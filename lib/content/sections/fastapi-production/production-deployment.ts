@@ -126,16 +126,16 @@ access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
 proc_name = "fastapi-app"
 
 # Server hooks
-def on_starting(server):
+def on_starting (server):
     print("Gunicorn starting...")
 
-def on_reload(server):
+def on_reload (server):
     print("Gunicorn reloading...")
 
-def when_ready(server):
+def when_ready (server):
     print("Gunicorn ready!")
 
-def on_exit(server):
+def on_exit (server):
     print("Gunicorn shutting down...")
 \`\`\`
 
@@ -342,14 +342,14 @@ async def health_check():
     return {"status": "healthy"}
 
 @app.get("/ready", tags=["health"])
-async def readiness_check(db: Session = Depends(get_db)):
+async def readiness_check (db: Session = Depends (get_db)):
     """
     Readiness probe: Is the app ready to serve traffic?
     Checks all dependencies (database, Redis, etc.)
     """
     try:
         # Check database
-        await db.execute(text("SELECT 1"))
+        await db.execute (text("SELECT 1"))
         
         # Check Redis
         await redis_client.ping()
@@ -358,7 +358,7 @@ async def readiness_check(db: Session = Depends(get_db)):
     except Exception as e:
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={"status": "not_ready", "error": str(e)}
+            content={"status": "not_ready", "error": str (e)}
         )
 
 @app.get("/startup", tags=["health"])
@@ -526,13 +526,13 @@ REQUEST_DURATION = Histogram(
 
 # Mount Prometheus metrics endpoint
 metrics_app = make_asgi_app()
-app.mount("/metrics", WSGIMiddleware(metrics_app))
+app.mount("/metrics", WSGIMiddleware (metrics_app))
 
 @app.middleware("http")
-async def metrics_middleware(request: Request, call_next):
+async def metrics_middleware (request: Request, call_next):
     start_time = time.time()
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     duration = time.time() - start_time
     
@@ -545,7 +545,7 @@ async def metrics_middleware(request: Request, call_next):
     REQUEST_DURATION.labels(
         method=request.method,
         endpoint=request.url.path
-    ).observe(duration)
+    ).observe (duration)
     
     return response
 \`\`\`

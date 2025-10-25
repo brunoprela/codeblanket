@@ -35,10 +35,10 @@ export const operationsQuiz = [
       'What is the update operation actually doing? Does it set a value or add a delta?',
     hint: 'Think about why it is called "add delta" not "set value".',
     sampleAnswer:
-      'Fenwick Tree update adds a delta to an index, it does not set an absolute value. To set arr[i] to new_val, you must compute delta = new_val - arr[i], then call update(i, delta). This is because Fenwick Tree stores cumulative sums, not individual values, so it can only support additive updates efficiently.',
+      'Fenwick Tree update adds a delta to an index, it does not set an absolute value. To set arr[i] to new_val, you must compute delta = new_val - arr[i], then call update (i, delta). This is because Fenwick Tree stores cumulative sums, not individual values, so it can only support additive updates efficiently.',
     keyPoints: [
       'Updates add a delta, not set a value',
-      'To set: delta = new_value - old_value, then update(i, delta)',
+      'To set: delta = new_value - old_value, then update (i, delta)',
       'Fenwick stores cumulative data, not raw values',
     ],
   },

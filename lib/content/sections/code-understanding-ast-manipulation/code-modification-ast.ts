@@ -24,7 +24,7 @@ This section teaches you to build these capabilities.
 
 ### AST Transformation Approaches
 
-**1. NodeTransformer (Python's ast module):**
+**1. NodeTransformer (Python\'s ast module):**
 - Visits and modifies nodes in-place
 - Returns modified or new nodes
 - Can add, remove, or transform nodes
@@ -56,25 +56,25 @@ x = new_function()
 **Insert:**
 \`\`\`python
 # Before
-def process(data):
-    return transform(data)
+def process (data):
+    return transform (data)
 
 # After (inserting validation)
-def process(data):
-    validate(data)  # Inserted
-    return transform(data)
+def process (data):
+    validate (data)  # Inserted
+    return transform (data)
 \`\`\`
 
 **Delete:**
 \`\`\`python
 # Before
-def process(data):
+def process (data):
     debug_print(data)  # Remove this
-    return transform(data)
+    return transform (data)
 
 # After
-def process(data):
-    return transform(data)
+def process (data):
+    return transform (data)
 \`\`\`
 
 **Wrap:**
@@ -97,7 +97,7 @@ except APIError:
 import ast
 from typing import Any
 
-class VariableRenamer(ast.NodeTransformer):
+class VariableRenamer (ast.NodeTransformer):
     """
     Rename variables throughout code.
     This is how refactoring tools implement "rename symbol".
@@ -108,49 +108,49 @@ class VariableRenamer(ast.NodeTransformer):
         self.new_name = new_name
         self.rename_count = 0
     
-    def visit_Name(self, node: ast.Name) -> ast.Name:
+    def visit_Name (self, node: ast.Name) -> ast.Name:
         """Replace variable names."""
         if node.id == self.old_name:
             node.id = self.new_name
             self.rename_count += 1
         return node
     
-    def visit_arg(self, node: ast.arg) -> ast.arg:
+    def visit_arg (self, node: ast.arg) -> ast.arg:
         """Rename function parameters."""
         if node.arg == self.old_name:
             node.arg = self.new_name
             self.rename_count += 1
         return node
     
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
+    def visit_FunctionDef (self, node: ast.FunctionDef) -> ast.FunctionDef:
         """Rename function names."""
         if node.name == self.old_name:
             node.name = self.new_name
             self.rename_count += 1
-        self.generic_visit(node)
+        self.generic_visit (node)
         return node
 
 # Example usage
 code = """
-def calculate(value):
+def calculate (value):
     result = value * 2
     return result
 
-total = calculate(value=10)
+total = calculate (value=10)
 print(f"Result: {result}")
 """
 
-tree = ast.parse(code)
+tree = ast.parse (code)
 
 # Rename 'value' to 'input_value'
 renamer = VariableRenamer('value', 'input_value')
-new_tree = renamer.visit(tree)
+new_tree = renamer.visit (tree)
 
 # Important: Fix missing locations after transformation
-ast.fix_missing_locations(new_tree)
+ast.fix_missing_locations (new_tree)
 
 # Convert back to code
-new_code = ast.unparse(new_tree)
+new_code = ast.unparse (new_tree)
 print("=== Renamed Code ===")
 print(new_code)
 print(f"\\nRenamed {renamer.rename_count} occurrences")
@@ -162,7 +162,7 @@ print(f"\\nRenamed {renamer.rename_count} occurrences")
 import ast
 from typing import List, Set
 
-class FunctionExtractor(ast.NodeTransformer):
+class FunctionExtractor (ast.NodeTransformer):
     """
     Extract selected code into a new function.
     This implements the "Extract Method" refactoring.
@@ -176,38 +176,38 @@ class FunctionExtractor(ast.NodeTransformer):
         self.required_params: Set[str] = set()
         self.return_vars: Set[str] = set()
     
-    def extract(self, tree: ast.Module) -> ast.Module:
+    def extract (self, tree: ast.Module) -> ast.Module:
         """Extract code and create new function."""
         # First pass: identify what to extract and analyze dependencies
-        self._analyze_extraction(tree)
+        self._analyze_extraction (tree)
         
         # Create the new function
         new_func = self._create_function()
         
         # Second pass: replace extracted code with function call
-        new_tree = self._replace_with_call(tree, new_func)
+        new_tree = self._replace_with_call (tree, new_func)
         
         return new_tree
     
-    def _analyze_extraction(self, tree: ast.Module):
+    def _analyze_extraction (self, tree: ast.Module):
         """Analyze code to extract and determine dependencies."""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.stmt):
-                if hasattr(node, 'lineno'):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.stmt):
+                if hasattr (node, 'lineno'):
                     if self.start_line <= node.lineno <= self.end_line:
-                        self.extracted_stmts.append(node)
+                        self.extracted_stmts.append (node)
         
         # Find variables used in extracted code
         used_vars = set()
         defined_vars = set()
         
         for stmt in self.extracted_stmts:
-            for node in ast.walk(stmt):
-                if isinstance(node, ast.Name):
-                    if isinstance(node.ctx, ast.Load):
-                        used_vars.add(node.id)
-                    elif isinstance(node.ctx, ast.Store):
-                        defined_vars.add(node.id)
+            for node in ast.walk (stmt):
+                if isinstance (node, ast.Name):
+                    if isinstance (node.ctx, ast.Load):
+                        used_vars.add (node.id)
+                    elif isinstance (node.ctx, ast.Store):
+                        defined_vars.add (node.id)
         
         # Parameters are variables used but not defined in extracted code
         self.required_params = used_vars - defined_vars
@@ -216,12 +216,12 @@ class FunctionExtractor(ast.NodeTransformer):
         # For simplicity, we'll return all defined variables
         self.return_vars = defined_vars
     
-    def _create_function(self) -> ast.FunctionDef:
+    def _create_function (self) -> ast.FunctionDef:
         """Create the new function with extracted code."""
         # Create parameters
         args = ast.arguments(
             posonlyargs=[],
-            args=[ast.arg(arg=param, annotation=None) for param in sorted(self.required_params)],
+            args=[ast.arg (arg=param, annotation=None) for param in sorted (self.required_params)],
             kwonlyargs=[],
             kw_defaults=[],
             defaults=[]
@@ -232,14 +232,14 @@ class FunctionExtractor(ast.NodeTransformer):
         
         # Add return statement if needed
         if self.return_vars:
-            if len(self.return_vars) == 1:
-                return_value = ast.Name(id=list(self.return_vars)[0], ctx=ast.Load())
+            if len (self.return_vars) == 1:
+                return_value = ast.Name (id=list (self.return_vars)[0], ctx=ast.Load())
             else:
                 return_value = ast.Tuple(
-                    elts=[ast.Name(id=var, ctx=ast.Load()) for var in sorted(self.return_vars)],
+                    elts=[ast.Name (id=var, ctx=ast.Load()) for var in sorted (self.return_vars)],
                     ctx=ast.Load()
                 )
-            body.append(ast.Return(value=return_value))
+            body.append (ast.Return (value=return_value))
         
         # Create function
         func = ast.FunctionDef(
@@ -254,52 +254,52 @@ class FunctionExtractor(ast.NodeTransformer):
         
         return func
     
-    def _replace_with_call(self, tree: ast.Module, new_func: ast.FunctionDef) -> ast.Module:
+    def _replace_with_call (self, tree: ast.Module, new_func: ast.FunctionDef) -> ast.Module:
         """Replace extracted code with function call."""
         new_body = []
         
         # Add the new function definition at the start
-        new_body.append(new_func)
+        new_body.append (new_func)
         
-        extracted_lines = set(range(self.start_line, self.end_line + 1))
+        extracted_lines = set (range (self.start_line, self.end_line + 1))
         replaced = False
         
         for stmt in tree.body:
-            if hasattr(stmt, 'lineno') and stmt.lineno in extracted_lines:
+            if hasattr (stmt, 'lineno') and stmt.lineno in extracted_lines:
                 if not replaced:
                     # Replace first extracted statement with function call
                     call = ast.Call(
-                        func=ast.Name(id=self.new_func_name, ctx=ast.Load()),
-                        args=[ast.Name(id=param, ctx=ast.Load()) for param in sorted(self.required_params)],
+                        func=ast.Name (id=self.new_func_name, ctx=ast.Load()),
+                        args=[ast.Name (id=param, ctx=ast.Load()) for param in sorted (self.required_params)],
                         keywords=[]
                     )
                     
                     if self.return_vars:
                         # Assign return value
-                        if len(self.return_vars) == 1:
-                            target = ast.Name(id=list(self.return_vars)[0], ctx=ast.Store())
+                        if len (self.return_vars) == 1:
+                            target = ast.Name (id=list (self.return_vars)[0], ctx=ast.Store())
                         else:
                             target = ast.Tuple(
-                                elts=[ast.Name(id=var, ctx=ast.Store()) for var in sorted(self.return_vars)],
+                                elts=[ast.Name (id=var, ctx=ast.Store()) for var in sorted (self.return_vars)],
                                 ctx=ast.Store()
                             )
-                        call_stmt = ast.Assign(targets=[target], value=call)
+                        call_stmt = ast.Assign (targets=[target], value=call)
                     else:
-                        call_stmt = ast.Expr(value=call)
+                        call_stmt = ast.Expr (value=call)
                     
-                    new_body.append(call_stmt)
+                    new_body.append (call_stmt)
                     replaced = True
                 # Skip other extracted statements
             else:
-                new_body.append(stmt)
+                new_body.append (stmt)
         
-        new_tree = ast.Module(body=new_body, type_ignores=[])
-        ast.fix_missing_locations(new_tree)
+        new_tree = ast.Module (body=new_body, type_ignores=[])
+        ast.fix_missing_locations (new_tree)
         return new_tree
 
 # Example usage
 code = """
-def process_data(items):
+def process_data (items):
     # Lines 3-6 will be extracted
     total = 0
     for item in items:
@@ -310,7 +310,7 @@ def process_data(items):
     return total
 """
 
-tree = ast.parse(code)
+tree = ast.parse (code)
 
 # Extract lines 3-6 into new function
 extractor = FunctionExtractor(
@@ -319,8 +319,8 @@ extractor = FunctionExtractor(
     new_func_name='calculate_sum'
 )
 
-new_tree = extractor.extract(tree)
-new_code = ast.unparse(new_tree)
+new_tree = extractor.extract (tree)
+new_code = ast.unparse (new_tree)
 
 print("=== After Extraction ===")
 print(new_code)
@@ -332,54 +332,54 @@ print(new_code)
 import ast
 from typing import List
 
-class ErrorHandlingAdder(ast.NodeTransformer):
+class ErrorHandlingAdder (ast.NodeTransformer):
     """
     Wrap function calls in try/except blocks.
     This is how Cursor adds error handling automatically.
     """
     
     def __init__(self, functions_to_wrap: List[str]):
-        self.functions_to_wrap = set(functions_to_wrap)
+        self.functions_to_wrap = set (functions_to_wrap)
         self.wrap_count = 0
     
-    def visit_Expr(self, node: ast.Expr) -> ast.stmt:
+    def visit_Expr (self, node: ast.Expr) -> ast.stmt:
         """Wrap expression statements that are function calls."""
-        if isinstance(node.value, ast.Call):
-            if self._should_wrap(node.value):
-                return self._wrap_in_try_except(node)
+        if isinstance (node.value, ast.Call):
+            if self._should_wrap (node.value):
+                return self._wrap_in_try_except (node)
         return node
     
-    def visit_Assign(self, node: ast.Assign) -> ast.stmt:
+    def visit_Assign (self, node: ast.Assign) -> ast.stmt:
         """Wrap assignments from function calls."""
-        if isinstance(node.value, ast.Call):
-            if self._should_wrap(node.value):
-                return self._wrap_in_try_except(node)
+        if isinstance (node.value, ast.Call):
+            if self._should_wrap (node.value):
+                return self._wrap_in_try_except (node)
         return node
     
-    def _should_wrap(self, call: ast.Call) -> bool:
+    def _should_wrap (self, call: ast.Call) -> bool:
         """Check if this call should be wrapped."""
-        if isinstance(call.func, ast.Name):
+        if isinstance (call.func, ast.Name):
             return call.func.id in self.functions_to_wrap
-        elif isinstance(call.func, ast.Attribute):
+        elif isinstance (call.func, ast.Attribute):
             return call.func.attr in self.functions_to_wrap
         return False
     
-    def _wrap_in_try_except(self, stmt: ast.stmt) -> ast.Try:
+    def _wrap_in_try_except (self, stmt: ast.stmt) -> ast.Try:
         """Wrap a statement in try/except."""
         self.wrap_count += 1
         
         # Create exception handler
         handler = ast.ExceptHandler(
-            type=ast.Name(id='Exception', ctx=ast.Load()),
+            type=ast.Name (id='Exception', ctx=ast.Load()),
             name='e',
             body=[
-                ast.Expr(value=ast.Call(
-                    func=ast.Name(id='print', ctx=ast.Load()),
+                ast.Expr (value=ast.Call(
+                    func=ast.Name (id='print', ctx=ast.Load()),
                     args=[
-                        ast.JoinedStr(values=[
-                            ast.Constant(value="Error: "),
+                        ast.JoinedStr (values=[
+                            ast.Constant (value="Error: "),
                             ast.FormattedValue(
-                                value=ast.Name(id='e', ctx=ast.Load()),
+                                value=ast.Name (id='e', ctx=ast.Load()),
                                 conversion=-1
                             )
                         ])
@@ -403,20 +403,20 @@ class ErrorHandlingAdder(ast.NodeTransformer):
 code = """
 def main():
     data = fetch_data()
-    result = process(data)
-    save_result(result)
+    result = process (data)
+    save_result (result)
     
     normal_operation()
 """
 
-tree = ast.parse(code)
+tree = ast.parse (code)
 
 # Add error handling to specific functions
 adder = ErrorHandlingAdder(['fetch_data', 'process', 'save_result'])
-new_tree = adder.visit(tree)
-ast.fix_missing_locations(new_tree)
+new_tree = adder.visit (tree)
+ast.fix_missing_locations (new_tree)
 
-new_code = ast.unparse(new_tree)
+new_code = ast.unparse (new_tree)
 print("=== With Error Handling ===")
 print(new_code)
 print(f"\\nAdded error handling to {adder.wrap_count} calls")
@@ -427,7 +427,7 @@ print(f"\\nAdded error handling to {adder.wrap_count} calls")
 \`\`\`python
 import ast
 
-class StyleNormalizer(ast.NodeTransformer):
+class StyleNormalizer (ast.NodeTransformer):
     """
     Normalize code style to match conventions.
     Makes generated code consistent with existing style.
@@ -436,49 +436,49 @@ class StyleNormalizer(ast.NodeTransformer):
     def __init__(self):
         self.changes = []
     
-    def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.FunctionDef:
+    def visit_FunctionDef (self, node: ast.FunctionDef) -> ast.FunctionDef:
         """Ensure function names are snake_case."""
         original_name = node.name
         
         # Convert to snake_case if needed
-        new_name = self._to_snake_case(original_name)
+        new_name = self._to_snake_case (original_name)
         
         if new_name != original_name:
-            self.changes.append(f"Function '{original_name}' → '{new_name}'")
+            self.changes.append (f"Function '{original_name}' → '{new_name}'")
             node.name = new_name
         
-        self.generic_visit(node)
+        self.generic_visit (node)
         return node
     
-    def visit_ClassDef(self, node: ast.ClassDef) -> ast.ClassDef:
+    def visit_ClassDef (self, node: ast.ClassDef) -> ast.ClassDef:
         """Ensure class names are PascalCase."""
         original_name = node.name
         
         # Convert to PascalCase if needed
-        new_name = self._to_pascal_case(original_name)
+        new_name = self._to_pascal_case (original_name)
         
         if new_name != original_name:
-            self.changes.append(f"Class '{original_name}' → '{new_name}'")
+            self.changes.append (f"Class '{original_name}' → '{new_name}'")
             node.name = new_name
         
-        self.generic_visit(node)
+        self.generic_visit (node)
         return node
     
-    def visit_Name(self, node: ast.Name) -> ast.Name:
+    def visit_Name (self, node: ast.Name) -> ast.Name:
         """Ensure constant names are UPPER_CASE."""
         # Only process if it's a global assignment target
-        if isinstance(node.ctx, ast.Store):
+        if isinstance (node.ctx, ast.Store):
             if node.id.isupper() or '_' in node.id:
                 # Likely a constant, ensure UPPER_CASE
                 original = node.id
                 new_name = node.id.upper()
                 if new_name != original:
-                    self.changes.append(f"Constant '{original}' → '{new_name}'")
+                    self.changes.append (f"Constant '{original}' → '{new_name}'")
                     node.id = new_name
         
         return node
     
-    def _to_snake_case(self, name: str) -> str:
+    def _to_snake_case (self, name: str) -> str:
         """Convert to snake_case."""
         import re
         # Insert underscore before capitals
@@ -487,35 +487,35 @@ class StyleNormalizer(ast.NodeTransformer):
         s2 = re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', s1)
         return s2.lower()
     
-    def _to_pascal_case(self, name: str) -> str:
+    def _to_pascal_case (self, name: str) -> str:
         """Convert to PascalCase."""
         words = name.replace('_', ' ').replace('-', ' ').split()
-        return '.join(word.capitalize() for word in words)
+        return '.join (word.capitalize() for word in words)
 
 # Example usage
 code = """
 class user_service:
-    def GetUser(self, userID):
+    def GetUser (self, userID):
         max_retries = 3
-        return self.FetchData(userID)
+        return self.FetchData (userID)
     
-    def FetchData(self, id):
-        return database.get(id)
+    def FetchData (self, id):
+        return database.get (id)
 
-def ProcessData(input_data):
-    return transform(input_data)
+def ProcessData (input_data):
+    return transform (input_data)
 
 MAX_SIZE = 100
 tempValue = 50
 """
 
-tree = ast.parse(code)
+tree = ast.parse (code)
 
 normalizer = StyleNormalizer()
-new_tree = normalizer.visit(tree)
-ast.fix_missing_locations(new_tree)
+new_tree = normalizer.visit (tree)
+ast.fix_missing_locations (new_tree)
 
-new_code = ast.unparse(new_tree)
+new_code = ast.unparse (new_tree)
 
 print("=== Normalized Code ===")
 print(new_code)
@@ -532,7 +532,7 @@ if normalizer.changes:
 # LibCST example (requires: pip install libcst)
 import libcst as cst
 
-class PreservingRenamer(cst.CSTTransformer):
+class PreservingRenamer (cst.CSTTransformer):
     """
     Rename variables while preserving formatting and comments.
     This is production-quality refactoring.
@@ -542,24 +542,24 @@ class PreservingRenamer(cst.CSTTransformer):
         self.old_name = old_name
         self.new_name = new_name
     
-    def leave_Name(self, original_node: cst.Name, updated_node: cst.Name) -> cst.Name:
+    def leave_Name (self, original_node: cst.Name, updated_node: cst.Name) -> cst.Name:
         """Rename Name nodes."""
         if updated_node.value == self.old_name:
-            return updated_node.with_changes(value=self.new_name)
+            return updated_node.with_changes (value=self.new_name)
         return updated_node
     
-    def leave_Param(self, original_node: cst.Param, updated_node: cst.Param) -> cst.Param:
+    def leave_Param (self, original_node: cst.Param, updated_node: cst.Param) -> cst.Param:
         """Rename function parameters."""
-        if isinstance(updated_node.name, cst.Name):
+        if isinstance (updated_node.name, cst.Name):
             if updated_node.name.value == self.old_name:
                 return updated_node.with_changes(
-                    name=cst.Name(self.new_name)
+                    name=cst.Name (self.new_name)
                 )
         return updated_node
 
 # Example with formatting preservation
 code = """
-def calculate(value):  # Calculate result
+def calculate (value):  # Calculate result
     result = value * 2  # Double the value
     
     # Return the result
@@ -567,11 +567,11 @@ def calculate(value):  # Calculate result
 """
 
 # Parse with LibCST
-module = cst.parse_module(code)
+module = cst.parse_module (code)
 
 # Transform
 renamer = PreservingRenamer('value', 'input_value')
-new_module = module.visit(renamer)
+new_module = module.visit (renamer)
 
 # Code is identical except for renamed variable
 # Comments and formatting are preserved!
@@ -601,10 +601,10 @@ class CodeRefactorer:
     
     def __init__(self, code: str):
         self.original_code = code
-        self.tree = ast.parse(code)
+        self.tree = ast.parse (code)
         self.operations: List[RefactoringOperation] = []
     
-    def rename_symbol(self, old_name: str, new_name: str):
+    def rename_symbol (self, old_name: str, new_name: str):
         """Add rename operation."""
         self.operations.append(RefactoringOperation(
             type='rename',
@@ -613,7 +613,7 @@ class CodeRefactorer:
         ))
         return self
     
-    def extract_function(self, start_line: int, end_line: int, func_name: str):
+    def extract_function (self, start_line: int, end_line: int, func_name: str):
         """Add extract function operation."""
         self.operations.append(RefactoringOperation(
             type='extract',
@@ -623,24 +623,24 @@ class CodeRefactorer:
         ))
         return self
     
-    def add_error_handling(self, function_names: List[str]):
+    def add_error_handling (self, function_names: List[str]):
         """Add error handling operation."""
         self.operations.append(RefactoringOperation(
             type='add_error_handling',
-            target=','.join(function_names),
+            target=','.join (function_names),
             metadata={'functions': function_names}
         ))
         return self
     
-    def apply(self) -> str:
+    def apply (self) -> str:
         """Apply all refactoring operations."""
         current_tree = self.tree
         
         for operation in self.operations:
             if operation.type == 'rename':
-                transformer = VariableRenamer(operation.target, operation.new_value)
-                current_tree = transformer.visit(current_tree)
-                ast.fix_missing_locations(current_tree)
+                transformer = VariableRenamer (operation.target, operation.new_value)
+                current_tree = transformer.visit (current_tree)
+                ast.fix_missing_locations (current_tree)
             
             elif operation.type == 'extract':
                 extractor = FunctionExtractor(
@@ -648,38 +648,38 @@ class CodeRefactorer:
                     operation.metadata['end_line'],
                     operation.new_value
                 )
-                current_tree = extractor.extract(current_tree)
+                current_tree = extractor.extract (current_tree)
             
             elif operation.type == 'add_error_handling':
-                adder = ErrorHandlingAdder(operation.metadata['functions'])
-                current_tree = adder.visit(current_tree)
-                ast.fix_missing_locations(current_tree)
+                adder = ErrorHandlingAdder (operation.metadata['functions'])
+                current_tree = adder.visit (current_tree)
+                ast.fix_missing_locations (current_tree)
         
-        return ast.unparse(current_tree)
+        return ast.unparse (current_tree)
     
-    def preview(self) -> str:
+    def preview (self) -> str:
         """Preview operations without applying."""
         lines = ["Planned Refactoring Operations:\\n"]
-        for i, op in enumerate(self.operations, 1):
-            lines.append(f"{i}. {op.type.replace('_', ' ').title()}")
-            lines.append(f"   Target: {op.target}")
+        for i, op in enumerate (self.operations, 1):
+            lines.append (f"{i}. {op.type.replace('_', ' ').title()}")
+            lines.append (f"   Target: {op.target}")
             if op.new_value:
-                lines.append(f"   New value: {op.new_value}")
-        return "\\n".join(lines)
+                lines.append (f"   New value: {op.new_value}")
+        return "\\n".join (lines)
 
 # Example usage
 code = """
-def process(data):
+def process (data):
     items = data.split(',')
     total = 0
     for item in items:
-        total += int(item)
+        total += int (item)
     result = total
     return result
 """
 
 # Chain multiple refactoring operations
-refactorer = CodeRefactorer(code)
+refactorer = CodeRefactorer (code)
 refactorer.rename_symbol('data', 'input_str').rename_symbol('result', 'final_result')
 
 print("=== Preview ===")
@@ -760,28 +760,28 @@ class ProductionRefactoringEngine:
         self.history: List[str] = [code]
         self.operations_applied: List[str] = []
     
-    def rename_variable(self, old_name: str, new_name: str) -> bool:
+    def rename_variable (self, old_name: str, new_name: str) -> bool:
         """Safely rename a variable."""
         try:
-            tree = ast.parse(self.current_code)
+            tree = ast.parse (self.current_code)
             
             # Validate names
-            if not self._is_valid_identifier(new_name):
-                raise ValueError(f"Invalid identifier: {new_name}")
+            if not self._is_valid_identifier (new_name):
+                raise ValueError (f"Invalid identifier: {new_name}")
             
             # Apply transformation
-            renamer = VariableRenamer(old_name, new_name)
-            new_tree = renamer.visit(tree)
-            ast.fix_missing_locations(new_tree)
+            renamer = VariableRenamer (old_name, new_name)
+            new_tree = renamer.visit (tree)
+            ast.fix_missing_locations (new_tree)
             
             # Validate result
-            if not self._validate_syntax(new_tree):
+            if not self._validate_syntax (new_tree):
                 raise SyntaxError("Transformation produced invalid syntax")
             
             # Apply change
-            self.current_code = ast.unparse(new_tree)
-            self.history.append(self.current_code)
-            self.operations_applied.append(f"Renamed '{old_name}' to '{new_name}'")
+            self.current_code = ast.unparse (new_tree)
+            self.history.append (self.current_code)
+            self.operations_applied.append (f"Renamed '{old_name}' to '{new_name}'")
             
             return True
         
@@ -789,21 +789,21 @@ class ProductionRefactoringEngine:
             print(f"Refactoring failed: {e}")
             return False
     
-    def _is_valid_identifier(self, name: str) -> bool:
+    def _is_valid_identifier (self, name: str) -> bool:
         """Check if name is a valid Python identifier."""
-        return name.isidentifier() and not __import__('keyword').iskeyword(name)
+        return name.isidentifier() and not __import__('keyword').iskeyword (name)
     
-    def _validate_syntax(self, tree: ast.AST) -> bool:
+    def _validate_syntax (self, tree: ast.AST) -> bool:
         """Validate that AST is syntactically correct."""
         try:
-            compile(tree, '<string>', 'exec')
+            compile (tree, '<string>', 'exec')
             return True
         except:
             return False
     
-    def undo(self) -> bool:
+    def undo (self) -> bool:
         """Undo last operation."""
-        if len(self.history) > 1:
+        if len (self.history) > 1:
             self.history.pop()
             self.current_code = self.history[-1]
             if self.operations_applied:
@@ -811,35 +811,35 @@ class ProductionRefactoringEngine:
             return True
         return False
     
-    def get_diff(self) -> str:
+    def get_diff (self) -> str:
         """Show differences from original."""
         import difflib
         diff = difflib.unified_diff(
-            self.original_code.splitlines(keepends=True),
-            self.current_code.splitlines(keepends=True),
+            self.original_code.splitlines (keepends=True),
+            self.current_code.splitlines (keepends=True),
             fromfile='original',
             tofile='refactored'
         )
-        return '.join(diff)
+        return '.join (diff)
     
-    def get_current_code(self) -> str:
+    def get_current_code (self) -> str:
         """Get current code state."""
         return self.current_code
     
-    def get_history(self) -> List[str]:
+    def get_history (self) -> List[str]:
         """Get operation history."""
         return self.operations_applied.copy()
 
 # Test the engine
 code = """
-def calculate(value):
+def calculate (value):
     result = value * 2
     return result
 
 output = calculate(10)
 """
 
-engine = ProductionRefactoringEngine(code)
+engine = ProductionRefactoringEngine (code)
 
 # Apply refactorings
 engine.rename_variable('value', 'input_value')
@@ -869,27 +869,27 @@ print(engine.get_diff())
 
 \`\`\`python
 # ❌ Wrong: Missing locations cause issues
-new_tree = transformer.visit(tree)
-code = ast.unparse(new_tree)  # May have wrong line numbers
+new_tree = transformer.visit (tree)
+code = ast.unparse (new_tree)  # May have wrong line numbers
 
 # ✅ Correct: Always fix locations
-new_tree = transformer.visit(tree)
-ast.fix_missing_locations(new_tree)
-code = ast.unparse(new_tree)
+new_tree = transformer.visit (tree)
+ast.fix_missing_locations (new_tree)
+code = ast.unparse (new_tree)
 \`\`\`
 
 ### 2. Forgetting to Return Nodes
 
 \`\`\`python
 # ❌ Wrong: Doesn't return node
-class MyTransformer(ast.NodeTransformer):
-    def visit_Name(self, node):
+class MyTransformer (ast.NodeTransformer):
+    def visit_Name (self, node):
         node.id = "new_name"
         # Forgot to return!
 
 # ✅ Correct: Always return the node
-class MyTransformer(ast.NodeTransformer):
-    def visit_Name(self, node):
+class MyTransformer (ast.NodeTransformer):
+    def visit_Name (self, node):
         node.id = "new_name"
         return node  # Important!
 \`\`\`
@@ -898,16 +898,16 @@ class MyTransformer(ast.NodeTransformer):
 
 \`\`\`python
 # ❌ Wrong: Won't visit children
-class MyTransformer(ast.NodeTransformer):
-    def visit_FunctionDef(self, node):
+class MyTransformer (ast.NodeTransformer):
+    def visit_FunctionDef (self, node):
         print(node.name)
         return node  # Children not visited!
 
 # ✅ Correct: Visit children
-class MyTransformer(ast.NodeTransformer):
-    def visit_FunctionDef(self, node):
+class MyTransformer (ast.NodeTransformer):
+    def visit_FunctionDef (self, node):
         print(node.name)
-        self.generic_visit(node)  # Visit children
+        self.generic_visit (node)  # Visit children
         return node
 \`\`\`
 
@@ -915,7 +915,7 @@ class MyTransformer(ast.NodeTransformer):
 
 \`\`\`python
 # ❌ Wrong: Loses annotations
-def transform_function(node):
+def transform_function (node):
     return ast.FunctionDef(
         name=node.name,
         args=node.args,
@@ -923,7 +923,7 @@ def transform_function(node):
     )  # Lost returns, decorators, etc.
 
 # ✅ Correct: Preserve all attributes
-def transform_function(node):
+def transform_function (node):
     return ast.FunctionDef(
         name=node.name,
         args=node.args,

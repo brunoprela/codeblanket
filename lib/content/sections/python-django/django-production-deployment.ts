@@ -507,16 +507,16 @@ DATABASES = {
 \`\`\`python
 from django.db import models
 
-class Article(models.Model):
-    title = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(unique=True, db_index=True)
-    status = models.CharField(max_length=10, db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+class Article (models.Model):
+    title = models.CharField (max_length=200, db_index=True)
+    slug = models.SlugField (unique=True, db_index=True)
+    status = models.CharField (max_length=10, db_index=True)
+    created_at = models.DateTimeField (auto_now_add=True, db_index=True)
     
     class Meta:
         indexes = [
-            models.Index(fields=['status', '-created_at']),
-            models.Index(fields=['author', 'status']),
+            models.Index (fields=['status', '-created_at']),
+            models.Index (fields=['author', 'status']),
         ]
 \`\`\`
 

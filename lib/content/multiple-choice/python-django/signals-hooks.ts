@@ -18,12 +18,12 @@ export const SignalsHooksMultipleChoice = [
 Use \`transaction.on_commit()\` to ensure side effects only happen after the database transaction successfully commits. This prevents sending emails or calling external APIs for operations that might be rolled back.
 
 \`\`\`python
-@receiver(post_save, sender=Order)
-def send_confirmation(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def send_confirmation (sender, instance, created, **kwargs):
     if created:
         # Only send email after transaction commits
         transaction.on_commit(
-            lambda: send_email(instance.id)
+            lambda: send_email (instance.id)
         )
 \`\`\`
 
@@ -50,7 +50,7 @@ article.save()  # Where does the email get sent?
 
 # vs explicit
 article.save()
-send_article_notification(article)  # Clear and traceable
+send_article_notification (article)  # Clear and traceable
 \`\`\`
 
 Use signals for cross-app communication and decoupling, but prefer explicit calls for core business logic.
@@ -72,14 +72,14 @@ Use signals for cross-app communication and decoupling, but prefer explicit call
 \`update()\` performs database updates without triggering model signals, preventing infinite loops.
 
 \`\`\`python
-@receiver(post_save, sender=Article)
-def update_counter(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def update_counter (sender, instance, **kwargs):
     # ❌ This creates infinite loop
     # instance.view_count += 1
     # instance.save()  # Triggers post_save again!
     
     # ✅ This doesn't trigger signals
-    Article.objects.filter(id=instance.id).update(
+    Article.objects.filter (id=instance.id).update(
         view_count=F('view_count') + 1
     )
 \`\`\`
@@ -101,8 +101,8 @@ def update_counter(sender, instance, **kwargs):
 \`pre_delete\` fires before the delete operation, allowing you to access related data before it's removed.
 
 \`\`\`python
-@receiver(pre_delete, sender=Article)
-def cleanup_files(sender, instance, **kwargs):
+@receiver (pre_delete, sender=Article)
+def cleanup_files (sender, instance, **kwargs):
     # Access files before article is deleted
     if instance.image:
         instance.image.delete()
@@ -133,8 +133,8 @@ def cleanup_files(sender, instance, **kwargs):
 In \`post_save\`, the model has already been saved to the database. If an exception is raised, it propagates up but doesn't undo the save (unless you're in an explicit transaction).
 
 \`\`\`python
-@receiver(post_save, sender=Article)
-def process_article(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def process_article (sender, instance, **kwargs):
     if some_condition:
         raise ValueError("Processing failed")
     # Article is already saved!

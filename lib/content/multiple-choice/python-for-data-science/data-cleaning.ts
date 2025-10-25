@@ -17,7 +17,7 @@ export const datacleaningMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'data-cleaning-mc-2',
     question:
-      'When using pd.to_numeric(series, errors="coerce"), what happens to values that cannot be converted to numbers?',
+      'When using pd.to_numeric (series, errors="coerce"), what happens to values that cannot be converted to numbers?',
     options: [
       'They are removed from the Series',
       'They are converted to NaN',

@@ -42,8 +42,8 @@ CREATE TABLE metrics (
     timestamp TIMESTAMP
 );
 
-CREATE INDEX idx_metrics_time ON metrics(timestamp);
-CREATE INDEX idx_metrics_name_time ON metrics(metric_name, timestamp);
+CREATE INDEX idx_metrics_time ON metrics (timestamp);
+CREATE INDEX idx_metrics_name_time ON metrics (metric_name, timestamp);
 
 -- Insert 1 million metrics per minute
 -- After 1 day: 1.44 billion rows
@@ -90,8 +90,8 @@ cpu,host=server01,region=us-west usage_idle=90.5,usage_user=5.2 1609459200000000
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-client = InfluxDBClient(url="http://localhost:8086", token="my-token", org="my-org")
-write_api = client.write_api(write_options=SYNCHRONOUS)
+client = InfluxDBClient (url="http://localhost:8086", token="my-token", org="my-org")
+write_api = client.write_api (write_options=SYNCHRONOUS)
 
 # Write data
 point = Point("cpu") \\
@@ -99,20 +99,20 @@ point = Point("cpu") \\
     .tag("region", "us-west") \\
     .field("usage_idle", 90.5) \\
     .field("usage_user", 5.2) \\
-    .time(datetime.utcnow())
+    .time (datetime.utcnow())
 
-write_api.write(bucket="metrics", record=point)
+write_api.write (bucket="metrics", record=point)
 
 # Query data
 query = ''
-from(bucket: "metrics")
-  |> range(start: -1h)
-  |> filter(fn: (r) => r._measurement == "cpu")
-  |> filter(fn: (r) => r.host == "server01")
-  |> aggregateWindow(every: 1m, fn: mean)
+from (bucket: "metrics")
+  |> range (start: -1h)
+  |> filter (fn: (r) => r._measurement == "cpu")
+  |> filter (fn: (r) => r.host == "server01")
+  |> aggregateWindow (every: 1m, fn: mean)
 ''
 
-result = client.query_api().query(query=query)
+result = client.query_api().query (query=query)
 \`\`\`
 
 **Use Cases:**
@@ -158,8 +158,8 @@ request_count = Counter('http_requests_total', 'Total HTTP requests', ['method',
 request_duration = Histogram('http_request_duration_seconds', 'HTTP request duration')
 
 @request_duration.time()
-def handle_request(method, endpoint):
-    request_count.labels(method=method, endpoint=endpoint).inc()
+def handle_request (method, endpoint):
+    request_count.labels (method=method, endpoint=endpoint).inc()
     # ... handle request
 
 # Start metrics server
@@ -171,13 +171,13 @@ start_http_server(8000)
 **PromQL Queries:**
 \`\`\`promql
 # Request rate over 5 minutes
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 
 # 95th percentile latency
-histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.95, rate (http_request_duration_seconds_bucket[5m]))
 
 # Error rate
-sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))
+sum (rate (http_requests_total{status=~"5.."}[5m])) / sum (rate (http_requests_total[5m]))
 \`\`\`
 
 **Use Cases:**
@@ -491,15 +491,15 @@ LIMIT 100;
 \`\`\`python
 import redis
 
-r = redis.Redis(host='localhost', port=6379)
+r = redis.Redis (host='localhost', port=6379)
 
 # Cache user profile
-r.setex(f"user:{user_id}", 3600, json.dumps(user_profile))
+r.setex (f"user:{user_id}", 3600, json.dumps (user_profile))
 
 # Get from cache
-cached = r.get(f"user:{user_id}")
+cached = r.get (f"user:{user_id}")
 if cached:
-    return json.loads(cached)
+    return json.loads (cached)
 \`\`\`
 
 **When to use:**

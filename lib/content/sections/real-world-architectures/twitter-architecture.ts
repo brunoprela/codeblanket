@@ -5,7 +5,7 @@
 export const twitterarchitectureSection = {
   id: 'twitter-architecture',
   title: 'Twitter Architecture',
-  content: `Twitter (now X) is a real-time social networking platform where users post short messages (tweets) to their followers. With 330+ million monthly active users posting 500 million tweets per day, Twitter's architecture must handle massive read/write volume, real-time delivery, and global scale. This section explores the technical systems behind Twitter.
+  content: `Twitter (now X) is a real-time social networking platform where users post short messages (tweets) to their followers. With 330+ million monthly active users posting 500 million tweets per day, Twitter\'s architecture must handle massive read/write volume, real-time delivery, and global scale. This section explores the technical systems behind Twitter.
 
 ## Overview
 
@@ -27,7 +27,7 @@ Twitter's architecture handles unique challenges:
 
 ---
 
-## Evolution of Twitter's Architecture
+## Evolution of Twitter\'s Architecture
 
 ### Phase 1: Monolithic Ruby on Rails (2006-2010)
 
@@ -224,7 +224,7 @@ Return top 50 tweets
 
 ---
 
-### Hybrid Approach (Twitter's Solution)
+### Hybrid Approach (Twitter\'s Solution)
 
 Twitter uses a **hybrid** approach to get benefits of both:
 
@@ -269,7 +269,7 @@ User B requests timeline:
 
 ### 3. Social Graph (Relationships)
 
-Twitter's social graph stores following relationships: user A follows user B.
+Twitter\'s social graph stores following relationships: user A follows user B.
 
 **Graph Structure**:
 \`\`\`
@@ -324,7 +324,7 @@ Columns: follower_id, timestamp
 
 Twitter Search allows users to find tweets by keyword, hashtag, or user.
 
-**Search Index**: **Earlybird** (Twitter's real-time search engine)
+**Search Index**: **Earlybird** (Twitter\'s real-time search engine)
 
 **Built on Lucene**:
 - Inverted index (keyword → tweet IDs)
@@ -554,7 +554,7 @@ If User B offline:
 ### Custom-Built Systems
 
 **1. Manhattan (Distributed Key-Value Store)**:
-- Twitter's primary datastore
+- Twitter\'s primary datastore
 - Built on RocksDB (LSM tree)
 - Multi-region replication
 - Strong consistency within region, eventual consistency across regions
@@ -681,7 +681,7 @@ With 100s of microservices, distributed tracing (Zipkin) and metrics (Prometheus
 
 ## Interview Tips
 
-**Q: How would you design Twitter's timeline?**
+**Q: How would you design Twitter\'s timeline?**
 
 A: Use hybrid fanout approach. For users with <1M followers, use fanout-on-write: when user tweets, write to all followers' timelines (Redis list) asynchronously. For users with >1M followers, use fanout-on-read: don't write to followers, fetch on-demand when followers request timeline. When user requests timeline: (1) Fetch pre-computed timeline from Redis (fanout-on-write tweets). (2) Check if user follows any celebrities, fetch their recent tweets. (3) Merge both sources, sort by time. (4) Return top 50. Cache result for 1-2 minutes. Benefits: Fast reads (pre-computed for most users), handles celebrities (no 100M writes), scalable.
 
@@ -697,7 +697,7 @@ A: Stream all tweets to analytics pipeline (Apache Storm/Heron). Extract hashtag
 
 ## Summary
 
-Twitter's architecture demonstrates building a real-time social platform at massive scale:
+Twitter\'s architecture demonstrates building a real-time social platform at massive scale:
 
 **Key Takeaways**:
 

@@ -36,14 +36,14 @@ qa_pipeline = pipeline('question-answering', model='distilbert-base-cased-distil
 context = """
 The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. 
 It is named after the engineer Gustave Eiffel, whose company designed and built the tower.
-Constructed from 1887 to 1889, it was initially criticized by some of France's leading artists 
+Constructed from 1887 to 1889, it was initially criticized by some of France\'s leading artists 
 and intellectuals for its design, but has become a global cultural icon of France and one of 
 the most recognizable structures in the world.
 """
 
 question = "When was the Eiffel Tower built?"
 
-result = qa_pipeline(question=question, context=context)
+result = qa_pipeline (question=question, context=context)
 print(f"Answer: {result['answer']}")
 print(f"Score: {result['score']:.4f}")
 print(f"Start: {result['start']}, End: {result['end']}")
@@ -62,7 +62,7 @@ import torch
 model = AutoModelForQuestionAnswering.from_pretrained('bert-base-uncased')
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
-def answer_question(question, context):
+def answer_question (question, context):
     """Extract answer span from context"""
     # Encode question and context
     inputs = tokenizer.encode_plus(
@@ -82,17 +82,17 @@ def answer_question(question, context):
     end_logits = outputs.end_logits
     
     # Get most likely start and end positions
-    start_index = torch.argmax(start_logits)
-    end_index = torch.argmax(end_logits)
+    start_index = torch.argmax (start_logits)
+    end_index = torch.argmax (end_logits)
     
     # Decode tokens to get answer
-    tokens = tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])
+    tokens = tokenizer.convert_ids_to_tokens (inputs['input_ids'][0])
     answer_tokens = tokens[start_index:end_index+1]
-    answer = tokenizer.convert_tokens_to_string(answer_tokens)
+    answer = tokenizer.convert_tokens_to_string (answer_tokens)
     
     # Calculate confidence score
-    start_score = torch.max(torch.softmax(start_logits, dim=1)).item()
-    end_score = torch.max(torch.softmax(end_logits, dim=1)).item()
+    start_score = torch.max (torch.softmax (start_logits, dim=1)).item()
+    end_score = torch.max (torch.softmax (end_logits, dim=1)).item()
     confidence = (start_score + end_score) / 2
     
     return {
@@ -104,7 +104,7 @@ def answer_question(question, context):
 
 # Example
 question = "Who designed the Eiffel Tower?"
-result = answer_question(question, context)
+result = answer_question (question, context)
 print(f"Answer: {result['answer']}")
 print(f"Confidence: {result['confidence']:.4f}")
 \`\`\`
@@ -124,7 +124,7 @@ from transformers import (
 datasets = load_dataset('squad')
 
 # Tokenize and prepare features
-def prepare_train_features(examples):
+def prepare_train_features (examples):
     # Tokenize questions and contexts
     tokenized_examples = tokenizer(
         examples['question'],
@@ -144,21 +144,21 @@ def prepare_train_features(examples):
     tokenized_examples['start_positions'] = []
     tokenized_examples['end_positions'] = []
     
-    for i, offsets in enumerate(offset_mapping):
+    for i, offsets in enumerate (offset_mapping):
         input_ids = tokenized_examples['input_ids'][i]
-        cls_index = input_ids.index(tokenizer.cls_token_id)
+        cls_index = input_ids.index (tokenizer.cls_token_id)
         
-        sequence_ids = tokenized_examples.sequence_ids(i)
+        sequence_ids = tokenized_examples.sequence_ids (i)
         sample_index = sample_mapping[i]
         answers = examples['answers'][sample_index]
         
         # If no answer, set to CLS index
-        if len(answers['answer_start']) == 0:
-            tokenized_examples['start_positions'].append(cls_index)
-            tokenized_examples['end_positions'].append(cls_index)
+        if len (answers['answer_start']) == 0:
+            tokenized_examples['start_positions'].append (cls_index)
+            tokenized_examples['end_positions'].append (cls_index)
         else:
             start_char = answers['answer_start'][0]
-            end_char = start_char + len(answers['text'][0])
+            end_char = start_char + len (answers['text'][0])
             
             # Find token start position
             token_start_index = 0
@@ -166,24 +166,24 @@ def prepare_train_features(examples):
                 token_start_index += 1
             
             # Find token end position
-            token_end_index = len(input_ids) - 1
+            token_end_index = len (input_ids) - 1
             while sequence_ids[token_end_index] != 1:
                 token_end_index -= 1
             
             # Check if answer is within context
             if not (offsets[token_start_index][0] <= start_char and 
                     offsets[token_end_index][1] >= end_char):
-                tokenized_examples['start_positions'].append(cls_index)
-                tokenized_examples['end_positions'].append(cls_index)
+                tokenized_examples['start_positions'].append (cls_index)
+                tokenized_examples['end_positions'].append (cls_index)
             else:
                 # Find start and end token positions
-                while token_start_index < len(offsets) and offsets[token_start_index][0] <= start_char:
+                while token_start_index < len (offsets) and offsets[token_start_index][0] <= start_char:
                     token_start_index += 1
-                tokenized_examples['start_positions'].append(token_start_index - 1)
+                tokenized_examples['start_positions'].append (token_start_index - 1)
                 
                 while offsets[token_end_index][1] >= end_char:
                     token_end_index -= 1
-                tokenized_examples['end_positions'].append(token_end_index + 1)
+                tokenized_examples['end_positions'].append (token_end_index + 1)
     
     return tokenized_examples
 
@@ -238,23 +238,23 @@ documents = [
 tokenized_docs = [doc.lower().split() for doc in documents]
 
 # Create BM25 index
-bm25 = BM25Okapi(tokenized_docs)
+bm25 = BM25Okapi (tokenized_docs)
 
 # Query
 query = "machine learning artificial intelligence"
 tokenized_query = query.lower().split()
 
 # Get scores
-scores = bm25.get_scores(tokenized_query)
+scores = bm25.get_scores (tokenized_query)
 print("BM25 Scores:", scores)
 
 # Get top k documents
 top_k = 3
-top_docs = np.argsort(scores)[::-1][:top_k]
+top_docs = np.argsort (scores)[::-1][:top_k]
 
 print(f"\\nQuery: {query}")
 print("Top results:")
-for i, doc_idx in enumerate(top_docs):
+for i, doc_idx in enumerate (top_docs):
     print(f"{i+1}. {documents[doc_idx]} (score: {scores[doc_idx]:.4f})")
 \`\`\`
 
@@ -277,7 +277,7 @@ documents = [
     "Python is a popular programming language for data science"
 ]
 
-doc_embeddings = model.encode(documents)
+doc_embeddings = model.encode (documents)
 print(f"Document embeddings shape: {doc_embeddings.shape}")  # (5, 384)
 
 # Encode query
@@ -285,16 +285,16 @@ query = "What is machine learning?"
 query_embedding = model.encode([query])
 
 # Compute similarity
-similarities = cosine_similarity(query_embedding, doc_embeddings)[0]
+similarities = cosine_similarity (query_embedding, doc_embeddings)[0]
 print(f"\\nQuery: {query}")
 print("Similarities:", similarities)
 
 # Get top k
 top_k = 3
-top_indices = np.argsort(similarities)[::-1][:top_k]
+top_indices = np.argsort (similarities)[::-1][:top_k]
 
 print("\\nTop results:")
-for i, idx in enumerate(top_indices):
+for i, idx in enumerate (top_indices):
     print(f"{i+1}. {documents[idx]}")
     print(f"   Similarity: {similarities[idx]:.4f}")
 \`\`\`
@@ -302,21 +302,21 @@ for i, idx in enumerate(top_indices):
 ### Hybrid Search (BM25 + Dense)
 
 \`\`\`python
-def hybrid_search(query, documents, alpha=0.5):
+def hybrid_search (query, documents, alpha=0.5):
     """
     Combine BM25 (sparse) and dense retrieval
     alpha: weight for dense scores (1-alpha for BM25)
     """
     # BM25 scores
     tokenized_docs = [doc.lower().split() for doc in documents]
-    bm25 = BM25Okapi(tokenized_docs)
+    bm25 = BM25Okapi (tokenized_docs)
     tokenized_query = query.lower().split()
-    bm25_scores = bm25.get_scores(tokenized_query)
+    bm25_scores = bm25.get_scores (tokenized_query)
     
     # Dense scores
-    doc_embeddings = model.encode(documents)
+    doc_embeddings = model.encode (documents)
     query_embedding = model.encode([query])
-    dense_scores = cosine_similarity(query_embedding, doc_embeddings)[0]
+    dense_scores = cosine_similarity (query_embedding, doc_embeddings)[0]
     
     # Normalize scores to [0, 1]
     bm25_normalized = (bm25_scores - bm25_scores.min()) / (bm25_scores.max() - bm25_scores.min() + 1e-10)
@@ -329,11 +329,11 @@ def hybrid_search(query, documents, alpha=0.5):
 
 # Example
 query = "machine learning AI"
-hybrid_scores = hybrid_search(query, documents, alpha=0.5)
+hybrid_scores = hybrid_search (query, documents, alpha=0.5)
 
 print(f"Query: {query}")
 print("\\nHybrid scores:")
-for i, score in enumerate(hybrid_scores):
+for i, score in enumerate (hybrid_scores):
     print(f"{documents[i]}: {score:.4f}")
 \`\`\`
 
@@ -358,25 +358,25 @@ passages = [
     "Madrid is the capital of Spain"
 ]
 
-context_inputs = context_tokenizer(passages, padding=True, truncation=True, return_tensors='pt')
+context_inputs = context_tokenizer (passages, padding=True, truncation=True, return_tensors='pt')
 with torch.no_grad():
     context_embeddings = context_encoder(**context_inputs).pooler_output
 
 # Encode question
 question = "What is the capital of France?"
-question_inputs = question_tokenizer(question, return_tensors='pt')
+question_inputs = question_tokenizer (question, return_tensors='pt')
 with torch.no_grad():
     question_embedding = question_encoder(**question_inputs).pooler_output
 
 # Compute similarities
-similarities = torch.matmul(question_embedding, context_embeddings.T)[0]
+similarities = torch.matmul (question_embedding, context_embeddings.T)[0]
 print(f"\\nQuestion: {question}")
 print("Similarities:")
-for i, sim in enumerate(similarities):
+for i, sim in enumerate (similarities):
     print(f"{passages[i]}: {sim.item():.4f}")
 
 # Get best match
-best_idx = torch.argmax(similarities).item()
+best_idx = torch.argmax (similarities).item()
 print(f"\\nBest match: {passages[best_idx]}")
 \`\`\`
 
@@ -388,7 +388,7 @@ class QASystem:
     
     def __init__(self, retriever_model='all-MiniLM-L6-v2', qa_model='distilbert-base-cased-distilled-squad'):
         # Retriever
-        self.retriever = SentenceTransformer(retriever_model)
+        self.retriever = SentenceTransformer (retriever_model)
         
         # QA model
         self.qa_pipeline = pipeline('question-answering', model=qa_model)
@@ -397,35 +397,35 @@ class QASystem:
         self.documents = []
         self.document_embeddings = None
     
-    def add_documents(self, documents):
+    def add_documents (self, documents):
         """Index documents"""
         self.documents = documents
-        self.document_embeddings = self.retriever.encode(documents)
-        print(f"Indexed {len(documents)} documents")
+        self.document_embeddings = self.retriever.encode (documents)
+        print(f"Indexed {len (documents)} documents")
     
-    def retrieve(self, question, top_k=3):
+    def retrieve (self, question, top_k=3):
         """Retrieve relevant documents"""
         question_embedding = self.retriever.encode([question])
-        similarities = cosine_similarity(question_embedding, self.document_embeddings)[0]
+        similarities = cosine_similarity (question_embedding, self.document_embeddings)[0]
         
-        top_indices = np.argsort(similarities)[::-1][:top_k]
+        top_indices = np.argsort (similarities)[::-1][:top_k]
         return [(self.documents[i], similarities[i]) for i in top_indices]
     
-    def answer(self, question, top_k=3):
+    def answer (self, question, top_k=3):
         """Retrieve documents and extract answer"""
         # Retrieve relevant documents
-        retrieved_docs = self.retrieve(question, top_k)
+        retrieved_docs = self.retrieve (question, top_k)
         
         print(f"\\nQuestion: {question}")
-        print(f"\\nRetrieved {len(retrieved_docs)} documents:")
-        for i, (doc, score) in enumerate(retrieved_docs):
+        print(f"\\nRetrieved {len (retrieved_docs)} documents:")
+        for i, (doc, score) in enumerate (retrieved_docs):
             print(f"{i+1}. (score: {score:.4f}) {doc[:100]}...")
         
         # Try to answer from each document
         answers = []
         for doc, retrieval_score in retrieved_docs:
             try:
-                result = self.qa_pipeline(question=question, context=doc)
+                result = self.qa_pipeline (question=question, context=doc)
                 answers.append({
                     'answer': result['answer'],
                     'qa_score': result['score'],
@@ -440,7 +440,7 @@ class QASystem:
             return None
         
         # Return best answer by combined score
-        best_answer = max(answers, key=lambda x: x['combined_score'])
+        best_answer = max (answers, key=lambda x: x['combined_score'])
         return best_answer
 
 # Example usage
@@ -454,11 +454,11 @@ documents = [
     "The Taj Mahal is an ivory-white marble mausoleum on the right bank of the river Yamuna in Agra, India.",
 ]
 
-qa_system.add_documents(documents)
+qa_system.add_documents (documents)
 
 # Ask questions
 question = "Who was the Eiffel Tower named after?"
-result = qa_system.answer(question)
+result = qa_system.answer (question)
 
 if result:
     print(f"\\nAnswer: {result['answer']}")
@@ -483,12 +483,12 @@ documents = [
 ] * 1000  # Scale up
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
-embeddings = model.encode(documents)
+embeddings = model.encode (documents)
 
 # Create FAISS index
 dimension = embeddings.shape[1]
 index = faiss.IndexFlatL2(dimension)  # L2 distance
-index.add(embeddings.astype('float32'))
+index.add (embeddings.astype('float32'))
 
 print(f"Indexed {index.ntotal} documents")
 
@@ -497,11 +497,11 @@ query = "What is machine learning?"
 query_embedding = model.encode([query]).astype('float32')
 
 k = 5  # Top 5 results
-distances, indices = index.search(query_embedding, k)
+distances, indices = index.search (query_embedding, k)
 
 print(f"\\nQuery: {query}")
 print("Results:")
-for i, (dist, idx) in enumerate(zip(distances[0], indices[0])):
+for i, (dist, idx) in enumerate (zip (distances[0], indices[0])):
     print(f"{i+1}. {documents[idx]} (distance: {dist:.4f})")
 \`\`\`
 
@@ -510,73 +510,73 @@ for i, (dist, idx) in enumerate(zip(distances[0], indices[0])):
 \`\`\`python
 # For retrieval: Precision@K, Recall@K, MAP, MRR
 
-def precision_at_k(relevant, retrieved, k):
+def precision_at_k (relevant, retrieved, k):
     """Precision at K"""
     retrieved_k = retrieved[:k]
-    relevant_retrieved = len(set(relevant) & set(retrieved_k))
+    relevant_retrieved = len (set (relevant) & set (retrieved_k))
     return relevant_retrieved / k
 
-def recall_at_k(relevant, retrieved, k):
+def recall_at_k (relevant, retrieved, k):
     """Recall at K"""
     retrieved_k = retrieved[:k]
-    relevant_retrieved = len(set(relevant) & set(retrieved_k))
-    return relevant_retrieved / len(relevant)
+    relevant_retrieved = len (set (relevant) & set (retrieved_k))
+    return relevant_retrieved / len (relevant)
 
-def average_precision(relevant, retrieved):
+def average_precision (relevant, retrieved):
     """Average Precision"""
     score = 0.0
     num_relevant = 0
     
-    for i, doc in enumerate(retrieved):
+    for i, doc in enumerate (retrieved):
         if doc in relevant:
             num_relevant += 1
             score += num_relevant / (i + 1)
     
-    return score / len(relevant) if relevant else 0.0
+    return score / len (relevant) if relevant else 0.0
 
-def mean_average_precision(relevance_lists, retrieval_lists):
+def mean_average_precision (relevance_lists, retrieval_lists):
     """MAP across multiple queries"""
-    return np.mean([average_precision(rel, ret) 
-                   for rel, ret in zip(relevance_lists, retrieval_lists)])
+    return np.mean([average_precision (rel, ret) 
+                   for rel, ret in zip (relevance_lists, retrieval_lists)])
 
 # For QA: Exact Match (EM) and F1
 
-def normalize_answer(s):
+def normalize_answer (s):
     """Normalize answer for comparison"""
     import re
     import string
     
-    def remove_articles(text):
-        return re.sub(r'\\b(a|an|the)\\b', ' ', text)
+    def remove_articles (text):
+        return re.sub (r'\\b (a|an|the)\\b', ' ', text)
     
-    def white_space_fix(text):
-        return ' '.join(text.split())
+    def white_space_fix (text):
+        return ' '.join (text.split())
     
-    def remove_punc(text):
-        exclude = set(string.punctuation)
-        return '.join(ch for ch in text if ch not in exclude)
+    def remove_punc (text):
+        exclude = set (string.punctuation)
+        return '.join (ch for ch in text if ch not in exclude)
     
-    def lower(text):
+    def lower (text):
         return text.lower()
     
-    return white_space_fix(remove_articles(remove_punc(lower(s))))
+    return white_space_fix (remove_articles (remove_punc (lower (s))))
 
-def exact_match_score(prediction, ground_truth):
+def exact_match_score (prediction, ground_truth):
     """Exact match"""
-    return normalize_answer(prediction) == normalize_answer(ground_truth)
+    return normalize_answer (prediction) == normalize_answer (ground_truth)
 
-def f1_score_qa(prediction, ground_truth):
+def f1_score_qa (prediction, ground_truth):
     """Token-level F1"""
-    pred_tokens = normalize_answer(prediction).split()
-    gt_tokens = normalize_answer(ground_truth).split()
+    pred_tokens = normalize_answer (prediction).split()
+    gt_tokens = normalize_answer (ground_truth).split()
     
-    common = set(pred_tokens) & set(gt_tokens)
+    common = set (pred_tokens) & set (gt_tokens)
     
-    if len(common) == 0:
+    if len (common) == 0:
         return 0.0
     
-    precision = len(common) / len(pred_tokens)
-    recall = len(common) / len(gt_tokens)
+    precision = len (common) / len (pred_tokens)
+    recall = len (common) / len (gt_tokens)
     
     return 2 * (precision * recall) / (precision + recall)
 
@@ -584,8 +584,8 @@ def f1_score_qa(prediction, ground_truth):
 prediction = "Gustave Eiffel"
 ground_truth = "the engineer Gustave Eiffel"
 
-em = exact_match_score(prediction, ground_truth)
-f1 = f1_score_qa(prediction, ground_truth)
+em = exact_match_score (prediction, ground_truth)
+f1 = f1_score_qa (prediction, ground_truth)
 
 print(f"Exact Match: {em}")
 print(f"F1 Score: {f1:.4f}")

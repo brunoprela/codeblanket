@@ -34,7 +34,7 @@ export const creditDiscussionQuestions = [
       'Company has Total Debt $2B, EBITDA $500M, but also has $800M cash. Calculate both gross and net leverage. Why does net leverage matter more for credit analysis?',
     answer: `**Leverage Calculations**:
 - **Gross Leverage**: Total Debt / EBITDA = $2B / $500M = **4.0x**
-- **Net Leverage**: (Total Debt - Cash) / EBITDA = ($2B - $800M) / $500M = **2.4x**
+- **Net Leverage**: (Total Debt - Cash) / EBITDA = (\$2B - $800M) / $500M = **2.4x**
 
 **Why Net Leverage Matters More**:
 

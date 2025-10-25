@@ -19,12 +19,12 @@ class SECFilingMonitor:
             'gross_margin_decline': -0.05  # 5%+ decline
         }
     
-    def monitor_filing(self, ticker: str, filing_type: str):
+    def monitor_filing (self, ticker: str, filing_type: str):
         """Process new filing and generate alerts."""
         
         # 1. Extract financials
-        current = self.extract_metrics(ticker, filing_type)
-        prior = self.get_prior_period(ticker)
+        current = self.extract_metrics (ticker, filing_type)
+        prior = self.get_prior_period (ticker)
         
         # 2. Calculate changes
         alerts = []
@@ -108,17 +108,17 @@ class MDATextAnalyzer:
             ]
         }
     
-    def analyze_mda(self, mda_text: str, prior_mda: str) -> Dict:
+    def analyze_mda (self, mda_text: str, prior_mda: str) -> Dict:
         """Compare current MD&A to prior period."""
         
         current_analysis = {
-            'fog_index': self.calculate_readability(mda_text),
-            'evasive_language_count': self.count_patterns(mda_text, 'evasive_language'),
-            'sentiment_score': self.analyze_sentiment(mda_text),
-            'forward_looking_count': self.count_forward_looking(mda_text)
+            'fog_index': self.calculate_readability (mda_text),
+            'evasive_language_count': self.count_patterns (mda_text, 'evasive_language'),
+            'sentiment_score': self.analyze_sentiment (mda_text),
+            'forward_looking_count': self.count_forward_looking (mda_text)
         }
         
-        prior_analysis = self.analyze_prior(prior_mda)
+        prior_analysis = self.analyze_prior (prior_mda)
         
         # Red flag: Increased complexity (hiding problems)
         if current_analysis['fog_index'] > prior_analysis['fog_index'] + 2:
@@ -175,51 +175,51 @@ class MDATextAnalyzer:
 class XBRLValidator:
     """Detect XBRL manipulation and classification games."""
     
-    def validate_filing(self, facts: Dict, ticker: str) -> List[str]:
+    def validate_filing (self, facts: Dict, ticker: str) -> List[str]:
         """Run validation checks on XBRL data."""
         
         issues = []
         
         # Check 1: Revenue recognition consistency
         revenue_tags = ['Revenues', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'SalesRevenueNet']
-        if self.multiple_revenue_tags_used(facts, revenue_tags):
+        if self.multiple_revenue_tags_used (facts, revenue_tags):
             issues.append('Multiple revenue tags used - check for classification shift')
         
         # Check 2: Operating expense reclassification
-        if self.detect_expense_reclassification(facts):
+        if self.detect_expense_reclassification (facts):
             issues.append('Operating expenses may have been reclassified')
         
         # Check 3: Unusual custom tags
-        custom_tag_pct = self.calculate_custom_tag_percentage(facts)
+        custom_tag_pct = self.calculate_custom_tag_percentage (facts)
         if custom_tag_pct > 0.15:  # >15% custom tags
-            issues.append(f'High custom tag usage ({custom_tag_pct:.1%}) - reduced comparability')
+            issues.append (f'High custom tag usage ({custom_tag_pct:.1%}) - reduced comparability')
         
         # Check 4: Balance sheet doesn't balance
-        if not self.validate_balance_sheet(facts):
+        if not self.validate_balance_sheet (facts):
             issues.append('CRITICAL: Balance sheet assets ≠ liabilities + equity')
         
         # Check 5: Cash flow reconciliation
-        if not self.validate_cash_flow_reconciliation(facts):
+        if not self.validate_cash_flow_reconciliation (facts):
             issues.append('Cash flow statement doesn't reconcile with balance sheet')
         
         return issues
     
-    def detect_expense_reclassification(self, facts: Dict) -> bool:
+    def detect_expense_reclassification (self, facts: Dict) -> bool:
         """Detect if expenses moved between categories."""
         
         # Compare current vs prior period classifications
         # Flag if same $ amount moved from OpEx to COGS (boosts margins)
         pass
     
-    def validate_balance_sheet(self, facts: Dict) -> bool:
+    def validate_balance_sheet (self, facts: Dict) -> bool:
         """Verify accounting equation: Assets = Liabilities + Equity."""
         
-        assets = self.get_value(facts, 'Assets')
-        liabilities = self.get_value(facts, 'Liabilities')
-        equity = self.get_value(facts, 'StockholdersEquity')
+        assets = self.get_value (facts, 'Assets')
+        liabilities = self.get_value (facts, 'Liabilities')
+        equity = self.get_value (facts, 'StockholdersEquity')
         
         # Allow 1% rounding difference
-        return abs(assets - (liabilities + equity)) / assets < 0.01
+        return abs (assets - (liabilities + equity)) / assets < 0.01
 \`\`\`
 
 **Validation Checks**:

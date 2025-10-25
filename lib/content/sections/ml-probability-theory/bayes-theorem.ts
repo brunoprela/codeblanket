@@ -131,7 +131,7 @@ def law_of_total_probability_demo():
     p_free_given_spam = 0.8  # 80% of spam contains "free"
     p_free_given_legit = 0.1  # 10% of legit contains "free"
     
-    # What's the overall probability an email contains "free"?
+    # What\'s the overall probability an email contains "free"?
     # Law of Total Probability
     p_free = (p_free_given_spam * p_spam + 
               p_free_given_legit * p_legit)
@@ -188,7 +188,7 @@ def bayesian_updating():
     print("=== Bayesian Updating: Fair vs Biased Coin ===")
     print(f"Prior: P(fair) = {p_fair:.3f}, P(biased) = {p_biased:.3f}\\n")
     
-    for i, outcome in enumerate(observations, 1):
+    for i, outcome in enumerate (observations, 1):
         # Likelihoods
         if outcome == 'H':
             p_outcome_given_fair = 0.5
@@ -260,7 +260,7 @@ labels = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0]  # 1=spam, 0=legitimate
 
 # Convert text to features
 vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(emails)
+X = vectorizer.fit_transform (emails)
 
 # Train Naive Bayes
 nb = MultinomialNB()
@@ -272,12 +272,12 @@ test_emails = [
     "Team meeting notes"
 ]
 
-X_test = vectorizer.transform(test_emails)
+X_test = vectorizer.transform (test_emails)
 predictions = nb.predict(X_test)
 probabilities = nb.predict_proba(X_test)
 
 print("=== Naive Bayes Spam Classifier ===")
-for email, pred, proba in zip(test_emails, predictions, probabilities):
+for email, pred, proba in zip (test_emails, predictions, probabilities):
     label = "SPAM" if pred == 1 else "LEGITIMATE"
     print(f"Email: '{email}'")
     print(f"Prediction: {label}")
@@ -315,12 +315,12 @@ def visualize_prior_vs_posterior():
         p_e_given_not_h = 1 - likelihood
         p_e = likelihood * prior + p_e_given_not_h * (1 - prior)
         posterior = (likelihood * prior) / p_e
-        posteriors.append(posterior)
+        posteriors.append (posterior)
     
     # Plot
-    plt.figure(figsize=(10, 6))
-    plt.plot(evidence_strengths, posteriors, 'b-', linewidth=2, label='Posterior P(H|E)')
-    plt.axhline(y=prior, color='r', linestyle='--', label=f'Prior P(H) = {prior}')
+    plt.figure (figsize=(10, 6))
+    plt.plot (evidence_strengths, posteriors, 'b-', linewidth=2, label='Posterior P(H|E)')
+    plt.axhline (y=prior, color='r', linestyle='--', label=f'Prior P(H) = {prior}')
     plt.xlabel('Likelihood P(E|H)', fontsize=12)
     plt.ylabel('Probability', fontsize=12)
     plt.title('How Evidence Updates Beliefs (Bayesian Updating)', fontsize=14)
@@ -338,7 +338,7 @@ visualize_prior_vs_posterior()
 
 ## Common Misconceptions
 
-### 1. Prosecutor's Fallacy
+### 1. Prosecutor\'s Fallacy
 
 **Wrong**: P(innocent | evidence) = P(evidence | innocent)
 
@@ -404,11 +404,11 @@ def ab_test_bayesian():
     
     # Sample from posteriors
     np.random.seed(42)
-    samples_A = beta.rvs(alpha_A, beta_A, size=10000)
-    samples_B = beta.rvs(alpha_B, beta_B, size=10000)
+    samples_A = beta.rvs (alpha_A, beta_A, size=10000)
+    samples_B = beta.rvs (alpha_B, beta_B, size=10000)
     
     # Probability B > A
-    p_b_better = np.mean(samples_B > samples_A)
+    p_b_better = np.mean (samples_B > samples_A)
     
     print("=== Bayesian A/B Test ===")
     print(f"Variant A: {conversions_A}/{total_A} = {conversions_A/total_A:.1%} conversion")

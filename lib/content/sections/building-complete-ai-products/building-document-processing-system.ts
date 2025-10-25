@@ -114,13 +114,13 @@ class FileDetector:
     """
     
     def __init__(self):
-        self.magic = magic.Magic(mime=True)
+        self.magic = magic.Magic (mime=True)
     
-    def detect(self, file_path: Path) -> FileType:
+    def detect (self, file_path: Path) -> FileType:
         """
         Detect file type from content, not extension
         """
-        mime_type = self.magic.from_file(str(file_path))
+        mime_type = self.magic.from_file (str (file_path))
         
         # Map MIME types to FileType enum
         if "pdf" in mime_type:
@@ -147,9 +147,9 @@ class FileDetector:
         else:
             return FileType.UNKNOWN
     
-    def is_processable(self, file_path: Path) -> bool:
+    def is_processable (self, file_path: Path) -> bool:
         """Check if file can be processed"""
-        file_type = self.detect(file_path)
+        file_type = self.detect (file_path)
         return file_type != FileType.UNKNOWN
 
 # Usage
@@ -196,28 +196,28 @@ class PDFProcessor:
     def __init__(self):
         self.ocr_enabled = True
         
-    async def process(self, file_path: Path) -> PDFContent:
+    async def process (self, file_path: Path) -> PDFContent:
         """
         Process PDF with multiple extraction methods
         """
         # Try PyPDF2 first (fastest)
-        text, metadata = self._extract_with_pypdf(file_path)
+        text, metadata = self._extract_with_pypdf (file_path)
         
         # If little text found, likely scanned - use OCR
-        is_scanned = len(text.strip()) < 100
+        is_scanned = len (text.strip()) < 100
         
         if is_scanned and self.ocr_enabled:
             print(f"Scanned PDF detected, using OCR...")
-            text = await self._extract_with_ocr(file_path)
+            text = await self._extract_with_ocr (file_path)
         
         # Extract tables with pdfplumber
-        tables = self._extract_tables(file_path)
+        tables = self._extract_tables (file_path)
         
         # Extract images
-        images = self._extract_images(file_path)
+        images = self._extract_images (file_path)
         
         # Extract per-page content
-        pages = self._extract_pages(file_path)
+        pages = self._extract_pages (file_path)
         
         return PDFContent(
             text=text,
@@ -228,16 +228,16 @@ class PDFProcessor:
             is_scanned=is_scanned
         )
     
-    def _extract_with_pypdf(self, file_path: Path) -> Tuple[str, Dict]:
+    def _extract_with_pypdf (self, file_path: Path) -> Tuple[str, Dict]:
         """Extract text with PyPDF2"""
-        reader = PdfReader(file_path)
+        reader = PdfReader (file_path)
         
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\\n\\n"
         
         metadata = {
-            "pages": len(reader.pages),
+            "pages": len (reader.pages),
             "title": reader.metadata.get('/Title', '),
             "author": reader.metadata.get('/Author', '),
             "subject": reader.metadata.get('/Subject', '),
@@ -246,56 +246,56 @@ class PDFProcessor:
         
         return text, metadata
     
-    async def _extract_with_ocr(self, file_path: Path) -> str:
+    async def _extract_with_ocr (self, file_path: Path) -> str:
         """
         Extract text using OCR (for scanned PDFs)
         """
-        doc = fitz.open(file_path)
+        doc = fitz.open (file_path)
         text = ""
         
-        for page_num, page in enumerate(doc):
+        for page_num, page in enumerate (doc):
             # Convert page to image
-            pix = page.get_pixmap(dpi=300)  # High DPI for better OCR
+            pix = page.get_pixmap (dpi=300)  # High DPI for better OCR
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             
             # Apply OCR
-            page_text = pytesseract.image_to_string(img, lang='eng')
+            page_text = pytesseract.image_to_string (img, lang='eng')
             text += f"[Page {page_num + 1}]\\n{page_text}\\n\\n"
         
         doc.close()
         return text
     
-    def _extract_tables(self, file_path: Path) -> List[Dict]:
+    def _extract_tables (self, file_path: Path) -> List[Dict]:
         """Extract tables with pdfplumber"""
         tables = []
         
-        with pdfplumber.open(file_path) as pdf:
-            for page_num, page in enumerate(pdf.pages):
+        with pdfplumber.open (file_path) as pdf:
+            for page_num, page in enumerate (pdf.pages):
                 page_tables = page.extract_tables()
                 
-                for table_num, table in enumerate(page_tables):
+                for table_num, table in enumerate (page_tables):
                     if table:
                         tables.append({
                             "page": page_num + 1,
                             "table_number": table_num + 1,
                             "data": table,
                             "headers": table[0] if table else [],
-                            "rows": table[1:] if len(table) > 1 else []
+                            "rows": table[1:] if len (table) > 1 else []
                         })
         
         return tables
     
-    def _extract_images(self, file_path: Path) -> List[Dict]:
+    def _extract_images (self, file_path: Path) -> List[Dict]:
         """Extract images from PDF"""
-        doc = fitz.open(file_path)
+        doc = fitz.open (file_path)
         images = []
         
-        for page_num, page in enumerate(doc):
+        for page_num, page in enumerate (doc):
             image_list = page.get_images()
             
-            for img_num, img in enumerate(image_list):
+            for img_num, img in enumerate (image_list):
                 xref = img[0]
-                base_image = doc.extract_image(xref)
+                base_image = doc.extract_image (xref)
                 
                 images.append({
                     "page": page_num + 1,
@@ -309,16 +309,16 @@ class PDFProcessor:
         doc.close()
         return images
     
-    def _extract_pages(self, file_path: Path) -> List[Dict]:
+    def _extract_pages (self, file_path: Path) -> List[Dict]:
         """Extract per-page content"""
-        reader = PdfReader(file_path)
+        reader = PdfReader (file_path)
         pages = []
         
-        for i, page in enumerate(reader.pages):
+        for i, page in enumerate (reader.pages):
             pages.append({
                 "page_number": i + 1,
                 "text": page.extract_text(),
-                "word_count": len(page.extract_text().split())
+                "word_count": len (page.extract_text().split())
             })
         
         return pages
@@ -327,9 +327,9 @@ class PDFProcessor:
 processor = PDFProcessor()
 content = await processor.process(Path("document.pdf"))
 
-print(f"Extracted {len(content.text)} characters")
-print(f"Found {len(content.tables)} tables")
-print(f"Found {len(content.images)} images")
+print(f"Extracted {len (content.text)} characters")
+print(f"Found {len (content.tables)} tables")
+print(f"Found {len (content.images)} images")
 print(f"Scanned: {content.is_scanned}")
 \`\`\`
 
@@ -364,26 +364,26 @@ class DOCXProcessor:
     Process Word documents preserving structure
     """
     
-    def process(self, file_path: Path) -> DOCXContent:
+    def process (self, file_path: Path) -> DOCXContent:
         """
         Extract structured content from DOCX
         """
-        doc = Document(file_path)
+        doc = Document (file_path)
         
         # Extract text maintaining structure
-        paragraphs = self._extract_paragraphs(doc)
+        paragraphs = self._extract_paragraphs (doc)
         
         # Extract tables
-        tables = self._extract_tables(doc)
+        tables = self._extract_tables (doc)
         
         # Extract images
-        images = self._extract_images(doc)
+        images = self._extract_images (doc)
         
         # Analyze styles used
-        styles = self._analyze_styles(doc)
+        styles = self._analyze_styles (doc)
         
         # Get metadata
-        metadata = self._extract_metadata(doc)
+        metadata = self._extract_metadata (doc)
         
         # Combine all text
         full_text = "\\n\\n".join([p["text"] for p in paragraphs])
@@ -397,33 +397,33 @@ class DOCXProcessor:
             metadata=metadata
         )
     
-    def _extract_paragraphs(self, doc: Document) -> List[Dict]:
+    def _extract_paragraphs (self, doc: Document) -> List[Dict]:
         """Extract paragraphs with formatting"""
         paragraphs = []
         
-        for i, para in enumerate(doc.paragraphs):
+        for i, para in enumerate (doc.paragraphs):
             if para.text.strip():
                 paragraphs.append({
                     "index": i,
                     "text": para.text,
                     "style": para.style.name if para.style else "Normal",
-                    "alignment": str(para.alignment) if para.alignment else "LEFT",
+                    "alignment": str (para.alignment) if para.alignment else "LEFT",
                     "is_heading": para.style.name.startswith("Heading") if para.style else False,
-                    "level": self._get_heading_level(para)
+                    "level": self._get_heading_level (para)
                 })
         
         return paragraphs
     
-    def _get_heading_level(self, para: Paragraph) -> Optional[int]:
+    def _get_heading_level (self, para: Paragraph) -> Optional[int]:
         """Get heading level (1-9)"""
         if para.style and para.style.name.startswith("Heading"):
             try:
-                return int(para.style.name.replace("Heading ", ""))
+                return int (para.style.name.replace("Heading ", ""))
             except:
                 return None
         return None
     
-    def _extract_tables(self, doc: Document) -> List[List[List[str]]]:
+    def _extract_tables (self, doc: Document) -> List[List[List[str]]]:
         """Extract all tables"""
         tables = []
         
@@ -432,13 +432,13 @@ class DOCXProcessor:
             for row in table.rows:
                 row_data = []
                 for cell in row.cells:
-                    row_data.append(cell.text.strip())
-                table_data.append(row_data)
-            tables.append(table_data)
+                    row_data.append (cell.text.strip())
+                table_data.append (row_data)
+            tables.append (table_data)
         
         return tables
     
-    def _extract_images(self, doc: Document) -> List[Dict]:
+    def _extract_images (self, doc: Document) -> List[Dict]:
         """Extract embedded images"""
         images = []
         
@@ -451,18 +451,18 @@ class DOCXProcessor:
         
         return images
     
-    def _analyze_styles(self, doc: Document) -> Dict[str, int]:
+    def _analyze_styles (self, doc: Document) -> Dict[str, int]:
         """Count usage of different styles"""
         styles = {}
         
         for para in doc.paragraphs:
             if para.style:
                 style_name = para.style.name
-                styles[style_name] = styles.get(style_name, 0) + 1
+                styles[style_name] = styles.get (style_name, 0) + 1
         
         return styles
     
-    def _extract_metadata(self, doc: Document) -> Dict[str, any]:
+    def _extract_metadata (self, doc: Document) -> Dict[str, any]:
         """Extract document metadata"""
         core_props = doc.core_properties
         
@@ -481,9 +481,9 @@ class DOCXProcessor:
 docx_processor = DOCXProcessor()
 content = docx_processor.process(Path("document.docx"))
 
-print(f"Paragraphs: {len(content.paragraphs)}")
-print(f"Tables: {len(content.tables)}")
-print(f"Images: {len(content.images)}")
+print(f"Paragraphs: {len (content.paragraphs)}")
+print(f"Tables: {len (content.tables)}")
+print(f"Images: {len (content.images)}")
 print(f"Styles used: {content.styles}")
 \`\`\`
 
@@ -515,15 +515,15 @@ class ExcelProcessor:
     Process Excel files with formula and formatting preservation
     """
     
-    def process(self, file_path: Path) -> ExcelContent:
+    def process (self, file_path: Path) -> ExcelContent:
         """
         Extract structured data from Excel
         """
         # Load with pandas for data
-        excel_file = pd.ExcelFile(file_path)
+        excel_file = pd.ExcelFile (file_path)
         
         # Load with openpyxl for formulas
-        workbook = load_workbook(file_path, data_only=False)
+        workbook = load_workbook (file_path, data_only=False)
         
         sheets = []
         total_rows = 0
@@ -532,31 +532,31 @@ class ExcelProcessor:
         
         for sheet_name in excel_file.sheet_names:
             # Get data
-            df = pd.read_excel(excel_file, sheet_name=sheet_name)
+            df = pd.read_excel (excel_file, sheet_name=sheet_name)
             
             # Get formulas
             ws = workbook[sheet_name]
-            formulas = self._extract_formulas(ws)
-            all_formulas.extend(formulas)
+            formulas = self._extract_formulas (ws)
+            all_formulas.extend (formulas)
             
             # Get cell formatting
-            formatting = self._extract_formatting(ws)
+            formatting = self._extract_formatting (ws)
             
             sheets.append({
                 "name": sheet_name,
-                "data": df.to_dict(orient='records'),
+                "data": df.to_dict (orient='records'),
                 "shape": df.shape,
-                "columns": list(df.columns),
+                "columns": list (df.columns),
                 "formulas": formulas,
                 "formatting": formatting,
-                "has_charts": len(ws._charts) > 0
+                "has_charts": len (ws._charts) > 0
             })
             
             total_rows += df.shape[0]
             total_cols += df.shape[1]
         
         # Generate summary
-        summary = self._generate_summary(sheets)
+        summary = self._generate_summary (sheets)
         
         return ExcelContent(
             sheets=sheets,
@@ -566,13 +566,13 @@ class ExcelProcessor:
             formulas=all_formulas
         )
     
-    def _extract_formulas(self, worksheet) -> List[str]:
+    def _extract_formulas (self, worksheet) -> List[str]:
         """Extract all formulas from worksheet"""
         formulas = []
         
         for row in worksheet.iter_rows():
             for cell in row:
-                if cell.value and isinstance(cell.value, str) and cell.value.startswith('='):
+                if cell.value and isinstance (cell.value, str) and cell.value.startswith('='):
                     formulas.append({
                         "cell": cell.coordinate,
                         "formula": cell.value
@@ -580,7 +580,7 @@ class ExcelProcessor:
         
         return formulas
     
-    def _extract_formatting(self, worksheet) -> Dict:
+    def _extract_formatting (self, worksheet) -> Dict:
         """Extract cell formatting information"""
         formatting = {
             "bold_cells": [],
@@ -591,7 +591,7 @@ class ExcelProcessor:
         for row in worksheet.iter_rows():
             for cell in row:
                 if cell.font and cell.font.bold:
-                    formatting["bold_cells"].append(cell.coordinate)
+                    formatting["bold_cells"].append (cell.coordinate)
                 
                 if cell.fill and cell.fill.start_color:
                     formatting["colored_cells"].append({
@@ -600,39 +600,39 @@ class ExcelProcessor:
                     })
         
         # Get merged cells
-        formatting["merged_cells"] = [str(r) for r in worksheet.merged_cells.ranges]
+        formatting["merged_cells"] = [str (r) for r in worksheet.merged_cells.ranges]
         
         return formatting
     
-    def _generate_summary(self, sheets: List[Dict]) -> str:
+    def _generate_summary (self, sheets: List[Dict]) -> str:
         """Generate natural language summary"""
         summary_parts = []
         
-        summary_parts.append(f"Excel file with {len(sheets)} sheet(s):")
+        summary_parts.append (f"Excel file with {len (sheets)} sheet (s):")
         
         for sheet in sheets:
             name = sheet["name"]
             rows, cols = sheet["shape"]
-            formulas_count = len(sheet["formulas"])
+            formulas_count = len (sheet["formulas"])
             
             summary_parts.append(
                 f"- {name}: {rows} rows × {cols} columns"
             )
             
             if formulas_count > 0:
-                summary_parts.append(f"  Contains {formulas_count} formulas")
+                summary_parts.append (f"  Contains {formulas_count} formulas")
             
             if sheet["has_charts"]:
-                summary_parts.append(f"  Includes charts/graphs")
+                summary_parts.append (f"  Includes charts/graphs")
         
-        return "\\n".join(summary_parts)
+        return "\\n".join (summary_parts)
 
 # Usage
 excel_processor = ExcelProcessor()
 content = excel_processor.process(Path("spreadsheet.xlsx"))
 
 print(content.summary)
-print(f"Total formulas: {len(content.formulas)}")
+print(f"Total formulas: {len (content.formulas)}")
 \`\`\`
 
 ---
@@ -672,7 +672,7 @@ class SmartChunker:
     ):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
-        self.encoder = tiktoken.encoding_for_model(model)
+        self.encoder = tiktoken.encoding_for_model (model)
     
     def chunk_document(
         self,
@@ -683,7 +683,7 @@ class SmartChunker:
         Chunk document intelligently
         """
         # Split into paragraphs first
-        paragraphs = self._split_paragraphs(text)
+        paragraphs = self._split_paragraphs (text)
         
         chunks = []
         current_chunk = []
@@ -691,15 +691,15 @@ class SmartChunker:
         char_position = 0
         
         for para in paragraphs:
-            para_tokens = len(self.encoder.encode(para))
+            para_tokens = len (self.encoder.encode (para))
             
             # If single paragraph exceeds chunk size, split it
             if para_tokens > self.chunk_size:
                 # Flush current chunk
                 if current_chunk:
-                    chunks.append(self._create_chunk(
-                        "\\n\\n".join(current_chunk),
-                        len(chunks),
+                    chunks.append (self._create_chunk(
+                        "\\n\\n".join (current_chunk),
+                        len (chunks),
                         char_position,
                         metadata
                     ))
@@ -707,60 +707,60 @@ class SmartChunker:
                     current_tokens = 0
                 
                 # Split large paragraph by sentences
-                sentences = self._split_sentences(para)
+                sentences = self._split_sentences (para)
                 for sentence in sentences:
-                    sent_tokens = len(self.encoder.encode(sentence))
+                    sent_tokens = len (self.encoder.encode (sentence))
                     
                     if current_tokens + sent_tokens > self.chunk_size:
                         # Create chunk
-                        chunks.append(self._create_chunk(
-                            "\\n\\n".join(current_chunk),
-                            len(chunks),
+                        chunks.append (self._create_chunk(
+                            "\\n\\n".join (current_chunk),
+                            len (chunks),
                             char_position,
                             metadata
                         ))
                         
                         # Keep overlap from previous chunk
-                        overlap_text = self._get_overlap(current_chunk)
+                        overlap_text = self._get_overlap (current_chunk)
                         current_chunk = [overlap_text, sentence] if overlap_text else [sentence]
-                        current_tokens = len(self.encoder.encode(" ".join(current_chunk)))
+                        current_tokens = len (self.encoder.encode(" ".join (current_chunk)))
                     else:
-                        current_chunk.append(sentence)
+                        current_chunk.append (sentence)
                         current_tokens += sent_tokens
             
             # Normal paragraph that fits
             elif current_tokens + para_tokens <= self.chunk_size:
-                current_chunk.append(para)
+                current_chunk.append (para)
                 current_tokens += para_tokens
             
             # Paragraph would exceed limit, start new chunk
             else:
-                chunks.append(self._create_chunk(
-                    "\\n\\n".join(current_chunk),
-                    len(chunks),
+                chunks.append (self._create_chunk(
+                    "\\n\\n".join (current_chunk),
+                    len (chunks),
                     char_position,
                     metadata
                 ))
                 
                 # Start new chunk with overlap
-                overlap_text = self._get_overlap(current_chunk)
+                overlap_text = self._get_overlap (current_chunk)
                 current_chunk = [overlap_text, para] if overlap_text else [para]
-                current_tokens = len(self.encoder.encode(" ".join(current_chunk)))
+                current_tokens = len (self.encoder.encode(" ".join (current_chunk)))
             
-            char_position += len(para) + 2  # +2 for \\n\\n
+            char_position += len (para) + 2  # +2 for \\n\\n
         
         # Add final chunk
         if current_chunk:
-            chunks.append(self._create_chunk(
-                "\\n\\n".join(current_chunk),
-                len(chunks),
+            chunks.append (self._create_chunk(
+                "\\n\\n".join (current_chunk),
+                len (chunks),
                 char_position,
                 metadata
             ))
         
         return chunks
     
-    def _split_paragraphs(self, text: str) -> List[str]:
+    def _split_paragraphs (self, text: str) -> List[str]:
         """Split text into paragraphs"""
         # Split on double newlines or markdown headers
         paragraphs = []
@@ -768,32 +768,32 @@ class SmartChunker:
         
         for line in text.split('\\n'):
             if line.strip() == ' and current:
-                paragraphs.append('\\n'.join(current))
+                paragraphs.append('\\n'.join (current))
                 current = []
             elif line.strip():
-                current.append(line)
+                current.append (line)
         
         if current:
-            paragraphs.append('\\n'.join(current))
+            paragraphs.append('\\n'.join (current))
         
         return paragraphs
     
-    def _split_sentences(self, text: str) -> List[str]:
+    def _split_sentences (self, text: str) -> List[str]:
         """Split text into sentences"""
         import re
         # Simple sentence splitter
-        sentences = re.split(r'(?<=[.!?])\\s+', text)
+        sentences = re.split (r'(?<=[.!?])\\s+', text)
         return [s.strip() for s in sentences if s.strip()]
     
-    def _get_overlap(self, current_chunk: List[str]) -> str:
+    def _get_overlap (self, current_chunk: List[str]) -> str:
         """Get overlap text from previous chunk"""
-        overlap_text = " ".join(current_chunk)
-        overlap_tokens = self.encoder.encode(overlap_text)
+        overlap_text = " ".join (current_chunk)
+        overlap_tokens = self.encoder.encode (overlap_text)
         
-        if len(overlap_tokens) > self.chunk_overlap:
+        if len (overlap_tokens) > self.chunk_overlap:
             # Take last N tokens
             overlap_tokens = overlap_tokens[-self.chunk_overlap:]
-            return self.encoder.decode(overlap_tokens)
+            return self.encoder.decode (overlap_tokens)
         
         return overlap_text
     
@@ -805,22 +805,22 @@ class SmartChunker:
         metadata: Dict
     ) -> DocumentChunk:
         """Create chunk object"""
-        tokens = len(self.encoder.encode(content))
+        tokens = len (self.encoder.encode (content))
         
         return DocumentChunk(
             content=content,
             chunk_id=f"chunk_{chunk_id}",
             start_char=start_char,
-            end_char=start_char + len(content),
+            end_char=start_char + len (content),
             tokens=tokens,
             metadata=metadata or {}
         )
 
 # Usage
-chunker = SmartChunker(chunk_size=1000, chunk_overlap=200)
-chunks = chunker.chunk_document(long_document_text, metadata={"source": "paper.pdf"})
+chunker = SmartChunker (chunk_size=1000, chunk_overlap=200)
+chunks = chunker.chunk_document (long_document_text, metadata={"source": "paper.pdf"})
 
-print(f"Created {len(chunks)} chunks")
+print(f"Created {len (chunks)} chunks")
 for chunk in chunks[:3]:
     print(f"Chunk {chunk.chunk_id}: {chunk.tokens} tokens")
 \`\`\`
@@ -861,10 +861,10 @@ class EmbeddingGenerator:
         embeddings = []
         
         # Process in batches for efficiency
-        for i in range(0, len(chunks), self.batch_size):
+        for i in range(0, len (chunks), self.batch_size):
             batch = chunks[i:i + self.batch_size]
-            batch_embeddings = await self._embed_batch(batch)
-            embeddings.extend(batch_embeddings)
+            batch_embeddings = await self._embed_batch (batch)
+            embeddings.extend (batch_embeddings)
         
         return embeddings
     
@@ -883,11 +883,11 @@ class EmbeddingGenerator:
         )
         
         embeddings = []
-        for i, embedding_data in enumerate(response.data):
+        for i, embedding_data in enumerate (response.data):
             embeddings.append({
                 "chunk_id": chunks[i].chunk_id,
                 "embedding": embedding_data.embedding,
-                "dimension": len(embedding_data.embedding),
+                "dimension": len (embedding_data.embedding),
                 "metadata": chunks[i].metadata
             })
         
@@ -901,16 +901,16 @@ class EmbeddingGenerator:
         """
         Compute cosine similarity between embeddings
         """
-        vec1 = np.array(embedding1)
-        vec2 = np.array(embedding2)
+        vec1 = np.array (embedding1)
+        vec2 = np.array (embedding2)
         
-        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+        return np.dot (vec1, vec2) / (np.linalg.norm (vec1) * np.linalg.norm (vec2))
 
 # Usage
-embedding_gen = EmbeddingGenerator(llm_client)
-embeddings = await embedding_gen.generate_embeddings(chunks)
+embedding_gen = EmbeddingGenerator (llm_client)
+embeddings = await embedding_gen.generate_embeddings (chunks)
 
-print(f"Generated {len(embeddings)} embeddings")
+print(f"Generated {len (embeddings)} embeddings")
 print(f"Dimension: {embeddings[0]['dimension']}")
 \`\`\`
 
@@ -934,13 +934,13 @@ class DocumentStore:
     """
     
     def __init__(self, pinecone_api_key: str, index_name: str = "documents"):
-        self.pc = Pinecone(api_key=pinecone_api_key)
+        self.pc = Pinecone (api_key=pinecone_api_key)
         self.index_name = index_name
         self.index = None
         
         self._init_index()
     
-    def _init_index(self):
+    def _init_index (self):
         """Initialize or connect to Pinecone index"""
         if self.index_name not in self.pc.list_indexes().names():
             self.pc.create_index(
@@ -953,7 +953,7 @@ class DocumentStore:
                 )
             )
         
-        self.index = self.pc.Index(self.index_name)
+        self.index = self.pc.Index (self.index_name)
     
     async def store_document(
         self,
@@ -966,7 +966,7 @@ class DocumentStore:
         """
         vectors = []
         
-        for chunk, emb in zip(chunks, embeddings):
+        for chunk, emb in zip (chunks, embeddings):
             vector_id = f"{document_id}_{chunk.chunk_id}"
             
             vectors.append({
@@ -983,9 +983,9 @@ class DocumentStore:
             })
         
         # Batch upsert
-        self.index.upsert(vectors=vectors, batch_size=100)
+        self.index.upsert (vectors=vectors, batch_size=100)
         
-        print(f"Stored {len(vectors)} chunks for document {document_id}")
+        print(f"Stored {len (vectors)} chunks for document {document_id}")
     
     async def search(
         self,
@@ -1012,17 +1012,17 @@ class DocumentStore:
             for match in results["matches"]
         ]
     
-    async def delete_document(self, document_id: str):
+    async def delete_document (self, document_id: str):
         """Delete all chunks for a document"""
-        self.index.delete(filter={"document_id": document_id})
+        self.index.delete (filter={"document_id": document_id})
 
 # Usage
-store = DocumentStore(pinecone_api_key)
+store = DocumentStore (pinecone_api_key)
 await store.store_document("doc_123", chunks, embeddings)
 
 # Search
-query_emb = await embedding_gen.generate_embeddings([DocumentChunk(content="quantum computing")])
-results = await store.search(query_emb[0]["embedding"], top_k=5)
+query_emb = await embedding_gen.generate_embeddings([DocumentChunk (content="quantum computing")])
+results = await store.search (query_emb[0]["embedding"], top_k=5)
 
 for result in results:
     print(f"Score: {result['score']:.3f}")
@@ -1070,7 +1070,7 @@ class DocumentQA:
                 content=question,
                 chunk_id="query",
                 start_char=0,
-                end_char=len(question),
+                end_char=len (question),
                 tokens=0
             )
         ])
@@ -1084,23 +1084,23 @@ class DocumentQA:
         )
         
         # 3. Build context from top results
-        context = self._build_context(results)
+        context = self._build_context (results)
         
         # 4. Generate answer with citations
-        answer = await self._generate_answer(question, context, results)
+        answer = await self._generate_answer (question, context, results)
         
         return answer
     
-    def _build_context(self, results: List[Dict]) -> str:
+    def _build_context (self, results: List[Dict]) -> str:
         """Build context string from search results"""
         context_parts = []
         
-        for i, result in enumerate(results):
+        for i, result in enumerate (results):
             context_parts.append(
                 f"[Source {i+1}]\\n{result['metadata']['content']}"
             )
         
-        return "\\n\\n".join(context_parts)
+        return "\\n\\n".join (context_parts)
     
     async def _generate_answer(
         self,
@@ -1153,7 +1153,7 @@ answer = await qa.answer_question(
 )
 
 print(f"Answer: {answer['answer']}")
-print(f"Sources used: {len(answer['sources'])}")
+print(f"Sources used: {len (answer['sources'])}")
 \`\`\`
 
 ---
@@ -1183,8 +1183,8 @@ class DocumentProcessingPipeline:
         self.docx_processor = DOCXProcessor()
         self.excel_processor = ExcelProcessor()
         self.chunker = SmartChunker()
-        self.embedding_gen = EmbeddingGenerator(llm_client)
-        self.doc_store = DocumentStore(pinecone_api_key)
+        self.embedding_gen = EmbeddingGenerator (llm_client)
+        self.doc_store = DocumentStore (pinecone_api_key)
         self.qa = DocumentQA(llm_client, self.embedding_gen, self.doc_store)
     
     async def process_document(
@@ -1201,39 +1201,39 @@ class DocumentProcessingPipeline:
         print(f"Processing {file_path.name}...")
         
         # 1. Detect file type
-        file_type = self.file_detector.detect(file_path)
+        file_type = self.file_detector.detect (file_path)
         print(f"Detected type: {file_type}")
         
         # 2. Extract content
         if file_type == FileType.PDF:
-            content = await self.pdf_processor.process(file_path)
+            content = await self.pdf_processor.process (file_path)
             text = content.text
             metadata = content.metadata
         elif file_type == FileType.DOCX:
-            content = self.docx_processor.process(file_path)
+            content = self.docx_processor.process (file_path)
             text = content.text
             metadata = content.metadata
         elif file_type == FileType.XLSX:
-            content = self.excel_processor.process(file_path)
+            content = self.excel_processor.process (file_path)
             text = content.summary
-            metadata = {"sheets": len(content.sheets)}
+            metadata = {"sheets": len (content.sheets)}
         else:
             text = file_path.read_text()
             metadata = {}
         
-        print(f"Extracted {len(text)} characters")
+        print(f"Extracted {len (text)} characters")
         
         # 3. Chunk content
         metadata.update({"filename": file_path.name, "type": file_type.value})
-        chunks = self.chunker.chunk_document(text, metadata)
-        print(f"Created {len(chunks)} chunks")
+        chunks = self.chunker.chunk_document (text, metadata)
+        print(f"Created {len (chunks)} chunks")
         
         # 4. Generate embeddings
-        embeddings = await self.embedding_gen.generate_embeddings(chunks)
-        print(f"Generated {len(embeddings)} embeddings")
+        embeddings = await self.embedding_gen.generate_embeddings (chunks)
+        print(f"Generated {len (embeddings)} embeddings")
         
         # 5. Store in vector database
-        await self.doc_store.store_document(document_id, chunks, embeddings)
+        await self.doc_store.store_document (document_id, chunks, embeddings)
         print(f"Stored document {document_id}")
         
         return document_id
@@ -1246,7 +1246,7 @@ class DocumentProcessingPipeline:
         Process multiple documents in parallel
         """
         tasks = [
-            self.process_document(path)
+            self.process_document (path)
             for path in file_paths
         ]
         
@@ -1272,7 +1272,7 @@ async def main():
     print(f"Answer: {answer['answer']}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run (main())
 \`\`\`
 
 ---

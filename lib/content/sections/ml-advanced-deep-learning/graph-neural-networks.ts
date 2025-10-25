@@ -133,7 +133,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class GCNLayer(nn.Module):
+class GCNLayer (nn.Module):
     def __init__(self, in_features, out_features):
         """
         Single Graph Convolutional layer.
@@ -143,9 +143,9 @@ class GCNLayer(nn.Module):
             out_features: Output feature dimension
         """
         super().__init__()
-        self.linear = nn.Linear(in_features, out_features)
+        self.linear = nn.Linear (in_features, out_features)
     
-    def forward(self, X, A):
+    def forward (self, X, A):
         """
         Args:
             X: Node features (n_nodes, in_features)
@@ -158,7 +158,7 @@ class GCNLayer(nn.Module):
         A_hat = A + torch.eye(A.size(0), device=A.device)
         
         # Degree matrix
-        D = torch.diag(A_hat.sum(dim=1))
+        D = torch.diag(A_hat.sum (dim=1))
         
         # Symmetric normalization: D^(-1/2) A D^(-1/2)
         D_inv_sqrt = torch.diag(1.0 / torch.sqrt(D.diag()))
@@ -187,16 +187,16 @@ class GCN(nn.Module):
         self.layers = nn.ModuleList()
         
         # First layer
-        self.layers.append(GCNLayer(in_features, hidden_features))
+        self.layers.append(GCNLayer (in_features, hidden_features))
         
         # Hidden layers
-        for _ in range(num_layers - 2):
-            self.layers.append(GCNLayer(hidden_features, hidden_features))
+        for _ in range (num_layers - 2):
+            self.layers.append(GCNLayer (hidden_features, hidden_features))
         
         # Output layer
-        self.layers.append(GCNLayer(hidden_features, out_features))
+        self.layers.append(GCNLayer (hidden_features, out_features))
     
-    def forward(self, X, A):
+    def forward (self, X, A):
         """
         Args:
             X: Node features (n_nodes, in_features)
@@ -208,9 +208,9 @@ class GCN(nn.Module):
         H = X
         
         # Apply GCN layers with ReLU (except last)
-        for i, layer in enumerate(self.layers):
+        for i, layer in enumerate (self.layers):
             H = layer(H, A)
-            if i < len(self.layers) - 1:
+            if i < len (self.layers) - 1:
                 H = F.relu(H)
                 H = F.dropout(H, p=0.5, training=self.training)
         
@@ -224,7 +224,7 @@ hidden_features = 16
 out_features = 2  # Output dimension (e.g., 2 classes)
 
 # Create graph
-X = torch.randn(n_nodes, in_features)  # Node features
+X = torch.randn (n_nodes, in_features)  # Node features
 A = torch.tensor([
     [0, 1, 1, 0, 0],
     [1, 0, 1, 1, 0],
@@ -247,7 +247,7 @@ print(f"Output (node representations):")
 print(output)
 
 # For node classification
-predictions = output.argmax(dim=1)
+predictions = output.argmax (dim=1)
 print(f"\\nPredicted classes: {predictions}")
 \`\`\`
 
@@ -273,10 +273,10 @@ n_features = 10
 n_classes = 3
 
 # Random node features
-X = torch.randn(n_nodes, n_features)
+X = torch.randn (n_nodes, n_features)
 
 # Create adjacency matrix (random graph)
-A = torch.rand(n_nodes, n_nodes)
+A = torch.rand (n_nodes, n_nodes)
 A = (A > 0.9).float()  # Sparse graph
 A = (A + A.T) / 2  # Make symmetric (undirected)
 A.fill_diagonal_(0)  # Remove self-loops (added by GCN)
@@ -292,9 +292,9 @@ n_train = 60
 n_val = 20
 n_test = 20
 
-train_mask = torch.zeros(n_nodes, dtype=torch.bool)
-val_mask = torch.zeros(n_nodes, dtype=torch.bool)
-test_mask = torch.zeros(n_nodes, dtype=torch.bool)
+train_mask = torch.zeros (n_nodes, dtype=torch.bool)
+val_mask = torch.zeros (n_nodes, dtype=torch.bool)
+test_mask = torch.zeros (n_nodes, dtype=torch.bool)
 
 train_mask[:n_train] = True
 val_mask[n_train:n_train+n_val] = True
@@ -302,13 +302,13 @@ test_mask[n_train+n_val:] = True
 
 # Create model
 model = GCN(n_features, hidden_features=32, out_features=n_classes, num_layers=2)
-optimizer = optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
+optimizer = optim.Adam (model.parameters(), lr=0.01, weight_decay=5e-4)
 criterion = nn.CrossEntropyLoss()
 
 # Training loop
 num_epochs = 100
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     model.train()
     optimizer.zero_grad()
     
@@ -316,7 +316,7 @@ for epoch in range(num_epochs):
     output = model(X, A)
     
     # Compute loss only on training nodes
-    loss = criterion(output[train_mask], labels[train_mask])
+    loss = criterion (output[train_mask], labels[train_mask])
     
     # Backward pass
     loss.backward()
@@ -329,11 +329,11 @@ for epoch in range(num_epochs):
             output = model(X, A)
             
             # Train accuracy
-            train_pred = output[train_mask].argmax(dim=1)
+            train_pred = output[train_mask].argmax (dim=1)
             train_acc = (train_pred == labels[train_mask]).float().mean()
             
             # Val accuracy
-            val_pred = output[val_mask].argmax(dim=1)
+            val_pred = output[val_mask].argmax (dim=1)
             val_acc = (val_pred == labels[val_mask]).float().mean()
             
             print(f"Epoch {epoch+1}: Loss={loss.item():.4f}, "
@@ -343,7 +343,7 @@ for epoch in range(num_epochs):
 model.eval()
 with torch.no_grad():
     output = model(X, A)
-    test_pred = output[test_mask].argmax(dim=1)
+    test_pred = output[test_mask].argmax (dim=1)
     test_acc = (test_pred == labels[test_mask]).float().mean()
     print(f"\\nTest Accuracy: {test_acc:.4f}")
 \`\`\`
@@ -360,7 +360,7 @@ with torch.no_grad():
 
 **Attention mechanism**:
 \`\`\`
-α_{ij} = softmax_j(e_{ij})  (attention weight from j to i)
+α_{ij} = softmax_j (e_{ij})  (attention weight from j to i)
 
 e_{ij} = LeakyReLU(a^T [W h_i || W h_j])  (attention coefficient)
 \`\`\`
@@ -380,7 +380,7 @@ Each node aggregates neighbors weighted by learned attention!
 ### Implementation
 
 \`\`\`python
-class GATLayer(nn.Module):
+class GATLayer (nn.Module):
     def __init__(self, in_features, out_features, num_heads=1, concat=True):
         """
         Graph Attention layer with multi-head attention.
@@ -399,8 +399,8 @@ class GATLayer(nn.Module):
         self.concat = concat
         
         # Multi-head attention
-        self.W = nn.Parameter(torch.zeros(num_heads, in_features, out_features))
-        self.a = nn.Parameter(torch.zeros(num_heads, 2 * out_features, 1))
+        self.W = nn.Parameter (torch.zeros (num_heads, in_features, out_features))
+        self.a = nn.Parameter (torch.zeros (num_heads, 2 * out_features, 1))
         
         self.leaky_relu = nn.LeakyReLU(0.2)
         
@@ -408,7 +408,7 @@ class GATLayer(nn.Module):
         nn.init.xavier_uniform_(self.W)
         nn.init.xavier_uniform_(self.a)
     
-    def forward(self, X, A):
+    def forward (self, X, A):
         """
         Args:
             X: Node features (n_nodes, in_features)
@@ -427,39 +427,39 @@ class GATLayer(nn.Module):
         # For each head and each pair of nodes
         attention_outputs = []
         
-        for h in range(self.num_heads):
+        for h in range (self.num_heads):
             Wh_h = Wh[h]  # (n_nodes, out_features)
             
             # Prepare for attention: [Wh_i || Wh_j] for all pairs
             # Wh_repeat_i: (n_nodes, n_nodes, out_features) - repeat along rows
             # Wh_repeat_j: (n_nodes, n_nodes, out_features) - repeat along cols
             Wh_repeat_i = Wh_h.unsqueeze(1).repeat(1, n_nodes, 1)
-            Wh_repeat_j = Wh_h.unsqueeze(0).repeat(n_nodes, 1, 1)
+            Wh_repeat_j = Wh_h.unsqueeze(0).repeat (n_nodes, 1, 1)
             
             # Concatenate
             concat_features = torch.cat([Wh_repeat_i, Wh_repeat_j], dim=2)
             # Shape: (n_nodes, n_nodes, 2*out_features)
             
             # Compute attention scores
-            e = self.leaky_relu(torch.matmul(concat_features, self.a[h]))
+            e = self.leaky_relu (torch.matmul (concat_features, self.a[h]))
             # Shape: (n_nodes, n_nodes, 1)
             e = e.squeeze(2)  # (n_nodes, n_nodes)
             
             # Mask attention for non-neighbors
-            e = torch.where(A > 0, e, torch.tensor(float('-inf'), device=e.device))
+            e = torch.where(A > 0, e, torch.tensor (float('-inf'), device=e.device))
             
             # Softmax attention weights
-            alpha = F.softmax(e, dim=1)  # (n_nodes, n_nodes)
+            alpha = F.softmax (e, dim=1)  # (n_nodes, n_nodes)
             
             # Weighted aggregation
-            h_prime = torch.matmul(alpha, Wh_h)  # (n_nodes, out_features)
-            attention_outputs.append(h_prime)
+            h_prime = torch.matmul (alpha, Wh_h)  # (n_nodes, out_features)
+            attention_outputs.append (h_prime)
         
         # Combine heads
         if self.concat:
-            output = torch.cat(attention_outputs, dim=1)  # Concatenate heads
+            output = torch.cat (attention_outputs, dim=1)  # Concatenate heads
         else:
-            output = torch.stack(attention_outputs, dim=0).mean(dim=0)  # Average heads
+            output = torch.stack (attention_outputs, dim=0).mean (dim=0)  # Average heads
         
         return output
 
@@ -468,7 +468,7 @@ class GATLayer(nn.Module):
 in_features, out_features, num_heads = 10, 8, 4
 n_nodes = 5
 
-X = torch.randn(n_nodes, in_features)
+X = torch.randn (n_nodes, in_features)
 A = torch.tensor([
     [0, 1, 1, 0, 0],
     [1, 0, 1, 1, 0],
@@ -477,7 +477,7 @@ A = torch.tensor([
     [0, 0, 1, 1, 0]
 ], dtype=torch.float32)
 
-gat_layer = GATLayer(in_features, out_features, num_heads=num_heads, concat=True)
+gat_layer = GATLayer (in_features, out_features, num_heads=num_heads, concat=True)
 
 output = gat_layer(X, A)
 print(f"Input shape: {X.shape}")  # (5, 10)
@@ -498,15 +498,15 @@ print(f"Output shape: {output.shape}")  # (5, 8*4=32) with concat
 
 ### Pooling Methods
 
-1. **Global mean pooling**: h_graph = mean(h_1, ..., h_n)
-2. **Global max pooling**: h_graph = max(h_1, ..., h_n)
-3. **Global sum pooling**: h_graph = sum(h_1, ..., h_n)
+1. **Global mean pooling**: h_graph = mean (h_1, ..., h_n)
+2. **Global max pooling**: h_graph = max (h_1, ..., h_n)
+3. **Global sum pooling**: h_graph = sum (h_1, ..., h_n)
 4. **Attention pooling**: Weighted sum with learned attention weights
 
 ### Implementation
 
 \`\`\`python
-class GraphClassifier(nn.Module):
+class GraphClassifier (nn.Module):
     def __init__(self, in_features, hidden_features, out_features, num_classes):
         """
         Graph classification model: GCN + pooling + classifier
@@ -514,13 +514,13 @@ class GraphClassifier(nn.Module):
         super().__init__()
         
         # GCN layers
-        self.gcn1 = GCNLayer(in_features, hidden_features)
-        self.gcn2 = GCNLayer(hidden_features, out_features)
+        self.gcn1 = GCNLayer (in_features, hidden_features)
+        self.gcn2 = GCNLayer (hidden_features, out_features)
         
         # Classifier
-        self.classifier = nn.Linear(out_features, num_classes)
+        self.classifier = nn.Linear (out_features, num_classes)
     
-    def forward(self, X, A):
+    def forward (self, X, A):
         """
         Args:
             X: Node features (n_nodes, in_features)
@@ -536,16 +536,16 @@ class GraphClassifier(nn.Module):
         H = F.relu(H)
         
         # Global pooling: aggregate all nodes
-        h_graph = H.mean(dim=0)  # (out_features,)
+        h_graph = H.mean (dim=0)  # (out_features,)
         
         # Classify
-        logits = self.classifier(h_graph)
+        logits = self.classifier (h_graph)
         
         return logits
 
 
 # Example: Classify multiple graphs (batch)
-def classify_graph_batch(graphs, model):
+def classify_graph_batch (graphs, model):
     """
     Classify a batch of graphs.
     
@@ -561,7 +561,7 @@ def classify_graph_batch(graphs, model):
     for X, A in graphs:
         logits = model(X, A)
         pred = logits.argmax().item()
-        predictions.append(pred)
+        predictions.append (pred)
     
     return predictions
 \`\`\`

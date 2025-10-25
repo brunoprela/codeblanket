@@ -6,7 +6,7 @@ export const introductionQuiz = [
   {
     id: 'q1',
     question:
-      "Explain the FIFO principle and how it differs from a Stack's LIFO principle.",
+      "Explain the FIFO principle and how it differs from a Stack\'s LIFO principle.",
     sampleAnswer:
       'FIFO (First-In-First-Out) means the first element added to the queue is the first one removed, like a line at a store. Stack uses LIFO (Last-In-First-Out) where the most recently added element is removed first, like a stack of plates. In a queue, elements are added at the rear and removed from the front. In a stack, elements are added and removed from the same end (top). Queue preserves order of arrival, while stack reverses it. Example: Queue [1,2,3] removes 1 first; Stack [1,2,3] removes 3 first.',
     keyPoints: [

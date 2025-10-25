@@ -51,7 +51,7 @@ export const authenticationJwtOauth2MultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'OAuth2PasswordBearer extracts the token from the Authorization header. Usage: oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token"). As dependency: def get_token(token: str = Depends(oauth2_scheme)). It looks for: Authorization: Bearer <token> header, extracts <token> part, returns token string, raises 401 if header missing. Does NOT validate token—just extracts it. You still need to decode/validate the JWT yourself. The tokenUrl parameter tells OpenAPI docs where to get tokens (for "Try it out" feature in /docs). Essential for FastAPI authentication flow.',
+      'OAuth2PasswordBearer extracts the token from the Authorization header. Usage: oauth2_scheme = OAuth2PasswordBearer (tokenUrl="token"). As dependency: def get_token (token: str = Depends (oauth2_scheme)). It looks for: Authorization: Bearer <token> header, extracts <token> part, returns token string, raises 401 if header missing. Does NOT validate token—just extracts it. You still need to decode/validate the JWT yourself. The tokenUrl parameter tells OpenAPI docs where to get tokens (for "Try it out" feature in /docs). Essential for FastAPI authentication flow.',
   },
   {
     id: 'fastapi-auth-mc-5',

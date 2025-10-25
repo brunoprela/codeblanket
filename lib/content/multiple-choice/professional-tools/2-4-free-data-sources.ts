@@ -27,7 +27,7 @@ export const freeDataSourcesMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "FRED is the gold standard for economic data. It's maintained by the Federal Reserve Bank of St. Louis, contains 800,000+ official economic time series, provides historical data going back decades, offers a free Python API (fredapi), and is updated directly from official sources. FRED includes Fed Funds Rate, GDP, unemployment, inflation, and every major economic indicator. Yahoo Finance economic data is limited, Google/Wikipedia lack APIs and reliability, and news articles aren't suitable for quantitative analysis.",
+      "FRED is the gold standard for economic data. It\'s maintained by the Federal Reserve Bank of St. Louis, contains 800,000+ official economic time series, provides historical data going back decades, offers a free Python API (fredapi), and is updated directly from official sources. FRED includes Fed Funds Rate, GDP, unemployment, inflation, and every major economic indicator. Yahoo Finance economic data is limited, Google/Wikipedia lack APIs and reliability, and news articles aren't suitable for quantitative analysis.",
   },
   {
     id: '2-4-q3',

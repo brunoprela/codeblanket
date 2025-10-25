@@ -46,7 +46,7 @@ class Wav2LipGenerator:
         
         # Load model (simplified - actual implementation more complex)
         print(f"Loading Wav2Lip on {self.device}...")
-        # self.model = load_wav2lip_model(model_path)
+        # self.model = load_wav2lip_model (model_path)
         print("✅ Model loaded")
     
     def generate(
@@ -72,11 +72,11 @@ class Wav2LipGenerator:
         print(f"  Audio: {audio_path}")
         
         # Load video
-        video = cv2.VideoCapture(str(face_video_path))
-        fps = video.get(cv2.CAP_PROP_FPS)
+        video = cv2.VideoCapture (str (face_video_path))
+        fps = video.get (cv2.CAP_PROP_FPS)
         
         # Load audio
-        # audio_features = self._load_audio(audio_path)
+        # audio_features = self._load_audio (audio_path)
         
         # Process frames
         output_frames = []
@@ -88,15 +88,15 @@ class Wav2LipGenerator:
                 break
             
             # Detect face
-            # face_coords = self._detect_face(frame)
+            # face_coords = self._detect_face (frame)
             
             # Generate lip-synced mouth region
-            # synced_mouth = self._generate_mouth(frame, audio_features, frame_count)
+            # synced_mouth = self._generate_mouth (frame, audio_features, frame_count)
             
             # Composite back into frame
-            # output_frame = self._composite(frame, synced_mouth, face_coords)
+            # output_frame = self._composite (frame, synced_mouth, face_coords)
             
-            # output_frames.append(output_frame)
+            # output_frames.append (output_frame)
             frame_count += 1
             
             if frame_count % 30 == 0:
@@ -105,31 +105,31 @@ class Wav2LipGenerator:
         video.release()
         
         # Write output video
-        # self._write_video(output_frames, output_path, fps, audio_path)
+        # self._write_video (output_frames, output_path, fps, audio_path)
         
         print(f"✅ Lip-synced video saved: {output_path}")
     
-    def _load_audio(self, audio_path: Path):
+    def _load_audio (self, audio_path: Path):
         """Load and preprocess audio"""
         # Extract mel spectrogram features
         pass
     
-    def _detect_face(self, frame: np.ndarray):
+    def _detect_face (self, frame: np.ndarray):
         """Detect face in frame"""
         # Use face detection (e.g., RetinaFace)
         pass
     
-    def _generate_mouth(self, frame, audio_features, frame_idx):
+    def _generate_mouth (self, frame, audio_features, frame_idx):
         """Generate synced mouth region"""
         # Run Wav2Lip model
         pass
     
-    def _composite(self, frame, mouth, face_coords):
+    def _composite (self, frame, mouth, face_coords):
         """Composite synced mouth into frame"""
         # Blend mouth region
         pass
     
-    def _write_video(self, frames, output_path, fps, audio_path):
+    def _write_video (self, frames, output_path, fps, audio_path):
         """Write frames to video with audio"""
         # Use FFmpeg to write video with audio
         pass
@@ -296,7 +296,7 @@ class DIDClient:
         
         return talk_id
     
-    def get_talk(self, talk_id: str) -> Dict:
+    def get_talk (self, talk_id: str) -> Dict:
         """Get talk status and result"""
         response = requests.get(
             f"{self.BASE_URL}/talks/{talk_id}",
@@ -321,7 +321,7 @@ class DIDClient:
         start = time.time()
         
         while time.time() - start < max_wait:
-            data = self.get_talk(talk_id)
+            data = self.get_talk (talk_id)
             status = data["status"]
             
             if status == "done":
@@ -330,10 +330,10 @@ class DIDClient:
                 return video_url
             
             elif status == "error":
-                raise Exception(f"Generation failed: {data.get('error')}")
+                raise Exception (f"Generation failed: {data.get('error')}")
             
             print(f"Status: {status}...")
-            time.sleep(poll_interval)
+            time.sleep (poll_interval)
         
         raise TimeoutError("Generation timed out")
     
@@ -362,7 +362,7 @@ class DIDClient:
         )
         
         # Wait for completion
-        video_url = self.wait_for_completion(talk_id)
+        video_url = self.wait_for_completion (talk_id)
         
         return video_url
 
@@ -370,7 +370,7 @@ class DIDClient:
 def did_example():
     """Generate avatar video with D-ID"""
     
-    client = DIDClient(api_key="your_api_key")
+    client = DIDClient (api_key="your_api_key")
     
     # Generate from image + text
     video_url = client.generate_avatar_video(
@@ -387,7 +387,7 @@ def did_example():
         audio_url="https://example.com/custom_audio.mp3",
     )
     
-    video_url = client.wait_for_completion(talk_id)
+    video_url = client.wait_for_completion (talk_id)
     print(f"Custom audio video: {video_url}")
 
 if __name__ == "__main__":
@@ -497,7 +497,7 @@ class HeyGenClient:
 def heygen_example():
     """Translate video to Spanish"""
     
-    client = HeyGenClient(api_key="your_api_key")
+    client = HeyGenClient (api_key="your_api_key")
     
     # Translate English video to Spanish
     job_id = client.translate_video(
@@ -533,7 +533,7 @@ class AvatarPipeline:
     
     def __init__(self):
         self.wav2lip = Wav2LipGenerator()
-        self.did = DIDClient(api_key="...")
+        self.did = DIDClient (api_key="...")
     
     def generate_batch(
         self,
@@ -543,35 +543,35 @@ class AvatarPipeline:
     ):
         """Generate multiple avatar videos from one image"""
         
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir (parents=True, exist_ok=True)
         
-        for i, script in enumerate(scripts):
-            print(f"\\n[{i+1}/{len(scripts)}] Generating...")
+        for i, script in enumerate (scripts):
+            print(f"\\n[{i+1}/{len (scripts)}] Generating...")
             
             # Use D-ID for production quality
             video_url = self.did.generate_avatar_video(
-                image_url=self._upload_image(image_path),
+                image_url=self._upload_image (image_path),
                 text=script,
             )
             
             # Download video
             output_path = output_dir / f"avatar_{i+1:03d}.mp4"
-            self._download_video(video_url, output_path)
+            self._download_video (video_url, output_path)
         
-        print(f"\\n✅ Generated {len(scripts)} videos")
+        print(f"\\n✅ Generated {len (scripts)} videos")
     
-    def _upload_image(self, path: Path) -> str:
+    def _upload_image (self, path: Path) -> str:
         """Upload image and return URL"""
         # Upload to cloud storage
         return "https://..."
     
-    def _download_video(self, url: str, path: Path):
+    def _download_video (self, url: str, path: Path):
         """Download video from URL"""
         import requests
         
-        response = requests.get(url)
-        with open(path, "wb") as f:
-            f.write(response.content)
+        response = requests.get (url)
+        with open (path, "wb") as f:
+            f.write (response.content)
 \`\`\`
 
 ---

@@ -38,10 +38,10 @@ accumulation_steps = 4  # Effective batch size = batch_size * accumulation_steps
 model.train()
 optimizer.zero_grad()
 
-for i, (data, target) in enumerate(train_loader):
+for i, (data, target) in enumerate (train_loader):
     # Forward pass
-    output = model(data)
-    loss = criterion(output, target)
+    output = model (data)
+    loss = criterion (output, target)
     
     # Normalize loss (important!)
     loss = loss / accumulation_steps
@@ -89,7 +89,7 @@ from torch.cuda.amp import autocast, GradScaler
 scaler = GradScaler()
 
 model.train()
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     for data, target in train_loader:
         data, target = data.cuda(), target.cuda()
         
@@ -97,14 +97,14 @@ for epoch in range(num_epochs):
         
         # Forward pass with autocast
         with autocast():
-            output = model(data)
-            loss = criterion(output, target)
+            output = model (data)
+            loss = criterion (output, target)
         
         # Backward pass with scaling
-        scaler.scale(loss).backward()
+        scaler.scale (loss).backward()
         
         # Update weights
-        scaler.step(optimizer)
+        scaler.step (optimizer)
         scaler.update()
 
 print("Mixed precision training complete!")
@@ -123,7 +123,7 @@ from tensorflow import keras
 
 # Enable mixed precision
 policy = keras.mixed_precision.Policy('mixed_float16')
-keras.mixed_precision.set_global_policy(policy)
+keras.mixed_precision.set_global_policy (policy)
 
 # Build model (automatically uses FP16)
 model = keras.Sequential([
@@ -132,13 +132,13 @@ model = keras.Sequential([
 ])
 
 # Important: output layer should use FP32 for numerical stability
-model.add(keras.layers.Activation('softmax', dtype='float32'))
+model.add (keras.layers.Activation('softmax', dtype='float32'))
 
 # Compile with loss scaling
 optimizer = keras.optimizers.Adam()
-optimizer = keras.mixed_precision.LossScaleOptimizer(optimizer)
+optimizer = keras.mixed_precision.LossScaleOptimizer (optimizer)
 
-model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy')
+model.compile (optimizer=optimizer, loss='sparse_categorical_crossentropy')
 model.fit(X_train, y_train, epochs=10)
 \`\`\`
 
@@ -151,32 +151,32 @@ model.fit(X_train, y_train, epochs=10)
 \`\`\`python
 import torch.utils.checkpoint as checkpoint
 
-class CheckpointedBlock(nn.Module):
+class CheckpointedBlock (nn.Module):
     def __init__(self, block):
         super().__init__()
         self.block = block
     
-    def forward(self, x):
+    def forward (self, x):
         # Use checkpointing for this block
-        return checkpoint.checkpoint(self.block, x)
+        return checkpoint.checkpoint (self.block, x)
 
 # Example: ResNet with checkpointing
-class CheckpointedResNet(nn.Module):
+class CheckpointedResNet (nn.Module):
     def __init__(self, num_layers):
         super().__init__()
         self.layers = nn.ModuleList([
             CheckpointedBlock(ResidualBlock()) 
-            for _ in range(num_layers)
+            for _ in range (num_layers)
         ])
         self.output = nn.Linear(512, 10)
     
-    def forward(self, x):
+    def forward (self, x):
         for layer in self.layers:
-            x = layer(x)
-        return self.output(x)
+            x = layer (x)
+        return self.output (x)
 
 # Now can train much deeper models in same memory
-model = CheckpointedResNet(num_layers=200)
+model = CheckpointedResNet (num_layers=200)
 \`\`\`
 
 **Trade-off**:
@@ -194,10 +194,10 @@ model = CheckpointedResNet(num_layers=200)
 # Simple but less efficient
 if torch.cuda.device_count() > 1:
     print(f"Using {torch.cuda.device_count()} GPUs")
-    model = nn.DataParallel(model)
+    model = nn.DataParallel (model)
 
 model = model.cuda()
-model.fit(train_loader)
+model.fit (train_loader)
 \`\`\`
 
 ### PyTorch DistributedDataParallel (Recommended)
@@ -206,15 +206,15 @@ model.fit(train_loader)
 import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-def setup(rank, world_size):
+def setup (rank, world_size):
     """Initialize distributed training"""
     dist.init_process_group("nccl", rank=rank, world_size=world_size)
 
-def train_ddp(rank, world_size):
-    setup(rank, world_size)
+def train_ddp (rank, world_size):
+    setup (rank, world_size)
     
     # Create model and move to GPU
-    model = MyModel().to(rank)
+    model = MyModel().to (rank)
     ddp_model = DDP(model, device_ids=[rank])
     
     # Create distributed sampler
@@ -231,15 +231,15 @@ def train_ddp(rank, world_size):
     )
     
     # Training loop
-    for epoch in range(num_epochs):
-        train_sampler.set_epoch(epoch)  # Shuffle differently each epoch
+    for epoch in range (num_epochs):
+        train_sampler.set_epoch (epoch)  # Shuffle differently each epoch
         
         for data, target in train_loader:
-            data, target = data.to(rank), target.to(rank)
+            data, target = data.to (rank), target.to (rank)
             
             optimizer.zero_grad()
-            output = ddp_model(data)
-            loss = criterion(output, target)
+            output = ddp_model (data)
+            loss = criterion (output, target)
             loss.backward()
             optimizer.step()
 
@@ -247,7 +247,7 @@ def train_ddp(rank, world_size):
 import torch.multiprocessing as mp
 
 world_size = torch.cuda.device_count()
-mp.spawn(train_ddp, args=(world_size,), nprocs=world_size)
+mp.spawn (train_ddp, args=(world_size,), nprocs=world_size)
 \`\`\`
 
 **Benefits**:
@@ -263,7 +263,7 @@ mp.spawn(train_ddp, args=(world_size,), nprocs=world_size)
 **Idea**: Split model across multiple GPUs (different layers on different GPUs).
 
 \`\`\`python
-class ModelParallelNet(nn.Module):
+class ModelParallelNet (nn.Module):
     def __init__(self):
         super().__init__()
         # First half on GPU 0
@@ -274,14 +274,14 @@ class ModelParallelNet(nn.Module):
         self.layer3 = nn.Linear(1000, 1000).to('cuda:1')
         self.layer4 = nn.Linear(1000, 10).to('cuda:1')
     
-    def forward(self, x):
+    def forward (self, x):
         # Move through GPUs
         x = x.to('cuda:0')
-        x = F.relu(self.layer1(x))
-        x = F.relu(self.layer2(x))
+        x = F.relu (self.layer1(x))
+        x = F.relu (self.layer2(x))
         
         x = x.to('cuda:1')  # Transfer to GPU 1
-        x = F.relu(self.layer3(x))
+        x = F.relu (self.layer3(x))
         x = self.layer4(x)
         return x
 
@@ -298,30 +298,30 @@ model = ModelParallelNet()
 # Conceptual (use libraries like FairScale or DeepSpeed in practice)
 
 # Split model into stages
-stage1 = nn.Sequential(layer1, layer2).to('cuda:0')
-stage2 = nn.Sequential(layer3, layer4).to('cuda:1')
+stage1 = nn.Sequential (layer1, layer2).to('cuda:0')
+stage2 = nn.Sequential (layer3, layer4).to('cuda:1')
 
 # Split batch into micro-batches
 micro_batch_size = 8
-micro_batches = batch.split(micro_batch_size)
+micro_batches = batch.split (micro_batch_size)
 
 # Pipeline execution
 outputs = []
-for i, micro_batch in enumerate(micro_batches):
+for i, micro_batch in enumerate (micro_batches):
     # Stage 1 processes micro-batch i
     intermediate = stage1(micro_batch.to('cuda:0'))
     
     # Meanwhile, stage 2 processes micro-batch i-1
     if i > 0:
         output = stage2(intermediates[i-1].to('cuda:1'))
-        outputs.append(output)
+        outputs.append (output)
     
-    intermediates.append(intermediate)
+    intermediates.append (intermediate)
 
 # Process final micro-batches
-for intermediate in intermediates[-len(micro_batches)+1:]:
+for intermediate in intermediates[-len (micro_batches)+1:]:
     output = stage2(intermediate.to('cuda:1'))
-    outputs.append(output)
+    outputs.append (output)
 \`\`\`
 
 **Benefit**: Better GPU utilization (both GPUs busy most of the time).
@@ -355,9 +355,9 @@ model_engine, optimizer, train_loader, _ = deepspeed.initialize(
 
 # Training loop
 for data, target in train_loader:
-    outputs = model_engine(data)
-    loss = criterion(outputs, target)
-    model_engine.backward(loss)
+    outputs = model_engine (data)
+    loss = criterion (outputs, target)
+    model_engine.backward (loss)
     model_engine.step()
 \`\`\`
 
@@ -373,7 +373,7 @@ for data, target in train_loader:
 from accelerate import Accelerator
 
 # Handles device placement, mixed precision, distributed training
-accelerator = Accelerator(mixed_precision="fp16")
+accelerator = Accelerator (mixed_precision="fp16")
 
 # Prepare model, optimizer, dataloader
 model, optimizer, train_loader = accelerator.prepare(
@@ -383,9 +383,9 @@ model, optimizer, train_loader = accelerator.prepare(
 # Training loop (same code for 1 GPU or 8 GPUs!)
 for data, target in train_loader:
     optimizer.zero_grad()
-    outputs = model(data)
-    loss = criterion(outputs, target)
-    accelerator.backward(loss)  # Handles scaling
+    outputs = model (data)
+    loss = criterion (outputs, target)
+    accelerator.backward (loss)  # Handles scaling
     optimizer.step()
 \`\`\`
 
@@ -419,7 +419,7 @@ for data, target in train_loader:
 \`\`\`python
 # 1. Use mixed precision
 with torch.cuda.amp.autocast():
-    output = model(data)
+    output = model (data)
 
 # 2. Efficient data loading
 train_loader = DataLoader(
@@ -431,7 +431,7 @@ train_loader = DataLoader(
 )
 
 # 3. Gradient accumulation for larger effective batch
-for i, batch in enumerate(train_loader):
+for i, batch in enumerate (train_loader):
     loss = loss / accumulation_steps
     loss.backward()
     if (i + 1) % accumulation_steps == 0:
@@ -439,12 +439,12 @@ for i, batch in enumerate(train_loader):
         optimizer.zero_grad()
 
 # 4. Compile model (PyTorch 2.0+)
-model = torch.compile(model)  # 2x faster!
+model = torch.compile (model)  # 2x faster!
 
 # 5. Profile to find bottlenecks
 with torch.profiler.profile() as prof:
     for _ in range(10):
-        output = model(data)
+        output = model (data)
         loss.backward()
 print(prof.key_averages().table())
 \`\`\`

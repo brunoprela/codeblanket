@@ -22,7 +22,7 @@ export const variationsQuiz = [
     question:
       'What is the difference between a regular queue and a priority queue? When would you use each?',
     sampleAnswer:
-      "Regular queue follows strict FIFO - first in is first out. Priority queue dequeues elements by priority, not insertion order. Regular queue uses deque with O(1) enqueue/dequeue. Priority queue uses a heap with O(log n) enqueue/dequeue. Use regular queue for BFS, task processing where order matters (like print queue). Use priority queue when some elements are more important: Dijkstra's shortest path (process closest node first), CPU scheduling (high priority tasks first), A* search, event simulation with timestamps. Key difference: FIFO vs priority-based.",
+      "Regular queue follows strict FIFO - first in is first out. Priority queue dequeues elements by priority, not insertion order. Regular queue uses deque with O(1) enqueue/dequeue. Priority queue uses a heap with O(log n) enqueue/dequeue. Use regular queue for BFS, task processing where order matters (like print queue). Use priority queue when some elements are more important: Dijkstra\'s shortest path (process closest node first), CPU scheduling (high priority tasks first), A* search, event simulation with timestamps. Key difference: FIFO vs priority-based.",
     keyPoints: [
       'Regular: strict FIFO order',
       'Priority: dequeue by priority, not order',

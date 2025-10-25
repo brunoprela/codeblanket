@@ -88,8 +88,8 @@ Anti-entropy will eventually sync all replicas.
 \`\`\`
 For each replica pair (A, B):
   For each key in dataset:
-    value_A = A.get(key)
-    value_B = B.get(key)
+    value_A = A.get (key)
+    value_B = B.get (key)
     if value_A != value_B:
       sync(A, B, key)
 \`\`\`
@@ -133,10 +133,10 @@ Time: 1,000,000 seconds = 277 hours = 11.5 days ❌
          (h:100) (h:200) (h:300) (h:400)
          
 Where:
-  A1 = hash(keys 0-24999)
-  A2 = hash(keys 25000-49999)
-  B1 = hash(keys 50000-74999)
-  B2 = hash(keys 75000-99999)
+  A1 = hash (keys 0-24999)
+  A2 = hash (keys 25000-49999)
+  B1 = hash (keys 50000-74999)
+  B2 = hash (keys 75000-99999)
 \`\`\`
 
 ### **Comparison Process**
@@ -204,10 +204,10 @@ Result: Only sync B1 range, not entire dataset! ✅
    - Range 0-24999, 25000-49999, ..., etc.
 
 2. For each range, compute hash of all keys/values:
-   leaf_hash = hash(concat(key1:value1, key2:value2, ...))
+   leaf_hash = hash (concat (key1:value1, key2:value2, ...))
 
 3. Build tree bottom-up:
-   parent_hash = hash(left_child_hash + right_child_hash)
+   parent_hash = hash (left_child_hash + right_child_hash)
 
 4. Store tree structure and hashes
 \`\`\`
@@ -218,16 +218,16 @@ Keyspace: 0-99999
 Leaf size: 25000 keys per leaf
 
 Leaf 1 (0-24999):
-  hash = hash(concatenate all key:value in range)
+  hash = hash (concatenate all key:value in range)
 
 Leaf 2 (25000-49999):
-  hash = hash(concatenate all key:value in range)
+  hash = hash (concatenate all key:value in range)
 
 Leaf 3 (50000-74999):
-  hash = hash(concatenate all key:value in range)
+  hash = hash (concatenate all key:value in range)
 
 Leaf 4 (75000-99999):
-  hash = hash(concatenate all key:value in range)
+  hash = hash (concatenate all key:value in range)
 
 Internal nodes:
   Node A = hash(Leaf1 + Leaf2)
@@ -370,7 +370,7 @@ Git uses Merkle tree-like structure (commit DAG).
 \`\`\`
 Each commit has hash of:
   - Tree (directory structure)
-  - Parent commit(s)
+  - Parent commit (s)
   - Commit metadata
 
 Efficient sync:
@@ -674,7 +674,7 @@ A: "Those mechanisms have gaps: (1) Hinted handoff has TTL (e.g., 3 hours)—nod
 A: "Tree depth: Shallow (few levels) means fewer comparisons but larger leaf ranges (sync more data). Deep tree means more comparisons but smaller ranges (sync less data). Typical: 10-15 levels. Leaf size: Small leaves (1000 keys) sync precisely but larger tree. Large leaves (100K keys) smaller tree but sync more. Typical: 10K-100K keys. Hash function: Cryptographic (SHA-256) secure but slow. Non-cryptographic (xxHash) fast but possible collisions (acceptable for anti-entropy)."
 
 **Q: How often should anti-entropy run?**
-A: "Balance between consistency and overhead. Cassandra recommendation: At least once per gc_grace_seconds (10 days default) to prevent deleted data from resurrecting. More frequent for critical data: daily or even continuous (Cassandra's automatic repair). Less frequent for large datasets with low inconsistency: weekly. Monitor inconsistency rate: if high (>5%), increase frequency. If low (<1%), can reduce. Also consider: repair must complete before next cycle (if daily repairs take 30 hours, won't work)."
+A: "Balance between consistency and overhead. Cassandra recommendation: At least once per gc_grace_seconds (10 days default) to prevent deleted data from resurrecting. More frequent for critical data: daily or even continuous (Cassandra\'s automatic repair). Less frequent for large datasets with low inconsistency: weekly. Monitor inconsistency rate: if high (>5%), increase frequency. If low (<1%), can reduce. Also consider: repair must complete before next cycle (if daily repairs take 30 hours, won't work)."
 
 ---
 

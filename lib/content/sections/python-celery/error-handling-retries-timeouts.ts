@@ -38,7 +38,7 @@ app = Celery('tasks', broker='redis://localhost:6379/0')
 
 
 @app.task
-def call_external_api(url: str):
+def call_external_api (url: str):
     """
     What could go wrong?
     - Network timeout
@@ -46,7 +46,7 @@ def call_external_api(url: str):
     - Server error (500, 503)
     - Invalid response
     """
-    response = requests.get(url)  # 💥 No timeout!
+    response = requests.get (url)  # 💥 No timeout!
     return response.json()  # 💥 No error handling!
 
 
@@ -90,7 +90,7 @@ app = Celery('tasks', broker='redis://localhost:6379/0')
     retry_backoff_max=600,               # Max 10 minutes between retries
     retry_jitter=True,                   # Add randomness to prevent thundering herd
 )
-def call_api_with_auto_retry(self, url: str):
+def call_api_with_auto_retry (self, url: str):
     """
     Automatically retries on RequestException
     
@@ -103,7 +103,7 @@ def call_api_with_auto_retry(self, url: str):
     - Attempt 6: ~32 seconds later (or max 600s)
     """
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get (url, timeout=10)
         response.raise_for_status()  # Raises HTTPError for 4xx/5xx
         return response.json()
     except Timeout as exc:
@@ -151,8 +151,8 @@ app = Celery('tasks', broker='redis://localhost:6379/0')
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, max_retries=5)
-def call_api_with_manual_retry(self, url: str, data: dict):
+@app.task (bind=True, max_retries=5)
+def call_api_with_manual_retry (self, url: str, data: dict):
     """
     Manual retry with different strategies for different errors
     
@@ -162,7 +162,7 @@ def call_api_with_manual_retry(self, url: str, data: dict):
     - Timeout → Short retry (30s)
     """
     try:
-        response = requests.post(url, json=data, timeout=10)
+        response = requests.post (url, json=data, timeout=10)
         
         # Handle different HTTP status codes
         if response.status_code == 200:
@@ -170,40 +170,40 @@ def call_api_with_manual_retry(self, url: str, data: dict):
         
         elif response.status_code == 429:
             # Rate limited - respect Retry-After header
-            retry_after = int(response.headers.get('Retry-After', 60))
-            logger.warning(f"Rate limited. Retrying after {retry_after}s")
-            raise self.retry(countdown=retry_after, exc=HTTPError(response=response))
+            retry_after = int (response.headers.get('Retry-After', 60))
+            logger.warning (f"Rate limited. Retrying after {retry_after}s")
+            raise self.retry (countdown=retry_after, exc=HTTPError (response=response))
         
         elif response.status_code == 503:
             # Temporary service unavailable - exponential backoff
             countdown = 60 * (2 ** self.request.retries)  # 60s, 120s, 240s, 480s...
-            countdown = min(countdown, 600)  # Cap at 10 minutes
-            logger.warning(f"Service unavailable. Retrying in {countdown}s")
-            raise self.retry(countdown=countdown, exc=HTTPError(response=response))
+            countdown = min (countdown, 600)  # Cap at 10 minutes
+            logger.warning (f"Service unavailable. Retrying in {countdown}s")
+            raise self.retry (countdown=countdown, exc=HTTPError (response=response))
         
         elif response.status_code == 404:
             # Permanent error - don't retry
-            logger.error(f"Resource not found: {url}")
-            raise ValueError(f"Resource not found: {url}")
+            logger.error (f"Resource not found: {url}")
+            raise ValueError (f"Resource not found: {url}")
         
         elif response.status_code >= 500:
             # Server error - retry with backoff
             countdown = 60 * (2 ** self.request.retries)
-            raise self.retry(countdown=countdown, exc=HTTPError(response=response))
+            raise self.retry (countdown=countdown, exc=HTTPError (response=response))
         
         else:
             response.raise_for_status()
     
     except requests.Timeout as exc:
         # Network timeout - retry soon (transient issue)
-        logger.warning(f"Timeout on attempt {self.request.retries + 1}")
-        raise self.retry(exc=exc, countdown=30)
+        logger.warning (f"Timeout on attempt {self.request.retries + 1}")
+        raise self.retry (exc=exc, countdown=30)
     
     except requests.ConnectionError as exc:
         # Connection error - retry with exponential backoff
         countdown = 60 * (2 ** self.request.retries)
-        logger.warning(f"Connection error. Retrying in {countdown}s")
-        raise self.retry(exc=exc, countdown=countdown)
+        logger.warning (f"Connection error. Retrying in {countdown}s")
+        raise self.retry (exc=exc, countdown=countdown)
     
     except ValueError:
         # Permanent error (404) - don't retry, just fail
@@ -211,19 +211,19 @@ def call_api_with_manual_retry(self, url: str, data: dict):
     
     except Exception as exc:
         # Unknown error - retry but log
-        logger.error(f"Unknown error: {exc}")
+        logger.error (f"Unknown error: {exc}")
         if self.request.retries >= self.max_retries:
             # Max retries exceeded - send to dead letter queue
-            send_to_dlq(url, data, str(exc))
+            send_to_dlq (url, data, str (exc))
             raise
-        raise self.retry(exc=exc)
+        raise self.retry (exc=exc)
 
 
-def send_to_dlq(url: str, data: dict, error: str):
+def send_to_dlq (url: str, data: dict, error: str):
     """Send failed task to dead letter queue for manual inspection"""
     # Store in database or separate queue
-    logger.critical(f"Task permanently failed. URL: {url}, Error: {error}")
-    # FailedTask.create(url=url, data=data, error=error)
+    logger.critical (f"Task permanently failed. URL: {url}, Error: {error}")
+    # FailedTask.create (url=url, data=data, error=error)
 
 
 # Usage
@@ -253,17 +253,17 @@ PROBLEMATIC: No time limits
 """
 
 @app.task
-def process_large_dataset(dataset_id: int):
+def process_large_dataset (dataset_id: int):
     """
     What if this takes 10 hours? Or hangs forever?
     - Worker blocked for hours
     - Other tasks starved
     - No timeout
     """
-    dataset = load_dataset(dataset_id)  # Could be huge!
+    dataset = load_dataset (dataset_id)  # Could be huge!
     
     for item in dataset:  # Could be 1 billion items!
-        process_item(item)
+        process_item (item)
     
     return "Done"
 
@@ -294,7 +294,7 @@ logger = logging.getLogger(__name__)
     soft_time_limit=270,  # Soft limit: 4.5 minutes (raises exception)
     time_limit=300,       # Hard limit: 5 minutes (SIGKILL - forces termination)
 )
-def process_with_time_limit(self, dataset_id: int):
+def process_with_time_limit (self, dataset_id: int):
     """
     Soft limit (270s): Raises SoftTimeLimitExceeded exception
     - Task can catch it
@@ -308,40 +308,40 @@ def process_with_time_limit(self, dataset_id: int):
     - No cleanup possible
     - Last resort
     """
-    dataset = load_dataset(dataset_id)
+    dataset = load_dataset (dataset_id)
     processed_items = []
     
     try:
-        for i, item in enumerate(dataset):
-            processed_items.append(process_item(item))
+        for i, item in enumerate (dataset):
+            processed_items.append (process_item (item))
             
             # Periodic progress update
             if i % 1000 == 0:
-                logger.info(f"Processed {i} items")
+                logger.info (f"Processed {i} items")
     
     except SoftTimeLimitExceeded:
         # Soft limit hit - save progress and retry
-        logger.warning(f"Soft time limit exceeded. Processed {len(processed_items)} items")
+        logger.warning (f"Soft time limit exceeded. Processed {len (processed_items)} items")
         
         # Save checkpoint
-        save_checkpoint(dataset_id, processed_items)
+        save_checkpoint (dataset_id, processed_items)
         
         # Optionally retry with remaining work
-        remaining_ids = [item['id'] for item in dataset[len(processed_items):]]
-        process_with_time_limit.delay(dataset_id, start_from=len(processed_items))
+        remaining_ids = [item['id'] for item in dataset[len (processed_items):]]
+        process_with_time_limit.delay (dataset_id, start_from=len (processed_items))
         
         raise  # Re-raise to mark task as failed (will be retried)
     
     return {
-        'processed': len(processed_items),
+        'processed': len (processed_items),
         'status': 'complete'
     }
 
 
-def save_checkpoint(dataset_id: int, processed_items: list):
+def save_checkpoint (dataset_id: int, processed_items: list):
     """Save progress for resumption"""
     # Save to Redis or database
-    logger.info(f"Checkpoint saved: {len(processed_items)} items")
+    logger.info (f"Checkpoint saved: {len (processed_items)} items")
 
 
 # Usage
@@ -396,11 +396,11 @@ def process_all_users():
         chunks.append((i, i + chunk_size))
     
     # Process chunks in parallel
-    job = group(process_user_chunk.s(start, end) for start, end in chunks)
+    job = group (process_user_chunk.s (start, end) for start, end in chunks)
     result = job.apply_async()
     
     return {
-        'total_chunks': len(chunks),
+        'total_chunks': len (chunks),
         'chunk_size': chunk_size,
         'group_id': result.id
     }
@@ -412,7 +412,7 @@ def process_all_users():
     time_limit=330,
     max_retries=3
 )
-def process_user_chunk(self, start: int, end: int):
+def process_user_chunk (self, start: int, end: int):
     """
     Process one chunk of users
     
@@ -425,19 +425,19 @@ def process_user_chunk(self, start: int, end: int):
     checkpoint_key = f"checkpoint:users:{start}:{end}"
     
     # Check if already processed (idempotency)
-    if redis_client.exists(checkpoint_key):
+    if redis_client.exists (checkpoint_key):
         return {'status': 'already_processed', 'range': (start, end)}
     
     processed = 0
-    for user_id in range(start, end):
+    for user_id in range (start, end):
         try:
-            process_user(user_id)
+            process_user (user_id)
             processed += 1
         except Exception as e:
-            logger.error(f"Failed to process user {user_id}: {e}")
+            logger.error (f"Failed to process user {user_id}: {e}")
     
     # Mark as complete
-    redis_client.setex(checkpoint_key, 86400, 'done')  # 24h expiration
+    redis_client.setex (checkpoint_key, 86400, 'done')  # 24h expiration
     
     return {
         'status': 'complete',
@@ -446,7 +446,7 @@ def process_user_chunk(self, start: int, end: int):
     }
 
 
-def process_user(user_id: int):
+def process_user (user_id: int):
     """Process single user"""
     pass
 
@@ -484,7 +484,7 @@ class FailedTask:
     """Store failed tasks in database"""
     
     @staticmethod
-    def create(task_name: str, args: tuple, kwargs: dict, error: str):
+    def create (task_name: str, args: tuple, kwargs: dict, error: str):
         """Save failed task to DLQ"""
         failed_task = {
             'task_name': task_name,
@@ -501,17 +501,17 @@ class FailedTask:
         
         # Or save to file
         with open('/var/log/celery/dlq.jsonl', 'a') as f:
-            f.write(json.dumps(failed_task) + '\\n')
+            f.write (json.dumps (failed_task) + '\\n')
         
         print(f"Task sent to DLQ: {task_name}")
 
 
-@app.task(bind=True, max_retries=5)
-def risky_task(self, user_id: int):
+@app.task (bind=True, max_retries=5)
+def risky_task (self, user_id: int):
     """Task that might fail permanently"""
     try:
         # Attempt processing
-        result = process_user_payment(user_id)
+        result = process_user_payment (user_id)
         return result
     
     except Exception as exc:
@@ -521,7 +521,7 @@ def risky_task(self, user_id: int):
                 task_name=self.name,
                 args=(user_id,),
                 kwargs={'retries': self.request.retries},
-                error=str(exc)
+                error=str (exc)
             )
             
             # Send alert to ops team
@@ -533,15 +533,15 @@ def risky_task(self, user_id: int):
             raise  # Mark as failed
         
         # Retry
-        raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
+        raise self.retry (exc=exc, countdown=60 * (2 ** self.request.retries))
 
 
-def process_user_payment(user_id: int):
+def process_user_payment (user_id: int):
     """Simulate payment processing"""
     pass
 
 
-def send_alert(title: str, message: str):
+def send_alert (title: str, message: str):
     """Send alert to ops team (PagerDuty, Slack, etc.)"""
     print(f"ALERT: {title} - {message}")
 
@@ -550,12 +550,12 @@ def send_alert(title: str, message: str):
 def get_dlq_tasks():
     """Retrieve failed tasks for manual review"""
     with open('/var/log/celery/dlq.jsonl', 'r') as f:
-        tasks = [json.loads(line) for line in f]
+        tasks = [json.loads (line) for line in f]
     return tasks
 
 
 # Reprocess DLQ task
-def retry_dlq_task(failed_task: dict):
+def retry_dlq_task (failed_task: dict):
     """Manually retry a failed task from DLQ"""
     task_name = failed_task['task_name']
     args = failed_task['args']
@@ -581,7 +581,7 @@ Production pattern: Idempotent tasks
 """
 
 @app.task
-def send_notification(user_id: int, notification_id: int):
+def send_notification (user_id: int, notification_id: int):
     """
     Idempotent: Can be called multiple times safely
     
@@ -594,27 +594,27 @@ def send_notification(user_id: int, notification_id: int):
     # Check if already sent
     cache_key = f"notification:sent:{notification_id}"
     
-    if redis_client.exists(cache_key):
+    if redis_client.exists (cache_key):
         return {'status': 'already_sent', 'notification_id': notification_id}
     
     # Send notification
-    send_push_notification(user_id, notification_id)
+    send_push_notification (user_id, notification_id)
     
     # Mark as sent (prevent duplicates)
-    redis_client.setex(cache_key, 86400, 'sent')  # 24h expiration
+    redis_client.setex (cache_key, 86400, 'sent')  # 24h expiration
     
     return {'status': 'sent', 'notification_id': notification_id}
 
 
 @app.task
-def process_payment(order_id: int):
+def process_payment (order_id: int):
     """
     Idempotent payment processing
     
     Critical: Payment must not be charged multiple times!
     """
     # Check if already processed
-    payment = Payment.query.filter_by(order_id=order_id).first()
+    payment = Payment.query.filter_by (order_id=order_id).first()
     
     if payment and payment.status == 'complete':
         return {'status': 'already_processed', 'payment_id': payment.id}
@@ -622,7 +622,7 @@ def process_payment(order_id: int):
     # Process payment (with database unique constraint)
     try:
         charge = stripe.Charge.create(
-            amount=get_order_amount(order_id),
+            amount=get_order_amount (order_id),
             currency='usd',
             idempotency_key=f'order_{order_id}'  # Stripe idempotency
         )
@@ -633,7 +633,7 @@ def process_payment(order_id: int):
             stripe_charge_id=charge.id,
             status='complete'
         )
-        db.session.add(payment)
+        db.session.add (payment)
         db.session.commit()  # Unique constraint prevents duplicates
         
         return {'status': 'processed', 'payment_id': payment.id}
@@ -660,16 +660,16 @@ logger = logging.getLogger(__name__)
 
 
 @task_failure.connect
-def task_failure_handler(sender=None, task_id=None, exception=None, args=None, kwargs=None, **kw):
+def task_failure_handler (sender=None, task_id=None, exception=None, args=None, kwargs=None, **kw):
     """
     Handle task failures
     
     Called when task fails after all retries
     """
-    logger.error(f"Task {sender.name} [{task_id}] failed: {exception}")
+    logger.error (f"Task {sender.name} [{task_id}] failed: {exception}")
     
     # Send to monitoring (Sentry, Datadog, etc.)
-    sentry_sdk.capture_exception(exception)
+    sentry_sdk.capture_exception (exception)
     
     # Alert ops team for critical tasks
     if sender.name in ['process_payment', 'send_verification_email']:
@@ -680,16 +680,16 @@ def task_failure_handler(sender=None, task_id=None, exception=None, args=None, k
 
 
 @task_retry.connect
-def task_retry_handler(sender=None, task_id=None, reason=None, **kw):
+def task_retry_handler (sender=None, task_id=None, reason=None, **kw):
     """
     Handle task retries
     
     Called when task is retried
     """
-    logger.warning(f"Task {sender.name} [{task_id}] retry: {reason}")
+    logger.warning (f"Task {sender.name} [{task_id}] retry: {reason}")
     
     # Increment retry counter metric
-    retry_counter.labels(task_name=sender.name).inc()
+    retry_counter.labels (task_name=sender.name).inc()
 
 
 # Metrics

@@ -24,7 +24,7 @@ A production code editor needs:
 
 ### Project Structure
 
-Let's build a complete system step by step.
+Let\'s build a complete system step by step.
 
 ## Core Architecture
 
@@ -53,22 +53,22 @@ class CodeEditorApp:
     
     def __init__(self, config: EditorConfig):
         self.config = config
-        self.project_root = Path(config.project_root)
+        self.project_root = Path (config.project_root)
         
         # Initialize components
-        self.analyzer = ProjectAnalyzer(config.project_root)
+        self.analyzer = ProjectAnalyzer (config.project_root)
         self.editor = InteractiveCodeEditor()
         self.validator = CodeValidator()
-        self.file_watcher = FileWatcher(config.project_root)
+        self.file_watcher = FileWatcher (config.project_root)
         self.conversation_manager = ConversationManager()
         
         # Active sessions
         self.sessions: Dict[str, EditSession] = {}
     
-    def start(self):
+    def start (self):
         """Start the code editor."""
         print(f"Code Editor started for: {self.project_root}")
-        print(f"Supported languages: {', '.join(self.config.supported_languages)}")
+        print(f"Supported languages: {', '.join (self.config.supported_languages)}")
         
         # Start file watcher
         self.file_watcher.start()
@@ -76,7 +76,7 @@ class CodeEditorApp:
         # Run main loop
         self.run()
     
-    def run(self):
+    def run (self):
         """Main editor loop."""
         while True:
             try:
@@ -89,10 +89,10 @@ class CodeEditorApp:
                     break
                 elif command.startswith("edit "):
                     file_path = command[5:]
-                    self.edit_file(file_path)
+                    self.edit_file (file_path)
                 elif command.startswith("new "):
                     file_path = command[4:]
-                    self.create_file(file_path)
+                    self.create_file (file_path)
                 elif command == "list":
                     self.list_files()
                 elif command == "help":
@@ -106,7 +106,7 @@ class CodeEditorApp:
             except Exception as e:
                 print(f"Error: {e}")
     
-    def edit_file(self, file_path: str):
+    def edit_file (self, file_path: str):
         """Start editing a file interactively."""
         full_path = self.project_root / file_path
         
@@ -122,7 +122,7 @@ class CodeEditorApp:
             return
         
         # Start editing session
-        session = self.editor.start_editing(file_path, content)
+        session = self.editor.start_editing (file_path, content)
         self.sessions[file_path] = session
         
         print(f"\\nEditing: {file_path}")
@@ -130,7 +130,7 @@ class CodeEditorApp:
         
         # Interactive editing loop
         while True:
-            user_request = input(f"{file_path}> ").strip()
+            user_request = input (f"{file_path}> ").strip()
             
             if user_request == "done":
                 break
@@ -138,36 +138,36 @@ class CodeEditorApp:
                 print(session.current_content)
             elif user_request == "diff":
                 if session.pending_edits:
-                    diff = self.editor.show_diff(session)
+                    diff = self.editor.show_diff (session)
                     print(diff)
                 else:
                     print("No pending changes")
             elif user_request == "accept":
                 if session.pending_edits:
-                    success = self.editor.accept_edits(session)
+                    success = self.editor.accept_edits (session)
                     if success:
                         print("✓ Changes applied")
                         # Save file
-                        self.save_file(file_path, session.current_content)
+                        self.save_file (file_path, session.current_content)
                     else:
                         print("✗ Failed to apply changes")
                 else:
                     print("No pending changes")
             elif user_request == "reject":
-                self.editor.reject_edits(session)
+                self.editor.reject_edits (session)
                 print("✗ Changes rejected")
             elif user_request == "undo":
-                success = self.editor.undo(session)
+                success = self.editor.undo (session)
                 if success:
                     print("✓ Undone")
                 else:
                     print("Nothing to undo")
             else:
                 # Process as editing request
-                response = self.editor.process_request(session, user_request)
+                response = self.editor.process_request (session, user_request)
                 print(f"\\nAI: {response}\\n")
     
-    def create_file(self, file_path: str):
+    def create_file (self, file_path: str):
         """Create a new file with AI assistance."""
         full_path = self.project_root / file_path
         
@@ -178,11 +178,11 @@ class CodeEditorApp:
         description = input("Describe the file to create: ")
         
         # Detect language
-        language = self._detect_language_from_path(file_path)
+        language = self._detect_language_from_path (file_path)
         
         # Generate file
         generator = MultiLanguageGenerator()
-        content = generator.generate(language, description, "file")
+        content = generator.generate (language, description, "file")
         
         # Show preview
         print("\\nGenerated content:")
@@ -192,31 +192,31 @@ class CodeEditorApp:
         # Confirm
         confirm = input("Create this file? (yes/no): ")
         if confirm.lower() == "yes":
-            full_path.parent.mkdir(parents=True, exist_ok=True)
-            full_path.write_text(content)
+            full_path.parent.mkdir (parents=True, exist_ok=True)
+            full_path.write_text (content)
             print(f"✓ Created: {file_path}")
     
-    def save_file(self, file_path: str, content: str):
+    def save_file (self, file_path: str, content: str):
         """Save file with backup."""
         full_path = self.project_root / file_path
         
         # Create backup
         if full_path.exists():
-            backup_path = full_path.with_suffix(full_path.suffix + ".bak")
-            backup_path.write_text(full_path.read_text())
+            backup_path = full_path.with_suffix (full_path.suffix + ".bak")
+            backup_path.write_text (full_path.read_text())
         
         # Save
-        full_path.write_text(content)
+        full_path.write_text (content)
         print(f"Saved: {file_path}")
     
-    def list_files(self):
+    def list_files (self):
         """List all files in project."""
         print("\\nProject files:")
         for py_file in self.project_root.rglob("*.py"):
-            relative = py_file.relative_to(self.project_root)
+            relative = py_file.relative_to (self.project_root)
             print(f"  {relative}")
     
-    def show_help(self):
+    def show_help (self):
         """Show help message."""
         print("""
 Commands:
@@ -236,9 +236,9 @@ During editing:
   done         - Finish editing
 """)
     
-    def _detect_language_from_path(self, file_path: str) -> str:
+    def _detect_language_from_path (self, file_path: str) -> str:
         """Detect language from file extension."""
-        ext = Path(file_path).suffix
+        ext = Path (file_path).suffix
         
         mapping = {
             ".py": "python",
@@ -250,7 +250,7 @@ During editing:
             ".go": "go"
         }
         
-        return mapping.get(ext, "python")
+        return mapping.get (ext, "python")
 
 # Usage
 config = EditorConfig(
@@ -259,7 +259,7 @@ config = EditorConfig(
     enable_sandbox=True
 )
 
-app = CodeEditorApp(config)
+app = CodeEditorApp (config)
 app.start()
 
 # Example interaction:
@@ -295,15 +295,15 @@ class CodeFileHandler(FileSystemEventHandler):
     def __init__(self, callback):
         self.callback = callback
     
-    def on_modified(self, event):
+    def on_modified (self, event):
         if not event.is_directory:
             self.callback("modified", event.src_path)
     
-    def on_created(self, event):
+    def on_created (self, event):
         if not event.is_directory:
             self.callback("created", event.src_path)
     
-    def on_deleted(self, event):
+    def on_deleted (self, event):
         if not event.is_directory:
             self.callback("deleted", event.src_path)
 
@@ -311,24 +311,24 @@ class FileWatcher:
     """Watch files for changes."""
     
     def __init__(self, root_path: str):
-        self.root_path = Path(root_path)
+        self.root_path = Path (root_path)
         self.observer = None
     
-    def start(self):
+    def start (self):
         """Start watching files."""
-        def handle_event(event_type, path):
+        def handle_event (event_type, path):
             print(f"\\n[File {event_type}: {path}]")
         
-        event_handler = CodeFileHandler(handle_event)
+        event_handler = CodeFileHandler (handle_event)
         self.observer = Observer()
         self.observer.schedule(
             event_handler,
-            str(self.root_path),
+            str (self.root_path),
             recursive=True
         )
         self.observer.start()
     
-    def stop(self):
+    def stop (self):
         """Stop watching files."""
         if self.observer:
             self.observer.stop()
@@ -350,8 +350,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize editor
-config = EditorConfig(project_root="/path/to/project")
-editor_app = CodeEditorApp(config)
+config = EditorConfig (project_root="/path/to/project")
+editor_app = CodeEditorApp (config)
 
 @app.route("/")
 def index():
@@ -362,15 +362,15 @@ def index():
 def list_files():
     """List all files in project."""
     files = []
-    for py_file in Path(config.project_root).rglob("*.py"):
-        relative = str(py_file.relative_to(config.project_root))
-        files.append(relative)
-    return jsonify(files)
+    for py_file in Path (config.project_root).rglob("*.py"):
+        relative = str (py_file.relative_to (config.project_root))
+        files.append (relative)
+    return jsonify (files)
 
 @app.route("/api/file/<path:file_path>", methods=["GET"])
-def get_file(file_path):
+def get_file (file_path):
     """Get file content."""
-    full_path = Path(config.project_root) / file_path
+    full_path = Path (config.project_root) / file_path
     if not full_path.exists():
         return jsonify({"error": "File not found"}), 404
     
@@ -386,20 +386,20 @@ def edit_file():
     
     # Get or create session
     if file_path not in editor_app.sessions:
-        full_path = Path(config.project_root) / file_path
+        full_path = Path (config.project_root) / file_path
         content = full_path.read_text()
-        session = editor_app.editor.start_editing(file_path, content)
+        session = editor_app.editor.start_editing (file_path, content)
         editor_app.sessions[file_path] = session
     else:
         session = editor_app.sessions[file_path]
     
     # Process request
-    response = editor_app.editor.process_request(session, user_request)
+    response = editor_app.editor.process_request (session, user_request)
     
     # Return response and pending edits
     return jsonify({
         "response": response,
-        "has_edits": len(session.pending_edits) > 0,
+        "has_edits": len (session.pending_edits) > 0,
         "current_content": session.current_content
     })
 
@@ -413,11 +413,11 @@ def accept_changes():
         return jsonify({"error": "No active session"}), 400
     
     session = editor_app.sessions[file_path]
-    success = editor_app.editor.accept_edits(session)
+    success = editor_app.editor.accept_edits (session)
     
     if success:
         # Save file
-        editor_app.save_file(file_path, session.current_content)
+        editor_app.save_file (file_path, session.current_content)
         return jsonify({"success": True})
     
     return jsonify({"success": False}), 400
@@ -429,12 +429,12 @@ def reject_changes():
     file_path = data["file_path"]
     
     if file_path in editor_app.sessions:
-        editor_app.editor.reject_edits(editor_app.sessions[file_path])
+        editor_app.editor.reject_edits (editor_app.sessions[file_path])
     
     return jsonify({"success": True})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run (debug=True, port=5000)
 
 # Frontend would be a React/Vue app that connects to this API
 \`\`\`
@@ -455,38 +455,38 @@ def cli():
 @click.argument("file_path")
 @click.option("--request", "-r", help="Edit request")
 @click.option("--project", "-p", default=".", help="Project root")
-def edit(file_path, request, project):
+def edit (file_path, request, project):
     """Edit a file with AI assistance."""
-    config = EditorConfig(project_root=project)
-    editor_app = CodeEditorApp(config)
+    config = EditorConfig (project_root=project)
+    editor_app = CodeEditorApp (config)
     
     # Read file
-    full_path = Path(project) / file_path
+    full_path = Path (project) / file_path
     if not full_path.exists():
-        click.echo(f"File not found: {file_path}")
+        click.echo (f"File not found: {file_path}")
         return
     
     content = full_path.read_text()
     
     # Start session
-    session = editor_app.editor.start_editing(file_path, content)
+    session = editor_app.editor.start_editing (file_path, content)
     
     # Process request
     if request:
-        response = editor_app.editor.process_request(session, request)
-        click.echo(f"\\nAI: {response}\\n")
+        response = editor_app.editor.process_request (session, request)
+        click.echo (f"\\nAI: {response}\\n")
         
         if session.pending_edits:
             # Show diff
-            diff = editor_app.editor.show_diff(session)
+            diff = editor_app.editor.show_diff (session)
             click.echo("Proposed changes:")
-            click.echo(diff)
+            click.echo (diff)
             
             # Confirm
             if click.confirm("\\nApply these changes?"):
-                success = editor_app.editor.accept_edits(session)
+                success = editor_app.editor.accept_edits (session)
                 if success:
-                    full_path.write_text(session.current_content)
+                    full_path.write_text (session.current_content)
                     click.echo("✓ Changes applied and saved")
                 else:
                     click.echo("✗ Failed to apply changes")
@@ -497,12 +497,12 @@ def edit(file_path, request, project):
 @click.argument("file_path")
 @click.option("--description", "-d", required=True, help="File description")
 @click.option("--project", "-p", default=".", help="Project root")
-def create(file_path, description, project):
+def create (file_path, description, project):
     """Create a new file with AI."""
-    full_path = Path(project) / file_path
+    full_path = Path (project) / file_path
     
     if full_path.exists():
-        click.echo(f"File already exists: {file_path}")
+        click.echo (f"File already exists: {file_path}")
         return
     
     # Detect language
@@ -512,43 +512,43 @@ def create(file_path, description, project):
         ".js": "javascript",
         ".ts": "typescript"
     }
-    language = language_map.get(ext, "python")
+    language = language_map.get (ext, "python")
     
     # Generate
     generator = MultiLanguageGenerator()
-    content = generator.generate(language, description, "file")
+    content = generator.generate (language, description, "file")
     
     # Show preview
     click.echo("\\nGenerated content:")
-    click.echo(content)
+    click.echo (content)
     
     # Confirm
     if click.confirm("\\nCreate this file?"):
-        full_path.parent.mkdir(parents=True, exist_ok=True)
-        full_path.write_text(content)
-        click.echo(f"✓ Created: {file_path}")
+        full_path.parent.mkdir (parents=True, exist_ok=True)
+        full_path.write_text (content)
+        click.echo (f"✓ Created: {file_path}")
 
 @cli.command()
 @click.argument("file_path")
 @click.option("--project", "-p", default=".", help="Project root")
-def review(file_path, project):
+def review (file_path, project):
     """Review code for issues."""
-    full_path = Path(project) / file_path
+    full_path = Path (project) / file_path
     
     if not full_path.exists():
-        click.echo(f"File not found: {file_path}")
+        click.echo (f"File not found: {file_path}")
         return
     
     content = full_path.read_text()
     
     # Run review
     reviewer = CodeReviewer()
-    review = reviewer.review_code(content)
+    review = reviewer.review_code (content)
     
     # Generate report
-    report = reviewer.generate_review_report(review)
+    report = reviewer.generate_review_report (review)
     
-    click.echo(report)
+    click.echo (report)
 
 if __name__ == "__main__":
     cli()

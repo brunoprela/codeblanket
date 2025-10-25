@@ -20,7 +20,7 @@ export const mstMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "How does Kruskal's algorithm work?",
+    question: "How does Kruskal\'s algorithm work?",
     options: [
       'BFS',
       "Sort edges by weight, greedily add edge if doesn't create cycle (use Union-Find)",
@@ -33,7 +33,7 @@ export const mstMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "How does Prim's algorithm work?",
+    question: "How does Prim\'s algorithm work?",
     options: [
       'Sorting edges',
       'Start from vertex, grow tree by adding minimum weight edge connecting tree to new vertex (use priority queue)',

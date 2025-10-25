@@ -82,7 +82,7 @@ class User(BaseModel):
     id: int = Field(..., description="Unique user identifier", example=123)
     email: str = Field(..., description="User email address", example="user@example.com")
     username: str = Field(..., min_length=3, max_length=50, example="johndoe")
-    is_active: bool = Field(default=True, description="Whether user account is active")
+    is_active: bool = Field (default=True, description="Whether user account is active")
     
     class Config:
         schema_extra = {
@@ -145,7 +145,7 @@ class User(BaseModel):
         }
     }
 )
-async def create_user(user: User):
+async def create_user (user: User):
     """
     Create a new user account.
     
@@ -198,9 +198,9 @@ app = FastAPI(
 )
 
 # Group endpoints by router
-users_router = APIRouter(prefix="/users", tags=["users"])
-auth_router = APIRouter(prefix="/auth", tags=["authentication"])
-posts_router = APIRouter(prefix="/posts", tags=["posts"])
+users_router = APIRouter (prefix="/users", tags=["users"])
+auth_router = APIRouter (prefix="/auth", tags=["authentication"])
+posts_router = APIRouter (prefix="/posts", tags=["posts"])
 
 @users_router.get("/")
 async def list_users():
@@ -212,9 +212,9 @@ async def login():
     """Authenticate user and return JWT token"""
     pass
 
-app.include_router(users_router)
-app.include_router(auth_router)
-app.include_router(posts_router)
+app.include_router (users_router)
+app.include_router (auth_router)
+app.include_router (posts_router)
 \`\`\`
 
 ### Security Schemes
@@ -237,12 +237,12 @@ app = FastAPI(
 # Automatic security documentation
 @app.get(
     "/protected",
-    dependencies=[Security(security)],
+    dependencies=[Security (security)],
     summary="Protected endpoint",
     description="Requires valid JWT token in Authorization header"
 )
 async def protected_endpoint(
-    credentials: HTTPAuthorizationCredentials = Security(security)
+    credentials: HTTPAuthorizationCredentials = Security (security)
 ):
     """
     Access protected resource.
@@ -267,7 +267,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 @app.get("/admin")
-async def admin_only(token: str = Depends(oauth2_scheme)):
+async def admin_only (token: str = Depends (oauth2_scheme)):
     """
     Admin-only endpoint.
     

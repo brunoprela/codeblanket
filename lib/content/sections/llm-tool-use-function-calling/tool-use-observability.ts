@@ -35,8 +35,8 @@ class ToolLogger:
     """Structured logger for tool executions."""
     
     def __init__(self, name: str):
-        self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger (name)
+        self.logger.setLevel (logging.INFO)
         
         # JSON formatter
         formatter = logging.Formatter(
@@ -46,10 +46,10 @@ class ToolLogger:
         
         # File handler
         handler = logging.FileHandler('tool_usage.log')
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
+        handler.setFormatter (formatter)
+        self.logger.addHandler (handler)
     
-    def log_tool_call(self, 
+    def log_tool_call (self, 
                      tool_name: str,
                      arguments: Dict[str, Any],
                      user_id: str = None,
@@ -63,9 +63,9 @@ class ToolLogger:
             "request_id": request_id,
             "timestamp": datetime.now().isoformat()
         }
-        self.logger.info(json.dumps(log_data))
+        self.logger.info (json.dumps (log_data))
     
-    def log_tool_result(self,
+    def log_tool_result (self,
                        tool_name: str,
                        result: Dict[str, Any],
                        execution_time_ms: float,
@@ -78,14 +78,14 @@ class ToolLogger:
             "tool_name": tool_name,
             "success": success,
             "execution_time_ms": execution_time_ms,
-            "result_size_bytes": len(json.dumps(result)),
+            "result_size_bytes": len (json.dumps (result)),
             "user_id": user_id,
             "request_id": request_id,
             "timestamp": datetime.now().isoformat()
         }
-        self.logger.info(json.dumps(log_data))
+        self.logger.info (json.dumps (log_data))
     
-    def log_tool_error(self,
+    def log_tool_error (self,
                       tool_name: str,
                       error: Exception,
                       arguments: Dict[str, Any],
@@ -95,27 +95,27 @@ class ToolLogger:
         log_data = {
             "event": "tool_call_error",
             "tool_name": tool_name,
-            "error_type": type(error).__name__,
-            "error_message": str(error),
+            "error_type": type (error).__name__,
+            "error_message": str (error),
             "arguments": arguments,
             "user_id": user_id,
             "request_id": request_id,
             "timestamp": datetime.now().isoformat()
         }
-        self.logger.error(json.dumps(log_data))
+        self.logger.error (json.dumps (log_data))
 
 # Usage
 tool_logger = ToolLogger("tool_execution")
 
-def execute_tool_with_logging(tool_name: str, arguments: Dict, 
+def execute_tool_with_logging (tool_name: str, arguments: Dict, 
                               user_id: str, request_id: str):
     """Execute tool with comprehensive logging."""
-    tool_logger.log_tool_call(tool_name, arguments, user_id, request_id)
+    tool_logger.log_tool_call (tool_name, arguments, user_id, request_id)
     
     start_time = time.time()
     
     try:
-        result = registry.execute(tool_name, **arguments)
+        result = registry.execute (tool_name, **arguments)
         execution_time = (time.time() - start_time) * 1000
         
         tool_logger.log_tool_result(
@@ -127,7 +127,7 @@ def execute_tool_with_logging(tool_name: str, arguments: Dict,
     except Exception as e:
         execution_time = (time.time() - start_time) * 1000
         
-        tool_logger.log_tool_error(tool_name, e, arguments, user_id, request_id)
+        tool_logger.log_tool_error (tool_name, e, arguments, user_id, request_id)
         
         raise
 \`\`\`
@@ -152,32 +152,32 @@ class ToolMetrics:
     
     # Timing
     total_execution_time_ms: float = 0.0
-    execution_times: List[float] = field(default_factory=list)
+    execution_times: List[float] = field (default_factory=list)
     
     # Errors
-    errors_by_type: Dict[str, int] = field(default_factory=lambda: defaultdict(int))
+    errors_by_type: Dict[str, int] = field (default_factory=lambda: defaultdict (int))
     
     # Cost
     total_cost_usd: float = 0.0
     
     @property
-    def success_rate(self) -> float:
+    def success_rate (self) -> float:
         if self.total_calls == 0:
             return 0.0
         return self.successful_calls / self.total_calls
     
     @property
-    def average_execution_time_ms(self) -> float:
+    def average_execution_time_ms (self) -> float:
         if not self.execution_times:
             return 0.0
-        return sum(self.execution_times) / len(self.execution_times)
+        return sum (self.execution_times) / len (self.execution_times)
     
     @property
-    def p95_execution_time_ms(self) -> float:
+    def p95_execution_time_ms (self) -> float:
         if not self.execution_times:
             return 0.0
-        sorted_times = sorted(self.execution_times)
-        index = int(len(sorted_times) * 0.95)
+        sorted_times = sorted (self.execution_times)
+        index = int (len (sorted_times) * 0.95)
         return sorted_times[index]
 
 class MetricsCollector:
@@ -187,7 +187,7 @@ class MetricsCollector:
         self.metrics: Dict[str, ToolMetrics] = defaultdict(ToolMetrics)
         self.global_metrics = ToolMetrics()
     
-    def record_call(self, 
+    def record_call (self, 
                    tool_name: str,
                    execution_time_ms: float,
                    success: bool,
@@ -197,7 +197,7 @@ class MetricsCollector:
         # Tool-specific metrics
         metrics = self.metrics[tool_name]
         metrics.total_calls += 1
-        metrics.execution_times.append(execution_time_ms)
+        metrics.execution_times.append (execution_time_ms)
         metrics.total_execution_time_ms += execution_time_ms
         metrics.total_cost_usd += cost_usd
         
@@ -210,7 +210,7 @@ class MetricsCollector:
         
         # Global metrics
         self.global_metrics.total_calls += 1
-        self.global_metrics.execution_times.append(execution_time_ms)
+        self.global_metrics.execution_times.append (execution_time_ms)
         self.global_metrics.total_execution_time_ms += execution_time_ms
         self.global_metrics.total_cost_usd += cost_usd
         
@@ -219,13 +219,13 @@ class MetricsCollector:
         else:
             self.global_metrics.failed_calls += 1
     
-    def get_metrics(self, tool_name: str = None) -> ToolMetrics:
+    def get_metrics (self, tool_name: str = None) -> ToolMetrics:
         """Get metrics for a specific tool or global."""
         if tool_name:
             return self.metrics[tool_name]
         return self.global_metrics
     
-    def print_report(self):
+    def print_report (self):
         """Print metrics report."""
         print("\\n=== Tool Usage Metrics ===\\n")
         print(f"Global Metrics:")
@@ -236,7 +236,7 @@ class MetricsCollector:
         print(f"  Total Cost: \${self.global_metrics.total_cost_usd:.4f}")
 
 print("\\nPer-Tool Metrics:")
-for tool_name, metrics in sorted(self.metrics.items(),
+for tool_name, metrics in sorted (self.metrics.items(),
     key = lambda x: x[1].total_calls,
     reverse = True):
     print(f"\\n{tool_name}:")
@@ -253,27 +253,27 @@ for error_type, count in metrics.errors_by_type.items():
 # Usage
 metrics = MetricsCollector()
 
-def execute_tool_with_metrics(tool_name: str, ** kwargs):
+def execute_tool_with_metrics (tool_name: str, ** kwargs):
 """Execute tool and record metrics."""
 start_time = time.time()
 
 try:
-result = registry.execute(tool_name, ** kwargs)
+result = registry.execute (tool_name, ** kwargs)
 execution_time = (time.time() - start_time) * 1000
         
         # Get cost from tool metadata
-tool = registry.get(tool_name)
+tool = registry.get (tool_name)
 cost = tool.estimated_cost if tool else 0.0
 
-metrics.record_call(tool_name, execution_time, True, cost_usd = cost)
+metrics.record_call (tool_name, execution_time, True, cost_usd = cost)
 
 return result
     
     except Exception as e:
 execution_time = (time.time() - start_time) * 1000
-error_type = type(e).__name__
+error_type = type (e).__name__
 
-metrics.record_call(tool_name, execution_time, False, error_type = error_type)
+metrics.record_call (tool_name, execution_time, False, error_type = error_type)
 
 raise
 
@@ -302,10 +302,10 @@ jaeger_exporter = JaegerExporter(
     agent_port=6831,
 )
 
-span_processor = BatchSpanProcessor(jaeger_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
+span_processor = BatchSpanProcessor (jaeger_exporter)
+trace.get_tracer_provider().add_span_processor (span_processor)
 
-def execute_tool_with_tracing(tool_name: str, 
+def execute_tool_with_tracing (tool_name: str, 
                               arguments: Dict[str, Any],
                               parent_span_context = None):
     """Execute tool with distributed tracing."""
@@ -316,34 +316,34 @@ def execute_tool_with_tracing(tool_name: str,
     ) as span:
         # Add attributes
         span.set_attribute("tool.name", tool_name)
-        span.set_attribute("tool.arguments", json.dumps(arguments))
+        span.set_attribute("tool.arguments", json.dumps (arguments))
         
         try:
             # Execute tool
-            result = registry.execute(tool_name, **arguments)
+            result = registry.execute (tool_name, **arguments)
             
             # Record success
             span.set_attribute("tool.success", True)
-            span.set_attribute("tool.result_size", len(json.dumps(result)))
+            span.set_attribute("tool.result_size", len (json.dumps (result)))
             
             return result
         
         except Exception as e:
             # Record error
             span.set_attribute("tool.success", False)
-            span.set_attribute("tool.error_type", type(e).__name__)
-            span.set_attribute("tool.error_message", str(e))
-            span.record_exception(e)
+            span.set_attribute("tool.error_type", type (e).__name__)
+            span.set_attribute("tool.error_message", str (e))
+            span.record_exception (e)
             
             raise
 
 # For LLM conversation with multiple tool calls
-def execute_llm_conversation_with_tracing(user_message: str):
+def execute_llm_conversation_with_tracing (user_message: str):
     """Execute full LLM conversation with tracing."""
     
-    request_id = str(uuid.uuid4())
+    request_id = str (uuid.uuid4())
     
-    with tracer.start_as_current_span(f"llm.conversation.{request_id}") as conversation_span:
+    with tracer.start_as_current_span (f"llm.conversation.{request_id}") as conversation_span:
         conversation_span.set_attribute("user.message", user_message)
         conversation_span.set_attribute("request.id", request_id)
         
@@ -360,7 +360,7 @@ def execute_llm_conversation_with_tracing(user_message: str):
         # Execute tool calls
         if response.choices[0].message.function_call:
             func_name = response.choices[0].message.function_call.name
-            func_args = json.loads(response.choices[0].message.function_call.arguments)
+            func_args = json.loads (response.choices[0].message.function_call.arguments)
             
             # Execute with tracing
             result = execute_tool_with_tracing(
@@ -389,7 +389,7 @@ class MonitoringDashboard:
         self.metrics = metrics_collector
         self.alerts = []
     
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data (self) -> Dict[str, Any]:
         """Get data for dashboard."""
         global_metrics = self.metrics.get_metrics()
         
@@ -427,12 +427,12 @@ class MonitoringDashboard:
             "timestamp": datetime.now().isoformat()
         }
 
-dashboard = MonitoringDashboard(metrics)
+dashboard = MonitoringDashboard (metrics)
 
 @app.route('/api/metrics')
 def get_metrics():
     """API endpoint for metrics."""
-    return jsonify(dashboard.get_dashboard_data())
+    return jsonify (dashboard.get_dashboard_data())
 
 @app.route('/dashboard')
 def show_dashboard():
@@ -440,7 +440,7 @@ def show_dashboard():
     return render_template('dashboard.html')
 
 # Run dashboard
-# app.run(port=5000)
+# app.run (port=5000)
 \`\`\`
 
 ## Alerting System
@@ -474,20 +474,20 @@ class AlertManager:
         self.alerts: List[Alert] = []
         self.alert_handlers: List[Callable] = []
     
-    def add_alert(self, alert: Alert):
+    def add_alert (self, alert: Alert):
         """Add an alert."""
         alert.timestamp = datetime.now()
-        self.alerts.append(alert)
+        self.alerts.append (alert)
         
         # Trigger handlers
         for handler in self.alert_handlers:
-            handler(alert)
+            handler (alert)
     
-    def add_handler(self, handler: Callable):
+    def add_handler (self, handler: Callable):
         """Add alert handler."""
-        self.alert_handlers.append(handler)
+        self.alert_handlers.append (handler)
     
-    def check_metrics(self, metrics: MetricsCollector):
+    def check_metrics (self, metrics: MetricsCollector):
         """Check metrics and generate alerts."""
         global_metrics = metrics.get_metrics()
         
@@ -527,11 +527,11 @@ class AlertManager:
                 ))
 
 # Alert handlers
-def log_alert(alert: Alert):
+def log_alert (alert: Alert):
     """Log alert."""
-    logging.warning(f"[{alert.severity.value.upper()}] {alert.message}")
+    logging.warning (f"[{alert.severity.value.upper()}] {alert.message}")
 
-def send_slack_alert(alert: Alert):
+def send_slack_alert (alert: Alert):
     """Send alert to Slack."""
     if alert.severity in [AlertSeverity.ERROR, AlertSeverity.CRITICAL]:
         # Send to Slack
@@ -543,8 +543,8 @@ def send_slack_alert(alert: Alert):
 
 # Setup alerts
 alert_manager = AlertManager()
-alert_manager.add_handler(log_alert)
-alert_manager.add_handler(send_slack_alert)
+alert_manager.add_handler (log_alert)
+alert_manager.add_handler (send_slack_alert)
 
 # Periodic check
 import threading
@@ -552,10 +552,10 @@ import threading
 def check_metrics_periodically():
     """Check metrics every minute."""
     while True:
-        alert_manager.check_metrics(metrics)
+        alert_manager.check_metrics (metrics)
         time.sleep(60)
 
-alert_thread = threading.Thread(target=check_metrics_periodically, daemon=True)
+alert_thread = threading.Thread (target=check_metrics_periodically, daemon=True)
 alert_thread.start()
 \`\`\`
 
@@ -583,7 +583,7 @@ class DecisionTracker:
     def __init__(self):
         self.decisions: List[LLMDecision] = []
     
-    def track_decision(self,
+    def track_decision (self,
                       request_id: str,
                       user_query: str,
                       available_tools: List[str],
@@ -605,32 +605,32 @@ class DecisionTracker:
                 response.choices[0].message.function_call.arguments
             )
         
-        self.decisions.append(decision)
+        self.decisions.append (decision)
     
-    def analyze_decisions(self):
+    def analyze_decisions (self):
         """Analyze LLM decisions."""
         if not self.decisions:
             return {}
         
         # Tool selection frequency
-        tool_counts = defaultdict(int)
+        tool_counts = defaultdict (int)
         for decision in self.decisions:
             if decision.chosen_tool:
                 tool_counts[decision.chosen_tool] += 1
         
         # Average decision time
-        avg_decision_time = sum(d.decision_time_ms for d in self.decisions) / len(self.decisions)
+        avg_decision_time = sum (d.decision_time_ms for d in self.decisions) / len (self.decisions)
         
         # No-tool decision rate
         no_tool_count = sum(1 for d in self.decisions if not d.chosen_tool)
-        no_tool_rate = no_tool_count / len(self.decisions)
+        no_tool_rate = no_tool_count / len (self.decisions)
         
         return {
-            "total_decisions": len(self.decisions),
-            "tool_selection_frequency": dict(tool_counts),
+            "total_decisions": len (self.decisions),
+            "tool_selection_frequency": dict (tool_counts),
             "avg_decision_time_ms": avg_decision_time,
             "no_tool_decision_rate": no_tool_rate,
-            "most_used_tool": max(tool_counts.items(), key=lambda x: x[1])[0] if tool_counts else None
+            "most_used_tool": max (tool_counts.items(), key=lambda x: x[1])[0] if tool_counts else None
         }
 
 decision_tracker = DecisionTracker()
@@ -647,12 +647,12 @@ class CostTracker:
     def __init__(self):
         self.costs = {
             "llm_calls": 0.0,
-            "tool_calls": defaultdict(float),
+            "tool_calls": defaultdict (float),
             "total": 0.0
         }
-        self.cost_by_user = defaultdict(float)
+        self.cost_by_user = defaultdict (float)
     
-    def track_llm_cost(self, tokens: int, model: str, user_id: str = None):
+    def track_llm_cost (self, tokens: int, model: str, user_id: str = None):
         """Track LLM API cost."""
         # Cost per 1K tokens (example rates)
         rates = {
@@ -669,7 +669,7 @@ class CostTracker:
         if user_id:
             self.cost_by_user[user_id] += cost
     
-    def track_tool_cost(self, tool_name: str, cost: float, user_id: str = None):
+    def track_tool_cost (self, tool_name: str, cost: float, user_id: str = None):
         """Track tool execution cost."""
         self.costs["tool_calls"][tool_name] += cost
         self.costs["total"] += cost
@@ -677,13 +677,13 @@ class CostTracker:
         if user_id:
             self.cost_by_user[user_id] += cost
     
-    def get_report(self) -> Dict[str, Any]:
+    def get_report (self) -> Dict[str, Any]:
         """Get cost report."""
         return {
             "total_cost_usd": self.costs["total"],
             "llm_cost_usd": self.costs["llm_calls"],
-            "tool_costs_usd": dict(self.costs["tool_calls"]),
-            "cost_by_user": dict(self.cost_by_user),
+            "tool_costs_usd": dict (self.costs["tool_calls"]),
+            "cost_by_user": dict (self.cost_by_user),
             "most_expensive_tool": max(
                 self.costs["tool_calls"].items(),
                 key=lambda x: x[1]
@@ -693,17 +693,17 @@ class CostTracker:
 cost_tracker = CostTracker()
 
 # Track in execution
-def execute_with_cost_tracking(tool_name: str, user_id: str, **kwargs):
+def execute_with_cost_tracking (tool_name: str, user_id: str, **kwargs):
     """Execute tool with cost tracking."""
     # Get tool cost
-    tool = registry.get(tool_name)
+    tool = registry.get (tool_name)
     cost = tool.estimated_cost if tool else 0.0
     
     # Execute
-    result = registry.execute(tool_name, **kwargs)
+    result = registry.execute (tool_name, **kwargs)
     
     # Track cost
-    cost_tracker.track_tool_cost(tool_name, cost, user_id)
+    cost_tracker.track_tool_cost (tool_name, cost, user_id)
     
     return result
 \`\`\`
@@ -723,7 +723,7 @@ class ObservableToolExecutor:
         self.decision_tracker = DecisionTracker()
         self.cost_tracker = CostTracker()
     
-    def execute(self,
+    def execute (self,
                 tool_name: str,
                 arguments: Dict[str, Any],
                 user_id: str,
@@ -731,10 +731,10 @@ class ObservableToolExecutor:
         """Execute tool with full observability."""
         
         # Log start
-        self.logger.log_tool_call(tool_name, arguments, user_id, request_id)
+        self.logger.log_tool_call (tool_name, arguments, user_id, request_id)
         
         # Start tracing
-        with tracer.start_as_current_span(f"tool.{tool_name}") as span:
+        with tracer.start_as_current_span (f"tool.{tool_name}") as span:
             span.set_attribute("tool.name", tool_name)
             span.set_attribute("user.id", user_id)
             
@@ -742,16 +742,16 @@ class ObservableToolExecutor:
             
             try:
                 # Execute
-                result = registry.execute(tool_name, **arguments)
+                result = registry.execute (tool_name, **arguments)
                 execution_time = (time.time() - start_time) * 1000
                 
                 # Get cost
-                tool = registry.get(tool_name)
+                tool = registry.get (tool_name)
                 cost = tool.estimated_cost if tool else 0.0
                 
                 # Record success
-                self.metrics.record_call(tool_name, execution_time, True, cost_usd=cost)
-                self.cost_tracker.track_tool_cost(tool_name, cost, user_id)
+                self.metrics.record_call (tool_name, execution_time, True, cost_usd=cost)
+                self.cost_tracker.track_tool_cost (tool_name, cost, user_id)
                 self.logger.log_tool_result(
                     tool_name, result, execution_time, True, user_id, request_id
                 )
@@ -762,17 +762,17 @@ class ObservableToolExecutor:
             
             except Exception as e:
                 execution_time = (time.time() - start_time) * 1000
-                error_type = type(e).__name__
+                error_type = type (e).__name__
                 
                 # Record failure
-                self.metrics.record_call(tool_name, execution_time, False, error_type=error_type)
-                self.logger.log_tool_error(tool_name, e, arguments, user_id, request_id)
+                self.metrics.record_call (tool_name, execution_time, False, error_type=error_type)
+                self.logger.log_tool_error (tool_name, e, arguments, user_id, request_id)
                 
                 span.set_attribute("tool.success", False)
-                span.record_exception(e)
+                span.record_exception (e)
                 
                 # Check if alert needed
-                tool_metrics = self.metrics.get_metrics(tool_name)
+                tool_metrics = self.metrics.get_metrics (tool_name)
                 if tool_metrics.success_rate < 0.90:
                     self.alert_manager.add_alert(Alert(
                         severity=AlertSeverity.ERROR,
@@ -782,7 +782,7 @@ class ObservableToolExecutor:
                 
                 raise
     
-    def get_health_status(self) -> Dict[str, Any]:
+    def get_health_status (self) -> Dict[str, Any]:
         """Get system health status."""
         global_metrics = self.metrics.get_metrics()
         
@@ -790,7 +790,7 @@ class ObservableToolExecutor:
             "status": "healthy" if global_metrics.success_rate > 0.95 else "degraded",
             "success_rate": global_metrics.success_rate,
             "avg_latency_ms": global_metrics.average_execution_time_ms,
-            "active_alerts": len(self.alert_manager.alerts),
+            "active_alerts": len (self.alert_manager.alerts),
             "total_cost_usd": self.cost_tracker.costs["total"]
         }
 

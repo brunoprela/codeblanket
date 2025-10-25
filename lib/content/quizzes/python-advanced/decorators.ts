@@ -22,7 +22,7 @@ export const decoratorsQuiz = [
     question:
       'Why do we need functools.wraps when creating decorators? What problem does it solve?',
     sampleAnswer:
-      'Without functools.wraps, the decorated function loses its original metadata like __name__, __doc__, and __module__. This breaks introspection and makes debugging harder. For example, if I decorate my_function, its __name__ would become "wrapper" instead of "my_function", and help(my_function) would show the wrapper docs, not the original docs. functools.wraps copies the metadata from the original function to the wrapper, preserving the function identity. This is critical for debugging, documentation generation, and any tools that rely on function introspection.',
+      'Without functools.wraps, the decorated function loses its original metadata like __name__, __doc__, and __module__. This breaks introspection and makes debugging harder. For example, if I decorate my_function, its __name__ would become "wrapper" instead of "my_function", and help (my_function) would show the wrapper docs, not the original docs. functools.wraps copies the metadata from the original function to the wrapper, preserving the function identity. This is critical for debugging, documentation generation, and any tools that rely on function introspection.',
     keyPoints: [
       'Preserves original function metadata',
       '__name__, __doc__, __module__ preserved',

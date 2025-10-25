@@ -131,7 +131,7 @@ def read_root():
 def get_companies(
     sector: Optional[str] = None,
     limit: int = 100,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Get list of companies, optionally filtered by sector."""
     
@@ -140,7 +140,7 @@ def get_companies(
     if sector:
         query = query.filter(Company.sector == sector)
     
-    companies = query.limit(limit).all()
+    companies = query.limit (limit).all()
     
     return [
         {
@@ -155,7 +155,7 @@ def get_companies(
 @app.post("/companies/{ticker}/refresh")
 async def refresh_company_data(
     ticker: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Trigger data refresh for company.
@@ -170,15 +170,15 @@ async def refresh_company_data(
     
     company = db.query(Company).filter(Company.ticker == ticker).first()
     if not company:
-        raise HTTPException(status_code=404, detail="Company not found")
+        raise HTTPException (status_code=404, detail="Company not found")
     
     try:
         # Download latest filings
-        filings = edgar.download_filings(ticker, company.cik)
+        filings = edgar.download_filings (ticker, company.cik)
         
         # Parse and store
         for filing in filings:
-            financials = edgar.parse_xbrl(filing)
+            financials = edgar.parse_xbrl (filing)
             
             # Store to database
             for metric, value in financials.items():
@@ -190,27 +190,27 @@ async def refresh_company_data(
                     fiscal_year=filing['fiscal_year'],
                     fiscal_quarter=filing['fiscal_quarter']
                 )
-                db.add(db_financial)
+                db.add (db_financial)
         
         db.commit()
         
         # Calculate metrics
-        metrics = analyzer.calculate_all_metrics(ticker, db)
+        metrics = analyzer.calculate_all_metrics (ticker, db)
         
         return {
             "status": "success",
             "ticker": ticker,
-            "filings_processed": len(filings),
-            "metrics_calculated": len(metrics)
+            "filings_processed": len (filings),
+            "metrics_calculated": len (metrics)
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException (status_code=500, detail=str (e))
 
 @app.get("/analysis/{ticker}")
 def get_company_analysis(
     ticker: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Get complete financial analysis for company.
@@ -229,14 +229,14 @@ def get_company_analysis(
     ).order_by(FinancialMetric.period_end.desc()).first()
     
     if not latest_metrics:
-        raise HTTPException(status_code=404, detail="No data available for company")
+        raise HTTPException (status_code=404, detail="No data available for company")
     
     # Calculate quality scores
-    financials = analyzer.get_financials_df(ticker, db)
+    financials = analyzer.get_financials_df (ticker, db)
     
-    beneish = analyzer.calculate_beneish_mscore(financials)
-    altman = analyzer.calculate_altman_zscore(financials)
-    piotroski = analyzer.calculate_piotroski_fscore(financials)
+    beneish = analyzer.calculate_beneish_mscore (financials)
+    altman = analyzer.calculate_altman_zscore (financials)
+    piotroski = analyzer.calculate_piotroski_fscore (financials)
     
     # Get recent alerts
     alerts = db.query(Alert).filter(
@@ -271,11 +271,11 @@ def get_company_analysis(
             "receivables_turnover": latest_metrics.receivables_turnover
         },
         "quality_scores": {
-            "beneish_mscore": float(beneish),
+            "beneish_mscore": float (beneish),
             "beneish_flag": beneish > -1.78,  # Potential manipulator
-            "altman_zscore": float(altman),
+            "altman_zscore": float (altman),
             "altman_zone": "Safe" if altman > 2.99 else "Grey" if altman > 1.81 else "Distress",
-            "piotroski_fscore": int(piotroski),
+            "piotroski_fscore": int (piotroski),
             "piotroski_grade": "Strong" if piotroski >= 7 else "Average" if piotroski >= 4 else "Weak"
         },
         "alerts": [
@@ -292,7 +292,7 @@ def get_company_analysis(
 @app.get("/peers/{ticker}")
 def get_peer_comparison(
     ticker: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Compare company to industry peers.
@@ -303,7 +303,7 @@ def get_peer_comparison(
     # Get company's industry
     company = db.query(Company).filter(Company.ticker == ticker).first()
     if not company:
-        raise HTTPException(status_code=404, detail="Company not found")
+        raise HTTPException (status_code=404, detail="Company not found")
     
     # Get all peers in same industry
     peers = db.query(Company).filter(
@@ -345,7 +345,7 @@ def get_peer_comparison(
     return {
         "ticker": ticker,
         "industry": company.industry,
-        "peer_count": len(peer_tickers),
+        "peer_count": len (peer_tickers),
         "percentile_rankings": percentiles,
         "interpretation": {
             "roe": "Top quartile" if percentiles['roe'] > 75 else "Bottom quartile" if percentiles['roe'] < 25 else "Average",
@@ -358,7 +358,7 @@ def get_alerts(
     severity: Optional[str] = None,
     acknowledged: bool = False,
     limit: int = 50,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Get recent alerts, optionally filtered."""
     
@@ -367,7 +367,7 @@ def get_alerts(
     if severity:
         query = query.filter(Alert.severity == severity)
     
-    alerts = query.order_by(Alert.detected_at.desc()).limit(limit).all()
+    alerts = query.order_by(Alert.detected_at.desc()).limit (limit).all()
     
     return [
         {
@@ -386,13 +386,13 @@ def get_alerts(
 def acknowledge_alert(
     alert_id: int,
     user: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Mark alert as acknowledged."""
     
     alert = db.query(Alert).filter(Alert.id == alert_id).first()
     if not alert:
-        raise HTTPException(status_code=404, detail="Alert not found")
+        raise HTTPException (status_code=404, detail="Alert not found")
     
     alert.acknowledged = True
     alert.acknowledged_at = datetime.utcnow()
@@ -405,7 +405,7 @@ def acknowledge_alert(
 @app.get("/sentiment/{ticker}")
 def get_sentiment_analysis(
     ticker: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Get NLP sentiment analysis for latest earnings call.
@@ -417,7 +417,7 @@ def get_sentiment_analysis(
     # Placeholder - in production, fetch actual transcript
     transcript = "Sample earnings call transcript..."
     
-    sentiment = sentiment_analyzer.analyze_earnings_call(transcript)
+    sentiment = sentiment_analyzer.analyze_earnings_call (transcript)
     
     return {
         "ticker": ticker,
@@ -429,7 +429,7 @@ def get_sentiment_analysis(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ## Part 2: React Dashboard Implementation
@@ -470,7 +470,7 @@ interface AnalysisData {
 const CompanyDashboard: React.FC = () => {
   const { ticker } = useParams<{ ticker: string }>();
   const [data, setData] = useState<AnalysisData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState (true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -479,15 +479,15 @@ const CompanyDashboard: React.FC = () => {
 
   const fetchAnalysis = async () => {
     try {
-      setLoading(true);
+      setLoading (true);
       const response = await axios.get(\`http://localhost:8000/analysis/\${ticker}\`);
-      setData(response.data);
-      setError(null);
+      setData (response.data);
+      setError (null);
     } catch (err) {
       setError('Failed to fetch company data');
-      console.error(err);
+      console.error (err);
     } finally {
-      setLoading(false);
+      setLoading (false);
     }
   };
 
@@ -536,7 +536,7 @@ const CompanyDashboard: React.FC = () => {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{ticker}</h1>
-          <p className="text-gray-600">As of {new Date(data.as_of_date).toLocaleDateString()}</p>
+          <p className="text-gray-600">As of {new Date (data.as_of_date).toLocaleDateString()}</p>
         </div>
         <button
           onClick={refreshData}
@@ -550,7 +550,7 @@ const CompanyDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
           <h3 className="text-sm font-medium text-gray-500 mb-2">Beneish M-Score</h3>
-          <p className={\`text-3xl font-bold \${getScoreColor(data.quality_scores.beneish_mscore, 'beneish')}\`}>
+          <p className={\`text-3xl font-bold \${getScoreColor (data.quality_scores.beneish_mscore, 'beneish')}\`}>
             {data.quality_scores.beneish_mscore.toFixed(2)}
           </p>
           <p className="text-sm mt-2">
@@ -563,7 +563,7 @@ const CompanyDashboard: React.FC = () => {
 
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
           <h3 className="text-sm font-medium text-gray-500 mb-2">Altman Z-Score</h3>
-          <p className={\`text-3xl font-bold \${getScoreColor(data.quality_scores.altman_zscore, 'altman')}\`}>
+          <p className={\`text-3xl font-bold \${getScoreColor (data.quality_scores.altman_zscore, 'altman')}\`}>
             {data.quality_scores.altman_zscore.toFixed(2)}
           </p>
           <p className="text-sm mt-2 font-semibold">{data.quality_scores.altman_zone} Zone</p>
@@ -571,7 +571,7 @@ const CompanyDashboard: React.FC = () => {
 
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
           <h3 className="text-sm font-medium text-gray-500 mb-2">Piotroski F-Score</h3>
-          <p className={\`text-3xl font-bold \${getScoreColor(data.quality_scores.piotroski_fscore, 'piotroski')}\`}>
+          <p className={\`text-3xl font-bold \${getScoreColor (data.quality_scores.piotroski_fscore, 'piotroski')}\`}>
             {data.quality_scores.piotroski_fscore}/9
           </p>
           <p className="text-sm mt-2 font-semibold">{data.quality_scores.piotroski_grade} Fundamentals</p>
@@ -586,14 +586,14 @@ const CompanyDashboard: React.FC = () => {
             {data.alerts.map((alert, idx) => (
               <div 
                 key={idx}
-                className={\`p-4 border rounded-lg \${getSeverityColor(alert.severity)}\`}
+                className={\`p-4 border rounded-lg \${getSeverityColor (alert.severity)}\`}
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="font-semibold">{alert.type}</p>
                     <p className="text-sm mt-1">{alert.message}</p>
                   </div>
-                  <span className="text-xs">{new Date(alert.detected_at).toLocaleDateString()}</span>
+                  <span className="text-xs">{new Date (alert.detected_at).toLocaleDateString()}</span>
                 </div>
               </div>
             ))}

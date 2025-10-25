@@ -52,38 +52,38 @@ class User(Base):
     extra_permissions = Column(ARRAY(String))  # ["delete:featured_posts"]
     revoked_permissions = Column(ARRAY(String))  # ["approve:posts"]
     
-    def get_permissions(self) -> Set[str]:
+    def get_permissions (self) -> Set[str]:
         """Get all effective permissions"""
         permissions = set()
         
         # Add permissions from roles
         for role in self.roles:
-            permissions.update(roles.get(role, []))
+            permissions.update (roles.get (role, []))
         
         # Add extra permissions
-        permissions.update(self.extra_permissions or [])
+        permissions.update (self.extra_permissions or [])
         
         # Remove revoked permissions
-        permissions -= set(self.revoked_permissions or [])
+        permissions -= set (self.revoked_permissions or [])
         
         return permissions
     
-    def has_permission(self, permission: str) -> bool:
+    def has_permission (self, permission: str) -> bool:
         return permission in self.get_permissions()
 
 # Authorization for creating posts
 @app.post("/posts")
 async def create_post(
     post: PostCreate,
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """Authors, editors, and admins can create posts"""
     if not user.has_permission("write:own_posts"):
-        raise HTTPException(status_code=403, detail="Cannot create posts")
+        raise HTTPException (status_code=403, detail="Cannot create posts")
     
     new_post = Post(**post.dict(), author_id=user.id, status="draft")
-    db.add(new_post)
+    db.add (new_post)
     db.commit()
     
     return new_post
@@ -92,16 +92,16 @@ async def create_post(
 @app.post("/posts/{post_id}/approve")
 async def approve_post(
     post_id: int,
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """Only editors and admins can approve"""
     if not user.has_permission("approve:posts"):
-        raise HTTPException(status_code=403, detail="Cannot approve posts")
+        raise HTTPException (status_code=403, detail="Cannot approve posts")
     
     post = db.query(Post).filter(Post.id == post_id).first()
     if not post:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     
     post.status = "approved"
     db.commit()
@@ -110,8 +110,8 @@ async def approve_post(
 
 # Authorization for deleting posts
 async def require_delete_permission(
-    post: Post = Depends(get_post_or_404),
-    user: User = Depends(get_current_user)
+    post: Post = Depends (get_post_or_404),
+    user: User = Depends (get_current_user)
 ) -> Post:
     """
     Can delete if:
@@ -132,11 +132,11 @@ async def require_delete_permission(
 @app.delete("/posts/{post_id}")
 async def delete_post(
     post_id: int,
-    post: Post = Depends(require_delete_permission),
-    db: Session = Depends(get_db)
+    post: Post = Depends (require_delete_permission),
+    db: Session = Depends (get_db)
 ):
     """Delete post with permission check"""
-    db.delete(post)
+    db.delete (post)
     db.commit()
     
     return {"deleted": post_id}
@@ -182,7 +182,7 @@ class User(Base):
     memberships = relationship("OrganizationMember", back_populates="user")
 
 class OrganizationMember(Base):
-    """User's membership in an organization with role"""
+    """User\'s membership in an organization with role"""
     __tablename__ = "organization_members"
     
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
@@ -228,7 +228,7 @@ from typing import Optional
 async def get_current_organization(
     request: Request,
     x_organization_id: Optional[int] = Header(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ) -> Organization:
     """
     Extract organization from:
@@ -275,9 +275,9 @@ async def get_current_organization(
     return organization
 
 async def get_current_user_with_org(
-    current_user: User = Depends(get_current_user),
-    organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    organization: Organization = Depends (get_current_organization),
+    db: Session = Depends (get_db)
 ) -> tuple[User, Organization, str]:
     """
     Get user, organization, and user's role in that organization
@@ -298,18 +298,18 @@ async def get_current_user_with_org(
     return current_user, organization, membership.role
 
 # Role checker for multi-tenant
-def require_org_role(required_role: str):
+def require_org_role (required_role: str):
     """
     Require specific role in current organization
     """
     async def checker(
-        user_org_role: tuple = Depends(get_current_user_with_org)
+        user_org_role: tuple = Depends (get_current_user_with_org)
     ):
         user, org, role = user_org_role
         
         role_hierarchy = {"admin": 3, "member": 2, "viewer": 1}
         
-        if role_hierarchy.get(role, 0) < role_hierarchy.get(required_role, 999):
+        if role_hierarchy.get (role, 0) < role_hierarchy.get (required_role, 999):
             raise HTTPException(
                 status_code=403,
                 detail=f"Role '{required_role}' required in organization {org.name}"
@@ -333,7 +333,7 @@ class TenantMiddleware(BaseHTTPMiddleware):
     """
     Middleware to set current organization in context
     """
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch (self, request: Request, call_next):
         # Extract org from request
         org_id = None
         
@@ -342,20 +342,20 @@ class TenantMiddleware(BaseHTTPMiddleware):
         if '.' in hostname:
             subdomain = hostname.split('.')[0]
             # Look up org_id from subdomain (cached)
-            org_id = get_org_id_from_subdomain(subdomain)
+            org_id = get_org_id_from_subdomain (subdomain)
         
         # From header
         if not org_id:
             org_id = request.headers.get('X-Organization-ID')
         
         # Set in context
-        token = current_org_context.set(org_id)
+        token = current_org_context.set (org_id)
         
         try:
-            response = await call_next(request)
+            response = await call_next (request)
             return response
         finally:
-            current_org_context.reset(token)
+            current_org_context.reset (token)
 
 # Add middleware
 app.add_middleware(TenantMiddleware)
@@ -365,7 +365,7 @@ class TenantSession(Session):
     """
     Session that automatically filters by current organization
     """
-    def query(self, *entities, **kwargs):
+    def query (self, *entities, **kwargs):
         query = super().query(*entities, **kwargs)
         
         # Get current org from context
@@ -374,14 +374,14 @@ class TenantSession(Session):
         if org_id:
             # Automatically filter by organization_id
             for entity in entities:
-                if hasattr(entity, 'organization_id'):
-                    query = query.filter(entity.organization_id == org_id)
+                if hasattr (entity, 'organization_id'):
+                    query = query.filter (entity.organization_id == org_id)
         
         return query
 
 def get_tenant_db():
     """Get database session with automatic tenant filtering"""
-    db = TenantSession(bind=engine)
+    db = TenantSession (bind=engine)
     try:
         yield db
     finally:
@@ -393,8 +393,8 @@ def get_tenant_db():
 \`\`\`python
 @app.get("/posts")
 async def list_posts(
-    user_org_role: tuple = Depends(get_current_user_with_org),
-    db: Session = Depends(get_tenant_db)
+    user_org_role: tuple = Depends (get_current_user_with_org),
+    db: Session = Depends (get_tenant_db)
 ):
     """
     List posts in current organization only
@@ -410,8 +410,8 @@ async def list_posts(
 @app.post("/posts")
 async def create_post(
     post: PostCreate,
-    user_org_role: tuple = Depends(get_current_user_with_org),
-    db: Session = Depends(get_tenant_db)
+    user_org_role: tuple = Depends (get_current_user_with_org),
+    db: Session = Depends (get_tenant_db)
 ):
     """
     Create post in current organization
@@ -425,7 +425,7 @@ async def create_post(
         organization_id=org.id  # CRITICAL
     )
     
-    db.add(new_post)
+    db.add (new_post)
     db.commit()
     
     return new_post
@@ -433,8 +433,8 @@ async def create_post(
 @app.delete("/posts/{post_id}")
 async def delete_post(
     post_id: int,
-    user_org_role: tuple = Depends(require_org_role("admin")),
-    db: Session = Depends(get_tenant_db)
+    user_org_role: tuple = Depends (require_org_role("admin")),
+    db: Session = Depends (get_tenant_db)
 ):
     """
     Only org admins can delete posts
@@ -445,13 +445,13 @@ async def delete_post(
     post = db.query(Post).filter(Post.id == post_id).first()
     
     if not post:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     
     # Double-check tenant (defense in depth)
     if post.organization_id != org.id:
-        raise HTTPException(status_code=403, detail="Tenant mismatch")
+        raise HTTPException (status_code=403, detail="Tenant mismatch")
     
-    db.delete(post)
+    db.delete (post)
     db.commit()
     
     return {"deleted": post_id}
@@ -553,12 +553,12 @@ from fastapi import Request
 
 logger = logging.getLogger(__name__)
 
-def audit_access(action: str, resource_type: str):
+def audit_access (action: str, resource_type: str):
     """
     Decorator for auditing all access attempts
     """
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         async def wrapper(*args, **kwargs):
             # Extract context
             request = kwargs.get('request')
@@ -582,7 +582,7 @@ def audit_access(action: str, resource_type: str):
                     user_agent=request.headers.get('user-agent') if request else None
                 )
                 
-                db.add(audit_log)
+                db.add (audit_log)
                 db.commit()
                 
                 # Also log to application logs
@@ -610,7 +610,7 @@ def audit_access(action: str, resource_type: str):
                     user_agent=request.headers.get('user-agent') if request else None
                 )
                 
-                db.add(audit_log)
+                db.add (audit_log)
                 db.commit()
                 
                 # Log security event
@@ -632,8 +632,8 @@ def audit_access(action: str, resource_type: str):
 # Authorization dependencies
 async def require_assigned_patient(
     patient_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ) -> Patient:
     """
     Doctor can only access patients assigned to them
@@ -641,7 +641,7 @@ async def require_assigned_patient(
     # Get patient
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
-        raise HTTPException(status_code=404, detail="Patient not found")
+        raise HTTPException (status_code=404, detail="Patient not found")
     
     # Check assignment
     if current_user.role == "doctor":
@@ -672,7 +672,7 @@ async def require_assigned_patient(
         )
     
     else:
-        raise HTTPException(status_code=403, detail="Unauthorized role")
+        raise HTTPException (status_code=403, detail="Unauthorized role")
     
     return patient
 
@@ -682,9 +682,9 @@ async def require_assigned_patient(
 async def get_patient(
     patient_id: int,
     request: Request,
-    patient: Patient = Depends(require_assigned_patient),
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    patient: Patient = Depends (require_assigned_patient),
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     View patient record (doctors and nurses only)
@@ -702,9 +702,9 @@ async def update_diagnosis(
     patient_id: int,
     diagnosis: str,
     request: Request,
-    patient: Patient = Depends(require_assigned_patient),
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    patient: Patient = Depends (require_assigned_patient),
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Update diagnosis (doctors only, not nurses)
@@ -724,8 +724,8 @@ async def update_diagnosis(
 @audit_access("read_audit_logs", "audit_log")
 async def get_audit_logs(
     request: Request,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db),
     skip: int = 0,
     limit: int = 100
 ):
@@ -740,7 +740,7 @@ async def get_audit_logs(
     
     logs = db.query(AuthorizationAuditLog).order_by(
         AuthorizationAuditLog.timestamp.desc()
-    ).offset(skip).limit(limit).all()
+    ).offset (skip).limit (limit).all()
     
     return logs
 \`\`\`
@@ -757,13 +757,13 @@ import pytest
     ("nurse", 2, 403),  # Different department
     ("admin", 1, 403),  # Admins cannot access patient data
 ])
-def test_patient_access_control(role, patient_id, expected_status, client, db):
+def test_patient_access_control (role, patient_id, expected_status, client, db):
     """Test all role-patient access combinations"""
     # Setup: Create users and patients
-    user = User(id=1, role=role, department="cardiology")
-    patient1 = Patient(id=1, department="cardiology")
-    patient2 = Patient(id=2, department="emergency")
-    assignment = PatientAssignment(doctor_id=1, patient_id=1)
+    user = User (id=1, role=role, department="cardiology")
+    patient1 = Patient (id=1, department="cardiology")
+    patient2 = Patient (id=2, department="emergency")
+    assignment = PatientAssignment (doctor_id=1, patient_id=1)
     
     db.add_all([user, patient1, patient2, assignment])
     db.commit()
@@ -772,13 +772,13 @@ def test_patient_access_control(role, patient_id, expected_status, client, db):
     app.dependency_overrides[get_current_user] = lambda: user
     
     # Test access
-    response = client.get(f"/patients/{patient_id}")
+    response = client.get (f"/patients/{patient_id}")
     assert response.status_code == expected_status
 
-def test_nurse_cannot_update_diagnosis(client, db):
+def test_nurse_cannot_update_diagnosis (client, db):
     """Nurses can view but not edit diagnoses"""
-    nurse = User(id=2, role="nurse", department="cardiology")
-    patient = Patient(id=1, department="cardiology", diagnosis="Original")
+    nurse = User (id=2, role="nurse", department="cardiology")
+    patient = Patient (id=1, department="cardiology", diagnosis="Original")
     db.add_all([nurse, patient])
     db.commit()
     
@@ -794,10 +794,10 @@ def test_nurse_cannot_update_diagnosis(client, db):
     assert response.status_code == 403
     assert "only doctors" in response.json()["detail"].lower()
 
-def test_authorization_bypass_attempts(client, db):
+def test_authorization_bypass_attempts (client, db):
     """Test common authorization bypass attempts"""
-    doctor = User(id=1, role="doctor", department="cardiology")
-    patient = Patient(id=2, department="emergency")
+    doctor = User (id=1, role="doctor", department="cardiology")
+    patient = Patient (id=2, department="emergency")
     # No assignment between doctor and patient
     db.add_all([doctor, patient])
     db.commit()
@@ -816,11 +816,11 @@ def test_authorization_bypass_attempts(client, db):
     response = client.get("/patients/2 OR 1=1--")
     assert response.status_code in [404, 422]  # Not 200
 
-def test_audit_log_created_on_access(client, db):
+def test_audit_log_created_on_access (client, db):
     """Every access attempt must be logged"""
-    doctor = User(id=1, role="doctor")
-    patient = Patient(id=1)
-    assignment = PatientAssignment(doctor_id=1, patient_id=1)
+    doctor = User (id=1, role="doctor")
+    patient = Patient (id=1)
+    assignment = PatientAssignment (doctor_id=1, patient_id=1)
     db.add_all([doctor, patient, assignment])
     db.commit()
     
@@ -835,16 +835,16 @@ def test_audit_log_created_on_access(client, db):
     
     # Check audit log created
     logs = db.query(AuthorizationAuditLog).all()
-    assert len(logs) == 1
+    assert len (logs) == 1
     assert logs[0].action == "read_patient"
     assert logs[0].user_id == 1
     assert logs[0].resource_id == 1
     assert logs[0].result == "success"
 
-def test_audit_log_on_denied_access(client, db):
+def test_audit_log_on_denied_access (client, db):
     """Failed access attempts must also be logged"""
-    doctor = User(id=1, role="doctor")
-    patient = Patient(id=2)
+    doctor = User (id=1, role="doctor")
+    patient = Patient (id=2)
     # No assignment
     db.add_all([doctor, patient])
     db.commit()
@@ -860,7 +860,7 @@ def test_audit_log_on_denied_access(client, db):
         AuthorizationAuditLog.result == "denied"
     ).all()
     
-    assert len(logs) == 1
+    assert len (logs) == 1
     assert logs[0].reason.lower().contains("not assigned")
 \`\`\`
 

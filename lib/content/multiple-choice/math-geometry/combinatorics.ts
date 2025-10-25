@@ -33,7 +33,7 @@ export const combinatoricsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "What is Pascal's Triangle and its use?",
+    question: "What is Pascal\'s Triangle and its use?",
     options: [
       'Random triangle',
       'Triangle where C(n,r) = C(n-1,r-1) + C(n-1,r) - computes combinations efficiently',
@@ -42,7 +42,7 @@ export const combinatoricsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Pascal's Triangle: each entry is sum of two above. Row n contains C(n,0), C(n,1),...,C(n,n). Property: C(n,r) = C(n-1,r-1) + C(n-1,r). Precompute combinations in O(n²).",
+      "Pascal\'s Triangle: each entry is sum of two above. Row n contains C(n,0), C(n,1),...,C(n,n). Property: C(n,r) = C(n-1,r-1) + C(n-1,r). Precompute combinations in O(n²).",
   },
   {
     id: 'mc4',
@@ -50,13 +50,13 @@ export const combinatoricsMultipleChoice: MultipleChoiceQuestion[] = [
       'How do you count number of ways to climb n stairs (1 or 2 steps)?',
     options: [
       'n',
-      'Fibonacci: ways(n) = ways(n-1) + ways(n-2) - sum of ways from 1-step and 2-step before',
+      'Fibonacci: ways (n) = ways (n-1) + ways (n-2) - sum of ways from 1-step and 2-step before',
       '2^n',
       'Random',
     ],
     correctAnswer: 1,
     explanation:
-      'Climbing stairs: can reach step n from n-1 (1 step) or n-2 (2 steps). ways(n) = ways(n-1) + ways(n-2). Same as Fibonacci. Base: ways(1)=1, ways(2)=2.',
+      'Climbing stairs: can reach step n from n-1 (1 step) or n-2 (2 steps). ways (n) = ways (n-1) + ways (n-2). Same as Fibonacci. Base: ways(1)=1, ways(2)=2.',
   },
   {
     id: 'mc5',

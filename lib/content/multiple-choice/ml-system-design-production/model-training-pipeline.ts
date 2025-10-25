@@ -61,7 +61,7 @@ export const modelTrainingPipelineQuestions: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Low GPU utilization (45-55%) despite available memory indicates the GPU is waiting for data. This is a classic data loading bottleneck. Increasing DataLoader workers (num_workers) parallelizes data preprocessing on CPU, and prefetching (prefetch_factor) ensures batches are ready before the GPU needs them. PyTorch's DataLoader with pin_memory=True also helps. Option A is wrong because low utilization means the GPU isn't being fully used. Option C doesn't address the bottleneck cause. Option D would reduce utilization further and doesn't match the symptoms (memory isn't the issue).",
+      "Low GPU utilization (45-55%) despite available memory indicates the GPU is waiting for data. This is a classic data loading bottleneck. Increasing DataLoader workers (num_workers) parallelizes data preprocessing on CPU, and prefetching (prefetch_factor) ensures batches are ready before the GPU needs them. PyTorch\'s DataLoader with pin_memory=True also helps. Option A is wrong because low utilization means the GPU isn't being fully used. Option C doesn't address the bottleneck cause. Option D would reduce utilization further and doesn't match the symptoms (memory isn't the issue).",
     difficulty: 'intermediate',
     topic: 'Model Training Pipeline',
   },

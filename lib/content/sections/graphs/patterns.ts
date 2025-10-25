@@ -12,25 +12,25 @@ Find all connected groups in undirected graph.
 **Approach**: Run BFS/DFS from each unvisited node.
 
 \`\`\`python
-def count_components(n, edges):
+def count_components (n, edges):
     # Build adjacency list
-    graph = {i: [] for i in range(n)}
+    graph = {i: [] for i in range (n)}
     for a, b in edges:
-        graph[a].append(b)
-        graph[b].append(a)
+        graph[a].append (b)
+        graph[b].append (a)
     
     visited = set()
     count = 0
     
-    def dfs(node):
-        visited.add(node)
+    def dfs (node):
+        visited.add (node)
         for neighbor in graph[node]:
             if neighbor not in visited:
-                dfs(neighbor)
+                dfs (neighbor)
     
-    for node in range(n):
+    for node in range (n):
         if node not in visited:
-            dfs(node)
+            dfs (node)
             count += 1
     
     return count
@@ -54,9 +54,9 @@ Order nodes in DAG such that for edge u → v, u comes before v.
 
 **Applications**: Task scheduling, course prerequisites
 
-**Algorithm (Kahn's - BFS):**
+**Algorithm (Kahn\'s - BFS):**
 \`\`\`python
-def topological_sort(graph):
+def topological_sort (graph):
     # Calculate in-degrees
     in_degree = {node: 0 for node in graph}
     for node in graph:
@@ -69,15 +69,15 @@ def topological_sort(graph):
     
     while queue:
         node = queue.popleft()
-        result.append(node)
+        result.append (node)
         
         for neighbor in graph[node]:
             in_degree[neighbor] -= 1
             if in_degree[neighbor] == 0:
-                queue.append(neighbor)
+                queue.append (neighbor)
     
     # Check if all nodes processed (no cycle)
-    return result if len(result) == len(graph) else []
+    return result if len (result) == len (graph) else []
 \`\`\`
 
 ---
@@ -89,13 +89,13 @@ def topological_sort(graph):
 \`\`\`python
 import heapq
 
-def dijkstra(graph, start):
+def dijkstra (graph, start):
     distances = {node: float('inf') for node in graph}
     distances[start] = 0
     pq = [(0, start)]  # (distance, node)
     
     while pq:
-        curr_dist, node = heapq.heappop(pq)
+        curr_dist, node = heapq.heappop (pq)
         
         if curr_dist > distances[node]:
             continue
@@ -105,7 +105,7 @@ def dijkstra(graph, start):
             
             if distance < distances[neighbor]:
                 distances[neighbor] = distance
-                heapq.heappush(pq, (distance, neighbor))
+                heapq.heappush (pq, (distance, neighbor))
     
     return distances
 \`\`\`
@@ -123,16 +123,16 @@ Efficiently track and merge connected components.
 \`\`\`python
 class UnionFind:
     def __init__(self, n):
-        self.parent = list(range(n))
+        self.parent = list (range (n))
         self.rank = [0] * n
     
-    def find(self, x):
+    def find (self, x):
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])  # Path compression
+            self.parent[x] = self.find (self.parent[x])  # Path compression
         return self.parent[x]
     
-    def union(self, x, y):
-        root_x, root_y = self.find(x), self.find(y)
+    def union (self, x, y):
+        root_x, root_y = self.find (x), self.find (y)
         
         if root_x == root_y:
             return False  # Already connected

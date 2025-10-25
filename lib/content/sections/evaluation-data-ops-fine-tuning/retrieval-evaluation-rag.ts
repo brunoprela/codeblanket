@@ -77,7 +77,7 @@ class RetrievalEvaluator:
         
         top_k = retrieved[:k]
         relevant_retrieved = sum(1 for doc in top_k if doc in relevant)
-        return relevant_retrieved / len(relevant)
+        return relevant_retrieved / len (relevant)
     
     def mean_reciprocal_rank(
         self,
@@ -91,7 +91,7 @@ class RetrievalEvaluator:
         MRR=0.5: Second result is relevant
         MRR=0.0: No relevant results
         """
-        for i, doc in enumerate(retrieved):
+        for i, doc in enumerate (retrieved):
             if doc in relevant:
                 return 1.0 / (i + 1)
         return 0.0
@@ -111,15 +111,15 @@ class RetrievalEvaluator:
         """
         # DCG: Discounted cumulative gain
         dcg = 0.0
-        for i, doc in enumerate(retrieved[:k]):
-            relevance = relevance_scores.get(doc, 0.0)
+        for i, doc in enumerate (retrieved[:k]):
+            relevance = relevance_scores.get (doc, 0.0)
             dcg += relevance / np.log2(i + 2)  # i+2 because i starts at 0
         
         # IDCG: Ideal DCG (perfect ranking)
-        ideal_relevances = sorted(relevance_scores.values(), reverse=True)[:k]
+        ideal_relevances = sorted (relevance_scores.values(), reverse=True)[:k]
         idcg = sum(
             rel / np.log2(i + 2)
-            for i, rel in enumerate(ideal_relevances)
+            for i, rel in enumerate (ideal_relevances)
         )
         
         # Normalize
@@ -135,13 +135,13 @@ class RetrievalEvaluator:
         """Evaluate single query."""
         
         metrics = {
-            'precision@5': self.precision_at_k(retrieved_docs, relevant_docs, k=5),
-            'recall@5': self.recall_at_k(retrieved_docs, relevant_docs, k=5),
-            'mrr': self.mean_reciprocal_rank(retrieved_docs, relevant_docs)
+            'precision@5': self.precision_at_k (retrieved_docs, relevant_docs, k=5),
+            'recall@5': self.recall_at_k (retrieved_docs, relevant_docs, k=5),
+            'mrr': self.mean_reciprocal_rank (retrieved_docs, relevant_docs)
         }
         
         if relevance_scores:
-            metrics['ndcg@5'] = self.ndcg_at_k(retrieved_docs, relevance_scores, k=5)
+            metrics['ndcg@5'] = self.ndcg_at_k (retrieved_docs, relevance_scores, k=5)
         
         return metrics
 
@@ -153,7 +153,7 @@ query = "What is machine learning?"
 retrieved = ["doc1", "doc5", "doc3", "doc2", "doc9"]  # Retrieved in order
 relevant = {"doc1", "doc2", "doc3"}  # Ground truth relevant docs
 
-metrics = evaluator.evaluate_query(query, retrieved, relevant)
+metrics = evaluator.evaluate_query (query, retrieved, relevant)
 
 print(f"Precision@5: {metrics['precision@5']:.2%}")  # 60% (3/5 relevant)
 print(f"Recall@5: {metrics['recall@5']:.2%}")  # 100% (found all 3)
@@ -182,16 +182,16 @@ class RAGGenerationEvaluator:
         nli = pipeline("text-classification", model="microsoft/deberta-large-mnli")
         
         # Extract claims from answer
-        claims = self._extract_claims(answer)
+        claims = self._extract_claims (answer)
         
         # Check each claim against context
         supported = 0
         for claim in claims:
-            result = nli(f"{context} [SEP] {claim}")
+            result = nli (f"{context} [SEP] {claim}")
             if result[0]['label'] == 'ENTAILMENT':
                 supported += 1
         
-        return supported / len(claims) if claims else 0.0
+        return supported / len (claims) if claims else 0.0
     
     async def answer_relevance(
         self,
@@ -208,10 +208,10 @@ class RAGGenerationEvaluator:
         
         model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        q_emb = model.encode(question)
-        a_emb = model.encode(answer)
+        q_emb = model.encode (question)
+        a_emb = model.encode (answer)
         
-        similarity = 1 - cosine(q_emb, a_emb)
+        similarity = 1 - cosine (q_emb, a_emb)
         
         return similarity
     
@@ -228,21 +228,21 @@ class RAGGenerationEvaluator:
         
         model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        q_emb = model.encode(question)
+        q_emb = model.encode (question)
         
         relevances = []
         for context in contexts:
-            c_emb = model.encode(context)
-            sim = 1 - cosine(q_emb, c_emb)
-            relevances.append(sim)
+            c_emb = model.encode (context)
+            sim = 1 - cosine (q_emb, c_emb)
+            relevances.append (sim)
         
-        return sum(relevances) / len(relevances) if relevances else 0.0
+        return sum (relevances) / len (relevances) if relevances else 0.0
     
-    def _extract_claims(self, text: str) -> List[str]:
+    def _extract_claims (self, text: str) -> List[str]:
         """Extract factual claims from text."""
         # Simple: split into sentences
         import re
-        sentences = re.split(r'[.!?]+', text)
+        sentences = re.split (r'[.!?]+', text)
         return [s.strip() for s in sentences if s.strip()]
 
 # Usage
@@ -252,9 +252,9 @@ question = "What is the capital of France?"
 answer = "The capital of France is Paris, a major European city."
 context = "Paris is the capital and largest city of France."
 
-faithfulness = await rag_eval.faithfulness(question, answer, context)
-answer_rel = await rag_eval.answer_relevance(question, answer)
-context_rel = await rag_eval.context_relevance(question, [context])
+faithfulness = await rag_eval.faithfulness (question, answer, context)
+answer_rel = await rag_eval.answer_relevance (question, answer)
+context_rel = await rag_eval.context_relevance (question, [context])
 
 print(f"Faithfulness: {faithfulness:.2%}")  # ~100% (grounded in context)
 print(f"Answer Relevance: {answer_rel:.2%}")  # ~90% (answers question)
@@ -300,7 +300,7 @@ class RAGASEvaluator:
             'ground_truths': [tc.get('ground_truth', ') for tc in test_cases]
         }
         
-        return Dataset.from_dict(data)
+        return Dataset.from_dict (data)
     
     async def evaluate_rag_system(
         self,
@@ -308,7 +308,7 @@ class RAGASEvaluator:
     ) -> Dict[str, float]:
         """Evaluate RAG system with RAGAS metrics."""
         
-        dataset = self.prepare_dataset(test_cases)
+        dataset = self.prepare_dataset (test_cases)
         
         # Evaluate with all metrics
         result = evaluate(
@@ -322,7 +322,7 @@ class RAGASEvaluator:
             ]
         )
         
-        return dict(result)
+        return dict (result)
 
 # Usage
 ragas_eval = RAGASEvaluator()
@@ -337,7 +337,7 @@ test_cases = [
     # ... more test cases
 ]
 
-scores = await ragas_eval.evaluate_rag_system(test_cases)
+scores = await ragas_eval.evaluate_rag_system (test_cases)
 
 print("RAG System Evaluation:")
 print(f"  Faithfulness: {scores['faithfulness']:.2%}")
@@ -379,7 +379,7 @@ class ComprehensiveRAGEvaluator:
             question = test_case['question']
             
             # 1. Retrieval
-            retrieved_docs = await self._retrieve(question)
+            retrieved_docs = await self._retrieve (question)
             retrieved_ids = [doc['id'] for doc in retrieved_docs]
             relevant_ids = test_case['relevant_doc_ids']
             
@@ -391,7 +391,7 @@ class ComprehensiveRAGEvaluator:
             
             # 2. Generation
             context = "\\n".join([doc['text'] for doc in retrieved_docs])
-            answer = await self._generate(question, context)
+            answer = await self._generate (question, context)
             
             faithfulness = await self.generation_eval.faithfulness(
                 question,
@@ -407,8 +407,8 @@ class ComprehensiveRAGEvaluator:
             # 3. End-to-end quality
             # Compare generated answer to ground truth
             ground_truth = test_case['ground_truth_answer']
-            exact_match = self._exact_match(answer, ground_truth)
-            f1 = self._f1_score(answer, ground_truth)
+            exact_match = self._exact_match (answer, ground_truth)
+            f1 = self._f1_score (answer, ground_truth)
             
             all_metrics.append({
                 **retrieval_metrics,
@@ -422,11 +422,11 @@ class ComprehensiveRAGEvaluator:
         aggregated = {}
         for key in all_metrics[0].keys():
             values = [m[key] for m in all_metrics]
-            aggregated[key] = sum(values) / len(values)
+            aggregated[key] = sum (values) / len (values)
         
         return aggregated
     
-    async def _retrieve(self, query: str) -> List[Dict]:
+    async def _retrieve (self, query: str) -> List[Dict]:
         """Your retrieval implementation."""
         # Placeholder
         return [
@@ -434,19 +434,19 @@ class ComprehensiveRAGEvaluator:
             {'id': 'doc2', 'text': 'Retrieved document 2'}
         ]
     
-    async def _generate(self, query: str, context: str) -> str:
+    async def _generate (self, query: str, context: str) -> str:
         """Your generation implementation."""
         # Placeholder
         return "Generated answer using context"
     
-    def _exact_match(self, pred: str, truth: str) -> float:
+    def _exact_match (self, pred: str, truth: str) -> float:
         """Exact match scoring."""
         return 1.0 if pred.strip().lower() == truth.strip().lower() else 0.0
     
-    def _f1_score(self, pred: str, truth: str) -> float:
+    def _f1_score (self, pred: str, truth: str) -> float:
         """Token-level F1."""
-        pred_tokens = set(pred.lower().split())
-        truth_tokens = set(truth.lower().split())
+        pred_tokens = set (pred.lower().split())
+        truth_tokens = set (truth.lower().split())
         
         if not pred_tokens or not truth_tokens:
             return 0.0
@@ -455,8 +455,8 @@ class ComprehensiveRAGEvaluator:
         if not common:
             return 0.0
         
-        precision = len(common) / len(pred_tokens)
-        recall = len(common) / len(truth_tokens)
+        precision = len (common) / len (pred_tokens)
+        recall = len (common) / len (truth_tokens)
         
         f1 = 2 * (precision * recall) / (precision + recall)
         return f1
@@ -464,7 +464,7 @@ class ComprehensiveRAGEvaluator:
 # Usage
 comprehensive_eval = ComprehensiveRAGEvaluator()
 
-results = await comprehensive_eval.evaluate_rag_pipeline(test_dataset)
+results = await comprehensive_eval.evaluate_rag_pipeline (test_dataset)
 
 print("RAG Pipeline Evaluation:")
 print(f"\\nRetrieval:")

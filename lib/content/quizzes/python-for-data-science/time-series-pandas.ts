@@ -24,7 +24,7 @@ df = pd.DataFrame({'sales': np.random.randint(100, 500, 365)}, index=dates)
 monthly = df.resample('ME').sum()
 # Result: 12 rows (one per month), each containing sum of daily sales
 
-print(f"Daily: {len(df)} rows → Monthly: {len(monthly)} rows")
+print(f"Daily: {len (df)} rows → Monthly: {len (monthly)} rows")
 # Daily: 365 rows → Monthly: 12 rows
 \`\`\`
 
@@ -68,10 +68,10 @@ df = pd.DataFrame({'price': range(100, 200)},
                   index=pd.date_range('2024-01-01', periods=100, freq='D'))
 
 # 20-day moving average
-df['MA_20',] = df['price',].rolling(window=20).mean()
+df['MA_20',] = df['price',].rolling (window=20).mean()
 # Result: 100 rows (same as input), each with 20-day average
 
-print(f"Input: {len(df)} rows → Output: {len(df)} rows")
+print(f"Input: {len (df)} rows → Output: {len (df)} rows")
 # Input: 100 rows → Output: 100 rows (same)
 \`\`\`
 
@@ -166,10 +166,10 @@ daily = hourly_prices.resample('D').agg({
 **Pitfall 4: Mixing up window sizes**
 \`\`\`python
 # WRONG: Window as number of periods (inconsistent for irregular data)
-df.rolling(window=20).mean()  # 20 what? Days? Rows?
+df.rolling (window=20).mean()  # 20 what? Days? Rows?
 
 # CORRECT: Specify time-based window
-df.rolling(window='20D').mean()  # Explicitly 20 days
+df.rolling (window='20D').mean()  # Explicitly 20 days
 \`\`\`
 
 **Pitfall 5: Resampling loses information**
@@ -237,10 +237,10 @@ monthly = daily.resample('ME').mean()  # What about count? sum?
 2. **Use time-based windows:**
 \`\`\`python
 # Good: Time-aware
-df.rolling(window='30D').mean()
+df.rolling (window='30D').mean()
 
 # Bad: Row-based (inconsistent with irregular data)
-df.rolling(window=30).mean()
+df.rolling (window=30).mean()
 \`\`\`
 
 3. **Document window choices:**
@@ -376,7 +376,7 @@ Estimates intermediate values based on surrounding data
 
 \`\`\`python
 # Linear interpolation
-df['interpolate_linear',] = df['price',].interpolate(method='linear')
+df['interpolate_linear',] = df['price',].interpolate (method='linear')
 print(df[['price', 'ffill', 'interpolate_linear',]])
 #             price  ffill  interpolate_linear
 # 2024-01-01  100.0  100.0             100.0
@@ -387,14 +387,14 @@ print(df[['price', 'ffill', 'interpolate_linear',]])
 # ...
 
 # Time-aware interpolation
-df['interpolate_time',] = df['price',].interpolate(method='time')
+df['interpolate_time',] = df['price',].interpolate (method='time')
 # Accounts for actual time distances
 
 # Polynomial interpolation (smoother)
-df['interpolate_poly',] = df['price',].interpolate(method='polynomial', order=2)
+df['interpolate_poly',] = df['price',].interpolate (method='polynomial', order=2)
 
 # Spline interpolation (very smooth)
-df['interpolate_spline',] = df['price',].interpolate(method='spline', order=3)
+df['interpolate_spline',] = df['price',].interpolate (method='spline', order=3)
 \`\`\`
 
 **When to use:**
@@ -402,22 +402,22 @@ df['interpolate_spline',] = df['price',].interpolate(method='spline', order=3)
 ✅ **Physical/Natural phenomena:**
 \`\`\`python
 # Temperature (gradual changes)
-temperature.interpolate(method='linear')
+temperature.interpolate (method='linear')
 
 # Water levels, air pressure
-sensor_readings.interpolate(method='time')
+sensor_readings.interpolate (method='time')
 \`\`\`
 
 ✅ **Upsampling:**
 \`\`\`python
 # Monthly to daily (create intermediate values)
-monthly_data.resample('D').interpolate(method='linear')
+monthly_data.resample('D').interpolate (method='linear')
 \`\`\`
 
 ✅ **Small gaps in smooth data:**
 \`\`\`python
 # Few missing points in continuous measurement
-continuous_data.interpolate(method='cubic')
+continuous_data.interpolate (method='cubic')
 \`\`\`
 
 ❌ **Inappropriate for:**
@@ -437,8 +437,8 @@ df = pd.DataFrame({'price': prices}, index=dates)
 
 df['ffill',] = df['price',].ffill()
 df['bfill',] = df['price',].bfill()
-df['interpolate',] = df['price',].interpolate(method='linear')
-df['mean',] = df['price',].fillna(df['price',].mean())
+df['interpolate',] = df['price',].interpolate (method='linear')
+df['mean',] = df['price',].fillna (df['price',].mean())
 
 print(df[5:15])
 #             price  ffill  bfill  interpolate    mean
@@ -455,7 +455,7 @@ print(df[5:15])
 \`\`\`python
 # Fill with rolling average
 df['rolling_fill',] = df['price',].fillna(
-    df['price',].rolling(window=7, min_periods=1, center=True).mean()
+    df['price',].rolling (window=7, min_periods=1, center=True).mean()
 )
 \`\`\`
 
@@ -463,7 +463,7 @@ df['rolling_fill',] = df['price',].fillna(
 \`\`\`python
 # Use same day last week/month/year
 df['seasonal_fill',] = df['price',].fillna(
-    df['price',].shift(freq='7D')  # Use value from 7 days ago
+    df['price',].shift (freq='7D')  # Use value from 7 days ago
 )
 \`\`\`
 
@@ -497,10 +497,10 @@ irregular_data = pd.DataFrame({
 
 # Strategy 1: Resample to regular grid
 regular = irregular_data.resample('5min').mean()
-regular_filled = regular.interpolate(method='time')
+regular_filled = regular.interpolate (method='time')
 
 # Strategy 2: Keep irregular, interpolate at query points
-def get_value_at(timestamp):
+def get_value_at (timestamp):
     # Find surrounding values
     before = irregular_data[irregular_data.index <= timestamp].iloc[-1]
     after = irregular_data[irregular_data.index >= timestamp].iloc[0]
@@ -516,10 +516,10 @@ def get_value_at(timestamp):
 \`\`\`python
 # Analyze gap patterns
 missing = df['price',].isna()
-print(f"Missing: {missing.sum()} / {len(df)} ({missing.sum()/len(df)*100:.1f}%)")
+print(f"Missing: {missing.sum()} / {len (df)} ({missing.sum()/len (df)*100:.1f}%)")
 
 # Gap sizes
-gaps = missing.astype(int).groupby((missing != missing.shift()).cumsum()).sum()
+gaps = missing.astype (int).groupby((missing != missing.shift()).cumsum()).sum()
 print(f"Average gap size: {gaps[gaps > 0].mean():.1f}")
 print(f"Max gap size: {gaps.max()}")
 \`\`\`
@@ -527,18 +527,18 @@ print(f"Max gap size: {gaps.max()}")
 **2. Set maximum gap size:**
 \`\`\`python
 # Only fill small gaps
-def fill_small_gaps(series, max_gap=3, method='linear'):
+def fill_small_gaps (series, max_gap=3, method='linear'):
     """Fill gaps only if ≤ max_gap consecutive missing"""
     filled = series.copy()
-    gaps = series.isna().astype(int).groupby((series.notna()).cumsum()).cumsum()
+    gaps = series.isna().astype (int).groupby((series.notna()).cumsum()).cumsum()
     
     # Only interpolate where gap ≤ max_gap
     mask = (series.isna()) & (gaps <= max_gap)
-    filled[mask] = series.interpolate(method=method)[mask]
+    filled[mask] = series.interpolate (method=method)[mask]
     
     return filled
 
-df['smart_fill',] = fill_small_gaps(df['price',], max_gap=3)
+df['smart_fill',] = fill_small_gaps (df['price',], max_gap=3)
 \`\`\`
 
 **3. Document filling strategy:**
@@ -554,10 +554,10 @@ reliable_data = df[~df['was_filled',]]
 **4. Consider domain constraints:**
 \`\`\`python
 # Prices can't be negative
-df['price_filled',] = df['price',].interpolate().clip(lower=0)
+df['price_filled',] = df['price',].interpolate().clip (lower=0)
 
 # Inventory is integer
-df['inventory_filled',] = df['inventory',].interpolate().round().astype(int)
+df['inventory_filled',] = df['inventory',].interpolate().round().astype (int)
 
 # Percentages are [0, 100]
 df['pct_filled',] = df['percent',].interpolate().clip(0, 100)
@@ -567,7 +567,7 @@ df['pct_filled',] = df['percent',].interpolate().clip(0, 100)
 \`\`\`python
 # Compare to known values (train/test split)
 known = df[df['price',].notna()]
-test_idx = known.sample(frac=0.2).index
+test_idx = known.sample (frac=0.2).index
 
 # Remove test values, fill, compare
 df_test = df.copy()
@@ -575,7 +575,7 @@ df_test.loc[test_idx, 'price',] = np.nan
 df_test['filled',] = df_test['price',].interpolate()
 
 # Measure error
-mae = np.abs(df_test.loc[test_idx, 'filled',] - df.loc[test_idx, 'price',]).mean()
+mae = np.abs (df_test.loc[test_idx, 'filled',] - df.loc[test_idx, 'price',]).mean()
 print(f"Fill MAE: {mae:.2f}")
 \`\`\`
 
@@ -638,19 +638,19 @@ Where P = price, n = window size
 # Generate sample price data
 np.random.seed(42)
 dates = pd.date_range('2023-01-01', '2024-12-31', freq='B')
-returns = np.random.normal(0.0005, 0.02, len(dates))
+returns = np.random.normal(0.0005, 0.02, len (dates))
 df = pd.DataFrame({
     'price': 100 * (1 + returns).cumprod()
 }, index=dates)
 
 # Simple Moving Average
-df['SMA_20',] = df['price',].rolling(window=20).mean()
-df['SMA_50',] = df['price',].rolling(window=50).mean()
-df['SMA_200',] = df['price',].rolling(window=200).mean()
+df['SMA_20',] = df['price',].rolling (window=20).mean()
+df['SMA_50',] = df['price',].rolling (window=50).mean()
+df['SMA_200',] = df['price',].rolling (window=200).mean()
 
 # Trading signals
-df['golden_cross',] = (df['SMA_50',] > df['SMA_200',]).astype(int).diff()  # 1 when crosses up
-df['death_cross',] = (df['SMA_50',] < df['SMA_200',]).astype(int).diff()  # 1 when crosses down
+df['golden_cross',] = (df['SMA_50',] > df['SMA_200',]).astype (int).diff()  # 1 when crosses up
+df['death_cross',] = (df['SMA_50',] < df['SMA_200',]).astype (int).diff()  # 1 when crosses down
 
 print(df[['price', 'SMA_20', 'SMA_50',]].tail())
 \`\`\`
@@ -678,32 +678,32 @@ For 20-period EMA: α = 2 / 21 ≈ 0.095
 **Implementation:**
 \`\`\`python
 # Pandas EMA
-df['EMA_20',] = df['price',].ewm(span=20, adjust=False).mean()
-df['EMA_50',] = df['price',].ewm(span=50, adjust=False).mean()
+df['EMA_20',] = df['price',].ewm (span=20, adjust=False).mean()
+df['EMA_50',] = df['price',].ewm (span=50, adjust=False).mean()
 
 # Manual implementation (for understanding)
-def calculate_ema(prices, period):
+def calculate_ema (prices, period):
     alpha = 2 / (period + 1)
     ema = [prices.iloc[0]]  # Start with first price
     
     for price in prices.iloc[1:]:
-        ema.append(price * alpha + ema[-1] * (1 - alpha))
+        ema.append (price * alpha + ema[-1] * (1 - alpha))
     
-    return pd.Series(ema, index=prices.index)
+    return pd.Series (ema, index=prices.index)
 
-df['EMA_20_manual',] = calculate_ema(df['price',], 20)
+df['EMA_20_manual',] = calculate_ema (df['price',], 20)
 
 # Verify they match
-print(f"Match: {np.allclose(df['EMA_20',].dropna(), df['EMA_20_manual',].dropna())}")
+print(f"Match: {np.allclose (df['EMA_20',].dropna(), df['EMA_20_manual',].dropna())}")
 \`\`\`
 
 **Pitfall 2: adjust parameter**
 \`\`\`python
 # adjust=False: Standard EMA (weighted recursive)
-df['EMA_standard',] = df['price',].ewm(span=20, adjust=False).mean()
+df['EMA_standard',] = df['price',].ewm (span=20, adjust=False).mean()
 
 # adjust=True: Simple weighted average (not standard EMA)
-df['EMA_adjusted',] = df['price',].ewm(span=20, adjust=True).mean()
+df['EMA_adjusted',] = df['price',].ewm (span=20, adjust=True).mean()
 
 # They differ, especially at start
 print(df[['EMA_standard', 'EMA_adjusted',]].head(25))
@@ -733,18 +733,18 @@ Range: 0-100 (typically >70 = overbought, <30 = oversold)
 
 **Implementation:**
 \`\`\`python
-def calculate_rsi(prices, period=14):
+def calculate_rsi (prices, period=14):
     """Calculate RSI"""
     # Calculate price changes
     delta = prices.diff()
     
     # Separate gains and losses
-    gain = delta.where(delta > 0, 0)
-    loss = -delta.where(delta < 0, 0)
+    gain = delta.where (delta > 0, 0)
+    loss = -delta.where (delta < 0, 0)
     
     # Calculate average gains and losses (EMA)
-    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+    avg_gain = gain.ewm (alpha=1/period, adjust=False).mean()
+    avg_loss = loss.ewm (alpha=1/period, adjust=False).mean()
     
     # Calculate RS and RSI
     rs = avg_gain / avg_loss
@@ -752,7 +752,7 @@ def calculate_rsi(prices, period=14):
     
     return rsi
 
-df['RSI_14',] = calculate_rsi(df['price',], period=14)
+df['RSI_14',] = calculate_rsi (df['price',], period=14)
 
 # Trading signals
 df['RSI_overbought',] = df['RSI_14',] > 70
@@ -786,31 +786,31 @@ Signals:
 **Implementation:**
 \`\`\`python
 # MACD components
-df['EMA_12',] = df['price',].ewm(span=12, adjust=False).mean()
-df['EMA_26',] = df['price',].ewm(span=26, adjust=False).mean()
+df['EMA_12',] = df['price',].ewm (span=12, adjust=False).mean()
+df['EMA_26',] = df['price',].ewm (span=26, adjust=False).mean()
 df['MACD',] = df['EMA_12',] - df['EMA_26',]
-df['MACD_signal',] = df['MACD',].ewm(span=9, adjust=False).mean()
+df['MACD_signal',] = df['MACD',].ewm (span=9, adjust=False).mean()
 df['MACD_histogram',] = df['MACD',] - df['MACD_signal',]
 
 # Trading signals
-df['MACD_bullish',] = (df['MACD',] > df['MACD_signal',]).astype(int).diff() == 1
-df['MACD_bearish',] = (df['MACD',] < df['MACD_signal',]).astype(int).diff() == 1
+df['MACD_bullish',] = (df['MACD',] > df['MACD_signal',]).astype (int).diff() == 1
+df['MACD_bearish',] = (df['MACD',] < df['MACD_signal',]).astype (int).diff() == 1
 
 print(df[['price', 'MACD', 'MACD_signal', 'MACD_histogram',]].tail())
 
 # Visualization
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
 
-ax1.plot(df.index, df['price',], label='Price')
-ax1.plot(df.index, df['EMA_12',], label='EMA 12', alpha=0.7)
-ax1.plot(df.index, df['EMA_26',], label='EMA 26', alpha=0.7)
+ax1.plot (df.index, df['price',], label='Price')
+ax1.plot (df.index, df['EMA_12',], label='EMA 12', alpha=0.7)
+ax1.plot (df.index, df['EMA_26',], label='EMA 26', alpha=0.7)
 ax1.legend()
 ax1.set_title('Price and EMAs')
 
-ax2.plot(df.index, df['MACD',], label='MACD', linewidth=2)
-ax2.plot(df.index, df['MACD_signal',], label='Signal', linewidth=2)
-ax2.bar(df.index, df['MACD_histogram',], label='Histogram', alpha=0.3)
-ax2.axhline(y=0, color='black', linestyle='--', alpha=0.3)
+ax2.plot (df.index, df['MACD',], label='MACD', linewidth=2)
+ax2.plot (df.index, df['MACD_signal',], label='Signal', linewidth=2)
+ax2.bar (df.index, df['MACD_histogram',], label='Histogram', alpha=0.3)
+ax2.axhline (y=0, color='black', linestyle='--', alpha=0.3)
 ax2.legend()
 ax2.set_title('MACD')
 
@@ -835,17 +835,17 @@ Interpretation:
 
 **Implementation:**
 \`\`\`python
-def calculate_bollinger_bands(prices, period=20, num_std=2):
+def calculate_bollinger_bands (prices, period=20, num_std=2):
     """Calculate Bollinger Bands"""
-    middle = prices.rolling(period).mean()
-    std = prices.rolling(period).std()
+    middle = prices.rolling (period).mean()
+    std = prices.rolling (period).std()
     
     upper = middle + (num_std * std)
     lower = middle - (num_std * std)
     
     return middle, upper, lower
 
-df['BB_middle',], df['BB_upper',], df['BB_lower',] = calculate_bollinger_bands(df['price',])
+df['BB_middle',], df['BB_upper',], df['BB_lower',] = calculate_bollinger_bands (df['price',])
 
 # Additional indicators
 df['BB_width',] = (df['BB_upper',] - df['BB_lower',]) / df['BB_middle',]  # Volatility
@@ -859,10 +859,10 @@ df['below_lower',] = df['price',] < df['BB_lower',]
 print(df[['price', 'BB_upper', 'BB_middle', 'BB_lower', 'BB_width',]].tail())
 
 # Visualization
-plt.figure(figsize=(12, 6))
-plt.plot(df.index, df['price',], label='Price', linewidth=2)
-plt.plot(df.index, df['BB_middle',], label='Middle Band', linestyle='--')
-plt.fill_between(df.index, df['BB_upper',], df['BB_lower',], alpha=0.2, label='Bollinger Bands')
+plt.figure (figsize=(12, 6))
+plt.plot (df.index, df['price',], label='Price', linewidth=2)
+plt.plot (df.index, df['BB_middle',], label='Middle Band', linestyle='--')
+plt.fill_between (df.index, df['BB_upper',], df['BB_lower',], alpha=0.2, label='Bollinger Bands')
 plt.legend()
 plt.title('Bollinger Bands')
 plt.show()
@@ -882,25 +882,25 @@ df['SMA_flexible',] = df['price',].rolling(20, min_periods=10).mean()
 **6. Complete Trading System Example**
 
 \`\`\`python
-def add_all_indicators(df):
+def add_all_indicators (df):
     """Add comprehensive technical indicators"""
     # Moving Averages
     df['SMA_20',] = df['price',].rolling(20).mean()
     df['SMA_50',] = df['price',].rolling(50).mean()
     df['SMA_200',] = df['price',].rolling(200).mean()
-    df['EMA_12',] = df['price',].ewm(span=12, adjust=False).mean()
-    df['EMA_26',] = df['price',].ewm(span=26, adjust=False).mean()
+    df['EMA_12',] = df['price',].ewm (span=12, adjust=False).mean()
+    df['EMA_26',] = df['price',].ewm (span=26, adjust=False).mean()
     
     # RSI
-    df['RSI',] = calculate_rsi(df['price',], 14)
+    df['RSI',] = calculate_rsi (df['price',], 14)
     
     # MACD
     df['MACD',] = df['EMA_12',] - df['EMA_26',]
-    df['MACD_signal',] = df['MACD',].ewm(span=9, adjust=False).mean()
+    df['MACD_signal',] = df['MACD',].ewm (span=9, adjust=False).mean()
     df['MACD_hist',] = df['MACD',] - df['MACD_signal',]
     
     # Bollinger Bands
-    df['BB_mid',], df['BB_upper',], df['BB_lower',] = calculate_bollinger_bands(df['price',])
+    df['BB_mid',], df['BB_upper',], df['BB_lower',] = calculate_bollinger_bands (df['price',])
     df['BB_width',] = (df['BB_upper',] - df['BB_lower',]) / df['BB_mid',]
     
     # Volatility
@@ -910,21 +910,21 @@ def add_all_indicators(df):
     return df
 
 # Apply indicators
-df = add_all_indicators(df)
+df = add_all_indicators (df)
 
 # Generate trading signals
-def generate_signals(df):
+def generate_signals (df):
     """Generate composite trading signals"""
-    signals = pd.DataFrame(index=df.index)
+    signals = pd.DataFrame (index=df.index)
     
     # Trend signals
-    signals['trend',] = (df['SMA_20',] > df['SMA_50',]).astype(int)
+    signals['trend',] = (df['SMA_20',] > df['SMA_50',]).astype (int)
     
     # Momentum signals
-    signals['momentum',] = ((df['RSI',] > 50) & (df['MACD',] > df['MACD_signal',])).astype(int)
+    signals['momentum',] = ((df['RSI',] > 50) & (df['MACD',] > df['MACD_signal',])).astype (int)
     
     # Volatility signals
-    signals['low_vol',] = (df['BB_width',] < df['BB_width',].quantile(0.25)).astype(int)
+    signals['low_vol',] = (df['BB_width',] < df['BB_width',].quantile(0.25)).astype (int)
     
     # Combined signal
     signals['composite',] = (signals['trend',] + signals['momentum',]).clip(0, 2)
@@ -932,7 +932,7 @@ def generate_signals(df):
     
     return signals
 
-signals = generate_signals(df)
+signals = generate_signals (df)
 print(signals.tail())
 \`\`\`
 
@@ -951,10 +951,10 @@ print(signals.tail())
 1. **Vectorize calculations**:
 \`\`\`python
 # Good: Vectorized
-df['signal',] = (df['SMA_20',] > df['SMA_50',]).astype(int)
+df['signal',] = (df['SMA_20',] > df['SMA_50',]).astype (int)
 
 # Bad: Loop
-for i in range(len(df)):
+for i in range (len (df)):
     df.loc[df.index[i], 'signal',] = 1 if df.iloc[i]['SMA_20',] > df.iloc[i]['SMA_50',] else 0
 \`\`\`
 
@@ -973,11 +973,11 @@ df_ready = df.iloc[warmup:]
 # Compare with established library
 import ta
 
-df['RSI_ta',] = ta.momentum.RSIIndicator(df['price',], window=14).rsi()
-df['RSI_custom',] = calculate_rsi(df['price',], 14)
+df['RSI_ta',] = ta.momentum.RSIIndicator (df['price',], window=14).rsi()
+df['RSI_custom',] = calculate_rsi (df['price',], 14)
 
 # Should be nearly identical
-assert np.allclose(df['RSI_ta',].dropna(), df['RSI_custom',].dropna(), rtol=0.01)
+assert np.allclose (df['RSI_ta',].dropna(), df['RSI_custom',].dropna(), rtol=0.01)
 \`\`\`
 
 4. **Document parameters**:

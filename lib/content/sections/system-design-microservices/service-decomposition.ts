@@ -9,7 +9,7 @@ export const servicedecompositionSection = {
 
 ## The Challenge of Decomposition
 
-**Why It's Hard**:
+**Why It\'s Hard**:
 - Business logic is deeply intertwined
 - Data dependencies are unclear
 - Existing code reflects years of quick fixes
@@ -65,7 +65,7 @@ Amazon's organization structure:
 - Kindle team → Kindle services
 - Prime Video team → Video services
 
-**Conway's Law**: "Organizations design systems that mirror their communication structure."
+**Conway\'s Law**: "Organizations design systems that mirror their communication structure."
 
 Amazon designed services to match organizational boundaries.
 
@@ -542,7 +542,7 @@ Order Service stores:
 
 ---
 
-## Real-World Example: Spotify's Decomposition
+## Real-World Example: Spotify\'s Decomposition
 
 **Evolution**:
 

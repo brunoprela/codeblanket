@@ -6,10 +6,10 @@ export const dataclassesQuiz = [
   {
     id: 'q1',
     question:
-      'Why should you use field(default_factory=list) instead of a simple list as a default value? What problem does this solve?',
+      'Why should you use field (default_factory=list) instead of a simple list as a default value? What problem does this solve?',
     hint: 'Think about mutable default arguments and shared state between instances.',
     sampleAnswer:
-      'Using a bare list as default (tags: list = []) creates ONE shared list that all instances will reference—if you modify the list in one instance, it affects all instances. This is Python\'s mutable default argument gotcha. field(default_factory=list) calls list() for each new instance, creating a fresh list every time. For example, with bare list: person1.tags.append("vip") would add "vip" to person2.tags too! With default_factory, each person gets their own independent list. This applies to any mutable default: dict, set, or custom objects.',
+      'Using a bare list as default (tags: list = []) creates ONE shared list that all instances will reference—if you modify the list in one instance, it affects all instances. This is Python\'s mutable default argument gotcha. field (default_factory=list) calls list() for each new instance, creating a fresh list every time. For example, with bare list: person1.tags.append("vip") would add "vip" to person2.tags too! With default_factory, each person gets their own independent list. This applies to any mutable default: dict, set, or custom objects.',
     keyPoints: [
       'Bare list creates shared mutable object',
       'Changes affect all instances',
@@ -24,7 +24,7 @@ export const dataclassesQuiz = [
       'What is the difference between frozen=True and regular dataclasses? When would you use frozen dataclasses?',
     hint: 'Consider immutability, hashability, and use cases like dict keys or sets.',
     sampleAnswer:
-      "frozen=True makes dataclasses immutable—you can't modify attributes after creation, like tuples. This has several benefits: 1) Instances become hashable and can be used as dict keys or in sets, 2) Thread-safe by default (no race conditions), 3) Easier to reason about (values never change), 4) Better for value objects and DTOs. Use frozen dataclasses for: configuration objects, coordinates, API responses, or any data that represents a value rather than an entity. For example, Point(x=10, y=20) should never change—if you need a different point, create a new instance.",
+      "frozen=True makes dataclasses immutable—you can't modify attributes after creation, like tuples. This has several benefits: 1) Instances become hashable and can be used as dict keys or in sets, 2) Thread-safe by default (no race conditions), 3) Easier to reason about (values never change), 4) Better for value objects and DTOs. Use frozen dataclasses for: configuration objects, coordinates, API responses, or any data that represents a value rather than an entity. For example, Point (x=10, y=20) should never change—if you need a different point, create a new instance.",
     keyPoints: [
       'frozen=True makes instances immutable',
       'Enables use as dict keys (hashable)',

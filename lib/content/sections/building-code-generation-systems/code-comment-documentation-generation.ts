@@ -69,7 +69,7 @@ class DocstringGenerator:
         """Generate docstring for a function."""
         
         # Analyze function
-        func_info = self._analyze_function(function_code)
+        func_info = self._analyze_function (function_code)
         
         # Build prompt
         template = self.style_templates.get(
@@ -77,7 +77,7 @@ class DocstringGenerator:
             self._google_template
         )
         
-        prompt = template(func_info, include_examples)
+        prompt = template (func_info, include_examples)
         
         # Generate
         response = self.client.chat.completions.create(
@@ -95,36 +95,36 @@ class DocstringGenerator:
         
         return response.choices[0].message.content.strip()
     
-    def _analyze_function(self, function_code: str) -> dict:
+    def _analyze_function (self, function_code: str) -> dict:
         """Extract function metadata."""
-        tree = ast.parse(function_code)
+        tree = ast.parse (function_code)
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef):
                 # Get parameters with types
                 params = []
                 for arg in node.args.args:
                     param_info = {"name": arg.arg}
                     if arg.annotation:
-                        param_info["type"] = ast.unparse(arg.annotation)
-                    params.append(param_info)
+                        param_info["type"] = ast.unparse (arg.annotation)
+                    params.append (param_info)
                 
                 # Get return type
                 return_type = None
                 if node.returns:
-                    return_type = ast.unparse(node.returns)
+                    return_type = ast.unparse (node.returns)
                 
                 # Get function body to understand what it does
                 body_lines = []
                 for stmt in node.body:
-                    if not isinstance(stmt, ast.Expr):  # Skip docstring
-                        body_lines.append(ast.unparse(stmt))
+                    if not isinstance (stmt, ast.Expr):  # Skip docstring
+                        body_lines.append (ast.unparse (stmt))
                 
                 return {
                     "name": node.name,
                     "params": params,
                     "return_type": return_type,
-                    "body": "\\n".join(body_lines),
+                    "body": "\\n".join (body_lines),
                     "code": function_code
                 }
         
@@ -171,7 +171,7 @@ Raises:
 Generate the complete docstring.
 """
     
-    def _numpy_template(self, func_info: dict, include_examples: bool) -> str:
+    def _numpy_template (self, func_info: dict, include_examples: bool) -> str:
         """NumPy style docstring template."""
         return f"""Generate a NumPy-style docstring for this function:
 
@@ -182,7 +182,7 @@ Generate the complete docstring.
 Use NumPy docstring format with Parameters, Returns, Examples sections.
 """
     
-    def _sphinx_template(self, func_info: dict, include_examples: bool) -> str:
+    def _sphinx_template (self, func_info: dict, include_examples: bool) -> str:
         """Sphinx style docstring template."""
         return f"""Generate a Sphinx-style docstring for this function:
 
@@ -203,39 +203,39 @@ Use Sphinx format with :param, :return, :raises tags.
         
         # Find first line after function definition
         insert_line = 1
-        for i, line in enumerate(lines):
+        for i, line in enumerate (lines):
             if line.strip().endswith(":"):
                 insert_line = i + 1
                 break
         
         # Get indentation
-        indent = self._get_indentation(lines[insert_line] if insert_line < len(lines) else "    ")
+        indent = self._get_indentation (lines[insert_line] if insert_line < len (lines) else "    ")
         
         # Format docstring with proper indentation
         docstring_lines = [indent + '"""']
         for line in docstring.strip().split("\\n"):
-            docstring_lines.append(indent + line)
-        docstring_lines.append(indent + '"""')
+            docstring_lines.append (indent + line)
+        docstring_lines.append (indent + '"""')
         
         # Insert docstring
         result = lines[:insert_line] + docstring_lines + lines[insert_line:]
         
-        return "\\n".join(result)
+        return "\\n".join (result)
     
-    def _get_indentation(self, line: str) -> str:
+    def _get_indentation (self, line: str) -> str:
         """Get indentation of a line."""
-        return line[:len(line) - len(line.lstrip())]
+        return line[:len (line) - len (line.lstrip())]
 
 # Usage
-doc_gen = DocstringGenerator(style="google")
+doc_gen = DocstringGenerator (style="google")
 
 function_code = """
-def calculate_statistics(data: List[float], trim_outliers: bool = False) -> Dict[str, float]:
+def calculate_statistics (data: List[float], trim_outliers: bool = False) -> Dict[str, float]:
     if trim_outliers:
-        data = remove_outliers(data)
+        data = remove_outliers (data)
     
-    mean = sum(data) / len(data)
-    variance = sum((x - mean) ** 2 for x in data) / len(data)
+    mean = sum (data) / len (data)
+    variance = sum((x - mean) ** 2 for x in data) / len (data)
     std_dev = variance ** 0.5
     
     return {
@@ -245,12 +245,12 @@ def calculate_statistics(data: List[float], trim_outliers: bool = False) -> Dict
     }
 """
 
-docstring = doc_gen.generate_docstring(function_code, include_examples=True)
+docstring = doc_gen.generate_docstring (function_code, include_examples=True)
 print("Generated docstring:")
 print(docstring)
 
 # Add to function
-complete_function = doc_gen.add_docstring_to_function(function_code, docstring)
+complete_function = doc_gen.add_docstring_to_function (function_code, docstring)
 print("\\nComplete function:")
 print(complete_function)
 \`\`\`
@@ -301,13 +301,13 @@ Output the code with comments added.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -315,29 +315,29 @@ Output the code with comments added.
 comment_gen = InlineCommentGenerator()
 
 code = """
-def quick_sort(arr):
-    if len(arr) <= 1:
+def quick_sort (arr):
+    if len (arr) <= 1:
         return arr
     
-    pivot = arr[len(arr) // 2]
+    pivot = arr[len (arr) // 2]
     left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
     
-    return quick_sort(left) + middle + quick_sort(right)
+    return quick_sort (left) + middle + quick_sort (right)
 """
 
-commented = comment_gen.add_comments(code, comment_style="explanatory")
+commented = comment_gen.add_comments (code, comment_style="explanatory")
 print(commented)
 
 # Output will have comments like:
-# def quick_sort(arr):
+# def quick_sort (arr):
 #     # Base case: arrays with 0 or 1 element are already sorted
-#     if len(arr) <= 1:
+#     if len (arr) <= 1:
 #         return arr
 #     
 #     # Choose middle element as pivot for balanced partitioning
-#     pivot = arr[len(arr) // 2]
+#     pivot = arr[len (arr) // 2]
 #     
 #     # Partition array into three groups around pivot
 #     left = [x for x in arr if x < pivot]      # Elements less than pivot
@@ -345,7 +345,7 @@ print(commented)
 #     right = [x for x in arr if x > pivot]     # Elements greater than pivot
 #     
 #     # Recursively sort left and right, concatenate with middle
-#     return quick_sort(left) + middle + quick_sort(right)
+#     return quick_sort (left) + middle + quick_sort (right)
 \`\`\`
 
 ## Class Documentation
@@ -367,7 +367,7 @@ class ClassDocGenerator:
         """Generate complete documentation for a class."""
         
         # Analyze class
-        class_info = self._analyze_class(class_code)
+        class_info = self._analyze_class (class_code)
         
         prompt = f"""Generate comprehensive documentation for this class:
 
@@ -396,23 +396,23 @@ Use Google-style docstrings.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _analyze_class(self, class_code: str) -> dict:
+    def _analyze_class (self, class_code: str) -> dict:
         """Analyze class structure."""
-        tree = ast.parse(class_code)
+        tree = ast.parse (class_code)
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ClassDef):
                 methods = []
                 attributes = []
                 
                 for item in node.body:
-                    if isinstance(item, ast.FunctionDef):
-                        methods.append(item.name)
-                    elif isinstance(item, ast.AnnAssign):
-                        if isinstance(item.target, ast.Name):
-                            attributes.append(item.target.id)
+                    if isinstance (item, ast.FunctionDef):
+                        methods.append (item.name)
+                    elif isinstance (item, ast.AnnAssign):
+                        if isinstance (item.target, ast.Name):
+                            attributes.append (item.target.id)
                 
                 return {
                     "name": node.name,
@@ -422,11 +422,11 @@ Use Google-style docstrings.
         
         return {}
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -439,26 +439,26 @@ class UserManager:
         self.database = database
         self.cache = {}
     
-    def create_user(self, username, email):
-        user = User(username=username, email=email)
-        self.database.save(user)
+    def create_user (self, username, email):
+        user = User (username=username, email=email)
+        self.database.save (user)
         self.cache[user.id] = user
         return user
     
-    def get_user(self, user_id):
+    def get_user (self, user_id):
         if user_id in self.cache:
             return self.cache[user_id]
         
-        user = self.database.get(user_id)
+        user = self.database.get (user_id)
         if user:
             self.cache[user_id] = user
         return user
     
-    def clear_cache(self):
+    def clear_cache (self):
         self.cache.clear()
 """
 
-documented_class = class_doc_gen.document_class(class_code, include_examples=True)
+documented_class = class_doc_gen.document_class (class_code, include_examples=True)
 print(documented_class)
 \`\`\`
 
@@ -488,10 +488,10 @@ Project Name: {project_name}
 Description: {description}
 
 Main Files:
-{self._format_files(main_files)}
+{self._format_files (main_files)}
 
 Dependencies:
-{self._format_dependencies(dependencies)}
+{self._format_dependencies (dependencies)}
 
 Include:
 1. Project title and description
@@ -519,13 +519,13 @@ Use proper Markdown formatting.
         
         return response.choices[0].message.content
     
-    def _format_files(self, files: List[str]) -> str:
+    def _format_files (self, files: List[str]) -> str:
         """Format file list."""
-        return "\\n".join(f"- {file}" for file in files)
+        return "\\n".join (f"- {file}" for file in files)
     
-    def _format_dependencies(self, deps: List[str]) -> str:
+    def _format_dependencies (self, deps: List[str]) -> str:
         """Format dependency list."""
-        return "\\n".join(f"- {dep}" for dep in deps)
+        return "\\n".join (f"- {dep}" for dep in deps)
 
 # Usage
 readme_gen = ReadmeGenerator()
@@ -566,7 +566,7 @@ class APIDocGenerator:
     ) -> str:
         """Generate API documentation from routes."""
         
-        routes_info = self._format_routes(api_routes)
+        routes_info = self._format_routes (api_routes)
         
         prompt = f"""Generate API documentation for these routes:
 
@@ -598,14 +598,14 @@ Use Markdown format suitable for API docs.
         
         return response.choices[0].message.content
     
-    def _format_routes(self, routes: List[dict]) -> str:
+    def _format_routes (self, routes: List[dict]) -> str:
         """Format routes information."""
         lines = []
         for route in routes:
-            lines.append(f"- {route['method']} {route['path']}")
+            lines.append (f"- {route['method']} {route['path']}")
             if 'function' in route:
-                lines.append(f"  Handler: {route['function']}")
-        return "\\n".join(lines)
+                lines.append (f"  Handler: {route['function']}")
+        return "\\n".join (lines)
 
 # Usage
 api_doc_gen = APIDocGenerator()
@@ -628,7 +628,7 @@ routes = [
     }
 ]
 
-api_docs = api_doc_gen.generate_api_docs(routes)
+api_docs = api_doc_gen.generate_api_docs (routes)
 print(api_docs)
 \`\`\`
 
@@ -679,13 +679,13 @@ Output the code with type hints added.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -693,10 +693,10 @@ Output the code with type hints added.
 type_hint_adder = TypeHintAdder()
 
 code = """
-def process_orders(orders, discount_rate=0.1):
+def process_orders (orders, discount_rate=0.1):
     results = []
     for order in orders:
-        total = sum(item['price'] * item['quantity'] for item in order['items'])
+        total = sum (item['price'] * item['quantity'] for item in order['items'])
         discounted = total * (1 - discount_rate)
         results.append({
             'order_id': order['id'],
@@ -705,7 +705,7 @@ def process_orders(orders, discount_rate=0.1):
     return results
 """
 
-typed_code = type_hint_adder.add_type_hints(code)
+typed_code = type_hint_adder.add_type_hints (code)
 print(typed_code)
 
 # Output:

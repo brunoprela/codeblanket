@@ -147,7 +147,7 @@ Value TechDistributor using comparable companies:
 
 **Deliverables**:
 1. Calculate median multiples
-2. Apply to TechDistributor's financials
+2. Apply to TechDistributor\'s financials
 3. Implied valuation range (EV, equity value, per share)
 4. Justify any adjustments for size, growth, or margin differences
 
@@ -185,7 +185,7 @@ lbo = LBOModel(
 projections = lbo.project_financials(...)
 
 # Calculate returns
-returns = lbo.calculate_returns(exit_multiple=9.0)
+returns = lbo.calculate_returns (exit_multiple=9.0)
 lbo.print_lbo_summary()
 \`\`\`
 
@@ -644,8 +644,8 @@ if __name__ == "__main__":
 ### Challenge 1: Monte Carlo Simulation
 
 Run 10,000 simulations with uncertain inputs:
-- Revenue growth: Normal(mean=6%, std=2%)
-- EBITDA margin: Normal(mean=11%, std=1%)
+- Revenue growth: Normal (mean=6%, std=2%)
+- EBITDA margin: Normal (mean=11%, std=1%)
 - Terminal multiple: Uniform(8×, 10×)
 
 Generate distribution of valuations (P10, P50, P90).

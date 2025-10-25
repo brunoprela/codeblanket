@@ -8,7 +8,7 @@ export const mergersAcquisitionsMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['-$100M', '+$100M', '+$500M', '-$500M'],
     correctAnswer: 0,
     explanation:
-      'NPV to acquirer = (Combined value) - (Acquirer standalone) - (Price paid). Combined value = $8B + $2B + $0.5B = $10.5B. NPV = $10.5B - $8B - $2.6B = -$0.1B = -$100M. The acquirer DESTROYS $100M value because they paid a $600M premium ($2.6B - $2.0B) but only got $500M in synergies. Premium > Synergies → value destruction. The acquirer overpaid by $100M.',
+      'NPV to acquirer = (Combined value) - (Acquirer standalone) - (Price paid). Combined value = $8B + $2B + $0.5B = $10.5B. NPV = $10.5B - $8B - $2.6B = -$0.1B = -$100M. The acquirer DESTROYS $100M value because they paid a $600M premium (\$2.6B - $2.0B) but only got $500M in synergies. Premium > Synergies → value destruction. The acquirer overpaid by $100M.',
   },
   {
     id: 'mergers-acquisitions-mc-2',

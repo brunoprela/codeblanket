@@ -10,7 +10,7 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'The Fundamental Theorem of Calculus states that:',
     options: [
       'Differentiation and integration are unrelated',
-      "∫ₐᵇ f(x)dx = F(b) - F(a) where F'(x) = f(x)",
+      "∫ₐᵇ f (x)dx = F(b) - F(a) where F'(x) = f (x)",
       'All functions can be integrated analytically',
       'Integration always gives a constant',
     ],
@@ -29,7 +29,7 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'integration-3',
     question:
-      "Simpson's rule is more accurate than the trapezoidal rule because:",
+      "Simpson\'s rule is more accurate than the trapezoidal rule because:",
     options: [
       'It uses more function evaluations',
       'It approximates the function with parabolas instead of straight lines',
@@ -38,16 +38,21 @@ export const integrationbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Simpson's rule uses quadratic (parabolic) interpolation between points, providing better approximation than linear (trapezoidal) interpolation.",
+      "Simpson\'s rule uses quadratic (parabolic) interpolation between points, providing better approximation than linear (trapezoidal) interpolation.",
   },
   {
     id: 'integration-4',
     question:
       'The expectation E[X] of a continuous random variable is computed as:',
-    options: ['∫ f(x) dx', '∫ x·f(x) dx', '∫ x² ·f(x) dx', '∫ log(f(x)) dx'],
+    options: [
+      '∫ f (x) dx',
+      '∫ x·f (x) dx',
+      '∫ x² ·f (x) dx',
+      '∫ log (f(x)) dx',
+    ],
     correctAnswer: 1,
     explanation:
-      'Expectation is the weighted average: E[X] = ∫ x·f(x) dx, where f(x) is the probability density function.',
+      'Expectation is the weighted average: E[X] = ∫ x·f (x) dx, where f (x) is the probability density function.',
   },
   {
     id: 'integration-5',

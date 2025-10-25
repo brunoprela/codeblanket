@@ -16,10 +16,10 @@ export const graphbfsSection = {
 \`\`\`python
 from collections import deque
 
-def bfs(graph, start):
+def bfs (graph, start):
     visited = set()
     queue = deque([start])
-    visited.add(start)
+    visited.add (start)
     
     while queue:
         node = queue.popleft()
@@ -27,13 +27,13 @@ def bfs(graph, start):
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
+                visited.add (neighbor)
+                queue.append (neighbor)
 \`\`\`
 
 **Shortest Path in Unweighted Graph:**
 \`\`\`python
-def shortest_path(graph, start, end):
+def shortest_path (graph, start, end):
     if start == end:
         return 0
     
@@ -48,7 +48,7 @@ def shortest_path(graph, start, end):
                 return dist + 1
             
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 queue.append((neighbor, dist + 1))
     
     return -1  # No path exists
@@ -56,7 +56,7 @@ def shortest_path(graph, start, end):
 
 **Shortest Path with Parent Tracking:**
 \`\`\`python
-def shortest_path_with_route(graph, start, end):
+def shortest_path_with_route (graph, start, end):
     if start == end:
         return [start]
     
@@ -72,27 +72,27 @@ def shortest_path_with_route(graph, start, end):
             path = []
             curr = end
             while curr is not None:
-                path.append(curr)
+                path.append (curr)
                 curr = parent[curr]
             return path[::-1]
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 parent[neighbor] = node
-                queue.append(neighbor)
+                queue.append (neighbor)
     
     return []  # No path
 \`\`\`
 
 **Multi-Source BFS:**
 \`\`\`python
-def multi_source_bfs(graph, sources):
+def multi_source_bfs (graph, sources):
     """
     BFS starting from multiple sources simultaneously.
     Useful for problems like "distance from nearest X"
     """
-    visited = set(sources)
+    visited = set (sources)
     queue = deque([(s, 0) for s in sources])
     distances = {}
     
@@ -102,7 +102,7 @@ def multi_source_bfs(graph, sources):
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 queue.append((neighbor, dist + 1))
     
     return distances
@@ -133,9 +133,9 @@ def bfs_01(graph, start, end):
                 dist[neighbor] = new_dist
                 
                 if weight == 0:
-                    deque_bfs.appendleft(neighbor)  # 0-weight: front
+                    deque_bfs.appendleft (neighbor)  # 0-weight: front
                 else:
-                    deque_bfs.append(neighbor)      # 1-weight: back
+                    deque_bfs.append (neighbor)      # 1-weight: back
     
     return -1
 \`\`\``,

@@ -22,7 +22,7 @@ The **normal (Gaussian) distribution** is the most important distribution in sta
 ## Definition
 
 **PDF**:
-\\[ f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}} \\]
+\\[ f (x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}} \\]
 
 **Notation**: X ~ N(μ, σ²)
 
@@ -58,25 +58,25 @@ def normal_distribution_demo():
     axes = axes.flatten()
     
     print("=== Normal Distribution ===")
-    print("PDF: f(x) = (1/(σ√(2π))) * exp(-(x-μ)²/(2σ²))")
+    print("PDF: f (x) = (1/(σ√(2π))) * exp(-(x-μ)²/(2σ²))")
     print()
     
     x = np.linspace(-5, 5, 1000)
     
-    for i, (mu, sigma, label) in enumerate(params):
-        normal = stats.norm(mu, sigma)
-        pdf = normal.pdf(x)
+    for i, (mu, sigma, label) in enumerate (params):
+        normal = stats.norm (mu, sigma)
+        pdf = normal.pdf (x)
         
         # Plot
         ax = axes[i]
-        ax.plot(x, pdf, 'b-', linewidth=2)
-        ax.fill_between(x, pdf, alpha=0.3)
-        ax.axvline(mu, color='r', linestyle='--', linewidth=2, label=f'μ = {mu}')
-        ax.axvline(mu - sigma, color='g', linestyle=':', label=f'μ ± σ')
-        ax.axvline(mu + sigma, color='g', linestyle=':')
+        ax.plot (x, pdf, 'b-', linewidth=2)
+        ax.fill_between (x, pdf, alpha=0.3)
+        ax.axvline (mu, color='r', linestyle='--', linewidth=2, label=f'μ = {mu}')
+        ax.axvline (mu - sigma, color='g', linestyle=':', label=f'μ ± σ')
+        ax.axvline (mu + sigma, color='g', linestyle=':')
         ax.set_xlabel('x')
         ax.set_ylabel('Density')
-        ax.set_title(label)
+        ax.set_title (label)
         ax.legend()
         ax.grid(True, alpha=0.3)
         
@@ -93,7 +93,7 @@ normal_distribution_demo()
 
 # Output:
 # === Normal Distribution ===
-# PDF: f(x) = (1/(σ√(2π))) * exp(-(x-μ)²/(2σ²))
+# PDF: f (x) = (1/(σ√(2π))) * exp(-(x-μ)²/(2σ²))
 #
 # N(0,1) - Standard Normal: μ=0, σ=1, σ²=1
 # N(0,0.25) - Smaller variance: μ=0, σ=0.5, σ²=0.25
@@ -137,9 +137,9 @@ def standard_normal_demo():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # Original
-    ax1.hist(heights, bins=50, density=True, alpha=0.7, edgecolor='black')
+    ax1.hist (heights, bins=50, density=True, alpha=0.7, edgecolor='black')
     x = np.linspace(140, 200, 1000)
-    ax1.plot(x, stats.norm(mean, std).pdf(x), 'r-', linewidth=2, label='N(170, 100)')
+    ax1.plot (x, stats.norm (mean, std).pdf (x), 'r-', linewidth=2, label='N(170, 100)')
     ax1.set_xlabel('Height (cm)')
     ax1.set_ylabel('Density')
     ax1.set_title('Original Data')
@@ -147,9 +147,9 @@ def standard_normal_demo():
     ax1.grid(True, alpha=0.3)
     
     # Standardized
-    ax2.hist(z_scores, bins=50, density=True, alpha=0.7, edgecolor='black')
+    ax2.hist (z_scores, bins=50, density=True, alpha=0.7, edgecolor='black')
     z = np.linspace(-4, 4, 1000)
-    ax2.plot(z, stats.norm(0, 1).pdf(z), 'r-', linewidth=2, label='N(0, 1)')
+    ax2.plot (z, stats.norm(0, 1).pdf (z), 'r-', linewidth=2, label='N(0, 1)')
     ax2.set_xlabel('Z-score')
     ax2.set_ylabel('Density')
     ax2.set_title('Standardized (Z-scores)')
@@ -163,7 +163,7 @@ def standard_normal_demo():
     example_height = 185
     z = (example_height - mean) / std
     print(f"Height {example_height} cm → Z = {z:.2f}")
-    print(f"This is {abs(z):.2f} standard deviations {'above' if z > 0 else 'below'} mean")
+    print(f"This is {abs (z):.2f} standard deviations {'above' if z > 0 else 'below'} mean")
     
     print("\\nML Applications:")
     print("- Feature normalization (StandardScaler)")
@@ -185,7 +185,7 @@ def empirical_rule_demo():
     """Demonstrate the 68-95-99.7 rule"""
     
     mu, sigma = 0, 1
-    normal = stats.norm(mu, sigma)
+    normal = stats.norm (mu, sigma)
     
     print("=== 68-95-99.7 Rule ===")
     print("For N(0, 1):")
@@ -201,29 +201,29 @@ def empirical_rule_demo():
     
     # Visualization
     x = np.linspace(-4, 4, 1000)
-    pdf = normal.pdf(x)
+    pdf = normal.pdf (x)
     
-    plt.figure(figsize=(12, 7))
-    plt.plot(x, pdf, 'b-', linewidth=2, label='N(0,1)')
+    plt.figure (figsize=(12, 7))
+    plt.plot (x, pdf, 'b-', linewidth=2, label='N(0,1)')
     
     # Shade regions
     colors = ['lightblue', 'lightgreen', 'lightyellow']
     alphas = [0.6, 0.4, 0.2]
     labels = ['68%', '95%', '99.7%']
     
-    for i, (z, color, alpha, label) in enumerate(zip([1, 2, 3], colors, alphas, labels)):
+    for i, (z, color, alpha, label) in enumerate (zip([1, 2, 3], colors, alphas, labels)):
         mask = (x >= -z) & (x <= z)
-        plt.fill_between(x[mask], pdf[mask], alpha=alpha, color=color, label=f'μ ± {i+1}σ: {label}')
+        plt.fill_between (x[mask], pdf[mask], alpha=alpha, color=color, label=f'μ ± {i+1}σ: {label}')
     
     # Mark sigma boundaries
     for i in range(1, 4):
-        plt.axvline(i, color='red', linestyle='--', alpha=0.5)
+        plt.axvline (i, color='red', linestyle='--', alpha=0.5)
         plt.axvline(-i, color='red', linestyle='--', alpha=0.5)
     
     plt.xlabel('Standard Deviations from Mean')
     plt.ylabel('Probability Density')
     plt.title('68-95-99.7 Rule for Normal Distribution')
-    plt.legend(loc='upper right')
+    plt.legend (loc='upper right')
     plt.grid(True, alpha=0.3)
     
     print("\\nOutlier Detection:")
@@ -265,15 +265,15 @@ def linear_transformation_demo():
     
     ax1.hist(X, bins=50, density=True, alpha=0.7, label='X ~ N(0,1)')
     x_range = np.linspace(-4, 4, 1000)
-    ax1.plot(x_range, stats.norm(0, 1).pdf(x_range), 'r-', linewidth=2)
+    ax1.plot (x_range, stats.norm(0, 1).pdf (x_range), 'r-', linewidth=2)
     ax1.set_title('Original: X ~ N(0, 1)')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
     ax2.hist(Y, bins=50, density=True, alpha=0.7, label=f'Y = {a}X + {b}')
     y_range = np.linspace(-2, 12, 1000)
-    ax2.plot(y_range, stats.norm(b, a).pdf(y_range), 'r-', linewidth=2)
-    ax2.set_title(f'Transformed: Y ~ N({b}, {a**2})')
+    ax2.plot (y_range, stats.norm (b, a).pdf (y_range), 'r-', linewidth=2)
+    ax2.set_title (f'Transformed: Y ~ N({b}, {a**2})')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
     
@@ -307,7 +307,7 @@ def sum_of_normals_demo():
     
     mu_sum = mu1 + mu2
     var_sum = sigma1**2 + sigma2**2
-    sigma_sum = np.sqrt(var_sum)
+    sigma_sum = np.sqrt (var_sum)
     
     print("=== Sum of Independent Normals ===")
     print(f"X₁ ~ N({mu1}, {sigma1**2})")
@@ -322,10 +322,10 @@ def sum_of_normals_demo():
     print(f"√{var_sum} = {sigma_sum:.4f}")
     
     # Plot
-    plt.figure(figsize=(10, 6))
+    plt.figure (figsize=(10, 6))
     plt.hist(Y, bins=50, density=True, alpha=0.7, edgecolor='black', label='Empirical Sum')
     x = np.linspace(-10, 15, 1000)
-    plt.plot(x, stats.norm(mu_sum, sigma_sum).pdf(x), 'r-', linewidth=2, 
+    plt.plot (x, stats.norm (mu_sum, sigma_sum).pdf (x), 'r-', linewidth=2, 
              label=f'Theoretical N({mu_sum}, {var_sum:.2f})')
     plt.xlabel('X₁ + X₂')
     plt.ylabel('Density')
@@ -362,11 +362,11 @@ def mle_normal_demo():
     print("-" * 55)
     
     for n in sample_sizes:
-        data = np.random.normal(true_mu, true_sigma, size=n)
+        data = np.random.normal (true_mu, true_sigma, size=n)
         
         # MLE estimates
         mu_hat = data.mean()
-        sigma_hat = data.std(ddof=0)  # MLE uses ddof=0
+        sigma_hat = data.std (ddof=0)  # MLE uses ddof=0
         
         error = np.sqrt((mu_hat - true_mu)**2 + (sigma_hat - true_sigma)**2)
         
@@ -416,12 +416,12 @@ def feature_normalization_demo():
     print("StandardScaler: (X - μ) / σ → N(0, 1)")
     print()
     print("Original features:")
-    print(f"  Means: {X.mean(axis=0)}")
-    print(f"  Stds:  {X.std(axis=0)}")
+    print(f"  Means: {X.mean (axis=0)}")
+    print(f"  Stds:  {X.std (axis=0)}")
     print()
     print("Normalized features:")
-    print(f"  Means: {X_normalized.mean(axis=0)}")
-    print(f"  Stds:  {X_normalized.std(axis=0)}")
+    print(f"  Means: {X_normalized.mean (axis=0)}")
+    print(f"  Stds:  {X_normalized.std (axis=0)}")
     
     print("\\nWhy normalize?")
     print("- Puts all features on same scale")
@@ -462,9 +462,9 @@ def gaussian_noise_demo():
     noise = np.random.normal(0, 0.5, size=100)
     noisy_signal = original_signal + noise
     
-    plt.figure(figsize=(10, 6))
-    plt.plot(original_signal, 'b-', linewidth=2, label='Original Signal')
-    plt.plot(noisy_signal, 'r.', alpha=0.5, label='With Gaussian Noise N(0, 0.25)')
+    plt.figure (figsize=(10, 6))
+    plt.plot (original_signal, 'b-', linewidth=2, label='Original Signal')
+    plt.plot (noisy_signal, 'r.', alpha=0.5, label='With Gaussian Noise N(0, 0.25)')
     plt.xlabel('Sample')
     plt.ylabel('Value')
     plt.title('Adding Gaussian Noise for Data Augmentation')

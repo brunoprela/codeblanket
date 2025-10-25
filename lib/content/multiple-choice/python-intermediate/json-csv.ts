@@ -42,14 +42,14 @@ export const jsoncsvMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'pi-jsoncsv-mc-4',
     question: 'How do you pretty-print JSON with indentation?',
     options: [
-      'json.dumps(data, pretty=True)',
-      'json.dumps(data, indent=2)',
-      'json.dumps(data, format="pretty")',
-      'json.pretty(data)',
+      'json.dumps (data, pretty=True)',
+      'json.dumps (data, indent=2)',
+      'json.dumps (data, format="pretty")',
+      'json.pretty (data)',
     ],
     correctAnswer: 1,
     explanation:
-      'Use the indent parameter: json.dumps(data, indent=2) for readable JSON.',
+      'Use the indent parameter: json.dumps (data, indent=2) for readable JSON.',
   },
   {
     id: 'pi-jsoncsv-mc-5',

@@ -67,8 +67,8 @@ MATCH (suspicious:Account {flagged: true})
 MATCH path = (suspicious)-[:USES_DEVICE|ACCESSED_FROM|TRANSFERRED_TO*1..3]-(connected:Account)
 WHERE connected.flagged = false
 RETURN DISTINCT connected, 
-       length(path) AS hops,
-       [rel IN relationships(path) | type(rel)] AS connection_types
+       length (path) AS hops,
+       [rel IN relationships (path) | type (rel)] AS connection_types
 \`\`\`
 
 **Pattern: Shared Device Indicator**
@@ -81,7 +81,7 @@ RETURN a1.id, a2.id, d.fingerprint
 **Pattern: Circular Transfers (Money Laundering)**
 \`\`\`cypher
 MATCH path = (start:Account)-[:TRANSFERRED_TO*3..5]->(start)
-WHERE ALL(rel IN relationships(path) WHERE rel.amount > 1000)
+WHERE ALL(rel IN relationships (path) WHERE rel.amount > 1000)
 RETURN path
 \`\`\`
 
@@ -142,7 +142,7 @@ LIMIT 10
 
 \`\`\`cypher
 MATCH (me:User {id: $userId})-[:PURCHASED]->(p:Product)
-WITH me, collect(p) AS my_products
+WITH me, collect (p) AS my_products
 
 MATCH (other:User)-[:PURCHASED]->(p:Product)
 WHERE p IN my_products AND other <> me

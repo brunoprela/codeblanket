@@ -8,7 +8,7 @@ export const contextmanagersQuiz = [
     question:
       'Why are context managers critical for resource management? What problem do they solve?',
     sampleAnswer:
-      'Context managers guarantee cleanup happens even when errors occur. Without them, if an exception is raised while using a resource like a file or database connection, you might forget to clean up, causing resource leaks. try/finally blocks work but are verbose and error-prone—developers forget them. Context managers centralize the cleanup logic and make it impossible to forget. For example, "with open(file)" ensures the file closes even if an exception occurs while reading. This prevents file descriptor exhaustion, database connection pool exhaustion, and other resource leak issues.',
+      'Context managers guarantee cleanup happens even when errors occur. Without them, if an exception is raised while using a resource like a file or database connection, you might forget to clean up, causing resource leaks. try/finally blocks work but are verbose and error-prone—developers forget them. Context managers centralize the cleanup logic and make it impossible to forget. For example, "with open (file)" ensures the file closes even if an exception occurs while reading. This prevents file descriptor exhaustion, database connection pool exhaustion, and other resource leak issues.',
     keyPoints: [
       'Guarantee cleanup even with exceptions',
       'Prevent resource leaks',

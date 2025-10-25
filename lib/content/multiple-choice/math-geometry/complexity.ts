@@ -23,13 +23,13 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the time complexity of GCD?',
     options: [
       'O(n)',
-      'O(log min(a,b)) - Euclidean algorithm with modulo operation',
+      'O(log min (a,b)) - Euclidean algorithm with modulo operation',
       'O(1)',
       'O(a*b)',
     ],
     correctAnswer: 1,
     explanation:
-      'Euclidean algorithm: GCD(a,b) = GCD(b, a%b). Each iteration reduces by at least half. O(log min(a,b)) time. Very efficient even for large numbers.',
+      'Euclidean algorithm: GCD(a,b) = GCD(b, a%b). Each iteration reduces by at least half. O(log min (a,b)) time. Very efficient even for large numbers.',
   },
   {
     id: 'mc3',
@@ -49,13 +49,13 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the space complexity of combinatorics problems?',
     options: [
       'O(1) always',
-      "Varies: direct formula O(1), Pascal's Triangle O(n²), backtracking O(n) for recursion",
+      "Varies: direct formula O(1), Pascal\'s Triangle O(n²), backtracking O(n) for recursion",
       'O(n³)',
       'Random',
     ],
     correctAnswer: 1,
     explanation:
-      "Combinatorics space: computing single value (nCr) O(1) with formula. Pascal's Triangle precomputation O(n²). Generating all permutations O(n!) output. Backtracking O(n) recursion depth.",
+      "Combinatorics space: computing single value (nCr) O(1) with formula. Pascal\'s Triangle precomputation O(n²). Generating all permutations O(n!) output. Backtracking O(n) recursion depth.",
   },
   {
     id: 'mc5',

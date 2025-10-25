@@ -9,7 +9,7 @@ export const informationtheorybasicsSection = {
 
 ## Introduction
 
-**Information theory**, founded by Claude Shannon, quantifies information and uncertainty. It's fundamental to machine learning, especially:
+**Information theory**, founded by Claude Shannon, quantifies information and uncertainty. It\'s fundamental to machine learning, especially:
 - Classification loss functions (cross-entropy)
 - Model complexity (mutual information)
 - Feature selection (information gain)
@@ -37,11 +37,11 @@ import matplotlib.pyplot as plt
 def entropy_demo():
     """Demonstrate entropy"""
     
-    def entropy(probs):
+    def entropy (probs):
         """Calculate entropy"""
-        probs = np.array(probs)
+        probs = np.array (probs)
         probs = probs[probs > 0]  # Remove zeros (0 log 0 = 0)
-        return -np.sum(probs * np.log2(probs))
+        return -np.sum (probs * np.log2(probs))
     
     print("=== Entropy ===")
     print("H(X) = -Σ P(x) log₂ P(x)")
@@ -59,7 +59,7 @@ def entropy_demo():
     print("-" * 40)
     
     for name, probs in examples:
-        h = entropy(probs)
+        h = entropy (probs)
         print(f"{name:20s}  {h:.3f}")
     
     print()
@@ -70,12 +70,12 @@ def entropy_demo():
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     axes = axes.flatten()
     
-    for idx, (name, probs) in enumerate(examples):
+    for idx, (name, probs) in enumerate (examples):
         ax = axes[idx]
-        ax.bar(range(len(probs)), probs, alpha=0.7, edgecolor='black')
+        ax.bar (range (len (probs)), probs, alpha=0.7, edgecolor='black')
         ax.set_xlabel('Outcome')
         ax.set_ylabel('Probability')
-        ax.set_title(f'{name}\\nH = {entropy(probs):.3f} bits')
+        ax.set_title (f'{name}\\nH = {entropy (probs):.3f} bits')
         ax.set_ylim([0, 1])
         ax.grid(True, alpha=0.3, axis='y')
     
@@ -96,11 +96,11 @@ entropy_demo()
 def cross_entropy_demo():
     """Demonstrate cross-entropy"""
     
-    def cross_entropy(p_true, q_model):
+    def cross_entropy (p_true, q_model):
         """Calculate cross-entropy"""
-        p_true = np.array(p_true)
-        q_model = np.array(q_model)
-        return -np.sum(p_true * np.log2(q_model + 1e-10))
+        p_true = np.array (p_true)
+        q_model = np.array (q_model)
+        return -np.sum (p_true * np.log2(q_model + 1e-10))
     
     # True distribution
     p_true = [0.7, 0.2, 0.1]
@@ -119,12 +119,12 @@ def cross_entropy_demo():
     print("Model Distribution Q  ->  H(P, Q)")
     print("-" * 50)
     
-    true_entropy = cross_entropy(p_true, p_true)
+    true_entropy = cross_entropy (p_true, p_true)
     print(f"Entropy H(P): {true_entropy:.3f} bits")
     print()
     
     for name, q_model in models:
-        ce = cross_entropy(p_true, q_model)
+        ce = cross_entropy (p_true, q_model)
         print(f"{name:20s}  {ce:.3f} bits")
     
     print()
@@ -149,11 +149,11 @@ cross_entropy_demo()
 def kl_divergence_demo():
     """Demonstrate KL divergence"""
     
-    def kl_divergence(p, q):
+    def kl_divergence (p, q):
         """Calculate KL divergence"""
-        p = np.array(p)
-        q = np.array(q)
-        return np.sum(p * np.log(p / (q + 1e-10) + 1e-10))
+        p = np.array (p)
+        q = np.array (q)
+        return np.sum (p * np.log (p / (q + 1e-10) + 1e-10))
     
     # True distribution
     p_true = [0.6, 0.3, 0.1]
@@ -172,7 +172,7 @@ def kl_divergence_demo():
     print("-" * 45)
     
     for q in models:
-        kl = kl_divergence(p_true, q)
+        kl = kl_divergence (p_true, q)
         print(f"{q}  {kl:.4f}")
     
     print()
@@ -207,8 +207,8 @@ def cross_entropy_loss_demo():
     y_pred_good = [0.1, 0.8, 0.1]
     y_pred_bad = [0.4, 0.3, 0.3]
     
-    loss_good = -np.sum(np.array(y_true) * np.log(np.array(y_pred_good) + 1e-10))
-    loss_bad = -np.sum(np.array(y_true) * np.log(np.array(y_pred_bad) + 1e-10))
+    loss_good = -np.sum (np.array (y_true) * np.log (np.array (y_pred_good) + 1e-10))
+    loss_bad = -np.sum (np.array (y_true) * np.log (np.array (y_pred_bad) + 1e-10))
     
     print(f"Good prediction {y_pred_good}: Loss = {loss_good:.3f}")
     print(f"Bad prediction {y_pred_bad}: Loss = {loss_bad:.3f}")
@@ -246,7 +246,7 @@ def mutual_information_demo():
     
     mi = mutual_info_classif(X, y)
     
-    for i, (name, score) in enumerate(zip(data.feature_names, mi)):
+    for i, (name, score) in enumerate (zip (data.feature_names, mi)):
         print(f"  {name:20s}: MI = {score:.3f}")
     
     print()

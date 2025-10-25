@@ -9,7 +9,7 @@ export const forwardPropagationQuiz: QuizQuestion[] = [
 
 **1. Optimized Low-Level Implementation:**
 
-NumPy's vectorized operations are implemented in C and Fortran, which are compiled languages orders of magnitude faster than interpreted Python:
+NumPy\'s vectorized operations are implemented in C and Fortran, which are compiled languages orders of magnitude faster than interpreted Python:
 - Python loops: Each iteration involves Python interpreter overhead
 - Vectorized: Single call to compiled code, no per-element Python overhead
 - Speedup factor: 10-100x just from avoiding interpretation
@@ -77,10 +77,10 @@ NumPy arrays are stored contiguously in memory:
 \`\`\`python
 # Loops: N function calls
 for i in range(N):
-    result[i] = func(data[i])  # N Python function calls
+    result[i] = func (data[i])  # N Python function calls
 
 # Vectorized: 1 function call
-result = func(data)  # Single call processes all N elements
+result = func (data)  # Single call processes all N elements
 \`\`\`
 
 **Concrete Example:**
@@ -91,9 +91,9 @@ result = func(data)  # Single call processes all N elements
 # Operations: m * k * n multiplications and additions
 
 # Loop version (3 nested loops):
-for i in range(m):
-    for j in range(n):
-        for k in range(k):
+for i in range (m):
+    for j in range (n):
+        for k in range (k):
             C[i,j] += A[i,k] * B[k,j]
 # - 3 nested loops: m*n*k interpreter cycles
 # - Random memory access patterns
@@ -363,10 +363,10 @@ learning_rate = 0.001 * (batch_size / 32)  # Linear scaling rule
 # Use sequential batches
 
 # WRONG: Random batches break temporal dependencies
-batches = random_shuffle(data)
+batches = random_shuffle (data)
 
 # CORRECT: Sequential or walk-forward batches
-batches = [data[i:i+32] for i in range(0, len(data), 32)]
+batches = [data[i:i+32] for i in range(0, len (data), 32)]
 \`\`\`
 
 2. **Regime Changes:**
@@ -390,8 +390,8 @@ def experiment_with_batch_sizes():
     results = []
     
     for bs in batch_sizes:
-        model = TrainingNetwork(batch_size=bs)
-        train_loss, val_loss, sharpe = model.train(data)
+        model = TrainingNetwork (batch_size=bs)
+        train_loss, val_loss, sharpe = model.train (data)
         results.append({
             'batch_size': bs,
             'train_loss': train_loss,
@@ -474,7 +474,7 @@ a₂ = σ(W₂a₁ + b₂)
 
         ┌─→ [matmul] ──→ z₁ ──→ [σ] ──→ a₁ ──┐
   x, W₁─┤                                      │
-        └─→ [add(b₁)]                           │
+        └─→ [add (b₁)]                           │
                                                 ├─→ [matmul] ──→ z₂ ──→ [σ] ──→ a₂
                                          W₂, b₂─┘
 \`\`\`
@@ -562,11 +562,11 @@ Gradient computation often requires forward pass values:
 Example:
 \`\`\`python
 class SigmoidNode:
-    def forward(self, z):
+    def forward (self, z):
         self.a = 1 / (1 + np.exp(-z))  # Cache for backward
         return self.a
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         # Need self.a from forward pass!
         grad_input = grad_output * self.a * (1 - self.a)
         return grad_input
@@ -618,13 +618,13 @@ print(x.grad)  # Correctly accumulates gradients from both paths
 
 \`\`\`python
 # TensorFlow 1.x style
-x = tf.placeholder(tf.float32)
+x = tf.placeholder (tf.float32)
 w = tf.Variable([3.0])
 y = x * w
 
 sess = tf.Session()
 # Graph is fixed, just feed different x values
-result = sess.run(y, feed_dict={x: 2.0})
+result = sess.run (y, feed_dict={x: 2.0})
 \`\`\`
 
 **Dynamic Graphs (PyTorch, TensorFlow 2.x):**
@@ -634,15 +634,15 @@ result = sess.run(y, feed_dict={x: 2.0})
 
 \`\`\`python
 # PyTorch style
-def forward(x, w):
+def forward (x, w):
     if x > 0:  # Control flow!
         return x * w
     else:
         return x * w * w
 
 # Different graphs for different inputs
-y1 = forward(torch.tensor([2.0]), torch.tensor([3.0]))  # Graph 1
-y2 = forward(torch.tensor([-2.0]), torch.tensor([3.0])) # Graph 2
+y1 = forward (torch.tensor([2.0]), torch.tensor([3.0]))  # Graph 1
+y2 = forward (torch.tensor([-2.0]), torch.tensor([3.0])) # Graph 2
 \`\`\`
 
 **Complete Example: Manual Autodiff**
@@ -655,20 +655,20 @@ class ComputationNode:
         self.output = None
         self.grad = None
     
-    def forward(self, *inputs):
+    def forward (self, *inputs):
         raise NotImplementedError
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         raise NotImplementedError
 
 
 class MultiplyNode(ComputationNode):
-    def forward(self, x, y):
+    def forward (self, x, y):
         self.inputs = [x, y]
         self.output = x * y
         return self.output
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         x, y = self.inputs
         grad_x = grad_output * y  # ∂(xy)/∂x = y
         grad_y = grad_output * x  # ∂(xy)/∂y = x
@@ -676,23 +676,23 @@ class MultiplyNode(ComputationNode):
 
 
 class AddNode(ComputationNode):
-    def forward(self, x, y):
+    def forward (self, x, y):
         self.inputs = [x, y]
         self.output = x + y
         return self.output
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         # ∂(x+y)/∂x = 1, ∂(x+y)/∂y = 1
         return grad_output, grad_output
 
 
 class SigmoidNode(ComputationNode):
-    def forward(self, x):
+    def forward (self, x):
         self.inputs = [x]
         self.output = 1 / (1 + np.exp(-x))
         return self.output
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         # ∂σ/∂x = σ * (1 - σ)
         sig = self.output
         grad_x = grad_output * sig * (1 - sig)
@@ -707,18 +707,18 @@ add_node = AddNode()
 sig_node = SigmoidNode()
 
 # Forward pass
-z1 = mul_node.forward(x_val, w_val)  # x * w
-z2 = add_node.forward(z1, b_val)      # + b
-y = sig_node.forward(z2)               # σ(.)
+z1 = mul_node.forward (x_val, w_val)  # x * w
+z2 = add_node.forward (z1, b_val)      # + b
+y = sig_node.forward (z2)               # σ(.)
 
 print(f"Forward: y = {y:.4f}")
 
 # Backward pass (traverse graph in reverse)
 grad_y = 1.0  # dy/dy = 1
 
-grad_z2 = sig_node.backward(grad_y)
-grad_z1, grad_b = add_node.backward(grad_z2)
-grad_x, grad_w = mul_node.backward(grad_z1)
+grad_z2 = sig_node.backward (grad_y)
+grad_z1, grad_b = add_node.backward (grad_z2)
+grad_x, grad_w = mul_node.backward (grad_z1)
 
 print(f"Gradients:")
 print(f"  dy/dx = {grad_x:.4f}")
@@ -738,10 +738,10 @@ print(f"  dy/db = {grad_b:.4f}")
 
 \`\`\`python
 # Complex trading loss function
-def trading_loss(predictions, returns, positions, transaction_costs):
+def trading_loss (predictions, returns, positions, transaction_costs):
     # Computational graph automatically tracks all operations:
     pnl = predictions * returns * positions
-    costs = transaction_costs * torch.abs(positions[1:] - positions[:-1])
+    costs = transaction_costs * torch.abs (positions[1:] - positions[:-1])
     sharpe = pnl.mean() / (pnl.std() + 1e-6)
     loss = -sharpe + costs.sum()
     
@@ -751,7 +751,7 @@ def trading_loss(predictions, returns, positions, transaction_costs):
     return loss
 
 # Framework handles all gradient computation
-loss = trading_loss(model(features), returns, positions, costs)
+loss = trading_loss (model (features), returns, positions, costs)
 loss.backward()  # All gradients computed automatically
 optimizer.step()  # Update model parameters
 \`\`\`

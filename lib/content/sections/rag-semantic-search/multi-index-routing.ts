@@ -23,7 +23,7 @@ all_documents = [
 ]
 
 # All documents in one index - suboptimal!
-single_index.add_all(all_documents)
+single_index.add_all (all_documents)
 
 # Query: "How to use async in Python?"
 # Problem: Searches across ALL document types
@@ -67,16 +67,16 @@ class MultiIndexManager:
         self.indexes: Dict[DocumentType, VectorStore] = {}
         self._initialize_indexes()
     
-    def _initialize_indexes(self):
+    def _initialize_indexes (self):
         """Create specialized indexes."""
         for doc_type in DocumentType:
             # Each index can have different configuration
             self.indexes[doc_type] = VectorStore(
                 name=f"index_{doc_type.value}",
-                embedding_model=self._get_embedding_model(doc_type)
+                embedding_model=self._get_embedding_model (doc_type)
             )
     
-    def _get_embedding_model(self, doc_type: DocumentType) -> str:
+    def _get_embedding_model (self, doc_type: DocumentType) -> str:
         """Get specialized embedding model for document type."""
         model_map = {
             DocumentType.CODE: "code-embedding-model",
@@ -85,7 +85,7 @@ class MultiIndexManager:
             DocumentType.SUPPORT: "text-embedding-3-small",
             DocumentType.GENERAL: "text-embedding-3-small",
         }
-        return model_map.get(doc_type, "text-embedding-3-small")
+        return model_map.get (doc_type, "text-embedding-3-small")
     
     def add_document(
         self,
@@ -102,7 +102,7 @@ class MultiIndexManager:
             metadata: Document metadata
         """
         index = self.indexes[doc_type]
-        index.add(document, metadata)
+        index.add (document, metadata)
     
     def search(
         self,
@@ -125,16 +125,16 @@ class MultiIndexManager:
         
         for doc_type in doc_types:
             index = self.indexes[doc_type]
-            results = index.search(query, top_k=top_k)
+            results = index.search (query, top_k=top_k)
             
             # Add index info to results
             for result in results:
                 result['source_index'] = doc_type.value
             
-            all_results.extend(results)
+            all_results.extend (results)
         
         # Re-rank combined results
-        all_results.sort(key=lambda x: x['score'], reverse=True)
+        all_results.sort (key=lambda x: x['score'], reverse=True)
         
         return all_results[:top_k]
 
@@ -190,8 +190,8 @@ class SourceBasedIndexing:
         
         for source in sources:
             if source in self.indexes:
-                source_results = self.indexes[source].search(query, top_k)
-                results.extend(source_results)
+                source_results = self.indexes[source].search (query, top_k)
+                results.extend (source_results)
         
         return results
 \`\`\`
@@ -214,15 +214,15 @@ class TimeBasedIndexing:
             "historical": VectorStore("historical")
         }
     
-    def get_index_for_date(self, date: datetime) -> str:
+    def get_index_for_date (self, date: datetime) -> str:
         """Determine which index to use for a date."""
         now = datetime.now()
         
-        if date > now - timedelta(days=7):
+        if date > now - timedelta (days=7):
             return "current_week"
-        elif date > now - timedelta(days=30):
+        elif date > now - timedelta (days=30):
             return "current_month"
-        elif date > now - timedelta(days=90):
+        elif date > now - timedelta (days=90):
             return "current_quarter"
         else:
             return "historical"
@@ -246,32 +246,32 @@ class RuleBasedRouter:
     def __init__(self):
         self.rules = self._define_rules()
     
-    def _define_rules(self) -> List[Dict]:
+    def _define_rules (self) -> List[Dict]:
         """Define routing rules."""
         return [
             {
-                "pattern": r"\\b(code|function|class|method|API)\\b",
+                "pattern": r"\\b (code|function|class|method|API)\\b",
                 "index": DocumentType.CODE,
                 "priority": 1
             },
             {
-                "pattern": r"\\b(revenue|profit|financial|earnings)\\b",
+                "pattern": r"\\b (revenue|profit|financial|earnings)\\b",
                 "index": DocumentType.FINANCIAL,
                 "priority": 1
             },
             {
-                "pattern": r"\\b(how to|tutorial|guide|example)\\b",
+                "pattern": r"\\b (how to|tutorial|guide|example)\\b",
                 "index": DocumentType.DOCUMENTATION,
                 "priority": 1
             },
             {
-                "pattern": r"\\b(error|issue|problem|help|support)\\b",
+                "pattern": r"\\b (error|issue|problem|help|support)\\b",
                 "index": DocumentType.SUPPORT,
                 "priority": 1
             },
         ]
     
-    def route(self, query: str) -> List[DocumentType]:
+    def route (self, query: str) -> List[DocumentType]:
         """
         Route query to appropriate indexes.
         
@@ -285,15 +285,15 @@ class RuleBasedRouter:
         matched_indexes = []
         
         for rule in self.rules:
-            if re.search(rule["pattern"], query_lower, re.IGNORECASE):
-                matched_indexes.append(rule["index"])
+            if re.search (rule["pattern"], query_lower, re.IGNORECASE):
+                matched_indexes.append (rule["index"])
         
         # If no rules match, search all indexes
         if not matched_indexes:
             matched_indexes = list(DocumentType)
         
         # Remove duplicates
-        return list(set(matched_indexes))
+        return list (set (matched_indexes))
 
 
 # Example usage
@@ -306,7 +306,7 @@ queries = [
 ]
 
 for query in queries:
-    indexes = router.route(query)
+    indexes = router.route (query)
     print(f"Query: {query}")
     print(f"Route to: {[idx.value for idx in indexes]}\\n")
 \`\`\`
@@ -324,7 +324,7 @@ class MLQueryRouter:
     """
     
     def __init__(self):
-        self.vectorizer = TfidfVectorizer(max_features=1000)
+        self.vectorizer = TfidfVectorizer (max_features=1000)
         self.classifier = MultinomialNB()
         self.is_trained = False
         self.index_labels = list(DocumentType)
@@ -342,7 +342,7 @@ class MLQueryRouter:
             labels: Correct index for each query
         """
         # Vectorize queries
-        X = self.vectorizer.fit_transform(queries)
+        X = self.vectorizer.fit_transform (queries)
         
         # Train classifier
         self.classifier.fit(X, labels)
@@ -375,7 +375,7 @@ class MLQueryRouter:
         # Select indexes above threshold
         selected_indexes = [
             self.index_labels[i]
-            for i, prob in enumerate(probabilities)
+            for i, prob in enumerate (probabilities)
             if prob >= confidence_threshold
         ]
         
@@ -408,11 +408,11 @@ training_labels = [
     DocumentType.SUPPORT,
 ]
 
-router.train(training_queries, training_labels)
+router.train (training_queries, training_labels)
 
 # Route new queries
 query = "How do I fix this code error?"
-indexes = router.route(query)
+indexes = router.route (query)
 print(f"Route '{query}' to: {[idx.value for idx in indexes]}")
 \`\`\`
 
@@ -488,7 +488,7 @@ Selected Indexes:"""
             if idx in available_indexes
         ]
         
-        return valid_indexes if valid_indexes else list(available_indexes.keys())
+        return valid_indexes if valid_indexes else list (available_indexes.keys())
 
 
 # Example usage
@@ -501,7 +501,7 @@ indexes = {
 }
 
 query = "How to calculate quarterly revenue in Python?"
-selected = llm_router.route(query, indexes)
+selected = llm_router.route (query, indexes)
 print(f"LLM routed to: {selected}")
 # Likely: ["financial", "code"]
 \`\`\`
@@ -557,7 +557,7 @@ class ProductionMultiIndexRAG:
         Query multi-index system.
         
         Args:
-            user_query: User's query
+            user_query: User\'s query
             max_indexes: Maximum indexes to search
             top_k: Results per index
         
@@ -565,7 +565,7 @@ class ProductionMultiIndexRAG:
             Search results with routing info
         """
         # Route query to appropriate indexes
-        target_indexes = self._route_query(user_query, max_indexes)
+        target_indexes = self._route_query (user_query, max_indexes)
         
         print(f"Routing to indexes: {[idx.value for idx in target_indexes]}")
         
@@ -577,7 +577,7 @@ class ProductionMultiIndexRAG:
         )
         
         # Log for monitoring
-        self._log_query(user_query, target_indexes, results)
+        self._log_query (user_query, target_indexes, results)
         
         return {
             "results": results,
@@ -593,10 +593,10 @@ class ProductionMultiIndexRAG:
         """Route query using selected strategy."""
         
         if self.routing_strategy == "rule":
-            return self.rule_router.route(query)[:max_indexes]
+            return self.rule_router.route (query)[:max_indexes]
         
         elif self.routing_strategy == "ml":
-            return self.ml_router.route(query)[:max_indexes]
+            return self.ml_router.route (query)[:max_indexes]
         
         elif self.routing_strategy == "llm":
             # Convert to LLM format
@@ -604,19 +604,19 @@ class ProductionMultiIndexRAG:
                 idx.value: f"{idx.value} documents"
                 for idx in DocumentType
             }
-            index_names = self.llm_router.route(query, index_map)
+            index_names = self.llm_router.route (query, index_map)
             return [
-                DocumentType(name) for name in index_names
+                DocumentType (name) for name in index_names
                 if name in [idx.value for idx in DocumentType]
             ][:max_indexes]
         
         elif self.routing_strategy == "hybrid":
             # Combine multiple strategies
-            rule_indexes = set(self.rule_router.route(query))
-            ml_indexes = set(self.ml_router.route(query))
+            rule_indexes = set (self.rule_router.route (query))
+            ml_indexes = set (self.ml_router.route (query))
             
             # Union of both
-            combined = list(rule_indexes | ml_indexes)
+            combined = list (rule_indexes | ml_indexes)
             return combined[:max_indexes]
         
         else:
@@ -632,11 +632,11 @@ class ProductionMultiIndexRAG:
         self.query_log.append({
             "query": query,
             "indexes": [idx.value for idx in indexes],
-            "num_results": len(results),
+            "num_results": len (results),
             "timestamp": datetime.now().isoformat()
         })
     
-    def get_routing_stats(self) -> Dict:
+    def get_routing_stats (self) -> Dict:
         """Get statistics on routing patterns."""
         if not self.query_log:
             return {}
@@ -645,13 +645,13 @@ class ProductionMultiIndexRAG:
         index_counts = {}
         for log_entry in self.query_log:
             for index in log_entry["indexes"]:
-                index_counts[index] = index_counts.get(index, 0) + 1
+                index_counts[index] = index_counts.get (index, 0) + 1
         
         return {
-            "total_queries": len(self.query_log),
+            "total_queries": len (self.query_log),
             "index_usage": index_counts,
             "avg_indexes_per_query": np.mean([
-                len(log["indexes"]) for log in self.query_log
+                len (log["indexes"]) for log in self.query_log
             ])
         }
 
@@ -667,7 +667,7 @@ result = rag.query(
 )
 
 print(f"Searched indexes: {result['searched_indexes']}")
-print(f"Found {len(result['results'])} results")
+print(f"Found {len (result['results'])} results")
 
 # Get routing statistics
 stats = rag.get_routing_stats()
@@ -701,7 +701,7 @@ class IndexSynchronizer:
             metadata: Document metadata
         """
         # Determine which indexes should have this document
-        target_indexes = self._determine_indexes(document, metadata)
+        target_indexes = self._determine_indexes (document, metadata)
         
         for index_type in target_indexes:
             self.index_manager.add_document(
@@ -710,7 +710,7 @@ class IndexSynchronizer:
                 metadata
             )
         
-        self._log_sync(document, target_indexes)
+        self._log_sync (document, target_indexes)
     
     def _determine_indexes(
         self,
@@ -722,17 +722,17 @@ class IndexSynchronizer:
         
         # Add to type-specific index
         if "type" in metadata:
-            indexes.append(DocumentType(metadata["type"]))
+            indexes.append(DocumentType (metadata["type"]))
         
         # Add to GENERAL index as fallback
         indexes.append(DocumentType.GENERAL)
         
         return indexes
     
-    def _log_sync(self, document: str, indexes: List[DocumentType]):
+    def _log_sync (self, document: str, indexes: List[DocumentType]):
         """Log synchronization."""
         self.sync_log.append({
-            "document_id": hash(document),
+            "document_id": hash (document),
             "indexes": [idx.value for idx in indexes],
             "timestamp": datetime.now().isoformat()
         })

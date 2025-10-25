@@ -6,7 +6,7 @@ export const zoomarchitectureQuiz = [
   {
     id: 'q1',
     question:
-      "Explain Zoom's video routing architecture. How does it decide between peer-to-peer, SFU (Selective Forwarding Unit), and MCU (Multipoint Control Unit) modes?",
+      "Explain Zoom\'s video routing architecture. How does it decide between peer-to-peer, SFU (Selective Forwarding Unit), and MCU (Multipoint Control Unit) modes?",
     sampleAnswer:
       'Zoom uses adaptive video routing based on meeting size and network conditions. (1) 1-on-1 calls: Peer-to-peer (P2P) when possible. Clients exchange ICE candidates, establish direct connection via STUN/TURN. Lowest latency, no server bandwidth cost. Falls back to relay (TURN server) if P2P fails (strict firewalls). (2) Small meetings (2-40 participants): SFU mode. Each participant sends one stream to Zoom SFU (Multimedia Router). SFU forwards streams to other participants without transcoding. Participants receive N-1 streams (3 people = receive 2 streams). Bandwidth: Upload 1 stream, download N-1 streams. (3) Large meetings (40+ participants): SFU with gallery view optimization. SFU sends active speaker + 3-4 gallery thumbnails (not all 100 participants). Webinar mode (1000+ participants): MCU-like, server composites active speaker video, sends single stream to viewers. Decision factors: Meeting size, client bandwidth, CPU capability (mobile vs desktop). Result: Optimized quality and latency for each scenario.',
     keyPoints: [
@@ -32,7 +32,7 @@ export const zoomarchitectureQuiz = [
   {
     id: 'q3',
     question:
-      "Describe Zoom's data center architecture and global infrastructure. How does it handle 300M+ daily meeting participants?",
+      "Describe Zoom\'s data center architecture and global infrastructure. How does it handle 300M+ daily meeting participants?",
     sampleAnswer:
       'Zoom infrastructure: (1) Data centers - 17 co-located data centers globally (US, Europe, Asia, Australia). Own infrastructure (not cloud) for cost and control. Each DC has Multimedia Routers (SFU servers). (2) PoP (Points of Presence) - 100s of edge locations for TURN relay servers. Route users to nearest PoP for lowest latency. (3) Cloud peering - Direct connections to AWS, Azure, GCP for customers using cloud. (4) Meeting routing - User starts meeting → Assigned to nearest DC based on geolocation. Participants join, routed to nearest PoP, connected to meeting DC. (5) Load balancing - If DC reaches capacity, route new meetings to next nearest DC. Web Socket Manager distributes connections across Multimedia Routers. (6) Redundancy - Each DC has redundant power, network, servers. If DC fails, meetings migrated to backup DC (60-second reconnection). Capacity: Each Multimedia Router handles 1000-2000 concurrent streams. 10,000s of routers globally. Scale: 300M daily participants, peaks at 3M concurrent meetings.',
     keyPoints: [

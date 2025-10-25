@@ -37,7 +37,7 @@ users = session.query(User).filter(User.email == "test@example.com").all()
 # Modern 2.0 style (recommended)
 from sqlalchemy import select
 stmt = select(User).where(User.email == "test@example.com")
-users = session.execute(stmt).scalars().all()
+users = session.execute (stmt).scalars().all()
 \`\`\`
 
 ---
@@ -94,8 +94,8 @@ engine = create_engine("postgresql://localhost/mydb")
 # Execute SQL using Core
 from sqlalchemy import select
 with engine.connect() as conn:
-    stmt = select(users).where(users.c.email == "test@example.com")
-    result = conn.execute(stmt)
+    stmt = select (users).where (users.c.email == "test@example.com")
+    result = conn.execute (stmt)
     for row in result:
         print(row.id, row.email)
 
@@ -114,7 +114,7 @@ class User(Base):
 
 # Create engine and session
 engine = create_engine("postgresql://localhost/mydb")
-Session = sessionmaker(bind=engine)
+Session = sessionmaker (bind=engine)
 session = Session()
 
 # Query using ORM
@@ -229,20 +229,20 @@ from sqlalchemy import text
 
 # Context manager (recommended)
 with engine.connect() as conn:
-    result = conn.execute(text("SELECT * FROM users"))
+    result = conn.execute (text("SELECT * FROM users"))
     for row in result:
         print(row)
 # Connection automatically returned to pool
 
 # Explicit transaction
 with engine.begin() as conn:
-    conn.execute(text("INSERT INTO users (email) VALUES (:email)"), {"email": "test@example.com"})
+    conn.execute (text("INSERT INTO users (email) VALUES (:email)"), {"email": "test@example.com"})
     # Automatically commits on success, rolls back on exception
 
 # Manual connection management (not recommended)
 conn = engine.connect()
 try:
-    result = conn.execute(text("SELECT * FROM users"))
+    result = conn.execute (text("SELECT * FROM users"))
 finally:
     conn.close()  # Must manually close
 \`\`\`
@@ -276,10 +276,10 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
     def __repr__(self):
-        return f"<User(id={self.id}, email='{self.email}')>"
+        return f"<User (id={self.id}, email='{self.email}')>"
 
 # Create all tables
-Base.metadata.create_all(engine)
+Base.metadata.create_all (engine)
 \`\`\`
 
 ### Modern Declarative Mapping (2.0)
@@ -303,14 +303,14 @@ class User(Base):
     __tablename__ = 'users'
     
     # Type-annotated columns
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True)
     username: Mapped[str] = mapped_column(String(50))
     bio: Mapped[Optional[str]] = mapped_column(String(500))  # Nullable
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column (default=datetime.utcnow)
     
     def __repr__(self):
-        return f"<User(email='{self.email}')>"
+        return f"<User (email='{self.email}')>"
 \`\`\`
 
 ### Table Configuration
@@ -325,7 +325,7 @@ from sqlalchemy import Index, CheckConstraint, UniqueConstraint
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     age: Mapped[Optional[int]]
     status: Mapped[str] = mapped_column(String(20), default='active')
@@ -373,8 +373,8 @@ session = SessionLocal()
 
 try:
     # Use session
-    user = User(email="test@example.com")
-    session.add(user)
+    user = User (email="test@example.com")
+    session.add (user)
     session.commit()
 finally:
     session.close()
@@ -404,8 +404,8 @@ def get_db_session():
 
 # Usage
 with get_db_session() as session:
-    user = User(email="test@example.com")
-    session.add(user)
+    user = User (email="test@example.com")
+    session.add (user)
     # Automatic commit on success, rollback on exception
 \`\`\`
 
@@ -420,14 +420,14 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Create thread-local session
 SessionLocal = scoped_session(
-    sessionmaker(bind=engine)
+    sessionmaker (bind=engine)
 )
 
 # Each thread gets its own session
-def create_user(email: str):
+def create_user (email: str):
     session = SessionLocal()  # Thread-local session
-    user = User(email=email)
-    session.add(user)
+    user = User (email=email)
+    session.add (user)
     session.commit()
     return user
 
@@ -451,8 +451,8 @@ from sqlalchemy import select
 session = SessionLocal()
 
 # Start transaction (implicit)
-user = User(email="test@example.com")
-session.add(user)
+user = User (email="test@example.com")
+session.add (user)
 
 # Query in same transaction
 existing = session.execute(
@@ -480,16 +480,16 @@ session = SessionLocal()
 
 try:
     # Outer transaction
-    user1 = User(email="user1@example.com")
-    session.add(user1)
+    user1 = User (email="user1@example.com")
+    session.add (user1)
     
     # Create savepoint
     nested = session.begin_nested()
     
     try:
         # Inner transaction
-        user2 = User(email="user2@example.com")
-        session.add(user2)
+        user2 = User (email="user2@example.com")
+        session.add (user2)
         
         # Commit savepoint
         nested.commit()
@@ -523,11 +523,11 @@ engine = create_engine(
 with engine.connect().execution_options(
     isolation_level="SERIALIZABLE"
 ) as conn:
-    result = conn.execute(text("SELECT * FROM users"))
+    result = conn.execute (text("SELECT * FROM users"))
 
 # Session-level
 session = SessionLocal()
-session.connection(execution_options={"isolation_level": "READ UNCOMMITTED"})
+session.connection (execution_options={"isolation_level": "READ UNCOMMITTED"})
 \`\`\`
 
 **Isolation levels** (from least to most strict):
@@ -560,13 +560,13 @@ class User(Base):
 print(Base.metadata.tables.keys())  # ['users', ...]
 
 # Create all tables
-Base.metadata.create_all(engine)
+Base.metadata.create_all (engine)
 
 # Drop all tables (dangerous!)
-Base.metadata.drop_all(engine)
+Base.metadata.drop_all (engine)
 
 # Create specific table
-Base.metadata.tables['users'].create(engine)
+Base.metadata.tables['users'].create (engine)
 \`\`\`
 
 ### Database Reflection
@@ -580,7 +580,7 @@ from sqlalchemy import MetaData, Table
 
 # Reflect all tables
 metadata = MetaData()
-metadata.reflect(bind=engine)
+metadata.reflect (bind=engine)
 
 # Access reflected tables
 users_table = metadata.tables['users']
@@ -592,9 +592,9 @@ print(users.c.email)  # Column('email', String(255), ...)
 
 # Use reflected table in queries
 from sqlalchemy import select
-stmt = select(users).where(users.c.email == "test@example.com")
+stmt = select (users).where (users.c.email == "test@example.com")
 with engine.connect() as conn:
-    result = conn.execute(stmt)
+    result = conn.execute (stmt)
 \`\`\`
 
 ### Automap: ORM from Existing Database
@@ -608,7 +608,7 @@ from sqlalchemy.ext.automap import automap_base
 
 # Reflect database into ORM models
 Base = automap_base()
-Base.prepare(engine, reflect=True)
+Base.prepare (engine, reflect=True)
 
 # Access generated classes
 User = Base.classes.users
@@ -665,7 +665,7 @@ engine = create_engine(
 Monitor Connection Pool Health
 """
 
-def get_pool_stats(engine):
+def get_pool_stats (engine):
     """Get connection pool statistics"""
     pool = engine.pool
     return {
@@ -677,23 +677,23 @@ def get_pool_stats(engine):
     }
 
 # Check pool status
-stats = get_pool_stats(engine)
+stats = get_pool_stats (engine)
 print(f"Pool: {stats['checked_out']}/{stats['total']} connections in use")
 
 # Pool events for monitoring
 from sqlalchemy import event
 
-@event.listens_for(engine, "connect")
-def receive_connect(dbapi_conn, connection_record):
-    print(f"New connection: {id(dbapi_conn)}")
+@event.listens_for (engine, "connect")
+def receive_connect (dbapi_conn, connection_record):
+    print(f"New connection: {id (dbapi_conn)}")
 
-@event.listens_for(engine, "checkout")
-def receive_checkout(dbapi_conn, connection_record, connection_proxy):
-    print(f"Connection checked out: {id(dbapi_conn)}")
+@event.listens_for (engine, "checkout")
+def receive_checkout (dbapi_conn, connection_record, connection_proxy):
+    print(f"Connection checked out: {id (dbapi_conn)}")
 
-@event.listens_for(engine, "checkin")
-def receive_checkin(dbapi_conn, connection_record):
-    print(f"Connection checked in: {id(dbapi_conn)}")
+@event.listens_for (engine, "checkin")
+def receive_checkin (dbapi_conn, connection_record):
+    print(f"Connection checked in: {id (dbapi_conn)}")
 \`\`\`
 
 ---
@@ -712,13 +712,13 @@ engine = create_engine("postgresql://localhost/mydb", pool_size=10)
 
 def get_users():
     with engine.connect() as conn:
-        return conn.execute(text("SELECT * FROM users")).fetchall()
+        return conn.execute (text("SELECT * FROM users")).fetchall()
 
 # ❌ Wrong: Creating engine per function
 def get_users_wrong():
     engine = create_engine("postgresql://localhost/mydb")  # Don't do this!
     with engine.connect() as conn:
-        return conn.execute(text("SELECT * FROM users")).fetchall()
+        return conn.execute (text("SELECT * FROM users")).fetchall()
 \`\`\`
 
 ### 2. Always Close Sessions
@@ -765,7 +765,7 @@ def get_db() -> Generator[SessionType, None, None]:
 from fastapi import Depends
 
 @app.get("/users")
-def get_users(session: SessionType = Depends(get_db)):
+def get_users (session: SessionType = Depends (get_db)):
     return session.query(User).all()
 \`\`\`
 

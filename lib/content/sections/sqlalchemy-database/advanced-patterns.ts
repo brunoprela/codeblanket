@@ -13,16 +13,16 @@ class UserRepository:
     def __init__(self, session):
         self.session = session
     
-    def create(self, email: str) -> User:
-        user = User(email=email)
-        self.session.add(user)
+    def create (self, email: str) -> User:
+        user = User (email=email)
+        self.session.add (user)
         self.session.commit()
         return user
     
-    def get_by_id(self, user_id: int) -> User | None:
+    def get_by_id (self, user_id: int) -> User | None:
         return self.session.get(User, user_id)
     
-    def find_active(self) -> list[User]:
+    def find_active (self) -> list[User]:
         return self.session.execute(
             select(User).where(User.is_active == True)
         ).scalars().all()
@@ -34,8 +34,8 @@ class UserRepository:
 class UnitOfWork:
     def __init__(self):
         self.session = SessionLocal()
-        self.users = UserRepository(self.session)
-        self.posts = PostRepository(self.session)
+        self.users = UserRepository (self.session)
+        self.posts = PostRepository (self.session)
     
     def __enter__(self):
         return self
@@ -43,16 +43,16 @@ class UnitOfWork:
     def __exit__(self, *args):
         self.session.close()
     
-    def commit(self):
+    def commit (self):
         self.session.commit()
     
-    def rollback(self):
+    def rollback (self):
         self.session.rollback()
 
 # Usage
 with UnitOfWork() as uow:
     user = uow.users.create("test@example.com")
-    post = uow.posts.create(user.id, "Title")
+    post = uow.posts.create (user.id, "Title")
     uow.commit()
 \`\`\`
 
@@ -99,7 +99,7 @@ export const advancedPatternsQuiz = [
     question:
       'How do you implement the Active Record pattern using SQLAlchemy models?',
     sampleAnswer:
-      'Active Record: Business logic in model class. Implementation: Add methods to model - User.authenticate(), User.send_email(). Query methods: User.find_by_email(email) as classmethod. Benefits: Simple, intuitive. Drawbacks: Tight coupling to database, harder to test, violates single responsibility. Recommendation: Use for simple apps, prefer Repository for complex systems.',
+      'Active Record: Business logic in model class. Implementation: Add methods to model - User.authenticate(), User.send_email(). Query methods: User.find_by_email (email) as classmethod. Benefits: Simple, intuitive. Drawbacks: Tight coupling to database, harder to test, violates single responsibility. Recommendation: Use for simple apps, prefer Repository for complex systems.',
     keyPoints: [
       'Business logic in model',
       'Query methods as classmethods',
@@ -162,7 +162,7 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Dependency injection: Pass session as parameter instead of using global. Example: def create_user(email, session) vs using global session. Benefits: (1) Testable - can pass mock session, (2) Explicit dependencies, (3) Thread-safe, (4) Clear lifecycle. FastAPI uses this: def endpoint(db: Session = Depends(get_db)). Avoid global sessions - causes thread safety and testing issues.',
+      'Dependency injection: Pass session as parameter instead of using global. Example: def create_user (email, session) vs using global session. Benefits: (1) Testable - can pass mock session, (2) Explicit dependencies, (3) Thread-safe, (4) Clear lifecycle. FastAPI uses this: def endpoint (db: Session = Depends (get_db)). Avoid global sessions - causes thread safety and testing issues.',
   },
   {
     id: 'sql-patterns-mc-5',
@@ -176,6 +176,6 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "DTOs/Pydantic models separate database from API layer. ORM models for database, Pydantic for API responses. Benefits: (1) Control API shape independently, (2) No DetachedInstanceError (DTOs have no session), (3) Validation and serialization, (4) Security - don't expose internal structure. Example: class UserResponse(BaseModel): id: int; email: str. Convert: UserResponse.from_orm(user).",
+      "DTOs/Pydantic models separate database from API layer. ORM models for database, Pydantic for API responses. Benefits: (1) Control API shape independently, (2) No DetachedInstanceError (DTOs have no session), (3) Validation and serialization, (4) Security - don't expose internal structure. Example: class UserResponse(BaseModel): id: int; email: str. Convert: UserResponse.from_orm (user).",
   },
 ];

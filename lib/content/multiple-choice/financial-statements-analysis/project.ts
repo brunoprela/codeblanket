@@ -47,7 +47,7 @@ export const projectMultipleChoiceQuestions = [
   {
     id: 4,
     question:
-      "What's the best way to handle companies that restate earnings in your capstone project?",
+      "What\'s the best way to handle companies that restate earnings in your capstone project?",
     options: [
       'Delete old data and use restated only',
       'Keep only original reported data',

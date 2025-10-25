@@ -36,7 +36,7 @@ export const twosumpatternsSection = {
 
 **Implementation:**
 \`\`\`python
-def two_sum(nums: List[int], target: int) -> List[int]:
+def two_sum (nums: List[int], target: int) -> List[int]:
     """
     Find indices of two numbers that add up to target.
     
@@ -47,7 +47,7 @@ def two_sum(nums: List[int], target: int) -> List[int]:
     """
     seen = {}  # value → index
     
-    for i, num in enumerate(nums):
+    for i, num in enumerate (nums):
         complement = target - num
         
         if complement in seen:
@@ -89,7 +89,7 @@ Iteration 2: num=7, complement=2
 
 **Implementation:**
 \`\`\`python
-def two_sum_sorted(nums: List[int], target: int) -> List[int]:
+def two_sum_sorted (nums: List[int], target: int) -> List[int]:
     """
     Find indices in sorted array that add up to target.
     
@@ -98,7 +98,7 @@ def two_sum_sorted(nums: List[int], target: int) -> List[int]:
     
     Key: Use sorted property to move pointers intelligently
     """
-    left, right = 0, len(nums) - 1
+    left, right = 0, len (nums) - 1
     
     while left < right:
         current_sum = nums[left] + nums[right]
@@ -142,7 +142,7 @@ def two_sum_sorted(nums: List[int], target: int) -> List[int]:
 
 **Implementation:**
 \`\`\`python
-def three_sum(nums: List[int]) -> List[List[int]]:
+def three_sum (nums: List[int]) -> List[List[int]]:
     """
     Find all unique triplets that sum to zero.
     
@@ -157,9 +157,9 @@ def three_sum(nums: List[int]) -> List[List[int]]:
     """
     nums.sort()
     result = []
-    n = len(nums)
+    n = len (nums)
     
-    for i in range(n - 2):
+    for i in range (n - 2):
         # Skip duplicate values for first element
         if i > 0 and nums[i] == nums[i-1]:
             continue
@@ -227,7 +227,7 @@ Final: [[-1, -1, 2], [-1, 0, 1]]
 
 **Implementation Sketch:**
 \`\`\`python
-def four_sum(nums: List[int], target: int) -> List[List[int]]:
+def four_sum (nums: List[int], target: int) -> List[List[int]]:
     """
     Find all unique quadruplets that sum to target.
     
@@ -242,14 +242,14 @@ def four_sum(nums: List[int], target: int) -> List[List[int]]:
     """
     nums.sort()
     result = []
-    n = len(nums)
+    n = len (nums)
     
-    for i in range(n - 3):
+    for i in range (n - 3):
         # Skip duplicates for first element
         if i > 0 and nums[i] == nums[i-1]:
             continue
         
-        for j in range(i + 1, n - 2):
+        for j in range (i + 1, n - 2):
             # Skip duplicates for second element
             if j > i + 1 and nums[j] == nums[j-1]:
                 continue
@@ -326,7 +326,7 @@ def four_sum(nums: List[int], target: int) -> List[List[int]]:
 **Approach Selection:**
 1. **Unsorted, two elements** → Hash table
 2. **Sorted, two elements** → Two pointers
-3. **Three+ elements** → Sort + fix first(s) + two pointers
+3. **Three+ elements** → Sort + fix first (s) + two pointers
 4. **Space constrained** → Sort first, use two pointers
 
 **Communication:**

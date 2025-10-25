@@ -28,7 +28,7 @@ CREATE TABLE products (
 
 1. **Category Browsing:**
 \`\`\`sql
-CREATE INDEX idx_category_popularity ON products(category, popularity_score DESC)
+CREATE INDEX idx_category_popularity ON products (category, popularity_score DESC)
 WHERE stock_quantity > 0;
 \`\`\`
 - Supports: "Show popular products in category"
@@ -37,7 +37,7 @@ WHERE stock_quantity > 0;
 
 2. **Price Filtering:**
 \`\`\`sql
-CREATE INDEX idx_category_price ON products(category, price)
+CREATE INDEX idx_category_price ON products (category, price)
 WHERE stock_quantity > 0;
 \`\`\`
 - Supports: "Products in category under $50"
@@ -52,7 +52,7 @@ CREATE INDEX idx_search ON products USING GIN(search_vector);
 
 4. **Recently Added:**
 \`\`\`sql
-CREATE INDEX idx_new_products ON products(created_at DESC)
+CREATE INDEX idx_new_products ON products (created_at DESC)
 WHERE created_at > NOW() - INTERVAL '30 days';
 \`\`\`
 - Supports: "New arrivals" page
@@ -162,7 +162,7 @@ CREATE TABLE user_feeds (
 );
 
 -- Simple index for feed retrieval
-CREATE INDEX idx_user_feed ON user_feeds(user_id, created_at DESC);
+CREATE INDEX idx_user_feed ON user_feeds (user_id, created_at DESC);
 \`\`\`
 
 *Read Path (Fast):*
@@ -190,7 +190,7 @@ When user posts:
 
 \`\`\`sql
 -- Covering index avoids table lookups
-CREATE INDEX idx_feed_covering ON posts(user_id, created_at DESC)
+CREATE INDEX idx_feed_covering ON posts (user_id, created_at DESC)
 INCLUDE (content, media_urls, like_count);
 
 -- Shard by user_id hash
@@ -258,8 +258,8 @@ ORDER BY total_time DESC;
 
 -- Check table size
 SELECT 
-    pg_size_pretty(pg_relation_size('users')) as table_size,
-    pg_size_pretty(pg_total_relation_size('users')) as total_size;
+    pg_size_pretty (pg_relation_size('users')) as table_size,
+    pg_size_pretty (pg_total_relation_size('users')) as total_size;
 
 -- List existing indexes
 SELECT indexname, indexdef
@@ -286,11 +286,11 @@ SELECT * FROM users WHERE email = 'john@example.com';
 
 **Problem 1: Wrong Index**
 \`\`\`sql
--- Have: CREATE INDEX idx_name ON users(last_name, first_name);
+-- Have: CREATE INDEX idx_name ON users (last_name, first_name);
 -- Query: WHERE first_name = 'John'
 -- Issue: Can't use index (violates left-prefix rule)
 
--- Fix: CREATE INDEX idx_first_name ON users(first_name);
+-- Fix: CREATE INDEX idx_first_name ON users (first_name);
 \`\`\`
 
 **Problem 2: Type Mismatch**
@@ -304,7 +304,7 @@ SELECT * FROM users WHERE email = 'john@example.com';
 
 **Problem 3: Function on Indexed Column**
 \`\`\`sql
--- Have: CREATE INDEX idx_email ON users(email);
+-- Have: CREATE INDEX idx_email ON users (email);
 -- Query: WHERE LOWER(email) = 'john@example.com'
 -- Issue: Function prevents index usage
 
@@ -314,7 +314,7 @@ CREATE INDEX idx_email_lower ON users(LOWER(email));
 -- Fix 2: Store normalized (better)
 ALTER TABLE users ADD COLUMN email_lower VARCHAR(255);
 UPDATE users SET email_lower = LOWER(email);
-CREATE INDEX idx_email_lower ON users(email_lower);
+CREATE INDEX idx_email_lower ON users (email_lower);
 \`\`\`
 
 **Problem 4: Outdated Statistics**
@@ -345,7 +345,7 @@ GROUP BY country;
 
 -- If query matches many rows, index isn't helpful
 -- Consider: Partial index for rare values
-CREATE INDEX idx_rare_countries ON users(country)
+CREATE INDEX idx_rare_countries ON users (country)
 WHERE country NOT IN ('USA', 'UK', 'Canada');
 \`\`\`
 
@@ -354,7 +354,7 @@ WHERE country NOT IN ('USA', 'UK', 'Canada');
 -- Check index bloat
 SELECT
     indexname,
-    pg_size_pretty(pg_relation_size(indexrelid)) as size,
+    pg_size_pretty (pg_relation_size (indexrelid)) as size,
     idx_scan,
     idx_tup_read,
     idx_tup_fetch
@@ -369,7 +369,7 @@ REINDEX INDEX CONCURRENTLY idx_users_email;
 
 \`\`\`sql
 -- Create new index
-CREATE INDEX CONCURRENTLY idx_test ON users(email, created_at);
+CREATE INDEX CONCURRENTLY idx_test ON users (email, created_at);
 
 -- Force use of specific index
 SET enable_seqscan = off;
@@ -389,7 +389,7 @@ SELECT
     idx_scan,
     idx_tup_read,
     idx_tup_fetch,
-    pg_size_pretty(pg_relation_size(indexrelid))
+    pg_size_pretty (pg_relation_size (indexrelid))
 FROM pg_stat_user_indexes
 WHERE schemaname = 'public'
 ORDER BY idx_scan DESC;
@@ -411,18 +411,18 @@ ORDER BY mean_time DESC;
 **Technique 1: Covering Index**
 \`\`\`sql
 -- Original: Index Scan + Table Lookup
-CREATE INDEX idx_email ON users(email);
+CREATE INDEX idx_email ON users (email);
 
 -- Improved: Index-Only Scan
-CREATE INDEX idx_email_covering ON users(email) 
+CREATE INDEX idx_email_covering ON users (email) 
 INCLUDE (first_name, last_name, created_at);
 \`\`\`
 
 **Technique 2: Composite Index Reordering**
 \`\`\`sql
 -- Test different column orders
-CREATE INDEX idx_test1 ON users(country, city, age);
-CREATE INDEX idx_test2 ON users(city, country, age);
+CREATE INDEX idx_test1 ON users (country, city, age);
+CREATE INDEX idx_test2 ON users (city, country, age);
 
 -- Use EXPLAIN to compare
 EXPLAIN SELECT * FROM users WHERE city = 'SF' AND country = 'USA';
@@ -431,10 +431,10 @@ EXPLAIN SELECT * FROM users WHERE city = 'SF' AND country = 'USA';
 **Technique 3: Partial Index**
 \`\`\`sql
 -- Full index: 10GB
-CREATE INDEX idx_all ON orders(user_id, created_at);
+CREATE INDEX idx_all ON orders (user_id, created_at);
 
 -- Partial index: 500MB (only active orders)
-CREATE INDEX idx_active ON orders(user_id, created_at)
+CREATE INDEX idx_active ON orders (user_id, created_at)
 WHERE status IN ('pending', 'processing');
 \`\`\`
 

@@ -75,9 +75,9 @@ app = FastAPI()
 
 # Async endpoint (preferred)
 @app.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     # Async database call
-    user = await db.fetch_user(user_id)
+    user = await db.fetch_user (user_id)
     return user
 
 # Sync endpoint (also supported)
@@ -120,7 +120,7 @@ class User(BaseModel):
     email: EmailStr
     age: int = Field(..., ge=0, le=120)
     is_active: bool = True
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field (default_factory=datetime.utcnow)
     tags: List[str] = []
 
 # Response model
@@ -131,7 +131,7 @@ class UserResponse(BaseModel):
     created_at: datetime
 
 @app.post("/users", response_model=UserResponse)
-async def create_user(user: User):
+async def create_user (user: User):
     """
     Type hints provide:
     - Request validation
@@ -141,7 +141,7 @@ async def create_user(user: User):
     - Error messages
     """
     # Save to database
-    db_user = await save_user(user)
+    db_user = await save_user (user)
     return db_user
 
 @app.get("/users/{user_id}", response_model=UserResponse)
@@ -155,9 +155,9 @@ async def get_user(
     - user_id: Must be >= 1
     - include_inactive: Optional boolean, defaults to False
     """
-    user = await fetch_user(user_id, include_inactive)
+    user = await fetch_user (user_id, include_inactive)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 \`\`\`
 
@@ -185,7 +185,7 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-# That's it! You get:
+# That\'s it! You get:
 # - Automatic OpenAPI docs at /docs
 # - ReDoc documentation at /redoc
 # - JSON Schema at /openapi.json
@@ -309,22 +309,22 @@ async def root():
 
 # Route with path parameters
 @app.get("/items/{item_id}")
-async def get_item(item_id: int):
+async def get_item (item_id: int):
     return {"item_id": item_id}
 
 # Using APIRouter for organization
-router = APIRouter(prefix="/api/v1", tags=["users"])
+router = APIRouter (prefix="/api/v1", tags=["users"])
 
 @router.get("/users")
 async def list_users():
     return []
 
 @router.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     return {"user_id": user_id}
 
 # Include router
-app.include_router(router)
+app.include_router (router)
 \`\`\`
 
 #### 3. Dependency Injection System
@@ -353,23 +353,23 @@ def get_db() -> Session:
 
 # Dependency: Current user
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+    token: str = Depends (oauth2_scheme),
+    db: Session = Depends (get_db)
 ):
     """
     Dependency that validates token and returns user
     Can depend on other dependencies (get_db)
     """
-    user = await validate_token(token, db)
+    user = await validate_token (token, db)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException (status_code=401, detail="Invalid token")
     return user
 
 # Use dependencies in endpoints
 @app.get("/users/me")
 async def read_users_me(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Dependencies injected automatically
@@ -400,11 +400,11 @@ class UserCreate(BaseModel):
     age: Optional[int] = Field(None, ge=0, le=120)
     
     @validator('password')
-    def password_strength(cls, v):
+    def password_strength (cls, v):
         """Custom validation"""
-        if not any(c.isupper() for c in v):
+        if not any (c.isupper() for c in v):
             raise ValueError('Password must contain uppercase letter')
-        if not any(c.isdigit() for c in v):
+        if not any (c.isdigit() for c in v):
             raise ValueError('Password must contain digit')
         return v
 
@@ -421,7 +421,7 @@ class UserResponse(BaseModel):
         orm_mode = True  # Allow from ORM models
 
 @app.post("/users", response_model=UserResponse)
-async def create_user(user: UserCreate):
+async def create_user (user: UserCreate):
     """
     Automatic validation:
     - username: 3-50 chars
@@ -431,7 +431,7 @@ async def create_user(user: UserCreate):
     
     Response automatically filtered (password excluded)
     """
-    db_user = await save_user(user)
+    db_user = await save_user (user)
     return db_user
 \`\`\`
 
@@ -451,13 +451,13 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 @app.route('/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
+def get_user (user_id):
     # Manual validation
     if user_id < 1:
         return jsonify({"error": "Invalid user ID"}), 400
     
     # Manual JSON handling
-    user = fetch_user(user_id)
+    user = fetch_user (user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
     
@@ -482,13 +482,13 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 @app.get("/users/{user_id}", response_model=UserResponse)
-async def get_user(user_id: int = Path(..., ge=1)):
+async def get_user (user_id: int = Path(..., ge=1)):
     # Automatic validation (user_id >= 1)
     # Automatic OpenAPI docs
     # Async by default
-    user = await fetch_user(user_id)
+    user = await fetch_user (user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
     # Automatic serialization (response_model)
     return user
@@ -519,16 +519,16 @@ Django REST Framework: Full-featured, Batteries-included
 from django.db import models
 from rest_framework import serializers, viewsets
 
-class User(models.Model):
-    username = models.CharField(max_length=50)
+class User (models.Model):
+    username = models.CharField (max_length=50)
     email = models.EmailField()
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer (serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet (viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -549,11 +549,11 @@ app = FastAPI()
 @app.get("/users/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 
 # Pros: Fast, async, lightweight, auto-docs
@@ -669,17 +669,17 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Middleware: Request timing
 @app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
+async def add_process_time_header (request: Request, call_next):
     start_time = time.time()
-    response = await call_next(request)
+    response = await call_next (request)
     process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
+    response.headers["X-Process-Time"] = str (process_time)
     return response
 
 # Global exception handling
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    logging.error(f"Global exception: {exc}")
+async def global_exception_handler (request: Request, exc: Exception):
+    logging.error (f"Global exception: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error"}

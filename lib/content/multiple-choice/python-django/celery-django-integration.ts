@@ -19,12 +19,12 @@ export const CeleryDjangoIntegrationMultipleChoice = [
 from celery import shared_task
 
 @shared_task
-def send_email(user_id):
+def send_email (user_id):
     # Task code
     pass
 \`\`\`
 
-@shared_task creates app-independent tasks that work with Django's Celery setup.
+@shared_task creates app-independent tasks that work with Django\'s Celery setup.
       `,
   },
   {
@@ -41,10 +41,10 @@ def send_email(user_id):
 
 \`\`\`python
 # Asynchronous execution
-send_email.delay(user_id=1)
+send_email.delay (user_id=1)
 
 # Alternative with more options
-send_email.apply_async(args=[user_id], countdown=60)
+send_email.apply_async (args=[user_id], countdown=60)
 \`\`\`
 
 delay() is a shortcut for apply_async() with simple arguments.
@@ -68,7 +68,7 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'daily-report': {
         'task': 'myapp.tasks.send_report',
-        'schedule': crontab(hour=8, minute=0),
+        'schedule': crontab (hour=8, minute=0),
     },
 }
 
@@ -76,7 +76,7 @@ CELERY_BEAT_SCHEDULE = {
 celery -A myproject beat
 \`\`\`
 
-Beat is Celery's scheduler for recurring tasks.
+Beat is Celery\'s scheduler for recurring tasks.
       `,
   },
   {
@@ -92,13 +92,13 @@ Beat is Celery's scheduler for recurring tasks.
 **Correct Answer: B) raise self.retry()**
 
 \`\`\`python
-@shared_task(bind=True, max_retries=3)
-def my_task(self):
+@shared_task (bind=True, max_retries=3)
+def my_task (self):
     try:
         # Task logic
         pass
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=60)
+        raise self.retry (exc=exc, countdown=60)
 \`\`\`
 
 bind=True gives access to self for retry functionality.

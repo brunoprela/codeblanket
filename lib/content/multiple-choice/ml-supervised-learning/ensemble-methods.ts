@@ -61,7 +61,7 @@ export const ensemblemethodsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'ensemble-methods-mc-5',
     question:
-      "You have a VotingClassifier with 5 base models: three achieve 80% accuracy, two achieve 75%. The ensemble achieves 78%. What's the most likely problem?",
+      "You have a VotingClassifier with 5 base models: three achieve 80% accuracy, two achieve 75%. The ensemble achieves 78%. What\'s the most likely problem?",
     options: [
       'Not enough base models',
       'Base models are too similar (highly correlated predictions)',

@@ -24,7 +24,7 @@ export const typehintsQuiz = [
       "Explain TypeVar and why it's useful for generic functions. How does it preserve type information?",
     hint: 'Think about what happens when you pass different types to the same function.',
     sampleAnswer:
-      'TypeVar creates a generic type placeholder that preserves the actual type used. Without TypeVar, a function returning "any type" would lose type information. For example, def first(items: List) -> object means "returns something", but def first(items: List[T]) -> T (with T = TypeVar("T")) means "returns same type as input". This lets the type checker know that first([1,2,3]) returns an int, not just "some object". This is crucial for maintaining type safety in generic functions—the type checker can verify you\'re using the result correctly.',
+      'TypeVar creates a generic type placeholder that preserves the actual type used. Without TypeVar, a function returning "any type" would lose type information. For example, def first (items: List) -> object means "returns something", but def first (items: List[T]) -> T (with T = TypeVar("T")) means "returns same type as input". This lets the type checker know that first([1,2,3]) returns an int, not just "some object". This is crucial for maintaining type safety in generic functions—the type checker can verify you\'re using the result correctly.',
     keyPoints: [
       'Creates generic type placeholder',
       'Preserves type information through function',
@@ -39,7 +39,7 @@ export const typehintsQuiz = [
       "Why are type hints beneficial even though they don't affect runtime behavior? What problems do they solve?",
     hint: 'Consider development tools, documentation, and catching bugs.',
     sampleAnswer:
-      'Type hints are zero-cost at runtime but invaluable during development. Benefits: 1) IDE autocomplete and inline error detection catch typos and type mismatches immediately, 2) Self-documenting code—function signatures show expected types, 3) Refactoring is safer—type checker catches breaking changes, 4) mypy catches bugs in CI/CD before deployment, 5) New developers understand code faster. For example, def process(data: Dict[str, List[int]]) -> Optional[int] immediately tells you what the function expects and returns, without reading documentation or code. The investment in adding types pays off in reduced bugs and development time.',
+      'Type hints are zero-cost at runtime but invaluable during development. Benefits: 1) IDE autocomplete and inline error detection catch typos and type mismatches immediately, 2) Self-documenting code—function signatures show expected types, 3) Refactoring is safer—type checker catches breaking changes, 4) mypy catches bugs in CI/CD before deployment, 5) New developers understand code faster. For example, def process (data: Dict[str, List[int]]) -> Optional[int] immediately tells you what the function expects and returns, without reading documentation or code. The investment in adding types pays off in reduced bugs and development time.',
     keyPoints: [
       'Zero runtime cost, huge development benefits',
       'IDE catches errors as you type',

@@ -18,8 +18,8 @@ export const deepLearningBestPracticesQuiz: QuizQuestion[] = [
 CORRECT:
 \`\`\`python
 # Compute statistics on training set ONLY
-mean = X_train.mean(axis=0)
-std = X_train.std(axis=0)
+mean = X_train.mean (axis=0)
+std = X_train.std (axis=0)
 
 # Apply to all sets
 X_train_norm = (X_train - mean) / std
@@ -82,8 +82,8 @@ for i in range(100):
     optimizer.param_groups[0]['lr',] = lr
     loss = train_step()
     
-    lrs.append(lr)
-    losses.append(loss)
+    lrs.append (lr)
+    losses.append (loss)
     
     lr *= 1.1  # Exponential increase
     
@@ -139,7 +139,7 @@ Exhaustively tries all combinations:
 for lr in [1e-4, 1e-3, 1e-2]:
     for batch_size in [32, 64, 128]:
         for dropout in [0.3, 0.5, 0.7]:
-            train(lr, batch_size, dropout)
+            train (lr, batch_size, dropout)
 \`\`\`
 
 **Pros:**
@@ -159,7 +159,7 @@ for trial in range(20):
     lr = 10 ** uniform(-5, -2)
     batch_size = choice([32, 64, 128, 256])
     dropout = uniform(0.2, 0.7)
-    train(lr, batch_size, dropout)
+    train (lr, batch_size, dropout)
 \`\`\`
 
 **Pros:**
@@ -181,8 +181,8 @@ Uses previous trials to guide next ones:
 for trial in range(50):
     # Model predicts promising hyperparameters
     params = optimizer.suggest()
-    score = train(params)
-    optimizer.update(params, score)
+    score = train (params)
+    optimizer.update (params, score)
 \`\`\`
 
 **Pros:**

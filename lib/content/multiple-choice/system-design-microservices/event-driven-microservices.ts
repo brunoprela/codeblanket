@@ -11,10 +11,10 @@ export const eventdrivenmicroservicesMultipleChoice: MultipleChoiceQuestion[] =
       question:
         'What is the main advantage of event-driven architecture over request-response?',
       options: [
-        "It's always faster",
+        "It\'s always faster",
         "Loose coupling - services don't need to know about each other",
         'It eliminates the need for databases',
-        "It's easier to debug",
+        "It\'s easier to debug",
       ],
       correctAnswer: 1,
       explanation:

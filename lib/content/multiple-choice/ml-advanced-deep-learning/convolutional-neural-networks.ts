@@ -42,7 +42,7 @@ export const convolutionalNeuralNetworksMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Stride=2 means the filter moves 2 pixels at a time instead of 1, effectively skipping every other position. This reduces the output spatial dimensions by approximately half in each direction (height and width), resulting in ~4× less computation overall. It's often used as an alternative to pooling for downsampling. For example, a 32×32 input with stride=2 produces roughly a 16×16 output, while stride=1 would produce ~32×32 (with same padding).",
+      "Stride=2 means the filter moves 2 pixels at a time instead of 1, effectively skipping every other position. This reduces the output spatial dimensions by approximately half in each direction (height and width), resulting in ~4× less computation overall. It\'s often used as an alternative to pooling for downsampling. For example, a 32×32 input with stride=2 produces roughly a 16×16 output, while stride=1 would produce ~32×32 (with same padding).",
   },
   {
     id: 'cnn-mc-4',

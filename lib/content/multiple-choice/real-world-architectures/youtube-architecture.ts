@@ -21,7 +21,7 @@ export const youtubearchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What is DASH in the context of YouTube's video delivery?",
+    question: "What is DASH in the context of YouTube\'s video delivery?",
     options: [
       'Dynamic Asynchronous Streaming Handler for multiplexing',
       'Data Aggregation Service for analytics',
@@ -30,7 +30,7 @@ export const youtubearchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "DASH (Dynamic Adaptive Streaming over HTTP) is YouTube's protocol for video delivery. Videos are split into 2-10 second chunks, with each chunk available in multiple qualities. The player dynamically switches quality based on current buffer level and measured bandwidth. If bandwidth drops, the player switches to lower quality to avoid rebuffering. This ensures smooth playback across varying network conditions.",
+      "DASH (Dynamic Adaptive Streaming over HTTP) is YouTube\'s protocol for video delivery. Videos are split into 2-10 second chunks, with each chunk available in multiple qualities. The player dynamically switches quality based on current buffer level and measured bandwidth. If bandwidth drops, the player switches to lower quality to avoid rebuffering. This ensures smooth playback across varying network conditions.",
   },
   {
     id: 'mc3',
@@ -44,7 +44,7 @@ export const youtubearchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Approximately 70% of YouTube watch time comes from recommendations. YouTube's sophisticated two-stage recommendation system (candidate generation from millions of videos to ~100, then deep ranking to ordered list) is central to user engagement. The ML models consider watch history, search history, demographics, and video metadata, trained on petabytes of historical data with TensorFlow and TPUs.",
+      "Approximately 70% of YouTube watch time comes from recommendations. YouTube\'s sophisticated two-stage recommendation system (candidate generation from millions of videos to ~100, then deep ranking to ordered list) is central to user engagement. The ML models consider watch history, search history, demographics, and video metadata, trained on petabytes of historical data with TensorFlow and TPUs.",
   },
   {
     id: 'mc4',
@@ -58,12 +58,12 @@ export const youtubearchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "YouTube uses TensorFlow for training recommendation models and TPUs (Tensor Processing Units) for inference. TPUs are Google's custom AI accelerators optimized for TensorFlow operations. Models are trained offline on Google Dataflow processing petabytes of data, then deployed to serving infrastructure with Bigtable caching user features. This enables sub-100ms recommendation queries for 2 billion users.",
+      "YouTube uses TensorFlow for training recommendation models and TPUs (Tensor Processing Units) for inference. TPUs are Google\'s custom AI accelerators optimized for TensorFlow operations. Models are trained offline on Google Dataflow processing petabytes of data, then deployed to serving infrastructure with Bigtable caching user features. This enables sub-100ms recommendation queries for 2 billion users.",
   },
   {
     id: 'mc5',
     question:
-      "What is YouTube's typical cache hit rate for popular videos in its CDN?",
+      "What is YouTube\'s typical cache hit rate for popular videos in its CDN?",
     options: [
       'Approximately 60-70%',
       'Approximately 75-85%',

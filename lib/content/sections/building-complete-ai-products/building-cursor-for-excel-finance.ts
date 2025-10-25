@@ -116,11 +116,11 @@ class ExcelParser:
     def __init__(self):
         self.workbook = None
         
-    def parse(self, file_path: str) -> ExcelStructure:
+    def parse (self, file_path: str) -> ExcelStructure:
         """
         Parse Excel file and analyze structure
         """
-        self.workbook = load_workbook(file_path, data_only=False)
+        self.workbook = load_workbook (file_path, data_only=False)
         
         # Extract all components
         sheets = self.workbook.sheetnames
@@ -139,7 +139,7 @@ class ExcelParser:
             data_summary=data_summary
         )
     
-    def _extract_named_ranges(self) -> Dict[str, str]:
+    def _extract_named_ranges (self) -> Dict[str, str]:
         """Extract all named ranges"""
         named_ranges = {}
         
@@ -149,7 +149,7 @@ class ExcelParser:
         
         return named_ranges
     
-    def _extract_tables(self) -> List[Dict]:
+    def _extract_tables (self) -> List[Dict]:
         """Extract Excel tables"""
         tables = []
         
@@ -157,7 +157,7 @@ class ExcelParser:
             sheet = self.workbook[sheet_name]
             
             # Check for table structures
-            if hasattr(sheet, 'tables'):
+            if hasattr (sheet, 'tables'):
                 for table in sheet.tables.values():
                     tables.append({
                         "name": table.name,
@@ -168,7 +168,7 @@ class ExcelParser:
         
         return tables
     
-    def _extract_formulas(self) -> Dict[str, List[str]]:
+    def _extract_formulas (self) -> Dict[str, List[str]]:
         """Extract all formulas by sheet"""
         formulas = {}
         
@@ -178,20 +178,20 @@ class ExcelParser:
             
             for row in sheet.iter_rows():
                 for cell in row:
-                    if cell.value and isinstance(cell.value, str) and cell.value.startswith('='):
+                    if cell.value and isinstance (cell.value, str) and cell.value.startswith('='):
                         sheet_formulas.append({
                             "cell": cell.coordinate,
                             "formula": cell.value,
-                            "parsed": self._parse_formula(cell.value)
+                            "parsed": self._parse_formula (cell.value)
                         })
             
             formulas[sheet_name] = sheet_formulas
         
         return formulas
     
-    def _parse_formula(self, formula: str) -> Dict:
+    def _parse_formula (self, formula: str) -> Dict:
         """Parse formula into components"""
-        tokenizer = Tokenizer(formula)
+        tokenizer = Tokenizer (formula)
         
         functions = []
         cell_refs = []
@@ -199,11 +199,11 @@ class ExcelParser:
         
         for token in tokenizer.items:
             if token.type == 'FUNC':
-                functions.append(token.value)
+                functions.append (token.value)
             elif token.type == 'OPERAND' and token.subtype == 'RANGE':
-                cell_refs.append(token.value)
+                cell_refs.append (token.value)
             elif token.type == 'OPERATOR':
-                operators.append(token.value)
+                operators.append (token.value)
         
         return {
             "functions": functions,
@@ -211,7 +211,7 @@ class ExcelParser:
             "operators": operators
         }
     
-    def _build_dependency_graph(self) -> Dict[str, Set[str]]:
+    def _build_dependency_graph (self) -> Dict[str, Set[str]]:
         """Build graph of cell dependencies"""
         dependencies = {}
         
@@ -220,23 +220,23 @@ class ExcelParser:
             
             for row in sheet.iter_rows():
                 for cell in row:
-                    if cell.value and isinstance(cell.value, str) and cell.value.startswith('='):
+                    if cell.value and isinstance (cell.value, str) and cell.value.startswith('='):
                         cell_key = f"{sheet_name}!{cell.coordinate}"
-                        parsed = self._parse_formula(cell.value)
+                        parsed = self._parse_formula (cell.value)
                         
                         # Extract dependencies
                         deps = set()
                         for ref in parsed["cell_references"]:
                             if '!' in ref:
-                                deps.add(ref)
+                                deps.add (ref)
                             else:
-                                deps.add(f"{sheet_name}!{ref}")
+                                deps.add (f"{sheet_name}!{ref}")
                         
                         dependencies[cell_key] = deps
         
         return dependencies
     
-    def _summarize_data(self) -> Dict:
+    def _summarize_data (self) -> Dict:
         """Summarize data in spreadsheet"""
         summary = {}
         
@@ -248,11 +248,11 @@ class ExcelParser:
             )
             
             summary[sheet_name] = {
-                "rows": len(df),
-                "columns": len(df.columns),
-                "column_names": list(df.columns),
-                "data_types": df.dtypes.astype(str).to_dict(),
-                "numeric_columns": list(df.select_dtypes(include=['number']).columns),
+                "rows": len (df),
+                "columns": len (df.columns),
+                "column_names": list (df.columns),
+                "data_types": df.dtypes.astype (str).to_dict(),
+                "numeric_columns": list (df.select_dtypes (include=['number']).columns),
                 "has_headers": True  # Heuristic
             }
         
@@ -263,8 +263,8 @@ parser = ExcelParser()
 structure = parser.parse("financial_model.xlsx")
 
 print(f"Sheets: {structure.sheets}")
-print(f"Named ranges: {len(structure.named_ranges)}")
-print(f"Total formulas: {sum(len(f) for f in structure.formulas.values())}")
+print(f"Named ranges: {len (structure.named_ranges)}")
+print(f"Total formulas: {sum (len (f) for f in structure.formulas.values())}")
 \`\`\`
 
 ---
@@ -297,7 +297,7 @@ class FormulaGenerator:
         Generate Excel formula from description
         """
         # Build context about spreadsheet
-        context_info = self._build_context(context) if context else ""
+        context_info = self._build_context (context) if context else ""
         
         prompt = f"""Generate an Excel formula based on this description.
 
@@ -333,31 +333,31 @@ Format as JSON:
             temperature=0.1
         )
         
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         # Validate formula syntax
-        is_valid = self._validate_formula(result["formula"])
+        is_valid = self._validate_formula (result["formula"])
         result["is_valid"] = is_valid
         
         return result
     
-    def _build_context(self, context: ExcelStructure) -> str:
+    def _build_context (self, context: ExcelStructure) -> str:
         """Build context string about spreadsheet"""
         context_parts = []
         
-        context_parts.append(f"Available sheets: {', '.join(context.sheets)}")
+        context_parts.append (f"Available sheets: {', '.join (context.sheets)}")
         
         if context.named_ranges:
-            context_parts.append(f"Named ranges: {', '.join(context.named_ranges.keys())}")
+            context_parts.append (f"Named ranges: {', '.join (context.named_ranges.keys())}")
         
         for sheet, summary in context.data_summary.items():
             context_parts.append(
-                f"Sheet '{sheet}': {summary['rows']} rows, columns: {', '.join(summary['column_names'][:10])}"
+                f"Sheet '{sheet}': {summary['rows']} rows, columns: {', '.join (summary['column_names'][:10])}"
             )
         
-        return "\\n".join(context_parts)
+        return "\\n".join (context_parts)
     
-    def _validate_formula(self, formula: str) -> bool:
+    def _validate_formula (self, formula: str) -> bool:
         """Basic formula validation"""
         if not formula.startswith('='):
             return False
@@ -368,9 +368,9 @@ Format as JSON:
         
         # Check for common errors
         invalid_patterns = ['==', ',,', '())', '(()']
-        return not any(pattern in formula for pattern in invalid_patterns)
+        return not any (pattern in formula for pattern in invalid_patterns)
     
-    async def explain_formula(self, formula: str) -> str:
+    async def explain_formula (self, formula: str) -> str:
         """Explain what an existing formula does"""
         prompt = f"""Explain this Excel formula in simple terms:
 
@@ -387,7 +387,7 @@ Provide a clear, step-by-step explanation of what this formula does."""
         return response.choices[0].message.content
 
 # Usage
-formula_gen = FormulaGenerator(llm_client)
+formula_gen = FormulaGenerator (llm_client)
 
 # Generate formula
 result = await formula_gen.generate_formula(
@@ -433,30 +433,30 @@ class FinancialAnalyzer:
         """
         # Parse Excel
         parser = ExcelParser()
-        structure = parser.parse(file_path)
+        structure = parser.parse (file_path)
         
         # Load data
         all_data = {}
         for sheet in structure.sheets:
-            df = pd.read_excel(file_path, sheet_name=sheet)
+            df = pd.read_excel (file_path, sheet_name=sheet)
             all_data[sheet] = df
         
         # Identify financial statement types
-        statement_types = self._identify_statements(all_data)
+        statement_types = self._identify_statements (all_data)
         
         # Perform analysis
         analysis = {}
         
         for sheet, stmt_type in statement_types.items():
             if stmt_type == "income_statement":
-                analysis[sheet] = self._analyze_income_statement(all_data[sheet])
+                analysis[sheet] = self._analyze_income_statement (all_data[sheet])
             elif stmt_type == "balance_sheet":
-                analysis[sheet] = self._analyze_balance_sheet(all_data[sheet])
+                analysis[sheet] = self._analyze_balance_sheet (all_data[sheet])
             elif stmt_type == "cash_flow":
-                analysis[sheet] = self._analyze_cash_flow(all_data[sheet])
+                analysis[sheet] = self._analyze_cash_flow (all_data[sheet])
         
         # Generate insights with LLM
-        insights = await self._generate_insights(analysis)
+        insights = await self._generate_insights (analysis)
         
         return {
             "analysis": analysis,
@@ -464,33 +464,33 @@ class FinancialAnalyzer:
             "statement_types": statement_types
         }
     
-    def _identify_statements(self, data: Dict[str, pd.DataFrame]) -> Dict[str, str]:
+    def _identify_statements (self, data: Dict[str, pd.DataFrame]) -> Dict[str, str]:
         """Identify what type of financial statement each sheet contains"""
         statement_types = {}
         
         for sheet_name, df in data.items():
             # Look for key terms in column headers
-            columns = ' '.join(df.columns.astype(str)).lower()
+            columns = ' '.join (df.columns.astype (str)).lower()
             
-            if any(term in columns for term in ['revenue', 'net income', 'expenses', 'gross profit']):
+            if any (term in columns for term in ['revenue', 'net income', 'expenses', 'gross profit']):
                 statement_types[sheet_name] = "income_statement"
-            elif any(term in columns for term in ['assets', 'liabilities', 'equity']):
+            elif any (term in columns for term in ['assets', 'liabilities', 'equity']):
                 statement_types[sheet_name] = "balance_sheet"
-            elif any(term in columns for term in ['operating activities', 'cash flow', 'investing activities']):
+            elif any (term in columns for term in ['operating activities', 'cash flow', 'investing activities']):
                 statement_types[sheet_name] = "cash_flow"
             else:
                 statement_types[sheet_name] = "unknown"
         
         return statement_types
     
-    def _analyze_income_statement(self, df: pd.DataFrame) -> Dict:
+    def _analyze_income_statement (self, df: pd.DataFrame) -> Dict:
         """Calculate key income statement metrics"""
         # Find revenue and net income rows
         revenue_row = None
         net_income_row = None
         
         for idx, row in df.iterrows():
-            row_text = str(row[0]).lower()
+            row_text = str (row[0]).lower()
             if 'revenue' in row_text or 'sales' in row_text:
                 revenue_row = idx
             if 'net income' in row_text:
@@ -500,37 +500,37 @@ class FinancialAnalyzer:
             return {"error": "Could not identify key line items"}
         
         # Extract numeric columns (typically years)
-        numeric_cols = df.select_dtypes(include=['number']).columns
+        numeric_cols = df.select_dtypes (include=['number']).columns
         
         metrics = {}
         for col in numeric_cols:
             revenue = df.iloc[revenue_row][col]
             net_income = df.iloc[net_income_row][col]
             
-            if pd.notna(revenue) and pd.notna(net_income) and revenue != 0:
-                metrics[str(col)] = {
-                    "revenue": float(revenue),
-                    "net_income": float(net_income),
+            if pd.notna (revenue) and pd.notna (net_income) and revenue != 0:
+                metrics[str (col)] = {
+                    "revenue": float (revenue),
+                    "net_income": float (net_income),
                     "net_margin": (net_income / revenue) * 100
                 }
         
         return metrics
     
-    def _analyze_balance_sheet(self, df: pd.DataFrame) -> Dict:
+    def _analyze_balance_sheet (self, df: pd.DataFrame) -> Dict:
         """Calculate key balance sheet metrics"""
         # Similar approach to income statement
         # Calculate liquidity ratios, leverage ratios, etc.
         return {}
     
-    def _analyze_cash_flow(self, df: pd.DataFrame) -> Dict:
+    def _analyze_cash_flow (self, df: pd.DataFrame) -> Dict:
         """Calculate cash flow metrics"""
         return {}
     
-    async def _generate_insights(self, analysis: Dict) -> str:
+    async def _generate_insights (self, analysis: Dict) -> str:
         """Generate AI insights from analysis"""
         prompt = f"""Analyze these financial metrics and provide insights:
 
-{json.dumps(analysis, indent=2)}
+{json.dumps (analysis, indent=2)}
 
 Provide:
 1. Key trends
@@ -561,17 +561,17 @@ Be specific and reference the actual numbers."""
         
         # Calculate present values
         present_values = []
-        for i, fcf in enumerate(free_cash_flows, start=1):
+        for i, fcf in enumerate (free_cash_flows, start=1):
             pv = fcf / ((1 + discount_rate) ** i)
-            present_values.append(pv)
+            present_values.append (pv)
         
         # Calculate terminal value
         last_fcf = free_cash_flows[-1]
         terminal_value = (last_fcf * (1 + terminal_growth_rate)) / (discount_rate - terminal_growth_rate)
-        terminal_pv = terminal_value / ((1 + discount_rate) ** len(free_cash_flows))
+        terminal_pv = terminal_value / ((1 + discount_rate) ** len (free_cash_flows))
         
         # Enterprise value
-        enterprise_value = sum(present_values) + terminal_pv
+        enterprise_value = sum (present_values) + terminal_pv
         
         return {
             "free_cash_flows": free_cash_flows,
@@ -582,12 +582,12 @@ Be specific and reference the actual numbers."""
             "assumptions": {
                 "discount_rate": discount_rate,
                 "terminal_growth_rate": terminal_growth_rate,
-                "projection_years": len(free_cash_flows)
+                "projection_years": len (free_cash_flows)
             }
         }
 
 # Usage
-analyzer = FinancialAnalyzer(llm_client)
+analyzer = FinancialAnalyzer (llm_client)
 
 # Analyze financial statements
 analysis = await analyzer.analyze_financial_statements("financials.xlsx")
@@ -599,8 +599,7 @@ dcf = await analyzer.build_dcf_model(
     discount_rate=0.10,
     terminal_growth_rate=0.03
 )
-print(f"Enterprise Value: \${dcf['enterprise_value']:, .2f
-}")
+print(f"Enterprise Value: \${dcf['enterprise_value']:,.2f}")
 \`\`\`
 
 ---
@@ -633,20 +632,20 @@ class FinancialDataFetcher:
         Fetch stock price data
         """
         if not start_date:
-            start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+            start_date = (datetime.now() - timedelta (days=365)).strftime('%Y-%m-%d')
         if not end_date:
             end_date = datetime.now().strftime('%Y-%m-%d')
         
-        stock = yf.Ticker(ticker)
-        df = stock.history(start=start_date, end=end_date)
+        stock = yf.Ticker (ticker)
+        df = stock.history (start=start_date, end=end_date)
         
         return df
     
-    async def get_financial_statements(self, ticker: str) -> Dict:
+    async def get_financial_statements (self, ticker: str) -> Dict:
         """
         Fetch company financials
         """
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         
         return {
             "income_statement": stock.financials,
@@ -655,14 +654,14 @@ class FinancialDataFetcher:
             "info": stock.info
         }
     
-    async def get_market_data(self, tickers: List[str]) -> pd.DataFrame:
+    async def get_market_data (self, tickers: List[str]) -> pd.DataFrame:
         """
         Fetch current market data for multiple tickers
         """
         data = []
         
         for ticker in tickers:
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             info = stock.info
             
             data.append({
@@ -674,7 +673,7 @@ class FinancialDataFetcher:
                 "pe_ratio": info.get("trailingPE")
             })
         
-        return pd.DataFrame(data)
+        return pd.DataFrame (data)
     
     async def update_excel_with_live_data(
         self,
@@ -689,7 +688,7 @@ class FinancialDataFetcher:
         data = await self.get_market_data([ticker])
         
         # Load workbook
-        wb = load_workbook(file_path)
+        wb = load_workbook (file_path)
         ws = wb.active
         
         # Parse range (e.g., "A1:F1")
@@ -698,11 +697,11 @@ class FinancialDataFetcher:
         row = start_cell.row
         col = start_cell.column
         
-        for i, (key, value) in enumerate(data.iloc[0].items()):
-            ws.cell(row=row, column=col + i, value=value)
+        for i, (key, value) in enumerate (data.iloc[0].items()):
+            ws.cell (row=row, column=col + i, value=value)
         
         # Save
-        wb.save(file_path)
+        wb.save (file_path)
 
 # Usage
 fetcher = FinancialDataFetcher()
@@ -749,9 +748,9 @@ class ExcelVersionControl:
     """
     
     def __init__(self, base_path: str):
-        self.base_path = Path(base_path)
+        self.base_path = Path (base_path)
         self.versions_path = self.base_path / ".excel_versions"
-        self.versions_path.mkdir(exist_ok=True)
+        self.versions_path.mkdir (exist_ok=True)
         self.versions: List[SpreadsheetVersion] = []
         
     def commit(
@@ -764,14 +763,14 @@ class ExcelVersionControl:
         Create a new version
         """
         # Calculate file hash
-        file_hash = self._hash_file(file_path)
+        file_hash = self._hash_file (file_path)
         
         # Detect changes from previous version
-        changes = self._detect_changes(file_path)
+        changes = self._detect_changes (file_path)
         
         # Create version
         version = SpreadsheetVersion(
-            version_id=str(uuid.uuid4()),
+            version_id=str (uuid.uuid4()),
             timestamp=datetime.now(),
             author=author,
             message=message,
@@ -781,7 +780,7 @@ class ExcelVersionControl:
         
         # Store version
         version_file = self.versions_path / f"{version.version_id}.json"
-        version_file.write_text(version.model_dump_json())
+        version_file.write_text (version.model_dump_json())
         
         # Copy file
         shutil.copy(
@@ -789,15 +788,15 @@ class ExcelVersionControl:
             self.versions_path / f"{version.version_id}.xlsx"
         )
         
-        self.versions.append(version)
+        self.versions.append (version)
         
         return version.version_id
     
-    def _hash_file(self, file_path: Path) -> str:
+    def _hash_file (self, file_path: Path) -> str:
         """Calculate file hash"""
         return hashlib.sha256(file_path.read_bytes()).hexdigest()
     
-    def _detect_changes(self, file_path: Path) -> Dict:
+    def _detect_changes (self, file_path: Path) -> Dict:
         """
         Detect changes from previous version
         """
@@ -805,9 +804,9 @@ class ExcelVersionControl:
             return {"type": "initial_commit"}
         
         # Load current and previous
-        current = load_workbook(file_path, data_only=True)
+        current = load_workbook (file_path, data_only=True)
         previous_path = self.versions_path / f"{self.versions[-1].version_id}.xlsx"
-        previous = load_workbook(previous_path, data_only=True)
+        previous = load_workbook (previous_path, data_only=True)
         
         changes = {
             "modified_cells": [],
@@ -816,11 +815,11 @@ class ExcelVersionControl:
         }
         
         # Compare sheets
-        current_sheets = set(current.sheetnames)
-        previous_sheets = set(previous.sheetnames)
+        current_sheets = set (current.sheetnames)
+        previous_sheets = set (previous.sheetnames)
         
-        changes["new_sheets"] = list(current_sheets - previous_sheets)
-        changes["deleted_sheets"] = list(previous_sheets - current_sheets)
+        changes["new_sheets"] = list (current_sheets - previous_sheets)
+        changes["deleted_sheets"] = list (previous_sheets - current_sheets)
         
         # Compare cells in common sheets
         for sheet_name in current_sheets & previous_sheets:
@@ -842,22 +841,22 @@ class ExcelVersionControl:
         
         return changes
     
-    def list_versions(self) -> List[SpreadsheetVersion]:
+    def list_versions (self) -> List[SpreadsheetVersion]:
         """List all versions"""
-        return sorted(self.versions, key=lambda v: v.timestamp, reverse=True)
+        return sorted (self.versions, key=lambda v: v.timestamp, reverse=True)
     
-    def checkout(self, version_id: str, target_path: Path):
+    def checkout (self, version_id: str, target_path: Path):
         """
         Restore a specific version
         """
         version_file = self.versions_path / f"{version_id}.xlsx"
         
         if not version_file.exists():
-            raise ValueError(f"Version {version_id} not found")
+            raise ValueError (f"Version {version_id} not found")
         
-        shutil.copy(version_file, target_path)
+        shutil.copy (version_file, target_path)
     
-    def diff(self, version_id_1: str, version_id_2: str) -> Dict:
+    def diff (self, version_id_1: str, version_id_2: str) -> Dict:
         """
         Show differences between two versions
         """
@@ -866,9 +865,9 @@ class ExcelVersionControl:
         file2 = self.versions_path / f"{version_id_2}.xlsx"
         
         # Compare (similar to _detect_changes but between any two versions)
-        return self._compare_files(file1, file2)
+        return self._compare_files (file1, file2)
     
-    def _compare_files(self, file1: Path, file2: Path) -> Dict:
+    def _compare_files (self, file1: Path, file2: Path) -> Dict:
         """Compare two Excel files"""
         # Implementation similar to _detect_changes
         pass
@@ -889,7 +888,7 @@ for v in versions:
     print(f"{v.version_id[:8]} - {v.timestamp} - {v.message}")
 
 # Restore previous version
-vcs.checkout(versions[1].version_id, Path("financial_model.xlsx"))
+vcs.checkout (versions[1].version_id, Path("financial_model.xlsx"))
 \`\`\`
 
 ---
@@ -915,8 +914,8 @@ class ExcelAssistant:
     
     def __init__(self):
         self.parser = ExcelParser()
-        self.formula_gen = FormulaGenerator(llm_client)
-        self.financial_analyzer = FinancialAnalyzer(llm_client)
+        self.formula_gen = FormulaGenerator (llm_client)
+        self.financial_analyzer = FinancialAnalyzer (llm_client)
         self.data_fetcher = FinancialDataFetcher()
         self.vcs = ExcelVersionControl("/tmp/excel_vcs")
     
@@ -929,29 +928,29 @@ class ExcelAssistant:
         Process natural language request on Excel file
         """
         # Parse Excel to understand structure
-        structure = self.parser.parse(file_path)
+        structure = self.parser.parse (file_path)
         
         # Determine intent
-        intent = await self._classify_intent(request)
+        intent = await self._classify_intent (request)
         
         if intent == "generate_formula":
-            result = await self.formula_gen.generate_formula(request, structure)
+            result = await self.formula_gen.generate_formula (request, structure)
         elif intent == "analyze_financials":
-            result = await self.financial_analyzer.analyze_financial_statements(file_path)
+            result = await self.financial_analyzer.analyze_financial_statements (file_path)
         elif intent == "fetch_data":
             # Extract ticker from request
-            ticker = await self._extract_ticker(request)
-            result = await self.data_fetcher.get_financial_statements(ticker)
+            ticker = await self._extract_ticker (request)
+            result = await self.data_fetcher.get_financial_statements (ticker)
         elif intent == "explain_formula":
             # Extract formula from request
             formula = request.split(":")[-1].strip()
-            result = await self.formula_gen.explain_formula(formula)
+            result = await self.formula_gen.explain_formula (formula)
         else:
             result = {"error": "Could not understand request"}
         
         return result
     
-    async def _classify_intent(self, request: str) -> str:
+    async def _classify_intent (self, request: str) -> str:
         """Classify user intent"""
         prompt = f"""Classify this Excel-related request into one category:
 - generate_formula: User wants to create a new formula
@@ -971,31 +970,31 @@ Return only the category name."""
         
         return response.choices[0].message.content.strip()
     
-    async def _extract_ticker(self, request: str) -> str:
+    async def _extract_ticker (self, request: str) -> str:
         """Extract stock ticker from request"""
         # Simple extraction, could be improved
         words = request.upper().split()
         for word in words:
-            if len(word) <= 5 and word.isalpha():
+            if len (word) <= 5 and word.isalpha():
                 return word
         return ""
 
 @app.post("/api/excel/analyze")
-async def analyze_excel(file: UploadFile = File(...)):
+async def analyze_excel (file: UploadFile = File(...)):
     """Analyze uploaded Excel file"""
     # Save file
     temp_path = f"/tmp/{file.filename}"
-    with open(temp_path, "wb") as f:
-        f.write(await file.read())
+    with open (temp_path, "wb") as f:
+        f.write (await file.read())
     
     # Parse and analyze
     assistant = ExcelAssistant()
-    structure = assistant.parser.parse(temp_path)
+    structure = assistant.parser.parse (temp_path)
     
     return {
         "sheets": structure.sheets,
-        "total_formulas": sum(len(f) for f in structure.formulas.values()),
-        "named_ranges": len(structure.named_ranges),
+        "total_formulas": sum (len (f) for f in structure.formulas.values()),
+        "named_ranges": len (structure.named_ranges),
         "data_summary": structure.data_summary
     }
 
@@ -1006,11 +1005,11 @@ async def process_request(
 ):
     """Process natural language request"""
     temp_path = f"/tmp/{file.filename}"
-    with open(temp_path, "wb") as f:
-        f.write(await file.read())
+    with open (temp_path, "wb") as f:
+        f.write (await file.read())
     
     assistant = ExcelAssistant()
-    result = await assistant.process_request(temp_path, request)
+    result = await assistant.process_request (temp_path, request)
     
     return result
 \`\`\`

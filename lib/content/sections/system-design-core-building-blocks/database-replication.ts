@@ -58,7 +58,7 @@ export const databasereplicationSection = {
 
 ### **Synchronous Replication**
 
-**How it works**: Write confirmed only after data written to BOTH primary and replica(s).
+**How it works**: Write confirmed only after data written to BOTH primary and replica (s).
 
 **Flow:**
 1. App writes to Primary

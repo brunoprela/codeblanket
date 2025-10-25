@@ -34,7 +34,7 @@ export const searchOptimizationDiscussionQuiz: QuizQuestion[] = [
 **1. Implement Query Strategy Based on Terms:**
 
 \`\`\`javascript
-function buildQuery(userQuery) {
+function buildQuery (userQuery) {
   const terms = userQuery.split(' ');
   
   if (terms.length === 1) {
@@ -205,11 +205,11 @@ Returns partial results rather than waiting forever.
 Application-level cache:
 \`\`\`javascript
 const cacheKey = \`search:\${query}:\${filters}\`;
-const cached = await redis.get(cacheKey);
+const cached = await redis.get (cacheKey);
 if (cached) return cached;
 
 const results = await elasticsearch.search(...);
-await redis.setex(cacheKey, 300, results);  // 5 min TTL
+await redis.setex (cacheKey, 300, results);  // 5 min TTL
 return results;
 \`\`\`
 
@@ -266,7 +266,7 @@ For top 1000 queries, pre-compute and cache results:
 \`\`\`javascript
 // Nightly job
 for (const query of topQueries) {
-  const results = await elasticsearch.search(query);
+  const results = await elasticsearch.search (query);
   await redis.set(\`precache:\${query}\`, results, 'EX', 86400);
 }
 \`\`\`
@@ -702,7 +702,7 @@ Use **completion suggester** as primary with **edge n-grams** as fallback:
 **Query Strategy:**
 
 \`\`\`javascript
-async function autocomplete(prefix) {
+async function autocomplete (prefix) {
   // Phase 1: Try completion suggester (fast, limited)
   const suggestions = await es.search({
     suggest: {
@@ -747,7 +747,7 @@ async function autocomplete(prefix) {
     size: 10
   });
   
-  return merge(suggestions, searchResults);
+  return merge (suggestions, searchResults);
 }
 \`\`\`
 
@@ -782,7 +782,7 @@ For pure autocomplete use case:
 
 1. **Generate input variants intelligently:**
 \`\`\`javascript
-function generateInputs(title, brand, category) {
+function generateInputs (title, brand, category) {
   return [
     title,                                    // "Apple iPhone 15 Pro"
     title.replace(/^\\S+\\s/, ''),            // "iPhone 15 Pro"
@@ -1160,14 +1160,14 @@ if (circuit_breaker_trips > 10/hour) {
 
 \`\`\`javascript
 // API layer validates queries
-function validateQuery(query) {
+function validateQuery (query) {
   // Reject aggregations on text fields
-  if (hasTextFieldAgg(query)) {
+  if (hasTextFieldAgg (query)) {
     throw new Error("Cannot aggregate on text fields");
   }
   
   // Limit cardinality
-  if (getAggCardinality(query) > 10000) {
+  if (getAggCardinality (query) > 10000) {
     throw new Error("Aggregation cardinality too high");
   }
   

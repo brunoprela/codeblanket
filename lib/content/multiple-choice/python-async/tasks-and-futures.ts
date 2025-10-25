@@ -13,7 +13,7 @@ export const tasksAndFuturesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "asyncio.create_task() wraps a coroutine and schedules it to run immediately on the event loop. Just calling an async function returns a coroutine object that doesn't execute until awaited. Example: task = asyncio.create_task(fetch_data()) starts fetching immediately (non-blocking). coro = fetch_data() creates coroutine but doesn't start execution. Key use: Create multiple tasks before awaiting to achieve concurrency. task1 = create_task(op1()); task2 = create_task(op2()) starts both immediately. await task1; await task2 waits for both (already running concurrently). Without tasks: result1 = await op1(); result2 = await op2() runs sequentially (slow).",
+      "asyncio.create_task() wraps a coroutine and schedules it to run immediately on the event loop. Just calling an async function returns a coroutine object that doesn't execute until awaited. Example: task = asyncio.create_task (fetch_data()) starts fetching immediately (non-blocking). coro = fetch_data() creates coroutine but doesn't start execution. Key use: Create multiple tasks before awaiting to achieve concurrency. task1 = create_task (op1()); task2 = create_task (op2()) starts both immediately. await task1; await task2 waits for both (already running concurrently). Without tasks: result1 = await op1(); result2 = await op2() runs sequentially (slow).",
   },
   {
     id: 'taf-mc-2',
@@ -41,7 +41,7 @@ export const tasksAndFuturesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'return_exceptions=True changes error handling: Default: await asyncio.gather(task1, task2, task3) raises the first exception immediately, stopping execution. With return_exceptions=True: All tasks run to completion, exceptions are returned as results (not raised). Example: results = await gather(task1, task2, task3, return_exceptions=True); for i, r in enumerate(results): if isinstance(r, Exception): print(f"Task {i} failed: {r}"); else: print(f"Task {i} succeeded: {r}"). Use when: (1) You want all results even if some fail, (2) Partial success is useful, (3) Need to know which specific tasks failed. Example: fetching from 100 APIs—if 5 fail, still want the 95 successes.',
+      'return_exceptions=True changes error handling: Default: await asyncio.gather (task1, task2, task3) raises the first exception immediately, stopping execution. With return_exceptions=True: All tasks run to completion, exceptions are returned as results (not raised). Example: results = await gather (task1, task2, task3, return_exceptions=True); for i, r in enumerate (results): if isinstance (r, Exception): print(f"Task {i} failed: {r}"); else: print(f"Task {i} succeeded: {r}"). Use when: (1) You want all results even if some fail, (2) Partial success is useful, (3) Need to know which specific tasks failed. Example: fetching from 100 APIs—if 5 fail, still want the 95 successes.',
   },
   {
     id: 'taf-mc-4',
@@ -55,7 +55,7 @@ export const tasksAndFuturesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Use asyncio.as_completed() when you want to process results immediately as each task completes (not waiting for all). Example: Dashboard that shows user data progressively—for coro in asyncio.as_completed(tasks): data = await coro; render(data) shows each section as it loads (better UX). Compare to gather(): results = await gather(*tasks); for r in results: render(r) waits for ALL tasks before showing anything. Use cases: (1) Progressive rendering (show results as available), (2) Streaming data (process each item immediately), (3) Time-sensitive (act on first completions). Both run tasks concurrently (same speed), differ in when results are available to your code. as_completed yields in completion order, gather returns in submission order.',
+      'Use asyncio.as_completed() when you want to process results immediately as each task completes (not waiting for all). Example: Dashboard that shows user data progressively—for coro in asyncio.as_completed (tasks): data = await coro; render (data) shows each section as it loads (better UX). Compare to gather(): results = await gather(*tasks); for r in results: render (r) waits for ALL tasks before showing anything. Use cases: (1) Progressive rendering (show results as available), (2) Streaming data (process each item immediately), (3) Time-sensitive (act on first completions). Both run tasks concurrently (same speed), differ in when results are available to your code. as_completed yields in completion order, gather returns in submission order.',
   },
   {
     id: 'taf-mc-5',
@@ -68,6 +68,6 @@ export const tasksAndFuturesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Task is a subclass of Future specifically for running coroutines. Future is a low-level primitive representing a value that will be available in the future. Task extends Future to: (1) Wrap and execute a coroutine, (2) Schedule it on the event loop, (3) Provide cancellation, (4) Track exceptions. Use Tasks for coroutines (high-level): task = asyncio.create_task(my_coroutine()). Use Futures for callback-based code (low-level): future = loop.create_future(); callback sets future.set_result(value). In practice: Use asyncio.create_task() for your code (high-level, convenient). Futures are mainly for library authors integrating callback-based APIs with async/await. Both can be awaited, both track completion state, Task adds coroutine-specific functionality.',
+      'Task is a subclass of Future specifically for running coroutines. Future is a low-level primitive representing a value that will be available in the future. Task extends Future to: (1) Wrap and execute a coroutine, (2) Schedule it on the event loop, (3) Provide cancellation, (4) Track exceptions. Use Tasks for coroutines (high-level): task = asyncio.create_task (my_coroutine()). Use Futures for callback-based code (low-level): future = loop.create_future(); callback sets future.set_result (value). In practice: Use asyncio.create_task() for your code (high-level, convenient). Futures are mainly for library authors integrating callback-based APIs with async/await. Both can be awaited, both track completion state, Task adds coroutine-specific functionality.',
   },
 ];

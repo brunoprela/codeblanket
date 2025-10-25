@@ -6,7 +6,7 @@ export const codeExecutionToolsMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What is the most secure approach for executing LLM-generated code?',
     options: [
-      "Use Python's eval() function",
+      "Use Python\'s eval() function",
       'Run in Docker containers with resource limits and no network access',
       'Use threading for isolation',
       'Validate syntax before execution',

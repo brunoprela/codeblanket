@@ -6,7 +6,7 @@ export const tcpvsudpQuiz = [
   {
     id: 'tcp-vs-udp-choice',
     question:
-      "You're building a multiplayer online game where players' positions are updated 60 times per second, but there's also a chat system and inventory management. Which transport protocol(s) would you use for each feature and why? Discuss the trade-offs and how you would handle potential issues like packet loss or latency.",
+      "You're building a multiplayer online game where players' positions are updated 60 times per second, but there's also a chat system and inventory management. Which transport protocol (s) would you use for each feature and why? Discuss the trade-offs and how you would handle potential issues like packet loss or latency.",
     sampleAnswer: `I would use a hybrid approach with different protocols for different features based on their requirements:
 
 **1. Player Position Updates: UDP**
@@ -230,7 +230,7 @@ ip route change default via [gateway] initcwnd 32 initrwnd 32
 
 *Problem*: Traditional TCP (Cubic) is too conservative on high-latency networks
 
-*Solution*: Google's BBR (Bottleneck Bandwidth and RTT)
+*Solution*: Google\'s BBR (Bottleneck Bandwidth and RTT)
 \`\`\`bash
 # Enable BBR (Linux 4.9+)
 echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
@@ -247,7 +247,7 @@ sysctl -p
 *Client-side optimization*:
 \`\`\`javascript
 // Keep connections alive
-fetch(url, {
+fetch (url, {
   keepalive: true,
   headers: {
     'Connection': 'keep-alive'
@@ -300,17 +300,17 @@ brotli_types application/json text/plain;
 \`\`\`javascript
 // Cloudflare Worker
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
+  event.respondWith (handleRequest (event.request))
 })
 
-async function handleRequest(request) {
+async function handleRequest (request) {
   const cache = caches.default
-  let response = await cache.match(request)
+  let response = await cache.match (request)
   
   if (!response) {
-    response = await fetch(request)
+    response = await fetch (request)
     // Cache for 60 seconds
-    event.waitUntil(cache.put(request, response.clone()))
+    event.waitUntil (cache.put (request, response.clone()))
   }
   
   return response
@@ -333,7 +333,7 @@ async function handleRequest(request) {
 \`\`\`graphql
 # Instead of returning full user object
 query {
-  user(id: 123) {
+  user (id: 123) {
     id
     name
     avatar  # Only what's needed
@@ -566,27 +566,27 @@ Value: {
 
 *Implementation*:
 \`\`\`python
-def resolve(domain, record_type):
+def resolve (domain, record_type):
     # L1: Check local memory
     key = (domain, record_type)
-    if key in local_cache and not expired(local_cache[key]):
+    if key in local_cache and not expired (local_cache[key]):
         return local_cache[key]
     
     # L2: Check Redis
     redis_key = f"dns:{domain}:{record_type}"
-    cached = redis.get(redis_key)
+    cached = redis.get (redis_key)
     if cached:
         # Populate L1 cache
         local_cache[key] = cached
         return cached
     
     # L3: Query authoritative servers
-    response = query_authoritative(domain, record_type)
+    response = query_authoritative (domain, record_type)
     
     # Cache response
     ttl = response.ttl
     local_cache[key] = response
-    redis.setex(redis_key, ttl, response)
+    redis.setex (redis_key, ttl, response)
     
     return response
 \`\`\`
@@ -601,7 +601,7 @@ def resolve(domain, record_type):
 *Example*:
 \`\`\`python
 if record.ttl_remaining < record.original_ttl * 0.1:
-    background_task.submit(refresh_record, domain, record_type)
+    background_task.submit (refresh_record, domain, record_type)
 \`\`\`
 
 **2. Negative Caching**:
@@ -672,7 +672,7 @@ responses = await asyncio.gather(
     return_exceptions=True
 )
 # Return first successful response
-return next(r for r in responses if r.success)
+return next (r for r in responses if r.success)
 \`\`\`
 
 **Handling Millions of QPS**:
@@ -729,7 +729,7 @@ if query_count[client_ip] > 100:  # 100 queries/sec
 # Prometheus metrics
 dns_queries_total.inc()
 dns_cache_hit_total.inc()
-dns_query_duration.observe(latency_ms)
+dns_query_duration.observe (latency_ms)
 \`\`\`
 
 **Real-World Examples**:

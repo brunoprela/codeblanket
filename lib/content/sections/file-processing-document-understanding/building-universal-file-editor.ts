@@ -47,15 +47,15 @@ class UniversalFileEditor:
     """
     
     def __init__(self, workspace_dir: str):
-        self.workspace = Path(workspace_dir)
+        self.workspace = Path (workspace_dir)
         self.backup_dir = self.workspace / ".backups"
-        self.backup_dir.mkdir(exist_ok=True)
+        self.backup_dir.mkdir (exist_ok=True)
         self.logger = logging.getLogger(__name__)
         
         # Initialize processors
         self.processors = self._init_processors()
     
-    def _init_processors(self) -> Dict:
+    def _init_processors (self) -> Dict:
         """Initialize format-specific processors."""
         return {
             'text': TextFileProcessor(),
@@ -66,9 +66,9 @@ class UniversalFileEditor:
             'markdown': MarkdownProcessor()
         }
     
-    def detect_file_type(self, filepath: str) -> str:
+    def detect_file_type (self, filepath: str) -> str:
         """Detect file type and return processor type."""
-        path = Path(filepath)
+        path = Path (filepath)
         ext = path.suffix.lower()
         
         type_map = {
@@ -80,15 +80,15 @@ class UniversalFileEditor:
             '.docx': 'word'
         }
         
-        return type_map.get(ext, 'text')
+        return type_map.get (ext, 'text')
     
-    def read_file(self, filepath: str) -> Dict:
+    def read_file (self, filepath: str) -> Dict:
         """Read file with appropriate processor."""
-        file_type = self.detect_file_type(filepath)
-        processor = self.processors.get(file_type)
+        file_type = self.detect_file_type (filepath)
+        processor = self.processors.get (file_type)
         
         if processor:
-            return processor.read(filepath)
+            return processor.read (filepath)
         else:
             return {'error': 'Unsupported file type'}
     
@@ -106,68 +106,68 @@ class UniversalFileEditor:
         full_path = self.workspace / filepath
         
         if not full_path.exists():
-            self.logger.error(f"File not found: {filepath}")
+            self.logger.error (f"File not found: {filepath}")
             return False
         
         try:
             # Create backup
             if create_backup:
-                self._create_backup(full_path)
+                self._create_backup (full_path)
             
             # Apply edits
-            file_type = self.detect_file_type(filepath)
-            processor = self.processors.get(file_type)
+            file_type = self.detect_file_type (filepath)
+            processor = self.processors.get (file_type)
             
             if not processor:
-                self.logger.error(f"No processor for {file_type}")
+                self.logger.error (f"No processor for {file_type}")
                 return False
             
-            success = processor.apply_edits(str(full_path), edits)
+            success = processor.apply_edits (str (full_path), edits)
             
             if success:
-                self.logger.info(f"Successfully edited {filepath}")
+                self.logger.info (f"Successfully edited {filepath}")
             else:
-                self._restore_backup(full_path)
-                self.logger.error(f"Failed to edit {filepath}, restored backup")
+                self._restore_backup (full_path)
+                self.logger.error (f"Failed to edit {filepath}, restored backup")
             
             return success
             
         except Exception as e:
-            self.logger.error(f"Error editing file: {e}")
+            self.logger.error (f"Error editing file: {e}")
             if create_backup:
-                self._restore_backup(full_path)
+                self._restore_backup (full_path)
             return False
     
-    def _create_backup(self, filepath: Path):
+    def _create_backup (self, filepath: Path):
         """Create timestamped backup."""
         import time
-        timestamp = int(time.time())
+        timestamp = int (time.time())
         backup_name = f"{filepath.stem}_{timestamp}{filepath.suffix}"
         backup_path = self.backup_dir / backup_name
         shutil.copy2(filepath, backup_path)
-        self.logger.info(f"Created backup: {backup_name}")
+        self.logger.info (f"Created backup: {backup_name}")
     
-    def _restore_backup(self, filepath: Path):
+    def _restore_backup (self, filepath: Path):
         """Restore most recent backup."""
         # Find most recent backup
-        backups = sorted(self.backup_dir.glob(f"{filepath.stem}_*{filepath.suffix}"))
+        backups = sorted (self.backup_dir.glob (f"{filepath.stem}_*{filepath.suffix}"))
         if backups:
             shutil.copy2(backups[-1], filepath)
-            self.logger.info(f"Restored backup for {filepath.name}")
+            self.logger.info (f"Restored backup for {filepath.name}")
     
-    def get_file_summary(self, filepath: str) -> str:
+    def get_file_summary (self, filepath: str) -> str:
         """
         Get file summary for LLM context.
         
         Provides structure and preview for AI understanding.
         """
-        file_data = self.read_file(filepath)
+        file_data = self.read_file (filepath)
         
         if 'error' in file_data:
             return f"Error reading file: {file_data['error']}"
         
         summary = f"File: {filepath}\\n"
-        summary += f"Type: {self.detect_file_type(filepath)}\\n"
+        summary += f"Type: {self.detect_file_type (filepath)}\\n"
         
         # Add type-specific summary
         if 'content' in file_data:
@@ -180,11 +180,11 @@ class UniversalFileEditor:
 class FileProcessor:
     """Base class for file processors."""
     
-    def read(self, filepath: str) -> Dict:
+    def read (self, filepath: str) -> Dict:
         """Read file and return structured data."""
         raise NotImplementedError
     
-    def apply_edits(self, filepath: str, edits: list[FileEdit]) -> bool:
+    def apply_edits (self, filepath: str, edits: list[FileEdit]) -> bool:
         """Apply edits to file."""
         raise NotImplementedError
 
@@ -192,23 +192,23 @@ class FileProcessor:
 class TextFileProcessor(FileProcessor):
     """Process plain text files."""
     
-    def read(self, filepath: str) -> Dict:
-        content = Path(filepath).read_text(encoding='utf-8')
+    def read (self, filepath: str) -> Dict:
+        content = Path (filepath).read_text (encoding='utf-8')
         return {
             'type': 'text',
             'content': content,
             'lines': content.splitlines()
         }
     
-    def apply_edits(self, filepath: str, edits: list[FileEdit]) -> bool:
+    def apply_edits (self, filepath: str, edits: list[FileEdit]) -> bool:
         try:
-            content = Path(filepath).read_text(encoding='utf-8')
+            content = Path (filepath).read_text (encoding='utf-8')
             
             for edit in edits:
                 if edit.edit_type == 'replace':
-                    content = content.replace(edit.old_content, edit.new_content)
+                    content = content.replace (edit.old_content, edit.new_content)
             
-            Path(filepath).write_text(content, encoding='utf-8')
+            Path (filepath).write_text (content, encoding='utf-8')
             return True
         except Exception:
             return False
@@ -216,14 +216,14 @@ class TextFileProcessor(FileProcessor):
 class PythonFileProcessor(FileProcessor):
     """Process Python files with AST awareness."""
     
-    def read(self, filepath: str) -> Dict:
+    def read (self, filepath: str) -> Dict:
         import ast
-        content = Path(filepath).read_text(encoding='utf-8')
+        content = Path (filepath).read_text (encoding='utf-8')
         
         try:
-            tree = ast.parse(content)
-            functions = [node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
-            classes = [node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
+            tree = ast.parse (content)
+            functions = [node.name for node in ast.walk (tree) if isinstance (node, ast.FunctionDef)]
+            classes = [node.name for node in ast.walk (tree) if isinstance (node, ast.ClassDef)]
             
             return {
                 'type': 'python',
@@ -234,9 +234,9 @@ class PythonFileProcessor(FileProcessor):
         except:
             return {'type': 'python', 'content': content}
     
-    def apply_edits(self, filepath: str, edits: list[FileEdit]) -> bool:
+    def apply_edits (self, filepath: str, edits: list[FileEdit]) -> bool:
         # Similar to TextFileProcessor but could add Python-specific logic
-        return TextFileProcessor().apply_edits(filepath, edits)
+        return TextFileProcessor().apply_edits (filepath, edits)
 
 # Usage Example: Build Cursor-like file editor
 editor = UniversalFileEditor("my_project")

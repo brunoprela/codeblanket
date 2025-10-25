@@ -13,7 +13,7 @@ export const numpyOperations = {
 
 ## Introduction
 
-NumPy's true power lies in its rich set of operations that work efficiently on entire arrays without explicit loops. This section covers the essential operations you'll use daily in data science and machine learning: element-wise arithmetic, aggregations, boolean operations, array manipulation, linear algebra, and random number generation.
+NumPy\'s true power lies in its rich set of operations that work efficiently on entire arrays without explicit loops. This section covers the essential operations you'll use daily in data science and machine learning: element-wise arithmetic, aggregations, boolean operations, array manipulation, linear algebra, and random number generation.
 
 **Key Concept: Vectorization**
 
@@ -23,10 +23,10 @@ Instead of writing Python loops, NumPy operations apply to entire arrays at once
 import numpy as np
 
 # Slow: Python loop
-arr = list(range(1000000))
+arr = list (range(1000000))
 result = []
 for x in arr:
-    result.append(x ** 2)
+    result.append (x ** 2)
 
 # Fast: NumPy vectorization
 arr = np.arange(1000000)
@@ -83,33 +83,33 @@ print(f"Reciprocal: {1 / arr}")  # [1.0 0.5 0.333... 0.25 0.2]
 arr = np.array([1, 4, 9, 16, 25])
 
 # Square root
-print(f"Square root: {np.sqrt(arr)}")  # [1. 2. 3. 4. 5.]
+print(f"Square root: {np.sqrt (arr)}")  # [1. 2. 3. 4. 5.]
 
 # Exponential and logarithm
 arr = np.array([1, 2, 3])
-print(f"Exponential: {np.exp(arr)}")  # [2.718... 7.389... 20.085...]
-print(f"Natural log: {np.log(arr)}")  # [0. 0.693... 1.098...]
+print(f"Exponential: {np.exp (arr)}")  # [2.718... 7.389... 20.085...]
+print(f"Natural log: {np.log (arr)}")  # [0. 0.693... 1.098...]
 print(f"Log base 10: {np.log10(arr)}")  # [0. 0.301... 0.477...]
 print(f"Log base 2: {np.log2(arr)}")  # [0. 1. 1.584...]
 
 # Trigonometric functions
 angles = np.array([0, np.pi/6, np.pi/4, np.pi/3, np.pi/2])
-print(f"Sine: {np.sin(angles)}")
-print(f"Cosine: {np.cos(angles)}")
-print(f"Tangent: {np.tan(angles)}")
+print(f"Sine: {np.sin (angles)}")
+print(f"Cosine: {np.cos (angles)}")
+print(f"Tangent: {np.tan (angles)}")
 
 # Rounding functions
 arr = np.array([1.2, 2.5, 3.7, 4.9])
-print(f"Round: {np.round(arr)}")  # [1. 2. 4. 5.]
-print(f"Floor: {np.floor(arr)}")  # [1. 2. 3. 4.]
-print(f"Ceil: {np.ceil(arr)}")  # [2. 3. 4. 5.]
+print(f"Round: {np.round (arr)}")  # [1. 2. 4. 5.]
+print(f"Floor: {np.floor (arr)}")  # [1. 2. 3. 4.]
+print(f"Ceil: {np.ceil (arr)}")  # [2. 3. 4. 5.]
 
 # Absolute value
 arr = np.array([-1, -2, 3, -4, 5])
-print(f"Absolute: {np.abs(arr)}")  # [1 2 3 4 5]
+print(f"Absolute: {np.abs (arr)}")  # [1 2 3 4 5]
 
 # Sign function
-print(f"Sign: {np.sign(arr)}")  # [-1 -1 1 -1 1]
+print(f"Sign: {np.sign (arr)}")  # [-1 -1 1 -1 1]
 \`\`\`
 
 ### Comparison Operations
@@ -139,13 +139,13 @@ arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
 # Sum
 print(f"Sum: {arr.sum()}")  # 55
-print(f"Sum (function): {np.sum(arr)}")  # 55
+print(f"Sum (function): {np.sum (arr)}")  # 55
 
 # Mean
 print(f"Mean: {arr.mean()}")  # 5.5
 
 # Median
-print(f"Median: {np.median(arr)}")  # 5.5
+print(f"Median: {np.median (arr)}")  # 5.5
 
 # Standard deviation and variance
 print(f"Std dev: {arr.std()}")  # 2.872...
@@ -183,16 +183,16 @@ print(f"Array:\\n{arr2d}")
 print(f"\\nTotal sum: {arr2d.sum()}")  # 78
 
 # Aggregate along axis 0 (down columns, across rows)
-print(f"Sum axis 0: {arr2d.sum(axis=0)}")  # [15 18 21 24]
-print(f"Mean axis 0: {arr2d.mean(axis=0)}")  # [5. 6. 7. 8.]
+print(f"Sum axis 0: {arr2d.sum (axis=0)}")  # [15 18 21 24]
+print(f"Mean axis 0: {arr2d.mean (axis=0)}")  # [5. 6. 7. 8.]
 
 # Aggregate along axis 1 (across columns, within rows)
-print(f"Sum axis 1: {arr2d.sum(axis=1)}")  # [10 26 42]
-print(f"Mean axis 1: {arr2d.mean(axis=1)}")  # [2.5 6.5 10.5]
+print(f"Sum axis 1: {arr2d.sum (axis=1)}")  # [10 26 42]
+print(f"Mean axis 1: {arr2d.mean (axis=1)}")  # [2.5 6.5 10.5]
 
 # Practical example: row and column statistics
-print(f"\\nMax in each row: {arr2d.max(axis=1)}")  # [4 8 12]
-print(f"Min in each column: {arr2d.min(axis=0)}")  # [1 2 3 4]
+print(f"\\nMax in each row: {arr2d.max (axis=1)}")  # [4 8 12]
+print(f"Min in each column: {arr2d.min (axis=0)}")  # [1 2 3 4]
 \`\`\`
 
 ### Statistical Functions
@@ -201,20 +201,20 @@ print(f"Min in each column: {arr2d.min(axis=0)}")  # [1 2 3 4]
 data = np.random.randn(1000)  # 1000 samples from standard normal
 
 # Percentiles
-print(f"25th percentile: {np.percentile(data, 25):.3f}")
-print(f"50th percentile (median): {np.percentile(data, 50):.3f}")
-print(f"75th percentile: {np.percentile(data, 75):.3f}")
+print(f"25th percentile: {np.percentile (data, 25):.3f}")
+print(f"50th percentile (median): {np.percentile (data, 50):.3f}")
+print(f"75th percentile: {np.percentile (data, 75):.3f}")
 
 # Quantiles (equivalent to percentiles/100)
-print(f"Quantiles [0.25, 0.5, 0.75]: {np.quantile(data, [0.25, 0.5, 0.75])}")
+print(f"Quantiles [0.25, 0.5, 0.75]: {np.quantile (data, [0.25, 0.5, 0.75])}")
 
 # Range
-print(f"Range (max - min): {np.ptp(data):.3f}")  # Peak to peak
+print(f"Range (max - min): {np.ptp (data):.3f}")  # Peak to peak
 
 # Correlation coefficient
 x = np.random.randn(100)
 y = 2 * x + np.random.randn(100) * 0.5
-correlation = np.corrcoef(x, y)
+correlation = np.corrcoef (x, y)
 print(f"\\nCorrelation matrix:\\n{correlation}")
 \`\`\`
 
@@ -230,7 +230,7 @@ arr = np.array([1, 5, 3, 8, 2, 9, 7, 4, 6, 10])
 # Create mask
 mask = arr > 5
 print(f"Mask: {mask}")  # [False False False True False True True False True True]
-print(f"Type: {type(mask)}")  # <class 'numpy.ndarray'>
+print(f"Type: {type (mask)}")  # <class 'numpy.ndarray'>
 print(f"Dtype: {mask.dtype}")  # bool
 
 # Use mask to filter
@@ -269,12 +269,12 @@ print(f"Complex: {arr[mask]}")  # [5 7 4 6 10]
 arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
 # np.where: ternary operator for arrays
-# np.where(condition, value_if_true, value_if_false)
-result = np.where(arr > 5, "high", "low")
+# np.where (condition, value_if_true, value_if_false)
+result = np.where (arr > 5, "high", "low")
 print(f"Where result: {result}")
 
 # Use with numbers
-result = np.where(arr % 2 == 0, arr, -arr)  # Keep evens, negate odds
+result = np.where (arr % 2 == 0, arr, -arr)  # Keep evens, negate odds
 print(f"Conditional: {result}")  # [-1 2 -3 4 -5 6 -7 8 -9 10]
 
 # Replace values matching condition
@@ -283,7 +283,7 @@ arr_copy[arr_copy > 5] = 999
 print(f"Replaced > 5: {arr_copy}")  # [1 2 3 4 5 999 999 999 999 999]
 
 # Clip values to range
-clipped = np.clip(arr, 3, 7)
+clipped = np.clip (arr, 3, 7)
 print(f"Clipped [3, 7]: {clipped}")  # [3 3 3 4 5 6 7 7 7 7]
 \`\`\`
 
@@ -302,20 +302,20 @@ mean = data.mean()
 std = data.std()
 z_scores = np.abs((data - mean) / std)
 outliers_zscore = data[z_scores > 3]
-print(f"Outliers (Z-score > 3): {len(outliers_zscore)} found")
+print(f"Outliers (Z-score > 3): {len (outliers_zscore)} found")
 
 # Method 2: IQR (Interquartile Range)
-q1 = np.percentile(data, 25)
-q3 = np.percentile(data, 75)
+q1 = np.percentile (data, 25)
+q3 = np.percentile (data, 75)
 iqr = q3 - q1
 lower_bound = q1 - 1.5 * iqr
 upper_bound = q3 + 1.5 * iqr
 outliers_iqr = data[(data < lower_bound) | (data > upper_bound)]
-print(f"Outliers (IQR method): {len(outliers_iqr)} found")
+print(f"Outliers (IQR method): {len (outliers_iqr)} found")
 
 # Remove outliers
 clean_data = data[(data >= lower_bound) & (data <= upper_bound)]
-print(f"Original size: {len(data)}, Clean size: {len(clean_data)}")
+print(f"Original size: {len (data)}, Clean size: {len (clean_data)}")
 \`\`\`
 
 ## Array Concatenation and Splitting
@@ -362,11 +362,11 @@ print(f"Depth stack shape: {dstack.shape}")  # (2, 2, 2)
 arr = np.arange(12)
 
 # Split into equal parts
-split_arr = np.split(arr, 3)  # Split into 3 arrays
+split_arr = np.split (arr, 3)  # Split into 3 arrays
 print(f"Split into 3: {split_arr}")  # [array([0, 1, 2, 3]), ...]
 
 # Split at specific indices
-split_arr = np.split(arr, [3, 7])  # Split at indices 3 and 7
+split_arr = np.split (arr, [3, 7])  # Split at indices 3 and 7
 print(f"Split at [3, 7]: {split_arr}")
 # [array([0, 1, 2]), array([3, 4, 5, 6]), array([7, 8, 9, 10, 11])]
 
@@ -375,11 +375,11 @@ arr2d = np.arange(16).reshape(4, 4)
 print(f"Array:\\n{arr2d}")
 
 # Horizontal split (split columns)
-hsplit = np.hsplit(arr2d, 2)
+hsplit = np.hsplit (arr2d, 2)
 print(f"Horizontal split into 2:\\n{hsplit[0]}\\n{hsplit[1]}")
 
 # Vertical split (split rows)
-vsplit = np.vsplit(arr2d, 2)
+vsplit = np.vsplit (arr2d, 2)
 print(f"Vertical split into 2:\\n{vsplit[0]}\\n{vsplit[1]}")
 \`\`\`
 
@@ -389,19 +389,19 @@ print(f"Vertical split into 2:\\n{vsplit[0]}\\n{vsplit[1]}")
 arr = np.array([1, 2, 3])
 
 # Repeat each element
-repeated = np.repeat(arr, 3)
+repeated = np.repeat (arr, 3)
 print(f"Repeated: {repeated}")  # [1 1 1 2 2 2 3 3 3]
 
 # Repeat with different counts
-repeated = np.repeat(arr, [2, 3, 1])
+repeated = np.repeat (arr, [2, 3, 1])
 print(f"Repeated custom: {repeated}")  # [1 1 2 2 2 3]
 
 # Tile (repeat entire array)
-tiled = np.tile(arr, 3)
+tiled = np.tile (arr, 3)
 print(f"Tiled: {tiled}")  # [1 2 3 1 2 3 1 2 3]
 
 # Tile in 2D
-tiled_2d = np.tile(arr, (2, 3))  # 2 rows, 3 repetitions per row
+tiled_2d = np.tile (arr, (2, 3))  # 2 rows, 3 repetitions per row
 print(f"Tiled 2D:\\n{tiled_2d}")
 # [[1 2 3 1 2 3 1 2 3]
 #  [1 2 3 1 2 3 1 2 3]]
@@ -447,21 +447,21 @@ print(f"Element-wise A * B:\\n{element_wise}")
 # Dot product of vectors
 v1 = np.array([1, 2, 3])
 v2 = np.array([4, 5, 6])
-dot_product = np.dot(v1, v2)
+dot_product = np.dot (v1, v2)
 print(f"Dot product: {dot_product}")  # 1*4 + 2*5 + 3*6 = 32
 
 # Cross product (3D vectors)
-cross_product = np.cross(v1, v2)
+cross_product = np.cross (v1, v2)
 print(f"Cross product: {cross_product}")  # [-3 6 -3]
 
 # Norm (magnitude)
-norm = np.linalg.norm(v1)
+norm = np.linalg.norm (v1)
 print(f"L2 norm: {norm:.3f}")  # sqrt(1^2 + 2^2 + 3^2) = 3.742
 
 # Different norms
-l1_norm = np.linalg.norm(v1, ord=1)  # Sum of absolute values
-l2_norm = np.linalg.norm(v1, ord=2)  # Euclidean (default)
-linf_norm = np.linalg.norm(v1, ord=np.inf)  # Max absolute value
+l1_norm = np.linalg.norm (v1, ord=1)  # Sum of absolute values
+l2_norm = np.linalg.norm (v1, ord=2)  # Euclidean (default)
+linf_norm = np.linalg.norm (v1, ord=np.inf)  # Max absolute value
 print(f"L1: {l1_norm}, L2: {l2_norm:.3f}, L-inf: {linf_norm}")
 \`\`\`
 
@@ -541,23 +541,23 @@ print(f"Uniform [10, 20): {rand_range}")
 
 \`\`\`python
 # Normal (Gaussian) distribution
-normal = np.random.normal(loc=100, scale=15, size=1000)  # mean=100, std=15
+normal = np.random.normal (loc=100, scale=15, size=1000)  # mean=100, std=15
 print(f"Normal mean: {normal.mean():.2f}, std: {normal.std():.2f}")
 
 # Binomial distribution
-binomial = np.random.binomial(n=10, p=0.5, size=1000)  # 10 trials, p=0.5
+binomial = np.random.binomial (n=10, p=0.5, size=1000)  # 10 trials, p=0.5
 print(f"Binomial mean: {binomial.mean():.2f}")
 
 # Poisson distribution
-poisson = np.random.poisson(lam=5, size=1000)  # lambda=5
+poisson = np.random.poisson (lam=5, size=1000)  # lambda=5
 print(f"Poisson mean: {poisson.mean():.2f}")
 
 # Exponential distribution
-exponential = np.random.exponential(scale=2, size=1000)  # scale=1/lambda
+exponential = np.random.exponential (scale=2, size=1000)  # scale=1/lambda
 print(f"Exponential mean: {exponential.mean():.2f}")
 
 # Beta distribution
-beta = np.random.beta(a=2, b=5, size=1000)
+beta = np.random.beta (a=2, b=5, size=1000)
 print(f"Beta mean: {beta.mean():.2f}")
 \`\`\`
 
@@ -566,17 +566,17 @@ print(f"Beta mean: {beta.mean():.2f}")
 \`\`\`python
 # Random choice from array
 arr = np.array([10, 20, 30, 40, 50])
-choice = np.random.choice(arr, size=3, replace=False)  # Without replacement
+choice = np.random.choice (arr, size=3, replace=False)  # Without replacement
 print(f"Random choice: {choice}")
 
 # Shuffle array in place
 arr_shuffle = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-np.random.shuffle(arr_shuffle)
+np.random.shuffle (arr_shuffle)
 print(f"Shuffled: {arr_shuffle}")
 
 # Permutation (returns shuffled copy)
 arr = np.array([1, 2, 3, 4, 5])
-perm = np.random.permutation(arr)
+perm = np.random.permutation (arr)
 print(f"Permutation: {perm}")
 print(f"Original unchanged: {arr}")
 
@@ -591,7 +591,7 @@ NumPy 1.17+ introduced a new random generation API:
 
 \`\`\`python
 # Create generator
-rng = np.random.default_rng(seed=42)
+rng = np.random.default_rng (seed=42)
 
 # Generate random numbers
 rand = rng.random(5)  # Uniform [0, 1)
@@ -632,7 +632,7 @@ print(f"Standardized mean: {standardized.mean():.3f}, std: {standardized.std():.
 prices = np.random.uniform(90, 110, size=100)
 
 window = 5
-moving_avg = np.convolve(prices, np.ones(window)/window, mode='valid')
+moving_avg = np.convolve (prices, np.ones (window)/window, mode='valid')
 print(f"Original shape: {prices.shape}, MA shape: {moving_avg.shape}")
 \`\`\`
 

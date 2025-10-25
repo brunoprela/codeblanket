@@ -9,7 +9,7 @@ export const stripearchitectureSection = {
 
 ## Overview
 
-Stripe's scale and reliability requirements:
+Stripe\'s scale and reliability requirements:
 - **Millions of businesses** using Stripe
 - **$640+ billion** processed annually (2022)
 - **99.99%+ availability** (4 nines SLA)
@@ -70,7 +70,7 @@ Stripe processes payments through a multi-step flow with strong guarantees.
 
 7. Stripe → Card Network (capture/settle)
    - Transfer funds (T+2 days typically)
-   - Funds move: Customer's bank → Stripe → Merchant's bank
+   - Funds move: Customer's bank → Stripe → Merchant\'s bank
 \`\`\`
 
 **Key Properties**:
@@ -231,7 +231,7 @@ Table: transfers
 
 ### 4. API Design
 
-Stripe's API is renowned for developer experience.
+Stripe\'s API is renowned for developer experience.
 
 **REST API**:
 - **Resource-oriented**: Nouns not verbs (/charges, /customers, /subscriptions)
@@ -333,7 +333,7 @@ except stripe.error.SignatureVerificationError:
 # Process event
 if event['type'] == 'charge.succeeded':
   charge = event['data']['object']
-  fulfill_order(charge)
+  fulfill_order (charge)
 \`\`\`
 
 **Event Ordering**:
@@ -431,7 +431,7 @@ Stripe is PCI DSS Level 1 compliant (highest level).
 
 **Tokenization**:
 - Cardholder data replaced with token
-- Token stored in Stripe's vault
+- Token stored in Stripe\'s vault
 - Merchants never see raw card numbers (PCI scope reduced)
 
 **Stripe.js**:
@@ -531,7 +531,7 @@ Financial data requires ACID guarantees. Use PostgreSQL with transactions, avoid
 
 ### 3. API Design Matters
 
-Stripe's success partly due to excellent API design: REST principles, clear docs, SDKs for all languages.
+Stripe\'s success partly due to excellent API design: REST principles, clear docs, SDKs for all languages.
 
 ### 4. Security is Non-Negotiable
 
@@ -561,7 +561,7 @@ A: Event-driven architecture. When event occurs (charge succeeds): (1) Create ev
 
 ## Summary
 
-Stripe's architecture demonstrates building a reliable, scalable payment platform:
+Stripe\'s architecture demonstrates building a reliable, scalable payment platform:
 
 **Key Takeaways**:
 

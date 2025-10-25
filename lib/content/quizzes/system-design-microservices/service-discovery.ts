@@ -193,17 +193,17 @@ const k8s = require('@kubernetes/client-node');
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
 
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+const k8sApi = kc.makeApiClient (k8s.CoreV1Api);
 
 // Get service endpoints
-async function getServiceEndpoints(serviceName, namespace) {
+async function getServiceEndpoints (serviceName, namespace) {
   try {
-    const response = await k8sApi.readNamespacedEndpoints(serviceName, namespace);
+    const response = await k8sApi.readNamespacedEndpoints (serviceName, namespace);
     
     const endpoints = [];
-    response.body.subsets.forEach(subset => {
-      subset.addresses.forEach(address => {
-        subset.ports.forEach(port => {
+    response.body.subsets.forEach (subset => {
+      subset.addresses.forEach (address => {
+        subset.ports.forEach (port => {
           endpoints.push({
             ip: address.ip,
             port: port.port,
@@ -223,7 +223,7 @@ async function getServiceEndpoints(serviceName, namespace) {
 
 // Usage
 const endpoints = await getServiceEndpoints('order-service', 'production');
-console.log(endpoints);
+console.log (endpoints);
 // [
 //   { ip: '10.0.1.5', port: 8080, nodeName: 'node-1', podName: 'order-service-pod-1' },
 //   { ip: '10.0.1.6', port: 8080, nodeName: 'node-2', podName: 'order-service-pod-2' }
@@ -233,7 +233,7 @@ console.log(endpoints);
 **Watch for Changes** (real-time updates):
 
 \`\`\`javascript
-const watch = new k8s.Watch(kc);
+const watch = new k8s.Watch (kc);
 
 watch.watch('/api/v1/namespaces/production/endpoints',
   {},
@@ -243,7 +243,7 @@ watch.watch('/api/v1/namespaces/production/endpoints',
     
     if (type === 'MODIFIED') {
       // Update local cache
-      updateServiceRegistry(apiObj);
+      updateServiceRegistry (apiObj);
     }
   },
   (err) => {
@@ -387,7 +387,7 @@ sudo iptables-save | grep order-service
 
 \`\`\`javascript
 class ServiceDiscoveryClient {
-  constructor(serviceName, namespace) {
+  constructor (serviceName, namespace) {
     this.serviceName = serviceName;
     this.namespace = namespace;
     this.endpoints = [];
@@ -398,19 +398,19 @@ class ServiceDiscoveryClient {
   }
   
   async startWatch() {
-    const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+    const k8sApi = kc.makeApiClient (k8s.CoreV1Api);
     
     // Initial fetch
     await this.refreshEndpoints();
     
     // Watch for changes
-    const watch = new k8s.Watch(kc);
+    const watch = new k8s.Watch (kc);
     watch.watch(
       \`/api/v1/namespaces/\${this.namespace}/endpoints/\${this.serviceName}\`,
       {},
       (type, apiObj) => {
         if (type === 'MODIFIED' || type === 'ADDED') {
-          this.updateEndpoints(apiObj);
+          this.updateEndpoints (apiObj);
         }
       },
       (err) => console.error('Watch error:', err)
@@ -418,19 +418,19 @@ class ServiceDiscoveryClient {
   }
   
   async refreshEndpoints() {
-    const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+    const k8sApi = kc.makeApiClient (k8s.CoreV1Api);
     const response = await k8sApi.readNamespacedEndpoints(
       this.serviceName,
       this.namespace
     );
-    this.updateEndpoints(response.body);
+    this.updateEndpoints (response.body);
   }
   
-  updateEndpoints(endpointsObj) {
+  updateEndpoints (endpointsObj) {
     this.endpoints = [];
-    endpointsObj.subsets?.forEach(subset => {
-      subset.addresses?.forEach(address => {
-        subset.ports?.forEach(port => {
+    endpointsObj.subsets?.forEach (subset => {
+      subset.addresses?.forEach (address => {
+        subset.ports?.forEach (port => {
           this.endpoints.push({
             ip: address.ip,
             port: port.port,
@@ -473,13 +473,13 @@ class ServiceDiscoveryClient {
 // Usage
 const orderService = new ServiceDiscoveryClient('order-service', 'production');
 
-async function callOrderService(data) {
+async function callOrderService (data) {
   const endpoint = orderService.getNextEndpoint();
   
   try {
     const response = await fetch(\`\${endpoint.url}/api/orders\`, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify (data)
     });
     return await response.json();
   } catch (error) {
@@ -489,7 +489,7 @@ async function callOrderService(data) {
     const retryEndpoint = orderService.getNextEndpoint();
     const response = await fetch(\`\${retryEndpoint.url}/api/orders\`, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify (data)
     });
     return await response.json();
   }
@@ -721,8 +721,8 @@ process.on('SIGTERM', async () => {
   }, 30000); // 30 seconds max
 });
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function sleep (ms) {
+  return new Promise (resolve => setTimeout (resolve, ms));
 }
 \`\`\`
 
@@ -777,10 +777,10 @@ T+20s:  Process exits
 **Solution 2: Client-Side Retry with Exponential Backoff**
 
 \`\`\`javascript
-async function retryableRequest(url, options = {}, maxRetries = 3) {
+async function retryableRequest (url, options = {}, maxRetries = 3) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(url, options);
+      const response = await fetch (url, options);
       
       // Retry on specific status codes
       if (response.status >= 500 && response.status < 600) {
@@ -790,7 +790,7 @@ async function retryableRequest(url, options = {}, maxRetries = 3) {
       if (response.status === 429) {
         // Rate limited - retry after delay
         const retryAfter = response.headers.get('Retry-After') || 5;
-        await sleep(retryAfter * 1000);
+        await sleep (retryAfter * 1000);
         continue;
       }
       
@@ -813,7 +813,7 @@ async function retryableRequest(url, options = {}, maxRetries = 3) {
         // Exponential backoff: 100ms, 200ms, 400ms
         const delay = Math.pow(2, attempt) * 100;
         console.log(\`Retrying in \${delay}ms...\`);
-        await sleep(delay);
+        await sleep (delay);
         continue;
       }
       
@@ -863,7 +863,7 @@ Instead of DNS, watch Kubernetes Endpoints API directly:
 const k8s = require('@kubernetes/client-node');
 
 class ServiceDiscoveryClient {
-  constructor(serviceName, namespace) {
+  constructor (serviceName, namespace) {
     this.serviceName = serviceName;
     this.namespace = namespace;
     this.endpoints = [];
@@ -874,7 +874,7 @@ class ServiceDiscoveryClient {
     const kc = new k8s.KubeConfig();
     kc.loadFromDefault();
     
-    const watch = new k8s.Watch(kc);
+    const watch = new k8s.Watch (kc);
     
     watch.watch(
       \`/api/v1/namespaces/\${this.namespace}/endpoints/\${this.serviceName}\`,
@@ -883,7 +883,7 @@ class ServiceDiscoveryClient {
         console.log('Endpoint event:', type);
         
         if (type === 'MODIFIED' || type === 'ADDED') {
-          this.updateEndpoints(apiObj);
+          this.updateEndpoints (apiObj);
         } else if (type === 'DELETED') {
           this.endpoints = [];
         }
@@ -892,12 +892,12 @@ class ServiceDiscoveryClient {
     );
   }
   
-  updateEndpoints(endpointsObj) {
+  updateEndpoints (endpointsObj) {
     this.endpoints = [];
     
-    endpointsObj.subsets?.forEach(subset => {
-      subset.addresses?.forEach(address => {
-        subset.ports?.forEach(port => {
+    endpointsObj.subsets?.forEach (subset => {
+      subset.addresses?.forEach (address => {
+        subset.ports?.forEach (port => {
           this.endpoints.push({
             ip: address.ip,
             port: port.port,
@@ -924,12 +924,12 @@ class ServiceDiscoveryClient {
 // Usage
 const orderService = new ServiceDiscoveryClient('order-service', 'production');
 
-async function callOrderService(data) {
+async function callOrderService (data) {
   const endpoint = orderService.getEndpoint();
   
   const response = await fetch(\`\${endpoint.url}/api/orders\`, {
     method: 'POST',
-    body: JSON.stringify(data)
+    body: JSON.stringify (data)
   });
   
   return await response.json();
@@ -996,9 +996,9 @@ const connectionFailures = new prometheus.Counter({
   labelNames: ['service', 'error',]
 });
 
-async function monitoredRequest(url, options) {
+async function monitoredRequest (url, options) {
   try {
-    return await fetch(url, options);
+    return await fetch (url, options);
   } catch (error) {
     if (error.code === 'ECONNREFUSED') {
       connectionFailures.inc({ service: 'order-service', error: 'refused' });
@@ -1274,7 +1274,7 @@ process.on('SIGTERM', async () => {
 
 \`\`\`javascript
 // Discover services in all regions
-async function discoverService(serviceName) {
+async function discoverService (serviceName) {
   // Query local datacenter first
   const localServices = await consul.health.service({
     service: serviceName,
@@ -1400,7 +1400,7 @@ class RegionSelector {
     this.latencies = {};
   }
   
-  async measureLatency(region) {
+  async measureLatency (region) {
     const start = Date.now();
     
     try {
@@ -1421,7 +1421,7 @@ class RegionSelector {
   async selectFastestRegion() {
     // Measure latency to all regions in parallel
     await Promise.all(
-      this.regions.map(region => this.measureLatency(region))
+      this.regions.map (region => this.measureLatency (region))
     );
     
     // Select region with lowest latency
@@ -1461,7 +1461,7 @@ class FailoverClient {
     this.currentRegion = this.regions[0];
   }
   
-  async makeRequest(path, options = {}) {
+  async makeRequest (path, options = {}) {
     const maxRetries = this.regions.length;
     
     for (let i = 0; i < maxRetries; i++) {
@@ -1498,7 +1498,7 @@ class FailoverClient {
   }
   
   failoverToNextRegion() {
-    const currentIndex = this.regions.indexOf(this.currentRegion);
+    const currentIndex = this.regions.indexOf (this.currentRegion);
     this.currentRegion = this.regions[(currentIndex + 1) % this.regions.length];
     console.log(\`Failed over to \${this.currentRegion.name}\`);
   }
@@ -1526,9 +1526,9 @@ try {
 
 \`\`\`javascript
 // Write to local region, replicate asynchronously
-async function createOrder(order) {
+async function createOrder (order) {
   // Write to local database
-  await db.orders.insert(order);
+  await db.orders.insert (order);
   
   // Publish event to Kafka (cross-region replication)
   await kafka.produce('orders.created', {
@@ -1545,7 +1545,7 @@ async function createOrder(order) {
 kafka.subscribe('orders.created', async (event) => {
   if (event.region !== 'us-east-1') {
     // Replicate from other region
-    await db.orders.upsert(event.data);
+    await db.orders.upsert (event.data);
   }
 });
 \`\`\`
@@ -1554,16 +1554,16 @@ kafka.subscribe('orders.created', async (event) => {
 
 \`\`\`javascript
 // Write to primary region, synchronously replicate to secondary
-async function createOrder(order) {
+async function createOrder (order) {
   const primary = 'us-east-1';
   const secondary = 'eu-west-1';
   
   // Write to primary
-  const result = await db.primary.orders.insert(order);
+  const result = await db.primary.orders.insert (order);
   
   // Synchronous replication to secondary
   try {
-    await db.secondary.orders.insert(order);
+    await db.secondary.orders.insert (order);
   } catch (error) {
     console.error('Secondary replication failed:', error);
     // Log for async retry, but don't fail request

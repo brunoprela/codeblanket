@@ -1,6 +1,6 @@
 export const section4 = {
-    title: "Cash Flow Statement Mastery",
-    content: `
+  title: 'Cash Flow Statement Mastery',
+  content: `
 # Cash Flow Statement Mastery
 
 The cash flow statement is arguably the **most important** financial statement because:
@@ -43,24 +43,24 @@ class CashFlowStatement:
     equity_repurchased: float  # Buybacks (negative)
     dividends_paid: float  # (negative)
     
-    def calculate_cfo(self) -> float:
+    def calculate_cfo (self) -> float:
         """Cash Flow from Operations."""
         cfo = self.net_income
         cfo += self.depreciation_amortization
         cfo += self.stock_based_comp
         cfo += self.deferred_taxes
-        cfo += sum(self.changes_in_working_capital.values())
+        cfo += sum (self.changes_in_working_capital.values())
         return cfo
     
-    def calculate_cfi(self) -> float:
+    def calculate_cfi (self) -> float:
         """Cash Flow from Investing."""
         cfi = self.capex  # Already negative
         cfi += self.acquisitions  # Already negative
         cfi += self.asset_sales  # Positive
-        cfi += sum(self.investments.values())
+        cfi += sum (self.investments.values())
         return cfi
     
-    def calculate_cff(self) -> float:
+    def calculate_cff (self) -> float:
         """Cash Flow from Financing."""
         cff = self.debt_issued
         cff += self.debt_repaid  # Already negative
@@ -69,15 +69,15 @@ class CashFlowStatement:
         cff += self.dividends_paid  # Already negative
         return cff
     
-    def calculate_free_cash_flow(self) -> float:
+    def calculate_free_cash_flow (self) -> float:
         """Free Cash Flow = CFO - CapEx."""
         return self.calculate_cfo() + self.capex  # CapEx is negative
     
-    def calculate_net_change_cash(self) -> float:
+    def calculate_net_change_cash (self) -> float:
         """Total change in cash."""
         return self.calculate_cfo() + self.calculate_cfi() + self.calculate_cff()
     
-    def to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe (self) -> pd.DataFrame:
         """Format as standard cash flow statement."""
         
         cfo = self.calculate_cfo()
@@ -147,7 +147,7 @@ class CashFlowStatement:
             ]
         }
         
-        return pd.DataFrame(data)
+        return pd.DataFrame (data)
 
 # Example: Apple-like cash flow statement
 apple_cf = CashFlowStatement(
@@ -181,10 +181,10 @@ apple_cf = CashFlowStatement(
 
 print("Cash Flow Statement Example")
 print("=" * 70)
-print(apple_cf.to_dataframe().to_string(index=False))
+print(apple_cf.to_dataframe().to_string (index=False))
 print()
-print(f"Free Cash Flow: ${apple_cf.calculate_free_cash_flow():,.0f}")
-print(f"Net Change in Cash: ${apple_cf.calculate_net_change_cash():,.0f}")
+print(f"Free Cash Flow: \${apple_cf.calculate_free_cash_flow():,.0f}")
+print(f"Net Change in Cash: \${apple_cf.calculate_net_change_cash():,.0f}")
 \`\`\`
 
 ## Section 1: Operating Cash Flow (CFO) - The Most Critical
@@ -214,25 +214,25 @@ class OperatingCashFlowAnalyzer:
         print("Reconciliation: Net Income → Operating Cash Flow")
         print("=" * 70)
         print()
-        print(f"Net Income (starting point):           ${net_income:> 15, .0f}")
+        print(f"Net Income (starting point):           \${net_income:> 15, .0f}")
 print()
         
         # Add back non - cash expenses
 print("Add back: Non-Cash Expenses")
 total_non_cash_expenses = 0
 for expense, amount in non_cash_expenses.items():
-    print(f"  {expense:35} ${amount:>15,.0f}")
+    print(f"  {expense:35} \${amount:>15,.0f}")
 total_non_cash_expenses += amount
-print(f"  {'Total Non-Cash Expenses':35} ${total_non_cash_expenses:>15,.0f}")
+print(f"  {'Total Non-Cash Expenses':35} \${total_non_cash_expenses:>15,.0f}")
 print()
         
         # Subtract non - cash income
 print("Subtract: Non-Cash Income")
 total_non_cash_income = 0
 for income, amount in non_cash_income.items():
-    print(f"  {income:35} ${-amount:>15,.0f}")
+    print(f"  {income:35} \${-amount:>15,.0f}")
 total_non_cash_income += amount
-print(f"  {'Total Non-Cash Income':35} ${-total_non_cash_income:>15,.0f}")
+print(f"  {'Total Non-Cash Income':35} \${-total_non_cash_income:>15,.0f}")
 print()
         
         # Working capital changes
@@ -240,15 +240,15 @@ print("Adjust for: Changes in Working Capital")
 total_wc_changes = 0
 for item, change in working_capital_changes.items():
     sign = '+' if change > 0 else ''
-print(f"  {item:35} ${change:>15,.0f}")
+print(f"  {item:35} \${change:>15,.0f}")
 total_wc_changes += change
-print(f"  {'Total WC Changes':35} ${total_wc_changes:>15,.0f}")
+print(f"  {'Total WC Changes':35} \${total_wc_changes:>15,.0f}")
 print()
         
         # Calculate CFO
 cfo = net_income + total_non_cash_expenses - total_non_cash_income + total_wc_changes
 
-print(f"{'Operating Cash Flow (CFO)':35} ${cfo:>15,.0f}")
+print(f"{'Operating Cash Flow (CFO)':35} \${cfo:>15,.0f}")
 print()
         
         # Quality metrics
@@ -341,7 +341,7 @@ class WorkingCapitalAnalyzer:
         print("=" * 90)
         print()
         
-        for i, ex in enumerate(examples, 1):
+        for i, ex in enumerate (examples, 1):
             print(f"Example {i}: {ex['change']}")
             print(f"  Balance Sheet: {ex['balance_sheet']}")
             print(f"  Cash Flow Statement: {ex['cash_flow']}")
@@ -364,7 +364,7 @@ class WorkingCapitalAnalyzer:
         
         # Warning 1: AR growing faster than revenue
         if ar_change < 0:  # Negative = cash outflow
-            ar_growth = abs(ar_change) / wc_changes.get('prior_ar', 1)
+            ar_growth = abs (ar_change) / wc_changes.get('prior_ar', 1)
             if ar_growth > revenue_growth * 1.2:
                 warnings.append({
                     'flag': 'AR_OUTPACING_REVENUE',
@@ -378,7 +378,7 @@ class WorkingCapitalAnalyzer:
             warnings.append({
                 'flag': 'INVENTORY_BUILDUP',
                 'severity': 'MEDIUM',
-                'message': f'Inventory increased ${abs(inventory_change):, .0f}',
+                'message': f'Inventory increased \${abs (inventory_change):,.0f}',
 'implication': 'Slow sales or preparing for demand'
             })
         
@@ -387,7 +387,7 @@ if ap_change > wc_changes.get('prior_ap', 1) * 0.3:
     warnings.append({
         'flag': 'PAYABLES_STRETCHED',
         'severity': 'MEDIUM',
-        'message': f'AP increased ${ap_change:,.0f}',
+        'message': f'AP increased \${ap_change:,.0f}',
         'implication': 'Cash conservation or payment difficulties'
     })
 
@@ -427,7 +427,7 @@ class FreeCashFlowAnalyzer:
         # 4. FCF excluding acquisitions (normalized)
         fcf_normalized = cfo - capex  # Excludes one-time acquisitions
         
-        # 5. Owner earnings (Buffett's metric)
+        # 5. Owner earnings (Buffett\'s metric)
         # = Net Income + D&A - CapEx - Working Capital needs
         owner_earnings = fcf_standard - working_capital_changes
         
@@ -458,12 +458,12 @@ class FreeCashFlowAnalyzer:
         print("Free Cash Flow Quality Analysis")
         print("=" * 70)
         print()
-        print(f"Operating Cash Flow:     ${cfo:> 15, .0f}")
-print(f"Capital Expenditures:    ${capex:>15,.0f}")
-print(f"Free Cash Flow:          ${fcf:>15,.0f}")
+        print(f"Operating Cash Flow:     \${cfo:> 15, .0f}")
+print(f"Capital Expenditures:    \${capex:>15,.0f}")
+print(f"Free Cash Flow:          \${fcf:>15,.0f}")
 print()
-print(f"Revenue:                 ${revenue:>15,.0f}")
-print(f"Net Income:              ${net_income:>15,.0f}")
+print(f"Revenue:                 \${revenue:>15,.0f}")
+print(f"Net Income:              \${net_income:>15,.0f}")
 print()
 print("Quality Metrics:")
 print(f"  FCF Margin:            {fcf_margin:>15.1%}")
@@ -547,7 +547,7 @@ class CashFlowPatternAnalyzer:
     """Identify company life cycle stage from cash flow patterns."""
     
     @staticmethod
-    def classify_stage(cfo: float, cfi: float, cff: float) -> Dict:
+    def classify_stage (cfo: float, cfi: float, cff: float) -> Dict:
         """Determine business life cycle stage."""
         
         # Define patterns for each stage
@@ -585,9 +585,9 @@ class CashFlowPatternAnalyzer:
         # Classify based on patterns
         if cfo < 0 and cfi < 0 and cff > 0:
             stage = 'Startup'
-        elif cfo > 0 and cfo < abs(cfi) and cff >= 0:
+        elif cfo > 0 and cfo < abs (cfi) and cff >= 0:
             stage = 'Growth'
-        elif cfo > 0 and cfo > abs(cfi) and cff < 0:
+        elif cfo > 0 and cfo > abs (cfi) and cff < 0:
             stage = 'Mature'
         elif cfi > 0 and cfo < cfo * 0.5:  # Simplified
             stage = 'Declining'
@@ -597,9 +597,9 @@ class CashFlowPatternAnalyzer:
         print("Cash Flow Pattern Analysis")
         print("=" * 70)
         print()
-        print(f"Operating Cash Flow (CFO):  ${cfo:> 15, .0f}")
-print(f"Investing Cash Flow (CFI):  ${cfi:>15,.0f}")
-print(f"Financing Cash Flow (CFF):  ${cff:>15,.0f}")
+        print(f"Operating Cash Flow (CFO):  \${cfo:> 15, .0f}")
+print(f"Investing Cash Flow (CFI):  \${cfi:>15,.0f}")
+print(f"Financing Cash Flow (CFF):  \${cff:>15,.0f}")
 print()
 print(f"Identified Stage: {stage}")
 
@@ -615,14 +615,14 @@ return {
 }
 
 @staticmethod
-    def analyze_multi_year_pattern(cash_flows: List[Dict]) -> None:
+    def analyze_multi_year_pattern (cash_flows: List[Dict]) -> None:
 """Analyze trends over multiple years."""
 
-df = pd.DataFrame(cash_flows)
+df = pd.DataFrame (cash_flows)
 
 print("\\nMulti-Year Cash Flow Trend Analysis")
 print("=" * 70)
-print(df.to_string(index = False))
+print(df.to_string (index = False))
 print()
         
         # Calculate trends
@@ -647,7 +647,7 @@ pattern_analyzer = CashFlowPatternAnalyzer()
 pattern_analyzer.classify_stage(
     cfo = 100_000_000_000,   # Strong positive
     cfi = -16_500_000_000,   # Moderate negative(CapEx + investments)
-    cff = -100_000_000_000   # Large negative(buybacks + dividends)
+    cff = -100_000_000_000   # Large negative (buybacks + dividends)
 )
 
 # Multi - year analysis
@@ -658,7 +658,7 @@ cash_flows = [
     { 'Year': 2023, 'CFO': 115_000, 'CFI': -18_000, 'CFF': -95_000, 'FCF': 105_000 },
 ]
 
-pattern_analyzer.analyze_multi_year_pattern(cash_flows)
+pattern_analyzer.analyze_multi_year_pattern (cash_flows)
 \`\`\`
 
 ## Section 4: Cash Flow Red Flags & Manipulation Detection
@@ -685,8 +685,8 @@ class CashFlowFraudDetector:
         
         # Flag 1: CFO < Net Income persistently
         cfo_ni_ratio = cfo / net_income if net_income != 0 else 0
-        print(f"Net Income:              ${net_income:> 15, .0f}")
-print(f"Operating Cash Flow:     ${cfo:>15,.0f}")
+        print(f"Net Income:              \${net_income:> 15, .0f}")
+print(f"Operating Cash Flow:     \${cfo:>15,.0f}")
 print(f"CFO / NI Ratio:          {cfo_ni_ratio:>15.2f}x")
 print()
 
@@ -700,8 +700,8 @@ if cfo_ni_ratio < 0.8:
 print("  🚩 RED FLAG: CFO significantly below Net Income")
         
         # Flag 2: High accruals
-accruals_ratio = abs(accruals) / abs(net_income) if net_income != 0 else 0
-print(f"Total Accruals:          ${accruals:>15,.0f}")
+accruals_ratio = abs (accruals) / abs (net_income) if net_income != 0 else 0
+print(f"Total Accruals:          \${accruals:>15,.0f}")
 print(f"Accruals / NI:           {accruals_ratio:>15.2f}x")
 print()
 
@@ -724,7 +724,7 @@ self.red_flags.append({
 })
 print("  🚨 CRITICAL FLAG: Profitable on P&L but burning cash")
         
-        # Sloan Accruals Anomaly(predicts future underperformance)
+        # Sloan Accruals Anomaly (predicts future underperformance)
 if accruals_ratio > 0.10 and cfo_ni_ratio < 1.0:
 print("\\n  ⚠️  SLOAN ACCRUALS ANOMALY DETECTED")
 print("  Research shows: Companies with high accruals tend to")
@@ -734,7 +734,7 @@ return {
     'cfo_ni_ratio': cfo_ni_ratio,
     'accruals_ratio': accruals_ratio,
     'red_flags': self.red_flags,
-    'earnings_quality': 'LOW' if len(self.red_flags) > 0 else 'HIGH'
+    'earnings_quality': 'LOW' if len (self.red_flags) > 0 else 'HIGH'
 }
     
     def detect_working_capital_manipulation(
@@ -804,11 +804,11 @@ class ComprehensiveCashFlowAnalysis:
     
     def __init__(self, ticker: str):
         self.ticker = ticker
-        self.stock = yf.Ticker(ticker)
+        self.stock = yf.Ticker (ticker)
         self.cash_flow = self.stock.cashflow
         self.financials = self.stock.financials
     
-    def run_complete_analysis(self) -> Dict:
+    def run_complete_analysis (self) -> Dict:
         """Perform comprehensive cash flow analysis."""
         
         print(f"\\n{'='*70}")
@@ -829,15 +829,15 @@ class ComprehensiveCashFlowAnalysis:
         # Analysis sections
         print("1. CASH FLOW COMPONENTS")
         print("-" * 70)
-        print(f"Operating Cash Flow:     ${cfo:> 18, .0f}")
-print(f"Capital Expenditures:    ${capex:>18,.0f}")
-print(f"Free Cash Flow:          ${fcf:>18,.0f}")
+        print(f"Operating Cash Flow:     \${cfo:> 18, .0f}")
+print(f"Capital Expenditures:    \${capex:>18,.0f}")
+print(f"Free Cash Flow:          \${fcf:>18,.0f}")
 print()
 
 print("2. EARNINGS QUALITY")
 print("-" * 70)
 cfo_ni_ratio = cfo / net_income if net_income != 0 else 0
-print(f"Net Income:              ${net_income:>18,.0f}")
+print(f"Net Income:              \${net_income:>18,.0f}")
 print(f"CFO / NI Ratio:          {cfo_ni_ratio:>18.2f}x")
 
 if cfo_ni_ratio > 1.1:
@@ -851,7 +851,7 @@ print()
 print("3. PROFITABILITY METRICS")
 print("-" * 70)
 fcf_margin = fcf / revenue if revenue != 0 else 0
-print(f"Revenue:                 ${revenue:>18,.0f}")
+print(f"Revenue:                 \${revenue:>18,.0f}")
 print(f"FCF Margin:              {fcf_margin:>18.1%}")
 
 if fcf_margin > 0.20:
@@ -864,8 +864,8 @@ print()
 
 print("4. CAPITAL EFFICIENCY")
 print("-" * 70)
-capex_intensity = abs(capex) / revenue if revenue != 0 else 0
-cfo_capex_coverage = cfo / abs(capex) if capex != 0 else 0
+capex_intensity = abs (capex) / revenue if revenue != 0 else 0
+cfo_capex_coverage = cfo / abs (capex) if capex != 0 else 0
 print(f"CapEx Intensity:         {capex_intensity:>18.1%}")
 print(f"CFO / CapEx:             {cfo_capex_coverage:>18.2f}x")
 
@@ -912,7 +912,7 @@ return {
     'assessment': assessment
 }
 
-# Example usage(would need actual data)
+# Example usage (would need actual data)
 # analyzer = ComprehensiveCashFlowAnalysis('AAPL')
 # results = analyzer.run_complete_analysis()
 \`\`\`
@@ -948,7 +948,6 @@ Build a complete cash flow analyzer that:
 
 The cash flow statement reveals truth that income statements can hide. Master it!
 `,
-    discussionQuestions: [],
-        multipleChoiceQuestions: []
+  discussionQuestions: [],
+  multipleChoiceQuestions: [],
 };
-

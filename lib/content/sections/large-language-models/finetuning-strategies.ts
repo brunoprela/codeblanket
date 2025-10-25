@@ -45,11 +45,11 @@ class FullFineTuning:
     """
     
     def __init__(self, model_name="gpt2"):
-        self.model = AutoModelForCausalLM.from_pretrained(model_name)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModelForCausalLM.from_pretrained (model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained (model_name)
         self.tokenizer.pad_token = self.tokenizer.eos_token
     
-    def prepare_dataset(self, examples):
+    def prepare_dataset (self, examples):
         """
         Format dataset for fine-tuning
         """
@@ -57,7 +57,7 @@ class FullFineTuning:
         prompts = []
         for ex in examples:
             prompt = f"### Instruction:\\n{ex['instruction']}\\n\\n### Response:\\n{ex['response']}"
-            prompts.append(prompt)
+            prompts.append (prompt)
         
         # Tokenize
         tokenized = self.tokenizer(
@@ -73,7 +73,7 @@ class FullFineTuning:
         
         return tokenized
     
-    def train(self, train_dataset, val_dataset, output_dir="./finetuned_model"):
+    def train (self, train_dataset, val_dataset, output_dir="./finetuned_model"):
         """
         Train with Hugging Face Trainer
         """
@@ -108,8 +108,8 @@ class FullFineTuning:
         trainer.train()
         
         # Save
-        trainer.save_model(output_dir)
-        self.tokenizer.save_pretrained(output_dir)
+        trainer.save_model (output_dir)
+        self.tokenizer.save_pretrained (output_dir)
         
         return trainer
 
@@ -119,7 +119,7 @@ class SQLFineTuning:
     Fine-tune for text-to-SQL
     """
     
-    def prepare_sql_data(self, examples):
+    def prepare_sql_data (self, examples):
         """
         Format: Question → SQL
         """
@@ -129,11 +129,11 @@ class SQLFineTuning:
 ### Database Schema: {ex['schema']}
 ### SQL:
 {ex['sql']}"""
-            formatted.append(text)
+            formatted.append (text)
         
         return formatted
     
-    def train_sql_model(self):
+    def train_sql_model (self):
         """
         Train text-to-SQL model
         """
@@ -142,12 +142,12 @@ class SQLFineTuning:
         val_data = load_dataset("wikisql", split="validation[:500]")
         
         # Prepare
-        train_texts = self.prepare_sql_data(train_data)
-        val_texts = self.prepare_sql_data(val_data)
+        train_texts = self.prepare_sql_data (train_data)
+        val_texts = self.prepare_sql_data (val_data)
         
         # Fine-tune
         tuner = FullFineTuning("gpt2")
-        trainer = tuner.train(train_texts, val_texts)
+        trainer = tuner.train (train_texts, val_texts)
         
         return trainer.model
 
@@ -228,13 +228,13 @@ class LoRAFineTuning:
         )
         
         # Apply LoRA
-        self.model = get_peft_model(self.base_model, lora_config)
+        self.model = get_peft_model (self.base_model, lora_config)
         
         # Print trainable parameters
         self.model.print_trainable_parameters()
         # Output: trainable params: 4.2M || all params: 7B || trainable: 0.06%
     
-    def understand_lora(self):
+    def understand_lora (self):
         """
         How LoRA works
         """
@@ -253,21 +253,21 @@ class LoRAFineTuning:
         # LoRA: 4096 * 8 + 8 * 4096 = 65.5K (0.4% of original!)
         
         # Example implementation
-        class LoRALayer(nn.Module):
+        class LoRALayer (nn.Module):
             def __init__(self, in_features, out_features, rank=8, alpha=16):
                 super().__init__()
                 
                 # Frozen weight
-                self.weight = nn.Parameter(torch.randn(out_features, in_features))
+                self.weight = nn.Parameter (torch.randn (out_features, in_features))
                 self.weight.requires_grad = False
                 
                 # LoRA matrices
-                self.lora_A = nn.Parameter(torch.randn(rank, in_features))
-                self.lora_B = nn.Parameter(torch.zeros(out_features, rank))
+                self.lora_A = nn.Parameter (torch.randn (rank, in_features))
+                self.lora_B = nn.Parameter (torch.zeros (out_features, rank))
                 
                 self.scaling = alpha / rank
             
-            def forward(self, x):
+            def forward (self, x):
                 # Original: x @ W^T
                 result = x @ self.weight.T
                 
@@ -276,7 +276,7 @@ class LoRAFineTuning:
                 
                 return result + self.scaling * lora_result
     
-    def train(self, train_dataset, output_dir="./lora_model"):
+    def train (self, train_dataset, output_dir="./lora_model"):
         """
         Train only LoRA parameters
         """
@@ -304,7 +304,7 @@ class LoRAFineTuning:
         trainer.train()
         
         # Save only LoRA weights (few MB vs GBs for full model)
-        self.model.save_pretrained(output_dir)
+        self.model.save_pretrained (output_dir)
         
         return trainer
 
@@ -319,23 +319,23 @@ def finetune_llama_with_lora():
     dataset = load_dataset("databricks/databricks-dolly-15k")
     
     # Prepare
-    def format_instruction(example):
+    def format_instruction (example):
         return f"""### Instruction:
 {example['instruction']}
 
 ### Response:
 {example['response']}"""
     
-    dataset = dataset.map(lambda x: {"text": format_instruction(x)})
+    dataset = dataset.map (lambda x: {"text": format_instruction (x)})
     
     # Fine-tune
     lora_tuner = LoRAFineTuning("meta-llama/Llama-2-7b-hf")
-    trainer = lora_tuner.train(dataset['train'])
+    trainer = lora_tuner.train (dataset['train'])
     
     print("LoRA weights saved! Only 5MB vs 13GB for full model")
 
 # Inference with LoRA
-def load_and_use_lora(base_model_name, lora_path):
+def load_and_use_lora (base_model_name, lora_path):
     """
     Load LoRA adapter for inference
     """
@@ -343,10 +343,10 @@ def load_and_use_lora(base_model_name, lora_path):
     from peft import PeftModel
     
     # Load base model
-    base_model = AutoModelForCausalLM.from_pretrained(base_model_name)
+    base_model = AutoModelForCausalLM.from_pretrained (base_model_name)
     
     # Load LoRA adapter
-    model = PeftModel.from_pretrained(base_model, lora_path)
+    model = PeftModel.from_pretrained (base_model, lora_path)
     
     # Can merge LoRA weights into base model for faster inference
     model = model.merge_and_unload()
@@ -398,7 +398,7 @@ class QLoRAFineTuning:
         )
         
         # Prepare for LoRA
-        self.model = prepare_model_for_kbit_training(self.model)
+        self.model = prepare_model_for_kbit_training (self.model)
         
         # LoRA config
         lora_config = LoraConfig(
@@ -411,9 +411,9 @@ class QLoRAFineTuning:
         )
         
         # Apply LoRA
-        self.model = get_peft_model(self.model, lora_config)
+        self.model = get_peft_model (self.model, lora_config)
     
-    def memory_comparison(self):
+    def memory_comparison (self):
         """
         Memory usage comparison
         """
@@ -447,10 +447,10 @@ def train_70b_model_on_single_gpu():
     
     # Load model with QLoRA
     model_name = "meta-llama/Llama-2-70b-hf"
-    tuner = QLoRAFineTuning(model_name)
+    tuner = QLoRAFineTuning (model_name)
     
     # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained (model_name)
     tokenizer.pad_token = tokenizer.eos_token
     
     # Load dataset
@@ -502,7 +502,7 @@ class NF4Quantization:
         Simplified NF4 quantization
         """
         # 1. Normalize to [-1, 1]
-        scale = torch.abs(weights).max()
+        scale = torch.abs (weights).max()
         normalized = weights / scale
         
         # 2. Quantize to 16 levels (4 bits)
@@ -515,15 +515,15 @@ class NF4Quantization:
         ])
         
         # 3. Find closest level for each weight
-        quantized = torch.zeros_like(normalized)
-        for i, w in enumerate(normalized.flatten()):
-            idx = torch.argmin(torch.abs(nf4_levels - w))
+        quantized = torch.zeros_like (normalized)
+        for i, w in enumerate (normalized.flatten()):
+            idx = torch.argmin (torch.abs (nf4_levels - w))
             quantized.flatten()[i] = nf4_levels[idx]
         
         # Store: 4 bits per weight + scale factor
         return quantized, scale
     
-    def dequantize(self, quantized, scale):
+    def dequantize (self, quantized, scale):
         """
         Convert back to FP16 for computation
         """
@@ -562,28 +562,28 @@ class PrefixTuning:
         for layer in model.transformer.layers:
             # Key prefix
             layer.attention.key_prefix = nn.Parameter(
-                torch.randn(num_prefix_tokens, model.d_model)
+                torch.randn (num_prefix_tokens, model.d_model)
             )
             
             # Value prefix
             layer.attention.value_prefix = nn.Parameter(
-                torch.randn(num_prefix_tokens, model.d_model)
+                torch.randn (num_prefix_tokens, model.d_model)
             )
     
-    def forward_with_prefix(self, layer, x):
+    def forward_with_prefix (self, layer, x):
         """
         Attention with prefix
         """
         batch_size, seq_len, d_model = x.shape
         
         # Compute Q, K, V
-        Q = layer.attention.query(x)
-        K = layer.attention.key(x)
-        V = layer.attention.value(x)
+        Q = layer.attention.query (x)
+        K = layer.attention.key (x)
+        V = layer.attention.value (x)
         
         # Prepend prefix to K, V
-        prefix_K = layer.attention.key_prefix.unsqueeze(0).expand(batch_size, -1, -1)
-        prefix_V = layer.attention.value_prefix.unsqueeze(0).expand(batch_size, -1, -1)
+        prefix_K = layer.attention.key_prefix.unsqueeze(0).expand (batch_size, -1, -1)
+        prefix_V = layer.attention.value_prefix.unsqueeze(0).expand (batch_size, -1, -1)
         
         K = torch.cat([prefix_K, K], dim=1)
         V = torch.cat([prefix_V, V], dim=1)
@@ -612,29 +612,29 @@ class PromptTuning:
         
         # Trainable prompt embeddings
         self.prompt_embeddings = nn.Parameter(
-            torch.randn(num_prompt_tokens, d_model)
+            torch.randn (num_prompt_tokens, d_model)
         )
         
         # Freeze model
         for param in model.parameters():
             param.requires_grad = False
     
-    def forward(self, input_ids):
+    def forward (self, input_ids):
         """
         Prepend prompt embeddings
         """
         # Get input embeddings
-        inputs_embeds = self.model.transformer.wte(input_ids)
+        inputs_embeds = self.model.transformer.wte (input_ids)
         
         # Expand prompt for batch
         batch_size = input_ids.shape[0]
-        prompt_embeds = self.prompt_embeddings.unsqueeze(0).expand(batch_size, -1, -1)
+        prompt_embeds = self.prompt_embeddings.unsqueeze(0).expand (batch_size, -1, -1)
         
         # Concatenate
         inputs_embeds = torch.cat([prompt_embeds, inputs_embeds], dim=1)
         
         # Forward through model
-        outputs = self.model(inputs_embeds=inputs_embeds)
+        outputs = self.model (inputs_embeds=inputs_embeds)
         
         return outputs
 
@@ -653,17 +653,17 @@ class IA3:
     def __init__(self, model):
         for layer in model.transformer.layers:
             # Scaling vectors
-            layer.attention.k_scale = nn.Parameter(torch.ones(model.d_model))
-            layer.attention.v_scale = nn.Parameter(torch.ones(model.d_model))
-            layer.ffn.scale = nn.Parameter(torch.ones(model.d_ff))
+            layer.attention.k_scale = nn.Parameter (torch.ones (model.d_model))
+            layer.attention.v_scale = nn.Parameter (torch.ones (model.d_model))
+            layer.ffn.scale = nn.Parameter (torch.ones (model.d_ff))
     
-    def forward_attention(self, layer, x):
+    def forward_attention (self, layer, x):
         """
         Attention with IA³ scaling
         """
-        Q = layer.attention.query(x)
-        K = layer.attention.key(x) * layer.attention.k_scale  # Scale
-        V = layer.attention.value(x) * layer.attention.v_scale  # Scale
+        Q = layer.attention.query (x)
+        K = layer.attention.key (x) * layer.attention.k_scale  # Scale
+        V = layer.attention.value (x) * layer.attention.v_scale  # Scale
         
         return layer.attention.compute(Q, K, V)
 
@@ -731,7 +731,7 @@ class InstructionTuning:
     }
     """
     
-    def format_instruction(self, example):
+    def format_instruction (self, example):
         """
         Create instruction-following prompt
         """
@@ -753,11 +753,11 @@ class InstructionTuning:
         
         return prompt
     
-    def prepare_dataset(self, examples):
+    def prepare_dataset (self, examples):
         """
         Format entire dataset
         """
-        return [self.format_instruction(ex) for ex in examples]
+        return [self.format_instruction (ex) for ex in examples]
 
 # Popular instruction datasets
 instruction_datasets = {
@@ -800,7 +800,7 @@ def instruction_tune_llama():
     
     # Format instructions
     tuner = InstructionTuning()
-    formatted_data = tuner.prepare_dataset(dataset['train'])
+    formatted_data = tuner.prepare_dataset (dataset['train'])
     
     # Tokenize
     tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
@@ -813,7 +813,7 @@ def instruction_tune_llama():
     
     # Fine-tune with QLoRA
     qlora = QLoRAFineTuning("meta-llama/Llama-2-7b-hf")
-    trainer = qlora.train(tokenized)
+    trainer = qlora.train (tokenized)
     
     return trainer.model
 
@@ -823,7 +823,7 @@ class ConversationTuning:
     Fine-tune for multi-turn dialogue
     """
     
-    def format_conversation(self, messages):
+    def format_conversation (self, messages):
         """
         Format conversation history
         """
@@ -836,7 +836,7 @@ class ConversationTuning:
         
         return formatted
     
-    def prepare_conversation_data(self, conversations):
+    def prepare_conversation_data (self, conversations):
         """
         Create training examples from conversations
         """
@@ -844,11 +844,11 @@ class ConversationTuning:
         
         for conv in conversations:
             # For each turn, predict assistant response given context
-            for i, msg in enumerate(conv['messages']):
+            for i, msg in enumerate (conv['messages']):
                 if msg['role'] == 'assistant':
                     context = conv['messages'][:i+1]
-                    formatted = self.format_conversation(context)
-                    examples.append(formatted)
+                    formatted = self.format_conversation (context)
+                    examples.append (formatted)
         
         return examples
 \`\`\`
@@ -869,7 +869,7 @@ class FineTuningEvaluation:
     Comprehensive evaluation framework
     """
     
-    def evaluate_perplexity(self, model, test_data):
+    def evaluate_perplexity (self, model, test_data):
         """
         Perplexity: How surprised model is by test data
         Lower = better
@@ -886,10 +886,10 @@ class FineTuningEvaluation:
                 total_loss += loss.item() * batch['input_ids'].numel()
                 total_tokens += batch['input_ids'].numel()
         
-        perplexity = torch.exp(torch.tensor(total_loss / total_tokens))
+        perplexity = torch.exp (torch.tensor (total_loss / total_tokens))
         return perplexity.item()
     
-    def evaluate_task_accuracy(self, model, task_data):
+    def evaluate_task_accuracy (self, model, task_data):
         """
         Task-specific accuracy
         """
@@ -898,7 +898,7 @@ class FineTuningEvaluation:
         
         for example in task_data:
             # Generate prediction
-            prediction = model.generate(example['input'])
+            prediction = model.generate (example['input'])
             
             # Compare with ground truth
             if prediction.strip() == example['output'].strip():
@@ -908,15 +908,15 @@ class FineTuningEvaluation:
         accuracy = correct / total
         return accuracy
     
-    def compare_before_after(self, base_model, finetuned_model, test_prompts):
+    def compare_before_after (self, base_model, finetuned_model, test_prompts):
         """
         Compare base vs fine-tuned
         """
         results = []
         
         for prompt in test_prompts:
-            base_response = base_model.generate(prompt)
-            ft_response = finetuned_model.generate(prompt)
+            base_response = base_model.generate (prompt)
+            ft_response = finetuned_model.generate (prompt)
             
             results.append({
                 'prompt': prompt,
@@ -926,14 +926,14 @@ class FineTuningEvaluation:
         
         return results
     
-    def check_for_catastrophic_forgetting(self, model, general_tasks):
+    def check_for_catastrophic_forgetting (self, model, general_tasks):
         """
         Ensure model didn't forget general knowledge
         """
         results = {}
         
         for task_name, task_data in general_tasks.items():
-            accuracy = self.evaluate_task_accuracy(model, task_data)
+            accuracy = self.evaluate_task_accuracy (model, task_data)
             results[task_name] = accuracy
         
         # Flag if accuracy dropped significantly
@@ -949,7 +949,7 @@ class TrainingMonitor:
     Track training progress
     """
     
-    def log_metrics(self, step, metrics):
+    def log_metrics (self, step, metrics):
         """
         Log to wandb or similar
         """
@@ -962,11 +962,11 @@ class TrainingMonitor:
             'grad_norm': metrics['grad_norm'],
         })
     
-    def check_overfitting(self, train_loss_history, val_loss_history):
+    def check_overfitting (self, train_loss_history, val_loss_history):
         """
         Detect overfitting
         """
-        if len(val_loss_history) < 10:
+        if len (val_loss_history) < 10:
             return False
         
         # Check if validation loss increasing while training loss decreasing

@@ -17,7 +17,7 @@ Alternative investments offer diversification and uncorrelated returns:
 
 **What makes them "alternative":**
 - Illiquid (can't sell instantly)
-- High minimums ($100K-$1M+)
+- High minimums (\$100K-$1M+)
 - Limited transparency
 - Different risk/return profile
 - Low correlation with stocks/bonds
@@ -66,7 +66,7 @@ class HedgeFund:
     target_return: float
     target_volatility: float
     
-    def calculate_fees(self, 
+    def calculate_fees (self, 
                       starting_aum: float,
                       ending_aum: float,
                       benchmark_return: float = 0) -> Dict:
@@ -189,7 +189,7 @@ print(f"\\nNet Return to Investor: {fees['net_return']:.2f}%")
 print("\\n\\n=== Hedge Fund Strategies ===\\n")
 profiles = HedgeFund.strategy_profiles()
 
-for strategy, details in list(profiles.items())[:3]:
+for strategy, details in list (profiles.items())[:3]:
     print(f"{strategy}:")
     print(f"  Description: {details['description']}")
     print(f"  Target Return: {details['target_return']}")
@@ -219,7 +219,7 @@ class PrivateEquityFund:
         self.carried_interest = 0.20  # 20% of profits
         self.hurdle_rate = 0.08  # 8% preferred return to LPs
         
-    def lbo_model(self,
+    def lbo_model (self,
                   purchase_price: float,
                   ebitda: float,
                   entry_multiple: float,
@@ -271,7 +271,7 @@ class PrivateEquityFund:
             'holding_period': holding_period_years
         }
     
-    def calculate_waterfall(self, 
+    def calculate_waterfall (self, 
                            total_profit: float,
                            lp_commitment: float) -> Dict:
         """
@@ -288,12 +288,12 @@ class PrivateEquityFund:
         
         # Preferred return (8% annually over holding period, simplified)
         preferred_return = lp_commitment * (1.08 ** 5 - 1)  # 5-year hold
-        lp_preferred = min(preferred_return, remaining)
+        lp_preferred = min (preferred_return, remaining)
         remaining -= lp_preferred
         
         # Catch-up (GP gets 100% until they have 20% of all profits)
         catchup = lp_preferred / 4  # Simplified
-        gp_catchup = min(catchup, remaining)
+        gp_catchup = min (catchup, remaining)
         remaining -= gp_catchup
         
         # 80/20 split
@@ -320,7 +320,7 @@ class PrivateEquityFund:
         }
 
 # LBO example
-pe_fund = PrivateEquityFund(fund_size=1_000_000_000)
+pe_fund = PrivateEquityFund (fund_size=1_000_000_000)
 
 lbo = pe_fund.lbo_model(
     purchase_price=500_000_000,  # Ignored, calculated from EBITDA
@@ -371,7 +371,7 @@ class RealEstateInvestment:
     Model real estate investment returns
     """
     
-    def calculate_reit_metrics(self,
+    def calculate_reit_metrics (self,
                                property_value: float,
                                annual_noi: float,  # Net Operating Income
                                debt: float,
@@ -508,7 +508,7 @@ class AlternativesPortfolio:
         self.real_estate = []
         self.collectibles = []
         
-    def calculate_illiquidity_premium(self,
+    def calculate_illiquidity_premium (self,
                                      liquid_return: float,
                                      illiquid_return: float,
                                      lockup_years: float) -> Dict:
@@ -534,7 +534,7 @@ class AlternativesPortfolio:
             'recommendation': 'INVEST' if acceptable else 'PASS'
         }
     
-    def due_diligence_checklist(self) -> Dict:
+    def due_diligence_checklist (self) -> Dict:
         """
         Due diligence for alternative investments
         """

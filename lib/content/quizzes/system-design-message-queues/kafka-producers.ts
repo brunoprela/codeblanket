@@ -10,7 +10,7 @@ export const kafkaproducersQuiz: QuizQuestion[] = [
     question:
       'Explain Kafka producer idempotence and how it prevents duplicate messages. Walk through a failure scenario where a producer crashes after sending a message but before receiving acknowledgment. How does idempotence handle this, and what are the performance implications?',
     hint: 'Consider producer IDs, sequence numbers, broker-side deduplication, and the trade-offs between reliability and throughput.',
-    sampleAnswer: `Kafka producer idempotence ensures exactly-once delivery semantics per partition by preventing duplicate messages even when producers retry on failure. Here's how it works:
+    sampleAnswer: `Kafka producer idempotence ensures exactly-once delivery semantics per partition by preventing duplicate messages even when producers retry on failure. Here\'s how it works:
 
 **The Duplicate Problem (Without Idempotence):**
 
@@ -274,7 +274,7 @@ Example: Payment processing
     question:
       'Design a Kafka producer configuration for a payment processing system that must guarantee no duplicate charges and no lost payments. Explain your choices for acks, retries, idempotence, compression, batching, and timeout settings. What monitoring metrics would you track?',
     hint: 'Consider reliability vs performance trade-offs, failure scenarios, and production best practices for critical financial data.',
-    sampleAnswer: `Payment processing requires the highest reliability guarantees. Here's a comprehensive producer configuration with justifications:
+    sampleAnswer: `Payment processing requires the highest reliability guarantees. Here\'s a comprehensive producer configuration with justifications:
 
 **Requirements:**
 - No duplicate charges (exactly-once processing)
@@ -392,10 +392,10 @@ public class PaymentPartitioner implements Partitioner {
                         Object value, byte[] valueBytes, Cluster cluster) {
         // Partition by payment_id (ensures all messages for same payment to same partition)
         String paymentId = (String) key;
-        int numPartitions = cluster.partitionCountForTopic(topic);
+        int numPartitions = cluster.partitionCountForTopic (topic);
         
         // Hash-based partitioning
-        return Math.abs(paymentId.hashCode()) % numPartitions;
+        return Math.abs (paymentId.hashCode()) % numPartitions;
     }
 }
 \`\`\`
@@ -415,7 +415,7 @@ public class PaymentProducer {
         long startTime = System.currentTimeMillis();
         
         String key = payment.getPaymentId();  // Partition key
-        byte[] value = serializePayment(payment);  // Avro serialization
+        byte[] value = serializePayment (payment);  // Avro serialization
         
         ProducerRecord<String, byte[]> record = new ProducerRecord<>(
             "payments",  // Topic
@@ -430,9 +430,9 @@ public class PaymentProducer {
             .add("version", "v1".getBytes());
         
         // Async send with callback (production best practice)
-        producer.send(record, (metadata, exception) -> {
+        producer.send (record, (metadata, exception) -> {
             long latency = System.currentTimeMillis() - startTime;
-            paymentLatency.observe(latency);
+            paymentLatency.observe (latency);
             
             if (exception == null) {
                 // Success
@@ -441,7 +441,7 @@ public class PaymentProducer {
                     key, metadata.partition(), metadata.offset(), latency);
                 
                 // Update application state (mark as sent)
-                updatePaymentStatus(payment.getPaymentId(), "SENT");
+                updatePaymentStatus (payment.getPaymentId(), "SENT");
                 
             } else {
                 // Failure (after all retries exhausted)
@@ -459,10 +459,10 @@ public class PaymentProducer {
                 }
                 
                 // Update application state (mark as failed)
-                updatePaymentStatus(payment.getPaymentId(), "FAILED");
+                updatePaymentStatus (payment.getPaymentId(), "FAILED");
                 
                 // Send to dead letter queue or retry table
-                sendToDeadLetterQueue(payment, exception);
+                sendToDeadLetterQueue (payment, exception);
             }
         });
     }
@@ -484,32 +484,32 @@ public class PaymentProducer {
 public void processPayment(PaymentRequest request) {
     try {
         // 1. Validate payment request
-        validatePayment(request);
+        validatePayment (request);
         
         // 2. Check idempotency (application-level)
-        if (paymentAlreadyProcessed(request.getPaymentId())) {
+        if (paymentAlreadyProcessed (request.getPaymentId())) {
             logger.info("Payment already processed: {}", request.getPaymentId());
             return;  // Skip duplicate
         }
         
         // 3. Create payment object
         Payment payment = Payment.builder()
-            .paymentId(request.getPaymentId())
-            .customerId(request.getCustomerId())
-            .amount(request.getAmount())
+            .paymentId (request.getPaymentId())
+            .customerId (request.getCustomerId())
+            .amount (request.getAmount())
             .timestamp(Instant.now())
             .build();
         
         // 4. Send to Kafka (async)
-        paymentProducer.sendPayment(payment);
+        paymentProducer.sendPayment (payment);
         
         // 5. Return immediately (don't wait for Kafka ACK)
-        return PaymentResponse.accepted(request.getPaymentId());
+        return PaymentResponse.accepted (request.getPaymentId());
         
     } catch (ValidationException e) {
         // Permanent error (don't send to Kafka)
         logger.warn("Payment validation failed: {}", e.getMessage());
-        return PaymentResponse.rejected(e.getMessage());
+        return PaymentResponse.rejected (e.getMessage());
     }
 }
 \`\`\`
@@ -604,7 +604,7 @@ Kafka Cluster Metrics:
 \`\`\`yaml
 alerts:
   - name: PaymentProducerFailure
-    expr: rate(payments_failed_total[5m]) > 0
+    expr: rate (payments_failed_total[5m]) > 0
     severity: critical
     message: "Payments failing after retries"
     
@@ -614,7 +614,7 @@ alerts:
     message: "Payment send latency p99 > 100ms"
     
   - name: ProducerHighRetryRate
-    expr: rate(record_retry_rate[5m]) > 5
+    expr: rate (record_retry_rate[5m]) > 5
     severity: warning
     message: "High producer retry rate (broker issues?)"
     
@@ -944,12 +944,12 @@ public void benchmarkBatching() {
     config3.put("linger.ms", 100);
     
     // Send 10,000 messages with each configuration
-    for (Props config : Arrays.asList(config1, config2, config3)) {
-        KafkaProducer producer = new KafkaProducer(config);
+    for (Props config : Arrays.asList (config1, config2, config3)) {
+        KafkaProducer producer = new KafkaProducer (config);
         
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10000; i++) {
-            producer.send(new ProducerRecord("test", "message" + i));
+            producer.send (new ProducerRecord("test", "message" + i));
         }
         producer.flush();
         long duration = System.currentTimeMillis() - start;

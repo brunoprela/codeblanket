@@ -31,7 +31,7 @@ export const modulereviewMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Interviews evaluate HOW you think, not WHAT you know. Key signals: (1) Systematic approach (structured thinking). (2) Communication (thinking out loud, explaining reasoning). (3) Trade-off analysis (understanding pros/cons). (4) Adaptability (incorporating feedback). There's no single \"correct\" solution. Two candidates with different designs can both succeed if reasoning is sound. Memorization (option 1) and technology breadth (option 2) help but aren't primary evaluation criteria. Matching interviewer's solution (option 4) is NOT the goal.",
+      "Interviews evaluate HOW you think, not WHAT you know. Key signals: (1) Systematic approach (structured thinking). (2) Communication (thinking out loud, explaining reasoning). (3) Trade-off analysis (understanding pros/cons). (4) Adaptability (incorporating feedback). There\'s no single \"correct\" solution. Two candidates with different designs can both succeed if reasoning is sound. Memorization (option 1) and technology breadth (option 2) help but aren't primary evaluation criteria. Matching interviewer's solution (option 4) is NOT the goal.",
   },
   {
     id: 'mc3',

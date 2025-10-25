@@ -18,13 +18,13 @@ RAG evaluation is complex because it involves multiple stages:
 query = "What is machine learning?"
 
 # 1. Retrieval Quality
-retrieved_docs = retriever.search(query)  # Are these relevant?
+retrieved_docs = retriever.search (query)  # Are these relevant?
 
 # 2. Context Quality  
-context = format_context(retrieved_docs)  # Is context well-formed?
+context = format_context (retrieved_docs)  # Is context well-formed?
 
 # 3. Generation Quality
-answer = llm.generate(context, query)  # Is answer accurate?
+answer = llm.generate (context, query)  # Is answer accurate?
 
 # 4. End-to-End Quality
 # Does the complete system meet user needs?
@@ -93,12 +93,12 @@ class RetrievalMetrics:
         Returns:
             Recall score (0-1)
         """
-        if len(relevant) == 0:
+        if len (relevant) == 0:
             return 0.0
         
         top_k = retrieved[:k]
         relevant_in_k = sum(1 for doc_id in top_k if doc_id in relevant)
-        return relevant_in_k / len(relevant)
+        return relevant_in_k / len (relevant)
     
     @staticmethod
     def mean_reciprocal_rank(
@@ -117,7 +117,7 @@ class RetrievalMetrics:
         Returns:
             MRR score
         """
-        for rank, doc_id in enumerate(retrieved, start=1):
+        for rank, doc_id in enumerate (retrieved, start=1):
             if doc_id in relevant:
                 return 1.0 / rank
         return 0.0
@@ -139,25 +139,25 @@ class RetrievalMetrics:
         Returns:
             NDCG score (0-1)
         """
-        def dcg(scores):
+        def dcg (scores):
             """Calculate DCG."""
             return sum(
                 score / np.log2(rank + 2)
-                for rank, score in enumerate(scores)
+                for rank, score in enumerate (scores)
             )
         
         # Get relevance scores for retrieved docs
         retrieved_scores = [
-            relevance_scores.get(doc_id, 0)
+            relevance_scores.get (doc_id, 0)
             for doc_id in retrieved[:k]
         ]
         
         # Calculate DCG
-        dcg_score = dcg(retrieved_scores)
+        dcg_score = dcg (retrieved_scores)
         
         # Calculate ideal DCG (best possible ranking)
-        ideal_scores = sorted(relevance_scores.values(), reverse=True)[:k]
-        idcg_score = dcg(ideal_scores)
+        ideal_scores = sorted (relevance_scores.values(), reverse=True)[:k]
+        idcg_score = dcg (ideal_scores)
         
         # Normalize
         if idcg_score == 0:
@@ -174,9 +174,9 @@ retrieved = ["doc1", "doc3", "doc5", "doc2", "doc4"]
 relevant = {"doc1", "doc2", "doc4", "doc7"}
 
 # Calculate metrics
-precision = metrics.precision_at_k(retrieved, relevant, k=5)
-recall = metrics.recall_at_k(retrieved, relevant, k=5)
-mrr = metrics.mean_reciprocal_rank(retrieved, relevant)
+precision = metrics.precision_at_k (retrieved, relevant, k=5)
+recall = metrics.recall_at_k (retrieved, relevant, k=5)
+mrr = metrics.mean_reciprocal_rank (retrieved, relevant)
 
 print(f"Precision@5: {precision:.3f}")
 print(f"Recall@5: {recall:.3f}")
@@ -187,7 +187,7 @@ relevance_scores = {
     "doc1": 3, "doc2": 2, "doc3": 1,
     "doc4": 2, "doc5": 0, "doc7": 3
 }
-ndcg = metrics.ndcg_at_k(retrieved, relevance_scores, k=5)
+ndcg = metrics.ndcg_at_k (retrieved, relevance_scores, k=5)
 print(f"NDCG@5: {ndcg:.3f}")
 \`\`\`
 
@@ -248,7 +248,7 @@ class RAGASEvaluator:
             data["ground_truths"] = ground_truths
         
         # Create dataset
-        dataset = Dataset.from_dict(data)
+        dataset = Dataset.from_dict (data)
         
         # Evaluate
         result = evaluate(
@@ -290,7 +290,7 @@ ground_truths = [
 ]
 
 # Evaluate
-results = evaluator.evaluate(questions, answers, contexts, ground_truths)
+results = evaluator.evaluate (questions, answers, contexts, ground_truths)
 print(results)
 \`\`\`
 
@@ -372,7 +372,7 @@ Provide your rating and brief reasoning."""
         content = response.choices[0].message.content
         
         # Parse score (simplified)
-        score = self._extract_score(content)
+        score = self._extract_score (content)
         
         return {
             "score": score,
@@ -422,7 +422,7 @@ Provide your rating and identify any unsupported claims."""
         )
         
         content = response.choices[0].message.content
-        score = self._extract_score(content)
+        score = self._extract_score (content)
         
         return {
             "score": score,
@@ -430,7 +430,7 @@ Provide your rating and identify any unsupported claims."""
             "max_score": 5
         }
     
-    def _extract_score(self, text: str) -> float:
+    def _extract_score (self, text: str) -> float:
         """Extract numeric score from LLM response."""
         import re
         
@@ -442,9 +442,9 @@ Provide your rating and identify any unsupported claims."""
         ]
         
         for pattern in patterns:
-            match = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
+            match = re.search (pattern, text, re.IGNORECASE | re.MULTILINE)
             if match:
-                return float(match.group(1))
+                return float (match.group(1))
         
         return 0.0
 
@@ -457,12 +457,12 @@ answer = "The capital of France is Paris, which is known for the Eiffel Tower."
 context = "Paris is the capital and largest city of France. It is located on the Seine River."
 
 # Evaluate relevance
-relevance = judge.evaluate_answer_relevance(question, answer)
+relevance = judge.evaluate_answer_relevance (question, answer)
 print(f"Relevance Score: {relevance['score']}/5")
 print(f"Reasoning: {relevance['reasoning'][:100]}...\n")
 
 # Evaluate faithfulness
-faithfulness = judge.evaluate_faithfulness(answer, context)
+faithfulness = judge.evaluate_faithfulness (answer, context)
 print(f"Faithfulness Score: {faithfulness['score']}/5")
 print(f"Analysis: {faithfulness['analysis'][:100]}...")
 \`\`\`
@@ -516,25 +516,25 @@ class RAGEvaluationPipeline:
         relevance_scores = []
         faithfulness_scores = []
         
-        for i, test_case in enumerate(test_cases):
-            print(f"Evaluating test case {i+1}/{len(test_cases)}...")
+        for i, test_case in enumerate (test_cases):
+            print(f"Evaluating test case {i+1}/{len (test_cases)}...")
             
             # Evaluate retrieval
             precision = self.retrieval_metrics.precision_at_k(
                 test_case["retrieved_docs"],
-                set(test_case["relevant_docs"]),
+                set (test_case["relevant_docs"]),
                 k=5
             )
             
             recall = self.retrieval_metrics.recall_at_k(
                 test_case["retrieved_docs"],
-                set(test_case["relevant_docs"]),
+                set (test_case["relevant_docs"]),
                 k=5
             )
             
             mrr = self.retrieval_metrics.mean_reciprocal_rank(
                 test_case["retrieved_docs"],
-                set(test_case["relevant_docs"])
+                set (test_case["relevant_docs"])
             )
             
             # Evaluate generation
@@ -558,25 +558,25 @@ class RAGEvaluationPipeline:
                 "faithfulness": faithfulness["score"] / 5,
             }
             
-            results["per_query"].append(query_results)
+            results["per_query"].append (query_results)
             
             # Accumulate for averages
-            precision_scores.append(precision)
-            recall_scores.append(recall)
-            mrr_scores.append(mrr)
-            relevance_scores.append(relevance["score"] / 5)
-            faithfulness_scores.append(faithfulness["score"] / 5)
+            precision_scores.append (precision)
+            recall_scores.append (recall)
+            mrr_scores.append (mrr)
+            relevance_scores.append (relevance["score"] / 5)
+            faithfulness_scores.append (faithfulness["score"] / 5)
         
         # Calculate aggregate metrics
         results["retrieval"] = {
-            "avg_precision@5": np.mean(precision_scores),
-            "avg_recall@5": np.mean(recall_scores),
-            "avg_mrr": np.mean(mrr_scores),
+            "avg_precision@5": np.mean (precision_scores),
+            "avg_recall@5": np.mean (recall_scores),
+            "avg_mrr": np.mean (mrr_scores),
         }
         
         results["generation"] = {
-            "avg_answer_relevance": np.mean(relevance_scores),
-            "avg_faithfulness": np.mean(faithfulness_scores),
+            "avg_answer_relevance": np.mean (relevance_scores),
+            "avg_faithfulness": np.mean (faithfulness_scores),
         }
         
         # Overall score
@@ -591,7 +591,7 @@ class RAGEvaluationPipeline:
         
         return results
     
-    def print_report(self, results: Dict):
+    def print_report (self, results: Dict):
         """Print evaluation report."""
         print("\\n" + "="*60)
         print("RAG SYSTEM EVALUATION REPORT")
@@ -627,8 +627,8 @@ test_cases = [
 ]
 
 # Run evaluation
-results = pipeline.evaluate_system(test_cases)
-pipeline.print_report(results)
+results = pipeline.evaluate_system (test_cases)
+pipeline.print_report (results)
 \`\`\`
 
 ## A/B Testing RAG Systems
@@ -675,13 +675,13 @@ class RAGABTest:
         ]
         
         # Calculate statistics
-        mean_a = np.mean(scores_a)
-        mean_b = np.mean(scores_b)
-        std_a = np.std(scores_a)
-        std_b = np.std(scores_b)
+        mean_a = np.mean (scores_a)
+        mean_b = np.mean (scores_b)
+        std_a = np.std (scores_a)
+        std_b = np.std (scores_b)
         
         # Perform t-test
-        t_statistic, p_value = stats.ttest_ind(scores_a, scores_b)
+        t_statistic, p_value = stats.ttest_ind (scores_a, scores_b)
         
         # Determine winner
         if p_value < 0.05:  # Statistically significant
@@ -735,7 +735,7 @@ class EvaluationDatasetBuilder:
         """
         questions = []
         
-        for doc_id, doc in enumerate(documents):
+        for doc_id, doc in enumerate (documents):
             prompt = f"""Generate {num_questions} diverse questions that can be answered using this document:
 
 Document:
@@ -755,7 +755,7 @@ Generate questions of varying difficulty that test understanding of the content.
             doc_questions = [
                 line.strip()
                 for line in content.split('\\n')
-                if line.strip() and any(line.strip().endswith(c) for c in '?.')
+                if line.strip() and any (line.strip().endswith (c) for c in '?.')
             ]
             
             for q in doc_questions[:num_questions]:
@@ -796,16 +796,16 @@ class ContinuousEvaluator:
     Continuously evaluate RAG system in production.
     """
     
-    def log_query(self, query_data: Dict):
+    def log_query (self, query_data: Dict):
         """Log query for later evaluation."""
         # Store: query, results, user feedback
         pass
     
-    def sample_for_evaluation(self, sample_rate: float = 0.1):
+    def sample_for_evaluation (self, sample_rate: float = 0.1):
         """Sample queries for detailed evaluation."""
         pass
     
-    def generate_weekly_report(self):
+    def generate_weekly_report (self):
         """Generate evaluation report."""
         pass
 \`\`\`

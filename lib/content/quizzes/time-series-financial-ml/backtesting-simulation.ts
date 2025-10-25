@@ -9,7 +9,7 @@ export const backtestingSimulationQuiz = [
       'Example: RSI calculated with future data',
       'Prevention: shift features, walk-forward validation',
       'Can inflate returns 20-50% (major bug)',
-      'Check: corr(feature.shift(-1), target) > corr(feature, target)',
+      'Check: corr (feature.shift(-1), target) > corr (feature, target)',
     ],
   },
   {
@@ -29,7 +29,7 @@ export const backtestingSimulationQuiz = [
     id: 'bs-q-3',
     question: 'Design Monte Carlo simulation to validate strategy robustness.',
     sampleAnswer:
-      'Monte Carlo: (1) Record all backtest trades (entry, exit, PnL), (2) Resample trades randomly with replacement 1000 times, (3) Calculate return distribution, (4) Check: Mean > 0, Std < Mean/2, 5th percentile > -10%, Prob(positive) > 60%. Robust strategy: consistent across resamples. Fragile: Few large wins (lottery-like). Also test: shuffle entry dates, bootstrap returns, vary parameters. Good strategy survives all tests.',
+      'Monte Carlo: (1) Record all backtest trades (entry, exit, PnL), (2) Resample trades randomly with replacement 1000 times, (3) Calculate return distribution, (4) Check: Mean > 0, Std < Mean/2, 5th percentile > -10%, Prob (positive) > 60%. Robust strategy: consistent across resamples. Fragile: Few large wins (lottery-like). Also test: shuffle entry dates, bootstrap returns, vary parameters. Good strategy survives all tests.',
     keyPoints: [
       'Resample trades randomly 1000 times',
       'Calculate return distribution (mean, std, percentiles)',

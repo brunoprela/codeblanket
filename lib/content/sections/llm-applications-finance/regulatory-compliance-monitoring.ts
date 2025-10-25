@@ -40,10 +40,10 @@ class TradeSurveillanceSystem:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_trade_pattern(self, trades: List[Dict],
+    def analyze_trade_pattern (self, trades: List[Dict],
                              context: Dict) -> Dict:
         """
         Analyze trading patterns for suspicious activity
@@ -113,12 +113,12 @@ response = self.client.messages.create(
     messages = [{ "role": "user", "content": prompt }]
 )
 
-report = self._parse_json(response.content[0].text)
+report = self._parse_json (response.content[0].text)
 report['analysis_date'] = datetime.now().isoformat()
 
 return report
     
-    def detect_insider_trading_risk(self, trades: List[Dict],
+    def detect_insider_trading_risk (self, trades: List[Dict],
     material_events: List[Dict],
     account_info: Dict) -> Dict:
 """
@@ -157,7 +157,7 @@ Material Corporate Events:
 
 Analyze:
 1. Were trades made before material event announcements ?
-    2. Timing suspicious(concentrated activity before events) ?
+    2. Timing suspicious (concentrated activity before events) ?
         3. Unusual size or aggressiveness of trades ?
             4. Pattern of trading ahead of news ?
                 5. Any legitimate explanations ?
@@ -170,9 +170,9 @@ response = self.client.messages.create(
     messages = [{ "role": "user", "content": prompt }]
 )
 
-return self._parse_json(response.content[0].text)
+return self._parse_json (response.content[0].text)
     
-    def check_best_execution(self, order: Dict,
+    def check_best_execution (self, order: Dict,
     execution: Dict,
     market_data: Dict) -> Dict:
 """
@@ -220,9 +220,9 @@ response = self.client.messages.create(
     messages = [{ "role": "user", "content": prompt }]
 )
 
-return self._parse_json(response.content[0].text)
+return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
 """Parse JSON from response"""
 try:
 if "\`\`\`json" in response_text:
@@ -231,12 +231,12 @@ if "\`\`\`json" in response_text:
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-surveillance = TradeSurveillanceSystem(api_key = "your-key")
+surveillance = TradeSurveillanceSystem (api_key = "your-key")
 
 trades = [
     {
@@ -262,9 +262,9 @@ context = {
     'history': 'Active trader, usually holds 2-4 weeks'
 }
 
-report = surveillance.analyze_trade_pattern(trades, context)
+report = surveillance.analyze_trade_pattern (trades, context)
 print("Surveillance Report:")
-print(json.dumps(report, indent = 2))
+print(json.dumps (report, indent = 2))
 \`\`\`
 
 ---
@@ -284,10 +284,10 @@ class CommunicationMonitor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_communication(self, message: str,
+    def analyze_communication (self, message: str,
                              metadata: Dict) -> Dict:
         """
         Analyze communication for compliance issues
@@ -346,9 +346,9 @@ Provide analysis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def detect_collusion(self, messages: List[Dict]) -> Dict:
+    def detect_collusion (self, messages: List[Dict]) -> Dict:
         """
         Detect potential collusion in communications
         
@@ -384,9 +384,9 @@ Return JSON assessment of collusion risk."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -396,12 +396,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-comm_monitor = CommunicationMonitor(api_key = "your-key")
+comm_monitor = CommunicationMonitor (api_key = "your-key")
 
 message = """
 Hey John, I just heard from a friend at XYZ Corp that they're announcing
@@ -418,9 +418,9 @@ metadata = {
     'channel': 'Instant Message'
 }
 
-analysis = comm_monitor.analyze_communication(message, metadata)
+analysis = comm_monitor.analyze_communication (message, metadata)
 print("Communication Analysis:")
-print(json.dumps(analysis, indent = 2))
+print(json.dumps (analysis, indent = 2))
 \`\`\`
 
 ---
@@ -440,10 +440,10 @@ class RegulatoryChangeMonitor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_regulatory_change(self, change_document: str,
+    def analyze_regulatory_change (self, change_document: str,
                                   current_policies: Dict) -> Dict:
         """
         Analyze regulatory change and implications
@@ -461,7 +461,7 @@ Regulatory Change:
 {change_document[:5000]}
 
 Current Policies:
-{json.dumps(current_policies, indent=2)}
+{json.dumps (current_policies, indent=2)}
 
 Provide analysis as JSON:
 {{
@@ -497,9 +497,9 @@ Provide analysis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def generate_compliance_checklist(self, regulation: str) -> List[Dict]:
+    def generate_compliance_checklist (self, regulation: str) -> List[Dict]:
         """
         Generate compliance checklist for regulation
         
@@ -528,9 +528,9 @@ Return as structured JSON list."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -540,12 +540,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-reg_monitor = RegulatoryChangeMonitor(api_key = "your-key")
+reg_monitor = RegulatoryChangeMonitor (api_key = "your-key")
 
 change_doc = """
 SEC Amendment to Rule 10b5 - 1: Trading Plans and Affirmative Defense
@@ -566,9 +566,9 @@ current_policies = {
     'disclosure': 'Annual disclosure in proxy statements'
 }
 
-analysis = reg_monitor.analyze_regulatory_change(change_doc, current_policies)
+analysis = reg_monitor.analyze_regulatory_change (change_doc, current_policies)
 print("Regulatory Change Analysis:")
-print(json.dumps(analysis, indent = 2))
+print(json.dumps (analysis, indent = 2))
 \`\`\`
 
 ---
@@ -588,10 +588,10 @@ class ComplianceReporter:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_surveillance_report(self, period: str,
+    def generate_surveillance_report (self, period: str,
                                     surveillance_data: Dict) -> str:
         """
         Generate periodic surveillance report
@@ -606,7 +606,7 @@ class ComplianceReporter:
         prompt = f"""Generate a comprehensive surveillance report for {period}.
 
 Surveillance Data:
-{json.dumps(surveillance_data, indent=2)}
+{json.dumps (surveillance_data, indent=2)}
 
 Generate report (1500-2000 words) including:
 
@@ -650,7 +650,7 @@ Format as professional regulatory report."""
         
         return response.content[0].text
     
-    def generate_exception_report(self, exceptions: List[Dict]) -> str:
+    def generate_exception_report (self, exceptions: List[Dict]) -> str:
         """
         Generate report of compliance exceptions
         
@@ -692,7 +692,7 @@ Format as executive summary suitable for board presentation."""
         
         return response.content[0].text
     
-    def generate_regulatory_filing(self, filing_type: str,
+    def generate_regulatory_filing (self, filing_type: str,
                                   data: Dict) -> str:
         """
         Generate regulatory filing document
@@ -707,7 +707,7 @@ Format as executive summary suitable for board presentation."""
         prompt = f"""Generate regulatory filing: {filing_type}
 
 Data:
-{json.dumps(data, indent=2)}
+{json.dumps (data, indent=2)}
 
 Generate complete filing with:
 1. All required sections
@@ -727,7 +727,7 @@ Return formatted filing document."""
         return response.content[0].text
 
 # Example usage
-reporter = ComplianceReporter(api_key="your-key")
+reporter = ComplianceReporter (api_key="your-key")
 
 surveillance_data = {
     'period': 'Q1 2024',
@@ -764,24 +764,24 @@ class ComplianceMonitoringPlatform:
     """
     
     def __init__(self, api_key: str):
-        self.surveillance = TradeSurveillanceSystem(api_key)
-        self.comm_monitor = CommunicationMonitor(api_key)
-        self.reg_monitor = RegulatoryChangeMonitor(api_key)
-        self.reporter = ComplianceReporter(api_key)
+        self.surveillance = TradeSurveillanceSystem (api_key)
+        self.comm_monitor = CommunicationMonitor (api_key)
+        self.reg_monitor = RegulatoryChangeMonitor (api_key)
+        self.reporter = ComplianceReporter (api_key)
         
         # Storage
         self.alerts = []
         self.investigations = []
     
-    def monitor_continuous(self):
+    def monitor_continuous (self):
         """
         Run continuous compliance monitoring
         """
         # Schedule monitoring tasks
-        schedule.every(5).minutes.do(self._check_trades)
-        schedule.every(5).minutes.do(self._check_communications)
-        schedule.every().day.at("09:00").do(self._check_regulatory_updates)
-        schedule.every().monday.at("08:00").do(self._generate_weekly_report)
+        schedule.every(5).minutes.do (self._check_trades)
+        schedule.every(5).minutes.do (self._check_communications)
+        schedule.every().day.at("09:00").do (self._check_regulatory_updates)
+        schedule.every().monday.at("08:00").do (self._generate_weekly_report)
         
         print("Compliance monitoring system started")
         
@@ -789,35 +789,35 @@ class ComplianceMonitoringPlatform:
             schedule.run_pending()
             time.sleep(60)
     
-    def _check_trades(self):
+    def _check_trades (self):
         """Monitor recent trades"""
         # Fetch recent trades
         # Analyze with surveillance system
         # Flag suspicious activity
         pass
     
-    def _check_communications(self):
+    def _check_communications (self):
         """Monitor communications"""
         # Fetch recent communications
         # Analyze with comm monitor
         # Flag violations
         pass
     
-    def _check_regulatory_updates(self):
+    def _check_regulatory_updates (self):
         """Check for regulatory changes"""
         # Check regulatory websites
         # Analyze changes
         # Generate action items
         pass
     
-    def _generate_weekly_report(self):
+    def _generate_weekly_report (self):
         """Generate weekly compliance report"""
         # Aggregate weekly data
         # Generate report
         # Distribute to stakeholders
         pass
     
-    def investigate_alert(self, alert_id: str) -> Dict:
+    def investigate_alert (self, alert_id: str) -> Dict:
         """
         Conduct investigation of alert
         
@@ -833,7 +833,7 @@ class ComplianceMonitoringPlatform:
         pass
 
 # Initialize platform
-# platform = ComplianceMonitoringPlatform(api_key="your-key")
+# platform = ComplianceMonitoringPlatform (api_key="your-key")
 # platform.monitor_continuous()
 \`\`\`
 

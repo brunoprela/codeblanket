@@ -113,7 +113,7 @@ class GenerationWorker:
         # Preload models
         self.load_models()
     
-    def load_models(self):
+    def load_models (self):
         """Preload frequently used models."""
         logging.info("Loading models...")
         
@@ -143,13 +143,13 @@ class GenerationWorker:
         seed: Optional[int] = None
     ) -> Image.Image:
         """Generate single image."""
-        pipe = self.models.get(model_name)
+        pipe = self.models.get (model_name)
         if not pipe:
-            raise ValueError(f"Unknown model: {model_name}")
+            raise ValueError (f"Unknown model: {model_name}")
         
         generator = None
         if seed is not None:
-            generator = torch.Generator(device="cuda").manual_seed(seed)
+            generator = torch.Generator (device="cuda").manual_seed (seed)
         
         image = pipe(
             prompt=prompt,
@@ -173,7 +173,7 @@ class GenerationWorker:
         
         # Convert to bytes
         buffer = BytesIO()
-        image.save(buffer, format='PNG')
+        image.save (buffer, format='PNG')
         buffer.seek(0)
         
         # Upload
@@ -190,7 +190,7 @@ class GenerationWorker:
 # Celery tasks
 worker = GenerationWorker()
 
-@celery_app.task(bind=True)
+@celery_app.task (bind=True)
 def generate_task(
     self,
     job_id: str,
@@ -202,7 +202,7 @@ def generate_task(
     """
     try:
         # Update status
-        self.update_state(state='PROCESSING')
+        self.update_state (state='PROCESSING')
         
         # Generate
         image = worker.generate_image(**params)
@@ -220,7 +220,7 @@ def generate_task(
     except Exception as e:
         return {
             'status': 'failed',
-            'error': str(e),
+            'error': str (e),
             'job_id': job_id
         }
 \`\`\`
@@ -270,8 +270,8 @@ class Database:
         self.jobs = {}
         self.users = {}
     
-    def create_job(self, user_id: str, params: dict) -> str:
-        job_id = str(uuid.uuid4())
+    def create_job (self, user_id: str, params: dict) -> str:
+        job_id = str (uuid.uuid4())
         self.jobs[job_id] = {
             'user_id': user_id,
             'status': 'queued',
@@ -282,15 +282,15 @@ class Database:
         }
         return job_id
     
-    def update_job(self, job_id: str, updates: dict):
+    def update_job (self, job_id: str, updates: dict):
         if job_id in self.jobs:
-            self.jobs[job_id].update(updates)
+            self.jobs[job_id].update (updates)
     
-    def get_job(self, job_id: str) -> dict:
-        return self.jobs.get(job_id)
+    def get_job (self, job_id: str) -> dict:
+        return self.jobs.get (job_id)
     
-    def get_user_quota(self, user_id: str) -> dict:
-        user = self.users.get(user_id, {
+    def get_user_quota (self, user_id: str) -> dict:
+        user = self.users.get (user_id, {
             'daily_limit': 100,
             'used_today': 0,
             'tier': 'free'
@@ -301,7 +301,7 @@ db = Database()
 
 # Auth dependency
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
+    credentials: HTTPAuthorizationCredentials = Depends (security)
 ) -> str:
     """Verify auth token and return user ID."""
     token = credentials.credentials
@@ -313,13 +313,13 @@ async def get_current_user(
 @app.post("/generate", response_model=GenerationResponse)
 async def generate_image(
     request: GenerationRequest,
-    user_id: str = Depends(get_current_user)
+    user_id: str = Depends (get_current_user)
 ):
     """
     Queue image generation.
     """
     # Check quota
-    quota = db.get_user_quota(user_id)
+    quota = db.get_user_quota (user_id)
     if quota['used_today'] >= quota['daily_limit']:
         raise HTTPException(
             status_code=429,
@@ -327,7 +327,7 @@ async def generate_image(
         )
     
     # Create job
-    job_id = db.create_job(user_id, request.dict())
+    job_id = db.create_job (user_id, request.dict())
     
     # Queue generation
     task = generate_task.delay(
@@ -348,38 +348,38 @@ async def generate_image(
 @app.get("/job/{job_id}", response_model=JobStatus)
 async def get_job_status(
     job_id: str,
-    user_id: str = Depends(get_current_user)
+    user_id: str = Depends (get_current_user)
 ):
     """
     Get generation job status.
     """
-    job = db.get_job(job_id)
+    job = db.get_job (job_id)
     
     if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+        raise HTTPException (status_code=404, detail="Job not found")
     
     if job['user_id'] != user_id:
-        raise HTTPException(status_code=403, detail="Access denied")
+        raise HTTPException (status_code=403, detail="Access denied")
     
     # Check Celery task status
-    task_result = generate_task.AsyncResult(job_id)
+    task_result = generate_task.AsyncResult (job_id)
     
     if task_result.ready():
         result = task_result.result
-        db.update_job(job_id, {
+        db.update_job (job_id, {
             'status': result['status'],
             'url': result.get('url'),
             'error': result.get('error'),
             'completed_at': datetime.now()
         })
-        job = db.get_job(job_id)
+        job = db.get_job (job_id)
     
     return JobStatus(**job)
 
 @app.get("/history")
 async def get_generation_history(
     limit: int = 20,
-    user_id: str = Depends(get_current_user)
+    user_id: str = Depends (get_current_user)
 ):
     """
     Get user's generation history.
@@ -390,19 +390,19 @@ async def get_generation_history(
     ]
     
     # Sort by created_at, newest first
-    user_jobs.sort(key=lambda x: x['created_at'], reverse=True)
+    user_jobs.sort (key=lambda x: x['created_at'], reverse=True)
     
     return user_jobs[:limit]
 
 @app.get("/quota")
-async def get_quota(user_id: str = Depends(get_current_user)):
+async def get_quota (user_id: str = Depends (get_current_user)):
     """Get user's quota information."""
-    return db.get_user_quota(user_id)
+    return db.get_user_quota (user_id)
 
 # Run server
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ### 3. WebSocket for Real-Time Updates
@@ -418,32 +418,32 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict[str, Set[WebSocket]] = {}
     
-    async def connect(self, websocket: WebSocket, user_id: str):
+    async def connect (self, websocket: WebSocket, user_id: str):
         await websocket.accept()
         if user_id not in self.active_connections:
             self.active_connections[user_id] = set()
-        self.active_connections[user_id].add(websocket)
+        self.active_connections[user_id].add (websocket)
     
-    def disconnect(self, websocket: WebSocket, user_id: str):
-        self.active_connections[user_id].discard(websocket)
+    def disconnect (self, websocket: WebSocket, user_id: str):
+        self.active_connections[user_id].discard (websocket)
     
-    async def send_update(self, user_id: str, message: dict):
+    async def send_update (self, user_id: str, message: dict):
         """Send update to all user's connections."""
         if user_id in self.active_connections:
             for connection in self.active_connections[user_id]:
                 try:
-                    await connection.send_json(message)
+                    await connection.send_json (message)
                 except:
                     pass
 
 manager = ConnectionManager()
 
 @app.websocket("/ws/{user_id}")
-async def websocket_endpoint(websocket: WebSocket, user_id: str):
+async def websocket_endpoint (websocket: WebSocket, user_id: str):
     """
     WebSocket endpoint for real-time updates.
     """
-    await manager.connect(websocket, user_id)
+    await manager.connect (websocket, user_id)
     
     try:
         while True:
@@ -455,10 +455,10 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
                 await websocket.send_text("pong")
     
     except WebSocketDisconnect:
-        manager.disconnect(websocket, user_id)
+        manager.disconnect (websocket, user_id)
 
 # Modify generate_task to send updates
-@celery_app.task(bind=True)
+@celery_app.task (bind=True)
 def generate_task_with_updates(
     self,
     job_id: str,
@@ -468,8 +468,8 @@ def generate_task_with_updates(
     """Generate with real-time updates."""
     import asyncio
     
-    async def send_update(status: str, progress: float = 0):
-        await manager.send_update(user_id, {
+    async def send_update (status: str, progress: float = 0):
+        await manager.send_update (user_id, {
             'job_id': job_id,
             'status': status,
             'progress': progress
@@ -477,22 +477,22 @@ def generate_task_with_updates(
     
     try:
         # Send updates throughout process
-        asyncio.run(send_update('starting', 0))
+        asyncio.run (send_update('starting', 0))
         
         image = worker.generate_image(**params)
         
-        asyncio.run(send_update('uploading', 90))
+        asyncio.run (send_update('uploading', 90))
         
         key = f"generations/{user_id}/{job_id}.png"
         url = worker.upload_to_s3(image, key)
         
-        asyncio.run(send_update('completed', 100))
+        asyncio.run (send_update('completed', 100))
         
         return {'status': 'completed', 'url': url}
     
     except Exception as e:
-        asyncio.run(send_update('failed', 0))
-        return {'status': 'failed', 'error': str(e)}
+        asyncio.run (send_update('failed', 0))
+        return {'status': 'failed', 'error': str (e)}
 \`\`\`
 
 ### 4. Frontend React Component
@@ -522,7 +522,7 @@ const ImageGenerator: React.FC = () => {
     guidanceScale: 7.5,
   });
   
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState (false);
   const [result, setResult] = useState<string | null>(null);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
@@ -531,25 +531,25 @@ const ImageGenerator: React.FC = () => {
     const websocket = new WebSocket('ws://localhost:8000/ws/user_123');
     
     websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      const data = JSON.parse (event.data);
       
       if (data.status === 'completed') {
-        setResult(data.url);
-        setLoading(false);
+        setResult (data.url);
+        setLoading (false);
       } else if (data.status === 'failed') {
         alert('Generation failed: ' + data.error);
-        setLoading(false);
+        setLoading (false);
       }
     };
     
-    setWs(websocket);
+    setWs (websocket);
     
     return () => websocket.close();
   }, []);
 
   const generate = async () => {
-    setLoading(true);
-    setResult(null);
+    setLoading (true);
+    setResult (null);
     
     try {
       const response = await fetch('http://localhost:8000/generate', {
@@ -558,7 +558,7 @@ const ImageGenerator: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer YOUR_TOKEN',
         },
-        body: JSON.stringify(params),
+        body: JSON.stringify (params),
       });
       
       const data = await response.json();
@@ -566,7 +566,7 @@ const ImageGenerator: React.FC = () => {
       
     } catch (error) {
       console.error('Error:', error);
-      setLoading(false);
+      setLoading (false);
     }
   };
 

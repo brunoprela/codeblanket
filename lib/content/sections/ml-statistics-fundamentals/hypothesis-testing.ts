@@ -9,7 +9,7 @@ export const hypothesistestingSection = {
 
 ## Introduction
 
-Hypothesis testing is a formal framework for making decisions based on data. It's everywhere in machine learning:
+Hypothesis testing is a formal framework for making decisions based on data. It\'s everywhere in machine learning:
 
 - **A/B Testing**: Is the new model better than the old one?
 - **Feature Selection**: Does adding this feature significantly improve performance?
@@ -80,11 +80,11 @@ def visualize_errors():
     
     # Type I Error
     x = np.linspace(-4, 4, 1000)
-    y_null = stats.norm.pdf(x, 0, 1)
+    y_null = stats.norm.pdf (x, 0, 1)
     
     ax = axes[0]
-    ax.plot(x, y_null, 'b-', linewidth=2, label='H₀ distribution')
-    ax.fill_between(x[x > 1.96], 0, y_null[x > 1.96], alpha=0.3, color='red', 
+    ax.plot (x, y_null, 'b-', linewidth=2, label='H₀ distribution')
+    ax.fill_between (x[x > 1.96], 0, y_null[x > 1.96], alpha=0.3, color='red', 
                      label='Type I Error region (α=0.05)')
     ax.axvline(1.96, color='r', linestyle='--', linewidth=2)
     ax.set_title('Type I Error: Reject H₀ when H₀ is True', fontweight='bold')
@@ -94,20 +94,20 @@ def visualize_errors():
     ax.text(2.5, 0.15, f'α = 0.05', fontsize=12, color='red')
     
     # Type II Error
-    y_alt = stats.norm.pdf(x, 2, 1)
+    y_alt = stats.norm.pdf (x, 2, 1)
     
     ax = axes[1]
-    ax.plot(x, y_null, 'b--', linewidth=2, label='H₀ distribution', alpha=0.5)
-    ax.plot(x, y_alt, 'g-', linewidth=2, label='H₁ distribution (true)')
-    ax.fill_between(x[x < 1.96], 0, y_alt[x < 1.96], alpha=0.3, color='orange',
+    ax.plot (x, y_null, 'b--', linewidth=2, label='H₀ distribution', alpha=0.5)
+    ax.plot (x, y_alt, 'g-', linewidth=2, label='H₁ distribution (true)')
+    ax.fill_between (x[x < 1.96], 0, y_alt[x < 1.96], alpha=0.3, color='orange',
                      label='Type II Error region (β)')
-    ax.fill_between(x[x >= 1.96], 0, y_alt[x >= 1.96], alpha=0.3, color='green',
+    ax.fill_between (x[x >= 1.96], 0, y_alt[x >= 1.96], alpha=0.3, color='green',
                      label='Power (1-β)')
     ax.axvline(1.96, color='r', linestyle='--', linewidth=2, label='Decision threshold')
     ax.set_title('Type II Error: Fail to Reject H₀ when H₁ is True', fontweight='bold')
     ax.set_xlabel('Test Statistic')
     ax.set_ylabel('Probability Density')
-    ax.legend(loc='upper left', fontsize=8)
+    ax.legend (loc='upper left', fontsize=8)
     
     plt.tight_layout()
     plt.savefig('hypothesis_testing_errors.png', dpi=300, bbox_inches='tight')
@@ -163,7 +163,7 @@ def demonstrate_p_value():
     
     # Under H₀, expected 50 heads
     # Calculate p-value using binomial test
-    p_value = stats.binom_test(observed_heads, n_flips, 0.5, alternative='two-sided')
+    p_value = stats.binom_test (observed_heads, n_flips, 0.5, alternative='two-sided')
     
     print("=== P-Value Example ===")
     print(f"Observed: {observed_heads} heads in {n_flips} flips")
@@ -180,26 +180,26 @@ def demonstrate_p_value():
     
     # Visualize
     x = np.arange(0, n_flips + 1)
-    pmf = stats.binom.pmf(x, n_flips, 0.5)
+    pmf = stats.binom.pmf (x, n_flips, 0.5)
     
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.bar(x, pmf, alpha=0.7, edgecolor='black', label='Binomial distribution under H₀')
+    fig, ax = plt.subplots (figsize=(12, 6))
+    ax.bar (x, pmf, alpha=0.7, edgecolor='black', label='Binomial distribution under H₀')
     
     # Highlight observed value and more extreme
     extreme_mask = (x <= (n_flips - observed_heads)) | (x >= observed_heads)
-    ax.bar(x[extreme_mask], pmf[extreme_mask], color='red', alpha=0.7, 
+    ax.bar (x[extreme_mask], pmf[extreme_mask], color='red', alpha=0.7, 
            label=f'Values as or more extreme (p-value region)')
     
-    ax.axvline(observed_heads, color='green', linestyle='--', linewidth=2, 
+    ax.axvline (observed_heads, color='green', linestyle='--', linewidth=2, 
                label=f'Observed: {observed_heads}')
-    ax.axvline(n_flips * 0.5, color='blue', linestyle='--', linewidth=2,
+    ax.axvline (n_flips * 0.5, color='blue', linestyle='--', linewidth=2,
                label=f'Expected: {n_flips * 0.5:.0f}')
     
     ax.set_xlabel('Number of Heads', fontsize=12)
     ax.set_ylabel('Probability', fontsize=12)
-    ax.set_title(f'P-Value Visualization (p = {p_value:.4f})', fontsize=14, fontweight='bold')
+    ax.set_title (f'P-Value Visualization (p = {p_value:.4f})', fontsize=14, fontweight='bold')
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid (axis='y', alpha=0.3)
     
     plt.tight_layout()
     plt.savefig('p_value_visualization.png', dpi=300, bbox_inches='tight')
@@ -229,7 +229,7 @@ def compare_one_two_tailed():
     new_model_accuracies = np.random.normal(0.78, 0.05, 30)  # Slightly better
     
     # Two-tailed test: Is accuracy different?
-    t_stat, p_two = stats.ttest_1samp(new_model_accuracies, baseline_accuracy)
+    t_stat, p_two = stats.ttest_1samp (new_model_accuracies, baseline_accuracy)
     
     # One-tailed test: Is accuracy greater?
     p_one = p_two / 2 if t_stat > 0 else 1 - (p_two / 2)
@@ -272,43 +272,43 @@ def power_analysis_demo():
     from statsmodels.stats.power import ttest_power
     
     # Calculate power for different sample sizes
-    effect_size = 0.5  # Cohen's d (medium effect)
+    effect_size = 0.5  # Cohen\'s d (medium effect)
     alpha = 0.05
     sample_sizes = [10, 20, 30, 50, 100, 200, 500]
     
-    powers = [ttest_power(effect_size, n, alpha, alternative='two-sided') 
+    powers = [ttest_power (effect_size, n, alpha, alternative='two-sided') 
               for n in sample_sizes]
     
     # Plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(sample_sizes, powers, 'o-', linewidth=2, markersize=8)
+    fig, ax = plt.subplots (figsize=(10, 6))
+    ax.plot (sample_sizes, powers, 'o-', linewidth=2, markersize=8)
     ax.axhline(0.8, color='r', linestyle='--', linewidth=2, 
                label='Target power: 0.80')
     ax.set_xlabel('Sample Size', fontsize=12)
     ax.set_ylabel('Statistical Power', fontsize=12)
-    ax.set_title(f'Power Analysis (Effect Size = {effect_size}, α = {alpha})', 
+    ax.set_title (f'Power Analysis (Effect Size = {effect_size}, α = {alpha})', 
                  fontsize=14, fontweight='bold')
     ax.legend()
     ax.grid(True, alpha=0.3)
     
     # Annotate required sample size for 80% power
-    target_n = next(n for n, p in zip(sample_sizes, powers) if p >= 0.8)
-    ax.plot(target_n, 0.8, 'ro', markersize=12)
-    ax.annotate(f'n ≈ {target_n} needed\\nfor 80% power', 
+    target_n = next (n for n, p in zip (sample_sizes, powers) if p >= 0.8)
+    ax.plot (target_n, 0.8, 'ro', markersize=12)
+    ax.annotate (f'n ≈ {target_n} needed\\nfor 80% power', 
                 xy=(target_n, 0.8), xytext=(target_n + 50, 0.7),
-                fontsize=10, arrowprops=dict(arrowstyle='->', color='red'))
+                fontsize=10, arrowprops=dict (arrowstyle='->', color='red'))
     
     plt.tight_layout()
     plt.savefig('power_analysis.png', dpi=300, bbox_inches='tight')
     plt.show()
     
     print("=== Power Analysis ===")
-    print(f"Effect size (Cohen's d): {effect_size}")
+    print(f"Effect size (Cohen\'s d): {effect_size}")
     print(f"Significance level: {alpha}")
     print()
     print("Sample Size    Power")
     print("-" * 25)
-    for n, power in zip(sample_sizes, powers):
+    for n, power in zip (sample_sizes, powers):
         print(f"{n:6d}        {power:.3f}")
     print()
     print(f"Rule of thumb: Aim for 80% power")
@@ -343,7 +343,7 @@ def model_ab_test():
     count = np.array([new_model_accuracies.sum(), baseline_accuracies.sum()])
     nobs = np.array([n_samples, n_samples])
     
-    z_stat, p_value = proportions_ztest(count, nobs, alternative='larger')
+    z_stat, p_value = proportions_ztest (count, nobs, alternative='larger')
     
     print("=== Model A/B Test ===")
     print(f"Baseline model accuracy: {baseline_acc:.2%}")
@@ -368,31 +368,31 @@ def model_ab_test():
         print("✗ Recommendation: Keep baseline model or collect more data")
     
     # Visualize
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots (figsize=(10, 6))
     
     models = ['Baseline', 'New Model']
     accuracies = [baseline_acc, new_acc]
     colors = ['gray', 'green' if p_value < 0.05 else 'orange']
     
-    bars = ax.bar(models, accuracies, color=colors, alpha=0.7, edgecolor='black', linewidth=2)
+    bars = ax.bar (models, accuracies, color=colors, alpha=0.7, edgecolor='black', linewidth=2)
     
     # Add error bars (confidence intervals)
     for i, (acc, n) in enumerate([(baseline_acc, n_samples), (new_acc, n_samples)]):
-        se = np.sqrt(acc * (1 - acc) / n)
+        se = np.sqrt (acc * (1 - acc) / n)
         ci = 1.96 * se
-        ax.errorbar(i, acc, yerr=ci, fmt='none', color='black', capsize=10, linewidth=2)
+        ax.errorbar (i, acc, yerr=ci, fmt='none', color='black', capsize=10, linewidth=2)
     
     # Add value labels
-    for bar, acc in zip(bars, accuracies):
+    for bar, acc in zip (bars, accuracies):
         height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2., height,
+        ax.text (bar.get_x() + bar.get_width()/2., height,
                 f'{acc:.1%}', ha='center', va='bottom', fontsize=12, fontweight='bold')
     
     ax.set_ylabel('Accuracy', fontsize=12)
-    ax.set_title(f'Model A/B Test\\n(p = {p_value:.4f}, {"Significant" if p_value < 0.05 else "Not Significant"})',
+    ax.set_title (f'Model A/B Test\\n (p = {p_value:.4f}, {"Significant" if p_value < 0.05 else "Not Significant"})',
                  fontsize=14, fontweight='bold')
     ax.set_ylim([0, 1])
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid (axis='y', alpha=0.3)
     
     plt.tight_layout()
     plt.savefig('model_ab_test.png', dpi=300, bbox_inches='tight')
@@ -418,12 +418,12 @@ def demonstrate_p_hacking():
     print("H₀ is true for all features (all noise)")
     print()
     
-    for i in range(n_tests):
+    for i in range (n_tests):
         # Generate noise data (no real effect)
         group1 = np.random.normal(0, 1, 30)
         group2 = np.random.normal(0, 1, 30)
         
-        _, p = stats.ttest_ind(group1, group2)
+        _, p = stats.ttest_ind (group1, group2)
         
         if p < 0.05:
             false_positives += 1

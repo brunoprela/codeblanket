@@ -31,11 +31,11 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "What is the space complexity of Floyd's cycle detection algorithm?",
+      "What is the space complexity of Floyd\'s cycle detection algorithm?",
     options: ['O(N)', 'O(1)', 'O(log N)', 'O(N²)'],
     correctAnswer: 1,
     explanation:
-      "Floyd's algorithm uses only two pointers (slow and fast) regardless of list size, making it O(1) space. This is more efficient than hash set approaches which use O(N) space.",
+      "Floyd\'s algorithm uses only two pointers (slow and fast) regardless of list size, making it O(1) space. This is more efficient than hash set approaches which use O(N) space.",
   },
   {
     id: 'mc4',

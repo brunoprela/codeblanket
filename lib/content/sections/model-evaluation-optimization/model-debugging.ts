@@ -77,10 +77,10 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
     
     # Check data types
     if isinstance(X_train, pd.DataFrame):
-        non_numeric = X_train.select_dtypes(exclude=[np.number]).columns
-        if len(non_numeric) > 0:
-            issues_found.append(f"Non-numeric columns: {list(non_numeric)}")
-            print(f"  ⚠️  Non-numeric columns: {list(non_numeric)}")
+        non_numeric = X_train.select_dtypes (exclude=[np.number]).columns
+        if len (non_numeric) > 0:
+            issues_found.append (f"Non-numeric columns: {list (non_numeric)}")
+            print(f"  ⚠️  Non-numeric columns: {list (non_numeric)}")
         else:
             print("  ✓ All columns numeric")
     
@@ -95,13 +95,13 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
     max_corr_feature = None
     for i in range(X_train.shape[1]):
         corr, _ = pearsonr(X_train[:, i], y_train)
-        if abs(corr) > abs(max_corr):
+        if abs (corr) > abs (max_corr):
             max_corr = corr
             max_corr_feature = i
     
     print(f"\\n  Maximum correlation with target: {max_corr:.4f} (feature {max_corr_feature})")
-    if abs(max_corr) > 0.95:
-        issues_found.append(f"Suspiciously high correlation ({max_corr:.4f})")
+    if abs (max_corr) > 0.95:
+        issues_found.append (f"Suspiciously high correlation ({max_corr:.4f})")
         print("  ⚠️  WARNING: Possible data leakage!")
     
     # 2. DATA DISTRIBUTION CHECKS
@@ -112,10 +112,10 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
     from scipy.stats import ks_2samp
     distribution_mismatches = []
     
-    for i in range(min(X_train.shape[1], 10)):  # Check first 10 features
+    for i in range (min(X_train.shape[1], 10)):  # Check first 10 features
         stat, p_value = ks_2samp(X_train[:, i], X_test[:, i])
         if p_value < 0.05:
-            distribution_mismatches.append(i)
+            distribution_mismatches.append (i)
     
     if distribution_mismatches:
         print(f"  ⚠️  Distribution mismatch in features: {distribution_mismatches}")
@@ -128,7 +128,7 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
     constant_features = []
     for i in range(X_train.shape[1]):
         if X_train[:, i].std() < 1e-10:
-            constant_features.append(i)
+            constant_features.append (i)
     
     if constant_features:
         print(f"  ⚠️  Constant features: {constant_features}")
@@ -147,10 +147,10 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
         train_pred = model.predict(X_train)
         test_pred = model.predict(X_test)
         
-        train_mse = mean_squared_error(y_train, train_pred)
-        test_mse = mean_squared_error(y_test, test_pred)
-        train_r2 = r2_score(y_train, train_pred)
-        test_r2 = r2_score(y_test, test_pred)
+        train_mse = mean_squared_error (y_train, train_pred)
+        test_mse = mean_squared_error (y_test, test_pred)
+        train_r2 = r2_score (y_train, train_pred)
+        test_r2 = r2_score (y_test, test_pred)
         
         print(f"  Train MSE: {train_mse:.2f}, R²: {train_r2:.4f}")
         print(f"  Test  MSE: {test_mse:.2f}, R²: {test_r2:.4f}")
@@ -165,7 +165,7 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
             print("    - Add regularization")
             print("    - Get more training data")
             print("    - Remove noisy features")
-        elif train_mse > np.var(y_train) * 0.8:  # Barely better than predicting mean
+        elif train_mse > np.var (y_train) * 0.8:  # Barely better than predicting mean
             print("  ⚠️  HIGH BIAS (Underfitting)")
             issues_found.append("Underfitting detected")
             print("  Actions:")
@@ -181,7 +181,7 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
             print("  ⚠️  Negative predictions (may be problematic)")
             issues_found.append("Negative predictions")
         
-        if np.isnan(test_pred).any():
+        if np.isnan (test_pred).any():
             print("  ⚠️  NaN predictions!")
             issues_found.append("NaN predictions")
     
@@ -194,21 +194,21 @@ def comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model=None):
         print("\\n✓ No major issues detected!")
         print("  Model appears healthy.")
     else:
-        print(f"\\n⚠️  {len(issues_found)} issue(s) found:")
-        for i, issue in enumerate(issues_found, 1):
+        print(f"\\n⚠️  {len (issues_found)} issue (s) found:")
+        for i, issue in enumerate (issues_found, 1):
             print(f"  {i}. {issue}")
     
     return issues_found
 
 # Run checklist
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
 issues = comprehensive_debug_checklist(X_train, X_test, y_train, y_test, model)
 \`\`\`
 
 ## Residual Analysis
 
 \`\`\`python
-def analyze_residuals(model, X_train, X_test, y_train, y_test):
+def analyze_residuals (model, X_train, X_test, y_train, y_test):
     """Detailed residual analysis."""
     
     print("\\n" + "="*70)
@@ -229,7 +229,7 @@ def analyze_residuals(model, X_train, X_test, y_train, y_test):
     print(f"  Test  - Mean: {test_residuals.mean():7.2f}, Std: {test_residuals.std():7.2f}")
     
     # Check for bias
-    if abs(test_residuals.mean()) > test_residuals.std() * 0.1:
+    if abs (test_residuals.mean()) > test_residuals.std() * 0.1:
         if test_residuals.mean() > 0:
             print("  ⚠️  Model systematically UNDER-predicts")
         else:
@@ -239,9 +239,9 @@ def analyze_residuals(model, X_train, X_test, y_train, y_test):
     
     # Check for heteroscedasticity
     from scipy.stats import spearmanr
-    corr, p_value = spearmanr(test_pred, np.abs(test_residuals))
-    print(f"\\n  Correlation(predictions, |residuals|): {corr:.4f} (p={p_value:.4f})")
-    if abs(corr) > 0.3 and p_value < 0.05:
+    corr, p_value = spearmanr (test_pred, np.abs (test_residuals))
+    print(f"\\n  Correlation (predictions, |residuals|): {corr:.4f} (p={p_value:.4f})")
+    if abs (corr) > 0.3 and p_value < 0.05:
         print("  ⚠️  Heteroscedasticity detected (error variance not constant)")
         print("  ACTION: Consider transforming target variable")
     else:
@@ -252,44 +252,44 @@ def analyze_residuals(model, X_train, X_test, y_train, y_test):
     
     # 1. Predicted vs Actual
     ax1 = axes[0, 0]
-    ax1.scatter(y_test, test_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
+    ax1.scatter (y_test, test_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
     ax1.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
             'r--', linewidth=2)
     ax1.set_xlabel('Actual')
     ax1.set_ylabel('Predicted')
     ax1.set_title('Predicted vs Actual', fontweight='bold')
-    ax1.grid(alpha=0.3)
+    ax1.grid (alpha=0.3)
     
     # 2. Residuals vs Predicted
     ax2 = axes[0, 1]
-    ax2.scatter(test_pred, test_residuals, alpha=0.6, edgecolors='black', linewidth=0.5)
-    ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
+    ax2.scatter (test_pred, test_residuals, alpha=0.6, edgecolors='black', linewidth=0.5)
+    ax2.axhline (y=0, color='r', linestyle='--', linewidth=2)
     ax2.set_xlabel('Predicted Values')
     ax2.set_ylabel('Residuals')
     ax2.set_title('Residual Plot', fontweight='bold')
-    ax2.grid(alpha=0.3)
+    ax2.grid (alpha=0.3)
     
     # 3. Residual Distribution
     ax3 = axes[1, 0]
-    ax3.hist(test_residuals, bins=30, edgecolor='black', alpha=0.7)
-    ax3.axvline(x=0, color='r', linestyle='--', linewidth=2)
+    ax3.hist (test_residuals, bins=30, edgecolor='black', alpha=0.7)
+    ax3.axvline (x=0, color='r', linestyle='--', linewidth=2)
     ax3.set_xlabel('Residuals')
     ax3.set_ylabel('Frequency')
     ax3.set_title('Residual Distribution', fontweight='bold')
-    ax3.grid(alpha=0.3)
+    ax3.grid (alpha=0.3)
     
     # 4. Q-Q Plot
     from scipy import stats
     ax4 = axes[1, 1]
-    stats.probplot(test_residuals, dist="norm", plot=ax4)
+    stats.probplot (test_residuals, dist="norm", plot=ax4)
     ax4.set_title('Q-Q Plot', fontweight='bold')
-    ax4.grid(alpha=0.3)
+    ax4.grid (alpha=0.3)
     
     plt.tight_layout()
     plt.savefig('residual_analysis.png', dpi=150, bbox_inches='tight')
     print("\\n  Plots saved to 'residual_analysis.png'")
 
-analyze_residuals(model, X_train, X_test, y_train, y_test)
+analyze_residuals (model, X_train, X_test, y_train, y_test)
 \`\`\`
 
 ## Common Debugging Scenarios
@@ -369,7 +369,7 @@ scenarios = [
     }
 ]
 
-for i, scenario in enumerate(scenarios, 1):
+for i, scenario in enumerate (scenarios, 1):
     print(f"\\n{i}. {scenario['diagnosis'].upper()}")
     print(f"   Symptoms: {scenario['symptoms']}")
     print("   Solutions:")
@@ -446,22 +446,22 @@ print(X_train.describe())
 
 # Check labels
 print(y_train.min(), y_train.max(), y_train.mean())
-print(pd.Series(y_train).value_counts())  # For classification
+print(pd.Series (y_train).value_counts())  # For classification
 
 # Check predictions
 pred = model.predict(X_test)
 print(f"Predictions: min={pred.min()}, max={pred.max()}, mean={pred.mean()}")
-print(f"NaN predictions: {np.isnan(pred).sum()}")
+print(f"NaN predictions: {np.isnan (pred).sum()}")
 
 # Quick performance check
 from sklearn.metrics import mean_squared_error, r2_score, accuracy_score
-print(f"Train R²: {r2_score(y_train, model.predict(X_train)):.4f}")
-print(f"Test R²: {r2_score(y_test, model.predict(X_test)):.4f}")
+print(f"Train R²: {r2_score (y_train, model.predict(X_train)):.4f}")
+print(f"Test R²: {r2_score (y_test, model.predict(X_test)):.4f}")
 
 # Check feature importance (tree models)
-if hasattr(model, 'feature_importances_'):
+if hasattr (model, 'feature_importances_'):
     importances = model.feature_importances_
-    for i, imp in enumerate(importances):
+    for i, imp in enumerate (importances):
         if imp > 0.1:  # Significant features
             print(f"Feature {i}: {imp:.4f}")
 
@@ -470,8 +470,8 @@ from sklearn.model_selection import learning_curve
 train_sizes, train_scores, val_scores = learning_curve(
     model, X_train, y_train, cv=5
 )
-print(f"Learning curve - Train: {train_scores.mean(axis=1)}")
-print(f"Learning curve - Val: {val_scores.mean(axis=1)}")
+print(f"Learning curve - Train: {train_scores.mean (axis=1)}")
+print(f"Learning curve - Val: {val_scores.mean (axis=1)}")
 """
 
 print(debugging_commands)

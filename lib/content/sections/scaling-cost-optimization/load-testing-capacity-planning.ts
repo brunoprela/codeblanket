@@ -30,25 +30,25 @@ import random
 class LLMUser(HttpUser):
     wait_time = between(1, 3)  # Wait 1-3s between requests
     
-    def on_start(self):
+    def on_start (self):
         # Called when user starts
         pass
     
     @task(3)  # Weight 3 (75% of requests)
-    def simple_query(self):
+    def simple_query (self):
         prompts = [
             "What is 2+2?",
             "Hello, how are you?",
-            "What's the capital of France?"
+            "What\'s the capital of France?"
         ]
         
         self.client.post("/api/chat", json={
-            "prompt": random.choice(prompts),
+            "prompt": random.choice (prompts),
             "user_id": f"user_{self.user_id}"
         }, name="Simple Query")
     
     @task(1)  # Weight 1 (25% of requests)
-    def complex_query(self):
+    def complex_query (self):
         self.client.post("/api/chat", json={
             "prompt": "Explain quantum computing in detail with examples",
             "user_id": f"user_{self.user_id}"

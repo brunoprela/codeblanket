@@ -18,14 +18,14 @@ Async programming allows your code to handle multiple tasks concurrently without
 \`\`\`python
 import asyncio
 
-async def fetch_data(url):
+async def fetch_data (url):
     """Async function (coroutine)"""
     print(f"Fetching {url}...")
     await asyncio.sleep(1)  # Simulate I/O operation
     return f"Data from {url}"
 
 # Run async function
-result = asyncio.run(fetch_data("https://api.example.com"))
+result = asyncio.run (fetch_data("https://api.example.com"))
 print(result)
 \`\`\`
 
@@ -42,7 +42,7 @@ async def fetch_all_data():
     return results
 
 # Total time: ~1 second (not 3 seconds!)
-results = asyncio.run(fetch_all_data())
+results = asyncio.run (fetch_all_data())
 \`\`\`
 
 **Why Async Matters:**
@@ -54,12 +54,12 @@ def sync_fetch_all():
     results = []
     for url in ["url1", "url2", "url3"]:
         time.sleep(1)  # Blocking operation
-        results.append(f"Data from {url}")
+        results.append (f"Data from {url}")
     return results
 
 # Async version (1 second total - concurrent!)
 async def async_fetch_all():
-    tasks = [fetch_data(url) for url in ["url1", "url2", "url3"]]
+    tasks = [fetch_data (url) for url in ["url1", "url2", "url3"]]
     return await asyncio.gather(*tasks)
 \`\`\`
 
@@ -69,8 +69,8 @@ async def async_fetch_all():
 \`\`\`python
 async def main():
     # Create tasks (start them immediately)
-    task1 = asyncio.create_task(fetch_data("url1"))
-    task2 = asyncio.create_task(fetch_data("url2"))
+    task1 = asyncio.create_task (fetch_data("url1"))
+    task2 = asyncio.create_task (fetch_data("url2"))
     
     # Do other work while tasks run
     print("Tasks are running in background...")
@@ -82,10 +82,10 @@ async def main():
 
 **2. Timeout Handling:**
 \`\`\`python
-async def fetch_with_timeout(url, timeout=5):
+async def fetch_with_timeout (url, timeout=5):
     try:
         return await asyncio.wait_for(
-            fetch_data(url), 
+            fetch_data (url), 
             timeout=timeout
         )
     except asyncio.TimeoutError:
@@ -112,9 +112,9 @@ async def use_database():
 
 **4. Async Generators:**
 \`\`\`python
-async def async_range(start, stop):
+async def async_range (start, stop):
     """Async generator example"""
-    for i in range(start, stop):
+    for i in range (start, stop):
         await asyncio.sleep(0.1)  # Simulate async work
         yield i
 
@@ -128,20 +128,20 @@ async def consume_async_generator():
 import aiohttp
 import asyncio
 
-async def fetch_url(session, url):
+async def fetch_url (session, url):
     """Fetch single URL"""
-    async with session.get(url) as response:
+    async with session.get (url) as response:
         return await response.text()
 
-async def scrape_websites(urls):
+async def scrape_websites (urls):
     """Scrape multiple websites concurrently"""
     async with aiohttp.ClientSession() as session:
-        tasks = [fetch_url(session, url) for url in urls]
+        tasks = [fetch_url (session, url) for url in urls]
         return await asyncio.gather(*tasks)
 
 # Scrape 10 websites concurrently (much faster than sequential!)
 urls = [f"https://example.com/page{i}" for i in range(10)]
-results = asyncio.run(scrape_websites(urls))
+results = asyncio.run (scrape_websites (urls))
 \`\`\`
 
 **Common Pitfalls:**
@@ -170,7 +170,7 @@ await asyncio.sleep(1)
 result = await fetch_data("url")  
 
 # CORRECT - use asyncio.run()
-result = asyncio.run(fetch_data("url"))
+result = asyncio.run (fetch_data("url"))
 \`\`\`
 
 **When to Use Async:**

@@ -102,7 +102,7 @@ class EventTracker:
             """,
             event.event_id, event.event_type, event.user_id,
             event.session_id, event.timestamp,
-            json.dumps(event.properties), json.dumps(event.context)
+            json.dumps (event.properties), json.dumps (event.context)
         )
         
         # Send to Kafka (for real-time processing)
@@ -113,7 +113,7 @@ class EventTracker:
             )
 
 # Event types
-tracker = EventTracker(db, kafka)
+tracker = EventTracker (db, kafka)
 
 # Track chat message
 await tracker.track(
@@ -276,18 +276,18 @@ class MetricsCalculator:
         latency_values = [row['latency'] for row in latencies]
         
         if latency_values:
-            latency_p50 = statistics.median(latency_values)
-            latency_p95 = statistics.quantiles(latency_values, n=20)[18]  # 95th percentile
-            latency_p99 = statistics.quantiles(latency_values, n=100)[98]  # 99th percentile
+            latency_p50 = statistics.median (latency_values)
+            latency_p95 = statistics.quantiles (latency_values, n=20)[18]  # 95th percentile
+            latency_p99 = statistics.quantiles (latency_values, n=100)[98]  # 99th percentile
         else:
             latency_p50 = latency_p95 = latency_p99 = 0
         
         return {
             "total_requests": total_requests,
             "active_users": active_users,
-            "total_cost": float(cost_data['total_cost'] or 0),
-            "avg_cost_per_request": float(cost_data['avg_cost_per_request'] or 0),
-            "cost_per_user": float(cost_data['total_cost'] or 0) / max(active_users, 1),
+            "total_cost": float (cost_data['total_cost'] or 0),
+            "avg_cost_per_request": float (cost_data['avg_cost_per_request'] or 0),
+            "cost_per_user": float (cost_data['total_cost'] or 0) / max (active_users, 1),
             "total_input_tokens": token_data['total_input_tokens'] or 0,
             "total_output_tokens": token_data['total_output_tokens'] or 0,
             "latency_ms": {
@@ -417,8 +417,8 @@ class MetricsCalculator:
         )
         
         return {
-            "avg_messages_per_conversation": float(msg_per_conv or 0),
-            "avg_session_duration_seconds": float(avg_session or 0),
+            "avg_messages_per_conversation": float (msg_per_conv or 0),
+            "avg_session_duration_seconds": float (avg_session or 0),
             "feature_adoption": [
                 {"feature": row['feature'], "users": row['user_count']}
                 for row in feature_usage
@@ -426,7 +426,7 @@ class MetricsCalculator:
         }
 
 # API endpoints
-metrics_calc = MetricsCalculator(db)
+metrics_calc = MetricsCalculator (db)
 
 @app.get("/api/metrics/dashboard")
 async def get_dashboard_metrics(
@@ -439,16 +439,16 @@ async def get_dashboard_metrics(
     # Calculate time range
     end = datetime.utcnow()
     if period == "24h":
-        start = end - timedelta(hours=24)
+        start = end - timedelta (hours=24)
     elif period == "7d":
-        start = end - timedelta(days=7)
+        start = end - timedelta (days=7)
     elif period == "30d":
-        start = end - timedelta(days=30)
+        start = end - timedelta (days=30)
     
     # Get all metrics
-    usage = await metrics_calc.get_usage_metrics(start, end)
-    quality = await metrics_calc.get_quality_metrics(start, end)
-    engagement = await metrics_calc.get_engagement_metrics(start, end)
+    usage = await metrics_calc.get_usage_metrics (start, end)
+    quality = await metrics_calc.get_quality_metrics (start, end)
+    engagement = await metrics_calc.get_engagement_metrics (start, end)
     
     return {
         "period": period,
@@ -554,20 +554,20 @@ class CostAnalytics:
         )
         
         return {
-            "by_provider": [dict(row) for row in by_provider],
-            "by_model": [dict(row) for row in by_model],
-            "top_users": [dict(row) for row in by_user],
-            "over_time": [dict(row) for row in over_time]
+            "by_provider": [dict (row) for row in by_provider],
+            "by_model": [dict (row) for row in by_model],
+            "top_users": [dict (row) for row in by_user],
+            "over_time": [dict (row) for row in over_time]
         }
     
-    async def get_cost_projections(self) -> Dict:
+    async def get_cost_projections (self) -> Dict:
         """
         Project costs based on current usage
         """
         
         # Get last 7 days of costs
         end = datetime.utcnow()
-        start = end - timedelta(days=7)
+        start = end - timedelta (days=7)
         
         daily_costs = await self.db.fetch(
             """
@@ -587,7 +587,7 @@ class CostAnalytics:
             return {"error": "Insufficient data"}
         
         # Calculate average daily cost
-        avg_daily_cost = sum(row['cost'] for row in daily_costs) / len(daily_costs)
+        avg_daily_cost = sum (row['cost'] for row in daily_costs) / len (daily_costs)
         
         return {
             "avg_daily_cost": avg_daily_cost,
@@ -595,7 +595,7 @@ class CostAnalytics:
             "projected_yearly_cost": avg_daily_cost * 365
         }
     
-    async def identify_cost_optimizations(self) -> List[Dict]:
+    async def identify_cost_optimizations (self) -> List[Dict]:
         """
         Suggest cost optimizations
         """
@@ -640,13 +640,13 @@ async def get_cost_analytics(
     
     end = datetime.utcnow()
     if period == "7d":
-        start = end - timedelta(days=7)
+        start = end - timedelta (days=7)
     elif period == "30d":
-        start = end - timedelta(days=30)
+        start = end - timedelta (days=30)
     
-    cost_analytics = CostAnalytics(db)
+    cost_analytics = CostAnalytics (db)
     
-    breakdown = await cost_analytics.get_cost_breakdown(start, end)
+    breakdown = await cost_analytics.get_cost_breakdown (start, end)
     projections = await cost_analytics.get_cost_projections()
     optimizations = await cost_analytics.identify_cost_optimizations()
     
@@ -676,7 +676,7 @@ class CohortAnalytics:
     def __init__(self, db):
         self.db = db
     
-    async def get_retention_cohorts(self) -> List[Dict]:
+    async def get_retention_cohorts (self) -> List[Dict]:
         """
         Calculate retention by weekly cohort
         """
@@ -705,7 +705,7 @@ class CohortAnalytics:
         ORDER BY uc.cohort_week, wa.activity_week
         """
         
-        results = await self.db.fetch(query)
+        results = await self.db.fetch (query)
         
         # Format as cohort table
         cohorts = {}
@@ -729,7 +729,7 @@ class CohortAnalytics:
         
         return cohorts
     
-    async def identify_power_users(self) -> List[Dict]:
+    async def identify_power_users (self) -> List[Dict]:
         """
         Identify most engaged users
         """
@@ -752,7 +752,7 @@ class CohortAnalytics:
             """,
         )
         
-        return [dict(row) for row in power_users]
+        return [dict (row) for row in power_users]
 
 @app.get("/api/analytics/cohorts")
 async def get_cohort_analytics():
@@ -760,7 +760,7 @@ async def get_cohort_analytics():
     Get cohort analytics
     """
     
-    cohort_analytics = CohortAnalytics(db)
+    cohort_analytics = CohortAnalytics (db)
     
     retention = await cohort_analytics.get_retention_cohorts()
     power_users = await cohort_analytics.identify_power_users()

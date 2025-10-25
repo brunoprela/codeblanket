@@ -21,7 +21,7 @@ export const typesystemunderstandingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-typesystemunderstanding-mc-2',
     question:
-      'How do type checkers like mypy analyze this code?\n\ndef add(x: int, y: int) -> int:\n    return x + y\n\nresult = add("hello", "world")',
+      'How do type checkers like mypy analyze this code?\n\ndef add (x: int, y: int) -> int:\n    return x + y\n\nresult = add("hello", "world")',
     options: [
       'Execute the code to check types',
       'Build type environment, infer types, check parameter types match annotations',
@@ -35,7 +35,7 @@ export const typesystemunderstandingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-typesystemunderstanding-mc-3',
     question:
-      'What is a generic type?\n\nfrom typing import List\ndef process(items: List[int]) -> int',
+      'What is a generic type?\n\nfrom typing import List\ndef process (items: List[int]) -> int',
     options: [
       'A type that can be any value',
       'A parameterized type (List[T] where T can vary)',
@@ -49,7 +49,7 @@ export const typesystemunderstandingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-typesystemunderstanding-mc-4',
     question:
-      'What does Protocol mean in Python typing?\n\nfrom typing import Protocol\n\nclass Drawable(Protocol):\n    def draw(self) -> None: ...',
+      'What does Protocol mean in Python typing?\n\nfrom typing import Protocol\n\nclass Drawable(Protocol):\n    def draw (self) -> None: ...',
     options: [
       'A network protocol',
       'Structural subtyping - any class with draw() method matches',

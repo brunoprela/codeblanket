@@ -17,7 +17,7 @@ export const celeryArchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "For CPU-intensive tasks, use prefork (multiprocessing) because it creates separate processes that bypass Python's GIL (Global Interpreter Lock), enabling true parallelism. Threads (option 1) are limited by GIL for CPU tasks. Gevent (option 3) is for I/O tasks only. Solo (option 4) has no concurrency. CPU-bound = prefork, I/O-bound = gevent/threads.",
+      "For CPU-intensive tasks, use prefork (multiprocessing) because it creates separate processes that bypass Python\'s GIL (Global Interpreter Lock), enabling true parallelism. Threads (option 1) are limited by GIL for CPU tasks. Gevent (option 3) is for I/O tasks only. Solo (option 4) has no concurrency. CPU-bound = prefork, I/O-bound = gevent/threads.",
   },
   {
     id: 'mc2',

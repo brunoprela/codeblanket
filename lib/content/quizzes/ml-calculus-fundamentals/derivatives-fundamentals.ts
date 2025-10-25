@@ -33,10 +33,10 @@ b) **Subgradient convention**: Automatic differentiation libraries define:
    Either choice works because we'll never actually hit exactly 0.
 
 c) **Implementation**: Libraries use:
-   \\\`\\\`\\\`python
-   def relu_backward(x):
-       return (x > 0).astype(float)  # Returns 0 for x ≤ 0, 1 for x > 0
-   \\\`\\\`\\\`
+   \`\`\`python
+   def relu_backward (x):
+       return (x > 0).astype (float)  # Returns 0 for x ≤ 0, 1 for x > 0
+   \`\`\`
 
 **4. Sparse Activations:**
 The zero gradient for x < 0 creates sparse representations - only a subset of neurons activate for any input. This:
@@ -89,25 +89,25 @@ This is a perfect example of where mathematical purity (everywhere differentiabl
 
 **Implementation Strategy:**
 
-\\\`\\\`\\\`python
-def gradient_check(f, x, analytical_grad, epsilon=1e-5):
+\`\`\`python
+def gradient_check (f, x, analytical_grad, epsilon=1e-5):
     """
     Verify analytical gradients against numerical approximation
     """
-    numerical_grad = np.zeros_like(x)
+    numerical_grad = np.zeros_like (x)
     
     # Compute numerical gradient for each parameter
-    for i in range(x.size):
+    for i in range (x.size):
         # Store original value
         original = x.flat[i]
         
-        # Compute f(x + h)
+        # Compute f (x + h)
         x.flat[i] = original + epsilon
-        f_plus = f(x)
+        f_plus = f (x)
         
-        # Compute f(x - h)
+        # Compute f (x - h)
         x.flat[i] = original - epsilon
-        f_minus = f(x)
+        f_minus = f (x)
         
         # Central difference
         numerical_grad.flat[i] = (f_plus - f_minus) / (2 * epsilon)
@@ -116,12 +116,12 @@ def gradient_check(f, x, analytical_grad, epsilon=1e-5):
         x.flat[i] = original
     
     # Compute relative error
-    numerator = np.linalg.norm(numerical_grad - analytical_grad)
-    denominator = np.linalg.norm(numerical_grad) + np.linalg.norm(analytical_grad)
+    numerator = np.linalg.norm (numerical_grad - analytical_grad)
+    denominator = np.linalg.norm (numerical_grad) + np.linalg.norm (analytical_grad)
     relative_error = numerator / denominator
     
     return numerical_grad, relative_error
-\\\`\\\`\\\`
+\`\`\`
 
 **Choosing h (epsilon):**
 
@@ -154,12 +154,12 @@ Example: Neural network with 1M parameters
    - NOT during regular training (too expensive)
 
 2. **Sampling strategy:**
-   \\\`\\\`\\\`python
+   \`\`\`python
    # Don't check all parameters - sample instead
    n_samples = min(100, n_parameters)
-   indices = np.random.choice(n_parameters, n_samples, replace=False)
+   indices = np.random.choice (n_parameters, n_samples, replace=False)
    # Check only sampled parameters
-   \\\`\\\`\\\`
+   \`\`\`
 
 3. **Tolerance thresholds:**
    - Relative error < 1e-7: Excellent (backprop likely correct)
@@ -175,10 +175,10 @@ Example: Neural network with 1M parameters
 
 **Advanced: Two-sided error bounds:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Check both forward and central difference
-forward_error = abs(forward_diff - analytical)
-central_error = abs(central_diff - analytical)
+forward_error = abs (forward_diff - analytical)
+central_error = abs (central_diff - analytical)
 
 if forward_error < 1e-7 and central_error < 1e-9:
     print("Gradient implementation verified ✓")
@@ -186,20 +186,20 @@ elif central_error < 1e-5:
     print("Gradient likely correct (within numerical precision)")
 else:
     print("Gradient BUG detected!")
-\\\`\\\`\\\`
+\`\`\`
 
 **Real-World Application:**
 
 Modern frameworks (PyTorch, TensorFlow) have built-in gradient checking:
-\\\`\\\`\\\`python
+\`\`\`python
 import torch
 from torch.autograd import gradcheck
 
 # PyTorch automatic gradient checking
 inputs = torch.randn(20, 20, dtype=torch.double, requires_grad=True)
-test = gradcheck(my_function, inputs, eps=1e-6)
+test = gradcheck (my_function, inputs, eps=1e-6)
 print(f"Gradients correct: {test}")
-\\\`\\\`\\\`
+\`\`\`
 
 **Summary:**
 Gradient checking is essential for correctness but too expensive for training. Use central difference with h ≈ 1e-5 to 1e-7, sample parameters randomly, and only check during development/debugging phases.`,
@@ -244,7 +244,7 @@ Gradient checking is essential for correctness but too expensive for training. U
 
 **Learning Rate Too Small (α → 0):**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Example: α = 0.001 (too small)
 # Problem: Slow convergence
 θ = 10.0  # Start far from minimum
@@ -257,7 +257,7 @@ while abs(θ) > 0.01:  # Get close to minimum
     iterations += 1
 
 print(f"Iterations needed: {iterations}")  # Thousands!
-\\\`\\\`\\\`
+\`\`\`
 
 Consequences:
 - Takes many iterations to converge
@@ -267,7 +267,7 @@ Consequences:
 
 **Learning Rate Too Large (α → ∞):**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Example: α = 1.5 (too large)
 # Problem: Overshooting
 θ = 1.0
@@ -283,7 +283,7 @@ for i in range(20):
         break
 
 # θ oscillates wildly: 1, -2, 4, -8, 16, ...
-\\\`\\\`\\\`
+\`\`\`
 
 Consequences:
 - Overshoots the minimum
@@ -311,9 +311,9 @@ For general functions with Lipschitz-continuous gradients:
 
 **1. Learning Rate Schedules:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Start large, decay over time
-def learning_rate_schedule(epoch, initial_lr=0.1):
+def learning_rate_schedule (epoch, initial_lr=0.1):
     # Step decay
     if epoch < 30:
         return initial_lr
@@ -323,19 +323,19 @@ def learning_rate_schedule(epoch, initial_lr=0.1):
         return initial_lr * 0.01
 
 # Or exponential decay
-def exp_decay(epoch, initial_lr=0.1, decay_rate=0.95):
+def exp_decay (epoch, initial_lr=0.1, decay_rate=0.95):
     return initial_lr * (decay_rate ** epoch)
 
 # Or cosine annealing
-def cosine_anneal(epoch, initial_lr=0.1, total_epochs=100):
-    return initial_lr * 0.5 * (1 + np.cos(np.pi * epoch / total_epochs))
-\\\`\\\`\\\`
+def cosine_anneal (epoch, initial_lr=0.1, total_epochs=100):
+    return initial_lr * 0.5 * (1 + np.cos (np.pi * epoch / total_epochs))
+\`\`\`
 
 **2. Adaptive Learning Rates (Adam, RMSprop):**
 
 These algorithms automatically adjust α per parameter based on gradient history:
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Simplified Adam
 m = 0  # First moment (momentum)
 v = 0  # Second moment (variance)
@@ -352,7 +352,7 @@ for t in range(1, num_iterations):
     v_hat = v / (1 - β2**t)
     
     θ = θ - α * m_hat / (√v_hat + ε)  # Adaptive step
-\\\`\\\`\\\`
+\`\`\`
 
 Adam effectively uses:
 - Larger steps when gradients are consistent
@@ -361,13 +361,13 @@ Adam effectively uses:
 
 **3. Learning Rate Warmup:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Start with small α, increase gradually
-def warmup_schedule(epoch, target_lr=0.1, warmup_epochs=5):
+def warmup_schedule (epoch, target_lr=0.1, warmup_epochs=5):
     if epoch < warmup_epochs:
         return target_lr * (epoch + 1) / warmup_epochs
     return target_lr
-\\\`\\\`\\\`
+\`\`\`
 
 Useful for:
 - Large batch training
@@ -376,27 +376,27 @@ Useful for:
 
 **4. Learning Rate Finder:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Empirically find good learning rate
-def find_learning_rate(model, train_loader, start_lr=1e-7, end_lr=10):
+def find_learning_rate (model, train_loader, start_lr=1e-7, end_lr=10):
     lrs, losses = [], []
     lr = start_lr
     
     for batch in train_loader:
-        loss = train_step(model, batch, lr)
-        losses.append(loss)
-        lrs.append(lr)
+        loss = train_step (model, batch, lr)
+        losses.append (loss)
+        lrs.append (lr)
         
         # Exponentially increase lr
         lr *= 1.1
         
-        if lr > end_lr or loss > 4 * min(losses):
+        if lr > end_lr or loss > 4 * min (losses):
             break
     
     # Plot and choose lr where loss decreases fastest
     # Typically: 1/10 of lr at minimum loss
     return lrs, losses
-\\\`\\\`\\\`
+\`\`\`
 
 **Visual Understanding:**
 
@@ -407,11 +407,11 @@ Imagine rolling a ball down a hill (loss landscape):
 
 **Loss Landscape Visualization:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Different learning rates on same problem
-θ_history_small = gradient_descent(f, initial_θ, α=0.01, iterations=100)
-θ_history_good = gradient_descent(f, initial_θ, α=0.1, iterations=100)
-θ_history_large = gradient_descent(f, initial_θ, α=0.9, iterations=100)
+θ_history_small = gradient_descent (f, initial_θ, α=0.01, iterations=100)
+θ_history_good = gradient_descent (f, initial_θ, α=0.1, iterations=100)
+θ_history_large = gradient_descent (f, initial_θ, α=0.9, iterations=100)
 
 # Plot trajectories
 plt.plot(θ_history_small, label='α=0.01 (too small)')
@@ -419,7 +419,7 @@ plt.plot(θ_history_good, label='α=0.1 (good)')
 plt.plot(θ_history_large, label='α=0.9 (too large)')
 plt.legend()
 # Shows: Small α crawls, good α converges smoothly, large α oscillates
-\\\`\\\`\\\`
+\`\`\`
 
 **Summary:**
 Derivatives provide the direction to move (downhill), while the learning rate controls step size. Too small → slow convergence, too large → instability/divergence. Modern practice uses adaptive methods (Adam) with learning rate schedules and warmup for robust training across diverse architectures and datasets.`,

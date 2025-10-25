@@ -166,42 +166,42 @@ from pathlib import Path
 import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configuration
 START_DATE = "2015-01-01"
 END_DATE = "2024-01-01"
 DATA_DIR = Path("../data/raw")
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+DATA_DIR.mkdir (parents=True, exist_ok=True)
 
 # Get S&P 500 tickers
 import pandas_datareader as pdr
 sp500_tickers = pdr.get_data_yahoo('^GSPC')  # Simplified
 
 # Download data with error handling
-def download_ticker(ticker):
+def download_ticker (ticker):
     try:
-        df = yf.download(ticker, start=START_DATE, end=END_DATE, progress=False)
-        logger.info(f"Downloaded {ticker}: {len(df)} rows")
+        df = yf.download (ticker, start=START_DATE, end=END_DATE, progress=False)
+        logger.info (f"Downloaded {ticker}: {len (df)} rows")
         return ticker, df
     except Exception as e:
-        logger.error(f"Failed to download {ticker}: {e}")
+        logger.error (f"Failed to download {ticker}: {e}")
         return ticker, None
 
 # Parallel download
 from joblib import Parallel, delayed
-results = Parallel(n_jobs=10)(
-    delayed(download_ticker)(ticker) 
+results = Parallel (n_jobs=10)(
+    delayed (download_ticker)(ticker) 
     for ticker in sp500_tickers[:50]  # Start with 50 for testing
 )
 
 # Combine and save
 data_dict = {ticker: df for ticker, df in results if df is not None}
-combined_df = pd.concat(data_dict, names=['ticker', 'date'])
+combined_df = pd.concat (data_dict, names=['ticker', 'date'])
 combined_df.to_parquet(DATA_DIR / "sp500_prices.parquet")
 
-logger.info(f"Saved data for {len(data_dict)} tickers")
+logger.info (f"Saved data for {len (data_dict)} tickers")
 \`\`\`
 
 ### Step 2: Data Quality Check (02_data_quality_check.ipynb)
@@ -230,7 +230,7 @@ df = pd.read_parquet("../data/raw/sp500_prices.parquet")
 
 # Check 1: Missing data
 missing_by_ticker = df.groupby('ticker').apply(
-    lambda x: x.isnull().sum() / len(x) * 100
+    lambda x: x.isnull().sum() / len (x) * 100
 )
 print("Tickers with >5% missing data:")
 print(missing_by_ticker[missing_by_ticker['Close'] > 5])
@@ -238,7 +238,7 @@ print(missing_by_ticker[missing_by_ticker['Close'] > 5])
 # Check 2: Price discontinuities (potential splits)
 returns = df.groupby('ticker')['Close'].pct_change()
 extreme_returns = returns[(returns < -0.3) | (returns > 0.3)]
-print(f"\\nPotential splits/errors: {len(extreme_returns)} instances")
+print(f"\\nPotential splits/errors: {len (extreme_returns)} instances")
 
 # Check 3: Volume analysis
 volume_stats = df.groupby('ticker')['Volume'].describe()
@@ -251,20 +251,20 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 # Missing data heatmap
 missing_data = df.isnull().groupby('ticker').sum()
-sns.heatmap(missing_data.T, cmap='YlOrRd', ax=axes[0,0])
+sns.heatmap (missing_data.T, cmap='YlOrRd', ax=axes[0,0])
 axes[0,0].set_title('Missing Data by Ticker')
 
 # Returns distribution
-returns.hist(bins=100, ax=axes[0,1])
+returns.hist (bins=100, ax=axes[0,1])
 axes[0,1].set_title('Returns Distribution')
 axes[0,1].set_xlabel('Daily Return')
 
 # Volume over time
-df.groupby(level='date')['Volume'].sum().plot(ax=axes[1,0])
+df.groupby (level='date')['Volume'].sum().plot (ax=axes[1,0])
 axes[1,0].set_title('Total Market Volume')
 
 # Price levels
-df.groupby('ticker')['Close'].last().hist(bins=50, ax=axes[1,1])
+df.groupby('ticker')['Close'].last().hist (bins=50, ax=axes[1,1])
 axes[1,1].set_title('Current Price Distribution')
 
 plt.tight_layout()
@@ -275,10 +275,10 @@ quality_report = {
     'total_tickers': df.index.get_level_values('ticker').nunique(),
     'date_range': f"{df.index.get_level_values('date').min()} to {df.index.get_level_values('date').max()}",
     'missing_data_pct': df.isnull().sum().sum() / df.size * 100,
-    'tickers_with_issues': len(missing_by_ticker[missing_by_ticker['Close'] > 5])
+    'tickers_with_issues': len (missing_by_ticker[missing_by_ticker['Close'] > 5])
 }
 
-pd.Series(quality_report).to_csv("../results/data_quality_report.csv")
+pd.Series (quality_report).to_csv("../results/data_quality_report.csv")
 \`\`\`
 
 ### Step 3: Strategy Prototyping (05_strategy_prototyping.ipynb)
@@ -312,10 +312,10 @@ ticker_data = df.xs('AAPL', level='ticker')
 
 # Calculate indicators (PROTOTYPE - will move to src/features later)
 ticker_data['returns_126d'] = ticker_data['Close'].pct_change(126)
-ticker_data['rsi_5d'] = RSIIndicator(ticker_data['Close'], window=5).rsi()
+ticker_data['rsi_5d'] = RSIIndicator (ticker_data['Close'], window=5).rsi()
 
 # Generate signals (PROTOTYPE)
-ticker_data['momentum_rank'] = ticker_data['returns_126d'].rolling(252).rank(pct=True)
+ticker_data['momentum_rank'] = ticker_data['returns_126d'].rolling(252).rank (pct=True)
 ticker_data['signal'] = 0
 
 # Long signal: Strong momentum + Oversold RSI
@@ -330,7 +330,7 @@ exit_condition = ticker_data['rsi_5d'] > 70
 ticker_data.loc[exit_condition, 'signal'] = -1
 
 # Simple backtest (PROTOTYPE - will use proper engine later)
-ticker_data['position'] = ticker_data['signal'].replace(-1, 0).fillna(method='ffill')
+ticker_data['position'] = ticker_data['signal'].replace(-1, 0).fillna (method='ffill')
 ticker_data['strategy_returns'] = ticker_data['Close'].pct_change() * ticker_data['position'].shift(1)
 ticker_data['cumulative_returns'] = (1 + ticker_data['strategy_returns']).cumprod()
 
@@ -346,22 +346,22 @@ print(f"Sharpe Ratio: {sharpe:.2f}")
 fig, axes = plt.subplots(3, 1, figsize=(14, 12))
 
 # Price and signals
-ticker_data['Close'].plot(ax=axes[0])
+ticker_data['Close'].plot (ax=axes[0])
 buy_signals = ticker_data[ticker_data['signal'] == 1]
-axes[0].scatter(buy_signals.index, buy_signals['Close'], 
+axes[0].scatter (buy_signals.index, buy_signals['Close'], 
                color='green', marker='^', s=100, label='Buy')
 axes[0].legend()
 axes[0].set_title('Price and Entry Signals')
 
 # RSI
-ticker_data['rsi_5d'].plot(ax=axes[1])
+ticker_data['rsi_5d'].plot (ax=axes[1])
 axes[1].axhline(30, color='green', linestyle='--', label='Oversold')
 axes[1].axhline(70, color='red', linestyle='--', label='Overbought')
 axes[1].legend()
 axes[1].set_title('RSI Indicator')
 
 # Cumulative returns
-ticker_data['cumulative_returns'].plot(ax=axes[2])
+ticker_data['cumulative_returns'].plot (ax=axes[2])
 axes[2].set_title('Strategy Performance')
 
 plt.tight_layout()
@@ -400,7 +400,7 @@ def calculate_momentum(
     price_col : str
         Column name for price (default 'Close')
     periods : int or list
-        Lookback period(s) in days
+        Lookback period (s) in days
         
     Returns
     -------
@@ -409,12 +409,12 @@ def calculate_momentum(
     \"\"\"
     df = df.copy()
     
-    if isinstance(periods, int):
+    if isinstance (periods, int):
         periods = [periods]
     
     for period in periods:
         col_name = f'momentum_{period}d'
-        df[col_name] = df[price_col].pct_change(period)
+        df[col_name] = df[price_col].pct_change (period)
     
     return df
 
@@ -441,7 +441,7 @@ def calculate_rsi(
         Original dataframe with added RSI column
     \"\"\"
     df = df.copy()
-    rsi = RSIIndicator(df[price_col], window=window)
+    rsi = RSIIndicator (df[price_col], window=window)
     df[f'rsi_{window}'] = rsi.rsi()
     return df
 
@@ -484,7 +484,7 @@ class MomentumReversionStrategy(BaseStrategy):
         self.rsi_overbought = rsi_overbought
         self.stop_loss_pct = stop_loss_pct
         
-    def generate_signals(self, df: pd.DataFrame) -> pd.DataFrame:
+    def generate_signals (self, df: pd.DataFrame) -> pd.DataFrame:
         \"\"\"
         Generate trading signals.
         
@@ -501,13 +501,13 @@ class MomentumReversionStrategy(BaseStrategy):
         df = df.copy()
         
         # Calculate features
-        df = calculate_momentum(df, periods=[self.momentum_period])
-        df = calculate_rsi(df, window=self.rsi_period)
+        df = calculate_momentum (df, periods=[self.momentum_period])
+        df = calculate_rsi (df, window=self.rsi_period)
         
         # Momentum ranking
         df['momentum_rank'] = df[f'momentum_{self.momentum_period}d'].rolling(
             window=252
-        ).rank(pct=True)
+        ).rank (pct=True)
         
         # Initialize signal column
         df['signal'] = 0
@@ -578,7 +578,7 @@ results = backtester.run(
 )
 
 # Calculate metrics
-metrics = PerformanceMetrics(results)
+metrics = PerformanceMetrics (results)
 print(metrics.summary())
 
 # Results are now reproducible and testable!
@@ -615,10 +615,10 @@ def sample_price_data():
     
     return df
 
-def test_strategy_generates_signals(sample_price_data):
+def test_strategy_generates_signals (sample_price_data):
     \"\"\"Test that strategy generates valid signals\"\"\"
     strategy = MomentumReversionStrategy()
-    result = strategy.generate_signals(sample_price_data)
+    result = strategy.generate_signals (sample_price_data)
     
     # Should have signal column
     assert 'signal' in result.columns
@@ -639,18 +639,18 @@ def test_strategy_parameters():
     assert strategy.momentum_period == 90
     assert strategy.rsi_period == 7
 
-def test_no_lookahead_bias(sample_price_data):
+def test_no_lookahead_bias (sample_price_data):
     \"\"\"Ensure strategy doesn't use future data\"\"\"
     strategy = MomentumReversionStrategy()
     
     # Run strategy
-    result = strategy.generate_signals(sample_price_data)
+    result = strategy.generate_signals (sample_price_data)
     
     # Signal at time t should only use data up to time t
     # Test by comparing with progressive calculation
-    for i in range(200, len(sample_price_data)):
+    for i in range(200, len (sample_price_data)):
         partial_data = sample_price_data.iloc[:i]
-        partial_result = strategy.generate_signals(partial_data)
+        partial_result = strategy.generate_signals (partial_data)
         
         # Signal at day i should match
         assert result['signal'].iloc[i-1] == partial_result['signal'].iloc[-1]
@@ -717,28 +717,28 @@ from src.backtest.engine import Backtester
 from src.backtest.reporting import generate_report
 
 def main():
-    parser = argparse.ArgumentParser(description='Run strategy backtest')
+    parser = argparse.ArgumentParser (description='Run strategy backtest')
     parser.add_argument('--config', required=True, help='Config file path')
     parser.add_argument('--output', required=True, help='Output directory')
     parser.add_argument('--tickers', nargs='+', help='Specific tickers to test')
     args = parser.parse_args()
     
     # Load configuration
-    with open(args.config) as f:
-        config = yaml.safe_load(f)
+    with open (args.config) as f:
+        config = yaml.safe_load (f)
     
     # Setup logging
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler(Path(args.output) / 'backtest.log'),
+            logging.FileHandler(Path (args.output) / 'backtest.log'),
             logging.StreamHandler()
         ]
     )
     logger = logging.getLogger(__name__)
     
-    logger.info(f"Starting backtest with config: {args.config}")
+    logger.info (f"Starting backtest with config: {args.config}")
     
     # Load data
     data = load_price_data(
@@ -752,11 +752,11 @@ def main():
     
     # Run backtest
     backtester = Backtester(**config['backtest']['parameters'])
-    results = backtester.run(data, strategy)
+    results = backtester.run (data, strategy)
     
     # Generate report
-    output_dir = Path(args.output)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = Path (args.output)
+    output_dir.mkdir (parents=True, exist_ok=True)
     
     generate_report(
         results=results,
@@ -764,7 +764,7 @@ def main():
         include_plots=True
     )
     
-    logger.info(f"Backtest complete. Results saved to {output_dir}")
+    logger.info (f"Backtest complete. Results saved to {output_dir}")
 
 if __name__ == '__main__':
     main()
@@ -816,7 +816,7 @@ import time
 start = time.time()
 df = pd.read_csv('sp500_minute_bars_2023.csv')  # 5GB file
 print(f"Load time: {time.time() - start:.1f}s")  # ~65 seconds
-print(f"Memory: {df.memory_usage(deep=True).sum() / 1e9:.1f} GB")  # 8.2 GB
+print(f"Memory: {df.memory_usage (deep=True).sum() / 1e9:.1f} GB")  # 8.2 GB
 \`\`\`
 
 ### Solution: Use Columnar Formats
@@ -832,7 +832,7 @@ df.to_parquet('sp500_minute_bars_2023.parquet', compression='snappy')
 start = time.time()
 df = pd.read_parquet('sp500_minute_bars_2023.parquet')
 print(f"Load time: {time.time() - start:.1f}s")  # ~6 seconds
-print(f"Memory: {df.memory_usage(deep=True).sum() / 1e9:.1f} GB")  # 4.5 GB (better compression)
+print(f"Memory: {df.memory_usage (deep=True).sum() / 1e9:.1f} GB")  # 4.5 GB (better compression)
 
 # Selective column loading
 df_subset = pd.read_parquet(
@@ -878,7 +878,7 @@ df_jan = dataset.to_table(
 
 \`\`\`python
 # Check memory usage
-df.info(memory_usage='deep')
+df.info (memory_usage='deep')
 
 # Common culprits:
 # - object dtype (strings) uses excessive memory
@@ -889,26 +889,26 @@ df.info(memory_usage='deep')
 ### Solution 1: Downcast Numeric Types
 
 \`\`\`python
-def optimize_dtypes(df):
+def optimize_dtypes (df):
     \"\"\"Reduce DataFrame memory footprint\"\"\"
     df_optimized = df.copy()
     
     # Downcast integers
-    int_cols = df.select_dtypes(include=['int64']).columns
-    df_optimized[int_cols] = df[int_cols].apply(pd.to_numeric, downcast='integer')
+    int_cols = df.select_dtypes (include=['int64']).columns
+    df_optimized[int_cols] = df[int_cols].apply (pd.to_numeric, downcast='integer')
     
     # Downcast floats
-    float_cols = df.select_dtypes(include=['float64']).columns
-    df_optimized[float_cols] = df[float_cols].apply(pd.to_numeric, downcast='float')
+    float_cols = df.select_dtypes (include=['float64']).columns
+    df_optimized[float_cols] = df[float_cols].apply (pd.to_numeric, downcast='float')
     
     return df_optimized
 
 # Before
-print(f"Memory: {df.memory_usage(deep=True).sum() / 1e9:.2f} GB")
+print(f"Memory: {df.memory_usage (deep=True).sum() / 1e9:.2f} GB")
 
 # After
-df_opt = optimize_dtypes(df)
-print(f"Memory: {df_opt.memory_usage(deep=True).sum() / 1e9:.2f} GB")
+df_opt = optimize_dtypes (df)
+print(f"Memory: {df_opt.memory_usage (deep=True).sum() / 1e9:.2f} GB")
 
 # Typical reduction: 40-60%
 \`\`\`
@@ -917,15 +917,15 @@ print(f"Memory: {df_opt.memory_usage(deep=True).sum() / 1e9:.2f} GB")
 
 \`\`\`python
 # Problem: Ticker symbols as strings
-df['ticker'].memory_usage(deep=True) / 1e6  # 150 MB
+df['ticker'].memory_usage (deep=True) / 1e6  # 150 MB
 
 # Solution: Categorize
 df['ticker'] = df['ticker'].astype('category')
-df['ticker'].memory_usage(deep=True) / 1e6  # 5 MB (30x reduction!)
+df['ticker'].memory_usage (deep=True) / 1e6  # 5 MB (30x reduction!)
 
 # Apply to all low-cardinality strings
 for col in ['ticker', 'exchange', 'sector']:
-    if df[col].nunique() / len(df) < 0.5:  # Less than 50% unique
+    if df[col].nunique() / len (df) < 0.5:  # Less than 50% unique
         df[col] = df[col].astype('category')
 \`\`\`
 
@@ -933,18 +933,18 @@ for col in ['ticker', 'exchange', 'sector']:
 
 \`\`\`python
 # When data truly doesn't fit in memory
-def process_in_chunks(file_path, chunk_size=100000):
+def process_in_chunks (file_path, chunk_size=100000):
     \"\"\"Process large file in chunks\"\"\"
     results = []
     
-    for chunk in pd.read_parquet(file_path, chunksize=chunk_size):
+    for chunk in pd.read_parquet (file_path, chunksize=chunk_size):
         # Process chunk
         chunk['returns'] = chunk.groupby('ticker')['close'].pct_change()
         chunk_agg = chunk.groupby('ticker')['returns'].agg(['mean', 'std'])
-        results.append(chunk_agg)
+        results.append (chunk_agg)
     
     # Combine results
-    final_result = pd.concat(results).groupby('ticker').mean()
+    final_result = pd.concat (results).groupby('ticker').mean()
     return final_result
 
 # Processes 50GB file with only 1GB RAM usage
@@ -957,7 +957,7 @@ def process_in_chunks(file_path, chunk_size=100000):
 \`\`\`python
 # Slow: Using apply (100x slower than necessary)
 %%timeit
-df['returns'] = df.groupby('ticker')['close'].apply(lambda x: x.pct_change())
+df['returns'] = df.groupby('ticker')['close'].apply (lambda x: x.pct_change())
 # 2.5 seconds
 
 # Fast: Vectorized operation
@@ -973,7 +973,7 @@ import numpy as np
 
 # Calculate Sharpe ratio for 500 stocks
 # Slow method: Loop through each ticker
-def slow_sharpe(df):
+def slow_sharpe (df):
     sharpe_ratios = {}
     for ticker in df['ticker'].unique():
         returns = df[df['ticker'] == ticker]['returns']
@@ -981,35 +981,35 @@ def slow_sharpe(df):
     return sharpe_ratios
 
 %%timeit
-slow_sharpe(df)
+slow_sharpe (df)
 # 850 ms
 
 # Fast method: Vectorized GroupBy
-def fast_sharpe(df):
+def fast_sharpe (df):
     grouped = df.groupby('ticker')['returns']
     sharpe = (grouped.mean() / grouped.std()) * np.sqrt(252)
     return sharpe
 
 %%timeit
-fast_sharpe(df)
+fast_sharpe (df)
 # 45 ms (19x faster!)
 
 # Ultra-fast: Pure NumPy
-def ultra_fast_sharpe(returns_matrix):
+def ultra_fast_sharpe (returns_matrix):
     \"\"\"
     returns_matrix: 2D NumPy array (days x tickers)
     \"\"\"
-    mean_returns = np.mean(returns_matrix, axis=0)
-    std_returns = np.std(returns_matrix, axis=0)
+    mean_returns = np.mean (returns_matrix, axis=0)
+    std_returns = np.std (returns_matrix, axis=0)
     sharpe = (mean_returns / std_returns) * np.sqrt(252)
     return sharpe
 
 # Convert to matrix once
-returns_pivot = df.pivot(index='date', columns='ticker', values='returns')
+returns_pivot = df.pivot (index='date', columns='ticker', values='returns')
 returns_matrix = returns_pivot.values
 
 %%timeit
-ultra_fast_sharpe(returns_matrix)
+ultra_fast_sharpe (returns_matrix)
 # 2 ms (425x faster than original!)
 \`\`\`
 
@@ -1021,14 +1021,14 @@ ultra_fast_sharpe(returns_matrix)
 from joblib import Parallel, delayed
 import yfinance as yf
 
-def backtest_ticker(ticker):
+def backtest_ticker (ticker):
     \"\"\"Backtest single ticker - independent of others\"\"\"
-    df = yf.download(ticker, start='2020-01-01', end='2023-12-31', progress=False)
+    df = yf.download (ticker, start='2020-01-01', end='2023-12-31', progress=False)
     
     # Strategy logic
     df['SMA_20'] = df['Close'].rolling(20).mean()
     df['SMA_50'] = df['Close'].rolling(50).mean()
-    df['signal'] = (df['SMA_20'] > df['SMA_50']).astype(int)
+    df['signal'] = (df['SMA_20'] > df['SMA_50']).astype (int)
     df['returns'] = df['Close'].pct_change() * df['signal'].shift(1)
     
     total_return = (1 + df['returns']).prod() - 1
@@ -1040,13 +1040,13 @@ def backtest_ticker(ticker):
 tickers = get_sp500_tickers()  # 500 tickers
 
 start = time.time()
-results_sequential = [backtest_ticker(t) for t in tickers]
+results_sequential = [backtest_ticker (t) for t in tickers]
 print(f"Sequential: {time.time() - start:.0f} seconds")  # ~1000s
 
 # Parallel: Use all CPU cores
 start = time.time()
-results_parallel = Parallel(n_jobs=-1)(
-    delayed(backtest_ticker)(t) for t in tickers
+results_parallel = Parallel (n_jobs=-1)(
+    delayed (backtest_ticker)(t) for t in tickers
 )
 print(f"Parallel: {time.time() - start:.0f} seconds")  # ~125s (8x speedup on 8 cores)
 \`\`\`
@@ -1054,23 +1054,23 @@ print(f"Parallel: {time.time() - start:.0f} seconds")  # ~125s (8x speedup on 8 
 ### Use Case 2: Parallel Rolling Window Calculations
 
 \`\`\`python
-def calculate_rolling_metric(data_chunk, window=20):
+def calculate_rolling_metric (data_chunk, window=20):
     \"\"\"Calculate metric on data chunk\"\"\"
-    return data_chunk.rolling(window).mean()
+    return data_chunk.rolling (window).mean()
 
 # Split data into chunks
 n_cores = 8
-chunk_size = len(df) // n_cores
-chunks = [df.iloc[i:i+chunk_size] for i in range(0, len(df), chunk_size)]
+chunk_size = len (df) // n_cores
+chunks = [df.iloc[i:i+chunk_size] for i in range(0, len (df), chunk_size)]
 
 # Process in parallel
-results = Parallel(n_jobs=n_cores)(
-    delayed(calculate_rolling_metric)(chunk) 
+results = Parallel (n_jobs=n_cores)(
+    delayed (calculate_rolling_metric)(chunk) 
     for chunk in chunks
 )
 
 # Combine results
-df_result = pd.concat(results)
+df_result = pd.concat (results)
 \`\`\`
 
 ## Strategy 5: Dask for Out-of-Core Computation
@@ -1120,43 +1120,43 @@ with ProgressBar():
 from numba import jit
 
 # Python loop: Very slow
-def slow_moving_average(prices, window):
-    n = len(prices)
-    ma = np.empty(n)
-    for i in range(window, n):
-        ma[i] = np.mean(prices[i-window:i])
+def slow_moving_average (prices, window):
+    n = len (prices)
+    ma = np.empty (n)
+    for i in range (window, n):
+        ma[i] = np.mean (prices[i-window:i])
     return ma
 
 prices = np.random.randn(1000000)
 
 %%timeit
-slow_moving_average(prices, 20)
+slow_moving_average (prices, 20)
 # 1.2 seconds
 
 # Numba-accelerated: Compiled to machine code
-@jit(nopython=True)
-def fast_moving_average(prices, window):
-    n = len(prices)
-    ma = np.empty(n)
-    for i in range(window, n):
-        ma[i] = np.mean(prices[i-window:i])
+@jit (nopython=True)
+def fast_moving_average (prices, window):
+    n = len (prices)
+    ma = np.empty (n)
+    for i in range (window, n):
+        ma[i] = np.mean (prices[i-window:i])
     return ma
 
 %%timeit
-fast_moving_average(prices, 20)
+fast_moving_average (prices, 20)
 # 15 milliseconds (80x speedup!)
 \`\`\`
 
 ### Numba for Technical Indicators
 
 \`\`\`python
-@jit(nopython=True)
-def fast_rsi(prices, period=14):
+@jit (nopython=True)
+def fast_rsi (prices, period=14):
     \"\"\"Ultra-fast RSI calculation\"\"\"
-    n = len(prices)
-    rsi = np.empty(n)
-    gains = np.zeros(n)
-    losses = np.zeros(n)
+    n = len (prices)
+    rsi = np.empty (n)
+    gains = np.zeros (n)
+    losses = np.zeros (n)
     
     # Calculate gains and losses
     for i in range(1, n):
@@ -1165,9 +1165,9 @@ def fast_rsi(prices, period=14):
         losses[i] = -diff if diff < 0 else 0
     
     # Calculate RSI
-    for i in range(period, n):
-        avg_gain = np.mean(gains[i-period:i])
-        avg_loss = np.mean(losses[i-period:i])
+    for i in range (period, n):
+        avg_gain = np.mean (gains[i-period:i])
+        avg_loss = np.mean (losses[i-period:i])
         
         if avg_loss == 0:
             rsi[i] = 100
@@ -1186,8 +1186,8 @@ def fast_rsi(prices, period=14):
 
 \`\`\`python
 # Without caching: Recompute every time
-def expensive_analysis(ticker, start_date, end_date):
-    df = yf.download(ticker, start=start_date, end=end_date)
+def expensive_analysis (ticker, start_date, end_date):
+    df = yf.download (ticker, start=start_date, end=end_date)
     # ... expensive calculations ...
     return results
 
@@ -1205,10 +1205,10 @@ from joblib import Memory
 memory = Memory('cache/', verbose=0)
 
 @memory.cache
-def cached_analysis(ticker, start_date, end_date):
+def cached_analysis (ticker, start_date, end_date):
     \"\"\"Results cached to disk automatically\"\"\"
     print(f"Computing {ticker}...")  # Only prints first time
-    df = yf.download(ticker, start=start_date, end=end_date, progress=False)
+    df = yf.download (ticker, start=start_date, end=end_date, progress=False)
     # ... expensive calculations ...
     return results
 
@@ -1248,7 +1248,7 @@ query = \"\"\"
     ORDER BY date
 \"\"\"
 
-df = pd.read_sql(query, engine)  # Much faster, less memory
+df = pd.read_sql (query, engine)  # Much faster, less memory
 
 # Leverage database indexes and query optimization
 \`\`\`
@@ -1278,11 +1278,11 @@ CREATE INDEX ON prices (ticker, time DESC);
 query = \"\"\"
     SELECT ticker, 
            time_bucket('1 day', time) AS day,
-           first(open, time) as open,
-           max(high) as high,
-           min(low) as low,
-           last(close, time) as close,
-           sum(volume) as volume
+           first (open, time) as open,
+           max (high) as high,
+           min (low) as low,
+           last (close, time) as close,
+           sum (volume) as volume
     FROM prices
     WHERE ticker = 'AAPL'
     AND time >= NOW() - INTERVAL '1 year'
@@ -1290,7 +1290,7 @@ query = \"\"\"
     ORDER BY day DESC
 \"\"\"
 
-df = pd.read_sql(query, engine)  # Sub-second response
+df = pd.read_sql (query, engine)  # Sub-second response
 \`\`\`
 
 ## Performance Monitoring
@@ -1301,11 +1301,11 @@ df = pd.read_sql(query, engine)  # Sub-second response
 # Line profiler
 %load_ext line_profiler
 
-def my_analysis_function(df):
+def my_analysis_function (df):
     # ... analysis code ...
     pass
 
-%lprun -f my_analysis_function my_analysis_function(df)
+%lprun -f my_analysis_function my_analysis_function (df)
 
 # Shows time spent per line - identifies bottlenecks
 \`\`\`

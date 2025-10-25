@@ -10,10 +10,10 @@ export const databaseindexingMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'You have a query: SELECT * FROM orders WHERE user_id = 123 AND status = "active" AND created_at > "2024-01-01". Which composite index would be MOST efficient?',
     options: [
-      'CREATE INDEX idx ON orders(created_at, user_id, status)',
-      'CREATE INDEX idx ON orders(user_id, status, created_at)',
-      'CREATE INDEX idx ON orders(status, user_id, created_at)',
-      'CREATE INDEX idx ON orders(created_at, status, user_id)',
+      'CREATE INDEX idx ON orders (created_at, user_id, status)',
+      'CREATE INDEX idx ON orders (user_id, status, created_at)',
+      'CREATE INDEX idx ON orders (status, user_id, created_at)',
+      'CREATE INDEX idx ON orders (created_at, status, user_id)',
     ],
     correctAnswer: 1,
     explanation:
@@ -57,17 +57,17 @@ export const databaseindexingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Option B is correct. A covering index (or index with INCLUDE columns) contains all data needed to satisfy a query, allowing an "index-only scan" without accessing table rows. This eliminates random I/O to fetch table data. Example: CREATE INDEX idx ON orders(user_id) INCLUDE (status, total) can satisfy "SELECT status, total FROM orders WHERE user_id = 123" entirely from the index. Option A is impractical (huge index). Option C misunderstands covering. Option D describes a different concept.',
+      'Option B is correct. A covering index (or index with INCLUDE columns) contains all data needed to satisfy a query, allowing an "index-only scan" without accessing table rows. This eliminates random I/O to fetch table data. Example: CREATE INDEX idx ON orders (user_id) INCLUDE (status, total) can satisfy "SELECT status, total FROM orders WHERE user_id = 123" entirely from the index. Option A is impractical (huge index). Option C misunderstands covering. Option D describes a different concept.',
   },
   {
     id: 'indexing-5',
     question:
       'You have a users table with 1 billion rows. Only 0.1% of users are "premium" status. What indexing strategy would optimize queries for premium users?',
     options: [
-      'CREATE INDEX idx ON users(status)',
-      'CREATE INDEX idx ON users(user_id, status)',
-      'CREATE INDEX idx ON users(status, user_id) WHERE status = "premium"',
-      'CREATE UNIQUE INDEX idx ON users(user_id) WHERE status = "premium"',
+      'CREATE INDEX idx ON users (status)',
+      'CREATE INDEX idx ON users (user_id, status)',
+      'CREATE INDEX idx ON users (status, user_id) WHERE status = "premium"',
+      'CREATE UNIQUE INDEX idx ON users (user_id) WHERE status = "premium"',
     ],
     correctAnswer: 2,
     explanation:

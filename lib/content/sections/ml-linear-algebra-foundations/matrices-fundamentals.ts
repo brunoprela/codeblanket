@@ -81,7 +81,7 @@ c**A** = [c·aᵢⱼ]
 **Properties**:
 - Distributive: c(**A** + **B**) = c**A** + c**B**
 - Distributive: (c + d)**A** = c**A** + d**A**
-- Associative: (cd)**A** = c(d**A**)
+- Associative: (cd)**A** = c (d**A**)
 - Identity: 1**A** = **A**
 
 ## Matrix Multiplication
@@ -327,23 +327,23 @@ Rotating a vector by angle θ:
 
 \`\`\`python
 # Rotation matrix example
-def rotation_matrix_2d(theta):
+def rotation_matrix_2d (theta):
     """Create 2D rotation matrix for angle theta (in radians)"""
     return np.array([
-        [np.cos(theta), -np.sin(theta)],
-        [np.sin(theta),  np.cos(theta)]
+        [np.cos (theta), -np.sin (theta)],
+        [np.sin (theta),  np.cos (theta)]
     ])
 
 # Rotate vector [1, 0] by 90 degrees (π/2 radians)
 v = np.array([1, 0])
 theta = np.pi / 2  # 90 degrees
 
-R = rotation_matrix_2d(theta)
+R = rotation_matrix_2d (theta)
 v_rotated = R @ v
 
 print("=== Rotation Example ===")
 print(f"Original vector: {v}")
-print(f"Rotation by {np.degrees(theta)}°")
+print(f"Rotation by {np.degrees (theta)}°")
 print(f"Rotation matrix R:")
 print(R)
 print(f"Rotated vector: {v_rotated}")
@@ -352,11 +352,11 @@ print(f"Expected: [0, 1] (approximately)")
 
 \`\`\`python
 # Visualize rotation
-def plot_vector_transformation(v_original, v_transformed, title=""):
+def plot_vector_transformation (v_original, v_transformed, title=""):
     """Plot original and transformed vectors"""
-    plt.figure(figsize=(8, 8))
-    plt.axhline(y=0, color='k', linewidth=0.5)
-    plt.axvline(x=0, color='k', linewidth=0.5)
+    plt.figure (figsize=(8, 8))
+    plt.axhline (y=0, color='k', linewidth=0.5)
+    plt.axvline (x=0, color='k', linewidth=0.5)
     plt.grid(True, alpha=0.3)
     
     # Plot vectors
@@ -372,11 +372,11 @@ def plot_vector_transformation(v_original, v_transformed, title=""):
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.legend()
-    plt.title(title)
+    plt.title (title)
     plt.axis('equal')
     plt.show()
 
-plot_vector_transformation(v, v_rotated, "90° Rotation")
+plot_vector_transformation (v, v_rotated, "90° Rotation")
 \`\`\`
 
 ### Example: Scaling Matrix
@@ -402,7 +402,7 @@ print(f"Scaling matrix S:")
 print(S)
 print(f"Scaled vector: {v_scaled}")
 
-plot_vector_transformation(v, v_scaled, "Scaling: 2x in X, 3x in Y")
+plot_vector_transformation (v, v_scaled, "Scaling: 2x in X, 3x in Y")
 \`\`\`
 
 ## Matrices in Machine Learning
@@ -492,8 +492,8 @@ hidden_size = 3
 
 # Initialize weights and bias
 np.random.seed(42)
-W = np.random.randn(hidden_size, input_size) * 0.1
-b = np.zeros(hidden_size)
+W = np.random.randn (hidden_size, input_size) * 0.1
+b = np.zeros (hidden_size)
 
 print("\\n=== Neural Network Layer ===")
 print(f"Weight matrix W ({hidden_size}×{input_size}):")
@@ -557,7 +557,7 @@ print("Each row is the output for one sample")
 def matrix_multiply_safe(A, B):
     """Safely multiply matrices with dimension checking"""
     if A.shape[1] != B.shape[0]:
-        raise ValueError(f"Cannot multiply {A.shape} × {B.shape}: "
+        raise ValueError (f"Cannot multiply {A.shape} × {B.shape}: "
                         f"incompatible dimensions")
     return A @ B
 

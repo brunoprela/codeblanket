@@ -9,7 +9,7 @@ export const datapartitioningshardingMultipleChoice: MultipleChoiceQuestion[] =
     {
       id: 'mc1',
       question:
-        'You have a users table with 100M rows. You shard by user_id using hash(user_id) % 10. Which query is MOST efficient?',
+        'You have a users table with 100M rows. You shard by user_id using hash (user_id) % 10. Which query is MOST efficient?',
       options: [
         'SELECT * FROM users WHERE user_id = 12345',
         'SELECT * FROM users WHERE country = "USA"',
@@ -46,7 +46,7 @@ export const datapartitioningshardingMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "Sharding by timestamp creates hotspot: all recent logs go to one shard (the current time range). Example: 10 shards by date ranges. Today's logs: ALL writes hit Shard 10 (today's shard). Old shards (1-9): Idle (no writes, only rare historical reads). Result: Uneven load, Shard 10 overloaded. Better solution: Shard by hash(log_id) or composite key hash(source_id + timestamp) for uniform distribution. Lesson: Avoid sharding by sequential/time-based keys unless data is truly immutable and access patterns are historical.",
+        "Sharding by timestamp creates hotspot: all recent logs go to one shard (the current time range). Example: 10 shards by date ranges. Today\'s logs: ALL writes hit Shard 10 (today's shard). Old shards (1-9): Idle (no writes, only rare historical reads). Result: Uneven load, Shard 10 overloaded. Better solution: Shard by hash (log_id) or composite key hash (source_id + timestamp) for uniform distribution. Lesson: Avoid sharding by sequential/time-based keys unless data is truly immutable and access patterns are historical.",
     },
     {
       id: 'mc4',

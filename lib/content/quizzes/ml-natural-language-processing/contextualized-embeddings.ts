@@ -223,7 +223,7 @@ Bidirectional:
 
 **The Mechanism:**
 
-ELMo's bidirectional architecture:
+ELMo\'s bidirectional architecture:
 
 \`\`\`
 Input: "I deposited money at the bank"
@@ -239,7 +239,7 @@ h₆(bank) ← h₅(the) ← h₄(at) ← h₃(money) ← h₂(deposited) ← h�
 Uses context: (end of sentence, could include more)
 
 Final embedding for "bank":
-  = combine(forward_h₆, backward_h₆)
+  = combine (forward_h₆, backward_h₆)
   = context from both directions
 \`\`\`
 
@@ -299,7 +299,7 @@ Natural language meaning is not purely left-to-right. Humans read entire sentenc
       'ELMo marked a transition point in NLP before the transformer revolution. Compare ELMo to modern transformer-based models (BERT). What advantages did ELMo demonstrate, and what limitations led to transformers becoming dominant?',
     sampleAnswer: `ELMo was a crucial stepping stone that proved contextualized embeddings work, but transformers (BERT) overcame its architectural limitations.
 
-**ELMo's Groundbreaking Contributions:**
+**ELMo\'s Groundbreaking Contributions:**
 
 1. **Proved Contextualized Embeddings Work:**
    - First widely-adopted contextualized embedding
@@ -456,7 +456,7 @@ ELMo was major improvement, BERT was even larger improvement.
 4. **Flexibility:** Same architecture for many tasks
 5. **Interpretability:** Attention weights provide insights
 
-**ELMo's Lasting Impact:**
+**ELMo\'s Lasting Impact:**
 
 Despite BERT dominance, ELMo's legacy:
 - **Proved contextualized embeddings essential** (now standard)
@@ -493,7 +493,7 @@ ELMo was the critical bridge between static embeddings and transformers. It prov
       'Limited context window (~100-200 tokens) due to LSTM vanishing gradients',
       'BERT (transformers): parallel processing, true bidirectional, self-attention',
       'Transformers 10-100x faster training, better performance, scale better',
-      "ELMo's legacy: established contextualized embeddings and pre-training paradigm",
+      "ELMo\'s legacy: established contextualized embeddings and pre-training paradigm",
       'Modern NLP: all use transformers (BERT, GPT, T5), not LSTMs',
     ],
   },

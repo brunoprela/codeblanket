@@ -53,7 +53,7 @@ class ResourceNotFoundError(Exception):
 
 # Global exception handler
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
+async def global_exception_handler (request: Request, exc: Exception):
     """
     Catch all unhandled exceptions
     Prevents 500 errors with no details
@@ -75,7 +75,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # Business logic error handler
 @app.exception_handler(BusinessLogicError)
-async def business_logic_handler(request: Request, exc: BusinessLogicError):
+async def business_logic_handler (request: Request, exc: BusinessLogicError):
     """Handle business rule violations"""
     return JSONResponse(
         status_code=exc.status_code,
@@ -87,21 +87,21 @@ async def business_logic_handler(request: Request, exc: BusinessLogicError):
 
 # Not found handler
 @app.exception_handler(ResourceNotFoundError)
-async def not_found_handler(request: Request, exc: ResourceNotFoundError):
+async def not_found_handler (request: Request, exc: ResourceNotFoundError):
     """Handle 404s consistently"""
     return JSONResponse(
         status_code=404,
         content={
             "error": "not_found",
-            "message": str(exc) or "Resource not found"
+            "message": str (exc) or "Resource not found"
         }
     )
 
 # Database error handler
 @app.exception_handler(SQLAlchemyError)
-async def database_exception_handler(request: Request, exc: SQLAlchemyError):
+async def database_exception_handler (request: Request, exc: SQLAlchemyError):
     """Handle database errors"""
-    logger.error(f"Database error: {exc}", exc_info=True)
+    logger.error (f"Database error: {exc}", exc_info=True)
     
     return JSONResponse(
         status_code=500,
@@ -113,7 +113,7 @@ async def database_exception_handler(request: Request, exc: SQLAlchemyError):
 
 # Validation error handler
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler (request: Request, exc: RequestValidationError):
     """
     Format Pydantic validation errors
     """
@@ -121,7 +121,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     
     for error in exc.errors():
         errors.append({
-            "field": ".".join(str(loc) for loc in error["loc"][1:]),  # Skip 'body'
+            "field": ".".join (str (loc) for loc in error["loc"][1:]),  # Skip 'body'
             "message": error["msg"],
             "type": error["type"]
         })
@@ -149,18 +149,18 @@ Proper HTTP status codes for all scenarios
 
 # Success (2xx)
 @app.post("/users", status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate):
+async def create_user (user: UserCreate):
     """201: Resource created"""
     pass
 
 @app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(user_id: int):
+async def delete_user (user_id: int):
     """204: Success with no response body"""
     pass
 
 # Client errors (4xx)
 @app.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     """
     400: Bad Request - Invalid input
     401: Unauthorized - Not authenticated
@@ -172,7 +172,7 @@ async def get_user(user_id: int):
     """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 
 # Server errors (5xx)
@@ -210,7 +210,7 @@ class ErrorResponse(BaseModel):
 
 # Usage
 @app.post("/orders")
-async def create_order(order: OrderCreate, request: Request):
+async def create_order (order: OrderCreate, request: Request):
     """Return structured errors"""
     if order.quantity <= 0:
         return JSONResponse(

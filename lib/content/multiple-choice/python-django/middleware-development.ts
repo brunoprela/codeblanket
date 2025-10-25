@@ -47,11 +47,11 @@ Returning an HttpResponse from middleware skips the view and remaining middlewar
 \`\`\`python
 class RateLimitMiddleware:
     def __call__(self, request):
-        if is_rate_limited(request):
+        if is_rate_limited (request):
             # Short-circuit: skip view, return immediately
             return JsonResponse({'error': 'Rate limited'}, status=429)
         
-        response = self.get_response(request)
+        response = self.get_response (request)
         return response
 \`\`\`
 
@@ -75,10 +75,10 @@ This is useful for authentication, rate limiting, and maintenance mode.
 
 \`\`\`python
 class ErrorHandlingMiddleware:
-    def process_exception(self, request, exception):
-        if isinstance(exception, ValidationError):
+    def process_exception (self, request, exception):
+        if isinstance (exception, ValidationError):
             return JsonResponse({
-                'error': str(exception)
+                'error': str (exception)
             }, status=400)
         
         # Return None to let other middleware handle it
@@ -109,7 +109,7 @@ class TimingMiddleware:
         # Store on request object
         request.start_time = time.time()
         
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Access stored data
         duration = time.time() - request.start_time
@@ -146,7 +146,7 @@ class CustomMiddleware:
         print("Request processing")
         
         # Call next middleware/view
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # After view
         print("Response processing")

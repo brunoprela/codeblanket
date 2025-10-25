@@ -160,7 +160,7 @@ Ring: 1 → 2 → 3 → 4 → 5 → 1
 
 ### **3. Paxos-Based Leader Election**
 
-Used in production systems like **Chubby** (Google's lock service) and **ZooKeeper**.
+Used in production systems like **Chubby** (Google\'s lock service) and **ZooKeeper**.
 
 **Concept**: Uses consensus algorithm (Paxos) to agree on the leader.
 

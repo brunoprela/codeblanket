@@ -67,20 +67,20 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 y_pred_proba = model.predict_proba(X_test)[:, 1]
 
 # Create confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 
 print("Understanding the Confusion Matrix")
 print("="*60)
-print(f"\\nDataset: {len(y_test)} samples")
-print(f"True class distribution: {np.bincount(y_test)}")
-print(f"  Class 0 (Negative): {np.sum(y_test == 0)} ({np.sum(y_test == 0)/len(y_test)*100:.1f}%)")
-print(f"  Class 1 (Positive): {np.sum(y_test == 1)} ({np.sum(y_test == 1)/len(y_test)*100:.1f}%)")
+print(f"\\nDataset: {len (y_test)} samples")
+print(f"True class distribution: {np.bincount (y_test)}")
+print(f"  Class 0 (Negative): {np.sum (y_test == 0)} ({np.sum (y_test == 0)/len (y_test)*100:.1f}%)")
+print(f"  Class 1 (Positive): {np.sum (y_test == 1)} ({np.sum (y_test == 1)/len (y_test)*100:.1f}%)")
 
 print(f"\\nConfusion Matrix:")
 print(cm)
@@ -99,7 +99,7 @@ print(f"Incorrect predictions: {fp + fn}")
 
 # Visualize confusion matrix
 fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax,
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues', ax=ax,
             xticklabels=['Predicted 0', 'Predicted 1'],
             yticklabels=['Actual 0', 'Actual 1'])
 ax.set_ylabel('True Label')
@@ -110,7 +110,7 @@ ax.set_title('Confusion Matrix')
 for i in range(2):
     for j in range(2):
         percentage = cm[i, j] / cm.sum() * 100
-        ax.text(j + 0.5, i + 0.7, f'({percentage:.1f}%)', 
+        ax.text (j + 0.5, i + 0.7, f'({percentage:.1f}%)', 
                 ha='center', va='center', color='gray', fontsize=10)
 
 plt.tight_layout()
@@ -162,7 +162,7 @@ $$\\text{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}$$
 \`\`\`python
 # Calculate accuracy
 accuracy_manual = (tp + tn) / (tp + tn + fp + fn)
-accuracy_sklearn = accuracy_score(y_test, y_pred)
+accuracy_sklearn = accuracy_score (y_test, y_pred)
 
 print("Accuracy:")
 print(f"  Manual: {accuracy_manual:.4f} ({accuracy_manual*100:.2f}%)")
@@ -187,7 +187,7 @@ n_legitimate = n_samples - n_fraud
 y_true_fraud = np.array([0] * n_legitimate + [1] * n_fraud)
 y_pred_naive = np.array([0] * n_samples)  # Always predict 0
 
-accuracy_naive = accuracy_score(y_true_fraud, y_pred_naive)
+accuracy_naive = accuracy_score (y_true_fraud, y_pred_naive)
 print(f"\\nNaive model (always predicts 'not fraud'):")
 print(f"  Accuracy: {accuracy_naive:.4f} ({accuracy_naive*100:.2f}%)")
 print(f"  Frauds detected: 0 out of {n_fraud} (0%)")
@@ -195,10 +195,10 @@ print(f"  Problem: 99% accurate but completely useless!")
 
 # Better model
 y_pred_better = y_pred_naive.copy()
-y_pred_better[np.random.choice(np.where(y_true_fraud == 1)[0], size=80, replace=False)] = 1
-y_pred_better[np.random.choice(np.where(y_true_fraud == 0)[0], size=100, replace=False)] = 1
+y_pred_better[np.random.choice (np.where (y_true_fraud == 1)[0], size=80, replace=False)] = 1
+y_pred_better[np.random.choice (np.where (y_true_fraud == 0)[0], size=100, replace=False)] = 1
 
-accuracy_better = accuracy_score(y_true_fraud, y_pred_better)
+accuracy_better = accuracy_score (y_true_fraud, y_pred_better)
 frauds_detected = np.sum((y_true_fraud == 1) & (y_pred_better == 1))
 print(f"\\nBetter model:")
 print(f"  Accuracy: {accuracy_better:.4f} ({accuracy_better*100:.2f}%)")
@@ -257,7 +257,7 @@ $$\\text{Precision} = \\frac{TP}{TP + FP} = \\frac{\\text{True Positives}}{\\tex
 \`\`\`python
 # Calculate precision
 precision_manual = tp / (tp + fp)
-precision_sklearn = precision_score(y_test, y_pred)
+precision_sklearn = precision_score (y_test, y_pred)
 
 print("Precision:")
 print(f"  Manual: {precision_manual:.4f} ({precision_manual*100:.2f}%)")
@@ -340,7 +340,7 @@ $$\\text{Recall} = \\frac{TP}{TP + FN} = \\frac{\\text{True Positives}}{\\text{A
 \`\`\`python
 # Calculate recall
 recall_manual = tp / (tp + fn)
-recall_sklearn = recall_score(y_test, y_pred)
+recall_sklearn = recall_score (y_test, y_pred)
 
 print("Recall (Sensitivity):")
 print(f"  Manual: {recall_manual:.4f} ({recall_manual*100:.2f}%)")
@@ -415,7 +415,7 @@ Airport security:
 
 ## The Precision-Recall Tradeoff
 
-There's an inherent tradeoff between precision and recall:
+There\'s an inherent tradeoff between precision and recall:
 
 \`\`\`python
 # Demonstrate precision-recall tradeoff
@@ -427,21 +427,21 @@ thresholds = [0.3, 0.5, 0.7, 0.9]
 results = []
 
 for threshold in thresholds:
-    y_pred_thresh = (y_pred_proba >= threshold).astype(int)
+    y_pred_thresh = (y_pred_proba >= threshold).astype (int)
     
     # Calculate metrics
-    if np.sum(y_pred_thresh) > 0:  # Avoid division by zero
-        precision = precision_score(y_test, y_pred_thresh)
+    if np.sum (y_pred_thresh) > 0:  # Avoid division by zero
+        precision = precision_score (y_test, y_pred_thresh)
     else:
         precision = 0.0
     
-    if np.sum(y_test) > 0:
-        recall = recall_score(y_test, y_pred_thresh)
+    if np.sum (y_test) > 0:
+        recall = recall_score (y_test, y_pred_thresh)
     else:
         recall = 0.0
     
     # Count predictions
-    n_positive_pred = np.sum(y_pred_thresh)
+    n_positive_pred = np.sum (y_pred_thresh)
     
     results.append({
         'Threshold': threshold,
@@ -466,18 +466,18 @@ print("    → Higher precision (fewer false positives)")
 
 # Visualize tradeoff
 fig, ax = plt.subplots(1, 1, figsize=(10, 6))
-results_df = pd.DataFrame(results)
-x = np.arange(len(results_df))
+results_df = pd.DataFrame (results)
+x = np.arange (len (results_df))
 width = 0.35
 
-bars1 = ax.bar(x - width/2, results_df['Precision'], width, label='Precision', alpha=0.8)
-bars2 = ax.bar(x + width/2, results_df['Recall'], width, label='Recall', alpha=0.8)
+bars1 = ax.bar (x - width/2, results_df['Precision'], width, label='Precision', alpha=0.8)
+bars2 = ax.bar (x + width/2, results_df['Recall'], width, label='Recall', alpha=0.8)
 
 ax.set_xlabel('Threshold')
 ax.set_ylabel('Score')
 ax.set_title('Precision-Recall Tradeoff')
-ax.set_xticks(x)
-ax.set_xticklabels(results_df['Threshold'])
+ax.set_xticks (x)
+ax.set_xticklabels (results_df['Threshold'])
 ax.legend()
 ax.grid(True, alpha=0.3, axis='y')
 
@@ -535,7 +535,7 @@ $$F1 = 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision
 \`\`\`python
 # Calculate F1-score
 f1_manual = 2 * (precision_sklearn * recall_sklearn) / (precision_sklearn + recall_sklearn)
-f1_sklearn = f1_score(y_test, y_pred)
+f1_sklearn = f1_score (y_test, y_pred)
 
 print("F1-Score:")
 print(f"  Manual: {f1_manual:.4f}")
@@ -570,7 +570,7 @@ print("   Both must be high for high F1 score")
 print("\\n" + "="*60)
 print("Complete Classification Report:")
 print("="*60)
-print(classification_report(y_test, y_pred, 
+print(classification_report (y_test, y_pred, 
                           target_names=['Class 0 (Neg)', 'Class 1 (Pos)']))
 \`\`\`
 
@@ -625,8 +625,8 @@ ROC (Receiver Operating Characteristic) curve plots True Positive Rate vs False 
 
 \`\`\`python
 # Calculate ROC curve
-fpr, tpr, roc_thresholds = roc_curve(y_test, y_pred_proba)
-roc_auc = roc_auc_score(y_test, y_pred_proba)
+fpr, tpr, roc_thresholds = roc_curve (y_test, y_pred_proba)
+roc_auc = roc_auc_score (y_test, y_pred_proba)
 
 print("ROC-AUC Score:")
 print(f"  AUC: {roc_auc:.4f}")
@@ -639,26 +639,26 @@ print(f"    {roc_auc:.2f} = Our model")
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # ROC curve
-axes[0].plot(fpr, tpr, 'b-', lw=2, label=f'ROC curve (AUC = {roc_auc:.3f})')
+axes[0].plot (fpr, tpr, 'b-', lw=2, label=f'ROC curve (AUC = {roc_auc:.3f})')
 axes[0].plot([0, 1], [0, 1], 'r--', lw=2, label='Random (AUC = 0.5)')
 axes[0].set_xlabel('False Positive Rate (FPR)')
 axes[0].set_ylabel('True Positive Rate (TPR / Recall)')
 axes[0].set_title('ROC Curve')
-axes[0].legend(loc='lower right')
+axes[0].legend (loc='lower right')
 axes[0].grid(True, alpha=0.3)
 
 # Precision-Recall curve
-precision_curve, recall_curve, pr_thresholds = precision_recall_curve(y_test, y_pred_proba)
-ap_score = average_precision_score(y_test, y_pred_proba)
+precision_curve, recall_curve, pr_thresholds = precision_recall_curve (y_test, y_pred_proba)
+ap_score = average_precision_score (y_test, y_pred_proba)
 
-axes[1].plot(recall_curve, precision_curve, 'b-', lw=2, 
+axes[1].plot (recall_curve, precision_curve, 'b-', lw=2, 
              label=f'PR curve (AP = {ap_score:.3f})')
-axes[1].axhline(y=np.sum(y_test)/len(y_test), color='r', linestyle='--', 
-                lw=2, label=f'Random (AP = {np.sum(y_test)/len(y_test):.3f})')
+axes[1].axhline (y=np.sum (y_test)/len (y_test), color='r', linestyle='--', 
+                lw=2, label=f'Random (AP = {np.sum (y_test)/len (y_test):.3f})')
 axes[1].set_xlabel('Recall')
 axes[1].set_ylabel('Precision')
 axes[1].set_title('Precision-Recall Curve')
-axes[1].legend(loc='lower left')
+axes[1].legend (loc='lower left')
 axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()

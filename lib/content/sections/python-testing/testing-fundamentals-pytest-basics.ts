@@ -74,15 +74,15 @@ Python includes \`unittest\` in the standard library, but \`pytest\` has become 
 \`\`\`python
 import unittest
 
-class TestCalculator(unittest.TestCase):
-    def setUp(self):
+class TestCalculator (unittest.TestCase):
+    def setUp (self):
         self.calc = Calculator()
     
-    def test_addition(self):
+    def test_addition (self):
         result = self.calc.add(2, 3)
-        self.assertEqual(result, 5)
+        self.assertEqual (result, 5)
     
-    def tearDown(self):
+    def tearDown (self):
         self.calc = None
 
 if __name__ == '__main__':
@@ -193,25 +193,25 @@ markers =
 class Calculator:
     """Simple calculator for demonstration"""
     
-    def add(self, a: float, b: float) -> float:
+    def add (self, a: float, b: float) -> float:
         """Add two numbers"""
         return a + b
     
-    def subtract(self, a: float, b: float) -> float:
+    def subtract (self, a: float, b: float) -> float:
         """Subtract b from a"""
         return a - b
     
-    def multiply(self, a: float, b: float) -> float:
+    def multiply (self, a: float, b: float) -> float:
         """Multiply two numbers"""
         return a * b
     
-    def divide(self, a: float, b: float) -> float:
+    def divide (self, a: float, b: float) -> float:
         """Divide a by b"""
         if b == 0:
             raise ValueError("Cannot divide by zero")
         return a / b
     
-    def power(self, base: float, exponent: float) -> float:
+    def power (self, base: float, exponent: float) -> float:
         """Raise base to exponent"""
         return base ** exponent
 \`\`\`
@@ -364,8 +364,8 @@ def test_advanced_assertions():
     # Multiple items
     results = [1, 2, 3, 4]
     assert 2 in results
-    assert all(x > 0 for x in results)
-    assert any(x == 3 for x in results)
+    assert all (x > 0 for x in results)
+    assert any (x == 3 for x in results)
     
     # String matching
     message = "Error: File not found"
@@ -407,7 +407,7 @@ def test_exception_assertions():
     with pytest.raises(ValueError) as exc_info:
         raise ValueError("Custom error message")
     
-    assert str(exc_info.value) == "Custom error message"
+    assert str (exc_info.value) == "Custom error message"
     assert exc_info.type is ValueError
 \`\`\`
 
@@ -508,12 +508,12 @@ from calculator import Calculator
 class TestCalculatorBasicOps:
     """Group related calculator tests"""
     
-    def test_add(self):
+    def test_add (self):
         """Test addition"""
         calc = Calculator()
         assert calc.add(2, 3) == 5
     
-    def test_subtract(self):
+    def test_subtract (self):
         """Test subtraction"""
         calc = Calculator()
         assert calc.subtract(10, 4) == 6
@@ -522,12 +522,12 @@ class TestCalculatorBasicOps:
 class TestCalculatorAdvancedOps:
     """Advanced operations"""
     
-    def test_power(self):
+    def test_power (self):
         """Test exponentiation"""
         calc = Calculator()
         assert calc.power(2, 8) == 256
     
-    def test_divide_by_zero(self):
+    def test_divide_by_zero (self):
         """Test error handling"""
         calc = Calculator()
         with pytest.raises(ValueError):
@@ -544,7 +544,7 @@ class TestCalculatorAdvancedOps:
 
 ## Practical Example: Testing a Payment Service
 
-Let's test a realistic payment processing module:
+Let\'s test a realistic payment processing module:
 
 **payment.py**:
 
@@ -577,7 +577,7 @@ class Payment:
         if self.amount <= 0:
             raise ValueError("Amount must be positive")
         if self.currency not in ["USD", "EUR", "GBP"]:
-            raise ValueError(f"Unsupported currency: {self.currency}")
+            raise ValueError (f"Unsupported currency: {self.currency}")
 
 
 class PaymentProcessor:
@@ -587,7 +587,7 @@ class PaymentProcessor:
         self.api_key = api_key
         self.processed_payments: list[Payment] = []
     
-    def process_payment(self, payment: Payment) -> bool:
+    def process_payment (self, payment: Payment) -> bool:
         """
         Process a payment
         
@@ -604,13 +604,13 @@ class PaymentProcessor:
         try:
             # In real implementation, call payment gateway API
             payment.status = PaymentStatus.COMPLETED
-            self.processed_payments.append(payment)
+            self.processed_payments.append (payment)
             return True
         except Exception:
             payment.status = PaymentStatus.FAILED
             return False
     
-    def refund_payment(self, payment: Payment) -> bool:
+    def refund_payment (self, payment: Payment) -> bool:
         """Refund a payment"""
         if payment.status != PaymentStatus.COMPLETED:
             raise ValueError("Can only refund completed payments")
@@ -618,7 +618,7 @@ class PaymentProcessor:
         payment.status = PaymentStatus.REFUNDED
         return True
     
-    def get_total_processed(self) -> Decimal:
+    def get_total_processed (self) -> Decimal:
         """Get total amount processed"""
         return sum(
             p.amount for p in self.processed_payments
@@ -638,7 +638,7 @@ from payment import Payment, PaymentProcessor, PaymentStatus
 class TestPayment:
     """Test Payment model"""
     
-    def test_create_payment(self):
+    def test_create_payment (self):
         """Test creating valid payment"""
         payment = Payment(
             amount=Decimal("99.99"),
@@ -649,81 +649,81 @@ class TestPayment:
         assert payment.currency == "USD"
         assert payment.status == PaymentStatus.PENDING
     
-    def test_payment_negative_amount(self):
+    def test_payment_negative_amount (self):
         """Test payment with negative amount fails"""
         with pytest.raises(ValueError, match="Amount must be positive"):
-            Payment(amount=Decimal("-10.00"), currency="USD")
+            Payment (amount=Decimal("-10.00"), currency="USD")
     
-    def test_payment_zero_amount(self):
+    def test_payment_zero_amount (self):
         """Test payment with zero amount fails"""
         with pytest.raises(ValueError, match="Amount must be positive"):
-            Payment(amount=Decimal("0.00"), currency="USD")
+            Payment (amount=Decimal("0.00"), currency="USD")
     
-    def test_payment_invalid_currency(self):
+    def test_payment_invalid_currency (self):
         """Test payment with invalid currency fails"""
         with pytest.raises(ValueError, match="Unsupported currency"):
-            Payment(amount=Decimal("100.00"), currency="JPY")
+            Payment (amount=Decimal("100.00"), currency="JPY")
 
 
 class TestPaymentProcessor:
     """Test PaymentProcessor"""
     
-    def test_process_payment_success(self):
+    def test_process_payment_success (self):
         """Test successful payment processing"""
-        processor = PaymentProcessor(api_key="test_key")
-        payment = Payment(amount=Decimal("50.00"), currency="USD")
+        processor = PaymentProcessor (api_key="test_key")
+        payment = Payment (amount=Decimal("50.00"), currency="USD")
         
-        result = processor.process_payment(payment)
+        result = processor.process_payment (payment)
         
         assert result is True
         assert payment.status == PaymentStatus.COMPLETED
-        assert len(processor.processed_payments) == 1
+        assert len (processor.processed_payments) == 1
     
-    def test_process_payment_no_api_key(self):
+    def test_process_payment_no_api_key (self):
         """Test processing fails without API key"""
-        processor = PaymentProcessor(api_key="")
-        payment = Payment(amount=Decimal("50.00"), currency="USD")
+        processor = PaymentProcessor (api_key="")
+        payment = Payment (amount=Decimal("50.00"), currency="USD")
         
         with pytest.raises(ValueError, match="API key required"):
-            processor.process_payment(payment)
+            processor.process_payment (payment)
     
-    def test_process_payment_already_processed(self):
+    def test_process_payment_already_processed (self):
         """Test cannot process payment twice"""
-        processor = PaymentProcessor(api_key="test_key")
-        payment = Payment(amount=Decimal("50.00"), currency="USD")
+        processor = PaymentProcessor (api_key="test_key")
+        payment = Payment (amount=Decimal("50.00"), currency="USD")
         payment.status = PaymentStatus.COMPLETED
         
         with pytest.raises(ValueError, match="already processed"):
-            processor.process_payment(payment)
+            processor.process_payment (payment)
     
-    def test_refund_payment_success(self):
+    def test_refund_payment_success (self):
         """Test successful refund"""
-        processor = PaymentProcessor(api_key="test_key")
-        payment = Payment(amount=Decimal("50.00"), currency="USD")
-        processor.process_payment(payment)
+        processor = PaymentProcessor (api_key="test_key")
+        payment = Payment (amount=Decimal("50.00"), currency="USD")
+        processor.process_payment (payment)
         
-        result = processor.refund_payment(payment)
+        result = processor.refund_payment (payment)
         
         assert result is True
         assert payment.status == PaymentStatus.REFUNDED
     
-    def test_refund_pending_payment(self):
+    def test_refund_pending_payment (self):
         """Test cannot refund pending payment"""
-        processor = PaymentProcessor(api_key="test_key")
-        payment = Payment(amount=Decimal("50.00"), currency="USD")
+        processor = PaymentProcessor (api_key="test_key")
+        payment = Payment (amount=Decimal("50.00"), currency="USD")
         
         with pytest.raises(ValueError, match="only refund completed"):
-            processor.refund_payment(payment)
+            processor.refund_payment (payment)
     
-    def test_get_total_processed(self):
+    def test_get_total_processed (self):
         """Test calculating total processed amount"""
-        processor = PaymentProcessor(api_key="test_key")
+        processor = PaymentProcessor (api_key="test_key")
         
-        payment1 = Payment(amount=Decimal("50.00"), currency="USD")
-        payment2 = Payment(amount=Decimal("75.50"), currency="USD")
+        payment1 = Payment (amount=Decimal("50.00"), currency="USD")
+        payment2 = Payment (amount=Decimal("75.50"), currency="USD")
         
-        processor.process_payment(payment1)
-        processor.process_payment(payment2)
+        processor.process_payment (payment1)
+        processor.process_payment (payment2)
         
         total = processor.get_total_processed()
         assert total == Decimal("125.50")
@@ -790,11 +790,11 @@ def test_payment_processing_succeeds_with_valid_card():
 \`\`\`python
 def test_payment_processing():
     # Arrange: Set up test data
-    processor = PaymentProcessor(api_key="test")
-    payment = Payment(amount=Decimal("100.00"), currency="USD")
+    processor = PaymentProcessor (api_key="test")
+    payment = Payment (amount=Decimal("100.00"), currency="USD")
     
     # Act: Execute the code being tested
-    result = processor.process_payment(payment)
+    result = processor.process_payment (payment)
     
     # Assert: Verify the results
     assert result is True
@@ -923,17 +923,17 @@ def test_calculator_add():
     ...
 
 # Skip test
-@pytest.mark.skip(reason="Not implemented yet")
+@pytest.mark.skip (reason="Not implemented yet")
 def test_future_feature():
     ...
 
 # Skip conditionally
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10+")
+@pytest.mark.skipif (sys.version_info < (3, 10), reason="Requires Python 3.10+")
 def test_new_syntax():
     ...
 
 # Expected to fail
-@pytest.mark.xfail(reason="Known bug #123")
+@pytest.mark.xfail (reason="Known bug #123")
 def test_buggy_feature():
     ...
 \`\`\`

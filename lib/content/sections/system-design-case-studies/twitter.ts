@@ -270,7 +270,7 @@ CREATE TABLE follows (
 
 **Algorithm**:
 1. User requests timeline
-2. Query: Get Alice's followings (500 IDs)
+2. Query: Get Alice\'s followings (500 IDs)
 3. Query: Get recent tweets from each followee
 4. Merge and sort tweets by timestamp
 5. Return top 20 tweets
@@ -324,7 +324,7 @@ CREATE TABLE timelines (
 - ❌ Celebrity problem: Posting a tweet fans out to 100M followers (infeasible)
 - ❌ Storage explosion: Duplicate tweet_id stored billions of times
 
-### Approach 3: Hybrid (Twitter's Production Approach)
+### Approach 3: Hybrid (Twitter\'s Production Approach)
 
 **Strategy**:
 - **Regular users** (< 10K followers): Fanout-on-write

@@ -50,7 +50,7 @@ export const templatesMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc4',
     question: 'Why is Trie deletion more complex than insertion?',
     options: [
-      "It's slower",
+      "It\'s slower",
       'Must avoid breaking other words - cannot blindly remove nodes',
       'Uses more memory',
       'Requires sorting',

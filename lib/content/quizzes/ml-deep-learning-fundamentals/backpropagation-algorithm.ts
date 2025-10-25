@@ -5,7 +5,7 @@ export const backpropagationAlgorithmQuiz: QuizQuestion[] = [
     id: 'backpropagation-algorithm-dq-1',
     question:
       'Walk through the mathematical derivation of backpropagation for a single layer z = Wx + b, a = σ(z), showing how the chain rule produces ∂L/∂W. Explain why we need to cache forward pass values.',
-    sampleAnswer: `Backpropagation for a single layer demonstrates the power of the chain rule and why caching forward values is essential. Let's derive it step by step:
+    sampleAnswer: `Backpropagation for a single layer demonstrates the power of the chain rule and why caching forward values is essential. Let\'s derive it step by step:
 
 **Setup:**
 - Input: x (shape: batch_size × n_in)
@@ -22,19 +22,19 @@ export const backpropagationAlgorithmQuiz: QuizQuestion[] = [
 Assume we have ∂L/∂a from the next layer (or directly from loss if this is output layer).
 
 Apply chain rule:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂z = ∂L/∂a · ∂a/∂z
-\\\`\\\`\\\`
+\`\`\`
 
 For element-wise operations:
-\\\`\\\`\\\`
+\`\`\`
 ∂a/∂z = σ'(z)
-\\\`\\\`\\\`
+\`\`\`
 
 Therefore:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂z = ∂L/∂a ⊙ σ'(z)
-\\\`\\\`\\\`
+\`\`\`
 
 Where ⊙ denotes element-wise multiplication (Hadamard product).
 
@@ -47,55 +47,55 @@ Where ⊙ denotes element-wise multiplication (Hadamard product).
 **Step 2: Gradient w.r.t. Weights (∂L/∂W)**
 
 Now find ∂L/∂W using chain rule:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W = ∂L/∂z · ∂z/∂W
-\\\`\\\`\\\`
+\`\`\`
 
 First, find ∂z/∂W. Since z = Wx + b:
-\\\`\\\`\\\`
+\`\`\`
 For z_ij = Σ_k W_kj x_k + b_j
 
 ∂z_ij/∂W_mn = x_m if j = n, else 0
-\\\`\\\`\\\`
+\`\`\`
 
 This means:
-\\\`\\\`\\\`
+\`\`\`
 ∂z/∂W has shape (batch, n_out, n_in, n_out)
-\\\`\\\`\\\`
+\`\`\`
 
 But we don't compute this 4D tensor! Instead, use matrix calculus:
 
 For batch of m samples:
-\\\`\\\`\\\`
+\`\`\`
 Z = XW + b  (shape: m × n_out)
 
 where X is (m × n_in), W is (n_in × n_out)
-\\\`\\\`\\\`
+\`\`\`
 
 The gradient aggregates across batch:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W = (1/m) X^T · (∂L/∂Z)
-\\\`\\\`\\\`
+\`\`\`
 
 **Derivation of matrix form:**
 
 For a single sample:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W_ij = ∂L/∂z_j · ∂z_j/∂W_ij
          = ∂L/∂z_j · x_i
-\\\`\\\`\\\`
+\`\`\`
 
 For batch (m samples):
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W_ij = (1/m) Σ_{sample k} ∂L/∂z_kj · x_ki
          = (1/m) Σ_k x_ki · ∂L/∂z_kj
          = (1/m) [X^T · ∂L/∂Z]_ij
-\\\`\\\`\\\`
+\`\`\`
 
 Therefore:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W = (1/m) X^T @ (∂L/∂Z)
-\\\`\\\`\\\`
+\`\`\`
 
 Shape check:
 - X^T: (n_in × m)
@@ -110,20 +110,20 @@ Shape check:
 **Step 3: Gradient w.r.t. Bias (∂L/∂b)**
 
 Since z = Wx + b and b is broadcast across batch:
-\\\`\\\`\\\`
+\`\`\`
 ∂z_ij/∂b_j = 1
-\\\`\\\`\\\`
+\`\`\`
 
 Therefore:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂b_j = (1/m) Σ_i ∂L/∂z_ij
-\\\`\\\`\\\`
+\`\`\`
 
 In matrix form:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂b = (1/m) Σ_{samples} ∂L/∂Z
        = (1/m) · sum(∂L/∂Z, axis=0, keepdims=True)
-\\\`\\\`\\\`
+\`\`\`
 
 Shape check:
 - ∂L/∂Z: (m × n_out)
@@ -132,19 +132,19 @@ Shape check:
 **Step 4: Gradient w.r.t. Input (∂L/∂x)**
 
 To propagate gradients to previous layer:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂x = ∂L/∂z · ∂z/∂x
-\\\`\\\`\\\`
+\`\`\`
 
 Since z = Wx + b:
-\\\`\\\`\\\`
+\`\`\`
 ∂z_j/∂x_i = W_ij
-\\\`\\\`\\\`
+\`\`\`
 
 In matrix form:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂X = (∂L/∂Z) @ W^T
-\\\`\\\`\\\`
+\`\`\`
 
 Shape check:
 - ∂L/∂Z: (m × n_out)
@@ -153,30 +153,30 @@ Shape check:
 
 **Complete Backprop Algorithm for One Layer:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Forward pass (cache these!)
 z = X @ W + b
-a = activation(z)
+a = activation (z)
 
 # Backward pass
 # 1. Gradient w.r.t. pre-activation
-dL_dz = dL_da * activation_derivative(z)  # Needs cached z!
+dL_dz = dL_da * activation_derivative (z)  # Needs cached z!
 
 # 2. Gradient w.r.t. weights
 dL_dW = (X.T @ dL_dz) / m  # Needs cached X!
 
 # 3. Gradient w.r.t. bias
-dL_db = np.sum(dL_dz, axis=0, keepdims=True) / m
+dL_db = np.sum (dL_dz, axis=0, keepdims=True) / m
 
 # 4. Gradient to propagate backward
 dL_dX = dL_dz @ W.T
-\\\`\\\`\\\`
+\`\`\`
 
 **Why Caching is Essential:**
 
 1. **Activation Derivatives Need Forward Values:**
    - Sigmoid: σ'(z) = σ(z)(1 - σ(z)) needs a = σ(z)
-   - Tanh: tanh'(z) = 1 - tanh²(z) needs a = tanh(z)
+   - Tanh: tanh'(z) = 1 - tanh²(z) needs a = tanh (z)
    - ReLU: requires z to check if z > 0
 
 2. **Weight Gradients Need Input:**
@@ -209,38 +209,38 @@ For very deep networks, caching all activations can exhaust memory. Solutions:
 **Common Mistakes:**
 
 1. **Forgetting to cache:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Wrong
 def forward(X):
     z = X @ W + b
-    return activation(z)  # Lost z!
+    return activation (z)  # Lost z!
 
 # Correct
 def forward(X):
     z = X @ W + b
-    a = activation(z)
+    a = activation (z)
     return a, (X, z)  # Cache for backward
-\\\`\\\`\\\`
+\`\`\`
 
 2. **Modifying cached values:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Wrong
-a = activation(z)
+a = activation (z)
 a += 0.1  # Modifies cached value!
 
 # Correct
-a = activation(z)
+a = activation (z)
 a_modified = a + 0.1  # New array
-\\\`\\\`\\\`
+\`\`\`
 
 3. **Wrong shapes in matrix multiply:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Wrong
 dL_dW = dL_dz @ X  # Wrong order!
 
 # Correct  
 dL_dW = X.T @ dL_dz  # Transpose X
-\\\`\\\`\\\`
+\`\`\`
 
 **Conclusion:**
 
@@ -272,14 +272,14 @@ Memory-compute trade-off managed through checkpointing for very deep networks.`,
     id: 'backpropagation-algorithm-dq-2',
     question:
       'Compare the computational complexity of numerical gradient computation versus backpropagation for a network with 1 million parameters. Why is backpropagation O(1) in terms of forward passes while numerical gradients are O(n)?',
-    sampleAnswer: `The computational advantage of backpropagation over numerical gradients is one of the most important insights in deep learning. Let's analyze both approaches:
+    sampleAnswer: `The computational advantage of backpropagation over numerical gradients is one of the most important insights in deep learning. Let\'s analyze both approaches:
 
 **Numerical Gradients (Finite Differences):**
 
 Definition:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂θ_i ≈ [L(θ + ε·e_i) - L(θ - ε·e_i)] / (2ε)
-\\\`\\\`\\\`
+\`\`\`
 
 Where e_i is the i-th unit vector (1 in position i, 0 elsewhere).
 
@@ -299,25 +299,25 @@ For 1M parameters:
 
 **Implementation:**
 
-\\\`\\\`\\\`python
-def numerical_gradients(network, X, y, epsilon=1e-5):
+\`\`\`python
+def numerical_gradients (network, X, y, epsilon=1e-5):
     """
     Compute gradients numerically
     Extremely slow but useful for verification
     """
-    params = get_all_parameters(network)  # Flatten to vector
-    n = len(params)
-    gradients = np.zeros(n)
+    params = get_all_parameters (network)  # Flatten to vector
+    n = len (params)
+    gradients = np.zeros (n)
     
-    for i in range(n):  # O(n) loop
+    for i in range (n):  # O(n) loop
         # Perturb parameter i
         params[i] += epsilon
-        set_parameters(network, params)
-        loss_plus = compute_loss(network, X, y)  # Forward pass
+        set_parameters (network, params)
+        loss_plus = compute_loss (network, X, y)  # Forward pass
         
         params[i] -= 2 * epsilon
-        set_parameters(network, params)
-        loss_minus = compute_loss(network, X, y)  # Forward pass
+        set_parameters (network, params)
+        loss_minus = compute_loss (network, X, y)  # Forward pass
         
         # Finite difference
         gradients[i] = (loss_plus - loss_minus) / (2 * epsilon)
@@ -328,7 +328,7 @@ def numerical_gradients(network, X, y, epsilon=1e-5):
     return gradients
 
 # Complexity: O(n) forward passes where n = number of parameters
-\\\`\\\`\\\`
+\`\`\`
 
 **Backpropagation:**
 
@@ -376,7 +376,7 @@ Key insight: **All gradients computed simultaneously in one backward sweep**
    - No need to recompute earlier layers
 
 2. **Shared Computation:**
-\\\`\\\`\\\`
+\`\`\`
 Numerical gradient for W_l^{ij}:
   - Perturb W_l^{ij}
   - Forward through entire network → loss
@@ -387,17 +387,17 @@ Backpropagation:
   - One forward pass caches all activations
   - One backward pass computes ∂L/∂W_l for ALL i,j simultaneously
   - Matrix operations compute many gradients at once
-\\\`\\\`\\\`
+\`\`\`
 
 3. **Mathematical Elegance:**
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W_l = (∂L/∂z_l) · (∂z_l/∂W_l)
             ^^^^^^^^^   ^^^^^^^^^^^
             from next   a_{l-1}^T
             layer       (cached)
 
 Single matrix multiply computes ALL weight gradients for layer l!
-\\\`\\\`\\\`
+\`\`\`
 
 **Concrete Example:**
 
@@ -405,22 +405,22 @@ Network: 784 → 256 → 128 → 10 (MNIST classifier)
 Parameters: (784×256) + 256 + (256×128) + 128 + (128×10) + 10 = 235,146
 
 **Numerical Gradients:**
-\\\`\\\`\\\`
+\`\`\`
 For each of 235,146 parameters:
   - 2 forward passes
 Total: 470,292 forward passes
 
 At 1ms per forward pass: 470 seconds ≈ 8 minutes
-\\\`\\\`\\\`
+\`\`\`
 
 **Backpropagation:**
-\\\`\\\`\\\`
+\`\`\`
 1 forward pass + 1 backward pass ≈ 3 forward passes equivalent
 
 At 1ms per forward pass: 3ms
 
 Speedup: 470,292 / 3 ≈ 156,764x faster!
-\\\`\\\`\\\`
+\`\`\`
 
 **Why O(1) in Terms of Forward Passes:**
 
@@ -445,7 +445,7 @@ Alternative (checkpointing):
 **Practical Implications:**
 
 **Training Deep Networks:**
-\\\`\\\`\\\`
+\`\`\`
 Without backprop: infeasible
 - 1M parameters, 1000 training steps
 - 2B forward passes
@@ -454,7 +454,7 @@ Without backprop: infeasible
 With backprop: practical
 - 3000 forward pass equivalents
 - Minutes/hours of training
-\\\`\\\`\\\`
+\`\`\`
 
 **Gradient Checking:**
 - Use numerical gradients only for debugging (small networks, few parameters)
@@ -468,7 +468,7 @@ With backprop: practical
 **Financial ML Context:**
 
 For trading models:
-\\\`\\\`\\\`
+\`\`\`
 Typical network: 50 features → 128 → 64 → 32 → 1
 Parameters: ~13,000
 
@@ -481,7 +481,7 @@ Backpropagation:
   - 3 forward equivalents per update
   - 300,000 forward equivalents total
   - Completes in reasonable time
-\\\`\\\`\\\`
+\`\`\`
 
 **Summary Table:**
 
@@ -517,57 +517,57 @@ The O(1) vs O(n) difference is why backpropagation is called "the algorithm that
     id: 'backpropagation-algorithm-dq-3',
     question:
       "Gradient checking is used to verify backpropagation implementations. Explain how it works, why it's reliable, when you should use it, and what relative error threshold indicates a correct implementation.",
-    sampleAnswer: `Gradient checking is the gold standard for verifying backpropagation implementations. It's reliable because it uses the mathematical definition of derivatives, but it's too expensive for regular use.
+    sampleAnswer: `Gradient checking is the gold standard for verifying backpropagation implementations. It\'s reliable because it uses the mathematical definition of derivatives, but it's too expensive for regular use.
 
 **Mathematical Foundation:**
 
 The derivative is defined as:
-\\\`\\\`\\\`
-f'(x) = lim_{ε→0} [f(x + ε) - f(x - ε)] / (2ε)
-\\\`\\\`\\\`
+\`\`\`
+f'(x) = lim_{ε→0} [f (x + ε) - f (x - ε)] / (2ε)
+\`\`\`
 
 For small ε (e.g., 10^-5), this finite difference approximates the derivative very accurately.
 
 **How Gradient Checking Works:**
 
 **1. Compute Analytical Gradients (Backprop):**
-\\\`\\\`\\\`python
-def compute_analytical_gradients(network, X, y):
+\`\`\`python
+def compute_analytical_gradients (network, X, y):
     """Use backpropagation to compute gradients"""
     network.forward(X)
-    gradients_analytical = network.backward(y)
+    gradients_analytical = network.backward (y)
     return gradients_analytical
-\\\`\\\`\\\`
+\`\`\`
 
 **2. Compute Numerical Gradients (Finite Differences):**
-\\\`\\\`\\\`python
-def compute_numerical_gradient(network, X, y, param_name, epsilon=1e-5):
+\`\`\`python
+def compute_numerical_gradient (network, X, y, param_name, epsilon=1e-5):
     """
     Compute gradient numerically using finite differences
     
     For parameter θ:
     ∂L/∂θ ≈ [L(θ + ε) - L(θ - ε)] / (2ε)
     """
-    param = getattr(network, param_name)
-    numerical_grad = np.zeros_like(param)
+    param = getattr (network, param_name)
+    numerical_grad = np.zeros_like (param)
     
     # Flatten parameter for iteration
     param_flat = param.ravel()
     numerical_grad_flat = numerical_grad.ravel()
     
-    for i in range(len(param_flat)):
+    for i in range (len (param_flat)):
         # Save original value
         original_value = param_flat[i]
         
         # Evaluate f(θ + ε)
         param_flat[i] = original_value + epsilon
         network.forward(X)
-        loss_plus = network.compute_loss(y, network.output)
+        loss_plus = network.compute_loss (y, network.output)
         
         # Evaluate f(θ - ε)
         param_flat[i] = original_value - epsilon
         network.forward(X)
-        loss_minus = network.compute_loss(y, network.output)
+        loss_minus = network.compute_loss (y, network.output)
         
         # Compute gradient
         numerical_grad_flat[i] = (loss_plus - loss_minus) / (2 * epsilon)
@@ -575,12 +575,12 @@ def compute_numerical_gradient(network, X, y, param_name, epsilon=1e-5):
         # Restore original value
         param_flat[i] = original_value
     
-    return numerical_grad.reshape(param.shape)
-\\\`\\\`\\\`
+    return numerical_grad.reshape (param.shape)
+\`\`\`
 
 **3. Compare Gradients:**
-\\\`\\\`\\\`python
-def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
+\`\`\`python
+def gradient_check (network, X, y, epsilon=1e-5, threshold=1e-5):
     """
     Verify backprop by comparing with numerical gradients
     
@@ -590,7 +590,7 @@ def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
     """
     # Compute analytical gradients
     network.forward(X)
-    analytical_grads = network.backward(y)
+    analytical_grads = network.backward (y)
     
     results = {}
     all_passed = True
@@ -611,8 +611,8 @@ def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
         )
         
         # Compute relative difference
-        numerator = np.linalg.norm(grad_analytical - grad_numerical)
-        denominator = np.linalg.norm(grad_analytical) + np.linalg.norm(grad_numerical)
+        numerator = np.linalg.norm (grad_analytical - grad_numerical)
+        denominator = np.linalg.norm (grad_analytical) + np.linalg.norm (grad_numerical)
         relative_diff = numerator / (denominator + 1e-12)
         
         # Check if passes
@@ -623,8 +623,8 @@ def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
         results[param_name] = {
             'relative_diff': relative_diff,
             'passed': passed,
-            'analytical_norm': np.linalg.norm(grad_analytical),
-            'numerical_norm': np.linalg.norm(grad_numerical),
+            'analytical_norm': np.linalg.norm (grad_analytical),
+            'numerical_norm': np.linalg.norm (grad_numerical),
         }
         
         # Print results
@@ -641,7 +641,7 @@ def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
     print(f"Overall: {'✓ ALL PASS' if all_passed else '✗ SOME FAILED'}")
     
     return all_passed, results
-\\\`\\\`\\\`
+\`\`\`
 
 **Why Gradient Checking is Reliable:**
 
@@ -663,13 +663,13 @@ def gradient_check(network, X, y, epsilon=1e-5, threshold=1e-5):
 
 Trade-off between accuracy and numerical stability:
 
-\\\`\\\`\\\`
+\`\`\`
 ε too large (e.g., 0.01):
   - Poor approximation of derivative
   - Relative error > 0.01 even for correct gradients
 
 ε too small (e.g., 10^-10):
-  - Subtractive cancellation (f(x+ε) ≈ f(x))
+  - Subtractive cancellation (f (x+ε) ≈ f (x))
   - Numerical instability
   - Relative error > 0.1 due to floating point errors
 
@@ -677,13 +677,13 @@ Trade-off between accuracy and numerical stability:
   - Good approximation
   - Numerically stable
   - Relative error < 10^-7 for correct gradients
-\\\`\\\`\\\`
+\`\`\`
 
 Recommended: ε = 10^-5 or 10^-7
 
 **Relative Error Thresholds:**
 
-\\\`\\\`\\\`
+\`\`\`
 Relative difference = ||grad_analytical - grad_numerical|| / 
                      (||grad_analytical|| + ||grad_numerical||)
 
@@ -692,11 +692,11 @@ Interpretation:
   < 10^-5: Good - likely correct (acceptable for most purposes)
   < 10^-3: Concerning - may have bugs, check carefully
   > 10^-3: Failed - implementation has errors
-\\\`\\\`\\\`
+\`\`\`
 
 **Common Patterns:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Excellent implementation
 relative_diff = 3.5e-9  # Nearly perfect match
 
@@ -708,7 +708,7 @@ relative_diff = 5.3e-4  # Systematic error likely
 
 # Failed (definitely has bugs)
 relative_diff = 0.15  # Completely wrong
-\\\`\\\`\\\`
+\`\`\`
 
 **When to Use Gradient Checking:**
 
@@ -728,19 +728,19 @@ relative_diff = 0.15  # Completely wrong
 **Best Practices:**
 
 **1. Use Small Networks for Testing:**
-\\\`\\\`\\\`python
+\`\`\`python
 # For gradient checking, use tiny network
 test_net = Network([5, 3, 2])  # Only ~30 parameters
 test_data = X[:1]  # Single sample
 
 # Verify on tiny network first
-passed, results = gradient_check(test_net, test_data, y[:1])
+passed, results = gradient_check (test_net, test_data, y[:1])
 
 # If passes, trust it for larger networks
-\\\`\\\`\\\`
+\`\`\`
 
 **2. Test Each Component Separately:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Test layers independently
 def test_relu_layer():
     layer = ReLULayer(10, 5)
@@ -749,84 +749,84 @@ def test_relu_layer():
 def test_softmax_layer():
     layer = SoftmaxLayer(10)
     # ... gradient check just this layer
-\\\`\\\`\\\`
+\`\`\`
 
 **3. Use Double Precision:**
-\\\`\\\`\\\`python
+\`\`\`python
 # float64 for gradient checking (more precise)
 network = Network([5, 3, 2], dtype=np.float64)
-X = X.astype(np.float64)
-y = y.astype(np.float64)
+X = X.astype (np.float64)
+y = y.astype (np.float64)
 
 # After verification, use float32 for training (faster)
-\\\`\\\`\\\`
+\`\`\`
 
 **4. Turn Off Regularization:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Regularization adds to gradient
 # Turn off for cleaner gradient checking
 network.dropout_rate = 0.0
 network.l2_lambda = 0.0
-\\\`\\\`\\\`
+\`\`\`
 
 **5. Use Deterministic Operations:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Disable dropout, batch norm, etc. during gradient check
 network.eval()  # Evaluation mode
-\\\`\\\`\\\`
+\`\`\`
 
 **Typical Bugs Gradient Checking Catches:**
 
 **1. Wrong Sign:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Bug
 dL_dW = -X.T @ dL_dz  # Wrong sign!
 
 # Correct
 dL_dW = X.T @ dL_dz
-\\\`\\\`\\\`
+\`\`\`
 Relative error: ~2.0 (gradients in opposite direction)
 
 **2. Forgot to Average Over Batch:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Bug
 dL_dW = X.T @ dL_dz  # Missing /m!
 
 # Correct
 dL_dW = (X.T @ dL_dz) / m
-\\\`\\\`\\\`
+\`\`\`
 Relative error: proportional to batch size
 
 **3. Wrong Activation Derivative:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Bug
 dL_dz = dL_da * a  # Wrong! Should be a * (1 - a)
 
 # Correct
 dL_dz = dL_da * a * (1 - a)  # For sigmoid
-\\\`\\\`\\\`
+\`\`\`
 Relative error: ~0.5-2.0
 
 **4. Shape Errors:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Bug
 dL_dW = dL_dz @ X  # Wrong order!
 
 # Correct
 dL_dW = X.T @ dL_dz  # Transpose X
-\\\`\\\`\\\`
+\`\`\`
 Causes shape mismatch or wrong values
 
 **Example Implementation:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Complete gradient check example
 import numpy as np
 
 def full_gradient_check_example():
     # Create small network
     np.random.seed(42)
-    network = TwoLayerNetwork(input_size=3, hidden_size=4, output_size=2)
+    network = TwoLayerNetwork (input_size=3, hidden_size=4, output_size=2)
     
     # Single sample (faster)
     X = np.random.randn(1, 3)
@@ -848,7 +848,7 @@ def full_gradient_check_example():
                 print(f"  {param}: error = {result['relative_diff',]:.2e}")
 
 full_gradient_check_example()
-\\\`\\\`\\\`
+\`\`\`
 
 **Summary:**
 

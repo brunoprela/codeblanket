@@ -58,14 +58,14 @@ import time
 
 app = FastAPI()
 
-def write_log(message: str):
+def write_log (message: str):
     """
     Background task function
     Runs after response is sent
     """
     time.sleep(2)  # Simulate slow operation
     with open("log.txt", "a") as f:
-        f.write(f"{message}\\n")
+        f.write (f"{message}\\n")
 
 @app.post("/send-notification/")
 async def send_notification(
@@ -96,12 +96,12 @@ async def register_user(
     Execute in order after response
     """
     # Create user in database (fast)
-    new_user = create_user(user)
+    new_user = create_user (user)
     
     # Add background tasks
-    background_tasks.add_task(send_welcome_email, user.email)
-    background_tasks.add_task(create_default_settings, new_user.id)
-    background_tasks.add_task(notify_admin, new_user.id)
+    background_tasks.add_task (send_welcome_email, user.email)
+    background_tasks.add_task (create_default_settings, new_user.id)
+    background_tasks.add_task (notify_admin, new_user.id)
     
     # Return immediately
     return {"user_id": new_user.id}
@@ -117,7 +117,7 @@ def send_email_report(
     Background task with multiple parameters
     """
     # Generate report (slow)
-    report_data = generate_report(report_type, start_date, end_date)
+    report_data = generate_report (report_type, start_date, end_date)
     
     # Send email
     send_email(
@@ -133,7 +133,7 @@ async def request_report(
     start_date: datetime,
     end_date: datetime,
     background_tasks: BackgroundTasks,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends (get_current_user)
 ):
     """
     Generate report in background
@@ -205,8 +205,8 @@ celery_app.conf.update(
 )
 
 # Define tasks
-@celery_app.task(bind=True, max_retries=3)
-def send_email_task(self, recipient: str, subject: str, body: str):
+@celery_app.task (bind=True, max_retries=3)
+def send_email_task (self, recipient: str, subject: str, body: str):
     """
     Send email with retry logic
     
@@ -215,7 +215,7 @@ def send_email_task(self, recipient: str, subject: str, body: str):
     """
     try:
         # Send email
-        send_email(recipient, subject, body)
+        send_email (recipient, subject, body)
         
         return {"status": "sent", "recipient": recipient}
         
@@ -227,17 +227,17 @@ def send_email_task(self, recipient: str, subject: str, body: str):
         )
 
 @celery_app.task
-def process_uploaded_image(image_id: int):
+def process_uploaded_image (image_id: int):
     """
     Process image: resize, optimize, generate thumbnails
     """
     # Get image from database
-    image = get_image(image_id)
+    image = get_image (image_id)
     
     # Process (slow operations)
-    resized = resize_image(image.path, width=1200)
-    thumbnail = create_thumbnail(image.path, size=200)
-    optimized = optimize_image(resized)
+    resized = resize_image (image.path, width=1200)
+    thumbnail = create_thumbnail (image.path, size=200)
+    optimized = optimize_image (resized)
     
     # Update database
     update_image(
@@ -250,26 +250,26 @@ def process_uploaded_image(image_id: int):
     return {"image_id": image_id, "status": "processed"}
 
 @celery_app.task
-def generate_monthly_report(user_id: int, month: int, year: int):
+def generate_monthly_report (user_id: int, month: int, year: int):
     """
     Generate monthly analytics report
     Long-running task (5-10 minutes)
     """
     # Fetch data
-    data = fetch_monthly_data(user_id, month, year)
+    data = fetch_monthly_data (user_id, month, year)
     
     # Generate charts
-    charts = generate_charts(data)
+    charts = generate_charts (data)
     
     # Create PDF
-    pdf_path = create_pdf_report(data, charts)
+    pdf_path = create_pdf_report (data, charts)
     
     # Upload to S3
     s3_url = upload_to_s3(pdf_path)
     
     # Notify user
     send_email_task.delay(
-        recipient=get_user_email(user_id),
+        recipient=get_user_email (user_id),
         subject=f"Monthly Report - {month}/{year}",
         body=f"Your report is ready: {s3_url}"
     )
@@ -291,21 +291,21 @@ app = FastAPI()
 @app.post("/upload-image/")
 async def upload_image(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Upload image and process in background
     """
     # Save file (fast)
-    image_path = save_upload(file)
+    image_path = save_upload (file)
     
     # Create database record
-    image = Image(path=image_path, status="pending")
-    db.add(image)
+    image = Image (path=image_path, status="pending")
+    db.add (image)
     db.commit()
     
     # Trigger Celery task (returns immediately)
-    task = process_uploaded_image.delay(image.id)
+    task = process_uploaded_image.delay (image.id)
     
     return {
         "image_id": image.id,
@@ -314,24 +314,24 @@ async def upload_image(
     }
 
 @app.get("/task-status/{task_id}")
-async def get_task_status(task_id: str):
+async def get_task_status (task_id: str):
     """
     Check Celery task status
     """
-    task_result = AsyncResult(task_id, app=celery_app)
+    task_result = AsyncResult (task_id, app=celery_app)
     
     return {
         "task_id": task_id,
         "status": task_result.state,  # PENDING, STARTED, SUCCESS, FAILURE
         "result": task_result.result if task_result.ready() else None,
-        "error": str(task_result.info) if task_result.failed() else None
+        "error": str (task_result.info) if task_result.failed() else None
     }
 
 @app.post("/request-report/")
 async def request_report(
     month: int,
     year: int,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends (get_current_user)
 ):
     """
     Generate report asynchronously
@@ -363,16 +363,16 @@ Track task progress and results
 
 from celery import current_task
 
-@celery_app.task(bind=True)
-def long_running_task(self, data_size: int):
+@celery_app.task (bind=True)
+def long_running_task (self, data_size: int):
     """
     Task with progress updates
     """
     total = data_size
     
-    for i in range(total):
+    for i in range (total):
         # Process item
-        process_item(i)
+        process_item (i)
         
         # Update progress
         self.update_state(
@@ -390,11 +390,11 @@ def long_running_task(self, data_size: int):
 
 # FastAPI endpoint to track progress
 @app.get("/task-progress/{task_id}")
-async def get_task_progress(task_id: str):
+async def get_task_progress (task_id: str):
     """
     Get real-time task progress
     """
-    task_result = AsyncResult(task_id, app=celery_app)
+    task_result = AsyncResult (task_id, app=celery_app)
     
     if task_result.state == 'PROGRESS':
         return {
@@ -428,8 +428,8 @@ Retry failed tasks with backoff
 
 from celery.exceptions import MaxRetriesExceededError
 
-@celery_app.task(bind=True, max_retries=5, default_retry_delay=60)
-def call_external_api(self, url: str, payload: dict):
+@celery_app.task (bind=True, max_retries=5, default_retry_delay=60)
+def call_external_api (self, url: str, payload: dict):
     """
     Call external API with retry on failure
     
@@ -437,7 +437,7 @@ def call_external_api(self, url: str, payload: dict):
     default_retry_delay: 60 seconds between retries
     """
     try:
-        response = requests.post(url, json=payload, timeout=10)
+        response = requests.post (url, json=payload, timeout=10)
         response.raise_for_status()
         
         return response.json()
@@ -453,26 +453,26 @@ def call_external_api(self, url: str, payload: dict):
             # All retries exhausted, log error
             logger.error(
                 f"Failed to call {url} after {self.request.retries} retries",
-                extra={"url": url, "error": str(exc)}
+                extra={"url": url, "error": str (exc)}
             )
             
             # Send alert
             send_alert_to_admin(
                 f"External API call failed: {url}",
-                error=str(exc)
+                error=str (exc)
             )
             
             raise
 
 # Task with custom retry logic
-@celery_app.task(bind=True)
-def process_payment(self, order_id: int):
+@celery_app.task (bind=True)
+def process_payment (self, order_id: int):
     """
     Process payment with idempotency
     """
     try:
         # Get order
-        order = get_order(order_id)
+        order = get_order (order_id)
         
         # Check if already processed (idempotency)
         if order.payment_status == "completed":
@@ -489,25 +489,25 @@ def process_payment(self, order_id: int):
         # Update order
         order.payment_status = "completed"
         order.payment_id = result.id
-        save_order(order)
+        save_order (order)
         
         return {"status": "success", "payment_id": result.id}
         
     except PaymentDeclinedError as exc:
         # Don't retry if card declined
-        logger.warning(f"Payment declined for order {order_id}")
-        update_order_status(order_id, "payment_failed")
-        send_payment_failed_email(order_id)
+        logger.warning (f"Payment declined for order {order_id}")
+        update_order_status (order_id, "payment_failed")
+        send_payment_failed_email (order_id)
         
         raise  # Don't retry
         
     except PaymentGatewayError as exc:
         # Retry on gateway errors
         if self.request.retries < self.max_retries:
-            raise self.retry(exc=exc, countdown=30)
+            raise self.retry (exc=exc, countdown=30)
         else:
             # All retries failed, escalate
-            send_alert_to_admin(f"Payment processing failed for order {order_id}")
+            send_alert_to_admin (f"Payment processing failed for order {order_id}")
             raise
 \`\`\`
 
@@ -528,11 +528,11 @@ from celery.schedules import crontab
 celery_app.conf.beat_schedule = {
     'send-daily-report': {
         'task': 'tasks.send_daily_report',
-        'schedule': crontab(hour=8, minute=0),  # 8 AM every day
+        'schedule': crontab (hour=8, minute=0),  # 8 AM every day
     },
     'cleanup-old-sessions': {
         'task': 'tasks.cleanup_sessions',
-        'schedule': crontab(hour=2, minute=0),  # 2 AM every day
+        'schedule': crontab (hour=2, minute=0),  # 2 AM every day
     },
     'process-pending-orders': {
         'task': 'tasks.process_pending_orders',
@@ -540,7 +540,7 @@ celery_app.conf.beat_schedule = {
     },
     'generate-weekly-analytics': {
         'task': 'tasks.generate_weekly_analytics',
-        'schedule': crontab(hour=9, minute=0, day_of_week=1),  # 9 AM every Monday
+        'schedule': crontab (hour=9, minute=0, day_of_week=1),  # 9 AM every Monday
     },
 }
 
@@ -554,11 +554,11 @@ def send_daily_report():
     users = get_all_active_users()
     
     for user in users:
-        report_data = generate_user_report(user.id)
+        report_data = generate_user_report (user.id)
         send_email_task.delay(
             recipient=user.email,
             subject="Daily Summary",
-            body=render_report(report_data)
+            body=render_report (report_data)
         )
 
 @celery_app.task
@@ -567,10 +567,10 @@ def cleanup_sessions():
     Delete expired sessions
     Runs at 2 AM every day
     """
-    cutoff = datetime.utcnow() - timedelta(days=30)
-    deleted_count = delete_sessions_before(cutoff)
+    cutoff = datetime.utcnow() - timedelta (days=30)
+    deleted_count = delete_sessions_before (cutoff)
     
-    logger.info(f"Cleaned up {deleted_count} expired sessions")
+    logger.info (f"Cleaned up {deleted_count} expired sessions")
 
 @celery_app.task
 def process_pending_orders():
@@ -584,7 +584,7 @@ def process_pending_orders():
         # Check if stuck for > 30 minutes
         if (datetime.utcnow() - order.created_at).seconds > 1800:
             # Cancel or retry
-            process_stuck_order(order.id)
+            process_stuck_order (order.id)
 \`\`\`
 
 ---
@@ -599,7 +599,7 @@ Production-ready task architecture
 """
 
 # Task base class with common patterns
-class ProductionTask(celery_app.Task):
+class ProductionTask (celery_app.Task):
     """
     Base task class with production patterns
     """
@@ -611,7 +611,7 @@ class ProductionTask(celery_app.Task):
     retry_backoff_max = 600  # Max 10 minutes
     retry_jitter = True  # Add randomness to backoff
     
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
+    def on_failure (self, exc, task_id, args, kwargs, einfo):
         """
         Called when task fails
         """
@@ -619,7 +619,7 @@ class ProductionTask(celery_app.Task):
             f"Task {self.name} failed",
             extra={
                 "task_id": task_id,
-                "exception": str(exc),
+                "exception": str (exc),
                 "args": args,
                 "kwargs": kwargs
             }
@@ -629,10 +629,10 @@ class ProductionTask(celery_app.Task):
         if self.name in CRITICAL_TASKS:
             send_alert_to_slack(
                 f"❌ Critical task failed: {self.name}",
-                error=str(exc)
+                error=str (exc)
             )
     
-    def on_success(self, retval, task_id, args, kwargs):
+    def on_success (self, retval, task_id, args, kwargs):
         """
         Called when task succeeds
         """
@@ -642,19 +642,19 @@ class ProductionTask(celery_app.Task):
         )
 
 # Use production task class
-@celery_app.task(base=ProductionTask)
-def important_task(data: dict):
+@celery_app.task (base=ProductionTask)
+def important_task (data: dict):
     """
     Automatically gets retry logic and monitoring
     """
-    process_data(data)
+    process_data (data)
 
 # Task chaining
 from celery import chain, group, chord
 
 # Sequential tasks
 workflow = chain(
-    download_data.s(url),
+    download_data.s (url),
     process_data.s(),
     upload_results.s()
 )
@@ -662,14 +662,14 @@ result = workflow.apply_async()
 
 # Parallel tasks
 parallel_tasks = group(
-    process_chunk.s(chunk)
+    process_chunk.s (chunk)
     for chunk in data_chunks
 )
 results = parallel_tasks.apply_async()
 
 # Parallel + callback
 callback_workflow = chord(
-    group(process_user_data.s(user_id) for user_id in user_ids),
+    group (process_user_data.s (user_id) for user_id in user_ids),
     aggregate_results.s()  # Called after all parallel tasks complete
 )
 result = callback_workflow.apply_async()
@@ -687,14 +687,14 @@ import time
 
 # Track task duration
 @task_prerun.connect
-def task_prerun_handler(sender=None, task_id=None, task=None, **kwargs):
+def task_prerun_handler (sender=None, task_id=None, task=None, **kwargs):
     """
     Called before task starts
     """
     task.start_time = time.time()
 
 @task_postrun.connect
-def task_postrun_handler(sender=None, task_id=None, task=None, retval=None, **kwargs):
+def task_postrun_handler (sender=None, task_id=None, task=None, retval=None, **kwargs):
     """
     Called after task completes
     """
@@ -710,15 +710,15 @@ def task_postrun_handler(sender=None, task_id=None, task=None, retval=None, **kw
     )
     
     # Track metrics (Prometheus)
-    TASK_DURATION.labels(task_name=task.name).observe(duration)
+    TASK_DURATION.labels (task_name=task.name).observe (duration)
 
 @task_failure.connect
-def task_failure_handler(sender=None, task_id=None, exception=None, **kwargs):
+def task_failure_handler (sender=None, task_id=None, exception=None, **kwargs):
     """
     Called when task fails
     """
     # Track failures (Prometheus)
-    TASK_FAILURES.labels(task_name=sender.name).inc()
+    TASK_FAILURES.labels (task_name=sender.name).inc()
 
 # Health check endpoint
 @app.get("/health/celery")
@@ -740,14 +740,14 @@ async def celery_health():
         
         return {
             "status": "healthy",
-            "workers": len(stats),
-            "active_tasks": sum(len(tasks) for tasks in (active or {}).values())
+            "workers": len (stats),
+            "active_tasks": sum (len (tasks) for tasks in (active or {}).values())
         }
         
     except Exception as e:
         return {
             "status": "unhealthy",
-            "error": str(e)
+            "error": str (e)
         }
 \`\`\`
 

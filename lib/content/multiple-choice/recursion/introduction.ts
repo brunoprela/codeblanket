@@ -8,7 +8,7 @@ export const introductionMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      'What is the time complexity of calculating factorial(n) recursively?',
+      'What is the time complexity of calculating factorial (n) recursively?',
     options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
     correctAnswer: 2,
     explanation:
@@ -43,7 +43,7 @@ export const introductionMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc4',
     question:
-      'What is the space complexity of factorial(n) recursive implementation?',
+      'What is the space complexity of factorial (n) recursive implementation?',
     options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'],
     correctAnswer: 2,
     explanation:

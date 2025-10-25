@@ -55,12 +55,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train decision tree
-tree = DecisionTreeClassifier(max_depth=3, random_state=42)
+tree = DecisionTreeClassifier (max_depth=3, random_state=42)
 tree.fit(X_train, y_train)
 
 # Visualize tree
-plt.figure(figsize=(15, 8))
-plot_tree(tree, feature_names=['petal length', 'petal width'],
+plt.figure (figsize=(15, 8))
+plot_tree (tree, feature_names=['petal length', 'petal width'],
          class_names=['setosa', 'versicolor'], filled=True, 
          rounded=True, fontsize=10)
 plt.title('Decision Tree Structure')
@@ -90,7 +90,7 @@ Where \\( p_i \\) is the proportion of class i in the node.
 
 \\[ Entropy = -\\sum_{i=1}^{C} p_i \\log_2(p_i) \\]
 
-**Information Gain** = Entropy(parent) - Weighted Entropy(children)
+**Information Gain** = Entropy (parent) - Weighted Entropy (children)
 
 ### Mean Squared Error (Regression)
 
@@ -105,8 +105,8 @@ X_sample = np.array([[1], [2], [3], [4], [5], [6]])
 y_sample = np.array([0, 0, 0, 1, 1, 1])
 
 # Compare Gini vs Entropy
-tree_gini = DecisionTreeClassifier(criterion='gini', max_depth=2)
-tree_entropy = DecisionTreeClassifier(criterion='entropy', max_depth=2)
+tree_gini = DecisionTreeClassifier (criterion='gini', max_depth=2)
+tree_entropy = DecisionTreeClassifier (criterion='entropy', max_depth=2)
 
 tree_gini.fit(X_sample, y_sample)
 tree_entropy.fit(X_sample, y_sample)
@@ -136,7 +136,7 @@ print("\\nBoth usually give similar results!")
 from sklearn.datasets import make_classification
 
 # Generate data with noise
-X, y = make_classification(n_samples=500, n_features=10, n_informative=5,
+X, y = make_classification (n_samples=500, n_features=10, n_informative=5,
                            n_redundant=5, random_state=42)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -145,7 +145,7 @@ depths = [1, 3, 5, 10, 20, None]
 results = []
 
 for depth in depths:
-    tree = DecisionTreeClassifier(max_depth=depth, random_state=42)
+    tree = DecisionTreeClassifier (max_depth=depth, random_state=42)
     tree.fit(X_train, y_train)
     
     train_acc = tree.score(X_train, y_train)
@@ -160,30 +160,30 @@ for depth in depths:
     })
     
 import pandas as pd
-df_results = pd.DataFrame(results)
+df_results = pd.DataFrame (results)
 print("\\nTree Depth vs Performance:")
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 
 # Plot bias-variance tradeoff
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-x_pos = range(len(depths))
-plt.plot(x_pos, df_results['train_acc'], 'o-', label='Training', linewidth=2)
-plt.plot(x_pos, df_results['test_acc'], 's-', label='Test', linewidth=2)
+x_pos = range (len (depths))
+plt.plot (x_pos, df_results['train_acc'], 'o-', label='Training', linewidth=2)
+plt.plot (x_pos, df_results['test_acc'], 's-', label='Test', linewidth=2)
 plt.xlabel('Tree Complexity →')
 plt.ylabel('Accuracy')
 plt.title('Overfitting: Deep Trees')
 plt.legend()
-plt.xticks(x_pos, [str(d) for d in depths])
+plt.xticks (x_pos, [str (d) for d in depths])
 plt.grid(True, alpha=0.3)
 
 plt.subplot(1, 2, 2)
-plt.plot(x_pos, df_results['n_leaves'], 'o-', linewidth=2, color='green')
+plt.plot (x_pos, df_results['n_leaves'], 'o-', linewidth=2, color='green')
 plt.xlabel('max_depth')
 plt.ylabel('Number of Leaves')
 plt.title('Tree Complexity Growth')
-plt.xticks(x_pos, [str(d) for d in depths])
+plt.xticks (x_pos, [str (d) for d in depths])
 plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
@@ -204,7 +204,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train tree
-tree = DecisionTreeClassifier(max_depth=5, random_state=42)
+tree = DecisionTreeClassifier (max_depth=5, random_state=42)
 tree.fit(X_train, y_train)
 
 # Feature importance
@@ -214,13 +214,13 @@ feature_importance = pd.DataFrame({
 }).sort_values('importance', ascending=False)
 
 print("\\nTop 10 Most Important Features:")
-print(feature_importance.head(10).to_string(index=False))
+print(feature_importance.head(10).to_string (index=False))
 
 # Visualize
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 top_features = feature_importance.head(15)
-plt.barh(range(len(top_features)), top_features['importance'])
-plt.yticks(range(len(top_features)), top_features['feature'])
+plt.barh (range (len (top_features)), top_features['importance'])
+plt.yticks (range (len (top_features)), top_features['feature'])
 plt.xlabel('Importance')
 plt.title('Feature Importance in Decision Tree')
 plt.gca().invert_yaxis()
@@ -234,34 +234,34 @@ plt.show()
 # Visualize decision boundaries
 from sklearn.datasets import make_moons
 
-X_moons, y_moons = make_moons(n_samples=200, noise=0.25, random_state=42)
+X_moons, y_moons = make_moons (n_samples=200, noise=0.25, random_state=42)
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 max_depths = [2, 5, None]
 
-for idx, max_depth in enumerate(max_depths):
-    tree = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
+for idx, max_depth in enumerate (max_depths):
+    tree = DecisionTreeClassifier (max_depth=max_depth, random_state=42)
     tree.fit(X_moons, y_moons)
     
     # Create mesh
     h = 0.02
     x_min, x_max = X_moons[:, 0].min() - 0.5, X_moons[:, 0].max() + 0.5
     y_min, y_max = X_moons[:, 1].min() - 0.5, X_moons[:, 1].max() + 0.5
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
+    xx, yy = np.meshgrid (np.arange (x_min, x_max, h),
+                         np.arange (y_min, y_max, h))
     
-    Z = tree.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
+    Z = tree.predict (np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape (xx.shape)
     
-    axes[idx].contourf(xx, yy, Z, alpha=0.4, cmap='RdBu')
+    axes[idx].contourf (xx, yy, Z, alpha=0.4, cmap='RdBu')
     axes[idx].scatter(X_moons[y_moons==0, 0], X_moons[y_moons==0, 1], 
                      c='blue', s=30, edgecolors='k')
     axes[idx].scatter(X_moons[y_moons==1, 0], X_moons[y_moons==1, 1], 
                      c='red', s=30, edgecolors='k')
     
     depth_str = max_depth if max_depth else 'Unlimited'
-    axes[idx].set_title(f'max_depth={depth_str}\\nLeaves: {tree.get_n_leaves()}')
+    axes[idx].set_title (f'max_depth={depth_str}\\nLeaves: {tree.get_n_leaves()}')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -286,8 +286,8 @@ fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 depths = [2, 5, 20]
 
-for idx, depth in enumerate(depths):
-    tree_reg = DecisionTreeRegressor(max_depth=depth, random_state=42)
+for idx, depth in enumerate (depths):
+    tree_reg = DecisionTreeRegressor (max_depth=depth, random_state=42)
     tree_reg.fit(X_reg, y_reg)
     
     # Predict
@@ -299,7 +299,7 @@ for idx, depth in enumerate(depths):
     axes[idx].plot(X_test_reg, y_pred_reg, color="red", linewidth=2, label="Prediction")
     axes[idx].set_xlabel("X")
     axes[idx].set_ylabel("y")
-    axes[idx].set_title(f"max_depth={depth}")
+    axes[idx].set_title (f"max_depth={depth}")
     axes[idx].legend()
     axes[idx].grid(True, alpha=0.3)
 
@@ -347,7 +347,7 @@ customer_data = pd.DataFrame({
 
 # Generate churn (influenced by features)
 churn_prob = 0.2 + 0.005 * customer_data['monthly_charges'] - 0.01 * customer_data['tenure_months']
-customer_data['churned'] = (np.random.random(n) < np.clip(churn_prob, 0, 1)).astype(int)
+customer_data['churned'] = (np.random.random (n) < np.clip (churn_prob, 0, 1)).astype (int)
 
 X = customer_data.drop('churned', axis=1)
 y = customer_data['churned']
@@ -355,7 +355,7 @@ y = customer_data['churned']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train optimized tree
-tree = DecisionTreeClassifier(max_depth=4, min_samples_split=50, min_samples_leaf=20, random_state=42)
+tree = DecisionTreeClassifier (max_depth=4, min_samples_split=50, min_samples_leaf=20, random_state=42)
 tree.fit(X_train, y_train)
 
 y_pred = tree.predict(X_test)
@@ -365,13 +365,13 @@ print("CUSTOMER CHURN PREDICTION")
 print("="*60)
 print(f"\\nTest Accuracy: {tree.score(X_test, y_test):.4f}")
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=['Retained', 'Churned']))
+print(classification_report (y_test, y_pred, target_names=['Retained', 'Churned']))
 print("\\nFeature Importance:")
 importance_df = pd.DataFrame({
     'feature': X.columns,
     'importance': tree.feature_importances_
 }).sort_values('importance', ascending=False)
-print(importance_df.to_string(index=False))
+print(importance_df.to_string (index=False))
 \`\`\`
 
 ## Summary
@@ -410,7 +410,7 @@ param_grid = {
     'criterion': ['gini', 'entropy']
 }
 
-grid = GridSearchCV(DecisionTreeClassifier(random_state=42), param_grid, cv=5, n_jobs=-1)
+grid = GridSearchCV(DecisionTreeClassifier (random_state=42), param_grid, cv=5, n_jobs=-1)
 grid.fit(X_train, y_train)
 
 print(f"Best params: {grid.best_params_}")

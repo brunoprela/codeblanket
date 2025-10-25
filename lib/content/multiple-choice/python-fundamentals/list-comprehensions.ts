@@ -12,7 +12,7 @@ export const listcomprehensionsMultipleChoice: MultipleChoiceQuestion[] = [
       '[x for x in iterable]',
       '{x for x in iterable}',
       '(x for x in iterable)',
-      'list(x in iterable)',
+      'list (x in iterable)',
     ],
     correctAnswer: 0,
     explanation:
@@ -59,7 +59,7 @@ export const listcomprehensionsMultipleChoice: MultipleChoiceQuestion[] = [
       '[key: value for item in iterable]',
       '{key: value for item in iterable}',
       '(key, value for item in iterable)',
-      'dict(key=value for item in iterable)',
+      'dict (key=value for item in iterable)',
     ],
     correctAnswer: 1,
     explanation:

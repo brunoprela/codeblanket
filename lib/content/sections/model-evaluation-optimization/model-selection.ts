@@ -49,14 +49,14 @@ print("="*70)
 
 # Define models
 models = {
-    'Logistic Regression': LogisticRegression(max_iter=10000),
-    'Decision Tree': DecisionTreeClassifier(random_state=42),
-    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
-    'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, random_state=42),
+    'Logistic Regression': LogisticRegression (max_iter=10000),
+    'Decision Tree': DecisionTreeClassifier (random_state=42),
+    'Random Forest': RandomForestClassifier (n_estimators=100, random_state=42),
+    'Gradient Boosting': GradientBoostingClassifier (n_estimators=100, random_state=42),
     'SVM': SVC(probability=True, random_state=42),
     'KNN': KNeighborsClassifier(),
     'Naive Bayes': GaussianNB(),
-    'Neural Network': MLPClassifier(hidden_layers=(100,), max_iter=1000, random_state=42)
+    'Neural Network': MLPClassifier (hidden_layers=(100,), max_iter=1000, random_state=42)
 }
 
 # Create pipelines with scaling
@@ -100,15 +100,15 @@ for name, pipeline in pipelines.items():
         'Overfitting': cv_results['train_accuracy'].mean() - cv_results['test_accuracy'].mean()
     }
     
-    results.append(result)
+    results.append (result)
 
 # Display results
-df_results = pd.DataFrame(results).sort_values('CV Accuracy', ascending=False)
+df_results = pd.DataFrame (results).sort_values('CV Accuracy', ascending=False)
 
 print("\\n" + "="*70)
 print("Model Comparison Results")
 print("="*70)
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 
 # Visualize comparison
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))
@@ -116,62 +116,62 @@ fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 # 1. Accuracy comparison
 ax1 = axes[0, 0]
 models_sorted = df_results.sort_values('CV Accuracy', ascending=True)
-y_pos = np.arange(len(models_sorted))
+y_pos = np.arange (len (models_sorted))
 
-bars = ax1.barh(y_pos, models_sorted['CV Accuracy'], xerr=models_sorted['CV Accuracy Std'])
-ax1.set_yticks(y_pos)
-ax1.set_yticklabels(models_sorted['Model'])
+bars = ax1.barh (y_pos, models_sorted['CV Accuracy'], xerr=models_sorted['CV Accuracy Std'])
+ax1.set_yticks (y_pos)
+ax1.set_yticklabels (models_sorted['Model'])
 ax1.set_xlabel('Accuracy')
 ax1.set_title('Model Accuracy Comparison', fontweight='bold')
-ax1.grid(axis='x', alpha=0.3)
+ax1.grid (axis='x', alpha=0.3)
 
 # Color code
 colors = ['green' if x > 0.95 else 'orange' if x > 0.90 else 'red' 
           for x in models_sorted['CV Accuracy']]
-for bar, color in zip(bars, colors):
-    bar.set_color(color)
+for bar, color in zip (bars, colors):
+    bar.set_color (color)
     bar.set_alpha(0.7)
 
 # 2. Multiple metrics heatmap
 ax2 = axes[0, 1]
 metrics_to_show = ['CV Accuracy', 'CV Precision', 'CV Recall', 'CV F1', 'CV ROC AUC']
 heatmap_data = df_results[['Model'] + metrics_to_show].set_index('Model')
-sns.heatmap(heatmap_data, annot=True, fmt='.3f', cmap='RdYlGn', ax=ax2, 
+sns.heatmap (heatmap_data, annot=True, fmt='.3f', cmap='RdYlGn', ax=ax2, 
            vmin=0.85, vmax=1.0, cbar_kws={'label': 'Score'})
 ax2.set_title('Model Performance Heatmap', fontweight='bold')
 
 # 3. Training time vs accuracy
 ax3 = axes[1, 0]
-ax3.scatter(df_results['Fit Time (s)'], df_results['CV Accuracy'], 
+ax3.scatter (df_results['Fit Time (s)'], df_results['CV Accuracy'], 
            s=200, alpha=0.6, edgecolors='black', linewidth=2)
 
 for idx, row in df_results.iterrows():
-    ax3.annotate(row['Model'], (row['Fit Time (s)'], row['CV Accuracy']),
+    ax3.annotate (row['Model'], (row['Fit Time (s)'], row['CV Accuracy']),
                 fontsize=8, ha='center')
 
 ax3.set_xlabel('Training Time (seconds)')
 ax3.set_ylabel('CV Accuracy')
 ax3.set_title('Accuracy vs Training Time', fontweight='bold')
-ax3.grid(alpha=0.3)
+ax3.grid (alpha=0.3)
 
 # 4. Overfitting analysis
 ax4 = axes[1, 1]
 models_sorted_overfit = df_results.sort_values('Overfitting', ascending=True)
-y_pos = np.arange(len(models_sorted_overfit))
+y_pos = np.arange (len (models_sorted_overfit))
 
-bars = ax4.barh(y_pos, models_sorted_overfit['Overfitting'])
-ax4.set_yticks(y_pos)
-ax4.set_yticklabels(models_sorted_overfit['Model'])
+bars = ax4.barh (y_pos, models_sorted_overfit['Overfitting'])
+ax4.set_yticks (y_pos)
+ax4.set_yticklabels (models_sorted_overfit['Model'])
 ax4.set_xlabel('Train - Test Accuracy Gap')
 ax4.set_title('Overfitting Analysis', fontweight='bold')
-ax4.axvline(x=0, color='red', linestyle='--', alpha=0.5)
-ax4.grid(axis='x', alpha=0.3)
+ax4.axvline (x=0, color='red', linestyle='--', alpha=0.5)
+ax4.grid (axis='x', alpha=0.3)
 
 # Color code
-colors = ['green' if abs(x) < 0.05 else 'orange' if abs(x) < 0.10 else 'red' 
+colors = ['green' if abs (x) < 0.05 else 'orange' if abs (x) < 0.10 else 'red' 
           for x in models_sorted_overfit['Overfitting']]
-for bar, color in zip(bars, colors):
-    bar.set_color(color)
+for bar, color in zip (bars, colors):
+    bar.set_color (color)
     bar.set_alpha(0.7)
 
 plt.tight_layout()
@@ -194,23 +194,23 @@ top_3_models = df_results.nsmallest(3, 'CV Accuracy')['Model'].values
 detailed_scores = {}
 for name in top_3_models:
     pipeline = pipelines[name]
-    scores = cross_val_score(pipeline, X_train, y_train, cv=10, scoring='accuracy')
+    scores = cross_val_score (pipeline, X_train, y_train, cv=10, scoring='accuracy')
     detailed_scores[name] = scores
 
 # Pairwise t-tests
 print("\\nPairwise t-tests (paired, 10-fold CV):")
 print("-"*70)
 
-model_names = list(detailed_scores.keys())
-for i in range(len(model_names)):
-    for j in range(i+1, len(model_names)):
+model_names = list (detailed_scores.keys())
+for i in range (len (model_names)):
+    for j in range (i+1, len (model_names)):
         model1 = model_names[i]
         model2 = model_names[j]
         
         scores1 = detailed_scores[model1]
         scores2 = detailed_scores[model2]
         
-        t_stat, p_value = stats.ttest_rel(scores1, scores2)
+        t_stat, p_value = stats.ttest_rel (scores1, scores2)
         
         mean_diff = scores1.mean() - scores2.mean()
         
@@ -263,16 +263,16 @@ but fail on highly non-linear data where tree-based methods shine.
 from sklearn.datasets import make_classification, make_moons, make_circles
 
 datasets = {
-    'Linearly Separable': make_classification(n_samples=500, n_features=2, n_informative=2,
+    'Linearly Separable': make_classification (n_samples=500, n_features=2, n_informative=2,
                                              n_redundant=0, n_clusters_per_class=1, 
                                              class_sep=2.0, random_state=42),
-    'Moons': make_moons(n_samples=500, noise=0.1, random_state=42),
-    'Circles': make_circles(n_samples=500, noise=0.1, factor=0.5, random_state=42)
+    'Moons': make_moons (n_samples=500, noise=0.1, random_state=42),
+    'Circles': make_circles (n_samples=500, noise=0.1, factor=0.5, random_state=42)
 }
 
 simple_models = {
     'Logistic Regression': LogisticRegression(),
-    'Decision Tree': DecisionTreeClassifier(max_depth=5, random_state=42),
+    'Decision Tree': DecisionTreeClassifier (max_depth=5, random_state=42),
     'SVM (RBF)': SVC(kernel='rbf', random_state=42)
 }
 
@@ -280,7 +280,7 @@ nfl_results = []
 
 for dataset_name, (X_data, y_data) in datasets.items():
     for model_name, model in simple_models.items():
-        scores = cross_val_score(model, X_data, y_data, cv=5)
+        scores = cross_val_score (model, X_data, y_data, cv=5)
         nfl_results.append({
             'Dataset': dataset_name,
             'Model': model_name,
@@ -288,8 +288,8 @@ for dataset_name, (X_data, y_data) in datasets.items():
             'Std': scores.std()
         })
 
-df_nfl = pd.DataFrame(nfl_results)
-pivot_nfl = df_nfl.pivot(index='Model', columns='Dataset', values='Accuracy')
+df_nfl = pd.DataFrame (nfl_results)
+pivot_nfl = df_nfl.pivot (index='Model', columns='Dataset', values='Accuracy')
 
 print("\\nPerformance across different problem types:")
 print(pivot_nfl.to_string())
@@ -406,7 +406,7 @@ START
 print(decision_tree_text)
 
 # Recommendation function
-def recommend_models(problem_characteristics):
+def recommend_models (problem_characteristics):
     """Recommend models based on problem characteristics."""
     
     recommendations = []
@@ -453,9 +453,9 @@ example_problem = {
 }
 
 print("\\nExample: Large dataset, non-linear, no interpretability requirement")
-recommended = recommend_models(example_problem)
+recommended = recommend_models (example_problem)
 print("\\nRecommended models to try:")
-for i, (model, reason) in enumerate(recommended, 1):
+for i, (model, reason) in enumerate (recommended, 1):
     print(f"  {i}. {model}: {reason}")
 \`\`\`
 
@@ -475,9 +475,9 @@ print("\\n1. Voting Classifier (combine predictions)")
 
 voting_clf = VotingClassifier(
     estimators=[
-        ('lr', LogisticRegression(max_iter=10000)),
-        ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
-        ('gb', GradientBoostingClassifier(n_estimators=100, random_state=42))
+        ('lr', LogisticRegression (max_iter=10000)),
+        ('rf', RandomForestClassifier (n_estimators=100, random_state=42)),
+        ('gb', GradientBoostingClassifier (n_estimators=100, random_state=42))
     ],
     voting='soft'
 )
@@ -499,7 +499,7 @@ for name, model in voting_clf.named_estimators_.items():
     individual_scores[name] = score
     print(f"  {name}: {score:.4f}")
 
-if voting_score > max(individual_scores.values()):
+if voting_score > max (individual_scores.values()):
     print(f"\\n✓ Ensemble outperforms all individual models!")
 else:
     print(f"\\n→ Best individual model still competitive")
@@ -509,11 +509,11 @@ print("\\n2. Stacking Classifier (meta-learning)")
 
 stacking_clf = StackingClassifier(
     estimators=[
-        ('lr', LogisticRegression(max_iter=10000)),
-        ('rf', RandomForestClassifier(n_estimators=50, random_state=42)),
-        ('gb', GradientBoostingClassifier(n_estimators=50, random_state=42))
+        ('lr', LogisticRegression (max_iter=10000)),
+        ('rf', RandomForestClassifier (n_estimators=50, random_state=42)),
+        ('gb', GradientBoostingClassifier (n_estimators=50, random_state=42))
     ],
-    final_estimator=LogisticRegression(max_iter=10000),
+    final_estimator=LogisticRegression (max_iter=10000),
     cv=5
 )
 
@@ -534,8 +534,8 @@ print("="*70)
 # Generate trading data
 np.random.seed(42)
 n_days = 1000
-returns = np.random.randn(n_days) * 0.015
-prices = 100 * np.exp(np.cumsum(returns))
+returns = np.random.randn (n_days) * 0.015
+prices = 100 * np.exp (np.cumsum (returns))
 
 # Create features
 features_df = pd.DataFrame({'price': prices})
@@ -546,7 +546,7 @@ features_df['volatility'] = features_df['returns'].rolling(20).std()
 features_df['momentum'] = features_df['price'].pct_change(20)
 
 # Target: next day direction
-features_df['target'] = (features_df['price'].shift(-1) > features_df['price']).astype(int)
+features_df['target'] = (features_df['price'].shift(-1) > features_df['price']).astype (int)
 features_df = features_df.dropna()
 
 X_trading = features_df[['returns', 'sma_10', 'sma_50', 'volatility', 'momentum']].values
@@ -561,9 +561,9 @@ y_test_t = y_trading[split_point:]
 
 # Compare models for trading
 trading_models = {
-    'Logistic Regression': LogisticRegression(max_iter=10000),
-    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
-    'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, random_state=42)
+    'Logistic Regression': LogisticRegression (max_iter=10000),
+    'Random Forest': RandomForestClassifier (n_estimators=100, random_state=42),
+    'Gradient Boosting': GradientBoostingClassifier (n_estimators=100, random_state=42)
 }
 
 print("\\nComparing models for trading strategy:")
@@ -575,9 +575,9 @@ for name, model in trading_models.items():
     model.fit(X_train_t, y_train_t)
     y_pred_t = model.predict(X_test_t)
     
-    accuracy = accuracy_score(y_test_t, y_pred_t)
-    precision = precision_score(y_test_t, y_pred_t)
-    recall = recall_score(y_test_t, y_pred_t)
+    accuracy = accuracy_score (y_test_t, y_pred_t)
+    precision = precision_score (y_test_t, y_pred_t)
+    recall = recall_score (y_test_t, y_pred_t)
     
     print(f"\\n{name}:")
     print(f"  Accuracy:  {accuracy:.4f}")

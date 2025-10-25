@@ -76,15 +76,15 @@ encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
 # Count tokens in text
 text = "Hello, how are you doing today?"
-tokens = encoding.encode(text)
+tokens = encoding.encode (text)
 
 print(f"Text: {text}")
 print(f"Tokens: {tokens}")
-print(f"Token count: {len(tokens)}")
+print(f"Token count: {len (tokens)}")
 # Output: Token count: 8
 
 # Decode back to text
-decoded = encoding.decode(tokens)
+decoded = encoding.decode (tokens)
 print(f"Decoded: {decoded}")
 
 # See individual tokens
@@ -109,7 +109,7 @@ def count_tokens_in_messages(
     https://github.com/openai/openai-cookbook
     """
     try:
-        encoding = tiktoken.encoding_for_model(model)
+        encoding = tiktoken.encoding_for_model (model)
     except KeyError:
         encoding = tiktoken.get_encoding("cl100k_base")
     
@@ -127,7 +127,7 @@ def count_tokens_in_messages(
         num_tokens += tokens_per_message
         
         for key, value in message.items():
-            num_tokens += len(encoding.encode(value))
+            num_tokens += len (encoding.encode (value))
             if key == "name":
                 num_tokens += tokens_per_name
     
@@ -143,7 +143,7 @@ messages = [
     {"role": "user", "content": "Can you explain it more simply?"}
 ]
 
-token_count = count_tokens_in_messages(messages)
+token_count = count_tokens_in_messages (messages)
 print(f"Total tokens in conversation: {token_count}")
 \`\`\`
 
@@ -161,15 +161,15 @@ class TokenCounter:
     def __init__(self, model: str = "gpt-3.5-turbo"):
         self.model = model
         try:
-            self.encoding = tiktoken.encoding_for_model(model)
+            self.encoding = tiktoken.encoding_for_model (model)
         except KeyError:
             self.encoding = tiktoken.get_encoding("cl100k_base")
     
-    def count(self, text: str) -> int:
+    def count (self, text: str) -> int:
         """Count tokens in text."""
-        return len(self.encoding.encode(text))
+        return len (self.encoding.encode (text))
     
-    def count_messages(self, messages: List[Dict[str, str]]) -> Dict:
+    def count_messages (self, messages: List[Dict[str, str]]) -> Dict:
         """
         Count tokens in messages with detailed breakdown.
         """
@@ -180,7 +180,7 @@ class TokenCounter:
         
         for msg in messages:
             msg_tokens = tokens_per_message
-            content_tokens = len(self.encoding.encode(msg['content']))
+            content_tokens = len (self.encoding.encode (msg['content']))
             msg_tokens += content_tokens
             
             total += msg_tokens
@@ -195,7 +195,7 @@ class TokenCounter:
         return {
             'total_tokens': total,
             'message_breakdown': breakdown,
-            'average_per_message': total / len(messages) if messages else 0
+            'average_per_message': total / len (messages) if messages else 0
         }
     
     def estimate_cost(
@@ -211,7 +211,7 @@ class TokenCounter:
             'gpt-3.5-turbo': {'prompt': 0.50, 'completion': 1.50},
         }
         
-        rates = pricing.get(self.model, pricing['gpt-3.5-turbo'])
+        rates = pricing.get (self.model, pricing['gpt-3.5-turbo'])
         
         prompt_cost = (prompt_tokens / 1_000_000) * rates['prompt']
         completion_cost = (completion_tokens / 1_000_000) * rates['completion']
@@ -229,10 +229,10 @@ class TokenCounter:
         
         Args:
             messages: Conversation messages
-            max_context: Model's context window size
+            max_context: Model\'s context window size
             response_buffer: Tokens to reserve for response
         """
-        used_tokens = self.count_messages(messages)['total_tokens']
+        used_tokens = self.count_messages (messages)['total_tokens']
         available_for_response = max_context - used_tokens
         
         return {
@@ -249,7 +249,7 @@ counter = TokenCounter("gpt-3.5-turbo")
 
 # Count single text
 text = "This is a test message to count tokens."
-print(f"Tokens: {counter.count(text)}")
+print(f"Tokens: {counter.count (text)}")
 
 # Count messages
 messages = [
@@ -257,13 +257,13 @@ messages = [
     {"role": "user", "content": "Explain Python in detail."}
 ]
 
-result = counter.count_messages(messages)
+result = counter.count_messages (messages)
 print(f"Total: {result['total_tokens']}")
 for msg in result['message_breakdown']:
     print(f"  {msg['role']}: {msg['tokens']} tokens")
 
 # Check if fits in context
-fit_check = counter.fits_in_context(messages, max_context=4096)
+fit_check = counter.fits_in_context (messages, max_context=4096)
 print(f"Fits in context: {fit_check['fits']}")
 print(f"Usage: {fit_check['usage_percent']:.1f}%")
 \`\`\`
@@ -297,11 +297,11 @@ CONTEXT_WINDOWS = {
     "mixtral-8x7b": 32_768,             # 32K tokens
 }
 
-def get_context_window(model: str) -> int:
+def get_context_window (model: str) -> int:
     """Get context window for model."""
-    return CONTEXT_WINDOWS.get(model, 4096)  # default 4K
+    return CONTEXT_WINDOWS.get (model, 4096)  # default 4K
 
-def recommend_model_for_context(required_tokens: int) -> List[str]:
+def recommend_model_for_context (required_tokens: int) -> List[str]:
     """Recommend models that can handle required tokens."""
     suitable = []
     
@@ -314,13 +314,13 @@ def recommend_model_for_context(required_tokens: int) -> List[str]:
             })
     
     # Sort by overhead (prefer tighter fit for cost)
-    suitable.sort(key=lambda x: x['overhead'])
+    suitable.sort (key=lambda x: x['overhead'])
     
     return suitable
 
 # Usage
 required = 50_000  # Need 50K tokens
-recommendations = recommend_model_for_context(required)
+recommendations = recommend_model_for_context (required)
 
 print(f"Models that can handle {required:,} tokens:")
 for rec in recommendations[:5]:
@@ -361,7 +361,7 @@ def analyze_context_implications(
     """
     Analyze the implications of a given context size.
     """
-    context_window = get_context_window(model)
+    context_window = get_context_window (model)
     
     # Estimate latency (rough)
     base_latency = 0.5  # seconds
@@ -369,8 +369,8 @@ def analyze_context_implications(
     estimated_latency = base_latency + token_latency
     
     # Estimate cost
-    counter = TokenCounter(model)
-    prompt_cost = counter.estimate_cost(token_count, 0)
+    counter = TokenCounter (model)
+    prompt_cost = counter.estimate_cost (token_count, 0)
     
     return {
         'token_count': token_count,
@@ -415,22 +415,22 @@ def chunk_text(
         overlap: Token overlap between chunks for context
         model: Model to tokenize for
     """
-    encoding = tiktoken.encoding_for_model(model)
+    encoding = tiktoken.encoding_for_model (model)
     
     # Tokenize entire text
-    tokens = encoding.encode(text)
+    tokens = encoding.encode (text)
     
     chunks = []
     start = 0
     
-    while start < len(tokens):
+    while start < len (tokens):
         # Get chunk
         end = start + max_tokens
         chunk_tokens = tokens[start:end]
         
         # Decode back to text
-        chunk_text = encoding.decode(chunk_tokens)
-        chunks.append(chunk_text)
+        chunk_text = encoding.decode (chunk_tokens)
+        chunks.append (chunk_text)
         
         # Move start forward (with overlap)
         start = end - overlap
@@ -440,9 +440,9 @@ def chunk_text(
 # Usage
 long_text = "Your very long document text here... " * 1000
 
-chunks = chunk_text(long_text, max_tokens=500, overlap=50)
-print(f"Split into {len(chunks)} chunks")
-print(f"First chunk length: {len(chunks[0])} chars")
+chunks = chunk_text (long_text, max_tokens=500, overlap=50)
+print(f"Split into {len (chunks)} chunks")
+print(f"First chunk length: {len (chunks[0])} chars")
 \`\`\`
 
 ### Strategy 2: Summarization
@@ -461,21 +461,21 @@ def summarize_long_text(
     Uses chunking + summarization + final summary.
     """
     client = OpenAI()
-    counter = TokenCounter(model)
+    counter = TokenCounter (model)
     
     # Check if summarization needed
-    token_count = counter.count(text)
+    token_count = counter.count (text)
     
     if token_count < max_context * 0.5:
         return text  # No summarization needed
     
     # Chunk the text
-    chunks = chunk_text(text, max_tokens=2000)
+    chunks = chunk_text (text, max_tokens=2000)
     
     # Summarize each chunk
     chunk_summaries = []
     
-    for i, chunk in enumerate(chunks):
+    for i, chunk in enumerate (chunks):
         response = client.chat.completions.create(
             model=model,
             messages=[
@@ -487,14 +487,14 @@ def summarize_long_text(
         )
         
         summary = response.choices[0].message.content
-        chunk_summaries.append(summary)
-        print(f"Summarized chunk {i+1}/{len(chunks)}")
+        chunk_summaries.append (summary)
+        print(f"Summarized chunk {i+1}/{len (chunks)}")
     
     # Combine summaries
-    combined = "\\n\\n".join(chunk_summaries)
+    combined = "\\n\\n".join (chunk_summaries)
     
     # If still too long, summarize the summaries!
-    combined_tokens = counter.count(combined)
+    combined_tokens = counter.count (combined)
     
     if combined_tokens > max_context * 0.5:
         response = client.chat.completions.create(
@@ -516,9 +516,9 @@ def summarize_long_text(
 # Usage
 long_document = "..." * 10000  # Very long text
 
-summary = summarize_long_text(long_document)
-print(f"Original: {len(long_document)} chars")
-print(f"Summary: {len(summary)} chars")
+summary = summarize_long_text (long_document)
+print(f"Original: {len (long_document)} chars")
+print(f"Summary: {len (summary)} chars")
 \`\`\`
 
 ### Strategy 3: Retrieval (RAG)
@@ -557,24 +557,24 @@ def simple_retrieval_example(
     In production, use embeddings + vector DB.
     """
     # Chunk document
-    chunks = chunk_text(document, max_tokens=500)
+    chunks = chunk_text (document, max_tokens=500)
     
     # Simple keyword matching (not ideal, but illustrative)
-    question_words = set(question.lower().split())
+    question_words = set (question.lower().split())
     
     # Score chunks by overlap with question
     scored_chunks = []
     for chunk in chunks:
-        chunk_words = set(chunk.lower().split())
-        overlap = len(question_words & chunk_words)
+        chunk_words = set (chunk.lower().split())
+        overlap = len (question_words & chunk_words)
         scored_chunks.append((chunk, overlap))
     
     # Get top chunks
-    scored_chunks.sort(key=lambda x: x[1], reverse=True)
+    scored_chunks.sort (key=lambda x: x[1], reverse=True)
     relevant_chunks = [chunk for chunk, _ in scored_chunks[:top_k]]
     
     # Combine relevant chunks
-    context = "\\n\\n---\\n\\n".join(relevant_chunks)
+    context = "\\n\\n---\\n\\n".join (relevant_chunks)
     
     return context
 
@@ -582,8 +582,8 @@ def simple_retrieval_example(
 doc = "Long document about Python programming..." * 100
 question = "How do Python decorators work?"
 
-relevant_context = simple_retrieval_example(doc, question, top_k=3)
-print(f"Retrieved {len(relevant_context)} characters of relevant context")
+relevant_context = simple_retrieval_example (doc, question, top_k=3)
+print(f"Retrieved {len (relevant_context)} characters of relevant context")
 
 # Now send only relevant context to LLM
 # messages = [
@@ -610,18 +610,18 @@ def hierarchical_summarize(
     - Repeat until target length
     """
     client = OpenAI()
-    counter = TokenCounter(model)
+    counter = TokenCounter (model)
     
     current_text = text
     level = 1
     
-    while counter.count(current_text) > target_tokens:
-        print(f"Level {level}: {counter.count(current_text)} tokens")
+    while counter.count (current_text) > target_tokens:
+        print(f"Level {level}: {counter.count (current_text)} tokens")
         
         # Chunk current text
-        chunks = chunk_text(current_text, max_tokens=2000)
+        chunks = chunk_text (current_text, max_tokens=2000)
         
-        if len(chunks) == 1:
+        if len (chunks) == 1:
             # Can't chunk further, just summarize directly
             response = client.chat.completions.create(
                 model=model,
@@ -645,19 +645,19 @@ def hierarchical_summarize(
                 temperature=0.3,
                 max_tokens=500
             )
-            summaries.append(response.choices[0].message.content)
+            summaries.append (response.choices[0].message.content)
         
         # Combine summaries for next level
-        current_text = "\\n\\n".join(summaries)
+        current_text = "\\n\\n".join (summaries)
         level += 1
     
-    print(f"Final: {counter.count(current_text)} tokens")
+    print(f"Final: {counter.count (current_text)} tokens")
     return current_text
 
 # Usage
 huge_document = "..." * 50000
-compressed = hierarchical_summarize(huge_document, target_tokens=1000)
-print(f"Compressed from ~{len(huge_document)} to {len(compressed)} chars")
+compressed = hierarchical_summarize (huge_document, target_tokens=1000)
+print(f"Compressed from ~{len (huge_document)} to {len (compressed)} chars")
 \`\`\`
 
 ## Token Optimization Techniques
@@ -670,12 +670,12 @@ Reduce costs without sacrificing quality.
 import re
 from typing import str
 
-def optimize_prompt(prompt: str) -> str:
+def optimize_prompt (prompt: str) -> str:
     """
     Remove unnecessary tokens from prompt.
     """
     # Remove extra whitespace
-    prompt = re.sub(r'\\s+', ' ', prompt)
+    prompt = re.sub (r'\\s+', ' ', prompt)
     
     # Remove comments if code
     # (be careful - might remove important context)
@@ -689,7 +689,7 @@ def optimize_prompt(prompt: str) -> str:
     ]
     
     for phrase in redundant:
-        prompt = prompt.replace(phrase, "")
+        prompt = prompt.replace (phrase, "")
     
     # Trim
     prompt = prompt.strip()
@@ -703,11 +703,11 @@ I would like you to explain them in simple terms with examples.
 Can you also tell me when to use them?
 """
 
-optimized = optimize_prompt(verbose)
+optimized = optimize_prompt (verbose)
 
-print(f"Original: {len(verbose)} chars")
-print(f"Optimized: {len(optimized)} chars")
-print(f"Savings: {(1 - len(optimized)/len(verbose)) * 100:.1f}%")
+print(f"Original: {len (verbose)} chars")
+print(f"Optimized: {len (optimized)} chars")
+print(f"Savings: {(1 - len (optimized)/len (verbose)) * 100:.1f}%")
 \`\`\`
 
 ### Use Shorter Models When Possible
@@ -764,22 +764,22 @@ class TokenBudget:
     reserved_for_response: int = 1000
     
     @property
-    def available_for_context(self) -> int:
+    def available_for_context (self) -> int:
         """Tokens available for context."""
         return self.max_total - self.reserved_for_response
     
     @property
-    def remaining(self) -> int:
+    def remaining (self) -> int:
         """Tokens remaining for response."""
         return self.max_total - self.used_for_prompt
     
-    def can_fit(self, additional_tokens: int) -> bool:
+    def can_fit (self, additional_tokens: int) -> bool:
         """Check if additional tokens fit in budget."""
         return self.used_for_prompt + additional_tokens < self.available_for_context
     
-    def add_tokens(self, count: int) -> bool:
+    def add_tokens (self, count: int) -> bool:
         """Add tokens to budget. Returns False if exceeds."""
-        if not self.can_fit(count):
+        if not self.can_fit (count):
             return False
         self.used_for_prompt += count
         return True
@@ -789,8 +789,8 @@ class TokenManager:
     
     def __init__(self, model: str = "gpt-3.5-turbo"):
         self.model = model
-        self.counter = TokenCounter(model)
-        self.context_window = get_context_window(model)
+        self.counter = TokenCounter (model)
+        self.context_window = get_context_window (model)
     
     def create_budget(
         self,
@@ -814,16 +814,16 @@ class TokenManager:
         result = []
         if messages and messages[0]['role'] == 'system':
             system_msg = messages[0]
-            system_tokens = self.counter.count(system_msg['content'])
-            budget.add_tokens(system_tokens)
-            result.append(system_msg)
+            system_tokens = self.counter.count (system_msg['content'])
+            budget.add_tokens (system_tokens)
+            result.append (system_msg)
             messages = messages[1:]
         
         # Add messages from most recent until budget full
-        for msg in reversed(messages):
-            msg_tokens = self.counter.count(msg['content']) + 4
-            if budget.can_fit(msg_tokens):
-                budget.add_tokens(msg_tokens)
+        for msg in reversed (messages):
+            msg_tokens = self.counter.count (msg['content']) + 4
+            if budget.can_fit (msg_tokens):
+                budget.add_tokens (msg_tokens)
                 result.insert(1 if result else 0, msg)
             else:
                 break
@@ -834,7 +834,7 @@ class TokenManager:
 manager = TokenManager("gpt-3.5-turbo")
 
 # Create budget
-budget = manager.create_budget(expected_response_tokens=500)
+budget = manager.create_budget (expected_response_tokens=500)
 print(f"Available for context: {budget.available_for_context:,} tokens")
 
 # Fit messages
@@ -845,9 +845,9 @@ long_conversation = [
     {"role": "assistant", "content": "Answer..." * 100}
 ] * 100  # Way too long!
 
-fitted = manager.fit_messages_to_budget(long_conversation, budget)
-print(f"Original messages: {len(long_conversation)}")
-print(f"Fitted messages: {len(fitted)}")
+fitted = manager.fit_messages_to_budget (long_conversation, budget)
+print(f"Original messages: {len (long_conversation)}")
+print(f"Fitted messages: {len (fitted)}")
 print(f"Tokens used: {budget.used_for_prompt:,}")
 print(f"Remaining for response: {budget.remaining:,}")
 \`\`\`

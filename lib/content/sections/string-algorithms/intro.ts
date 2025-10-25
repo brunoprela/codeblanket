@@ -38,7 +38,7 @@ Strings are fundamental in programming and appear in ~30-40% of coding interview
 s = "hello world"
 
 # Length
-len(s)  # 11
+len (s)  # 11
 
 # Indexing (O(1))
 s[0]    # 'h'
@@ -102,8 +102,8 @@ for char in "hello":
 # ✅ GOOD: Use list + join
 chars = []
 for char in "hello":
-    chars.append(char)
-result = '.join(chars)  # O(n)
+    chars.append (char)
+result = '.join (chars)  # O(n)
 
 # Or use list comprehension
 result = '.join([char for char in "hello"])
@@ -115,8 +115,8 @@ result = '.join([char for char in "hello"])
 Moving from both ends toward center.
 
 \`\`\`python
-def is_palindrome(s):
-    left, right = 0, len(s) - 1
+def is_palindrome (s):
+    left, right = 0, len (s) - 1
     while left < right:
         if s[left] != s[right]:
             return False
@@ -129,7 +129,7 @@ def is_palindrome(s):
 Fixed or variable window moving through string.
 
 \`\`\`python
-def max_vowels_in_substring(s, k):
+def max_vowels_in_substring (s, k):
     """Find max vowels in any substring of length k"""
     vowels = set('aeiou')
     
@@ -138,14 +138,14 @@ def max_vowels_in_substring(s, k):
     max_vowels = current_vowels
     
     # Slide window
-    for i in range(k, len(s)):
+    for i in range (k, len (s)):
         # Remove left character
         if s[i-k] in vowels:
             current_vowels -= 1
         # Add right character
         if s[i] in vowels:
             current_vowels += 1
-        max_vowels = max(max_vowels, current_vowels)
+        max_vowels = max (max_vowels, current_vowels)
     
     return max_vowels
 \`\`\`
@@ -156,14 +156,14 @@ Track character frequencies.
 \`\`\`python
 from collections import Counter
 
-def is_anagram(s1, s2):
-    return Counter(s1) == Counter(s2)
+def is_anagram (s1, s2):
+    return Counter (s1) == Counter (s2)
 
 # Or manually
-def char_frequency(s):
+def char_frequency (s):
     freq = {}
     for char in s:
-        freq[char] = freq.get(char, 0) + 1
+        freq[char] = freq.get (char, 0) + 1
     return freq
 \`\`\`
 
@@ -171,28 +171,28 @@ def char_frequency(s):
 Build solutions for subproblems.
 
 \`\`\`python
-def longest_palindromic_substring_length(s):
-    n = len(s)
+def longest_palindromic_substring_length (s):
+    n = len (s)
     if n == 0:
         return 0
     
     # dp[i][j] = True if s[i:j+1] is palindrome
-    dp = [[False] * n for _ in range(n)]
+    dp = [[False] * n for _ in range (n)]
     max_length = 1
     
     # Single characters
-    for i in range(n):
+    for i in range (n):
         dp[i][i] = True
     
     # Two characters
-    for i in range(n - 1):
+    for i in range (n - 1):
         if s[i] == s[i + 1]:
             dp[i][i + 1] = True
             max_length = 2
     
     # Longer substrings
     for length in range(3, n + 1):
-        for i in range(n - length + 1):
+        for i in range (n - length + 1):
             j = i + length - 1
             if s[i] == s[j] and dp[i + 1][j - 1]:
                 dp[i][j] = True
@@ -208,10 +208,10 @@ def longest_palindromic_substring_length(s):
 | Access s[i] | O(1) | O(1) |
 | Slice s[i:j] | O(k) | O(k) |
 | Concatenation s1 + s2 | O(n+m) | O(n+m) |
-| s.find(sub) | O(n*m) | O(1) |
+| s.find (sub) | O(n*m) | O(1) |
 | s.split() | O(n) | O(n) |
-| '.join(list) | O(n) | O(n) |
-| s.replace(old, new) | O(n) | O(n) |
+| '.join (list) | O(n) | O(n) |
+| s.replace (old, new) | O(n) | O(n) |
 
 ## Common Mistakes to Avoid
 

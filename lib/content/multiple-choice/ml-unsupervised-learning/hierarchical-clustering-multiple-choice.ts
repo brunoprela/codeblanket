@@ -31,7 +31,7 @@ export const hierarchical_clusteringMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'hierarchical-clustering-mc3',
     question: 'What advantage does hierarchical clustering have over K-Means?',
     options: [
-      "It's faster for large datasets",
+      "It\'s faster for large datasets",
       "It doesn't require specifying the number of clusters upfront",
       'It can only find spherical clusters',
       'It uses less memory',

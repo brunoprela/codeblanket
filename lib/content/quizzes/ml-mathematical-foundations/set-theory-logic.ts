@@ -28,7 +28,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 
 # Generate synthetic dataset
-X, y = make_classification(n_samples=1000, n_features=20, n_informative=10,
+X, y = make_classification (n_samples=1000, n_features=20, n_informative=10,
                            n_redundant=5, n_repeated=0, random_state=42)
 
 feature_names = [f'feature_{i}' for i in range(X.shape[1])]
@@ -37,31 +37,31 @@ df = pd.DataFrame(X, columns=feature_names)
 print(f"Dataset: {X.shape[0]} samples, {X.shape[1]} features")
 
 # Method 1: Correlation-based (ANOVA F-statistic)
-selector_corr = SelectKBest(f_classif, k=10)
+selector_corr = SelectKBest (f_classif, k=10)
 selector_corr.fit(X, y)
-features_correlation = set([feature_names[i] for i in selector_corr.get_support(indices=True)])
+features_correlation = set([feature_names[i] for i in selector_corr.get_support (indices=True)])
 
-print(f"\\nCorrelation-based: {len(features_correlation)} features")
+print(f"\\nCorrelation-based: {len (features_correlation)} features")
 print(f"  {features_correlation}")
 
 # Method 2: Tree-based importance
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf = RandomForestClassifier (n_estimators=100, random_state=42)
 rf.fit(X, y)
 importances = rf.feature_importances_
 # Select top 10 by importance
-top_indices = np.argsort(importances)[-10:]
+top_indices = np.argsort (importances)[-10:]
 features_importance = set([feature_names[i] for i in top_indices])
 
-print(f"\\nImportance-based: {len(features_importance)} features")
+print(f"\\nImportance-based: {len (features_importance)} features")
 print(f"  {features_importance}")
 
 # Method 3: Recursive Feature Elimination
-estimator = LogisticRegression(max_iter=1000)
+estimator = LogisticRegression (max_iter=1000)
 selector_rfe = RFE(estimator, n_features_to_select=10, step=1)
 selector_rfe.fit(X, y)
-features_rfe = set([feature_names[i] for i in selector_rfe.get_support(indices=True)])
+features_rfe = set([feature_names[i] for i in selector_rfe.get_support (indices=True)])
 
-print(f"\\nRFE-based: {len(features_rfe)} features")
+print(f"\\nRFE-based: {len (features_rfe)} features")
 print(f"  {features_rfe}")
 \`\`\`
 
@@ -70,12 +70,12 @@ print(f"  {features_rfe}")
 \`\`\`python
 # Intersection: Features selected by ALL methods (most robust)
 robust_features = features_correlation & features_importance & features_rfe
-print(f"\\nRobust features (all 3 methods): {len(robust_features)}")
+print(f"\\nRobust features (all 3 methods): {len (robust_features)}")
 print(f"  {robust_features}")
 
 # Union: Features selected by ANY method (comprehensive)
 all_selected = features_correlation | features_importance | features_rfe
-print(f"\\nAll selected features (any method): {len(all_selected)}")
+print(f"\\nAll selected features (any method): {len (all_selected)}")
 print(f"  {all_selected}")
 
 # Pairwise intersections
@@ -84,9 +84,9 @@ corr_rfe = features_correlation & features_rfe
 imp_rfe = features_importance & features_rfe
 
 print(f"\\nPairwise agreements:")
-print(f"  Correlation ∩ Importance: {len(corr_imp)} features")
-print(f"  Correlation ∩ RFE: {len(corr_rfe)} features")
-print(f"  Importance ∩ RFE: {len(imp_rfe)} features")
+print(f"  Correlation ∩ Importance: {len (corr_imp)} features")
+print(f"  Correlation ∩ RFE: {len (corr_rfe)} features")
+print(f"  Importance ∩ RFE: {len (imp_rfe)} features")
 
 # Features unique to each method
 unique_to_corr = features_correlation - features_importance - features_rfe
@@ -109,7 +109,7 @@ print(f"\\nDisagreement (Correlation △ Importance): {disagreement_corr_imp}")
 from matplotlib_venn import venn3
 import matplotlib.pyplot as plt
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 venn3([features_correlation, features_importance, features_rfe],
       set_labels=('Correlation', 'Importance', 'RFE'))
 plt.title('Feature Selection Methods: Set Relationships')
@@ -125,7 +125,7 @@ plt.show()
 
 \`\`\`python
 conservative_features = features_correlation & features_importance & features_rfe
-print(f"\\nConservative strategy: {len(conservative_features)} features")
+print(f"\\nConservative strategy: {len (conservative_features)} features")
 \`\`\`
 
 **Strategy 2: Majority Vote**
@@ -148,7 +148,7 @@ for feature in all_features:
     feature_votes[feature] = votes
 
 majority_features = {f for f, v in feature_votes.items() if v >= 2}
-print(f"\\nMajority vote (≥2 methods): {len(majority_features)} features")
+print(f"\\nMajority vote (≥2 methods): {len (majority_features)} features")
 print(f"  {majority_features}")
 \`\`\`
 
@@ -159,22 +159,22 @@ print(f"  {majority_features}")
 
 \`\`\`python
 aggressive_features = features_correlation | features_importance | features_rfe
-print(f"\\nAggressive strategy: {len(aggressive_features)} features")
+print(f"\\nAggressive strategy: {len (aggressive_features)} features")
 \`\`\`
 
 **Analyzing Method Agreement**:
 
 \`\`\`python
-def jaccard_similarity(set1, set2):
+def jaccard_similarity (set1, set2):
     """Compute Jaccard similarity between two sets"""
-    intersection = len(set1 & set2)
-    union = len(set1 | set2)
+    intersection = len (set1 & set2)
+    union = len (set1 | set2)
     return intersection / union if union > 0 else 0
 
 # Compute pairwise similarities
-sim_corr_imp = jaccard_similarity(features_correlation, features_importance)
-sim_corr_rfe = jaccard_similarity(features_correlation, features_rfe)
-sim_imp_rfe = jaccard_similarity(features_importance, features_rfe)
+sim_corr_imp = jaccard_similarity (features_correlation, features_importance)
+sim_corr_rfe = jaccard_similarity (features_correlation, features_rfe)
+sim_imp_rfe = jaccard_similarity (features_importance, features_rfe)
 
 print(f"\\nMethod Agreement (Jaccard Similarity):")
 print(f"  Correlation ↔ Importance: {sim_corr_imp:.3f}")
@@ -182,9 +182,9 @@ print(f"  Correlation ↔ RFE: {sim_corr_rfe:.3f}")
 print(f"  Importance ↔ RFE: {sim_imp_rfe:.3f}")
 
 # Overall agreement
-overall_agreement = len(robust_features) / len(all_selected)
+overall_agreement = len (robust_features) / len (all_selected)
 print(f"\\nOverall agreement: {overall_agreement:.3f}")
-print(f"({len(robust_features)} robust / {len(all_selected)} total)")
+print(f"({len (robust_features)} robust / {len (all_selected)} total)")
 \`\`\`
 
 **Trading Application**:
@@ -213,7 +213,7 @@ print(f"Validated fundamental features: {validated_fundamental}")
 # Final feature set
 final_features = validated_technical | validated_fundamental
 print(f"\\nFinal feature set: {final_features}")
-print(f"Total features: {len(final_features)}")
+print(f"Total features: {len (final_features)}")
 \`\`\`
 
 **Key Insights**:
@@ -242,7 +242,7 @@ Set operations provide a principled way to combine feature selection methods, mo
   {
     id: 'dq2-logic-decision-trees',
     question:
-      "Decision trees use logical conditions to make predictions. Explain how Boolean logic (AND, OR, NOT) maps to decision tree structure. How can complex logical expressions be represented as trees? Discuss De Morgan's laws in the context of decision tree simplification and provide examples showing equivalent tree representations.",
+      "Decision trees use logical conditions to make predictions. Explain how Boolean logic (AND, OR, NOT) maps to decision tree structure. How can complex logical expressions be represented as trees? Discuss De Morgan\'s laws in the context of decision tree simplification and provide examples showing equivalent tree representations.",
     sampleAnswer: `Decision trees are essentially visual representations of logical expressions, where each path from root to leaf represents a conjunction (AND) of conditions, and the tree as a whole represents a disjunction (OR) of these paths.
 
 **Decision Trees as Logic**:
@@ -298,17 +298,17 @@ X = data[['age', 'income', 'credit_score',]]
 y = data['approved',]
 
 # Train decision tree
-tree = DecisionTreeClassifier(max_depth=3, random_state=42)
+tree = DecisionTreeClassifier (max_depth=3, random_state=42)
 tree.fit(X, y)
 
 # Visualize
-plt.figure(figsize=(20, 10))
-plot_tree(tree, feature_names=['age', 'income', 'credit_score',],
+plt.figure (figsize=(20, 10))
+plot_tree (tree, feature_names=['age', 'income', 'credit_score',],
           class_names=['Reject', 'Approve',], filled=True, fontsize=10)
 plt.show()
 
 # Extract rules as text
-tree_rules = export_text(tree, feature_names=['age', 'income', 'credit_score',])
+tree_rules = export_text (tree, feature_names=['age', 'income', 'credit_score',])
 print("Decision Tree Rules:")
 print(tree_rules)
 \`\`\`
@@ -316,7 +316,7 @@ print(tree_rules)
 **Manual Logic Implementation**:
 
 \`\`\`python
-def decision_tree_as_logic(age, income, credit_score):
+def decision_tree_as_logic (age, income, credit_score):
     """
     Manually implement tree logic
     Shows explicit AND/OR structure
@@ -346,15 +346,15 @@ test_cases = [
 
 print("\\nTesting logical paths:")
 for age, income, credit, desc in test_cases:
-    approve, paths = decision_tree_as_logic(age, income, credit)
-    active_paths = [i+1 for i, p in enumerate(paths) if p]
+    approve, paths = decision_tree_as_logic (age, income, credit)
+    active_paths = [i+1 for i, p in enumerate (paths) if p]
     print(f"{desc}")
     print(f"  Input: age={age}, income={income}, credit={credit}")
     print(f"  Decision: {'APPROVE' if approve else 'REJECT'}")
     print(f"  Active paths: {active_paths if active_paths else 'None'}")
 \`\`\`
 
-**De Morgan's Laws in Trees**:
+**De Morgan\'s Laws in Trees**:
 
 De Morgan's laws allow us to transform decision trees:
 - ¬(A ∧ B) = ¬A ∨ ¬B
@@ -365,13 +365,13 @@ De Morgan's laws allow us to transform decision trees:
 Instead of defining approval conditions, we can define rejection:
 
 \`\`\`python
-def approval_positive_logic(age, income, credit):
+def approval_positive_logic (age, income, credit):
     """Define APPROVAL conditions (positive logic)"""
     return ((age >= 25 and income > 50000) or
             (age >= 25 and income <= 50000 and credit > 700) or
             (age < 25 and credit > 720))
 
-def approval_negative_logic(age, income, credit):
+def approval_negative_logic (age, income, credit):
     """
     Define REJECTION conditions (negative logic)
     Then negate to get approval
@@ -393,8 +393,8 @@ def approval_negative_logic(age, income, credit):
 
 # Verify equivalence
 for age, income, credit, _ in test_cases:
-    pos = approval_positive_logic(age, income, credit)
-    neg = approval_negative_logic(age, income, credit)
+    pos = approval_positive_logic (age, income, credit)
+    neg = approval_negative_logic (age, income, credit)
     print(f"age={age}, income={income}, credit={credit}: "
           f"Positive={pos}, Negative={neg}, Match={pos == neg}")
 \`\`\`
@@ -403,7 +403,7 @@ for age, income, credit, _ in test_cases:
 
 \`\`\`python
 # Original condition (complex)
-def original_condition(x1, x2, x3):
+def original_condition (x1, x2, x3):
     return not ((x1 and x2) or x3)
 
 # Apply De Morgan's: ¬(A ∨ B) = ¬A ∧ ¬B
@@ -413,16 +413,16 @@ def original_condition(x1, x2, x3):
 # ¬(x1 ∧ x2) = ¬x1 ∨ ¬x2
 
 # Final simplified:
-def simplified_condition(x1, x2, x3):
+def simplified_condition (x1, x2, x3):
     return ((not x1) or (not x2)) and (not x3)
 
 # Verify equivalence
-print("\\nDe Morgan's Simplification:")
+print("\\nDe Morgan\'s Simplification:")
 for x1 in [True, False]:
     for x2 in [True, False]:
         for x3 in [True, False]:
-            orig = original_condition(x1, x2, x3)
-            simp = simplified_condition(x1, x2, x3)
+            orig = original_condition (x1, x2, x3)
+            simp = simplified_condition (x1, x2, x3)
             match = "✓" if orig == simp else "✗"
             print(f"x1={x1}, x2={x2}, x3={x3}: "
                   f"Original={orig}, Simplified={simp} {match}")
@@ -487,7 +487,7 @@ print("All cases match! Trees are equivalent.")
 \`\`\`python
 # Trading signal decision tree
 
-def trading_signal_positive(price_above_sma, rsi_oversold, volume_high, trend_up):
+def trading_signal_positive (price_above_sma, rsi_oversold, volume_high, trend_up):
     """
     BUY signal if:
     (price below SMA AND RSI oversold) OR (volume high AND trend up)
@@ -499,7 +499,7 @@ def trading_signal_positive(price_above_sma, rsi_oversold, volume_high, trend_up
     
     return signal_1 or signal_2
 
-def trading_signal_negative(price_above_sma, rsi_oversold, volume_high, trend_up):
+def trading_signal_negative (price_above_sma, rsi_oversold, volume_high, trend_up):
     """
     Same logic using De Morgan's transformation
     Negative logic: when NOT to buy
@@ -524,21 +524,21 @@ test_scenarios = [
 
 print("\\nTrading Signal Logic:")
 for price_above, rsi_os, vol_high, trend, desc in test_scenarios:
-    pos = trading_signal_positive(price_above, rsi_os, vol_high, trend)
-    neg = trading_signal_negative(price_above, rsi_os, vol_high, trend)
+    pos = trading_signal_positive (price_above, rsi_os, vol_high, trend)
+    neg = trading_signal_negative (price_above, rsi_os, vol_high, trend)
     print(f"{desc}: {'BUY' if pos else 'HOLD'} (Match: {pos == neg})")
 \`\`\`
 
 **Summary**:
 - Decision trees = visual logic (AND for paths, OR for multiple paths)
-- De Morgan's laws enable tree transformations and simplifications
+- De Morgan\'s laws enable tree transformations and simplifications
 - Same logic can have multiple equivalent tree structures
 - Understanding logical equivalences helps optimize decision trees
 - Negative logic (rejection rules) often simpler than positive logic`,
     keyPoints: [
       'Decision tree paths are AND operations (conjunction of conditions)',
       'Multiple paths to same class are OR operations (disjunction)',
-      "De Morgan's laws: ¬(A∧B)=¬A∨¬B and ¬(A∨B)=¬A∧¬B enable transformations",
+      "De Morgan\'s laws: ¬(A∧B)=¬A∨¬B and ¬(A∨B)=¬A∧¬B enable transformations",
       'Same logical expression can be represented by different tree structures',
       'Negative logic (rejection conditions) sometimes simpler than positive',
       'Tree simplification using logical equivalences reduces complexity',
@@ -572,7 +572,7 @@ from sklearn.model_selection import train_test_split
 
 # Create dataset
 n_samples = 1000
-all_indices = set(range(n_samples))
+all_indices = set (range (n_samples))
 
 # Split into train/val/test
 train_size = 0.6
@@ -581,29 +581,29 @@ test_size = 0.2
 
 # First split: train vs temp
 train_indices, temp_indices = train_test_split(
-    list(all_indices), train_size=train_size, random_state=42
+    list (all_indices), train_size=train_size, random_state=42
 )
-train_indices = set(train_indices)
-temp_indices = set(temp_indices)
+train_indices = set (train_indices)
+temp_indices = set (temp_indices)
 
 # Second split: val vs test
 val_indices, test_indices = train_test_split(
-    list(temp_indices), train_size=val_size/(val_size + test_size), random_state=42
+    list (temp_indices), train_size=val_size/(val_size + test_size), random_state=42
 )
-val_indices = set(val_indices)
-test_indices = set(test_indices)
+val_indices = set (val_indices)
+test_indices = set (test_indices)
 
 print("Set Sizes:")
-print(f"Total: {len(all_indices)}")
-print(f"Train: {len(train_indices)} ({len(train_indices)/n_samples:.1%})")
-print(f"Val: {len(val_indices)} ({len(val_indices)/n_samples:.1%})")
-print(f"Test: {len(test_indices)} ({len(test_indices)/n_samples:.1%})")
+print(f"Total: {len (all_indices)}")
+print(f"Train: {len (train_indices)} ({len (train_indices)/n_samples:.1%})")
+print(f"Val: {len (val_indices)} ({len (val_indices)/n_samples:.1%})")
+print(f"Test: {len (test_indices)} ({len (test_indices)/n_samples:.1%})")
 \`\`\`
 
 **2. Verifying No Data Leakage with Set Operations**:
 
 \`\`\`python
-def verify_data_splits(train, val, test, all_data):
+def verify_data_splits (train, val, test, all_data):
     """
     Comprehensive verification of data splits using set theory
     """
@@ -615,34 +615,34 @@ def verify_data_splits(train, val, test, all_data):
     val_test_overlap = val & test
     
     print("1. Disjoint Sets (must be empty):")
-    print(f"   Train ∩ Val = {train_val_overlap} (size: {len(train_val_overlap)})")
-    print(f"   Train ∩ Test = {train_test_overlap} (size: {len(train_test_overlap)})")
-    print(f"   Val ∩ Test = {val_test_overlap} (size: {len(val_test_overlap)})")
+    print(f"   Train ∩ Val = {train_val_overlap} (size: {len (train_val_overlap)})")
+    print(f"   Train ∩ Test = {train_test_overlap} (size: {len (train_test_overlap)})")
+    print(f"   Val ∩ Test = {val_test_overlap} (size: {len (val_test_overlap)})")
     
-    all_disjoint = (len(train_val_overlap) == 0 and 
-                    len(train_test_overlap) == 0 and 
-                    len(val_test_overlap) == 0)
+    all_disjoint = (len (train_val_overlap) == 0 and 
+                    len (train_test_overlap) == 0 and 
+                    len (val_test_overlap) == 0)
     print(f"   ✓ All disjoint: {all_disjoint}")
     
     # Check 2: Union equals original (no missing data)
     union = train | val | test
     print(f"\\n2. Complete Coverage:")
-    print(f"   Train ∪ Val ∪ Test = {len(union)} samples")
-    print(f"   Original data = {len(all_data)} samples")
+    print(f"   Train ∪ Val ∪ Test = {len (union)} samples")
+    print(f"   Original data = {len (all_data)} samples")
     print(f"   ✓ Complete: {union == all_data}")
     
     # Check 3: No missing indices
     missing = all_data - union
     print(f"\\n3. Missing Data:")
-    print(f"   All - Union = {missing} (size: {len(missing)})")
-    print(f"   ✓ No missing: {len(missing) == 0}")
+    print(f"   All - Union = {missing} (size: {len (missing)})")
+    print(f"   ✓ No missing: {len (missing) == 0}")
     
     # Check 4: No duplicate indices within sets
     print(f"\\n4. No Duplicates (set property automatically enforced):")
     print(f"   ✓ Sets inherently have no duplicates")
     
     # Summary
-    is_valid = all_disjoint and (union == all_data) and (len(missing) == 0)
+    is_valid = all_disjoint and (union == all_data) and (len (missing) == 0)
     print(f"\\n{'='*40}")
     print(f"Overall: {'✓ VALID SPLIT' if is_valid else '✗ INVALID SPLIT'}")
     print(f"{'='*40}")
@@ -650,7 +650,7 @@ def verify_data_splits(train, val, test, all_data):
     return is_valid
 
 # Verify our splits
-is_valid = verify_data_splits(train_indices, val_indices, test_indices, all_indices)
+is_valid = verify_data_splits (train_indices, val_indices, test_indices, all_indices)
 \`\`\`
 
 **3. Stratification as Preserving Set Proportions**:
@@ -663,12 +663,12 @@ from collections import Counter
 
 # Create imbalanced dataset
 y = np.array([0]*700 + [1]*250 + [2]*50)  # Imbalanced classes
-X = np.arange(len(y)).reshape(-1, 1)
+X = np.arange (len (y)).reshape(-1, 1)
 
 print("Original class distribution:")
-original_dist = Counter(y)
-for class_label, count in sorted(original_dist.items()):
-    print(f"  Class {class_label}: {count} ({count/len(y):.1%})")
+original_dist = Counter (y)
+for class_label, count in sorted (original_dist.items()):
+    print(f"  Class {class_label}: {count} ({count/len (y):.1%})")
 
 # Stratified split
 X_train, X_temp, y_train, y_temp = train_test_split(
@@ -686,10 +686,10 @@ test_by_class = {c: set(X_test[y_test == c].flatten()) for c in [0, 1, 2]}
 print("\\nStratified split class distributions:")
 for split_name, y_split in [('Train', y_train), ('Val', y_val), ('Test', y_test)]:
     print(f"\\n{split_name}:")
-    split_dist = Counter(y_split)
-    for class_label, count in sorted(split_dist.items()):
-        original_prop = original_dist[class_label] / len(y)
-        split_prop = count / len(y_split)
+    split_dist = Counter (y_split)
+    for class_label, count in sorted (split_dist.items()):
+        original_prop = original_dist[class_label] / len (y)
+        split_prop = count / len (y_split)
         print(f"  Class {class_label}: {count} ({split_prop:.1%}) "
               f"[Original: {original_prop:.1%}]")
 
@@ -700,9 +700,9 @@ for c in [0, 1, 2]:
     overlap_train_test = train_by_class[c] & test_by_class[c]
     overlap_val_test = val_by_class[c] & test_by_class[c]
     
-    all_disjoint = (len(overlap_train_val) == 0 and 
-                    len(overlap_train_test) == 0 and 
-                    len(overlap_val_test) == 0)
+    all_disjoint = (len (overlap_train_val) == 0 and 
+                    len (overlap_train_test) == 0 and 
+                    len (overlap_val_test) == 0)
     print(f"  Class {c}: {'✓ Disjoint' if all_disjoint else '✗ Overlap detected'}")
 \`\`\`
 
@@ -721,52 +721,52 @@ from sklearn.model_selection import KFold
 n_samples = 100
 k_folds = 5
 
-indices = np.arange(n_samples)
-kfold = KFold(n_splits=k_folds, shuffle=True, random_state=42)
+indices = np.arange (n_samples)
+kfold = KFold (n_splits=k_folds, shuffle=True, random_state=42)
 
 # Create folds as sets
 folds = []
-for fold_idx, (train_idx, val_idx) in enumerate(kfold.split(indices)):
-    fold = set(val_idx)
-    folds.append(fold)
-    print(f"Fold {fold_idx + 1}: {len(fold)} samples")
+for fold_idx, (train_idx, val_idx) in enumerate (kfold.split (indices)):
+    fold = set (val_idx)
+    folds.append (fold)
+    print(f"Fold {fold_idx + 1}: {len (fold)} samples")
 
 # Verify partition properties
 print("\\n=== Partition Verification ===")
 
 # 1. Union equals all data
 union_folds = set().union(*folds)
-all_data = set(indices)
+all_data = set (indices)
 print(f"\\n1. Union = All Data: {union_folds == all_data}")
 
 # 2. Pairwise disjoint
 print(f"\\n2. Pairwise Disjoint:")
 all_disjoint = True
-for i in range(len(folds)):
-    for j in range(i + 1, len(folds)):
+for i in range (len (folds)):
+    for j in range (i + 1, len (folds)):
         overlap = folds[i] & folds[j]
-        if len(overlap) > 0:
-            print(f"   Fold {i+1} ∩ Fold {j+1}: {len(overlap)} (PROBLEM!)")
+        if len (overlap) > 0:
+            print(f"   Fold {i+1} ∩ Fold {j+1}: {len (overlap)} (PROBLEM!)")
             all_disjoint = False
 
 if all_disjoint:
     print(f"   ✓ All folds are pairwise disjoint")
 
 # 3. Equal sizes (approximately)
-sizes = [len(fold) for fold in folds]
+sizes = [len (fold) for fold in folds]
 print(f"\\n3. Fold Sizes: {sizes}")
-print(f"   Min: {min(sizes)}, Max: {max(sizes)}, Difference: {max(sizes) - min(sizes)}")
+print(f"   Min: {min (sizes)}, Max: {max (sizes)}, Difference: {max (sizes) - min (sizes)}")
 
 # Visualize CV folds
 print("\\n=== Cross-Validation Iterations ===")
-for fold_idx, (train_idx, val_idx) in enumerate(kfold.split(indices)):
-    train_set = set(train_idx)
-    val_set = set(val_idx)
+for fold_idx, (train_idx, val_idx) in enumerate (kfold.split (indices)):
+    train_set = set (train_idx)
+    val_set = set (val_idx)
     
     print(f"\\nIteration {fold_idx + 1}:")
-    print(f"  Train: {len(train_set)} samples")
-    print(f"  Val: {len(val_set)} samples")
-    print(f"  Disjoint: {len(train_set & val_set) == 0}")
+    print(f"  Train: {len (train_set)} samples")
+    print(f"  Val: {len (val_set)} samples")
+    print(f"  Disjoint: {len (train_set & val_set) == 0}")
     print(f"  Union = All: {(train_set | val_set) == all_data}")
 \`\`\`
 
@@ -787,51 +787,51 @@ n_samples = 100
 dates = pd.date_range('2020-01-01', periods=n_samples, freq='D')
 data = pd.DataFrame({
     'date': dates,
-    'value': np.random.randn(n_samples),
-    'index': range(n_samples)
+    'value': np.random.randn (n_samples),
+    'index': range (n_samples)
 })
 
 # Time series split
-tscv = TimeSeriesSplit(n_splits=5)
+tscv = TimeSeriesSplit (n_splits=5)
 
 print("=== Time Series Cross-Validation ===\\n")
 
-for fold_idx, (train_idx, test_idx) in enumerate(tscv.split(data)):
-    train_set = set(train_idx)
-    test_set = set(test_idx)
+for fold_idx, (train_idx, test_idx) in enumerate (tscv.split (data)):
+    train_set = set (train_idx)
+    test_set = set (test_idx)
     
     print(f"Fold {fold_idx + 1}:")
-    print(f"  Train: indices {min(train_idx)} to {max(train_idx)} ({len(train_set)} samples)")
-    print(f"  Test: indices {min(test_idx)} to {max(test_idx)} ({len(test_set)} samples)")
+    print(f"  Train: indices {min (train_idx)} to {max (train_idx)} ({len (train_set)} samples)")
+    print(f"  Test: indices {min (test_idx)} to {max (test_idx)} ({len (test_set)} samples)")
     
     # Verify temporal ordering
-    max_train = max(train_idx)
-    min_test = min(test_idx)
+    max_train = max (train_idx)
+    min_test = min (test_idx)
     temporal_order_preserved = max_train < min_test
     
     # Verify disjoint
-    disjoint = len(train_set & test_set) == 0
+    disjoint = len (train_set & test_set) == 0
     
     print(f"  Temporal order preserved: {temporal_order_preserved}")
     print(f"  Disjoint: {disjoint}")
     print()
 
 # Visualize temporal splits
-plt.figure(figsize=(14, 8))
+plt.figure (figsize=(14, 8))
 
-for fold_idx, (train_idx, test_idx) in enumerate(tscv.split(data)):
+for fold_idx, (train_idx, test_idx) in enumerate (tscv.split (data)):
     plt.subplot(5, 1, fold_idx + 1)
     
     # Plot train as blue, test as red
-    train_mask = np.zeros(n_samples)
+    train_mask = np.zeros (n_samples)
     train_mask[train_idx] = 1
-    test_mask = np.zeros(n_samples)
+    test_mask = np.zeros (n_samples)
     test_mask[test_idx] = 2
     
     combined = train_mask + test_mask
-    plt.scatter(range(n_samples), [fold_idx + 1] * n_samples, 
+    plt.scatter (range (n_samples), [fold_idx + 1] * n_samples, 
                 c=combined, cmap='RdBu', s=50, marker='|')
-    plt.ylabel(f'Fold {fold_idx + 1}', rotation=0, labelpad=20)
+    plt.ylabel (f'Fold {fold_idx + 1}', rotation=0, labelpad=20)
     plt.yticks([])
     
     if fold_idx == 4:
@@ -845,12 +845,12 @@ plt.show()
 **Trading Application - Walk-Forward Validation**:
 
 \`\`\`python
-def walk_forward_validation(data, train_window, test_window):
+def walk_forward_validation (data, train_window, test_window):
     """
     Walk-forward validation for trading strategies
     Maintains temporal order and disjoint sets
     """
-    n = len(data)
+    n = len (data)
     splits = []
     
     start = 0
@@ -858,8 +858,8 @@ def walk_forward_validation(data, train_window, test_window):
         train_end = start + train_window
         test_end = train_end + test_window
         
-        train_indices = set(range(start, train_end))
-        test_indices = set(range(train_end, test_end))
+        train_indices = set (range (start, train_end))
+        test_indices = set (range (train_end, test_end))
         
         splits.append((train_indices, test_indices))
         start += test_window  # Move forward by test window
@@ -871,19 +871,19 @@ n_days = 500
 train_window = 252  # 1 year
 test_window = 63    # Quarter
 
-splits = walk_forward_validation(range(n_days), train_window, test_window)
+splits = walk_forward_validation (range (n_days), train_window, test_window)
 
 print(f"=== Walk-Forward Validation ===")
-print(f"Total periods: {len(splits)}\\n")
+print(f"Total periods: {len (splits)}\\n")
 
-for i, (train, test) in enumerate(splits):
+for i, (train, test) in enumerate (splits):
     print(f"Period {i + 1}:")
-    print(f"  Train: days {min(train)} to {max(train)} ({len(train)} days)")
-    print(f"  Test: days {min(test)} to {max(test)} ({len(test)} days)")
+    print(f"  Train: days {min (train)} to {max (train)} ({len (train)} days)")
+    print(f"  Test: days {min (test)} to {max (test)} ({len (test)} days)")
     
     # Verify properties
-    disjoint = len(train & test) == 0
-    temporal = max(train) < min(test)
+    disjoint = len (train & test) == 0
+    temporal = max (train) < min (test)
     print(f"  Disjoint: {disjoint}, Temporal order: {temporal}")
     print()
 \`\`\`

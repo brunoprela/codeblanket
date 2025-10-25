@@ -41,7 +41,7 @@ export const combinatoricsbasicsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc5-pascals-triangle',
-    question: "What is the sum of all numbers in row n of Pascal's triangle?",
+    question: "What is the sum of all numbers in row n of Pascal\'s triangle?",
     options: ['n', 'n!', '2^n', 'n^2'],
     correctAnswer: 2,
     explanation:

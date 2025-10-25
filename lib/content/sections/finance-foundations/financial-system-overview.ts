@@ -1,7 +1,7 @@
 export const financialSystemOverview = {
-    title: 'The Financial System: A 30,000-Foot View',
-    id: 'financial-system-overview',
-    content: `
+  title: 'The Financial System: A 30,000-Foot View',
+  id: 'financial-system-overview',
+  content: `
 # The Financial System: A 30,000-Foot View
 
 ## Introduction
@@ -46,7 +46,7 @@ At its core, finance is about **three fundamental questions**:
 Time Value of Money: Present Value and Future Value
 """
 
-def future_value(present_value: float, rate: float, periods: int) -> float:
+def future_value (present_value: float, rate: float, periods: int) -> float:
     """
     Calculate future value with compound interest
     
@@ -75,7 +75,7 @@ def future_value(present_value: float, rate: float, periods: int) -> float:
     return present_value * (1 + rate) ** periods
 
 
-def present_value(future_value: float, rate: float, periods: int) -> float:
+def present_value (future_value: float, rate: float, periods: int) -> float:
     """
     Calculate present value (discount future cash flows)
     
@@ -111,13 +111,13 @@ discount_rate = 0.05  # 5% annual discount rate
 
 # Calculate present value of annuity
 pv_annuity = sum(
-    present_value(annuity_payment, discount_rate, year)
+    present_value (annuity_payment, discount_rate, year)
     for year in range(1, 31)
 )
 
-print(f"Lump sum: ${lump_sum:,.0f}")
-print(f"PV of annuity: ${pv_annuity:,.0f}")
-print(f"Difference: ${lump_sum - pv_annuity:,.0f}")
+print(f"Lump sum: \${lump_sum:,.0f}")
+print(f"PV of annuity: \${pv_annuity:,.0f}")
+print(f"Difference: \${lump_sum - pv_annuity:,.0f}")
 print(f"\\nTake the lump sum!" if lump_sum > pv_annuity else "\\nTake the annuity!")
 
 # Output:
@@ -179,8 +179,8 @@ def calculate_sharpe_ratio(
     SR > 3: Exceptional (Renaissance Technologies territory!)
     """
     # Annualize returns and volatility
-    mean_return = np.mean(returns) * periods_per_year
-    volatility = np.std(returns) * np.sqrt(periods_per_year)
+    mean_return = np.mean (returns) * periods_per_year
+    volatility = np.std (returns) * np.sqrt (periods_per_year)
     
     # Sharpe ratio
     sharpe = (mean_return - risk_free_rate) / volatility
@@ -197,16 +197,16 @@ returns_a = np.random.normal(0.0015, 0.03, 252)  # 37.8% annual return, 47.7% vo
 # Strategy B: Moderate return, lower volatility (diversified portfolio)
 returns_b = np.random.normal(0.0008, 0.015, 252)  # 20.2% annual return, 23.8% vol
 
-sharpe_a = calculate_sharpe_ratio(returns_a)
-sharpe_b = calculate_sharpe_ratio(returns_b)
+sharpe_a = calculate_sharpe_ratio (returns_a)
+sharpe_b = calculate_sharpe_ratio (returns_b)
 
 print(f"Strategy A:")
-print(f"  Annual Return: {np.mean(returns_a) * 252:.1%}")
-print(f"  Annual Volatility: {np.std(returns_a) * np.sqrt(252):.1%}")
+print(f"  Annual Return: {np.mean (returns_a) * 252:.1%}")
+print(f"  Annual Volatility: {np.std (returns_a) * np.sqrt(252):.1%}")
 print(f"  Sharpe Ratio: {sharpe_a:.2f}")
 print(f"\\nStrategy B:")
-print(f"  Annual Return: {np.mean(returns_b) * 252:.1%}")
-print(f"  Annual Volatility: {np.std(returns_b) * np.sqrt(252):.1%}")
+print(f"  Annual Return: {np.mean (returns_b) * 252:.1%}")
+print(f"  Annual Volatility: {np.std (returns_b) * np.sqrt(252):.1%}")
 print(f"  Sharpe Ratio: {sharpe_b:.2f}")
 print(f"\\nBetter risk-adjusted returns: Strategy {'A' if sharpe_a > sharpe_b else 'B'}")
 
@@ -224,7 +224,7 @@ print(f"\\nBetter risk-adjusted returns: Strategy {'A' if sharpe_a > sharpe_b el
 # Better risk-adjusted returns: Strategy A
 \`\`\`
 
-**Key Insight**: It's not just about returns. **Risk-adjusted returns** matter. A 50% return with 80% volatility is worse than 20% return with 10% volatility.
+**Key Insight**: It\'s not just about returns. **Risk-adjusted returns** matter. A 50% return with 80% volatility is worse than 20% return with 10% volatility.
 
 ### 3. Capital Allocation
 **Question**: Where should money be invested to maximize societal value?  
@@ -285,7 +285,7 @@ class OrderBook:
         self.asks: List[tuple] = []
         self.trades: List[tuple] = []
     
-    def add_order(self, order: Order) -> List[tuple]:
+    def add_order (self, order: Order) -> List[tuple]:
         """
         Add order and match if possible
         
@@ -298,10 +298,10 @@ class OrderBook:
         if order.side == 'buy':
             # Try to match with existing sell orders
             while order.quantity > 0 and self.asks and self.asks[0][0] <= order.price:
-                ask_price, ask_qty, ask_time = heapq.heappop(self.asks)
+                ask_price, ask_qty, ask_time = heapq.heappop (self.asks)
                 
                 # Match orders
-                trade_qty = min(order.quantity, ask_qty)
+                trade_qty = min (order.quantity, ask_qty)
                 trade_price = ask_price  # Existing order gets price priority
                 
                 trades.append((trade_price, trade_qty))
@@ -312,21 +312,21 @@ class OrderBook:
                 
                 # If sell order partially filled, add back
                 if ask_qty > 0:
-                    heapq.heappush(self.asks, (ask_price, ask_qty, ask_time))
+                    heapq.heappush (self.asks, (ask_price, ask_qty, ask_time))
             
             # If order not fully filled, add to book
             if order.quantity > 0:
                 # Negative price for max heap behavior
-                heapq.heappush(self.bids, (-order.price, order.quantity, order.timestamp))
+                heapq.heappush (self.bids, (-order.price, order.quantity, order.timestamp))
         
         else:  # sell order
             # Try to match with existing buy orders
             while order.quantity > 0 and self.bids and -self.bids[0][0] >= order.price:
-                neg_bid_price, bid_qty, bid_time = heapq.heappop(self.bids)
+                neg_bid_price, bid_qty, bid_time = heapq.heappop (self.bids)
                 bid_price = -neg_bid_price
                 
                 # Match orders
-                trade_qty = min(order.quantity, bid_qty)
+                trade_qty = min (order.quantity, bid_qty)
                 trade_price = bid_price  # Existing order gets price priority
                 
                 trades.append((trade_price, trade_qty))
@@ -337,21 +337,21 @@ class OrderBook:
                 
                 # If buy order partially filled, add back
                 if bid_qty > 0:
-                    heapq.heappush(self.bids, (neg_bid_price, bid_qty, bid_time))
+                    heapq.heappush (self.bids, (neg_bid_price, bid_qty, bid_time))
             
             # If order not fully filled, add to book
             if order.quantity > 0:
-                heapq.heappush(self.asks, (order.price, order.quantity, order.timestamp))
+                heapq.heappush (self.asks, (order.price, order.quantity, order.timestamp))
         
         return trades
     
-    def get_best_bid_ask(self) -> tuple:
+    def get_best_bid_ask (self) -> tuple:
         """Get current best bid (buy) and ask (sell) prices"""
         best_bid = -self.bids[0][0] if self.bids else None
         best_ask = self.asks[0][0] if self.asks else None
         return best_bid, best_ask
     
-    def get_mid_price(self) -> float:
+    def get_mid_price (self) -> float:
         """Get mid price (average of best bid and ask)"""
         best_bid, best_ask = self.get_best_bid_ask()
         if best_bid and best_ask:
@@ -368,25 +368,25 @@ book.add_order(Order(99.50, 100, 'buy', time.time()))
 book.add_order(Order(100.50, 100, 'sell', time.time()))
 
 print("Initial market:")
-print(f"  Best bid: ${book.get_best_bid_ask()[0]: .2f}")
-print(f"  Best ask: ${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Mid price: ${book.get_mid_price():.2f}")
-print(f"  Spread: ${book.get_best_bid_ask()[1] - book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
+print(f"  Mid price: \${book.get_mid_price():.2f}")
+print(f"  Spread: \${book.get_best_bid_ask()[1] - book.get_best_bid_ask()[0]:.2f}")
 
 # News: Positive earnings announcement → aggressive buyers
 print("\\n[NEWS] Positive earnings! Buyers rush in...")
 
 trades = book.add_order(Order(100.50, 100, 'buy', time.time()))
-print(f"  Trade executed: {len(trades)} fills at ${trades[0][0]:.2f}")
+print(f"  Trade executed: {len (trades)} fills at \${trades[0][0]:.2f}")
 
 # More buyers, pushing price up
 trades = book.add_order(Order(101.00, 50, 'buy', time.time()))
 book.add_order(Order(101.50, 50, 'sell', time.time()))
 
 print(f"\\nNew market after news:")
-print(f"  Best bid: ${book.get_best_bid_ask()[0]:.2f}")
-print(f"  Best ask: ${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Mid price: ${book.get_mid_price():.2f}")
+print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
+print(f"  Mid price: \${book.get_mid_price():.2f}")
 print(f"  Price change: +{book.get_mid_price() - 100:.2f} (+{(book.get_mid_price() - 100) / 100 * 100:.1f}%)")
 
 # Output:
@@ -435,7 +435,7 @@ Companies raise money by issuing securities:
 
 ## How Money Flows Through the System
 
-Let's trace a dollar's journey through the financial system:
+Let\'s trace a dollar's journey through the financial system:
 
 ### The Money Flow Cycle
 
@@ -490,7 +490,7 @@ Modern finance is **dominated by technology**. Here's why:
 
 ### 2. **Scale**
 Technology enables managing trillions:
-- **BlackRock's Aladdin**: Manages $21 trillion in assets
+- **BlackRock\'s Aladdin**: Manages $21 trillion in assets
 - **Visa**: Processes 65,000 transactions/second
 - **Binance**: $76 billion daily trading volume (crypto)
 
@@ -527,7 +527,7 @@ Understanding the 2008 crisis is essential. Here's what happened:
 5. **Stock market crash** → S&P 500 falls 57% from peak
 
 ### The Aftermath
-- **Bailouts**: Government rescues banks ($700B TARP)
+- **Bailouts**: Government rescues banks (\$700B TARP)
 - **Unemployment**: Spikes to 10%
 - **Regulations**: Dodd-Frank Act (2010)
 - **Fed intervention**: Quantitative easing (print money to buy bonds)
@@ -588,7 +588,7 @@ Fintech isn't about **finance expertise**—it's about:
 
 ## Your First Market Data Fetch
 
-Let's get hands-on immediately:
+Let\'s get hands-on immediately:
 
 \`\`\`python
 """
@@ -598,7 +598,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def fetch_stock_data(ticker: str, period: str = '1y') -> pd.DataFrame:
+def fetch_stock_data (ticker: str, period: str = '1y') -> pd.DataFrame:
     """
     Fetch stock data using Yahoo Finance
     
@@ -613,12 +613,12 @@ def fetch_stock_data(ticker: str, period: str = '1y') -> pd.DataFrame:
     --------
     DataFrame with columns: Open, High, Low, Close, Volume, Adj Close
     """
-    stock = yf.Ticker(ticker)
-    df = stock.history(period=period)
+    stock = yf.Ticker (ticker)
+    df = stock.history (period=period)
     return df
 
 
-def calculate_returns(df: pd.DataFrame) -> pd.DataFrame:
+def calculate_returns (df: pd.DataFrame) -> pd.DataFrame:
     """Calculate daily and cumulative returns"""
     df = df.copy()
     df['Daily_Return'] = df['Close'].pct_change()
@@ -626,32 +626,32 @@ def calculate_returns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def plot_stock_performance(ticker: str, period: str = '1y'):
+def plot_stock_performance (ticker: str, period: str = '1y'):
     """Fetch data and plot stock performance"""
     # Fetch data
-    df = fetch_stock_data(ticker, period)
-    df = calculate_returns(df)
+    df = fetch_stock_data (ticker, period)
+    df = calculate_returns (df)
     
     # Create plots
     fig, axes = plt.subplots(2, 1, figsize=(14, 10))
     
     # Price chart
-    axes[0].plot(df.index, df['Close'], label='Close Price', color='blue', linewidth=2)
-    axes[0].set_title(f'{ticker} Stock Price - Last {period}', fontsize=16, fontweight='bold')
+    axes[0].plot (df.index, df['Close'], label='Close Price', color='blue', linewidth=2)
+    axes[0].set_title (f'{ticker} Stock Price - Last {period}', fontsize=16, fontweight='bold')
     axes[0].set_xlabel('Date', fontsize=12)
     axes[0].set_ylabel('Price ($)', fontsize=12)
     axes[0].legend()
-    axes[0].grid(alpha=0.3)
+    axes[0].grid (alpha=0.3)
     
     # Cumulative returns
-    axes[1].plot(df.index, df['Cumulative_Return'] * 100, label='Cumulative Return', 
+    axes[1].plot (df.index, df['Cumulative_Return'] * 100, label='Cumulative Return', 
                  color='green', linewidth=2)
-    axes[1].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-    axes[1].set_title(f'{ticker} Cumulative Returns', fontsize=16, fontweight='bold')
+    axes[1].axhline (y=0, color='black', linestyle='--', alpha=0.5)
+    axes[1].set_title (f'{ticker} Cumulative Returns', fontsize=16, fontweight='bold')
     axes[1].set_xlabel('Date', fontsize=12)
     axes[1].set_ylabel('Return (%)', fontsize=12)
     axes[1].legend()
-    axes[1].grid(alpha=0.3)
+    axes[1].grid (alpha=0.3)
     
     plt.tight_layout()
     plt.show()
@@ -659,12 +659,12 @@ def plot_stock_performance(ticker: str, period: str = '1y'):
     # Statistics
     total_return = df['Cumulative_Return'].iloc[-1]
     volatility = df['Daily_Return'].std() * (252 ** 0.5)  # Annualized
-    sharpe = (total_return / (len(df) / 252) - 0.04) / volatility  # Approx annual Sharpe
+    sharpe = (total_return / (len (df) / 252) - 0.04) / volatility  # Approx annual Sharpe
     
     print(f"\\n{ticker} Performance Summary:")
     print(f"  Period: {period}")
-    print(f"  Start Price: ${df['Close'].iloc[0]: .2f}")
-print(f"  End Price: ${df['Close'].iloc[-1]:.2f}")
+    print(f"  Start Price: \${df['Close'].iloc[0]:.2f}")
+print(f"  End Price: \${df['Close'].iloc[-1]:.2f}")
 print(f"  Total Return: {total_return:.2%}")
 print(f"  Annualized Volatility: {volatility:.2%}")
 print(f"  Approx Sharpe Ratio: {sharpe:.2f}")
@@ -683,20 +683,20 @@ tickers = ['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'SPY']
 comparison = pd.DataFrame()
 
 for ticker in tickers:
-    df = fetch_stock_data(ticker, period = '1y')
-df = calculate_returns(df)
+    df = fetch_stock_data (ticker, period = '1y')
+df = calculate_returns (df)
 comparison[ticker] = df['Cumulative_Return']
     
     # Plot comparison
-plt.figure(figsize = (14, 7))
+plt.figure (figsize = (14, 7))
 for ticker in tickers:
-    plt.plot(comparison.index, comparison[ticker] * 100, label = ticker, linewidth = 2)
+    plt.plot (comparison.index, comparison[ticker] * 100, label = ticker, linewidth = 2)
 
 plt.title('Stock Performance Comparison - Last Year', fontsize = 16, fontweight = 'bold')
 plt.xlabel('Date', fontsize = 12)
 plt.ylabel('Cumulative Return (%)', fontsize = 12)
 plt.legend()
-plt.grid(alpha = 0.3)
+plt.grid (alpha = 0.3)
 plt.tight_layout()
 plt.show()
     
@@ -754,4 +754,3 @@ By the end of Module 0, you'll have:
 **Welcome to financial engineering. Let's build the future of finance together!** 🚀
 `,
 };
-

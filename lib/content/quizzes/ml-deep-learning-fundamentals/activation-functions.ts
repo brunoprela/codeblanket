@@ -38,18 +38,18 @@ z = -4.0*x₁ - 2.5*x₂ - 3.8 < 0 for most (x₁, x₂)
 
 1. **Monitor Activation Statistics:**
 \`\`\`python
-def check_dead_neurons(activations):
+def check_dead_neurons (activations):
     """
     Check percentage of dead neurons
     activations: shape (batch, neurons)
     """
-    dead_neurons = np.sum(np.all(activations == 0, axis=0))
+    dead_neurons = np.sum (np.all (activations == 0, axis=0))
     total_neurons = activations.shape[1]
     return dead_neurons / total_neurons
 
 # During training
-activations = model.get_activations(validation_data)
-dead_percentage = check_dead_neurons(activations)
+activations = model.get_activations (validation_data)
+dead_percentage = check_dead_neurons (activations)
 print(f"Dead neurons: {dead_percentage:.1%}")
 \`\`\`
 
@@ -67,8 +67,8 @@ print(f"Dead neurons: {dead_percentage:.1%}")
 
 **1. Use Leaky ReLU Instead:**
 \`\`\`python
-def leaky_relu(z, alpha=0.01):
-    return np.where(z > 0, z, alpha * z)
+def leaky_relu (z, alpha=0.01):
+    return np.where (z > 0, z, alpha * z)
 \`\`\`
 - Allows small negative gradient (alpha * z when z < 0)
 - Neurons can recover from negative weights
@@ -76,8 +76,8 @@ def leaky_relu(z, alpha=0.01):
 
 **2. Use ELU (Exponential Linear Unit):**
 \`\`\`python
-def elu(z, alpha=1.0):
-    return np.where(z > 0, z, alpha * (np.exp(z) - 1))
+def elu (z, alpha=1.0):
+    return np.where (z > 0, z, alpha * (np.exp (z) - 1))
 \`\`\`
 - Smooth activation with negative values
 - Better gradient flow
@@ -92,7 +92,7 @@ def elu(z, alpha=1.0):
 - Use He initialization for ReLU: w ~ N(0, sqrt(2/n_in))
 - Prevents weights from starting in bad regions
 \`\`\`python
-W = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)
+W = np.random.randn (n_in, n_out) * np.sqrt(2.0 / n_in)
 \`\`\`
 
 **5. Batch Normalization:**
@@ -102,8 +102,8 @@ W = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)
 
 **6. Gradient Clipping:**
 \`\`\`python
-def clip_gradients(gradients, max_norm=1.0):
-    total_norm = np.linalg.norm(gradients)
+def clip_gradients (gradients, max_norm=1.0):
+    total_norm = np.linalg.norm (gradients)
     clip_coef = max_norm / (total_norm + 1e-6)
     if clip_coef < 1:
         gradients *= clip_coef
@@ -158,7 +158,7 @@ These practices ensure neurons remain trainable throughout the learning process.
     id: 'activation-functions-dq-2',
     question:
       'Compare and contrast sigmoid, tanh, and ReLU activation functions. For a deep neural network (10+ layers) predicting next-day stock returns, which activation would you use for hidden layers and why? What problems might arise with each choice?',
-    sampleAnswer: `Choosing the right activation function is critical for deep networks. Let's analyze sigmoid, tanh, and ReLU in the context of deep learning for financial prediction:
+    sampleAnswer: `Choosing the right activation function is critical for deep networks. Let\'s analyze sigmoid, tanh, and ReLU in the context of deep learning for financial prediction:
 
 **Sigmoid Function:**
 
@@ -188,7 +188,7 @@ Disadvantages for Deep Networks:
 
 Properties:
 - Range: (-1, 1)
-- Formula: tanh(z) = (e^z - e^(-z)) / (e^z + e^(-z))
+- Formula: tanh (z) = (e^z - e^(-z)) / (e^z + e^(-z))
 - Derivative: tanh'(z) = 1 - tanh²(z)
 - Maximum gradient: 1.0 (at z=0)
 
@@ -256,22 +256,22 @@ class StockReturnPredictor:
         self.weights = []
         self.biases = []
         
-        for i in range(len(layers) - 1):
+        for i in range (len (layers) - 1):
             # He initialization for ReLU
-            W = np.random.randn(layers[i], layers[i+1]) * np.sqrt(2.0 / layers[i])
-            b = np.zeros(layers[i+1])
+            W = np.random.randn (layers[i], layers[i+1]) * np.sqrt(2.0 / layers[i])
+            b = np.zeros (layers[i+1])
             self.weights.append(W)
-            self.biases.append(b)
+            self.biases.append (b)
     
-    def leaky_relu(self, z, alpha=0.01):
-        return np.where(z > 0, z, alpha * z)
+    def leaky_relu (self, z, alpha=0.01):
+        return np.where (z > 0, z, alpha * z)
     
-    def forward(self, X):
+    def forward (self, X):
         activation = X
         # Hidden layers: Leaky ReLU
-        for i in range(len(self.weights) - 1):
+        for i in range (len (self.weights) - 1):
             z = activation @ self.weights[i] + self.biases[i]
-            activation = self.leaky_relu(z)
+            activation = self.leaky_relu (z)
         
         # Output layer: Linear (for regression)
         output = activation @ self.weights[-1] + self.biases[-1]
@@ -350,12 +350,12 @@ The key insight: depth requires gradient preservation, which only ReLU-family ac
 
 Standard softmax:
 \`\`\`
-softmax(zᵢ) = exp(zᵢ) / Σⱼ exp(zⱼ)
+softmax (zᵢ) = exp (zᵢ) / Σⱼ exp (zⱼ)
 \`\`\`
 
 Softmax with temperature T:
 \`\`\`
-softmax_T(zᵢ) = exp(zᵢ/T) / Σⱼ exp(zⱼ/T)
+softmax_T(zᵢ) = exp (zᵢ/T) / Σⱼ exp (zⱼ/T)
 \`\`\`
 
 **Effect of Temperature:**
@@ -385,22 +385,22 @@ softmax_T(zᵢ) = exp(zᵢ/T) / Σⱼ exp(zⱼ/T)
 **Mathematical Example:**
 
 \`\`\`python
-def softmax_temperature(logits, T=1.0):
+def softmax_temperature (logits, T=1.0):
     """Softmax with temperature"""
     logits_scaled = logits / T
-    exp_logits = np.exp(logits_scaled - np.max(logits_scaled))
-    return exp_logits / np.sum(exp_logits)
+    exp_logits = np.exp (logits_scaled - np.max (logits_scaled))
+    return exp_logits / np.sum (exp_logits)
 
 # Example logits for 3-class problem
 logits = np.array([2.0, 1.0, 0.5])
 
 print("Effect of Temperature:")
 for T in [0.5, 1.0, 2.0, 5.0]:
-    probs = softmax_temperature(logits, T)
-    entropy = -np.sum(probs * np.log(probs + 1e-10))
+    probs = softmax_temperature (logits, T)
+    entropy = -np.sum (probs * np.log (probs + 1e-10))
     print(f"\\nT = {T}:")
     print(f"  Probabilities: {probs}")
-    print(f"  Max prob: {np.max(probs):.3f}")
+    print(f"  Max prob: {np.max (probs):.3f}")
     print(f"  Entropy: {entropy:.3f}")
 \`\`\`
 
@@ -440,26 +440,26 @@ T = 5.0:
 **Solution**: Temperature scaling for calibration
 
 \`\`\`python
-def find_optimal_temperature(logits_val, labels_val):
+def find_optimal_temperature (logits_val, labels_val):
     """
     Find temperature that minimizes calibration error
     using validation set
     """
     def nll_loss(T):
-        probs = softmax_temperature(logits_val, T)
-        return -np.mean(np.log(probs[range(len(labels_val)), labels_val] + 1e-10))
+        probs = softmax_temperature (logits_val, T)
+        return -np.mean (np.log (probs[range (len (labels_val)), labels_val] + 1e-10))
     
     # Grid search for best T
     T_range = np.linspace(0.1, 10, 100)
     losses = [nll_loss(T) for T in T_range]
-    best_T = T_range[np.argmin(losses)]
+    best_T = T_range[np.argmin (losses)]
     return best_T
 
 # Example: Model is overconfident
 logits_val = np.array([[3.0, 1.0, 0.5], [2.5, 2.0, 0.3], ...])
 labels_val = np.array([0, 1, ...])
 
-optimal_T = find_optimal_temperature(logits_val, labels_val)
+optimal_T = find_optimal_temperature (logits_val, labels_val)
 print(f"Optimal temperature for calibration: {optimal_T:.2f}")
 
 # If optimal_T > 1, model was overconfident
@@ -474,14 +474,14 @@ print(f"Optimal temperature for calibration: {optimal_T:.2f}")
 **Trading Example:**
 \`\`\`python
 # Market regime classification: Bull/Neutral/Bear
-logits = model.predict(market_features)
+logits = model.predict (market_features)
 
 # Without calibration (overconfident)
-probs_uncalibrated = softmax(logits)  # [0.95, 0.03, 0.02]
+probs_uncalibrated = softmax (logits)  # [0.95, 0.03, 0.02]
 # → Model is 95% sure it's bull market, might be wrong!
 
 # With calibration (T=2.5 found optimal)
-probs_calibrated = softmax_temperature(logits, T=2.5)  # [0.65, 0.25, 0.10]
+probs_calibrated = softmax_temperature (logits, T=2.5)  # [0.65, 0.25, 0.10]
 # → More realistic uncertainty, better for decision-making
 \`\`\`
 
@@ -496,7 +496,7 @@ probs_calibrated = softmax_temperature(logits, T=2.5)  # [0.65, 0.25, 0.10]
 **Solution**: Use "soft" targets with high temperature
 
 \`\`\`python
-def knowledge_distillation(teacher_model, student_model, X_train, y_train, T=4.0):
+def knowledge_distillation (teacher_model, student_model, X_train, y_train, T=4.0):
     """
     Train student model using soft targets from teacher
     
@@ -507,7 +507,7 @@ def knowledge_distillation(teacher_model, student_model, X_train, y_train, T=4.0
     """
     # Get teacher's soft predictions
     teacher_logits = teacher_model.predict(X_train)
-    soft_targets = softmax_temperature(teacher_logits, T)
+    soft_targets = softmax_temperature (teacher_logits, T)
     
     # Train student on soft targets (higher temperature)
     student_model.train(
@@ -534,14 +534,14 @@ def knowledge_distillation(teacher_model, student_model, X_train, y_train, T=4.0
 # Distill large ensemble model into fast single model for real-time trading
 
 # Teacher: Ensemble of 10 models (slow, accurate)
-teacher_logits = ensemble.predict(features)  # [2.5, 1.8, 0.3]
+teacher_logits = ensemble.predict (features)  # [2.5, 1.8, 0.3]
 
 # Standard softmax (hard targets)
-hard_targets = softmax(teacher_logits)  # [0.67, 0.30, 0.03]
+hard_targets = softmax (teacher_logits)  # [0.67, 0.30, 0.03]
 # → Student learns: "Class 0 is right, others are wrong"
 
 # Soft targets with T=5
-soft_targets = softmax_temperature(teacher_logits, T=5.0)  # [0.45, 0.38, 0.17]
+soft_targets = softmax_temperature (teacher_logits, T=5.0)  # [0.45, 0.38, 0.17]
 # → Student learns: "Class 0 slightly better than 1, both better than 2"
 # → Preserves nuanced decision boundaries
 # → Better generalization
@@ -569,11 +569,11 @@ soft_targets = softmax_temperature(teacher_logits, T=5.0)  # [0.45, 0.38, 0.17]
 strategy_logits = [3.0, 2.5, 1.0, 0.5]  # Quality scores for 4 strategies
 
 # Exploitation (T=0.5): Always pick best strategy
-probs_exploit = softmax_temperature(strategy_logits, T=0.5)  # [0.53, 0.34, 0.09, 0.04]
+probs_exploit = softmax_temperature (strategy_logits, T=0.5)  # [0.53, 0.34, 0.09, 0.04]
 # → Almost always use strategy 0
 
 # Exploration (T=2.0): Try different strategies
-probs_explore = softmax_temperature(strategy_logits, T=2.0)  # [0.35, 0.31, 0.21, 0.13]
+probs_explore = softmax_temperature (strategy_logits, T=2.0)  # [0.35, 0.31, 0.21, 0.13]
 # → More diversity, discover robust strategies
 \`\`\`
 
@@ -628,7 +628,7 @@ Applications:
 
 In financial ML, proper calibration via temperature scaling is essential for reliable decision-making under uncertainty.`,
     keyPoints: [
-      'Temperature T scales logits before softmax: softmax(z/T)',
+      'Temperature T scales logits before softmax: softmax (z/T)',
       'T < 1 sharpens distribution (more confident), T > 1 smooths it (less confident)',
       'For calibration: Find optimal T on validation set to correct overconfident predictions',
       'For knowledge distillation: Use T=2-10 to create "soft targets" that preserve nuanced information',

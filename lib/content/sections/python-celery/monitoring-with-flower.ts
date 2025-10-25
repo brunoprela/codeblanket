@@ -384,21 +384,21 @@ FLOWER_URL = 'http://localhost:5555/api'
 
 def get_workers():
     """Get list of workers"""
-    response = requests.get(f'{FLOWER_URL}/workers')
+    response = requests.get (f'{FLOWER_URL}/workers')
     workers = response.json()
     
     for worker_name, info in workers.items():
         print(f"Worker: {worker_name}")
         print(f"  Status: {'Online' if info['status'] else 'Offline'}")
-        print(f"  Active tasks: {len(info.get('active', []))}")
+        print(f"  Active tasks: {len (info.get('active', []))}")
         print(f"  Processed: {info['stats']['total']}")
     
     return workers
 
 
-def get_tasks(limit=100):
+def get_tasks (limit=100):
     """Get recent tasks"""
-    response = requests.get(f'{FLOWER_URL}/tasks', params={'limit': limit})
+    response = requests.get (f'{FLOWER_URL}/tasks', params={'limit': limit})
     tasks = response.json()
     
     for task_id, task_info in tasks.items():
@@ -411,15 +411,15 @@ def get_tasks(limit=100):
     return tasks
 
 
-def get_task_info(task_id):
+def get_task_info (task_id):
     """Get detailed info for specific task"""
-    response = requests.get(f'{FLOWER_URL}/task/info/{task_id}')
+    response = requests.get (f'{FLOWER_URL}/task/info/{task_id}')
     return response.json()
 
 
-def get_queue_length(queue_name='celery'):
+def get_queue_length (queue_name='celery'):
     """Get queue depth"""
-    response = requests.get(f'{FLOWER_URL}/queues/length')
+    response = requests.get (f'{FLOWER_URL}/queues/length')
     queues = response.json()
     
     for queue, depth in queues['active_queues']:
@@ -429,7 +429,7 @@ def get_queue_length(queue_name='celery'):
     return 0
 
 
-def shutdown_worker(worker_name):
+def shutdown_worker (worker_name):
     """Shutdown worker (if enable_control=True)"""
     response = requests.post(
         f'{FLOWER_URL}/worker/shutdown/{worker_name}'
@@ -437,7 +437,7 @@ def shutdown_worker(worker_name):
     return response.json()
 
 
-def restart_worker(worker_name):
+def restart_worker (worker_name):
     """Restart worker (if enable_control=True)"""
     response = requests.post(
         f'{FLOWER_URL}/worker/pool/restart/{worker_name}'
@@ -451,7 +451,7 @@ if __name__ == '__main__':
     workers = get_workers()
     
     print("\\n=== Recent Tasks ===")
-    tasks = get_tasks(limit=10)
+    tasks = get_tasks (limit=10)
     
     print("\\n=== Queue Depth ===")
     default_queue_depth = get_queue_length('celery')
@@ -491,14 +491,14 @@ def monitor_celery_health():
             check_failure_rate()
             check_task_runtime()
         except Exception as e:
-            logger.error(f"Monitoring error: {e}")
+            logger.error (f"Monitoring error: {e}")
         
         time.sleep(60)  # Check every minute
 
 
 def check_queue_depth():
     """Alert if queue depth exceeds threshold"""
-    response = requests.get(f'{FLOWER_URL}/queues/length')
+    response = requests.get (f'{FLOWER_URL}/queues/length')
     queues = response.json()
     
     for queue_name, depth in queues.get('active_queues', []):
@@ -512,29 +512,29 @@ def check_queue_depth():
 
 def check_worker_health():
     """Alert if insufficient workers online"""
-    response = requests.get(f'{FLOWER_URL}/workers')
+    response = requests.get (f'{FLOWER_URL}/workers')
     workers = response.json()
     
     online_workers = [w for w, info in workers.items() if info.get('status')]
     
-    if len(online_workers) < ALERT_THRESHOLDS['min_workers']:
+    if len (online_workers) < ALERT_THRESHOLDS['min_workers']:
         alert_ops(
             severity='critical',
             title='Insufficient Workers',
-            message=f'Only {len(online_workers)} workers online (required: {ALERT_THRESHOLDS["min_workers"]})'
+            message=f'Only {len (online_workers)} workers online (required: {ALERT_THRESHOLDS["min_workers"]})'
         )
 
 
 def check_failure_rate():
     """Alert if task failure rate is high"""
-    response = requests.get(f'{FLOWER_URL}/tasks', params={'limit': 1000})
+    response = requests.get (f'{FLOWER_URL}/tasks', params={'limit': 1000})
     tasks = response.json()
     
     if not tasks:
         return
     
     failed = sum(1 for t in tasks.values() if t.get('state') == 'FAILURE')
-    total = len(tasks)
+    total = len (tasks)
     failure_rate = failed / total if total > 0 else 0
     
     if failure_rate > ALERT_THRESHOLDS['failure_rate']:
@@ -547,13 +547,13 @@ def check_failure_rate():
 
 def check_task_runtime():
     """Alert if average task runtime is high"""
-    response = requests.get(f'{FLOWER_URL}/tasks', params={'limit': 100})
+    response = requests.get (f'{FLOWER_URL}/tasks', params={'limit': 100})
     tasks = response.json()
     
     runtimes = [t.get('runtime', 0) for t in tasks.values() if t.get('runtime')]
     
     if runtimes:
-        avg_runtime = sum(runtimes) / len(runtimes)
+        avg_runtime = sum (runtimes) / len (runtimes)
         
         if avg_runtime > ALERT_THRESHOLDS['avg_runtime']:
             alert_ops(
@@ -563,19 +563,19 @@ def check_task_runtime():
             )
 
 
-def alert_ops(severity: str, title: str, message: str):
+def alert_ops (severity: str, title: str, message: str):
     """Send alert to ops team"""
-    logger.warning(f"[{severity.upper()}] {title}: {message}")
+    logger.warning (f"[{severity.upper()}] {title}: {message}")
     
     # Send to Slack
-    # slack_webhook(title, message)
+    # slack_webhook (title, message)
     
     # Send to PagerDuty
     # if severity == 'critical':
-    #     pagerduty_alert(title, message)
+    #     pagerduty_alert (title, message)
     
     # Send to email
-    # send_email(ops_email, title, message)
+    # send_email (ops_email, title, message)
 
 
 if __name__ == '__main__':
@@ -610,9 +610,9 @@ class CeleryAutoScaler:
         self.max_workers = MAX_WORKERS
         self.tasks_per_worker = TASKS_PER_WORKER
     
-    def get_queue_depth(self):
+    def get_queue_depth (self):
         """Get total queue depth across all queues"""
-        response = requests.get(f'{self.flower_url}/queues/length')
+        response = requests.get (f'{self.flower_url}/queues/length')
         queues = response.json()
         
         total = 0
@@ -621,50 +621,50 @@ class CeleryAutoScaler:
         
         return total
     
-    def get_active_workers(self):
+    def get_active_workers (self):
         """Get count of online workers"""
-        response = requests.get(f'{self.flower_url}/workers')
+        response = requests.get (f'{self.flower_url}/workers')
         workers = response.json()
         
         return len([w for w, info in workers.items() if info.get('status')])
     
-    def calculate_needed_workers(self, queue_depth):
+    def calculate_needed_workers (self, queue_depth):
         """Calculate optimal worker count"""
         # Need 1 worker per N tasks
         needed = (queue_depth // self.tasks_per_worker) + self.min_workers
         
         # Clamp to min/max
-        return max(self.min_workers, min(needed, self.max_workers))
+        return max (self.min_workers, min (needed, self.max_workers))
     
-    def scale_workers_kubernetes(self, target_replicas):
+    def scale_workers_kubernetes (self, target_replicas):
         """Scale workers in Kubernetes"""
         try:
             subprocess.run([
                 'kubectl', 'scale', 'deployment', 'celery-workers',
-                '--replicas', str(target_replicas)
+                '--replicas', str (target_replicas)
             ], check=True)
-            logger.info(f"Scaled to {target_replicas} workers")
+            logger.info (f"Scaled to {target_replicas} workers")
         except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to scale: {e}")
+            logger.error (f"Failed to scale: {e}")
     
-    def scale_workers_docker(self, target_replicas):
+    def scale_workers_docker (self, target_replicas):
         """Scale workers in Docker Swarm"""
         try:
             subprocess.run([
                 'docker', 'service', 'scale',
                 f'myapp_celery_worker={target_replicas}'
             ], check=True)
-            logger.info(f"Scaled to {target_replicas} workers")
+            logger.info (f"Scaled to {target_replicas} workers")
         except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to scale: {e}")
+            logger.error (f"Failed to scale: {e}")
     
-    def run_autoscaling(self, platform='kubernetes'):
+    def run_autoscaling (self, platform='kubernetes'):
         """Run auto-scaling loop"""
         while True:
             try:
                 queue_depth = self.get_queue_depth()
                 current_workers = self.get_active_workers()
-                target_workers = self.calculate_needed_workers(queue_depth)
+                target_workers = self.calculate_needed_workers (queue_depth)
                 
                 logger.info(
                     f"Queue: {queue_depth}, "
@@ -674,19 +674,19 @@ class CeleryAutoScaler:
                 
                 if target_workers != current_workers:
                     if platform == 'kubernetes':
-                        self.scale_workers_kubernetes(target_workers)
+                        self.scale_workers_kubernetes (target_workers)
                     elif platform == 'docker':
-                        self.scale_workers_docker(target_workers)
+                        self.scale_workers_docker (target_workers)
             
             except Exception as e:
-                logger.error(f"Auto-scaling error: {e}")
+                logger.error (f"Auto-scaling error: {e}")
             
             time.sleep(60)  # Check every minute
 
 
 if __name__ == '__main__':
     scaler = CeleryAutoScaler()
-    scaler.run_autoscaling(platform='kubernetes')
+    scaler.run_autoscaling (platform='kubernetes')
 \`\`\`
 
 **Kubernetes Horizontal Pod Autoscaler (HPA):**
@@ -728,7 +728,7 @@ spec:
 import bcrypt
 
 password = b"strongpassword"
-hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+hashed = bcrypt.hashpw (password, bcrypt.gensalt())
 print(hashed.decode())  # Use in flowerconfig.py
 
 # flowerconfig.py

@@ -10,13 +10,13 @@ export const variationsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What variation do you use for range minimum query?',
     options: [
       'Same as sum',
-      'Change combine to min(left, right) instead of left + right',
+      'Change combine to min (left, right) instead of left + right',
       'Different tree structure',
       'Cannot do RMQ',
     ],
     correctAnswer: 1,
     explanation:
-      'RMQ: just change combine function from sum (left+right) to min (min(left,right)). Identity changes from 0 to INF. Same structure, different operation.',
+      'RMQ: just change combine function from sum (left+right) to min (min (left,right)). Identity changes from 0 to INF. Same structure, different operation.',
   },
   {
     id: 'mc2',

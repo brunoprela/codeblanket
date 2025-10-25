@@ -69,7 +69,7 @@ from PIL import Image
 from typing import Optional, List
 import numpy as np
 
-class ImageToVideoModel(nn.Module):
+class ImageToVideoModel (nn.Module):
     """
     Simplified image-to-video model showing key concepts
     """
@@ -100,7 +100,7 @@ class ImageToVideoModel(nn.Module):
         batch_size = image.shape[0]
         
         # Encode input image to latent space
-        image_latent = self.image_encoder(image)  # (B, latent_dim, h, w)
+        image_latent = self.image_encoder (image)  # (B, latent_dim, h, w)
         
         # Create latent sequence starting with image
         # First frame is the input image
@@ -108,7 +108,7 @@ class ImageToVideoModel(nn.Module):
         
         # Generate subsequent frames
         for t in range(1, num_frames):
-            # Use previous frame(s) and motion prompt to generate next
+            # Use previous frame (s) and motion prompt to generate next
             prev_latent = latent_sequence[-1]
             
             # Temporal model predicts next frame
@@ -118,18 +118,18 @@ class ImageToVideoModel(nn.Module):
                 timestep=t,
             )
             
-            latent_sequence.append(next_latent)
+            latent_sequence.append (next_latent)
         
         # Stack into tensor
-        latent_video = torch.stack(latent_sequence, dim=1)  # (B, T, C, h, w)
+        latent_video = torch.stack (latent_sequence, dim=1)  # (B, T, C, h, w)
         
         # Decode all frames
         frames = []
-        for t in range(num_frames):
-            frame = self.decoder(latent_video[:, t])
-            frames.append(frame)
+        for t in range (num_frames):
+            frame = self.decoder (latent_video[:, t])
+            frames.append (frame)
         
-        video = torch.stack(frames, dim=1)  # (B, T, C, H, W)
+        video = torch.stack (frames, dim=1)  # (B, T, C, H, W)
         
         return video
 
@@ -152,14 +152,14 @@ class MotionControl:
         width, height = image.size
         frames = []
         
-        for t in range(num_frames):
+        for t in range (num_frames):
             # Calculate zoom amount for this frame
             progress = t / (num_frames - 1)  # 0 to 1
             current_zoom = 1.0 + (zoom_factor - 1.0) * progress
             
             # Calculate crop dimensions
-            new_width = int(width / current_zoom)
-            new_height = int(height / current_zoom)
+            new_width = int (width / current_zoom)
+            new_height = int (height / current_zoom)
             
             # Center crop
             left = (width - new_width) // 2
@@ -171,7 +171,7 @@ class MotionControl:
             frame = image.crop((left, top, right, bottom))
             frame = frame.resize((width, height), Image.LANCZOS)
             
-            frames.append(frame)
+            frames.append (frame)
         
         return frames
     
@@ -189,25 +189,25 @@ class MotionControl:
         frames = []
         
         # Amount to pan (fraction of width)
-        pan_distance = int(width * amount)
+        pan_distance = int (width * amount)
         
         # Extend image by padding
         extended_width = width + pan_distance
         extended = Image.new('RGB', (extended_width, height))
-        extended.paste(image, (0, 0))
+        extended.paste (image, (0, 0))
         # Mirror edge to fill extended area (simple approach)
-        extended.paste(image.crop((width-pan_distance, 0, width, height)), (width, 0))
+        extended.paste (image.crop((width-pan_distance, 0, width, height)), (width, 0))
         
-        for t in range(num_frames):
+        for t in range (num_frames):
             progress = t / (num_frames - 1)
             
             if direction == "right":
-                offset = int(pan_distance * progress)
+                offset = int (pan_distance * progress)
             else:  # left
-                offset = int(pan_distance * (1 - progress))
+                offset = int (pan_distance * (1 - progress))
             
             frame = extended.crop((offset, 0, offset + width, height))
-            frames.append(frame)
+            frames.append (frame)
         
         return frames
     
@@ -225,15 +225,15 @@ class MotionControl:
         width, height = image.size
         frames = []
         
-        for t in range(num_frames):
+        for t in range (num_frames):
             # Sine wave for smooth back-and-forth motion
             progress = np.sin(2 * np.pi * t / num_frames)
             
             if motion_type == "breathing":
                 # Subtle scale change (1% variation)
                 scale = 1.0 + 0.01 * progress
-                new_size = (int(width * scale), int(height * scale))
-                frame = image.resize(new_size, Image.LANCZOS)
+                new_size = (int (width * scale), int (height * scale))
+                frame = image.resize (new_size, Image.LANCZOS)
                 
                 # Center crop back to original size
                 left = (frame.width - width) // 2
@@ -244,12 +244,12 @@ class MotionControl:
                 # Vertical motion
                 offset = int(5 * progress)  # +/- 5 pixels
                 frame = Image.new('RGB', (width, height))
-                frame.paste(image, (0, offset))
+                frame.paste (image, (0, offset))
             
             else:
                 frame = image
             
-            frames.append(frame)
+            frames.append (frame)
         
         return frames
 
@@ -264,16 +264,16 @@ def demonstrate_motion_controls():
     
     # Generate different motions
     motions = {
-        "zoom_in": MotionControl.zoom_in(image, num_frames=30, zoom_factor=1.5),
-        "pan_right": MotionControl.pan_horizontal(image, num_frames=30, direction="right"),
-        "breathing": MotionControl.add_subtle_motion(image, num_frames=30, motion_type="breathing"),
+        "zoom_in": MotionControl.zoom_in (image, num_frames=30, zoom_factor=1.5),
+        "pan_right": MotionControl.pan_horizontal (image, num_frames=30, direction="right"),
+        "breathing": MotionControl.add_subtle_motion (image, num_frames=30, motion_type="breathing"),
     }
     
     # Save as GIFs
     for name, frames in motions.items():
         # Convert PIL images to numpy arrays
-        frame_arrays = [np.array(frame) for frame in frames]
-        imageio.mimsave(f"{name}.gif", frame_arrays, fps=10)
+        frame_arrays = [np.array (frame) for frame in frames]
+        imageio.mimsave (f"{name}.gif", frame_arrays, fps=10)
         print(f"Saved {name}.gif")
 
 if __name__ == "__main__":
@@ -331,7 +331,7 @@ class SVDImageToVideo:
     ):
         self.device = device
         self.cache_dir = cache_dir or Path("./svd_cache")
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_dir.mkdir (exist_ok=True)
         
         print(f"Loading Stable Video Diffusion: {model_id}")
         
@@ -345,11 +345,11 @@ class SVDImageToVideo:
         if enable_optimizations:
             self._apply_optimizations()
         
-        self.pipe.to(device)
+        self.pipe.to (device)
         
         print("Model loaded successfully!")
     
-    def _apply_optimizations(self):
+    def _apply_optimizations (self):
         """Apply memory and speed optimizations"""
         # Enable CPU offloading for large models
         self.pipe.enable_model_cpu_offload()
@@ -380,8 +380,8 @@ class SVDImageToVideo:
             Preprocessed PIL Image
         """
         # Load if path
-        if isinstance(image, str):
-            image = Image.open(image)
+        if isinstance (image, str):
+            image = Image.open (image)
         
         # Convert to RGB if needed
         if image.mode != "RGB":
@@ -389,7 +389,7 @@ class SVDImageToVideo:
         
         if maintain_aspect_ratio:
             # Resize maintaining aspect ratio
-            image.thumbnail(target_resolution, Image.LANCZOS)
+            image.thumbnail (target_resolution, Image.LANCZOS)
             
             # Pad to exact target size
             result = Image.new("RGB", target_resolution, (0, 0, 0))
@@ -397,11 +397,11 @@ class SVDImageToVideo:
                 (target_resolution[0] - image.width) // 2,
                 (target_resolution[1] - image.height) // 2,
             )
-            result.paste(image, offset)
+            result.paste (image, offset)
             return result
         else:
             # Direct resize
-            return image.resize(target_resolution, Image.LANCZOS)
+            return image.resize (target_resolution, Image.LANCZOS)
     
     def generate(
         self,
@@ -434,12 +434,12 @@ class SVDImageToVideo:
         
         # Preprocess image
         if preprocess:
-            image = self.preprocess_image(image)
+            image = self.preprocess_image (image)
         
         # Set seed for reproducibility
         generator = None
         if seed is not None:
-            generator = torch.manual_seed(seed)
+            generator = torch.manual_seed (seed)
         
         # Generate frames
         print(f"Generating {num_frames} frames (motion={motion_bucket_id})...")
@@ -461,7 +461,7 @@ class SVDImageToVideo:
         
         return {
             "frames": frames,
-            "num_frames": len(frames),
+            "num_frames": len (frames),
             "fps": fps,
             "motion_bucket_id": motion_bucket_id,
             "generation_time": generation_time,
@@ -490,7 +490,7 @@ class SVDImageToVideo:
         results = {}
         
         # Preprocess once
-        image = self.preprocess_image(image)
+        image = self.preprocess_image (image)
         
         for motion_level in motion_levels:
             print(f"\\n🎬 Generating with motion level {motion_level}...")
@@ -532,7 +532,7 @@ class SVDImageToVideo:
         # Create loop: forward + reverse (excluding first/last to avoid duplication)
         loop_frames = frames + frames[-2:0:-1]
         
-        print(f"✅ Created loop with {len(loop_frames)} frames")
+        print(f"✅ Created loop with {len (loop_frames)} frames")
         
         return loop_frames
     
@@ -551,8 +551,8 @@ class SVDImageToVideo:
         """
         all_results = []
         
-        for i, image in enumerate(images):
-            print(f"\\n[{i+1}/{len(images)}] Processing image...")
+        for i, image in enumerate (images):
+            print(f"\\n[{i+1}/{len (images)}] Processing image...")
             
             result = self.generate(
                 image=image,
@@ -561,7 +561,7 @@ class SVDImageToVideo:
                 seed=seed,
             )
             
-            all_results.append(result["frames"])
+            all_results.append (result["frames"])
         
         return all_results
     
@@ -581,12 +581,12 @@ class SVDImageToVideo:
             fps: Frames per second
             quality: Video quality (0-10)
         """
-        export_to_video(frames, output_path, fps=fps)
+        export_to_video (frames, output_path, fps=fps)
         
         # Get file size
-        size_mb = Path(output_path).stat().st_size / (1024 * 1024)
+        size_mb = Path (output_path).stat().st_size / (1024 * 1024)
         
-        print(f"💾 Saved: {output_path} ({size_mb:.2f} MB, {len(frames)} frames @ {fps}fps)")
+        print(f"💾 Saved: {output_path} ({size_mb:.2f} MB, {len (frames)} frames @ {fps}fps)")
 
 # Production usage examples
 def production_examples():
@@ -614,7 +614,7 @@ def production_examples():
         seed=42,
     )
     
-    svd.save_video(result["frames"], "product_animation.mp4", fps=7)
+    svd.save_video (result["frames"], "product_animation.mp4", fps=7)
     
     # Example 2: Portrait animation
     print("\\n=== Example 2: Portrait Animation ===")
@@ -630,7 +630,7 @@ def production_examples():
         seed=42,
     )
     
-    svd.save_video(result["frames"], "portrait_animation.mp4", fps=7)
+    svd.save_video (result["frames"], "portrait_animation.mp4", fps=7)
     
     # Example 3: Landscape with motion sweep
     print("\\n=== Example 3: Motion Sweep ===")
@@ -648,7 +648,7 @@ def production_examples():
     # Save each version
     for motion_level, frames in motion_results.items():
         output_path = f"landscape_motion_{motion_level}.mp4"
-        svd.save_video(frames, output_path)
+        svd.save_video (frames, output_path)
     
     # Example 4: Looping animation
     print("\\n=== Example 4: Seamless Loop ===")
@@ -662,7 +662,7 @@ def production_examples():
         seed=42,
     )
     
-    svd.save_video(loop_frames, "abstract_loop.mp4", fps=10)
+    svd.save_video (loop_frames, "abstract_loop.mp4", fps=10)
     
     # Example 5: Batch processing
     print("\\n=== Example 5: Batch Processing ===")
@@ -682,8 +682,8 @@ def production_examples():
     )
     
     # Save all videos
-    for i, frames in enumerate(batch_results):
-        svd.save_video(frames, f"batch_video_{i+1}.mp4")
+    for i, frames in enumerate (batch_results):
+        svd.save_video (frames, f"batch_video_{i+1}.mp4")
     
     print("\\n✅ All examples completed!")
 
@@ -724,7 +724,7 @@ def compute_optical_flow_map(
     Returns:
         Flow map (H, W, 2) with (dx, dy) for each pixel
     """
-    img_array = np.array(image)
+    img_array = np.array (image)
     height, width = img_array.shape[:2]
     
     # Create flow map
@@ -740,7 +740,7 @@ def compute_optical_flow_map(
         dy = center_y - y_coords
         
         # Normalize and scale
-        magnitude = np.sqrt(dx**2 + dy**2) + 1e-5
+        magnitude = np.sqrt (dx**2 + dy**2) + 1e-5
         flow[:, :, 0] = (dx / magnitude) * flow_magnitude
         flow[:, :, 1] = (dy / magnitude) * flow_magnitude
     
@@ -768,10 +768,10 @@ def apply_optical_flow(
     
     Simple implementation - production would use neural optical flow
     """
-    img_array = np.array(image)
+    img_array = np.array (image)
     frames = []
     
-    for t in range(num_frames):
+    for t in range (num_frames):
         # Gradually apply flow
         progress = t / (num_frames - 1)
         current_flow = flow * progress
@@ -787,13 +787,13 @@ def apply_optical_flow(
         # Remap
         warped = cv2.remap(
             img_array,
-            new_x.astype(np.float32),
-            new_y.astype(np.float32),
+            new_x.astype (np.float32),
+            new_y.astype (np.float32),
             interpolation=cv2.INTER_LINEAR,
             borderMode=cv2.BORDER_REFLECT,
         )
         
-        frames.append(Image.fromarray(warped))
+        frames.append(Image.fromarray (warped))
     
     return frames
 \`\`\`
@@ -834,8 +834,8 @@ class AnimationPipeline:
         all_frames = []
         current_image = image
         
-        for i, step in enumerate(steps):
-            print(f"\\nStep {i+1}/{len(steps)}: motion={step['motion']}")
+        for i, step in enumerate (steps):
+            print(f"\\nStep {i+1}/{len (steps)}: motion={step['motion']}")
             
             # Generate from current image
             result = self.svd.generate(
@@ -847,7 +847,7 @@ class AnimationPipeline:
             )
             
             frames = result["frames"]
-            all_frames.extend(frames)
+            all_frames.extend (frames)
             
             # Use last frame as next starting point
             current_image = frames[-1]
@@ -860,7 +860,7 @@ def create_complex_animation():
     Create multi-step animation: zoom in -> pan right -> zoom out
     """
     svd = SVDImageToVideo()
-    pipeline = AnimationPipeline(svd)
+    pipeline = AnimationPipeline (svd)
     
     # Define animation steps
     steps = [
@@ -874,8 +874,8 @@ def create_complex_animation():
         steps=steps,
     )
     
-    svd.save_video(frames, "complex_animation.mp4", fps=7)
-    print(f"Created {len(frames)} frame animation")
+    svd.save_video (frames, "complex_animation.mp4", fps=7)
+    print(f"Created {len (frames)} frame animation")
 \`\`\`
 
 ---
@@ -912,7 +912,7 @@ def find_optimal_motion(
     """
     from skimage.metrics import structural_similarity as ssim
     
-    motion_levels = np.linspace(motion_range[0], motion_range[1], num_samples, dtype=int)
+    motion_levels = np.linspace (motion_range[0], motion_range[1], num_samples, dtype=int)
     scores = []
     
     for motion in motion_levels:
@@ -921,7 +921,7 @@ def find_optimal_motion(
         result = svd.generate(
             image=image,
             num_frames=14,
-            motion_bucket_id=int(motion),
+            motion_bucket_id=int (motion),
             seed=42,
         )
         
@@ -929,15 +929,15 @@ def find_optimal_motion(
         
         # Calculate motion score
         # Want: noticeable motion but good consistency
-        frame_arrays = [np.array(f) for f in frames]
+        frame_arrays = [np.array (f) for f in frames]
         
         # Measure frame-to-frame differences
         differences = []
         similarities = []
         
-        for i in range(len(frame_arrays) - 1):
-            diff = np.mean(np.abs(frame_arrays[i+1] - frame_arrays[i]))
-            differences.append(diff)
+        for i in range (len (frame_arrays) - 1):
+            diff = np.mean (np.abs (frame_arrays[i+1] - frame_arrays[i]))
+            differences.append (diff)
             
             # SSIM for consistency
             sim = ssim(
@@ -947,25 +947,25 @@ def find_optimal_motion(
                 channel_axis=2,
                 data_range=255,
             )
-            similarities.append(sim)
+            similarities.append (sim)
         
-        avg_diff = np.mean(differences)
-        avg_sim = np.mean(similarities)
+        avg_diff = np.mean (differences)
+        avg_sim = np.mean (similarities)
         
         # Score: balance between motion and consistency
         # Want high motion (high diff) but high consistency (high sim)
         score = avg_diff * avg_sim
-        scores.append(score)
+        scores.append (score)
         
         print(f"  Motion: {avg_diff:.2f}, Consistency: {avg_sim:.3f}, Score: {score:.2f}")
     
     # Find best
-    best_idx = np.argmax(scores)
+    best_idx = np.argmax (scores)
     best_motion = motion_levels[best_idx]
     
     print(f"\\n✅ Optimal motion level: {best_motion}")
     
-    return int(best_motion)
+    return int (best_motion)
 
 # Example usage
 def auto_optimize_motion():
@@ -989,7 +989,7 @@ def auto_optimize_motion():
         seed=42,
     )
     
-    svd.save_video(result["frames"], "optimized_motion.mp4")
+    svd.save_video (result["frames"], "optimized_motion.mp4")
 \`\`\`
 
 ---
@@ -1041,9 +1041,9 @@ class VideoQualityChecker:
         from skimage.metrics import structural_similarity as ssim
         
         similarities = []
-        frame_arrays = [np.array(f) for f in frames]
+        frame_arrays = [np.array (f) for f in frames]
         
-        for i in range(len(frame_arrays) - 1):
+        for i in range (len (frame_arrays) - 1):
             sim = ssim(
                 frame_arrays[i],
                 frame_arrays[i+1],
@@ -1051,9 +1051,9 @@ class VideoQualityChecker:
                 channel_axis=2,
                 data_range=255,
             )
-            similarities.append(sim)
+            similarities.append (sim)
         
-        avg_similarity = np.mean(similarities)
+        avg_similarity = np.mean (similarities)
         is_consistent = avg_similarity >= threshold
         
         return is_consistent, avg_similarity
@@ -1069,14 +1069,14 @@ class VideoQualityChecker:
         
         Returns: (is_good, average_motion)
         """
-        frame_arrays = [np.array(f) for f in frames]
+        frame_arrays = [np.array (f) for f in frames]
         
         motions = []
-        for i in range(len(frame_arrays) - 1):
-            motion = np.mean(np.abs(frame_arrays[i+1] - frame_arrays[i]))
-            motions.append(motion)
+        for i in range (len (frame_arrays) - 1):
+            motion = np.mean (np.abs (frame_arrays[i+1] - frame_arrays[i]))
+            motions.append (motion)
         
-        avg_motion = np.mean(motions)
+        avg_motion = np.mean (motions)
         is_good = min_motion <= avg_motion <= max_motion
         
         return is_good, avg_motion
@@ -1091,18 +1091,18 @@ class VideoQualityChecker:
         Returns: (has_artifacts, frame_indices_with_artifacts)
         """
         artifact_frames = []
-        frame_arrays = [np.array(f) for f in frames]
+        frame_arrays = [np.array (f) for f in frames]
         
-        for i in range(1, len(frame_arrays) - 1):
+        for i in range(1, len (frame_arrays) - 1):
             # Check for sudden changes (potential artifacts)
-            diff_prev = np.mean(np.abs(frame_arrays[i] - frame_arrays[i-1]))
-            diff_next = np.mean(np.abs(frame_arrays[i+1] - frame_arrays[i]))
+            diff_prev = np.mean (np.abs (frame_arrays[i] - frame_arrays[i-1]))
+            diff_next = np.mean (np.abs (frame_arrays[i+1] - frame_arrays[i]))
             
             # If one frame has much higher difference than others
             if diff_prev > 50 or diff_next > 50:
-                artifact_frames.append(i)
+                artifact_frames.append (i)
         
-        has_artifacts = len(artifact_frames) > 0
+        has_artifacts = len (artifact_frames) > 0
         
         return has_artifacts, artifact_frames
     
@@ -1116,9 +1116,9 @@ class VideoQualityChecker:
         
         Returns: Dict with all check results
         """
-        is_consistent, consistency_score = cls.check_temporal_consistency(frames)
-        is_good_motion, motion_score = cls.check_motion_amount(frames)
-        has_artifacts, artifact_frames = cls.detect_artifacts(frames)
+        is_consistent, consistency_score = cls.check_temporal_consistency (frames)
+        is_good_motion, motion_score = cls.check_motion_amount (frames)
+        has_artifacts, artifact_frames = cls.detect_artifacts (frames)
         
         passed = is_consistent and is_good_motion and not has_artifacts
         
@@ -1156,11 +1156,11 @@ def production_with_qc():
     frames = result["frames"]
     
     # Quality check
-    qc_results = qc.full_quality_check(frames)
+    qc_results = qc.full_quality_check (frames)
     
     if qc_results["passed"]:
         print("✅ Quality check passed")
-        svd.save_video(frames, "output.mp4")
+        svd.save_video (frames, "output.mp4")
     else:
         print("⚠️  Quality issues detected:")
         if not qc_results["consistency"]["passed"]:

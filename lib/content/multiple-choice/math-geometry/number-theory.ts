@@ -42,7 +42,7 @@ export const numbertheoryMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'GCD: largest number dividing both a and b. Euclidean algorithm: GCD(a,b) = GCD(b, a%b), base case: GCD(a,0)=a. O(log min(a,b)) time. LCM(a,b) = a*b/GCD(a,b).',
+      'GCD: largest number dividing both a and b. Euclidean algorithm: GCD(a,b) = GCD(b, a%b), base case: GCD(a,0)=a. O(log min (a,b)) time. LCM(a,b) = a*b/GCD(a,b).',
   },
   {
     id: 'mc4',

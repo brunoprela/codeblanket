@@ -8,7 +8,7 @@ export const functionsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'pf-functions-mc-1',
     question:
-      'What is the output?\n\ndef multiply(a, b=2):\n    return a * b\n\nprint(multiply(5))',
+      'What is the output?\n\ndef multiply (a, b=2):\n    return a * b\n\nprint(multiply(5))',
     options: ['10', '5', '7', 'Error'],
     correctAnswer: 0,
     explanation: 'b defaults to 2, so 5 * 2 = 10.',
@@ -39,7 +39,7 @@ export const functionsMultipleChoice: MultipleChoiceQuestion[] = [
       'Which is the correct syntax for a lambda function that squares a number?',
     options: [
       'lambda x: x ** 2',
-      'lambda(x): x ** 2',
+      'lambda (x): x ** 2',
       'def lambda x: x ** 2',
       'lambda x => x ** 2',
     ],

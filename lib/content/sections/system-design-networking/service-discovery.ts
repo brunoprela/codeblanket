@@ -81,8 +81,8 @@ export const servicediscoverySection = {
     client.start();
     
     // Get service instances
-    function getService(serviceName) {
-      const instances = client.getInstancesByAppId(serviceName);
+    function getService (serviceName) {
+      const instances = client.getInstancesByAppId (serviceName);
       // Client-side load balancing (round-robin)
       const instance = instances[Math.floor(Math.random() * instances.length)];
       return \`http://\${instance.ipAddr}:\${instance.port['$']}\`;
@@ -144,16 +144,16 @@ export const servicediscoverySection = {
       health: '/health'
     };
     
-    await consul.agent.service.register(serviceInfo);
+    await consul.agent.service.register (serviceInfo);
     
     // Heartbeat to maintain registration
-    setInterval(async () => {
+    setInterval (async () => {
       await consul.agent.check.pass(\`service:\${serviceInfo.id}\`);
     }, 10000);
     
     // Deregister on shutdown
     process.on('SIGTERM', async () => {
-      await consul.agent.service.deregister(serviceInfo.id);
+      await consul.agent.service.deregister (serviceInfo.id);
       process.exit(0);
     });
     \`\`\`
@@ -259,7 +259,7 @@ export const servicediscoverySection = {
       passing: true // Only healthy instances
     });
     
-    services.forEach(service => {
+    services.forEach (service => {
       console.log(\`\${service.Service.Address}:\${service.Service.Port}\`);
     });
     \`\`\`
@@ -303,7 +303,7 @@ export const servicediscoverySection = {
       .prefix('services/user-service/')
       .strings();
     
-    console.log(services);
+    console.log (services);
     \`\`\`
     
     ### **3. ZooKeeper**
@@ -360,12 +360,12 @@ export const servicediscoverySection = {
     const kc = new k8s.KubeConfig();
     kc.loadFromDefault();
     
-    const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+    const k8sApi = kc.makeApiClient (k8s.CoreV1Api);
     
     // Get service endpoints
     const endpoints = await k8sApi.readNamespacedEndpoints('user-service', 'default');
-    endpoints.body.subsets.forEach(subset => {
-      subset.addresses.forEach(address => {
+    endpoints.body.subsets.forEach (subset => {
+      subset.addresses.forEach (address => {
         console.log(\`\${address.ip}:\${subset.ports[0].port}\`);
       });
     });
@@ -417,23 +417,23 @@ export const servicediscoverySection = {
     \`\`\`javascript
     // Track failures, remove unhealthy instances
     class CircuitBreaker {
-      constructor(threshold = 5) {
+      constructor (threshold = 5) {
         this.failureCount = new Map();
         this.threshold = threshold;
       }
       
-      recordFailure(instanceId) {
-        const count = this.failureCount.get(instanceId) || 0;
-        this.failureCount.set(instanceId, count + 1);
+      recordFailure (instanceId) {
+        const count = this.failureCount.get (instanceId) || 0;
+        this.failureCount.set (instanceId, count + 1);
         
         if (count + 1 >= this.threshold) {
           console.log(\`Instance \${instanceId} marked unhealthy\`);
-          this.removeFromPool(instanceId);
+          this.removeFromPool (instanceId);
         }
       }
       
-      recordSuccess(instanceId) {
-        this.failureCount.set(instanceId, 0);
+      recordSuccess (instanceId) {
+        this.failureCount.set (instanceId, 0);
       }
     }
     \`\`\`
@@ -446,7 +446,7 @@ export const servicediscoverySection = {
     
     \`\`\`javascript
     class ServiceClient {
-      constructor(serviceName, consul) {
+      constructor (serviceName, consul) {
         this.serviceName = serviceName;
         this.consul = consul;
         this.instances = [];
@@ -463,7 +463,7 @@ export const servicediscoverySection = {
           passing: true
         });
         
-        this.instances = services.map(s => ({
+        this.instances = services.map (s => ({
           address: s.Service.Address,
           port: s.Service.Port
         }));
@@ -497,7 +497,7 @@ export const servicediscoverySection = {
     // Usage
     const userService = new ServiceClient('user-service', consul);
     
-    async function makeRequest(userId) {
+    async function makeRequest (userId) {
       const url = userService.getNext();
       return await fetch(\`\${url}/users/\${userId}\`);
     }
@@ -634,7 +634,7 @@ export const servicediscoverySection = {
     // Service might have moved!
     
     // Good: Refresh periodically
-    setInterval(async () => {
+    setInterval (async () => {
       this.cachedServices = await refreshServices();
     }, 30000); // 30 seconds
     \`\`\`
@@ -650,7 +650,7 @@ export const servicediscoverySection = {
     // Good: Deregister, then drain
     process.on('SIGTERM', async () => {
       // 1. Deregister from service discovery
-      await consul.agent.service.deregister(serviceId);
+      await consul.agent.service.deregister (serviceId);
       
       // 2. Stop accepting new requests
       server.close();
@@ -701,7 +701,7 @@ export const servicediscoverySection = {
       id: \`order-service-\${process.env.INSTANCE_ID}\`,
       name: 'order-service',
       address: process.env.HOST,
-      port: parseInt(process.env.PORT),
+      port: parseInt (process.env.PORT),
       tags: ['http', 'v1'],
       check: {
         http: \`http://\${process.env.HOST}:\${process.env.PORT}/health\`,
@@ -712,12 +712,12 @@ export const servicediscoverySection = {
     
     // Service client for calling other services
     class MicroserviceClient {
-      constructor(serviceName) {
+      constructor (serviceName) {
         this.serviceName = serviceName;
         this.consul = new Consul();
       }
       
-      async call(path, options = {}) {
+      async call (path, options = {}) {
         // Get healthy instances
         const services = await this.consul.health.service({
           service: this.serviceName,
@@ -736,13 +736,13 @@ export const servicediscoverySection = {
         let attempts = 0;
         while (attempts < 3) {
           try {
-            const response = await fetch(url, options);
+            const response = await fetch (url, options);
             if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
             return await response.json();
           } catch (error) {
             attempts++;
             if (attempts >= 3) throw error;
-            await new Promise(resolve => setTimeout(resolve, 100 * attempts));
+            await new Promise (resolve => setTimeout (resolve, 100 * attempts));
           }
         }
       }
@@ -769,7 +769,7 @@ export const servicediscoverySection = {
       
       // Create order
       const order = await db.orders.create({ userId, items });
-      res.json(order);
+      res.json (order);
     });
     \`\`\`
     

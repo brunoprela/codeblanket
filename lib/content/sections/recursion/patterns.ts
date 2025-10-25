@@ -17,24 +17,24 @@ Most recursive problems fall into a few common patterns. Mastering these pattern
 
 ### Example 1: Sum of Array
 \`\`\`python
-def sum_array(arr, index=0):
+def sum_array (arr, index=0):
     """Sum all elements in array using recursion"""
     # Base case: past end of array
-    if index >= len(arr):
+    if index >= len (arr):
         return 0
     
     # Recursive case: current element + sum of rest
-    return arr[index] + sum_array(arr, index + 1)
+    return arr[index] + sum_array (arr, index + 1)
 
 # Alternative: process from the end
-def sum_array_reverse(arr):
+def sum_array_reverse (arr):
     """Sum array by processing from end"""
     # Base case: empty array
     if not arr:
         return 0
     
     # Recursive case: last element + sum of rest
-    return arr[-1] + sum_array_reverse(arr[:-1])
+    return arr[-1] + sum_array_reverse (arr[:-1])
 
 # Usage
 print(sum_array([1, 2, 3, 4, 5]))  # 15
@@ -42,21 +42,21 @@ print(sum_array([1, 2, 3, 4, 5]))  # 15
 
 ### Example 2: String Reversal
 \`\`\`python
-def reverse_string(s):
+def reverse_string (s):
     """Reverse string using recursion"""
     # Base case: empty or single character
-    if len(s) <= 1:
+    if len (s) <= 1:
         return s
     
     # Recursive case: last char + reverse of rest
-    return s[-1] + reverse_string(s[:-1])
+    return s[-1] + reverse_string (s[:-1])
 
 print(reverse_string("hello"))  # "olleh"
 \`\`\`
 
 ### Example 3: Power Function
 \`\`\`python
-def power(base, exponent):
+def power (base, exponent):
     """Calculate base^exponent using recursion"""
     # Base case
     if exponent == 0:
@@ -65,7 +65,7 @@ def power(base, exponent):
         return base
     
     # Recursive case
-    return base * power(base, exponent - 1)
+    return base * power (base, exponent - 1)
 
 print(power(2, 5))  # 32
 \`\`\`
@@ -78,7 +78,7 @@ print(power(2, 5))  # 32
 
 ### Example 1: Fibonacci
 \`\`\`python
-def fibonacci(n):
+def fibonacci (n):
     """Calculate nth Fibonacci number"""
     # Base cases
     if n <= 0:
@@ -87,7 +87,7 @@ def fibonacci(n):
         return 1
     
     # Two recursive calls
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    return fibonacci (n - 1) + fibonacci (n - 2)
 
 # Trace for fibonacci(4):
 #        fib(4)
@@ -109,14 +109,14 @@ class TreeNode:
         self.left = left
         self.right = right
 
-def tree_sum(root):
+def tree_sum (root):
     """Sum all values in binary tree"""
     # Base case: empty tree
     if root is None:
         return 0
     
     # Recursive case: current + left subtree + right subtree
-    return root.val + tree_sum(root.left) + tree_sum(root.right)
+    return root.val + tree_sum (root.left) + tree_sum (root.right)
 \`\`\`
 
 ---
@@ -132,7 +132,7 @@ class TreeNode:
         self.val = val
         self.children = children if children else []
 
-def sum_n_ary_tree(root):
+def sum_n_ary_tree (root):
     """Sum all values in N-ary tree"""
     # Base case: empty node
     if root is None:
@@ -143,7 +143,7 @@ def sum_n_ary_tree(root):
     
     # Add sum of all children
     for child in root.children:
-        total += sum_n_ary_tree(child)
+        total += sum_n_ary_tree (child)
     
     return total
 \`\`\`
@@ -156,22 +156,22 @@ def sum_n_ary_tree(root):
 
 ### Regular Recursion (Not Tail Recursive)
 \`\`\`python
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n - 1)  # Multiplication AFTER recursive call
+    return n * factorial (n - 1)  # Multiplication AFTER recursive call
 \`\`\`
 
 ### Tail Recursive Version
 \`\`\`python
-def factorial_tail(n, accumulator=1):
+def factorial_tail (n, accumulator=1):
     """Tail recursive factorial"""
     # Base case
     if n <= 1:
         return accumulator
     
     # Recursive call is LAST operation
-    return factorial_tail(n - 1, n * accumulator)
+    return factorial_tail (n - 1, n * accumulator)
 
 print(factorial_tail(5))  # 120
 \`\`\`
@@ -188,10 +188,10 @@ print(factorial_tail(5))  # 120
 **Definition:** Use a helper function with extra parameters for accumulation or tracking.
 
 \`\`\`python
-def is_palindrome(s):
+def is_palindrome (s):
     """Check if string is palindrome using helper function"""
     
-    def helper(left, right):
+    def helper (left, right):
         # Base case: pointers met or crossed
         if left >= right:
             return True
@@ -201,10 +201,10 @@ def is_palindrome(s):
             return False
         
         # Check remaining substring
-        return helper(left + 1, right - 1)
+        return helper (left + 1, right - 1)
     
     # Start with full string
-    return helper(0, len(s) - 1)
+    return helper(0, len (s) - 1)
 
 print(is_palindrome("racecar"))  # True
 print(is_palindrome("hello"))    # False

@@ -52,7 +52,7 @@ print(df.isnull().sum())
 # Department    1
 
 # Percentage of missing values
-print(df.isnull().sum() / len(df) * 100)
+print(df.isnull().sum() / len (df) * 100)
 
 # Total missing values
 print(f"Total missing: {df.isnull().sum().sum()}")
@@ -61,12 +61,12 @@ print(f"Total missing: {df.isnull().sum().sum()}")
 print(f"Has missing: {df.isnull().any().any()}")
 
 # Rows with any missing value
-rows_with_missing = df[df.isnull().any(axis=1)]
-print(f"Rows with missing: {len(rows_with_missing)}")
+rows_with_missing = df[df.isnull().any (axis=1)]
+print(f"Rows with missing: {len (rows_with_missing)}")
 
 # Rows with all values present
 complete_rows = df.dropna()
-print(f"Complete rows: {len(complete_rows)}")
+print(f"Complete rows: {len (complete_rows)}")
 \`\`\`
 
 ### Visualizing Missing Data
@@ -76,8 +76,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Heatmap of missing values
-plt.figure(figsize=(10, 6))
-sns.heatmap(df.isnull(), cbar=False, yticklabels=False, cmap='viridis')
+plt.figure (figsize=(10, 6))
+sns.heatmap (df.isnull(), cbar=False, yticklabels=False, cmap='viridis')
 plt.title('Missing Values Heatmap')
 plt.show()
 
@@ -85,7 +85,7 @@ plt.show()
 missing_summary = pd.DataFrame({
     'Column': df.columns,
     'Missing_Count': df.isnull().sum(),
-    'Missing_Percentage': df.isnull().sum() / len(df) * 100
+    'Missing_Percentage': df.isnull().sum() / len (df) * 100
 })
 print(missing_summary)
 \`\`\`
@@ -95,23 +95,23 @@ print(missing_summary)
 \`\`\`python
 # Drop rows with any missing value
 df_dropped = df.dropna()
-print(f"Original rows: {len(df)}, After dropna: {len(df_dropped)}")
+print(f"Original rows: {len (df)}, After dropna: {len (df_dropped)}")
 
 # Drop rows with all values missing
-df_dropped = df.dropna(how='all')
+df_dropped = df.dropna (how='all')
 
 # Drop rows with missing values in specific columns
-df_dropped = df.dropna(subset=['Age', 'Salary'])
+df_dropped = df.dropna (subset=['Age', 'Salary'])
 
 # Drop columns with any missing value
-df_dropped = df.dropna(axis=1)
+df_dropped = df.dropna (axis=1)
 
 # Drop columns with more than 50% missing
-threshold = len(df) * 0.5
-df_dropped = df.dropna(thresh=threshold, axis=1)
+threshold = len (df) * 0.5
+df_dropped = df.dropna (thresh=threshold, axis=1)
 
 # In-place modification
-df.dropna(inplace=True)
+df.dropna (inplace=True)
 \`\`\`
 
 ### Filling Missing Values
@@ -121,21 +121,21 @@ df.dropna(inplace=True)
 df['Age'].fillna(0, inplace=True)
 
 # Fill with mean
-df['Salary'].fillna(df['Salary'].mean(), inplace=True)
+df['Salary'].fillna (df['Salary'].mean(), inplace=True)
 
 # Fill with median (better for skewed data)
-df['Age'].fillna(df['Age'].median(), inplace=True)
+df['Age'].fillna (df['Age'].median(), inplace=True)
 
 # Fill with mode (most frequent)
-df['Department'].fillna(df['Department'].mode()[0], inplace=True)
+df['Department'].fillna (df['Department'].mode()[0], inplace=True)
 
 # Forward fill (use previous value)
-df['Age'].fillna(method='ffill', inplace=True)
-# or: df['Age'].ffill(inplace=True)
+df['Age'].fillna (method='ffill', inplace=True)
+# or: df['Age'].ffill (inplace=True)
 
 # Backward fill (use next value)
-df['Age'].fillna(method='bfill', inplace=True)
-# or: df['Age'].bfill(inplace=True)
+df['Age'].fillna (method='bfill', inplace=True)
+# or: df['Age'].bfill (inplace=True)
 
 # Fill with different values per column
 fill_values = {
@@ -143,10 +143,10 @@ fill_values = {
     'Salary': df['Salary'].mean(),
     'Department': 'Unknown'
 }
-df.fillna(fill_values, inplace=True)
+df.fillna (fill_values, inplace=True)
 
 # Interpolate (for time series or ordered data)
-df['Value'].interpolate(method='linear', inplace=True)
+df['Value'].interpolate (method='linear', inplace=True)
 \`\`\`
 
 ### Advanced Missing Value Imputation
@@ -155,16 +155,16 @@ df['Value'].interpolate(method='linear', inplace=True)
 from sklearn.impute import SimpleImputer, KNNImputer
 
 # Simple imputation with sklearn
-imputer = SimpleImputer(strategy='mean')  # 'median', 'most_frequent', 'constant'
-df[['Age', 'Salary']] = imputer.fit_transform(df[['Age', 'Salary']])
+imputer = SimpleImputer (strategy='mean')  # 'median', 'most_frequent', 'constant'
+df[['Age', 'Salary']] = imputer.fit_transform (df[['Age', 'Salary']])
 
 # KNN imputation (uses similar rows)
-knn_imputer = KNNImputer(n_neighbors=5)
-df[['Age', 'Salary']] = knn_imputer.fit_transform(df[['Age', 'Salary']])
+knn_imputer = KNNImputer (n_neighbors=5)
+df[['Age', 'Salary']] = knn_imputer.fit_transform (df[['Age', 'Salary']])
 
 # Group-based imputation
 df['Salary'] = df.groupby('Department')['Salary'].transform(
-    lambda x: x.fillna(x.mean())
+    lambda x: x.fillna (x.mean())
 )
 \`\`\`
 
@@ -191,17 +191,17 @@ duplicates = df[df.duplicated()]
 print(duplicates)
 
 # Check duplicates based on specific columns
-print(df.duplicated(subset=['Name']))
+print(df.duplicated (subset=['Name']))
 # [False, False, True, False, True]
 
 # Keep first occurrence (default)
-print(df.duplicated(keep='first'))
+print(df.duplicated (keep='first'))
 
 # Keep last occurrence
-print(df.duplicated(keep='last'))
+print(df.duplicated (keep='last'))
 
 # Mark all duplicates (including first occurrence)
-print(df.duplicated(keep=False))
+print(df.duplicated (keep=False))
 \`\`\`
 
 ### Removing Duplicates
@@ -211,19 +211,19 @@ print(df.duplicated(keep=False))
 df_unique = df.drop_duplicates()
 
 # Remove duplicates based on specific columns
-df_unique = df.drop_duplicates(subset=['Name'])
+df_unique = df.drop_duplicates (subset=['Name'])
 
 # Keep last occurrence instead of first
-df_unique = df.drop_duplicates(keep='last')
+df_unique = df.drop_duplicates (keep='last')
 
 # Remove duplicates in place
-df.drop_duplicates(inplace=True)
+df.drop_duplicates (inplace=True)
 
 # Remove duplicates but keep original index
-df_unique = df.drop_duplicates(ignore_index=False)
+df_unique = df.drop_duplicates (ignore_index=False)
 
 # Reset index after removing duplicates
-df_unique = df.drop_duplicates().reset_index(drop=True)
+df_unique = df.drop_duplicates().reset_index (drop=True)
 \`\`\`
 
 ### Fuzzy Duplicate Detection
@@ -232,7 +232,7 @@ df_unique = df.drop_duplicates().reset_index(drop=True)
 # For similar but not identical strings
 from difflib import SequenceMatcher
 
-def similarity(s1, s2):
+def similarity (s1, s2):
     return SequenceMatcher(None, s1, s2).ratio()
 
 # Find similar names
@@ -241,9 +241,9 @@ df = pd.DataFrame({
 })
 
 # Compare all pairs
-for i, name1 in enumerate(df['Company']):
-    for j, name2 in enumerate(df['Company'][i+1:], i+1):
-        sim = similarity(name1, name2)
+for i, name1 in enumerate (df['Company']):
+    for j, name2 in enumerate (df['Company'][i+1:], i+1):
+        sim = similarity (name1, name2)
         if sim > 0.8:  # 80% similar
             print(f"{name1} <-> {name2}: {sim:.2f}")
 
@@ -269,26 +269,26 @@ print(df.dtypes)
 # All are 'object' (string)
 
 # Convert to numeric
-df['id'] = pd.to_numeric(df['id'])
+df['id'] = pd.to_numeric (df['id'])
 print(df['id'].dtype)  # int64
 
 # Convert to numeric with error handling
-df['value'] = pd.to_numeric(df['value'], errors='coerce')  # Invalid -> NaN
+df['value'] = pd.to_numeric (df['value'], errors='coerce')  # Invalid -> NaN
 # errors='ignore': leave unchanged
 # errors='raise': raise exception
 
 # Convert to integer (requires no NaN)
-df['id'] = df['id'].astype(int)
+df['id'] = df['id'].astype (int)
 
 # Nullable integer (allows NaN)
 df['value'] = df['value'].astype('Int64')  # Capital I
 
 # Convert to datetime
-df['date'] = pd.to_datetime(df['date'])
+df['date'] = pd.to_datetime (df['date'])
 print(df['date'].dtype)  # datetime64[ns]
 
 # Convert to datetime with format
-df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+df['date'] = pd.to_datetime (df['date'], format='%Y-%m-%d')
 
 # Convert to boolean
 df['flag'] = df['flag'].map({'True': True, 'False': False})
@@ -297,8 +297,8 @@ df['flag'] = df['flag'].map({'True': True, 'False': False})
 df['category'] = df['category'].astype('category')
 
 # Downcast for memory efficiency
-df['id'] = pd.to_numeric(df['id'], downcast='integer')  # Use smallest int type
-df['value'] = pd.to_numeric(df['value'], downcast='float')  # Use float32 if possible
+df['id'] = pd.to_numeric (df['id'], downcast='integer')  # Use smallest int type
+df['value'] = pd.to_numeric (df['value'], downcast='float')  # Use float32 if possible
 \`\`\`
 
 ### Handling Date Parsing Errors
@@ -307,16 +307,16 @@ df['value'] = pd.to_numeric(df['value'], downcast='float')  # Use float32 if pos
 dates = pd.Series(['2024-01-01', '2024-02-30', 'invalid', '2024-03-15'])
 
 # Coerce errors to NaT (Not a Time)
-dates_parsed = pd.to_datetime(dates, errors='coerce')
+dates_parsed = pd.to_datetime (dates, errors='coerce')
 print(dates_parsed)
 # ['2024-01-01', NaT, NaT, '2024-03-15']
 
 # Infer date format
-dates_inferred = pd.to_datetime(dates, infer_datetime_format=True, errors='coerce')
+dates_inferred = pd.to_datetime (dates, infer_datetime_format=True, errors='coerce')
 
 # Multiple date formats
 dates_mixed = pd.Series(['01/15/2024', '2024-02-20', '03-10-2024'])
-dates_parsed = pd.to_datetime(dates_mixed, format='mixed', errors='coerce')
+dates_parsed = pd.to_datetime (dates_mixed, format='mixed', errors='coerce')
 \`\`\`
 
 ## Outlier Detection and Treatment
@@ -336,7 +336,7 @@ df = pd.DataFrame({'value': data})
 mean = df['value'].mean()
 std = df['value'].std()
 df['z_score'] = (df['value'] - mean) / std
-df['is_outlier_z'] = np.abs(df['z_score']) > 3
+df['is_outlier_z'] = np.abs (df['z_score']) > 3
 
 print(f"Z-score outliers: {df['is_outlier_z'].sum()}")
 
@@ -352,9 +352,9 @@ print(f"IQR outliers: {df['is_outlier_iqr'].sum()}")
 
 # Method 3: Modified Z-score (robust to outliers)
 median = df['value'].median()
-mad = np.median(np.abs(df['value'] - median))
+mad = np.median (np.abs (df['value'] - median))
 df['modified_z'] = 0.6745 * (df['value'] - median) / mad
-df['is_outlier_mod_z'] = np.abs(df['modified_z']) > 3.5
+df['is_outlier_mod_z'] = np.abs (df['modified_z']) > 3.5
 
 print(f"Modified Z-score outliers: {df['is_outlier_mod_z'].sum()}")
 
@@ -364,17 +364,17 @@ import matplotlib.pyplot as plt
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
 # Box plot
-axes[0].boxplot(df['value'])
+axes[0].boxplot (df['value'])
 axes[0].set_title('Box Plot')
 axes[0].set_ylabel('Value')
 
 # Histogram
-axes[1].hist(df['value'], bins=30, edgecolor='black')
+axes[1].hist (df['value'], bins=30, edgecolor='black')
 axes[1].set_title('Histogram')
 axes[1].set_xlabel('Value')
 
 # Scatter plot with outliers highlighted
-axes[2].scatter(df.index, df['value'], c=df['is_outlier_iqr'], cmap='coolwarm')
+axes[2].scatter (df.index, df['value'], c=df['is_outlier_iqr'], cmap='coolwarm')
 axes[2].set_title('Scatter Plot (outliers in red)')
 axes[2].set_xlabel('Index')
 axes[2].set_ylabel('Value')
@@ -390,7 +390,7 @@ plt.show()
 df_clean = df[~df['is_outlier_iqr']]
 
 # Option 2: Cap outliers (winsorization)
-df['value_capped'] = df['value'].clip(lower=lower_bound, upper=upper_bound)
+df['value_capped'] = df['value'].clip (lower=lower_bound, upper=upper_bound)
 
 # Option 3: Replace with boundary values
 df['value_winsorized'] = df['value']
@@ -402,12 +402,12 @@ df['value_median'] = df['value']
 df.loc[df['is_outlier_iqr'], 'value_median'] = median
 
 # Option 5: Transform (log for right-skewed data)
-df['value_log'] = np.log1p(df['value'] - df['value'].min() + 1)
+df['value_log'] = np.log1p (df['value'] - df['value'].min() + 1)
 
 # Option 6: Use robust scaling
 from sklearn.preprocessing import RobustScaler
 scaler = RobustScaler()
-df['value_scaled'] = scaler.fit_transform(df[['value']])
+df['value_scaled'] = scaler.fit_transform (df[['value']])
 \`\`\`
 
 ## String Cleaning
@@ -437,11 +437,11 @@ df['email'] = df['email'].str.lower()
 df['name_clean'] = df['name'].str.replace('_', ' ').str.replace('-', ' ')
 
 # Remove special characters
-df['name_alpha'] = df['name'].str.replace(r'[^a-zA-Z\\s]', ', regex=True)
+df['name_alpha'] = df['name'].str.replace (r'[^a-zA-Z\\s]', ', regex=True)
 
 # Standardize phone numbers
 df['phone_clean'] = (df['phone']
-    .str.replace(r'[^0-9]', ', regex=True)  # Keep only digits
+    .str.replace (r'[^0-9]', ', regex=True)  # Keep only digits
     .str[-10:]  # Last 10 digits (remove country code)
 )
 
@@ -457,16 +457,16 @@ print(df[['name', 'name_clean', 'phone', 'phone_formatted']])
 
 \`\`\`python
 # Remove extra whitespace between words
-df['text'] = df['text'].str.replace(r'\\s+', ' ', regex=True)
+df['text'] = df['text'].str.replace (r'\\s+', ' ', regex=True)
 
 # Remove leading/trailing punctuation
 df['text'] = df['text'].str.strip('.,!?;:')
 
 # Standardize separators
-df['text'] = df['text'].str.replace(r'[\\-_/]', ' ', regex=True)
+df['text'] = df['text'].str.replace (r'[\\-_/]', ' ', regex=True)
 
 # Remove digits
-df['text'] = df['text'].str.replace(r'\\d+', ', regex=True)
+df['text'] = df['text'].str.replace (r'\\d+', ', regex=True)
 
 # Expand contractions
 contractions = {
@@ -475,14 +475,14 @@ contractions = {
     "can't": "cannot"
 }
 for contraction, expansion in contractions.items():
-    df['text'] = df['text'].str.replace(contraction, expansion)
+    df['text'] = df['text'].str.replace (contraction, expansion)
 
 # Lemmatization/Stemming (requires nltk)
 # import nltk
 # from nltk.stem import WordNetLemmatizer
 # lemmatizer = WordNetLemmatizer()
 # df['text_lemmatized'] = df['text'].apply(
-#     lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()])
+#     lambda x: ' '.join([lemmatizer.lemmatize (word) for word in x.split()])
 # )
 \`\`\`
 
@@ -500,23 +500,23 @@ df = pd.DataFrame({
 # Age validation (must be between 0 and 120)
 df['age_valid'] = df['age'].between(0, 120)
 invalid_ages = df[~df['age_valid']]
-print(f"Invalid ages: {len(invalid_ages)}")
+print(f"Invalid ages: {len (invalid_ages)}")
 
 # Salary validation (must be positive and reasonable)
 df['salary_valid'] = (df['salary'] > 0) & (df['salary'] < 1000000)
 
 # Email validation (basic regex)
 email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
-df['email_valid'] = df['email'].str.match(email_pattern)
+df['email_valid'] = df['email'].str.match (email_pattern)
 
 # Create validation report
 validation_report = {
-    'Total Rows': len(df),
+    'Total Rows': len (df),
     'Invalid Age': (~df['age_valid']).sum(),
     'Invalid Salary': (~df['salary_valid']).sum(),
     'Invalid Email': (~df['email_valid']).sum()
 }
-print(pd.Series(validation_report))
+print(pd.Series (validation_report))
 
 # Flag all invalid rows
 df['is_valid'] = df['age_valid'] & df['salary_valid'] & df['email_valid']
@@ -535,22 +535,22 @@ expected_schema = {
 }
 
 # Validate schema
-def validate_schema(df, expected):
+def validate_schema (df, expected):
     issues = []
     for col, dtype in expected.items():
         if col not in df.columns:
-            issues.append(f"Missing column: {col}")
+            issues.append (f"Missing column: {col}")
         elif df[col].dtype != dtype:
-            issues.append(f"Wrong type for {col}: expected {dtype}, got {df[col].dtype}")
+            issues.append (f"Wrong type for {col}: expected {dtype}, got {df[col].dtype}")
     
     # Check for extra columns
-    extra_cols = set(df.columns) - set(expected.keys())
+    extra_cols = set (df.columns) - set (expected.keys())
     if extra_cols:
-        issues.append(f"Extra columns: {extra_cols}")
+        issues.append (f"Extra columns: {extra_cols}")
     
     return issues
 
-issues = validate_schema(df, expected_schema)
+issues = validate_schema (df, expected_schema)
 if issues:
     print("Schema validation failed:")
     for issue in issues:
@@ -562,42 +562,42 @@ else:
 ## Practical Example: Complete Data Cleaning Pipeline
 
 \`\`\`python
-def clean_dataset(df):
+def clean_dataset (df):
     """
     Comprehensive data cleaning pipeline
     """
-    print(f"Starting with {len(df)} rows")
+    print(f"Starting with {len (df)} rows")
     
     # 1. Remove duplicates
     df = df.drop_duplicates()
-    print(f"After removing duplicates: {len(df)} rows")
+    print(f"After removing duplicates: {len (df)} rows")
     
     # 2. Handle missing values
     # Drop rows where critical columns are missing
-    df = df.dropna(subset=['customer_id', 'transaction_date'])
+    df = df.dropna (subset=['customer_id', 'transaction_date'])
     
     # Fill numeric columns with median
-    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    numeric_cols = df.select_dtypes (include=[np.number]).columns
     for col in numeric_cols:
-        df[col].fillna(df[col].median(), inplace=True)
+        df[col].fillna (df[col].median(), inplace=True)
     
     # Fill categorical columns with mode
-    categorical_cols = df.select_dtypes(include=['object']).columns
+    categorical_cols = df.select_dtypes (include=['object']).columns
     for col in categorical_cols:
         if df[col].notna().any():
-            df[col].fillna(df[col].mode()[0], inplace=True)
+            df[col].fillna (df[col].mode()[0], inplace=True)
     
     print(f"After handling missing values: {df.isnull().sum().sum()} missing values remain")
     
     # 3. Fix data types
     if 'transaction_date' in df.columns:
-        df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce')
+        df['transaction_date'] = pd.to_datetime (df['transaction_date'], errors='coerce')
     
     if 'amount' in df.columns:
-        df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+        df['amount'] = pd.to_numeric (df['amount'], errors='coerce')
     
     # 4. Clean strings
-    string_cols = df.select_dtypes(include=['object']).columns
+    string_cols = df.select_dtypes (include=['object']).columns
     for col in string_cols:
         df[col] = df[col].str.strip()
         df[col] = df[col].str.lower()
@@ -611,17 +611,17 @@ def clean_dataset(df):
         upper = Q3 + 1.5 * IQR
         df = df[(df[col] >= lower) & (df[col] <= upper)]
     
-    print(f"After removing outliers: {len(df)} rows")
+    print(f"After removing outliers: {len (df)} rows")
     
     # 6. Reset index
-    df = df.reset_index(drop=True)
+    df = df.reset_index (drop=True)
     
-    print(f"Cleaning complete! Final dataset: {len(df)} rows, {len(df.columns)} columns")
+    print(f"Cleaning complete! Final dataset: {len (df)} rows, {len (df.columns)} columns")
     
     return df
 
 # Usage
-# df_clean = clean_dataset(df_raw)
+# df_clean = clean_dataset (df_raw)
 \`\`\`
 
 ## Key Takeaways

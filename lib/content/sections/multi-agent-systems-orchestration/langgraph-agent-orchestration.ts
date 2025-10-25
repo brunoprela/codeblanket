@@ -43,7 +43,7 @@ class AgentState(TypedDict):
     final_output: str
 
 # 2. Define Agent Nodes
-async def research_node(state: AgentState) -> AgentState:
+async def research_node (state: AgentState) -> AgentState:
     """Research agent node."""
     print(f"[Research] Task: {state['current_task']}")
     
@@ -55,7 +55,7 @@ async def research_node(state: AgentState) -> AgentState:
         "completed_tasks": state['completed_tasks'] + ["research"]
     }
 
-async def write_node(state: AgentState) -> AgentState:
+async def write_node (state: AgentState) -> AgentState:
     """Writer agent node."""
     print(f"[Write] Based on research")
     
@@ -72,7 +72,7 @@ async def write_node(state: AgentState) -> AgentState:
         "completed_tasks": state['completed_tasks'] + ["write"]
     }
 
-async def review_node(state: AgentState) -> AgentState:
+async def review_node (state: AgentState) -> AgentState:
     """Reviewer agent node."""
     print(f"[Review] Reviewing article")
     
@@ -117,7 +117,7 @@ initial_state = {
     "final_output": ""
 }
 
-result = await app.ainvoke(initial_state)
+result = await app.ainvoke (initial_state)
 print(f"\\nFinal output: {result['final_output']}")
 print(f"Completed: {result['completed_tasks']}")
 \`\`\`
@@ -134,7 +134,7 @@ class ConditionalState(TypedDict):
     iterations: int
     max_iterations: int
 
-async def generate_node(state: ConditionalState) -> ConditionalState:
+async def generate_node (state: ConditionalState) -> ConditionalState:
     """Generate content."""
     print(f"[Generate] Iteration {state['iterations'] + 1}")
     
@@ -146,7 +146,7 @@ async def generate_node(state: ConditionalState) -> ConditionalState:
         "iterations": state['iterations'] + 1
     }
 
-async def evaluate_node(state: ConditionalState) -> ConditionalState:
+async def evaluate_node (state: ConditionalState) -> ConditionalState:
     """Evaluate quality."""
     print(f"[Evaluate] Checking quality...")
     
@@ -158,7 +158,7 @@ async def evaluate_node(state: ConditionalState) -> ConditionalState:
         "quality_score": quality
     }
 
-def should_continue(state: ConditionalState) -> str:
+def should_continue (state: ConditionalState) -> str:
     """Decide whether to continue or finish."""
     if state['quality_score'] >= 0.8:
         print("  Quality threshold reached!")
@@ -220,7 +220,7 @@ class CollaborationState(TypedDict):
     current_agent: str
     next_action: str
 
-async def researcher(state: CollaborationState) -> CollaborationState:
+async def researcher (state: CollaborationState) -> CollaborationState:
     """Researcher agent."""
     print(f"[Researcher] Researching: {state['task']}")
     
@@ -232,7 +232,7 @@ async def researcher(state: CollaborationState) -> CollaborationState:
         "next_action": "code"
     }
 
-async def coder(state: CollaborationState) -> CollaborationState:
+async def coder (state: CollaborationState) -> CollaborationState:
     """Coder agent."""
     print(f"[Coder] Implementing based on research")
     
@@ -248,7 +248,7 @@ def solution():
         "next_action": "test"
     }
 
-async def tester(state: CollaborationState) -> CollaborationState:
+async def tester (state: CollaborationState) -> CollaborationState:
     """Tester agent."""
     print(f"[Tester] Writing tests")
     
@@ -264,7 +264,7 @@ def test_solution():
         "next_action": "review"
     }
 
-async def reviewer(state: CollaborationState) -> CollaborationState:
+async def reviewer (state: CollaborationState) -> CollaborationState:
     """Reviewer agent."""
     print(f"[Reviewer] Reviewing all work")
     
@@ -276,7 +276,7 @@ async def reviewer(state: CollaborationState) -> CollaborationState:
         "next_action": "end"
     }
 
-def route_next(state: CollaborationState) -> Literal["code", "test", "review", "end"]:
+def route_next (state: CollaborationState) -> Literal["code", "test", "review", "end"]:
     """Route to next agent."""
     action = state.get("next_action", "end")
     print(f"  Routing to: {action}")
@@ -345,7 +345,7 @@ class HITLState(TypedDict):
     feedback: str
     iteration: int
 
-async def propose_node(state: HITLState) -> HITLState:
+async def propose_node (state: HITLState) -> HITLState:
     """Generate proposal."""
     print(f"[Propose] Creating proposal (iteration {state['iteration']})")
     
@@ -359,7 +359,7 @@ async def propose_node(state: HITLState) -> HITLState:
         "iteration": state['iteration'] + 1
     }
 
-async def human_approval_node(state: HITLState) -> HITLState:
+async def human_approval_node (state: HITLState) -> HITLState:
     """Wait for human approval."""
     print(f"\\nProposal: {state['proposal']}")
     print("Waiting for approval...")
@@ -376,7 +376,7 @@ async def human_approval_node(state: HITLState) -> HITLState:
         print("❌ Needs revision")
         return {"approved": False, "feedback": "Add more detail"}
 
-def check_approval(state: HITLState) -> str:
+def check_approval (state: HITLState) -> str:
     """Check if approved."""
     return "approved" if state.get('approved', False) else "revise"
 
@@ -400,7 +400,7 @@ workflow.add_conditional_edges(
 
 # Use checkpointer to save state between human interactions
 checkpointer = MemorySaver()
-app = workflow.compile(checkpointer=checkpointer)
+app = workflow.compile (checkpointer=checkpointer)
 
 # Execute
 result = await app.ainvoke(
@@ -481,25 +481,25 @@ class ParallelState(TypedDict):
     analysis_c: str
     combined: str
 
-async def analyzer_a(state: ParallelState) -> ParallelState:
+async def analyzer_a (state: ParallelState) -> ParallelState:
     """First analyzer."""
     print("[Analyzer A] Analyzing...")
     await asyncio.sleep(1)
     return {"analysis_a": "Analysis A results"}
 
-async def analyzer_b(state: ParallelState) -> ParallelState:
+async def analyzer_b (state: ParallelState) -> ParallelState:
     """Second analyzer."""
     print("[Analyzer B] Analyzing...")
     await asyncio.sleep(1.5)
     return {"analysis_b": "Analysis B results"}
 
-async def analyzer_c(state: ParallelState) -> ParallelState:
+async def analyzer_c (state: ParallelState) -> ParallelState:
     """Third analyzer."""
     print("[Analyzer C] Analyzing...")
     await asyncio.sleep(0.8)
     return {"analysis_c": "Analysis C results"}
 
-async def combiner(state: ParallelState) -> ParallelState:
+async def combiner (state: ParallelState) -> ParallelState:
     """Combine all analyses."""
     print("[Combiner] Combining results...")
     
@@ -562,7 +562,7 @@ class ErrorHandlingState(TypedDict):
     retry_count: int
     max_retries: int
 
-async def risky_node(state: ErrorHandlingState) -> ErrorHandlingState:
+async def risky_node (state: ErrorHandlingState) -> ErrorHandlingState:
     """Node that might fail."""
     print(f"[Risky] Attempt {state['retry_count'] + 1}")
     
@@ -581,7 +581,7 @@ async def risky_node(state: ErrorHandlingState) -> ErrorHandlingState:
             "retry_count": state['retry_count'] + 1
         }
 
-def check_error(state: ErrorHandlingState) -> str:
+def check_error (state: ErrorHandlingState) -> str:
     """Check if error occurred."""
     if state.get('error') and state['retry_count'] < state['max_retries']:
         print(f"  Error: {state['error']}, retrying...")
@@ -648,23 +648,23 @@ class ResearchState(TypedDict):
     quality_score: float
     iteration: int
 
-async def search_node(state: ResearchState) -> ResearchState:
+async def search_node (state: ResearchState) -> ResearchState:
     """Search for information."""
     # Use web search API
     results = ["Result 1", "Result 2", "Result 3"]
     return {"search_results": results}
 
-async def analyze_node(state: ResearchState) -> ResearchState:
+async def analyze_node (state: ResearchState) -> ResearchState:
     """Analyze search results."""
     analysis = "Analysis of search results..."
     return {"analysis": analysis}
 
-async def draft_node(state: ResearchState) -> ResearchState:
+async def draft_node (state: ResearchState) -> ResearchState:
     """Draft report."""
     draft = f"Report based on: {state['analysis'][:50]}..."
     return {"draft_report": draft, "iteration": state['iteration'] + 1}
 
-async def review_node(state: ResearchState) -> ResearchState:
+async def review_node (state: ResearchState) -> ResearchState:
     """Review report quality."""
     import random
     quality = min(1.0, 0.6 + state['iteration'] * 0.15 + random.random() * 0.1)
@@ -674,7 +674,7 @@ async def review_node(state: ResearchState) -> ResearchState:
         "review_feedback": feedback
     }
 
-def should_revise(state: ResearchState) -> str:
+def should_revise (state: ResearchState) -> str:
     """Decide if revision needed."""
     if state['quality_score'] >= 0.8:
         return "finalize"
@@ -683,7 +683,7 @@ def should_revise(state: ResearchState) -> str:
     else:
         return "revise"
 
-async def finalize_node(state: ResearchState) -> ResearchState:
+async def finalize_node (state: ResearchState) -> ResearchState:
     """Finalize report."""
     return {"final_report": state['draft_report']}
 

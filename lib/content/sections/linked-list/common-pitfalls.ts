@@ -9,7 +9,7 @@ export const commonpitfallsSection = {
 
 ❌ **Wrong:**
 \`\`\`python
-def reverse(head):
+def reverse (head):
     prev = None
     curr = head
     while curr:  # Crashes if head is None
@@ -21,7 +21,7 @@ def reverse(head):
 
 ✅ **Correct:**
 \`\`\`python
-def reverse(head):
+def reverse (head):
     if not head or not head.next:  # Check edge cases
         return head
     
@@ -58,8 +58,8 @@ curr = next_temp       # Move to original next
 
 ❌ **Wrong:**
 \`\`\`python
-def insert_at_head(head, val):
-    new_node = ListNode(val)
+def insert_at_head (head, val):
+    new_node = ListNode (val)
     new_node.next = head
     # Forgot to update head!
     return head  # Still returns old head
@@ -67,8 +67,8 @@ def insert_at_head(head, val):
 
 ✅ **Correct:**
 \`\`\`python
-def insert_at_head(head, val):
-    new_node = ListNode(val)
+def insert_at_head (head, val):
+    new_node = ListNode (val)
     new_node.next = head
     return new_node  # Return new head
 \`\`\`
@@ -80,7 +80,7 @@ def insert_at_head(head, val):
 ❌ **Wrong (Finding Kth from End):**
 \`\`\`python
 # Move first k steps
-for _ in range(k):  # Should be k, not k-1 or k+1
+for _ in range (k):  # Should be k, not k-1 or k+1
     first = first.next
 \`\`\`
 
@@ -95,7 +95,7 @@ for _ in range(k):  # Should be k, not k-1 or k+1
 
 ❌ **Wrong (Removing Nodes):**
 \`\`\`python
-def remove_val(head, val):
+def remove_val (head, val):
     # Special case for head
     while head and head.val == val:
         head = head.next
@@ -112,7 +112,7 @@ def remove_val(head, val):
 
 ✅ **Correct (With Dummy):**
 \`\`\`python
-def remove_val(head, val):
+def remove_val (head, val):
     dummy = ListNode(0)
     dummy.next = head
     curr = dummy
@@ -132,7 +132,7 @@ def remove_val(head, val):
 
 ❌ **Wrong:**
 \`\`\`python
-def merge_lists(l1, l2):
+def merge_lists (l1, l2):
     # Directly modifying input lists
     # Caller might not expect this!
 \`\`\`

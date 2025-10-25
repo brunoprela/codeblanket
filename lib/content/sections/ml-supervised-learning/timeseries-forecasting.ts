@@ -34,19 +34,19 @@ from datetime import datetime, timedelta
 
 # Generate sample time series
 np.random.seed(42)
-dates = pd.date_range(start='2020-01-01', periods=365, freq='D')
+dates = pd.date_range (start='2020-01-01', periods=365, freq='D')
 
 # Trend + Seasonality + Noise
 trend = np.linspace(100, 150, 365)
-seasonality = 10 * np.sin(np.linspace(0, 4*np.pi, 365))
+seasonality = 10 * np.sin (np.linspace(0, 4*np.pi, 365))
 noise = np.random.randn(365) * 5
 ts_data = trend + seasonality + noise
 
-ts = pd.Series(ts_data, index=dates)
+ts = pd.Series (ts_data, index=dates)
 
 # Visualize
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, linewidth=1.5)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, linewidth=1.5)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Sample Time Series: Trend + Seasonality + Noise')
@@ -72,15 +72,15 @@ Where:
 from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Decompose time series
-decomposition = seasonal_decompose(ts, model='additive', period=30)
+decomposition = seasonal_decompose (ts, model='additive', period=30)
 
 # Plot components
 fig, axes = plt.subplots(4, 1, figsize=(14, 10))
 
-ts.plot(ax=axes[0], title='Original')
-decomposition.trend.plot(ax=axes[1], title='Trend')
-decomposition.seasonal.plot(ax=axes[2], title='Seasonality')
-decomposition.resid.plot(ax=axes[3], title='Residual')
+ts.plot (ax=axes[0], title='Original')
+decomposition.trend.plot (ax=axes[1], title='Trend')
+decomposition.seasonal.plot (ax=axes[2], title='Seasonality')
+decomposition.resid.plot (ax=axes[3], title='Residual')
 
 for ax in axes:
     ax.grid(True, alpha=0.3)
@@ -102,9 +102,9 @@ plt.show()
 \`\`\`python
 from statsmodels.tsa.stattools import adfuller
 
-def test_stationarity(timeseries):
+def test_stationarity (timeseries):
     # ADF Test
-    result = adfuller(timeseries.dropna())
+    result = adfuller (timeseries.dropna())
     
     print('='*60)
     print('AUGMENTED DICKEY-FULLER TEST')
@@ -120,13 +120,13 @@ def test_stationarity(timeseries):
     else:
         print("\\nResult: Series is NON-STATIONARY (fail to reject null hypothesis)")
 
-test_stationarity(ts)
+test_stationarity (ts)
 
 # Plot with rolling statistics
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Original', linewidth=1.5)
-plt.plot(ts.index, ts.rolling(window=30).mean(), label='Rolling Mean (30 days)', linewidth=2)
-plt.plot(ts.index, ts.rolling(window=30).std(), label='Rolling Std (30 days)', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Original', linewidth=1.5)
+plt.plot (ts.index, ts.rolling (window=30).mean(), label='Rolling Mean (30 days)', linewidth=2)
+plt.plot (ts.index, ts.rolling (window=30).std(), label='Rolling Std (30 days)', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Time Series with Rolling Statistics')
@@ -155,10 +155,10 @@ ts_seasonal_diff = ts.diff(30).dropna()
 # Plot
 fig, axes = plt.subplots(4, 1, figsize=(14, 10))
 
-ts.plot(ax=axes[0], title='Original')
-ts_diff1.plot(ax=axes[1], title='First Difference')
-ts_diff2.plot(ax=axes[2], title='Second Difference')
-ts_seasonal_diff.plot(ax=axes[3], title='Seasonal Difference (lag=30)')
+ts.plot (ax=axes[0], title='Original')
+ts_diff1.plot (ax=axes[1], title='First Difference')
+ts_diff2.plot (ax=axes[2], title='Second Difference')
+ts_seasonal_diff.plot (ax=axes[3], title='Seasonal Difference (lag=30)')
 
 for ax in axes:
     ax.grid(True, alpha=0.3)
@@ -168,7 +168,7 @@ plt.show()
 
 # Test stationarity
 print("\\nFirst Difference:")
-test_stationarity(ts_diff1)
+test_stationarity (ts_diff1)
 \`\`\`
 
 ### 2. Log Transformation
@@ -178,16 +178,16 @@ Stabilize variance.
 \`\`\`python
 # Log transform (for positive series)
 ts_positive = ts - ts.min() + 1  # Ensure positive
-ts_log = np.log(ts_positive)
+ts_log = np.log (ts_positive)
 
-plt.figure(figsize=(14, 6))
+plt.figure (figsize=(14, 6))
 plt.subplot(1, 2, 1)
-plt.plot(ts.index, ts.values)
+plt.plot (ts.index, ts.values)
 plt.title('Original')
 plt.grid(True, alpha=0.3)
 
 plt.subplot(1, 2, 2)
-plt.plot(ts_log.index, ts_log.values)
+plt.plot (ts_log.index, ts_log.values)
 plt.title('Log Transformed')
 plt.grid(True, alpha=0.3)
 
@@ -207,10 +207,10 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 fig, axes = plt.subplots(2, 1, figsize=(14, 8))
 
-plot_acf(ts.dropna(), lags=50, ax=axes[0])
+plot_acf (ts.dropna(), lags=50, ax=axes[0])
 axes[0].set_title('Autocorrelation Function (ACF)')
 
-plot_pacf(ts.dropna(), lags=50, ax=axes[1])
+plot_pacf (ts.dropna(), lags=50, ax=axes[1])
 axes[1].set_title('Partial Autocorrelation Function (PACF)')
 
 plt.tight_layout()
@@ -228,12 +228,12 @@ Simple but effective for short-term forecasting.
 # Simple Moving Average
 window_sizes = [7, 14, 30]
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Original', linewidth=1, alpha=0.7)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Original', linewidth=1, alpha=0.7)
 
 for window in window_sizes:
-    ma = ts.rolling(window=window).mean()
-    plt.plot(ma.index, ma.values, label=f'MA({window})', linewidth=2)
+    ma = ts.rolling (window=window).mean()
+    plt.plot (ma.index, ma.values, label=f'MA({window})', linewidth=2)
 
 plt.xlabel('Date')
 plt.ylabel('Value')
@@ -244,15 +244,15 @@ plt.tight_layout()
 plt.show()
 
 # Weighted Moving Average
-def weighted_moving_average(series, weights):
-    return series.rolling(window=len(weights)).apply(lambda x: np.dot(x, weights) / sum(weights), raw=True)
+def weighted_moving_average (series, weights):
+    return series.rolling (window=len (weights)).apply (lambda x: np.dot (x, weights) / sum (weights), raw=True)
 
 weights = [1, 2, 3, 4, 5]  # More recent values weighted higher
-wma = weighted_moving_average(ts, weights)
+wma = weighted_moving_average (ts, weights)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Original', linewidth=1, alpha=0.7)
-plt.plot(wma.index, wma.values, label='Weighted MA', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Original', linewidth=1, alpha=0.7)
+plt.plot (wma.index, wma.values, label='Weighted MA', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Weighted Moving Average')
@@ -274,15 +274,15 @@ For series with no trend or seasonality.
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 
 # Fit model
-ses_model = SimpleExpSmoothing(ts).fit(smoothing_level=0.3, optimized=False)
+ses_model = SimpleExpSmoothing (ts).fit (smoothing_level=0.3, optimized=False)
 
 # Forecast
 forecast_steps = 30
-forecast = ses_model.forecast(steps=forecast_steps)
+forecast = ses_model.forecast (steps=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
-plt.plot(forecast.index, forecast.values, label='Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
+plt.plot (forecast.index, forecast.values, label='Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Simple Exponential Smoothing')
@@ -294,7 +294,7 @@ plt.show()
 print(f"Smoothing level (alpha): {ses_model.params['smoothing_level']:.4f}")
 \`\`\`
 
-### Holt's Linear Trend Method
+### Holt\'s Linear Trend Method
 
 For series with trend.
 
@@ -302,17 +302,17 @@ For series with trend.
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 # Fit model with trend
-holt_model = ExponentialSmoothing(ts, trend='add', seasonal=None).fit()
+holt_model = ExponentialSmoothing (ts, trend='add', seasonal=None).fit()
 
 # Forecast
-forecast_holt = holt_model.forecast(steps=forecast_steps)
+forecast_holt = holt_model.forecast (steps=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
-plt.plot(forecast_holt.index, forecast_holt.values, label='Holt Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
+plt.plot (forecast_holt.index, forecast_holt.values, label='Holt Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
-plt.title("Holt's Linear Trend Method")
+plt.title("Holt\'s Linear Trend Method")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
@@ -333,11 +333,11 @@ hw_model = ExponentialSmoothing(
 ).fit()
 
 # Forecast
-forecast_hw = hw_model.forecast(steps=forecast_steps)
+forecast_hw = hw_model.forecast (steps=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
-plt.plot(forecast_hw.index, forecast_hw.values, label='Holt-Winters Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
+plt.plot (forecast_hw.index, forecast_hw.values, label='Holt-Winters Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Holt-Winters Method')
@@ -375,11 +375,11 @@ print("="*60)
 print(arima_fit.summary())
 
 # Forecast
-forecast_arima = arima_fit.forecast(steps=forecast_steps)
+forecast_arima = arima_fit.forecast (steps=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
-plt.plot(forecast_arima.index, forecast_arima.values, label='ARIMA Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
+plt.plot (forecast_arima.index, forecast_arima.values, label='ARIMA Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('ARIMA(2,1,2) Forecast')
@@ -415,13 +415,13 @@ print(f"AIC: {auto_model.aic():.2f}")
 print(f"BIC: {auto_model.bic():.2f}")
 
 # Forecast
-forecast_auto = auto_model.predict(n_periods=forecast_steps)
+forecast_auto = auto_model.predict (n_periods=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
 
-forecast_dates = pd.date_range(start=ts.index[-1] + timedelta(days=1), periods=forecast_steps, freq='D')
-plt.plot(forecast_dates, forecast_auto, label=f'Auto ARIMA{auto_model.order}', linestyle='--', linewidth=2)
+forecast_dates = pd.date_range (start=ts.index[-1] + timedelta (days=1), periods=forecast_steps, freq='D')
+plt.plot (forecast_dates, forecast_auto, label=f'Auto ARIMA{auto_model.order}', linestyle='--', linewidth=2)
 
 plt.xlabel('Date')
 plt.ylabel('Value')
@@ -443,14 +443,14 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 # Fit SARIMA
 sarima_model = SARIMAX(ts, order=(1, 1, 1), seasonal_order=(1, 1, 1, 30))
-sarima_fit = sarima_model.fit(disp=False)
+sarima_fit = sarima_model.fit (disp=False)
 
 # Forecast
-forecast_sarima = sarima_fit.forecast(steps=forecast_steps)
+forecast_sarima = sarima_fit.forecast (steps=forecast_steps)
 
-plt.figure(figsize=(14, 6))
-plt.plot(ts.index, ts.values, label='Training Data')
-plt.plot(forecast_sarima.index, forecast_sarima.values, label='SARIMA Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (ts.index, ts.values, label='Training Data')
+plt.plot (forecast_sarima.index, forecast_sarima.values, label='SARIMA Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('SARIMA(1,1,1)(1,1,1,30) Forecast')
@@ -466,14 +466,14 @@ plt.show()
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Train/test split (time series specific!)
-train_size = int(len(ts) * 0.8)
+train_size = int (len (ts) * 0.8)
 train, test = ts[:train_size], ts[train_size:]
 
 # Fit models on training data
 models = {
-    'Simple ES': SimpleExpSmoothing(train).fit(),
-    'Holt': ExponentialSmoothing(train, trend='add').fit(),
-    'Holt-Winters': ExponentialSmoothing(train, trend='add', seasonal='add', seasonal_periods=30).fit(),
+    'Simple ES': SimpleExpSmoothing (train).fit(),
+    'Holt': ExponentialSmoothing (train, trend='add').fit(),
+    'Holt-Winters': ExponentialSmoothing (train, trend='add', seasonal='add', seasonal_periods=30).fit(),
     'ARIMA(2,1,2)': ARIMA(train, order=(2, 1, 2)).fit()
 }
 
@@ -481,12 +481,12 @@ models = {
 results = []
 
 for name, model in models.items():
-    forecast = model.forecast(steps=len(test))
+    forecast = model.forecast (steps=len (test))
     
-    mse = mean_squared_error(test, forecast)
-    rmse = np.sqrt(mse)
-    mae = mean_absolute_error(test, forecast)
-    mape = np.mean(np.abs((test - forecast) / test)) * 100
+    mse = mean_squared_error (test, forecast)
+    rmse = np.sqrt (mse)
+    mae = mean_absolute_error (test, forecast)
+    mape = np.mean (np.abs((test - forecast) / test)) * 100
     
     results.append({
         'Model': name,
@@ -495,25 +495,25 @@ for name, model in models.items():
         'MAPE': mape
     })
 
-results_df = pd.DataFrame(results).sort_values('RMSE')
+results_df = pd.DataFrame (results).sort_values('RMSE')
 
 print("\\n" + "="*60)
 print("MODEL COMPARISON")
 print("="*60)
-print(results_df.to_string(index=False))
+print(results_df.to_string (index=False))
 
 # Visualize best model
 best_model_name = results_df.iloc[0]['Model']
 best_model = models[best_model_name]
-forecast_best = best_model.forecast(steps=len(test))
+forecast_best = best_model.forecast (steps=len (test))
 
-plt.figure(figsize=(14, 6))
-plt.plot(train.index, train.values, label='Training')
-plt.plot(test.index, test.values, label='Test', linewidth=2)
-plt.plot(test.index, forecast_best.values, label=f'{best_model_name} Forecast', linestyle='--', linewidth=2)
+plt.figure (figsize=(14, 6))
+plt.plot (train.index, train.values, label='Training')
+plt.plot (test.index, test.values, label='Test', linewidth=2)
+plt.plot (test.index, forecast_best.values, label=f'{best_model_name} Forecast', linestyle='--', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Value')
-plt.title(f'Best Model: {best_model_name}')
+plt.title (f'Best Model: {best_model_name}')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
@@ -550,18 +550,18 @@ from sklearn.metrics import mean_squared_error
 import numpy as np
 
 # Split data (time series specific)
-train_size = int(len(ts) * 0.8)
+train_size = int (len (ts) * 0.8)
 train, test = ts[:train_size], ts[train_size:]
 
 # Fit SARIMA
 model = SARIMAX(train, order=(1, 1, 1), seasonal_order=(1, 1, 1, 30))
-fitted_model = model.fit(disp=False)
+fitted_model = model.fit (disp=False)
 
 # Forecast
-forecast = fitted_model.forecast(steps=len(test))
+forecast = fitted_model.forecast (steps=len (test))
 
 # Evaluate
-rmse = np.sqrt(mean_squared_error(test, forecast))
+rmse = np.sqrt (mean_squared_error (test, forecast))
 print(f"RMSE: {rmse:.2f}")
 `,
 };

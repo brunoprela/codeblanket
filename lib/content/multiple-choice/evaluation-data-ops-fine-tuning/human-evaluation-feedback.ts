@@ -20,16 +20,16 @@ export const humanEvaluationFeedbackMultipleChoice = [
   {
     id: 'human-eval-mc-2',
     question:
-      "You measure inter-annotator agreement using these methods on the same dataset: Percent Agreement = 78%, Cohen's Kappa = 0.52, Krippendorff's Alpha = 0.48. Which metric should you report and why?",
+      "You measure inter-annotator agreement using these methods on the same dataset: Percent Agreement = 78%, Cohen\'s Kappa = 0.52, Krippendorff's Alpha = 0.48. Which metric should you report and why?",
     options: [
       "Percent Agreement (78%) because it's highest and easiest to understand",
-      "Cohen's Kappa (0.52) because it's most commonly used",
+      "Cohen\'s Kappa (0.52) because it's most commonly used",
       "Krippendorff's Alpha (0.48) because it's most rigorous and handles missing data",
       'All three to show different perspectives',
     ],
     correctAnswer: 2,
     explanation:
-      "Option C (Krippendorff's Alpha) is most rigorous. Here's why metrics differ: Percent Agreement (78%) is INFLATED—it counts random chance agreements as real agreement. Example: If two annotators randomly pick from 5 categories, they'll agree 20% by pure chance. Cohen's Kappa (0.52) corrects for chance but only works with 2 annotators and requires all annotators to rate all examples. Krippendorff's Alpha (0.48) is most conservative: handles ≥2 annotators, handles missing data (if some annotators skip examples), works with different data types (nominal, ordinal, interval, ratio). The big gap (78% → 48%) shows much of the agreement is just chance. 0.48 means only \"moderate\" agreement. For academic rigor and edge cases (missing data, >2 annotators), report Krippendorff's Alpha. For communication to non-experts, also show percent agreement but explain the chance correction.",
+      "Option C (Krippendorff\'s Alpha) is most rigorous. Here's why metrics differ: Percent Agreement (78%) is INFLATED—it counts random chance agreements as real agreement. Example: If two annotators randomly pick from 5 categories, they'll agree 20% by pure chance. Cohen\'s Kappa (0.52) corrects for chance but only works with 2 annotators and requires all annotators to rate all examples. Krippendorff's Alpha (0.48) is most conservative: handles ≥2 annotators, handles missing data (if some annotators skip examples), works with different data types (nominal, ordinal, interval, ratio). The big gap (78% → 48%) shows much of the agreement is just chance. 0.48 means only \"moderate\" agreement. For academic rigor and edge cases (missing data, >2 annotators), report Krippendorff's Alpha. For communication to non-experts, also show percent agreement but explain the chance correction.",
   },
   {
     id: 'human-eval-mc-3',
@@ -57,7 +57,7 @@ export const humanEvaluationFeedbackMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Option B (weighted aggregation) is best. Here's why: Worker A at 85% is still usable—they're right most of the time. Rejecting them wastes time and money. Using both equally (Option C) works but suboptimal—why ignore information about annotator quality? Weighted aggregation is optimal: When annotations conflict, trust Worker B more. Example: Response gets ratings [3, 5, 4] from Workers [A, B, C with quality 85%, 92%, 88%]. Weighted average: (3×0.85 + 5×0.92 + 4×0.88) / (0.85+0.92+0.88) = 4.06 vs simple average of 4.0. Implementation: Use Bayesian inference or weighted voting. Weight by: calibration accuracy, Krippendorff Alpha with gold set, time to annotate (too fast = low quality). Option D (retrain) is good long-term but doesn't solve immediate needs. Best practice: Use all qualified annotators with performance-weighted aggregation.",
+      "Option B (weighted aggregation) is best. Here\'s why: Worker A at 85% is still usable—they're right most of the time. Rejecting them wastes time and money. Using both equally (Option C) works but suboptimal—why ignore information about annotator quality? Weighted aggregation is optimal: When annotations conflict, trust Worker B more. Example: Response gets ratings [3, 5, 4] from Workers [A, B, C with quality 85%, 92%, 88%]. Weighted average: (3×0.85 + 5×0.92 + 4×0.88) / (0.85+0.92+0.88) = 4.06 vs simple average of 4.0. Implementation: Use Bayesian inference or weighted voting. Weight by: calibration accuracy, Krippendorff Alpha with gold set, time to annotate (too fast = low quality). Option D (retrain) is good long-term but doesn't solve immediate needs. Best practice: Use all qualified annotators with performance-weighted aggregation.",
   },
   {
     id: 'human-eval-mc-5',

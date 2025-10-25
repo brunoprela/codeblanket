@@ -6,7 +6,7 @@ export const djangoRestFrameworkFundamentals = {
 
 ## Introduction
 
-**Django REST Framework (DRF)** is a powerful and flexible toolkit for building Web APIs in Django. It's the most popular way to build REST APIs with Django, used by companies like Mozilla, Red Hat, Heroku, and Eventbrite.
+**Django REST Framework (DRF)** is a powerful and flexible toolkit for building Web APIs in Django. It\'s the most popular way to build REST APIs with Django, used by companies like Mozilla, Red Hat, Heroku, and Eventbrite.
 
 ### Why DRF?
 
@@ -93,46 +93,46 @@ from .models import Article
 from .serializers import ArticleSerializer
 
 @api_view(['GET', 'POST'])
-def article_list(request):
+def article_list (request):
     """
     List all articles or create a new article
     """
     if request.method == 'GET':
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+        serializer = ArticleSerializer (articles, many=True)
+        return Response (serializer.data)
     
     elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
+        serializer = ArticleSerializer (data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response (serializer.data, status=status.HTTP_201_CREATED)
+        return Response (serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def article_detail(request, pk):
+def article_detail (request, pk):
     """
     Retrieve, update or delete an article
     """
     try:
-        article = Article.objects.get(pk=pk)
+        article = Article.objects.get (pk=pk)
     except Article.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response (status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data)
+        serializer = ArticleSerializer (article)
+        return Response (serializer.data)
     
     elif request.method == 'PUT':
-        serializer = ArticleSerializer(article, data=request.data)
+        serializer = ArticleSerializer (article, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response (serializer.data)
+        return Response (serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
         article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response (status=status.HTTP_204_NO_CONTENT)
 \`\`\`
 
 ### URLs Configuration
@@ -163,46 +163,46 @@ class ArticleList(APIView):
     List all articles or create a new article
     """
     
-    def get(self, request, format=None):
+    def get (self, request, format=None):
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+        serializer = ArticleSerializer (articles, many=True)
+        return Response (serializer.data)
     
-    def post(self, request, format=None):
-        serializer = ArticleSerializer(data=request.data)
+    def post (self, request, format=None):
+        serializer = ArticleSerializer (data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save (author=request.user)
+            return Response (serializer.data, status=status.HTTP_201_CREATED)
+        return Response (serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ArticleDetail(APIView):
     """
     Retrieve, update or delete an article instance
     """
     
-    def get_object(self, pk):
+    def get_object (self, pk):
         try:
-            return Article.objects.get(pk=pk)
+            return Article.objects.get (pk=pk)
         except Article.DoesNotExist:
             raise Http404
     
-    def get(self, request, pk, format=None):
-        article = self.get_object(pk)
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data)
+    def get (self, request, pk, format=None):
+        article = self.get_object (pk)
+        serializer = ArticleSerializer (article)
+        return Response (serializer.data)
     
-    def put(self, request, pk, format=None):
-        article = self.get_object(pk)
-        serializer = ArticleSerializer(article, data=request.data)
+    def put (self, request, pk, format=None):
+        article = self.get_object (pk)
+        serializer = ArticleSerializer (article, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response (serializer.data)
+        return Response (serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, pk, format=None):
-        article = self.get_object(pk)
+    def delete (self, request, pk, format=None):
+        article = self.get_object (pk)
         article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response (status=status.HTTP_204_NO_CONTENT)
 
 # urls.py
 urlpatterns = [
@@ -220,33 +220,33 @@ urlpatterns = [
 \`\`\`python
 from rest_framework import mixins, generics
 
-class ArticleList(mixins.ListModelMixin,
+class ArticleList (mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   generics.GenericAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def get (self, request, *args, **kwargs):
+        return self.list (request, *args, **kwargs)
     
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    def post (self, request, *args, **kwargs):
+        return self.create (request, *args, **kwargs)
 
-class ArticleDetail(mixins.RetrieveModelMixin,
+class ArticleDetail (mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
                     generics.GenericAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    def get (self, request, *args, **kwargs):
+        return self.retrieve (request, *args, **kwargs)
     
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    def put (self, request, *args, **kwargs):
+        return self.update (request, *args, **kwargs)
     
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def delete (self, request, *args, **kwargs):
+        return self.destroy (request, *args, **kwargs)
 \`\`\`
 
 ### Using Concrete Generic Views
@@ -254,16 +254,16 @@ class ArticleDetail(mixins.RetrieveModelMixin,
 \`\`\`python
 from rest_framework import generics
 
-class ArticleList(generics.ListCreateAPIView):
+class ArticleList (generics.ListCreateAPIView):
     """List all articles or create new article"""
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def perform_create(self, serializer):
+    def perform_create (self, serializer):
         """Set author to current user"""
-        serializer.save(author=self.request.user)
+        serializer.save (author=self.request.user)
 
-class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetail (generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update or delete article"""
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
@@ -280,7 +280,7 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
 from rest_framework import serializers
 from .models import Article, Category, Tag
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     """Serializer for Article model"""
     
     class Meta:
@@ -294,21 +294,21 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Nested Serializers
 
 \`\`\`python
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer (serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug']
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer (serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'slug']
 
-class ArticleDetailSerializer(serializers.ModelSerializer):
+class ArticleDetailSerializer (serializers.ModelSerializer):
     """Serializer with nested relationships"""
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
-    author_name = serializers.CharField(source='author.get_full_name', read_only=True)
+    category = CategorySerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
+    author_name = serializers.CharField (source='author.get_full_name', read_only=True)
     
     class Meta:
         model = Article
@@ -327,7 +327,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 
 \`\`\`python
 class ArticleList(APIView):
-    def post(self, request):
+    def post (self, request):
         # Access data
         title = request.data.get('title')
         
@@ -351,7 +351,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class ArticleList(APIView):
-    def get(self, request):
+    def get (self, request):
         # Simple response
         return Response({'message': 'Hello'})
         
@@ -368,7 +368,7 @@ class ArticleList(APIView):
         )
         
         # With specific status
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response (serializer.data, status=status.HTTP_201_CREATED)
 \`\`\`
 
 ---
@@ -394,7 +394,7 @@ python manage.py migrate
 
 # Create tokens for users
 from rest_framework.authtoken.models import Token
-token = Token.objects.create(user=user)
+token = Token.objects.create (user=user)
 print(token.key)
 \`\`\`
 
@@ -426,14 +426,14 @@ urlpatterns = [
 \`\`\`python
 from rest_framework import permissions
 
-class ArticleList(generics.ListCreateAPIView):
+class ArticleList (generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # GET (list) = Anyone
     # POST (create) = Authenticated only
 
-class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetail (generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -445,12 +445,12 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
 \`\`\`python
 from rest_framework import permissions
 
-class IsAuthorOrReadOnly(permissions.BasePermission):
+class IsAuthorOrReadOnly (permissions.BasePermission):
     """
     Custom permission to only allow authors to edit their articles
     """
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         # Read permissions for any request (GET, HEAD, OPTIONS)
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -458,7 +458,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         # Write permissions only for article author
         return obj.author == request.user
 
-class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetail (generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
@@ -496,7 +496,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     pagination_class = StandardResultsSetPagination
@@ -516,7 +516,7 @@ class ArticleList(generics.ListAPIView):
 \`\`\`python
 from django_filters import rest_framework as filters
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.DjangoFilterBackend]
@@ -532,7 +532,7 @@ class ArticleList(generics.ListAPIView):
 \`\`\`python
 from rest_framework import filters
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.SearchFilter]
@@ -545,7 +545,7 @@ class ArticleList(generics.ListAPIView):
 ### Ordering
 
 \`\`\`python
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.OrderingFilter]
@@ -568,10 +568,10 @@ class ArticleList(generics.ListAPIView):
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 
-def custom_exception_handler(exc, context):
+def custom_exception_handler (exc, context):
     """Custom exception handler"""
     # Call DRF's default handler first
-    response = exception_handler(exc, context)
+    response = exception_handler (exc, context)
     
     if response is not None:
         # Customize error response
@@ -601,21 +601,21 @@ REST_FRAMEWORK = {
 from rest_framework import status
 
 class ArticleList(APIView):
-    def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
+    def post (self, request):
+        serializer = ArticleSerializer (data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response (serializer.data, status=status.HTTP_201_CREATED)
+        return Response (serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 \`\`\`
 
 ### 2. Optimize Queries
 
 \`\`\`python
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         return Article.objects.select_related(
             'author', 'category'
         ).prefetch_related('tags')

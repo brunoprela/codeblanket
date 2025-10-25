@@ -16,7 +16,7 @@ For 35% growth: 10x + (5% × 0.2) = **11x EV/Revenue**
 
 **Justification**: Company growing 35% (between 30-40% peers) should trade between 10-12x. Linear interpolation gives 11x as fair value.
 
-**Application**: If target has $500M revenue, fair EV = $5.5B. If trading at $4B, it's **27% undervalued** ($4B vs $5.5B fair value).`,
+**Application**: If target has $500M revenue, fair EV = $5.5B. If trading at $4B, it's **27% undervalued** (\$4B vs $5.5B fair value).`,
   },
 
   {

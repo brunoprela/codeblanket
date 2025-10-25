@@ -48,14 +48,14 @@ export const magicmethodsMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc4',
     question: 'What does __len__ allow?',
     options: [
-      'Calling len(obj)',
+      'Calling len (obj)',
       'Comparing objects',
       'Adding objects',
       'Iterating over object',
     ],
     correctAnswer: 0,
     explanation:
-      '__len__ allows len(obj) to work on custom objects, returning the "length" you define.',
+      '__len__ allows len (obj) to work on custom objects, returning the "length" you define.',
   },
   {
     id: 'mc5',

@@ -49,7 +49,7 @@ class ProcessingMode(Enum):
     NEARTIME = "neartime"     # 1-60s response
     BATCH = "batch"           # Minutes to hours
 
-def choose_processing_mode(use_case: str) -> ProcessingMode:
+def choose_processing_mode (use_case: str) -> ProcessingMode:
     """Choose appropriate processing mode"""
     
     realtime_usecases = {
@@ -97,7 +97,7 @@ class BatchRequest:
     id: str
     prompt: str
     model: str
-    submitted_at: datetime = field(default_factory=datetime.now)
+    submitted_at: datetime = field (default_factory=datetime.now)
     priority: int = 0
     callback: Callable = None
 
@@ -114,28 +114,28 @@ class SimpleBatchProcessor:
         self.queue = []
         self.processing = False
     
-    async def submit(self, request: BatchRequest):
+    async def submit (self, request: BatchRequest):
         """Submit request to batch queue"""
-        self.queue.append(request)
-        print(f"📝 Queued request {request.id} (queue size: {len(self.queue)})")
+        self.queue.append (request)
+        print(f"📝 Queued request {request.id} (queue size: {len (self.queue)})")
         
         # Check if we should process now
         should_process = (
-            len(self.queue) >= self.batch_size or
+            len (self.queue) >= self.batch_size or
             self._oldest_request_age() > self.max_wait_seconds
         )
         
         if should_process and not self.processing:
             await self.process_batch()
     
-    def _oldest_request_age(self) -> float:
+    def _oldest_request_age (self) -> float:
         """Get age of oldest request in seconds"""
         if not self.queue:
             return 0
-        oldest = min(self.queue, key=lambda r: r.submitted_at)
+        oldest = min (self.queue, key=lambda r: r.submitted_at)
         return (datetime.now() - oldest.submitted_at).total_seconds()
     
-    async def process_batch(self):
+    async def process_batch (self):
         """Process accumulated batch"""
         if not self.queue or self.processing:
             return
@@ -146,21 +146,21 @@ class SimpleBatchProcessor:
         batch = self.queue[:self.batch_size]
         self.queue = self.queue[self.batch_size:]
         
-        print(f"\n🔄 Processing batch of {len(batch)} requests")
+        print(f"\n🔄 Processing batch of {len (batch)} requests")
         start_time = time.time()
         
         # Process all requests in parallel
-        tasks = [self._process_single(req) for req in batch]
+        tasks = [self._process_single (req) for req in batch]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         elapsed = time.time() - start_time
         print(f"✅ Batch completed in {elapsed:.2f}s")
-        print(f"   Avg time per request: {elapsed/len(batch):.2f}s\n")
+        print(f"   Avg time per request: {elapsed/len (batch):.2f}s\n")
         
         # Call callbacks
-        for request, result in zip(batch, results):
-            if request.callback and not isinstance(result, Exception):
-                request.callback(result)
+        for request, result in zip (batch, results):
+            if request.callback and not isinstance (result, Exception):
+                request.callback (result)
         
         self.processing = False
         
@@ -170,7 +170,7 @@ class SimpleBatchProcessor:
         
         return results
     
-    async def _process_single(self, request: BatchRequest):
+    async def _process_single (self, request: BatchRequest):
         """Process single request"""
         print(f"  Processing {request.id}...")
         
@@ -246,42 +246,42 @@ class AdaptiveBatchProcessor:
         self.batch_latencies = []
         self.batch_sizes = []
     
-    async def process_batch(self, requests: List[BatchRequest]):
+    async def process_batch (self, requests: List[BatchRequest]):
         """Process batch and adjust size"""
         
         start_time = time.time()
         
         # Process requests in parallel
-        tasks = [self._process_single(req) for req in requests]
+        tasks = [self._process_single (req) for req in requests]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         latency = time.time() - start_time
         
         # Record metrics
-        self.batch_latencies.append(latency)
-        self.batch_sizes.append(len(requests))
+        self.batch_latencies.append (latency)
+        self.batch_sizes.append (len (requests))
         
         # Keep only recent history
-        if len(self.batch_latencies) > 20:
+        if len (self.batch_latencies) > 20:
             self.batch_latencies = self.batch_latencies[-20:]
             self.batch_sizes = self.batch_sizes[-20:]
         
         # Adjust batch size
-        self._adjust_batch_size(latency, len(requests))
+        self._adjust_batch_size (latency, len (requests))
         
         return results
     
-    def _adjust_batch_size(self, latency: float, batch_size: int):
+    def _adjust_batch_size (self, latency: float, batch_size: int):
         """Dynamically adjust batch size based on performance"""
         
         # If we're consistently under target latency, increase batch size
-        if len(self.batch_latencies) >= 3:
-            recent_avg_latency = statistics.mean(self.batch_latencies[-3:])
+        if len (self.batch_latencies) >= 3:
+            recent_avg_latency = statistics.mean (self.batch_latencies[-3:])
             
             if recent_avg_latency < self.target_latency * 0.8:
                 # We have headroom, increase batch size
                 new_size = min(
-                    int(self.current_batch_size * 1.2),
+                    int (self.current_batch_size * 1.2),
                     self.max_batch_size
                 )
                 if new_size > self.current_batch_size:
@@ -291,29 +291,29 @@ class AdaptiveBatchProcessor:
             elif recent_avg_latency > self.target_latency:
                 # We're too slow, decrease batch size
                 new_size = max(
-                    int(self.current_batch_size * 0.8),
+                    int (self.current_batch_size * 0.8),
                     self.min_batch_size
                 )
                 if new_size < self.current_batch_size:
                     print(f"📉 Decreasing batch size: {self.current_batch_size} → {new_size}")
                     self.current_batch_size = new_size
     
-    def get_recommended_batch_size(self) -> int:
+    def get_recommended_batch_size (self) -> int:
         """Get current recommended batch size"""
         return self.current_batch_size
     
-    def get_performance_report(self) -> str:
+    def get_performance_report (self) -> str:
         """Generate performance report"""
         if not self.batch_latencies:
             return "No batches processed yet"
         
-        avg_latency = statistics.mean(self.batch_latencies)
-        avg_batch_size = statistics.mean(self.batch_sizes)
-        total_requests = sum(self.batch_sizes)
+        avg_latency = statistics.mean (self.batch_latencies)
+        avg_batch_size = statistics.mean (self.batch_sizes)
+        total_requests = sum (self.batch_sizes)
         
         return f"""
 Adaptive Batch Performance:
-  Total Batches: {len(self.batch_latencies)}
+  Total Batches: {len (self.batch_latencies)}
   Total Requests: {total_requests}
   Avg Batch Size: {avg_batch_size:.1f}
   Avg Latency: {avg_latency:.2f}s
@@ -330,10 +330,10 @@ processor = AdaptiveBatchProcessor(
 # Process multiple batches - size auto-adjusts
 for batch_num in range(10):
     batch_size = processor.get_recommended_batch_size()
-    requests = [BatchRequest(f"req_{i}", f"prompt_{i}", "gpt-3.5-turbo") 
-                for i in range(batch_size)]
+    requests = [BatchRequest (f"req_{i}", f"prompt_{i}", "gpt-3.5-turbo") 
+                for i in range (batch_size)]
     
-    await processor.process_batch(requests)
+    await processor.process_batch (requests)
 
 print(processor.get_performance_report())
 
@@ -367,7 +367,7 @@ class PriorityBatchProcessor:
         self.priority_queue = []
         self.counter = 0  # For stable sorting
     
-    async def submit(self, request: BatchRequest):
+    async def submit (self, request: BatchRequest):
         """Submit request with priority"""
         
         # Push to heap: (priority, counter, request)
@@ -378,13 +378,13 @@ class PriorityBatchProcessor:
         )
         self.counter += 1
         
-        print(f"📝 Queued {request.id} (priority: {Priority(request.priority).name})")
+        print(f"📝 Queued {request.id} (priority: {Priority (request.priority).name})")
         
         # Process if we have enough items
-        if len(self.priority_queue) >= self.batch_size:
+        if len (self.priority_queue) >= self.batch_size:
             await self.process_next_batch()
     
-    async def process_next_batch(self):
+    async def process_next_batch (self):
         """Process next batch in priority order"""
         
         if not self.priority_queue:
@@ -392,22 +392,22 @@ class PriorityBatchProcessor:
         
         # Take highest priority items
         batch = []
-        for _ in range(min(self.batch_size, len(self.priority_queue))):
-            priority, counter, request = heapq.heappop(self.priority_queue)
-            batch.append(request)
+        for _ in range (min (self.batch_size, len (self.priority_queue))):
+            priority, counter, request = heapq.heappop (self.priority_queue)
+            batch.append (request)
         
-        print(f"\n🔄 Processing batch of {len(batch)} requests")
-        print(f"   Priorities: {[Priority(r.priority).name for r in batch]}")
+        print(f"\n🔄 Processing batch of {len (batch)} requests")
+        print(f"   Priorities: {[Priority (r.priority).name for r in batch]}")
         
         # Process in parallel
-        tasks = [self._process_single(req) for req in batch]
+        tasks = [self._process_single (req) for req in batch]
         results = await asyncio.gather(*tasks)
         
         print(f"✅ Batch completed\n")
         
         return results
     
-    async def _process_single(self, request: BatchRequest):
+    async def _process_single (self, request: BatchRequest):
         """Process single request"""
         response = await openai.ChatCompletion.acreate(
             model=request.model,
@@ -415,20 +415,20 @@ class PriorityBatchProcessor:
         )
         return response.choices[0].message.content
     
-    def get_queue_stats(self) -> Dict:
+    def get_queue_stats (self) -> Dict:
         """Get queue statistics by priority"""
         priority_counts = {p.name: 0 for p in Priority}
         
         for priority, _, _ in self.priority_queue:
-            priority_counts[Priority(priority).name] += 1
+            priority_counts[Priority (priority).name] += 1
         
         return {
-            "total": len(self.priority_queue),
+            "total": len (self.priority_queue),
             "by_priority": priority_counts
         }
 
 # Usage
-processor = PriorityBatchProcessor(batch_size=5)
+processor = PriorityBatchProcessor (batch_size=5)
 
 # Submit mixed priority requests
 requests = [
@@ -441,7 +441,7 @@ requests = [
 ]
 
 for req in requests:
-    await processor.submit(req)
+    await processor.submit (req)
 
 # Output:
 # 🔄 Processing batch of 5 requests
@@ -473,43 +473,43 @@ class CostOptimizedBatchProcessor:
         self.total_cost = 0.0
         self.requests_processed = 0
     
-    async def process_batch(self, requests: List[BatchRequest]):
+    async def process_batch (self, requests: List[BatchRequest]):
         """Process batch with cost optimization"""
         
-        print(f"\n💰 Cost-optimized batch processing ({len(requests)} requests)")
+        print(f"\n💰 Cost-optimized batch processing ({len (requests)} requests)")
         
         # Strategy 1: Group by model for efficiency
-        by_model = self._group_by_model(requests)
+        by_model = self._group_by_model (requests)
         
         # Strategy 2: Downgrade to cheaper models if acceptable
         if self.use_cheaper_models:
-            by_model = self._optimize_model_selection(by_model)
+            by_model = self._optimize_model_selection (by_model)
         
         # Strategy 3: Process each model group in parallel
         all_results = []
         for model, model_requests in by_model.items():
-            print(f"  Processing {len(model_requests)} requests with {model}")
-            results = await self._process_model_batch(model, model_requests)
-            all_results.extend(results)
+            print(f"  Processing {len (model_requests)} requests with {model}")
+            results = await self._process_model_batch (model, model_requests)
+            all_results.extend (results)
         
         # Calculate cost
-        batch_cost = self._calculate_batch_cost(all_results)
+        batch_cost = self._calculate_batch_cost (all_results)
         self.total_cost += batch_cost
-        self.requests_processed += len(requests)
+        self.requests_processed += len (requests)
         
-        avg_cost = batch_cost / len(requests)
+        avg_cost = batch_cost / len (requests)
         print(f"  Batch cost: \${batch_cost:.4f} (\${avg_cost:.4f}/request)")
         print(f"  Total saved: \${self._estimate_savings():.2f}\n")
         
         return all_results
     
-    def _group_by_model(self, requests: List[BatchRequest]) -> Dict[str, List[BatchRequest]]:
+    def _group_by_model (self, requests: List[BatchRequest]) -> Dict[str, List[BatchRequest]]:
         """Group requests by model"""
         by_model = {}
         for req in requests:
             if req.model not in by_model:
                 by_model[req.model] = []
-            by_model[req.model].append(req)
+            by_model[req.model].append (req)
         return by_model
     
     def _optimize_model_selection(
@@ -522,20 +522,20 @@ class CostOptimizedBatchProcessor:
         
         for model, requests in by_model.items():
             # For batch processing, simpler tasks can use cheaper models
-            if model == "gpt-4" and self._can_use_cheaper_model(requests):
-                print(f"  ⚡ Downgrading {len(requests)} requests: gpt-4 → gpt-3.5-turbo")
+            if model == "gpt-4" and self._can_use_cheaper_model (requests):
+                print(f"  ⚡ Downgrading {len (requests)} requests: gpt-4 → gpt-3.5-turbo")
                 model = "gpt-3.5-turbo"
             
             if model not in optimized:
                 optimized[model] = []
-            optimized[model].extend(requests)
+            optimized[model].extend (requests)
         
         return optimized
     
-    def _can_use_cheaper_model(self, requests: List[BatchRequest]) -> bool:
+    def _can_use_cheaper_model (self, requests: List[BatchRequest]) -> bool:
         """Check if cheaper model is acceptable"""
         # Heuristic: if all prompts are short, use cheaper model
-        avg_prompt_length = sum(len(r.prompt) for r in requests) / len(requests)
+        avg_prompt_length = sum (len (r.prompt) for r in requests) / len (requests)
         return avg_prompt_length < 200  # Simplified heuristic
     
     async def _process_model_batch(
@@ -551,12 +551,12 @@ class CostOptimizedBatchProcessor:
                 model=model,
                 messages=[{"role": "user", "content": req.prompt}]
             )
-            tasks.append(task)
+            tasks.append (task)
         
         responses = await asyncio.gather(*tasks)
         
         results = []
-        for req, response in zip(requests, responses):
+        for req, response in zip (requests, responses):
             results.append({
                 "id": req.id,
                 "model": model,
@@ -566,7 +566,7 @@ class CostOptimizedBatchProcessor:
         
         return results
     
-    def _calculate_batch_cost(self, results: List[Dict]) -> float:
+    def _calculate_batch_cost (self, results: List[Dict]) -> float:
         """Calculate total cost for batch"""
         
         pricing = {
@@ -585,7 +585,7 @@ class CostOptimizedBatchProcessor:
         
         return total_cost
     
-    def _estimate_savings(self) -> float:
+    def _estimate_savings (self) -> float:
         """Estimate cost savings vs sequential processing"""
         # Sequential processing might not benefit from model optimization
         sequential_cost = self.requests_processed * 0.001  # Rough estimate
@@ -599,11 +599,11 @@ processor = CostOptimizedBatchProcessor(
 
 # Submit mix of requests
 requests = [
-    BatchRequest(f"req_{i}", f"Short prompt {i}", "gpt-4")
+    BatchRequest (f"req_{i}", f"Short prompt {i}", "gpt-4")
     for i in range(20)
 ]
 
-results = await processor.process_batch(requests)
+results = await processor.process_batch (requests)
 
 # Output:
 # 💰 Cost-optimized batch processing (20 requests)
@@ -645,8 +645,8 @@ app.conf.task_queues = (
     Queue('batch', priority=1),
 )
 
-@app.task(bind=True, max_retries=3)
-def process_llm_request(self, request_id: str, prompt: str, model: str):
+@app.task (bind=True, max_retries=3)
+def process_llm_request (self, request_id: str, prompt: str, model: str):
     """Process individual LLM request"""
     try:
         response = openai.ChatCompletion.create(
@@ -661,13 +661,13 @@ def process_llm_request(self, request_id: str, prompt: str, model: str):
         }
     except Exception as exc:
         # Retry with exponential backoff
-        raise self.retry(exc=exc, countdown=2 ** self.request.retries)
+        raise self.retry (exc=exc, countdown=2 ** self.request.retries)
 
 @app.task
-def process_llm_batch(request_batch: List[Dict]):
+def process_llm_batch (request_batch: List[Dict]):
     """Process batch of LLM requests in parallel"""
     
-    print(f"Processing batch of {len(request_batch)} requests")
+    print(f"Processing batch of {len (request_batch)} requests")
     
     # Create group of parallel tasks
     job = group(
@@ -684,11 +684,11 @@ def process_llm_batch(request_batch: List[Dict]):
     # Wait for all to complete (or use callback)
     results = result.get()
     
-    print(f"Batch completed: {len(results)} results")
+    print(f"Batch completed: {len (results)} results")
     return results
 
 # Submit batch job
-def submit_batch_job(requests: List[Dict]):
+def submit_batch_job (requests: List[Dict]):
     """Submit batch processing job"""
     
     # Send to batch queue (lower priority)
@@ -708,17 +708,17 @@ requests = [
 ]
 
 # Submit for batch processing
-job_id = submit_batch_job(requests)
+job_id = submit_batch_job (requests)
 
 # Check status later
 from celery.result import AsyncResult
-result = AsyncResult(job_id)
+result = AsyncResult (job_id)
 print(f"Job status: {result.status}")
 
 # Get results when ready
 if result.ready():
     results = result.get()
-    print(f"Processed {len(results)} requests")
+    print(f"Processed {len (results)} requests")
 \`\`\`
 
 ---
@@ -740,37 +740,37 @@ class ScheduledBatchProcessor:
             "afternoon": dt_time(14, 0), # 2 PM
         }
     
-    def queue_for_next_batch(self, request: BatchRequest):
+    def queue_for_next_batch (self, request: BatchRequest):
         """Queue request for next scheduled batch"""
-        self.pending_requests.append(request)
+        self.pending_requests.append (request)
         next_run = self.get_next_scheduled_run()
         print(f"📅 Queued for batch at {next_run}")
     
-    def get_next_scheduled_run(self) -> datetime:
+    def get_next_scheduled_run (self) -> datetime:
         """Get next scheduled batch time"""
         now = datetime.now()
         
         # Find next scheduled time
-        for name, scheduled_time in sorted(self.schedule.items(), key=lambda x: x[1]):
-            scheduled_datetime = datetime.combine(now.date(), scheduled_time)
+        for name, scheduled_time in sorted (self.schedule.items(), key=lambda x: x[1]):
+            scheduled_datetime = datetime.combine (now.date(), scheduled_time)
             if scheduled_datetime > now:
                 return scheduled_datetime
         
         # If all times today have passed, use tomorrow's first slot
-        first_time = min(self.schedule.values())
-        return datetime.combine(now.date(), first_time) + timedelta(days=1)
+        first_time = min (self.schedule.values())
+        return datetime.combine (now.date(), first_time) + timedelta (days=1)
     
-    async def run_scheduled_batch(self):
+    async def run_scheduled_batch (self):
         """Run the scheduled batch"""
         if not self.pending_requests:
             print("No pending requests")
             return
         
         print(f"\n⏰ Running scheduled batch at {datetime.now()}")
-        print(f"   Processing {len(self.pending_requests)} queued requests")
+        print(f"   Processing {len (self.pending_requests)} queued requests")
         
         # Process all pending
-        results = await self.process_batch(self.pending_requests)
+        results = await self.process_batch (self.pending_requests)
         
         # Clear queue
         self.pending_requests = []
@@ -781,15 +781,15 @@ class ScheduledBatchProcessor:
 app.conf.beat_schedule = {
     'process-batch-night': {
         'task': 'tasks.run_scheduled_batch',
-        'schedule': crontab(hour=2, minute=0),  # 2 AM daily
+        'schedule': crontab (hour=2, minute=0),  # 2 AM daily
     },
     'process-batch-morning': {
         'task': 'tasks.run_scheduled_batch',
-        'schedule': crontab(hour=8, minute=0),  # 8 AM daily
+        'schedule': crontab (hour=8, minute=0),  # 8 AM daily
     },
     'process-batch-afternoon': {
         'task': 'tasks.run_scheduled_batch',
-        'schedule': crontab(hour=14, minute=0),  # 2 PM daily
+        'schedule': crontab (hour=14, minute=0),  # 2 PM daily
     },
 }
 
@@ -799,7 +799,7 @@ processor = ScheduledBatchProcessor()
 # Queue requests throughout the day
 for i in range(1000):
     processor.queue_for_next_batch(
-        BatchRequest(f"req_{i}", f"Analyze document {i}", "gpt-3.5-turbo")
+        BatchRequest (f"req_{i}", f"Analyze document {i}", "gpt-3.5-turbo")
     )
 
 # Batches automatically run at 2 AM, 8 AM, 2 PM
@@ -820,29 +820,29 @@ class BatchMetrics:
     total_batches: int = 0
     total_requests: int = 0
     total_cost: float = 0.0
-    batch_latencies: List[float] = field(default_factory=list)
-    batch_sizes: List[int] = field(default_factory=list)
+    batch_latencies: List[float] = field (default_factory=list)
+    batch_sizes: List[int] = field (default_factory=list)
     
-    def record_batch(self, size: int, latency: float, cost: float):
+    def record_batch (self, size: int, latency: float, cost: float):
         """Record batch metrics"""
         self.total_batches += 1
         self.total_requests += size
         self.total_cost += cost
-        self.batch_latencies.append(latency)
-        self.batch_sizes.append(size)
+        self.batch_latencies.append (latency)
+        self.batch_sizes.append (size)
     
-    def get_report(self) -> str:
+    def get_report (self) -> str:
         """Generate metrics report"""
         if not self.batch_latencies:
             return "No batches processed"
         
-        avg_latency = statistics.mean(self.batch_latencies)
-        avg_batch_size = statistics.mean(self.batch_sizes)
+        avg_latency = statistics.mean (self.batch_latencies)
+        avg_batch_size = statistics.mean (self.batch_sizes)
         avg_cost_per_request = self.total_cost / self.total_requests
         
         # Estimate savings vs sequential processing
         sequential_time = self.total_requests * 2.0  # 2s per request
-        actual_time = sum(self.batch_latencies)
+        actual_time = sum (self.batch_latencies)
         time_saved = sequential_time - actual_time
         
         return f"""

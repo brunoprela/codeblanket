@@ -36,7 +36,7 @@ class FXMarketMaker:
         self.inventory = 0  # EUR position
         self.pnl = 0  # USD P&L
     
-    def quote(self, fair_value, spread_half=0.00025):
+    def quote (self, fair_value, spread_half=0.00025):
         """
         Post bid/ask around fair value
         """
@@ -46,7 +46,7 @@ class FXMarketMaker:
             'spread_pips': spread_half * 2 * 10000
         }
     
-    def trade(self, side, amount_eur, price):
+    def trade (self, side, amount_eur, price):
         """Execute trade and update position"""
         if side == 'buy':  # We buy EUR (client sells)
             self.inventory += amount_eur
@@ -55,17 +55,17 @@ class FXMarketMaker:
             self.inventory -= amount_eur
             self.pnl += amount_eur * price
     
-    def profit_from_spread(self):
+    def profit_from_spread (self):
         """
         Example: Client buys €1M, then sells €1M
         We capture full spread
         """
         fair_value = 1.10025
-        quotes = self.quote(fair_value)
+        quotes = self.quote (fair_value)
         
         # Client buys €1M (we sell at ask)
         self.trade('sell', 1_000_000, quotes['ask'])
-        print(f"Sold €1M at {quotes['ask']} → {self.inventory:,} EUR, \${self.pnl:, .0f} USD")
+        print(f"Sold €1M at {quotes['ask']} → {self.inventory:,} EUR, \${self.pnl:,.0f} USD")
         
         # Client sells €1M(we buy at bid)
 self.trade('buy', 1_000_000, quotes['bid'])
@@ -268,7 +268,7 @@ class FXPriceAggregator:
     def __init__(self):
         self.quotes = {}  # currency_pair -> List[FXQuote]
     
-    def update_quote(self, quote: FXQuote):
+    def update_quote (self, quote: FXQuote):
         """Receive real-time quote from provider"""
         pair = quote.currency_pair
         if pair not in self.quotes:
@@ -278,13 +278,13 @@ class FXPriceAggregator:
         self.quotes[pair] = [q for q in self.quotes[pair] if q.provider != quote.provider]
         
         # Add new quote
-        self.quotes[pair].append(quote)
+        self.quotes[pair].append (quote)
         
         # Remove stale quotes (> 1 second old)
         now = time.time()
         self.quotes[pair] = [q for q in self.quotes[pair] if now - q.timestamp < 1.0]
     
-    def get_best_quotes(self, currency_pair: str) -> Dict:
+    def get_best_quotes (self, currency_pair: str) -> Dict:
         """Find best bid/ask across all providers"""
         if currency_pair not in self.quotes or not self.quotes[currency_pair]:
             return None
@@ -292,10 +292,10 @@ class FXPriceAggregator:
         quotes = self.quotes[currency_pair]
         
         # Best bid = highest (best to sell at)
-        best_bid_quote = max(quotes, key=lambda q: q.bid)
+        best_bid_quote = max (quotes, key=lambda q: q.bid)
         
         # Best ask = lowest (best to buy at)
-        best_ask_quote = min(quotes, key=lambda q: q.ask)
+        best_ask_quote = min (quotes, key=lambda q: q.ask)
         
         return {
             'bid': best_bid_quote.bid,
@@ -313,14 +313,14 @@ class SmartOrderRouter:
     def __init__(self, aggregator: FXPriceAggregator):
         self.aggregator = aggregator
     
-    def execute_order(self, currency_pair: str, side: str, amount: float):
+    def execute_order (self, currency_pair: str, side: str, amount: float):
         """
         Execute order using smart routing
         
         side: 'buy' or 'sell'
         amount: notional in base currency
         """
-        best = self.aggregator.get_best_quotes(currency_pair)
+        best = self.aggregator.get_best_quotes (currency_pair)
         
         if not best:
             return {'error': 'No quotes available'}
@@ -342,7 +342,7 @@ class SmartOrderRouter:
         
         if amount > provider_quote.liquidity:
             # Need to split order across multiple providers
-            return self._execute_split_order(currency_pair, side, amount, best['all_quotes'])
+            return self._execute_split_order (currency_pair, side, amount, best['all_quotes'])
         
         # Execute
         return {
@@ -354,33 +354,33 @@ class SmartOrderRouter:
             'timestamp': time.time()
         }
     
-    def _execute_split_order(self, pair, side, total_amount, quotes):
+    def _execute_split_order (self, pair, side, total_amount, quotes):
         """Split large order across multiple providers"""
         fills = []
         remaining = total_amount
         
         # Sort quotes by price (best first)
         if side == 'buy':
-            sorted_quotes = sorted(quotes, key=lambda q: q.ask)
+            sorted_quotes = sorted (quotes, key=lambda q: q.ask)
             price_key = 'ask'
         else:
-            sorted_quotes = sorted(quotes, key=lambda q: q.bid, reverse=True)
+            sorted_quotes = sorted (quotes, key=lambda q: q.bid, reverse=True)
             price_key = 'bid'
         
         for quote in sorted_quotes:
             if remaining <= 0:
                 break
             
-            fill_amount = min(remaining, quote.liquidity)
+            fill_amount = min (remaining, quote.liquidity)
             fills.append({
                 'provider': quote.provider,
-                'price': getattr(quote, price_key),
+                'price': getattr (quote, price_key),
                 'amount': fill_amount
             })
             remaining -= fill_amount
         
         # Calculate average price
-        total_notional = sum(f['amount'] * f['price'] for f in fills)
+        total_notional = sum (f['amount'] * f['price'] for f in fills)
         avg_price = total_notional / total_amount
         
         return {
@@ -399,7 +399,7 @@ class FXPortfolio:
         self.trades = []
         self.positions[base_currency] = 1_000_000  # Start with $1M
     
-    def execute_trade(self, trade_result):
+    def execute_trade (self, trade_result):
         """Update positions after trade"""
         if trade_result.get('status') != 'filled':
             return
@@ -412,16 +412,16 @@ class FXPortfolio:
         price = trade_result['price']
         
         # Update positions
-        if 'buy' in str(trade_result.get('side', '')):
-            self.positions[base_ccy] = self.positions.get(base_ccy, 0) + amount
-            self.positions[quote_ccy] = self.positions.get(quote_ccy, 0) - amount * price
+        if 'buy' in str (trade_result.get('side', '')):
+            self.positions[base_ccy] = self.positions.get (base_ccy, 0) + amount
+            self.positions[quote_ccy] = self.positions.get (quote_ccy, 0) - amount * price
         else:
-            self.positions[base_ccy] = self.positions.get(base_ccy, 0) - amount
-            self.positions[quote_ccy] = self.positions.get(quote_ccy, 0) + amount * price
+            self.positions[base_ccy] = self.positions.get (base_ccy, 0) - amount
+            self.positions[quote_ccy] = self.positions.get (quote_ccy, 0) + amount * price
         
-        self.trades.append(trade_result)
+        self.trades.append (trade_result)
     
-    def calculate_pnl(self, current_rates: Dict[str, float]):
+    def calculate_pnl (self, current_rates: Dict[str, float]):
         """
         Calculate P&L in base currency
         
@@ -434,7 +434,7 @@ class FXPortfolio:
             if currency == self.base:
                 total_base += amount
             else:
-                rate = current_rates.get(currency, 1.0)
+                rate = current_rates.get (currency, 1.0)
                 total_base += amount * rate
         
         initial_capital = 1_000_000
@@ -448,7 +448,7 @@ class FXPortfolio:
             'positions': self.positions
         }
     
-    def hedging_recommendations(self, target_currency=None):
+    def hedging_recommendations (self, target_currency=None):
         """
         Recommend hedges to reduce FX risk
         """
@@ -458,13 +458,13 @@ class FXPortfolio:
             if currency == self.base:
                 continue
             
-            if abs(amount) > 100_000:  # Material exposure
+            if abs (amount) > 100_000:  # Material exposure
                 hedge_direction = 'sell' if amount > 0 else 'buy'
                 recommendations.append({
                     'currency': currency,
                     'exposure': amount,
-                    'recommendation': f'{hedge_direction} {abs(amount):,.0f} {currency} forward',
-                    'rationale': f'Hedge {abs(amount):,.0f} {currency} exposure'
+                    'recommendation': f'{hedge_direction} {abs (amount):,.0f} {currency} forward',
+                    'rationale': f'Hedge {abs (amount):,.0f} {currency} exposure'
                 })
         
         return recommendations
@@ -474,8 +474,8 @@ print("=== FX Trading System ===\\n")
 
 # Set up system
 aggregator = FXPriceAggregator()
-router = SmartOrderRouter(aggregator)
-portfolio = FXPortfolio(base_currency='USD')
+router = SmartOrderRouter (aggregator)
+portfolio = FXPortfolio (base_currency='USD')
 
 # Simulate quotes from multiple providers
 aggregator.update_quote(FXQuote('Citibank', 'EUR/USD', 1.1000, 1.1005, time.time(), 1_000_000))
@@ -494,8 +494,7 @@ print(f"Executed: Buy €1M at {trade['price']} via {trade['provider']}")
 
 # Calculate P&L
 pnl = portfolio.calculate_pnl({'EUR': 1.1050})  # EUR strengthened
-print(f"\\nP&L: \${pnl['pnl']:, .0f
-} ({ pnl['pnl_pct']: .2f } %)")
+print(f"\\nP&L: \${pnl['pnl']:,.0f} ({ pnl['pnl_pct']: .2f } %)")
 
 # Hedging
 hedges = portfolio.hedging_recommendations()

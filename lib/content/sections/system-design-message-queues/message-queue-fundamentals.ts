@@ -289,7 +289,7 @@ Consumer receives: Message 2 → Message 3 → Message 1
 Why? Distributed system, multiple consumers, network delays
 \`\`\`
 
-**When It's OK:**
+**When It\'s OK:**
 - Independent events (user registrations)
 - Stateless operations (send email)
 - Metrics aggregation

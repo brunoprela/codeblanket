@@ -53,13 +53,13 @@ export const regressionMetricsMultipleChoice = {
         'What is a major limitation of MAPE (Mean Absolute Percentage Error)?',
       options: [
         "It can't be used for regression problems",
-        "It's undefined when actual values are zero and asymmetric (penalizes over-predictions more)",
+        "It\'s undefined when actual values are zero and asymmetric (penalizes over-predictions more)",
         "It's too slow to compute",
         'It requires more data than other metrics',
       ],
       correctAnswer: 1,
       explanation:
-        "MAPE divides by actual values, so it's undefined when y=0. It's also asymmetric: a $50 error on $100 (50%) is treated worse than a $50 error on $200 (25%), even though absolute error is the same.",
+        "MAPE divides by actual values, so it's undefined when y=0. It\'s also asymmetric: a $50 error on $100 (50%) is treated worse than a $50 error on $200 (25%), even though absolute error is the same.",
       difficulty: 'advanced' as const,
       category: 'Limitations',
     },

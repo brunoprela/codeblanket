@@ -1,7 +1,7 @@
 export const leveragedBuyouts = {
-    title: 'Leveraged Buyouts (LBO)',
-    id: 'leveraged-buyouts',
-    content: `
+  title: 'Leveraged Buyouts (LBO)',
+  id: 'leveraged-buyouts',
+  content: `
 # Leveraged Buyouts (LBO)
 
 A **Leveraged Buyout (LBO)** is the acquisition of a company using significant amounts of borrowed money (leverage) to meet the purchase price. The assets of the company being acquired are typically used as collateral. LBOs are the cornerstone of private equity investing—understanding them is essential for finance professionals.
@@ -40,7 +40,7 @@ Return on Equity = (Total Return - Debt Repayment + Value Creation) / Equity Inv
 - Hold 5 years, grow EBITDA, pay down debt
 - Sell for $150M, debt reduced to $30M
 - Equity value = $150M - $30M = $120M
-- Return = ($120M - $40M) / $40M = 200% (5-year), 25% IRR
+- Return = (\$120M - $40M) / $40M = 200% (5-year), 25% IRR
 
 **Three Sources of Value Creation**:
 1. **Deleveraging**: Debt paydown (using cash flow)
@@ -144,7 +144,7 @@ class LBOModel:
         self.projections = pd.DataFrame()
         self.returns = {}
     
-    def sources_and_uses(self):
+    def sources_and_uses (self):
         """Build sources and uses of funds."""
         sources = {
             'Equity': self.equity_investment,
@@ -172,10 +172,10 @@ class LBOModel:
         interest_rate: float
     ):
         """Project financial statements."""
-        years = len(revenue_growth_rates)
+        years = len (revenue_growth_rates)
         
         data = {
-            'Year': list(range(1, years + 1)),
+            'Year': list (range(1, years + 1)),
             'Revenue': [base_revenue],
             'EBITDA': [],
             'EBITDA_Margin': ebitda_margins,
@@ -195,12 +195,12 @@ class LBOModel:
         }
         
         # Project revenue
-        for i, growth_rate in enumerate(revenue_growth_rates[1:]):
-            data['Revenue'].append(data['Revenue'][-1] * (1 + growth_rate))
+        for i, growth_rate in enumerate (revenue_growth_rates[1:]):
+            data['Revenue'].append (data['Revenue'][-1] * (1 + growth_rate))
         
         prev_nwc = base_revenue * nwc_pct_revenue
         
-        for i in range(years):
+        for i in range (years):
             revenue = data['Revenue'][i]
             ebitda_margin = data['EBITDA_Margin'][i]
             
@@ -225,32 +225,32 @@ class LBOModel:
             fcf = net_income + da - capex - change_nwc
             
             # Debt paydown (use all FCF)
-            debt_paydown = min(fcf, debt_beg)  # Can't pay more than outstanding
+            debt_paydown = min (fcf, debt_beg)  # Can't pay more than outstanding
             debt_end = debt_beg - debt_paydown
             
             # Store results
-            data['EBITDA'].append(ebitda)
-            data['D&A'].append(da)
-            data['EBIT'].append(ebit)
-            data['Interest'].append(interest)
-            data['EBT'].append(ebt)
-            data['Taxes'].append(taxes)
-            data['Net_Income'].append(net_income)
-            data['CapEx'].append(capex)
-            data['NWC'].append(nwc)
-            data['Change_in_NWC'].append(change_nwc)
-            data['FCF'].append(fcf)
-            data['Debt_Paydown'].append(debt_paydown)
-            data['Debt_Ending'].append(debt_end)
+            data['EBITDA'].append (ebitda)
+            data['D&A'].append (da)
+            data['EBIT'].append (ebit)
+            data['Interest'].append (interest)
+            data['EBT'].append (ebt)
+            data['Taxes'].append (taxes)
+            data['Net_Income'].append (net_income)
+            data['CapEx'].append (capex)
+            data['NWC'].append (nwc)
+            data['Change_in_NWC'].append (change_nwc)
+            data['FCF'].append (fcf)
+            data['Debt_Paydown'].append (debt_paydown)
+            data['Debt_Ending'].append (debt_end)
             
             # Next year's beginning debt
             if i < years - 1:
-                data['Debt_Beginning'].append(debt_end)
+                data['Debt_Beginning'].append (debt_end)
         
-        self.projections = pd.DataFrame(data)
+        self.projections = pd.DataFrame (data)
         return self.projections
     
-    def calculate_returns(self, exit_multiple: float):
+    def calculate_returns (self, exit_multiple: float):
         """Calculate IRR and MOIC."""
         if self.projections.empty:
             raise ValueError("Must project financials first")
@@ -272,16 +272,16 @@ class LBOModel:
         
         # IRR (solve for discount rate where NPV = 0)
         cash_flows = [-self.equity_investment]  # Year 0 outflow
-        for i in range(len(self.projections) - 1):
+        for i in range (len (self.projections) - 1):
             cash_flows.append(0)  # No interim cash flows (assumes no dividends)
-        cash_flows.append(exit_equity_value)  # Year N inflow
+        cash_flows.append (exit_equity_value)  # Year N inflow
         
         # Solve for IRR
-        def npv(rate):
-            return sum(cf / (1 + rate) ** i for i, cf in enumerate(cash_flows))
+        def npv (rate):
+            return sum (cf / (1 + rate) ** i for i, cf in enumerate (cash_flows))
         
         try:
-            irr = fsolve(npv, 0.20)[0]  # Initial guess 20%
+            irr = fsolve (npv, 0.20)[0]  # Initial guess 20%
         except:
             irr = np.nan
         
@@ -324,11 +324,11 @@ class LBOModel:
                 
                 cash_flows = [-self.equity_investment] + [0] * (self.exit_year - 1) + [exit_equity]
                 
-                def npv(rate):
-                    return sum(cf / (1 + rate) ** i for i, cf in enumerate(cash_flows))
+                def npv (rate):
+                    return sum (cf / (1 + rate) ** i for i, cf in enumerate (cash_flows))
                 
                 try:
-                    irr = fsolve(npv, 0.20)[0]
+                    irr = fsolve (npv, 0.20)[0]
                 except:
                     irr = np.nan
                 
@@ -339,9 +339,9 @@ class LBOModel:
                     'IRR': irr * 100
                 })
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def print_lbo_summary(self):
+    def print_lbo_summary (self):
         """Print formatted LBO summary."""
         print(f"\\n{'=' * 70}")
         print(f"LBO Analysis: {self.company_name}")
@@ -353,31 +353,31 @@ class LBOModel:
         for key, value in su['Sources'].items():
             if key != 'Total Sources':
                 pct = value / self.purchase_price
-                print(f"  {key}: ${value:,.0f}M ({pct:.1%})")
+                print(f"  {key}: \${value:,.0f}M ({pct:.1%})")
 print(f"  {'-' * 66}")
-print(f"  Total: ${su['Sources']['Total Sources']:,.0f}M\\n")
+print(f"  Total: \${su['Sources']['Total Sources']:,.0f}M\\n")
 
 print("Uses of Funds:")
 for key, value in su['Uses'].items():
     if key != 'Total Uses':
-        print(f"  {key}: ${value:,.0f}M")
+        print(f"  {key}: \${value:,.0f}M")
 print(f"  {'-' * 66}")
-print(f"  Total: ${su['Uses']['Total Uses']:,.0f}M\\n")
+print(f"  Total: \${su['Uses']['Total Uses']:,.0f}M\\n")
         
         # Financial projections summary
 print(f"Financial Projections (Year 1 to {self.exit_year}):")
 summary_cols = ['Year', 'Revenue', 'EBITDA', 'EBITDA_Margin', 'FCF', 'Debt_Ending']
-print(self.projections[summary_cols].to_string(index = False, float_format = lambda x: f'{x:,.0f}'))
+print(self.projections[summary_cols].to_string (index = False, float_format = lambda x: f'{x:,.0f}'))
         
         # Returns
 print(f"\\nReturns Analysis:")
-print(f"  Exit Year {self.exit_year} EBITDA: ${self.returns['Exit EBITDA']:,.0f}M")
+print(f"  Exit Year {self.exit_year} EBITDA: \${self.returns['Exit EBITDA']:,.0f}M")
 print(f"  Exit Multiple: {self.returns['Exit Multiple']:.1f}×")
-print(f"  Exit Enterprise Value: ${self.returns['Exit EV']:,.0f}M")
-print(f"  Less: Remaining Debt: ${self.returns['Exit Debt']:,.0f}M")
+print(f"  Exit Enterprise Value: \${self.returns['Exit EV']:,.0f}M")
+print(f"  Less: Remaining Debt: \${self.returns['Exit Debt']:,.0f}M")
 print(f"  {'─' * 68}")
-print(f"  Exit Equity Value: ${self.returns['Exit Equity Value']:,.0f}M")
-print(f"\\n  Initial Equity Investment: ${self.returns['Equity Invested']:,.0f}M")
+print(f"  Exit Equity Value: \${self.returns['Exit Equity Value']:,.0f}M")
+print(f"\\n  Initial Equity Investment: \${self.returns['Equity Invested']:,.0f}M")
 print(f"  {'=' * 68}")
 print(f"  MOIC: {self.returns['MOIC']:.2f}×")
 print(f"  IRR: {self.returns['IRR']:.1%}")
@@ -404,8 +404,8 @@ projections = lbo.project_financials(
     interest_rate = 0.07  # 7 % interest rate
 )
 
-# Calculate returns(assume 10× exit multiple)
-returns = lbo.calculate_returns(exit_multiple = 10.0)
+# Calculate returns (assume 10× exit multiple)
+returns = lbo.calculate_returns (exit_multiple = 10.0)
 
 # Print summary
 lbo.print_lbo_summary()
@@ -488,7 +488,7 @@ Exit Multiple
 
 ## LBO Return Drivers (Value Creation Bridge)
 
-Let's decompose returns into three components:
+Let\'s decompose returns into three components:
 
 \`\`\`python
 def lbo_value_bridge(
@@ -542,16 +542,16 @@ bridge = lbo_value_bridge(
 )
 
 print("LBO Value Creation Bridge:")
-print(f"  Entry Equity: ${bridge['Entry Equity']: .0f}M")
-print(f"  Exit Equity: ${bridge['Exit Equity']:.0f}M")
+print(f"  Entry Equity: \${bridge['Entry Equity']:.0f}M")
+print(f"  Exit Equity: \${bridge['Exit Equity']:.0f}M")
 print(f"  {'─' * 40}")
-print(f"  Total Return: ${bridge['Total Return']:.0f}M\\n")
+print(f"  Total Return: \${bridge['Total Return']:.0f}M\\n")
 print(f"  Decomposition:")
-print(f"    1. EBITDA Growth: ${bridge['EBITDA Growth']:.0f}M")
-print(f"    2. Multiple Expansion: ${bridge['Multiple Expansion']:.0f}M")
-print(f"    3. Deleveraging: ${bridge['Deleveraging']:.0f}M")
+print(f"    1. EBITDA Growth: \${bridge['EBITDA Growth']:.0f}M")
+print(f"    2. Multiple Expansion: \${bridge['Multiple Expansion']:.0f}M")
+print(f"    3. Deleveraging: \${bridge['Deleveraging']:.0f}M")
 print(f"  {'─' * 40}")
-print(f"  Total (check): ${bridge['Sum of Components']:.0f}M")
+print(f"  Total (check): \${bridge['Sum of Components']:.0f}M")
 \`\`\`
 
 **Output**:
@@ -618,4 +618,3 @@ LBO Value Creation Bridge:
 LBOs are a powerful financial tool—when executed well, they create substantial value for investors. When executed poorly, they lead to bankruptcy and destroyed value. The difference lies in rigorous analysis, realistic assumptions, and disciplined execution.
 `,
 };
-

@@ -1,16 +1,17 @@
 export const balanceSheetMultipleChoiceQuestions = [
   {
-            id: 1,
-            question: "A company has Current Assets of $500M, Current Liabilities of $400M, Inventory of $200M, and Prepaid Expenses of $50M. The CFO proudly announces 'We have a current ratio of 1.25, showing strong liquidity!' However, a credit analyst raises concerns. What is the MOST valid concern about this company's liquidity?",
-            options: [
-                "The current ratio of 1.25 is too low; it should be at least 2.0 for adequate liquidity",
-                "The quick ratio is only 0.625, indicating the company can't pay current liabilities without selling inventory",
-                "Current assets should always exceed current liabilities by at least 50%, not just 25%",
-                "The company has too much inventory relative to current liabilities",
-                "Prepaid expenses should not be included in current assets"
-            ],
-            correctAnswer: 1,
-            explanation: `The correct answer is B: The quick ratio is only 0.625, indicating the company can't pay current liabilities without selling inventory.
+    id: 1,
+    question:
+      "A company has Current Assets of $500M, Current Liabilities of $400M, Inventory of $200M, and Prepaid Expenses of $50M. The CFO proudly announces 'We have a current ratio of 1.25, showing strong liquidity!' However, a credit analyst raises concerns. What is the MOST valid concern about this company's liquidity?",
+    options: [
+      'The current ratio of 1.25 is too low; it should be at least 2.0 for adequate liquidity',
+      "The quick ratio is only 0.625, indicating the company can't pay current liabilities without selling inventory",
+      'Current assets should always exceed current liabilities by at least 50%, not just 25%',
+      'The company has too much inventory relative to current liabilities',
+      'Prepaid expenses should not be included in current assets',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: The quick ratio is only 0.625, indicating the company can't pay current liabilities without selling inventory.
 
 **Calculating the Quick Ratio**:
 
@@ -30,7 +31,7 @@ quick_assets = current_assets - inventory - prepaid_expenses
 quick_ratio = quick_assets / current_liabilities
 
 print(f"\\nQuick Ratio Calculation:")
-print(f"  Current Assets: \${current_assets:, .0f}")
+print(f"  Current Assets: \${current_assets:,.0f}")
 print(f"  Less: Inventory: \${inventory:,.0f}")
 print(f"  Less: Prepaid Expenses: \${prepaid_expenses:,.0f}")
 print(f"  = Quick Assets: \${quick_assets:,.0f}")
@@ -68,14 +69,14 @@ def analyze_liquidity_problem(
     Quick Ratio: {quick_ratio:.3f} (0.625)
     
     PROBLEM:
-    Company has ${quick_assets:, .0f} in liquid assets
-    But owes ${ current_liabilities:, .0f } in short - term obligations
+    Company has \${quick_assets:,.0f} in liquid assets
+    But owes \${ current_liabilities:, .0f } in short - term obligations
 
-SHORTFALL: ${ shortfall:, .0f }
+SHORTFALL: \${ shortfall:, .0f }
     
     This means:
 1. Cannot pay ALL current liabilities from liquid assets
-2. Would need to sell ${ shortfall:, .0f } of inventory
+2. Would need to sell \${ shortfall:, .0f } of inventory
 3. Inventory may not sell quickly or at book value
 4. If creditors demand payment → LIQUIDITY CRISIS
     
@@ -94,7 +95,7 @@ Real - World Implication:
 
 return analysis
 
-print(analyze_liquidity_problem(quick_assets, current_liabilities, quick_ratio))
+print(analyze_liquidity_problem (quick_assets, current_liabilities, quick_ratio))
 \`\`\`
 
 **Why This Matters More Than Current Ratio**:
@@ -104,7 +105,7 @@ class LiquidityAnalyzer:
     """Compare current ratio vs quick ratio insights."""
     
     @staticmethod
-    def compare_ratios(company_data: dict):
+    def compare_ratios (company_data: dict):
         """Show why quick ratio reveals hidden problems."""
         
         print("CURRENT RATIO vs QUICK RATIO")
@@ -127,8 +128,8 @@ class LiquidityAnalyzer:
         
         # The Issue
         print("The Problem:")
-        print("  • Inventory = 40% of current assets ($200M / $500M)")
-        print("  • Prepaid = 10% of current assets ($50M / $500M)")
+        print("  • Inventory = 40% of current assets (\$200M / $500M)")
+        print("  • Prepaid = 10% of current assets (\$50M / $500M)")
         print("  • Together = 50% of 'current assets' are ILLIQUID")
         print()
         print("  In a crisis:")
@@ -153,7 +154,7 @@ LiquidityAnalyzer.compare_ratios({})
 
 A) **"Current ratio should be 2.0"** - WRONG
 
-There's no universal requirement for 2.0. While 2.0 is comfortable, many healthy companies operate at 1.0-1.5. The issue isn't the absolute number but the composition (too much inventory).
+There\'s no universal requirement for 2.0. While 2.0 is comfortable, many healthy companies operate at 1.0-1.5. The issue isn't the absolute number but the composition (too much inventory).
 
 \`\`\`python
 # Different industries have different norms:
@@ -192,7 +193,7 @@ class LiquidityCrisisDetector:
         'inventory_pct_high': 0.40  # >40% of current assets
     }
     
-    def assess_liquidity(self, balance_sheet: dict) -> dict:
+    def assess_liquidity (self, balance_sheet: dict) -> dict:
         """Comprehensive liquidity assessment."""
         
         ca = balance_sheet['current_assets']
@@ -276,21 +277,22 @@ print(f"Action: {result['recommended_action']}")
 
 The CFO focused on current ratio (1.25) which looks acceptable. But the quick ratio (0.625) reveals the real problem: **the company cannot pay its short-term obligations without selling inventory**, which may not be possible quickly or at book value. This is a classic case of **poor liquidity disguised by inventory**.
 
-In a downturn or credit crunch, this company would face severe liquidity stress despite the "adequate" current ratio. Credit analysts look at quick ratio specifically to avoid this trap.`
-    },
+In a downturn or credit crunch, this company would face severe liquidity stress despite the "adequate" current ratio. Credit analysts look at quick ratio specifically to avoid this trap.`,
+  },
 
-{
+  {
     id: 2,
-        question: "Company A has $2B in total assets and $500M in shareholders' equity. Company B has $2B in total assets and $1B in shareholders' equity. Both generate $200M in net income. A portfolio manager claims 'Company A is better because it has higher ROE.' What is the MOST important insight from this comparison?",
-            options: [
-                "Company A is definitively better due to higher ROE (40% vs 20%)",
-                "Company A achieves higher ROE through financial leverage (3x vs 1x equity multiplier), which increases both returns AND risk",
-                "Company B is safer because it has more equity cushion",
-                "Both companies are identical in profitability since they generate the same net income",
-                "Company A is more efficient at asset utilization"
-            ],
-                correctAnswer: 1,
-                    explanation: `The correct answer is B: Company A achieves higher ROE through financial leverage (3x vs 1x equity multiplier), which increases both returns AND risk.
+    question:
+      "Company A has $2B in total assets and $500M in shareholders' equity. Company B has $2B in total assets and $1B in shareholders' equity. Both generate $200M in net income. A portfolio manager claims 'Company A is better because it has higher ROE.' What is the MOST important insight from this comparison?",
+    options: [
+      'Company A is definitively better due to higher ROE (40% vs 20%)',
+      'Company A achieves higher ROE through financial leverage (3x vs 1x equity multiplier), which increases both returns AND risk',
+      'Company B is safer because it has more equity cushion',
+      'Both companies are identical in profitability since they generate the same net income',
+      'Company A is more efficient at asset utilization',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: Company A achieves higher ROE through financial leverage (3x vs 1x equity multiplier), which increases both returns AND risk.
 
 **The Math Behind ROE**:
 
@@ -375,7 +377,7 @@ class DuPontAnalysis:
     """
     
     @staticmethod
-    def analyze_roe_drivers(company: dict, revenue: float) -> dict:
+    def analyze_roe_drivers (company: dict, revenue: float) -> dict:
         """Break down what drives ROE."""
         
         # Calculate components
@@ -405,8 +407,8 @@ class DuPontAnalysis:
 # Assume both companies have $1B revenue
 revenue = 1_000_000_000
 
-analysis_a = DuPontAnalysis.analyze_roe_drivers(company_a, revenue)
-analysis_b = DuPontAnalysis.analyze_roe_drivers(company_b, revenue)
+analysis_a = DuPontAnalysis.analyze_roe_drivers (company_a, revenue)
+analysis_b = DuPontAnalysis.analyze_roe_drivers (company_b, revenue)
 
 print("DuPont Analysis Comparison")
 print("=" * 70)
@@ -429,7 +431,7 @@ print(f"  Leverage Contribution: {analysis_b['leverage_contribution']:.0%}")
 **The Risk-Return Trade-off**:
 
 \`\`\`python
-def analyze_leverage_risk(company_a: dict, company_b: dict) -> str:
+def analyze_leverage_risk (company_a: dict, company_b: dict) -> str:
     """Explain the risk difference between high and low leverage."""
     
     debt_a = company_a['total_liabilities']
@@ -445,9 +447,8 @@ def analyze_leverage_risk(company_a: dict, company_b: dict) -> str:
     {'='*70}
     
     Company A (High Leverage):
-      Debt: ${debt_a:, .0f
-}
-Equity: ${ equity_a:, .0f }
+      Debt: \${debt_a:,.0f}
+Equity: \${ equity_a:, .0f }
 Debt - to - Equity: { debt_to_equity_a: .1f } x
 
 RISKS:
@@ -462,12 +463,12 @@ RISKS:
 - But interest coverage may be inadequate
       
     Company B(Low Leverage):
-Debt: ${ debt_b:, .0f }
-Equity: ${ equity_b:, .0f }
+Debt: \${ debt_b:, .0f }
+Equity: \${ equity_b:, .0f }
 Debt - to - Equity: { debt_to_equity_b: .1f } x
 
 BENEFITS:
-      • Only $1B in debt(vs Company A's $1.5B)
+      • Only $1B in debt (vs Company A's $1.5B)
       • Lower fixed obligations
       • More financial flexibility
       • Better survives downturns
@@ -495,7 +496,7 @@ BENEFITS:
 
 return analysis
 
-print(analyze_leverage_risk(company_a, company_b))
+print(analyze_leverage_risk (company_a, company_b))
 \`\`\`
 
 **Why Other Options Are Wrong**:
@@ -620,21 +621,22 @@ This is why savvy investors always look at:
 3. **Equity Multiplier** (leverage)
 4. **Debt-to-Equity** (financial risk)
 
-And evaluate them together, not just ROE alone.`
-    },
+And evaluate them together, not just ROE alone.`,
+  },
 
-{
+  {
     id: 3,
-        question: "You're analyzing a company's balance sheet and notice that Goodwill has increased from $1B to $3B over the past year, with no corresponding increase in intangible assets or revenue. What is the MOST likely explanation and its significance?",
-            options: [
-                "The company generated $2B of internally developed goodwill through strong brand building",
-                "The company made an acquisition and paid $2B above the book value of the acquired assets",
-                "The company revalued its existing goodwill to fair market value",
-                "This is an accounting error that should be corrected",
-                "The company capitalized operating expenses as goodwill"
-            ],
-                correctAnswer: 1,
-                    explanation: `The correct answer is B: The company made an acquisition and paid $2B above the book value of the acquired assets.
+    question:
+      "You're analyzing a company's balance sheet and notice that Goodwill has increased from $1B to $3B over the past year, with no corresponding increase in intangible assets or revenue. What is the MOST likely explanation and its significance?",
+    options: [
+      'The company generated $2B of internally developed goodwill through strong brand building',
+      'The company made an acquisition and paid $2B above the book value of the acquired assets',
+      'The company revalued its existing goodwill to fair market value',
+      'This is an accounting error that should be corrected',
+      'The company capitalized operating expenses as goodwill',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: The company made an acquisition and paid $2B above the book value of the acquired assets.
 
 **Understanding Goodwill**:
 
@@ -681,8 +683,7 @@ class GoodwillAnalyzer:
         
         print("Goodwill Analysis")
         print("=" * 70)
-        print(f"Prior Year Goodwill: \${prior_goodwill:, .0f
-} ")
+        print(f"Prior Year Goodwill: \${prior_goodwill:,.0f} ")
 print(f"Current Year Goodwill: \${current_goodwill:,.0f}")
 print(f"Increase: \${goodwill_increase:,.0f}")
 print()
@@ -711,16 +712,16 @@ total_goodwill += goodwill
 
 print(f"\\nTotal Goodwill from Acquisitions: \${total_goodwill:,.0f}")
 
-if abs(total_goodwill - goodwill_increase) < 10_000_000:  # Within $10M
+if abs (total_goodwill - goodwill_increase) < 10_000_000:  # Within $10M
 print("✓ Goodwill increase matches acquisition activity")
             else:
 print("⚠ Goodwill increase doesn't match acquisitions!")
-print(f"  Difference: \${abs(total_goodwill - goodwill_increase):,.0f}")
+print(f"  Difference: \${abs (total_goodwill - goodwill_increase):,.0f}")
 
 return {
     'goodwill_increase': goodwill_increase,
-    'explained_by_acquisitions': len(acquisitions) > 0,
-    'total_purchase_price': sum(a['purchase_price'] for a in acquisitions),
+    'explained_by_acquisitions': len (acquisitions) > 0,
+    'total_purchase_price': sum (a['purchase_price'] for a in acquisitions),
     'concern_level': 'LOW' if acquisitions else 'HIGH'
 }
 
@@ -753,7 +754,7 @@ result = analyzer.analyze_goodwill_increase(
 **Why This Matters - Acquisition Analysis**:
 
 \`\`\`python
-def assess_acquisition_quality(acquisition: dict) -> dict:
+def assess_acquisition_quality (acquisition: dict) -> dict:
     """Evaluate if the acquisition was smart."""
     
     purchase_price = acquisition['purchase_price']
@@ -804,18 +805,18 @@ def assess_acquisition_quality(acquisition: dict) -> dict:
         'premium_pct': premium_pct,
         'goodwill_amount': goodwill,
         'concerns': concerns,
-        'risk': 'HIGH' if len(concerns) > 0 else 'MODERATE'
+        'risk': 'HIGH' if len (concerns) > 0 else 'MODERATE'
     }
 
 # Analyze the $2B goodwill acquisition
-acq_quality = assess_acquisition_quality(acquisitions[0])
+acq_quality = assess_acquisition_quality (acquisitions[0])
 
 print("\\nAcquisition Quality Assessment:")
 print("=" * 70)
 print(f"Quality Rating: {acq_quality['quality']}")
 print(f"Explanation: {acq_quality['explanation']}")
 print(f"Premium Paid: {acq_quality['premium_pct']:.1f}%")
-print(f"Goodwill Created: \${acq_quality['goodwill_amount']:, .0f}")
+print(f"Goodwill Created: \${acq_quality['goodwill_amount']:,.0f}")
 print()
 
 if acq_quality['concerns']:
@@ -855,7 +856,7 @@ def analyze_goodwill_risks(
         • Company must write down goodwill
         • Could be $1B+ charge to earnings
         • Stock price typically drops 20-40%
-        """.format(goodwill_ratio))
+        """.format (goodwill_ratio))
     
     # Risk 2: Goodwill > market cap
     if goodwill_vs_market_cap > 1.0:
@@ -916,7 +917,7 @@ A) **"Internally developed goodwill"** - IMPOSSIBLE
 Under GAAP and IFRS, internally developed goodwill CANNOT be recognized on the balance sheet. Even if a company builds an amazing brand (think Apple, Coca-Cola), they cannot book goodwill from it. Goodwill ONLY arises from acquisitions.
 
 \`\`\`python
-# Even though Apple's brand is worth $100B+ (by some estimates)
+# Even though Apple\'s brand is worth $100B+ (by some estimates)
 # Apple's balance sheet shows $0 for brand value
 # 
 # Goodwill can ONLY be booked when ACQUIRING another company
@@ -972,20 +973,20 @@ class GoodwillAnomalyDetector:
         alerts = []
         
         # Alert 1: Large increase without disclosed acquisitions
-        if change > 100_000_000 and len(acquisitions_disclosed) == 0:
+        if change > 100_000_000 and len (acquisitions_disclosed) == 0:
             alerts.append({
                 'type': 'UNDISCLOSED_ACQUISITION',
                 'severity': 'MEDIUM',
-                'message': f'Goodwill increased ${change:, .0f} but no acquisitions disclosed',
+                'message': f'Goodwill increased \${change:,.0f} but no acquisitions disclosed',
 'action': 'Review 8-K filings and earnings calls for acquisition announcements'
             })
         
-        # Alert 2: Decrease(impairment)
+        # Alert 2: Decrease (impairment)
 if change < -50_000_000:
     alerts.append({
         'type': 'GOODWILL_IMPAIRMENT',
         'severity': 'HIGH',
-        'message': f'Goodwill impaired by ${abs(change):,.0f}',
+        'message': f'Goodwill impaired by \${abs (change):,.0f}',
         'action': 'Acquisition likely failed - negative signal'
     })
 
@@ -1022,21 +1023,22 @@ Investors should:
 - Research the acquisition details
 - Assess if premium paid was reasonable
 - Monitor integration progress
-- Be prepared for potential impairment charges`
-    },
+- Be prepared for potential impairment charges`,
+  },
 
-{
+  {
     id: 4,
-        question: "A retail company has the following working capital metrics: Days Sales Outstanding (DSO) = 30 days, Days Inventory Outstanding (DIO) = 90 days, Days Payable Outstanding (DPO) = 60 days. After negotiating better terms with suppliers, DPO increases to 90 days. What is the impact on the Cash Conversion Cycle and what does this mean for the company?",
-            options: [
-                "CCC decreases from 60 days to 30 days; the company now generates 'float' by collecting from customers before paying suppliers",
-                "CCC increases from 60 days to 90 days; the company's working capital needs increase",
-                "CCC stays the same at 60 days because DSO and DIO haven't changed",
-                "CCC decreases from 150 days to 120 days; the company's efficiency improved",
-                "CCC becomes negative, indicating the company is insolvent"
-            ],
-                correctAnswer: 0,
-                    explanation: `The correct answer is A: CCC decreases from 60 days to 30 days; the company now generates 'float' by collecting from customers before paying suppliers.
+    question:
+      'A retail company has the following working capital metrics: Days Sales Outstanding (DSO) = 30 days, Days Inventory Outstanding (DIO) = 90 days, Days Payable Outstanding (DPO) = 60 days. After negotiating better terms with suppliers, DPO increases to 90 days. What is the impact on the Cash Conversion Cycle and what does this mean for the company?',
+    options: [
+      "CCC decreases from 60 days to 30 days; the company now generates 'float' by collecting from customers before paying suppliers",
+      "CCC increases from 60 days to 90 days; the company's working capital needs increase",
+      "CCC stays the same at 60 days because DSO and DIO haven't changed",
+      "CCC decreases from 150 days to 120 days; the company's efficiency improved",
+      'CCC becomes negative, indicating the company is insolvent',
+    ],
+    correctAnswer: 0,
+    explanation: `The correct answer is A: CCC decreases from 60 days to 30 days; the company now generates 'float' by collecting from customers before paying suppliers.
 
 **Cash Conversion Cycle Formula**:
 
@@ -1056,7 +1058,7 @@ class CashConversionCycleAnalyzer:
     """Analyze changes in Cash Conversion Cycle."""
     
     @staticmethod
-    def calculate_ccc(dso: int, dio: int, dpo: int) -> dict:
+    def calculate_ccc (dso: int, dio: int, dpo: int) -> dict:
         """Calculate CCC and interpret."""
         
         ccc = dso + dio - dpo
@@ -1082,7 +1084,7 @@ class CashConversionCycleAnalyzer:
         }
     
     @staticmethod
-    def analyze_ccc_change(before: dict, after: dict) -> dict:
+    def analyze_ccc_change (before: dict, after: dict) -> dict:
         """Analyze what changed in CCC."""
         
         print("Cash Conversion Cycle Analysis")
@@ -1144,7 +1146,7 @@ after = analyzer.calculate_ccc(
     dpo=90   # Improved! Now pay in 90 days instead of 60
 )
 
-analyzer.analyze_ccc_change(before, after)
+analyzer.analyze_ccc_change (before, after)
 \`\`\`
 
 **Output**:
@@ -1198,15 +1200,14 @@ def calculate_cash_freed_up(
     
     print("Cash Impact Analysis")
     print("=" * 70)
-    print(f"Annual COGS: \${annual_cogs:, .0f
-} ")
+    print(f"Annual COGS: \${annual_cogs:,.0f} ")
 print(f"Daily COGS: \${daily_cogs:,.0f}")
 print()
 print(f"Working Capital BEFORE (60-day CCC):")
-print(f"  \${daily_cogs:,.0f}/day × 60 days = ${wc_before:,.0f}")
+print(f"  \${daily_cogs:,.0f}/day × 60 days = \${wc_before:,.0f}")
 print()
 print(f"Working Capital AFTER (30-day CCC):")
-print(f"  \${daily_cogs:,.0f}/day × 30 days = ${wc_after:,.0f}")
+print(f"  \${daily_cogs:,.0f}/day × 30 days = \${wc_after:,.0f}")
 print()
 print(f"CASH FREED UP: \${cash_freed:,.0f}")
 print()
@@ -1291,7 +1292,7 @@ def show_real_world_examples():
         print(f"  Model: {data['business_model']}")
         
         if ccc < 0:
-            print(f"  → NEGATIVE CCC: Generates \${abs(ccc)} days of float!")
+            print(f"  → NEGATIVE CCC: Generates \${abs (ccc)} days of float!")
 
 show_real_world_examples()
 \`\`\`
@@ -1336,7 +1337,7 @@ def explain_negative_ccc():
     """Explain why negative CCC is good."""
     
     print("""
-    NEGATIVE CCC: Why It's EXCELLENT
+    NEGATIVE CCC: Why It\'s EXCELLENT
     ================================================================
     
     Example: Amazon with CCC = -30 days
@@ -1379,21 +1380,22 @@ This is a POSITIVE development showing:
 - Improved financial efficiency
 - More cash available for growth
 
-The company now collects from customers in 30 days but doesn't pay suppliers for 90 days, giving them 60 days of "float" on inventory purchases.`
-    },
+The company now collects from customers in 30 days but doesn't pay suppliers for 90 days, giving them 60 days of "float" on inventory purchases.`,
+  },
 
-{
+  {
     id: 5,
-        question: "You're comparing two companies: Company X has Total Assets of $10B and Intangible Assets of $8B. Company Y has Total Assets of $10B and Intangible Assets of $1B. Both trade at 1.5x book value. An analyst recommends 'Both are equally valued at 1.5x book, so they're fairly priced relative to each other.' What is the critical flaw in this analysis?",
-            options: [
-                "The analysis correctly identifies equal valuation multiples",
-                "Company X's book value is inflated by intangibles that are worthless in liquidation; tangible book value reveals X trades at 7.5x while Y trades at 1.67x",
-                "Company Y should trade at a higher multiple because it has fewer intangibles",
-                "Both companies should calculate book value differently under GAAP",
-                "Intangible assets should be valued at market value, not book value"
-            ],
-                correctAnswer: 1,
-                    explanation: `The correct answer is B: Company X's book value is inflated by intangibles that are worthless in liquidation; tangible book value reveals X trades at 7.5x while Y trades at 1.67x.
+    question:
+      "You're comparing two companies: Company X has Total Assets of $10B and Intangible Assets of $8B. Company Y has Total Assets of $10B and Intangible Assets of $1B. Both trade at 1.5x book value. An analyst recommends 'Both are equally valued at 1.5x book, so they're fairly priced relative to each other.' What is the critical flaw in this analysis?",
+    options: [
+      'The analysis correctly identifies equal valuation multiples',
+      "Company X's book value is inflated by intangibles that are worthless in liquidation; tangible book value reveals X trades at 7.5x while Y trades at 1.67x",
+      'Company Y should trade at a higher multiple because it has fewer intangibles',
+      'Both companies should calculate book value differently under GAAP',
+      'Intangible assets should be valued at market value, not book value',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: Company X's book value is inflated by intangibles that are worthless in liquidation; tangible book value reveals X trades at 7.5x while Y trades at 1.67x.
 
 **Understanding Tangible vs Total Book Value**:
 
@@ -1404,7 +1406,7 @@ class TangibleBookValueAnalyzer:
     """Analyze companies adjusting for intangible assets."""
     
     @staticmethod
-    def calculate_valuation_multiples(company_data: dict) -> dict:
+    def calculate_valuation_multiples (company_data: dict) -> dict:
         """Calculate both total and tangible book value multiples."""
         
         total_assets = company_data['total_assets']
@@ -1462,8 +1464,8 @@ company_y['market_cap'] = y_book_value * 1.5
 
 # Analyze both
 analyzer = TangibleBookValueAnalyzer()
-results_x = analyzer.calculate_valuation_multiples(company_x)
-results_y = analyzer.calculate_valuation_multiples(company_y)
+results_x = analyzer.calculate_valuation_multiples (company_x)
+results_y = analyzer.calculate_valuation_multiples (company_y)
 
 # Create comparison table
 comparison = pd.DataFrame({
@@ -1482,14 +1484,13 @@ comparison = pd.DataFrame({
         'Intangible %'
     ],
     'Company X': [
-        f"${results_x['total_assets']:, .0f
-} ",
-        f"${results_x['intangible_assets']:,.0f}",
-    f"${results_x['tangible_assets']:,.0f}",
-        f"${results_x['liabilities']:,.0f}",
-            f"${results_x['total_book_value']:,.0f}",
-                f"${results_x['tangible_book_value']:,.0f}",
-                    f"${results_x['market_cap']:,.0f}",
+        f"\${results_x['total_assets']:,.0f} ",
+        f"\${results_x['intangible_assets']:,.0f}",
+    f"\${results_x['tangible_assets']:,.0f}",
+        f"\${results_x['liabilities']:,.0f}",
+            f"\${results_x['total_book_value']:,.0f}",
+                f"\${results_x['tangible_book_value']:,.0f}",
+                    f"\${results_x['market_cap']:,.0f}",
                         '',
                         f"{results_x['price_to_book']:.2f}x",
                             f"{results_x['price_to_tangible_book']:.2f}x",
@@ -1497,13 +1498,13 @@ comparison = pd.DataFrame({
                                 f"{results_x['intangible_pct']:.1%}"
     ],
 'Company Y': [
-    f"${results_y['total_assets']:,.0f}",
-    f"${results_y['intangible_assets']:,.0f}",
-    f"${results_y['tangible_assets']:,.0f}",
-    f"${results_y['liabilities']:,.0f}",
-    f"${results_y['total_book_value']:,.0f}",
-    f"${results_y['tangible_book_value']:,.0f}",
-    f"${results_y['market_cap']:,.0f}",
+    f"\${results_y['total_assets']:,.0f}",
+    f"\${results_y['intangible_assets']:,.0f}",
+    f"\${results_y['tangible_assets']:,.0f}",
+    f"\${results_y['liabilities']:,.0f}",
+    f"\${results_y['total_book_value']:,.0f}",
+    f"\${results_y['tangible_book_value']:,.0f}",
+    f"\${results_y['market_cap']:,.0f}",
     '',
     f"{results_y['price_to_book']:.2f}x",
     f"{results_y['price_to_tangible_book']:.2f}x",
@@ -1514,7 +1515,7 @@ comparison = pd.DataFrame({
 
 print("Valuation Comparison: Company X vs Company Y")
 print("=" * 70)
-print(comparison.to_string(index = False))
+print(comparison.to_string (index = False))
 print()
 print("KEY INSIGHT:")
 print("Both trade at 1.5x TOTAL book value")
@@ -1553,7 +1554,7 @@ Company X is 4.5x MORE EXPENSIVE on tangible assets basis!
 **Why Tangible Book Value Matters**:
 
 \`\`\`python
-def explain_liquidation_value(company_x: dict, company_y: dict):
+def explain_liquidation_value (company_x: dict, company_y: dict):
     """Show liquidation value analysis."""
     
     print("LIQUIDATION SCENARIO ANALYSIS")
@@ -1600,7 +1601,7 @@ def explain_liquidation_value(company_x: dict, company_y: dict):
     print()
     print("  Therefore: Company Y is MUCH SAFER investment")
 
-explain_liquidation_value(results_x, results_y)
+explain_liquidation_value (results_x, results_y)
 \`\`\`
 
 **Real-World Application - Sector Analysis**:
@@ -1703,7 +1704,7 @@ class AssetQualityAdjustedValuation:
         
         for company in companies:
             analyzer = TangibleBookValueAnalyzer()
-            metrics = analyzer.calculate_valuation_multiples(company)
+            metrics = analyzer.calculate_valuation_multiples (company)
             
             results.append({
                 'Company': company['name'],
@@ -1713,14 +1714,14 @@ class AssetQualityAdjustedValuation:
                 'True Valuation': 'EXPENSIVE' if metrics['price_to_tangible_book'] > 3.0 else 'REASONABLE'
             })
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
 
 # Example usage
 companies = [company_x, company_y]
-comparison_df = AssetQualityAdjustedValuation().analyze_comparable_companies(companies)
+comparison_df = AssetQualityAdjustedValuation().analyze_comparable_companies (companies)
 
 print("\\nAsset-Quality Adjusted Analysis:")
-print(comparison_df.to_string(index=False))
+print(comparison_df.to_string (index=False))
 \`\`\`
 
 **Key Takeaway**:
@@ -1740,8 +1741,8 @@ The analyst's conclusion that "both are equally valued at 1.5x book" is **critic
 - **Asset-heavy industries** (manufacturing, utilities)
 - **Distressed situations** (liquidation value matters)
 
-**Warren Buffett's approach**: "Price is what you pay, value is what you get. And with intangible-heavy companies, you're often paying for air."
+**Warren Buffett\'s approach**: "Price is what you pay, value is what you get. And with intangible-heavy companies, you're often paying for air."
 
-The proper analysis reveals Company Y is far cheaper and safer than Company X, despite both trading at "1.5x book value."`
-    }
+The proper analysis reveals Company Y is far cheaper and safer than Company X, despite both trading at "1.5x book value."`,
+  },
 ];

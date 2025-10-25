@@ -11,7 +11,7 @@ export const llmCostOptimization = {
 
 \`\`\`python
 """Cost calculation"""
-def calculate_cost(input_tokens, output_tokens, model="claude-sonnet"):
+def calculate_cost (input_tokens, output_tokens, model="claude-sonnet"):
     pricing = {
         "claude-sonnet": {"in": 3, "out": 15},
         "gpt-4-turbo": {"in": 10, "out": 30},
@@ -24,8 +24,7 @@ def calculate_cost(input_tokens, output_tokens, model="claude-sonnet"):
 
 # Example: 100k calls/day
 cost_per_day = calculate_cost(1000, 200, "claude-sonnet") * 100000
-print(f"Daily cost: \${cost_per_day: .2f
-}")  # $600/day = $18k/month
+print(f"Daily cost: \${cost_per_day:.2f}")  # $600/day = $18k/month
 \`\`\`
 
 ## Optimization Strategies
@@ -43,13 +42,13 @@ print(f"Daily cost: \${cost_per_day: .2f
 
 \`\`\`python
 """Model cascading"""
-def cascading_generation(prompt, difficulty):
+def cascading_generation (prompt, difficulty):
     if difficulty == "easy":
-        return gpt35.generate(prompt)  # $0.002/call
+        return gpt35.generate (prompt)  # $0.002/call
     elif difficulty == "medium":
-        return claude_haiku.generate(prompt)  # $0.01/call
+        return claude_haiku.generate (prompt)  # $0.01/call
     else:
-        return gpt4.generate(prompt)  # $0.05/call
+        return gpt4.generate (prompt)  # $0.05/call
 \`\`\`
 
 ### 3. Caching
@@ -73,8 +72,8 @@ class CostMonitor:
         self.daily_spend = 0
         self.daily_limit = 1000  # $1000/day
     
-    def track_call(self, input_tokens, output_tokens):
-        cost = calculate_cost(input_tokens, output_tokens)
+    def track_call (self, input_tokens, output_tokens):
+        cost = calculate_cost (input_tokens, output_tokens)
         self.daily_spend += cost
         
         if self.daily_spend > self.daily_limit:

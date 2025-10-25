@@ -38,7 +38,7 @@ Design a news feed system that:
 
 1. **Low Latency**: Feed loads in < 500ms
 2. **High Availability**: 99.99% uptime
-3. **Scalability**: Handle spikes (New Year's Eve posts)
+3. **Scalability**: Handle spikes (New Year\'s Eve posts)
 4. **Consistency**: Eventual consistency acceptable (feed may lag by seconds)
 5. **Fault Tolerance**: Graceful degradation if services fail
 
@@ -121,7 +121,7 @@ LIMIT 50;
 
 \`\`\`python
 # User A creates post
-def create_post(user_id, content):
+def create_post (user_id, content):
     # Store post
     post_id = db.insert("posts", {user_id: user_id, content: content, timestamp: now()})
     
@@ -130,14 +130,14 @@ def create_post(user_id, content):
     
     # Fanout: Write to each follower's feed
     for follower_id in followers:
-        redis.lpush(f"feed:{follower_id}", post_id)  # Prepend to feed
-        redis.ltrim(f"feed:{follower_id}", 0, 999)  # Keep only 1000 posts
+        redis.lpush (f"feed:{follower_id}", post_id)  # Prepend to feed
+        redis.ltrim (f"feed:{follower_id}", 0, 999)  # Keep only 1000 posts
     
     return post_id
 
 # User B retrieves feed
-def get_feed(user_id):
-    post_ids = redis.lrange(f"feed:{user_id}", 0, 49)  # Top 50 posts
+def get_feed (user_id):
+    post_ids = redis.lrange (f"feed:{user_id}", 0, 49)  # Top 50 posts
     posts = db.query("SELECT * FROM posts WHERE post_id IN (?)", post_ids)
     return posts
 \`\`\`
@@ -170,7 +170,7 @@ def get_feed(user_id):
 \`\`\`python
 CELEBRITY_THRESHOLD = 10000  # Users with > 10K followers
 
-def create_post(user_id, content):
+def create_post (user_id, content):
     post_id = db.insert("posts", {user_id: user_id, content: content})
     
     follower_count = db.query("SELECT COUNT(*) FROM followers WHERE user_id = ?", user_id)
@@ -179,18 +179,18 @@ def create_post(user_id, content):
         # Push model: Fanout to all followers
         followers = db.query("SELECT follower_id FROM followers WHERE user_id = ?", user_id)
         for follower_id in followers:
-            redis.lpush(f"feed:{follower_id}", post_id)
+            redis.lpush (f"feed:{follower_id}", post_id)
     else:
         # Pull model: Don't fanout (too expensive)
         # Mark user as celebrity, followers will pull at read time
         redis.sadd("celebrities", user_id)
 
-def get_feed(user_id):
+def get_feed (user_id):
     # Get pre-computed feed (push model)
-    feed_posts = redis.lrange(f"feed:{user_id}", 0, 49)
+    feed_posts = redis.lrange (f"feed:{user_id}", 0, 49)
     
     # Get celebrity posts (pull model)
-    celebrities_following = redis.smembers(f"following_celebrities:{user_id}")
+    celebrities_following = redis.smembers (f"following_celebrities:{user_id}")
     celebrity_posts = db.query("""
         SELECT * FROM posts 
         WHERE user_id IN (?) AND created_at > NOW() - INTERVAL '7 days'
@@ -198,7 +198,7 @@ def get_feed(user_id):
     """, celebrities_following)
     
     # Merge and rank
-    all_posts = merge_and_rank(feed_posts, celebrity_posts)
+    all_posts = merge_and_rank (feed_posts, celebrity_posts)
     return all_posts[:50]
 \`\`\`
 
@@ -214,7 +214,7 @@ def get_feed(user_id):
 **Engagement-Based** (Modern Facebook, Instagram):
 
 \`\`\`python
-def calculate_post_score(post, user):
+def calculate_post_score (post, user):
     base_score = 1.0
     
     # Recency (exponential decay)
@@ -225,7 +225,7 @@ def calculate_post_score(post, user):
     engagement_score = (post.likes * 1 + post.comments * 2 + post.shares * 3) / 10
     
     # Affinity (how close is user to post creator?)
-    affinity = get_affinity(user.id, post.user_id)  # 0-1 scale
+    affinity = get_affinity (user.id, post.user_id)  # 0-1 scale
     
     # Content type
     if post.has_video:
@@ -236,15 +236,15 @@ def calculate_post_score(post, user):
         content_boost = 1.0  # Text only
     
     # User preferences (learned via ML)
-    user_preference = predict_engagement(user, post)  # ML model: 0-1
+    user_preference = predict_engagement (user, post)  # ML model: 0-1
     
     score = base_score * recency_factor * (1 + engagement_score) * affinity * content_boost * user_preference
     return score
 
-def get_feed_ranked(user_id):
-    posts = get_feed(user_id)  # Get candidate posts
-    scored_posts = [(post, calculate_post_score(post, user)) for post in posts]
-    scored_posts.sort(key=lambda x: x[1], reverse=True)  # Sort by score
+def get_feed_ranked (user_id):
+    posts = get_feed (user_id)  # Get candidate posts
+    scored_posts = [(post, calculate_post_score (post, user)) for post in posts]
+    scored_posts.sort (key=lambda x: x[1], reverse=True)  # Sort by score
     return [post for post, score in scored_posts[:50]]
 \`\`\`
 
@@ -412,7 +412,7 @@ LTRIM feed:123 0 999  # Periodic trimming
 
 \`\`\`python
 # Post Service
-def create_post(user_id, content):
+def create_post (user_id, content):
     post_id = db.insert("posts", {user_id: user_id, content: content})
     
     # Publish event (non-blocking)
@@ -434,11 +434,11 @@ def fanout_worker():
         followers = db.query("SELECT follower_id FROM followers WHERE user_id = ?", user_id)
         
         # Batch write to Redis (100 followers at a time)
-        for batch in chunks(followers, 100):
+        for batch in chunks (followers, 100):
             pipeline = redis.pipeline()
             for follower_id in batch:
-                pipeline.lpush(f"feed:{follower_id}", post_id)
-                pipeline.ltrim(f"feed:{follower_id}", 0, 999)
+                pipeline.lpush (f"feed:{follower_id}", post_id)
+                pipeline.ltrim (f"feed:{follower_id}", 0, 999)
             pipeline.execute()
 \`\`\`
 
@@ -460,18 +460,18 @@ def fanout_worker():
 const ws = new WebSocket("wss://feed.example.com");
 
 ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
+    const data = JSON.parse (event.data);
     if (data.type === "new_post") {
         showNotification(\`New post from \${ data.author }\`);
-        prependPostToFeed(data.post_id);
+        prependPostToFeed (data.post_id);
     }
 };
 
 # Server (Fanout Service)
-def notify_followers(post_id, user_id):
-    followers = get_online_followers(user_id)  # Only users currently online
+def notify_followers (post_id, user_id):
+    followers = get_online_followers (user_id)  # Only users currently online
     for follower_id in followers:
-        websocket_connection = get_connection(follower_id)
+        websocket_connection = get_connection (follower_id)
         if websocket_connection:
             websocket_connection.send({
                 "type": "new_post",
@@ -497,13 +497,13 @@ Scroll down:  Get posts 100-149
 **Implementation**:
 
 \`\`\`python
-def get_feed_paginated(user_id, offset=0, limit=50):
+def get_feed_paginated (user_id, offset=0, limit=50):
     # Get from Redis cache
-    post_ids = redis.lrange(f"feed:{user_id}", offset, offset + limit - 1)
+    post_ids = redis.lrange (f"feed:{user_id}", offset, offset + limit - 1)
     
     if not post_ids:
         # Cache miss: Fall back to database (pull model)
-        posts = get_feed_from_db(user_id, offset, limit)
+        posts = get_feed_from_db (user_id, offset, limit)
     else:
         posts = db.query("SELECT * FROM posts WHERE post_id IN (?)", post_ids)
     

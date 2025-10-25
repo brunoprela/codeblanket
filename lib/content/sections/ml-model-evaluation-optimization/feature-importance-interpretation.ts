@@ -30,7 +30,7 @@ import shap
 
 # Load data
 data = load_breast_cancer()
-X = pd.DataFrame(data.data, columns=data.feature_names)
+X = pd.DataFrame (data.data, columns=data.feature_names)
 y = data.target
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -54,7 +54,7 @@ print("Method 1: Built-in Feature Importance (Random Forest)")
 print("="*70)
 
 # Train Random Forest
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model = RandomForestClassifier (n_estimators=100, random_state=42)
 rf_model.fit(X_train, y_train)
 
 # Get feature importances
@@ -69,9 +69,9 @@ for idx, row in feature_importance_df.head(10).iterrows():
     print(f"  {row['feature']:30s} {row['importance']:.4f}")
 
 # Visualize
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots (figsize=(10, 6))
 top_features = feature_importance_df.head(15)
-ax.barh(top_features['feature'], top_features['importance'])
+ax.barh (top_features['feature'], top_features['importance'])
 ax.set_xlabel('Importance')
 ax.set_title('Random Forest Feature Importance (Top 15)')
 ax.invert_yaxis()
@@ -128,7 +128,7 @@ comparison = feature_importance_df.merge(
 )
 
 print("\\n📊 Correlation between methods:")
-correlation = comparison['importance_builtin'].corr(comparison['importance_permutation'])
+correlation = comparison['importance_builtin'].corr (comparison['importance_permutation'])
 print(f"   Spearman correlation: {correlation:.3f}")
 
 # Visualize comparison
@@ -136,14 +136,14 @@ fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
 # Built-in
 top_builtin = comparison.nlargest(10, 'importance_builtin')
-axes[0].barh(top_builtin['feature'], top_builtin['importance_builtin'])
+axes[0].barh (top_builtin['feature'], top_builtin['importance_builtin'])
 axes[0].set_title('Built-in Importance (Training Set)')
 axes[0].invert_yaxis()
 
 # Permutation
 top_perm = comparison.nlargest(10, 'importance_permutation')
-axes[1].barh(top_perm['feature'], top_perm['importance_permutation'])
-axes[1].errorbar(top_perm['importance_permutation'], top_perm['feature'], 
+axes[1].barh (top_perm['feature'], top_perm['importance_permutation'])
+axes[1].errorbar (top_perm['importance_permutation'], top_perm['feature'], 
                  xerr=top_perm['std_permutation'], fmt='none', color='red', alpha=0.5)
 axes[1].set_title('Permutation Importance (Test Set)')
 axes[1].invert_yaxis()
@@ -179,19 +179,19 @@ print("="*70)
 
 # Create SHAP explainer
 print("\\nCreating SHAP explainer...")
-explainer = shap.TreeExplainer(rf_model)
+explainer = shap.TreeExplainer (rf_model)
 shap_values = explainer.shap_values(X_test)
 
 # For binary classification, shap_values is a list [class_0, class_1]
 # We'll use class 1 (malignant)
-shap_values_class1 = shap_values[1] if isinstance(shap_values, list) else shap_values
+shap_values_class1 = shap_values[1] if isinstance (shap_values, list) else shap_values
 
 print("✅ SHAP values calculated")
 
 # Global feature importance (mean absolute SHAP)
 shap_importance = pd.DataFrame({
     'feature': X.columns,
-    'importance': np.abs(shap_values_class1).mean(axis=0)
+    'importance': np.abs (shap_values_class1).mean (axis=0)
 }).sort_values('importance', ascending=False)
 
 print("\\nTop 10 Features by SHAP Importance:")
@@ -200,15 +200,15 @@ for idx, row in shap_importance.head(10).iterrows():
 
 # Summary plot (shows distribution of SHAP values)
 print("\\n📊 Creating SHAP summary plot...")
-plt.figure(figsize=(10, 8))
-shap.summary_plot(shap_values_class1, X_test, plot_type="bar", show=False)
+plt.figure (figsize=(10, 8))
+shap.summary_plot (shap_values_class1, X_test, plot_type="bar", show=False)
 plt.tight_layout()
 plt.savefig('shap_importance.png', dpi=150, bbox_inches='tight')
 print("   Saved: shap_importance.png")
 
 # Detailed summary plot (shows feature values)
-plt.figure(figsize=(10, 8))
-shap.summary_plot(shap_values_class1, X_test, show=False)
+plt.figure (figsize=(10, 8))
+shap.summary_plot (shap_values_class1, X_test, show=False)
 plt.tight_layout()
 plt.savefig('shap_summary.png', dpi=150, bbox_inches='tight')
 print("   Saved: shap_summary.png")
@@ -258,7 +258,7 @@ for idx in example_indices:
 
 # Create waterfall plot for first sample
 print("\\n📊 Creating SHAP waterfall plot for sample #0...")
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 shap.waterfall_plot(
     shap.Explanation(
         values=shap_values_class1[0],
@@ -315,9 +315,9 @@ for feat in comparison_full.nlargest(5, 'shap')['feature']:
 print("\\n📊 Agreement between methods:")
 from scipy.stats import spearmanr
 methods = ['builtin', 'permutation', 'shap']
-for i, method1 in enumerate(methods):
+for i, method1 in enumerate (methods):
     for method2 in methods[i+1:]:
-        corr, _ = spearmanr(comparison_full[method1], comparison_full[method2])
+        corr, _ = spearmanr (comparison_full[method1], comparison_full[method2])
         print(f"   {method1:12s} vs {method2:12s}: {corr:.3f}")
 
 print("\\n💡 High correlation (>0.8) indicates methods agree on important features")
@@ -334,11 +334,11 @@ from sklearn.inspection import PartialDependenceDisplay
 
 # Select top 4 features by SHAP importance
 top_4_features = shap_importance.head(4)['feature'].tolist()
-feature_indices = [X.columns.get_loc(f) for f in top_4_features]
+feature_indices = [X.columns.get_loc (f) for f in top_4_features]
 
 print(f"\\nCreating partial dependence plots for: {top_4_features}")
 
-fig, ax = plt.subplots(figsize=(14, 10))
+fig, ax = plt.subplots (figsize=(14, 10))
 PartialDependenceDisplay.from_estimator(
     rf_model, X_train, feature_indices,
     feature_names=X.columns.tolist(),

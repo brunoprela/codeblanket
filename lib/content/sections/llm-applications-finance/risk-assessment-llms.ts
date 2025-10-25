@@ -40,10 +40,10 @@ class CreditRiskAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_credit_risk(self, company_data: Dict) -> Dict:
+    def analyze_credit_risk (self, company_data: Dict) -> Dict:
         """
         Comprehensive credit risk analysis
         
@@ -123,13 +123,13 @@ Provide comprehensive credit risk assessment as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        assessment = self._parse_json(response.content[0].text)
+        assessment = self._parse_json (response.content[0].text)
         assessment['company'] = company_data.get('name')
         assessment['analysis_date'] = datetime.now().isoformat()
         
         return assessment
     
-    def analyze_debt_covenants(self, covenant_text: str, 
+    def analyze_debt_covenants (self, covenant_text: str, 
                                financial_metrics: Dict) -> Dict:
         """
         Analyze debt covenant compliance risk
@@ -147,7 +147,7 @@ Covenant Language:
 {covenant_text}
 
 Current Financial Metrics:
-{json.dumps(financial_metrics, indent=2)}
+{json.dumps (financial_metrics, indent=2)}
 
 Analyze:
 1. What are the specific covenant requirements?
@@ -183,9 +183,9 @@ Return JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def assess_going_concern_risk(self, company_filings: Dict,
+    def assess_going_concern_risk (self, company_filings: Dict,
                                   news_articles: List[str]) -> Dict:
         """
         Assess risk of company's going concern status
@@ -245,9 +245,9 @@ Assess going concern risk as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         try:
             if "\`\`\`json" in response_text:
@@ -256,12 +256,12 @@ Assess going concern risk as JSON:
     json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
         json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-credit_analyzer = CreditRiskAnalyzer(api_key = "your-key")
+credit_analyzer = CreditRiskAnalyzer (api_key = "your-key")
 
 company_data = {
         'name': 'Example Corp',
@@ -284,9 +284,9 @@ company_data = {
     }
 
 # Analyze credit risk
-credit_assessment = credit_analyzer.analyze_credit_risk(company_data)
+credit_assessment = credit_analyzer.analyze_credit_risk (company_data)
 print("Credit Risk Assessment:")
-print(json.dumps(credit_assessment, indent = 2))
+print(json.dumps (credit_assessment, indent = 2))
 \`\`\`
 
 ---
@@ -306,10 +306,10 @@ class CounterpartyRiskAssessor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def assess_counterparty(self, counterparty_data: Dict,
+    def assess_counterparty (self, counterparty_data: Dict,
                            relationship_type: str) -> Dict:
         """
         Assess counterparty risk
@@ -390,13 +390,13 @@ Provide risk assessment as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        assessment = self._parse_json(response.content[0].text)
+        assessment = self._parse_json (response.content[0].text)
         assessment['counterparty'] = counterparty_data.get('name')
         assessment['assessment_date'] = datetime.now().isoformat()
         
         return assessment
     
-    def assess_supply_chain_risk(self, supplier_data: List[Dict],
+    def assess_supply_chain_risk (self, supplier_data: List[Dict],
                                 critical_components: List[str]) -> Dict:
         """
         Assess supply chain risk across multiple suppliers
@@ -424,7 +424,7 @@ Suppliers:
 {supplier_summary}
 
 Critical Components:
-{json.dumps(critical_components)}
+{json.dumps (critical_components)}
 
 Analyze:
 1. Single points of failure in supply chain
@@ -442,9 +442,9 @@ Return comprehensive supply chain risk assessment as JSON."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -454,12 +454,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-counterparty_assessor = CounterpartyRiskAssessor(api_key = "your-key")
+counterparty_assessor = CounterpartyRiskAssessor (api_key = "your-key")
 
 counterparty_data = {
     'name': 'Key Supplier Inc',
@@ -483,7 +483,7 @@ assessment = counterparty_assessor.assess_counterparty(
 )
 
 print("Counterparty Risk Assessment:")
-print(json.dumps(assessment, indent = 2))
+print(json.dumps (assessment, indent = 2))
 \`\`\`
 
 ---
@@ -506,10 +506,10 @@ class GeopoliticalRiskMonitor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def assess_geopolitical_event(self, event_data: Dict,
+    def assess_geopolitical_event (self, event_data: Dict,
                                   portfolio_exposure: Dict) -> Dict:
         """
         Assess impact of geopolitical event on portfolio
@@ -531,10 +531,10 @@ Event:
 - Timeline: {event_data.get('timeline')}
 
 Portfolio Exposure:
-- Geographic: {json.dumps(portfolio_exposure.get('geographic', {}))}
-- Industry: {json.dumps(portfolio_exposure.get('industry', {}))}
-- Key Holdings: {json.dumps(portfolio_exposure.get('top_holdings', []))}
-- Currency Exposure: {json.dumps(portfolio_exposure.get('currencies', {}))}
+- Geographic: {json.dumps (portfolio_exposure.get('geographic', {}))}
+- Industry: {json.dumps (portfolio_exposure.get('industry', {}))}
+- Key Holdings: {json.dumps (portfolio_exposure.get('top_holdings', []))}
+- Currency Exposure: {json.dumps (portfolio_exposure.get('currencies', {}))}
 
 Provide impact assessment as JSON:
 {{
@@ -586,13 +586,13 @@ Provide impact assessment as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        assessment = self._parse_json(response.content[0].text)
+        assessment = self._parse_json (response.content[0].text)
         assessment['event'] = event_data.get('description')
         assessment['assessment_date'] = datetime.now().isoformat()
         
         return assessment
     
-    def monitor_risk_indicators(self, news_feed: List[Dict],
+    def monitor_risk_indicators (self, news_feed: List[Dict],
                                current_risks: List[Dict]) -> Dict:
         """
         Monitor news for emerging geopolitical risks
@@ -668,9 +668,9 @@ Return JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -680,12 +680,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-geo_monitor = GeopoliticalRiskMonitor(api_key = "your-key")
+geo_monitor = GeopoliticalRiskMonitor (api_key = "your-key")
 
 event_data = {
     'event_type': 'Trade Dispute',
@@ -720,9 +720,9 @@ portfolio_exposure = {
     }
 }
 
-impact = geo_monitor.assess_geopolitical_event(event_data, portfolio_exposure)
+impact = geo_monitor.assess_geopolitical_event (event_data, portfolio_exposure)
 print("Geopolitical Impact Assessment:")
-print(json.dumps(impact, indent = 2))
+print(json.dumps (impact, indent = 2))
 \`\`\`
 
 ---
@@ -747,11 +747,11 @@ class RiskEarlyWarningSystem:
     """
     
     def __init__(self, api_key: str):
-        self.credit_analyzer = CreditRiskAnalyzer(api_key)
-        self.counterparty_assessor = CounterpartyRiskAssessor(api_key)
-        self.geo_monitor = GeopoliticalRiskMonitor(api_key)
+        self.credit_analyzer = CreditRiskAnalyzer (api_key)
+        self.counterparty_assessor = CounterpartyRiskAssessor (api_key)
+        self.geo_monitor = GeopoliticalRiskMonitor (api_key)
         
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
         
         # Risk tracking
@@ -763,15 +763,15 @@ class RiskEarlyWarningSystem:
         
         self.running = False
     
-    def start(self):
+    def start (self):
         """Start the early warning system"""
         self.running = True
         
         # Start monitoring threads
         threads = [
-            threading.Thread(target=self._credit_monitor, daemon=True),
-            threading.Thread(target=self._news_monitor, daemon=True),
-            threading.Thread(target=self._alert_processor, daemon=True)
+            threading.Thread (target=self._credit_monitor, daemon=True),
+            threading.Thread (target=self._news_monitor, daemon=True),
+            threading.Thread (target=self._alert_processor, daemon=True)
         ]
         
         for thread in threads:
@@ -779,7 +779,7 @@ class RiskEarlyWarningSystem:
         
         print("Risk Early Warning System started")
     
-    def add_watchlist_company(self, ticker: str, company_data: Dict):
+    def add_watchlist_company (self, ticker: str, company_data: Dict):
         """Add company to watchlist"""
         self.active_risks[ticker] = {
             'data': company_data,
@@ -788,7 +788,7 @@ class RiskEarlyWarningSystem:
             'alerts': []
         }
     
-    def _credit_monitor(self):
+    def _credit_monitor (self):
         """Monitor credit risk for watchlist companies"""
         while self.running:
             for ticker, risk_data in self.active_risks.items():
@@ -800,7 +800,7 @@ class RiskEarlyWarningSystem:
                     
                     # Check for deterioration
                     if risk_data['last_assessment']:
-                        self._check_risk_change(ticker, 
+                        self._check_risk_change (ticker, 
                                                risk_data['last_assessment'],
                                                assessment)
                     
@@ -813,7 +813,7 @@ class RiskEarlyWarningSystem:
             
             time.sleep(3600)  # Check hourly
     
-    def _news_monitor(self):
+    def _news_monitor (self):
         """Monitor news for risk signals"""
         while self.running:
             # Fetch news for watchlist companies
@@ -821,15 +821,15 @@ class RiskEarlyWarningSystem:
             # Generate alerts if needed
             time.sleep(300)  # Check every 5 minutes
     
-    def _check_risk_change(self, ticker: str, previous: Dict, current: Dict):
+    def _check_risk_change (self, ticker: str, previous: Dict, current: Dict):
         """Check if risk level has changed"""
         prev_level = previous.get('risk_level')
         curr_level = current.get('risk_level')
         
         if prev_level != curr_level:
-            self._generate_risk_alert(ticker, prev_level, curr_level, current)
+            self._generate_risk_alert (ticker, prev_level, curr_level, current)
     
-    def _generate_risk_alert(self, ticker: str, prev_level: str,
+    def _generate_risk_alert (self, ticker: str, prev_level: str,
                             curr_level: str, assessment: Dict):
         """Generate risk alert"""
         alert = {
@@ -838,19 +838,19 @@ class RiskEarlyWarningSystem:
             'alert_type': 'RISK_CHANGE',
             'previous_level': prev_level,
             'current_level': curr_level,
-            'severity': self._calculate_severity(prev_level, curr_level),
+            'severity': self._calculate_severity (prev_level, curr_level),
             'details': assessment,
-            'action_required': self._determine_action(curr_level)
+            'action_required': self._determine_action (curr_level)
         }
         
-        self.alert_queue.put(alert)
+        self.alert_queue.put (alert)
     
-    def _calculate_severity(self, prev_level: str, curr_level: str) -> str:
+    def _calculate_severity (self, prev_level: str, curr_level: str) -> str:
         """Calculate alert severity"""
         risk_levels = {'Low': 1, 'Medium': 2, 'High': 3, 'Very High': 4}
         
-        prev_score = risk_levels.get(prev_level, 0)
-        curr_score = risk_levels.get(curr_level, 0)
+        prev_score = risk_levels.get (prev_level, 0)
+        curr_score = risk_levels.get (curr_level, 0)
         
         diff = curr_score - prev_score
         
@@ -863,7 +863,7 @@ class RiskEarlyWarningSystem:
         else:
             return 'MEDIUM'
     
-    def _determine_action(self, risk_level: str) -> str:
+    def _determine_action (self, risk_level: str) -> str:
         """Determine required action based on risk level"""
         actions = {
             'Very High': 'IMMEDIATE ACTION - Consider exit',
@@ -871,19 +871,19 @@ class RiskEarlyWarningSystem:
             'Medium': 'MONITOR CLOSELY - Review position',
             'Low': 'MAINTAIN - Continue monitoring'
         }
-        return actions.get(risk_level, 'REVIEW')
+        return actions.get (risk_level, 'REVIEW')
     
-    def _alert_processor(self):
+    def _alert_processor (self):
         """Process and distribute alerts"""
         while self.running:
             try:
-                alert = self.alert_queue.get(timeout=1)
+                alert = self.alert_queue.get (timeout=1)
                 
                 # Process alert
-                self._emit_alert(alert)
+                self._emit_alert (alert)
                 
                 # Store in history
-                self.risk_history.append(alert)
+                self.risk_history.append (alert)
                 
                 self.alert_queue.task_done()
             
@@ -892,7 +892,7 @@ class RiskEarlyWarningSystem:
             except Exception as e:
                 print(f"Error processing alert: {e}")
     
-    def _emit_alert(self, alert: Dict):
+    def _emit_alert (self, alert: Dict):
         """Emit alert to various channels"""
         print(f"\\n{'='*70}")
         print(f"RISK ALERT - {alert['severity']}")
@@ -911,7 +911,7 @@ class RiskEarlyWarningSystem:
         # - Log to database
         # - Trigger automated actions if configured
     
-    def generate_risk_report(self) -> str:
+    def generate_risk_report (self) -> str:
         """Generate comprehensive risk report"""
         prompt = f"""Generate a comprehensive risk report based on current risk monitoring.
 
@@ -954,7 +954,7 @@ Format as professional risk report."""
         return response.content[0].text
 
 # Example usage
-ews = RiskEarlyWarningSystem(api_key="your-key")
+ews = RiskEarlyWarningSystem (api_key="your-key")
 ews.start()
 
 # Add companies to monitor

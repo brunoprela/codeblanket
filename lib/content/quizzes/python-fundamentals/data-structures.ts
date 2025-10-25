@@ -37,10 +37,10 @@ export const datastructuresQuiz = [
       'What is the difference between dict.get() and dict[key]? When would you use each method?',
     hint: "Consider what happens when a key doesn't exist and when you want different behaviors.",
     sampleAnswer:
-      'dict[key] raises a KeyError if the key doesn\'t exist, while dict.get(key, default) returns None (or a specified default) if the key is missing. Use dict[key] when you expect the key to exist and want to catch programming errors - the KeyError signals a bug. Use dict.get() when missing keys are valid, like when checking optional configuration settings, or when you want to provide a default value. For example: config.get("debug", False) is cleaner than checking "if \'debug\' in config" first.',
+      'dict[key] raises a KeyError if the key doesn\'t exist, while dict.get (key, default) returns None (or a specified default) if the key is missing. Use dict[key] when you expect the key to exist and want to catch programming errors - the KeyError signals a bug. Use dict.get() when missing keys are valid, like when checking optional configuration settings, or when you want to provide a default value. For example: config.get("debug", False) is cleaner than checking "if \'debug\' in config" first.',
     keyPoints: [
       'dict[key]: raises KeyError if missing',
-      'dict.get(key, default): returns default if missing',
+      'dict.get (key, default): returns default if missing',
       'Use [key] when absence is an error',
       'Use .get() for optional values',
     ],

@@ -66,7 +66,7 @@ export const knnMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       "What is the advantage of using weighted kNN (weights='distance') over uniform weights?",
     options: [
-      "It's faster to compute",
+      "It\'s faster to compute",
       'It gives more influence to closer neighbors',
       'It requires less memory',
       'It handles missing data better',

@@ -5,7 +5,7 @@
 export const introductionSection = {
   id: 'introduction',
   title: 'What is Complexity Analysis?',
-  content: `Complexity analysis is the process of determining how the runtime and memory usage of an algorithm scale as the input size grows. It's one of the most fundamental skills in computer science and is crucial for writing efficient code.
+  content: `Complexity analysis is the process of determining how the runtime and memory usage of an algorithm scale as the input size grows. It\'s one of the most fundamental skills in computer science and is crucial for writing efficient code.
 
 **Why Does It Matter?**
 - **Scalability:** An algorithm that works for 100 items might fail for 1 million items

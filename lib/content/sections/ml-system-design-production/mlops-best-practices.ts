@@ -6,7 +6,7 @@ export const mlopsBestPractices = {
 
 ## Introduction
 
-**"DevOps for ML isn't just DevOps + ML. It's a different beast."**
+**"DevOps for ML isn't just DevOps + ML. It\'s a different beast."**
 
 MLOps (Machine Learning Operations) extends DevOps practices to ML systems. But ML adds unique challenges: data dependencies, model versioning, experiment tracking, and monitoring drift.
 
@@ -93,7 +93,7 @@ class MLCIPipeline:
             ]
         }
     
-    def data_validation_tests(self, data):
+    def data_validation_tests (self, data):
         """
         Validate data before training
         """
@@ -113,11 +113,11 @@ class MLCIPipeline:
         
         # Test 1: Schema validation
         expected_columns = ['feature1', 'feature2', 'target']
-        schema_valid = all(col in df.columns for col in expected_columns)
+        schema_valid = all (col in df.columns for col in expected_columns)
         tests_passed.append(("Schema validation", schema_valid))
         
         # Test 2: Missing values
-        missing_pct = df.isnull().sum().sum() / (len(df) * len(df.columns))
+        missing_pct = df.isnull().sum().sum() / (len (df) * len (df.columns))
         missing_ok = missing_pct < 0.05  # < 5% missing
         tests_passed.append(("Missing values check", missing_ok))
         
@@ -127,12 +127,12 @@ class MLCIPipeline:
         feature1_std = df['feature1'].std()
         
         # Expected: mean ≈ 0, std ≈ 1
-        distribution_ok = abs(feature1_mean) < 0.5 and 0.5 < feature1_std < 1.5
+        distribution_ok = abs (feature1_mean) < 0.5 and 0.5 < feature1_std < 1.5
         tests_passed.append(("Feature distribution", distribution_ok))
         
         # Test 4: Target balance
         target_balance = df['target'].value_counts()
-        min_class_pct = target_balance.min() / len(df)
+        min_class_pct = target_balance.min() / len (df)
         balance_ok = min_class_pct > 0.1  # No class < 10%
         tests_passed.append(("Target balance", balance_ok))
         
@@ -141,7 +141,7 @@ class MLCIPipeline:
             status = "✓ PASS" if passed else "✗ FAIL"
             print(f"{status}: {test_name}")
         
-        all_passed = all(passed for _, passed in tests_passed)
+        all_passed = all (passed for _, passed in tests_passed)
         
         if all_passed:
             print("\\n✓ All data validation tests passed")
@@ -150,7 +150,7 @@ class MLCIPipeline:
         
         return all_passed
     
-    def model_evaluation_tests(self, model, X_test, y_test):
+    def model_evaluation_tests (self, model, X_test, y_test):
         """
         Model must pass performance thresholds
         """
@@ -165,17 +165,17 @@ class MLCIPipeline:
         tests_passed = []
         
         # Test 1: Accuracy threshold
-        accuracy = accuracy_score(y_test, y_pred)
+        accuracy = accuracy_score (y_test, y_pred)
         accuracy_ok = accuracy > 0.75  # Minimum 75%
         tests_passed.append((f"Accuracy > 0.75 (got {accuracy:.3f})", accuracy_ok))
         
         # Test 2: Precision threshold
-        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        precision = precision_score (y_test, y_pred, average='weighted', zero_division=0)
         precision_ok = precision > 0.70
         tests_passed.append((f"Precision > 0.70 (got {precision:.3f})", precision_ok))
         
         # Test 3: Recall threshold
-        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score (y_test, y_pred, average='weighted', zero_division=0)
         recall_ok = recall > 0.70
         tests_passed.append((f"Recall > 0.70 (got {recall:.3f})", recall_ok))
         
@@ -193,7 +193,7 @@ class MLCIPipeline:
             status = "✓ PASS" if passed else "✗ FAIL"
             print(f"{status}: {test_name}")
         
-        all_passed = all(passed for _, passed in tests_passed)
+        all_passed = all (passed for _, passed in tests_passed)
         
         if all_passed:
             print("\\n✓ All model evaluation tests passed")
@@ -202,7 +202,7 @@ class MLCIPipeline:
         
         return all_passed
     
-    def run_ci_pipeline(self):
+    def run_ci_pipeline (self):
         """
         Full CI pipeline
         """
@@ -213,7 +213,7 @@ class MLCIPipeline:
         from sklearn.model_selection import train_test_split
         from sklearn.ensemble import RandomForestClassifier
         
-        X, y = make_classification(n_samples=1000, n_features=20, random_state=42)
+        X, y = make_classification (n_samples=1000, n_features=20, random_state=42)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
         
         # Stage 1: Data validation
@@ -226,13 +226,13 @@ class MLCIPipeline:
         
         # Stage 2: Model training
         print("\\nStage 2/4: Model Training")
-        model = RandomForestClassifier(n_estimators=100, random_state=42)
+        model = RandomForestClassifier (n_estimators=100, random_state=42)
         model.fit(X_train, y_train)
         print("✓ Model trained successfully")
         
         # Stage 3: Model evaluation
         print("\\nStage 3/4: Model Evaluation")
-        model_ok = self.model_evaluation_tests(model, X_test, y_test)
+        model_ok = self.model_evaluation_tests (model, X_test, y_test)
         
         if not model_ok:
             print("\\n❌ Pipeline failed at model evaluation")
@@ -265,7 +265,7 @@ class MLCDPipeline:
     Deployment strategies for ML models
     """
     
-    def canary_deployment(self, new_model, old_model, traffic_split=0.05):
+    def canary_deployment (self, new_model, old_model, traffic_split=0.05):
         """
         Canary Deployment: Gradually shift traffic to new model
         
@@ -296,19 +296,19 @@ class MLCDPipeline:
             print(f"    - Business metrics: Revenue, engagement")
             
             # Simulate monitoring
-            metrics_ok = self._monitor_deployment(new_model, old_model, traffic_pct)
+            metrics_ok = self._monitor_deployment (new_model, old_model, traffic_pct)
             
             if metrics_ok:
                 print(f"  ✓ Metrics OK - proceeding to next stage\\n")
             else:
                 print(f"  ✗ Metrics degraded - ROLLING BACK")
-                self._rollback(old_model)
+                self._rollback (old_model)
                 return False
         
         print("✅ Canary deployment complete - new model at 100%")
         return True
     
-    def _monitor_deployment(self, new_model, old_model, traffic_pct):
+    def _monitor_deployment (self, new_model, old_model, traffic_pct):
         """
         Monitor canary deployment
         """
@@ -318,7 +318,7 @@ class MLCDPipeline:
         # Simulate: 95% chance metrics are OK
         return random.random() < 0.95
     
-    def _rollback(self, old_model):
+    def _rollback (self, old_model):
         """
         Automatic rollback to previous model
         """
@@ -329,7 +329,7 @@ class MLCDPipeline:
         print("  4. Save failure logs for analysis")
         print("\\n✓ Rollback complete - old model serving")
     
-    def blue_green_deployment(self):
+    def blue_green_deployment (self):
         """
         Blue-Green Deployment: Zero-downtime switch
         
@@ -374,7 +374,7 @@ class MLCDPipeline:
 cd = MLCDPipeline()
 
 print("=== Deployment Strategy 1: Canary ===")
-cd.canary_deployment(new_model=None, old_model=None)
+cd.canary_deployment (new_model=None, old_model=None)
 
 print("\\n" + "="*50)
 cd.blue_green_deployment()
@@ -407,10 +407,10 @@ class ModelRegistry:
     """
     
     def __init__(self, registry_uri="sqlite:///mlflow.db"):
-        mlflow.set_tracking_uri(registry_uri)
+        mlflow.set_tracking_uri (registry_uri)
         self.client = mlflow.tracking.MlflowClient()
     
-    def register_model(self, model, name, metrics, hyperparameters, dataset_version):
+    def register_model (self, model, name, metrics, hyperparameters, dataset_version):
         """
         Register model with full lineage
         """
@@ -418,15 +418,15 @@ class ModelRegistry:
         
         with mlflow.start_run() as run:
             # Log model
-            mlflow.sklearn.log_model(model, "model")
+            mlflow.sklearn.log_model (model, "model")
             
             # Log metrics
             for metric_name, value in metrics.items():
-                mlflow.log_metric(metric_name, value)
+                mlflow.log_metric (metric_name, value)
             
             # Log hyperparameters
             for param_name, value in hyperparameters.items():
-                mlflow.log_param(param_name, value)
+                mlflow.log_param (param_name, value)
             
             # Log dataset version
             mlflow.log_param("dataset_version", dataset_version)
@@ -437,7 +437,7 @@ class ModelRegistry:
             
             # Register to model registry
             model_uri = f"runs:/{run.info.run_id}/model"
-            mv = mlflow.register_model(model_uri, name)
+            mv = mlflow.register_model (model_uri, name)
             
             print(f"✓ Model registered: {name} version {mv.version}")
             print(f"  Run ID: {run.info.run_id}")
@@ -446,14 +446,14 @@ class ModelRegistry:
             
             return mv.version
     
-    def promote_to_production(self, model_name, version):
+    def promote_to_production (self, model_name, version):
         """
         Promote model to production stage
         """
         print(f"\\n=== Promoting {model_name} v{version} to Production ===\\n")
         
         # Archive current production model
-        current_prod = self._get_production_model(model_name)
+        current_prod = self._get_production_model (model_name)
         if current_prod:
             self.client.transition_model_version_stage(
                 name=model_name,
@@ -472,23 +472,23 @@ class ModelRegistry:
         print(f"  ✓ Version {version} promoted to Production")
         print(f"  ✓ Ready to serve")
     
-    def _get_production_model(self, model_name):
+    def _get_production_model (self, model_name):
         """
         Get current production model
         """
         try:
-            versions = self.client.get_latest_versions(model_name, stages=["Production"])
+            versions = self.client.get_latest_versions (model_name, stages=["Production"])
             return versions[0] if versions else None
         except:
             return None
     
-    def list_models(self, model_name):
+    def list_models (self, model_name):
         """
         List all versions of a model
         """
         print(f"\\n=== Model Versions: {model_name} ===\\n")
         
-        versions = self.client.search_model_versions(f"name='{model_name}'")
+        versions = self.client.search_model_versions (f"name='{model_name}'")
         
         for v in versions:
             print(f"Version {v.version}:")
@@ -497,14 +497,14 @@ class ModelRegistry:
             print(f"  Run ID: {v.run_id}")
             print()
     
-    def rollback_to_version(self, model_name, version):
+    def rollback_to_version (self, model_name, version):
         """
         Rollback to previous version
         """
         print(f"\\n=== Rolling Back {model_name} to v{version} ===\\n")
         
         # Demote current production
-        current = self._get_production_model(model_name)
+        current = self._get_production_model (model_name)
         if current:
             self.client.transition_model_version_stage(
                 name=model_name,
@@ -529,14 +529,14 @@ from sklearn.datasets import make_classification
 from sklearn.metrics import accuracy_score, precision_score
 
 # Train model
-X, y = make_classification(n_samples=1000, random_state=42)
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+X, y = make_classification (n_samples=1000, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X, y)
 
 y_pred = model.predict(X)
 metrics = {
-    "accuracy": accuracy_score(y, y_pred),
-    "precision": precision_score(y, y_pred, zero_division=0)
+    "accuracy": accuracy_score (y, y_pred),
+    "precision": precision_score (y, y_pred, zero_division=0)
 }
 
 # Register model
@@ -578,7 +578,7 @@ class MLTestSuite:
     4. Integration tests
     """
     
-    def test_data_quality(self, df):
+    def test_data_quality (self, df):
         """
         Data quality tests
         """
@@ -601,11 +601,11 @@ class MLTestSuite:
         no_duplicates = not df.duplicated().any()
         tests.append(("No duplicate rows", no_duplicates))
         
-        self._print_test_results(tests)
+        self._print_test_results (tests)
         
-        return all(passed for _, passed in tests)
+        return all (passed for _, passed in tests)
     
-    def test_model_invariance(self, model, X_test):
+    def test_model_invariance (self, model, X_test):
         """
         Model invariance tests
         
@@ -639,11 +639,11 @@ class MLTestSuite:
         )
         tests.append(("Deterministic predictions", deterministic))
         
-        self._print_test_results(tests)
+        self._print_test_results (tests)
         
-        return all(passed for _, passed in tests)
+        return all (passed for _, passed in tests)
     
-    def test_model_performance(self, model, X_test, y_test):
+    def test_model_performance (self, model, X_test, y_test):
         """
         Model performance tests
         
@@ -658,29 +658,29 @@ class MLTestSuite:
         tests = []
         
         # Minimum accuracy
-        accuracy = accuracy_score(y_test, y_pred)
+        accuracy = accuracy_score (y_test, y_pred)
         meets_accuracy = accuracy >= 0.75
         tests.append((f"Accuracy >= 0.75 (got {accuracy:.3f})", meets_accuracy))
         
         # Minimum F1
-        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+        f1 = f1_score (y_test, y_pred, average='weighted', zero_division=0)
         meets_f1 = f1 >= 0.70
         tests.append((f"F1 >= 0.70 (got {f1:.3f})", meets_f1))
         
         # Better than baseline (most frequent class)
         from sklearn.dummy import DummyClassifier
-        baseline = DummyClassifier(strategy='most_frequent')
+        baseline = DummyClassifier (strategy='most_frequent')
         baseline.fit(X_test, y_test)
         baseline_acc = baseline.score(X_test, y_test)
         
         better_than_baseline = accuracy > baseline_acc
         tests.append((f"Better than baseline ({baseline_acc:.3f})", better_than_baseline))
         
-        self._print_test_results(tests)
+        self._print_test_results (tests)
         
-        return all(passed for _, passed in tests)
+        return all (passed for _, passed in tests)
     
-    def test_inference_latency(self, model, X_test):
+    def test_inference_latency (self, model, X_test):
         """
         Latency tests
         """
@@ -708,11 +708,11 @@ class MLTestSuite:
         batch_ok = batch_latency_ms < 100  # < 100ms for batch of 100
         tests.append((f"Batch (100) < 100ms (got {batch_latency_ms:.2f}ms)", batch_ok))
         
-        self._print_test_results(tests)
+        self._print_test_results (tests)
         
-        return all(passed for _, passed in tests)
+        return all (passed for _, passed in tests)
     
-    def _print_test_results(self, tests):
+    def _print_test_results (self, tests):
         """
         Print test results
         """
@@ -720,7 +720,7 @@ class MLTestSuite:
             status = "✓ PASS" if passed else "✗ FAIL"
             print(f"{status}: {test_name}")
         
-        all_passed = all(passed for _, passed in tests)
+        all_passed = all (passed for _, passed in tests)
         
         if all_passed:
             print("\\n✓ All tests passed")
@@ -735,21 +735,21 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 
 # Create test data
-X, y = make_classification(n_samples=1000, n_features=20, random_state=42)
+X, y = make_classification (n_samples=1000, n_features=20, random_state=42)
 df = pd.DataFrame(X, columns=[f'feature{i}' for i in range(20)])
 df['target'] = y
 
 # Train model
-model = RandomForestClassifier(n_estimators=50, random_state=42)
+model = RandomForestClassifier (n_estimators=50, random_state=42)
 model.fit(X, y)
 
 # Run test suite
 test_suite = MLTestSuite()
 
-test_suite.test_data_quality(df)
-test_suite.test_model_invariance(model, X[:100])
-test_suite.test_model_performance(model, X, y)
-test_suite.test_inference_latency(model, X)
+test_suite.test_data_quality (df)
+test_suite.test_model_invariance (model, X[:100])
+test_suite.test_model_performance (model, X, y)
+test_suite.test_inference_latency (model, X)
 
 print("\\n" + "="*50)
 print("✅ Test Suite Complete")
@@ -770,14 +770,14 @@ class ModelCard:
     """
     Document model for transparency and reproducibility
     
-    Based on Google's Model Cards paper
+    Based on Google\'s Model Cards paper
     """
     
     def __init__(self, model_name):
         self.model_name = model_name
         self.card = {}
     
-    def create_model_card(self):
+    def create_model_card (self):
         """
         Create comprehensive model documentation
         """
@@ -861,7 +861,7 @@ class ModelCard:
             }
         }
     
-    def render_model_card(self):
+    def render_model_card (self):
         """
         Display model card
         """
@@ -873,13 +873,13 @@ class ModelCard:
             section_title = section.replace('_', ' ').title()
             print(f"## {section_title}\\n")
             
-            if isinstance(content, dict):
+            if isinstance (content, dict):
                 for key, value in content.items():
-                    if isinstance(value, dict):
+                    if isinstance (value, dict):
                         print(f"  {key}:")
                         for k, v in value.items():
                             print(f"    - {k}: {v}")
-                    elif isinstance(value, list):
+                    elif isinstance (value, list):
                         print(f"  {key}:")
                         for item in value:
                             print(f"    - {item}")

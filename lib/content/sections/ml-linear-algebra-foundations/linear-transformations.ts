@@ -26,8 +26,8 @@ print("=== Linear Transformation Basics ===")
 
 # Example: 2D rotation by 45 degrees
 theta = np.pi / 4
-A = np.array([[np.cos(theta), -np.sin(theta)],
-              [np.sin(theta), np.cos(theta)]])
+A = np.array([[np.cos (theta), -np.sin (theta)],
+              [np.sin (theta), np.cos (theta)]])
 
 print("Rotation matrix (45°):")
 print(A)
@@ -68,13 +68,13 @@ Rotate by angle θ counterclockwise:
 \`\`\`python
 print("\\n=== 2D Rotation ===")
 
-def rotation_matrix_2d(theta):
+def rotation_matrix_2d (theta):
     """Create 2D rotation matrix."""
-    return np.array([[np.cos(theta), -np.sin(theta)],
-                     [np.sin(theta), np.cos(theta)]])
+    return np.array([[np.cos (theta), -np.sin (theta)],
+                     [np.sin (theta), np.cos (theta)]])
 
 # Rotate vector [1, 0] by 90 degrees
-R_90 = rotation_matrix_2d(np.pi / 2)
+R_90 = rotation_matrix_2d (np.pi / 2)
 v = np.array([1, 0])
 v_rotated = R_90 @ v
 
@@ -168,8 +168,8 @@ print()
 
 # Project onto arbitrary line (direction [1, 1])
 u = np.array([1, 1])
-u_normalized = u / np.linalg.norm(u)
-P_line = np.outer(u_normalized, u_normalized)
+u_normalized = u / np.linalg.norm (u)
+P_line = np.outer (u_normalized, u_normalized)
 
 v_proj_line = P_line @ v
 
@@ -187,7 +187,7 @@ Applying transformations sequentially: **T₂**(**T₁**(**x**)) = **A₂A₁x**
 print("\\n=== Composition of Transformations ===")
 
 # Rotation by 45° then scaling by 2
-R = rotation_matrix_2d(np.pi / 4)
+R = rotation_matrix_2d (np.pi / 4)
 S = np.array([[2, 0],
               [0, 2]])
 
@@ -262,7 +262,7 @@ A transformation is invertible if there exists **T⁻¹** such that **T⁻¹**(*
 print("\\n=== Invertibility ===")
 
 # Invertible: Rotation
-R = rotation_matrix_2d(np.pi / 6)
+R = rotation_matrix_2d (np.pi / 6)
 R_inv = np.linalg.inv(R)
 
 print("Rotation matrix R (30°):")
@@ -280,7 +280,7 @@ v_recovered = R_inv @ v_transformed
 print(f"v = {v}")
 print(f"R(v) = {v_transformed}")
 print(f"R⁻¹(R(v)) = {v_recovered}")
-print(f"Recovered original: {np.allclose(v, v_recovered)}")
+print(f"Recovered original: {np.allclose (v, v_recovered)}")
 print()
 
 # Non-invertible: Projection
@@ -298,20 +298,20 @@ print("Not invertible (information loss)")
 \`\`\`python
 print("\\n=== 3D Rotations ===")
 
-def rotation_matrix_3d_z(theta):
+def rotation_matrix_3d_z (theta):
     """Rotate around z-axis."""
-    return np.array([[np.cos(theta), -np.sin(theta), 0],
-                     [np.sin(theta), np.cos(theta), 0],
+    return np.array([[np.cos (theta), -np.sin (theta), 0],
+                     [np.sin (theta), np.cos (theta), 0],
                      [0, 0, 1]])
 
-def rotation_matrix_3d_x(theta):
+def rotation_matrix_3d_x (theta):
     """Rotate around x-axis."""
     return np.array([[1, 0, 0],
-                     [0, np.cos(theta), -np.sin(theta)],
-                     [0, np.sin(theta), np.cos(theta)]])
+                     [0, np.cos (theta), -np.sin (theta)],
+                     [0, np.sin (theta), np.cos (theta)]])
 
 # Rotate around z-axis
-R_z = rotation_matrix_3d_z(np.pi / 4)
+R_z = rotation_matrix_3d_z (np.pi / 4)
 v = np.array([1, 0, 0])
 v_rotated = R_z @ v
 
@@ -417,7 +417,7 @@ print()
 # Convert back
 x_recovered = P @ x_new
 print(f"Converted back: {x_recovered}")
-print(f"Match: {np.allclose(x_standard, x_recovered)}")
+print(f"Match: {np.allclose (x_standard, x_recovered)}")
 \`\`\`
 
 ### 4. Dimensionality Reduction
@@ -432,7 +432,7 @@ X_3d = np.random.randn(100, 3)
 
 # Project onto first 2 principal components
 # (In practice, use PCA from sklearn)
-U, S, Vt = np.linalg.svd(X_3d - X_3d.mean(axis=0), full_matrices=False)
+U, S, Vt = np.linalg.svd(X_3d - X_3d.mean (axis=0), full_matrices=False)
 V = Vt.T
 
 # Projection matrix (to 2D)
@@ -460,7 +460,7 @@ Linear transformations can:
 print("\\n=== Geometric Effects ===")
 
 transformations = {
-    "Rotation (Orthogonal)": rotation_matrix_2d(np.pi/4),
+    "Rotation (Orthogonal)": rotation_matrix_2d (np.pi/4),
     "Scaling (Diagonal)": np.array([[2, 0], [0, 3]]),
     "Shear": np.array([[1, 0.5], [0, 1]]),
     "Projection (Singular)": np.array([[1, 0], [0, 0]])
@@ -476,7 +476,7 @@ for name, T in transformations.items():
     print(f"  Matrix: {T.tolist()}")
     print(f"  {v} → {v_transformed}")
     print(f"  Determinant: {det_T:.2f}")
-    print(f"  Area scaling factor: |det| = {abs(det_T):.2f}")
+    print(f"  Area scaling factor: |det| = {abs (det_T):.2f}")
 \`\`\`
 
 ## Summary
@@ -493,8 +493,8 @@ for name, T in transformations.items():
 - **Projection**: Reduces dimension
 
 **Key Properties**:
-- **Range**: dim(range) = rank(**A**)
-- **Null space**: dim(null) = n - rank(**A**)
+- **Range**: dim (range) = rank(**A**)
+- **Null space**: dim (null) = n - rank(**A**)
 - **Invertibility**: det(**A**) ≠ 0
 - **Composition**: **T₂** ∘ **T₁** = **A₂A₁**
 

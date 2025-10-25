@@ -21,7 +21,7 @@ SELECT * FROM users WHERE email = 'john@example.com';
 ### With an Index
 \`\`\`sql
 -- Create index
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_email ON users (email);
 
 -- Now this query uses the index: O(log n)
 SELECT * FROM users WHERE email = 'john@example.com';
@@ -64,8 +64,8 @@ CREATE TABLE users (
 );
 
 -- Explicit B-tree indexes
-CREATE INDEX idx_email ON users(email);
-CREATE INDEX idx_created_at ON users(created_at);
+CREATE INDEX idx_email ON users (email);
+CREATE INDEX idx_created_at ON users (created_at);
 
 -- Efficient queries
 SELECT * FROM users WHERE email = 'john@example.com';
@@ -137,7 +137,7 @@ WHERE to_tsvector('english', title || ' ' || content)
 @@ to_tsquery('english', 'database & indexing');
 
 -- With ranking
-SELECT *, ts_rank(to_tsvector('english', content), query) AS rank
+SELECT *, ts_rank (to_tsvector('english', content), query) AS rank
 FROM articles, to_tsquery('english', 'database & indexing') query
 WHERE to_tsvector('english', content) @@ query
 ORDER BY rank DESC;
@@ -203,7 +203,7 @@ db.restaurants.find({
 **Definition:** Index on one column only
 
 \`\`\`sql
-CREATE INDEX idx_email ON users(email);
+CREATE INDEX idx_email ON users (email);
 \`\`\`
 
 **Use Cases:**
@@ -216,7 +216,7 @@ CREATE INDEX idx_email ON users(email);
 **Definition:** Index on multiple columns
 
 \`\`\`sql
-CREATE INDEX idx_user_location ON users(country, city, zip_code);
+CREATE INDEX idx_user_location ON users (country, city, zip_code);
 \`\`\`
 
 **Column Order Matters:**
@@ -244,7 +244,7 @@ WHERE city = 'SF' AND zip_code = '94102'       -- ❌ Can't use index
 
 \`\`\`sql
 -- Good: Equality first, range last
-CREATE INDEX idx_orders ON orders(user_id, status, created_at);
+CREATE INDEX idx_orders ON orders (user_id, status, created_at);
 
 -- Supports these efficiently:
 WHERE user_id = 123 AND status = 'active' AND created_at > '2024-01-01'
@@ -259,7 +259,7 @@ WHERE user_id = 123
 \`\`\`sql
 -- PostgreSQL
 CREATE INDEX idx_users_email_covering 
-ON users(email) INCLUDE (first_name, last_name);
+ON users (email) INCLUDE (first_name, last_name);
 
 -- This query can be satisfied entirely from the index
 SELECT first_name, last_name FROM users WHERE email = 'john@example.com';
@@ -282,7 +282,7 @@ SELECT first_name, last_name FROM users WHERE email = 'john@example.com';
 
 \`\`\`sql
 -- Index only active users
-CREATE INDEX idx_active_users ON users(email) WHERE status = 'active';
+CREATE INDEX idx_active_users ON users (email) WHERE status = 'active';
 
 -- Efficient for queries matching the filter
 SELECT * FROM users WHERE email = 'john@example.com' AND status = 'active';
@@ -300,7 +300,7 @@ SELECT * FROM users WHERE email = 'john@example.com' AND status = 'active';
 
 \`\`\`sql
 -- E-commerce example
-CREATE INDEX idx_pending_orders ON orders(user_id, created_at) 
+CREATE INDEX idx_pending_orders ON orders (user_id, created_at) 
 WHERE status = 'pending';
 
 -- Much smaller than indexing all orders
@@ -311,7 +311,7 @@ WHERE status = 'pending';
 
 \`\`\`sql
 -- Ensure email uniqueness
-CREATE UNIQUE INDEX idx_users_email_unique ON users(email);
+CREATE UNIQUE INDEX idx_users_email_unique ON users (email);
 
 -- Equivalent to:
 ALTER TABLE users ADD CONSTRAINT users_email_unique UNIQUE(email);
@@ -321,7 +321,7 @@ ALTER TABLE users ADD CONSTRAINT users_email_unique UNIQUE(email);
 \`\`\`sql
 -- Unique combination of user_id and product_id
 CREATE UNIQUE INDEX idx_cart_items_unique 
-ON cart_items(user_id, product_id);
+ON cart_items (user_id, product_id);
 
 -- Allows: user_id=1, product_id=100 and user_id=2, product_id=100
 -- Prevents: duplicate (user_id=1, product_id=100)
@@ -441,9 +441,9 @@ SELECT
     schemaname,
     tablename,
     indexname,
-    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
+    pg_size_pretty (pg_relation_size (indexrelid)) AS index_size
 FROM pg_stat_user_indexes
-ORDER BY pg_relation_size(indexrelid) DESC;
+ORDER BY pg_relation_size (indexrelid) DESC;
 
 -- Rebuild fragmented index
 REINDEX INDEX idx_users_email;
@@ -480,10 +480,10 @@ SELECT
     tablename,
     indexname,
     idx_scan,
-    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
+    pg_size_pretty (pg_relation_size (indexrelid)) AS index_size
 FROM pg_stat_user_indexes
 WHERE idx_scan = 0
-ORDER BY pg_relation_size(indexrelid) DESC;
+ORDER BY pg_relation_size (indexrelid) DESC;
 
 -- Drop unused indexes to improve write performance
 DROP INDEX idx_rarely_used;
@@ -506,10 +506,10 @@ CREATE TABLE products (
 );
 
 -- Indexes for different query patterns
-CREATE INDEX idx_products_category ON products(category, price);
-CREATE INDEX idx_products_price ON products(price) WHERE stock_quantity > 0;
+CREATE INDEX idx_products_category ON products (category, price);
+CREATE INDEX idx_products_price ON products (price) WHERE stock_quantity > 0;
 CREATE INDEX idx_products_search ON products USING GIN(search_vector);
-CREATE INDEX idx_products_recent ON products(created_at DESC) 
+CREATE INDEX idx_products_recent ON products (created_at DESC) 
     WHERE created_at > NOW() - INTERVAL '30 days';
 
 -- Query patterns these support:
@@ -547,12 +547,12 @@ CREATE TABLE posts (
 
 -- Composite index for user's feed
 CREATE INDEX idx_posts_user_timeline 
-ON posts(user_id, created_at DESC) 
+ON posts (user_id, created_at DESC) 
 WHERE visibility = 'public';
 
 -- Covering index for timeline queries
 CREATE INDEX idx_posts_feed_covering 
-ON posts(user_id, created_at DESC) 
+ON posts (user_id, created_at DESC) 
 INCLUDE (content, visibility);
 
 -- Efficient feed query
@@ -603,7 +603,7 @@ CREATE INDEX idx_logs_timestamp ON logs USING BRIN(timestamp);
 -- Much smaller than B-tree, good for time-series
 
 -- Concurrent index creation (no table lock)
-CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
+CREATE INDEX CONCURRENTLY idx_users_email ON users (email);
 \`\`\`
 
 ### MySQL
@@ -614,7 +614,7 @@ CREATE TABLE users (
     id INT PRIMARY KEY,
     email VARCHAR(255)
 );
-CREATE INDEX idx_email ON users(email);
+CREATE INDEX idx_email ON users (email);
 -- Secondary index stores: (email, id)
 -- Allows index-only scans for: SELECT id FROM users WHERE email = '...'
 \`\`\`
@@ -670,14 +670,14 @@ db.users.createIndex(
 **Pattern 1: Composite Index for Common Query**
 \`\`\`sql
 -- Query: Get user's recent orders
-CREATE INDEX idx_orders_user_date ON orders(user_id, created_at DESC);
+CREATE INDEX idx_orders_user_date ON orders (user_id, created_at DESC);
 \`\`\`
 
 **Pattern 2: Covering Index for Performance**
 \`\`\`sql
 -- Query needs: user_id, status, total
 CREATE INDEX idx_orders_covering 
-ON orders(user_id, created_at) 
+ON orders (user_id, created_at) 
 INCLUDE (status, total);
 \`\`\`
 
@@ -685,7 +685,7 @@ INCLUDE (status, total);
 \`\`\`sql
 -- Only index pending/processing orders (5% of data)
 CREATE INDEX idx_active_orders 
-ON orders(user_id, created_at) 
+ON orders (user_id, created_at) 
 WHERE status IN ('pending', 'processing');
 \`\`\`
 

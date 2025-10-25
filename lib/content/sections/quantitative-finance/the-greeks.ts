@@ -82,9 +82,9 @@ def calculate_delta(S, K, T, r, sigma, option_type='call'):
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
     
     if option_type == 'call':
-        delta = norm.cdf(d1)
+        delta = norm.cdf (d1)
     else:  # put
-        delta = norm.cdf(d1) - 1
+        delta = norm.cdf (d1) - 1
     
     return delta
 
@@ -123,33 +123,33 @@ fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # Delta vs Stock Price
 stock_range = np.linspace(120, 180, 100)
-call_deltas = [calculate_delta(s, K, T, r, sigma, 'call') for s in stock_range]
-put_deltas = [calculate_delta(s, K, T, r, sigma, 'put') for s in stock_range]
+call_deltas = [calculate_delta (s, K, T, r, sigma, 'call') for s in stock_range]
+put_deltas = [calculate_delta (s, K, T, r, sigma, 'put') for s in stock_range]
 
-axes[0].plot(stock_range, call_deltas, label='Call Delta', linewidth=2)
-axes[0].plot(stock_range, put_deltas, label='Put Delta', linewidth=2)
-axes[0].axhline(y=0, color='black', linestyle='-', alpha=0.3)
-axes[0].axhline(y=0.5, color='gray', linestyle='--', alpha=0.3, label='Δ=0.50')
-axes[0].axhline(y=-0.5, color='gray', linestyle='--', alpha=0.3)
-axes[0].axvline(x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
+axes[0].plot (stock_range, call_deltas, label='Call Delta', linewidth=2)
+axes[0].plot (stock_range, put_deltas, label='Put Delta', linewidth=2)
+axes[0].axhline (y=0, color='black', linestyle='-', alpha=0.3)
+axes[0].axhline (y=0.5, color='gray', linestyle='--', alpha=0.3, label='Δ=0.50')
+axes[0].axhline (y=-0.5, color='gray', linestyle='--', alpha=0.3)
+axes[0].axvline (x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
 axes[0].set_xlabel('Stock Price ($)')
 axes[0].set_ylabel('Delta')
 axes[0].set_title('Delta vs Stock Price', fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 axes[0].set_ylim([-1.1, 1.1])
 
 # Delta vs Time to Expiration (for ATM)
 time_range = np.linspace(1/365, 1, 100)
 call_deltas_time = [calculate_delta(S, K, t, r, sigma, 'call') for t in time_range]
 
-axes[1].plot(time_range * 365, call_deltas_time, linewidth=2, color='green')
-axes[1].axhline(y=0.5, color='red', linestyle='--', alpha=0.5, label='Δ=0.50')
+axes[1].plot (time_range * 365, call_deltas_time, linewidth=2, color='green')
+axes[1].axhline (y=0.5, color='red', linestyle='--', alpha=0.5, label='Δ=0.50')
 axes[1].set_xlabel('Days to Expiration')
 axes[1].set_ylabel('Call Delta')
 axes[1].set_title('ATM Call Delta vs Time', fontweight='bold')
 axes[1].legend()
-axes[1].grid(alpha=0.3)
+axes[1].grid (alpha=0.3)
 axes[1].set_ylim([0.45, 0.55])
 
 plt.tight_layout()
@@ -201,7 +201,7 @@ print(f"Interpretation: Portfolio behaves like {total_delta:.0f} shares of stock
 Create delta-neutral position (zero directional exposure):
 
 \`\`\`python
-def delta_hedge(option_position, option_delta, shares_per_contract=100):
+def delta_hedge (option_position, option_delta, shares_per_contract=100):
     """
     Calculate hedge for delta-neutral position
     
@@ -225,14 +225,14 @@ def delta_hedge(option_position, option_delta, shares_per_contract=100):
 option_pos = 10
 opt_delta = 0.70
 
-hedge = delta_hedge(option_pos, opt_delta)
+hedge = delta_hedge (option_pos, opt_delta)
 
 print(f"\\n=== DELTA HEDGING ===")
 print(f"Position: Long {option_pos} call contracts (delta {opt_delta})")
 print(f"Option delta exposure: {option_pos * 100 * opt_delta:.0f} shares")
-print(f"Hedge: {hedge:.0f} shares (short {abs(hedge):.0f} shares)")
+print(f"Hedge: {hedge:.0f} shares (short {abs (hedge):.0f} shares)")
 print(f"\\nResult: Delta-neutral position")
-print(f"  Stock up $1: Calls gain \${option_pos * 100 * opt_delta:.0f}, stock loses \${abs(hedge):.0f}")
+print(f"  Stock up $1: Calls gain \${option_pos * 100 * opt_delta:.0f}, stock loses \${abs (hedge):.0f}")
 print(f"  Net change: $0 (approximately)")
 \`\`\`
 
@@ -315,36 +315,36 @@ stock_range = np.linspace(120, 180, 100)
 times = [5/365, 30/365, 90/365]
 
 for t in times:
-    gammas = [calculate_gamma(s, K, t, r, sigma) for s in stock_range]
-    axes[0, 0].plot(stock_range, gammas, label=f'{t*365:.0f} days', linewidth=2)
+    gammas = [calculate_gamma (s, K, t, r, sigma) for s in stock_range]
+    axes[0, 0].plot (stock_range, gammas, label=f'{t*365:.0f} days', linewidth=2)
 
-axes[0, 0].axvline(x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
+axes[0, 0].axvline (x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
 axes[0, 0].set_xlabel('Stock Price ($)')
 axes[0, 0].set_ylabel('Gamma')
 axes[0, 0].set_title('Gamma vs Stock Price (Different Expirations)', fontweight='bold')
 axes[0, 0].legend()
-axes[0, 0].grid(alpha=0.3)
+axes[0, 0].grid (alpha=0.3)
 
 # 2. Gamma vs Time (ATM option)
 time_range = np.linspace(1/365, 90/365, 100)
 gammas_time = [calculate_gamma(S, K, t, r, sigma) for t in time_range]
 
-axes[0, 1].plot(time_range * 365, gammas_time, linewidth=2, color='purple')
+axes[0, 1].plot (time_range * 365, gammas_time, linewidth=2, color='purple')
 axes[0, 1].set_xlabel('Days to Expiration')
 axes[0, 1].set_ylabel('Gamma')
 axes[0, 1].set_title('ATM Gamma vs Time (Gamma Risk Increases Near Expiration)', fontweight='bold')
-axes[0, 1].grid(alpha=0.3)
+axes[0, 1].grid (alpha=0.3)
 
 # 3. Delta vs Stock Price (showing curvature = gamma)
 stock_range_fine = np.linspace(140, 160, 200)
-call_deltas_fine = [calculate_delta(s, K, T, r, sigma, 'call') for s in stock_range_fine]
+call_deltas_fine = [calculate_delta (s, K, T, r, sigma, 'call') for s in stock_range_fine]
 
-axes[1, 0].plot(stock_range_fine, call_deltas_fine, linewidth=2)
-axes[1, 0].axvline(x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
+axes[1, 0].plot (stock_range_fine, call_deltas_fine, linewidth=2)
+axes[1, 0].axvline (x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
 axes[1, 0].set_xlabel('Stock Price ($)')
 axes[1, 0].set_ylabel('Delta')
 axes[1, 0].set_title('Delta Curve (Gamma = Slope of This Curve)', fontweight='bold')
-axes[1, 0].grid(alpha=0.3)
+axes[1, 0].grid (alpha=0.3)
 axes[1, 0].legend()
 
 # Add annotation showing gamma as slope
@@ -355,7 +355,7 @@ gamma_at_point = calculate_gamma(S_point, K, T, r, sigma)
 # Draw tangent line
 x_tangent = np.array([S_point - 5, S_point + 5])
 y_tangent = delta_at_point + gamma_at_point * (x_tangent - S_point)
-axes[1, 0].plot(x_tangent, y_tangent, 'r--', alpha=0.7, label=f'Tangent (slope={gamma_at_point:.4f})')
+axes[1, 0].plot (x_tangent, y_tangent, 'r--', alpha=0.7, label=f'Tangent (slope={gamma_at_point:.4f})')
 axes[1, 0].legend()
 
 # 4. P&L from gamma
@@ -363,16 +363,16 @@ stock_moves = np.linspace(-20, 20, 100)
 delta_pnl = call_deltas_fine[100] * stock_moves  # Linear (delta only)
 gamma_pnl = call_deltas_fine[100] * stock_moves + 0.5 * gamma * stock_moves**2  # With gamma correction
 
-axes[1, 1].plot(stock_moves, delta_pnl, label='Delta P&L Only (Linear)', linestyle='--', linewidth=2)
-axes[1, 1].plot(stock_moves, gamma_pnl, label='Delta + Gamma P&L (Actual)', linewidth=2)
-axes[1, 1].axhline(y=0, color='black', linestyle='-', alpha=0.3)
-axes[1, 1].axvline(x=0, color='black', linestyle='-', alpha=0.3)
-axes[1, 1].fill_between(stock_moves, delta_pnl, gamma_pnl, alpha=0.2, label='Gamma Profit')
+axes[1, 1].plot (stock_moves, delta_pnl, label='Delta P&L Only (Linear)', linestyle='--', linewidth=2)
+axes[1, 1].plot (stock_moves, gamma_pnl, label='Delta + Gamma P&L (Actual)', linewidth=2)
+axes[1, 1].axhline (y=0, color='black', linestyle='-', alpha=0.3)
+axes[1, 1].axvline (x=0, color='black', linestyle='-', alpha=0.3)
+axes[1, 1].fill_between (stock_moves, delta_pnl, gamma_pnl, alpha=0.2, label='Gamma Profit')
 axes[1, 1].set_xlabel('Stock Price Move ($)')
 axes[1, 1].set_ylabel('Option P&L ($)')
 axes[1, 1].set_title('Gamma Creates Convexity (Profit From Large Moves)', fontweight='bold')
 axes[1, 1].legend()
-axes[1, 1].grid(alpha=0.3)
+axes[1, 1].grid (alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -410,7 +410,7 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
         d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
         if opt_type == 'call':
-            return S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+            return S * norm.cdf (d1) - K * np.exp(-r * T) * norm.cdf (d2)
         else:
             return K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
     
@@ -429,9 +429,9 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
     total_hedging_pnl = 0
     rehedges = []
     
-    for i, S_current in enumerate(stock_path):
+    for i, S_current in enumerate (stock_path):
         # Current delta
-        T_current = T * (1 - i / len(stock_path))
+        T_current = T * (1 - i / len (stock_path))
         if T_current <= 0:
             break
         
@@ -442,7 +442,7 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
         # Check if rehedge needed
         total_delta = option_delta + stock_position / 100
         
-        if abs(total_delta) > rehedge_threshold:
+        if abs (total_delta) > rehedge_threshold:
             # Rehedge to delta-neutral
             shares_to_trade = -total_delta * 100
             
@@ -465,8 +465,8 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
             })
     
     # Close out at end
-    final_call = bs_price(stock_path[-1], K, 0.01, r, sigma, 'call')
-    final_put = bs_price(stock_path[-1], K, 0.01, r, sigma, 'put')
+    final_call = bs_price (stock_path[-1], K, 0.01, r, sigma, 'call')
+    final_put = bs_price (stock_path[-1], K, 0.01, r, sigma, 'put')
     final_value = final_call + final_put
     
     option_pnl = final_value - initial_cost
@@ -479,7 +479,7 @@ def simulate_gamma_scalping(S_initial, K, T, r, sigma, stock_path,
     total_pnl = option_pnl + total_hedging_pnl
     
     print(f"\\n=== GAMMA SCALPING RESULTS ===")
-    print(f"Number of rehedges: {len(rehedges)}")
+    print(f"Number of rehedges: {len (rehedges)}")
     print(f"\\nP&L Breakdown:")
     print(f"  Option P&L: \${option_pnl:.2f}")
     print(f"  Hedging P&L (gamma scalping): \${total_hedging_pnl:.2f}")
@@ -496,13 +496,13 @@ daily_vol = volatility / np.sqrt(252)
 
 # Generate stock path with mean reversion
 stock_path = [S_start]
-for _ in range(days - 1):
+for _ in range (days - 1):
     # Random walk with mean reversion
     mean_reversion = 0.02 * (S_start - stock_path[-1])
     change = mean_reversion + daily_vol * S_start * np.random.randn()
-    stock_path.append(stock_path[-1] + change)
+    stock_path.append (stock_path[-1] + change)
 
-stock_path = np.array(stock_path)
+stock_path = np.array (stock_path)
 
 # Run gamma scalping
 total_pnl, rehedges = simulate_gamma_scalping(
@@ -519,25 +519,25 @@ total_pnl, rehedges = simulate_gamma_scalping(
 fig, axes = plt.subplots(2, 1, figsize=(12, 10))
 
 # Stock path with rehedges
-axes[0].plot(stock_path, linewidth=2, label='Stock Price')
-axes[0].axhline(y=150, color='red', linestyle='--', alpha=0.5, label='Strike')
+axes[0].plot (stock_path, linewidth=2, label='Stock Price')
+axes[0].axhline (y=150, color='red', linestyle='--', alpha=0.5, label='Strike')
 for rehedge in rehedges:
-    axes[0].axvline(x=rehedge['day'], color='gray', linestyle=':', alpha=0.3)
-    axes[0].plot(rehedge['day'], rehedge['price'], 'ro', markersize=8)
+    axes[0].axvline (x=rehedge['day'], color='gray', linestyle=':', alpha=0.3)
+    axes[0].plot (rehedge['day'], rehedge['price'], 'ro', markersize=8)
 axes[0].set_xlabel('Day')
 axes[0].set_ylabel('Stock Price ($)')
 axes[0].set_title('Stock Path with Rehedge Points (Red Dots)', fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 
 # Cumulative hedging P&L
 cum_pnl = np.cumsum([r['pnl'] for r in rehedges])
-axes[1].plot(range(len(cum_pnl)), cum_pnl, linewidth=2, color='green', marker='o')
-axes[1].axhline(y=0, color='black', linestyle='-', alpha=0.3)
+axes[1].plot (range (len (cum_pnl)), cum_pnl, linewidth=2, color='green', marker='o')
+axes[1].axhline (y=0, color='black', linestyle='-', alpha=0.3)
 axes[1].set_xlabel('Rehedge Number')
 axes[1].set_ylabel('Cumulative Hedging P&L ($)')
 axes[1].set_title('Gamma Scalping P&L (Buy Low, Sell High Automatically)', fontweight='bold')
-axes[1].grid(alpha=0.3)
+axes[1].grid (alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -596,7 +596,7 @@ def calculate_theta(S, K, T, r, sigma, option_type='call'):
     common = -S * n_prime_d1 * sigma / (2 * np.sqrt(T))
     
     if option_type == 'call':
-        theta = common - r * K * np.exp(-r * T) * norm.cdf(d2)
+        theta = common - r * K * np.exp(-r * T) * norm.cdf (d2)
     else:  # put
         theta = common + r * K * np.exp(-r * T) * norm.cdf(-d2)
     
@@ -618,7 +618,7 @@ put_theta = calculate_theta(S, K, T, r, sigma, 'put')
 print("=== THETA EXAMPLES ===\\n")
 print(f"ATM Call (30 days to expiration):")
 print(f"  Theta: \${call_theta:.4f} per day")
-print(f"  Interpretation: Loses \${abs(call_theta):.2f} per day from time decay\\n")
+print(f"  Interpretation: Loses \${abs (call_theta):.2f} per day from time decay\\n")
 
 print(f"ATM Put (30 days to expiration):")
 print(f"  Theta: \${put_theta:.4f} per day\\n")
@@ -628,7 +628,7 @@ expirations = [5, 15, 30, 60, 90, 180]
 thetas = [calculate_theta(S, K, t/365, r, sigma, 'call') for t in expirations]
 
 print("Theta vs Time to Expiration:")
-for t, theta in zip(expirations, thetas):
+for t, theta in zip (expirations, thetas):
     print(f"  {t:3d} days: \${theta:+.4f}/day")
 
 print("\\n→ Theta accelerates as expiration approaches!")
@@ -647,8 +647,8 @@ for day in days_to_exp:
         T_curr = 0.001
     call_val = black_scholes(S, K, T_curr, r, sigma, 'call')
     put_val = black_scholes(S, K, T_curr, r, sigma, 'put')
-    call_values.append(call_val)
-    put_values.append(put_val)
+    call_values.append (call_val)
+    put_values.append (put_val)
 
 axes[0, 0].plot(90 - days_to_exp, call_values, label='ATM Call', linewidth=2)
 axes[0, 0].plot(90 - days_to_exp, put_values, label='ATM Put', linewidth=2)
@@ -656,32 +656,32 @@ axes[0, 0].set_xlabel('Days Elapsed')
 axes[0, 0].set_ylabel('Option Value ($)')
 axes[0, 0].set_title('Time Decay: Option Value vs Days Passed', fontweight='bold')
 axes[0, 0].legend()
-axes[0, 0].grid(alpha=0.3)
+axes[0, 0].grid (alpha=0.3)
 axes[0, 0].invert_xaxis()
 
 # 2. Theta vs Time to Expiration
 time_range = np.linspace(1/365, 180/365, 100)
 call_thetas = [calculate_theta(S, K, t, r, sigma, 'call') for t in time_range]
 
-axes[0, 1].plot(time_range * 365, np.abs(call_thetas), linewidth=2, color='red')
+axes[0, 1].plot (time_range * 365, np.abs (call_thetas), linewidth=2, color='red')
 axes[0, 1].set_xlabel('Days to Expiration')
 axes[0, 1].set_ylabel('|Theta| ($/day)')
 axes[0, 1].set_title('Theta Acceleration Near Expiration', fontweight='bold')
-axes[0, 1].grid(alpha=0.3)
-axes[0, 1].axvline(x=30, color='orange', linestyle='--', alpha=0.5, label='30 days (theta accelerates)')
+axes[0, 1].grid (alpha=0.3)
+axes[0, 1].axvline (x=30, color='orange', linestyle='--', alpha=0.5, label='30 days (theta accelerates)')
 axes[0, 1].legend()
 
 # 3. Theta vs Strike (at 30 days)
 strike_range = np.linspace(120, 180, 50)
 call_thetas_strike = [calculate_theta(S, k, T, r, sigma, 'call') for k in strike_range]
 
-axes[1, 0].plot(strike_range, np.abs(call_thetas_strike), linewidth=2, color='purple')
-axes[1, 0].axvline(x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM (Stock \${S})')
+axes[1, 0].plot (strike_range, np.abs (call_thetas_strike), linewidth=2, color='purple')
+axes[1, 0].axvline (x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM (Stock \${S})')
 axes[1, 0].set_xlabel('Strike Price ($)')
 axes[1, 0].set_ylabel('|Theta| ($/day)')
 axes[1, 0].set_title('Theta vs Strike (ATM Has Highest Theta)', fontweight='bold')
 axes[1, 0].legend()
-axes[1, 0].grid(alpha=0.3)
+axes[1, 0].grid (alpha=0.3)
 
 # 4. Weekend effect: 3-day decay on Friday
 # Simulate option value decay Thurs → Mon
@@ -693,15 +693,15 @@ call_value_mon = black_scholes(S, K, 26/365, r, sigma, 'call')  # 3 days pass
 values = [call_value_thurs, call_value_fri, call_value_mon]
 decays = [0, call_value_thurs - call_value_fri, call_value_fri - call_value_mon]
 
-axes[1, 1].bar(days_labels, values, color=['blue', 'blue', 'red'], alpha=0.7)
-for i, (label, val, decay) in enumerate(zip(days_labels, values, decays)):
-    axes[1, 1].text(i, val + 0.1, f'\${val:.2f}', ha='center', fontweight='bold')
+axes[1, 1].bar (days_labels, values, color=['blue', 'blue', 'red'], alpha=0.7)
+for i, (label, val, decay) in enumerate (zip (days_labels, values, decays)):
+    axes[1, 1].text (i, val + 0.1, f'\${val:.2f}', ha='center', fontweight='bold')
     if decay > 0:
-        axes[1, 1].text(i, val - 0.3, f'-\${decay:.2f}', ha='center', color='red', fontweight='bold')
+        axes[1, 1].text (i, val - 0.3, f'-\${decay:.2f}', ha='center', color='red', fontweight='bold')
 
 axes[1, 1].set_ylabel('Option Value ($)')
 axes[1, 1].set_title('Weekend Effect: 3-Day Decay Friday→Monday', fontweight='bold')
-axes[1, 1].grid(axis='y', alpha=0.3)
+axes[1, 1].grid (axis='y', alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -801,7 +801,7 @@ print(f"  IV: {pre_earnings_iv*100:.0f}%, Call Price: \${option_price_before:.2f
 print(f"  Vega: \${vega_pre:.2f}")
 
 print(f"\\nAfter earnings (stock unchanged):")
-print(f"  IV: {post_earnings_iv*100:.0f}% (dropped {abs(iv_drop):.0f}%)")
+print(f"  IV: {post_earnings_iv*100:.0f}% (dropped {abs (iv_drop):.0f}%)")
 print(f"  Call Price: \${option_price_after:.2f}")
 print(f"\\nLoss from IV crush: \${actual_loss:.2f}")
 print(f"Vega estimate: \${vega_loss_estimate:.2f} (close!)")
@@ -811,44 +811,44 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 # 1. Vega vs Stock Price
 stock_range = np.linspace(120, 180, 100)
-vegas = [calculate_vega(s, K, T, r, sigma) for s in stock_range]
+vegas = [calculate_vega (s, K, T, r, sigma) for s in stock_range]
 
-axes[0, 0].plot(stock_range, vegas, linewidth=2, color='orange')
-axes[0, 0].axvline(x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
+axes[0, 0].plot (stock_range, vegas, linewidth=2, color='orange')
+axes[0, 0].axvline (x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
 axes[0, 0].set_xlabel('Stock Price ($)')
 axes[0, 0].set_ylabel('Vega ($/1% IV)')
 axes[0, 0].set_title('Vega vs Stock Price (Max at ATM)', fontweight='bold')
 axes[0, 0].legend()
-axes[0, 0].grid(alpha=0.3)
+axes[0, 0].grid (alpha=0.3)
 
 # 2. Vega vs Time
 time_range = np.linspace(5/365, 180/365, 100)
 vegas_time = [calculate_vega(S, K, t, r, sigma) for t in time_range]
 
-axes[0, 1].plot(time_range * 365, vegas_time, linewidth=2, color='green')
+axes[0, 1].plot (time_range * 365, vegas_time, linewidth=2, color='green')
 axes[0, 1].set_xlabel('Days to Expiration')
 axes[0, 1].set_ylabel('Vega ($/1% IV)')
 axes[0, 1].set_title('Vega vs Time (Longer-dated = Higher Vega)', fontweight='bold')
-axes[0, 1].grid(alpha=0.3)
+axes[0, 1].grid (alpha=0.3)
 
 # 3. Option price vs IV
 iv_range = np.linspace(0.10, 0.60, 100)
 call_prices_vs_iv = [black_scholes(S, K, T, r, iv, 'call') for iv in iv_range]
 
-axes[1, 0].plot(iv_range * 100, call_prices_vs_iv, linewidth=2, color='purple')
-axes[1, 0].axvline(x=sigma*100, color='red', linestyle='--', alpha=0.5, label=f'Current IV {sigma*100:.0f}%')
+axes[1, 0].plot (iv_range * 100, call_prices_vs_iv, linewidth=2, color='purple')
+axes[1, 0].axvline (x=sigma*100, color='red', linestyle='--', alpha=0.5, label=f'Current IV {sigma*100:.0f}%')
 axes[1, 0].set_xlabel('Implied Volatility (%)')
 axes[1, 0].set_ylabel('Call Option Price ($)')
 axes[1, 0].set_title('Option Price vs IV (Vega = Slope)', fontweight='bold')
 axes[1, 0].legend()
-axes[1, 0].grid(alpha=0.3)
+axes[1, 0].grid (alpha=0.3)
 
 # Add tangent line at current IV
 current_price = black_scholes(S, K, T, r, sigma, 'call')
 vega_current = calculate_vega(S, K, T, r, sigma)
 iv_tangent = np.array([sigma - 0.05, sigma + 0.05])
 price_tangent = current_price + vega_current * (iv_tangent - sigma) * 100
-axes[1, 0].plot(iv_tangent * 100, price_tangent, 'r--', alpha=0.7, linewidth=2, label=f'Tangent (vega=\${vega_current:.2f})')
+axes[1, 0].plot (iv_tangent * 100, price_tangent, 'r--', alpha=0.7, linewidth=2, label=f'Tangent (vega=\${vega_current:.2f})')
 axes[1, 0].legend()
 
 # 4. VIX and option values correlation
@@ -858,32 +858,32 @@ days = 60
 vix_path = [25]  # Start at 25
 option_values = [black_scholes(S, K, 30/365, r, vix_path[0]/100, 'call')]
 
-for _ in range(days - 1):
+for _ in range (days - 1):
     # VIX mean-reverting random walk
     mean_reversion = 0.05 * (25 - vix_path[-1])
     vix_change = mean_reversion + 2 * np.random.randn()
-    new_vix = max(vix_path[-1] + vix_change, 10)  # Floor at 10
-    vix_path.append(new_vix)
+    new_vix = max (vix_path[-1] + vix_change, 10)  # Floor at 10
+    vix_path.append (new_vix)
     
-    opt_val = black_scholes(S, K, max(30 - len(option_values), 1)/365, r, new_vix/100, 'call')
-    option_values.append(opt_val)
+    opt_val = black_scholes(S, K, max(30 - len (option_values), 1)/365, r, new_vix/100, 'call')
+    option_values.append (opt_val)
 
 ax2 = axes[1, 1].twinx()
-axes[1, 1].plot(vix_path, color='red', linewidth=2, label='VIX')
-ax2.plot(option_values, color='blue', linewidth=2, label='Option Value')
+axes[1, 1].plot (vix_path, color='red', linewidth=2, label='VIX')
+ax2.plot (option_values, color='blue', linewidth=2, label='Option Value')
 axes[1, 1].set_xlabel('Day')
 axes[1, 1].set_ylabel('VIX', color='red')
 ax2.set_ylabel('Option Value ($)', color='blue')
 axes[1, 1].set_title('VIX and Option Value (Positive Correlation)', fontweight='bold')
-axes[1, 1].tick_params(axis='y', labelcolor='red')
-ax2.tick_params(axis='y', labelcolor='blue')
-axes[1, 1].grid(alpha=0.3)
+axes[1, 1].tick_params (axis='y', labelcolor='red')
+ax2.tick_params (axis='y', labelcolor='blue')
+axes[1, 1].grid (alpha=0.3)
 
 # Add correlation
-correlation = np.corrcoef(vix_path, option_values)[0, 1]
+correlation = np.corrcoef (vix_path, option_values)[0, 1]
 axes[1, 1].text(0.5, 0.95, f'Correlation: {correlation:.3f}', 
                 transform=axes[1, 1].transAxes, ha='center', fontsize=12,
-                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+                bbox=dict (boxstyle='round', facecolor='wheat', alpha=0.5))
 
 plt.tight_layout()
 plt.show()
@@ -941,7 +941,7 @@ def calculate_rho(S, K, T, r, sigma, option_type='call'):
     d2 = d1 - sigma * np.sqrt(T)
     
     if option_type == 'call':
-        rho = K * T * np.exp(-r * T) * norm.cdf(d2) / 100
+        rho = K * T * np.exp(-r * T) * norm.cdf (d2) / 100
     else:  # put
         rho = -K * T * np.exp(-r * T) * norm.cdf(-d2) / 100
     
@@ -1006,7 +1006,7 @@ class OptionPortfolio:
     def __init__(self):
         self.positions = []
     
-    def add_position(self, name, option_type, strike, expiration, 
+    def add_position (self, name, option_type, strike, expiration, 
                      quantity, S, r, sigma):
         """Add option position"""
         # Calculate Greeks
@@ -1028,9 +1028,9 @@ class OptionPortfolio:
             }
         }
         
-        self.positions.append(position)
+        self.positions.append (position)
     
-    def portfolio_greeks(self):
+    def portfolio_greeks (self):
         """Calculate total portfolio Greeks"""
         total = {
             'delta': 0,
@@ -1046,7 +1046,7 @@ class OptionPortfolio:
         
         return total
     
-    def display(self):
+    def display (self):
         """Display portfolio summary"""
         print("=== PORTFOLIO GREEKS ===\\n")
         print(f"{'Position':<30} {'Qty':<8} {'Delta':<10} {'Gamma':<10} {'Theta':<10} {'Vega':<10}")
@@ -1071,7 +1071,7 @@ class OptionPortfolio:
         print("\\n=== INTERPRETATION ===")
         print(f"Portfolio Delta: {total['delta']:.0f} (behaves like {total['delta']:.0f} shares)")
         print(f"Portfolio Gamma: {total['gamma']:.4f} (delta changes by {total['gamma']:.4f} per $1 move)")
-        print(f"Portfolio Theta: \${total['theta']:.2f}/day ({'earning' if total['theta'] > 0 else 'losing'} \${abs(total['theta']):.2f}/day)")
+        print(f"Portfolio Theta: \${total['theta']:.2f}/day ({'earning' if total['theta'] > 0 else 'losing'} \${abs (total['theta']):.2f}/day)")
         print(f"Portfolio Vega: \${total['vega']:.2f} per 1% IV ({'long' if total['vega'] > 0 else 'short'} vol)")
 
 # Example portfolio
@@ -1106,26 +1106,26 @@ total_greeks = portfolio.portfolio_greeks()
 
 print("\\n=== HEDGING RECOMMENDATIONS ===")
 
-if abs(total_greeks['delta']) > 100:
+if abs (total_greeks['delta']) > 100:
     hedge_shares = -total_greeks['delta']
     print(f"1. Delta hedge: {'+' if hedge_shares > 0 else '}{hedge_shares:.0f} shares to reach delta-neutral")
 
-if abs(total_greeks['vega']) > 500:
+if abs (total_greeks['vega']) > 500:
     if total_greeks['vega'] > 0:
         print(f"2. Vega risk: Long \${total_greeks['vega']:.0f} vega → exposed to IV drop")
         print(f"   Consider: Sell some options or buy short-dated options (lower vega)")
     else:
-        print(f"2. Vega risk: Short \${abs(total_greeks['vega']):.0f} vega → exposed to IV spike")
+        print(f"2. Vega risk: Short \${abs (total_greeks['vega']):.0f} vega → exposed to IV spike")
         print(f"   Consider: Buy long-dated options to add positive vega")
 
 if total_greeks['theta'] < -50:
-    print(f"3. Theta burn: Losing \${abs(total_greeks['theta']):.2f}/day")
+    print(f"3. Theta burn: Losing \${abs (total_greeks['theta']):.2f}/day")
     print(f"   Consider: Close or roll positions if expecting low movement")
 elif total_greeks['theta'] > 50:
     print(f"3. Theta collection: Earning \${total_greeks['theta']:.2f}/day")
     print(f"   Good for range-bound markets")
 
-if abs(total_greeks['gamma']) < 0.01:
+if abs (total_greeks['gamma']) < 0.01:
     print(f"4. Low gamma: Portfolio delta will stay stable")
 elif total_greeks['gamma'] > 0.5:
     print(f"5. High gamma: Delta will change significantly with stock moves")

@@ -88,17 +88,17 @@ await eventBus.publish('OrderCreated', {
 const amqp = require('amqplib');
 
 // Publisher
-async function publishOrderCreated(order) {
+async function publishOrderCreated (order) {
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
     
     const exchange = 'orders';
-    await channel.assertExchange(exchange, 'topic', { durable: true });
+    await channel.assertExchange (exchange, 'topic', { durable: true });
     
     channel.publish(
         exchange,
         'order.created',
-        Buffer.from(JSON.stringify(order)),
+        Buffer.from(JSON.stringify (order)),
         { persistent: true }
     );
     
@@ -113,19 +113,19 @@ async function subscribeToOrderEvents() {
     const exchange = 'orders';
     const queue = 'payment-service-orders';
     
-    await channel.assertExchange(exchange, 'topic', { durable: true });
-    await channel.assertQueue(queue, { durable: true });
-    await channel.bindQueue(queue, exchange, 'order.*');
+    await channel.assertExchange (exchange, 'topic', { durable: true });
+    await channel.assertQueue (queue, { durable: true });
+    await channel.bindQueue (queue, exchange, 'order.*');
     
-    channel.consume(queue, (msg) => {
-        const event = JSON.parse(msg.content.toString());
+    channel.consume (queue, (msg) => {
+        const event = JSON.parse (msg.content.toString());
         console.log('Received:', event);
         
         // Process event
-        processOrderCreated(event);
+        processOrderCreated (event);
         
         // Acknowledge
-        channel.ack(msg);
+        channel.ack (msg);
     });
 }
 \`\`\`
@@ -145,7 +145,7 @@ const kafka = new Kafka({
 });
 
 // Producer
-async function publishOrderCreated(order) {
+async function publishOrderCreated (order) {
     const producer = kafka.producer();
     await producer.connect();
     
@@ -174,10 +174,10 @@ async function subscribeToOrderEvents() {
     
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-            const event = JSON.parse(message.value.toString());
+            const event = JSON.parse (message.value.toString());
             
             if (event.eventType === 'OrderCreated') {
-                await processOrderCreated(event.data);
+                await processOrderCreated (event.data);
             }
         }
     });
@@ -244,7 +244,7 @@ async function subscribeToOrderEvents() {
 }
 
 // Consumer handles both versions
-function handleOrderCreated(event) {
+function handleOrderCreated (event) {
     const { data, eventVersion } = event;
     
     let currency = 'USD';  // Default
@@ -273,12 +273,12 @@ await eventBus.publish('OrderCreated', { orderId, userId, total });
 
 // Email Service
 eventBus.on('OrderCreated', async (event) => {
-    await sendOrderConfirmationEmail(event.userId, event.orderId);
+    await sendOrderConfirmationEmail (event.userId, event.orderId);
 });
 
 // Analytics Service
 eventBus.on('OrderCreated', async (event) => {
-    await trackOrderMetric(event);
+    await trackOrderMetric (event);
 });
 \`\`\`
 
@@ -337,18 +337,18 @@ SELECT * FROM orders WHERE id = 123;
 ]
 
 // Reconstruct current state by replaying events
-function getOrderState(orderId) {
-    const events = getEvents(orderId);
+function getOrderState (orderId) {
+    const events = getEvents (orderId);
     let state = {};
     
     for (const event of events) {
-        state = applyEvent(state, event);
+        state = applyEvent (state, event);
     }
     
     return state;
 }
 
-function applyEvent(state, event) {
+function applyEvent (state, event) {
     switch (event.eventType) {
         case 'OrderCreated':
             return { ...event.data, status: 'PENDING' };
@@ -395,7 +395,7 @@ Query:
 **Implementation**:
 \`\`\`javascript
 // Write side (commands)
-async function createOrder(orderData) {
+async function createOrder (orderData) {
     const order = { id: generateId(), ...orderData, status: 'PENDING' };
     
     // Store event
@@ -421,14 +421,14 @@ eventBus.on('OrderCreated', async (event) => {
 
 eventBus.on('OrderShipped', async (event) => {
     // Update read model
-    await orderReadDB.update(event.data.orderId, {
+    await orderReadDB.update (event.data.orderId, {
         status: 'SHIPPED',
         shippedAt: event.timestamp
     });
 });
 
 // Query (fast!)
-async function getOrdersByUser(userId) {
+async function getOrdersByUser (userId) {
     return await orderReadDB.query({ userId });
 }
 \`\`\`
@@ -466,7 +466,7 @@ eventBus.on('OrderCreated', async (event) => {
     }
     
     // Process (in transaction)
-    await database.transaction(async (tx) => {
+    await database.transaction (async (tx) => {
         // Update inventory
         await tx.query(
             'UPDATE inventory SET quantity = quantity - $1 WHERE productId = $2',
@@ -491,7 +491,7 @@ eventBus.on('OrderCreated', async (event) => {
 \`\`\`javascript
 eventBus.on('OrderCreated', async (event) => {
     try {
-        await processOrderCreated(event);
+        await processOrderCreated (event);
     } catch (error) {
         const retryCount = event.retryCount || 0;
         
@@ -506,7 +506,7 @@ eventBus.on('OrderCreated', async (event) => {
             }, delay);
         } else {
             // Move to dead letter queue
-            await deadLetterQueue.send(event);
+            await deadLetterQueue.send (event);
             await alerting.notify('Event processing failed after 3 retries', event);
         }
     }

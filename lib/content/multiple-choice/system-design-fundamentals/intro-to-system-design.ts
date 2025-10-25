@@ -60,9 +60,9 @@ export const introtosystemdesignMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'Which type of question is most appropriate for a mid-level engineer in a system design interview?',
     options: [
-      "Design Google's entire infrastructure",
+      "Design Google\'s entire infrastructure",
       'Design a URL shortener service like bit.ly',
-      "Design Facebook's global data center network",
+      "Design Facebook\'s global data center network",
       "Design Amazon's recommendation engine",
     ],
     correctAnswer: 1,

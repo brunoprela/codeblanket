@@ -46,7 +46,7 @@ export const llmAlignmentRLHFMC = {
     },
     {
       id: 4,
-      question: "What is Constitutional AI (Anthropic's approach)?",
+      question: "What is Constitutional AI (Anthropic\'s approach)?",
       options: [
         'Using RLHF with constitutional law experts',
         'Training models to critique and revise their outputs based on a set of principles',

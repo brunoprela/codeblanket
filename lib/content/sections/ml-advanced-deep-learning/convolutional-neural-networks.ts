@@ -42,13 +42,13 @@ from PIL import Image
 class FullyConnectedNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(FullyConnectedNN, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, num_classes)
+        self.fc1 = nn.Linear (input_size, hidden_size)
+        self.fc2 = nn.Linear (hidden_size, num_classes)
     
-    def forward(self, x):
+    def forward (self, x):
         # Flatten image
-        x = x.view(x.size(0), -1)  # Loses spatial structure!
-        x = F.relu(self.fc1(x))
+        x = x.view (x.size(0), -1)  # Loses spatial structure!
+        x = F.relu (self.fc1(x))
         x = self.fc2(x)
         return x
 
@@ -60,10 +60,10 @@ num_classes = 10
 fc_model = FullyConnectedNN(input_size, hidden_size, num_classes)
 
 # Count parameters
-def count_parameters(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+def count_parameters (model):
+    return sum (p.numel() for p in model.parameters() if p.requires_grad)
 
-print(f"Fully Connected Model Parameters: {count_parameters(fc_model):,}")
+print(f"Fully Connected Model Parameters: {count_parameters (fc_model):,}")
 # Output: ~200,000 parameters for tiny MNIST images!
 
 # Problems:
@@ -89,7 +89,7 @@ Convolution is a mathematical operation that slides a small filter (kernel) acro
 \`\`\`python
 # Understanding Convolution from Scratch
 
-def convolve2d(image, kernel, stride=1, padding=0):
+def convolve2d (image, kernel, stride=1, padding=0):
     """
     Perform 2D convolution.
     
@@ -103,9 +103,9 @@ def convolve2d(image, kernel, stride=1, padding=0):
         Feature map after convolution
     """
     # Handle 2D grayscale
-    if len(image.shape) == 2:
+    if len (image.shape) == 2:
         image = image[:, :, np.newaxis]
-    if len(kernel.shape) == 2:
+    if len (kernel.shape) == 2:
         kernel = kernel[:, :, np.newaxis, np.newaxis]
     
     H, W, C_in = image.shape
@@ -113,7 +113,7 @@ def convolve2d(image, kernel, stride=1, padding=0):
     
     # Add padding
     if padding > 0:
-        image = np.pad(image, ((padding, padding), (padding, padding), (0, 0)), mode='constant')
+        image = np.pad (image, ((padding, padding), (padding, padding), (0, 0)), mode='constant')
         H, W = image.shape[:2]
     
     # Calculate output dimensions
@@ -125,8 +125,8 @@ def convolve2d(image, kernel, stride=1, padding=0):
     
     # Perform convolution
     for c_out in range(C_out):
-        for i in range(out_h):
-            for j in range(out_w):
+        for i in range (out_h):
+            for j in range (out_w):
                 h_start = i * stride
                 w_start = j * stride
                 h_end = h_start + k_h
@@ -136,7 +136,7 @@ def convolve2d(image, kernel, stride=1, padding=0):
                 region = image[h_start:h_end, w_start:w_end, :]
                 
                 # Element-wise multiplication and sum
-                output[i, j, c_out] = np.sum(region * kernel[:, :, :, c_out])
+                output[i, j, c_out] = np.sum (region * kernel[:, :, :, c_out])
     
     return output
 
@@ -167,20 +167,20 @@ sobel_y = np.array([
 ], dtype=np.float32).reshape(3, 3, 1, 1)
 
 # Apply convolutions
-edges_x = convolve2d(image, sobel_x, stride=1, padding=0)
-edges_y = convolve2d(image, sobel_y, stride=1, padding=0)
+edges_x = convolve2d (image, sobel_x, stride=1, padding=0)
+edges_y = convolve2d (image, sobel_y, stride=1, padding=0)
 
 # Visualize
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-axes[0].imshow(image, cmap='gray')
+axes[0].imshow (image, cmap='gray')
 axes[0].set_title('Original Image')
 axes[0].axis('off')
 
-axes[1].imshow(edges_x.squeeze(), cmap='gray')
+axes[1].imshow (edges_x.squeeze(), cmap='gray')
 axes[1].set_title('Vertical Edges (Sobel-X)')
 axes[1].axis('off')
 
-axes[2].imshow(edges_y.squeeze(), cmap='gray')
+axes[2].imshow (edges_y.squeeze(), cmap='gray')
 axes[2].set_title('Horizontal Edges (Sobel-Y)')
 axes[2].axis('off')
 
@@ -209,7 +209,7 @@ print(f"\\nNotice: Output is smaller due to kernel size (valid convolution)")
 \`\`\`python
 # Visualize Stride and Padding Effects
 
-def calculate_output_size(input_size, kernel_size, stride, padding):
+def calculate_output_size (input_size, kernel_size, stride, padding):
     """Calculate output dimensions after convolution."""
     return (input_size - kernel_size + 2 * padding) // stride + 1
 
@@ -250,8 +250,8 @@ for config in configs:
         stride=config['stride'],
         padding=config['padding']
     )
-    output = conv(x)
-    print(f"{config['name']:25s} → Output shape: {tuple(output.shape)}")
+    output = conv (x)
+    print(f"{config['name']:25s} → Output shape: {tuple (output.shape)}")
 \`\`\`
 
 ## Filters and Feature Maps
@@ -302,17 +302,17 @@ image = np.random.rand(28, 28) * 255
 fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 axes = axes.ravel()
 
-axes[0].imshow(image, cmap='gray')
+axes[0].imshow (image, cmap='gray')
 axes[0].set_title('Original Image')
 axes[0].axis('off')
 
-for idx, (name, kernel) in enumerate(filters_examples.items(), 1):
+for idx, (name, kernel) in enumerate (filters_examples.items(), 1):
     # Apply convolution
     kernel_3d = kernel.reshape(3, 3, 1, 1)
-    filtered = convolve2d(image, kernel_3d)
+    filtered = convolve2d (image, kernel_3d)
     
-    axes[idx].imshow(filtered.squeeze(), cmap='gray')
-    axes[idx].set_title(f'{name} Filter')
+    axes[idx].imshow (filtered.squeeze(), cmap='gray')
+    axes[idx].set_title (f'{name} Filter')
     axes[idx].axis('off')
 
 plt.tight_layout()
@@ -336,13 +336,13 @@ Each convolutional layer has multiple filters, producing multiple feature maps:
 
 # Create convolutional layer
 # in_channels=3 (RGB), out_channels=32 (32 different filters)
-conv_layer = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1)
+conv_layer = nn.Conv2d (in_channels=3, out_channels=32, kernel_size=3, padding=1)
 
 # Sample RGB image: (batch=1, channels=3, height=64, width=64)
 rgb_image = torch.randn(1, 3, 64, 64)
 
 # Forward pass
-feature_maps = conv_layer(rgb_image)
+feature_maps = conv_layer (rgb_image)
 
 print("Multiple Feature Maps:")
 print(f"Input shape: {rgb_image.shape}")
@@ -386,9 +386,9 @@ Pooling (downsampling) reduces spatial dimensions while retaining important feat
 \`\`\`python
 # Pooling Operations
 
-def max_pool2d(x, pool_size=2, stride=2):
+def max_pool2d (x, pool_size=2, stride=2):
     """Max pooling operation."""
-    if len(x.shape) == 2:
+    if len (x.shape) == 2:
         x = x[:, :, np.newaxis]
     
     H, W, C = x.shape
@@ -398,8 +398,8 @@ def max_pool2d(x, pool_size=2, stride=2):
     output = np.zeros((out_h, out_w, C))
     
     for c in range(C):
-        for i in range(out_h):
-            for j in range(out_w):
+        for i in range (out_h):
+            for j in range (out_w):
                 h_start = i * stride
                 w_start = j * stride
                 h_end = h_start + pool_size
@@ -407,13 +407,13 @@ def max_pool2d(x, pool_size=2, stride=2):
                 
                 # Take maximum in window
                 window = x[h_start:h_end, w_start:w_end, c]
-                output[i, j, c] = np.max(window)
+                output[i, j, c] = np.max (window)
     
     return output
 
-def avg_pool2d(x, pool_size=2, stride=2):
+def avg_pool2d (x, pool_size=2, stride=2):
     """Average pooling operation."""
-    if len(x.shape) == 2:
+    if len (x.shape) == 2:
         x = x[:, :, np.newaxis]
     
     H, W, C = x.shape
@@ -423,8 +423,8 @@ def avg_pool2d(x, pool_size=2, stride=2):
     output = np.zeros((out_h, out_w, C))
     
     for c in range(C):
-        for i in range(out_h):
-            for j in range(out_w):
+        for i in range (out_h):
+            for j in range (out_w):
                 h_start = i * stride
                 w_start = j * stride
                 h_end = h_start + pool_size
@@ -432,7 +432,7 @@ def avg_pool2d(x, pool_size=2, stride=2):
                 
                 # Take average in window
                 window = x[h_start:h_end, w_start:w_end, c]
-                output[i, j, c] = np.mean(window)
+                output[i, j, c] = np.mean (window)
     
     return output
 
@@ -444,8 +444,8 @@ feature_map = np.array([
     [4, 5, 3, 9]
 ], dtype=np.float32)
 
-max_pooled = max_pool2d(feature_map, pool_size=2, stride=2)
-avg_pooled = avg_pool2d(feature_map, pool_size=2, stride=2)
+max_pooled = max_pool2d (feature_map, pool_size=2, stride=2)
+avg_pooled = avg_pool2d (feature_map, pool_size=2, stride=2)
 
 print("Pooling Example:")
 print(f"Input (4×4):\\n{feature_map}\\n")
@@ -456,14 +456,14 @@ print(f"Average Pooling (2×2):\\n{avg_pooled.squeeze()}")
 print("\\n" + "=" * 50)
 print("PyTorch Pooling\\n")
 
-x_torch = torch.tensor(feature_map).unsqueeze(0).unsqueeze(0)  # (1, 1, 4, 4)
+x_torch = torch.tensor (feature_map).unsqueeze(0).unsqueeze(0)  # (1, 1, 4, 4)
 
-max_pool = nn.MaxPool2d(kernel_size=2, stride=2)
-avg_pool = nn.AvgPool2d(kernel_size=2, stride=2)
+max_pool = nn.MaxPool2d (kernel_size=2, stride=2)
+avg_pool = nn.AvgPool2d (kernel_size=2, stride=2)
 
 print(f"Input shape: {x_torch.shape}")
-print(f"Max pooled shape: {max_pool(x_torch).shape}")
-print(f"Avg pooled shape: {avg_pool(x_torch).shape}")
+print(f"Max pooled shape: {max_pool (x_torch).shape}")
+print(f"Avg pooled shape: {avg_pool (x_torch).shape}")
 \`\`\`
 
 ## Building a Complete CNN
@@ -488,12 +488,12 @@ class SimpleCNN(nn.Module):
         super(SimpleCNN, self).__init__()
         
         # Convolutional layers
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d (in_channels=1, out_channels=32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d (in_channels=32, out_channels=64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d (in_channels=64, out_channels=128, kernel_size=3, padding=1)
         
         # Pooling layer
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.pool = nn.MaxPool2d (kernel_size=2, stride=2)
         
         # Fully connected layers
         # After 3 pooling layers: 28×28 → 14×14 → 7×7 → 3×3 (with rounding)
@@ -504,22 +504,22 @@ class SimpleCNN(nn.Module):
         # Dropout for regularization
         self.dropout = nn.Dropout(0.5)
     
-    def forward(self, x):
+    def forward (self, x):
         # Conv block 1: 28×28×1 → 14×14×32
-        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu (self.conv1(x)))
         
         # Conv block 2: 14×14×32 → 7×7×64
-        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu (self.conv2(x)))
         
         # Conv block 3: 7×7×64 → 3×3×128
-        x = self.pool(F.relu(self.conv3(x)))
+        x = self.pool(F.relu (self.conv3(x)))
         
         # Flatten: 3×3×128 → 1152
         x = x.view(-1, 128 * 3 * 3)
         
         # Fully connected layers
-        x = F.relu(self.fc1(x))
-        x = self.dropout(x)
+        x = F.relu (self.fc1(x))
+        x = self.dropout (x)
         x = self.fc2(x)
         
         return x
@@ -527,11 +527,11 @@ class SimpleCNN(nn.Module):
 # Create model
 model = SimpleCNN(num_classes=10)
 print(model)
-print(f"\\nTotal parameters: {count_parameters(model):,}")
+print(f"\\nTotal parameters: {count_parameters (model):,}")
 
 # Test forward pass
 sample_input = torch.randn(1, 1, 28, 28)  # Single MNIST image
-output = model(sample_input)
+output = model (sample_input)
 print(f"\\nInput shape: {sample_input.shape}")
 print(f"Output shape: {output.shape}")
 print(f"Output: {output.shape} (10 class scores)")
@@ -541,37 +541,37 @@ print("\\n" + "=" * 60)
 print("Dimension Flow Through Network:")
 print("=" * 60)
 
-def trace_dimensions(model, input_shape):
+def trace_dimensions (model, input_shape):
     """Trace tensor dimensions through network."""
-    x = torch.randn(input_shape)
+    x = torch.randn (input_shape)
     
-    print(f"Input: {tuple(x.shape)}")
+    print(f"Input: {tuple (x.shape)}")
     
     # Conv1 + Pool
-    x = model.pool(F.relu(model.conv1(x)))
-    print(f"After Conv1 + Pool: {tuple(x.shape)}")
+    x = model.pool(F.relu (model.conv1(x)))
+    print(f"After Conv1 + Pool: {tuple (x.shape)}")
     
     # Conv2 + Pool
-    x = model.pool(F.relu(model.conv2(x)))
-    print(f"After Conv2 + Pool: {tuple(x.shape)}")
+    x = model.pool(F.relu (model.conv2(x)))
+    print(f"After Conv2 + Pool: {tuple (x.shape)}")
     
     # Conv3 + Pool
-    x = model.pool(F.relu(model.conv3(x)))
-    print(f"After Conv3 + Pool: {tuple(x.shape)}")
+    x = model.pool(F.relu (model.conv3(x)))
+    print(f"After Conv3 + Pool: {tuple (x.shape)}")
     
     # Flatten
     x = x.view(-1, 128 * 3 * 3)
-    print(f"After Flatten: {tuple(x.shape)}")
+    print(f"After Flatten: {tuple (x.shape)}")
     
     # FC1
-    x = F.relu(model.fc1(x))
-    print(f"After FC1: {tuple(x.shape)}")
+    x = F.relu (model.fc1(x))
+    print(f"After FC1: {tuple (x.shape)}")
     
     # FC2
     x = model.fc2(x)
-    print(f"After FC2 (Output): {tuple(x.shape)}")
+    print(f"After FC2 (Output): {tuple (x.shape)}")
 
-trace_dimensions(model, (1, 1, 28, 28))
+trace_dimensions (model, (1, 1, 28, 28))
 \`\`\`
 
 ## Why CNNs Work for Images
@@ -599,16 +599,16 @@ trace_dimensions(model, (1, 1, 28, 28))
 \`\`\`python
 # Comparison: CNN vs Fully Connected
 
-def compare_architectures(input_shape=(1, 28, 28), num_classes=10):
+def compare_architectures (input_shape=(1, 28, 28), num_classes=10):
     """Compare CNN vs FC network."""
     
     # CNN
     cnn = SimpleCNN(num_classes)
-    cnn_params = count_parameters(cnn)
+    cnn_params = count_parameters (cnn)
     
     # Fully Connected
-    fc = FullyConnectedNN(np.prod(input_shape), 256, num_classes)
-    fc_params = count_parameters(fc)
+    fc = FullyConnectedNN(np.prod (input_shape), 256, num_classes)
+    fc_params = count_parameters (fc)
     
     print("Architecture Comparison")
     print("=" * 60)
@@ -636,7 +636,7 @@ The **receptive field** is the region of the input image that affects a particul
 \`\`\`python
 # Calculate receptive field
 
-def calculate_receptive_field(layers):
+def calculate_receptive_field (layers):
     """
     Calculate receptive field size.
     
@@ -649,7 +649,7 @@ def calculate_receptive_field(layers):
     print("=" * 50)
     print(f"Layer 0 (Input): RF = {rf}\\n")
     
-    for i, (kernel_size, stride) in enumerate(layers, 1):
+    for i, (kernel_size, stride) in enumerate (layers, 1):
         # Receptive field grows with each layer
         rf = rf + (kernel_size - 1) * np.prod([s for _, s in layers[:i-1]], initial=1)
         print(f"Layer {i} (k={kernel_size}, s={stride}): RF = {rf}")
@@ -666,14 +666,14 @@ layers = [
     (2, 2),  # Pool3: 2×2, stride 2
 ]
 
-final_rf = calculate_receptive_field(layers)
+final_rf = calculate_receptive_field (layers)
 print(f"\\nFinal receptive field: {final_rf}×{final_rf}")
 print("→ Neurons in final layer see large image regions!")
 \`\`\`
 
 ## Practical Training Example
 
-Let's train our CNN on MNIST:
+Let\'s train our CNN on MNIST:
 
 \`\`\`python
 import torch.optim as optim
@@ -693,30 +693,30 @@ test_dataset = datasets.MNIST(
     root='./data', train=False, transform=transform
 )
 
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False)
+train_loader = DataLoader (train_dataset, batch_size=64, shuffle=True)
+test_loader = DataLoader (test_dataset, batch_size=1000, shuffle=False)
 
 # Initialize model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = SimpleCNN(num_classes=10).to(device)
+model = SimpleCNN(num_classes=10).to (device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam (model.parameters(), lr=0.001)
 
 # Training function
-def train_epoch(model, loader, criterion, optimizer, device):
+def train_epoch (model, loader, criterion, optimizer, device):
     model.train()
     total_loss = 0
     correct = 0
     
-    for batch_idx, (data, target) in enumerate(loader):
-        data, target = data.to(device), target.to(device)
+    for batch_idx, (data, target) in enumerate (loader):
+        data, target = data.to (device), target.to (device)
         
         # Forward pass
         optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
+        output = model (data)
+        loss = criterion (output, target)
         
         # Backward pass
         loss.backward()
@@ -724,31 +724,31 @@ def train_epoch(model, loader, criterion, optimizer, device):
         
         # Statistics
         total_loss += loss.item()
-        pred = output.argmax(dim=1)
-        correct += pred.eq(target).sum().item()
+        pred = output.argmax (dim=1)
+        correct += pred.eq (target).sum().item()
     
-    avg_loss = total_loss / len(loader)
-    accuracy = 100. * correct / len(loader.dataset)
+    avg_loss = total_loss / len (loader)
+    accuracy = 100. * correct / len (loader.dataset)
     return avg_loss, accuracy
 
 # Evaluation function
-def evaluate(model, loader, criterion, device):
+def evaluate (model, loader, criterion, device):
     model.eval()
     total_loss = 0
     correct = 0
     
     with torch.no_grad():
         for data, target in loader:
-            data, target = data.to(device), target.to(device)
-            output = model(data)
-            loss = criterion(output, target)
+            data, target = data.to (device), target.to (device)
+            output = model (data)
+            loss = criterion (output, target)
             
             total_loss += loss.item()
-            pred = output.argmax(dim=1)
-            correct += pred.eq(target).sum().item()
+            pred = output.argmax (dim=1)
+            correct += pred.eq (target).sum().item()
     
-    avg_loss = total_loss / len(loader)
-    accuracy = 100. * correct / len(loader.dataset)
+    avg_loss = total_loss / len (loader)
+    accuracy = 100. * correct / len (loader.dataset)
     return avg_loss, accuracy
 
 # Training loop
@@ -757,8 +757,8 @@ print("=" * 60)
 
 num_epochs = 5
 for epoch in range(1, num_epochs + 1):
-    train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)
-    test_loss, test_acc = evaluate(model, test_loader, criterion, device)
+    train_loss, train_acc = train_epoch (model, train_loader, criterion, optimizer, device)
+    test_loss, test_acc = evaluate (model, test_loader, criterion, device)
     
     print(f"Epoch {epoch}/{num_epochs}:")
     print(f"  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%")

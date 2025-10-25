@@ -16,7 +16,7 @@ export const dynamodbMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'DynamoDB partitions data based on the partition key using consistent hashing: hash(partition_key) → partition. Items with the same partition key are stored together. Good partition key design (high cardinality, even distribution) is critical for performance and avoiding hot partitions.',
+      'DynamoDB partitions data based on the partition key using consistent hashing: hash (partition_key) → partition. Items with the same partition key are stored together. Good partition key design (high cardinality, even distribution) is critical for performance and avoiding hot partitions.',
   },
   {
     id: 'mc2',

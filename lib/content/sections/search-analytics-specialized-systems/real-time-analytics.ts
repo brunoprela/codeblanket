@@ -134,7 +134,7 @@ from datetime import datetime
 
 producer = KafkaProducer(
     bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    value_serializer=lambda v: json.dumps (v).encode('utf-8')
 )
 
 # Send pageview event
@@ -168,7 +168,7 @@ consumer = KafkaConsumer(
     group_id='analytics-pipeline',
     auto_offset_reset='earliest',  # Start from beginning
     enable_auto_commit=True,
-    value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+    value_deserializer=lambda m: json.loads (m.decode('utf-8'))
 )
 
 for message in consumer:
@@ -211,7 +211,7 @@ consumer = KafkaConsumer(
 
 # Seek to timestamp 2024-01-10 00:00:00
 timestamp_ms = 1704844800000
-consumer.seek_to_timestamp(timestamp_ms)
+consumer.seek_to_timestamp (timestamp_ms)
 
 # Reprocess from that point
 for message in consumer:
@@ -252,25 +252,25 @@ StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironm
 
 // Source: Read from Kafka
 DataStream<Event> events = env
-    .addSource(new FlinkKafkaConsumer<>("events", new EventSchema(), properties))
-    .assignTimestampsAndWatermarks(new EventTimeExtractor());
+    .addSource (new FlinkKafkaConsumer<>("events", new EventSchema(), properties))
+    .assignTimestampsAndWatermarks (new EventTimeExtractor());
 
 // Transformation: Filter, map, aggregate
 DataStream<Metric> metrics = events
-    .filter(event -> event.getType().equals("pageview"))
+    .filter (event -> event.getType().equals("pageview"))
     .keyBy(Event::getUserId)
     .window(TumblingEventTimeWindows.of(Time.minutes(1)))
-    .aggregate(new PageViewCounter());
+    .aggregate (new PageViewCounter());
 
 // Sink: Write results
-metrics.addSink(new FlinkKafkaProducer<>("metrics", new MetricSchema(), properties));
+metrics.addSink (new FlinkKafkaProducer<>("metrics", new MetricSchema(), properties));
 
 env.execute("Real-Time Analytics Job");
 \`\`\`
 
 ### Stateful Stream Processing
 
-Flink's killer feature is **managed state**—the ability to store data per key across events.
+Flink\'s killer feature is **managed state**—the ability to store data per key across events.
 
 **Example: Fraud Detection**
 
@@ -306,11 +306,11 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Ale
         
         // Update state
         currentTotal += txn.getAmount();
-        totalSpentLast24h.update(currentTotal);
+        totalSpentLast24h.update (currentTotal);
         
         // Check fraud rules
         if (currentTotal > 10000.0) {
-            out.collect(new Alert(
+            out.collect (new Alert(
                 txn.getUserId(),
                 "High spending detected",
                 currentTotal,
@@ -322,12 +322,12 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Ale
         List<Transaction> recent = new ArrayList<>();
         for (Transaction t : recentTransactions.get()) {
             if (t.getTimestamp() > ctx.timestamp() - 3600000) {  // Last hour
-                recent.add(t);
+                recent.add (t);
             }
         }
         
         if (recent.size() > 20) {
-            out.collect(new Alert(
+            out.collect (new Alert(
                 txn.getUserId(),
                 "High transaction velocity",
                 recent.size(),
@@ -336,7 +336,7 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Ale
         }
         
         // Add current transaction to recent
-        recentTransactions.add(txn);
+        recentTransactions.add (txn);
         
         // Set timer to clean up old transactions
         ctx.timerService().registerEventTimeTimer(
@@ -345,24 +345,24 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Ale
     }
     
     @Override
-    public void onTimer(long timestamp, OnTimerContext ctx, Collector<Alert> out) 
+    public void onTimer (long timestamp, OnTimerContext ctx, Collector<Alert> out) 
             throws Exception {
         // Clean up state older than 24 hours
         List<Transaction> toKeep = new ArrayList<>();
         for (Transaction t : recentTransactions.get()) {
             if (t.getTimestamp() > timestamp - 86400000) {
-                toKeep.add(t);
+                toKeep.add (t);
             }
         }
-        recentTransactions.update(toKeep);
+        recentTransactions.update (toKeep);
     }
 }
 
 // Usage
 transactions
     .keyBy(Transaction::getUserId)
-    .process(new FraudDetector())
-    .addSink(new AlertSink());
+    .process (new FraudDetector())
+    .addSink (new AlertSink());
 \`\`\`
 
 **Why state matters:**
@@ -419,7 +419,7 @@ Window 3:           [─────]
 events
     .keyBy(Event::getUserId)
     .window(TumblingEventTimeWindows.of(Time.minutes(5)))
-    .aggregate(new CountAggregator())
+    .aggregate (new CountAggregator())
 \`\`\`
 
 **Use cases**: Metrics every X minutes, hourly reports
@@ -440,7 +440,7 @@ Size: 10 minutes, Slide: 5 minutes
 events
     .keyBy(Event::getUserId)
     .window(SlidingEventTimeWindows.of(Time.minutes(10), Time.minutes(1)))
-    .aggregate(new AverageAggregator())
+    .aggregate (new AverageAggregator())
 \`\`\`
 
 **Use cases**: Moving averages, "last N minutes" continuously updated
@@ -461,7 +461,7 @@ Gap: 10s
 events
     .keyBy(Event::getUserId)
     .window(EventTimeSessionWindows.withGap(Time.minutes(30)))
-    .aggregate(new SessionAggregator())
+    .aggregate (new SessionAggregator())
 \`\`\`
 
 **Use cases**: User sessions, activity bursts, fraud detection
@@ -508,7 +508,7 @@ WatermarkStrategy<Event> watermarkStrategy = WatermarkStrategy
     .withTimestampAssigner((event, timestamp) -> event.getTimestamp());
 
 DataStream<Event> withWatermarks = events
-    .assignTimestampsAndWatermarks(watermarkStrategy);
+    .assignTimestampsAndWatermarks (watermarkStrategy);
 \`\`\`
 
 **Handling very late data:**
@@ -519,12 +519,12 @@ SingleOutputStreamOperator<Result> result = events
     .keyBy(Event::getKey)
     .window(TumblingEventTimeWindows.of(Time.minutes(5)))
     .allowedLateness(Time.minutes(2))  // Accept up to 2min late
-    .sideOutputLateData(lateDataTag)   // Send very late data to side output
-    .aggregate(new Aggregator());
+    .sideOutputLateData (lateDataTag)   // Send very late data to side output
+    .aggregate (new Aggregator());
 
 // Process late data separately (e.g., write to special table)
-DataStream<Event> lateData = result.getSideOutput(lateDataTag);
-lateData.addSink(new LateDataSink());
+DataStream<Event> lateData = result.getSideOutput (lateDataTag);
+lateData.addSink (new LateDataSink());
 \`\`\`
 
 ## Apache Druid: Real-Time OLAP
@@ -705,9 +705,9 @@ hll = HyperLogLog(0.01)  # 1% error rate
 
 # Add millions of user_ids
 for event in event_stream:
-    hll.add(event.user_id)
+    hll.add (event.user_id)
 
-unique_count = len(hll)  # O(1), 12KB memory
+unique_count = len (hll)  # O(1), 12KB memory
 \`\`\`
 
 **Real-world usage**:
@@ -751,11 +751,11 @@ To query count for "page_A":
 \`\`\`python
 from count_min_sketch import CountMinSketch
 
-cms = CountMinSketch(width=10000, depth=5)
+cms = CountMinSketch (width=10000, depth=5)
 
 # Count pageviews
 for event in event_stream:
-    cms.add(event.page_url)
+    cms.add (event.page_url)
 
 # Top 10 pages
 top_pages = cms.top_k(10)
@@ -779,7 +779,7 @@ top_pages = cms.top_k(10)
 
 ## Real-World Example: Real-Time Fraud Detection
 
-Let's design a complete real-time fraud detection system.
+Let\'s design a complete real-time fraud detection system.
 
 ### Requirements
 
@@ -821,7 +821,7 @@ public class FraudDetectionJob {
         
         // Source: Read transactions from Kafka
         DataStream<Transaction> transactions = env
-            .addSource(new FlinkKafkaConsumer<>(
+            .addSource (new FlinkKafkaConsumer<>(
                 "transactions",
                 new TransactionDeserializer(),
                 kafkaProps
@@ -835,11 +835,11 @@ public class FraudDetectionJob {
         // Fraud detection
         DataStream<FraudAlert> alerts = transactions
             .keyBy(Transaction::getUserId)
-            .process(new FraudDetector());
+            .process (new FraudDetector());
         
         // Sink: Write alerts
-        alerts.addSink(new RedisSink());
-        alerts.addSink(new KafkaAlertSink());
+        alerts.addSink (new RedisSink());
+        alerts.addSink (new KafkaAlertSink());
         
         env.execute("Real-Time Fraud Detection");
     }
@@ -882,14 +882,14 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
         // Load user profile
         UserProfile profile = userProfile.value();
         if (profile == null) {
-            profile = new UserProfile(txn.getUserId());
+            profile = new UserProfile (txn.getUserId());
         }
         
         // Get recent transactions (last 24h)
         List<Transaction> recent24h = new ArrayList<>();
         for (Transaction t : recentTransactions.get()) {
             if (t.getTimestamp() >= last24h) {
-                recent24h.add(t);
+                recent24h.add (t);
             }
         }
         
@@ -899,7 +899,7 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
             .sum() + txn.getAmount();
         
         if (total24h > 10000.0) {
-            out.collect(new FraudAlert(
+            out.collect (new FraudAlert(
                 txn,
                 "HIGH_SPENDING",
                 String.format("$%.2f spent in 24h", total24h),
@@ -911,10 +911,10 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
         Set<String> countries = recent24h.stream()
             .map(Transaction::getCountry)
             .collect(Collectors.toSet());
-        countries.add(txn.getCountry());
+        countries.add (txn.getCountry());
         
         if (countries.size() > 3) {
-            out.collect(new FraudAlert(
+            out.collect (new FraudAlert(
                 txn,
                 "GEOGRAPHIC_ANOMALY",
                 String.format("%d countries: %s", countries.size(), countries),
@@ -925,18 +925,18 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
         // === RULE 3: New merchant velocity (>5 new merchants in 1h) ===
         Set<String> knownMerchants = profile.getKnownMerchants();
         long newMerchantsLastHour = recent24h.stream()
-            .filter(t -> t.getTimestamp() >= lastHour)
+            .filter (t -> t.getTimestamp() >= lastHour)
             .map(Transaction::getMerchantId)
-            .filter(m -> !knownMerchants.contains(m))
+            .filter (m -> !knownMerchants.contains (m))
             .distinct()
             .count();
         
-        if (!knownMerchants.contains(txn.getMerchantId())) {
+        if (!knownMerchants.contains (txn.getMerchantId())) {
             newMerchantsLastHour++;
         }
         
         if (newMerchantsLastHour > 5) {
-            out.collect(new FraudAlert(
+            out.collect (new FraudAlert(
                 txn,
                 "NEW_MERCHANT_VELOCITY",
                 String.format("%d new merchants in 1h", newMerchantsLastHour),
@@ -947,7 +947,7 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
         // === RULE 4: Amount anomaly (>3× average) ===
         double avgAmount = profile.getAverageAmount();
         if (avgAmount > 0 && txn.getAmount() > avgAmount * 3) {
-            out.collect(new FraudAlert(
+            out.collect (new FraudAlert(
                 txn,
                 "AMOUNT_ANOMALY",
                 String.format("$%.2f vs avg $%.2f", txn.getAmount(), avgAmount),
@@ -956,27 +956,27 @@ public class FraudDetector extends KeyedProcessFunction<String, Transaction, Fra
         }
         
         // === Update state ===
-        recent24h.add(txn);
-        recentTransactions.update(recent24h);
+        recent24h.add (txn);
+        recentTransactions.update (recent24h);
         
-        profile.addTransaction(txn);
-        userProfile.update(profile);
+        profile.addTransaction (txn);
+        userProfile.update (profile);
         
         // Clean up old transactions after 24h
-        ctx.timerService().registerEventTimeTimer(now + 86400000);
+        ctx.timerService().registerEventTimeTimer (now + 86400000);
     }
     
     @Override
-    public void onTimer(long timestamp, OnTimerContext ctx, Collector<FraudAlert> out) 
+    public void onTimer (long timestamp, OnTimerContext ctx, Collector<FraudAlert> out) 
             throws Exception {
         // Remove transactions older than 24h
         List<Transaction> toKeep = new ArrayList<>();
         for (Transaction t : recentTransactions.get()) {
             if (t.getTimestamp() >= timestamp - 86400000) {
-                toKeep.add(t);
+                toKeep.add (t);
             }
         }
-        recentTransactions.update(toKeep);
+        recentTransactions.update (toKeep);
     }
 }
 \`\`\`

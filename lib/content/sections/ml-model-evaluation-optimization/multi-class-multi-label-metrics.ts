@@ -55,21 +55,21 @@ X, y = digits.data, digits.target
 
 print("Multi-class Classification Example: Digit Recognition")
 print("="*60)
-print(f"Number of classes: {len(np.unique(y))} (digits 0-9)")
-print(f"Number of samples: {len(y)}")
-print(f"Class distribution: {np.bincount(y)}")
+print(f"Number of classes: {len (np.unique (y))} (digits 0-9)")
+print(f"Number of samples: {len (y)}")
+print(f"Class distribution: {np.bincount (y)}")
 
 # Split and train
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=42, stratify=y
 )
 
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # Multi-class confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 
 print(f"\\nConfusion Matrix Shape: {cm.shape}")
 print("(10x10 matrix for 10 classes)")
@@ -77,8 +77,8 @@ print("\\nConfusion Matrix:")
 print(cm)
 
 # Visualize with heatmap
-plt.figure(figsize=(10, 8))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+plt.figure (figsize=(10, 8))
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues', 
             xticklabels=range(10), yticklabels=range(10))
 plt.xlabel('Predicted Digit')
 plt.ylabel('True Digit')
@@ -163,24 +163,24 @@ print("Multi-class Metric Averaging Strategies")
 print("="*60)
 
 # Macro average: unweighted mean (all classes equal)
-precision_macro = precision_score(y_test, y_pred, average='macro')
-recall_macro = recall_score(y_test, y_pred, average='macro')
-f1_macro = f1_score(y_test, y_pred, average='macro')
+precision_macro = precision_score (y_test, y_pred, average='macro')
+recall_macro = recall_score (y_test, y_pred, average='macro')
+f1_macro = f1_score (y_test, y_pred, average='macro')
 
 # Weighted average: weighted by support (class frequency)
-precision_weighted = precision_score(y_test, y_pred, average='weighted')
-recall_weighted = recall_score(y_test, y_pred, average='weighted')
-f1_weighted = f1_score(y_test, y_pred, average='weighted')
+precision_weighted = precision_score (y_test, y_pred, average='weighted')
+recall_weighted = recall_score (y_test, y_pred, average='weighted')
+f1_weighted = f1_score (y_test, y_pred, average='weighted')
 
 # Micro average: aggregate all TP, FP, FN across classes
-precision_micro = precision_score(y_test, y_pred, average='micro')
-recall_micro = recall_score(y_test, y_pred, average='micro')
-f1_micro = f1_score(y_test, y_pred, average='micro')
+precision_micro = precision_score (y_test, y_pred, average='micro')
+recall_micro = recall_score (y_test, y_pred, average='micro')
+f1_micro = f1_score (y_test, y_pred, average='micro')
 
 # Per-class metrics (no averaging)
-precision_per_class = precision_score(y_test, y_pred, average=None)
-recall_per_class = recall_score(y_test, y_pred, average=None)
-f1_per_class = f1_score(y_test, y_pred, average=None)
+precision_per_class = precision_score (y_test, y_pred, average=None)
+recall_per_class = recall_score (y_test, y_pred, average=None)
+f1_per_class = f1_score (y_test, y_pred, average=None)
 
 print("\\n1. MACRO AVERAGE (unweighted mean):")
 print(f"   Precision: {precision_macro:.4f}")
@@ -204,7 +204,7 @@ print("   → Aggregates contributions of all classes")
 print("   → Use when you care about overall performance")
 
 print("\\n4. PER-CLASS METRICS (no averaging):")
-for i, (p, r, f1) in enumerate(zip(precision_per_class, recall_per_class, f1_per_class)):
+for i, (p, r, f1) in enumerate (zip (precision_per_class, recall_per_class, f1_per_class)):
     print(f"   Class {i}: Precision={p:.3f}, Recall={r:.3f}, F1={f1:.3f}")
 \`\`\`
 
@@ -262,25 +262,25 @@ y_true_imb = np.array([0]*900 + [1]*80 + [2]*20)
 # Simulate predictions with varying performance per class
 y_pred_imb = y_true_imb.copy()
 # Class 0: 95% accuracy (large class, good performance)
-errors_0 = np.random.choice(np.where(y_true_imb==0)[0], size=45, replace=False)
+errors_0 = np.random.choice (np.where (y_true_imb==0)[0], size=45, replace=False)
 y_pred_imb[errors_0] = np.random.choice([1, 2], size=45)
 # Class 1: 75% accuracy (medium class, okay performance)
-errors_1 = np.random.choice(np.where(y_true_imb==1)[0], size=20, replace=False)
+errors_1 = np.random.choice (np.where (y_true_imb==1)[0], size=20, replace=False)
 y_pred_imb[errors_1] = 0
 # Class 2: 50% accuracy (small class, poor performance)
-errors_2 = np.random.choice(np.where(y_true_imb==2)[0], size=10, replace=False)
+errors_2 = np.random.choice (np.where (y_true_imb==2)[0], size=10, replace=False)
 y_pred_imb[errors_2] = 0
 
 print("\\nScenario: Imbalanced Multi-class")
-print(f"Class 0: {np.sum(y_true_imb==0)} samples (90%)")
-print(f"Class 1: {np.sum(y_true_imb==1)} samples (8%)")
-print(f"Class 2: {np.sum(y_true_imb==2)} samples (2%)")
+print(f"Class 0: {np.sum (y_true_imb==0)} samples (90%)")
+print(f"Class 1: {np.sum (y_true_imb==1)} samples (8%)")
+print(f"Class 2: {np.sum (y_true_imb==2)} samples (2%)")
 
 # Calculate F1 with different averaging
-f1_macro_imb = f1_score(y_true_imb, y_pred_imb, average='macro')
-f1_weighted_imb = f1_score(y_true_imb, y_pred_imb, average='weighted')
-f1_micro_imb = f1_score(y_true_imb, y_pred_imb, average='micro')
-f1_per_class_imb = f1_score(y_true_imb, y_pred_imb, average=None)
+f1_macro_imb = f1_score (y_true_imb, y_pred_imb, average='macro')
+f1_weighted_imb = f1_score (y_true_imb, y_pred_imb, average='weighted')
+f1_micro_imb = f1_score (y_true_imb, y_pred_imb, average='micro')
+f1_per_class_imb = f1_score (y_true_imb, y_pred_imb, average=None)
 
 print(f"\\nPer-class F1 scores:")
 print(f"  Class 0 (90%): {f1_per_class_imb[0]:.3f}")
@@ -288,7 +288,7 @@ print(f"  Class 1 (8%):  {f1_per_class_imb[1]:.3f}")
 print(f"  Class 2 (2%):  {f1_per_class_imb[2]:.3f}")
 
 print(f"\\nAveraged F1 scores:")
-print(f"  Macro:    {f1_macro_imb:.3f} (simple mean: {np.mean(f1_per_class_imb):.3f})")
+print(f"  Macro:    {f1_macro_imb:.3f} (simple mean: {np.mean (f1_per_class_imb):.3f})")
 print(f"  Weighted: {f1_weighted_imb:.3f} (weighted by class size)")
 print(f"  Micro:    {f1_micro_imb:.3f} (same as accuracy for multi-class)")
 
@@ -334,15 +334,15 @@ Averaged F1 scores:
 print("\\n" + "="*60)
 print("Complete Multi-class Classification Report:")
 print("="*60)
-print(classification_report(y_test, y_pred, 
+print(classification_report (y_test, y_pred, 
                           target_names=[f'Digit {i}' for i in range(10)]))
 
 # Overall accuracy
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 print(f"Overall Accuracy: {accuracy:.4f} ({accuracy*100:.2f}%)")
 
-# Cohen's Kappa (agreement beyond chance)
-kappa = cohen_kappa_score(y_test, y_pred)
+# Cohen\'s Kappa (agreement beyond chance)
+kappa = cohen_kappa_score (y_test, y_pred)
 print(f"Cohen's Kappa: {kappa:.4f}")
 print("  (Kappa measures agreement beyond chance)")
 print("  1.0 = perfect agreement")
@@ -373,7 +373,7 @@ Complete Multi-class Classification Report:
 weighted avg       0.97      0.97      0.97       539
 
 Overall Accuracy: 0.9722 (97.22%)
-Cohen's Kappa: 0.9691
+Cohen\'s Kappa: 0.9691
   (Kappa measures agreement beyond chance)
   1.0 = perfect agreement
   0.0 = no better than chance
@@ -408,7 +408,7 @@ y_true_ml = np.random.randint(0, 2, size=(n_samples, n_labels))
 # Predictions (with some errors)
 y_pred_ml = y_true_ml.copy()
 # Add 10% random errors
-errors = np.random.rand(n_samples, n_labels) < 0.1
+errors = np.random.rand (n_samples, n_labels) < 0.1
 y_pred_ml[errors] = 1 - y_pred_ml[errors]
 
 genre_names = ['Action', 'Comedy', 'Drama', 'Romance', 'Sci-Fi']
@@ -417,11 +417,11 @@ print(f"Number of movies: {n_samples}")
 print(f"Number of genres (labels): {n_labels}")
 print(f"\\nExample movie labels:")
 for i in range(5):
-    true_genres = [genre_names[j] for j in range(n_labels) if y_true_ml[i, j] == 1]
-    pred_genres = [genre_names[j] for j in range(n_labels) if y_pred_ml[i, j] == 1]
+    true_genres = [genre_names[j] for j in range (n_labels) if y_true_ml[i, j] == 1]
+    pred_genres = [genre_names[j] for j in range (n_labels) if y_pred_ml[i, j] == 1]
     print(f"  Movie {i+1}:")
-    print(f"    True: {', '.join(true_genres) if true_genres else 'None'}")
-    print(f"    Pred: {', '.join(pred_genres) if pred_genres else 'None'}")
+    print(f"    True: {', '.join (true_genres) if true_genres else 'None'}")
+    print(f"    Pred: {', '.join (pred_genres) if pred_genres else 'None'}")
 \`\`\`
 
 **Output:**
@@ -454,19 +454,19 @@ Example movie labels:
 
 \`\`\`python
 # 1. Hamming Loss: fraction of labels incorrectly predicted
-hamming = hamming_loss(y_true_ml, y_pred_ml)
+hamming = hamming_loss (y_true_ml, y_pred_ml)
 print(f"\\n1. Hamming Loss: {hamming:.4f}")
 print(f"   Interpretation: {hamming*100:.2f}% of labels are incorrectly predicted")
 print("   (Lower is better, 0 = perfect)")
 
 # 2. Exact Match Ratio: fraction of samples with ALL labels correct
-exact_match = accuracy_score(y_true_ml, y_pred_ml)
+exact_match = accuracy_score (y_true_ml, y_pred_ml)
 print(f"\\n2. Exact Match Ratio: {exact_match:.4f}")
 print(f"   Interpretation: {exact_match*100:.2f}% of movies have ALL genres correct")
 print("   (Very strict metric)")
 
 # 3. Jaccard Score (Intersection over Union)
-jaccard = jaccard_score(y_true_ml, y_pred_ml, average='samples')
+jaccard = jaccard_score (y_true_ml, y_pred_ml, average='samples')
 print(f"\\n3. Jaccard Score (IoU): {jaccard:.4f}")
 print("   Interpretation: Average overlap between true and predicted labels")
 print("   Formula: |True ∩ Pred| / |True ∪ Pred|")
@@ -474,32 +474,32 @@ print("   1.0 = perfect overlap, 0.0 = no overlap")
 
 # 4. Per-label metrics
 print("\\n4. Per-label Metrics:")
-for i, genre in enumerate(genre_names):
-    precision = precision_score(y_true_ml[:, i], y_pred_ml[:, i])
-    recall = recall_score(y_true_ml[:, i], y_pred_ml[:, i])
-    f1 = f1_score(y_true_ml[:, i], y_pred_ml[:, i])
+for i, genre in enumerate (genre_names):
+    precision = precision_score (y_true_ml[:, i], y_pred_ml[:, i])
+    recall = recall_score (y_true_ml[:, i], y_pred_ml[:, i])
+    f1 = f1_score (y_true_ml[:, i], y_pred_ml[:, i])
     print(f"   {genre:8s}: Precision={precision:.3f}, Recall={recall:.3f}, F1={f1:.3f}")
 
 # 5. Sample-wise metrics
 print("\\n5. Sample-wise F1 Score:")
-f1_samples = f1_score(y_true_ml, y_pred_ml, average='samples')
+f1_samples = f1_score (y_true_ml, y_pred_ml, average='samples')
 print(f"   F1 (averaged over samples): {f1_samples:.4f}")
 
 # 6. Label-wise metrics with different averaging
 print("\\n6. Label-wise Averaging:")
-f1_macro = f1_score(y_true_ml, y_pred_ml, average='macro')
-f1_micro = f1_score(y_true_ml, y_pred_ml, average='micro')
-f1_weighted = f1_score(y_true_ml, y_pred_ml, average='weighted')
+f1_macro = f1_score (y_true_ml, y_pred_ml, average='macro')
+f1_micro = f1_score (y_true_ml, y_pred_ml, average='micro')
+f1_weighted = f1_score (y_true_ml, y_pred_ml, average='weighted')
 print(f"   Macro F1:    {f1_macro:.4f} (average across labels)")
 print(f"   Micro F1:    {f1_micro:.4f} (global TP/FP/FN)")
 print(f"   Weighted F1: {f1_weighted:.4f} (weighted by support)")
 
 # Visualize multi-label confusion matrix
 print("\\n7. Multi-label Confusion Matrix:")
-mlcm = multilabel_confusion_matrix(y_true_ml, y_pred_ml)
+mlcm = multilabel_confusion_matrix (y_true_ml, y_pred_ml)
 print(f"   Shape: {mlcm.shape} (one 2x2 matrix per label)")
 print("\\n   Per-label confusion matrices:")
-for i, genre in enumerate(genre_names):
+for i, genre in enumerate (genre_names):
     tn, fp, fn, tp = mlcm[i].ravel()
     print(f"   {genre}: TN={tn}, FP={fp}, FN={fn}, TP={tp}")
 \`\`\`
@@ -558,7 +558,7 @@ guide = {
         "Imbalanced classes": "Weighted-averaged F1 or per-class analysis",
         "Overall correctness matters": "Micro-averaged F1 (equals accuracy)",
         "Need per-class breakdown": "Classification report with all averages",
-        "Want single number": "Weighted F1 or Cohen's Kappa",
+        "Want single number": "Weighted F1 or Cohen\'s Kappa",
     },
     "Multi-label": {
         "Strict evaluation (all labels must match)": "Exact Match Ratio",

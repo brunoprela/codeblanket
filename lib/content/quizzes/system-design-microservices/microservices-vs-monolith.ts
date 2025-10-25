@@ -7,7 +7,7 @@ export const microservicesvsmonolithQuiz = [
     id: 'q1',
     question:
       'You\'re the tech lead at a 50-person engineering company. The CTO wants to migrate from your monolith to microservices "because that\'s what Netflix does." How do you respond? What factors would you consider, and what would be your recommendation?',
-    sampleAnswer: `I would caution against blindly copying Netflix's architecture and instead focus on our specific needs and constraints.
+    sampleAnswer: `I would caution against blindly copying Netflix\'s architecture and instead focus on our specific needs and constraints.
 
 **Key Considerations:**
 
@@ -50,7 +50,7 @@ export const microservicesvsmonolithQuiz = [
 
 **My Recommendation: Start with Modular Monolith, Extract Key Services**
 
-Here's my reasoning and architecture:
+Here\'s my reasoning and architecture:
 
 **Phase 1: Modular Monolith Foundation (Months 0-6)**
 
@@ -155,7 +155,7 @@ If we had a much larger team, I'd go full microservices from the start:
 
 But with 40-50 engineers, this would create too much operational overhead.
 
-**Key Point for Interview**: The answer depends on team size, operational maturity, and specific requirements. There's no one-size-fits-all. Always justify your choice with specific reasoning.`,
+**Key Point for Interview**: The answer depends on team size, operational maturity, and specific requirements. There\'s no one-size-fits-all. Always justify your choice with specific reasoning.`,
     keyPoints: [
       'Decision depends on team size and operational maturity',
       'Hybrid approach balances benefits and complexity',
@@ -288,7 +288,7 @@ Before extracting services, build:
 
 **Mistake 8: Cargo-Culting Netflix/Google Architecture**
 
-**What happens**: Small company with 20 engineers tries to implement Netflix's 700-service architecture.
+**What happens**: Small company with 20 engineers tries to implement Netflix\'s 700-service architecture.
 
 **Reality**: 
 - Netflix has 1000s of engineers

@@ -28,7 +28,7 @@ export const recurrentNeuralNetworksMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Gradient clipping **prevents exploding gradients** (not vanishing). When gradients grow exponentially large during backpropagation through time, they cause: (1) NaN/Inf values in parameters, (2) Massive parameter updates that destabilize training, (3) Loss divergence. Clipping caps the gradient norm: if ||g|| > threshold, set g = threshold × g/||g||. Example: threshold=5, if gradient norm is 50, scale it down to 5. This prevents catastrophic updates while preserving gradient direction. Note: Clipping does NOT fix vanishing gradients (which require architectural changes like LSTM). It's a necessary but not sufficient technique for stable RNN training. Typical threshold values: 1-10.",
+      "Gradient clipping **prevents exploding gradients** (not vanishing). When gradients grow exponentially large during backpropagation through time, they cause: (1) NaN/Inf values in parameters, (2) Massive parameter updates that destabilize training, (3) Loss divergence. Clipping caps the gradient norm: if ||g|| > threshold, set g = threshold × g/||g||. Example: threshold=5, if gradient norm is 50, scale it down to 5. This prevents catastrophic updates while preserving gradient direction. Note: Clipping does NOT fix vanishing gradients (which require architectural changes like LSTM). It\'s a necessary but not sufficient technique for stable RNN training. Typical threshold values: 1-10.",
   },
   {
     id: 'cnn-mc-3',
@@ -56,7 +56,7 @@ export const recurrentNeuralNetworksMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "In many-to-one architectures, the **final hidden state h_T** is used for prediction because it: (1) Has processed the entire sequence, (2) Summarizes all information from start to finish, (3) Represents the complete context. Example - Sentiment analysis: Input: 'This movie was terrible and boring' → Process all 6 words → h_6 contains aggregate sentiment → Classify h_6 as negative. The final hidden state is passed to a classification layer: logits = Linear(h_T). Why not earlier states? h_0, h_1, etc. haven't seen the full sequence yet. Why not average all outputs? Final state already aggregates information (and averaging is sometimes used as alternative). This pattern is used for: sentiment analysis, document classification, sequence summarization tasks.",
+      "In many-to-one architectures, the **final hidden state h_T** is used for prediction because it: (1) Has processed the entire sequence, (2) Summarizes all information from start to finish, (3) Represents the complete context. Example - Sentiment analysis: Input: 'This movie was terrible and boring' → Process all 6 words → h_6 contains aggregate sentiment → Classify h_6 as negative. The final hidden state is passed to a classification layer: logits = Linear (h_T). Why not earlier states? h_0, h_1, etc. haven't seen the full sequence yet. Why not average all outputs? Final state already aggregates information (and averaging is sometimes used as alternative). This pattern is used for: sentiment analysis, document classification, sequence summarization tasks.",
   },
   {
     id: 'cnn-mc-5',

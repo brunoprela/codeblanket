@@ -52,7 +52,7 @@ A: No, cats don't need food because they're independent.
 
 # 5. Temporal hallucination
 """
-Q: What's the current president?
+Q: What\'s the current president?
 A: The current US president is Barack Obama.
 # Outdated information
 """
@@ -98,13 +98,13 @@ class ConfidenceScorer:
         """
         
         # Method 1: Self-assessment
-        self_confidence = self._self_assessment(prompt, response)
+        self_confidence = self._self_assessment (prompt, response)
         
         # Method 2: Consistency check
-        consistency_score = self._consistency_check(prompt, temperature)
+        consistency_score = self._consistency_check (prompt, temperature)
         
         # Method 3: Linguistic analysis
-        linguistic_score = self._linguistic_analysis(response)
+        linguistic_score = self._linguistic_analysis (response)
         
         # Combine scores
         overall_confidence = (
@@ -121,10 +121,10 @@ class ConfidenceScorer:
             'consistency_score': consistency_score,
             'linguistic_score': linguistic_score,
             'likely_hallucination': is_likely_hallucination,
-            'confidence_level': self._confidence_level(overall_confidence)
+            'confidence_level': self._confidence_level (overall_confidence)
         }
     
-    def _self_assessment(self, prompt: str, response: str) -> float:
+    def _self_assessment (self, prompt: str, response: str) -> float:
         """Ask model to assess its own confidence"""
         
         assessment_prompt = f"""
@@ -153,7 +153,7 @@ Confidence score:"""
             )
             
             score_text = result.choices[0].message.content.strip()
-            confidence = float(score_text)
+            confidence = float (score_text)
             return max(0.0, min(1.0, confidence))
         
         except Exception as e:
@@ -172,7 +172,7 @@ Confidence score:"""
         """
         
         responses = []
-        for _ in range(num_samples):
+        for _ in range (num_samples):
             try:
                 result = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
@@ -180,30 +180,30 @@ Confidence score:"""
                     temperature=temperature,
                     max_tokens=150
                 )
-                responses.append(result.choices[0].message.content.strip())
+                responses.append (result.choices[0].message.content.strip())
             except Exception as e:
                 continue
         
-        if len(responses) < 2:
+        if len (responses) < 2:
             return 0.5
         
         # Calculate pairwise similarity
         from difflib import SequenceMatcher
         
         similarities = []
-        for i in range(len(responses)):
-            for j in range(i + 1, len(responses)):
+        for i in range (len (responses)):
+            for j in range (i + 1, len (responses)):
                 similarity = SequenceMatcher(
                     None,
                     responses[i],
                     responses[j]
                 ).ratio()
-                similarities.append(similarity)
+                similarities.append (similarity)
         
-        avg_similarity = sum(similarities) / len(similarities) if similarities else 0.5
+        avg_similarity = sum (similarities) / len (similarities) if similarities else 0.5
         return avg_similarity
     
-    def _linguistic_analysis(self, response: str) -> float:
+    def _linguistic_analysis (self, response: str) -> float:
         """
         Analyze linguistic patterns that indicate uncertainty.
         
@@ -228,14 +228,14 @@ Confidence score:"""
         # More hedging = lower confidence
         # Normalize by response length
         words = response.split()
-        hedging_ratio = hedging_count / max(len(words) / 10, 1)
+        hedging_ratio = hedging_count / max (len (words) / 10, 1)
         
         # Convert to confidence score (inverse of hedging)
         confidence = max(0.0, 1.0 - (hedging_ratio * 0.3))
         
         return confidence
     
-    def _confidence_level(self, score: float) -> str:
+    def _confidence_level (self, score: float) -> str:
         """Convert numerical score to level"""
         if score >= self.high_confidence_threshold:
             return "high"
@@ -248,7 +248,7 @@ Confidence score:"""
 scorer = ConfidenceScorer()
 prompt = "What is the capital of France?"
 response = "I think the capital of France is possibly Paris."
-result = scorer.score_response(prompt, response)
+result = scorer.score_response (prompt, response)
 
 print(f"Confidence: {result['overall_confidence']:.2f}")
 print(f"Level: {result['confidence_level']}")
@@ -288,23 +288,23 @@ class FactChecker:
         
         # Method 1: Web search verification
         if use_search and self.serpapi_key:
-            search_result = self._search_verification(claim)
+            search_result = self._search_verification (claim)
             results['search_verification'] = search_result
             results['methods_used'].append('search')
         
         # Method 2: LLM cross-verification
-        llm_result = self._llm_verification(claim)
+        llm_result = self._llm_verification (claim)
         results['llm_verification'] = llm_result
         results['methods_used'].append('llm')
         
         # Combine results
-        is_factual = self._combine_verification_results(results)
+        is_factual = self._combine_verification_results (results)
         results['is_factual'] = is_factual
-        results['confidence'] = self._calculate_confidence(results)
+        results['confidence'] = self._calculate_confidence (results)
         
         return results
     
-    def _search_verification(self, claim: str) -> Dict:
+    def _search_verification (self, claim: str) -> Dict:
         """Verify claim using web search"""
         
         try:
@@ -331,19 +331,19 @@ class FactChecker:
             supporting_sources = 0
             for result in organic_results[:5]:
                 snippet = result.get('snippet', ').lower()
-                if any(word in snippet for word in claim.lower().split()):
+                if any (word in snippet for word in claim.lower().split()):
                     supporting_sources += 1
             
             return {
                 'verified': supporting_sources >= 2,
                 'supporting_sources': supporting_sources,
-                'total_sources': len(organic_results)
+                'total_sources': len (organic_results)
             }
         
         except Exception as e:
-            return {'error': str(e), 'verified': False}
+            return {'error': str (e), 'verified': False}
     
-    def _llm_verification(self, claim: str) -> Dict:
+    def _llm_verification (self, claim: str) -> Dict:
         """Use LLM to verify claim"""
         
         verification_prompt = f"""
@@ -371,17 +371,17 @@ Respond in JSON format:
                 response_format={"type": "json_object"}
             )
             
-            result = json.loads(response.choices[0].message.content)
+            result = json.loads (response.choices[0].message.content)
             return result
         
         except Exception as e:
             return {
-                'error': str(e),
+                'error': str (e),
                 'is_factual': False,
                 'confidence': 0.0
             }
     
-    def _combine_verification_results(self, results: Dict) -> bool:
+    def _combine_verification_results (self, results: Dict) -> bool:
         """Combine multiple verification methods"""
         
         # Search verification
@@ -393,7 +393,7 @@ Respond in JSON format:
         # Both should agree for high confidence
         return search_verified and llm_verified
     
-    def _calculate_confidence(self, results: Dict) -> float:
+    def _calculate_confidence (self, results: Dict) -> float:
         """Calculate overall confidence in verification"""
         
         confidences = []
@@ -403,19 +403,19 @@ Respond in JSON format:
             if not search_result.get('error'):
                 supporting = search_result.get('supporting_sources', 0)
                 total = search_result.get('total_sources', 1)
-                confidences.append(supporting / max(total, 1))
+                confidences.append (supporting / max (total, 1))
         
         if 'llm_verification' in results:
             llm_result = results['llm_verification']
             if not llm_result.get('error'):
-                confidences.append(llm_result.get('confidence', 0.5))
+                confidences.append (llm_result.get('confidence', 0.5))
         
-        return sum(confidences) / len(confidences) if confidences else 0.5
+        return sum (confidences) / len (confidences) if confidences else 0.5
 
 # Example usage
 fact_checker = FactChecker()
 claim = "Paris is the capital of France"
-result = fact_checker.check_factual_claim(claim, use_search=False)
+result = fact_checker.check_factual_claim (claim, use_search=False)
 
 print(f"Claim: {claim}")
 print(f"Factual: {result['is_factual']}")
@@ -447,32 +447,32 @@ class ConsistencyValidator:
             if msg['role'] == 'assistant'
         ]
         
-        if len(assistant_responses) < 2:
+        if len (assistant_responses) < 2:
             return {'consistent': True, 'reason': 'Not enough responses to compare'}
         
         # Check for contradictions
-        contradictions = self._find_contradictions(assistant_responses)
+        contradictions = self._find_contradictions (assistant_responses)
         
         # Check for fact consistency
-        fact_consistency = self._check_fact_consistency(assistant_responses)
+        fact_consistency = self._check_fact_consistency (assistant_responses)
         
-        is_consistent = len(contradictions) == 0 and fact_consistency
+        is_consistent = len (contradictions) == 0 and fact_consistency
         
         return {
             'consistent': is_consistent,
             'contradictions': contradictions,
             'fact_consistency': fact_consistency,
-            'total_responses': len(assistant_responses)
+            'total_responses': len (assistant_responses)
         }
     
-    def _find_contradictions(self, responses: List[str]) -> List[Dict]:
+    def _find_contradictions (self, responses: List[str]) -> List[Dict]:
         """Find direct contradictions between responses"""
         
         # Use LLM to find contradictions
         contradiction_prompt = f"""
 Analyze these responses for contradictions:
 
-{chr(10).join(f"{i+1}. {r}" for i, r in enumerate(responses))}
+{chr(10).join (f"{i+1}. {r}" for i, r in enumerate (responses))}
 
 Are there any contradictory statements? Respond in JSON:
 {{
@@ -491,13 +491,13 @@ Are there any contradictory statements? Respond in JSON:
                 response_format={"type": "json_object"}
             )
             
-            result = json.loads(response.choices[0].message.content)
+            result = json.loads (response.choices[0].message.content)
             return result.get('contradictions', [])
         
         except Exception as e:
             return []
     
-    def _check_fact_consistency(self, responses: List[str]) -> bool:
+    def _check_fact_consistency (self, responses: List[str]) -> bool:
         """Check if facts mentioned are consistent"""
         
         # Extract entities and facts from each response
@@ -508,17 +508,17 @@ Are there any contradictory statements? Respond in JSON:
         
         numbers_by_response = []
         for response in responses:
-            numbers = re.findall(r'\\b\\d+\\b', response)
-            numbers_by_response.append(set(numbers))
+            numbers = re.findall (r'\\b\\d+\\b', response)
+            numbers_by_response.append (set (numbers))
         
         # If same context, numbers should be similar
         # This is a simplified check
-        if len(numbers_by_response) < 2:
+        if len (numbers_by_response) < 2:
             return True
         
         # Check for significant differences
         all_numbers = set().union(*numbers_by_response)
-        if len(all_numbers) > 10:  # Too many different numbers might indicate inconsistency
+        if len (all_numbers) > 10:  # Too many different numbers might indicate inconsistency
             return False
         
         return True
@@ -526,13 +526,13 @@ Are there any contradictory statements? Respond in JSON:
 # Example usage
 validator = ConsistencyValidator()
 conversation = [
-    {"role": "user", "content": "What's the population of Tokyo?"},
+    {"role": "user", "content": "What\'s the population of Tokyo?"},
     {"role": "assistant", "content": "Tokyo has about 14 million people."},
     {"role": "user", "content": "And how many people live in Tokyo?"},
     {"role": "assistant", "content": "Tokyo's population is around 9 million."},  # Inconsistent!
 ]
 
-result = validator.validate_consistency(conversation)
+result = validator.validate_consistency (conversation)
 print(f"Consistent: {result['consistent']}")
 print(f"Contradictions: {result['contradictions']}")
 \`\`\`
@@ -556,7 +556,7 @@ class UncertaintyExpr esser:
         """Add uncertainty expressions to low-confidence responses"""
         
         # Score confidence
-        confidence_result = self.confidence_scorer.score_response(prompt, response)
+        confidence_result = self.confidence_scorer.score_response (prompt, response)
         confidence = confidence_result['overall_confidence']
         
         if confidence >= 0.8:
@@ -591,11 +591,11 @@ class UncertaintyExpr esser:
 
 # Example usage
 expresser = UncertaintyExpresser()
-prompt = "What's the GDP of Uzbekistan in 2023?"
+prompt = "What\'s the GDP of Uzbekistan in 2023?"
 response = "The GDP of Uzbekistan in 2023 is $80 billion."
 
 # This is likely a hallucination or outdated, so add uncertainty
-modified = expresser.add_uncertainty(prompt, response)
+modified = expresser.add_uncertainty (prompt, response)
 print(modified)
 \`\`\`
 
@@ -639,7 +639,7 @@ RULES:
             else "Provide direct quotes when possible"
         )
         
-        system_prompt = system_prompt.format(citation_rule=citation_rule)
+        system_prompt = system_prompt.format (citation_rule=citation_rule)
         
         user_prompt = f"""
 Context:
@@ -662,7 +662,7 @@ Answer (based only on the context above):"""
             answer = response.choices[0].message.content
             
             # Verify answer is grounded in context
-            is_grounded = self._verify_grounding(answer, context)
+            is_grounded = self._verify_grounding (answer, context)
             
             return {
                 'answer': answer,
@@ -673,23 +673,23 @@ Answer (based only on the context above):"""
         
         except Exception as e:
             return {
-                'error': str(e),
+                'error': str (e),
                 'answer': None,
                 'is_grounded': False
             }
     
-    def _verify_grounding(self, answer: str, context: str) -> bool:
+    def _verify_grounding (self, answer: str, context: str) -> bool:
         """Verify that answer is grounded in context"""
         
         # Simple check: key phrases from answer should appear in context
         # More sophisticated: use NLI model
         
-        answer_words = set(answer.lower().split())
-        context_words = set(context.lower().split())
+        answer_words = set (answer.lower().split())
+        context_words = set (context.lower().split())
         
         # Check overlap
-        overlap = len(answer_words.intersection(context_words))
-        overlap_ratio = overlap / max(len(answer_words), 1)
+        overlap = len (answer_words.intersection (context_words))
+        overlap_ratio = overlap / max (len (answer_words), 1)
         
         # Should have significant overlap
         return overlap_ratio > 0.5
@@ -702,7 +702,7 @@ The city has a population of approximately 2.1 million.
 """
 
 query = "What is the capital of France?"
-result = generator.generate_grounded(query, context)
+result = generator.generate_grounded (query, context)
 
 print(f"Answer: {result['answer']}")
 print(f"Grounded: {result['is_grounded']}")
@@ -764,11 +764,11 @@ class HallucinationDetectionSystem:
         
         # Method 1: Confidence scoring
         methods.append('confidence_scoring')
-        confidence_result = self.confidence_scorer.score_response(prompt, response)
-        confidence_scores.append(confidence_result['overall_confidence'])
+        confidence_result = self.confidence_scorer.score_response (prompt, response)
+        confidence_scores.append (confidence_result['overall_confidence'])
         
         if confidence_result['likely_hallucination']:
-            reasons.append(f"Low confidence score: {confidence_result['overall_confidence']:.2f}")
+            reasons.append (f"Low confidence score: {confidence_result['overall_confidence']:.2f}")
         
         # Method 2: Consistency validation
         if conversation_history:
@@ -786,15 +786,15 @@ class HallucinationDetectionSystem:
             methods.append('fact_checking')
             # Extract claims and check them
             # Simplified: check entire response
-            fact_result = self.fact_checker.check_factual_claim(response, use_search=False)
+            fact_result = self.fact_checker.check_factual_claim (response, use_search=False)
             
             if not fact_result.get('is_factual', True):
                 reasons.append("Fact-checking failed")
-                confidence_scores.append(fact_result.get('confidence', 0.5))
+                confidence_scores.append (fact_result.get('confidence', 0.5))
         
         # Make final decision
-        avg_confidence = sum(confidence_scores) / len(confidence_scores)
-        likely_hallucination = avg_confidence < 0.6 or len(reasons) > 0
+        avg_confidence = sum (confidence_scores) / len (confidence_scores)
+        likely_hallucination = avg_confidence < 0.6 or len (reasons) > 0
         
         # Suggest action
         if likely_hallucination:
@@ -810,7 +810,7 @@ class HallucinationDetectionSystem:
         # Modify response if needed
         modified_response = None
         if suggested_action == "add_uncertainty":
-            modified_response = self.uncertainty_expresser.add_uncertainty(prompt, response)
+            modified_response = self.uncertainty_expresser.add_uncertainty (prompt, response)
         
         return HallucinationDetectionResult(
             likely_hallucination=likely_hallucination,
@@ -827,7 +827,7 @@ detector = HallucinationDetectionSystem()
 # Test case 1: Likely factual
 prompt1 = "What is 2 + 2?"
 response1 = "2 + 2 = 4"
-result1 = detector.detect(prompt1, response1)
+result1 = detector.detect (prompt1, response1)
 print(f"\\nTest 1:")
 print(f"Likely hallucination: {result1.likely_hallucination}")
 print(f"Confidence: {result1.confidence:.2f}")
@@ -836,7 +836,7 @@ print(f"Action: {result1.suggested_action}")
 # Test case 2: Likely hallucination
 prompt2 = "When was Einstein born?"
 response2 = "Einstein was born in 1885."  # Actually 1879
-result2 = detector.detect(prompt2, response2)
+result2 = detector.detect (prompt2, response2)
 print(f"\\nTest 2:")
 print(f"Likely hallucination: {result2.likely_hallucination}")
 print(f"Confidence: {result2.confidence:.2f}")

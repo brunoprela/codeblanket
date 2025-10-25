@@ -30,7 +30,7 @@ export const apmSection = {
 ### **Business Impact**
 
 **Slow Application**:
-- Lost revenue ($1M/hour for Amazon)
+- Lost revenue (\$1M/hour for Amazon)
 - Poor user experience
 - Customer churn
 - Damaged reputation
@@ -49,7 +49,7 @@ export const apmSection = {
 ### **Developer Impact**
 
 **Without APM**:
-- "It's slow, figure out why"
+- "It\'s slow, figure out why"
 - Hours of log searching
 - Guessing at root cause
 - Can't reproduce in dev
@@ -311,7 +311,7 @@ npm install dd-trace
 // Step 2: Initialize (first line of app)
 require('dd-trace').init();
 
-// That's it! Auto-instrumentation of:
+// That\'s it! Auto-instrumentation of:
 // - HTTP requests
 // - Database queries
 // - Redis operations
@@ -340,16 +340,16 @@ For custom business logic:
 \`\`\`javascript
 const tracer = require('dd-trace').init();
 
-async function processOrder(orderId) {
+async function processOrder (orderId) {
   const span = tracer.startSpan('process.order');
   span.setTag('order.id', orderId);
   
   try {
-    const order = await fetchOrder(orderId);
+    const order = await fetchOrder (orderId);
     span.setTag('order.amount', order.amount);
     
-    await chargePayment(order);
-    await fulfillOrder(order);
+    await chargePayment (order);
+    await fulfillOrder (order);
     
     span.setTag('status', 'success');
   } catch (error) {
@@ -684,7 +684,7 @@ Possible: DDoS attack or viral content
 **Q: How would you identify why an API is slow?**
 A: Use APM to trace slow requests, identify bottleneck span (e.g., database query), drill into code-level profiling, optimize the slow operation.
 
-**Q: What's the difference between APM and logging?**
+**Q: What\'s the difference between APM and logging?**
 A: Logs are raw events. APM synthesizes logs, metrics, and traces into actionable insights with code-level context.
 
 **Q: How do you balance APM costs with observability needs?**

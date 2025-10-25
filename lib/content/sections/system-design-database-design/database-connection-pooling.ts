@@ -105,7 +105,7 @@ def handle_request():
         return result
     finally:
         # Return to pool (don't close!)
-        pool.putconn(conn)
+        pool.putconn (conn)
 
 # For 1000 requests/sec:
 # - 0 new connections (reuse from pool)
@@ -171,7 +171,7 @@ pool = ConnectionPool(
     timeout=30  # Wait up to 30 seconds
 )
 
-conn = pool.get_connection(timeout=5)  # Or override per request
+conn = pool.get_connection (timeout=5)  # Or override per request
 if conn is None:
     raise TimeoutError("No connection available")
 \`\`\`
@@ -237,14 +237,14 @@ db_pool = psycopg2.pool.ThreadedConnectionPool(
     password="password"
 )
 
-def execute_query(query, params):
+def execute_query (query, params):
     conn = None
     try:
         # Get connection from pool
         conn = db_pool.getconn()
         
         cursor = conn.cursor()
-        cursor.execute(query, params)
+        cursor.execute (query, params)
         result = cursor.fetchall()
         conn.commit()
         
@@ -256,7 +256,7 @@ def execute_query(query, params):
     finally:
         if conn:
             # Return connection to pool
-            db_pool.putconn(conn)
+            db_pool.putconn (conn)
 \`\`\`
 
 ### Python: SQLAlchemy (Universal)
@@ -276,9 +276,9 @@ engine = create_engine(
 )
 
 # Usage
-def execute_query(query):
+def execute_query (query):
     with engine.connect() as conn:
-        result = conn.execute(query)
+        result = conn.execute (query)
         return result.fetchall()
     # Connection automatically returned to pool
 \`\`\`
@@ -302,7 +302,7 @@ config.setIdleTimeout(600000);           // 10 minutes
 config.setMaxLifetime(1800000);          // 30 minutes
 config.setConnectionTestQuery("SELECT 1");
 
-HikariDataSource dataSource = new HikariDataSource(config);
+HikariDataSource dataSource = new HikariDataSource (config);
 
 // Usage
 try (Connection conn = dataSource.getConnection()) {
@@ -332,10 +332,10 @@ const pool = new Pool({
 });
 
 // Usage
-async function executeQuery(query, params) {
+async function executeQuery (query, params) {
     const client = await pool.connect();
     try {
-        const result = await client.query(query, params);
+        const result = await client.query (query, params);
         return result.rows;
     } finally {
         client.release();  // Return to pool
@@ -360,19 +360,19 @@ import (
 db, err := sql.Open("postgres", 
     "host=localhost dbname=mydb user=user password=password")
 if err != nil {
-    log.Fatal(err)
+    log.Fatal (err)
 }
 
 // Configure pool
 db.SetMaxOpenConns(100)          // maxconn
 db.SetMaxIdleConns(10)           // minconn
-db.SetConnMaxLifetime(time.Hour) // max lifetime
+db.SetConnMaxLifetime (time.Hour) // max lifetime
 db.SetConnMaxIdleTime(5 * time.Minute)  // idle timeout
 
 // Usage
-func executeQuery(query string, args ...interface{}) error {
+func executeQuery (query string, args ...interface{}) error {
     // Connection automatically checked out and returned
-    rows, err := db.Query(query, args...)
+    rows, err := db.Query (query, args...)
     if err != nil {
         return err
     }
@@ -430,7 +430,7 @@ def get_connection():
         return conn
     except Exception:
         # Connection is dead, remove from pool
-        pool.putconn(conn, close=True)
+        pool.putconn (conn, close=True)
         return get_connection()  # Retry
 \`\`\`
 
@@ -446,7 +446,7 @@ def bad_function():
     cursor.execute("SELECT * FROM users")
     # Exception here → connection never returned!
     result = cursor.fetchall()
-    pool.putconn(conn)
+    pool.putconn (conn)
     return result
 
 # GOOD: Always return connection
@@ -460,7 +460,7 @@ def good_function():
         return result
     finally:
         if conn:
-            pool.putconn(conn)
+            pool.putconn (conn)
 
 # BEST: Use context manager
 from contextlib import contextmanager
@@ -471,7 +471,7 @@ def get_db_connection():
     try:
         yield conn
     finally:
-        pool.putconn(conn)
+        pool.putconn (conn)
 
 def best_function():
     with get_db_connection() as conn:
@@ -510,22 +510,22 @@ if pool.avg_wait_time > 1.0:
 import signal
 import sys
 
-def shutdown_handler(signum, frame):
+def shutdown_handler (signum, frame):
     print("Shutting down gracefully...")
     
     # Stop accepting new requests
     server.stop_accepting()
     
     # Wait for active connections to finish
-    pool.wait_for_active_connections(timeout=30)
+    pool.wait_for_active_connections (timeout=30)
     
     # Close all connections
     pool.close_all()
     
     sys.exit(0)
 
-signal.signal(signal.SIGTERM, shutdown_handler)
-signal.signal(signal.SIGINT, shutdown_handler)
+signal.signal (signal.SIGTERM, shutdown_handler)
+signal.signal (signal.SIGINT, shutdown_handler)
 \`\`\`
 
 ## Advanced Patterns
@@ -549,13 +549,13 @@ read_pool = ConnectionPool(
     host="replica.db.example.com"
 )
 
-def write_data(query, params):
+def write_data (query, params):
     with write_pool.get_connection() as conn:
-        conn.execute(query, params)
+        conn.execute (query, params)
 
-def read_data(query, params):
+def read_data (query, params):
     with read_pool.get_connection() as conn:
-        return conn.execute(query, params).fetchall()
+        return conn.execute (query, params).fetchall()
 \`\`\`
 
 ### 2. Priority Queues
@@ -565,19 +565,19 @@ def read_data(query, params):
 \`\`\`python
 class PriorityConnectionPool:
     def __init__(self):
-        self.pool = ConnectionPool(minconn=10, maxconn=50)
+        self.pool = ConnectionPool (minconn=10, maxconn=50)
         self.high_priority_queue = queue.PriorityQueue()
         self.normal_queue = queue.Queue()
     
-    def get_connection(self, priority='normal'):
+    def get_connection (self, priority='normal'):
         if self.pool.available > 0:
             return self.pool.getconn()
         
         # No available connection, queue the request
         if priority == 'high':
-            self.high_priority_queue.put(get_connection_waiter())
+            self.high_priority_queue.put (get_connection_waiter())
         else:
-            self.normal_queue.put(get_connection_waiter())
+            self.normal_queue.put (get_connection_waiter())
         
         # Wait for connection
         return wait_for_connection()
@@ -594,19 +594,19 @@ class DynamicConnectionPool:
         self.max_size = 100
         self.current_size = self.min_size
         
-    def adjust_pool_size(self):
+    def adjust_pool_size (self):
         # Monitor metrics
         wait_time = self.get_avg_wait_time()
         utilization = self.active_connections / self.current_size
         
         # Scale up if high utilization
         if utilization > 0.8 and wait_time > 0.1:
-            self.current_size = min(self.current_size + 10, self.max_size)
+            self.current_size = min (self.current_size + 10, self.max_size)
             self.add_connections(10)
         
         # Scale down if low utilization
         elif utilization < 0.2 and self.current_size > self.min_size:
-            self.current_size = max(self.current_size - 10, self.min_size)
+            self.current_size = max (self.current_size - 10, self.min_size)
             self.remove_connections(10)
 \`\`\`
 
@@ -617,18 +617,18 @@ class DynamicConnectionPool:
 \`\`\`python
 # ❌ WRONG: Creates new pool for every request
 def handle_request():
-    pool = ConnectionPool(minconn=10, maxconn=100)
+    pool = ConnectionPool (minconn=10, maxconn=100)
     conn = pool.getconn()
     # ... use connection
-    pool.putconn(conn)
+    pool.putconn (conn)
 
 # ✅ CORRECT: Create pool once at startup
-pool = ConnectionPool(minconn=10, maxconn=100)  # Global
+pool = ConnectionPool (minconn=10, maxconn=100)  # Global
 
 def handle_request():
     conn = pool.getconn()
     # ... use connection
-    pool.putconn(conn)
+    pool.putconn (conn)
 \`\`\`
 
 ### 2. Pool Size Too Large
@@ -637,11 +637,11 @@ def handle_request():
 # ❌ WRONG: Pool size exceeds database capacity
 # Database max_connections = 100
 # 10 app instances × 100 connections/instance = 1000 connections
-pool = ConnectionPool(minconn=50, maxconn=100)  # Per instance
+pool = ConnectionPool (minconn=50, maxconn=100)  # Per instance
 
 # ✅ CORRECT: Pool size accounts for all instances
 # 10 instances × 8 connections/instance = 80 connections (safe)
-pool = ConnectionPool(minconn=4, maxconn=8)  # Per instance
+pool = ConnectionPool (minconn=4, maxconn=8)  # Per instance
 \`\`\`
 
 ### 3. Not Returning Connections
@@ -665,7 +665,7 @@ def query_users():
         return cursor.fetchall()
     finally:
         if conn:
-            pool.putconn(conn)
+            pool.putconn (conn)
 \`\`\`
 
 ### 4. Ignoring Pool Exhaustion
@@ -676,7 +676,7 @@ conn = pool.getconn()  # Hangs forever if pool exhausted
 
 # ✅ CORRECT: Use timeout and handle gracefully
 try:
-    conn = pool.getconn(timeout=5)
+    conn = pool.getconn (timeout=5)
 except TimeoutError:
     return {"error": "Database busy, please try again"}
 \`\`\`

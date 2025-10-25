@@ -31,7 +31,7 @@ export const multiModalEvaluationQuiz = [
       'Long video challenges: Sparse relevance (5/60 frames relevant), context limits (180→50 frames), temporal reasoning needed',
       'Temporal localization: Measure if model identifies correct time segment (IoU >0.5)',
       'Question types: Single-frame (82%), duration (65%), sequence (48%), count (52%), causality (41%)',
-      'Temporal coverage: Measure if model attends to full video (entropy/log(frames)), target >0.5',
+      'Temporal coverage: Measure if model attends to full video (entropy/log (frames)), target >0.5',
       'Action segmentation: Test understanding of distinct actions in different segments',
       'Breakdown by length: Short (<30s) 78%, medium (30-120s) 65%, long (>120s) 52%',
       "Root cause: Model low temporal coverage (0.35), doesn't process full video, misses key segments",

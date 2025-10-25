@@ -43,7 +43,7 @@ class Vehicle(ABC):
         self.type = None
     
     @abstractmethod
-    def can_fit_in(self, spot):
+    def can_fit_in (self, spot):
         pass
 
 class Car(Vehicle):
@@ -51,7 +51,7 @@ class Car(Vehicle):
         super().__init__(license_plate)
         self.type = VehicleType.COMPACT
     
-    def can_fit_in(self, spot):
+    def can_fit_in (self, spot):
         return spot.type in [SpotType.COMPACT, SpotType.LARGE, 
                              SpotType.HANDICAPPED]
 
@@ -60,7 +60,7 @@ class Truck(Vehicle):
         super().__init__(license_plate)
         self.type = VehicleType.LARGE
     
-    def can_fit_in(self, spot):
+    def can_fit_in (self, spot):
         return spot.type == SpotType.LARGE
 
 class ParkingSpot:
@@ -71,18 +71,18 @@ class ParkingSpot:
         self.row = row
         self.vehicle = None
     
-    def is_available(self):
+    def is_available (self):
         return self.vehicle is None
     
-    def park_vehicle(self, vehicle):
+    def park_vehicle (self, vehicle):
         if not self.is_available():
             return False
-        if not vehicle.can_fit_in(self):
+        if not vehicle.can_fit_in (self):
             return False
         self.vehicle = vehicle
         return True
     
-    def remove_vehicle(self):
+    def remove_vehicle (self):
         self.vehicle = None
 
 class ParkingLot:
@@ -97,24 +97,24 @@ class ParkingLot:
             SpotType.MOTORCYCLE: []
         }
     
-    def add_spot(self, spot):
+    def add_spot (self, spot):
         self.spots[spot.id] = spot
-        heapq.heappush(self.available_spots[spot.type], 
+        heapq.heappush (self.available_spots[spot.type], 
                       (spot.level, spot.row, spot.id))
     
-    def park_vehicle(self, vehicle):
+    def park_vehicle (self, vehicle):
         # Find best available spot
-        spot_id = self._find_available_spot(vehicle)
+        spot_id = self._find_available_spot (vehicle)
         if not spot_id:
             return None  # No spots available
         
         spot = self.spots[spot_id]
-        if spot.park_vehicle(vehicle):
+        if spot.park_vehicle (vehicle):
             self.vehicle_to_spot[vehicle.license_plate] = spot_id
             return spot_id
         return None
     
-    def _find_available_spot(self, vehicle):
+    def _find_available_spot (self, vehicle):
         # Try to find spot (check each compatible type)
         for spot_type in [SpotType.COMPACT, SpotType.LARGE, 
                          SpotType.HANDICAPPED]:
@@ -122,14 +122,14 @@ class ParkingLot:
             while heap:
                 level, row, spot_id = heap[0]
                 spot = self.spots[spot_id]
-                if spot.is_available() and vehicle.can_fit_in(spot):
-                    heapq.heappop(heap)
+                if spot.is_available() and vehicle.can_fit_in (spot):
+                    heapq.heappop (heap)
                     return spot_id
                 else:
-                    heapq.heappop(heap)  # Remove stale entry
+                    heapq.heappop (heap)  # Remove stale entry
         return None
     
-    def remove_vehicle(self, license_plate):
+    def remove_vehicle (self, license_plate):
         if license_plate not in self.vehicle_to_spot:
             return False
         
@@ -138,7 +138,7 @@ class ParkingLot:
         spot.remove_vehicle()
         
         # Return spot to available pool
-        heapq.heappush(self.available_spots[spot.type],
+        heapq.heappush (self.available_spots[spot.type],
                       (spot.level, spot.row, spot_id))
         
         del self.vehicle_to_spot[license_plate]
@@ -171,7 +171,7 @@ class URLShortener:
         self.short_to_url = {}  # short -> long
         self.base_url = "http://short.url/"
     
-    def shorten(self, long_url):
+    def shorten (self, long_url):
         if long_url in self.url_to_short:
             return self.base_url + self.url_to_short[long_url]
         
@@ -182,7 +182,7 @@ class URLShortener:
         # Handle collisions
         counter = 0
         while short_code in self.short_to_url:
-            short_code = hash_val[:7] + str(counter)
+            short_code = hash_val[:7] + str (counter)
             counter += 1
         
         self.url_to_short[long_url] = short_code
@@ -190,9 +190,9 @@ class URLShortener:
         
         return self.base_url + short_code
     
-    def expand(self, short_url):
-        short_code = short_url.replace(self.base_url, "")
-        return self.short_to_url.get(short_code)
+    def expand (self, short_url):
+        short_code = short_url.replace (self.base_url, "")
+        return self.short_to_url.get (short_code)
 \`\`\`
 
 ### Approach 2: Counter-based (Better)
@@ -212,11 +212,11 @@ class URLShortener:
         
         result = []
         while num:
-            result.append(self.base62[num % 62])
+            result.append (self.base62[num % 62])
             num //= 62
-        return '.join(reversed(result))
+        return '.join (reversed (result))
     
-    def shorten(self, long_url):
+    def shorten (self, long_url):
         if long_url in self.url_to_short:
             return self.url_to_short[long_url]
         
@@ -229,9 +229,9 @@ class URLShortener:
         
         return short_url
     
-    def expand(self, short_url):
+    def expand (self, short_url):
         short_code = short_url.split("/")[-1]
-        return self.short_to_url.get(short_code)
+        return self.short_to_url.get (short_code)
 \`\`\`
 
 **Why Base62?**

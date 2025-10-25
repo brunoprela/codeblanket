@@ -88,7 +88,7 @@ class ComplexityMetrics:
     lines: int
     statements: int
 
-class ComplexityAnalyzer(ast.NodeVisitor):
+class ComplexityAnalyzer (ast.NodeVisitor):
     """
     Calculate various complexity metrics for code.
     This helps identify functions that need refactoring.
@@ -99,17 +99,17 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         self.current_function: Optional[str] = None
         self.nesting_depth: int = 0
     
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef (self, node: ast.FunctionDef):
         """Analyze function complexity."""
         # Calculate cyclomatic complexity
-        cyclomatic = self._calculate_cyclomatic(node)
+        cyclomatic = self._calculate_cyclomatic (node)
         
         # Calculate cognitive complexity (nesting-aware)
-        cognitive = self._calculate_cognitive(node)
+        cognitive = self._calculate_cognitive (node)
         
         # Count lines and statements
         lines = (node.end_lineno or node.lineno) - node.lineno + 1
-        statements = len(list(ast.walk(node)))
+        statements = len (list (ast.walk (node)))
         
         self.functions[node.name] = ComplexityMetrics(
             cyclomatic=cyclomatic,
@@ -120,71 +120,71 @@ class ComplexityAnalyzer(ast.NodeVisitor):
         
         old_function = self.current_function
         self.current_function = node.name
-        self.generic_visit(node)
+        self.generic_visit (node)
         self.current_function = old_function
     
-    def _calculate_cyclomatic(self, node: ast.FunctionDef) -> int:
+    def _calculate_cyclomatic (self, node: ast.FunctionDef) -> int:
         """Calculate cyclomatic complexity."""
         complexity = 1  # Base complexity
         
-        for child in ast.walk(node):
+        for child in ast.walk (node):
             # Each decision point adds 1
-            if isinstance(child, (ast.If, ast.While, ast.For, ast.AsyncFor)):
+            if isinstance (child, (ast.If, ast.While, ast.For, ast.AsyncFor)):
                 complexity += 1
-            elif isinstance(child, ast.ExceptHandler):
+            elif isinstance (child, ast.ExceptHandler):
                 complexity += 1
-            elif isinstance(child, ast.BoolOp):
+            elif isinstance (child, ast.BoolOp):
                 # And/Or operators add complexity
-                complexity += len(child.values) - 1
-            elif isinstance(child, (ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)):
+                complexity += len (child.values) - 1
+            elif isinstance (child, (ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)):
                 # Comprehensions with conditions
-                for generator in getattr(child, 'generators', []):
-                    complexity += len(generator.ifs)
+                for generator in getattr (child, 'generators', []):
+                    complexity += len (generator.ifs)
         
         return complexity
     
-    def _calculate_cognitive(self, node: ast.FunctionDef) -> int:
+    def _calculate_cognitive (self, node: ast.FunctionDef) -> int:
         """
         Calculate cognitive complexity (considers nesting).
         Nested code is harder to understand.
         """
         complexity = 0
         
-        def traverse(n: ast.AST, depth: int):
+        def traverse (n: ast.AST, depth: int):
             nonlocal complexity
             
-            if isinstance(n, (ast.If, ast.While, ast.For)):
+            if isinstance (n, (ast.If, ast.While, ast.For)):
                 # Add base + nesting penalty
                 complexity += 1 + depth
                 depth += 1
-            elif isinstance(n, ast.BoolOp):
+            elif isinstance (n, ast.BoolOp):
                 complexity += 1
             
-            for child in ast.iter_child_nodes(n):
-                traverse(child, depth)
+            for child in ast.iter_child_nodes (n):
+                traverse (child, depth)
         
         for stmt in node.body:
-            traverse(stmt, 0)
+            traverse (stmt, 0)
         
         return complexity
     
-    def get_complex_functions(self, threshold: int = 10) -> List[str]:
+    def get_complex_functions (self, threshold: int = 10) -> List[str]:
         """Find functions above complexity threshold."""
         return [
             name for name, metrics in self.functions.items()
             if metrics.cyclomatic > threshold
         ]
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate complexity report."""
         lines = ["=== Complexity Report ===\\n"]
         
-        for name, metrics in sorted(self.functions.items()):
-            lines.append(f"Function: {name}")
-            lines.append(f"  Cyclomatic Complexity: {metrics.cyclomatic}")
-            lines.append(f"  Cognitive Complexity: {metrics.cognitive}")
-            lines.append(f"  Lines: {metrics.lines}")
-            lines.append(f"  Statements: {metrics.statements}")
+        for name, metrics in sorted (self.functions.items()):
+            lines.append (f"Function: {name}")
+            lines.append (f"  Cyclomatic Complexity: {metrics.cyclomatic}")
+            lines.append (f"  Cognitive Complexity: {metrics.cognitive}")
+            lines.append (f"  Lines: {metrics.lines}")
+            lines.append (f"  Statements: {metrics.statements}")
             
             # Add warnings
             if metrics.cyclomatic > 10:
@@ -196,11 +196,11 @@ class ComplexityAnalyzer(ast.NodeVisitor):
             
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
-def complex_function(data, options):
+def complex_function (data, options):
     if not data:
         return None
     
@@ -210,33 +210,33 @@ def complex_function(data, options):
             if options.get('strict'):
                 if item.score > 0.8:
                     try:
-                        processed = transform(item)
+                        processed = transform (item)
                         if processed:
                             for validator in options.get('validators', []):
-                                if not validator(processed):
+                                if not validator (processed):
                                     break
                             else:
-                                results.append(processed)
+                                results.append (processed)
                     except ProcessError:
-                        log_error(item)
+                        log_error (item)
                         continue
     
     return results if results else None
 
-def simple_function(x, y):
+def simple_function (x, y):
     return x + y
 """
 
 analyzer = ComplexityAnalyzer()
-tree = ast.parse(code)
-analyzer.visit(tree)
+tree = ast.parse (code)
+analyzer.visit (tree)
 
 print(analyzer.generate_report())
 
 # Find complex functions
-complex_funcs = analyzer.get_complex_functions(threshold=5)
+complex_funcs = analyzer.get_complex_functions (threshold=5)
 if complex_funcs:
-    print(f"\\n⚠️  Functions needing refactoring: {', '.join(complex_funcs)}")
+    print(f"\\n⚠️  Functions needing refactoring: {', '.join (complex_funcs)}")
 \`\`\`
 
 ### Bug Pattern Detector
@@ -254,7 +254,7 @@ class BugReport:
     severity: str  # 'error', 'warning', 'info'
     suggestion: str
 
-class BugPatternDetector(ast.NodeVisitor):
+class BugPatternDetector (ast.NodeVisitor):
     """
     Detect common bug patterns in code.
     This is how linters like pylint and flake8 work.
@@ -263,11 +263,11 @@ class BugPatternDetector(ast.NodeVisitor):
     def __init__(self):
         self.issues: List[BugReport] = []
     
-    def visit_Compare(self, node: ast.Compare):
+    def visit_Compare (self, node: ast.Compare):
         """Detect comparison issues."""
         # Check for comparison with True/False
-        for op, comparator in zip(node.ops, node.comparators):
-            if isinstance(comparator, ast.Constant):
+        for op, comparator in zip (node.ops, node.comparators):
+            if isinstance (comparator, ast.Constant):
                 if comparator.value is True or comparator.value is False:
                     self.issues.append(BugReport(
                         type='compare_with_boolean',
@@ -278,8 +278,8 @@ class BugPatternDetector(ast.NodeVisitor):
                     ))
             
             # Check for is/is not with literals
-            if isinstance(op, (ast.Is, ast.IsNot)):
-                if isinstance(comparator, ast.Constant):
+            if isinstance (op, (ast.Is, ast.IsNot)):
+                if isinstance (comparator, ast.Constant):
                     if not (comparator.value is None):
                         self.issues.append(BugReport(
                             type='is_with_literal',
@@ -289,9 +289,9 @@ class BugPatternDetector(ast.NodeVisitor):
                             suggestion="Use '==' for value comparison, 'is' only for None"
                         ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Try(self, node: ast.Try):
+    def visit_Try (self, node: ast.Try):
         """Detect exception handling issues."""
         for handler in node.handlers:
             # Check for bare except
@@ -306,7 +306,7 @@ class BugPatternDetector(ast.NodeVisitor):
             
             # Check for catching Exception and doing nothing
             if handler.body:
-                if len(handler.body) == 1 and isinstance(handler.body[0], ast.Pass):
+                if len (handler.body) == 1 and isinstance (handler.body[0], ast.Pass):
                     self.issues.append(BugReport(
                         type='silent_exception',
                         line=handler.lineno,
@@ -315,13 +315,13 @@ class BugPatternDetector(ast.NodeVisitor):
                         suggestion="At minimum, log the exception"
                     ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef (self, node: ast.FunctionDef):
         """Detect function issues."""
         # Check for mutable default arguments
         for default in node.args.defaults:
-            if isinstance(default, (ast.List, ast.Dict, ast.Set)):
+            if isinstance (default, (ast.List, ast.Dict, ast.Set)):
                 self.issues.append(BugReport(
                     type='mutable_default',
                     line=node.lineno,
@@ -331,7 +331,7 @@ class BugPatternDetector(ast.NodeVisitor):
                 ))
         
         # Check for missing docstring
-        if not ast.get_docstring(node):
+        if not ast.get_docstring (node):
             if not node.name.startswith('_'):  # Skip private functions
                 self.issues.append(BugReport(
                     type='missing_docstring',
@@ -342,7 +342,7 @@ class BugPatternDetector(ast.NodeVisitor):
                 ))
         
         # Check for too many arguments
-        num_args = len(node.args.args)
+        num_args = len (node.args.args)
         if num_args > 5:
             self.issues.append(BugReport(
                 type='too_many_parameters',
@@ -352,13 +352,13 @@ class BugPatternDetector(ast.NodeVisitor):
                 suggestion="Consider grouping parameters into a config object"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Return(self, node: ast.Return):
+    def visit_Return (self, node: ast.Return):
         """Detect return statement issues."""
         # Check for returning multiple types
         # This is simplified - real analysis would track all returns
-        if isinstance(node.value, ast.IfExp):
+        if isinstance (node.value, ast.IfExp):
             self.issues.append(BugReport(
                 type='conditional_return',
                 line=node.lineno,
@@ -367,12 +367,12 @@ class BugPatternDetector(ast.NodeVisitor):
                 suggestion="Consider making conditional logic more explicit"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Call(self, node: ast.Call):
+    def visit_Call (self, node: ast.Call):
         """Detect function call issues."""
         # Check for dangerous eval/exec
-        if isinstance(node.func, ast.Name):
+        if isinstance (node.func, ast.Name):
             if node.func.id in ['eval', 'exec']:
                 self.issues.append(BugReport(
                     type='dangerous_function',
@@ -382,9 +382,9 @@ class BugPatternDetector(ast.NodeVisitor):
                     suggestion="Avoid eval/exec - use safer alternatives like ast.literal_eval"
                 ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Import(self, node: ast.Import):
+    def visit_Import (self, node: ast.Import):
         """Detect import issues."""
         for alias in node.names:
             # Check for import *
@@ -397,14 +397,14 @@ class BugPatternDetector(ast.NodeVisitor):
                     suggestion="Import specific names or use qualified imports"
                 ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate bug report."""
         if not self.issues:
             return "✅ No issues found!"
         
-        lines = [f"=== Found {len(self.issues)} Issues ===\\n"]
+        lines = [f"=== Found {len (self.issues)} Issues ===\\n"]
         
         # Sort by severity then line number
         severity_order = {'error': 0, 'warning': 1, 'info': 2}
@@ -415,22 +415,22 @@ class BugPatternDetector(ast.NodeVisitor):
         
         for issue in sorted_issues:
             symbol = {'error': '❌', 'warning': '⚠️', 'info': 'ℹ️'}[issue.severity]
-            lines.append(f"{symbol} Line {issue.line}: {issue.message}")
-            lines.append(f"   Type: {issue.type}")
-            lines.append(f"   Suggestion: {issue.suggestion}")
+            lines.append (f"{symbol} Line {issue.line}: {issue.message}")
+            lines.append (f"   Type: {issue.type}")
+            lines.append (f"   Suggestion: {issue.suggestion}")
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
-def process_data(items, options, config, flags, mode, debug):  # Too many params
+def process_data (items, options, config, flags, mode, debug):  # Too many params
     # No docstring
     if items == True:  # Bad comparison
         return None
     
     try:
-        result = eval(user_input)  # Dangerous!
+        result = eval (user_input)  # Dangerous!
     except:  # Bare except
         pass  # Silent exception
     
@@ -441,14 +441,14 @@ def process_data(items, options, config, flags, mode, debug):  # Too many params
 
 from bad_module import *  # Wildcard import
 
-def with_mutable_default(items=[]):  # Mutable default
+def with_mutable_default (items=[]):  # Mutable default
     items.append(1)
     return items
 """
 
 detector = BugPatternDetector()
-tree = ast.parse(code)
-detector.visit(tree)
+tree = ast.parse (code)
+detector.visit (tree)
 
 print(detector.generate_report())
 
@@ -473,7 +473,7 @@ class CodeSmell:
     impact: str  # 'maintainability', 'performance', 'readability'
     refactoring_suggestion: str
 
-class CodeSmellDetector(ast.NodeVisitor):
+class CodeSmellDetector (ast.NodeVisitor):
     """
     Detect code smells (indicators of deeper problems).
     This helps identify refactoring opportunities.
@@ -484,7 +484,7 @@ class CodeSmellDetector(ast.NodeVisitor):
         self.function_lengths: Dict[str, int] = {}
         self.variable_uses: Dict[str, int] = {}
     
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef (self, node: ast.FunctionDef):
         """Detect function-level smells."""
         func_name = node.name
         
@@ -502,9 +502,9 @@ class CodeSmellDetector(ast.NodeVisitor):
             ))
         
         # Feature envy (many calls to same object)
-        call_targets = self._analyze_call_targets(node)
+        call_targets = self._analyze_call_targets (node)
         if call_targets:
-            most_common = max(call_targets.items(), key=lambda x: x[1])
+            most_common = max (call_targets.items(), key=lambda x: x[1])
             if most_common[1] > 3:
                 self.smells.append(CodeSmell(
                     name='Feature Envy',
@@ -515,7 +515,7 @@ class CodeSmellDetector(ast.NodeVisitor):
                 ))
         
         # God function (too many responsibilities)
-        responsibilities = self._count_responsibilities(node)
+        responsibilities = self._count_responsibilities (node)
         if responsibilities > 5:
             self.smells.append(CodeSmell(
                 name='God Function',
@@ -525,12 +525,12 @@ class CodeSmellDetector(ast.NodeVisitor):
                 refactoring_suggestion="Split into multiple single-purpose functions"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_ClassDef(self, node: ast.ClassDef):
+    def visit_ClassDef (self, node: ast.ClassDef):
         """Detect class-level smells."""
         # Large class smell
-        method_count = sum(1 for n in node.body if isinstance(n, ast.FunctionDef))
+        method_count = sum(1 for n in node.body if isinstance (n, ast.FunctionDef))
         
         if method_count > 15:
             self.smells.append(CodeSmell(
@@ -542,7 +542,7 @@ class CodeSmellDetector(ast.NodeVisitor):
             ))
         
         # Data class smell (only getters/setters)
-        if self._is_data_class(node):
+        if self._is_data_class (node):
             self.smells.append(CodeSmell(
                 name='Data Class',
                 line=node.lineno,
@@ -551,12 +551,12 @@ class CodeSmellDetector(ast.NodeVisitor):
                 refactoring_suggestion="Consider using @dataclass or moving logic here"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_If(self, node: ast.If):
+    def visit_If (self, node: ast.If):
         """Detect conditional smells."""
         # Nested conditionals smell
-        nesting_depth = self._calculate_nesting_depth(node)
+        nesting_depth = self._calculate_nesting_depth (node)
         
         if nesting_depth > 3:
             self.smells.append(CodeSmell(
@@ -567,12 +567,12 @@ class CodeSmellDetector(ast.NodeVisitor):
                 refactoring_suggestion="Use early returns or extract to functions"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_For(self, node: ast.For):
+    def visit_For (self, node: ast.For):
         """Detect loop smells."""
         # Nested loops smell
-        nested_loops = sum(1 for n in ast.walk(node) if isinstance(n, (ast.For, ast.While)))
+        nested_loops = sum(1 for n in ast.walk (node) if isinstance (n, (ast.For, ast.While)))
         
         if nested_loops > 2:
             self.smells.append(CodeSmell(
@@ -583,86 +583,86 @@ class CodeSmellDetector(ast.NodeVisitor):
                 refactoring_suggestion="Consider list comprehensions or extract to function"
             ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def _analyze_call_targets(self, node: ast.FunctionDef) -> Dict[str, int]:
+    def _analyze_call_targets (self, node: ast.FunctionDef) -> Dict[str, int]:
         """Count calls to each target object."""
         targets = {}
         
-        for child in ast.walk(node):
-            if isinstance(child, ast.Call):
-                if isinstance(child.func, ast.Attribute):
-                    if isinstance(child.func.value, ast.Name):
+        for child in ast.walk (node):
+            if isinstance (child, ast.Call):
+                if isinstance (child.func, ast.Attribute):
+                    if isinstance (child.func.value, ast.Name):
                         target = child.func.value.id
-                        targets[target] = targets.get(target, 0) + 1
+                        targets[target] = targets.get (target, 0) + 1
         
         return targets
     
-    def _count_responsibilities(self, node: ast.FunctionDef) -> int:
+    def _count_responsibilities (self, node: ast.FunctionDef) -> int:
         """Count distinct responsibilities (simplified)."""
         # Count: assignments, calls, returns, try blocks
         responsibilities = 0
         
         for child in node.body:
-            if isinstance(child, (ast.Assign, ast.AnnAssign)):
+            if isinstance (child, (ast.Assign, ast.AnnAssign)):
                 responsibilities += 1
-            elif isinstance(child, ast.Expr) and isinstance(child.value, ast.Call):
+            elif isinstance (child, ast.Expr) and isinstance (child.value, ast.Call):
                 responsibilities += 1
-            elif isinstance(child, ast.Try):
+            elif isinstance (child, ast.Try):
                 responsibilities += 1
         
         return responsibilities
     
-    def _is_data_class(self, node: ast.ClassDef) -> bool:
+    def _is_data_class (self, node: ast.ClassDef) -> bool:
         """Check if class is just a data holder."""
-        methods = [n for n in node.body if isinstance(n, ast.FunctionDef)]
+        methods = [n for n in node.body if isinstance (n, ast.FunctionDef)]
         
         # If only __init__ or simple getters/setters
-        if len(methods) <= 1:
+        if len (methods) <= 1:
             return True
         
         # Check if all methods are just return self.x
         for method in methods:
             if method.name not in ['__init__', '__repr__', '__str__']:
                 # If it has any logic beyond return self.x, not a pure data class
-                if len(method.body) > 1:
+                if len (method.body) > 1:
                     return False
         
         return True
     
-    def _calculate_nesting_depth(self, node: ast.AST, depth: int = 0) -> int:
+    def _calculate_nesting_depth (self, node: ast.AST, depth: int = 0) -> int:
         """Calculate maximum nesting depth."""
         max_depth = depth
         
-        for child in ast.iter_child_nodes(node):
-            if isinstance(child, (ast.If, ast.For, ast.While, ast.With)):
-                child_depth = self._calculate_nesting_depth(child, depth + 1)
-                max_depth = max(max_depth, child_depth)
+        for child in ast.iter_child_nodes (node):
+            if isinstance (child, (ast.If, ast.For, ast.While, ast.With)):
+                child_depth = self._calculate_nesting_depth (child, depth + 1)
+                max_depth = max (max_depth, child_depth)
         
         return max_depth
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate code smell report."""
         if not self.smells:
             return "✅ No code smells detected!"
         
-        lines = [f"=== Detected {len(self.smells)} Code Smells ===\\n"]
+        lines = [f"=== Detected {len (self.smells)} Code Smells ===\\n"]
         
         # Group by impact
         by_impact = {}
         for smell in self.smells:
-            by_impact.setdefault(smell.impact, []).append(smell)
+            by_impact.setdefault (smell.impact, []).append (smell)
         
-        for impact, smells in sorted(by_impact.items()):
-            lines.append(f"## {impact.title()} Issues\\n")
+        for impact, smells in sorted (by_impact.items()):
+            lines.append (f"## {impact.title()} Issues\\n")
             
-            for smell in sorted(smells, key=lambda s: s.line):
-                lines.append(f"Line {smell.line}: {smell.name}")
-                lines.append(f"  {smell.description}")
-                lines.append(f"  Suggestion: {smell.refactoring_suggestion}")
+            for smell in sorted (smells, key=lambda s: s.line):
+                lines.append (f"Line {smell.line}: {smell.name}")
+                lines.append (f"  {smell.description}")
+                lines.append (f"  Suggestion: {smell.refactoring_suggestion}")
                 lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
@@ -671,18 +671,18 @@ class DataHolder:
         self.x = x
         self.y = y
     
-    def get_x(self):
+    def get_x (self):
         return self.x
 
 class MassiveService:
-    def process_everything(self, data):
+    def process_everything (self, data):
         # God function with many responsibilities
-        validated = self.validate(data)
-        cleaned = self.clean(data)
-        transformed = self.transform(data)
-        enriched = self.enrich(data)
-        filtered = self.filter(data)
-        sorted_data = self.sort(data)
+        validated = self.validate (data)
+        cleaned = self.clean (data)
+        transformed = self.transform (data)
+        enriched = self.enrich (data)
+        filtered = self.filter (data)
+        sorted_data = self.sort (data)
         
         # Deep nesting
         if validated:
@@ -700,13 +700,13 @@ def complex_processing():
     for i in range(10):
         for j in range(10):
             for k in range(10):
-                results.append(i * j * k)
+                results.append (i * j * k)
     return results
 """
 
 detector = CodeSmellDetector()
-tree = ast.parse(code)
-detector.visit(tree)
+tree = ast.parse (code)
+detector.visit (tree)
 
 print(detector.generate_report())
 \`\`\`
@@ -727,7 +727,7 @@ class SecurityIssue:
     cwe_id: Optional[str]  # Common Weakness Enumeration ID
     remediation: str
 
-class SecurityScanner(ast.NodeVisitor):
+class SecurityScanner (ast.NodeVisitor):
     """
     Scan for security vulnerabilities in code.
     Detects common security anti-patterns.
@@ -736,9 +736,9 @@ class SecurityScanner(ast.NodeVisitor):
     def __init__(self):
         self.issues: List[SecurityIssue] = []
     
-    def visit_Call(self, node: ast.Call):
+    def visit_Call (self, node: ast.Call):
         """Detect dangerous function calls."""
-        if isinstance(node.func, ast.Name):
+        if isinstance (node.func, ast.Name):
             func_name = node.func.id
             
             # Dangerous eval/exec
@@ -753,7 +753,7 @@ class SecurityScanner(ast.NodeVisitor):
                 ))
             
             # Unsafe deserialization
-            elif func_name == 'pickle' or (isinstance(node.func, ast.Attribute) and node.func.attr in ['loads', 'load']):
+            elif func_name == 'pickle' or (isinstance (node.func, ast.Attribute) and node.func.attr in ['loads', 'load']):
                 self.issues.append(SecurityIssue(
                     type='unsafe_deserialization',
                     line=node.lineno,
@@ -764,10 +764,10 @@ class SecurityScanner(ast.NodeVisitor):
                 ))
         
         # Check for SQL injection patterns
-        if isinstance(node.func, ast.Attribute):
+        if isinstance (node.func, ast.Attribute):
             if node.func.attr == 'execute':
                 # Check if SQL is constructed with string formatting
-                if node.args and isinstance(node.args[0], ast.JoinedStr):
+                if node.args and isinstance (node.args[0], ast.JoinedStr):
                     self.issues.append(SecurityIssue(
                         type='sql_injection',
                         line=node.lineno,
@@ -777,21 +777,21 @@ class SecurityScanner(ast.NodeVisitor):
                         remediation="Use parameterized queries with ? placeholders"
                     ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Assign(self, node: ast.Assign):
+    def visit_Assign (self, node: ast.Assign):
         """Detect security issues in assignments."""
         # Check for hardcoded credentials
-        if isinstance(node.value, ast.Constant):
-            if isinstance(node.value.value, str):
+        if isinstance (node.value, ast.Constant):
+            if isinstance (node.value.value, str):
                 value_lower = node.value.value.lower()
                 
                 for target in node.targets:
-                    if isinstance(target, ast.Name):
+                    if isinstance (target, ast.Name):
                         var_name_lower = target.id.lower()
                         
-                        if any(word in var_name_lower for word in ['password', 'secret', 'key', 'token', 'api_key']):
-                            if len(node.value.value) > 8:  # Likely not a placeholder
+                        if any (word in var_name_lower for word in ['password', 'secret', 'key', 'token', 'api_key']):
+                            if len (node.value.value) > 8:  # Likely not a placeholder
                                 self.issues.append(SecurityIssue(
                                     type='hardcoded_credentials',
                                     line=node.lineno,
@@ -801,14 +801,14 @@ class SecurityScanner(ast.NodeVisitor):
                                     remediation="Store credentials in environment variables or secure vaults"
                                 ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Try(self, node: ast.Try):
+    def visit_Try (self, node: ast.Try):
         """Detect security issues in exception handling."""
         for handler in node.handlers:
             # Catching Exception and ignoring
-            if handler.body and len(handler.body) == 1:
-                if isinstance(handler.body[0], ast.Pass):
+            if handler.body and len (handler.body) == 1:
+                if isinstance (handler.body[0], ast.Pass):
                     self.issues.append(SecurityIssue(
                         type='exception_swallowing',
                         line=handler.lineno,
@@ -818,9 +818,9 @@ class SecurityScanner(ast.NodeVisitor):
                         remediation="Log exceptions and handle appropriately"
                     ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Import(self, node: ast.Import):
+    def visit_Import (self, node: ast.Import):
         """Detect insecure imports."""
         for alias in node.names:
             # Check for known vulnerable modules
@@ -834,19 +834,19 @@ class SecurityScanner(ast.NodeVisitor):
                     remediation="Consider safer alternatives like JSON"
                 ))
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate security report."""
         if not self.issues:
             return "✅ No security issues detected!"
         
-        lines = [f"🔒 Security Scan Results: {len(self.issues)} issues found\\n"]
+        lines = [f"🔒 Security Scan Results: {len (self.issues)} issues found\\n"]
         
         # Group by severity
         by_severity = {'critical': [], 'high': [], 'medium': [], 'low': []}
         for issue in self.issues:
-            by_severity[issue.severity].append(issue)
+            by_severity[issue.severity].append (issue)
         
         severity_symbols = {
             'critical': '🚨',
@@ -860,17 +860,17 @@ class SecurityScanner(ast.NodeVisitor):
             if not issues:
                 continue
             
-            lines.append(f"## {severity_symbols[severity]} {severity.upper()} Severity ({len(issues)})\\n")
+            lines.append (f"## {severity_symbols[severity]} {severity.upper()} Severity ({len (issues)})\\n")
             
-            for issue in sorted(issues, key=lambda i: i.line):
-                lines.append(f"Line {issue.line}: {issue.type.replace('_', ' ').title()}")
-                lines.append(f"  {issue.description}")
+            for issue in sorted (issues, key=lambda i: i.line):
+                lines.append (f"Line {issue.line}: {issue.type.replace('_', ' ').title()}")
+                lines.append (f"  {issue.description}")
                 if issue.cwe_id:
-                    lines.append(f"  CWE: {issue.cwe_id}")
-                lines.append(f"  Fix: {issue.remediation}")
+                    lines.append (f"  CWE: {issue.cwe_id}")
+                lines.append (f"  Fix: {issue.remediation}")
                 lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
@@ -880,17 +880,17 @@ import pickle
 API_KEY = "sk-1234567890abcdef"
 PASSWORD = "SuperSecret123!"
 
-def process_data(user_input):
+def process_data (user_input):
     # Code injection vulnerability
-    result = eval(user_input)
+    result = eval (user_input)
     
     # SQL injection vulnerability
     user_id = request.args.get('id')
     query = f"SELECT * FROM users WHERE id = {user_id}"
-    cursor.execute(query)
+    cursor.execute (query)
     
     # Unsafe deserialization
-    data = pickle.loads(uploaded_file)
+    data = pickle.loads (uploaded_file)
     
     try:
         risky_operation()
@@ -901,8 +901,8 @@ def process_data(user_input):
 """
 
 scanner = SecurityScanner()
-tree = ast.parse(code)
-scanner.visit(tree)
+tree = ast.parse (code)
+scanner.visit (tree)
 
 print(scanner.generate_report())
 
@@ -918,7 +918,7 @@ Cursor integrates static analysis for real-time feedback:
 
 **1. Real-Time Warnings:**
 \`\`\`python
-def process(data=[]):  # Cursor immediately shows warning
+def process (data=[]):  # Cursor immediately shows warning
     # "Mutable default argument"
     data.append(1)
     return data
@@ -934,7 +934,7 @@ def complex_function():  # Cursor shows complexity: 15
 **3. Security Alerts:**
 \`\`\`python
 user_input = get_input()
-eval(user_input)  # Cursor shows critical security warning
+eval (user_input)  # Cursor shows critical security warning
 # "Code injection vulnerability - never use eval on user input"
 \`\`\`
 
@@ -960,22 +960,22 @@ class ComprehensiveCodeQualityAnalyzer:
     
     def __init__(self, code: str):
         self.code = code
-        self.tree = ast.parse(code)
+        self.tree = ast.parse (code)
         
         # Run all analyzers
         self.complexity = ComplexityAnalyzer()
-        self.complexity.visit(self.tree)
+        self.complexity.visit (self.tree)
         
         self.bugs = BugPatternDetector()
-        self.bugs.visit(self.tree)
+        self.bugs.visit (self.tree)
         
         self.smells = CodeSmellDetector()
-        self.smells.visit(self.tree)
+        self.smells.visit (self.tree)
         
         self.security = SecurityScanner()
-        self.security.visit(self.tree)
+        self.security.visit (self.tree)
     
-    def calculate_maintainability_index(self) -> float:
+    def calculate_maintainability_index (self) -> float:
         """
         Calculate maintainability index (0-100).
         Higher is better.
@@ -983,26 +983,26 @@ class ComprehensiveCodeQualityAnalyzer:
         # Simplified calculation
         avg_complexity = sum(
             m.cyclomatic for m in self.complexity.functions.values()
-        ) / max(len(self.complexity.functions), 1)
+        ) / max (len (self.complexity.functions), 1)
         
-        num_lines = len(self.code.split('\\n'))
+        num_lines = len (self.code.split('\\n'))
         
-        # Formula: 171 - 5.2 * ln(volume) - 0.23 * complexity - 16.2 * ln(lines)
+        # Formula: 171 - 5.2 * ln (volume) - 0.23 * complexity - 16.2 * ln (lines)
         import math
         volume = num_lines * 10  # Simplified
         
         mi = (
             171
-            - 5.2 * math.log(volume)
+            - 5.2 * math.log (volume)
             - 0.23 * avg_complexity
-            - 16.2 * math.log(num_lines)
+            - 16.2 * math.log (num_lines)
         )
         
         # Normalize to 0-100
         mi = max(0, min(100, mi))
-        return round(mi, 2)
+        return round (mi, 2)
     
-    def generate_comprehensive_report(self) -> str:
+    def generate_comprehensive_report (self) -> str:
         """Generate complete quality report."""
         lines = ["=" * 60]
         lines.append("CODE QUALITY ANALYSIS REPORT")
@@ -1010,7 +1010,7 @@ class ComprehensiveCodeQualityAnalyzer:
         
         # Overall score
         mi = self.calculate_maintainability_index()
-        lines.append(f"\\nMaintainability Index: {mi}/100")
+        lines.append (f"\\nMaintainability Index: {mi}/100")
         
         if mi >= 80:
             lines.append("  ✅ Excellent maintainability")
@@ -1022,7 +1022,7 @@ class ComprehensiveCodeQualityAnalyzer:
             lines.append("  🚨 Poor maintainability - needs refactoring")
         
         # Issue summary
-        lines.append(f"\\n{'='*60}")
+        lines.append (f"\\n{'='*60}")
         lines.append("ISSUE SUMMARY")
         lines.append("=" * 60)
         
@@ -1032,46 +1032,46 @@ class ComprehensiveCodeQualityAnalyzer:
         errors = sum(1 for i in self.bugs.issues if i.severity == 'error')
         warnings = sum(1 for i in self.bugs.issues if i.severity == 'warning')
         
-        lines.append(f"  🔒 Security: {len(self.security.issues)} issues ({critical_security} critical)")
-        lines.append(f"  🐛 Bugs: {len(self.bugs.issues)} issues ({errors} errors)")
-        lines.append(f"  💭 Code Smells: {len(self.smells.smells)} smells")
+        lines.append (f"  🔒 Security: {len (self.security.issues)} issues ({critical_security} critical)")
+        lines.append (f"  🐛 Bugs: {len (self.bugs.issues)} issues ({errors} errors)")
+        lines.append (f"  💭 Code Smells: {len (self.smells.smells)} smells")
         
         # Detailed reports
         if self.security.issues:
-            lines.append(f"\\n{self.security.generate_report()}")
+            lines.append (f"\\n{self.security.generate_report()}")
         
         if self.bugs.issues:
-            lines.append(f"\\n{self.bugs.generate_report()}")
+            lines.append (f"\\n{self.bugs.generate_report()}")
         
-        lines.append(f"\\n{self.complexity.generate_report()}")
+        lines.append (f"\\n{self.complexity.generate_report()}")
         
         if self.smells.smells:
-            lines.append(f"\\n{self.smells.generate_report()}")
+            lines.append (f"\\n{self.smells.generate_report()}")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
-    def get_actionable_items(self) -> List[str]:
+    def get_actionable_items (self) -> List[str]:
         """Get prioritized list of actions to take."""
         actions = []
         
         # Priority 1: Critical security issues
         critical = [i for i in self.security.issues if i.severity == 'critical']
         for issue in critical:
-            actions.append(f"🚨 URGENT: Fix {issue.type} at line {issue.line}")
+            actions.append (f"🚨 URGENT: Fix {issue.type} at line {issue.line}")
         
         # Priority 2: Error-level bugs
         errors = [i for i in self.bugs.issues if i.severity == 'error']
         for issue in errors:
-            actions.append(f"❌ Fix {issue.type} at line {issue.line}")
+            actions.append (f"❌ Fix {issue.type} at line {issue.line}")
         
         # Priority 3: High complexity functions
-        complex_funcs = self.complexity.get_complex_functions(threshold=10)
+        complex_funcs = self.complexity.get_complex_functions (threshold=10)
         for func in complex_funcs:
-            actions.append(f"🔧 Refactor complex function: {func}")
+            actions.append (f"🔧 Refactor complex function: {func}")
         
         # Priority 4: Code smells
         for smell in self.smells.smells[:3]:  # Top 3
-            actions.append(f"💭 Address {smell.name} at line {smell.line}")
+            actions.append (f"💭 Address {smell.name} at line {smell.line}")
         
         return actions
 
@@ -1081,7 +1081,7 @@ import pickle
 
 API_KEY = "sk-abc123def456"
 
-def process_user_data(data, options, config, mode, flags, debug_level):
+def process_user_data (data, options, config, mode, flags, debug_level):
     if not data:
         return None
     
@@ -1091,29 +1091,29 @@ def process_user_data(data, options, config, mode, flags, debug_level):
             if options.get('strict'):
                 if item.score > 0.8:
                     try:
-                        processed = eval(str(item))
+                        processed = eval (str (item))
                         if processed:
-                            results.append(processed)
+                            results.append (processed)
                     except:
                         pass
     
     query = f"SELECT * FROM users WHERE id = {data['id']}"
-    cursor.execute(query)
+    cursor.execute (query)
     
     return results if results else None
 
-def transform(value=[]):
+def transform (value=[]):
     value.append(1)
     return value
 """
 
-analyzer = ComprehensiveCodeQualityAnalyzer(code)
+analyzer = ComprehensiveCodeQualityAnalyzer (code)
 print(analyzer.generate_comprehensive_report())
 
 print("\\n" + "=" * 60)
 print("ACTIONABLE ITEMS (PRIORITY ORDER)")
 print("=" * 60)
-for i, action in enumerate(analyzer.get_actionable_items(), 1):
+for i, action in enumerate (analyzer.get_actionable_items(), 1):
     print(f"{i}. {action}")
 \`\`\`
 
@@ -1130,13 +1130,13 @@ for i, action in enumerate(analyzer.get_actionable_items(), 1):
 
 \`\`\`python
 # ❌ Wrong: Too strict, many false positives
-def check_complexity(func):
-    if calculate_complexity(func) > 5:
+def check_complexity (func):
+    if calculate_complexity (func) > 5:
         raise Error("Too complex!")  # Too strict!
 
 # ✅ Correct: Reasonable thresholds with warnings
-def check_complexity(func):
-    complexity = calculate_complexity(func)
+def check_complexity (func):
+    complexity = calculate_complexity (func)
     if complexity > 15:
         return "error"
     elif complexity > 10:
@@ -1148,15 +1148,15 @@ def check_complexity(func):
 
 \`\`\`python
 # ❌ Wrong: Doesn't consider context
-def is_dangerous(func_name):
+def is_dangerous (func_name):
     return func_name in ['eval', 'exec']
     # Misses: safe_eval might be okay
 
 # ✅ Correct: Consider context and usage
-def is_dangerous(call_node):
-    if is_eval_like(call_node):
+def is_dangerous (call_node):
+    if is_eval_like (call_node):
         # Check if input is trusted
-        if is_user_input(call_node.args[0]):
+        if is_user_input (call_node.args[0]):
             return True
     return False
 \`\`\`
@@ -1165,13 +1165,13 @@ def is_dangerous(call_node):
 
 \`\`\`python
 # ❌ Wrong: Too complex analysis
-def analyze_everything(code):
+def analyze_everything (code):
     # 100 different checks
     # Takes minutes to run
     # Overwhelming output
 
 # ✅ Correct: Focus on actionable items
-def analyze_key_issues(code):
+def analyze_key_issues (code):
     # Security, bugs, major smells
     # Fast execution
     # Prioritized output

@@ -11,7 +11,7 @@ export const introductionSection = {
 
 **1. Shortest Path Algorithms**
 - **Single-source shortest path**: One start to all destinations
-  - Dijkstra's (non-negative weights)
+  - Dijkstra\'s (non-negative weights)
   - Bellman-Ford (negative weights allowed)
 - **All-pairs shortest path**: Every pair of vertices
   - Floyd-Warshall

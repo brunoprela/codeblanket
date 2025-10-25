@@ -63,7 +63,7 @@ Both nodes AND edges can have arbitrary properties.
 (Alice)
 \`\`\`
 
-**Query**: "Who are Alice's friends of friends?"
+**Query**: "Who are Alice\'s friends of friends?"
 
 Graph database: Follow edges (constant time)
 Relational database: Self-join friendships table (expensive)
@@ -161,7 +161,7 @@ RETURN fof.name
 MATCH path = shortestPath(
   (alice:Person {name: "Alice"})-[:FRIENDS_WITH*]-(target:Person {name: "Zoe"})
 )
-RETURN path, length(path)
+RETURN path, length (path)
 \`\`\`
 
 ### Indexes
@@ -388,8 +388,8 @@ MATCH path = (suspicious)-[:USES_DEVICE|ACCESSED_FROM|TRANSFERRED_TO|PHONE_NUMBE
 WHERE connected.flagged = false
 RETURN DISTINCT connected.account_id, 
        connected.email,
-       length(path) AS hops,
-       [rel IN relationships(path) | type(rel)] AS connection_types
+       length (path) AS hops,
+       [rel IN relationships (path) | type (rel)] AS connection_types
 \`\`\`
 
 **Explanation**:
@@ -418,9 +418,9 @@ RETURN a1.account_id, a2.account_id, d.fingerprint, COUNT(*) AS shared_devices
 
 \`\`\`cypher
 MATCH path = (start:Account)-[:TRANSFERRED_TO*3..5]->(start)
-WHERE ALL(rel IN relationships(path) WHERE rel.amount > 1000)
-  AND length(path) >= 3
-RETURN path, [rel IN relationships(path) | rel.amount] AS amounts
+WHERE ALL(rel IN relationships (path) WHERE rel.amount > 1000)
+  AND length (path) >= 3
+RETURN path, [rel IN relationships (path) | rel.amount] AS amounts
 \`\`\`
 
 **Explanation**:
@@ -532,7 +532,7 @@ Neo4j Graph Data Science library provides graph algorithms.
 \`\`\`cypher
 CALL gds.pageRank.stream('myGraph')
 YIELD nodeId, score
-RETURN gds.util.asNode(nodeId).name AS name, score
+RETURN gds.util.asNode (nodeId).name AS name, score
 ORDER BY score DESC
 LIMIT 10
 \`\`\`
@@ -546,7 +546,7 @@ LIMIT 10
 \`\`\`cypher
 CALL gds.louvain.stream('myGraph')
 YIELD nodeId, communityId
-WITH communityId, COLLECT(gds.util.asNode(nodeId).name) AS members
+WITH communityId, COLLECT(gds.util.asNode (nodeId).name) AS members
 WHERE SIZE(members) > 10
 RETURN communityId, members, SIZE(members) AS size
 ORDER BY size DESC
@@ -556,13 +556,13 @@ ORDER BY size DESC
 
 ### Shortest Path
 
-"What's the shortest path between Alice and Zoe?"
+"What\'s the shortest path between Alice and Zoe?"
 
 \`\`\`cypher
 MATCH path = shortestPath(
   (alice:Person {name: "Alice"})-[:FRIENDS_WITH*]-(zoe:Person {name: "Zoe"})
 )
-RETURN path, length(path) AS hops
+RETURN path, length (path) AS hops
 \`\`\`
 
 **Use case**: Degrees of separation, network analysis.
@@ -574,7 +574,7 @@ RETURN path, length(path) AS hops
 \`\`\`cypher
 CALL gds.betweenness.stream('myGraph')
 YIELD nodeId, score
-RETURN gds.util.asNode(nodeId).name, score
+RETURN gds.util.asNode (nodeId).name, score
 ORDER BY score DESC
 LIMIT 10
 \`\`\`
@@ -598,7 +598,7 @@ g.addV('Person').property('name', 'Bob').property('age', 35)
 // Add edge
 g.V().has('Person', 'name', 'Alice')
   .addE('FRIENDS_WITH')
-  .to(g.V().has('Person', 'name', 'Bob'))
+  .to (g.V().has('Person', 'name', 'Bob'))
   .property('since', 2015)
 
 // Query: Friends of friends

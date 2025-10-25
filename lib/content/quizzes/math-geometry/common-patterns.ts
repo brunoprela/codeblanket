@@ -8,7 +8,7 @@ export const commonpatternsQuiz = [
     question:
       'Explain common math patterns: digit manipulation, sum of multiples, power of numbers.',
     sampleAnswer:
-      'Digit manipulation: extract digits with n % 10 (last digit) and n // 10 (remove last digit). Reverse number: result = result×10 + digit. Count digits: log10(n) + 1. Sum of digits: extract and sum. Sum of multiples: sum of multiples of k up to n is k×(1+2+...+m) where m = n//k. Use formula m×(m+1)/2. Power checks: power of 2 is (n & (n-1)) == 0, power of k needs log_k(n) to be integer. For example, reverse 123: take 3, result=3; take 2, result=32; take 1, result=321. Sum multiples of 3 up to 10: 3+6+9 = 3×(1+2+3) = 3×6 = 18. These patterns appear in many problems.',
+      'Digit manipulation: extract digits with n % 10 (last digit) and n // 10 (remove last digit). Reverse number: result = result×10 + digit. Count digits: log10(n) + 1. Sum of digits: extract and sum. Sum of multiples: sum of multiples of k up to n is k×(1+2+...+m) where m = n//k. Use formula m×(m+1)/2. Power checks: power of 2 is (n & (n-1)) == 0, power of k needs log_k (n) to be integer. For example, reverse 123: take 3, result=3; take 2, result=32; take 1, result=321. Sum multiples of 3 up to 10: 3+6+9 = 3×(1+2+3) = 3×6 = 18. These patterns appear in many problems.',
     keyPoints: [
       'Digits: n%10 for last, n//10 to remove',
       'Reverse: result = result×10 + digit',
@@ -20,9 +20,9 @@ export const commonpatternsQuiz = [
   {
     id: 'q2',
     question:
-      'Describe the sqrt(x) problem. How do you implement integer square root efficiently?',
+      'Describe the sqrt (x) problem. How do you implement integer square root efficiently?',
     sampleAnswer:
-      'Integer square root: find largest integer k where k² ≤ x. Approach 1: linear search O(sqrt(x)) - too slow. Approach 2: binary search O(log x) - efficient. Search range [0, x], check if mid² ≤ x. For example, sqrt(8): try mid=4, 16>8, search [0,3]; try mid=1, 1≤8, search [2,3]; try mid=2, 4≤8, search [3,3]; try mid=3, 9>8, answer is 2. Careful: mid² can overflow, use mid ≤ x/mid instead. Approach 3: Newton method (x_new = (x + n/x)/2), converges fast O(log log x). For coding interviews, binary search is standard. Key: handle overflow, correct boundaries. This is classic binary search application on answer space.',
+      'Integer square root: find largest integer k where k² ≤ x. Approach 1: linear search O(sqrt (x)) - too slow. Approach 2: binary search O(log x) - efficient. Search range [0, x], check if mid² ≤ x. For example, sqrt(8): try mid=4, 16>8, search [0,3]; try mid=1, 1≤8, search [2,3]; try mid=2, 4≤8, search [3,3]; try mid=3, 9>8, answer is 2. Careful: mid² can overflow, use mid ≤ x/mid instead. Approach 3: Newton method (x_new = (x + n/x)/2), converges fast O(log log x). For coding interviews, binary search is standard. Key: handle overflow, correct boundaries. This is classic binary search application on answer space.',
     keyPoints: [
       'Find largest k where k² ≤ x',
       'Binary search on [0, x], O(log x)',

@@ -7,7 +7,7 @@ export const interviewstrategySection = {
   title: 'Recursion in Interviews',
   content: `## Mastering Recursive Interview Problems
 
-Recursion is a common interview topic. Here's how to approach it confidently.
+Recursion is a common interview topic. Here\'s how to approach it confidently.
 
 ---
 
@@ -52,28 +52,28 @@ Questions to ask:
 - Are there performance requirements?
 \`\`\`
 
-### 2. Define Base Case(s)
+### 2. Define Base Case (s)
 \`\`\`python
 # Start here - what's the simplest case?
-def solve(input):
-    # Base case(s) - when do we stop?
-    if len(input) == 0:
+def solve (input):
+    # Base case (s) - when do we stop?
+    if len (input) == 0:
         return ...
-    if len(input) == 1:
+    if len (input) == 1:
         return ...
 \`\`\`
 
 ### 3. Define Recursive Case
 \`\`\`python
 # How do we break down the problem?
-def solve(input):
+def solve (input):
     # ... base cases ...
     
     # Recursive case - make problem smaller
-    smaller_result = solve(smaller_input)
+    smaller_result = solve (smaller_input)
     
     # Combine with current element
-    return combine(current, smaller_result)
+    return combine (current, smaller_result)
 \`\`\`
 
 ### 4. Trust the Recursion
@@ -97,33 +97,33 @@ solve([1,2,3])  # Three elements - verify pattern
 ### Pattern 1: Process and Recurse
 **Template:**
 \`\`\`python
-def process_list(arr, index=0):
+def process_list (arr, index=0):
     # Base case: processed all elements
-    if index >= len(arr):
+    if index >= len (arr):
         return base_value
     
     # Process current element
-    current = process(arr[index])
+    current = process (arr[index])
     
     # Recurse on rest
-    rest = process_list(arr, index + 1)
+    rest = process_list (arr, index + 1)
     
     # Combine
-    return combine(current, rest)
+    return combine (current, rest)
 \`\`\`
 
 **Example: Sum of list**
 \`\`\`python
-def sum_list(arr, index=0):
-    if index >= len(arr):
+def sum_list (arr, index=0):
+    if index >= len (arr):
         return 0
-    return arr[index] + sum_list(arr, index + 1)
+    return arr[index] + sum_list (arr, index + 1)
 \`\`\`
 
 ### Pattern 2: Divide and Conquer
 **Template:**
 \`\`\`python
-def divide_conquer(arr, left, right):
+def divide_conquer (arr, left, right):
     # Base case: single element or empty
     if left >= right:
         return base_value
@@ -132,16 +132,16 @@ def divide_conquer(arr, left, right):
     mid = (left + right) // 2
     
     # Conquer
-    left_result = divide_conquer(arr, left, mid)
-    right_result = divide_conquer(arr, mid + 1, right)
+    left_result = divide_conquer (arr, left, mid)
+    right_result = divide_conquer (arr, mid + 1, right)
     
     # Combine
-    return merge(left_result, right_result)
+    return merge (left_result, right_result)
 \`\`\`
 
 **Example: Binary search**
 \`\`\`python
-def binary_search(arr, target, left, right):
+def binary_search (arr, target, left, right):
     if left > right:
         return -1
     
@@ -150,28 +150,28 @@ def binary_search(arr, target, left, right):
     if arr[mid] == target:
         return mid
     elif arr[mid] < target:
-        return binary_search(arr, target, mid + 1, right)
+        return binary_search (arr, target, mid + 1, right)
     else:
-        return binary_search(arr, target, left, mid - 1)
+        return binary_search (arr, target, left, mid - 1)
 \`\`\`
 
 ### Pattern 3: Backtracking
 **Template:**
 \`\`\`python
-def backtrack(choices, current_path, results):
+def backtrack (choices, current_path, results):
     # Base case: valid solution found
-    if is_solution(current_path):
-        results.append(current_path[:])  # Make copy!
+    if is_solution (current_path):
+        results.append (current_path[:])  # Make copy!
         return
     
     # Try each choice
     for choice in choices:
-        if is_valid(choice, current_path):
+        if is_valid (choice, current_path):
             # Make choice
-            current_path.append(choice)
+            current_path.append (choice)
             
             # Recurse
-            backtrack(choices, current_path, results)
+            backtrack (choices, current_path, results)
             
             # Undo choice (backtrack)
             current_path.pop()
@@ -179,20 +179,20 @@ def backtrack(choices, current_path, results):
 
 **Example: Generate all subsets**
 \`\`\`python
-def subsets(nums):
-    def backtrack(index, current):
+def subsets (nums):
+    def backtrack (index, current):
         # Base case: processed all elements
-        if index == len(nums):
-            result.append(current[:])
+        if index == len (nums):
+            result.append (current[:])
             return
         
         # Choice 1: include nums[index]
-        current.append(nums[index])
-        backtrack(index + 1, current)
+        current.append (nums[index])
+        backtrack (index + 1, current)
         current.pop()
         
         # Choice 2: don't include nums[index]
-        backtrack(index + 1, current)
+        backtrack (index + 1, current)
     
     result = []
     backtrack(0, [])
@@ -202,32 +202,32 @@ def subsets(nums):
 ### Pattern 4: Tree Recursion
 **Template:**
 \`\`\`python
-def traverse_tree(node):
+def traverse_tree (node):
     # Base case: empty node
     if node is None:
         return base_value
     
     # Process current node
-    current = process(node.val)
+    current = process (node.val)
     
     # Recurse on children
-    left_result = traverse_tree(node.left)
-    right_result = traverse_tree(node.right)
+    left_result = traverse_tree (node.left)
+    right_result = traverse_tree (node.right)
     
     # Combine
-    return combine(current, left_result, right_result)
+    return combine (current, left_result, right_result)
 \`\`\`
 
 **Example: Tree height**
 \`\`\`python
-def max_depth(root):
+def max_depth (root):
     if root is None:
         return 0
     
-    left_depth = max_depth(root.left)
-    right_depth = max_depth(root.right)
+    left_depth = max_depth (root.left)
+    right_depth = max_depth (root.right)
     
-    return 1 + max(left_depth, right_depth)
+    return 1 + max (left_depth, right_depth)
 \`\`\`
 
 ---
@@ -259,7 +259,7 @@ def max_depth(root):
 \`\`\`
 Questions to ask:
 - How many recursive calls per invocation?
-- What's the depth of recursion?
+- What\'s the depth of recursion?
 - How much work per call?
 
 Common patterns:
@@ -275,10 +275,10 @@ Common patterns:
 - Additional structures: O(...)
 
 Example:
-def factorial(n):  # Space: O(n) for call stack
+def factorial (n):  # Space: O(n) for call stack
     if n <= 1:
         return 1
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 \`\`\`
 
 ---

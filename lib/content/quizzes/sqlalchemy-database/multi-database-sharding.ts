@@ -10,8 +10,8 @@ export const multiDatabaseShardingQuiz = [
       `Hash-based: shard_index = user_id % num_shards. ` +
       `Alternative: Range-based (0-10M shard_0, 10M-20M shard_1) - easier rebalancing but hotspots possible. ` +
       `Choose hash for even distribution. ` +
-      `(2) Shard routing: class ShardedDatabase: get_shard(user_id) returns engine for shard. ` +
-      `ShardedSession(shard_key=user_id) routes all queries to correct shard. ` +
+      `(2) Shard routing: class ShardedDatabase: get_shard (user_id) returns engine for shard. ` +
+      `ShardedSession (shard_key=user_id) routes all queries to correct shard. ` +
       `Example: user, posts, likes all use user_id as shard key - co-located on same shard. ` +
       `(3) Cross-shard queries: Timeline requires posts from multiple users (multiple shards). ` +
       `Solution: Fan-out query - query each shard in parallel, merge and sort results client-side. ` +
@@ -21,7 +21,7 @@ export const multiDatabaseShardingQuiz = [
       `(4) Replication lag: Master-replica per shard. ` +
       `Handle lag: Read-your-writes pattern - after write, read from master not replica. ` +
       `For timeline: eventual consistency acceptable, use replicas. For user profile updates: use master. ` +
-      `(5) Migration: Run Alembic on all shards in parallel. Script: migrate_all_shards(shard_urls). ` +
+      `(5) Migration: Run Alembic on all shards in parallel. Script: migrate_all_shards (shard_urls). ` +
       `Test on one shard first, then rollout. Monitoring: track migration status per shard. ` +
       `Rollback plan: downgrade per shard. (6) Adding shards: Start with 10 shards (5M users each). ` +
       `When shard hits 8M users, add more shards and rebalance. ` +
@@ -31,7 +31,7 @@ export const multiDatabaseShardingQuiz = [
       `Result: 50M users distributed across 10 shards, 5M per shard, linear scaling, <100ms query latency.`,
     keyPoints: [
       'Shard key: user_id (immutable, hash-based), co-locate related data',
-      'Routing: ShardedSession(shard_key), all queries to one shard',
+      'Routing: ShardedSession (shard_key), all queries to one shard',
       'Cross-shard: Fan-out parallel queries, merge client-side, or denormalize',
       'Replication: Read-your-writes pattern, master after write',
       'Migration: Parallel across shards, test one first, monitoring per shard',
@@ -81,7 +81,7 @@ export const multiDatabaseShardingQuiz = [
       `Single transaction can't span multiple databases. ` +
       `Network failures: partial commits possible (A debited, B not credited). ` +
       `(2) Two-phase commit (2PC): Phase 1 - prepare all transactions. Phase 2 - commit all or rollback all. ` +
-      `Implementation: def distributed_transaction(engines, operations): connections = []; transactions = []; for engine, op in zip(engines, operations): conn = engine.connect(); txn = conn.begin_twophase(); op(conn); txn.prepare(); # Phase 1. ` +
+      `Implementation: def distributed_transaction (engines, operations): connections = []; transactions = []; for engine, op in zip (engines, operations): conn = engine.connect(); txn = conn.begin_twophase(); op (conn); txn.prepare(); # Phase 1. ` +
       `Then: for txn in transactions: txn.commit(); # Phase 2. If any prepare fails: rollback all. ` +
       `(3) Failure scenarios: Network failure during commit phase → some shards committed, others not. ` +
       `Recovery: transaction log, retry or compensating transaction. ` +

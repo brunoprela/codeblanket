@@ -81,11 +81,11 @@ queue_depth = Gauge(
 )
 
 
-def monitor_llm_call(func):
+def monitor_llm_call (func):
     """
     Decorator to monitor LLM API calls.
     """
-    @wraps(func)
+    @wraps (func)
     async def wrapper(*args, **kwargs):
         model = kwargs.get('model', 'unknown')
         user_tier = kwargs.get('user_tier', 'free')
@@ -107,19 +107,19 @@ def monitor_llm_call(func):
                 tokens_used.labels(
                     model=model,
                     type='input'
-                ).inc(result['usage'].get('prompt_tokens', 0))
+                ).inc (result['usage'].get('prompt_tokens', 0))
                 
                 tokens_used.labels(
                     model=model,
                     type='output'
-                ).inc(result['usage'].get('completion_tokens', 0))
+                ).inc (result['usage'].get('completion_tokens', 0))
                 
                 # Calculate and record cost
-                cost = calculate_cost(result['usage'], model)
+                cost = calculate_cost (result['usage'], model)
                 cost_total.labels(
                     model=model,
                     user_tier=user_tier
-                ).inc(cost)
+                ).inc (cost)
             
             return result
         
@@ -127,7 +127,7 @@ def monitor_llm_call(func):
             # Record failure
             request_count.labels(
                 model=model,
-                status=type(e).__name__,
+                status=type (e).__name__,
                 user_tier=user_tier
             ).inc()
             
@@ -136,13 +136,13 @@ def monitor_llm_call(func):
         finally:
             # Record duration
             duration = time.time() - start_time
-            request_duration.labels(model=model).observe(duration)
+            request_duration.labels (model=model).observe (duration)
     
     return wrapper
 
 
 @monitor_llm_call
-async def generate_completion(prompt: str, model: str, user_tier: str):
+async def generate_completion (prompt: str, model: str, user_tier: str):
     """Generate completion with automatic monitoring."""
     response = await openai.ChatCompletion.acreate(
         model=model,
@@ -168,7 +168,7 @@ class StructuredLogger:
     
     def __init__(self, service_name: str):
         self.service_name = service_name
-        self.logger = logging.getLogger(service_name)
+        self.logger = logging.getLogger (service_name)
     
     def log_request(
         self,
@@ -179,12 +179,12 @@ class StructuredLogger:
         **kwargs
     ):
         """Log incoming request."""
-        self.logger.info(json.dumps({
+        self.logger.info (json.dumps({
             'event': 'llm_request',
             'request_id': request_id,
             'user_id': user_id,
             'model': model,
-            'prompt_length': len(prompt),
+            'prompt_length': len (prompt),
             'timestamp': datetime.utcnow().isoformat(),
             **kwargs
         }))
@@ -199,7 +199,7 @@ class StructuredLogger:
         **kwargs
     ):
         """Log response."""
-        self.logger.info(json.dumps({
+        self.logger.info (json.dumps({
             'event': 'llm_response',
             'request_id': request_id,
             'duration_seconds': duration,
@@ -218,7 +218,7 @@ class StructuredLogger:
         **kwargs
     ):
         """Log error."""
-        self.logger.error(json.dumps({
+        self.logger.error (json.dumps({
             'event': 'llm_error',
             'request_id': request_id,
             'error_type': error_type,
@@ -231,14 +231,14 @@ class StructuredLogger:
 logger = StructuredLogger('llm-service')
 
 # Usage
-request_id = str(uuid.uuid4())
-logger.log_request(request_id, user_id, prompt, model)
+request_id = str (uuid.uuid4())
+logger.log_request (request_id, user_id, prompt, model)
 
 try:
-    result = generate(prompt, model)
-    logger.log_response(request_id, duration, tokens, cost, True)
+    result = generate (prompt, model)
+    logger.log_response (request_id, duration, tokens, cost, True)
 except Exception as e:
-    logger.log_error(request_id, type(e).__name__, str(e))
+    logger.log_error (request_id, type (e).__name__, str (e))
 \`\`\`
 
 ## Distributed Tracing
@@ -255,23 +255,23 @@ jaeger_exporter = JaegerExporter(
     agent_host_name="localhost",
     agent_port=6831,
 )
-span_processor = BatchSpanProcessor(jaeger_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
+span_processor = BatchSpanProcessor (jaeger_exporter)
+trace.get_tracer_provider().add_span_processor (span_processor)
 
 tracer = trace.get_tracer(__name__)
 
 
-async def traced_generation(prompt: str, model: str):
+async def traced_generation (prompt: str, model: str):
     """
     Generate with distributed tracing.
     """
     with tracer.start_as_current_span("generate_completion") as span:
         span.set_attribute("model", model)
-        span.set_attribute("prompt_length", len(prompt))
+        span.set_attribute("prompt_length", len (prompt))
         
         # Check cache
         with tracer.start_as_current_span("check_cache"):
-            cached = cache.get(prompt, model)
+            cached = cache.get (prompt, model)
             if cached:
                 span.set_attribute("cache_hit", True)
                 return cached
@@ -290,7 +290,7 @@ async def traced_generation(prompt: str, model: str):
         
         # Store in cache
         with tracer.start_as_current_span("store_cache"):
-            cache.set(prompt, model, response.choices[0].message.content)
+            cache.set (prompt, model, response.choices[0].message.content)
         
         span.set_attribute("success", True)
         return response.choices[0].message.content
@@ -344,7 +344,7 @@ class AlertManager:
             'queue_depth': 1000
         }
     
-    def check_alerts(self):
+    def check_alerts (self):
         """Check all alert conditions."""
         if get_error_rate() > self.thresholds['error_rate']:
             self.send_alert(
@@ -358,7 +358,7 @@ class AlertManager:
                 f"P99 latency: {get_latency_p99():.1f}s"
             )
     
-    def send_alert(self, alert_type: str, message: str):
+    def send_alert (self, alert_type: str, message: str):
         """Send alert to team."""
         # Send to Slack, PagerDuty, etc.
         pass

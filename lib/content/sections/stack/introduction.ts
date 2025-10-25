@@ -14,7 +14,7 @@ export const introductionSection = {
 - **Expression evaluation**: Calculators use stacks to parse and evaluate expressions
 
 **Core Operations:**
-- **\`push(x)\`**: Add element \`x\` to the top of the stack - **O(1)**
+- **\`push (x)\`**: Add element \`x\` to the top of the stack - **O(1)**
 - **\`pop()\`**: Remove and return the top element - **O(1)**
 - **\`peek()\`** or **\`top()\`**: View the top element without removing it - **O(1)**
 - **\`isEmpty()\`**: Check if the stack is empty - **O(1)**

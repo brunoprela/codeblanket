@@ -42,12 +42,12 @@ When cache is full, which item do we remove? Different policies serve different 
 # HashMap: key -> Node (fast lookup)
 # LinkedList: Head (most recent) <-> ... <-> Tail (least recent)
 #
-# get(key):
+# get (key):
 #   1. Lookup in HashMap - O(1)
 #   2. Move node to front - O(1)
 #   3. Return value
 #
-# put(key, val):
+# put (key, val):
 #   1. If exists: update and move to front
 #   2. If new: add to front
 #   3. If over capacity: remove from back (LRU)
@@ -126,7 +126,7 @@ LFU Cache:
 
 ## LRU Cache Deep Dive
 
-Let's fully understand the most important cache design:
+Let\'s fully understand the most important cache design:
 
 ### Why HashMap + Doubly LinkedList?
 
@@ -226,7 +226,7 @@ Hit Rate = Cache Hits / Total Requests
 
 ## Interview Tips for Caching Problems
 
-1. **Start with requirements**: "What's the capacity? What's eviction policy?"
+1. **Start with requirements**: "What\'s the capacity? What's eviction policy?"
 
 2. **State the two needs**: "Need O(1) lookup AND O(1) order tracking"
 

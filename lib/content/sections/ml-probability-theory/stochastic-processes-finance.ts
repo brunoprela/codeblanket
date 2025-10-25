@@ -41,12 +41,12 @@ def random_walk_demo():
     print("S_t = S_0 + Σ X_i where X_i ~ N(0,1)")
     print()
     
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     
-    for i in range(n_paths):
-        steps = np.random.randn(n_steps)
-        path = np.cumsum(np.concatenate([[0], steps]))
-        plt.plot(path, alpha=0.7, label=f'Path {i+1}')
+    for i in range (n_paths):
+        steps = np.random.randn (n_steps)
+        path = np.cumsum (np.concatenate([[0], steps]))
+        plt.plot (path, alpha=0.7, label=f'Path {i+1}')
     
     plt.xlabel('Time Step')
     plt.ylabel('Position')
@@ -103,37 +103,36 @@ def geometric_brownian_motion():
     print(f"σ (volatility) = {sigma:.1%} per year")
     print()
     
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     
     final_prices = []
     
-    for i in range(n_paths):
+    for i in range (n_paths):
         # Generate random shocks
-        dW = np.random.randn(n_steps) * np.sqrt(dt)
+        dW = np.random.randn (n_steps) * np.sqrt (dt)
         
         # Simulate path
         path = [S0]
         S = S0
-        for j in range(n_steps):
+        for j in range (n_steps):
             S = S * np.exp((mu - 0.5*sigma**2)*dt + sigma*dW[j])
             path.append(S)
         
         final_prices.append(S)
-        plt.plot(path, alpha=0.6)
+        plt.plot (path, alpha=0.6)
     
     plt.xlabel('Time Step (Days)')
     plt.ylabel('Stock Price ($)')
-    plt.title(f'GBM: Stock Price Paths (μ={mu:.1%}, σ={sigma:.1%})')
+    plt.title (f'GBM: Stock Price Paths (μ={mu:.1%}, σ={sigma:.1%})')
     plt.grid(True, alpha=0.3)
     plt.axhline(S0, color='red', linestyle='--', label=f'Initial: \${S0}')
     plt.legend()
     
     print(f"Final prices after {T} year:")
-    print(f"  Mean: \${np.mean(final_prices): .2f
-}")
-print(f"  Std: \${np.std(final_prices):.2f}")
-print(f"  Min: \${np.min(final_prices):.2f}")
-print(f"  Max: \${np.max(final_prices):.2f}")
+    print(f"  Mean: \${np.mean (final_prices):.2f}")
+print(f"  Std: \${np.std (final_prices):.2f}")
+print(f"  Min: \${np.min (final_prices):.2f}")
+print(f"  Max: \${np.max (final_prices):.2f}")
 
 geometric_brownian_motion()
 \`\`\`
@@ -171,20 +170,20 @@ def mean_reversion_demo():
     print(f"Reversion speed θ = {theta}")
     print()
     
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     
     for i in range(5):
         path = [X0]
         X = X0
         
-        for _ in range(n_steps):
-            dX = theta * (mu - X) * dt + sigma * np.sqrt(dt) * np.random.randn()
+        for _ in range (n_steps):
+            dX = theta * (mu - X) * dt + sigma * np.sqrt (dt) * np.random.randn()
             X = X + dX
             path.append(X)
         
-        plt.plot(path, alpha=0.6)
+        plt.plot (path, alpha=0.6)
     
-    plt.axhline(mu, color='red', linestyle='--', linewidth=2, label=f'Mean = {mu}')
+    plt.axhline (mu, color='red', linestyle='--', linewidth=2, label=f'Mean = {mu}')
     plt.xlabel('Time Step')
     plt.ylabel('Value')
     plt.title('Mean-Reverting Process: Tends toward long-term mean')
@@ -227,35 +226,35 @@ def poisson_process_demo():
         dt = np.random.exponential(1/lambda_rate)
         t += dt
         if t < T:
-            event_times.append(t)
+            event_times.append (t)
     
     # Counting process
     times = np.linspace(0, T, 1000)
-    counts = [np.sum(np.array(event_times) <= t) for t in times]
+    counts = [np.sum (np.array (event_times) <= t) for t in times]
     
     print("=== Poisson Process ===")
     print(f"Rate λ = {lambda_rate} events per unit time")
-    print(f"Total events in [0, {T}]: {len(event_times)}")
+    print(f"Total events in [0, {T}]: {len (event_times)}")
     print(f"Expected: λ·T = {lambda_rate * T}")
     print()
     
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10))
     
     # Counting process
-    ax1.plot(times, counts, linewidth=2)
-    ax1.scatter(event_times, range(1, len(event_times)+1), color='red', s=50, zorder=5)
+    ax1.plot (times, counts, linewidth=2)
+    ax1.scatter (event_times, range(1, len (event_times)+1), color='red', s=50, zorder=5)
     ax1.set_xlabel('Time')
     ax1.set_ylabel('Number of Events')
     ax1.set_title('Poisson Process: Counting Process N(t)')
     ax1.grid(True, alpha=0.3)
     
     # Inter-arrival times
-    if len(event_times) > 1:
+    if len (event_times) > 1:
         inter_arrival = np.diff([0] + event_times)
-        ax2.hist(inter_arrival, bins=30, density=True, alpha=0.7, edgecolor='black')
-        x = np.linspace(0, max(inter_arrival), 100)
+        ax2.hist (inter_arrival, bins=30, density=True, alpha=0.7, edgecolor='black')
+        x = np.linspace(0, max (inter_arrival), 100)
         from scipy import stats
-        ax2.plot(x, stats.expon(scale=1/lambda_rate).pdf(x), 'r-', linewidth=2, label='Exponential(λ)')
+        ax2.plot (x, stats.expon (scale=1/lambda_rate).pdf (x), 'r-', linewidth=2, label='Exponential(λ)')
         ax2.set_xlabel('Inter-arrival Time')
         ax2.set_ylabel('Density')
         ax2.set_title('Time Between Events (should be Exponential)')

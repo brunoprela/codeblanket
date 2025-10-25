@@ -43,19 +43,19 @@ Backtracking explores all branches, building solutions incrementally.
 
 **Template:**
 \`\`\`python
-def backtrack(path, choices):
+def backtrack (path, choices):
     # Base case: valid solution found
-    if is_valid_solution(path):
-        result.append(path.copy())  # Save solution
+    if is_valid_solution (path):
+        result.append (path.copy())  # Save solution
         return
     
     # Try each possible choice
-    for choice in get_choices(choices):
+    for choice in get_choices (choices):
         # Make choice
-        path.append(choice)
+        path.append (choice)
         
         # Explore with this choice
-        backtrack(path, updated_choices)
+        backtrack (path, updated_choices)
         
         # Undo choice (backtrack)
         path.pop()

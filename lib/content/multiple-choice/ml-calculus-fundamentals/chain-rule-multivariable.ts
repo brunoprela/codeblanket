@@ -7,7 +7,7 @@ import { MultipleChoiceQuestion } from '../../../types';
 export const chainrulemultivariableMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'chain-multi-1',
-    question: 'For z = f(x,y) where x = g(t), y = h(t), what is dz/dt?',
+    question: 'For z = f (x,y) where x = g (t), y = h (t), what is dz/dt?',
     options: [
       '(∂f/∂x) + (∂f/∂y)',
       '(∂f/∂x)(dx/dt) + (∂f/∂y)(dy/dt)',

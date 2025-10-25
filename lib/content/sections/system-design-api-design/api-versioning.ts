@@ -210,7 +210,7 @@ app.use('/v2/users', v2UsersHandler);
 
 // Migrate data between versions
 app.get('/v1/users/:id', async (req, res) => {
-  const user = await getUser(req.params.id);
+  const user = await getUser (req.params.id);
   
   // Convert v2 data to v1 format
   res.json({
@@ -243,7 +243,7 @@ const versionUsage = new prometheus.Counter({
 
 app.use((req, res, next) => {
   const version = req.path.split('/')[1];  // Extract version from path
-  versionUsage.labels(version, req.path).inc();
+  versionUsage.labels (version, req.path).inc();
   next();
 });
 \`\`\`

@@ -61,7 +61,7 @@ class LLMStreamingService:
         self.model_name = model_name
         self.total_tokens_streamed = 0
     
-    def stream_completion(self, prompt):
+    def stream_completion (self, prompt):
         """
         Stream completion token by token
         """
@@ -84,7 +84,7 @@ class LLMStreamingService:
         
         for token in tokens:
             # Simulate token generation delay
-            time.sleep(random.uniform(0.05, 0.15))
+            time.sleep (random.uniform(0.05, 0.15))
             
             print(token + " ", end="", flush=True)
             self.total_tokens_streamed += 1
@@ -92,7 +92,7 @@ class LLMStreamingService:
         print("\\n")
         print(f"✓ Streamed {self.total_tokens_streamed} tokens")
     
-    def stream_with_fastapi(self):
+    def stream_with_fastapi (self):
         """
         FastAPI streaming endpoint
         """
@@ -103,7 +103,7 @@ import openai
 
 app = FastAPI()
 
-async def generate_stream(prompt: str):
+async def generate_stream (prompt: str):
     """
     Generator for streaming tokens
     """
@@ -119,9 +119,9 @@ async def generate_stream(prompt: str):
             yield f"data: {token}\\n\\n"
 
 @app.post("/stream")
-async def stream_completion(prompt: str):
+async def stream_completion (prompt: str):
     return StreamingResponse(
-        generate_stream(prompt),
+        generate_stream (prompt),
         media_type="text/event-stream"
     )
 ''
@@ -168,7 +168,7 @@ class LLMCostOptimizer:
             "claude-3-sonnet": {"input": 0.003, "output": 0.015}
         }
     
-    def calculate_cost(self, model, input_tokens, output_tokens):
+    def calculate_cost (self, model, input_tokens, output_tokens):
         """
         Calculate API call cost
         """
@@ -179,7 +179,7 @@ class LLMCostOptimizer:
         
         return input_cost + output_cost
     
-    def demonstrate_cost_strategies(self):
+    def demonstrate_cost_strategies (self):
         """
         Cost optimization strategies
         """
@@ -188,8 +188,7 @@ class LLMCostOptimizer:
         print("Strategy 1: Prompt Optimization")
         print("  Bad prompt: 1000 tokens → 500 token response")
         long_cost = self.calculate_cost("gpt-4", 1000, 500)
-        print(f"  Cost: \${long_cost: .4f
-}")
+        print(f"  Cost: \${long_cost:.4f}")
 
 print("\\n  Good prompt (concise): 200 tokens → 500 token response")
 short_cost = self.calculate_cost("gpt-4", 200, 500)
@@ -222,7 +221,7 @@ print("  Summarization: GPT-3.5 often sufficient")
 print("  Complex reasoning: GPT-4 when needed")
 print("  → Hybrid approach: Right model for each task")
     
-    def implement_response_caching(self):
+    def implement_response_caching (self):
 """
         Cache LLM responses
 """
@@ -238,24 +237,24 @@ self.redis = redis.Redis()
 self.hits = 0
 self.misses = 0
     
-    def get_or_generate(self, prompt, model = "gpt-3.5-turbo"):
+    def get_or_generate (self, prompt, model = "gpt-3.5-turbo"):
         # Cache key: hash of prompt + model
 cache_key = hashlib.md5(
     f"{model}:{prompt}".encode()
 ).hexdigest()
         
         # Try cache first
-cached = self.redis.get(cache_key)
+cached = self.redis.get (cache_key)
 if cached:
     self.hits += 1
 return cached.decode(), True  # From cache
         
         # Cache miss: call LLM
 self.misses += 1
-response = call_llm_api(prompt, model)
+response = call_llm_api (prompt, model)
         
         # Cache for 1 hour
-        self.redis.setex(cache_key, 3600, response)
+        self.redis.setex (cache_key, 3600, response)
         
         return response, False
 
@@ -306,7 +305,7 @@ class ProductionPromptSystem:
         self.prompts = {}
         self.validation_stats = {"valid": 0, "invalid": 0}
     
-    def create_structured_prompt(self, task="classification"):
+    def create_structured_prompt (self, task="classification"):
         """
         Structured prompts for consistent outputs
         """
@@ -346,7 +345,7 @@ Extraction:
             
             return prompt_template
     
-    def validate_and_parse_response(self, response, expected_schema):
+    def validate_and_parse_response (self, response, expected_schema):
         """
         Validate LLM response against schema
         """
@@ -356,7 +355,7 @@ Extraction:
         import re
         
         # Try to extract JSON from response
-        json_match = re.search(r'\\{.*\\}', response, re.DOTALL)
+        json_match = re.search (r'\\{.*\\}', response, re.DOTALL)
         
         if not json_match:
             print("✗ No JSON found in response")
@@ -364,7 +363,7 @@ Extraction:
             return None
         
         try:
-            parsed = json.loads(json_match.group())
+            parsed = json.loads (json_match.group())
             
             # Validate schema
             for field in expected_schema:
@@ -382,24 +381,24 @@ Extraction:
             self.validation_stats["invalid"] += 1
             return None
     
-    def implement_retry_logic(self):
+    def implement_retry_logic (self):
         """
         Retry on validation failure
         """
         print("\\n=== Retry Logic ===\\n")
         
         retry_code = ''
-def call_llm_with_retry(prompt, max_retries=3):
+def call_llm_with_retry (prompt, max_retries=3):
     """
     Retry if response validation fails
     """
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             # Call LLM
-            response = llm_api_call(prompt)
+            response = llm_api_call (prompt)
             
             # Validate
-            parsed = validate_response(response)
+            parsed = validate_response (response)
             
             if parsed:
                 return parsed
@@ -422,7 +421,7 @@ def call_llm_with_retry(prompt, max_retries=3):
         print("✓ Exponential backoff for rate limits")
         print("✓ Clarifies prompt on retry")
     
-    def example_usage(self):
+    def example_usage (self):
         """
         Example: Structured classification
         """
@@ -430,7 +429,7 @@ def call_llm_with_retry(prompt, max_retries=3):
         
         prompt = self.create_structured_prompt("classification")
         text = "This product is amazing! Best purchase ever."
-        full_prompt = prompt.format(text=text)
+        full_prompt = prompt.format (text=text)
         
         print("Prompt:")
         print(full_prompt)
@@ -501,22 +500,22 @@ class LLMMonitoring:
             "rate_limits": 0
         }
     
-    def track_request(self, input_tokens, output_tokens, latency_ms, cost, error=None):
+    def track_request (self, input_tokens, output_tokens, latency_ms, cost, error=None):
         """
         Track each LLM request
         """
         self.metrics["requests"] += 1
         self.metrics["total_tokens"] += input_tokens + output_tokens
         self.metrics["total_cost"] += cost
-        self.metrics["avg_latency"].append(latency_ms)
+        self.metrics["avg_latency"].append (latency_ms)
         
         if error:
             self.metrics["errors"] += 1
             
-            if "rate_limit" in str(error).lower():
+            if "rate_limit" in str (error).lower():
                 self.metrics["rate_limits"] += 1
     
-    def get_dashboard_metrics(self):
+    def get_dashboard_metrics (self):
         """
         Metrics for monitoring dashboard
         """
@@ -525,9 +524,9 @@ class LLMMonitoring:
         if not self.metrics["requests"]:
             return "No data yet"
         
-        avg_latency = np.mean(self.metrics["avg_latency"])
-        p95_latency = np.percentile(self.metrics["avg_latency"], 95)
-        p99_latency = np.percentile(self.metrics["avg_latency"], 99)
+        avg_latency = np.mean (self.metrics["avg_latency"])
+        p95_latency = np.percentile (self.metrics["avg_latency"], 95)
+        p99_latency = np.percentile (self.metrics["avg_latency"], 99)
         
         avg_cost_per_request = self.metrics["total_cost"] / self.metrics["requests"]
         error_rate = self.metrics["errors"] / self.metrics["requests"]
@@ -535,7 +534,7 @@ class LLMMonitoring:
         print("\\n=== LLM System Dashboard ===\\n")
         print(f"Total Requests: {self.metrics['requests']}")
         print(f"Total Tokens: {self.metrics['total_tokens']:,}")
-        print(f"Total Cost: \${self.metrics['total_cost']: .2f}")
+        print(f"Total Cost: \${self.metrics['total_cost']:.2f}")
 print(f"Avg Cost/Request: \${avg_cost_per_request:.4f}\\n")
 
 print(f"Latency:")
@@ -556,7 +555,7 @@ if p99_latency > 10000:
 if error_rate > 0.05:
     print("\\n🚨 ALERT: Error rate > 5%")
     
-    def monitor_output_quality(self):
+    def monitor_output_quality (self):
 """
         Monitor output quality
 """
@@ -582,7 +581,7 @@ print("   - Thumbs up/down")
 print("   - Regeneration requests")
 print("   - Track by prompt template")
     
-    def cost_alerting(self):
+    def cost_alerting (self):
 """
         Cost alerting system
 """
@@ -595,7 +594,7 @@ self.daily_budget = daily_budget
 self.today_cost = 0
 self.alert_thresholds = [0.5, 0.75, 0.9, 1.0]
     
-    def track_cost(self, cost):
+    def track_cost (self, cost):
 self.today_cost += cost
 
 usage_pct = self.today_cost / self.daily_budget
@@ -612,11 +611,11 @@ if usage_pct >= 1.0:
 send_alert("⚠️ 75% of daily budget used")
 
 # Usage
-cost_alert = CostAlert(daily_budget = 100)
+cost_alert = CostAlert (daily_budget = 100)
 
 for request in requests:
-    cost = process_request(request)
-cost_alert.track_cost(cost)
+    cost = process_request (request)
+cost_alert.track_cost (cost)
 ''
 
 print(alert_code)
@@ -639,7 +638,7 @@ cost = (input_tokens * 0.03 + output_tokens * 0.06) / 1000
 
 error = "rate_limit" if random.random() < 0.02 else None
 
-monitor.track_request(input_tokens, output_tokens, latency_ms, cost, error)
+monitor.track_request (input_tokens, output_tokens, latency_ms, cost, error)
 
 # Display metrics
 monitor.get_dashboard_metrics()
@@ -674,7 +673,7 @@ class LLMFallbackSystem:
         self.fallback_model = fallback_model
         self.fallback_count = 0
     
-    def call_with_fallback(self, prompt):
+    def call_with_fallback (self, prompt):
         """
         Try primary, fallback to cheaper model
         """
@@ -682,7 +681,7 @@ class LLMFallbackSystem:
         
         try:
             print(f"Trying primary model: {self.primary_model}")
-            response = self._call_llm(prompt, self.primary_model)
+            response = self._call_llm (prompt, self.primary_model)
             print(f"✓ Primary model succeeded")
             return response
             
@@ -691,7 +690,7 @@ class LLMFallbackSystem:
             print(f"→ Falling back to {self.fallback_model}")
             
             self.fallback_count += 1
-            response = self._call_llm(prompt, self.fallback_model)
+            response = self._call_llm (prompt, self.fallback_model)
             print(f"✓ Fallback model succeeded")
             return response
             
@@ -701,7 +700,7 @@ class LLMFallbackSystem:
             # Last resort: return cached or default response
             return self._get_default_response()
     
-    def _call_llm(self, prompt, model):
+    def _call_llm (self, prompt, model):
         """
         Simulate LLM call
         """
@@ -709,18 +708,18 @@ class LLMFallbackSystem:
         
         # Simulate rate limit 10% of time for primary
         if model == self.primary_model and random.random() < 0.1:
-            raise RateLimitError(f"Rate limit exceeded for {model}")
+            raise RateLimitError (f"Rate limit exceeded for {model}")
         
         return f"Response from {model}: [simulated]"
     
-    def _get_default_response(self):
+    def _get_default_response (self):
         """
         Default response when all fails
         """
         print("→ Using default response (cached/template)")
         return "I apologize, but I'm experiencing technical difficulties. Please try again."
     
-    def implement_circuit_breaker(self):
+    def implement_circuit_breaker (self):
         """
         Circuit breaker pattern
         """
@@ -738,7 +737,7 @@ class CircuitBreaker:
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
         self.last_failure_time = None
     
-    def call(self, func, *args, **kwargs):
+    def call (self, func, *args, **kwargs):
         if self.state == "OPEN":
             # Check if timeout expired
             if time.time() - self.last_failure_time > self.timeout:
@@ -770,7 +769,7 @@ class CircuitBreaker:
 breaker = CircuitBreaker()
 
 try:
-    response = breaker.call(llm_api_call, prompt)
+    response = breaker.call (llm_api_call, prompt)
 except CircuitOpenError:
     # Use fallback
     response = fallback_response()
@@ -797,7 +796,7 @@ fallback_system = LLMFallbackSystem()
 # Simulate 10 requests (some will hit rate limits)
 for i in range(10):
     try:
-        fallback_system.call_with_fallback(f"Request {i+1}")
+        fallback_system.call_with_fallback (f"Request {i+1}")
     except:
         pass
 

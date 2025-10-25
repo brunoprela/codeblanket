@@ -46,7 +46,7 @@ class OpenAIFineTuner:
         
         Format: JSONL with messages array
         """
-        with open(output_path, 'w') as f:
+        with open (output_path, 'w') as f:
             for ex in examples:
                 # OpenAI format
                 entry = {
@@ -65,15 +65,15 @@ class OpenAIFineTuner:
                         }
                     ]
                 }
-                f.write(json.dumps(entry) + '\\n')
+                f.write (json.dumps (entry) + '\\n')
         
-        print(f"✅ Prepared {len(examples)} examples in {output_path}")
+        print(f"✅ Prepared {len (examples)} examples in {output_path}")
         return output_path
     
-    async def upload_training_file(self, file_path: str) -> str:
+    async def upload_training_file (self, file_path: str) -> str:
         """Upload training file to OpenAI."""
         
-        with open(file_path, 'rb') as f:
+        with open (file_path, 'rb') as f:
             response = await openai.File.acreate(
                 file=f,
                 purpose='fine-tune'
@@ -109,14 +109,14 @@ class OpenAIFineTuner:
         print(f"✅ Created fine-tuning job: {job_id}")
         return job_id
     
-    async def monitor_job(self, job_id: str):
+    async def monitor_job (self, job_id: str):
         """Monitor fine-tuning progress."""
         import time
         
         print(f"\\nMonitoring job {job_id}...")
         
         while True:
-            job = await openai.FineTuningJob.retrieve(job_id)
+            job = await openai.FineTuningJob.retrieve (job_id)
             status = job['status']
             
             print(f"Status: {status}")
@@ -172,7 +172,7 @@ class OpenAIFineTuner:
                 'match': output.strip() == ex['output'].strip()
             })
         
-        accuracy = sum(1 for r in results if r['match']) / len(results)
+        accuracy = sum(1 for r in results if r['match']) / len (results)
         print(f"\\nTest Accuracy: {accuracy:.2%}")
         
         return results
@@ -195,13 +195,13 @@ class OpenAIFineTuner:
         
         # Step 1: Prepare data
         print("Step 1: Preparing training data...")
-        train_file = self.prepare_training_file(training_examples, "train.jsonl")
-        val_file = self.prepare_training_file(validation_examples, "val.jsonl")
+        train_file = self.prepare_training_file (training_examples, "train.jsonl")
+        val_file = self.prepare_training_file (validation_examples, "val.jsonl")
         
         # Step 2: Upload files
         print("\\nStep 2: Uploading files...")
-        train_file_id = await self.upload_training_file(train_file)
-        val_file_id = await self.upload_training_file(val_file)
+        train_file_id = await self.upload_training_file (train_file)
+        val_file_id = await self.upload_training_file (val_file)
         
         # Step 3: Create job
         print("\\nStep 3: Creating fine-tuning job...")
@@ -215,14 +215,14 @@ class OpenAIFineTuner:
         
         # Step 4: Monitor
         print("\\nStep 4: Monitoring training...")
-        model_name = await self.monitor_job(job_id)
+        model_name = await self.monitor_job (job_id)
         
         if not model_name:
             raise Exception("Fine-tuning failed")
         
         # Step 5: Test
         print("\\nStep 5: Testing fine-tuned model...")
-        results = await self.test_fine_tuned_model(model_name, test_examples)
+        results = await self.test_fine_tuned_model (model_name, test_examples)
         
         print(f"\\n✅ Workflow complete!")
         print(f"Model name: {model_name}")
@@ -230,7 +230,7 @@ class OpenAIFineTuner:
         return model_name
 
 # Usage
-finetuner = OpenAIFineTuner(api_key="your-api-key")
+finetuner = OpenAIFineTuner (api_key="your-api-key")
 
 model_name = await finetuner.complete_workflow(
     training_examples=train_data,      # 500+ examples
@@ -338,8 +338,7 @@ class FineTuningCostCalculator:
             'monthly_savings': savings['monthly_savings_usd'],
             'breakeven_months': breakeven_months,
             'worth_it': breakeven_months < 6,  # Worthwhile if ROI < 6 months
-            'reasoning': f"Training costs \${training_cost: .2f
-}, saves \${ savings['monthly_savings_usd']:.2f }/month"
+            'reasoning': f"Training costs \${training_cost:.2f}, saves \${ savings['monthly_savings_usd']:.2f }/month"
         }
 
 # Usage
@@ -394,10 +393,10 @@ bad_training_data = [
 ### 2. Validation Set Monitoring
 
 \`\`\`python
-async def monitor_validation_loss(job_id: str):
+async def monitor_validation_loss (job_id: str):
     """Track validation loss during training."""
     
-    events = await openai.FineTuningJob.list_events(job_id)
+    events = await openai.FineTuningJob.list_events (job_id)
     
     train_losses = []
     val_losses = []
@@ -406,9 +405,9 @@ async def monitor_validation_loss(job_id: str):
         if event['type'] == 'metrics':
             metrics = event['data']
             if 'train_loss' in metrics:
-                train_losses.append(metrics['train_loss'])
+                train_losses.append (metrics['train_loss'])
             if 'valid_loss' in metrics:
-                val_losses.append(metrics['valid_loss'])
+                val_losses.append (metrics['valid_loss'])
     
     # Check for overfitting
     if val_losses:
@@ -446,7 +445,7 @@ class ModelVersionManager:
             'status': 'active'
         }
     
-    def rollback(self, to_version: str):
+    def rollback (self, to_version: str):
         """Rollback to previous version."""
         if to_version in self.versions:
             # Set previous version as active
@@ -457,7 +456,7 @@ class ModelVersionManager:
             print(f"✅ Rolled back to {to_version}")
             return self.versions[to_version]['model_name']
     
-    def get_active_model(self) -> str:
+    def get_active_model (self) -> str:
         """Get currently active model."""
         for version, data in self.versions.items():
             if data['status'] == 'active':
@@ -491,13 +490,13 @@ manager.rollback("v1.0")
 **Issue 1: Training fails with "Invalid format"**
 \`\`\`python
 # Fix: Validate JSONL format
-def validate_jsonl(file_path: str):
-    with open(file_path, 'r') as f:
-        for i, line in enumerate(f):
+def validate_jsonl (file_path: str):
+    with open (file_path, 'r') as f:
+        for i, line in enumerate (f):
             try:
-                data = json.loads(line)
+                data = json.loads (line)
                 assert 'messages' in data
-                assert len(data['messages']) >= 2
+                assert len (data['messages']) >= 2
             except Exception as e:
                 print(f"❌ Line {i+1}: {e}")
                 return False

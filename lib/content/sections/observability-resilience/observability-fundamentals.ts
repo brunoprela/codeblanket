@@ -462,7 +462,7 @@ OpenTelemetry defines conventions:
 - "How would you debug a latency issue in a distributed system?"
   → Start with traces to identify slow span, then logs for details, metrics for patterns
 
-- "What's the difference between logs and metrics?"
+- "What\'s the difference between logs and metrics?"
   → Logs are discrete events (high cardinality), metrics are aggregated (low cardinality)
 
 - "How do you instrument a new service?"

@@ -15,7 +15,7 @@ export const advancedLLMArchitecturesQuiz = {
       question:
         'Long context models use various techniques to extend beyond the O(n²) attention limitation: sparse attention patterns, sliding windows, and alternative position encodings. Compare Longformer, BigBird, and ALiBi approaches. What are the tradeoffs in quality, speed, and implementation complexity? Can these techniques enable infinite context?',
       expectedAnswer:
-        "Should discuss: full attention quadratic scaling being prohibitive, Longformer's local + global attention patterns, BigBird's random + window + global attention, ALiBi using attention biases instead of positional embeddings, quality degradation with approximations, speed improvements from sparsity, implementation complexity and hardware optimization, extrapolation to longer sequences than trained on, fundamental limits (attention dilution, memory constraints), and future directions in linear attention research.",
+        "Should discuss: full attention quadratic scaling being prohibitive, Longformer\'s local + global attention patterns, BigBird's random + window + global attention, ALiBi using attention biases instead of positional embeddings, quality degradation with approximations, speed improvements from sparsity, implementation complexity and hardware optimization, extrapolation to longer sequences than trained on, fundamental limits (attention dilution, memory constraints), and future directions in linear attention research.",
     },
     {
       id: 3,

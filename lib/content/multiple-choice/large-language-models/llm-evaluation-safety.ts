@@ -14,14 +14,14 @@ export const llmEvaluationSafetyMC = {
       ],
       correctAnswer: 1,
       explanation:
-        "MMLU (Massive Multitask Language Understanding) tests knowledge across 57 diverse subjects from elementary to professional level: STEM, humanities, social sciences. It's become a key benchmark for evaluating general capability of LLMs.",
+        "MMLU (Massive Multitask Language Understanding) tests knowledge across 57 diverse subjects from elementary to professional level: STEM, humanities, social sciences. It\'s become a key benchmark for evaluating general capability of LLMs.",
     },
     {
       id: 2,
       question:
         'Why is perplexity a poor metric for evaluating modern LLM quality for end-user applications?',
       options: [
-        "It's too computationally expensive",
+        "It\'s too computationally expensive",
         'It measures token prediction ability but not usefulness, helpfulness, or safety',
         'It only works on English',
         'It requires labeled data',

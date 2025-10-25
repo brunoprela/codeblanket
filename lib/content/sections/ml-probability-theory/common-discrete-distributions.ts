@@ -40,11 +40,11 @@ def bernoulli_demo():
     p = 0.7  # 70% success rate
     
     # Create distribution
-    bernoulli = stats.bernoulli(p)
+    bernoulli = stats.bernoulli (p)
     
     # Sample
     np.random.seed(42)
-    samples = bernoulli.rvs(size=1000)
+    samples = bernoulli.rvs (size=1000)
     
     print("=== Bernoulli Distribution ===")
     print(f"Parameter p = {p}")
@@ -58,7 +58,7 @@ def bernoulli_demo():
     # PMF
     x = [0, 1]
     pmf = [1-p, p]
-    ax1.bar(x, pmf, color=['red', 'green'], alpha=0.7)
+    ax1.bar (x, pmf, color=['red', 'green'], alpha=0.7)
     ax1.set_xlabel('Outcome')
     ax1.set_ylabel('Probability')
     ax1.set_title('Bernoulli PMF (p=0.7)')
@@ -66,8 +66,8 @@ def bernoulli_demo():
     ax1.set_xticklabels(['Failure (0)', 'Success (1)'])
     
     # Samples
-    unique, counts = np.unique(samples, return_counts=True)
-    ax2.bar(unique, counts/len(samples), color=['red', 'green'], alpha=0.7)
+    unique, counts = np.unique (samples, return_counts=True)
+    ax2.bar (unique, counts/len (samples), color=['red', 'green'], alpha=0.7)
     ax2.set_xlabel('Outcome')
     ax2.set_ylabel('Empirical Probability')
     ax2.set_title('Bernoulli Samples (n=1000)')
@@ -102,7 +102,7 @@ def binomial_demo():
     
     n, p = 10, 0.7  # 10 trials, 70% success
     
-    binomial = stats.binom(n, p)
+    binomial = stats.binom (n, p)
     
     print("=== Binomial Distribution ===")
     print(f"Parameters: n={n} trials, p={p}")
@@ -111,7 +111,7 @@ def binomial_demo():
     
     # PMF for all possible values
     x = np.arange(0, n+1)
-    pmf = binomial.pmf(x)
+    pmf = binomial.pmf (x)
     
     print("PMF:")
     for k in x:
@@ -121,21 +121,21 @@ def binomial_demo():
     
     # Samples
     np.random.seed(42)
-    samples = binomial.rvs(size=10000)
+    samples = binomial.rvs (size=10000)
     print(f"Empirical:   E[X] = {samples.mean():.4f}, Var(X) = {samples.var():.4f}")
     
     # Plot
-    plt.figure(figsize=(10, 6))
-    plt.bar(x, pmf, alpha=0.7, edgecolor='black')
+    plt.figure (figsize=(10, 6))
+    plt.bar (x, pmf, alpha=0.7, edgecolor='black')
     plt.xlabel('Number of Successes (k)')
     plt.ylabel('Probability')
-    plt.title(f'Binomial PMF (n={n}, p={p})')
+    plt.title (f'Binomial PMF (n={n}, p={p})')
     plt.grid(True, alpha=0.3, axis='y')
-    plt.xticks(x)
+    plt.xticks (x)
     
     # Most likely value
-    mode = np.argmax(pmf)
-    plt.axvline(mode, color='r', linestyle='--', label=f'Mode = {mode}')
+    mode = np.argmax (pmf)
+    plt.axvline (mode, color='r', linestyle='--', label=f'Mode = {mode}')
     plt.legend()
     
     print("\\nML Applications:")
@@ -166,7 +166,7 @@ def poisson_demo():
     
     lambda_param = 3.5  # Average 3.5 events per interval
     
-    poisson = stats.poisson(lambda_param)
+    poisson = stats.poisson (lambda_param)
     
     print("=== Poisson Distribution ===")
     print(f"Parameter λ = {lambda_param}")
@@ -176,7 +176,7 @@ def poisson_demo():
     
     # PMF for reasonable range
     x = np.arange(0, 15)
-    pmf = poisson.pmf(x)
+    pmf = poisson.pmf (x)
     
     print("PMF (selected values):")
     for k in range(10):
@@ -184,17 +184,17 @@ def poisson_demo():
     
     # Samples
     np.random.seed(42)
-    samples = poisson.rvs(size=10000)
+    samples = poisson.rvs (size=10000)
     print(f"\\nEmpirical: E[X] = {samples.mean():.4f}, Var(X) = {samples.var():.4f}")
     
     # Plot
-    plt.figure(figsize=(10, 6))
-    plt.bar(x, pmf, alpha=0.7, edgecolor='black')
+    plt.figure (figsize=(10, 6))
+    plt.bar (x, pmf, alpha=0.7, edgecolor='black')
     plt.xlabel('Number of Events (k)')
     plt.ylabel('Probability')
-    plt.title(f'Poisson PMF (λ={lambda_param})')
+    plt.title (f'Poisson PMF (λ={lambda_param})')
     plt.grid(True, alpha=0.3, axis='y')
-    plt.axvline(lambda_param, color='r', linestyle='--', linewidth=2, label=f'Mean = λ = {lambda_param}')
+    plt.axvline (lambda_param, color='r', linestyle='--', linewidth=2, label=f'Mean = λ = {lambda_param}')
     plt.legend()
     
     print("\\nML Applications:")
@@ -226,7 +226,7 @@ def geometric_demo():
     
     p = 0.3  # 30% success rate
     
-    geometric = stats.geom(p)
+    geometric = stats.geom (p)
     
     print("=== Geometric Distribution ===")
     print(f"Parameter p = {p}")
@@ -236,7 +236,7 @@ def geometric_demo():
     
     # PMF
     x = np.arange(1, 21)
-    pmf = geometric.pmf(x)
+    pmf = geometric.pmf (x)
     
     print("PMF (first 10 values):")
     for k in range(1, 11):
@@ -244,15 +244,15 @@ def geometric_demo():
     
     # Samples
     np.random.seed(42)
-    samples = geometric.rvs(size=10000)
+    samples = geometric.rvs (size=10000)
     print(f"\\nEmpirical E[X] = {samples.mean():.4f}")
     
     # Plot
-    plt.figure(figsize=(10, 6))
-    plt.bar(x, pmf, alpha=0.7, edgecolor='black')
+    plt.figure (figsize=(10, 6))
+    plt.bar (x, pmf, alpha=0.7, edgecolor='black')
     plt.xlabel('Number of Trials to First Success')
     plt.ylabel('Probability')
-    plt.title(f'Geometric PMF (p={p})')
+    plt.title (f'Geometric PMF (p={p})')
     plt.grid(True, alpha=0.3, axis='y')
     plt.axvline(1/p, color='r', linestyle='--', linewidth=2, label=f'Mean = 1/p = {1/p:.2f}')
     plt.legend()
@@ -291,29 +291,29 @@ def categorical_demo():
     np.random.seed(42)
     samples = np.random.choice([0, 1, 2], size=10000, p=probs)
     
-    unique, counts = np.unique(samples, return_counts=True)
-    empirical_probs = counts / len(samples)
+    unique, counts = np.unique (samples, return_counts=True)
+    empirical_probs = counts / len (samples)
     
     print("Theoretical vs Empirical:")
-    for i, (theo, emp) in enumerate(zip(probs, empirical_probs)):
+    for i, (theo, emp) in enumerate (zip (probs, empirical_probs)):
         print(f"Class {i}: P={theo:.3f} (theory), {emp:.3f} (empirical)")
     
     # Plot
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
     
     # Theoretical
-    ax1.bar(range(len(probs)), probs, alpha=0.7, edgecolor='black')
+    ax1.bar (range (len (probs)), probs, alpha=0.7, edgecolor='black')
     ax1.set_xlabel('Class')
     ax1.set_ylabel('Probability')
     ax1.set_title('Categorical PMF (Theoretical)')
-    ax1.set_xticks(range(len(probs)))
+    ax1.set_xticks (range (len (probs)))
     
     # Empirical
-    ax2.bar(unique, empirical_probs, alpha=0.7, edgecolor='black', color='orange')
+    ax2.bar (unique, empirical_probs, alpha=0.7, edgecolor='black', color='orange')
     ax2.set_xlabel('Class')
     ax2.set_ylabel('Empirical Probability')
     ax2.set_title('Categorical Samples (n=10000)')
-    ax2.set_xticks(range(len(probs)))
+    ax2.set_xticks (range (len (probs)))
     
     plt.tight_layout()
     
@@ -337,7 +337,7 @@ def compare_distributions():
     ax = axes[0, 0]
     x = [0, 1]
     pmf = [0.3, 0.7]
-    ax.bar(x, pmf, alpha=0.7, edgecolor='black')
+    ax.bar (x, pmf, alpha=0.7, edgecolor='black')
     ax.set_title('Bernoulli (p=0.7)')
     ax.set_xlabel('Outcome')
     ax.set_ylabel('Probability')
@@ -346,8 +346,8 @@ def compare_distributions():
     # Binomial
     ax = axes[0, 1]
     x = np.arange(0, 11)
-    pmf = stats.binom(10, 0.7).pmf(x)
-    ax.bar(x, pmf, alpha=0.7, edgecolor='black')
+    pmf = stats.binom(10, 0.7).pmf (x)
+    ax.bar (x, pmf, alpha=0.7, edgecolor='black')
     ax.set_title('Binomial (n=10, p=0.7)')
     ax.set_xlabel('Number of Successes')
     ax.set_ylabel('Probability')
@@ -355,8 +355,8 @@ def compare_distributions():
     # Poisson
     ax = axes[1, 0]
     x = np.arange(0, 15)
-    pmf = stats.poisson(5).pmf(x)
-    ax.bar(x, pmf, alpha=0.7, edgecolor='black')
+    pmf = stats.poisson(5).pmf (x)
+    ax.bar (x, pmf, alpha=0.7, edgecolor='black')
     ax.set_title('Poisson (λ=5)')
     ax.set_xlabel('Number of Events')
     ax.set_ylabel('Probability')
@@ -364,8 +364,8 @@ def compare_distributions():
     # Geometric
     ax = axes[1, 1]
     x = np.arange(1, 16)
-    pmf = stats.geom(0.3).pmf(x)
-    ax.bar(x, pmf, alpha=0.7, edgecolor='black')
+    pmf = stats.geom(0.3).pmf (x)
+    ax.bar (x, pmf, alpha=0.7, edgecolor='black')
     ax.set_title('Geometric (p=0.3)')
     ax.set_xlabel('Trials to First Success')
     ax.set_ylabel('Probability')
@@ -393,7 +393,7 @@ def classification_distributions():
     """Show how distributions relate to classification"""
     
     # Generate data
-    X, y = make_classification(n_samples=1000, n_features=5, n_informative=3, 
+    X, y = make_classification (n_samples=1000, n_features=5, n_informative=3, 
                                 n_redundant=0, n_classes=2, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     
@@ -414,7 +414,7 @@ def classification_distributions():
         print(f"{proba[i, 0]:.3f}   {proba[i, 1]:.3f}   {pred_class}")
     
     print("\\nModel outputs probability parameter p for Bernoulli distribution")
-    print("Each test sample ~ Bernoulli(p) where p = P(y=1|x)")
+    print("Each test sample ~ Bernoulli (p) where p = P(y=1|x)")
 
 classification_distributions()
 \`\`\`

@@ -17,14 +17,14 @@ export const geometrySection = {
 - **Circle**: π × r²
 - **Polygon** (Shoelace formula):
 \`\`\`python
-def polygon_area(points):
-    n = len(points)
+def polygon_area (points):
+    n = len (points)
     area = 0
-    for i in range(n):
+    for i in range (n):
         j = (i + 1) % n
         area += points[i][0] * points[j][1]
         area -= points[j][0] * points[i][1]
-    return abs(area) / 2
+    return abs (area) / 2
 \`\`\`
 
 **3. Angle Calculations:**

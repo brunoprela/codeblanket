@@ -27,7 +27,7 @@ export const mockInterviewProblemsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Put-call parity is a no-arbitrage condition: Portfolio A (long call, short put) has payoff = S_T - K at expiration. Portfolio B (long stock, short K bonds) has payoff = S_T - K at expiration. Since payoffs are IDENTICAL in all states, the costs must be equal today: C - P = S - K×e^(-rT). If not equal, arbitrage exists. This doesn't require any assumptions about probabilities (option 1), volatility (option 3), or risk premia (option 4). It's purely about replication: two ways to create the same payoff must cost the same. Violations allow risk-free profit. This is why we can detect mispricing: C - P = $2 but S - K = $0 means prices are inconsistent with no-arbitrage.",
+      "Put-call parity is a no-arbitrage condition: Portfolio A (long call, short put) has payoff = S_T - K at expiration. Portfolio B (long stock, short K bonds) has payoff = S_T - K at expiration. Since payoffs are IDENTICAL in all states, the costs must be equal today: C - P = S - K×e^(-rT). If not equal, arbitrage exists. This doesn't require any assumptions about probabilities (option 1), volatility (option 3), or risk premia (option 4). It\'s purely about replication: two ways to create the same payoff must cost the same. Violations allow risk-free profit. This is why we can detect mispricing: C - P = $2 but S - K = $0 means prices are inconsistent with no-arbitrage.",
   },
   {
     id: 'mip-mc-3',

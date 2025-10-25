@@ -59,7 +59,7 @@ export const tokenscontextwindowsMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       'Output tokens are higher quality',
       'Generation requires more computation than processing',
-      "It's arbitrary pricing by providers",
+      "It\'s arbitrary pricing by providers",
       'Output tokens use more memory',
     ],
     correctAnswer: 1,

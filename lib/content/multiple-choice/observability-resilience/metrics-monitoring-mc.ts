@@ -30,7 +30,7 @@ export const metricsMonitoringMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "http_requests_total is a Counter (monotonically increasing, only goes up, resets on restart). Counters should be queried with rate() or increase() functions. For example, rate(http_requests_total[5m]) gives requests per second over the last 5 minutes. You never query a counter's raw value because it just keeps increasing—rate() converts it to a meaningful per-second measurement.",
+      "http_requests_total is a Counter (monotonically increasing, only goes up, resets on restart). Counters should be queried with rate() or increase() functions. For example, rate (http_requests_total[5m]) gives requests per second over the last 5 minutes. You never query a counter's raw value because it just keeps increasing—rate() converts it to a meaningful per-second measurement.",
   },
   {
     id: 'mc3',

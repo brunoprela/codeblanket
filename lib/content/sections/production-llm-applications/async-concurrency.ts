@@ -5,7 +5,7 @@ export const asyncConcurrencyContent = `
 
 Large Language Model APIs are inherently slow compared to traditional operations - a single API call can take anywhere from 1 to 30+ seconds depending on the model and response length. When building production applications that serve multiple users or process multiple requests, handling these slow operations efficiently becomes critical. This is where async programming and concurrency patterns become essential.
 
-In this section, we'll explore how to use Python's async/await syntax, handle concurrent LLM requests efficiently, manage backpressure, and implement patterns that maximize throughput while maintaining responsiveness. We'll cover everything from basic asyncio concepts to advanced patterns for production LLM applications.
+In this section, we'll explore how to use Python\'s async/await syntax, handle concurrent LLM requests efficiently, manage backpressure, and implement patterns that maximize throughput while maintaining responsiveness. We'll cover everything from basic asyncio concepts to advanced patterns for production LLM applications.
 
 ## Why Async Matters for LLM Applications
 
@@ -29,7 +29,7 @@ import openai
 from typing import List
 
 # SYNCHRONOUS (Slow): Processes one request at a time
-def generate_sync(prompts: List[str]) -> List[str]:
+def generate_sync (prompts: List[str]) -> List[str]:
     """
     Synchronous generation - processes sequentially.
     For 10 prompts @ 3 seconds each = 30 seconds total.
@@ -41,7 +41,7 @@ def generate_sync(prompts: List[str]) -> List[str]:
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
-        results.append(response.choices[0].message.content)
+        results.append (response.choices[0].message.content)
     
     return results
 
@@ -52,12 +52,12 @@ from openai import AsyncOpenAI
 
 client = AsyncOpenAI()
 
-async def generate_async(prompts: List[str]) -> List[str]:
+async def generate_async (prompts: List[str]) -> List[str]:
     """
     Asynchronous generation - processes concurrently.
     For 10 prompts @ 3 seconds each = ~3 seconds total (limited by max concurrency).
     """
-    async def generate_one(prompt: str) -> str:
+    async def generate_one (prompt: str) -> str:
         response = await client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
@@ -65,7 +65,7 @@ async def generate_async(prompts: List[str]) -> List[str]:
         return response.choices[0].message.content
     
     # Run all prompts concurrently
-    tasks = [generate_one(prompt) for prompt in prompts]
+    tasks = [generate_one (prompt) for prompt in prompts]
     results = await asyncio.gather(*tasks)
     
     return results
@@ -77,12 +77,12 @@ prompts = [f"Tell me a fact about {topic}"
 
 # Synchronous: ~15 seconds
 start = time.time()
-results_sync = generate_sync(prompts)
+results_sync = generate_sync (prompts)
 print(f"Sync took: {time.time() - start:.2f}s")
 
 # Asynchronous: ~3 seconds (5x faster!)
 start = time.time()
-results_async = asyncio.run(generate_async(prompts))
+results_async = asyncio.run (generate_async (prompts))
 print(f"Async took: {time.time() - start:.2f}s")
 \`\`\`
 
@@ -109,7 +109,7 @@ async def async_function():
 
 
 # Run an async function
-result = asyncio.run(async_function())
+result = asyncio.run (async_function())
 \`\`\`
 
 ### Running Multiple Tasks Concurrently
@@ -132,13 +132,13 @@ async def run_concurrent():
     print(results)  # ['Task A complete', 'Task B complete']
     
     # Method 2: asyncio.create_task (more control)
-    task_a_obj = asyncio.create_task(task_a())
-    task_b_obj = asyncio.create_task(task_b())
+    task_a_obj = asyncio.create_task (task_a())
+    task_b_obj = asyncio.create_task (task_b())
     
     result_a = await task_a_obj
     result_b = await task_b_obj
 
-asyncio.run(run_concurrent())
+asyncio.run (run_concurrent())
 \`\`\`
 
 ### Error Handling in Async
@@ -155,30 +155,30 @@ async def safe_gather(*tasks):
     failures = []
     
     for result in results:
-        if isinstance(result, Exception):
-            failures.append(result)
+        if isinstance (result, Exception):
+            failures.append (result)
         else:
-            successes.append(result)
+            successes.append (result)
     
     return successes, failures
 
 
-async def unreliable_task(task_id: int):
+async def unreliable_task (task_id: int):
     """Simulates a task that might fail."""
     await asyncio.sleep(0.1)
     if task_id == 3:
-        raise ValueError(f"Task {task_id} failed!")
+        raise ValueError (f"Task {task_id} failed!")
     return f"Task {task_id} success"
 
 
 async def main():
-    tasks = [unreliable_task(i) for i in range(5)]
+    tasks = [unreliable_task (i) for i in range(5)]
     successes, failures = await safe_gather(*tasks)
     
-    print(f"Successful: {len(successes)}")  # 4
-    print(f"Failed: {len(failures)}")        # 1
+    print(f"Successful: {len (successes)}")  # 4
+    print(f"Failed: {len (failures)}")        # 1
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ## Async LLM API Calls
@@ -195,7 +195,7 @@ from typing import List, Dict
 
 client = AsyncOpenAI()
 
-async def generate_completion(prompt: str, model: str = "gpt-3.5-turbo") -> str:
+async def generate_completion (prompt: str, model: str = "gpt-3.5-turbo") -> str:
     """
     Generate a single completion asynchronously.
     """
@@ -208,18 +208,18 @@ async def generate_completion(prompt: str, model: str = "gpt-3.5-turbo") -> str:
         return response.choices[0].message.content
     
     except Exception as e:
-        print(f"Error generating completion: {str(e)}")
+        print(f"Error generating completion: {str (e)}")
         return None
 
 
-async def generate_batch(prompts: List[str]) -> List[Dict]:
+async def generate_batch (prompts: List[str]) -> List[Dict]:
     """
     Generate completions for multiple prompts concurrently.
     """
     start_time = time.time()
     
     # Create tasks for all prompts
-    tasks = [generate_completion(prompt) for prompt in prompts]
+    tasks = [generate_completion (prompt) for prompt in prompts]
     
     # Execute concurrently
     results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -228,15 +228,15 @@ async def generate_batch(prompts: List[str]) -> List[Dict]:
     
     # Format results
     formatted_results = []
-    for i, (prompt, result) in enumerate(zip(prompts, results)):
+    for i, (prompt, result) in enumerate (zip (prompts, results)):
         formatted_results.append({
             'prompt': prompt,
-            'result': result if not isinstance(result, Exception) else None,
-            'error': str(result) if isinstance(result, Exception) else None
+            'result': result if not isinstance (result, Exception) else None,
+            'error': str (result) if isinstance (result, Exception) else None
         })
     
-    print(f"Processed {len(prompts)} prompts in {elapsed:.2f}s")
-    print(f"Average time per prompt: {elapsed/len(prompts):.2f}s")
+    print(f"Processed {len (prompts)} prompts in {elapsed:.2f}s")
+    print(f"Average time per prompt: {elapsed/len (prompts):.2f}s")
     
     return formatted_results
 
@@ -250,13 +250,13 @@ async def main():
         "Generate a random interesting fact"
     ]
     
-    results = await generate_batch(prompts)
+    results = await generate_batch (prompts)
     
     for item in results:
         print(f"\\nPrompt: {item['prompt']}")
         print(f"Result: {item['result']}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Anthropic Claude Async
@@ -267,7 +267,7 @@ import asyncio
 
 client = anthropic.AsyncAnthropic()
 
-async def generate_with_claude(prompt: str, max_tokens: int = 1024):
+async def generate_with_claude (prompt: str, max_tokens: int = 1024):
     """Generate with Claude asynchronously."""
     message = await client.messages.create(
         model="claude-3-sonnet-20240229",
@@ -278,9 +278,9 @@ async def generate_with_claude(prompt: str, max_tokens: int = 1024):
     return message.content[0].text
 
 
-async def parallel_claude_calls(prompts: List[str]):
+async def parallel_claude_calls (prompts: List[str]):
     """Make multiple Claude API calls in parallel."""
-    tasks = [generate_with_claude(prompt) for prompt in prompts]
+    tasks = [generate_with_claude (prompt) for prompt in prompts]
     results = await asyncio.gather(*tasks)
     return results
 \`\`\`
@@ -305,7 +305,7 @@ class ConcurrencyLimiter:
     """Limit concurrent LLM API calls."""
     
     def __init__(self, max_concurrent: int = 10):
-        self.semaphore = asyncio.Semaphore(max_concurrent)
+        self.semaphore = asyncio.Semaphore (max_concurrent)
         self.stats = {
             'total': 0,
             'successful': 0,
@@ -313,7 +313,7 @@ class ConcurrencyLimiter:
             'in_progress': 0
         }
     
-    async def generate(self, prompt: str) -> dict:
+    async def generate (self, prompt: str) -> dict:
         """
         Generate completion with concurrency limiting.
         """
@@ -340,20 +340,20 @@ class ConcurrencyLimiter:
                 self.stats['failed'] += 1
                 return {
                     'prompt': prompt,
-                    'error': str(e),
+                    'error': str (e),
                     'success': False
                 }
             
             finally:
                 self.stats['in_progress'] -= 1
     
-    async def process_batch(self, prompts: List[str]) -> List[dict]:
+    async def process_batch (self, prompts: List[str]) -> List[dict]:
         """
         Process a batch of prompts with controlled concurrency.
         """
-        print(f"Processing {len(prompts)} prompts with max {self.semaphore._value} concurrent")
+        print(f"Processing {len (prompts)} prompts with max {self.semaphore._value} concurrent")
         
-        tasks = [self.generate(prompt) for prompt in prompts]
+        tasks = [self.generate (prompt) for prompt in prompts]
         results = await asyncio.gather(*tasks)
         
         print(f"\\nStats:")
@@ -366,15 +366,15 @@ class ConcurrencyLimiter:
 
 async def main():
     # Process 100 prompts but max 10 at a time
-    limiter = ConcurrencyLimiter(max_concurrent=10)
+    limiter = ConcurrencyLimiter (max_concurrent=10)
     
     prompts = [f"Tell me about topic {i}" for i in range(100)]
     
-    results = await limiter.process_batch(prompts)
+    results = await limiter.process_batch (prompts)
     
-    print(f"\\nCompleted {len(results)} generations")
+    print(f"\\nCompleted {len (results)} generations")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ## Rate Limiting with Token Bucket
@@ -404,7 +404,7 @@ class TokenBucket:
         self.last_update = time.monotonic()
         self.lock = asyncio.Lock()
     
-    async def acquire(self, tokens: int = 1) -> bool:
+    async def acquire (self, tokens: int = 1) -> bool:
         """
         Acquire tokens from bucket.
         Waits if not enough tokens available.
@@ -431,7 +431,7 @@ class TokenBucket:
                 wait_time = tokens_needed / self.rate
                 
                 # Release lock while waiting
-                await asyncio.sleep(wait_time)
+                await asyncio.sleep (wait_time)
 
 
 class RateLimitedClient:
@@ -441,9 +441,9 @@ class RateLimitedClient:
         self.client = AsyncOpenAI()
         # Convert to requests per second
         rate = requests_per_minute / 60
-        self.rate_limiter = TokenBucket(rate=rate, capacity=rate * 10)
+        self.rate_limiter = TokenBucket (rate=rate, capacity=rate * 10)
     
-    async def generate(self, prompt: str) -> str:
+    async def generate (self, prompt: str) -> str:
         """Generate with rate limiting."""
         # Acquire token (waits if rate limit reached)
         await self.rate_limiter.acquire()
@@ -459,19 +459,19 @@ class RateLimitedClient:
 
 async def test_rate_limiting():
     """Test rate limiting with 60 requests per minute."""
-    client = RateLimitedClient(requests_per_minute=60)
+    client = RateLimitedClient (requests_per_minute=60)
     
     start = time.time()
     
     # Try to make 10 requests
-    tasks = [client.generate(f"Prompt {i}") for i in range(10)]
+    tasks = [client.generate (f"Prompt {i}") for i in range(10)]
     results = await asyncio.gather(*tasks)
     
     elapsed = time.time() - start
-    print(f"Made {len(results)} requests in {elapsed:.2f}s")
-    print(f"Rate: {len(results)/elapsed:.2f} req/s")
+    print(f"Made {len (results)} requests in {elapsed:.2f}s")
+    print(f"Rate: {len (results)/elapsed:.2f} req/s")
 
-asyncio.run(test_rate_limiting())
+asyncio.run (test_rate_limiting())
 \`\`\`
 
 ## Async Queue Processing
@@ -486,13 +486,13 @@ import logging
 
 client = AsyncOpenAI()
 
-async def producer(queue: Queue, prompts: List[str]):
+async def producer (queue: Queue, prompts: List[str]):
     """
     Producer: Add prompts to queue.
     """
     for prompt in prompts:
-        await queue.put(prompt)
-        logging.info(f"Added prompt to queue: {prompt[:50]}...")
+        await queue.put (prompt)
+        logging.info (f"Added prompt to queue: {prompt[:50]}...")
     
     # Signal completion
     await queue.put(None)
@@ -516,7 +516,7 @@ async def consumer(
             break
         
         try:
-            logging.info(f"Consumer {consumer_id} processing: {prompt[:50]}...")
+            logging.info (f"Consumer {consumer_id} processing: {prompt[:50]}...")
             
             response = await client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -529,14 +529,14 @@ async def consumer(
                 'consumer_id': consumer_id
             }
             
-            results.append(result)
-            logging.info(f"Consumer {consumer_id} completed processing")
+            results.append (result)
+            logging.info (f"Consumer {consumer_id} completed processing")
         
         except Exception as e:
-            logging.error(f"Consumer {consumer_id} error: {str(e)}")
+            logging.error (f"Consumer {consumer_id} error: {str (e)}")
             results.append({
                 'prompt': prompt,
-                'error': str(e),
+                'error': str (e),
                 'consumer_id': consumer_id
             })
         
@@ -551,16 +551,16 @@ async def process_with_queue(
     """
     Process prompts using producer-consumer pattern.
     """
-    queue = Queue(maxsize=100)
+    queue = Queue (maxsize=100)
     results = []
     
     # Start producer
-    producer_task = asyncio.create_task(producer(queue, prompts))
+    producer_task = asyncio.create_task (producer (queue, prompts))
     
     # Start consumers
     consumer_tasks = [
-        asyncio.create_task(consumer(queue, i, results))
-        for i in range(num_consumers)
+        asyncio.create_task (consumer (queue, i, results))
+        for i in range (num_consumers)
     ]
     
     # Wait for producer to finish
@@ -576,20 +576,20 @@ async def process_with_queue(
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig (level=logging.INFO)
     
     prompts = [f"Generate content about topic {i}" for i in range(20)]
     
-    results = await process_with_queue(prompts, num_consumers=5)
+    results = await process_with_queue (prompts, num_consumers=5)
     
-    print(f"\\nProcessed {len(results)} prompts")
+    print(f"\\nProcessed {len (results)} prompts")
     
     # Show distribution across consumers
     from collections import Counter
-    consumer_distribution = Counter(r.get('consumer_id') for r in results)
-    print(f"Consumer distribution: {dict(consumer_distribution)}")
+    consumer_distribution = Counter (r.get('consumer_id') for r in results)
+    print(f"Consumer distribution: {dict (consumer_distribution)}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ## Handling Backpressure
@@ -610,8 +610,8 @@ class BackpressureHandler:
         max_queue_size: int = 100,
         max_concurrent: int = 10
     ):
-        self.queue = Queue(maxsize=max_queue_size)
-        self.semaphore = asyncio.Semaphore(max_concurrent)
+        self.queue = Queue (maxsize=max_queue_size)
+        self.semaphore = asyncio.Semaphore (max_concurrent)
         self.stats = {
             'accepted': 0,
             'rejected': 0,
@@ -619,7 +619,7 @@ class BackpressureHandler:
             'failed': 0
         }
     
-    async def submit(self, prompt: str, timeout: float = 1.0) -> dict:
+    async def submit (self, prompt: str, timeout: float = 1.0) -> dict:
         """
         Submit a request with backpressure handling.
         
@@ -628,7 +628,7 @@ class BackpressureHandler:
         try:
             # Try to add to queue with timeout
             await asyncio.wait_for(
-                self.queue.put(prompt),
+                self.queue.put (prompt),
                 timeout=timeout
             )
             
@@ -649,7 +649,7 @@ class BackpressureHandler:
                 'queue_size': self.queue.qsize()
             }
     
-    async def process_worker(self):
+    async def process_worker (self):
         """Worker that processes queue items."""
         while True:
             prompt = await self.queue.get()
@@ -661,17 +661,17 @@ class BackpressureHandler:
             async with self.semaphore:
                 try:
                     # Process the prompt
-                    result = await self._generate(prompt)
+                    result = await self._generate (prompt)
                     self.stats['processed'] += 1
                 
                 except Exception as e:
-                    logging.error(f"Processing failed: {str(e)}")
+                    logging.error (f"Processing failed: {str (e)}")
                     self.stats['failed'] += 1
                 
                 finally:
                     self.queue.task_done()
     
-    async def _generate(self, prompt: str):
+    async def _generate (self, prompt: str):
         """Generate completion."""
         client = AsyncOpenAI()
         response = await client.chat.completions.create(
@@ -680,7 +680,7 @@ class BackpressureHandler:
         )
         return response.choices[0].message.content
     
-    def get_stats(self) -> dict:
+    def get_stats (self) -> dict:
         """Get current statistics."""
         return {
             **self.stats,
@@ -691,19 +691,19 @@ class BackpressureHandler:
 
 async def test_backpressure():
     """Test backpressure handling."""
-    handler = BackpressureHandler(max_queue_size=10, max_concurrent=3)
+    handler = BackpressureHandler (max_queue_size=10, max_concurrent=3)
     
     # Start workers
     workers = [
-        asyncio.create_task(handler.process_worker())
+        asyncio.create_task (handler.process_worker())
         for _ in range(3)
     ]
     
     # Simulate high request rate
     submit_results = []
     for i in range(50):
-        result = await handler.submit(f"Prompt {i}")
-        submit_results.append(result)
+        result = await handler.submit (f"Prompt {i}")
+        submit_results.append (result)
         
         # Small delay between requests
         await asyncio.sleep(0.01)
@@ -725,7 +725,7 @@ async def test_backpressure():
     print(f"  Failed: {stats['failed']}")
     print(f"  Rejection Rate: {stats['rejection_rate']:.2%}")
 
-asyncio.run(test_backpressure())
+asyncio.run (test_backpressure())
 \`\`\`
 
 ## Timeouts and Cancellation
@@ -758,7 +758,7 @@ async def generate_with_timeout(
         return response.choices[0].message.content
     
     except asyncio.TimeoutError:
-        logging.warning(f"Generation timed out after {timeout}s")
+        logging.warning (f"Generation timed out after {timeout}s")
         return None
     
     except asyncio.CancelledError:
@@ -766,7 +766,7 @@ async def generate_with_timeout(
         raise  # Re-raise to propagate cancellation
 
 
-async def cancellable_generation(prompt: str):
+async def cancellable_generation (prompt: str):
     """Generation that can be cancelled externally."""
     try:
         response = await client.chat.completions.create(
@@ -796,7 +796,7 @@ async def test_cancellation():
     except asyncio.CancelledError:
         print("Task was cancelled successfully")
 
-asyncio.run(test_cancellation())
+asyncio.run (test_cancellation())
 \`\`\`
 
 ## Thread Pool for CPU-Bound Tasks
@@ -808,7 +808,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import time
 
-def cpu_intensive_task(text: str) -> str:
+def cpu_intensive_task (text: str) -> str:
     """
     Simulates CPU-intensive preprocessing.
     (e.g., tokenization, embedding calculation, etc.)
@@ -818,7 +818,7 @@ def cpu_intensive_task(text: str) -> str:
     return text.upper()
 
 
-async def process_with_threadpool(texts: List[str]):
+async def process_with_threadpool (texts: List[str]):
     """
     Process CPU-intensive tasks in thread pool
     while keeping async code non-blocking.
@@ -826,10 +826,10 @@ async def process_with_threadpool(texts: List[str]):
     loop = asyncio.get_event_loop()
     
     # Create thread pool
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor (max_workers=4) as executor:
         # Run CPU-intensive tasks in threads
         tasks = [
-            loop.run_in_executor(executor, cpu_intensive_task, text)
+            loop.run_in_executor (executor, cpu_intensive_task, text)
             for text in texts
         ]
         
@@ -842,12 +842,12 @@ async def main():
     texts = [f"text {i}" for i in range(20)]
     
     start = time.time()
-    results = await process_with_threadpool(texts)
+    results = await process_with_threadpool (texts)
     elapsed = time.time() - start
     
-    print(f"Processed {len(results)} texts in {elapsed:.2f}s")
+    print(f"Processed {len (results)} texts in {elapsed:.2f}s")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ## FastAPI Integration
@@ -869,7 +869,7 @@ class GenerateRequest(BaseModel):
 
 # Async endpoint
 @app.post("/generate")
-async def generate_endpoint(request: GenerateRequest):
+async def generate_endpoint (request: GenerateRequest):
     """
     Async endpoint for generation.
     Handles request asynchronously without blocking.
@@ -895,7 +895,7 @@ async def generate_background(
     Submit generation as background task.
     Returns immediately with task ID.
     """
-    task_id = str(uuid.uuid4())
+    task_id = str (uuid.uuid4())
     
     background_tasks.add_task(
         process_generation,
@@ -910,7 +910,7 @@ async def generate_background(
     }
 
 
-async def process_generation(task_id: str, prompt: str, model: str):
+async def process_generation (task_id: str, prompt: str, model: str):
     """Process generation in background."""
     try:
         response = await client.chat.completions.create(
@@ -921,11 +921,11 @@ async def process_generation(task_id: str, prompt: str, model: str):
         result = response.choices[0].message.content
         
         # Store result in database
-        save_result(task_id, result)
+        save_result (task_id, result)
     
     except Exception as e:
-        logging.error(f"Background task {task_id} failed: {str(e)}")
-        save_error(task_id, str(e))
+        logging.error (f"Background task {task_id} failed: {str (e)}")
+        save_error (task_id, str (e))
 \`\`\`
 
 ## Best Practices

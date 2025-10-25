@@ -55,14 +55,14 @@ export const ratelimitingSection = {
     **Implementation**:
     \`\`\`javascript
     class TokenBucket {
-      constructor(capacity, refillRate) {
+      constructor (capacity, refillRate) {
         this.capacity = capacity;
         this.refillRate = refillRate; // tokens per second
         this.tokens = capacity;
         this.lastRefill = Date.now();
       }
       
-      tryConsume(tokens = 1) {
+      tryConsume (tokens = 1) {
         this.refill();
         
         if (this.tokens >= tokens) {
@@ -78,7 +78,7 @@ export const ratelimitingSection = {
         const timePassed = (now - this.lastRefill) / 1000; // seconds
         const tokensToAdd = timePassed * this.refillRate;
         
-        this.tokens = Math.min(this.capacity, this.tokens + tokensToAdd);
+        this.tokens = Math.min (this.capacity, this.tokens + tokensToAdd);
         this.lastRefill = now;
       }
       
@@ -93,13 +93,13 @@ export const ratelimitingSection = {
     
     app.use((req, res, next) => {
       const userId = req.user.id;
-      const userBucket = buckets.get(userId) || new TokenBucket(100, 2);
+      const userBucket = buckets.get (userId) || new TokenBucket(100, 2);
       
       if (userBucket.tryConsume()) {
-        buckets.set(userId, userBucket);
+        buckets.set (userId, userBucket);
         next();
       } else {
-        const waitTime = Math.ceil(userBucket.getWaitTime() / 1000);
+        const waitTime = Math.ceil (userBucket.getWaitTime() / 1000);
         res.status(429).json({
           error: 'Rate limit exceeded',
           retryAfter: waitTime
@@ -138,19 +138,19 @@ export const ratelimitingSection = {
     **Implementation**:
     \`\`\`javascript
     class LeakyBucket {
-      constructor(capacity, leakRate) {
+      constructor (capacity, leakRate) {
         this.capacity = capacity;
         this.leakRate = leakRate; // requests per second
         this.queue = [];
         this.processing = false;
       }
       
-      async tryAdd(request) {
+      async tryAdd (request) {
         if (this.queue.length >= this.capacity) {
           return false; // Bucket full
         }
         
-        this.queue.push(request);
+        this.queue.push (request);
         
         if (!this.processing) {
           this.startLeaking();
@@ -166,19 +166,19 @@ export const ratelimitingSection = {
         
         const leak = setInterval(() => {
           if (this.queue.length === 0) {
-            clearInterval(leak);
+            clearInterval (leak);
             this.processing = false;
             return;
           }
           
           const request = this.queue.shift();
-          this.processRequest(request);
+          this.processRequest (request);
         }, interval);
       }
       
-      async processRequest(request) {
+      async processRequest (request) {
         // Process request at constant rate
-        await handleRequest(request);
+        await handleRequest (request);
       }
     }
     \`\`\`
@@ -221,15 +221,15 @@ export const ratelimitingSection = {
     **Implementation**:
     \`\`\`javascript
     class FixedWindow {
-      constructor(limit, windowSizeMs) {
+      constructor (limit, windowSizeMs) {
         this.limit = limit;
         this.windowSizeMs = windowSizeMs;
         this.counters = new Map(); // userId -> {count, windowStart}
       }
       
-      tryRequest(userId) {
+      tryRequest (userId) {
         const now = Date.now();
-        const userData = this.counters.get(userId) || { count: 0, windowStart: now };
+        const userData = this.counters.get (userId) || { count: 0, windowStart: now };
         
         // Check if we're in a new window
         if (now - userData.windowStart >= this.windowSizeMs) {
@@ -239,7 +239,7 @@ export const ratelimitingSection = {
         
         if (userData.count < this.limit) {
           userData.count++;
-          this.counters.set(userId, userData);
+          this.counters.set (userId, userData);
           return true;
         }
         
@@ -270,23 +270,23 @@ export const ratelimitingSection = {
     **Implementation**:
     \`\`\`javascript
     class SlidingWindowLog {
-      constructor(limit, windowSizeMs) {
+      constructor (limit, windowSizeMs) {
         this.limit = limit;
         this.windowSizeMs = windowSizeMs;
         this.logs = new Map(); // userId -> [timestamps]
       }
       
-      tryRequest(userId) {
+      tryRequest (userId) {
         const now = Date.now();
-        const userLog = this.logs.get(userId) || [];
+        const userLog = this.logs.get (userId) || [];
         
         // Remove timestamps outside window
         const windowStart = now - this.windowSizeMs;
-        const validLog = userLog.filter(timestamp => timestamp > windowStart);
+        const validLog = userLog.filter (timestamp => timestamp > windowStart);
         
         if (validLog.length < this.limit) {
-          validLog.push(now);
-          this.logs.set(userId, validLog);
+          validLog.push (now);
+          this.logs.set (userId, validLog);
           return true;
         }
         
@@ -325,15 +325,15 @@ export const ratelimitingSection = {
     **Implementation**:
     \`\`\`javascript
     class SlidingWindowCounter {
-      constructor(limit, windowSizeMs) {
+      constructor (limit, windowSizeMs) {
         this.limit = limit;
         this.windowSizeMs = windowSizeMs;
         this.counters = new Map(); // userId -> {current, previous, windowStart}
       }
       
-      tryRequest(userId) {
+      tryRequest (userId) {
         const now = Date.now();
-        const userData = this.counters.get(userId) || {
+        const userData = this.counters.get (userId) || {
           current: 0,
           previous: 0,
           windowStart: now
@@ -356,7 +356,7 @@ export const ratelimitingSection = {
         
         if (estimatedCount < this.limit) {
           userData.current++;
-          this.counters.set(userId, userData);
+          this.counters.set (userId, userData);
           return true;
         }
         
@@ -387,7 +387,7 @@ export const ratelimitingSection = {
     const Redis = require('ioredis');
     const redis = new Redis();
     
-    async function rateLimitRedis(userId, limit, windowSec) {
+    async function rateLimitRedis (userId, limit, windowSec) {
       const key = \`rate_limit:\${userId}\`;
       const now = Date.now();
       const windowStart = now - (windowSec * 1000);
@@ -396,16 +396,16 @@ export const ratelimitingSection = {
       const pipeline = redis.pipeline();
       
       // Remove old entries
-      pipeline.zremrangebyscore(key, '-inf', windowStart);
+      pipeline.zremrangebyscore (key, '-inf', windowStart);
       
       // Count requests in window
-      pipeline.zcard(key);
+      pipeline.zcard (key);
       
       // Add current request
-      pipeline.zadd(key, now, \`\${now}-\${Math.random()}\`);
+      pipeline.zadd (key, now, \`\${now}-\${Math.random()}\`);
       
       // Set expiry
-      pipeline.expire(key, windowSec * 2);
+      pipeline.expire (key, windowSec * 2);
       
       const results = await pipeline.exec();
       const count = results[1][1]; // Count from zcard
@@ -414,14 +414,14 @@ export const ratelimitingSection = {
         return { allowed: true, remaining: limit - count - 1 };
       } else {
         // Remove the request we just added
-        await redis.zrem(key, \`\${now}-\${Math.random()}\`);
+        await redis.zrem (key, \`\${now}-\${Math.random()}\`);
         return { allowed: false, remaining: 0 };
       }
     }
     
     // Usage
-    app.use(async (req, res, next) => {
-      const result = await rateLimitRedis(req.user.id, 100, 60);
+    app.use (async (req, res, next) => {
+      const result = await rateLimitRedis (req.user.id, 100, 60);
       
       if (result.allowed) {
         res.setHeader('X-RateLimit-Remaining', result.remaining);
@@ -435,7 +435,7 @@ export const ratelimitingSection = {
     ### **Solution 2: Redis with Token Bucket (More Efficient)**
     
     \`\`\`javascript
-    async function tokenBucketRedis(userId, capacity, refillRate) {
+    async function tokenBucketRedis (userId, capacity, refillRate) {
       const key = \`token_bucket:\${userId}\`;
       
       // Lua script for atomic token bucket operation
@@ -446,20 +446,20 @@ export const ratelimitingSection = {
         local now = tonumber(ARGV[3])
         
         local bucket = redis.call('HMGET', key, 'tokens', 'lastRefill')
-        local tokens = tonumber(bucket[1]) or capacity
-        local lastRefill = tonumber(bucket[2]) or now
+        local tokens = tonumber (bucket[1]) or capacity
+        local lastRefill = tonumber (bucket[2]) or now
         
         -- Refill tokens
         local timePassed = (now - lastRefill) / 1000
         local tokensToAdd = timePassed * refillRate
-        tokens = math.min(capacity, tokens + tokensToAdd)
+        tokens = math.min (capacity, tokens + tokensToAdd)
         
         -- Try to consume
         if tokens >= 1 then
           tokens = tokens - 1
           redis.call('HMSET', key, 'tokens', tokens, 'lastRefill', now)
           redis.call('EXPIRE', key, 3600)
-          return {1, math.floor(tokens)}
+          return {1, math.floor (tokens)}
         else
           return {0, 0}
         end
@@ -493,9 +493,9 @@ export const ratelimitingSection = {
     ### **1. Per-User Rate Limiting**
     
     \`\`\`javascript
-    app.use(async (req, res, next) => {
+    app.use (async (req, res, next) => {
       const userId = req.user.id;
-      const result = await rateLimit(userId, 100, 60);
+      const result = await rateLimit (userId, 100, 60);
       
       if (result.allowed) {
         next();
@@ -508,9 +508,9 @@ export const ratelimitingSection = {
     ### **2. Per-IP Rate Limiting** (for anonymous users)
     
     \`\`\`javascript
-    app.use(async (req, res, next) => {
+    app.use (async (req, res, next) => {
       const ip = req.ip || req.connection.remoteAddress;
-      const result = await rateLimit(ip, 20, 60);
+      const result = await rateLimit (ip, 20, 60);
       
       if (result.allowed) {
         next();
@@ -530,12 +530,12 @@ export const ratelimitingSection = {
       'POST /api/upload': { limit: 10, window: 3600 } // 10 per hour
     };
     
-    app.use(async (req, res, next) => {
+    app.use (async (req, res, next) => {
       const endpoint = \`\${req.method} \${req.path}\`;
       const config = limits[endpoint] || { limit: 60, window: 60 };
       
       const key = \`\${req.user.id}:\${endpoint}\`;
-      const result = await rateLimit(key, config.limit, config.window);
+      const result = await rateLimit (key, config.limit, config.window);
       
       if (result.allowed) {
         next();
@@ -554,11 +554,11 @@ export const ratelimitingSection = {
       enterprise: { limit: 10000, window: 3600 }
     };
     
-    app.use(async (req, res, next) => {
+    app.use (async (req, res, next) => {
       const userTier = req.user.tier || 'free';
       const config = tiers[userTier];
       
-      const result = await rateLimit(req.user.id, config.limit, config.window);
+      const result = await rateLimit (req.user.id, config.limit, config.window);
       
       res.setHeader('X-RateLimit-Limit', config.limit);
       res.setHeader('X-RateLimit-Remaining', result.remaining);
@@ -589,8 +589,8 @@ export const ratelimitingSection = {
     
     **Example**:
     \`\`\`javascript
-    app.use(async (req, res, next) => {
-      const result = await tokenBucket.tryConsume(req.user.id);
+    app.use (async (req, res, next) => {
+      const result = await tokenBucket.tryConsume (req.user.id);
       
       res.setHeader('X-RateLimit-Limit', 100);
       res.setHeader('X-RateLimit-Remaining', result.remaining);
@@ -634,7 +634,7 @@ export const ratelimitingSection = {
     
     // Good: Use Redis TIME command for distributed consistency
     const [seconds, microseconds] = await redis.time();
-    const now = seconds * 1000 + Math.floor(microseconds / 1000);
+    const now = seconds * 1000 + Math.floor (microseconds / 1000);
     \`\`\`
     
     ### **❌ Mistake 3: No Exponential Backoff for Retries**
@@ -648,7 +648,7 @@ export const ratelimitingSection = {
     // Good: Exponential backoff
     if (response.status === 429) {
       const retryAfter = response.headers.get('Retry-After');
-      const delay = retryAfter ? parseInt(retryAfter) * 1000 : 1000;
+      const delay = retryAfter ? parseInt (retryAfter) * 1000 : 1000;
       setTimeout(() => retry(), delay * Math.pow(2, attempts));
     }
     \`\`\`

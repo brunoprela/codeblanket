@@ -23,7 +23,7 @@ export const filesystemoperationspathhandlingMultipleChoice: MultipleChoiceQuest
     {
       id: 'fpdu-fs-ops-mc-2',
       question:
-        'Why is atomic file writing important in production applications?\n\nwith open("file.txt", "w") as f:\n    f.write(content)  # vs atomic write',
+        'Why is atomic file writing important in production applications?\n\nwith open("file.txt", "w") as f:\n    f.write (content)  # vs atomic write',
       options: [
         'It is faster than regular file writing',
         'It prevents partial writes if the process crashes',
@@ -41,7 +41,7 @@ export const filesystemoperationspathhandlingMultipleChoice: MultipleChoiceQuest
       options: [
         'content = Path("large.log").read_text()',
         'with open("large.log") as f: content = f.read()',
-        'for line in open("large.log"): process(line)',
+        'for line in open("large.log"): process (line)',
         'content = open("large.log").readlines()',
       ],
       correctAnswer: 2,
@@ -50,7 +50,7 @@ export const filesystemoperationspathhandlingMultipleChoice: MultipleChoiceQuest
     },
     {
       id: 'fpdu-fs-ops-mc-4',
-      question: 'What does path.parent.mkdir(parents=True, exist_ok=True) do?',
+      question: 'What does path.parent.mkdir (parents=True, exist_ok=True) do?',
       options: [
         'Creates only the immediate parent directory',
         'Creates all parent directories and does not error if they exist',

@@ -36,7 +36,7 @@ export const youtubeMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "YouTube's Content ID scans 500 hours of uploaded video per minute for copyright matches. How is this computationally feasible?",
+      "YouTube\'s Content ID scans 500 hours of uploaded video per minute for copyright matches. How is this computationally feasible?",
     options: [
       'Manual human review of all uploads',
       'Generate audio/video fingerprints, use approximate nearest neighbor search against 100M reference fingerprints',
@@ -59,7 +59,7 @@ export const youtubeMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "BANDWIDTH COMPARISON: 1080p bitrate: 5 Mbps. 144p bitrate: 100 Kbps (0.1 Mbps). Ratio: 50x difference. SCENARIO: Mobile user on 2G network (200 Kbps) in rural India. If served 1080p: Video buffers constantly (needs 5 Mbps, has 0.2 Mbps). Terrible UX. If served 144p: Video plays smoothly (needs 0.1 Mbps, has 0.2 Mbps). Acceptable UX. CLIENT DOWNSCALING PROBLEMS: (1) Wastes user's data plan (50x more download). (2) Wastes YouTube's bandwidth costs (50x more egress). (3) Video buffers (network can't handle 5 Mbps). (4) Device CPU/battery to downscale (not free). PRE-ENCODED BENEFITS: Server encodes once, serves millions of times. 144p file is 50x smaller (better compression than downscaling). Tailored to device capability. STORAGE COST: 7 versions = 7x storage, but storage is cheap ($0.023/GB/month) vs bandwidth ($0.02/GB transfer). Encode once, save bandwidth forever.",
+      "BANDWIDTH COMPARISON: 1080p bitrate: 5 Mbps. 144p bitrate: 100 Kbps (0.1 Mbps). Ratio: 50x difference. SCENARIO: Mobile user on 2G network (200 Kbps) in rural India. If served 1080p: Video buffers constantly (needs 5 Mbps, has 0.2 Mbps). Terrible UX. If served 144p: Video plays smoothly (needs 0.1 Mbps, has 0.2 Mbps). Acceptable UX. CLIENT DOWNSCALING PROBLEMS: (1) Wastes user's data plan (50x more download). (2) Wastes YouTube\'s bandwidth costs (50x more egress). (3) Video buffers (network can't handle 5 Mbps). (4) Device CPU/battery to downscale (not free). PRE-ENCODED BENEFITS: Server encodes once, serves millions of times. 144p file is 50x smaller (better compression than downscaling). Tailored to device capability. STORAGE COST: 7 versions = 7x storage, but storage is cheap ($0.023/GB/month) vs bandwidth ($0.02/GB transfer). Encode once, save bandwidth forever.",
   },
   {
     id: 'mc5',

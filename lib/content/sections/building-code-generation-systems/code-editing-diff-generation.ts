@@ -51,8 +51,8 @@ def generate_unified_diff(
     import difflib
     from datetime import datetime
     
-    original_lines = original.splitlines(keepends=True)
-    modified_lines = modified.splitlines(keepends=True)
+    original_lines = original.splitlines (keepends=True)
+    modified_lines = modified.splitlines (keepends=True)
     
     timestamp = datetime.now().isoformat()
     
@@ -64,40 +64,40 @@ def generate_unified_diff(
         lineterm=""
     )
     
-    return "".join(diff)
+    return "".join (diff)
 
 # Example
 original = """
-def calculate(x, y):
+def calculate (x, y):
     return x + y
 """
 
 modified = """
-def calculate(x: int, y: int) -> int:
+def calculate (x: int, y: int) -> int:
     ''Add two numbers.''
-    if not isinstance(x, int) or not isinstance(y, int):
+    if not isinstance (x, int) or not isinstance (y, int):
         raise TypeError("Arguments must be integers")
     return x + y
 """
 
-diff = generate_unified_diff(original, modified)
+diff = generate_unified_diff (original, modified)
 print(diff)
 
 # Output:
 # --- file.py (original)
 # +++ file.py (modified)
 # @@ -1,2 +1,5 @@
-# -def calculate(x, y):
-# +def calculate(x: int, y: int) -> int:
+# -def calculate (x, y):
+# +def calculate (x: int, y: int) -> int:
 # +    ''Add two numbers.''
-# +    if not isinstance(x, int) or not isinstance(y, int):
+# +    if not isinstance (x, int) or not isinstance (y, int):
 # +        raise TypeError("Arguments must be integers")
 #      return x + y
 \`\`\`
 
 ### 2. Search/Replace Format
 
-Cursor's preferred format - more LLM-friendly:
+Cursor\'s preferred format - more LLM-friendly:
 
 \`\`\`python
 from dataclasses import dataclass
@@ -120,7 +120,7 @@ class SearchReplace:
 class SearchReplaceParser:
     """Parse search/replace blocks from LLM output."""
     
-    def parse(self, text: str) -> List[SearchReplace]:
+    def parse (self, text: str) -> List[SearchReplace]:
         """Extract all search/replace blocks."""
         edits = []
         
@@ -135,7 +135,7 @@ class SearchReplaceParser:
                 replace_parts = parts[1].split(">>>>>>> REPLACE")
                 replace = replace_parts[0].strip()
                 
-                edits.append(SearchReplace(search, replace))
+                edits.append(SearchReplace (search, replace))
         
         return edits
 
@@ -143,10 +143,10 @@ class SearchReplaceParser:
 llm_output = """Here are the changes:
 
 <<<<<<< SEARCH
-def calculate(x, y):
+def calculate (x, y):
     return x + y
 =======
-def calculate(x: int, y: int) -> int:
+def calculate (x: int, y: int) -> int:
     ''Add two numbers.''
     return x + y
 >>>>>>> REPLACE
@@ -154,12 +154,12 @@ def calculate(x: int, y: int) -> int:
 <<<<<<< SEARCH
 result = calculate(5, 3)
 =======
-result = calculate(x=5, y=3)
+result = calculate (x=5, y=3)
 >>>>>>> REPLACE
 """
 
 parser = SearchReplaceParser()
-edits = parser.parse(llm_output)
+edits = parser.parse (llm_output)
 
 for edit in edits:
     print(edit)
@@ -190,23 +190,23 @@ class LineEditor:
         lines = content.split("\\n")
         
         # Sort edits by line number (descending) to avoid offset issues
-        sorted_edits = sorted(edits, key=lambda e: e.line_number, reverse=True)
+        sorted_edits = sorted (edits, key=lambda e: e.line_number, reverse=True)
         
         for edit in sorted_edits:
             line_idx = edit.line_number - 1  # Convert to 0-indexed
             
             if edit.operation == "replace":
-                if line_idx < len(lines):
+                if line_idx < len (lines):
                     lines[line_idx] = edit.new_content
             
             elif edit.operation == "insert":
-                lines.insert(line_idx, edit.new_content)
+                lines.insert (line_idx, edit.new_content)
             
             elif edit.operation == "delete":
-                if line_idx < len(lines):
+                if line_idx < len (lines):
                     del lines[line_idx]
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Usage
 original = """def hello():
@@ -215,12 +215,12 @@ original = """def hello():
 """
 
 edits = [
-    LineEdit(1, "def hello():", "def hello(name: str):", "replace"),
+    LineEdit(1, "def hello():", "def hello (name: str):", "replace"),
     LineEdit(2, 'print("world")', 'print(f"Hello, {name}")', "replace")
 ]
 
 editor = LineEditor()
-result = editor.apply_edits(original, edits)
+result = editor.apply_edits (original, edits)
 print(result)
 \`\`\`
 
@@ -274,7 +274,7 @@ Output your changes as line-by-line edits in this JSON format:
         
         # Number the lines for reference
         lines = file_content.split("\\n")
-        numbered = "\\n".join(f"{i+1:4d} | {line}" for i, line in enumerate(lines))
+        numbered = "\\n".join (f"{i+1:4d} | {line}" for i, line in enumerate (lines))
         
         prompt = f"""You are editing this file:
 
@@ -292,7 +292,7 @@ Generate ONLY the necessary changes. Do not regenerate unchanged code.
 # Usage
 builder = EditPromptBuilder()
 
-file_content = """def process_user(user):
+file_content = """def process_user (user):
     name = user.get('name')
     email = user.get('email')
     return name, email
@@ -333,14 +333,14 @@ class SafeEditApplicator:
         """
         # Try exact match first
         if search in content:
-            new_content = content.replace(search, replace, 1)
+            new_content = content.replace (search, replace, 1)
             return True, new_content, ""
         
         # If fuzzy matching enabled, try approximate match
         if fuzzy:
-            best_match = self._find_fuzzy_match(content, search)
+            best_match = self._find_fuzzy_match (content, search)
             if best_match:
-                new_content = content.replace(best_match, replace, 1)
+                new_content = content.replace (best_match, replace, 1)
                 return True, new_content, f"Used fuzzy match: {best_match[:50]}..."
         
         return False, content, f"Search text not found: {search[:50]}..."
@@ -354,14 +354,14 @@ class SafeEditApplicator:
         """Find approximate match using difflib."""
         lines = content.split("\\n")
         search_lines = search.split("\\n")
-        search_len = len(search_lines)
+        search_len = len (search_lines)
         
         best_match = None
         best_ratio = 0.0
         
         # Try all possible positions
-        for i in range(len(lines) - search_len + 1):
-            candidate = "\\n".join(lines[i:i+search_len])
+        for i in range (len (lines) - search_len + 1):
+            candidate = "\\n".join (lines[i:i+search_len])
             ratio = difflib.SequenceMatcher(
                 None, search, candidate
             ).ratio()
@@ -387,7 +387,7 @@ class SafeEditApplicator:
         current_content = content
         errors = []
         
-        for i, edit in enumerate(edits):
+        for i, edit in enumerate (edits):
             success, new_content, error = self.apply_search_replace(
                 current_content,
                 edit.search,
@@ -398,22 +398,22 @@ class SafeEditApplicator:
             if success:
                 current_content = new_content
             else:
-                errors.append(f"Edit {i+1} failed: {error}")
+                errors.append (f"Edit {i+1} failed: {error}")
         
-        return len(errors) == 0, current_content, errors
+        return len (errors) == 0, current_content, errors
 
 # Usage
 applicator = SafeEditApplicator()
 
-original = """def calculate(x, y):
+original = """def calculate (x, y):
     result = x + y
     return result
 """
 
 success, new_content, error = applicator.apply_search_replace(
     original,
-    "def calculate(x, y):",
-    "def calculate(x: int, y: int) -> int:"
+    "def calculate (x, y):",
+    "def calculate (x: int, y: int) -> int:"
 )
 
 if success:
@@ -449,46 +449,46 @@ class MinimalDiffGenerator:
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag == 'replace':
                 # Lines were changed
-                search = "\\n".join(original_lines[i1:i2])
-                replace = "\\n".join(modified_lines[j1:j2])
-                edits.append(SearchReplace(search, replace))
+                search = "\\n".join (original_lines[i1:i2])
+                replace = "\\n".join (modified_lines[j1:j2])
+                edits.append(SearchReplace (search, replace))
             
             elif tag == 'delete':
                 # Lines were deleted
-                search = "\\n".join(original_lines[i1:i2])
+                search = "\\n".join (original_lines[i1:i2])
                 replace = ""
-                edits.append(SearchReplace(search, replace))
+                edits.append(SearchReplace (search, replace))
             
             elif tag == 'insert':
                 # Lines were inserted - need context
                 # Find surrounding context for stable anchor
                 context_before = original_lines[i1-1] if i1 > 0 else ""
-                context_after = original_lines[i1] if i1 < len(original_lines) else ""
+                context_after = original_lines[i1] if i1 < len (original_lines) else ""
                 
                 search = f"{context_before}\\n{context_after}"
-                new_lines = "\\n".join(modified_lines[j1:j2])
+                new_lines = "\\n".join (modified_lines[j1:j2])
                 replace = f"{context_before}\\n{new_lines}\\n{context_after}"
-                edits.append(SearchReplace(search, replace))
+                edits.append(SearchReplace (search, replace))
         
         return edits
 
 # Usage
-original = """def process(data):
-    result = transform(data)
+original = """def process (data):
+    result = transform (data)
     return result
 """
 
-modified = """def process(data: dict) -> dict:
+modified = """def process (data: dict) -> dict:
     ''Process input data.''
     if not data:
         raise ValueError("Data cannot be empty")
-    result = transform(data)
-    validate(result)
+    result = transform (data)
+    validate (result)
     return result
 """
 
 generator = MinimalDiffGenerator()
-edits = generator.generate_minimal_diff(original, modified)
+edits = generator.generate_minimal_diff (original, modified)
 
 for edit in edits:
     print(edit)
@@ -497,7 +497,7 @@ for edit in edits:
 
 ## Cursor-Style Edit Generation
 
-### Replicate Cursor's Edit Approach
+### Replicate Cursor\'s Edit Approach
 
 \`\`\`python
 from openai import OpenAI
@@ -546,7 +546,7 @@ Rules:
         
         # Parse edits
         parser = SearchReplaceParser()
-        edits = parser.parse(response.choices[0].message.content)
+        edits = parser.parse (response.choices[0].message.content)
         
         return edits
     
@@ -558,7 +558,7 @@ Rules:
     ) -> str:
         """Build Cursor-style prompt."""
         lines = file_content.split("\\n")
-        numbered = "\\n".join(f"{i+1:4d} | {line}" for i, line in enumerate(lines))
+        numbered = "\\n".join (f"{i+1:4d} | {line}" for i, line in enumerate (lines))
         
         prompt = f"""File content:
 {numbered}
@@ -604,7 +604,7 @@ Important:
             (success, new_content, errors)
         """
         # Generate edits
-        edits = self.generate_edit(file_content, instruction)
+        edits = self.generate_edit (file_content, instruction)
         
         if not edits:
             return False, file_content, ["No edits generated"]
@@ -620,7 +620,7 @@ Important:
         # Validate if requested
         if success and validate:
             validator = GeneratedFileValidator()
-            is_valid, val_errors = validator.validate_python_file(new_content)
+            is_valid, val_errors = validator.validate_python_file (new_content)
             
             if not is_valid:
                 return False, file_content, val_errors
@@ -631,11 +631,11 @@ Important:
 editor = CursorStyleEditor()
 
 file_content = """
-def process_users(users):
+def process_users (users):
     results = []
     for user in users:
         if user['active']:
-            results.append(user['name'])
+            results.append (user['name'])
     return results
 """
 
@@ -695,22 +695,22 @@ class ThreeWayMerger:
         ).get_opcodes()
         
         # Detect conflicts
-        conflicts = self._find_conflicts(our_changes, their_changes)
+        conflicts = self._find_conflicts (our_changes, their_changes)
         
         if conflicts:
             # Has conflicts - need manual resolution
             merged = self._create_conflict_markers(
                 base_lines, ours_lines, theirs_lines, conflicts
             )
-            return False, "\\n".join(merged), conflicts
+            return False, "\\n".join (merged), conflicts
         
         # No conflicts - merge automatically
         merged = self._auto_merge(
             base_lines, our_changes, their_changes
         )
-        return True, "\\n".join(merged), []
+        return True, "\\n".join (merged), []
     
-    def _find_conflicts(self, our_changes, their_changes):
+    def _find_conflicts (self, our_changes, their_changes):
         """Identify conflicting changes."""
         conflicts = []
         
@@ -738,29 +738,29 @@ class ThreeWayMerger:
         for conflict in conflicts:
             our_i1, our_i2, their_i1, their_i2 = conflict
             
-            result.insert(our_i1, "<<<<<<< OURS")
-            result.insert(our_i2 + 1, "=======")
-            result.insert(their_i2 + 2, ">>>>>>> THEIRS")
+            result.insert (our_i1, "<<<<<<< OURS")
+            result.insert (our_i2 + 1, "=======")
+            result.insert (their_i2 + 2, ">>>>>>> THEIRS")
         
         return result
 
 # Usage
 merger = ThreeWayMerger()
 
-base = """def calculate(x, y):
+base = """def calculate (x, y):
     return x + y
 """
 
-ours = """def calculate(x: int, y: int):
+ours = """def calculate (x: int, y: int):
     return x + y
 """
 
-theirs = """def calculate(x, y):
+theirs = """def calculate (x, y):
     ''Add two numbers.''
     return x + y
 """
 
-success, merged, conflicts = merger.merge(base, ours, theirs)
+success, merged, conflicts = merger.merge (base, ours, theirs)
 
 if success:
     print("✓ Merged successfully:")

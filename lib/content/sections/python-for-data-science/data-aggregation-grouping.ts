@@ -40,7 +40,7 @@ df = pd.DataFrame({
 \`\`\`python
 # Group by single column
 grouped = df.groupby('Department')
-print(type(grouped))  # <class 'pandas.core.groupby.generic.DataFrameGroupBy'>
+print(type (grouped))  # <class 'pandas.core.groupby.generic.DataFrameGroupBy'>
 
 # Group by multiple columns
 grouped = df.groupby(['Department', 'Experience'])
@@ -73,7 +73,7 @@ it_group = grouped.get_group('IT')
 print(it_group)
 
 # Filter groups (groups meeting condition)
-large_depts = grouped.filter(lambda x: len(x) > 1)
+large_depts = grouped.filter (lambda x: len (x) > 1)
 print(large_depts)
 
 # Select specific columns after grouping
@@ -145,10 +145,10 @@ print(result)
 
 \`\`\`python
 # Define custom aggregation
-def salary_range(x):
+def salary_range (x):
     return x.max() - x.min()
 
-def cv(x):  # Coefficient of variation
+def cv (x):  # Coefficient of variation
     return x.std() / x.mean()
 
 result = df.groupby('Department')['Salary'].agg([
@@ -203,7 +203,7 @@ df['salary_vs_dept_avg'] = df.groupby('Department')['Salary'].transform(
 )
 
 # Rank within group
-df['rank_in_dept'] = df.groupby('Department')['Salary'].rank(ascending=False)
+df['rank_in_dept'] = df.groupby('Department')['Salary'].rank (ascending=False)
 
 # Cumulative sum within group
 df['cumsum_salary'] = df.groupby('Department')['Salary'].cumsum()
@@ -226,7 +226,7 @@ high_paying_depts = df.groupby('Department').filter(
 print(high_paying_depts)  # Only IT department
 
 # Keep groups with more than 2 employees
-large_depts = df.groupby('Department').filter(lambda x: len(x) > 2)
+large_depts = df.groupby('Department').filter (lambda x: len (x) > 2)
 
 # Keep groups where max experience > 5
 experienced_depts = df.groupby('Department').filter(
@@ -306,7 +306,7 @@ print(pivot)
 
 \`\`\`python
 # Frequency tables
-crosstab = pd.crosstab(df['Region'], df['Product'])
+crosstab = pd.crosstab (df['Region'], df['Product'])
 print(crosstab)
 # Product  A  B
 # Region       
@@ -396,7 +396,7 @@ print(result)
 #        B         ...   ...   ...      ...  ...
 
 # Flatten column names
-result.columns = ['_'.join(col).strip() for col in result.columns.values]
+result.columns = ['_'.join (col).strip() for col in result.columns.values]
 result = result.reset_index()
 print(result)
 \`\`\`
@@ -410,7 +410,7 @@ print(result)
 np.random.seed(42)
 dates = pd.date_range('2024-01-01', periods=365, freq='D')
 sales_data = pd.DataFrame({
-    'date': np.random.choice(dates, 1000),
+    'date': np.random.choice (dates, 1000),
     'region': np.random.choice(['North', 'South', 'East', 'West'], 1000),
     'product': np.random.choice(['A', 'B', 'C'], 1000),
     'salesperson': np.random.choice([f'SP{i}' for i in range(1, 11)], 1000),
@@ -419,7 +419,7 @@ sales_data = pd.DataFrame({
 })
 
 # 1. Total sales by region
-region_sales = sales_data.groupby('region')['sales'].sum().sort_values(ascending=False)
+region_sales = sales_data.groupby('region')['sales'].sum().sort_values (ascending=False)
 print("Total sales by region:")
 print(region_sales)
 
@@ -441,7 +441,7 @@ print("\\nTop 5 salespeople:")
 print(top_sellers)
 
 # 4. Monthly trends
-sales_data['month'] = pd.to_datetime(sales_data['date']).dt.to_period('M')
+sales_data['month'] = pd.to_datetime (sales_data['date']).dt.to_period('M')
 monthly_sales = sales_data.groupby('month')['sales'].agg(['sum', 'mean', 'count'])
 print("\\nMonthly sales trends:")
 print(monthly_sales.head())
@@ -478,8 +478,8 @@ dept_stats = employees.groupby('department').agg({
     'performance_score': 'mean',
     'employee_id': 'count'
 }).round(2)
-dept_stats.columns = ['_'.join(col) for col in dept_stats.columns]
-dept_stats = dept_stats.rename(columns={'employee_id_count': 'headcount'})
+dept_stats.columns = ['_'.join (col) for col in dept_stats.columns]
+dept_stats = dept_stats.rename (columns={'employee_id_count': 'headcount'})
 print("Department statistics:")
 print(dept_stats)
 
@@ -495,22 +495,22 @@ print(salary_matrix)
 
 # 3. High performers (top 25% in each department)
 employees['performance_quartile'] = employees.groupby('department')['performance_score'].transform(
-    lambda x: pd.qcut(x, q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+    lambda x: pd.qcut (x, q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])
 )
 high_performers = employees[employees['performance_quartile'] == 'Q4']
-print(f"\\nHigh performers: {len(high_performers)} employees")
+print(f"\\nHigh performers: {len (high_performers)} employees")
 
 # 4. Salary vs performance correlation by department
 for dept in employees['department'].unique():
     dept_data = employees[employees['department'] == dept]
-    corr = dept_data['salary'].corr(dept_data['performance_score'])
+    corr = dept_data['salary'].corr (dept_data['performance_score'])
     print(f"{dept}: Salary-Performance correlation = {corr:.2f}")
 
 # 5. Experience distribution
 exp_bins = [0, 2, 5, 10, 20]
 exp_labels = ['0-2', '3-5', '6-10', '11+']
-employees['exp_bracket'] = pd.cut(employees['years_exp'], bins=exp_bins, labels=exp_labels)
-exp_dist = pd.crosstab(employees['department'], employees['exp_bracket'])
+employees['exp_bracket'] = pd.cut (employees['years_exp'], bins=exp_bins, labels=exp_labels)
+exp_dist = pd.crosstab (employees['department'], employees['exp_bracket'])
 print("\\nExperience distribution by department:")
 print(exp_dist)
 \`\`\`
@@ -526,7 +526,7 @@ stock_data = pd.DataFrame({
     'price': np.random.uniform(100, 200, 252),
     'volume': np.random.randint(1000000, 10000000, 252)
 })
-stock_data['date'] = pd.to_datetime(stock_data['date'])
+stock_data['date'] = pd.to_datetime (stock_data['date'])
 stock_data = stock_data.sort_values('date')
 
 # 1. Weekly aggregation
@@ -546,10 +546,10 @@ print(monthly)
 
 # 3. Rolling statistics within groups
 stock_data['ma_20'] = stock_data.groupby('ticker')['price'].transform(
-    lambda x: x.rolling(window=20, min_periods=1).mean()
+    lambda x: x.rolling (window=20, min_periods=1).mean()
 )
 stock_data['volatility_20'] = stock_data.groupby('ticker')['price'].transform(
-    lambda x: x.rolling(window=20, min_periods=1).std()
+    lambda x: x.rolling (window=20, min_periods=1).std()
 )
 print("\\nRolling statistics:")
 print(stock_data[['date', 'ticker', 'price', 'ma_20', 'volatility_20']].tail(10))
@@ -561,23 +561,23 @@ print(stock_data[['date', 'ticker', 'price', 'ma_20', 'volatility_20']].tail(10)
 
 \`\`\`python
 # Apply custom function to each group
-def group_summary(group):
+def group_summary (group):
     return pd.Series({
-        'count': len(group),
+        'count': len (group),
         'mean_salary': group['Salary'].mean(),
         'top_earner': group.loc[group['Salary'].idxmax(), 'Employee'],
         'salary_range': group['Salary'].max() - group['Salary'].min()
     })
 
-result = df.groupby('Department').apply(group_summary)
+result = df.groupby('Department').apply (group_summary)
 print(result)
 
 # Return modified DataFrame
-def normalize_salaries(group):
+def normalize_salaries (group):
     group['normalized_salary'] = (group['Salary'] - group['Salary'].mean()) / group['Salary'].std()
     return group
 
-df_normalized = df.groupby('Department').apply(normalize_salaries)
+df_normalized = df.groupby('Department').apply (normalize_salaries)
 print(df_normalized)
 \`\`\`
 
@@ -585,7 +585,7 @@ print(df_normalized)
 
 \`\`\`python
 # Group by computed column
-df['salary_bracket'] = pd.cut(df['Salary'], bins=[0, 55000, 70000, 100000], labels=['Low', 'Mid', 'High'])
+df['salary_bracket'] = pd.cut (df['Salary'], bins=[0, 55000, 70000, 100000], labels=['Low', 'Mid', 'High'])
 by_bracket = df.groupby('salary_bracket')['Employee'].count()
 print(by_bracket)
 
@@ -595,7 +595,7 @@ by_dept_exp = df.groupby(['Department', 'high_exp'])['Salary'].mean()
 print(by_dept_exp)
 
 # Group by time periods
-df['hire_date'] = pd.date_range('2020-01-01', periods=len(df), freq='ME')
+df['hire_date'] = pd.date_range('2020-01-01', periods=len (df), freq='ME')
 df['hire_year'] = df['hire_date'].dt.year
 by_year = df.groupby('hire_year')['Salary'].mean()
 print(by_year)
@@ -606,7 +606,7 @@ print(by_year)
 \`\`\`python
 # Use built-in aggregations (faster than custom functions)
 # Slow
-result = df.groupby('Department')['Salary'].agg(lambda x: x.mean())
+result = df.groupby('Department')['Salary'].agg (lambda x: x.mean())
 
 # Fast
 result = df.groupby('Department')['Salary'].mean()

@@ -9,7 +9,7 @@ export const chartingTechnicalAnalysisQuiz: Discussion = {
       id: 'charting-disc-1',
       question:
         'Compare and contrast the strengths and weaknesses of TradingView, Bloomberg Terminal, and ThinkOrSwim for technical analysis. In what scenarios would you choose one platform over the others? Consider factors like data quality, customization capabilities, cost, and community support.',
-      sampleAnswer: `[Content from previous attempt - comprehensive platform comparison with scenarios, hybrid approaches, and recommendations based on trader type, budget, asset class, and trading style. Covers TradingView's Pine Script and social features, Bloomberg's institutional-grade data and integration, and ThinkOrSwim's options analysis capabilities.]`,
+      sampleAnswer: `[Content from previous attempt - comprehensive platform comparison with scenarios, hybrid approaches, and recommendations based on trader type, budget, asset class, and trading style. Covers TradingView\'s Pine Script and social features, Bloomberg's institutional-grade data and integration, and ThinkOrSwim's options analysis capabilities.]`,
     },
     {
       id: 'charting-disc-2',
@@ -133,14 +133,14 @@ class GeometricPatternDetector:
     def __init__(self, min_confidence=0.60):
         self.min_confidence = min_confidence
         
-    def detect_head_shoulders(self, df, window=20):
+    def detect_head_shoulders (self, df, window=20):
         """
         Algorithmic head & shoulders detection
         """
         # Find local maxima (peaks)
-        peaks = argrelextrema(df['High'].values, np.greater, order=window)[0]
+        peaks = argrelextrema (df['High'].values, np.greater, order=window)[0]
         
-        if len(peaks) < 3:
+        if len (peaks) < 3:
             return None
             
         # Examine most recent three peaks
@@ -156,18 +156,18 @@ class GeometricPatternDetector:
         head = peak_prices[1]
         right_shoulder = peak_prices[2]
         
-        shoulder_diff = abs(left_shoulder - right_shoulder) / left_shoulder
+        shoulder_diff = abs (left_shoulder - right_shoulder) / left_shoulder
         
         if shoulder_diff > 0.05:  # Shoulders must be within 5%
             return None
             
         # Find neckline (lows between peaks)
         neckline_lows = []
-        for i in range(len(recent_peaks) - 1):
+        for i in range (len (recent_peaks) - 1):
             segment = df.iloc[recent_peaks[i]:recent_peaks[i+1]]
-            neckline_lows.append(segment['Low'].min())
+            neckline_lows.append (segment['Low'].min())
         
-        neckline_price = np.mean(neckline_lows)
+        neckline_price = np.mean (neckline_lows)
         
         # Calculate confidence score
         confidence = self._calculate_hs_confidence(
@@ -188,19 +188,19 @@ class GeometricPatternDetector:
             'peak_indices': recent_peaks
         }
     
-    def _calculate_hs_confidence(self, ls, head, rs, neckline, df, peaks):
+    def _calculate_hs_confidence (self, ls, head, rs, neckline, df, peaks):
         """
         Calculate confidence score for H&S pattern
         """
         scores = []
         
         # 1. Shoulder symmetry (max 25 points)
-        shoulder_symmetry = 1 - abs(ls - rs) / ls
-        scores.append(shoulder_symmetry * 25)
+        shoulder_symmetry = 1 - abs (ls - rs) / ls
+        scores.append (shoulder_symmetry * 25)
         
         # 2. Head prominence (max 25 points)
-        head_prominence = (head - max(ls, rs)) / head
-        scores.append(min(head_prominence * 100, 25))
+        head_prominence = (head - max (ls, rs)) / head
+        scores.append (min (head_prominence * 100, 25))
         
         # 3. Volume pattern (max 25 points)
         # Expect declining volume on right shoulder
@@ -209,7 +209,7 @@ class GeometricPatternDetector:
         
         if vol_right < vol_left:
             volume_score = 25 * (1 - vol_right / vol_left)
-            scores.append(volume_score)
+            scores.append (volume_score)
         else:
             scores.append(0)
         
@@ -217,21 +217,20 @@ class GeometricPatternDetector:
         # Check if neckline touches are clean
         neckline_touches = df[(df['Low'] <= neckline * 1.02) & 
                               (df['Low'] >= neckline * 0.98)]
-        neckline_score = min(len(neckline_touches) * 8, 25)
-        scores.append(neckline_score)
+        neckline_score = min (len (neckline_touches) * 8, 25)
+        scores.append (neckline_score)
         
         # Total confidence (0-100, normalized to 0-1)
-        return sum(scores) / 100
+        return sum (scores) / 100
 
 # Example usage
-detector = GeometricPatternDetector(min_confidence=0.65)
-pattern = detector.detect_head_shoulders(df)
+detector = GeometricPatternDetector (min_confidence=0.65)
+pattern = detector.detect_head_shoulders (df)
 
 if pattern:
     print(f"Pattern: {pattern['pattern']}")
     print(f"Confidence: {pattern['confidence']:.2f}")
-    print(f"Target: \${pattern['target']: .2f
-        }")
+    print(f"Target: \${pattern['target']:.2f}")
 \`\`\`
 
 **Stage 2: Contextual Filters (Machine + Human-Defined Rules)**
@@ -242,44 +241,44 @@ class ContextualFilter:
     Apply context-aware filters to pattern candidates
     """
     
-    def filter_pattern(self, pattern, df, market_data):
+    def filter_pattern (self, pattern, df, market_data):
         """
         Apply multiple contextual filters
         """
         filters_passed = []
         
         # Filter 1: Trend Alignment
-        trend_filter = self._check_trend_alignment(pattern, df)
+        trend_filter = self._check_trend_alignment (pattern, df)
         filters_passed.append(('trend', trend_filter))
         
         # Filter 2: Volatility Regime
-        vol_filter = self._check_volatility_regime(df)
+        vol_filter = self._check_volatility_regime (df)
         filters_passed.append(('volatility', vol_filter))
         
         # Filter 3: Market Breadth
-        breadth_filter = self._check_market_breadth(market_data)
+        breadth_filter = self._check_market_breadth (market_data)
         filters_passed.append(('breadth', breadth_filter))
         
         # Filter 4: Sector Strength
-        sector_filter = self._check_sector_context(pattern, market_data)
+        sector_filter = self._check_sector_context (pattern, market_data)
         filters_passed.append(('sector', sector_filter))
         
         # Filter 5: Risk/Reward
-        rr_filter = self._check_risk_reward(pattern, df)
+        rr_filter = self._check_risk_reward (pattern, df)
         filters_passed.append(('risk_reward', rr_filter))
         
         # Calculate adjusted confidence
         passed_count = sum(1 for _, passed in filters_passed if passed)
-        adjusted_confidence = pattern['confidence'] * (passed_count / len(filters_passed))
+        adjusted_confidence = pattern['confidence'] * (passed_count / len (filters_passed))
         
         return {
             **pattern,
             'adjusted_confidence': adjusted_confidence,
-            'filters': dict(filters_passed),
+            'filters': dict (filters_passed),
             'passed': adjusted_confidence >= 0.50
         }
     
-    def _check_trend_alignment(self, pattern, df):
+    def _check_trend_alignment (self, pattern, df):
         """
         Check if pattern aligns with higher timeframe trend
         """
@@ -294,7 +293,7 @@ class ContextualFilter:
         else:  # bullish patterns
             return current_price > ma_50 and ma_50 > ma_200
     
-    def _check_volatility_regime(self, df):
+    def _check_volatility_regime (self, df):
         """
         Check if volatility is suitable for pattern trading
         """
@@ -305,7 +304,7 @@ class ContextualFilter:
         # Avoid extreme volatility (whipsaws) or extreme low vol (lack of movement)
         return 0.5 < (current_vol / historical_vol) < 2.0
     
-    def _check_market_breadth(self, market_data):
+    def _check_market_breadth (self, market_data):
         """
         Check overall market health
         """
@@ -318,7 +317,7 @@ class ContextualFilter:
         # Healthy market: ratio between 0.8 and 1.5
         return 0.8 < ad_ratio < 1.5
     
-    def _check_sector_context(self, pattern, market_data):
+    def _check_sector_context (self, pattern, market_data):
         """
         Check if sector is strong/weak appropriately
         """
@@ -329,7 +328,7 @@ class ContextualFilter:
         else:
             return sector_performance > 0.01  # Sector advancing
     
-    def _check_risk_reward(self, pattern, df):
+    def _check_risk_reward (self, pattern, df):
         """
         Ensure risk/reward ratio is favorable
         """
@@ -337,8 +336,8 @@ class ContextualFilter:
         target = pattern.get('target', current_price)
         stop = pattern.get('stop', current_price)
         
-        reward = abs(target - current_price)
-        risk = abs(stop - current_price)
+        reward = abs (target - current_price)
+        risk = abs (stop - current_price)
         
         if risk == 0:
             return False
@@ -358,7 +357,7 @@ class HumanReviewQueue:
     def __init__(self):
         self.review_queue = []
         
-    def add_to_queue(self, pattern, ticker, df):
+    def add_to_queue (self, pattern, ticker, df):
         """
         Add pattern to human review queue with all relevant data
         """
@@ -372,7 +371,7 @@ class HumanReviewQueue:
             'human_notes': None
         })
     
-    def present_for_review(self, item):
+    def present_for_review (self, item):
         """
         Generate comprehensive review packet for human analyst
         """
@@ -388,23 +387,23 @@ class HumanReviewQueue:
             print(f"  {status} {filter_name.title()}")
         
         print(f"\\nTrade Setup:")
-        print(f"  Current Price: \${item['data']['Close'].iloc[-1]: .2f}")
+        print(f"  Current Price: \${item['data']['Close'].iloc[-1]:.2f}")
 print(f"  Target: \${item['pattern']['target']:.2f}")
 print(f"  Stop: \${item['pattern']['stop']:.2f}")
 
-reward = abs(item['pattern']['target'] - item['data']['Close'].iloc[-1])
-risk = abs(item['pattern']['stop'] - item['data']['Close'].iloc[-1])
+reward = abs (item['pattern']['target'] - item['data']['Close'].iloc[-1])
+risk = abs (item['pattern']['stop'] - item['data']['Close'].iloc[-1])
 print(f"  Risk/Reward: {reward/risk:.2f}")
         
         # Generate chart for review
-        self._generate_review_chart(item)
+        self._generate_review_chart (item)
         
         # Get human decision
 decision = input("\\nApprove for trading? (y/n/notes): ")
 
-return self._process_human_feedback(item, decision)
+return self._process_human_feedback (item, decision)
     
-    def _process_human_feedback(self, item, decision):
+    def _process_human_feedback (self, item, decision):
 """
         Record human analyst decision and reasoning
 """
@@ -422,11 +421,11 @@ item['approved'] = False
 item['human_notes'] = decision
         
         # Store feedback for machine learning
-        self._store_feedback_for_training(item)
+        self._store_feedback_for_training (item)
         
         return item['approved']
     
-    def _store_feedback_for_training(self, item):
+    def _store_feedback_for_training (self, item):
 """
         Store human decisions to retrain ML models
 """
@@ -441,7 +440,7 @@ feedback_data = {
         
         # Append to training dataset
         # This data will be used to improve algorithmic filters
-self._append_to_training_data(feedback_data)
+self._append_to_training_data (feedback_data)
 \`\`\`
 
 ### Component 2: Feedback Loop and Continuous Improvement
@@ -455,7 +454,7 @@ class PerformanceTracker:
     def __init__(self):
         self.trades = []
         
-    def log_trade(self, pattern, ticker, entry_price, entry_date):
+    def log_trade (self, pattern, ticker, entry_price, entry_date):
         """
         Log trade for performance tracking
         """
@@ -472,7 +471,7 @@ class PerformanceTracker:
             'return': None
         })
     
-    def update_trade(self, trade_id, current_price, current_date):
+    def update_trade (self, trade_id, current_price, current_date):
         """
         Check if trade hit target or stop
         """
@@ -482,20 +481,20 @@ class PerformanceTracker:
             return
         
         # Check if target hit
-        if self._target_hit(trade, current_price):
+        if self._target_hit (trade, current_price):
             trade['status'] = 'winner'
             trade['exit_price'] = trade['target']
             trade['exit_date'] = current_date
             trade['return'] = (trade['exit_price'] - trade['entry_price']) / trade['entry_price']
         
         # Check if stop hit
-        elif self._stop_hit(trade, current_price):
+        elif self._stop_hit (trade, current_price):
             trade['status'] = 'loser'
             trade['exit_price'] = trade['stop']
             trade['exit_date'] = current_date
             trade['return'] = (trade['exit_price'] - trade['entry_price']) / trade['entry_price']
     
-    def generate_performance_report(self):
+    def generate_performance_report (self):
         """
         Analyze which patterns and configurations performed best
         """
@@ -505,9 +504,9 @@ class PerformanceTracker:
             return None
         
         # Overall statistics
-        total_trades = len(completed_trades)
+        total_trades = len (completed_trades)
         winners = [t for t in completed_trades if t['status'] == 'winner']
-        win_rate = len(winners) / total_trades
+        win_rate = len (winners) / total_trades
         
         avg_return = np.mean([t['return'] for t in completed_trades])
         avg_winner = np.mean([t['return'] for t in winners]) if winners else 0
@@ -520,7 +519,7 @@ class PerformanceTracker:
             pattern_type = trade['pattern']['pattern']
             if pattern_type not in pattern_performance:
                 pattern_performance[pattern_type] = []
-            pattern_performance[pattern_type].append(trade['return'])
+            pattern_performance[pattern_type].append (trade['return'])
         
         # Performance by confidence level
         high_conf_trades = [t for t in completed_trades 
@@ -534,18 +533,18 @@ class PerformanceTracker:
             'avg_return': avg_return,
             'avg_winner': avg_winner,
             'avg_loser': avg_loser,
-            'profit_factor': abs(avg_winner / avg_loser) if avg_loser != 0 else None,
+            'profit_factor': abs (avg_winner / avg_loser) if avg_loser != 0 else None,
             'pattern_performance': {
-                k: {'count': len(v), 'avg_return': np.mean(v), 'win_rate': sum(1 for x in v if x > 0)/len(v)}
+                k: {'count': len (v), 'avg_return': np.mean (v), 'win_rate': sum(1 for x in v if x > 0)/len (v)}
                 for k, v in pattern_performance.items()
             },
-            'high_confidence_win_rate': sum(1 for t in high_conf_trades if t['return'] > 0) / len(high_conf_trades) if high_conf_trades else None,
-            'low_confidence_win_rate': sum(1 for t in low_conf_trades if t['return'] > 0) / len(low_conf_trades) if low_conf_trades else None
+            'high_confidence_win_rate': sum(1 for t in high_conf_trades if t['return'] > 0) / len (high_conf_trades) if high_conf_trades else None,
+            'low_confidence_win_rate': sum(1 for t in low_conf_trades if t['return'] > 0) / len (low_conf_trades) if low_conf_trades else None
         }
         
         return report
     
-    def generate_model_improvements(self, report):
+    def generate_model_improvements (self, report):
         """
         Use performance data to suggest model improvements
         """
@@ -592,7 +591,7 @@ class AdaptiveLearner:
     """
     
     def __init__(self):
-        self.model = GradientBoostingClassifier(n_estimators=100)
+        self.model = GradientBoostingClassifier (n_estimators=100)
         self.feature_names = [
             'geometric_confidence',
             'trend_aligned',
@@ -605,7 +604,7 @@ class AdaptiveLearner:
         ]
         self.trained = False
         
-    def prepare_training_data(self, historical_trades):
+    def prepare_training_data (self, historical_trades):
         """
         Convert trade history to ML training data
         """
@@ -622,21 +621,21 @@ class AdaptiveLearner:
                 1 if trade['pattern']['filters']['volatility'] else 0,
                 1 if trade['pattern']['filters']['breadth'] else 0,
                 1 if trade['pattern']['filters']['sector'] else 0,
-                self._calculate_rr_ratio(trade),
-                1 if self._had_volume_confirmation(trade) else 0,
-                self._encode_pattern_type(trade['pattern']['pattern'])
+                self._calculate_rr_ratio (trade),
+                1 if self._had_volume_confirmation (trade) else 0,
+                self._encode_pattern_type (trade['pattern']['pattern'])
             ]
             
-            X.append(features)
+            X.append (features)
             y.append(1 if trade['status'] == 'winner' else 0)
         
-        return np.array(X), np.array(y)
+        return np.array(X), np.array (y)
     
-    def train(self, historical_trades):
+    def train (self, historical_trades):
         """
         Train model on historical trade outcomes
         """
-        X, y = self.prepare_training_data(historical_trades)
+        X, y = self.prepare_training_data (historical_trades)
         
         if len(X) < 50:
             print("Insufficient training data (need 50+ completed trades)")
@@ -648,12 +647,12 @@ class AdaptiveLearner:
         
         # Feature importance
         importances = self.model.feature_importances_
-        for name, importance in zip(self.feature_names, importances):
+        for name, importance in zip (self.feature_names, importances):
             print(f"{name}: {importance:.3f}")
         
         return True
     
-    def predict_success_probability(self, pattern, filters):
+    def predict_success_probability (self, pattern, filters):
         """
         Predict probability that pattern trade will succeed
         """
@@ -666,25 +665,25 @@ class AdaptiveLearner:
             1 if filters['volatility'] else 0,
             1 if filters['breadth'] else 0,
             1 if filters['sector'] else 0,
-            self._calculate_rr_from_pattern(pattern),
-            1 if self._check_volume_confirm(pattern) else 0,
-            self._encode_pattern_type(pattern['pattern'])
+            self._calculate_rr_from_pattern (pattern),
+            1 if self._check_volume_confirm (pattern) else 0,
+            self._encode_pattern_type (pattern['pattern'])
         ]
         
         prob = self.model.predict_proba([features])[0][1]
         return prob
     
-    def save_model(self, filepath='pattern_model.pkl'):
+    def save_model (self, filepath='pattern_model.pkl'):
         """
         Save trained model for later use
         """
-        joblib.dump(self.model, filepath)
+        joblib.dump (self.model, filepath)
     
-    def load_model(self, filepath='pattern_model.pkl'):
+    def load_model (self, filepath='pattern_model.pkl'):
         """
         Load previously trained model
         """
-        self.model = joblib.load(filepath)
+        self.model = joblib.load (filepath)
         self.trained = True
 \`\`\`
 

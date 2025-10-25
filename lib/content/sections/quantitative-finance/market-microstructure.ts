@@ -420,24 +420,24 @@ class OrderBook:
         self.asks = {}  # {price: quantity}
         self.trade_history = []
     
-    def add_order(self, side, price, quantity):
+    def add_order (self, side, price, quantity):
         """Add limit order to book."""
         if side == 'bid':
-            self.bids[price] = self.bids.get(price, 0) + quantity
+            self.bids[price] = self.bids.get (price, 0) + quantity
         else:  # ask
-            self.asks[price] = self.asks.get(price, 0) + quantity
+            self.asks[price] = self.asks.get (price, 0) + quantity
     
-    def market_order(self, side, quantity):
+    def market_order (self, side, quantity):
         """Execute market order (walk the book)."""
         fills = []
         remaining = quantity
         
         if side == 'buy':
             # Buy at asks (ascending price)
-            prices = sorted(self.asks.keys())
+            prices = sorted (self.asks.keys())
             for price in prices:
                 available = self.asks[price]
-                fill_qty = min(remaining, available)
+                fill_qty = min (remaining, available)
                 fills.append((price, fill_qty))
                 remaining -= fill_qty
                 self.asks[price] -= fill_qty
@@ -447,10 +447,10 @@ class OrderBook:
                     break
         else:  # sell
             # Sell at bids (descending price)
-            prices = sorted(self.bids.keys(), reverse=True)
+            prices = sorted (self.bids.keys(), reverse=True)
             for price in prices:
                 available = self.bids[price]
-                fill_qty = min(remaining, available)
+                fill_qty = min (remaining, available)
                 fills.append((price, fill_qty))
                 remaining -= fill_qty
                 self.bids[price] -= fill_qty
@@ -459,7 +459,7 @@ class OrderBook:
                 if remaining == 0:
                     break
         
-        avg_price = sum(p * q for p, q in fills) / sum(q for p, q in fills) if fills else None
+        avg_price = sum (p * q for p, q in fills) / sum (q for p, q in fills) if fills else None
         self.trade_history.append({
             'side': side,
             'quantity': quantity,
@@ -470,42 +470,41 @@ class OrderBook:
         
         return fills, avg_price, remaining
     
-    def get_spread(self):
+    def get_spread (self):
         """Calculate bid-ask spread."""
         if not self.bids or not self.asks:
             return None
-        best_bid = max(self.bids.keys())
-        best_ask = min(self.asks.keys())
+        best_bid = max (self.bids.keys())
+        best_ask = min (self.asks.keys())
         return best_ask - best_bid
     
-    def get_mid_price(self):
+    def get_mid_price (self):
         """Calculate mid-price."""
         if not self.bids or not self.asks:
             return None
-        return (max(self.bids.keys()) + min(self.asks.keys())) / 2
+        return (max (self.bids.keys()) + min (self.asks.keys())) / 2
     
-    def get_depth(self, levels=5):
+    def get_depth (self, levels=5):
         """Get order book depth."""
-        bid_prices = sorted(self.bids.keys(), reverse=True)[:levels]
-        ask_prices = sorted(self.asks.keys())[:levels]
+        bid_prices = sorted (self.bids.keys(), reverse=True)[:levels]
+        ask_prices = sorted (self.asks.keys())[:levels]
         
         return {
             'bids': [(p, self.bids[p]) for p in bid_prices],
             'asks': [(p, self.asks[p]) for p in ask_prices]
         }
     
-    def display(self):
+    def display (self):
         """Display order book."""
         depth = self.get_depth(5)
         
         print("\\n" + "="*50)
         print("ORDER BOOK")
         print("="*50)
-        print(f"Spread: \${self.get_spread(): .2f
-}")
+        print(f"Spread: \${self.get_spread():.2f}")
 print(f"Mid Price: \${self.get_mid_price():.2f}")
 print("\\nAsks (Sell Orders):")
-for price, qty in reversed(depth['asks']):
+for price, qty in reversed (depth['asks']):
     print(f"  \${price:.2f}  |  {qty} shares")
 print("-" * 50)
 print("Bids (Buy Orders):")
@@ -545,7 +544,7 @@ book.display()
 ### Market Impact Estimation
 
 \`\`\`python
-def market_impact_almgren_chriss(order_size, daily_volume, volatility, eta=0.5):
+def market_impact_almgren_chriss (order_size, daily_volume, volatility, eta=0.5):
     """
     Estimate market impact using Almgren-Chriss square-root model.
     
@@ -560,7 +559,7 @@ def market_impact_almgren_chriss(order_size, daily_volume, volatility, eta=0.5):
     - impact_bps: Impact in basis points
     """
     participation_rate = order_size / daily_volume
-    impact_pct = eta * volatility * np.sqrt(participation_rate)
+    impact_pct = eta * volatility * np.sqrt (participation_rate)
     impact_bps = impact_pct * 10000
     
     return impact_pct, impact_bps
@@ -589,12 +588,12 @@ for order_size in order_sizes:
         'Order Size': f'{order_size:,}',
         '% of ADV': f'{order_size/daily_volume*100:.2f}%',
         'Impact (bps)': f'{impact_bps:.1f}',
-        'Impact ($)': f'\${impact_dollars: .4f}',
+        'Impact ($)': f'\${impact_dollars:.4f}',
 'Total Cost': f'\${total_cost:,.0f}'
     })
 
-df = pd.DataFrame(results)
-print(df.to_string(index = False))
+df = pd.DataFrame (results)
+print(df.to_string (index = False))
 
 print("\\nKEY INSIGHT: Impact scales with √(order size)")
 print("Doubling order size increases impact by √2 = 1.41× (not 2×)")

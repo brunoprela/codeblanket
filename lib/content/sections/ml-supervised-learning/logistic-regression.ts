@@ -39,7 +39,7 @@ from sklearn.datasets import make_classification
 
 # Generate binary classification data
 np.random.seed(42)
-X, y = make_classification(n_samples=100, n_features=1, n_informative=1, 
+X, y = make_classification (n_samples=100, n_features=1, n_informative=1, 
                            n_redundant=0, n_clusters_per_class=1, random_state=42)
 
 # Sort for visualization
@@ -58,13 +58,13 @@ logistic_model.fit(X_sorted, y_sorted)
 y_pred_prob = logistic_model.predict_proba(X_sorted)[:, 1]
 
 # Visualize
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_sorted[y_sorted==0], y_sorted[y_sorted==0], label='Class 0', alpha=0.7)
 plt.scatter(X_sorted[y_sorted==1], y_sorted[y_sorted==1], label='Class 1', alpha=0.7)
 plt.plot(X_sorted, y_pred_linear, 'r-', linewidth=2, label='Linear Regression')
-plt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+plt.axhline (y=0.5, color='gray', linestyle='--', alpha=0.5)
 plt.xlabel('Feature')
 plt.ylabel('Target / Prediction')
 plt.title('Linear Regression for Classification (WRONG)')
@@ -76,7 +76,7 @@ plt.subplot(1, 2, 2)
 plt.scatter(X_sorted[y_sorted==0], y_sorted[y_sorted==0], label='Class 0', alpha=0.7)
 plt.scatter(X_sorted[y_sorted==1], y_sorted[y_sorted==1], label='Class 1', alpha=0.7)
 plt.plot(X_sorted, y_pred_prob, 'g-', linewidth=2, label='Logistic Regression')
-plt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5, label='Decision boundary')
+plt.axhline (y=0.5, color='gray', linestyle='--', alpha=0.5, label='Decision boundary')
 plt.xlabel('Feature')
 plt.ylabel('Probability of Class 1')
 plt.title('Logistic Regression (CORRECT)')
@@ -101,27 +101,27 @@ print("• More robust to outliers")
 
 The key to logistic regression is the **sigmoid (logistic) function**:
 
-\\[ \\sigma(z) = \\frac{1}{1 + e^{-z}} \\]
+\\[ \\sigma (z) = \\frac{1}{1 + e^{-z}} \\]
 
 **Properties:**
 - Input: any real number (-∞ to +∞)
 - Output: probability between 0 and 1
 - S-shaped curve
 - \\( \\sigma(0) = 0.5 \\) (decision boundary)
-- \\( \\sigma(z) \\to 1 \\) as \\( z \\to \\infty \\)
-- \\( \\sigma(z) \\to 0 \\) as \\( z \\to -\\infty \\)
+- \\( \\sigma (z) \\to 1 \\) as \\( z \\to \\infty \\)
+- \\( \\sigma (z) \\to 0 \\) as \\( z \\to -\\infty \\)
 
 \`\`\`python
 # Visualize sigmoid function
 z = np.linspace(-10, 10, 200)
 sigmoid = 1 / (1 + np.exp(-z))
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.plot(z, sigmoid, linewidth=3, color='blue')
-plt.axhline(y=0.5, color='red', linestyle='--', alpha=0.7, label='Decision threshold')
-plt.axvline(x=0, color='gray', linestyle='--', alpha=0.5)
+plt.plot (z, sigmoid, linewidth=3, color='blue')
+plt.axhline (y=0.5, color='red', linestyle='--', alpha=0.7, label='Decision threshold')
+plt.axvline (x=0, color='gray', linestyle='--', alpha=0.5)
 plt.xlabel('z = wᵀx + b')
 plt.ylabel('σ(z) = Probability')
 plt.title('Sigmoid Function')
@@ -132,7 +132,7 @@ plt.legend()
 sigmoid_derivative = sigmoid * (1 - sigmoid)
 
 plt.subplot(1, 2, 2)
-plt.plot(z, sigmoid_derivative, linewidth=3, color='green')
+plt.plot (z, sigmoid_derivative, linewidth=3, color='green')
 plt.xlabel('z')
 plt.ylabel("σ'(z)")
 plt.title("Sigmoid Derivative (for gradient descent)")
@@ -195,15 +195,15 @@ Where \\( \\hat{p}_i = P(y=1|\\mathbf{x}_i) \\) is the predicted probability.
 p_pred = np.linspace(0.001, 0.999, 200)
 
 # Loss when true class is 1
-loss_y1 = -np.log(p_pred)
+loss_y1 = -np.log (p_pred)
 
 # Loss when true class is 0
 loss_y0 = -np.log(1 - p_pred)
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.plot(p_pred, loss_y1, linewidth=3, label='True class = 1')
+plt.plot (p_pred, loss_y1, linewidth=3, label='True class = 1')
 plt.xlabel('Predicted Probability P(y=1)')
 plt.ylabel('Loss')
 plt.title('Cross-Entropy Loss (True Class = 1)')
@@ -211,7 +211,7 @@ plt.grid(True, alpha=0.3)
 plt.legend()
 
 plt.subplot(1, 2, 2)
-plt.plot(p_pred, loss_y0, linewidth=3, color='orange', label='True class = 0')
+plt.plot (p_pred, loss_y0, linewidth=3, color='orange', label='True class = 0')
 plt.xlabel('Predicted Probability P(y=1)')
 plt.ylabel('Loss')
 plt.title('Cross-Entropy Loss (True Class = 0)')
@@ -234,18 +234,18 @@ Where \\( \\hat{\\mathbf{p}} \\) is the vector of predicted probabilities.
 \\[ \\mathbf{w} := \\mathbf{w} - \\alpha \\frac{\\partial L}{\\partial \\mathbf{w}} \\]
 
 \`\`\`python
-def sigmoid(z):
+def sigmoid (z):
     return 1 / (1 + np.exp(-z))
 
 def compute_loss(X, y, w, b):
     """Binary cross-entropy loss"""
-    n = len(y)
+    n = len (y)
     z = X @ w + b
-    p = sigmoid(z)
+    p = sigmoid (z)
     # Add small epsilon to avoid log(0)
     epsilon = 1e-7
-    p = np.clip(p, epsilon, 1 - epsilon)
-    loss = -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
+    p = np.clip (p, epsilon, 1 - epsilon)
+    loss = -np.mean (y * np.log (p) + (1 - y) * np.log(1 - p))
     return loss
 
 def logistic_regression_gd(X, y, learning_rate=0.01, iterations=1000):
@@ -253,23 +253,23 @@ def logistic_regression_gd(X, y, learning_rate=0.01, iterations=1000):
     n_samples, n_features = X.shape
     
     # Initialize parameters
-    w = np.zeros(n_features)
+    w = np.zeros (n_features)
     b = 0
     
     losses = []
     
-    for i in range(iterations):
+    for i in range (iterations):
         # Forward pass
         z = X @ w + b
-        p = sigmoid(z)
+        p = sigmoid (z)
         
         # Compute loss
         loss = compute_loss(X, y, w, b)
-        losses.append(loss)
+        losses.append (loss)
         
         # Compute gradients
         dw = (1/n_samples) * X.T @ (p - y)
-        db = (1/n_samples) * np.sum(p - y)
+        db = (1/n_samples) * np.sum (p - y)
         
         # Update parameters
         w -= learning_rate * dw
@@ -285,7 +285,7 @@ from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-X, y = make_classification(n_samples=1000, n_features=2, n_redundant=0,
+X, y = make_classification (n_samples=1000, n_features=2, n_redundant=0,
                            n_informative=2, random_state=42, n_clusters_per_class=1)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -299,8 +299,8 @@ X_test_scaled = scaler.transform(X_test)
 w, b, losses = logistic_regression_gd(X_train_scaled, y_train, learning_rate=0.1, iterations=1000)
 
 # Plot convergence
-plt.figure(figsize=(10, 5))
-plt.plot(losses, linewidth=2)
+plt.figure (figsize=(10, 5))
+plt.plot (losses, linewidth=2)
 plt.xlabel('Iteration')
 plt.ylabel('Binary Cross-Entropy Loss')
 plt.title('Training Loss Convergence')
@@ -310,15 +310,15 @@ plt.show()
 # Make predictions
 def predict(X, w, b, threshold=0.5):
     probabilities = sigmoid(X @ w + b)
-    predictions = (probabilities >= threshold).astype(int)
+    predictions = (probabilities >= threshold).astype (int)
     return predictions, probabilities
 
 y_pred_train, y_prob_train = predict(X_train_scaled, w, b)
 y_pred_test, y_prob_test = predict(X_test_scaled, w, b)
 
 # Accuracy
-train_accuracy = np.mean(y_pred_train == y_train)
-test_accuracy = np.mean(y_pred_test == y_test)
+train_accuracy = np.mean (y_pred_train == y_train)
+test_accuracy = np.mean (y_pred_test == y_test)
 
 print(f"\\nTraining Accuracy: {train_accuracy:.4f}")
 print(f"Test Accuracy: {test_accuracy:.4f}")
@@ -331,7 +331,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_auc_score
 
 # Train model
-model = LogisticRegression(random_state=42)
+model = LogisticRegression (random_state=42)
 model.fit(X_train_scaled, y_train)
 
 # Predictions
@@ -346,16 +346,16 @@ print("="*60)
 print("LOGISTIC REGRESSION RESULTS")
 print("="*60)
 
-print(f"\\nTraining Accuracy: {accuracy_score(y_train, y_pred_train):.4f}")
-print(f"Test Accuracy: {accuracy_score(y_test, y_pred_test):.4f}")
+print(f"\\nTraining Accuracy: {accuracy_score (y_train, y_pred_train):.4f}")
+print(f"Test Accuracy: {accuracy_score (y_test, y_pred_test):.4f}")
 
-print(f"\\nTest AUC-ROC: {roc_auc_score(y_test, y_prob_test):.4f}")
+print(f"\\nTest AUC-ROC: {roc_auc_score (y_test, y_prob_test):.4f}")
 
 print("\\nClassification Report (Test Set):")
-print(classification_report(y_test, y_pred_test, target_names=['Class 0', 'Class 1']))
+print(classification_report (y_test, y_pred_test, target_names=['Class 0', 'Class 1']))
 
 print("\\nConfusion Matrix (Test Set):")
-cm = confusion_matrix(y_test, y_pred_test)
+cm = confusion_matrix (y_test, y_pred_test)
 print(cm)
 
 # Visualize decision boundary
@@ -365,22 +365,22 @@ def plot_decision_boundary(X, y, model, title="Decision Boundary"):
     h = 0.02  # Step size
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
+    xx, yy = np.meshgrid (np.arange (x_min, x_max, h),
+                         np.arange (y_min, y_max, h))
     
-    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
+    Z = model.predict (np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape (xx.shape)
     
-    plt.contourf(xx, yy, Z, alpha=0.3, cmap=ListedColormap(['blue', 'red']))
+    plt.contourf (xx, yy, Z, alpha=0.3, cmap=ListedColormap(['blue', 'red']))
     plt.scatter(X[y==0, 0], X[y==0, 1], c='blue', label='Class 0', edgecolors='k')
     plt.scatter(X[y==1, 0], X[y==1, 1], c='red', label='Class 1', edgecolors='k')
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
-    plt.title(title)
+    plt.title (title)
     plt.legend()
     plt.grid(True, alpha=0.3)
 
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plot_decision_boundary(X_test_scaled, y_test, model, "Logistic Regression Decision Boundary")
 plt.show()
 \`\`\`
@@ -410,7 +410,7 @@ Generalizes sigmoid to K classes:
 from sklearn.datasets import make_blobs
 
 # Generate 3-class dataset
-X_multi, y_multi = make_blobs(n_samples=300, centers=3, n_features=2,
+X_multi, y_multi = make_blobs (n_samples=300, centers=3, n_features=2,
                               cluster_std=1.5, random_state=42)
 
 X_train_m, X_test_m, y_train_m, y_test_m = train_test_split(
@@ -418,19 +418,19 @@ X_train_m, X_test_m, y_train_m, y_test_m = train_test_split(
 )
 
 # Softmax logistic regression
-model_multi = LogisticRegression(multi_class='multinomial', random_state=42)
+model_multi = LogisticRegression (multi_class='multinomial', random_state=42)
 model_multi.fit(X_train_m, y_train_m)
 
 y_pred_multi = model_multi.predict(X_test_m)
 y_prob_multi = model_multi.predict_proba(X_test_m)
 
 print("\\nMulticlass Logistic Regression:")
-print(f"Test Accuracy: {accuracy_score(y_test_m, y_pred_multi):.4f}")
+print(f"Test Accuracy: {accuracy_score (y_test_m, y_pred_multi):.4f}")
 print("\\nClassification Report:")
-print(classification_report(y_test_m, y_pred_multi))
+print(classification_report (y_test_m, y_pred_multi))
 
 # Visualize
-plt.figure(figsize=(14, 6))
+plt.figure (figsize=(14, 6))
 
 plt.subplot(1, 2, 1)
 colors = ['blue', 'red', 'green']
@@ -449,12 +449,12 @@ plt.subplot(1, 2, 2)
 h = 0.02
 x_min, x_max = X_multi[:, 0].min() - 1, X_multi[:, 0].max() + 1
 y_min, y_max = X_multi[:, 1].min() - 1, X_multi[:, 1].max() + 1
-xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+xx, yy = np.meshgrid (np.arange (x_min, x_max, h), np.arange (y_min, y_max, h))
 
-Z = model_multi.predict(np.c_[xx.ravel(), yy.ravel()])
-Z = Z.reshape(xx.shape)
+Z = model_multi.predict (np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape (xx.shape)
 
-plt.contourf(xx, yy, Z, alpha=0.3, levels=2, colors=['blue', 'red', 'green'])
+plt.contourf (xx, yy, Z, alpha=0.3, levels=2, colors=['blue', 'red', 'green'])
 
 for i in range(3):
     mask = y_test_m == i
@@ -489,14 +489,14 @@ In sklearn, use parameter \`C\` (inverse of regularization strength):
 # Compare different regularization strengths
 C_values = [0.01, 0.1, 1.0, 10.0, 100.0]
 
-plt.figure(figsize=(15, 10))
+plt.figure (figsize=(15, 10))
 
 for idx, C in enumerate(C_values, 1):
     model = LogisticRegression(C=C, random_state=42)
     model.fit(X_train_scaled, y_train)
     
-    train_acc = accuracy_score(y_train, model.predict(X_train_scaled))
-    test_acc = accuracy_score(y_test, model.predict(X_test_scaled))
+    train_acc = accuracy_score (y_train, model.predict(X_train_scaled))
+    test_acc = accuracy_score (y_test, model.predict(X_test_scaled))
     
     plt.subplot(2, 3, idx)
     plot_decision_boundary(X_test_scaled, y_test, model,
@@ -531,12 +531,12 @@ X_credit, y_credit = make_classification(
 feature_names = ['Income', 'Debt', 'Credit_Score', 'Age', 'Existing_Loans']
 
 # Fit model
-model_credit = LogisticRegression(random_state=42)
+model_credit = LogisticRegression (random_state=42)
 model_credit.fit(X_credit, y_credit)
 
 # Interpret coefficients
 coefficients = model_credit.coef_[0]
-odds_ratios = np.exp(coefficients)
+odds_ratios = np.exp (coefficients)
 
 print("="*60)
 print("COEFFICIENT INTERPRETATION")
@@ -544,7 +544,7 @@ print("="*60)
 print(f"\\n{'Feature':<20} {'Coefficient':<15} {'Odds Ratio':<15} {'Interpretation'}")
 print("-"*80)
 
-for feature, coef, odds in zip(feature_names, coefficients, odds_ratios):
+for feature, coef, odds in zip (feature_names, coefficients, odds_ratios):
     if odds > 1:
         interp = f"↑ by {(odds-1)*100:.1f}%"
     else:
@@ -571,7 +571,7 @@ data = {
 
 # Churn probability based on features
 import pandas as pd
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 
 # Higher charges, shorter tenure, more support calls → higher churn
 churn_prob = (
@@ -583,12 +583,12 @@ churn_prob = (
     0.05 * df['paperless_billing']
 )
 churn_prob = 1 / (1 + np.exp(-churn_prob + 3))  # Apply sigmoid
-df['churned'] = (np.random.random(n_customers) < churn_prob).astype(int)
+df['churned'] = (np.random.random (n_customers) < churn_prob).astype (int)
 
 print("="*60)
 print("CUSTOMER CHURN PREDICTION")
 print("="*60)
-print(f"\\nDataset: {len(df)} customers")
+print(f"\\nDataset: {len (df)} customers")
 print(f"Churn rate: {df['churned'].mean():.1%}")
 
 # Split data
@@ -603,18 +603,18 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # Train model
-model = LogisticRegression(random_state=42)
+model = LogisticRegression (random_state=42)
 model.fit(X_train_scaled, y_train)
 
 # Evaluate
 y_pred = model.predict(X_test_scaled)
 y_prob = model.predict_proba(X_test_scaled)[:, 1]
 
-print(f"\\nTest Accuracy: {accuracy_score(y_test, y_pred):.4f}")
-print(f"Test AUC-ROC: {roc_auc_score(y_test, y_prob):.4f}")
+print(f"\\nTest Accuracy: {accuracy_score (y_test, y_pred):.4f}")
+print(f"Test AUC-ROC: {roc_auc_score (y_test, y_prob):.4f}")
 
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=['Retained', 'Churned']))
+print(classification_report (y_test, y_pred, target_names=['Retained', 'Churned']))
 
 # Feature importance
 print("\\nFeature Importance (Coefficients):")
@@ -687,7 +687,7 @@ z = (
     1.2 * has_money_words
 )
 spam_prob = 1 / (1 + np.exp(-z))
-is_spam = (np.random.random(n_emails) < spam_prob).astype(int)
+is_spam = (np.random.random (n_emails) < spam_prob).astype (int)
 
 # Create DataFrame
 df = pd.DataFrame({
@@ -702,9 +702,9 @@ df = pd.DataFrame({
 print("="*70)
 print("LOGISTIC REGRESSION: EMAIL SPAM DETECTION")
 print("="*70)
-print(f"\\nDataset: {len(df)} emails")
+print(f"\\nDataset: {len (df)} emails")
 print(f"Spam rate: {df['is_spam'].mean():.1%}")
-print(f"\\nFeatures: {list(df.columns[:-1])}")
+print(f"\\nFeatures: {list (df.columns[:-1])}")
 
 # Split features and target
 X = df.drop('is_spam', axis=1)
@@ -728,7 +728,7 @@ print("TRAINING MODEL")
 print("="*70)
 
 # Train logistic regression
-model = LogisticRegression(random_state=42, max_iter=1000)
+model = LogisticRegression (random_state=42, max_iter=1000)
 model.fit(X_train_scaled, y_train)
 
 # Make predictions
@@ -745,21 +745,21 @@ print("MODEL PERFORMANCE")
 print("="*70)
 
 print(f"\\nTraining Set:")
-print(f"  Accuracy:  {accuracy_score(y_train, y_train_pred):.4f}")
-print(f"  Precision: {precision_score(y_train, y_train_pred):.4f}")
-print(f"  Recall:    {recall_score(y_train, y_train_pred):.4f}")
-print(f"  F1-Score:  {f1_score(y_train, y_train_pred):.4f}")
-print(f"  AUC-ROC:   {roc_auc_score(y_train, y_train_prob):.4f}")
+print(f"  Accuracy:  {accuracy_score (y_train, y_train_pred):.4f}")
+print(f"  Precision: {precision_score (y_train, y_train_pred):.4f}")
+print(f"  Recall:    {recall_score (y_train, y_train_pred):.4f}")
+print(f"  F1-Score:  {f1_score (y_train, y_train_pred):.4f}")
+print(f"  AUC-ROC:   {roc_auc_score (y_train, y_train_prob):.4f}")
 
 print(f"\\nTest Set:")
-print(f"  Accuracy:  {accuracy_score(y_test, y_test_pred):.4f}")
-print(f"  Precision: {precision_score(y_test, y_test_pred):.4f}")
-print(f"  Recall:    {recall_score(y_test, y_test_pred):.4f}")
-print(f"  F1-Score:  {f1_score(y_test, y_test_pred):.4f}")
-print(f"  AUC-ROC:   {roc_auc_score(y_test, y_test_prob):.4f}")
+print(f"  Accuracy:  {accuracy_score (y_test, y_test_pred):.4f}")
+print(f"  Precision: {precision_score (y_test, y_test_pred):.4f}")
+print(f"  Recall:    {recall_score (y_test, y_test_pred):.4f}")
+print(f"  F1-Score:  {f1_score (y_test, y_test_pred):.4f}")
+print(f"  AUC-ROC:   {roc_auc_score (y_test, y_test_prob):.4f}")
 
 # Confusion matrix
-cm = confusion_matrix(y_test, y_test_pred)
+cm = confusion_matrix (y_test, y_test_pred)
 print(f"\\nConfusion Matrix (Test Set):")
 print(f"              Predicted")
 print(f"              Not Spam  Spam")
@@ -776,7 +776,7 @@ print(f"True Positives:  {tp} (correctly identified as spam)")
 print("\\n" + "="*70)
 print("DETAILED CLASSIFICATION REPORT")
 print("="*70)
-print(classification_report(y_test, y_test_pred, 
+print(classification_report (y_test, y_test_pred, 
                           target_names=['Not Spam', 'Spam']))
 
 # Feature importance
@@ -785,13 +785,13 @@ print("FEATURE IMPORTANCE")
 print("="*70)
 
 coefficients = model.coef_[0]
-odds_ratios = np.exp(coefficients)
+odds_ratios = np.exp (coefficients)
 
 feature_importance = pd.DataFrame({
     'Feature': X.columns,
     'Coefficient': coefficients,
     'Odds_Ratio': odds_ratios,
-    'Abs_Coefficient': np.abs(coefficients)
+    'Abs_Coefficient': np.abs (coefficients)
 }).sort_values('Abs_Coefficient', ascending=False)
 
 print(f"\\n{'Feature':<25} {'Coefficient':<12} {'Odds Ratio':<12} {'Effect'}")
@@ -813,14 +813,14 @@ for _, row in feature_importance.iterrows():
 print("\\nIntercept (bias):", model.intercept_[0])
 
 # Visualizations
-fig = plt.figure(figsize=(16, 12))
+fig = plt.figure (figsize=(16, 12))
 
 # 1. ROC Curve
 ax1 = plt.subplot(2, 3, 1)
-fpr, tpr, thresholds = roc_curve(y_test, y_test_prob)
-auc = roc_auc_score(y_test, y_test_prob)
+fpr, tpr, thresholds = roc_curve (y_test, y_test_prob)
+auc = roc_auc_score (y_test, y_test_prob)
 
-plt.plot(fpr, tpr, linewidth=2, label=f'AUC = {auc:.3f}')
+plt.plot (fpr, tpr, linewidth=2, label=f'AUC = {auc:.3f}')
 plt.plot([0, 1], [0, 1], 'k--', linewidth=1)
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
@@ -831,8 +831,8 @@ plt.grid(True, alpha=0.3)
 # 2. Precision-Recall Curve
 from sklearn.metrics import precision_recall_curve
 ax2 = plt.subplot(2, 3, 2)
-precision, recall, _ = precision_recall_curve(y_test, y_test_prob)
-plt.plot(recall, precision, linewidth=2)
+precision, recall, _ = precision_recall_curve (y_test, y_test_prob)
+plt.plot (recall, precision, linewidth=2)
 plt.xlabel('Recall')
 plt.ylabel('Precision')
 plt.title('Precision-Recall Curve')
@@ -840,9 +840,9 @@ plt.grid(True, alpha=0.3)
 
 # 3. Probability Distribution
 ax3 = plt.subplot(2, 3, 3)
-plt.hist(y_test_prob[y_test==0], bins=30, alpha=0.5, label='Not Spam', color='blue')
-plt.hist(y_test_prob[y_test==1], bins=30, alpha=0.5, label='Spam', color='red')
-plt.axvline(x=0.5, color='black', linestyle='--', label='Decision threshold')
+plt.hist (y_test_prob[y_test==0], bins=30, alpha=0.5, label='Not Spam', color='blue')
+plt.hist (y_test_prob[y_test==1], bins=30, alpha=0.5, label='Spam', color='red')
+plt.axvline (x=0.5, color='black', linestyle='--', label='Decision threshold')
 plt.xlabel('Predicted Probability of Spam')
 plt.ylabel('Frequency')
 plt.title('Probability Distribution by True Class')
@@ -855,13 +855,13 @@ colors = ['red' if x > 0 else 'blue' for x in coefficients]
 plt.barh(X.columns, coefficients, color=colors, alpha=0.7)
 plt.xlabel('Coefficient Value')
 plt.title('Feature Coefficients\\n(Red = increases spam prob)')
-plt.axvline(x=0, color='black', linestyle='-', linewidth=0.5)
+plt.axvline (x=0, color='black', linestyle='-', linewidth=0.5)
 plt.grid(True, alpha=0.3, axis='x')
 
 # 5. Confusion Matrix Heatmap
 ax5 = plt.subplot(2, 3, 5)
 import seaborn as sns
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False)
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues', cbar=False)
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Confusion Matrix')
@@ -871,8 +871,8 @@ plt.yticks([0.5, 1.5], ['Not Spam', 'Spam'])
 # 6. Calibration Plot
 ax6 = plt.subplot(2, 3, 6)
 from sklearn.calibration import calibration_curve
-prob_true, prob_pred = calibration_curve(y_test, y_test_prob, n_bins=10)
-plt.plot(prob_pred, prob_true, marker='o', linewidth=2, label='Logistic Regression')
+prob_true, prob_pred = calibration_curve (y_test, y_test_prob, n_bins=10)
+plt.plot (prob_pred, prob_true, marker='o', linewidth=2, label='Logistic Regression')
 plt.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Perfectly calibrated')
 plt.xlabel('Mean Predicted Probability')
 plt.ylabel('Fraction of Positives')
@@ -889,7 +889,7 @@ print("EXAMPLE PREDICTIONS")
 print("="*70)
 
 # Select random samples
-sample_indices = np.random.choice(len(X_test), 5, replace=False)
+sample_indices = np.random.choice (len(X_test), 5, replace=False)
 
 print(f"\\n{'Actual':<10} {'Predicted':<10} {'Probability':<12} {'Features'}")
 print("-"*70)
@@ -909,8 +909,8 @@ print("\\n" + "="*70)
 print("SUMMARY")
 print("="*70)
 print(f"""
-The logistic regression model achieves {accuracy_score(y_test, y_test_pred):.1%} accuracy
-on the test set with an AUC-ROC of {roc_auc_score(y_test, y_test_prob):.3f}.
+The logistic regression model achieves {accuracy_score (y_test, y_test_pred):.1%} accuracy
+on the test set with an AUC-ROC of {roc_auc_score (y_test, y_test_prob):.3f}.
 
 Top factors indicating spam:
 1. {feature_importance.iloc[0]['Feature']}: odds ratio = {feature_importance.iloc[0]['Odds_Ratio']:.2f}

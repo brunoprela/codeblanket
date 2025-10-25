@@ -1,7 +1,8 @@
 export const marketParticipants = {
-  title: "Market Participants",
-  slug: "market-participants",
-  description: "Understand who trades, why they trade, and how to interact with them",
+  title: 'Market Participants',
+  slug: 'market-participants',
+  description:
+    'Understand who trades, why they trade, and how to interact with them',
   content: `
 # Market Participants
 
@@ -62,14 +63,14 @@ class InstitutionalInvestor:
     rebalancing_frequency: str
     regulatory_constraints: List[str]
     
-    def get_trading_patterns(self) -> Dict:
+    def get_trading_patterns (self) -> Dict:
         """Different institutions have predictable patterns"""
         
         patterns = {
             InstitutionType.PENSION_FUND: {
                 'style': 'Buy-and-hold, passive indexing',
                 'rebalancing': 'Quarterly (predictable)',
-                'size': 'Large orders ($10M-$100M)',
+                'size': 'Large orders (\$10M-$100M)',
                 'time_horizon': '10-30 years',
                 'flow_pattern': 'Month-end/quarter-end rebalancing',
                 'exploitable': 'Yes - front-run rebalancing',
@@ -78,7 +79,7 @@ class InstitutionalInvestor:
             InstitutionType.ENDOWMENT: {
                 'style': 'Yale Model - heavy alternatives',
                 'rebalancing': 'Annual',
-                'size': 'Medium to large ($1M-$50M)',
+                'size': 'Medium to large (\$1M-$50M)',
                 'time_horizon': 'Perpetual (forever)',
                 'flow_pattern': 'Less predictable, sophisticated',
                 'exploitable': 'No - smart money',
@@ -87,7 +88,7 @@ class InstitutionalInvestor:
             InstitutionType.MUTUAL_FUND: {
                 'style': 'Active management, benchmark-aware',
                 'rebalancing': 'Continuous',
-                'size': 'Variable ($100K-$10M)',
+                'size': 'Variable (\$100K-$10M)',
                 'time_horizon': '1-5 years',
                 'flow_pattern': 'Window dressing (month/quarter end)',
                 'exploitable': 'Yes - window dressing, closet indexing',
@@ -96,7 +97,7 @@ class InstitutionalInvestor:
             InstitutionType.SOVEREIGN_WEALTH: {
                 'style': 'Strategic, long-term',
                 'rebalancing': 'Infrequent',
-                'size': 'Massive ($100M-$1B+)',
+                'size': 'Massive (\$100M-$1B+)',
                 'time_horizon': 'Generational',
                 'flow_pattern': 'Unpredictable, non-economic motives',
                 'exploitable': 'No - patient capital',
@@ -104,7 +105,7 @@ class InstitutionalInvestor:
             }
         }
         
-        return patterns.get(self.institution_type, {})
+        return patterns.get (self.institution_type, {})
     
     @staticmethod
     def calendar_effects() -> Dict:
@@ -165,7 +166,7 @@ print("=== Institutional Investor Profiles ===\\n")
 for inst in institutions:
     patterns = inst.get_trading_patterns()
     print(f"{inst.name} ({inst.institution_type.value}):")
-    print(f"  AUM: ${inst.aum/1e9:.0f}B")
+    print(f"  AUM: \${inst.aum/1e9:.0f}B")
     print(f"  Time Horizon: {inst.time_horizon}")
     print(f"  Style: {patterns.get('style', 'N/A')}")
     print(f"  Rebalancing: {patterns.get('rebalancing', 'N/A')}")
@@ -176,7 +177,7 @@ for inst in institutions:
 print("\\n=== Predictable Calendar Effects ===\\n")
 calendar = InstitutionalInvestor.calendar_effects()
 
-for event, details in list(calendar.items())[:2]:
+for event, details in list (calendar.items())[:2]:
     print(f"{event}:")
     print(f"  Who: {details['participants']}")
     print(f"  What: {details['behavior']}")
@@ -244,7 +245,7 @@ class HighFrequencyTrader:
             }
         }
     
-    def calculate_market_maker_profit(self,
+    def calculate_market_maker_profit (self,
                                      bid_ask_spread: float,
                                      daily_volume: float,
                                      fill_rate: float = 0.50,
@@ -311,19 +312,19 @@ mm_profit = hft.calculate_market_maker_profit(
 )
 
 print("\\n=== Market Maker Economics ===\\n")
-print(f"Daily Volume: ${mm_profit['daily_volume']/1e6:.0f}M")
-print(f"Bid-Ask Spread: ${mm_profit['bid_ask_spread']:.2f}")
-print(f"Gross Revenue: ${mm_profit['gross_revenue']:,.0f}")
-print(f"Adverse Selection Cost: ${mm_profit['adverse_selection_cost']:,.0f}")
-print(f"Net Profit: ${mm_profit['net_profit']:,.0f}/day")
+print(f"Daily Volume: \${mm_profit['daily_volume']/1e6:.0f}M")
+print(f"Bid-Ask Spread: \${mm_profit['bid_ask_spread']:.2f}")
+print(f"Gross Revenue: \${mm_profit['gross_revenue']:,.0f}")
+print(f"Adverse Selection Cost: \${mm_profit['adverse_selection_cost']:,.0f}")
+print(f"Net Profit: \${mm_profit['net_profit']:,.0f}/day")
 print(f"Profit Margin: {mm_profit['profit_margin']:.1f}%")
-print(f"Annual Profit: ${mm_profit['annual_profit']/1e6:.1f}M")
+print(f"Annual Profit: \${mm_profit['annual_profit']/1e6:.1f}M")
 
 # HFT strategies
 print("\\n\\n=== HFT Strategies ===\\n")
 strategies = hft.hft_strategies()
 
-for strategy, details in list(strategies.items())[:2]:
+for strategy, details in list (strategies.items())[:2]:
     print(f"{strategy}:")
     print(f"  Description: {details['description']}")
     print(f"  Volume: {details['volume']}")
@@ -420,7 +421,7 @@ class ParticipantFlowDetection:
     Build systems to detect who's trading
     """
     
-    def detect_institution_type(self,
+    def detect_institution_type (self,
                                trade_size: float,
                                trade_time: str,
                                order_type: str) -> str:
@@ -450,7 +451,7 @@ class ParticipantFlowDetection:
         else:
             return "UNKNOWN"
     
-    def exploit_index_rebalancing(self,
+    def exploit_index_rebalancing (self,
                                  additions: List[str],
                                  deletions: List[str],
                                  announcement_date: str,
@@ -494,13 +495,13 @@ trades = [
 ]
 
 print("\\n\\n=== Participant Detection ===\\n")
-for i, trade in enumerate(trades, 1):
+for i, trade in enumerate (trades, 1):
     participant = detector.detect_institution_type(
         trade['size'],
         trade['time'],
         trade['type']
     )
-    print(f"Trade {i}: ${trade['size']:,} at {trade['time']} ({trade['type']})")
+    print(f"Trade {i}: \${trade['size']:,} at {trade['time']} ({trade['type']})")
     print(f"  → Likely: {participant}\\n")
 
 # Index rebalancing strategy
@@ -546,13 +547,16 @@ You now understand who's trading against you - use it wisely!
 `,
   exercises: [
     {
-      prompt: "Build a system to detect and exploit S&P 500 index rebalancing. Monitor S&P announcements, download additions/deletions, calculate forced index fund buying/selling (based on $11T indexed), backtest buying additions at announcement and selling at close on effective date.",
-      solution: "// Implementation: 1) Scrape S&P website for rebalancing announcements (or use financial news APIs), 2) For each addition: Calculate shares held by S&P500 ETFs (SPY, VOO, IVV) = total shares × 0.XX (S&P weight), 3) Est imated forced buying ≈ $11T × company weight, 4) Backtest: Buy at announcement close, sell at rebalancing close (typically 7 days later), 5) Measure: Average return is 5-8% for large additions, 6) Risk: Early run-up reduces returns, post-inclusion reversal"
+      prompt:
+        'Build a system to detect and exploit S&P 500 index rebalancing. Monitor S&P announcements, download additions/deletions, calculate forced index fund buying/selling (based on $11T indexed), backtest buying additions at announcement and selling at close on effective date.',
+      solution:
+        '// Implementation: 1) Scrape S&P website for rebalancing announcements (or use financial news APIs), 2) For each addition: Calculate shares held by S&P500 ETFs (SPY, VOO, IVV) = total shares × 0.XX (S&P weight), 3) Est imated forced buying ≈ $11T × company weight, 4) Backtest: Buy at announcement close, sell at rebalancing close (typically 7 days later), 5) Measure: Average return is 5-8% for large additions, 6) Risk: Early run-up reduces returns, post-inclusion reversal',
     },
     {
-      prompt: "Create a retail sentiment tracker that monitors Reddit r/wallstreetbets, Twitter (X) mentions, Robinhood top holdings, and Google Trends. Correlate retail sentiment spikes with subsequent price action. Does retail buying predict rallies or tops?",
-      solution: "// Implementation: 1) Reddit API: Count mentions and upvotes for tickers, 2) Twitter API: Track ticker mentions and sentiment, 3) Robinhood 100 most popular (if available), 4) Google Trends: Search volume for ticker + 'stock', 5) Create composite retail sentiment score, 6) Backtest: Does high sentiment predict +5% next week (GME) or -5% (usually)?, 7) Result: Pre-2021 = contrarian indicator, Post-2021 = mixed (meme stocks can persist)"
-    }
-  ]
+      prompt:
+        'Create a retail sentiment tracker that monitors Reddit r/wallstreetbets, Twitter (X) mentions, Robinhood top holdings, and Google Trends. Correlate retail sentiment spikes with subsequent price action. Does retail buying predict rallies or tops?',
+      solution:
+        "// Implementation: 1) Reddit API: Count mentions and upvotes for tickers, 2) Twitter API: Track ticker mentions and sentiment, 3) Robinhood 100 most popular (if available), 4) Google Trends: Search volume for ticker + 'stock', 5) Create composite retail sentiment score, 6) Backtest: Does high sentiment predict +5% next week (GME) or -5% (usually)?, 7) Result: Pre-2021 = contrarian indicator, Post-2021 = mixed (meme stocks can persist)",
+    },
+  ],
 };
-

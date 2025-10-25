@@ -1,7 +1,7 @@
 export const financeTerminologyDevelopers = {
-    title: 'Finance Terminology for Developers',
-    id: 'finance-terminology-developers',
-    content: `
+  title: 'Finance Terminology for Developers',
+  id: 'finance-terminology-developers',
+  content: `
 # Finance Terminology for Developers
 
 ## Introduction
@@ -26,7 +26,7 @@ Calculate Alpha
 """
 import numpy as np
 
-def calculate_alpha(portfolio_returns: np.array, 
+def calculate_alpha (portfolio_returns: np.array, 
                    market_returns: np.array,
                    risk_free_rate: float = 0.02) -> float:
     """
@@ -36,13 +36,13 @@ def calculate_alpha(portfolio_returns: np.array,
     Expected return = risk_free_rate + beta * (market_return - risk_free_rate)
     """
     # Calculate beta first
-    covariance = np.cov(portfolio_returns, market_returns)[0][1]
-    market_variance = np.var(market_returns)
+    covariance = np.cov (portfolio_returns, market_returns)[0][1]
+    market_variance = np.var (market_returns)
     beta = covariance / market_variance
     
     # Calculate returns
-    portfolio_return = np.mean(portfolio_returns)
-    market_return = np.mean(market_returns)
+    portfolio_return = np.mean (portfolio_returns)
+    market_return = np.mean (market_returns)
     
     # Expected return (CAPM)
     expected_return = risk_free_rate + beta * (market_return - risk_free_rate)
@@ -57,7 +57,7 @@ def calculate_alpha(portfolio_returns: np.array,
 portfolio_returns = np.array([0.15, 0.08, -0.03, 0.12, 0.18, 0.05, 0.09, 0.14, -0.02, 0.11])
 market_returns = np.array([0.10, 0.06, -0.05, 0.09, 0.12, 0.04, 0.07, 0.10, -0.04, 0.08])
 
-alpha, beta = calculate_alpha(portfolio_returns, market_returns)
+alpha, beta = calculate_alpha (portfolio_returns, market_returns)
 
 print(f"Alpha: {alpha:.4f} ({alpha*100:.2f}%)")
 print(f"Beta: {beta:.4f}")
@@ -65,7 +65,7 @@ print(f"Beta: {beta:.4f}")
 if alpha > 0:
     print(f"✓ Positive alpha! Strategy outperformed market by {alpha*100:.2f}% after risk adjustment")
 else:
-    print(f"✗ Negative alpha. Strategy underperformed market by {abs(alpha)*100:.2f}%")
+    print(f"✗ Negative alpha. Strategy underperformed market by {abs (alpha)*100:.2f}%")
 \`\`\`
 
 ### Beta (β)
@@ -93,7 +93,7 @@ else:
 Calculate Sharpe Ratio
 """
 
-def calculate_sharpe_ratio(returns: np.array, risk_free_rate: float = 0.02) -> float:
+def calculate_sharpe_ratio (returns: np.array, risk_free_rate: float = 0.02) -> float:
     """
     Sharpe ratio = (mean return - risk-free rate) / std dev of returns
     
@@ -103,7 +103,7 @@ def calculate_sharpe_ratio(returns: np.array, risk_free_rate: float = 0.02) -> f
     - Sharpe < 1: Poor (better to buy index)
     """
     excess_returns = returns - risk_free_rate / 252  # Daily risk-free rate
-    sharpe = np.mean(excess_returns) / np.std(excess_returns)
+    sharpe = np.mean (excess_returns) / np.std (excess_returns)
     
     # Annualize (√252 trading days)
     sharpe_annualized = sharpe * np.sqrt(252)
@@ -115,8 +115,8 @@ def calculate_sharpe_ratio(returns: np.array, risk_free_rate: float = 0.02) -> f
 strategy_a_returns = np.random.normal(0.0005, 0.01, 252)  # Mean 0.05%, std 1%
 strategy_b_returns = np.random.normal(0.0008, 0.02, 252)  # Mean 0.08%, std 2%
 
-sharpe_a = calculate_sharpe_ratio(strategy_a_returns)
-sharpe_b = calculate_sharpe_ratio(strategy_b_returns)
+sharpe_a = calculate_sharpe_ratio (strategy_a_returns)
+sharpe_b = calculate_sharpe_ratio (strategy_b_returns)
 
 print(f"\\n=== Sharpe Ratio Comparison ===")
 print(f"Strategy A: {sharpe_a:.2f}")
@@ -144,13 +144,13 @@ else:
 Calculate Volatility
 """
 
-def calculate_volatility(returns: np.array, annualize: bool = True) -> float:
+def calculate_volatility (returns: np.array, annualize: bool = True) -> float:
     """
     Volatility = standard deviation of returns
     
     Typically annualized: daily_vol * sqrt(252)
     """
-    volatility = np.std(returns)
+    volatility = np.std (returns)
     
     if annualize:
         volatility *= np.sqrt(252)  # 252 trading days
@@ -162,8 +162,8 @@ def calculate_volatility(returns: np.array, annualize: bool = True) -> float:
 aapl_daily_returns = np.random.normal(0.001, 0.02, 252)  # 2% daily vol
 spy_daily_returns = np.random.normal(0.0005, 0.01, 252)  # 1% daily vol
 
-aapl_vol = calculate_volatility(aapl_daily_returns)
-spy_vol = calculate_volatility(spy_daily_returns)
+aapl_vol = calculate_volatility (aapl_daily_returns)
+spy_vol = calculate_volatility (spy_daily_returns)
 
 print(f"\\n=== Volatility ===")
 print(f"AAPL: {aapl_vol*100:.1f}% annualized")
@@ -182,7 +182,7 @@ print(f"AAPL is {aapl_vol/spy_vol:.1f}x more volatile than SPY")
 Calculate Maximum Drawdown
 """
 
-def calculate_max_drawdown(returns: np.array) -> tuple:
+def calculate_max_drawdown (returns: np.array) -> tuple:
     """
     Max drawdown = largest percentage decline from peak to trough
     """
@@ -190,13 +190,13 @@ def calculate_max_drawdown(returns: np.array) -> tuple:
     cumulative = np.cumprod(1 + returns)
     
     # Calculate running maximum
-    running_max = np.maximum.accumulate(cumulative)
+    running_max = np.maximum.accumulate (cumulative)
     
     # Calculate drawdown
     drawdown = (cumulative - running_max) / running_max
     
-    max_dd = np.min(drawdown)
-    max_dd_idx = np.argmin(drawdown)
+    max_dd = np.min (drawdown)
+    max_dd_idx = np.argmin (drawdown)
     
     return max_dd, max_dd_idx
 
@@ -204,12 +204,12 @@ def calculate_max_drawdown(returns: np.array) -> tuple:
 # Example: Calculate drawdown
 returns = np.array([0.10, 0.05, -0.08, -0.12, 0.03, 0.15, -0.05, 0.08])
 
-max_dd, dd_idx = calculate_max_drawdown(returns)
+max_dd, dd_idx = calculate_max_drawdown (returns)
 
 print(f"\\n=== Maximum Drawdown ===")
 print(f"Max drawdown: {max_dd*100:.2f}%")
 print(f"Occurred at period: {dd_idx}")
-print(f"\\nInterpretation: Portfolio declined {abs(max_dd)*100:.1f}% from peak")
+print(f"\\nInterpretation: Portfolio declined {abs (max_dd)*100:.1f}% from peak")
 \`\`\`
 
 ---
@@ -238,15 +238,15 @@ class Position:
         self.entry_price = entry_price
         self.current_price = entry_price
     
-    def update_price(self, new_price: float):
+    def update_price (self, new_price: float):
         """Update current price"""
         self.current_price = new_price
     
-    def unrealized_pnl(self) -> float:
+    def unrealized_pnl (self) -> float:
         """Calculate unrealized P&L"""
         return (self.current_price - self.entry_price) * self.quantity
     
-    def realized_pnl(self, exit_price: float, quantity: int) -> float:
+    def realized_pnl (self, exit_price: float, quantity: int) -> float:
         """Calculate realized P&L when closing position"""
         return (exit_price - self.entry_price) * quantity
 
@@ -256,11 +256,11 @@ position = Position('AAPL', 100, 150.00)
 
 # Price moves
 position.update_price(155.00)
-print(f"Unrealized P&L: ${position.unrealized_pnl():,.2f}")
+print(f"Unrealized P&L: \${position.unrealized_pnl():,.2f}")
 
 # Close half position
 realized = position.realized_pnl(155.00, 50)
-print(f"Realized P&L (50 shares): ${realized:,.2f}")
+print(f"Realized P&L (50 shares): \${realized:,.2f}")
 \`\`\`
 
 ### Bid-Ask Spread
@@ -316,7 +316,7 @@ class Portfolio:
         self.positions = {}  # {ticker: {'quantity': int, 'cost_basis': float}}
         self.cash = 0
     
-    def add_position(self, ticker: str, quantity: int, price: float):
+    def add_position (self, ticker: str, quantity: int, price: float):
         """Add position at cost"""
         if ticker not in self.positions:
             self.positions[ticker] = {'quantity': 0, 'cost_basis': 0}
@@ -332,7 +332,7 @@ class Portfolio:
         
         self.cash -= price * quantity
     
-    def mark_to_market(self, prices: dict) -> dict:
+    def mark_to_market (self, prices: dict) -> dict:
         """
         Calculate MTM valuation
         
@@ -344,7 +344,7 @@ class Portfolio:
         for ticker, position in self.positions.items():
             qty = position['quantity']
             cost = position['cost_basis']
-            market_price = prices.get(ticker, cost)
+            market_price = prices.get (ticker, cost)
             
             market_value += qty * market_price
             cost_value += qty * cost
@@ -369,12 +369,12 @@ portfolio.add_position('MSFT', 50, 300.00)
 # Prices move
 current_prices = {'AAPL': 155.00, 'MSFT': 310.00}
 
-mtm = portfolio.mark_to_market(current_prices)
+mtm = portfolio.mark_to_market (current_prices)
 
 print(f"\\n=== Mark-to-Market ===")
-print(f"Market value: ${mtm['market_value']:, .2f}")
-print(f"Cost basis: ${mtm['cost_basis']:,.2f}")
-print(f"Unrealized P&L: ${mtm['unrealized_pnl']:,.2f}")
+print(f"Market value: \${mtm['market_value']:,.2f}")
+print(f"Cost basis: \${mtm['cost_basis']:,.2f}")
+print(f"Unrealized P&L: \${mtm['unrealized_pnl']:,.2f}")
 print(f"Return: {mtm['return_pct']:.2f}%")
 \`\`\`
 
@@ -430,7 +430,7 @@ class FIXMessage:
     }
     
     @staticmethod
-    def parse(fix_message: str) -> dict:
+    def parse (fix_message: str) -> dict:
         """Parse FIX message into dictionary"""
         fields = fix_message.split('|')
         parsed = {}
@@ -438,12 +438,12 @@ class FIXMessage:
         for field in fields:
             if '=' in field:
                 tag, value = field.split('=', 1)
-                field_name = FIXMessage.TAGS.get(tag, f'Tag{tag}')
+                field_name = FIXMessage.TAGS.get (tag, f'Tag{tag}')
                 parsed[field_name] = value
         
         # Add human-readable message type
         if 'MsgType' in parsed:
-            parsed['MsgType_Name'] = FIXMessage.MSG_TYPES.get(parsed['MsgType'], 'Unknown')
+            parsed['MsgType_Name'] = FIXMessage.MSG_TYPES.get (parsed['MsgType'], 'Unknown')
         
         return parsed
 
@@ -451,7 +451,7 @@ class FIXMessage:
 # Example: Parse FIX order
 fix_msg = "8=FIX.4.2|35=D|49=CLIENT|56=BROKER|11=ORD001|55=AAPL|54=1|38=100|40=2|44=150.00"
 
-parsed = FIXMessage.parse(fix_msg)
+parsed = FIXMessage.parse (fix_msg)
 
 print("\\n=== FIX Message ===")
 for field, value in parsed.items():
@@ -473,4 +473,3 @@ for field, value in parsed.items():
 **Next section**: Mathematics for Finance - the math you need for quant finance.
 `,
 };
-

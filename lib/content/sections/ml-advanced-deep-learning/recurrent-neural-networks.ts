@@ -51,19 +51,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Problem: Feedforward network for sequences
-class FeedforwardSequence(nn.Module):
+class FeedforwardSequence (nn.Module):
     """Naive approach: Flatten entire sequence."""
     def __init__(self, seq_length, input_size, hidden_size, output_size):
         super().__init__()
         # Must specify sequence length!
-        self.fc1 = nn.Linear(seq_length * input_size, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.fc1 = nn.Linear (seq_length * input_size, hidden_size)
+        self.fc2 = nn.Linear (hidden_size, output_size)
     
-    def forward(self, x):
+    def forward (self, x):
         # x: (batch, seq_length, input_size)
         batch_size = x.size(0)
-        x = x.view(batch_size, -1)  # Flatten: loses temporal structure
-        x = F.relu(self.fc1(x))
+        x = x.view (batch_size, -1)  # Flatten: loses temporal structure
+        x = F.relu (self.fc1(x))
         x = self.fc2(x)
         return x
 
@@ -124,19 +124,19 @@ class SimpleRNN:
         self.hidden_size = hidden_size
         
         # Input to hidden
-        self.W_xh = np.random.randn(hidden_size, input_size) * 0.01
+        self.W_xh = np.random.randn (hidden_size, input_size) * 0.01
         
         # Hidden to hidden (recurrent connection)
-        self.W_hh = np.random.randn(hidden_size, hidden_size) * 0.01
+        self.W_hh = np.random.randn (hidden_size, hidden_size) * 0.01
         
         # Hidden to output
-        self.W_hy = np.random.randn(output_size, hidden_size) * 0.01
+        self.W_hy = np.random.randn (output_size, hidden_size) * 0.01
         
         # Biases
         self.b_h = np.zeros((hidden_size, 1))
         self.b_y = np.zeros((output_size, 1))
     
-    def forward(self, inputs):
+    def forward (self, inputs):
         """
         Forward pass through sequence.
         
@@ -156,16 +156,16 @@ class SimpleRNN:
         for x_t in inputs:
             # h_t = tanh(W_hh * h_{t-1} + W_xh * x_t + b_h)
             h = np.tanh(
-                np.dot(self.W_hh, h) + 
-                np.dot(self.W_xh, x_t) + 
+                np.dot (self.W_hh, h) + 
+                np.dot (self.W_xh, x_t) + 
                 self.b_h
             )
             
             # y_t = W_hy * h_t + b_y
-            y = np.dot(self.W_hy, h) + self.b_y
+            y = np.dot (self.W_hy, h) + self.b_y
             
-            outputs.append(y)
-            hidden_states.append(h)
+            outputs.append (y)
+            hidden_states.append (h)
         
         return outputs, hidden_states
 
@@ -175,32 +175,32 @@ print("=" * 60)
 
 # Vocabulary
 chars = ['h', 'e', 'l', 'o']
-char_to_idx = {ch: i for i, ch in enumerate(chars)}
-idx_to_char = {i: ch for i, ch in enumerate(chars)}
+char_to_idx = {ch: i for i, ch in enumerate (chars)}
+idx_to_char = {i: ch for i, ch in enumerate (chars)}
 
 # Convert 'hello' to one-hot vectors
-def char_to_onehot(char):
-    vec = np.zeros((len(chars), 1))
+def char_to_onehot (char):
+    vec = np.zeros((len (chars), 1))
     vec[char_to_idx[char]] = 1
     return vec
 
 text = 'hello'
-inputs = [char_to_onehot(ch) for ch in text]
+inputs = [char_to_onehot (ch) for ch in text]
 
 # Create and run RNN
-rnn = SimpleRNN(input_size=len(chars), hidden_size=10, output_size=len(chars))
-outputs, hidden_states = rnn.forward(inputs)
+rnn = SimpleRNN(input_size=len (chars), hidden_size=10, output_size=len (chars))
+outputs, hidden_states = rnn.forward (inputs)
 
 print(f"Input sequence: {text}")
-print(f"Sequence length: {len(inputs)}")
+print(f"Sequence length: {len (inputs)}")
 print(f"Hidden size: {rnn.hidden_size}")
 print(f"\\nHidden state shapes: {[h.shape for h in hidden_states[:3]]}")
 print(f"Output shapes: {[y.shape for y in outputs[:3]]}")
 
 # Visualize hidden states
-hidden_matrix = np.hstack(hidden_states)
-plt.figure(figsize=(12, 4))
-plt.imshow(hidden_matrix, aspect='auto', cmap='coolwarm')
+hidden_matrix = np.hstack (hidden_states)
+plt.figure (figsize=(12, 4))
+plt.imshow (hidden_matrix, aspect='auto', cmap='coolwarm')
 plt.colorbar()
 plt.xlabel('Time Step')
 plt.ylabel('Hidden Unit')
@@ -237,9 +237,9 @@ class CharRNN(nn.Module):
         )
         
         # Output layer
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.fc = nn.Linear (hidden_size, output_size)
     
-    def forward(self, x, hidden=None):
+    def forward (self, x, hidden=None):
         """
         Forward pass.
         
@@ -254,26 +254,26 @@ class CharRNN(nn.Module):
         # RNN forward
         # out: (batch, seq, hidden_size)
         # hidden: (num_layers, batch, hidden_size)
-        out, hidden = self.rnn(x, hidden)
+        out, hidden = self.rnn (x, hidden)
         
         # Reshape for linear layer
         # out: (batch * seq, hidden_size)
         out = out.contiguous().view(-1, self.hidden_size)
         
         # Linear layer
-        out = self.fc(out)
+        out = self.fc (out)
         
         # Reshape back
         # out: (batch, seq, output_size)
         batch_size = x.size(0)
         seq_length = x.size(1)
-        out = out.view(batch_size, seq_length, -1)
+        out = out.view (batch_size, seq_length, -1)
         
         return out, hidden
     
-    def init_hidden(self, batch_size):
+    def init_hidden (self, batch_size):
         """Initialize hidden state with zeros."""
-        return torch.zeros(self.num_layers, batch_size, self.hidden_size)
+        return torch.zeros (self.num_layers, batch_size, self.hidden_size)
 
 # Create model
 vocab_size = 50
@@ -286,15 +286,15 @@ print(model)
 # Test forward pass
 batch_size = 32
 seq_length = 20
-x = torch.randn(batch_size, seq_length, vocab_size)
+x = torch.randn (batch_size, seq_length, vocab_size)
 
-output, hidden = model(x)
+output, hidden = model (x)
 print(f"\\nInput shape: {x.shape}")
 print(f"Output shape: {output.shape}")
 print(f"Hidden shape: {hidden.shape}")
 
 # Count parameters
-total_params = sum(p.numel() for p in model.parameters())
+total_params = sum (p.numel() for p in model.parameters())
 print(f"\\nTotal parameters: {total_params:,}")
 \`\`\`
 
@@ -311,7 +311,7 @@ RNNs are trained using **Backpropagation Through Time (BPTT)**: unroll the netwo
 
 \`\`\`python
 # Training example: Character prediction
-def train_char_rnn(model, data, epochs=10, seq_length=25):
+def train_char_rnn (model, data, epochs=10, seq_length=25):
     """
     Train character-level RNN.
     
@@ -322,24 +322,24 @@ def train_char_rnn(model, data, epochs=10, seq_length=25):
         seq_length: Length of training sequences
     """
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
     
     # Convert text to indices
-    chars = sorted(list(set(data)))
-    char_to_idx = {ch: i for i, ch in enumerate(chars)}
-    idx_to_char = {i: ch for i, ch in enumerate(chars)}
+    chars = sorted (list (set (data)))
+    char_to_idx = {ch: i for i, ch in enumerate (chars)}
+    idx_to_char = {i: ch for i, ch in enumerate (chars)}
     
-    vocab_size = len(chars)
+    vocab_size = len (chars)
     
-    for epoch in range(epochs):
+    for epoch in range (epochs):
         # Initialize hidden state
-        hidden = model.init_hidden(batch_size=1)
+        hidden = model.init_hidden (batch_size=1)
         
         model.train()
         total_loss = 0
         
         # Create batches
-        for i in range(0, len(data) - seq_length, seq_length):
+        for i in range(0, len (data) - seq_length, seq_length):
             # Get sequence
             seq = data[i:i+seq_length]
             target = data[i+1:i+seq_length+1]
@@ -349,11 +349,11 @@ def train_char_rnn(model, data, epochs=10, seq_length=25):
             target_idx = torch.tensor([char_to_idx[ch] for ch in target])
             
             # One-hot encode
-            seq_onehot = F.one_hot(seq_idx, vocab_size).float().unsqueeze(0)
+            seq_onehot = F.one_hot (seq_idx, vocab_size).float().unsqueeze(0)
             
             # Forward pass
             optimizer.zero_grad()
-            output, hidden = model(seq_onehot, hidden)
+            output, hidden = model (seq_onehot, hidden)
             
             # Detach hidden state (truncated BPTT)
             hidden = hidden.detach()
@@ -374,7 +374,7 @@ def train_char_rnn(model, data, epochs=10, seq_length=25):
             
             total_loss += loss.item()
         
-        avg_loss = total_loss / (len(data) // seq_length)
+        avg_loss = total_loss / (len (data) // seq_length)
         print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}")
 
 print("Training Considerations:")
@@ -416,12 +416,12 @@ def show_vanishing_gradients():
     gradients = []
     grad = 1.0
     
-    for t in range(seq_length):
+    for t in range (seq_length):
         grad *= derivative
-        gradients.append(grad)
+        gradients.append (grad)
     
-    plt.figure(figsize=(12, 5))
-    plt.semilogy(gradients)
+    plt.figure (figsize=(12, 5))
+    plt.semilogy (gradients)
     plt.xlabel('Timesteps Back')
     plt.ylabel('Gradient Magnitude (log scale)')
     plt.title('Vanishing Gradient in RNN')
@@ -479,22 +479,22 @@ class SentimentRNN(nn.Module):
         super(SentimentRNN, self).__init__()
         
         # Embedding layer
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         
         # RNN layer
         self.rnn = nn.RNN(embedding_dim, hidden_size, batch_first=True)
         
         # Classification layer (uses final hidden state)
-        self.fc = nn.Linear(hidden_size, num_classes)
+        self.fc = nn.Linear (hidden_size, num_classes)
     
-    def forward(self, x):
+    def forward (self, x):
         # x: (batch, seq_length) - word indices
         
         # Embed words
-        embedded = self.embedding(x)  # (batch, seq, embedding_dim)
+        embedded = self.embedding (x)  # (batch, seq, embedding_dim)
         
         # RNN forward
-        output, hidden = self.rnn(embedded)
+        output, hidden = self.rnn (embedded)
         # output: (batch, seq, hidden_size)
         # hidden: (1, batch, hidden_size)
         
@@ -502,7 +502,7 @@ class SentimentRNN(nn.Module):
         final_hidden = hidden.squeeze(0)  # (batch, hidden_size)
         
         # Classify
-        logits = self.fc(final_hidden)  # (batch, num_classes)
+        logits = self.fc (final_hidden)  # (batch, num_classes)
         
         return logits
 
@@ -519,7 +519,7 @@ print(sentiment_model)
 
 # Test
 reviews = torch.randint(0, 10000, (32, 50))  # 32 reviews, 50 words each
-output = sentiment_model(reviews)
+output = sentiment_model (reviews)
 print(f"\\nInput shape: {reviews.shape} (batch, sequence)")
 print(f"Output shape: {output.shape} (batch, classes)")
 print("\\n→ Takes variable-length sequences")

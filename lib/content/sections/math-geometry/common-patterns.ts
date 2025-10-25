@@ -28,7 +28,7 @@ export const commonpatternsSection = {
 
 **5. Mathematical Optimization:**
 - Use math properties to reduce brute force
-- Example: Check divisors only up to sqrt(n)
+- Example: Check divisors only up to sqrt (n)
 - Use formulas instead of loops when possible
 
 **6. Modular Arithmetic:**

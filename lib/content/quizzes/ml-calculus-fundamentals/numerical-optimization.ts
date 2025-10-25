@@ -37,14 +37,14 @@ Speedup: ~15,000×!
 
 **Full-Batch GD:**
 - Smooth, deterministic convergence
-- Guaranteed descent: f(x_{k+1}) < f(x_k)
+- Guaranteed descent: f (x_{k+1}) < f (x_k)
 - Convergence rate: O(1/k) for convex, O(exp(-k)) for strongly convex
 - Finds precise minimum
 
 **Mini-Batch SGD:**
 - Noisy, stochastic convergence
 - May increase loss temporarily
-- Expected descent: E[f(x_{k+1})] < f(x_k)
+- Expected descent: E[f (x_{k+1})] < f (x_k)
 - Oscillates around minimum
 - Slower final convergence
 
@@ -92,17 +92,17 @@ Flat minima generalize better to test data!
 **Evidence:**
 \`\`\`python
 # Measure sharpness (max Hessian eigenvalue)
-model_gd = train_full_batch(data)
-model_sgd = train_mini_batch(data)
+model_gd = train_full_batch (data)
+model_sgd = train_mini_batch (data)
 
-sharpness_gd = max_eigenvalue(hessian(model_gd))
-sharpness_sgd = max_eigenvalue(hessian(model_sgd))
+sharpness_gd = max_eigenvalue (hessian (model_gd))
+sharpness_sgd = max_eigenvalue (hessian (model_sgd))
 
 print(f"GD sharpness: {sharpness_gd:.2f}")    # Higher
 print(f"SGD sharpness: {sharpness_sgd:.2f}")  # Lower
 
-test_acc_gd = evaluate(model_gd, test_data)
-test_acc_sgd = evaluate(model_sgd, test_data)
+test_acc_gd = evaluate (model_gd, test_data)
+test_acc_sgd = evaluate (model_sgd, test_data)
 
 print(f"GD test accuracy: {test_acc_gd:.2%}")   # Lower
 print(f"SGD test accuracy: {test_acc_sgd:.2%}") # Higher!
@@ -311,7 +311,7 @@ Ensures unbiased estimates from the start!
 Works well with default values:
 \`\`\`python
 # Usually just tune learning rate
-optimizer = Adam(lr=0.001)  # Often works!
+optimizer = Adam (lr=0.001)  # Often works!
 
 # Compare to SGD:
 optimizer = SGD(lr=???, momentum=???)  # Need to tune both
@@ -374,14 +374,14 @@ class Adam:
         self.eps = eps
         
         # Initialize moments
-        self.m = [np.zeros_like(p) for p in params]
-        self.v = [np.zeros_like(p) for p in params]
+        self.m = [np.zeros_like (p) for p in params]
+        self.v = [np.zeros_like (p) for p in params]
         self.t = 0
     
-    def step(self, grads):
+    def step (self, grads):
         self.t += 1
         
-        for i, (param, grad) in enumerate(zip(self.params, grads)):
+        for i, (param, grad) in enumerate (zip (self.params, grads)):
             # Update moments
             self.m[i] = self.beta1 * self.m[i] + (1 - self.beta1) * grad
             self.v[i] = self.beta2 * self.v[i] + (1 - self.beta2) * grad**2
@@ -391,7 +391,7 @@ class Adam:
             v_hat = self.v[i] / (1 - self.beta2**self.t)
             
             # Update parameters
-            param -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)
+            param -= self.lr * m_hat / (np.sqrt (v_hat) + self.eps)
 \`\`\`
 
 **6. When Adam Excels:**
@@ -475,7 +475,7 @@ optimizer = AdamW(lr=0.001, weight_decay=0.01)
 # 3. Switch to SGD for final epochs (better generalization)
 \`\`\`
 
-**Key insight:** Adam's combination of momentum and adaptive learning rates makes it remarkably robust across diverse architectures and datasets, explaining its status as the default optimizer in modern deep learning.`,
+**Key insight:** Adam\'s combination of momentum and adaptive learning rates makes it remarkably robust across diverse architectures and datasets, explaining its status as the default optimizer in modern deep learning.`,
     keyPoints: [
       'Combines momentum (first moment) with adaptive LR (second moment)',
       'Bias correction ensures unbiased estimates early in training',
@@ -488,7 +488,7 @@ optimizer = AdamW(lr=0.001, weight_decay=0.01)
   {
     id: 'numopt-disc-3',
     question:
-      "Compare and contrast first-order methods (gradient descent) with second-order methods (Newton's method) for optimization. Why aren't second-order methods used more in deep learning?",
+      "Compare and contrast first-order methods (gradient descent) with second-order methods (Newton\'s method) for optimization. Why aren't second-order methods used more in deep learning?",
     hint: 'Consider computational cost, convergence rate, memory requirements, and scalability.',
     sampleAnswer: `**First-Order vs Second-Order Optimization Methods**
 
@@ -498,15 +498,15 @@ Understanding the trade-offs between these method families is crucial for choosi
 
 **First-Order (Gradient Descent):**
 \`\`\`
-Uses: f(x), ∇f(x)
-Update: x_{k+1} = x_k - α∇f(x_k)
+Uses: f (x), ∇f (x)
+Update: x_{k+1} = x_k - α∇f (x_k)
 Information: Direction of steepest descent
 \`\`\`
 
-**Second-Order (Newton's Method):**
+**Second-Order (Newton\'s Method):**
 \`\`\`
-Uses: f(x), ∇f(x), ∇²f(x)
-Update: x_{k+1} = x_k - [∇²f(x_k)]⁻¹∇f(x_k)
+Uses: f (x), ∇f (x), ∇²f (x)
+Update: x_{k+1} = x_k - [∇²f (x_k)]⁻¹∇f (x_k)
 Information: Direction + curvature
 \`\`\`
 
@@ -542,7 +542,7 @@ Newton: ~5 iterations (near optimum)
 - Total: O(n·d)
 \`\`\`
 
-**Newton's Method:**
+**Newton\'s Method:**
 \`\`\`
 - Gradient: O(n·d)
 - Hessian: O(n·d²)  ← expensive!
@@ -573,25 +573,25 @@ from time import time
 d = 100  # Small dimension
 
 # Gradient descent
-def gd_iteration(x, grad):
+def gd_iteration (x, grad):
     return 0.01 * grad  # O(d)
 
 # Newton iteration  
-def newton_iteration(x, grad, hessian):
-    return np.linalg.solve(hessian, grad)  # O(d³)
+def newton_iteration (x, grad, hessian):
+    return np.linalg.solve (hessian, grad)  # O(d³)
 
-grad = np.random.randn(d)
-hessian = np.random.randn(d, d)
+grad = np.random.randn (d)
+hessian = np.random.randn (d, d)
 
 # Time comparison
 t0 = time()
 for _ in range(1000):
-    update = gd_iteration(x, grad)
+    update = gd_iteration (x, grad)
 gd_time = time() - t0
 
 t0 = time()
 for _ in range(1000):
-    update = newton_iteration(x, grad, hessian)
+    update = newton_iteration (x, grad, hessian)
 newton_time = time() - t0
 
 print(f"GD: {gd_time:.3f}s, Newton: {newton_time:.3f}s")
@@ -735,7 +735,7 @@ More practical than Hessian, but still expensive.
 
 **10. The Paradox:**
 
-**Newton's method:**
+**Newton\'s method:**
 - Fewer iterations (5-10)
 - But each iteration extremely expensive
 - Total time: Usually worse for large d

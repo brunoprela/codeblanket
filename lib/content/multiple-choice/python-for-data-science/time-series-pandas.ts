@@ -40,7 +40,7 @@ export const timeseriespandasMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'min_periods specifies the minimum number of observations required to return a value. For example, rolling(window=20, min_periods=10) will start returning values after 10 observations instead of waiting for the full 20-observation window.',
+      'min_periods specifies the minimum number of observations required to return a value. For example, rolling (window=20, min_periods=10) will start returning values after 10 observations instead of waiting for the full 20-observation window.',
   },
   {
     id: 'time-series-pandas-mc-4',

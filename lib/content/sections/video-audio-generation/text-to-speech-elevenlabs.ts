@@ -123,14 +123,14 @@ class ElevenLabsTTS:
         self.total_characters = 0
         
         self.cache_dir = cache_dir or Path("./elevenlabs_cache")
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_dir.mkdir (exist_ok=True)
         
         self.headers = {
             "xi-api-key": self.api_key,
             "Content-Type": "application/json",
         }
     
-    def get_voices(self) -> List[Voice]:
+    def get_voices (self) -> List[Voice]:
         """
         Get available voices
         
@@ -196,7 +196,7 @@ class ElevenLabsTTS:
         }
         
         # Make request
-        print(f"Generating speech ({len(text)} characters)...")
+        print(f"Generating speech ({len (text)} characters)...")
         start_time = time.time()
         
         response = requests.post(
@@ -210,8 +210,8 @@ class ElevenLabsTTS:
         generation_time = time.time() - start_time
         
         # Track costs
-        cost = len(text) * self.cost_per_char
-        self.total_characters += len(text)
+        cost = len (text) * self.cost_per_char
+        self.total_characters += len (text)
         self.total_cost += cost
         
         print(f"✅ Generated in {generation_time:.2f}s")
@@ -219,11 +219,11 @@ class ElevenLabsTTS:
         
         # Save if path provided
 if output_path:
-    output_path = Path(output_path)
-output_path.parent.mkdir(parents = True, exist_ok = True)
+    output_path = Path (output_path)
+output_path.parent.mkdir (parents = True, exist_ok = True)
 
-with open(output_path, "wb") as f:
-f.write(audio_bytes)
+with open (output_path, "wb") as f:
+f.write (audio_bytes)
 
 print(f"💾 Saved: {output_path}")
 
@@ -237,18 +237,18 @@ return audio_bytes
         voice_settings: Optional[VoiceSettings] = None,
     ):
 """
-        Generate speech with streaming(lower latency)
+        Generate speech with streaming (lower latency)
         
         Yields audio chunks as they're generated
 
 Args:
 text: Text to convert
 voice_id: Voice to use
-model: TTS model(use TURBO for best streaming)
+model: TTS model (use TURBO for best streaming)
     voice_settings: Voice settings
 
 Yields:
-            Audio chunks(bytes)
+            Audio chunks (bytes)
 """
 if voice_settings is None:
 voice_settings = VoiceSettings()
@@ -273,7 +273,7 @@ response = requests.post(
 response.raise_for_status()
         
         # Stream chunks
-for chunk in response.iter_content(chunk_size = 4096):
+for chunk in response.iter_content (chunk_size = 4096):
     if chunk:
         yield chunk
     
@@ -296,10 +296,10 @@ Returns:
 """
         # Prepare files
 files = []
-for i, audio_file in enumerate(audio_files):
+for i, audio_file in enumerate (audio_files):
     files.append((
         'files',
-        (audio_file.name, open(audio_file, 'rb'), 'audio/mpeg')
+        (audio_file.name, open (audio_file, 'rb'), 'audio/mpeg')
     ))
         
         # Build request
@@ -308,7 +308,7 @@ if description:
     data['description'] = description
         
         # Upload and clone
-print(f"Cloning voice from {len(audio_files)} samples...")
+print(f"Cloning voice from {len (audio_files)} samples...")
 
 response = requests.post(
     f"{self.BASE_URL}/voices/add",
@@ -328,7 +328,7 @@ print(f"✅ Voice cloned: {voice_id}")
 
 return voice_id
     
-    def get_voice_settings(self, voice_id: str) -> VoiceSettings:
+    def get_voice_settings (self, voice_id: str) -> VoiceSettings:
 """Get default settings for voice"""
 response = requests.get(
     f"{self.BASE_URL}/voices/{voice_id}/settings",
@@ -366,13 +366,13 @@ voice_settings: Voice settings
 Returns:
             List of output file paths
 """
-output_dir = Path(output_dir)
-output_dir.mkdir(parents = True, exist_ok = True)
+output_dir = Path (output_dir)
+output_dir.mkdir (parents = True, exist_ok = True)
 
 output_paths = []
 
-for i, text in enumerate(texts):
-    print(f"\\n[{i+1}/{len(texts)}] Generating...")
+for i, text in enumerate (texts):
+    print(f"\\n[{i+1}/{len (texts)}] Generating...")
 
 output_path = output_dir / f"speech_{i+1:03d}.mp3"
 
@@ -384,7 +384,7 @@ self.generate(
     voice_settings = voice_settings,
     output_path = output_path,
 )
-output_paths.append(output_path)
+output_paths.append (output_path)
                 
             except Exception as e:
 print(f"❌ Failed: {e}")
@@ -392,7 +392,7 @@ output_paths.append(None)
 
 return output_paths
     
-    def get_usage(self) -> Dict:
+    def get_usage (self) -> Dict:
 """
         Get API usage statistics
 
@@ -430,7 +430,7 @@ self.tts = tts_client
 """
         # Split into sentences
 import re
-        sentences = re.split(r'(?<=[.!?])\\s+', text)
+        sentences = re.split (r'(?<=[.!?])\\s+', text)
         
         # Group into chunks
 chunks = []
@@ -438,29 +438,29 @@ current_chunk = []
 current_length = 0
 
 for sentence in sentences:
-    if current_length + len(sentence) > chunk_size and current_chunk:
-chunks.append(" ".join(current_chunk))
+    if current_length + len (sentence) > chunk_size and current_chunk:
+chunks.append(" ".join (current_chunk))
 current_chunk = [sentence]
-current_length = len(sentence)
+current_length = len (sentence)
             else:
-current_chunk.append(sentence)
-current_length += len(sentence)
+current_chunk.append (sentence)
+current_length += len (sentence)
 
 if current_chunk:
-    chunks.append(" ".join(current_chunk))
+    chunks.append(" ".join (current_chunk))
 
-print(f"Split into {len(chunks)} chunks")
+print(f"Split into {len (chunks)} chunks")
         
         # Generate each chunk
 audio_chunks = []
-for i, chunk in enumerate(chunks):
-    print(f"\\nChunk {i+1}/{len(chunks)}")
+for i, chunk in enumerate (chunks):
+    print(f"\\nChunk {i+1}/{len (chunks)}")
 
 audio_bytes = self.tts.generate(
     text = chunk,
     voice_id = voice_id,
 )
-audio_chunks.append(audio_bytes)
+audio_chunks.append (audio_bytes)
         
         # Concatenate audio
         from pydub import AudioSegment
@@ -471,7 +471,7 @@ for audio_bytes in audio_chunks:
 combined += segment
         
         # Export
-combined.export(output_path, format = "mp3")
+combined.export (output_path, format = "mp3")
 
 print(f"✅ Combined audio saved: {output_path}")
     
@@ -516,7 +516,7 @@ emotion_settings = {
     ),
 }
 
-settings = emotion_settings.get(emotion, VoiceSettings())
+settings = emotion_settings.get (emotion, VoiceSettings())
 
 self.tts.generate(
     text = text,
@@ -539,7 +539,7 @@ tts = ElevenLabsTTS(
 print("\\n=== Example 1: Available Voices ===")
 voices = tts.get_voices()
 
-print(f"Found {len(voices)} voices:\\n")
+print(f"Found {len (voices)} voices:\\n")
 for voice in voices[: 5]:  # Show first 5
 print(f"  {voice.name} ({voice.voice_id})")
 if voice.labels:
@@ -580,7 +580,7 @@ tts.generate(
     output_path = "custom_voice.mp3",
 )
     
-    # Example 4: Streaming(low latency)
+    # Example 4: Streaming (low latency)
 print("\\n=== Example 4: Streaming ===")
 
 with open("streamed_audio.mp3", "wb") as f:
@@ -589,21 +589,21 @@ for chunk in tts.stream_generate(
     voice_id = narrator_voice,
     model = Model.TURBO_V2,
 ):
-    f.write(chunk)
+    f.write (chunk)
 
 print("✅ Streamed audio saved")
     
     # Example 5: Voice cloning
 print("\\n=== Example 5: Voice Cloning ===")
     
-    # Prepare audio samples(need 1 - 3 minutes of clean audio)
+    # Prepare audio samples (need 1 - 3 minutes of clean audio)
 sample_files = [
     Path("voice_sample_1.mp3"),
     Path("voice_sample_2.mp3"),
     Path("voice_sample_3.mp3"),
 ]
 
-if all(f.exists() for f in sample_files):
+if all (f.exists() for f in sample_files):
     cloned_voice_id = tts.clone_voice(
         name = "My Custom Voice",
         audio_files = sample_files,
@@ -634,12 +634,12 @@ output_paths = tts.batch_generate(
     output_dir = Path("audiobook_chapters"),
 )
 
-print(f"\\n✅ Generated {len(output_paths)} audio files")
+print(f"\\n✅ Generated {len (output_paths)} audio files")
     
-    # Example 7: Long text(automatic chunking)
+    # Example 7: Long text (automatic chunking)
 print("\\n=== Example 7: Long Text ===")
 
-pipeline = TTSPipeline(tts)
+pipeline = TTSPipeline (tts)
 
 long_text = """
 [Your very long text here - could be an entire article, chapter, or script]
@@ -668,7 +668,7 @@ for emotion in emotions:
     # Show usage stats
 print("\\n=== Usage Statistics ===")
 usage = tts.get_usage()
-print(json.dumps(usage, indent = 2))
+print(json.dumps (usage, indent = 2))
 
 print(f"\\n💰 Session cost: \${tts.total_cost:.4f}")
 print(f"   Characters processed: {tts.total_characters:,}")
@@ -712,12 +712,12 @@ Text preprocessing for better TTS
 
 import re
 
-def preprocess_for_tts(text: str) -> str:
+def preprocess_for_tts (text: str) -> str:
     """
     Prepare text for optimal TTS output
     """
     # Remove unwanted characters
-    text = re.sub(r'[\\x00-\\x1f\\x7f-\\x9f]', ', text)
+    text = re.sub (r'[\\x00-\\x1f\\x7f-\\x9f]', ', text)
     
     # Fix common issues
     text = text.replace('&', 'and')
@@ -736,20 +736,20 @@ def preprocess_for_tts(text: str) -> str:
     }
     
     for contraction, expansion in contractions.items():
-        text = text.replace(contraction, expansion)
+        text = text.replace (contraction, expansion)
     
     # Add pauses with punctuation
-    text = re.sub(r'([.!?])\\s+', r'\\1  ', text)  # Double space for longer pause
+    text = re.sub (r'([.!?])\\s+', r'\\1  ', text)  # Double space for longer pause
     
     # Remove extra whitespace
-    text = re.sub(r'\\s+', ' ', text)
+    text = re.sub (r'\\s+', ' ', text)
     
     return text.strip()
 
 # Usage
 raw_text = "Your text here..."
-processed = preprocess_for_tts(raw_text)
-tts.generate(processed, voice_id="...")
+processed = preprocess_for_tts (raw_text)
+tts.generate (processed, voice_id="...")
 \`\`\`
 
 ### 3. Quality Control
@@ -759,16 +759,16 @@ tts.generate(processed, voice_id="...")
 Quality checks for generated audio
 """
 
-def check_audio_quality(audio_path: Path) -> Dict:
+def check_audio_quality (audio_path: Path) -> Dict:
     """
     Analyze generated audio quality
     """
     from pydub import AudioSegment
     
-    audio = AudioSegment.from_file(audio_path)
+    audio = AudioSegment.from_file (audio_path)
     
     return {
-        "duration_seconds": len(audio) / 1000,
+        "duration_seconds": len (audio) / 1000,
         "channels": audio.channels,
         "frame_rate": audio.frame_rate,
         "sample_width": audio.sample_width,

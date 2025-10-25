@@ -9,7 +9,7 @@ export const structureSection = {
 Each index in BIT stores sum of a range of elements, not just one element.
 
 **Index Responsibility:**
-Index \`i\` stores sum of \`r(i)\` elements, where \`r(i)\` is the position of the last set bit.
+Index \`i\` stores sum of \`r (i)\` elements, where \`r (i)\` is the position of the last set bit.
 
 **Example:** Array = [3, 2, -1, 6, 5, 4, -3, 3, 7, 2, 3]
 
@@ -29,7 +29,7 @@ Index (binary)  Stores sum of
 
 **1. Get Last Set Bit (LSB):**
 \`\`\`python
-def lsb(i):
+def lsb (i):
     return i & (-i)
 # Examples:
 # 6 (110) & -6 (010) = 2 (010)
@@ -38,14 +38,14 @@ def lsb(i):
 
 **2. Parent (for update):**
 \`\`\`python
-def parent(i):
+def parent (i):
     return i + (i & -i)
 # Move to next index that needs updating
 \`\`\`
 
 **3. Prefix (for query):**
 \`\`\`python
-def prefix_parent(i):
+def prefix_parent (i):
     return i - (i & -i)
 # Move to previous range to sum
 \`\`\``,

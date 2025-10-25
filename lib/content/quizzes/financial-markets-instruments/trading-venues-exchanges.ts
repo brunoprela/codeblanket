@@ -1,8 +1,9 @@
 export const tradingVenuesExchangesQuiz = [
-    {
-        id: 'fm-1-10-q-1',
-        question: "Compare NYSE (specialist model) vs NASDAQ (dealer network) vs dark pools (hidden liquidity). For a $10M institutional order, which venue minimizes market impact and why? Design a smart order routing algorithm.",
-        sampleAnswer: `**Venue Comparison:**
+  {
+    id: 'fm-1-10-q-1',
+    question:
+      'Compare NYSE (specialist model) vs NASDAQ (dealer network) vs dark pools (hidden liquidity). For a $10M institutional order, which venue minimizes market impact and why? Design a smart order routing algorithm.',
+    sampleAnswer: `**Venue Comparison:**
 
 **NYSE (Specialist/DMM Model):**
 - Single designated market maker per stock
@@ -28,24 +29,24 @@ For large institutional order, use **combination**:
 
 \`\`\`python
 class SmartOrderRouter:
-    def route_large_order(self, symbol, size=10_000_000):
+    def route_large_order (self, symbol, size=10_000_000):
         """
         $10M order needs careful routing to minimize market impact
         """
         # 1. Try dark pools first (40% of order)
-        dark_pool_fill = self.try_dark_pools(symbol, size * 0.40)
+        dark_pool_fill = self.try_dark_pools (symbol, size * 0.40)
         remaining = size - dark_pool_fill
         
         # 2. Lit markets with TWAP (30%)
-        lit_fill = self.twap_execution(symbol, size * 0.30, duration_hours=4)
+        lit_fill = self.twap_execution (symbol, size * 0.30, duration_hours=4)
         remaining -= lit_fill
         
         # 3. Iceberg orders on exchanges (20%)
-        iceberg_fill = self.iceberg_order(symbol, size * 0.20, display_size=1000)
+        iceberg_fill = self.iceberg_order (symbol, size * 0.20, display_size=1000)
         remaining -= iceberg_fill
         
         # 4. Remaining via VWAP (10%)
-        vwap_fill = self.vwap_execution(symbol, remaining)
+        vwap_fill = self.vwap_execution (symbol, remaining)
         
         return {
             'dark_pools': dark_pool_fill,
@@ -56,7 +57,7 @@ class SmartOrderRouter:
             'estimated_impact': '10-15 bps'  # 0.10-0.15%
         }
     
-    def try_dark_pools(self, symbol, size):
+    def try_dark_pools (self, symbol, size):
         """
         Route to multiple dark pools
         Priority: Largest pools with best fill rates
@@ -66,7 +67,7 @@ class SmartOrderRouter:
         
         for pool in dark_pools:
             # Check available liquidity (hidden)
-            fill = pool.try_match(symbol, size - filled)
+            fill = pool.try_match (symbol, size - filled)
             filled += fill
             
             if filled >= size:
@@ -74,7 +75,7 @@ class SmartOrderRouter:
         
         return filled
     
-    def calculate_market_impact(self, order_size, adv):
+    def calculate_market_impact (self, order_size, adv):
         """
         Market impact model
         
@@ -106,18 +107,19 @@ class SmartOrderRouter:
 4. **VWAP for remainder** (10%, match market rhythm)
 
 **Bottom Line:** Large orders need multi-venue strategy. Dark pools for blocks, lit markets with algos for rest. Total impact: 10-15 bps vs 50+ bps if dumping on one exchange.`,
-        keyPoints: [
-            'NYSE: Specialist model, centralized, good price discovery. NASDAQ: Competing dealers, tight spreads',
-            'Dark pools: Hidden liquidity, no front-running, best for large institutional orders',
-            'Smart routing: 40% dark pools, 30% TWAP, 20% iceberg, 10% VWAP',
-            'Market impact model: Impact = α × (Size / ADV)^0.6',
-            'Dark pool advantage: Orders invisible → no market impact before execution'
-        ]
-    },
-    {
-        id: 'fm-1-10-q-2',
-        question: "MiFID II (Europe) and Reg NMS (US) mandate best execution. Define best execution beyond just price. Design a transaction cost analysis (TCA) system that measures execution quality across multiple dimensions.",
-        sampleAnswer: `**Best Execution Dimensions:**
+    keyPoints: [
+      'NYSE: Specialist model, centralized, good price discovery. NASDAQ: Competing dealers, tight spreads',
+      'Dark pools: Hidden liquidity, no front-running, best for large institutional orders',
+      'Smart routing: 40% dark pools, 30% TWAP, 20% iceberg, 10% VWAP',
+      'Market impact model: Impact = α × (Size / ADV)^0.6',
+      'Dark pool advantage: Orders invisible → no market impact before execution',
+    ],
+  },
+  {
+    id: 'fm-1-10-q-2',
+    question:
+      'MiFID II (Europe) and Reg NMS (US) mandate best execution. Define best execution beyond just price. Design a transaction cost analysis (TCA) system that measures execution quality across multiple dimensions.',
+    sampleAnswer: `**Best Execution Dimensions:**
 
 **Not just price!** Must consider:
 1. **Price:** Execution price vs benchmark
@@ -131,24 +133,24 @@ class SmartOrderRouter:
 
 \`\`\`python
 class TCASystem:
-    def analyze_execution(self, order, executions):
+    def analyze_execution (self, order, executions):
         """
         Comprehensive execution quality analysis
         """
         # 1. Implementation Shortfall
-        IS = self.implementation_shortfall(order, executions)
+        IS = self.implementation_shortfall (order, executions)
         
         # 2. Market impact
-        impact = self.market_impact(order, executions)
+        impact = self.market_impact (order, executions)
         
         # 3. Timing cost
-        timing = self.timing_cost(order, executions)
+        timing = self.timing_cost (order, executions)
         
         # 4. Opportunity cost (unfilled portion)
-        opportunity = self.opportunity_cost(order, executions)
+        opportunity = self.opportunity_cost (order, executions)
         
         # 5. Spread cost
-        spread_cost = self.spread_captured(order, executions)
+        spread_cost = self.spread_captured (order, executions)
         
         total_cost_bps = IS + impact + timing + opportunity + spread_cost
         
@@ -159,10 +161,10 @@ class TCASystem:
             'opportunity_cost_bps': opportunity,
             'spread_cost_bps': spread_cost,
             'total_cost_bps': total_cost_bps,
-            'grade': self.grade_execution(total_cost_bps)
+            'grade': self.grade_execution (total_cost_bps)
         }
     
-    def implementation_shortfall(self, order, executions):
+    def implementation_shortfall (self, order, executions):
         """
         IS = (Execution Price - Decision Price) / Decision Price
         
@@ -172,8 +174,8 @@ class TCASystem:
         decision_price = order.price_at_decision
         
         # Weighted average execution price
-        total_filled_value = sum(e.shares * e.price for e in executions)
-        total_filled_shares = sum(e.shares for e in executions)
+        total_filled_value = sum (e.shares * e.price for e in executions)
+        total_filled_shares = sum (e.shares for e in executions)
         avg_exec_price = total_filled_value / total_filled_shares
         
         # Shortfall (in bps)
@@ -184,14 +186,14 @@ class TCASystem:
         
         return shortfall * 10000  # Convert to bps
     
-    def market_impact(self, order, executions):
+    def market_impact (self, order, executions):
         """
         How much did our order move the market?
         
         Compare price before/after our trades
         """
         price_before = order.price_at_arrival
-        price_after = self.get_price_after_completion(order.symbol)
+        price_after = self.get_price_after_completion (order.symbol)
         
         if order.side == 'BUY':
             impact = (price_after - price_before) / price_before
@@ -200,14 +202,14 @@ class TCASystem:
         
         return impact * 10000
     
-    def timing_cost(self, order, executions):
+    def timing_cost (self, order, executions):
         """
         Cost of NOT trading immediately
         
         If price moved against us while we slowly traded
         """
         arrival_price = order.price_at_arrival
-        vwap_during_period = self.calculate_vwap(order.symbol, order.start_time, order.end_time)
+        vwap_during_period = self.calculate_vwap (order.symbol, order.start_time, order.end_time)
         
         if order.side == 'BUY':
             timing = (vwap_during_period - arrival_price) / arrival_price
@@ -216,7 +218,7 @@ class TCASystem:
         
         return timing * 10000
     
-    def opportunity_cost(self, order, executions):
+    def opportunity_cost (self, order, executions):
         """
         Cost of unfilled portion
         
@@ -224,7 +226,7 @@ class TCASystem:
         what was cost of missing 2K?
         """
         target_shares = order.target_shares
-        filled_shares = sum(e.shares for e in executions)
+        filled_shares = sum (e.shares for e in executions)
         unfilled = target_shares - filled_shares
         
         if unfilled <= 0:
@@ -232,7 +234,7 @@ class TCASystem:
         
         # Price movement on unfilled portion
         exec_price = order.final_execution_price
-        closing_price = self.get_closing_price(order.symbol, order.date)
+        closing_price = self.get_closing_price (order.symbol, order.date)
         
         if order.side == 'BUY':
             opportunity = (closing_price - exec_price) / exec_price
@@ -242,7 +244,7 @@ class TCASystem:
         # Weight by unfilled portion
         return opportunity * (unfilled / target_shares) * 10000
     
-    def grade_execution(self, total_cost_bps):
+    def grade_execution (self, total_cost_bps):
         """Grade execution quality"""
         if total_cost_bps < 5:
             return 'EXCELLENT (A)'
@@ -276,18 +278,19 @@ print(f"Grade: {analysis['grade']}")
 - **Brokers must:** Compare execution quality across venues, route smartly
 
 **Bottom Line:** Best execution ≠ lowest price. Must minimize total cost: price + impact + timing + opportunity. Good execution: <15 bps total cost.`,
-        keyPoints: [
-            'Best execution: Price + speed + certainty + impact + opportunity cost + information leakage',
-            'Implementation shortfall: (Execution price - Decision price), key metric',
-            'TCA components: Shortfall + market impact + timing + opportunity + spread',
-            'Grading: <5 bps excellent, <15 good, <30 fair, >30 poor',
-            'Regulation: Reg NMS (US) and MiFID II (EU) mandate best execution with TCA proof'
-        ]
-    },
-    {
-        id: 'fm-1-10-q-3',
-        question: "Exchange co-location allows HFT firms to place servers next to exchange servers, reducing latency from milliseconds to microseconds. Analyze the arms race dynamics. Should regulators allow/ban co-location? Design a 'fairness' alternative.",
-        sampleAnswer: `**Co-Location Arms Race:**
+    keyPoints: [
+      'Best execution: Price + speed + certainty + impact + opportunity cost + information leakage',
+      'Implementation shortfall: (Execution price - Decision price), key metric',
+      'TCA components: Shortfall + market impact + timing + opportunity + spread',
+      'Grading: <5 bps excellent, <15 good, <30 fair, >30 poor',
+      'Regulation: Reg NMS (US) and MiFID II (EU) mandate best execution with TCA proof',
+    ],
+  },
+  {
+    id: 'fm-1-10-q-3',
+    question:
+      "Exchange co-location allows HFT firms to place servers next to exchange servers, reducing latency from milliseconds to microseconds. Analyze the arms race dynamics. Should regulators allow/ban co-location? Design a 'fairness' alternative.",
+    sampleAnswer: `**Co-Location Arms Race:**
 
 **Current State:**
 - Exchange rack space: $10K-50K/month
@@ -298,9 +301,9 @@ print(f"Grade: {analysis['grade']}")
 **Arms Race Dynamics:**
 \`\`\`python
 class CoLocationArmsRace:
-    def model_equilibrium(self):
+    def model_equilibrium (self):
         """
-        Game theory: Prisoner's dilemma
+        Game theory: Prisoner\'s dilemma
         
         If no one co-locates: Everyone saves $100M
         If one firm co-locates: They dominate, others lose
@@ -334,7 +337,7 @@ class CoLocationArmsRace:
 - ✅ Liquidity: HFT provides tight spreads
 
 **Arguments Against:**
-- ❌ Wasteful arms race ($100M+ per firm, zero-sum)
+- ❌ Wasteful arms race (\$100M+ per firm, zero-sum)
 - ❌ Unfair: Retail can't compete with microseconds
 - ❌ Fragile: 2010 flash crash (speed → instability)
 - ❌ Socially useless: No economic value from being 10µs faster
@@ -364,7 +367,7 @@ class FairnessAlternative:
     IEX Exchange approach: 350µs speed bump for ALL orders
     """
     
-    def implement_speed_bump(self, order):
+    def implement_speed_bump (self, order):
         # Coil fiber optic cable to create 350µs delay
         delay_microseconds = 350
         
@@ -375,7 +378,7 @@ class FairnessAlternative:
         # Relative difference: 4950µs vs previous 4950µs
         # But within exchange: everyone equal
         
-        time.sleep(delay_microseconds / 1_000_000)
+        time.sleep (delay_microseconds / 1_000_000)
         
         return {
             'effect': 'Latency arbitrage eliminated',
@@ -383,18 +386,18 @@ class FairnessAlternative:
             'fairness': 'All market participants see same prices'
         }
     
-    def auction_alternative(self):
+    def auction_alternative (self):
         """
         Frequent batch auctions (1ms)
         """
         # Collect all orders in 1ms window
-        orders = self.collect_orders(duration_ms=1)
+        orders = self.collect_orders (duration_ms=1)
         
         # Execute all simultaneously at market-clearing price
-        clearing_price = self.find_equilibrium(orders)
+        clearing_price = self.find_equilibrium (orders)
         
         # Allocate: Pro-rata or price-time
-        fills = self.allocate_fills(orders, clearing_price)
+        fills = self.allocate_fills (orders, clearing_price)
         
         return {
             'effect': 'Speed irrelevant (all orders in 1ms treated equal)',
@@ -414,13 +417,12 @@ class FairnessAlternative:
 - Ends wasteful arms race
 
 **Bottom Line:** Co-location arms race is socially wasteful prisoner's dilemma. Speed bumps eliminate advantage while preserving liquidity. Regulators should mandate IEX-style delays.`,
-        keyPoints: [
-            'Co-location: Pay $50K/month for rack space, reduce latency from 5ms to 50µs',
-            'Arms race: Prisoner's dilemma → everyone spends $100M +, zero relative advantage(wasteful)',
+    keyPoints: [
+      'Co-location: Pay $50K/month for rack space, reduce latency from 5ms to 50µs',
+      "Arms race: Prisoner's dilemma → everyone spends $100M +, zero relative advantage (wasteful)",
       'IEX solution: 350µs speed bump for ALL orders → eliminates latency arbitrage',
-            'Batch auctions: Execute all orders in 1ms window simultaneously → speed irrelevant',
-            'Recommendation: Mandate speed bumps (preserves liquidity, ends wasteful race, levels field)'
-        ]
-    }
+      'Batch auctions: Execute all orders in 1ms window simultaneously → speed irrelevant',
+      'Recommendation: Mandate speed bumps (preserves liquidity, ends wasteful race, levels field)',
+    ],
+  },
 ];
-

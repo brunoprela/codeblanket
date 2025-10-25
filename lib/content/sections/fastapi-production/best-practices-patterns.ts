@@ -120,8 +120,8 @@ Security best practices
 # ✅ 1. Use HTTPS in production
 # ✅ 2. Set security headers
 @app.middleware("http")
-async def security_headers(request: Request, call_next):
-    response = await call_next(request)
+async def security_headers (request: Request, call_next):
+    response = await call_next (request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
@@ -131,23 +131,23 @@ async def security_headers(request: Request, call_next):
 # ✅ 3. Validate ALL inputs with Pydantic
 class UserCreate(BaseModel):
     email: EmailStr  # Validates email format
-    password: str = Field(min_length=8, max_length=100)
-    username: str = Field(min_length=3, max_length=50, pattern="^[a-zA-Z0-9_]+$")
+    password: str = Field (min_length=8, max_length=100)
+    username: str = Field (min_length=3, max_length=50, pattern="^[a-zA-Z0-9_]+$")
 
 # ✅ 4. Hash passwords properly
 from passlib.context import CryptContext
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext (schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+def hash_password (password: str) -> str:
+    return pwd_context.hash (password)
 
 # ✅ 5. Use parameterized queries (SQLAlchemy does this)
-# ❌ BAD: user = db.execute(f"SELECT * FROM users WHERE id={user_id}")
-# ✅ GOOD: user = db.execute(select(User).where(User.id == user_id))
+# ❌ BAD: user = db.execute (f"SELECT * FROM users WHERE id={user_id}")
+# ✅ GOOD: user = db.execute (select(User).where(User.id == user_id))
 
 # ✅ 6. Implement rate limiting
 from slowapi import Limiter
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter (key_func=get_remote_address)
 
 # ✅ 7. Restrict CORS to known origins
 app.add_middleware(
@@ -161,7 +161,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")  # Never hardcode!
 
 # ✅ 9. Implement proper authentication
 @app.get("/protected")
-async def protected(user: User = Depends(get_current_user)):
+async def protected (user: User = Depends (get_current_user)):
     return {"user": user}
 
 # ✅ 10. Log security events
@@ -238,19 +238,19 @@ async def get_data():
 from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 
-@cache(expire=60)
+@cache (expire=60)
 @app.get("/cached")
 async def cached_endpoint():
     return expensive_operation()
 
 # 5. Use response models to limit data
 @app.get("/users/{user_id}", response_model=UserPublic)
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     return user  # Only returns fields in UserPublic
 
 # 6. Batch database queries
 users = await db.execute(
-    select(User).options(selectinload(User.posts))  # Eager load
+    select(User).options (selectinload(User.posts))  # Eager load
 )
 \`\`\`
 
@@ -263,8 +263,8 @@ users = await db.execute(
 URL-based API versioning
 """
 
-v1_router = APIRouter(prefix="/api/v1", tags=["v1"])
-v2_router = APIRouter(prefix="/api/v2", tags=["v2"])
+v1_router = APIRouter (prefix="/api/v1", tags=["v1"])
+v2_router = APIRouter (prefix="/api/v2", tags=["v2"])
 
 @v1_router.get("/users")
 async def get_users_v1():
@@ -274,8 +274,8 @@ async def get_users_v1():
 async def get_users_v2():
     return {"users": [], "total": 0}  # New format
 
-app.include_router(v1_router)
-app.include_router(v2_router)
+app.include_router (v1_router)
+app.include_router (v2_router)
 \`\`\`
 
 ---
@@ -292,16 +292,16 @@ import structlog
 logger = structlog.get_logger()
 
 @app.middleware("http")
-async def logging_middleware(request: Request, call_next):
+async def logging_middleware (request: Request, call_next):
     logger.info(
         "request_started",
         method=request.method,
         path=request.url.path,
         request_id=request.state.request_id,
-        user_id=getattr(request.state, "user_id", None)
+        user_id=getattr (request.state, "user_id", None)
     )
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     logger.info(
         "request_completed",
@@ -329,12 +329,12 @@ users = db.execute("SELECT * FROM users")
 
 # ❌ DON'T skip input validation
 @app.post("/users")
-async def create_user(data: dict):  # No validation!
+async def create_user (data: dict):  # No validation!
     pass
 
 # ❌ DON'T ignore errors
 try:
-    user = get_user(id)
+    user = get_user (id)
 except:
     pass  # Silent failure!
 
@@ -345,7 +345,7 @@ async def blocking():
     
 # ❌ DON'T expose internal errors
 except Exception as e:
-    return {"error": str(e)}  # Leaks internals!
+    return {"error": str (e)}  # Leaks internals!
 \`\`\`
 
 ---

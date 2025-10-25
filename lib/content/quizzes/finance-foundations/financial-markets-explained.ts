@@ -28,14 +28,14 @@ class DataProvider(ABC):
     """Abstract base class for data providers"""
     
     @abstractmethod
-    def fetch_data(self, ticker: str, start_date, end_date) -> AssetData:
+    def fetch_data (self, ticker: str, start_date, end_date) -> AssetData:
         pass
 
 class EquityDataProvider(DataProvider):
     """Fetch equity data from Yahoo Finance"""
     
-    def fetch_data(self, ticker, start_date, end_date) -> AssetData:
-        df = yf.download(ticker, start=start_date, end=end_date, progress=False)
+    def fetch_data (self, ticker, start_date, end_date) -> AssetData:
+        df = yf.download (ticker, start=start_date, end=end_date, progress=False)
         prices = df['Adj Close']
         returns = prices.pct_change().dropna()
         
@@ -53,14 +53,14 @@ class CryptoDataProvider(DataProvider):
     def __init__(self):
         self.exchange = ccxt.binance()
     
-    def fetch_data(self, ticker, start_date, end_date) -> AssetData:
+    def fetch_data (self, ticker, start_date, end_date) -> AssetData:
         # Crypto tickers like 'BTC/USDT'
         # Fetch OHLCV data
-        since = int(start_date.timestamp() * 1000)
-        ohlcv = self.exchange.fetch_ohlcv(ticker, '1d', since=since)
+        since = int (start_date.timestamp() * 1000)
+        ohlcv = self.exchange.fetch_ohlcv (ticker, '1d', since=since)
         
-        df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        df = pd.DataFrame (ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+        df['timestamp'] = pd.to_datetime (df['timestamp'], unit='ms')
         df.set_index('timestamp', inplace=True)
         
         prices = df['close']
@@ -86,7 +86,7 @@ class MultiAssetDataManager:
         }
         self.cache = {}  # Cache fetched data
     
-    def fetch_portfolio_data(self, portfolio: Dict[str, str], 
+    def fetch_portfolio_data (self, portfolio: Dict[str, str], 
                              start_date, end_date) -> Dict[str, AssetData]:
         """
         Fetch data for entire portfolio
@@ -102,7 +102,7 @@ class MultiAssetDataManager:
         for ticker, asset_class in portfolio.items():
             try:
                 provider = self.providers[asset_class]
-                asset_data = provider.fetch_data(ticker, start_date, end_date)
+                asset_data = provider.fetch_data (ticker, start_date, end_date)
                 data[ticker] = asset_data
                 self.cache[ticker] = asset_data
             except Exception as e:
@@ -125,13 +125,13 @@ class ReturnCalculator:
     """Handle different return calculation methods"""
     
     @staticmethod
-    def arithmetic_return(prices: pd.Series) -> float:
+    def arithmetic_return (prices: pd.Series) -> float:
         """Simple average return"""
         returns = prices.pct_change().dropna()
         return returns.mean()
     
     @staticmethod
-    def geometric_return(prices: pd.Series) -> float:
+    def geometric_return (prices: pd.Series) -> float:
         """Compound average return (CAGR)"""
         total_return = (prices.iloc[-1] / prices.iloc[0]) - 1
         years = (prices.index[-1] - prices.index[0]).days / 365.25
@@ -139,12 +139,12 @@ class ReturnCalculator:
         return cagr
     
     @staticmethod
-    def log_return(prices: pd.Series) -> pd.Series:
+    def log_return (prices: pd.Series) -> pd.Series:
         """Log returns (better for statistical properties)"""
-        return np.log(prices / prices.shift(1)).dropna()
+        return np.log (prices / prices.shift(1)).dropna()
     
     @staticmethod
-    def align_returns(data: Dict[str, AssetData], 
+    def align_returns (data: Dict[str, AssetData], 
                       frequency: str = 'D') -> pd.DataFrame:
         """
         Align returns across assets with different trading schedules
@@ -160,16 +160,16 @@ class ReturnCalculator:
             # Resample to common frequency
             if asset_data.asset_class == 'crypto':
                 # Crypto: Resample to daily, use last price of day
-                returns = returns.resample(frequency).last()
+                returns = returns.resample (frequency).last()
             
             returns_dict[ticker] = returns
         
         # Create aligned DataFrame
-        df = pd.DataFrame(returns_dict)
+        df = pd.DataFrame (returns_dict)
         
         # Forward-fill missing values (weekends, holidays)
         # This assumes asset maintains value when not trading
-        df = df.fillna(method='ffill')
+        df = df.fillna (method='ffill')
         
         # Drop rows where any asset has no data
         df = df.dropna()
@@ -178,10 +178,10 @@ class ReturnCalculator:
 
 # Usage
 calculator = ReturnCalculator()
-portfolio_data = manager.fetch_portfolio_data(portfolio, start_date, end_date)
+portfolio_data = manager.fetch_portfolio_data (portfolio, start_date, end_date)
 
 # Get aligned returns
-aligned_returns = calculator.align_returns(portfolio_data)
+aligned_returns = calculator.align_returns (portfolio_data)
 print(aligned_returns.head())
 \`\`\`
 
@@ -192,7 +192,7 @@ class CorrelationCalculator:
     """Robust correlation calculation"""
     
     @staticmethod
-    def pairwise_correlation(returns: pd.DataFrame, 
+    def pairwise_correlation (returns: pd.DataFrame, 
                              method: str = 'pearson',
                              min_periods: int = 30) -> pd.DataFrame:
         """
@@ -200,10 +200,10 @@ class CorrelationCalculator:
         
         Handles missing data gracefully
         """
-        return returns.corr(method=method, min_periods=min_periods)
+        return returns.corr (method=method, min_periods=min_periods)
     
     @staticmethod
-    def shrinkage_correlation(returns: pd.DataFrame, 
+    def shrinkage_correlation (returns: pd.DataFrame, 
                               shrinkage_factor: float = 0.1) -> pd.DataFrame:
         """
         Ledoit-Wolf shrinkage for more stable correlation estimates
@@ -212,17 +212,17 @@ class CorrelationCalculator:
         Useful when you have more assets than observations
         """
         sample_corr = returns.corr()
-        identity = np.eye(len(sample_corr))
+        identity = np.eye (len (sample_corr))
         
         # Shrink toward identity matrix
         shrunk_corr = (1 - shrinkage_factor) * sample_corr + shrinkage_factor * identity
         
-        return pd.DataFrame(shrunk_corr, 
+        return pd.DataFrame (shrunk_corr, 
                             index=sample_corr.index, 
                             columns=sample_corr.columns)
     
     @staticmethod
-    def rolling_correlation(returns: pd.DataFrame, 
+    def rolling_correlation (returns: pd.DataFrame, 
                             window: int = 60) -> Dict[str, pd.DataFrame]:
         """
         Calculate rolling correlation matrices
@@ -230,7 +230,7 @@ class CorrelationCalculator:
         Useful for understanding how correlations change over time
         """
         rolling_corr = {}
-        for i in range(window, len(returns)):
+        for i in range (window, len (returns)):
             window_data = returns.iloc[i-window:i]
             corr_matrix = window_data.corr()
             rolling_corr[returns.index[i]] = corr_matrix
@@ -241,12 +241,12 @@ class CorrelationCalculator:
 corr_calc = CorrelationCalculator()
 
 # Sample correlation
-correlation_matrix = corr_calc.pairwise_correlation(aligned_returns)
+correlation_matrix = corr_calc.pairwise_correlation (aligned_returns)
 print("\\nCorrelation Matrix:")
 print(correlation_matrix)
 
 # Shrunk correlation (more stable for optimization)
-shrunk_corr = corr_calc.shrinkage_correlation(aligned_returns, shrinkage_factor=0.2)
+shrunk_corr = corr_calc.shrinkage_correlation (aligned_returns, shrinkage_factor=0.2)
 \`\`\`
 
 **4. Portfolio Optimization Methods**
@@ -258,7 +258,7 @@ import cvxpy as cp
 class PortfolioOptimizer:
     """Multiple optimization strategies"""
     
-    def mean_variance_optimization(self, returns: pd.DataFrame, 
+    def mean_variance_optimization (self, returns: pd.DataFrame, 
                                     target_return: float = None) -> np.ndarray:
         """
         Markowitz mean-variance optimization
@@ -270,30 +270,30 @@ class PortfolioOptimizer:
         """
         mu = returns.mean() * 252  # Annualize
         Sigma = returns.cov() * 252  # Annualize
-        n = len(mu)
+        n = len (mu)
         
         # Define optimization variables
-        w = cp.Variable(n)
+        w = cp.Variable (n)
         
         # Objective: minimize variance
-        portfolio_variance = cp.quad_form(w, Sigma)
+        portfolio_variance = cp.quad_form (w, Sigma)
         
         # Constraints
         constraints = [
-            cp.sum(w) == 1,  # Weights sum to 1
+            cp.sum (w) == 1,  # Weights sum to 1
             w >= 0  # Long-only (no short positions)
         ]
         
         if target_return:
-            constraints.append(mu @ w >= target_return)
+            constraints.append (mu @ w >= target_return)
         
         # Solve
-        problem = cp.Problem(cp.Minimize(portfolio_variance), constraints)
+        problem = cp.Problem (cp.Minimize (portfolio_variance), constraints)
         problem.solve()
         
         return w.value
     
-    def risk_parity(self, returns: pd.DataFrame) -> np.ndarray:
+    def risk_parity (self, returns: pd.DataFrame) -> np.ndarray:
         """
         Risk parity: Equal risk contribution from all assets
         
@@ -302,7 +302,7 @@ class PortfolioOptimizer:
         Sigma = returns.cov() * 252  # Annualized covariance
         n = len(Sigma)
         
-        def risk_parity_objective(w):
+        def risk_parity_objective (w):
             # Portfolio variance
             portfolio_var = w @ Sigma @ w
             
@@ -310,29 +310,29 @@ class PortfolioOptimizer:
             marginal_contrib = Sigma @ w
             
             # Risk contribution
-            risk_contrib = w * marginal_contrib / np.sqrt(portfolio_var)
+            risk_contrib = w * marginal_contrib / np.sqrt (portfolio_var)
             
             # Target: equal risk from all assets
-            target_risk = np.sqrt(portfolio_var) / n
+            target_risk = np.sqrt (portfolio_var) / n
             
             # Minimize squared differences
             return np.sum((risk_contrib - target_risk) ** 2)
         
         # Constraints
         constraints = [
-            {'type': 'eq', 'fun': lambda w: np.sum(w) - 1},  # Sum to 1
+            {'type': 'eq', 'fun': lambda w: np.sum (w) - 1},  # Sum to 1
         ]
-        bounds = tuple((0, 1) for _ in range(n))  # Long-only
+        bounds = tuple((0, 1) for _ in range (n))  # Long-only
         
         # Initial guess: equal weights
-        w0 = np.ones(n) / n
+        w0 = np.ones (n) / n
         
-        result = minimize(risk_parity_objective, w0, 
+        result = minimize (risk_parity_objective, w0, 
                           method='SLSQP', bounds=bounds, constraints=constraints)
         
         return result.x
     
-    def maximum_sharpe(self, returns: pd.DataFrame, 
+    def maximum_sharpe (self, returns: pd.DataFrame, 
                        risk_free_rate: float = 0.04) -> np.ndarray:
         """
         Maximize Sharpe ratio
@@ -341,25 +341,25 @@ class PortfolioOptimizer:
         """
         mu = returns.mean() * 252
         Sigma = returns.cov() * 252
-        n = len(mu)
+        n = len (mu)
         
-        w = cp.Variable(n)
+        w = cp.Variable (n)
         
         # Expected return
         portfolio_return = mu @ w
         
         # Volatility
-        portfolio_std = cp.sqrt(cp.quad_form(w, Sigma))
+        portfolio_std = cp.sqrt (cp.quad_form (w, Sigma))
         
         # Sharpe ratio (we minimize negative Sharpe)
         sharpe = (portfolio_return - risk_free_rate) / portfolio_std
         
         constraints = [
-            cp.sum(w) == 1,
+            cp.sum (w) == 1,
             w >= 0
         ]
         
-        problem = cp.Problem(cp.Maximize(sharpe), constraints)
+        problem = cp.Problem (cp.Maximize (sharpe), constraints)
         problem.solve()
         
         return w.value
@@ -368,21 +368,21 @@ class PortfolioOptimizer:
 optimizer = PortfolioOptimizer()
 
 # Mean-variance
-mv_weights = optimizer.mean_variance_optimization(aligned_returns, target_return=0.10)
+mv_weights = optimizer.mean_variance_optimization (aligned_returns, target_return=0.10)
 print("\\nMean-Variance Weights:")
-for ticker, weight in zip(aligned_returns.columns, mv_weights):
+for ticker, weight in zip (aligned_returns.columns, mv_weights):
     print(f"  {ticker}: {weight:.2%}")
 
 # Risk parity
-rp_weights = optimizer.risk_parity(aligned_returns)
+rp_weights = optimizer.risk_parity (aligned_returns)
 print("\\nRisk Parity Weights:")
-for ticker, weight in zip(aligned_returns.columns, rp_weights):
+for ticker, weight in zip (aligned_returns.columns, rp_weights):
     print(f"  {ticker}: {weight:.2%}")
 
 # Maximum Sharpe
-ms_weights = optimizer.maximum_sharpe(aligned_returns)
+ms_weights = optimizer.maximum_sharpe (aligned_returns)
 print("\\nMaximum Sharpe Weights:")
-for ticker, weight in zip(aligned_returns.columns, ms_weights):
+for ticker, weight in zip (aligned_returns.columns, ms_weights):
     print(f"  {ticker}: {weight:.2%}")
 \`\`\`
 
@@ -399,7 +399,7 @@ class Rebalancer:
         self.tax_rate_short = tax_rate_short
         self.tax_rate_long = tax_rate_long
     
-    def calculate_rebalance_trades(self, current_weights: Dict[str, float],
+    def calculate_rebalance_trades (self, current_weights: Dict[str, float],
                                     target_weights: Dict[str, float],
                                     current_prices: Dict[str, float],
                                     cost_basis: Dict[str, float],
@@ -420,10 +420,10 @@ class Rebalancer:
         
         for ticker in current_weights:
             current_weight = current_weights[ticker]
-            target_weight = target_weights.get(ticker, 0)
+            target_weight = target_weights.get (ticker, 0)
             
             # Check if rebalancing needed
-            drift = abs(current_weight - target_weight)
+            drift = abs (current_weight - target_weight)
             if drift < threshold:
                 continue  # Skip if within threshold
             
@@ -433,7 +433,7 @@ class Rebalancer:
             shares_change = dollar_change / current_prices[ticker]
             
             # Calculate costs
-            transaction_cost_dollar = abs(dollar_change) * self.transaction_cost
+            transaction_cost_dollar = abs (dollar_change) * self.transaction_cost
             
             # Calculate taxes (only on gains when selling)
             if dollar_change < 0:  # Selling
@@ -444,9 +444,9 @@ class Rebalancer:
                 if gain > 0:
                     # Long-term vs short-term capital gains
                     if holding_period_days[ticker] > 365:
-                        tax = gain * (abs(dollar_change) / current_value) * self.tax_rate_long
+                        tax = gain * (abs (dollar_change) / current_value) * self.tax_rate_long
                     else:
-                        tax = gain * (abs(dollar_change) / current_value) * self.tax_rate_short
+                        tax = gain * (abs (dollar_change) / current_value) * self.tax_rate_short
                     
                     total_tax += tax
             
@@ -461,7 +461,7 @@ class Rebalancer:
         
         return trades, total_cost, total_tax
     
-    def tax_loss_harvesting(self, positions: Dict[str, dict]) -> List[str]:
+    def tax_loss_harvesting (self, positions: Dict[str, dict]) -> List[str]:
         """
         Identify positions for tax-loss harvesting
         
@@ -475,7 +475,7 @@ class Rebalancer:
                 harvestable.append((ticker, loss))
         
         # Sort by loss amount (harvest biggest losses first)
-        harvestable.sort(key=lambda x: x[1], reverse=True)
+        harvestable.sort (key=lambda x: x[1], reverse=True)
         
         return [ticker for ticker, loss in harvestable]
 
@@ -492,7 +492,7 @@ trades, transaction_costs, taxes = rebalancer.calculate_rebalance_trades(
 
 print("\\nRebalancing Trades:")
 for ticker, trade in trades.items():
-    print(f"  {ticker}: {trade['shares']:.0f} shares (\${trade['dollars']:, .0f}) ")
+    print(f"  {ticker}: {trade['shares']:.0f} shares (\${trade['dollars']:,.0f}) ")
 print(f"\\nTotal Transaction Costs: \${transaction_costs:,.2f}")
 print(f"Total Taxes: \${taxes:,.2f}")
 \`\`\`

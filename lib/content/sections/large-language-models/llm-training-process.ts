@@ -38,7 +38,7 @@ class TrainingDataPipeline:
         self.stats = {}
     
     # Step 1: Data sources
-    def collect_data_sources(self):
+    def collect_data_sources (self):
         """
         Common data sources for LLM training
         """
@@ -84,7 +84,7 @@ class TrainingDataPipeline:
         return sources
     
     # Step 2: Data filtering
-    def filter_low_quality(self, text):
+    def filter_low_quality (self, text):
         """
         Remove low-quality content
         
@@ -96,36 +96,36 @@ class TrainingDataPipeline:
         """
         
         # 1. Language detection
-        if not self.is_target_language(text):
+        if not self.is_target_language (text):
             return False
         
         # 2. Adult content filter
-        if self.contains_adult_content(text):
+        if self.contains_adult_content (text):
             return False
         
         # 3. Quality heuristics
-        if not self.passes_quality_checks(text):
+        if not self.passes_quality_checks (text):
             return False
         
         # 4. Deduplication
-        if self.is_duplicate(text):
+        if self.is_duplicate (text):
             return False
         
         return True
     
-    def is_target_language(self, text, target='en'):
+    def is_target_language (self, text, target='en'):
         """
         Detect language
         """
         from langdetect import detect
         
         try:
-            lang = detect(text)
+            lang = detect (text)
             return lang == target
         except:
             return False
     
-    def contains_adult_content(self, text):
+    def contains_adult_content (self, text):
         """
         Filter adult/harmful content
         """
@@ -133,66 +133,66 @@ class TrainingDataPipeline:
         adult_keywords = set([...])  # Blocklist
         
         text_lower = text.lower()
-        return any(keyword in text_lower for keyword in adult_keywords)
+        return any (keyword in text_lower for keyword in adult_keywords)
     
-    def passes_quality_checks(self, text):
+    def passes_quality_checks (self, text):
         """
         Quality heuristics
         """
         lines = text.split('\\n')
         
         # 1. Minimum length
-        if len(text) < 100:
+        if len (text) < 100:
             return False
         
         # 2. Maximum line length (filter tables, logs)
-        avg_line_length = sum(len(line) for line in lines) / len(lines)
+        avg_line_length = sum (len (line) for line in lines) / len (lines)
         if avg_line_length > 200:  # Likely not prose
             return False
         
         # 3. Ratio of alphabetic characters
-        alpha_ratio = sum(c.isalpha() for c in text) / len(text)
+        alpha_ratio = sum (c.isalpha() for c in text) / len (text)
         if alpha_ratio < 0.6:  # Too many numbers/symbols
             return False
         
         # 4. Word count
         words = text.split()
-        if len(words) < 20:
+        if len (words) < 20:
             return False
         
         # 5. Unique word ratio (filter repetitive text)
-        unique_ratio = len(set(words)) / len(words)
+        unique_ratio = len (set (words)) / len (words)
         if unique_ratio < 0.3:  # Too repetitive
             return False
         
         # 6. Stop word ratio (natural language check)
         stop_words = {'the', 'a', 'an', 'in', 'on', 'at', ...}
         stop_word_count = sum(1 for w in words if w.lower() in stop_words)
-        stop_word_ratio = stop_word_count / len(words)
+        stop_word_ratio = stop_word_count / len (words)
         if stop_word_ratio < 0.1:  # Not natural language
             return False
         
         return True
     
-    def is_duplicate(self, text):
+    def is_duplicate (self, text):
         """
         Deduplication using MinHash LSH
         """
         from datasketch import MinHash, MinHashLSH
         
         # Create MinHash
-        m = MinHash(num_perm=128)
+        m = MinHash (num_perm=128)
         for word in text.split():
-            m.update(word.encode('utf-8'))
+            m.update (word.encode('utf-8'))
         
         # Check against LSH index
-        result = self.lsh.query(m)
+        result = self.lsh.query (m)
         
-        if len(result) > 0:
+        if len (result) > 0:
             return True  # Duplicate found
         
         # Add to index
-        self.lsh.insert(hash(text), m)
+        self.lsh.insert (hash (text), m)
         return False
 
 # Example: Process Common Crawl
@@ -207,20 +207,20 @@ class CommonCrawlProcessor:
     def __init__(self):
         self.pipeline = TrainingDataPipeline()
     
-    def process_warc_file(self, warc_path):
+    def process_warc_file (self, warc_path):
         """
         Extract clean text from WARC
         """
         clean_texts = []
         
-        with open(warc_path, 'rb') as f:
-            for record in warc.WARCFile(fileobj=f):
+        with open (warc_path, 'rb') as f:
+            for record in warc.WARCFile (fileobj=f):
                 if record.type == 'response':
                     # Extract HTML
                     html = record.payload.read()
                     
                     # Parse with BeautifulSoup
-                    soup = BeautifulSoup(html, 'html.parser')
+                    soup = BeautifulSoup (html, 'html.parser')
                     
                     # Remove scripts, styles
                     for script in soup(["script", "style"]):
@@ -230,28 +230,28 @@ class CommonCrawlProcessor:
                     text = soup.get_text()
                     
                     # Clean whitespace
-                    text = ' '.join(text.split())
+                    text = ' '.join (text.split())
                     
                     # Filter
-                    if self.pipeline.filter_low_quality(text):
-                        clean_texts.append(text)
+                    if self.pipeline.filter_low_quality (text):
+                        clean_texts.append (text)
         
         return clean_texts
 
 # Data statistics
-def analyze_dataset(texts):
+def analyze_dataset (texts):
     """
     Compute statistics on training data
     """
     import numpy as np
     
     stats = {
-        "total_documents": len(texts),
-        "total_tokens": sum(len(text.split()) for text in texts),
-        "avg_length": np.mean([len(text.split()) for text in texts]),
-        "median_length": np.median([len(text.split()) for text in texts]),
-        "min_length": min(len(text.split()) for text in texts),
-        "max_length": max(len(text.split()) for text in texts),
+        "total_documents": len (texts),
+        "total_tokens": sum (len (text.split()) for text in texts),
+        "avg_length": np.mean([len (text.split()) for text in texts]),
+        "median_length": np.median([len (text.split()) for text in texts]),
+        "min_length": min (len (text.split()) for text in texts),
+        "max_length": max (len (text.split()) for text in texts),
     }
     
     return stats
@@ -301,15 +301,15 @@ class BPETokenizer:
     4. Repeat until desired vocab size
     """
     
-    def train(self, texts, vocab_size=50000):
+    def train (self, texts, vocab_size=50000):
         """
         Train BPE tokenizer
         """
         # Initialize
-        tokenizer = Tokenizer(models.BPE())
+        tokenizer = Tokenizer (models.BPE())
         
         # Pre-tokenization (split on whitespace/punctuation)
-        tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)
+        tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel (add_prefix_space=False)
         
         # Trainer
         trainer = trainers.BpeTrainer(
@@ -318,11 +318,11 @@ class BPETokenizer:
         )
         
         # Train
-        tokenizer.train_from_iterator(texts, trainer)
+        tokenizer.train_from_iterator (texts, trainer)
         
         return tokenizer
     
-    def example_bpe_merging(self):
+    def example_bpe_merging (self):
         """
         How BPE learns merges
         """
@@ -346,22 +346,22 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
 # Tokenize text
 text = "Hello, how are you?"
-tokens = tokenizer.encode(text)
+tokens = tokenizer.encode (text)
 print(tokens)  # [15496, 11, 703, 389, 345, 30]
 
 # Decode
-decoded = tokenizer.decode(tokens)
+decoded = tokenizer.decode (tokens)
 print(decoded)  # "Hello, how are you?"
 
 # Token analysis
 text = "The cat sat on the mat"
-tokens = tokenizer.tokenize(text)
+tokens = tokenizer.tokenize (text)
 print(tokens)  # ['The', 'Ġcat', 'Ġsat', 'Ġon', 'Ġthe', 'Ġmat']
 # Note: Ġ represents space
 
 # Subword splitting
 text = "unbelievable"
-tokens = tokenizer.tokenize(text)
+tokens = tokenizer.tokenize (text)
 print(tokens)  # ['un', 'believ', 'able']
 
 # Advantages of BPE:
@@ -371,24 +371,24 @@ print(tokens)  # ['un', 'believ', 'able']
 # 4. Handles morphology (prefixes, suffixes)
 
 # Token counting (important for API costs)
-def count_tokens(text, tokenizer):
+def count_tokens (text, tokenizer):
     """
     Count tokens in text
     """
-    tokens = tokenizer.encode(text)
-    return len(tokens)
+    tokens = tokenizer.encode (text)
+    return len (tokens)
 
 # Example
 text = "This is a sentence."
-n_tokens = count_tokens(text, tokenizer)
+n_tokens = count_tokens (text, tokenizer)
 print(f"Tokens: {n_tokens}")  # 5 tokens
 
 # Rule of thumb: ~1 token per 4 characters in English
-def estimate_tokens(text):
+def estimate_tokens (text):
     """
     Quick estimation without tokenizer
     """
-    return len(text) // 4
+    return len (text) // 4
 
 # SentencePiece (used by LLaMA, BERT)
 import sentencepiece as spm
@@ -398,7 +398,7 @@ class SentencePieceTokenizer:
     Language-agnostic tokenization
     """
     
-    def train(self, input_file, vocab_size=32000):
+    def train (self, input_file, vocab_size=32000):
         """
         Train SentencePiece model
         """
@@ -410,7 +410,7 @@ class SentencePieceTokenizer:
             model_type='bpe'  # Or 'unigram'
         )
     
-    def load_and_use(self):
+    def load_and_use (self):
         """
         Load and use trained tokenizer
         """
@@ -427,7 +427,7 @@ class SentencePieceTokenizer:
         print(ids)  # [1234, 5678]
         
         # Decode
-        text = sp.decode_ids(ids)
+        text = sp.decode_ids (ids)
         print(text)  # "Hello world"
 
 # Tokenizer vocabulary size impact
@@ -474,7 +474,7 @@ class DataParallelTraining:
     - Updates model
     """
     
-    def setup(self, rank, world_size):
+    def setup (self, rank, world_size):
         """
         Initialize distributed training
         """
@@ -485,15 +485,15 @@ class DataParallelTraining:
             world_size=world_size
         )
     
-    def train(self, rank, world_size, model, dataset):
+    def train (self, rank, world_size, model, dataset):
         """
         Train with DDP
         """
         # Setup
-        self.setup(rank, world_size)
+        self.setup (rank, world_size)
         
         # Move model to GPU
-        model = model.to(rank)
+        model = model.to (rank)
         
         # Wrap with DDP
         model = DDP(model, device_ids=[rank])
@@ -514,16 +514,16 @@ class DataParallelTraining:
         )
         
         # Training loop
-        for epoch in range(num_epochs):
-            sampler.set_epoch(epoch)  # Shuffle differently each epoch
+        for epoch in range (num_epochs):
+            sampler.set_epoch (epoch)  # Shuffle differently each epoch
             
             for batch in dataloader:
-                inputs = batch['input_ids'].to(rank)
-                labels = batch['labels'].to(rank)
+                inputs = batch['input_ids'].to (rank)
+                labels = batch['labels'].to (rank)
                 
                 # Forward pass
-                outputs = model(inputs)
-                loss = criterion(outputs, labels)
+                outputs = model (inputs)
+                loss = criterion (outputs, labels)
                 
                 # Backward pass
                 loss.backward()
@@ -561,32 +561,32 @@ class ModelParallelTraining:
     - GPU 3: Layers 75-99
     """
     
-    def split_model_across_gpus(self, model, num_gpus=4):
+    def split_model_across_gpus (self, model, num_gpus=4):
         """
         Split layers across GPUs
         """
-        layers_per_gpu = len(model.layers) // num_gpus
+        layers_per_gpu = len (model.layers) // num_gpus
         
-        for i, layer in enumerate(model.layers):
+        for i, layer in enumerate (model.layers):
             gpu_id = i // layers_per_gpu
-            layer.to(f'cuda:{gpu_id}')
+            layer.to (f'cuda:{gpu_id}')
         
         return model
     
-    def forward_with_model_parallel(self, model, x):
+    def forward_with_model_parallel (self, model, x):
         """
         Forward pass moves between GPUs
         """
         # Start on GPU 0
         x = x.to('cuda:0')
         
-        for i, layer in enumerate(model.layers):
+        for i, layer in enumerate (model.layers):
             # Move to correct GPU
             gpu_id = i // layers_per_gpu
-            x = x.to(f'cuda:{gpu_id}')
+            x = x.to (f'cuda:{gpu_id}')
             
             # Forward through layer
-            x = layer(x)
+            x = layer (x)
         
         return x
 
@@ -599,14 +599,14 @@ class PipelineParallelism:
     Reduces idle time (GPUs don't wait for each other)
     """
     
-    def forward_with_pipeline(self, model, batch, num_microbatches=4):
+    def forward_with_pipeline (self, model, batch, num_microbatches=4):
         """
         Pipeline execution
         """
-        microbatch_size = len(batch) // num_microbatches
+        microbatch_size = len (batch) // num_microbatches
         microbatches = [
             batch[i:i+microbatch_size]
-            for i in range(0, len(batch), microbatch_size)
+            for i in range(0, len (batch), microbatch_size)
         ]
         
         # Pipeline: As soon as GPU 0 finishes microbatch 1,
@@ -614,10 +614,10 @@ class PipelineParallelism:
         
         outputs = []
         for mb in microbatches:
-            out = self.forward_microbatch(model, mb)
-            outputs.append(out)
+            out = self.forward_microbatch (model, mb)
+            outputs.append (out)
         
-        return torch.cat(outputs)
+        return torch.cat (outputs)
 
 # 4. ZeRO (Zero Redundancy Optimizer) - DeepSpeed
 from deepspeed import DeepSpeedConfig, initialize
@@ -632,7 +632,7 @@ class ZeROTraining:
     - Stage 3: + Partition parameters (linear memory reduction)
     """
     
-    def setup_deepspeed(self, model):
+    def setup_deepspeed (self, model):
         """
         Setup DeepSpeed with ZeRO-3
         """
@@ -712,7 +712,7 @@ class MixedPrecisionTraining:
         self.optimizer = optimizer
         self.scaler = GradScaler()  # Prevents underflow
     
-    def training_step(self, batch):
+    def training_step (self, batch):
         """
         Mixed precision training step
         """
@@ -721,11 +721,11 @@ class MixedPrecisionTraining:
         
         # Forward pass in FP16
         with autocast():
-            outputs = self.model(inputs)
-            loss = criterion(outputs, labels)
+            outputs = self.model (inputs)
+            loss = criterion (outputs, labels)
         
         # Backward pass: Scale loss to prevent underflow
-        self.scaler.scale(loss).backward()
+        self.scaler.scale (loss).backward()
         
         # Unscale gradients before clipping
         self.scaler.unscale_(self.optimizer)
@@ -734,7 +734,7 @@ class MixedPrecisionTraining:
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
         
         # Update weights
-        self.scaler.step(self.optimizer)
+        self.scaler.step (self.optimizer)
         self.scaler.update()
         
         self.optimizer.zero_grad()
@@ -755,7 +755,7 @@ class BFloat16Training:
     - Slightly less precise, but fine for LLMs
     """
     
-    def training_step(self, batch):
+    def training_step (self, batch):
         """
         BF16 training (simpler than FP16)
         """
@@ -763,9 +763,9 @@ class BFloat16Training:
         labels = batch['labels']
         
         # Convert to BF16
-        with autocast(dtype=torch.bfloat16):
-            outputs = self.model(inputs)
-            loss = criterion(outputs, labels)
+        with autocast (dtype=torch.bfloat16):
+            outputs = self.model (inputs)
+            loss = criterion (outputs, labels)
         
         # No scaling needed!
         loss.backward()
@@ -857,7 +857,7 @@ class LearningRateScheduler:
         self.min_lr = min_lr
         self.base_lr = optimizer.param_groups[0]['lr']
     
-    def get_lr(self, step):
+    def get_lr (self, step):
         """
         Learning rate schedule
         
@@ -870,22 +870,22 @@ class LearningRateScheduler:
         else:
             # Cosine decay
             progress = (step - self.warmup_steps) / (self.total_steps - self.warmup_steps)
-            lr = self.min_lr + (self.base_lr - self.min_lr) * 0.5 * (1 + math.cos(math.pi * progress))
+            lr = self.min_lr + (self.base_lr - self.min_lr) * 0.5 * (1 + math.cos (math.pi * progress))
         
         return lr
     
-    def step(self, step):
+    def step (self, step):
         """
         Update learning rate
         """
-        lr = self.get_lr(step)
+        lr = self.get_lr (step)
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = lr
 
 # Visualize LR schedule
 import matplotlib.pyplot as plt
 
-def plot_lr_schedule(warmup_steps=2000, total_steps=100000, base_lr=3e-4):
+def plot_lr_schedule (warmup_steps=2000, total_steps=100000, base_lr=3e-4):
     scheduler = LearningRateScheduler(
         optimizer=None,
         warmup_steps=warmup_steps,
@@ -893,11 +893,11 @@ def plot_lr_schedule(warmup_steps=2000, total_steps=100000, base_lr=3e-4):
         min_lr=base_lr * 0.1
     )
     
-    steps = range(total_steps)
-    lrs = [scheduler.get_lr(step) for step in steps]
+    steps = range (total_steps)
+    lrs = [scheduler.get_lr (step) for step in steps]
     
-    plt.figure(figsize=(10, 6))
-    plt.plot(steps, lrs)
+    plt.figure (figsize=(10, 6))
+    plt.plot (steps, lrs)
     plt.xlabel('Step')
     plt.ylabel('Learning Rate')
     plt.title('Learning Rate Schedule (Warmup + Cosine Decay)')
@@ -905,7 +905,7 @@ def plot_lr_schedule(warmup_steps=2000, total_steps=100000, base_lr=3e-4):
     plt.show()
 
 # 3. Gradient clipping
-def clip_gradients(model, max_norm=1.0):
+def clip_gradients (model, max_norm=1.0):
     """
     Prevent exploding gradients
     """
@@ -920,13 +920,13 @@ class GradientAccumulation:
     → Accumulate gradients over 8 steps (256/32=8)
     """
     
-    def train_with_accumulation(self, model, dataloader, accumulation_steps=8):
+    def train_with_accumulation (self, model, dataloader, accumulation_steps=8):
         optimizer.zero_grad()
         
-        for i, batch in enumerate(dataloader):
+        for i, batch in enumerate (dataloader):
             # Forward pass
-            outputs = model(batch['input_ids'])
-            loss = criterion(outputs, batch['labels'])
+            outputs = model (batch['input_ids'])
+            loss = criterion (outputs, batch['labels'])
             
             # Scale loss
             loss = loss / accumulation_steps
@@ -937,7 +937,7 @@ class GradientAccumulation:
             # Update every accumulation_steps
             if (i + 1) % accumulation_steps == 0:
                 # Clip gradients
-                clip_gradients(model)
+                clip_gradients (model)
                 
                 # Update
                 optimizer.step()
@@ -997,19 +997,19 @@ class TrainingMonitor:
     
     def __init__(self, project_name, run_name):
         # Initialize Weights & Biases
-        wandb.init(project=project_name, name=run_name)
+        wandb.init (project=project_name, name=run_name)
         
         self.step = 0
         self.best_val_loss = float('inf')
     
-    def log_metrics(self, metrics):
+    def log_metrics (self, metrics):
         """
         Log to wandb
         """
-        wandb.log(metrics, step=self.step)
+        wandb.log (metrics, step=self.step)
         self.step += 1
     
-    def should_save_checkpoint(self, val_loss):
+    def should_save_checkpoint (self, val_loss):
         """
         Save if validation loss improved
         """
@@ -1018,7 +1018,7 @@ class TrainingMonitor:
             return True
         return False
     
-    def save_checkpoint(self, model, optimizer, scheduler, path):
+    def save_checkpoint (self, model, optimizer, scheduler, path):
         """
         Save training state
         """
@@ -1031,17 +1031,17 @@ class TrainingMonitor:
             'config': model.config
         }
         
-        torch.save(checkpoint, path)
+        torch.save (checkpoint, path)
     
-    def load_checkpoint(self, model, optimizer, scheduler, path):
+    def load_checkpoint (self, model, optimizer, scheduler, path):
         """
         Resume training
         """
-        checkpoint = torch.load(path)
+        checkpoint = torch.load (path)
         
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+        model.load_state_dict (checkpoint['model_state_dict'])
+        optimizer.load_state_dict (checkpoint['optimizer_state_dict'])
+        scheduler.load_state_dict (checkpoint['scheduler_state_dict'])
         
         self.step = checkpoint['step']
         self.best_val_loss = checkpoint['best_val_loss']
@@ -1060,9 +1060,9 @@ def train_llm(
     """
     # Setup
     optimizer = optim.AdamW(model.parameters(), lr=3e-4)
-    scheduler = LearningRateScheduler(optimizer, warmup_steps=2000, total_steps=num_steps)
+    scheduler = LearningRateScheduler (optimizer, warmup_steps=2000, total_steps=num_steps)
     scaler = GradScaler()
-    monitor = TrainingMonitor(project_name="llm-training", run_name="gpt-125m")
+    monitor = TrainingMonitor (project_name="llm-training", run_name="gpt-125m")
     
     model.train()
     global_step = 0
@@ -1074,37 +1074,37 @@ def train_llm(
             labels = batch['labels'].cuda()
             
             with autocast():
-                outputs = model(inputs)
-                loss = criterion(outputs, labels)
+                outputs = model (inputs)
+                loss = criterion (outputs, labels)
             
-            scaler.scale(loss).backward()
+            scaler.scale (loss).backward()
             scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            scaler.step(optimizer)
+            scaler.step (optimizer)
             scaler.update()
             optimizer.zero_grad()
             
-            scheduler.step(global_step)
+            scheduler.step (global_step)
             
             # Log metrics
             if global_step % 10 == 0:
                 monitor.log_metrics({
                     'train/loss': loss.item(),
-                    'train/perplexity': math.exp(loss.item()),
-                    'train/lr': scheduler.get_lr(global_step),
+                    'train/perplexity': math.exp (loss.item()),
+                    'train/lr': scheduler.get_lr (global_step),
                     'train/step': global_step
                 })
             
             # Validation
             if global_step % eval_every == 0:
-                val_loss = evaluate(model, val_dataloader)
+                val_loss = evaluate (model, val_dataloader)
                 monitor.log_metrics({
                     'val/loss': val_loss,
-                    'val/perplexity': math.exp(val_loss)
+                    'val/perplexity': math.exp (val_loss)
                 })
                 
                 # Save checkpoint if improved
-                if monitor.should_save_checkpoint(val_loss):
+                if monitor.should_save_checkpoint (val_loss):
                     monitor.save_checkpoint(
                         model, optimizer, scheduler,
                         f'checkpoint_step_{global_step}.pt'
@@ -1124,7 +1124,7 @@ def train_llm(
     
     return model
 
-def evaluate(model, dataloader):
+def evaluate (model, dataloader):
     """
     Compute validation loss
     """
@@ -1137,8 +1137,8 @@ def evaluate(model, dataloader):
             inputs = batch['input_ids'].cuda()
             labels = batch['labels'].cuda()
             
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
+            outputs = model (inputs)
+            loss = criterion (outputs, labels)
             
             total_loss += loss.item() * inputs.size(0)
             total_tokens += inputs.size(0)
@@ -1174,6 +1174,6 @@ Training LLMs requires:
 - Save checkpoints frequently
 - Test on validation set regularly
 
-Training from scratch is expensive ($1M+ for large models). Most practitioners fine-tune existing models or use APIs.
+Training from scratch is expensive (\$1M+ for large models). Most practitioners fine-tune existing models or use APIs.
 `,
 };

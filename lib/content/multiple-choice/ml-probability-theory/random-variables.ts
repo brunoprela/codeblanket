@@ -35,27 +35,28 @@ export const randomvariablesMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc3',
     question: 'Which statement about PDFs is TRUE?',
     options: [
-      'The PDF value f(x) is always between 0 and 1',
-      'The PDF f(x) gives P(X = x)',
-      'The PDF f(x) can be greater than 1',
+      'The PDF value f (x) is always between 0 and 1',
+      'The PDF f (x) gives P(X = x)',
+      'The PDF f (x) can be greater than 1',
       'The PDF is the same as the CDF',
     ],
     correctAnswer: 2,
     explanation:
-      'The PDF f(x) is a density, not a probability, so it CAN be greater than 1. The probability is the area under the curve (integral), not the height. Only requirement: f(x) ≥ 0 and ∫f(x)dx = 1.',
+      'The PDF f (x) is a density, not a probability, so it CAN be greater than 1. The probability is the area under the curve (integral), not the height. Only requirement: f (x) ≥ 0 and ∫f (x)dx = 1.',
   },
   {
     id: 'mc4',
-    question: 'What is the relationship between the CDF F(x) and the PDF f(x)?',
+    question:
+      'What is the relationship between the CDF F(x) and the PDF f (x)?',
     options: [
-      'F(x) = f(x)',
-      'F(x) = df(x)/dx',
-      'F(x) = ∫f(t)dt from -∞ to x',
-      'F(x) = f(x) + constant',
+      'F(x) = f (x)',
+      'F(x) = df (x)/dx',
+      'F(x) = ∫f (t)dt from -∞ to x',
+      'F(x) = f (x) + constant',
     ],
     correctAnswer: 2,
     explanation:
-      'The CDF is the integral of the PDF: F(x) = ∫₋∞ˣ f(t)dt. This means F(x) = P(X ≤ x) accumulates the probability density up to x. Conversely, f(x) = dF(x)/dx.',
+      'The CDF is the integral of the PDF: F(x) = ∫₋∞ˣ f (t)dt. This means F(x) = P(X ≤ x) accumulates the probability density up to x. Conversely, f (x) = dF(x)/dx.',
   },
   {
     id: 'mc5',

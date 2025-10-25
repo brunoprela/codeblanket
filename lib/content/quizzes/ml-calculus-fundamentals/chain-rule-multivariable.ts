@@ -21,7 +21,7 @@ For n parameters:
 **Backpropagation Approach:**
 Single backward pass computes ALL gradients simultaneously.
 
-**Why It's Efficient:**
+**Why It\'s Efficient:**
 
 1. **Shared Computations:**
    
@@ -104,7 +104,7 @@ The O(n) vs O(n²) difference is what enables deep learning at scale.`,
     id: 'chain-multi-disc-2',
     question:
       'Describe how modern deep learning frameworks use computational graphs and automatic differentiation. How does this relate to the chain rule?',
-    hint: "Consider PyTorch/TensorFlow's autograd, define-by-run vs static graphs, and gradient tape.",
+    hint: "Consider PyTorch/TensorFlow\'s autograd, define-by-run vs static graphs, and gradient tape.",
     sampleAnswer: `**Computational Graphs and Automatic Differentiation:**
 
 Modern frameworks (PyTorch, TensorFlow, JAX) automatically apply the chain rule through computational graphs.
@@ -130,11 +130,11 @@ x, W, b → z1 = W·x → z2 = z1 + b → L = z2²
 x = tf.placeholder()
 W = tf.Variable()
 z1 = tf.matmul(W, x)
-loss = tf.reduce_sum(z1**2)
+loss = tf.reduce_sum (z1**2)
 
 # Then execute
 with tf.Session() as sess:
-    result = sess.run(loss, feed_dict={x: data})
+    result = sess.run (loss, feed_dict={x: data})
 \`\`\`
 
 Pros: Can optimize graph before execution
@@ -189,12 +189,12 @@ Each operation stores its local gradient function:
 
 \`\`\`python
 class MulOp:
-    def forward(self, a, b):
+    def forward (self, a, b):
         self.a = a
         self.b = b
         return a * b
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         # Chain rule: ∂L/∂a = ∂L/∂out · ∂out/∂a = grad_output · b
         grad_a = grad_output * self.b
         grad_b = grad_output * self.a
@@ -209,10 +209,10 @@ import tensorflow as tf
 with tf.GradientTape() as tape:
     x = tf.Variable([1.0, 2.0])
     y = x**2
-    loss = tf.reduce_sum(y)
+    loss = tf.reduce_sum (y)
 
 # Tape records all operations
-gradients = tape.gradient(loss, x)
+gradients = tape.gradient (loss, x)
 # Applies chain rule backward through recorded operations
 \`\`\`
 
@@ -222,8 +222,8 @@ gradients = tape.gradient(loss, x)
 \`\`\`python
 x = torch.tensor(2.0, requires_grad=True)
 y = x**3
-dy_dx = torch.autograd.grad(y, x, create_graph=True)[0]
-d2y_dx2 = torch.autograd.grad(dy_dx, x)[0]
+dy_dx = torch.autograd.grad (y, x, create_graph=True)[0]
+d2y_dx2 = torch.autograd.grad (dy_dx, x)[0]
 print(f"d²y/dx² = {d2y_dx2}")  # Second derivative
 \`\`\`
 
@@ -231,19 +231,19 @@ print(f"d²y/dx² = {d2y_dx2}")  # Second derivative
 \`\`\`python
 from torch.autograd.functional import jacobian, hessian
 
-def f(x):
-    return torch.sum(x**2)
+def f (x):
+    return torch.sum (x**2)
 
 x = torch.tensor([1.0, 2.0, 3.0])
-J = jacobian(f, x)  # ∂f/∂x for vector f
-H = hessian(f, x)   # ∂²f/∂x∂x
+J = jacobian (f, x)  # ∂f/∂x for vector f
+H = hessian (f, x)   # ∂²f/∂x∂x
 \`\`\`
 
 **Gradient Accumulation:**
 \`\`\`python
 optimizer.zero_grad()
 for batch in mini_batches:
-    loss = model(batch)
+    loss = model (batch)
     loss.backward()  # Accumulates gradients
 optimizer.step()
 \`\`\`
@@ -269,10 +269,10 @@ W1 = torch.randn(10, 50, requires_grad=True)
 W2 = torch.randn(50, 20, requires_grad=True)
 
 # Computation
-h = torch.relu(x @ W1)
-h = torch.dropout(h, 0.5, training=True)
-y = torch.softmax(h @ W2, dim=1)
-loss = -torch.log(y[range(100), labels]).mean()
+h = torch.relu (x @ W1)
+h = torch.dropout (h, 0.5, training=True)
+y = torch.softmax (h @ W2, dim=1)
+loss = -torch.log (y[range(100), labels]).mean()
 
 # One line gets all gradients!
 loss.backward()
@@ -314,12 +314,12 @@ Both compute exact derivatives using the chain rule, but in different orders.
 **Strategy:** Propagate derivatives forward along with values.
 
 **How it works:**
-For y = f(x₁, ..., xₙ), compute ∂y/∂xᵢ by:
+For y = f (x₁, ..., xₙ), compute ∂y/∂xᵢ by:
 1. Set dx_i/dx_i = 1, dx_j/dx_i = 0 for j≠i
 2. Propagate derivatives forward through operations
 3. Result: dy/dx_i
 
-**Example:** y = x₁·x₂ + sin(x₁)
+**Example:** y = x₁·x₂ + sin (x₁)
 
 Compute ∂y/∂x₁:
 \`\`\`
@@ -332,7 +332,7 @@ v₁ = x₁·x₂:
   value = 2·3 = 6
   derivative = 1·3 + 2·0 = 3  (product rule)
 
-v₂ = sin(x₁):
+v₂ = sin (x₁):
   value = sin(2) ≈ 0.909
   derivative = cos(2)·1 ≈ -0.416  (chain rule)
 
@@ -351,13 +351,13 @@ y = v₁ + v₂:
 **Strategy:** Compute all derivatives in one backward pass.
 
 **How it works:**
-For L = f(x₁, ..., xₙ), compute all ∂L/∂xᵢ by:
+For L = f (x₁, ..., xₙ), compute all ∂L/∂xᵢ by:
 1. Forward pass: Compute values, save intermediates
 2. Set ∂L/∂L = 1
 3. Propagate gradients backward
 4. Result: All ∂L/∂xᵢ simultaneously
 
-**Same example:** L = x₁·x₂ + sin(x₁)
+**Same example:** L = x₁·x₂ + sin (x₁)
 
 \`\`\`
 Forward pass (save values):
@@ -423,19 +423,19 @@ import torch
 
 # Network with 1M parameters
 n_params = 1_000_000
-params = torch.randn(n_params, requires_grad=True)
+params = torch.randn (n_params, requires_grad=True)
 
-def loss_fn(p):
+def loss_fn (p):
     # Some complex computation
     return (p**2).sum()
 
 # Reverse-mode (backprop): O(1)
-loss = loss_fn(params)
+loss = loss_fn (params)
 loss.backward()  # All gradients in one backward pass
 print(params.grad.shape)  # (1000000,) - all gradients!
 
 # Forward-mode would need:
-# for i in range(n_params):
+# for i in range (n_params):
 #     compute ∂loss/∂params[i]  # 1M forward passes!
 \`\`\`
 
@@ -459,16 +459,16 @@ Modern AD systems support both:
 # JAX supports both modes
 import jax
 
-def f(x):
-    return jax.numpy.sum(x**2)
+def f (x):
+    return jax.numpy.sum (x**2)
 
 x = jax.numpy.array([1.0, 2.0, 3.0])
 
 # Reverse-mode (backprop)
-grad_reverse = jax.grad(f)(x)
+grad_reverse = jax.grad (f)(x)
 
 # Forward-mode
-def forward_mode_grad(x):
+def forward_mode_grad (x):
     # Compute gradient via forward-mode
     # (JAX can do this with jax.jvp)
     pass

@@ -77,7 +77,7 @@ print(user.bio)           # None
 
 # Validation happens automatically
 try:
-    invalid_user = User(id="not_an_int", username="bob")
+    invalid_user = User (id="not_an_int", username="bob")
 except ValidationError as e:
     print(e.errors())
     # [{'loc': ('id',), 'msg': 'value is not a valid integer', 'type': 'type_error.integer'}]
@@ -121,7 +121,7 @@ class User(BaseModel):
             }
         }
 
-# orm_mode allows: User.from_orm(db_user_object)
+# orm_mode allows: User.from_orm (db_user_object)
 # validate_assignment: user.email = "invalid" → raises ValidationError
 \`\`\`
 
@@ -199,7 +199,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.post("/products", response_model=Product)
-async def create_product(product: Product):
+async def create_product (product: Product):
     """
     Automatic validation:
     - name: 3-100 chars
@@ -232,51 +232,51 @@ class UserCreate(BaseModel):
     tags: List[str] = []
     
     @validator('username')
-    def username_alphanumeric(cls, v):
+    def username_alphanumeric (cls, v):
         """
         Validate username is alphanumeric
         """
         if not v.isalnum():
             raise ValueError('Username must be alphanumeric')
-        if len(v) < 3:
+        if len (v) < 3:
             raise ValueError('Username must be at least 3 characters')
         return v.lower()  # Normalize to lowercase
     
     @validator('password')
-    def password_strength(cls, v):
+    def password_strength (cls, v):
         """
         Validate password strength
         """
-        if len(v) < 8:
+        if len (v) < 8:
             raise ValueError('Password must be at least 8 characters')
         
-        if not any(c.isupper() for c in v):
+        if not any (c.isupper() for c in v):
             raise ValueError('Password must contain uppercase letter')
         
-        if not any(c.islower() for c in v):
+        if not any (c.islower() for c in v):
             raise ValueError('Password must contain lowercase letter')
         
-        if not any(c.isdigit() for c in v):
+        if not any (c.isdigit() for c in v):
             raise ValueError('Password must contain digit')
         
-        if not any(c in '!@#$%^&*()' for c in v):
+        if not any (c in '!@#$%^&*()' for c in v):
             raise ValueError('Password must contain special character')
         
         return v
     
     @validator('tags', each_item=True)
-    def validate_tag(cls, v):
+    def validate_tag (cls, v):
         """
         Validate each tag (runs for each item in list)
         """
-        if len(v) < 2:
+        if len (v) < 2:
             raise ValueError('Tag must be at least 2 characters')
         if not v.replace('-', '').isalnum():
             raise ValueError('Tag must be alphanumeric (hyphens allowed)')
         return v.lower()
     
     @root_validator
-    def passwords_match(cls, values):
+    def passwords_match (cls, values):
         """
         Validate entire model (all fields)
         """
@@ -326,7 +326,7 @@ class CreatePostRequest(BaseModel):
     """
     title: str = Field(..., min_length=10, max_length=200)
     content: str = Field(..., min_length=50)
-    tags: List[str] = Field(default=[], max_items=10)
+    tags: List[str] = Field (default=[], max_items=10)
     published: bool = False
     publish_at: Optional[datetime] = None
     
@@ -342,7 +342,7 @@ class CreatePostRequest(BaseModel):
         }
 
 @app.post("/posts")
-async def create_post(post: CreatePostRequest):
+async def create_post (post: CreatePostRequest):
     """
     Automatic validation:
     - title: 10-200 characters
@@ -360,8 +360,8 @@ async def create_post(post: CreatePostRequest):
 @app.post("/posts/advanced")
 async def create_post_advanced(
     post: CreatePostRequest,
-    metadata: dict = Body(default={}),
-    importance: int = Body(default=1, ge=1, le=5)
+    metadata: dict = Body (default={}),
+    importance: int = Body (default=1, ge=1, le=5)
 ):
     """
     Multiple body parameters:
@@ -464,7 +464,7 @@ from enum import Enum
 
 app = FastAPI()
 
-class Category(str, Enum):
+class Category (str, Enum):
     """Enum for valid categories"""
     TECH = "tech"
     SCIENCE = "science"
@@ -541,7 +541,7 @@ class UserResponse(BaseModel):
         orm_mode = True
 
 @app.get("/users/{user_id}", response_model=UserResponse)
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     """
     Returns user WITHOUT sensitive fields
     
@@ -549,27 +549,27 @@ async def get_user(user_id: int):
     UserResponse excludes them automatically
     """
     # Fetch from database (has all fields)
-    db_user = await get_user_from_db(user_id)
+    db_user = await get_user_from_db (user_id)
     
     # Return db_user, FastAPI filters to UserResponse fields only
     return db_user
 
 # Alternative: Use response_model_exclude
 @app.get("/users/{user_id}/full", response_model=UserDB, response_model_exclude={"password_hash", "api_key", "is_superuser"})
-async def get_user_full(user_id: int):
+async def get_user_full (user_id: int):
     """
     Same result using response_model_exclude
     """
-    db_user = await get_user_from_db(user_id)
+    db_user = await get_user_from_db (user_id)
     return db_user
 
 # Alternative: Use response_model_include
 @app.get("/users/{user_id}/minimal", response_model=UserDB, response_model_include={"id", "username"})
-async def get_user_minimal(user_id: int):
+async def get_user_minimal (user_id: int):
     """
     Return only specific fields
     """
-    db_user = await get_user_from_db(user_id)
+    db_user = await get_user_from_db (user_id)
     return db_user  # Only id and username in response
 \`\`\`
 
@@ -612,7 +612,7 @@ class UserAdmin(BaseModel):
 @app.get("/users/{user_id}")
 async def get_user_dynamic(
     user_id: int,
-    current_user: Optional[User] = Depends(get_current_user)
+    current_user: Optional[User] = Depends (get_current_user)
 ):
     """
     Return different response based on auth level
@@ -621,22 +621,22 @@ async def get_user_dynamic(
     Authenticated: UserPrivate
     Admin: UserAdmin
     """
-    db_user = await get_user_from_db(user_id)
+    db_user = await get_user_from_db (user_id)
     
     if not current_user:
         # Anonymous: minimal info
-        return UserPublic.from_orm(db_user)
+        return UserPublic.from_orm (db_user)
     
     if current_user.is_superuser:
         # Admin: full info
-        return UserAdmin.from_orm(db_user)
+        return UserAdmin.from_orm (db_user)
     
     # Authenticated: private info
-    return UserPrivate.from_orm(db_user)
+    return UserPrivate.from_orm (db_user)
 
 # Using Union for response_model
 @app.get("/users/{user_id}/typed", response_model=Union[UserPublic, UserPrivate, UserAdmin])
-async def get_user_typed(user_id: int):
+async def get_user_typed (user_id: int):
     """
     Response can be any of the three types
     OpenAPI docs show all possibilities
@@ -671,7 +671,7 @@ class SocialMedia(BaseModel):
     """Nested social media model"""
     platform: str
     url: HttpUrl
-    followers: int = Field(ge=0)
+    followers: int = Field (ge=0)
 
 class Author(BaseModel):
     """Nested author model"""
@@ -736,7 +736,7 @@ class BlogPost(BaseModel):
         }
 
 @app.post("/posts", response_model=BlogPost)
-async def create_post(post: BlogPost):
+async def create_post (post: BlogPost):
     """
     Automatically validates entire nested structure:
     - BlogPost fields
@@ -793,12 +793,12 @@ class Product(BaseModel):
     price: float
 
 @app.get("/users", response_model=PaginatedResponse[User])
-async def list_users(page: int = 1, page_size: int = 20):
+async def list_users (page: int = 1, page_size: int = 20):
     """
     Returns paginated list of users
     Type: PaginatedResponse[User]
     """
-    users = await fetch_users(page, page_size)
+    users = await fetch_users (page, page_size)
     total = await count_users()
     
     return PaginatedResponse(
@@ -812,12 +812,12 @@ async def list_users(page: int = 1, page_size: int = 20):
     )
 
 @app.get("/products", response_model=PaginatedResponse[Product])
-async def list_products(page: int = 1, page_size: int = 20):
+async def list_products (page: int = 1, page_size: int = 20):
     """
     Same generic response for products
     Type: PaginatedResponse[Product]
     """
-    products = await fetch_products(page, page_size)
+    products = await fetch_products (page, page_size)
     total = await count_products()
     
     return PaginatedResponse(
@@ -936,7 +936,7 @@ class OptimizedModel(BaseModel):
     
     # Custom validation only when needed
     @validator('email')
-    def validate_email_simple(cls, v):
+    def validate_email_simple (cls, v):
         """Simple email validation (faster than EmailStr)"""
         if '@' not in v:
             raise ValueError('Invalid email')
@@ -966,7 +966,7 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request, exc: RequestValidationError):
+async def validation_exception_handler (request, exc: RequestValidationError):
     """
     Custom validation error response
     
@@ -976,7 +976,7 @@ async def validation_exception_handler(request, exc: RequestValidationError):
     errors = []
     for error in exc.errors():
         errors.append({
-            "field": " -> ".join(str(loc) for loc in error["loc"]),
+            "field": " -> ".join (str (loc) for loc in error["loc"]),
             "message": error["msg"],
             "type": error["type"]
         })
@@ -1030,17 +1030,17 @@ def test_user_validation():
     
     # Invalid email
     with pytest.raises(ValidationError) as exc_info:
-        User(username="bob", email="invalid", age=30)
+        User (username="bob", email="invalid", age=30)
     
     errors = exc_info.value.errors()
-    assert any(e["loc"] == ("email",) for e in errors)
+    assert any (e["loc"] == ("email",) for e in errors)
     
     # Invalid age
     with pytest.raises(ValidationError) as exc_info:
-        User(username="charlie", email="charlie@example.com", age=-5)
+        User (username="charlie", email="charlie@example.com", age=-5)
     
     errors = exc_info.value.errors()
-    assert any(e["loc"] == ("age",) for e in errors)
+    assert any (e["loc"] == ("age",) for e in errors)
 \`\`\`
 
 ---

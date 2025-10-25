@@ -5,7 +5,7 @@
 export const ratelimitingSection = {
   id: 'rate-limiting',
   title: 'Rate Limiting & Counters',
-  content: `Rate limiting controls how frequently users can perform actions. It's critical for:
+  content: `Rate limiting controls how frequently users can perform actions. It\'s critical for:
 - **API protection**: Prevent abuse and overload
 - **Fair usage**: Ensure all users get access
 - **Cost control**: Limit expensive operations
@@ -20,8 +20,8 @@ export const ratelimitingSection = {
 **Problem**: Count hits in the last N seconds (typically 300 = 5 minutes).
 
 **Operations**:
-- \`hit(timestamp)\`: Record a hit at given time
-- \`getHits(timestamp)\`: Return hits in last N seconds
+- \`hit (timestamp)\`: Record a hit at given time
+- \`getHits (timestamp)\`: Return hits in last N seconds
 
 ### Approach 1: Queue/Deque (Simple)
 
@@ -35,14 +35,14 @@ class HitCounter:
         self.hits = deque()  # Store timestamps
         self.window = 300  # 5 minutes
     
-    def hit(self, timestamp):
-        self.hits.append(timestamp)  # O(1)
+    def hit (self, timestamp):
+        self.hits.append (timestamp)  # O(1)
     
-    def getHits(self, timestamp):
+    def getHits (self, timestamp):
         # Remove hits older than timestamp - window
         while self.hits and self.hits[0] <= timestamp - self.window:
             self.hits.popleft()  # O(1) per old hit
-        return len(self.hits)  # O(1)
+        return len (self.hits)  # O(1)
 \`\`\`
 
 **Time Complexity**:
@@ -64,7 +64,7 @@ class HitCounter:
         self.buckets = [0] * 300  # 300 seconds
         self.timestamps = [0] * 300  # Last update time per bucket
     
-    def hit(self, timestamp):
+    def hit (self, timestamp):
         idx = timestamp % 300
         # If bucket from old window, reset it
         if self.timestamps[idx] != timestamp:
@@ -73,7 +73,7 @@ class HitCounter:
         else:
             self.buckets[idx] += 1
     
-    def getHits(self, timestamp):
+    def getHits (self, timestamp):
         total = 0
         for i in range(300):
             # Only count if timestamp is within window
@@ -101,19 +101,19 @@ class HitCounter:
         self.hits = deque()  # Store (timestamp, count) pairs
         self.window = 300
     
-    def hit(self, timestamp):
+    def hit (self, timestamp):
         # If last hit is same second, increment count
         if self.hits and self.hits[-1][0] == timestamp:
             self.hits[-1] = (timestamp, self.hits[-1][1] + 1)
         else:
             self.hits.append((timestamp, 1))
     
-    def getHits(self, timestamp):
+    def getHits (self, timestamp):
         # Remove old entries
         while self.hits and self.hits[0][0] <= timestamp - self.window:
             self.hits.popleft()
         
-        return sum(count for ts, count in self.hits)
+        return sum (count for ts, count in self.hits)
 \`\`\`
 
 **Optimization**: Stores (timestamp, count) instead of individual hits. If 1000 hits in same second, stores once instead of 1000 times.
@@ -134,7 +134,7 @@ class FixedWindowRateLimiter:
         self.window_start = 0
         self.count = 0
     
-    def allow_request(self, timestamp):
+    def allow_request (self, timestamp):
         # Check if we're in a new window
         window_num = timestamp // self.window_size
         if window_num > self.window_start:
@@ -167,15 +167,15 @@ class SlidingWindowLog:
         self.window_size = window_size
         self.requests = deque()  # Store timestamps
     
-    def allow_request(self, timestamp):
+    def allow_request (self, timestamp):
         # Remove old requests outside window
         cutoff = timestamp - self.window_size
         while self.requests and self.requests[0] <= cutoff:
             self.requests.popleft()
         
         # Check if under limit
-        if len(self.requests) < self.limit:
-            self.requests.append(timestamp)
+        if len (self.requests) < self.limit:
+            self.requests.append (timestamp)
             return True
         return False
 \`\`\`
@@ -196,7 +196,7 @@ class SlidingWindowCounter:
         self.curr_count = 0
         self.curr_window_start = 0
     
-    def allow_request(self, timestamp):
+    def allow_request (self, timestamp):
         window_num = timestamp // self.window_size
         
         if window_num > self.curr_window_start:
@@ -231,11 +231,11 @@ class TokenBucket:
         self.refill_rate = refill_rate  # Tokens per second
         self.last_refill = time.time()
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         # Refill tokens based on time elapsed
         elapsed = now - self.last_refill
-        self.tokens = min(self.capacity, 
+        self.tokens = min (self.capacity, 
                          self.tokens + elapsed * self.refill_rate)
         self.last_refill = now
         
@@ -281,12 +281,12 @@ class TokenBucket:
 
 \`\`\`python
 # Redis-based rate limiter
-def allow_request(user_id, redis_client):
+def allow_request (user_id, redis_client):
     key = f"rate_limit:{user_id}"
-    current = redis_client.incr(key)
+    current = redis_client.incr (key)
     
     if current == 1:
-        redis_client.expire(key, 60)  # 60 second window
+        redis_client.expire (key, 60)  # 60 second window
     
     return current <= 100  # 100 requests per minute
 \`\`\`

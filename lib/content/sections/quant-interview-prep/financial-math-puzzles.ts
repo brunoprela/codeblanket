@@ -38,7 +38,7 @@ PV = FV × e^(-rT)
 
 ### Problem 1: Simple Discounting
 
-**Question:** You'll receive $100 in 2 years. Interest rate is 5% per year. What's the present value?
+**Question:** You'll receive $100 in 2 years. Interest rate is 5% per year. What\'s the present value?
 
 **Solution:**
 \`\`\`
@@ -168,20 +168,20 @@ IRR Calculation
 import numpy as np
 from scipy.optimize import fsolve
 
-def npv(r, cash_flows):
+def npv (r, cash_flows):
     """Calculate NPV at rate r."""
-    return sum(cf / (1 + r)**t for t, cf in enumerate(cash_flows))
+    return sum (cf / (1 + r)**t for t, cf in enumerate (cash_flows))
 
 # Problem 5
 cash_flows = [-100, 30, 40, 50]
 
 # Find IRR (where NPV = 0)
-irr = fsolve(lambda r: npv(r, cash_flows), x0=0.1)[0]
+irr = fsolve (lambda r: npv (r, cash_flows), x0=0.1)[0]
 
 print(f"IRR: {irr:.4f} = {irr*100:.2f}%")
 
 # Verify
-npv_at_irr = npv(irr, cash_flows)
+npv_at_irr = npv (irr, cash_flows)
 print(f"NPV at IRR: \${npv_at_irr:.6f} (should be ≈0)")
 
 # Output:

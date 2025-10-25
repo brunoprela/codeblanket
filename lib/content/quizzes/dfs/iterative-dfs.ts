@@ -22,7 +22,7 @@ export const iterativedfsQuiz = [
     question:
       'Walk me through converting recursive DFS to iterative. What changes?',
     sampleAnswer:
-      'Conversion steps: 1) Replace recursion with explicit stack. 2) Push root to stack. 3) Loop while stack not empty. 4) Pop node, process. 5) Push children (order matters). For example, recursive max depth: depth(node) = 1 + max(depth(left), depth(right)). Iterative: stack = [(node, depth)], loop: pop (node, d), if leaf update max, push children with d+1. The state (current depth) that was in recursive parameters goes into stack tuples. Recursive return values become: accumulated in variables (max, sum) or checked in conditions. The key: what was in call stack (parameters, local vars) goes into explicit stack as tuples. Backtracking: happens automatically when popping.',
+      'Conversion steps: 1) Replace recursion with explicit stack. 2) Push root to stack. 3) Loop while stack not empty. 4) Pop node, process. 5) Push children (order matters). For example, recursive max depth: depth (node) = 1 + max (depth (left), depth (right)). Iterative: stack = [(node, depth)], loop: pop (node, d), if leaf update max, push children with d+1. The state (current depth) that was in recursive parameters goes into stack tuples. Recursive return values become: accumulated in variables (max, sum) or checked in conditions. The key: what was in call stack (parameters, local vars) goes into explicit stack as tuples. Backtracking: happens automatically when popping.',
     keyPoints: [
       'Call stack → explicit stack',
       'Parameters → stack tuples (node, state)',

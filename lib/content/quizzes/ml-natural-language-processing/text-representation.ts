@@ -216,13 +216,13 @@ labels = [0, 1, 1, 0, 0, 0]  # 0=negative, 1=positive
 
 # Unigrams only
 pipeline_unigram = Pipeline([
-    ('tfidf', TfidfVectorizer(ngram_range=(1,1))),
+    ('tfidf', TfidfVectorizer (ngram_range=(1,1))),
     ('clf', LogisticRegression())
 ])
 
 # Unigrams + Bigrams
 pipeline_bigram = Pipeline([
-    ('tfidf', TfidfVectorizer(ngram_range=(1,2))),
+    ('tfidf', TfidfVectorizer (ngram_range=(1,2))),
     ('clf', LogisticRegression())
 ])
 
@@ -357,7 +357,7 @@ print(f"Sparse matrix: {sparse_memory / 1e6:.2f} MB")  # 800 MB
 Training time scales with dimensionality:
 - Logistic Regression: O(n_features × n_samples × n_iterations)
 - SVM: O(n_features × n_samples²)
-- Random Forest: O(n_trees × n_features × n_samples × log(n_samples))
+- Random Forest: O(n_trees × n_features × n_samples × log (n_samples))
 
 With millions of features, training becomes prohibitively slow.
 
@@ -412,7 +412,7 @@ vectorizer = TfidfVectorizer(
 from sklearn.feature_selection import SelectKBest, chi2
 
 # Chi-square feature selection
-selector = SelectKBest(chi2, k=5000)
+selector = SelectKBest (chi2, k=5000)
 
 X_selected = selector.fit_transform(X_train, y_train)
 
@@ -464,7 +464,7 @@ vectorizer_char = TfidfVectorizer(
 from sklearn.feature_extraction.text import HashingVectorizer
 
 # Hash features to fixed-size space
-vectorizer_hash = HashingVectorizer(n_features=2**16)  # 65k features
+vectorizer_hash = HashingVectorizer (n_features=2**16)  # 65k features
 
 # No need to store vocabulary
 # Fixed memory footprint
@@ -517,10 +517,10 @@ vocab_sizes = []
 accuracies = []
 
 for max_feat in [1000, 5000, 10000, 50000, 100000]:
-    vec = TfidfVectorizer(max_features=max_feat)
-    X = vec.fit_transform(docs)
+    vec = TfidfVectorizer (max_features=max_feat)
+    X = vec.fit_transform (docs)
     
-    vocab_sizes.append(len(vec.vocabulary_))
+    vocab_sizes.append (len (vec.vocabulary_))
     # Train model and measure accuracy
     # Plot accuracy vs vocabulary size
     

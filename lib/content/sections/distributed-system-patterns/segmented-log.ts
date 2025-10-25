@@ -361,7 +361,7 @@ Compacted Segment:
 
 ### **Kafka Log Compaction**
 
-Kafka's compaction ensures:
+Kafka\'s compaction ensures:
 - Latest value for each key is always available
 - Old values are eventually removed
 - Log size bounded by number of unique keys (not time)

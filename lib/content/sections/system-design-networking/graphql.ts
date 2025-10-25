@@ -69,33 +69,33 @@ export const graphqlSection = {
     
     type Query {
       # Get single user
-      user(id: ID!): User
+      user (id: ID!): User
       
       # Get all users with pagination
-      users(limit: Int = 20, offset: Int = 0): [User!]!
+      users (limit: Int = 20, offset: Int = 0): [User!]!
       
       # Get posts by user
-      posts(userId: ID!): [Post!]!
+      posts (userId: ID!): [Post!]!
       
       # Search users
-      searchUsers(query: String!): [User!]!
+      searchUsers (query: String!): [User!]!
     }
     
     type Mutation {
       # Create user
-      createUser(name: String!, email: String!, age: Int): User!
+      createUser (name: String!, email: String!, age: Int): User!
       
       # Update user
-      updateUser(id: ID!, name: String, email: String, age: Int): User!
+      updateUser (id: ID!, name: String, email: String, age: Int): User!
       
       # Delete user
-      deleteUser(id: ID!): Boolean!
+      deleteUser (id: ID!): Boolean!
       
       # Create post
-      createPost(userId: ID!, title: String!, content: String!): Post!
+      createPost (userId: ID!, title: String!, content: String!): Post!
       
       # Add comment
-      addComment(postId: ID!, userId: ID!, text: String!): Comment!
+      addComment (postId: ID!, userId: ID!, text: String!): Comment!
     }
     
     type Subscription {
@@ -103,7 +103,7 @@ export const graphqlSection = {
       newPost: Post!
       
       # Subscribe to comments on a post
-      newComment(postId: ID!): Comment!
+      newComment (postId: ID!): Comment!
     }
     
     # Custom scalar for dates
@@ -118,7 +118,7 @@ export const graphqlSection = {
     
     \`\`\`graphql
     query {
-      user(id: "123") {
+      user (id: "123") {
         id
         name
         email
@@ -143,7 +143,7 @@ export const graphqlSection = {
     
     \`\`\`graphql
     query {
-      user(id: "123") {
+      user (id: "123") {
         id
         name
         posts {
@@ -169,7 +169,7 @@ export const graphqlSection = {
     
     \`\`\`graphql
     query GetUser($userId: ID!) {
-      user(id: $userId) {
+      user (id: $userId) {
         id
         name
         email
@@ -188,10 +188,10 @@ export const graphqlSection = {
     
     \`\`\`graphql
     query {
-      user1: user(id: "123") {
+      user1: user (id: "123") {
         name
       }
-      user2: user(id: "456") {
+      user2: user (id: "456") {
         name
       }
     }
@@ -217,10 +217,10 @@ export const graphqlSection = {
     }
     
     query {
-      user1: user(id: "123") {
+      user1: user (id: "123") {
         ...UserFields
       }
-      user2: user(id: "456") {
+      user2: user (id: "456") {
         ...UserFields
       }
     }
@@ -233,7 +233,7 @@ export const graphqlSection = {
     **Create User**:
     \`\`\`graphql
     mutation {
-      createUser(name: "Jane Doe", email: "jane@example.com", age: 28) {
+      createUser (name: "Jane Doe", email: "jane@example.com", age: 28) {
         id
         name
         email
@@ -244,7 +244,7 @@ export const graphqlSection = {
     **Update User**:
     \`\`\`graphql
     mutation {
-      updateUser(id: "123", name: "John Smith") {
+      updateUser (id: "123", name: "John Smith") {
         id
         name
         email
@@ -255,7 +255,7 @@ export const graphqlSection = {
     **Create Post with Variables**:
     \`\`\`graphql
     mutation CreatePost($userId: ID!, $title: String!, $content: String!) {
-      createPost(userId: $userId, title: $title, content: $content) {
+      createPost (userId: $userId, title: $title, content: $content) {
         id
         title
         author {
@@ -323,12 +323,12 @@ export const graphqlSection = {
       }
       
       type Query {
-        user(id: ID!): User
+        user (id: ID!): User
         users: [User!]!
       }
       
       type Mutation {
-        createUser(name: String!, email: String!): User!
+        createUser (name: String!, email: String!): User!
       }
     \`;
     
@@ -336,7 +336,7 @@ export const graphqlSection = {
     const resolvers = {
       Query: {
         user: async (parent, { id }, context) => {
-          return await context.db.users.findById(id);
+          return await context.db.users.findById (id);
         },
         
         users: async (parent, args, context) => {
@@ -355,14 +355,14 @@ export const graphqlSection = {
       User: {
         posts: async (parent, args, context) => {
           // parent is the User object
-          return await context.db.posts.findByUserId(parent.id);
+          return await context.db.posts.findByUserId (parent.id);
         }
       },
       
       Post: {
         author: async (parent, args, context) => {
           // parent is the Post object
-          return await context.db.users.findById(parent.userId);
+          return await context.db.users.findById (parent.userId);
         }
       }
     };
@@ -408,7 +408,7 @@ export const graphqlSection = {
         posts: () => db.posts.findAll() // 1 query
       },
       Post: {
-        author: (post) => db.users.findById(post.userId) // N queries!
+        author: (post) => db.users.findById (post.userId) // N queries!
       }
     };
     \`\`\`
@@ -421,10 +421,10 @@ export const graphqlSection = {
     const DataLoader = require('dataloader');
     
     // Batch load users
-    const userLoader = new DataLoader(async (userIds) => {
-      const users = await db.users.findByIds(userIds);
+    const userLoader = new DataLoader (async (userIds) => {
+      const users = await db.users.findByIds (userIds);
       // Return users in same order as userIds
-      return userIds.map(id => users.find(user => user.id === id));
+      return userIds.map (id => users.find (user => user.id === id));
     });
     
     const resolvers = {
@@ -433,7 +433,7 @@ export const graphqlSection = {
       },
       Post: {
         author: (post, args, { loaders }) => {
-          return loaders.user.load(post.userId); // Batched!
+          return loaders.user.load (post.userId); // Batched!
         }
       }
     };
@@ -444,7 +444,7 @@ export const graphqlSection = {
       resolvers,
       context: () => ({
         loaders: {
-          user: new DataLoader(batchLoadUsers)
+          user: new DataLoader (batchLoadUsers)
         }
       })
     });
@@ -501,13 +501,13 @@ export const graphqlSection = {
     
     **Cache hints in schema**:
     \`\`\`graphql
-    type User @cacheControl(maxAge: 300) {
+    type User @cacheControl (maxAge: 300) {
       id: ID!
       name: String!
       email: String!
     }
     
-    type Post @cacheControl(maxAge: 60) {
+    type Post @cacheControl (maxAge: 60) {
       id: ID!
       title: String!
     }
@@ -525,7 +525,7 @@ export const graphqlSection = {
           Query: {
             fields: {
               user: {
-                read(existing, { args, toReference }) {
+                read (existing, { args, toReference }) {
                   // Return cached user if exists
                   return existing || toReference({
                     __typename: 'User',
@@ -620,14 +620,14 @@ export const graphqlSection = {
     // Bad: N+1 queries
     const resolvers = {
       Post: {
-        author: (post) => db.users.findById(post.userId)
+        author: (post) => db.users.findById (post.userId)
       }
     };
     
     // Good: Batch with DataLoader
     const resolvers = {
       Post: {
-        author: (post, args, { loaders }) => loaders.user.load(post.userId)
+        author: (post, args, { loaders }) => loaders.user.load (post.userId)
       }
     };
     \`\`\`
@@ -642,7 +642,7 @@ export const graphqlSection = {
     
     // Good: Paginate with cursor or offset
     type Query {
-      users(first: Int, after: String): UserConnection!
+      users (first: Int, after: String): UserConnection!
     }
     
     type UserConnection {
@@ -666,7 +666,7 @@ export const graphqlSection = {
     \`\`\`javascript
     // Malicious query (infinite loop)
     query {
-      user(id: "1") {
+      user (id: "1") {
         friends {
           friends {
             friends {
@@ -696,9 +696,9 @@ export const graphqlSection = {
     \`\`\`javascript
     // Expensive query
     query {
-      users(first: 1000) {
-        posts(first: 1000) {
-          comments(first: 1000) {
+      users (first: 1000) {
+        posts (first: 1000) {
+          comments (first: 1000) {
             # 1 billion operations!
           }
         }
@@ -743,7 +743,7 @@ export const graphqlSection = {
       id: ID!
       username: String!
       email: String!
-      posts(first: Int, after: String): PostConnection!
+      posts (first: Int, after: String): PostConnection!
       followers: [User!]!
       following: [User!]!
       followerCount: Int!
@@ -756,7 +756,7 @@ export const graphqlSection = {
       imageUrl: String
       author: User!
       likes: [Like!]!
-      comments(first: Int): [Comment!]!
+      comments (first: Int): [Comment!]!
       likeCount: Int!
       commentCount: Int!
       createdAt: DateTime!
@@ -778,23 +778,23 @@ export const graphqlSection = {
     
     type Query {
       me: User
-      user(username: String!): User
-      post(id: ID!): Post
-      feed(first: Int, after: String): PostConnection!
+      user (username: String!): User
+      post (id: ID!): Post
+      feed (first: Int, after: String): PostConnection!
     }
     
     type Mutation {
-      createPost(content: String!, imageUrl: String): Post!
-      likePost(postId: ID!): Post!
-      unlikePost(postId: ID!): Post!
-      addComment(postId: ID!, text: String!): Comment!
-      followUser(userId: ID!): User!
-      unfollowUser(userId: ID!): User!
+      createPost (content: String!, imageUrl: String): Post!
+      likePost (postId: ID!): Post!
+      unlikePost (postId: ID!): Post!
+      addComment (postId: ID!, text: String!): Comment!
+      followUser (userId: ID!): User!
+      unfollowUser (userId: ID!): User!
     }
     
     type Subscription {
-      newPost(userId: ID!): Post!
-      newComment(postId: ID!): Comment!
+      newPost (userId: ID!): Post!
+      newComment (postId: ID!): Comment!
     }
     \`\`\`
     
@@ -803,7 +803,7 @@ export const graphqlSection = {
     \`\`\`graphql
     # Get user feed
     query GetFeed {
-      feed(first: 20) {
+      feed (first: 20) {
         edges {
           node {
             id
@@ -814,7 +814,7 @@ export const graphqlSection = {
             }
             likeCount
             commentCount
-            comments(first: 3) {
+            comments (first: 3) {
               text
               author {
                 username

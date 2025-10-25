@@ -21,7 +21,7 @@ export const spotifyarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What is Spotify's typical cache size limit for offline songs?",
+    question: "What is Spotify\'s typical cache size limit for offline songs?",
     options: [
       '1 GB (approximately 200 songs)',
       '5 GB (configurable by user)',
@@ -58,7 +58,7 @@ export const spotifyarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Spotify uses Apache Spark for batch processing user data and generating weekly playlists like Discover Weekly. Spark jobs run on Sunday nights to process 200M+ users, analyzing listening history, applying collaborative filtering, and generating personalized recommendations. The results are stored in Cassandra for quick retrieval. Spark's in-memory processing and rich API make it ideal for large-scale ML and data processing workloads.",
+      "Spotify uses Apache Spark for batch processing user data and generating weekly playlists like Discover Weekly. Spark jobs run on Sunday nights to process 200M+ users, analyzing listening history, applying collaborative filtering, and generating personalized recommendations. The results are stored in Cassandra for quick retrieval. Spark\'s in-memory processing and rich API make it ideal for large-scale ML and data processing workloads.",
   },
   {
     id: 'mc5',

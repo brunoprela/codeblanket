@@ -11,7 +11,7 @@ export const mockingWithUnittestMock = {
 ### The Problem: Testing with Real Dependencies
 
 \`\`\`python
-def send_welcome_email(user):
+def send_welcome_email (user):
     """Send welcome email to new user"""
     email_service = EmailService()
     email_service.connect("smtp.gmail.com", 587)
@@ -24,8 +24,8 @@ def send_welcome_email(user):
 
 def test_send_welcome_email():
     """How do we test this?"""
-    user = User(name="Alice", email="alice@example.com")
-    result = send_welcome_email(user)
+    user = User (name="Alice", email="alice@example.com")
+    result = send_welcome_email (user)
     assert result is True
     # Problems:
     # 1. Actually sends email (slow, costs money)
@@ -41,7 +41,7 @@ from unittest.mock import Mock, patch
 
 def test_send_welcome_email_mocked():
     """Test with mocked email service"""
-    user = User(name="Alice", email="alice@example.com")
+    user = User (name="Alice", email="alice@example.com")
     
     with patch('email_service.EmailService') as MockEmailService:
         # Control the mock's behavior
@@ -49,7 +49,7 @@ def test_send_welcome_email_mocked():
         mock_service.send.return_value = True
         
         # Test the function
-        result = send_welcome_email(user)
+        result = send_welcome_email (user)
         
         # Verify behavior
         assert result is True
@@ -84,7 +84,7 @@ print(mock.any_attribute)  # <Mock name='mock.any_attribute' id='...'>
 
 # Mock can be called with any arguments
 mock(1, 2, 3, key="value")
-mock.method(arg1, arg2)
+mock.method (arg1, arg2)
 
 # All calls return Mock objects by default
 \`\`\`
@@ -93,7 +93,7 @@ mock.method(arg1, arg2)
 
 \`\`\`python
 # Simple return value
-mock = Mock(return_value=42)
+mock = Mock (return_value=42)
 print(mock())  # 42
 
 # Or set after creation
@@ -118,23 +118,23 @@ Execute custom logic when mock is called:
 
 \`\`\`python
 # Raise exception
-mock = Mock(side_effect=Exception("Connection failed"))
+mock = Mock (side_effect=Exception("Connection failed"))
 try:
     mock()
 except Exception as e:
     print(e)  # Connection failed
 
 # Return different values on successive calls
-mock = Mock(side_effect=[1, 2, 3])
+mock = Mock (side_effect=[1, 2, 3])
 print(mock())  # 1
 print(mock())  # 2
 print(mock())  # 3
 
 # Custom function
-def custom_side_effect(arg):
+def custom_side_effect (arg):
     return arg * 2
 
-mock = Mock(side_effect=custom_side_effect)
+mock = Mock (side_effect=custom_side_effect)
 print(mock(5))  # 10
 print(mock(10))  # 20
 \`\`\`
@@ -151,9 +151,9 @@ print(mock(10))  # 20
 from unittest.mock import patch
 
 # payment_service.py
-def process_payment(amount):
+def process_payment (amount):
     gateway = PaymentGateway()
-    return gateway.charge(amount)
+    return gateway.charge (amount)
 
 # test_payment.py
 def test_process_payment():
@@ -192,7 +192,7 @@ def test_process_payment(MockGateway):
 @patch('module.ThirdDependency')
 @patch('module.SecondDependency')
 @patch('module.FirstDependency')
-def test_multiple_patches(mock_first, mock_second, mock_third):
+def test_multiple_patches (mock_first, mock_second, mock_third):
     """Arguments in reverse order of decorators"""
     # Configure mocks
     mock_first.return_value = "first"
@@ -209,7 +209,7 @@ Patch a specific method/attribute of an object:
 
 \`\`\`python
 class Database:
-    def query(self, sql):
+    def query (self, sql):
         # Actual database query
         ...
 
@@ -217,9 +217,9 @@ def test_with_patch_object():
     """Patch specific method"""
     db = Database()
     
-    with patch.object(db, 'query', return_value=[{"id": 1, "name": "Alice"}]):
+    with patch.object (db, 'query', return_value=[{"id": 1, "name": "Alice"}]):
         result = db.query("SELECT * FROM users")
-        assert len(result) == 1
+        assert len (result) == 1
         assert result[0]["name"] == "Alice"
 \`\`\`
 
@@ -290,18 +290,18 @@ from unittest.mock import MagicMock
 
 # Regular Mock doesn't support magic methods well
 regular_mock = Mock()
-print(len(regular_mock))  # Error or unexpected behavior
+print(len (regular_mock))  # Error or unexpected behavior
 
 # MagicMock supports magic methods
 magic_mock = MagicMock()
 magic_mock.__len__.return_value = 5
-print(len(magic_mock))  # 5
+print(len (magic_mock))  # 5
 
 magic_mock.__str__.return_value = "custom string"
-print(str(magic_mock))  # "custom string"
+print(str (magic_mock))  # "custom string"
 
 magic_mock.__iter__.return_value = iter([1, 2, 3])
-print(list(magic_mock))  # [1, 2, 3]
+print(list (magic_mock))  # [1, 2, 3]
 \`\`\`
 
 ---
@@ -316,12 +316,12 @@ class UserService:
     def __init__(self, db):
         self.db = db
     
-    def get_user(self, user_id):
-        result = self.db.query(f"SELECT * FROM users WHERE id={user_id}")
+    def get_user (self, user_id):
+        result = self.db.query (f"SELECT * FROM users WHERE id={user_id}")
         return result[0] if result else None
     
-    def create_user(self, name, email):
-        self.db.execute(f"INSERT INTO users (name, email) VALUES ('{name}', '{email}')")
+    def create_user (self, name, email):
+        self.db.execute (f"INSERT INTO users (name, email) VALUES ('{name}', '{email}')")
         return True
 
 # test_user_service.py
@@ -334,7 +334,7 @@ def test_get_user():
     mock_db.query.return_value = [{"id": 1, "name": "Alice", "email": "alice@example.com"}]
     
     # Test
-    service = UserService(mock_db)
+    service = UserService (mock_db)
     user = service.get_user(1)
     
     # Verify
@@ -346,7 +346,7 @@ def test_get_user_not_found():
     mock_db = Mock()
     mock_db.query.return_value = []  # No results
     
-    service = UserService(mock_db)
+    service = UserService (mock_db)
     user = service.get_user(999)
     
     assert user is None
@@ -355,7 +355,7 @@ def test_create_user():
     """Test creating user"""
     mock_db = Mock()
     
-    service = UserService(mock_db)
+    service = UserService (mock_db)
     result = service.create_user("Bob", "bob@example.com")
     
     assert result is True
@@ -368,9 +368,9 @@ def test_create_user():
 # weather_service.py
 import requests
 
-def get_weather(city):
+def get_weather (city):
     """Get weather from external API"""
-    response = requests.get(f"https://api.weather.com/v1/weather?city={city}")
+    response = requests.get (f"https://api.weather.com/v1/weather?city={city}")
     response.raise_for_status()
     return response.json()
 
@@ -378,7 +378,7 @@ def get_weather(city):
 from unittest.mock import patch, Mock
 
 @patch('weather_service.requests.get')
-def test_get_weather_success(mock_get):
+def test_get_weather_success (mock_get):
     """Test successful weather fetch"""
     # Configure mock response
     mock_response = Mock()
@@ -399,7 +399,7 @@ def test_get_weather_success(mock_get):
     mock_get.assert_called_once_with("https://api.weather.com/v1/weather?city=New York")
 
 @patch('weather_service.requests.get')
-def test_get_weather_api_error(mock_get):
+def test_get_weather_api_error (mock_get):
     """Test API error handling"""
     # Configure mock to raise exception
     mock_response = Mock()
@@ -407,7 +407,7 @@ def test_get_weather_api_error(mock_get):
     mock_get.return_value = mock_response
     
     # Test
-    with pytest.raises(requests.HTTPError):
+    with pytest.raises (requests.HTTPError):
         get_weather("InvalidCity")
 \`\`\`
 
@@ -415,11 +415,11 @@ def test_get_weather_api_error(mock_get):
 
 \`\`\`python
 # config_loader.py
-def load_config(filename):
+def load_config (filename):
     """Load configuration from file"""
-    with open(filename, 'r') as f:
+    with open (filename, 'r') as f:
         content = f.read()
-    return json.loads(content)
+    return json.loads (content)
 
 # test_config_loader.py
 from unittest.mock import mock_open, patch
@@ -428,7 +428,7 @@ def test_load_config():
     """Test loading config with mocked file"""
     config_data = '{"debug": true, "api_key": "secret"}'
     
-    with patch('builtins.open', mock_open(read_data=config_data)):
+    with patch('builtins.open', mock_open (read_data=config_data)):
         config = load_config('config.json')
         
         assert config["debug"] is True
@@ -447,7 +447,7 @@ def test_load_config_file_not_found():
 # order_service.py
 from datetime import datetime
 
-def create_order(product_id, quantity):
+def create_order (product_id, quantity):
     """Create order with current timestamp"""
     order = {
         "product_id": product_id,
@@ -482,7 +482,7 @@ pytest-mock provides a simpler interface for mocking:
 \`\`\`python
 # Install: pip install pytest-mock
 
-def test_with_mocker(mocker):
+def test_with_mocker (mocker):
     """mocker fixture provided by pytest-mock"""
     # Patch with mocker (cleaner than unittest.mock)
     mock_service = mocker.patch('module.Service')
@@ -501,11 +501,11 @@ def test_with_mocker(mocker):
 \`\`\`python
 # unittest.mock (verbose)
 @patch('module.Service')
-def test_function(mock_service):
+def test_function (mock_service):
     ...
 
 # pytest-mock (cleaner)
-def test_function(mocker):
+def test_function (mocker):
     mock_service = mocker.patch('module.Service')
     ...
 \`\`\`
@@ -520,7 +520,7 @@ def test_function(mocker):
 
 \`\`\`python
 @patch('requests.get')  # Mock external HTTP call
-def test_api_call(mock_get):
+def test_api_call (mock_get):
     ...
 \`\`\`
 
@@ -538,7 +538,7 @@ def test_order():
 
 \`\`\`python
 @patch('payment_gateway.PaymentGateway')
-def test_payment(mock_payment_gateway):
+def test_payment (mock_payment_gateway):
     ...
 \`\`\`
 
@@ -546,7 +546,7 @@ def test_payment(mock_payment_gateway):
 
 \`\`\`python
 @patch('payment_gateway.PaymentGateway')
-def test_payment(mock):
+def test_payment (mock):
     ...
 \`\`\`
 
@@ -555,7 +555,7 @@ def test_payment(mock):
 ✅ **Good**: Verify critical calls
 
 \`\`\`python
-mock_gateway.charge.assert_called_once_with(amount=100.0, currency="USD")
+mock_gateway.charge.assert_called_once_with (amount=100.0, currency="USD")
 \`\`\`
 
 ❌ **Bad**: Over-verification
@@ -579,7 +579,7 @@ mock_db.query.return_value = [{"id": 1, "name": "Alice"}]
 ❌ **Bad**: Complex mock setup
 
 \`\`\`python
-def complex_side_effect(query):
+def complex_side_effect (query):
     if "users" in query:
         if "id=1" in query:
             return [{"id": 1, "name": "Alice"}]
@@ -599,7 +599,7 @@ mock = Mock()
 mock.non_existent_method()  # Works (returns Mock)
 
 # With spec
-mock = Mock(spec=PaymentGateway)
+mock = Mock (spec=PaymentGateway)
 mock.non_existent_method()  # AttributeError (catches typos)
 \`\`\`
 
@@ -620,12 +620,12 @@ def function():
 # test_module_a.py
 # ❌ Wrong: Patches original location
 @patch('module_b.SomeClass')
-def test_function(mock):
+def test_function (mock):
     ...  # Doesn't work!
 
 # ✅ Correct: Patch where it's used
 @patch('module_a.SomeClass')
-def test_function(mock):
+def test_function (mock):
     ...  # Works!
 \`\`\`
 
@@ -656,13 +656,13 @@ result = mock_service.method()  # "result"
 @patch('module.Logger')
 @patch('module.Validator')
 @patch('module.Formatter')
-def test_function(mock_formatter, mock_validator, mock_logger, mock_cache, mock_db):
+def test_function (mock_formatter, mock_validator, mock_logger, mock_cache, mock_db):
     # If everything is mocked, what are we actually testing?
     ...
 
 # ✅ Mock only external dependencies
 @patch('module.Database')
-def test_function(mock_db):
+def test_function (mock_db):
     # Test actual logic with real Validator, Formatter, etc.
     ...
 \`\`\`

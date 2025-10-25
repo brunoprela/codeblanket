@@ -10,7 +10,7 @@ Generators are functions that return an iterator that produces values lazily usi
 
 **Basic Generator:**
 \`\`\`python
-def count_up_to(n):
+def count_up_to (n):
     i = 1
     while i <= n:
         yield i
@@ -38,15 +38,15 @@ squares_gen = (x**2 for x in range(1000000))
 
 **Real-World Example - Processing Large Files:**
 \`\`\`python
-def read_large_file(filepath):
+def read_large_file (filepath):
     """Memory-efficient file reading"""
-    with open(filepath) as f:
+    with open (filepath) as f:
         for line in f:
             yield line.strip()
 
-def process_logs(filepath):
+def process_logs (filepath):
     """Process huge log files without loading into memory"""
-    for line in read_large_file(filepath):
+    for line in read_large_file (filepath):
         if 'ERROR' in line:
             yield line
 
@@ -63,18 +63,18 @@ def fibonacci():
         yield a
         a, b = b, a + b
 
-def take(n, iterable):
+def take (n, iterable):
     """Take first n items"""
-    for i, item in enumerate(iterable):
+    for i, item in enumerate (iterable):
         if i >= n:
             break
         yield item
 
-def is_even(n):
+def is_even (n):
     return n % 2 == 0
 
 # Chain generators
-result = list(take(5, filter(is_even, fibonacci())))
+result = list (take(5, filter (is_even, fibonacci())))
 print(result)  # [0, 2, 8, 34, 144]
 \`\`\`
 
@@ -91,7 +91,7 @@ def running_average():
         average = total / count
 
 avg = running_average()
-next(avg)  # Prime the generator
+next (avg)  # Prime the generator
 print(avg.send(10))  # 10.0
 print(avg.send(20))  # 15.0
 print(avg.send(30))  # 20.0

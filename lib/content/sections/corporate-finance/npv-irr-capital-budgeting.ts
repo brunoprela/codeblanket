@@ -1,7 +1,7 @@
 export const npvIrrCapitalBudgeting = {
-    title: 'NPV, IRR & Capital Budgeting',
-    id: 'npv-irr-capital-budgeting',
-    content: `
+  title: 'NPV, IRR & Capital Budgeting',
+  id: 'npv-irr-capital-budgeting',
+  content: `
 # NPV, IRR & Capital Budgeting
 
 ## Introduction
@@ -12,7 +12,7 @@ These decisions involve **large investments today** in exchange for **uncertain 
 
 The two primary tools:
 1. **Net Present Value (NPV)**: Is the project worth more than it costs?
-2. **Internal Rate of Return (IRR)**: What's the project's return rate?
+2. **Internal Rate of Return (IRR)**: What\'s the project's return rate?
 
 **Why This Matters:**
 - **For companies**: Invest in right projects → grow and create value
@@ -47,7 +47,7 @@ discount_rate = 0.10
 pv_cash_flows = sum([annual_cf / (1 + discount_rate)**t for t in range(1, years + 1)])
 npv = initial_investment + pv_cash_flows
 
-print(f"NPV: ${npv / 1e6:.2f} million")
+print(f"NPV: \${npv / 1e6:.2f} million")
 # NPV: $21.71 million
 
 # Decision: NPV > 0 → Build it!
@@ -55,7 +55,7 @@ print(f"NPV: ${npv / 1e6:.2f} million")
 
 **Result**: NPV = $21.71 million > 0 → **Build the warehouse**
 
-This single calculation drives a $100M decision. Let's understand why.
+This single calculation drives a $100M decision. Let\'s understand why.
 
 ---
 
@@ -125,7 +125,7 @@ def npv(
     # Calculate NPV
     npv_value = sum([
         cf / (1 + discount_rate)**t 
-        for t, cf in enumerate(all_cash_flows)
+        for t, cf in enumerate (all_cash_flows)
     ])
     
     return npv_value
@@ -136,10 +136,10 @@ cash_flows = [30, 40, 50]  # Years 1-3
 initial_cost = -100  # Year 0 (negative = outflow)
 rate = 0.10
 
-project_npv = npv(rate, cash_flows, initial_cost)
+project_npv = npv (rate, cash_flows, initial_cost)
 
 print("Project Analysis:")
-print(f"Initial investment: \${abs(initial_cost): .0f}")
+print(f"Initial investment: \${abs (initial_cost):.0f}")
 print(f"Cash flows: {cash_flows}")
 print(f"Discount rate: {rate:.0%}")
 print(f"NPV: \${project_npv:.2f}")
@@ -185,16 +185,16 @@ def evaluate_projects(
     
     for name, cash_flows in projects.items():
         initial_investment = cash_flows[0]
-        project_npv = npv(discount_rate, cash_flows)
+        project_npv = npv (discount_rate, cash_flows)
         
         results.append({
             'Project': name,
-            'Initial Investment': abs(initial_investment),
+            'Initial Investment': abs (initial_investment),
             'NPV': project_npv,
-            'PI': (project_npv + abs(initial_investment)) / abs(initial_investment)  # Profitability Index
+            'PI': (project_npv + abs (initial_investment)) / abs (initial_investment)  # Profitability Index
         })
     
-    df = pd.DataFrame(results)
+    df = pd.DataFrame (results)
     df = df.sort_values('NPV', ascending=False)
     df['Cumulative Investment'] = df['Initial Investment'].cumsum()
     df['Select'] = df['Cumulative Investment'] <= capital_budget
@@ -211,10 +211,10 @@ projects = {
     'Expansion': [-60, 18, 18, 18, 18],
 }
 
-analysis = evaluate_projects(projects, discount_rate=0.10, capital_budget=200)
+analysis = evaluate_projects (projects, discount_rate=0.10, capital_budget=200)
 
 print("Capital Budgeting Decision:")
-print(analysis.to_string(index=False))
+print(analysis.to_string (index=False))
 
 # Output:
 # Capital Budgeting Decision:
@@ -285,17 +285,17 @@ def irr(
         
     Example:
         >>> cf = [-100, 30, 40, 50]
-        >>> irr(cf)
+        >>> irr (cf)
         0.1357  # 13.57%
     """
-    def npv_func(rate):
-        return sum([cf / (1 + rate)**t for t, cf in enumerate(cash_flows)])
+    def npv_func (rate):
+        return sum([cf / (1 + rate)**t for t, cf in enumerate (cash_flows)])
     
-    def npv_derivative(rate):
-        return sum([-t * cf / (1 + rate)**(t+1) for t, cf in enumerate(cash_flows)])
+    def npv_derivative (rate):
+        return sum([-t * cf / (1 + rate)**(t+1) for t, cf in enumerate (cash_flows)])
     
     # Newton-Raphson method
-    irr_value = newton(npv_func, guess, fprime=npv_derivative, maxiter=100)
+    irr_value = newton (npv_func, guess, fprime=npv_derivative, maxiter=100)
     
     return irr_value
 
@@ -304,15 +304,15 @@ def irr_robust(
     cash_flows: List[float]
 ) -> float:
     """
-    Robust IRR calculation using Brent's method.
+    Robust IRR calculation using Brent\'s method.
     Handles edge cases better than Newton-Raphson.
     """
-    def npv_func(rate):
-        return sum([cf / (1 + rate)**t for t, cf in enumerate(cash_flows)])
+    def npv_func (rate):
+        return sum([cf / (1 + rate)**t for t, cf in enumerate (cash_flows)])
     
     try:
         # Search for IRR between -50% and +100%
-        irr_value = brentq(npv_func, -0.5, 1.0)
+        irr_value = brentq (npv_func, -0.5, 1.0)
         return irr_value
     except ValueError:
         # No IRR found in range
@@ -322,7 +322,7 @@ def irr_robust(
 # Example: Same project as before
 cash_flows = [-100, 30, 40, 50]
 
-project_irr = irr(cash_flows)
+project_irr = irr (cash_flows)
 project_npv = npv(0.10, cash_flows)
 
 print("IRR Analysis:")
@@ -331,7 +331,7 @@ print(f"IRR: {project_irr:.2%}")
 print(f"Required return: 10.00%")
 print(f"\\nDecision: {'✓ Accept' if project_irr > 0.10 else '✗ Reject'}")
 print(f"(IRR {project_irr:.2%} > Required 10.00%)")
-print(f"\\nNPV at 10%: \${project_npv: .2f}")
+print(f"\\nNPV at 10%: \${project_npv:.2f}")
 
 # Output:
 # IRR Analysis:
@@ -376,19 +376,19 @@ def compare_projects(
     results = []
     
     for name, cf in [('Project A', project_a_cf), ('Project B', project_b_cf)]:
-        project_npv = npv(discount_rate, cf)
-        project_irr = irr(cf)
+        project_npv = npv (discount_rate, cf)
+        project_irr = irr (cf)
         
         results.append({
             'Project': name,
-            'Investment': abs(cf[0]),
+            'Investment': abs (cf[0]),
             'NPV': project_npv,
             'IRR': project_irr,
             'NPV Decision': 'Accept' if project_npv > 0 else 'Reject',
             'IRR Decision': 'Accept' if project_irr > discount_rate else 'Reject'
         })
     
-    return pd.DataFrame(results)
+    return pd.DataFrame (results)
 
 
 # Project A: Small, high return
@@ -399,10 +399,10 @@ project_b = [-100, 150]  # Invest $100, get $150 in 1 year
 
 discount_rate = 0.10
 
-comparison = compare_projects(project_a, project_b, discount_rate)
+comparison = compare_projects (project_a, project_b, discount_rate)
 
 print("Mutually Exclusive Projects:")
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 
 print("\\nConflict:")
 print("IRR says: Choose Project A (100% > 50%)")
@@ -461,7 +461,7 @@ def npv_profile(
     if rate_range is None:
         rate_range = np.linspace(0, 0.30, 100)
     
-    npv_values = [npv(r, cash_flows) for r in rate_range]
+    npv_values = [npv (r, cash_flows) for r in rate_range]
     
     return rate_range, npv_values
 
@@ -469,23 +469,23 @@ def npv_profile(
 # Plot NPV profiles for both projects
 rates = np.linspace(0, 0.30, 100)
 
-npv_a = [npv(r, project_a) for r in rates]
-npv_b = [npv(r, project_b) for r in rates]
+npv_a = [npv (r, project_a) for r in rates]
+npv_b = [npv (r, project_b) for r in rates]
 
-plt.figure(figsize=(12, 8))
+plt.figure (figsize=(12, 8))
 
-plt.plot(rates * 100, npv_a, label='Project A (Small)', linewidth=2)
-plt.plot(rates * 100, npv_b, label='Project B (Large)', linewidth=2)
-plt.axhline(y=0, color='black', linestyle='--', alpha=0.3)
-plt.axvline(x=10, color='gray', linestyle='--', alpha=0.3, label='WACC = 10%')
+plt.plot (rates * 100, npv_a, label='Project A (Small)', linewidth=2)
+plt.plot (rates * 100, npv_b, label='Project B (Large)', linewidth=2)
+plt.axhline (y=0, color='black', linestyle='--', alpha=0.3)
+plt.axvline (x=10, color='gray', linestyle='--', alpha=0.3, label='WACC = 10%')
 
 # Mark IRRs
-irr_a = irr(project_a)
-irr_b = irr(project_b)
+irr_a = irr (project_a)
+irr_b = irr (project_b)
 plt.scatter([irr_a * 100], [0], color='blue', s=100, zorder=5)
 plt.scatter([irr_b * 100], [0], color='orange', s=100, zorder=5)
-plt.text(irr_a * 100, -2, f'IRR_A = {irr_a:.0%}', ha='center')
-plt.text(irr_b * 100, -2, f'IRR_B = {irr_b:.0%}', ha='center')
+plt.text (irr_a * 100, -2, f'IRR_A = {irr_a:.0%}', ha='center')
+plt.text (irr_b * 100, -2, f'IRR_B = {irr_b:.0%}', ha='center')
 
 # Mark NPVs at WACC
 npv_a_10 = npv(0.10, project_a)
@@ -497,12 +497,12 @@ plt.xlabel('Discount Rate (%)', fontsize=12)
 plt.ylabel('NPV ($)', fontsize=12)
 plt.title('NPV Profile: Why NPV Wins Over IRR', fontsize=14, fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 # Find crossover rate (where NPV_A = NPV_B)
-incremental_cf = [project_b[i] - project_a[i] for i in range(len(project_a))]
-crossover_rate = irr(incremental_cf)
-plt.axvline(x=crossover_rate * 100, color='red', linestyle=':', alpha=0.5, label=f'Crossover = {crossover_rate:.1%}')
+incremental_cf = [project_b[i] - project_a[i] for i in range (len (project_a))]
+crossover_rate = irr (incremental_cf)
+plt.axvline (x=crossover_rate * 100, color='red', linestyle=':', alpha=0.5, label=f'Crossover = {crossover_rate:.1%}')
 
 plt.savefig('npv_vs_irr.png', dpi=300, bbox_inches='tight')
 print("Chart saved: npv_vs_irr.png")
@@ -530,41 +530,41 @@ print("Chart saved: npv_vs_irr.png")
 oil_well = [-100, 250, 250, -300]
 
 # Try to find all IRRs
-def find_all_irrs(cash_flows, rate_range=np.linspace(-0.9, 2.0, 1000)):
+def find_all_irrs (cash_flows, rate_range=np.linspace(-0.9, 2.0, 1000)):
     """Find all IRRs by checking where NPV crosses zero."""
     irrs = []
     prev_npv = None
     
     for rate in rate_range:
-        current_npv = npv(rate, cash_flows)
+        current_npv = npv (rate, cash_flows)
         
         # Check for sign change (zero crossing)
         if prev_npv is not None:
             if (prev_npv > 0 and current_npv < 0) or (prev_npv < 0 and current_npv > 0):
-                # Refine with Brent's method
+                # Refine with Brent\'s method
                 try:
-                    irr_value = brentq(lambda r: npv(r, cash_flows), rate - 0.01, rate + 0.01)
-                    irrs.append(irr_value)
+                    irr_value = brentq (lambda r: npv (r, cash_flows), rate - 0.01, rate + 0.01)
+                    irrs.append (irr_value)
                 except:
                     pass
         
         prev_npv = current_npv
     
     # Remove duplicates
-    irrs = list(set([round(irr, 4) for irr in irrs]))
-    return sorted(irrs)
+    irrs = list (set([round (irr, 4) for irr in irrs]))
+    return sorted (irrs)
 
 
-irrs = find_all_irrs(oil_well)
+irrs = find_all_irrs (oil_well)
 
 print("Multiple IRR Problem:")
 print(f"Cash flows: {oil_well}")
-print(f"Number of IRRs found: {len(irrs)}")
-for i, r in enumerate(irrs, 1):
+print(f"Number of IRRs found: {len (irrs)}")
+for i, r in enumerate (irrs, 1):
     print(f"  IRR #{i}: {r:.2%}")
 
 print("\\nWhich IRR is 'correct'? → Neither! Use NPV instead.")
-print(f"NPV at 10%: \${npv(0.10, oil_well): .2f}")
+print(f"NPV at 10%: \${npv(0.10, oil_well):.2f}")
 
 # Output:
 # Multiple IRR Problem:
@@ -588,12 +588,12 @@ Some projects have no IRR (NPV never crosses zero):
 no_irr_project = [100, -50, -50, -50]  # Lend money, receive payments back
 
 try:
-    project_irr = irr(no_irr_project)
+    project_irr = irr (no_irr_project)
     print(f"IRR: {project_irr:.2%}")
 except:
     print("No IRR exists!")
 
-print(f"NPV at 10%: \${npv(0.10, no_irr_project): .2f}")
+print(f"NPV at 10%: \${npv(0.10, no_irr_project):.2f}")
 
 # Output:
 # No IRR exists!
@@ -644,22 +644,22 @@ def mirr(
     Returns:
         Modified IRR
     """
-    n = len(cash_flows) - 1
+    n = len (cash_flows) - 1
     
     # Present value of negative cash flows
     pv_negative = sum([
         cf / (1 + finance_rate)**t 
-        for t, cf in enumerate(cash_flows) if cf < 0
+        for t, cf in enumerate (cash_flows) if cf < 0
     ])
     
     # Future value of positive cash flows
     fv_positive = sum([
         cf * (1 + reinvest_rate)**(n - t)
-        for t, cf in enumerate(cash_flows) if cf > 0
+        for t, cf in enumerate (cash_flows) if cf > 0
     ])
     
     # MIRR
-    mirr_value = (fv_positive / abs(pv_negative))**(1/n) - 1
+    mirr_value = (fv_positive / abs (pv_negative))**(1/n) - 1
     
     return mirr_value
 
@@ -667,8 +667,8 @@ def mirr(
 # Compare IRR vs MIRR
 cash_flows = [-100, 30, 40, 50]
 
-project_irr = irr(cash_flows)
-project_mirr = mirr(cash_flows, finance_rate=0.10, reinvest_rate=0.10)
+project_irr = irr (cash_flows)
+project_mirr = mirr (cash_flows, finance_rate=0.10, reinvest_rate=0.10)
 project_npv = npv(0.10, cash_flows)
 
 print("IRR vs MIRR Comparison:")
@@ -723,7 +723,7 @@ def payback_period(
     """
     cumulative = 0
     
-    for year, cf in enumerate(cash_flows, 1):
+    for year, cf in enumerate (cash_flows, 1):
         cumulative += cf
         if cumulative >= initial_investment:
             # Interpolate within the year
@@ -738,7 +738,7 @@ def payback_period(
 initial_inv = 100
 cfs = [30, 40, 50]
 
-payback = payback_period(initial_inv, cfs)
+payback = payback_period (initial_inv, cfs)
 
 print(f"Initial investment: \${initial_inv}")
 print(f"Cash flows: {cfs}")
@@ -746,7 +746,7 @@ print(f"Payback period: {payback:.2f} years")
 
 # Cumulative cash flows
 cumulative = np.cumsum([0] + cfs)
-for year, cum in enumerate(cumulative[1:], 1):
+for year, cum in enumerate (cumulative[1:], 1):
     print(f"  Year {year}: \${cum} cumulative")
 
 # Output:
@@ -791,7 +791,7 @@ def discounted_payback_period(
     """
     cumulative_pv = 0
     
-    for year, cf in enumerate(cash_flows, 1):
+    for year, cf in enumerate (cash_flows, 1):
         pv_cf = cf / (1 + discount_rate)**year
         cumulative_pv += pv_cf
         
@@ -804,7 +804,7 @@ def discounted_payback_period(
 
 
 # Compare payback vs discounted payback
-disc_payback = discounted_payback_period(initial_inv, cfs, 0.10)
+disc_payback = discounted_payback_period (initial_inv, cfs, 0.10)
 
 print("\\nPayback Comparison:")
 print(f"Payback period: {payback:.2f} years")
@@ -855,7 +855,7 @@ def profitability_index(
     Returns:
         Profitability Index
     """
-    pv_future = sum([cf / (1 + discount_rate)**t for t, cf in enumerate(cash_flows, 1)])
+    pv_future = sum([cf / (1 + discount_rate)**t for t, cf in enumerate (cash_flows, 1)])
     pi = pv_future / initial_investment
     return pi
 
@@ -864,7 +864,7 @@ def profitability_index(
 pi = profitability_index(100, [30, 40, 50], 0.10)
 
 print(f"Profitability Index: {pi:.3f}")
-print(f"Interpretation: Every $1 invested generates \${pi: .2f} in PV")
+print(f"Interpretation: Every $1 invested generates \${pi:.2f} in PV")
 print(f"Decision: {'Accept (PI > 1)' if pi > 1 else 'Reject (PI < 1)'}")
 
 # Output:
@@ -913,21 +913,21 @@ def incremental_analysis(
         Analysis dictionary
     """
     # Ensure same length
-    max_len = max(len(project_a_cf), len(project_b_cf))
-    a = project_a_cf + [0] * (max_len - len(project_a_cf))
-    b = project_b_cf + [0] * (max_len - len(project_b_cf))
+    max_len = max (len (project_a_cf), len (project_b_cf))
+    a = project_a_cf + [0] * (max_len - len (project_a_cf))
+    b = project_b_cf + [0] * (max_len - len (project_b_cf))
     
     # Incremental cash flows (B - A)
-    incremental = [b[i] - a[i] for i in range(max_len)]
+    incremental = [b[i] - a[i] for i in range (max_len)]
     
     # Calculate metrics
-    npv_a = npv(discount_rate, project_a_cf)
-    npv_b = npv(discount_rate, project_b_cf)
-    npv_incremental = npv(discount_rate, incremental)
+    npv_a = npv (discount_rate, project_a_cf)
+    npv_b = npv (discount_rate, project_b_cf)
+    npv_incremental = npv (discount_rate, incremental)
     
-    irr_a = irr(project_a_cf)
-    irr_b = irr(project_b_cf)
-    irr_incremental = irr(incremental)
+    irr_a = irr (project_a_cf)
+    irr_b = irr (project_b_cf)
+    irr_incremental = irr (incremental)
     
     return {
         'Project A': {
@@ -951,11 +951,11 @@ def incremental_analysis(
 old_equipment = [-50, 20, 20, 20]  # Keep old
 new_equipment = [-100, 35, 35, 35, 35]  # Buy new
 
-analysis = incremental_analysis(old_equipment, new_equipment, 0.10)
+analysis = incremental_analysis (old_equipment, new_equipment, 0.10)
 
 print("Incremental Analysis:")
 print(f"\\nProject A (Keep Old):")
-print(f"  NPV: \${analysis['Project A']['NPV']: .2f}")
+print(f"  NPV: \${analysis['Project A']['NPV']:.2f}")
 print(f"  IRR: {analysis['Project A']['IRR']:.2%}")
 
 print(f"\\nProject B (Buy New):")
@@ -1034,7 +1034,7 @@ def startup_valuation(
     
     # IRR (if successful)
     cash_flows_success = [-investment] + [0]*(exit_year-1) + [exit_value * ownership_pct]
-    irr_if_success = irr(cash_flows_success)
+    irr_if_success = irr (cash_flows_success)
     
     # Expected IRR (probability-weighted)
     expected_return = (exit_value * ownership_pct / investment)**(1/exit_year) - 1
@@ -1063,9 +1063,9 @@ analysis = startup_valuation(
 
 print("Startup Investment Analysis:")
 for key, value in analysis.items():
-    if isinstance(value, float):
+    if isinstance (value, float):
         if 'NPV' in key or 'Investment' in key or 'Proceeds' in key or 'PV' in key:
-            print(f"{key}: \${value / 1e6: .2f}M")
+            print(f"{key}: \${value / 1e6:.2f}M")
         else:
 print(f"{key}: {value:.2%}")
     else:
@@ -1127,16 +1127,16 @@ def real_estate_project(
         cash_flows.append(-annual_construction)
     
     # Operating years: Receive NOI
-    for year in range(construction_years + 1, construction_years + hold_period + 1):
-        cash_flows.append(annual_noi)
+    for year in range (construction_years + 1, construction_years + hold_period + 1):
+        cash_flows.append (annual_noi)
     
     # Exit year: Sell property
     exit_value = annual_noi / exit_cap_rate
     cash_flows[-1] += exit_value
     
     # Calculate metrics
-    project_npv = npv(discount_rate, cash_flows)
-    project_irr = irr(cash_flows)
+    project_npv = npv (discount_rate, cash_flows)
+    project_irr = irr (cash_flows)
     
     total_investment = land_cost + construction_cost
     
@@ -1162,7 +1162,7 @@ project = real_estate_project(
 )
 
 print("Real Estate Development Analysis:")
-print(f"Total investment: \${project['Total Investment'] / 1e6: .1f}M")
+print(f"Total investment: \${project['Total Investment'] / 1e6:.1f}M")
 print(f"Exit value: \${project['Exit Value']/1e6:.1f}M")
 print(f"NPV: \${project['NPV']/1e6:.2f}M")
 print(f"IRR: {project['IRR']:.2%}")
@@ -1170,7 +1170,7 @@ print(f"\\nDecision: {project['Decision']}")
 
 # Show cash flow timeline
 print("\\nCash Flow Timeline:")
-for year, cf in enumerate(project['Cash Flows']):
+for year, cf in enumerate (project['Cash Flows']):
     print(f"  Year {year}: \${cf/1e6:+.1f}M")
 
 # Output:
@@ -1222,7 +1222,7 @@ class CapitalBudgetingAnalyzer:
     def __init__(self, discount_rate: float):
         self.discount_rate = discount_rate
     
-    def analyze_project(self, project: Project) -> dict:
+    def analyze_project (self, project: Project) -> dict:
         """
         Complete analysis of a single project.
         
@@ -1232,12 +1232,12 @@ class CapitalBudgetingAnalyzer:
         r = self.discount_rate
         
         # Calculate all metrics
-        project_npv = npv(r, cf)
-        project_irr = irr(cf) if self._has_conventional_cf(cf) else None
-        project_mirr = mirr(cf, r, r) if self._has_conventional_cf(cf) else None
-        project_pi = profitability_index(abs(cf[0]), cf[1:], r) if cf[0] < 0 else None
-        project_payback = payback_period(abs(cf[0]), cf[1:]) if cf[0] < 0 else None
-        project_disc_payback = discounted_payback_period(abs(cf[0]), cf[1:], r) if cf[0] < 0 else None
+        project_npv = npv (r, cf)
+        project_irr = irr (cf) if self._has_conventional_cf (cf) else None
+        project_mirr = mirr (cf, r, r) if self._has_conventional_cf (cf) else None
+        project_pi = profitability_index (abs (cf[0]), cf[1:], r) if cf[0] < 0 else None
+        project_payback = payback_period (abs (cf[0]), cf[1:]) if cf[0] < 0 else None
+        project_disc_payback = discounted_payback_period (abs (cf[0]), cf[1:], r) if cf[0] < 0 else None
         
         # Decision
         accept = project_npv > 0
@@ -1254,10 +1254,10 @@ class CapitalBudgetingAnalyzer:
             'Value Created': project_npv if accept else 0
         }
     
-    def _has_conventional_cf(self, cash_flows: List[float]) -> bool:
+    def _has_conventional_cf (self, cash_flows: List[float]) -> bool:
         """Check if cash flows are conventional (one sign change)."""
         sign_changes = sum([
-            1 for i in range(1, len(cash_flows))
+            1 for i in range(1, len (cash_flows))
             if (cash_flows[i] > 0 and cash_flows[i-1] < 0) or
                (cash_flows[i] < 0 and cash_flows[i-1] > 0)
         ])
@@ -1274,15 +1274,15 @@ class CapitalBudgetingAnalyzer:
         results = []
         
         for project in projects:
-            analysis = self.analyze_project(project)
-            results.append(analysis)
+            analysis = self.analyze_project (project)
+            results.append (analysis)
         
-        df = pd.DataFrame(results)
+        df = pd.DataFrame (results)
         df = df.sort_values('NPV', ascending=False)
         
         # Capital budgeting
         if capital_budget < float('inf'):
-            df['Initial Investment'] = [abs(p.cash_flows[0]) for p in projects]
+            df['Initial Investment'] = [abs (p.cash_flows[0]) for p in projects]
             df['Cumulative Investment'] = df['Initial Investment'].cumsum()
             df['Select'] = df['Cumulative Investment'] <= capital_budget
         
@@ -1297,8 +1297,8 @@ class CapitalBudgetingAnalyzer:
         """
         NPV sensitivity to discount rate.
         """
-        rates = np.linspace(rate_range[0], rate_range[1], n_points)
-        npvs = [npv(r, project.cash_flows) for r in rates]
+        rates = np.linspace (rate_range[0], rate_range[1], n_points)
+        npvs = [npv (r, project.cash_flows) for r in rates]
         
         df = pd.DataFrame({
             'Discount Rate': rates,
@@ -1309,7 +1309,7 @@ class CapitalBudgetingAnalyzer:
 
 
 # Example usage
-analyzer = CapitalBudgetingAnalyzer(discount_rate=0.10)
+analyzer = CapitalBudgetingAnalyzer (discount_rate=0.10)
 
 # Define projects
 projects = [
@@ -1320,17 +1320,17 @@ projects = [
 ]
 
 # Analyze all projects
-comparison = analyzer.compare_projects(projects, capital_budget=8_000_000)
+comparison = analyzer.compare_projects (projects, capital_budget=8_000_000)
 
 print("Capital Budgeting Analysis:")
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 
 # Sensitivity analysis for top project
 top_project = projects[comparison.index[0]]
-sensitivity = analyzer.sensitivity_analysis(top_project)
+sensitivity = analyzer.sensitivity_analysis (top_project)
 
 print(f"\\nSensitivity Analysis for {top_project.name}:")
-print(sensitivity.head(10).to_string(index=False))
+print(sensitivity.head(10).to_string (index=False))
 \`\`\`
 
 ---
@@ -1389,4 +1389,3 @@ You now understand the **core tools of capital budgeting**. Next sections:
 **Next Section**: [Cost of Capital (WACC)](./cost-of-capital-wacc) →
 `,
 };
-

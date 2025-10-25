@@ -435,7 +435,7 @@ spec:
         paths: ["/charge"]
 \`\`\`
 
-**Result**: Only Order Service can call Payment Service's /charge endpoint.
+**Result**: Only Order Service can call Payment Service\'s /charge endpoint.
 
 #### Rate Limiting
 

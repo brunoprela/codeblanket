@@ -64,7 +64,7 @@ class FileGenerator:
             'typescript': self._typescript_template,
         }
     
-    def generate(self, spec: FileSpec) -> str:
+    def generate (self, spec: FileSpec) -> str:
         """Generate a complete file from specification."""
         
         # Get language-specific template
@@ -74,7 +74,7 @@ class FileGenerator:
         )
         
         # Build prompt
-        prompt = template_fn(spec)
+        prompt = template_fn (spec)
         
         # Generate
         response = self.client.chat.completions.create(
@@ -93,13 +93,13 @@ class FileGenerator:
         code = response.choices[0].message.content
         
         # Clean the code
-        code = self._extract_code(code)
+        code = self._extract_code (code)
         
         return code
     
-    def _python_template(self, spec: FileSpec) -> str:
+    def _python_template (self, spec: FileSpec) -> str:
         """Python-specific prompt template."""
-        requirements = "\\n".join(f"- {r}" for r in spec.requirements)
+        requirements = "\\n".join (f"- {r}" for r in spec.requirements)
         
         prompt = f"""Generate a Python file: {spec.filename}
 
@@ -127,9 +127,9 @@ Examples of similar code:
         
         return prompt
     
-    def _javascript_template(self, spec: FileSpec) -> str:
+    def _javascript_template (self, spec: FileSpec) -> str:
         """JavaScript-specific prompt template."""
-        requirements = "\\n".join(f"- {r}" for r in spec.requirements)
+        requirements = "\\n".join (f"- {r}" for r in spec.requirements)
         
         return f"""Generate a JavaScript file: {spec.filename}
 
@@ -148,9 +148,9 @@ Follow these JavaScript conventions:
 - Export functions properly
 """
     
-    def _typescript_template(self, spec: FileSpec) -> str:
+    def _typescript_template (self, spec: FileSpec) -> str:
         """TypeScript-specific prompt template."""
-        requirements = "\\n".join(f"- {r}" for r in spec.requirements)
+        requirements = "\\n".join (f"- {r}" for r in spec.requirements)
         
         return f"""Generate a TypeScript file: {spec.filename}
 
@@ -169,9 +169,9 @@ Follow these TypeScript conventions:
 - Strict mode compliance
 """
     
-    def _generic_template(self, spec: FileSpec) -> str:
+    def _generic_template (self, spec: FileSpec) -> str:
         """Generic template for other languages."""
-        requirements = "\\n".join(f"- {r}" for r in spec.requirements)
+        requirements = "\\n".join (f"- {r}" for r in spec.requirements)
         
         return f"""Generate a {spec.language} file: {spec.filename}
 
@@ -182,13 +182,13 @@ Requirements:
 {requirements}
 """
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from markdown or text response."""
         # Check if wrapped in markdown code block
         if "\`\`\`" in response:
             # Extract content between code fences
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 # Get the code block (skip language identifier line)
                 code = parts[1]
                 # Remove language identifier if present
@@ -196,7 +196,7 @@ Requirements:
                 if lines and lines[0].strip() in {
                     'python', 'javascript', 'typescript', 'js', 'ts'
                 }:
-                    code = "\\n".join(lines[1:])
+                    code = "\\n".join (lines[1:])
                 return code.strip()
         
         return response.strip()
@@ -217,7 +217,7 @@ spec = FileSpec(
     ]
 )
 
-code = generator.generate(spec)
+code = generator.generate (spec)
 print(code)
 \`\`\`
 
@@ -245,10 +245,10 @@ class FunctionGenerator:
         
         # Build parameter string
         if language == "python":
-            params = ", ".join(f"{name}: {type_}" for name, type_ in parameters)
+            params = ", ".join (f"{name}: {type_}" for name, type_ in parameters)
             signature = f"def {name}({params}) -> {return_type}:"
         elif language in ["javascript", "typescript"]:
-            params = ", ".join(f"{name}: {type_}" for name, type_ in parameters)
+            params = ", ".join (f"{name}: {type_}" for name, type_ in parameters)
             signature = f"function {name}({params}): {return_type}"
         
         prompt = f"""Generate a {language} function with this signature:
@@ -280,13 +280,13 @@ Requirements:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -334,13 +334,13 @@ class ClassGenerator:
         """Generate a complete class."""
         
         if language == "python":
-            return self._generate_python_class(spec)
+            return self._generate_python_class (spec)
         elif language == "typescript":
-            return self._generate_typescript_class(spec)
+            return self._generate_typescript_class (spec)
         else:
-            return self._generate_generic_class(spec, language)
+            return self._generate_generic_class (spec, language)
     
-    def _generate_python_class(self, spec: ClassSpec) -> str:
+    def _generate_python_class (self, spec: ClassSpec) -> str:
         """Generate Python class."""
         # Build attributes string
         attrs = "\\n".join(
@@ -357,12 +357,12 @@ class ClassGenerator:
         # Build base classes
         bases = ""
         if spec.base_classes:
-            bases = f"Inherits from: {', '.join(spec.base_classes)}"
+            bases = f"Inherits from: {', '.join (spec.base_classes)}"
         
         # Build decorators
         decorators = ""
         if spec.decorators:
-            decorators = f"Decorators: {', '.join(spec.decorators)}"
+            decorators = f"Decorators: {', '.join (spec.decorators)}"
         
         prompt = f"""Generate a Python class: {spec.name}
 
@@ -400,17 +400,17 @@ Requirements:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 code = parts[1]
                 lines = code.split("\\n")
                 if lines and lines[0].strip() in {'python', 'py'}:
-                    code = "\\n".join(lines[1:])
+                    code = "\\n".join (lines[1:])
                 return code.strip()
         return response.strip()
 
@@ -436,7 +436,7 @@ class_spec = ClassSpec(
 )
 
 class_gen = ClassGenerator()
-code = class_gen.generate_class(class_spec)
+code = class_gen.generate_class (class_spec)
 print(code)
 \`\`\`
 
@@ -487,7 +487,7 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def generate_database_model(
         self,
@@ -528,7 +528,7 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def generate_test_file(
         self,
@@ -538,7 +538,7 @@ Include:
     ) -> str:
         """Generate test file boilerplate."""
         
-        functions_str = "\\n".join(f"- {func}" for func in functions_to_test)
+        functions_str = "\\n".join (f"- {func}" for func in functions_to_test)
         
         prompt = f"""Generate a {framework} test file for module: {module_name}
 
@@ -568,13 +568,13 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -622,33 +622,33 @@ from typing import Optional
 class GeneratedFileValidator:
     """Validate generated files before accepting."""
     
-    def validate_python_file(self, code: str) -> tuple[bool, List[str]]:
+    def validate_python_file (self, code: str) -> tuple[bool, List[str]]:
         """Validate Python file."""
         errors = []
         
         # 1. Syntax check
         try:
-            ast.parse(code)
+            ast.parse (code)
         except SyntaxError as e:
-            errors.append(f"Syntax error at line {e.lineno}: {e.msg}")
+            errors.append (f"Syntax error at line {e.lineno}: {e.msg}")
             return False, errors
         
         # 2. Check imports
-        tree = ast.parse(code)
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
+        tree = ast.parse (code)
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Import):
                 for name in node.names:
                     try:
                         __import__(name.name)
                     except ImportError:
-                        errors.append(f"Import not found: {name.name}")
+                        errors.append (f"Import not found: {name.name}")
         
         # 3. Style check with black (if available)
         try:
             with tempfile.NamedTemporaryFile(
                 mode='w', suffix='.py', delete=False
             ) as f:
-                f.write(code)
+                f.write (code)
                 temp_path = f.name
             
             result = subprocess.run(
@@ -665,11 +665,11 @@ class GeneratedFileValidator:
         finally:
             import os
             if 'temp_path' in locals():
-                os.unlink(temp_path)
+                os.unlink (temp_path)
         
-        return len(errors) == 0, errors
+        return len (errors) == 0, errors
     
-    def validate_javascript_file(self, code: str) -> tuple[bool, List[str]]:
+    def validate_javascript_file (self, code: str) -> tuple[bool, List[str]]:
         """Validate JavaScript file."""
         errors = []
         
@@ -677,7 +677,7 @@ class GeneratedFileValidator:
         with tempfile.NamedTemporaryFile(
             mode='w', suffix='.js', delete=False
         ) as f:
-            f.write(code)
+            f.write (code)
             temp_path = f.name
         
         try:
@@ -689,7 +689,7 @@ class GeneratedFileValidator:
             )
             
             if result.returncode != 0:
-                errors.append(f"Syntax error: {result.stderr.decode()}")
+                errors.append (f"Syntax error: {result.stderr.decode()}")
         
         except FileNotFoundError:
             errors.append("Node.js not available for validation")
@@ -697,20 +697,20 @@ class GeneratedFileValidator:
             errors.append("Validation timeout")
         finally:
             import os
-            os.unlink(temp_path)
+            os.unlink (temp_path)
         
-        return len(errors) == 0, errors
+        return len (errors) == 0, errors
 
 # Usage
 validator = GeneratedFileValidator()
 
 generated_code = """
-def calculate_sum(numbers: List[int]) -> int:
+def calculate_sum (numbers: List[int]) -> int:
     ''Calculate sum of numbers.''
-    return sum(numbers)
+    return sum (numbers)
 """
 
-is_valid, errors = validator.validate_python_file(generated_code)
+is_valid, errors = validator.validate_python_file (generated_code)
 
 if is_valid:
     print("✓ Generated file is valid")
@@ -741,25 +741,25 @@ class ProductionFileGenerator:
     ) -> Optional[str]:
         """Generate and validate file with retries."""
         
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             print(f"Generation attempt {attempt + 1}/{self.max_retries}")
             
             # Generate
-            code = self.generator.generate(spec)
+            code = self.generator.generate (spec)
             
             # Validate
             if spec.language == "python":
-                is_valid, errors = self.validator.validate_python_file(code)
+                is_valid, errors = self.validator.validate_python_file (code)
             elif spec.language in ["javascript", "typescript"]:
-                is_valid, errors = self.validator.validate_javascript_file(code)
+                is_valid, errors = self.validator.validate_javascript_file (code)
             else:
                 is_valid, errors = True, []
             
             if is_valid:
                 # Success!
                 if output_path:
-                    with open(output_path, 'w') as f:
-                        f.write(code)
+                    with open (output_path, 'w') as f:
+                        f.write (code)
                     print(f"✓ File written to {output_path}")
                 
                 return code
@@ -770,7 +770,7 @@ class ProductionFileGenerator:
             if auto_fix and attempt < self.max_retries - 1:
                 # Add error context for retry
                 spec.requirements.append(
-                    f"Fix these issues from previous attempt: {', '.join(errors)}"
+                    f"Fix these issues from previous attempt: {', '.join (errors)}"
                 )
         
         print("✗ Failed to generate valid file after max retries")

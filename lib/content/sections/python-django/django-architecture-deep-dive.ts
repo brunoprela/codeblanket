@@ -17,7 +17,7 @@ Django is a **high-level Python web framework** that encourages rapid developmen
 - **Scalable**: From small projects to billions of requests per day
 
 By the end of this section, you'll understand:
-- Django's MTV (Model-Template-View) architecture
+- Django\'s MTV (Model-Template-View) architecture
 - The request/response lifecycle
 - Django's app structure and design philosophy
 - Settings configuration and environment management
@@ -120,7 +120,7 @@ Controller     →      View (business logic)
 
 ### Complete Request Flow Example
 
-Let's trace a request from client to response:
+Let\'s trace a request from client to response:
 
 **User requests**: \`GET /articles/2024/django-guide/\`
 
@@ -203,7 +203,7 @@ class ArticleDetailView(DetailView):
     template_name = 'articles/article_detail.html'
     context_object_name = 'article'
     
-    def get_object(self):
+    def get_object (self):
         """Custom object retrieval with year and slug"""
         year = self.kwargs['year']
         slug = self.kwargs['slug']
@@ -218,11 +218,11 @@ class ArticleDetailView(DetailView):
         
         # Track view count (side effect)
         article.view_count += 1
-        article.save(update_fields=['view_count'])
+        article.save (update_fields=['view_count'])
         
         return article
     
-    def get_context_data(self, **kwargs):
+    def get_context_data (self, **kwargs):
         """Add extra context for template"""
         context = super().get_context_data(**kwargs)
         
@@ -235,7 +235,7 @@ class ArticleDetailView(DetailView):
         )[:5]
         
         # Add reading time estimate
-        words = len(self.object.content.split())
+        words = len (self.object.content.split())
         context['reading_time'] = words // 200  # ~200 words per minute
         
         return context
@@ -250,7 +250,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 
-class Article(models.Model):
+class Article (models.Model):
     """
     Article model with automatic slug generation
     Demonstrates Django ORM features
@@ -261,15 +261,15 @@ class Article(models.Model):
         ('archived', 'Archived'),
     ]
     
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
+    title = models.CharField (max_length=200)
+    slug = models.SlugField (max_length=200, unique=True)
     author = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
         related_name='articles'
     )
     content = models.TextField()
-    excerpt = models.TextField(max_length=500, blank=True)
+    excerpt = models.TextField (max_length=500, blank=True)
     category = models.ForeignKey(
         'Category',
         on_delete=models.SET_NULL,
@@ -277,33 +277,33 @@ class Article(models.Model):
         related_name='articles'
     )
     tags = models.ManyToManyField('Tag', related_name='articles', blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
-    view_count = models.IntegerField(default=0)
-    featured = models.BooleanField(default=False)
+    status = models.CharField (max_length=10, choices=STATUS_CHOICES, default='draft')
+    view_count = models.IntegerField (default=0)
+    featured = models.BooleanField (default=False)
     
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    published_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField (auto_now_add=True)
+    updated_at = models.DateTimeField (auto_now=True)
+    published_at = models.DateTimeField (null=True, blank=True)
     
     class Meta:
         ordering = ['-published_at']
         indexes = [
-            models.Index(fields=['slug']),
-            models.Index(fields=['status', 'published_at']),
-            models.Index(fields=['author', 'status']),
+            models.Index (fields=['slug']),
+            models.Index (fields=['status', 'published_at']),
+            models.Index (fields=['author', 'status']),
         ]
         verbose_name_plural = 'articles'
     
     def __str__(self):
         return self.title
     
-    def save(self, *args, **kwargs):
+    def save (self, *args, **kwargs):
         """Auto-generate slug if not provided"""
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify (self.title)
         super().save(*args, **kwargs)
     
-    def get_absolute_url(self):
+    def get_absolute_url (self):
         """Return canonical URL for article"""
         return reverse('articles:detail', kwargs={
             'year': self.published_at.year,
@@ -311,15 +311,15 @@ class Article(models.Model):
         })
     
     @property
-    def is_published(self):
+    def is_published (self):
         """Check if article is published"""
         return self.status == 'published' and self.published_at is not None
 
-class Category(models.Model):
+class Category (models.Model):
     """Article category"""
-    name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
+    name = models.CharField (max_length=100, unique=True)
+    slug = models.SlugField (max_length=100, unique=True)
+    description = models.TextField (blank=True)
     
     class Meta:
         verbose_name_plural = 'categories'
@@ -327,10 +327,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Tag(models.Model):
+class Tag (models.Model):
     """Article tag"""
-    name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=50, unique=True)
+    name = models.CharField (max_length=50, unique=True)
+    slug = models.SlugField (max_length=50, unique=True)
     
     def __str__(self):
         return self.name
@@ -423,7 +423,7 @@ class TimingMiddleware:
         start_time = time.time()
         
         # Get response from next middleware/view
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Process response
         duration = time.time() - start_time
@@ -829,7 +829,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Apps
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', TemplateView.as_view (template_name='home.html'), name='home'),
     path('articles/', include('apps.articles.urls')),
     path('users/', include('apps.users.urls')),
     
@@ -842,12 +842,12 @@ urlpatterns = [
 
 # Serve media files in development
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static (settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     
     # Debug toolbar
     import debug_toolbar
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    urlpatterns += [path('__debug__/', include (debug_toolbar.urls))]
 \`\`\`
 
 ### URL Patterns with Parameters
@@ -880,7 +880,7 @@ urlpatterns = [
     path('draft/<uuid:draft_id>/', views.DraftDetailView.as_view(), name='draft'),
     
     # Regex pattern (more complex)
-    re_path(r'^archive/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', 
+    re_path (r'^archive/(? P<year>[0-9]{4})/(? P<month>[0-9]{2})/$', 
             views.ArchiveView.as_view(), 
             name='archive'),
     
@@ -909,10 +909,10 @@ class YearConverter:
     """Custom converter for 4-digit years"""
     regex = '[0-9]{4}'
     
-    def to_python(self, value):
-        return int(value)
+    def to_python (self, value):
+        return int (value)
     
-    def to_url(self, value):
+    def to_url (self, value):
         return f'{value:04d}'
 
 # Register converter
@@ -1032,30 +1032,30 @@ from django.contrib.auth.decorators import login_required
 from .models import Article
 from .forms import ArticleForm
 
-def article_list(request):
+def article_list (request):
     """List all published articles"""
-    articles = Article.objects.filter(status='published').order_by('-published_at')
-    return render(request, 'articles/article_list.html', {'articles': articles})
+    articles = Article.objects.filter (status='published').order_by('-published_at')
+    return render (request, 'articles/article_list.html', {'articles': articles})
 
-def article_detail(request, pk):
+def article_detail (request, pk):
     """Display single article"""
     article = get_object_or_404(Article, pk=pk, status='published')
-    return render(request, 'articles/article_detail.html', {'article': article})
+    return render (request, 'articles/article_detail.html', {'article': article})
 
 @login_required
-def article_create(request):
+def article_create (request):
     """Create new article"""
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        form = ArticleForm (request.POST)
         if form.is_valid():
-            article = form.save(commit=False)
+            article = form.save (commit=False)
             article.author = request.user
             article.save()
             return redirect('articles:detail', pk=article.pk)
     else:
         form = ArticleForm()
     
-    return render(request, 'articles/article_form.html', {'form': form})
+    return render (request, 'articles/article_form.html', {'form': form})
 \`\`\`
 
 ### Class-Based Views (CBVs)
@@ -1073,8 +1073,8 @@ class ArticleListView(ListView):
     context_object_name = 'articles'
     paginate_by = 20
     
-    def get_queryset(self):
-        return Article.objects.filter(status='published').order_by('-published_at')
+    def get_queryset (self):
+        return Article.objects.filter (status='published').order_by('-published_at')
 
 class ArticleDetailView(DetailView):
     """Display single article"""
@@ -1088,11 +1088,11 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     form_class = ArticleForm
     template_name = 'articles/article_form.html'
     
-    def form_valid(self, form):
+    def form_valid (self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        return super().form_valid (form)
     
-    def get_success_url(self):
+    def get_success_url (self):
         return reverse_lazy('articles:detail', kwargs={'pk': self.object.pk})
 \`\`\`
 

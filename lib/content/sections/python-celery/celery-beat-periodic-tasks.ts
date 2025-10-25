@@ -6,7 +6,7 @@ export const celeryBeatPeriodicTasks = {
 
 ## Introduction
 
-**Celery Beat** is Celery's scheduler for periodic tasks - think of it as "cron for Celery". It enables running tasks at regular intervals (every 5 minutes, daily at midnight, every Monday, etc.) without manual triggering.
+**Celery Beat** is Celery\'s scheduler for periodic tasks - think of it as "cron for Celery". It enables running tasks at regular intervals (every 5 minutes, daily at midnight, every Monday, etc.) without manual triggering.
 
 **Common Use Cases:**
 - Daily database backups
@@ -72,25 +72,25 @@ app.conf.beat_schedule = {
     # Task 3: Run every day at midnight
     'daily-backup': {
         'task': 'tasks.backup_database',
-        'schedule': crontab(hour=0, minute=0),
+        'schedule': crontab (hour=0, minute=0),
     },
     
     # Task 4: Run every Monday at 9 AM
     'weekly-report': {
         'task': 'tasks.generate_weekly_report',
-        'schedule': crontab(hour=9, minute=0, day_of_week=1),
+        'schedule': crontab (hour=9, minute=0, day_of_week=1),
     },
     
     # Task 5: Run every hour
     'hourly-sync': {
         'task': 'tasks.sync_data',
-        'schedule': crontab(minute=0),  # Every hour at :00
+        'schedule': crontab (minute=0),  # Every hour at :00
     },
 }
 
 # Define tasks
 @app.task
-def add(x, y):
+def add (x, y):
     return x + y
 
 @app.task
@@ -165,43 +165,43 @@ app.conf.beat_schedule = {
     # Every midnight
     'midnight-task': {
         'task': 'tasks.midnight_task',
-        'schedule': crontab(hour=0, minute=0),
+        'schedule': crontab (hour=0, minute=0),
     },
     
     # Every day at 9:30 AM
     'morning-task': {
         'task': 'tasks.morning_task',
-        'schedule': crontab(hour=9, minute=30),
+        'schedule': crontab (hour=9, minute=30),
     },
     
     # Every Monday at 8 AM
     'monday-morning': {
         'task': 'tasks.monday_task',
-        'schedule': crontab(hour=8, minute=0, day_of_week=1),
+        'schedule': crontab (hour=8, minute=0, day_of_week=1),
     },
     
     # Every weekday at 5 PM
     'weekday-evening': {
         'task': 'tasks.weekday_task',
-        'schedule': crontab(hour=17, minute=0, day_of_week='mon-fri'),
+        'schedule': crontab (hour=17, minute=0, day_of_week='mon-fri'),
     },
     
     # Every 15 minutes
     'every-15-minutes': {
         'task': 'tasks.quarter_hourly',
-        'schedule': crontab(minute='*/15'),  # 0, 15, 30, 45
+        'schedule': crontab (minute='*/15'),  # 0, 15, 30, 45
     },
     
     # First day of every month at midnight
     'monthly-task': {
         'task': 'tasks.monthly_task',
-        'schedule': crontab(hour=0, minute=0, day_of_month=1),
+        'schedule': crontab (hour=0, minute=0, day_of_month=1),
     },
     
     # Every hour at :30 (1:30, 2:30, 3:30, ...)
     'half-past-every-hour': {
         'task': 'tasks.half_hourly',
-        'schedule': crontab(minute=30),
+        'schedule': crontab (minute=30),
     },
 }
 \`\`\`
@@ -237,44 +237,44 @@ from celery.schedules import crontab
 crontab()
 
 # Every 5 minutes
-crontab(minute='*/5')
+crontab (minute='*/5')
 
 # Every hour
-crontab(minute=0)
+crontab (minute=0)
 
 # Every day at midnight
-crontab(hour=0, minute=0)
+crontab (hour=0, minute=0)
 
 # Every day at 3:30 AM
-crontab(hour=3, minute=30)
+crontab (hour=3, minute=30)
 
 # Every Monday at 9 AM
-crontab(hour=9, minute=0, day_of_week=1)
+crontab (hour=9, minute=0, day_of_week=1)
 
 # Every weekday (Mon-Fri) at 5 PM
-crontab(hour=17, minute=0, day_of_week='1-5')
-crontab(hour=17, minute=0, day_of_week='mon-fri')
+crontab (hour=17, minute=0, day_of_week='1-5')
+crontab (hour=17, minute=0, day_of_week='mon-fri')
 
 # Every weekend (Sat-Sun) at 10 AM
-crontab(hour=10, minute=0, day_of_week='6-0')
+crontab (hour=10, minute=0, day_of_week='6-0')
 
 # First day of every month at midnight
-crontab(hour=0, minute=0, day_of_month=1)
+crontab (hour=0, minute=0, day_of_month=1)
 
 # Last day of every month (use day_of_month=-1)
-crontab(hour=0, minute=0, day_of_month=-1)
+crontab (hour=0, minute=0, day_of_month=-1)
 
 # Every quarter hour (0, 15, 30, 45)
-crontab(minute='*/15')
+crontab (minute='*/15')
 
 # Specific times: 9 AM, 12 PM, 3 PM
-crontab(hour='9,12,15', minute=0)
+crontab (hour='9,12,15', minute=0)
 
 # Every 2 hours
-crontab(minute=0, hour='*/2')
+crontab (minute=0, hour='*/2')
 
 # Every 4 hours starting at 1 AM (1, 5, 9, 13, 17, 21)
-crontab(minute=0, hour='1-23/4')
+crontab (minute=0, hour='1-23/4')
 \`\`\`
 
 ---
@@ -340,12 +340,12 @@ PeriodicTask.objects.create(
 )
 
 # Enable/disable task dynamically
-task = PeriodicTask.objects.get(name='Daily backup')
+task = PeriodicTask.objects.get (name='Daily backup')
 task.enabled = False  # Disable
 task.save()
 
 # Modify schedule dynamically
-task = PeriodicTask.objects.get(name='Cleanup every 10 seconds')
+task = PeriodicTask.objects.get (name='Cleanup every 10 seconds')
 task.interval.every = 60  # Change to 60 seconds
 task.interval.save()
 \`\`\`
@@ -380,14 +380,14 @@ app.conf.beat_schedule = {
     # Daily backup at 2 AM UTC
     'daily-backup': {
         'task': 'tasks.backup_database',
-        'schedule': crontab(hour=2, minute=0),
+        'schedule': crontab (hour=2, minute=0),
         'kwargs': {'full': True}
     },
     
     # Hourly report generation
     'hourly-reports': {
         'task': 'tasks.generate_reports',
-        'schedule': crontab(minute=0),
+        'schedule': crontab (minute=0),
         'options': {
             'queue': 'reports',
             'priority': 5
@@ -397,20 +397,20 @@ app.conf.beat_schedule = {
     # Cleanup old data every night at 3 AM
     'nightly-cleanup': {
         'task': 'tasks.cleanup_old_data',
-        'schedule': crontab(hour=3, minute=0),
+        'schedule': crontab (hour=3, minute=0),
         'kwargs': {'days_old': 90}
     },
     
     # Weekly analytics every Sunday at midnight
     'weekly-analytics': {
         'task': 'tasks.compute_weekly_analytics',
-        'schedule': crontab(hour=0, minute=0, day_of_week=0),
+        'schedule': crontab (hour=0, minute=0, day_of_week=0),
     },
     
     # Monthly billing on 1st of month
     'monthly-billing': {
         'task': 'tasks.process_monthly_billing',
-        'schedule': crontab(hour=0, minute=0, day_of_month=1),
+        'schedule': crontab (hour=0, minute=0, day_of_month=1),
     },
 }
 
@@ -545,7 +545,7 @@ app = Celery('myapp', broker='redis://localhost:6379/0')
 logger = logging.getLogger(__name__)
 
 @beat_init.connect
-def on_beat_init(sender, **kwargs):
+def on_beat_init (sender, **kwargs):
     """Called when Beat starts"""
     logger.info("Celery Beat started")
 
@@ -553,17 +553,17 @@ def on_beat_init(sender, **kwargs):
 from celery.signals import task_success, task_failure
 
 @task_success.connect
-def task_succeeded(sender=None, result=None, **kwargs):
+def task_succeeded (sender=None, result=None, **kwargs):
     """Log successful periodic task"""
     if sender.request.id:
-        logger.info(f"Periodic task succeeded: {sender.name}")
+        logger.info (f"Periodic task succeeded: {sender.name}")
 
 @task_failure.connect
-def task_failed(sender=None, exception=None, **kwargs):
+def task_failed (sender=None, exception=None, **kwargs):
     """Alert on periodic task failure"""
-    logger.error(f"Periodic task failed: {sender.name}, Error: {exception}")
+    logger.error (f"Periodic task failed: {sender.name}, Error: {exception}")
     # Send alert to ops team
-    alert_ops_team(f"Periodic task {sender.name} failed")
+    alert_ops_team (f"Periodic task {sender.name} failed")
 
 # Health check periodic task
 @app.task
@@ -580,12 +580,12 @@ def health_check():
         # Check queue depth
         queue_depth = get_queue_depth()
         if queue_depth > 10000:
-            alert_ops_team(f"Queue depth high: {queue_depth}")
+            alert_ops_team (f"Queue depth high: {queue_depth}")
         
         logger.info("Health check passed")
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        alert_ops_team(f"Health check failed: {e}")
+        logger.error (f"Health check failed: {e}")
+        alert_ops_team (f"Health check failed: {e}")
         raise
 \`\`\`
 
@@ -616,7 +616,7 @@ app.conf.beat_schedule = {
     # ✅ GOOD: Route to specific queue
     'generate-reports': {
         'task': 'tasks.generate_reports',
-        'schedule': crontab(hour=0, minute=0),
+        'schedule': crontab (hour=0, minute=0),
         'options': {
             'queue': 'reports',  # Dedicated queue
             'priority': 9  # High priority
@@ -626,14 +626,14 @@ app.conf.beat_schedule = {
     # ✅ GOOD: Add task arguments
     'cleanup-old-data': {
         'task': 'tasks.cleanup',
-        'schedule': crontab(hour=3, minute=0),
+        'schedule': crontab (hour=3, minute=0),
         'kwargs': {'days_old': 90, 'dry_run': False}
     },
     
     # ✅ GOOD: Make tasks idempotent
     'daily-sync': {
         'task': 'tasks.sync_data',  # Idempotent task
-        'schedule': crontab(hour=2, minute=0),
+        'schedule': crontab (hour=2, minute=0),
     },
 }
 
@@ -682,7 +682,7 @@ app.conf.enable_utc = True
 app.conf.beat_schedule = {
     'morning-report': {
         'task': 'tasks.morning_report',
-        'schedule': crontab(hour=9, minute=0),  # 9 AM EST
+        'schedule': crontab (hour=9, minute=0),  # 9 AM EST
     },
 }
 \`\`\`
@@ -693,8 +693,8 @@ app.conf.beat_schedule = {
 from datetime import datetime, timedelta
 
 # Schedule task to run once in future
-eta = datetime.utcnow() + timedelta(hours=1)
-send_reminder.apply_async(args=['user@example.com'], eta=eta)
+eta = datetime.utcnow() + timedelta (hours=1)
+send_reminder.apply_async (args=['user@example.com'], eta=eta)
 \`\`\`
 
 ### 3. Dynamic Schedule Modification
@@ -703,7 +703,7 @@ send_reminder.apply_async(args=['user@example.com'], eta=eta)
 # With django-celery-beat
 from django_celery_beat.models import PeriodicTask
 
-task = PeriodicTask.objects.get(name='health-check')
+task = PeriodicTask.objects.get (name='health-check')
 task.enabled = False  # Disable during maintenance
 task.save()
 

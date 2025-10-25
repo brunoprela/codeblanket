@@ -106,7 +106,7 @@ POST /api/users         # Create user
 ### **Use Hierarchical Relationships**
 
 \`\`\`
-GET /api/users/123/posts          # User's posts
+GET /api/users/123/posts          # User\'s posts
 GET /api/users/123/posts/456      # Specific post by user
 GET /api/posts/456/comments       # Post's comments
 \`\`\`
@@ -284,7 +284,7 @@ Client must know to construct: \`GET /api/orders/456\`
 
 ## Richardson Maturity Model
 
-Leonard Richardson's model for REST API maturity:
+Leonard Richardson\'s model for REST API maturity:
 
 ### **Level 0: The Swamp of POX (Plain Old XML)**
 - Single endpoint
@@ -477,7 +477,7 @@ GET    /api/v1/posts/:id       # Get post
 PUT    /api/v1/posts/:id       # Update post
 DELETE /api/v1/posts/:id       # Delete post
 
-# User's posts
+# User\'s posts
 GET    /api/v1/users/:id/posts # Get user's posts
 
 # Comments

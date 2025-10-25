@@ -73,12 +73,12 @@ class FacePromptBuilder:
         # Build subject description
         descriptors = [age]
         if gender:
-            descriptors.append(gender)
+            descriptors.append (gender)
         if ethnicity:
-            descriptors.append(ethnicity)
-        descriptors.append(subject)
+            descriptors.append (ethnicity)
+        descriptors.append (subject)
         
-        subject_desc = " ".join(descriptors)
+        subject_desc = " ".join (descriptors)
         
         prompt_parts = [
             f"professional headshot photograph of {subject_desc}",
@@ -95,7 +95,7 @@ class FacePromptBuilder:
             "natural look",
         ]
         
-        prompt_parts.extend(additional)
+        prompt_parts.extend (additional)
         
         negative_parts = [
             "blurry", "low quality", "distorted",
@@ -107,8 +107,8 @@ class FacePromptBuilder:
         ]
         
         return {
-            "prompt": ", ".join(prompt_parts),
-            "negative_prompt": ", ".join(negative_parts)
+            "prompt": ", ".join (prompt_parts),
+            "negative_prompt": ", ".join (negative_parts)
         }
     
     @staticmethod
@@ -254,8 +254,8 @@ class FaceRestorer:
         import numpy as np
         
         # Convert PIL to numpy
-        img_np = np.array(image)
-        img_np = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        img_np = np.array (image)
+        img_np = cv2.cvtColor (img_np, cv2.COLOR_RGB2BGR)
         
         # Restore
         _, _, output = self.restorer.enhance(
@@ -267,8 +267,8 @@ class FaceRestorer:
         )
         
         # Convert back to PIL
-        output = cv2.cvtColor(output, cv2.COLOR_BGR2RGB)
-        return Image.fromarray(output)
+        output = cv2.cvtColor (output, cv2.COLOR_BGR2RGB)
+        return Image.fromarray (output)
     
     def restore_multiple(
         self,
@@ -276,10 +276,10 @@ class FaceRestorer:
         **kwargs
     ) -> List[Image.Image]:
         """Restore faces in multiple images."""
-        return [self.restore_face(img, **kwargs) for img in images]
+        return [self.restore_face (img, **kwargs) for img in images]
 
 # Usage
-restorer = FaceRestorer(version="1.4")
+restorer = FaceRestorer (version="1.4")
 
 # Restore low-quality face photo
 old_photo = Image.open("blurry_face.jpg")
@@ -291,8 +291,8 @@ restored = restorer.restore_face(
 restored.save("face_restored.png")
 
 # Restore AI-generated faces
-ai_faces = [Image.open(f"gen_{i}.png") for i in range(4)]
-enhanced = restorer.restore_multiple(ai_faces, weight=0.5)
+ai_faces = [Image.open (f"gen_{i}.png") for i in range(4)]
+enhanced = restorer.restore_multiple (ai_faces, weight=0.5)
 \`\`\`
 
 ### CodeFormer: Advanced Face Restoration
@@ -320,7 +320,7 @@ class CodeFormerRestorer:
         
         # Load weights
         checkpoint = torch.load('CodeFormer.pth')
-        self.model.load_state_dict(checkpoint['params_ema'])
+        self.model.load_state_dict (checkpoint['params_ema'])
         self.model.eval()
         self.model = self.model.to('cuda')
     
@@ -341,11 +341,11 @@ class CodeFormerRestorer:
         import numpy as np
         
         # Preprocess
-        img_np = np.array(image)
-        img_np = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        img_np = np.array (image)
+        img_np = cv2.cvtColor (img_np, cv2.COLOR_RGB2BGR)
         
         # Convert to tensor
-        img_tensor = torch.from_numpy(img_np).float() / 255.0
+        img_tensor = torch.from_numpy (img_np).float() / 255.0
         img_tensor = img_tensor.permute(2, 0, 1).unsqueeze(0)
         img_tensor = img_tensor.to('cuda')
         
@@ -359,10 +359,10 @@ class CodeFormerRestorer:
         
         # Post-process
         output = output.squeeze().permute(1, 2, 0).cpu().numpy()
-        output = (output * 255.0).clip(0, 255).astype(np.uint8)
-        output = cv2.cvtColor(output, cv2.COLOR_BGR2RGB)
+        output = (output * 255.0).clip(0, 255).astype (np.uint8)
+        output = cv2.cvtColor (output, cv2.COLOR_BGR2RGB)
         
-        return Image.fromarray(output)
+        return Image.fromarray (output)
 
 # Usage
 codeformer = CodeFormerRestorer()
@@ -370,8 +370,8 @@ codeformer = CodeFormerRestorer()
 damaged_face = Image.open("damaged_face.jpg")
 
 # Try different fidelity weights
-restored_quality = codeformer.restore(damaged_face, fidelity_weight=0.2)
-restored_faithful = codeformer.restore(damaged_face, fidelity_weight=0.8)
+restored_quality = codeformer.restore (damaged_face, fidelity_weight=0.2)
+restored_faithful = codeformer.restore (damaged_face, fidelity_weight=0.8)
 
 restored_quality.save("restored_quality_focused.png")
 restored_faithful.save("restored_faithful.png")
@@ -407,22 +407,22 @@ class FaceDetector:
         import numpy as np
         import cv2
         
-        img_np = np.array(image)
-        gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+        img_np = np.array (image)
+        gray = cv2.cvtColor (img_np, cv2.COLOR_RGB2GRAY)
         
         # Detect faces
-        faces = self.detector(gray)
+        faces = self.detector (gray)
         
         results = []
         for face in faces:
             # Get landmarks
-            landmarks = self.predictor(gray, face)
+            landmarks = self.predictor (gray, face)
             
             # Extract coordinates
             points = []
             for i in range(68):
-                x = landmarks.part(i).x
-                y = landmarks.part(i).y
+                x = landmarks.part (i).x
+                y = landmarks.part (i).y
                 points.append((x, y))
             
             results.append({
@@ -451,7 +451,7 @@ class FaceDetector:
         # Calculate angle
         dy = right_eye[1] - left_eye[1]
         dx = right_eye[0] - left_eye[0]
-        angle = np.degrees(np.arctan2(dy, dx))
+        angle = np.degrees (np.arctan2(dy, dx))
         
         # Calculate center
         center = ((left_eye[0] + right_eye[0]) / 2,
@@ -461,29 +461,29 @@ class FaceDetector:
         M = cv2.getRotationMatrix2D(center, angle, 1.0)
         
         # Rotate
-        img_np = np.array(image)
+        img_np = np.array (image)
         rotated = cv2.warpAffine(
             img_np, M, (img_np.shape[1], img_np.shape[0]),
             flags=cv2.INTER_CUBIC
         )
         
         # Crop and resize
-        x, y, w, h = self._get_face_box(landmarks)
+        x, y, w, h = self._get_face_box (landmarks)
         cropped = rotated[y:y+h, x:x+w]
-        aligned = cv2.resize(cropped, output_size)
+        aligned = cv2.resize (cropped, output_size)
         
-        return Image.fromarray(aligned)
+        return Image.fromarray (aligned)
     
-    def _get_face_box(self, landmarks):
+    def _get_face_box (self, landmarks):
         """Calculate bounding box from landmarks."""
         xs = [p[0] for p in landmarks]
         ys = [p[1] for p in landmarks]
         
-        x, y = min(xs), min(ys)
-        w, h = max(xs) - x, max(ys) - y
+        x, y = min (xs), min (ys)
+        w, h = max (xs) - x, max (ys) - y
         
         # Add padding
-        pad = int(0.2 * min(w, h))
+        pad = int(0.2 * min (w, h))
         return x - pad, y - pad, w + 2*pad, h + 2*pad
 
 # Usage
@@ -492,8 +492,8 @@ detector = FaceDetector()
 photo = Image.open("group_photo.jpg")
 
 # Detect all faces
-faces = detector.detect_faces(photo)
-print(f"Found {len(faces)} faces")
+faces = detector.detect_faces (photo)
+print(f"Found {len (faces)} faces")
 
 # Align first face
 if faces:
@@ -513,7 +513,7 @@ class FaceEnhancer:
     """
     
     @staticmethod
-    def enhance_eyes(image: Image.Image, factor: float = 1.3) -> Image.Image:
+    def enhance_eyes (image: Image.Image, factor: float = 1.3) -> Image.Image:
         """
         Enhance eye region for more vivid eyes.
         """
@@ -522,22 +522,22 @@ class FaceEnhancer:
         import numpy as np
         
         # Detect eyes (simplified - use face detector in production)
-        img_np = np.array(image)
+        img_np = np.array (image)
         
         # Create mask for eye region (simplified)
         h, w = img_np.shape[:2]
         eye_region = (
-            int(w * 0.3), int(h * 0.3),
-            int(w * 0.7), int(h * 0.5)
+            int (w * 0.3), int (h * 0.3),
+            int (w * 0.7), int (h * 0.5)
         )
         
         # Enhance eye region
-        eye_img = image.crop(eye_region)
-        enhancer = ImageEnhance.Sharpness(eye_img)
-        eye_enhanced = enhancer.enhance(factor)
+        eye_img = image.crop (eye_region)
+        enhancer = ImageEnhance.Sharpness (eye_img)
+        eye_enhanced = enhancer.enhance (factor)
         
         result = image.copy()
-        result.paste(eye_enhanced, eye_region[:2])
+        result.paste (eye_enhanced, eye_region[:2])
         
         return result
     
@@ -552,7 +552,7 @@ class FaceEnhancer:
         import cv2
         import numpy as np
         
-        img_np = np.array(image)
+        img_np = np.array (image)
         
         # Bilateral filter for skin smoothing
         smoothed = cv2.bilateralFilter(
@@ -571,7 +571,7 @@ class FaceEnhancer:
             0
         )
         
-        return Image.fromarray(result)
+        return Image.fromarray (result)
     
     @staticmethod
     def enhance_contrast(
@@ -584,17 +584,17 @@ class FaceEnhancer:
         import cv2
         import numpy as np
         
-        img_np = np.array(image)
-        lab = cv2.cvtColor(img_np, cv2.COLOR_RGB2LAB)
+        img_np = np.array (image)
+        lab = cv2.cvtColor (img_np, cv2.COLOR_RGB2LAB)
         
         # Apply CLAHE to L channel
         clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=(8, 8))
-        lab[:, :, 0] = clahe.apply(lab[:, :, 0])
+        lab[:, :, 0] = clahe.apply (lab[:, :, 0])
         
         # Convert back
-        enhanced = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+        enhanced = cv2.cvtColor (lab, cv2.COLOR_LAB2RGB)
         
-        return Image.fromarray(enhanced)
+        return Image.fromarray (enhanced)
 
 # Usage
 enhancer = FaceEnhancer()
@@ -602,9 +602,9 @@ enhancer = FaceEnhancer()
 face_photo = Image.open("portrait.jpg")
 
 # Apply enhancements
-vivid_eyes = enhancer.enhance_eyes(face_photo, factor=1.4)
-smooth_skin = enhancer.smooth_skin(face_photo, strength=0.6)
-enhanced = enhancer.enhance_contrast(smooth_skin, clip_limit=2.5)
+vivid_eyes = enhancer.enhance_eyes (face_photo, factor=1.4)
+smooth_skin = enhancer.smooth_skin (face_photo, strength=0.6)
+enhanced = enhancer.enhance_contrast (smooth_skin, clip_limit=2.5)
 
 enhanced.save("enhanced_portrait.png")
 \`\`\`
@@ -645,7 +645,7 @@ class FaceGenerationPipeline:
         """
         # Build prompt
         prompt_builder = FacePromptBuilder()
-        prompts = prompt_builder.professional_headshot(description)
+        prompts = prompt_builder.professional_headshot (description)
         
         # Generate candidates
         print(f"Generating {num_candidates} candidates...")
@@ -656,19 +656,19 @@ class FaceGenerationPipeline:
         ).images
         
         results = []
-        for i, img in enumerate(candidates):
+        for i, img in enumerate (candidates):
             print(f"Processing candidate {i+1}/{num_candidates}")
             
             # Restore face
             if restore:
-                img = self.face_restorer.restore_face(img, weight=0.5)
+                img = self.face_restorer.restore_face (img, weight=0.5)
             
             # Enhance
             if enhance:
-                img = self.face_enhancer.smooth_skin(img, strength=0.3)
-                img = self.face_enhancer.enhance_contrast(img, clip_limit=2.0)
+                img = self.face_enhancer.smooth_skin (img, strength=0.3)
+                img = self.face_enhancer.enhance_contrast (img, clip_limit=2.0)
             
-            results.append(img)
+            results.append (img)
         
         return results
     
@@ -684,11 +684,11 @@ class FaceGenerationPipeline:
         
         # Face restoration
         weight = 0.8 if aggressive else 0.5
-        restored = self.face_restorer.restore_face(photo, weight=weight)
+        restored = self.face_restorer.restore_face (photo, weight=weight)
         
         # Enhancement
-        enhanced = self.face_enhancer.enhance_contrast(restored, clip_limit=2.5)
-        enhanced = self.face_enhancer.smooth_skin(enhanced, strength=0.2)
+        enhanced = self.face_enhancer.enhance_contrast (restored, clip_limit=2.5)
+        enhanced = self.face_enhancer.smooth_skin (enhanced, strength=0.2)
         
         return enhanced
 
@@ -703,12 +703,12 @@ headshots = pipeline.generate_professional_headshot(
     enhance=True
 )
 
-for i, img in enumerate(headshots):
-    img.save(f"headshot_candidate_{i}.png")
+for i, img in enumerate (headshots):
+    img.save (f"headshot_candidate_{i}.png")
 
 # Restore old photo
 old_photo = Image.open("old_family_photo.jpg")
-restored = pipeline.restore_old_photo(old_photo, aggressive=True)
+restored = pipeline.restore_old_photo (old_photo, aggressive=True)
 restored.save("restored_family_photo.png")
 \`\`\`
 
@@ -762,12 +762,12 @@ class EthicalFaceGenerator:
         Generate face with AI watermark.
         """
         # Generate
-        image = self.generate(prompt, **kwargs)
+        image = self.generate (prompt, **kwargs)
         
         # Add watermark
         from PIL import ImageDraw, ImageFont
         
-        draw = ImageDraw.Draw(image)
+        draw = ImageDraw.Draw (image)
         watermark_text = "AI Generated"
         
         # Add to corner

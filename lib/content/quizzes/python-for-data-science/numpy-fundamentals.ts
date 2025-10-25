@@ -5,7 +5,7 @@ export const numpyFundamentalsQuiz: QuizQuestion[] = [
     id: 'numpy-fundamentals-dq-1',
     question:
       'Explain why NumPy arrays require all elements to be the same data type (homogeneous), and discuss the trade-offs of this design decision compared to Python lists.',
-    sampleAnswer: `NumPy's requirement for homogeneous data types is a fundamental design choice that enables its exceptional performance:
+    sampleAnswer: `NumPy\'s requirement for homogeneous data types is a fundamental design choice that enables its exceptional performance:
 
 **Why Homogeneous Types:**
 
@@ -76,17 +76,17 @@ batch = augmented_images[[0, 1, 2, 3]]  # Yet another copy
 
 1. **In-Place Operations:**
 \`\`\`python
-images = images.astype(np.float32)  # Convert type first
+images = images.astype (np.float32)  # Convert type first
 images /= 255.0  # In-place division (uses /=)
 \`\`\`
 
 2. **Process in Batches:**
 \`\`\`python
 batch_size = 32
-for i in range(0, len(images), batch_size):
+for i in range(0, len (images), batch_size):
     batch = images[i:i+batch_size]  # View, not copy
     batch_normalized = batch / 255.0  # Only small batch copied
-    process_batch(batch_normalized)
+    process_batch (batch_normalized)
 \`\`\`
 
 3. **Use Views When Possible:**
@@ -107,13 +107,13 @@ images_mmap = np.load('images.npy', mmap_mode='r')  # Read-only memory map
 import psutil
 import os
 
-process = psutil.Process(os.getpid())
+process = psutil.Process (os.getpid())
 print(f"Memory usage: {process.memory_info().rss / 1e9:.2f} GB")
 \`\`\`
 
 **Best Practices:**
 
-- Use \`np.shares_memory(arr1, arr2)\` to verify view relationships
+- Use \`np.shares_memory (arr1, arr2)\` to verify view relationships
 - Prefer in-place operations (+=, -=, *=, /=) when possible
 - Delete large intermediate arrays explicitly: \`del large_array\`
 - Use generators and lazy evaluation for data pipelines
@@ -136,9 +136,9 @@ In production ML systems, running out of memory is a common failure mode. Unders
       'Compare np.linspace() and np.arange() for creating sequences of numbers. When would you use each, and what are the pitfalls of np.arange() with floating-point numbers?',
     sampleAnswer: `np.linspace() and np.arange() serve similar purposes but have important differences that affect their suitability for different tasks:
 
-**np.arange(start, stop, step):**
+**np.arange (start, stop, step):**
 
-- Works like Python's range() but for NumPy arrays
+- Works like Python\'s range() but for NumPy arrays
 - Specifies the STEP size between elements
 - Excludes the stop value
 - Works well with integers
@@ -148,7 +148,7 @@ np.arange(0, 10, 2)  # [0, 2, 4, 6, 8]
 np.arange(0, 1, 0.1)  # Problematic with floats!
 \`\`\`
 
-**np.linspace(start, stop, num):**
+**np.linspace (start, stop, num):**
 
 - Specifies the NUMBER of points wanted
 - Includes both start and stop (by default)
@@ -165,14 +165,14 @@ np.linspace(0, 1, 11)  # [0.0, 0.1, 0.2, ..., 1.0]
 \`\`\`python
 # PROBLEM: Floating-point arithmetic is inexact
 arr = np.arange(0, 1, 0.1)
-print(len(arr))  # Might be 10 or 11 depending on rounding!
+print(len (arr))  # Might be 10 or 11 depending on rounding!
 print(arr)
 # [0.  0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9]
 # Missing 1.0? Or includes 1.0? Unpredictable!
 
 # SOLUTION: Use linspace
 arr = np.linspace(0, 1, 11)  # Exactly 11 points including endpoints
-print(len(arr))  # Always 11
+print(len (arr))  # Always 11
 \`\`\`
 
 **When to Use Each:**
@@ -185,7 +185,7 @@ print(len(arr))  # Always 11
 
 \`\`\`python
 # Good use cases
-indices = np.arange(len(data))
+indices = np.arange (len (data))
 time_steps = np.arange(0, 1000)  # 1000 time steps
 bins = np.arange(0, 100, 10)  # Histogram bins
 \`\`\`
@@ -199,12 +199,12 @@ bins = np.arange(0, 100, 10)  # Histogram bins
 \`\`\`python
 # Good use cases
 x = np.linspace(0, 2*np.pi, 100)  # 100 points for plotting sine wave
-y = np.sin(x)
+y = np.sin (x)
 
 # Create mesh grid for 3D plots
 x = np.linspace(-5, 5, 50)
 y = np.linspace(-5, 5, 50)
-X, Y = np.meshgrid(x, y)
+X, Y = np.meshgrid (x, y)
 
 # Temperature range for simulation
 temperatures = np.linspace(273, 373, 101)  # 0°C to 100°C, 1° steps

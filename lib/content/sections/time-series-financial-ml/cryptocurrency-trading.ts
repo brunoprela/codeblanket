@@ -62,7 +62,7 @@ class CryptoDataFetcher:
             api_key: API key (for private endpoints)
             secret: API secret
         """
-        exchange_class = getattr(ccxt, exchange_name)
+        exchange_class = getattr (ccxt, exchange_name)
         
         if api_key and secret:
             self.exchange = exchange_class({
@@ -78,13 +78,13 @@ class CryptoDataFetcher:
         self.exchange_name = exchange_name
         
         print(f"✓ Connected to {exchange_name}")
-        print(f"  Markets: {len(self.exchange.load_markets())}")
+        print(f"  Markets: {len (self.exchange.load_markets())}")
     
     # ========================================================================
     # OHLCV DATA
     # ========================================================================
     
-    def fetch_ohlcv(self, symbol: str = 'BTC/USDT', 
+    def fetch_ohlcv (self, symbol: str = 'BTC/USDT', 
                     timeframe: str = '1h',
                     since: Optional[datetime] = None,
                     limit: int = 1000) -> pd.DataFrame:
@@ -101,7 +101,7 @@ class CryptoDataFetcher:
             DataFrame with OHLCV data
         """
         if since:
-            since_ms = int(since.timestamp() * 1000)
+            since_ms = int (since.timestamp() * 1000)
         else:
             since_ms = None
         
@@ -116,18 +116,18 @@ class CryptoDataFetcher:
             ohlcv, 
             columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
         )
-        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        df['timestamp'] = pd.to_datetime (df['timestamp'], unit='ms')
         df.set_index('timestamp', inplace=True)
         
         return df
     
-    def fetch_multiple_timeframes(self, symbol: str = 'BTC/USDT',
+    def fetch_multiple_timeframes (self, symbol: str = 'BTC/USDT',
                                   timeframes: List[str] = ['1h', '4h', '1d']) -> Dict[str, pd.DataFrame]:
         """Fetch multiple timeframes for multi-scale analysis"""
         data = {}
         for tf in timeframes:
-            data[tf] = self.fetch_ohlcv(symbol, timeframe=tf)
-            print(f"Fetched {len(data[tf])} {tf} candles for {symbol}")
+            data[tf] = self.fetch_ohlcv (symbol, timeframe=tf)
+            print(f"Fetched {len (data[tf])} {tf} candles for {symbol}")
         
         return data
     
@@ -135,27 +135,27 @@ class CryptoDataFetcher:
     # ORDER BOOK
     # ========================================================================
     
-    def fetch_order_book(self, symbol: str = 'BTC/USDT', limit: int = 20) -> Dict:
+    def fetch_order_book (self, symbol: str = 'BTC/USDT', limit: int = 20) -> Dict:
         """
         Fetch order book (level 2 data)
         
         Returns:
             Dict with bids, asks, spread, depth
         """
-        orderbook = self.exchange.fetch_order_book(symbol, limit=limit)
+        orderbook = self.exchange.fetch_order_book (symbol, limit=limit)
         
         bids = orderbook['bids'][:limit]  # [[price, size], ...]
         asks = orderbook['asks'][:limit]
         
-        if len(bids) > 0 and len(asks) > 0:
+        if len (bids) > 0 and len (asks) > 0:
             best_bid = bids[0][0]
             best_ask = asks[0][0]
             spread = best_ask - best_bid
             spread_bps = (spread / best_bid) * 10000
             
             # Calculate depth (liquidity)
-            bid_depth = sum(size for price, size in bids)
-            ask_depth = sum(size for price, size in asks)
+            bid_depth = sum (size for price, size in bids)
+            ask_depth = sum (size for price, size in asks)
         else:
             best_bid = best_ask = spread = spread_bps = 0
             bid_depth = ask_depth = 0
@@ -176,9 +176,9 @@ class CryptoDataFetcher:
     # TICKER DATA
     # ========================================================================
     
-    def fetch_ticker(self, symbol: str = 'BTC/USDT') -> Dict:
+    def fetch_ticker (self, symbol: str = 'BTC/USDT') -> Dict:
         """Fetch current ticker (price, volume, change)"""
-        ticker = self.exchange.fetch_ticker(symbol)
+        ticker = self.exchange.fetch_ticker (symbol)
         
         return {
             'symbol': symbol,
@@ -189,15 +189,15 @@ class CryptoDataFetcher:
             'low_24h': ticker['low'],
             'volume_24h': ticker['quoteVolume'],
             'change_24h': ticker['percentage'],
-            'timestamp': datetime.fromtimestamp(ticker['timestamp'] / 1000)
+            'timestamp': datetime.fromtimestamp (ticker['timestamp'] / 1000)
         }
     
-    def fetch_tickers(self, symbols: List[str]) -> Dict[str, Dict]:
+    def fetch_tickers (self, symbols: List[str]) -> Dict[str, Dict]:
         """Fetch tickers for multiple symbols"""
         tickers = {}
         for symbol in symbols:
             try:
-                tickers[symbol] = self.fetch_ticker(symbol)
+                tickers[symbol] = self.fetch_ticker (symbol)
             except Exception as e:
                 print(f"Error fetching {symbol}: {e}")
         
@@ -207,7 +207,7 @@ class CryptoDataFetcher:
     # FUNDING RATES (FUTURES)
     # ========================================================================
     
-    def fetch_funding_rate(self, symbol: str = 'BTC/USDT') -> Dict:
+    def fetch_funding_rate (self, symbol: str = 'BTC/USDT') -> Dict:
         """
         Fetch funding rate for perpetual futures
         
@@ -216,7 +216,7 @@ class CryptoDataFetcher:
         - Negative: Shorts pay longs (bearish sentiment)
         """
         try:
-            funding = self.exchange.fetch_funding_rate(symbol)
+            funding = self.exchange.fetch_funding_rate (symbol)
             return {
                 'symbol': symbol,
                 'funding_rate': funding['fundingRate'],
@@ -231,7 +231,7 @@ class CryptoDataFetcher:
     # HISTORICAL TRADES
     # ========================================================================
     
-    def fetch_trades(self, symbol: str = 'BTC/USDT', limit: int = 100) -> pd.DataFrame:
+    def fetch_trades (self, symbol: str = 'BTC/USDT', limit: int = 100) -> pd.DataFrame:
         """
         Fetch recent trades (time & sales)
         
@@ -240,10 +240,10 @@ class CryptoDataFetcher:
         - Buy/sell pressure
         - Large order detection
         """
-        trades = self.exchange.fetch_trades(symbol, limit=limit)
+        trades = self.exchange.fetch_trades (symbol, limit=limit)
         
         df = pd.DataFrame([{
-            'timestamp': datetime.fromtimestamp(t['timestamp'] / 1000),
+            'timestamp': datetime.fromtimestamp (t['timestamp'] / 1000),
             'price': t['price'],
             'amount': t['amount'],
             'side': t['side'],
@@ -258,7 +258,7 @@ class CryptoDataFetcher:
 # ============================================================================
 
 # Initialize fetcher
-fetcher = CryptoDataFetcher(exchange_name='binance')
+fetcher = CryptoDataFetcher (exchange_name='binance')
 
 # Fetch BTC data
 print("\\n" + "="*70)
@@ -267,7 +267,7 @@ print("="*70)
 
 # 1. OHLCV data
 btc_1h = fetcher.fetch_ohlcv('BTC/USDT', timeframe='1h', limit=168)  # 1 week
-print(f"\\nFetched {len(btc_1h)} hourly candles")
+print(f"\\nFetched {len (btc_1h)} hourly candles")
 print(btc_1h.tail())
 
 # 2. Order book
@@ -307,7 +307,7 @@ class CryptoFeatureEngineer:
     """
     
     @staticmethod
-    def add_volatility_features(df: pd.DataFrame) -> pd.DataFrame:
+    def add_volatility_features (df: pd.DataFrame) -> pd.DataFrame:
         """
         Crypto-specific volatility features
         
@@ -322,21 +322,21 @@ class CryptoFeatureEngineer:
         df['vol_7d'] = returns.rolling(168).std() * np.sqrt(365 * 24)
         
         # Volatility regime
-        df['high_vol'] = (df['vol_24h'] > df['vol_7d'].quantile(0.75)).astype(int)
-        df['low_vol'] = (df['vol_24h'] < df['vol_7d'].quantile(0.25)).astype(int)
+        df['high_vol'] = (df['vol_24h'] > df['vol_7d'].quantile(0.75)).astype (int)
+        df['low_vol'] = (df['vol_24h'] < df['vol_7d'].quantile(0.25)).astype (int)
         
         # Volatility ratio (expansion/contraction)
         df['vol_ratio'] = df['vol_24h'] / df['vol_7d']
         
         # Parkinson volatility (uses high-low range)
         df['parkinson_vol'] = np.sqrt(
-            1 / (4 * np.log(2)) * np.log(df['high'] / df['low']) ** 2
+            1 / (4 * np.log(2)) * np.log (df['high'] / df['low']) ** 2
         ).rolling(24).mean() * np.sqrt(365 * 24)
         
         return df
     
     @staticmethod
-    def add_momentum_features(df: pd.DataFrame) -> pd.DataFrame:
+    def add_momentum_features (df: pd.DataFrame) -> pd.DataFrame:
         """Momentum features for crypto"""
         # Multiple timeframe momentum
         df['mom_1h'] = df['close'].pct_change(1)
@@ -346,8 +346,8 @@ class CryptoFeatureEngineer:
         
         # Momentum strength
         df['mom_strength'] = (
-            (df['mom_24h'] > 0).astype(int) + 
-            (df['mom_7d'] > 0).astype(int)
+            (df['mom_24h'] > 0).astype (int) + 
+            (df['mom_7d'] > 0).astype (int)
         )
         
         # Rate of change acceleration
@@ -356,7 +356,7 @@ class CryptoFeatureEngineer:
         return df
     
     @staticmethod
-    def add_order_flow_features(df: pd.DataFrame, trades_df: pd.DataFrame = None) -> pd.DataFrame:
+    def add_order_flow_features (df: pd.DataFrame, trades_df: pd.DataFrame = None) -> pd.DataFrame:
         """
         Order flow imbalance features
         
@@ -381,12 +381,12 @@ class CryptoFeatureEngineer:
             hourly_flow['flow_ratio'] = hourly_flow['buy_volume'] / (hourly_flow['buy_volume'] + hourly_flow['sell_volume'])
             
             # Merge with OHLCV
-            df = df.join(hourly_flow[['net_flow', 'flow_ratio']], how='left')
+            df = df.join (hourly_flow[['net_flow', 'flow_ratio']], how='left')
         
         return df
     
     @staticmethod
-    def add_funding_features(df: pd.DataFrame, funding_rates: pd.Series = None) -> pd.DataFrame:
+    def add_funding_features (df: pd.DataFrame, funding_rates: pd.Series = None) -> pd.DataFrame:
         """
         Funding rate features (for futures)
         
@@ -397,31 +397,31 @@ class CryptoFeatureEngineer:
         if funding_rates is not None:
             df['funding_rate'] = funding_rates
             df['funding_ma_24h'] = df['funding_rate'].rolling(24).mean()
-            df['funding_extreme'] = (abs(df['funding_rate']) > abs(df['funding_rate']).quantile(0.95)).astype(int)
+            df['funding_extreme'] = (abs (df['funding_rate']) > abs (df['funding_rate']).quantile(0.95)).astype (int)
         
         return df
     
     @staticmethod
-    def add_market_regime_features(df: pd.DataFrame) -> pd.DataFrame:
+    def add_market_regime_features (df: pd.DataFrame) -> pd.DataFrame:
         """Detect crypto market regimes"""
         # Bull/bear regime (SMA crossover)
         df['sma_50'] = df['close'].rolling(50).mean()
         df['sma_200'] = df['close'].rolling(200).mean()
-        df['bull_regime'] = (df['sma_50'] > df['sma_200']).astype(int)
+        df['bull_regime'] = (df['sma_50'] > df['sma_200']).astype (int)
         
         # Consolidation vs trending
         df['bb_upper'] = df['close'].rolling(20).mean() + 2 * df['close'].rolling(20).std()
         df['bb_lower'] = df['close'].rolling(20).mean() - 2 * df['close'].rolling(20).std()
         df['bb_width'] = (df['bb_upper'] - df['bb_lower']) / df['close']
-        df['consolidation'] = (df['bb_width'] < df['bb_width'].quantile(0.25)).astype(int)
+        df['consolidation'] = (df['bb_width'] < df['bb_width'].quantile(0.25)).astype (int)
         
         return df
 
 
 # Apply features
-btc_1h = CryptoFeatureEngineer.add_volatility_features(btc_1h)
-btc_1h = CryptoFeatureEngineer.add_momentum_features(btc_1h)
-btc_1h = CryptoFeatureEngineer.add_market_regime_features(btc_1h)
+btc_1h = CryptoFeatureEngineer.add_volatility_features (btc_1h)
+btc_1h = CryptoFeatureEngineer.add_momentum_features (btc_1h)
+btc_1h = CryptoFeatureEngineer.add_market_regime_features (btc_1h)
 
 print("\\n" + "="*70)
 print("CRYPTO FEATURES ENGINEERED")
@@ -454,7 +454,7 @@ class CryptoTradingStrategy:
         """
         self.risk_per_trade = risk_per_trade
     
-    def momentum_breakout(self, df: pd.DataFrame, 
+    def momentum_breakout (self, df: pd.DataFrame, 
                          lookback: int = 24,
                          threshold: float = 0.05) -> pd.Series:
         """
@@ -463,7 +463,7 @@ class CryptoTradingStrategy:
         Buy on strong upward momentum, sell on downward
         Works well in trending crypto markets
         """
-        returns_24h = df['close'].pct_change(lookback)
+        returns_24h = df['close'].pct_change (lookback)
         
         signals = pd.Series(0, index=df.index)
         signals[returns_24h > threshold] = 1  # Long
@@ -471,7 +471,7 @@ class CryptoTradingStrategy:
         
         return signals
     
-    def mean_reversion_rsi(self, df: pd.DataFrame,
+    def mean_reversion_rsi (self, df: pd.DataFrame,
                           period: int = 14,
                           oversold: int = 30,
                           overbought: int = 70) -> pd.Series:
@@ -483,8 +483,8 @@ class CryptoTradingStrategy:
         """
         # Calculate RSI
         delta = df['close'].diff()
-        gain = delta.where(delta > 0, 0).ewm(span=period, adjust=False).mean()
-        loss = -delta.where(delta < 0, 0).ewm(span=period, adjust=False).mean()
+        gain = delta.where (delta > 0, 0).ewm (span=period, adjust=False).mean()
+        loss = -delta.where (delta < 0, 0).ewm (span=period, adjust=False).mean()
         rs = gain / loss
         rsi = 100 - (100 / (1 + rs))
         
@@ -494,7 +494,7 @@ class CryptoTradingStrategy:
         
         return signals
     
-    def volatility_breakout(self, df: pd.DataFrame,
+    def volatility_breakout (self, df: pd.DataFrame,
                            vol_threshold: float = 1.5,
                            volume_confirm: bool = True) -> pd.Series:
         """
@@ -503,7 +503,7 @@ class CryptoTradingStrategy:
         Trade when volatility expands (potential big move)
         """
         if 'vol_ratio' not in df.columns:
-            df = CryptoFeatureEngineer.add_volatility_features(df)
+            df = CryptoFeatureEngineer.add_volatility_features (df)
         
         returns = df['close'].pct_change()
         vol_expanding = df['vol_ratio'] > vol_threshold
@@ -519,7 +519,7 @@ class CryptoTradingStrategy:
         
         return signals
     
-    def funding_rate_contrarian(self, df: pd.DataFrame,
+    def funding_rate_contrarian (self, df: pd.DataFrame,
                                 funding_rates: pd.Series,
                                 extreme_threshold: float = 0.001) -> pd.Series:
         """
@@ -531,7 +531,7 @@ class CryptoTradingStrategy:
         signals = pd.Series(0, index=df.index)
         
         # Align funding rates with df
-        funding_aligned = funding_rates.reindex(df.index, method='ffill')
+        funding_aligned = funding_rates.reindex (df.index, method='ffill')
         
         # Extreme positive funding → short (longs will be squeezed)
         signals[funding_aligned > extreme_threshold] = -1
@@ -541,7 +541,7 @@ class CryptoTradingStrategy:
         
         return signals
     
-    def multi_timeframe_trend(self, df_1h: pd.DataFrame,
+    def multi_timeframe_trend (self, df_1h: pd.DataFrame,
                              df_4h: pd.DataFrame,
                              df_1d: pd.DataFrame) -> pd.Series:
         """
@@ -550,25 +550,25 @@ class CryptoTradingStrategy:
         Strongest signals when all timeframes align
         """
         # Trends on each timeframe
-        trend_1h = (df_1h['close'] > df_1h['close'].rolling(20).mean()).astype(int) * 2 - 1
-        trend_4h = (df_4h['close'] > df_4h['close'].rolling(20).mean()).astype(int) * 2 - 1
-        trend_1d = (df_1d['close'] > df_1d['close'].rolling(20).mean()).astype(int) * 2 - 1
+        trend_1h = (df_1h['close'] > df_1h['close'].rolling(20).mean()).astype (int) * 2 - 1
+        trend_4h = (df_4h['close'] > df_4h['close'].rolling(20).mean()).astype (int) * 2 - 1
+        trend_1d = (df_1d['close'] > df_1d['close'].rolling(20).mean()).astype (int) * 2 - 1
         
         # Align all to 1h timeframe
-        trend_4h_aligned = trend_4h.reindex(df_1h.index, method='ffill')
-        trend_1d_aligned = trend_1d.reindex(df_1h.index, method='ffill')
+        trend_4h_aligned = trend_4h.reindex (df_1h.index, method='ffill')
+        trend_1d_aligned = trend_1d.reindex (df_1h.index, method='ffill')
         
         # Combined signal (average)
         signals = (trend_1h + trend_4h_aligned + trend_1d_aligned) / 3
         
         # Only trade when strong alignment
-        signals[abs(signals) < 0.6] = 0
+        signals[abs (signals) < 0.6] = 0
         signals[signals >= 0.6] = 1
         signals[signals <= -0.6] = -1
         
         return signals
     
-    def calculate_position_size(self, signal: float, price: float,
+    def calculate_position_size (self, signal: float, price: float,
                                 capital: float, volatility: float) -> float:
         """
         Position sizing for crypto (accounts for high volatility)
@@ -591,23 +591,23 @@ class CryptoTradingStrategy:
         max_position_value = capital * 0.25  # Max 25% per position
         max_shares = max_position_value / price
         
-        return min(shares, max_shares) * np.sign(signal)
+        return min (shares, max_shares) * np.sign (signal)
 
 
 # ============================================================================
 # EXAMPLE: BACKTEST CRYPTO STRATEGY
 # ============================================================================
 
-strategy = CryptoTradingStrategy(risk_per_trade=0.02)
+strategy = CryptoTradingStrategy (risk_per_trade=0.02)
 
 # Generate signals
-momentum_signals = strategy.momentum_breakout(btc_1h, lookback=24, threshold=0.05)
-rsi_signals = strategy.mean_reversion_rsi(btc_1h)
-vol_signals = strategy.volatility_breakout(btc_1h, vol_threshold=1.5)
+momentum_signals = strategy.momentum_breakout (btc_1h, lookback=24, threshold=0.05)
+rsi_signals = strategy.mean_reversion_rsi (btc_1h)
+vol_signals = strategy.volatility_breakout (btc_1h, vol_threshold=1.5)
 
 # Ensemble (combine strategies)
 ensemble_signals = (momentum_signals + rsi_signals + vol_signals) / 3
-ensemble_signals[abs(ensemble_signals) < 0.5] = 0  # Only trade strong signals
+ensemble_signals[abs (ensemble_signals) < 0.5] = 0  # Only trade strong signals
 ensemble_signals[ensemble_signals >= 0.5] = 1
 ensemble_signals[ensemble_signals <= -0.5] = -1
 
@@ -630,7 +630,7 @@ sharpe = strategy_returns.mean() / strategy_returns.std() * np.sqrt(365 * 24)
 print(f"\\nBacktest Results (1 week):")
 print(f"  Total Return: {total_return:+.2%}")
 print(f"  Sharpe Ratio: {sharpe:.2f}")
-print(f"  Win Rate: {(strategy_returns > 0).sum() / len(strategy_returns):.1%}")
+print(f"  Win Rate: {(strategy_returns > 0).sum() / len (strategy_returns):.1%}")
 \`\`\`
 
 ---
@@ -651,9 +651,9 @@ class CrossExchangeArbitrage:
         """Initialize multiple exchange connections"""
         self.exchanges = {}
         for exchange_name in exchanges:
-            self.exchanges[exchange_name] = CryptoDataFetcher(exchange_name)
+            self.exchanges[exchange_name] = CryptoDataFetcher (exchange_name)
     
-    def find_arbitrage_opportunities(self, symbol: str = 'BTC/USDT',
+    def find_arbitrage_opportunities (self, symbol: str = 'BTC/USDT',
                                     min_profit_bps: float = 50) -> List[Dict]:
         """
         Find arbitrage opportunities across exchanges
@@ -669,7 +669,7 @@ class CrossExchangeArbitrage:
         prices = {}
         for name, fetcher in self.exchanges.items():
             try:
-                ticker = fetcher.fetch_ticker(symbol)
+                ticker = fetcher.fetch_ticker (symbol)
                 prices[name] = {
                     'bid': ticker['bid'],
                     'ask': ticker['ask'],
@@ -707,7 +707,7 @@ class CrossExchangeArbitrage:
                         'timestamp': datetime.now()
                     })
         
-        return sorted(opportunities, key=lambda x: x['net_profit_bps'], reverse=True)
+        return sorted (opportunities, key=lambda x: x['net_profit_bps'], reverse=True)
 
 
 # Example (would need API keys for live trading)

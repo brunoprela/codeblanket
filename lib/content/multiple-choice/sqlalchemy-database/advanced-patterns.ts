@@ -14,7 +14,7 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     explanation:
       'Repository Pattern separates business logic from data access layer. ' +
       'Benefits: (1) Business logic does not depend on SQLAlchemy/database, (2) Centralized query logic, (3) Easier testing (mock repository), (4) Can swap implementations (SQL to NoSQL). ' +
-      'Example: UserRepository provides get(id), find_by_email(email), add(user). ' +
+      'Example: UserRepository provides get (id), find_by_email (email), add (user). ' +
       'Business layer uses repository methods, never writes queries directly. ' +
       'Testing: Mock repository for unit tests, real repository for integration tests.',
   },
@@ -31,7 +31,7 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     explanation:
       'Unit of Work manages database transaction lifecycle: Starts transaction, tracks changes, commits all together, rolls back on error. ' +
       'Implementation: Context manager (__enter__ creates session, __exit__ commits/rolls back). ' +
-      'Coordinates multiple repositories: with UnitOfWork() as uow: uow.users.add(user); uow.posts.add(post). ' +
+      'Coordinates multiple repositories: with UnitOfWork() as uow: uow.users.add (user); uow.posts.add (post). ' +
       'Single commit for all changes (atomic). Auto-rollback if exception occurs. ' +
       'Benefits: Centralized transaction management, automatic rollback, clean code.',
   },
@@ -64,9 +64,9 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Query Object encapsulates query logic in reusable class. ' +
-      'Example: class ActiveUsersQuery: def execute(self, session): return session.execute(select(User).where(User.active==True)).scalars(). ' +
+      'Example: class ActiveUsersQuery: def execute (self, session): return session.execute (select(User).where(User.active==True)).scalars(). ' +
       'Benefits: (1) Reusable across codebase, (2) Named (self-documenting), (3) Testable in isolation, (4) Can add methods (with_posts(), ordered_by_name()). ' +
-      'Usage: users = ActiveUsersQuery(session).execute(). ' +
+      'Usage: users = ActiveUsersQuery (session).execute(). ' +
       'Alternative to raw queries scattered throughout code.',
   },
   {
@@ -81,9 +81,9 @@ export const advancedPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Specification pattern: Composable, reusable filters. ' +
-      'Example: class ActiveUserSpec: def to_sqlalchemy(self): return User.active==True. ' +
+      'Example: class ActiveUserSpec: def to_sqlalchemy (self): return User.active==True. ' +
       'Compose with operators: spec = ActiveUserSpec() & EmailVerifiedSpec(). ' +
-      'Use in query: select(User).where(spec.to_sqlalchemy()). ' +
+      'Use in query: select(User).where (spec.to_sqlalchemy()). ' +
       'Benefits: (1) DRY - define filter once, use everywhere, (2) Composable with &/|/~ (AND/OR/NOT), (3) Testable, (4) Business rules as objects. ' +
       'Example composition: (Active & Verified) | AdminSpec = active verified users OR admins.',
   },

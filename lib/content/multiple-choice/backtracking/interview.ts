@@ -42,7 +42,7 @@ export const interviewMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Most common: result.append(path) without copy. Path is mutated, so all results reference same array. Must use path.copy() or path[:] to preserve current state.',
+      'Most common: result.append (path) without copy. Path is mutated, so all results reference same array. Must use path.copy() or path[:] to preserve current state.',
   },
   {
     id: 'mc4',

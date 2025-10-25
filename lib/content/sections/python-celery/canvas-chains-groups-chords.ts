@@ -6,7 +6,7 @@ export const canvasChainsGroupsChords = {
 
 ## Introduction
 
-**Canvas** is Celery's powerful workflow API for composing complex task workflows. Instead of manually orchestrating tasks, Canvas provides three elegant primitives:
+**Canvas** is Celery\'s powerful workflow API for composing complex task workflows. Instead of manually orchestrating tasks, Canvas provides three elegant primitives:
 
 1. **chain**: Sequential execution (A → B → C)
 2. **group**: Parallel execution ([A, B, C])
@@ -35,21 +35,21 @@ app = Celery('chains', broker='redis://localhost:6379/0')
 
 
 @app.task
-def download_image(url: str) -> str:
+def download_image (url: str) -> str:
     """Step 1: Download image"""
     print(f"Downloading {url}")
     return f"/tmp/image_{url.split('/')[-1]}"
 
 
 @app.task
-def resize_image(image_path: str) -> str:
+def resize_image (image_path: str) -> str:
     """Step 2: Resize image (depends on download)"""
     print(f"Resizing {image_path}")
     return image_path.replace('.jpg', '_resized.jpg')
 
 
 @app.task
-def upload_to_cdn(image_path: str) -> str:
+def upload_to_cdn (image_path: str) -> str:
     """Step 3: Upload to CDN (depends on resize)"""
     print(f"Uploading {image_path}")
     return f"https://cdn.example.com/{image_path.split('/')[-1]}"
@@ -89,28 +89,28 @@ result = workflow.apply_async()
 # ========================================
 
 @app.task
-def validate_payment(order_id: int) -> int:
+def validate_payment (order_id: int) -> int:
     """Step 1: Validate payment"""
     print(f"Validating payment for order {order_id}")
     return order_id
 
 
 @app.task
-def reserve_inventory(order_id: int) -> int:
+def reserve_inventory (order_id: int) -> int:
     """Step 2: Reserve inventory"""
     print(f"Reserving inventory for order {order_id}")
     return order_id
 
 
 @app.task
-def ship_order(order_id: int) -> dict:
+def ship_order (order_id: int) -> dict:
     """Step 3: Ship order"""
     print(f"Shipping order {order_id}")
     return {'order_id': order_id, 'tracking': 'TRACK123'}
 
 
 @app.task
-def send_confirmation(result: dict) -> str:
+def send_confirmation (result: dict) -> str:
     """Step 4: Send confirmation email"""
     print(f"Sending confirmation for order {result['order_id']}")
     return "Email sent"
@@ -154,7 +154,7 @@ app = Celery('groups', broker='redis://localhost:6379/0')
 
 
 @app.task
-def process_user(user_id: int) -> dict:
+def process_user (user_id: int) -> dict:
     """Process single user (takes 3 seconds)"""
     time.sleep(3)
     return {'user_id': user_id, 'status': 'processed'}
@@ -164,7 +164,7 @@ def process_user(user_id: int) -> dict:
 # Sequential Processing (SLOW)
 # ========================================
 
-def process_users_sequential(user_ids):
+def process_users_sequential (user_ids):
     """
     Process 100 users sequentially
     
@@ -172,8 +172,8 @@ def process_users_sequential(user_ids):
     """
     results = []
     for user_id in user_ids:
-        result = process_user.delay(user_id).get()
-        results.append(result)
+        result = process_user.delay (user_id).get()
+        results.append (result)
     return results
 
 
@@ -181,7 +181,7 @@ def process_users_sequential(user_ids):
 # Parallel Processing with group (FAST)
 # ========================================
 
-def process_users_parallel(user_ids):
+def process_users_parallel (user_ids):
     """
     Process 100 users in parallel
     
@@ -190,7 +190,7 @@ def process_users_parallel(user_ids):
     
     100× faster! ⚡
     """
-    job = group(process_user.s(user_id) for user_id in user_ids)
+    job = group (process_user.s (user_id) for user_id in user_ids)
     result = job.apply_async()
     return result.get()  # List of all results
 
@@ -199,10 +199,10 @@ def process_users_parallel(user_ids):
 user_ids = range(1, 101)  # 100 users
 
 # Sequential: 300 seconds 🐌
-# results = process_users_sequential(user_ids)
+# results = process_users_sequential (user_ids)
 
 # Parallel: 30 seconds ⚡ (with 10 workers)
-results = process_users_parallel(user_ids)
+results = process_users_parallel (user_ids)
 
 
 # ========================================
@@ -210,18 +210,18 @@ results = process_users_parallel(user_ids)
 # ========================================
 
 @app.task
-def generate_thumbnail(image_id: int, size: tuple) -> str:
+def generate_thumbnail (image_id: int, size: tuple) -> str:
     """Generate thumbnail of specific size"""
     print(f"Generating {size} thumbnail for image {image_id}")
     return f"thumbnail_{image_id}_{size[0]}x{size[1]}.jpg"
 
 
-def generate_all_thumbnails(image_id: int):
+def generate_all_thumbnails (image_id: int):
     """Generate multiple thumbnail sizes in parallel"""
     sizes = [(150, 150), (300, 300), (600, 600), (1200, 1200)]
     
     job = group(
-        generate_thumbnail.s(image_id, size) for size in sizes
+        generate_thumbnail.s (image_id, size) for size in sizes
     )
     
     result = job.apply_async()
@@ -253,21 +253,21 @@ app = Celery('chords', broker='redis://localhost:6379/0')
 
 
 @app.task
-def fetch_data_from_api(api_id: int) -> dict:
+def fetch_data_from_api (api_id: int) -> dict:
     """Fetch data from external API"""
     print(f"Fetching from API {api_id}")
     return {'api_id': api_id, 'value': api_id * 100}
 
 
 @app.task
-def aggregate_results(results: List[dict]) -> dict:
+def aggregate_results (results: List[dict]) -> dict:
     """
     Callback: Aggregate results from all APIs
     
     Called after ALL header tasks complete
     """
-    total_apis = len(results)
-    total_value = sum(r['value'] for r in results)
+    total_apis = len (results)
+    total_value = sum (r['value'] for r in results)
     
     print(f"Aggregated {total_apis} APIs: total value = {total_value}")
     
@@ -283,9 +283,9 @@ def aggregate_results(results: List[dict]) -> dict:
 # ========================================
 
 callback = aggregate_results.s()
-header = [fetch_data_from_api.s(i) for i in range(1, 11)]  # 10 APIs
+header = [fetch_data_from_api.s (i) for i in range(1, 11)]  # 10 APIs
 
-result = chord(header)(callback)
+result = chord (header)(callback)
 summary = result.get()
 
 print(summary)
@@ -297,7 +297,7 @@ print(summary)
 # ========================================
 
 @app.task
-def fetch_user_stats(user_id: int) -> dict:
+def fetch_user_stats (user_id: int) -> dict:
     """Fetch statistics for single user"""
     return {
         'user_id': user_id,
@@ -307,11 +307,11 @@ def fetch_user_stats(user_id: int) -> dict:
 
 
 @app.task
-def generate_report(user_stats: List[dict]) -> dict:
+def generate_report (user_stats: List[dict]) -> dict:
     """Generate summary report from all user stats"""
-    total_users = len(user_stats)
-    total_orders = sum(s['orders'] for s in user_stats)
-    total_revenue = sum(s['revenue'] for s in user_stats)
+    total_users = len (user_stats)
+    total_orders = sum (s['orders'] for s in user_stats)
+    total_revenue = sum (s['revenue'] for s in user_stats)
     
     report = {
         'date': datetime.now().isoformat(),
@@ -322,7 +322,7 @@ def generate_report(user_stats: List[dict]) -> dict:
     }
     
     # Save report to database
-    save_report(report)
+    save_report (report)
     
     # Send to stakeholders
     send_email('ceo@company.com', 'Daily Report', report)
@@ -330,7 +330,7 @@ def generate_report(user_stats: List[dict]) -> dict:
     return report
 
 
-def generate_daily_report(user_ids):
+def generate_daily_report (user_ids):
     """
     Generate daily report for all users
     
@@ -338,9 +338,9 @@ def generate_daily_report(user_ids):
     2. Aggregate and generate report (callback)
     """
     callback = generate_report.s()
-    header = [fetch_user_stats.s(user_id) for user_id in user_ids]
+    header = [fetch_user_stats.s (user_id) for user_id in user_ids]
     
-    result = chord(header)(callback)
+    result = chord (header)(callback)
     report = result.get()
     
     print(f"Report generated: {report}")
@@ -349,7 +349,7 @@ def generate_daily_report(user_ids):
 
 # Usage
 user_ids = range(1, 10001)  # 10,000 users
-generate_daily_report(user_ids)
+generate_daily_report (user_ids)
 # Processes 10K users in parallel, then generates report
 \`\`\`
 
@@ -372,21 +372,21 @@ app = Celery('advanced', broker='redis://localhost:6379/0')
 # ========================================
 
 @app.task
-def download_file(url: str) -> str:
+def download_file (url: str) -> str:
     return f"file_{url}"
 
 @app.task
-def process_file(file_path: str) -> dict:
+def process_file (file_path: str) -> dict:
     return {'file': file_path, 'processed': True}
 
 @app.task
-def aggregate_files(results: List[dict]) -> str:
-    return f"Processed {len(results)} files"
+def aggregate_files (results: List[dict]) -> str:
+    return f"Processed {len (results)} files"
 
 # Download files in parallel, then process in parallel
 workflow = chain(
-    group(download_file.s(url) for url in ['url1', 'url2', 'url3']),
-    group(process_file.s() for _ in range(3))
+    group (download_file.s (url) for url in ['url1', 'url2', 'url3']),
+    group (process_file.s() for _ in range(3))
 )
 
 
@@ -396,7 +396,7 @@ workflow = chain(
 
 # Parallel processing → chain of post-processing steps
 workflow = chord(
-    [fetch_data_from_api.s(i) for i in range(10)],
+    [fetch_data_from_api.s (i) for i in range(10)],
     chain(
         aggregate_results.s(),
         save_to_database.s(),
@@ -411,7 +411,7 @@ workflow = chord(
 
 # Process in parallel, aggregate, process aggregates in parallel
 inner_chord = chord(
-    [process_chunk.s(i) for i in range(100)],
+    [process_chunk.s (i) for i in range(100)],
     aggregate_chunk_results.s()
 )
 
@@ -426,38 +426,38 @@ outer_chord = chord(
 # ========================================
 
 @app.task
-def fetch_orders(date: str) -> List[dict]:
+def fetch_orders (date: str) -> List[dict]:
     """Fetch orders for date"""
     return []  # List of orders
 
 @app.task
-def process_order_batch(orders: List[dict]) -> dict:
+def process_order_batch (orders: List[dict]) -> dict:
     """Process batch of orders"""
-    return {'revenue': sum(o['total'] for o in orders)}
+    return {'revenue': sum (o['total'] for o in orders)}
 
 @app.task
-def fetch_users(date: str) -> List[dict]:
+def fetch_users (date: str) -> List[dict]:
     """Fetch user activity for date"""
     return []  # List of users
 
 @app.task
-def process_user_batch(users: List[dict]) -> dict:
+def process_user_batch (users: List[dict]) -> dict:
     """Process batch of users"""
-    return {'active_users': len(users)}
+    return {'active_users': len (users)}
 
 @app.task
-def generate_analytics(results: List[dict]) -> dict:
+def generate_analytics (results: List[dict]) -> dict:
     """Final analytics report"""
     return {
-        'revenue': sum(r.get('revenue', 0) for r in results),
-        'active_users': sum(r.get('active_users', 0) for r in results)
+        'revenue': sum (r.get('revenue', 0) for r in results),
+        'active_users': sum (r.get('active_users', 0) for r in results)
     }
 
 # Complex pipeline: Fetch + process in parallel, then aggregate
 analytics_pipeline = chord(
     [
-        chain(fetch_orders.s('2025-01-01'), process_order_batch.s()),
-        chain(fetch_users.s('2025-01-01'), process_user_batch.s())
+        chain (fetch_orders.s('2025-01-01'), process_order_batch.s()),
+        chain (fetch_users.s('2025-01-01'), process_user_batch.s())
     ],
     generate_analytics.s()
 )
@@ -485,23 +485,23 @@ app = Celery('errors', broker='redis://localhost:6379/0')
 # Chain Error Handling
 # ========================================
 
-@app.task(bind=True, max_retries=3)
-def risky_task(self, x):
+@app.task (bind=True, max_retries=3)
+def risky_task (self, x):
     """Task that might fail"""
     try:
         if x < 0:
             raise ValueError("Negative number!")
         return x * 2
     except ValueError as exc:
-        raise self.retry(exc=exc, countdown=10)
+        raise self.retry (exc=exc, countdown=10)
 
 @app.task
-def safe_task(x):
+def safe_task (x):
     """This won't run if risky_task fails"""
     return x + 10
 
 # Chain: If risky_task fails, safe_task never runs
-workflow = chain(risky_task.s(-5), safe_task.s())
+workflow = chain (risky_task.s(-5), safe_task.s())
 result = workflow.apply_async()
 # Result: FAILURE (risky_task failed)
 
@@ -510,37 +510,37 @@ result = workflow.apply_async()
 # Chord Error Handling
 # ========================================
 
-@app.task(bind=True, max_retries=3)
-def process_item(self, item_id: int) -> dict:
+@app.task (bind=True, max_retries=3)
+def process_item (self, item_id: int) -> dict:
     """Process item (might fail)"""
     try:
         if item_id % 10 == 0:  # Simulate failure
             raise Exception("Item processing failed")
         return {'item_id': item_id, 'status': 'success'}
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=30)
+        raise self.retry (exc=exc, countdown=30)
 
 @app.task
-def aggregate_items(results: List[dict]) -> dict:
+def aggregate_items (results: List[dict]) -> dict:
     """
     Callback: Handle mixed success/failure results
     
     Filter out failed tasks, aggregate successful ones
     """
     successful = [r for r in results if r and r.get('status') == 'success']
-    failed = len(results) - len(successful)
+    failed = len (results) - len (successful)
     
     return {
-        'total': len(results),
-        'successful': len(successful),
+        'total': len (results),
+        'successful': len (successful),
         'failed': failed
     }
 
 # Chord with error handling
 callback = aggregate_items.s()
-header = [process_item.s(i) for i in range(100)]
+header = [process_item.s (i) for i in range(100)]
 
-result = chord(header)(callback)
+result = chord (header)(callback)
 summary = result.get()
 # {'total': 100, 'successful': 90, 'failed': 10}
 \`\`\`
@@ -576,11 +576,11 @@ workflow = chain(
 # ========================================
 
 # SLOW: 10,000 individual tasks
-job = group(process.s(i) for i in range(10_000))
+job = group (process.s (i) for i in range(10_000))
 
 # FAST: 100 batch tasks
-chunks = [range(i, i+100) for i in range(0, 10_000, 100)]
-job = group(process_batch.s(chunk) for chunk in chunks)
+chunks = [range (i, i+100) for i in range(0, 10_000, 100)]
+job = group (process_batch.s (chunk) for chunk in chunks)
 
 
 # ========================================
@@ -593,7 +593,7 @@ from celery import signature
 sig = task.s(5)
 
 # Immutable - args frozen
-sig = task.si(5)  # or task.s(5).set(immutable=True)
+sig = task.si(5)  # or task.s(5).set (immutable=True)
 
 # Useful in groups/chords where args shouldn't propagate
 \`\`\`

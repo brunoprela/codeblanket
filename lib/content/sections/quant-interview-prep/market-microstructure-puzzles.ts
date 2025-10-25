@@ -111,7 +111,7 @@ Calculate:
 Spread Calculations
 """
 
-def calculate_spreads(bid, ask, execution_price, new_mid=None):
+def calculate_spreads (bid, ask, execution_price, new_mid=None):
     """
     Calculate various spread measures.
     
@@ -129,7 +129,7 @@ def calculate_spreads(bid, ask, execution_price, new_mid=None):
     absolute_spread = ask - bid
     percentage_spread = (absolute_spread / mid) * 100
     
-    effective_half_spread = abs(execution_price - mid)
+    effective_half_spread = abs (execution_price - mid)
     effective_spread = 2 * effective_half_spread
     
     results = {
@@ -141,9 +141,9 @@ def calculate_spreads(bid, ask, execution_price, new_mid=None):
     }
     
     if new_mid is not None:
-        realized_half_spread = abs(execution_price - new_mid)
+        realized_half_spread = abs (execution_price - new_mid)
         realized_spread = 2 * realized_half_spread
-        price_impact = abs(new_mid - mid)
+        price_impact = abs (new_mid - mid)
         
         results.update({
             'realized_spread': realized_spread,
@@ -270,33 +270,33 @@ class MarketMakerPnL:
         self.spread_pnl = 0
         self.trades = []
     
-    def buy_at_bid(self, shares):
+    def buy_at_bid (self, shares):
         """Market maker buys (someone sells to us at our bid)."""
         self.position += shares
         self.cash -= shares * self.bid
         self.trades.append(('buy', shares, self.bid))
     
-    def sell_at_ask(self, shares):
+    def sell_at_ask (self, shares):
         """Market maker sells (someone buys from us at our ask)."""
         self.position -= shares
         self.cash += shares * self.ask
         self.trades.append(('sell', shares, self.ask))
         
         # Track spread capture
-        matched = min(shares, abs(self.position + shares))
+        matched = min (shares, abs (self.position + shares))
         self.spread_pnl += matched * (self.ask - self.bid)
     
-    def close_position(self, closing_price):
+    def close_position (self, closing_price):
         """Close remaining inventory at given price."""
         if self.position != 0:
             self.cash += self.position * closing_price
             self.position = 0
     
-    def get_total_pnl(self):
+    def get_total_pnl (self):
         """Calculate total P&L."""
         return self.cash
     
-    def get_breakdown(self):
+    def get_breakdown (self):
         """Get P&L breakdown."""
         return {
             'spread_pnl': self.spread_pnl,
@@ -315,7 +315,7 @@ print(f"Position after morning: {mm.position} shares")
 print(f"Spread P&L: \${mm.spread_pnl:.2f}")
 
 # Close position at new mid
-mm.close_position(closing_price=100.25)
+mm.close_position (closing_price=100.25)
 
 breakdown = mm.get_breakdown()
 print(f"\\nP&L Breakdown:")
@@ -438,7 +438,7 @@ def estimate_market_impact(
     """
     # Calculate impact as percentage
     participation_rate = trade_size / daily_volume
-    impact_pct = gamma * volatility * np.sqrt(participation_rate)
+    impact_pct = gamma * volatility * np.sqrt (participation_rate)
     
     results = {
         'participation_rate': participation_rate * 100,  # as percentage

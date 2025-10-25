@@ -23,7 +23,7 @@ export const stringsQuiz = [
       'Explain the difference between str.format(), f-strings, and % formatting. Which should you use and why?',
     hint: 'Consider readability, performance, Python version requirements, and flexibility.',
     sampleAnswer:
-      'Old-style % formatting (like "Hello %s" % name) is C-style but limited and less readable. str.format() (like "Hello {}".format(name)) is more powerful and readable but verbose. F-strings (like f"Hello {name}") are the modern preferred way (Python 3.6+) - they\'re most readable, fastest, and allow expressions inside braces. Use f-strings for new code unless you need Python 3.5 compatibility. str.format() is still useful when the format string comes from user input or configuration (security concern with f-strings).',
+      'Old-style % formatting (like "Hello %s" % name) is C-style but limited and less readable. str.format() (like "Hello {}".format (name)) is more powerful and readable but verbose. F-strings (like f"Hello {name}") are the modern preferred way (Python 3.6+) - they\'re most readable, fastest, and allow expressions inside braces. Use f-strings for new code unless you need Python 3.5 compatibility. str.format() is still useful when the format string comes from user input or configuration (security concern with f-strings).',
     keyPoints: [
       '% formatting: old style, less readable',
       'str.format(): more flexible, verbose',
@@ -37,7 +37,7 @@ export const stringsQuiz = [
       'When would you use str.join() versus string concatenation with +? What about performance considerations?',
     hint: 'Think about building strings in loops and memory allocation.',
     sampleAnswer:
-      'Use str.join() when building strings from multiple parts, especially in loops. Since strings are immutable, using + creates a new string object each time, which is O(n²) for n concatenations. str.join() is O(n) as it allocates the final size once. Example: "".join(parts) is much faster than result = ""; for p in parts: result += p. However, for a small fixed number of concatenations (2-3), + is fine and more readable. F-strings are also efficient for combining a few known values.',
+      'Use str.join() when building strings from multiple parts, especially in loops. Since strings are immutable, using + creates a new string object each time, which is O(n²) for n concatenations. str.join() is O(n) as it allocates the final size once. Example: "".join (parts) is much faster than result = ""; for p in parts: result += p. However, for a small fixed number of concatenations (2-3), + is fine and more readable. F-strings are also efficient for combining a few known values.',
     keyPoints: [
       'join(): O(n), efficient for multiple strings',
       '+: O(n²) in loops due to immutability',

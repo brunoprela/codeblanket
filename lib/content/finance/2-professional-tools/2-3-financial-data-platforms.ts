@@ -11,13 +11,13 @@ Beyond Bloomberg Terminal, a thriving ecosystem of financial data platforms serv
 ### The Landscape
 
 \`\`\`
-TIER 1: Premium Enterprise ($12K-24K/year)
-├── Bloomberg Terminal ($24K)
+TIER 1: Premium Enterprise (\$12K-24K/year)
+├── Bloomberg Terminal (\$24K)
 ├── Refinitiv Eikon ($15-20K)
 ├── FactSet ($12-18K)
 └── S&P Capital IQ ($12-15K)
 
-TIER 2: Professional ($2K-10K/year)
+TIER 2: Professional (\$2K-10K/year)
 ├── Morningstar Direct ($4-8K)
 ├── PitchBook ($7-12K)
 ├── YCharts ($3-6K)
@@ -36,7 +36,7 @@ TIER 4: Free/Freemium
 └── TradingView (Free tier)
 \`\`\`
 
-## FactSet: Bloomberg's Main Competitor
+## FactSet: Bloomberg\'s Main Competitor
 
 **Overview**: FactSet competes directly with Bloomberg but with a different philosophy - **quantitative analytics over qualitative research**.
 
@@ -74,7 +74,7 @@ FDS("AAPL-US", "P_PRICE")           // Current price
 FDS("AAPL-US", "FF_SALES(0,Q)")     // Latest quarterly sales
 
 SCREENING:
-FactSet's screening (FQL - FactSet Query Language)
+FactSet\'s screening (FQL - FactSet Query Language)
 More powerful than Bloomberg's EQS
 Can save and share complex screens
 
@@ -135,7 +135,7 @@ config.username = 'your_serial'
 config.password = 'your_api_key'
 
 # Get data
-api_instance = fa.DataApi(fa.ApiClient(config))
+api_instance = fa.DataApi (fa.ApiClient (config))
 
 # Example: Get price history
 response = api_instance.get_fd_time_series(
@@ -148,7 +148,7 @@ response = api_instance.get_fd_time_series(
 
 print(response)
 
-# FactSet's API is more RESTful than Bloomberg's SOAP
+# FactSet\'s API is more RESTful than Bloomberg's SOAP
 \`\`\`
 
 ### Real-World Usage
@@ -232,7 +232,7 @@ ADD-ONS:
     "SDate=2023-01-01 EDate=2023-12-31")
 
 // Screening
-=TR("SCREEN(U(IN(Equity(active,public,primary))), 
+=TR("SCREEN(U(IN(Equity (active,public,primary))), 
      TR.MktCap>1000000000, 
      TR.PERatio<15)", "TR.CommonName")
 \`\`\`
@@ -256,7 +256,7 @@ import refinitiv.dataplatform as rdp
 # Initialize session
 rdp.open_platform_session(
     app_key='your_app_key',
-    rdp_session=rdp.DesktopSession(app_key='your_app_key')
+    rdp_session=rdp.DesktopSession (app_key='your_app_key')
 )
 
 # Get historical data
@@ -272,7 +272,7 @@ stream = rdp.StreamingPrices(['EUR=', 'JPY='],
                              fields=['BID', 'ASK'])
 stream.open()
 
-# More modern than Bloomberg's API, less quantitative than FactSet
+# More modern than Bloomberg\'s API, less quantitative than FactSet
 \`\`\`
 
 ## S&P Capital IQ
@@ -497,7 +497,7 @@ M&A TRANSACTIONS:
 ### When to Choose YCharts
 
 **Ideal For**:
-- Small RIAs ($100M-1B AUM)
+- Small RIAs (\$100M-1B AUM)
 - Independent analysts
 - Family offices
 - Startups (pre-Series B)
@@ -534,7 +534,7 @@ response = requests.get(
 )
 
 data = response.json()
-df = pd.DataFrame(data['data'])
+df = pd.DataFrame (data['data'])
 \`\`\`
 
 ## Koyfin: The New Kid on the Block
@@ -636,7 +636,7 @@ Global Coverage        ✓✓✓        ✓✓✓       ✓✓✓        ✓✓ 
 ### By Use Case
 
 \`\`\`python
-def choose_platform(use_case, budget, team_size):
+def choose_platform (use_case, budget, team_size):
     """
     Decision tree for choosing financial data platform
     \"\"\"
@@ -727,10 +727,10 @@ BUDGET: $5,000-10,000/year
 
 BUDGET: $10,000-20,000/year
 → FactSet or S&P Capital IQ ($12-18K)
-→ OR Bloomberg Terminal ($24K, above budget but often worth it)
+→ OR Bloomberg Terminal (\$24K, above budget but often worth it)
 
 BUDGET: >$20,000/year
-→ Bloomberg Terminal ($24K)
+→ Bloomberg Terminal (\$24K)
 → + Supplemental sources (PitchBook for VC/PE, Morningstar for funds)
 \`\`\`
 
@@ -741,19 +741,19 @@ Most professional firms use **multiple platforms** for different purposes:
 ### Hedge Fund Example
 
 \`\`\`
-PRIMARY: FactSet ($18K/year)
+PRIMARY: FactSet (\$18K/year)
 - Quantitative research
 - Portfolio analytics
 - Factor models
 - Excel integration
 
-SUPPLEMENTAL: Bloomberg Terminal ($24K/year)
+SUPPLEMENTAL: Bloomberg Terminal (\$24K/year)
 - Real-time trading
 - Fixed income
 - Communication (Messenger)
 - Industry standard
 
-SPECIALIZED: PitchBook ($10K/year)
+SPECIALIZED: PitchBook (\$10K/year)
 - Pre-IPO research
 - Private market comparables
 
@@ -763,18 +763,18 @@ TOTAL: $52K/year/analyst (typical at mid-size fund)
 ### Investment Bank Example
 
 \`\`\`
-PRIMARY: Bloomberg Terminal ($24K/year)
+PRIMARY: Bloomberg Terminal (\$24K/year)
 - Industry standard
 - Client expectations
 - Communication
 - Market data
 
-SUPPLEMENTAL: S&P Capital IQ ($15K/year)
+SUPPLEMENTAL: S&P Capital IQ (\$15K/year)
 - Company fundamentals
 - M&A comps
 - Financial modeling
 
-SPECIALIZED: PitchBook ($10K/year)
+SPECIALIZED: PitchBook (\$10K/year)
 - Private company targets
 - VC/PE data
 
@@ -829,7 +829,7 @@ class MultiPlatformDataHub:
         if config.get('bloomberg_available'):
             try:
                 import pdblp
-                self.bloomberg = pdblp.BCon(debug=False, port=8194)
+                self.bloomberg = pdblp.BCon (debug=False, port=8194)
                 self.bloomberg.start()
                 self.available_platforms.append('bloomberg')
             except:
@@ -847,7 +847,7 @@ class MultiPlatformDataHub:
         # Always have free sources as fallback
         self.available_platforms.append('yfinance')
     
-    def get_price_history(self, ticker, start_date, end_date):
+    def get_price_history (self, ticker, start_date, end_date):
         \"\"\"
         Get price history from best available source
         \"\"\"
@@ -872,10 +872,10 @@ class MultiPlatformDataHub:
                 pass
         
         # Fallback to free source
-        stock = yf.Ticker(ticker)
-        return stock.history(start=start_date, end=end_date)
+        stock = yf.Ticker (ticker)
+        return stock.history (start=start_date, end=end_date)
     
-    def get_fundamentals(self, ticker):
+    def get_fundamentals (self, ticker):
         \"\"\"
         Get company fundamentals from best source
         \"\"\"
@@ -884,7 +884,7 @@ class MultiPlatformDataHub:
         # Try each source, combine results
         if 'bloomberg' in self.available_platforms:
             try:
-                data = self.bloomberg.ref(ticker, [
+                data = self.bloomberg.ref (ticker, [
                     'CUR_MKT_CAP', 'PE_RATIO', 'DVD_YIELD'
                 ])
                 results['bloomberg'] = data
@@ -892,13 +892,13 @@ class MultiPlatformDataHub:
                 pass
         
         # Always get yfinance as backup
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         results['yfinance'] = stock.info
         
         # Combine and return best data
-        return self._merge_fundamental_data(results)
+        return self._merge_fundamental_data (results)
     
-    def _merge_fundamental_data(self, sources):
+    def _merge_fundamental_data (self, sources):
         \"\"\"
         Merge data from multiple sources, preferring premium sources
         \"\"\"
@@ -919,7 +919,7 @@ config = {
     'factset_api_key': None,       # Don't have FactSet
 }
 
-hub = MultiPlatformDataHub(config)
+hub = MultiPlatformDataHub (config)
 
 # Always works, uses best available source
 prices = hub.get_price_history('AAPL', 
@@ -956,7 +956,7 @@ print(f"Data from: {hub.available_platforms}")
 
 ### Key Takeaways
 
-1. **Bloomberg** is the gold standard but expensive ($24K)
+1. **Bloomberg** is the gold standard but expensive (\$24K)
 2. **FactSet** is best for quantitative research ($12-18K)
 3. **S&P Capital IQ** is ideal for M&A and comps ($12-15K)
 4. **PitchBook** is required for VC/PE ($7-12K)

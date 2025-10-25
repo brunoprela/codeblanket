@@ -14,7 +14,7 @@ export const designingMarketDataSystemsMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 2,
       explanation:
-        'Tiered storage minimizes cost: Hot tier (7 days) in TimescaleDB for <10ms queries ($1K/mo), Warm tier (90 days) in ClickHouse for analytics ($500/mo), Cold tier (3 years) in S3/Parquet for archival ($50/mo). Total ~$1550/mo. Single-tier solutions: TimescaleDB for 3 years = $50K+/mo (too expensive), Redis = $100K+/mo (RAM cost), DynamoDB = $10K+/mo (high write costs). Parquet compression (50:1) makes S3 very cheap.',
+        'Tiered storage minimizes cost: Hot tier (7 days) in TimescaleDB for <10ms queries (\$1K/mo), Warm tier (90 days) in ClickHouse for analytics ($500/mo), Cold tier (3 years) in S3/Parquet for archival ($50/mo). Total ~$1550/mo. Single-tier solutions: TimescaleDB for 3 years = $50K+/mo (too expensive), Redis = $100K+/mo (RAM cost), DynamoDB = $10K+/mo (high write costs). Parquet compression (50:1) makes S3 very cheap.',
     },
     {
       id: 'dmds-mc-2',

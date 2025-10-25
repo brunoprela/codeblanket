@@ -447,7 +447,7 @@ Coordinator holds 3MB in memory. ❌
 
 **Fast digest**:
 \`\`\`
-digest = hash(value + timestamp)
+digest = hash (value + timestamp)
 
 Example:
   value = "Alice"
@@ -459,7 +459,7 @@ Example:
 
 **Include metadata**:
 \`\`\`
-digest = hash(value + timestamp + tombstone + ttl)
+digest = hash (value + timestamp + tombstone + ttl)
 \`\`\`
 
 Ensures all aspects are checked.
@@ -561,7 +561,7 @@ Use both:
 **Q: How does read repair improve consistency?**
 A: "Read repair opportunistically fixes inconsistencies during reads. Coordinator reads from multiple replicas (often more than quorum), compares responses, and detects stale data. It then updates stale replicas with the latest version. This means frequently accessed data is continuously repaired, improving consistency over time. Example: Hot key read 1000x/day—any inconsistency fixed on first read, stays consistent due to frequent reads."
 
-**Q: What's the difference between read repair and anti-entropy?**
+**Q: What\'s the difference between read repair and anti-entropy?**
 A: "Read repair is triggered by reads, only fixes keys that are accessed, immediate for those keys, overhead proportional to read traffic. Anti-entropy is a background process that scans the entire dataset, slow but comprehensive. They're complementary: read repair fixes hot data automatically, anti-entropy catches cold data and ensures full consistency. Production systems use both—read repair for fast fixes, anti-entropy for completeness."
 
 **Q: How do you prevent read repair from impacting read latency?**

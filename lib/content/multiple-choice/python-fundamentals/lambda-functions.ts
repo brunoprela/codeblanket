@@ -23,8 +23,8 @@ export const lambdafunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the syntax for a lambda function?',
     options: [
       'lambda x: x*2',
-      'def lambda(x): x*2',
-      'function(x) => x*2',
+      'def lambda (x): x*2',
+      'function (x) => x*2',
       'x => x*2',
     ],
     correctAnswer: 0,

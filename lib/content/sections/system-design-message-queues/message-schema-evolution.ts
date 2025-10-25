@@ -311,7 +311,7 @@ value_schema_str = """
 }
 """
 
-value_schema = avro.loads(value_schema_str)
+value_schema = avro.loads (value_schema_str)
 
 # Producer configuration
 avro_producer = AvroProducer({
@@ -695,20 +695,20 @@ Communicate changes to all teams
 # Test old consumers with new data
 def test_backward_compatibility():
     new_schema = load_schema("user_v2.avsc")
-    old_consumer = Consumer(schema="user_v1.avsc")
+    old_consumer = Consumer (schema="user_v1.avsc")
     
-    message = produce_with_schema(new_schema, {...})
-    result = old_consumer.consume(message)
+    message = produce_with_schema (new_schema, {...})
+    result = old_consumer.consume (message)
     
     assert result is not None  # Should deserialize ✅
 
 # Test new consumers with old data
 def test_forward_compatibility():
     old_schema = load_schema("user_v1.avsc")
-    new_consumer = Consumer(schema="user_v2.avsc")
+    new_consumer = Consumer (schema="user_v2.avsc")
     
-    message = produce_with_schema(old_schema, {...})
-    result = new_consumer.consume(message)
+    message = produce_with_schema (old_schema, {...})
+    result = new_consumer.consume (message)
     
     assert result is not None  # Should deserialize ✅
 \`\`\`

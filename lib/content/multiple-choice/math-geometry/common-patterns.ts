@@ -23,7 +23,7 @@ export const commonpatternsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the GCD pattern?',
     options: [
       'Random',
-      'Use GCD for divisibility, simplification, LCM. Euclidean algorithm O(log min(a,b))',
+      'Use GCD for divisibility, simplification, LCM. Euclidean algorithm O(log min (a,b))',
       'Sorting',
       'No pattern',
     ],

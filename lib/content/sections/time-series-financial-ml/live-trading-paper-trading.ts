@@ -49,9 +49,9 @@ class Trade:
     slippage: float
     
     @property
-    def total_cost(self):
+    def total_cost (self):
         """Total cost including commissions"""
-        return abs(self.quantity * self.fill_price) + self.commission
+        return abs (self.quantity * self.fill_price) + self.commission
 
 
 @dataclass
@@ -62,7 +62,7 @@ class Position:
     avg_entry_price: float = 0.0
     realized_pnl: float = 0.0
     
-    def update(self, quantity: int, price: float):
+    def update (self, quantity: int, price: float):
         """Update position with new trade"""
         if self.quantity * quantity >= 0:  # Same direction
             # Increase position
@@ -71,12 +71,12 @@ class Position:
             self.avg_entry_price = total_value / self.quantity if self.quantity != 0 else 0
         else:  # Opposite direction
             # Reduce or flip position
-            close_qty = min(abs(self.quantity), abs(quantity))
-            pnl = close_qty * (price - self.avg_entry_price) * np.sign(self.quantity)
+            close_qty = min (abs (self.quantity), abs (quantity))
+            pnl = close_qty * (price - self.avg_entry_price) * np.sign (self.quantity)
             self.realized_pnl += pnl
             self.quantity += quantity
             
-            if self.quantity != 0 and abs(self.quantity) < close_qty:
+            if self.quantity != 0 and abs (self.quantity) < close_qty:
                 # Position flipped
                 self.avg_entry_price = price
 
@@ -95,7 +95,7 @@ class Order:
     status: str = 'pending'  # 'pending', 'filled', 'partial', 'canceled', 'rejected'
     filled_quantity: int = 0
     avg_fill_price: float = 0.0
-    created_at: datetime = field(default_factory=datetime.now)
+    created_at: datetime = field (default_factory=datetime.now)
     filled_at: Optional[datetime] = None
 
 
@@ -151,7 +151,7 @@ class PaperTradingEngine:
     # ORDER SUBMISSION
     # ========================================================================
     
-    def submit_market_order(self, symbol: str, quantity: int, side: str) -> Order:
+    def submit_market_order (self, symbol: str, quantity: int, side: str) -> Order:
         """Submit market order"""
         order = Order(
             order_id=self._generate_order_id(),
@@ -162,14 +162,14 @@ class PaperTradingEngine:
         )
         
         # Pre-trade risk checks
-        if not self._pre_trade_checks(order):
+        if not self._pre_trade_checks (order):
             order.status = 'rejected'
             return order
         
-        self.orders.append(order)
+        self.orders.append (order)
         return order
     
-    def submit_limit_order(self, symbol: str, quantity: int, side: str,
+    def submit_limit_order (self, symbol: str, quantity: int, side: str,
                           limit_price: float, time_in_force: str = 'day') -> Order:
         """Submit limit order"""
         order = Order(
@@ -182,14 +182,14 @@ class PaperTradingEngine:
             time_in_force=time_in_force
         )
         
-        if not self._pre_trade_checks(order):
+        if not self._pre_trade_checks (order):
             order.status = 'rejected'
             return order
         
-        self.orders.append(order)
+        self.orders.append (order)
         return order
     
-    def submit_stop_loss(self, symbol: str, quantity: int, side: str,
+    def submit_stop_loss (self, symbol: str, quantity: int, side: str,
                         stop_price: float) -> Order:
         """Submit stop-loss order"""
         order = Order(
@@ -202,14 +202,14 @@ class PaperTradingEngine:
             time_in_force='gtc'
         )
         
-        self.orders.append(order)
+        self.orders.append (order)
         return order
     
     # ========================================================================
     # ORDER EXECUTION
     # ========================================================================
     
-    def execute_orders(self, market_data: Dict[str, Dict], timestamp: datetime):
+    def execute_orders (self, market_data: Dict[str, Dict], timestamp: datetime):
         """
         Execute pending orders based on market data
         
@@ -229,15 +229,15 @@ class PaperTradingEngine:
             
             # Execute based on order type
             if order.order_type == 'market':
-                self._execute_market_order(order, data, timestamp)
+                self._execute_market_order (order, data, timestamp)
             
             elif order.order_type == 'limit':
-                self._execute_limit_order(order, data, timestamp)
+                self._execute_limit_order (order, data, timestamp)
             
             elif order.order_type == 'stop':
-                self._execute_stop_order(order, data, timestamp)
+                self._execute_stop_order (order, data, timestamp)
     
-    def _execute_market_order(self, order: Order, data: Dict, timestamp: datetime):
+    def _execute_market_order (self, order: Order, data: Dict, timestamp: datetime):
         """Execute market order with slippage"""
         # Use bid/ask spread
         if order.side == 'buy':
@@ -246,51 +246,51 @@ class PaperTradingEngine:
             base_price = data.get('bid', data['price'])
         
         # Calculate slippage
-        slippage = self._calculate_slippage(order, data)
+        slippage = self._calculate_slippage (order, data)
         
         # Fill price
         fill_price = base_price * (1 + slippage * (1 if order.side == 'buy' else -1))
         
         # Execute
-        self._fill_order(order, order.quantity, fill_price, timestamp)
+        self._fill_order (order, order.quantity, fill_price, timestamp)
     
-    def _execute_limit_order(self, order: Order, data: Dict, timestamp: datetime):
+    def _execute_limit_order (self, order: Order, data: Dict, timestamp: datetime):
         """Execute limit order if price crosses limit"""
         price = data['price']
         
         # Check if limit crossed
         if order.side == 'buy' and price <= order.limit_price:
             # Buy limit: Execute at limit or better
-            fill_price = min(order.limit_price, price)
-            self._fill_order(order, order.quantity, fill_price, timestamp)
+            fill_price = min (order.limit_price, price)
+            self._fill_order (order, order.quantity, fill_price, timestamp)
         
         elif order.side == 'sell' and price >= order.limit_price:
             # Sell limit: Execute at limit or better
-            fill_price = max(order.limit_price, price)
-            self._fill_order(order, order.quantity, fill_price, timestamp)
+            fill_price = max (order.limit_price, price)
+            self._fill_order (order, order.quantity, fill_price, timestamp)
     
-    def _execute_stop_order(self, order: Order, data: Dict, timestamp: datetime):
+    def _execute_stop_order (self, order: Order, data: Dict, timestamp: datetime):
         """Execute stop order if price crosses stop"""
         price = data['price']
         
         # Check if stop triggered
         if order.side == 'sell' and price <= order.stop_price:
             # Stop loss triggered - execute as market
-            slippage = self._calculate_slippage(order, data)
+            slippage = self._calculate_slippage (order, data)
             fill_price = price * (1 - slippage)
-            self._fill_order(order, order.quantity, fill_price, timestamp)
+            self._fill_order (order, order.quantity, fill_price, timestamp)
     
-    def _fill_order(self, order: Order, quantity: int, price: float, timestamp: datetime):
+    def _fill_order (self, order: Order, quantity: int, price: float, timestamp: datetime):
         """Fill order and update portfolio"""
         # Calculate costs
-        commission = abs(quantity * price) * self.commission_rate
+        commission = abs (quantity * price) * self.commission_rate
         
         # Check sufficient cash (for buys)
         if order.side == 'buy':
             required_cash = quantity * price + commission
             if required_cash > self.cash:
                 order.status = 'rejected'
-                self.warnings.append(f"Insufficient cash for order {order.order_id}")
+                self.warnings.append (f"Insufficient cash for order {order.order_id}")
                 return
         
         # Update order
@@ -307,10 +307,10 @@ class PaperTradingEngine:
         # Update position
         symbol = order.symbol
         if symbol not in self.positions:
-            self.positions[symbol] = Position(symbol)
+            self.positions[symbol] = Position (symbol)
         
         qty_with_sign = quantity if order.side == 'buy' else -quantity
-        self.positions[symbol].update(qty_with_sign, price)
+        self.positions[symbol].update (qty_with_sign, price)
         
         # Update cash
         if order.side == 'buy':
@@ -326,15 +326,15 @@ class PaperTradingEngine:
             quantity=quantity,
             fill_price=price,
             commission=commission,
-            slippage=abs(price - order.limit_price)/order.limit_price if order.limit_price else 0
+            slippage=abs (price - order.limit_price)/order.limit_price if order.limit_price else 0
         )
-        self.trades.append(trade)
+        self.trades.append (trade)
     
     # ========================================================================
     # SLIPPAGE MODELS
     # ========================================================================
     
-    def _calculate_slippage(self, order: Order, data: Dict) -> float:
+    def _calculate_slippage (self, order: Order, data: Dict) -> float:
         """
         Calculate realistic slippage
         
@@ -351,7 +351,7 @@ class PaperTradingEngine:
             participation_rate = order.quantity / volume
             # Slippage increases with square root of participation
             base_slippage = 0.0002
-            volume_impact = 0.001 * np.sqrt(participation_rate)
+            volume_impact = 0.001 * np.sqrt (participation_rate)
             return base_slippage + volume_impact
         
         elif self.slippage_model == 'spread_based':
@@ -367,7 +367,7 @@ class PaperTradingEngine:
     # RISK CONTROLS
     # ========================================================================
     
-    def _pre_trade_checks(self, order: Order) -> bool:
+    def _pre_trade_checks (self, order: Order) -> bool:
         """
         Pre-trade risk checks
         
@@ -375,7 +375,7 @@ class PaperTradingEngine:
         """
         # 1. Kill switch check
         if not self.trading_enabled:
-            self.errors.append(f"Trading disabled - kill switch active")
+            self.errors.append (f"Trading disabled - kill switch active")
             return False
         
         # 2. Position size limit
@@ -388,7 +388,7 @@ class PaperTradingEngine:
         # 3. Daily loss limit
         daily_pnl = current_equity - self.start_of_day_equity
         if daily_pnl < -self.max_daily_loss * self.start_of_day_equity:
-            self.errors.append(f"Daily loss limit exceeded: {daily_pnl:.2%}")
+            self.errors.append (f"Daily loss limit exceeded: {daily_pnl:.2%}")
             self.trading_enabled = False  # Trigger kill switch
             return False
         
@@ -401,7 +401,7 @@ class PaperTradingEngine:
     # PORTFOLIO & PERFORMANCE
     # ========================================================================
     
-    def get_equity(self, prices: Optional[Dict[str, float]] = None) -> float:
+    def get_equity (self, prices: Optional[Dict[str, float]] = None) -> float:
         """Calculate total portfolio value"""
         positions_value = 0
         
@@ -412,32 +412,32 @@ class PaperTradingEngine:
         
         return self.cash + positions_value
     
-    def update_equity_history(self, prices: Dict[str, float], timestamp: datetime):
+    def update_equity_history (self, prices: Dict[str, float], timestamp: datetime):
         """Record equity snapshot"""
-        equity = self.get_equity(prices)
+        equity = self.get_equity (prices)
         
         self.equity_history.append({
             'timestamp': timestamp,
             'equity': equity,
             'cash': self.cash,
             'positions_value': equity - self.cash,
-            'num_positions': len(self.positions)
+            'num_positions': len (self.positions)
         })
         
         return equity
     
-    def get_performance_metrics(self) -> Dict:
+    def get_performance_metrics (self) -> Dict:
         """Calculate comprehensive performance metrics"""
-        if len(self.equity_history) < 2:
+        if len (self.equity_history) < 2:
             return {}
         
-        df = pd.DataFrame(self.equity_history)
+        df = pd.DataFrame (self.equity_history)
         df['returns'] = df['equity'].pct_change()
         
         returns = df['returns'].dropna()
         
         total_return = (df['equity'].iloc[-1] - self.initial_capital) / self.initial_capital
-        sharpe = returns.mean() / returns.std() * np.sqrt(252) if len(returns) > 1 else 0
+        sharpe = returns.mean() / returns.std() * np.sqrt(252) if len (returns) > 1 else 0
         
         # Drawdown
         cumulative = (1 + returns).cumprod()
@@ -447,18 +447,18 @@ class PaperTradingEngine:
         
         # Win rate
         winning_trades = [t for t in self.trades if 
-                         (t.side == 'sell' and t.fill_price > self.positions.get(t.symbol, Position(t.symbol)).avg_entry_price)]
-        win_rate = len(winning_trades) / len(self.trades) if self.trades else 0
+                         (t.side == 'sell' and t.fill_price > self.positions.get (t.symbol, Position (t.symbol)).avg_entry_price)]
+        win_rate = len (winning_trades) / len (self.trades) if self.trades else 0
         
         return {
             'total_return': total_return,
-            'annual_return': total_return / (len(df) / 252),
+            'annual_return': total_return / (len (df) / 252),
             'sharpe_ratio': sharpe,
             'max_drawdown': max_drawdown,
             'win_rate': win_rate,
-            'num_trades': len(self.trades),
+            'num_trades': len (self.trades),
             'final_equity': df['equity'].iloc[-1],
-            'total_commissions': sum(t.commission for t in self.trades),
+            'total_commissions': sum (t.commission for t in self.trades),
             'avg_slippage': np.mean([t.slippage for t in self.trades]) if self.trades else 0
         }
     
@@ -466,7 +466,7 @@ class PaperTradingEngine:
     # POSITION RECONCILIATION
     # ========================================================================
     
-    def reconcile_positions(self, broker_positions: Dict[str, int]) -> List[str]:
+    def reconcile_positions (self, broker_positions: Dict[str, int]) -> List[str]:
         """
         Compare paper positions to broker positions
         
@@ -476,7 +476,7 @@ class PaperTradingEngine:
         
         # Check all paper positions
         for symbol, position in self.positions.items():
-            broker_qty = broker_positions.get(symbol, 0)
+            broker_qty = broker_positions.get (symbol, 0)
             
             if position.quantity != broker_qty:
                 discrepancies.append(
@@ -496,14 +496,14 @@ class PaperTradingEngine:
     # UTILITIES
     # ========================================================================
     
-    def _generate_order_id(self) -> str:
+    def _generate_order_id (self) -> str:
         """Generate unique order ID"""
-        return f"ORD_{len(self.orders)}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        return f"ORD_{len (self.orders)}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
     
-    def trigger_kill_switch(self, reason: str):
+    def trigger_kill_switch (self, reason: str):
         """Emergency stop all trading"""
         self.trading_enabled = False
-        self.errors.append(f"KILL SWITCH: {reason}")
+        self.errors.append (f"KILL SWITCH: {reason}")
         print(f"\\n🛑 KILL SWITCH ACTIVATED: {reason}")
         
         # Cancel all pending orders
@@ -516,7 +516,7 @@ class PaperTradingEngine:
         # - Cancel all orders at broker
         # - Send alerts to all channels
     
-    def print_status(self):
+    def print_status (self):
         """Print current portfolio status"""
         equity = self.get_equity()
         
@@ -527,15 +527,15 @@ class PaperTradingEngine:
         print(f"Cash: \${self.cash:,.2f}")
         print(f"P&L: \${equity - self.initial_capital:,.2f} ({(equity/self.initial_capital - 1):.2%})")
         
-        print(f"\\nPositions: {len(self.positions)}")
+        print(f"\\nPositions: {len (self.positions)}")
         for symbol, pos in self.positions.items():
             print(f"  {symbol}: {pos.quantity} @ \${pos.avg_entry_price:.2f}")
         
-        print(f"\\nTrades: {len(self.trades)}")
+        print(f"\\nTrades: {len (self.trades)}")
         print(f"Open Orders: {sum(1 for o in self.orders if o.status == 'pending')}")
         
         if self.errors:
-            print(f"\\n⚠️ Errors: {len(self.errors)}")
+            print(f"\\n⚠️ Errors: {len (self.errors)}")
             for error in self.errors[-3:]:
                 print(f"  - {error}")
         
@@ -566,7 +566,7 @@ order1 = engine.submit_market_order('AAPL', 100, 'buy')
 order2 = engine.submit_limit_order('MSFT', 50, 'buy', limit_price=379.00)
 
 # Execute orders
-engine.execute_orders(market_data, datetime.now())
+engine.execute_orders (market_data, datetime.now())
 
 # Update equity
 equity = engine.update_equity_history(
@@ -581,7 +581,7 @@ engine.print_status()
 perf = engine.get_performance_metrics()
 print(f"\\nPerformance:")
 for metric, value in perf.items():
-    if isinstance(value, float):
+    if isinstance (value, float):
         if 'rate' in metric or 'return' in metric:
             print(f"  {metric}: {value:.2%}")
         else:
@@ -710,8 +710,8 @@ class LiveTradingChecklist:
                 status_icon = "✅" if status else "❌"
                 print(f"  {status_icon} {item}")
         
-        total_items = sum(len(items) for _, items in phases)
-        completed = sum(sum(items.values()) for _, items in phases)
+        total_items = sum (len (items) for _, items in phases)
+        completed = sum (sum (items.values()) for _, items in phases)
         
         print(f"\\n{'='*70}")
         print(f"Completion: {completed}/{total_items} ({completed/total_items:.1%})")

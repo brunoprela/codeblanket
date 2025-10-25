@@ -56,7 +56,7 @@ export const distributedTaskProcessingPatternsMultipleChoice: MultipleChoiceQues
       ],
       correctAnswer: 1,
       explanation:
-        'Fan-out/fan-in: (1) Fan-out - distribute work to N workers (parallel), (2) Fan-in - combine all results into one. Celery chord implements this: chord(header)(callback). Header tasks run in parallel, callback receives all results. Perfect for parallel processing with aggregation.',
+        'Fan-out/fan-in: (1) Fan-out - distribute work to N workers (parallel), (2) Fan-in - combine all results into one. Celery chord implements this: chord (header)(callback). Header tasks run in parallel, callback receives all results. Perfect for parallel processing with aggregation.',
     },
     {
       id: 'mc5',

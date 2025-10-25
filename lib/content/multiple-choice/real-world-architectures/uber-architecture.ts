@@ -21,7 +21,7 @@ export const uberarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What is DISCO in Uber's architecture?",
+    question: "What is DISCO in Uber\'s architecture?",
     options: [
       "Uber's distributed caching system",
       'Dispatch Optimization algorithm for matching drivers to orders',
@@ -35,7 +35,7 @@ export const uberarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "How frequently does Uber's driver app send GPS location updates?",
+      "How frequently does Uber\'s driver app send GPS location updates?",
     options: [
       'Every second for real-time accuracy',
       'Every 4 seconds via WebSocket',
@@ -44,7 +44,7 @@ export const uberarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Uber's driver app (Dasher app) sends GPS coordinates every 4 seconds via WebSocket connection. This frequency balances real-time tracking accuracy with battery consumption and network bandwidth. Location updates are sent to the Location Gateway, published to Kafka for processing, and stored in Redis (current location with 60s TTL) and Cassandra (historical tracking). This enables sub-100ms queries for nearby drivers.",
+      "Uber\'s driver app (Dasher app) sends GPS coordinates every 4 seconds via WebSocket connection. This frequency balances real-time tracking accuracy with battery consumption and network bandwidth. Location updates are sent to the Location Gateway, published to Kafka for processing, and stored in Redis (current location with 60s TTL) and Cassandra (historical tracking). This enables sub-100ms queries for nearby drivers.",
   },
   {
     id: 'mc4',
@@ -58,7 +58,7 @@ export const uberarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Uber uses Apache Flink for real-time stream processing of location updates. Flink processes the Kafka stream of location events, performs stateful operations (aggregations, windowing), updates Redis for current locations, converts to H3 hex IDs for indexing, and writes historical data to Cassandra. Flink's exactly-once processing semantics and low-latency capabilities make it ideal for Uber's real-time location tracking at scale.",
+      "Uber uses Apache Flink for real-time stream processing of location updates. Flink processes the Kafka stream of location events, performs stateful operations (aggregations, windowing), updates Redis for current locations, converts to H3 hex IDs for indexing, and writes historical data to Cassandra. Flink\'s exactly-once processing semantics and low-latency capabilities make it ideal for Uber's real-time location tracking at scale.",
   },
   {
     id: 'mc5',

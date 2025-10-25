@@ -104,7 +104,7 @@ class JSONSchemaValidator:
         warnings = []
         
         # Get schema
-        schema = self.schemas.get(schema_name)
+        schema = self.schemas.get (schema_name)
         if not schema:
             return ValidationResult(
                 is_valid=False,
@@ -115,18 +115,18 @@ class JSONSchemaValidator:
         
         # Parse JSON
         try:
-            data = json.loads(output)
+            data = json.loads (output)
         except json.JSONDecodeError as e:
             return ValidationResult(
                 is_valid=False,
                 data=None,
-                errors=[f"Invalid JSON: {str(e)}"],
+                errors=[f"Invalid JSON: {str (e)}"],
                 warnings=[]
             )
         
         # Validate against schema
         try:
-            validate(instance=data, schema=schema)
+            validate (instance=data, schema=schema)
             return ValidationResult(
                 is_valid=True,
                 data=data,
@@ -134,7 +134,7 @@ class JSONSchemaValidator:
                 warnings=warnings
             )
         except ValidationError as e:
-            errors.append(f"Schema validation error: {e.message}")
+            errors.append (f"Schema validation error: {e.message}")
             return ValidationResult(
                 is_valid=False,
                 data=data,
@@ -153,7 +153,7 @@ valid_output = json.dumps({
     'interests': ['coding', 'reading']
 })
 
-result = validator.validate_output(valid_output, 'user_profile')
+result = validator.validate_output (valid_output, 'user_profile')
 print(f"Valid: {result.is_valid}")
 if not result.is_valid:
     print(f"Errors: {result.errors}")
@@ -165,7 +165,7 @@ invalid_output = json.dumps({
     # Missing required 'email'
 })
 
-result = validator.validate_output(invalid_output, 'user_profile')
+result = validator.validate_output (invalid_output, 'user_profile')
 print(f"\\nValid: {result.is_valid}")
 print(f"Errors: {result.errors}")
 \`\`\`
@@ -177,7 +177,7 @@ from pydantic import BaseModel, Field, EmailStr, validator
 from typing import List, Optional
 from enum import Enum
 
-class ProgrammingLanguage(str, Enum):
+class ProgrammingLanguage (str, Enum):
     PYTHON = "python"
     JAVASCRIPT = "javascript"
     JAVA = "java"
@@ -194,10 +194,10 @@ class CodeSnippet(BaseModel):
     language: ProgrammingLanguage
     code: str = Field(..., min_length=10, max_length=10000)
     explanation: str = Field(..., min_length=10)
-    test_cases: List[TestCase] = Field(default_factory=list)
+    test_cases: List[TestCase] = Field (default_factory=list)
     
     @validator('code')
-    def validate_code(cls, v, values):
+    def validate_code (cls, v, values):
         """Custom validation for code"""
         language = values.get('language')
         
@@ -209,7 +209,7 @@ class CodeSnippet(BaseModel):
         
         # Check for potentially dangerous code
         dangerous_patterns = ['eval(', 'exec(', '__import__']
-        if any(pattern in v for pattern in dangerous_patterns):
+        if any (pattern in v for pattern in dangerous_patterns):
             raise ValueError("Code contains potentially dangerous patterns")
         
         return v
@@ -231,7 +231,7 @@ class Pydantic Validator:
         """Validate output using Pydantic model"""
         
         # Get model
-        model_class = self.models.get(model_name)
+        model_class = self.models.get (model_name)
         if not model_class:
             return ValidationResult(
                 is_valid=False,
@@ -242,12 +242,12 @@ class Pydantic Validator:
         
         # Parse JSON
         try:
-            data = json.loads(output)
+            data = json.loads (output)
         except json.JSONDecodeError as e:
             return ValidationResult(
                 is_valid=False,
                 data=None,
-                errors=[f"Invalid JSON: {str(e)}"],
+                errors=[f"Invalid JSON: {str (e)}"],
                 warnings=[]
             )
         
@@ -264,7 +264,7 @@ class Pydantic Validator:
             return ValidationResult(
                 is_valid=False,
                 data=data,
-                errors=[str(e)],
+                errors=[str (e)],
                 warnings=[]
             )
 
@@ -280,7 +280,7 @@ output = json.dumps({
     ]
 })
 
-result = validator.validate_output(output, 'code_snippet')
+result = validator.validate_output (output, 'code_snippet')
 print(f"Valid: {result.is_valid}")
 if result.is_valid:
     print(f"Data: {result.data}")
@@ -317,7 +317,7 @@ class GuardrailsValidator:
         self.guards = {}
         self._setup_guards()
     
-    def _setup_guards(self):
+    def _setup_guards (self):
         """Setup predefined guards"""
         
         # Guard for code output
@@ -349,7 +349,7 @@ class GuardrailsValidator:
     ) -> Dict:
         """Validate output using named guard"""
         
-        guard = self.guards.get(guard_name)
+        guard = self.guards.get (guard_name)
         if not guard:
             return {
                 'valid': False,
@@ -357,7 +357,7 @@ class GuardrailsValidator:
             }
         
         try:
-            validated_output = guard.parse(output)
+            validated_output = guard.parse (output)
             return {
                 'valid': True,
                 'validated_output': validated_output,
@@ -366,7 +366,7 @@ class GuardrailsValidator:
         except Exception as e:
             return {
                 'valid': False,
-                'error': str(e),
+                'error': str (e),
                 'original_output': output
             }
     
@@ -385,17 +385,17 @@ class GuardrailsValidator:
             max_retries: Maximum retry attempts
         """
         
-        guard = self.guards.get(guard_name)
+        guard = self.guards.get (guard_name)
         if not guard:
             return {'valid': False, 'error': 'Guard not found'}
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
                 # Call LLM
                 output = llm_function()
                 
                 # Validate
-                validated = guard.parse(output)
+                validated = guard.parse (output)
                 
                 return {
                     'valid': True,
@@ -407,7 +407,7 @@ class GuardrailsValidator:
                 if attempt == max_retries - 1:
                     return {
                         'valid': False,
-                        'error': str(e),
+                        'error': str (e),
                         'attempts': attempt + 1
                     }
                 continue
@@ -420,12 +420,12 @@ validator = GuardrailsValidator()
 code_output = """
 {
     "language": "python",
-    "code": "def add(a, b):\\n    return a + b",
+    "code": "def add (a, b):\\n    return a + b",
     "explanation": "A simple addition function"
 }
 """
 
-result = validator.validate_with_guard(code_output, 'code')
+result = validator.validate_with_guard (code_output, 'code')
 print(f"Valid: {result['valid']}")
 \`\`\`
 
@@ -458,62 +458,62 @@ class QualityValidator:
         warnings = []
         
         # Check 1: Length
-        if len(output) < self.min_length:
-            issues.append(f"Output too short: {len(output)} chars (min: {self.min_length})")
-        elif len(output) > self.max_length:
-            warnings.append(f"Output very long: {len(output)} chars (max: {self.max_length})")
+        if len (output) < self.min_length:
+            issues.append (f"Output too short: {len (output)} chars (min: {self.min_length})")
+        elif len (output) > self.max_length:
+            warnings.append (f"Output very long: {len (output)} chars (max: {self.max_length})")
         
         # Check 2: Completeness
         if output.endswith('...') or 'continued' in output.lower():
             issues.append("Output appears incomplete")
         
         # Check 3: Relevance (simple keyword matching)
-        relevance_score = self._check_relevance(prompt, output)
+        relevance_score = self._check_relevance (prompt, output)
         if relevance_score < 0.3:
-            issues.append(f"Low relevance score: {relevance_score:.2f}")
+            issues.append (f"Low relevance score: {relevance_score:.2f}")
         
         # Check 4: Coherence (simple checks)
-        coherence_issues = self._check_coherence(output)
-        issues.extend(coherence_issues)
+        coherence_issues = self._check_coherence (output)
+        issues.extend (coherence_issues)
         
-        is_valid = len(issues) == 0
+        is_valid = len (issues) == 0
         
         return {
             'is_valid': is_valid,
-            'quality_score': self._calculate_quality_score(issues, warnings),
+            'quality_score': self._calculate_quality_score (issues, warnings),
             'issues': issues,
             'warnings': warnings,
             'relevance_score': relevance_score
         }
     
-    def _check_relevance(self, prompt: str, output: str) -> float:
+    def _check_relevance (self, prompt: str, output: str) -> float:
         """Check if output is relevant to prompt"""
         
         # Extract keywords from prompt
-        prompt_words = set(prompt.lower().split())
-        output_words = set(output.lower().split())
+        prompt_words = set (prompt.lower().split())
+        output_words = set (output.lower().split())
         
         # Calculate overlap
-        overlap = len(prompt_words.intersection(output_words))
-        relevance = overlap / max(len(prompt_words), 1)
+        overlap = len (prompt_words.intersection (output_words))
+        relevance = overlap / max (len (prompt_words), 1)
         
         return relevance
     
-    def _check_coherence(self, output: str) -> List[str]:
+    def _check_coherence (self, output: str) -> List[str]:
         """Check output coherence"""
         
         issues = []
         
         # Check for repeated phrases
         sentences = output.split('.')
-        if len(sentences) > len(set(sentences)):
+        if len (sentences) > len (set (sentences)):
             issues.append("Contains repeated sentences")
         
         # Check for gibberish (very high ratio of non-words)
         words = output.split()
         if words:
             # Simple check: words should be mostly alphabetic
-            alphabetic_ratio = sum(1 for w in words if w.isalpha()) / len(words)
+            alphabetic_ratio = sum(1 for w in words if w.isalpha()) / len (words)
             if alphabetic_ratio < 0.7:
                 issues.append("High ratio of non-standard characters")
         
@@ -527,8 +527,8 @@ class QualityValidator:
         """Calculate overall quality score"""
         
         score = 1.0
-        score -= len(issues) * 0.2
-        score -= len(warnings) * 0.1
+        score -= len (issues) * 0.2
+        score -= len (warnings) * 0.1
         
         return max(0.0, min(1.0, score))
 
@@ -537,7 +537,7 @@ validator = QualityValidator()
 prompt = "Explain how photosynthesis works"
 output = "Photosynthesis is the process by which plants convert sunlight into energy through a complex series of chemical reactions involving chlorophyll, carbon dioxide, and water."
 
-result = validator.validate_quality(output, prompt)
+result = validator.validate_quality (output, prompt)
 print(f"Valid: {result['is_valid']}")
 print(f"Quality score: {result['quality_score']:.2f}")
 print(f"Issues: {result['issues']}")
@@ -608,7 +608,7 @@ class ComprehensiveValidator:
         # Step 1: Schema validation (if schema provided)
         validated_data = None
         if schema_name:
-            schema_result = self.schema_validator.validate_output(output, schema_name)
+            schema_result = self.schema_validator.validate_output (output, schema_name)
             if not schema_result.is_valid:
                 for error in schema_result.errors:
                     issues.append(ValidationIssue(
@@ -619,7 +619,7 @@ class ComprehensiveValidator:
             validated_data = schema_result.data
         
         # Step 2: Quality validation
-        quality_result = self.quality_validator.validate_quality(output, prompt)
+        quality_result = self.quality_validator.validate_quality (output, prompt)
         for issue in quality_result['issues']:
             issues.append(ValidationIssue(
                 severity=ValidationSeverity.ERROR,
@@ -634,11 +634,11 @@ class ComprehensiveValidator:
             ))
         
         # Step 3: Safety checks (PII detection)
-        pii_matches = self.pii_detector.detect(output)
+        pii_matches = self.pii_detector.detect (output)
         if pii_matches:
             issues.append(ValidationIssue(
                 severity=ValidationSeverity.ERROR,
-                message=f"PII detected: {len(pii_matches)} instances",
+                message=f"PII detected: {len (pii_matches)} instances",
                 validator='safety'
             ))
         
@@ -646,7 +646,7 @@ class ComprehensiveValidator:
         if custom_validators:
             for validator_func in custom_validators:
                 try:
-                    custom_result = validator_func(output)
+                    custom_result = validator_func (output)
                     if not custom_result.get('valid', True):
                         issues.append(ValidationIssue(
                             severity=ValidationSeverity.ERROR,
@@ -656,17 +656,17 @@ class ComprehensiveValidator:
                 except Exception as e:
                     issues.append(ValidationIssue(
                         severity=ValidationSeverity.WARNING,
-                        message=f"Custom validator error: {str(e)}",
+                        message=f"Custom validator error: {str (e)}",
                         validator='custom'
                     ))
         
         # Make final decision
         errors = [i for i in issues if i.severity == ValidationSeverity.ERROR]
-        is_valid = len(errors) == 0
+        is_valid = len (errors) == 0
         
         # Determine action
-        should_retry = len(errors) > 0 and quality_result['quality_score'] > 0.3
-        should_use_fallback = len(errors) > 0 and not should_retry
+        should_retry = len (errors) > 0 and quality_result['quality_score'] > 0.3
+        should_use_fallback = len (errors) > 0 and not should_retry
         
         return ComprehensiveValidationResult(
             is_valid=is_valid,
@@ -681,13 +681,13 @@ class ComprehensiveValidator:
 validator = ComprehensiveValidator()
 
 # Custom validator example
-def custom_no_urls(output: str) -> Dict:
+def custom_no_urls (output: str) -> Dict:
     """Custom validator: no URLs allowed"""
     import re
-    urls = re.findall(r'https?://\\S+', output)
+    urls = re.findall (r'https?://\\S+', output)
     return {
-        'valid': len(urls) == 0,
-        'message': f"Found {len(urls)} URLs" if urls else "OK"
+        'valid': len (urls) == 0,
+        'message': f"Found {len (urls)} URLs" if urls else "OK"
     }
 
 output = json.dumps({

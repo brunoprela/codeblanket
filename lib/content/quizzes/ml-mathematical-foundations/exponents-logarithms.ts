@@ -17,20 +17,20 @@ When multiplying many small probabilities (common in ML), the product can underf
 \`\`\`python
 # Example: Computing likelihood of a sequence
 probs = np.array([0.1, 0.15, 0.08, 0.12, 0.09])
-print(f"Direct product: {np.prod(probs)}")  # 0.00001296
+print(f"Direct product: {np.prod (probs)}")  # 0.00001296
 
 # With 100 such probabilities
 tiny_probs = np.full(100, 0.1)
-print(f"100 probs: {np.prod(tiny_probs):.2e}")  # Underflows to 0!
+print(f"100 probs: {np.prod (tiny_probs):.2e}")  # Underflows to 0!
 
 # Log space is stable
-log_likelihood = np.sum(np.log(tiny_probs))
+log_likelihood = np.sum (np.log (tiny_probs))
 print(f"Log-likelihood: {log_likelihood:.4f}")  # -230.2585 (stable!)
-# Convert back if needed: np.exp(log_likelihood)
+# Convert back if needed: np.exp (log_likelihood)
 \`\`\`
 
 **Why it works**:
-- log(a · b · c) = log(a) + log(b) + log(c)
+- log (a · b · c) = log (a) + log (b) + log (c)
 - Turns multiplication → addition
 - Addition is numerically stable
 - Log maps (0, 1) → (-∞, 0), spreading out small numbers
@@ -40,32 +40,32 @@ print(f"Log-likelihood: {log_likelihood:.4f}")  # -230.2585 (stable!)
 Naive softmax with large inputs overflows:
 
 \`\`\`python
-def softmax_naive(x):
-    exp_x = np.exp(x)
-    return exp_x / np.sum(exp_x)
+def softmax_naive (x):
+    exp_x = np.exp (x)
+    return exp_x / np.sum (exp_x)
 
 # Large logits (common in deep networks)
 logits = np.array([1000, 1001, 1002])
 try:
-    result = softmax_naive(logits)
+    result = softmax_naive (logits)
     print(result)  # RuntimeWarning: overflow
 except:
     print("OVERFLOW!")
 
 # Log-sum-exp trick
-def softmax_stable(x):
-    x_shifted = x - np.max(x)  # Shift by max
-    exp_x = np.exp(x_shifted)
-    return exp_x / np.sum(exp_x)
+def softmax_stable (x):
+    x_shifted = x - np.max (x)  # Shift by max
+    exp_x = np.exp (x_shifted)
+    return exp_x / np.sum (exp_x)
 
-result_stable = softmax_stable(logits)
+result_stable = softmax_stable (logits)
 print(f"Stable result: {result_stable}")  # [0.09, 0.24, 0.67]
 \`\`\`
 
 **Derivation**:
-softmax(x) = exp(xᵢ) / Σexp(xⱼ)
-= exp(xᵢ - c) / Σexp(xⱼ - c)  [for any constant c]
-= exp(xᵢ - max(x)) / Σexp(xⱼ - max(x))  [choose c = max(x)]
+softmax (x) = exp (xᵢ) / Σexp (xⱼ)
+= exp (xᵢ - c) / Σexp (xⱼ - c)  [for any constant c]
+= exp (xᵢ - max (x)) / Σexp (xⱼ - max (x))  [choose c = max (x)]
 
 Subtracting max ensures all exponentials are ≤ 1, preventing overflow.
 
@@ -75,18 +75,18 @@ Maximum likelihood estimation is more stable in log space:
 
 \`\`\`python
 # Likelihood of data given model parameters
-def likelihood(data, model_params):
+def likelihood (data, model_params):
     """Product of individual probabilities"""
-    probs = [model_prob(x, model_params) for x in data]
-    return np.prod(probs)  # Can underflow!
+    probs = [model_prob (x, model_params) for x in data]
+    return np.prod (probs)  # Can underflow!
 
-def log_likelihood(data, model_params):
+def log_likelihood (data, model_params):
     """Sum of log probabilities"""
-    log_probs = [np.log(model_prob(x, model_params)) for x in data]
-    return np.sum(log_probs)  # Stable!
+    log_probs = [np.log (model_prob (x, model_params)) for x in data]
+    return np.sum (log_probs)  # Stable!
 
 # In practice, we minimize negative log-likelihood
-nll = -log_likelihood(data, params)
+nll = -log_likelihood (data, params)
 \`\`\`
 
 **Why this matters**:
@@ -106,9 +106,9 @@ product = a * b
 print(f"Direct: {product}")  # May be 0 due to underflow
 
 # Log space
-log_product = np.log(a) + np.log(b)
+log_product = np.log (a) + np.log (b)
 print(f"Log space: {log_product:.4f}")  # -460.5170 (precise!)
-print(f"Recovered: {np.exp(log_product):.2e}")  # 1.00e-200
+print(f"Recovered: {np.exp (log_product):.2e}")  # 1.00e-200
 \`\`\`
 
 **Trade-offs**:
@@ -144,15 +144,15 @@ print(f"Recovered: {np.exp(log_product):.2e}")  # 1.00e-200
 
 \`\`\`python
 # Bayesian portfolio optimization
-def portfolio_log_likelihood(returns, weights, params):
+def portfolio_log_likelihood (returns, weights, params):
     """
     Compute log-likelihood of portfolio returns
     More stable than direct likelihood
     """
-    residuals = returns - np.dot(weights, params)
+    residuals = returns - np.dot (weights, params)
     # Log of Gaussian likelihood
-    log_like = -0.5 * np.sum(residuals**2 / params['variance',])
-    log_like -= 0.5 * len(returns) * np.log(2 * np.pi * params['variance',])
+    log_like = -0.5 * np.sum (residuals**2 / params['variance',])
+    log_like -= 0.5 * len (returns) * np.log(2 * np.pi * params['variance',])
     return log_like
 
 # Optimize in log space, interpret results in probability space
@@ -174,7 +174,7 @@ Log space transforms multiplication into addition, preventing numerical issues w
       'Compare linear growth, exponential growth, and logarithmic growth. For each, provide the mathematical form, real-world examples, and explain when each dominates. How does compound interest relate to portfolio returns in trading?',
     sampleAnswer: `Understanding different growth patterns is fundamental to mathematics, computer science, and finance. Each has distinct characteristics and applications.
 
-**Linear Growth: f(x) = mx + b**
+**Linear Growth: f (x) = mx + b**
 
 **Characteristics**:
 - Constant additive change per unit
@@ -187,21 +187,21 @@ Log space transforms multiplication into addition, preventing numerical issues w
 - Simple interest: I = Prt
 
 \`\`\`python
-def linear_growth(initial, rate, time):
+def linear_growth (initial, rate, time):
     return initial + rate * time
 
 # $1000 + $100/month
 t = np.arange(0, 60)  # 60 months
 linear = linear_growth(1000, 100, t)
 
-plt.plot(t, linear, label='Linear', linewidth=2)
+plt.plot (t, linear, label='Linear', linewidth=2)
 plt.xlabel('Time (months)')
 plt.ylabel('Value ($)')
 plt.title('Linear Growth')
 plt.grid(True)
 \`\`\`
 
-**Exponential Growth: f(x) = a · bˣ or f(x) = a · eʳˣ**
+**Exponential Growth: f (x) = a · bˣ or f (x) = a · eʳˣ**
 
 **Characteristics**:
 - Constant multiplicative change per unit
@@ -216,17 +216,17 @@ plt.grid(True)
 - Portfolio returns (compounded)
 
 \`\`\`python
-def exponential_growth(initial, rate, time):
-    return initial * np.exp(rate * time)
+def exponential_growth (initial, rate, time):
+    return initial * np.exp (rate * time)
 
 # $1000 at 10% annual rate, compounded
 t = np.arange(0, 60)
 exponential = exponential_growth(1000, 0.10/12, t)  # Monthly
 
-plt.plot(t, exponential, label='Exponential', linewidth=2)
+plt.plot (t, exponential, label='Exponential', linewidth=2)
 \`\`\`
 
-**Logarithmic Growth: f(x) = a · log(x) + b**
+**Logarithmic Growth: f (x) = a · log (x) + b**
 
 **Characteristics**:
 - Growth slows down over time
@@ -240,13 +240,13 @@ plt.plot(t, exponential, label='Exponential', linewidth=2)
 - Learning curves (diminishing improvement)
 
 \`\`\`python
-def logarithmic_growth(initial, scale, time):
-    return initial + scale * np.log(time + 1)  # +1 to avoid log(0)
+def logarithmic_growth (initial, scale, time):
+    return initial + scale * np.log (time + 1)  # +1 to avoid log(0)
 
 t = np.arange(0, 60)
 logarithmic = logarithmic_growth(1000, 500, t)
 
-plt.plot(t, logarithmic, label='Logarithmic', linewidth=2)
+plt.plot (t, logarithmic, label='Logarithmic', linewidth=2)
 \`\`\`
 
 **Comparison**:
@@ -258,12 +258,12 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 t = np.arange(1, 61)
 linear = 1000 + 100 * t
 exponential = 1000 * (1.10)**(t/12)
-logarithmic = 1000 + 500 * np.log(t)
+logarithmic = 1000 + 500 * np.log (t)
 
 # Linear scale
-ax1.plot(t, linear, label='Linear', linewidth=2)
-ax1.plot(t, exponential, label='Exponential', linewidth=2)
-ax1.plot(t, logarithmic, label='Logarithmic', linewidth=2)
+ax1.plot (t, linear, label='Linear', linewidth=2)
+ax1.plot (t, exponential, label='Exponential', linewidth=2)
+ax1.plot (t, logarithmic, label='Logarithmic', linewidth=2)
 ax1.set_xlabel('Time')
 ax1.set_ylabel('Value')
 ax1.set_title('Growth Patterns (Linear Scale)')
@@ -271,9 +271,9 @@ ax1.legend()
 ax1.grid(True)
 
 # Log scale
-ax2.plot(t, linear, label='Linear', linewidth=2)
-ax2.plot(t, exponential, label='Exponential', linewidth=2)
-ax2.plot(t, logarithmic, label='Logarithmic', linewidth=2)
+ax2.plot (t, linear, label='Linear', linewidth=2)
+ax2.plot (t, exponential, label='Exponential', linewidth=2)
+ax2.plot (t, logarithmic, label='Logarithmic', linewidth=2)
 ax2.set_xlabel('Time')
 ax2.set_ylabel('Value')
 ax2.set_yscale('log')
@@ -306,7 +306,7 @@ plt.tight_layout()
 - Logarithmic barely increases
 
 **Formal relationships**:
-log(x) << x << xᵏ << eˣ << x! << xˣ
+log (x) << x << xᵏ << eˣ << x! << xˣ
 
 **Compound Interest & Portfolio Returns**:
 
@@ -331,13 +331,13 @@ compound_annual = initial * (1 + annual_rate)**years
 compound_monthly = initial * (1 + annual_rate/12)**(12*years)
 
 # Continuous compounding
-continuous = initial * np.exp(annual_rate * years)
+continuous = initial * np.exp (annual_rate * years)
 
-plt.figure(figsize=(12, 6))
-plt.plot(years, simple, label='Simple (Linear)', linewidth=2)
-plt.plot(years, compound_annual, label='Compound (Annual)', linewidth=2)
-plt.plot(years, compound_monthly, label='Compound (Monthly)', linewidth=2)
-plt.plot(years, continuous, label='Continuous', linewidth=2, linestyle='--')
+plt.figure (figsize=(12, 6))
+plt.plot (years, simple, label='Simple (Linear)', linewidth=2)
+plt.plot (years, compound_annual, label='Compound (Annual)', linewidth=2)
+plt.plot (years, compound_monthly, label='Compound (Monthly)', linewidth=2)
+plt.plot (years, continuous, label='Continuous', linewidth=2, linestyle='--')
 plt.xlabel('Years')
 plt.ylabel('Portfolio Value ($)')
 plt.title('Simple vs Compound Returns')
@@ -345,15 +345,15 @@ plt.legend()
 plt.grid(True)
 
 print(f"After 30 years:")
-print(f"Simple: \\${simple[-1]:,.2f}")
-print(f"Compound: \\${compound_annual[-1]:,.2f}")
-print(f"Continuous: \\${continuous[-1]:,.2f}")
+print(f"Simple: \${simple[-1]:,.2f}")
+print(f"Compound: \${compound_annual[-1]:,.2f}")
+print(f"Continuous: \${continuous[-1]:,.2f}")
             \`\`\`
 
 **Trading Application: Compounding Returns**:
 
 \`\`\`python
-def portfolio_simulation(initial, monthly_returns):
+def portfolio_simulation (initial, monthly_returns):
     """
     Simulate portfolio with compound returns
     Each month's return compounds on previous value
@@ -363,9 +363,9 @@ def portfolio_simulation(initial, monthly_returns):
     
     for r in monthly_returns:
         current_value *= (1 + r)  # Compound effect
-        portfolio_values.append(current_value)
+        portfolio_values.append (current_value)
     
-    return np.array(portfolio_values)
+    return np.array (portfolio_values)
 
 # Simulate 5 years of trading
 np.random.seed(42)
@@ -376,11 +376,11 @@ monthly_returns = np.random.normal(0.01, 0.05, months)
 portfolio = portfolio_simulation(10000, monthly_returns)
 
 # Compare with simple (non-compounded)
-simple_portfolio = 10000 * (1 + np.cumsum(np.insert(monthly_returns, 0, 0)))
+simple_portfolio = 10000 * (1 + np.cumsum (np.insert (monthly_returns, 0, 0)))
 
-plt.figure(figsize=(12, 6))
-plt.plot(portfolio, label='Compound Returns', linewidth=2)
-plt.plot(simple_portfolio, label='Simple Returns', linewidth=2, linestyle='--')
+plt.figure (figsize=(12, 6))
+plt.plot (portfolio, label='Compound Returns', linewidth=2)
+plt.plot (simple_portfolio, label='Simple Returns', linewidth=2, linestyle='--')
 plt.xlabel('Month')
 plt.ylabel('Portfolio Value ($)')
 plt.title('Compound vs Simple Returns in Trading')
@@ -436,7 +436,7 @@ print(f"Difference: {total_compound - total_simple:.2f}%")
 **Shannon Entropy: Measuring Uncertainty**
 
 **Definition**:
-H(X) = -Σ p(x) log₂(p(x))
+H(X) = -Σ p (x) log₂(p (x))
 
 **Intuition**: 
 Entropy measures the average amount of information (in bits) needed to describe a random variable. Higher entropy = more uncertainty = more information required.
@@ -444,35 +444,35 @@ Entropy measures the average amount of information (in bits) needed to describe 
 **Examples**:
 
 \`\`\`python
-def shannon_entropy(probs):
+def shannon_entropy (probs):
     """Calculate Shannon entropy (base 2 for bits)"""
     probs = probs[probs > 0]  # Avoid log(0)
-    return -np.sum(probs * np.log2(probs))
+    return -np.sum (probs * np.log2(probs))
 
 # Example 1: Fair coin (maximum uncertainty for 2 outcomes)
 fair_coin = np.array([0.5, 0.5])
-H_fair = shannon_entropy(fair_coin)
+H_fair = shannon_entropy (fair_coin)
 print(f"Fair coin: H = {H_fair:.4f} bits")  # 1.0 bit
 
 # You need 1 bit to represent: 0=heads, 1=tails
 
 # Example 2: Biased coin (less uncertainty)
 biased_coin = np.array([0.9, 0.1])
-H_biased = shannon_entropy(biased_coin)
+H_biased = shannon_entropy (biased_coin)
 print(f"Biased coin: H = {H_biased:.4f} bits")  # 0.469 bits
 
 # Less information needed since outcome is more predictable
 
 # Example 3: Certain outcome (no uncertainty)
 certain = np.array([1.0, 0.0])
-H_certain = shannon_entropy(certain)
+H_certain = shannon_entropy (certain)
 print(f"Certain: H = {H_certain:.4f} bits")  # 0 bits
 
 # No information needed - outcome is known
 
 # Example 4: Uniform distribution (maximum uncertainty)
 uniform_4 = np.array([0.25, 0.25, 0.25, 0.25])
-H_uniform_4 = shannon_entropy(uniform_4)
+H_uniform_4 = shannon_entropy (uniform_4)
 print(f"Uniform (4 outcomes): H = {H_uniform_4:.4f} bits")  # 2.0 bits
 
 # Need 2 bits to represent 4 equally likely outcomes
@@ -489,11 +489,11 @@ For uniform distribution over n outcomes: H = log₂(n)
 **Cross-Entropy: Comparing Distributions**
 
 **Definition**:
-H(p, q) = -Σ p(x) log(q(x))
+H(p, q) = -Σ p (x) log (q(x))
 
 Where:
-- p(x): true distribution
-- q(x): predicted/approximate distribution
+- p (x): true distribution
+- q (x): predicted/approximate distribution
 
 **Intuition**: 
 Average number of bits needed to encode data from true distribution p using code optimized for distribution q.
@@ -504,19 +504,19 @@ H(p, q) ≥ H(p, p) = H(p)
 Equality holds only when q = p (perfect match).
 
 **KL Divergence** (relative entropy):
-D_KL(p || q) = H(p, q) - H(p) = Σ p(x) log(p(x)/q(x))
+D_KL(p || q) = H(p, q) - H(p) = Σ p (x) log (p(x)/q (x))
 
 Measures "distance" from q to p (not symmetric).
 
 \`\`\`python
-def cross_entropy(p, q, epsilon=1e-10):
+def cross_entropy (p, q, epsilon=1e-10):
     """Cross-entropy between distributions p and q"""
-    q = np.clip(q, epsilon, 1)  # Avoid log(0)
-    return -np.sum(p * np.log(q))
+    q = np.clip (q, epsilon, 1)  # Avoid log(0)
+    return -np.sum (p * np.log (q))
 
-def kl_divergence(p, q, epsilon=1e-10):
+def kl_divergence (p, q, epsilon=1e-10):
     """KL divergence from q to p"""
-    return cross_entropy(p, q, epsilon) - shannon_entropy(p)
+    return cross_entropy (p, q, epsilon) - shannon_entropy (p)
 
 # True distribution
 p_true = np.array([0.6, 0.3, 0.1])
@@ -530,16 +530,16 @@ q_good = np.array([0.5, 0.35, 0.15])
 # Bad prediction
 q_bad = np.array([0.1, 0.1, 0.8])
 
-print(f"Entropy H(p): {shannon_entropy(p_true):.4f}")
+print(f"Entropy H(p): {shannon_entropy (p_true):.4f}")
 print(f"\\nCross-Entropy:")
-print(f"  Perfect: {cross_entropy(p_true, q_perfect):.4f}")
-print(f"  Good: {cross_entropy(p_true, q_good):.4f}")
-print(f"  Bad: {cross_entropy(p_true, q_bad):.4f}")
+print(f"  Perfect: {cross_entropy (p_true, q_perfect):.4f}")
+print(f"  Good: {cross_entropy (p_true, q_good):.4f}")
+print(f"  Bad: {cross_entropy (p_true, q_bad):.4f}")
 
 print(f"\\nKL Divergence:")
-print(f"  Perfect: {kl_divergence(p_true, q_perfect):.6f}")
-print(f"  Good: {kl_divergence(p_true, q_good):.4f}")
-print(f"  Bad: {kl_divergence(p_true, q_bad):.4f}")
+print(f"  Perfect: {kl_divergence (p_true, q_perfect):.6f}")
+print(f"  Good: {kl_divergence (p_true, q_good):.4f}")
+print(f"  Bad: {kl_divergence (p_true, q_bad):.4f}")
 \`\`\`
 
 **Cross-Entropy as Loss Function**
@@ -556,24 +556,24 @@ CCE = -Σ Σ y_ij log(ŷ_ij)
 
 \`\`\`python
 # Binary classification example
-def binary_cross_entropy(y_true, y_pred, epsilon=1e-10):
-    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
-    return -np.mean(y_true * np.log(y_pred) + 
+def binary_cross_entropy (y_true, y_pred, epsilon=1e-10):
+    y_pred = np.clip (y_pred, epsilon, 1 - epsilon)
+    return -np.mean (y_true * np.log (y_pred) + 
                     (1 - y_true) * np.log(1 - y_pred))
 
 y_true = np.array([1, 0, 1, 1, 0])
 
 # Confident correct predictions
 y_pred_good = np.array([0.95, 0.05, 0.90, 0.85, 0.10])
-loss_good = binary_cross_entropy(y_true, y_pred_good)
+loss_good = binary_cross_entropy (y_true, y_pred_good)
 
 # Uncertain predictions
 y_pred_uncertain = np.array([0.6, 0.4, 0.6, 0.55, 0.45])
-loss_uncertain = binary_cross_entropy(y_true, y_pred_uncertain)
+loss_uncertain = binary_cross_entropy (y_true, y_pred_uncertain)
 
 # Confident wrong predictions
 y_pred_bad = np.array([0.1, 0.9, 0.2, 0.15, 0.85])
-loss_bad = binary_cross_entropy(y_true, y_pred_bad)
+loss_bad = binary_cross_entropy (y_true, y_pred_bad)
 
 print(f"Good predictions: Loss = {loss_good:.4f}")
 print(f"Uncertain predictions: Loss = {loss_uncertain:.4f}")
@@ -581,12 +581,12 @@ print(f"Bad predictions: Loss = {loss_bad:.4f}")
 
 # Visualize loss landscape
 pred_range = np.linspace(0.01, 0.99, 100)
-loss_when_true = -np.log(pred_range)  # y=1
+loss_when_true = -np.log (pred_range)  # y=1
 loss_when_false = -np.log(1 - pred_range)  # y=0
 
-plt.figure(figsize=(10, 6))
-plt.plot(pred_range, loss_when_true, label='True label = 1', linewidth=2)
-plt.plot(pred_range, loss_when_false, label='True label = 0', linewidth=2)
+plt.figure (figsize=(10, 6))
+plt.plot (pred_range, loss_when_true, label='True label = 1', linewidth=2)
+plt.plot (pred_range, loss_when_false, label='True label = 0', linewidth=2)
 plt.xlabel('Predicted Probability')
 plt.ylabel('Loss')
 plt.title('Binary Cross-Entropy Loss')
@@ -604,9 +604,9 @@ plt.ylim(0, 5)
 
 **Proof**:
 Given data D and model parameters θ:
-- Likelihood: L(θ) = Π p(yᵢ|xᵢ; θ)
-- Log-likelihood: log L(θ) = Σ log p(yᵢ|xᵢ; θ)
-- For classification: p(y=1|x) = ŷ
+- Likelihood: L(θ) = Π p (yᵢ|xᵢ; θ)
+- Log-likelihood: log L(θ) = Σ log p (yᵢ|xᵢ; θ)
+- For classification: p (y=1|x) = ŷ
 - Negative log-likelihood = Cross-entropy loss!
 
 **2. Proper Gradients with Softmax/Sigmoid**:
@@ -623,14 +623,14 @@ y_true = 1
 predictions = np.linspace(0.01, 0.99, 100)
 
 # Cross-entropy gradient magnitude: |ŷ - y|
-ce_grad = np.abs(predictions - y_true)
+ce_grad = np.abs (predictions - y_true)
 
 # MSE gradient magnitude: |ŷ - y| · ŷ · (1 - ŷ)
-mse_grad = np.abs(predictions - y_true) * predictions * (1 - predictions)
+mse_grad = np.abs (predictions - y_true) * predictions * (1 - predictions)
 
-plt.figure(figsize=(10, 6))
-plt.plot(predictions, ce_grad, label='Cross-Entropy', linewidth=2)
-plt.plot(predictions, mse_grad, label='MSE', linewidth=2)
+plt.figure (figsize=(10, 6))
+plt.plot (predictions, ce_grad, label='Cross-Entropy', linewidth=2)
+plt.plot (predictions, mse_grad, label='MSE', linewidth=2)
 plt.xlabel('Predicted Probability (ŷ)')
 plt.ylabel('Gradient Magnitude')
 plt.title('Gradient Comparison: Cross-Entropy vs MSE')
@@ -646,7 +646,7 @@ plt.grid(True)
 \`\`\`python
 # When true label is 1:
 for pred in [0.01, 0.1, 0.5, 0.9, 0.99]:
-    ce_loss = -np.log(pred)
+    ce_loss = -np.log (pred)
     mse_loss = (1 - pred)**2
     print(f"Pred={pred:.2f}: CE={ce_loss:.4f}, MSE={mse_loss:.4f}")
 
@@ -673,7 +673,7 @@ Model assigns probability ŷ to true event y.
 
 \`\`\`python
 # Predicting market direction
-def train_direction_classifier(features, directions):
+def train_direction_classifier (features, directions):
     """
     Use cross-entropy loss for binary direction classification
     directions: 1 = up, 0 = down
@@ -681,8 +681,8 @@ def train_direction_classifier(features, directions):
     model = ...  # Your model
     
     # Cross-entropy loss
-    def loss_fn(y_true, y_pred):
-        return binary_cross_entropy(y_true, y_pred)
+    def loss_fn (y_true, y_pred):
+        return binary_cross_entropy (y_true, y_pred)
     
     # Train to minimize cross-entropy
     # Encourages confident predictions when pattern is clear
@@ -691,15 +691,15 @@ def train_direction_classifier(features, directions):
     return model
 
 # Entropy can also measure strategy diversity
-def strategy_entropy(position_distribution):
+def strategy_entropy (position_distribution):
     """
     High entropy = diversified positions
     Low entropy = concentrated positions
     """
-    return shannon_entropy(position_distribution)
+    return shannon_entropy (position_distribution)
 
 positions = np.array([0.4, 0.3, 0.2, 0.1])  # 4 assets
-print(f"Portfolio entropy: {strategy_entropy(positions):.4f} bits")
+print(f"Portfolio entropy: {strategy_entropy (positions):.4f} bits")
 \`\`\`
 
 **Summary**:

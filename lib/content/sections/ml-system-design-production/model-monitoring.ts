@@ -64,16 +64,16 @@ class DataDriftDetector:
             reference_data: Training/baseline data
         """
         self.reference_data = reference_data
-        self.reference_stats = self._compute_statistics(reference_data)
+        self.reference_stats = self._compute_statistics (reference_data)
     
-    def _compute_statistics(self, data: pd.DataFrame) -> Dict:
+    def _compute_statistics (self, data: pd.DataFrame) -> Dict:
         """
         Compute baseline statistics
         """
         stats_dict = {}
         
         for col in data.columns:
-            if pd.api.types.is_numeric_dtype(data[col]):
+            if pd.api.types.is_numeric_dtype (data[col]):
                 stats_dict[col] = {
                     'mean': data[col].mean(),
                     'std': data[col].std(),
@@ -102,7 +102,7 @@ class DataDriftDetector:
             if col not in current_data.columns:
                 continue
             
-            if not pd.api.types.is_numeric_dtype(current_data[col]):
+            if not pd.api.types.is_numeric_dtype (current_data[col]):
                 continue
             
             # KS test
@@ -116,8 +116,8 @@ class DataDriftDetector:
             
             results[col] = {
                 'test': 'KS',
-                'statistic': float(statistic),
-                'pvalue': float(pvalue),
+                'statistic': float (statistic),
+                'pvalue': float (pvalue),
                 'drift_detected': drift_detected,
                 'threshold': alpha
             }
@@ -142,7 +142,7 @@ class DataDriftDetector:
             if col not in current_data.columns:
                 continue
             
-            if not pd.api.types.is_numeric_dtype(current_data[col]):
+            if not pd.api.types.is_numeric_dtype (current_data[col]):
                 continue
             
             # Create bins based on reference data
@@ -157,21 +157,21 @@ class DataDriftDetector:
             )
             
             # Calculate distributions
-            ref_dist, _ = np.histogram(ref_col, bins=bin_edges)
-            cur_dist, _ = np.histogram(cur_col, bins=bin_edges)
+            ref_dist, _ = np.histogram (ref_col, bins=bin_edges)
+            cur_dist, _ = np.histogram (cur_col, bins=bin_edges)
             
             # Convert to proportions
             ref_dist = ref_dist / ref_dist.sum()
             cur_dist = cur_dist / cur_dist.sum()
             
             # Avoid division by zero
-            ref_dist = np.where(ref_dist == 0, 0.0001, ref_dist)
-            cur_dist = np.where(cur_dist == 0, 0.0001, cur_dist)
+            ref_dist = np.where (ref_dist == 0, 0.0001, ref_dist)
+            cur_dist = np.where (cur_dist == 0, 0.0001, cur_dist)
             
             # Calculate PSI
-            psi = np.sum((cur_dist - ref_dist) * np.log(cur_dist / ref_dist))
+            psi = np.sum((cur_dist - ref_dist) * np.log (cur_dist / ref_dist))
             
-            psi_scores[col] = float(psi)
+            psi_scores[col] = float (psi)
         
         return psi_scores
     
@@ -186,8 +186,8 @@ class DataDriftDetector:
         results = {
             'timestamp': pd.Timestamp.now().isoformat(),
             'sample_size': {
-                'reference': len(self.reference_data),
-                'current': len(current_data)
+                'reference': len (self.reference_data),
+                'current': len (current_data)
             },
             'drift_detected': False,
             'features_with_drift': [],
@@ -196,7 +196,7 @@ class DataDriftDetector:
         
         # KS test
         if 'ks' in methods:
-            ks_results = self.kolmogorov_smirnov_test(current_data)
+            ks_results = self.kolmogorov_smirnov_test (current_data)
             results['tests']['ks'] = ks_results
             
             # Check for drift
@@ -210,7 +210,7 @@ class DataDriftDetector:
         
         # PSI
         if 'psi' in methods:
-            psi_scores = self.population_stability_index(current_data)
+            psi_scores = self.population_stability_index (current_data)
             results['tests']['psi'] = psi_scores
             
             # Check for drift (PSI >= 0.2)
@@ -223,7 +223,7 @@ class DataDriftDetector:
                     })
         
         # Overall drift flag
-        results['drift_detected'] = len(results['features_with_drift']) > 0
+        results['drift_detected'] = len (results['features_with_drift']) > 0
         
         return results
 
@@ -246,8 +246,8 @@ current = pd.DataFrame({
 })
 
 # Detect drift
-detector = DataDriftDetector(reference)
-drift_report = detector.detect_drift(current, methods=['ks', 'psi'])
+detector = DataDriftDetector (reference)
+drift_report = detector.detect_drift (current, methods=['ks', 'psi'])
 
 print("=== Drift Detection Report ===")
 print(f"Drift detected: {drift_report['drift_detected']}")
@@ -284,41 +284,41 @@ class FeatureDriftMonitor:
         
         # Sliding windows for each feature
         self.feature_windows = {
-            feature: deque(maxlen=window_size)
+            feature: deque (maxlen=window_size)
             for feature in reference_stats.keys()
         }
         
         self.alerts = []
         self.monitoring = False
     
-    def add_sample(self, features: Dict[str, float]):
+    def add_sample (self, features: Dict[str, float]):
         """
         Add new sample to monitoring windows
         """
         for feature, value in features.items():
             if feature in self.feature_windows:
-                self.feature_windows[feature].append(value)
+                self.feature_windows[feature].append (value)
     
-    def check_drift(self) -> Dict[str, bool]:
+    def check_drift (self) -> Dict[str, bool]:
         """
         Check current drift status
         """
         drift_status = {}
         
         for feature, window in self.feature_windows.items():
-            if len(window) < 100:  # Need minimum samples
+            if len (window) < 100:  # Need minimum samples
                 continue
             
             # Current statistics
-            current_mean = np.mean(window)
-            current_std = np.std(window)
+            current_mean = np.mean (window)
+            current_std = np.std (window)
             
             # Reference statistics
             ref_mean = self.reference_stats[feature]['mean']
             ref_std = self.reference_stats[feature]['std']
             
             # Z-score for mean shift
-            z_score = abs(current_mean - ref_mean) / ref_std if ref_std > 0 else 0
+            z_score = abs (current_mean - ref_mean) / ref_std if ref_std > 0 else 0
             
             # Drift if z-score > 3 (3 sigma)
             drift_detected = z_score > 3
@@ -338,12 +338,12 @@ class FeatureDriftMonitor:
                     'z_score': z_score,
                     'message': f"Drift detected in {feature}: z-score={z_score:.2f}"
                 }
-                self.alerts.append(alert)
+                self.alerts.append (alert)
                 print(f"🚨 ALERT: {alert['message']}")
         
         return drift_status
     
-    def start_monitoring(self, check_interval: int = 60):
+    def start_monitoring (self, check_interval: int = 60):
         """
         Start background monitoring
         
@@ -355,21 +355,21 @@ class FeatureDriftMonitor:
         def monitor_loop():
             while self.monitoring:
                 self.check_drift()
-                time.sleep(check_interval)
+                time.sleep (check_interval)
         
-        thread = threading.Thread(target=monitor_loop, daemon=True)
+        thread = threading.Thread (target=monitor_loop, daemon=True)
         thread.start()
         
         print(f"✓ Monitoring started (check every {check_interval}s)")
     
-    def stop_monitoring(self):
+    def stop_monitoring (self):
         """Stop monitoring"""
         self.monitoring = False
         print("✓ Monitoring stopped")
     
-    def get_recent_alerts(self, hours: int = 24) -> list:
+    def get_recent_alerts (self, hours: int = 24) -> list:
         """Get recent alerts"""
-        cutoff = datetime.now() - timedelta(hours=hours)
+        cutoff = datetime.now() - timedelta (hours=hours)
         
         recent = [
             alert for alert in self.alerts
@@ -385,7 +385,7 @@ reference_stats = {
     'feature_2': {'mean': 5.0, 'std': 2.0}
 }
 
-monitor = FeatureDriftMonitor(reference_stats, window_size=1000)
+monitor = FeatureDriftMonitor (reference_stats, window_size=1000)
 
 # Simulate incoming data
 for i in range(2000):
@@ -402,7 +402,7 @@ for i in range(2000):
             'feature_2': np.random.normal(5, 2)
         }
     
-    monitor.add_sample(sample)
+    monitor.add_sample (sample)
     
     # Check every 100 samples
     if i % 100 == 0:
@@ -443,7 +443,7 @@ class ModelPerformanceMonitor:
         self.actuals = []
         
         # Performance over time
-        self.performance_history = defaultdict(list)
+        self.performance_history = defaultdict (list)
         
         # Prediction distribution tracking
         self.prediction_stats = {
@@ -453,7 +453,7 @@ class ModelPerformanceMonitor:
             'std': []
         }
     
-    def log_prediction(self, prediction: float, actual: float = None, metadata: Dict = None):
+    def log_prediction (self, prediction: float, actual: float = None, metadata: Dict = None):
         """
         Log a prediction (and actual if available)
         """
@@ -465,20 +465,20 @@ class ModelPerformanceMonitor:
         })
         
         if actual is not None:
-            self.actuals.append(actual)
+            self.actuals.append (actual)
     
-    def compute_metrics(self, window: int = 1000) -> Dict:
+    def compute_metrics (self, window: int = 1000) -> Dict:
         """
         Compute metrics on recent predictions
         """
-        if len(self.predictions) < 10:
+        if len (self.predictions) < 10:
             return {}
         
         # Get recent predictions with actuals
         recent = self.predictions[-window:]
         recent_with_actuals = [p for p in recent if p['actual'] is not None]
         
-        if len(recent_with_actuals) < 10:
+        if len (recent_with_actuals) < 10:
             return {}
         
         preds = [p['prediction'] for p in recent_with_actuals]
@@ -487,22 +487,22 @@ class ModelPerformanceMonitor:
         metrics = {}
         
         if self.model_type == 'regression':
-            metrics['rmse'] = np.sqrt(mean_squared_error(actuals, preds))
-            metrics['mae'] = np.mean(np.abs(np.array(actuals) - np.array(preds)))
-            metrics['r2'] = r2_score(actuals, preds)
+            metrics['rmse'] = np.sqrt (mean_squared_error (actuals, preds))
+            metrics['mae'] = np.mean (np.abs (np.array (actuals) - np.array (preds)))
+            metrics['r2'] = r2_score (actuals, preds)
         
         elif self.model_type == 'classification':
-            metrics['accuracy'] = accuracy_score(actuals, preds)
+            metrics['accuracy'] = accuracy_score (actuals, preds)
         
         # Prediction distribution
-        metrics['pred_mean'] = np.mean(preds)
-        metrics['pred_std'] = np.std(preds)
-        metrics['pred_min'] = np.min(preds)
-        metrics['pred_max'] = np.max(preds)
+        metrics['pred_mean'] = np.mean (preds)
+        metrics['pred_std'] = np.std (preds)
+        metrics['pred_min'] = np.min (preds)
+        metrics['pred_max'] = np.max (preds)
         
         return metrics
     
-    def detect_degradation(self, current_metrics: Dict) -> Dict:
+    def detect_degradation (self, current_metrics: Dict) -> Dict:
         """
         Detect model degradation
         """
@@ -550,7 +550,7 @@ class ModelPerformanceMonitor:
         
         # Determine severity
         if degradation['degraded']:
-            max_degradation = max(m['degradation_pct'] for m in degradation['metrics_worse'])
+            max_degradation = max (m['degradation_pct'] for m in degradation['metrics_worse'])
             
             if max_degradation > 50:
                 degradation['severity'] = 'critical'
@@ -561,15 +561,15 @@ class ModelPerformanceMonitor:
         
         return degradation
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """
         Generate monitoring report
         """
         current_metrics = self.compute_metrics()
-        degradation = self.detect_degradation(current_metrics)
+        degradation = self.detect_degradation (current_metrics)
         
         report = "\\n=== Model Performance Report ===\\n"
-        report += f"Total predictions: {len(self.predictions)}\\n"
+        report += f"Total predictions: {len (self.predictions)}\\n"
         report += f"Predictions with actuals: {len([p for p in self.predictions if p['actual'] is not None])}\\n"
         
         report += "\\nCurrent Metrics:\\n"
@@ -606,7 +606,7 @@ for i in range(1000):
         # Degraded model
         prediction = true_value + np.random.normal(0, 0.3)
     
-    monitor.log_prediction(prediction, actual=true_value)
+    monitor.log_prediction (prediction, actual=true_value)
 
 # Check performance
 report = monitor.generate_report()
@@ -638,8 +638,8 @@ class SystemHealthMonitor:
         self.window_size = window_size
         
         # Metric windows
-        self.latencies = deque(maxlen=window_size)
-        self.timestamps = deque(maxlen=window_size)
+        self.latencies = deque (maxlen=window_size)
+        self.timestamps = deque (maxlen=window_size)
         self.error_count = 0
         self.total_requests = 0
         
@@ -648,40 +648,40 @@ class SystemHealthMonitor:
         self.latency_threshold_p99 = 200  # ms
         self.error_rate_threshold = 0.01  # 1%
     
-    def log_request(self, latency_ms: float, error: bool = False):
+    def log_request (self, latency_ms: float, error: bool = False):
         """
         Log a request
         """
-        self.latencies.append(latency_ms)
-        self.timestamps.append(time.time())
+        self.latencies.append (latency_ms)
+        self.timestamps.append (time.time())
         self.total_requests += 1
         
         if error:
             self.error_count += 1
     
-    def get_latency_stats(self) -> Dict:
+    def get_latency_stats (self) -> Dict:
         """
         Get latency statistics
         """
         if not self.latencies:
             return {}
         
-        latencies_array = np.array(self.latencies)
+        latencies_array = np.array (self.latencies)
         
         return {
-            'p50': np.percentile(latencies_array, 50),
-            'p95': np.percentile(latencies_array, 95),
-            'p99': np.percentile(latencies_array, 99),
-            'mean': np.mean(latencies_array),
-            'max': np.max(latencies_array),
-            'min': np.min(latencies_array)
+            'p50': np.percentile (latencies_array, 50),
+            'p95': np.percentile (latencies_array, 95),
+            'p99': np.percentile (latencies_array, 99),
+            'mean': np.mean (latencies_array),
+            'max': np.max (latencies_array),
+            'min': np.min (latencies_array)
         }
     
-    def get_throughput(self, window_seconds: int = 60) -> float:
+    def get_throughput (self, window_seconds: int = 60) -> float:
         """
         Get requests per second
         """
-        if len(self.timestamps) < 2:
+        if len (self.timestamps) < 2:
             return 0.0
         
         # Count requests in last window_seconds
@@ -690,7 +690,7 @@ class SystemHealthMonitor:
         
         return recent_requests / window_seconds
     
-    def get_error_rate(self) -> float:
+    def get_error_rate (self) -> float:
         """
         Get error rate
         """
@@ -699,17 +699,17 @@ class SystemHealthMonitor:
         
         return self.error_count / self.total_requests
     
-    def get_system_resources(self) -> Dict:
+    def get_system_resources (self) -> Dict:
         """
         Get system resource usage
         """
         return {
-            'cpu_percent': psutil.cpu_percent(interval=1),
+            'cpu_percent': psutil.cpu_percent (interval=1),
             'memory_percent': psutil.virtual_memory().percent,
             'disk_percent': psutil.disk_usage('/').percent
         }
     
-    def check_health(self) -> Dict:
+    def check_health (self) -> Dict:
         """
         Check overall system health
         """
@@ -794,7 +794,7 @@ for i in range(1000):
         latency = np.random.uniform(150, 250)
         error = np.random.random() < 0.1  # 10% error rate
     
-    system_monitor.log_request(latency, error)
+    system_monitor.log_request (latency, error)
 
 # Check health
 health = system_monitor.check_health()
@@ -857,33 +857,33 @@ class AlertManager:
         self.alerts = []
         self.notification_channels = []
     
-    def add_channel(self, channel: Callable):
+    def add_channel (self, channel: Callable):
         """
         Add notification channel
         
         Args:
             channel: Function that takes Alert object
         """
-        self.notification_channels.append(channel)
+        self.notification_channels.append (channel)
     
-    def trigger_alert(self, alert: Alert):
+    def trigger_alert (self, alert: Alert):
         """
         Trigger an alert
         """
-        self.alerts.append(alert)
+        self.alerts.append (alert)
         
         # Send to all channels
         for channel in self.notification_channels:
             try:
-                channel(alert)
+                channel (alert)
             except Exception as e:
                 print(f"Failed to send alert via {channel.__name__}: {e}")
     
-    def get_recent_alerts(self, hours: int = 24, severity: AlertSeverity = None) -> List[Alert]:
+    def get_recent_alerts (self, hours: int = 24, severity: AlertSeverity = None) -> List[Alert]:
         """
         Get recent alerts
         """
-        cutoff = pd.Timestamp.now() - pd.Timedelta(hours=hours)
+        cutoff = pd.Timestamp.now() - pd.Timedelta (hours=hours)
         
         recent = [
             alert for alert in self.alerts
@@ -897,21 +897,21 @@ class AlertManager:
 
 
 # Notification channels
-def slack_notification(alert: Alert):
+def slack_notification (alert: Alert):
     """
     Send alert to Slack
     """
     # In production: use Slack API
     print(f"📱 SLACK: {alert}")
 
-def email_notification(alert: Alert):
+def email_notification (alert: Alert):
     """
     Send alert via email
     """
     # In production: use SMTP
     print(f"📧 EMAIL: {alert}")
 
-def pagerduty_notification(alert: Alert):
+def pagerduty_notification (alert: Alert):
     """
     Send to PagerDuty (for critical alerts)
     """
@@ -923,9 +923,9 @@ def pagerduty_notification(alert: Alert):
 alert_manager = AlertManager()
 
 # Add notification channels
-alert_manager.add_channel(slack_notification)
-alert_manager.add_channel(email_notification)
-alert_manager.add_channel(pagerduty_notification)
+alert_manager.add_channel (slack_notification)
+alert_manager.add_channel (email_notification)
+alert_manager.add_channel (pagerduty_notification)
 
 # Trigger alerts
 alert_manager.trigger_alert(Alert(
@@ -943,8 +943,8 @@ alert_manager.trigger_alert(Alert(
 ))
 
 # Get recent critical alerts
-critical_alerts = alert_manager.get_recent_alerts(hours=24, severity=AlertSeverity.CRITICAL)
-print(f"\\nCritical alerts (last 24h): {len(critical_alerts)}")
+critical_alerts = alert_manager.get_recent_alerts (hours=24, severity=AlertSeverity.CRITICAL)
+print(f"\\nCritical alerts (last 24h): {len (critical_alerts)}")
 \`\`\`
 
 ---
@@ -994,7 +994,7 @@ error_rate = Gauge(
 )
 
 
-def predict_with_metrics(features, model_version='v1.0'):
+def predict_with_metrics (features, model_version='v1.0'):
     """
     Make prediction with metric tracking
     """
@@ -1012,11 +1012,11 @@ def predict_with_metrics(features, model_version='v1.0'):
         
         prediction_latency.labels(
             model_version=model_version
-        ).observe(time.time() - start)
+        ).observe (time.time() - start)
         
         prediction_value.labels(
             model_version=model_version
-        ).observe(prediction)
+        ).observe (prediction)
         
         return prediction
     
@@ -1037,8 +1037,8 @@ for i in range(100):
     predict_with_metrics([0.5] * 10)
     
     # Update drift scores
-    model_drift_score.labels(feature='feature_1').set(0.15)
-    model_drift_score.labels(feature='feature_2').set(0.08)
+    model_drift_score.labels (feature='feature_1').set(0.15)
+    model_drift_score.labels (feature='feature_2').set(0.08)
 
 print("Metrics exported to http://localhost:8000/metrics")
 print("Configure Prometheus to scrape this endpoint")

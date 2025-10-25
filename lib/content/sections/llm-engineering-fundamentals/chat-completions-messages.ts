@@ -78,7 +78,7 @@ Your responses should:
 Format code blocks with \`\`\`python and explain line by line when needed."""
 
 # Even better - task-specific system prompt
-def create_system_prompt(role: str, task_type: str) -> str:
+def create_system_prompt (role: str, task_type: str) -> str:
     """Generate optimized system prompts."""
     
     prompts = {
@@ -139,21 +139,21 @@ class ConversationManager:
         ]
         self.client = OpenAI()
     
-    def add_user_message(self, content: str):
+    def add_user_message (self, content: str):
         """Add user message to conversation."""
         self.messages.append({
             "role": "user",
             "content": content
         })
     
-    def add_assistant_message(self, content: str):
+    def add_assistant_message (self, content: str):
         """Add assistant message to conversation."""
         self.messages.append({
             "role": "assistant",
             "content": content
         })
     
-    def get_response(self) -> str:
+    def get_response (self) -> str:
         """Get response from LLM and add to conversation."""
         response = self.client.chat.completions.create(
             model=self.model,
@@ -161,37 +161,37 @@ class ConversationManager:
         )
         
         assistant_message = response.choices[0].message.content
-        self.add_assistant_message(assistant_message)
+        self.add_assistant_message (assistant_message)
         
         return assistant_message
     
-    def chat(self, user_input: str) -> str:
+    def chat (self, user_input: str) -> str:
         """
         Complete turn: add user message and get response.
         """
-        self.add_user_message(user_input)
+        self.add_user_message (user_input)
         return self.get_response()
     
-    def get_conversation_history(self) -> str:
+    def get_conversation_history (self) -> str:
         """Return formatted conversation history."""
         history = []
         for msg in self.messages:
             role = msg['role'].upper()
             content = msg['content']
-            history.append(f"{role}: {content}")
-        return "\\n\\n".join(history)
+            history.append (f"{role}: {content}")
+        return "\\n\\n".join (history)
     
-    def clear_history(self, keep_system: bool = True):
+    def clear_history (self, keep_system: bool = True):
         """Clear conversation history."""
         if keep_system:
             self.messages = [self.messages[0]]  # Keep system message
         else:
             self.messages = []
     
-    def get_token_count(self) -> int:
+    def get_token_count (self) -> int:
         """Estimate token count of conversation."""
         # Rough estimate: ~4 characters per token
-        total_chars = sum(len(msg['content']) for msg in self.messages)
+        total_chars = sum (len (msg['content']) for msg in self.messages)
         return total_chars // 4
 
 # Usage example
@@ -213,7 +213,7 @@ print(f"Assistant: {response3}\\n")
 
 # Check conversation
 print(f"Total tokens: ~{conversation.get_token_count()}")
-print(f"Message count: {len(conversation.messages)}")
+print(f"Message count: {len (conversation.messages)}")
 \`\`\`
 
 ## Context Window Management
@@ -238,20 +238,20 @@ Conversation grows with each turn!
 - After 50 turns: 15,000 tokens (approaching limit!)
 """
 
-def estimate_tokens(text: str) -> int:
+def estimate_tokens (text: str) -> int:
     """
     Rough token estimation.
     More accurate: use tiktoken library.
     """
     # Rough: 1 token ≈ 4 characters
-    return len(text) // 4
+    return len (text) // 4
 
-def check_context_size(messages: list, max_tokens: int = 4000) -> dict:
+def check_context_size (messages: list, max_tokens: int = 4000) -> dict:
     """
     Check if conversation is approaching context limit.
     """
-    total_text = " ".join(msg['content'] for msg in messages)
-    estimated_tokens = estimate_tokens(total_text)
+    total_text = " ".join (msg['content'] for msg in messages)
+    estimated_tokens = estimate_tokens (total_text)
     
     return {
         'estimated_tokens': estimated_tokens,
@@ -267,7 +267,7 @@ messages.extend([
     {"role": "assistant", "content": "Python is..." * 50}
 ] * 10)  # 10 turns
 
-status = check_context_size(messages)
+status = check_context_size (messages)
 print(f"Tokens used: {status['estimated_tokens']}")
 print(f"Usage: {status['usage_percent']:.1f}%")
 print(f"Approaching limit: {status['approaching_limit']}")
@@ -293,13 +293,13 @@ def truncate_conversation(
     """
     
     if strategy == "sliding_window":
-        return sliding_window_truncate(messages, max_tokens)
+        return sliding_window_truncate (messages, max_tokens)
     elif strategy == "summarize":
-        return summarize_truncate(messages, max_tokens)
+        return summarize_truncate (messages, max_tokens)
     elif strategy == "important":
-        return importance_truncate(messages, max_tokens)
+        return importance_truncate (messages, max_tokens)
     else:
-        raise ValueError(f"Unknown strategy: {strategy}")
+        raise ValueError (f"Unknown strategy: {strategy}")
 
 def sliding_window_truncate(
     messages: List[Dict[str, str]],
@@ -312,10 +312,10 @@ def sliding_window_truncate(
     result = [messages[0]] if messages[0]['role'] == 'system' else []
     
     # Add messages from end until we hit limit
-    current_tokens = estimate_tokens(result[0]['content']) if result else 0
+    current_tokens = estimate_tokens (result[0]['content']) if result else 0
     
-    for msg in reversed(messages[1:]):
-        msg_tokens = estimate_tokens(msg['content'])
+    for msg in reversed (messages[1:]):
+        msg_tokens = estimate_tokens (msg['content'])
         if current_tokens + msg_tokens < max_tokens * 0.9:  # 90% of limit
             result.insert(1, msg)
             current_tokens += msg_tokens
@@ -333,7 +333,7 @@ def summarize_truncate(
     (Requires additional LLM call)
     """
     # Check if truncation needed
-    total_tokens = sum(estimate_tokens(m['content']) for m in messages)
+    total_tokens = sum (estimate_tokens (m['content']) for m in messages)
     
     if total_tokens < max_tokens * 0.8:
         return messages
@@ -348,9 +348,9 @@ def summarize_truncate(
     
     result = []
     if system_msg:
-        result.append(system_msg)
+        result.append (system_msg)
     result.append({"role": "system", "content": summary})
-    result.extend(recent_msgs)
+    result.extend (recent_msgs)
     
     return result
 
@@ -374,11 +374,11 @@ def importance_truncate(
         )
 
 if is_important:
-    result.append(msg)
+    result.append (msg)
     
     # If still too long, fall back to sliding window
-if sum(estimate_tokens(m['content']) for m in result) > max_tokens * 0.9:
-return sliding_window_truncate(result, max_tokens)
+if sum (estimate_tokens (m['content']) for m in result) > max_tokens * 0.9:
+return sliding_window_truncate (result, max_tokens)
 
 return result
 
@@ -396,8 +396,8 @@ truncated = truncate_conversation(
     strategy = "sliding_window"
 )
 
-print(f"Original messages: {len(long_conversation)}")
-print(f"After truncation: {len(truncated)}")
+print(f"Original messages: {len (long_conversation)}")
+print(f"After truncation: {len (truncated)}")
 \`\`\`
 
 ## Message Formatting Best Practices
@@ -416,7 +416,7 @@ I need to:
 1. Remove duplicates
 2. Sort the result
 
-What's the best way to do this?"""
+What\'s the best way to do this?"""
 
 # Even better - provide context
 user_message_with_context = """Context: Building a data pipeline
@@ -454,21 +454,21 @@ def create_structured_message(
         f"TASK: {task}",
         "",
         "INPUT:",
-        json.dumps(input_data, indent=2),
+        json.dumps (input_data, indent=2),
         "",
         "REQUIREMENTS:",
     ]
     
-    for i, req in enumerate(requirements, 1):
-        message_parts.append(f"{i}. {req}")
+    for i, req in enumerate (requirements, 1):
+        message_parts.append (f"{i}. {req}")
     
     if constraints:
         message_parts.append("")
         message_parts.append("CONSTRAINTS:")
         for constraint in constraints:
-            message_parts.append(f"- {constraint}")
+            message_parts.append (f"- {constraint}")
     
-    return "\\n".join(message_parts)
+    return "\\n".join (message_parts)
 
 # Usage
 message = create_structured_message(
@@ -574,29 +574,29 @@ class ConversationBranch:
         }
         self.current_branch = "main"
     
-    def create_branch(self, branch_name: str, from_message_index: int = None):
+    def create_branch (self, branch_name: str, from_message_index: int = None):
         """Create new branch from a specific point."""
         if from_message_index is None:
-            from_message_index = len(self.branches[self.current_branch])
+            from_message_index = len (self.branches[self.current_branch])
         
         # Copy messages up to branch point
         self.branches[branch_name] = self.branches[self.current_branch][:from_message_index].copy()
         return branch_name
     
-    def switch_branch(self, branch_name: str):
+    def switch_branch (self, branch_name: str):
         """Switch to different branch."""
         if branch_name not in self.branches:
-            raise ValueError(f"Branch {branch_name} doesn't exist")
+            raise ValueError (f"Branch {branch_name} doesn't exist")
         self.current_branch = branch_name
     
-    def add_message(self, role: str, content: str):
+    def add_message (self, role: str, content: str):
         """Add message to current branch."""
         self.branches[self.current_branch].append({
             "role": role,
             "content": content
         })
     
-    def get_messages(self) -> List[Dict[str, str]]:
+    def get_messages (self) -> List[Dict[str, str]]:
         """Get messages from current branch."""
         return self.branches[self.current_branch]
 
@@ -615,9 +615,9 @@ conv.add_message("user", "Explain Python lists with advanced examples")
 
 # Original branch still exists
 conv.switch_branch("main")
-print(f"Main branch has {len(conv.get_messages())} messages")
+print(f"Main branch has {len (conv.get_messages())} messages")
 conv.switch_branch("detailed")
-print(f"Detailed branch has {len(conv.get_messages())} messages")
+print(f"Detailed branch has {len (conv.get_messages())} messages")
 \`\`\`
 
 ## Production Conversation Manager
@@ -710,7 +710,7 @@ class ProductionConversationManager:
                 'tokens_used': tokens_used,
                 'cost': cost,
                 'total_cost': self.total_cost,
-                'message_count': len(self.messages),
+                'message_count': len (self.messages),
                 'finish_reason': response.choices[0].finish_reason
             }
         
@@ -720,12 +720,12 @@ class ProductionConversationManager:
             self.messages.pop()
             raise
     
-    def _estimate_tokens(self) -> int:
+    def _estimate_tokens (self) -> int:
         """Estimate total tokens in conversation."""
-        total_chars = sum(len(m['content']) for m in self.messages)
+        total_chars = sum (len (m['content']) for m in self.messages)
         return total_chars // 4
     
-    def _calculate_cost(self, prompt_tokens: int, completion_tokens: int) -> float:
+    def _calculate_cost (self, prompt_tokens: int, completion_tokens: int) -> float:
         """Calculate cost for this interaction."""
         # Simplified pricing
         rates = {
@@ -733,14 +733,14 @@ class ProductionConversationManager:
             'gpt-4-turbo-preview': {'prompt': 10.00, 'completion': 30.00}
         }
         
-        rate = rates.get(self.model, rates['gpt-3.5-turbo'])
+        rate = rates.get (self.model, rates['gpt-3.5-turbo'])
         
         prompt_cost = (prompt_tokens / 1_000_000) * rate['prompt']
         completion_cost = (completion_tokens / 1_000_000) * rate['completion']
         
         return prompt_cost + completion_cost
     
-    def save_conversation(self, filepath: str):
+    def save_conversation (self, filepath: str):
         """Save conversation to JSON file."""
         data = {
             'conversation_id': self.conversation_id,
@@ -749,17 +749,17 @@ class ProductionConversationManager:
             'metrics': {
                 'total_tokens': self.total_tokens_used,
                 'total_cost': self.total_cost,
-                'message_count': len(self.messages)
+                'message_count': len (self.messages)
             }
         }
         
-        with open(filepath, 'w') as f:
-            json.dump(data, f, indent=2)
+        with open (filepath, 'w') as f:
+            json.dump (data, f, indent=2)
     
-    def load_conversation(self, filepath: str):
+    def load_conversation (self, filepath: str):
         """Load conversation from JSON file."""
-        with open(filepath) as f:
-            data = json.load(f)
+        with open (filepath) as f:
+            data = json.load (f)
         
         self.messages = data['messages']
         self.total_tokens_used = data['metrics']['total_tokens']
@@ -776,7 +776,7 @@ manager = ProductionConversationManager(
 # Have conversation
 result1 = manager.chat("What are Python decorators?")
 print(result1['response'])
-print(f"Cost: \${result1['cost']: .6f}")
+print(f"Cost: \${result1['cost']:.6f}")
 
 result2 = manager.chat("Show me an example")
 print(result2['response'])

@@ -15,7 +15,7 @@ List comprehensions provide a concise way to create lists based on existing list
 # Traditional way
 squares = []
 for i in range(10):
-    squares.append(i ** 2)
+    squares.append (i ** 2)
 
 # List comprehension way
 squares = [i ** 2 for i in range(10)]
@@ -47,7 +47,7 @@ print(result)  # [0, 'odd', 2, 'odd', 4, 'odd', 6, 'odd', 8, 'odd']
 
 # Absolute values
 numbers = [-4, -2, 0, 2, 4]
-abs_values = [abs(x) for x in numbers]
+abs_values = [abs (x) for x in numbers]
 print(abs_values)  # [4, 2, 0, 2, 4]
 \`\`\`
 
@@ -66,7 +66,7 @@ first_letters = [word[0] for word in words]
 print(first_letters)  # ['h', 'w', 'p']
 
 # Filter strings by length
-long_words = [word for word in words if len(word) > 5]
+long_words = [word for word in words if len (word) > 5]
 print(long_words)  # ['python']
 \`\`\`
 
@@ -100,7 +100,7 @@ print(combinations)
 # Using zip
 names = ['Alice', 'Bob', 'Charlie']
 ages = [25, 30, 35]
-people = [f"{name} is {age}" for name, age in zip(names, ages)]
+people = [f"{name} is {age}" for name, age in zip (names, ages)]
 print(people)
 # ['Alice is 25', 'Bob is 30', 'Charlie is 35']
 \`\`\`
@@ -181,7 +181,7 @@ result = []
 for x in range(10):
     for y in range(20):
         if x != y and x * y < 100:
-            result.append(func1(func2(x, y)))
+            result.append (func1(func2(x, y)))
 \`\`\`
 
 ## Performance Comparison
@@ -193,15 +193,15 @@ import timeit
 def with_loop():
     result = []
     for i in range(1000):
-        result.append(i ** 2)
+        result.append (i ** 2)
     return result
 
 def with_comprehension():
     return [i ** 2 for i in range(1000)]
 
 # Comprehension is typically 20-30% faster
-print(timeit.timeit(with_loop, number=10000))
-print(timeit.timeit(with_comprehension, number=10000))
+print(timeit.timeit (with_loop, number=10000))
+print(timeit.timeit (with_comprehension, number=10000))
 \`\`\`
 
 ## Common Patterns

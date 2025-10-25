@@ -30,7 +30,7 @@ export const syncvsasynccommunicationMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 2,
       explanation:
-        "Sending welcome emails is perfect for asynchronous communication because: (1) User doesn't need to wait for email to be sent, (2) It's not critical - account creation should succeed even if email fails, (3) Email can be retried if it fails. Login, payment, and search require immediate feedback (synchronous).",
+        "Sending welcome emails is perfect for asynchronous communication because: (1) User doesn't need to wait for email to be sent, (2) It\'s not critical - account creation should succeed even if email fails, (3) Email can be retried if it fails. Login, payment, and search require immediate feedback (synchronous).",
     },
     {
       id: 'mc3',

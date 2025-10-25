@@ -11,9 +11,9 @@ export const optimizationSection = {
 
 ❌ **Slow:**
 \`\`\`python
-def has_duplicate(arr):  # O(n²)
-    for i in range(len(arr)):
-        for j in range(i+1, len(arr)):
+def has_duplicate (arr):  # O(n²)
+    for i in range (len (arr)):
+        for j in range (i+1, len (arr)):
             if arr[i] == arr[j]:
                 return True
     return False
@@ -21,12 +21,12 @@ def has_duplicate(arr):  # O(n²)
 
 ✅ **Fast:**
 \`\`\`python
-def has_duplicate(arr):  # O(n)
+def has_duplicate (arr):  # O(n)
     seen = set()
     for num in arr:
         if num in seen:
             return True
-        seen.add(num)
+        seen.add (num)
     return False
 \`\`\`
 
@@ -34,20 +34,20 @@ def has_duplicate(arr):  # O(n)
 
 ❌ **Slow:**
 \`\`\`python
-def fibonacci(n):  # O(2ⁿ)
+def fibonacci (n):  # O(2ⁿ)
     if n <= 1:
         return n
-    return fibonacci(n-1) + fibonacci(n-2)
+    return fibonacci (n-1) + fibonacci (n-2)
 \`\`\`
 
 ✅ **Fast with Memoization:**
 \`\`\`python
-def fibonacci(n, cache={}):  # O(n)
+def fibonacci (n, cache={}):  # O(n)
     if n in cache:
         return cache[n]
     if n <= 1:
         return n
-    cache[n] = fibonacci(n-1, cache) + fibonacci(n-2, cache)
+    cache[n] = fibonacci (n-1, cache) + fibonacci (n-2, cache)
     return cache[n]
 \`\`\`
 
@@ -55,22 +55,22 @@ def fibonacci(n, cache={}):  # O(n)
 
 ❌ **Slow:**
 \`\`\`python
-def query_sum(arr, queries):  # O(q × n)
+def query_sum (arr, queries):  # O(q × n)
     results = []
     for start, end in queries:
-        results.append(sum(arr[start:end]))
+        results.append (sum (arr[start:end]))
     return results
 \`\`\`
 
 ✅ **Fast with Prefix Sums:**
 \`\`\`python
-def query_sum(arr, queries):  # O(n + q)
+def query_sum (arr, queries):  # O(n + q)
     prefix = [0]
     for num in arr:
-        prefix.append(prefix[-1] + num)
+        prefix.append (prefix[-1] + num)
     results = []
     for start, end in queries:
-        results.append(prefix[end] - prefix[start])
+        results.append (prefix[end] - prefix[start])
     return results
 \`\`\`
 
@@ -78,9 +78,9 @@ def query_sum(arr, queries):  # O(n + q)
 
 ❌ **Slow:**
 \`\`\`python
-def two_sum_sorted(arr, target):  # O(n²)
-    for i in range(len(arr)):
-        for j in range(i+1, len(arr)):
+def two_sum_sorted (arr, target):  # O(n²)
+    for i in range (len (arr)):
+        for j in range (i+1, len (arr)):
             if arr[i] + arr[j] == target:
                 return [i, j]
     return None
@@ -88,8 +88,8 @@ def two_sum_sorted(arr, target):  # O(n²)
 
 ✅ **Fast:**
 \`\`\`python
-def two_sum_sorted(arr, target):  # O(n)
-    left, right = 0, len(arr) - 1
+def two_sum_sorted (arr, target):  # O(n)
+    left, right = 0, len (arr) - 1
     while left < right:
         curr_sum = arr[left] + arr[right]
         if curr_sum == target:

@@ -175,7 +175,7 @@ poetry add pytest --dev  # Development dependency
 # Install all dependencies
 poetry install
 
-# pyproject.toml (Poetry's config file):
+# pyproject.toml (Poetry\'s config file):
 ''
 [tool.poetry]
 name = "my-project"

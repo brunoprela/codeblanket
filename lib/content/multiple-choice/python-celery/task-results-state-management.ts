@@ -8,7 +8,7 @@ export const taskResultsStateManagementMultipleChoice: MultipleChoiceQuestion[] 
   [
     {
       id: 'mc1',
-      question: 'What does result.get(timeout=10) do?',
+      question: 'What does result.get (timeout=10) do?',
       options: [
         'Checks if task is complete without waiting',
         'Waits up to 10 seconds for task to complete, then returns result (blocks)',
@@ -17,7 +17,7 @@ export const taskResultsStateManagementMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        'result.get(timeout=10) BLOCKS the calling thread for up to 10 seconds waiting for task to complete. Returns result if success, raises exception if failure, raises TimeoutError if exceeds 10s. NEVER use in API endpoints (blocks web worker). Use result.ready() for non-blocking check. Alternative: Poll status endpoint asynchronously.',
+        'result.get (timeout=10) BLOCKS the calling thread for up to 10 seconds waiting for task to complete. Returns result if success, raises exception if failure, raises TimeoutError if exceeds 10s. NEVER use in API endpoints (blocks web worker). Use result.ready() for non-blocking check. Alternative: Poll status endpoint asynchronously.',
     },
     {
       id: 'mc2',
@@ -43,7 +43,7 @@ export const taskResultsStateManagementMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        "Use ignore_result=True for fire-and-forget tasks: logging, emails, cleanup, analytics. These tasks don't need result retrieval → no reason to store in backend → saves memory. Example: @app.task(ignore_result=True) def send_email(). ~90% of tasks don't need results! Only store results for tasks where you need to retrieve output (reports, processing results). Reduces result backend load significantly.",
+        "Use ignore_result=True for fire-and-forget tasks: logging, emails, cleanup, analytics. These tasks don't need result retrieval → no reason to store in backend → saves memory. Example: @app.task (ignore_result=True) def send_email(). ~90% of tasks don't need results! Only store results for tasks where you need to retrieve output (reports, processing results). Reduces result backend load significantly.",
     },
     {
       id: 'mc4',
@@ -63,12 +63,12 @@ export const taskResultsStateManagementMultipleChoice: MultipleChoiceQuestion[] 
       question: 'How do you track progress in a long-running task?',
       options: [
         'Use print() statements',
-        'Call self.update_state(state="PROGRESS", meta={...}) with progress info',
+        'Call self.update_state (state="PROGRESS", meta={...}) with progress info',
         'Write to a log file',
         'Progress tracking not supported',
       ],
       correctAnswer: 1,
       explanation:
-        'Use self.update_state() to track progress: self.update_state(state="PROGRESS", meta={"current": 50, "total": 100, "percent": 50}). Frontend polls result.state and result.info to display progress bar. Example: @app.task(bind=True) def long_task(self): for i in range(100): self.update_state(state="PROGRESS", meta={"percent": i}). Enables real-time progress tracking.',
+        'Use self.update_state() to track progress: self.update_state (state="PROGRESS", meta={"current": 50, "total": 100, "percent": 50}). Frontend polls result.state and result.info to display progress bar. Example: @app.task (bind=True) def long_task (self): for i in range(100): self.update_state (state="PROGRESS", meta={"percent": i}). Enables real-time progress tracking.',
     },
   ];

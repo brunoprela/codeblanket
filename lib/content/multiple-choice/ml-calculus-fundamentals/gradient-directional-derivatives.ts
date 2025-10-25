@@ -37,7 +37,7 @@ export const gradientdirectionalderivativesMultipleChoice: MultipleChoiceQuestio
       question: 'What is the maximum directional derivative of f at point a?',
       options: [
         'Always 1',
-        'The gradient magnitude ||∇f(a)||',
+        'The gradient magnitude ||∇f (a)||',
         'Infinity',
         'The minimum eigenvalue',
       ],

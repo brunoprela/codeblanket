@@ -50,25 +50,25 @@ population_std = 15
 population_size = 1_000_000
 
 # Generate population (simulate)
-population = np.random.normal(population_mean, population_std, population_size)
+population = np.random.normal (population_mean, population_std, population_size)
 
 print("=== POPULATION (True Parameters) ===")
 print(f"Mean: {population.mean():.4f}")
-print(f"Std Dev: {population.std(ddof=0):.4f}")
-print(f"Size: {len(population):,}")
+print(f"Std Dev: {population.std (ddof=0):.4f}")
+print(f"Size: {len (population):,}")
 
 # Take a sample
 sample_size = 100
-sample = np.random.choice(population, size=sample_size, replace=False)
+sample = np.random.choice (population, size=sample_size, replace=False)
 
 print(f"\\n=== SAMPLE (Estimated Parameters) ===")
 print(f"Mean: {sample.mean():.4f}")
-print(f"Std Dev: {sample.std(ddof=1):.4f}")  # Use ddof=1 for sample
-print(f"Size: {len(sample)}")
+print(f"Std Dev: {sample.std (ddof=1):.4f}")  # Use ddof=1 for sample
+print(f"Size: {len (sample)}")
 
 print(f"\\n=== ESTIMATION ERROR ===")
-print(f"Mean error: {abs(sample.mean() - population.mean()):.4f}")
-print(f"Std error: {abs(sample.std(ddof=1) - population.std(ddof=0)):.4f}")
+print(f"Mean error: {abs (sample.mean() - population.mean()):.4f}")
+print(f"Std error: {abs (sample.std (ddof=1) - population.std (ddof=0)):.4f}")
 \`\`\`
 
 ### Why Sampling?
@@ -91,37 +91,37 @@ def demonstrate_sampling_distribution():
     """Show how sample means form a normal distribution"""
     
     # Population
-    population = np.random.exponential(scale=2, size=100000)  # Skewed!
+    population = np.random.exponential (scale=2, size=100000)  # Skewed!
     
     # Take many samples and compute means
     n_samples = 1000
     sample_size = 30
     sample_means = []
     
-    for _ in range(n_samples):
-        sample = np.random.choice(population, size=sample_size, replace=False)
-        sample_means.append(sample.mean())
+    for _ in range (n_samples):
+        sample = np.random.choice (population, size=sample_size, replace=False)
+        sample_means.append (sample.mean())
     
-    sample_means = np.array(sample_means)
+    sample_means = np.array (sample_means)
     
     # Plot
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
     # Original population (skewed)
-    axes[0].hist(population, bins=50, density=True, alpha=0.7, edgecolor='black')
-    axes[0].axvline(population.mean(), color='r', linestyle='--', linewidth=2, label=f'Mean: {population.mean():.2f}')
+    axes[0].hist (population, bins=50, density=True, alpha=0.7, edgecolor='black')
+    axes[0].axvline (population.mean(), color='r', linestyle='--', linewidth=2, label=f'Mean: {population.mean():.2f}')
     axes[0].set_title('Population Distribution\\n(Exponential - Skewed!)')
     axes[0].set_xlabel('Value')
     axes[0].set_ylabel('Density')
     axes[0].legend()
     
     # Distribution of sample means (normal!)
-    axes[1].hist(sample_means, bins=50, density=True, alpha=0.7, edgecolor='black')
-    axes[1].axvline(sample_means.mean(), color='r', linestyle='--', linewidth=2, 
+    axes[1].hist (sample_means, bins=50, density=True, alpha=0.7, edgecolor='black')
+    axes[1].axvline (sample_means.mean(), color='r', linestyle='--', linewidth=2, 
                      label=f'Mean: {sample_means.mean():.2f}')
-    axes[1].axvline(population.mean(), color='g', linestyle='--', linewidth=2,
+    axes[1].axvline (population.mean(), color='g', linestyle='--', linewidth=2,
                      label=f'True: {population.mean():.2f}')
-    axes[1].set_title(f'Sampling Distribution of Means\\n(n={sample_size}, samples={n_samples})')
+    axes[1].set_title (f'Sampling Distribution of Means\\n (n={sample_size}, samples={n_samples})')
     axes[1].set_xlabel('Sample Mean')
     axes[1].set_ylabel('Density')
     axes[1].legend()
@@ -135,7 +135,7 @@ def demonstrate_sampling_distribution():
     print("• Sampling distribution: Normal (bell curve)")
     print(f"• Mean of sample means: {sample_means.mean():.4f}")
     print(f"• True population mean: {population.mean():.4f}")
-    print(f"• Difference: {abs(sample_means.mean() - population.mean()):.4f}")
+    print(f"• Difference: {abs (sample_means.mean() - population.mean()):.4f}")
 
 demonstrate_sampling_distribution()
 \`\`\`
@@ -157,12 +157,12 @@ Where:
 **Interpretation**: How much sample means vary from the true population mean.
 
 \`\`\`python
-def compute_standard_error(data, sample_sizes):
+def compute_standard_error (data, sample_sizes):
     """Demonstrate standard error decreases with sample size"""
     
     population = np.random.normal(100, 15, 100000)
     true_mean = population.mean()
-    true_std = population.std(ddof=0)
+    true_std = population.std (ddof=0)
     
     results = []
     
@@ -170,22 +170,22 @@ def compute_standard_error(data, sample_sizes):
         # Take many samples of size n
         sample_means = []
         for _ in range(1000):
-            sample = np.random.choice(population, size=n, replace=False)
-            sample_means.append(sample.mean())
+            sample = np.random.choice (population, size=n, replace=False)
+            sample_means.append (sample.mean())
         
-        sample_means = np.array(sample_means)
+        sample_means = np.array (sample_means)
         
         # Empirical standard error
-        empirical_se = sample_means.std(ddof=1)
+        empirical_se = sample_means.std (ddof=1)
         
         # Theoretical standard error
-        theoretical_se = true_std / np.sqrt(n)
+        theoretical_se = true_std / np.sqrt (n)
         
         results.append({
             'n': n,
             'empirical_se': empirical_se,
             'theoretical_se': theoretical_se,
-            'mean_error': abs(sample_means.mean() - true_mean)
+            'mean_error': abs (sample_means.mean() - true_mean)
         })
     
     # Plot
@@ -196,8 +196,8 @@ def compute_standard_error(data, sample_sizes):
     empirical = [r['empirical_se'] for r in results]
     theoretical = [r['theoretical_se'] for r in results]
     
-    axes[0].plot(ns, empirical, 'o-', linewidth=2, markersize=8, label='Empirical SE')
-    axes[0].plot(ns, theoretical, 's--', linewidth=2, markersize=8, label='Theoretical SE')
+    axes[0].plot (ns, empirical, 'o-', linewidth=2, markersize=8, label='Empirical SE')
+    axes[0].plot (ns, theoretical, 's--', linewidth=2, markersize=8, label='Theoretical SE')
     axes[0].set_xlabel('Sample Size (n)', fontsize=12)
     axes[0].set_ylabel('Standard Error', fontsize=12)
     axes[0].set_title('Standard Error Decreases with Sample Size')
@@ -207,7 +207,7 @@ def compute_standard_error(data, sample_sizes):
     
     # Mean estimation error
     errors = [r['mean_error'] for r in results]
-    axes[1].plot(ns, errors, 'o-', linewidth=2, markersize=8, color='red')
+    axes[1].plot (ns, errors, 'o-', linewidth=2, markersize=8, color='red')
     axes[1].set_xlabel('Sample Size (n)', fontsize=12)
     axes[1].set_ylabel('Mean Estimation Error', fontsize=12)
     axes[1].set_title('Accuracy Improves with More Data')
@@ -244,12 +244,12 @@ Where:
 **Interpretation**: "We are 95% confident the true mean is in this range"
 
 \`\`\`python
-def compute_confidence_interval(sample, confidence=0.95):
+def compute_confidence_interval (sample, confidence=0.95):
     """Compute confidence interval for the mean"""
     
-    n = len(sample)
-    mean = np.mean(sample)
-    se = stats.sem(sample)  # Standard error of the mean
+    n = len (sample)
+    mean = np.mean (sample)
+    se = stats.sem (sample)  # Standard error of the mean
     
     # For large samples, use z-score
     # For small samples (n < 30), use t-score
@@ -269,12 +269,12 @@ def compute_confidence_interval(sample, confidence=0.95):
 # Example
 np.random.seed(42)
 population = np.random.normal(100, 15, 100000)
-sample = np.random.choice(population, size=50, replace=False)
+sample = np.random.choice (population, size=50, replace=False)
 
-mean, ci_lower, ci_upper, method = compute_confidence_interval(sample, 0.95)
+mean, ci_lower, ci_upper, method = compute_confidence_interval (sample, 0.95)
 
 print("=== Confidence Interval ===")
-print(f"Sample size: {len(sample)}")
+print(f"Sample size: {len (sample)}")
 print(f"Sample mean: {mean:.2f}")
 print(f"95% CI: [{ci_lower:.2f}, {ci_upper:.2f}]")
 print(f"Method used: {method}-distribution")
@@ -285,7 +285,7 @@ print(f"\\nIs true mean in CI? {ci_lower <= population.mean() <= ci_upper}")
 ### Visualizing Confidence Intervals
 
 \`\`\`python
-def visualize_confidence_intervals(population, n_samples=20, sample_size=30):
+def visualize_confidence_intervals (population, n_samples=20, sample_size=30):
     """Show that ~95% of CIs contain the true mean"""
     
     true_mean = population.mean()
@@ -294,32 +294,32 @@ def visualize_confidence_intervals(population, n_samples=20, sample_size=30):
     cis = []
     contains_true = []
     
-    for _ in range(n_samples):
-        sample = np.random.choice(population, size=sample_size, replace=False)
-        mean, ci_lower, ci_upper, _ = compute_confidence_interval(sample, 0.95)
+    for _ in range (n_samples):
+        sample = np.random.choice (population, size=sample_size, replace=False)
+        mean, ci_lower, ci_upper, _ = compute_confidence_interval (sample, 0.95)
         cis.append((mean, ci_lower, ci_upper))
-        contains_true.append(ci_lower <= true_mean <= ci_upper)
+        contains_true.append (ci_lower <= true_mean <= ci_upper)
     
     # Plot
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots (figsize=(10, 8))
     
-    for i, (mean, lower, upper) in enumerate(cis):
+    for i, (mean, lower, upper) in enumerate (cis):
         color = 'blue' if contains_true[i] else 'red'
         ax.plot([lower, upper], [i, i], 'o-', linewidth=2, color=color, alpha=0.6)
-        ax.plot(mean, i, 'o', markersize=8, color=color)
+        ax.plot (mean, i, 'o', markersize=8, color=color)
     
     # True mean line
-    ax.axvline(true_mean, color='green', linestyle='--', linewidth=2, 
+    ax.axvline (true_mean, color='green', linestyle='--', linewidth=2, 
                label=f'True Mean: {true_mean:.2f}')
     
     # Count
-    n_contain = sum(contains_true)
+    n_contain = sum (contains_true)
     percentage = (n_contain / n_samples) * 100
     
     ax.set_xlabel('Value', fontsize=12)
     ax.set_ylabel('Sample Number', fontsize=12)
-    ax.set_title(f'95% Confidence Intervals\\n{n_contain}/{n_samples} ({percentage:.0f}%) contain true mean')
-    ax.legend(fontsize=10)
+    ax.set_title (f'95% Confidence Intervals\\n{n_contain}/{n_samples} ({percentage:.0f}%) contain true mean')
+    ax.legend (fontsize=10)
     ax.grid(True, alpha=0.3, axis='x')
     
     plt.tight_layout()
@@ -331,7 +331,7 @@ def visualize_confidence_intervals(population, n_samples=20, sample_size=30):
     print(f"\\nBlue CIs: contain true mean")
     print(f"Red CIs: do NOT contain true mean (expected ~5%)")
 
-visualize_confidence_intervals(population, n_samples=20, sample_size=30)
+visualize_confidence_intervals (population, n_samples=20, sample_size=30)
 \`\`\`
 
 ## Types of Estimation
@@ -344,12 +344,12 @@ A single value estimate:
 
 \`\`\`python
 # Point estimates
-sample = np.random.choice(population, size=100, replace=False)
+sample = np.random.choice (population, size=100, replace=False)
 
 print("=== Point Estimates ===")
 print(f"Population mean: {population.mean():.2f}")
 print(f"Sample mean (point estimate): {sample.mean():.2f}")
-print(f"Error: {abs(sample.mean() - population.mean()):.2f}")
+print(f"Error: {abs (sample.mean() - population.mean()):.2f}")
 \`\`\`
 
 ### Interval Estimation
@@ -360,7 +360,7 @@ A range of plausible values:
 
 \`\`\`python
 # Interval estimate
-mean, ci_lower, ci_upper, _ = compute_confidence_interval(sample, 0.95)
+mean, ci_lower, ci_upper, _ = compute_confidence_interval (sample, 0.95)
 
 print(f"\\n=== Interval Estimate ===")
 print(f"95% CI: [{ci_lower:.2f}, {ci_upper:.2f}]")
@@ -373,33 +373,33 @@ print(f"Contains true mean? {ci_lower <= population.mean() <= ci_upper}")
 **Bootstrap**: Resample from your sample to estimate uncertainty.
 
 \`\`\`python
-def bootstrap_confidence_interval(data, n_bootstrap=10000, confidence=0.95):
+def bootstrap_confidence_interval (data, n_bootstrap=10000, confidence=0.95):
     """Non-parametric bootstrap CI"""
     
     bootstrap_means = []
     
-    for _ in range(n_bootstrap):
+    for _ in range (n_bootstrap):
         # Resample with replacement
-        bootstrap_sample = np.random.choice(data, size=len(data), replace=True)
-        bootstrap_means.append(bootstrap_sample.mean())
+        bootstrap_sample = np.random.choice (data, size=len (data), replace=True)
+        bootstrap_means.append (bootstrap_sample.mean())
     
-    bootstrap_means = np.array(bootstrap_means)
+    bootstrap_means = np.array (bootstrap_means)
     
     # Percentile method
     alpha = 1 - confidence
-    ci_lower = np.percentile(bootstrap_means, alpha/2 * 100)
-    ci_upper = np.percentile(bootstrap_means, (1 - alpha/2) * 100)
+    ci_lower = np.percentile (bootstrap_means, alpha/2 * 100)
+    ci_upper = np.percentile (bootstrap_means, (1 - alpha/2) * 100)
     
     return bootstrap_means, ci_lower, ci_upper
 
 # Compare bootstrap vs traditional CI
-sample = np.random.choice(population, size=50, replace=False)
+sample = np.random.choice (population, size=50, replace=False)
 
 # Traditional CI
-mean, trad_lower, trad_upper, _ = compute_confidence_interval(sample, 0.95)
+mean, trad_lower, trad_upper, _ = compute_confidence_interval (sample, 0.95)
 
 # Bootstrap CI
-bootstrap_means, boot_lower, boot_upper = bootstrap_confidence_interval(sample, 10000, 0.95)
+bootstrap_means, boot_lower, boot_upper = bootstrap_confidence_interval (sample, 10000, 0.95)
 
 print("=== Bootstrap vs Traditional CI ===")
 print(f"Traditional 95% CI: [{trad_lower:.2f}, {trad_upper:.2f}]")
@@ -410,15 +410,15 @@ print("• No distributional assumptions")
 print("• Easy to implement")
 
 # Visualize bootstrap distribution
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.hist(bootstrap_means, bins=50, density=True, alpha=0.7, edgecolor='black')
-ax.axvline(boot_lower, color='r', linestyle='--', linewidth=2, label=f'95% CI: [{boot_lower:.2f}, {boot_upper:.2f}]')
-ax.axvline(boot_upper, color='r', linestyle='--', linewidth=2)
-ax.axvline(sample.mean(), color='g', linestyle='-', linewidth=2, label=f'Sample mean: {sample.mean():.2f}')
+fig, ax = plt.subplots (figsize=(10, 6))
+ax.hist (bootstrap_means, bins=50, density=True, alpha=0.7, edgecolor='black')
+ax.axvline (boot_lower, color='r', linestyle='--', linewidth=2, label=f'95% CI: [{boot_lower:.2f}, {boot_upper:.2f}]')
+ax.axvline (boot_upper, color='r', linestyle='--', linewidth=2)
+ax.axvline (sample.mean(), color='g', linestyle='-', linewidth=2, label=f'Sample mean: {sample.mean():.2f}')
 ax.set_xlabel('Bootstrap Sample Mean', fontsize=12)
 ax.set_ylabel('Density', fontsize=12)
 ax.set_title('Bootstrap Distribution of Sample Means')
-ax.legend(fontsize=10)
+ax.legend (fontsize=10)
 plt.tight_layout()
 plt.savefig('bootstrap_distribution.png', dpi=300, bbox_inches='tight')
 plt.show()
@@ -432,13 +432,13 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 # Generate data
-X, y = make_classification(n_samples=1000, n_features=20, n_informative=15,
+X, y = make_classification (n_samples=1000, n_features=20, n_informative=15,
                             n_redundant=5, random_state=42)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Point estimate of accuracy
@@ -448,10 +448,10 @@ print("=== ML Model Performance Inference ===")
 print(f"Test set accuracy (point estimate): {test_accuracy:.4f}")
 
 # Confidence interval via cross-validation
-cv_scores = cross_val_score(model, X_train, y_train, cv=10)
+cv_scores = cross_val_score (model, X_train, y_train, cv=10)
 
 mean_cv = cv_scores.mean()
-se_cv = cv_scores.std() / np.sqrt(len(cv_scores))
+se_cv = cv_scores.std() / np.sqrt (len (cv_scores))
 ci_lower_cv = mean_cv - 1.96 * se_cv
 ci_upper_cv = mean_cv + 1.96 * se_cv
 
@@ -459,27 +459,27 @@ print(f"\\nCross-validation accuracy: {mean_cv:.4f}")
 print(f"95% CI for accuracy: [{ci_lower_cv:.4f}, {ci_upper_cv:.4f}]")
 
 # Bootstrap confidence interval for test accuracy
-def bootstrap_model_accuracy(model, X, y, n_bootstrap=1000):
+def bootstrap_model_accuracy (model, X, y, n_bootstrap=1000):
     """Bootstrap CI for model accuracy"""
     
     bootstrap_accuracies = []
     
-    for _ in range(n_bootstrap):
+    for _ in range (n_bootstrap):
         # Resample test set
-        indices = np.random.choice(len(X), size=len(X), replace=True)
+        indices = np.random.choice (len(X), size=len(X), replace=True)
         X_boot = X[indices]
         y_boot = y[indices]
         
         accuracy = model.score(X_boot, y_boot)
-        bootstrap_accuracies.append(accuracy)
+        bootstrap_accuracies.append (accuracy)
     
-    bootstrap_accuracies = np.array(bootstrap_accuracies)
-    ci_lower = np.percentile(bootstrap_accuracies, 2.5)
-    ci_upper = np.percentile(bootstrap_accuracies, 97.5)
+    bootstrap_accuracies = np.array (bootstrap_accuracies)
+    ci_lower = np.percentile (bootstrap_accuracies, 2.5)
+    ci_upper = np.percentile (bootstrap_accuracies, 97.5)
     
     return bootstrap_accuracies, ci_lower, ci_upper
 
-boot_acc, boot_lower, boot_upper = bootstrap_model_accuracy(model, X_test, y_test, 1000)
+boot_acc, boot_lower, boot_upper = bootstrap_model_accuracy (model, X_test, y_test, 1000)
 
 print(f"\\nBootstrap 95% CI for test accuracy: [{boot_lower:.4f}, {boot_upper:.4f}]")
 print(f"\\nInterpretation:")

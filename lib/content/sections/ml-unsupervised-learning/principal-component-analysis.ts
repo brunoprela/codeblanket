@@ -13,7 +13,7 @@ export const principalComponentAnalysis = {
 
 ## Introduction
 
-Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while preserving as much variance as possible. It's one of the most widely used techniques in machine learning for:
+Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while preserving as much variance as possible. It\'s one of the most widely used techniques in machine learning for:
 
 - **Dimensionality Reduction**: Reduce features from thousands to tens
 - **Visualization**: Project high-D data to 2D/3D for plotting
@@ -57,13 +57,13 @@ print(f"Features: {feature_names}")
 print(f"Classes: {target_names}")
 
 # Visualize first two features
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 colors = ['red', 'blue', 'green']
 for i, color, name in zip([0, 1, 2], colors, target_names):
     plt.scatter(X[y == i, 0], X[y == i, 1], 
                c=color, label=name, alpha=0.6, s=50)
-plt.xlabel(feature_names[0])
-plt.ylabel(feature_names[1])
+plt.xlabel (feature_names[0])
+plt.ylabel (feature_names[1])
 plt.title('Iris Dataset: First Two Features')
 plt.legend()
 plt.show()
@@ -94,14 +94,14 @@ Where \\( V_k \\) contains the top k eigenvectors
 \`\`\`python
 # Manual PCA calculation
 # Step 1: Center the data
-X_centered = X - X.mean(axis=0)
+X_centered = X - X.mean (axis=0)
 
 # Step 2: Compute covariance matrix
 cov_matrix = np.cov(X_centered.T)
 print(f"Covariance matrix shape: {cov_matrix.shape}")
 
 # Step 3: Eigenvalue decomposition
-eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+eigenvalues, eigenvectors = np.linalg.eig (cov_matrix)
 
 # Sort by eigenvalue (descending)
 idx = eigenvalues.argsort()[::-1]
@@ -133,13 +133,13 @@ print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
 print(f"Total variance explained: {pca.explained_variance_ratio_.sum():.2%}")
 
 # Visualize PCA projection
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 for i, color, name in zip([0, 1, 2], colors, target_names):
     plt.scatter(X_pca[y == i, 0], X_pca[y == i, 1], 
                c=color, label=name, alpha=0.6, s=50)
 
-plt.xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%} variance)')
-plt.ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%} variance)')
+plt.xlabel (f'PC1 ({pca.explained_variance_ratio_[0]:.1%} variance)')
+plt.ylabel (f'PC2 ({pca.explained_variance_ratio_[1]:.1%} variance)')
 plt.title('Iris Dataset: PCA Projection to 2D')
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -159,35 +159,35 @@ pca_full = PCA()
 pca_full.fit(X_scaled)
 
 # Plot explained variance
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.bar(range(1, len(pca_full.explained_variance_ratio_) + 1),
+plt.bar (range(1, len (pca_full.explained_variance_ratio_) + 1),
         pca_full.explained_variance_ratio_,
         alpha=0.6, color='blue')
 plt.xlabel('Principal Component')
 plt.ylabel('Explained Variance Ratio')
 plt.title('Variance Explained by Each PC')
-plt.xticks(range(1, len(pca_full.explained_variance_ratio_) + 1))
+plt.xticks (range(1, len (pca_full.explained_variance_ratio_) + 1))
 
 plt.subplot(1, 2, 2)
-cumulative_variance = np.cumsum(pca_full.explained_variance_ratio_)
-plt.plot(range(1, len(cumulative_variance) + 1), 
+cumulative_variance = np.cumsum (pca_full.explained_variance_ratio_)
+plt.plot (range(1, len (cumulative_variance) + 1), 
          cumulative_variance, 'go-', linewidth=2, markersize=8)
 plt.xlabel('Number of Components')
 plt.ylabel('Cumulative Explained Variance')
 plt.title('Cumulative Variance Explained')
-plt.axhline(y=0.95, color='r', linestyle='--', linewidth=2, label='95% threshold')
-plt.axhline(y=0.99, color='orange', linestyle='--', linewidth=2, label='99% threshold')
+plt.axhline (y=0.95, color='r', linestyle='--', linewidth=2, label='95% threshold')
+plt.axhline (y=0.99, color='orange', linestyle='--', linewidth=2, label='99% threshold')
 plt.grid(True, alpha=0.3)
 plt.legend()
-plt.xticks(range(1, len(cumulative_variance) + 1))
+plt.xticks (range(1, len (cumulative_variance) + 1))
 
 plt.tight_layout()
 plt.show()
 
 # Rule of thumb: keep enough components to explain 95-99% of variance
-n_components_95 = np.argmax(cumulative_variance >= 0.95) + 1
+n_components_95 = np.argmax (cumulative_variance >= 0.95) + 1
 print(f"Components needed for 95% variance: {n_components_95}")
 \`\`\`
 
@@ -195,13 +195,13 @@ print(f"Components needed for 95% variance: {n_components_95}")
 
 \`\`\`python
 # Scree plot
-plt.figure(figsize=(10, 6))
-plt.plot(range(1, len(pca_full.explained_variance_) + 1),
+plt.figure (figsize=(10, 6))
+plt.plot (range(1, len (pca_full.explained_variance_) + 1),
          pca_full.explained_variance_, 'go-', linewidth=2, markersize=10)
 plt.xlabel('Principal Component', fontsize=12)
 plt.ylabel('Eigenvalue (Variance)', fontsize=12)
 plt.title('Scree Plot - Look for the "Elbow"', fontsize=14)
-plt.xticks(range(1, len(pca_full.explained_variance_) + 1))
+plt.xticks (range(1, len (pca_full.explained_variance_) + 1))
 plt.grid(True, alpha=0.3)
 plt.show()
 
@@ -213,7 +213,7 @@ plt.show()
 Keep components with eigenvalue > 1 (for standardized data)
 
 \`\`\`python
-n_components_kaiser = np.sum(pca_full.explained_variance_ > 1)
+n_components_kaiser = np.sum (pca_full.explained_variance_ > 1)
 print(f"Kaiser criterion: keep {n_components_kaiser} components")
 print(f"(eigenvalues > 1.0)")
 \`\`\`
@@ -235,23 +235,23 @@ for n in n_components_range:
     X_temp = pca_temp.fit_transform(X_scaled)
     
     # Evaluate with logistic regression
-    clf = LogisticRegression(max_iter=1000)
-    scores = cross_val_score(clf, X_temp, y, cv=5)
-    cv_scores.append(scores.mean())
+    clf = LogisticRegression (max_iter=1000)
+    scores = cross_val_score (clf, X_temp, y, cv=5)
+    cv_scores.append (scores.mean())
 
 # Plot
-plt.figure(figsize=(10, 6))
-plt.plot(n_components_range, cv_scores, 'go-', linewidth=2, markersize=8)
+plt.figure (figsize=(10, 6))
+plt.plot (n_components_range, cv_scores, 'go-', linewidth=2, markersize=8)
 plt.xlabel('Number of Components')
 plt.ylabel('Cross-Validation Accuracy')
 plt.title('Classification Accuracy vs Number of Components')
 plt.grid(True, alpha=0.3)
-plt.xticks(n_components_range)
+plt.xticks (n_components_range)
 plt.show()
 
-best_n = n_components_range[np.argmax(cv_scores)]
+best_n = n_components_range[np.argmax (cv_scores)]
 print(f"Best number of components: {best_n}")
-print(f"Best CV accuracy: {max(cv_scores):.3f}")
+print(f"Best CV accuracy: {max (cv_scores):.3f}")
 \`\`\`
 
 ## Interpreting Principal Components
@@ -262,7 +262,7 @@ pca_interpret = PCA(n_components=2)
 pca_interpret.fit(X_scaled)
 
 # Loadings matrix
-loadings = pca_interpret.components_.T * np.sqrt(pca_interpret.explained_variance_)
+loadings = pca_interpret.components_.T * np.sqrt (pca_interpret.explained_variance_)
 
 # Create loadings dataframe
 import pandas as pd
@@ -280,10 +280,10 @@ print("\\nLoadings show contribution of each original feature to each PC")
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 for idx, pc in enumerate(['PC1', 'PC2']):
-    loadings_df[pc].plot(kind='barh', ax=axes[idx], color='steelblue')
-    axes[idx].set_title(f'{pc} Loadings')
+    loadings_df[pc].plot (kind='barh', ax=axes[idx], color='steelblue')
+    axes[idx].set_title (f'{pc} Loadings')
     axes[idx].set_xlabel('Loading Value')
-    axes[idx].axvline(x=0, color='black', linestyle='-', linewidth=0.8)
+    axes[idx].axvline (x=0, color='black', linestyle='-', linewidth=0.8)
     axes[idx].grid(True, alpha=0.3)
 
 plt.tight_layout()
@@ -299,7 +299,7 @@ plt.show()
 \`\`\`python
 def biplot(X_pca, loadings, labels, feature_names):
     ''Create a biplot showing data and loadings''
-    plt.figure(figsize=(12, 8))
+    plt.figure (figsize=(12, 8))
     
     # Plot data points
     colors = ['red', 'blue', 'green']
@@ -309,21 +309,21 @@ def biplot(X_pca, loadings, labels, feature_names):
                    c=color, label=name, alpha=0.5, s=50)
     
     # Plot loading vectors
-    for i, feature in enumerate(feature_names):
+    for i, feature in enumerate (feature_names):
         plt.arrow(0, 0, 
                  loadings[i, 0]*3, loadings[i, 1]*3,
                  head_width=0.1, head_length=0.1, 
                  fc='black', ec='black', linewidth=2)
-        plt.text(loadings[i, 0]*3.2, loadings[i, 1]*3.2, 
+        plt.text (loadings[i, 0]*3.2, loadings[i, 1]*3.2, 
                 feature, fontsize=10, fontweight='bold')
     
-    plt.xlabel(f'PC1')
-    plt.ylabel(f'PC2')
+    plt.xlabel (f'PC1')
+    plt.ylabel (f'PC2')
     plt.title('PCA Biplot: Data Points + Feature Loadings')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.axhline(y=0, color='k', linestyle='-', linewidth=0.5)
-    plt.axvline(x=0, color='k', linestyle='-', linewidth=0.5)
+    plt.axhline (y=0, color='k', linestyle='-', linewidth=0.5)
+    plt.axvline (x=0, color='k', linestyle='-', linewidth=0.5)
     plt.tight_layout()
     plt.show()
 
@@ -345,13 +345,13 @@ X_digits = digits.data
 y_digits = digits.target
 
 print(f"Digits shape: {X_digits.shape}")
-print(f"Classes: {len(np.unique(y_digits))}")
+print(f"Classes: {len (np.unique (y_digits))}")
 
 # Visualize some digits
 fig, axes = plt.subplots(2, 5, figsize=(12, 5))
-for i, ax in enumerate(axes.ravel()):
+for i, ax in enumerate (axes.ravel()):
     ax.imshow(X_digits[i].reshape(8, 8), cmap='gray')
-    ax.set_title(f'Label: {y_digits[i]}')
+    ax.set_title (f'Label: {y_digits[i]}')
     ax.axis('off')
 plt.suptitle('Sample Handwritten Digits (8x8 = 64 features)')
 plt.tight_layout()
@@ -368,12 +368,12 @@ print(f"Reduced to: {X_digits_pca.shape}")
 print(f"Variance explained: {pca_digits.explained_variance_ratio_.sum():.2%}")
 
 # Visualize
-plt.figure(figsize=(12, 8))
+plt.figure (figsize=(12, 8))
 scatter = plt.scatter(X_digits_pca[:, 0], X_digits_pca[:, 1], 
                      c=y_digits, cmap='tab10', s=20, alpha=0.6)
-plt.colorbar(scatter, ticks=range(10))
-plt.xlabel(f'PC1 ({pca_digits.explained_variance_ratio_[0]:.1%})')
-plt.ylabel(f'PC2 ({pca_digits.explained_variance_ratio_[1]:.1%})')
+plt.colorbar (scatter, ticks=range(10))
+plt.xlabel (f'PC1 ({pca_digits.explained_variance_ratio_[0]:.1%})')
+plt.ylabel (f'PC2 ({pca_digits.explained_variance_ratio_[1]:.1%})')
 plt.title('Handwritten Digits: PCA from 64D to 2D')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
@@ -392,7 +392,7 @@ pca_3d = PCA(n_components=3)
 X_digits_pca_3d = pca_3d.fit_transform(X_digits_scaled)
 
 # 3D plot
-fig = plt.figure(figsize=(12, 8))
+fig = plt.figure (figsize=(12, 8))
 ax = fig.add_subplot(111, projection='3d')
 
 for digit in range(10):
@@ -400,13 +400,13 @@ for digit in range(10):
     ax.scatter(X_digits_pca_3d[mask, 0], 
               X_digits_pca_3d[mask, 1],
               X_digits_pca_3d[mask, 2],
-              label=str(digit), s=20, alpha=0.6)
+              label=str (digit), s=20, alpha=0.6)
 
-ax.set_xlabel(f'PC1 ({pca_3d.explained_variance_ratio_[0]:.1%})')
-ax.set_ylabel(f'PC2 ({pca_3d.explained_variance_ratio_[1]:.1%})')
-ax.set_zlabel(f'PC3 ({pca_3d.explained_variance_ratio_[2]:.1%})')
-ax.set_title(f'3D PCA Projection ({pca_3d.explained_variance_ratio_.sum():.1%} variance)')
-ax.legend(loc='upper right')
+ax.set_xlabel (f'PC1 ({pca_3d.explained_variance_ratio_[0]:.1%})')
+ax.set_ylabel (f'PC2 ({pca_3d.explained_variance_ratio_[1]:.1%})')
+ax.set_zlabel (f'PC3 ({pca_3d.explained_variance_ratio_[2]:.1%})')
+ax.set_title (f'3D PCA Projection ({pca_3d.explained_variance_ratio_.sum():.1%} variance)')
+ax.legend (loc='upper right')
 plt.tight_layout()
 plt.show()
 \`\`\`
@@ -425,7 +425,7 @@ n_components_list = [2, 5, 10, 20, 40, 64]
 fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 axes = axes.ravel()
 
-for idx, n_comp in enumerate(n_components_list):
+for idx, n_comp in enumerate (n_components_list):
     # Apply PCA
     pca_recon = PCA(n_components=n_comp)
     X_compressed = pca_recon.fit_transform(X_digits_scaled)
@@ -440,8 +440,8 @@ for idx, n_comp in enumerate(n_components_list):
     # Calculate reconstruction error
     mse = np.mean((X_digits[0] - X_reconstructed[0])**2)
     
-    axes[idx].imshow(reconstructed_digit, cmap='gray')
-    axes[idx].set_title(f'{n_comp} components\\nMSE: {mse:.2f}')
+    axes[idx].imshow (reconstructed_digit, cmap='gray')
+    axes[idx].set_title (f'{n_comp} components\\nMSE: {mse:.2f}')
     axes[idx].axis('off')
 
 plt.suptitle('PCA Reconstruction with Different Components', fontsize=14)
@@ -512,10 +512,10 @@ X_test_scaled = scaler.transform(X_test)
 results = {}
 
 # Without PCA
-clf_raw = RandomForestClassifier(n_estimators=100, random_state=42)
+clf_raw = RandomForestClassifier (n_estimators=100, random_state=42)
 clf_raw.fit(X_train_scaled, y_train)
 y_pred_raw = clf_raw.predict(X_test_scaled)
-results['Raw (64 features)'] = accuracy_score(y_test, y_pred_raw)
+results['Raw (64 features)'] = accuracy_score (y_test, y_pred_raw)
 
 # With different PCA components
 for n_comp in [5, 10, 20, 30]:
@@ -523,18 +523,18 @@ for n_comp in [5, 10, 20, 30]:
     X_train_pca = pca.fit_transform(X_train_scaled)
     X_test_pca = pca.transform(X_test_scaled)
     
-    clf_pca = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf_pca = RandomForestClassifier (n_estimators=100, random_state=42)
     clf_pca.fit(X_train_pca, y_train)
     y_pred_pca = clf_pca.predict(X_test_pca)
     
-    accuracy = accuracy_score(y_test, y_pred_pca)
+    accuracy = accuracy_score (y_test, y_pred_pca)
     variance_explained = pca.explained_variance_ratio_.sum()
     results[f'PCA ({n_comp} comp, {variance_explained:.1%} var)'] = accuracy
 
 # Plot results
-plt.figure(figsize=(12, 6))
-plt.bar(range(len(results)), list(results.values()), color='steelblue', alpha=0.7)
-plt.xticks(range(len(results)), list(results.keys()), rotation=45, ha='right')
+plt.figure (figsize=(12, 6))
+plt.bar (range (len (results)), list (results.values()), color='steelblue', alpha=0.7)
+plt.xticks (range (len (results)), list (results.keys()), rotation=45, ha='right')
 plt.ylabel('Test Accuracy')
 plt.title('Classification Accuracy: Raw Features vs PCA')
 plt.ylim([0.9, 1.0])
@@ -593,7 +593,7 @@ print(f"Variance explained: {pca_scaled.explained_variance_ratio_}")
 from sklearn.datasets import make_circles
 
 # Non-linear data (circles)
-X_circles, y_circles = make_circles(n_samples=400, factor=0.3, noise=0.05, random_state=42)
+X_circles, y_circles = make_circles (n_samples=400, factor=0.3, noise=0.05, random_state=42)
 
 # Try linear PCA
 pca_linear = PCA(n_components=2)
@@ -627,7 +627,7 @@ from sklearn.decomposition import KernelPCA
 kpca = KernelPCA(n_components=2, kernel='rbf', gamma=15)
 X_kpca = kpca.fit_transform(X_circles)
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_circles[:, 0], X_circles[:, 1], c=y_circles, cmap='viridis', s=30)
@@ -669,7 +669,7 @@ face_shape = (64, 64)
 print(f"Original: {X_faces.shape}")
 
 # One face
-original_face = X_faces[0].reshape(face_shape)
+original_face = X_faces[0].reshape (face_shape)
 
 # Compress with different components
 n_components_list = [10, 50, 100, 200, 400]
@@ -678,25 +678,25 @@ compression_ratios = []
 fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 axes = axes.ravel()
 
-axes[0].imshow(original_face, cmap='gray')
+axes[0].imshow (original_face, cmap='gray')
 axes[0].set_title('Original (4096 values)')
 axes[0].axis('off')
 
-for idx, n_comp in enumerate(n_components_list, 1):
+for idx, n_comp in enumerate (n_components_list, 1):
     pca = PCA(n_components=n_comp)
     X_compressed = pca.fit_transform(X_faces)
     X_reconstructed = pca.inverse_transform(X_compressed)
     
-    reconstructed_face = X_reconstructed[0].reshape(face_shape)
+    reconstructed_face = X_reconstructed[0].reshape (face_shape)
     
     # Compression ratio
     original_size = X_faces.shape[1]
     compressed_size = n_comp
     ratio = original_size / compressed_size
-    compression_ratios.append(ratio)
+    compression_ratios.append (ratio)
     
-    axes[idx].imshow(reconstructed_face, cmap='gray')
-    axes[idx].set_title(f'{n_comp} components\\n{ratio:.1f}x compression')
+    axes[idx].imshow (reconstructed_face, cmap='gray')
+    axes[idx].set_title (f'{n_comp} components\\n{ratio:.1f}x compression')
     axes[idx].axis('off')
 
 plt.tight_layout()
@@ -729,13 +729,13 @@ X_genes_scaled = scaler_genes.fit_transform(X_genes)
 pca_genes = PCA(n_components=2)
 X_genes_pca = pca_genes.fit_transform(X_genes_scaled)
 
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X_genes_pca[y_genes==0, 0], X_genes_pca[y_genes==0, 1], 
            c='blue', label='Healthy', alpha=0.6, s=50)
 plt.scatter(X_genes_pca[y_genes==1, 0], X_genes_pca[y_genes==1, 1], 
            c='red', label='Disease', alpha=0.6, s=50)
-plt.xlabel(f'PC1 ({pca_genes.explained_variance_ratio_[0]:.1%})')
-plt.ylabel(f'PC2 ({pca_genes.explained_variance_ratio_[1]:.1%})')
+plt.xlabel (f'PC1 ({pca_genes.explained_variance_ratio_[0]:.1%})')
+plt.ylabel (f'PC2 ({pca_genes.explained_variance_ratio_[1]:.1%})')
 plt.title('Gene Expression: 5000 Genes → 2D PCA Projection')
 plt.legend()
 plt.grid(True, alpha=0.3)

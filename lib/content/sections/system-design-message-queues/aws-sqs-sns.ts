@@ -109,8 +109,8 @@ response = sqs.send_message_batch(
     Entries=entries
 )
 
-print(f"Successful: {len(response['Successful'])}")
-print(f"Failed: {len(response.get('Failed', []))}")
+print(f"Successful: {len (response['Successful'])}")
+print(f"Failed: {len (response.get('Failed', []))}")
 \`\`\`
 
 ### **Consumer Example:**
@@ -132,7 +132,7 @@ for message in messages:
     print(f"Processing: {message['Body']}")
     
     try:
-        process_order(message['Body'])
+        process_order (message['Body'])
         
         # Delete message (acknowledge)
         sqs.delete_message(
@@ -388,7 +388,7 @@ policy = {
 
 sqs.set_queue_attributes(
     QueueUrl=analytics_queue,
-    Attributes={'Policy': json.dumps(policy)}
+    Attributes={'Policy': json.dumps (policy)}
 )
 
 # Publish to SNS
@@ -423,7 +423,7 @@ filter_policy = {
 sns.set_subscription_attributes(
     SubscriptionArn=subscription_arn,
     AttributeName='FilterPolicy',
-    AttributeValue=json.dumps(filter_policy)
+    AttributeValue=json.dumps (filter_policy)
 )
 
 # Publish message
@@ -470,11 +470,11 @@ Trigger Lambda functions directly from SQS or SNS:
 
 \`\`\`python
 # Lambda function triggered by SQS
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     # event['Records'] contains SQS messages
     for record in event['Records']:
         message_body = record['body']
-        process_message(message_body)
+        process_message (message_body)
     
     # No need to delete messages manually
     # Lambda deletes automatically on success
@@ -491,11 +491,11 @@ def lambda_handler(event, context):
 
 \`\`\`python
 # Lambda function triggered by SNS
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     # event['Records'] contains SNS messages
     for record in event['Records']:
         sns_message = record['Sns']['Message']
-        process_notification(sns_message)
+        process_notification (sns_message)
     
     return {'statusCode': 200}
 
@@ -602,7 +602,7 @@ response = sqs.receive_message(
 
 \`\`\`python
 # Send 10 messages in one request (save 90% cost)
-entries = [{'Id': str(i), 'MessageBody': f'Message {i}'} for i in range(10)]
+entries = [{'Id': str (i), 'MessageBody': f'Message {i}'} for i in range(10)]
 sqs.send_message_batch(QueueUrl=queue_url, Entries=entries)
 
 # vs Sending individually (10 requests)
@@ -648,14 +648,14 @@ Alert if:
 # SQS Standard can deliver duplicates
 # Design consumers to handle reprocessing
 
-def process_message(message):
-    message_id = extract_id(message)
-    if already_processed(message_id):
+def process_message (message):
+    message_id = extract_id (message)
+    if already_processed (message_id):
         return  # Skip duplicate
     
     # Process
-    save_result(message)
-    mark_as_processed(message_id)
+    save_result (message)
+    mark_as_processed (message_id)
 \`\`\`
 
 ---

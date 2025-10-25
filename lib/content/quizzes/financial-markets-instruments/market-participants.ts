@@ -106,7 +106,7 @@ def quarter_end_strategy():
 **Implementation:**
 \`\`\`python
 class HFTRegulation:
-    def enforce_rules(self, trade):
+    def enforce_rules (self, trade):
         # Speed bump
         if trade.latency < 350:  # microseconds
             delay(350 - trade.latency)
@@ -121,12 +121,12 @@ class HFTRegulation:
         
         # Circuit breaker
         if stock.move_5min > 0.05:
-            pause_trading(stock, duration=300)  # 5min pause
+            pause_trading (stock, duration=300)  # 5min pause
 \`\`\`
 
 **Bottom Line:** Keep HFT benefits (spreads, liquidity), prevent harms (speed bumps, quote life, ban manipulation). Net effect: Better markets for all.`,
     keyPoints: [
-      'HFT benefits: Tighter spreads ($4B+ savings), liquidity, efficiency',
+      'HFT benefits: Tighter spreads (\$4B+ savings), liquidity, efficiency',
       'HFT harms: Latency arbitrage ($1-2B transfer), flash crashes, wasteful arms race',
       'Regulation: Speed bumps (350µs), minimum quote life (500ms), circuit breakers',
       'Ban: Quote stuffing, pinging dark pools, layering/spoofing',
@@ -149,7 +149,7 @@ class MarketMaker:
         self.max_inventory = 10000  # Risk limit
         self.base_spread = 0.0005  # 5 bps
     
-    def quote(self, fair_value):
+    def quote (self, fair_value):
         # Adjust spread based on inventory
         inventory_skew = self.inventory / self.max_inventory
         
@@ -160,7 +160,7 @@ class MarketMaker:
         
         return bid, ask
     
-    def adjust_spread_for_risk(self, volatility, order_flow_toxicity):
+    def adjust_spread_for_risk (self, volatility, order_flow_toxicity):
         """
         Wider spreads when:
         - High volatility (more price risk)
@@ -173,7 +173,7 @@ class MarketMaker:
         
         return adjusted_spread
     
-    def detect_adverse_selection(self, recent_fills):
+    def detect_adverse_selection (self, recent_fills):
         """
         If we keep buying at bid and price drops,
         or selling at ask and price rises,
@@ -182,12 +182,12 @@ class MarketMaker:
         buys_followed_by_drop = sum(1 for trade in recent_fills 
                                     if trade.side == 'buy' and trade.pnl < 0)
         
-        toxicity = buys_followed_by_drop / len(recent_fills)
+        toxicity = buys_followed_by_drop / len (recent_fills)
         
         if toxicity > 0.6:  # Losing on 60%+ of trades
             return 'HIGH_TOXICITY'  # Widen spreads or stop quoting
     
-    def handle_flash_crash(self):
+    def handle_flash_crash (self):
         """
         Flash crash (2010): Dow -1000pts in minutes
         
@@ -216,7 +216,7 @@ class MarketMaker:
 **Flash Crash Scenario:**
 
 **What Happened (May 6, 2010):**
-1. Large sell order ($4.1B E-mini futures)
+1. Large sell order (\$4.1B E-mini futures)
 2. HFT market makers bought, then tried to sell
 3. No buyers → HFTs sold to each other in hot potato
 4. Prices cascaded down

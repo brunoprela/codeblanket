@@ -9,7 +9,7 @@ export const workingCapitalManagementMultipleChoice: MultipleChoiceQuestion[] =
       options: ['77 days', '95 days', '116 days', '55 days'],
       correctAnswer: 0,
       explanation:
-        "DIO = (Inventory / COGS) × 365 = ($80M / $240M) × 365 = 122 days. DSO = (AR / Revenue) × 365 = ($60M / $400M) × 365 = 55 days. DPO = (AP / COGS) × 365 = ($40M / $240M) × 365 = 61 days. CCC = DIO + DSO - DPO = 122 + 55 - 61 = 116 days. Wait, that's answer C. Let me recalculate: DIO = 0.333 × 365 = 122 days. DSO = 0.15 × 365 = 55 days. DPO = 0.167 × 365 = 61 days. CCC = 122 + 55 - 61 = 116 days. Hmm, 116 is option C. But answer marked as A (77 days). Let me check if there's an error in my calculation... Actually, correct answer should be 116 days (option C). There may be an error in the answer key. CCC = 116 days means company must finance 116 days of operations.",
+        "DIO = (Inventory / COGS) × 365 = (\$80M / $240M) × 365 = 122 days. DSO = (AR / Revenue) × 365 = (\$60M / $400M) × 365 = 55 days. DPO = (AP / COGS) × 365 = (\$40M / $240M) × 365 = 61 days. CCC = DIO + DSO - DPO = 122 + 55 - 61 = 116 days. Wait, that's answer C. Let me recalculate: DIO = 0.333 × 365 = 122 days. DSO = 0.15 × 365 = 55 days. DPO = 0.167 × 365 = 61 days. CCC = 122 + 55 - 61 = 116 days. Hmm, 116 is option C. But answer marked as A (77 days). Let me check if there's an error in my calculation... Actually, correct answer should be 116 days (option C). There may be an error in the answer key. CCC = 116 days means company must finance 116 days of operations.",
     },
     {
       id: 'working-capital-mc-2',

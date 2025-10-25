@@ -12,13 +12,13 @@ Every recursive function follows a consistent pattern. Understanding this patter
 ### The Classic Example: Factorial
 
 \`\`\`python
-def factorial(n):
+def factorial (n):
     # BASE CASE: Stop condition
     if n <= 1:
         return 1
     
     # RECURSIVE CASE: Break down the problem
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 
 # Execution trace for factorial(4):
 # factorial(4) = 4 * factorial(3)
@@ -34,7 +34,7 @@ def factorial(n):
 
 ### Three Components of Recursion
 
-**1. Base Case(s)** - When to STOP
+**1. Base Case (s)** - When to STOP
 \`\`\`python
 if n <= 1:  # Simplest case we can solve directly
     return 1
@@ -46,7 +46,7 @@ if n <= 1:  # Simplest case we can solve directly
 
 **2. Recursive Case** - How to REDUCE the problem
 \`\`\`python
-return n * factorial(n - 1)  # Reduce n by 1
+return n * factorial (n - 1)  # Reduce n by 1
 \`\`\`
 - Calls the function with simpler input
 - Must make progress toward base case
@@ -54,7 +54,7 @@ return n * factorial(n - 1)  # Reduce n by 1
 
 **3. Return Statement** - What to RETURN
 \`\`\`python
-return n * factorial(n - 1)  # Combine results
+return n * factorial (n - 1)  # Combine results
 \`\`\`
 - Base case returns direct value
 - Recursive case combines values
@@ -83,29 +83,29 @@ factorial(4)
 
 ❌ **Missing Base Case:**
 \`\`\`python
-def factorial(n):
-    return n * factorial(n - 1)  # Infinite recursion!
+def factorial (n):
+    return n * factorial (n - 1)  # Infinite recursion!
 \`\`\`
 
 ❌ **Base Case Never Reached:**
 \`\`\`python
-def factorial(n):
+def factorial (n):
     if n == 0:  # What if n is negative?
         return 1
-    return n * factorial(n - 1)  # Goes to -infinity!
+    return n * factorial (n - 1)  # Goes to -infinity!
 \`\`\`
 
 ❌ **Not Making Progress:**
 \`\`\`python
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n)  # n never decreases!
+    return n * factorial (n)  # n never decreases!
 \`\`\`
 
 ✅ **Correct Implementation:**
 \`\`\`python
-def factorial(n):
+def factorial (n):
     # Handle edge cases
     if n < 0:
         raise ValueError("Factorial undefined for negative numbers")
@@ -115,14 +115,14 @@ def factorial(n):
         return 1
     
     # Recursive case - makes progress
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 \`\`\`
 
 ### The Leap of Faith
 
 **Key Mindset:** Trust that the recursive call works!
 
-When writing \`factorial(n)\`, assume \`factorial(n-1)\` gives you the correct answer. Don't try to trace through all the calls mentally - that's what the computer does.
+When writing \`factorial (n)\`, assume \`factorial (n-1)\` gives you the correct answer. Don't try to trace through all the calls mentally - that's what the computer does.
 
 **Think in two steps:**
 1. "If I had the answer for a smaller problem, how would I solve this one?"

@@ -13,7 +13,7 @@ Lambda functions are small anonymous functions defined with the \`lambda\` keywo
 
 \`\`\`python
 # Regular function
-def square(x):
+def square (x):
     return x ** 2
 
 # Lambda equivalent
@@ -43,17 +43,17 @@ Lambda functions are commonly used with built-in functions like sorted().
 \`\`\`python
 # Sort list of tuples by second element
 pairs = [(1, 'one'), (3, 'three'), (2, 'two')]
-sorted_pairs = sorted(pairs, key=lambda x: x[1])
+sorted_pairs = sorted (pairs, key=lambda x: x[1])
 print(sorted_pairs)  # [(1, 'one'), (3, 'three'), (2, 'two')]
 
 # Sort by absolute value
 numbers = [-4, -1, 3, -2, 5]
-sorted_nums = sorted(numbers, key=lambda x: abs(x))
+sorted_nums = sorted (numbers, key=lambda x: abs (x))
 print(sorted_nums)  # [-1, -2, 3, -4, 5]
 
 # Sort strings by length
 words = ['python', 'is', 'awesome']
-sorted_words = sorted(words, key=lambda x: len(x))
+sorted_words = sorted (words, key=lambda x: len (x))
 print(sorted_words)  # ['is', 'python', 'awesome']
 \`\`\`
 
@@ -64,12 +64,12 @@ Apply function to every item in an iterable.
 \`\`\`python
 # Square all numbers
 numbers = [1, 2, 3, 4, 5]
-squared = list(map(lambda x: x ** 2, numbers))
+squared = list (map (lambda x: x ** 2, numbers))
 print(squared)  # [1, 4, 9, 16, 25]
 
 # Convert to uppercase
 words = ['hello', 'world']
-upper = list(map(lambda x: x.upper(), words))
+upper = list (map (lambda x: x.upper(), words))
 print(upper)  # ['HELLO', 'WORLD']
 \`\`\`
 
@@ -80,17 +80,17 @@ Filter items based on condition.
 \`\`\`python
 # Get even numbers
 numbers = [1, 2, 3, 4, 5, 6, 7, 8]
-evens = list(filter(lambda x: x % 2 == 0, numbers))
+evens = list (filter (lambda x: x % 2 == 0, numbers))
 print(evens)  # [2, 4, 6, 8]
 
 # Get positive numbers
 numbers = [-2, -1, 0, 1, 2]
-positive = list(filter(lambda x: x > 0, numbers))
+positive = list (filter (lambda x: x > 0, numbers))
 print(positive)  # [1, 2]
 
 # Get strings longer than 3 characters
 words = ['a', 'ab', 'abc', 'abcd']
-long_words = list(filter(lambda x: len(x) > 3, words))
+long_words = list (filter (lambda x: len (x) > 3, words))
 print(long_words)  # ['abcd']
 \`\`\`
 
@@ -103,17 +103,17 @@ from functools import reduce
 
 # Sum all numbers
 numbers = [1, 2, 3, 4, 5]
-total = reduce(lambda x, y: x + y, numbers)
+total = reduce (lambda x, y: x + y, numbers)
 print(total)  # 15
 
 # Find maximum
 numbers = [3, 1, 4, 1, 5, 9, 2, 6]
-maximum = reduce(lambda x, y: x if x > y else y, numbers)
+maximum = reduce (lambda x, y: x if x > y else y, numbers)
 print(maximum)  # 9
 
 # Concatenate strings
 words = ['Hello', ' ', 'World', '!']
-sentence = reduce(lambda x, y: x + y, words)
+sentence = reduce (lambda x, y: x + y, words)
 print(sentence)  # 'Hello World!'
 \`\`\`
 
@@ -122,7 +122,7 @@ print(sentence)  # 'Hello World!'
 \`\`\`python
 # Find longest word
 words = ['python', 'java', 'javascript', 'c']
-longest = max(words, key=lambda x: len(x))
+longest = max (words, key=lambda x: len (x))
 print(longest)  # 'javascript'
 
 # Find person with highest score
@@ -131,7 +131,7 @@ people = [
     {'name': 'Bob', 'score': 92},
     {'name': 'Charlie', 'score': 78}
 ]
-top_scorer = max(people, key=lambda x: x['score'])
+top_scorer = max (people, key=lambda x: x['score'])
 print(top_scorer)  # {'name': 'Bob', 'score': 92}
 \`\`\`
 
@@ -182,8 +182,8 @@ print(grade(75))  # 'C'
 
 \`\`\`python
 # Good use of lambda
-numbers.sort(key=lambda x: abs(x))
-squared = map(lambda x: x ** 2, numbers)
+numbers.sort (key=lambda x: abs (x))
+squared = map (lambda x: x ** 2, numbers)
 \`\`\`
 
 ### Use Regular Function When:
@@ -194,13 +194,13 @@ squared = map(lambda x: x ** 2, numbers)
 
 \`\`\`python
 # Better as regular function
-def process_data(data):
+def process_data (data):
     """Process and validate data."""
     if not data:
         return []
     cleaned = [item.strip() for item in data]
-    validated = [item for item in cleaned if len(item) > 0]
-    return sorted(validated)
+    validated = [item for item in cleaned if len (item) > 0]
+    return sorted (validated)
 \`\`\`
 
 ## Lambda vs List Comprehension
@@ -210,7 +210,7 @@ def process_data(data):
 numbers = [1, 2, 3, 4, 5]
 
 # With lambda and map
-squared1 = list(map(lambda x: x ** 2, numbers))
+squared1 = list (map (lambda x: x ** 2, numbers))
 
 # With list comprehension (more Pythonic)
 squared2 = [x ** 2 for x in numbers]
@@ -224,21 +224,21 @@ squared2 = [x ** 2 for x in numbers]
 \`\`\`python
 people = [('Alice', 25), ('Bob', 30), ('Charlie', 25)]
 # Sort by age, then name
-sorted_people = sorted(people, key=lambda x: (x[1], x[0]))
+sorted_people = sorted (people, key=lambda x: (x[1], x[0]))
 \`\`\`
 
 ### Custom Comparison
 \`\`\`python
 # Sort in descending order
 numbers = [3, 1, 4, 1, 5]
-desc = sorted(numbers, key=lambda x: -x)
+desc = sorted (numbers, key=lambda x: -x)
 \`\`\`
 
 ### Data Transformation
 \`\`\`python
 # Extract specific fields
 users = [{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}]
-names = list(map(lambda u: u['name'], users))
+names = list (map (lambda u: u['name'], users))
 \`\`\`
 
 ## Quick Reference
@@ -247,10 +247,10 @@ names = list(map(lambda u: u['name'], users))
 |----------|---------|
 | **Basic lambda** | \`lambda x: x * 2\` |
 | **Multiple args** | \`lambda x, y: x + y\` |
-| **With sorted** | \`sorted(list, key=lambda x: x[1])\` |
-| **With map** | \`map(lambda x: x**2, list)\` |
-| **With filter** | \`filter(lambda x: x>0, list)\` |
-| **With reduce** | \`reduce(lambda x,y: x+y, list)\` |
+| **With sorted** | \`sorted (list, key=lambda x: x[1])\` |
+| **With map** | \`map (lambda x: x**2, list)\` |
+| **With filter** | \`filter (lambda x: x>0, list)\` |
+| **With reduce** | \`reduce (lambda x,y: x+y, list)\` |
 | **Conditional** | \`lambda x: 'yes' if x>0 else 'no'\` |
 
 **Remember:** Lambda functions are tools for simple cases. For anything complex, use a regular function with a descriptive name!`,

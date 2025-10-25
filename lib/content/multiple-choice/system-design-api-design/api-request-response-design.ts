@@ -23,7 +23,7 @@ export const apirequestresponsedesignMultipleChoice: MultipleChoiceQuestion[] =
     {
       id: 'req-res-q2',
       question:
-        "What's the correct HTTP status code and response for an invalid email during registration?",
+        "What\'s the correct HTTP status code and response for an invalid email during registration?",
       options: [
         '200 OK with {"success": false}',
         '400 Bad Request with structured error',

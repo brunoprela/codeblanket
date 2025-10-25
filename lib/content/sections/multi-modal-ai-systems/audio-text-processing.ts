@@ -111,7 +111,7 @@ def transcribe_audio(
     Returns:
         Transcribed text
     """
-    with open(audio_path, "rb") as audio_file:
+    with open (audio_path, "rb") as audio_file:
         transcript = client.audio.transcriptions.create(
             model=model,
             file=audio_file,
@@ -144,7 +144,7 @@ def transcribe_with_timestamps(
     Returns:
         Dictionary with transcript and timing information
     """
-    with open(audio_path, "rb") as audio_file:
+    with open (audio_path, "rb") as audio_file:
         transcript = client.audio.transcriptions.create(
             model="whisper-1",
             file=audio_file,
@@ -174,7 +174,7 @@ for segment in result.segments:
 Whisper can also translate audio to English:
 
 \`\`\`python
-def translate_audio_to_english(audio_path: str) -> str:
+def translate_audio_to_english (audio_path: str) -> str:
     """
     Translate audio in any language to English text.
     
@@ -184,7 +184,7 @@ def translate_audio_to_english(audio_path: str) -> str:
     Returns:
         English translation
     """
-    with open(audio_path, "rb") as audio_file:
+    with open (audio_path, "rb") as audio_file:
         translation = client.audio.translations.create(
             model="whisper-1",
             file=audio_file
@@ -210,7 +210,7 @@ import json
 from pydub import AudioSegment
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -244,23 +244,23 @@ class ProductionTranscriptionSystem:
         max_file_size_mb: int = 25
     ):
         self.client = openai.OpenAI(api_key=openai_api_key)
-        self.redis_client = redis.Redis(host=redis_host, port=redis_port)
+        self.redis_client = redis.Redis (host=redis_host, port=redis_port)
         self.cache_ttl = cache_ttl
         self.max_file_size_bytes = max_file_size_mb * 1024 * 1024
     
-    def _get_audio_hash(self, audio_path: str) -> str:
+    def _get_audio_hash (self, audio_path: str) -> str:
         """Generate hash of audio file."""
-        with open(audio_path, 'rb') as f:
+        with open (audio_path, 'rb') as f:
             return hashlib.sha256(f.read()).hexdigest()
     
-    def _get_cache_key(self, audio_hash: str, language: Optional[str]) -> str:
+    def _get_cache_key (self, audio_hash: str, language: Optional[str]) -> str:
         """Generate cache key."""
         lang_suffix = language or "auto"
         return f"transcription:{audio_hash}:{lang_suffix}"
     
     def _convert_to_mp3(self, audio_path: str, output_path: str) -> str:
         """Convert audio to MP3 if needed."""
-        audio = AudioSegment.from_file(audio_path)
+        audio = AudioSegment.from_file (audio_path)
         
         # Convert to mono if stereo
         if audio.channels > 1:
@@ -271,7 +271,7 @@ class ProductionTranscriptionSystem:
             audio = audio.set_frame_rate(16000)
         
         # Export as MP3
-        audio.export(output_path, format="mp3", bitrate="64k")
+        audio.export (output_path, format="mp3", bitrate="64k")
         
         return output_path
     
@@ -281,14 +281,14 @@ class ProductionTranscriptionSystem:
         chunk_length_ms: int = 10 * 60 * 1000  # 10 minutes
     ) -> List[str]:
         """Split large audio files into chunks."""
-        audio = AudioSegment.from_file(audio_path)
+        audio = AudioSegment.from_file (audio_path)
         
         chunks = []
-        for i, start in enumerate(range(0, len(audio), chunk_length_ms)):
+        for i, start in enumerate (range(0, len (audio), chunk_length_ms)):
             chunk = audio[start:start + chunk_length_ms]
             chunk_path = f"chunk_{i}.mp3"
-            chunk.export(chunk_path, format="mp3")
-            chunks.append(chunk_path)
+            chunk.export (chunk_path, format="mp3")
+            chunks.append (chunk_path)
         
         return chunks
     
@@ -314,20 +314,20 @@ class ProductionTranscriptionSystem:
         start_time = datetime.now()
         
         # Validate file exists
-        if not os.path.exists(audio_path):
-            raise FileNotFoundError(f"Audio file not found: {audio_path}")
+        if not os.path.exists (audio_path):
+            raise FileNotFoundError (f"Audio file not found: {audio_path}")
         
         # Get audio hash for caching
-        audio_hash = self._get_audio_hash(audio_path)
+        audio_hash = self._get_audio_hash (audio_path)
         
         # Check cache
         if use_cache:
-            cache_key = self._get_cache_key(audio_hash, language)
-            cached_result = self.redis_client.get(cache_key)
+            cache_key = self._get_cache_key (audio_hash, language)
+            cached_result = self.redis_client.get (cache_key)
             
             if cached_result:
-                logger.info(f"Cache hit for audio {audio_hash[:8]}")
-                result_dict = json.loads(cached_result)
+                logger.info (f"Cache hit for audio {audio_hash[:8]}")
+                result_dict = json.loads (cached_result)
                 
                 # Reconstruct segments
                 segments = [
@@ -346,14 +346,14 @@ class ProductionTranscriptionSystem:
                 )
         
         # Check file size
-        file_size = os.path.getsize(audio_path)
+        file_size = os.path.getsize (audio_path)
         
         if file_size > self.max_file_size_bytes:
             logger.warning(
                 f"Large audio file ({file_size / 1024 / 1024:.1f}MB), "
                 "splitting into chunks..."
             )
-            chunks = self._split_audio(audio_path)
+            chunks = self._split_audio (audio_path)
             
             # Transcribe each chunk
             all_segments = []
@@ -370,12 +370,12 @@ class ProductionTranscriptionSystem:
                 for seg in chunk_result.segments:
                     seg.start += time_offset
                     seg.end += time_offset
-                    all_segments.append(seg)
+                    all_segments.append (seg)
                 
                 time_offset += chunk_result.duration
                 
                 # Clean up chunk file
-                os.remove(chunk_path)
+                os.remove (chunk_path)
             
             # Combine results
             full_text = " ".join([seg.text for seg in all_segments])
@@ -383,13 +383,13 @@ class ProductionTranscriptionSystem:
         
         else:
             # Transcribe single file
-            result = self._transcribe_file(audio_path, language, include_timestamps)
+            result = self._transcribe_file (audio_path, language, include_timestamps)
             full_text = result.text
             total_duration = result.duration
             all_segments = result.segments
         
         # Calculate metrics
-        word_count = len(full_text.split())
+        word_count = len (full_text.split())
         processing_time = (datetime.now() - start_time).total_seconds()
         
         # Detect language if not specified
@@ -424,11 +424,11 @@ class ProductionTranscriptionSystem:
                 'processing_time': final_result.processing_time
             }
             
-            cache_key = self._get_cache_key(audio_hash, language)
+            cache_key = self._get_cache_key (audio_hash, language)
             self.redis_client.setex(
                 cache_key,
                 self.cache_ttl,
-                json.dumps(result_dict)
+                json.dumps (result_dict)
             )
         
         logger.info(
@@ -445,7 +445,7 @@ class ProductionTranscriptionSystem:
         include_timestamps: bool
     ) -> TranscriptionResult:
         """Internal method to transcribe a single file."""
-        with open(audio_path, "rb") as audio_file:
+        with open (audio_path, "rb") as audio_file:
             if include_timestamps:
                 response = self.client.audio.transcriptions.create(
                     model="whisper-1",
@@ -474,10 +474,10 @@ class ProductionTranscriptionSystem:
             
             return TranscriptionResult(
                 text=response.text,
-                language=response.language if hasattr(response, 'language') else 'en',
-                duration=response.duration if hasattr(response, 'duration') else 0,
+                language=response.language if hasattr (response, 'language') else 'en',
+                duration=response.duration if hasattr (response, 'duration') else 0,
                 segments=segments,
-                word_count=len(response.text.split()),
+                word_count=len (response.text.split()),
                 processing_time=0,
                 cached=False
             )
@@ -528,7 +528,7 @@ def text_to_speech(
         input=text
     )
     
-    response.stream_to_file(output_path)
+    response.stream_to_file (output_path)
     
     return output_path
 
@@ -557,7 +557,7 @@ def stream_text_to_speech(
     )
     
     # Stream to output
-    for chunk in response.iter_bytes(chunk_size=1024):
+    for chunk in response.iter_bytes (chunk_size=1024):
         # Process chunk (e.g., send to client, play audio)
         yield chunk
 
@@ -596,11 +596,11 @@ def identify_speakers(
     )
     
     # Run diarization
-    diarization = pipeline(audio_path)
+    diarization = pipeline (audio_path)
     
     # Extract segments
     segments = []
-    for turn, _, speaker in diarization.itertracks(yield_label=True):
+    for turn, _, speaker in diarization.itertracks (yield_label=True):
         segments.append({
             "start": turn.start,
             "end": turn.end,
@@ -616,10 +616,10 @@ def transcribe_with_speakers(
 ) -> List[Dict[str, Any]]:
     """Transcribe audio with speaker labels."""
     # Get transcription with timestamps
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     # Get speaker segments
-    speakers = identify_speakers(audio_path, hf_token)
+    speakers = identify_speakers (audio_path, hf_token)
     
     # Match transcription segments with speakers
     labeled_segments = []
@@ -649,10 +649,10 @@ for seg in segments:
 ### Audio Classification
 
 \`\`\`python
-def classify_audio_content(audio_path: str) -> Dict[str, Any]:
+def classify_audio_content (audio_path: str) -> Dict[str, Any]:
     """Classify audio content type."""
     # First transcribe
-    result = transcriber.transcribe(audio_path)
+    result = transcriber.transcribe (audio_path)
     
     # Use LLM to classify
     classification_prompt = f"""Analyze this audio transcript and classify it:
@@ -678,20 +678,20 @@ Return as JSON."""
     )
     
     import json
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Classify audio
 classification = classify_audio_content("audio.mp3")
-print(json.dumps(classification, indent=2))
+print(json.dumps (classification, indent=2))
 \`\`\`
 
 ### Sentiment Analysis
 
 \`\`\`python
-def analyze_audio_sentiment(audio_path: str) -> Dict[str, Any]:
+def analyze_audio_sentiment (audio_path: str) -> Dict[str, Any]:
     """Analyze sentiment in audio transcript."""
     # Transcribe
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     # Analyze sentiment for each segment
     sentiments = []
@@ -710,7 +710,7 @@ def analyze_audio_sentiment(audio_path: str) -> Dict[str, Any]:
         )
         
         import json
-        sentiment_data = json.loads(response.choices[0].message.content)
+        sentiment_data = json.loads (response.choices[0].message.content)
         
         sentiments.append({
             "start": segment.start,
@@ -725,7 +725,7 @@ def analyze_audio_sentiment(audio_path: str) -> Dict[str, Any]:
     negative = sum(1 for s in sentiments if s['sentiment'] == 'negative')
     neutral = sum(1 for s in sentiments if s['sentiment'] == 'neutral')
     
-    total = len(sentiments)
+    total = len (sentiments)
     overall = "positive" if positive > negative else "negative" if negative > positive else "neutral"
     
     return {
@@ -768,7 +768,7 @@ def process_podcast(
         Complete podcast analysis
     """
     # Transcribe
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     podcast_data = {
         "transcript": result.text,
@@ -808,7 +808,7 @@ Return JSON array:
         )
         
         import json
-        podcast_data['chapters'] = json.loads(response.choices[0].message.content)
+        podcast_data['chapters'] = json.loads (response.choices[0].message.content)
     
     # Extract quotes
     if extract_quotes:
@@ -823,7 +823,7 @@ Return as JSON array of strings."""
             messages=[{"role": "user", "content": quotes_prompt}]
         )
         
-        podcast_data['quotes'] = json.loads(response.choices[0].message.content)
+        podcast_data['quotes'] = json.loads (response.choices[0].message.content)
     
     return podcast_data
 
@@ -845,9 +845,9 @@ for quote in podcast_analysis['quotes']:
 ### 1. Meeting Transcription and Summarization
 
 \`\`\`python
-def process_meeting(audio_path: str) -> Dict[str, Any]:
+def process_meeting (audio_path: str) -> Dict[str, Any]:
     """Process meeting recording."""
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     analysis_prompt = f"""Analyze this meeting transcript and extract:
 
@@ -868,7 +868,7 @@ Return as JSON."""
     )
     
     import json
-    analysis = json.loads(response.choices[0].message.content)
+    analysis = json.loads (response.choices[0].message.content)
     
     return {
         "duration": result.duration,
@@ -880,9 +880,9 @@ Return as JSON."""
 ### 2. Customer Service Call Analysis
 
 \`\`\`python
-def analyze_service_call(audio_path: str) -> Dict[str, Any]:
+def analyze_service_call (audio_path: str) -> Dict[str, Any]:
     """Analyze customer service call."""
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     analysis_prompt = f"""Analyze this customer service call:
 
@@ -904,15 +904,15 @@ Return as JSON."""
     )
     
     import json
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 \`\`\`
 
 ### 3. Lecture/Educational Content Processing
 
 \`\`\`python
-def process_lecture(audio_path: str) -> Dict[str, Any]:
+def process_lecture (audio_path: str) -> Dict[str, Any]:
     """Process educational lecture."""
-    result = transcriber.transcribe(audio_path, include_timestamps=True)
+    result = transcriber.transcribe (audio_path, include_timestamps=True)
     
     # Generate study materials
     materials_prompt = f"""From this lecture transcript, generate:
@@ -934,7 +934,7 @@ Return as JSON."""
     )
     
     import json
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 \`\`\`
 
 ## Best Practices
@@ -951,20 +951,20 @@ def preprocess_audio(
 ) -> str:
     """Preprocess audio for better transcription."""
     # Load audio
-    audio = AudioSegment.from_file(input_path)
+    audio = AudioSegment.from_file (input_path)
     
     # Convert to mono
     if audio.channels > 1:
         audio = audio.set_channels(1)
     
     # Normalize volume
-    audio = normalize(audio)
+    audio = normalize (audio)
     
     # Resample to 16kHz (sufficient for speech)
     audio = audio.set_frame_rate(16000)
     
     # Export
-    audio.export(output_path, format="mp3", bitrate="64k")
+    audio.export (output_path, format="mp3", bitrate="64k")
     
     return output_path
 \`\`\`
@@ -994,7 +994,7 @@ def validate_transcription(
 ) -> bool:
     """Validate transcription quality."""
     # Check length
-    word_count = len(transcription.split())
+    word_count = len (transcription.split())
     if word_count < expected_min_words:
         return False
     
@@ -1005,7 +1005,7 @@ def validate_transcription(
     
     # Check for repetition (sign of poor audio quality)
     words = transcription.lower().split()
-    if len(set(words)) / len(words) < 0.3:
+    if len (set (words)) / len (words) < 0.3:
         # Less than 30% unique words suggests issues
         return False
     

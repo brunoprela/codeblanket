@@ -50,7 +50,7 @@ import json
 
 client = OpenAI()
 
-def extract_structured_data(text: str) -> dict:
+def extract_structured_data (text: str) -> dict:
     """Extract data in guaranteed JSON format."""
     
     prompt = f"""Extract person information as JSON with these exact fields:
@@ -71,7 +71,7 @@ Output only valid JSON:"""
     )
     
     # Parse JSON
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Test
 result = extract_structured_data("Sarah Johnson is a 30-year-old software engineer")
@@ -94,9 +94,9 @@ class Person(BaseModel):
     name: str = Field(..., description="Full name")
     age: Optional[int] = Field(None, description="Age in years")
     email: Optional[str] = Field(None, description="Email address")
-    skills: List[str] = Field(default_factory=list, description="List of skills")
+    skills: List[str] = Field (default_factory=list, description="List of skills")
 
-def create_json_schema_prompt(schema_model: type[BaseModel]) -> str:
+def create_json_schema_prompt (schema_model: type[BaseModel]) -> str:
     """
     Generate prompt with JSON schema from Pydantic model.
     Ensures type-safe, validated outputs.
@@ -116,8 +116,8 @@ def create_json_schema_prompt(schema_model: type[BaseModel]) -> str:
         elif field_type == 'array':
             example[field_name] = []
     
-    schema_str = json.dumps(schema, indent=2)
-    example_str = json.dumps(example, indent=2)
+    schema_str = json.dumps (schema, indent=2)
+    example_str = json.dumps (example, indent=2)
     
     return f"""Extract information matching this JSON schema:
 
@@ -132,7 +132,7 @@ Output only valid JSON matching the schema."""
 # Generate prompt
 prompt_template = create_json_schema_prompt(Person)
 
-def extract_with_schema(text: str) -> Person:
+def extract_with_schema (text: str) -> Person:
     """Extract data with schema validation."""
     
     full_prompt = f"""{prompt_template}
@@ -147,7 +147,7 @@ JSON:"""
         response_format={"type": "json_object"}
     )
     
-    data = json.loads(response.choices[0].message.content)
+    data = json.loads (response.choices[0].message.content)
     
     # Validate with Pydantic
     return Person(**data)
@@ -159,7 +159,7 @@ person = extract_with_schema(
 
 print(person.model_dump())
 # Type-safe access
-print(f"Skills: {', '.join(person.skills)}")
+print(f"Skills: {', '.join (person.skills)}")
 \`\`\`
 
 ## Instructor Library: Type-Safe LLM Outputs
@@ -185,12 +185,12 @@ client = instructor.from_openai(OpenAI())
 class CodeReview(BaseModel):
     """Structured code review output."""
     summary: str = Field(..., description="One-sentence summary")
-    bugs: List[str] = Field(default_factory=list, description="List of bugs found")
-    suggestions: List[str] = Field(default_factory=list, description="Improvement suggestions")
+    bugs: List[str] = Field (default_factory=list, description="List of bugs found")
+    suggestions: List[str] = Field (default_factory=list, description="Improvement suggestions")
     severity: str = Field(..., description="Overall severity: low/medium/high")
     code_quality_score: int = Field(..., ge=0, le=10, description="Quality score 0-10")
 
-def review_code_structured(code: str) -> CodeReview:
+def review_code_structured (code: str) -> CodeReview:
     """Get structured code review."""
     
     review = client.chat.completions.create(
@@ -208,23 +208,23 @@ def review_code_structured(code: str) -> CodeReview:
 
 # Usage
 code = """
-def calculate_average(numbers):
+def calculate_average (numbers):
     total = 0
     for num in numbers:
         total += num
-    return total / len(numbers)
+    return total / len (numbers)
 """
 
-review = review_code_structured(code)
+review = review_code_structured (code)
 
 # Type-safe access with autocomplete!
 print(f"Summary: {review.summary}")
-print(f"Bugs: {len(review.bugs)}")
+print(f"Bugs: {len (review.bugs)}")
 print(f"Quality: {review.code_quality_score}/10")
 print(f"Severity: {review.severity}")
 
 # Pydantic validation ensures correct types
-assert isinstance(review.code_quality_score, int)
+assert isinstance (review.code_quality_score, int)
 assert 0 <= review.code_quality_score <= 10
 \`\`\`
 
@@ -249,7 +249,7 @@ class CodeAnalysis(BaseModel):
     complexity_score: int = Field(..., ge=1, le=10)
     recommendations: List[str]
 
-def analyze_code(code: str) -> CodeAnalysis:
+def analyze_code (code: str) -> CodeAnalysis:
     """Analyze code and return structured analysis."""
     
     analysis = client.chat.completions.create(
@@ -274,23 +274,23 @@ code = """
 import requests
 from typing import List
 
-def fetch_users(api_key: str) -> List[dict]:
+def fetch_users (api_key: str) -> List[dict]:
     response = requests.get('https://api.example.com/users', 
                            headers={'Authorization': api_key})
     return response.json()
 
-def process_users(users: List[dict]) -> None:
+def process_users (users: List[dict]) -> None:
     for user in users:
         print(user['name'])
 """
 
-analysis = analyze_code(code)
+analysis = analyze_code (code)
 
 print(f"Language: {analysis.language}")
-print(f"Functions: {', '.join(analysis.functions_defined)}")
+print(f"Functions: {', '.join (analysis.functions_defined)}")
 print(f"\\nFunction Calls:")
 for call in analysis.functions_called:
-    print(f"  - {call.name}({', '.join(call.arguments)})")
+    print(f"  - {call.name}({', '.join (call.arguments)})")
 print(f"\\nComplexity: {analysis.complexity_score}/10")
 \`\`\`
 
@@ -299,7 +299,7 @@ print(f"\\nComplexity: {analysis.complexity_score}/10")
 ### Structured Alternative to JSON
 
 \`\`\`python
-def xml_format_prompt(task: str, input_data: str) -> str:
+def xml_format_prompt (task: str, input_data: str) -> str:
     """
     Some tasks work better with XML than JSON.
     Especially for hierarchical or mixed content.
@@ -321,11 +321,11 @@ Input: {input_data}
 
 Response:"""
 
-def parse_xml_response(xml_str: str) -> dict:
+def parse_xml_response (xml_str: str) -> dict:
     """Parse XML response."""
     import xml.etree.ElementTree as ET
     
-    root = ET.fromstring(xml_str)
+    root = ET.fromstring (xml_str)
     
     return {
         'summary': root.find('summary').text,
@@ -350,7 +350,7 @@ xml_response = """<response>
   <conclusion>Recommend proceeding with pilot launch</conclusion>
 </response>"""
 
-parsed = parse_xml_response(xml_response)
+parsed = parse_xml_response (xml_response)
 print("Summary:", parsed['summary'])
 print("Details:", parsed['details'])
 \`\`\`
@@ -358,7 +358,7 @@ print("Details:", parsed['details'])
 ### Markdown for Human-Readable Structured Output
 
 \`\`\`python
-def markdown_format_prompt(task: str) -> str:
+def markdown_format_prompt (task: str) -> str:
     """
     Markdown provides structure that's both machine-parseable
     and human-readable.
@@ -387,7 +387,7 @@ Format as Markdown with this exact structure:
 
 Generate report:"""
 
-def parse_markdown_sections(md_text: str) -> dict:
+def parse_markdown_sections (md_text: str) -> dict:
     """Parse markdown into structured sections."""
     
     sections = {}
@@ -398,16 +398,16 @@ def parse_markdown_sections(md_text: str) -> dict:
         if line.startswith('## '):
             # Save previous section
             if current_section:
-                sections[current_section] = '\\n'.join(current_content).strip()
+                sections[current_section] = '\\n'.join (current_content).strip()
             # Start new section
             current_section = line[3:].strip().lower().replace(' ', '_')
             current_content = []
         else:
-            current_content.append(line)
+            current_content.append (line)
     
     # Save last section
     if current_section:
-        sections[current_section] = '\\n'.join(current_content).strip()
+        sections[current_section] = '\\n'.join (current_content).strip()
     
     return sections
 
@@ -425,7 +425,7 @@ The proposed architecture is scalable and follows best practices.
 2. Add comprehensive monitoring
 3. Plan for data consistency patterns"""
 
-parsed = parse_markdown_sections(md_output)
+parsed = parse_markdown_sections (md_output)
 print("Summary:", parsed['summary'])
 print("\\nKey Points:", parsed['key_points'])
 \`\`\`
@@ -461,7 +461,7 @@ class OutputValidator:
         Retry with error feedback if validation fails.
         """
         
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             try:
                 # Get response
                 response = self.client.chat.completions.create(
@@ -474,7 +474,7 @@ class OutputValidator:
                 output_text = response.choices[0].message.content
                 
                 # Parse JSON
-                data = json.loads(output_text)
+                data = json.loads (output_text)
                 
                 # Validate against schema
                 validated = schema(**data)
@@ -487,7 +487,7 @@ class OutputValidator:
                 
                 if attempt < self.max_retries - 1:
                     # Retry with error feedback
-                    error_msg = str(e)
+                    error_msg = str (e)
                     prompt = f"""{prompt}
 
 Previous attempt failed validation:
@@ -495,7 +495,7 @@ Error: {error_msg}
 
 Please correct the output to match the schema exactly."""
                 else:
-                    raise ValueError(f"Failed to get valid output after {self.max_retries} attempts")
+                    raise ValueError (f"Failed to get valid output after {self.max_retries} attempts")
     
     def validate_and_fix(
         self,
@@ -507,7 +507,7 @@ Please correct the output to match the schema exactly."""
         """
         
         try:
-            data = json.loads(output)
+            data = json.loads (output)
             return schema(**data)
         except (json.JSONDecodeError, ValidationError) as e:
             # Ask LLM to fix
@@ -531,7 +531,7 @@ Please provide corrected JSON that passes validation."""
             )
             
             fixed_output = response.choices[0].message.content
-            data = json.loads(fixed_output)
+            data = json.loads (fixed_output)
             return schema(**data)
 
 # Example
@@ -541,7 +541,7 @@ class Product(BaseModel):
     in_stock: bool
     tags: List[str] = Field(..., min_items=1)
 
-validator = OutputValidator(client)
+validator = OutputValidator (client)
 
 prompt = """Extract product info as JSON:
 {
@@ -555,7 +555,7 @@ Product description: "Apple MacBook Pro M3, $1999, available now, laptop compute
 
 JSON:"""
 
-product = validator.get_validated_output(prompt, Product)
+product = validator.get_validated_output (prompt, Product)
 print(f"Validated: {product.model_dump()}")
 \`\`\`
 
@@ -573,41 +573,41 @@ class OutputParser:
     """
     
     @staticmethod
-    def extract_json(text: str) -> dict:
+    def extract_json (text: str) -> dict:
         """
         Extract JSON from text even if surrounded by other content.
         """
         
         # Try direct JSON parse first
         try:
-            return json.loads(text)
+            return json.loads (text)
         except json.JSONDecodeError:
             pass
         
         # Look for JSON between code blocks
         code_block_pattern = r'\`\`\`(?: json) ?\\n?(.*?) \\n ? \`\`\`'
-        matches = re.findall(code_block_pattern, text, re.DOTALL)
+        matches = re.findall (code_block_pattern, text, re.DOTALL)
         
         for match in matches:
             try:
-                return json.loads(match)
+                return json.loads (match)
             except json.JSONDecodeError:
                 continue
         
         # Look for JSON-like structure
         json_pattern = r'\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\}'
-        matches = re.findall(json_pattern, text)
+        matches = re.findall (json_pattern, text)
         
         for match in matches:
             try:
-                return json.loads(match)
+                return json.loads (match)
             except json.JSONDecodeError:
                 continue
         
         raise ValueError("Could not extract valid JSON from text")
     
     @staticmethod
-    def extract_code(text: str, language: str = None) -> str:
+    def extract_code (text: str, language: str = None) -> str:
         """
         Extract code from markdown code blocks.
         """
@@ -617,7 +617,7 @@ class OutputParser:
         else:
             pattern = r'\`\`\`(?: \\w +) ?\\n(.*?)\`\`\`'
         
-        matches = re.findall(pattern, text, re.DOTALL)
+        matches = re.findall (pattern, text, re.DOTALL)
         
         if matches:
             return matches[0].strip()
@@ -626,7 +626,7 @@ class OutputParser:
         return text.strip()
     
     @staticmethod
-    def extract_list(text: str) -> List[str]:
+    def extract_list (text: str) -> List[str]:
         """
         Extract list items from various formats.
         """
@@ -635,11 +635,11 @@ class OutputParser:
         
         # Try bullet points
         bullet_pattern = r'^[•\\-\\*]\\s+(.+)$'
-        items.extend(re.findall(bullet_pattern, text, re.MULTILINE))
+        items.extend (re.findall (bullet_pattern, text, re.MULTILINE))
         
         # Try numbered lists
         number_pattern = r'^\\d+\\.\\s+(.+)$'
-        items.extend(re.findall(number_pattern, text, re.MULTILINE))
+        items.extend (re.findall (number_pattern, text, re.MULTILINE))
         
         # If nothing found, split by newlines
         if not items:
@@ -652,13 +652,13 @@ parser = OutputParser()
 
 # Extract JSON from messy output
 messy_output = """
-Here's the data you requested:
+Here\'s the data you requested:
 \`\`\`json
 { "name": "Alice", "age": 30 }
 \`\`\`
 Hope this helps!
 """
-data = parser.extract_json(messy_output)
+data = parser.extract_json (messy_output)
 print("Extracted JSON:", data)
 
 # Extract code
@@ -669,7 +669,7 @@ def hello():
 print("Hello!")
     \`\`\`
 """
-code = parser.extract_code(code_output, 'python')
+code = parser.extract_code (code_output, 'python')
 print("Extracted code:", code)
 
 # Extract list
@@ -679,7 +679,7 @@ Key points:
 - Point two  
 - Point three
 """
-items = parser.extract_list(list_output)
+items = parser.extract_list (list_output)
 print("Extracted list:", items)
 \`\`\`
 
@@ -714,7 +714,7 @@ class FormatEnforcer:
         
         prompt = base_prompt
         
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             response = self.client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
@@ -724,7 +724,7 @@ class FormatEnforcer:
             output = response.choices[0].message.content
             
             # Validate format
-            is_valid, error_msg = validation_func(output)
+            is_valid, error_msg = validation_func (output)
             
             if is_valid:
                 print(f"✓ Valid format (attempt {attempt + 1})")
@@ -743,27 +743,27 @@ Error: {error_msg}
 
 Please fix and provide output in the exact format specified."""
         
-        raise ValueError(f"Could not get valid format after {self.max_retries} attempts")
+        raise ValueError (f"Could not get valid format after {self.max_retries} attempts")
 
 # Example: Enforce CSV format
-def validate_csv(output: str) -> tuple[bool, str]:
+def validate_csv (output: str) -> tuple[bool, str]:
     """Validate CSV format."""
     
     lines = output.strip().split('\\n')
     
-    if len(lines) < 2:
+    if len (lines) < 2:
         return False, "CSV must have header and at least one data row"
     
-    header_cols = len(lines[0].split(','))
+    header_cols = len (lines[0].split(','))
     
-    for i, line in enumerate(lines[1:], 2):
-        cols = len(line.split(','))
+    for i, line in enumerate (lines[1:], 2):
+        cols = len (line.split(','))
         if cols != header_cols:
             return False, f"Line {i} has {cols} columns, expected {header_cols}"
     
     return True, ""
 
-enforcer = FormatEnforcer(client)
+enforcer = FormatEnforcer (client)
 
 csv_output = enforcer.enforce_format(
     task="Convert this data to CSV: Users: Alice (age 25), Bob (age 30)",

@@ -63,9 +63,9 @@ Password Hashing with bcrypt
 from passlib.context import CryptContext
 
 # Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext (schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
+def hash_password (password: str) -> str:
     """
     Hash password using bcrypt
     
@@ -73,19 +73,19 @@ def hash_password(password: str) -> str:
     - Computationally expensive (prevents brute force)
     - Industry standard for password hashing
     """
-    return pwd_context.hash(password)
+    return pwd_context.hash (password)
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verify_password (plain_password: str, hashed_password: str) -> bool:
     """
     Verify password against hash
     
     Returns True if password matches
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    return pwd_context.verify (plain_password, hashed_password)
 
 # Example usage
 password = "SecurePassword123!"
-hashed = hash_password(password)  # $2b$12$abc...
+hashed = hash_password (password)  # $2b$12$abc...
 
 # Verify
 is_valid = verify_password("SecurePassword123!", hashed)  # True
@@ -111,22 +111,22 @@ class UserRegister(BaseModel):
     password: str = Field(..., min_length=8)
     
     @validator('password')
-    def password_strength(cls, v):
+    def password_strength (cls, v):
         """Validate password strength"""
-        if not any(c.isupper() for c in v):
+        if not any (c.isupper() for c in v):
             raise ValueError('Password must contain uppercase letter')
-        if not any(c.islower() for c in v):
+        if not any (c.islower() for c in v):
             raise ValueError('Password must contain lowercase letter')
-        if not any(c.isdigit() for c in v):
+        if not any (c.isdigit() for c in v):
             raise ValueError('Password must contain digit')
-        if not any(c in '!@#$%^&*()' for c in v):
+        if not any (c in '!@#$%^&*()' for c in v):
             raise ValueError('Password must contain special character')
         return v
 
 @app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register(
     user: UserRegister,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Register new user with hashed password
@@ -148,7 +148,7 @@ async def register(
         )
     
     # Hash password
-    hashed_password = hash_password(user.password)
+    hashed_password = hash_password (user.password)
     
     # Create user
     db_user = User(
@@ -157,9 +157,9 @@ async def register(
         hashed_password=hashed_password
     )
     
-    db.add(db_user)
+    db.add (db_user)
     db.commit()
-    db.refresh(db_user)
+    db.refresh (db_user)
     
     return db_user
 \`\`\`
@@ -204,7 +204,7 @@ def create_access_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta (minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
     to_encode.update({
         "exp": expire,
@@ -212,14 +212,14 @@ def create_access_token(
         "type": "access"
     })
     
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode (to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def create_refresh_token(user_id: int) -> str:
+def create_refresh_token (user_id: int) -> str:
     """
     Create JWT refresh token (longer lived)
     """
-    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    expire = datetime.utcnow() + timedelta (days=REFRESH_TOKEN_EXPIRE_DAYS)
     
     to_encode = {
         "sub": user_id,
@@ -228,10 +228,10 @@ def create_refresh_token(user_id: int) -> str:
         "type": "refresh"
     }
     
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode (to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def decode_token(token: str) -> dict:
+def decode_token (token: str) -> dict:
     """
     Decode and validate JWT token
     
@@ -239,7 +239,7 @@ def decode_token(token: str) -> dict:
         JWTError: If token is invalid or expired
     """
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode (token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except JWTError as e:
         raise HTTPException(
@@ -250,11 +250,11 @@ def decode_token(token: str) -> dict:
 
 # Example usage
 token_data = {"sub": "123", "username": "alice"}
-access_token = create_access_token(token_data)
+access_token = create_access_token (token_data)
 # eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 # Decode
-decoded = decode_token(access_token)
+decoded = decode_token (access_token)
 # {"sub": "123", "username": "alice", "exp": 1234567890, ...}
 \`\`\`
 
@@ -270,9 +270,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 # OAuth2 scheme (extracts token from Authorization header)
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer (tokenUrl="token")
 
-def get_token_payload(token: str = Depends(oauth2_scheme)) -> dict:
+def get_token_payload (token: str = Depends (oauth2_scheme)) -> dict:
     """
     Extract and validate token
     
@@ -282,7 +282,7 @@ def get_token_payload(token: str = Depends(oauth2_scheme)) -> dict:
     3. Returns payload
     """
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode (token, SECRET_KEY, algorithms=[ALGORITHM])
         
         # Check expiration
         exp = payload.get("exp")
@@ -309,8 +309,8 @@ def get_token_payload(token: str = Depends(oauth2_scheme)) -> dict:
         )
 
 async def get_current_user(
-    token_payload: dict = Depends(get_token_payload),
-    db: Session = Depends(get_db)
+    token_payload: dict = Depends (get_token_payload),
+    db: Session = Depends (get_db)
 ) -> User:
     """
     Get current user from token
@@ -344,7 +344,7 @@ async def get_current_user(
 
 # Protected endpoint
 @app.get("/users/me", response_model=UserResponse)
-async def read_users_me(current_user: User = Depends(get_current_user)):
+async def read_users_me (current_user: User = Depends (get_current_user)):
     """
     Get current user profile
     
@@ -376,7 +376,7 @@ class Token(BaseModel):
 @app.post("/token", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     OAuth2 password flow login
@@ -404,7 +404,7 @@ async def login(
         )
     
     # Verify password
-    if not verify_password(form_data.password, user.hashed_password):
+    if not verify_password (form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -420,9 +420,9 @@ async def login(
     
     # Create tokens
     access_token = create_access_token(
-        data={"sub": str(user.id), "username": user.username}
+        data={"sub": str (user.id), "username": user.username}
     )
-    refresh_token = create_refresh_token(user.id)
+    refresh_token = create_refresh_token (user.id)
     
     # Update last login
     user.last_login = datetime.utcnow()
@@ -442,7 +442,7 @@ class LoginRequest(BaseModel):
 @app.post("/login", response_model=Token)
 async def login_json(
     credentials: LoginRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     JSON-based login (alternative to OAuth2 form)
@@ -454,14 +454,14 @@ async def login_json(
         (User.email == credentials.username)
     ).first()
     
-    if not user or not verify_password(credentials.password, user.hashed_password):
+    if not user or not verify_password (credentials.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password"
         )
     
-    access_token = create_access_token(data={"sub": str(user.id)})
-    refresh_token = create_refresh_token(user.id)
+    access_token = create_access_token (data={"sub": str (user.id)})
+    refresh_token = create_refresh_token (user.id)
     
     return {
         "access_token": access_token,
@@ -486,7 +486,7 @@ def get_refresh_token_payload(
     Validate refresh token from header
     """
     try:
-        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode (refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
         
         # Check token type
         if payload.get("type") != "refresh":
@@ -513,8 +513,8 @@ def get_refresh_token_payload(
 
 @app.post("/token/refresh", response_model=Token)
 async def refresh_access_token(
-    token_payload: dict = Depends(get_refresh_token_payload),
-    db: Session = Depends(get_db)
+    token_payload: dict = Depends (get_refresh_token_payload),
+    db: Session = Depends (get_db)
 ):
     """
     Refresh access token using refresh token
@@ -535,11 +535,11 @@ async def refresh_access_token(
     
     # Create new access token
     access_token = create_access_token(
-        data={"sub": str(user.id), "username": user.username}
+        data={"sub": str (user.id), "username": user.username}
     )
     
     # Optionally rotate refresh token
-    new_refresh_token = create_refresh_token(user.id)
+    new_refresh_token = create_refresh_token (user.id)
     
     return {
         "access_token": access_token,
@@ -572,40 +572,40 @@ def generate_secret_key() -> str:
 # 2. Token blacklist (for logout)
 from redis import Redis
 
-redis_client = Redis(host='localhost', port=6379, decode_responses=True)
+redis_client = Redis (host='localhost', port=6379, decode_responses=True)
 
-async def blacklist_token(token: str, expires_in: int):
+async def blacklist_token (token: str, expires_in: int):
     """
     Add token to blacklist
     
     Used for logout - prevents token reuse
     """
-    redis_client.setex(f"blacklist:{token}", expires_in, "1")
+    redis_client.setex (f"blacklist:{token}", expires_in, "1")
 
-async def is_token_blacklisted(token: str) -> bool:
+async def is_token_blacklisted (token: str) -> bool:
     """Check if token is blacklisted"""
-    return redis_client.exists(f"blacklist:{token}") > 0
+    return redis_client.exists (f"blacklist:{token}") > 0
 
 def get_token_payload_with_blacklist(
-    token: str = Depends(oauth2_scheme)
+    token: str = Depends (oauth2_scheme)
 ) -> dict:
     """
     Validate token and check blacklist
     """
     # Check blacklist
-    if await is_token_blacklisted(token):
+    if await is_token_blacklisted (token):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token has been revoked"
         )
     
     # Validate token
-    return get_token_payload(token)
+    return get_token_payload (token)
 
 @app.post("/logout")
 async def logout(
-    token: str = Depends(oauth2_scheme),
-    token_payload: dict = Depends(get_token_payload)
+    token: str = Depends (oauth2_scheme),
+    token_payload: dict = Depends (get_token_payload)
 ):
     """
     Logout - blacklist token
@@ -615,7 +615,7 @@ async def logout(
     ttl = exp - datetime.utcnow().timestamp()
     
     if ttl > 0:
-        await blacklist_token(token, int(ttl))
+        await blacklist_token (token, int (ttl))
     
     return {"detail": "Successfully logged out"}
 
@@ -623,9 +623,9 @@ async def logout(
 from collections import defaultdict
 from time import time
 
-login_attempts = defaultdict(list)
+login_attempts = defaultdict (list)
 
-def check_login_rate_limit(username: str):
+def check_login_rate_limit (username: str):
     """
     Rate limit login attempts
     
@@ -637,26 +637,26 @@ def check_login_rate_limit(username: str):
     # Remove old attempts (older than 15 minutes)
     attempts = [t for t in attempts if now - t < 900]
     
-    if len(attempts) >= 5:
+    if len (attempts) >= 5:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Too many login attempts. Try again in 15 minutes."
         )
     
-    attempts.append(now)
+    attempts.append (now)
     login_attempts[username] = attempts
 
 # 4. Password reset tokens
 import secrets
 
-def create_password_reset_token(user_id: int) -> str:
+def create_password_reset_token (user_id: int) -> str:
     """
     Create secure password reset token
     
     Store in database with expiration
     """
     token = secrets.token_urlsafe(32)
-    expire = datetime.utcnow() + timedelta(hours=1)
+    expire = datetime.utcnow() + timedelta (hours=1)
     
     # Store in database
     reset_token = PasswordResetToken(
@@ -664,7 +664,7 @@ def create_password_reset_token(user_id: int) -> str:
         token=token,
         expires_at=expire
     )
-    db.add(reset_token)
+    db.add (reset_token)
     db.commit()
     
     return token
@@ -672,7 +672,7 @@ def create_password_reset_token(user_id: int) -> str:
 @app.post("/password/reset-request")
 async def request_password_reset(
     email: EmailStr,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Request password reset
@@ -686,7 +686,7 @@ async def request_password_reset(
         return {"detail": "If email exists, reset link sent"}
     
     # Create reset token
-    token = create_password_reset_token(user.id)
+    token = create_password_reset_token (user.id)
     
     # Send email (pseudo-code)
     send_email(
@@ -714,7 +714,7 @@ from starlette.config import Config
 
 # Configuration
 config = Config('.env')
-oauth = OAuth(config)
+oauth = OAuth (config)
 
 oauth.register(
     name='google',
@@ -725,17 +725,17 @@ oauth.register(
 )
 
 @app.get("/auth/google")
-async def login_google(request: Request):
+async def login_google (request: Request):
     """
     Redirect to Google OAuth2 login
     """
     redirect_uri = request.url_for('auth_google_callback')
-    return await oauth.google.authorize_redirect(request, redirect_uri)
+    return await oauth.google.authorize_redirect (request, redirect_uri)
 
 @app.get("/auth/google/callback")
 async def auth_google_callback(
     request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Google OAuth2 callback
@@ -743,13 +743,13 @@ async def auth_google_callback(
     Creates or logs in user
     """
     # Get token from Google
-    token = await oauth.google.authorize_access_token(request)
+    token = await oauth.google.authorize_access_token (request)
     
     # Get user info
     user_info = token.get('userinfo')
     
     if not user_info:
-        raise HTTPException(status_code=400, detail="Failed to get user info")
+        raise HTTPException (status_code=400, detail="Failed to get user info")
     
     # Find or create user
     user = db.query(User).filter(User.email == user_info['email']).first()
@@ -765,13 +765,13 @@ async def auth_google_callback(
             oauth_provider='google',
             oauth_id=user_info['sub']
         )
-        db.add(user)
+        db.add (user)
         db.commit()
-        db.refresh(user)
+        db.refresh (user)
     
     # Create JWT tokens
-    access_token = create_access_token(data={"sub": str(user.id)})
-    refresh_token = create_refresh_token(user.id)
+    access_token = create_access_token (data={"sub": str (user.id)})
+    refresh_token = create_refresh_token (user.id)
     
     # Redirect to frontend with tokens
     return RedirectResponse(
@@ -807,19 +807,19 @@ def authenticated_client():
     """Test client with authenticated user"""
     app.dependency_overrides[get_current_user] = override_get_current_user
     
-    with TestClient(app) as client:
+    with TestClient (app) as client:
         yield client
     
     app.dependency_overrides.clear()
 
-def test_protected_endpoint(authenticated_client):
+def test_protected_endpoint (authenticated_client):
     """Test protected endpoint"""
     response = authenticated_client.get("/users/me")
     
     assert response.status_code == 200
     assert response.json()["username"] == "testuser"
 
-def test_login(client):
+def test_login (client):
     """Test login"""
     response = client.post(
         "/token",
@@ -830,7 +830,7 @@ def test_login(client):
     assert "access_token" in response.json()
     assert response.json()["token_type"] == "bearer"
 
-def test_invalid_login(client):
+def test_invalid_login (client):
     """Test login with wrong password"""
     response = client.post(
         "/token",

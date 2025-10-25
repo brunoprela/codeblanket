@@ -143,7 +143,7 @@ return {'upload_url': presigned_url}
 
 \`\`\`javascript
 // Client uploads directly
-fetch(presignedUrl, {
+fetch (presignedUrl, {
   method: 'PUT',
   body: imageFile,
   headers: {'Content-Type': 'image/jpeg'}
@@ -347,16 +347,16 @@ File uploaded → Calculate hash (SHA-256)
 import hashlib
 
 # Calculate file hash
-def calculate_hash(file_path):
+def calculate_hash (file_path):
     sha256 = hashlib.sha256()
-    with open(file_path, 'rb') as f:
-        for chunk in iter(lambda: f.read(4096), b''):
-            sha256.update(chunk)
+    with open (file_path, 'rb') as f:
+        for chunk in iter (lambda: f.read(4096), b''):
+            sha256.update (chunk)
     return sha256.hexdigest()
 
 # Check for duplicate
 file_hash = calculate_hash('document.pdf')
-existing = db.query(f"SELECT blob_key FROM files WHERE hash = '{file_hash}'")
+existing = db.query (f"SELECT blob_key FROM files WHERE hash = '{file_hash}'")
 
 if existing:
     # Reference existing blob
@@ -395,7 +395,7 @@ GET /bucket/config.json?versionId=abc123 → Returns v1
 **Rollback implementation**:
 \`\`\`python
 # Rollback to previous version
-def rollback(bucket, key, target_version_id):
+def rollback (bucket, key, target_version_id):
     # Copy old version as new current version
     s3.copy_object(
         CopySource={'Bucket': bucket, 'Key': key, 'VersionId': target_version_id},
@@ -478,13 +478,13 @@ S3 Event → SQS Queue → Worker processes
 **Example: Image processing**:
 \`\`\`python
 # Lambda triggered on S3 upload
-def handler(event, context):
+def handler (event, context):
     for record in event['Records']:
         bucket = record['s3']['bucket']['name']
         key = record['s3']['object']['key']
         
         # Download image
-        s3.download_file(bucket, key, '/tmp/image.jpg')
+        s3.download_file (bucket, key, '/tmp/image.jpg')
         
         # Create thumbnail
         create_thumbnail('/tmp/image.jpg', '/tmp/thumb.jpg')
@@ -519,12 +519,12 @@ Secondary Region (eu-west-1)
 \`\`\`python
 from concurrent.futures import ThreadPoolExecutor
 
-def upload_part(part):
+def upload_part (part):
     # Upload one part
     pass
 
-with ThreadPoolExecutor(max_workers=10) as executor:
-    executor.map(upload_part, parts)
+with ThreadPoolExecutor (max_workers=10) as executor:
+    executor.map (upload_part, parts)
 \`\`\`
 
 ### 2. Connection Pooling

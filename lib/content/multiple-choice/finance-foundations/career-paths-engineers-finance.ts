@@ -7,10 +7,10 @@ export const careerPathsEngineersFinanceMultipleChoice: MultipleChoiceQuestion[]
       question:
         'A quantitative researcher at a hedge fund has a base salary of $250K and their strategy generated $10M in profit. With a 20% profit share, what is their total compensation?',
       options: [
-        '$450K ($250K base + $200K bonus)',
-        '$2.25M ($250K + 20% of $10M)',
+        '$450K (\$250K base + $200K bonus)',
+        '$2.25M (\$250K + 20% of $10M)',
         '$2.5M (20% of $10M + base)',
-        '$10.25M ($250K + $10M)',
+        '$10.25M (\$250K + $10M)',
       ],
       correctAnswer: 1,
       explanation:
@@ -50,8 +50,8 @@ export const careerPathsEngineersFinanceMultipleChoice: MultipleChoiceQuestion[]
         'A fintech engineer receives a total comp offer of $400K: $240K base + $160K in RSUs vesting over 4 years. If the company doubles in valuation, what is the potential total comp in year 1?',
       options: [
         '$400K (same as offered)',
-        '$480K ($240K + double RSUs = $320K/4)',
-        '$560K ($240K + $320K RSUs)',
+        '$480K (\$240K + double RSUs = $320K/4)',
+        '$560K (\$240K + $320K RSUs)',
         '$640K (everything doubles)',
       ],
       correctAnswer: 1,

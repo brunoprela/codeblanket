@@ -28,13 +28,13 @@ Order Service (orchestrator)
 
 \`\`\`javascript
 // Order Service → Inventory Service
-async function reserveInventory(orderId, items) {
+async function reserveInventory (orderId, items) {
   try {
     const response = await httpClient.post(
       'http://inventory-service/api/reserve',
       {
         orderId: orderId,
-        items: items.map(item => ({
+        items: items.map (item => ({
           productId: item.productId,
           quantity: item.quantity
         })),
@@ -56,10 +56,10 @@ async function reserveInventory(orderId, items) {
     
   } catch (error) {
     if (error.code === 'OUT_OF_STOCK') {
-      throw new OutOfStockError(error.message);
+      throw new OutOfStockError (error.message);
     } else if (error.code === 'TIMEOUT') {
       // Retry once
-      return await reserveInventory(orderId, items);
+      return await reserveInventory (orderId, items);
     }
     throw error;
   }
@@ -71,7 +71,7 @@ async function reserveInventory(orderId, items) {
 **Payment Processing** (Synchronous - REST):
 
 \`\`\`javascript
-async function processPayment(orderId, paymentDetails) {
+async function processPayment (orderId, paymentDetails) {
   const idempotencyKey = \`payment-\${orderId}\`;
   
   try {
@@ -100,7 +100,7 @@ async function processPayment(orderId, paymentDetails) {
   } catch (error) {
     if (error.code === 'PAYMENT_DECLINED') {
       // Release inventory reservation
-      await releaseInventory(orderId);
+      await releaseInventory (orderId);
       throw new PaymentDeclinedError();
     }
     throw error;
@@ -116,7 +116,7 @@ async function processPayment(orderId, paymentDetails) {
 
 \`\`\`javascript
 // Order Service publishes event
-async function publishOrderCreatedEvent(order) {
+async function publishOrderCreatedEvent (order) {
   const event = {
     eventId: generateUUID(),
     eventType: 'OrderCreated',
@@ -160,7 +160,7 @@ messageQueue.subscribe('orders.created', async (message) => {
 
 \`\`\`javascript
 class OrderService {
-  async createOrder(userId, items, paymentDetails) {
+  async createOrder (userId, items, paymentDetails) {
     const orderId = generateOrderId();
     let reservationId = null;
     let transactionId = null;
@@ -168,17 +168,17 @@ class OrderService {
     try {
       // Step 1: Reserve inventory (SYNC)
       console.log('Reserving inventory...');
-      const inventoryResult = await this.reserveInventory(orderId, items);
+      const inventoryResult = await this.reserveInventory (orderId, items);
       reservationId = inventoryResult.reservationId;
       
       // Step 2: Process payment (SYNC)
       console.log('Processing payment...');
-      const paymentResult = await this.processPayment(orderId, paymentDetails);
+      const paymentResult = await this.processPayment (orderId, paymentDetails);
       transactionId = paymentResult.transactionId;
       
       // Step 3: Confirm inventory (SYNC)
       console.log('Confirming inventory...');
-      await this.confirmInventory(reservationId);
+      await this.confirmInventory (reservationId);
       
       // Step 4: Create order in database
       const order = await this.orderRepository.create({
@@ -191,7 +191,7 @@ class OrderService {
       });
       
       // Step 5: Publish events (ASYNC)
-      await this.publishOrderCreatedEvent(order);
+      await this.publishOrderCreatedEvent (order);
       
       return {
         success: true,
@@ -205,7 +205,7 @@ class OrderService {
       
       if (reservationId && !transactionId) {
         // Payment failed - release inventory
-        await this.releaseInventory(reservationId);
+        await this.releaseInventory (reservationId);
       }
       
       if (transactionId) {
@@ -229,7 +229,7 @@ class OrderService {
 
 \`\`\`javascript
 // Idempotency middleware
-async function idempotencyMiddleware(req, res, next) {
+async function idempotencyMiddleware (req, res, next) {
   const idempotencyKey = req.headers['x-idempotency-key',];
   
   if (!idempotencyKey) {
@@ -241,15 +241,15 @@ async function idempotencyMiddleware(req, res, next) {
   
   if (cached) {
     // Return cached response
-    return res.status(200).json(JSON.parse(cached));
+    return res.status(200).json(JSON.parse (cached));
   }
   
   // Store original response
   const originalSend = res.send;
-  res.send = function(data) {
+  res.send = function (data) {
     // Cache for 24 hours
     redis.setex(\`idempotency:\${idempotencyKey}\`, 86400, data);
-    originalSend.call(this, data);
+    originalSend.call (this, data);
   };
   
   next();
@@ -265,7 +265,7 @@ app.post('/api/orders', idempotencyMiddleware, async (req, res) => {
 **Retry Logic with Exponential Backoff**:
 
 \`\`\`javascript
-async function retryWithBackoff(fn, maxRetries = 3) {
+async function retryWithBackoff (fn, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
@@ -273,9 +273,9 @@ async function retryWithBackoff(fn, maxRetries = 3) {
       if (i === maxRetries - 1) throw error;
       
       // Retry on transient errors
-      if (['TIMEOUT', 'CONNECTION_ERROR', 'SERVICE_UNAVAILABLE',].includes(error.code)) {
+      if (['TIMEOUT', 'CONNECTION_ERROR', 'SERVICE_UNAVAILABLE',].includes (error.code)) {
         const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s
-        await sleep(delay);
+        await sleep (delay);
         continue;
       }
       
@@ -290,14 +290,14 @@ async function retryWithBackoff(fn, maxRetries = 3) {
 
 \`\`\`javascript
 class CircuitBreaker {
-  constructor(threshold = 5, timeout = 60000) {
+  constructor (threshold = 5, timeout = 60000) {
     this.state = 'CLOSED';
     this.failureCount = 0;
     this.threshold = threshold;
     this.timeout = timeout;
   }
   
-  async execute(fn) {
+  async execute (fn) {
     if (this.state === 'OPEN') {
       throw new Error('Circuit breaker is OPEN');
     }
@@ -430,7 +430,7 @@ const user = await response.json();
 try {
   const response = await fetch('/api/orders', {
     method: 'POST',
-    body: JSON.stringify(order)
+    body: JSON.stringify (order)
   });
   
   if (!response.ok) {
@@ -487,10 +487,10 @@ const client = new UserServiceClient('localhost:50051');
 
 client.getUser({ id: 123 }, (error, user) => {
   if (error) {
-    console.error(error);
+    console.error (error);
     return;
   }
-  console.log(user);
+  console.log (user);
 });
 \`\`\`
 
@@ -564,7 +564,7 @@ await messageQueue.publish('orders.created', {
 // Subscriber
 messageQueue.subscribe('orders.created', async (message) => {
   const order = message.data;
-  await processOrder(order);
+  await processOrder (order);
   message.ack();
 });
 \`\`\`
@@ -595,7 +595,7 @@ messageQueue.subscribe('orders.created', async (message) => {
 \`\`\`javascript
 messageQueue.subscribe('orders.created', async (message) => {
   try {
-    await processOrder(message.data);
+    await processOrder (message.data);
     message.ack(); // Success - remove from queue
   } catch (error) {
     if (error.isTransient) {
@@ -785,7 +785,7 @@ app.use((req, res, next) => {
   
   // Extract or generate trace context
   const traceId = req.headers['traceparent',] 
-    ? extractTraceId(req.headers['traceparent',])
+    ? extractTraceId (req.headers['traceparent',])
     : generateTraceId();
   
   // Inject into request context
@@ -819,7 +819,7 @@ async function callServiceA(data) {
       code: SpanStatusCode.ERROR,
       message: error.message
     });
-    span.recordException(error);
+    span.recordException (error);
     throw error;
   } finally {
     span.end();
@@ -856,7 +856,7 @@ const exporter = new JaegerExporter({
 });
 
 // Batch spans for efficiency
-provider.addSpanProcessor(new BatchSpanProcessor(exporter, {
+provider.addSpanProcessor (new BatchSpanProcessor (exporter, {
   maxQueueSize: 2048,
   maxExportBatchSize: 512,
   scheduledDelayMillis: 5000
@@ -881,7 +881,7 @@ registerInstrumentations({
 // Manual instrumentation example
 const tracer = require('@opentelemetry/api').trace.getTracer('order-service');
 
-async function processOrder(orderId) {
+async function processOrder (orderId) {
   const span = tracer.startSpan('process_order', {
     attributes: {
       'order.id': orderId,
@@ -891,15 +891,15 @@ async function processOrder(orderId) {
   
   try {
     // Business logic
-    await reserveInventory(orderId);
-    await processPayment(orderId);
-    await confirmOrder(orderId);
+    await reserveInventory (orderId);
+    await processPayment (orderId);
+    await confirmOrder (orderId);
     
     span.addEvent('order_processed_successfully');
     span.setStatus({ code: SpanStatusCode.OK });
     
   } catch (error) {
-    span.recordException(error);
+    span.recordException (error);
     span.setStatus({
       code: SpanStatusCode.ERROR,
       message: error.message
@@ -955,20 +955,20 @@ processors:
 
 \`\`\`javascript
 class AdaptiveSampler {
-  constructor(targetRate = 100) { // 100 traces/sec
+  constructor (targetRate = 100) { // 100 traces/sec
     this.targetRate = targetRate;
     this.currentRate = 0;
     this.samplingProbability = 1.0;
   }
   
-  shouldSample(traceId) {
+  shouldSample (traceId) {
     // Always sample errors
-    if (this.hasError(traceId)) {
+    if (this.hasError (traceId)) {
       return true;
     }
     
     // Always sample slow traces
-    if (this.isSlow(traceId)) {
+    if (this.isSlow (traceId)) {
       return true;
     }
     
@@ -1090,7 +1090,7 @@ app.get('/api/traces', async (req, res) => {
     size: limit
   });
   
-  res.json(traces.hits.hits);
+  res.json (traces.hits.hits);
 });
 
 // Get trace by ID
@@ -1101,8 +1101,8 @@ app.get('/api/traces/:traceId', async (req, res) => {
   );
   
   // Build trace tree
-  const trace = buildTraceTree(spans.rows);
-  res.json(trace);
+  const trace = buildTraceTree (spans.rows);
+  res.json (trace);
 });
 \`\`\`
 

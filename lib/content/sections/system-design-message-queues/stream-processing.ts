@@ -5,7 +5,7 @@
 export const streamprocessingSection = {
   id: 'stream-processing',
   title: 'Stream Processing',
-  content: `Stream processing is the practice of processing data in motion—analyzing, transforming, and deriving insights from continuous streams of events in real-time. It's fundamental to modern data platforms powering applications from fraud detection to real-time recommendations.
+  content: `Stream processing is the practice of processing data in motion—analyzing, transforming, and deriving insights from continuous streams of events in real-time. It\'s fundamental to modern data platforms powering applications from fraud detection to real-time recommendations.
 
 ## Stream vs Batch Processing
 
@@ -414,11 +414,11 @@ impression_2 + click_2 → Matched (within 2 min) ✅
 
 Implementation (Flink):
 impressions
-  .join(clicks)
-  .where(imp -> imp.adId)
-  .equalTo(click -> click.adId)
+  .join (clicks)
+  .where (imp -> imp.adId)
+  .equalTo (click -> click.adId)
   .window(TumblingEventTimeWindows.of(Time.minutes(2)))
-  .apply((imp, click) -> new ImpressionClick(imp, click))
+  .apply((imp, click) -> new ImpressionClick (imp, click))
 \`\`\`
 
 ### **2. Stream-Table Join:**
@@ -443,8 +443,8 @@ KStream<String, Transaction> transactions = ...;
 KTable<String, UserProfile> users = ...;
 
 transactions
-  .join(users, (transaction, user) -> 
-    new EnrichedTransaction(transaction, user))
+  .join (users, (transaction, user) -> 
+    new EnrichedTransaction (transaction, user))
 \`\`\`
 
 ### **3. Temporal Join:**

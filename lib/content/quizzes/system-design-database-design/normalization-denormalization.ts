@@ -29,7 +29,7 @@ CREATE TABLE posts (
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     published_at TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 -- Comments
@@ -40,9 +40,9 @@ CREATE TABLE comments (
     parent_comment_id INT,  -- for nested comments
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (parent_comment_id) REFERENCES comments(comment_id)
+    FOREIGN KEY (post_id) REFERENCES posts (post_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (parent_comment_id) REFERENCES comments (comment_id)
 );
 
 -- Tags
@@ -56,8 +56,8 @@ CREATE TABLE post_tags (
     post_id INT,
     tag_id INT,
     PRIMARY KEY (post_id, tag_id),
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+    FOREIGN KEY (post_id) REFERENCES posts (post_id),
+    FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
 );
 
 -- Likes
@@ -67,8 +67,8 @@ CREATE TABLE post_likes (
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE (post_id, user_id),
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (post_id) REFERENCES posts (post_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 \`\`\`
 
@@ -231,7 +231,7 @@ WHERE p.published_at > NOW() - INTERVAL '30 days'  -- Recent posts only
 GROUP BY p.post_id, p.title, p.content, p.published_at, u.username, u.avatar_url
 ORDER BY p.published_at DESC;
 
-CREATE INDEX idx_homepage_posts_published ON homepage_posts(published_at DESC);
+CREATE INDEX idx_homepage_posts_published ON homepage_posts (published_at DESC);
 
 -- Refresh every 5 minutes
 REFRESH MATERIALIZED VIEW CONCURRENTLY homepage_posts;
@@ -340,7 +340,7 @@ CREATE TABLE inventory (
     product_id INT PRIMARY KEY,
     quantity INT NOT NULL CHECK (quantity >= 0),
     reserved INT DEFAULT 0,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 -- Orders
@@ -351,7 +351,7 @@ CREATE TABLE orders (
     total_amount DECIMAL(10,2),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
 );
 
 -- Order Items
@@ -361,8 +361,8 @@ CREATE TABLE order_items (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 -- Payments
@@ -373,7 +373,7 @@ CREATE TABLE payments (
     payment_method VARCHAR(50),
     status VARCHAR(50),  -- pending, completed, failed
     created_at TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
 
 -- Event Store (for CQRS)
@@ -386,22 +386,22 @@ CREATE TABLE domain_events (
     created_at TIMESTAMP DEFAULT NOW(),
     processed BOOLEAN DEFAULT FALSE
 );
-CREATE INDEX idx_events_unprocessed ON domain_events(processed, created_at) WHERE NOT processed;
+CREATE INDEX idx_events_unprocessed ON domain_events (processed, created_at) WHERE NOT processed;
 \`\`\`
 
 **Write Model Business Logic:**
 
 \`\`\`python
 # Command: CreateOrder
-def create_order(customer_id, items):
+def create_order (customer_id, items):
     # Start transaction
     with transaction():
         # 1. Validate customer exists
-        customer = customers.get(customer_id)
+        customer = customers.get (customer_id)
         
         # 2. Validate product availability
         for item in items:
-            inventory = inventory_table.get(item.product_id)
+            inventory = inventory_table.get (item.product_id)
             if inventory.quantity < item.quantity:
                 raise InsufficientInventoryError()
         
@@ -416,7 +416,7 @@ def create_order(customer_id, items):
         order = orders.create(
             customer_id=customer_id,
             status='pending',
-            total_amount=calculate_total(items)
+            total_amount=calculate_total (items)
         )
         
         # 5. Create order items
@@ -425,7 +425,7 @@ def create_order(customer_id, items):
                 order_id=order.order_id,
                 product_id=item.product_id,
                 quantity=item.quantity,
-                unit_price=get_current_price(item.product_id)
+                unit_price=get_current_price (item.product_id)
             )
         
         # 6. Emit event
@@ -473,9 +473,9 @@ CREATE TABLE order_summary (
 );
 
 -- Indexes for common queries
-CREATE INDEX idx_order_summary_customer ON order_summary(customer_id, created_at DESC);
-CREATE INDEX idx_order_summary_status ON order_summary(order_status, created_at DESC);
-CREATE INDEX idx_order_summary_created ON order_summary(created_at DESC);
+CREATE INDEX idx_order_summary_customer ON order_summary (customer_id, created_at DESC);
+CREATE INDEX idx_order_summary_status ON order_summary (order_status, created_at DESC);
+CREATE INDEX idx_order_summary_created ON order_summary (created_at DESC);
 \`\`\`
 
 **Read Model 2: User Order History (Redis Cache)**
@@ -527,39 +527,39 @@ TTL: 1 hour
 def event_processor():
     while True:
         # Poll for unprocessed events
-        events = domain_events.query(processed=False, limit=100)
+        events = domain_events.query (processed=False, limit=100)
         
         for event in events:
             try:
                 # Route to appropriate handler
                 if event.event_type == 'OrderCreated':
-                    handle_order_created(event)
+                    handle_order_created (event)
                 elif event.event_type == 'OrderShipped':
-                    handle_order_shipped(event)
+                    handle_order_shipped (event)
                 elif event.event_type == 'PaymentCompleted':
-                    handle_payment_completed(event)
+                    handle_payment_completed (event)
                 
                 # Mark as processed
-                domain_events.update(event_id=event.event_id, processed=True)
+                domain_events.update (event_id=event.event_id, processed=True)
             except Exception as e:
                 # Log error, implement retry logic
-                log_error(event, e)
+                log_error (event, e)
         
         sleep(1)  # Poll every second
 
-def handle_order_created(event):
+def handle_order_created (event):
     data = event.event_data
     
     # 1. Update PostgreSQL read model
     order_summary.insert({
         'order_id': data['order_id',],
         'customer_id': data['customer_id',],
-        'customer_name': get_customer_name(data['customer_id',]),
-        'customer_email': get_customer_email(data['customer_id',]),
+        'customer_name': get_customer_name (data['customer_id',]),
+        'customer_email': get_customer_email (data['customer_id',]),
         'order_status': 'pending',
         'total_amount': data['total_amount',],
-        'item_count': len(data['items',]),
-        'items': serialize_items(data['items',]),
+        'item_count': len (data['items',]),
+        'items': serialize_items (data['items',]),
         'created_at': event.created_at
     })
     
@@ -571,7 +571,7 @@ def handle_order_created(event):
                 'order_id': data['order_id',],
                 'total': data['total_amount',],
                 'status': 'pending',
-                'item_count': len(data['items',])
+                'item_count': len (data['items',])
             }): event.created_at.timestamp()
         }
     )
@@ -594,26 +594,26 @@ def handle_order_created(event):
 # Fast queries from read models
 
 # Get order details (PostgreSQL read model)
-def get_order_details(order_id):
+def get_order_details (order_id):
     # Single query, no JOINs, <5ms
-    return order_summary.get(order_id)
+    return order_summary.get (order_id)
 
 # Get user's orders (Redis cache)
-def get_user_orders(customer_id, limit=10):
+def get_user_orders (customer_id, limit=10):
     # Check cache first
-    cached = redis.zrevrange(f"user:orders:{customer_id}", 0, limit-1)
+    cached = redis.zrevrange (f"user:orders:{customer_id}", 0, limit-1)
     if cached:
         return cached
     
     # Cache miss: query database and populate cache
-    orders = order_summary.query(customer_id=customer_id, limit=limit)
+    orders = order_summary.query (customer_id=customer_id, limit=limit)
     for order in orders:
-        redis.zadd(f"user:orders:{customer_id}", {json.dumps(order): order.created_at})
+        redis.zadd (f"user:orders:{customer_id}", {json.dumps (order): order.created_at})
     
     return orders
 
 # Search products (Elasticsearch)
-def search_products(query, filters):
+def search_products (query, filters):
     return elasticsearch.search(
         index='products',
         query={
@@ -780,15 +780,15 @@ CREATE TABLE fact_orders (
     -- Degenerate dimension (stays in fact table)
     order_number VARCHAR(50),
     
-    FOREIGN KEY (date_key) REFERENCES dim_date(date_key),
-    FOREIGN KEY (customer_key) REFERENCES dim_customer(customer_key),
-    FOREIGN KEY (product_key) REFERENCES dim_product(product_key),
-    FOREIGN KEY (store_key) REFERENCES dim_store(store_key)
+    FOREIGN KEY (date_key) REFERENCES dim_date (date_key),
+    FOREIGN KEY (customer_key) REFERENCES dim_customer (customer_key),
+    FOREIGN KEY (product_key) REFERENCES dim_product (product_key),
+    FOREIGN KEY (store_key) REFERENCES dim_store (store_key)
 );
 
-CREATE INDEX idx_fact_orders_date ON fact_orders(date_key);
-CREATE INDEX idx_fact_orders_customer ON fact_orders(customer_key);
-CREATE INDEX idx_fact_orders_product ON fact_orders(product_key);
+CREATE INDEX idx_fact_orders_date ON fact_orders (date_key);
+CREATE INDEX idx_fact_orders_customer ON fact_orders (customer_key);
+CREATE INDEX idx_fact_orders_product ON fact_orders (product_key);
 
 -- Dimension: Date (small: 3650 rows for 10 years)
 CREATE TABLE dim_date (
@@ -923,17 +923,17 @@ dim_product (product_key, name, category, subcategory, brand)
 
 def daily_etl():
     # 1. EXTRACT: Get new/updated data from OLTP
-    new_orders = extract_orders(since=yesterday)
-    new_customers = extract_customers(since=yesterday)
-    new_products = extract_products(since=yesterday)
+    new_orders = extract_orders (since=yesterday)
+    new_customers = extract_customers (since=yesterday)
+    new_products = extract_products (since=yesterday)
     
     # 2. TRANSFORM: Clean, enrich, conform
-    transformed_data = transform(new_orders, new_customers, new_products)
+    transformed_data = transform (new_orders, new_customers, new_products)
     
     # 3. LOAD: Insert into data warehouse
-    load(transformed_data)
+    load (transformed_data)
 
-def extract_orders(since):
+def extract_orders (since):
     # Query OLTP database (read replica to avoid impacting production)
     return oltp_db.query("""
         SELECT 
@@ -949,15 +949,15 @@ def extract_orders(since):
         WHERE o.order_date >= %s
     """, since)
 
-def transform(orders, customers, products):
+def transform (orders, customers, products):
     result = []
     
     for order in orders:
         # Lookup dimension keys (or create if new)
-        date_key = lookup_or_create_date(order.order_date)
-        customer_key = lookup_or_create_customer(order.customer_id, customers)
-        product_key = lookup_or_create_product(order.product_id, products)
-        store_key = get_store_key(order.store_id)
+        date_key = lookup_or_create_date (order.order_date)
+        customer_key = lookup_or_create_customer (order.customer_id, customers)
+        product_key = lookup_or_create_product (order.product_id, products)
+        store_key = get_store_key (order.store_id)
         
         # Build fact row
         fact_row = {
@@ -968,16 +968,16 @@ def transform(orders, customers, products):
             'quantity': order.quantity,
             'unit_price': order.unit_price,
             'total_amount': order.total_amount,
-            'discount_amount': calculate_discount(order),
-            'shipping_cost': calculate_shipping(order),
+            'discount_amount': calculate_discount (order),
+            'shipping_cost': calculate_shipping (order),
             'order_number': order.order_number
         }
         
-        result.append(fact_row)
+        result.append (fact_row)
     
     return result
 
-def lookup_or_create_customer(customer_id, customers_data):
+def lookup_or_create_customer (customer_id, customers_data):
     # Check if customer already exists
     existing = dw_db.query(
         "SELECT customer_key FROM dim_customer WHERE customer_id = %s AND is_current = TRUE",
@@ -989,7 +989,7 @@ def lookup_or_create_customer(customer_id, customers_data):
         
         # Check if attributes changed (SCD Type 2)
         customer_data = customers_data[customer_id]
-        if customer_changed(customer_key, customer_data):
+        if customer_changed (customer_key, customer_data):
             # Expire old record
             dw_db.execute("""
                 UPDATE dim_customer 
@@ -1013,7 +1013,7 @@ def lookup_or_create_customer(customer_id, customers_data):
             VALUES (%s, %s, %s, %s, %s, %s, ..., CURRENT_DATE, TRUE)
         """, customers_data[customer_id])
 
-def load(transformed_data):
+def load (transformed_data):
     # Bulk insert into fact table
     dw_db.bulk_insert('fact_orders', transformed_data)
     

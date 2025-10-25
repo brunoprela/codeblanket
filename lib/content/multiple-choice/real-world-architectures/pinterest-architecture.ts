@@ -44,7 +44,7 @@ export const pinterestarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Approximately 70% of engagement comes from Pinterest's personalized home feed. The feed uses a two-stage ranking system: candidate generation (followed boards, topics, related pins, trending, collaborative filtering → 1000 candidates) and deep ML ranking (user/pin embeddings, predict save/click probability → ordered feed). Real-time updates via Flink streaming adjust user embeddings when users save pins, ensuring fresh personalization.",
+      "Approximately 70% of engagement comes from Pinterest\'s personalized home feed. The feed uses a two-stage ranking system: candidate generation (followed boards, topics, related pins, trending, collaborative filtering → 1000 candidates) and deep ML ranking (user/pin embeddings, predict save/click probability → ordered feed). Real-time updates via Flink streaming adjust user embeddings when users save pins, ensuring fresh personalization.",
   },
   {
     id: 'mc4',

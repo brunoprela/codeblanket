@@ -2,17 +2,17 @@ export const bloombergTerminalQuiz = [
   {
     id: '2-2-d1',
     question:
-      "Bloomberg Terminal dominates institutional finance despite costing $24,000/year, while free alternatives like Yahoo Finance and TradingView exist. Analyze Bloomberg's competitive moat from a business strategy perspective. Why haven't competitors successfully disrupted Bloomberg? Design a strategy for a hypothetical startup trying to compete with Bloomberg in 2024.",
+      "Bloomberg Terminal dominates institutional finance despite costing $24,000/year, while free alternatives like Yahoo Finance and TradingView exist. Analyze Bloomberg\'s competitive moat from a business strategy perspective. Why haven't competitors successfully disrupted Bloomberg? Design a strategy for a hypothetical startup trying to compete with Bloomberg in 2024.",
     sampleAnswer: `**Bloomberg's Unbreakable Moat: A Strategic Analysis**
 
-**Why Bloomberg Dominates ($10B+ Annual Revenue):**
+**Why Bloomberg Dominates (\$10B+ Annual Revenue):**
 
 **1. Network Effects (The Primary Moat)**
 
 Bloomberg isn't just a data terminal—it's a communication network:
 
 \`\`\`
-Bloomberg's Network Effect:
+Bloomberg\'s Network Effect:
 ┌─────────────────────────────────────────────┐
 │ 325,000+ users worldwide                    │
 │                                             │
@@ -38,7 +38,7 @@ your entire professional network.
 
 **2. Integration Moat**
 
-Bloomberg's ecosystem creates workflow lock-in:
+Bloomberg\'s ecosystem creates workflow lock-in:
 
 \`\`\`
 Typical Investment Banker's Morning:
@@ -66,7 +66,7 @@ Bloomberg's "difficult" interface is actually a moat:
 
 **4. Data Breadth and Depth**
 
-While competitors have data, Bloomberg's coverage is unmatched:
+While competitors have data, Bloomberg\'s coverage is unmatched:
 - 330+ exchanges
 - 40+ million securities
 - Real-time updates from thousands of sources
@@ -105,7 +105,7 @@ Bloomberg has 99.99% uptime:
 **Symphony (startup messaging)**
 - Built modern secure chat for finance
 - Backed by major banks
-- Failed to displace Bloomberg Messenger because: Bloomberg's chat is "good enough" and integrated
+- Failed to displace Bloomberg Messenger because: Bloomberg\'s chat is "good enough" and integrated
 
 **IEX Cloud, Polygon.io, Alpha Vantage (API-first)**
 - Modern APIs
@@ -120,7 +120,7 @@ Bloomberg has 99.99% uptime:
 **Don't compete head-on with Bloomberg. Target the market Bloomberg isn't serving.**
 
 **Target Market:**
-- Smaller hedge funds ($100M-1B AUM)
+- Smaller hedge funds (\$100M-1B AUM)
 - Fintech companies
 - Crypto funds
 - Independent researchers
@@ -135,7 +135,7 @@ Product: Modern API + Python Libraries
 Price: $100-500/month (100x cheaper than Bloomberg)
 
 Value Proposition:
-✓ Modern REST API (vs Bloomberg's SOAP)
+✓ Modern REST API (vs Bloomberg\'s SOAP)
 ✓ Native Python/JavaScript libraries
 ✓ Real-time WebSocket feeds
 ✓ Free tier for developers
@@ -143,7 +143,7 @@ Value Proposition:
 ✓ GitHub integration
 
 Target: 10,000 developers using free tier
-Convert: 1,000 to paid ($500K MRR)
+Convert: 1,000 to paid (\$500K MRR)
 
 This builds:
 - Brand awareness
@@ -250,10 +250,10 @@ You're API-first, terminal-second (modern)
 
 **Revenue Model:**
 \`\`\`
-Year 1-2: Developer API ($500K ARR)
-Year 3-4: Small fund terminals ($10M ARR)
-Year 5-6: Network + Enterprise ($50M ARR)
-Year 7+: Enterprise + Data licensing ($200M+ ARR)
+Year 1-2: Developer API (\$500K ARR)
+Year 3-4: Small fund terminals (\$10M ARR)
+Year 5-6: Network + Enterprise (\$50M ARR)
+Year 7+: Enterprise + Data licensing (\$200M+ ARR)
 \`\`\`
 
 **Why This Could Work:**
@@ -270,7 +270,7 @@ Year 7+: Enterprise + Data licensing ($200M+ ARR)
 - Can grow with customer
 
 **3. Better Tech**
-- Actually better UX (Bloomberg's UI is from 1980s)
+- Actually better UX (Bloomberg\'s UI is from 1980s)
 - Faster iteration
 - Cloud-native
 - Modern integrations
@@ -320,7 +320,7 @@ Bloomberg's moat is primarily **network effects** and **switching costs**, not d
 3. **Creating new network effects** among younger users
 4. **Leveraging modern technology** Bloomberg can't easily adopt
 
-The window is now, as a generational shift in finance is happening. In 20 years, Bloomberg's core users (50-60 year old traders) will retire. The next generation prefers APIs, Python, and modern tools.
+The window is now, as a generational shift in finance is happening. In 20 years, Bloomberg\'s core users (50-60 year old traders) will retire. The next generation prefers APIs, Python, and modern tools.
 
 **Investment Required**: $50-100M over 5 years
 **Success Probability**: 10-20%
@@ -332,7 +332,7 @@ Bloomberg is beatable, but it requires patience, perfect execution, and attackin
   {
     id: '2-2-d2',
     question:
-      "You're a quantitative researcher at a startup hedge fund that can't afford Bloomberg ($24K/year). Design a complete data stack using free and affordable alternatives that replicates 80% of Bloomberg's functionality for equity analysis. Include specific tools, APIs, cost breakdown, and a Python framework for integration.",
+      "You're a quantitative researcher at a startup hedge fund that can't afford Bloomberg (\$24K/year). Design a complete data stack using free and affordable alternatives that replicates 80% of Bloomberg\'s functionality for equity analysis. Include specific tools, APIs, cost breakdown, and a Python framework for integration.",
     sampleAnswer: `**Building a "Poor Man's Bloomberg" - Complete Data Stack**
 
 **Design Requirements:**
@@ -371,21 +371,21 @@ class MarketDataProvider:
     def __init__(self):
         self.cache = {}
     
-    def get_price(self, ticker, start=None, end=None):
+    def get_price (self, ticker, start=None, end=None):
         """Get historical prices"""
-        stock = yf.Ticker(ticker)
-        df = stock.history(start=start, end=end)
+        stock = yf.Ticker (ticker)
+        df = stock.history (start=start, end=end)
         return df
     
-    def get_realtime_price(self, ticker):
+    def get_realtime_price (self, ticker):
         """Get current price (15 min delay)"""
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         return stock.info.get('currentPrice')
     
-    def get_intraday(self, ticker, period='1d', interval='1m'):
+    def get_intraday (self, ticker, period='1d', interval='1m'):
         """Get intraday data (1,5,15,30,60min bars)"""
-        stock = yf.Ticker(ticker)
-        df = stock.history(period=period, interval=interval)
+        stock = yf.Ticker (ticker)
+        df = stock.history (period=period, interval=interval)
         return df
 
 # Usage
@@ -417,9 +417,9 @@ class FundamentalDataProvider:
     def __init__(self):
         self.edgar = Downloader("MyCompany", "email@example.com")
     
-    def get_financials(self, ticker):
+    def get_financials (self, ticker):
         """Get financial statements"""
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         
         return {
             'income_statement': stock.financials,
@@ -428,9 +428,9 @@ class FundamentalDataProvider:
             'quarterly_financials': stock.quarterly_financials
         }
     
-    def get_key_metrics(self, ticker):
+    def get_key_metrics (self, ticker):
         """Get key financial metrics"""
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         info = stock.info
         
         metrics = {
@@ -451,14 +451,14 @@ class FundamentalDataProvider:
         
         return metrics
     
-    def get_sec_filings(self, ticker, filing_type='10-K', num_filings=5):
+    def get_sec_filings (self, ticker, filing_type='10-K', num_filings=5):
         """Download SEC filings"""
-        self.edgar.get(filing_type, ticker, amount=num_filings)
+        self.edgar.get (filing_type, ticker, amount=num_filings)
         return f"Downloaded {num_filings} {filing_type} filings for {ticker}"
     
-    def get_analyst_estimates(self, ticker):
+    def get_analyst_estimates (self, ticker):
         """Get analyst estimates"""
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         return {
             'earnings_estimate': stock.earnings_estimate,
             'revenue_estimate': stock.revenue_estimate,
@@ -488,21 +488,21 @@ class EconomicDataProvider:
     
     def __init__(self, api_key):
         # Get free API key from https://fred.stlouisfed.org/
-        self.fred = Fred(api_key=api_key)
+        self.fred = Fred (api_key=api_key)
     
-    def get_gdp(self, start='2020-01-01'):
+    def get_gdp (self, start='2020-01-01'):
         """Get US GDP"""
         return self.fred.get_series('GDP', observation_start=start)
     
-    def get_unemployment(self, start='2020-01-01'):
+    def get_unemployment (self, start='2020-01-01'):
         """Get unemployment rate"""
         return self.fred.get_series('UNRATE', observation_start=start)
     
-    def get_inflation(self, start='2020-01-01'):
+    def get_inflation (self, start='2020-01-01'):
         """Get CPI (inflation)"""
         return self.fred.get_series('CPIAUCSL', observation_start=start)
     
-    def get_interest_rate(self, start='2020-01-01'):
+    def get_interest_rate (self, start='2020-01-01'):
         """Get Fed Funds Rate"""
         return self.fred.get_series('FEDFUNDS', observation_start=start)
     
@@ -510,12 +510,12 @@ class EconomicDataProvider:
         """Get S&P 500 index"""
         return self.fred.get_series('SP500', observation_start=start)
     
-    def search_series(self, query):
+    def search_series (self, query):
         """Search for economic series"""
-        return self.fred.search(query)
+        return self.fred.search (query)
 
 # Usage (requires free FRED API key)
-econ = EconomicDataProvider(api_key='your_fred_api_key')
+econ = EconomicDataProvider (api_key='your_fred_api_key')
 gdp = econ.get_gdp()
 unemployment = econ.get_unemployment()
 inflation = econ.get_inflation()
@@ -537,12 +537,12 @@ class NewsProvider:
     
     def __init__(self, newsapi_key):
         # Free tier: 100 requests/day
-        self.newsapi = NewsApiClient(api_key=newsapi_key)
+        self.newsapi = NewsApiClient (api_key=newsapi_key)
     
-    def get_company_news(self, ticker, days=7):
+    def get_company_news (self, ticker, days=7):
         """Get news for specific company"""
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=days)
+        start_date = end_date - timedelta (days=days)
         
         articles = self.newsapi.get_everything(
             q=ticker,
@@ -555,7 +555,7 @@ class NewsProvider:
         
         return articles['articles']
     
-    def get_market_news(self):
+    def get_market_news (self):
         """Get general market news"""
         articles = self.newsapi.get_top_headlines(
             category='business',
@@ -565,7 +565,7 @@ class NewsProvider:
         
         return articles['articles']
     
-    def get_seeking_alpha_articles(self, ticker):
+    def get_seeking_alpha_articles (self, ticker):
         """Scrape Seeking Alpha (use responsibly)"""
         url = f"https://seekingalpha.com/symbol/{ticker}/news"
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -574,8 +574,8 @@ class NewsProvider:
         import time
         time.sleep(2)
         
-        response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.content, 'html.parser')
+        response = requests.get (url, headers=headers)
+        soup = BeautifulSoup (response.content, 'html.parser')
         
         # Parse articles (structure changes, needs maintenance)
         articles = []
@@ -584,7 +584,7 @@ class NewsProvider:
         return articles
 
 # Usage
-news = NewsProvider(newsapi_key='your_newsapi_key')
+news = NewsProvider (newsapi_key='your_newsapi_key')
 aapl_news = news.get_company_news('Apple', days=7)
 market_news = news.get_market_news()
 \`\`\`
@@ -609,23 +609,23 @@ class AlternativeDataProvider:
     def __init__(self):
         self.edgar = Downloader("MyCompany", "email@example.com")
     
-    def get_insider_trades(self, ticker):
+    def get_insider_trades (self, ticker):
         """Get Form 4 (insider trading)"""
         self.edgar.get("4", ticker, amount=20)
         # Parse Form 4 XML files
         # Returns: insider, transaction, date, shares, price
         pass
     
-    def get_institutional_holdings(self, ticker):
+    def get_institutional_holdings (self, ticker):
         """Get 13F filings (institutional holdings)"""
         self.edgar.get("13F-HR", ticker, amount=4)
         # Parse 13F filings
         # Returns: institution, shares, value, change
         pass
     
-    def get_ownership_from_yfinance(self, ticker):
+    def get_ownership_from_yfinance (self, ticker):
         """Get ownership data from yfinance"""
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         return {
             'institutional_holders': stock.institutional_holders,
             'major_holders': stock.major_holders,
@@ -667,7 +667,7 @@ Savings                                     $22,183 (92%)
 # unified_finance_data.py
 \"\"\"
 Unified Finance Data Framework
-Poor Man's Bloomberg Terminal
+Poor Man\'s Bloomberg Terminal
 \"\"\"
 
 import yfinance as yf
@@ -688,15 +688,15 @@ class FinanceDataHub:
         # Initialize all data providers
         self.market_data = MarketDataProvider()
         self.fundamentals = FundamentalDataProvider()
-        self.economic = EconomicDataProvider(config['fred_api_key'])
-        self.news = NewsProvider(config['newsapi_key'])
+        self.economic = EconomicDataProvider (config['fred_api_key'])
+        self.news = NewsProvider (config['newsapi_key'])
         self.alt_data = AlternativeDataProvider()
         
         # Local cache database
         self.db = sqlite3.connect('finance_data_cache.db')
         self.setup_cache()
     
-    def setup_cache(self):
+    def setup_cache (self):
         \"\"\"Create cache tables\"\"\"
         self.db.execute('''
             CREATE TABLE IF NOT EXISTS price_cache (
@@ -721,12 +721,12 @@ class FinanceDataHub:
             )
         ''')
     
-    def get_complete_profile(self, ticker):
+    def get_complete_profile (self, ticker):
         \"\"\"
         Get complete company profile
         Replicates: Bloomberg DES <GO>
         \"\"\"
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         info = stock.info
         
         profile = {
@@ -739,9 +739,9 @@ class FinanceDataHub:
                 'website': info.get('website'),
                 'description': info.get('longBusinessSummary')
             },
-            'valuation': self.fundamentals.get_key_metrics(ticker),
-            'ownership': self.alt_data.get_ownership_from_yfinance(ticker),
-            'recent_news': self.news.get_company_news(ticker, days=7),
+            'valuation': self.fundamentals.get_key_metrics (ticker),
+            'ownership': self.alt_data.get_ownership_from_yfinance (ticker),
+            'recent_news': self.news.get_company_news (ticker, days=7),
             'price_data': {
                 'current_price': info.get('currentPrice'),
                 '52w_high': info.get('fiftyTwoWeekHigh'),
@@ -753,7 +753,7 @@ class FinanceDataHub:
         
         return profile
     
-    def screen_stocks(self, universe, criteria):
+    def screen_stocks (self, universe, criteria):
         \"\"\"
         Stock screening
         Replicates: Bloomberg EQS <GO>
@@ -762,15 +762,15 @@ class FinanceDataHub:
         
         for ticker in universe:
             try:
-                metrics = self.fundamentals.get_key_metrics(ticker)
+                metrics = self.fundamentals.get_key_metrics (ticker)
                 
                 # Check criteria
                 passes = True
                 for key, condition in criteria.items():
-                    if metrics.get(key) is None:
+                    if metrics.get (key) is None:
                         passes = False
                         break
-                    if not condition(metrics[key]):
+                    if not condition (metrics[key]):
                         passes = False
                         break
                 
@@ -782,9 +782,9 @@ class FinanceDataHub:
             except:
                 continue
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def get_market_overview(self):
+    def get_market_overview (self):
         \"\"\"
         Market overview
         Replicates: Bloomberg ALLQ <GO>
@@ -799,9 +799,9 @@ class FinanceDataHub:
         
         overview = {}
         for name, ticker in indices.items():
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             info = stock.info
-            hist = stock.history(period='1d')
+            hist = stock.history (period='1d')
             
             overview[name] = {
                 'price': info.get('regularMarketPrice'),
@@ -809,32 +809,32 @@ class FinanceDataHub:
                 'change_pct': ((hist['Close'].iloc[-1] / hist['Open'].iloc[0]) - 1) * 100
             }
         
-        return pd.DataFrame(overview).T
+        return pd.DataFrame (overview).T
     
-    def export_to_excel(self, ticker, filename):
+    def export_to_excel (self, ticker, filename):
         \"\"\"
         Export complete analysis to Excel
         Replicates: Bloomberg Excel Add-in
         \"\"\"
-        with pd.ExcelWriter(filename) as writer:
+        with pd.ExcelWriter (filename) as writer:
             # Price data
-            prices = self.market_data.get_price(ticker, start='2020-01-01')
-            prices.to_excel(writer, sheet_name='Prices')
+            prices = self.market_data.get_price (ticker, start='2020-01-01')
+            prices.to_excel (writer, sheet_name='Prices')
             
             # Financials
-            financials = self.fundamentals.get_financials(ticker)
-            financials['income_statement'].to_excel(writer, sheet_name='Income Statement')
-            financials['balance_sheet'].to_excel(writer, sheet_name='Balance Sheet')
-            financials['cash_flow'].to_excel(writer, sheet_name='Cash Flow')
+            financials = self.fundamentals.get_financials (ticker)
+            financials['income_statement'].to_excel (writer, sheet_name='Income Statement')
+            financials['balance_sheet'].to_excel (writer, sheet_name='Balance Sheet')
+            financials['cash_flow'].to_excel (writer, sheet_name='Cash Flow')
             
             # Metrics
-            metrics = self.fundamentals.get_key_metrics(ticker)
-            pd.Series(metrics).to_excel(writer, sheet_name='Key Metrics')
+            metrics = self.fundamentals.get_key_metrics (ticker)
+            pd.Series (metrics).to_excel (writer, sheet_name='Key Metrics')
             
             # News
-            news = self.news.get_company_news(ticker)
-            news_df = pd.DataFrame(news)
-            news_df.to_excel(writer, sheet_name='News')
+            news = self.news.get_company_news (ticker)
+            news_df = pd.DataFrame (news)
+            news_df.to_excel (writer, sheet_name='News')
         
         return f"Exported {ticker} analysis to {filename}"
 
@@ -844,7 +844,7 @@ config = {
     'newsapi_key': 'your_newsapi_key'
 }
 
-hub = FinanceDataHub(config)
+hub = FinanceDataHub (config)
 
 # Get complete company profile
 profile = hub.get_complete_profile('AAPL')
@@ -856,7 +856,7 @@ criteria = {
     'ROE': lambda x: x > 0.15,
     'Debt to Equity': lambda x: x < 0.5
 }
-results = hub.screen_stocks(sp500, criteria)
+results = hub.screen_stocks (sp500, criteria)
 
 # Market overview
 overview = hub.get_market_overview()
@@ -873,50 +873,50 @@ import streamlit as st
 from unified_finance_data import FinanceDataHub
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="Finance Data Hub", layout="wide")
+st.set_page_config (page_title="Finance Data Hub", layout="wide")
 
 # Initialize
 config = {
     'fred_api_key': st.secrets['fred_api_key'],
     'newsapi_key': st.secrets['newsapi_key']
 }
-hub = FinanceDataHub(config)
+hub = FinanceDataHub (config)
 
 # Sidebar
 ticker = st.sidebar.text_input("Enter Ticker", value="AAPL")
 
 # Main content
-st.title(f"Analysis: {ticker}")
+st.title (f"Analysis: {ticker}")
 
 # Tabs
 tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Financials", "Charts", "News"])
 
 with tab1:
-    profile = hub.get_complete_profile(ticker)
-    st.write(profile['basic_info'])
-    st.write(profile['valuation'])
+    profile = hub.get_complete_profile (ticker)
+    st.write (profile['basic_info'])
+    st.write (profile['valuation'])
 
 with tab2:
-    financials = hub.fundamentals.get_financials(ticker)
-    st.dataframe(financials['income_statement'])
+    financials = hub.fundamentals.get_financials (ticker)
+    st.dataframe (financials['income_statement'])
 
 with tab3:
-    prices = hub.market_data.get_price(ticker, start='2023-01-01')
-    fig = go.Figure(data=[go.Candlestick(
+    prices = hub.market_data.get_price (ticker, start='2023-01-01')
+    fig = go.Figure (data=[go.Candlestick(
         x=prices.index,
         open=prices['Open'],
         high=prices['High'],
         low=prices['Low'],
         close=prices['Close']
     )])
-    st.plotly_chart(fig)
+    st.plotly_chart (fig)
 
 with tab4:
     news = profile['recent_news']
     for article in news[:10]:
-        st.write(f"**{article['title']}**")
-        st.write(f"Source: {article['source']['name']}")
-        st.write(article['url'])
+        st.write (f"**{article['title']}**")
+        st.write (f"Source: {article['source']['name']}")
+        st.write (article['url'])
         st.write("---")
 \`\`\`
 
@@ -968,7 +968,7 @@ Savings: $22,363 (93%)
 
 **Conclusion:**
 
-You can replicate 80% of Bloomberg's equity analysis functionality for $0-1,600/year using modern Python tools and free APIs. The 20% you lose:
+You can replicate 80% of Bloomberg\'s equity analysis functionality for $0-1,600/year using modern Python tools and free APIs. The 20% you lose:
 - Bloomberg Messenger network
 - Sub-second data
 - Fixed income/derivatives depth
@@ -1274,7 +1274,7 @@ Sections:
 5. Economic data releases
 6. Week ahead (earnings, econ data)
 
-Practice populating it with Friday's data
+Practice populating it with Friday\'s data
 \`\`\`
 
 ---
@@ -1397,7 +1397,7 @@ pip install pdblp  # pandas wrapper, easier to use
 
 # Basic connection
 import pdblp
-con = pdblp.BCon(debug=False, port=8194, timeout=5000)
+con = pdblp.BCon (debug=False, port=8194, timeout=5000)
 con.start()
 
 # Test connection
@@ -1413,14 +1413,14 @@ con.stop()
 import pdblp
 import pandas as pd
 
-con = pdblp.BCon(debug=False, port=8194)
+con = pdblp.BCon (debug=False, port=8194)
 con.start()
 
 # Get current data for multiple securities
 tickers = ['AAPL US EQUITY', 'MSFT US EQUITY', 'GOOGL US EQUITY']
 fields = ['PX_LAST', 'CUR_MKT_CAP', 'PE_RATIO', 'DVD_YIELD']
 
-data = con.ref(tickers, fields)
+data = con.ref (tickers, fields)
 print(data)
 
 # Exercise:
@@ -1471,11 +1471,11 @@ import time
 
 class BloombergDataPipeline:
     def __init__(self, db_path='bloomberg_data.db'):
-        self.con = pdblp.BCon(debug=False, port=8194)
-        self.db = sqlite3.connect(db_path)
+        self.con = pdblp.BCon (debug=False, port=8194)
+        self.db = sqlite3.connect (db_path)
         self.setup_database()
     
-    def setup_database(self):
+    def setup_database (self):
         """Create tables for storing data"""
         self.db.execute('''
             CREATE TABLE IF NOT EXISTS prices (
@@ -1502,12 +1502,12 @@ class BloombergDataPipeline:
         
         self.db.commit()
     
-    def fetch_daily_prices(self, tickers):
+    def fetch_daily_prices (self, tickers):
         """Fetch yesterday's prices"""
         self.con.start()
         
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=5)  # Get last 5 days
+        start_date = end_date - timedelta (days=5)  # Get last 5 days
         
         data = self.con.bdh(
             tickers,
@@ -1523,14 +1523,14 @@ class BloombergDataPipeline:
             ticker_data = data[ticker]
             ticker_data.to_sql('prices', self.db, if_exists='append', index=False)
         
-        print(f"Fetched prices for {len(tickers)} tickers")
+        print(f"Fetched prices for {len (tickers)} tickers")
     
-    def fetch_fundamentals(self, tickers):
+    def fetch_fundamentals (self, tickers):
         """Fetch current fundamentals"""
         self.con.start()
         
         fields = ['CUR_MKT_CAP', 'PE_RATIO', 'DVD_YIELD', 'ROE', 'DEBT_TO_EQY']
-        data = self.con.ref(tickers, fields)
+        data = self.con.ref (tickers, fields)
         
         self.con.stop()
         
@@ -1544,9 +1544,9 @@ class BloombergDataPipeline:
                 )
         
         self.db.commit()
-        print(f"Fetched fundamentals for {len(tickers)} tickers")
+        print(f"Fetched fundamentals for {len (tickers)} tickers")
     
-    def run_daily_update(self):
+    def run_daily_update (self):
         """Run daily data update"""
         tickers = [
             'AAPL US EQUITY', 'MSFT US EQUITY', 'GOOGL US EQUITY',
@@ -1554,8 +1554,8 @@ class BloombergDataPipeline:
         ]
         
         print(f"Starting daily update: {datetime.now()}")
-        self.fetch_daily_prices(tickers)
-        self.fetch_fundamentals(tickers)
+        self.fetch_daily_prices (tickers)
+        self.fetch_fundamentals (tickers)
         print(f"Daily update complete: {datetime.now()}")
 
 # Usage
@@ -1565,7 +1565,7 @@ pipeline = BloombergDataPipeline()
 pipeline.run_daily_update()
 
 # Schedule for daily execution (after market close)
-schedule.every().day.at("18:00").do(pipeline.run_daily_update)
+schedule.every().day.at("18:00").do (pipeline.run_daily_update)
 
 while True:
     schedule.run_pending()
@@ -1588,9 +1588,9 @@ import matplotlib.pyplot as plt
 
 class BloombergQuantResearch:
     def __init__(self):
-        self.con = pdblp.BCon(debug=False, port=8194)
+        self.con = pdblp.BCon (debug=False, port=8194)
     
-    def get_data_for_backtest(self, tickers, start_date, end_date):
+    def get_data_for_backtest (self, tickers, start_date, end_date):
         """Get data formatted for backtesting"""
         self.con.start()
         
@@ -1618,19 +1618,19 @@ class BloombergQuantResearch:
             'fundamentals': fundamentals
         }
     
-    def run_factor_strategy(self, universe, start_date, end_date):
+    def run_factor_strategy (self, universe, start_date, end_date):
         """Example: Value + Momentum factor strategy"""
-        data = self.get_data_for_backtest(universe, start_date, end_date)
+        data = self.get_data_for_backtest (universe, start_date, end_date)
         
         # Calculate momentum (12-month return)
         returns_12m = data['prices'].pct_change(252)
         
         # Get value factor (from fundamentals)
-        pe_ratios = self.get_fundamental_series(universe, 'PE_RATIO', start_date, end_date)
+        pe_ratios = self.get_fundamental_series (universe, 'PE_RATIO', start_date, end_date)
         
         # Combine factors
-        momentum_score = returns_12m.rank(axis=1, pct=True)
-        value_score = (-pe_ratios).rank(axis=1, pct=True)  # Lower P/E = higher score
+        momentum_score = returns_12m.rank (axis=1, pct=True)
+        value_score = (-pe_ratios).rank (axis=1, pct=True)  # Lower P/E = higher score
         
         # Combined score
         combined = (momentum_score + value_score) / 2
@@ -1641,12 +1641,12 @@ class BloombergQuantResearch:
         
         # Calculate returns
         forward_returns = data['prices'].pct_change().shift(-1)
-        strategy_returns = (forward_returns[top_quintile].mean(axis=1) - 
-                          forward_returns[bottom_quintile].mean(axis=1))
+        strategy_returns = (forward_returns[top_quintile].mean (axis=1) - 
+                          forward_returns[bottom_quintile].mean (axis=1))
         
         return strategy_returns
     
-    def get_fundamental_series(self, tickers, field, start_date, end_date):
+    def get_fundamental_series (self, tickers, field, start_date, end_date):
         """Get time series of fundamental data"""
         self.con.start()
         data = self.con.bdh(
@@ -1662,7 +1662,7 @@ class BloombergQuantResearch:
 # Usage
 research = BloombergQuantResearch()
 sp500 = ['AAPL US EQUITY', 'MSFT US EQUITY', ...]  # Full list
-returns = research.run_factor_strategy(sp500, '20200101', '20231231')
+returns = research.run_factor_strategy (sp500, '20200101', '20231231')
 
 print(f"Strategy Sharpe Ratio: {returns.mean() / returns.std() * (252**0.5)}")
 \`\`\`

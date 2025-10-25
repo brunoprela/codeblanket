@@ -6,13 +6,13 @@ export const fineTuningOpenSourceModelsQuiz = [
   {
     id: 'open-source-fine-tune-q-1',
     question:
-      'Compare fine-tuning Llama 2 7B locally vs using OpenAI fine-tuning for GPT-3.5. Consider: (1) Setup complexity, (2) Training cost, (3) Inference cost at 1M req/month, (4) Control and customization, (5) Data privacy. Which would you choose for a healthcare application with strict privacy requirements and moderate budget ($5K/month)?',
+      'Compare fine-tuning Llama 2 7B locally vs using OpenAI fine-tuning for GPT-3.5. Consider: (1) Setup complexity, (2) Training cost, (3) Inference cost at 1M req/month, (4) Control and customization, (5) Data privacy. Which would you choose for a healthcare application with strict privacy requirements and moderate budget (\$5K/month)?',
     hint: 'Healthcare requires data privacy (HIPAA compliance). Consider whether cloud APIs are acceptable and total cost of ownership including infrastructure.',
     sampleAnswer:
       'This is a comprehensive answer that would be displayed in the UI.',
     keyPoints: [
       'Healthcare requires HIPAA compliance—data privacy is critical, self-hosted model essential',
-      'Cost: Llama 2 $44.9K first year ($14.9K ongoing) vs GPT-3.5 $11.2K ($7.2K ongoing)',
+      'Cost: Llama 2 $44.9K first year (\$14.9K ongoing) vs GPT-3.5 $11.2K (\$7.2K ongoing)',
       'Setup: Llama needs 2-3 weeks engineering vs GPT-3.5 needs 3-4 days',
       'Inference: Llama $740/month (A10G GPU) vs GPT-3.5 $600/month at 1M req/month',
       'Privacy: Llama full control, GPT-3.5 requires BAA and still external data sharing',

@@ -1,7 +1,7 @@
 export const valuationBasics = {
-    title: 'Valuation Basics',
-    id: 'valuation-basics',
-    content: `
+  title: 'Valuation Basics',
+  id: 'valuation-basics',
+  content: `
 # Valuation Basics
 
 Valuation is the process of determining the economic value of an asset, company, or security. It combines art and science—rigorous financial modeling with judgment about future prospects. This section covers core valuation methodologies used in corporate finance, investment banking, and equity research.
@@ -129,7 +129,7 @@ Value per Share = Equity Value / Shares Outstanding
 
 ## Python DCF Implementation
 
-Let's build a complete DCF model:
+Let\'s build a complete DCF model:
 
 \`\`\`python
 import numpy as np
@@ -169,11 +169,11 @@ class DCFModel:
         nwc_pct_revenue: float
     ):
         """Project financial statements for DCF."""
-        years = len(revenue_growth_rates)
+        years = len (revenue_growth_rates)
         
         # Initialize projections
         data = {
-            'Year': list(range(1, years + 1)),
+            'Year': list (range(1, years + 1)),
             'Revenue': [base_revenue],
             'Revenue_Growth': [np.nan],
             'EBIT': [],
@@ -190,17 +190,17 @@ class DCFModel:
         
         # Project revenues
         for growth_rate in revenue_growth_rates[1:]:
-            data['Revenue'].append(data['Revenue'][-1] * (1 + revenue_growth_rates[len(data['Revenue']) - 1]))
-            data['Revenue_Growth'].append(revenue_growth_rates[len(data['Revenue']) - 2])
+            data['Revenue'].append (data['Revenue'][-1] * (1 + revenue_growth_rates[len (data['Revenue']) - 1]))
+            data['Revenue_Growth'].append (revenue_growth_rates[len (data['Revenue']) - 2])
         
         # Fill growth rates
-        for i, rate in enumerate(revenue_growth_rates):
-            if i < len(data['Revenue_Growth']):
+        for i, rate in enumerate (revenue_growth_rates):
+            if i < len (data['Revenue_Growth']):
                 data['Revenue_Growth'][i] = rate
         
         prev_nwc = base_revenue * nwc_pct_revenue
         
-        for i, revenue in enumerate(data['Revenue']):
+        for i, revenue in enumerate (data['Revenue']):
             # Income statement items
             ebit = revenue * ebit_margin
             tax = ebit * tax_rate
@@ -221,21 +221,21 @@ class DCFModel:
             pv_fcff = fcff * discount_factor
             
             # Append to data
-            data['EBIT'].append(ebit)
-            data['Tax'].append(tax)
-            data['NOPAT'].append(nopat)
-            data['D&A'].append(da)
-            data['CapEx'].append(capex)
-            data['NWC'].append(nwc)
-            data['Change_in_NWC'].append(change_nwc)
-            data['FCFF'].append(fcff)
-            data['Discount_Factor'].append(discount_factor)
-            data['PV_FCFF'].append(pv_fcff)
+            data['EBIT'].append (ebit)
+            data['Tax'].append (tax)
+            data['NOPAT'].append (nopat)
+            data['D&A'].append (da)
+            data['CapEx'].append (capex)
+            data['NWC'].append (nwc)
+            data['Change_in_NWC'].append (change_nwc)
+            data['FCFF'].append (fcff)
+            data['Discount_Factor'].append (discount_factor)
+            data['PV_FCFF'].append (pv_fcff)
         
-        self.projections = pd.DataFrame(data)
+        self.projections = pd.DataFrame (data)
         return self.projections
     
-    def calculate_terminal_value(self, method='perpetuity'):
+    def calculate_terminal_value (self, method='perpetuity'):
         """Calculate terminal value using perpetuity growth or exit multiple."""
         if self.projections.empty:
             raise ValueError("Must run project_financials first")
@@ -260,7 +260,7 @@ class DCFModel:
         
         return terminal_value, pv_terminal
     
-    def calculate_valuation(self):
+    def calculate_valuation (self):
         """Calculate enterprise value, equity value, and per-share value."""
         # PV of projected cash flows
         pv_projected_fcff = self.projections['PV_FCFF'].sum()
@@ -325,7 +325,7 @@ class DCFModel:
         self.wacc = original_wacc
         self.terminal_growth = original_growth
         
-        sensitivity_df = pd.DataFrame(results)
+        sensitivity_df = pd.DataFrame (results)
         sensitivity_table = sensitivity_df.pivot(
             index='WACC',
             columns='Terminal Growth',
@@ -334,27 +334,27 @@ class DCFModel:
         
         return sensitivity_table
     
-    def print_valuation_summary(self):
+    def print_valuation_summary (self):
         """Print formatted valuation summary."""
         print(f"\\n{'=' * 60}")
         print(f"DCF Valuation Summary: {self.company_name}")
         print(f"{'=' * 60}\\n")
         
         print("Valuation Build-Up:")
-        print(f"  PV of Projected FCF (Years 1-{len(self.projections)}): ${self.valuation_summary['PV of Projected FCF']:,.0f}M")
-print(f"  Terminal Value: ${self.valuation_summary['Terminal Value']:,.0f}M")
-print(f"  PV of Terminal Value: ${self.valuation_summary['PV of Terminal Value']:,.0f}M")
+        print(f"  PV of Projected FCF (Years 1-{len (self.projections)}): \${self.valuation_summary['PV of Projected FCF']:,.0f}M")
+print(f"  Terminal Value: \${self.valuation_summary['Terminal Value']:,.0f}M")
+print(f"  PV of Terminal Value: \${self.valuation_summary['PV of Terminal Value']:,.0f}M")
 print(f"  {'─' * 58}")
-print(f"  Enterprise Value: ${self.valuation_summary['Enterprise Value']:,.0f}M")
-print(f"\\n  Less: Net Debt: ${self.valuation_summary['Less: Net Debt']:,.0f}M")
-print(f"  Plus: Non-operating Assets: ${self.valuation_summary['Plus: Non-operating Assets']:,.0f}M")
+print(f"  Enterprise Value: \${self.valuation_summary['Enterprise Value']:,.0f}M")
+print(f"\\n  Less: Net Debt: \${self.valuation_summary['Less: Net Debt']:,.0f}M")
+print(f"  Plus: Non-operating Assets: \${self.valuation_summary['Plus: Non-operating Assets']:,.0f}M")
 print(f"  {'─' * 58}")
-print(f"  Equity Value: ${self.valuation_summary['Equity Value']:,.0f}M")
+print(f"  Equity Value: \${self.valuation_summary['Equity Value']:,.0f}M")
 
 if self.valuation_summary['Value per Share']:
     print(f"\\n  Shares Outstanding: {self.valuation_summary['Shares Outstanding']:,.1f}M")
 print(f"  {'=' * 58}")
-print(f"  Value per Share: ${self.valuation_summary['Value per Share']:.2f}")
+print(f"  Value per Share: \${self.valuation_summary['Value per Share']:.2f}")
 
 print(f"\\n  Assumptions:")
 print(f"    WACC: {self.valuation_summary['WACC']:.2%}")
@@ -385,7 +385,7 @@ da_pct_revenue=0.05,  # 5 % D & A
 )
 
 print("\\nProjected Financials ($ Millions):")
-print(projections[['Year', 'Revenue', 'EBIT', 'FCFF', 'PV_FCFF']].to_string(index = False))
+print(projections[['Year', 'Revenue', 'EBIT', 'FCFF', 'PV_FCFF']].to_string (index = False))
     
     # Calculate valuation
 valuation = model.calculate_valuation()
@@ -486,11 +486,11 @@ class ComparableCompanyAnalysis:
         self.data = {}
         self.multiples = pd.DataFrame()
     
-    def fetch_data(self):
+    def fetch_data (self):
         """Fetch financial data for comparable companies."""
         for ticker in self.tickers:
             try:
-                stock = yf.Ticker(ticker)
+                stock = yf.Ticker (ticker)
                 info = stock.info
                 
                 self.data[ticker] = {
@@ -510,7 +510,7 @@ class ComparableCompanyAnalysis:
             except Exception as e:
                 print(f"Error fetching {ticker}: {e}")
     
-    def calculate_multiples(self) -> pd.DataFrame:
+    def calculate_multiples (self) -> pd.DataFrame:
         """Calculate valuation multiples."""
         rows = []
         
@@ -537,10 +537,10 @@ class ComparableCompanyAnalysis:
                 'Revenue Growth': data['Revenue Growth']
             })
         
-        self.multiples = pd.DataFrame(rows)
+        self.multiples = pd.DataFrame (rows)
         return self.multiples
     
-    def summary_statistics(self) -> pd.DataFrame:
+    def summary_statistics (self) -> pd.DataFrame:
         """Calculate summary statistics for multiples."""
         cols = ['EV/Revenue', 'EV/EBITDA', 'P/E', 'P/B', 'PEG']
         
@@ -568,7 +568,7 @@ class ComparableCompanyAnalysis:
         valuations = []
         
         # EV/Revenue
-        if not np.isnan(summary.loc['EV/Revenue', 'Median']):
+        if not np.isnan (summary.loc['EV/Revenue', 'Median']):
             ev_revenue_val = target_revenue * summary.loc['EV/Revenue', 'Median']
             valuations.append({
                 'Method': 'EV/Revenue',
@@ -578,7 +578,7 @@ class ComparableCompanyAnalysis:
             })
         
         # EV/EBITDA
-        if not np.isnan(summary.loc['EV/EBITDA', 'Median']):
+        if not np.isnan (summary.loc['EV/EBITDA', 'Median']):
             ev_ebitda_val = target_ebitda * summary.loc['EV/EBITDA', 'Median']
             valuations.append({
                 'Method': 'EV/EBITDA',
@@ -588,7 +588,7 @@ class ComparableCompanyAnalysis:
             })
         
         # P/E
-        if not np.isnan(summary.loc['P/E', 'Median']):
+        if not np.isnan (summary.loc['P/E', 'Median']):
             pe_val = target_earnings * summary.loc['P/E', 'Median']
             valuations.append({
                 'Method': 'P/E',
@@ -598,7 +598,7 @@ class ComparableCompanyAnalysis:
             })
         
         # P/B
-        if not np.isnan(summary.loc['P/B', 'Median']):
+        if not np.isnan (summary.loc['P/B', 'Median']):
             pb_val = target_book_value * summary.loc['P/B', 'Median']
             valuations.append({
                 'Method': 'P/B',
@@ -607,7 +607,7 @@ class ComparableCompanyAnalysis:
                 'Implied Market Cap': pb_val
             })
         
-        return pd.DataFrame(valuations)
+        return pd.DataFrame (valuations)
 
 # Example: Value using comparables
 if __name__ == "__main__":
@@ -621,7 +621,7 @@ if __name__ == "__main__":
     
     multiples = comps.calculate_multiples()
     print("\\nComparable Company Multiples:")
-    print(multiples[['Company', 'EV/Revenue', 'EV/EBITDA', 'P/E', 'P/B']].to_string(index=False))
+    print(multiples[['Company', 'EV/Revenue', 'EV/EBITDA', 'P/E', 'P/B']].to_string (index=False))
     
     summary = comps.summary_statistics()
     print("\\nSummary Statistics:")
@@ -639,7 +639,7 @@ if __name__ == "__main__":
     for col in ['Implied EV', 'Implied Market Cap']:
         if col in target_valuations.columns:
             target_valuations[col] = target_valuations[col] / 1e6
-    print(target_valuations.to_string(index=False))
+    print(target_valuations.to_string (index=False))
 \`\`\`
 
 ## Common Valuation Pitfalls
@@ -701,35 +701,35 @@ Equity metrics: P/E, P/B
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-def plot_football_field(valuations: Dict[str, tuple]):
+def plot_football_field (valuations: Dict[str, tuple]):
     """
     Plot football field valuation chart.
     
     Args:
         valuations: Dict of {method: (low, high)} tuples
     """
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots (figsize=(12, 6))
     
-    methods = list(valuations.keys())
-    y_positions = range(len(methods))
+    methods = list (valuations.keys())
+    y_positions = range (len (methods))
     
-    for i, (method, (low, high)) in enumerate(valuations.items()):
-        ax.barh(i, high - low, left=low, height=0.5, 
+    for i, (method, (low, high)) in enumerate (valuations.items()):
+        ax.barh (i, high - low, left=low, height=0.5, 
                 color='steelblue', edgecolor='black', linewidth=1.5)
         
         # Add value labels
-        ax.text(low, i, f'${low: .0f}', ha='right', va='center', fontsize=9)
-ax.text(high, i, f'${high:.0f}', ha = 'left', va = 'center', fontsize = 9)
+        ax.text (low, i, f'\${low:.0f}', ha='right', va='center', fontsize=9)
+ax.text (high, i, f'\${high:.0f}', ha = 'left', va = 'center', fontsize = 9)
         
         # Add midpoint
 mid = (low + high) / 2
-ax.plot(mid, i, 'ro', markersize = 8)
+ax.plot (mid, i, 'ro', markersize = 8)
 
-ax.set_yticks(y_positions)
-ax.set_yticklabels(methods)
+ax.set_yticks (y_positions)
+ax.set_yticklabels (methods)
 ax.set_xlabel('Valuation ($ per share)', fontsize = 12)
 ax.set_title('Football Field Valuation', fontsize = 14, fontweight = 'bold')
-ax.grid(axis = 'x', alpha = 0.3)
+ax.grid (axis = 'x', alpha = 0.3)
 
 plt.tight_layout()
 plt.show()
@@ -742,7 +742,7 @@ valuations = {
     '52-Week Trading Range': (42, 60)
 }
 
-plot_football_field(valuations)
+plot_football_field (valuations)
 \`\`\`
 
 This creates a chart showing valuation ranges, helping identify consensus fair value.
@@ -758,7 +758,7 @@ shopify_dcf = DCFModel(
     wacc=0.11,  # 11% (tech company, higher risk)
     terminal_growth=0.03,  # 3% (mature e-commerce growth)
     shares_outstanding=1250,  # ~1.25B shares
-    net_debt=-6000,  # Net cash position ($6B)
+    net_debt=-6000,  # Net cash position (\$6B)
     non_operating_assets=500  # Investments
 )
 
@@ -799,4 +799,3 @@ print(sensitivity.round(2))
 Valuation is a core skill for any finance professional. While models provide structure, judgment is critical—understanding business drivers, competitive dynamics, and economic context. Practice with real companies, challenge assumptions, and never confuse precision with accuracy. A valuation range of $45-55 is more honest than a false precise estimate of $50.23.
 `,
 };
-

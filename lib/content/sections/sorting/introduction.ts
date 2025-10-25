@@ -5,7 +5,7 @@
 export const introductionSection = {
   id: 'introduction',
   title: 'Why Sorting Matters',
-  content: `Sorting is one of the most fundamental operations in computer science. It's the process of arranging data in a specific order (usually ascending or descending), and it serves as the foundation for many other algorithms.
+  content: `Sorting is one of the most fundamental operations in computer science. It\'s the process of arranging data in a specific order (usually ascending or descending), and it serves as the foundation for many other algorithms.
 
 **Why Learn Sorting?**
 - **Ubiquitous:** Used everywhere - databases, search engines, operating systems

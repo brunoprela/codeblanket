@@ -32,7 +32,7 @@ BERT architecture: Stacked transformer encoders
 import torch
 import torch.nn as nn
 
-class BERTModel(nn.Module):
+class BERTModel (nn.Module):
     """
     BERT: Bidirectional Encoder Representations from Transformers
     
@@ -56,26 +56,26 @@ class BERTModel(nn.Module):
         super().__init__()
         
         # Token, position, segment embeddings
-        self.token_embedding = nn.Embedding(vocab_size, d_model)
-        self.position_embedding = nn.Embedding(max_seq_len, d_model)
+        self.token_embedding = nn.Embedding (vocab_size, d_model)
+        self.position_embedding = nn.Embedding (max_seq_len, d_model)
         self.segment_embedding = nn.Embedding(2, d_model)  # For sentence pairs
         
         # Transformer encoder layers
         self.encoder_layers = nn.ModuleList([
-            TransformerEncoderBlock(d_model, n_heads, d_ff, dropout)
-            for _ in range(n_layers)
+            TransformerEncoderBlock (d_model, n_heads, d_ff, dropout)
+            for _ in range (n_layers)
         ])
         
         # Pooler: Extract [CLS] representation
         self.pooler = nn.Sequential(
-            nn.Linear(d_model, d_model),
+            nn.Linear (d_model, d_model),
             nn.Tanh()
         )
         
-        self.dropout = nn.Dropout(dropout)
-        self.layer_norm = nn.LayerNorm(d_model)
+        self.dropout = nn.Dropout (dropout)
+        self.layer_norm = nn.LayerNorm (d_model)
     
-    def forward(self, input_ids, attention_mask=None, token_type_ids=None):
+    def forward (self, input_ids, attention_mask=None, token_type_ids=None):
         """
         Args:
             input_ids: [batch, seq_len]
@@ -89,21 +89,21 @@ class BERTModel(nn.Module):
         batch_size, seq_len = input_ids.size()
         
         # Position IDs
-        position_ids = torch.arange(seq_len, device=input_ids.device).unsqueeze(0)
+        position_ids = torch.arange (seq_len, device=input_ids.device).unsqueeze(0)
         
         # Segment IDs (default to 0 if not provided)
         if token_type_ids is None:
-            token_type_ids = torch.zeros_like(input_ids)
+            token_type_ids = torch.zeros_like (input_ids)
         
         # Embeddings
-        token_emb = self.token_embedding(input_ids)
-        position_emb = self.position_embedding(position_ids)
-        segment_emb = self.segment_embedding(token_type_ids)
+        token_emb = self.token_embedding (input_ids)
+        position_emb = self.position_embedding (position_ids)
+        segment_emb = self.segment_embedding (token_type_ids)
         
         # Combine embeddings
         embeddings = token_emb + position_emb + segment_emb
-        embeddings = self.layer_norm(embeddings)
-        embeddings = self.dropout(embeddings)
+        embeddings = self.layer_norm (embeddings)
+        embeddings = self.dropout (embeddings)
         
         # Attention mask: Expand to [batch, 1, 1, seq_len] for broadcasting
         if attention_mask is not None:
@@ -113,12 +113,12 @@ class BERTModel(nn.Module):
         # Pass through encoder layers
         hidden = embeddings
         for layer in self.encoder_layers:
-            hidden = layer(hidden, attention_mask)
+            hidden = layer (hidden, attention_mask)
         
         sequence_output = hidden  # All token representations
         
         # Pooled output: [CLS] token (first token)
-        pooled_output = self.pooler(hidden[:, 0, :])
+        pooled_output = self.pooler (hidden[:, 0, :])
         
         return sequence_output, pooled_output
 
@@ -142,12 +142,12 @@ bert_configs = {
 
 # Example usage
 vocab_size = 30000
-model = BERTModel(vocab_size, **bert_configs["bert-base"])
+model = BERTModel (vocab_size, **bert_configs["bert-base"])
 
 input_ids = torch.randint(0, vocab_size, (4, 128))  # Batch of 4, seq len 128
 attention_mask = torch.ones(4, 128)  # All tokens are real (not padding)
 
-sequence_output, pooled_output = model(input_ids, attention_mask)
+sequence_output, pooled_output = model (input_ids, attention_mask)
 
 print(f"Sequence output: {sequence_output.shape}")  # [4, 128, 768]
 print(f"Pooled output: {pooled_output.shape}")      # [4, 768]
@@ -180,7 +180,7 @@ class MaskedLanguageModeling:
         self.mask_token_id = tokenizer.mask_token_id
         self.vocab_size = tokenizer.vocab_size
     
-    def create_masked_lm_predictions(self, tokens):
+    def create_masked_lm_predictions (self, tokens):
         """
         Mask tokens for MLM training
         
@@ -198,16 +198,16 @@ class MaskedLanguageModeling:
         """
         
         masked_tokens = tokens.copy()
-        labels = np.full_like(tokens, -100)  # -100 = ignore in loss
+        labels = np.full_like (tokens, -100)  # -100 = ignore in loss
         
         # Choose 15% of positions to mask (excluding special tokens)
         mask_indices = []
-        for i, token in enumerate(tokens):
+        for i, token in enumerate (tokens):
             if token not in [self.tokenizer.cls_token_id, 
                            self.tokenizer.sep_token_id,
                            self.tokenizer.pad_token_id]:
                 if np.random.random() < self.mask_prob:
-                    mask_indices.append(i)
+                    mask_indices.append (i)
         
         for idx in mask_indices:
             # Set label (what to predict)
@@ -229,10 +229,10 @@ class MaskedLanguageModeling:
 
 # Example
 sentence = "The cat sat on the mat"
-tokens = tokenizer.encode(sentence)
+tokens = tokenizer.encode (sentence)
 print(f"Original: {tokens}")
 
-masked_tokens, labels = mlm.create_masked_lm_predictions(tokens)
+masked_tokens, labels = mlm.create_masked_lm_predictions (tokens)
 print(f"Masked: {masked_tokens}")
 print(f"Labels: {labels}")
 
@@ -243,19 +243,19 @@ print(f"Labels: {labels}")
 # Labels:   [-100, -100, 4937, -100, 2006, -100, -100, -100]
 
 # Training MLM
-class MLMTrainingHead(nn.Module):
+class MLMTrainingHead (nn.Module):
     """
     Prediction head for masked tokens
     """
     
     def __init__(self, d_model, vocab_size):
         super().__init__()
-        self.dense = nn.Linear(d_model, d_model)
-        self.layer_norm = nn.LayerNorm(d_model)
-        self.decoder = nn.Linear(d_model, vocab_size, bias=False)
-        self.bias = nn.Parameter(torch.zeros(vocab_size))
+        self.dense = nn.Linear (d_model, d_model)
+        self.layer_norm = nn.LayerNorm (d_model)
+        self.decoder = nn.Linear (d_model, vocab_size, bias=False)
+        self.bias = nn.Parameter (torch.zeros (vocab_size))
     
-    def forward(self, hidden_states):
+    def forward (self, hidden_states):
         """
         Args:
             hidden_states: [batch, seq_len, d_model]
@@ -263,14 +263,14 @@ class MLMTrainingHead(nn.Module):
         Returns:
             logits: [batch, seq_len, vocab_size]
         """
-        hidden = self.dense(hidden_states)
-        hidden = nn.functional.gelu(hidden)
-        hidden = self.layer_norm(hidden)
-        logits = self.decoder(hidden) + self.bias
+        hidden = self.dense (hidden_states)
+        hidden = nn.functional.gelu (hidden)
+        hidden = self.layer_norm (hidden)
+        logits = self.decoder (hidden) + self.bias
         return logits
 
 # Training loop
-def train_mlm(model, dataloader, optimizer):
+def train_mlm (model, dataloader, optimizer):
     """
     Train BERT with MLM objective
     """
@@ -283,11 +283,11 @@ def train_mlm(model, dataloader, optimizer):
         attention_mask = batch['attention_mask']
         
         # Forward pass
-        sequence_output, _ = model(input_ids, attention_mask)
-        prediction_scores = mlm_head(sequence_output)
+        sequence_output, _ = model (input_ids, attention_mask)
+        prediction_scores = mlm_head (sequence_output)
         
         # Loss: Only on masked tokens
-        loss_fct = nn.CrossEntropyLoss(ignore_index=-100)
+        loss_fct = nn.CrossEntropyLoss (ignore_index=-100)
         loss = loss_fct(
             prediction_scores.view(-1, model.vocab_size),
             labels.view(-1)
@@ -326,16 +326,16 @@ class NextSentencePrediction:
     Label: NotNext (0)
     """
     
-    def create_nsp_training_examples(self, documents):
+    def create_nsp_training_examples (self, documents):
         """
         Create sentence pairs for NSP training
         """
         examples = []
         
         for doc in documents:
-            sentences = split_into_sentences(doc)
+            sentences = split_into_sentences (doc)
             
-            for i in range(len(sentences) - 1):
+            for i in range (len (sentences) - 1):
                 sentence_a = sentences[i]
                 
                 # 50%: Use actual next sentence
@@ -345,9 +345,9 @@ class NextSentencePrediction:
                 
                 # 50%: Use random sentence from corpus
                 else:
-                    random_doc = random.choice(documents)
-                    random_sentences = split_into_sentences(random_doc)
-                    sentence_b = random.choice(random_sentences)
+                    random_doc = random.choice (documents)
+                    random_sentences = split_into_sentences (random_doc)
+                    sentence_b = random.choice (random_sentences)
                     label = 0  # NotNext
                 
                 examples.append({
@@ -359,35 +359,35 @@ class NextSentencePrediction:
         return examples
 
 # Input format for BERT
-def prepare_nsp_input(sentence_a, sentence_b, tokenizer):
+def prepare_nsp_input (sentence_a, sentence_b, tokenizer):
     """
     Format: [CLS] sentence_a [SEP] sentence_b [SEP]
     """
-    tokens_a = tokenizer.tokenize(sentence_a)
-    tokens_b = tokenizer.tokenize(sentence_b)
+    tokens_a = tokenizer.tokenize (sentence_a)
+    tokens_b = tokenizer.tokenize (sentence_b)
     
     # Build sequence
     tokens = ['[CLS]'] + tokens_a + ['[SEP]'] + tokens_b + ['[SEP]']
     
     # Segment IDs (0 for sentence A, 1 for sentence B)
-    segment_ids = [0] * (len(tokens_a) + 2) + [1] * (len(tokens_b) + 1)
+    segment_ids = [0] * (len (tokens_a) + 2) + [1] * (len (tokens_b) + 1)
     
     # Convert to IDs
-    input_ids = tokenizer.convert_tokens_to_ids(tokens)
+    input_ids = tokenizer.convert_tokens_to_ids (tokens)
     
     return input_ids, segment_ids
 
 # NSP prediction head
-class NSPHead(nn.Module):
+class NSPHead (nn.Module):
     """
     Binary classifier for next sentence prediction
     """
     
     def __init__(self, d_model):
         super().__init__()
-        self.classifier = nn.Linear(d_model, 2)  # Binary: IsNext or NotNext
+        self.classifier = nn.Linear (d_model, 2)  # Binary: IsNext or NotNext
     
-    def forward(self, pooled_output):
+    def forward (self, pooled_output):
         """
         Args:
             pooled_output: [batch, d_model] (from [CLS] token)
@@ -395,15 +395,15 @@ class NSPHead(nn.Module):
         Returns:
             logits: [batch, 2]
         """
-        return self.classifier(pooled_output)
+        return self.classifier (pooled_output)
 
 # Combined BERT pre-training
-def pretrain_bert(model, dataloader, optimizer):
+def pretrain_bert (model, dataloader, optimizer):
     """
     Train with both MLM and NSP
     """
-    mlm_head = MLMTrainingHead(model.d_model, model.vocab_size)
-    nsp_head = NSPHead(model.d_model)
+    mlm_head = MLMTrainingHead (model.d_model, model.vocab_size)
+    nsp_head = NSPHead (model.d_model)
     
     model.train()
     
@@ -422,12 +422,12 @@ def pretrain_bert(model, dataloader, optimizer):
         )
         
         # MLM loss
-        mlm_scores = mlm_head(sequence_output)
-        mlm_loss = cross_entropy(mlm_scores, mlm_labels)
+        mlm_scores = mlm_head (sequence_output)
+        mlm_loss = cross_entropy (mlm_scores, mlm_labels)
         
         # NSP loss
-        nsp_scores = nsp_head(pooled_output)
-        nsp_loss = cross_entropy(nsp_scores, nsp_labels)
+        nsp_scores = nsp_head (pooled_output)
+        nsp_loss = cross_entropy (nsp_scores, nsp_labels)
         
         # Combined loss
         loss = mlm_loss + nsp_loss
@@ -469,7 +469,7 @@ class BERTClassifier:
         )
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     
-    def prepare_data(self, texts, labels):
+    def prepare_data (self, texts, labels):
         """
         Tokenize texts for BERT
         """
@@ -484,16 +484,16 @@ class BERTClassifier:
         return {
             'input_ids': encodings['input_ids'],
             'attention_mask': encodings['attention_mask'],
-            'labels': torch.tensor(labels)
+            'labels': torch.tensor (labels)
         }
     
-    def train(self, train_texts, train_labels, val_texts, val_labels):
+    def train (self, train_texts, train_labels, val_texts, val_labels):
         """
         Fine-tune on classification task
         """
         # Prepare data
-        train_data = self.prepare_data(train_texts, train_labels)
-        val_data = self.prepare_data(val_texts, val_labels)
+        train_data = self.prepare_data (train_texts, train_labels)
+        val_data = self.prepare_data (val_texts, val_labels)
         
         # Training arguments
         training_args = TrainingArguments(
@@ -520,7 +520,7 @@ class BERTClassifier:
         
         return trainer
     
-    def predict(self, texts):
+    def predict (self, texts):
         """
         Predict on new texts
         """
@@ -536,25 +536,25 @@ class BERTClassifier:
         
         with torch.no_grad():
             outputs = self.model(**encodings)
-            predictions = torch.argmax(outputs.logits, dim=-1)
+            predictions = torch.argmax (outputs.logits, dim=-1)
         
         return predictions.numpy()
 
 # Example: Sentiment analysis
-classifier = BERTClassifier(num_labels=3)  # Positive, Negative, Neutral
+classifier = BERTClassifier (num_labels=3)  # Positive, Negative, Neutral
 
 train_texts = [
     "I love this product!",
     "Terrible experience, waste of money.",
-    "It's okay, nothing special."
+    "It\'s okay, nothing special."
 ]
 train_labels = [0, 1, 2]  # 0=Positive, 1=Negative, 2=Neutral
 
-trainer = classifier.train(train_texts, train_labels, val_texts, val_labels)
+trainer = classifier.train (train_texts, train_labels, val_texts, val_labels)
 
 # Predict
 new_texts = ["This is amazing!", "Not great"]
-predictions = classifier.predict(new_texts)
+predictions = classifier.predict (new_texts)
 print(predictions)  # [0, 1] → Positive, Negative
 
 # 2. Named Entity Recognition (NER)
@@ -583,44 +583,44 @@ class BERTNER:
             6: 'I-LOC'
         }
     
-    def predict_entities(self, text):
+    def predict_entities (self, text):
         """
         Extract named entities
         """
         self.model.eval()
         
         # Tokenize
-        tokens = self.tokenizer.tokenize(text)
-        input_ids = self.tokenizer.encode(text, return_tensors='pt')
+        tokens = self.tokenizer.tokenize (text)
+        input_ids = self.tokenizer.encode (text, return_tensors='pt')
         
         # Predict
         with torch.no_grad():
-            outputs = self.model(input_ids)
-            predictions = torch.argmax(outputs.logits, dim=-1)
+            outputs = self.model (input_ids)
+            predictions = torch.argmax (outputs.logits, dim=-1)
         
         # Extract entities
         entities = []
         current_entity = []
         current_type = None
         
-        for token, pred_id in zip(tokens, predictions[0][1:-1]):  # Skip [CLS] and [SEP]
+        for token, pred_id in zip (tokens, predictions[0][1:-1]):  # Skip [CLS] and [SEP]
             label = self.id2label[pred_id.item()]
             
             if label.startswith('B-'):
                 # Start new entity
                 if current_entity:
-                    entities.append((current_type, ' '.join(current_entity)))
+                    entities.append((current_type, ' '.join (current_entity)))
                 current_entity = [token]
                 current_type = label[2:]  # Remove 'B-'
             
             elif label.startswith('I-') and current_entity:
                 # Continue entity
-                current_entity.append(token)
+                current_entity.append (token)
             
             else:
                 # Outside entity
                 if current_entity:
-                    entities.append((current_type, ' '.join(current_entity)))
+                    entities.append((current_type, ' '.join (current_entity)))
                 current_entity = []
                 current_type = None
         
@@ -629,7 +629,7 @@ class BERTNER:
 # Example
 ner = BERTNER(num_labels=7)
 text = "John Smith works at Microsoft in Seattle."
-entities = ner.predict_entities(text)
+entities = ner.predict_entities (text)
 print(entities)
 # [('PER', 'John Smith'), ('ORG', 'Microsoft'), ('LOC', 'Seattle')]
 
@@ -647,7 +647,7 @@ class BERTQA:
         )
         self.tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
     
-    def answer_question(self, question, context):
+    def answer_question (self, question, context):
         """
         Extract answer span from context
         """
@@ -667,12 +667,12 @@ class BERTQA:
             end_scores = outputs.end_logits
         
         # Get answer span
-        start_idx = torch.argmax(start_scores)
-        end_idx = torch.argmax(end_scores)
+        start_idx = torch.argmax (start_scores)
+        end_idx = torch.argmax (end_scores)
         
         # Extract answer
         answer_tokens = inputs['input_ids'][0][start_idx:end_idx+1]
-        answer = self.tokenizer.decode(answer_tokens)
+        answer = self.tokenizer.decode (answer_tokens)
         
         return answer
 
@@ -680,7 +680,7 @@ class BERTQA:
 qa = BERTQA()
 context = "BERT was published in 2018 by researchers at Google. It uses bidirectional training."
 question = "When was BERT published?"
-answer = qa.answer_question(question, context)
+answer = qa.answer_question (question, context)
 print(answer)  # "2018"
 \`\`\`
 
@@ -708,7 +708,7 @@ class RoBERTa:
     Result: Better performance than BERT
     """
     
-    def dynamic_masking(self, text):
+    def dynamic_masking (self, text):
         """
         Mask different tokens each epoch
         vs BERT's static masking
@@ -730,7 +730,7 @@ class ALBERT:
     Result: 18x fewer parameters than BERT-large
     """
     
-    def factorized_embedding(self):
+    def factorized_embedding (self):
         """
         V x H → V x E → E x H
         where V = vocab, H = hidden, E = embedding (E << H)
@@ -753,7 +753,7 @@ class DistilBERT:
     Result: 40% smaller, 60% faster, retains 97% of BERT's performance
     """
     
-    def distillation_loss(self, student_logits, teacher_logits, labels, temperature=2.0):
+    def distillation_loss (self, student_logits, teacher_logits, labels, temperature=2.0):
         """
         Combine two losses:
         1. Soft targets from teacher (knowledge transfer)
@@ -761,8 +761,8 @@ class DistilBERT:
         """
         # Soft loss: Match teacher's probability distribution
         soft_loss = nn.KLDivLoss()(
-            F.log_softmax(student_logits / temperature, dim=-1),
-            F.softmax(teacher_logits / temperature, dim=-1)
+            F.log_softmax (student_logits / temperature, dim=-1),
+            F.softmax (teacher_logits / temperature, dim=-1)
         ) * (temperature ** 2)
         
         # Hard loss: Match true labels
@@ -789,16 +789,16 @@ class ELECTRA:
         self.generator = BERTSmall()  # 1/4 size
         self.discriminator = BERT()
     
-    def train_step(self, tokens):
+    def train_step (self, tokens):
         """
         1. Generator replaces masked tokens
         2. Discriminator detects replaced tokens
         """
         # Mask tokens
-        masked_tokens, mask_indices = mask_tokens(tokens)
+        masked_tokens, mask_indices = mask_tokens (tokens)
         
         # Generator predicts masked tokens
-        generated_tokens = self.generator(masked_tokens)
+        generated_tokens = self.generator (masked_tokens)
         
         # Replace masked positions with generator predictions
         corrupted_tokens = tokens.copy()
@@ -808,10 +808,10 @@ class ELECTRA:
         # Discriminator: Binary classification for each token
         # 0 = original, 1 = replaced
         is_replaced = (corrupted_tokens != tokens).float()
-        predictions = self.discriminator(corrupted_tokens)
+        predictions = self.discriminator (corrupted_tokens)
         
         # Loss: Binary cross-entropy
-        loss = binary_cross_entropy(predictions, is_replaced)
+        loss = binary_cross_entropy (predictions, is_replaced)
         
         return loss
 
@@ -861,7 +861,7 @@ class ModelSelection:
     Decision framework for architecture selection
     """
     
-    def choose_model(self, task_type):
+    def choose_model (self, task_type):
         """
         Task-based model selection
         """
@@ -887,7 +887,7 @@ class ModelSelection:
             "text_completion": "GPT",
         }
         
-        return recommendations.get(task_type, "GPT (general purpose)")
+        return recommendations.get (task_type, "GPT (general purpose)")
 
 # Example use cases
 
@@ -905,7 +905,7 @@ def spam_detection_bert():
     model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
     
     email = "URGENT!!! Click here for FREE MONEY!!!"
-    prediction = model.predict(email)
+    prediction = model.predict (email)
     return prediction  # Spam
 
 # Use GPT when:
@@ -922,7 +922,7 @@ def email_reply_gpt():
     email = "Can we reschedule tomorrow's meeting?"
     prompt = f"Email: {email}\\n\\nReply:"
     
-    response = gpt_model.generate(prompt)
+    response = gpt_model.generate (prompt)
     return response
     # "Of course! What time works better for you?"
 
@@ -989,7 +989,7 @@ class BERTEmbeddings:
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
         self.model.eval()
     
-    def get_embedding(self, text):
+    def get_embedding (self, text):
         """
         Get embedding for a sentence
         
@@ -1019,19 +1019,19 @@ class BERTEmbeddings:
         token_embeddings = outputs.last_hidden_state
         
         # Mask padding tokens
-        input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-        sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
-        sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+        input_mask_expanded = attention_mask.unsqueeze(-1).expand (token_embeddings.size()).float()
+        sum_embeddings = torch.sum (token_embeddings * input_mask_expanded, 1)
+        sum_mask = torch.clamp (input_mask_expanded.sum(1), min=1e-9)
         mean_embedding = sum_embeddings / sum_mask
         
         return mean_embedding.numpy()[0]
     
-    def similarity(self, text1, text2):
+    def similarity (self, text1, text2):
         """
         Compute semantic similarity
         """
-        emb1 = self.get_embedding(text1)
-        emb2 = self.get_embedding(text2)
+        emb1 = self.get_embedding (text1)
+        emb2 = self.get_embedding (text2)
         
         sim = cosine_similarity([emb1], [emb2])[0][0]
         return sim
@@ -1049,14 +1049,14 @@ documents = [
 query = "A cat on a mat"
 
 # Get embeddings
-query_emb = bert_emb.get_embedding(query)
-doc_embs = [bert_emb.get_embedding(doc) for doc in documents]
+query_emb = bert_emb.get_embedding (query)
+doc_embs = [bert_emb.get_embedding (doc) for doc in documents]
 
 # Compute similarities
 similarities = cosine_similarity([query_emb], doc_embs)[0]
 
 # Rank documents
-ranked = sorted(zip(documents, similarities), key=lambda x: x[1], reverse=True)
+ranked = sorted (zip (documents, similarities), key=lambda x: x[1], reverse=True)
 
 for doc, sim in ranked:
     print(f"{sim:.3f}: {doc}")
@@ -1073,8 +1073,8 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Much better embeddings for similarity tasks
-embeddings = model.encode(documents)
-query_emb = model.encode(query)
+embeddings = model.encode (documents)
+query_emb = model.encode (query)
 
 similarities = cosine_similarity([query_emb], embeddings)[0]
 # Even better semantic matching!

@@ -38,54 +38,54 @@ Dataset must cover real usage:
 class DatasetAnalyzer:
     """Analyze dataset coverage and balance."""
     
-    def analyze_coverage(self, dataset: List[Dict]) -> Dict[str, Any]:
+    def analyze_coverage (self, dataset: List[Dict]) -> Dict[str, Any]:
         """Check if dataset covers key dimensions."""
         
         from collections import Counter
         
         # Analyze input lengths
-        lengths = [len(ex['input'].split()) for ex in dataset]
+        lengths = [len (ex['input'].split()) for ex in dataset]
         length_dist = {
-            'short (<20 words)': sum(1 for l in lengths if l < 20) / len(lengths),
-            'medium (20-100)': sum(1 for l in lengths if 20 <= l < 100) / len(lengths),
-            'long (100+)': sum(1 for l in lengths if l >= 100) / len(lengths)
+            'short (<20 words)': sum(1 for l in lengths if l < 20) / len (lengths),
+            'medium (20-100)': sum(1 for l in lengths if 20 <= l < 100) / len (lengths),
+            'long (100+)': sum(1 for l in lengths if l >= 100) / len (lengths)
         }
         
         # Analyze categories if present
-        categories = Counter(ex.get('category', 'unknown') for ex in dataset)
+        categories = Counter (ex.get('category', 'unknown') for ex in dataset)
         category_dist = {
-            k: v / len(dataset) for k, v in categories.items()
+            k: v / len (dataset) for k, v in categories.items()
         }
         
         # Analyze difficulty if labeled
-        difficulties = Counter(ex.get('difficulty', 'unknown') for ex in dataset)
+        difficulties = Counter (ex.get('difficulty', 'unknown') for ex in dataset)
         difficulty_dist = {
-            k: v / len(dataset) for k, v in difficulties.items()
+            k: v / len (dataset) for k, v in difficulties.items()
         }
         
         return {
-            'total_examples': len(dataset),
+            'total_examples': len (dataset),
             'length_distribution': length_dist,
             'category_distribution': category_dist,
             'difficulty_distribution': difficulty_dist,
-            'balance_score': self._calculate_balance(category_dist)
+            'balance_score': self._calculate_balance (category_dist)
         }
     
-    def _calculate_balance(self, distribution: Dict[str, float]) -> float:
+    def _calculate_balance (self, distribution: Dict[str, float]) -> float:
         """Calculate how balanced the distribution is (0=imbalanced, 1=perfect)."""
         if not distribution:
             return 0.0
         
-        ideal = 1.0 / len(distribution)
-        deviations = sum(abs(v - ideal) for v in distribution.values())
-        max_deviation = 2.0 * (len(distribution) - 1) / len(distribution)
+        ideal = 1.0 / len (distribution)
+        deviations = sum (abs (v - ideal) for v in distribution.values())
+        max_deviation = 2.0 * (len (distribution) - 1) / len (distribution)
         
         balance = 1 - (deviations / max_deviation)
         return balance
 
 # Usage
 analyzer = DatasetAnalyzer()
-analysis = analyzer.analyze_coverage(my_eval_dataset)
+analysis = analyzer.analyze_coverage (my_eval_dataset)
 
 print(f"Total examples: {analysis['total_examples']}")
 print(f"\\nLength distribution:")
@@ -121,7 +121,7 @@ class EvaluationExample:
     tags: List[str]
     metadata: Dict[str, Any] = None
     
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict (self) -> Dict[str, Any]:
         return {
             'id': self.id,
             'input': self.input,
@@ -156,13 +156,13 @@ def create_balanced_dataset(
     
     # Sample based on ratios
     import random
-    dataset.extend(random.sample(easy_examples, int(target_size * ratios[Difficulty.EASY])))
-    dataset.extend(random.sample(medium_examples, int(target_size * ratios[Difficulty.MEDIUM])))
-    dataset.extend(random.sample(hard_examples, int(target_size * ratios[Difficulty.HARD])))
-    dataset.extend(random.sample(adversarial_examples, int(target_size * ratios[Difficulty.ADVERSARIAL])))
+    dataset.extend (random.sample (easy_examples, int (target_size * ratios[Difficulty.EASY])))
+    dataset.extend (random.sample (medium_examples, int (target_size * ratios[Difficulty.MEDIUM])))
+    dataset.extend (random.sample (hard_examples, int (target_size * ratios[Difficulty.HARD])))
+    dataset.extend (random.sample (adversarial_examples, int (target_size * ratios[Difficulty.ADVERSARIAL])))
     
     # Shuffle
-    random.shuffle(dataset)
+    random.shuffle (dataset)
     
     return dataset
 
@@ -211,7 +211,7 @@ adversarial_examples = [
     )
 ]
 
-dataset = create_balanced_dataset(easy_examples, medium_examples, hard_examples, adversarial_examples)
+dataset = create_balanced_dataset (easy_examples, medium_examples, hard_examples, adversarial_examples)
 \`\`\`
 
 ### 3. Edge Cases
@@ -223,7 +223,7 @@ class EdgeCaseGenerator:
     """Generate edge cases for evaluation."""
     
     @staticmethod
-    def generate_edge_cases(base_input: str) -> List[Dict[str, Any]]:
+    def generate_edge_cases (base_input: str) -> List[Dict[str, Any]]:
         """Generate edge case variations."""
         
         edge_cases = []
@@ -305,20 +305,20 @@ class DatasetBuilder:
         import random
         
         # Load production logs
-        logs = pd.read_json(logs_path, lines=True)
+        logs = pd.read_json (logs_path, lines=True)
         
         # Sample diverse inputs (various lengths, times, users)
-        sampled = logs.sample(n=sample_size * 2)  # Oversample for filtering
+        sampled = logs.sample (n=sample_size * 2)  # Oversample for filtering
         
         # Filter for quality
         # - Remove very similar inputs (deduplication)
         # - Remove low-quality inputs
         # - Ensure diversity
         
-        unique_inputs = self._deduplicate(sampled['input'].tolist())
+        unique_inputs = self._deduplicate (sampled['input'].tolist())
         
         # Convert to EvaluationExample (expected_output needs to be added)
-        for i, input_text in enumerate(unique_inputs[:sample_size]):
+        for i, input_text in enumerate (unique_inputs[:sample_size]):
             self.examples.append(EvaluationExample(
                 id=f"prod_{i}",
                 input=input_text,
@@ -342,7 +342,7 @@ class DatasetBuilder:
         count: int = 100
     ):
         """Generate synthetic examples."""
-        for i in range(count):
+        for i in range (count):
             synthetic = generator_fn()
             self.examples.append(EvaluationExample(
                 id=f"synth_{i}",
@@ -359,44 +359,44 @@ class DatasetBuilder:
         from scipy.spatial.distance import cosine
         
         model = SentenceTransformer('all-MiniLM-L6-v2')
-        embeddings = model.encode(inputs)
+        embeddings = model.encode (inputs)
         
         unique = []
         unique_embeddings = []
         
-        for i, (input_text, emb) in enumerate(zip(inputs, embeddings)):
+        for i, (input_text, emb) in enumerate (zip (inputs, embeddings)):
             # Check similarity with existing unique examples
             is_unique = True
             for unique_emb in unique_embeddings:
-                similarity = 1 - cosine(emb, unique_emb)
+                similarity = 1 - cosine (emb, unique_emb)
                 if similarity > similarity_threshold:
                     is_unique = False
                     break
             
             if is_unique:
-                unique.append(input_text)
-                unique_embeddings.append(emb)
+                unique.append (input_text)
+                unique_embeddings.append (emb)
         
         return unique
     
-    def export(self, output_path: str):
+    def export (self, output_path: str):
         """Export dataset to JSON."""
         import json
         
         data = [ex.to_dict() for ex in self.examples]
         
-        with open(output_path, 'w') as f:
-            json.dump(data, f, indent=2)
+        with open (output_path, 'w') as f:
+            json.dump (data, f, indent=2)
         
-        print(f"✅ Exported {len(data)} examples to {output_path}")
+        print(f"✅ Exported {len (data)} examples to {output_path}")
 
 # Usage
 builder = DatasetBuilder("summarization")
 
 # Collect from multiple sources
 builder.add_from_production_logs("logs/production.jsonl", sample_size=500)
-builder.add_handcrafted_examples(expert_examples)
-builder.add_synthetic_examples(synthetic_generator, count=200)
+builder.add_handcrafted_examples (expert_examples)
+builder.add_synthetic_examples (synthetic_generator, count=200)
 
 # Export
 builder.export("datasets/summarization_eval_v1.json")
@@ -455,7 +455,7 @@ Provide a high-quality, correct output:"""
             # Quality check
             confidence = input("Confidence (1-5): ")
             example.metadata = example.metadata or {}
-            example.metadata['annotator_confidence'] = int(confidence)
+            example.metadata['annotator_confidence'] = int (confidence)
         
         return examples
 
@@ -463,11 +463,11 @@ Provide a high-quality, correct output:"""
 annotator = OutputAnnotator()
 
 # Auto-annotate with LLM (cheaper, faster but less accurate)
-examples = await annotator.auto_annotate_with_llm(examples)
+examples = await annotator.auto_annotate_with_llm (examples)
 
 # Then human review/correction for critical examples
 critical_examples = [ex for ex in examples if ex.difficulty == Difficulty.HARD]
-annotator.human_annotation_workflow(critical_examples, annotators=['expert_1'])
+annotator.human_annotation_workflow (critical_examples, annotators=['expert_1'])
 \`\`\`
 
 ## Industry Benchmarks
@@ -486,7 +486,7 @@ class BenchmarkEvaluator:
             'humaneval': self.load_humaneval
         }
     
-    def load_mmlu(self) -> List[Dict]:
+    def load_mmlu (self) -> List[Dict]:
         """
         MMLU: Massive Multitask Language Understanding
         57 subjects, multiple choice, measures world knowledge
@@ -506,7 +506,7 @@ class BenchmarkEvaluator:
         
         return examples
     
-    def load_hellaswag(self) -> List[Dict]:
+    def load_hellaswag (self) -> List[Dict]:
         """
         HellaSwag: Commonsense reasoning
         Tests ability to complete scenarios
@@ -517,7 +517,7 @@ class BenchmarkEvaluator:
         # Implementation...
         pass
     
-    def load_truthfulqa(self) -> List[Dict]:
+    def load_truthfulqa (self) -> List[Dict]:
         """
         TruthfulQA: Tests truthfulness
         Questions designed to elicit false beliefs
@@ -528,7 +528,7 @@ class BenchmarkEvaluator:
         # Implementation...
         pass
     
-    def load_humaneval(self) -> List[Dict]:
+    def load_humaneval (self) -> List[Dict]:
         """
         HumanEval: Code generation
         164 programming problems
@@ -549,24 +549,24 @@ class BenchmarkEvaluator:
         
         # Load benchmark
         if benchmark_name not in self.benchmarks:
-            raise ValueError(f"Unknown benchmark: {benchmark_name}")
+            raise ValueError (f"Unknown benchmark: {benchmark_name}")
         
         examples = self.benchmarks[benchmark_name]()
         
         # Sample if needed
         if sample_size:
             import random
-            examples = random.sample(examples, min(sample_size, len(examples)))
+            examples = random.sample (examples, min (sample_size, len (examples)))
         
         # Evaluate
         correct = 0
-        total = len(examples)
+        total = len (examples)
         
         for example in examples:
-            output = await model_fn(example['input'])
+            output = await model_fn (example['input'])
             
             # Check correctness (benchmark-specific logic)
-            if self._check_correct(benchmark_name, output, example):
+            if self._check_correct (benchmark_name, output, example):
                 correct += 1
         
         accuracy = correct / total
@@ -589,7 +589,7 @@ class BenchmarkEvaluator:
         if benchmark_name == 'mmlu':
             # Extract answer letter from output
             import re
-            match = re.search(r'\\b([A-D])\\b', output)
+            match = re.search (r'\\b([A-D])\\b', output)
             if match:
                 return match.group(1) == example['correct_answer']
         
@@ -636,31 +636,31 @@ class CustomBenchmark:
             if target_score:
                 ex.metadata = ex.metadata or {}
                 ex.metadata['target_score'] = target_score
-            self.examples.append(ex)
+            self.examples.append (ex)
     
-    def export_benchmark(self, output_dir: str):
+    def export_benchmark (self, output_dir: str):
         """Export as standard benchmark format."""
         import os
         import json
         
-        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs (output_dir, exist_ok=True)
         
         # Metadata
         metadata = {
             'name': self.name,
             'description': self.description,
             'version': self.version,
-            'total_examples': len(self.examples),
-            'categories': list(set(ex.category for ex in self.examples))
+            'total_examples': len (self.examples),
+            'categories': list (set (ex.category for ex in self.examples))
         }
         
-        with open(f"{output_dir}/metadata.json", 'w') as f:
-            json.dump(metadata, f, indent=2)
+        with open (f"{output_dir}/metadata.json", 'w') as f:
+            json.dump (metadata, f, indent=2)
         
         # Examples
-        with open(f"{output_dir}/examples.jsonl", 'w') as f:
+        with open (f"{output_dir}/examples.jsonl", 'w') as f:
             for ex in self.examples:
-                f.write(json.dumps(ex.to_dict()) + '\\n')
+                f.write (json.dumps (ex.to_dict()) + '\\n')
         
         print(f"✅ Benchmark exported to {output_dir}")
 
@@ -714,7 +714,7 @@ class DatasetVersionManager:
         self.versions[version] = examples
         
         # Log changes
-        self._log_changes(version, examples, changes)
+        self._log_changes (version, examples, changes)
     
     def _log_changes(
         self,
@@ -726,13 +726,13 @@ class DatasetVersionManager:
         changelog = {
             'version': version,
             'timestamp': time.time(),
-            'num_examples': len(examples),
+            'num_examples': len (examples),
             'changes': changes
         }
         
         # Save changelog
-        with open(f"datasets/{self.dataset_name}_changelog.json", 'a') as f:
-            f.write(json.dumps(changelog) + '\\n')
+        with open (f"datasets/{self.dataset_name}_changelog.json", 'a') as f:
+            f.write (json.dumps (changelog) + '\\n')
 
 # Usage
 manager = DatasetVersionManager("summarization")

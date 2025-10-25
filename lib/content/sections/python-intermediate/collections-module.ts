@@ -20,7 +20,7 @@ from collections import Counter
 
 # Count elements in list
 fruits = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']
-counts = Counter(fruits)
+counts = Counter (fruits)
 print(counts)  # Counter({'apple': 3, 'banana': 2, 'cherry': 1})
 
 # Access counts
@@ -29,7 +29,7 @@ print(counts['grape'])  # 0 (no KeyError!)
 
 # Count characters in string
 text = 'hello world'
-char_counts = Counter(text)
+char_counts = Counter (text)
 print(char_counts)  # Counter({'l': 3, 'o': 2, 'h': 1, ...})
 \`\`\`
 
@@ -38,7 +38,7 @@ print(char_counts)  # Counter({'l': 3, 'o': 2, 'h': 1, ...})
 \`\`\`python
 # Get most common
 numbers = [1, 1, 1, 2, 2, 3, 4, 4, 4, 4]
-counter = Counter(numbers)
+counter = Counter (numbers)
 
 # Top 2 most common
 print(counter.most_common(2))  # [(4, 4), (1, 3)]
@@ -70,14 +70,14 @@ print(c1 | c2)  # Counter({'b': 3, 'a': 2, 'c': 1, 'd': 1})
 
 \`\`\`python
 # Check if two strings are anagrams
-def is_anagram(s1, s2):
-    return Counter(s1) == Counter(s2)
+def is_anagram (s1, s2):
+    return Counter (s1) == Counter (s2)
 
 print(is_anagram('listen', 'silent'))  # True
 
 # Find first non-repeating character
-def first_unique_char(s):
-    counts = Counter(s)
+def first_unique_char (s):
+    counts = Counter (s)
     for char in s:
         if counts[char] == 1:
             return char
@@ -86,9 +86,9 @@ def first_unique_char(s):
 print(first_unique_char('leetcode'))  # 'l'
 
 # Top K frequent elements
-def top_k_frequent(nums, k):
-    counter = Counter(nums)
-    return [num for num, count in counter.most_common(k)]
+def top_k_frequent (nums, k):
+    counter = Counter (nums)
+    return [num for num, count in counter.most_common (k)]
 
 print(top_k_frequent([1,1,1,2,2,3], 2))  # [1, 2]
 \`\`\`
@@ -109,18 +109,18 @@ regular = {}
 # regular['key'].append('value')  # KeyError!
 
 # defaultdict with list
-d = defaultdict(list)
+d = defaultdict (list)
 d['key'].append('value')  # Works! Auto-creates empty list
 print(d)  # defaultdict(<class 'list'>, {'key': ['value']})
 
 # defaultdict with int (default 0)
-counts = defaultdict(int)
+counts = defaultdict (int)
 counts['a'] += 1  # Works! Starts from 0
 counts['b'] += 1
 print(counts)  # defaultdict(<class 'int'>, {'a': 1, 'b': 1})
 
 # defaultdict with set
-groups = defaultdict(set)
+groups = defaultdict (set)
 groups['team1'].add('Alice')
 groups['team1'].add('Bob')
 print(groups)  # defaultdict(<class 'set'>, {'team1': {'Alice', 'Bob'}})
@@ -132,12 +132,12 @@ print(groups)  # defaultdict(<class 'set'>, {'team1': {'Alice', 'Bob'}})
 \`\`\`python
 # Group words by first letter
 words = ['apple', 'apricot', 'banana', 'blueberry', 'cherry']
-groups = defaultdict(list)
+groups = defaultdict (list)
 
 for word in words:
-    groups[word[0]].append(word)
+    groups[word[0]].append (word)
 
-print(dict(groups))
+print(dict (groups))
 # {'a': ['apple', 'apricot'], 
 #  'b': ['banana', 'blueberry'], 
 #  'c': ['cherry']}
@@ -146,28 +146,28 @@ print(dict(groups))
 **2. Graph adjacency list:**
 \`\`\`python
 # Build graph
-graph = defaultdict(list)
+graph = defaultdict (list)
 edges = [(1, 2), (1, 3), (2, 4), (3, 4)]
 
 for u, v in edges:
-    graph[u].append(v)
-    graph[v].append(u)  # Undirected
+    graph[u].append (v)
+    graph[v].append (u)  # Undirected
 
-print(dict(graph))
+print(dict (graph))
 # {1: [2, 3], 2: [1, 4], 3: [1, 4], 4: [2, 3]}
 \`\`\`
 
 **3. Counting with categories:**
 \`\`\`python
 # Track scores by player
-scores = defaultdict(list)
+scores = defaultdict (list)
 scores['Alice'].append(10)
 scores['Bob'].append(15)
 scores['Alice'].append(20)
 
 # Calculate averages
 for player, score_list in scores.items():
-    avg = sum(score_list) / len(score_list)
+    avg = sum (score_list) / len (score_list)
     print(f"{player}: {avg}")
 \`\`\`
 
@@ -175,14 +175,14 @@ for player, score_list in scores.items():
 
 \`\`\`python
 # Default to specific value
-d = defaultdict(lambda: 'N/A')
+d = defaultdict (lambda: 'N/A')
 print(d['missing'])  # 'N/A'
 
 # Default to 0
-counts = defaultdict(int)
+counts = defaultdict (int)
 
 # Default to empty dict
-nested = defaultdict(dict)
+nested = defaultdict (dict)
 nested['level1']['level2'] = 'value'
 \`\`\`
 
@@ -243,12 +243,12 @@ first = queue.popleft()  # Dequeue - O(1)!
 ### Sliding Window Maximum
 
 \`\`\`python
-def max_sliding_window(nums, k):
+def max_sliding_window (nums, k):
     """Find max in each sliding window"""
     dq = deque()  # Store indices
     result = []
     
-    for i in range(len(nums)):
+    for i in range (len (nums)):
         # Remove out-of-window indices
         while dq and dq[0] < i - k + 1:
             dq.popleft()
@@ -257,10 +257,10 @@ def max_sliding_window(nums, k):
         while dq and nums[dq[-1]] < nums[i]:
             dq.pop()
         
-        dq.append(i)
+        dq.append (i)
         
         if i >= k - 1:
-            result.append(nums[dq[0]])
+            result.append (nums[dq[0]])
     
     return result
 
@@ -284,7 +284,7 @@ dq.rotate(-2)  # [1, 2, 3, 4, 5]
 
 \`\`\`python
 # Limited-size deque (circular buffer)
-dq = deque(maxlen=3)
+dq = deque (maxlen=3)
 dq.append(1)
 dq.append(2)
 dq.append(3)
@@ -306,19 +306,19 @@ od = OrderedDict()
 od['b'] = 2
 od['a'] = 1
 od['c'] = 3
-print(list(od.keys()))  # ['b', 'a', 'c']
+print(list (od.keys()))  # ['b', 'a', 'c']
 
 # Move to end
 od.move_to_end('a')  # a moved to end
-print(list(od.keys()))  # ['b', 'c', 'a']
+print(list (od.keys()))  # ['b', 'c', 'a']
 
 # Move to beginning
 od.move_to_end('a', last=False)
-print(list(od.keys()))  # ['a', 'b', 'c']
+print(list (od.keys()))  # ['a', 'b', 'c']
 
 # Pop last item
-od.popitem(last=True)  # Remove from end
-od.popitem(last=False)  # Remove from beginning
+od.popitem (last=True)  # Remove from end
+od.popitem (last=False)  # Remove from beginning
 \`\`\`
 
 ### LRU Cache Implementation
@@ -330,19 +330,19 @@ class LRUCache:
         self.cache = OrderedDict()
         self.capacity = capacity
     
-    def get(self, key):
+    def get (self, key):
         if key not in self.cache:
             return -1
         # Move to end (most recently used)
-        self.cache.move_to_end(key)
+        self.cache.move_to_end (key)
         return self.cache[key]
     
-    def put(self, key, value):
+    def put (self, key, value):
         if key in self.cache:
-            self.cache.move_to_end(key)
+            self.cache.move_to_end (key)
         self.cache[key] = value
-        if len(self.cache) > self.capacity:
-            self.cache.popitem(last=False)  # Remove LRU
+        if len (self.cache) > self.capacity:
+            self.cache.popitem (last=False)  # Remove LRU
 \`\`\`
 
 ---
@@ -377,7 +377,7 @@ print(person._asdict())
 # {'name': 'Alice', 'age': 30, 'city': 'NYC'}
 
 # Replace values (creates new instance)
-person2 = person._replace(age=31)
+person2 = person._replace (age=31)
 \`\`\`
 
 ### Use Cases
@@ -386,7 +386,7 @@ person2 = person._replace(age=31)
 # Function returns
 def get_stats():
     Stats = namedtuple('Stats', 'mean median mode')
-    return Stats(mean=10, median=9, mode=8)
+    return Stats (mean=10, median=9, mode=8)
 
 stats = get_stats()
 print(f"Mean: {stats.mean}")
@@ -417,7 +417,7 @@ config = {'user': 'admin'}
 cli_args = {'debug': True}
 
 # Chain them (first dict takes priority)
-combined = ChainMap(cli_args, config, defaults)
+combined = ChainMap (cli_args, config, defaults)
 
 print(combined['color'])  # 'red' (from defaults)
 print(combined['user'])   # 'admin' (from config, overrides defaults)
@@ -452,7 +452,7 @@ import timeit
 def list_queue():
     q = []
     for i in range(1000):
-        q.append(i)
+        q.append (i)
     for i in range(1000):
         q.pop(0)  # O(n) each time!
 
@@ -460,13 +460,13 @@ def deque_queue():
     from collections import deque
     q = deque()
     for i in range(1000):
-        q.append(i)
+        q.append (i)
     for i in range(1000):
         q.popleft()  # O(1) each time!
 
 # deque is ~100x faster for this!
-print(timeit.timeit(list_queue, number=100))
-print(timeit.timeit(deque_queue, number=100))
+print(timeit.timeit (list_queue, number=100))
+print(timeit.timeit (deque_queue, number=100))
 \`\`\`
 
 ---

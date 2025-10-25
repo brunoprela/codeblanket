@@ -19,9 +19,9 @@ Instead of updating after each batch, accumulate gradients over multiple batches
 accumulation_steps = 8  # Effective batch = 64 * 8 = 512
 
 optimizer.zero_grad()
-for i, (data, target) in enumerate(train_loader):
-    output = model(data)
-    loss = criterion(output, target)
+for i, (data, target) in enumerate (train_loader):
+    output = model (data)
+    loss = criterion (output, target)
     
     # KEY: Divide by accumulation steps!
     loss = loss / accumulation_steps
@@ -93,11 +93,11 @@ scaler = GradScaler()
 
 optimizer.zero_grad()
 with autocast():  # FP16 forward pass
-    output = model(data)
-    loss = criterion(output, target)
+    output = model (data)
+    loss = criterion (output, target)
 
-scaler.scale(loss).backward()  # Scale up before backward
-scaler.step(optimizer)  # Scale down and update
+scaler.scale (loss).backward()  # Scale up before backward
+scaler.step (optimizer)  # Scale down and update
 scaler.update()  # Adjust scale factor
 \`\`\`
 

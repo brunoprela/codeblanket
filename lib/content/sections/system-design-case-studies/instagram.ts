@@ -320,7 +320,7 @@ Instagram uses **hybrid fanout** similar to Twitter:
 **Algorithm**:
 1. User Bob posts photo
 2. If Bob has < 10K followers:
-   a. Query: Get Bob's followers
+   a. Query: Get Bob\'s followers
    b. Insert photo_id into each follower's feed table
 3. If Bob has >= 10K followers (celebrity):
    - Skip fanout (handle at feed generation time)

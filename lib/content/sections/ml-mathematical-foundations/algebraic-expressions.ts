@@ -34,7 +34,7 @@ In ML, we use specific variable conventions:
 | Symbol | Common Use | Example |
 |--------|------------|---------|
 | x | Input features | x₁, x₂, ..., xₙ |
-| y | Output/target | y = f(x) |
+| y | Output/target | y = f (x) |
 | θ, w | Model parameters/weights | θ = [θ₀, θ₁, ..., θₙ] |
 | α | Learning rate | α = 0.01 |
 | λ | Regularization parameter | λ = 0.1 |
@@ -63,7 +63,7 @@ print(f"Prediction: y = {theta_0} + {theta_1}*{x1} + {theta_2}*{x2} = {y_pred}")
 # Vectorized form (more efficient)
 theta = np.array([theta_0, theta_1, theta_2])
 x = np.array([1, x1, x2])  # Note: 1 for intercept
-y_pred_vec = np.dot(theta, x)
+y_pred_vec = np.dot (theta, x)
 print(f"Vectorized prediction: {y_pred_vec}")
 \`\`\`
 
@@ -83,12 +83,12 @@ x = symbols('x')
 
 # Expression: 3x + 5x - 2x
 expr = 3*x + 5*x - 2*x
-simplified = simplify(expr)
+simplified = simplify (expr)
 print(f"3x + 5x - 2x = {simplified}")
 
 # More complex expression
 expr2 = 2*x**2 + 3*x + 4*x**2 - x + 5
-simplified2 = simplify(expr2)
+simplified2 = simplify (expr2)
 print(f"2x² + 3x + 4x² - x + 5 = {simplified2}")
 
 # Application: Combining gradient terms
@@ -97,13 +97,13 @@ gradient_term1 = 2 * theta - 3
 gradient_term2 = 4 * theta + 1
 gradient_term3 = -theta + 5
 
-total_gradient = simplify(gradient_term1 + gradient_term2 + gradient_term3)
+total_gradient = simplify (gradient_term1 + gradient_term2 + gradient_term3)
 print(f"\\nTotal gradient: {total_gradient}")
 \`\`\`
 
 ### Distributive Property
 
-**Rule**: \`a(b + c) = ab + ac\`
+**Rule**: \`a (b + c) = ab + ac\`
 
 **Python Example**:
 \`\`\`python
@@ -113,19 +113,19 @@ x, y = symbols('x y')
 
 # Expanding
 expr = 2*x * (3*x + 4)
-expanded = expand(expr)
+expanded = expand (expr)
 print(f"2x(3x + 4) = {expanded}")
 
 # Factoring (reverse)
 expr2 = 6*x**2 + 8*x
-factored = factor(expr2)
+factored = factor (expr2)
 print(f"6x² + 8x = {factored}")
 
 # ML application: Expanding loss function
 # L(θ) = (y - θx)²
 theta, x_var, y_var = symbols('theta x y')
 loss = (y_var - theta * x_var)**2
-expanded_loss = expand(loss)
+expanded_loss = expand (loss)
 print(f"\\nExpanded loss: (y - θx)² = {expanded_loss}")
 \`\`\`
 
@@ -133,10 +133,10 @@ print(f"\\nExpanded loss: (y - θx)² = {expanded_loss}")
 
 Common factoring patterns:
 
-1. **Common factor**: \`ax + ay = a(x + y)\`
+1. **Common factor**: \`ax + ay = a (x + y)\`
 2. **Difference of squares**: \`a² - b² = (a + b)(a - b)\`
 3. **Perfect square**: \`a² + 2ab + b² = (a + b)²\`
-4. **Quadratic**: \`ax² + bx + c = a(x - r₁)(x - r₂)\`
+4. **Quadratic**: \`ax² + bx + c = a (x - r₁)(x - r₂)\`
 
 \`\`\`python
 from sympy import symbols, factor, expand
@@ -145,23 +145,23 @@ x = symbols('x')
 
 # Common factor
 expr1 = 3*x**2 + 6*x
-print(f"Factor {expr1}: {factor(expr1)}")
+print(f"Factor {expr1}: {factor (expr1)}")
 
 # Difference of squares
 expr2 = x**2 - 9
-print(f"Factor {expr2}: {factor(expr2)}")
+print(f"Factor {expr2}: {factor (expr2)}")
 
 # Perfect square
 expr3 = x**2 + 6*x + 9
-print(f"Factor {expr3}: {factor(expr3)}")
+print(f"Factor {expr3}: {factor (expr3)}")
 
 # Quadratic
 expr4 = x**2 - 5*x + 6
-print(f"Factor {expr4}: {factor(expr4)}")
+print(f"Factor {expr4}: {factor (expr4)}")
 
 # Verify by expanding back
-factored = factor(expr4)
-expanded_back = expand(factored)
+factored = factor (expr4)
+expanded_back = expand (factored)
 print(f"Expand {factored}: {expanded_back}")
 \`\`\`
 
@@ -186,12 +186,12 @@ x = symbols('x')
 
 # Equation: 3x - 12 = 0
 equation = Eq(3*x - 12, 0)
-solution = solve(equation, x)
+solution = solve (equation, x)
 print(f"Solution to 3x - 12 = 0: x = {solution}")
 
 # More complex: 2(x + 3) = 4x - 10
 equation2 = Eq(2*(x + 3), 4*x - 10)
-solution2 = solve(equation2, x)
+solution2 = solve (equation2, x)
 print(f"Solution to 2(x + 3) = 4x - 10: x = {solution2}")
 
 # Verification
@@ -214,8 +214,8 @@ old_loss = symbols('old_loss')
 target_loss = symbols('target_loss')
 
 # Equation: old_loss - α * gradient = target_loss
-equation = Eq(old_loss - alpha * gradient, target_loss)
-alpha_solution = solve(equation, alpha)
+equation = Eq (old_loss - alpha * gradient, target_loss)
+alpha_solution = solve (equation, alpha)
 print(f"Optimal α = {alpha_solution[0]}")
 
 # Numerical example
@@ -247,13 +247,13 @@ print(f"\\nNumerical: α = {alpha_val}")
 import numpy as np
 from sympy import symbols, solve, Eq
 
-def solve_quadratic(a, b, c):
+def solve_quadratic (a, b, c):
     """Solve quadratic equation ax² + bx + c = 0"""
     discriminant = b**2 - 4*a*c
     
     if discriminant > 0:
-        x1 = (-b + np.sqrt(discriminant)) / (2*a)
-        x2 = (-b - np.sqrt(discriminant)) / (2*a)
+        x1 = (-b + np.sqrt (discriminant)) / (2*a)
+        x2 = (-b - np.sqrt (discriminant)) / (2*a)
         return f"Two solutions: x₁ = {x1:.4f}, x₂ = {x2:.4f}"
     elif discriminant == 0:
         x = -b / (2*a)
@@ -276,7 +276,7 @@ print(solve_quadratic(1, 1, 1))
 # Using SymPy
 x = symbols('x')
 equation = x**2 - 5*x + 6
-solutions = solve(equation, x)
+solutions = solve (equation, x)
 print(f"\\nSymPy solution: {solutions}")
 \`\`\`
 
@@ -292,22 +292,22 @@ theta = symbols('theta')
 f = theta**2 - 4*theta + 5
 
 # Take derivative
-f_prime = f.diff(theta)
+f_prime = f.diff (theta)
 print(f"f(θ) = {f}")
 print(f"f'(θ) = {f_prime}")
 
 # Solve f'(θ) = 0
-optimal_theta = solve(f_prime, theta)
+optimal_theta = solve (f_prime, theta)
 print(f"Optimal θ = {optimal_theta}")
 
 # Evaluate minimum value
-min_value = f.subs(theta, optimal_theta[0])
+min_value = f.subs (theta, optimal_theta[0])
 print(f"Minimum value: f({optimal_theta[0]}) = {min_value}")
 
 # Verify with NumPy
 theta_range = np.linspace(-1, 5, 100)
 f_values = theta_range**2 - 4*theta_range + 5
-optimal_idx = np.argmin(f_values)
+optimal_idx = np.argmin (f_values)
 print(f"\\nNumerical verification: θ ≈ {theta_range[optimal_idx]:.4f}")
 \`\`\`
 
@@ -337,7 +337,7 @@ x, y = symbols('x y')
 # x - y = 1
 
 eq1 = Eq(2*x + 3*y, 8)
-eq2 = Eq(x - y, 1)
+eq2 = Eq (x - y, 1)
 
 # Solve system
 solution = solve((eq1, eq2), (x, y))
@@ -370,7 +370,7 @@ print(f"Matrix solution: x = {solution[0]:.4f}, y = {solution[1]:.4f}")
 # Verification
 result = A @ solution
 print(f"Verification: Ax = {result}, b = {b}")
-print(f"Match? {np.allclose(result, b)}")
+print(f"Match? {np.allclose (result, b)}")
 \`\`\`
 
 ### Three Variables
@@ -395,9 +395,9 @@ x, y, z = symbols('x y z')
 # 2x - y + z = 3
 # x + 2y - z = 2
 
-eq1 = Eq(x + y + z, 6)
+eq1 = Eq (x + y + z, 6)
 eq2 = Eq(2*x - y + z, 3)
-eq3 = Eq(x + 2*y - z, 2)
+eq3 = Eq (x + 2*y - z, 2)
 
 solution = solve((eq1, eq2, eq3), (x, y, z))
 print(f"SymPy solution: {solution}")
@@ -504,9 +504,9 @@ Break-even: Revenue = Cost
 
 n = symbols('n')
 equation = Eq(5*n, 1000 + 2*n)
-breakeven = solve(equation, n)
+breakeven = solve (equation, n)
 print(f"Break-even trades: {breakeven[0]:.0f} trades")
-print(f"Rounded up: {np.ceil(float(breakeven[0]))} trades")
+print(f"Rounded up: {np.ceil (float (breakeven[0]))} trades")
 
 # Verification
 trades = 334
@@ -521,7 +521,7 @@ print(f"Profit: \${profit:,}")
 
 ## Using SymPy for Symbolic Math
 
-SymPy is Python's symbolic mathematics library:
+SymPy is Python\'s symbolic mathematics library:
 
 \`\`\`python
 from sympy import symbols, solve, Eq, simplify, expand, factor, diff
@@ -531,36 +531,36 @@ x, y, theta, alpha = symbols('x y theta alpha')
 
 # 1. Solve equations
 eq = x**2 + 3*x - 10
-solution = solve(eq, x)
+solution = solve (eq, x)
 print(f"Solve x² + 3x - 10 = 0: {solution}")
 
 # 2. Simplify expressions
 expr = (x + 1)**2 - (x**2 + 2*x + 1)
-simplified = simplify(expr)
+simplified = simplify (expr)
 print(f"\\nSimplify (x+1)² - (x²+2x+1): {simplified}")
 
 # 3. Expand expressions
 expr2 = (x + y)**3
-expanded = expand(expr2)
+expanded = expand (expr2)
 print(f"\\nExpand (x+y)³: {expanded}")
 
 # 4. Factor expressions
 expr3 = x**3 - y**3
-factored = factor(expr3)
+factored = factor (expr3)
 print(f"\\nFactor x³ - y³: {factored}")
 
 # 5. Derivatives (preview)
 f = x**3 - 2*x**2 + x - 5
-f_prime = diff(f, x)
+f_prime = diff (f, x)
 print(f"\\nDerivative of {f}: {f_prime}")
 
 # 6. Substitute values
-result = f.subs(x, 2)
+result = f.subs (x, 2)
 print(f"f(2) = {result}")
 
 # 7. Systems of equations
 eq1 = Eq(2*x + y, 10)
-eq2 = Eq(x - y, 2)
+eq2 = Eq (x - y, 2)
 sol = solve((eq1, eq2), (x, y))
 print(f"\\nSystem solution: {sol}")
 \`\`\`
@@ -575,7 +575,7 @@ print(f"\\nSystem solution: {sol}")
 
 x = symbols('x')
 eq = Eq(-2*x + 5, 13)
-correct = solve(eq, x)
+correct = solve (eq, x)
 print(f"Correct solution: {correct}")
 \`\`\`
 
@@ -594,7 +594,7 @@ print(f"Right (PEMDAS): {result_right}")
 ### 3. Division by Zero
 
 \`\`\`python
-def safe_solve(numerator, denominator):
+def safe_solve (numerator, denominator):
     """Safely solve ax + b = 0"""
     if denominator == 0:
         if numerator == 0:
@@ -621,12 +621,12 @@ print(f"2x + 6 = 0: x = {safe_solve(6, 2)}")
 # But √4 = 2, not -2! Need to check solution.
 
 x = symbols('x')
-# Original: sqrt(x) = -2 (no real solution)
+# Original: sqrt (x) = -2 (no real solution)
 # After squaring: x = 4 (but this doesn't satisfy original!)
 
 from sympy import sqrt
-eq_original = Eq(sqrt(x), -2)
-eq_squared = Eq(x, 4)
+eq_original = Eq (sqrt (x), -2)
+eq_squared = Eq (x, 4)
 
 print(f"Original equation: {eq_original}")
 print(f"After squaring: {eq_squared}")

@@ -105,7 +105,7 @@ class PlannerAgent:
     def __init__(self, llm_client: AsyncOpenAI):
         self.llm = llm_client
         
-    async def create_plan(self, query: str) -> ResearchPlan:
+    async def create_plan (self, query: str) -> ResearchPlan:
         """
         Create a research plan for the query
         """
@@ -143,16 +143,16 @@ Generate the plan:"""
             temperature=0.3
         )
         
-        plan_json = json.loads(response.choices[0].message.content)
+        plan_json = json.loads (response.choices[0].message.content)
         return ResearchPlan(**plan_json)
 
 # Example usage
-planner = PlannerAgent(llm_client)
+planner = PlannerAgent (llm_client)
 plan = await planner.create_plan(
     "What are the latest developments in quantum computing and their commercial applications?"
 )
 
-print(f"Research plan with {len(plan.steps)} steps")
+print(f"Research plan with {len (plan.steps)} steps")
 for step in plan.steps:
     print(f"{step.step_number}. {step.action}: {step.query}")
 
@@ -195,7 +195,7 @@ class WebSearchAgent:
         self.api_key = serper_api_key
         self.llm = llm_client
         
-    async def search(self, query: str, num_results: int = 10) -> List[SearchResult]:
+    async def search (self, query: str, num_results: int = 10) -> List[SearchResult]:
         """
         Search web using Serper API
         """
@@ -221,16 +221,16 @@ class WebSearchAgent:
         
         return results
     
-    async def extract_content(self, url: str) -> str:
+    async def extract_content (self, url: str) -> str:
         """
         Extract main content from URL
         """
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=10) as response:
+                async with session.get (url, timeout=10) as response:
                     html = await response.text()
             
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = BeautifulSoup (html, 'html.parser')
             
             # Remove script and style elements
             for script in soup(["script", "style", "nav", "footer"]):
@@ -240,7 +240,7 @@ class WebSearchAgent:
             main_content = soup.find('main') or soup.find('article') or soup.body
             
             if main_content:
-                text = main_content.get_text(separator='\\n', strip=True)
+                text = main_content.get_text (separator='\\n', strip=True)
                 # Limit to reasonable size
                 return text[:10000]
             
@@ -279,15 +279,15 @@ Return JSON array of scores: [0.9, 0.7, ...]"""
             temperature=0.1
         )
         
-        scores = json.loads(response.choices[0].message.content).get("scores", [])
+        scores = json.loads (response.choices[0].message.content).get("scores", [])
         
-        for i, score in enumerate(scores[:len(results)]):
+        for i, score in enumerate (scores[:len (results)]):
             results[i].relevance_score = score
         
-        return sorted(results, key=lambda x: x.relevance_score, reverse=True)
+        return sorted (results, key=lambda x: x.relevance_score, reverse=True)
 
 # Usage
-search_agent = WebSearchAgent(serper_api_key, llm_client)
+search_agent = WebSearchAgent (serper_api_key, llm_client)
 
 results = await search_agent.search("quantum computing applications")
 ranked_results = await search_agent.rank_by_relevance(
@@ -338,73 +338,73 @@ class DocumentProcessorAgent:
         """
         # Extract text based on file type
         if file_path.endswith('.pdf'):
-            text = self._extract_pdf(file_path)
+            text = self._extract_pdf (file_path)
         elif file_path.endswith('.docx'):
-            text = self._extract_docx(file_path)
+            text = self._extract_docx (file_path)
         else:
-            text = Path(file_path).read_text(encoding='utf-8')
+            text = Path (file_path).read_text (encoding='utf-8')
         
         # Chunk text
-        chunks = self._chunk_text(text, chunk_size)
+        chunks = self._chunk_text (text, chunk_size)
         
         return chunks
     
-    def _extract_pdf(self, file_path: str) -> str:
+    def _extract_pdf (self, file_path: str) -> str:
         """Extract text from PDF"""
-        reader = PdfReader(file_path)
+        reader = PdfReader (file_path)
         text = ""
         for page in reader.pages:
             text += page.extract_text() + "\\n\\n"
         return text
     
-    def _extract_docx(self, file_path: str) -> str:
+    def _extract_docx (self, file_path: str) -> str:
         """Extract text from DOCX"""
-        doc = DocxDocument(file_path)
+        doc = DocxDocument (file_path)
         return "\\n\\n".join([para.text for para in doc.paragraphs])
     
-    def _chunk_text(self, text: str, chunk_size: int) -> List[DocumentChunk]:
+    def _chunk_text (self, text: str, chunk_size: int) -> List[DocumentChunk]:
         """
         Chunk text by token count with overlap
         """
-        tokens = self.encoder.encode(text)
+        tokens = self.encoder.encode (text)
         chunks = []
         overlap = 200  # Token overlap between chunks
         
-        for i in range(0, len(tokens), chunk_size - overlap):
+        for i in range(0, len (tokens), chunk_size - overlap):
             chunk_tokens = tokens[i:i + chunk_size]
-            chunk_text = self.encoder.decode(chunk_tokens)
+            chunk_text = self.encoder.decode (chunk_tokens)
             
             chunks.append(DocumentChunk(
                 content=chunk_text,
-                chunk_index=len(chunks),
-                tokens=len(chunk_tokens)
+                chunk_index=len (chunks),
+                tokens=len (chunk_tokens)
             ))
         
         return chunks
     
-    async def summarize_document(self, chunks: List[DocumentChunk]) -> str:
+    async def summarize_document (self, chunks: List[DocumentChunk]) -> str:
         """
         Summarize entire document from chunks
         """
         # For short documents, summarize directly
-        if len(chunks) <= 5:
+        if len (chunks) <= 5:
             full_text = "\\n\\n".join([c.content for c in chunks])
-            return await self._summarize_text(full_text)
+            return await self._summarize_text (full_text)
         
         # For long documents, hierarchical summarization
         # 1. Summarize each chunk
         chunk_summaries = []
         for chunk in chunks:
-            summary = await self._summarize_text(chunk.content)
-            chunk_summaries.append(summary)
+            summary = await self._summarize_text (chunk.content)
+            chunk_summaries.append (summary)
         
         # 2. Combine and summarize summaries
-        combined = "\\n\\n".join(chunk_summaries)
-        final_summary = await self._summarize_text(combined)
+        combined = "\\n\\n".join (chunk_summaries)
+        final_summary = await self._summarize_text (combined)
         
         return final_summary
     
-    async def _summarize_text(self, text: str) -> str:
+    async def _summarize_text (self, text: str) -> str:
         """Summarize single text"""
         response = await self.llm.chat.completions.create(
             model="gpt-4-turbo",
@@ -424,7 +424,7 @@ class DocumentProcessorAgent:
         
         return response.choices[0].message.content
     
-    async def extract_key_points(self, text: str) -> List[str]:
+    async def extract_key_points (self, text: str) -> List[str]:
         """
         Extract key points from text
         """
@@ -442,14 +442,14 @@ Return as JSON array: ["point 1", "point 2", ...]"""
             temperature=0.3
         )
         
-        return json.loads(response.choices[0].message.content).get("points", [])
+        return json.loads (response.choices[0].message.content).get("points", [])
 
 # Usage
-doc_processor = DocumentProcessorAgent(llm_client)
+doc_processor = DocumentProcessorAgent (llm_client)
 
 chunks = await doc_processor.process_document("research_paper.pdf")
-summary = await doc_processor.summarize_document(chunks)
-key_points = await doc_processor.extract_key_points(summary)
+summary = await doc_processor.summarize_document (chunks)
+key_points = await doc_processor.extract_key_points (summary)
 
 print(f"Document summary:\\n{summary}")
 print(f"\\nKey points: {key_points}")
@@ -488,7 +488,7 @@ class SynthesizerAgent:
         """
         # Combine sources with attribution
         source_text = ""
-        for i, source in enumerate(sources):
+        for i, source in enumerate (sources):
             source_text += f"\\n\\n[Source {i+1}: {source['url']}]\\n{source['content']}"
         
         prompt = f"""Synthesize information from these sources to answer the query.
@@ -525,7 +525,7 @@ Format as JSON:
             temperature=0.3
         )
         
-        return json.loads(response.choices[0].message.content)
+        return json.loads (response.choices[0].message.content)
     
     async def cross_reference(
         self,
@@ -563,15 +563,15 @@ Return JSON:
             temperature=0.1
         )
         
-        return json.loads(response.choices[0].message.content)
+        return json.loads (response.choices[0].message.content)
 
 # Usage
-synthesizer = SynthesizerAgent(llm_client)
+synthesizer = SynthesizerAgent (llm_client)
 
 sources = [
     {"url": "https://source1.com", "content": "Quantum computers use qubits..."},
     {"url": "https://source2.com", "content": "IBM quantum computer achieved..."},
-    {"url": "https://source3.com", "content": "Google's quantum supremacy..."}
+    {"url": "https://source3.com", "content": "Google\'s quantum supremacy..."}
 ]
 
 synthesis = await synthesizer.synthesize(
@@ -580,7 +580,7 @@ synthesis = await synthesizer.synthesize(
 )
 
 print(f"Answer: {synthesis['answer']}")
-print(f"Key facts: {len(synthesis['key_facts'])}")
+print(f"Key facts: {len (synthesis['key_facts'])}")
 \`\`\`
 
 ---
@@ -638,13 +638,13 @@ class ReportGenerator:
         )
         
         # Create sections
-        sections = await self._generate_sections(query, synthesis)
+        sections = await self._generate_sections (query, synthesis)
         
         # Count words
-        word_count = self._count_words(exec_summary, sections)
+        word_count = self._count_words (exec_summary, sections)
         
         return ResearchReport(
-            title=await self._generate_title(query),
+            title=await self._generate_title (query),
             query=query,
             executive_summary=exec_summary,
             sections=sections,
@@ -653,7 +653,7 @@ class ReportGenerator:
             word_count=word_count
         )
     
-    async def _generate_title(self, query: str) -> str:
+    async def _generate_title (self, query: str) -> str:
         """Generate report title"""
         response = await self.llm.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -702,7 +702,7 @@ Executive Summary:"""
         # Introduction
         sections.append(ReportSection(
             title="Introduction",
-            content=await self._generate_introduction(query),
+            content=await self._generate_introduction (query),
             level=1
         ))
         
@@ -715,7 +715,7 @@ Executive Summary:"""
         
         # Key Facts
         key_facts_content = "\\n\\n".join([
-            f"**{fact['fact']}**\\nSources: {', '.join(fact['sources'])}"
+            f"**{fact['fact']}**\\nSources: {', '.join (fact['sources'])}"
             for fact in synthesis.get('key_facts', [])
         ])
         
@@ -736,13 +736,13 @@ Executive Summary:"""
         # Conclusion
         sections.append(ReportSection(
             title="Conclusion",
-            content=await self._generate_conclusion(query, synthesis),
+            content=await self._generate_conclusion (query, synthesis),
             level=1
         ))
         
         return sections
     
-    async def _generate_introduction(self, query: str) -> str:
+    async def _generate_introduction (self, query: str) -> str:
         """Generate introduction section"""
         prompt = f"""Write an introduction paragraph for a research report on: {query}"""
         
@@ -777,12 +777,12 @@ Conclusion:"""
         
         return response.choices[0].message.content
     
-    def _count_words(self, summary: str, sections: List[ReportSection]) -> int:
+    def _count_words (self, summary: str, sections: List[ReportSection]) -> int:
         """Count total words in report"""
         text = summary + " " + " ".join([s.content for s in sections])
-        return len(text.split())
+        return len (text.split())
     
-    def export_markdown(self, report: ResearchReport) -> str:
+    def export_markdown (self, report: ResearchReport) -> str:
         """Export report as Markdown"""
         md = f"""# {report.title}
 
@@ -801,12 +801,12 @@ Conclusion:"""
         
         # Add sources
         md += "\\n## Sources\\n\\n"
-        for i, source in enumerate(report.sources):
+        for i, source in enumerate (report.sources):
             md += f"{i+1}. [{source.get('title', 'Source')}]({source['url']})\\n"
         
         return md
     
-    def export_html(self, report: ResearchReport) -> str:
+    def export_html (self, report: ResearchReport) -> str:
         """Export report as HTML"""
         template = Template("""
 <!DOCTYPE html>
@@ -847,16 +847,16 @@ Conclusion:"""
 </html>
         """)
         
-        return template.render(report=report)
+        return template.render (report=report)
 
 # Usage
-report_gen = ReportGenerator(llm_client)
+report_gen = ReportGenerator (llm_client)
 
-report = await report_gen.generate_report(query, synthesis, sources)
+report = await report_gen.generate_report (query, synthesis, sources)
 
 # Export
-markdown = report_gen.export_markdown(report)
-html = report_gen.export_html(report)
+markdown = report_gen.export_markdown (report)
+html = report_gen.export_html (report)
 
 print(f"Generated report: {report.title}")
 print(f"Word count: {report.word_count}")
@@ -883,11 +883,11 @@ class ResearchOrchestrator:
         llm_client: AsyncOpenAI,
         serper_api_key: str
     ):
-        self.planner = PlannerAgent(llm_client)
-        self.search_agent = WebSearchAgent(serper_api_key, llm_client)
-        self.doc_processor = DocumentProcessorAgent(llm_client)
-        self.synthesizer = SynthesizerAgent(llm_client)
-        self.report_gen = ReportGenerator(llm_client)
+        self.planner = PlannerAgent (llm_client)
+        self.search_agent = WebSearchAgent (serper_api_key, llm_client)
+        self.doc_processor = DocumentProcessorAgent (llm_client)
+        self.synthesizer = SynthesizerAgent (llm_client)
+        self.report_gen = ReportGenerator (llm_client)
     
     async def research(
         self,
@@ -902,8 +902,8 @@ class ResearchOrchestrator:
         
         # 1. Create research plan
         print("Creating research plan...")
-        plan = await self.planner.create_plan(query)
-        print(f"Plan created with {len(plan.steps)} steps")
+        plan = await self.planner.create_plan (query)
+        print(f"Plan created with {len (plan.steps)} steps")
         
         # 2. Execute search steps
         all_sources = []
@@ -911,11 +911,11 @@ class ResearchOrchestrator:
         for step in plan.steps:
             if step.action == "search":
                 print(f"Searching: {step.query}")
-                results = await self.search_agent.search(step.query, num_results=5)
+                results = await self.search_agent.search (step.query, num_results=5)
                 
                 # Extract content from top results
                 for result in results[:3]:
-                    content = await self.search_agent.extract_content(result.url)
+                    content = await self.search_agent.extract_content (result.url)
                     if content:
                         all_sources.append({
                             "title": result.title,
@@ -923,15 +923,15 @@ class ResearchOrchestrator:
                             "content": content[:5000]  # Limit size
                         })
         
-        print(f"Gathered {len(all_sources)} sources")
+        print(f"Gathered {len (all_sources)} sources")
         
         # 3. Synthesize information
         print("Synthesizing information...")
-        synthesis = await self.synthesizer.synthesize(query, all_sources[:max_sources])
+        synthesis = await self.synthesizer.synthesize (query, all_sources[:max_sources])
         
         # 4. Generate report
         print("Generating report...")
-        report = await self.report_gen.generate_report(query, synthesis, all_sources)
+        report = await self.report_gen.generate_report (query, synthesis, all_sources)
         
         print(f"Research complete! Report: {report.title}")
         return report
@@ -949,19 +949,19 @@ class ResearchOrchestrator:
         
         for doc_path in document_paths:
             print(f"Processing document: {doc_path}")
-            chunks = await self.doc_processor.process_document(doc_path)
-            summary = await self.doc_processor.summarize_document(chunks)
+            chunks = await self.doc_processor.process_document (doc_path)
+            summary = await self.doc_processor.summarize_document (chunks)
             
             all_sources.append({
-                "title": Path(doc_path).name,
+                "title": Path (doc_path).name,
                 "url": f"file://{doc_path}",
                 "content": summary
             })
         
         # Also search web
-        search_results = await self.search_agent.search(query, num_results=5)
+        search_results = await self.search_agent.search (query, num_results=5)
         for result in search_results[:3]:
-            content = await self.search_agent.extract_content(result.url)
+            content = await self.search_agent.extract_content (result.url)
             if content:
                 all_sources.append({
                     "title": result.title,
@@ -970,8 +970,8 @@ class ResearchOrchestrator:
                 })
         
         # Synthesize and generate report
-        synthesis = await self.synthesizer.synthesize(query, all_sources)
-        report = await self.report_gen.generate_report(query, synthesis, all_sources)
+        synthesis = await self.synthesizer.synthesize (query, all_sources)
+        report = await self.report_gen.generate_report (query, synthesis, all_sources)
         
         return report
 
@@ -988,14 +988,14 @@ async def main():
     )
     
     # Export report
-    markdown = orchestrator.report_gen.export_markdown(report)
-    Path("research_report.md").write_text(markdown)
+    markdown = orchestrator.report_gen.export_markdown (report)
+    Path("research_report.md").write_text (markdown)
     
     print(f"Report saved to research_report.md")
     print(f"Word count: {report.word_count}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run (main())
 \`\`\`
 
 ---
@@ -1021,33 +1021,33 @@ class ResearchCache:
         self.redis = redis_client
         self.ttl = 86400  # 24 hours
     
-    def _get_cache_key(self, query: str) -> str:
+    def _get_cache_key (self, query: str) -> str:
         """Generate cache key from query"""
         return f"research:{hashlib.sha256(query.encode()).hexdigest()}"
     
-    async def get(self, query: str) -> Optional[ResearchReport]:
+    async def get (self, query: str) -> Optional[ResearchReport]:
         """Get cached research result"""
-        key = self._get_cache_key(query)
-        cached = await self.redis.get(key)
+        key = self._get_cache_key (query)
+        cached = await self.redis.get (key)
         
         if cached:
-            return ResearchReport(**json.loads(cached))
+            return ResearchReport(**json.loads (cached))
         
         return None
     
-    async def set(self, query: str, report: ResearchReport):
+    async def set (self, query: str, report: ResearchReport):
         """Cache research result"""
-        key = self._get_cache_key(query)
+        key = self._get_cache_key (query)
         await self.redis.setex(
             key,
             self.ttl,
             report.model_dump_json()
         )
     
-    async def invalidate(self, query: str):
+    async def invalidate (self, query: str):
         """Invalidate cached result"""
-        key = self._get_cache_key(query)
-        await self.redis.delete(key)
+        key = self._get_cache_key (query)
+        await self.redis.delete (key)
 \`\`\`
 
 ### Error Handling & Retries
@@ -1066,22 +1066,22 @@ class RobustResearchOrchestrator(ResearchOrchestrator):
     
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=4, max=10)
+        wait=wait_exponential (multiplier=1, min=4, max=10)
     )
-    async def research(self, query: str, **kwargs) -> ResearchReport:
+    async def research (self, query: str, **kwargs) -> ResearchReport:
         """Research with automatic retries"""
         try:
-            return await super().research(query, **kwargs)
+            return await super().research (query, **kwargs)
         except Exception as e:
-            logger.error(f"Research failed: {e}")
+            logger.error (f"Research failed: {e}")
             raise
     
-    async def safe_search(self, query: str) -> List[SearchResult]:
+    async def safe_search (self, query: str) -> List[SearchResult]:
         """Search with fallback"""
         try:
-            return await self.search_agent.search(query)
+            return await self.search_agent.search (query)
         except Exception as e:
-            logger.warning(f"Search failed, using fallback: {e}")
+            logger.warning (f"Search failed, using fallback: {e}")
             # Fallback to alternative search API
             return []
 \`\`\`

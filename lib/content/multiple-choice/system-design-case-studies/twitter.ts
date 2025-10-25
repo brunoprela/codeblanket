@@ -45,7 +45,7 @@ export const twitterMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "10K writes can complete in ~1 second (assuming 100 writes/sec per worker with parallel workers). This keeps tweet posting responsive for 99%+ of users (<10K followers). Higher threshold (100K) would make posts slow for more users. Lower threshold (1K) would increase fanout-on-read load (more celebrities). 10K is empirically validated sweet spot: fast enough to complete quickly, rare enough to not affect many users. Twitter's actual threshold is proprietary but likely 10-50K range. Key is choosing threshold where fanout completes in <2 seconds.",
+      "10K writes can complete in ~1 second (assuming 100 writes/sec per worker with parallel workers). This keeps tweet posting responsive for 99%+ of users (<10K followers). Higher threshold (100K) would make posts slow for more users. Lower threshold (1K) would increase fanout-on-read load (more celebrities). 10K is empirically validated sweet spot: fast enough to complete quickly, rare enough to not affect many users. Twitter\'s actual threshold is proprietary but likely 10-50K range. Key is choosing threshold where fanout completes in <2 seconds.",
   },
   {
     id: 'mc4',

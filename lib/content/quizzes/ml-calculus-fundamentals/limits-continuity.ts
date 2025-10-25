@@ -55,8 +55,8 @@ In practice, limit analysis transforms abstract mathematical concepts into pract
 - Problems: Bounded output causes vanishing gradients (derivative → 0 at extremes)
 - The limit boundaries [0, 1] help with probability interpretation but harm gradient flow
 
-**Tanh: tanh(x) = (e^x - e^(-x))/(e^x + e^(-x))**
-- lim_(x→-∞) tanh(x) = -1, lim_(x→+∞) tanh(x) = 1
+**Tanh: tanh (x) = (e^x - e^(-x))/(e^x + e^(-x))**
+- lim_(x→-∞) tanh (x) = -1, lim_(x→+∞) tanh (x) = 1
 - Continuous and differentiable everywhere
 - Better than sigmoid due to zero-centered output, but still saturates
 
@@ -100,10 +100,10 @@ When minimizing a loss function L(θ), we seek points where ∇L(θ) = 0. The IV
 
 **Binary Search for Roots:**
 The IVT enables efficient root-finding algorithms:
-1. Start with interval [a, b] where f(a) and f(b) have opposite signs
+1. Start with interval [a, b] where f (a) and f (b) have opposite signs
 2. Check midpoint m = (a + b)/2
-3. Replace [a, b] with either [a, m] or [m, b] based on sign of f(m)
-4. Repeat until |f(m)| < tolerance
+3. Replace [a, b] with either [a, m] or [m, b] based on sign of f (m)
+4. Repeat until |f (m)| < tolerance
 
 This converges logarithmically: O(log(ε)) iterations for precision ε.
 

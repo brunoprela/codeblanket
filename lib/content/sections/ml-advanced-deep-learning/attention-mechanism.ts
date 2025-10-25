@@ -74,21 +74,21 @@ def visualize_attention_concept():
     ])
     
     # Plot attention heatmap
-    plt.figure(figsize=(10, 8))
-    plt.imshow(attention_weights, cmap='Blues', aspect='auto')
-    plt.colorbar(label='Attention Weight')
+    plt.figure (figsize=(10, 8))
+    plt.imshow (attention_weights, cmap='Blues', aspect='auto')
+    plt.colorbar (label='Attention Weight')
     
     # Labels
     plt.xlabel('Source (English)', fontsize=12)
     plt.ylabel('Target (French)', fontsize=12)
-    plt.xticks(range(len(source_words)), source_words)
-    plt.yticks(range(len(target_words)), target_words)
+    plt.xticks (range (len (source_words)), source_words)
+    plt.yticks (range (len (target_words)), target_words)
     plt.title('Attention Weights: English → French Translation', fontsize=14)
     
     # Add text annotations
-    for i in range(len(target_words)):
-        for j in range(len(source_words)):
-            text = plt.text(j, i, f'{attention_weights[i, j]:.2f}',
+    for i in range (len (target_words)):
+        for j in range (len (source_words)):
+            text = plt.text (j, i, f'{attention_weights[i, j]:.2f}',
                           ha="center", va="center", color="black", fontsize=10)
     
     plt.tight_layout()
@@ -121,7 +121,7 @@ At decoder timestep t:
 
 1. **Score Function** (Bahdanau/Additive):
 \`\`\`
-score(h_i, s_{t-1}) = v^T tanh(W_1 h_i + W_2 s_{t-1})
+score (h_i, s_{t-1}) = v^T tanh(W_1 h_i + W_2 s_{t-1})
 \`\`\`
 where:
 - h_i = encoder hidden state at position i
@@ -130,7 +130,7 @@ where:
 
 2. **Alignment Weights** (Softmax):
 \`\`\`
-α_{t,i} = exp(score(h_i, s_{t-1})) / Σ_j exp(score(h_j, s_{t-1}))
+α_{t,i} = exp (score (h_i, s_{t-1})) / Σ_j exp (score (h_j, s_{t-1}))
 \`\`\`
 Ensures weights sum to 1: Σ_i α_{t,i} = 1
 
@@ -141,12 +141,12 @@ c_t = Σ_i α_{t,i} * h_i
 
 4. **Decoder Update**:
 \`\`\`
-s_t = f(s_{t-1}, y_{t-1}, c_t)
-output_t = g(s_t, c_t)
+s_t = f (s_{t-1}, y_{t-1}, c_t)
+output_t = g (s_t, c_t)
 \`\`\`
 
 \`\`\`python
-class BahdanauAttention(nn.Module):
+class BahdanauAttention (nn.Module):
     """
     Bahdanau (Additive) Attention Mechanism.
     """
@@ -156,11 +156,11 @@ class BahdanauAttention(nn.Module):
         self.hidden_size = hidden_size
         
         # Attention parameters
-        self.W_h = nn.Linear(hidden_size, hidden_size)  # For encoder hidden states
-        self.W_s = nn.Linear(hidden_size, hidden_size)  # For decoder hidden state
-        self.v = nn.Linear(hidden_size, 1)              # Final projection
+        self.W_h = nn.Linear (hidden_size, hidden_size)  # For encoder hidden states
+        self.W_s = nn.Linear (hidden_size, hidden_size)  # For decoder hidden state
+        self.v = nn.Linear (hidden_size, 1)              # Final projection
     
-    def forward(self, encoder_outputs, decoder_hidden):
+    def forward (self, encoder_outputs, decoder_hidden):
         """
         Compute attention.
         
@@ -182,16 +182,16 @@ class BahdanauAttention(nn.Module):
         # Compute scores (energy)
         # score = v^T * tanh(W_h * h_i + W_s * s_{t-1})
         energy = torch.tanh(
-            self.W_h(encoder_outputs) + self.W_s(decoder_hidden)
+            self.W_h (encoder_outputs) + self.W_s (decoder_hidden)
         )
         # energy: (batch, seq_length, hidden_size)
         
         # Project to scalar scores
-        scores = self.v(energy).squeeze(2)
+        scores = self.v (energy).squeeze(2)
         # scores: (batch, seq_length)
         
         # Compute attention weights (alignment)
-        attention_weights = F.softmax(scores, dim=1)
+        attention_weights = F.softmax (scores, dim=1)
         # attention_weights: (batch, seq_length)
         
         # Compute context vector (weighted sum)
@@ -211,14 +211,14 @@ hidden_size = 256
 batch_size = 2
 seq_length = 10
 
-attention = BahdanauAttention(hidden_size)
+attention = BahdanauAttention (hidden_size)
 
 # Dummy encoder outputs and decoder hidden state
-encoder_outputs = torch.randn(batch_size, seq_length, hidden_size)
-decoder_hidden = torch.randn(batch_size, hidden_size)
+encoder_outputs = torch.randn (batch_size, seq_length, hidden_size)
+decoder_hidden = torch.randn (batch_size, hidden_size)
 
 # Compute attention
-context, weights = attention(encoder_outputs, decoder_hidden)
+context, weights = attention (encoder_outputs, decoder_hidden)
 
 print(f"Encoder outputs shape: {encoder_outputs.shape}")
 print(f"Decoder hidden shape: {decoder_hidden.shape}")
@@ -229,8 +229,8 @@ print(weights[0].detach().numpy())
 print(f"Sum of weights: {weights[0].sum().item():.4f} (should be 1.0)")
 
 # Visualize attention weights
-plt.figure(figsize=(12, 4))
-plt.bar(range(seq_length), weights[0].detach().numpy())
+plt.figure (figsize=(12, 4))
+plt.bar (range (seq_length), weights[0].detach().numpy())
 plt.xlabel('Encoder Position')
 plt.ylabel('Attention Weight')
 plt.title('Attention Distribution Over Input Sequence')
@@ -244,7 +244,7 @@ plt.show()
 
 **1. Dot Product (Luong)**:
 \`\`\`
-score(h_i, s_t) = h_i^T s_t
+score (h_i, s_t) = h_i^T s_t
 \`\`\`
 - Simplest
 - No parameters
@@ -252,20 +252,20 @@ score(h_i, s_t) = h_i^T s_t
 
 **2. General (Luong)**:
 \`\`\`
-score(h_i, s_t) = h_i^T W s_t
+score (h_i, s_t) = h_i^T W s_t
 \`\`\`
 - Learns weight matrix W
 - Can handle different dimensions
 
 **3. Concat/Additive (Bahdanau)**:
 \`\`\`
-score(h_i, s_t) = v^T tanh(W_1 h_i + W_2 s_t)
+score (h_i, s_t) = v^T tanh(W_1 h_i + W_2 s_t)
 \`\`\`
 - Most parameters
 - Often best performance
 
 \`\`\`python
-class LuongAttention(nn.Module):
+class LuongAttention (nn.Module):
     """
     Luong (Multiplicative) Attention Mechanism.
     """
@@ -276,12 +276,12 @@ class LuongAttention(nn.Module):
         self.method = method
         
         if method == 'general':
-            self.W = nn.Linear(hidden_size, hidden_size, bias=False)
+            self.W = nn.Linear (hidden_size, hidden_size, bias=False)
         elif method == 'concat':
-            self.W = nn.Linear(hidden_size * 2, hidden_size)
-            self.v = nn.Linear(hidden_size, 1, bias=False)
+            self.W = nn.Linear (hidden_size * 2, hidden_size)
+            self.v = nn.Linear (hidden_size, 1, bias=False)
     
-    def forward(self, encoder_outputs, decoder_hidden):
+    def forward (self, encoder_outputs, decoder_hidden):
         """
         Compute Luong attention.
         
@@ -297,7 +297,7 @@ class LuongAttention(nn.Module):
         seq_length = encoder_outputs.size(1)
         
         if self.method == 'dot':
-            # score(h_i, s_t) = h_i^T · s_t
+            # score (h_i, s_t) = h_i^T · s_t
             scores = torch.bmm(
                 encoder_outputs,                     # (batch, seq, hidden)
                 decoder_hidden.unsqueeze(2)          # (batch, hidden, 1)
@@ -305,7 +305,7 @@ class LuongAttention(nn.Module):
             # scores: (batch, seq_length)
         
         elif self.method == 'general':
-            # score(h_i, s_t) = h_i^T · W · s_t
+            # score (h_i, s_t) = h_i^T · W · s_t
             transformed = self.W(decoder_hidden)     # (batch, hidden)
             scores = torch.bmm(
                 encoder_outputs,                     # (batch, seq, hidden)
@@ -313,14 +313,14 @@ class LuongAttention(nn.Module):
             ).squeeze(2)
         
         elif self.method == 'concat':
-            # score(h_i, s_t) = v^T · tanh(W · [h_i; s_t])
+            # score (h_i, s_t) = v^T · tanh(W · [h_i; s_t])
             decoder_hidden = decoder_hidden.unsqueeze(1).repeat(1, seq_length, 1)
             concat = torch.cat([encoder_outputs, decoder_hidden], dim=2)
-            energy = torch.tanh(self.W(concat))
-            scores = self.v(energy).squeeze(2)
+            energy = torch.tanh (self.W(concat))
+            scores = self.v (energy).squeeze(2)
         
         # Attention weights
-        attention_weights = F.softmax(scores, dim=1)
+        attention_weights = F.softmax (scores, dim=1)
         
         # Context vector
         context = torch.bmm(
@@ -335,13 +335,13 @@ print("\\nAttention Mechanism Comparison:")
 print("=" * 60)
 
 mechanisms = {
-    'Dot Product': LuongAttention(hidden_size, method='dot'),
-    'General': LuongAttention(hidden_size, method='general'),
-    'Concat': LuongAttention(hidden_size, method='concat'),
+    'Dot Product': LuongAttention (hidden_size, method='dot'),
+    'General': LuongAttention (hidden_size, method='general'),
+    'Concat': LuongAttention (hidden_size, method='concat'),
 }
 
 for name, attn in mechanisms.items():
-    params = sum(p.numel() for p in attn.parameters())
+    params = sum (p.numel() for p in attn.parameters())
     print(f"{name:15s}: {params:,} parameters")
 
 print("\\nTrade-offs:")
@@ -355,7 +355,7 @@ print("  Concat: Most expressive, most params, often best quality")
 ### Complete Architecture
 
 \`\`\`python
-class AttentionDecoder(nn.Module):
+class AttentionDecoder (nn.Module):
     """
     Decoder with attention mechanism.
     """
@@ -366,21 +366,21 @@ class AttentionDecoder(nn.Module):
         self.output_size = output_size
         
         # Embedding
-        self.embedding = nn.Embedding(output_size, embedding_dim)
+        self.embedding = nn.Embedding (output_size, embedding_dim)
         
         # Attention mechanism
         if attention_type == 'bahdanau':
-            self.attention = BahdanauAttention(hidden_size)
+            self.attention = BahdanauAttention (hidden_size)
         else:
-            self.attention = LuongAttention(hidden_size, method='general')
+            self.attention = LuongAttention (hidden_size, method='general')
         
         # LSTM (input = embedding + context)
         self.lstm = nn.LSTM(embedding_dim + hidden_size, hidden_size, batch_first=True)
         
         # Output projection
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.fc = nn.Linear (hidden_size, output_size)
     
-    def forward(self, input_token, hidden, cell, encoder_outputs):
+    def forward (self, input_token, hidden, cell, encoder_outputs):
         """
         Decode one step with attention.
         
@@ -397,11 +397,11 @@ class AttentionDecoder(nn.Module):
             attention_weights: (batch, seq_length)
         """
         # Embed input token
-        embedded = self.embedding(input_token)  # (batch, 1, embedding_dim)
+        embedded = self.embedding (input_token)  # (batch, 1, embedding_dim)
         
         # Compute attention
         # hidden: (1, batch, hidden_size) → squeeze to (batch, hidden_size)
-        context, attention_weights = self.attention(encoder_outputs, hidden.squeeze(0))
+        context, attention_weights = self.attention (encoder_outputs, hidden.squeeze(0))
         # context: (batch, hidden_size)
         
         # Concatenate embedding and context
@@ -410,15 +410,15 @@ class AttentionDecoder(nn.Module):
         # lstm_input: (batch, 1, embedding_dim + hidden_size)
         
         # LSTM step
-        output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
+        output, (hidden, cell) = self.lstm (lstm_input, (hidden, cell))
         # output: (batch, 1, hidden_size)
         
         # Project to vocabulary
-        output = self.fc(output.squeeze(1))  # (batch, output_size)
+        output = self.fc (output.squeeze(1))  # (batch, output_size)
         
         return output, hidden, cell, attention_weights
 
-class Seq2SeqWithAttention(nn.Module):
+class Seq2SeqWithAttention (nn.Module):
     """
     Complete Seq2Seq model with attention.
     """
@@ -429,7 +429,7 @@ class Seq2SeqWithAttention(nn.Module):
         self.decoder = decoder
         self.device = device
     
-    def forward(self, source, target, teacher_forcing_ratio=0.5):
+    def forward (self, source, target, teacher_forcing_ratio=0.5):
         """
         Forward pass through Seq2Seq with attention.
         
@@ -447,11 +447,11 @@ class Seq2SeqWithAttention(nn.Module):
         output_size = self.decoder.output_size
         
         # Store outputs and attention
-        outputs = torch.zeros(batch_size, target_length, output_size).to(self.device)
+        outputs = torch.zeros (batch_size, target_length, output_size).to (self.device)
         attention_history = []
         
         # Encode entire input sequence
-        encoder_outputs, (hidden, cell) = self.encoder(source)
+        encoder_outputs, (hidden, cell) = self.encoder (source)
         # encoder_outputs: (batch, source_length, hidden_size)
         
         # First input to decoder
@@ -466,7 +466,7 @@ class Seq2SeqWithAttention(nn.Module):
             
             # Store output and attention
             outputs[:, t, :] = output
-            attention_history.append(attention_weights.detach())
+            attention_history.append (attention_weights.detach())
             
             # Teacher forcing
             teacher_force = torch.rand(1).item() < teacher_forcing_ratio
@@ -481,22 +481,22 @@ print("=" * 60)
 from types import SimpleNamespace
 
 # Create simple encoder (reuse from previous)
-encoder = Encoder(input_size=5000, embedding_dim=256, hidden_size=512)
-decoder = AttentionDecoder(output_size=5000, embedding_dim=256, hidden_size=512)
+encoder = Encoder (input_size=5000, embedding_dim=256, hidden_size=512)
+decoder = AttentionDecoder (output_size=5000, embedding_dim=256, hidden_size=512)
 
 device = torch.device('cpu')
-model = Seq2SeqWithAttention(encoder, decoder, device)
+model = Seq2SeqWithAttention (encoder, decoder, device)
 
 # Test
 source = torch.randint(0, 5000, (2, 15))  # Batch of 2, source length 15
 target = torch.randint(0, 5000, (2, 20))  # Batch of 2, target length 20
 
-outputs, attention_history = model(source, target, teacher_forcing_ratio=0.5)
+outputs, attention_history = model (source, target, teacher_forcing_ratio=0.5)
 
 print(f"Source shape: {source.shape}")
 print(f"Target shape: {target.shape}")
 print(f"Output shape: {outputs.shape}")
-print(f"\\nAttention history: {len(attention_history)} timesteps")
+print(f"\\nAttention history: {len (attention_history)} timesteps")
 print(f"Each attention: shape {attention_history[0].shape}")
 print("\\n→ Decoder can attend to any encoder position!")
 print("→ No more bottleneck!")
@@ -509,7 +509,7 @@ print("→ No more bottleneck!")
 Attention weights reveal what the model is "looking at" when generating each output token.
 
 \`\`\`python
-def visualize_attention_heatmap(source_tokens, target_tokens, attention_weights):
+def visualize_attention_heatmap (source_tokens, target_tokens, attention_weights):
     """
     Visualize attention as a heatmap.
     
@@ -518,15 +518,15 @@ def visualize_attention_heatmap(source_tokens, target_tokens, attention_weights)
         target_tokens: List of target tokens
         attention_weights: (target_len, source_len) array
     """
-    plt.figure(figsize=(12, 10))
+    plt.figure (figsize=(12, 10))
     
     # Create heatmap
-    plt.imshow(attention_weights, cmap='Blues', aspect='auto', interpolation='nearest')
-    plt.colorbar(label='Attention Weight')
+    plt.imshow (attention_weights, cmap='Blues', aspect='auto', interpolation='nearest')
+    plt.colorbar (label='Attention Weight')
     
     # Set ticks and labels
-    plt.xticks(range(len(source_tokens)), source_tokens, rotation=45, ha='right')
-    plt.yticks(range(len(target_tokens)), target_tokens)
+    plt.xticks (range (len (source_tokens)), source_tokens, rotation=45, ha='right')
+    plt.yticks (range (len (target_tokens)), target_tokens)
     
     plt.xlabel('Source (Input)', fontsize=12)
     plt.ylabel('Target (Output)', fontsize=12)
@@ -536,12 +536,12 @@ def visualize_attention_heatmap(source_tokens, target_tokens, attention_weights)
     plt.grid(False)
     
     # Add values as text
-    for i in range(len(target_tokens)):
-        for j in range(len(source_tokens)):
+    for i in range (len (target_tokens)):
+        for j in range (len (source_tokens)):
             value = attention_weights[i, j]
             if value > 0.1:  # Only show significant weights
                 color = 'white' if value > 0.5 else 'black'
-                plt.text(j, i, f'{value:.2f}', 
+                plt.text (j, i, f'{value:.2f}', 
                         ha='center', va='center', color=color, fontsize=8)
     
     plt.tight_layout()
@@ -562,7 +562,7 @@ attention = np.array([
     [0.0, 0.0, 0.0, 0.1, 0.2, 0.7],     # "tapis" → "mat"
 ])
 
-visualize_attention_heatmap(source, target, attention)
+visualize_attention_heatmap (source, target, attention)
 
 print("\\nAttention Visualization Insights:")
 print("=" * 60)

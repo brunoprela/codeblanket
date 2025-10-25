@@ -8,7 +8,7 @@ export const advancedQuiz = [
     question: 'How do you extend Fenwick Tree to handle 2D range queries?',
     hint: 'Think about nesting the update and query operations.',
     sampleAnswer:
-      'A 2D Fenwick Tree uses nested loops. For update(r, c, delta), the outer loop iterates over rows using "r += r & -r", and for each row, the inner loop iterates over columns using "c += c & -c". Query works similarly with subtraction. This gives O(log M × log N) complexity for an M×N matrix.',
+      'A 2D Fenwick Tree uses nested loops. For update (r, c, delta), the outer loop iterates over rows using "r += r & -r", and for each row, the inner loop iterates over columns using "c += c & -c". Query works similarly with subtraction. This gives O(log M × log N) complexity for an M×N matrix.',
     keyPoints: [
       'Nest two Fenwick Trees: one for rows, one for columns',
       'Update/Query: O(log M × log N)',

@@ -46,7 +46,7 @@ export const imageProcessingWithCnnsMultipleChoice = [
   {
     id: 'cnn-mc-4',
     question:
-      "What is the primary advantage of U-Net's skip connections for semantic segmentation?",
+      "What is the primary advantage of U-Net\'s skip connections for semantic segmentation?",
     options: [
       'They reduce the number of parameters needed',
       'They preserve spatial information from encoder to help decoder reconstruct precise boundaries',
@@ -55,7 +55,7 @@ export const imageProcessingWithCnnsMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Skip connections **preserve spatial information** lost during downsampling. During encoding, pooling reduces 256×256 → 8×8, destroying precise locations. Skip connections copy encoder feature maps directly to decoder, bypassing the bottleneck. This provides: (1) Fine spatial details (edges, textures) from shallow layers, (2) Semantic understanding from deep layers, (3) Decoder combines both for precise, meaningful segmentation. Without skip connections, decoder must guess spatial structure from tiny bottleneck → blurry boundaries. With skips: Sharp boundaries, +20-30% accuracy. Note: This is different from ResNet's skip connections (enable depth); U-Net's skips preserve spatial resolution.",
+      "Skip connections **preserve spatial information** lost during downsampling. During encoding, pooling reduces 256×256 → 8×8, destroying precise locations. Skip connections copy encoder feature maps directly to decoder, bypassing the bottleneck. This provides: (1) Fine spatial details (edges, textures) from shallow layers, (2) Semantic understanding from deep layers, (3) Decoder combines both for precise, meaningful segmentation. Without skip connections, decoder must guess spatial structure from tiny bottleneck → blurry boundaries. With skips: Sharp boundaries, +20-30% accuracy. Note: This is different from ResNet\'s skip connections (enable depth); U-Net's skips preserve spatial resolution.",
   },
   {
     id: 'cnn-mc-5',

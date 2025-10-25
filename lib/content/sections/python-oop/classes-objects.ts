@@ -16,7 +16,7 @@ class Dog:
         self.name = name
         self.age = age
     
-    def bark(self):
+    def bark (self):
         return f"{self.name} says woof!"
     
     def __str__(self):
@@ -61,13 +61,13 @@ class Point:
         return f"Point({self.x}, {self.y})"
     
     def __repr__(self):
-        return f"Point(x={self.x}, y={self.y})"
+        return f"Point (x={self.x}, y={self.y})"
     
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
     
     def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
+        return Point (self.x + other.x, self.y + other.y)
 
 p1 = Point(1, 2)
 p2 = Point(3, 4)
@@ -82,17 +82,17 @@ class Circle:
         self._radius = radius
     
     @property
-    def radius(self):
+    def radius (self):
         return self._radius
     
     @radius.setter
-    def radius(self, value):
+    def radius (self, value):
         if value < 0:
             raise ValueError("Radius must be positive")
         self._radius = value
     
     @property
-    def area(self):
+    def area (self):
         return 3.14159 * self._radius ** 2
 
 circle = Circle(5)
@@ -107,11 +107,11 @@ class Pizza:
         self.ingredients = ingredients
     
     @classmethod
-    def margherita(cls):
+    def margherita (cls):
         return cls(['mozzarella', 'tomatoes'])
     
     @staticmethod
-    def is_valid_topping(topping):
+    def is_valid_topping (topping):
         return topping in ['mozzarella', 'tomatoes', 'pepperoni']
 
 # Use class method as factory

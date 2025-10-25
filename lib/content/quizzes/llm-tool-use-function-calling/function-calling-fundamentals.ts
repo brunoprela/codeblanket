@@ -3,7 +3,7 @@ export const functionCallingFundamentalsQuiz = [
     id: 'q1',
     question:
       'Explain the fundamental difference between function calling and traditional prompt-based information extraction. Why is function calling more reliable, and in what scenarios might traditional prompting still be preferable?',
-    sampleAnswer: `Function calling provides a structured, schema-enforced way for LLMs to generate outputs, making it fundamentally more reliable than parsing text responses. Here's why:
+    sampleAnswer: `Function calling provides a structured, schema-enforced way for LLMs to generate outputs, making it fundamentally more reliable than parsing text responses. Here\'s why:
 
 **Key Differences:**
 
@@ -82,19 +82,19 @@ Extracting a city name from "Show me weather for SF" - with function calling, yo
 
 **Implementation Example:**
 \`\`\`python
-async def execute_with_resilience(func_name, args):
+async def execute_with_resilience (func_name, args):
     for attempt in range(3):
         try:
-            result = await execute_function(func_name, args, timeout=30)
+            result = await execute_function (func_name, args, timeout=30)
             return {"success": True, "data": result}
         except RateLimitError as e:
-            await asyncio.sleep(parse_retry_after(e.headers))
+            await asyncio.sleep (parse_retry_after (e.headers))
         except TimeoutError:
             if attempt == 2:
                 return {"success": False, "error": "Timeout", "suggestion": "Try simpler query"}
             await asyncio.sleep(2 ** attempt)
         except Exception as e:
-            return {"success": False, "error": str(e), "type": type(e).__name__}
+            return {"success": False, "error": str (e), "type": type (e).__name__}
 \`\`\`
 
 **User Experience:**
@@ -174,36 +174,36 @@ class UniversalFunctionCaller:
     
     def __init__(self, provider: str):
         self.provider = provider
-        self.adapter = self._get_adapter(provider)
+        self.adapter = self._get_adapter (provider)
     
-    def call(self, messages, functions):
+    def call (self, messages, functions):
         # Convert to provider format
-        provider_messages = self.adapter.convert_messages(messages)
-        provider_functions = self.adapter.convert_functions(functions)
+        provider_messages = self.adapter.convert_messages (messages)
+        provider_functions = self.adapter.convert_functions (functions)
         
         # Call provider
-        response = self.adapter.call_api(provider_messages, provider_functions)
+        response = self.adapter.call_api (provider_messages, provider_functions)
         
         # Convert response to universal format
-        return self.adapter.parse_response(response)
+        return self.adapter.parse_response (response)
     
     class OpenAIAdapter:
-        def convert_functions(self, functions):
+        def convert_functions (self, functions):
             return [{"name": f.name, "parameters": f.schema} for f in functions]
         
-        def parse_response(self, response):
+        def parse_response (self, response):
             if response.message.function_call:
                 return {
                     "type": "function_call",
                     "name": response.message.function_call.name,
-                    "arguments": json.loads(response.message.function_call.arguments)
+                    "arguments": json.loads (response.message.function_call.arguments)
                 }
     
     class ClaudeAdapter:
-        def convert_functions(self, functions):
+        def convert_functions (self, functions):
             return [{"name": f.name, "input_schema": f.schema} for f in functions]
         
-        def parse_response(self, response):
+        def parse_response (self, response):
             for block in response.content:
                 if block.type == "tool_use":
                     return {

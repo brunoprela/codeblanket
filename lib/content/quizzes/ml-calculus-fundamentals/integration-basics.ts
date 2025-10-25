@@ -20,11 +20,11 @@ Integration is fundamental to probabilistic modeling because continuous probabil
 
 A probability density function (PDF) must integrate to 1:
 
-∫₋∞^∞ p(x) dx = 1
+∫₋∞^∞ p (x) dx = 1
 
 Example: Normal distribution
 \`\`\`
-p(x) = (1/Z) · exp(-0.5·((x-μ)/σ)²)
+p (x) = (1/Z) · exp(-0.5·((x-μ)/σ)²)
 \`\`\`
 
 Where Z = σ√(2π) is the normalizing constant (computed via integration).
@@ -36,23 +36,23 @@ Without correct normalization, probabilities would be meaningless. Integration e
 
 The expected value of any function g(X):
 
-E[g(X)] = ∫ g(x)·p(x) dx
+E[g(X)] = ∫ g (x)·p (x) dx
 
 **Examples in ML:**
 
 **Mean:**
 \`\`\`
-E[X] = ∫ x·p(x) dx
+E[X] = ∫ x·p (x) dx
 \`\`\`
 
 **Variance:**
 \`\`\`
-Var(X) = E[X²] - (E[X])² = ∫ x²·p(x) dx - (∫ x·p(x) dx)²
+Var(X) = E[X²] - (E[X])² = ∫ x²·p (x) dx - (∫ x·p (x) dx)²
 \`\`\`
 
 **Loss:**
 \`\`\`
-E[Loss] = ∫ L(θ, x)·p(x|D) dx
+E[Loss] = ∫ L(θ, x)·p (x|D) dx
 \`\`\`
 
 **Why needed:**
@@ -60,14 +60,14 @@ We rarely observe all possible values; integration computes average behavior ove
 
 **3. Marginalizing Over Variables:**
 
-For joint distribution p(x, y), the marginal distribution:
+For joint distribution p (x, y), the marginal distribution:
 
-p(x) = ∫ p(x, y) dy
+p (x) = ∫ p (x, y) dy
 
 **Example:** Mixture of Gaussians
 
 \`\`\`
-p(x) = ∫ p(x|z)·p(z) dz
+p (x) = ∫ p (x|z)·p (z) dz
      = Σₖ πₖ·N(x|μₖ, σₖ²)
 \`\`\`
 
@@ -117,22 +117,22 @@ Model: y = Xw + ε, ε ~ N(0, σ²I)
 
 **Likelihood:**
 \`\`\`
-p(y|X, w, σ²) = N(y|Xw, σ²I)
+p (y|X, w, σ²) = N(y|Xw, σ²I)
 \`\`\`
 
 **Prior:**
 \`\`\`
-p(w) = N(w|0, λ⁻¹I)
+p (w) = N(w|0, λ⁻¹I)
 \`\`\`
 
 **Posterior:**
 \`\`\`
-p(w|X, y) = p(y|X, w)·p(w) / p(y|X)
+p (w|X, y) = p (y|X, w)·p (w) / p (y|X)
 \`\`\`
 
 **Evidence (integral!):**
 \`\`\`
-p(y|X) = ∫ p(y|X, w)·p(w) dw
+p (y|X) = ∫ p (y|X, w)·p (w) dw
 \`\`\`
 
 This integral can be computed analytically for linear models, but for most models (neural nets, etc.), it's intractable.
@@ -143,7 +143,7 @@ Since exact integration is often impossible, we use approximations:
 
 **Monte Carlo Integration:**
 \`\`\`
-∫ f(x)·p(x) dx ≈ (1/N) Σᵢ f(xᵢ), xᵢ ~ p(x)
+∫ f (x)·p (x) dx ≈ (1/N) Σᵢ f (xᵢ), xᵢ ~ p (x)
 \`\`\`
 
 Sample from distribution, average function values.
@@ -179,7 +179,7 @@ Bayesian NN: Distribution over weights
 
 **Predictive distribution:**
 \`\`\`
-p(y*|x*, D) = ∫ p(y*|x*, w)·p(w|D) dw
+p (y*|x*, D) = ∫ p (y*|x*, w)·p (w|D) dw
 \`\`\`
 
 This integral over all weight configurations:
@@ -189,7 +189,7 @@ This integral over all weight configurations:
 
 **Approximation (Monte Carlo dropout):**
 \`\`\`
-p(y*|x*, D) ≈ (1/T) Σₜ p(y*|x*, wₜ), wₜ ~ dropout
+p (y*|x*, D) ≈ (1/T) Σₜ p (y*|x*, wₜ), wₜ ~ dropout
 \`\`\`
 
 Sample T forward passes with dropout, average predictions.
@@ -210,8 +210,8 @@ Without efficient integration methods, Bayesian deep learning would be impossibl
 Integration in probabilistic models isn't just a mathematical detail—it's the central computational challenge. Advances in approximate inference (VAEs, normalizing flows, score-based models) are fundamentally about finding better ways to handle these integrals.`,
     keyPoints: [
       'Integration normalizes probability distributions',
-      'Expectations computed via ∫ g(x)·p(x) dx',
-      'Marginalization removes variables: p(x) = ∫ p(x,y) dy',
+      'Expectations computed via ∫ g (x)·p (x) dx',
+      'Marginalization removes variables: p (x) = ∫ p (x,y) dy',
       'Bayesian evidence p(D) = ∫ p(D|θ)·p(θ) dθ is often intractable',
       'Approximate inference (MC, VI, MCMC) handles intractable integrals',
       'Integration is the computational bottleneck in Bayesian ML',
@@ -220,11 +220,11 @@ Integration in probabilistic models isn't just a mathematical detail—it's the 
   {
     id: 'integration-disc-2',
     question:
-      "Compare and contrast different numerical integration methods (Riemann sums, trapezoidal rule, Simpson's rule, Monte Carlo). When is each most appropriate?",
+      "Compare and contrast different numerical integration methods (Riemann sums, trapezoidal rule, Simpson\'s rule, Monte Carlo). When is each most appropriate?",
     hint: 'Consider accuracy, computational cost, dimensionality, and function smoothness.',
     sampleAnswer: `**Comparison of Numerical Integration Methods:**
 
-Numerical integration approximates ∫ₐᵇ f(x) dx when analytical solutions don't exist.
+Numerical integration approximates ∫ₐᵇ f (x) dx when analytical solutions don't exist.
 
 **1. Riemann Sums**
 
@@ -232,7 +232,7 @@ Numerical integration approximates ∫ₐᵇ f(x) dx when analytical solutions d
 Divide [a,b] into n intervals, approximate as rectangles:
 
 \`\`\`
-∫ₐᵇ f(x) dx ≈ Σᵢ f(xᵢ*) · Δx
+∫ₐᵇ f (x) dx ≈ Σᵢ f (xᵢ*) · Δx
 \`\`\`
 
 Variants:
@@ -260,7 +260,7 @@ Variants:
 # ∫₀¹ x² dx = 1/3
 n = 100
 dx = 1.0 / n
-midpoint_sum = sum(((i + 0.5) * dx)**2 for i in range(n)) * dx
+midpoint_sum = sum(((i + 0.5) * dx)**2 for i in range (n)) * dx
 # midpoint_sum ≈ 0.3333
 \`\`\`
 
@@ -270,7 +270,7 @@ midpoint_sum = sum(((i + 0.5) * dx)**2 for i in range(n)) * dx
 Approximate function with straight lines (trapezoids):
 
 \`\`\`
-∫ₐᵇ f(x) dx ≈ (Δx/2) · [f(x₀) + 2f(x₁) + ... + 2f(xₙ₋₁) + f(xₙ)]
+∫ₐᵇ f (x) dx ≈ (Δx/2) · [f (x₀) + 2f (x₁) + ... + 2f (xₙ₋₁) + f (xₙ)]
 \`\`\`
 
 **Error:** O(1/n²) for smooth functions
@@ -281,8 +281,7 @@ Approximate function with straight lines (trapezoids):
 - Good for smooth functions
 
 **Cons:**
-- Less accurate than Simpson's
-- Requires function evaluation at endpoints
+- Less accurate than Simpson\'s - Requires function evaluation at endpoints
 
 **When to use:**
 - Smooth functions
@@ -294,7 +293,7 @@ Approximate function with straight lines (trapezoids):
 from scipy.integrate import trapezoid
 x = np.linspace(0, 1, 101)
 y = x**2
-result = trapezoid(y, x)  # result ≈ 0.333333
+result = trapezoid (y, x)  # result ≈ 0.333333
 \`\`\`
 
 **3. Simpson's Rule**
@@ -303,7 +302,7 @@ result = trapezoid(y, x)  # result ≈ 0.333333
 Approximate function with parabolas (quadratic interpolation):
 
 \`\`\`
-∫ₐᵇ f(x) dx ≈ (Δx/3) · [f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + ... + f(xₙ)]
+∫ₐᵇ f (x) dx ≈ (Δx/3) · [f (x₀) + 4f (x₁) + 2f (x₂) + 4f (x₃) + ... + f (xₙ)]
 \`\`\`
 
 **Error:** O(1/n⁴) for smooth functions
@@ -328,7 +327,7 @@ Approximate function with parabolas (quadratic interpolation):
 from scipy.integrate import simpson
 x = np.linspace(0, 1, 101)
 y = x**2
-result = simpson(y, x=x)  # result ≈ 0.33333333 (very accurate!)
+result = simpson (y, x=x)  # result ≈ 0.33333333 (very accurate!)
 \`\`\`
 
 **4. Monte Carlo Integration**
@@ -337,7 +336,7 @@ result = simpson(y, x=x)  # result ≈ 0.33333333 (very accurate!)
 Sample random points, average function values:
 
 \`\`\`
-∫ₐᵇ f(x) dx ≈ (b-a) · (1/N) Σᵢ f(xᵢ), xᵢ ~ Uniform[a,b]
+∫ₐᵇ f (x) dx ≈ (b-a) · (1/N) Σᵢ f (xᵢ), xᵢ ~ Uniform[a,b]
 \`\`\`
 
 **Error:** O(1/√N) - **independent of dimension!**
@@ -351,7 +350,7 @@ Sample random points, average function values:
 
 **Cons:**
 - Slow convergence (need 4× samples for 2× accuracy)
-- Less accurate than Simpson's in 1D
+- Less accurate than Simpson\'s in 1D
 - Requires random number generation
 - Stochastic (different runs give different results)
 
@@ -367,7 +366,7 @@ Sample random points, average function values:
 # ∫₀¹ x² dx using Monte Carlo
 n_samples = 10000
 x_samples = np.random.uniform(0, 1, n_samples)
-mc_estimate = np.mean(x_samples**2)  # ≈ 0.333 ± 0.01
+mc_estimate = np.mean (x_samples**2)  # ≈ 0.333 ± 0.01
 \`\`\`
 
 **5. Comparison Table:**
@@ -412,9 +411,9 @@ For d=10, n=100:
 - Error: O((log N)^d / N) better than O(1/√N)
 
 **Importance Sampling:**
-Sample from distribution q(x) that concentrates on important regions:
+Sample from distribution q (x) that concentrates on important regions:
 \`\`\`
-∫ f(x) dx ≈ (1/N) Σᵢ f(xᵢ)/q(xᵢ), xᵢ ~ q
+∫ f (x) dx ≈ (1/N) Σᵢ f (xᵢ)/q (xᵢ), xᵢ ~ q
 \`\`\`
 
 **Adaptive Quadrature:**
@@ -426,7 +425,7 @@ Sample from distribution q(x) that concentrates on important regions:
 \`\`\`
 Is dimension d ≤ 3?
 ├─ Yes: Is function smooth?
-│  ├─ Yes: Use Simpson's rule (best accuracy)
+│  ├─ Yes: Use Simpson\'s rule (best accuracy)
 │  └─ No: Use Monte Carlo or midpoint Riemann
 └─ No (high-D):
    ├─ Can afford many samples? → Monte Carlo
@@ -442,7 +441,7 @@ Is dimension d ≤ 3?
 
 **Expectations over distributions:**
 - Monte Carlo sampling
-- Example: E_x~p[f(x)] ≈ (1/N)Σf(xᵢ), xᵢ~p
+- Example: E_x~p[f (x)] ≈ (1/N)Σf (xᵢ), xᵢ~p
 
 **High-dimensional integrals (Bayesian inference):**
 - MCMC (Metropolis, HMC)
@@ -457,7 +456,7 @@ Is dimension d ≤ 3?
 
 The key insight: **dimension determines method choice**. In ML, high dimensionality makes Monte Carlo and its variants (MCMC, VI) essential tools.`,
     keyPoints: [
-      "Simpson's rule: Best for 1D smooth functions, O(1/n⁴) error",
+      "Simpson\'s rule: Best for 1D smooth functions, O(1/n⁴) error",
       'Monte Carlo: Best for high-D, O(1/√N) error independent of dimension',
       'Curse of dimensionality: grid methods need n^d points',
       'MC avoids curse: error independent of dimension',
@@ -478,11 +477,11 @@ Both cross-entropy and KL divergence fundamentally involve integration (or summa
 
 For continuous distributions P and Q:
 
-H(P, Q) = -∫ p(x) log q(x) dx
+H(P, Q) = -∫ p (x) log q (x) dx
 
 For discrete distributions:
 
-H(P, Q) = -Σᵢ p(xᵢ) log q(xᵢ)
+H(P, Q) = -Σᵢ p (xᵢ) log q (xᵢ)
 
 **Interpretation:**
 - Measures expected log-likelihood under Q when true distribution is P
@@ -492,14 +491,14 @@ H(P, Q) = -Σᵢ p(xᵢ) log q(xᵢ)
 
 **Continuous:**
 \`\`\`
-D_KL(P||Q) = ∫ p(x) log(p(x)/q(x)) dx
-           = ∫ p(x) log p(x) dx - ∫ p(x) log q(x) dx
+D_KL(P||Q) = ∫ p (x) log (p(x)/q (x)) dx
+           = ∫ p (x) log p (x) dx - ∫ p (x) log q (x) dx
            = -H(P) + H(P, Q)
 \`\`\`
 
 **Discrete:**
 \`\`\`
-D_KL(P||Q) = Σᵢ p(xᵢ) log(p(xᵢ)/q(xᵢ))
+D_KL(P||Q) = Σᵢ p (xᵢ) log (p(xᵢ)/q (xᵢ))
 \`\`\`
 
 **Interpretation:**
@@ -514,13 +513,13 @@ Both are **expectations** over distribution P:
 **Cross-entropy:**
 \`\`\`
 H(P, Q) = -E_P[log q(X)]
-        = -∫ p(x) log q(x) dx
+        = -∫ p (x) log q (x) dx
 \`\`\`
 
 **KL divergence:**
 \`\`\`
-D_KL(P||Q) = E_P[log(p(X)/q(X))]
-           = ∫ p(x) log(p(x)/q(x)) dx
+D_KL(P||Q) = E_P[log (p(X)/q(X))]
+           = ∫ p (x) log (p(x)/q (x)) dx
 \`\`\`
 
 **4. Example: Gaussian Distributions**
@@ -542,21 +541,21 @@ from scipy.integrate import quad
 mu1, sigma1 = 0.0, 1.0
 mu2, sigma2 = 1.0, 1.5
 
-def p(x):
+def p (x):
     return (1/(sigma1*np.sqrt(2*np.pi))) * np.exp(-0.5*((x-mu1)/sigma1)**2)
 
-def q(x):
+def q (x):
     return (1/(sigma2*np.sqrt(2*np.pi))) * np.exp(-0.5*((x-mu2)/sigma2)**2)
 
-def kl_integrand(x):
-    p_x, q_x = p(x), q(x)
-    return p_x * np.log(p_x / q_x) if p_x > 1e-10 else 0
+def kl_integrand (x):
+    p_x, q_x = p (x), q (x)
+    return p_x * np.log (p_x / q_x) if p_x > 1e-10 else 0
 
 # Numerical integration
-kl_numerical, _ = quad(kl_integrand, -10, 10)
+kl_numerical, _ = quad (kl_integrand, -10, 10)
 
 # Analytical formula
-kl_analytical = np.log(sigma2/sigma1) + (sigma1**2 + (mu1-mu2)**2)/(2*sigma2**2) - 0.5
+kl_analytical = np.log (sigma2/sigma1) + (sigma1**2 + (mu1-mu2)**2)/(2*sigma2**2) - 0.5
 
 print(f"KL (numerical): {kl_numerical:.6f}")
 print(f"KL (analytical): {kl_analytical:.6f}")
@@ -568,7 +567,7 @@ print(f"KL (analytical): {kl_analytical:.6f}")
 
 For images (d=784 for MNIST):
 \`\`\`
-D_KL(P||Q) = ∫...∫ p(x) log(p(x)/q(x)) dx₁...dx₇₈₄
+D_KL(P||Q) = ∫...∫ p (x) log (p(x)/q (x)) dx₁...dx₇₈₄
 \`\`\`
 
 This 784-dimensional integral is intractable!
@@ -579,14 +578,14 @@ In supervised learning:
 - True data distribution P(x, y) is unknown
 - Only have samples: {(x₁,y₁), ..., (xₙ,yₙ)}
 
-Can't compute ∫ p(x) ... dx because we don't have p(x)!
+Can't compute ∫ p (x) ... dx because we don't have p (x)!
 
 **Problem 3: Intractable Model Distributions**
 
-For complex models (deep networks), even computing q(x) requires intractable integrals:
+For complex models (deep networks), even computing q (x) requires intractable integrals:
 
 \`\`\`
-q(x) = ∫ q(x|z) q(z) dz  (marginalizing latent variables)
+q (x) = ∫ q (x|z) q (z) dz  (marginalizing latent variables)
 \`\`\`
 
 **6. Practical Approximations:**
@@ -596,17 +595,17 @@ q(x) = ∫ q(x|z) q(z) dz  (marginalizing latent variables)
 Replace integral with sample average:
 
 \`\`\`
-D_KL(P||Q) = E_P[log(p(X)/q(X))]
-           ≈ (1/N) Σᵢ log(p(xᵢ)/q(xᵢ)), xᵢ ~ P
+D_KL(P||Q) = E_P[log (p(X)/q(X))]
+           ≈ (1/N) Σᵢ log (p(xᵢ)/q (xᵢ)), xᵢ ~ P
 \`\`\`
 
 **Example:**
 \`\`\`python
 # Sample from P
-samples = np.random.normal(mu1, sigma1, 10000)
+samples = np.random.normal (mu1, sigma1, 10000)
 
 # Monte Carlo estimate
-kl_mc = np.mean([np.log(p(x) / q(x)) for x in samples])
+kl_mc = np.mean([np.log (p(x) / q (x)) for x in samples])
 print(f"KL (Monte Carlo): {kl_mc:.6f}")
 \`\`\`
 
@@ -615,17 +614,17 @@ print(f"KL (Monte Carlo): {kl_mc:.6f}")
 Use empirical samples instead of true P:
 
 \`\`\`
-H_empirical(P, Q) = -(1/N) Σᵢ log q(xᵢ)
+H_empirical(P, Q) = -(1/N) Σᵢ log q (xᵢ)
 \`\`\`
 
 **This is the standard cross-entropy loss in ML!**
 
 \`\`\`python
 # Classification: minimize cross-entropy
-def cross_entropy_loss(y_true, y_pred):
+def cross_entropy_loss (y_true, y_pred):
     # y_true: one-hot encoded true labels (empirical P)
     # y_pred: model predictions (Q)
-    return -np.mean(np.sum(y_true * np.log(y_pred + 1e-10), axis=1))
+    return -np.mean (np.sum (y_true * np.log (y_pred + 1e-10), axis=1))
 \`\`\`
 
 **Approximation 3: Evidence Lower Bound (ELBO)**
@@ -633,7 +632,7 @@ def cross_entropy_loss(y_true, y_pred):
 For latent variable models, KL involves intractable integrals:
 
 \`\`\`
-log p(x) = log ∫ p(x|z) p(z) dz  (intractable!)
+log p (x) = log ∫ p (x|z) p (z) dz  (intractable!)
 \`\`\`
 
 **Solution:** Variational inference
@@ -641,19 +640,19 @@ log p(x) = log ∫ p(x|z) p(z) dz  (intractable!)
 Instead of computing exact KL, maximize ELBO:
 
 \`\`\`
-log p(x) ≥ E_q[log p(x|z)] - D_KL(q(z)||p(z))  (ELBO)
+log p (x) ≥ E_q[log p (x|z)] - D_KL(q (z)||p (z))  (ELBO)
 \`\`\`
 
-where q(z) is a tractable approximation.
+where q (z) is a tractable approximation.
 
 **Example: Variational Autoencoder (VAE)**
 \`\`\`python
-def vae_loss(x, x_recon, mu, logvar):
+def vae_loss (x, x_recon, mu, logvar):
     # Reconstruction term (Monte Carlo estimate)
-    recon_loss = binary_crossentropy(x, x_recon)
+    recon_loss = binary_crossentropy (x, x_recon)
     
     # KL term (analytical for Gaussian)
-    kl_loss = -0.5 * np.sum(1 + logvar - mu**2 - np.exp(logvar))
+    kl_loss = -0.5 * np.sum(1 + logvar - mu**2 - np.exp (logvar))
     
     return recon_loss + kl_loss
 \`\`\`
@@ -664,19 +663,19 @@ def vae_loss(x, x_recon, mu, logvar):
 
 Minimize:
 \`\`\`
-D_KL(P_data || Q_model) = E_P_data[log(p(y|x)) - log(q(y|x))]
+D_KL(P_data || Q_model) = E_P_data[log (p(y|x)) - log (q(y|x))]
 \`\`\`
 
 First term (entropy of true distribution) is constant, so equivalent to:
 
 \`\`\`
-minimize E_P_data[-log q(y|x)]
+minimize E_P_data[-log q (y|x)]
 \`\`\`
 
 Use empirical samples:
 
 \`\`\`
-≈ -(1/N) Σᵢ log q(yᵢ|xᵢ)  (cross-entropy loss!)
+≈ -(1/N) Σᵢ log q (yᵢ|xᵢ)  (cross-entropy loss!)
 \`\`\`
 
 **Example:**
@@ -686,7 +685,7 @@ y_true = np.array([0, 1, 1, 0])  # empirical samples
 y_pred = np.array([0.1, 0.9, 0.8, 0.2])  # model predictions
 
 # Cross-entropy (empirical approximation of integral)
-loss = -np.mean(y_true * np.log(y_pred) + (1-y_true) * np.log(1-y_pred))
+loss = -np.mean (y_true * np.log (y_pred) + (1-y_true) * np.log(1-y_pred))
 \`\`\`
 
 **8. Discrete vs Continuous:**
@@ -704,15 +703,15 @@ loss = -np.mean(y_true * np.log(y_pred) + (1-y_true) * np.log(1-y_pred))
 **9. Advanced: Tractable Approximations**
 
 **Normalizing Flows:**
-Design q(x) such that:
+Design q (x) such that:
 1. Sampling is easy
 2. Density evaluation is tractable
-3. Can compute log q(x) exactly
+3. Can compute log q (x) exactly
 
 Transform simple distribution (Gaussian) through bijective functions.
 
 **Score-Based Models:**
-Instead of modeling p(x) directly, model ∇_x log p(x) (the score).
+Instead of modeling p (x) directly, model ∇_x log p (x) (the score).
 Avoids computing normalizing constant (which requires integration).
 
 **10. Summary Table:**
@@ -721,7 +720,7 @@ Avoids computing normalizing constant (which requires integration).
 |---------|--------|---------------|
 | **Gaussian** | Analytical | Closed-form formula |
 | **Discrete (classification)** | Exact | Summation (no integral) |
-| **Empirical samples** | Monte Carlo | (1/N)Σ log q(xᵢ) |
+| **Empirical samples** | Monte Carlo | (1/N)Σ log q (xᵢ) |
 | **Latent variables (VAE)** | Variational (ELBO) | Lower bound |
 | **High-D continuous** | Normalizing flows | Tractable density |
 | **Score matching** | Avoid density | Model score instead |
@@ -749,20 +748,20 @@ Avoids computing normalizing constant (which requires integration).
 
 When you see cross-entropy loss in code:
 \`\`\`python
-loss = -torch.mean(y_true * torch.log(y_pred))
+loss = -torch.mean (y_true * torch.log (y_pred))
 \`\`\`
 
 Remember: this is an **empirical approximation** of the integral:
 \`\`\`
-H(P, Q) = -∫ p(x) log q(x) dx
+H(P, Q) = -∫ p (x) log q (x) dx
 \`\`\`
 
 using samples from the training set. The entire foundation of supervised learning rests on this approximation being valid (which it is, by the law of large numbers)!`,
     keyPoints: [
-      'Cross-entropy H(P,Q) = -∫ p(x)log q(x)dx is an expectation',
+      'Cross-entropy H(P,Q) = -∫ p (x)log q (x)dx is an expectation',
       'KL divergence involves integration over continuous distributions',
       'High-dimensional integrals (images, text) are intractable',
-      'Empirical approximation: replace ∫ p(x)... with (1/N)Σ...',
+      'Empirical approximation: replace ∫ p (x)... with (1/N)Σ...',
       'Classification: discrete (sums), Generative: continuous (integrals)',
       'VAEs use ELBO to avoid intractable KL computation',
       'Standard cross-entropy loss = empirical approximation of integral',

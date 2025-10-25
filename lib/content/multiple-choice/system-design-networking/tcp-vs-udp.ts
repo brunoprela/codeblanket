@@ -26,7 +26,7 @@ export const tcpvsudpMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "For live streaming, if a video frame is lost, retransmitting it (as TCP would do) is useless because the timestamp has passed. It's better to skip the lost frame and display the next one. UDP doesn't provide error correction, isn't inherently more secure, and doesn't compress data.",
+      "For live streaming, if a video frame is lost, retransmitting it (as TCP would do) is useless because the timestamp has passed. It\'s better to skip the lost frame and display the next one. UDP doesn't provide error correction, isn't inherently more secure, and doesn't compress data.",
   },
   {
     id: 'tcp-reliability',

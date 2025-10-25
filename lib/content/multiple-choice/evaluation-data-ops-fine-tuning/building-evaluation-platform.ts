@@ -15,7 +15,7 @@ export const buildingEvaluationPlatformMultipleChoice = [
     ],
     correctAnswer: 3,
     explanation:
-      "Option D (PostgreSQL + S3 hybrid) is best. Here's why: PostgreSQL (metadata): Store test_set_id, name, model_type, num_examples, tags, created_at. Fast queries for searching/filtering. Relational integrity (foreign keys). S3 (examples): Store actual test examples as JSONL files. Cheap storage ($0.023/GB vs $0.115/GB for PostgreSQL). Scales to millions of examples. Can use S3 Select for filtering. Trade-offs: Option A (JSONB only): PostgreSQL expensive at scale, 10K test sets × 1000 examples × 1KB = 10GB → $115/month + slow queries. Option B (S3 only): Can't efficiently query/search metadata, need to download+parse files. Option C (MongoDB): Works but most companies have PostgreSQL already, not worth adding new DB. Best of both worlds: Fast metadata queries (PostgreSQL) + cheap storage (S3).",
+      "Option D (PostgreSQL + S3 hybrid) is best. Here\'s why: PostgreSQL (metadata): Store test_set_id, name, model_type, num_examples, tags, created_at. Fast queries for searching/filtering. Relational integrity (foreign keys). S3 (examples): Store actual test examples as JSONL files. Cheap storage ($0.023/GB vs $0.115/GB for PostgreSQL). Scales to millions of examples. Can use S3 Select for filtering. Trade-offs: Option A (JSONB only): PostgreSQL expensive at scale, 10K test sets × 1000 examples × 1KB = 10GB → $115/month + slow queries. Option B (S3 only): Can't efficiently query/search metadata, need to download+parse files. Option C (MongoDB): Works but most companies have PostgreSQL already, not worth adding new DB. Best of both worlds: Fast metadata queries (PostgreSQL) + cheap storage (S3).",
   },
   {
     id: 'eval-platform-mc-2',
@@ -43,7 +43,7 @@ export const buildingEvaluationPlatformMultipleChoice = [
     ],
     correctAnswer: 3,
     explanation:
-      "Option D (all of the above) is best—they complement each other. Index (Option A): CREATE INDEX idx_model_time ON evaluation_runs(model_id, started_at DESC);. Makes WHERE + GROUP BY faster: 8s → 2s. Still slow because aggregating 1000s of rows. Cache (Option B): Cache result in Redis for 1 hour, 70%+ cache hit rate. Cached queries: <10ms. But doesn't help first query or cache misses. Materialized view (Option C): Pre-compute daily aggregates, refresh nightly. Query pre-computed view instead of raw data: 2s → 0.05s (40x faster). Combined effect: Materialized view: 8s → 0.05s (for aggregate query), Index: Speeds up other queries (filtering, sorting), Cache: Makes repeated queries instant (<10ms). This is a standard three-tier optimization: Index for query efficiency, materialized view for pre-computation, cache for hot data. Use all three for production dashboards.",
+      "Option D (all of the above) is best—they complement each other. Index (Option A): CREATE INDEX idx_model_time ON evaluation_runs (model_id, started_at DESC);. Makes WHERE + GROUP BY faster: 8s → 2s. Still slow because aggregating 1000s of rows. Cache (Option B): Cache result in Redis for 1 hour, 70%+ cache hit rate. Cached queries: <10ms. But doesn't help first query or cache misses. Materialized view (Option C): Pre-compute daily aggregates, refresh nightly. Query pre-computed view instead of raw data: 2s → 0.05s (40x faster). Combined effect: Materialized view: 8s → 0.05s (for aggregate query), Index: Speeds up other queries (filtering, sorting), Cache: Makes repeated queries instant (<10ms). This is a standard three-tier optimization: Index for query efficiency, materialized view for pre-computation, cache for hot data. Use all three for production dashboards.",
   },
   {
     id: 'eval-platform-mc-4',
@@ -62,7 +62,7 @@ export const buildingEvaluationPlatformMultipleChoice = [
   {
     id: 'eval-platform-mc-5',
     question:
-      "Your platform stores 10M predictions (1GB). Database queries are slow. What's the BEST data archival strategy?",
+      "Your platform stores 10M predictions (1GB). Database queries are slow. What\'s the BEST data archival strategy?",
     options: [
       'Delete predictions older than 90 days',
       'Move predictions older than 90 days to S3 Glacier',

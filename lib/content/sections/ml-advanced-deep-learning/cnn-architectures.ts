@@ -61,26 +61,26 @@ class LeNet5(nn.Module):
         self.conv2 = nn.Conv2d(6, 16, kernel_size=5, stride=1)
         
         # Pooling
-        self.pool = nn.AvgPool2d(kernel_size=2, stride=2)
+        self.pool = nn.AvgPool2d (kernel_size=2, stride=2)
         
         # Fully connected layers
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, num_classes)
     
-    def forward(self, x):
+    def forward (self, x):
         # Conv block 1: 32×32×1 → 28×28×6 → 14×14×6
-        x = self.pool(torch.tanh(self.conv1(x)))
+        x = self.pool (torch.tanh (self.conv1(x)))
         
         # Conv block 2: 14×14×6 → 10×10×16 → 5×5×16
-        x = self.pool(torch.tanh(self.conv2(x)))
+        x = self.pool (torch.tanh (self.conv2(x)))
         
         # Flatten: 5×5×16 → 400
         x = x.view(-1, 16 * 5 * 5)
         
         # Fully connected layers
-        x = torch.tanh(self.fc1(x))
-        x = torch.tanh(self.fc2(x))
+        x = torch.tanh (self.fc1(x))
+        x = torch.tanh (self.fc2(x))
         x = self.fc3(x)
         
         return x
@@ -91,14 +91,14 @@ print("LeNet-5 Architecture:")
 print(lenet)
 
 # Count parameters
-def count_params(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+def count_params (model):
+    return sum (p.numel() for p in model.parameters() if p.requires_grad)
 
-print(f"\\nParameters: {count_params(lenet):,}")
+print(f"\\nParameters: {count_params (lenet):,}")
 
 # Test forward pass
 x = torch.randn(1, 1, 32, 32)
-output = lenet(x)
+output = lenet (x)
 print(f"Input shape: {x.shape}")
 print(f"Output shape: {output.shape}")
 
@@ -135,7 +135,7 @@ FC(4096) → FC(4096) → OUTPUT(1000)
 - Top-5 error: 15.3% (vs 26.2% runner-up)
 
 \`\`\`python
-class AlexNet(nn.Module):
+class AlexNet (nn.Module):
     """
     AlexNet Architecture (2012)
     Paper: "ImageNet Classification with Deep Convolutional Neural Networks"
@@ -148,12 +148,12 @@ class AlexNet(nn.Module):
             # Conv1: 224×224×3 → 55×55×96
             nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.MaxPool2d (kernel_size=3, stride=2),
             
             # Conv2: 55×55×96 → 27×27×256
             nn.Conv2d(96, 256, kernel_size=5, padding=2),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.MaxPool2d (kernel_size=3, stride=2),
             
             # Conv3: 27×27×256 → 13×13×384
             nn.Conv2d(256, 384, kernel_size=3, padding=1),
@@ -166,7 +166,7 @@ class AlexNet(nn.Module):
             # Conv5: 13×13×384 → 13×13×256
             nn.Conv2d(384, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            nn.MaxPool2d (kernel_size=3, stride=2),
         )
         
         # Classifier
@@ -180,20 +180,20 @@ class AlexNet(nn.Module):
             nn.Linear(4096, num_classes),
         )
     
-    def forward(self, x):
-        x = self.features(x)
-        x = x.view(x.size(0), -1)  # Flatten
-        x = self.classifier(x)
+    def forward (self, x):
+        x = self.features (x)
+        x = x.view (x.size(0), -1)  # Flatten
+        x = self.classifier (x)
         return x
 
 # Create and analyze
-alexnet = AlexNet(num_classes=1000)
+alexnet = AlexNet (num_classes=1000)
 print("AlexNet Architecture:")
-print(f"Parameters: {count_params(alexnet):,}")
+print(f"Parameters: {count_params (alexnet):,}")
 
 # Test
 x = torch.randn(1, 3, 224, 224)
-output = alexnet(x)
+output = alexnet (x)
 print(f"\\nInput: {x.shape}")
 print(f"Output: {output.shape}")
 
@@ -247,14 +247,14 @@ class VGG16(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d (kernel_size=2, stride=2),
             
             # Block 2: 112×112×64 → 56×56×128
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(128, 128, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d (kernel_size=2, stride=2),
             
             # Block 3: 56×56×128 → 28×28×256
             nn.Conv2d(128, 256, kernel_size=3, padding=1),
@@ -263,7 +263,7 @@ class VGG16(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d (kernel_size=2, stride=2),
             
             # Block 4: 28×28×256 → 14×14×512
             nn.Conv2d(256, 512, kernel_size=3, padding=1),
@@ -272,7 +272,7 @@ class VGG16(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d (kernel_size=2, stride=2),
             
             # Block 5: 14×14×512 → 7×7×512
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
@@ -281,7 +281,7 @@ class VGG16(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.MaxPool2d (kernel_size=2, stride=2),
         )
         
         # Classifier
@@ -295,20 +295,20 @@ class VGG16(nn.Module):
             nn.Linear(4096, num_classes),
         )
     
-    def forward(self, x):
-        x = self.features(x)
-        x = x.view(x.size(0), -1)
-        x = self.classifier(x)
+    def forward (self, x):
+        x = self.features (x)
+        x = x.view (x.size(0), -1)
+        x = self.classifier (x)
         return x
 
 # Create and analyze
 vgg16 = VGG16()
 print("VGG-16 Architecture:")
-print(f"Parameters: {count_params(vgg16):,}")
+print(f"Parameters: {count_params (vgg16):,}")
 
 # Parameter breakdown
-feature_params = sum(p.numel() for p in vgg16.features.parameters())
-classifier_params = sum(p.numel() for p in vgg16.classifier.parameters())
+feature_params = sum (p.numel() for p in vgg16.features.parameters())
+classifier_params = sum (p.numel() for p in vgg16.classifier.parameters())
 
 print(f"\\nParameter Breakdown:")
 print(f"  Features (conv layers): {feature_params:,}")
@@ -344,7 +344,7 @@ H(x) = F(x) + x
 3. **Easier optimization**: Learning residuals easier than learning full mapping
 
 \`\`\`python
-class ResidualBlock(nn.Module):
+class ResidualBlock (nn.Module):
     """
     Basic Residual Block for ResNet
     
@@ -355,30 +355,30 @@ class ResidualBlock(nn.Module):
         super(ResidualBlock, self).__init__()
         
         # Main path
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, 
+        self.conv1 = nn.Conv2d (in_channels, out_channels, kernel_size=3, 
                                stride=stride, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(out_channels)
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3,
+        self.bn1 = nn.BatchNorm2d (out_channels)
+        self.conv2 = nn.Conv2d (out_channels, out_channels, kernel_size=3,
                                stride=1, padding=1, bias=False)
-        self.bn2 = nn.BatchNorm2d(out_channels)
+        self.bn2 = nn.BatchNorm2d (out_channels)
         
         # Shortcut connection (if dimensions change)
         self.shortcut = nn.Sequential()
         if stride != 1 or in_channels != out_channels:
             self.shortcut = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels, kernel_size=1,
+                nn.Conv2d (in_channels, out_channels, kernel_size=1,
                          stride=stride, bias=False),
-                nn.BatchNorm2d(out_channels)
+                nn.BatchNorm2d (out_channels)
             )
     
-    def forward(self, x):
+    def forward (self, x):
         # Main path
-        out = F.relu(self.bn1(self.conv1(x)))
+        out = F.relu (self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
         
         # Add shortcut (residual connection)
-        out += self.shortcut(x)
-        out = F.relu(out)
+        out += self.shortcut (x)
+        out = F.relu (out)
         
         return out
 
@@ -393,7 +393,7 @@ class ResNet18(nn.Module):
         # Initial convolution
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.maxpool = nn.MaxPool2d (kernel_size=3, stride=2, padding=1)
         
         # Residual blocks
         self.layer1 = self._make_layer(64, 64, num_blocks=2, stride=1)
@@ -405,19 +405,19 @@ class ResNet18(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(512, num_classes)
     
-    def _make_layer(self, in_channels, out_channels, num_blocks, stride):
+    def _make_layer (self, in_channels, out_channels, num_blocks, stride):
         layers = []
         # First block may downsample
-        layers.append(ResidualBlock(in_channels, out_channels, stride))
+        layers.append(ResidualBlock (in_channels, out_channels, stride))
         # Remaining blocks
         for _ in range(1, num_blocks):
-            layers.append(ResidualBlock(out_channels, out_channels, stride=1))
+            layers.append(ResidualBlock (out_channels, out_channels, stride=1))
         return nn.Sequential(*layers)
     
-    def forward(self, x):
+    def forward (self, x):
         # Initial layers: 224×224×3 → 56×56×64
-        x = F.relu(self.bn1(self.conv1(x)))
-        x = self.maxpool(x)
+        x = F.relu (self.bn1(self.conv1(x)))
+        x = self.maxpool (x)
         
         # Residual blocks
         x = self.layer1(x)  # 56×56×64
@@ -426,22 +426,22 @@ class ResNet18(nn.Module):
         x = self.layer4(x)  # 7×7×512
         
         # Global average pooling and classification
-        x = self.avgpool(x)  # 1×1×512
-        x = x.view(x.size(0), -1)  # 512
-        x = self.fc(x)  # num_classes
+        x = self.avgpool (x)  # 1×1×512
+        x = x.view (x.size(0), -1)  # 512
+        x = self.fc (x)  # num_classes
         
         return x
 
 # Create and analyze
 resnet18 = ResNet18()
 print("ResNet-18 Architecture:")
-print(f"Parameters: {count_params(resnet18):,}")
+print(f"Parameters: {count_params (resnet18):,}")
 
 # Test residual block
 print("\\nResidual Block Test:")
 block = ResidualBlock(64, 64)
 x = torch.randn(1, 64, 56, 56)
-output = block(x)
+output = block (x)
 print(f"Input: {x.shape}")
 print(f"Output: {output.shape}")
 print("✓ Dimensions preserved with identity shortcut")
@@ -499,7 +499,7 @@ Input ──────┼─ 3×3 Conv ─┼──→ Concatenate → Output
 **Solution**: Use 1×1 convolutions to reduce channels before expensive operations
 
 \`\`\`python
-class InceptionModule(nn.Module):
+class InceptionModule (nn.Module):
     """
     Inception Module (with dimension reduction)
     """
@@ -509,34 +509,34 @@ class InceptionModule(nn.Module):
         
         # 1×1 convolution branch
         self.branch1 = nn.Sequential(
-            nn.Conv2d(in_channels, ch1x1, kernel_size=1),
+            nn.Conv2d (in_channels, ch1x1, kernel_size=1),
             nn.ReLU(inplace=True)
         )
         
         # 3×3 convolution branch (with 1×1 reduction)
         self.branch2 = nn.Sequential(
-            nn.Conv2d(in_channels, ch3x3_reduce, kernel_size=1),
+            nn.Conv2d (in_channels, ch3x3_reduce, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(ch3x3_reduce, ch3x3, kernel_size=3, padding=1),
+            nn.Conv2d (ch3x3_reduce, ch3x3, kernel_size=3, padding=1),
             nn.ReLU(inplace=True)
         )
         
         # 5×5 convolution branch (with 1×1 reduction)
         self.branch3 = nn.Sequential(
-            nn.Conv2d(in_channels, ch5x5_reduce, kernel_size=1),
+            nn.Conv2d (in_channels, ch5x5_reduce, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(ch5x5_reduce, ch5x5, kernel_size=5, padding=2),
+            nn.Conv2d (ch5x5_reduce, ch5x5, kernel_size=5, padding=2),
             nn.ReLU(inplace=True)
         )
         
         # Max pooling branch (with 1×1 projection)
         self.branch4 = nn.Sequential(
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
-            nn.Conv2d(in_channels, pool_proj, kernel_size=1),
+            nn.MaxPool2d (kernel_size=3, stride=1, padding=1),
+            nn.Conv2d (in_channels, pool_proj, kernel_size=1),
             nn.ReLU(inplace=True)
         )
     
-    def forward(self, x):
+    def forward (self, x):
         # Execute all branches in parallel
         branch1 = self.branch1(x)
         branch2 = self.branch2(x)
@@ -558,7 +558,7 @@ inception = InceptionModule(
 )
 
 x = torch.randn(1, 192, 28, 28)
-output = inception(x)
+output = inception (x)
 print(f"Input: {x.shape}")
 print(f"Output: {output.shape}")
 print(f"Output channels: 64 + 128 + 32 + 32 = {64+128+32+32}")
@@ -675,13 +675,13 @@ comparison = pd.DataFrame([
 
 print("CNN Architecture Evolution:")
 print("=" * 100)
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 
 print("\\n\\nKey Trends:")
 print("1. Increasing depth: 5 → 152+ layers")
 print("2. More efficient designs: VGG (138M) → GoogLeNet (6.8M) similar performance")
 print("3. Better optimization: Residual connections enable ultra-deep networks")
-print("4. Principled scaling: EfficientNet's compound scaling")
+print("4. Principled scaling: EfficientNet\'s compound scaling")
 print("5. Accuracy improvement: 15.3% → 2.0% top-5 error in 7 years!")
 \`\`\`
 

@@ -45,7 +45,7 @@ export const toolUseObservabilityMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'fcfc-mc-4',
     question: 'Why is cost tracking important in tool-using systems?',
     options: [
-      "It's required by law",
+      "It\'s required by law",
       'To understand expenses, set budgets, and optimize usage',
       'To make tools run faster',
       'To improve accuracy',

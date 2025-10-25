@@ -25,7 +25,7 @@ How to compute \`dp[i]\` from previous states?
 Examples:
 - Fibonacci: \`dp[i] = dp[i-1] + dp[i-2]\`
 - Climbing Stairs: \`dp[i] = dp[i-1] + dp[i-2]\`
-- Coin Change: \`dp[i] = min(dp[i-c] + 1 for c in coins)\`
+- Coin Change: \`dp[i] = min (dp[i-c] + 1 for c in coins)\`
 
 **This is the heart of DP!**
 
@@ -85,7 +85,7 @@ For i from 2 to n
 \`dp[n]\`
 
 \`\`\`python
-def climb_stairs(n):
+def climb_stairs (n):
     if n <= 1:
         return 1
     

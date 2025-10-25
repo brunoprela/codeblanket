@@ -47,18 +47,18 @@ describe('calculateTotal', () => {
             { price: 5, quantity: 3 }
         ];
         
-        const total = calculateTotal(items);
+        const total = calculateTotal (items);
         
-        expect(total).toBe(35); // (10*2) + (5*3)
+        expect (total).toBe(35); // (10*2) + (5*3)
     });
     
     it('should apply discount correctly', () => {
         const items = [{ price: 100, quantity: 1 }];
         const discount = 0.1; // 10%
         
-        const total = calculateTotal(items, discount);
+        const total = calculateTotal (items, discount);
         
-        expect(total).toBe(90);
+        expect (total).toBe(90);
     });
 });
 \`\`\`
@@ -86,17 +86,17 @@ describe('calculateTotal', () => {
 describe('OrderRepository Integration', () => {
     let db;
     
-    beforeAll(async () => {
+    beforeAll (async () => {
         // Start test database (Docker)
         db = await startTestDatabase();
         await db.migrate();
     });
     
-    afterAll(async () => {
+    afterAll (async () => {
         await db.close();
     });
     
-    afterEach(async () => {
+    afterEach (async () => {
         await db.clearAll(); // Clean between tests
     });
     
@@ -107,19 +107,19 @@ describe('OrderRepository Integration', () => {
             total: 50
         };
         
-        const createdOrder = await orderRepository.create(order);
-        const retrievedOrder = await orderRepository.findById(createdOrder.id);
+        const createdOrder = await orderRepository.create (order);
+        const retrievedOrder = await orderRepository.findById (createdOrder.id);
         
-        expect(retrievedOrder).toMatchObject(order);
+        expect (retrievedOrder).toMatchObject (order);
     });
     
     it('should update order status', async () => {
         const order = await orderRepository.create({...});
         
-        await orderRepository.updateStatus(order.id, 'SHIPPED');
+        await orderRepository.updateStatus (order.id, 'SHIPPED');
         
-        const updated = await orderRepository.findById(order.id);
-        expect(updated.status).toBe('SHIPPED');
+        const updated = await orderRepository.findById (order.id);
+        expect (updated.status).toBe('SHIPPED');
     });
 });
 \`\`\`
@@ -130,19 +130,19 @@ describe('OrderRepository Integration', () => {
 describe('Order Event Publisher Integration', () => {
     let rabbitMQ;
     
-    beforeAll(async () => {
+    beforeAll (async () => {
         rabbitMQ = await startTestRabbitMQ();
     });
     
     it('should publish OrderCreated event', async () => {
         const order = { id: 'order-123', userId: 'user-1' };
         
-        await eventPublisher.publishOrderCreated(order);
+        await eventPublisher.publishOrderCreated (order);
         
         // Verify message published
         const messages = await rabbitMQ.getMessages('order-events');
-        expect(messages).toHaveLength(1);
-        expect(messages[0]).toMatchObject({
+        expect (messages).toHaveLength(1);
+        expect (messages[0]).toMatchObject({
             eventType: 'OrderCreated',
             data: order
         });
@@ -217,8 +217,8 @@ describe('Payment Service Contract', () => {
                 orderId: 'order-456'
             });
             
-            expect(result.status).toBe('SUCCESS');
-            expect(result.transactionId).toBeTruthy();
+            expect (result.status).toBe('SUCCESS');
+            expect (result.transactionId).toBeTruthy();
         });
     });
 });
@@ -266,7 +266,7 @@ describe('Order Service Component Tests', () => {
     let mockPaymentService;
     let mockInventoryService;
     
-    beforeAll(async () => {
+    beforeAll (async () => {
         // Start mock services
         mockPaymentService = startMockServer(8081);
         mockInventoryService = startMockServer(8082);
@@ -278,7 +278,7 @@ describe('Order Service Component Tests', () => {
         });
     });
     
-    afterAll(async () => {
+    afterAll (async () => {
         await app.stop();
         await mockPaymentService.stop();
         await mockInventoryService.stop();
@@ -297,19 +297,19 @@ describe('Order Service Component Tests', () => {
         }));
         
         // Test order creation
-        const response = await request(app)
+        const response = await request (app)
             .post('/orders')
             .send({
                 userId: 'user-123',
                 items: [{ productId: 'prod-1', quantity: 2 }]
             });
         
-        expect(response.status).toBe(201);
-        expect(response.body.status).toBe('PENDING');
+        expect (response.status).toBe(201);
+        expect (response.body.status).toBe('PENDING');
         
         // Verify calls to dependencies
-        expect(mockInventoryService.requests).toHaveLength(1);
-        expect(mockPaymentService.requests).toHaveLength(1);
+        expect (mockInventoryService.requests).toHaveLength(1);
+        expect (mockPaymentService.requests).toHaveLength(1);
     });
     
     it('should handle payment failure', async () => {
@@ -324,15 +324,15 @@ describe('Order Service Component Tests', () => {
             body: { error: 'Insufficient funds' }
         }));
         
-        const response = await request(app)
+        const response = await request (app)
             .post('/orders')
             .send({...});
         
-        expect(response.status).toBe(400);
-        expect(response.body.error).toContain('Payment failed');
+        expect (response.status).toBe(400);
+        expect (response.body.error).toContain('Payment failed');
         
         // Should have called inventory release (compensating transaction)
-        expect(mockInventoryService.requests).toContainEqual(
+        expect (mockInventoryService.requests).toContainEqual(
             expect.objectContaining({ path: '/release' })
         );
     });
@@ -360,13 +360,13 @@ describe('Order Service Component Tests', () => {
 \`\`\`javascript
 // e2e/order-flow.test.js
 describe('Order Flow E2E', () => {
-    beforeAll(async () => {
+    beforeAll (async () => {
         // Start all services (Docker Compose)
         await exec('docker-compose up -d');
         await waitForServices();
     });
     
-    afterAll(async () => {
+    afterAll (async () => {
         await exec('docker-compose down');
     });
     
@@ -378,25 +378,25 @@ describe('Order Flow E2E', () => {
         });
         
         // 2. Add to cart
-        await addToCart(user.id, { productId: 'prod-1', quantity: 2 });
+        await addToCart (user.id, { productId: 'prod-1', quantity: 2 });
         
         // 3. Checkout
-        const order = await checkout(user.id, {
+        const order = await checkout (user.id, {
             paymentMethod: 'credit_card'
         });
         
-        expect(order.status).toBe('CONFIRMED');
+        expect (order.status).toBe('CONFIRMED');
         
         // 4. Wait for async processing
         await sleep(2000);
         
         // 5. Verify order status
-        const orderStatus = await getOrderStatus(order.id);
-        expect(orderStatus.status).toBe('SHIPPED');
+        const orderStatus = await getOrderStatus (order.id);
+        expect (orderStatus.status).toBe('SHIPPED');
         
         // 6. Verify email sent
-        const emails = await getTestEmails(user.email);
-        expect(emails).toContainEqual(
+        const emails = await getTestEmails (user.email);
+        expect (emails).toContainEqual(
             expect.objectContaining({
                 subject: 'Order Confirmed',
                 orderId: order.id
@@ -435,22 +435,22 @@ const email = \`test-\${Date.now()}@example.com\`;
 
 **2. Use Test Database Per Test**:
 \`\`\`javascript
-beforeEach(async () => {
+beforeEach (async () => {
     testDb = await createTestDatabase();
 });
 
-afterEach(async () => {
+afterEach (async () => {
     await testDb.drop();
 });
 \`\`\`
 
 **3. Database Transactions (Rollback)**:
 \`\`\`javascript
-beforeEach(async () => {
+beforeEach (async () => {
     await db.beginTransaction();
 });
 
-afterEach(async () => {
+afterEach (async () => {
     await db.rollback(); // Undo all changes
 });
 \`\`\`
@@ -475,20 +475,20 @@ describe('Order Created Event Processing', () => {
         });
         
         // Poll for email sent (eventual consistency)
-        await waitFor(async () => {
+        await waitFor (async () => {
             const emails = await getEmailsSent('user-456');
-            return emails.some(e => e.orderId === 'order-123');
+            return emails.some (e => e.orderId === 'order-123');
         }, { timeout: 5000 });
         
         // Verify email content
         const emails = await getEmailsSent('user-456');
-        const orderEmail = emails.find(e => e.orderId === 'order-123');
-        expect(orderEmail.subject).toContain('Order Confirmed');
+        const orderEmail = emails.find (e => e.orderId === 'order-123');
+        expect (orderEmail.subject).toContain('Order Confirmed');
     });
 });
 
 // Helper
-async function waitFor(condition, options = {}) {
+async function waitFor (condition, options = {}) {
     const timeout = options.timeout || 5000;
     const interval = options.interval || 100;
     const start = Date.now();
@@ -497,7 +497,7 @@ async function waitFor(condition, options = {}) {
         if (await condition()) {
             return;
         }
-        await sleep(interval);
+        await sleep (interval);
     }
     
     throw new Error('Condition not met within timeout');
@@ -518,14 +518,14 @@ describe('Circuit Breaker', () => {
         
         // Trigger failures
         for (let i = 0; i < 5; i++) {
-            await expect(chargePayment({})).rejects.toThrow();
+            await expect (chargePayment({})).rejects.toThrow();
         }
         
         // Circuit should be open now
-        await expect(chargePayment({})).rejects.toThrow('Circuit breaker open');
+        await expect (chargePayment({})).rejects.toThrow('Circuit breaker open');
         
         // Verify no requests sent (circuit is open)
-        expect(mockPaymentService.requestCount).toBe(5); // Not 6
+        expect (mockPaymentService.requestCount).toBe(5); // Not 6
     });
     
     it('should half-open after timeout', async () => {
@@ -543,11 +543,11 @@ describe('Circuit Breaker', () => {
         
         // Should allow test request (half-open)
         const result = await chargePayment({});
-        expect(result.status).toBe('SUCCESS');
+        expect (result.status).toBe('SUCCESS');
         
         // Circuit should be closed now
         const result2 = await chargePayment({});
-        expect(result2.status).toBe('SUCCESS');
+        expect (result2.status).toBe('SUCCESS');
     });
 });
 \`\`\`
@@ -565,18 +565,18 @@ describe('Retry Logic', () => {
         
         const result = await chargePaymentWithRetry({});
         
-        expect(result.status).toBe('SUCCESS');
-        expect(mockPaymentService.requestCount).toBe(3);
+        expect (result.status).toBe('SUCCESS');
+        expect (mockPaymentService.requestCount).toBe(3);
     });
     
     it('should not retry on permanent failure', async () => {
         // 400 Bad Request (permanent failure)
         mockPaymentService.respondWith(400, { error: 'Invalid card' });
         
-        await expect(chargePaymentWithRetry({})).rejects.toThrow('Invalid card');
+        await expect (chargePaymentWithRetry({})).rejects.toThrow('Invalid card');
         
         // Should not retry 400 errors
-        expect(mockPaymentService.requestCount).toBe(1);
+        expect (mockPaymentService.requestCount).toBe(1);
     });
 });
 \`\`\`
@@ -616,7 +616,7 @@ export default function () {
         headers: { 'Content-Type': 'application/json' },
     });
     
-    check(res, {
+    check (res, {
         'status is 201': (r) => r.status === 201,
         'response time < 500ms': (r) => r.timings.duration < 500,
     });
@@ -647,8 +647,8 @@ describe('Chaos Tests', () => {
         
         // Order creation should still work (degrade gracefully)
         const response = await createOrder({...});
-        expect(response.status).toBe(202); // Accepted
-        expect(response.body.status).toBe('PENDING_PAYMENT');
+        expect (response.status).toBe(202); // Accepted
+        expect (response.body.status).toBe('PENDING_PAYMENT');
     });
     
     it('should recover when service comes back', async () => {
@@ -659,7 +659,7 @@ describe('Chaos Tests', () => {
         
         // Should work again
         const response = await createOrder({...});
-        expect(response.status).toBe(201);
+        expect (response.status).toBe(201);
     });
 });
 \`\`\`
@@ -681,10 +681,10 @@ describe('Production Smoke Tests', () => {
             items: [{ productId: 'TEST_PRODUCT', quantity: 1 }]
         });
         
-        expect(order.status).toBe('CONFIRMED');
+        expect (order.status).toBe('CONFIRMED');
         
         // Clean up
-        await deleteOrder(order.id);
+        await deleteOrder (order.id);
     });
 });
 \`\`\`

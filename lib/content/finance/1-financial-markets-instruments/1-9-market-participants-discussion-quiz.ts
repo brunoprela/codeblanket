@@ -9,7 +9,7 @@ export const marketParticipantsDiscussionQuiz = {
 
 \`\`\`python
 class RebalancingExploitation:
-    def detect_rebalancing_flow(self, target_date: str) -> Dict:
+    def detect_rebalancing_flow (self, target_date: str) -> Dict:
         """
         Pattern: Institutions rebalance to target allocations quarterly
         
@@ -35,14 +35,14 @@ class RebalancingExploitation:
         rebalancing_amount = passive_aum * (new_stock_weight - typical_allocation)
         
         return {
-            'rebalancing_amount': abs(rebalancing_amount),
+            'rebalancing_amount': abs (rebalancing_amount),
             'direction': 'SELL' if rebalancing_amount > 0 else 'BUY',
             'date': target_date,
             'expected_impact': '0.5-1% price move',
             'strategy': 'SHORT on last day of quarter, COVER next day'
         }
     
-    def backtest_strategy(self, years: int = 10) -> Dict:
+    def backtest_strategy (self, years: int = 10) -> Dict:
         """
         Backtest: Short S&P on last day of strong quarters
         """
@@ -111,7 +111,7 @@ class RebalancingExploitation:
 **Balanced Evaluation:**
 \`\`\`python
 class HFTEvaluation:
-    def calculate_net_benefit(self) -> Dict:
+    def calculate_net_benefit (self) -> Dict:
         """
         Do HFT benefits outweigh costs?
         """
@@ -185,12 +185,12 @@ class HFTEvaluation:
 **6. Prevent Predatory Tactics:**
 - Ban "pinging" dark pools to find hidden orders
 - Ban layering/spoofing (fake orders)
-- Enforce with real penalties ($100M+ fines)
+- Enforce with real penalties (\$100M+ fines)
 
 **Implementation:**
 \`\`\`python
 class HFTRegulation:
-    def enforce_rules(self, trade):
+    def enforce_rules (self, trade):
         # Rule 1: Speed bump
         if trade.latency < 350:  # microseconds
             delay(350 - trade.latency)
@@ -200,8 +200,8 @@ class HFTRegulation:
             reject("Quote must stay active 500ms")
         
         # Rule 3: Detect spoofing
-        if self.detect_layering(trade):
-            fine(trade.firm, amount=1_000_000)
+        if self.detect_layering (trade):
+            fine (trade.firm, amount=1_000_000)
         
         return trade
 \`\`\`
@@ -216,7 +216,7 @@ class HFTRegulation:
 
 \`\`\`python
 class RetailActivityDetector:
-    def monitor_social_media(self) -> Dict:
+    def monitor_social_media (self) -> Dict:
         """
         Track retail sentiment and coordination
         """
@@ -249,7 +249,7 @@ class RetailActivityDetector:
         
         return sources
     
-    def detect_gamma_squeeze_risk(self,
+    def detect_gamma_squeeze_risk (self,
                                   stock_price: float,
                                   open_interest: Dict,
                                   dealer_gamma: float) -> Dict:
@@ -259,8 +259,8 @@ class RetailActivityDetector:
         GME Jan 2021: $4 → $480 from gamma squeeze
         """
         # Calculate gamma exposure by strike
-        strikes = sorted(open_interest.keys())
-        total_gamma = sum(open_interest[strike] * self.calc_gamma(stock_price, strike)
+        strikes = sorted (open_interest.keys())
+        total_gamma = sum (open_interest[strike] * self.calc_gamma (stock_price, strike)
                          for strike in strikes)
         
         # Dealer positioning
@@ -286,7 +286,7 @@ class RetailActivityDetector:
             'interpretation': f'Dealers are {"short" if dealer_gamma < 0 else "long"} gamma'
         }
     
-    def trading_strategy(self, signal_strength: str) -> Dict:
+    def trading_strategy (self, signal_strength: str) -> Dict:
         """
         How to trade retail-driven volatility
         """
@@ -329,7 +329,7 @@ detector = RetailActivityDetector()
 # Monitor social media
 sources = detector.monitor_social_media()
 print("=== Retail Sentiment Sources ===\\n")
-for source, details in list(sources.items())[:2]:
+for source, details in list (sources.items())[:2]:
     print(f"{source}:")
     print(f"  Metric: {details['metric']}")
     print(f"  Signal: {details['signal']}\\n")

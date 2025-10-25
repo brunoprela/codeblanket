@@ -92,8 +92,8 @@ What options do we have at each step?
 **Common Mistakes:**
 
 **1. Forgetting to Copy**
-❌ result.append(path)  # Reference, will change!
-✅ result.append(path.copy()) or result.append(path[:])
+❌ result.append (path)  # Reference, will change!
+✅ result.append (path.copy()) or result.append (path[:])
 
 **2. Wrong Base Case**
 ❌ Check constraints after recursion

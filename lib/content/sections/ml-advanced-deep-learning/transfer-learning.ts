@@ -98,11 +98,11 @@ from torch.utils.data import DataLoader
 # 1. Load pre-trained model
 model = models.resnet50(pretrained=True)
 print(f"Original classifier: {model.fc}")
-# Original: Linear(in_features=2048, out_features=1000)  # ImageNet classes
+# Original: Linear (in_features=2048, out_features=1000)  # ImageNet classes
 
 # 2. Replace classifier for your task (e.g., 10 classes)
 num_classes = 10
-model.fc = nn.Linear(model.fc.in_features, num_classes)
+model.fc = nn.Linear (model.fc.in_features, num_classes)
 print(f"New classifier: {model.fc}")
 
 # 3. Strategy A: Feature Extraction (freeze backbone)
@@ -114,8 +114,8 @@ for param in model.fc.parameters():
     param.requires_grad = True
 
 # Count trainable parameters
-trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-total_params = sum(p.numel() for p in model.parameters())
+trainable_params = sum (p.numel() for p in model.parameters() if p.requires_grad)
+total_params = sum (p.numel() for p in model.parameters())
 print(f"Trainable: {trainable_params:,} / {total_params:,} "
       f"({100*trainable_params/total_params:.1f}%)")
 # Only ~20K trainable (new classifier) out of 25M total
@@ -125,36 +125,36 @@ transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),  # ResNet expects 224×224
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],  # ImageNet statistics
+    transforms.Normalize (mean=[0.485, 0.456, 0.406],  # ImageNet statistics
                         std=[0.229, 0.224, 0.225])
 ])
 
 train_dataset = datasets.ImageFolder('path/to/train', transform=transform)
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+train_loader = DataLoader (train_dataset, batch_size=32, shuffle=True)
 
 # 5. Training setup
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam (model.fc.parameters(), lr=1e-3)
 # Only optimize the classifier
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+model = model.to (device)
 
 # 6. Training loop
 num_epochs = 10
 model.train()
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     running_loss = 0.0
     correct = 0
     total = 0
     
     for images, labels in train_loader:
-        images, labels = images.to(device), labels.to(device)
+        images, labels = images.to (device), labels.to (device)
         
         # Forward pass
-        outputs = model(images)
-        loss = criterion(outputs, labels)
+        outputs = model (images)
+        loss = criterion (outputs, labels)
         
         # Backward pass
         optimizer.zero_grad()
@@ -165,9 +165,9 @@ for epoch in range(num_epochs):
         running_loss += loss.item()
         _, predicted = outputs.max(1)
         total += labels.size(0)
-        correct += predicted.eq(labels).sum().item()
+        correct += predicted.eq (labels).sum().item()
     
-    epoch_loss = running_loss / len(train_loader)
+    epoch_loss = running_loss / len (train_loader)
     epoch_acc = 100. * correct / total
     print(f"Epoch {epoch+1}/{num_epochs}: Loss={epoch_loss:.4f}, Acc={epoch_acc:.2f}%")
 
@@ -179,7 +179,7 @@ print("Feature extraction training complete!")
 \`\`\`python
 # Strategy B: Gradual Unfreezing
 model = models.resnet50(pretrained=True)
-model.fc = nn.Linear(model.fc.in_features, num_classes)
+model.fc = nn.Linear (model.fc.in_features, num_classes)
 
 # Phase 1: Train only classifier (5 epochs)
 for param in model.parameters():
@@ -187,7 +187,7 @@ for param in model.parameters():
 for param in model.fc.parameters():
     param.requires_grad = True
 
-optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam (model.fc.parameters(), lr=1e-3)
 # ... train for 5 epochs ...
 
 # Phase 2: Unfreeze last residual block (5 epochs)
@@ -221,7 +221,7 @@ print("Gradual fine-tuning complete!")
 Different learning rates for different layers (lower for early layers):
 
 \`\`\`python
-def get_discriminative_lr_groups(model, base_lr=1e-3, multiplier=0.5):
+def get_discriminative_lr_groups (model, base_lr=1e-3, multiplier=0.5):
     """
     Create parameter groups with exponentially decreasing learning rates.
     Early layers get lower LR, later layers get higher LR.
@@ -246,10 +246,10 @@ def get_discriminative_lr_groups(model, base_lr=1e-3, multiplier=0.5):
     ]
     
     # Calculate LR for each group (exponentially increasing)
-    num_groups = len(layer_groups)
+    num_groups = len (layer_groups)
     param_groups = []
     
-    for i, layer in enumerate(layer_groups):
+    for i, layer in enumerate (layer_groups):
         # Earlier layers get smaller LR
         lr_factor = multiplier ** (num_groups - i - 1)
         lr = base_lr * lr_factor
@@ -266,10 +266,10 @@ def get_discriminative_lr_groups(model, base_lr=1e-3, multiplier=0.5):
 
 # Example usage
 model = models.resnet50(pretrained=True)
-model.fc = nn.Linear(model.fc.in_features, 10)
+model.fc = nn.Linear (model.fc.in_features, 10)
 
-param_groups = get_discriminative_lr_groups(model, base_lr=1e-3, multiplier=0.5)
-optimizer = torch.optim.Adam(param_groups)
+param_groups = get_discriminative_lr_groups (model, base_lr=1e-3, multiplier=0.5)
+optimizer = torch.optim.Adam (param_groups)
 
 # Output:
 # Layer 0 (Conv2d): LR = 1.56e-05
@@ -310,14 +310,14 @@ from torch.utils.data import Dataset
 
 # 1. Load pre-trained BERT
 model_name = 'bert-base-uncased'
-tokenizer = BertTokenizer.from_pretrained(model_name)
+tokenizer = BertTokenizer.from_pretrained (model_name)
 model = BertForSequenceClassification.from_pretrained(
     model_name,
     num_labels=2  # Binary classification
 )
 
 print(f"Model: {model_name}")
-print(f"Parameters: {sum(p.numel() for p in model.parameters()):,}")
+print(f"Parameters: {sum (p.numel() for p in model.parameters()):,}")
 # ~110M parameters
 
 # 2. Prepare dataset
@@ -329,7 +329,7 @@ class TextDataset(Dataset):
         self.max_length = max_length
     
     def __len__(self):
-        return len(self.texts)
+        return len (self.texts)
     
     def __getitem__(self, idx):
         text = self.texts[idx]
@@ -347,7 +347,7 @@ class TextDataset(Dataset):
         return {
             'input_ids': encoding['input_ids'].flatten(),
             'attention_mask': encoding['attention_mask'].flatten(),
-            'labels': torch.tensor(label, dtype=torch.long)
+            'labels': torch.tensor (label, dtype=torch.long)
         }
 
 
@@ -360,7 +360,7 @@ texts = [
 ]
 labels = [1, 0, 1, ...]  # 1=positive, 0=negative
 
-train_dataset = TextDataset(texts, labels, tokenizer)
+train_dataset = TextDataset (texts, labels, tokenizer)
 
 # 3. Training configuration
 training_args = TrainingArguments(
@@ -389,18 +389,18 @@ trainer = Trainer(
 trainer.train()
 
 # 6. Inference
-def predict(text):
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, max_length=128)
+def predict (text):
+    inputs = tokenizer (text, return_tensors='pt', truncation=True, max_length=128)
     outputs = model(**inputs)
-    probs = torch.softmax(outputs.logits, dim=1)
-    predicted_class = torch.argmax(probs, dim=1).item()
+    probs = torch.softmax (outputs.logits, dim=1)
+    predicted_class = torch.argmax (probs, dim=1).item()
     confidence = probs[0, predicted_class].item()
     
     return predicted_class, confidence
 
 # Test
 text = "This product exceeded my expectations!"
-label, conf = predict(text)
+label, conf = predict (text)
 print(f"Text: {text}")
 print(f"Prediction: {'Positive' if label == 1 else 'Negative'} ({conf:.2%} confidence)")
 \`\`\`
@@ -412,7 +412,7 @@ Instead of fine-tuning all parameters, add small **adapter** layers:
 \`\`\`python
 import torch.nn as nn
 
-class AdapterLayer(nn.Module):
+class AdapterLayer (nn.Module):
     def __init__(self, hidden_size, adapter_size=64):
         """
         Adapter: down-project → non-linearity → up-project + residual
@@ -422,8 +422,8 @@ class AdapterLayer(nn.Module):
             adapter_size: Bottleneck dimension (much smaller, e.g., 64)
         """
         super().__init__()
-        self.down_project = nn.Linear(hidden_size, adapter_size)
-        self.up_project = nn.Linear(adapter_size, hidden_size)
+        self.down_project = nn.Linear (hidden_size, adapter_size)
+        self.up_project = nn.Linear (adapter_size, hidden_size)
         self.activation = nn.ReLU()
         
         # Initialize to near-identity
@@ -432,19 +432,19 @@ class AdapterLayer(nn.Module):
         nn.init.zeros_(self.down_project.bias)
         nn.init.zeros_(self.up_project.bias)
     
-    def forward(self, x):
+    def forward (self, x):
         # Bottleneck transformation
         residual = x
-        x = self.down_project(x)
-        x = self.activation(x)
-        x = self.up_project(x)
+        x = self.down_project (x)
+        x = self.activation (x)
+        x = self.up_project (x)
         
         # Residual connection
         return x + residual
 
 
 # Add adapters to BERT
-def add_adapters_to_bert(model, adapter_size=64):
+def add_adapters_to_bert (model, adapter_size=64):
     """Insert adapter layers after each attention and FFN"""
     hidden_size = model.config.hidden_size
     
@@ -453,14 +453,14 @@ def add_adapters_to_bert(model, adapter_size=64):
         original_attention_output = layer.attention.output
         layer.attention.output = nn.Sequential(
             original_attention_output,
-            AdapterLayer(hidden_size, adapter_size)
+            AdapterLayer (hidden_size, adapter_size)
         )
         
         # After feed-forward
         original_ffn_output = layer.output
         layer.output = nn.Sequential(
             original_ffn_output,
-            AdapterLayer(hidden_size, adapter_size)
+            AdapterLayer (hidden_size, adapter_size)
         )
     
     return model
@@ -468,15 +468,15 @@ def add_adapters_to_bert(model, adapter_size=64):
 
 # Freeze BERT, train only adapters
 model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
-model = add_adapters_to_bert(model, adapter_size=64)
+model = add_adapters_to_bert (model, adapter_size=64)
 
 # Freeze all parameters except adapters
 for name, param in model.named_parameters():
     if 'adapter' not in name.lower():
         param.requires_grad = False
 
-trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-total = sum(p.numel() for p in model.parameters())
+trainable = sum (p.numel() for p in model.parameters() if p.requires_grad)
+total = sum (p.numel() for p in model.parameters())
 print(f"Trainable parameters: {trainable:,} / {total:,} ({100*trainable/total:.2f}%)")
 # Only ~1-3% of parameters trainable!
 
@@ -539,13 +539,13 @@ Apply augmentations matching target domain:
 # Medical imaging augmentations
 transform = transforms.Compose([
     transforms.RandomRotation(10),
-    transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)),
-    transforms.ColorJitter(brightness=0.2, contrast=0.2),
+    transforms.RandomAffine (degrees=0, translate=(0.1, 0.1)),
+    transforms.ColorJitter (brightness=0.2, contrast=0.2),
     transforms.RandomHorizontalFlip(),
     # Medical-specific: simulate different scanner settings
-    transforms.GaussianBlur(kernel_size=3),
+    transforms.GaussianBlur (kernel_size=3),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485], std=[0.229])  # Grayscale
+    transforms.Normalize (mean=[0.485], std=[0.229])  # Grayscale
 ])
 \`\`\`
 
@@ -554,7 +554,7 @@ transform = transforms.Compose([
 Train model to be **invariant** to domain:
 
 \`\`\`python
-class DomainAdversarialNetwork(nn.Module):
+class DomainAdversarialNetwork (nn.Module):
     def __init__(self, feature_extractor, task_classifier, domain_classifier):
         """
         Architecture:
@@ -571,34 +571,34 @@ class DomainAdversarialNetwork(nn.Module):
         self.domain_classifier = domain_classifier
         self.gradient_reversal = GradientReversalLayer()
     
-    def forward(self, x):
-        features = self.feature_extractor(x)
+    def forward (self, x):
+        features = self.feature_extractor (x)
         
         # Task prediction (normal forward)
-        task_output = self.task_classifier(features)
+        task_output = self.task_classifier (features)
         
         # Domain prediction (reverse gradients)
-        domain_features = self.gradient_reversal(features)
-        domain_output = self.domain_classifier(domain_features)
+        domain_features = self.gradient_reversal (features)
+        domain_output = self.domain_classifier (domain_features)
         
         return task_output, domain_output
 
 
-class GradientReversalLayer(torch.autograd.Function):
+class GradientReversalLayer (torch.autograd.Function):
     """Reverses gradients during backprop"""
     @staticmethod
-    def forward(ctx, x, lambda_=1.0):
+    def forward (ctx, x, lambda_=1.0):
         ctx.lambda_ = lambda_
-        return x.view_as(x)
+        return x.view_as (x)
     
     @staticmethod
-    def backward(ctx, grad_output):
+    def backward (ctx, grad_output):
         return grad_output.neg() * ctx.lambda_, None
 
 
 # Training: Minimize task loss, maximize domain loss (confuse domain classifier)
-task_loss = criterion(task_output, task_labels)
-domain_loss = criterion(domain_output, domain_labels)
+task_loss = criterion (task_output, task_labels)
+domain_loss = criterion (domain_output, domain_labels)
 
 total_loss = task_loss - 0.1 * domain_loss  # Negative sign for adversarial
 total_loss.backward()
@@ -624,15 +624,15 @@ class MedicalImageDataset(Dataset):
         self.transform = transform
     
     def __len__(self):
-        return len(self.image_paths)
+        return len (self.image_paths)
     
     def __getitem__(self, idx):
         # Load image (grayscale X-ray)
-        image = Image.open(self.image_paths[idx]).convert('L')  # Grayscale
+        image = Image.open (self.image_paths[idx]).convert('L')  # Grayscale
         label = self.labels[idx]
         
         if self.transform:
-            image = self.transform(image)
+            image = self.transform (image)
         
         return image, label
 
@@ -642,12 +642,12 @@ train_transform = transforms.Compose([
     transforms.Resize(256),
     transforms.RandomCrop(224),
     transforms.RandomRotation(10),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.ColorJitter(brightness=0.2, contrast=0.2),
+    transforms.RandomHorizontalFlip (p=0.5),
+    transforms.ColorJitter (brightness=0.2, contrast=0.2),
     transforms.ToTensor(),
     # Convert grayscale to 3-channel (for ImageNet pre-trained models)
-    transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    transforms.Lambda (lambda x: x.repeat(3, 1, 1)),
+    transforms.Normalize (mean=[0.485, 0.456, 0.406],
                         std=[0.229, 0.224, 0.225])
 ])
 
@@ -655,26 +655,26 @@ val_transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),
     transforms.ToTensor(),
-    transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    transforms.Lambda (lambda x: x.repeat(3, 1, 1)),
+    transforms.Normalize (mean=[0.485, 0.456, 0.406],
                         std=[0.229, 0.224, 0.225])
 ])
 
 # Create datasets
-train_dataset = MedicalImageDataset(train_paths, train_labels, train_transform)
-val_dataset = MedicalImageDataset(val_paths, val_labels, val_transform)
+train_dataset = MedicalImageDataset (train_paths, train_labels, train_transform)
+val_dataset = MedicalImageDataset (val_paths, val_labels, val_transform)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
-val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=4)
+train_loader = DataLoader (train_dataset, batch_size=32, shuffle=True, num_workers=4)
+val_loader = DataLoader (val_dataset, batch_size=32, shuffle=False, num_workers=4)
 
 # Load pre-trained model
 model = models.densenet121(pretrained=True)
 num_features = model.classifier.in_features
-model.classifier = nn.Linear(num_features, 2)  # Binary: disease present/absent
+model.classifier = nn.Linear (num_features, 2)  # Binary: disease present/absent
 
 # Transfer to GPU
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+model = model.to (device)
 
 # Training setup with discriminative learning rates
 optimizer = torch.optim.Adam([
@@ -691,7 +691,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
 best_val_acc = 0.0
 num_epochs = 30
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     # Training
     model.train()
     train_loss = 0.0
@@ -699,18 +699,18 @@ for epoch in range(num_epochs):
     train_total = 0
     
     for images, labels in train_loader:
-        images, labels = images.to(device), labels.to(device)
+        images, labels = images.to (device), labels.to (device)
         
         optimizer.zero_grad()
-        outputs = model(images)
-        loss = criterion(outputs, labels)
+        outputs = model (images)
+        loss = criterion (outputs, labels)
         loss.backward()
         optimizer.step()
         
         train_loss += loss.item()
         _, predicted = outputs.max(1)
         train_total += labels.size(0)
-        train_correct += predicted.eq(labels).sum().item()
+        train_correct += predicted.eq (labels).sum().item()
     
     train_acc = 100. * train_correct / train_total
     
@@ -722,29 +722,29 @@ for epoch in range(num_epochs):
     
     with torch.no_grad():
         for images, labels in val_loader:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)
-            loss = criterion(outputs, labels)
+            images, labels = images.to (device), labels.to (device)
+            outputs = model (images)
+            loss = criterion (outputs, labels)
             
             val_loss += loss.item()
             _, predicted = outputs.max(1)
             val_total += labels.size(0)
-            val_correct += predicted.eq(labels).sum().item()
+            val_correct += predicted.eq (labels).sum().item()
     
     val_acc = 100. * val_correct / val_total
     
     # Logging
     print(f"Epoch {epoch+1}/{num_epochs}")
-    print(f"Train Loss: {train_loss/len(train_loader):.4f}, Acc: {train_acc:.2f}%")
-    print(f"Val Loss: {val_loss/len(val_loader):.4f}, Acc: {val_acc:.2f}%")
+    print(f"Train Loss: {train_loss/len (train_loader):.4f}, Acc: {train_acc:.2f}%")
+    print(f"Val Loss: {val_loss/len (val_loader):.4f}, Acc: {val_acc:.2f}%")
     
     # Learning rate scheduling
-    scheduler.step(val_acc)
+    scheduler.step (val_acc)
     
     # Save best model
     if val_acc > best_val_acc:
         best_val_acc = val_acc
-        torch.save(model.state_dict(), 'best_medical_model.pth')
+        torch.save (model.state_dict(), 'best_medical_model.pth')
         print(f"Saved new best model with val accuracy: {val_acc:.2f}%")
     
     print("-" * 60)

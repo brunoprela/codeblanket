@@ -14,16 +14,16 @@ export const cachingSection = {
 ### ** Why Caching Matters **
 
 ** Without Cache:**
-    - Every request hits the database(slow)
+    - Every request hits the database (slow)
         - Database becomes bottleneck at scale
             - High latency for users
-                - Expensive(database costs scale with requests)
+                - Expensive (database costs scale with requests)
 
 ** With Cache:**
-    - Most requests served from memory(fast)
+    - Most requests served from memory (fast)
         - Database load reduced by 80 - 95 %
-            - Lower latency(milliseconds vs hundreds of milliseconds)
-                - Cost savings(cache cheaper than database scaling)
+            - Lower latency (milliseconds vs hundreds of milliseconds)
+                - Cost savings (cache cheaper than database scaling)
 
                     ** Real - world impact:**
 - ** Reddit **: 99 % cache hit rate on homepage
@@ -51,7 +51,7 @@ export const cachingSection = {
 
 ** Example:**
     1. User requests profile for user ID 456
-2. Check cache: Not found(miss)
+2. Check cache: Not found (miss)
 3. Query database(50ms)
 4. Store result in cache
 5. Return to user
@@ -65,8 +65,8 @@ export const cachingSection = {
 ** Formula:** \`Cache Hit Rate = Hits / (Hits + Misses)\`
 
     ** Example:**
-        - 90 requests served from cache(hits)
-            - 10 requests went to database(misses)
+        - 90 requests served from cache (hits)
+            - 10 requests went to database (misses)
                 - Hit rate: 90 / (90 + 10) = 90 %
 
 ** Target hit rates:**
@@ -82,7 +82,7 @@ export const cachingSection = {
 
 ### ** 1. Client - Side Cache(Browser) **
 
-** Location **: User's browser
+** Location **: User\'s browser
 
     ** What's cached**: HTML pages, CSS, JavaScript, images
 
@@ -91,12 +91,12 @@ export const cachingSection = {
     - \`ETag\` for validation
 
         ** Pros:**
-            - Fastest(no network request)
+            - Fastest (no network request)
             - Reduces server load
                 - Works offline
 
                     ** Cons:**
-                        - No control after deployment(can't invalidate)
+                        - No control after deployment (can't invalidate)
                             - Limited storage
                         - User can clear cache
 
@@ -106,7 +106,7 @@ export const cachingSection = {
 
 ** Location **: Geographically distributed edge servers(CloudFront, Akamai)
 
-                        ** What's cached**: Static assets (images, videos, CSS, JS)
+                        ** What\'s cached**: Static assets (images, videos, CSS, JS)
 
                         ** Example **: User in Japan requests image
                         - First request: Fetches from US origin server(200ms)
@@ -114,7 +114,7 @@ export const cachingSection = {
                         - Subsequent requests: Served from Tokyo(20ms)
 
                         ** Pros:**
-                        - Reduced latency(geographically close to users)
+                        - Reduced latency (geographically close to users)
                         - Offloads origin server
                         - Scales globally
 
@@ -134,7 +134,7 @@ export const cachingSection = {
         ** Example **: Each API server caches configuration in memory
 
             ** Pros:**
-                - Extremely fast(no network call)
+                - Extremely fast (no network call)
                     - Simple to implement
 
                         ** Cons:**
@@ -142,7 +142,7 @@ export const cachingSection = {
                                 - Lost on server restart
                                     - Limited by server memory
 
-                                        ** Use case:** Small, read - only data that rarely changes(config, feature flags)
+                                        ** Use case:** Small, read - only data that rarely changes (config, feature flags)
 
 ---
 
@@ -150,12 +150,12 @@ export const cachingSection = {
 
 ** Location **: Dedicated cache cluster, separate from app servers
 
-    ** What's cached**: Frequently accessed data (user sessions, API responses, database queries)
+    ** What\'s cached**: Frequently accessed data (user sessions, API responses, database queries)
 
         ** Example:** Redis cluster shared by all API servers
 
             ** Pros:**
-                - Shared across all app servers(consistent)
+                - Shared across all app servers (consistent)
                     - Survives app server restarts
                         - Scales independently
                             - Rich features(TTL, data structures)
@@ -178,7 +178,7 @@ export const cachingSection = {
         ** Example **: MySQL caches\`SELECT * FROM users WHERE id = 123\`
 
             ** Pros:**
-                - Transparent(application doesn't need to manage)
+                - Transparent (application doesn't need to manage)
                     - Works automatically
 
                 ** Cons:**
@@ -206,9 +206,9 @@ export const cachingSection = {
 
             ** Pseudocode:**
 \`\`\`python
-def get_user(user_id):
+def get_user (user_id):
     # Check cache first
-    user = cache.get(f"user:{user_id}")
+    user = cache.get (f"user:{user_id}")
     if user:
         return user  # Cache hit
     
@@ -216,7 +216,7 @@ def get_user(user_id):
     user = database.query("SELECT * FROM users WHERE id = ?", user_id)
     
     # Store in cache for next time
-    cache.set(f"user:{user_id}", user, ttl=3600)  # Cache for 1 hour
+    cache.set (f"user:{user_id}", user, ttl=3600)  # Cache for 1 hour
     
     return user
 \`\`\`
@@ -246,9 +246,9 @@ def get_user(user_id):
 
 **Pseudocode:**
 \`\`\`python
-def get_user(user_id):
+def get_user (user_id):
     # Cache library handles everything
-    return cache.get_or_load(f"user:{user_id}")
+    return cache.get_or_load (f"user:{user_id}")
     
 # Cache library internally:
 # - Checks cache
@@ -280,9 +280,9 @@ def get_user(user_id):
 
 **Pseudocode:**
 \`\`\`python
-def update_user(user_id, new_data):
+def update_user (user_id, new_data):
     # Write to cache, which writes through to database
-    cache.set(f"user:{user_id}", new_data)  # Internally writes to DB
+    cache.set (f"user:{user_id}", new_data)  # Internally writes to DB
     return success
 \`\`\`
 
@@ -309,9 +309,9 @@ def update_user(user_id, new_data):
 
 **Pseudocode:**
 \`\`\`python
-def update_user(user_id, new_data):
+def update_user (user_id, new_data):
     # Write to cache only
-    cache.set(f"user:{user_id}", new_data)  # Instant return
+    cache.set (f"user:{user_id}", new_data)  # Instant return
     # Cache will flush to database periodically
     return success
 \`\`\`
@@ -339,12 +339,12 @@ def update_user(user_id, new_data):
 
 **Pseudocode:**
 \`\`\`python
-def update_user(user_id, new_data):
+def update_user (user_id, new_data):
     # Write directly to database
     database.update("UPDATE users SET ... WHERE id = ?", user_id, new_data)
     
     # Optionally invalidate cache
-    cache.delete(f"user:{user_id}")
+    cache.delete (f"user:{user_id}")
     
     return success
 \`\`\`
@@ -498,12 +498,12 @@ Delete from cache when data changes.
 
 **Example:**
 \`\`\`python
-def update_user(user_id, new_data):
+def update_user (user_id, new_data):
     # Update database
-    database.update(user_id, new_data)
+    database.update (user_id, new_data)
     
     # Invalidate cache
-    cache.delete(f"user:{user_id}")
+    cache.delete (f"user:{user_id}")
 \`\`\`
 
 **Pros:**
@@ -567,21 +567,21 @@ First request acquires lock, queries database, updates cache. Other requests wai
 
 **Pseudocode:**
 \`\`\`python
-def get_user(user_id):
-    user = cache.get(f"user:{user_id}")
+def get_user (user_id):
+    user = cache.get (f"user:{user_id}")
     if user:
         return user
     
     # Acquire lock
-    with cache.lock(f"lock:user:{user_id}", timeout=5):
+    with cache.lock (f"lock:user:{user_id}", timeout=5):
         # Double-check cache (might have been populated while waiting for lock)
-        user = cache.get(f"user:{user_id}")
+        user = cache.get (f"user:{user_id}")
         if user:
             return user
         
         # Query database
-        user = database.query(user_id)
-        cache.set(f"user:{user_id}", user, ttl=3600)
+        user = database.query (user_id)
+        cache.set (f"user:{user_id}", user, ttl=3600)
         return user
 \`\`\`
 
@@ -593,19 +593,19 @@ Randomly refresh cache before TTL expires.
 
 **Pseudocode:**
 \`\`\`python
-def get_user(user_id):
-    user, ttl_remaining = cache.get_with_ttl(f"user:{user_id}")
+def get_user (user_id):
+    user, ttl_remaining = cache.get_with_ttl (f"user:{user_id}")
     
     if user and ttl_remaining > 0:
         # Probabilistically refresh early
         if random.random() < (1.0 / ttl_remaining):
             # Asynchronously refresh
-            background_task.enqueue(refresh_user_cache, user_id)
+            background_task.enqueue (refresh_user_cache, user_id)
         return user
     
     # Cache miss: load and cache
-    user = database.query(user_id)
-    cache.set(f"user:{user_id}", user, ttl=3600)
+    user = database.query (user_id)
+    cache.set (f"user:{user_id}", user, ttl=3600)
     return user
 \`\`\`
 
@@ -667,28 +667,28 @@ import redis
 import json
 
 # Connect to Redis
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+r = redis.Redis (host='localhost', port=6379, decode_responses=True)
 
-def get_user(user_id):
+def get_user (user_id):
     # Try cache first
-    cached = r.get(f"user:{user_id}")
+    cached = r.get (f"user:{user_id}")
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Cache miss: query database
     user = database.query("SELECT * FROM users WHERE id = ?", user_id)
     
     # Store in cache (expire after 1 hour)
-    r.setex(f"user:{user_id}", 3600, json.dumps(user))
+    r.setex (f"user:{user_id}", 3600, json.dumps (user))
     
     return user
 
-def update_user(user_id, new_data):
+def update_user (user_id, new_data):
     # Update database
-    database.update(user_id, new_data)
+    database.update (user_id, new_data)
     
     # Invalidate cache
-    r.delete(f"user:{user_id}")
+    r.delete (f"user:{user_id}")
 \`\`\`
 
 ---

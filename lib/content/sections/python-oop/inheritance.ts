@@ -11,15 +11,15 @@ class Animal:
     def __init__(self, name):
         self.name = name
     
-    def speak(self):
+    def speak (self):
         pass
 
 class Dog(Animal):
-    def speak(self):
+    def speak (self):
         return f"{self.name} barks"
 
 class Cat(Animal):
-    def speak(self):
+    def speak (self):
         return f"{self.name} meows"
 
 dog = Dog("Buddy")
@@ -31,15 +31,15 @@ print(cat.speak())  # "Whiskers meows"
 **Method Resolution Order (MRO):**
 \`\`\`python
 class A:
-    def method(self):
+    def method (self):
         return "A"
 
 class B(A):
-    def method(self):
+    def method (self):
         return "B"
 
 class C(A):
-    def method(self):
+    def method (self):
         return "C"
 
 class D(B, C):
@@ -57,7 +57,7 @@ class Rectangle:
         self.width = width
         self.height = height
     
-    def area(self):
+    def area (self):
         return self.width * self.height
 
 class Square(Rectangle):
@@ -71,12 +71,12 @@ print(square.area())  # 25
 
 **Polymorphism:**
 \`\`\`python
-def make_animals_speak(animals):
+def make_animals_speak (animals):
     for animal in animals:
         print(animal.speak())
 
 animals = [Dog("Buddy"), Cat("Whiskers"), Dog("Max")]
-make_animals_speak(animals)
+make_animals_speak (animals)
 # Buddy barks
 # Whiskers meows  
 # Max barks
@@ -88,21 +88,21 @@ from abc import ABC, abstractmethod
 
 class Shape(ABC):
     @abstractmethod
-    def area(self):
+    def area (self):
         pass
     
     @abstractmethod
-    def perimeter(self):
+    def perimeter (self):
         pass
 
 class Circle(Shape):
     def __init__(self, radius):
         self.radius = radius
     
-    def area(self):
+    def area (self):
         return 3.14159 * self.radius ** 2
     
-    def perimeter(self):
+    def perimeter (self):
         return 2 * 3.14159 * self.radius
 
 # Cannot instantiate abstract class
@@ -114,15 +114,15 @@ circle = Circle(5)  # OK
 **Multiple Inheritance:**
 \`\`\`python
 class Flyable:
-    def fly(self):
+    def fly (self):
         return "Flying!"
 
 class Swimmable:
-    def swim(self):
+    def swim (self):
         return "Swimming!"
 
 class Duck(Animal, Flyable, Swimmable):
-    def speak(self):
+    def speak (self):
         return f"{self.name} quacks"
 
 duck = Duck("Donald")
@@ -143,7 +143,7 @@ class Car:
         self.engine = Engine()
         self.wheels = [Wheel() for _ in range(4)]
     
-    def start(self):
+    def start (self):
         self.engine.start()
 \`\`\``,
 };

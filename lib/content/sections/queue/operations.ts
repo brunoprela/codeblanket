@@ -12,7 +12,7 @@ A queue supports two fundamental operations:
 ### 1. **Enqueue (Add to rear)**
 Add an element to the back of the queue.
 \`\`\`python
-queue.enqueue(item)  # Add item to rear
+queue.enqueue (item)  # Add item to rear
 \`\`\`
 
 ### 2. **Dequeue (Remove from front)**
@@ -55,29 +55,29 @@ class QueueWithList:
     def __init__(self):
         self.items = []
     
-    def enqueue(self, item):
+    def enqueue (self, item):
         """Add to rear - O(1)"""
-        self.items.append(item)
+        self.items.append (item)
     
-    def dequeue(self):
+    def dequeue (self):
         """Remove from front - O(n) ❌ SLOW!"""
         if self.is_empty():
             raise IndexError("Dequeue from empty queue")
         return self.items.pop(0)  # O(n) - shifts all elements!
     
-    def front(self):
+    def front (self):
         """Peek at front - O(1)"""
         if self.is_empty():
             raise IndexError("Queue is empty")
         return self.items[0]
     
-    def is_empty(self):
+    def is_empty (self):
         """Check if empty - O(1)"""
-        return len(self.items) == 0
+        return len (self.items) == 0
     
-    def size(self):
+    def size (self):
         """Get size - O(1)"""
-        return len(self.items)
+        return len (self.items)
 
 # Usage
 queue = QueueWithList()
@@ -105,33 +105,33 @@ class Queue:
     def __init__(self):
         self.items = deque()  # Optimized for both ends
     
-    def enqueue(self, item):
+    def enqueue (self, item):
         """Add to rear - O(1)"""
-        self.items.append(item)  # Append to right
+        self.items.append (item)  # Append to right
     
-    def dequeue(self):
+    def dequeue (self):
         """Remove from front - O(1) ✅ FAST!"""
         if self.is_empty():
             raise IndexError("Dequeue from empty queue")
         return self.items.popleft()  # Pop from left - O(1)!
     
-    def front(self):
+    def front (self):
         """Peek at front - O(1)"""
         if self.is_empty():
             raise IndexError("Queue is empty")
         return self.items[0]
     
-    def is_empty(self):
+    def is_empty (self):
         """Check if empty - O(1)"""
-        return len(self.items) == 0
+        return len (self.items) == 0
     
-    def size(self):
+    def size (self):
         """Get size - O(1)"""
-        return len(self.items)
+        return len (self.items)
     
     def __repr__(self):
         """String representation"""
-        return f"Queue({list(self.items)})"
+        return f"Queue({list (self.items)})"
 
 # Usage
 queue = Queue()
@@ -164,34 +164,34 @@ class QueueWithStacks:
         self.stack_in = []   # For enqueue
         self.stack_out = []  # For dequeue
     
-    def enqueue(self, item):
+    def enqueue (self, item):
         """Add to rear - O(1)"""
-        self.stack_in.append(item)
+        self.stack_in.append (item)
     
-    def dequeue(self):
+    def dequeue (self):
         """Remove from front - O(1) amortized"""
         # Move elements from stack_in to stack_out if needed
         if not self.stack_out:
             while self.stack_in:
-                self.stack_out.append(self.stack_in.pop())
+                self.stack_out.append (self.stack_in.pop())
         
         if not self.stack_out:
             raise IndexError("Dequeue from empty queue")
         
         return self.stack_out.pop()
     
-    def front(self):
+    def front (self):
         """Peek at front - O(1) amortized"""
         if not self.stack_out:
             while self.stack_in:
-                self.stack_out.append(self.stack_in.pop())
+                self.stack_out.append (self.stack_in.pop())
         
         if not self.stack_out:
             raise IndexError("Queue is empty")
         
         return self.stack_out[-1]
     
-    def is_empty(self):
+    def is_empty (self):
         """Check if empty - O(1)"""
         return not self.stack_in and not self.stack_out
 

@@ -370,10 +370,10 @@ spec:
 from django.http import JsonResponse
 from django.db import connection
 
-def health_check(request):
+def health_check (request):
     return JsonResponse({'status': 'healthy'})
 
-def readiness_check(request):
+def readiness_check (request):
     try:
         # Check database
         connection.ensure_connection()
@@ -381,7 +381,7 @@ def readiness_check(request):
         cache.set('health_check', 'ok', 1)
         return JsonResponse({'status': 'ready'})
     except Exception as e:
-        return JsonResponse({'status': 'not ready', 'error': str(e)}, status=503)
+        return JsonResponse({'status': 'not ready', 'error': str (e)}, status=503)
 \`\`\`
       `,
   },
@@ -488,7 +488,7 @@ env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Read .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env (os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
@@ -530,13 +530,13 @@ import time
 from django.utils.deprecation import MiddlewareMixin
 
 class MetricsMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+    def process_request (self, request):
         request.start_time = time.time()
     
-    def process_response(self, request, response):
-        if hasattr(request, 'start_time'):
+    def process_response (self, request, response):
+        if hasattr (request, 'start_time'):
             duration = time.time() - request.start_time
-            logger.info(f'{request.method} {request.path} - {response.status_code} - {duration:.2f}s')
+            logger.info (f'{request.method} {request.path} - {response.status_code} - {duration:.2f}s')
         return response
 \`\`\`
 

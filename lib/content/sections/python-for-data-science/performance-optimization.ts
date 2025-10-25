@@ -28,7 +28,7 @@ import numpy as np
 import time
 
 # Timing utility
-def time_it(func, *args, **kwargs):
+def time_it (func, *args, **kwargs):
     start = time.time()
     result = func(*args, **kwargs)
     end = time.time()
@@ -43,27 +43,27 @@ def time_it(func, *args, **kwargs):
 \`\`\`python
 # Create large dataset
 n = 1_000_000
-data = np.random.randn(n)
+data = np.random.randn (n)
 
 # BAD: Python loop
-def sum_with_loop(arr):
+def sum_with_loop (arr):
     total = 0
     for x in arr:
         total += x
     return total
 
 # GOOD: NumPy vectorized
-def sum_vectorized(arr):
-    return np.sum(arr)
+def sum_vectorized (arr):
+    return np.sum (arr)
 
 # Compare
 start = time.time()
-result1 = sum_with_loop(data)
+result1 = sum_with_loop (data)
 time1 = time.time() - start
 print(f"Loop: {time1:.4f} seconds")
 
 start = time.time()
-result2 = sum_vectorized(data)
+result2 = sum_vectorized (data)
 time2 = time.time() - start
 print(f"Vectorized: {time2:.4f} seconds")
 
@@ -78,28 +78,28 @@ print(f"Speedup: {time1/time2:.1f}x faster")
 \`\`\`python
 # Example: Calculate distance from origin
 n = 1_000_000
-x = np.random.randn(n)
-y = np.random.randn(n)
+x = np.random.randn (n)
+y = np.random.randn (n)
 
 # BAD: Loop
-def distance_loop(x, y):
+def distance_loop (x, y):
     distances = []
-    for i in range(len(x)):
-        distances.append(np.sqrt(x[i]**2 + y[i]**2))
-    return np.array(distances)
+    for i in range (len (x)):
+        distances.append (np.sqrt (x[i]**2 + y[i]**2))
+    return np.array (distances)
 
 # GOOD: Vectorized
-def distance_vectorized(x, y):
-    return np.sqrt(x**2 + y**2)
+def distance_vectorized (x, y):
+    return np.sqrt (x**2 + y**2)
 
 # Compare
 start = time.time()
-result1 = distance_loop(x, y)
+result1 = distance_loop (x, y)
 time1 = time.time() - start
 print(f"Loop: {time1:.4f} seconds")
 
 start = time.time()
-result2 = distance_vectorized(x, y)
+result2 = distance_vectorized (x, y)
 time2 = time.time() - start
 print(f"Vectorized: {time2:.4f} seconds")
 
@@ -107,7 +107,7 @@ print(f"Speedup: {time1/time2:.1f}x faster")
 # Speedup: 50-100x faster
 
 # Verify they match
-print(f"Results match: {np.allclose(result1, result2)}")
+print(f"Results match: {np.allclose (result1, result2)}")
 \`\`\`
 
 ### When Vectorization Seems Impossible
@@ -119,9 +119,9 @@ print(f"Results match: {np.allclose(result1, result2)}")
 data = np.random.randn(1_000_000)
 
 # BAD: Loop with conditionals
-def conditional_loop(arr):
-    result = np.zeros_like(arr)
-    for i, x in enumerate(arr):
+def conditional_loop (arr):
+    result = np.zeros_like (arr)
+    for i, x in enumerate (arr):
         if x > 0:
             result[i] = x ** 2
         elif x < -1:
@@ -131,14 +131,14 @@ def conditional_loop(arr):
     return result
 
 # GOOD: Use np.where or np.select
-def conditional_vectorized(arr):
+def conditional_vectorized (arr):
     # Method 1: Nested np.where
-    result = np.where(arr > 0, arr ** 2,
-                     np.where(arr < -1, arr ** 3, arr))
+    result = np.where (arr > 0, arr ** 2,
+                     np.where (arr < -1, arr ** 3, arr))
     return result
 
 # Method 2: np.select (clearer for many conditions)
-def conditional_vectorized_select(arr):
+def conditional_vectorized_select (arr):
     conditions = [
         arr > 0,
         arr < -1
@@ -147,21 +147,21 @@ def conditional_vectorized_select(arr):
         arr ** 2,
         arr ** 3
     ]
-    return np.select(conditions, choices, default=arr)
+    return np.select (conditions, choices, default=arr)
 
 # Compare
 start = time.time()
-result1 = conditional_loop(data)
+result1 = conditional_loop (data)
 time1 = time.time() - start
 print(f"Loop: {time1:.4f} seconds")
 
 start = time.time()
-result2 = conditional_vectorized(data)
+result2 = conditional_vectorized (data)
 time2 = time.time() - start
 print(f"Vectorized (where): {time2:.4f} seconds")
 
 start = time.time()
-result3 = conditional_vectorized_select(data)
+result3 = conditional_vectorized_select (data)
 time3 = time.time() - start
 print(f"Vectorized (select): {time3:.4f} seconds")
 
@@ -176,15 +176,15 @@ print(f"Speedup: {time1/time2:.1f}x faster")
 # Example: Large DataFrame with inefficient types
 n = 1_000_000
 df = pd.DataFrame({
-    'id': range(n),
+    'id': range (n),
     'category': np.random.choice(['A', 'B', 'C'], n),
-    'value': np.random.rand(n),
+    'value': np.random.rand (n),
     'flag': np.random.choice([True, False], n)
 })
 
 print("Original memory usage:")
-print(df.memory_usage(deep=True))
-print(f"Total: {df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(df.memory_usage (deep=True))
+print(f"Total: {df.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
 # Optimize data types
 df_optimized = df.copy()
@@ -193,15 +193,15 @@ df_optimized = df.copy()
 df_optimized['category'] = df_optimized['category'].astype('category')
 
 # Downcast numeric types
-df_optimized['id'] = pd.to_numeric(df_optimized['id'], downcast='integer')
-df_optimized['value'] = pd.to_numeric(df_optimized['value'], downcast='float')
+df_optimized['id'] = pd.to_numeric (df_optimized['id'], downcast='integer')
+df_optimized['value'] = pd.to_numeric (df_optimized['value'], downcast='float')
 
 print("\\nOptimized memory usage:")
-print(df_optimized.memory_usage(deep=True))
-print(f"Total: {df_optimized.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(df_optimized.memory_usage (deep=True))
+print(f"Total: {df_optimized.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_optimized.memory_usage(deep=True).sum() / 
-             df.memory_usage(deep=True).sum()) * 100
+reduction = (1 - df_optimized.memory_usage (deep=True).sum() / 
+             df.memory_usage (deep=True).sum()) * 100
 print(f"\\nMemory reduction: {reduction:.1f}%")
 \`\`\`
 
@@ -210,26 +210,26 @@ print(f"\\nMemory reduction: {reduction:.1f}%")
 \`\`\`python
 # Integer types
 print("Integer types:")
-print(f"int8: {np.iinfo(np.int8).min} to {np.iinfo(np.int8).max}")
-print(f"int16: {np.iinfo(np.int16).min} to {np.iinfo(np.int16).max}")
-print(f"int32: {np.iinfo(np.int32).min} to {np.iinfo(np.int32).max}")
-print(f"int64: {np.iinfo(np.int64).min} to {np.iinfo(np.int64).max}")
+print(f"int8: {np.iinfo (np.int8).min} to {np.iinfo (np.int8).max}")
+print(f"int16: {np.iinfo (np.int16).min} to {np.iinfo (np.int16).max}")
+print(f"int32: {np.iinfo (np.int32).min} to {np.iinfo (np.int32).max}")
+print(f"int64: {np.iinfo (np.int64).min} to {np.iinfo (np.int64).max}")
 
 # Float types
 print("\\nFloat types:")
-print(f"float16: ~{np.finfo(np.float16).min:.2e} to {np.finfo(np.float16).max:.2e}")
-print(f"float32: ~{np.finfo(np.float32).min:.2e} to {np.finfo(np.float32).max:.2e}")
-print(f"float64: ~{np.finfo(np.float64).min:.2e} to {np.finfo(np.float64).max:.2e}")
+print(f"float16: ~{np.finfo (np.float16).min:.2e} to {np.finfo (np.float16).max:.2e}")
+print(f"float32: ~{np.finfo (np.float32).min:.2e} to {np.finfo (np.float32).max:.2e}")
+print(f"float64: ~{np.finfo (np.float64).min:.2e} to {np.finfo (np.float64).max:.2e}")
 
 # Example: Age data (0-120)
 ages = np.random.randint(0, 120, 1_000_000)
 
 # Default: int64 (8 bytes per value)
-ages_int64 = ages.astype(np.int64)
+ages_int64 = ages.astype (np.int64)
 print(f"\\nint64: {ages_int64.nbytes / 1024**2:.2f} MB")
 
 # Optimized: int8 (1 byte per value)
-ages_int8 = ages.astype(np.int8)
+ages_int8 = ages.astype (np.int8)
 print(f"int8: {ages_int8.nbytes / 1024**2:.2f} MB")
 print(f"Memory saved: {(1 - ages_int8.nbytes / ages_int64.nbytes) * 100:.1f}%")
 \`\`\`
@@ -243,14 +243,14 @@ products = np.random.choice(['Widget', 'Gadget', 'Gizmo', 'Tool'], n)
 
 # As object dtype (stores strings)
 df_object = pd.DataFrame({'product': products})
-print(f"Object dtype: {df_object.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(f"Object dtype: {df_object.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
 # As categorical
-df_categorical = pd.DataFrame({'product': pd.Categorical(products)})
-print(f"Categorical: {df_categorical.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+df_categorical = pd.DataFrame({'product': pd.Categorical (products)})
+print(f"Categorical: {df_categorical.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_categorical.memory_usage(deep=True).sum() / 
-             df_object.memory_usage(deep=True).sum()) * 100
+reduction = (1 - df_categorical.memory_usage (deep=True).sum() / 
+             df_object.memory_usage (deep=True).sum()) * 100
 print(f"Memory reduction: {reduction:.1f}%")
 
 # Categorical is also faster for operations
@@ -282,33 +282,33 @@ df = pd.DataFrame({
 })
 
 # BAD: iterrows (very slow)
-def sum_with_iterrows(df):
+def sum_with_iterrows (df):
     total = 0
     for index, row in df.iterrows():
         total += row['A'] + row['B'] + row['C']
     return total
 
 # BETTER: apply (still uses Python loop internally)
-def sum_with_apply(df):
-    return df.apply(lambda row: row['A'] + row['B'] + row['C'], axis=1).sum()
+def sum_with_apply (df):
+    return df.apply (lambda row: row['A'] + row['B'] + row['C'], axis=1).sum()
 
 # BEST: Vectorized operations
-def sum_vectorized(df):
+def sum_vectorized (df):
     return (df['A'] + df['B'] + df['C']).sum()
 
 # Compare
 times = {}
 
 start = time.time()
-result1 = sum_with_iterrows(df)
+result1 = sum_with_iterrows (df)
 times['iterrows'] = time.time() - start
 
 start = time.time()
-result2 = sum_with_apply(df)
+result2 = sum_with_apply (df)
 times['apply'] = time.time() - start
 
 start = time.time()
-result3 = sum_vectorized(df)
+result3 = sum_vectorized (df)
 times['vectorized'] = time.time() - start
 
 print("Timing results:")
@@ -330,32 +330,32 @@ df = pd.DataFrame({
 })
 
 # BAD: Multiple separate filters (creates intermediate DataFrames)
-def filter_separate(df):
+def filter_separate (df):
     filtered = df[df['A'] > 0]
     filtered = filtered[filtered['B'] == 'X']
     filtered = filtered[filtered['C'] < 50]
     return filtered
 
 # GOOD: Combined boolean indexing
-def filter_combined(df):
+def filter_combined (df):
     mask = (df['A'] > 0) & (df['B'] == 'X') & (df['C'] < 50)
     return df[mask]
 
 # BETTER: query() for complex conditions (more readable)
-def filter_query(df):
+def filter_query (df):
     return df.query('A > 0 and B == "X" and C < 50')
 
 # Compare
 start = time.time()
-result1 = filter_separate(df)
+result1 = filter_separate (df)
 time1 = time.time() - start
 
 start = time.time()
-result2 = filter_combined(df)
+result2 = filter_combined (df)
 time2 = time.time() - start
 
 start = time.time()
-result3 = filter_query(df)
+result3 = filter_query (df)
 time3 = time.time() - start
 
 print(f"Separate: {time1:.4f} seconds")
@@ -423,22 +423,22 @@ print(f"Original: {df['A'].iloc[0]}")  # Still 1
 arr = np.random.randn(1_000_000)
 
 # BAD: Manual calculation
-def variance_manual(arr):
-    mean = sum(arr) / len(arr)
+def variance_manual (arr):
+    mean = sum (arr) / len (arr)
     squared_diffs = [(x - mean)**2 for x in arr]
-    return sum(squared_diffs) / len(arr)
+    return sum (squared_diffs) / len (arr)
 
 # GOOD: NumPy built-in (highly optimized)
-def variance_numpy(arr):
-    return np.var(arr)
+def variance_numpy (arr):
+    return np.var (arr)
 
 # Compare
 start = time.time()
-result1 = variance_manual(arr)
+result1 = variance_manual (arr)
 time1 = time.time() - start
 
 start = time.time()
-result2 = variance_numpy(arr)
+result2 = variance_numpy (arr)
 time2 = time.time() - start
 
 print(f"Manual: {time1:.4f} seconds")
@@ -455,20 +455,20 @@ df = pd.DataFrame({
 })
 
 # BAD: apply with Python string methods
-def lowercase_apply(df):
-    return df['text'].apply(lambda x: x.lower())
+def lowercase_apply (df):
+    return df['text'].apply (lambda x: x.lower())
 
 # GOOD: Vectorized str accessor
-def lowercase_vectorized(df):
+def lowercase_vectorized (df):
     return df['text'].str.lower()
 
 # Compare
 start = time.time()
-result1 = lowercase_apply(df)
+result1 = lowercase_apply (df)
 time1 = time.time() - start
 
 start = time.time()
-result2 = lowercase_vectorized(df)
+result2 = lowercase_vectorized (df)
 time2 = time.time() - start
 
 print(f"Apply: {time1:.4f} seconds")
@@ -485,34 +485,34 @@ print(f"Speedup: {time1/time2:.1f}x faster")
 data = np.random.randn(1000, 5)
 
 # BAD: Loop over columns
-def normalize_loop(arr):
-    result = np.zeros_like(arr)
-    for i in range(arr.shape[1]):
+def normalize_loop (arr):
+    result = np.zeros_like (arr)
+    for i in range (arr.shape[1]):
         mean = arr[:, i].mean()
         std = arr[:, i].std()
         result[:, i] = (arr[:, i] - mean) / std
     return result
 
 # GOOD: Broadcasting
-def normalize_broadcast(arr):
-    means = arr.mean(axis=0)  # Shape: (5,)
-    stds = arr.std(axis=0)     # Shape: (5,)
+def normalize_broadcast (arr):
+    means = arr.mean (axis=0)  # Shape: (5,)
+    stds = arr.std (axis=0)     # Shape: (5,)
     return (arr - means) / stds  # Broadcasting!
 
 # Compare
 start = time.time()
-result1 = normalize_loop(data)
+result1 = normalize_loop (data)
 time1 = time.time() - start
 
 start = time.time()
-result2 = normalize_broadcast(data)
+result2 = normalize_broadcast (data)
 time2 = time.time() - start
 
 print(f"Loop: {time1:.4f} seconds")
 print(f"Broadcast: {time2:.4f} seconds")
 print(f"Speedup: {time1/time2:.1f}x faster")
 
-print(f"\\nResults match: {np.allclose(result1, result2)}")
+print(f"\\nResults match: {np.allclose (result1, result2)}")
 
 # Broadcasting rules
 a = np.array([1, 2, 3])  # Shape: (3,)
@@ -546,17 +546,17 @@ df = pd.DataFrame({
     'category': np.random.choice(['Electronics', 'Clothing', 'Food', 'Books'], n)
 })
 
-print(f"Original size: {df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(f"Original size: {df.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
 # Optimization pipeline
-def optimize_dataframe(df):
+def optimize_dataframe (df):
     df_opt = df.copy()
     
     # 1. Optimize numeric types
-    df_opt['user_id'] = pd.to_numeric(df_opt['user_id'], downcast='integer')
-    df_opt['product_id'] = pd.to_numeric(df_opt['product_id'], downcast='integer')
-    df_opt['price'] = pd.to_numeric(df_opt['price'], downcast='float')
-    df_opt['quantity'] = pd.to_numeric(df_opt['quantity'], downcast='integer')
+    df_opt['user_id'] = pd.to_numeric (df_opt['user_id'], downcast='integer')
+    df_opt['product_id'] = pd.to_numeric (df_opt['product_id'], downcast='integer')
+    df_opt['price'] = pd.to_numeric (df_opt['price'], downcast='float')
+    df_opt['quantity'] = pd.to_numeric (df_opt['quantity'], downcast='integer')
     
     # 2. Convert to categorical
     df_opt['category'] = df_opt['category'].astype('category')
@@ -566,11 +566,11 @@ def optimize_dataframe(df):
     
     return df_opt
 
-df_optimized = optimize_dataframe(df)
-print(f"Optimized size: {df_optimized.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+df_optimized = optimize_dataframe (df)
+print(f"Optimized size: {df_optimized.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
-reduction = (1 - df_optimized.memory_usage(deep=True).sum() / 
-             df.memory_usage(deep=True).sum()) * 100
+reduction = (1 - df_optimized.memory_usage (deep=True).sum() / 
+             df.memory_usage (deep=True).sum()) * 100
 print(f"Memory reduction: {reduction:.1f}%")
 
 # Performance comparison
@@ -597,43 +597,43 @@ print(f"Speedup: {time_original/time_optimized:.1f}x faster")
 
 # Generate returns data
 dates = pd.date_range('2020-01-01', periods=1000, freq='D')
-returns = pd.Series(np.random.randn(1000) * 0.02, index=dates)
+returns = pd.Series (np.random.randn(1000) * 0.02, index=dates)
 
 # BAD: Loop-based calculation
-def sharpe_loop(returns, window=252):
+def sharpe_loop (returns, window=252):
     sharpe_ratios = []
-    for i in range(len(returns)):
+    for i in range (len (returns)):
         if i < window:
-            sharpe_ratios.append(np.nan)
+            sharpe_ratios.append (np.nan)
         else:
             window_returns = returns.iloc[i-window:i]
             mean_return = window_returns.mean()
             std_return = window_returns.std()
             sharpe = np.sqrt(252) * mean_return / std_return if std_return > 0 else 0
-            sharpe_ratios.append(sharpe)
-    return pd.Series(sharpe_ratios, index=returns.index)
+            sharpe_ratios.append (sharpe)
+    return pd.Series (sharpe_ratios, index=returns.index)
 
 # GOOD: Vectorized with rolling
-def sharpe_vectorized(returns, window=252):
-    rolling_mean = returns.rolling(window).mean()
-    rolling_std = returns.rolling(window).std()
+def sharpe_vectorized (returns, window=252):
+    rolling_mean = returns.rolling (window).mean()
+    rolling_std = returns.rolling (window).std()
     sharpe = np.sqrt(252) * rolling_mean / rolling_std
     return sharpe
 
 # Compare
 start = time.time()
-result1 = sharpe_loop(returns)
+result1 = sharpe_loop (returns)
 time1 = time.time() - start
 
 start = time.time()
-result2 = sharpe_vectorized(returns)
+result2 = sharpe_vectorized (returns)
 time2 = time.time() - start
 
 print(f"Loop: {time1:.4f} seconds")
 print(f"Vectorized: {time2:.4f} seconds")
 print(f"Speedup: {time1/time2:.1f}x faster")
 
-print(f"\\nResults match: {np.allclose(result1.dropna(), result2.dropna())}")
+print(f"\\nResults match: {np.allclose (result1.dropna(), result2.dropna())}")
 \`\`\`
 
 ### Example 3: Efficient Merging
@@ -644,7 +644,7 @@ n_transactions = 1_000_000
 n_users = 10_000
 
 transactions = pd.DataFrame({
-    'transaction_id': range(n_transactions),
+    'transaction_id': range (n_transactions),
     'user_id': np.random.randint(1, n_users, n_transactions),
     'amount': np.random.uniform(10, 1000, n_transactions)
 })
@@ -656,19 +656,19 @@ users = pd.DataFrame({
 })
 
 # Optimize types before merge
-transactions['user_id'] = transactions['user_id'].astype(np.int32)
-users['user_id'] = users['user_id'].astype(np.int32)
+transactions['user_id'] = transactions['user_id'].astype (np.int32)
+users['user_id'] = users['user_id'].astype (np.int32)
 users['country'] = users['country'].astype('category')
 
 # Merge
 start = time.time()
-merged = pd.merge(transactions, users, on='user_id', how='left')
+merged = pd.merge (transactions, users, on='user_id', how='left')
 merge_time = time.time() - start
 print(f"Merge time: {merge_time:.4f} seconds")
-print(f"Merged DataFrame: {merged.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(f"Merged DataFrame: {merged.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
 # Using categorical saves memory in merged result too
-print(f"\\nMerged country column: {merged['country'].memory_usage(deep=True) / 1024**2:.2f} MB")
+print(f"\\nMerged country column: {merged['country'].memory_usage (deep=True) / 1024**2:.2f} MB")
 \`\`\`
 
 ## Performance Profiling
@@ -680,8 +680,8 @@ import pstats
 
 def example_function():
     # Some data processing
-    df = pd.DataFrame(np.random.randn(10000, 5))
-    result = df.apply(lambda x: x.sum(), axis=1)
+    df = pd.DataFrame (np.random.randn(10000, 5))
+    result = df.apply (lambda x: x.sum(), axis=1)
     return result
 
 # Profile it
@@ -691,7 +691,7 @@ result = example_function()
 profiler.disable()
 
 # Print stats
-stats = pstats.Stats(profiler)
+stats = pstats.Stats (profiler)
 stats.sort_stats('cumulative')
 stats.print_stats(10)  # Top 10 functions by time
 \`\`\`

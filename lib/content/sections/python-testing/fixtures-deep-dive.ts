@@ -18,8 +18,8 @@ def test_create_user():
     db = create_database_connection()
     db.begin_transaction()
     
-    user = User(name="Alice")
-    db.add(user)
+    user = User (name="Alice")
+    db.add (user)
     db.commit()
     
     assert user.id is not None
@@ -33,8 +33,8 @@ def test_update_user():
     db = create_database_connection()
     db.begin_transaction()
     
-    user = User(name="Bob")
-    db.add(user)
+    user = User (name="Bob")
+    db.add (user)
     user.name = "Robert"
     db.commit()
     
@@ -61,17 +61,17 @@ def db_session():
     db.rollback()
     db.close()
 
-def test_create_user(db_session):
+def test_create_user (db_session):
     """db_session injected automatically"""
-    user = User(name="Alice")
-    db_session.add(user)
+    user = User (name="Alice")
+    db_session.add (user)
     db_session.commit()
     assert user.id is not None
 
-def test_update_user(db_session):
+def test_update_user (db_session):
     """Same fixture, zero duplication"""
-    user = User(name="Bob")
-    db_session.add(user)
+    user = User (name="Bob")
+    db_session.add (user)
     user.name = "Robert"
     db_session.commit()
     assert user.name == "Robert"
@@ -95,11 +95,11 @@ def sample_data():
     """Fixture that returns sample data"""
     return {"name": "Alice", "age": 30}
 
-def test_user_name(sample_data):
+def test_user_name (sample_data):
     """Use fixture by naming it as parameter"""
     assert sample_data["name"] == "Alice"
 
-def test_user_age(sample_data):
+def test_user_age (sample_data):
     """Each test gets fresh copy"""
     assert sample_data["age"] == 30
 \`\`\`
@@ -130,10 +130,10 @@ def database_connection():
     print("Disconnecting from database...")
     db.disconnect()
 
-def test_query(database_connection):
+def test_query (database_connection):
     """Uses database, guaranteed cleanup"""
     result = database_connection.query("SELECT * FROM users")
-    assert len(result) > 0
+    assert len (result) > 0
     # db.disconnect() called automatically after test
 \`\`\`
 
@@ -154,7 +154,7 @@ def clean_database():
     database.truncate_all_tables()
     # No yield/return needed if no value to provide
 
-def test_user_creation(clean_database):
+def test_user_creation (clean_database):
     """Database cleaned before test runs"""
     user = create_user("Alice")
     assert user.id == 1  # First user ID (clean database)
@@ -171,17 +171,17 @@ def test_user_creation(clean_database):
 **Created once per test function** (default behavior):
 
 \`\`\`python
-@pytest.fixture(scope="function")  # Default, can omit
+@pytest.fixture (scope="function")  # Default, can omit
 def user():
     """New user for each test"""
     print("Creating user...")
-    return User(name="Alice")
+    return User (name="Alice")
 
-def test_user_name(user):
+def test_user_name (user):
     print("Test 1")
     assert user.name == "Alice"
 
-def test_user_age(user):
+def test_user_age (user):
     print("Test 2")
     user.age = 30
     assert user.age == 30
@@ -201,7 +201,7 @@ def test_user_age(user):
 **Created once per test class**:
 
 \`\`\`python
-@pytest.fixture(scope="class")
+@pytest.fixture (scope="class")
 def api_client():
     """One client for entire test class"""
     print("Creating API client...")
@@ -211,12 +211,12 @@ def api_client():
     client.close()
 
 class TestUserAPI:
-    def test_create_user(self, api_client):
+    def test_create_user (self, api_client):
         print("Test 1")
         response = api_client.post("/users", {"name": "Alice"})
         assert response.status_code == 201
     
-    def test_get_user(self, api_client):
+    def test_get_user (self, api_client):
         print("Test 2")
         response = api_client.get("/users/1")
         assert response.status_code == 200
@@ -236,7 +236,7 @@ class TestUserAPI:
 **Created once per test module (file)**:
 
 \`\`\`python
-@pytest.fixture(scope="module")
+@pytest.fixture (scope="module")
 def database():
     """One database for entire test file"""
     print("Setting up database...")
@@ -248,11 +248,11 @@ def database():
 
 def test_query_1(database):
     result = database.query("SELECT * FROM users")
-    assert isinstance(result, list)
+    assert isinstance (result, list)
 
 def test_query_2(database):
     result = database.query("SELECT * FROM products")
-    assert isinstance(result, list)
+    assert isinstance (result, list)
 
 # Database created once when first test runs
 # Same database used for both tests
@@ -266,7 +266,7 @@ def test_query_2(database):
 **Created once per entire test session**:
 
 \`\`\`python
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def browser():
     """One browser for entire test session"""
     print("Launching browser...")
@@ -276,12 +276,12 @@ def browser():
     browser.quit()
 
 # In test_login.py
-def test_login(browser):
+def test_login (browser):
     browser.get("http://example.com/login")
     # ...
 
 # In test_checkout.py
-def test_checkout(browser):
+def test_checkout (browser):
     browser.get("http://example.com/checkout")
     # ...
 
@@ -312,7 +312,7 @@ def db():
     return create_database()  # Created 1000 times
 
 # 1000 tests with session-scoped database (fast)
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def db():
     return create_database()  # Created once
 
@@ -335,16 +335,16 @@ def database():
     db.disconnect()
 
 @pytest.fixture
-def user_repository(database):
+def user_repository (database):
     """Depends on database fixture"""
-    return UserRepository(database)
+    return UserRepository (database)
 
 @pytest.fixture
-def user_service(user_repository):
+def user_service (user_repository):
     """Depends on user_repository (which depends on database)"""
-    return UserService(user_repository)
+    return UserService (user_repository)
 
-def test_create_user(user_service):
+def test_create_user (user_service):
     """Uses user_service (which uses user_repository, which uses database)"""
     user = user_service.create_user("Alice")
     assert user.id is not None
@@ -373,11 +373,11 @@ def db_engine():
     engine.dispose()
 
 @pytest.fixture
-def db_session(db_engine):
+def db_session (db_engine):
     """Database session (depends on engine)"""
     connection = db_engine.connect()
     transaction = connection.begin()
-    Session = sessionmaker(bind=connection)
+    Session = sessionmaker (bind=connection)
     session = Session()
     yield session
     session.close()
@@ -385,22 +385,22 @@ def db_session(db_engine):
     connection.close()
 
 @pytest.fixture
-def user(db_session):
+def user (db_session):
     """Test user (depends on session)"""
-    user = User(name="Alice", email="alice@example.com")
-    db_session.add(user)
+    user = User (name="Alice", email="alice@example.com")
+    db_session.add (user)
     db_session.commit()
     return user
 
 @pytest.fixture
-def authenticated_client(user):
+def authenticated_client (user):
     """API client with auth (depends on user)"""
     client = APIClient()
-    token = generate_token(user)
+    token = generate_token (user)
     client.set_header("Authorization", f"Bearer {token}")
     return client
 
-def test_get_profile(authenticated_client):
+def test_get_profile (authenticated_client):
     """Uses entire chain: db_engine → db_session → user → authenticated_client"""
     response = authenticated_client.get("/me")
     assert response.status_code == 200
@@ -414,7 +414,7 @@ def test_get_profile(authenticated_client):
 Fixtures that run automatically for every test:
 
 \`\`\`python
-@pytest.fixture(autouse=True)
+@pytest.fixture (autouse=True)
 def clean_database():
     """Runs before EVERY test automatically"""
     print("Cleaning database...")
@@ -422,12 +422,12 @@ def clean_database():
 
 def test_create_user():
     """Database automatically cleaned before this test"""
-    user = User(name="Alice")
+    user = User (name="Alice")
     assert user.id == 1  # First user (clean DB)
 
 def test_create_product():
     """Database automatically cleaned before this test too"""
-    product = Product(name="Widget")
+    product = Product (name="Widget")
     assert product.id == 1  # First product (clean DB)
 
 # No need to add clean_database parameter to tests
@@ -445,7 +445,7 @@ def test_create_product():
 ### Autouse with Scope
 
 \`\`\`python
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture (scope="session", autouse=True)
 def setup_test_environment():
     """Runs once at start of test session"""
     print("Setting up test environment...")
@@ -468,23 +468,23 @@ Fixtures that return factory functions for creating multiple instances:
 
 \`\`\`python
 @pytest.fixture
-def user_factory(db_session):
+def user_factory (db_session):
     """Returns factory function to create users"""
-    def make_user(name="Test User", email=None):
+    def make_user (name="Test User", email=None):
         if email is None:
             email = f"{name.replace(' ', '')}@example.com"
-        user = User(name=name, email=email)
-        db_session.add(user)
+        user = User (name=name, email=email)
+        db_session.add (user)
         db_session.commit()
         return user
     
     return make_user
 
-def test_multiple_users(user_factory):
+def test_multiple_users (user_factory):
     """Create multiple users with factory"""
-    alice = user_factory(name="Alice")
-    bob = user_factory(name="Bob")
-    charlie = user_factory(name="Charlie")
+    alice = user_factory (name="Alice")
+    bob = user_factory (name="Bob")
+    charlie = user_factory (name="Charlie")
     
     assert alice.email == "Alice@example.com"
     assert bob.email == "Bob@example.com"
@@ -500,29 +500,29 @@ def test_multiple_users(user_factory):
 
 \`\`\`python
 @pytest.fixture
-def payment_factory(db_session):
+def payment_factory (db_session):
     """Factory with cleanup tracking"""
     created_payments = []
     
-    def make_payment(amount, currency="USD", status="pending"):
-        payment = Payment(amount=amount, currency=currency, status=status)
-        db_session.add(payment)
+    def make_payment (amount, currency="USD", status="pending"):
+        payment = Payment (amount=amount, currency=currency, status=status)
+        db_session.add (payment)
         db_session.commit()
-        created_payments.append(payment)
+        created_payments.append (payment)
         return payment
     
     yield make_payment
     
     # Cleanup: delete all created payments
     for payment in created_payments:
-        db_session.delete(payment)
+        db_session.delete (payment)
     db_session.commit()
 
-def test_payment_processing(payment_factory):
+def test_payment_processing (payment_factory):
     """Create multiple payments, automatically cleaned up"""
-    payment1 = payment_factory(amount=100.0)
-    payment2 = payment_factory(amount=200.0)
-    payment3 = payment_factory(amount=50.0, currency="EUR")
+    payment1 = payment_factory (amount=100.0)
+    payment2 = payment_factory (amount=200.0)
+    payment3 = payment_factory (amount=50.0, currency="EUR")
     
     assert len([payment1, payment2, payment3]) == 3
     # All payments deleted automatically after test
@@ -535,8 +535,8 @@ def test_payment_processing(payment_factory):
 Create multiple versions of same fixture with different parameters:
 
 \`\`\`python
-@pytest.fixture(params=["sqlite", "postgresql", "mysql"])
-def database(request):
+@pytest.fixture (params=["sqlite", "postgresql", "mysql"])
+def database (request):
     """Fixture parametrized by database type"""
     db_type = request.param
     
@@ -551,7 +551,7 @@ def database(request):
     yield db
     db.disconnect()
 
-def test_query(database):
+def test_query (database):
     """Test runs 3 times (once per database)"""
     result = database.query("SELECT 1")
     assert result is not None
@@ -575,12 +575,12 @@ def test_query(database):
     ],
     ids=["USD", "EUR", "GBP"]
 )
-def currency_amount(request):
+def currency_amount (request):
     """Parametrized fixture with readable IDs"""
     currency, amount = request.param
     return {"currency": currency, "amount": amount}
 
-def test_payment(currency_amount):
+def test_payment (currency_amount):
     """Test runs 3 times with clear output"""
     assert currency_amount["amount"] > 0
 
@@ -599,7 +599,7 @@ pytest provides useful built-in fixtures:
 ### tmp_path: Temporary Directory
 
 \`\`\`python
-def test_file_operations(tmp_path):
+def test_file_operations (tmp_path):
     """tmp_path provides unique temporary directory"""
     # Create test file
     test_file = tmp_path / "data.txt"
@@ -616,7 +616,7 @@ def test_file_operations(tmp_path):
 ### capsys: Capture stdout/stderr
 
 \`\`\`python
-def test_print_output(capsys):
+def test_print_output (capsys):
     """capsys captures print statements"""
     print("Hello, World!")
     print("Testing output", file=sys.stderr)
@@ -629,7 +629,7 @@ def test_print_output(capsys):
 ### monkeypatch: Mock/Patch
 
 \`\`\`python
-def test_environment_variable(monkeypatch):
+def test_environment_variable (monkeypatch):
     """monkeypatch temporarily modifies environment"""
     monkeypatch.setenv("API_KEY", "test_key_123")
     
@@ -641,7 +641,7 @@ def test_environment_variable(monkeypatch):
 
 \`\`\`python
 @pytest.fixture
-def database(request):
+def database (request):
     """Access fixture metadata with request"""
     # Get test function that requested this fixture
     test_name = request.node.name
@@ -650,7 +650,7 @@ def database(request):
     db = Database()
     
     # Add finalizer (alternative to yield)
-    request.addfinalizer(db.close)
+    request.addfinalizer (db.close)
     
     return db
 \`\`\`
@@ -674,28 +674,28 @@ from myapp.services import PaymentService
 
 # ==================== Database Fixtures ====================
 
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def db_engine():
     """Session-scoped database engine"""
     engine = create_engine("postgresql://test:test@localhost/testdb")
     
     # Create all tables once
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all (engine)
     
     yield engine
     
     # Drop all tables at end
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all (engine)
     engine.dispose()
 
 
 @pytest.fixture
-def db_session(db_engine):
+def db_session (db_engine):
     """Function-scoped clean database session"""
     connection = db_engine.connect()
     transaction = connection.begin()
     
-    Session = sessionmaker(bind=connection)
+    Session = sessionmaker (bind=connection)
     session = Session()
     
     yield session
@@ -709,14 +709,14 @@ def db_session(db_engine):
 # ==================== Model Factories ====================
 
 @pytest.fixture
-def user_factory(db_session):
+def user_factory (db_session):
     """Factory for creating test users"""
-    def make_user(name="Test User", email=None, balance=Decimal("1000.00")):
+    def make_user (name="Test User", email=None, balance=Decimal("1000.00")):
         if email is None:
             email = f"{name.replace(' ', '')}@example.com"
         
-        user = User(name=name, email=email, balance=balance)
-        db_session.add(user)
+        user = User (name=name, email=email, balance=balance)
+        db_session.add (user)
         db_session.commit()
         return user
     
@@ -724,16 +724,16 @@ def user_factory(db_session):
 
 
 @pytest.fixture
-def payment_factory(db_session):
+def payment_factory (db_session):
     """Factory for creating test payments"""
-    def make_payment(user, amount, currency="USD", status="pending"):
+    def make_payment (user, amount, currency="USD", status="pending"):
         payment = Payment(
             user=user,
             amount=amount,
             currency=currency,
             status=status
         )
-        db_session.add(payment)
+        db_session.add (payment)
         db_session.commit()
         return payment
     
@@ -743,23 +743,23 @@ def payment_factory(db_session):
 # ==================== Service Fixtures ====================
 
 @pytest.fixture
-def payment_service(db_session):
+def payment_service (db_session):
     """Payment service instance"""
-    return PaymentService(db_session)
+    return PaymentService (db_session)
 
 
 # ==================== Common Test Data ====================
 
 @pytest.fixture
-def alice(user_factory):
+def alice (user_factory):
     """Standard test user Alice"""
-    return user_factory(name="Alice", balance=Decimal("500.00"))
+    return user_factory (name="Alice", balance=Decimal("500.00"))
 
 
 @pytest.fixture
-def bob(user_factory):
+def bob (user_factory):
     """Standard test user Bob"""
-    return user_factory(name="Bob", balance=Decimal("1000.00"))
+    return user_factory (name="Bob", balance=Decimal("1000.00"))
 
 
 # ==================== Tests ====================
@@ -767,16 +767,16 @@ def bob(user_factory):
 class TestUserCreation:
     """Tests for user creation"""
     
-    def test_create_user_with_defaults(self, user_factory):
+    def test_create_user_with_defaults (self, user_factory):
         """Should create user with default values"""
         user = user_factory()
         assert user.id is not None
         assert user.name == "Test User"
         assert user.balance == Decimal("1000.00")
     
-    def test_create_user_with_custom_values(self, user_factory):
+    def test_create_user_with_custom_values (self, user_factory):
         """Should create user with custom values"""
-        user = user_factory(name="Charlie", balance=Decimal("250.00"))
+        user = user_factory (name="Charlie", balance=Decimal("250.00"))
         assert user.name == "Charlie"
         assert user.balance == Decimal("250.00")
 
@@ -784,27 +784,27 @@ class TestUserCreation:
 class TestPaymentProcessing:
     """Tests for payment processing"""
     
-    def test_process_payment_success(self, payment_service, alice, payment_factory):
+    def test_process_payment_success (self, payment_service, alice, payment_factory):
         """Should process valid payment successfully"""
-        payment = payment_factory(user=alice, amount=Decimal("100.00"))
+        payment = payment_factory (user=alice, amount=Decimal("100.00"))
         
-        result = payment_service.process_payment(payment)
+        result = payment_service.process_payment (payment)
         
         assert result is True
         assert payment.status == "completed"
         assert alice.balance == Decimal("400.00")  # 500 - 100
     
-    def test_process_payment_insufficient_funds(self, payment_service, alice, payment_factory):
+    def test_process_payment_insufficient_funds (self, payment_service, alice, payment_factory):
         """Should fail when insufficient funds"""
-        payment = payment_factory(user=alice, amount=Decimal("600.00"))
+        payment = payment_factory (user=alice, amount=Decimal("600.00"))
         
-        result = payment_service.process_payment(payment)
+        result = payment_service.process_payment (payment)
         
         assert result is False
         assert payment.status == "failed"
         assert alice.balance == Decimal("500.00")  # Unchanged
     
-    def test_transfer_between_users(self, payment_service, alice, bob):
+    def test_transfer_between_users (self, payment_service, alice, bob):
         """Should transfer money between users"""
         result = payment_service.transfer(
             from_user=bob,
@@ -820,23 +820,23 @@ class TestPaymentProcessing:
 class TestPaymentRefunds:
     """Tests for payment refunds"""
     
-    def test_refund_completed_payment(self, payment_service, alice, payment_factory):
+    def test_refund_completed_payment (self, payment_service, alice, payment_factory):
         """Should refund completed payment"""
-        payment = payment_factory(user=alice, amount=Decimal("100.00"))
-        payment_service.process_payment(payment)
+        payment = payment_factory (user=alice, amount=Decimal("100.00"))
+        payment_service.process_payment (payment)
         
-        result = payment_service.refund_payment(payment)
+        result = payment_service.refund_payment (payment)
         
         assert result is True
         assert payment.status == "refunded"
         assert alice.balance == Decimal("500.00")  # Back to original
     
-    def test_cannot_refund_pending_payment(self, payment_service, alice, payment_factory):
+    def test_cannot_refund_pending_payment (self, payment_service, alice, payment_factory):
         """Should not refund pending payment"""
-        payment = payment_factory(user=alice, amount=Decimal("100.00"))
+        payment = payment_factory (user=alice, amount=Decimal("100.00"))
         
         with pytest.raises(ValueError, match="only refund completed"):
-            payment_service.refund_payment(payment)
+            payment_service.refund_payment (payment)
 \`\`\`
 
 ---
@@ -854,7 +854,7 @@ def db_session():
     ...
 
 @pytest.fixture
-def user(db_session):
+def user (db_session):
     """Only creates user"""
     ...
 \`\`\`
@@ -913,11 +913,11 @@ def db_session():
     ...
 
 @pytest.fixture
-def user(db_session):
+def user (db_session):
     ...
 
 @pytest.fixture
-def payment(user):
+def payment (user):
     ...
 \`\`\`
 
@@ -928,8 +928,8 @@ def payment(user):
 def complete_setup():
     """Does everything"""
     db = create_db()
-    user = create_user(db)
-    payment = create_payment(user)
+    user = create_user (db)
+    payment = create_payment (user)
     return db, user, payment
 \`\`\`
 
@@ -960,21 +960,21 @@ def db_session():
 ### Pattern 1: Database with Automatic Cleanup
 
 \`\`\`python
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def db_engine():
     """Database engine (created once)"""
     engine = create_engine("postgresql://...")
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all (engine)
     yield engine
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all (engine)
     engine.dispose()
 
 @pytest.fixture
-def db_session(db_engine):
+def db_session (db_engine):
     """Clean database session per test"""
     connection = db_engine.connect()
     transaction = connection.begin()
-    session = Session(bind=connection)
+    session = Session (bind=connection)
     yield session
     session.close()
     transaction.rollback()  # Clean state
@@ -987,12 +987,12 @@ def db_session(db_engine):
 @pytest.fixture
 def api_client():
     """Unauthenticated API client"""
-    return APIClient(base_url="http://localhost:8000")
+    return APIClient (base_url="http://localhost:8000")
 
 @pytest.fixture
-def authenticated_client(api_client, user):
+def authenticated_client (api_client, user):
     """API client with authentication"""
-    token = generate_token(user)
+    token = generate_token (user)
     api_client.set_header("Authorization", f"Bearer {token}")
     return api_client
 \`\`\`
@@ -1001,7 +1001,7 @@ def authenticated_client(api_client, user):
 
 \`\`\`python
 @pytest.fixture
-def mock_payment_gateway(monkeypatch):
+def mock_payment_gateway (monkeypatch):
     """Mock external payment gateway"""
     mock = Mock()
     mock.charge.return_value = {"status": "success", "id": "txn_123"}

@@ -108,16 +108,16 @@ def process_document_image(
         Extracted structured data
     """
     # Read and encode image
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     # Build extraction prompt based on document type
     if extraction_schema:
         prompt = f"""Extract information from this {document_type} according to this schema:
 
-{json.dumps(extraction_schema, indent=2)}
+{json.dumps (extraction_schema, indent=2)}
 
 Return the extracted data as JSON matching this schema. If a field is not found, use null."""
     
@@ -207,7 +207,7 @@ Be precise with numbers and dates.""",
 }}"""
         }
         
-        prompt = prompts.get(document_type, prompts["generic"])
+        prompt = prompts.get (document_type, prompts["generic"])
     
     # Call Vision API
     response = client.chat.completions.create(
@@ -232,7 +232,7 @@ Be precise with numbers and dates.""",
     # Parse JSON response
     import json
     try:
-        extracted_data = json.loads(response.choices[0].message.content)
+        extracted_data = json.loads (response.choices[0].message.content)
     except json.JSONDecodeError:
         # Fallback: return raw response
         extracted_data = {
@@ -250,7 +250,7 @@ invoice_data = process_document_image(
 
 print(f"Invoice Number: {invoice_data['invoice_number']}")
 print(f"Total: \${invoice_data['total']}")
-print(f"Line Items: {len(invoice_data['line_items'])}")
+print(f"Line Items: {len (invoice_data['line_items'])}")
 \`\`\`
 
 ### Production Document Intelligence System
@@ -265,7 +265,7 @@ import json
 import logging
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -290,13 +290,13 @@ class ProductionDocumentIntelligence:
         cache_ttl: int = 86400 * 30  # 30 days
     ):
         self.client = OpenAI(api_key=openai_api_key)
-        self.redis_client = redis.Redis(host=redis_host, port=redis_port)
+        self.redis_client = redis.Redis (host=redis_host, port=redis_port)
         self.cache_ttl = cache_ttl
         
         # Define extraction schemas for different document types
         self.schemas = self._load_schemas()
     
-    def _load_schemas(self) -> Dict[str, Dict]:
+    def _load_schemas (self) -> Dict[str, Dict]:
         """Load document extraction schemas."""
         return {
             "invoice": {
@@ -325,12 +325,12 @@ class ProductionDocumentIntelligence:
             }
         }
     
-    def _get_document_hash(self, image_path: str) -> str:
+    def _get_document_hash (self, image_path: str) -> str:
         """Generate hash of document image."""
-        with open(image_path, 'rb') as f:
+        with open (image_path, 'rb') as f:
             return hashlib.sha256(f.read()).hexdigest()
     
-    def _get_cache_key(self, doc_hash: str, doc_type: str) -> str:
+    def _get_cache_key (self, doc_hash: str, doc_type: str) -> str:
         """Generate cache key."""
         return f"doc_intel:{doc_hash}:{doc_type}"
     
@@ -351,7 +351,7 @@ class ProductionDocumentIntelligence:
         """
         from PIL import Image, ImageEnhance, ImageFilter
         
-        img = Image.open(image_path)
+        img = Image.open (image_path)
         
         # Convert to RGB if needed
         if img.mode != 'RGB':
@@ -359,19 +359,19 @@ class ProductionDocumentIntelligence:
         
         if enhance:
             # Increase contrast
-            enhancer = ImageEnhance.Contrast(img)
+            enhancer = ImageEnhance.Contrast (img)
             img = enhancer.enhance(1.5)
             
             # Increase sharpness
-            enhancer = ImageEnhance.Sharpness(img)
+            enhancer = ImageEnhance.Sharpness (img)
             img = enhancer.enhance(1.5)
             
             # Apply slight denoise
-            img = img.filter(ImageFilter.MedianFilter(size=3))
+            img = img.filter(ImageFilter.MedianFilter (size=3))
         
         # Save preprocessed image
-        output_path = "preprocessed_" + Path(image_path).name
-        img.save(output_path, 'JPEG', quality=95)
+        output_path = "preprocessed_" + Path (image_path).name
+        img.save (output_path, 'JPEG', quality=95)
         
         return output_path
     
@@ -395,23 +395,23 @@ class ProductionDocumentIntelligence:
         # Check required fields
         for field in schema["required_fields"]:
             if field not in extracted_data or not extracted_data[field]:
-                errors.append(f"Missing required field: {field}")
+                errors.append (f"Missing required field: {field}")
         
         # Validate numeric fields
         for field in schema["numeric_fields"]:
             if field in extracted_data:
                 try:
-                    float(extracted_data[field])
+                    float (extracted_data[field])
                 except (ValueError, TypeError):
-                    errors.append(f"Invalid numeric value for field: {field}")
+                    errors.append (f"Invalid numeric value for field: {field}")
         
         # Validate date fields
         for field in schema["date_fields"]:
             if field in extracted_data and extracted_data[field]:
                 try:
-                    datetime.strptime(extracted_data[field], "%Y-%m-%d")
+                    datetime.strptime (extracted_data[field], "%Y-%m-%d")
                 except ValueError:
-                    errors.append(f"Invalid date format for field: {field}")
+                    errors.append (f"Invalid date format for field: {field}")
         
         return errors
     
@@ -425,7 +425,7 @@ class ProductionDocumentIntelligence:
         confidence = 1.0
         
         # Reduce confidence for each validation error
-        confidence -= len(validation_errors) * 0.1
+        confidence -= len (validation_errors) * 0.1
         
         # Reduce confidence for missing optional fields
         # (Implementation depends on schema)
@@ -456,22 +456,22 @@ class ProductionDocumentIntelligence:
         start_time = datetime.now()
         
         # Generate document ID
-        doc_hash = self._get_document_hash(image_path)
+        doc_hash = self._get_document_hash (image_path)
         doc_id = f"{document_type}_{doc_hash[:8]}"
         
         # Check cache
         if use_cache:
-            cache_key = self._get_cache_key(doc_hash, document_type)
-            cached_result = self.redis_client.get(cache_key)
+            cache_key = self._get_cache_key (doc_hash, document_type)
+            cached_result = self.redis_client.get (cache_key)
             
             if cached_result:
-                logger.info(f"Cache hit for document {doc_id}")
-                result_dict = json.loads(cached_result)
+                logger.info (f"Cache hit for document {doc_id}")
+                result_dict = json.loads (cached_result)
                 return DocumentExtractionResult(**result_dict, cached=True)
         
         # Preprocess image
         if enhance_image:
-            processed_image_path = self._preprocess_image(image_path)
+            processed_image_path = self._preprocess_image (image_path)
         else:
             processed_image_path = image_path
         
@@ -483,10 +483,10 @@ class ProductionDocumentIntelligence:
         )
         
         # Validate extraction
-        validation_errors = self._validate_extraction(extracted_data, document_type)
+        validation_errors = self._validate_extraction (extracted_data, document_type)
         
         # Calculate confidence
-        confidence = self._calculate_confidence(extracted_data, validation_errors)
+        confidence = self._calculate_confidence (extracted_data, validation_errors)
         
         # Calculate processing time
         processing_time = (datetime.now() - start_time).total_seconds()
@@ -512,11 +512,11 @@ class ProductionDocumentIntelligence:
                 "validation_errors": result.validation_errors
             }
             
-            cache_key = self._get_cache_key(doc_hash, document_type)
+            cache_key = self._get_cache_key (doc_hash, document_type)
             self.redis_client.setex(
                 cache_key,
                 self.cache_ttl,
-                json.dumps(result_dict)
+                json.dumps (result_dict)
             )
         
         logger.info(
@@ -544,11 +544,11 @@ class ProductionDocumentIntelligence:
         import asyncio
         from concurrent.futures import ThreadPoolExecutor
         
-        def process_one(doc: Dict[str, str]) -> DocumentExtractionResult:
-            return self.process_document(doc['path'], doc['type'])
+        def process_one (doc: Dict[str, str]) -> DocumentExtractionResult:
+            return self.process_document (doc['path'], doc['type'])
         
-        with ThreadPoolExecutor(max_workers=max_concurrent) as executor:
-            results = list(executor.map(process_one, documents))
+        with ThreadPoolExecutor (max_workers=max_concurrent) as executor:
+            results = list (executor.map (process_one, documents))
         
         return results
 
@@ -567,7 +567,7 @@ print(f"Document ID: {result.document_id}")
 print(f"Confidence: {result.confidence:.2%}")
 print(f"Processing Time: {result.processing_time:.2f}s")
 print(f"\\nExtracted Data:")
-print(json.dumps(result.extracted_data, indent=2))
+print(json.dumps (result.extracted_data, indent=2))
 
 if result.validation_errors:
     print(f"\\nValidation Errors:")
@@ -592,10 +592,10 @@ def extract_table_from_document(
     Returns:
         List of dictionaries representing table rows
     """
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     prompt = """Extract the table from this document.
 
@@ -630,7 +630,7 @@ Use the first row as column headers. Be precise with numbers and text."""
     )
     
     import json
-    table_data = json.loads(response.choices[0].message.content)
+    table_data = json.loads (response.choices[0].message.content)
     
     return table_data
 
@@ -640,7 +640,7 @@ table = extract_table_from_document(
     table_description="quarterly revenue table"
 )
 
-print(f"Extracted {len(table)} rows")
+print(f"Extracted {len (table)} rows")
 for row in table[:3]:
     print(row)
 \`\`\`
@@ -662,10 +662,10 @@ def process_filled_form(
     Returns:
         Extracted form data
     """
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     if form_template:
         field_list = "\\n".join([f"- {field}" for field in form_template.get("fields", [])])
@@ -712,13 +712,13 @@ Return as JSON with:
     )
     
     import json
-    form_data = json.loads(response.choices[0].message.content)
+    form_data = json.loads (response.choices[0].message.content)
     
     return form_data
 
 # Process form
 form_data = process_filled_form("application_form.png")
-print(json.dumps(form_data, indent=2))
+print(json.dumps (form_data, indent=2))
 \`\`\`
 
 ### Multi-Page Document Processing
@@ -740,19 +740,19 @@ def process_multi_page_pdf(
     Returns:
         Aggregated extracted data
     """
-    doc = fitz.open(pdf_path)
+    doc = fitz.open (pdf_path)
     
     page_data = []
     
-    for page_num, page in enumerate(doc):
+    for page_num, page in enumerate (doc):
         # Convert page to image
-        pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))  # 2x resolution
+        pix = page.get_pixmap (matrix=fitz.Matrix(2, 2))  # 2x resolution
         img_data = pix.tobytes("png")
         
         # Save page as image
         page_image_path = f"page_{page_num + 1}.png"
-        with open(page_image_path, "wb") as f:
-            f.write(img_data)
+        with open (page_image_path, "wb") as f:
+            f.write (img_data)
         
         # Extract data from page
         page_result = process_document_image(
@@ -770,10 +770,10 @@ def process_multi_page_pdf(
     # Aggregate data from all pages
     aggregated = {
         "document_type": document_type,
-        "total_pages": len(page_data),
+        "total_pages": len (page_data),
         "pages": page_data,
         "combined_text": " ".join([
-            str(p["data"].get("main_content", ""))
+            str (p["data"].get("main_content", ""))
             for p in page_data
         ])
     }
@@ -805,25 +805,25 @@ def calculate_field_confidence(
     # Validate based on field type
     if field_type == "date":
         try:
-            datetime.strptime(field_value, "%Y-%m-%d")
+            datetime.strptime (field_value, "%Y-%m-%d")
         except ValueError:
             confidence *= 0.5
     
     elif field_type == "number":
         try:
-            float(field_value)
+            float (field_value)
         except ValueError:
             confidence *= 0.3
     
     elif field_type == "email":
         import re
-        if not re.match(r"[^@]+@[^@]+\\.[^@]+", field_value):
+        if not re.match (r"[^@]+@[^@]+\\.[^@]+", field_value):
             confidence *= 0.4
     
     # Apply custom validation rules
     if validation_rules:
         for rule_name, rule_func in validation_rules.items():
-            if not rule_func(field_value):
+            if not rule_func (field_value):
                 confidence *= 0.7
     
     return confidence
@@ -849,14 +849,14 @@ def correct_extraction_errors(
     corrected = extracted_data.copy()
     
     # Correct common OCR errors in numbers
-    if "total" in corrected and isinstance(corrected["total"], str):
+    if "total" in corrected and isinstance (corrected["total"], str):
         # Remove currency symbols
         total = corrected["total"].replace("$", "").replace("€", "")
         # Remove commas
         total = total.replace(",", "")
         # Convert to float
         try:
-            corrected["total"] = float(total)
+            corrected["total"] = float (total)
         except ValueError:
             pass
     
@@ -866,7 +866,7 @@ def correct_extraction_errors(
         # Try multiple date formats
         for fmt in ["%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%Y/%m/%d"]:
             try:
-                dt = datetime.strptime(date_str, fmt)
+                dt = datetime.strptime (date_str, fmt)
                 corrected["date"] = dt.strftime("%Y-%m-%d")
                 break
             except ValueError:
@@ -882,7 +882,7 @@ def correct_extraction_errors(
     
     for old_key, new_key in field_mappings.items():
         if old_key in corrected and new_key not in corrected:
-            corrected[new_key] = corrected.pop(old_key)
+            corrected[new_key] = corrected.pop (old_key)
     
     return corrected
 \`\`\`
@@ -940,11 +940,11 @@ def create_validation_request(
 # Example usage
 result = doc_intel.process_document("important_invoice.png", "invoice")
 
-if needs_human_validation(result):
-    validation_request = create_validation_request(result, "important_invoice.png")
+if needs_human_validation (result):
+    validation_request = create_validation_request (result, "important_invoice.png")
     print(f"Document {result.document_id} requires human validation")
     print(f"Confidence: {result.confidence:.2%}")
-    print(f"Errors: {len(result.validation_errors)}")
+    print(f"Errors: {len (result.validation_errors)}")
     # Send to validation queue
 else:
     print(f"Document {result.document_id} passed automatic validation")
@@ -962,9 +962,9 @@ def build_invoice_processing_system() -> Dict[str, Any]:
         openai_api_key=os.getenv("OPENAI_API_KEY")
     )
     
-    def process_invoice(invoice_path: str) -> Dict[str, Any]:
+    def process_invoice (invoice_path: str) -> Dict[str, Any]:
         # Process invoice
-        result = doc_intel.process_document(invoice_path, "invoice")
+        result = doc_intel.process_document (invoice_path, "invoice")
         
         # Correct common errors
         corrected_data = correct_extraction_errors(
@@ -981,18 +981,18 @@ def build_invoice_processing_system() -> Dict[str, Any]:
             
             # Check if it matches extracted subtotal
             extracted_subtotal = corrected_data.get("subtotal", 0)
-            if abs(calculated_subtotal - extracted_subtotal) > 0.01:
+            if abs (calculated_subtotal - extracted_subtotal) > 0.01:
                 result.validation_errors.append(
                     f"Line items total ({calculated_subtotal}) "
                     f"doesn't match subtotal ({extracted_subtotal})"
                 )
         
         # Determine next action
-        if needs_human_validation(result):
+        if needs_human_validation (result):
             return {
                 "status": "needs_validation",
                 "data": corrected_data,
-                "validation_request": create_validation_request(result, invoice_path)
+                "validation_request": create_validation_request (result, invoice_path)
             }
         else:
             return {
@@ -1032,21 +1032,21 @@ def process_expense_report(
     total_amount = 0.0
     
     for receipt_path in receipts:
-        result = doc_intel.process_document(receipt_path, "receipt")
+        result = doc_intel.process_document (receipt_path, "receipt")
         
         if result.confidence > 0.7:
-            receipt_data.append(result.extracted_data)
+            receipt_data.append (result.extracted_data)
             total_amount += result.extracted_data.get("total", 0.0)
     
     # Process report form if provided
     form_data = None
     if report_form:
-        form_result = doc_intel.process_document(report_form, "form")
+        form_result = doc_intel.process_document (report_form, "form")
         form_data = form_result.extracted_data
     
     return {
         "receipts": receipt_data,
-        "total_receipts": len(receipt_data),
+        "total_receipts": len (receipt_data),
         "total_amount": total_amount,
         "form_data": form_data,
         "status": "complete"

@@ -36,7 +36,7 @@ export const videoGenerationFundamentalsQuiz = [
 
 **How Sora Handles This:**
 
-Sora's spacetime patch approach likely helps by:
+Sora\'s spacetime patch approach likely helps by:
 1. Treating time as a dimension similar to space, allowing the transformer to learn temporal relationships naturally
 2. Using self-attention across both spatial and temporal dimensions simultaneously
 3. Training on massive datasets of real-world video to learn physical laws implicitly
@@ -174,7 +174,7 @@ Heterogeneous GPU fleet:
 
 Dynamic allocation strategy:
 \`\`\`python
-def allocate_gpu(job):
+def allocate_gpu (job):
                 duration = job.duration
     resolution = job.resolution
     priority = job.priority

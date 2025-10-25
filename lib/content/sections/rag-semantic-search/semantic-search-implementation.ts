@@ -5,7 +5,7 @@ export const semanticSearchImplementation = {
 
 ## Introduction
 
-Semantic search goes beyond keyword matching to understand the meaning and intent behind queries. It's the core technology powering modern RAG systems, enabling retrieval based on concepts rather than exact text matches.
+Semantic search goes beyond keyword matching to understand the meaning and intent behind queries. It\'s the core technology powering modern RAG systems, enabling retrieval based on concepts rather than exact text matches.
 
 In this comprehensive section, we'll build production-ready semantic search systems from scratch, covering query embedding, similarity search, ranking algorithms, and optimization techniques.
 
@@ -76,13 +76,13 @@ class SemanticSearchEngine:
             metadata: Optional metadata for each document
         """
         if metadata is None:
-            metadata = [{}] * len(documents)
+            metadata = [{}] * len (documents)
         
-        print(f"Indexing {len(documents)} documents...")
+        print(f"Indexing {len (documents)} documents...")
         
         # Create embeddings in batches
         batch_size = 100
-        for i in range(0, len(documents), batch_size):
+        for i in range(0, len (documents), batch_size):
             batch_docs = documents[i:i + batch_size]
             
             # Embed batch
@@ -95,11 +95,11 @@ class SemanticSearchEngine:
             batch_embeddings = [item.embedding for item in response.data]
             
             # Store
-            self.documents.extend(batch_docs)
-            self.embeddings.extend(batch_embeddings)
-            self.metadata.extend(metadata[i:i + batch_size])
+            self.documents.extend (batch_docs)
+            self.embeddings.extend (batch_embeddings)
+            self.metadata.extend (metadata[i:i + batch_size])
             
-            print(f"  Indexed {len(self.documents)}/{len(documents)} documents")
+            print(f"  Indexed {len (self.documents)}/{len (documents)} documents")
         
         print(f"✓ Indexing complete")
     
@@ -121,12 +121,12 @@ class SemanticSearchEngine:
             List of search results with scores
         """
         # Embed query
-        query_embedding = self._embed_text(query)
+        query_embedding = self._embed_text (query)
         
         # Calculate similarities
         similarities = []
-        for i, doc_embedding in enumerate(self.embeddings):
-            similarity = self._cosine_similarity(query_embedding, doc_embedding)
+        for i, doc_embedding in enumerate (self.embeddings):
+            similarity = self._cosine_similarity (query_embedding, doc_embedding)
             
             if similarity >= min_score:
                 similarities.append({
@@ -137,12 +137,12 @@ class SemanticSearchEngine:
                 })
         
         # Sort by similarity (descending)
-        similarities.sort(key=lambda x: x["score"], reverse=True)
+        similarities.sort (key=lambda x: x["score"], reverse=True)
         
         # Return top K
         return similarities[:top_k]
     
-    def _embed_text(self, text: str) -> List[float]:
+    def _embed_text (self, text: str) -> List[float]:
         """Create embedding for text."""
         response = client.embeddings.create(
             model=self.embedding_model,
@@ -156,13 +156,13 @@ class SemanticSearchEngine:
         v2: List[float]
     ) -> float:
         """Calculate cosine similarity between two vectors."""
-        v1_np = np.array(v1)
-        v2_np = np.array(v2)
+        v1_np = np.array (v1)
+        v2_np = np.array (v2)
         
-        dot_product = np.dot(v1_np, v2_np)
-        norm_product = np.linalg.norm(v1_np) * np.linalg.norm(v2_np)
+        dot_product = np.dot (v1_np, v2_np)
+        norm_product = np.linalg.norm (v1_np) * np.linalg.norm (v2_np)
         
-        return float(dot_product / norm_product)
+        return float (dot_product / norm_product)
 
 
 # Example usage
@@ -185,7 +185,7 @@ metadata = [
     {"category": "ai", "source": "tech_wiki"}
 ]
 
-search_engine.add_documents(documents, metadata)
+search_engine.add_documents (documents, metadata)
 
 # Search
 results = search_engine.search(
@@ -194,7 +194,7 @@ results = search_engine.search(
 )
 
 print("\\nSearch Results:")
-for i, result in enumerate(results, 1):
+for i, result in enumerate (results, 1):
     print(f"\\n{i}. Score: {result['score']:.3f}")
     print(f"   Category: {result['metadata']['category']}")
     print(f"   Text: {result['document']}")
@@ -232,46 +232,46 @@ class AdvancedSimilarityCalculator:
     """
     
     @staticmethod
-    def cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
+    def cosine_similarity (v1: np.ndarray, v2: np.ndarray) -> float:
         """
         Cosine similarity: angle between vectors.
         Range: -1 to 1 (1 = identical direction)
         """
-        return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+        return np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
     
     @staticmethod
-    def euclidean_distance(v1: np.ndarray, v2: np.ndarray) -> float:
+    def euclidean_distance (v1: np.ndarray, v2: np.ndarray) -> float:
         """
         Euclidean distance: straight-line distance.
         Range: 0 to infinity (0 = identical)
         """
-        return np.linalg.norm(v1 - v2)
+        return np.linalg.norm (v1 - v2)
     
     @staticmethod
-    def manhattan_distance(v1: np.ndarray, v2: np.ndarray) -> float:
+    def manhattan_distance (v1: np.ndarray, v2: np.ndarray) -> float:
         """
         Manhattan distance: sum of absolute differences.
         Range: 0 to infinity (0 = identical)
         """
-        return np.sum(np.abs(v1 - v2))
+        return np.sum (np.abs (v1 - v2))
     
     @staticmethod
-    def dot_product(v1: np.ndarray, v2: np.ndarray) -> float:
+    def dot_product (v1: np.ndarray, v2: np.ndarray) -> float:
         """
         Dot product: simple multiplication.
         For normalized vectors, equivalent to cosine similarity.
         """
-        return np.dot(v1, v2)
+        return np.dot (v1, v2)
     
     @staticmethod
-    def normalized_dot_product(v1: np.ndarray, v2: np.ndarray) -> float:
+    def normalized_dot_product (v1: np.ndarray, v2: np.ndarray) -> float:
         """
         Dot product of normalized vectors.
         Same as cosine similarity but faster.
         """
-        v1_norm = v1 / np.linalg.norm(v1)
-        v2_norm = v2 / np.linalg.norm(v2)
-        return np.dot(v1_norm, v2_norm)
+        v1_norm = v1 / np.linalg.norm (v1)
+        v2_norm = v2 / np.linalg.norm (v2)
+        return np.dot (v1_norm, v2_norm)
 
 
 # Compare metrics
@@ -280,10 +280,10 @@ calc = AdvancedSimilarityCalculator()
 v1 = np.array([1, 2, 3])
 v2 = np.array([2, 3, 4])
 
-print(f"Cosine similarity: {calc.cosine_similarity(v1, v2):.3f}")
-print(f"Euclidean distance: {calc.euclidean_distance(v1, v2):.3f}")
-print(f"Manhattan distance: {calc.manhattan_distance(v1, v2):.3f}")
-print(f"Dot product: {calc.dot_product(v1, v2):.3f}")
+print(f"Cosine similarity: {calc.cosine_similarity (v1, v2):.3f}")
+print(f"Euclidean distance: {calc.euclidean_distance (v1, v2):.3f}")
+print(f"Manhattan distance: {calc.manhattan_distance (v1, v2):.3f}")
+print(f"Dot product: {calc.dot_product (v1, v2):.3f}")
 \`\`\`
 
 ## Query Preprocessing
@@ -300,7 +300,7 @@ class QueryPreprocessor:
     """
     
     @staticmethod
-    def clean_query(query: str) -> str:
+    def clean_query (query: str) -> str:
         """
         Basic query cleaning.
         
@@ -309,7 +309,7 @@ class QueryPreprocessor:
         - Remove special characters (optional)
         """
         # Remove extra whitespace
-        query = re.sub(r'\\s+', ' ', query.strip())
+        query = re.sub (r'\\s+', ' ', query.strip())
         
         # Convert to lowercase (preserve for case-sensitive models)
         # query = query.lower()
@@ -317,7 +317,7 @@ class QueryPreprocessor:
         return query
     
     @staticmethod
-    def expand_query(query: str) -> List[str]:
+    def expand_query (query: str) -> List[str]:
         """
         Generate query variations for better recall.
         
@@ -328,14 +328,14 @@ class QueryPreprocessor:
         
         # Add question forms
         if not query.endswith('?'):
-            variations.append(f"{query}?")
-            variations.append(f"What is {query}?")
-            variations.append(f"Tell me about {query}")
+            variations.append (f"{query}?")
+            variations.append (f"What is {query}?")
+            variations.append (f"Tell me about {query}")
         
         return variations
     
     @staticmethod
-    def extract_entities(query: str) -> List[str]:
+    def extract_entities (query: str) -> List[str]:
         """
         Extract potential entities from query.
         (Simplified - use spaCy/NER for production)
@@ -351,7 +351,7 @@ class QueryPreprocessor:
 preprocessor = QueryPreprocessor()
 
 query = "  What   is  Python?  "
-cleaned = preprocessor.clean_query(query)
+cleaned = preprocessor.clean_query (query)
 print(f"Cleaned: '{cleaned}'")
 
 variations = preprocessor.expand_query("machine learning")
@@ -391,26 +391,26 @@ class HybridSearchEngine:
         self.embeddings = []
         self.inverted_index = {}  # Word -> document indices
     
-    def add_documents(self, documents: List[str]):
+    def add_documents (self, documents: List[str]):
         """Add documents and build both indexes."""
         self.documents = documents
         
         # Build semantic index (embeddings)
         print("Building semantic index...")
         for doc in documents:
-            embedding = self._embed(doc)
-            self.embeddings.append(embedding)
+            embedding = self._embed (doc)
+            self.embeddings.append (embedding)
         
         # Build keyword index (inverted index)
         print("Building keyword index...")
-        for doc_idx, doc in enumerate(documents):
-            words = self._tokenize(doc)
+        for doc_idx, doc in enumerate (documents):
+            words = self._tokenize (doc)
             for word in words:
                 if word not in self.inverted_index:
                     self.inverted_index[word] = set()
-                self.inverted_index[word].add(doc_idx)
+                self.inverted_index[word].add (doc_idx)
         
-        print(f"✓ Indexed {len(documents)} documents")
+        print(f"✓ Indexed {len (documents)} documents")
     
     def search(
         self,
@@ -428,18 +428,18 @@ class HybridSearchEngine:
             Ranked search results
         """
         # Get semantic scores
-        semantic_scores = self._semantic_search(query)
+        semantic_scores = self._semantic_search (query)
         
         # Get keyword scores
-        keyword_scores = self._keyword_search(query)
+        keyword_scores = self._keyword_search (query)
         
         # Combine scores
         combined_scores = {}
-        all_doc_ids = set(semantic_scores.keys()) | set(keyword_scores.keys())
+        all_doc_ids = set (semantic_scores.keys()) | set (keyword_scores.keys())
         
         for doc_id in all_doc_ids:
-            semantic_score = semantic_scores.get(doc_id, 0.0)
-            keyword_score = keyword_scores.get(doc_id, 0.0)
+            semantic_score = semantic_scores.get (doc_id, 0.0)
+            keyword_score = keyword_scores.get (doc_id, 0.0)
             
             combined_scores[doc_id] = (
                 self.semantic_weight * semantic_score +
@@ -457,18 +457,18 @@ class HybridSearchEngine:
             {
                 "document": self.documents[doc_id],
                 "score": score,
-                "semantic_score": semantic_scores.get(doc_id, 0.0),
-                "keyword_score": keyword_scores.get(doc_id, 0.0)
+                "semantic_score": semantic_scores.get (doc_id, 0.0),
+                "keyword_score": keyword_scores.get (doc_id, 0.0)
             }
             for doc_id, score in sorted_results
         ]
     
-    def _semantic_search(self, query: str) -> Dict[int, float]:
+    def _semantic_search (self, query: str) -> Dict[int, float]:
         """Semantic search scores."""
-        query_embedding = self._embed(query)
+        query_embedding = self._embed (query)
         
         scores = {}
-        for doc_id, doc_embedding in enumerate(self.embeddings):
+        for doc_id, doc_embedding in enumerate (self.embeddings):
             similarity = self._cosine_similarity(
                 query_embedding,
                 doc_embedding
@@ -477,19 +477,19 @@ class HybridSearchEngine:
         
         return scores
     
-    def _keyword_search(self, query: str) -> Dict[int, float]:
+    def _keyword_search (self, query: str) -> Dict[int, float]:
         """Keyword search scores (BM25-like)."""
-        query_words = self._tokenize(query)
+        query_words = self._tokenize (query)
         
         # Find documents containing query words
         doc_matches = {}
         for word in query_words:
             if word in self.inverted_index:
                 for doc_id in self.inverted_index[word]:
-                    doc_matches[doc_id] = doc_matches.get(doc_id, 0) + 1
+                    doc_matches[doc_id] = doc_matches.get (doc_id, 0) + 1
         
         # Normalize scores (simple TF)
-        max_matches = max(doc_matches.values()) if doc_matches else 1
+        max_matches = max (doc_matches.values()) if doc_matches else 1
         normalized_scores = {
             doc_id: count / max_matches
             for doc_id, count in doc_matches.items()
@@ -497,23 +497,23 @@ class HybridSearchEngine:
         
         return normalized_scores
     
-    def _embed(self, text: str) -> List[float]:
+    def _embed (self, text: str) -> List[float]:
         """Create embedding (placeholder)."""
         # In production, use actual embedding model
         return [0.0] * 1536
     
-    def _tokenize(self, text: str) -> Set[str]:
+    def _tokenize (self, text: str) -> Set[str]:
         """Simple tokenization."""
-        words = re.findall(r'\\w+', text.lower())
-        return set(words)
+        words = re.findall (r'\\w+', text.lower())
+        return set (words)
     
-    def _cosine_similarity(self, v1: List[float], v2: List[float]) -> float:
+    def _cosine_similarity (self, v1: List[float], v2: List[float]) -> float:
         """Calculate cosine similarity."""
-        v1_np = np.array(v1)
-        v2_np = np.array(v2)
+        v1_np = np.array (v1)
+        v2_np = np.array (v2)
         return float(
-            np.dot(v1_np, v2_np) /
-            (np.linalg.norm(v1_np) * np.linalg.norm(v2_np))
+            np.dot (v1_np, v2_np) /
+            (np.linalg.norm (v1_np) * np.linalg.norm (v2_np))
         )
 
 
@@ -529,11 +529,11 @@ documents = [
     "Neural networks are inspired by the brain"
 ]
 
-hybrid_search.add_documents(documents)
+hybrid_search.add_documents (documents)
 
 results = hybrid_search.search("machine learning in python", top_k=3)
 
-for i, result in enumerate(results, 1):
+for i, result in enumerate (results, 1):
     print(f"\\n{i}. Score: {result['score']:.3f}")
     print(f"   Semantic: {result['semantic_score']:.3f}")
     print(f"   Keyword: {result['keyword_score']:.3f}")
@@ -564,9 +564,9 @@ class FilterableSearchEngine:
         metadata: List[Dict]
     ):
         """Add documents with metadata."""
-        self.documents.extend(documents)
-        self.embeddings.extend(embeddings)
-        self.metadata.extend(metadata)
+        self.documents.extend (documents)
+        self.embeddings.extend (embeddings)
+        self.metadata.extend (metadata)
     
     def search(
         self,
@@ -588,14 +588,14 @@ class FilterableSearchEngine:
         results = []
         
         for i, (doc, emb, meta) in enumerate(
-            zip(self.documents, self.embeddings, self.metadata)
+            zip (self.documents, self.embeddings, self.metadata)
         ):
             # Apply filter if provided
-            if filter_fn and not filter_fn(meta):
+            if filter_fn and not filter_fn (meta):
                 continue
             
             # Calculate similarity
-            similarity = self._cosine_similarity(query_embedding, emb)
+            similarity = self._cosine_similarity (query_embedding, emb)
             
             results.append({
                 "document": doc,
@@ -604,7 +604,7 @@ class FilterableSearchEngine:
             })
         
         # Sort and return top K
-        results.sort(key=lambda x: x["score"], reverse=True)
+        results.sort (key=lambda x: x["score"], reverse=True)
         return results[:top_k]
     
     def _cosine_similarity(
@@ -613,11 +613,11 @@ class FilterableSearchEngine:
         v2: List[float]
     ) -> float:
         """Cosine similarity."""
-        v1_np = np.array(v1)
-        v2_np = np.array(v2)
+        v1_np = np.array (v1)
+        v2_np = np.array (v2)
         return float(
-            np.dot(v1_np, v2_np) /
-            (np.linalg.norm(v1_np) * np.linalg.norm(v2_np))
+            np.dot (v1_np, v2_np) /
+            (np.linalg.norm (v1_np) * np.linalg.norm (v2_np))
         )
 
 
@@ -633,7 +633,7 @@ metadata = [
     {"date": "2023-12-01", "category": "tech"}
 ]
 
-search.add_documents(docs, embeddings, metadata)
+search.add_documents (docs, embeddings, metadata)
 
 # Search only 2024 documents
 query_emb = [0.1] * 1536
@@ -643,7 +643,7 @@ results = search.search(
     filter_fn=lambda meta: meta["date"].startswith("2024")
 )
 
-print(f"Found {len(results)} results from 2024")
+print(f"Found {len (results)} results from 2024")
 \`\`\`
 
 ## Caching Search Results
@@ -686,7 +686,7 @@ class CachedSearchEngine:
             Search results (cached if available)
         """
         # Generate cache key
-        cache_key = self._get_cache_key(query, top_k)
+        cache_key = self._get_cache_key (query, top_k)
         
         # Check cache
         if cache_key in self._cache:
@@ -695,36 +695,36 @@ class CachedSearchEngine:
         
         # Perform search
         print("✗ Cache miss, searching...")
-        results = self._do_search(query, top_k)
+        results = self._do_search (query, top_k)
         
         # Store in cache
-        if len(self._cache) >= self.cache_size:
+        if len (self._cache) >= self.cache_size:
             # Remove oldest entry (simple FIFO)
-            first_key = next(iter(self._cache))
+            first_key = next (iter (self._cache))
             del self._cache[first_key]
         
         self._cache[cache_key] = results
         
         return results
     
-    def _get_cache_key(self, query: str, top_k: int) -> str:
+    def _get_cache_key (self, query: str, top_k: int) -> str:
         """Generate cache key from query parameters."""
         content = json.dumps({"query": query, "top_k": top_k})
         return hashlib.md5(content.encode()).hexdigest()
     
-    def _do_search(self, query: str, top_k: int) -> List[Dict]:
+    def _do_search (self, query: str, top_k: int) -> List[Dict]:
         """Actual search implementation."""
         # Implement your search logic here
         return []
     
-    def clear_cache(self):
+    def clear_cache (self):
         """Clear the cache."""
         self._cache = {}
         print("Cache cleared")
 
 
 # Example usage
-cached_search = CachedSearchEngine(cache_size=100)
+cached_search = CachedSearchEngine (cache_size=100)
 
 # First search - cache miss
 results1 = cached_search.search("machine learning", top_k=5)
@@ -804,7 +804,7 @@ class ProductionSearchEngine:
         
         try:
             # Embed query
-            query_embedding = self._embed(query)
+            query_embedding = self._embed (query)
             
             # Search
             results = self._search_internal(
@@ -826,7 +826,7 @@ class ProductionSearchEngine:
                     rank=i + 1,
                     search_time_ms=search_time_ms
                 )
-                for i, r in enumerate(results)
+                for i, r in enumerate (results)
             ]
             
             return formatted_results
@@ -852,11 +852,11 @@ class ProductionSearchEngine:
         ):
             # Apply metadata filter
             if filter_metadata:
-                if not all(meta.get(k) == v for k, v in filter_metadata.items()):
+                if not all (meta.get (k) == v for k, v in filter_metadata.items()):
                     continue
             
             # Calculate similarity
-            similarity = self._cosine_similarity(query_embedding, emb)
+            similarity = self._cosine_similarity (query_embedding, emb)
             
             if similarity >= min_score:
                 results.append({
@@ -866,33 +866,33 @@ class ProductionSearchEngine:
                 })
         
         # Sort by score
-        results.sort(key=lambda x: x["score"], reverse=True)
+        results.sort (key=lambda x: x["score"], reverse=True)
         
         return results[:top_k]
     
-    def get_analytics(self) -> Dict:
+    def get_analytics (self) -> Dict:
         """Get search analytics."""
         if not self._query_log:
             return {"total_queries": 0}
         
         return {
-            "total_queries": len(self._query_log),
-            "unique_queries": len(set(q["query"] for q in self._query_log)),
+            "total_queries": len (self._query_log),
+            "unique_queries": len (set (q["query"] for q in self._query_log)),
             "avg_top_k": np.mean([q["top_k"] for q in self._query_log])
         }
     
-    def _embed(self, text: str) -> List[float]:
+    def _embed (self, text: str) -> List[float]:
         """Create embedding."""
         # Implement embedding logic
         return [0.0] * 1536
     
-    def _cosine_similarity(self, v1: List[float], v2: List[float]) -> float:
+    def _cosine_similarity (self, v1: List[float], v2: List[float]) -> float:
         """Cosine similarity."""
-        v1_np = np.array(v1)
-        v2_np = np.array(v2)
+        v1_np = np.array (v1)
+        v2_np = np.array (v2)
         return float(
-            np.dot(v1_np, v2_np) /
-            (np.linalg.norm(v1_np) * np.linalg.norm(v2_np))
+            np.dot (v1_np, v2_np) /
+            (np.linalg.norm (v1_np) * np.linalg.norm (v2_np))
         )
 \`\`\`
 

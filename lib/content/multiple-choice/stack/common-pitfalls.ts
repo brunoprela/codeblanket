@@ -58,7 +58,7 @@ export const commonpitfallsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Without checking "len(stack) == 0" at the end, strings with extra opening brackets (like "((") would incorrectly return True because the loop completes without errors.',
+      'Without checking "len (stack) == 0" at the end, strings with extra opening brackets (like "((") would incorrectly return True because the loop completes without errors.',
   },
   {
     id: 'mc5',

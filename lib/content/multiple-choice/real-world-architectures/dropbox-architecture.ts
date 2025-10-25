@@ -22,7 +22,7 @@ export const dropboxarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc2',
     question:
-      "What was Dropbox's primary motivation for migrating from AWS to Magic Pocket (own datacenters)?",
+      "What was Dropbox\'s primary motivation for migrating from AWS to Magic Pocket (own datacenters)?",
     options: [
       'AWS had reliability issues affecting Dropbox availability',
       'Cost savings (30-40%) and operational control',
@@ -59,7 +59,7 @@ export const dropboxarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Dropbox uses SHA-256 for chunk hashing and deduplication. SHA-256 provides cryptographic security against collision attacks, ensuring that two different chunks won't have the same hash. This is critical for deduplication correctness—serving the wrong chunk due to a collision would corrupt files. While SHA-256 is slower than MD5 or xxHash, the security benefits outweigh the performance cost for Dropbox's use case.",
+      "Dropbox uses SHA-256 for chunk hashing and deduplication. SHA-256 provides cryptographic security against collision attacks, ensuring that two different chunks won't have the same hash. This is critical for deduplication correctness—serving the wrong chunk due to a collision would corrupt files. While SHA-256 is slower than MD5 or xxHash, the security benefits outweigh the performance cost for Dropbox\'s use case.",
   },
   {
     id: 'mc5',

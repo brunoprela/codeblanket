@@ -163,7 +163,7 @@ CREATE TABLE users (
 
 \`\`\`sql
 CREATE TABLE drivers (
-    driver_id BIGINT PRIMARY KEY REFERENCES users(user_id),
+    driver_id BIGINT PRIMARY KEY REFERENCES users (user_id),
     vehicle_type VARCHAR(20),  -- uberX, uberXL, black
     license_plate VARCHAR(10),
     current_location GEOMETRY(Point, 4326),  -- PostGIS
@@ -423,7 +423,7 @@ drivers:available:black
 3. RIDER TRACKING (If on active trip)
    - Query: "Which riders are tracking this driver?"
    - Push location update via WebSocket to rider
-   - Rider's map updates driver marker
+   - Rider\'s map updates driver marker
    - Recalculate ETA based on new location
 
 4. ETA CALCULATION
@@ -441,10 +441,10 @@ drivers:available:black
 const ws = new WebSocket('wss://uber.com/rider/123');
 
 ws.onmessage = (event) => {
-    const update = JSON.parse(event.data);
+    const update = JSON.parse (event.data);
     if (update.type === 'driver_location') {
         // Update map with driver's new location
-        map.updateMarker(update.driver_id, update.location);
+        map.updateMarker (update.driver_id, update.location);
     }
     if (update.type === 'eta_update') {
         // Update ETA display
@@ -456,16 +456,16 @@ ws.onmessage = (event) => {
 **Server Broadcasting**:
 \`\`\`python
 # When driver location received
-def on_driver_location_update(driver_id, location):
+def on_driver_location_update (driver_id, location):
     # Find active trip for this driver
-    trip = get_active_trip(driver_id)
+    trip = get_active_trip (driver_id)
     if trip:
         rider_id = trip.rider_id
         # Send to rider's WebSocket
-        websocket_send(rider_id, {
+        websocket_send (rider_id, {
             'type': 'driver_location',
             'location': location,
-            'eta': calculate_eta(location, trip.pickup_location)
+            'eta': calculate_eta (location, trip.pickup_location)
         })
 \`\`\`
 
@@ -483,9 +483,9 @@ def on_driver_location_update(driver_id, location):
 **Implementation**:
 
 \`\`\`python
-def calculate_eta(driver_location, destination):
+def calculate_eta (driver_location, destination):
     # Option 1: Haversine (fast approximation)
-    distance_km = haversine(driver_location, destination)
+    distance_km = haversine (driver_location, destination)
     avg_speed_kmh = 40  # City driving
     eta_minutes = (distance_km / avg_speed_kmh) * 60
     
@@ -524,12 +524,12 @@ Where:
 **Implementation**:
 
 \`\`\`python
-def calculate_surge(lat, lon, radius_km=2):
+def calculate_surge (lat, lon, radius_km=2):
     # Count ride requests in area (last 5 min)
     requests = redis.zcount(
         'ride_requests:geo',
-        geohash_min(lat, lon, radius_km),
-        geohash_max(lat, lon, radius_km)
+        geohash_min (lat, lon, radius_km),
+        geohash_max (lat, lon, radius_km)
     )
     
     # Count available drivers in area
@@ -635,8 +635,8 @@ Rating stored:
 **Algorithm**:
 
 \`\`\`python
-def update_user_rating(user_id, new_rating):
-    user = db.get_user(user_id)
+def update_user_rating (user_id, new_rating):
+    user = db.get_user (user_id)
     
     # Weighted average (recent ratings weighted more)
     total_trips = user.total_trips + 1
@@ -651,7 +651,7 @@ def update_user_rating(user_id, new_rating):
         weight_new = 0.3
         new_avg = (current_rating * weight_old) + (new_rating * weight_new)
     
-    db.update_user(user_id, rating=new_avg, total_trips=total_trips)
+    db.update_user (user_id, rating=new_avg, total_trips=total_trips)
 \`\`\`
 
 **Consequences**:

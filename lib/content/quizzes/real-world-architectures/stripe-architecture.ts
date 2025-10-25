@@ -6,7 +6,7 @@ export const stripearchitectureQuiz = [
   {
     id: 'q1',
     question:
-      "Explain Stripe's approach to handling payment idempotency. Why is idempotency critical for payment systems, and how does Stripe implement it?",
+      "Explain Stripe\'s approach to handling payment idempotency. Why is idempotency critical for payment systems, and how does Stripe implement it?",
     sampleAnswer:
       'Idempotency ensures duplicate requests don\'t result in double charges. Problem: User clicks "Pay" button twice, or network timeout causes retry. Without idempotency: Charge customer twice. Stripe implementation: (1) Client generates idempotency key (UUID) for each payment intent. (2) Client sends payment request with header: Idempotency-Key: uuid123. (3) Stripe checks Redis cache: key exists? If yes, return cached response (don\'t process again). If no, continue. (4) Process payment (charge card, update database). (5) Store result in Redis with idempotency key, TTL 24 hours. (6) Return response. (7) Retry with same key → Retrieve from cache, return identical response. Implementation details: Use Redis for fast lookups. Store full response (status code, body) to ensure identical retries. 24-hour TTL balances safety vs storage. Critical for financial correctness. Without idempotency: Customer disputes, refund complexity, regulatory violations.',
     keyPoints: [
@@ -32,7 +32,7 @@ export const stripearchitectureQuiz = [
   {
     id: 'q3',
     question:
-      "Describe Stripe's approach to API versioning and backward compatibility. How do they evolve their API without breaking existing integrations?",
+      "Describe Stripe\'s approach to API versioning and backward compatibility. How do they evolve their API without breaking existing integrations?",
     sampleAnswer:
       'Stripe uses date-based API versioning with extensive backward compatibility. Versioning strategy: (1) Version format - Each API version identified by date (e.g., 2024-01-15). (2) Opt-in upgrades - Customers pin to specific version. Default to version at account creation. Upgrades opt-in (explicitly change version in dashboard or API call). (3) Backward compatibility - Stripe maintains many versions simultaneously (10+ years of versions active). Old versions receive bug fixes (no new features). Breaking changes only in new versions. (4) Deprecation - Announce deprecation 24 months in advance. Email customers using old version. Provide migration guides. Eventually sunset (but >2 years). Implementation: (1) Version routing - API gateway reads version from header (Stripe-Version: 2024-01-15) or account default. Routes to appropriate service version. (2) Adapter pattern - Convert between versions using adapters (v2023 request → v2024 request → v2024 response → v2023 response). (3) Testing - Automated tests for each version ensure backward compatibility. Benefits: Customers upgrade at their pace, no forced breakage, Stripe innovates without fear of breaking changes. Cost: Maintaining many versions is complex.',
     keyPoints: [

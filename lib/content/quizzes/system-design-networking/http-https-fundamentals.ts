@@ -102,7 +102,7 @@ I'd choose Approach 2 with idempotency keys for production, as it provides the b
 
 1. **HTTPS Required**: 
    - Must obtain SSL/TLS certificates
-   - Cost: Let's Encrypt is free, but need automation
+   - Cost: Let\'s Encrypt is free, but need automation
    - Slight CPU overhead for encryption
 
 2. **Server Compatibility**: 
@@ -201,7 +201,7 @@ HTTPS uses TLS/SSL to provide three security guarantees:
 2. **Server Hello**: 
    - Server chooses cipher suite (e.g., TLS_AES_128_GCM_SHA256)
    - Sends its certificate containing:
-     * Server's public key
+     * Server\'s public key
      * Domain name
      * Digital signature from Certificate Authority (CA)
 
@@ -237,7 +237,7 @@ HTTPS uses TLS/SSL to provide three security guarantees:
 *Attack Attempt 2: Pose as server*:
 - Attacker sends own certificate to client
 - Client verifies certificate signature
-- Attacker's certificate not signed by trusted CA
+- Attacker\'s certificate not signed by trusted CA
 - Browser shows warning: "Your connection is not private"
 - **Result**: Attack blocked by authentication
 

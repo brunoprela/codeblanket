@@ -69,17 +69,17 @@ tools = [
 ]
 
 # Implement tool functions
-def get_stock_price(ticker):
+def get_stock_price (ticker):
     """Actual implementation"""
     # In reality, call an API
     prices = {"AAPL": 175.50, "GOOGL": 140.25}
-    return prices.get(ticker, "Unknown")
+    return prices.get (ticker, "Unknown")
 
-def calculate(expression):
+def calculate (expression):
     """Safe math evaluation"""
     try:
-        result = eval(expression, {"__builtins__": {}}, {})
-        return str(result)
+        result = eval (expression, {"__builtins__": {}}, {})
+        return str (result)
     except:
         return "Invalid expression"
 
@@ -90,7 +90,7 @@ tool_functions = {
 }
 
 # Use tools with LLM
-def chat_with_tools(user_message):
+def chat_with_tools (user_message):
     """
     Complete function calling flow
     """
@@ -111,12 +111,12 @@ def chat_with_tools(user_message):
     # Check if model wants to call a function
     while response.choices[0].message.tool_calls:
         # Add assistant response to messages
-        messages.append(response.choices[0].message)
+        messages.append (response.choices[0].message)
         
         # Execute each tool call
         for tool_call in response.choices[0].message.tool_calls:
             function_name = tool_call.function.name
-            function_args = json.loads(tool_call.function.arguments)
+            function_args = json.loads (tool_call.function.arguments)
             
             print(f"Calling: {function_name}({function_args})")
             
@@ -128,7 +128,7 @@ def chat_with_tools(user_message):
                 "role": "tool",
                 "tool_call_id": tool_call.id,
                 "name": function_name,
-                "content": str(function_response)
+                "content": str (function_response)
             })
         
         # Get final response
@@ -141,7 +141,7 @@ def chat_with_tools(user_message):
     return response.choices[0].message.content
 
 # Example usage
-result = chat_with_tools("What's the stock price of AAPL and calculate 150 * 1.2")
+result = chat_with_tools("What\'s the stock price of AAPL and calculate 150 * 1.2")
 
 # Model will:
 # 1. Call get_stock_price("AAPL") → 175.50
@@ -176,7 +176,7 @@ class ReActAgent:
         self.tools = tools
         self.max_iterations = 10
     
-    def create_prompt(self, question, history):
+    def create_prompt (self, question, history):
         """
         Format ReAct prompt
         """
@@ -200,20 +200,20 @@ After seeing the observation, continue reasoning.
 
 {history}
 
-Let's begin!
+Let\'s begin!
 
 Thought:"""
         
         return prompt
     
-    def parse_action(self, text):
+    def parse_action (self, text):
         """
         Extract action and input from model response
         """
         import re
         
-        action_match = re.search(r'Action: (.+)', text)
-        input_match = re.search(r'Action Input: (.+)', text)
+        action_match = re.search (r'Action: (.+)', text)
+        input_match = re.search (r'Action Input: (.+)', text)
         
         if action_match and input_match:
             return {
@@ -223,16 +223,16 @@ Thought:"""
         
         return None
     
-    def run(self, question):
+    def run (self, question):
         """
         Execute ReAct loop
         """
         history = ""
         
-        for i in range(self.max_iterations):
+        for i in range (self.max_iterations):
             # Generate thought + action
-            prompt = self.create_prompt(question, history)
-            response = self.llm.generate(prompt)
+            prompt = self.create_prompt (question, history)
+            response = self.llm.generate (prompt)
             
             print(f"\\n--- Iteration {i+1} ---")
             print(response)
@@ -243,14 +243,14 @@ Thought:"""
                 return final_answer
             
             # Parse action
-            action_info = self.parse_action(response)
+            action_info = self.parse_action (response)
             
             if action_info:
                 # Execute tool
                 tool_name = action_info['action']
                 tool_input = action_info['input']
                 
-                observation = self.execute_tool(tool_name, tool_input)
+                observation = self.execute_tool (tool_name, tool_input)
                 
                 # Add to history
                 history += f"{response}\\nObservation: {observation}\\n\\n"
@@ -259,7 +259,7 @@ Thought:"""
         
         return "Max iterations reached without final answer"
     
-    def execute_tool(self, tool_name, tool_input):
+    def execute_tool (self, tool_name, tool_input):
         """
         Execute a tool and return result
         """
@@ -279,18 +279,18 @@ tools = [
     {
         'name': 'calculator',
         'description': 'Perform calculations',
-        'function': lambda expr: str(eval(expr))
+        'function': lambda expr: str (eval (expr))
     }
 ]
 
-agent = ReActAgent(llm, tools)
+agent = ReActAgent (llm, tools)
 
 question = """What is the population of France multiplied by 2?"""
 
-answer = agent.run(question)
+answer = agent.run (question)
 
 # Expected flow:
-# Thought: I need to find France's population
+# Thought: I need to find France\'s population
 # Action: search
 # Action Input: population of France
 # Observation: ~67 million
@@ -321,11 +321,11 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 # Define tools
-def search_web(query: str) -> str:
+def search_web (query: str) -> str:
     """Search the web"""
     return f"Results for {query}: [mock results]"
 
-def get_weather(location: str) -> str:
+def get_weather (location: str) -> str:
     """Get weather"""
     return f"Weather in {location}: Sunny, 72°F"
 
@@ -348,11 +348,11 @@ llm = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0)
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful assistant with access to tools."),
     ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad")
+    MessagesPlaceholder (variable_name="agent_scratchpad")
 ])
 
-agent = create_openai_functions_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+agent = create_openai_functions_agent (llm, tools, prompt)
+agent_executor = AgentExecutor (agent=agent, tools=tools, verbose=True)
 
 # Run
 result = agent_executor.invoke({
@@ -391,12 +391,12 @@ class AutonomousAgent:
         self.memory = []
         self.max_iterations = 20
     
-    def run(self, goal):
+    def run (self, goal):
         """
         Work autonomously toward goal
         """
         # Decompose goal into tasks
-        tasks = self.decompose_goal(goal)
+        tasks = self.decompose_goal (goal)
         
         completed_tasks = []
         
@@ -404,16 +404,16 @@ class AutonomousAgent:
             print(f"\\nTask: {task}")
             
             # Execute task
-            result = self.execute_task(task)
+            result = self.execute_task (task)
             completed_tasks.append({
                 'task': task,
                 'result': result
             })
             
             # Self-critique
-            if not self.is_satisfactory(task, result):
+            if not self.is_satisfactory (task, result):
                 print("Result not satisfactory, retrying...")
-                result = self.execute_task(task)  # Retry
+                result = self.execute_task (task)  # Retry
             
             # Update memory
             self.memory.append({
@@ -422,13 +422,13 @@ class AutonomousAgent:
             })
             
             # Check if goal achieved
-            if self.is_goal_achieved(goal, completed_tasks):
+            if self.is_goal_achieved (goal, completed_tasks):
                 print("\\nGoal achieved!")
-                return self.summarize_results(completed_tasks)
+                return self.summarize_results (completed_tasks)
         
         return "Completed all tasks"
     
-    def decompose_goal(self, goal):
+    def decompose_goal (self, goal):
         """
         Break goal into subtasks
         """
@@ -439,11 +439,11 @@ Goal: {goal}
 Tasks:
 1."""
         
-        response = self.llm.generate(prompt)
+        response = self.llm.generate (prompt)
         tasks = response.strip().split('\\n')
         return [t.strip() for t in tasks if t.strip()]
     
-    def execute_task(self, task):
+    def execute_task (self, task):
         """
         Execute single task using available tools
         """
@@ -456,7 +456,7 @@ Which tool should be used? Respond with tool name and input.
 
 Tool:"""
         
-        response = self.llm.generate(prompt)
+        response = self.llm.generate (prompt)
         
         # Execute tool (simplified)
         for tool in self.tools:
@@ -465,7 +465,7 @@ Tool:"""
         
         return "Task completed without tools"
     
-    def is_satisfactory(self, task, result):
+    def is_satisfactory (self, task, result):
         """
         Self-critique: Is result good enough?
         """
@@ -476,10 +476,10 @@ Is this result satisfactory? Answer yes or no.
 
 Evaluation:"""
         
-        evaluation = self.llm.generate(prompt)
+        evaluation = self.llm.generate (prompt)
         return "yes" in evaluation.lower()
     
-    def is_goal_achieved(self, goal, completed_tasks):
+    def is_goal_achieved (self, goal, completed_tasks):
         """
         Check if original goal is achieved
         """
@@ -497,16 +497,16 @@ Has the goal been fully achieved? Answer yes or no.
 
 Assessment:"""
         
-        assessment = self.llm.generate(prompt)
+        assessment = self.llm.generate (prompt)
         return "yes" in assessment.lower()
     
-    def summarize_results(self, completed_tasks):
+    def summarize_results (self, completed_tasks):
         """
         Create final summary
         """
         summary = "\\n".join([
             f"{i+1}. {t['task']}: {t['result']}"
-            for i, t in enumerate(completed_tasks)
+            for i, t in enumerate (completed_tasks)
         ])
         
         return f"Completed tasks:\\n{summary}"
@@ -518,10 +518,10 @@ tools = [
     {'name': 'analyze', 'function': lambda x: f"Analysis: {x}"}
 ]
 
-agent = AutonomousAgent(llm, tools)
+agent = AutonomousAgent (llm, tools)
 
 goal = "Research Python web frameworks and create a comparison chart"
-result = agent.run(goal)
+result = agent.run (goal)
 \`\`\`
 
 ---
@@ -552,25 +552,25 @@ class AgentMemory:
         self.long_term = vector_db  # Persistent storage
         self.episodic = []  # Past episodes
     
-    def add_to_short_term(self, message):
+    def add_to_short_term (self, message):
         """
         Add to short-term memory (limited size)
         """
-        self.short_term.append(message)
+        self.short_term.append (message)
         
         # Keep last 10 messages
-        if len(self.short_term) > 10:
+        if len (self.short_term) > 10:
             # Move old to long-term
             old = self.short_term.pop(0)
-            self.add_to_long_term(old)
+            self.add_to_long_term (old)
     
-    def add_to_working_memory(self, key, value):
+    def add_to_working_memory (self, key, value):
         """
         Store current task context
         """
         self.working_memory[key] = value
     
-    def add_to_long_term(self, memory):
+    def add_to_long_term (self, memory):
         """
         Store in vector database for retrieval
         """
@@ -582,7 +582,7 @@ class AgentMemory:
             }]
         )
     
-    def add_episode(self, episode):
+    def add_episode (self, episode):
         """
         Store episodic memory (past experiences)
         """
@@ -593,7 +593,7 @@ class AgentMemory:
             'timestamp': episode['timestamp']
         })
     
-    def retrieve_relevant_memories(self, query, k=5):
+    def retrieve_relevant_memories (self, query, k=5):
         """
         Retrieve relevant memories for current context
         """
@@ -605,42 +605,42 @@ class AgentMemory:
         
         return results['documents'][0]
     
-    def get_context(self, current_goal):
+    def get_context (self, current_goal):
         """
         Build context from all memory types
         """
         context = {
             'short_term': self.short_term[-5:],  # Last 5 messages
             'working': self.working_memory,
-            'relevant_long_term': self.retrieve_relevant_memories(current_goal),
-            'similar_episodes': self.find_similar_episodes(current_goal)
+            'relevant_long_term': self.retrieve_relevant_memories (current_goal),
+            'similar_episodes': self.find_similar_episodes (current_goal)
         }
         
         return context
     
-    def find_similar_episodes(self, goal, k=3):
+    def find_similar_episodes (self, goal, k=3):
         """
         Find similar past experiences
         """
         # Embed goal
-        goal_emb = embedder.encode(goal)
+        goal_emb = embedder.encode (goal)
         
         # Compare with past episodes
         similarities = []
         for episode in self.episodic:
-            ep_emb = embedder.encode(episode['goal'])
+            ep_emb = embedder.encode (episode['goal'])
             sim = cosine_similarity([goal_emb], [ep_emb])[0][0]
             similarities.append((sim, episode))
         
         # Return top-k
-        similarities.sort(reverse=True)
+        similarities.sort (reverse=True)
         return [ep for _, ep in similarities[:k]]
 
 # Example usage
 from chromadb import Client
 
 vector_db = Client().create_collection("agent_memory")
-memory = AgentMemory(vector_db)
+memory = AgentMemory (vector_db)
 
 # Agent operates
 memory.add_to_short_term({
@@ -681,32 +681,32 @@ class MultiAgentSystem:
     def __init__(self):
         self.agents = {}
     
-    def register_agent(self, name, agent):
+    def register_agent (self, name, agent):
         """
         Register specialized agent
         """
         self.agents[name] = agent
     
-    def hierarchical_execution(self, task):
+    def hierarchical_execution (self, task):
         """
         Manager agent delegates to specialists
         """
         # Manager breaks down task
         manager = self.agents['manager']
-        subtasks = manager.decompose(task)
+        subtasks = manager.decompose (task)
         
         results = []
         for subtask in subtasks:
             # Assign to appropriate specialist
-            specialist = manager.select_specialist(subtask)
-            result = self.agents[specialist].execute(subtask)
-            results.append(result)
+            specialist = manager.select_specialist (subtask)
+            result = self.agents[specialist].execute (subtask)
+            results.append (result)
         
         # Manager synthesizes
-        final_result = manager.synthesize(results)
+        final_result = manager.synthesize (results)
         return final_result
     
-    def sequential_execution(self, task, agent_chain):
+    def sequential_execution (self, task, agent_chain):
         """
         Pass through chain of agents
         """
@@ -714,21 +714,21 @@ class MultiAgentSystem:
         
         for agent_name in agent_chain:
             agent = self.agents[agent_name]
-            current_output = agent.process(current_output)
+            current_output = agent.process (current_output)
         
         return current_output
     
-    def debate_execution(self, question, num_rounds=3):
+    def debate_execution (self, question, num_rounds=3):
         """
         Agents debate to reach best answer
         """
         # Initial answers from each agent
         answers = {}
         for name, agent in self.agents.items():
-            answers[name] = agent.answer(question)
+            answers[name] = agent.answer (question)
         
         # Debate rounds
-        for round in range(num_rounds):
+        for round in range (num_rounds):
             critiques = {}
             
             # Each agent critiques others
@@ -736,7 +736,7 @@ class MultiAgentSystem:
                 other_answers = {
                     k: v for k, v in answers.items() if k != name
                 }
-                critique = agent.critique(other_answers)
+                critique = agent.critique (other_answers)
                 critiques[name] = critique
             
             # Update answers based on critiques
@@ -747,10 +747,10 @@ class MultiAgentSystem:
                 )
         
         # Final consensus
-        consensus = self.reach_consensus(answers)
+        consensus = self.reach_consensus (answers)
         return consensus
     
-    def reach_consensus(self, answers):
+    def reach_consensus (self, answers):
         """
         Combine agent answers into consensus
         """
@@ -762,7 +762,7 @@ class MultiAgentSystem:
         # Use manager to synthesize
         manager = self.agents.get('manager')
         if manager:
-            consensus = manager.synthesize_consensus(answers)
+            consensus = manager.synthesize_consensus (answers)
         else:
             consensus = summary
         
@@ -771,17 +771,17 @@ class MultiAgentSystem:
 # Example: Research team
 class ResearcherAgent:
     """Finds information"""
-    def execute(self, task):
+    def execute (self, task):
         return f"Research: {task}"
 
 class WriterAgent:
     """Writes content"""
-    def execute(self, task):
+    def execute (self, task):
         return f"Written: {task}"
 
 class EditorAgent:
     """Reviews and improves"""
-    def execute(self, task):
+    def execute (self, task):
         return f"Edited: {task}"
 
 # Setup
@@ -821,30 +821,30 @@ class ProductionAgent:
         self.action_log = []
         self.safety_checks = []
     
-    def execute_with_safety(self, action):
+    def execute_with_safety (self, action):
         """
         Execute action with safety checks
         """
         # Pre-execution checks
-        if not self.is_safe_action(action):
-            self.log_rejection(action, "Safety check failed")
+        if not self.is_safe_action (action):
+            self.log_rejection (action, "Safety check failed")
             return {"status": "rejected", "reason": "unsafe"}
         
         # Spending limit check
-        if not self.check_budget(action):
-            self.log_rejection(action, "Budget exceeded")
+        if not self.check_budget (action):
+            self.log_rejection (action, "Budget exceeded")
             return {"status": "rejected", "reason": "budget"}
         
         # Execute
         try:
-            result = self.execute_action(action)
-            self.log_action(action, result, "success")
+            result = self.execute_action (action)
+            self.log_action (action, result, "success")
             return result
         except Exception as e:
-            self.log_action(action, str(e), "error")
-            return {"status": "error", "message": str(e)}
+            self.log_action (action, str (e), "error")
+            return {"status": "error", "message": str (e)}
     
-    def is_safe_action(self, action):
+    def is_safe_action (self, action):
         """
         Safety checks before execution
         """
@@ -855,15 +855,15 @@ class ProductionAgent:
             "system("
         ]
         
-        action_str = str(action).lower()
-        return not any(pattern in action_str for pattern in unsafe_patterns)
+        action_str = str (action).lower()
+        return not any (pattern in action_str for pattern in unsafe_patterns)
     
-    def check_budget(self, action):
+    def check_budget (self, action):
         """
         Ensure action within budget
         """
         # Estimate cost
-        cost = self.estimate_action_cost(action)
+        cost = self.estimate_action_cost (action)
         
         # Check against daily budget
         daily_spent = sum(
@@ -873,7 +873,7 @@ class ProductionAgent:
         
         return daily_spent + cost < self.config['daily_budget']
     
-    def log_action(self, action, result, status):
+    def log_action (self, action, result, status):
         """
         Log all actions for auditing
         """
@@ -882,10 +882,10 @@ class ProductionAgent:
             'action': action,
             'result': result,
             'status': status,
-            'cost': self.estimate_action_cost(action)
+            'cost': self.estimate_action_cost (action)
         })
     
-    def get_audit_trail(self):
+    def get_audit_trail (self):
         """
         Full audit trail of actions
         """
@@ -897,14 +897,14 @@ class AgentMonitor:
     Monitor agent performance
     """
     
-    def track_metrics(self, agent):
+    def track_metrics (self, agent):
         """
         Track key metrics
         """
         metrics = {
-            'total_actions': len(agent.action_log),
-            'success_rate': self.calculate_success_rate(agent),
-            'avg_cost_per_action': self.calculate_avg_cost(agent),
+            'total_actions': len (agent.action_log),
+            'success_rate': self.calculate_success_rate (agent),
+            'avg_cost_per_action': self.calculate_avg_cost (agent),
             'safety_incidents': len([
                 a for a in agent.action_log
                 if a['status'] == 'rejected'
@@ -913,7 +913,7 @@ class AgentMonitor:
         
         return metrics
     
-    def alert_on_anomalies(self, metrics):
+    def alert_on_anomalies (self, metrics):
         """
         Alert if metrics anomalous
         """

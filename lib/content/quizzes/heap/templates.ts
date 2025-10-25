@@ -34,11 +34,11 @@ export const templatesQuiz = [
     question: 'How do you implement a max heap in Python using heapq?',
     hint: 'Python heapq only provides min heap.',
     sampleAnswer:
-      'Negate all values when pushing to the heap and negate them again when popping. This converts max heap operations to min heap operations. For example, to add 5, push -5. When popping -5, return 5. This works because -max(values) = min(-values).',
+      'Negate all values when pushing to the heap and negate them again when popping. This converts max heap operations to min heap operations. For example, to add 5, push -5. When popping -5, return 5. This works because -max (values) = min(-values).',
     keyPoints: [
       'Python heapq is min heap only',
       'Negate values: push -value, return -popped',
-      '-max(x) = min(-x)',
+      '-max (x) = min(-x)',
     ],
   },
 ];

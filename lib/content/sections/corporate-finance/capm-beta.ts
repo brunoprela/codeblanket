@@ -82,7 +82,7 @@ def capm(
     
     Args:
         risk_free_rate: Risk-free rate (e.g., 10-year Treasury)
-        beta: Stock's beta (systematic risk)
+        beta: Stock\'s beta (systematic risk)
         market_risk_premium: Expected market return - risk-free rate
     
     Returns:
@@ -106,7 +106,7 @@ def capm_batch(
     
     Useful for portfolio analysis.
     """
-    returns = [capm(risk_free_rate, beta, market_risk_premium) for beta in betas]
+    returns = [capm (risk_free_rate, beta, market_risk_premium) for beta in betas]
     
     return pd.DataFrame({
         'Beta': betas,
@@ -129,7 +129,7 @@ stocks = {
 print("CAPM Expected Returns:")
 print("=" * 60)
 for name, beta in stocks.items():
-    expected_return = capm(rf, beta, mrp)
+    expected_return = capm (rf, beta, mrp)
     print(f"{name:.<25} β={beta:.1f}  →  E(R)={expected_return:.2%}")
 
 print("=" * 60)
@@ -204,8 +204,8 @@ def calculate_beta(
         Dictionary with beta and statistics
     """
     # Download data
-    stock = yf.download(ticker, period=period, progress=False)
-    market = yf.download(market_ticker, period=period, progress=False)
+    stock = yf.download (ticker, period=period, progress=False)
+    market = yf.download (market_ticker, period=period, progress=False)
     
     # Align dates
     combined = pd.DataFrame({
@@ -233,13 +233,13 @@ def calculate_beta(
     beta = slope
     
     # Calculate using covariance formula (should match)
-    cov = returns['stock'].cov(returns['market'])
+    cov = returns['stock'].cov (returns['market'])
     var = returns['market'].var()
     beta_cov = cov / var
     
     # Additional statistics
     r_squared = r_value ** 2
-    correlation = returns['stock'].corr(returns['market'])
+    correlation = returns['stock'].corr (returns['market'])
     
     # Annualize alpha (intercept)
     if frequency == 'monthly':
@@ -257,11 +257,11 @@ def calculate_beta(
         'r_squared': r_squared,
         'correlation': correlation,
         'std_error': std_err,
-        'observations': len(returns)
+        'observations': len (returns)
     }
 
 
-# Example: Calculate Tesla's beta
+# Example: Calculate Tesla\'s beta
 tesla_beta_analysis = calculate_beta('TSLA', period='5y', frequency='monthly')
 
 print("Tesla Beta Analysis (5-year monthly returns):")
@@ -291,7 +291,7 @@ print(f"Interpretation: Tesla is {beta:.1f}x as volatile as S&P 500")
 # Expected return using CAPM
 rf = 0.04
 mrp = 0.065
-expected_return = capm(rf, beta, mrp)
+expected_return = capm (rf, beta, mrp)
 print(f"\\nCAPM Expected Return: {expected_return:.2%}")
 \`\`\`
 
@@ -319,7 +319,7 @@ def plot_beta_regression(
     )
     
     # Create plot
-    fig, ax = plt.subplots(figsize=(12, 8))
+    fig, ax = plt.subplots (figsize=(12, 8))
     
     # Scatter plot
     ax.scatter(
@@ -331,7 +331,7 @@ def plot_beta_regression(
     )
     
     # Regression line
-    x_line = np.linspace(market_returns.min(), market_returns.max(), 100)
+    x_line = np.linspace (market_returns.min(), market_returns.max(), 100)
     y_line = intercept + slope * x_line
     ax.plot(
         x_line * 100,
@@ -352,14 +352,14 @@ def plot_beta_regression(
     
     # Labels and formatting
     ax.set_xlabel('Market Return (%)', fontsize=12)
-    ax.set_ylabel(f'{ticker} Return (%)', fontsize=12)
+    ax.set_ylabel (f'{ticker} Return (%)', fontsize=12)
     ax.set_title(
         f'{ticker} vs Market\\nBeta = {slope:.2f}, R² = {r_value**2:.3f}',
         fontsize=14,
         fontweight='bold'
     )
-    ax.grid(alpha=0.3)
-    ax.legend(fontsize=10)
+    ax.grid (alpha=0.3)
+    ax.legend (fontsize=10)
     
     # Add interpretation text
     if slope > 1.0:
@@ -375,15 +375,15 @@ def plot_beta_regression(
         transform=ax.transAxes,
         fontsize=10,
         verticalalignment='top',
-        bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+        bbox=dict (boxstyle='round', facecolor='wheat', alpha=0.5)
     )
     
     plt.tight_layout()
-    plt.savefig(f'{ticker}_beta.png', dpi=300, bbox_inches='tight')
+    plt.savefig (f'{ticker}_beta.png', dpi=300, bbox_inches='tight')
     print(f"Chart saved: {ticker}_beta.png")
 
 # Example usage (with actual data)
-# plot_beta_regression(returns['stock'], returns['market'], 'TSLA')
+# plot_beta_regression (returns['stock'], returns['market'], 'TSLA')
 \`\`\`
 
 ---
@@ -482,7 +482,7 @@ print(f"{'Capital Structure':<20} {'D/E Ratio':<12} {'Levered Beta':<15} {'Risk 
 print("-" * 80)
 
 for scenario_name, de_ratio in leverage_scenarios:
-    levered_beta = relever_beta(industry_asset_beta, de_ratio, tax_rate)
+    levered_beta = relever_beta (industry_asset_beta, de_ratio, tax_rate)
     
     if levered_beta < 0.8:
         risk = "Low"
@@ -549,15 +549,15 @@ def estimate_beta_from_comps(
     """
     # Step 1: Unlever each comp
     unlevered_betas = []
-    for i in range(len(comp_betas)):
-        bu = unlever_beta(comp_betas[i], comp_debt_equity[i], comp_tax_rates[i])
-        unlevered_betas.append(bu)
+    for i in range (len (comp_betas)):
+        bu = unlever_beta (comp_betas[i], comp_debt_equity[i], comp_tax_rates[i])
+        unlevered_betas.append (bu)
     
     # Step 2: Calculate industry asset beta (median is more robust than mean)
-    industry_asset_beta = np.median(unlevered_betas)
+    industry_asset_beta = np.median (unlevered_betas)
     
     # Step 3: Relever for target
-    target_beta = relever_beta(industry_asset_beta, target_debt_equity, target_tax_rate)
+    target_beta = relever_beta (industry_asset_beta, target_debt_equity, target_tax_rate)
     
     return {
         'comparable_betas': comp_betas,
@@ -578,7 +578,7 @@ comps = pd.DataFrame({
 
 print("Comparable Company Beta Analysis:")
 print("=" * 80)
-print(comps.to_string(index=False))
+print(comps.to_string (index=False))
 print()
 
 # Estimate for target with D/E = 0.8
@@ -600,7 +600,7 @@ print("=" * 80)
 # Calculate cost of equity
 rf = 0.04
 mrp = 0.065
-cost_of_equity = capm(rf, analysis['target_levered_beta'], mrp)
+cost_of_equity = capm (rf, analysis['target_levered_beta'], mrp)
 print(f"\\nImplied cost of equity: {cost_of_equity:.2%}")
 \`\`\`
 
@@ -651,7 +651,7 @@ print(f"{'Historical Beta':<20} {'Adjusted Beta':<20} {'Change'}")
 print("-" * 60)
 
 for hist_beta in historical_betas:
-    adj_beta = adjusted_beta(hist_beta)
+    adj_beta = adjusted_beta (hist_beta)
     change = adj_beta - hist_beta
     print(f"{hist_beta:<20.2f} {adj_beta:<20.2f} {change:+.2f}")
 
@@ -708,7 +708,7 @@ def bottom_up_beta(
     Args:
         industry_businesses: Dict of {business: industry_asset_beta}
         business_weights: Dict of {business: revenue_weight}
-        target_debt_equity: Company's D/E ratio
+        target_debt_equity: Company\'s D/E ratio
         target_tax_rate: Company's tax rate
     
     Returns:
@@ -717,7 +717,7 @@ def bottom_up_beta(
     Example:
         >>> industries = {'Software': 1.2, 'Hardware': 1.0, 'Services': 0.8}
         >>> weights = {'Software': 0.5, 'Hardware': 0.3, 'Services': 0.2}
-        >>> beta = bottom_up_beta(industries, weights, 0.3, 0.25)
+        >>> beta = bottom_up_beta (industries, weights, 0.3, 0.25)
     """
     # Step 1: Calculate weighted average unlevered beta
     weighted_asset_beta = sum([
@@ -726,7 +726,7 @@ def bottom_up_beta(
     ])
     
     # Step 2: Relever at company's capital structure
-    levered_beta = relever_beta(weighted_asset_beta, target_debt_equity, target_tax_rate)
+    levered_beta = relever_beta (weighted_asset_beta, target_debt_equity, target_tax_rate)
     
     return levered_beta
 
@@ -743,7 +743,7 @@ industries = {
     'Financial Services': 1.1
 }
 
-# Company's revenue breakdown
+# Company\'s revenue breakdown
 weights = {
     'Technology': 0.40,
     'Healthcare': 0.25,
@@ -751,12 +751,12 @@ weights = {
     'Financial Services': 0.15
 }
 
-# Company's capital structure
+# Company\'s capital structure
 de_ratio = 0.4
 tax_rate = 0.25
 
 # Calculate
-beta_bottomup = bottom_up_beta(industries, weights, de_ratio, tax_rate)
+beta_bottomup = bottom_up_beta (industries, weights, de_ratio, tax_rate)
 
 print("Business Segment Analysis:")
 print("-" * 80)
@@ -772,7 +772,7 @@ print(f"\\nBottom-up levered beta: {beta_bottomup:.3f}")
 print("=" * 80)
 
 # Compare to single-industry company
-single_industry_beta = relever_beta(industries['Technology'], de_ratio, tax_rate)
+single_industry_beta = relever_beta (industries['Technology'], de_ratio, tax_rate)
 print(f"\\nComparison:")
 print(f"If pure Technology company: Beta = {single_industry_beta:.3f}")
 print(f"Actual (diversified): Beta = {beta_bottomup:.3f}")
@@ -816,8 +816,8 @@ def rolling_beta(
     Shows how beta changes with different time periods.
     """
     # Download data
-    stock = yf.download(stock_ticker, period=period, progress=False)
-    market = yf.download(market_ticker, period=period, progress=False)
+    stock = yf.download (stock_ticker, period=period, progress=False)
+    market = yf.download (market_ticker, period=period, progress=False)
     
     # Monthly returns
     combined = pd.DataFrame({
@@ -829,11 +829,11 @@ def rolling_beta(
     betas = []
     dates = []
     
-    for i in range(window_months, len(combined)):
+    for i in range (window_months, len (combined)):
         window_data = combined.iloc[i-window_months:i]
-        beta = window_data['stock'].cov(window_data['market']) / window_data['market'].var()
-        betas.append(beta)
-        dates.append(combined.index[i])
+        beta = window_data['stock'].cov (window_data['market']) / window_data['market'].var()
+        betas.append (beta)
+        dates.append (combined.index[i])
     
     return pd.DataFrame({
         'Date': dates,
@@ -922,7 +922,7 @@ erp = 0.065
 size = 0.03  # Small company
 specific = 0.025  # Moderate additional risk
 
-cost_equity_buildup = buildup_cost_of_equity(rf, erp, size, specific)
+cost_equity_buildup = buildup_cost_of_equity (rf, erp, size, specific)
 
 print("Build-Up Method:")
 print(f"Risk-free rate:          {rf:.2%}")
@@ -970,7 +970,7 @@ def project_wacc_with_beta(
     2. Calculate project WACC
     """
     # Project cost of equity
-    project_cost_equity = capm(risk_free_rate, project_beta, market_risk_premium)
+    project_cost_equity = capm (risk_free_rate, project_beta, market_risk_premium)
     
     # Project WACC (assuming same capital structure)
     equity_weight = 1 - debt_ratio

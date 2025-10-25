@@ -4,10 +4,10 @@ export const fermiEstimationMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'fe-mc-1',
     question:
-      "You need to estimate Netflix's subscriber count but don't know the exact number. Which approach gives the MOST accurate estimate?",
+      "You need to estimate Netflix\'s subscriber count but don't know the exact number. Which approach gives the MOST accurate estimate?",
     options: [
       'Multiply US population by estimated penetration rate and extrapolate globally',
-      'Use revenue ($30B) divided by average revenue per user ($15/month × 12) to get subscribers',
+      'Use revenue (\$30B) divided by average revenue per user ($15/month × 12) to get subscribers',
       'Estimate by region (US, Europe, LatAm, Asia) with different penetration rates, then sum',
       'Compare to other streaming services and estimate market share',
     ],
@@ -27,14 +27,14 @@ export const fermiEstimationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Market impact dominates for large orders. At 40% of daily volume, market impact can be 50-100 bps ($500K-$1M on $100M order) due to price movement while executing. Bid-ask spread (~5-10 bps = $50-100K) is paid once. Exchange fees (~0.5 bp = $5K) are tiny. Broker commission (~2-3 bps = $20-30K) is fixed. The square-root market impact model: impact ∝ σ × sqrt(order_size/daily_volume) means large orders face quadratically increasing costs. For comparison, a $1M order (0.04% of daily volume) might only pay 5-10 bps total, but a $100M order (40× larger) pays ~20× more per dollar in market impact due to nonlinear scaling.',
+      'Market impact dominates for large orders. At 40% of daily volume, market impact can be 50-100 bps (\$500K-$1M on $100M order) due to price movement while executing. Bid-ask spread (~5-10 bps = $50-100K) is paid once. Exchange fees (~0.5 bp = $5K) are tiny. Broker commission (~2-3 bps = $20-30K) is fixed. The square-root market impact model: impact ∝ σ × sqrt (order_size/daily_volume) means large orders face quadratically increasing costs. For comparison, a $1M order (0.04% of daily volume) might only pay 5-10 bps total, but a $100M order (40× larger) pays ~20× more per dollar in market impact due to nonlinear scaling.',
   },
   {
     id: 'fe-mc-3',
     question:
       'You estimate the number of active retail traders in the US as 12 million with average account size $50K. How should you sanity-check this estimate?',
     options: [
-      'Compare total retail capital ($600B) to total US equity market cap ($50T) - should be ~1-2%',
+      'Compare total retail capital (\$600B) to total US equity market cap ($50T) - should be ~1-2%',
       'Check if 12M is reasonable relative to US population and brokerage account statistics',
       'Verify against known data: major brokers (Schwab, Fidelity, Robinhood) report ~30M total accounts, with ~40% active',
       'All of the above - use multiple independent checks',

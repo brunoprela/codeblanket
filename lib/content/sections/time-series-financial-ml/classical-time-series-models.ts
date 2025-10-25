@@ -53,7 +53,7 @@ Where:
 - \\( c \\): Constant
 - \\( ε_t \\): White noise error
 
-**Intuition**: Today's value depends on yesterday's (and previous days')
+**Intuition**: Today\'s value depends on yesterday's (and previous days')
 
 ### Implementing AR Models
 
@@ -74,7 +74,7 @@ spy = yf.download('SPY', start='2020-01-01', end='2024-01-01')
 returns = spy['Close'].pct_change().dropna()
 
 # Fit AR(1) model
-model_ar1 = AutoReg(returns, lags=1).fit()
+model_ar1 = AutoReg (returns, lags=1).fit()
 
 print("=== AR(1) Model ===")
 print(model_ar1.summary())
@@ -82,13 +82,13 @@ print(f"\\nAR coefficient: {model_ar1.params[1]:.4f}")
 print(f"Intercept: {model_ar1.params[0]:.6f}")
 
 # Interpretation
-if abs(model_ar1.params[1]) < 0.1:
+if abs (model_ar1.params[1]) < 0.1:
     print("→ Weak autocorrelation: returns are nearly random walk")
 else:
     print(f"→ Returns show {'positive' if model_ar1.params[1] > 0 else 'negative'} autocorrelation")
 
 # Fit AR(5) model
-model_ar5 = AutoReg(returns, lags=5).fit()
+model_ar5 = AutoReg (returns, lags=5).fit()
 
 print("\\n=== AR(5) Model ===")
 print(f"AIC: {model_ar5.aic:.2f}")
@@ -97,10 +97,10 @@ print(f"BIC: {model_ar5.bic:.2f}")
 # Plot PACF to determine optimal lag
 fig, axes = plt.subplots(2, 1, figsize=(12, 8))
 
-plot_acf(returns, lags=20, ax=axes[0])
+plot_acf (returns, lags=20, ax=axes[0])
 axes[0].set_title('ACF of Returns')
 
-plot_pacf(returns, lags=20, ax=axes[1])
+plot_pacf (returns, lags=20, ax=axes[1])
 axes[1].set_title('PACF of Returns (use for AR order selection)')
 
 plt.tight_layout()
@@ -114,7 +114,7 @@ plt.show()
 Forecasting with AR Models
 """
 
-def forecast_ar(model, steps=5):
+def forecast_ar (model, steps=5):
     """
     Forecast future values
     
@@ -125,10 +125,10 @@ def forecast_ar(model, steps=5):
     Returns:
         Forecast and confidence intervals
     """
-    forecast = model.forecast(steps=steps)
+    forecast = model.forecast (steps=steps)
     
     # Get confidence intervals (manual calculation)
-    se = np.sqrt(model.scale)  # Standard error
+    se = np.sqrt (model.scale)  # Standard error
     
     # 95% confidence interval
     ci_lower = forecast - 1.96 * se
@@ -137,30 +137,30 @@ def forecast_ar(model, steps=5):
     return forecast, ci_lower, ci_upper
 
 # Forecast next 10 days
-forecast, ci_lower, ci_upper = forecast_ar(model_ar5, steps=10)
+forecast, ci_lower, ci_upper = forecast_ar (model_ar5, steps=10)
 
 print("\\n=== 10-Day Forecast ===")
-for i, (f, lower, upper) in enumerate(zip(forecast, ci_lower, ci_upper), 1):
+for i, (f, lower, upper) in enumerate (zip (forecast, ci_lower, ci_upper), 1):
     print(f"Day {i}: {f:.4f} [{lower:.4f}, {upper:.4f}]")
 
 # Plot forecast
-fig, ax = plt.subplots(figsize=(14, 6))
+fig, ax = plt.subplots (figsize=(14, 6))
 
 # Historical returns (last 100 days)
 returns_plot = returns.iloc[-100:]
-ax.plot(returns_plot.index, returns_plot.values, label='Historical', color='black')
+ax.plot (returns_plot.index, returns_plot.values, label='Historical', color='black')
 
 # Forecast
 forecast_index = pd.date_range(
-    start=returns.index[-1] + pd.Timedelta(days=1),
+    start=returns.index[-1] + pd.Timedelta (days=1),
     periods=10
 )
-ax.plot(forecast_index, forecast, label='Forecast', color='red', linewidth=2)
+ax.plot (forecast_index, forecast, label='Forecast', color='red', linewidth=2)
 
 # Confidence interval
-ax.fill_between(forecast_index, ci_lower, ci_upper, alpha=0.3, color='red')
+ax.fill_between (forecast_index, ci_lower, ci_upper, alpha=0.3, color='red')
 
-ax.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+ax.axhline (y=0, color='gray', linestyle='--', alpha=0.5)
 ax.set_xlabel('Date')
 ax.set_ylabel('Returns')
 ax.set_title('AR(5) Forecast with 95% Confidence Interval')
@@ -188,7 +188,7 @@ Where:
 - \\( θ_i \\): MA coefficients
 - \\( μ \\): Mean
 
-**Intuition**: Today's value depends on recent forecast errors
+**Intuition**: Today\'s value depends on recent forecast errors
 
 ### Implementing MA Models
 
@@ -214,7 +214,7 @@ print(f"AIC: {model_ma2.aic:.2f}")
 print(f"BIC: {model_ma2.bic:.2f}")
 
 # Use ACF to determine MA order (sharp cutoff indicates order)
-plot_acf(returns, lags=20)
+plot_acf (returns, lags=20)
 plt.title('ACF - Use for MA Order Selection (Sharp Cutoff)')
 plt.show()
 \`\`\`
@@ -262,7 +262,7 @@ for name, model in models.items():
     print(f"{name:<12} {model.aic:>10.2f} {model.bic:>10.2f}")
 
 # Select best model (lowest AIC)
-best_model_name = min(models.items(), key=lambda x: x[1].aic)[0]
+best_model_name = min (models.items(), key=lambda x: x[1].aic)[0]
 print(f"\\n→ Best model by AIC: {best_model_name}")
 \`\`\`
 
@@ -295,7 +295,7 @@ prices = spy['Close']
 # Test stationarity
 from statsmodels.tsa.stattools import adfuller
 
-adf_result = adfuller(prices)
+adf_result = adfuller (prices)
 print(f"ADF p-value (prices): {adf_result[1]:.6f}")
 
 if adf_result[1] > 0.05:
@@ -308,28 +308,28 @@ print("\\n=== ARIMA(1,1,1) on Prices ===")
 print(model_arima.summary())
 
 # Forecast prices
-forecast_prices = model_arima.forecast(steps=10)
+forecast_prices = model_arima.forecast (steps=10)
 
 print("\\n=== Price Forecast (10 days) ===")
-for i, price in enumerate(forecast_prices, 1):
+for i, price in enumerate (forecast_prices, 1):
     print(f"Day {i}: \${price:.2f}")
 
 # Plot forecast
-fig, ax = plt.subplots(figsize = (14, 6))
+fig, ax = plt.subplots (figsize = (14, 6))
 
-# Historical prices(last 60 days)
+# Historical prices (last 60 days)
 prices_plot = prices.iloc[-60:]
-ax.plot(prices_plot.index, prices_plot.values, label = 'Historical', color = 'black')
+ax.plot (prices_plot.index, prices_plot.values, label = 'Historical', color = 'black')
 
 # Forecast
 forecast_index = pd.date_range(
-    start = prices.index[-1] + pd.Timedelta(days = 1),
+    start = prices.index[-1] + pd.Timedelta (days = 1),
     periods = 10
 )
-ax.plot(forecast_index, forecast_prices, label = 'Forecast', color = 'red', marker = 'o', linewidth = 2)
+ax.plot (forecast_index, forecast_prices, label = 'Forecast', color = 'red', marker = 'o', linewidth = 2)
 
 # Get forecast with confidence intervals
-forecast_obj = model_arima.get_forecast(steps = 10)
+forecast_obj = model_arima.get_forecast (steps = 10)
 forecast_ci = forecast_obj.conf_int()
 
 ax.fill_between(
@@ -405,7 +405,7 @@ np.random.seed(42)
 t = np.arange(120)  # 10 years of monthly data
 trend = 0.5 * t
 seasonal = 10 * np.sin(2 * np.pi * t / 12)
-noise = np.random.normal(0, 2, len(t))
+noise = np.random.normal(0, 2, len (t))
 seasonal_series = trend + seasonal + noise + 100
 
 seasonal_df = pd.DataFrame({
@@ -413,8 +413,8 @@ seasonal_df = pd.DataFrame({
 }, index=pd.date_range('2014-01-01', periods=120, freq='MS'))
 
 # Plot
-plt.figure(figsize=(14, 5))
-plt.plot(seasonal_df.index, seasonal_df['value'])
+plt.figure (figsize=(14, 5))
+plt.plot (seasonal_df.index, seasonal_df['value'])
 plt.title('Seasonal Time Series (Monthly)')
 plt.xlabel('Date')
 plt.ylabel('Value')
@@ -432,22 +432,22 @@ print("=== SARIMA(1,1,1)(1,1,1,12) ===")
 print(model_sarima.summary())
 
 # Forecast 12 months ahead
-forecast_seasonal = model_sarima.forecast(steps=12)
+forecast_seasonal = model_sarima.forecast (steps=12)
 
 # Plot forecast
-fig, ax = plt.subplots(figsize=(14, 6))
+fig, ax = plt.subplots (figsize=(14, 6))
 
-ax.plot(seasonal_df.index, seasonal_df['value'], label='Historical', color='black')
+ax.plot (seasonal_df.index, seasonal_df['value'], label='Historical', color='black')
 
 forecast_index = pd.date_range(
-    start=seasonal_df.index[-1] + pd.DateOffset(months=1),
+    start=seasonal_df.index[-1] + pd.DateOffset (months=1),
     periods=12,
     freq='MS'
 )
-ax.plot(forecast_index, forecast_seasonal, label='Forecast', color='red', marker='o', linewidth=2)
+ax.plot (forecast_index, forecast_seasonal, label='Forecast', color='red', marker='o', linewidth=2)
 
 # Confidence intervals
-forecast_obj = model_sarima.get_forecast(steps=12)
+forecast_obj = model_sarima.get_forecast (steps=12)
 forecast_ci = forecast_obj.conf_int()
 
 ax.fill_between(
@@ -479,7 +479,7 @@ plt.show()
 ARIMA Model Diagnostics
 """
 
-def diagnose_model(model, name='Model'):
+def diagnose_model (model, name='Model'):
     """
     Comprehensive model diagnostics
     """
@@ -500,8 +500,8 @@ def diagnose_model(model, name='Model'):
     # 2. Ljung-Box test (no autocorrelation in residuals)
     from statsmodels.stats.diagnostic import acorr_ljungbox
     
-    lb_result = acorr_ljungbox(residuals, lags=10)
-    significant_lags = sum(lb_result['lb_pvalue'] < 0.05)
+    lb_result = acorr_ljungbox (residuals, lags=10)
+    significant_lags = sum (lb_result['lb_pvalue'] < 0.05)
     
     print(f"\\n2. Ljung-Box Test:")
     print(f"   Significant lags: {significant_lags}/10")
@@ -514,7 +514,7 @@ def diagnose_model(model, name='Model'):
     # 3. Normality test
     from scipy.stats import jarque_bera
     
-    jb_stat, jb_pvalue = jarque_bera(residuals)
+    jb_stat, jb_pvalue = jarque_bera (residuals)
     
     print(f"\\n3. Jarque-Bera Test (normality):")
     print(f"   Statistic: {jb_stat:.4f}")
@@ -529,30 +529,30 @@ def diagnose_model(model, name='Model'):
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
     # Residuals over time
-    residuals.plot(ax=axes[0, 0], title='Residuals Over Time')
-    axes[0, 0].axhline(y=0, color='red', linestyle='--')
+    residuals.plot (ax=axes[0, 0], title='Residuals Over Time')
+    axes[0, 0].axhline (y=0, color='red', linestyle='--')
     axes[0, 0].set_ylabel('Residual')
     
     # Histogram
-    axes[0, 1].hist(residuals, bins=30, edgecolor='black', alpha=0.7)
+    axes[0, 1].hist (residuals, bins=30, edgecolor='black', alpha=0.7)
     axes[0, 1].set_title('Residual Distribution')
     axes[0, 1].set_xlabel('Residual')
     axes[0, 1].set_ylabel('Frequency')
     
     # Q-Q plot
     from scipy.stats import probplot
-    probplot(residuals, dist="norm", plot=axes[1, 0])
+    probplot (residuals, dist="norm", plot=axes[1, 0])
     axes[1, 0].set_title('Q-Q Plot')
     
     # ACF of residuals
-    plot_acf(residuals, lags=20, ax=axes[1, 1])
+    plot_acf (residuals, lags=20, ax=axes[1, 1])
     axes[1, 1].set_title('ACF of Residuals (should be near zero)')
     
     plt.tight_layout()
     plt.show()
 
 # Diagnose ARIMA model
-diagnose_model(model_arima, 'ARIMA(1,1,1)')
+diagnose_model (model_arima, 'ARIMA(1,1,1)')
 \`\`\`
 
 ---
@@ -564,7 +564,7 @@ diagnose_model(model_arima, 'ARIMA(1,1,1)')
 Walk-Forward Validation for ARIMA
 """
 
-def walk_forward_arima(series, order=(1,1,1), train_size=252, test_size=21):
+def walk_forward_arima (series, order=(1,1,1), train_size=252, test_size=21):
     """
     Walk-forward validation
     
@@ -580,12 +580,12 @@ def walk_forward_arima(series, order=(1,1,1), train_size=252, test_size=21):
     predictions = []
     actuals = []
     
-    for i in range(train_size, len(series), test_size):
+    for i in range (train_size, len (series), test_size):
         # Train on window
         train = series[i-train_size:i]
         test = series[i:i+test_size]
         
-        if len(test) == 0:
+        if len (test) == 0:
             break
         
         # Fit model
@@ -593,16 +593,16 @@ def walk_forward_arima(series, order=(1,1,1), train_size=252, test_size=21):
             model = ARIMA(train, order=order).fit()
             
             # Forecast
-            forecast = model.forecast(steps=len(test))
+            forecast = model.forecast (steps=len (test))
             
-            predictions.extend(forecast)
-            actuals.extend(test.values)
+            predictions.extend (forecast)
+            actuals.extend (test.values)
             
         except Exception as e:
             print(f"Error at iteration {i}: {e}")
             continue
     
-    return np.array(predictions), np.array(actuals)
+    return np.array (predictions), np.array (actuals)
 
 # Run walk-forward validation on prices
 predictions, actuals = walk_forward_arima(
@@ -615,20 +615,20 @@ predictions, actuals = walk_forward_arima(
 # Calculate metrics
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-mae = mean_absolute_error(actuals, predictions)
-rmse = np.sqrt(mean_squared_error(actuals, predictions))
-mape = np.mean(np.abs((actuals - predictions) / actuals)) * 100
+mae = mean_absolute_error (actuals, predictions)
+rmse = np.sqrt (mean_squared_error (actuals, predictions))
+mape = np.mean (np.abs((actuals - predictions) / actuals)) * 100
 
 print("\\n=== Walk-Forward Validation Results ===")
-print(f"Predictions: {len(predictions)}")
+print(f"Predictions: {len (predictions)}")
 print(f"MAE: \${mae:.2f}")
 print(f"RMSE: \${rmse:.2f}")
 print(f"MAPE: {mape:.2f}%")
 
 # Plot predictions vs actuals
-plt.figure(figsize = (14, 6))
-plt.plot(actuals, label = 'Actual', alpha = 0.7)
-plt.plot(predictions, label = 'Predicted', alpha = 0.7)
+plt.figure (figsize = (14, 6))
+plt.plot (actuals, label = 'Actual', alpha = 0.7)
+plt.plot (predictions, label = 'Predicted', alpha = 0.7)
 plt.xlabel('Step')
 plt.ylabel('Price ($)')
 plt.title('Walk-Forward ARIMA Predictions')
@@ -639,9 +639,9 @@ plt.show()
 # Plot residuals
 residuals = actuals - predictions
 
-plt.figure(figsize = (14, 5))
-plt.plot(residuals)
-plt.axhline(y = 0, color = 'red', linestyle = '--')
+plt.figure (figsize = (14, 5))
+plt.plot (residuals)
+plt.axhline (y = 0, color = 'red', linestyle = '--')
 plt.xlabel('Step')
 plt.ylabel('Residual ($)')
 plt.title('Prediction Residuals')
@@ -668,7 +668,7 @@ class ARIMAStrategy:
         self.train_size = train_size
         self.threshold = threshold  # Minimum predicted return to trade
     
-    def generate_signals(self, prices):
+    def generate_signals (self, prices):
         """
         Generate trading signals
         
@@ -677,7 +677,7 @@ class ARIMAStrategy:
         """
         signals = []
         
-        for i in range(self.train_size, len(prices)):
+        for i in range (self.train_size, len (prices)):
             # Train on past data
             train = prices[i-self.train_size:i]
             
@@ -686,7 +686,7 @@ class ARIMAStrategy:
                 model = ARIMA(train, order=self.order).fit()
                 
                 # Forecast next day
-                forecast = model.forecast(steps=1)[0]
+                forecast = model.forecast (steps=1)[0]
                 current_price = train.iloc[-1]
                 
                 # Calculate predicted return
@@ -717,14 +717,14 @@ class ARIMAStrategy:
                     'signal': 0
                 })
         
-        return pd.DataFrame(signals).set_index('date')
+        return pd.DataFrame (signals).set_index('date')
     
-    def backtest(self, prices):
+    def backtest (self, prices):
         """
         Backtest strategy
         """
         # Generate signals
-        signals = self.generate_signals(prices)
+        signals = self.generate_signals (prices)
         
         # Calculate returns
         signals['actual_return'] = signals['price'].pct_change()
@@ -739,13 +739,13 @@ class ARIMAStrategy:
         return signals
 
 # Run strategy
-strategy = ARIMAStrategy(order=(2,1,1), train_size=100, threshold=0.005)
-results = strategy.backtest(prices)
+strategy = ARIMAStrategy (order=(2,1,1), train_size=100, threshold=0.005)
+results = strategy.backtest (prices)
 
 print("\\n=== ARIMA Strategy Results ===")
-print(f"Total signals: {len(results)}")
-print(f"Buy signals: {sum(results['signal'] == 1)}")
-print(f"Sell signals: {sum(results['signal'] == -1)}")
+print(f"Total signals: {len (results)}")
+print(f"Buy signals: {sum (results['signal'] == 1)}")
+print(f"Sell signals: {sum (results['signal'] == -1)}")
 print(f"\\nBuy & Hold Return: {(results['cum_actual'].iloc[-1] - 1) * 100:.2f}%")
 print(f"Strategy Return: {(results['cum_strategy'].iloc[-1] - 1) * 100:.2f}%")
 
@@ -757,23 +757,23 @@ print(f"Strategy Sharpe Ratio: {sharpe:.2f}")
 fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
 # Cumulative returns
-results['cum_actual'].plot(ax=axes[0], label='Buy & Hold', color='blue')
-results['cum_strategy'].plot(ax=axes[0], label='ARIMA Strategy', color='red')
+results['cum_actual'].plot (ax=axes[0], label='Buy & Hold', color='blue')
+results['cum_strategy'].plot (ax=axes[0], label='ARIMA Strategy', color='red')
 axes[0].set_ylabel('Cumulative Return')
 axes[0].set_title('Strategy Performance')
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 
 # Signals
-axes[1].plot(results.index, results['price'], color='black', alpha=0.5, label='Price')
+axes[1].plot (results.index, results['price'], color='black', alpha=0.5, label='Price')
 
 # Buy signals
 buy_signals = results[results['signal'] == 1]
-axes[1].scatter(buy_signals.index, buy_signals['price'], color='green', marker='^', s=100, label='Buy', zorder=5)
+axes[1].scatter (buy_signals.index, buy_signals['price'], color='green', marker='^', s=100, label='Buy', zorder=5)
 
 # Sell signals
 sell_signals = results[results['signal'] == -1]
-axes[1].scatter(sell_signals.index, sell_signals['price'], color='red', marker='v', s=100, label='Sell', zorder=5)
+axes[1].scatter (sell_signals.index, sell_signals['price'], color='red', marker='v', s=100, label='Sell', zorder=5)
 
 axes[1].set_ylabel('Price ($)')
 axes[1].set_title('Trading Signals')

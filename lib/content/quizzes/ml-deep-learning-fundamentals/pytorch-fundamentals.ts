@@ -4,7 +4,7 @@ export const pytorchFundamentalsQuiz: QuizQuestion[] = [
   {
     id: 'pytorch-q1',
     question:
-      "Explain how PyTorch's autograd system works. What is a computational graph, how does it track operations, and how does the backward() method compute gradients? Why is it important to call optimizer.zero_grad() before each training step?",
+      "Explain how PyTorch\'s autograd system works. What is a computational graph, how does it track operations, and how does the backward() method compute gradients? Why is it important to call optimizer.zero_grad() before each training step?",
     sampleAnswer: `PyTorch's autograd is the engine that makes deep learning possible by automatically computing gradients for any operation. Understanding it is crucial for effective PyTorch usage:
 
 **Computational Graph:**
@@ -121,16 +121,16 @@ model = nn.Sequential(
 **nn.Module - Full Flexibility:**
 
 \`\`\`python
-class CustomModel(nn.Module):
+class CustomModel (nn.Module):
     def __init__(self):
         super().__init__()
         self.layer1 = nn.Linear(784, 512)
         self.layer2 = nn.Linear(512, 10)
     
-    def forward(self, x):
-        x = F.relu(self.layer1(x))
+    def forward (self, x):
+        x = F.relu (self.layer1(x))
         if self.training:  # Conditional logic
-            x = F.dropout(x, 0.5)
+            x = F.dropout (x, 0.5)
         return self.layer2(x)
 \`\`\`
 
@@ -170,7 +170,7 @@ class CustomModel(nn.Module):
 Best of both worlds - use Sequential within nn.Module:
 
 \`\`\`python
-class HybridModel(nn.Module):
+class HybridModel (nn.Module):
     def __init__(self):
         super().__init__()
         self.encoder = nn.Sequential(
@@ -184,10 +184,10 @@ class HybridModel(nn.Module):
             nn.Linear(256, 10)
         )
     
-    def forward(self, x):
-        features = self.encoder(x)
+    def forward (self, x):
+        features = self.encoder (x)
         # Custom logic here
-        output = self.decoder(features)
+        output = self.decoder (features)
         return output
 \`\`\``,
     keyPoints: [
@@ -212,18 +212,18 @@ class HybridModel(nn.Module):
 \`\`\`python
 model.train()  # Set to training mode
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     for batch_x, batch_y in train_loader:
         # Move to GPU
-        batch_x = batch_x.to(device)
-        batch_y = batch_y.to(device)
+        batch_x = batch_x.to (device)
+        batch_y = batch_y.to (device)
         
         # Zero gradients
         optimizer.zero_grad()
         
         # Forward pass
-        outputs = model(batch_x)
-        loss = criterion(outputs, batch_y)
+        outputs = model (batch_x)
+        loss = criterion (outputs, batch_y)
         
         # Backward pass
         loss.backward()
@@ -235,10 +235,10 @@ for epoch in range(num_epochs):
     model.eval()
     with torch.no_grad():
         for val_x, val_y in val_loader:
-            val_x = val_x.to(device)
-            val_y = val_y.to(device)
-            outputs = model(val_x)
-            val_loss = criterion(outputs, val_y)
+            val_x = val_x.to (device)
+            val_y = val_y.to (device)
+            outputs = model (val_x)
+            val_loss = criterion (outputs, val_y)
     
     model.train()  # Back to training mode
 \`\`\`
@@ -261,7 +261,7 @@ for epoch in range(num_epochs):
 
 \`\`\`python
 with torch.no_grad():
-    outputs = model(inputs)
+    outputs = model (inputs)
 \`\`\`
 
 **Why it's essential:**
@@ -280,13 +280,13 @@ with torch.no_grad():
 **Setup:**
 \`\`\`python
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)  # Move model once
+model = model.to (device)  # Move model once
 \`\`\`
 
 **In training loop:**
 \`\`\`python
-data = data.to(device)    # Move each batch
-target = target.to(device)
+data = data.to (device)    # Move each batch
+target = target.to (device)
 \`\`\`
 
 **Key points:**
@@ -306,33 +306,33 @@ target = target.to(device)
 
 **Complete Best Practice:**
 \`\`\`python
-def train_epoch(model, loader, optimizer, criterion, device):
+def train_epoch (model, loader, optimizer, criterion, device):
     model.train()
     total_loss = 0
     
     for data, target in loader:
-        data, target = data.to(device), target.to(device)
+        data, target = data.to (device), target.to (device)
         optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
+        output = model (data)
+        loss = criterion (output, target)
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
     
-    return total_loss / len(loader)
+    return total_loss / len (loader)
 
-def validate(model, loader, criterion, device):
+def validate (model, loader, criterion, device):
     model.eval()
     total_loss = 0
     
     with torch.no_grad():
         for data, target in loader:
-            data, target = data.to(device), target.to(device)
-            output = model(data)
-            loss = criterion(output, target)
+            data, target = data.to (device), target.to (device)
+            output = model (data)
+            loss = criterion (output, target)
             total_loss += loss.item()
     
-    return total_loss / len(loader)
+    return total_loss / len (loader)
 \`\`\``,
     keyPoints: [
       'Training loop: zero_grad() → forward() → loss.backward() → optimizer.step()',
@@ -340,7 +340,7 @@ def validate(model, loader, criterion, device):
       'model.eval() disables dropout and uses running statistics',
       'torch.no_grad() disables gradient tracking for efficiency',
       'Without no_grad(), validation wastes memory storing unused gradients',
-      'GPU usage: model.to(device) once, data.to(device) per batch',
+      'GPU usage: model.to (device) once, data.to (device) per batch',
       'All tensors must be on same device (CPU or GPU)',
       'Always call eval() before validation/inference',
     ],

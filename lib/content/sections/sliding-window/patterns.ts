@@ -21,22 +21,22 @@ Window 4:          [1, 3, 2] → sum = 6
 
 **Naive O(N*K):**
 \`\`\`python
-for i in range(len(arr) - k + 1):
-    current_sum = sum(arr[i:i+k])  # Recalculate every time
-    max_sum = max(max_sum, current_sum)
+for i in range (len (arr) - k + 1):
+    current_sum = sum (arr[i:i+k])  # Recalculate every time
+    max_sum = max (max_sum, current_sum)
 \`\`\`
 
 **Optimized O(N) with Sliding Window:**
 \`\`\`python
 # Initial window
-window_sum = sum(arr[:k])
+window_sum = sum (arr[:k])
 max_sum = window_sum
 
 # Slide the window
-for i in range(k, len(arr)):
+for i in range (k, len (arr)):
     window_sum += arr[i]      # Add new element
     window_sum -= arr[i - k]  # Remove old element
-    max_sum = max(max_sum, window_sum)
+    max_sum = max (max_sum, window_sum)
 \`\`\`
 
 ---
@@ -65,19 +65,19 @@ left = 0
 max_length = 0
 window_data = {}  # Track window state
 
-for right in range(len(arr)):
+for right in range (len (arr)):
     # Add arr[right] to window
-    window_data[arr[right]] = window_data.get(arr[right], 0) + 1
+    window_data[arr[right]] = window_data.get (arr[right], 0) + 1
     
     # Shrink window while condition violated
-    while condition_violated(window_data):
+    while condition_violated (window_data):
         window_data[arr[left]] -= 1
         if window_data[arr[left]] == 0:
             del window_data[arr[left]]
         left += 1
     
     # Update result with current window
-    max_length = max(max_length, right - left + 1)
+    max_length = max (max_length, right - left + 1)
 
 return max_length
 \`\`\`
@@ -111,13 +111,13 @@ min_length = float('inf')
 required = {}  # Characters we need
 window = {}    # Characters we have
 
-for right in range(len(arr)):
+for right in range (len (arr)):
     # Expand window
-    window[arr[right]] = window.get(arr[right], 0) + 1
+    window[arr[right]] = window.get (arr[right], 0) + 1
     
     # Shrink window while condition met
-    while condition_met(window, required):
-        min_length = min(min_length, right - left + 1)
+    while condition_met (window, required):
+        min_length = min (min_length, right - left + 1)
         window[arr[left]] -= 1
         left += 1
 
@@ -134,7 +134,7 @@ Use hash maps, sets, or counters to track window state:
 \`\`\`python
 from collections import defaultdict
 
-window = defaultdict(int)
+window = defaultdict (int)
 for char in s[left:right+1]:
     window[char] += 1
 \`\`\`
@@ -142,14 +142,14 @@ for char in s[left:right+1]:
 **Set (Unique Elements):**
 \`\`\`python
 window = set()
-for i in range(left, right + 1):
-    window.add(arr[i])
+for i in range (left, right + 1):
+    window.add (arr[i])
 \`\`\`
 
 **Counter (Efficient Frequency):**
 \`\`\`python
 from collections import Counter
 
-window = Counter(s[left:right+1])
+window = Counter (s[left:right+1])
 \`\`\``,
 };

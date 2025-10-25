@@ -55,7 +55,7 @@ Find longest subsequence common to two strings.
 if text1[i-1] == text2[j-1]:
     dp[i][j] = dp[i-1][j-1] + 1
 else:
-    dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    dp[i][j] = max (dp[i-1][j], dp[i][j-1])
 \`\`\`
 
 **Applications**: Edit distance, shortest common supersequence
@@ -123,8 +123,8 @@ Track different states (e.g., holding stock, cooldown).
 **Example - Stock with cooldown**:
 \`\`\`python
 # Three states: hold stock, sold, rest
-hold[i] = max(hold[i-1], rest[i-1] - price[i])
+hold[i] = max (hold[i-1], rest[i-1] - price[i])
 sold[i] = hold[i-1] + price[i]
-rest[i] = max(rest[i-1], sold[i-1])
+rest[i] = max (rest[i-1], sold[i-1])
 \`\`\``,
 };

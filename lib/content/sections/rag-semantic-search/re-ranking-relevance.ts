@@ -18,7 +18,7 @@ Vector similarity search is fast but has limitations:
 \`\`\`python
 # Problem: Vector similarity alone misses nuances
 query = "best practices for python async programming"
-results = semantic_search(query, top_k=100)
+results = semantic_search (query, top_k=100)
 
 # Results might include:
 # 1. "Python async basics" (similar embedding)
@@ -31,8 +31,8 @@ results = semantic_search(query, top_k=100)
 
 \`\`\`python
 # Solution: Use cross-encoder to re-rank
-initial_results = semantic_search(query, top_k=100)
-reranked = cross_encoder_rerank(query, initial_results, top_k=10)
+initial_results = semantic_search (query, top_k=100)
+reranked = cross_encoder_rerank (query, initial_results, top_k=10)
 
 # Now top result: "Advanced async patterns in Python" ✓
 \`\`\`
@@ -53,13 +53,13 @@ Cross-encoders jointly encode query and document together, capturing their relat
 
 \`\`\`python
 # Bi-Encoder (for initial retrieval)
-query_emb = encode(query)      # Encode separately
-doc_emb = encode(document)
-similarity = cosine(query_emb, doc_emb)  # Compare vectors
+query_emb = encode (query)      # Encode separately
+doc_emb = encode (document)
+similarity = cosine (query_emb, doc_emb)  # Compare vectors
 
 # Cross-Encoder (for re-ranking)
 combined = f"{query} [SEP] {document}"  # Encode together
-relevance_score = model(combined)  # Direct relevance score
+relevance_score = model (combined)  # Direct relevance score
 \`\`\`
 
 **Trade-offs:**
@@ -87,7 +87,7 @@ class CrossEncoderReranker:
                        - ms-marco-MiniLM-L-6-v2 (fast, good)
                        - ms-marco-MiniLM-L-12-v2 (slower, better)
         """
-        self.model = CrossEncoder(model_name)
+        self.model = CrossEncoder (model_name)
     
     def rerank(
         self,
@@ -110,11 +110,11 @@ class CrossEncoderReranker:
         pairs = [[query, doc] for doc in documents]
         
         # Get relevance scores
-        scores = self.model.predict(pairs)
+        scores = self.model.predict (pairs)
         
         # Sort by score (descending)
-        doc_score_pairs = list(zip(documents, scores))
-        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
+        doc_score_pairs = list (zip (documents, scores))
+        doc_score_pairs.sort (key=lambda x: x[1], reverse=True)
         
         return doc_score_pairs[:top_k]
 
@@ -131,7 +131,7 @@ initial_docs = [
     "Async best practices in Python"
 ]
 
-reranked = reranker.rerank(query, initial_docs, top_k=3)
+reranked = reranker.rerank (query, initial_docs, top_k=3)
 
 print("Re-ranked Results:")
 for doc, score in reranked:
@@ -157,7 +157,7 @@ class BatchedCrossEncoderReranker:
     """
     
     def __init__(self, model_name: str, batch_size: int = 32):
-        self.model = CrossEncoder(model_name)
+        self.model = CrossEncoder (model_name)
         self.batch_size = batch_size
     
     def rerank(
@@ -173,14 +173,14 @@ class BatchedCrossEncoderReranker:
         
         # Predict in batches
         all_scores = []
-        for i in range(0, len(pairs), self.batch_size):
+        for i in range(0, len (pairs), self.batch_size):
             batch = pairs[i:i + self.batch_size]
-            batch_scores = self.model.predict(batch, show_progress_bar=False)
-            all_scores.extend(batch_scores)
+            batch_scores = self.model.predict (batch, show_progress_bar=False)
+            all_scores.extend (batch_scores)
         
         # Sort and return top K
-        doc_score_pairs = list(zip(documents, all_scores))
-        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
+        doc_score_pairs = list (zip (documents, all_scores))
+        doc_score_pairs.sort (key=lambda x: x[1], reverse=True)
         
         return doc_score_pairs[:top_k]
 \`\`\`
@@ -195,11 +195,11 @@ from typing import List, Dict
 
 class CohereReranker:
     """
-    Re-rank using Cohere's managed API.
+    Re-rank using Cohere\'s managed API.
     """
     
     def __init__(self, api_key: str):
-        self.client = cohere.Client(api_key)
+        self.client = cohere.Client (api_key)
     
     def rerank(
         self,
@@ -239,7 +239,7 @@ class CohereReranker:
 
 
 # Example usage
-reranker = CohereReranker(api_key="your-api-key")
+reranker = CohereReranker (api_key="your-api-key")
 
 query = "machine learning best practices"
 docs = [
@@ -249,7 +249,7 @@ docs = [
     "Python programming basics"
 ]
 
-reranked = reranker.rerank(query, docs, top_k=3)
+reranked = reranker.rerank (query, docs, top_k=3)
 
 for result in reranked:
     print(f"{result['score']:.3f}: {result['document']}")
@@ -342,8 +342,8 @@ class HybridScorer:
         ]
         
         # Sort by combined score
-        doc_score_pairs = list(zip(documents, combined_scores))
-        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
+        doc_score_pairs = list (zip (documents, combined_scores))
+        doc_score_pairs.sort (key=lambda x: x[1], reverse=True)
         
         return doc_score_pairs[:top_k]
 \`\`\`
@@ -366,7 +366,7 @@ class BM25DenseReranker:
         self.documents = []
         self.tokenized_docs = []
     
-    def index_documents(self, documents: List[str]):
+    def index_documents (self, documents: List[str]):
         """
         Index documents for BM25.
         
@@ -381,9 +381,9 @@ class BM25DenseReranker:
         ]
         
         # Build BM25 index
-        self.bm25 = BM25Okapi(self.tokenized_docs)
+        self.bm25 = BM25Okapi (self.tokenized_docs)
     
-    def get_bm25_scores(self, query: str) -> np.ndarray:
+    def get_bm25_scores (self, query: str) -> np.ndarray:
         """
         Get BM25 scores for query.
         
@@ -394,7 +394,7 @@ class BM25DenseReranker:
             BM25 scores (normalized)
         """
         tokenized_query = query.lower().split()
-        scores = self.bm25.get_scores(tokenized_query)
+        scores = self.bm25.get_scores (tokenized_query)
         
         # Normalize to 0-1
         if scores.max() > 0:
@@ -422,7 +422,7 @@ class BM25DenseReranker:
             Re-ranked results
         """
         # Get BM25 scores
-        bm25_scores = self.get_bm25_scores(query)
+        bm25_scores = self.get_bm25_scores (query)
         
         # Normalize dense scores to 0-1
         dense_scores_norm = (dense_scores - dense_scores.min()) / (dense_scores.max() - dense_scores.min())
@@ -431,8 +431,8 @@ class BM25DenseReranker:
         combined_scores = alpha * dense_scores_norm + (1 - alpha) * bm25_scores
         
         # Sort and return top K
-        doc_score_pairs = list(zip(self.documents, combined_scores))
-        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
+        doc_score_pairs = list (zip (self.documents, combined_scores))
+        doc_score_pairs.sort (key=lambda x: x[1], reverse=True)
         
         return doc_score_pairs[:top_k]
 
@@ -447,12 +447,12 @@ documents = [
     "Advanced asyncio in Python"
 ]
 
-reranker.index_documents(documents)
+reranker.index_documents (documents)
 
 query = "python async patterns"
 dense_scores = np.array([0.8, 0.6, 0.4, 0.9])  # From embedding search
 
-results = reranker.rerank(query, dense_scores, alpha=0.5, top_k=3)
+results = reranker.rerank (query, dense_scores, alpha=0.5, top_k=3)
 
 for doc, score in results:
     print(f"{score:.3f}: {doc}")
@@ -497,10 +497,10 @@ class ReciprocalRankFusion:
             Fused ranking
         """
         # Calculate RRF scores
-        rrf_scores = defaultdict(float)
+        rrf_scores = defaultdict (float)
         
         for ranking in rankings:
-            for rank, doc in enumerate(ranking, start=1):
+            for rank, doc in enumerate (ranking, start=1):
                 rrf_scores[doc] += 1.0 / (self.k + rank)
         
         # Sort by RRF score
@@ -514,7 +514,7 @@ class ReciprocalRankFusion:
 
 
 # Example: Combine results from different retrievers
-rrf = ReciprocalRankFusion(k=60)
+rrf = ReciprocalRankFusion (k=60)
 
 # Rankings from different methods
 semantic_ranking = ["doc1", "doc3", "doc5", "doc2"]
@@ -575,10 +575,10 @@ class LearningToRankModel:
             semantic_score,
             bm25_score,
             doc_length,
-            len(query.split()),  # Query length
-            len(set(query.lower().split()) & set(document.lower().split())),  # Term overlap
+            len (query.split()),  # Query length
+            len (set (query.lower().split()) & set (document.lower().split())),  # Term overlap
         ]
-        return np.array(features)
+        return np.array (features)
     
     def train(
         self,
@@ -603,7 +603,7 @@ class LearningToRankModel:
             for data in training_data
         ])
         
-        y = np.array(relevance_scores)
+        y = np.array (relevance_scores)
         
         self.model.fit(X, y)
     
@@ -638,8 +638,8 @@ class LearningToRankModel:
         scores = self.model.predict(X)
         
         # Sort by predicted score
-        doc_score_pairs = list(zip([d['text'] for d in documents], scores))
-        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
+        doc_score_pairs = list (zip([d['text'] for d in documents], scores))
+        doc_score_pairs.sort (key=lambda x: x[1], reverse=True)
         
         return doc_score_pairs[:top_k]
 \`\`\`
@@ -671,7 +671,7 @@ class ProductionReranker:
             use_cache: Enable result caching
             cache_ttl: Cache time-to-live in seconds
         """
-        self.cross_encoder = CrossEncoder(cross_encoder_model)
+        self.cross_encoder = CrossEncoder (cross_encoder_model)
         self.use_cache = use_cache
         self.cache_ttl = cache_ttl
         self._cache = {}
@@ -698,7 +698,7 @@ class ProductionReranker:
         start_time = time.time()
         
         # Check cache
-        cache_key = self._get_cache_key(query, method)
+        cache_key = self._get_cache_key (query, method)
         if self.use_cache and cache_key in self._cache:
             cached_result, timestamp = self._cache[cache_key]
             if time.time() - timestamp < self.cache_ttl:
@@ -706,11 +706,11 @@ class ProductionReranker:
         
         # Rerank based on method
         if method == "cross_encoder":
-            results = self._cross_encoder_rerank(query, documents, top_k)
+            results = self._cross_encoder_rerank (query, documents, top_k)
         elif method == "hybrid":
-            results = self._hybrid_rerank(query, documents, top_k)
+            results = self._hybrid_rerank (query, documents, top_k)
         elif method == "rrf":
-            results = self._rrf_rerank(query, documents, top_k)
+            results = self._rrf_rerank (query, documents, top_k)
         else:
             results = documents[:top_k]
         
@@ -733,13 +733,13 @@ class ProductionReranker:
     ) -> List[Dict]:
         """Cross-encoder reranking."""
         pairs = [[query, doc['text']] for doc in documents]
-        scores = self.cross_encoder.predict(pairs)
+        scores = self.cross_encoder.predict (pairs)
         
         # Add scores and sort
-        for doc, score in zip(documents, scores):
-            doc['rerank_score'] = float(score)
+        for doc, score in zip (documents, scores):
+            doc['rerank_score'] = float (score)
         
-        documents.sort(key=lambda x: x['rerank_score'], reverse=True)
+        documents.sort (key=lambda x: x['rerank_score'], reverse=True)
         return documents[:top_k]
     
     def _hybrid_rerank(
@@ -757,7 +757,7 @@ class ProductionReranker:
                 0.2 * doc.get('bm25_score', 0)
             )
         
-        documents.sort(key=lambda x: x['rerank_score'], reverse=True)
+        documents.sort (key=lambda x: x['rerank_score'], reverse=True)
         return documents[:top_k]
     
     def _rrf_rerank(
@@ -771,13 +771,13 @@ class ProductionReranker:
         # Simplified version
         return documents[:top_k]
     
-    def _get_cache_key(self, query: str, method: str) -> str:
+    def _get_cache_key (self, query: str, method: str) -> str:
         """Generate cache key."""
         import hashlib
         content = f"{query}:{method}"
         return hashlib.md5(content.encode()).hexdigest()
     
-    def clear_cache(self):
+    def clear_cache (self):
         """Clear the cache."""
         self._cache = {}
 \`\`\`
@@ -815,7 +815,7 @@ class ProductionReranker:
 class OptimizedReranker:
     """Performance-optimized reranker."""
     
-    def rerank(self, query: str, docs: List[str], top_k: int = 10):
+    def rerank (self, query: str, docs: List[str], top_k: int = 10):
         # 1. Filter by threshold first
         filtered = [d for d in docs if d['initial_score'] > 0.5]
         
@@ -823,7 +823,7 @@ class OptimizedReranker:
         candidates = filtered[:50]  # Don't re-rank all 100
         
         # 3. Batch processing
-        reranked = self._batch_rerank(query, candidates)
+        reranked = self._batch_rerank (query, candidates)
         
         # 4. Return top K
         return reranked[:top_k]

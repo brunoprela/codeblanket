@@ -8,7 +8,7 @@ export const testingBestPractices = {
 
 **Testing is as much art as science**—knowing what to test, how deeply, and when to stop is crucial for productive development. This final section synthesizes everything into actionable best practices, common patterns, and anti-patterns to avoid.
 
-Professional testing isn't about 100% coverage or testing every edge case. It's about strategically applying testing techniques to maximize confidence while minimizing maintenance burden.
+Professional testing isn't about 100% coverage or testing every edge case. It\'s about strategically applying testing techniques to maximize confidence while minimizing maintenance burden.
 
 ---
 
@@ -31,10 +31,10 @@ def test_user_creation_implementation():
 ✅ **Testing behavior** (robust):
 \`\`\`python
 def test_user_creation_behavior():
-    user = User.create(username="alice")
+    user = User.create (username="alice")
     
     assert user.username == "alice"
-    assert User.exists(username="alice")
+    assert User.exists (username="alice")
 \`\`\`
 
 **Why**: Implementation tests break when refactoring (even if behavior unchanged). Behavior tests survive refactoring.
@@ -50,7 +50,7 @@ def test_user_cannot_withdraw_more_than_balance():
     Then the withdrawal fails
     And their balance remains $100
     """
-    account = Account(balance=100)
+    account = Account (balance=100)
     
     with pytest.raises(InsufficientFundsError):
         account.withdraw(150)
@@ -70,12 +70,12 @@ def test_user_cannot_withdraw_more_than_balance():
 def test_shopping_cart_total():
     # Arrange: Setup test data
     cart = ShoppingCart()
-    item1 = Product(name="Widget", price=29.99)
-    item2 = Product(name="Gadget", price=49.99)
+    item1 = Product (name="Widget", price=29.99)
+    item2 = Product (name="Gadget", price=49.99)
     
     # Act: Perform action
-    cart.add(item1)
-    cart.add(item2)
+    cart.add (item1)
+    cart.add (item2)
     total = cart.calculate_total()
     
     # Assert: Verify result
@@ -87,10 +87,10 @@ def test_shopping_cart_total():
 \`\`\`python
 def test_user_login_with_invalid_password():
     # Given: User exists with password
-    user = UserFactory.create(password="correct_password")
+    user = UserFactory.create (password="correct_password")
     
     # When: User attempts login with wrong password
-    result = auth.login(username=user.username, password="wrong_password")
+    result = auth.login (username=user.username, password="wrong_password")
     
     # Then: Login fails
     assert result.success is False
@@ -104,31 +104,31 @@ class TestUserAuthentication:
     """Group related tests"""
     
     @pytest.fixture
-    def user(self):
-        return UserFactory.create(password="secret123")
+    def user (self):
+        return UserFactory.create (password="secret123")
     
-    def test_login_with_correct_password(self, user):
-        result = auth.login(user.username, "secret123")
+    def test_login_with_correct_password (self, user):
+        result = auth.login (user.username, "secret123")
         assert result.success is True
     
-    def test_login_with_wrong_password(self, user):
-        result = auth.login(user.username, "wrong")
+    def test_login_with_wrong_password (self, user):
+        result = auth.login (user.username, "wrong")
         assert result.success is False
     
-    def test_login_with_nonexistent_user(self):
+    def test_login_with_nonexistent_user (self):
         result = auth.login("nonexistent", "password")
         assert result.success is False
 
 class TestUserRegistration:
     """Separate class for different feature"""
     
-    def test_register_new_user(self):
-        result = auth.register(username="alice", password="secret")
+    def test_register_new_user (self):
+        result = auth.register (username="alice", password="secret")
         assert result.success is True
     
-    def test_register_duplicate_username(self):
-        UserFactory.create(username="alice")
-        result = auth.register(username="alice", password="secret")
+    def test_register_duplicate_username (self):
+        UserFactory.create (username="alice")
+        result = auth.register (username="alice", password="secret")
         assert result.success is False
 \`\`\`
 
@@ -191,11 +191,11 @@ def test_requests_library():
 \`\`\`python
 class User:
     @property
-    def username(self):
+    def username (self):
         return self._username  # Too simple to test
 
 def test_username_getter():  # Waste of time
-    user = User(username="alice")
+    user = User (username="alice")
     assert user.username == "alice"
 \`\`\`
 
@@ -203,7 +203,7 @@ def test_username_getter():  # Waste of time
 \`\`\`python
 def test_django_orm():
     # Don't test that Django ORM works
-    user = User.objects.create(username="alice")
+    user = User.objects.create (username="alice")
     assert User.objects.count() == 1
 \`\`\`
 
@@ -212,7 +212,7 @@ def test_django_orm():
 def test_api_client_handles_timeout():
     """Test OUR error handling, not requests library"""
     with pytest.raises(APIClientError):
-        api_client.fetch_data(timeout=0.001)  # Will timeout
+        api_client.fetch_data (timeout=0.001)  # Will timeout
 \`\`\`
 
 ---
@@ -224,32 +224,32 @@ def test_api_client_handles_timeout():
 ❌ **Bad** (tests too much):
 \`\`\`python
 def test_user_and_posts_and_comments():
-    user = User.create(username="alice")
-    post = Post.create(author=user, title="Hello")
-    comment = Comment.create(post=post, author=user, text="Great!")
+    user = User.create (username="alice")
+    post = Post.create (author=user, title="Hello")
+    comment = Comment.create (post=post, author=user, text="Great!")
     
     assert user.username == "alice"
     assert post.title == "Hello"
     assert comment.text == "Great!"
-    assert len(user.posts) == 1
-    assert len(post.comments) == 1
+    assert len (user.posts) == 1
+    assert len (post.comments) == 1
 \`\`\`
 
 ✅ **Good** (focused):
 \`\`\`python
 def test_user_creation():
-    user = User.create(username="alice")
+    user = User.create (username="alice")
     assert user.username == "alice"
 
 def test_post_creation():
     user = UserFactory.create()
-    post = Post.create(author=user, title="Hello")
+    post = Post.create (author=user, title="Hello")
     assert post.title == "Hello"
     assert post.author == user
 
 def test_comment_creation():
     post = PostFactory.create()
-    comment = Comment.create(post=post, text="Great!")
+    comment = Comment.create (post=post, text="Great!")
     assert comment.text == "Great!"
     assert comment.post == post
 \`\`\`
@@ -261,11 +261,11 @@ def test_comment_creation():
 class TestUserFlow:
     user = None  # Shared state (BAD)
     
-    def test_1_create_user(self):
-        self.user = User.create(username="alice")
+    def test_1_create_user (self):
+        self.user = User.create (username="alice")
         assert self.user.id is not None
     
-    def test_2_update_user(self):
+    def test_2_update_user (self):
         self.user.username = "bob"  # Depends on test_1
         self.user.save()
         assert self.user.username == "bob"
@@ -275,14 +275,14 @@ class TestUserFlow:
 \`\`\`python
 class TestUser:
     @pytest.fixture
-    def user(self):
-        return UserFactory.create(username="alice")
+    def user (self):
+        return UserFactory.create (username="alice")
     
-    def test_create_user(self):
-        user = User.create(username="alice")
+    def test_create_user (self):
+        user = User.create (username="alice")
         assert user.id is not None
     
-    def test_update_user(self, user):
+    def test_update_user (self, user):
         user.username = "bob"
         user.save()
         assert user.username == "bob"
@@ -292,14 +292,14 @@ class TestUser:
 
 ❌ **Bad** (mocking everything):
 \`\`\`python
-def test_user_service_create_user(mocker):
+def test_user_service_create_user (mocker):
     mock_db = mocker.Mock()
     mock_validator = mocker.Mock()
     mock_email = mocker.Mock()
     mock_logger = mocker.Mock()
     mock_cache = mocker.Mock()
     
-    service = UserService(mock_db, mock_validator, mock_email, mock_logger, mock_cache)
+    service = UserService (mock_db, mock_validator, mock_email, mock_logger, mock_cache)
     service.create_user("alice", "alice@example.com")
     
     mock_db.save.assert_called_once()
@@ -308,10 +308,10 @@ def test_user_service_create_user(mocker):
 
 ✅ **Good** (mock external dependencies only):
 \`\`\`python
-def test_user_service_sends_welcome_email(db_session, mocker):
+def test_user_service_sends_welcome_email (db_session, mocker):
     mock_email = mocker.patch("myapp.email.send_email")
     
-    service = UserService(db_session)
+    service = UserService (db_session)
     user = service.create_user("alice", "alice@example.com")
     
     assert user.username == "alice"  # Real database
@@ -353,7 +353,7 @@ def user():
 @pytest.fixture
 def admin_user():
     """Admin variant"""
-    return UserFactory.create(role="admin")
+    return UserFactory.create (role="admin")
 
 @pytest.fixture
 def user_with_posts():
@@ -367,13 +367,13 @@ def user_with_posts():
 
 \`\`\`python
 @pytest.fixture
-def authenticated_client(client, user):
+def authenticated_client (client, user):
     """Compose client + user"""
-    token = generate_auth_token(user)
+    token = generate_auth_token (user)
     client.set_header("Authorization", f"Bearer {token}")
     return client
 
-def test_protected_endpoint(authenticated_client):
+def test_protected_endpoint (authenticated_client):
     response = authenticated_client.get("/api/profile")
     assert response.status_code == 200
 \`\`\`
@@ -395,7 +395,7 @@ assert result  # Too vague
 assert user is not None
 assert user.is_active is True
 assert result["status"] == "success"
-assert len(items) > 0
+assert len (items) > 0
 \`\`\`
 
 ### Multiple Assertions When Appropriate
@@ -403,7 +403,7 @@ assert len(items) > 0
 ✅ **Related assertions** (OK together):
 \`\`\`python
 def test_user_creation():
-    user = User.create(username="alice", email="alice@example.com")
+    user = User.create (username="alice", email="alice@example.com")
     
     # Related assertions about same object
     assert user.id is not None
@@ -436,7 +436,7 @@ def test_division_by_zero():
 # Exception with message
 def test_invalid_age():
     with pytest.raises(ValueError, match="Age must be positive"):
-        User.create(username="alice", age=-5)
+        User.create (username="alice", age=-5)
 
 # Exception with inspection
 def test_authentication_error():
@@ -444,13 +444,13 @@ def test_authentication_error():
         auth.login("nonexistent", "password")
     
     assert exc_info.value.code == "USER_NOT_FOUND"
-    assert "nonexistent" in str(exc_info.value)
+    assert "nonexistent" in str (exc_info.value)
 \`\`\`
 
 ### Pattern: Testing Error Recovery
 
 \`\`\`python
-def test_api_client_retries_on_failure(mocker):
+def test_api_client_retries_on_failure (mocker):
     """Test retry logic"""
     mock_request = mocker.patch("requests.get")
     
@@ -458,10 +458,10 @@ def test_api_client_retries_on_failure(mocker):
     mock_request.side_effect = [
         requests.Timeout(),
         requests.ConnectionError(),
-        mocker.Mock(status_code=200, json=lambda: {"data": "success"})
+        mocker.Mock (status_code=200, json=lambda: {"data": "success"})
     ]
     
-    result = api_client.fetch_with_retry(max_attempts=3)
+    result = api_client.fetch_with_retry (max_attempts=3)
     
     assert result["data"] == "success"
     assert mock_request.call_count == 3
@@ -476,11 +476,11 @@ def test_api_client_retries_on_failure(mocker):
 ❌ **Repetitive**:
 \`\`\`python
 def test_1():
-    user = User(username="user1", email="user1@example.com", age=30, role="user")
+    user = User (username="user1", email="user1@example.com", age=30, role="user")
     # ...
 
 def test_2():
-    user = User(username="user2", email="user2@example.com", age=25, role="user")
+    user = User (username="user2", email="user2@example.com", age=25, role="user")
     # ...
 \`\`\`
 
@@ -490,7 +490,7 @@ def test_1():
     user = UserFactory.create()  # Sensible defaults
 
 def test_2():
-    user = UserFactory.create(age=25)  # Override specific fields
+    user = UserFactory.create (age=25)  # Override specific fields
 \`\`\`
 
 ### Pattern: Minimal Test Data
@@ -499,7 +499,7 @@ def test_2():
 \`\`\`python
 def test_username_validation():
     # Only username matters for this test
-    user = User(username="a")
+    user = User (username="a")
     with pytest.raises(ValidationError):
         user.validate()
 \`\`\`
@@ -511,16 +511,16 @@ def test_username_validation():
 ### Pattern: Benchmark Critical Paths
 
 \`\`\`python
-def test_search_performance(benchmark):
+def test_search_performance (benchmark):
     """Ensure search completes in <100ms"""
-    items = [Product(name=f"Item {i}") for i in range(1000)]
+    items = [Product (name=f"Item {i}") for i in range(1000)]
     
-    result = benchmark(search_products, items, query="Item 500")
+    result = benchmark (search_products, items, query="Item 500")
     
     assert result is not None
     # benchmark automatically fails if >100ms (configurable)
 
-def test_no_n_plus_1_queries(db_session, django_assert_num_queries):
+def test_no_n_plus_1_queries (db_session, django_assert_num_queries):
     """Ensure queries are optimized"""
     users = UserFactory.create_batch(10)
     
@@ -547,8 +547,8 @@ def test_api_client_usage_example():
     3. Make requests
     4. Handle responses
     """
-    client = APIClient(base_url="https://api.example.com")
-    client.authenticate(api_key="your_key")
+    client = APIClient (base_url="https://api.example.com")
+    client.authenticate (api_key="your_key")
     
     response = client.get("/users/123")
     

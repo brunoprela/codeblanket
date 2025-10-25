@@ -38,7 +38,7 @@ Finds answer spans within provided context:
 Generates free-form answers:
 - Input: Question (+ optional context)
 - Output: Generated text answer
-- Example: "Why was the Eiffel Tower built?" → "The Eiffel Tower was built as the entrance arch for the 1889 World's Fair to celebrate the centennial of the French Revolution." (synthesized)
+- Example: "Why was the Eiffel Tower built?" → "The Eiffel Tower was built as the entrance arch for the 1889 World\'s Fair to celebrate the centennial of the French Revolution." (synthesized)
 
 **How it works:**
 1. Encoder processes question and context
@@ -128,10 +128,10 @@ Based on term frequency and inverse document frequency:
 
 **How it works:**
 \`\`\`
-BM25(Q, D) = Σ IDF(qi) * (f(qi, D) * (k1 + 1)) / 
-                         (f(qi, D) + k1 * (1 - b + b * |D| / avgdl))
+BM25(Q, D) = Σ IDF(qi) * (f (qi, D) * (k1 + 1)) / 
+                         (f (qi, D) + k1 * (1 - b + b * |D| / avgdl))
 where:
-- f(qi, D): term frequency in document
+- f (qi, D): term frequency in document
 - |D|: document length
 - avgdl: average document length
 - k1, b: tuning parameters
@@ -164,9 +164,9 @@ Based on neural embeddings:
 
 **How it works:**
 \`\`\`python
-query_embedding = encoder(query)  # [768] dense vector
-doc_embeddings = encoder(documents)  # [N, 768]
-similarities = cosine_similarity(query_embedding, doc_embeddings)
+query_embedding = encoder (query)  # [768] dense vector
+doc_embeddings = encoder (documents)  # [N, 768]
+similarities = cosine_similarity (query_embedding, doc_embeddings)
 \`\`\`
 
 **Characteristics:**
@@ -195,16 +195,16 @@ similarities = cosine_similarity(query_embedding, doc_embeddings)
 Combines strengths of both:
 
 \`\`\`python
-def hybrid_search(query, documents, alpha=0.5):
+def hybrid_search (query, documents, alpha=0.5):
     # Sparse scores (BM25)
-    bm25_scores = bm25.get_scores(query)
+    bm25_scores = bm25.get_scores (query)
     
     # Dense scores (embeddings)
-    dense_scores = cosine_similarity(encode(query), encode(documents))
+    dense_scores = cosine_similarity (encode (query), encode (documents))
     
     # Normalize to [0, 1]
-    bm25_norm = normalize(bm25_scores)
-    dense_norm = normalize(dense_scores)
+    bm25_norm = normalize (bm25_scores)
+    dense_norm = normalize (dense_scores)
     
     # Weighted combination
     final_scores = alpha * dense_norm + (1 - alpha) * bm25_norm
@@ -249,7 +249,7 @@ query = {
                 {"script_score": {
                     "query": {"match_all": {}},
                     "script": {
-                        "source": "cosineSimilarity(params.query_vector, 'content_embedding') + 1.0",
+                        "source": "cosineSimilarity (params.query_vector, 'content_embedding') + 1.0",
                         "params": {"query_vector": query_embedding}
                     },
                     "boost": 0.5
@@ -338,16 +338,16 @@ class QueryProcessor:
         self.spell_checker = SpellChecker()
         self.intent_classifier = IntentClassifier()
         
-    def process(self, query):
+    def process (self, query):
         # Spelling correction
-        corrected = self.spell_checker.correct(query)
+        corrected = self.spell_checker.correct (query)
         
         # Intent classification
-        intent = self.intent_classifier.predict(corrected)
+        intent = self.intent_classifier.predict (corrected)
         # Intents: "refund", "shipping", "product_info", etc.
         
         # Query expansion (add synonyms)
-        expanded = self.expand_query(corrected)
+        expanded = self.expand_query (corrected)
         
         return {
             'original': query,
@@ -368,10 +368,10 @@ class DocumentStore:
         self.es = Elasticsearch()
         self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
         
-    def index_documents(self, documents):
+    def index_documents (self, documents):
         """Index with both text and embeddings"""
         for doc in documents:
-            embedding = self.encoder.encode(doc['content',])
+            embedding = self.encoder.encode (doc['content',])
             
             self.es.index(
                 index='support_docs',
@@ -392,10 +392,10 @@ class HybridRetriever:
         self.doc_store = doc_store
         self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
         
-    def retrieve(self, query, intent=None, top_k=20):
+    def retrieve (self, query, intent=None, top_k=20):
         ''Retrieve using hybrid search''
         # Encode query
-        query_embedding = self.encoder.encode(query)
+        query_embedding = self.encoder.encode (query)
         
         # Elasticsearch hybrid query
         es_query = {
@@ -416,7 +416,7 @@ class HybridRetriever:
                             "script_score": {
                                 "query": {"match_all": {}},
                                 "script": {
-                                    "source": "cosineSimilarity(params.query_vector, 'content_embedding') + 1.0",
+                                    "source": "cosineSimilarity (params.query_vector, 'content_embedding') + 1.0",
                                     "params": {"query_vector": query_embedding.tolist()}
                                 },
                                 "boost": 0.5
@@ -432,7 +432,7 @@ class HybridRetriever:
             "size": top_k
         }
         
-        results = self.doc_store.es.search(index='support_docs', body=es_query)
+        results = self.doc_store.es.search (index='support_docs', body=es_query)
         return [hit['_source',] for hit in results['hits',]['hits',]]
 \`\`\`
 
@@ -447,7 +447,7 @@ class Reranker:
         self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2')
         self.tokenizer = AutoTokenizer.from_pretrained('cross-encoder/ms-marco-MiniLM-L-6-v2')
         
-    def rerank(self, query, documents, top_k=5):
+    def rerank (self, query, documents, top_k=5):
         ''Re-rank with cross-encoder''
         scores = []
         
@@ -463,10 +463,10 @@ class Reranker:
             with torch.no_grad():
                 score = self.model(**inputs).logits.item()
             
-            scores.append(score)
+            scores.append (score)
         
         # Sort by score
-        ranked_indices = np.argsort(scores)[::-1][:top_k]
+        ranked_indices = np.argsort (scores)[::-1][:top_k]
         return [documents[i] for i in ranked_indices], [scores[i] for i in ranked_indices]
 \`\`\`
 
@@ -477,13 +477,13 @@ class AnswerExtractor:
     def __init__(self):
         self.qa_model = pipeline('question-answering', model='distilbert-base-cased-distilled-squad')
         
-    def extract_answer(self, question, documents):
+    def extract_answer (self, question, documents):
         ''Try to extract answer from each document''
         candidates = []
         
         for doc in documents:
             try:
-                result = self.qa_model(question=question, context=doc['content',])
+                result = self.qa_model (question=question, context=doc['content',])
                 
                 # Only include if confidence is high
                 if result['score',] > 0.3:
@@ -498,7 +498,7 @@ class AnswerExtractor:
         
         # Return best answer
         if candidates:
-            return max(candidates, key=lambda x: x['score',])
+            return max (candidates, key=lambda x: x['score',])
         return None
 \`\`\`
 
@@ -509,7 +509,7 @@ class GenerativeAnswerer:
     def __init__(self):
         self.generator = pipeline('text-generation', model='gpt2')
         
-    def generate_answer(self, question, context_docs):
+    def generate_answer (self, question, context_docs):
         ''Generate answer when extraction fails''
         # Concatenate top documents as context
         context = "\\n".join([doc['content',][:200] for doc in context_docs[:3]])
@@ -522,7 +522,7 @@ Question: {question}
 
 Answer:''
         
-        answer = self.generator(prompt, max_length=150)[0]['generated_text',]
+        answer = self.generator (prompt, max_length=150)[0]['generated_text',]
         return answer.split("Answer:")[-1].strip()
 \`\`\`
 
@@ -532,14 +532,14 @@ Answer:''
 class CustomerSupportQA:
     def __init__(self):
         self.query_processor = QueryProcessor()
-        self.retriever = HybridRetriever(doc_store)
+        self.retriever = HybridRetriever (doc_store)
         self.reranker = Reranker()
         self.extractor = AnswerExtractor()
         self.generator = GenerativeAnswerer()
         
-    def answer_question(self, query):
+    def answer_question (self, query):
         # 1. Process query
-        processed = self.query_processor.process(query)
+        processed = self.query_processor.process (query)
         
         # 2. Retrieve candidates (broad recall)
         candidates = self.retriever.retrieve(
@@ -549,15 +549,15 @@ class CustomerSupportQA:
         )
         
         # 3. Re-rank (precision)
-        reranked, scores = self.reranker.rerank(processed['corrected',], candidates, top_k=5)
+        reranked, scores = self.reranker.rerank (processed['corrected',], candidates, top_k=5)
         
         # 4. Extract answer
-        answer = self.extractor.extract_answer(processed['corrected',], reranked)
+        answer = self.extractor.extract_answer (processed['corrected',], reranked)
         
         # 5. Fallback to generation if extraction fails
         if not answer or answer['score',] < 0.5:
             answer = {
-                'answer': self.generator.generate_answer(processed['corrected',], reranked),
+                'answer': self.generator.generate_answer (processed['corrected',], reranked),
                 'score': 0.7,
                 'context': reranked[0]['content',],
                 'source': 'Generated from context'
@@ -589,9 +589,9 @@ print("Sources:", result['sources',])
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=1000)
-def answer_question_cached(query):
-    return qa_system.answer_question(query)
+@lru_cache (maxsize=1000)
+def answer_question_cached (query):
+    return qa_system.answer_question (query)
 \`\`\`
 
 **2. Monitoring:**

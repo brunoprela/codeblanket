@@ -13,7 +13,7 @@ export const testingFastapiMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      'TestClient runs your FastAPI application in-process without starting an actual server or making network requests. This makes tests extremely fast (no TCP overhead), reliable (no network flakiness), and easy to debug. Tests execute synchronously even for async endpoints. Pattern: client = TestClient(app); response = client.get("/endpoint"). No need to run uvicorn, no port conflicts, tests run in milliseconds.',
+      'TestClient runs your FastAPI application in-process without starting an actual server or making network requests. This makes tests extremely fast (no TCP overhead), reliable (no network flakiness), and easy to debug. Tests execute synchronously even for async endpoints. Pattern: client = TestClient (app); response = client.get("/endpoint"). No need to run uvicorn, no port conflicts, tests run in milliseconds.',
   },
   {
     id: 2,
@@ -41,7 +41,7 @@ export const testingFastapiMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "Transaction rollback provides fast, reliable test isolation. Pattern: Start transaction before test → run test (all DB operations) → rollback transaction after test. Benefits: Fast (no actual commits), isolated (changes don't affect other tests), clean state automatically restored. Implementation with pytest fixture: @pytest.fixture def db(): connection = engine.connect(); transaction = connection.begin(); session = Session(bind=connection); yield session; transaction.rollback(). Deleting data (option 2) is slow, separate databases per test (option 3) don't scale, restarting DB (option 4) is extremely slow.",
+      "Transaction rollback provides fast, reliable test isolation. Pattern: Start transaction before test → run test (all DB operations) → rollback transaction after test. Benefits: Fast (no actual commits), isolated (changes don't affect other tests), clean state automatically restored. Implementation with pytest fixture: @pytest.fixture def db(): connection = engine.connect(); transaction = connection.begin(); session = Session (bind=connection); yield session; transaction.rollback(). Deleting data (option 2) is slow, separate databases per test (option 3) don't scale, restarting DB (option 4) is extremely slow.",
   },
   {
     id: 4,
@@ -54,7 +54,7 @@ export const testingFastapiMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      'TestClient handles async endpoints automatically - it runs them synchronously in tests for simplicity. For testing concurrent async behavior, use httpx.AsyncClient: async with httpx.AsyncClient(app=app) as client: response = await client.get("/endpoint"). Mark test with @pytest.mark.asyncio. TestClient is simpler for most tests, AsyncClient when testing actual async behavior (concurrent requests, timeouts, async context managers). Never convert production async to sync just for testing (option 4).',
+      'TestClient handles async endpoints automatically - it runs them synchronously in tests for simplicity. For testing concurrent async behavior, use httpx.AsyncClient: async with httpx.AsyncClient (app=app) as client: response = await client.get("/endpoint"). Mark test with @pytest.mark.asyncio. TestClient is simpler for most tests, AsyncClient when testing actual async behavior (concurrent requests, timeouts, async context managers). Never convert production async to sync just for testing (option 4).',
   },
   {
     id: 5,
@@ -67,6 +67,6 @@ export const testingFastapiMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      'Pytest fixtures enable DRY testing by providing reusable setup/teardown. Common fixtures: @pytest.fixture def client(): return TestClient(app) (test client), @pytest.fixture def db(): (database session with rollback), @pytest.fixture def authenticated_client(): (client with auth token). Fixtures can depend on other fixtures, have different scopes (function, session), and automatically handle cleanup with yield. Benefits: Reduce boilerplate, ensure consistent test setup, automatic cleanup, composition through fixture dependencies.',
+      'Pytest fixtures enable DRY testing by providing reusable setup/teardown. Common fixtures: @pytest.fixture def client(): return TestClient (app) (test client), @pytest.fixture def db(): (database session with rollback), @pytest.fixture def authenticated_client(): (client with auth token). Fixtures can depend on other fixtures, have different scopes (function, session), and automatically handle cleanup with yield. Benefits: Reduce boilerplate, ensure consistent test setup, automatic cleanup, composition through fixture dependencies.',
   },
 ].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

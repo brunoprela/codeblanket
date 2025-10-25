@@ -16,7 +16,7 @@ Master when and how to fine-tune LLMs for your specific use case.
 **When to fine-tune:** Need consistent behavior, specific domain, high volume
 
 \`\`\`python
-def should_fine_tune(scenario: Dict) -> bool:
+def should_fine_tune (scenario: Dict) -> bool:
     """Decide if fine-tuning is worth it."""
     
     score = 0
@@ -92,7 +92,7 @@ class LoRALayer:
     ΔW = A @ B where A is (d x r), B is (r x k)
     r << d, k (e.g., r=8, d=4096, k=4096)
     
-    Parameters: r(d+k) instead of d*k
+    Parameters: r (d+k) instead of d*k
     Example: 8(4096+4096) = 65K vs 16M = 250x reduction!
     """
     pass
@@ -141,25 +141,25 @@ class FineTuningDataPrep:
         issues = []
         
         # Check size
-        if len(dataset) < 50:
+        if len (dataset) < 50:
             issues.append("Dataset too small (<50 examples). Need 100+ for good results.")
         
         # Check for duplicates
         inputs = [ex['messages'][1]['content'] for ex in dataset]
-        if len(inputs) != len(set(inputs)):
+        if len (inputs) != len (set (inputs)):
             issues.append("Duplicate inputs found")
         
         # Check output diversity
         outputs = [ex['messages'][2]['content'] for ex in dataset]
-        if len(set(outputs)) < len(outputs) * 0.5:
+        if len (set (outputs)) < len (outputs) * 0.5:
             issues.append("Low output diversity - may overfit")
         
         # Check length distribution
-        lengths = [len(ex['messages'][2]['content'].split()) for ex in dataset]
-        avg_length = sum(lengths) / len(lengths)
+        lengths = [len (ex['messages'][2]['content'].split()) for ex in dataset]
+        avg_length = sum (lengths) / len (lengths)
         
         return {
-            'num_examples': len(dataset),
+            'num_examples': len (dataset),
             'avg_output_length': avg_length,
             'issues': issues,
             'quality_score': 1.0 if not issues else 0.5
@@ -177,8 +177,8 @@ training_data = [
     # ... more examples
 ]
 
-formatted = data_prep.format_for_openai(training_data)
-validation = data_prep.validate_dataset(formatted)
+formatted = data_prep.format_for_openai (training_data)
+validation = data_prep.validate_dataset (formatted)
 
 if validation['issues']:
     print("⚠️  Data quality issues:")
@@ -207,7 +207,7 @@ class FineTuningConfig:
         self.warmup_steps = warmup_steps
     
     @classmethod
-    def get_recommended(cls, dataset_size: int) -> 'FineTuningConfig':
+    def get_recommended (cls, dataset_size: int) -> 'FineTuningConfig':
         """Get recommended config based on dataset size."""
         
         if dataset_size < 500:
@@ -236,7 +236,7 @@ class FineTuningConfig:
             )
 
 # Usage
-config = FineTuningConfig.get_recommended(dataset_size=2000)
+config = FineTuningConfig.get_recommended (dataset_size=2000)
 print(f"Recommended: {config.epochs} epochs, LR={config.learning_rate}")
 \`\`\`
 
@@ -259,17 +259,17 @@ class FineTuneEvaluator:
         
         for example in test_set:
             # Base model
-            base_output = await base_model(example['input'])
-            base_score = self._score_output(base_output, example['expected'])
-            base_scores.append(base_score)
+            base_output = await base_model (example['input'])
+            base_score = self._score_output (base_output, example['expected'])
+            base_scores.append (base_score)
             
             # Fine-tuned model
-            ft_output = await finetuned_model(example['input'])
-            ft_score = self._score_output(ft_output, example['expected'])
-            ft_scores.append(ft_score)
+            ft_output = await finetuned_model (example['input'])
+            ft_score = self._score_output (ft_output, example['expected'])
+            ft_scores.append (ft_score)
         
-        avg_base = sum(base_scores) / len(base_scores)
-        avg_ft = sum(ft_scores) / len(ft_scores)
+        avg_base = sum (base_scores) / len (base_scores)
+        avg_ft = sum (ft_scores) / len (ft_scores)
         
         improvement = ((avg_ft - avg_base) / avg_base) * 100
         
@@ -280,7 +280,7 @@ class FineTuneEvaluator:
             'worth_it': improvement > 10  # >10% improvement threshold
         }
     
-    def _score_output(self, output: str, expected: str) -> float:
+    def _score_output (self, output: str, expected: str) -> float:
         """Score output quality (0-1)."""
         # Implement your scoring logic
         return 0.85  # Placeholder

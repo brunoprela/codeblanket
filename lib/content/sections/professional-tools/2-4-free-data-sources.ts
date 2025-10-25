@@ -1,7 +1,7 @@
 export const freeDataSources = {
-    id: 'free-data-sources',
-    title: 'Free & Affordable Data Sources',
-    content: `
+  id: 'free-data-sources',
+  title: 'Free & Affordable Data Sources',
+  content: `
 # Free & Affordable Data Sources
 
 ## Overview: Building on a Budget
@@ -10,7 +10,7 @@ You don't need $24,000/year Bloomberg Terminal to do professional financial anal
 
 **The Reality**:
 - **Bloomberg Terminal**: $24,000/year
-- **This Section's Stack**: $0-2,000/year
+- **This Section\'s Stack**: $0-2,000/year
 - **Coverage**: Comprehensive for most use cases
 
 ### What You Can Get for Free
@@ -85,20 +85,19 @@ ticker = yf.Ticker("AAPL")
 info = ticker.info
 print(f"Company: {info['longName']}")
 print(f"Sector: {info['sector']}")
-print(f"Market Cap: ${info['marketCap']:, .0f
-}")
+print(f"Market Cap: \${info['marketCap']:,.0f}")
 print(f"P/E Ratio: {info.get('trailingPE', 'N/A')}")
 print(f"Dividend Yield: {info.get('dividendYield', 0) * 100:.2f}%")
 
 # Historical prices
-hist = ticker.history(period = "1y")  # Last 1 year
+hist = ticker.history (period = "1y")  # Last 1 year
 print(hist.head())
 
 # With specific dates
-hist = ticker.history(start = "2023-01-01", end = "2023-12-31")
+hist = ticker.history (start = "2023-01-01", end = "2023-12-31")
 
 # Different intervals
-intraday = ticker.history(period = "1d", interval = "5m")  # 5 - minute bars
+intraday = ticker.history (period = "1d", interval = "5m")  # 5 - minute bars
 
 
 # ==========================================
@@ -176,7 +175,7 @@ print("\\nAvailable Option Expirations:")
 print(expirations[: 5])
 
 # Get options chain for specific expiration
-opt_chain = ticker.option_chain(expirations[0])
+opt_chain = ticker.option_chain (expirations[0])
 calls = opt_chain.calls
 puts = opt_chain.puts
 
@@ -237,55 +236,55 @@ print(correlation)
     
     def __init__(self, ticker):
 self.ticker = ticker
-self.stock = yf.Ticker(ticker)
+self.stock = yf.Ticker (ticker)
 self.data = None
     
-    def get_data(self, period = "2y"):
+    def get_data (self, period = "2y"):
 \"\"\"Load historical data\"\"\"
-self.data = self.stock.history(period = period)
+self.data = self.stock.history (period = period)
 return self.data
     
-    def calculate_sma(self, window):
+    def calculate_sma (self, window):
 \"\"\"Simple Moving Average\"\"\"
-return self.data['Close'].rolling(window = window).mean()
+return self.data['Close'].rolling (window = window).mean()
     
-    def calculate_ema(self, span):
+    def calculate_ema (self, span):
 \"\"\"Exponential Moving Average\"\"\"
-return self.data['Close'].ewm(span = span, adjust = False).mean()
+return self.data['Close'].ewm (span = span, adjust = False).mean()
     
-    def calculate_rsi(self, periods = 14):
+    def calculate_rsi (self, periods = 14):
 \"\"\"Relative Strength Index\"\"\"
 delta = self.data['Close'].diff()
-gain = (delta.where(delta > 0, 0)).rolling(window = periods).mean()
-loss = (-delta.where(delta < 0, 0)).rolling(window = periods).mean()
+gain = (delta.where (delta > 0, 0)).rolling (window = periods).mean()
+loss = (-delta.where (delta < 0, 0)).rolling (window = periods).mean()
 rs = gain / loss
 rsi = 100 - (100 / (1 + rs))
 return rsi
     
-    def calculate_bollinger_bands(self, window = 20, num_std = 2):
+    def calculate_bollinger_bands (self, window = 20, num_std = 2):
 \"\"\"Bollinger Bands\"\"\"
-sma = self.data['Close'].rolling(window = window).mean()
-std = self.data['Close'].rolling(window = window).std()
+sma = self.data['Close'].rolling (window = window).mean()
+std = self.data['Close'].rolling (window = window).std()
 upper_band = sma + (std * num_std)
 lower_band = sma - (std * num_std)
 return upper_band, sma, lower_band
     
-    def calculate_macd(self, fast = 12, slow = 26, signal = 9):
+    def calculate_macd (self, fast = 12, slow = 26, signal = 9):
 \"\"\"Moving Average Convergence Divergence\"\"\"
-ema_fast = self.data['Close'].ewm(span = fast).mean()
-ema_slow = self.data['Close'].ewm(span = slow).mean()
+ema_fast = self.data['Close'].ewm (span = fast).mean()
+ema_slow = self.data['Close'].ewm (span = slow).mean()
 macd_line = ema_fast - ema_slow
-signal_line = macd_line.ewm(span = signal).mean()
+signal_line = macd_line.ewm (span = signal).mean()
 histogram = macd_line - signal_line
 return macd_line, signal_line, histogram
     
-    def calculate_volatility(self, window = 30):
+    def calculate_volatility (self, window = 30):
 \"\"\"Historical Volatility (annualized)\"\"\"
 returns = self.data['Close'].pct_change()
-volatility = returns.rolling(window = window).std() * np.sqrt(252)
+volatility = returns.rolling (window = window).std() * np.sqrt(252)
 return volatility
     
-    def get_financial_ratios(self):
+    def get_financial_ratios (self):
 \"\"\"Calculate key financial ratios\"\"\"
 info = self.stock.info
 
@@ -304,9 +303,9 @@ ratios = {
     'Quick Ratio': info.get('quickRatio')
 }
 
-return pd.Series(ratios)
+return pd.Series (ratios)
     
-    def get_growth_metrics(self):
+    def get_growth_metrics (self):
 \"\"\"Calculate growth metrics\"\"\"
 info = self.stock.info
 financials = self.stock.quarterly_financials
@@ -324,9 +323,9 @@ metrics = {
         else:
 metrics = { 'error': 'Revenue data not available' }
 
-return pd.Series(metrics)
+return pd.Series (metrics)
     
-    def generate_report(self):
+    def generate_report (self):
 \"\"\"Generate comprehensive stock report\"\"\"
 print(f"\\n{'='*60}")
 print(f"STOCK ANALYSIS REPORT: {self.ticker}")
@@ -337,9 +336,9 @@ print(f"\\nCompany: {info.get('longName', 'N/A')}")
 print(f"Sector: {info.get('sector', 'N/A')}")
 print(f"Industry: {info.get('industry', 'N/A')}")
 
-print(f"\\nCurrent Price: ${info.get('currentPrice', 0):.2f}")
-print(f"52-Week Range: ${info.get('fiftyTwoWeekLow', 0):.2f} - ${info.get('fiftyTwoWeekHigh', 0):.2f}")
-print(f"Market Cap: ${info.get('marketCap', 0):,.0f}")
+print(f"\\nCurrent Price: \${info.get('currentPrice', 0):.2f}")
+print(f"52-Week Range: \${info.get('fiftyTwoWeekLow', 0):.2f} - \${info.get('fiftyTwoWeekHigh', 0):.2f}")
+print(f"Market Cap: \${info.get('marketCap', 0):,.0f}")
 
 print(f"\\nValuation Ratios:")
 ratios = self.get_financial_ratios()
@@ -350,19 +349,19 @@ print(f"  {ratio}: {value:.2f}")
 print(f"\\nGrowth Metrics:")
 growth = self.get_growth_metrics()
 for metric, value in growth.items():
-    if isinstance(value, (int, float)) and not np.isnan(value):
+    if isinstance (value, (int, float)) and not np.isnan (value):
 print(f"  {metric}: {value:.2%}")
         
         # Technical indicators
-self.get_data(period = "1y")
+self.get_data (period = "1y")
 current_price = self.data['Close'].iloc[-1]
 sma_50 = self.calculate_sma(50).iloc[-1]
 sma_200 = self.calculate_sma(200).iloc[-1]
 rsi = self.calculate_rsi().iloc[-1]
 
 print(f"\\nTechnical Indicators:")
-print(f"  50-day SMA: ${sma_50:.2f}")
-print(f"  200-day SMA: ${sma_200:.2f}")
+print(f"  50-day SMA: \${sma_50:.2f}")
+print(f"  200-day SMA: \${sma_200:.2f}")
 print(f"  RSI (14): {rsi:.2f}")
 print(f"  Trend: {'Bullish' if current_price > sma_50 > sma_200 else 'Bearish'}")
 
@@ -386,10 +385,10 @@ analyzer.generate_report()
 holdings: dict like { 'AAPL': 100, 'MSFT': 50 }
 \"\"\"
 self.holdings = holdings
-self.tickers = list(holdings.keys())
+self.tickers = list (holdings.keys())
 self.data = None
     
-    def load_data(self, start_date, end_date):
+    def load_data (self, start_date, end_date):
 \"\"\"Load historical data for all holdings\"\"\"
 self.data = yf.download(
     self.tickers,
@@ -398,18 +397,18 @@ self.data = yf.download(
 )['Close']
 return self.data
     
-    def calculate_returns(self):
+    def calculate_returns (self):
 \"\"\"Calculate daily returns\"\"\"
 returns = self.data.pct_change().dropna()
 return returns
     
-    def calculate_portfolio_value(self):
+    def calculate_portfolio_value (self):
 \"\"\"Calculate portfolio value over time\"\"\"
-shares = pd.Series(self.holdings)
-portfolio_value = (self.data * shares).sum(axis = 1)
+shares = pd.Series (self.holdings)
+portfolio_value = (self.data * shares).sum (axis = 1)
 return portfolio_value
     
-    def calculate_metrics(self):
+    def calculate_metrics (self):
 \"\"\"Calculate portfolio metrics\"\"\"
 returns = self.calculate_returns()
 portfolio_returns = self.calculate_portfolio_returns()
@@ -423,15 +422,15 @@ metrics = {
     'Max Drawdown': self.calculate_max_drawdown()
 }
 
-return pd.Series(metrics)
+return pd.Series (metrics)
     
-    def calculate_portfolio_returns(self):
+    def calculate_portfolio_returns (self):
 \"\"\"Calculate portfolio daily returns\"\"\"
 portfolio_value = self.calculate_portfolio_value()
 portfolio_returns = portfolio_value.pct_change().dropna()
 return portfolio_returns
     
-    def calculate_max_drawdown(self):
+    def calculate_max_drawdown (self):
 \"\"\"Calculate maximum drawdown\"\"\"
 portfolio_value = self.calculate_portfolio_value()
 cumulative_returns = (1 + portfolio_value.pct_change()).cumprod()
@@ -439,13 +438,13 @@ running_max = cumulative_returns.cummax()
 drawdown = (cumulative_returns - running_max) / running_max
 return drawdown.min()
     
-    def get_allocation(self):
+    def get_allocation (self):
 \"\"\"Get current allocation percentages\"\"\"
 current_prices = self.data.iloc[-1]
-position_values = current_prices * pd.Series(self.holdings)
+position_values = current_prices * pd.Series (self.holdings)
 total_value = position_values.sum()
 allocation = (position_values / total_value * 100).round(2)
-return allocation.sort_values(ascending = False)
+return allocation.sort_values (ascending = False)
 
 # Usage
 portfolio = Portfolio({
@@ -468,7 +467,7 @@ print(portfolio.calculate_metrics())
 # 1. Error Handling
 try:
     stock = yf.Ticker("INVALID")
-    data = stock.history(period="1y")
+    data = stock.history (period="1y")
     if data.empty:
         print("No data available")
 except Exception as e:
@@ -479,8 +478,8 @@ import time
 
 tickers = ['AAPL', 'MSFT', 'GOOGL']  # ... many tickers
 for ticker in tickers:
-    stock = yf.Ticker(ticker)
-    data = stock.history(period="1y")
+    stock = yf.Ticker (ticker)
+    data = stock.history (period="1y")
     time.sleep(0.1)  # Be respectful, don't hammer the API
 
 # 3. Caching
@@ -498,8 +497,8 @@ import pandas as pd
 data = pd.read_csv('aapl_data.csv', index_col=0, parse_dates=True)
 
 # 4. Handling Missing Data
-data = stock.history(period="5y")
-data = data.fillna(method='ffill')  # Forward fill
+data = stock.history (period="5y")
+data = data.fillna (method='ffill')  # Forward fill
 # or
 data = data.dropna()  # Drop missing values
 \`\`\`
@@ -534,7 +533,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Initialize (get free API key from https://fred.stlouisfed.org/)
-fred = Fred(api_key='your_api_key_here')
+fred = Fred (api_key='your_api_key_here')
 
 # ==========================================
 # BASIC USAGE
@@ -551,9 +550,9 @@ gdp = fred.get_series('GDP', observation_start='2020-01-01')
 series_ids = ['GDP', 'UNRATE', 'CPIAUCSL', 'FEDFUNDS']
 data = {}
 for series_id in series_ids:
-    data[series_id] = fred.get_series(series_id)
+    data[series_id] = fred.get_series (series_id)
 
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 print(df.tail())
 
 
@@ -567,28 +566,28 @@ class EconomicData:
     \"\"\"
     
     def __init__(self, api_key):
-        self.fred = Fred(api_key=api_key)
+        self.fred = Fred (api_key=api_key)
     
-    def get_gdp(self, start_date=None):
+    def get_gdp (self, start_date=None):
         \"\"\"Get GDP (quarterly)\"\"\"
         return self.fred.get_series('GDP', observation_start=start_date)
     
-    def get_unemployment(self, start_date=None):
+    def get_unemployment (self, start_date=None):
         \"\"\"Get unemployment rate (monthly)\"\"\"
         return self.fred.get_series('UNRATE', observation_start=start_date)
     
-    def get_inflation(self, start_date=None):
+    def get_inflation (self, start_date=None):
         \"\"\"Get CPI (monthly)\"\"\"
         cpi = self.fred.get_series('CPIAUCSL', observation_start=start_date)
         # Calculate YoY inflation rate
         inflation = cpi.pct_change(12) * 100
         return inflation
     
-    def get_fed_funds_rate(self, start_date=None):
+    def get_fed_funds_rate (self, start_date=None):
         \"\"\"Get Federal Funds Rate (daily)\"\"\"
         return self.fred.get_series('FEDFUNDS', observation_start=start_date)
     
-    def get_treasury_yields(self, start_date=None):
+    def get_treasury_yields (self, start_date=None):
         \"\"\"Get Treasury yields for various maturities\"\"\"
         yields = {
             '3M': self.fred.get_series('DGS3MO', observation_start=start_date),
@@ -596,9 +595,9 @@ class EconomicData:
             '10Y': self.fred.get_series('DGS10', observation_start=start_date),
             '30Y': self.fred.get_series('DGS30', observation_start=start_date)
         }
-        return pd.DataFrame(yields)
+        return pd.DataFrame (yields)
     
-    def get_yield_curve(self, date=None):
+    def get_yield_curve (self, date=None):
         \"\"\"Get yield curve for specific date\"\"\"
         if date is None:
             date = pd.Timestamp.now()
@@ -619,52 +618,52 @@ class EconomicData:
         
         yields = {}
         for maturity, series_id in maturities.items():
-            series = self.fred.get_series(series_id)
+            series = self.fred.get_series (series_id)
             # Get closest date
             closest_idx = series.index.get_indexer([date], method='nearest')[0]
             yields[maturity] = series.iloc[closest_idx]
         
-        return pd.Series(yields)
+        return pd.Series (yields)
     
-    def get_money_supply(self, measure='M2', start_date=None):
+    def get_money_supply (self, measure='M2', start_date=None):
         \"\"\"
         Get money supply
         measure: 'M1', 'M2'
         \"\"\"
         series_id = f'{measure}' if measure in ['M1', 'M2'] else 'M2'
-        return self.fred.get_series(series_id, observation_start=start_date)
+        return self.fred.get_series (series_id, observation_start=start_date)
     
-    def get_consumer_sentiment(self, start_date=None):
+    def get_consumer_sentiment (self, start_date=None):
         \"\"\"Get University of Michigan Consumer Sentiment Index\"\"\"
         return self.fred.get_series('UMCSENT', observation_start=start_date)
     
-    def get_housing_starts(self, start_date=None):
+    def get_housing_starts (self, start_date=None):
         \"\"\"Get Housing Starts (monthly)\"\"\"
         return self.fred.get_series('HOUST', observation_start=start_date)
     
-    def get_industrial_production(self, start_date=None):
+    def get_industrial_production (self, start_date=None):
         \"\"\"Get Industrial Production Index\"\"\"
         return self.fred.get_series('INDPRO', observation_start=start_date)
     
-    def search_series(self, query):
+    def search_series (self, query):
         \"\"\"Search for series by keyword\"\"\"
-        results = self.fred.search(query)
+        results = self.fred.search (query)
         return results[['id', 'title', 'frequency']].head(20)
 
 # Usage
-econ = EconomicData(api_key='your_api_key')
+econ = EconomicData (api_key='your_api_key')
 
 # Get various indicators
-gdp = econ.get_gdp(start_date='2020-01-01')
-unemployment = econ.get_unemployment(start_date='2020-01-01')
-inflation = econ.get_inflation(start_date='2020-01-01')
+gdp = econ.get_gdp (start_date='2020-01-01')
+unemployment = econ.get_unemployment (start_date='2020-01-01')
+inflation = econ.get_inflation (start_date='2020-01-01')
 
 # Plot
 fig, axes = plt.subplots(3, 1, figsize=(12, 10))
 
-gdp.plot(ax=axes[0], title='GDP')
-unemployment.plot(ax=axes[1], title='Unemployment Rate')
-inflation.plot(ax=axes[2], title='Inflation Rate (YoY)')
+gdp.plot (ax=axes[0], title='GDP')
+unemployment.plot (ax=axes[1], title='Unemployment Rate')
+inflation.plot (ax=axes[2], title='Inflation Rate (YoY)')
 
 plt.tight_layout()
 plt.savefig('economic_indicators.png')
@@ -676,7 +675,7 @@ print("\\nCurrent Yield Curve:")
 print(yield_curve)
 
 # Plot yield curve
-yield_curve.plot(kind='bar', title='US Treasury Yield Curve')
+yield_curve.plot (kind='bar', title='US Treasury Yield Curve')
 plt.ylabel('Yield (%)')
 plt.tight_layout()
 plt.savefig('yield_curve.png')
@@ -792,9 +791,9 @@ class SECFilingParser:
     \"\"\"
     
     def __init__(self, company_name, email):
-        self.downloader = Downloader(company_name, email)
+        self.downloader = Downloader (company_name, email)
     
-    def get_latest_10k(self, ticker):
+    def get_latest_10k (self, ticker):
         \"\"\"Download and parse latest 10-K\"\"\"
         self.downloader.get("10-K", ticker, amount=1)
         # File saved to: sec-edgar-filings/{ticker}/10-K/
@@ -803,11 +802,11 @@ class SECFilingParser:
         # (Implementation depends on filing format - HTML or XBRL)
         pass
     
-    def extract_financial_tables(self, filing_html):
+    def extract_financial_tables (self, filing_html):
         \"\"\"
         Extract financial statement tables from filing
         \"\"\"
-        soup = BeautifulSoup(filing_html, 'html.parser')
+        soup = BeautifulSoup (filing_html, 'html.parser')
         
         # Find all tables
         tables = soup.find_all('table')
@@ -822,18 +821,18 @@ class SECFilingParser:
         
         for table in tables:
             table_text = table.get_text().lower()
-            if any(keyword in table_text for keyword in keywords):
+            if any (keyword in table_text for keyword in keywords):
                 # Convert to pandas DataFrame
-                df = pd.read_html(str(table))[0]
-                financial_tables.append(df)
+                df = pd.read_html (str (table))[0]
+                financial_tables.append (df)
         
         return financial_tables
     
-    def get_md_and_a(self, filing_html):
+    def get_md_and_a (self, filing_html):
         \"\"\"
         Extract Management Discussion & Analysis section
         \"\"\"
-        soup = BeautifulSoup(filing_html, 'html.parser')
+        soup = BeautifulSoup (filing_html, 'html.parser')
         
         # MD&A typically in Item 7 for 10-K
         # Find section headers
@@ -841,11 +840,11 @@ class SECFilingParser:
         
         pass
     
-    def get_risk_factors(self, filing_html):
+    def get_risk_factors (self, filing_html):
         \"\"\"
         Extract Risk Factors section
         \"\"\"
-        soup = BeautifulSoup(filing_html, 'html.parser')
+        soup = BeautifulSoup (filing_html, 'html.parser')
         
         # Risk factors typically in Item 1A for 10-K
         # (Implementation varies by filing format)
@@ -865,8 +864,8 @@ def parse_form4(ticker):
     url = f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={ticker}&type=4&dateb=&owner=only&count=40"
     
     # Parse the page
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    response = requests.get (url)
+    soup = BeautifulSoup (response.content, 'html.parser')
     
     # Extract insider trades
     # (Implementation depends on HTML structure)
@@ -874,14 +873,14 @@ def parse_form4(ticker):
     trades = []
     # Parse each transaction...
     
-    return pd.DataFrame(trades)
+    return pd.DataFrame (trades)
 
 
 # ==========================================
 # 13F INSTITUTIONAL HOLDINGS
 # ==========================================
 
-def get_institutional_holders(ticker):
+def get_institutional_holders (ticker):
     \"\"\"
     Get institutional holdings from 13F filings
     \"\"\"
@@ -951,7 +950,7 @@ import pandas as pd
 
 # Initialize
 key = "your_polygon_api_key"
-client = RESTClient(key)
+client = RESTClient (key)
 
 # ==========================================
 # STOCK DATA
@@ -988,20 +987,20 @@ aggs = client.get_aggs(
 
 # Get last trade
 last_trade = client.get_last_trade("AAPL")
-print(f"Last trade: ${last_trade.price} at {last_trade.timestamp}")
+print(f"Last trade: \${last_trade.price} at {last_trade.timestamp}")
 
 # Get last quote
 last_quote = client.get_last_quote("AAPL")
-print(f"Bid: ${last_quote.bid_price}, Ask: ${last_quote.ask_price}")
+print(f"Bid: \${last_quote.bid_price}, Ask: \${last_quote.ask_price}")
 
 
 # ==========================================
 # REAL-TIME DATA (WebSocket)
 # ==========================================
 
-def handle_msg(msgs):
+def handle_msg (msgs):
     for msg in msgs:
-        print(f"{msg.symbol}: ${msg.price} at {msg.timestamp}")
+        print(f"{msg.symbol}: \${msg.price} at {msg.timestamp}")
 
 # Create WebSocket client
 ws_client = WebSocketClient(
@@ -1029,7 +1028,7 @@ options = client.list_options_contracts(
 )
 
 for option in options:
-    print(f"{option.ticker}: Strike ${option.strike_price}")
+    print(f"{option.ticker}: Strike \${option.strike_price}")
 
 
 # ==========================================
@@ -1042,9 +1041,9 @@ class PolygonDataFeed:
     \"\"\"
     
     def __init__(self, api_key):
-        self.client = RESTClient(api_key)
+        self.client = RESTClient (api_key)
     
-    def get_historical_data(self, ticker, start_date, end_date, timespan='day'):
+    def get_historical_data (self, ticker, start_date, end_date, timespan='day'):
         \"\"\"
         Get historical OHLCV data
         
@@ -1059,7 +1058,7 @@ class PolygonDataFeed:
         )
         
         df = pd.DataFrame([{
-            'timestamp': pd.to_datetime(agg.timestamp, unit='ms'),
+            'timestamp': pd.to_datetime (agg.timestamp, unit='ms'),
             'open': agg.open,
             'high': agg.high,
             'low': agg.low,
@@ -1072,7 +1071,7 @@ class PolygonDataFeed:
         df.set_index('timestamp', inplace=True)
         return df
     
-    def get_intraday_bars(self, ticker, date, interval_minutes=5):
+    def get_intraday_bars (self, ticker, date, interval_minutes=5):
         \"\"\"
         Get intraday bars for specific date
         \"\"\"
@@ -1085,7 +1084,7 @@ class PolygonDataFeed:
         )
         
         df = pd.DataFrame([{
-            'timestamp': pd.to_datetime(agg.timestamp, unit='ms'),
+            'timestamp': pd.to_datetime (agg.timestamp, unit='ms'),
             'open': agg.open,
             'high': agg.high,
             'low': agg.low,
@@ -1096,9 +1095,9 @@ class PolygonDataFeed:
         df.set_index('timestamp', inplace=True)
         return df
     
-    def get_company_details(self, ticker):
+    def get_company_details (self, ticker):
         \"\"\"Get company information\"\"\"
-        details = self.client.get_ticker_details(ticker)
+        details = self.client.get_ticker_details (ticker)
         return {
             'name': details.name,
             'market_cap': details.market_cap,
@@ -1108,7 +1107,7 @@ class PolygonDataFeed:
             'website': details.homepage_url
         }
     
-    def get_market_snapshot(self, tickers):
+    def get_market_snapshot (self, tickers):
         \"\"\"
         Get current snapshot for multiple tickers
         \"\"\"
@@ -1123,10 +1122,10 @@ class PolygonDataFeed:
                 'volume': snapshot.day.volume
             })
         
-        return pd.DataFrame(snapshots)
+        return pd.DataFrame (snapshots)
 
 # Usage
-feed = PolygonDataFeed(api_key='your_key')
+feed = PolygonDataFeed (api_key='your_key')
 data = feed.get_historical_data('AAPL', '2023-01-01', '2023-12-31')
 print(data.head())
 \`\`\`
@@ -1145,11 +1144,11 @@ token = 'your_iex_cloud_token'
 base_url = 'https://cloud.iexapis.com/stable'
 
 # Get quote
-response = requests.get(f'{base_url}/stock/AAPL/quote?token={token}')
+response = requests.get (f'{base_url}/stock/AAPL/quote?token={token}')
 quote = response.json()
 
-print(f"Price: ${quote['latestPrice']}")
-print(f"Market Cap: ${quote['marketCap']:,}")
+print(f"Price: \${quote['latestPrice']}")
+print(f"Market Cap: \${quote['marketCap']:,}")
 print(f"P/E Ratio: {quote['peRatio']}")
 \`\`\`
 
@@ -1175,7 +1174,7 @@ params = {
     'apikey': API_KEY
 }
 
-response = requests.get(base_url, params=params)
+response = requests.get (base_url, params=params)
 data = response.json()
 
 # Technical indicators
@@ -1188,7 +1187,7 @@ params = {
     'apikey': API_KEY
 }
 
-response = requests.get(base_url, params=params)
+response = requests.get (base_url, params=params)
 rsi_data = response.json()
 \`\`\`
 
@@ -1227,8 +1226,8 @@ from pycoingecko import CoinGeckoAPI
 cg = CoinGeckoAPI()
 
 # Get Bitcoin price
-btc_price = cg.get_price(ids='bitcoin', vs_currencies='usd')
-print(f"Bitcoin: ${btc_price['bitcoin']['usd']:,}")
+btc_price = cg.get_price (ids='bitcoin', vs_currencies='usd')
+print(f"Bitcoin: \${btc_price['bitcoin']['usd']:,}")
 
 # Get market data
 btc_market = cg.get_coin_market_chart_by_id(
@@ -1238,7 +1237,7 @@ btc_market = cg.get_coin_market_chart_by_id(
 )
 
 # Get top cryptocurrencies
-top_coins = cg.get_coins_markets(vs_currency = 'usd')
+top_coins = cg.get_coins_markets (vs_currency = 'usd')
 \`\`\`
 
 ## Building Your Free Data Stack
@@ -1266,7 +1265,7 @@ class FreeDataPlatform:
     
     def __init__(self, fred_api_key, sec_email):
         # Initialize sources
-        self.fred = Fred(api_key=fred_api_key)
+        self.fred = Fred (api_key=fred_api_key)
         self.sec = Downloader("FreeDataPlatform", sec_email)
         self.cg = CoinGeckoAPI()
         
@@ -1274,7 +1273,7 @@ class FreeDataPlatform:
         self.db = sqlite3.connect('data_cache.db')
         self.setup_database()
     
-    def setup_database(self):
+    def setup_database (self):
         \"\"\"Create cache database\"\"\"
         self.db.execute('''
             CREATE TABLE IF NOT EXISTS price_cache (
@@ -1290,21 +1289,21 @@ class FreeDataPlatform:
         ''')
         self.db.commit()
     
-    def get_stock_data(self, ticker, start_date, end_date):
+    def get_stock_data (self, ticker, start_date, end_date):
         \"\"\"Get stock data (yfinance)\"\"\"
-        stock = yf.Ticker(ticker)
-        return stock.history(start=start_date, end=end_date)
+        stock = yf.Ticker (ticker)
+        return stock.history (start=start_date, end=end_date)
     
-    def get_economic_data(self, series_id):
+    def get_economic_data (self, series_id):
         \"\"\"Get economic data (FRED)\"\"\"
-        return self.fred.get_series(series_id)
+        return self.fred.get_series (series_id)
     
-    def get_company_filings(self, ticker, form_type='10-K', amount=1):
+    def get_company_filings (self, ticker, form_type='10-K', amount=1):
         \"\"\"Get SEC filings\"\"\"
-        self.sec.get(form_type, ticker, amount=amount)
-        return f"Downloaded {amount} {form_type} filing(s) for {ticker}"
+        self.sec.get (form_type, ticker, amount=amount)
+        return f"Downloaded {amount} {form_type} filing (s) for {ticker}"
     
-    def get_crypto_data(self, coin_id='bitcoin', days=30):
+    def get_crypto_data (self, coin_id='bitcoin', days=30):
         \"\"\"Get cryptocurrency data\"\"\"
         return self.cg.get_coin_market_chart_by_id(
             id=coin_id,
@@ -1312,23 +1311,23 @@ class FreeDataPlatform:
             days=days
         )
     
-    def get_complete_analysis(self, ticker):
+    def get_complete_analysis (self, ticker):
         \"\"\"Get complete analysis for ticker\"\"\"
         print(f"\\nComplete Analysis: {ticker}")
         print("="*60)
         
         # Stock data
-        stock = yf.Ticker(ticker)
+        stock = yf.Ticker (ticker)
         info = stock.info
         
         print(f"\\nCompany: {info.get('longName')}")
         print(f"Sector: {info.get('sector')}")
-        print(f"Price: ${info.get('currentPrice'): .2f}")
-print(f"Market Cap: ${info.get('marketCap'):,}")
+        print(f"Price: \${info.get('currentPrice'):.2f}")
+print(f"Market Cap: \${info.get('marketCap'):,}")
 print(f"P/E: {info.get('trailingPE'):.2f}")
         
         # Historical performance
-hist = stock.history(period = "1y")
+hist = stock.history (period = "1y")
 returns = hist['Close'].pct_change()
 
 print(f"\\n1-Year Performance:")
@@ -1338,7 +1337,7 @@ print(f"Max Drawdown: {(returns.cumsum().cummax() - returns.cumsum()).max()*100:
         
         # Economic context
 spy = yf.Ticker("SPY")
-spy_hist = spy.history(period = "1y")
+spy_hist = spy.history (period = "1y")
 spy_return = (spy_hist['Close'].iloc[-1] / spy_hist['Close'].iloc[0] - 1) * 100
 
 print(f"\\nMarket Context:")
@@ -1409,7 +1408,6 @@ Savings vs Bloomberg        $19,363       (81% savings)
 
 Free data is powerful, but requires more work to integrate and maintain. The trade-off is worth it for most individual investors and small firms.
 `,
-    quiz: '2-4-quiz',
-        discussionQuestions: '2-4-discussion'
+  quiz: '2-4-quiz',
+  discussionQuestions: '2-4-discussion',
 };
-

@@ -1,8 +1,9 @@
 export const derivativesOverviewQuiz = [
-    {
-        id: 'fm-1-3-q-1',
-        question: "A company will receive €10M in 6 months and wants to hedge FX risk. Current spot: $1.10/€. 6-month forward: $1.08/€. Design: (1) Forward hedge, (2) Options hedge, (3) Compare costs/benefits, (4) When to use each strategy.",
-        sampleAnswer: `**Scenario:** Company receives €10M in 6 months, worried EUR will weaken vs USD.
+  {
+    id: 'fm-1-3-q-1',
+    question:
+      'A company will receive €10M in 6 months and wants to hedge FX risk. Current spot: $1.10/€. 6-month forward: $1.08/€. Design: (1) Forward hedge, (2) Options hedge, (3) Compare costs/benefits, (4) When to use each strategy.',
+    sampleAnswer: `**Scenario:** Company receives €10M in 6 months, worried EUR will weaken vs USD.
 
 **Forward Hedge:**
 - Action: Sell €10M forward at $1.08/€
@@ -42,7 +43,7 @@ Scenario 3: EUR stays at $1.08
 
 **Python Implementation:**
 \`\`\`python
-def compare_hedging_strategies(notional_eur, spot_rate, forward_rate, option_strike, option_premium_pct, future_spot_scenarios):
+def compare_hedging_strategies (notional_eur, spot_rate, forward_rate, option_strike, option_premium_pct, future_spot_scenarios):
     results = []
     for future_spot in future_spot_scenarios:
         # Forward hedge
@@ -69,18 +70,19 @@ def compare_hedging_strategies(notional_eur, spot_rate, forward_rate, option_str
 \`\`\`
 
 **Key Insight:** Forwards lock in rate (certainty), options provide insurance (flexibility). Choose based on risk appetite and view on currency direction.`,
-        keyPoints: [
-            'Forward: Lock in $1.08/€, certainty but no upside',
-            'Option: Floor at $1.08/€, pay premium but keep upside if EUR strengthens',
-            'Forward wins if EUR weakens or stays flat (no premium cost)',
-            'Option wins if EUR strengthens significantly (upside > premium)',
-            'Decision: Forward for certainty, option for flexibility'
-        ]
-    },
-    {
-        id: 'fm-1-3-q-2',
-        question: "Explain how futures differ from forwards, focusing on: (1) Standardization vs customization, (2) Clearing house vs bilateral, (3) Mark-to-market vs settlement at maturity, (4) Why futures are preferred for speculation and forwards for hedging.",
-        sampleAnswer: `**Futures vs Forwards Comparison:**
+    keyPoints: [
+      'Forward: Lock in $1.08/€, certainty but no upside',
+      'Option: Floor at $1.08/€, pay premium but keep upside if EUR strengthens',
+      'Forward wins if EUR weakens or stays flat (no premium cost)',
+      'Option wins if EUR strengthens significantly (upside > premium)',
+      'Decision: Forward for certainty, option for flexibility',
+    ],
+  },
+  {
+    id: 'fm-1-3-q-2',
+    question:
+      'Explain how futures differ from forwards, focusing on: (1) Standardization vs customization, (2) Clearing house vs bilateral, (3) Mark-to-market vs settlement at maturity, (4) Why futures are preferred for speculation and forwards for hedging.',
+    sampleAnswer: `**Futures vs Forwards Comparison:**
 
 **1. Standardization:**
 - Futures: Standard contracts (size, expiry, underlying)
@@ -161,18 +163,19 @@ advantages = {
 **Bottom Line:**
 Futures = standardized, liquid, daily settlement, better for trading
 Forwards = customized, OTC, maturity settlement, better for hedging`,
-        keyPoints: [
-            'Futures: standardized, exchange-traded, daily mark-to-market, liquid',
-            'Forwards: customized, OTC, settlement at maturity, counterparty risk',
-            'Futures eliminate counterparty risk via clearinghouse guarantee',
-            'Futures better for speculation (liquidity, leverage, transparency)',
-            'Forwards better for hedging (exact match to underlying exposure)'
-        ]
-    },
-    {
-        id: 'fm-1-3-q-3',
-        question: "Design an options pricing system that implements Black-Scholes, calculates Greeks (delta, gamma, vega, theta), simulates option P&L scenarios, and provides hedging recommendations. Include pricing model, risk metrics, and hedge ratios.",
-        sampleAnswer: `**Options Pricing & Risk Management System:**
+    keyPoints: [
+      'Futures: standardized, exchange-traded, daily mark-to-market, liquid',
+      'Forwards: customized, OTC, settlement at maturity, counterparty risk',
+      'Futures eliminate counterparty risk via clearinghouse guarantee',
+      'Futures better for speculation (liquidity, leverage, transparency)',
+      'Forwards better for hedging (exact match to underlying exposure)',
+    ],
+  },
+  {
+    id: 'fm-1-3-q-3',
+    question:
+      'Design an options pricing system that implements Black-Scholes, calculates Greeks (delta, gamma, vega, theta), simulates option P&L scenarios, and provides hedging recommendations. Include pricing model, risk metrics, and hedge ratios.',
+    sampleAnswer: `**Options Pricing & Risk Management System:**
 
 \`\`\`python
 import numpy as np
@@ -196,66 +199,66 @@ class BlackScholesOption:
         self.type = option_type
     
     def d1(self):
-        return (np.log(self.S / self.K) + (self.r + 0.5 * self.sigma**2) * self.T) / (self.sigma * np.sqrt(self.T))
+        return (np.log (self.S / self.K) + (self.r + 0.5 * self.sigma**2) * self.T) / (self.sigma * np.sqrt (self.T))
     
     def d2(self):
-        return self.d1() - self.sigma * np.sqrt(self.T)
+        return self.d1() - self.sigma * np.sqrt (self.T)
     
-    def price(self):
+    def price (self):
         """Black-Scholes option price"""
         d1, d2 = self.d1(), self.d2()
         
         if self.type == 'call':
-            price = self.S * norm.cdf(d1) - self.K * np.exp(-self.r * self.T) * norm.cdf(d2)
+            price = self.S * norm.cdf (d1) - self.K * np.exp(-self.r * self.T) * norm.cdf (d2)
         else:  # put
             price = self.K * np.exp(-self.r * self.T) * norm.cdf(-d2) - self.S * norm.cdf(-d1)
         
         return price
     
-    def delta(self):
+    def delta (self):
         """
         Delta: ∂V/∂S - Price sensitivity to underlying
         For hedging: Short delta shares to neutralize
         """
         d1 = self.d1()
         if self.type == 'call':
-            return norm.cdf(d1)
+            return norm.cdf (d1)
         else:
-            return norm.cdf(d1) - 1
+            return norm.cdf (d1) - 1
     
-    def gamma(self):
+    def gamma (self):
         """
         Gamma: ∂²V/∂S² - How delta changes
         High gamma = delta changes rapidly (need frequent rehedging)
         """
         d1 = self.d1()
-        return norm.pdf(d1) / (self.S * self.sigma * np.sqrt(self.T))
+        return norm.pdf (d1) / (self.S * self.sigma * np.sqrt (self.T))
     
-    def vega(self):
+    def vega (self):
         """
         Vega: ∂V/∂σ - Sensitivity to volatility
         Long options = positive vega (benefit from vol increase)
         """
         d1 = self.d1()
-        return self.S * norm.pdf(d1) * np.sqrt(self.T) / 100  # Per 1% vol change
+        return self.S * norm.pdf (d1) * np.sqrt (self.T) / 100  # Per 1% vol change
     
-    def theta(self):
+    def theta (self):
         """
         Theta: ∂V/∂t - Time decay
         Long options = negative theta (lose value over time)
         """
         d1, d2 = self.d1(), self.d2()
         
-        term1 = -(self.S * norm.pdf(d1) * self.sigma) / (2 * np.sqrt(self.T))
+        term1 = -(self.S * norm.pdf (d1) * self.sigma) / (2 * np.sqrt (self.T))
         
         if self.type == 'call':
-            term2 = -self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(d2)
+            term2 = -self.r * self.K * np.exp(-self.r * self.T) * norm.cdf (d2)
         else:
             term2 = self.r * self.K * np.exp(-self.r * self.T) * norm.cdf(-d2)
         
         return (term1 + term2) / 365  # Per day
     
-    def rho(self):
+    def rho (self):
         """
         Rho: ∂V/∂r - Sensitivity to interest rates
         Usually smallest Greek (rates change slowly)
@@ -263,7 +266,7 @@ class BlackScholesOption:
         d2 = self.d2()
         
         if self.type == 'call':
-            return self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(d2) / 100
+            return self.K * self.T * np.exp(-self.r * self.T) * norm.cdf (d2) / 100
         else:
             return -self.K * self.T * np.exp(-self.r * self.T) * norm.cdf(-d2) / 100
 
@@ -273,15 +276,15 @@ class OptionPortfolio:
     def __init__(self):
         self.positions = []  # List of (option, quantity)
     
-    def add_position(self, option: BlackScholesOption, quantity: int):
+    def add_position (self, option: BlackScholesOption, quantity: int):
         self.positions.append((option, quantity))
     
-    def portfolio_greeks(self) -> Dict:
+    def portfolio_greeks (self) -> Dict:
         """Calculate portfolio-level Greeks"""
-        total_delta = sum(opt.delta() * qty for opt, qty in self.positions)
-        total_gamma = sum(opt.gamma() * qty for opt, qty in self.positions)
-        total_vega = sum(opt.vega() * qty for opt, qty in self.positions)
-        total_theta = sum(opt.theta() * qty for opt, qty in self.positions)
+        total_delta = sum (opt.delta() * qty for opt, qty in self.positions)
+        total_gamma = sum (opt.gamma() * qty for opt, qty in self.positions)
+        total_vega = sum (opt.vega() * qty for opt, qty in self.positions)
+        total_theta = sum (opt.theta() * qty for opt, qty in self.positions)
         
         return {
             'delta': total_delta,
@@ -290,7 +293,7 @@ class OptionPortfolio:
             'theta': total_theta
         }
     
-    def calculate_hedge_ratio(self, underlying_price: float) -> Dict:
+    def calculate_hedge_ratio (self, underlying_price: float) -> Dict:
         """
         Calculate hedge ratio to delta-neutral portfolio
         """
@@ -309,7 +312,7 @@ class OptionPortfolio:
             'interpretation': f'Short {shares_to_short:.0f} shares to neutralize delta'
         }
     
-    def simulate_pnl(self, spot_scenarios, vol_scenarios, days_forward=1):
+    def simulate_pnl (self, spot_scenarios, vol_scenarios, days_forward=1):
         """
         Simulate P&L under different market scenarios
         """
@@ -367,19 +370,18 @@ print(f"Underlying: \${option.S}, Vol: {option.sigma*100:.0f}%\\n")
 
 # Price
 price = option.price()
-print(f"Fair Value: \${price: .2f
-    }")
+print(f"Fair Value: \${price:.2f}")
 
 # Greeks
 print(f"\\nGreeks:")
 print(f"  Delta: {option.delta():.4f} (hedge by shorting {option.delta():.2f} shares)")
 print(f"  Gamma: {option.gamma():.4f} (delta changes {option.gamma():.4f} per $1 move)")
 print(f"  Vega: {option.vega():.2f} (gains \${option.vega():.2f} per 1% vol increase)")
-print(f"  Theta: \${option.theta():.2f}/day (loses ${abs(option.theta()):.2f} per day)")
+print(f"  Theta: \${option.theta():.2f}/day (loses \${abs (option.theta()):.2f} per day)")
 
 # Portfolio example
 portfolio = OptionPortfolio()
-portfolio.add_position(option, 100)  # Long 100 calls
+portfolio.add_position (option, 100)  # Long 100 calls
 
 greeks = portfolio.portfolio_greeks()
 print(f"\\nPortfolio (100 calls):")
@@ -388,7 +390,7 @@ print(f"  Total Vega: \${greeks['vega']:.0f}")
 print(f"  Total Theta: \${greeks['theta']:.0f}/day")
 
 # Hedge recommendation
-hedge = portfolio.calculate_hedge_ratio(option.S)
+hedge = portfolio.calculate_hedge_ratio (option.S)
 print(f"\\nHedge: {hedge['interpretation']}")
 print(f"  Notional: \${hedge['notional_hedge']:,.0f}")
 
@@ -401,7 +403,7 @@ scenarios = portfolio.simulate_pnl(
 
 print(f"\\nP&L Scenarios (30 days forward):")
 for result in scenarios[: 3]:
-print(f"  Spot=\${result['spot']}, Vol={result['vol']*100:.0f}%: P&L=${result['pnl']:,.0f}")
+print(f"  Spot=\${result['spot']}, Vol={result['vol']*100:.0f}%: P&L=\${result['pnl']:,.0f}")
 \`\`\`
 
 **Key Components:**
@@ -417,12 +419,11 @@ print(f"  Spot=\${result['spot']}, Vol={result['vol']*100:.0f}%: P&L=${result['p
 - Volatility smile (different vols by strike)
 - Real-time market data integration`,
     keyPoints: [
-        'Black-Scholes: Closed-form solution for European options',
-        'Delta: Hedge ratio (short delta shares to neutralize)',
-        'Gamma: How delta changes (high gamma = frequent rehedging needed)',
-        'Vega: Volatility sensitivity (long options = positive vega)',
-        'Theta: Time decay (long options lose value daily)'
-    ]
-  }
+      'Black-Scholes: Closed-form solution for European options',
+      'Delta: Hedge ratio (short delta shares to neutralize)',
+      'Gamma: How delta changes (high gamma = frequent rehedging needed)',
+      'Vega: Volatility sensitivity (long options = positive vega)',
+      'Theta: Time decay (long options lose value daily)',
+    ],
+  },
 ];
-

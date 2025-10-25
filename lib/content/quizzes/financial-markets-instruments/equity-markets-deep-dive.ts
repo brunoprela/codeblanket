@@ -1,8 +1,9 @@
 export const equityMarketsDeepDiveQuiz = [
-    {
-        id: 'fm-1-1-q-1',
-        question: "You're building a stock trading platform for retail investors. The product manager wants to show users 'the current stock price' prominently on each stock page. Explain why showing a single 'current price' can be misleading, and design a better UI that accurately represents how equity markets work. What data should you display, and how should you explain bid-ask spreads to non-technical users?",
-        sampleAnswer: `**Why a Single "Current Price" is Misleading:**
+  {
+    id: 'fm-1-1-q-1',
+    question:
+      "You're building a stock trading platform for retail investors. The product manager wants to show users 'the current stock price' prominently on each stock page. Explain why showing a single 'current price' can be misleading, and design a better UI that accurately represents how equity markets work. What data should you display, and how should you explain bid-ask spreads to non-technical users?",
+    sampleAnswer: `**Why a Single "Current Price" is Misleading:**
 
 There is no single "current price" in equity markets. At any moment, there are:
 - **Best Bid**: Highest price buyers are willing to pay
@@ -45,8 +46,8 @@ Wide spread (50 cents) = less liquid, costs more"
 
 \`\`\`python
 # WebSocket real-time quotes
-async def stream_quotes(ticker: str):
-    quote = await get_latest_quote(ticker)
+async def stream_quotes (ticker: str):
+    quote = await get_latest_quote (ticker)
     return {
         'bid': quote.bid,
         'ask': quote.ask,
@@ -62,18 +63,19 @@ async def stream_quotes(ticker: str):
 - Warn users about wide spreads (illiquid)
 - Use analogies (concert tickets) for clarity
 - Show what THEY will pay/receive, not abstract "price"`,
-        keyPoints: [
-            'No single "current price" - bid, ask, last, and mid all differ',
-            'Users pay ASK when buying, receive BID when selling',
-            'Spread is real cost - tight = liquid, wide = illiquid',
-            'Use simple analogies (concert tickets) to explain',
-            'Always display what user will actually pay/receive'
-        ]
-    },
-    {
-        id: 'fm-1-1-q-2',
-        question: "The Efficient Market Hypothesis (EMH) states that stock prices reflect all available information. However, quantitative hedge funds consistently profit from market inefficiencies. Analyze: (1) Which form of EMH (weak/semi-strong/strong) is most defensible? (2) What types of inefficiencies can quant strategies exploit? (3) As markets become more efficient (more quants), where do future alpha sources lie?",
-        sampleAnswer: `**Which Form of EMH is Most Defensible:**
+    keyPoints: [
+      'No single "current price" - bid, ask, last, and mid all differ',
+      'Users pay ASK when buying, receive BID when selling',
+      'Spread is real cost - tight = liquid, wide = illiquid',
+      'Use simple analogies (concert tickets) to explain',
+      'Always display what user will actually pay/receive',
+    ],
+  },
+  {
+    id: 'fm-1-1-q-2',
+    question:
+      'The Efficient Market Hypothesis (EMH) states that stock prices reflect all available information. However, quantitative hedge funds consistently profit from market inefficiencies. Analyze: (1) Which form of EMH (weak/semi-strong/strong) is most defensible? (2) What types of inefficiencies can quant strategies exploit? (3) As markets become more efficient (more quants), where do future alpha sources lie?',
+    sampleAnswer: `**Which Form of EMH is Most Defensible:**
 
 **Weak Form (prices reflect past prices):**
 - MOSTLY true for liquid stocks
@@ -164,18 +166,19 @@ As markets become more efficient:
 
 **Conclusion:**
 Semi-strong EMH mostly holds for simple public info on liquid stocks. But complex info processing, alternative data, and microstructure create persistent inefficiencies. Future alpha = technology + unique data + speed, not clever ideas alone.`,
-        keyPoints: [
-            'Semi-strong EMH mostly defensible for liquid stocks, simple information',
-            'Inefficiencies persist due to speed barriers, complexity, behavioral biases',
-            'Microstructure (milliseconds), alternative data, structural flows still exploitable',
-            'Future alpha: AI on complex data, alternative data, technology advantage',
-            'As efficiency increases, alpha shifts to tech-enabled strategies'
-        ]
-    },
-    {
-        id: 'fm-1-1-q-3',
-        question: "Design a real-time stock screener that scans 3000+ US stocks for anomalies (unusual volume spikes, price breakouts, liquidity changes). Architecture requirements: (1) Handle 100K+ quotes/sec, (2) Sub-second latency for alerts, (3) Scale to institutional users. Include data ingestion, processing pipeline, storage, and alert delivery.",
-        sampleAnswer: `**Architecture Design for Real-Time Stock Screener:**
+    keyPoints: [
+      'Semi-strong EMH mostly defensible for liquid stocks, simple information',
+      'Inefficiencies persist due to speed barriers, complexity, behavioral biases',
+      'Microstructure (milliseconds), alternative data, structural flows still exploitable',
+      'Future alpha: AI on complex data, alternative data, technology advantage',
+      'As efficiency increases, alpha shifts to tech-enabled strategies',
+    ],
+  },
+  {
+    id: 'fm-1-1-q-3',
+    question:
+      'Design a real-time stock screener that scans 3000+ US stocks for anomalies (unusual volume spikes, price breakouts, liquidity changes). Architecture requirements: (1) Handle 100K+ quotes/sec, (2) Sub-second latency for alerts, (3) Scale to institutional users. Include data ingestion, processing pipeline, storage, and alert delivery.',
+    sampleAnswer: `**Architecture Design for Real-Time Stock Screener:**
 
 **System Requirements:**
 - Input: 100K+ quotes/second (3000 stocks × 30-50 quotes/sec each)
@@ -204,11 +207,11 @@ class MarketDataIngestion:
         self.normalizer = DataNormalizer()
         self.publisher = KafkaPublisher()
     
-    async def ingest_feed(self, exchange: str):
+    async def ingest_feed (self, exchange: str):
         """Ingest from single exchange"""
-        async for quote in self.connect_exchange(exchange):
+        async for quote in self.connect_exchange (exchange):
             # Normalize to common format
-            normalized = self.normalizer.normalize(quote)
+            normalized = self.normalizer.normalize (quote)
             
             # Publish to Kafka topic
             await self.publisher.publish(
@@ -227,7 +230,7 @@ class AnomalyDetector:
     - Liquidity changes (spread widening)
     """
     
-    def process_quote(self, quote, historical_stats):
+    def process_quote (self, quote, historical_stats):
         """
         Process single quote for anomalies
         """
@@ -247,11 +250,10 @@ class AnomalyDetector:
             anomalies.append({
                 'type': 'BREAKOUT_HIGH',
                 'severity': 'MEDIUM',
-                'details': f'New 52-week high: ${quote.price: .2f
-    }'
+                'details': f'New 52-week high: \${quote.price:.2f}'
             })
         
-        # Check 3: Spread widening(liquidity concern)
+        # Check 3: Spread widening (liquidity concern)
 spread_bps = (quote.ask - quote.bid) / quote.mid * 10000
 if spread_bps > historical_stats.avg_spread_bps * 2:
     anomalies.append({
@@ -265,7 +267,7 @@ return anomalies
 # 3. Storage Layer(TimescaleDB + Redis)
 class StorageLayer:
 """
-    Hot data: Redis(last quote, last 1hr ticks)
+    Hot data: Redis (last quote, last 1hr ticks)
     Warm data: TimescaleDB(last 3 months)
     Cold data: S3(historical archive)
 """
@@ -274,9 +276,9 @@ self.redis = RedisClient()
 self.timescale = TimescaleDB()
 self.s3 = S3Client()
     
-    async def store_quote(self, quote):
+    async def store_quote (self, quote):
 """Multi-tier storage"""
-        # Hot: Redis(instant access)
+        # Hot: Redis (instant access)
 await self.redis.set(
     f'quote:{quote.symbol}:latest',
     quote,
@@ -290,9 +292,9 @@ await self.timescale.insert(
 )
         
         # Update rolling stats
-await self.update_rolling_stats(quote)
+await self.update_rolling_stats (quote)
     
-    async def update_rolling_stats(self, quote):
+    async def update_rolling_stats (self, quote):
 """
         Maintain rolling statistics in Redis
     - 20 - day avg volume
@@ -315,15 +317,15 @@ class AlertEngine:
 self.subscriptions = {}  # user_id -> filters
 self.delivery = AlertDelivery()
     
-    async def process_anomaly(self, symbol, anomalies):
+    async def process_anomaly (self, symbol, anomalies):
 """
         Find matching subscriptions and deliver
 """
         # Find users subscribed to this symbol + anomaly type
-matching_users = self.find_subscribers(symbol, anomalies)
+matching_users = self.find_subscribers (symbol, anomalies)
 
 for user in matching_users:
-    alert = self.format_alert(symbol, anomalies, user.preferences)
+    alert = self.format_alert (symbol, anomalies, user.preferences)
             
             # Deliver based on user preference
 await self.delivery.send(
@@ -332,12 +334,12 @@ await self.delivery.send(
                 alert = alert
 )
 
-# 5. WebSocket Server(for real - time push to UI)
+# 5. WebSocket Server (for real - time push to UI)
 class WebSocketAlertServer:
 """
     Push alerts to connected clients
 """
-    async def on_connect(self, websocket, user_id):
+    async def on_connect (self, websocket, user_id):
 """User connects to alert stream"""
 self.active_connections[user_id] = websocket
         
@@ -346,12 +348,12 @@ await self.kafka_consumer.subscribe(
     topic = f'alerts.{user_id}'
 )
     
-    async def stream_alerts(self, user_id):
+    async def stream_alerts (self, user_id):
 """Push alerts as they arrive"""
-        async for alert in self.kafka_consumer.consume(f'alerts.{user_id}'):
-    await self.active_connections[user_id].send_json(alert)
+        async for alert in self.kafka_consumer.consume (f'alerts.{user_id}'):
+    await self.active_connections[user_id].send_json (alert)
 
-# 6. API Layer(for querying historical data)
+# 6. API Layer (for querying historical data)
     @app.get('/api/screener/results')
     async def get_screener_results(
         symbol: Optional[str],
@@ -428,12 +430,11 @@ return results
 
 This architecture handles 100K+ quotes/sec with <1s latency and scales horizontally.`,
     keyPoints: [
-        'Kafka for ingestion (1M+ msgs/sec), Flink for stream processing (<1s latency)',
-        'Multi-tier storage: Redis (hot), TimescaleDB (warm), S3 (cold)',
-        'Real-time anomaly detection: volume spikes, breakouts, spread widening',
-        'WebSocket push alerts, SMS/email for critical events',
-        'Horizontal scaling: partition by symbol, multiple workers'
-    ]
-  }
+      'Kafka for ingestion (1M+ msgs/sec), Flink for stream processing (<1s latency)',
+      'Multi-tier storage: Redis (hot), TimescaleDB (warm), S3 (cold)',
+      'Real-time anomaly detection: volume spikes, breakouts, spread widening',
+      'WebSocket push alerts, SMS/email for critical events',
+      'Horizontal scaling: partition by symbol, multiple workers',
+    ],
+  },
 ];
-

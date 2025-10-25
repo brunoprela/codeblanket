@@ -97,13 +97,13 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",  # Automatically distribute across GPUs
 )
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 
 # Use model normally
 prompt = "Explain quantum computing in simple terms:"
-inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+inputs = tokenizer (prompt, return_tensors="pt").to("cuda")
 outputs = model.generate(**inputs, max_new_tokens=200)
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+response = tokenizer.decode (outputs[0], skip_special_tokens=True)
 
 print(response)
 
@@ -136,17 +136,17 @@ model = AutoModelForCausalLM.from_pretrained(
 **Quality Comparison**:
 \`\`\`python
 # Benchmark on your dataset
-def evaluate_model(model, test_prompts):
+def evaluate_model (model, test_prompts):
     """Evaluate model quality"""
     scores = []
     
     for prompt, expected in test_prompts:
-        response = generate(model, prompt)
+        response = generate (model, prompt)
         # Score response quality (1-5)
-        score = score_response(response, expected)
-        scores.append(score)
+        score = score_response (response, expected)
+        scores.append (score)
     
-    return sum(scores) / len(scores)
+    return sum (scores) / len (scores)
 
 # Results on common benchmarks:
 # FP16: 4.8/5.0
@@ -215,18 +215,18 @@ print(output["choices"][0]["text"])
 \`\`\`python
 import time
 
-def benchmark_model(model, num_runs=10):
+def benchmark_model (model, num_runs=10):
     """Benchmark inference speed"""
     prompt = "Explain the theory of relativity: "
     
     times = []
-    for _ in range(num_runs):
+    for _ in range (num_runs):
         start = time.time()
-        model(prompt, max_tokens=100)
+        model (prompt, max_tokens=100)
         elapsed = time.time() - start
-        times.append(elapsed)
+        times.append (elapsed)
     
-    avg_time = sum(times) / len(times)
+    avg_time = sum (times) / len (times)
     tokens_per_sec = 100 / avg_time
     
     return {
@@ -258,8 +258,8 @@ model_path = "meta-llama/Llama-2-13b-hf"
 quant_path = "llama-2-13b-awq"
 
 # Load model
-model = AutoAWQForCausalLM.from_pretrained(model_path)
-tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoAWQForCausalLM.from_pretrained (model_path)
+tokenizer = AutoTokenizer.from_pretrained (model_path)
 
 # Quantize (requires calibration data)
 quant_config = {
@@ -283,11 +283,11 @@ model.quantize(
 )
 
 # Save quantized model
-model.save_quantized(quant_path)
-tokenizer.save_pretrained(quant_path)
+model.save_quantized (quant_path)
+tokenizer.save_pretrained (quant_path)
 
 # Load quantized model
-model = AutoAWQForCausalLM.from_quantized(quant_path)
+model = AutoAWQForCausalLM.from_quantized (quant_path)
 
 # AWQ typically preserves 95-98% of original quality
 # vs 90-94% for naive 4-bit quantization
@@ -317,13 +317,13 @@ model = AutoGPTQForCausalLM.from_quantized(
     use_safetensors=True,
 )
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 
 # Use model
 prompt = "Write a Python function to calculate factorial: "
-inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+inputs = tokenizer (prompt, return_tensors="pt").to("cuda")
 outputs = model.generate(**inputs, max_new_tokens=200)
-print(tokenizer.decode(outputs[0]))
+print(tokenizer.decode (outputs[0]))
 \`\`\`
 
 ### Quantizing Your Own Model with GPTQ
@@ -349,7 +349,7 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-13b-hf")
 
 # Prepare calibration data
 calibration_data = [
-    tokenizer(text) for text in [
+    tokenizer (text) for text in [
         "Sample text 1...",
         "Sample text 2...",
         # Need ~128 samples
@@ -357,7 +357,7 @@ calibration_data = [
 ]
 
 # Quantize
-model.quantize(calibration_data)
+model.quantize (calibration_data)
 
 # Save
 model.save_quantized("./llama-2-13b-gptq")
@@ -444,9 +444,9 @@ class GenerateResponse(BaseModel):
     time_taken: float
 
 @app.post("/generate", response_model=GenerateResponse)
-async def generate(request: GenerateRequest):
+async def generate (request: GenerateRequest):
     if llm is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
+        raise HTTPException (status_code=503, detail="Model not loaded")
     
     import time
     start = time.time()
@@ -466,7 +466,7 @@ async def generate(request: GenerateRequest):
     
     return GenerateResponse(
         text=output["choices"][0]["text"],
-        tokens_generated=len(output["choices"][0]["text"].split()),
+        tokens_generated=len (output["choices"][0]["text"].split()),
         time_taken=elapsed
     )
 
@@ -520,24 +520,24 @@ class ModelMonitor:
         self.request_times: List[float] = []
         self.token_counts: List[int] = []
     
-    def record_inference(self, time_taken: float, tokens_generated: int):
+    def record_inference (self, time_taken: float, tokens_generated: int):
         """Record inference metrics"""
-        self.request_times.append(time_taken)
-        self.token_counts.append(tokens_generated)
+        self.request_times.append (time_taken)
+        self.token_counts.append (tokens_generated)
         
         # Keep only last 100 requests
-        if len(self.request_times) > 100:
+        if len (self.request_times) > 100:
             self.request_times = self.request_times[-100:]
             self.token_counts = self.token_counts[-100:]
     
-    def get_metrics(self) -> InferenceMetrics:
+    def get_metrics (self) -> InferenceMetrics:
         """Calculate current metrics"""
         if not self.request_times:
             return None
         
-        avg_time = sum(self.request_times) / len(self.request_times)
-        total_tokens = sum(self.token_counts)
-        total_time = sum(self.request_times)
+        avg_time = sum (self.request_times) / len (self.request_times)
+        total_tokens = sum (self.token_counts)
+        total_time = sum (self.request_times)
         tokens_per_sec = total_tokens / total_time if total_time > 0 else 0
         
         return InferenceMetrics(
@@ -547,20 +547,20 @@ class ModelMonitor:
             avg_latency_ms=avg_time * 1000
         )
     
-    def _get_gpu_memory(self) -> float:
+    def _get_gpu_memory (self) -> float:
         """Get GPU memory usage"""
         import torch
         if torch.cuda.is_available():
             return torch.cuda.memory_allocated() / 1e9
         return 0.0
     
-    def _get_gpu_utilization(self) -> float:
+    def _get_gpu_utilization (self) -> float:
         """Get GPU utilization percentage"""
         try:
             import pynvml
             pynvml.nvmlInit()
             handle = pynvml.nvmlDeviceGetHandleByIndex(0)
-            util = pynvml.nvmlDeviceGetUtilizationRates(handle)
+            util = pynvml.nvmlDeviceGetUtilizationRates (handle)
             return util.gpu
         except:
             return 0.0
@@ -569,7 +569,7 @@ class ModelMonitor:
 monitor = ModelMonitor()
 
 # After each inference
-monitor.record_inference(time_taken=1.2, tokens_generated=150)
+monitor.record_inference (time_taken=1.2, tokens_generated=150)
 
 # Get current metrics
 metrics = monitor.get_metrics()

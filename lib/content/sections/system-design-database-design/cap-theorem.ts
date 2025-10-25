@@ -64,7 +64,7 @@ Time 3: User reads from Node B → Gets $100(now consistent)
 **Unavailable System:**
 \`\`\`
     Request: GET / balance
-    Response: 504 Gateway Timeout(system couldn't respond)
+    Response: 504 Gateway Timeout (system couldn't respond)
         \`\`\`
 
 ### **Partition Tolerance (P)**
@@ -138,7 +138,7 @@ Node B: balance = $100
 
 **You cannot:**
 - Return $150 ← Node B doesn't have it (partition)
-- Return $100 and claim consistency ← That's stale data
+- Return $100 and claim consistency ← That\'s stale data
 - Return $150 without the network ← Impossible
 
 ---
@@ -302,7 +302,7 @@ Network partition occurs
 
 User tries to transfer $100:
     - Master in DC1 can't reach replica in DC2
-        - System rejects transaction(unavailable)
+        - System rejects transaction (unavailable)
             - Better to reject than risk inconsistent balances
                 \`\`\`
 
@@ -391,10 +391,10 @@ Better than:
 **Example**: Cassandra
 \`\`\`java
     // Strong consistency (CP)
-    session.execute(query, ConsistencyLevel.QUORUM);
+    session.execute (query, ConsistencyLevel.QUORUM);
 
     // High availability (AP)
-    session.execute(query, ConsistencyLevel.ONE);
+    session.execute (query, ConsistencyLevel.ONE);
     \`\`\`
 
 ### **❌ Misconception 2: "AP systems are always inconsistent"**

@@ -91,9 +91,9 @@ train_pred = model.predict(X_train)
 val_pred = model.predict(X_val)
 test_pred = model.predict(X_test)
 
-train_rmse = np.sqrt(mean_squared_error(y_train, train_pred))
-val_rmse = np.sqrt(mean_squared_error(y_val, val_pred))
-test_rmse = np.sqrt(mean_squared_error(y_test, test_pred))
+train_rmse = np.sqrt (mean_squared_error (y_train, train_pred))
+val_rmse = np.sqrt (mean_squared_error (y_val, val_pred))
+test_rmse = np.sqrt (mean_squared_error (y_test, test_pred))
 
 print(f"\\nModel Performance (RMSE):")
 print(f"Training:   {train_rmse:.2f}")
@@ -158,9 +158,9 @@ X = cancer.data
 y = cancer.target
 
 print("Original class distribution:")
-print(Counter(y))
-print(f"Class 0: {(y==0).sum()/len(y)*100:.1f}%")
-print(f"Class 1: {(y==1).sum()/len(y)*100:.1f}%")
+print(Counter (y))
+print(f"Class 0: {(y==0).sum()/len (y)*100:.1f}%")
+print(f"Class 1: {(y==1).sum()/len (y)*100:.1f}%")
 
 # Random split (not stratified)
 X_train_rand, X_test_rand, y_train_rand, y_test_rand = train_test_split(
@@ -168,10 +168,10 @@ X_train_rand, X_test_rand, y_train_rand, y_test_rand = train_test_split(
 )
 
 print("\\n--- Random Split ---")
-print(f"Train - Class 0: {(y_train_rand==0).sum()/len(y_train_rand)*100:.1f}%")
-print(f"Train - Class 1: {(y_train_rand==1).sum()/len(y_train_rand)*100:.1f}%")
-print(f"Test  - Class 0: {(y_test_rand==0).sum()/len(y_test_rand)*100:.1f}%")
-print(f"Test  - Class 1: {(y_test_rand==1).sum()/len(y_test_rand)*100:.1f}%")
+print(f"Train - Class 0: {(y_train_rand==0).sum()/len (y_train_rand)*100:.1f}%")
+print(f"Train - Class 1: {(y_train_rand==1).sum()/len (y_train_rand)*100:.1f}%")
+print(f"Test  - Class 0: {(y_test_rand==0).sum()/len (y_test_rand)*100:.1f}%")
+print(f"Test  - Class 1: {(y_test_rand==1).sum()/len (y_test_rand)*100:.1f}%")
 
 # Stratified split
 X_train_strat, X_test_strat, y_train_strat, y_test_strat = train_test_split(
@@ -179,10 +179,10 @@ X_train_strat, X_test_strat, y_train_strat, y_test_strat = train_test_split(
 )
 
 print("\\n--- Stratified Split ---")
-print(f"Train - Class 0: {(y_train_strat==0).sum()/len(y_train_strat)*100:.1f}%")
-print(f"Train - Class 1: {(y_train_strat==1).sum()/len(y_train_strat)*100:.1f}%")
-print(f"Test  - Class 0: {(y_test_strat==0).sum()/len(y_test_strat)*100:.1f}%")
-print(f"Test  - Class 1: {(y_test_strat==1).sum()/len(y_test_strat)*100:.1f}%")
+print(f"Train - Class 0: {(y_train_strat==0).sum()/len (y_train_strat)*100:.1f}%")
+print(f"Train - Class 1: {(y_train_strat==1).sum()/len (y_train_strat)*100:.1f}%")
+print(f"Test  - Class 0: {(y_test_strat==0).sum()/len (y_test_strat)*100:.1f}%")
+print(f"Test  - Class 1: {(y_test_strat==1).sum()/len (y_test_strat)*100:.1f}%")
 \`\`\`
 
 ### Stratified Multi-class Example
@@ -197,7 +197,7 @@ y = iris.target
 print("Multi-class distribution:")
 for class_id in range(3):
     count = (y == class_id).sum()
-    print(f"Class {class_id}: {count} samples ({count/len(y)*100:.1f}%)")
+    print(f"Class {class_id}: {count} samples ({count/len (y)*100:.1f}%)")
 
 # Stratified split preserves distribution
 X_train, X_test, y_train, y_test = train_test_split(
@@ -208,12 +208,12 @@ print("\\nAfter stratified split:")
 print("Training set:")
 for class_id in range(3):
     count = (y_train == class_id).sum()
-    print(f"  Class {class_id}: {count} samples ({count/len(y_train)*100:.1f}%)")
+    print(f"  Class {class_id}: {count} samples ({count/len (y_train)*100:.1f}%)")
 
 print("Test set:")
 for class_id in range(3):
     count = (y_test == class_id).sum()
-    print(f"  Class {class_id}: {count} samples ({count/len(y_test)*100:.1f}%)")
+    print(f"  Class {class_id}: {count} samples ({count/len (y_test)*100:.1f}%)")
 \`\`\`
 
 ## Time-Based Splitting
@@ -230,13 +230,13 @@ from datetime import datetime, timedelta
 
 # Generate synthetic stock price data
 np.random.seed(42)
-dates = pd.date_range(start='2020-01-01', end='2023-12-31', freq='D')
-n = len(dates)
+dates = pd.date_range (start='2020-01-01', end='2023-12-31', freq='D')
+n = len (dates)
 
 # Simulate price with trend and noise
 trend = np.linspace(100, 150, n)
-seasonality = 10 * np.sin(2 * np.pi * np.arange(n) / 365)
-noise = np.random.randn(n) * 5
+seasonality = 10 * np.sin(2 * np.pi * np.arange (n) / 365)
+noise = np.random.randn (n) * 5
 price = trend + seasonality + noise
 
 df = pd.DataFrame({
@@ -246,7 +246,7 @@ df = pd.DataFrame({
 
 print("Stock price dataset:")
 print(df.head())
-print(f"Total days: {len(df)}")
+print(f"Total days: {len (df)}")
 
 # WRONG: Random split on time series
 X = df[['price']].values[:-1]  # Use price[t] to predict price[t+1]
@@ -303,20 +303,20 @@ def walk_forward_split(X, y, n_splits=5, test_size=0.2):
         Indices for train and test
     """
     n_samples = len(X)
-    test_samples = int(n_samples * test_size)
+    test_samples = int (n_samples * test_size)
     train_samples = n_samples - test_samples
     
     # Initial split
-    min_train = int(train_samples * 0.3)  # Minimum training size
+    min_train = int (train_samples * 0.3)  # Minimum training size
     
-    for i in range(n_splits):
+    for i in range (n_splits):
         # Expanding window: training set grows
         train_end = min_train + int((train_samples - min_train) * (i + 1) / n_splits)
         test_start = train_end
-        test_end = min(test_start + test_samples // n_splits, n_samples)
+        test_end = min (test_start + test_samples // n_splits, n_samples)
         
         train_idx = np.arange(0, train_end)
-        test_idx = np.arange(test_start, test_end)
+        test_idx = np.arange (test_start, test_end)
         
         yield train_idx, test_idx
 
@@ -329,17 +329,17 @@ split_info = []
 print("Walk-Forward Validation:")
 print("-" * 70)
 
-for fold, (train_idx, test_idx) in enumerate(walk_forward_split(X, y, n_splits=5), 1):
+for fold, (train_idx, test_idx) in enumerate (walk_forward_split(X, y, n_splits=5), 1):
     X_train_fold = X[train_idx]
     y_train_fold = y[train_idx]
     X_test_fold = X[test_idx]
     y_test_fold = y[test_idx]
     
     # Train and evaluate
-    model = Ridge(alpha=1.0)
+    model = Ridge (alpha=1.0)
     model.fit(X_train_fold, y_train_fold)
     score = model.score(X_test_fold, y_test_fold)
-    scores.append(score)
+    scores.append (score)
     
     train_dates = dates_X[train_idx]
     test_dates = dates_X[test_idx]
@@ -350,18 +350,18 @@ for fold, (train_idx, test_idx) in enumerate(walk_forward_split(X, y, n_splits=5
         'train_end': train_dates.max(),
         'test_start': test_dates.min(),
         'test_end': test_dates.max(),
-        'train_samples': len(train_idx),
-        'test_samples': len(test_idx),
+        'train_samples': len (train_idx),
+        'test_samples': len (test_idx),
         'r2_score': score
     })
     
     print(f"Fold {fold}:")
-    print(f"  Train: {train_dates.min().date()} to {train_dates.max().date()} ({len(train_idx)} samples)")
-    print(f"  Test:  {test_dates.min().date()} to {test_dates.max().date()} ({len(test_idx)} samples)")
+    print(f"  Train: {train_dates.min().date()} to {train_dates.max().date()} ({len (train_idx)} samples)")
+    print(f"  Test:  {test_dates.min().date()} to {test_dates.max().date()} ({len (test_idx)} samples)")
     print(f"  R² Score: {score:.4f}")
     print()
 
-print(f"Average R² Score: {np.mean(scores):.4f} (+/- {np.std(scores):.4f})")
+print(f"Average R² Score: {np.mean (scores):.4f} (+/- {np.std (scores):.4f})")
 \`\`\`
 
 ## Validation Set Purpose and Best Practices
@@ -416,7 +416,7 @@ for n_est in param_grid['n_estimators']:
             
             # Evaluate on validation set
             val_pred = model.predict(X_val_scaled)
-            val_rmse = np.sqrt(mean_squared_error(y_val, val_pred))
+            val_rmse = np.sqrt (mean_squared_error (y_val, val_pred))
             
             results.append({
                 'n_estimators': n_est,
@@ -452,9 +452,9 @@ for name, y_true, y_pred in [
     ('Validation', y_val, val_pred),
     ('Test', y_test, test_pred)
 ]:
-    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    mae = mean_absolute_error(y_true, y_pred)
-    r2 = r2_score(y_true, y_pred)
+    rmse = np.sqrt (mean_squared_error (y_true, y_pred))
+    mae = mean_absolute_error (y_true, y_pred)
+    r2 = r2_score (y_true, y_pred)
     print(f"{name:12s} - RMSE: {rmse:7.2f}, MAE: {mae:7.2f}, R²: {r2:6.4f}")
 \`\`\`
 
@@ -494,7 +494,7 @@ best_alpha = None
 best_test_score = 0
 
 for alpha in [0.01, 0.1, 1.0, 10.0]:
-    model = Ridge(alpha=alpha)
+    model = Ridge (alpha=alpha)
     model.fit(X_train, y_train)
     test_score = model.score(X_test, y_test)  # Using test set for tuning!
     
@@ -509,7 +509,7 @@ best_alpha = None
 best_val_score = 0
 
 for alpha in [0.01, 0.1, 1.0, 10.0]:
-    model = Ridge(alpha=alpha)
+    model = Ridge (alpha=alpha)
     model.fit(X_train, y_train)
     val_score = model.score(X_val, y_val)  # Using validation set
     
@@ -518,7 +518,7 @@ for alpha in [0.01, 0.1, 1.0, 10.0]:
         best_alpha = alpha
 
 # Final evaluation on test set (only once!)
-final_model = Ridge(alpha=best_alpha)
+final_model = Ridge (alpha=best_alpha)
 final_model.fit(X_train, y_train)
 final_test_score = final_model.score(X_test, y_test)
 
@@ -548,13 +548,13 @@ def evaluate_split_sizes(X, y, test_sizes):
             model = Ridge()
             model.fit(X_train, y_train)
             score = model.score(X_test, y_test)
-            scores.append(score)
+            scores.append (score)
         
         results.append({
             'test_size': test_size,
-            'test_samples': int(len(X) * test_size),
-            'mean_score': np.mean(scores),
-            'std_score': np.std(scores)
+            'test_samples': int (len(X) * test_size),
+            'mean_score': np.mean (scores),
+            'std_score': np.std (scores)
         })
     
     return results
@@ -604,7 +604,7 @@ print("\\nRecommendation: Use 15-25% for test set with sufficient samples")
 import pandas as pd
 import numpy as np
 
-def create_trading_features(df):
+def create_trading_features (df):
     """Create technical indicators as features."""
     df = df.copy()
     
@@ -625,7 +625,7 @@ def create_trading_features(df):
     return df.dropna()
 
 # Prepare trading data
-trading_df = create_trading_features(df)
+trading_df = create_trading_features (df)
 
 # Time-based split for trading (CRITICAL!)
 train_end = '2022-12-31'
@@ -636,9 +636,9 @@ val_data = trading_df[(trading_df['date'] > train_end) & (trading_df['date'] <= 
 test_data = trading_df[trading_df['date'] > val_end]
 
 print("Trading Model Validation:")
-print(f"Training:   {train_data['date'].min().date()} to {train_data['date'].max().date()} ({len(train_data)} days)")
-print(f"Validation: {val_data['date'].min().date()} to {val_data['date'].max().date()} ({len(val_data)} days)")
-print(f"Test:       {test_data['date'].min().date()} to {test_data['date'].max().date()} ({len(test_data)} days)")
+print(f"Training:   {train_data['date'].min().date()} to {train_data['date'].max().date()} ({len (train_data)} days)")
+print(f"Validation: {val_data['date'].min().date()} to {val_data['date'].max().date()} ({len (val_data)} days)")
+print(f"Test:       {test_data['date'].min().date()} to {test_data['date'].max().date()} ({len (test_data)} days)")
 
 # This ensures we never use future information to predict the past
 # Critical for realistic backtest results!
@@ -692,7 +692,7 @@ def three_way_stratified_split(X, y, train_size=0.6, val_size=0.2, test_size=0.2
     --------
     X_train, X_val, X_test, y_train, y_val, y_test
     """
-    assert abs(train_size + val_size + test_size - 1.0) < 1e-6, "Sizes must sum to 1"
+    assert abs (train_size + val_size + test_size - 1.0) < 1e-6, "Sizes must sum to 1"
     
     # First split: separate test set
     X_temp, X_test, y_temp, y_test = train_test_split(
@@ -715,28 +715,28 @@ def three_way_stratified_split(X, y, train_size=0.6, val_size=0.2, test_size=0.2
     
     return X_train, X_val, X_test, y_train, y_val, y_test
 
-def verify_stratification(y_train, y_val, y_test, y_full):
+def verify_stratification (y_train, y_val, y_test, y_full):
     """Verify that class distributions are preserved."""
     print("Class Distribution Verification:")
     print("=" * 70)
     
     # Get unique classes
-    classes = np.unique(y_full)
+    classes = np.unique (y_full)
     
     # Calculate distributions
-    full_dist = Counter(y_full)
-    train_dist = Counter(y_train)
-    val_dist = Counter(y_val)
-    test_dist = Counter(y_test)
+    full_dist = Counter (y_full)
+    train_dist = Counter (y_train)
+    val_dist = Counter (y_val)
+    test_dist = Counter (y_test)
     
     print(f"{'Class':<10s} {'Full':<12s} {'Train':<12s} {'Val':<12s} {'Test':<12s}")
     print("-" * 70)
     
     for cls in classes:
-        full_pct = full_dist[cls] / len(y_full) * 100
-        train_pct = train_dist[cls] / len(y_train) * 100
-        val_pct = val_dist[cls] / len(y_val) * 100
-        test_pct = test_dist[cls] / len(y_test) * 100
+        full_pct = full_dist[cls] / len (y_full) * 100
+        train_pct = train_dist[cls] / len (y_train) * 100
+        val_pct = val_dist[cls] / len (y_val) * 100
+        test_pct = test_dist[cls] / len (y_test) * 100
         
         print(f"{cls:<10d} {full_pct:>10.2f}% {train_pct:>10.2f}% "
               f"{val_pct:>10.2f}% {test_pct:>10.2f}%")
@@ -744,12 +744,12 @@ def verify_stratification(y_train, y_val, y_test, y_full):
     # Check if distributions are close
     max_deviation = 0
     for cls in classes:
-        full_pct = full_dist[cls] / len(y_full)
+        full_pct = full_dist[cls] / len (y_full)
         for dist, name in [(train_dist, 'train'), (val_dist, 'val'), (test_dist, 'test')]:
-            n_samples = len(y_train) if name == 'train' else (len(y_val) if name == 'val' else len(y_test))
+            n_samples = len (y_train) if name == 'train' else (len (y_val) if name == 'val' else len (y_test))
             set_pct = dist[cls] / n_samples
-            deviation = abs(full_pct - set_pct)
-            max_deviation = max(max_deviation, deviation)
+            deviation = abs (full_pct - set_pct)
+            max_deviation = max (max_deviation, deviation)
     
     print(f"\\nMaximum deviation from full distribution: {max_deviation*100:.2f}%")
     
@@ -776,7 +776,7 @@ print(f"Test:       {len(X_test)} samples")
 print(f"Total:      {len(X)} samples\\n")
 
 # Verify stratification
-verify_stratification(y_train, y_val, y_test, y)
+verify_stratification (y_train, y_val, y_test, y)
 `,
     },
   ],

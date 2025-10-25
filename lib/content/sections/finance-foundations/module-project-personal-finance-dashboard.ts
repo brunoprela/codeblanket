@@ -141,7 +141,7 @@ class Goal(Base):
 
 # Create database
 engine = create_engine('sqlite:///finance_dashboard.db')
-Base.metadata.create_all(engine)
+Base.metadata.create_all (engine)
 \`\`\`
 
 ### Portfolio Tracker
@@ -160,9 +160,9 @@ class PortfolioTracker:
     
     def __init__(self, engine):
         self.engine = engine
-        self.Session = sessionmaker(bind=engine)
+        self.Session = sessionmaker (bind=engine)
     
-    def get_portfolio_value(self) -> pd.DataFrame:
+    def get_portfolio_value (self) -> pd.DataFrame:
         """
         Calculate current portfolio value across all accounts
         """
@@ -175,8 +175,8 @@ class PortfolioTracker:
         
         for pos in positions:
             # Get current price
-            ticker_obj = yf.Ticker(pos.ticker)
-            current_price = ticker_obj.history(period='1d')['Close'].iloc[-1]
+            ticker_obj = yf.Ticker (pos.ticker)
+            current_price = ticker_obj.history (period='1d')['Close'].iloc[-1]
             
             # Calculate values
             market_value = pos.quantity * current_price
@@ -196,9 +196,9 @@ class PortfolioTracker:
         
         session.close()
         
-        return pd.DataFrame(portfolio_data)
+        return pd.DataFrame (portfolio_data)
     
-    def calculate_performance(self, start_date: str, end_date: str) -> dict:
+    def calculate_performance (self, start_date: str, end_date: str) -> dict:
         """
         Calculate portfolio performance metrics
         """
@@ -208,19 +208,19 @@ class PortfolioTracker:
         # Get historical prices
         tickers = [pos.ticker for pos in positions]
         weights = [pos.quantity * pos.cost_basis for pos in positions]
-        total_invested = sum(weights)
+        total_invested = sum (weights)
         weights = [w / total_invested for w in weights]
         
         # Download historical data
-        data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+        data = yf.download (tickers, start=start_date, end=end_date)['Adj Close']
         
         # Calculate portfolio returns
         returns = data.pct_change().dropna()
-        portfolio_returns = (returns * weights).sum(axis=1)
+        portfolio_returns = (returns * weights).sum (axis=1)
         
         # Performance metrics
         total_return = (1 + portfolio_returns).prod() - 1
-        annualized_return = (1 + total_return) ** (252 / len(portfolio_returns)) - 1
+        annualized_return = (1 + total_return) ** (252 / len (portfolio_returns)) - 1
         volatility = portfolio_returns.std() * np.sqrt(252)
         sharpe_ratio = (annualized_return - 0.02) / volatility  # Assuming 2% risk-free rate
         
@@ -243,7 +243,7 @@ class PortfolioTracker:
 
 # Example usage
 # engine = create_engine('sqlite:///finance_dashboard.db')
-# tracker = PortfolioTracker(engine)
+# tracker = PortfolioTracker (engine)
 # portfolio = tracker.get_portfolio_value()
 # print(portfolio)
 \`\`\`
@@ -260,9 +260,9 @@ class BudgetTracker:
     
     def __init__(self, engine):
         self.engine = engine
-        self.Session = sessionmaker(bind=engine)
+        self.Session = sessionmaker (bind=engine)
     
-    def add_transaction(self, date: datetime, type: str, category: str, 
+    def add_transaction (self, date: datetime, type: str, category: str, 
                        amount: float, description: str = ""):
         """Add income or expense"""
         session = self.Session()
@@ -275,27 +275,27 @@ class BudgetTracker:
             description=description
         )
         
-        session.add(transaction)
+        session.add (transaction)
         session.commit()
         session.close()
     
-    def get_monthly_summary(self, year: int, month: int) -> dict:
+    def get_monthly_summary (self, year: int, month: int) -> dict:
         """Get income/expense summary for a month"""
         session = self.Session()
         
-        start_date = datetime(year, month, 1)
+        start_date = datetime (year, month, 1)
         if month == 12:
-            end_date = datetime(year + 1, 1, 1)
+            end_date = datetime (year + 1, 1, 1)
         else:
-            end_date = datetime(year, month + 1, 1)
+            end_date = datetime (year, month + 1, 1)
         
         transactions = session.query(Transaction).filter(
             Transaction.date >= start_date,
             Transaction.date < end_date
         ).all()
         
-        income = sum(t.amount for t in transactions if t.type == 'income')
-        expenses = sum(t.amount for t in transactions if t.type == 'expense')
+        income = sum (t.amount for t in transactions if t.type == 'income')
+        expenses = sum (t.amount for t in transactions if t.type == 'expense')
         savings = income - expenses
         savings_rate = (savings / income * 100) if income > 0 else 0
         
@@ -317,7 +317,7 @@ class BudgetTracker:
             'expense_breakdown': expense_by_category
         }
     
-    def get_trend(self, num_months: int = 12) -> pd.DataFrame:
+    def get_trend (self, num_months: int = 12) -> pd.DataFrame:
         """Get income/expense trend over time"""
         session = self.Session()
         
@@ -331,9 +331,9 @@ class BudgetTracker:
         if df.empty:
             return pd.DataFrame()
         
-        df['month'] = pd.to_datetime(df['date']).dt.to_period('M')
+        df['month'] = pd.to_datetime (df['date']).dt.to_period('M')
         
-        trend = df.groupby(['month', 'type'])['amount'].sum().unstack(fill_value=0)
+        trend = df.groupby(['month', 'type'])['amount'].sum().unstack (fill_value=0)
         
         if 'income' in trend.columns and 'expense' in trend.columns:
             trend['savings'] = trend['income'] - trend['expense']
@@ -341,7 +341,7 @@ class BudgetTracker:
         
         session.close()
         
-        return trend.tail(num_months)
+        return trend.tail (num_months)
 \`\`\`
 
 ### Streamlit Dashboard
@@ -354,7 +354,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="Personal Finance Dashboard", layout="wide")
+st.set_page_config (page_title="Personal Finance Dashboard", layout="wide")
 
 # Title
 st.title("📊 Personal Finance Dashboard")
@@ -364,8 +364,8 @@ page = st.sidebar.selectbox("Navigate", ["Portfolio", "Budget", "Net Worth", "Go
 
 # Initialize trackers
 # engine = create_engine('sqlite:///finance_dashboard.db')
-# portfolio_tracker = PortfolioTracker(engine)
-# budget_tracker = BudgetTracker(engine)
+# portfolio_tracker = PortfolioTracker (engine)
+# budget_tracker = BudgetTracker (engine)
 
 if page == "Portfolio":
     st.header("💼 Portfolio")
@@ -385,21 +385,21 @@ if page == "Portfolio":
         col1.metric("Total Value", f"\${total_value:,.0f}")
 col2.metric("Total Cost", f"\${total_cost:,.0f}")
 col3.metric("Gain/Loss", f"\${total_gain:,.0f}", f"{total_gain_pct:.1f}%")
-col4.metric("Positions", len(portfolio))
+col4.metric("Positions", len (portfolio))
         
         # Portfolio table
 st.subheader("Holdings")
-st.dataframe(portfolio, use_container_width = True)
+st.dataframe (portfolio, use_container_width = True)
         
         # Allocation pie chart
-fig = px.pie(portfolio, values = 'market_value', names = 'ticker',
+fig = px.pie (portfolio, values = 'market_value', names = 'ticker',
     title = 'Portfolio Allocation')
-st.plotly_chart(fig, use_container_width = True)
+st.plotly_chart (fig, use_container_width = True)
         
         # Performance metrics
 st.subheader("Performance (Last Year)")
 perf = portfolio_tracker.calculate_performance(
-    start_date = (datetime.now() - timedelta(days = 365)).strftime('%Y-%m-%d'),
+    start_date = (datetime.now() - timedelta (days = 365)).strftime('%Y-%m-%d'),
     end_date = datetime.now().strftime('%Y-%m-%d')
 )
 
@@ -420,7 +420,7 @@ year = col1.number_input("Year", min_value = 2020, max_value = 2030, value = dat
 month = col2.number_input("Month", min_value = 1, max_value = 12, value = datetime.now().month)
     
     # Get monthly summary
-summary = budget_tracker.get_monthly_summary(year, month)
+summary = budget_tracker.get_monthly_summary (year, month)
     
     # Summary metrics
 col1, col2, col3, col4 = st.columns(4)
@@ -432,23 +432,23 @@ col4.metric("Savings Rate", f"{summary['savings_rate']:.1f}%")
     # Expense breakdown
 if summary['expense_breakdown']:
     st.subheader("Expense Breakdown")
-df = pd.DataFrame(list(summary['expense_breakdown'].items()),
+df = pd.DataFrame (list (summary['expense_breakdown'].items()),
     columns = ['Category', 'Amount'])
-fig = px.bar(df, x = 'Category', y = 'Amount', title = 'Expenses by Category')
-st.plotly_chart(fig, use_container_width = True)
+fig = px.bar (df, x = 'Category', y = 'Amount', title = 'Expenses by Category')
+st.plotly_chart (fig, use_container_width = True)
     
     # Trend over time
 st.subheader("12-Month Trend")
-trend = budget_tracker.get_trend(num_months = 12)
+trend = budget_tracker.get_trend (num_months = 12)
 if not trend.empty:
 fig = go.Figure()
-fig.add_trace(go.Scatter(x = trend.index.astype(str), y = trend['income'],
+fig.add_trace (go.Scatter (x = trend.index.astype (str), y = trend['income'],
     name = 'Income', mode = 'lines+markers'))
-fig.add_trace(go.Scatter(x = trend.index.astype(str), y = trend['expense'],
+fig.add_trace (go.Scatter (x = trend.index.astype (str), y = trend['expense'],
     name = 'Expenses', mode = 'lines+markers'))
-fig.add_trace(go.Scatter(x = trend.index.astype(str), y = trend['savings'],
+fig.add_trace (go.Scatter (x = trend.index.astype (str), y = trend['savings'],
     name = 'Savings', mode = 'lines+markers'))
-st.plotly_chart(fig, use_container_width = True)
+st.plotly_chart (fig, use_container_width = True)
 
 # Add similar pages for Net Worth and Goals...
 \`\`\`

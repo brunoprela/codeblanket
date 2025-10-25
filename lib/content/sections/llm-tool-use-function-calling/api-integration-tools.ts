@@ -36,7 +36,7 @@ class APITool:
             "Content-Type": "application/json"
         })
     
-    def _make_request(self, 
+    def _make_request (self, 
                      method: str, 
                      endpoint: str, 
                      params: Optional[Dict] = None,
@@ -56,16 +56,16 @@ class APITool:
             return response.json()
         
         except requests.exceptions.Timeout:
-            logger.error(f"Request to {url} timed out")
+            logger.error (f"Request to {url} timed out")
             return {"error": "Request timed out"}
         
         except requests.exceptions.HTTPError as e:
-            logger.error(f"HTTP error: {e}")
+            logger.error (f"HTTP error: {e}")
             return {"error": f"HTTP {response.status_code}: {response.text}"}
         
         except requests.exceptions.RequestException as e:
-            logger.error(f"Request failed: {e}")
-            return {"error": str(e)}
+            logger.error (f"Request failed: {e}")
+            return {"error": str (e)}
 \`\`\`
 
 ## Weather API Integration
@@ -87,7 +87,7 @@ class WeatherAPI(APITool):
             base_url="https://api.openweathermap.org/data/2.5"
         )
     
-    def get_current_weather(self, 
+    def get_current_weather (self, 
                            location: str, 
                            units: str = "metric") -> Dict[str, Any]:
         """
@@ -107,7 +107,7 @@ class WeatherAPI(APITool):
         }
         
         # Check if location is coordinates
-        if "," in location and all(part.replace(".", "").replace("-", "").isdigit() 
+        if "," in location and all (part.replace(".", "").replace("-", "").isdigit() 
                                    for part in location.split(",")):
             lat, lon = location.split(",")
             params["lat"] = lat.strip()
@@ -121,9 +121,9 @@ class WeatherAPI(APITool):
             return data
         
         # Transform API response to friendly format
-        return self._transform_weather_data(data, units)
+        return self._transform_weather_data (data, units)
     
-    def _transform_weather_data(self, data: Dict, units: str) -> Dict[str, Any]:
+    def _transform_weather_data (self, data: Dict, units: str) -> Dict[str, Any]:
         """Transform API response to friendly format."""
         temp_unit = "C" if units == "metric" else "F" if units == "imperial" else "K"
         
@@ -147,7 +147,7 @@ weather_api = WeatherAPI()
     category=ToolCategory.API_INTEGRATION,
     requires_auth=True
 )
-def get_weather(location: str, units: str = "metric") -> dict:
+def get_weather (location: str, units: str = "metric") -> dict:
     """
     Get current weather for a location.
     
@@ -160,7 +160,7 @@ def get_weather(location: str, units: str = "metric") -> dict:
     Returns:
         Dictionary with weather data or error message
     """
-    return weather_api.get_current_weather(location, units)
+    return weather_api.get_current_weather (location, units)
 
 # Usage
 result = get_weather("San Francisco", units="imperial")
@@ -193,7 +193,7 @@ class RateLimiter:
         self.requests = deque()
         self.lock = Lock()
     
-    def acquire(self) -> bool:
+    def acquire (self) -> bool:
         """
         Try to acquire permission to make a request.
         Returns True if allowed, False if rate limit exceeded.
@@ -202,18 +202,18 @@ class RateLimiter:
             now = datetime.now()
             
             # Remove old requests outside the time window
-            cutoff = now - timedelta(seconds=self.time_window)
+            cutoff = now - timedelta (seconds=self.time_window)
             while self.requests and self.requests[0] < cutoff:
                 self.requests.popleft()
             
             # Check if we can make a request
-            if len(self.requests) < self.max_requests:
-                self.requests.append(now)
+            if len (self.requests) < self.max_requests:
+                self.requests.append (now)
                 return True
             else:
                 return False
     
-    def wait_if_needed(self):
+    def wait_if_needed (self):
         """Wait until a request is allowed."""
         while not self.acquire():
             time.sleep(0.1)
@@ -224,9 +224,9 @@ class RateLimitedAPITool(APITool):
     def __init__(self, api_key: str, base_url: str, 
                  max_requests: int = 60, time_window: float = 60.0):
         super().__init__(api_key, base_url)
-        self.rate_limiter = RateLimiter(max_requests, time_window)
+        self.rate_limiter = RateLimiter (max_requests, time_window)
     
-    def _make_request(self, method: str, endpoint: str, 
+    def _make_request (self, method: str, endpoint: str, 
                      params: Optional[Dict] = None,
                      data: Optional[Dict] = None) -> Dict[str, Any]:
         """Make request with rate limiting."""
@@ -234,7 +234,7 @@ class RateLimitedAPITool(APITool):
         self.rate_limiter.wait_if_needed()
         
         # Make the actual request
-        return super()._make_request(method, endpoint, params, data)
+        return super()._make_request (method, endpoint, params, data)
 \`\`\`
 
 ## Retry Logic with Exponential Backoff
@@ -247,7 +247,7 @@ import random
 from functools import wraps
 from typing import Callable, Any
 
-def retry_with_backoff(max_retries: int = 3,
+def retry_with_backoff (max_retries: int = 3,
                        base_delay: float = 1.0,
                        max_delay: float = 60.0,
                        exponential_base: float = 2.0,
@@ -255,12 +255,12 @@ def retry_with_backoff(max_retries: int = 3,
     """
     Decorator for retrying with exponential backoff.
     """
-    def decorator(func: Callable) -> Callable:
-        @wraps(func)
+    def decorator (func: Callable) -> Callable:
+        @wraps (func)
         def wrapper(*args, **kwargs) -> Any:
             last_exception = None
             
-            for attempt in range(max_retries):
+            for attempt in range (max_retries):
                 try:
                     return func(*args, **kwargs)
                 
@@ -286,7 +286,7 @@ def retry_with_backoff(max_retries: int = 3,
                         f"Retrying in {delay:.2f}s..."
                     )
                     
-                    time.sleep(delay)
+                    time.sleep (delay)
             
             raise last_exception
         
@@ -296,12 +296,12 @@ def retry_with_backoff(max_retries: int = 3,
 class RobustAPITool(RateLimitedAPITool):
     """API tool with rate limiting and retry logic."""
     
-    @retry_with_backoff(max_retries=3, base_delay=1.0)
-    def _make_request(self, method: str, endpoint: str,
+    @retry_with_backoff (max_retries=3, base_delay=1.0)
+    def _make_request (self, method: str, endpoint: str,
                      params: Optional[Dict] = None,
                      data: Optional[Dict] = None) -> Dict[str, Any]:
         """Make request with retry logic."""
-        return super()._make_request(method, endpoint, params, data)
+        return super()._make_request (method, endpoint, params, data)
 \`\`\`
 
 ## Authentication Patterns
@@ -350,9 +350,9 @@ class OAuth2Tool(APITool):
         
         self._get_access_token()
     
-    def _get_access_token(self):
+    def _get_access_token (self):
         """Get or refresh access token."""
-        oauth = OAuth2Session(client=BackendApplicationClient(
+        oauth = OAuth2Session (client=BackendApplicationClient(
             client_id=self.client_id
         ))
         
@@ -372,7 +372,7 @@ class OAuth2Tool(APITool):
             "Authorization": f"Bearer {self.access_token}"
         })
     
-    def _make_request(self, method: str, endpoint: str,
+    def _make_request (self, method: str, endpoint: str,
                      params: Optional[Dict] = None,
                      data: Optional[Dict] = None) -> Dict[str, Any]:
         """Make request, refreshing token if needed."""
@@ -380,7 +380,7 @@ class OAuth2Tool(APITool):
         if datetime.now() >= self.token_expires:
             self._get_access_token()
         
-        return super()._make_request(method, endpoint, params, data)
+        return super()._make_request (method, endpoint, params, data)
 \`\`\`
 
 ## Email API Integration (SendGrid)
@@ -410,7 +410,7 @@ sendgrid_api = SendGridAPI()
     requires_auth=True,
     requires_approval=True
 )
-def send_email(to: str, subject: str, body: str, 
+def send_email (to: str, subject: str, body: str, 
                from_email: str = "noreply@example.com",
                body_type: str = "text") -> dict:
     """
@@ -466,7 +466,7 @@ class DatabaseTool:
         self.connection_string = connection_string
         self.conn = None
     
-    def _get_connection(self):
+    def _get_connection (self):
         """Get database connection with connection pooling."""
         if self.conn is None or self.conn.closed:
             self.conn = psycopg2.connect(
@@ -475,7 +475,7 @@ class DatabaseTool:
             )
         return self.conn
     
-    def execute_query(self, query: str, params: tuple = None) -> List[Dict[str, Any]]:
+    def execute_query (self, query: str, params: tuple = None) -> List[Dict[str, Any]]:
         """
         Execute a read-only SQL query.
         
@@ -486,33 +486,33 @@ class DatabaseTool:
         if not query_upper.startswith("SELECT"):
             raise ValueError("Only SELECT queries are allowed")
         
-        if any(keyword in query_upper for keyword in ["INSERT", "UPDATE", "DELETE", "DROP"]):
+        if any (keyword in query_upper for keyword in ["INSERT", "UPDATE", "DELETE", "DROP"]):
             raise ValueError("Modifying queries are not allowed")
         
         try:
             conn = self._get_connection()
             with conn.cursor() as cursor:
-                cursor.execute(query, params)
+                cursor.execute (query, params)
                 results = cursor.fetchall()
-                return [dict(row) for row in results]
+                return [dict (row) for row in results]
         
         except Exception as e:
-            logger.error(f"Query failed: {e}")
+            logger.error (f"Query failed: {e}")
             raise
     
-    def close(self):
+    def close (self):
         """Close database connection."""
         if self.conn and not self.conn.closed:
             self.conn.close()
 
-db_tool = DatabaseTool(os.getenv("DATABASE_URL"))
+db_tool = DatabaseTool (os.getenv("DATABASE_URL"))
 
 @tool(
     description="Query the database with SQL",
     category=ToolCategory.DATABASE,
     requires_auth=True
 )
-def query_database(query: str) -> dict:
+def query_database (query: str) -> dict:
     """
     Execute a read-only SQL query against the database.
     
@@ -527,10 +527,10 @@ def query_database(query: str) -> dict:
         Query results as list of dictionaries
     """
     try:
-        results = db_tool.execute_query(query)
+        results = db_tool.execute_query (query)
         
         # Limit results
-        if len(results) > 1000:
+        if len (results) > 1000:
             results = results[:1000]
             truncated = True
         else:
@@ -539,19 +539,19 @@ def query_database(query: str) -> dict:
         return {
             "success": True,
             "results": results,
-            "count": len(results),
+            "count": len (results),
             "truncated": truncated
         }
     
     except ValueError as e:
         return {
             "success": False,
-            "error": str(e)
+            "error": str (e)
         }
     except Exception as e:
         return {
             "success": False,
-            "error": f"Query failed: {str(e)}"
+            "error": f"Query failed: {str (e)}"
         }
 \`\`\`
 
@@ -578,7 +578,7 @@ google_search_api = GoogleSearchAPI()
     category=ToolCategory.WEB,
     requires_auth=True
 )
-def google_search(query: str, num_results: int = 10) -> dict:
+def google_search (query: str, num_results: int = 10) -> dict:
     """
     Search the web using Google Custom Search.
     
@@ -593,7 +593,7 @@ def google_search(query: str, num_results: int = 10) -> dict:
         "key": google_search_api.api_key,
         "cx": google_search_api.cx,
         "q": query,
-        "num": min(num_results, 10)
+        "num": min (num_results, 10)
     }
     
     data = google_search_api._make_request("GET", "", params=params)
@@ -615,7 +615,7 @@ def google_search(query: str, num_results: int = 10) -> dict:
         "success": True,
         "query": query,
         "results": results,
-        "count": len(results)
+        "count": len (results)
     }
 \`\`\`
 
@@ -630,10 +630,10 @@ class GoogleCalendarAPI:
     """Google Calendar API integration."""
     
     def __init__(self, credentials_path: str):
-        self.creds = Credentials.from_authorized_user_file(credentials_path)
+        self.creds = Credentials.from_authorized_user_file (credentials_path)
         self.service = build('calendar', 'v3', credentials=self.creds)
     
-    def list_events(self, time_min: str = None, max_results: int = 10) -> List[Dict]:
+    def list_events (self, time_min: str = None, max_results: int = 10) -> List[Dict]:
         """List upcoming calendar events."""
         if time_min is None:
             time_min = datetime.utcnow().isoformat() + 'Z'
@@ -648,7 +648,7 @@ class GoogleCalendarAPI:
         
         return events_result.get('items', [])
     
-    def create_event(self, summary: str, start_time: str, 
+    def create_event (self, summary: str, start_time: str, 
                     end_time: str, description: str = "") -> Dict:
         """Create a calendar event."""
         event = {
@@ -672,7 +672,7 @@ calendar_api = GoogleCalendarAPI('credentials.json')
     category=ToolCategory.API_INTEGRATION,
     requires_auth=True
 )
-def list_calendar_events(max_results: int = 10) -> dict:
+def list_calendar_events (max_results: int = 10) -> dict:
     """
     List upcoming calendar events.
     
@@ -683,7 +683,7 @@ def list_calendar_events(max_results: int = 10) -> dict:
         List of upcoming events with summary, start time, and end time
     """
     try:
-        events = calendar_api.list_events(max_results=max_results)
+        events = calendar_api.list_events (max_results=max_results)
         
         results = []
         for event in events:
@@ -697,13 +697,13 @@ def list_calendar_events(max_results: int = 10) -> dict:
         return {
             "success": True,
             "events": results,
-            "count": len(results)
+            "count": len (results)
         }
     
     except Exception as e:
         return {
             "success": False,
-            "error": str(e)
+            "error": str (e)
         }
 \`\`\`
 
@@ -721,17 +721,17 @@ class APICache:
     """Redis-based cache for API responses."""
     
     def __init__(self, redis_url: str, default_ttl: int = 3600):
-        self.redis_client = redis.from_url(redis_url)
+        self.redis_client = redis.from_url (redis_url)
         self.default_ttl = default_ttl
     
-    def get(self, key: str) -> Optional[Any]:
+    def get (self, key: str) -> Optional[Any]:
         """Get cached value."""
-        value = self.redis_client.get(key)
+        value = self.redis_client.get (key)
         if value:
-            return json.loads(value)
+            return json.loads (value)
         return None
     
-    def set(self, key: str, value: Any, ttl: int = None):
+    def set (self, key: str, value: Any, ttl: int = None):
         """Set cached value."""
         if ttl is None:
             ttl = self.default_ttl
@@ -739,34 +739,34 @@ class APICache:
         self.redis_client.setex(
             key,
             ttl,
-            json.dumps(value)
+            json.dumps (value)
         )
     
-    def cache_key(self, func_name: str, args: tuple, kwargs: dict) -> str:
+    def cache_key (self, func_name: str, args: tuple, kwargs: dict) -> str:
         """Generate cache key from function call."""
-        key_data = f"{func_name}:{args}:{sorted(kwargs.items())}"
+        key_data = f"{func_name}:{args}:{sorted (kwargs.items())}"
         return hashlib.md5(key_data.encode()).hexdigest()
 
-def cached_api_call(cache: APICache, ttl: int = None):
+def cached_api_call (cache: APICache, ttl: int = None):
     """Decorator to cache API call results."""
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
             # Generate cache key
-            cache_key = cache.cache_key(func.__name__, args, kwargs)
+            cache_key = cache.cache_key (func.__name__, args, kwargs)
             
             # Check cache
-            cached_result = cache.get(cache_key)
+            cached_result = cache.get (cache_key)
             if cached_result is not None:
-                logger.info(f"Cache hit for {func.__name__}")
+                logger.info (f"Cache hit for {func.__name__}")
                 return cached_result
             
             # Call function
             result = func(*args, **kwargs)
             
             # Cache result
-            cache.set(cache_key, result, ttl)
-            logger.info(f"Cached result for {func.__name__}")
+            cache.set (cache_key, result, ttl)
+            logger.info (f"Cached result for {func.__name__}")
             
             return result
         
@@ -774,12 +774,12 @@ def cached_api_call(cache: APICache, ttl: int = None):
     return decorator
 
 # Usage
-cache = APICache(redis_url="redis://localhost:6379/0", default_ttl=3600)
+cache = APICache (redis_url="redis://localhost:6379/0", default_ttl=3600)
 
-@cached_api_call(cache, ttl=1800)  # Cache for 30 minutes
-def get_weather_cached(location: str, units: str = "metric") -> dict:
+@cached_api_call (cache, ttl=1800)  # Cache for 30 minutes
+def get_weather_cached (location: str, units: str = "metric") -> dict:
     """Get weather with caching."""
-    return weather_api.get_current_weather(location, units)
+    return weather_api.get_current_weather (location, units)
 \`\`\`
 
 ## Async API Tools
@@ -798,7 +798,7 @@ class AsyncAPITool:
         self.api_key = api_key
         self.base_url = base_url
     
-    async def _make_request(self, method: str, endpoint: str,
+    async def _make_request (self, method: str, endpoint: str,
                            params: Optional[Dict] = None,
                            data: Optional[Dict] = None) -> Dict[str, Any]:
         """Make async API request."""
@@ -816,7 +816,7 @@ class AsyncAPITool:
                 params=params,
                 json=data,
                 headers=headers,
-                timeout=aiohttp.ClientTimeout(total=30)
+                timeout=aiohttp.ClientTimeout (total=30)
             ) as response:
                 if response.status == 200:
                     return await response.json()
@@ -826,12 +826,12 @@ class AsyncAPITool:
                     }
 
 # Parallel API calls
-async def fetch_multiple_weather(locations: List[str]) -> List[Dict]:
+async def fetch_multiple_weather (locations: List[str]) -> List[Dict]:
     """Fetch weather for multiple locations in parallel."""
     weather_tool = AsyncWeatherAPI()
     
     tasks = [
-        weather_tool.get_current_weather(location)
+        weather_tool.get_current_weather (location)
         for location in locations
     ]
     
@@ -840,7 +840,7 @@ async def fetch_multiple_weather(locations: List[str]) -> List[Dict]:
 
 # Usage
 locations = ["San Francisco", "New York", "London", "Tokyo"]
-results = asyncio.run(fetch_multiple_weather(locations))
+results = asyncio.run (fetch_multiple_weather (locations))
 \`\`\`
 
 ## Best Practices

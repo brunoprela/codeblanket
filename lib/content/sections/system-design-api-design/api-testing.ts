@@ -28,22 +28,22 @@ const { validateEmail, hashPassword } = require('./utils');
 
 describe('Email Validation', () => {
   it('should accept valid emails', () => {
-    expect(validateEmail('user@example.com')).toBe(true);
-    expect(validateEmail('test+tag@domain.co.uk')).toBe(true);
+    expect (validateEmail('user@example.com')).toBe (true);
+    expect (validateEmail('test+tag@domain.co.uk')).toBe (true);
   });
   
   it('should reject invalid emails', () => {
-    expect(validateEmail('notanemail')).toBe(false);
-    expect(validateEmail('@example.com')).toBe(false);
-    expect(validateEmail('user@')).toBe(false);
+    expect (validateEmail('notanemail')).toBe (false);
+    expect (validateEmail('@example.com')).toBe (false);
+    expect (validateEmail('user@')).toBe (false);
   });
 });
 
 describe('Password Hashing', () => {
   it('should hash passwords', async () => {
     const hash = await hashPassword('password123');
-    expect(hash).not.toBe('password123');
-    expect(hash.length).toBeGreaterThan(50);
+    expect (hash).not.toBe('password123');
+    expect (hash.length).toBeGreaterThan(50);
   });
 });
 \`\`\`
@@ -59,7 +59,7 @@ const app = require('./app');
 describe('User API', () => {
   describe('POST /users', () => {
     it('should create a new user', async () => {
-      const response = await request(app)
+      const response = await request (app)
         .post('/users')
         .send({
           name: 'John Doe',
@@ -68,16 +68,16 @@ describe('User API', () => {
         })
         .expect(201);
       
-      expect(response.body).toMatchObject({
+      expect (response.body).toMatchObject({
         id: expect.any(String),
         name: 'John Doe',
         email: 'john@example.com'
       });
-      expect(response.body.password).toBeUndefined();
+      expect (response.body.password).toBeUndefined();
     });
     
     it('should reject invalid email', async () => {
-      const response = await request(app)
+      const response = await request (app)
         .post('/users')
         .send({
           name: 'John Doe',
@@ -86,11 +86,11 @@ describe('User API', () => {
         })
         .expect(400);
       
-      expect(response.body.error).toBe('Invalid email');
+      expect (response.body.error).toBe('Invalid email');
     });
     
     it('should require authentication', async () => {
-      await request(app)
+      await request (app)
         .get('/users/123')
         .expect(401);
     });
@@ -106,15 +106,15 @@ Verify API adheres to OpenAPI spec:
 const { matchers } = require('jest-openapi');
 const openApiSpec = require('./openapi.json');
 
-expect.extend(matchers);
+expect.extend (matchers);
 
 describe('API Contract', () => {
   it('should match OpenAPI spec', async () => {
-    const response = await request(app)
+    const response = await request (app)
       .get('/users/123')
       .set('Authorization', 'Bearer token');
     
-    expect(response).toSatisfyApiSpec(openApiSpec);
+    expect (response).toSatisfyApiSpec (openApiSpec);
   });
 });
 \`\`\`
@@ -143,7 +143,7 @@ export const options = {
 export default function () {
   const response = http.get('https://api.example.com/users');
   
-  check(response, {
+  check (response, {
     'status is 200': (r) => r.status === 200,
     'response time < 500ms': (r) => r.timings.duration < 500,
   });

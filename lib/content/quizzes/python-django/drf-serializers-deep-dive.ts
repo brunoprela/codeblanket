@@ -11,13 +11,13 @@ Nested serializers allow you to represent related objects within a parent serial
 **1. Read-Only Nested Serializers (Simple):**
 
 \`\`\`python
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer (serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
-class ArticleSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)  # Nested
+class ArticleSerializer (serializers.ModelSerializer):
+    author = AuthorSerializer (read_only=True)  # Nested
     
     class Meta:
         model = Article
@@ -39,29 +39,29 @@ class ArticleSerializer(serializers.ModelSerializer):
 **2. Writable Nested Serializers:**
 
 \`\`\`python
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer (serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'text', 'created_at']
 
-class ArticleSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True)  # Writable nested
+class ArticleSerializer (serializers.ModelSerializer):
+    comments = CommentSerializer (many=True)  # Writable nested
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'comments']
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         """Handle nested creation"""
         comments_data = validated_data.pop('comments')
         article = Article.objects.create(**validated_data)
         
         for comment_data in comments_data:
-            Comment.objects.create(article=article, **comment_data)
+            Comment.objects.create (article=article, **comment_data)
         
         return article
     
-    def update(self, instance, validated_data):
+    def update (self, instance, validated_data):
         """Handle nested updates"""
         comments_data = validated_data.pop('comments', None)
         
@@ -76,7 +76,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             
             # Create new comments
             for comment_data in comments_data:
-                Comment.objects.create(article=instance, **comment_data)
+                Comment.objects.create (article=instance, **comment_data)
         
         return instance
 
@@ -94,26 +94,26 @@ class ArticleSerializer(serializers.ModelSerializer):
 **3. Advanced Writable Nested Serializers:**
 
 \`\`\`python
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer (serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name']
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer (serializers.ModelSerializer):
     class Meta:
         model = ArticleImage
         fields = ['id', 'image', 'caption']
 
-class ArticleSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
-    images = ImageSerializer(many=True)
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    tags = TagSerializer (many=True)
+    images = ImageSerializer (many=True)
+    author = serializers.PrimaryKeyRelatedField (read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'author', 'tags', 'images']
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         """Handle multiple nested relationships"""
         tags_data = validated_data.pop('tags')
         images_data = validated_data.pop('images')
@@ -127,22 +127,22 @@ class ArticleSerializer(serializers.ModelSerializer):
                 name=tag_data['name'],
                 defaults=tag_data
             )
-            article.tags.add(tag)
+            article.tags.add (tag)
         
         # Handle images (always create new)
         for image_data in images_data:
-            ArticleImage.objects.create(article=article, **image_data)
+            ArticleImage.objects.create (article=article, **image_data)
         
         return article
     
-    def update(self, instance, validated_data):
+    def update (self, instance, validated_data):
         """Handle updates with nested relationships"""
         tags_data = validated_data.pop('tags', None)
         images_data = validated_data.pop('images', None)
         
         # Update article fields
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            setattr (instance, attr, value)
         instance.save()
         
         # Update tags
@@ -153,7 +153,7 @@ class ArticleSerializer(serializers.ModelSerializer):
                     name=tag_data['name'],
                     defaults=tag_data
                 )
-                instance.tags.add(tag)
+                instance.tags.add (tag)
         
         # Update images
         if images_data is not None:
@@ -161,16 +161,16 @@ class ArticleSerializer(serializers.ModelSerializer):
             existing_ids = {img.get('id') for img in images_data if img.get('id')}
             
             # Delete images not in the update
-            instance.images.exclude(id__in=existing_ids).delete()
+            instance.images.exclude (id__in=existing_ids).delete()
             
             for image_data in images_data:
                 image_id = image_data.get('id')
                 if image_id:
                     # Update existing
-                    ArticleImage.objects.filter(id=image_id).update(**image_data)
+                    ArticleImage.objects.filter (id=image_id).update(**image_data)
                 else:
                     # Create new
-                    ArticleImage.objects.create(article=instance, **image_data)
+                    ArticleImage.objects.create (article=instance, **image_data)
         
         return instance
 \`\`\`
@@ -178,11 +178,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 **4. Performance Optimization:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    author = AuthorSerializer (read_only=True)
+    category = CategorySerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
+    comments = CommentSerializer (many=True, read_only=True)
     
     class Meta:
         model = Article
@@ -190,7 +190,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 # ❌ N+1 Query Problem
 articles = Article.objects.all()
-serializer = ArticleSerializer(articles, many=True)
+serializer = ArticleSerializer (articles, many=True)
 # Queries: 1 for articles + N for authors + N for categories + N for tags + N for comments
 
 # ✅ Optimized with select_related/prefetch_related
@@ -201,14 +201,14 @@ articles = Article.objects.select_related(
     'tags',
     'comments'
 )
-serializer = ArticleSerializer(articles, many=True)
+serializer = ArticleSerializer (articles, many=True)
 # Queries: 1 for articles + 1 JOIN for author/category + 1 for tags + 1 for comments = 4 queries total
 
 # ViewSet optimization
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         """Optimize queryset based on action"""
         qs = Article.objects.all()
         
@@ -229,7 +229,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 \`\`\`python
 # Automatic nested serialization with depth
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
@@ -245,20 +245,20 @@ class ArticleSerializer(serializers.ModelSerializer):
 **6. Conditional Nested Serializers:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'author']
     
-    def get_author(self, obj):
+    def get_author (self, obj):
         """Conditionally nest author based on context"""
         request = self.context.get('request')
         
         # Full details for authenticated users
         if request and request.user.is_authenticated:
-            return AuthorDetailSerializer(obj.author).data
+            return AuthorDetailSerializer (obj.author).data
         
         # Minimal info for anonymous users
         return {'id': obj.author.id, 'username': obj.author.username}
@@ -267,20 +267,20 @@ class ArticleSerializer(serializers.ModelSerializer):
 **7. Partial Updates with Nested Serializers:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, required=False)
-    images = ImageSerializer(many=True, required=False)
+class ArticleSerializer (serializers.ModelSerializer):
+    tags = TagSerializer (many=True, required=False)
+    images = ImageSerializer (many=True, required=False)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'tags', 'images']
     
-    def update(self, instance, validated_data):
+    def update (self, instance, validated_data):
         """Support partial updates"""
         # Only update provided fields
         for attr in ['title', 'content']:
             if attr in validated_data:
-                setattr(instance, attr, validated_data[attr])
+                setattr (instance, attr, validated_data[attr])
         
         instance.save()
         
@@ -290,7 +290,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             instance.tags.clear()
             for tag_data in tags_data:
                 tag, _ = Tag.objects.get_or_create(**tag_data)
-                instance.tags.add(tag)
+                instance.tags.add (tag)
         
         # Only update images if provided
         if 'images' in validated_data:
@@ -336,17 +336,17 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 \`\`\`python
 # Read: Nested serializers
-class ArticleDetailSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
+class ArticleDetailSerializer (serializers.ModelSerializer):
+    author = AuthorSerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'author', 'tags']
 
 # Write: ID-based
-class ArticleCreateUpdateSerializer(serializers.ModelSerializer):
-    author_id = serializers.IntegerField(write_only=True)
+class ArticleCreateUpdateSerializer (serializers.ModelSerializer):
+    author_id = serializers.IntegerField (write_only=True)
     tag_ids = serializers.ListField(
         child=serializers.IntegerField(),
         write_only=True
@@ -356,22 +356,22 @@ class ArticleCreateUpdateSerializer(serializers.ModelSerializer):
         model = Article
         fields = ['id', 'title', 'content', 'author_id', 'tag_ids']
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         tag_ids = validated_data.pop('tag_ids', [])
         article = Article.objects.create(**validated_data)
-        article.tags.set(tag_ids)
+        article.tags.set (tag_ids)
         return article
 
 # ViewSet
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.action in ['create', 'update', 'partial_update']:
             return ArticleCreateUpdateSerializer
         return ArticleDetailSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         if self.action == 'retrieve':
             return self.queryset.select_related('author').prefetch_related('tags')
         return self.queryset.all()
@@ -389,7 +389,7 @@ This approach provides optimal performance, flexibility, and maintainability for
 **1. SerializerMethodField (Read-Only):**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Computed field
     word_count = serializers.SerializerMethodField()
     reading_time = serializers.SerializerMethodField()
@@ -400,21 +400,21 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = ['id', 'title', 'content', 'word_count', 'reading_time', 'author_name', 'is_owner']
     
-    def get_word_count(self, obj):
+    def get_word_count (self, obj):
         """Calculate word count from content"""
-        return len(obj.content.split())
+        return len (obj.content.split())
     
-    def get_reading_time(self, obj):
+    def get_reading_time (self, obj):
         """Estimate reading time (250 words per minute)"""
-        word_count = len(obj.content.split())
+        word_count = len (obj.content.split())
         minutes = max(1, word_count // 250)
         return f"{minutes} min read"
     
-    def get_author_name(self, obj):
+    def get_author_name (self, obj):
         """Get author's full name"""
         return f"{obj.author.first_name} {obj.author.last_name}"
     
-    def get_is_owner(self, obj):
+    def get_is_owner (self, obj):
         """Check if current user is owner"""
         request = self.context.get('request')
         if request and request.user.is_authenticated:
@@ -438,33 +438,33 @@ class ArticleSerializer(serializers.ModelSerializer):
 \`\`\`python
 from rest_framework import serializers
 
-class LowercaseCharField(serializers.CharField):
+class LowercaseCharField (serializers.CharField):
     """Custom field that converts to lowercase"""
     
-    def to_internal_value(self, data):
+    def to_internal_value (self, data):
         """Convert input to lowercase"""
-        data = super().to_internal_value(data)
+        data = super().to_internal_value (data)
         return data.lower()
     
-    def to_representation(self, value):
+    def to_representation (self, value):
         """Convert output to lowercase"""
         return value.lower() if value else value
 
-class Base64ImageField(serializers.ImageField):
+class Base64ImageField (serializers.ImageField):
     """Custom field for base64 image upload"""
     
-    def to_internal_value(self, data):
+    def to_internal_value (self, data):
         import base64
         import io
         from django.core.files.uploadedfile import InMemoryUploadedFile
         
-        if isinstance(data, str) and data.startswith('data:image'):
+        if isinstance (data, str) and data.startswith('data:image'):
             # Parse base64 string
             format, imgstr = data.split(';base64,')
             ext = format.split('/')[-1]
             
             # Decode
-            decoded = base64.b64decode(imgstr)
+            decoded = base64.b64decode (imgstr)
             
             # Create file
             file = InMemoryUploadedFile(
@@ -472,42 +472,42 @@ class Base64ImageField(serializers.ImageField):
                 field_name='image',
                 name=f'image.{ext}',
                 content_type=f'image/{ext}',
-                size=len(decoded),
+                size=len (decoded),
                 charset=None
             )
             
-            return super().to_internal_value(file)
+            return super().to_internal_value (file)
         
-        return super().to_internal_value(data)
+        return super().to_internal_value (data)
 
-class ColorField(serializers.Field):
+class ColorField (serializers.Field):
     """Custom field for hex color codes"""
     
-    def to_representation(self, value):
+    def to_representation (self, value):
         """Convert to hex string"""
         return value
     
-    def to_internal_value(self, data):
+    def to_internal_value (self, data):
         """Validate hex color code"""
-        if not isinstance(data, str):
+        if not isinstance (data, str):
             raise serializers.ValidationError('Color must be a string')
         
         if not data.startswith('#'):
             raise serializers.ValidationError('Color must start with #')
         
-        if len(data) not in [4, 7]:  # #RGB or #RRGGBB
+        if len (data) not in [4, 7]:  # #RGB or #RRGGBB
             raise serializers.ValidationError('Invalid color format')
         
         try:
-            int(data[1:], 16)  # Validate hex
+            int (data[1:], 16)  # Validate hex
         except ValueError:
             raise serializers.ValidationError('Invalid hex color')
         
         return data
 
 # Usage
-class ProductSerializer(serializers.ModelSerializer):
-    sku = LowercaseCharField(max_length=50)
+class ProductSerializer (serializers.ModelSerializer):
+    sku = LowercaseCharField (max_length=50)
     image = Base64ImageField()
     color = ColorField()
     
@@ -519,49 +519,49 @@ class ProductSerializer(serializers.ModelSerializer):
 **3. Field-Level Validation:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'slug', 'content', 'published_at']
     
-    def validate_title(self, value):
+    def validate_title (self, value):
         """Validate title field"""
         # Check length
-        if len(value) < 10:
+        if len (value) < 10:
             raise serializers.ValidationError('Title must be at least 10 characters')
         
         # Check for spam keywords
         spam_keywords = ['spam', 'click here', 'buy now']
-        if any(keyword in value.lower() for keyword in spam_keywords):
+        if any (keyword in value.lower() for keyword in spam_keywords):
             raise serializers.ValidationError('Title contains spam keywords')
         
         # Check uniqueness (excluding current instance)
-        instance = getattr(self, 'instance', None)
-        if Article.objects.exclude(pk=instance.pk if instance else None).filter(title=value).exists():
+        instance = getattr (self, 'instance', None)
+        if Article.objects.exclude (pk=instance.pk if instance else None).filter (title=value).exists():
             raise serializers.ValidationError('Article with this title already exists')
         
         return value
     
-    def validate_slug(self, value):
+    def validate_slug (self, value):
         """Validate slug format"""
         import re
-        if not re.match(r'^[a-z0-9-]+$', value):
+        if not re.match (r'^[a-z0-9-]+$', value):
             raise serializers.ValidationError('Slug must contain only lowercase letters, numbers, and hyphens')
         return value
     
-    def validate_content(self, value):
+    def validate_content (self, value):
         """Validate content"""
-        if len(value) < 100:
+        if len (value) < 100:
             raise serializers.ValidationError('Content must be at least 100 characters')
         
         # Check for minimum number of paragraphs
         paragraphs = [p for p in value.split('\n\n') if p.strip()]
-        if len(paragraphs) < 3:
+        if len (paragraphs) < 3:
             raise serializers.ValidationError('Content must have at least 3 paragraphs')
         
         return value
     
-    def validate_published_at(self, value):
+    def validate_published_at (self, value):
         """Validate publication date"""
         from django.utils import timezone
         
@@ -574,12 +574,12 @@ class ArticleSerializer(serializers.ModelSerializer):
 **4. Object-Level Validation:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'status', 'published_at']
     
-    def validate(self, attrs):
+    def validate (self, attrs):
         """Validate across multiple fields"""
         status = attrs.get('status')
         published_at = attrs.get('published_at')
@@ -610,19 +610,19 @@ class ArticleSerializer(serializers.ModelSerializer):
 **5. Complex Custom Validation:**
 
 \`\`\`python
-class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+class OrderSerializer (serializers.ModelSerializer):
+    items = OrderItemSerializer (many=True)
     
     class Meta:
         model = Order
         fields = ['id', 'customer', 'items', 'total', 'discount_code']
     
-    def validate_items(self, value):
+    def validate_items (self, value):
         """Validate order items"""
         if not value:
             raise serializers.ValidationError('Order must have at least one item')
         
-        if len(value) > 50:
+        if len (value) > 50:
             raise serializers.ValidationError('Order cannot have more than 50 items')
         
         # Check stock availability
@@ -637,13 +637,13 @@ class OrderSerializer(serializers.ModelSerializer):
         
         return value
     
-    def validate_discount_code(self, value):
+    def validate_discount_code (self, value):
         """Validate discount code"""
         if not value:
             return value
         
         try:
-            discount = DiscountCode.objects.get(code=value)
+            discount = DiscountCode.objects.get (code=value)
         except DiscountCode.DoesNotExist:
             raise serializers.ValidationError('Invalid discount code')
         
@@ -657,17 +657,17 @@ class OrderSerializer(serializers.ModelSerializer):
         
         return value
     
-    def validate(self, attrs):
+    def validate (self, attrs):
         """Cross-field validation"""
         items = attrs.get('items', [])
         discount_code = attrs.get('discount_code')
         
         # Calculate total
-        subtotal = sum(item['quantity'] * item['product'].price for item in items)
+        subtotal = sum (item['quantity'] * item['product'].price for item in items)
         
         # Apply discount
         if discount_code:
-            discount_obj = DiscountCode.objects.get(code=discount_code)
+            discount_obj = DiscountCode.objects.get (code=discount_code)
             
             # Check minimum order amount
             if subtotal < discount_obj.minimum_order:
@@ -675,7 +675,7 @@ class OrderSerializer(serializers.ModelSerializer):
                     'discount_code': f'Minimum order amount for this discount is $''{discount_obj.minimum_order}'
                 })
             
-            discount_amount = discount_obj.calculate_discount(subtotal)
+            discount_amount = discount_obj.calculate_discount (subtotal)
             total = subtotal - discount_amount
         else:
             total = subtotal
@@ -687,7 +687,7 @@ class OrderSerializer(serializers.ModelSerializer):
 **6. Field-Level Permissions:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'status', 'featured', 'internal_notes']
@@ -707,7 +707,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             if 'status' in self.fields:
                 self.fields['status'].read_only = True
     
-    def validate_featured(self, value):
+    def validate_featured (self, value):
         """Only admins can set featured"""
         request = self.context.get('request')
         if request and not request.user.is_staff:
@@ -718,7 +718,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 **7. Dynamic Fields:**
 
 \`\`\`python
-class DynamicFieldsSerializer(serializers.ModelSerializer):
+class DynamicFieldsSerializer (serializers.ModelSerializer):
     """Serializer that supports dynamic field selection"""
     
     def __init__(self, *args, **kwargs):
@@ -729,10 +729,10 @@ class DynamicFieldsSerializer(serializers.ModelSerializer):
         
         if fields:
             # Remove fields not in the requested set
-            allowed = set(fields.split(','))
-            existing = set(self.fields.keys())
+            allowed = set (fields.split(','))
+            existing = set (self.fields.keys())
             for field_name in existing - allowed:
-                self.fields.pop(field_name)
+                self.fields.pop (field_name)
 
 class ArticleSerializer(DynamicFieldsSerializer):
     class Meta:
@@ -740,10 +740,10 @@ class ArticleSerializer(DynamicFieldsSerializer):
         fields = ['id', 'title', 'content', 'author', 'published_at']
 
 # Usage in ViewSet
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     
-    def get_serializer_context(self):
+    def get_serializer_context (self):
         context = super().get_serializer_context()
         # Pass requested fields
         context['fields'] = self.request.query_params.get('fields')
@@ -794,9 +794,9 @@ This comprehensive approach ensures robust, secure, and performant DRF serialize
 
 \`\`\`python
 # ❌ N+1 Query Problem
-class ArticleSerializer(serializers.ModelSerializer):
-    author_name = serializers.CharField(source='author.username', read_only=True)
-    category_name = serializers.CharField(source='category.name', read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    author_name = serializers.CharField (source='author.username', read_only=True)
+    category_name = serializers.CharField (source='category.name', read_only=True)
     
     class Meta:
         model = Article
@@ -804,30 +804,30 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 # Without optimization: 1 query for articles + N for authors + N for categories
 articles = Article.objects.all()
-serializer = ArticleSerializer(articles, many=True)
+serializer = ArticleSerializer (articles, many=True)
 
 # ✅ Optimized with select_related
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         return Article.objects.select_related('author', 'category')
 
 # Now: 1 query with JOINs (3 queries → 1 query)
 
 # ✅ Optimize Many-to-Many and Reverse ForeignKey
-class ArticleSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, read_only=True)
-    comments_count = serializers.IntegerField(read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    tags = TagSerializer (many=True, read_only=True)
+    comments_count = serializers.IntegerField (read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'tags', 'comments_count']
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         from django.db.models import Count
         
         return Article.objects.prefetch_related('tags').annotate(
@@ -840,27 +840,27 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **2. Only/Defer for Field Selection:**
 
 \`\`\`python
-class ArticleListSerializer(serializers.ModelSerializer):
+class ArticleListSerializer (serializers.ModelSerializer):
     """Light serializer for list views"""
     class Meta:
         model = Article
         fields = ['id', 'title', 'author', 'published_at']
 
-class ArticleDetailSerializer(serializers.ModelSerializer):
+class ArticleDetailSerializer (serializers.ModelSerializer):
     """Full serializer for detail views"""
     class Meta:
         model = Article
         fields = '__all__'
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.action == 'list':
             return ArticleListSerializer
         return ArticleDetailSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         qs = super().get_queryset()
         
         if self.action == 'list':
@@ -886,21 +886,21 @@ class CachedSerializerMixin:
     """Mixin to cache serialized data"""
     cache_timeout = 300  # 5 minutes
     
-    def get_cache_key(self, instance):
+    def get_cache_key (self, instance):
         """Generate cache key for instance"""
         model_name = instance.__class__.__name__
         return f'serializer_{model_name}_{instance.pk}_{instance.updated_at.timestamp()}'
     
-    def to_representation(self, instance):
+    def to_representation (self, instance):
         """Cache serialized representation"""
-        cache_key = self.get_cache_key(instance)
-        cached_data = cache.get(cache_key)
+        cache_key = self.get_cache_key (instance)
+        cached_data = cache.get (cache_key)
         
         if cached_data:
             return cached_data
         
-        data = super().to_representation(instance)
-        cache.set(cache_key, data, self.cache_timeout)
+        data = super().to_representation (instance)
+        cache.set (cache_key, data, self.cache_timeout)
         
         return data
 
@@ -913,25 +913,25 @@ class ArticleSerializer(CachedSerializerMixin, serializers.ModelSerializer):
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     
-    @method_decorator(cache_page(60 * 15))  # Cache for 15 minutes
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    @method_decorator (cache_page(60 * 15))  # Cache for 15 minutes
+    def list (self, request, *args, **kwargs):
+        return super().list (request, *args, **kwargs)
 \`\`\`
 
 **4. Bulk Operations:**
 
 \`\`\`python
-class BulkArticleSerializer(serializers.ListSerializer):
+class BulkArticleSerializer (serializers.ListSerializer):
     """Optimized bulk serializer"""
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         """Bulk create articles"""
         articles = [Article(**item) for item in validated_data]
-        return Article.objects.bulk_create(articles)
+        return Article.objects.bulk_create (articles)
     
-    def update(self, instance, validated_data):
+    def update (self, instance, validated_data):
         """Bulk update articles"""
         # Map instances by ID
         article_mapping = {article.id: article for article in instance}
@@ -939,11 +939,11 @@ class BulkArticleSerializer(serializers.ListSerializer):
         # Update attributes
         updated_articles = []
         for item in validated_data:
-            article = article_mapping.get(item['id'])
+            article = article_mapping.get (item['id'])
             if article:
                 for attr, value in item.items():
-                    setattr(article, attr, value)
-                updated_articles.append(article)
+                    setattr (article, attr, value)
+                updated_articles.append (article)
         
         # Bulk update
         Article.objects.bulk_update(
@@ -953,7 +953,7 @@ class BulkArticleSerializer(serializers.ListSerializer):
         
         return updated_articles
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'status']
@@ -966,7 +966,7 @@ data = [
     # ... hundreds more
 ]
 
-serializer = ArticleSerializer(data=data, many=True)
+serializer = ArticleSerializer (data=data, many=True)
 if serializer.is_valid():
     serializer.save()  # Bulk creates all articles
 \`\`\`
@@ -981,10 +981,10 @@ class ArticleCursorPagination(CursorPagination):
     page_size = 100
     ordering = '-created_at'
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     pagination_class = ArticleCursorPagination
     
-    def get_queryset(self):
+    def get_queryset (self):
         # Optimize with only needed fields
         return Article.objects.only(
             'id', 'title', 'created_at'
@@ -997,7 +997,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **6. Conditional Serialization:**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Expensive computed fields
     related_articles = serializers.SerializerMethodField()
     stats = serializers.SerializerMethodField()
@@ -1018,18 +1018,18 @@ class ArticleSerializer(serializers.ModelSerializer):
         if not include_stats:
             self.fields.pop('stats', None)
     
-    def get_related_articles(self, obj):
+    def get_related_articles (self, obj):
         # Expensive operation
         related = obj.get_related_articles()
-        return MinimalArticleSerializer(related, many=True).data
+        return MinimalArticleSerializer (related, many=True).data
     
-    def get_stats(self, obj):
+    def get_stats (self, obj):
         # Expensive calculation
         return obj.calculate_stats()
 
 # ViewSet
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_serializer_context(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_serializer_context (self):
         context = super().get_serializer_context()
         # Allow client to request optional fields
         context['include_related'] = self.request.query_params.get('include_related') == 'true'
@@ -1046,17 +1046,17 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from django.db.models import Count, Avg, Sum, F
 
-class ArticleSerializer(serializers.ModelSerializer):
-    comment_count = serializers.IntegerField(read_only=True)
-    avg_rating = serializers.FloatField(read_only=True)
-    total_views = serializers.IntegerField(read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    comment_count = serializers.IntegerField (read_only=True)
+    avg_rating = serializers.FloatField (read_only=True)
+    total_views = serializers.IntegerField (read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'comment_count', 'avg_rating', 'total_views']
 
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         # Calculate aggregations in database, not Python
         return Article.objects.annotate(
             comment_count=Count('comments'),
@@ -1073,22 +1073,22 @@ class ArticleViewSet(viewsets.ModelViewSet):
 import asyncio
 from asgiref.sync import sync_to_async
 
-class AsyncArticleSerializer(serializers.ModelSerializer):
+class AsyncArticleSerializer (serializers.ModelSerializer):
     related_data = serializers.SerializerMethodField()
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'related_data']
     
-    async def aget_related_data(self, obj):
+    async def aget_related_data (self, obj):
         """Async method for expensive operation"""
         # Perform async operation
-        result = await some_async_operation(obj)
+        result = await some_async_operation (obj)
         return result
     
-    def get_related_data(self, obj):
+    def get_related_data (self, obj):
         """Sync wrapper for async method"""
-        return asyncio.run(self.aget_related_data(obj))
+        return asyncio.run (self.aget_related_data (obj))
 \`\`\`
 
 **9. Monitoring and Profiling:**
@@ -1102,9 +1102,9 @@ logger = logging.getLogger(__name__)
 class ProfilingSerializerMixin:
     """Mixin to profile serializer performance"""
     
-    def to_representation(self, instance):
+    def to_representation (self, instance):
         start = time.time()
-        data = super().to_representation(instance)
+        data = super().to_representation (instance)
         duration = time.time() - start
         
         if duration > 0.1:  # Log if > 100ms

@@ -59,8 +59,8 @@ replica_engines = [
 ]
 
 # Session factories
-MasterSession = sessionmaker(bind=master_engine)
-ReplicaSession = sessionmaker(bind=replica_engines[0])
+MasterSession = sessionmaker (bind=master_engine)
+ReplicaSession = sessionmaker (bind=replica_engines[0])
 
 # Usage
 @contextmanager
@@ -86,15 +86,15 @@ def get_read_session():
         session.close()
 
 # Application code
-def create_user(email: str):
+def create_user (email: str):
     with get_write_session() as session:
-        user = User(email=email)
-        session.add(user)
+        user = User (email=email)
+        session.add (user)
         # Commits to master
 
 def get_users():
     with get_read_session() as session:
-        return session.execute(select(User)).scalars().all()
+        return session.execute (select(User)).scalars().all()
         # Reads from replica
 \`\`\`
 
@@ -116,7 +116,7 @@ class RoutingSession(Session):
         self.replica_engines = replica_engines
         self._replica_index = 0
     
-    def get_bind(self, mapper=None, clause=None):
+    def get_bind (self, mapper=None, clause=None):
         """Route to appropriate database"""
         # Writes: INSERT, UPDATE, DELETE
         if self._flushing:
@@ -127,21 +127,21 @@ class RoutingSession(Session):
             if clause.is_select:
                 # Round-robin across replicas
                 engine = self.replica_engines[self._replica_index]
-                self._replica_index = (self._replica_index + 1) % len(self.replica_engines)
+                self._replica_index = (self._replica_index + 1) % len (self.replica_engines)
                 return engine
         
         # Default: master
         return self.master_engine
 
 # Usage
-session = RoutingSession(master_engine, replica_engines)
+session = RoutingSession (master_engine, replica_engines)
 
 # SELECT queries go to replicas
-users = session.execute(select(User)).scalars().all()
+users = session.execute (select(User)).scalars().all()
 
 # INSERTs go to master
-user = User(email="test@example.com")
-session.add(user)
+user = User (email="test@example.com")
+session.add (user)
 session.commit()
 \`\`\`
 
@@ -170,20 +170,20 @@ class AnalyticsBase(DeclarativeBase):
 # User models (users_db)
 class User(Base):
     __tablename__ = "users"
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str]
 
 # Analytics models (analytics_db)
 class PageView(AnalyticsBase):
     __tablename__ = "page_views"
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int]
     page: Mapped[str]
     timestamp: Mapped[datetime]
 
 # Session with multiple binds
 Session = sessionmaker()
-Session.configure(binds={
+Session.configure (binds={
     User: users_engine,
     PageView: analytics_engine
 })
@@ -191,8 +191,8 @@ Session.configure(binds={
 session = Session()
 
 # Queries automatically route to correct DB
-user = session.execute(select(User)).scalar_one()      # -> users_db
-views = session.execute(select(PageView)).scalars().all()  # -> analytics_db
+user = session.execute (select(User)).scalar_one()      # -> users_db
+views = session.execute (select(PageView)).scalars().all()  # -> analytics_db
 \`\`\`
 
 ### Database Context Manager
@@ -209,25 +209,25 @@ class MultiDatabaseSession:
         self.databases = databases
         self.sessions: dict[str, Session] = {}
     
-    def get_session(self, db_name: str) -> Session:
+    def get_session (self, db_name: str) -> Session:
         """Get session for specific database"""
         if db_name not in self.sessions:
             engine = self.databases[db_name]
-            SessionLocal = sessionmaker(bind=engine)
+            SessionLocal = sessionmaker (bind=engine)
             self.sessions[db_name] = SessionLocal()
         return self.sessions[db_name]
     
-    def commit_all(self):
+    def commit_all (self):
         """Commit all sessions"""
         for session in self.sessions.values():
             session.commit()
     
-    def rollback_all(self):
+    def rollback_all (self):
         """Rollback all sessions"""
         for session in self.sessions.values():
             session.rollback()
     
-    def close_all(self):
+    def close_all (self):
         """Close all sessions"""
         for session in self.sessions.values():
             session.close()
@@ -239,14 +239,14 @@ databases = {
     "analytics": create_engine("postgresql://localhost/analytics_db")
 }
 
-multi_db = MultiDatabaseSession(databases)
+multi_db = MultiDatabaseSession (databases)
 
 # Use specific databases
 users_session = multi_db.get_session("users")
 analytics_session = multi_db.get_session("analytics")
 
-user = users_session.execute(select(User)).scalar_one()
-analytics_session.add(PageView(user_id=user.id, page="/home"))
+user = users_session.execute (select(User)).scalar_one()
+analytics_session.add(PageView (user_id=user.id, page="/home"))
 
 multi_db.commit_all()
 multi_db.close_all()
@@ -270,16 +270,16 @@ class ShardedDatabase:
     
     def __init__(self, shard_engines: list[Engine]):
         self.shard_engines = shard_engines
-        self.num_shards = len(shard_engines)
+        self.num_shards = len (shard_engines)
     
-    def get_shard(self, user_id: int) -> Engine:
+    def get_shard (self, user_id: int) -> Engine:
         """Get shard for user ID"""
         shard_index = user_id % self.num_shards
         return self.shard_engines[shard_index]
     
-    def get_shard_by_hash(self, key: str) -> Engine:
+    def get_shard_by_hash (self, key: str) -> Engine:
         """Get shard by hash of key"""
-        hash_value = int(hashlib.md5(key.encode()).hexdigest(), 16)
+        hash_value = int (hashlib.md5(key.encode()).hexdigest(), 16)
         shard_index = hash_value % self.num_shards
         return self.shard_engines[shard_index]
 
@@ -291,24 +291,24 @@ shard_engines = [
     create_engine("postgresql://localhost/shard_3")
 ]
 
-sharded_db = ShardedDatabase(shard_engines)
+sharded_db = ShardedDatabase (shard_engines)
 
 # Get user from correct shard
-def get_user(user_id: int) -> User:
-    engine = sharded_db.get_shard(user_id)
-    SessionLocal = sessionmaker(bind=engine)
+def get_user (user_id: int) -> User:
+    engine = sharded_db.get_shard (user_id)
+    SessionLocal = sessionmaker (bind=engine)
     with SessionLocal() as session:
         return session.execute(
             select(User).where(User.id == user_id)
         ).scalar_one()
 
 # Create user in correct shard
-def create_user(user_id: int, email: str):
-    engine = sharded_db.get_shard(user_id)
-    SessionLocal = sessionmaker(bind=engine)
+def create_user (user_id: int, email: str):
+    engine = sharded_db.get_shard (user_id)
+    SessionLocal = sessionmaker (bind=engine)
     with SessionLocal() as session:
-        user = User(id=user_id, email=email)
-        session.add(user)
+        user = User (id=user_id, email=email)
+        session.add (user)
         session.commit()
 \`\`\`
 
@@ -329,12 +329,12 @@ class RangeShardedDatabase:
             (2_000_000, 3_000_000, create_engine("postgresql://localhost/shard_2")),
         ]
     
-    def get_shard(self, user_id: int) -> Engine:
+    def get_shard (self, user_id: int) -> Engine:
         """Get shard for user ID range"""
         for start, end, engine in self.shard_ranges:
             if start <= user_id < end:
                 return engine
-        raise ValueError(f"No shard for user_id {user_id}")
+        raise ValueError (f"No shard for user_id {user_id}")
 
 # Usage
 range_db = RangeShardedDatabase()
@@ -359,16 +359,16 @@ class GeographicShardedDatabase:
             "asia": create_engine("postgresql://asia.db.example.com/myapp"),
         }
     
-    def get_shard(self, region: str) -> Engine:
+    def get_shard (self, region: str) -> Engine:
         """Get shard for region"""
-        return self.shard_map.get(region)
+        return self.shard_map.get (region)
 
 # Usage
 geo_db = GeographicShardedDatabase()
 
-def get_user_by_region(user_id: int, region: str):
-    engine = geo_db.get_shard(region)
-    SessionLocal = sessionmaker(bind=engine)
+def get_user_by_region (user_id: int, region: str):
+    engine = geo_db.get_shard (region)
+    SessionLocal = sessionmaker (bind=engine)
     with SessionLocal() as session:
         return session.execute(
             select(User).where(User.id == user_id)
@@ -390,15 +390,15 @@ class ShardedSession(Session):
     """Session with shard routing"""
     
     def __init__(self, sharded_db: ShardedDatabase, shard_key: int, **kwargs):
-        engine = sharded_db.get_shard(shard_key)
+        engine = sharded_db.get_shard (shard_key)
         super().__init__(bind=engine, **kwargs)
         self.sharded_db = sharded_db
         self.shard_key = shard_key
 
 # Usage
-def get_user_posts(user_id: int):
+def get_user_posts (user_id: int):
     """Get user and their posts (same shard)"""
-    session = ShardedSession(sharded_db, shard_key=user_id)
+    session = ShardedSession (sharded_db, shard_key=user_id)
     
     user = session.execute(
         select(User).where(User.id == user_id)
@@ -419,29 +419,29 @@ def get_user_posts(user_id: int):
 Query Across Multiple Shards
 """
 
-def get_all_active_users(sharded_db: ShardedDatabase) -> list[User]:
+def get_all_active_users (sharded_db: ShardedDatabase) -> list[User]:
     """Query all shards and merge results"""
     all_users = []
     
     for engine in sharded_db.shard_engines:
-        SessionLocal = sessionmaker(bind=engine)
+        SessionLocal = sessionmaker (bind=engine)
         with SessionLocal() as session:
             users = session.execute(
                 select(User).where(User.is_active == True)
             ).scalars().all()
-            all_users.extend(users)
+            all_users.extend (users)
     
     return all_users
 
-def get_user_count_by_shard(sharded_db: ShardedDatabase) -> dict[int, int]:
+def get_user_count_by_shard (sharded_db: ShardedDatabase) -> dict[int, int]:
     """Count users in each shard"""
     counts = {}
     
-    for index, engine in enumerate(sharded_db.shard_engines):
-        SessionLocal = sessionmaker(bind=engine)
+    for index, engine in enumerate (sharded_db.shard_engines):
+        SessionLocal = sessionmaker (bind=engine)
         with SessionLocal() as session:
             count = session.execute(
-                select(func.count()).select_from(User)
+                select (func.count()).select_from(User)
             ).scalar()
             counts[index] = count
     
@@ -471,14 +471,14 @@ def distributed_transaction(
     
     try:
         # Phase 1: Prepare all transactions
-        for engine, operation in zip(engines, operations):
+        for engine, operation in zip (engines, operations):
             conn = engine.connect()
             transaction = conn.begin_twophase()
-            connections.append(conn)
-            transactions.append(transaction)
+            connections.append (conn)
+            transactions.append (transaction)
             
             # Execute operation
-            operation(conn)
+            operation (conn)
             
             # Prepare transaction
             transaction.prepare()
@@ -501,23 +501,23 @@ def distributed_transaction(
             conn.close()
 
 # Usage
-def transfer_credits(from_user_id: int, to_user_id: int, amount: int):
+def transfer_credits (from_user_id: int, to_user_id: int, amount: int):
     """Transfer credits between users (possibly different shards)"""
-    from_shard = sharded_db.get_shard(from_user_id)
-    to_shard = sharded_db.get_shard(to_user_id)
+    from_shard = sharded_db.get_shard (from_user_id)
+    to_shard = sharded_db.get_shard (to_user_id)
     
-    def deduct_credits(conn):
+    def deduct_credits (conn):
         conn.execute(
             update(User)
             .where(User.id == from_user_id)
-            .values(credits=User.credits - amount)
+            .values (credits=User.credits - amount)
         )
     
-    def add_credits(conn):
+    def add_credits (conn):
         conn.execute(
             update(User)
             .where(User.id == to_user_id)
-            .values(credits=User.credits + amount)
+            .values (credits=User.credits + amount)
         )
     
     distributed_transaction(
@@ -537,7 +537,7 @@ def transfer_credits(from_user_id: int, to_user_id: int, amount: int):
 Handle Replication Lag
 """
 
-def get_user_with_fallback(user_id: int):
+def get_user_with_fallback (user_id: int):
     """Read from replica, fallback to master if not found"""
     # Try replica first
     with get_read_session() as session:
@@ -554,12 +554,12 @@ def get_user_with_fallback(user_id: int):
             select(User).where(User.id == user_id)
         ).scalar_one()
 
-def read_your_writes(user_id: int):
+def read_your_writes (user_id: int):
     """Force read from master after write"""
     # Write to master
     with get_write_session() as session:
-        user = User(id=user_id, email="test@example.com")
-        session.add(user)
+        user = User (id=user_id, email="test@example.com")
+        session.add (user)
         session.commit()
     
     # Read from master (not replica) to guarantee consistency
@@ -583,9 +583,9 @@ Run Alembic Migration Across All Shards
 from alembic.config import Config
 from alembic import command
 
-def migrate_all_shards(shard_urls: list[str]):
+def migrate_all_shards (shard_urls: list[str]):
     """Run migrations on all shards"""
-    for index, url in enumerate(shard_urls):
+    for index, url in enumerate (shard_urls):
         print(f"Migrating shard {index}: {url}")
         
         # Configure Alembic for this shard
@@ -593,7 +593,7 @@ def migrate_all_shards(shard_urls: list[str]):
         alembic_cfg.set_main_option("sqlalchemy.url", url)
         
         # Run migration
-        command.upgrade(alembic_cfg, "head")
+        command.upgrade (alembic_cfg, "head")
         
         print(f"Shard {index} migrated successfully")
 
@@ -605,7 +605,7 @@ shard_urls = [
     "postgresql://localhost/shard_3"
 ]
 
-migrate_all_shards(shard_urls)
+migrate_all_shards (shard_urls)
 \`\`\`
 
 ---
@@ -638,38 +638,38 @@ class ShardManager:
         self.shards: list[ShardInfo] = []
         self.load_shard_config()
     
-    def load_shard_config(self):
+    def load_shard_config (self):
         """Load shard configuration from database"""
         # In practice: load from config DB
         pass
     
-    def get_shard_for_new_user(self) -> ShardInfo:
+    def get_shard_for_new_user (self) -> ShardInfo:
         """Find shard with capacity for new user"""
         for shard in self.shards:
             if shard.is_active and shard.current_count < shard.capacity:
                 return shard
         raise Exception("No available shards")
     
-    def rebalance_shards(self):
+    def rebalance_shards (self):
         """Move users between shards to balance load"""
         # Implementation: gradual migration
         pass
     
-    def add_new_shard(self, url: str):
+    def add_new_shard (self, url: str):
         """Add new shard to cluster"""
-        engine = create_engine(url)
+        engine = create_engine (url)
         shard = ShardInfo(
-            index=len(self.shards),
+            index=len (self.shards),
             url=url,
             engine=engine,
             is_active=True,
             capacity=1_000_000,
             current_count=0
         )
-        self.shards.append(shard)
+        self.shards.append (shard)
         
         # Run migrations on new shard
-        self.migrate_shard(shard)
+        self.migrate_shard (shard)
 \`\`\`
 
 ---

@@ -38,7 +38,7 @@ export const interviewSection = {
 **Step 4: Define Validity Condition**
 What makes a window valid or invalid?
 - "No repeating characters" → Set size equals window size
-- "At most K distinct" → len(freq_map) <= K
+- "At most K distinct" → len (freq_map) <= K
 - "Sum equals target" → current_sum == target
 - "Contains all of T" → All chars in T are in window with sufficient count
 

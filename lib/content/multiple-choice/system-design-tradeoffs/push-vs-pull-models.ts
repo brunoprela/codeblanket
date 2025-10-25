@@ -52,7 +52,7 @@ export const pushvspullmodelsMultipleChoice: MultipleChoiceQuestion[] = [
       "It doesn't work at all",
       'Higher latency and wasted bandwidth from polling even when no new data exists',
       'It requires WebSockets',
-      "It's more complex than push",
+      "It\'s more complex than push",
     ],
     correctAnswer: 1,
     explanation:

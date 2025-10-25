@@ -5,7 +5,7 @@
 export const pinterestarchitectureSection = {
   id: 'pinterest-architecture',
   title: 'Pinterest Architecture',
-  content: `Pinterest is a visual discovery engine where users find and save ideas through "Pins" organized on boards. With 450+ million monthly active users saving 240+ billion Pins, Pinterest's architecture must handle massive image storage, visual search, personalized recommendations, and graph operations at scale. This section explores the technical systems that power Pinterest.
+  content: `Pinterest is a visual discovery engine where users find and save ideas through "Pins" organized on boards. With 450+ million monthly active users saving 240+ billion Pins, Pinterest\'s architecture must handle massive image storage, visual search, personalized recommendations, and graph operations at scale. This section explores the technical systems that power Pinterest.
 
 ## Overview
 
@@ -97,7 +97,7 @@ Pinterest migrated to HBase for hot path and expanded microservices.
 
 ### 1. Image Storage and Delivery Pipeline
 
-Pinterest's core asset is images. Handling billions of images requires sophisticated pipeline.
+Pinterest\'s core asset is images. Handling billions of images requires sophisticated pipeline.
 
 **Image Upload Flow**:
 
@@ -269,7 +269,7 @@ Query: "Get all Pins in board Z"
 
 ### 3. Home Feed (Smart Feed)
 
-Pinterest's Smart Feed shows personalized Pins to users.
+Pinterest\'s Smart Feed shows personalized Pins to users.
 
 **Feed Goals**:
 - **Relevance**: Show Pins user will engage with (save, click)
@@ -286,33 +286,33 @@ Pinterest's Smart Feed shows personalized Pins to users.
 Generate 1000-5000 candidate Pins:
 
 \`\`\`python
-def generate_candidates(user_id):
+def generate_candidates (user_id):
     candidates = []
     
     # 1. Pins from followed boards (30% weight)
-    followed_boards = get_followed_boards(user_id)
+    followed_boards = get_followed_boards (user_id)
     for board in followed_boards:
-        recent_pins = get_recent_pins(board, limit=50)
-        candidates.extend(recent_pins)
+        recent_pins = get_recent_pins (board, limit=50)
+        candidates.extend (recent_pins)
     
     # 2. Pins similar to past saves (40% weight)
-    saved_pins = get_recent_saves(user_id, limit=100)
+    saved_pins = get_recent_saves (user_id, limit=100)
     for pin in saved_pins:
-        similar_pins = find_similar_pins(pin, limit=20)
-        candidates.extend(similar_pins)
+        similar_pins = find_similar_pins (pin, limit=20)
+        candidates.extend (similar_pins)
     
     # 3. Trending Pins in user's interests (20% weight)
-    interests = get_user_interests(user_id)
+    interests = get_user_interests (user_id)
     for interest in interests:
-        trending_pins = get_trending_pins(interest, limit=50)
-        candidates.extend(trending_pins)
+        trending_pins = get_trending_pins (interest, limit=50)
+        candidates.extend (trending_pins)
     
     # 4. Explore (10% weight) - new topics
-    explore_pins = get_random_high_quality_pins(limit=100)
-    candidates.extend(explore_pins)
+    explore_pins = get_random_high_quality_pins (limit=100)
+    candidates.extend (explore_pins)
     
     # Deduplicate
-    candidates = deduplicate(candidates)
+    candidates = deduplicate (candidates)
     
     return candidates[:5000]  # Top 5000 candidates
 \`\`\`
@@ -648,7 +648,7 @@ Pinterest recommendations power multiple surfaces:
 
 **2. Board Recommendations**:
 - Suggest boards user might want to follow
-- Based on: User's interests, followed boards, similar users
+- Based on: User\'s interests, followed boards, similar users
 
 **3. Shopping Recommendations**:
 - Personalized product recommendations
@@ -800,7 +800,7 @@ Multiple image sizes, compression, CDN distribution ensure fast loading. Pintere
 
 ## Interview Tips
 
-**Q: How would you implement Pinterest's visual search?**
+**Q: How would you implement Pinterest\'s visual search?**
 
 A: Use CNNs to generate image embeddings. Train ResNet50 or EfficientNet on billions of Pinterest images using triplet loss: make similar images (saved together) closer in embedding space. Convert each Pin image to 256-dimensional vector. Store embeddings in Faiss (Facebook AI Similarity Search) - billion-scale vector index with GPU acceleration. User uploads query image: (1) Generate embedding (CNN inference, <50ms). (2) Query Faiss for K-nearest neighbors (K=1000, <100ms). (3) Retrieve Pin metadata (batch query HBase). (4) Rank by relevance (ML model considers user interests). (5) Return top 100. Handle multi-object: Use object detection (YOLO/Mask R-CNN) to identify objects, let user select, generate embedding for cropped region.
 
@@ -810,7 +810,7 @@ A: Two-stage approach. Stage 1 - Candidate generation: Generate 1000-5000 candid
 
 **Q: Why does Pinterest use HBase for graph data?**
 
-A: HBase's column-family model suits graph edges. Store user saves: Row key = user_id, Columns = pin_id_1, pin_id_2, ..., pin_id_10000. Query "get all saves for user X" = single row scan (fast, data locality). High write throughput: Millions of saves per minute, HBase handles easily. Horizontal scalability: Add RegionServers for capacity. Sequential scans fast (row-oriented storage). Alternative MySQL requires: (user_id, pin_id, timestamp) table, indexed by user_id, but millions of small rows vs HBase's single row with many columns. HBase wins for high-throughput, sequential-scan workloads. Trade-off: Complex queries (joins, aggregations) harder in HBase, use MySQL for analytics.
+A: HBase's column-family model suits graph edges. Store user saves: Row key = user_id, Columns = pin_id_1, pin_id_2, ..., pin_id_10000. Query "get all saves for user X" = single row scan (fast, data locality). High write throughput: Millions of saves per minute, HBase handles easily. Horizontal scalability: Add RegionServers for capacity. Sequential scans fast (row-oriented storage). Alternative MySQL requires: (user_id, pin_id, timestamp) table, indexed by user_id, but millions of small rows vs HBase\'s single row with many columns. HBase wins for high-throughput, sequential-scan workloads. Trade-off: Complex queries (joins, aggregations) harder in HBase, use MySQL for analytics.
 
 ---
 

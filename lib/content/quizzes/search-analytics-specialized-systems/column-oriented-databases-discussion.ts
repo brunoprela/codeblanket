@@ -77,7 +77,7 @@ queries = [
     "SELECT SUM(amount) FROM sales WHERE region = 'EU'",  # Replica 2
     "SELECT SUM(amount) FROM sales WHERE region = 'APAC'"  # Replica 3
 ]
-results = parallel_execute(queries)  # Merge results
+results = parallel_execute (queries)  # Merge results
 \`\`\`
 
 **Realistic speedup**: 2-3x (if perfectly partitioned)
@@ -122,7 +122,7 @@ SETTINGS index_granularity = 8192;
 
 -- Distributed setup for scaling
 CREATE TABLE sales_distributed AS sales
-ENGINE = Distributed(cluster, default, sales, rand());
+ENGINE = Distributed (cluster, default, sales, rand());
 \`\`\`
 
 **Phase 2: Historical Data Migration (Week 2-3)**
@@ -409,8 +409,8 @@ Batch INSERTs:
 # Buffer inserts, batch every 100ms
 buffer = []
 for transaction in stream:
-    buffer.append(transaction)
-    if len(buffer) >= 10000 or time_since_last_flush > 0.1:
+    buffer.append (transaction)
+    if len (buffer) >= 10000 or time_since_last_flush > 0.1:
         clickhouse.execute("INSERT INTO transactions VALUES", buffer)
         buffer = []
 
@@ -625,7 +625,7 @@ CREATE TABLE transactions_2024_01 PARTITION OF transactions
 FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
 
 -- Indexes for OLTP queries
-CREATE INDEX idx_user_recent ON transactions(user_id, created_at DESC);
+CREATE INDEX idx_user_recent ON transactions (user_id, created_at DESC);
 
 -- Configuration for high throughput
 shared_buffers = 8GB
@@ -693,7 +693,7 @@ GROUP BY DATE(created_at);
 **For real-time dashboards:**
 \`\`\`python
 # Hybrid query
-def get_user_total(user_id):
+def get_user_total (user_id):
     # Get from ClickHouse (fast, slightly stale)
     historical = clickhouse.query(
         f"SELECT SUM(amount) FROM transactions WHERE user_id = {user_id}"
@@ -729,7 +729,7 @@ def get_user_total(user_id):
 If CDC complexity is too high:
 \`\`\`python
 # Application handles transactions
-def transfer(from_user, to_user, amount):
+def transfer (from_user, to_user, amount):
     # Batch both operations
     operations = [
         {"user": from_user, "amount": -amount},
@@ -894,9 +894,9 @@ SELECT * FROM s3(
 -- Query
 SELECT 
   user_id,
-  avg(amount) as avg_transaction,
+  avg (amount) as avg_transaction,
   count() as transaction_count,
-  stdDev(amount) as amount_stddev
+  stdDev (amount) as amount_stddev
 FROM transactions
 WHERE date >= '2024-01-01'
 GROUP BY user_id;
@@ -967,9 +967,9 @@ S3 (Parquet) → Presto cluster (compute only) → ML queries
 -- Presto/Trino: Query S3 directly
 SELECT 
   user_id,
-  avg(amount) as avg_transaction,
+  avg (amount) as avg_transaction,
   count(*) as transaction_count,
-  stddev(amount) as amount_stddev
+  stddev (amount) as amount_stddev
 FROM hive.default.transactions  -- Points to S3
 WHERE date >= '2024-01-01'
 GROUP BY user_id;
@@ -1080,8 +1080,8 @@ S3 → ClickHouse (500GB, last 3 months)
 
 \`\`\`python
 # Smart query router
-def query_transactions(date_range):
-    if date_range.end >= datetime.now() - timedelta(days=90):
+def query_transactions (date_range):
+    if date_range.end >= datetime.now() - timedelta (days=90):
         # Recent data: Use ClickHouse (fast!)
         return clickhouse.query(
             f"SELECT * FROM transactions WHERE date >= '{date_range.start}'"

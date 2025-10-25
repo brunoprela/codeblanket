@@ -63,7 +63,7 @@ class SimpleCache:
         self.hits = 0
         self.misses = 0
     
-    def get_key(self, messages: list, model: str, **kwargs) -> str:
+    def get_key (self, messages: list, model: str, **kwargs) -> str:
         """Generate cache key from request parameters."""
         # Create deterministic string from all parameters
         cache_input = json.dumps({
@@ -75,9 +75,9 @@ class SimpleCache:
         # Hash it for compact key
         return hashlib.md5(cache_input.encode()).hexdigest()
     
-    def get(self, messages: list, model: str, **kwargs) -> Optional[str]:
+    def get (self, messages: list, model: str, **kwargs) -> Optional[str]:
         """Get cached response if exists."""
-        key = self.get_key(messages, model, **kwargs)
+        key = self.get_key (messages, model, **kwargs)
         
         if key in self.cache:
             self.hits += 1
@@ -86,18 +86,18 @@ class SimpleCache:
         self.misses += 1
         return None
     
-    def set(self, messages: list, model: str, response: str, **kwargs):
+    def set (self, messages: list, model: str, response: str, **kwargs):
         """Cache a response."""
-        key = self.get_key(messages, model, **kwargs)
+        key = self.get_key (messages, model, **kwargs)
         self.cache[key] = response
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get cache statistics."""
         total = self.hits + self.misses
         hit_rate = (self.hits / total * 100) if total > 0 else 0
         
         return {
-            'cache_size': len(self.cache),
+            'cache_size': len (self.cache),
             'hits': self.hits,
             'misses': self.misses,
             'hit_rate': hit_rate
@@ -109,11 +109,11 @@ from openai import OpenAI
 cache = SimpleCache()
 client = OpenAI()
 
-def chat_with_cache(messages: list, **kwargs) -> str:
+def chat_with_cache (messages: list, **kwargs) -> str:
     """Chat with caching."""
     
     # Check cache
-    cached = cache.get(messages, model="gpt-3.5-turbo", **kwargs)
+    cached = cache.get (messages, model="gpt-3.5-turbo", **kwargs)
     if cached:
         print("[Cache HIT]")
         return cached
@@ -130,7 +130,7 @@ def chat_with_cache(messages: list, **kwargs) -> str:
     result = response.choices[0].message.content
     
     # Cache it
-    cache.set(messages, "gpt-3.5-turbo", result, **kwargs)
+    cache.set (messages, "gpt-3.5-turbo", result, **kwargs)
     
     return result
 
@@ -138,11 +138,11 @@ def chat_with_cache(messages: list, **kwargs) -> str:
 messages = [{"role": "user", "content": "What is 2+2?"}]
 
 # First call - cache miss
-result1 = chat_with_cache(messages)
+result1 = chat_with_cache (messages)
 print(result1)
 
 # Second call - cache hit!
-result2 = chat_with_cache(messages)
+result2 = chat_with_cache (messages)
 print(result2)
 
 # Check stats
@@ -186,7 +186,7 @@ class RedisCache:
         self.hits = 0
         self.misses = 0
     
-    def get_key(self, messages: list, model: str, **kwargs) -> str:
+    def get_key (self, messages: list, model: str, **kwargs) -> str:
         """Generate cache key."""
         cache_input = json.dumps({
             'messages': messages,
@@ -196,11 +196,11 @@ class RedisCache:
         
         return f"llm:{hashlib.md5(cache_input.encode()).hexdigest()}"
     
-    def get(self, messages: list, model: str, **kwargs) -> Optional[str]:
+    def get (self, messages: list, model: str, **kwargs) -> Optional[str]:
         """Get cached response."""
-        key = self.get_key(messages, model, **kwargs)
+        key = self.get_key (messages, model, **kwargs)
         
-        cached = self.redis_client.get(key)
+        cached = self.redis_client.get (key)
         
         if cached:
             self.hits += 1
@@ -217,15 +217,15 @@ class RedisCache:
         **kwargs
     ):
         """Cache a response with TTL."""
-        key = self.get_key(messages, model, **kwargs)
-        self.redis_client.setex(key, self.ttl, response)
+        key = self.get_key (messages, model, **kwargs)
+        self.redis_client.setex (key, self.ttl, response)
     
-    def clear(self):
+    def clear (self):
         """Clear all cached items."""
         for key in self.redis_client.scan_iter("llm:*"):
-            self.redis_client.delete(key)
+            self.redis_client.delete (key)
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get cache statistics."""
         total = self.hits + self.misses
         hit_rate = (self.hits / total * 100) if total > 0 else 0
@@ -241,13 +241,13 @@ class RedisCache:
         }
 
 # Usage
-cache = RedisCache(ttl=3600)  # Cache for 1 hour
+cache = RedisCache (ttl=3600)  # Cache for 1 hour
 
 # Use same interface as SimpleCache
 messages = [{"role": "user", "content": "Explain Python"}]
 
 # Check cache
-cached = cache.get(messages, "gpt-3.5-turbo")
+cached = cache.get (messages, "gpt-3.5-turbo")
 
 if not cached:
     # Call API
@@ -258,7 +258,7 @@ if not cached:
     result = response.choices[0].message.content
     
     # Cache it
-    cache.set(messages, "gpt-3.5-turbo", result)
+    cache.set (messages, "gpt-3.5-turbo", result)
 else:
     result = cached
 
@@ -294,15 +294,15 @@ class SemanticCache:
         self.hits = 0
         self.misses = 0
     
-    def get_embedding(self, text: str) -> np.ndarray:
+    def get_embedding (self, text: str) -> np.ndarray:
         """Get embedding for text."""
         response = self.client.embeddings.create(
             model="text-embedding-3-small",
             input=text
         )
-        return np.array(response.data[0].embedding)
+        return np.array (response.data[0].embedding)
     
-    def get(self, prompt: str) -> Optional[str]:
+    def get (self, prompt: str) -> Optional[str]:
         """
         Get cached response if similar prompt exists.
         """
@@ -311,7 +311,7 @@ class SemanticCache:
             return None
         
         # Get embedding for query
-        query_embedding = self.get_embedding(prompt)
+        query_embedding = self.get_embedding (prompt)
         
         # Find most similar cached prompt
         best_similarity = 0
@@ -336,31 +336,31 @@ class SemanticCache:
         self.misses += 1
         return None
     
-    def set(self, prompt: str, response: str):
+    def set (self, prompt: str, response: str):
         """Cache a prompt-response pair."""
-        embedding = self.get_embedding(prompt)
+        embedding = self.get_embedding (prompt)
         self.cache.append((embedding, prompt, response))
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get cache statistics."""
         total = self.hits + self.misses
         hit_rate = (self.hits / total * 100) if total > 0 else 0
         
         return {
-            'cache_size': len(self.cache),
+            'cache_size': len (self.cache),
             'hits': self.hits,
             'misses': self.misses,
             'hit_rate': hit_rate
         }
 
 # Usage
-semantic_cache = SemanticCache(similarity_threshold=0.95)
+semantic_cache = SemanticCache (similarity_threshold=0.95)
 
-def chat_with_semantic_cache(prompt: str) -> str:
+def chat_with_semantic_cache (prompt: str) -> str:
     """Chat with semantic caching."""
     
     # Check semantic cache
-    cached = semantic_cache.get(prompt)
+    cached = semantic_cache.get (prompt)
     if cached:
         return cached
     
@@ -375,7 +375,7 @@ def chat_with_semantic_cache(prompt: str) -> str:
     result = response.choices[0].message.content
     
     # Cache it
-    semantic_cache.set(prompt, result)
+    semantic_cache.set (prompt, result)
     
     return result
 
@@ -400,7 +400,7 @@ print(f"\\nSemantic cache stats: {stats}")
 
 Claude offers native prompt caching to reduce costs.
 
-### Using Claude's Prompt Caching
+### Using Claude\'s Prompt Caching
 
 \`\`\`python
 # pip install anthropic
@@ -468,7 +468,7 @@ from typing import List
 
 client = AsyncOpenAI()
 
-async def call_llm_async(prompt: str) -> str:
+async def call_llm_async (prompt: str) -> str:
     """Async LLM call."""
     response = await client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -476,9 +476,9 @@ async def call_llm_async(prompt: str) -> str:
     )
     return response.choices[0].message.content
 
-async def batch_calls(prompts: List[str]) -> List[str]:
+async def batch_calls (prompts: List[str]) -> List[str]:
     """Make multiple LLM calls in parallel."""
-    tasks = [call_llm_async(prompt) for prompt in prompts]
+    tasks = [call_llm_async (prompt) for prompt in prompts]
     results = await asyncio.gather(*tasks)
     return results
 
@@ -497,13 +497,13 @@ import time
 start = time.time()
 sequential_results = []
 for prompt in prompts:
-    result = chat_with_cache(messages=[{"role": "user", "content": prompt}])
-    sequential_results.append(result)
+    result = chat_with_cache (messages=[{"role": "user", "content": prompt}])
+    sequential_results.append (result)
 sequential_time = time.time() - start
 
 # Parallel (fast!)
 start = time.time()
-parallel_results = asyncio.run(batch_calls(prompts))
+parallel_results = asyncio.run (batch_calls (prompts))
 parallel_time = time.time() - start
 
 print(f"Sequential: {sequential_time:.2f}s")
@@ -528,18 +528,18 @@ class RequestBatcher:
         self.pending_requests: List[str] = []
         self.pending_start: Optional[float] = None
     
-    def add_request(self, prompt: str) -> Optional[List[str]]:
+    def add_request (self, prompt: str) -> Optional[List[str]]:
         """
         Add request to batch. Returns results if batch is ready.
         """
-        self.pending_requests.append(prompt)
+        self.pending_requests.append (prompt)
         
         if self.pending_start is None:
             self.pending_start = time.time()
         
         # Check if should flush
         should_flush = (
-            len(self.pending_requests) >= self.max_batch_size or
+            len (self.pending_requests) >= self.max_batch_size or
             time.time() - self.pending_start >= self.max_wait_ms
         )
         
@@ -548,14 +548,14 @@ class RequestBatcher:
         
         return None
     
-    def flush(self) -> List[str]:
+    def flush (self) -> List[str]:
         """Process batched requests."""
         if not self.pending_requests:
             return []
         
         # Create batch prompt
         batch_prompt = "Answer each question separately:\\n\\n"
-        for i, prompt in enumerate(self.pending_requests, 1):
+        for i, prompt in enumerate (self.pending_requests, 1):
             batch_prompt += f"{i}. {prompt}\\n"
         
         # Call LLM once for all requests
@@ -575,7 +575,7 @@ class RequestBatcher:
         return results
 
 # Usage
-batcher = RequestBatcher(max_batch_size=5, max_wait_ms=100)
+batcher = RequestBatcher (max_batch_size=5, max_wait_ms=100)
 
 # Add requests
 batcher.add_request("What is 2+2?")
@@ -634,7 +634,7 @@ class ProductionCache:
         self.exact_cache = SimpleCache()
         
         if strategy == CacheStrategy.SEMANTIC:
-            self.semantic_cache = SemanticCache(semantic_threshold)
+            self.semantic_cache = SemanticCache (semantic_threshold)
         
         # Metrics
         self.total_requests = 0
@@ -659,7 +659,7 @@ class ProductionCache:
         
         # Try exact cache first
         if self.strategy in [CacheStrategy.EXACT, CacheStrategy.SEMANTIC]:
-            result = self.exact_cache.get(messages, model, **kwargs)
+            result = self.exact_cache.get (messages, model, **kwargs)
             if result:
                 self.cache_hits += 1
                 self.saved_cost += estimated_cost
@@ -668,7 +668,7 @@ class ProductionCache:
         # Try semantic cache
         if self.strategy == CacheStrategy.SEMANTIC:
             prompt = messages[-1]['content']  # Last message
-            result = self.semantic_cache.get(prompt)
+            result = self.semantic_cache.get (prompt)
             if result:
                 self.cache_hits += 1
                 self.saved_cost += estimated_cost
@@ -689,14 +689,14 @@ class ProductionCache:
         """Store in cache."""
         # Store in exact cache
         if self.strategy in [CacheStrategy.EXACT, CacheStrategy.SEMANTIC]:
-            self.exact_cache.set(messages, model, response, **kwargs)
+            self.exact_cache.set (messages, model, response, **kwargs)
         
         # Store in semantic cache
         if self.strategy == CacheStrategy.SEMANTIC:
             prompt = messages[-1]['content']
-            self.semantic_cache.set(prompt, response)
+            self.semantic_cache.set (prompt, response)
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get comprehensive metrics."""
         hit_rate = (
             (self.cache_hits / self.total_requests * 100)
@@ -727,13 +727,13 @@ cache = ProductionCache(
     semantic_threshold=0.95
 )
 
-def chat_with_production_cache(prompt: str) -> str:
+def chat_with_production_cache (prompt: str) -> str:
     """Chat with production caching."""
     messages = [{"role": "user", "content": prompt}]
     estimated_cost = 0.001  # Estimate
     
     # Try cache
-    cached, from_cache = cache.get(messages, "gpt-3.5-turbo", estimated_cost)
+    cached, from_cache = cache.get (messages, "gpt-3.5-turbo", estimated_cost)
     
     if from_cache:
         print(f"[CACHE HIT]")
@@ -750,20 +750,20 @@ def chat_with_production_cache(prompt: str) -> str:
     result = response.choices[0].message.content
     
     # Cache it
-    cache.set(messages, "gpt-3.5-turbo", result)
+    cache.set (messages, "gpt-3.5-turbo", result)
     
     return result
 
 # Make requests
 prompts = [
     "What is Python?",
-    "What's Python?",  # Similar - semantic cache hit
+    "What\'s Python?",  # Similar - semantic cache hit
     "Explain Python",  # Similar - semantic cache hit
     "What is Java?",   # Different - cache miss
 ]
 
 for prompt in prompts:
-    result = chat_with_production_cache(prompt)
+    result = chat_with_production_cache (prompt)
     print(f"Prompt: {prompt}")
     print(f"Result: {result[:50]}...\\n")
 
@@ -772,8 +772,7 @@ metrics = cache.get_metrics()
 print("\\nCache Metrics:")
 print(f"  Hit rate: {metrics['hit_rate']:.1f}%")
 print(f"  Cost reduction: {metrics['cost_reduction']:.1f}%")
-print(f"  Saved: \${metrics['saved_cost']: .4f
-}")
+print(f"  Saved: \${metrics['saved_cost']:.4f}")
 print(f"  Spent: \${metrics['total_api_cost']:.4f}")
 \`\`\`
 

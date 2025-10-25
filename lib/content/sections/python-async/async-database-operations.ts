@@ -20,24 +20,24 @@ import asyncpg
 import psycopg2  # Blocking driver
 
 # Blocking: Sequential queries
-def fetch_users_blocking(count):
+def fetch_users_blocking (count):
     conn = psycopg2.connect("postgresql://...")
     cursor = conn.cursor()
     users = []
-    for i in range(count):
+    for i in range (count):
         cursor.execute("SELECT * FROM users WHERE id = %s", (i,))
-        users.append(cursor.fetchone())
+        users.append (cursor.fetchone())
     conn.close()
     return users
 
 # Time: 100 queries × 10ms = 1 second
 
 # Async: Concurrent queries
-async def fetch_users_async(count):
+async def fetch_users_async (count):
     conn = await asyncpg.connect("postgresql://...")
     queries = [
         conn.fetchrow("SELECT * FROM users WHERE id = $1", i)
-        for i in range(count)
+        for i in range (count)
     ]
     users = await asyncio.gather(*queries)
     await conn.close()
@@ -95,7 +95,7 @@ async def basic_queries():
         "SELECT * FROM users WHERE created_at > $1",
         '2024-01-01'
     )
-    print(f"Found {len(users)} users")
+    print(f"Found {len (users)} users")
     
     # Fetch single value
     count = await conn.fetchval(
@@ -112,7 +112,7 @@ async def basic_queries():
     # Close connection
     await conn.close()
 
-asyncio.run(basic_queries())
+asyncio.run (basic_queries())
 \`\`\`
 
 ### Connection Pooling
@@ -140,7 +140,7 @@ async def with_connection_pool():
     # Acquire connection from pool
     async with pool.acquire() as conn:
         users = await conn.fetch("SELECT * FROM users")
-        print(f"Fetched {len(users)} users")
+        print(f"Fetched {len (users)} users")
     
     # Connection automatically returned to pool
     
@@ -156,21 +156,21 @@ class Database:
     def __init__(self):
         self.pool = None
     
-    async def connect(self):
+    async def connect (self):
         self.pool = await asyncpg.create_pool(
             "postgresql://user:pass@localhost/db",
             min_size=10,
             max_size=20
         )
     
-    async def close(self):
+    async def close (self):
         await self.pool.close()
     
-    async def fetch_users(self):
+    async def fetch_users (self):
         async with self.pool.acquire() as conn:
             return await conn.fetch("SELECT * FROM users")
 
-asyncio.run(with_connection_pool())
+asyncio.run (with_connection_pool())
 \`\`\`
 
 ---
@@ -261,7 +261,7 @@ async def manual_transaction():
     
     await pool.close()
 
-asyncio.run(manual_transaction())
+asyncio.run (manual_transaction())
 \`\`\`
 
 ### Nested Transactions (Savepoints)
@@ -307,7 +307,7 @@ async def nested_transactions():
     
     await pool.close()
 
-asyncio.run(nested_transactions())
+asyncio.run (nested_transactions())
 \`\`\`
 
 ---
@@ -354,7 +354,7 @@ async def bulk_insert_example():
 # executemany: ~60 seconds
 # copy_records_to_table: ~0.6 seconds (100× faster!)
 
-asyncio.run(bulk_insert_example())
+asyncio.run (bulk_insert_example())
 \`\`\`
 
 ### Batch Updates
@@ -372,7 +372,7 @@ async def bulk_update_example():
     
     async with pool.acquire() as conn:
         # Update multiple rows efficiently
-        user_ids = list(range(1, 1001))
+        user_ids = list (range(1, 1001))
         
         # Use unnest for batch update
         await conn.execute("""
@@ -409,7 +409,7 @@ async def bulk_update_example():
     
     await pool.close()
 
-asyncio.run(bulk_update_example())
+asyncio.run (bulk_update_example())
 \`\`\`
 
 ---
@@ -452,7 +452,7 @@ async def concurrent_queries_example():
     
     await pool.close()
 
-asyncio.run(concurrent_queries_example())
+asyncio.run (concurrent_queries_example())
 \`\`\`
 
 ---
@@ -479,7 +479,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     name: Mapped[str]
     email: Mapped[str]
 
@@ -507,29 +507,29 @@ async def sqlalchemy_example():
     async with async_session() as session:
         # Query
         stmt = select(User).where(User.id == 1)
-        result = await session.execute(stmt)
+        result = await session.execute (stmt)
         user = result.scalar_one_or_none()
         
         if user:
             print(f"User: {user.name}, {user.email}")
         
         # Insert
-        new_user = User(name="Alice", email="alice@example.com")
-        session.add(new_user)
+        new_user = User (name="Alice", email="alice@example.com")
+        session.add (new_user)
         await session.commit()
         
         # Update
         stmt = (
             update(User)
             .where(User.id == 1)
-            .values(name="Updated Name")
+            .values (name="Updated Name")
         )
-        await session.execute(stmt)
+        await session.execute (stmt)
         await session.commit()
     
     await engine.dispose()
 
-asyncio.run(sqlalchemy_example())
+asyncio.run (sqlalchemy_example())
 \`\`\`
 
 ---
@@ -583,7 +583,7 @@ async def error_handling_example():
     
     await pool.close()
 
-asyncio.run(error_handling_example())
+asyncio.run (error_handling_example())
 \`\`\`
 
 ---
@@ -607,7 +607,7 @@ class DatabaseManager:
         self.dsn = dsn
         self.pool: Optional[asyncpg.Pool] = None
     
-    async def connect(self):
+    async def connect (self):
         """Initialize connection pool"""
         self.pool = await asyncpg.create_pool(
             self.dsn,
@@ -617,38 +617,38 @@ class DatabaseManager:
             max_inactive_connection_lifetime=300.0
         )
     
-    async def close(self):
+    async def close (self):
         """Close connection pool"""
         if self.pool:
             await self.pool.close()
     
     @asynccontextmanager
-    async def acquire(self):
+    async def acquire (self):
         """Acquire connection from pool"""
         async with self.pool.acquire() as conn:
             yield conn
     
     @asynccontextmanager
-    async def transaction(self):
+    async def transaction (self):
         """Transaction context manager"""
         async with self.pool.acquire() as conn:
             async with conn.transaction():
                 yield conn
     
-    async def fetch_one(self, query: str, *args):
+    async def fetch_one (self, query: str, *args):
         """Fetch single row"""
         async with self.acquire() as conn:
-            return await conn.fetchrow(query, *args)
+            return await conn.fetchrow (query, *args)
     
-    async def fetch_all(self, query: str, *args):
+    async def fetch_all (self, query: str, *args):
         """Fetch multiple rows"""
         async with self.acquire() as conn:
-            return await conn.fetch(query, *args)
+            return await conn.fetch (query, *args)
     
-    async def execute(self, query: str, *args):
+    async def execute (self, query: str, *args):
         """Execute query"""
         async with self.acquire() as conn:
-            return await conn.execute(query, *args)
+            return await conn.execute (query, *args)
 
 # Usage
 db = DatabaseManager("postgresql://user:pass@localhost/db")
@@ -665,7 +665,7 @@ async def main():
     
     await db.close()
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---

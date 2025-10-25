@@ -33,7 +33,7 @@ from plotly.subplots import make_subplots
 
 # Load data
 from sklearn.datasets import fetch_california_housing
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 print("=" * 70)
@@ -88,7 +88,7 @@ fig_3d = px.scatter_3d(
     }
 )
 
-fig_3d.update_layout(scene=dict(
+fig_3d.update_layout (scene=dict(
     xaxis_title='Latitude',
     yaxis_title='Longitude',
     zaxis_title='House Value'
@@ -97,10 +97,10 @@ fig_3d.update_layout(scene=dict(
 fig_3d.show()
 
 # 3. Interactive Time Series (using synthetic time data)
-dates = pd.date_range('2020-01-01', periods=len(df), freq='D')
+dates = pd.date_range('2020-01-01', periods=len (df), freq='D')
 df_time = df.copy()
 df_time['Date'] = dates
-df_time_agg = df_time.groupby(pd.Grouper(key='Date', freq='M'))['MedHouseVal'].mean().reset_index()
+df_time_agg = df_time.groupby (pd.Grouper (key='Date', freq='M'))['MedHouseVal'].mean().reset_index()
 
 fig_time = px.line(
     df_time_agg,
@@ -110,8 +110,8 @@ fig_time = px.line(
     labels={'MedHouseVal': 'Average Median House Value'}
 )
 
-fig_time.update_traces(mode='lines+markers')
-fig_time.update_layout(hovermode='x unified')
+fig_time.update_traces (mode='lines+markers')
+fig_time.update_layout (hovermode='x unified')
 fig_time.show()
 
 print("\\n✓ Multiple interactive visualizations created")
@@ -120,11 +120,11 @@ print("\\n✓ Multiple interactive visualizations created")
 ### Dashboard-Style Layouts
 
 \`\`\`python
-def create_interactive_dashboard(df):
+def create_interactive_dashboard (df):
     """Create a comprehensive interactive dashboard"""
     
     # Sample for performance
-    df_sample = df.sample(min(2000, len(df)), random_state=42)
+    df_sample = df.sample (min(2000, len (df)), random_state=42)
     
     # Create subplots
     fig = make_subplots(
@@ -139,24 +139,24 @@ def create_interactive_dashboard(df):
     
     # 1. Histogram
     fig.add_trace(
-        go.Histogram(x=df_sample['MedHouseVal'], name='House Values',
+        go.Histogram (x=df_sample['MedHouseVal'], name='House Values',
                      marker_color='lightblue'),
         row=1, col=1
     )
     
     # 2. Scatter plot
     fig.add_trace(
-        go.Scatter(x=df_sample['MedInc'], y=df_sample['MedHouseVal'],
+        go.Scatter (x=df_sample['MedInc'], y=df_sample['MedHouseVal'],
                    mode='markers', name='Income vs Value',
-                   marker=dict(size=5, opacity=0.6)),
+                   marker=dict (size=5, opacity=0.6)),
         row=1, col=2
     )
     
     # 3. Geographic scatter
     fig.add_trace(
-        go.Scatter(x=df_sample['Longitude'], y=df_sample['Latitude'],
+        go.Scatter (x=df_sample['Longitude'], y=df_sample['Latitude'],
                    mode='markers', name='Locations',
-                   marker=dict(size=5, color=df_sample['MedHouseVal'],
+                   marker=dict (size=5, color=df_sample['MedHouseVal'],
                              colorscale='Viridis', showscale=True)),
         row=2, col=1
     )
@@ -164,7 +164,7 @@ def create_interactive_dashboard(df):
     # 4. Correlation heatmap
     corr = df.corr()
     fig.add_trace(
-        go.Heatmap(z=corr.values, x=corr.columns, y=corr.columns,
+        go.Heatmap (z=corr.values, x=corr.columns, y=corr.columns,
                    colorscale='RdBu', zmid=0),
         row=2, col=2
     )
@@ -182,7 +182,7 @@ def create_interactive_dashboard(df):
     return fig
 
 # Create dashboard
-dashboard = create_interactive_dashboard(df)
+dashboard = create_interactive_dashboard (df)
 print("\\n✓ Interactive dashboard created")
 \`\`\`
 
@@ -191,7 +191,7 @@ print("\\n✓ Interactive dashboard created")
 ### Mapping Data with Geospatial Context
 
 \`\`\`python
-def create_geographic_heatmap(df):
+def create_geographic_heatmap (df):
     """Create geographic heatmap showing house values by location"""
     
     print("\\nGEOGRAPHIC VISUALIZATION")
@@ -209,7 +209,7 @@ def create_geographic_heatmap(df):
     axes[0, 0].set_xlabel('Longitude')
     axes[0, 0].set_ylabel('Latitude')
     axes[0, 0].set_title('House Values by Location')
-    plt.colorbar(scatter, ax=axes[0, 0], label='Median House Value ($100k)')
+    plt.colorbar (scatter, ax=axes[0, 0], label='Median House Value ($100k)')
     
     # 2. Hexbin plot (aggregated heatmap)
     hexbin = axes[0, 1].hexbin(
@@ -220,7 +220,7 @@ def create_geographic_heatmap(df):
     axes[0, 1].set_xlabel('Longitude')
     axes[0, 1].set_ylabel('Latitude')
     axes[0, 1].set_title('Average House Values (Hexbin)')
-    plt.colorbar(hexbin, ax=axes[0, 1], label='Avg House Value')
+    plt.colorbar (hexbin, ax=axes[0, 1], label='Avg House Value')
     
     # 3. 2D Histogram
     hist = axes[1, 0].hist2d(
@@ -230,14 +230,14 @@ def create_geographic_heatmap(df):
     axes[1, 0].set_xlabel('Longitude')
     axes[1, 0].set_ylabel('Latitude')
     axes[1, 0].set_title('Density-Weighted House Values')
-    plt.colorbar(hist[3], ax=axes[1, 0], label='Total Value')
+    plt.colorbar (hist[3], ax=axes[1, 0], label='Total Value')
     
     # 4. Contour plot
     # Create grid
     from scipy.interpolate import griddata
-    xi = np.linspace(df['Longitude'].min(), df['Longitude'].max(), 100)
-    yi = np.linspace(df['Latitude'].min(), df['Latitude'].max(), 100)
-    xi, yi = np.meshgrid(xi, yi)
+    xi = np.linspace (df['Longitude'].min(), df['Longitude'].max(), 100)
+    yi = np.linspace (df['Latitude'].min(), df['Latitude'].max(), 100)
+    xi, yi = np.meshgrid (xi, yi)
     
     # Interpolate values
     zi = griddata(
@@ -247,11 +247,11 @@ def create_geographic_heatmap(df):
         method='cubic'
     )
     
-    contour = axes[1, 1].contourf(xi, yi, zi, levels=15, cmap='YlOrRd')
+    contour = axes[1, 1].contourf (xi, yi, zi, levels=15, cmap='YlOrRd')
     axes[1, 1].set_xlabel('Longitude')
     axes[1, 1].set_ylabel('Latitude')
     axes[1, 1].set_title('Interpolated House Value Contours')
-    plt.colorbar(contour, ax=axes[1, 1], label='House Value')
+    plt.colorbar (contour, ax=axes[1, 1], label='House Value')
     
     plt.tight_layout()
     plt.show()
@@ -259,13 +259,13 @@ def create_geographic_heatmap(df):
     print("\\n✓ Geographic visualizations created")
     print("  Insight: Coastal areas (low longitude) show higher values")
 
-create_geographic_heatmap(df)
+create_geographic_heatmap (df)
 \`\`\`
 
 ### Interactive Maps with Plotly
 
 \`\`\`python
-def create_interactive_map(df):
+def create_interactive_map (df):
     """Create interactive choropleth-style map"""
     
     # Sample for performance
@@ -278,7 +278,7 @@ def create_interactive_map(df):
         lon='Longitude',
         z='MedHouseVal',
         radius=10,
-        center=dict(lat=37, lon=-119),
+        center=dict (lat=37, lon=-119),
         zoom=5,
         mapbox_style="open-street-map",
         title='Interactive California Housing Density Map',
@@ -286,12 +286,12 @@ def create_interactive_map(df):
         labels={'MedHouseVal': 'House Value'}
     )
     
-    fig.update_layout(height=600, width=900)
+    fig.update_layout (height=600, width=900)
     fig.show()
     
     print("\\n✓ Interactive map created (zoom, pan, hover)")
 
-create_interactive_map(df)
+create_interactive_map (df)
 \`\`\`
 
 ## Network Graphs
@@ -299,7 +299,7 @@ create_interactive_map(df)
 ### Visualizing Relationships as Networks
 
 \`\`\`python
-def create_correlation_network(df, threshold=0.5):
+def create_correlation_network (df, threshold=0.5):
     """Visualize correlations as a network graph"""
     
     import networkx as nx
@@ -314,18 +314,18 @@ def create_correlation_network(df, threshold=0.5):
     G = nx.Graph()
     
     # Add edges for correlations above threshold
-    for i in range(len(corr.columns)):
-        for j in range(i+1, len(corr.columns)):
-            if abs(corr.iloc[i, j]) >= threshold:
+    for i in range (len (corr.columns)):
+        for j in range (i+1, len (corr.columns)):
+            if abs (corr.iloc[i, j]) >= threshold:
                 G.add_edge(
                     corr.columns[i],
                     corr.columns[j],
-                    weight=abs(corr.iloc[i, j]),
+                    weight=abs (corr.iloc[i, j]),
                     sign=1 if corr.iloc[i, j] > 0 else -1
                 )
     
     # Create visualization
-    plt.figure(figsize=(12, 8))
+    plt.figure (figsize=(12, 8))
     
     # Layout
     pos = nx.spring_layout(G, k=1, iterations=50)
@@ -350,7 +350,7 @@ def create_correlation_network(df, threshold=0.5):
     # Draw labels
     nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold')
     
-    plt.title(f'Feature Correlation Network (|r| >= {threshold})', fontsize=14)
+    plt.title (f'Feature Correlation Network (|r| >= {threshold})', fontsize=14)
     plt.axis('off')
     plt.tight_layout()
     plt.show()
@@ -362,12 +362,12 @@ def create_correlation_network(df, threshold=0.5):
     
     # Most connected features
     degrees = dict(G.degree())
-    most_connected = sorted(degrees.items(), key=lambda x: x[1], reverse=True)[:3]
+    most_connected = sorted (degrees.items(), key=lambda x: x[1], reverse=True)[:3]
     print(f"\\n  Most connected features:")
     for feature, degree in most_connected:
         print(f"    {feature}: {degree} connections")
 
-create_correlation_network(df, threshold=0.3)
+create_correlation_network (df, threshold=0.3)
 \`\`\`
 
 ## Animated Visualizations
@@ -375,12 +375,12 @@ create_correlation_network(df, threshold=0.3)
 ### Time-Based Animations
 
 \`\`\`python
-def create_animated_visualization(df):
+def create_animated_visualization (df):
     """Create animated visualization showing changes over time"""
     
     # Create time-based grouping (synthetic temporal data)
     df_anim = df.copy()
-    df_anim['Year'] = np.random.choice(range(2015, 2024), len(df))
+    df_anim['Year'] = np.random.choice (range(2015, 2024), len (df))
     
     # Aggregate by year
     df_yearly = df_anim.groupby('Year').agg({
@@ -411,14 +411,14 @@ def create_animated_visualization(df):
         }
     )
     
-    fig.update_layout(width=900, height=600)
+    fig.update_layout (width=900, height=600)
     fig.show()
     
     print("\\n✓ Animated visualization created")
     print("  Click play button to see animation")
 
 # Note: Requires plotly, uncomment to run
-# create_animated_visualization(df)
+# create_animated_visualization (df)
 \`\`\`
 
 ## Advanced Seaborn Techniques
@@ -426,7 +426,7 @@ def create_animated_visualization(df):
 ### Complex Multi-Panel Visualizations
 
 \`\`\`python
-def create_comprehensive_seaborn_analysis(df):
+def create_comprehensive_seaborn_analysis (df):
     """Create publication-quality multi-panel analysis"""
     
     print("\\nCOMPREHENSIVE SEABORN ANALYSIS")
@@ -437,47 +437,47 @@ def create_comprehensive_seaborn_analysis(df):
     sns.set_palette("husl")
     
     # Create figure with custom layout
-    fig = plt.figure(figsize=(18, 12))
+    fig = plt.figure (figsize=(18, 12))
     gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
     
     # 1. Joint plot embedded
-    ax1 = fig.add_subplot(gs[0:2, 0:2])
+    ax1 = fig.add_subplot (gs[0:2, 0:2])
     df_sample = df.sample(2000, random_state=42)
-    ax1.scatter(df_sample['MedInc'], df_sample['MedHouseVal'], 
+    ax1.scatter (df_sample['MedInc'], df_sample['MedHouseVal'], 
                 alpha=0.5, s=20)
     ax1.set_xlabel('Median Income')
     ax1.set_ylabel('Median House Value')
     ax1.set_title('Income vs House Value')
     
     # Add marginal distributions
-    ax_top = fig.add_subplot(gs[0, 0:2])
-    ax_top.hist(df_sample['MedInc'], bins=30, alpha=0.7, edgecolor='black')
+    ax_top = fig.add_subplot (gs[0, 0:2])
+    ax_top.hist (df_sample['MedInc'], bins=30, alpha=0.7, edgecolor='black')
     ax_top.set_xticks([])
     ax_top.set_ylabel('Frequency')
     
-    ax_right = fig.add_subplot(gs[1, 2])
-    ax_right.hist(df_sample['MedHouseVal'], bins=30, alpha=0.7, 
+    ax_right = fig.add_subplot (gs[1, 2])
+    ax_right.hist (df_sample['MedHouseVal'], bins=30, alpha=0.7, 
                   orientation='horizontal', edgecolor='black')
     ax_right.set_yticks([])
     ax_right.set_xlabel('Frequency')
     
     # 2. Violin plots
-    ax2 = fig.add_subplot(gs[0, 2])
-    df['IncomeCategory'] = pd.cut(df['MedInc'], bins=[0, 3, 6, 15],
+    ax2 = fig.add_subplot (gs[0, 2])
+    df['IncomeCategory'] = pd.cut (df['MedInc'], bins=[0, 3, 6, 15],
                                    labels=['Low', 'Medium', 'High'])
-    sns.violinplot(data=df.sample(1000), x='IncomeCategory', 
+    sns.violinplot (data=df.sample(1000), x='IncomeCategory', 
                    y='MedHouseVal', ax=ax2)
     ax2.set_title('House Value by Income Category')
     ax2.set_xlabel('Income Category')
     ax2.set_ylabel('House Value')
     
     # 3. Ridge plot style (multiple distributions)
-    ax3 = fig.add_subplot(gs[2, :])
+    ax3 = fig.add_subplot (gs[2, :])
     categories = df['IncomeCategory'].unique()
-    for i, cat in enumerate(categories):
+    for i, cat in enumerate (categories):
         data = df[df['IncomeCategory'] == cat]['MedHouseVal']
-        ax3.fill_between(np.linspace(0, 5, 100),
-                        i, i + np.histogram(data, bins=100, range=(0, 5),
+        ax3.fill_between (np.linspace(0, 5, 100),
+                        i, i + np.histogram (data, bins=100, range=(0, 5),
                                           density=True)[0],
                         alpha=0.6, label=cat)
     ax3.set_xlabel('Median House Value')
@@ -491,7 +491,7 @@ def create_comprehensive_seaborn_analysis(df):
     
     print("\\n✓ Comprehensive visualization created")
 
-create_comprehensive_seaborn_analysis(df)
+create_comprehensive_seaborn_analysis (df)
 \`\`\`
 
 ## Key Takeaways

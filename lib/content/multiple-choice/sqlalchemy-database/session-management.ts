@@ -26,7 +26,7 @@ export const sessionManagementMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Objects transition from PENDING to PERSISTENT when session.flush() or session.commit() is executed. At this point, SQLAlchemy sends INSERT to database and object receives its primary key. PENDING: added to session but not in database (no PK). PERSISTENT: in session AND in database (has PK). You can verify: user = User(); session.add(user); print(user.id) # None (PENDING); session.flush(); print(user.id) # 1 (PERSISTENT).',
+      'Objects transition from PENDING to PERSISTENT when session.flush() or session.commit() is executed. At this point, SQLAlchemy sends INSERT to database and object receives its primary key. PENDING: added to session but not in database (no PK). PERSISTENT: in session AND in database (has PK). You can verify: user = User(); session.add (user); print(user.id) # None (PENDING); session.flush(); print(user.id) # 1 (PERSISTENT).',
   },
   {
     id: 'sql-session-mc-3',
@@ -49,7 +49,7 @@ export const sessionManagementMultipleChoice: MultipleChoiceQuestion[] = [
       'It improves performance',
       'Causes thread safety issues, stale data, and connection leaks',
       "SQLAlchemy doesn't support it",
-      "It's the recommended pattern",
+      "It\'s the recommended pattern",
     ],
     correctAnswer: 1,
     explanation:

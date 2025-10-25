@@ -26,9 +26,9 @@ export const decisiontreesQuiz: QuizQuestion[] = [
       'Compare Gini impurity and entropy as splitting criteria. Do they produce significantly different trees? When might one be preferred over the other?',
     hint: 'Consider the mathematical differences and practical implications.',
     sampleAnswer:
-      "Gini impurity and entropy both measure node homogeneity but differ mathematically. Gini: 1-Σpᵢ² (quadratic), entropy: -Σpᵢlog(pᵢ) (logarithmic). Entropy penalizes impurity more severely due to logarithm, while Gini is computationally faster (no log). In practice, they usually produce similar trees - differences are minor for most datasets. Entropy may create slightly more balanced trees. Gini is preferred in scikit-learn default due to speed (no log computation). Choose entropy when you need information-theoretic interpretation or slightly better balance. Choose Gini for faster training. Honestly, the choice matters far less than proper pruning and ensemble methods (Random Forests). Don't overthink this - use default Gini unless you have specific reason for entropy.",
+      "Gini impurity and entropy both measure node homogeneity but differ mathematically. Gini: 1-Σpᵢ² (quadratic), entropy: -Σpᵢlog (pᵢ) (logarithmic). Entropy penalizes impurity more severely due to logarithm, while Gini is computationally faster (no log). In practice, they usually produce similar trees - differences are minor for most datasets. Entropy may create slightly more balanced trees. Gini is preferred in scikit-learn default due to speed (no log computation). Choose entropy when you need information-theoretic interpretation or slightly better balance. Choose Gini for faster training. Honestly, the choice matters far less than proper pruning and ensemble methods (Random Forests). Don't overthink this - use default Gini unless you have specific reason for entropy.",
     keyPoints: [
-      'Gini: 1-Σpᵢ², entropy: -Σpᵢlog(pᵢ)',
+      'Gini: 1-Σpᵢ², entropy: -Σpᵢlog (pᵢ)',
       'Both measure homogeneity, usually similar results',
       'Gini faster (no logarithm)',
       'Entropy slightly more balanced',

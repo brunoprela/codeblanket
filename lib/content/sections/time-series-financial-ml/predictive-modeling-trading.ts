@@ -40,7 +40,7 @@ class TradingFeatureEngineer:
         self.lookback = lookback
         self.scaler = StandardScaler()
     
-    def create_features(self, df):
+    def create_features (self, df):
         """
         Create all features from OHLCV data
         
@@ -50,7 +50,7 @@ class TradingFeatureEngineer:
         Returns:
             DataFrame with features
         """
-        features = pd.DataFrame(index=df.index)
+        features = pd.DataFrame (index=df.index)
         
         # 1. Returns (multiple horizons)
         features['return_1d'] = df['Close'].pct_change(1)
@@ -58,23 +58,23 @@ class TradingFeatureEngineer:
         features['return_21d'] = df['Close'].pct_change(21)
         
         # 2. Technical indicators
-        features = self._add_technical_indicators(features, df)
+        features = self._add_technical_indicators (features, df)
         
         # 3. Volume features
-        features = self._add_volume_features(features, df)
+        features = self._add_volume_features (features, df)
         
         # 4. Volatility features
-        features = self._add_volatility_features(features, df)
+        features = self._add_volatility_features (features, df)
         
         # 5. Trend features
-        features = self._add_trend_features(features, df)
+        features = self._add_trend_features (features, df)
         
         # 6. Statistical features
-        features = self._add_statistical_features(features, df)
+        features = self._add_statistical_features (features, df)
         
         return features
     
-    def _add_technical_indicators(self, features, df):
+    def _add_technical_indicators (self, features, df):
         """Technical indicators"""
         close = df['Close'].values
         high = df['High'].values
@@ -117,7 +117,7 @@ class TradingFeatureEngineer:
         
         return features
     
-    def _add_volume_features(self, features, df):
+    def _add_volume_features (self, features, df):
         """Volume-based features"""
         volume = df['Volume'].values
         close = df['Close'].values
@@ -132,12 +132,12 @@ class TradingFeatureEngineer:
         
         # Volume trend
         features['volume_trend'] = df['Volume'].rolling(20).apply(
-            lambda x: np.polyfit(range(len(x)), x, 1)[0]
+            lambda x: np.polyfit (range (len (x)), x, 1)[0]
         )
         
         return features
     
-    def _add_volatility_features(self, features, df):
+    def _add_volatility_features (self, features, df):
         """Volatility features"""
         returns = df['Close'].pct_change()
         
@@ -155,33 +155,33 @@ class TradingFeatureEngineer:
         
         return features
     
-    def _add_trend_features(self, features, df):
+    def _add_trend_features (self, features, df):
         """Trend identification features"""
         close = df['Close']
         
         # Linear regression slope (trend strength)
         for window in [5, 10, 21]:
-            features[f'trend_{window}d'] = close.rolling(window).apply(
-                lambda x: np.polyfit(range(len(x)), x, 1)[0]
+            features[f'trend_{window}d'] = close.rolling (window).apply(
+                lambda x: np.polyfit (range (len (x)), x, 1)[0]
             )
         
         # Higher highs, lower lows
-        features['higher_high'] = (df['High'] > df['High'].shift(1)).astype(int)
-        features['lower_low'] = (df['Low'] < df['Low'].shift(1)).astype(int)
+        features['higher_high'] = (df['High'] > df['High'].shift(1)).astype (int)
+        features['lower_low'] = (df['Low'] < df['Low'].shift(1)).astype (int)
         
         # Days since 52-week high/low
         features['days_since_high'] = (
             df.index.to_series().diff().dt.days.cumsum() -
-            df['High'].expanding().apply(lambda x: len(x) - 1 - x.argmax())
+            df['High'].expanding().apply (lambda x: len (x) - 1 - x.argmax())
         )
         features['days_since_low'] = (
             df.index.to_series().diff().dt.days.cumsum() -
-            df['Low'].expanding().apply(lambda x: len(x) - 1 - x.argmin())
+            df['Low'].expanding().apply (lambda x: len (x) - 1 - x.argmin())
         )
         
         return features
     
-    def _add_statistical_features(self, features, df):
+    def _add_statistical_features (self, features, df):
         """Statistical features"""
         returns = df['Close'].pct_change()
         
@@ -197,12 +197,12 @@ class TradingFeatureEngineer:
         
         # Autocorrelation
         features['autocorr_1d'] = returns.rolling(21).apply(
-            lambda x: x.autocorr(lag=1)
+            lambda x: x.autocorr (lag=1)
         )
         
         return features
     
-    def create_target(self, df, horizon=5, threshold=0.02):
+    def create_target (self, df, horizon=5, threshold=0.02):
         """
         Create target variable
         
@@ -216,7 +216,7 @@ class TradingFeatureEngineer:
             target_classification: 1 (up), 0 (sideways), -1 (down)
         """
         # Regression target: future return
-        future_return = df['Close'].pct_change(horizon).shift(-horizon)
+        future_return = df['Close'].pct_change (horizon).shift(-horizon)
         
         # Classification target: discretize returns
         target_classification = pd.Series(0, index=df.index)
@@ -230,10 +230,10 @@ class TradingFeatureEngineer:
 spy = yf.download('SPY', start='2020-01-01', end='2024-01-01')
 
 engineer = TradingFeatureEngineer()
-features = engineer.create_features(spy)
+features = engineer.create_features (spy)
 
 # Create targets
-target_reg, target_cls = engineer.create_target(spy, horizon=5, threshold=0.01)
+target_reg, target_cls = engineer.create_target (spy, horizon=5, threshold=0.01)
 
 # Combine
 data = pd.concat([features, target_reg.rename('target_return'), 
@@ -243,8 +243,8 @@ data = pd.concat([features, target_reg.rename('target_return'),
 data = data.dropna()
 
 print("=== Feature Engineering Complete ===")
-print(f"Features: {len(features.columns)}")
-print(f"Samples: {len(data)}")
+print(f"Features: {len (features.columns)}")
+print(f"Samples: {len (data)}")
 print(f"\\nFeature names:")
 print(features.columns.tolist())
 \`\`\`
@@ -273,7 +273,7 @@ class TradingModel:
         self.model = self._initialize_model()
         self.scaler = StandardScaler()
     
-    def _initialize_model(self):
+    def _initialize_model (self):
         """Initialize model based on type"""
         if self.model_type == 'xgboost':
             return xgb.XGBClassifier(
@@ -298,9 +298,9 @@ class TradingModel:
                 random_state=42
             )
         else:
-            raise ValueError(f"Unknown model type: {self.model_type}")
+            raise ValueError (f"Unknown model type: {self.model_type}")
     
-    def walk_forward_validation(self, data, feature_cols, target_col,
+    def walk_forward_validation (self, data, feature_cols, target_col,
                                 train_size=252, test_size=21, retrain_freq=21):
         """
         Walk-forward validation
@@ -320,7 +320,7 @@ class TradingModel:
         actuals = []
         dates = []
         
-        for i in range(train_size, len(data) - test_size, retrain_freq):
+        for i in range (train_size, len (data) - test_size, retrain_freq):
             # Train data
             train_data = data.iloc[i-train_size:i]
             X_train = train_data[feature_cols]
@@ -342,22 +342,22 @@ class TradingModel:
             y_pred = self.model.predict(X_test_scaled)
             
             # Store results
-            predictions.extend(y_pred)
-            actuals.extend(y_test.values)
-            dates.extend(test_data.index)
+            predictions.extend (y_pred)
+            actuals.extend (y_test.values)
+            dates.extend (test_data.index)
         
         # Calculate metrics
-        predictions = np.array(predictions)
-        actuals = np.array(actuals)
+        predictions = np.array (predictions)
+        actuals = np.array (actuals)
         
         results = {
             'predictions': predictions,
             'actuals': actuals,
             'dates': dates,
-            'accuracy': accuracy_score(actuals, predictions),
-            'precision': precision_score(actuals, predictions, average='weighted', zero_division=0),
-            'recall': recall_score(actuals, predictions, average='weighted', zero_division=0),
-            'f1': f1_score(actuals, predictions, average='weighted', zero_division=0)
+            'accuracy': accuracy_score (actuals, predictions),
+            'precision': precision_score (actuals, predictions, average='weighted', zero_division=0),
+            'recall': recall_score (actuals, predictions, average='weighted', zero_division=0),
+            'f1': f1_score (actuals, predictions, average='weighted', zero_division=0)
         }
         
         return results
@@ -371,7 +371,7 @@ data_clean = data[feature_cols + [target_col]].dropna()
 feature_cols_clean = [col for col in feature_cols if col in data_clean.columns]
 
 # XGBoost model
-model_xgb = TradingModel(model_type='xgboost')
+model_xgb = TradingModel (model_type='xgboost')
 results_xgb = model_xgb.walk_forward_validation(
     data_clean,
     feature_cols_clean,
@@ -388,7 +388,7 @@ print(f"Recall: {results_xgb['recall']:.3f}")
 print(f"F1 Score: {results_xgb['f1']:.3f}")
 
 # Random Forest model
-model_rf = TradingModel(model_type='random_forest')
+model_rf = TradingModel (model_type='random_forest')
 results_rf = model_rf.walk_forward_validation(
     data_clean,
     feature_cols_clean,
@@ -431,14 +431,14 @@ class EnsembleTrader:
             'logistic': 0.2
         }
     
-    def train_ensemble(self, X_train, y_train):
+    def train_ensemble (self, X_train, y_train):
         """Train all models"""
         for name, model in self.models.items():
             X_scaled = model.scaler.fit_transform(X_train)
             model.model.fit(X_scaled, y_train)
             print(f"✓ Trained {name}")
     
-    def predict_ensemble(self, X_test):
+    def predict_ensemble (self, X_test):
         """
         Predict using weighted ensemble
         
@@ -454,17 +454,17 @@ class EnsembleTrader:
             pred = model.model.predict(X_scaled)
             prob = model.model.predict_proba(X_scaled)
             
-            all_preds.append(pred * self.weights[name])
-            all_probs.append(prob * self.weights[name])
+            all_preds.append (pred * self.weights[name])
+            all_probs.append (prob * self.weights[name])
         
         # Weighted average
-        ensemble_pred = np.sign(np.sum(all_preds, axis=0))
-        ensemble_prob = np.sum(all_probs, axis=0)
+        ensemble_pred = np.sign (np.sum (all_preds, axis=0))
+        ensemble_prob = np.sum (all_probs, axis=0)
         
         return ensemble_pred, ensemble_prob
 
 # Example usage
-split_idx = int(0.8 * len(data_clean))
+split_idx = int(0.8 * len (data_clean))
 train_data = data_clean.iloc[:split_idx]
 test_data = data_clean.iloc[split_idx:]
 
@@ -481,7 +481,7 @@ ensemble.train_ensemble(X_train, y_train)
 ensemble_pred, ensemble_prob = ensemble.predict_ensemble(X_test)
 
 # Evaluate
-ensemble_accuracy = accuracy_score(y_test, ensemble_pred)
+ensemble_accuracy = accuracy_score (y_test, ensemble_pred)
 print(f"\\n=== Ensemble Accuracy: {ensemble_accuracy:.3f} ===")
 \`\`\`
 

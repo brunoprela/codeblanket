@@ -44,7 +44,7 @@ export const modelFineTuningFundamentalsQuiz = [
     sampleAnswer:
       'This is a comprehensive answer that would be displayed in the UI.',
     keyPoints: [
-      'Cost: Fine-tuned 7B ($3K/year) vs GPT-4 ($583K/year) at 10M requests/month → 195x cheaper',
+      'Cost: Fine-tuned 7B (\$3K/year) vs GPT-4 (\$583K/year) at 10M requests/month → 195x cheaper',
       'Performance: Fine-tuned 91% vs GPT-4 85% → +6% accuracy with task-specific training',
       'Latency: Fine-tuned 50ms vs GPT-4 800ms → 16x faster response time',
       'Maintenance: Fine-tuned needs more upfront (2.5 weeks) and ongoing (8 hrs/month) vs GPT-4 (1 week, 2 hrs/month)',

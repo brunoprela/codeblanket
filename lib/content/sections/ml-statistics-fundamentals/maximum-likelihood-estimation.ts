@@ -9,7 +9,7 @@ export const maximumlikelihoodestimationSection = {
 
 ## Introduction
 
-MLE is a fundamental method for estimating parameters that **maximize the likelihood of observing the data**. It's the foundation of:
+MLE is a fundamental method for estimating parameters that **maximize the likelihood of observing the data**. It\'s the foundation of:
 - Linear regression (equivalent to OLS under normality)
 - Logistic regression
 - Neural networks (cross-entropy loss)
@@ -29,20 +29,20 @@ np.random.seed(42)
 data = np.random.normal(5, 2, 100)
 
 # Likelihood function
-def likelihood(mu, data, sigma=2):
-    return np.prod(stats.norm.pdf(data, mu, sigma))
+def likelihood (mu, data, sigma=2):
+    return np.prod (stats.norm.pdf (data, mu, sigma))
 
 # Log-likelihood (more stable)
-def log_likelihood(mu, data, sigma=2):
-    return np.sum(stats.norm.logpdf(data, mu, sigma))
+def log_likelihood (mu, data, sigma=2):
+    return np.sum (stats.norm.logpdf (data, mu, sigma))
 
 # Test different mu values
 mus = np.linspace(3, 7, 100)
-lls = [log_likelihood(mu, data) for mu in mus]
+lls = [log_likelihood (mu, data) for mu in mus]
 
-plt.figure(figsize=(10, 5))
-plt.plot(mus, lls, linewidth=2)
-plt.axvline(data.mean(), color='r', linestyle='--', label=f'MLE: {data.mean():.3f}')
+plt.figure (figsize=(10, 5))
+plt.plot (mus, lls, linewidth=2)
+plt.axvline (data.mean(), color='r', linestyle='--', label=f'MLE: {data.mean():.3f}')
 plt.xlabel('μ (parameter)')
 plt.ylabel('Log-Likelihood')
 plt.title('Log-Likelihood Function')
@@ -64,17 +64,17 @@ X = np.random.randn(100, 2)
 beta_true = np.array([1, 2, -1])  # intercept + 2 slopes
 y = beta_true[0] + X @ beta_true[1:] + np.random.normal(0, 1, 100)
 
-def negative_log_likelihood(params, X, y):
+def negative_log_likelihood (params, X, y):
     beta = params[:-1]
     sigma = params[-1]
     y_pred = beta[0] + X @ beta[1:]
     residuals = y - y_pred
-    return -np.sum(stats.norm.logpdf(residuals, 0, sigma))
+    return -np.sum (stats.norm.logpdf (residuals, 0, sigma))
 
 # Optimize
-X_with_const = np.column_stack([np.ones(len(X)), X])
+X_with_const = np.column_stack([np.ones (len(X)), X])
 initial = np.zeros(4)  # 3 betas + 1 sigma
-result = minimize(negative_log_likelihood, initial, args=(X_with_const, y))
+result = minimize (negative_log_likelihood, initial, args=(X_with_const, y))
 
 print("\\n=== Regression via MLE ===")
 print(f"MLE estimates: {result.x[:-1]}")
@@ -88,8 +88,8 @@ Cross-entropy loss = Negative log-likelihood!
 
 \`\`\`python
 # Binary classification
-def cross_entropy_loss(y_true, y_pred):
-    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+def cross_entropy_loss (y_true, y_pred):
+    return -np.mean (y_true * np.log (y_pred) + (1 - y_true) * np.log(1 - y_pred))
 
 # This is exactly negative log-likelihood for Bernoulli distribution!
 print("\\n=== Neural Network Connection ===")

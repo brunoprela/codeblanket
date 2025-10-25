@@ -13,7 +13,7 @@ class FinancialStatementValidator:
     
     TOLERANCE = 1_000  # $1K tolerance for rounding
     
-    def validate_balance_sheet(self, bs: dict) -> list:
+    def validate_balance_sheet (self, bs: dict) -> list:
         """Validate balance sheet equation."""
         errors = []
         
@@ -21,7 +21,7 @@ class FinancialStatementValidator:
         liabilities = bs['total_liabilities']
         equity = bs['shareholders_equity']
         
-        if abs(assets - (liabilities + equity)) > self.TOLERANCE:
+        if abs (assets - (liabilities + equity)) > self.TOLERANCE:
             errors.append({
                 'type': 'BALANCE_SHEET_NOT_BALANCED',
                 'severity': 'CRITICAL',
@@ -51,12 +51,12 @@ class FinancialStatementValidator:
         
         actual_re = bs_end['retained_earnings']
         
-        if abs(expected_re - actual_re) > self.TOLERANCE:
+        if abs (expected_re - actual_re) > self.TOLERANCE:
             # Check for adjustments
             if 'other_comprehensive_income' in income:
                 expected_re += income['other_comprehensive_income']
             
-            if abs(expected_re - actual_re) > self.TOLERANCE:
+            if abs (expected_re - actual_re) > self.TOLERANCE:
                 errors.append({
                     'type': 'RETAINED_EARNINGS_MISMATCH',
                     'severity': 'HIGH',
@@ -81,7 +81,7 @@ Stock-Based Compensation:
 - Add back in operating cash flow
 
 \`\`\`python
-def handle_stock_comp(statements: dict) -> dict:
+def handle_stock_comp (statements: dict) -> dict:
     """Adjust for stock-based compensation."""
     sbc = statements['cash_flow']['stock_based_comp']
     
@@ -99,7 +99,7 @@ Foreign Currency Translation:
 - Part of accumulated OCI in equity section
 
 \`\`\`python
-def handle_forex_translation(statements: dict) -> dict:
+def handle_forex_translation (statements: dict) -> dict:
     """Handle foreign currency translation adjustments."""
     fx_adjustment = statements['equity_changes']['fx_translation']
     
@@ -115,7 +115,7 @@ Spin-offs and Divestitures:
 - Not through income statement
 
 \`\`\`python
-def detect_spinoffs(statements: dict) -> bool:
+def detect_spinoffs (statements: dict) -> bool:
     """Detect if spin-off occurred."""
     
     # Large unexplained equity reduction
@@ -138,7 +138,7 @@ def detect_spinoffs(statements: dict) -> bool:
 **3. Comprehensive Validation Framework**
 
 \`\`\`python
-def full_validation_suite(statements: dict) -> dict:
+def full_validation_suite (statements: dict) -> dict:
     """Run all validation checks."""
     
     validator = FinancialStatementValidator()
@@ -152,9 +152,9 @@ def full_validation_suite(statements: dict) -> dict:
     
     # Critical checks
     errors = []
-    errors.extend(validator.validate_balance_sheet(statements['bs']))
-    errors.extend(validator.validate_cash_reconciliation(statements))
-    errors.extend(validator.validate_retained_earnings(
+    errors.extend (validator.validate_balance_sheet (statements['bs']))
+    errors.extend (validator.validate_cash_reconciliation (statements))
+    errors.extend (validator.validate_retained_earnings(
         statements['bs_start'],
         statements['bs_end'],
         statements['income'],
@@ -163,8 +163,8 @@ def full_validation_suite(statements: dict) -> dict:
     
     # Warning-level checks
     warnings = []
-    warnings.extend(validator.check_for_unusual_items(statements))
-    warnings.extend(validator.verify_statement_dates_align(statements))
+    warnings.extend (validator.check_for_unusual_items (statements))
+    warnings.extend (validator.verify_statement_dates_align (statements))
     
     if errors:
         results['passed'] = False
@@ -237,7 +237,7 @@ class SECFilingMonitor:
         self.seen_filings = set()
         self.session = None
     
-    async def monitor(self):
+    async def monitor (self):
         """Continuously monitor for new 10-Ks."""
         self.session = aiohttp.ClientSession()
         
@@ -247,26 +247,26 @@ class SECFilingMonitor:
                 
                 for filing in new_filings:
                     if filing['accession'] not in self.seen_filings:
-                        self.seen_filings.add(filing['accession'])
+                        self.seen_filings.add (filing['accession'])
                         
                         # Non-blocking callback
                         asyncio.create_task(
-                            self.callback(filing)
+                            self.callback (filing)
                         )
                         
                         print(f"[{datetime.now()}] New 10-K: {filing['ticker']}")
                 
-                await asyncio.sleep(self.POLL_INTERVAL)
+                await asyncio.sleep (self.POLL_INTERVAL)
                 
             except Exception as e:
                 print(f"Monitor error: {e}")
                 await asyncio.sleep(1)
     
-    async def check_for_new_filings(self) -> list:
+    async def check_for_new_filings (self) -> list:
         """Fetch and parse RSS feed."""
-        async with self.session.get(self.RSS_URL) as response:
+        async with self.session.get (self.RSS_URL) as response:
             xml = await response.text()
-            return self.parse_rss(xml)
+            return self.parse_rss (xml)
 \`\`\`
 
 **Optimization**: Use multiple strategies:
@@ -285,18 +285,18 @@ Download and parse multiple sections simultaneously:
 class ParallelFilingParser:
     """Parse 10-K sections in parallel."""
     
-    async def parse_filing(self, url: str) -> dict:
+    async def parse_filing (self, url: str) -> dict:
         """Download and parse with parallelization."""
         
         # Download full HTML
-        html = await self.download(url)
+        html = await self.download (url)
         
         # Parse sections in parallel
         tasks = [
-            self.extract_financials(html),
-            self.extract_mda(html),
-            self.extract_risk_factors(html),
-            self.extract_notes(html)
+            self.extract_financials (html),
+            self.extract_mda (html),
+            self.extract_risk_factors (html),
+            self.extract_notes (html)
         ]
         
         results = await asyncio.gather(*tasks)
@@ -309,13 +309,13 @@ class ParallelFilingParser:
             'parsed_at': datetime.now()
         }
     
-    async def extract_financials(self, html: str) -> dict:
+    async def extract_financials (self, html: str) -> dict:
         """Extract financial statements."""
         # Use XBRL tags instead of HTML parsing (faster)
         xbrl_url = html.replace('.htm', '_htm.xml')
-        xbrl_data = await self.download(xbrl_url)
+        xbrl_data = await self.download (xbrl_url)
         
-        return self.parse_xbrl(xbrl_data)
+        return self.parse_xbrl (xbrl_data)
 \`\`\`
 
 **Optimization**: 
@@ -338,7 +338,7 @@ class SignalExtractor:
         self.fraud_model = load_model('fraud_detector')
         self.peer_comps = load_peer_database()
     
-    async def extract_signals(self, filing: dict, ticker: str) -> dict:
+    async def extract_signals (self, filing: dict, ticker: str) -> dict:
         """Generate trading signals."""
         
         signals = {}
@@ -351,15 +351,15 @@ class SignalExtractor:
         
         # 2. Margin trends
         current_margin = filing['financials']['operating_margin']
-        prior_margin = self.get_prior_margin(ticker)
+        prior_margin = self.get_prior_margin (ticker)
         signals['margin_change'] = current_margin - prior_margin
         
         # 3. MD&A sentiment
         mda_text = filing['mda']
-        signals['sentiment'] = self.sentiment_model.predict(mda_text)
+        signals['sentiment'] = self.sentiment_model.predict (mda_text)
         
         # 4. Red flags
-        signals['fraud_score'] = self.fraud_model.predict(filing['financials'])
+        signals['fraud_score'] = self.fraud_model.predict (filing['financials'])
         
         # 5. Relative valuation
         signals['valuation_vs_peers'] = self.compare_to_peers(
@@ -369,7 +369,7 @@ class SignalExtractor:
         
         return signals
     
-    def generate_trade_decision(self, signals: dict) -> str:
+    def generate_trade_decision (self, signals: dict) -> str:
         """Combine signals into trade decision."""
         
         score = 0
@@ -404,17 +404,17 @@ class TradingEngine:
         """Execute trade with risk checks."""
         
         # Risk checks
-        if not self.passes_risk_checks(ticker, decision):
+        if not self.passes_risk_checks (ticker, decision):
             return
         
         # Position sizing
-        size = self.calculate_position_size(signals['confidence'])
+        size = self.calculate_position_size (signals['confidence'])
         
         # Execute
         if decision == 'BUY':
-            await self.place_order(ticker, 'BUY', size, 'MARKET')
+            await self.place_order (ticker, 'BUY', size, 'MARKET')
         elif decision == 'SELL':
-            await self.place_order(ticker, 'SELL', size, 'MARKET')
+            await self.place_order (ticker, 'SELL', size, 'MARKET')
 \`\`\`
 
 **Bottlenecks and Optimizations**
@@ -505,9 +505,9 @@ class AccountingStandardNormalizer:
         """Normalize to common standard (IFRS as base)."""
         
         if from_standard == 'GAAP':
-            statements = self.gaap_to_ifrs(statements)
+            statements = self.gaap_to_ifrs (statements)
         elif from_standard != 'IFRS':
-            statements = self.other_to_ifrs(statements, from_standard)
+            statements = self.other_to_ifrs (statements, from_standard)
         
         return statements
 \`\`\`
@@ -594,7 +594,7 @@ def adjust_development_costs(
 **3. Revenue Recognition**
 
 \`\`\`python
-def normalize_revenue_recognition(statements: dict) -> dict:
+def normalize_revenue_recognition (statements: dict) -> dict:
     """
     Both GAAP and IFRS now use similar standards (ASC 606 / IFRS 15).
     But implementation can vary.
@@ -607,7 +607,7 @@ def normalize_revenue_recognition(statements: dict) -> dict:
     # Red flag: Receivables growing much faster than revenue
     if receivables_growth > revenue_growth * 1.5:
         statements['_metadata']['revenue_quality_concern'] = True
-        statements['_metadata']['days_sales_outstanding'] = calculate_dso(statements)
+        statements['_metadata']['days_sales_outstanding'] = calculate_dso (statements)
     
     return statements
 \`\`\`
@@ -628,7 +628,7 @@ class GlobalFinancialNormalizer:
         
         self.currency_converter = CurrencyConverter()
     
-    def normalize(self, company: dict) -> dict:
+    def normalize (self, company: dict) -> dict:
         """Full normalization pipeline."""
         
         statements = company['financial_statements']
@@ -646,17 +646,17 @@ class GlobalFinancialNormalizer:
         )
         
         # Step 3: Segment adjustments
-        statements = self.adjust_for_segments(statements, company)
+        statements = self.adjust_for_segments (statements, company)
         
         # Step 4: Calculate standardized metrics
-        statements['normalized_metrics'] = self.calculate_normalized_metrics(statements)
+        statements['normalized_metrics'] = self.calculate_normalized_metrics (statements)
         
         # Step 5: Quality scores
-        statements['data_quality'] = self.assess_quality(statements)
+        statements['data_quality'] = self.assess_quality (statements)
         
         return statements
     
-    def normalize_currency(self, statements: dict, currency: str) -> dict:
+    def normalize_currency (self, statements: dict, currency: str) -> dict:
         """Convert all values to USD."""
         
         if currency == 'USD':
@@ -672,7 +672,7 @@ class GlobalFinancialNormalizer:
         
         # Convert income statement (use average rate)
         for key, value in statements['income_statement'].items():
-            if isinstance(value, (int, float)):
+            if isinstance (value, (int, float)):
                 statements['income_statement'][key] = value * rate
         
         # Convert balance sheet (use period-end rate)
@@ -683,17 +683,17 @@ class GlobalFinancialNormalizer:
         )
         
         for key, value in statements['balance_sheet'].items():
-            if isinstance(value, (int, float)):
+            if isinstance (value, (int, float)):
                 statements['balance_sheet'][key] = value * end_rate
         
         return statements
     
-    def calculate_normalized_metrics(self, statements: dict) -> dict:
+    def calculate_normalized_metrics (self, statements: dict) -> dict:
         """Calculate metrics that are comparable across standards."""
         
         # These metrics are relatively comparable
         return {
-            'revenue_growth': calculate_growth(statements['revenue']),
+            'revenue_growth': calculate_growth (statements['revenue']),
             'operating_margin': statements['operating_income'] / statements['revenue'],
             'roa': statements['net_income'] / statements['total_assets'],
             'asset_turnover': statements['revenue'] / statements['total_assets'],
@@ -701,8 +701,8 @@ class GlobalFinancialNormalizer:
             'debt_to_equity': statements['total_debt'] / statements['equity'],
             
             # Adjusted metrics
-            'adjusted_roe': self.calculate_adjusted_roe(statements),
-            'normalized_earnings': self.calculate_normalized_earnings(statements),
+            'adjusted_roe': self.calculate_adjusted_roe (statements),
+            'normalized_earnings': self.calculate_normalized_earnings (statements),
             'fcf_yield': statements['free_cash_flow'] / statements['market_cap']
         }
 \`\`\`
@@ -712,7 +712,7 @@ class GlobalFinancialNormalizer:
 Some differences can't be reconciled:
 
 \`\`\`python
-def assess_comparability(company_a: dict, company_b: dict) -> dict:
+def assess_comparability (company_a: dict, company_b: dict) -> dict:
     """Assess if two companies are truly comparable."""
     
     issues = []
@@ -746,7 +746,7 @@ def assess_comparability(company_a: dict, company_b: dict) -> dict:
     return {
         'comparable': len([i for i in issues if i['severity'] == 'HIGH']) == 0,
         'issues': issues,
-        'confidence_score': 1.0 - (len(issues) * 0.1)
+        'confidence_score': 1.0 - (len (issues) * 0.1)
     }
 \`\`\`
 

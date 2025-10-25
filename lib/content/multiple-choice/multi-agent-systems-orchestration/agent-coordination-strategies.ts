@@ -57,7 +57,7 @@ export const agentcoordinationstrategiesMultipleChoice = [
     ],
     correctAnswer: 2,
     explanation:
-      "The Manager should balance workload intelligently—assign tasks based on Worker availability and capacity. This is the Manager's responsibility in hierarchical coordination. Option B (work-stealing) is a peer-to-peer pattern, not hierarchical. Option A is premature—first optimize task distribution. Option D doesn't solve the imbalance, just delays failure.",
+      "The Manager should balance workload intelligently—assign tasks based on Worker availability and capacity. This is the Manager\'s responsibility in hierarchical coordination. Option B (work-stealing) is a peer-to-peer pattern, not hierarchical. Option A is premature—first optimize task distribution. Option D doesn't solve the imbalance, just delays failure.",
   },
   {
     id: 'maas-coord-mc-5',

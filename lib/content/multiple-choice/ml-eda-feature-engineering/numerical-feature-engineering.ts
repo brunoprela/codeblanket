@@ -26,7 +26,7 @@ export const numericalfeatureengineeringMultipleChoice: MultipleChoiceQuestion[]
         'You have a right-skewed feature (long tail on the right). Which transformation is most appropriate?',
       options: [
         'Square transformation (x²)',
-        'Log transformation (log(x))',
+        'Log transformation (log (x))',
         'No transformation needed',
         'Exponential transformation (e^x)',
       ],

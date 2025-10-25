@@ -60,10 +60,10 @@ export const pytorchFundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What is the recommended way to save and load a PyTorch model for later use?',
     options: [
-      'Save the entire model object using torch.save(model, path)',
+      'Save the entire model object using torch.save (model, path)',
       'Save only the model.state_dict() which contains just the weights',
       'Convert the model to ONNX format',
-      `Pickle the entire model using Python's pickle module`,
+      `Pickle the entire model using Python\'s pickle module`,
     ],
     correctAnswer: 1,
     explanation:

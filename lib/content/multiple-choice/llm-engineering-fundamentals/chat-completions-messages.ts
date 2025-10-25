@@ -42,7 +42,7 @@ export const chatcompletionsmessagesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "The system message sets consistent behavior, provides instructions, defines tone/style, and specifies output format. It's sent with every request to ensure the model behaves as desired without repeating instructions in user messages.",
+      "The system message sets consistent behavior, provides instructions, defines tone/style, and specifies output format. It\'s sent with every request to ensure the model behaves as desired without repeating instructions in user messages.",
   },
   {
     id: 'mc4',

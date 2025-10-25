@@ -47,7 +47,7 @@ export const vectorspacesMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['r', 'm - r', 'n - r', 'mn - r'],
     correctAnswer: 2,
     explanation:
-      'By the rank-nullity theorem: dim(null space) = n - rank(A) = n - r, where n is the number of columns.',
+      'By the rank-nullity theorem: dim (null space) = n - rank(A) = n - r, where n is the number of columns.',
   },
   {
     id: 'vec-space-q5',

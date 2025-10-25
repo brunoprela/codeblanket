@@ -30,7 +30,7 @@ export const complexitySection = {
   - Complete binary tree needs 2N - 1 nodes
   - Array representation wastes some space
   - 4N is safe upper bound
-  - For exact: use 2^(ceil(log2(N)) + 1)
+  - For exact: use 2^(ceil (log2(N)) + 1)
 
 **Comparison:**
 

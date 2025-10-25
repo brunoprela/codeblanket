@@ -19,7 +19,7 @@ export const pacelctheoremSection = {
 
 ## Understanding the Extension
 
-### **CAP Theorem's Limitation**
+### **CAP Theorem\'s Limitation**
 
 CAP only describes behavior **during network partitions** (which are rare events). But systems must make trade-off decisions **all the time**, not just during partitions.
 

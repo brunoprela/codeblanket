@@ -36,13 +36,13 @@ export const floydwarshallMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'How does Floyd-Warshall work?',
     options: [
       'BFS from each vertex',
-      'DP: try each vertex k as intermediate, update dist[i][j] = min(dist[i][j], dist[i][k]+dist[k][j])',
+      'DP: try each vertex k as intermediate, update dist[i][j] = min (dist[i][j], dist[i][k]+dist[k][j])',
       'Greedy',
       'Random',
     ],
     correctAnswer: 1,
     explanation:
-      'Floyd-Warshall DP: for each intermediate vertex k, for all pairs (i,j), check if path through k is shorter. dist[i][j] = min(direct, via k). After k loops, all shortest paths found.',
+      'Floyd-Warshall DP: for each intermediate vertex k, for all pairs (i,j), check if path through k is shorter. dist[i][j] = min (direct, via k). After k loops, all shortest paths found.',
   },
   {
     id: 'mc4',

@@ -24,7 +24,7 @@ export const nonehandlingQuiz = [
       'Explain the mutable default argument problem. Why should you use None as default instead of [] or {}?',
     hint: 'Consider when default arguments are created and how they are shared between function calls.',
     sampleAnswer:
-      'Default arguments are created once when the function is defined, not each time the function is called. If you use a mutable default like [] or {}, all calls to the function share the same list/dict object. Example: "def add(item, items=[])" - the first call creates the list, and subsequent calls reuse it, causing items to accumulate across calls. This is almost never the intended behavior. The solution is to use None as default and create a new mutable object inside the function: "def add(item, items=None): if items is None: items = []". This ensures each call gets its own fresh list.',
+      'Default arguments are created once when the function is defined, not each time the function is called. If you use a mutable default like [] or {}, all calls to the function share the same list/dict object. Example: "def add (item, items=[])" - the first call creates the list, and subsequent calls reuse it, causing items to accumulate across calls. This is almost never the intended behavior. The solution is to use None as default and create a new mutable object inside the function: "def add (item, items=None): if items is None: items = []". This ensures each call gets its own fresh list.',
     keyPoints: [
       'Default arguments created once at function definition',
       'Mutable defaults shared between all calls',

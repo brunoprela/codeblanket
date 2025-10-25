@@ -30,11 +30,11 @@ import numpy as np
 # Example data
 y_true = np.array([3.0, -0.5, 2.0, 7.0])
 y_pred = np.array([2.5, 0.0, 2.0, 8.0])
-n = len(y_true)
+n = len (y_true)
 
 # Summation notation approach (explicit loop)
 mse_loop = 0
-for i in range(n):
+for i in range (n):
     mse_loop += (y_true[i] - y_pred[i])**2
 mse_loop = mse_loop / n
 
@@ -43,7 +43,7 @@ mse_vectorized = np.mean((y_true - y_pred)**2)
 
 print(f"MSE (loop): {mse_loop:.4f}")
 print(f"MSE (vectorized): {mse_vectorized:.4f}")
-print(f"Match: {np.isclose(mse_loop, mse_vectorized)}")
+print(f"Match: {np.isclose (mse_loop, mse_vectorized)}")
 
 # Breaking down the vectorized operation:
 print("\\nStep-by-step vectorization:")
@@ -66,20 +66,20 @@ This reads as: "For each sample, compute the log loss based on whether the true 
 # Binary classification
 y_true = np.array([1, 0, 1, 1, 0])
 y_pred = np.array([0.9, 0.1, 0.8, 0.7, 0.2])  # Predicted probabilities
-n = len(y_true)
+n = len (y_true)
 
 # Summation notation approach (explicit loop)
 loss_loop = 0
-for i in range(n):
-    loss_loop += y_true[i] * np.log(y_pred[i]) + (1 - y_true[i]) * np.log(1 - y_pred[i])
+for i in range (n):
+    loss_loop += y_true[i] * np.log (y_pred[i]) + (1 - y_true[i]) * np.log(1 - y_pred[i])
 loss_loop = -loss_loop / n
 
 # Vectorized NumPy
-loss_vectorized = -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+loss_vectorized = -np.mean (y_true * np.log (y_pred) + (1 - y_true) * np.log(1 - y_pred))
 
 print(f"\\nCross-Entropy Loss (loop): {loss_loop:.4f}")
 print(f"Cross-Entropy Loss (vectorized): {loss_vectorized:.4f}")
-print(f"Match: {np.isclose(loss_loop, loss_vectorized)}")
+print(f"Match: {np.isclose (loss_loop, loss_vectorized)}")
 \`\`\`
 
 **Gradient Computation with Summation**:
@@ -101,11 +101,11 @@ w = np.array([1.5, 2.0])
 y_pred = X @ w
 
 # Gradient: ∂MSE/∂w_j = (2/n) Σ(ŷ_i - y_i) x_ij
-n = len(y)
+n = len (y)
 
 # Loop version (following summation notation exactly)
 gradient_loop = np.zeros(2)
-for i in range(n):
+for i in range (n):
     for j in range(2):  # For each feature
         gradient_loop[j] += (y_pred[i] - y[i]) * X[i, j]
 gradient_loop = (2 / n) * gradient_loop
@@ -116,7 +116,7 @@ gradient_vectorized = (2 / n) * X.T @ (y_pred - y)
 print("\\nGradient computation:")
 print(f"Loop version: {gradient_loop}")
 print(f"Vectorized version: {gradient_vectorized}")
-print(f"Match: {np.allclose(gradient_loop, gradient_vectorized)}")
+print(f"Match: {np.allclose (gradient_loop, gradient_vectorized)}")
 \`\`\`
 
 **Double Summation (Nested Sums)**:
@@ -184,11 +184,11 @@ Without understanding summation notation (implicit in softmax), you can't implem
 
 **Theorem Statement Breakdown**:
 
-**Convex function**: f is convex if \\(f(\\lambda x + (1-\\lambda)y) \\leq \\lambda f(x) + (1-\\lambda)f(y)\\) for all \\(\\lambda \\in [0,1]\\).
+**Convex function**: f is convex if \\(f(\\lambda x + (1-\\lambda)y) \\leq \\lambda f (x) + (1-\\lambda)f (y)\\) for all \\(\\lambda \\in [0,1]\\).
 
 **Practical meaning**: No local minima (only one global minimum), like a bowl shape.
 
-**L-Lipschitz continuous gradient**: \\(\\|\\nabla f(x) - \\nabla f(y)\\| \\leq L\\|x - y\\|\\)
+**L-Lipschitz continuous gradient**: \\(\\|\\nabla f (x) - \\nabla f (y)\\| \\leq L\\|x - y\\|\\)
 
 **Practical meaning**: The gradient doesn't change too rapidly. L is the "smoothness constant" - how much the slope can vary.
 
@@ -202,20 +202,20 @@ Without understanding summation notation (implicit in softmax), you can't implem
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Simple convex function: f(x) = x²
-def f(x):
+# Simple convex function: f (x) = x²
+def f (x):
     """Convex quadratic function"""
     return x**2
 
-def grad_f(x):
+def grad_f (x):
     """Gradient: f'(x) = 2x"""
     return 2*x
 
-# For f(x) = x², the Lipschitz constant L = 2
-# (gradient is 2x, so |grad_f(x) - grad_f(y)| = |2x - 2y| = 2|x - y|)
+# For f (x) = x², the Lipschitz constant L = 2
+# (gradient is 2x, so |grad_f (x) - grad_f (y)| = |2x - 2y| = 2|x - y|)
 L = 2
 
-print("Function: f(x) = x²")
+print("Function: f (x) = x²")
 print(f"Gradient: f'(x) = 2x")
 print(f"Lipschitz constant L = {L}")
 print(f"Theorem says: Use α ≤ 1/L = {1/L}")
@@ -230,7 +230,7 @@ The key idea is that for a convex function with L-Lipschitz gradient, we can bou
 
 For convex f with L-Lipschitz gradient:
 \\[
-f(x - \\alpha \\nabla f(x)) \\leq f(x) - \\alpha \\|\\nabla f(x)\\|^2 + \\frac{\\alpha^2 L}{2} \\|\\nabla f(x)\\|^2
+f (x - \\alpha \\nabla f (x)) \\leq f (x) - \\alpha \\|\\nabla f (x)\\|^2 + \\frac{\\alpha^2 L}{2} \\|\\nabla f (x)\\|^2
 \\]
 
 This says: stepping in the negative gradient direction decreases the function value (middle term) but there's a penalty for taking too large a step (last term).
@@ -253,37 +253,37 @@ For guaranteed convergence (stronger result), we need \\(\\alpha \\leq \\frac{1}
 alphas = np.linspace(0, 2/L, 1000)
 descent_guaranteed = -alphas + (alphas**2 * L / 2)
 
-plt.figure(figsize=(10, 6))
-plt.plot(alphas, descent_guaranteed, linewidth=2)
-plt.axhline(y=0, color='r', linestyle='--', label='Descent boundary')
-plt.axvline(x=1/L, color='g', linestyle='--', label=f'α = 1/L = {1/L}')
-plt.axvline(x=2/L, color='orange', linestyle='--', label=f'α = 2/L = {2/L}')
+plt.figure (figsize=(10, 6))
+plt.plot (alphas, descent_guaranteed, linewidth=2)
+plt.axhline (y=0, color='r', linestyle='--', label='Descent boundary')
+plt.axvline (x=1/L, color='g', linestyle='--', label=f'α = 1/L = {1/L}')
+plt.axvline (x=2/L, color='orange', linestyle='--', label=f'α = 2/L = {2/L}')
 plt.xlabel('Learning Rate α')
 plt.ylabel('Change in function value')
 plt.title('Gradient Descent: Function Decrease vs Learning Rate')
 plt.legend()
 plt.grid(True, alpha=0.3)
-plt.fill_between(alphas, descent_guaranteed, 0, where=(descent_guaranteed<0), alpha=0.3, color='green', label='Guaranteed descent')
+plt.fill_between (alphas, descent_guaranteed, 0, where=(descent_guaranteed<0), alpha=0.3, color='green', label='Guaranteed descent')
 plt.show()
 \`\`\`
 
 **Demonstration: Convergence vs Divergence**:
 
 \`\`\`python
-def gradient_descent(f, grad_f, x0, alpha, n_iterations):
+def gradient_descent (f, grad_f, x0, alpha, n_iterations):
     """Run gradient descent"""
     trajectory = [x0]
     x = x0
     
-    for _ in range(n_iterations):
-        x = x - alpha * grad_f(x)
-        trajectory.append(x)
+    for _ in range (n_iterations):
+        x = x - alpha * grad_f (x)
+        trajectory.append (x)
         
         # Stop if diverging
-        if abs(x) > 1e10:
+        if abs (x) > 1e10:
             break
     
-    return np.array(trajectory)
+    return np.array (trajectory)
 
 # Test different learning rates
 x0 = 10.0
@@ -300,22 +300,22 @@ learning_rates = [
 fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 axes = axes.flatten()
 
-for idx, alpha in enumerate(learning_rates):
-    trajectory = gradient_descent(f, grad_f, x0, alpha, n_iterations)
+for idx, alpha in enumerate (learning_rates):
+    trajectory = gradient_descent (f, grad_f, x0, alpha, n_iterations)
     
     ax = axes[idx]
-    iterations = range(len(trajectory))
-    ax.plot(iterations, trajectory, 'bo-', markersize=3, linewidth=1)
-    ax.axhline(y=0, color='r', linestyle='--', label='Optimal x*=0')
+    iterations = range (len (trajectory))
+    ax.plot (iterations, trajectory, 'bo-', markersize=3, linewidth=1)
+    ax.axhline (y=0, color='r', linestyle='--', label='Optimal x*=0')
     ax.set_xlabel('Iteration')
     ax.set_ylabel('x value')
-    ax.set_title(f'α = {alpha} ({"✓ converges" if alpha <= 1/L else "✗ may diverge"})')
+    ax.set_title (f'α = {alpha} ({"✓ converges" if alpha <= 1/L else "✗ may diverge"})')
     ax.grid(True, alpha=0.3)
     ax.legend()
     
     # Print convergence status
     final_x = trajectory[-1]
-    converged = abs(final_x) < 1e-6
+    converged = abs (final_x) < 1e-6
     print(f"α = {alpha}: Final x = {final_x:.6f}, Converged: {converged}")
 
 plt.tight_layout()
@@ -326,19 +326,19 @@ plt.show()
 
 \`\`\`python
 # Analyze convergence rate
-def analyze_convergence(alpha, x0=10, n_iter=100):
+def analyze_convergence (alpha, x0=10, n_iter=100):
     """Analyze convergence behavior"""
     x = x0
     errors = []
     
-    for t in range(n_iter):
-        errors.append(abs(x))  # Distance from optimal x*=0
-        x = x - alpha * grad_f(x)
+    for t in range (n_iter):
+        errors.append (abs (x))  # Distance from optimal x*=0
+        x = x - alpha * grad_f (x)
         
-        if abs(x) > 1e10:  # Diverged
+        if abs (x) > 1e10:  # Diverged
             return errors, False
     
-    return errors, abs(x) < 1e-6
+    return errors, abs (x) < 1e-6
 
 print("\\nConvergence Analysis:\\n")
 print("Learning Rate | Converged | Final Error | Iterations to 1e-6")
@@ -346,14 +346,14 @@ print("-" * 65)
 
 test_alphas = [0.1, 0.3, 0.5, 0.7, 0.9, 1.1]
 for alpha in test_alphas:
-    errors, converged = analyze_convergence(alpha, n_iter=200)
-    final_error = errors[-1] if len(errors) > 0 else float('inf')
+    errors, converged = analyze_convergence (alpha, n_iter=200)
+    final_error = errors[-1] if len (errors) > 0 else float('inf')
     
     # Find iteration where error < 1e-6
-    iters_to_converge = next((i for i, e in enumerate(errors) if e < 1e-6), None)
+    iters_to_converge = next((i for i, e in enumerate (errors) if e < 1e-6), None)
     
     status = "✓ Yes" if converged else "✗ No"
-    iter_str = str(iters_to_converge) if iters_to_converge else "N/A"
+    iter_str = str (iters_to_converge) if iters_to_converge else "N/A"
     
     print(f"    {alpha:.1f}       |   {status}    | {final_error:.2e}  |      {iter_str}")
 \`\`\`
@@ -466,23 +466,23 @@ class TwoLayerNet:
         - b2: b^(2) ∈ R^(1)
         """
         # Initialize with small random values
-        self.W1 = np.random.randn(hidden_dim, input_dim) * 0.01
-        self.b1 = np.zeros(hidden_dim)
+        self.W1 = np.random.randn (hidden_dim, input_dim) * 0.01
+        self.b1 = np.zeros (hidden_dim)
         self.W2 = np.random.randn(1, hidden_dim) * 0.01
         self.b2 = np.zeros(1)
         
         # Cache for backward pass
         self.cache = {}
     
-    def relu(self, z):
+    def relu (self, z):
         """ReLU activation: h = max(0, z)"""
         return np.maximum(0, z)
     
-    def relu_derivative(self, z):
+    def relu_derivative (self, z):
         """ReLU derivative: 1 if z > 0, else 0"""
-        return (z > 0).astype(float)
+        return (z > 0).astype (float)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Forward pass
         
@@ -494,7 +494,7 @@ class TwoLayerNet:
         """
         # Layer 1
         z1 = self.W1 @ x + self.b1  # z^(1)
-        h = self.relu(z1)            # h = ReLU(z^(1))
+        h = self.relu (z1)            # h = ReLU(z^(1))
         
         # Layer 2
         z2 = self.W2 @ h + self.b2   # z^(2)
@@ -511,7 +511,7 @@ class TwoLayerNet:
         
         return y_pred
     
-    def backward(self, y_true):
+    def backward (self, y_true):
         """
         Backward pass (backpropagation)
         
@@ -544,7 +544,7 @@ class TwoLayerNet:
         # Gradient w.r.t. z1 (before ReLU)
         # ∂L/∂z^(1) = ∂L/∂h ⊙ ∂h/∂z^(1)
         # where ∂h/∂z^(1) = 1 if z^(1) > 0, else 0
-        dL_dz1 = dL_dh * self.relu_derivative(z1)
+        dL_dz1 = dL_dh * self.relu_derivative (z1)
         
         # Layer 1 gradients
         # ∂L/∂W^(1) = ∂L/∂z^(1) · x^T
@@ -562,7 +562,7 @@ class TwoLayerNet:
         
         return gradients
     
-    def loss(self, y_true, y_pred):
+    def loss (self, y_true, y_pred):
         """MSE loss: L = (y - ŷ)²"""
         return (y_true - y_pred)**2
 
@@ -573,15 +573,15 @@ print("=" * 60)
 # Initialize network
 input_dim = 3
 hidden_dim = 4
-net = TwoLayerNet(input_dim, hidden_dim)
+net = TwoLayerNet (input_dim, hidden_dim)
 
 # Sample data
 x = np.array([1.0, 2.0, 3.0])
 y = np.array([10.0])
 
 # Forward pass
-y_pred = net.forward(x)
-loss = net.loss(y, y_pred)
+y_pred = net.forward (x)
+loss = net.loss (y, y_pred)
 
 print(f"Input x: {x}")
 print(f"True y: {y[0]}")
@@ -589,7 +589,7 @@ print(f"Predicted ŷ: {y_pred[0]:.4f}")
 print(f"Loss: {loss[0]:.4f}\\n")
 
 # Backward pass
-gradients = net.backward(y)
+gradients = net.backward (y)
 
 print("Gradients:")
 print(f"  ∂L/∂W^(2) shape: {gradients['dW2',].shape}")
@@ -603,7 +603,7 @@ print(f"  ∂L/∂b^(1) shape: {gradients['db1',].shape}")
 Numerical gradient approximation: \\(\\frac{\\partial L}{\\partial w} \\approx \\frac{L(w + \\epsilon) - L(w - \\epsilon)}{2\\epsilon}\\)
 
 \`\`\`python
-def numerical_gradient(net, x, y, param_name, epsilon=1e-5):
+def numerical_gradient (net, x, y, param_name, epsilon=1e-5):
     """
     Compute numerical gradient using finite differences
     
@@ -619,22 +619,22 @@ def numerical_gradient(net, x, y, param_name, epsilon=1e-5):
     elif param_name == 'b2':
         param = net.b2
     
-    numerical_grad = np.zeros_like(param)
-    it = np.nditer(param, flags=['multi_index',], op_flags=['readwrite',])
+    numerical_grad = np.zeros_like (param)
+    it = np.nditer (param, flags=['multi_index',], op_flags=['readwrite',])
     
     while not it.finished:
         idx = it.multi_index
         old_value = param[idx]
         
-        # f(w + ε)
+        # f (w + ε)
         param[idx] = old_value + epsilon
-        y_pred_plus = net.forward(x)
-        loss_plus = net.loss(y, y_pred_plus)[0]
+        y_pred_plus = net.forward (x)
+        loss_plus = net.loss (y, y_pred_plus)[0]
         
-        # f(w - ε)
+        # f (w - ε)
         param[idx] = old_value - epsilon
-        y_pred_minus = net.forward(x)
-        loss_minus = net.loss(y, y_pred_minus)[0]
+        y_pred_minus = net.forward (x)
+        loss_minus = net.loss (y, y_pred_minus)[0]
         
         # Numerical gradient
         numerical_grad[idx] = (loss_plus - loss_minus) / (2 * epsilon)
@@ -649,17 +649,17 @@ def numerical_gradient(net, x, y, param_name, epsilon=1e-5):
 print("\\nGradient Checking:\\n")
 
 # Compute analytical gradients
-y_pred = net.forward(x)
-gradients = net.backward(y)
+y_pred = net.forward (x)
+gradients = net.backward (y)
 
 # Check each parameter
 for param_name in ['W1', 'b1', 'W2', 'b2',]:
     analytical_grad = gradients[f'd{param_name}',]
-    numerical_grad = numerical_gradient(net, x, y, param_name)
+    numerical_grad = numerical_gradient (net, x, y, param_name)
     
     # Compute relative error
-    diff = np.linalg.norm(analytical_grad - numerical_grad)
-    sum_norm = np.linalg.norm(analytical_grad) + np.linalg.norm(numerical_grad)
+    diff = np.linalg.norm (analytical_grad - numerical_grad)
+    sum_norm = np.linalg.norm (analytical_grad) + np.linalg.norm (numerical_grad)
     relative_error = diff / (sum_norm + 1e-8)
     
     status = "✓ PASS" if relative_error < 1e-7 else "✗ FAIL"

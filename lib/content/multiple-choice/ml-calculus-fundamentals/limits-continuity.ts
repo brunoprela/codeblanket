@@ -8,16 +8,16 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'limits-1',
     question:
-      'What does it mean for a function f(x) to have a limit L as x approaches a?',
+      'What does it mean for a function f (x) to have a limit L as x approaches a?',
     options: [
-      'f(a) must equal L',
-      'f(x) gets arbitrarily close to L as x gets arbitrarily close to a',
-      'f(x) is defined at x = a',
-      'f(x) = L for all x near a',
+      'f (a) must equal L',
+      'f (x) gets arbitrarily close to L as x gets arbitrarily close to a',
+      'f (x) is defined at x = a',
+      'f (x) = L for all x near a',
     ],
     correctAnswer: 1,
     explanation:
-      "A limit describes the value a function approaches as x gets close to a. The function doesn't need to be defined at a, and f(a) doesn't need to equal the limit. This is a key distinction between limits and function values.",
+      "A limit describes the value a function approaches as x gets close to a. The function doesn't need to be defined at a, and f (a) doesn't need to equal the limit. This is a key distinction between limits and function values.",
   },
   {
     id: 'limits-2',
@@ -37,14 +37,14 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'For a function to be continuous at x = a, which conditions must ALL be satisfied?',
     options: [
-      'Only that f(a) is defined',
+      'Only that f (a) is defined',
       'Only that the limit exists',
-      'f(a) is defined, lim_(x→a) f(x) exists, and they are equal',
-      'f(x) must be differentiable at a',
+      'f (a) is defined, lim_(x→a) f (x) exists, and they are equal',
+      'f (x) must be differentiable at a',
     ],
     correctAnswer: 2,
     explanation:
-      'Continuity requires three conditions: (1) f(a) is defined, (2) the limit as x approaches a exists, and (3) the limit equals f(a). Differentiability is not required for continuity.',
+      'Continuity requires three conditions: (1) f (a) is defined, (2) the limit as x approaches a exists, and (3) the limit equals f (a). Differentiability is not required for continuity.',
   },
   {
     id: 'limits-4',
@@ -60,12 +60,12 @@ export const limitscontinuityMultipleChoice: MultipleChoiceQuestion[] = [
       'The Intermediate Value Theorem guarantees that a continuous function on [a,b] will:',
     options: [
       'Be differentiable everywhere',
-      'Take on every value between f(a) and f(b)',
+      'Take on every value between f (a) and f (b)',
       'Have a maximum and minimum',
       'Be monotonic (always increasing or always decreasing)',
     ],
     correctAnswer: 1,
     explanation:
-      "The IVT states that a continuous function on a closed interval will take on every value between f(a) and f(b). It doesn't guarantee differentiability, extrema, or monotonicity.",
+      "The IVT states that a continuous function on a closed interval will take on every value between f (a) and f (b). It doesn't guarantee differentiability, extrema, or monotonicity.",
   },
 ];

@@ -26,7 +26,7 @@ export const univariateanalysisMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       'Square transformation (x²)',
       'No transformation needed',
-      'Log transformation (log(x) or log(x+1))',
+      'Log transformation (log (x) or log (x+1))',
       'Standardization (z-score)',
     ],
     correctAnswer: 2,

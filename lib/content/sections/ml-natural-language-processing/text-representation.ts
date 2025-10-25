@@ -73,11 +73,11 @@ documents = [
 vectorizer = CountVectorizer()
 
 # Fit and transform
-bow_matrix = vectorizer.fit_transform(documents)
+bow_matrix = vectorizer.fit_transform (documents)
 
 # View vocabulary
 vocab = vectorizer.get_feature_names_out()
-print(f"Vocabulary ({len(vocab)} words): {vocab}")
+print(f"Vocabulary ({len (vocab)} words): {vocab}")
 # ['amazing', 'and', 'are', 'deep', 'is', 'learning', 'love', 'machine', 'related']
 
 # View as DataFrame for clarity
@@ -105,21 +105,21 @@ Bag of Words Matrix:
 
 \`\`\`python
 # Binary mode (presence/absence instead of count)
-vectorizer_binary = CountVectorizer(binary=True)
-bow_binary = vectorizer_binary.fit_transform(documents)
+vectorizer_binary = CountVectorizer (binary=True)
+bow_binary = vectorizer_binary.fit_transform (documents)
 print("Binary BoW:")
-print(pd.DataFrame(bow_binary.toarray(), columns=vectorizer_binary.get_feature_names_out()))
+print(pd.DataFrame (bow_binary.toarray(), columns=vectorizer_binary.get_feature_names_out()))
 
 # Lowercasing (default=True)
-vectorizer_case = CountVectorizer(lowercase=False)
+vectorizer_case = CountVectorizer (lowercase=False)
 # This would treat "Machine" and "machine" as different words
 
 # Custom tokenization
 import re
-def custom_tokenizer(text):
-    return re.findall(r'\\w+', text.lower())
+def custom_tokenizer (text):
+    return re.findall (r'\\w+', text.lower())
 
-vectorizer_custom = CountVectorizer(tokenizer=custom_tokenizer)
+vectorizer_custom = CountVectorizer (tokenizer=custom_tokenizer)
 
 # Min/max document frequency (filter rare/common words)
 vectorizer_filtered = CountVectorizer(
@@ -128,15 +128,15 @@ vectorizer_filtered = CountVectorizer(
 )
 
 # Max features (keep only top N most frequent)
-vectorizer_limited = CountVectorizer(max_features=1000)
+vectorizer_limited = CountVectorizer (max_features=1000)
 
 # Stop words
-vectorizer_no_stop = CountVectorizer(stop_words='english')
+vectorizer_no_stop = CountVectorizer (stop_words='english')
 
 # Example with filtering
 docs_large = documents * 10  # Simulate larger corpus
-vectorizer_filtered.fit(docs_large)
-print(f"\\nFiltered vocabulary size: {len(vectorizer_filtered.vocabulary_)}")
+vectorizer_filtered.fit (docs_large)
+print(f"\\nFiltered vocabulary size: {len (vectorizer_filtered.vocabulary_)}")
 \`\`\`
 
 ### BoW from Scratch
@@ -152,31 +152,31 @@ class SimpleBagOfWords:
         self.vocabulary = {}
         self.inverse_vocabulary = {}
     
-    def fit(self, documents):
+    def fit (self, documents):
         """Build vocabulary from documents"""
         # Collect all unique words
         all_words = set()
         for doc in documents:
             words = doc.lower().split()
-            all_words.update(words)
+            all_words.update (words)
         
         # Create vocabulary mapping
-        self.vocabulary = {word: idx for idx, word in enumerate(sorted(all_words))}
+        self.vocabulary = {word: idx for idx, word in enumerate (sorted (all_words))}
         self.inverse_vocabulary = {idx: word for word, idx in self.vocabulary.items()}
         
         return self
     
-    def transform(self, documents):
+    def transform (self, documents):
         """Transform documents to BoW vectors"""
         vectors = []
         
         for doc in documents:
             # Initialize zero vector
-            vector = np.zeros(len(self.vocabulary))
+            vector = np.zeros (len (self.vocabulary))
             
             # Count words
             words = doc.lower().split()
-            word_counts = Counter(words)
+            word_counts = Counter (words)
             
             # Fill vector
             for word, count in word_counts.items():
@@ -184,18 +184,18 @@ class SimpleBagOfWords:
                     idx = self.vocabulary[word]
                     vector[idx] = count
             
-            vectors.append(vector)
+            vectors.append (vector)
         
-        return np.array(vectors)
+        return np.array (vectors)
     
-    def fit_transform(self, documents):
+    def fit_transform (self, documents):
         """Fit and transform in one step"""
-        self.fit(documents)
-        return self.transform(documents)
+        self.fit (documents)
+        return self.transform (documents)
 
 # Test custom implementation
 simple_bow = SimpleBagOfWords()
-vectors = simple_bow.fit_transform(documents)
+vectors = simple_bow.fit_transform (documents)
 
 print("Custom BoW:")
 print("Vocabulary:", simple_bow.vocabulary)
@@ -216,7 +216,7 @@ TF-IDF improves on BoW by considering both term frequency (how often a word appe
 
 **Inverse Document Frequency (IDF):**
 - Measures how rare/common a term is across all documents  
-- \`IDF(t) = log(total documents / documents containing term t)\`
+- \`IDF(t) = log (total documents / documents containing term t)\`
 
 **TF-IDF:**
 - \`TF-IDF(t, d) = TF(t, d) × IDF(t)\`
@@ -242,7 +242,7 @@ documents = [
 tfidf_vectorizer = TfidfVectorizer()
 
 # Fit and transform
-tfidf_matrix = tfidf_vectorizer.fit_transform(documents)
+tfidf_matrix = tfidf_vectorizer.fit_transform (documents)
 
 # View as DataFrame
 tfidf_df = pd.DataFrame(
@@ -273,18 +273,18 @@ Words like "comfortable" appear in one document → High IDF → High TF-IDF (wh
 
 \`\`\`python
 # Different normalization
-tfidf_l2 = TfidfVectorizer(norm='l2')  # L2 normalization (default)
-tfidf_l1 = TfidfVectorizer(norm='l1')  # L1 normalization
-tfidf_none = TfidfVectorizer(norm=None)  # No normalization
+tfidf_l2 = TfidfVectorizer (norm='l2')  # L2 normalization (default)
+tfidf_l1 = TfidfVectorizer (norm='l1')  # L1 normalization
+tfidf_none = TfidfVectorizer (norm=None)  # No normalization
 
 # Use IDF
-tfidf_no_idf = TfidfVectorizer(use_idf=False)  # Just term frequency
+tfidf_no_idf = TfidfVectorizer (use_idf=False)  # Just term frequency
 
 # Smooth IDF (add 1 to document frequencies)
-tfidf_smooth = TfidfVectorizer(smooth_idf=True)  # Default
+tfidf_smooth = TfidfVectorizer (smooth_idf=True)  # Default
 
 # Sublinear TF (use log of term frequency)
-tfidf_sublinear = TfidfVectorizer(sublinear_tf=True)  # TF = 1 + log(TF)
+tfidf_sublinear = TfidfVectorizer (sublinear_tf=True)  # TF = 1 + log(TF)
 
 # Complete example
 tfidf_advanced = TfidfVectorizer(
@@ -314,44 +314,44 @@ class SimpleTfidf:
         self.idf = {}
         self.document_count = 0
     
-    def fit(self, documents):
+    def fit (self, documents):
         """Calculate IDF values"""
         # Build vocabulary
         all_words = set()
         for doc in documents:
-            words = set(doc.lower().split())  # Unique words per doc
-            all_words.update(words)
+            words = set (doc.lower().split())  # Unique words per doc
+            all_words.update (words)
         
-        self.vocabulary = {word: idx for idx, word in enumerate(sorted(all_words))}
-        self.document_count = len(documents)
+        self.vocabulary = {word: idx for idx, word in enumerate (sorted (all_words))}
+        self.document_count = len (documents)
         
         # Calculate document frequency for each word
         doc_frequency = Counter()
         for doc in documents:
-            unique_words = set(doc.lower().split())
+            unique_words = set (doc.lower().split())
             for word in unique_words:
                 doc_frequency[word] += 1
         
         # Calculate IDF
         for word in self.vocabulary:
             df = doc_frequency[word]
-            # IDF = log(total docs / docs containing word)
-            self.idf[word] = math.log(self.document_count / df)
+            # IDF = log (total docs / docs containing word)
+            self.idf[word] = math.log (self.document_count / df)
         
         return self
     
-    def transform(self, documents):
+    def transform (self, documents):
         """Transform documents to TF-IDF vectors"""
         vectors = []
         
         for doc in documents:
             # Initialize zero vector
-            vector = np.zeros(len(self.vocabulary))
+            vector = np.zeros (len (self.vocabulary))
             
             # Calculate term frequency
             words = doc.lower().split()
-            total_words = len(words)
-            word_counts = Counter(words)
+            total_words = len (words)
+            word_counts = Counter (words)
             
             # Calculate TF-IDF
             for word, count in word_counts.items():
@@ -362,27 +362,27 @@ class SimpleTfidf:
                     vector[idx] = tf * idf
             
             # L2 normalization
-            norm = np.linalg.norm(vector)
+            norm = np.linalg.norm (vector)
             if norm > 0:
                 vector = vector / norm
             
-            vectors.append(vector)
+            vectors.append (vector)
         
-        return np.array(vectors)
+        return np.array (vectors)
     
-    def fit_transform(self, documents):
+    def fit_transform (self, documents):
         """Fit and transform in one step"""
-        self.fit(documents)
-        return self.transform(documents)
+        self.fit (documents)
+        return self.transform (documents)
 
 # Test custom TF-IDF
 simple_tfidf = SimpleTfidf()
-tfidf_vectors = simple_tfidf.fit_transform(documents)
+tfidf_vectors = simple_tfidf.fit_transform (documents)
 
 print("Custom TF-IDF:")
 print("Shape:", tfidf_vectors.shape)
 print("\\nIDF values:")
-for word, idf in sorted(simple_tfidf.idf.items(), key=lambda x: x[1], reverse=True)[:5]:
+for word, idf in sorted (simple_tfidf.idf.items(), key=lambda x: x[1], reverse=True)[:5]:
     print(f"  {word}: {idf:.3f}")
 \`\`\`
 
@@ -400,19 +400,19 @@ docs = [
 
 # BoW representation
 bow_vec = CountVectorizer()
-bow_matrix = bow_vec.fit_transform(docs)
+bow_matrix = bow_vec.fit_transform (docs)
 
 # TF-IDF representation
 tfidf_vec = TfidfVectorizer()
-tfidf_matrix = tfidf_vec.fit_transform(docs)
+tfidf_matrix = tfidf_vec.fit_transform (docs)
 
 # Compare similarities
 print("BoW Similarity Matrix:")
-bow_sim = cosine_similarity(bow_matrix)
+bow_sim = cosine_similarity (bow_matrix)
 print(bow_sim.round(3))
 
 print("\\nTF-IDF Similarity Matrix:")
-tfidf_sim = cosine_similarity(tfidf_matrix)
+tfidf_sim = cosine_similarity (tfidf_matrix)
 print(tfidf_sim.round(3))
 
 # Analysis
@@ -462,26 +462,26 @@ documents = [
 ]
 
 # Unigrams only (default)
-unigram_vec = CountVectorizer(ngram_range=(1, 1))
-unigram_matrix = unigram_vec.fit_transform(documents)
+unigram_vec = CountVectorizer (ngram_range=(1, 1))
+unigram_matrix = unigram_vec.fit_transform (documents)
 print(f"Unigrams ({unigram_matrix.shape[1]} features):")
 print(unigram_vec.get_feature_names_out())
 
 # Bigrams only
-bigram_vec = CountVectorizer(ngram_range=(2, 2))
-bigram_matrix = bigram_vec.fit_transform(documents)
+bigram_vec = CountVectorizer (ngram_range=(2, 2))
+bigram_matrix = bigram_vec.fit_transform (documents)
 print(f"\\nBigrams ({bigram_matrix.shape[1]} features):")
 print(bigram_vec.get_feature_names_out())
 
 # Unigrams + Bigrams
-combined_vec = CountVectorizer(ngram_range=(1, 2))
-combined_matrix = combined_vec.fit_transform(documents)
+combined_vec = CountVectorizer (ngram_range=(1, 2))
+combined_matrix = combined_vec.fit_transform (documents)
 print(f"\\nUnigrams + Bigrams ({combined_matrix.shape[1]} features):")
 print(combined_vec.get_feature_names_out())
 
 # Unigrams + Bigrams + Trigrams
-trigram_vec = CountVectorizer(ngram_range=(1, 3))
-trigram_matrix = trigram_vec.fit_transform(documents)
+trigram_vec = CountVectorizer (ngram_range=(1, 3))
+trigram_matrix = trigram_vec.fit_transform (documents)
 print(f"\\nUp to Trigrams ({trigram_matrix.shape[1]} features):")
 
 # Character n-grams (useful for typos, morphology)
@@ -489,7 +489,7 @@ char_ngram_vec = CountVectorizer(
     analyzer='char',  # Character-level
     ngram_range=(2, 4)  # 2-4 character sequences
 )
-char_matrix = char_ngram_vec.fit_transform(documents)
+char_matrix = char_ngram_vec.fit_transform (documents)
 print(f"\\nCharacter n-grams ({char_matrix.shape[1]} features):")
 print(char_ngram_vec.get_feature_names_out()[:20], "...")
 \`\`\`
@@ -498,7 +498,7 @@ print(char_ngram_vec.get_feature_names_out()[:20], "...")
 
 \`\`\`python
 # TF-IDF with bigrams
-tfidf_bigram = TfidfVectorizer(ngram_range=(1, 2), max_features=50)
+tfidf_bigram = TfidfVectorizer (ngram_range=(1, 2), max_features=50)
 
 docs_sentiment = [
     "This movie is not good at all",
@@ -507,7 +507,7 @@ docs_sentiment = [
     "I really liked this movie"
 ]
 
-tfidf_bigram_matrix = tfidf_bigram.fit_transform(docs_sentiment)
+tfidf_bigram_matrix = tfidf_bigram.fit_transform (docs_sentiment)
 
 # View important features
 feature_names = tfidf_bigram.get_feature_names_out()
@@ -528,23 +528,23 @@ print([f for f in feature_names if ' ' in f])  # Only bigrams
 ### N-gram from Scratch
 
 \`\`\`python
-def generate_ngrams(text, n):
+def generate_ngrams (text, n):
     """Generate n-grams from text"""
     words = text.lower().split()
     ngrams = []
     
-    for i in range(len(words) - n + 1):
-        ngram = ' '.join(words[i:i+n])
-        ngrams.append(ngram)
+    for i in range (len (words) - n + 1):
+        ngram = ' '.join (words[i:i+n])
+        ngrams.append (ngram)
     
     return ngrams
 
 # Examples
 text = "machine learning is awesome"
 
-print("Unigrams:", generate_ngrams(text, 1))
-print("Bigrams:", generate_ngrams(text, 2))
-print("Trigrams:", generate_ngrams(text, 3))
+print("Unigrams:", generate_ngrams (text, 1))
+print("Bigrams:", generate_ngrams (text, 2))
+print("Trigrams:", generate_ngrams (text, 3))
 
 # Implement full n-gram vectorizer
 class SimpleNgramVectorizer:
@@ -554,49 +554,49 @@ class SimpleNgramVectorizer:
         self.ngram_range = ngram_range
         self.vocabulary = {}
     
-    def fit(self, documents):
+    def fit (self, documents):
         """Build n-gram vocabulary"""
         all_ngrams = set()
         
         for doc in documents:
             # Generate n-grams for all n in range
-            for n in range(self.ngram_range[0], self.ngram_range[1] + 1):
-                ngrams = generate_ngrams(doc, n)
-                all_ngrams.update(ngrams)
+            for n in range (self.ngram_range[0], self.ngram_range[1] + 1):
+                ngrams = generate_ngrams (doc, n)
+                all_ngrams.update (ngrams)
         
-        self.vocabulary = {ngram: idx for idx, ngram in enumerate(sorted(all_ngrams))}
+        self.vocabulary = {ngram: idx for idx, ngram in enumerate (sorted (all_ngrams))}
         return self
     
-    def transform(self, documents):
+    def transform (self, documents):
         """Transform documents to n-gram vectors"""
         vectors = []
         
         for doc in documents:
-            vector = np.zeros(len(self.vocabulary))
+            vector = np.zeros (len (self.vocabulary))
             
             # Count all n-grams
-            for n in range(self.ngram_range[0], self.ngram_range[1] + 1):
-                ngrams = generate_ngrams(doc, n)
-                ngram_counts = Counter(ngrams)
+            for n in range (self.ngram_range[0], self.ngram_range[1] + 1):
+                ngrams = generate_ngrams (doc, n)
+                ngram_counts = Counter (ngrams)
                 
                 for ngram, count in ngram_counts.items():
                     if ngram in self.vocabulary:
                         idx = self.vocabulary[ngram]
                         vector[idx] = count
             
-            vectors.append(vector)
+            vectors.append (vector)
         
-        return np.array(vectors)
+        return np.array (vectors)
     
-    def fit_transform(self, documents):
-        self.fit(documents)
-        return self.transform(documents)
+    def fit_transform (self, documents):
+        self.fit (documents)
+        return self.transform (documents)
 
 # Test
-ngram_vec = SimpleNgramVectorizer(ngram_range=(1, 2))
-ngram_matrix = ngram_vec.fit_transform(documents)
+ngram_vec = SimpleNgramVectorizer (ngram_range=(1, 2))
+ngram_matrix = ngram_vec.fit_transform (documents)
 print(f"\\nCustom n-gram vectorizer: {ngram_matrix.shape}")
-print(f"Vocabulary size: {len(ngram_vec.vocabulary)}")
+print(f"Vocabulary size: {len (ngram_vec.vocabulary)}")
 \`\`\`
 
 ## Practical Considerations
@@ -610,19 +610,19 @@ sample_docs = [
 ] * 10
 
 # Unigrams
-vec_1 = CountVectorizer(ngram_range=(1, 1))
-vec_1.fit(sample_docs)
-print(f"Unigrams: {len(vec_1.vocabulary_)} features")
+vec_1 = CountVectorizer (ngram_range=(1, 1))
+vec_1.fit (sample_docs)
+print(f"Unigrams: {len (vec_1.vocabulary_)} features")
 
 # + Bigrams  
-vec_2 = CountVectorizer(ngram_range=(1, 2))
-vec_2.fit(sample_docs)
-print(f"Unigrams + Bigrams: {len(vec_2.vocabulary_)} features")
+vec_2 = CountVectorizer (ngram_range=(1, 2))
+vec_2.fit (sample_docs)
+print(f"Unigrams + Bigrams: {len (vec_2.vocabulary_)} features")
 
 # + Trigrams
-vec_3 = CountVectorizer(ngram_range=(1, 3))
-vec_3.fit(sample_docs)
-print(f"Up to Trigrams: {len(vec_3.vocabulary_)} features")
+vec_3 = CountVectorizer (ngram_range=(1, 3))
+vec_3.fit (sample_docs)
+print(f"Up to Trigrams: {len (vec_3.vocabulary_)} features")
 
 print("\\nFeatures grow exponentially with n-gram size!")
 print("Solution: Use max_features or min_df to limit vocabulary")
@@ -635,17 +635,17 @@ from scipy.sparse import csr_matrix
 
 # BoW/TF-IDF create sparse matrices (most values are 0)
 vec = TfidfVectorizer()
-sparse_matrix = vec.fit_transform(documents)
+sparse_matrix = vec.fit_transform (documents)
 
 print(f"Matrix shape: {sparse_matrix.shape}")
-print(f"Matrix type: {type(sparse_matrix)}")
+print(f"Matrix type: {type (sparse_matrix)}")
 print(f"Sparsity: {(1 - sparse_matrix.nnz / (sparse_matrix.shape[0] * sparse_matrix.shape[1])) * 100:.2f}% zeros")
 
 # Memory usage comparison
 dense_matrix = sparse_matrix.toarray()
 import sys
 print(f"\\nSparse matrix size: {sparse_matrix.data.nbytes / 1024:.2f} KB")
-print(f"Dense matrix size: {sys.getsizeof(dense_matrix) / 1024:.2f} KB")
+print(f"Dense matrix size: {sys.getsizeof (dense_matrix) / 1024:.2f} KB")
 print("Sparse representation saves memory!")
 \`\`\`
 
@@ -684,7 +684,7 @@ pipeline = Pipeline([
         min_df=2,
         stop_words='english'
     )),
-    ('classifier', LogisticRegression(max_iter=200))
+    ('classifier', LogisticRegression (max_iter=200))
 ])
 
 # Train
@@ -692,7 +692,7 @@ pipeline.fit(X_train, y_train)
 
 # Evaluate
 y_pred = pipeline.predict(X_test)
-print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
+print(classification_report (y_test, y_pred, target_names=['Negative', 'Positive']))
 
 # Inspect important features
 tfidf = pipeline.named_steps['tfidf']
@@ -702,13 +702,13 @@ feature_names = tfidf.get_feature_names_out()
 coefficients = classifier.coef_[0]
 
 # Top positive features
-top_positive = np.argsort(coefficients)[-10:]
+top_positive = np.argsort (coefficients)[-10:]
 print("\\nTop positive features (bigrams highlighted):")
 for idx in top_positive[::-1]:
     print(f"  {feature_names[idx]}: {coefficients[idx]:.3f}")
 
 # Top negative features
-top_negative = np.argsort(coefficients)[:10]
+top_negative = np.argsort (coefficients)[:10]
 print("\\nTop negative features:")
 for idx in top_negative:
     print(f"  {feature_names[idx]}: {coefficients[idx]:.3f}")

@@ -6,7 +6,7 @@ export const alembicMigrations = {
 
 ## Introduction
 
-Database migrations are version control for your schema. Alembic is SQLAlchemy's migration tool, enabling you to evolve database schemas safely in production. Without migrations, schema changes require manual SQL scripts, risking errors and downtime.
+Database migrations are version control for your schema. Alembic is SQLAlchemy\'s migration tool, enabling you to evolve database schemas safely in production. Without migrations, schema changes require manual SQL scripts, risking errors and downtime.
 
 In this section, you'll master:
 - Why database migrations are essential
@@ -101,7 +101,7 @@ from myapp.models import Base
 config = context.config
 
 # Configure logging
-fileConfig(config.config_file_name)
+fileConfig (config.config_file_name)
 
 # Add your model's MetaData for autogenerate
 target_metadata = Base.metadata
@@ -125,7 +125,7 @@ def run_migrations_offline():
 
 def run_migrations_online():
     """Run migrations in 'online' mode"""
-    configuration = config.get_section(config.config_ini_section)
+    configuration = config.get_section (config.config_ini_section)
     configuration["sqlalchemy.url"] = get_url()
     
     connectable = engine_from_config(
@@ -224,16 +224,16 @@ def upgrade():
         'posts',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('title', sa.String(length=200), nullable=False),
+        sa.Column('title', sa.String (length=200), nullable=False),
         sa.Column('content', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_posts_user_id'), 'posts', ['user_id'], unique=False)
+    op.create_index (op.f('ix_posts_user_id'), 'posts', ['user_id'], unique=False)
 
 def downgrade():
-    op.drop_index(op.f('ix_posts_user_id'), table_name='posts')
+    op.drop_index (op.f('ix_posts_user_id'), table_name='posts')
     op.drop_table('posts')
 \`\`\`
 
@@ -453,7 +453,7 @@ def upgrade():
     
     # Use ORM to update data
     bind = op.get_bind()
-    session = Session(bind=bind)
+    session = Session (bind=bind)
     
     # Define table (can't import models - circular dependency)
     metadata = MetaData()
@@ -464,10 +464,10 @@ def upgrade():
     )
     
     # Generate slugs
-    for user in session.execute(sa.select(users)).mappings():
+    for user in session.execute (sa.select (users)).mappings():
         slug = user['username'].lower().replace(' ', '-')
         session.execute(
-            users.update().where(users.c.id == user['id']).values(slug=slug)
+            users.update().where (users.c.id == user['id']).values (slug=slug)
         )
     
     session.commit()
@@ -550,21 +550,21 @@ def test_migration_up_down():
     alembic_cfg = Config("alembic.ini")
     
     # Upgrade
-    upgrade(alembic_cfg, "head")
+    upgrade (alembic_cfg, "head")
     
     # Downgrade
-    downgrade(alembic_cfg, "-1")
+    downgrade (alembic_cfg, "-1")
     
     # Re-upgrade
-    upgrade(alembic_cfg, "head")
+    upgrade (alembic_cfg, "head")
 
 def test_migration_idempotent():
     """Test migration can run multiple times"""
     alembic_cfg = Config("alembic.ini")
     
     # Run twice
-    upgrade(alembic_cfg, "head")
-    upgrade(alembic_cfg, "head")  # Should not error
+    upgrade (alembic_cfg, "head")
+    upgrade (alembic_cfg, "head")  # Should not error
 \`\`\`
 
 ---
@@ -696,7 +696,7 @@ git revert HEAD
 - **Add column**: \`op.add_column()\`
 - **Create index**: \`op.create_index()\`
 - **Data migration**: \`op.execute()\` or ORM with Session
-- **Rename column**: \`op.alter_column(new_column_name=...)\`
+- **Rename column**: \`op.alter_column (new_column_name=...)\`
 - **Foreign key**: \`op.create_foreign_key()\`
 
 ### Next Steps

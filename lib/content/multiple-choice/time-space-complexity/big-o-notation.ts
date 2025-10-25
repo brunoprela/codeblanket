@@ -8,7 +8,7 @@ export const bigonotationMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      'What is the time complexity of this code?\n\n```python\nfor i in range(n):\n    for j in range(n):\n        print(i, j)\n```',
+      'What is the time complexity of this code?\n\n```python\nfor i in range (n):\n    for j in range (n):\n        print(i, j)\n```',
     options: ['O(n)', 'O(n²)', 'O(2n)', 'O(n log n)'],
     correctAnswer: 1,
     explanation:
@@ -43,7 +43,7 @@ export const bigonotationMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc5',
     question:
-      'What is the time complexity of this code?\n\n```python\nfor i in range(n):\n    print(i)\nfor j in range(n):\n    print(j)\n```',
+      'What is the time complexity of this code?\n\n```python\nfor i in range (n):\n    print(i)\nfor j in range (n):\n    print(j)\n```',
     options: ['O(n)', 'O(n²)', 'O(2n)', 'O(log n)'],
     correctAnswer: 0,
     explanation:

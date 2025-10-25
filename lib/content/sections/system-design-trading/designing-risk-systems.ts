@@ -61,17 +61,17 @@ class Position:
     current_price: float
     
     @property
-    def market_value(self) -> float:
+    def market_value (self) -> float:
         """Current market value"""
         return self.quantity * self.current_price
     
     @property
-    def cost_basis(self) -> float:
+    def cost_basis (self) -> float:
         """Original cost"""
         return self.quantity * self.average_price
     
     @property
-    def unrealized_pnl(self) -> float:
+    def unrealized_pnl (self) -> float:
         """Unrealized profit/loss"""
         return self.market_value - self.cost_basis
 
@@ -89,7 +89,7 @@ class PLEngine:
         # Track P&L history
         self.pnl_history = []
     
-    def update_position(self, symbol: str, quantity_change: float, price: float):
+    def update_position (self, symbol: str, quantity_change: float, price: float):
         """
         Update position from trade
         quantity_change: +100 for buy, -100 for sell
@@ -108,7 +108,7 @@ class PLEngine:
             # Check if closing or adding
             if (pos.quantity > 0 and quantity_change < 0) or (pos.quantity < 0 and quantity_change > 0):
                 # Closing (at least partially)
-                close_quantity = min(abs(quantity_change), abs(pos.quantity))
+                close_quantity = min (abs (quantity_change), abs (pos.quantity))
                 
                 if pos.quantity > 0:
                     # Closing long
@@ -123,7 +123,7 @@ class PLEngine:
                 # Update position
                 pos.quantity += quantity_change
                 
-                if abs(pos.quantity) < 0.0001:  # Fully closed
+                if abs (pos.quantity) < 0.0001:  # Fully closed
                     del self.positions[symbol]
                     return
             else:
@@ -136,7 +136,7 @@ class PLEngine:
         # Update cash
         self.cash -= quantity_change * price
     
-    def update_market_price(self, symbol: str, price: float, timestamp: int):
+    def update_market_price (self, symbol: str, price: float, timestamp: int):
         """Update market price and recalculate P&L"""
         if symbol in self.positions:
             self.positions[symbol].current_price = price
@@ -150,15 +150,15 @@ class PLEngine:
             'total_pnl': total_pnl
         })
     
-    def get_unrealized_pnl(self) -> float:
+    def get_unrealized_pnl (self) -> float:
         """Total unrealized P&L across all positions"""
-        return sum(pos.unrealized_pnl for pos in self.positions.values())
+        return sum (pos.unrealized_pnl for pos in self.positions.values())
     
-    def get_total_pnl(self) -> float:
+    def get_total_pnl (self) -> float:
         """Total P&L (realized + unrealized)"""
         return self.realized_pnl + self.get_unrealized_pnl()
     
-    def get_position_pnl(self, symbol: str) -> dict:
+    def get_position_pnl (self, symbol: str) -> dict:
         """Get P&L breakdown for specific position"""
         if symbol not in self.positions:
             return {'unrealized': 0.0}
@@ -171,7 +171,7 @@ class PLEngine:
             'market_value': pos.market_value,
             'cost_basis': pos.cost_basis,
             'unrealized_pnl': pos.unrealized_pnl,
-            'unrealized_pnl_pct': pos.unrealized_pnl / abs(pos.cost_basis) if pos.cost_basis != 0 else 0
+            'unrealized_pnl_pct': pos.unrealized_pnl / abs (pos.cost_basis) if pos.cost_basis != 0 else 0
         }
 
 # Example
@@ -229,52 +229,52 @@ class VaRCalculator:
         self.positions = positions
         self.price_history = price_history
     
-    def historical_var(self, confidence_level: float = 0.95, horizon_days: int = 1) -> float:
+    def historical_var (self, confidence_level: float = 0.95, horizon_days: int = 1) -> float:
         """
         Historical Simulation VaR
         Use actual historical returns distribution
         """
         # Calculate returns for each symbol
-        returns_df = self.price_history.pivot(index='date', columns='symbol', values='close').pct_change()
+        returns_df = self.price_history.pivot (index='date', columns='symbol', values='close').pct_change()
         
         # Calculate portfolio returns
         portfolio_values = []
         for symbol, pos in self.positions.items():
             if symbol in returns_df.columns:
-                portfolio_values.append(pos.market_value)
+                portfolio_values.append (pos.market_value)
         
-        total_value = sum(portfolio_values)
+        total_value = sum (portfolio_values)
         
         portfolio_returns = []
         for _, row in returns_df.iterrows():
             portfolio_return = 0
             for symbol, pos in self.positions.items():
-                if symbol in row.index and not pd.isna(row[symbol]):
+                if symbol in row.index and not pd.isna (row[symbol]):
                     weight = pos.market_value / total_value
                     portfolio_return += weight * row[symbol]
-            portfolio_returns.append(portfolio_return)
+            portfolio_returns.append (portfolio_return)
         
-        portfolio_returns = np.array(portfolio_returns)
-        portfolio_returns = portfolio_returns[~np.isnan(portfolio_returns)]
+        portfolio_returns = np.array (portfolio_returns)
+        portfolio_returns = portfolio_returns[~np.isnan (portfolio_returns)]
         
         # Scale to horizon
-        portfolio_returns = portfolio_returns * np.sqrt(horizon_days)
+        portfolio_returns = portfolio_returns * np.sqrt (horizon_days)
         
         # VaR = quantile of loss distribution
-        var = -np.percentile(portfolio_returns, (1 - confidence_level) * 100) * total_value
+        var = -np.percentile (portfolio_returns, (1 - confidence_level) * 100) * total_value
         
         return var
     
-    def parametric_var(self, confidence_level: float = 0.95, horizon_days: int = 1) -> float:
+    def parametric_var (self, confidence_level: float = 0.95, horizon_days: int = 1) -> float:
         """
         Parametric VaR (Variance-Covariance method)
         Assumes returns are normally distributed
         """
         # Calculate covariance matrix
-        returns_df = self.price_history.pivot(index='date', columns='symbol', values='close').pct_change().dropna()
+        returns_df = self.price_history.pivot (index='date', columns='symbol', values='close').pct_change().dropna()
         
         # Portfolio weights
-        symbols = list(self.positions.keys())
+        symbols = list (self.positions.keys())
         weights = np.array([
             self.positions[s].market_value for s in symbols
         ])
@@ -285,15 +285,15 @@ class VaRCalculator:
         returns_matrix = returns_df[symbols].values
         
         # Covariance matrix
-        cov_matrix = np.cov(returns_matrix.T)
+        cov_matrix = np.cov (returns_matrix.T)
         
         # Portfolio variance
-        portfolio_variance = np.dot(weights, np.dot(cov_matrix, weights))
-        portfolio_std = np.sqrt(portfolio_variance)
+        portfolio_variance = np.dot (weights, np.dot (cov_matrix, weights))
+        portfolio_std = np.sqrt (portfolio_variance)
         
         # VaR = z-score * std * portfolio_value
-        z_score = stats.norm.ppf(confidence_level)
-        var = z_score * portfolio_std * total_value * np.sqrt(horizon_days)
+        z_score = stats.norm.ppf (confidence_level)
+        var = z_score * portfolio_std * total_value * np.sqrt (horizon_days)
         
         return var
     
@@ -308,14 +308,14 @@ class VaRCalculator:
         Simulate many possible future scenarios
         """
         # Calculate returns statistics
-        returns_df = self.price_history.pivot(index='date', columns='symbol', values='close').pct_change().dropna()
+        returns_df = self.price_history.pivot (index='date', columns='symbol', values='close').pct_change().dropna()
         
-        symbols = list(self.positions.keys())
+        symbols = list (self.positions.keys())
         returns_matrix = returns_df[symbols].values
         
         # Mean returns and covariance
-        mean_returns = returns_matrix.mean(axis=0)
-        cov_matrix = np.cov(returns_matrix.T)
+        mean_returns = returns_matrix.mean (axis=0)
+        cov_matrix = np.cov (returns_matrix.T)
         
         # Current portfolio value
         weights = np.array([self.positions[s].market_value for s in symbols])
@@ -329,10 +329,10 @@ class VaRCalculator:
         )
         
         # Calculate portfolio returns for each simulation
-        portfolio_returns = (weights * (1 + simulated_returns)).sum(axis=1) - total_value
+        portfolio_returns = (weights * (1 + simulated_returns)).sum (axis=1) - total_value
         
         # VaR = quantile of loss distribution
-        var = -np.percentile(portfolio_returns, (1 - confidence_level) * 100)
+        var = -np.percentile (portfolio_returns, (1 - confidence_level) * 100)
         
         return var
 
@@ -342,11 +342,11 @@ if __name__ == "__main__":
     dates = pd.date_range('2023-01-01', '2024-01-01', freq='D')
     data = []
     for symbol in ['AAPL', 'TSLA']:
-        prices = 100 * np.exp(np.cumsum(np.random.normal(0.001, 0.02, len(dates))))
-        for date, price in zip(dates, prices):
+        prices = 100 * np.exp (np.cumsum (np.random.normal(0.001, 0.02, len (dates))))
+        for date, price in zip (dates, prices):
             data.append({'date': date, 'symbol': symbol, 'close': price})
     
-    price_history = pd.DataFrame(data)
+    price_history = pd.DataFrame (data)
     
     # Current positions
     positions = {
@@ -354,11 +354,11 @@ if __name__ == "__main__":
         'TSLA': Position('TSLA', 50, 200.0, 210.0)
     }
     
-    calculator = VaRCalculator(positions, price_history)
+    calculator = VaRCalculator (positions, price_history)
     
-    hist_var = calculator.historical_var(confidence_level=0.95, horizon_days=1)
-    param_var = calculator.parametric_var(confidence_level=0.95, horizon_days=1)
-    mc_var = calculator.monte_carlo_var(confidence_level=0.95, horizon_days=1)
+    hist_var = calculator.historical_var (confidence_level=0.95, horizon_days=1)
+    param_var = calculator.parametric_var (confidence_level=0.95, horizon_days=1)
+    mc_var = calculator.monte_carlo_var (confidence_level=0.95, horizon_days=1)
     
     print(f"Historical VaR (95%, 1-day): \${hist_var:,.2f}")
     print(f"Parametric VaR (95%, 1-day): \${param_var:,.2f}")
@@ -372,12 +372,12 @@ if __name__ == "__main__":
 **CVaR**: Expected loss in worst cases (beyond VaR)
 
 \`\`\`python
-def calculate_cvar(returns: np.array, confidence_level: float = 0.95) -> float:
+def calculate_cvar (returns: np.array, confidence_level: float = 0.95) -> float:
     """
     Calculate CVaR (Expected Shortfall)
     CVaR = average loss in worst (1-confidence_level) cases
     """
-    var_threshold = np.percentile(returns, (1 - confidence_level) * 100)
+    var_threshold = np.percentile (returns, (1 - confidence_level) * 100)
     
     # Average of returns below VaR threshold
     tail_returns = returns[returns <= var_threshold]
@@ -423,30 +423,30 @@ class GreeksCalculator:
         
         if option_type == 'call':
             # Delta
-            delta = norm.cdf(d1)
+            delta = norm.cdf (d1)
             
             # Theta (per day)
             theta = (
-                -S * norm.pdf(d1) * sigma / (2 * np.sqrt(T))
-                - r * K * np.exp(-r * T) * norm.cdf(d2)
+                -S * norm.pdf (d1) * sigma / (2 * np.sqrt(T))
+                - r * K * np.exp(-r * T) * norm.cdf (d2)
             ) / 365
         else:  # put
             delta = -norm.cdf(-d1)
             
             theta = (
-                -S * norm.pdf(d1) * sigma / (2 * np.sqrt(T))
+                -S * norm.pdf (d1) * sigma / (2 * np.sqrt(T))
                 + r * K * np.exp(-r * T) * norm.cdf(-d2)
             ) / 365
         
         # Gamma (same for calls and puts)
-        gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+        gamma = norm.pdf (d1) / (S * sigma * np.sqrt(T))
         
         # Vega (per 1% change in volatility)
-        vega = S * norm.pdf(d1) * np.sqrt(T) / 100
+        vega = S * norm.pdf (d1) * np.sqrt(T) / 100
         
         # Rho (per 1% change in interest rate)
         if option_type == 'call':
-            rho = K * T * np.exp(-r * T) * norm.cdf(d2) / 100
+            rho = K * T * np.exp(-r * T) * norm.cdf (d2) / 100
         else:
             rho = -K * T * np.exp(-r * T) * norm.cdf(-d2) / 100
         
@@ -480,15 +480,15 @@ class PortfolioGreeks:
         self.option_positions: List[OptionPosition] = []
         self.stock_positions: Dict[str, Position] = {}
     
-    def add_option_position(self, pos: OptionPosition):
+    def add_option_position (self, pos: OptionPosition):
         """Add options position"""
-        self.option_positions.append(pos)
+        self.option_positions.append (pos)
     
-    def add_stock_position(self, pos: Position):
+    def add_stock_position (self, pos: Position):
         """Add stock position (Delta = 1 per share)"""
         self.stock_positions[pos.symbol] = pos
     
-    def calculate_portfolio_greeks(self) -> dict:
+    def calculate_portfolio_greeks (self) -> dict:
         """
         Aggregate Greeks across portfolio
         """
@@ -532,13 +532,13 @@ class PortfolioGreeks:
             'rho': total_rho
         }
     
-    def get_risk_metrics(self) -> dict:
+    def get_risk_metrics (self) -> dict:
         """Get interpretable risk metrics"""
         greeks = self.calculate_portfolio_greeks()
         
         return {
             'delta': greeks['delta'],
-            'delta_interpretation': f"Portfolio moves \${abs(greeks['delta']):.0f} for $1 move in underlying",
+            'delta_interpretation': f"Portfolio moves \${abs (greeks['delta']):.0f} for $1 move in underlying",
             'gamma': greeks['gamma'],
             'gamma_interpretation': f"Delta changes by {greeks['gamma']:.2f} for $1 move in underlying",
             'vega': greeks['vega'],
@@ -608,12 +608,12 @@ class RiskLimit:
     current_value: float = 0.0
     
     @property
-    def utilization(self) -> float:
+    def utilization (self) -> float:
         """How much of limit is used (%)"""
         return (self.current_value / self.hard_limit) * 100 if self.hard_limit != 0 else 0
     
     @property
-    def breach_status(self) -> str:
+    def breach_status (self) -> str:
         """Check if limit breached"""
         if self.current_value > self.hard_limit:
             return "HARD_BREACH"
@@ -632,46 +632,46 @@ class RiskLimitMonitor:
         self.limits: List[RiskLimit] = []
         self.alerts: List[dict] = []
     
-    def add_limit(self, limit: RiskLimit):
+    def add_limit (self, limit: RiskLimit):
         """Add risk limit"""
-        self.limits.append(limit)
+        self.limits.append (limit)
     
-    def update_limits(self, pnl_engine: PLEngine, greeks: dict, var: float):
+    def update_limits (self, pnl_engine: PLEngine, greeks: dict, var: float):
         """Update all limit values"""
         for limit in self.limits:
             if limit.limit_type == LimitType.POSITION_SIZE:
                 if limit.symbol:
-                    pos = pnl_engine.positions.get(limit.symbol)
-                    limit.current_value = abs(pos.quantity) if pos else 0
+                    pos = pnl_engine.positions.get (limit.symbol)
+                    limit.current_value = abs (pos.quantity) if pos else 0
             
             elif limit.limit_type == LimitType.NOTIONAL_EXPOSURE:
                 if limit.symbol:
-                    pos = pnl_engine.positions.get(limit.symbol)
-                    limit.current_value = abs(pos.market_value) if pos else 0
+                    pos = pnl_engine.positions.get (limit.symbol)
+                    limit.current_value = abs (pos.market_value) if pos else 0
                 else:
                     # Total portfolio exposure
                     limit.current_value = sum(
-                        abs(pos.market_value) for pos in pnl_engine.positions.values()
+                        abs (pos.market_value) for pos in pnl_engine.positions.values()
                     )
             
             elif limit.limit_type == LimitType.VAR:
                 limit.current_value = var
             
             elif limit.limit_type == LimitType.DELTA:
-                limit.current_value = abs(greeks.get('delta', 0))
+                limit.current_value = abs (greeks.get('delta', 0))
             
             elif limit.limit_type == LimitType.GAMMA:
-                limit.current_value = abs(greeks.get('gamma', 0))
+                limit.current_value = abs (greeks.get('gamma', 0))
             
             elif limit.limit_type == LimitType.MAX_LOSS:
-                limit.current_value = abs(min(pnl_engine.get_total_pnl(), 0))
+                limit.current_value = abs (min (pnl_engine.get_total_pnl(), 0))
             
             # Check for breaches
             status = limit.breach_status
             if status != "OK":
-                self.generate_alert(limit, status)
+                self.generate_alert (limit, status)
     
-    def generate_alert(self, limit: RiskLimit, status: str):
+    def generate_alert (self, limit: RiskLimit, status: str):
         """Generate alert for limit breach"""
         alert = {
             'timestamp': datetime.now(),
@@ -685,10 +685,10 @@ class RiskLimitMonitor:
             'message': f"{status}: {limit.limit_type.value} = {limit.current_value:.2f} (limit: {limit.hard_limit:.2f})"
         }
         
-        self.alerts.append(alert)
+        self.alerts.append (alert)
         print(f"ALERT: {alert['message']}")
     
-    def get_limit_summary(self) -> pd.DataFrame:
+    def get_limit_summary (self) -> pd.DataFrame:
         """Get summary of all limits"""
         data = []
         for limit in self.limits:
@@ -701,7 +701,7 @@ class RiskLimitMonitor:
                 'utilization_%': limit.utilization,
                 'status': limit.breach_status
             })
-        return pd.DataFrame(data)
+        return pd.DataFrame (data)
 
 # Example
 if __name__ == "__main__":
@@ -734,7 +734,7 @@ if __name__ == "__main__":
     greeks = {'delta': 500}
     var = 75_000
     
-    monitor.update_limits(pnl_engine, greeks, var)
+    monitor.update_limits (pnl_engine, greeks, var)
     
     # Print summary
     print(monitor.get_limit_summary())
@@ -766,11 +766,11 @@ class StressTester:
         Apply price shocks to portfolio
         Returns: P&L impact
         """
-        initial_value = sum(pos.market_value for pos in self.positions.values())
+        initial_value = sum (pos.market_value for pos in self.positions.values())
         
         shocked_value = 0
         for symbol, pos in self.positions.items():
-            shock = symbol_shocks.get(symbol, 0)
+            shock = symbol_shocks.get (symbol, 0)
             new_price = pos.current_price * (1 + shock)
             shocked_value += pos.quantity * new_price
         
@@ -783,7 +783,7 @@ class StressTester:
             'return_%': (pnl_impact / initial_value) * 100
         }
     
-    def standard_scenarios(self) -> pd.DataFrame:
+    def standard_scenarios (self) -> pd.DataFrame:
         """
         Run standard stress scenarios
         - Market crash (-20%)
@@ -795,7 +795,7 @@ class StressTester:
         
         # Scenario 1: Market crash
         all_symbols_shock = {s: -0.20 for s in self.positions.keys()}
-        result = self.scenario_shock(all_symbols_shock)
+        result = self.scenario_shock (all_symbols_shock)
         scenarios.append({
             'scenario': 'Market Crash (-20%)',
             **result
@@ -803,7 +803,7 @@ class StressTester:
         
         # Scenario 2: Flash crash
         all_symbols_shock = {s: -0.10 for s in self.positions.keys()}
-        result = self.scenario_shock(all_symbols_shock)
+        result = self.scenario_shock (all_symbols_shock)
         scenarios.append({
             'scenario': 'Flash Crash (-10%)',
             **result
@@ -811,10 +811,10 @@ class StressTester:
         
         # Add more scenarios...
         
-        return pd.DataFrame(scenarios)
+        return pd.DataFrame (scenarios)
 
 # Example
-tester = StressTester(positions)
+tester = StressTester (positions)
 stress_results = tester.standard_scenarios()
 print(stress_results)
 \`\`\`

@@ -25,11 +25,11 @@ class EDGARDownloader:
     """Download filings from SEC EDGAR."""
     
     def __init__(self, email: str, company_name: str):
-        self.dl = Downloader(company_name, email)
+        self.dl = Downloader (company_name, email)
         self.base_url = "https://www.sec.gov"
         self.headers = {'User-Agent': f'{company_name} {email}'}
     
-    def get_cik(self, ticker: str) -> str:
+    def get_cik (self, ticker: str) -> str:
         """Get CIK number from ticker symbol."""
         url = f"{self.base_url}/cgi-bin/browse-edgar"
         params = {
@@ -42,29 +42,29 @@ class EDGARDownloader:
             'search_text': ''
         }
         
-        response = requests.get(url, params=params, headers=self.headers)
-        soup = BeautifulSoup(response.content, 'html.parser')
+        response = requests.get (url, params=params, headers=self.headers)
+        soup = BeautifulSoup (response.content, 'html.parser')
         cik_element = soup.find('span', {'class': 'companyName'})
         
         if cik_element:
-            cik = re.search(r'CIK=(\d+)', str(cik_element)).group(1)
+            cik = re.search (r'CIK=(\d+)', str (cik_element)).group(1)
             return cik.zfill(10)
         return None
     
-    def download_10k(self, ticker: str, num_filings: int = 5):
+    def download_10k (self, ticker: str, num_filings: int = 5):
         """Download recent 10-K filings."""
         self.dl.get("10-K", ticker, amount=num_filings)
         print(f"Downloaded {num_filings} 10-K filings for {ticker}")
     
-    def download_10q(self, ticker: str, num_filings: int = 8):
+    def download_10q (self, ticker: str, num_filings: int = 8):
         """Download recent 10-Q filings."""
         self.dl.get("10-Q", ticker, amount=num_filings)
         print(f"Downloaded {num_filings} 10-Q filings for {ticker}")
     
-    def get_company_facts(self, cik: str) -> Dict:
+    def get_company_facts (self, cik: str) -> Dict:
         """Get company facts using new SEC API."""
         url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get (url, headers=self.headers)
         
         if response.status_code == 200:
             return response.json()
@@ -79,7 +79,7 @@ print(f"Apple CIK: {cik}")
 # downloader.download_10k("AAPL", num_filings=3)
 
 # Get company facts
-facts = downloader.get_company_facts(cik)
+facts = downloader.get_company_facts (cik)
 \`\`\`
 
 ## Section 2: XBRL Parsing for Financial Data
@@ -99,7 +99,7 @@ class XBRLParser:
             'dei': 'http://xbrl.sec.gov/dei/2021'
         }
     
-    def extract_financial_statements(self, facts_json: Dict) -> pd.DataFrame:
+    def extract_financial_statements (self, facts_json: Dict) -> pd.DataFrame:
         """Extract financial statements from company facts JSON."""
         
         us_gaap = facts_json.get('facts', {}).get('us-gaap', {})
@@ -130,10 +130,10 @@ class XBRLParser:
                                 'form': item['form']
                             })
         
-        df = pd.DataFrame(data)
-        return df.pivot(index='date', columns='metric', values='value')
+        df = pd.DataFrame (data)
+        return df.pivot (index='date', columns='metric', values='value')
     
-    def extract_with_context(self, facts_json: Dict, metric: str, 
+    def extract_with_context (self, facts_json: Dict, metric: str, 
                             fiscal_year: int) -> float:
         """Extract specific metric for specific fiscal year."""
         
@@ -149,7 +149,7 @@ class XBRLParser:
 
 # Example
 parser = XBRLParser("")
-# df = parser.extract_financial_statements(facts)
+# df = parser.extract_financial_statements (facts)
 # print(df)
 \`\`\`
 
@@ -160,7 +160,7 @@ class FinancialStatementExtractor:
     """Extract and structure financial statements."""
     
     @staticmethod
-    def extract_income_statement(facts: Dict, years: List[int]) -> pd.DataFrame:
+    def extract_income_statement (facts: Dict, years: List[int]) -> pd.DataFrame:
         """Build income statement from XBRL data."""
         
         us_gaap = facts.get('facts', {}).get('us-gaap', {})
@@ -189,11 +189,11 @@ class FinancialStatementExtractor:
                             yearly_values[entry['fy']] = entry['val']
                 data[item_name] = yearly_values
         
-        df = pd.DataFrame(data).T
+        df = pd.DataFrame (data).T
         return df
     
     @staticmethod
-    def extract_balance_sheet(facts: Dict, years: List[int]) -> pd.DataFrame:
+    def extract_balance_sheet (facts: Dict, years: List[int]) -> pd.DataFrame:
         """Build balance sheet from XBRL data."""
         
         balance_sheet_items = {
@@ -213,7 +213,7 @@ class FinancialStatementExtractor:
         pass
     
     @staticmethod
-    def extract_cash_flow(facts: Dict, years: List[int]) -> pd.DataFrame:
+    def extract_cash_flow (facts: Dict, years: List[int]) -> pd.DataFrame:
         """Build cash flow statement from XBRL data."""
         
         cash_flow_items = {
@@ -246,10 +246,10 @@ class MDAAanalyzer:
         self.nlp = spacy.load("en_core_web_sm")
         self.sentiment_analyzer = pipeline("sentiment-analysis")
     
-    def extract_mda_section(self, html_content: str) -> str:
+    def extract_mda_section (self, html_content: str) -> str:
         """Extract MD&A section from 10-K HTML."""
         
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup (html_content, 'html.parser')
         
         # MD&A is typically in Item 7
         patterns = [
@@ -261,51 +261,51 @@ class MDAAanalyzer:
         text = soup.get_text()
         
         for pattern in patterns:
-            match = re.search(pattern, text, re.IGNORECASE)
+            match = re.search (pattern, text, re.IGNORECASE)
             if match:
                 start_idx = match.start()
                 # Find end (usually Item 8)
-                end_match = re.search(r'ITEM\s+8[\.:]?', text[start_idx:], re.IGNORECASE)
+                end_match = re.search (r'ITEM\s+8[\.:]?', text[start_idx:], re.IGNORECASE)
                 if end_match:
                     end_idx = start_idx + end_match.start()
                     return text[start_idx:end_idx]
         
         return ""
     
-    def analyze_sentiment(self, text: str) -> Dict:
+    def analyze_sentiment (self, text: str) -> Dict:
         """Analyze sentiment of MD&A text."""
         
         # Split into chunks (models have token limits)
-        chunks = [text[i:i+500] for i in range(0, len(text), 500)]
+        chunks = [text[i:i+500] for i in range(0, len (text), 500)]
         
         sentiments = []
         for chunk in chunks[:10]:  # Analyze first 5000 chars
             if chunk.strip():
-                result = self.sentiment_analyzer(chunk)[0]
-                sentiments.append(result)
+                result = self.sentiment_analyzer (chunk)[0]
+                sentiments.append (result)
         
         # Aggregate
         positive = sum(1 for s in sentiments if s['label'] == 'POSITIVE')
         negative = sum(1 for s in sentiments if s['label'] == 'NEGATIVE')
         
         return {
-            'positive_pct': positive / len(sentiments) if sentiments else 0,
-            'negative_pct': negative / len(sentiments) if sentiments else 0,
+            'positive_pct': positive / len (sentiments) if sentiments else 0,
+            'negative_pct': negative / len (sentiments) if sentiments else 0,
             'overall': 'POSITIVE' if positive > negative else 'NEGATIVE'
         }
     
-    def extract_risk_factors(self, text: str) -> List[str]:
+    def extract_risk_factors (self, text: str) -> List[str]:
         """Extract key risk factors mentioned."""
         
-        doc = self.nlp(text)
+        doc = self.nlp (text)
         
         # Look for risk-related sentences
         risk_keywords = ['risk', 'uncertainty', 'adverse', 'challenge', 'volatile']
         
         risk_sentences = []
         for sent in doc.sents:
-            if any(keyword in sent.text.lower() for keyword in risk_keywords):
-                risk_sentences.append(sent.text.strip())
+            if any (keyword in sent.text.lower() for keyword in risk_keywords):
+                risk_sentences.append (sent.text.strip())
         
         return risk_sentences[:10]  # Top 10
 
@@ -322,14 +322,14 @@ class InsiderTradingAnalyzer:
         self.ticker = ticker
         self.transactions = []
     
-    def download_form4_filings(self, num_filings: int = 50) -> List[Dict]:
+    def download_form4_filings (self, num_filings: int = 50) -> List[Dict]:
         """Download recent Form 4 filings."""
         
         # Use sec-edgar-downloader or SEC API
         # Parse XML Form 4 files
         pass
     
-    def analyze_insider_sentiment(self, transactions: pd.DataFrame) -> Dict:
+    def analyze_insider_sentiment (self, transactions: pd.DataFrame) -> Dict:
         """Analyze insider buying/selling patterns."""
         
         # Calculate net insider activity
@@ -373,27 +373,27 @@ class MultiCompanyPipeline:
     
     def __init__(self, tickers: List[str], email: str):
         self.tickers = tickers
-        self.downloader = EDGARDownloader(email, "AnalysisBot")
+        self.downloader = EDGARDownloader (email, "AnalysisBot")
         self.results = {}
     
-    def run_pipeline(self):
+    def run_pipeline (self):
         """Run complete analysis pipeline."""
         
         for ticker in self.tickers:
             print(f"\\nAnalyzing {ticker}...")
             
             # 1. Get CIK
-            cik = self.downloader.get_cik(ticker)
+            cik = self.downloader.get_cik (ticker)
             
             # 2. Get company facts
-            facts = self.downloader.get_company_facts(cik)
+            facts = self.downloader.get_company_facts (cik)
             
             # 3. Extract financials
             parser = XBRLParser("")
-            financials = parser.extract_financial_statements(facts)
+            financials = parser.extract_financial_statements (facts)
             
             # 4. Calculate ratios
-            metrics = self.calculate_metrics(financials)
+            metrics = self.calculate_metrics (financials)
             
             # 5. Store results
             self.results[ticker] = {
@@ -406,7 +406,7 @@ class MultiCompanyPipeline:
         comparison = self.generate_comparison()
         return comparison
     
-    def calculate_metrics(self, financials: pd.DataFrame) -> Dict:
+    def calculate_metrics (self, financials: pd.DataFrame) -> Dict:
         """Calculate financial metrics."""
         
         latest = financials.iloc[-1]
@@ -419,7 +419,7 @@ class MultiCompanyPipeline:
             'roe': latest.get('NetIncome', 0) / latest.get('StockholdersEquity', 1)
         }
     
-    def generate_comparison(self) -> pd.DataFrame:
+    def generate_comparison (self) -> pd.DataFrame:
         """Generate peer comparison table."""
         
         data = []
@@ -429,7 +429,7 @@ class MultiCompanyPipeline:
                 **result['metrics']
             })
         
-        return pd.DataFrame(data)
+        return pd.DataFrame (data)
 
 # Example usage
 # pipeline = MultiCompanyPipeline(['AAPL', 'MSFT', 'GOOGL'], "email@example.com")

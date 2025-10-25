@@ -18,7 +18,7 @@ export const FilteringSearchingPaginationMultipleChoice = [
 \`\`\`python
 from django_filters.rest_framework import DjangoFilterBackend
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['status', 'category', 'author']
     # /api/articles/?status=published&category=tech
@@ -40,7 +40,7 @@ DjangoFilterBackend enables field-based filtering with lookups.
 **Correct Answer: B) Starts-with search**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     search_fields = ['^title', 'content']
     # ^title - matches titles starting with search term
     # content - matches anywhere in content
@@ -63,7 +63,7 @@ Other prefixes: '=' exact, '@' full-text, '$' regex.
 **Correct Answer: C) CursorPagination**
 
 \`\`\`python
-class CursorPagination(pagination.CursorPagination):
+class CursorPagination (pagination.CursorPagination):
     page_size = 25
     ordering = '-created_at'
 \`\`\`

@@ -214,7 +214,7 @@ class MarketMaker:
         self.estimated_value = 10.0  # Initial estimate
         self.trade_history = []  # Track for learning
     
-    def quote(self, round_num: int) -> Tuple[float, float]:
+    def quote (self, round_num: int) -> Tuple[float, float]:
         """
         Generate bid-ask quote.
         
@@ -226,17 +226,17 @@ class MarketMaker:
         """
         # Adjust spread based on round (tighter as game progresses)
         spread = self.base_spread * (1 - round_num * 0.05)
-        spread = max(spread, 0.20)  # Minimum 20 cent spread
+        spread = max (spread, 0.20)  # Minimum 20 cent spread
         
         # Inventory adjustment: shift quotes to reduce inventory
         inv_adj = self.inventory * self.inventory_adjustment
         
         # Late game: aggressive position closing
-        if round_num >= 8 and abs(self.inventory) > 0:
+        if round_num >= 8 and abs (self.inventory) > 0:
             inv_adj = self.inventory * 0.20  # 20 cents per share
         
         # Final round: close at any cost
-        if round_num == 10 and abs(self.inventory) > 0:
+        if round_num == 10 and abs (self.inventory) > 0:
             inv_adj = self.inventory * 0.50
         
         # Calculate quotes
@@ -248,9 +248,9 @@ class MarketMaker:
         if bid >= ask:
             bid = ask - 0.10
         
-        return round(bid, 2), round(ask, 2)
+        return round (bid, 2), round (ask, 2)
     
-    def update_estimate(self, trade_type: str, price: float):
+    def update_estimate (self, trade_type: str, price: float):
         """Update value estimate based on trading."""
         if trade_type == 'bought':
             # They sold to us = they think value > price
@@ -262,7 +262,7 @@ class MarketMaker:
             self.estimated_value = 0.7 * self.estimated_value + 0.3 * (price - 0.10)
         # If passed, narrow estimate around current quotes
     
-    def execute_trade(self, side: str, price: float, true_value: float):
+    def execute_trade (self, side: str, price: float, true_value: float):
         """Execute trade and update state."""
         if side == 'bought':  # We bought
             self.inventory += 1
@@ -273,9 +273,9 @@ class MarketMaker:
             self.cash_pnl += price
             self.trades.append(('SELL', price, self.inventory, true_value - price))
         
-        self.update_estimate(side, price)
+        self.update_estimate (side, price)
     
-    def mark_to_market(self, final_value: float) -> float:
+    def mark_to_market (self, final_value: float) -> float:
         """Close position at final value."""
         total_pnl = self.cash_pnl + self.inventory * final_value
         return total_pnl
@@ -287,7 +287,7 @@ class InformedTrader:
         self.true_value = true_value
         self.edge_threshold = edge_threshold  # Min edge to trade
     
-    def decide(self, bid: float, ask: float) -> str:
+    def decide (self, bid: float, ask: float) -> str:
         """
         Decide whether to trade.
         
@@ -310,20 +310,20 @@ class InformedTrader:
         
         return 'pass'
 
-def simulate_game(n_rounds: int = 10, true_value: float = 10.0) -> dict:
+def simulate_game (n_rounds: int = 10, true_value: float = 10.0) -> dict:
     """Simulate one complete game."""
     mm = MarketMaker()
-    trader = InformedTrader(true_value)
+    trader = InformedTrader (true_value)
     
     print(f"Starting game (true value = \${true_value:.2f})")
     print("="*70)
     
     for round_num in range(1, n_rounds + 1):
         # MM quotes
-bid, ask = mm.quote(round_num)
+bid, ask = mm.quote (round_num)
         
         # Informed trader decides
-action = trader.decide(bid, ask)
+action = trader.decide (bid, ask)
 
         if action == 'buy':
             mm.execute_trade('sold', ask, true_value)
@@ -340,7 +340,7 @@ action = trader.decide(bid, ask)
                   f"PASS | Inv: {mm.inventory:+2d} | Est: \${mm.estimated_value:.2f}")
     
     # Final P & L
-final_pnl = mm.mark_to_market(true_value)
+final_pnl = mm.mark_to_market (true_value)
 
 print("=" * 70)
 print(f"Final inventory: {mm.inventory}")
@@ -350,7 +350,7 @@ print(f"Total P&L: \${final_pnl:.2f}")
 
 return {
     'final_pnl': final_pnl,
-    'num_trades': len(mm.trades),
+    'num_trades': len (mm.trades),
     'final_inventory': mm.inventory,
     'trades': mm.trades
 }
@@ -367,19 +367,19 @@ result = simulate_game()
         mm = MarketMaker()
 trader = InformedTrader(10.0)
 for r in range(1, 11):
-    bid, ask = mm.quote(r)
-action = trader.decide(bid, ask)
+    bid, ask = mm.quote (r)
+action = trader.decide (bid, ask)
 if action == 'buy':
     mm.execute_trade('sold', ask, 10.0)
             elif action == 'sell':
 mm.execute_trade('bought', bid, 10.0)
-pnls.append(mm.mark_to_market(10.0))
+pnls.append (mm.mark_to_market(10.0))
 
-print(f"Mean P&L: \${np.mean(pnls):.2f}")
-print(f"Std Dev: \${np.std(pnls):.2f}")
+print(f"Mean P&L: \${np.mean (pnls):.2f}")
+print(f"Std Dev: \${np.std (pnls):.2f}")
 print(f"Win Rate: {np.mean([p > 0 for p in pnls]):.1%}")
-print(f"25th %ile: \${np.percentile(pnls, 25):.2f}")
-print(f"75th %ile: \${np.percentile(pnls, 75):.2f}")
+print(f"25th %ile: \${np.percentile (pnls, 25):.2f}")
+print(f"75th %ile: \${np.percentile (pnls, 75):.2f}")
 \`\`\`
 
 ### Interview Tips
@@ -396,7 +396,7 @@ print(f"75th %ile: \${np.percentile(pnls, 75):.2f}")
 
 ### Setup
 
-**Interviewer:** "There's a deck of 100 cards numbered 1-100. We shuffle and draw one card (you don't see it). You must bid a number from 0-100. Then we reveal the card.
+**Interviewer:** "There\'s a deck of 100 cards numbered 1-100. We shuffle and draw one card (you don't see it). You must bid a number from 0-100. Then we reveal the card.
 
 - If your bid ≥ card number: You win (bid - card) dollars
 - If your bid < card number: You lose your bid
@@ -499,7 +499,7 @@ So the optimal bid is actually 0 or close to 0!
 
 Wait, let me reconsider the problem statement. "If your bid ≥ card number: You win (bid - card) dollars"
 
-Ah! So if card is 10 and I bid 50, I win 50-10 = 40. That's a huge win!
+Ah! So if card is 10 and I bid 50, I win 50-10 = 40. That\'s a huge win!
 
 Let me recalculate properly:
 
@@ -579,7 +579,7 @@ Second sum: (B-1)B
 
 E[B] = [(100-B)(101-B)/2 - (B-1)B]/100
 
-Let's try B=33:
+Let\'s try B=33:
 E[33] = [(67)(68)/2 - 32·33]/100 = [2278 - 1056]/100 = 12.22 ✓
 
 Now this is positive! Let's optimize:
@@ -613,7 +613,7 @@ Then E[B] = (B/100)(100-B) - ((100-B)/100)B
          = B(100-B)/100 - B(100-B)/100 
          = 0
 
-That's zero EV for all bids, which also doesn't make sense for an interview question.
+That\'s zero EV for all bids, which also doesn't make sense for an interview question.
 
 Let me look up the standard form... Actually, for the interview, I'll present the analysis for the most interesting version where optimal bid exists.
 
@@ -636,11 +636,11 @@ Regardless of the exact formula, the key insight is: **bid around 1/3 of the max
 
 import numpy as np
 
-def play_game(bid: int, n_trials: int = 100000) -> dict:
+def play_game (bid: int, n_trials: int = 100000) -> dict:
     """Simulate game with given bid."""
     profits = []
     
-    for _ in range(n_trials):
+    for _ in range (n_trials):
         card = np.random.randint(1, 101)
         
         if bid >= card:
@@ -648,20 +648,20 @@ def play_game(bid: int, n_trials: int = 100000) -> dict:
         else:
             profit = -bid
         
-        profits.append(profit)
+        profits.append (profit)
     
     return {
-        'mean': np.mean(profits),
-        'std': np.std(profits),
+        'mean': np.mean (profits),
+        'std': np.std (profits),
         'win_rate': np.mean([p > 0 for p in profits]),
-        'median': np.median(profits)
+        'median': np.median (profits)
     }
 
 # Test different bids
 print("Bid | Mean P&L | Std Dev | Win Rate")
 print("----|----------|---------|----------")
 for bid in [10, 20, 25, 30, 33, 40, 50]:
-    result = play_game(bid, 100000)
+    result = play_game (bid, 100000)
     print(f"{bid:3d} | {result['mean']:7.2f} | {result['std']:6.2f} | {result['win_rate']:.1%}")
 \`\`\`
 
@@ -725,7 +725,7 @@ If forced to bet: **Bet minimum allowed** (say $1).
 
 ### Setup
 
-**Interviewer:** "Let's play a game. I'm thinking of a number from 1-100. You're a market maker—quote me a bid and ask. I'll either hit your bid, lift your offer, or pass. We play until I trade or 5 rounds pass. Your goal: make money."
+**Interviewer:** "Let\'s play a game. I'm thinking of a number from 1-100. You're a market maker—quote me a bid and ask. I'll either hit your bid, lift your offer, or pass. We play until I trade or 5 rounds pass. Your goal: make money."
 
 ### This is a variation of Game 1 but with complete information asymmetry.
 

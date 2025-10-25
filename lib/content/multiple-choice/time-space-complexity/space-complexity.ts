@@ -8,7 +8,7 @@ export const spacecomplexityMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      'What is the space complexity of this function?\n\n```python\ndef sum_array(arr):\n    total = 0\n    for num in arr:\n        total += num\n    return total\n```',
+      'What is the space complexity of this function?\n\n```python\ndef sum_array (arr):\n    total = 0\n    for num in arr:\n        total += num\n    return total\n```',
     options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'],
     correctAnswer: 1,
     explanation:

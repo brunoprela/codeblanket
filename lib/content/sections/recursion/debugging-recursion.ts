@@ -16,7 +16,7 @@ Recursion can be tricky to debug. These techniques help you understand what's ha
 **Track recursion depth visually:**
 
 \`\`\`python
-def factorial(n, depth=0):
+def factorial (n, depth=0):
     """Factorial with visual call stack"""
     indent = "  " * depth
     print(f"{indent}→ factorial({n})")
@@ -27,7 +27,7 @@ def factorial(n, depth=0):
         return 1
     
     # Recursive case
-    result = n * factorial(n - 1, depth + 1)
+    result = n * factorial (n - 1, depth + 1)
     print(f"{indent}← returning {result}")
     return result
 
@@ -53,7 +53,7 @@ factorial(4)
 **Manually track the call stack:**
 
 \`\`\`python
-def fibonacci_trace(n, depth=0):
+def fibonacci_trace (n, depth=0):
     """Fibonacci with detailed trace"""
     indent = "  " * depth
     print(f"{indent}fib({n})")
@@ -64,8 +64,8 @@ def fibonacci_trace(n, depth=0):
     
     print(f"{indent}Computing fib({n-1}) + fib({n-2})")
     
-    left = fibonacci_trace(n - 1, depth + 1)
-    right = fibonacci_trace(n - 2, depth + 1)
+    left = fibonacci_trace (n - 1, depth + 1)
+    right = fibonacci_trace (n - 2, depth + 1)
     
     result = left + right
     print(f"{indent}→ fib({n}) = {left} + {right} = {result}")
@@ -108,7 +108,7 @@ Computing fib(3) + fib(2)
 **Measure how many times function is called:**
 
 \`\`\`python
-def count_calls(func):
+def count_calls (func):
     """Decorator to count function calls"""
     def wrapper(*args, **kwargs):
         wrapper.calls += 1
@@ -117,10 +117,10 @@ def count_calls(func):
     return wrapper
 
 @count_calls
-def fibonacci_naive(n):
+def fibonacci_naive (n):
     if n <= 1:
         return n
-    return fibonacci_naive(n - 1) + fibonacci_naive(n - 2)
+    return fibonacci_naive (n - 1) + fibonacci_naive (n - 2)
 
 result = fibonacci_naive(10)
 print(f"Result: {result}")
@@ -132,11 +132,11 @@ print(f"Calls: {fibonacci_naive.calls}")
 from functools import lru_cache
 
 @count_calls
-@lru_cache(maxsize=None)
-def fibonacci_memo(n):
+@lru_cache (maxsize=None)
+def fibonacci_memo (n):
     if n <= 1:
         return n
-    return fibonacci_memo(n - 1) + fibonacci_memo(n - 2)
+    return fibonacci_memo (n - 1) + fibonacci_memo (n - 2)
 
 result = fibonacci_memo(10)
 print(f"Result: {result}")
@@ -152,7 +152,7 @@ print(f"Calls: {fibonacci_memo.calls}")
 **Draw the recursion tree on paper:**
 
 \`\`\`python
-def print_tree(n, prefix="", is_last=True):
+def print_tree (n, prefix="", is_last=True):
     """Visualize recursion as tree structure"""
     connector = "└── " if is_last else "├── "
     print(f"{prefix}{connector}fib({n})")
@@ -163,8 +163,8 @@ def print_tree(n, prefix="", is_last=True):
     extension = "    " if is_last else "│   "
     new_prefix = prefix + extension
     
-    print_tree(n - 1, new_prefix, False)
-    print_tree(n - 2, new_prefix, True)
+    print_tree (n - 1, new_prefix, False)
+    print_tree (n - 2, new_prefix, True)
 
 print_tree(5)
 \`\`\`
@@ -197,12 +197,12 @@ print_tree(5)
 \`\`\`python
 import pdb
 
-def factorial(n):
+def factorial (n):
     pdb.set_trace()  # Debugger will stop here
     
     if n <= 1:
         return 1
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 
 # Run and use debugger commands:
 # n - next line
@@ -219,65 +219,65 @@ def factorial(n):
 ### Bug 1: Infinite Recursion
 \`\`\`python
 # ❌ BAD: No base case
-def bad_function(n):
-    return bad_function(n - 1)  # RecursionError!
+def bad_function (n):
+    return bad_function (n - 1)  # RecursionError!
 
 # ✅ GOOD: Always have base case
-def good_function(n):
+def good_function (n):
     if n <= 0:  # Base case
         return 0
-    return good_function(n - 1)
+    return good_function (n - 1)
 \`\`\`
 
 ### Bug 2: Base Case Never Reached
 \`\`\`python
 # ❌ BAD: Progress in wrong direction
-def countdown(n):
+def countdown (n):
     if n == 0:
         return
     print(n)
-    countdown(n + 1)  # Goes up, not down!
+    countdown (n + 1)  # Goes up, not down!
 
 # ✅ GOOD: Make progress toward base case
-def countdown(n):
+def countdown (n):
     if n == 0:
         return
     print(n)
-    countdown(n - 1)  # Correctly decreases
+    countdown (n - 1)  # Correctly decreases
 \`\`\`
 
 ### Bug 3: Wrong Return Value
 \`\`\`python
 # ❌ BAD: Forgetting to return
-def sum_array(arr, index=0):
-    if index >= len(arr):
+def sum_array (arr, index=0):
+    if index >= len (arr):
         return 0
-    arr[index] + sum_array(arr, index + 1)  # Missing return!
+    arr[index] + sum_array (arr, index + 1)  # Missing return!
 
 # ✅ GOOD: Always return
-def sum_array(arr, index=0):
-    if index >= len(arr):
+def sum_array (arr, index=0):
+    if index >= len (arr):
         return 0
-    return arr[index] + sum_array(arr, index + 1)
+    return arr[index] + sum_array (arr, index + 1)
 \`\`\`
 
 ### Bug 4: Modifying Shared State
 \`\`\`python
 # ❌ BAD: Mutable default argument
-def collect_numbers(n, result=[]):  # Shared across calls!
+def collect_numbers (n, result=[]):  # Shared across calls!
     if n <= 0:
         return result
-    result.append(n)
-    return collect_numbers(n - 1, result)
+    result.append (n)
+    return collect_numbers (n - 1, result)
 
 # ✅ GOOD: Use None and create new list
-def collect_numbers(n, result=None):
+def collect_numbers (n, result=None):
     if result is None:
         result = []
     if n <= 0:
         return result
-    result.append(n)
-    return collect_numbers(n - 1, result)
+    result.append (n)
+    return collect_numbers (n - 1, result)
 \`\`\`
 
 ---
@@ -286,7 +286,7 @@ def collect_numbers(n, result=None):
 
 When your recursion doesn't work, check:
 
-**1. Base Case(s):**
+**1. Base Case (s):**
 - [ ] Do I have a base case?
 - [ ] Is it correct?
 - [ ] Will it definitely be reached?
@@ -318,7 +318,7 @@ When your recursion doesn't work, check:
 ## Pro Tips for Thinking Recursively
 
 **1. Start with the base case:**
-   - What's the simplest input I can handle?
+   - What\'s the simplest input I can handle?
    - What should I return for that case?
 
 **2. Assume recursion works:**

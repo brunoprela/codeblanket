@@ -51,9 +51,9 @@ Order Service ---HTTP POST---> Payment Service
 **Example: Order Checkout**
 \`\`\`javascript
 // Order Service
-async function createOrder(orderData) {
+async function createOrder (orderData) {
   // 1. Validate inventory (synchronous call)
-  const inventory = await inventoryService.checkStock(orderData.items);
+  const inventory = await inventoryService.checkStock (orderData.items);
   if (!inventory.available) {
     throw new Error('Out of stock');
   }
@@ -69,7 +69,7 @@ async function createOrder(orderData) {
   }
   
   // 3. Create order
-  const order = await db.orders.create(orderData);
+  const order = await db.orders.create (orderData);
   
   // 4. Send notification (synchronous call)
   await notificationService.sendEmail({
@@ -160,9 +160,9 @@ Producer → [Queue] → Consumer
 **Example: Order Processing**
 \`\`\`javascript
 // Order Service (Producer)
-async function createOrder(orderData) {
+async function createOrder (orderData) {
   // 1. Create order immediately
-  const order = await db.orders.create(orderData);
+  const order = await db.orders.create (orderData);
   
   // 2. Publish to queue (non-blocking)
   await queue.publish('order.created', {
@@ -179,7 +179,7 @@ async function createOrder(orderData) {
 // Payment Service (Consumer)
 queue.subscribe('order.created', async (message) => {
   try {
-    await processPayment(message.orderId, message.total);
+    await processPayment (message.orderId, message.total);
   } catch (error) {
     // Retry logic handled by queue
     throw error;
@@ -224,8 +224,8 @@ Producer → [Topic] → Consumer 1
 **Example: Order Placed Event**
 \`\`\`javascript
 // Order Service (Publisher)
-async function createOrder(orderData) {
-  const order = await db.orders.create(orderData);
+async function createOrder (orderData) {
+  const order = await db.orders.create (orderData);
   
   // Publish event to topic (multiple subscribers)
   await eventBus.publish('order.placed', {
@@ -241,22 +241,22 @@ async function createOrder(orderData) {
 
 // Payment Service (Subscriber 1)
 eventBus.subscribe('order.placed', async (event) => {
-  await processPayment(event.orderId, event.total);
+  await processPayment (event.orderId, event.total);
 });
 
 // Inventory Service (Subscriber 2)
 eventBus.subscribe('order.placed', async (event) => {
-  await reserveInventory(event.items);
+  await reserveInventory (event.items);
 });
 
 // Notification Service (Subscriber 3)
 eventBus.subscribe('order.placed', async (event) => {
-  await sendOrderConfirmation(event.customerId, event.orderId);
+  await sendOrderConfirmation (event.customerId, event.orderId);
 });
 
 // Analytics Service (Subscriber 4)
 eventBus.subscribe('order.placed', async (event) => {
-  await trackOrderEvent(event);
+  await trackOrderEvent (event);
 });
 \`\`\`
 
@@ -288,19 +288,19 @@ eventBus.subscribe('order.placed', async (event) => {
 
 **Example: E-commerce Checkout**
 \`\`\`javascript
-async function checkout(orderData) {
+async function checkout (orderData) {
   // SYNCHRONOUS: Need immediate result
   // 1. Validate inventory (must succeed before proceeding)
-  const inventoryCheck = await inventoryService.reserve(orderData.items);
+  const inventoryCheck = await inventoryService.reserve (orderData.items);
   if (!inventoryCheck.success) {
     return { error: 'Out of stock' };
   }
   
   // 2. Process payment (must succeed before confirming)
-  const payment = await paymentService.charge(orderData.amount);
+  const payment = await paymentService.charge (orderData.amount);
   if (!payment.success) {
     // Compensate: release inventory
-    await inventoryService.release(orderData.items);
+    await inventoryService.release (orderData.items);
     return { error: 'Payment failed' };
   }
   

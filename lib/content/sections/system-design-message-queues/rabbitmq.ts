@@ -5,7 +5,7 @@
 export const rabbitmqSection = {
   id: 'rabbitmq',
   title: 'RabbitMQ',
-  content: `RabbitMQ is a mature, feature-rich message broker that implements the Advanced Message Queuing Protocol (AMQP). It's known for flexible routing, reliable delivery, and support for multiple messaging patterns.
+  content: `RabbitMQ is a mature, feature-rich message broker that implements the Advanced Message Queuing Protocol (AMQP). It\'s known for flexible routing, reliable delivery, and support for multiple messaging patterns.
 
 ## What is RabbitMQ?
 
@@ -119,13 +119,13 @@ Bindings:
 - Queue "info" bound with routing_key="info"
 
 Messages:
-publish(routing_key="error", body="Fatal error")
+publish (routing_key="error", body="Fatal error")
   → Routed to "errors" queue
 
-publish(routing_key="warning", body="Disk space low")
+publish (routing_key="warning", body="Disk space low")
   → Routed to "warnings" queue
 
-publish(routing_key="debug", body="Debug info")
+publish (routing_key="debug", body="Debug info")
   → Not routed (no matching binding) → Dropped
 
 Use case: Severity-based routing (errors, warnings, info)
@@ -136,23 +136,23 @@ Use case: Severity-based routing (errors, warnings, info)
 \`\`\`python
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+connection = pika.BlockingConnection (pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
 # Declare exchange
-channel.exchange_declare(exchange='logs_direct', exchange_type='direct')
+channel.exchange_declare (exchange='logs_direct', exchange_type='direct')
 
 # Declare queues
-channel.queue_declare(queue='error_queue')
-channel.queue_declare(queue='warning_queue')
+channel.queue_declare (queue='error_queue')
+channel.queue_declare (queue='warning_queue')
 
 # Bind queues to exchange
-channel.queue_bind(exchange='logs_direct', queue='error_queue', routing_key='error')
-channel.queue_bind(exchange='logs_direct', queue='warning_queue', routing_key='warning')
+channel.queue_bind (exchange='logs_direct', queue='error_queue', routing_key='error')
+channel.queue_bind (exchange='logs_direct', queue='warning_queue', routing_key='warning')
 
 # Publish messages
-channel.basic_publish(exchange='logs_direct', routing_key='error', body='Fatal error occurred')
-channel.basic_publish(exchange='logs_direct', routing_key='warning', body='Disk space low')
+channel.basic_publish (exchange='logs_direct', routing_key='error', body='Fatal error occurred')
+channel.basic_publish (exchange='logs_direct', routing_key='warning', body='Disk space low')
 \`\`\`
 
 ### **2. Topic Exchange**
@@ -173,15 +173,15 @@ Bindings:
 - Queue "critical" bound with pattern="*.critical"
 
 Messages:
-publish(routing_key="order.created", ...)
+publish (routing_key="order.created", ...)
   → Matches "order.*" → orders queue
   → Matches "#" → all_logs queue
 
-publish(routing_key="payment.critical", ...)
+publish (routing_key="payment.critical", ...)
   → Matches "*.critical" → critical queue
   → Matches "#" → all_logs queue
 
-publish(routing_key="user.login.success", ...)
+publish (routing_key="user.login.success", ...)
   → Matches "#" → all_logs queue only
 
 Use case: Flexible pub/sub (logging, monitoring, events)
@@ -191,17 +191,17 @@ Use case: Flexible pub/sub (logging, monitoring, events)
 
 \`\`\`python
 # Declare topic exchange
-channel.exchange_declare(exchange='events', exchange_type='topic')
+channel.exchange_declare (exchange='events', exchange_type='topic')
 
 # Bind queues with patterns
-channel.queue_bind(exchange='events', queue='order_queue', routing_key='order.*')
-channel.queue_bind(exchange='events', queue='payment_queue', routing_key='payment.#')
-channel.queue_bind(exchange='events', queue='critical_queue', routing_key='*.critical')
+channel.queue_bind (exchange='events', queue='order_queue', routing_key='order.*')
+channel.queue_bind (exchange='events', queue='payment_queue', routing_key='payment.#')
+channel.queue_bind (exchange='events', queue='critical_queue', routing_key='*.critical')
 
 # Publish
-channel.basic_publish(exchange='events', routing_key='order.created', body='New order')
-channel.basic_publish(exchange='events', routing_key='payment.credit.card', body='Payment')
-channel.basic_publish(exchange='events', routing_key='system.critical', body='CPU high')
+channel.basic_publish (exchange='events', routing_key='order.created', body='New order')
+channel.basic_publish (exchange='events', routing_key='payment.credit.card', body='Payment')
+channel.basic_publish (exchange='events', routing_key='system.critical', body='CPU high')
 \`\`\`
 
 ### **3. Fanout Exchange**
@@ -217,7 +217,7 @@ Bindings (routing key ignored):
 - Queue "monitoring"
 
 Message:
-publish(routing_key="anything", body="User registered")
+publish (routing_key="anything", body="User registered")
   → Routed to ALL queues:
     - analytics queue
     - archive queue
@@ -230,15 +230,15 @@ Use case: Broadcasting events (user actions, system events)
 
 \`\`\`python
 # Declare fanout exchange
-channel.exchange_declare(exchange='user_events', exchange_type='fanout')
+channel.exchange_declare (exchange='user_events', exchange_type='fanout')
 
 # Multiple queues bound (routing key irrelevant)
-channel.queue_bind(exchange='user_events', queue='analytics_queue')
-channel.queue_bind(exchange='user_events', queue='email_queue')
-channel.queue_bind(exchange='user_events', queue='notification_queue')
+channel.queue_bind (exchange='user_events', queue='analytics_queue')
+channel.queue_bind (exchange='user_events', queue='email_queue')
+channel.queue_bind (exchange='user_events', queue='notification_queue')
 
 # Publish once, delivered to all queues
-channel.basic_publish(exchange='user_events', routing_key='', body='User signed up')
+channel.basic_publish (exchange='user_events', routing_key='', body='User signed up')
 
 # All three queues receive the message
 \`\`\`
@@ -344,21 +344,21 @@ Use case: Event streams, audit logs
 
 \`\`\`python
 # Auto-acknowledge (not recommended)
-channel.basic_consume(queue='my_queue', on_message_callback=callback, auto_ack=True)
+channel.basic_consume (queue='my_queue', on_message_callback=callback, auto_ack=True)
 # ❌ Message deleted before processing
 # ❌ Lost if consumer crashes
 
 # Manual acknowledge (recommended)
-def callback(ch, method, properties, body):
+def callback (ch, method, properties, body):
     try:
-        process_message(body)
-        ch.basic_ack(delivery_tag=method.delivery_tag)  # Success
+        process_message (body)
+        ch.basic_ack (delivery_tag=method.delivery_tag)  # Success
     except RecoverableError:
-        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)  # Retry
+        ch.basic_nack (delivery_tag=method.delivery_tag, requeue=True)  # Retry
     except PermanentError:
-        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)  # Discard
+        ch.basic_nack (delivery_tag=method.delivery_tag, requeue=False)  # Discard
 
-channel.basic_consume(queue='my_queue', on_message_callback=callback, auto_ack=False)
+channel.basic_consume (queue='my_queue', on_message_callback=callback, auto_ack=False)
 
 ✅ Message only deleted after successful processing
 ✅ Requeue on failure
@@ -372,7 +372,7 @@ channel.basic_consume(queue='my_queue', on_message_callback=callback, auto_ack=F
 channel.confirm_delivery()
 
 try:
-    channel.basic_publish(exchange='', routing_key='my_queue', body='Hello')
+    channel.basic_publish (exchange='', routing_key='my_queue', body='Hello')
     # If we get here, message was confirmed by broker
     print("Message delivered")
 except pika.exceptions.UnroutableError:
@@ -404,16 +404,16 @@ Use case: Task distribution, job processing
 \`\`\`python
 # Producer
 for i in range(100):
-    channel.basic_publish(exchange='', routing_key='tasks', body=f'Task {i}')
+    channel.basic_publish (exchange='', routing_key='tasks', body=f'Task {i}')
 
 # Workers (multiple instances)
-def callback(ch, method, properties, body):
+def callback (ch, method, properties, body):
     print(f"Processing {body}")
     time.sleep(2)  # Simulate work
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+    ch.basic_ack (delivery_tag=method.delivery_tag)
 
-channel.basic_qos(prefetch_count=1)  # Fair dispatch (one task per worker)
-channel.basic_consume(queue='tasks', on_message_callback=callback)
+channel.basic_qos (prefetch_count=1)  # Fair dispatch (one task per worker)
+channel.basic_consume (queue='tasks', on_message_callback=callback)
 channel.start_consuming()
 
 # Worker 1 gets Task 0, Task 3, Task 6, ...
@@ -464,9 +464,9 @@ Implementation:
 \`\`\`python
 # RPC Client
 class RpcClient:
-    def call(self, n):
+    def call (self, n):
         self.response = None
-        self.corr_id = str(uuid.uuid4())
+        self.corr_id = str (uuid.uuid4())
         
         # Send request
         self.channel.basic_publish(
@@ -476,28 +476,28 @@ class RpcClient:
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id
             ),
-            body=str(n)
+            body=str (n)
         )
         
         # Wait for response
         while self.response is None:
             self.connection.process_data_events()
         
-        return int(self.response)
+        return int (self.response)
 
 # RPC Server
-def on_request(ch, method, props, body):
-    n = int(body)
-    response = fibonacci(n)  # Calculate
+def on_request (ch, method, props, body):
+    n = int (body)
+    response = fibonacci (n)  # Calculate
     
     # Send response
     ch.basic_publish(
         exchange='',
         routing_key=props.reply_to,
-        properties=pika.BasicProperties(correlation_id=props.correlation_id),
-        body=str(response)
+        properties=pika.BasicProperties (correlation_id=props.correlation_id),
+        body=str (response)
     )
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+    ch.basic_ack (delivery_tag=method.delivery_tag)
 \`\`\`
 
 ---
@@ -508,11 +508,11 @@ Handle messages that cannot be delivered:
 
 \`\`\`python
 # Declare DLX
-channel.exchange_declare(exchange='dead_letters', exchange_type='direct')
+channel.exchange_declare (exchange='dead_letters', exchange_type='direct')
 
 # Declare DLQ
-channel.queue_declare(queue='failed_messages')
-channel.queue_bind(exchange='dead_letters', queue='failed_messages', routing_key='failed')
+channel.queue_declare (queue='failed_messages')
+channel.queue_bind (exchange='dead_letters', queue='failed_messages', routing_key='failed')
 
 # Declare main queue with DLX
 channel.queue_declare(
@@ -586,13 +586,13 @@ arguments={'x-queue-type': 'quorum', 'x-quorum-initial-group-size': 3}
 
 \`\`\`python
 # Without prefetch limit
-channel.basic_qos(prefetch_count=0)  # Default
+channel.basic_qos (prefetch_count=0)  # Default
 # RabbitMQ sends all messages to consumer immediately
 # ❌ Consumer overwhelmed
 # ❌ Uneven load distribution
 
 # With prefetch limit
-channel.basic_qos(prefetch_count=10)
+channel.basic_qos (prefetch_count=10)
 # RabbitMQ sends max 10 messages to consumer
 # Consumer acknowledges → RabbitMQ sends more
 # ✅ Backpressure
@@ -617,14 +617,14 @@ channel.queue_declare(
 
 \`\`\`python
 # Per-queue TTL
-channel.queue_declare(queue='temp_queue', arguments={'x-message-ttl': 60000})  # 60 sec
+channel.queue_declare (queue='temp_queue', arguments={'x-message-ttl': 60000})  # 60 sec
 
 # Per-message TTL
 channel.basic_publish(
     exchange='',
     routing_key='temp_queue',
     body='Expires soon',
-    properties=pika.BasicProperties(expiration='60000')  # 60 sec
+    properties=pika.BasicProperties (expiration='60000')  # 60 sec
 )
 
 # Use case: Temporary data, cleanup
@@ -710,7 +710,7 @@ auto_ack=False
 ### **4. Set Prefetch Count:**
 
 \`\`\`python
-channel.basic_qos(prefetch_count=10)
+channel.basic_qos (prefetch_count=10)
 # Prevent consumer overload
 \`\`\`
 
@@ -732,8 +732,8 @@ Scale consumers or investigate slow processing
 
 \`\`\`python
 # Handle message redelivery
-if not already_processed(message_id):
-    process(message)
+if not already_processed (message_id):
+    process (message)
 \`\`\`
 
 ---

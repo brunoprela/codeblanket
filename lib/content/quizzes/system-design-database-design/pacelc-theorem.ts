@@ -285,7 +285,7 @@ Why Spanner would be WORSE:
 **Real-World Hybrid Architecture:**
 
 \`\`\`
-Google's Approach:
+Google\'s Approach:
 
 Spanner (PC/EC):
 - Ads billing (must be accurate)
@@ -306,7 +306,7 @@ Result: Right tool for each job
 
 The 50-100ms Spanner latency buys us **global strong consistency** which is critical for financial accuracy. The 10ms DynamoDB latency provides **user experience** for non-critical data. We should use both: Spanner for financial/critical data, DynamoDB for user-facing/non-critical data.
 
-**Analogy**: It's like asking 'why not use sports cars for everything since they're faster?' Because sometimes you need a truck (to carry heavy loads) and sometimes you need a sports car (to go fast). Same with databases - use the right tool for the job."`,
+**Analogy**: It\'s like asking 'why not use sports cars for everything since they're faster?' Because sometimes you need a truck (to carry heavy loads) and sometimes you need a sports car (to go fast). Same with databases - use the right tool for the job."`,
     keyPoints: [
       'Spanner (PC/EC) chooses Consistency over Latency, resulting in 50-100ms for strong global consistency',
       'DynamoDB (PA/EL) chooses Latency over Consistency, resulting in <10ms with eventual consistency',
@@ -537,7 +537,7 @@ get 'post_engagement', post_id, 'metrics:likes'
 - ❌ Harder to scale horizontally
 - ❌ Lower throughput (1K-5K writes/sec per node)
 
-**For social media analytics: Cassandra's trade-offs are clearly better**
+**For social media analytics: Cassandra\'s trade-offs are clearly better**
 
 ---
 

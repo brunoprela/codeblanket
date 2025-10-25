@@ -26,7 +26,7 @@ When we say "space complexity," we typically mean **auxiliary space** - the extr
 
 \`\`\`python
 # O(1) space - just a few variables
-def sum_array(arr):
+def sum_array (arr):
     total = 0  # One variable
     for num in arr:
         total += num
@@ -40,17 +40,17 @@ def sum_array(arr):
 
 \`\`\`python
 # O(n) space - creating new array
-def double_array(arr):
+def double_array (arr):
     result = []  # New array of size n
     for num in arr:
-        result.append(num * 2)
+        result.append (num * 2)
     return result
 
 # O(n) space - recursive call stack
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n - 1)  # n recursive calls
+    return n * factorial (n - 1)  # n recursive calls
 \`\`\`
 
 **O(n²) - Quadratic Space:**
@@ -59,8 +59,8 @@ def factorial(n):
 
 \`\`\`python
 # O(n²) space - 2D matrix
-def create_matrix(n):
-    matrix = [[0 for _ in range(n)] for _ in range(n)]
+def create_matrix (n):
+    matrix = [[0 for _ in range (n)] for _ in range (n)]
     return matrix
 \`\`\`
 
@@ -70,10 +70,10 @@ Recursive functions use stack space! Each recursive call adds a frame to the cal
 
 \`\`\`python
 # O(n) space due to call stack
-def recursive_sum(arr, index=0):
-    if index == len(arr):
+def recursive_sum (arr, index=0):
+    if index == len (arr):
         return 0
-    return arr[index] + recursive_sum(arr, index + 1)
+    return arr[index] + recursive_sum (arr, index + 1)
 \`\`\`
 
 **Time-Space Tradeoffs:**
@@ -84,22 +84,22 @@ Often you can trade space for time or vice versa:
 
 \`\`\`python
 # Naive: O(2ⁿ) time, O(n) space
-def fib_naive(n):
+def fib_naive (n):
     if n <= 1:
         return n
-    return fib_naive(n-1) + fib_naive(n-2)
+    return fib_naive (n-1) + fib_naive (n-2)
 
 # Memoization: O(n) time, O(n) space
-def fib_memo(n, cache={}):
+def fib_memo (n, cache={}):
     if n in cache:
         return cache[n]
     if n <= 1:
         return n
-    cache[n] = fib_memo(n-1, cache) + fib_memo(n-2, cache)
+    cache[n] = fib_memo (n-1, cache) + fib_memo (n-2, cache)
     return cache[n]
 
 # Iterative: O(n) time, O(1) space
-def fib_iterative(n):
+def fib_iterative (n):
     if n <= 1:
         return n
     prev, curr = 0, 1

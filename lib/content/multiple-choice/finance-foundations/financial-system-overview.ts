@@ -50,7 +50,7 @@ export const financialSystemOverviewMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Price discovery is fundamental to capitalism. When markets aggregate information from millions of participants to determine fair prices, capital flows to its most productive uses. Example: Tesla stock rises from $50 to $250 → signal to market that EV transition is real → capital flows to Tesla (via stock issuance, cheaper debt) and other EV companies → society allocates resources to valuable technology. Without accurate price signals, capital is misallocated (see: Soviet Union's planned economy failures). Liquidity, risk management, and transactions are important but secondary to getting prices right.",
+      "Price discovery is fundamental to capitalism. When markets aggregate information from millions of participants to determine fair prices, capital flows to its most productive uses. Example: Tesla stock rises from $50 to $250 → signal to market that EV transition is real → capital flows to Tesla (via stock issuance, cheaper debt) and other EV companies → society allocates resources to valuable technology. Without accurate price signals, capital is misallocated (see: Soviet Union\'s planned economy failures). Liquidity, risk management, and transactions are important but secondary to getting prices right.",
   },
   {
     id: 'fso-mc-5',

@@ -14,7 +14,7 @@ export const shortestpathSection = {
 
 **Standard Shortest Path Template:**
 \`\`\`python
-def shortest_path_bfs(graph, start, end):
+def shortest_path_bfs (graph, start, end):
     if start == end:
         return 0
     
@@ -29,7 +29,7 @@ def shortest_path_bfs(graph, start, end):
                 return distance + 1
             
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 queue.append((neighbor, distance + 1))
     
     return -1  # Unreachable
@@ -37,7 +37,7 @@ def shortest_path_bfs(graph, start, end):
 
 **With Path Reconstruction:**
 \`\`\`python
-def shortest_path_with_reconstruction(graph, start, end):
+def shortest_path_with_reconstruction (graph, start, end):
     if start == end:
         return [start]
     
@@ -51,16 +51,16 @@ def shortest_path_with_reconstruction(graph, start, end):
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 parent[neighbor] = node
-                queue.append(neighbor)
+                queue.append (neighbor)
                 
                 if neighbor == end:
                     # Reconstruct path
                     path = []
                     curr = end
                     while curr is not None:
-                        path.append(curr)
+                        path.append (curr)
                         curr = parent[curr]
                     return path[::-1]
     
@@ -69,12 +69,12 @@ def shortest_path_with_reconstruction(graph, start, end):
 
 **Grid Shortest Path (4-directional):**
 \`\`\`python
-def shortest_path_grid(grid, start, end):
+def shortest_path_grid (grid, start, end):
     """
     Find shortest path in 2D grid.
     0 = walkable, 1 = blocked
     """
-    rows, cols = len(grid), len(grid[0])
+    rows, cols = len (grid), len (grid[0])
     visited = {start}
     queue = deque([(start[0], start[1], 0)])
     

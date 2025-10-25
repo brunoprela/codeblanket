@@ -52,7 +52,7 @@ export const authenticationfundamentalsMultipleChoice: MultipleChoiceQuestion[] 
       options: ['SAML', 'LDAP', 'OIDC', 'Kerberos'],
       correctAnswer: 2,
       explanation:
-        "OpenID Connect (OIDC) is best for modern mobile apps. It's JSON-based (lightweight), has native mobile support, better security than SAML for mobile, and simpler to implement. SAML is XML-based and designed for browser redirects, making it clunky for mobile.",
+        "OpenID Connect (OIDC) is best for modern mobile apps. It\'s JSON-based (lightweight), has native mobile support, better security than SAML for mobile, and simpler to implement. SAML is XML-based and designed for browser redirects, making it clunky for mobile.",
     },
     {
       id: 'mc5',

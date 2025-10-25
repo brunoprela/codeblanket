@@ -35,20 +35,20 @@ df_clean = df.dropna()
 \`\`\`python
 # Customer database where email is required
 # Only 2% missing email - safe to remove
-df = df.dropna(subset=['email',])
+df = df.dropna (subset=['email',])
 \`\`\`
 
 **2. Simple Imputation (Mean/Median/Mode)**
 
 \`\`\`python
 # Mean imputation
-df['age',].fillna(df['age',].mean(), inplace=True)
+df['age',].fillna (df['age',].mean(), inplace=True)
 
 # Median imputation (better for skewed data)
-df['salary',].fillna(df['salary',].median(), inplace=True)
+df['salary',].fillna (df['salary',].median(), inplace=True)
 
 # Mode imputation (categorical)
-df['department',].fillna(df['department',].mode()[0], inplace=True)
+df['department',].fillna (df['department',].mode()[0], inplace=True)
 \`\`\`
 
 **When to use:**
@@ -74,7 +74,7 @@ df['department',].fillna(df['department',].mode()[0], inplace=True)
 \`\`\`python
 # Survey data with 10% missing age values
 # Use median (robust to outliers)
-df['age',].fillna(df['age',].median(), inplace=True)
+df['age',].fillna (df['age',].median(), inplace=True)
 \`\`\`
 
 **3. Group-Based Imputation**
@@ -82,7 +82,7 @@ df['age',].fillna(df['age',].median(), inplace=True)
 \`\`\`python
 # Impute with group mean
 df['salary',] = df.groupby('department')['salary',].transform(
-    lambda x: x.fillna(x.mean())
+    lambda x: x.fillna (x.mean())
 )
 \`\`\`
 
@@ -106,7 +106,7 @@ df['salary',] = df.groupby('department')['salary',].transform(
 \`\`\`python
 from sklearn.impute import KNNImputer
 
-imputer = KNNImputer(n_neighbors=5)
+imputer = KNNImputer (n_neighbors=5)
 df[['age', 'salary', 'experience',]] = imputer.fit_transform(
     df[['age', 'salary', 'experience',]]
 )
@@ -137,9 +137,9 @@ df[['age', 'salary', 'experience',]] = imputer.fit_transform(
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 
-imputer = IterativeImputer(max_iter=10, random_state=42)
+imputer = IterativeImputer (max_iter=10, random_state=42)
 df_imputed = pd.DataFrame(
-    imputer.fit_transform(df),
+    imputer.fit_transform (df),
     columns=df.columns
 )
 \`\`\`
@@ -203,24 +203,24 @@ df = pd.DataFrame({
 # Introduce missing values (10%)
 mask = np.random.random((1000, 4)) < 0.1
 mask[:, 0] = False  # Don't remove patient_id
-df = df.mask(mask)
+df = df.mask (mask)
 
 # Strategy selection:
 # 1. Patient ID: Must have (drop if missing)
-df = df.dropna(subset=['patient_id',])
+df = df.dropna (subset=['patient_id',])
 
 # 2. Age: Use median (robust to outliers)
-df['age',].fillna(df['age',].median(), inplace=True)
+df['age',].fillna (df['age',].median(), inplace=True)
 
 # 3. Blood pressure & cholesterol: Correlated, use KNN
 from sklearn.impute import KNNImputer
-imputer = KNNImputer(n_neighbors=5)
+imputer = KNNImputer (n_neighbors=5)
 df[['blood_pressure', 'cholesterol',]] = imputer.fit_transform(
     df[['blood_pressure', 'cholesterol',]]
 )
 
 # 4. Outcome: Categorical, use mode or model-based
-df['outcome',].fillna(df['outcome',].mode()[0], inplace=True)
+df['outcome',].fillna (df['outcome',].mode()[0], inplace=True)
 \`\`\`
 
 **Best Practices:**
@@ -245,7 +245,7 @@ df['outcome',].fillna(df['outcome',].mode()[0], inplace=True)
 ❌ **Not checking imputation quality** → Always validate results  
 
 **Key Takeaway:**
-There's no universally best method—the choice depends on the percentage of missing data, missingness mechanism, analysis goals, and computational resources. Start simple, but be prepared to use more sophisticated methods when stakes are high.`,
+There\'s no universally best method—the choice depends on the percentage of missing data, missingness mechanism, analysis goals, and computational resources. Start simple, but be prepared to use more sophisticated methods when stakes are high.`,
     keyPoints: [
       'dropna() removes rows/columns with missing data - simple but loses information',
       'Simple imputation (mean/median/mode) easy but ignores relationships',
@@ -265,7 +265,7 @@ There's no universally best method—the choice depends on the percentage of mis
 **Definition:**
 \`\`\`python
 z_score = (x - mean) / std
-is_outlier = abs(z_score) > 3
+is_outlier = abs (z_score) > 3
 \`\`\`
 
 An observation is typically considered an outlier if |z-score| > 3 (or 2.5-3 depending on context).
@@ -279,14 +279,14 @@ An observation is typically considered an outlier if |z-score| > 3 (or 2.5-3 dep
 \`\`\`python
 data = np.random.normal(100, 15, 1000)
 # Add outliers
-data = np.append(data, [200, 250, -50])
+data = np.append (data, [200, 250, -50])
 
 mean = data.mean()
 std = data.std()
 z_scores = (data - mean) / std
-outliers_z = data[np.abs(z_scores) > 3]
+outliers_z = data[np.abs (z_scores) > 3]
 
-print(f"Z-score outliers: {len(outliers_z)}")
+print(f"Z-score outliers: {len (outliers_z)}")
 print(f"Outlier values: {outliers_z}")
 \`\`\`
 
@@ -294,8 +294,8 @@ print(f"Outlier values: {outliers_z}")
 
 **Definition:**
 \`\`\`python
-Q1 = np.percentile(data, 25)
-Q3 = np.percentile(data, 75)
+Q1 = np.percentile (data, 25)
+Q3 = np.percentile (data, 75)
 IQR = Q3 - Q1
 lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
@@ -309,14 +309,14 @@ is_outlier = (x < lower_bound) | (x > upper_bound)
 
 **Example:**
 \`\`\`python
-Q1 = np.percentile(data, 25)
-Q3 = np.percentile(data, 75)
+Q1 = np.percentile (data, 25)
+Q3 = np.percentile (data, 75)
 IQR = Q3 - Q1
 lower = Q1 - 1.5 * IQR
 upper = Q3 + 1.5 * IQR
 outliers_iqr = data[(data < lower) | (data > upper)]
 
-print(f"IQR outliers: {len(outliers_iqr)}")
+print(f"IQR outliers: {len (outliers_iqr)}")
 print(f"Outlier values: {outliers_iqr}")
 \`\`\`
 
@@ -338,7 +338,7 @@ print(f"Outlier values: {outliers_iqr}")
 normal_data = np.random.normal(100, 15, 1000)
 
 # Add extreme outlier
-data_with_outlier = np.append(normal_data, [1000])
+data_with_outlier = np.append (normal_data, [1000])
 
 # Z-score method
 mean_affected = data_with_outlier.mean()  # 100.9 (pulled by outlier)
@@ -349,8 +349,8 @@ z_score_outlier = (1000 - mean_affected) / std_affected  # 28.3
 # This can mask other outliers
 
 # IQR method (robust)
-Q1 = np.percentile(data_with_outlier, 25)  # ~89
-Q3 = np.percentile(data_with_outlier, 75)  # ~111
+Q1 = np.percentile (data_with_outlier, 25)  # ~89
+Q3 = np.percentile (data_with_outlier, 75)  # ~111
 IQR = Q3 - Q1  # ~22
 # Quartiles not affected by extreme outlier!
 \`\`\`
@@ -363,7 +363,7 @@ IQR = Q3 - Q1  # ~22
 \`\`\`python
 # Check normality
 from scipy import stats
-_, p_value = stats.normaltest(data)
+_, p_value = stats.normaltest (data)
 if p_value > 0.05:  # Not rejecting normality
     # Use Z-score
     pass
@@ -416,9 +416,9 @@ distributions = [
     ('Heavy Tails (Cauchy)', stats.cauchy.rvs(100, 25, 1000)),
 ]
 
-for idx, (name, data) in enumerate(distributions):
+for idx, (name, data) in enumerate (distributions):
     # Add outliers
-    data = np.append(data, [data.max() * 1.5, data.min() * 1.5])
+    data = np.append (data, [data.max() * 1.5, data.min() * 1.5])
     
     # Z-score method
     mean, std = data.mean(), data.std()
@@ -426,24 +426,24 @@ for idx, (name, data) in enumerate(distributions):
     z_outliers = data[z_scores > 3]
     
     # IQR method
-    Q1, Q3 = np.percentile(data, [25, 75])
+    Q1, Q3 = np.percentile (data, [25, 75])
     IQR = Q3 - Q1
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
     iqr_outliers = data[(data < lower) | (data > upper)]
     
     # Plot distribution
-    axes[0, idx].hist(data, bins=50, edgecolor='black', alpha=0.7)
-    axes[0, idx].set_title(f'{name}\\nZ-score outliers: {len(z_outliers)}')
-    axes[0, idx].axvline(mean, color='red', linestyle='--', label='Mean')
+    axes[0, idx].hist (data, bins=50, edgecolor='black', alpha=0.7)
+    axes[0, idx].set_title (f'{name}\\nZ-score outliers: {len (z_outliers)}')
+    axes[0, idx].axvline (mean, color='red', linestyle='--', label='Mean')
     
     # Plot boxplot
-    axes[1, idx].boxplot(data)
-    axes[1, idx].set_title(f'IQR outliers: {len(iqr_outliers)}')
+    axes[1, idx].boxplot (data)
+    axes[1, idx].set_title (f'IQR outliers: {len (iqr_outliers)}')
     
     print(f"\\n{name}:")
-    print(f"  Z-score found: {len(z_outliers)} outliers")
-    print(f"  IQR found: {len(iqr_outliers)} outliers")
+    print(f"  Z-score found: {len (z_outliers)} outliers")
+    print(f"  IQR found: {len (iqr_outliers)} outliers")
 
 plt.tight_layout()
 plt.show()
@@ -459,14 +459,14 @@ plt.show()
 For situations where you want z-score-like interpretation but with robustness:
 
 \`\`\`python
-def modified_z_score(data):
-    median = np.median(data)
-    mad = np.median(np.abs(data - median))  # Median Absolute Deviation
+def modified_z_score (data):
+    median = np.median (data)
+    mad = np.median (np.abs (data - median))  # Median Absolute Deviation
     modified_z = 0.6745 * (data - median) / mad
     return modified_z
 
 # Use threshold of 3.5 instead of 3
-outliers_mod_z = data[np.abs(modified_z_score(data)) > 3.5]
+outliers_mod_z = data[np.abs (modified_z_score (data)) > 3.5]
 \`\`\`
 
 **Best Practices:**
@@ -474,17 +474,17 @@ outliers_mod_z = data[np.abs(modified_z_score(data)) > 3.5]
 **1. Visualize First**
 \`\`\`python
 # Always plot before deciding
-plt.figure(figsize=(12, 4))
+plt.figure (figsize=(12, 4))
 plt.subplot(131)
-plt.hist(data, bins=50)
+plt.hist (data, bins=50)
 plt.title('Histogram')
 
 plt.subplot(132)
-plt.boxplot(data)
+plt.boxplot (data)
 plt.title('Boxplot (IQR)')
 
 plt.subplot(133)
-stats.probplot(data, dist="norm", plot=plt)
+stats.probplot (data, dist="norm", plot=plt)
 plt.title('Q-Q Plot (normality check)')
 plt.tight_layout()
 plt.show()
@@ -493,8 +493,8 @@ plt.show()
 **2. Use Both Methods**
 \`\`\`python
 # Combine both methods
-z_outliers = set(np.where(np.abs(z_scores) > 3)[0])
-iqr_outliers = set(np.where((data < lower) | (data > upper))[0])
+z_outliers = set (np.where (np.abs (z_scores) > 3)[0])
+iqr_outliers = set (np.where((data < lower) | (data > upper))[0])
 
 # Outliers detected by both (high confidence)
 both = z_outliers & iqr_outliers
@@ -515,9 +515,9 @@ valid_ages = data[(data >= 0) & (data <= 120)]
 **4. Iterative Outlier Detection**
 \`\`\`python
 # IQR can be applied iteratively
-def iterative_iqr(data, max_iter=3):
-    for i in range(max_iter):
-        Q1, Q3 = np.percentile(data, [25, 75])
+def iterative_iqr (data, max_iter=3):
+    for i in range (max_iter):
+        Q1, Q3 = np.percentile (data, [25, 75])
         IQR = Q3 - Q1
         lower = Q1 - 1.5 * IQR
         upper = Q3 + 1.5 * IQR
@@ -572,11 +572,11 @@ df = pd.DataFrame({
 })
 # Introduce 20% missing
 mask = np.random.random((1000, 2)) < 0.2
-df[['feature1', 'feature2',]] = df[['feature1', 'feature2',]].mask(mask)
+df[['feature1', 'feature2',]] = df[['feature1', 'feature2',]].mask (mask)
 
 # WRONG: Impute before split
-df['feature1',].fillna(df['feature1',].mean(), inplace=True)  # Uses ALL data including test!
-df['feature2',].fillna(df['feature2',].mean(), inplace=True)
+df['feature1',].fillna (df['feature1',].mean(), inplace=True)  # Uses ALL data including test!
+df['feature2',].fillna (df['feature2',].mean(), inplace=True)
 
 # Split
 X_train, X_test, y_train, y_test = train_test_split(
@@ -603,10 +603,10 @@ train_mean_f1 = X_train['feature1',].mean()
 train_mean_f2 = X_train['feature2',].mean()
 
 # Apply to both sets
-X_train['feature1',].fillna(train_mean_f1, inplace=True)
-X_train['feature2',].fillna(train_mean_f2, inplace=True)
-X_test['feature1',].fillna(train_mean_f1, inplace=True)  # Use training statistics
-X_test['feature2',].fillna(train_mean_f2, inplace=True)
+X_train['feature1',].fillna (train_mean_f1, inplace=True)
+X_train['feature2',].fillna (train_mean_f2, inplace=True)
+X_test['feature1',].fillna (train_mean_f1, inplace=True)  # Use training statistics
+X_test['feature2',].fillna (train_mean_f2, inplace=True)
 
 # Now test score is realistic
 model.fit(X_train, y_train)
@@ -621,12 +621,12 @@ n = 1000
 
 # Create data where missingness is informative
 df = pd.DataFrame({
-    'feature': np.random.randn(n),
+    'feature': np.random.randn (n),
     'target': np.random.randint(0, 2, n)
 })
 
 # Make missingness correlated with target
-mask = (df['target',] == 1) & (np.random.random(n) < 0.5)
+mask = (df['target',] == 1) & (np.random.random (n) < 0.5)
 df.loc[mask, 'feature',] = np.nan
 
 print(f"Missing in class 0: {df[df['target',]==0]['feature',].isna().sum()}")
@@ -635,7 +635,7 @@ print(f"Missing in class 1: {df[df['target',]==1]['feature',].isna().sum()}")
 
 # Wrong way (leaks)
 df_wrong = df.copy()
-df_wrong['feature',].fillna(df_wrong['feature',].mean(), inplace=True)
+df_wrong['feature',].fillna (df_wrong['feature',].mean(), inplace=True)
 X_train, X_test, y_train, y_test = train_test_split(
     df_wrong[['feature',]], df_wrong['target',], test_size=0.2
 )
@@ -648,8 +648,8 @@ X_train, X_test, y_train, y_test = train_test_split(
     df[['feature',]], df['target',], test_size=0.2, random_state=42
 )
 train_mean = X_train['feature',].mean()
-X_train_filled = X_train.fillna(train_mean)
-X_test_filled = X_test.fillna(train_mean)
+X_train_filled = X_train.fillna (train_mean)
+X_test_filled = X_test.fillna (train_mean)
 model.fit(X_train_filled, y_train)
 score_correct = model.score(X_test_filled, y_test)
 
@@ -666,15 +666,15 @@ from sklearn.preprocessing import StandardScaler
 
 # WRONG: Fit scaler on all data
 scaler = StandardScaler()
-df_scaled = scaler.fit_transform(df)  # Computes mean/std on ALL data
+df_scaled = scaler.fit_transform (df)  # Computes mean/std on ALL data
 
-X_train, X_test = train_test_split(df_scaled, test_size=0.2)
+X_train, X_test = train_test_split (df_scaled, test_size=0.2)
 # Test set influenced training set's mean/std
 \`\`\`
 
 **Correct:**
 \`\`\`python
-X_train, X_test = train_test_split(df, test_size=0.2)
+X_train, X_test = train_test_split (df, test_size=0.2)
 
 # Fit scaler only on training data
 scaler = StandardScaler()
@@ -695,14 +695,14 @@ IQR = Q3 - Q1
 df_clean = df[(df['feature',] >= Q1 - 1.5*IQR) & (df['feature',] <= Q3 + 1.5*IQR)]
 
 # Split after outlier removal
-X_train, X_test = train_test_split(df_clean, test_size=0.2)
+X_train, X_test = train_test_split (df_clean, test_size=0.2)
 # Test set was used to compute outlier bounds!
 \`\`\`
 
 **Correct:**
 \`\`\`python
 # Split first
-X_train, X_test = train_test_split(df, test_size=0.2)
+X_train, X_test = train_test_split (df, test_size=0.2)
 
 # Compute outlier bounds on training set only
 Q1 = X_train['feature',].quantile(0.25)
@@ -719,7 +719,7 @@ X_train_clean = X_train[
 
 # For test set: either keep all data or cap outliers
 X_test_capped = X_test.copy()
-X_test_capped['feature',] = X_test_capped['feature',].clip(lower_bound, upper_bound)
+X_test_capped['feature',] = X_test_capped['feature',].clip (lower_bound, upper_bound)
 \`\`\`
 
 **4. Leakage from Feature Engineering**
@@ -730,7 +730,7 @@ X_test_capped['feature',] = X_test_capped['feature',].clip(lower_bound, upper_bo
 df['category_mean_target',] = df.groupby('category')['target',].transform('mean')
 # This uses future information!
 
-X_train, X_test = train_test_split(df, test_size=0.2)
+X_train, X_test = train_test_split (df, test_size=0.2)
 \`\`\`
 
 **Correct:**
@@ -740,14 +740,14 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Compute target encoding on training set
-category_means = X_train.join(y_train).groupby('category')['target',].mean()
+category_means = X_train.join (y_train).groupby('category')['target',].mean()
 
 # Apply to both sets
-X_train['category_mean_target',] = X_train['category',].map(category_means)
-X_test['category_mean_target',] = X_test['category',].map(category_means)
+X_train['category_mean_target',] = X_train['category',].map (category_means)
+X_test['category_mean_target',] = X_test['category',].map (category_means)
 
 # Handle unseen categories in test set
-X_test['category_mean_target',].fillna(y_train.mean(), inplace=True)
+X_test['category_mean_target',].fillna (y_train.mean(), inplace=True)
 \`\`\`
 
 **5. Temporal Leakage (Time Series)**
@@ -756,7 +756,7 @@ X_test['category_mean_target',].fillna(y_train.mean(), inplace=True)
 \`\`\`python
 # Random split of time series data
 df = df.sort_values('date')
-X_train, X_test = train_test_split(df, test_size=0.2, shuffle=True)
+X_train, X_test = train_test_split (df, test_size=0.2, shuffle=True)
 # Training set contains future data!
 \`\`\`
 
@@ -780,7 +780,7 @@ from sklearn.linear_model import LogisticRegression
 
 # Create pipeline (prevents leakage automatically)
 pipeline = Pipeline([
-    ('imputer', SimpleImputer(strategy='mean')),
+    ('imputer', SimpleImputer (strategy='mean')),
     ('scaler', StandardScaler()),
     ('classifier', LogisticRegression())
 ])
@@ -806,7 +806,7 @@ score = pipeline.score(X_test, y_test)
 from sklearn.model_selection import cross_val_score
 
 # Pipeline ensures each fold is processed independently
-scores = cross_val_score(pipeline, X, y, cv=5)
+scores = cross_val_score (pipeline, X, y, cv=5)
 # Each fold:
 # 1. Fits imputer on training folds
 # 2. Transforms training and validation folds
@@ -866,11 +866,11 @@ print(f"Mean: {scores.mean():.3f} (+/- {scores.std():.3f})")
 import joblib
 
 # Save fitted imputer, scaler, etc.
-joblib.dump(pipeline, 'model_pipeline.pkl')
+joblib.dump (pipeline, 'model_pipeline.pkl')
 
 # Load in production
 pipeline = joblib.load('model_pipeline.pkl')
-predictions = pipeline.predict(new_data)
+predictions = pipeline.predict (new_data)
 \`\`\`
 
 3. **Validate on time-based holdout**

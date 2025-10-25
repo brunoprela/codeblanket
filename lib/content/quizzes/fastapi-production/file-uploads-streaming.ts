@@ -16,8 +16,8 @@ async def initiate_upload(
     filename: str,
     file_size: int,
     content_type: str,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """Initiate chunked upload"""
     # Validate
@@ -28,9 +28,9 @@ async def initiate_upload(
         raise HTTPException(415, "Invalid video format")
     
     # Create upload record
-    upload_id = str(uuid.uuid4())
+    upload_id = str (uuid.uuid4())
     chunk_size = 5 * 1024**2  # 5MB chunks
-    total_chunks = math.ceil(file_size / chunk_size)
+    total_chunks = math.ceil (file_size / chunk_size)
     
     upload = Upload(
         id=upload_id,
@@ -42,7 +42,7 @@ async def initiate_upload(
         uploaded_chunks=[],  # Track completed chunks
         status="initiated"
     )
-    db.add(upload)
+    db.add (upload)
     db.commit()
     
     return {
@@ -57,7 +57,7 @@ async def upload_chunk(
     upload_id: str,
     chunk_number: int,
     chunk: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Upload single chunk, supports resume"""
     upload = db.query(Upload).filter(Upload.id == upload_id).first()
@@ -79,47 +79,47 @@ async def upload_chunk(
     )
     
     # Mark chunk as uploaded
-    upload.uploaded_chunks.append(chunk_number)
+    upload.uploaded_chunks.append (chunk_number)
     db.commit()
     
     # Check if all chunks uploaded
-    if len(upload.uploaded_chunks) == upload.total_chunks:
+    if len (upload.uploaded_chunks) == upload.total_chunks:
         # Trigger assembly
-        assemble_video_task.delay(upload_id)
+        assemble_video_task.delay (upload_id)
     
     return {
         "chunk": chunk_number,
         "total": upload.total_chunks,
-        "uploaded": len(upload.uploaded_chunks),
-        "percent": (len(upload.uploaded_chunks) / upload.total_chunks) * 100
+        "uploaded": len (upload.uploaded_chunks),
+        "percent": (len (upload.uploaded_chunks) / upload.total_chunks) * 100
     }
 
 # 3. Resume Upload (get missing chunks)
 @app.get("/uploads/{upload_id}/status")
-async def get_upload_status(upload_id: str, db: Session = Depends(get_db)):
+async def get_upload_status (upload_id: str, db: Session = Depends (get_db)):
     """Get upload status for resume"""
     upload = db.query(Upload).filter(Upload.id == upload_id).first()
     if not upload:
         raise HTTPException(404)
     
     # Calculate missing chunks
-    all_chunks = set(range(upload.total_chunks))
-    uploaded = set(upload.uploaded_chunks)
-    missing = sorted(all_chunks - uploaded)
+    all_chunks = set (range (upload.total_chunks))
+    uploaded = set (upload.uploaded_chunks)
+    missing = sorted (all_chunks - uploaded)
     
     return {
         "upload_id": upload_id,
         "status": upload.status,
-        "uploaded_chunks": len(uploaded),
+        "uploaded_chunks": len (uploaded),
         "total_chunks": upload.total_chunks,
         "missing_chunks": missing
     }
 
 # 4. Assemble & Process (Background Task)
 @celery_app.task
-def assemble_video_task(upload_id: str):
+def assemble_video_task (upload_id: str):
     """Assemble chunks and process video"""
-    upload = db.query(Upload).get(upload_id)
+    upload = db.query(Upload).get (upload_id)
     
     # 1. Assemble chunks
     output_key = f"videos/{upload_id}/original.mp4"
@@ -131,7 +131,7 @@ def assemble_video_task(upload_id: str):
     )
     
     parts = []
-    for i in range(upload.total_chunks):
+    for i in range (upload.total_chunks):
         chunk_key = f"uploads/{upload_id}/chunk_{i}"
         
         # Copy chunk to multipart upload
@@ -157,20 +157,20 @@ def assemble_video_task(upload_id: str):
     )
     
     # 2. Virus scan
-    scan_video(output_key)
+    scan_video (output_key)
     
     # 3. Trigger transcoding
-    transcode_video.delay(upload_id, output_key)
+    transcode_video.delay (upload_id, output_key)
     
     # 4. Delete chunks
-    for i in range(upload.total_chunks):
+    for i in range (upload.total_chunks):
         s3_client.delete_object(Bucket=S3_BUCKET, Key=f"uploads/{upload_id}/chunk_{i}")
     
     upload.status = "assembled"
     db.commit()
 
 @celery_app.task
-def transcode_video(upload_id: str, source_key: str):
+def transcode_video (upload_id: str, source_key: str):
     """Transcode to multiple resolutions"""
     # Use AWS MediaConvert or FFmpeg
     
@@ -193,13 +193,13 @@ def transcode_video(upload_id: str, source_key: str):
         s3://{S3_BUCKET}/{output_key}
         """
         
-        subprocess.run(ffmpeg_command, shell=True, check=True)
+        subprocess.run (ffmpeg_command, shell=True, check=True)
     
     # Generate thumbnail
-    generate_thumbnail.delay(upload_id, source_key)
+    generate_thumbnail.delay (upload_id, source_key)
     
     # Mark complete
-    upload = db.query(Upload).get(upload_id)
+    upload = db.query(Upload).get (upload_id)
     upload.status = "ready"
     db.commit()
 \`\`\`
@@ -232,12 +232,12 @@ Use case: Small files with validation/processing
 
 \`\`\`python
 @app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file (file: UploadFile = File(...)):
     # Validate
-    await validate_file(file)
+    await validate_file (file)
     
     # Upload to S3
-    s3_client.upload_fileobj(file.file, S3_BUCKET, file.filename)
+    s3_client.upload_fileobj (file.file, S3_BUCKET, file.filename)
 \`\`\`
 
 **2. Presigned URLs (Direct Upload)**:
@@ -268,7 +268,7 @@ async def get_presigned_url(
     filename: str,
     filesize: int,
     content_type: str,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends (get_current_user)
 ):
     # Validate request
     if filesize > 5 * 1024**3:
@@ -286,7 +286,7 @@ async def get_presigned_url(
         Key=file_key,
         Fields={
             "Content-Type": content_type,
-            "x-amz-meta-user-id": str(current_user.id)
+            "x-amz-meta-user-id": str (current_user.id)
         },
         Conditions=[
             ["content-length-range", 1, filesize * 1.1],  # Allow 10% tolerance
@@ -302,9 +302,9 @@ async def get_presigned_url(
         user_id=current_user.id,
         filename=filename,
         filesize=filesize,
-        expires_at=datetime.utcnow() + timedelta(minutes=15)
+        expires_at=datetime.utcnow() + timedelta (minutes=15)
     )
-    db.add(pending_upload)
+    db.add (pending_upload)
     db.commit()
     
     return {
@@ -317,15 +317,15 @@ async def get_presigned_url(
 @app.post("/upload/confirm")
 async def confirm_upload(
     file_key: str,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     # Verify file in S3
     try:
         response = s3_client.head_object(Bucket=S3_BUCKET, Key=file_key)
         
         # Verify user_id metadata matches
-        if response["Metadata"].get("user-id") != str(current_user.id):
+        if response["Metadata"].get("user-id") != str (current_user.id):
             raise HTTPException(403, "File user mismatch")
         
         filesize = response["ContentLength"]
@@ -337,15 +337,15 @@ async def confirm_upload(
     upload = Upload(
         user_id=current_user.id,
         file_key=file_key,
-        filename=Path(file_key).name,
+        filename=Path (file_key).name,
         filesize=filesize,
         status="uploaded"
     )
-    db.add(upload)
+    db.add (upload)
     db.commit()
     
     # Trigger virus scan
-    scan_file_task.delay(file_key)
+    scan_file_task.delay (file_key)
     
     return {"upload_id": upload.id, "status": "confirmed"}
 \`\`\`
@@ -408,8 +408,8 @@ from sqlalchemy import select
 async def export_users_csv(
     filters: UserFilters = Depends(),
     compress: bool = True,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Stream CSV export with compression and progress
@@ -424,10 +424,10 @@ async def export_users_csv(
         query = query.where(User.status == filters.status)
     
     # Count total (for progress)
-    total_count = db.execute(select(func.count()).select_from(query.subquery())).scalar()
+    total_count = db.execute (select (func.count()).select_from (query.subquery())).scalar()
     
     # Generate export ID for progress tracking
-    export_id = str(uuid.uuid4())
+    export_id = str (uuid.uuid4())
     export_progress[export_id] = {
         "total": total_count,
         "processed": 0,
@@ -450,7 +450,7 @@ async def export_users_csv(
         while True:
             # Fetch batch
             users = db.execute(
-                query.offset(offset).limit(batch_size)
+                query.offset (offset).limit (batch_size)
             ).scalars().all()
             
             if not users:
@@ -494,9 +494,9 @@ async def export_users_csv(
             """
             buffer = io.BytesIO()
             
-            with gzip.GzipFile(fileobj=buffer, mode='wb') as gz_file:
+            with gzip.GzipFile (fileobj=buffer, mode='wb') as gz_file:
                 async for chunk in generate_csv_stream():
-                    gz_file.write(chunk.encode('utf-8'))
+                    gz_file.write (chunk.encode('utf-8'))
                     
                     # Yield compressed data when buffer reaches threshold
                     if buffer.tell() > 1024 * 1024:  # 1MB
@@ -530,7 +530,7 @@ async def export_users_csv(
 
 # Progress tracking endpoint
 @app.get("/export/progress/{export_id}")
-async def get_export_progress(export_id: str):
+async def get_export_progress (export_id: str):
     """Get export progress"""
     if export_id not in export_progress:
         raise HTTPException(404, "Export not found")
@@ -539,12 +539,12 @@ async def get_export_progress(export_id: str):
 
 # Cancellation endpoint
 @app.post("/export/cancel/{export_id}")
-async def cancel_export(export_id: str):
+async def cancel_export (export_id: str):
     """Cancel ongoing export"""
     if export_id not in export_progress:
         raise HTTPException(404)
     
-    cancelled_exports.add(export_id)
+    cancelled_exports.add (export_id)
     
     return {"status": "cancelled"}
 
@@ -552,16 +552,16 @@ async def cancel_export(export_id: str):
 @celery_app.task
 def cleanup_old_exports():
     """Remove export progress older than 1 hour"""
-    cutoff = datetime.utcnow() - timedelta(hours=1)
+    cutoff = datetime.utcnow() - timedelta (hours=1)
     
     to_remove = []
     for export_id, progress in export_progress.items():
         if progress.get("started_at", datetime.utcnow()) < cutoff:
-            to_remove.append(export_id)
+            to_remove.append (export_id)
     
     for export_id in to_remove:
         del export_progress[export_id]
-        cancelled_exports.discard(export_id)
+        cancelled_exports.discard (export_id)
 \`\`\`
 
 **Client-Side Implementation**:
@@ -575,14 +575,14 @@ async function downloadCsvWithProgress() {
     const exportId = response.headers.get('X-Export-ID');
     
     // Track progress in separate request
-    const progressInterval = setInterval(async () => {
+    const progressInterval = setInterval (async () => {
         const progressResponse = await fetch(\`/export/progress/\${exportId}\`);
         const progress = await progressResponse.json();
         
-        updateProgressBar(progress.percent);
+        updateProgressBar (progress.percent);
         
         if (progress.status === 'completed' || progress.status === 'cancelled') {
-            clearInterval(progressInterval);
+            clearInterval (progressInterval);
         }
     }, 1000);  // Poll every second
     
@@ -595,11 +595,11 @@ async function downloadCsvWithProgress() {
         
         if (done) break;
         
-        chunks.push(value);
+        chunks.push (value);
     }
     
     // Create blob and download
-    const blob = new Blob(chunks, {type: 'application/gzip'});
+    const blob = new Blob (chunks, {type: 'application/gzip'});
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
@@ -607,11 +607,11 @@ async function downloadCsvWithProgress() {
     a.download = 'users.csv.gz';
     a.click();
     
-    clearInterval(progressInterval);
+    clearInterval (progressInterval);
 }
 
 // Cancel download
-async function cancelDownload(exportId) {
+async function cancelDownload (exportId) {
     await fetch(\`/export/cancel/\${exportId}\`, {method: 'POST'});
 }
 \`\`\`

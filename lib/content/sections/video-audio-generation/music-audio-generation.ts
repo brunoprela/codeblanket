@@ -27,7 +27,7 @@ AI-powered music and audio generation has evolved from simple MIDI synthesis to 
 
 ### Overview
 
-**AudioCraft** is Meta's suite of generative AI models for audio:
+**AudioCraft** is Meta\'s suite of generative AI models for audio:
 - **MusicGen**: Music generation from text
 - **AudioGen**: Sound effects and ambient audio
 - **EnCodec**: High-fidelity audio compression
@@ -80,8 +80,8 @@ class MusicGenerator:
         self.device = device
         
         print(f"Loading MusicGen {model_size}...")
-        self.model = MusicGen.get_pretrained(self.MODELS[model_size])
-        self.model.to(device)
+        self.model = MusicGen.get_pretrained (self.MODELS[model_size])
+        self.model.to (device)
         
         # Set default generation params
         self.model.set_generation_params(
@@ -126,18 +126,18 @@ class MusicGenerator:
             cfg_coef=cfg_coef,
         )
         
-        print(f"Generating {len(descriptions)} tracks ({duration}s each)...")
+        print(f"Generating {len (descriptions)} tracks ({duration}s each)...")
         
         # Generate
         with torch.no_grad():
-            wav = self.model.generate(descriptions)
+            wav = self.model.generate (descriptions)
         
         # Convert to numpy
         audio_arrays = wav.cpu().numpy()
         
         print("✅ Generation complete")
         
-        return list(audio_arrays)
+        return list (audio_arrays)
     
     def generate_with_melody(
         self,
@@ -164,7 +164,7 @@ class MusicGenerator:
             raise ValueError("Melody conditioning requires 'melody' model")
         
         # Convert melody to tensor
-        melody_tensor = torch.from_numpy(melody_audio).unsqueeze(0)
+        melody_tensor = torch.from_numpy (melody_audio).unsqueeze(0)
         
         # Resample if needed (MusicGen uses 32kHz)
         if melody_sample_rate != self.model.sample_rate:
@@ -173,10 +173,10 @@ class MusicGenerator:
                 melody_sample_rate,
                 self.model.sample_rate
             )
-            melody_tensor = resampler(melody_tensor)
+            melody_tensor = resampler (melody_tensor)
         
         # Set duration
-        self.model.set_generation_params(duration=duration)
+        self.model.set_generation_params (duration=duration)
         
         print(f"Generating with melody conditioning...")
         
@@ -190,7 +190,7 @@ class MusicGenerator:
         
         audio_arrays = wav.cpu().numpy()
         
-        return list(audio_arrays)
+        return list (audio_arrays)
     
     def generate_continuation(
         self,
@@ -210,9 +210,9 @@ class MusicGenerator:
             Continued audio
         """
         # Convert to tensor
-        prompt_tensor = torch.from_numpy(prompt_audio).unsqueeze(0)
+        prompt_tensor = torch.from_numpy (prompt_audio).unsqueeze(0)
         
-        self.model.set_generation_params(duration=duration)
+        self.model.set_generation_params (duration=duration)
         
         print("Generating continuation...")
         
@@ -232,13 +232,13 @@ class MusicGenerator:
         sample_rate: int = 32000,
     ):
         """Save generated audio"""
-        output_path = Path(output_path)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path = Path (output_path)
+        output_path.parent.mkdir (parents=True, exist_ok=True)
         
         # audio_write handles normalization and format
         audio_write(
-            str(output_path.with_suffix(')),
-            torch.from_numpy(audio),
+            str (output_path.with_suffix(')),
+            torch.from_numpy (audio),
             sample_rate,
             strategy="loudness",
             loudness_compressor=True,
@@ -257,9 +257,9 @@ class SoundEffectGenerator:
         
         print("Loading AudioGen...")
         self.model = AudioGen.get_pretrained("facebook/audiogen-medium")
-        self.model.to(device)
+        self.model.to (device)
         
-        self.model.set_generation_params(duration=5.0)
+        self.model.set_generation_params (duration=5.0)
         
         print("✅ AudioGen loaded")
     
@@ -278,21 +278,21 @@ class SoundEffectGenerator:
         Returns:
             Generated audio arrays
         """
-        self.model.set_generation_params(duration=duration)
+        self.model.set_generation_params (duration=duration)
         
-        print(f"Generating {len(descriptions)} sound effects...")
+        print(f"Generating {len (descriptions)} sound effects...")
         
         with torch.no_grad():
-            wav = self.model.generate(descriptions)
+            wav = self.model.generate (descriptions)
         
-        return list(wav.cpu().numpy())
+        return list (wav.cpu().numpy())
 
 # Production examples
 def production_examples():
     """Real-world music generation examples"""
     
     # Initialize generator
-    music_gen = MusicGenerator(model_size="medium", device="cuda")
+    music_gen = MusicGenerator (model_size="medium", device="cuda")
     
     # Example 1: Simple music generation
     print("\\n=== Example 1: Basic Music Generation ===")
@@ -311,9 +311,9 @@ def production_examples():
     )
     
     # Save tracks
-    for i, (prompt, audio) in enumerate(zip(prompts, audio_arrays)):
+    for i, (prompt, audio) in enumerate (zip (prompts, audio_arrays)):
         output_path = f"track_{i+1}.wav"
-        music_gen.save_audio(audio, output_path)
+        music_gen.save_audio (audio, output_path)
         print(f"Generated: {prompt[:50]}...")
     
     # Example 2: Genre-specific generation
@@ -328,7 +328,7 @@ def production_examples():
     
     for name, description in genres.items():
         audio = music_gen.generate([description], duration=20.0)[0]
-        music_gen.save_audio(audio, f"genre_{name}.wav")
+        music_gen.save_audio (audio, f"genre_{name}.wav")
     
     # Example 3: Melody conditioning
     print("\\n=== Example 3: Melody Conditioning ===")
@@ -337,7 +337,7 @@ def production_examples():
     import torchaudio
     melody, sr = torchaudio.load("input_melody.wav")
     
-    melody_gen = MusicGenerator(model_size="melody")
+    melody_gen = MusicGenerator (model_size="melody")
     
     audio = melody_gen.generate_with_melody(
         descriptions=["orchestral arrangement"],
@@ -346,7 +346,7 @@ def production_examples():
         duration=15.0,
     )[0]
     
-    melody_gen.save_audio(audio, "melody_conditioned.wav")
+    melody_gen.save_audio (audio, "melody_conditioned.wav")
     
     # Example 4: Music continuation
     print("\\n=== Example 4: Continuation ===")
@@ -364,7 +364,7 @@ def production_examples():
         duration=20.0,  # Total duration
     )
     
-    music_gen.save_audio(continued, "continued_song.wav")
+    music_gen.save_audio (continued, "continued_song.wav")
     
     # Example 5: Sound effects
     print("\\n=== Example 5: Sound Effects ===")
@@ -379,11 +379,11 @@ def production_examples():
         "crowd cheering loudly",
     ]
     
-    sfx_audio = sfx_gen.generate(sound_effects, duration=3.0)
+    sfx_audio = sfx_gen.generate (sound_effects, duration=3.0)
     
-    for i, (desc, audio) in enumerate(zip(sound_effects, sfx_audio)):
-        output = Path(f"sfx_{i+1}_{desc.replace(' ', '_')[:20]}.wav")
-        music_gen.save_audio(audio, output)
+    for i, (desc, audio) in enumerate (zip (sound_effects, sfx_audio)):
+        output = Path (f"sfx_{i+1}_{desc.replace(' ', '_')[:20]}.wav")
+        music_gen.save_audio (audio, output)
     
     print("\\n✅ All examples completed")
 
@@ -421,10 +421,10 @@ class MusicStyleTransfer:
         Conceptual implementation
         """
         # Extract style features
-        style_features = self._extract_style(style_audio)
+        style_features = self._extract_style (style_audio)
         
         # Apply to content
-        stylized = self._apply_style(content_audio, style_features)
+        stylized = self._apply_style (content_audio, style_features)
         
         return stylized
 \`\`\`
@@ -469,7 +469,7 @@ class AdaptiveMusicGenerator:
         """
         segments = []
         
-        for i, intensity in enumerate(intensity_levels):
+        for i, intensity in enumerate (intensity_levels):
             # Modify description based on intensity
             description = self._adjust_for_intensity(
                 base_description,
@@ -485,12 +485,12 @@ class AdaptiveMusicGenerator:
                 temperature=0.8 + intensity * 0.4,  # Higher intensity = more variation
             )[0]
             
-            segments.append(audio)
+            segments.append (audio)
         
         # Concatenate with crossfades
-        return self._crossfade_segments(segments)
+        return self._crossfade_segments (segments)
     
-    def _adjust_for_intensity(self, base: str, intensity: float) -> str:
+    def _adjust_for_intensity (self, base: str, intensity: float) -> str:
         """Modify description based on intensity level"""
         if intensity < 0.3:
             return f"calm and gentle {base}"
@@ -508,7 +508,7 @@ class AdaptiveMusicGenerator:
         import numpy as np
         
         sample_rate = 32000
-        fade_samples = int(fade_duration * sample_rate)
+        fade_samples = int (fade_duration * sample_rate)
         
         result = segments[0]
         
@@ -518,7 +518,7 @@ class AdaptiveMusicGenerator:
             fade_in = np.linspace(0, 1, fade_samples)
             
             # Apply crossfade
-            overlap = len(result) - fade_samples
+            overlap = len (result) - fade_samples
             result[overlap:] *= fade_out
             segment[:fade_samples] *= fade_in
             result[overlap:] += segment[:fade_samples]
@@ -533,7 +533,7 @@ def game_music_example():
     """Generate adaptive music for a game"""
     
     music_gen = MusicGenerator()
-    adaptive = AdaptiveMusicGenerator(music_gen)
+    adaptive = AdaptiveMusicGenerator (music_gen)
     
     # Simulate game intensity over time
     # 0.0 = calm exploration, 1.0 = intense combat
@@ -556,9 +556,9 @@ def game_music_example():
         segment_duration=6.0,
     )
     
-    music_gen.save_audio(adaptive_track, "game_adaptive_music.wav")
+    music_gen.save_audio (adaptive_track, "game_adaptive_music.wav")
     
-    print(f"✅ Generated {len(adaptive_track)/32000:.1f}s adaptive track")
+    print(f"✅ Generated {len (adaptive_track)/32000:.1f}s adaptive track")
 \`\`\`
 
 ---
@@ -591,20 +591,20 @@ class AudioProcessor:
     """Post-process generated music"""
     
     @staticmethod
-    def normalize_loudness(audio_path: Path, output_path: Path):
+    def normalize_loudness (audio_path: Path, output_path: Path):
         """Normalize audio loudness"""
-        audio = AudioSegment.from_file(audio_path)
-        normalized = normalize(audio, headroom=0.1)
-        normalized.export(output_path, format="wav")
+        audio = AudioSegment.from_file (audio_path)
+        normalized = normalize (audio, headroom=0.1)
+        normalized.export (output_path, format="wav")
     
     @staticmethod
-    def add_reverb(audio_path: Path, output_path: Path, room_size: float = 0.5):
+    def add_reverb (audio_path: Path, output_path: Path, room_size: float = 0.5):
         """Add reverb effect"""
         # Would use pedalboard or similar
         pass
     
     @staticmethod
-    def apply_eq(audio_path: Path, output_path: Path):
+    def apply_eq (audio_path: Path, output_path: Path):
         """Apply equalization"""
         # Boost or cut specific frequencies
         pass
@@ -627,11 +627,11 @@ class AudioProcessor:
         import soundfile as sf
         
         # Load audio
-        audio, sr = sf.read(audio_path)
+        audio, sr = sf.read (audio_path)
         
         # Measure loudness
-        meter = Meter(sr)
-        loudness = meter.integrated_loudness(audio)
+        meter = Meter (sr)
+        loudness = meter.integrated_loudness (audio)
         
         # Normalize to target
         loudness_normalized = pyloudnorm.normalize.loudness(
@@ -639,10 +639,10 @@ class AudioProcessor:
         )
         
         # Apply limiter to prevent clipping
-        limited = np.clip(loudness_normalized, -1.0, 1.0)
+        limited = np.clip (loudness_normalized, -1.0, 1.0)
         
         # Save
-        sf.write(output_path, limited, sr)
+        sf.write (output_path, limited, sr)
         
         print(f"✅ Mastered: {loudness:.1f} LUFS → {target_loudness:.1f} LUFS")
 \`\`\`
@@ -673,26 +673,26 @@ class AudioProcessor:
 Quality checks for generated music
 """
 
-def analyze_audio_quality(audio_path: Path) -> dict:
+def analyze_audio_quality (audio_path: Path) -> dict:
     """Analyze quality metrics"""
     import librosa
     
     # Load audio
-    y, sr = librosa.load(audio_path)
+    y, sr = librosa.load (audio_path)
     
     # Compute metrics
-    spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr).mean()
-    spectral_bandwidth = librosa.feature.spectral_bandwidth(y=y, sr=sr).mean()
-    zero_crossing_rate = librosa.feature.zero_crossing_rate(y).mean()
-    rms_energy = librosa.feature.rms(y=y).mean()
+    spectral_centroid = librosa.feature.spectral_centroid (y=y, sr=sr).mean()
+    spectral_bandwidth = librosa.feature.spectral_bandwidth (y=y, sr=sr).mean()
+    zero_crossing_rate = librosa.feature.zero_crossing_rate (y).mean()
+    rms_energy = librosa.feature.rms (y=y).mean()
     
     return {
-        "duration": len(y) / sr,
+        "duration": len (y) / sr,
         "sample_rate": sr,
-        "spectral_centroid": float(spectral_centroid),
-        "spectral_bandwidth": float(spectral_bandwidth),
-        "zero_crossing_rate": float(zero_crossing_rate),
-        "rms_energy": float(rms_energy),
+        "spectral_centroid": float (spectral_centroid),
+        "spectral_bandwidth": float (spectral_bandwidth),
+        "zero_crossing_rate": float (zero_crossing_rate),
+        "rms_energy": float (rms_energy),
     }
 \`\`\`
 

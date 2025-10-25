@@ -167,19 +167,19 @@ app.post('/api/payments', async (req, res) => {
   const idempotencyKey = req.headers['idempotency-key'];
   
   // Check if request with this key already processed
-  const cached = await cache.get(idempotencyKey);
+  const cached = await cache.get (idempotencyKey);
   if (cached) {
     // Return cached result (idempotent!)
-    return res.json(cached);
+    return res.json (cached);
   }
   
   // Process payment
-  const result = await processPayment(req.body);
+  const result = await processPayment (req.body);
   
   // Cache result for 24 hours
-  await cache.set(idempotencyKey, result, { ttl: 86400 });
+  await cache.set (idempotencyKey, result, { ttl: 86400 });
   
-  return res.json(result);
+  return res.json (result);
 });
 \`\`\`
 
@@ -197,13 +197,13 @@ app.post('/api/payments', async (req, res) => {
 Wait same amount of time between retries
 
 \`\`\`javascript
-async function retryFixed(fn, maxRetries = 3, delay = 1000) {
+async function retryFixed (fn, maxRetries = 3, delay = 1000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
       if (i === maxRetries - 1) throw error;
-      await sleep(delay); // Always wait 1 second
+      await sleep (delay); // Always wait 1 second
     }
   }
 }
@@ -225,7 +225,7 @@ await retryFixed(() => callAPI(), 3, 1000);
 Exponentially increase wait time
 
 \`\`\`javascript
-async function retryExponential(fn, maxRetries = 5, baseDelay = 1000) {
+async function retryExponential (fn, maxRetries = 5, baseDelay = 1000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
@@ -233,7 +233,7 @@ async function retryExponential(fn, maxRetries = 5, baseDelay = 1000) {
       if (i === maxRetries - 1) throw error;
       
       const delay = baseDelay * Math.pow(2, i);
-      await sleep(delay);
+      await sleep (delay);
     }
   }
 }
@@ -268,7 +268,7 @@ Add randomness to prevent thundering herd
 
 **The Solution**: Add random jitter
 \`\`\`javascript
-async function retryExponentialJitter(fn, maxRetries = 5, baseDelay = 1000) {
+async function retryExponentialJitter (fn, maxRetries = 5, baseDelay = 1000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
@@ -279,7 +279,7 @@ async function retryExponentialJitter(fn, maxRetries = 5, baseDelay = 1000) {
       const jitter = Math.random() * exponentialDelay;
       const delay = exponentialDelay + jitter;
       
-      await sleep(delay);
+      await sleep (delay);
     }
   }
 }
@@ -316,7 +316,7 @@ const delay = Math.random() * (prevDelay * 3);
 Limit maximum wait time
 
 \`\`\`javascript
-async function retryCapped(fn, maxRetries = 10, baseDelay = 100, maxDelay = 30000) {
+async function retryCapped (fn, maxRetries = 10, baseDelay = 100, maxDelay = 30000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
@@ -325,9 +325,9 @@ async function retryCapped(fn, maxRetries = 10, baseDelay = 100, maxDelay = 3000
       
       const exponentialDelay = baseDelay * Math.pow(2, i);
       const jitter = Math.random() * exponentialDelay;
-      const delay = Math.min(exponentialDelay + jitter, maxDelay);
+      const delay = Math.min (exponentialDelay + jitter, maxDelay);
       
-      await sleep(delay);
+      await sleep (delay);
     }
   }
 }
@@ -362,7 +362,7 @@ Service experiencing issues
 **Solution: Retry Budget**:
 \`\`\`javascript
 class RetryBudget {
-  constructor(maxRetryRate = 0.1) { // 10% retry rate
+  constructor (maxRetryRate = 0.1) { // 10% retry rate
     this.maxRetryRate = maxRetryRate;
     this.attempts = 0;
     this.retries = 0;
@@ -382,7 +382,7 @@ class RetryBudget {
 // Usage
 const budget = new RetryBudget(0.1);
 
-async function callWithBudget(fn) {
+async function callWithBudget (fn) {
   try {
     return await fn();
   } catch (error) {
@@ -410,10 +410,10 @@ async function callWithBudget(fn) {
 Combine retry and circuit breaker
 
 \`\`\`javascript
-async function retryWithCircuitBreaker(fn, breaker, maxRetries = 3) {
+async function retryWithCircuitBreaker (fn, breaker, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
     try {
-      return await breaker.fire(fn);
+      return await breaker.fire (fn);
     } catch (error) {
       if (error.name === 'CircuitBreakerOpen') {
         throw error; // Don't retry if circuit open
@@ -449,14 +449,14 @@ const RETRYABLE_STATUS = [
   504  // Gateway Timeout
 ];
 
-async function retrySelective(fn, maxRetries = 3) {
+async function retrySelective (fn, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
       const shouldRetry = 
-        RETRYABLE_ERRORS.includes(error.code) ||
-        RETRYABLE_STATUS.includes(error.response?.status);
+        RETRYABLE_ERRORS.includes (error.code) ||
+        RETRYABLE_STATUS.includes (error.response?.status);
       
       if (!shouldRetry || i === maxRetries - 1) {
         throw error;
@@ -473,10 +473,10 @@ async function retrySelective(fn, maxRetries = 3) {
 Send multiple requests, use first success
 
 \`\`\`javascript
-async function hedgedRequest(fn, hedgeDelay = 1000) {
+async function hedgedRequest (fn, hedgeDelay = 1000) {
   return Promise.race([
     fn(),
-    sleep(hedgeDelay).then(() => fn()), // Hedged request
+    sleep (hedgeDelay).then(() => fn()), // Hedged request
   ]);
 }
 
@@ -510,7 +510,7 @@ class AdaptiveRetry {
     return 1; // Low success, retry less
   }
   
-  recordOutcome(success) {
+  recordOutcome (success) {
     this.attempts++;
     if (success) this.successes++;
     this.successRate = this.successes / this.attempts;
@@ -547,11 +547,11 @@ await retry(
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
 
-axiosRetry(axios, {
+axiosRetry (axios, {
   retries: 3,
   retryDelay: axiosRetry.exponentialDelay,
   retryCondition: (error) => {
-    return axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+    return axiosRetry.isNetworkOrIdempotentRequestError (error) ||
            error.response.status === 429;
   }
 });
@@ -565,7 +565,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 
 @retry(
     stop=stop_after_attempt(5),
-    wait=wait_exponential(multiplier=1, min=1, max=30),
+    wait=wait_exponential (multiplier=1, min=1, max=30),
     reraise=True
 )
 def call_api():
@@ -579,7 +579,7 @@ def call_api():
 RetryConfig config = RetryConfig.custom()
     .maxAttempts(3)
     .waitDuration(Duration.ofSeconds(1))
-    .retryOnException(e -> e instanceof TimeoutException)
+    .retryOnException (e -> e instanceof TimeoutException)
     .build();
 
 Retry retry = Retry.of("api", config);
@@ -672,7 +672,7 @@ Action: Check retry configuration
 **Q: How would you implement retry logic for an API call?**
 A: Use exponential backoff with jitter (1s, 2s, 4s), maximum 5 attempts, only retry on 5xx/timeouts, use idempotency keys for non-idempotent operations.
 
-**Q: What's the thundering herd problem?**
+**Q: What\'s the thundering herd problem?**
 A: When many clients retry at exact same time, overwhelming service. Solution: Add jitter (randomness) to retry delays.
 
 **Q: Should you retry a 404 Not Found error?**

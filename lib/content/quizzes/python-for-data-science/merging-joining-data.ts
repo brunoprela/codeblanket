@@ -14,7 +14,7 @@ export const mergingjoiningdataQuiz: QuizQuestion[] = [
 **What it does:**
 - Keeps only rows with matching keys in BOTH DataFrames
 - Rows without matches are discarded from both sides
-- Result size ≤ min(len(left), len(right))
+- Result size ≤ min (len (left), len (right))
 
 **SQL equivalent:**
 \`\`\`sql
@@ -34,7 +34,7 @@ departments = pd.DataFrame({
     'dept_name': ['IT', 'HR', 'Marketing',]
 })
 
-inner = pd.merge(employees, departments, on='dept_id', how='inner')
+inner = pd.merge (employees, departments, on='dept_id', how='inner')
 print(inner)
 #    emp_id     name  dept_id dept_name
 # 0       1    Alice       10        IT
@@ -57,7 +57,7 @@ orders = pd.DataFrame({...})  # All orders
 payments = pd.DataFrame({...})  # Payment records
 
 # Only analyze orders that have been paid
-completed = pd.merge(orders, payments, on='order_id', how='inner')
+completed = pd.merge (orders, payments, on='order_id', how='inner')
 # Excludes pending/cancelled orders
 \`\`\`
 
@@ -71,7 +71,7 @@ completed = pd.merge(orders, payments, on='order_id', how='inner')
 - Keeps ALL rows from left DataFrame
 - Matches from right where possible
 - Fills with NaN where no match in right
-- Result size = len(left)
+- Result size = len (left)
 
 **SQL equivalent:**
 \`\`\`sql
@@ -80,7 +80,7 @@ SELECT * FROM left LEFT JOIN right ON left.key = right.key
 
 **Pandas example:**
 \`\`\`python
-left = pd.merge(employees, departments, on='dept_id', how='left')
+left = pd.merge (employees, departments, on='dept_id', how='left')
 print(left)
 #    emp_id     name  dept_id dept_name
 # 0       1    Alice       10        IT
@@ -103,7 +103,7 @@ customers = pd.DataFrame({...})  # All registered customers
 purchases = pd.DataFrame({...})  # Purchase history
 
 # Keep all customers, show who has purchased
-enriched = pd.merge(customers, purchases, on='customer_id', how='left')
+enriched = pd.merge (customers, purchases, on='customer_id', how='left')
 # Can identify customers who haven't purchased (NaN in purchase columns)
 # Then target them with promotions
 \`\`\`
@@ -119,13 +119,13 @@ enriched = pd.merge(customers, purchases, on='customer_id', how='left')
 - Keeps ALL rows from right DataFrame
 - Matches from left where possible
 - Fills with NaN where no match in left
-- Result size = len(right)
+- Result size = len (right)
 
 **Note:** Right join is just left join with DataFrames swapped. Rarely used because you can reorder and use left join instead.
 
 **Pandas example:**
 \`\`\`python
-right = pd.merge(employees, departments, on='dept_id', how='right')
+right = pd.merge (employees, departments, on='dept_id', how='right')
 print(right)
 #    emp_id     name  dept_id   dept_name
 # 0       1    Alice       10          IT
@@ -147,7 +147,7 @@ products = pd.DataFrame({...})  # Full product catalog
 sales = pd.DataFrame({...})  # Sales records
 
 # Show all products, identify which haven't sold
-catalog_performance = pd.merge(sales, products, on='product_id', how='right')
+catalog_performance = pd.merge (sales, products, on='product_id', how='right')
 # NaN in sales columns = product hasn't sold
 # Identify products to discontinue or promote
 \`\`\`
@@ -155,8 +155,8 @@ catalog_performance = pd.merge(sales, products, on='product_id', how='right')
 **Practical tip:** Most people use left join instead:
 \`\`\`python
 # These are equivalent:
-right = pd.merge(df1, df2, on='key', how='right')
-left = pd.merge(df2, df1, on='key', how='left')
+right = pd.merge (df1, df2, on='key', how='right')
+left = pd.merge (df2, df1, on='key', how='left')
 # Prefer left join for consistency
 \`\`\`
 
@@ -166,7 +166,7 @@ left = pd.merge(df2, df1, on='key', how='left')
 - Keeps ALL rows from BOTH DataFrames
 - Matches where possible
 - Fills with NaN where no match on either side
-- Result size ≥ max(len(left), len(right))
+- Result size ≥ max (len (left), len (right))
 
 **SQL equivalent:**
 \`\`\`sql
@@ -175,7 +175,7 @@ SELECT * FROM left FULL OUTER JOIN right ON left.key = right.key
 
 **Pandas example:**
 \`\`\`python
-outer = pd.merge(employees, departments, on='dept_id', how='outer')
+outer = pd.merge (employees, departments, on='dept_id', how='outer')
 print(outer)
 #    emp_id     name  dept_id   dept_name
 # 0       1    Alice       10          IT
@@ -213,9 +213,9 @@ missing_from_new = reconciliation[reconciliation['_merge',] == 'left_only',]
 unexpected_in_new = reconciliation[reconciliation['_merge',] == 'right_only',]
 successfully_migrated = reconciliation[reconciliation['_merge',] == 'both',]
 
-print(f"Not migrated: {len(missing_from_new)}")
-print(f"Unexpected: {len(unexpected_in_new)}")
-print(f"Success rate: {len(successfully_migrated) / len(old_system) * 100:.1f}%")
+print(f"Not migrated: {len (missing_from_new)}")
+print(f"Unexpected: {len (unexpected_in_new)}")
+print(f"Success rate: {len (successfully_migrated) / len (old_system) * 100:.1f}%")
 \`\`\`
 
 **Wrong choice consequences:**
@@ -256,10 +256,10 @@ Question: Which dataset is the "source of truth"?
 **Mistake 1: Using inner join by default**
 \`\`\`python
 # BAD: Loses customers without orders
-result = pd.merge(customers, orders, on='customer_id')  # Default is inner
+result = pd.merge (customers, orders, on='customer_id')  # Default is inner
 
 # GOOD: Keeps all customers
-result = pd.merge(customers, orders, on='customer_id', how='left')
+result = pd.merge (customers, orders, on='customer_id', how='left')
 \`\`\`
 
 **Mistake 2: Not checking the result size**
@@ -267,15 +267,15 @@ result = pd.merge(customers, orders, on='customer_id', how='left')
 left = pd.DataFrame({'key': [1, 2, 3], 'val': [10, 20, 30]})
 right = pd.DataFrame({'key': [1, 1, 2, 2], 'val': [100, 200, 300, 400]})
 
-result = pd.merge(left, right, on='key')
-print(len(result))  # 4 rows! (2 matches for key=1, 2 for key=2)
+result = pd.merge (left, right, on='key')
+print(len (result))  # 4 rows! (2 matches for key=1, 2 for key=2)
 # Many-to-many join created more rows than either input
 \`\`\`
 
 **Mistake 3: Ignoring NaN values**
 \`\`\`python
 # After left join
-result = pd.merge(df1, df2, on='key', how='left')
+result = pd.merge (df1, df2, on='key', how='left')
 
 # BAD: Treating NaN as 0 without checking
 result['value',] = result['value',].fillna(0)
@@ -290,28 +290,28 @@ print(f"Unmatched records: {result['value',].isna().sum()}")
 1. **Always specify how parameter explicitly**
    \`\`\`python
    # Good: Clear intent
-   result = pd.merge(df1, df2, on='key', how='left')
+   result = pd.merge (df1, df2, on='key', how='left')
    
    # Bad: Implicit inner join
-   result = pd.merge(df1, df2, on='key')
+   result = pd.merge (df1, df2, on='key')
    \`\`\`
 
 2. **Use indicator for validation**
    \`\`\`python
-   result = pd.merge(df1, df2, on='key', how='outer', indicator=True)
+   result = pd.merge (df1, df2, on='key', how='outer', indicator=True)
    print(result['_merge',].value_counts())
    \`\`\`
 
 3. **Check result size**
    \`\`\`python
-   print(f"Left: {len(df1)}, Right: {len(df2)}, Result: {len(result)}")
+   print(f"Left: {len (df1)}, Right: {len (df2)}, Result: {len (result)}")
    \`\`\`
 
 4. **Document your choice**
    \`\`\`python
    # Left join: Keep all customers even without purchases
    # to calculate conversion rate
-   result = pd.merge(customers, purchases, on='id', how='left')
+   result = pd.merge (customers, purchases, on='id', how='left')
    \`\`\`
 
 **Key Takeaway:**
@@ -346,7 +346,7 @@ Choose based on business logic, not convenience. The wrong join type can silentl
 - Can merge on any columns
 
 \`\`\`python
-result = pd.merge(df1, df2, on='key', how='inner')
+result = pd.merge (df1, df2, on='key', how='inner')
 \`\`\`
 
 **Performance characteristics:**
@@ -364,7 +364,7 @@ result = pd.merge(df1, df2, on='key', how='inner')
 \`\`\`python
 df1 = df1.set_index('key')
 df2 = df2.set_index('key')
-result = df1.join(df2)
+result = df1.join (df2)
 \`\`\`
 
 **Performance characteristics:**
@@ -397,18 +397,18 @@ import time
 # Create test data
 n = 1_000_000
 df1 = pd.DataFrame({
-    'key': range(n),
-    'value1': np.random.randn(n)
+    'key': range (n),
+    'value1': np.random.randn (n)
 })
 
 df2 = pd.DataFrame({
-    'key': range(n),
-    'value2': np.random.randn(n)
+    'key': range (n),
+    'value2': np.random.randn (n)
 })
 
 # Method 1: merge() on column
 start = time.time()
-result1 = pd.merge(df1, df2, on='key')
+result1 = pd.merge (df1, df2, on='key')
 time1 = time.time() - start
 print(f"merge() on column: {time1:.3f}s")
 
@@ -416,13 +416,13 @@ print(f"merge() on column: {time1:.3f}s")
 df1_idx = df1.set_index('key')
 df2_idx = df2.set_index('key')
 start = time.time()
-result2 = pd.merge(df1_idx, df2_idx, left_index=True, right_index=True)
+result2 = pd.merge (df1_idx, df2_idx, left_index=True, right_index=True)
 time2 = time.time() - start
 print(f"merge() on index: {time2:.3f}s")
 
 # Method 3: join() with indexed data
 start = time.time()
-result3 = df1_idx.join(df2_idx)
+result3 = df1_idx.join (df2_idx)
 time3 = time.time() - start
 print(f"join() on index: {time3:.3f}s")
 
@@ -448,7 +448,7 @@ print(f"concat() horizontal: {time4:.3f}s")
 # Slow: Must build hash table on the fly
 df1 = pd.DataFrame({'key': [...], 'val1': [...]})
 df2 = pd.DataFrame({'key': [...], 'val2': [...]})
-result = pd.merge(df1, df2, on='key')
+result = pd.merge (df1, df2, on='key')
 # O(n + m) with hash table overhead
 \`\`\`
 
@@ -457,7 +457,7 @@ result = pd.merge(df1, df2, on='key')
 # Fast: Direct index lookup
 df1 = df1.set_index('key')
 df2 = df2.set_index('key')
-result = df1.join(df2)
+result = df1.join (df2)
 # O(n) with O(1) lookups
 \`\`\`
 
@@ -483,14 +483,14 @@ df2 = pd.DataFrame({
 
 # Method 1: Merge unsorted (hash join)
 start = time.time()
-result1 = pd.merge(df1, df2, on='key')
+result1 = pd.merge (df1, df2, on='key')
 time1 = time.time() - start
 
 # Method 2: Sort then merge (sort-merge join)
 df1_sorted = df1.sort_values('key')
 df2_sorted = df2.sort_values('key')
 start = time.time()
-result2 = pd.merge(df1_sorted, df2_sorted, on='key')
+result2 = pd.merge (df1_sorted, df2_sorted, on='key')
 time2 = time.time() - start
 
 print(f"Unsorted: {time1:.3f}s")
@@ -508,14 +508,14 @@ For time series with inexact matches:
 \`\`\`python
 # Regular merge (exact match required)
 start = time.time()
-result1 = pd.merge(trades, quotes, on='timestamp')
+result1 = pd.merge (trades, quotes, on='timestamp')
 time1 = time.time() - start
 
 # merge_asof (nearest match)
 trades_sorted = trades.sort_values('timestamp')
 quotes_sorted = quotes.sort_values('timestamp')
 start = time.time()
-result2 = pd.merge_asof(trades_sorted, quotes_sorted, on='timestamp')
+result2 = pd.merge_asof (trades_sorted, quotes_sorted, on='timestamp')
 time2 = time.time() - start
 
 print(f"merge(): {time1:.3f}s")
@@ -529,19 +529,19 @@ print(f"merge_asof(): {time2:.3f}s")
 
 \`\`\`python
 # Memory-intensive: Creates hash table
-result = pd.merge(large_df1, large_df2, on='key')
+result = pd.merge (large_df1, large_df2, on='key')
 
 # More memory efficient: Index-based
 df1 = df1.set_index('key')
 df2 = df2.set_index('key')
-result = df1.join(df2)
+result = df1.join (df2)
 
 # Most memory efficient: Chunked processing
 chunks = []
 for chunk in pd.read_csv('large_file.csv', chunksize=100000):
-    merged_chunk = pd.merge(chunk, reference_df, on='key')
-    chunks.append(merged_chunk)
-result = pd.concat(chunks, ignore_index=True)
+    merged_chunk = pd.merge (chunk, reference_df, on='key')
+    chunks.append (merged_chunk)
+result = pd.concat (chunks, ignore_index=True)
 \`\`\`
 
 **Categorical Data:**
@@ -561,9 +561,9 @@ df1['category',] = df1['category',].astype('category')
 # Memory savings: 80-90% for repeated values
 # Merge speedup: 2-3x faster
 
-print(f"Memory without categorical: {df1.memory_usage(deep=True).sum() / 1e6:.1f} MB")
+print(f"Memory without categorical: {df1.memory_usage (deep=True).sum() / 1e6:.1f} MB")
 df1['category',] = df1['category',].astype('category')
-print(f"Memory with categorical: {df1.memory_usage(deep=True).sum() / 1e6:.1f} MB")
+print(f"Memory with categorical: {df1.memory_usage (deep=True).sum() / 1e6:.1f} MB")
 \`\`\`
 
 **Optimization Strategies:**
@@ -573,32 +573,32 @@ print(f"Memory with categorical: {df1.memory_usage(deep=True).sum() / 1e6:.1f} M
 # Good: Set index once, reuse
 df1 = df1.set_index('key')
 df2 = df2.set_index('key')
-result1 = df1.join(df2)
-result2 = df1.join(df3)  # Reuse index
+result1 = df1.join (df2)
+result2 = df1.join (df3)  # Reuse index
 
 # Bad: Set index repeatedly
-result1 = pd.merge(df1.set_index('key'), df2.set_index('key'), left_index=True, right_index=True)
-result2 = pd.merge(df1.set_index('key'), df3.set_index('key'), left_index=True, right_index=True)
+result1 = pd.merge (df1.set_index('key'), df2.set_index('key'), left_index=True, right_index=True)
+result2 = pd.merge (df1.set_index('key'), df3.set_index('key'), left_index=True, right_index=True)
 \`\`\`
 
 **2. Filter before merging**
 \`\`\`python
 # Bad: Merge then filter
-result = pd.merge(large_df1, large_df2, on='key')
+result = pd.merge (large_df1, large_df2, on='key')
 result = result[result['date',] > '2024-01-01',]
 
 # Good: Filter then merge
 df1_filtered = large_df1[large_df1['date',] > '2024-01-01',]
-result = pd.merge(df1_filtered, large_df2, on='key')
+result = pd.merge (df1_filtered, large_df2, on='key')
 \`\`\`
 
 **3. Use appropriate join type**
 \`\`\`python
 # Bad: Outer join when you need inner
-result = pd.merge(df1, df2, on='key', how='outer')  # More data to process
+result = pd.merge (df1, df2, on='key', how='outer')  # More data to process
 
 # Good: Inner join if you only need matches
-result = pd.merge(df1, df2, on='key', how='inner')  # Less data
+result = pd.merge (df1, df2, on='key', how='inner')  # Less data
 \`\`\`
 
 **4. Vectorize multiple merges**
@@ -606,12 +606,12 @@ result = pd.merge(df1, df2, on='key', how='inner')  # Less data
 # Bad: Sequential merges
 result = df1.copy()
 for df in [df2, df3, df4]:
-    result = pd.merge(result, df, on='key')
+    result = pd.merge (result, df, on='key')
 
 # Good: Reduce pattern (if possible)
 from functools import reduce
 dfs = [df1, df2, df3, df4]
-result = reduce(lambda left, right: pd.merge(left, right, on='key'), dfs)
+result = reduce (lambda left, right: pd.merge (left, right, on='key'), dfs)
 \`\`\`
 
 **5. Consider alternatives for large data**
@@ -624,9 +624,9 @@ result = reduce(lambda left, right: pd.merge(left, right, on='key'), dfs)
 
 # Example: Dask
 import dask.dataframe as dd
-ddf1 = dd.from_pandas(df1, npartitions=10)
-ddf2 = dd.from_pandas(df2, npartitions=10)
-result = ddf1.merge(ddf2, on='key').compute()
+ddf1 = dd.from_pandas (df1, npartitions=10)
+ddf2 = dd.from_pandas (df2, npartitions=10)
+result = ddf1.merge (ddf2, on='key').compute()
 \`\`\`
 
 **Decision Tree:**
@@ -672,9 +672,9 @@ market_data = pd.DataFrame({
 # SLOW: Regular merge (requires exact timestamp match)
 # Most trades won't have exact market data timestamp
 start = time.time()
-result_slow = pd.merge(trades, market_data, on=['timestamp', 'ticker',])
+result_slow = pd.merge (trades, market_data, on=['timestamp', 'ticker',])
 time_slow = time.time() - start
-print(f"Regular merge: {time_slow:.3f}s, {len(result_slow)} rows")
+print(f"Regular merge: {time_slow:.3f}s, {len (result_slow)} rows")
 
 # FAST: merge_asof (match to nearest prior market data)
 trades_sorted = trades.sort_values(['ticker', 'timestamp',])
@@ -688,7 +688,7 @@ result_fast = pd.merge_asof(
     direction='backward'  # Use most recent market price
 )
 time_fast = time.time() - start
-print(f"merge_asof: {time_fast:.3f}s, {len(result_fast)} rows")
+print(f"merge_asof: {time_fast:.3f}s, {len (result_fast)} rows")
 
 # Typical result:
 # Regular merge: 125.3s, 127 rows (very few exact matches!)
@@ -746,8 +746,8 @@ orders = pd.DataFrame({
 })
 
 # Merge creates duplicate rows
-result = pd.merge(orders, customers, on='customer_id')
-print(len(result))  # 4 rows instead of 3!
+result = pd.merge (orders, customers, on='customer_id')
+print(len (result))  # 4 rows instead of 3!
 # Order 101 matched both Alice entries
 \`\`\`
 
@@ -768,8 +768,8 @@ df2 = pd.DataFrame({
     'value2': [100, 200, 300, 400]
 })
 
-result = pd.merge(df1, df2, on='key', how='inner')
-print(len(result))  # 2 rows - NaN keys don't match!
+result = pd.merge (df1, df2, on='key', how='inner')
+print(len (result))  # 2 rows - NaN keys don't match!
 \`\`\`
 
 **3. Type Mismatches**
@@ -789,8 +789,8 @@ df2 = pd.DataFrame({
     'value2': [100, 200, 300]
 })
 
-result = pd.merge(df1, df2, on='id')
-print(len(result))  # 0 rows! Types don't match
+result = pd.merge (df1, df2, on='id')
+print(len (result))  # 0 rows! Types don't match
 \`\`\`
 
 **4. Case Sensitivity**
@@ -810,8 +810,8 @@ df2 = pd.DataFrame({
     'value2': [100, 200, 300]
 })
 
-result = pd.merge(df1, df2, on='name')
-print(len(result))  # 0 rows! Case mismatch
+result = pd.merge (df1, df2, on='name')
+print(len (result))  # 0 rows! Case mismatch
 \`\`\`
 
 **Comprehensive Validation Strategy:**
@@ -819,7 +819,7 @@ print(len(result))  # 0 rows! Case mismatch
 **Phase 1: Pre-Merge Validation**
 
 \`\`\`python
-def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
+def validate_before_merge (df1, df2, merge_keys, merge_type='inner'):
     """
     Comprehensive pre-merge validation
     Returns: dict of validation results and warnings
@@ -833,9 +833,9 @@ def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
     # 1. Check if merge keys exist
     for key in merge_keys:
         if key not in df1.columns:
-            issues['errors',].append(f"Key '{key}' not found in left DataFrame")
+            issues['errors',].append (f"Key '{key}' not found in left DataFrame")
         if key not in df2.columns:
-            issues['errors',].append(f"Key '{key}' not found in right DataFrame")
+            issues['errors',].append (f"Key '{key}' not found in right DataFrame")
     
     if issues['errors',]:
         return issues
@@ -847,12 +847,12 @@ def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
         if null_left > 0:
             issues['warnings',].append(
                 f"Left DataFrame has {null_left} null values in '{key}' "
-                f"({null_left/len(df1)*100:.1f}%)"
+                f"({null_left/len (df1)*100:.1f}%)"
             )
         if null_right > 0:
             issues['warnings',].append(
                 f"Right DataFrame has {null_right} null values in '{key}' "
-                f"({null_right/len(df2)*100:.1f}%)"
+                f"({null_right/len (df2)*100:.1f}%)"
             )
     
     # 3. Check data types
@@ -878,34 +878,34 @@ def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
             )
     
     # 5. Check key overlap
-    if len(merge_keys) == 1:
+    if len (merge_keys) == 1:
         key = merge_keys[0]
-        left_values = set(df1[key].dropna().unique())
-        right_values = set(df2[key].dropna().unique())
+        left_values = set (df1[key].dropna().unique())
+        right_values = set (df2[key].dropna().unique())
         
         overlap = left_values & right_values
         left_only = left_values - right_values
         right_only = right_values - left_values
         
-        issues['info',].append(f"Key overlap: {len(overlap)} values")
-        issues['info',].append(f"Left only: {len(left_only)} values")
-        issues['info',].append(f"Right only: {len(right_only)} values")
+        issues['info',].append (f"Key overlap: {len (overlap)} values")
+        issues['info',].append (f"Left only: {len (left_only)} values")
+        issues['info',].append (f"Right only: {len (right_only)} values")
         
-        if merge_type == 'inner' and len(overlap) == 0:
+        if merge_type == 'inner' and len (overlap) == 0:
             issues['errors',].append("Inner join will return 0 rows (no overlap)")
     
     # 6. Estimate result size
-    if len(merge_keys) == 1:
+    if len (merge_keys) == 1:
         key = merge_keys[0]
         # Rough estimate for many-to-many
         left_dups = df1[key].value_counts().max()
         right_dups = df2[key].value_counts().max()
-        max_result_size = len(df1) * right_dups  # Worst case
+        max_result_size = len (df1) * right_dups  # Worst case
         
-        if max_result_size > len(df1) * 1.5:
+        if max_result_size > len (df1) * 1.5:
             issues['warnings',].append(
                 f"Potential many-to-many join: result could have up to {max_result_size} rows "
-                f"(input: {len(df1)} rows)"
+                f"(input: {len (df1)} rows)"
             )
     
     # 7. Check for string case issues
@@ -914,8 +914,8 @@ def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
             # Sample check
             left_sample = df1[key].dropna().head(100)
             right_sample = df2[key].dropna().head(100)
-            if any(s != s.lower() for s in left_sample) or \
-               any(s != s.lower() for s in right_sample):
+            if any (s != s.lower() for s in left_sample) or \
+               any (s != s.lower() for s in right_sample):
                 issues['warnings',].append(
                     f"Mixed case detected in '{key}' - consider normalizing"
                 )
@@ -923,7 +923,7 @@ def validate_before_merge(df1, df2, merge_keys, merge_type='inner'):
     return issues
 
 # Usage
-issues = validate_before_merge(customers, orders, ['customer_id',], 'left')
+issues = validate_before_merge (customers, orders, ['customer_id',], 'left')
 
 if issues['errors',]:
     print("ERRORS (must fix):")
@@ -957,25 +957,25 @@ result = pd.merge(
 # Check merge distribution
 print("\\nMerge distribution:")
 print(result['_merge',].value_counts())
-print(f"Match rate: {(result['_merge',] == 'both').sum() / len(result) * 100:.1f}%")
+print(f"Match rate: {(result['_merge',] == 'both').sum() / len (result) * 100:.1f}%")
 \`\`\`
 
 **Phase 3: Post-Merge Validation**
 
 \`\`\`python
-def validate_after_merge(result, df1, df2, merge_keys, expected_type='inner'):
+def validate_after_merge (result, df1, df2, merge_keys, expected_type='inner'):
     """
     Validate merge results
     """
     issues = []
     
     # 1. Check result size
-    print(f"Input sizes: left={len(df1)}, right={len(df2)}")
-    print(f"Result size: {len(result)}")
+    print(f"Input sizes: left={len (df1)}, right={len (df2)}")
+    print(f"Result size: {len (result)}")
     
-    size_change = len(result) / len(df1) if len(df1) > 0 else 0
+    size_change = len (result) / len (df1) if len (df1) > 0 else 0
     if size_change > 1.5:
-        issues.append(f"⚠️  Result {size_change:.1f}x larger than left input")
+        issues.append (f"⚠️  Result {size_change:.1f}x larger than left input")
     
     # 2. Check for unexpected nulls
     for col in result.columns:
@@ -983,7 +983,7 @@ def validate_after_merge(result, df1, df2, merge_keys, expected_type='inner'):
             continue  # Skip indicator column
         null_count = result[col].isnull().sum()
         if null_count > 0:
-            null_pct = null_count / len(result) * 100
+            null_pct = null_count / len (result) * 100
             if null_pct > 10:
                 issues.append(
                     f"⚠️  Column '{col}' has {null_pct:.1f}% null values"
@@ -996,17 +996,17 @@ def validate_after_merge(result, df1, df2, merge_keys, expected_type='inner'):
         both = (result['_merge',] == 'both').sum()
         
         print(f"\\nMerge breakdown:")
-        print(f"  Both: {both} ({both/len(result)*100:.1f}%)")
-        print(f"  Left only: {left_only} ({left_only/len(result)*100:.1f}%)")
-        print(f"  Right only: {right_only} ({right_only/len(result)*100:.1f}%)")
+        print(f"  Both: {both} ({both/len (result)*100:.1f}%)")
+        print(f"  Left only: {left_only} ({left_only/len (result)*100:.1f}%)")
+        print(f"  Right only: {right_only} ({right_only/len (result)*100:.1f}%)")
         
         if expected_type == 'inner' and (left_only > 0 or right_only > 0):
             issues.append("⚠️  Inner join expected but unmatched records found")
     
     # 4. Check for duplicate keys in result
-    dup_count = result.duplicated(subset=merge_keys).sum()
+    dup_count = result.duplicated (subset=merge_keys).sum()
     if dup_count > 0:
-        issues.append(f"⚠️  {dup_count} duplicate keys in result")
+        issues.append (f"⚠️  {dup_count} duplicate keys in result")
     
     # 5. Sample validation
     print("\\nSample result:")
@@ -1015,7 +1015,7 @@ def validate_after_merge(result, df1, df2, merge_keys, expected_type='inner'):
     return issues
 
 # Usage
-issues = validate_after_merge(result, df1, df2, ['key',], 'left')
+issues = validate_after_merge (result, df1, df2, ['key',], 'left')
 if issues:
     print("\\nIssues found:")
     for issue in issues:
@@ -1025,7 +1025,7 @@ if issues:
 **Complete Validation Workflow:**
 
 \`\`\`python
-def safe_merge(df1, df2, merge_keys, how='inner', validate='one_to_one'):
+def safe_merge (df1, df2, merge_keys, how='inner', validate='one_to_one'):
     """
     Merge with comprehensive validation
     """
@@ -1036,7 +1036,7 @@ def safe_merge(df1, df2, merge_keys, how='inner', validate='one_to_one'):
     # Phase 1: Pre-merge validation
     print("\\n1. PRE-MERGE VALIDATION")
     print("-"*60)
-    pre_issues = validate_before_merge(df1, df2, merge_keys, how)
+    pre_issues = validate_before_merge (df1, df2, merge_keys, how)
     
     if pre_issues['errors',]:
         print("\\nERRORS found - cannot proceed:")
@@ -1056,7 +1056,7 @@ def safe_merge(df1, df2, merge_keys, how='inner', validate='one_to_one'):
         result = pd.merge(
             df1,
             df2,
-            on=merge_keys if isinstance(merge_keys, list) else [merge_keys],
+            on=merge_keys if isinstance (merge_keys, list) else [merge_keys],
             how=how,
             indicator=True,
             validate=validate  # Validates cardinality
@@ -1069,7 +1069,7 @@ def safe_merge(df1, df2, merge_keys, how='inner', validate='one_to_one'):
     # Phase 3: Post-merge validation
     print("\\n3. POST-MERGE VALIDATION")
     print("-"*60)
-    post_issues = validate_after_merge(result, df1, df2, merge_keys, how)
+    post_issues = validate_after_merge (result, df1, df2, merge_keys, how)
     
     if post_issues:
         print("\\nPost-merge issues:")
@@ -1085,7 +1085,7 @@ def safe_merge(df1, df2, merge_keys, how='inner', validate='one_to_one'):
     return result
 
 # Usage
-result = safe_merge(customers, orders, 'customer_id', how='left', validate='one_to_many')
+result = safe_merge (customers, orders, 'customer_id', how='left', validate='one_to_many')
 \`\`\`
 
 **Fixing Common Issues:**
@@ -1093,11 +1093,11 @@ result = safe_merge(customers, orders, 'customer_id', how='left', validate='one_
 **1. Fix duplicate keys:**
 \`\`\`python
 # Identify duplicates
-duplicates = df[df.duplicated(subset=['key',], keep=False)]
+duplicates = df[df.duplicated (subset=['key',], keep=False)]
 print(f"Duplicate keys:\\n{duplicates}")
 
 # Strategy A: Keep first occurrence
-df_dedup = df.drop_duplicates(subset=['key',], keep='first')
+df_dedup = df.drop_duplicates (subset=['key',], keep='first')
 
 # Strategy B: Aggregate duplicates
 df_agg = df.groupby('key').agg({
@@ -1111,9 +1111,9 @@ df_agg = df.groupby('key').agg({
 **2. Fix type mismatches:**
 \`\`\`python
 # Convert types before merge
-df1['id',] = df1['id',].astype(str)
-df2['id',] = df2['id',].astype(str)
-result = pd.merge(df1, df2, on='id')
+df1['id',] = df1['id',].astype (str)
+df2['id',] = df2['id',].astype (str)
+result = pd.merge (df1, df2, on='id')
 \`\`\`
 
 **3. Fix case sensitivity:**
@@ -1121,20 +1121,20 @@ result = pd.merge(df1, df2, on='id')
 # Normalize strings before merge
 df1['name',] = df1['name',].str.lower().str.strip()
 df2['name',] = df2['name',].str.lower().str.strip()
-result = pd.merge(df1, df2, on='name')
+result = pd.merge (df1, df2, on='name')
 \`\`\`
 
 **4. Handle missing values:**
 \`\`\`python
 # Option A: Drop nulls before merge
-df1_clean = df1.dropna(subset=['key',])
-df2_clean = df2.dropna(subset=['key',])
-result = pd.merge(df1_clean, df2_clean, on='key')
+df1_clean = df1.dropna (subset=['key',])
+df2_clean = df2.dropna (subset=['key',])
+result = pd.merge (df1_clean, df2_clean, on='key')
 
 # Option B: Fill nulls with placeholder
 df1['key',].fillna('UNKNOWN', inplace=True)
 df2['key',].fillna('UNKNOWN', inplace=True)
-result = pd.merge(df1, df2, on='key')
+result = pd.merge (df1, df2, on='key')
 \`\`\`
 
 **Best Practices:**

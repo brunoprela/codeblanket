@@ -73,7 +73,7 @@ export const commoditiesMultipleChoiceQuestions = [
     ],
     correctAnswer: 1,
     explanation:
-      "The farmer should **SELL (short) October futures** at $4.50 to lock in that price. **Why**: He's naturally LONG corn (will have corn to sell in October). To hedge, he takes the OPPOSITE position in futures. **Example**: 1) May: Sells October futures at $4.50/bushel, 2) October: Harvests corn, sells physical corn at market price (say $4.00), loses $0.50 on physical sale, 3) But his short futures gained $0.50 (sold at $4.50, buyback at $4.00), 4) Net: Still receives $4.50/bushel. **Profit locked in**: $4.50 - $3.80 = $0.70/bushel profit guaranteed. **Tradeoff**: If prices rally to $5.50, he still only gets $4.50 (hedging sacrifices upside). **Why buy put options instead?** Puts protect downside but allow upside - costs premium but more flexibility.",
+      "The farmer should **SELL (short) October futures** at $4.50 to lock in that price. **Why**: He\'s naturally LONG corn (will have corn to sell in October). To hedge, he takes the OPPOSITE position in futures. **Example**: 1) May: Sells October futures at $4.50/bushel, 2) October: Harvests corn, sells physical corn at market price (say $4.00), loses $0.50 on physical sale, 3) But his short futures gained $0.50 (sold at $4.50, buyback at $4.00), 4) Net: Still receives $4.50/bushel. **Profit locked in**: $4.50 - $3.80 = $0.70/bushel profit guaranteed. **Tradeoff**: If prices rally to $5.50, he still only gets $4.50 (hedging sacrifices upside). **Why buy put options instead?** Puts protect downside but allow upside - costs premium but more flexibility.",
     difficulty: 'intermediate',
   },
   {

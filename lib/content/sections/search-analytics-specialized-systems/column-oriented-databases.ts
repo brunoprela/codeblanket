@@ -32,7 +32,7 @@ Block 2: [2, Bob, 35, UK, 2024-01-16]
 Block 3: [3, Charlie, 42, US, 2024-01-17]
 \`\`\`
 
-**Query: "What's the average age?"**
+**Query: "What\'s the average age?"**
 
 \`\`\`sql
 SELECT AVG(age) FROM users;
@@ -142,7 +142,7 @@ for (int i = 0; i < rows; i++) {
 // Column-oriented: Vectorizable (same type)
 // Process 8 values simultaneously with SIMD
 for (int i = 0; i < amounts.size(); i += 8) {
-    sum += simd_sum(amounts[i:i+8]);  // 8 values at once!
+    sum += simd_sum (amounts[i:i+8]);  // 8 values at once!
 }
 \`\`\`
 
@@ -535,10 +535,10 @@ import pandas as pd
 
 # Convert Pandas DataFrame to Arrow (zero-copy)
 df = pd.DataFrame({'a': [1, 2, 3]})
-arrow_table = pa.Table.from_pandas(df)
+arrow_table = pa.Table.from_pandas (df)
 
 # Now Spark can read this without copying!
-spark.createDataFrame(arrow_table.to_pandas())
+spark.createDataFrame (arrow_table.to_pandas())
 \`\`\`
 
 ## Best Practices

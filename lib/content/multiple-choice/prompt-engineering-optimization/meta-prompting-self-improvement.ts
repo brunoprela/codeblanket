@@ -64,7 +64,7 @@ export const metapromptingselfimprovementMultipleChoice: MultipleChoiceQuestion[
       question: 'What is the main risk of fully automated prompt improvement?',
       options: [
         'It costs too much',
-        "It's too slow",
+        "It\'s too slow",
         'Generated prompts might not align with business priorities or safety requirements',
         "It doesn't work",
       ],

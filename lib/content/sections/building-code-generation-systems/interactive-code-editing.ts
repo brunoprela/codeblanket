@@ -8,7 +8,7 @@ export const interactivecodeeditingSection = {
   title: 'Interactive Code Editing',
   content: `# Interactive Code Editing
 
-Master building interactive code editing experiences with conversational AI, like Cursor's chat interface.
+Master building interactive code editing experiences with conversational AI, like Cursor\'s chat interface.
 
 ## Overview: Conversational Code Editing
 
@@ -47,7 +47,7 @@ class Message:
     """A message in the conversation."""
     role: str  # "user", "assistant", "system"
     content: str
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field (default_factory=datetime.now)
 
 @dataclass
 class EditSession:
@@ -55,15 +55,15 @@ class EditSession:
     file_path: str
     original_content: str
     current_content: str
-    messages: List[Message] = field(default_factory=list)
-    pending_edits: List[SearchReplace] = field(default_factory=list)
-    applied_edits: List[SearchReplace] = field(default_factory=list)
+    messages: List[Message] = field (default_factory=list)
+    pending_edits: List[SearchReplace] = field (default_factory=list)
+    applied_edits: List[SearchReplace] = field (default_factory=list)
     
-    def add_message(self, role: str, content: str):
+    def add_message (self, role: str, content: str):
         """Add message to conversation."""
-        self.messages.append(Message(role, content))
+        self.messages.append(Message (role, content))
     
-    def apply_pending_edits(self):
+    def apply_pending_edits (self):
         """Apply pending edits to current content."""
         applicator = SafeEditApplicator()
         success, new_content, errors = applicator.apply_multiple_edits(
@@ -72,14 +72,14 @@ class EditSession:
         )
         
         if success:
-            self.applied_edits.extend(self.pending_edits)
+            self.applied_edits.extend (self.pending_edits)
             self.current_content = new_content
             self.pending_edits.clear()
             return True
         
         return False
     
-    def undo_last_edit(self):
+    def undo_last_edit (self):
         """Undo the most recent edit."""
         if not self.applied_edits:
             return False
@@ -120,11 +120,11 @@ class ConversationManager:
         self.sessions[file_path] = session
         return session
     
-    def get_session(self, file_path: str) -> Optional[EditSession]:
+    def get_session (self, file_path: str) -> Optional[EditSession]:
         """Get existing session."""
-        return self.sessions.get(file_path)
+        return self.sessions.get (file_path)
     
-    def end_session(self, file_path: str):
+    def end_session (self, file_path: str):
         """End an editing session."""
         if file_path in self.sessions:
             del self.sessions[file_path]
@@ -174,7 +174,7 @@ class InteractiveCodeEditor:
         content: str
     ) -> EditSession:
         """Start interactive editing session."""
-        session = self.conversation_manager.create_session(file_path, content)
+        session = self.conversation_manager.create_session (file_path, content)
         
         # Add system message
         session.add_message(
@@ -197,7 +197,7 @@ class InteractiveCodeEditor:
         session.add_message("user", user_request)
         
         # Build conversation history for LLM
-        messages = self._build_messages(session)
+        messages = self._build_messages (session)
         
         # Get AI response
         response = self.client.chat.completions.create(
@@ -215,12 +215,12 @@ class InteractiveCodeEditor:
         if "<<<<<<< SEARCH" in ai_response:
             # Parse edits
             parser = SearchReplaceParser()
-            edits = parser.parse(ai_response)
+            edits = parser.parse (ai_response)
             session.pending_edits = edits
         
         return ai_response
     
-    def _build_messages(self, session: EditSession) -> List[dict]:
+    def _build_messages (self, session: EditSession) -> List[dict]:
         """Build message array for LLM."""
         messages = []
         
@@ -245,19 +245,19 @@ Content:
         
         return messages
     
-    def accept_edits(self, session: EditSession) -> bool:
+    def accept_edits (self, session: EditSession) -> bool:
         """Accept pending edits."""
         return session.apply_pending_edits()
     
-    def reject_edits(self, session: EditSession):
+    def reject_edits (self, session: EditSession):
         """Reject pending edits."""
         session.pending_edits.clear()
     
-    def undo(self, session: EditSession) -> bool:
+    def undo (self, session: EditSession) -> bool:
         """Undo last edit."""
         return session.undo_last_edit()
     
-    def show_diff(self, session: EditSession) -> str:
+    def show_diff (self, session: EditSession) -> str:
         """Show diff of pending changes."""
         import difflib
         
@@ -278,7 +278,7 @@ Content:
             lineterm=""
         )
         
-        return "\\n".join(diff)
+        return "\\n".join (diff)
 
 # Usage
 editor = InteractiveCodeEditor()
@@ -304,7 +304,7 @@ if "?" in response:
 
 # Show diff before accepting
 if session.pending_edits:
-    diff = editor.show_diff(session)
+    diff = editor.show_diff (session)
     print("\\nProposed changes:")
     print(diff)
     
@@ -312,17 +312,17 @@ if session.pending_edits:
     user_decision = input("\\nAccept changes? (yes/no/modify): ")
     
     if user_decision == "yes":
-        editor.accept_edits(session)
+        editor.accept_edits (session)
         print("✓ Changes applied")
     
     elif user_decision == "no":
-        editor.reject_edits(session)
+        editor.reject_edits (session)
         print("✗ Changes rejected")
     
     elif user_decision == "modify":
         # User can provide feedback
         feedback = input("What would you like to change? ")
-        response = editor.process_request(session, feedback)
+        response = editor.process_request (session, feedback)
         print(f"AI: {response}")
 \`\`\`
 
@@ -378,7 +378,7 @@ Output as JSON:
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         needs_clarification = result.get("needs_clarification", False)
         question = result.get("question")
@@ -436,7 +436,7 @@ class IterativeRefiner:
         )
         
         # Show original edits
-        edits_str = "\\n\\n".join(str(edit) for edit in original_edits)
+        edits_str = "\\n\\n".join (str (edit) for edit in original_edits)
         
         prompt = f"""Refine these code edits based on user feedback:
 
@@ -469,7 +469,7 @@ Use SEARCH/REPLACE format.
         
         # Parse refined edits
         parser = SearchReplaceParser()
-        refined_edits = parser.parse(response.choices[0].message.content)
+        refined_edits = parser.parse (response.choices[0].message.content)
         
         return refined_edits
 
@@ -479,8 +479,8 @@ refiner = IterativeRefiner()
 # Original edits
 original_edits = [
     SearchReplace(
-        "def login(username, password):",
-        "def login(username: str, password: str) -> bool:"
+        "def login (username, password):",
+        "def login (username: str, password: str) -> bool:"
     )
 ]
 
@@ -510,7 +510,7 @@ class EditVersion:
     content: str
     edits: List[SearchReplace]
     message: str
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field (default_factory=datetime.now)
 
 class EditHistory:
     """Track edit history with undo/redo."""
@@ -544,15 +544,15 @@ class EditHistory:
         
         self.current_index += 1
     
-    def can_undo(self) -> bool:
+    def can_undo (self) -> bool:
         """Check if undo is possible."""
         return self.current_index > 0
     
-    def can_redo(self) -> bool:
+    def can_redo (self) -> bool:
         """Check if redo is possible."""
-        return self.current_index < len(self.versions) - 1
+        return self.current_index < len (self.versions) - 1
     
-    def undo(self) -> Optional[EditVersion]:
+    def undo (self) -> Optional[EditVersion]:
         """Undo to previous version."""
         if not self.can_undo():
             return None
@@ -560,7 +560,7 @@ class EditHistory:
         self.current_index -= 1
         return self.versions[self.current_index]
     
-    def redo(self) -> Optional[EditVersion]:
+    def redo (self) -> Optional[EditVersion]:
         """Redo to next version."""
         if not self.can_redo():
             return None
@@ -568,16 +568,16 @@ class EditHistory:
         self.current_index += 1
         return self.versions[self.current_index]
     
-    def get_current(self) -> EditVersion:
+    def get_current (self) -> EditVersion:
         """Get current version."""
         return self.versions[self.current_index]
     
-    def get_history(self) -> List[str]:
+    def get_history (self) -> List[str]:
         """Get history as list of messages."""
         return [v.message for v in self.versions]
 
 # Usage
-history = EditHistory(original_content)
+history = EditHistory (original_content)
 
 # Apply edit
 history.add_version(
@@ -600,7 +600,7 @@ if history.can_redo():
 
 # Show history
 print("\\nEdit history:")
-for i, msg in enumerate(history.get_history()):
+for i, msg in enumerate (history.get_history()):
     marker = "→" if i == history.current_index else " "
     print(f"{marker} {i}: {msg}")
 \`\`\`
@@ -714,7 +714,7 @@ confirmation = conf_manager.request_confirmation(
 )
 
 # Show to user
-prompt = conf_manager.show_confirmation_prompt(confirmation)
+prompt = conf_manager.show_confirmation_prompt (confirmation)
 print(prompt)
 
 # Get user input

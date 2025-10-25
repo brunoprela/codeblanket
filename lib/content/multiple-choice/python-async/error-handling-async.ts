@@ -13,7 +13,7 @@ export const errorHandlingAsyncMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Without return_exceptions=True, gather() stops at first exception and raises it, losing all remaining results. Example: await gather(task1(), task2(), task3()) where task2 fails: Without return_exceptions: task1 completes, task2 raises exception (stops gather), task3 result lost. With return_exceptions=True: All 3 tasks complete, results = [result1, Exception, result3]. Critical for batch operations where you want partial results. Pattern: results = await gather(..., return_exceptions=True); for r in results: if isinstance(r, Exception): handle_error(r); else: process(r). Always use return_exceptions=True for multiple independent tasks.',
+      'Without return_exceptions=True, gather() stops at first exception and raises it, losing all remaining results. Example: await gather (task1(), task2(), task3()) where task2 fails: Without return_exceptions: task1 completes, task2 raises exception (stops gather), task3 result lost. With return_exceptions=True: All 3 tasks complete, results = [result1, Exception, result3]. Critical for batch operations where you want partial results. Pattern: results = await gather(..., return_exceptions=True); for r in results: if isinstance (r, Exception): handle_error (r); else: process (r). Always use return_exceptions=True for multiple independent tasks.',
   },
   {
     id: 'eha-mc-2',
@@ -32,7 +32,7 @@ export const errorHandlingAsyncMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'eha-mc-3',
     question:
-      'What does asyncio.wait_for(coro, timeout) do when timeout expires?',
+      'What does asyncio.wait_for (coro, timeout) do when timeout expires?',
     options: [
       'Waits longer',
       'Cancels the coroutine and raises asyncio.TimeoutError',
@@ -41,7 +41,7 @@ export const errorHandlingAsyncMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'wait_for() enforces timeout by cancelling the coroutine when timeout expires and raising TimeoutError. Example: try: result = await asyncio.wait_for(slow_op(), timeout=5.0); except asyncio.TimeoutError: # slow_op was cancelled. Behavior: If completes within timeout: returns result. If exceeds timeout: cancels coroutine, raises TimeoutError. Important: Cancelled coroutine should handle CancelledError for cleanup. Pattern: try: result = await wait_for(operation(), timeout=T); except TimeoutError: log("Operation timed out"); # fallback. Critical for preventing operations from running forever.',
+      'wait_for() enforces timeout by cancelling the coroutine when timeout expires and raising TimeoutError. Example: try: result = await asyncio.wait_for (slow_op(), timeout=5.0); except asyncio.TimeoutError: # slow_op was cancelled. Behavior: If completes within timeout: returns result. If exceeds timeout: cancels coroutine, raises TimeoutError. Important: Cancelled coroutine should handle CancelledError for cleanup. Pattern: try: result = await wait_for (operation(), timeout=T); except TimeoutError: log("Operation timed out"); # fallback. Critical for preventing operations from running forever.',
   },
   {
     id: 'eha-mc-4',
@@ -55,7 +55,7 @@ export const errorHandlingAsyncMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Background tasks (create_task without await) don't raise exceptions automatically. Without handling, exceptions disappear (silent failures). Example: task = create_task(worker()); # Exception in worker() is lost! Correct: def handle_result(task): try: task.result(); except Exception as e: log_error(e). task = create_task(worker()); task.add_done_callback(handle_result). Now exceptions are logged. Alternative: Store tasks and await: tasks = []; tasks.append(create_task(worker())); results = await gather(*tasks, return_exceptions=True). Always handle background task exceptions explicitly.",
+      "Background tasks (create_task without await) don't raise exceptions automatically. Without handling, exceptions disappear (silent failures). Example: task = create_task (worker()); # Exception in worker() is lost! Correct: def handle_result (task): try: task.result(); except Exception as e: log_error (e). task = create_task (worker()); task.add_done_callback (handle_result). Now exceptions are logged. Alternative: Store tasks and await: tasks = []; tasks.append (create_task (worker())); results = await gather(*tasks, return_exceptions=True). Always handle background task exceptions explicitly.",
   },
   {
     id: 'eha-mc-5',

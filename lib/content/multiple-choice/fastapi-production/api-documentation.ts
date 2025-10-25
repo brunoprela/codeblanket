@@ -20,14 +20,14 @@ export const apiDocumentationMultipleChoice = [
     question:
       'How do you add examples to Pydantic models for better API documentation?',
     options: [
-      'Use Field(example=...) for individual fields or Config.schema_extra for complete model examples',
+      'Use Field (example=...) for individual fields or Config.schema_extra for complete model examples',
       'Examples are automatically generated from field types',
       'Add examples in a separate JSON file',
       'Examples cannot be added to Pydantic models',
     ],
     correctAnswer: 0,
     explanation:
-      'Pydantic supports examples via Field(example="value") for individual fields or Config.schema_extra={"example": {...}} for complete model examples. These appear in OpenAPI/Swagger UI, helping developers understand expected data format.',
+      'Pydantic supports examples via Field (example="value") for individual fields or Config.schema_extra={"example": {...}} for complete model examples. These appear in OpenAPI/Swagger UI, helping developers understand expected data format.',
   },
   {
     id: 3,

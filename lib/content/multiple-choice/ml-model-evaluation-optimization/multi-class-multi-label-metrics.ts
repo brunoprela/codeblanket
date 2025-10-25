@@ -72,7 +72,7 @@ export const multiClassMultiLabelMetricsMultipleChoice = {
         'The model is performing consistently across all classes',
         'The model performs well on frequent classes but poorly on minority classes',
         'The model is overfitting',
-        "There's an error in the calculations",
+        "There\'s an error in the calculations",
       ],
       correctAnswer: 1,
       explanation:

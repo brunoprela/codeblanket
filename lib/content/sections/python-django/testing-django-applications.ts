@@ -32,7 +32,7 @@ By the end of this section, you'll master:
 
 ---
 
-## Django's Testing Framework
+## Django\'s Testing Framework
 
 ### Basic Test Structure
 
@@ -44,7 +44,7 @@ from .models import Article
 class ArticleModelTest(TestCase):
     """Test the Article model"""
     
-    def setUp(self):
+    def setUp (self):
         """Run before each test method"""
         self.article = Article.objects.create(
             title='Test Article',
@@ -52,16 +52,16 @@ class ArticleModelTest(TestCase):
             status='published'
         )
     
-    def test_article_creation(self):
+    def test_article_creation (self):
         """Test article is created correctly"""
-        self.assertEqual(self.article.title, 'Test Article')
-        self.assertEqual(self.article.status, 'published')
+        self.assertEqual (self.article.title, 'Test Article')
+        self.assertEqual (self.article.status, 'published')
     
-    def test_article_str(self):
+    def test_article_str (self):
         """Test string representation"""
-        self.assertEqual(str(self.article), 'Test Article')
+        self.assertEqual (str (self.article), 'Test Article')
     
-    def tearDown(self):
+    def tearDown (self):
         """Run after each test method"""
         pass  # Cleanup if needed
 \`\`\`
@@ -104,10 +104,10 @@ from .models import Article, Category
 
 class ArticleModelTest(TestCase):
     
-    def setUp(self):
-        self.category = Category.objects.create(name='Tech')
+    def setUp (self):
+        self.category = Category.objects.create (name='Tech')
     
-    def test_create_article(self):
+    def test_create_article (self):
         """Test creating a valid article"""
         article = Article.objects.create(
             title='Django Testing',
@@ -117,10 +117,10 @@ class ArticleModelTest(TestCase):
         )
         
         self.assertEqual(Article.objects.count(), 1)
-        self.assertEqual(article.title, 'Django Testing')
-        self.assertEqual(article.category, self.category)
+        self.assertEqual (article.title, 'Django Testing')
+        self.assertEqual (article.category, self.category)
     
-    def test_article_slug_generation(self):
+    def test_article_slug_generation (self):
         """Test slug is auto-generated from title"""
         article = Article.objects.create(
             title='Django Testing Guide',
@@ -128,9 +128,9 @@ class ArticleModelTest(TestCase):
             category=self.category
         )
         
-        self.assertEqual(article.slug, 'django-testing-guide')
+        self.assertEqual (article.slug, 'django-testing-guide')
     
-    def test_article_validation(self):
+    def test_article_validation (self):
         """Test article validation"""
         article = Article(
             title='',  # Invalid: title required
@@ -141,7 +141,7 @@ class ArticleModelTest(TestCase):
         with self.assertRaises(ValidationError):
             article.full_clean()
     
-    def test_get_absolute_url(self):
+    def test_get_absolute_url (self):
         """Test URL generation"""
         article = Article.objects.create(
             title='Test',
@@ -151,7 +151,7 @@ class ArticleModelTest(TestCase):
         )
         
         expected_url = f'/articles/{article.slug}/'
-        self.assertEqual(article.get_absolute_url(), expected_url)
+        self.assertEqual (article.get_absolute_url(), expected_url)
 \`\`\`
 
 ### Testing QuerySets and Managers
@@ -159,8 +159,8 @@ class ArticleModelTest(TestCase):
 \`\`\`python
 class ArticleQuerySetTest(TestCase):
     
-    def setUp(self):
-        self.category = Category.objects.create(name='Tech')
+    def setUp (self):
+        self.category = Category.objects.create (name='Tech')
         
         # Create test articles
         Article.objects.create(
@@ -182,16 +182,16 @@ class ArticleQuerySetTest(TestCase):
             status='published'
         )
     
-    def test_published_manager(self):
+    def test_published_manager (self):
         """Test custom manager returns only published articles"""
         published = Article.published.all()
-        self.assertEqual(published.count(), 2)
-        self.assertTrue(all(a.status == 'published' for a in published))
+        self.assertEqual (published.count(), 2)
+        self.assertTrue (all (a.status == 'published' for a in published))
     
-    def test_by_category(self):
+    def test_by_category (self):
         """Test filtering by category"""
-        articles = Article.objects.filter(category=self.category)
-        self.assertEqual(articles.count(), 3)
+        articles = Article.objects.filter (category=self.category)
+        self.assertEqual (articles.count(), 3)
 \`\`\`
 
 ---
@@ -206,9 +206,9 @@ from django.urls import reverse
 
 class ArticleViewTest(TestCase):
     
-    def setUp(self):
+    def setUp (self):
         self.client = Client()
-        self.category = Category.objects.create(name='Tech')
+        self.category = Category.objects.create (name='Tech')
         self.article = Article.objects.create(
             title='Test Article',
             slug='test-article',
@@ -217,28 +217,28 @@ class ArticleViewTest(TestCase):
             status='published'
         )
     
-    def test_article_list_view(self):
+    def test_article_list_view (self):
         """Test article list view"""
-        response = self.client.get(reverse('article_list'))
+        response = self.client.get (reverse('article_list'))
         
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'articles/list.html')
-        self.assertContains(response, 'Test Article')
-        self.assertEqual(len(response.context['articles']), 1)
+        self.assertEqual (response.status_code, 200)
+        self.assertTemplateUsed (response, 'articles/list.html')
+        self.assertContains (response, 'Test Article')
+        self.assertEqual (len (response.context['articles']), 1)
     
-    def test_article_detail_view(self):
+    def test_article_detail_view (self):
         """Test article detail view"""
         url = reverse('article_detail', kwargs={'slug': self.article.slug})
-        response = self.client.get(url)
+        response = self.client.get (url)
         
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'articles/detail.html')
-        self.assertEqual(response.context['article'], self.article)
+        self.assertEqual (response.status_code, 200)
+        self.assertTemplateUsed (response, 'articles/detail.html')
+        self.assertEqual (response.context['article'], self.article)
     
-    def test_article_not_found(self):
+    def test_article_not_found (self):
         """Test 404 for non-existent article"""
-        response = self.client.get(reverse('article_detail', kwargs={'slug': 'non-existent'}))
-        self.assertEqual(response.status_code, 404)
+        response = self.client.get (reverse('article_detail', kwargs={'slug': 'non-existent'}))
+        self.assertEqual (response.status_code, 404)
 \`\`\`
 
 ### Testing Authenticated Views
@@ -248,36 +248,36 @@ from django.contrib.auth.models import User
 
 class AuthenticatedViewTest(TestCase):
     
-    def setUp(self):
+    def setUp (self):
         self.client = Client()
         self.user = User.objects.create_user(
             username='testuser',
             password='testpass123'
         )
-        self.category = Category.objects.create(name='Tech')
+        self.category = Category.objects.create (name='Tech')
     
-    def test_create_article_requires_login(self):
+    def test_create_article_requires_login (self):
         """Test create view requires authentication"""
-        response = self.client.get(reverse('article_create'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
+        response = self.client.get (reverse('article_create'))
+        self.assertEqual (response.status_code, 302)  # Redirect to login
     
-    def test_create_article_authenticated(self):
+    def test_create_article_authenticated (self):
         """Test creating article when logged in"""
-        self.client.login(username='testuser', password='testpass123')
+        self.client.login (username='testuser', password='testpass123')
         
-        response = self.client.post(reverse('article_create'), {
+        response = self.client.post (reverse('article_create'), {
             'title': 'New Article',
             'content': 'Content here',
             'category': self.category.id,
             'status': 'published'
         })
         
-        self.assertEqual(response.status_code, 302)  # Redirect after success
+        self.assertEqual (response.status_code, 302)  # Redirect after success
         self.assertEqual(Article.objects.count(), 1)
         
         article = Article.objects.first()
-        self.assertEqual(article.title, 'New Article')
-        self.assertEqual(article.author, self.user)
+        self.assertEqual (article.title, 'New Article')
+        self.assertEqual (article.author, self.user)
 \`\`\`
 
 ---
@@ -292,13 +292,13 @@ from rest_framework import status
 
 class ArticleAPITest(APITestCase):
     
-    def setUp(self):
+    def setUp (self):
         self.client = APIClient()
         self.user = User.objects.create_user(
             username='testuser',
             password='testpass123'
         )
-        self.category = Category.objects.create(name='Tech')
+        self.category = Category.objects.create (name='Tech')
         self.article = Article.objects.create(
             title='Test Article',
             content='Content',
@@ -307,22 +307,22 @@ class ArticleAPITest(APITestCase):
             status='published'
         )
     
-    def test_get_article_list(self):
+    def test_get_article_list (self):
         """Test GET /api/articles/"""
         response = self.client.get('/api/articles/')
         
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)
-        self.assertEqual(response.data['results'][0]['title'], 'Test Article')
+        self.assertEqual (response.status_code, status.HTTP_200_OK)
+        self.assertEqual (len (response.data['results']), 1)
+        self.assertEqual (response.data['results'][0]['title'], 'Test Article')
     
-    def test_get_article_detail(self):
+    def test_get_article_detail (self):
         """Test GET /api/articles/{id}/"""
-        response = self.client.get(f'/api/articles/{self.article.id}/')
+        response = self.client.get (f'/api/articles/{self.article.id}/')
         
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], 'Test Article')
+        self.assertEqual (response.status_code, status.HTTP_200_OK)
+        self.assertEqual (response.data['title'], 'Test Article')
     
-    def test_create_article_unauthenticated(self):
+    def test_create_article_unauthenticated (self):
         """Test POST /api/articles/ without authentication"""
         data = {
             'title': 'New Article',
@@ -331,11 +331,11 @@ class ArticleAPITest(APITestCase):
         }
         response = self.client.post('/api/articles/', data)
         
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual (response.status_code, status.HTTP_401_UNAUTHORIZED)
     
-    def test_create_article_authenticated(self):
+    def test_create_article_authenticated (self):
         """Test POST /api/articles/ with authentication"""
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate (user=self.user)
         
         data = {
             'title': 'New Article',
@@ -345,13 +345,13 @@ class ArticleAPITest(APITestCase):
         }
         response = self.client.post('/api/articles/', data)
         
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual (response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Article.objects.count(), 2)
-        self.assertEqual(response.data['title'], 'New Article')
+        self.assertEqual (response.data['title'], 'New Article')
     
-    def test_update_article(self):
+    def test_update_article (self):
         """Test PUT /api/articles/{id}/"""
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate (user=self.user)
         
         data = {
             'title': 'Updated Article',
@@ -359,19 +359,19 @@ class ArticleAPITest(APITestCase):
             'category': self.category.id,
             'status': 'published'
         }
-        response = self.client.put(f'/api/articles/{self.article.id}/', data)
+        response = self.client.put (f'/api/articles/{self.article.id}/', data)
         
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual (response.status_code, status.HTTP_200_OK)
         self.article.refresh_from_db()
-        self.assertEqual(self.article.title, 'Updated Article')
+        self.assertEqual (self.article.title, 'Updated Article')
     
-    def test_delete_article(self):
+    def test_delete_article (self):
         """Test DELETE /api/articles/{id}/"""
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate (user=self.user)
         
-        response = self.client.delete(f'/api/articles/{self.article.id}/')
+        response = self.client.delete (f'/api/articles/{self.article.id}/')
         
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual (response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Article.objects.count(), 0)
 \`\`\`
 
@@ -446,10 +446,10 @@ def user():
 @pytest.fixture
 def category():
     """Create test category"""
-    return Category.objects.create(name='Tech')
+    return Category.objects.create (name='Tech')
 
 @pytest.fixture
-def article(user, category):
+def article (user, category):
     """Create test article"""
     return Article.objects.create(
         title='Test Article',
@@ -461,7 +461,7 @@ def article(user, category):
 
 # Usage in tests
 @pytest.mark.django_db
-def test_article_with_fixtures(article):
+def test_article_with_fixtures (article):
     """Test using fixtures"""
     assert article.title == 'Test Article'
     assert article.status == 'published'
@@ -490,8 +490,8 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
     
-    username = factory.Sequence(lambda n: f'user{n}')
-    email = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+    username = factory.Sequence (lambda n: f'user{n}')
+    email = factory.LazyAttribute (lambda obj: f'{obj.username}@example.com')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
 
@@ -530,13 +530,13 @@ def test_with_factory():
     assert Article.objects.count() == 6
     
     # Override attributes
-    article = ArticleFactory(title='Custom Title', status='draft')
+    article = ArticleFactory (title='Custom Title', status='draft')
     assert article.title == 'Custom Title'
     assert article.status == 'draft'
     
     # Create related objects
     user = UserFactory()
-    article = ArticleFactory(author=user)
+    article = ArticleFactory (author=user)
     assert article.author == user
 \`\`\`
 
@@ -553,22 +553,22 @@ from django.test import TestCase
 class PaymentTest(TestCase):
     
     @patch('articles.services.payment_gateway.charge')
-    def test_process_payment(self, mock_charge):
+    def test_process_payment (self, mock_charge):
         """Test payment processing with mocked gateway"""
         # Configure mock
         mock_charge.return_value = {'status': 'success', 'transaction_id': '12345'}
         
         # Call function that uses payment gateway
-        result = process_order_payment(order_id=1)
+        result = process_order_payment (order_id=1)
         
         # Assertions
-        self.assertEqual(result['status'], 'success')
-        mock_charge.assert_called_once_with(amount=100, currency='USD')
+        self.assertEqual (result['status'], 'success')
+        mock_charge.assert_called_once_with (amount=100, currency='USD')
     
     @patch('articles.services.send_email')
-    def test_send_notification(self, mock_send_email):
+    def test_send_notification (self, mock_send_email):
         """Test email notification"""
-        send_article_notification(article_id=1)
+        send_article_notification (article_id=1)
         
         # Verify email was sent
         mock_send_email.assert_called_once()

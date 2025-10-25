@@ -22,7 +22,7 @@ Each model has different trade-offs in terms of quality, speed, cost, accessibil
 
 ### Overview
 
-**Runway Gen-2** is one of the most advanced text-to-video models publicly available (as of 2024). It's used by professional creators and offers:
+**Runway Gen-2** is one of the most advanced text-to-video models publicly available (as of 2024). It\'s used by professional creators and offers:
 
 - **Quality**: High-fidelity, cinematic outputs
 - **Length**: Up to 16 seconds per generation
@@ -97,11 +97,11 @@ class RunwayVideoConfig:
     motion_amount: float = 0.5  # 0.0 to 1.0, how much motion
     prompt_weight: float = 1.0  # How strongly to follow prompt
     
-    def to_api_payload(self) -> Dict:
+    def to_api_payload (self) -> Dict:
         """Convert to API request format"""
         payload = {
             "prompt": self.prompt,
-            "duration": min(self.duration, 16.0),
+            "duration": min (self.duration, 16.0),
             "aspect_ratio": self.aspect_ratio,
             "interpolate": self.interpolate,
             "motion_amount": self.motion_amount,
@@ -170,7 +170,7 @@ class RunwayGen2Client:
         
         self.base_url = "https://api.runwayml.com/v1"
         self.cache_dir = cache_dir or Path("./runway_cache")
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_dir.mkdir (exist_ok=True)
         
         self.track_costs = track_costs
         self.total_cost = 0.0
@@ -201,12 +201,12 @@ class RunwayGen2Client:
             RunwayVideoResult with video URL and metadata
         """
         # Convert string to config
-        if isinstance(config, str):
-            config = RunwayVideoConfig(prompt=config)
+        if isinstance (config, str):
+            config = RunwayVideoConfig (prompt=config)
         
         # Check cache
-        cache_key = self._get_cache_key(config)
-        cached_result = self._get_cached_result(cache_key)
+        cache_key = self._get_cache_key (config)
+        cached_result = self._get_cached_result (cache_key)
         if cached_result:
             print(f"✅ Using cached result: {cached_result.url}")
             return cached_result
@@ -214,7 +214,7 @@ class RunwayGen2Client:
         # Submit generation request
         payload = config.to_api_payload()
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
                 response = self.session.post(
                     f"{self.base_url}/generations",
@@ -225,12 +225,12 @@ class RunwayGen2Client:
                 break
             except requests.exceptions.RequestException as e:
                 if attempt == max_retries - 1:
-                    raise Exception(f"Failed to submit generation after {max_retries} attempts: {e}")
+                    raise Exception (f"Failed to submit generation after {max_retries} attempts: {e}")
                 
                 # Exponential backoff
                 wait_time = 2 ** attempt
                 print(f"⚠️  Request failed, retrying in {wait_time}s...")
-                time.sleep(wait_time)
+                time.sleep (wait_time)
         
         data = response.json()
         video_id = data["id"]
@@ -244,10 +244,10 @@ class RunwayGen2Client:
                 status="pending",
                 duration=config.duration,
                 resolution=(0, 0),
-                cost=self._estimate_cost(config),
+                cost=self._estimate_cost (config),
                 created_at=data.get("created_at", ""),
                 prompt=config.prompt,
-                config=asdict(config),
+                config=asdict (config),
             )
         
         # Poll for completion
@@ -263,7 +263,7 @@ class RunwayGen2Client:
             print(f"💰 Cost: \${result.cost:.2f} (Total: \${self.total_cost:.2f})")
         
         # Cache result
-self._cache_result(cache_key, result)
+self._cache_result (cache_key, result)
 
 return result
     
@@ -279,11 +279,11 @@ start_time = time.time()
 last_status = None
 
 while time.time() - start_time < max_wait_seconds:
-    result = self.get_status(video_id)
+    result = self.get_status (video_id)
             
             # Call progress callback if status changed
 if progress_callback and result.status != last_status:
-progress_callback(result)
+progress_callback (result)
 last_status = result.status
 
 if result.status == "completed":
@@ -292,29 +292,29 @@ print(f"✅ Generation completed in {elapsed:.1f}s")
 return result
             
             elif result.status == "failed":
-                raise Exception(f"Generation failed: {result.error}")
+                raise Exception (f"Generation failed: {result.error}")
             
             elif result.status in ["pending", "processing"]:
                 # Show progress
 elapsed = time.time() - start_time
 print(f"⏳ Still processing... ({elapsed:.0f}s elapsed)")
-time.sleep(poll_interval)
+time.sleep (poll_interval)
             
             else:
-                raise Exception(f"Unknown status: {result.status}")
+                raise Exception (f"Unknown status: {result.status}")
         
-        raise TimeoutError(f"Generation timed out after {max_wait_seconds}s")
+        raise TimeoutError (f"Generation timed out after {max_wait_seconds}s")
     
-    def get_status(self, video_id: str) -> RunwayVideoResult:
+    def get_status (self, video_id: str) -> RunwayVideoResult:
 """Get current status of generation"""
-response = self.session.get(f"{self.base_url}/generations/{video_id}")
+response = self.session.get (f"{self.base_url}/generations/{video_id}")
 response.raise_for_status()
 
 data = response.json()
         
         # Parse resolution
 resolution_str = data.get("resolution", "0x0")
-width, height = map(int, resolution_str.split("x"))
+width, height = map (int, resolution_str.split("x"))
 
 return RunwayVideoResult(
     id = video_id,
@@ -351,24 +351,24 @@ import concurrent.futures
 
 results = []
 completed = 0
-total = len(configs)
+total = len (configs)
 
-with concurrent.futures.ThreadPoolExecutor(max_workers = max_parallel) as executor:
+with concurrent.futures.ThreadPoolExecutor (max_workers = max_parallel) as executor:
             # Submit all jobs
 future_to_config = {
-    executor.submit(self.generate, config): config 
+    executor.submit (self.generate, config): config 
                 for config in configs
 }
             
             # Collect results as they complete
-for future in concurrent.futures.as_completed(future_to_config):
+for future in concurrent.futures.as_completed (future_to_config):
     try:
 result = future.result()
-results.append(result)
+results.append (result)
 completed += 1
 
 if progress_callback:
-    progress_callback(completed, total, result)
+    progress_callback (completed, total, result)
 
 print(f"✅ Completed {completed}/{total}")
                     
@@ -378,7 +378,7 @@ results.append(None)
 
 return results
     
-    def _estimate_cost(self, config: RunwayVideoConfig) -> float:
+    def _estimate_cost (self, config: RunwayVideoConfig) -> float:
 """Estimate cost for generation"""
 cost = config.duration * self.COST_PER_SECOND
 
@@ -387,34 +387,34 @@ if config.upscale:
 
 return cost
     
-    def _get_cache_key(self, config: RunwayVideoConfig) -> str:
+    def _get_cache_key (self, config: RunwayVideoConfig) -> str:
 """Generate cache key from config"""
         # Create deterministic hash of config
-config_str = json.dumps(asdict(config), sort_keys = True)
+config_str = json.dumps (asdict (config), sort_keys = True)
 return hashlib.md5(config_str.encode()).hexdigest()
     
-    def _cache_result(self, cache_key: str, result: RunwayVideoResult):
+    def _cache_result (self, cache_key: str, result: RunwayVideoResult):
 """Save result to cache"""
 cache_file = self.cache_dir / f"{cache_key}.json"
-with open(cache_file, "w") as f:
-json.dump(asdict(result), f, indent = 2)
+with open (cache_file, "w") as f:
+json.dump (asdict (result), f, indent = 2)
     
-    def _get_cached_result(self, cache_key: str) -> Optional[RunwayVideoResult]:
+    def _get_cached_result (self, cache_key: str) -> Optional[RunwayVideoResult]:
 """Load result from cache if exists"""
 cache_file = self.cache_dir / f"{cache_key}.json"
 
 if cache_file.exists():
-    with open(cache_file) as f:
-    data = json.load(f)
+    with open (cache_file) as f:
+    data = json.load (f)
 return RunwayVideoResult(** data)
 
 return None
     
-    def get_cost_summary(self) -> Dict:
+    def get_cost_summary (self) -> Dict:
 """Get summary of costs"""
 return {
     "total_cost_usd": self.total_cost,
-    "average_cost_per_video": self.total_cost / max(1, len(list(self.cache_dir.glob("*.json")))),
+    "average_cost_per_video": self.total_cost / max(1, len (list (self.cache_dir.glob("*.json")))),
 }
 
 # Example usage
@@ -454,7 +454,7 @@ config = RunwayVideoConfig(
     style = RunwayStyle.CYBERPUNK,
 )
 
-result = client.generate(config)
+result = client.generate (config)
 print(f"✅ Video URL: {result.url}")
     
     # Example 3: Image - to - video
@@ -466,7 +466,7 @@ config = RunwayVideoConfig(
     motion_amount = 0.3,  # Subtle motion
 )
 
-result = client.generate(config)
+result = client.generate (config)
 print(f"✅ Video URL: {result.url}")
     
     # Example 4: Batch generation
@@ -478,7 +478,7 @@ prompts = [
     "Cherry blossoms falling in slow motion",
 ]
 
-configs = [RunwayVideoConfig(prompt = p, duration = 4.0) for p in prompts]
+configs = [RunwayVideoConfig (prompt = p, duration = 4.0) for p in prompts]
 
 results = client.generate_batch(
     configs,
@@ -486,7 +486,7 @@ results = client.generate_batch(
     progress_callback = lambda done, total, result: print(f"  Progress: {done}/{total}"),
 )
 
-print(f"✅ Generated {len(results)} videos")
+print(f"✅ Generated {len (results)} videos")
     
     # Show cost summary
 print("\\n💰 Cost Summary:")
@@ -607,9 +607,9 @@ class PikaLabsClient:
             )
         
         # Wait for completion
-        return self._poll_completion(video_id)
+        return self._poll_completion (video_id)
     
-    def _poll_completion(self, video_id: str, max_wait: int = 180) -> PikaResult:
+    def _poll_completion (self, video_id: str, max_wait: int = 180) -> PikaResult:
         """Poll until video is ready"""
         start = time.time()
         
@@ -631,7 +631,7 @@ class PikaLabsClient:
                     prompt=data.get("prompt", ""),
                 )
             elif data["status"] == "failed":
-                raise Exception(f"Generation failed: {data.get('error')}")
+                raise Exception (f"Generation failed: {data.get('error')}")
             
             time.sleep(5)
         
@@ -640,7 +640,7 @@ class PikaLabsClient:
 # Example usage
 def pika_example():
     """Example Pika usage"""
-    client = PikaLabsClient(api_key="your_api_key")
+    client = PikaLabsClient (api_key="your_api_key")
     
     config = PikaConfig(
         prompt="A cyberpunk street scene with neon signs, raining",
@@ -649,7 +649,7 @@ def pika_example():
         aspect_ratio="9:16",  # Vertical for social media
     )
     
-    result = client.generate(config)
+    result = client.generate (config)
     print(f"Generated: {result.url}")
 
 if __name__ == "__main__":
@@ -706,7 +706,7 @@ class StableVideoDiffusion:
             torch_dtype=torch.float16 if variant == "fp16" else torch.float32,
             variant=variant,
         )
-        self.pipe.to(device)
+        self.pipe.to (device)
         
         # Enable memory optimizations
         self.pipe.enable_model_cpu_offload()
@@ -738,8 +738,8 @@ class StableVideoDiffusion:
             List of PIL Images (frames)
         """
         # Load image if path/URL
-        if isinstance(image, str):
-            image = load_image(image)
+        if isinstance (image, str):
+            image = load_image (image)
         
         # Resize to model input size (1024x576)
         image = image.resize((1024, 576))
@@ -747,7 +747,7 @@ class StableVideoDiffusion:
         # Set seed
         generator = None
         if seed is not None:
-            generator = torch.manual_seed(seed)
+            generator = torch.manual_seed (seed)
         
         # Generate video frames
         frames = self.pipe(
@@ -780,11 +780,11 @@ class StableVideoDiffusion:
             "runwayml/stable-diffusion-v1-5",
             torch_dtype=torch.float16,
         )
-        sd_pipe.to(self.device)
+        sd_pipe.to (self.device)
         
         # Generate initial image
         print(f"Generating initial image: {prompt}")
-        generator = torch.manual_seed(seed) if seed else None
+        generator = torch.manual_seed (seed) if seed else None
         
         image = sd_pipe(
             prompt=prompt,
@@ -811,7 +811,7 @@ class StableVideoDiffusion:
         fps: int = 7,
     ):
         """Save frames as video file"""
-        export_to_video(frames, output_path, fps=fps)
+        export_to_video (frames, output_path, fps=fps)
         print(f"Video saved: {output_path}")
 
 # Example usage
@@ -819,7 +819,7 @@ def main():
     """Demonstrate Stable Video Diffusion"""
     
     # Initialize model
-    svd = StableVideoDiffusion(device="cuda")
+    svd = StableVideoDiffusion (device="cuda")
     
     # Example 1: Image-to-video
     print("\\n📹 Example 1: Animate static image")
@@ -831,8 +831,8 @@ def main():
         seed=42,
     )
     
-    svd.save_video(frames, "output1.mp4", fps=7)
-    print(f"Generated {len(frames)} frames")
+    svd.save_video (frames, "output1.mp4", fps=7)
+    print(f"Generated {len (frames)} frames")
     
     # Example 2: Text-to-video (via image)
     print("\\n📹 Example 2: Text-to-video")
@@ -843,7 +843,7 @@ def main():
         seed=42,
     )
     
-    svd.save_video(frames, "output2.mp4", fps=7)
+    svd.save_video (frames, "output2.mp4", fps=7)
     
     # Example 3: Experimenting with motion
     print("\\n📹 Example 3: Different motion levels")
@@ -935,7 +935,7 @@ class AnimateDiffGenerator:
         self.pipe.enable_vae_slicing()
         self.pipe.enable_model_cpu_offload()
         
-        self.pipe.to(device)
+        self.pipe.to (device)
     
     def generate(
         self,
@@ -962,7 +962,7 @@ class AnimateDiffGenerator:
         """
         generator = None
         if seed is not None:
-            generator = torch.manual_seed(seed)
+            generator = torch.manual_seed (seed)
         
         output = self.pipe(
             prompt=prompt,
@@ -975,7 +975,7 @@ class AnimateDiffGenerator:
         
         return output.frames[0]
     
-    def load_lora(self, lora_path: str, weight: float = 1.0):
+    def load_lora (self, lora_path: str, weight: float = 1.0):
         """
         Load LoRA for style control
         
@@ -983,8 +983,8 @@ class AnimateDiffGenerator:
             lora_path: Path or HuggingFace ID
             weight: LoRA influence (0-1)
         """
-        self.pipe.load_lora_weights(lora_path)
-        self.pipe.fuse_lora(lora_scale=weight)
+        self.pipe.load_lora_weights (lora_path)
+        self.pipe.fuse_lora (lora_scale=weight)
 
 # Example usage
 def animatediff_examples():
@@ -1000,7 +1000,7 @@ def animatediff_examples():
         seed=42,
     )
     
-    export_to_video(frames, "animatediff_cat.mp4", fps=8)
+    export_to_video (frames, "animatediff_cat.mp4", fps=8)
     
     # Example 2: With LoRA for specific style
     print("\\n📹 Example 2: With anime LoRA")
@@ -1012,7 +1012,7 @@ def animatediff_examples():
         seed=42,
     )
     
-    export_to_video(frames, "animatediff_anime.mp4", fps=8)
+    export_to_video (frames, "animatediff_anime.mp4", fps=8)
 
 if __name__ == "__main__":
     animatediff_examples()
@@ -1174,7 +1174,7 @@ def recommend_model(
                 scores[model] += 20 if specs.opensource else 0
     
     # Return model with highest score
-    best_model = max(scores.items(), key=lambda x: x[1])
+    best_model = max (scores.items(), key=lambda x: x[1])
     return best_model[0]
 
 # Example usage

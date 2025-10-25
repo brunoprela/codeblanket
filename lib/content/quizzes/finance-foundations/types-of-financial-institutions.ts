@@ -26,7 +26,7 @@ import ccxt  # Crypto data (200+ exchanges)
 # Backtesting frameworks
 import backtrader  # Event-driven backtesting
 import vectorbt as vbt  # Vectorized backtesting (faster)
-import zipline  # Quantopian's framework
+import zipline  # Quantopian\'s framework
 
 # ML/Statistical tools
 import scipy.stats as stats
@@ -67,23 +67,23 @@ Example hypothesis: "Stocks with high short interest that gap down >5% on earnin
 
 Step 2: Data Collection
 \`\`\`python
-def collect_earnings_data(start_date, end_date):
+def collect_earnings_data (start_date, end_date):
     """Collect earnings dates, surprises, and price gaps"""
     # Get earnings calendar
-    earnings = fetch_earnings_calendar(start_date, end_date)
+    earnings = fetch_earnings_calendar (start_date, end_date)
     
     # Get price data
-    prices = fetch_price_data(earnings['tickers'], start_date, end_date)
+    prices = fetch_price_data (earnings['tickers'], start_date, end_date)
     
     # Get short interest
-    short_interest = fetch_short_interest(earnings['tickers'])
+    short_interest = fetch_short_interest (earnings['tickers'])
     
     # Calculate gaps
-    gaps = calculate_earnings_gaps(prices, earnings['dates'])
+    gaps = calculate_earnings_gaps (prices, earnings['dates'])
     
     # Merge datasets
-    data = pd.merge(earnings, gaps, on=['ticker', 'date'])
-    data = pd.merge(data, short_interest, on='ticker')
+    data = pd.merge (earnings, gaps, on=['ticker', 'date'])
+    data = pd.merge (data, short_interest, on='ticker')
     
     return data
 
@@ -98,7 +98,7 @@ Step 3: Exploratory Analysis
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def analyze_signal(data):
+def analyze_signal (data):
     """Analyze signal strength and characteristics"""
     # 1. Return distribution conditional on signal
     high_short = data[data['short_interest'] > 0.20]
@@ -107,7 +107,7 @@ def analyze_signal(data):
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     
     # Forward returns by gap size
-    axes[0, 0].scatter(data['gap_pct'], data['fwd_5d_return'])
+    axes[0, 0].scatter (data['gap_pct'], data['fwd_5d_return'])
     axes[0, 0].set_xlabel('Earnings Gap (%)')
     axes[0, 0].set_ylabel('5-Day Forward Return (%)')
     axes[0, 0].set_title('Gap vs Forward Return')
@@ -127,17 +127,17 @@ def analyze_signal(data):
     print(f"T-statistic: {t_stat:.2f}")
     print(f"P-value: {p_value:.4f}")
     
-    # Effect size (Cohen's d)
+    # Effect size (Cohen\'s d)
     mean_diff = high_short['fwd_5d_return'].mean() - low_short['fwd_5d_return'].mean()
     pooled_std = np.sqrt((high_short['fwd_5d_return'].std()**2 + 
                           low_short['fwd_5d_return'].std()**2) / 2)
     cohens_d = mean_diff / pooled_std
     
-    print(f"Effect size (Cohen's d): {cohens_d:.3f}")
+    print(f"Effect size (Cohen\'s d): {cohens_d:.3f}")
     
     # Decay analysis (how long does signal last?)
     for days in [1, 2, 5, 10, 20]:
-        corr = data['gap_pct'].corr(data[f'fwd_{days}d_return'])
+        corr = data['gap_pct'].corr (data[f'fwd_{days}d_return'])
         print(f"Signal decay at {days} days: {corr:.3f}")
     
     return t_stat, p_value, cohens_d
@@ -146,7 +146,7 @@ def analyze_signal(data):
 Step 4: Statistical Validation
 Requirements for signal acceptance:
 - P-value < 0.05 (statistically significant)
-- Cohen's d > 0.2 (meaningful effect size)
+- Cohen\'s d > 0.2 (meaningful effect size)
 - Consistent across market regimes (bull/bear/sideways)
 - Information ratio > 0.5 (Sharpe ratio of signal alone)
 - Not explained by known factors (CAPM, Fama-French 5-factor)
@@ -174,7 +174,7 @@ class RealisticBacktester:
         # Market impact model (square root model)
         self.market_impact_coef = 0.1
     
-    def calculate_transaction_costs(self, price, shares, adv):
+    def calculate_transaction_costs (self, price, shares, adv):
         """
         Calculate total transaction costs
         
@@ -190,14 +190,14 @@ class RealisticBacktester:
         notional = price * shares
         
         # Commission
-        commission = max(notional * self.commission_rate, self.min_commission)
+        commission = max (notional * self.commission_rate, self.min_commission)
         
         # Slippage (fixed)
         slippage = notional * (self.slippage_bps / 10000)
         
         # Market impact (depends on order size relative to ADV)
         participation_rate = shares / adv if adv > 0 else 0
-        market_impact = notional * self.market_impact_coef * np.sqrt(participation_rate)
+        market_impact = notional * self.market_impact_coef * np.sqrt (participation_rate)
         
         total_cost = commission + slippage + market_impact
         
@@ -209,7 +209,7 @@ class RealisticBacktester:
             'total_cost_bps': (total_cost / notional) * 10000
         }
     
-    def backtest_strategy(self, signals, prices, volumes):
+    def backtest_strategy (self, signals, prices, volumes):
         """
         Run backtest with realistic execution
         
@@ -224,7 +224,7 @@ class RealisticBacktester:
             signal = signals.loc[date]
             
             # Execute next day at open (delay)
-            next_date = get_next_trading_day(date)
+            next_date = get_next_trading_day (date)
             if next_date not in prices.index:
                 continue
             
@@ -241,13 +241,13 @@ class RealisticBacktester:
             # Capacity check: Don't exceed 10% of ADV
             max_shares = adv * 0.10
             desired_shares = position_size / exec_price
-            actual_shares = min(desired_shares, max_shares)
+            actual_shares = min (desired_shares, max_shares)
             
             if actual_shares < 100:  # Skip if less than 1 lot
                 continue
             
             # Calculate costs
-            costs = self.calculate_transaction_costs(exec_price, actual_shares, adv)
+            costs = self.calculate_transaction_costs (exec_price, actual_shares, adv)
             
             # Execute trade
             self.execute_trade(
@@ -259,21 +259,21 @@ class RealisticBacktester:
             )
             
             # Update equity curve
-            self.update_equity(date, prices, volumes)
+            self.update_equity (date, prices, volumes)
         
         return self.analyze_performance()
     
-    def analyze_performance(self):
+    def analyze_performance (self):
         """Calculate performance metrics"""
-        returns = pd.Series(self.equity_curve).pct_change()
+        returns = pd.Series (self.equity_curve).pct_change()
         
         metrics = {
             'total_return': (self.equity_curve[-1] / self.equity_curve[0]) - 1,
-            'sharpe_ratio': empyrical.sharpe_ratio(returns),
-            'sortino_ratio': empyrical.sortino_ratio(returns),
-            'max_drawdown': empyrical.max_drawdown(returns),
-            'calmar_ratio': empyrical.calmar_ratio(returns),
-            'win_rate': len([t for t in self.trades if t['pnl'] > 0]) / len(self.trades),
+            'sharpe_ratio': empyrical.sharpe_ratio (returns),
+            'sortino_ratio': empyrical.sortino_ratio (returns),
+            'max_drawdown': empyrical.max_drawdown (returns),
+            'calmar_ratio': empyrical.calmar_ratio (returns),
+            'win_rate': len([t for t in self.trades if t['pnl'] > 0]) / len (self.trades),
             'avg_trade_pnl': np.mean([t['pnl'] for t in self.trades]),
             'total_costs': sum([t['costs'] for t in self.trades]),
             'costs_as_pct_return': sum([t['costs'] for t in self.trades]) / self.equity_curve[-1]
@@ -301,7 +301,7 @@ class RiskManager:
         self.max_sector_exposure = 0.30  # 30% per sector
         self.max_leverage = 2.0
         
-    def position_sizing_kelly(self, win_rate, avg_win, avg_loss):
+    def position_sizing_kelly (self, win_rate, avg_win, avg_loss):
         """
         Kelly Criterion for position sizing
         
@@ -313,13 +313,13 @@ class RiskManager:
         if avg_loss == 0:
             return 0
         
-        b = avg_win / abs(avg_loss)
+        b = avg_win / abs (avg_loss)
         kelly_full = (win_rate * b - (1 - win_rate)) / b
         kelly_fraction = 0.25  # Use 25% Kelly for safety
         
-        return max(0, min(kelly_full * kelly_fraction, self.max_position_size))
+        return max(0, min (kelly_full * kelly_fraction, self.max_position_size))
     
-    def position_sizing_var(self, strategy_volatility, correlation_matrix, portfolio):
+    def position_sizing_var (self, strategy_volatility, correlation_matrix, portfolio):
         """
         Position sizing based on portfolio VaR target
         
@@ -332,19 +332,19 @@ class RiskManager:
             [p['volatility'] for p in portfolio.values()]
         )
         
-        portfolio_var = np.sqrt(weights @ cov_matrix @ weights.T)
+        portfolio_var = np.sqrt (weights @ cov_matrix @ weights.T)
         
         # Marginal VaR: How much does this position add to risk?
         if portfolio_var < self.max_portfolio_var:
             # Room for more risk
             remaining_var = self.max_portfolio_var - portfolio_var
             position_size = remaining_var / strategy_volatility
-            return min(position_size, self.max_position_size)
+            return min (position_size, self.max_position_size)
         else:
             # Already at limit
             return 0
     
-    def stop_loss_placement(self, entry_price, atr, confidence):
+    def stop_loss_placement (self, entry_price, atr, confidence):
         """
         Dynamic stop loss based on volatility
         
@@ -359,29 +359,29 @@ class RiskManager:
         
         return stop_loss
     
-    def portfolio_constraints(self, proposed_portfolio):
+    def portfolio_constraints (self, proposed_portfolio):
         """Check if portfolio violates constraints"""
         violations = []
         
         # Position size check
         for ticker, position in proposed_portfolio.items():
             if position['weight'] > self.max_position_size:
-                violations.append(f"{ticker}: Position too large ({position['weight']:.1%})")
+                violations.append (f"{ticker}: Position too large ({position['weight']:.1%})")
         
         # Sector exposure check
         sector_exposure = {}
         for ticker, position in proposed_portfolio.items():
             sector = position['sector']
-            sector_exposure[sector] = sector_exposure.get(sector, 0) + position['weight']
+            sector_exposure[sector] = sector_exposure.get (sector, 0) + position['weight']
         
         for sector, exposure in sector_exposure.items():
             if exposure > self.max_sector_exposure:
-                violations.append(f"{sector}: Sector exposure too high ({exposure:.1%})")
+                violations.append (f"{sector}: Sector exposure too high ({exposure:.1%})")
         
         # Leverage check
-        gross_leverage = sum([abs(p['weight']) for p in proposed_portfolio.values()])
+        gross_leverage = sum([abs (p['weight']) for p in proposed_portfolio.values()])
         if gross_leverage > self.max_leverage:
-            violations.append(f"Leverage too high: {gross_leverage:.2f}x")
+            violations.append (f"Leverage too high: {gross_leverage:.2f}x")
         
         return violations
 \`\`\`
@@ -420,7 +420,7 @@ class ProductionTradingSystem:
         self.max_order_size = 100000  # $100K per order
         self.trading_enabled = True
         
-    def run_strategy_loop(self):
+    def run_strategy_loop (self):
         """Main trading loop"""
         while self.trading_enabled:
             try:
@@ -428,27 +428,27 @@ class ProductionTradingSystem:
                 data = self.fetch_market_data()
                 
                 # 2. Generate signals (< 50ms)
-                signals = self.generate_signals(data)
+                signals = self.generate_signals (data)
                 
                 # 3. Risk checks (< 20ms)
-                approved_signals = self.risk_check(signals)
+                approved_signals = self.risk_check (signals)
                 
                 # 4. Execute orders (< 20ms)
-                orders = self.execute_orders(approved_signals)
+                orders = self.execute_orders (approved_signals)
                 
                 # 5. Update monitoring (< 10ms)
-                self.update_monitoring(orders)
+                self.update_monitoring (orders)
                 
                 # 6. Safety checks
                 self.check_safety_limits()
                 
             except Exception as e:
-                self.handle_error(e)
+                self.handle_error (e)
                 self.emergency_shutdown()
             
             time.sleep(1)  # Run every second
     
-    def check_safety_limits(self):
+    def check_safety_limits (self):
         """Emergency shutdown conditions"""
         # Check daily loss
         daily_pnl = self.calculate_daily_pnl()
@@ -468,14 +468,14 @@ class ProductionTradingSystem:
         if time.time() - self.last_data_update > 60:
             self.emergency_shutdown("Stale market data")
     
-    def emergency_shutdown(self, reason):
+    def emergency_shutdown (self, reason):
         """Kill switch: Flatten all positions"""
         self.trading_enabled = False
-        self.pagerduty.alert(f"EMERGENCY SHUTDOWN: {reason}")
+        self.pagerduty.alert (f"EMERGENCY SHUTDOWN: {reason}")
         
         # Close all positions
         for ticker, position in self.get_positions().items():
-            self.broker_api.market_order(ticker, -position['shares'])
+            self.broker_api.market_order (ticker, -position['shares'])
         
         self.datadog.event("Trading halted", reason)
 \`\`\`
@@ -530,7 +530,7 @@ Monitoring dashboard (real-time):
 - [ ] Can explain WHY strategy works (not just curve-fit)`,
     keyPoints: [
       'Research environment: Jupyter for exploration, refactor to .py modules for production, Git + DVC for version control',
-      "Statistical validation: p-value < 0.05, Cohen's d > 0.2, consistent across regimes, not explained by known factors",
+      "Statistical validation: p-value < 0.05, Cohen\'s d > 0.2, consistent across regimes, not explained by known factors",
       'Realistic backtesting: Model transaction costs (commission + slippage + market impact), avoid lookahead/survivorship bias, walk-forward validation',
       'Risk management: Kelly criterion for position sizing (use 25% fraction for safety), VaR-based portfolio limits, dynamic stops based on ATR',
       'Production deployment: <100ms latency, 99.9% uptime, real-time monitoring, emergency kill switch at max daily loss limit',

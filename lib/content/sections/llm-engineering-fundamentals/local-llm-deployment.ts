@@ -145,7 +145,7 @@ for chunk in stream:
 import requests
 import json
 
-def call_ollama(prompt: str, model: str = 'llama3') -> str:
+def call_ollama (prompt: str, model: str = 'llama3') -> str:
     """
     Call Ollama via HTTP API.
     """
@@ -157,7 +157,7 @@ def call_ollama(prompt: str, model: str = 'llama3') -> str:
         "stream": False
     }
     
-    response = requests.post(url, json=payload)
+    response = requests.post (url, json=payload)
     return response.json()['response']
 
 # Usage
@@ -165,7 +165,7 @@ result = call_ollama("What is machine learning?")
 print(result)
 
 # Streaming version
-def call_ollama_stream(prompt: str, model: str = 'llama3'):
+def call_ollama_stream (prompt: str, model: str = 'llama3'):
     """Stream responses from Ollama."""
     url = "http://localhost:11434/api/generate"
     
@@ -175,11 +175,11 @@ def call_ollama_stream(prompt: str, model: str = 'llama3'):
         "stream": True
     }
     
-    response = requests.post(url, json=payload, stream=True)
+    response = requests.post (url, json=payload, stream=True)
     
     for line in response.iter_lines():
         if line:
-            data = json.loads(line)
+            data = json.loads (line)
             if 'response' in data:
                 print(data['response'], end=', flush=True)
             
@@ -245,7 +245,7 @@ HOW TO CHOOSE:
 # Install models
 import subprocess
 
-def install_model(model_name: str):
+def install_model (model_name: str):
     """Install an Ollama model."""
     result = subprocess.run(
         ['ollama', 'pull', model_name],
@@ -259,7 +259,7 @@ models = ['llama3:8b', 'mistral:7b', 'gemma:2b']
 
 for model in models:
     print(f"Installing {model}...")
-    install_model(model)
+    install_model (model)
 \`\`\`
 
 ### Comparing Models
@@ -268,7 +268,7 @@ for model in models:
 import ollama
 import time
 
-def compare_models(prompt: str, models: list) -> dict:
+def compare_models (prompt: str, models: list) -> dict:
     """
     Compare different models on same prompt.
     """
@@ -298,7 +298,7 @@ prompt = "Explain recursion in programming in 2 sentences"
 
 models = ['llama3:8b', 'mistral:7b', 'gemma:7b']
 
-comparison = compare_models(prompt, models)
+comparison = compare_models (prompt, models)
 
 for model, data in comparison.items():
     print(f"\\n{model.upper()}:")
@@ -511,7 +511,7 @@ SPEED COMPARISON (tokens/second):
 - A100: 80-120
 """
 
-def benchmark_model(model: str, iterations: int = 5):
+def benchmark_model (model: str, iterations: int = 5):
     """Benchmark model speed."""
     import ollama
     import time
@@ -521,7 +521,7 @@ def benchmark_model(model: str, iterations: int = 5):
     times = []
     tokens = []
     
-    for i in range(iterations):
+    for i in range (iterations):
         start = time.time()
         
         response = ollama.chat(
@@ -532,13 +532,13 @@ def benchmark_model(model: str, iterations: int = 5):
         elapsed = time.time() - start
         
         # Estimate tokens (rough)
-        estimated_tokens = len(response['message']['content'].split())
+        estimated_tokens = len (response['message']['content'].split())
         
-        times.append(elapsed)
-        tokens.append(estimated_tokens)
+        times.append (elapsed)
+        tokens.append (estimated_tokens)
     
-    avg_time = sum(times) / len(times)
-    avg_tokens = sum(tokens) / len(tokens)
+    avg_time = sum (times) / len (times)
+    avg_tokens = sum (tokens) / len (tokens)
     tokens_per_sec = avg_tokens / avg_time
     
     print(f"Model: {model}")
@@ -602,13 +602,13 @@ class LoadBalancedLLM:
         self.server_urls = server_urls
         self.current_index = 0
     
-    def get_next_server(self) -> str:
+    def get_next_server (self) -> str:
         """Round-robin server selection."""
         server = self.server_urls[self.current_index]
-        self.current_index = (self.current_index + 1) % len(self.server_urls)
+        self.current_index = (self.current_index + 1) % len (self.server_urls)
         return server
     
-    def generate(self, prompt: str, model: str = 'llama3') -> str:
+    def generate (self, prompt: str, model: str = 'llama3') -> str:
         """Generate using load-balanced servers."""
         server = self.get_next_server()
         
@@ -620,12 +620,12 @@ class LoadBalancedLLM:
         }
         
         try:
-            response = requests.post(url, json=payload)
+            response = requests.post (url, json=payload)
             return response.json()['response']
         except Exception as e:
             print(f"Server {server} failed: {e}")
             # Try next server
-            return self.generate(prompt, model)
+            return self.generate (prompt, model)
 
 # Usage with multiple servers
 servers = [
@@ -638,7 +638,7 @@ llm = LoadBalancedLLM(servers)
 
 # Requests distributed across servers
 for i in range(10):
-    result = llm.generate(f"Question {i}")
+    result = llm.generate (f"Question {i}")
     print(f"Request {i}: {result[:50]}...")
 \`\`\`
 
@@ -702,10 +702,9 @@ scenarios = [
 ]
 
 for name, requests, tokens in scenarios:
-    result = calculate_breakeven(requests, tokens)
+    result = calculate_breakeven (requests, tokens)
     print(f"\\n{name.upper()} ({requests} requests/day):")
-    print(f"  Monthly API cost: \${result['monthly_api_cost']: .2f
-}")
+    print(f"  Monthly API cost: \${result['monthly_api_cost']:.2f}")
 print(f"  Months to break even: {result['months_to_breakeven']:.1f}")
 print(f"  3-year API cost: \${result['3_year_api_cost']:.0f}")
 print(f"  3-year local cost: \${result['3_year_local_cost']:.0f}")

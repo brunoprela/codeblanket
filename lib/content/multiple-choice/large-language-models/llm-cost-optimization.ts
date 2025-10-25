@@ -60,7 +60,8 @@ export const llmCostOptimizationMC = {
     },
     {
       id: 5,
-      question: "What is Claude's prompt caching feature designed to optimize?",
+      question:
+        "What is Claude\'s prompt caching feature designed to optimize?",
       options: [
         'Model loading time',
         'Reusing common static prompt prefixes across requests',

@@ -8,9 +8,9 @@ export const apachekafkaarchitectureQuiz: QuizQuestion[] = [
   {
     id: 'kafka-arch-dq-1',
     question:
-      "Explain Kafka's partitioning strategy and how it enables horizontal scalability. Design a Kafka topic for a high-traffic e-commerce platform processing 1 million orders per day. How many partitions would you create, how would you choose partition keys, and how would this design handle hot keys (e.g., celebrity orders)?",
+      "Explain Kafka\'s partitioning strategy and how it enables horizontal scalability. Design a Kafka topic for a high-traffic e-commerce platform processing 1 million orders per day. How many partitions would you create, how would you choose partition keys, and how would this design handle hot keys (e.g., celebrity orders)?",
     hint: 'Consider ordering guarantees, parallelism, rebalancing, and strategies for handling skewed data distribution.',
-    sampleAnswer: `Kafka's partitioning is fundamental to its scalability, enabling parallel processing while maintaining ordering guarantees within partitions. Here's a comprehensive analysis for an e-commerce platform:
+    sampleAnswer: `Kafka\'s partitioning is fundamental to its scalability, enabling parallel processing while maintaining ordering guarantees within partitions. Here's a comprehensive analysis for an e-commerce platform:
 
 **Kafka Partitioning Fundamentals:**
 
@@ -71,7 +71,7 @@ ProducerRecord<String, Order> record = new ProducerRecord<>(
     order
 );
 
-Partition = hash(customerId) % 24
+Partition = hash (customerId) % 24
 
 Benefits:
 ✅ Orders per customer guaranteed ordered
@@ -126,7 +126,7 @@ Drawbacks:
 Normal customer: 1-2 orders/day
 Celebrity (e.g., Kylie Jenner posts about product): 10,000 orders/hour
 
-If Kylie's customerId = "customer_123":
+If Kylie\'s customerId = "customer_123":
 hash("customer_123") % 24 = Partition 5
 
 Partition 5: 10,000 orders/hour (overloaded!)
@@ -143,11 +143,11 @@ public class VipAwarePartitioner implements Partitioner {
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, 
                         Object value, byte[] valueBytes, Cluster cluster) {
-        int numPartitions = cluster.partitionCountForTopic(topic);
+        int numPartitions = cluster.partitionCountForTopic (topic);
         String customerId = (String) key;
         
         // VIP customers: Use round-robin across dedicated partitions
-        if (VIP_CUSTOMERS.contains(customerId)) {
+        if (VIP_CUSTOMERS.contains (customerId)) {
             // Dedicated partitions for VIPs: last 4 partitions (20-23)
             int vipPartition = 20 + (ThreadLocalRandom.current().nextInt(4));
             return vipPartition;
@@ -176,7 +176,7 @@ Tradeoffs:
 \`\`\`java
 // Add random salt to hot keys
 String partitionKey;
-if (isHotCustomer(order.getCustomerId())) {
+if (isHotCustomer (order.getCustomerId())) {
     // Salt hot keys: distribute across 4 partitions
     int salt = ThreadLocalRandom.current().nextInt(4);
     partitionKey = order.getCustomerId() + "_" + salt;
@@ -203,9 +203,9 @@ Topics:
 
 Producer logic:
 if (order.getCustomer().isVip()) {
-    producer.send(new ProducerRecord<>("orders-vip", saltedKey, order));
+    producer.send (new ProducerRecord<>("orders-vip", saltedKey, order));
 } else {
-    producer.send(new ProducerRecord<>("orders-regular", customerId, order));
+    producer.send (new ProducerRecord<>("orders-regular", customerId, order));
 }
 
 Benefits:
@@ -317,9 +317,9 @@ This design handles 1M orders/day with room to scale 10×, maintains ordering pe
   {
     id: 'kafka-arch-dq-2',
     question:
-      "Explain Kafka's replication mechanism, ISR (In-Sync Replicas), and how it provides fault tolerance. Walk through what happens when the leader for a partition fails, how a new leader is elected, and what guarantees are maintained. What are the trade-offs between acks=0, acks=1, and acks=all?",
+      "Explain Kafka\'s replication mechanism, ISR (In-Sync Replicas), and how it provides fault tolerance. Walk through what happens when the leader for a partition fails, how a new leader is elected, and what guarantees are maintained. What are the trade-offs between acks=0, acks=1, and acks=all?",
     hint: 'Consider data durability, throughput, latency, and failure scenarios. Think about leader election, replication lag, and the role of ZooKeeper/KRaft.',
-    sampleAnswer: `Kafka's replication mechanism is critical for fault tolerance and data durability. Understanding ISR, leader election, and acks configuration is essential for designing reliable systems.
+    sampleAnswer: `Kafka\'s replication mechanism is critical for fault tolerance and data durability. Understanding ISR, leader election, and acks configuration is essential for designing reliable systems.
 
 **Replication Architecture:**
 
@@ -643,7 +643,7 @@ This replication mechanism makes Kafka highly fault-tolerant, surviving broker f
     question:
       'Compare Kafka to other messaging systems (RabbitMQ, AWS SQS, Redis Pub/Sub). For each scenario below, which technology would you choose and why: (1) Real-time click stream analytics with replay capability, (2) Traditional task queue for background jobs, (3) Low-latency notifications to connected clients, (4) Event sourcing for audit-critical financial system.',
     hint: 'Consider throughput, latency, persistence, replay capability, operational complexity, and cost.',
-    sampleAnswer: `Choosing the right messaging system depends on specific requirements. Let's analyze each technology and match them to the scenarios.
+    sampleAnswer: `Choosing the right messaging system depends on specific requirements. Let\'s analyze each technology and match them to the scenarios.
 
 **Technology Comparison:**
 
@@ -977,9 +977,9 @@ props.put("enable.idempotence", "true");
 props.put("transactional.id", "account-processor-1");
 
 producer.beginTransaction();
-  producer.send(event1);
-  producer.send(event2);
-  producer.sendOffsetsToTransaction(offsets, groupId);
+  producer.send (event1);
+  producer.send (event2);
+  producer.sendOffsetsToTransaction (offsets, groupId);
 producer.commitTransaction();
 
 ✅ All events written atomically
@@ -1009,7 +1009,7 @@ If out of order:
 \`\`\`
 Use case: Tax audit for year 2022
 
-replay(account_id, from: "2022-01-01", to: "2022-12-31"):
+replay (account_id, from: "2022-01-01", to: "2022-12-31"):
 - Seek to offset at 2022-01-01
 - Replay all events for that year
 - Reconstruct account state at any point

@@ -29,7 +29,7 @@ export const llmProductionSystemsQuestions: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      "Prompt caching has the highest impact: 60% of costs ($30K) come from prompts, and many applications have repeated prompt prefixes (system prompts, context). Caching can reduce prompt costs by 50-90% ($15K-$27K savings). OpenAI and other providers offer prompt caching features. Option B (reduce completion length) targets 40% of costs and may hurt quality. Option C (smaller model) may significantly degrade quality. Option D (rate limiting) reduces functionality and doesn't address cost efficiency.",
+      "Prompt caching has the highest impact: 60% of costs (\$30K) come from prompts, and many applications have repeated prompt prefixes (system prompts, context). Caching can reduce prompt costs by 50-90% (\$15K-$27K savings). OpenAI and other providers offer prompt caching features. Option B (reduce completion length) targets 40% of costs and may hurt quality. Option C (smaller model) may significantly degrade quality. Option D (rate limiting) reduces functionality and doesn't address cost efficiency.",
     difficulty: 'advanced',
     topic: 'LLM Production Systems',
   },

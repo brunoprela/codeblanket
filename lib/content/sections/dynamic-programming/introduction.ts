@@ -46,11 +46,11 @@ With DP: O(n) - linear!
 - Natural to write, easier to understand
 
 \`\`\`python
-def fib(n, memo={}):
+def fib (n, memo={}):
     if n <= 1:
         return n
     if n not in memo:
-        memo[n] = fib(n-1, memo) + fib(n-2, memo)
+        memo[n] = fib (n-1, memo) + fib (n-2, memo)
     return memo[n]
 \`\`\`
 
@@ -61,7 +61,7 @@ def fib(n, memo={}):
 - More space-efficient, iterative
 
 \`\`\`python
-def fib(n):
+def fib (n):
     if n <= 1:
         return n
     dp = [0] * (n + 1)

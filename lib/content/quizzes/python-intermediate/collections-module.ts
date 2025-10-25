@@ -5,14 +5,14 @@
 export const collectionsmoduleQuiz = [
   {
     id: 'q1',
-    question: 'When would you use Counter vs defaultdict(int) for counting?',
+    question: 'When would you use Counter vs defaultdict (int) for counting?',
     sampleAnswer:
-      "Use Counter when you need counting-specific features like most_common(), arithmetic operations (+, -, &, |), or when you want to emphasize that you're counting. Counter also returns 0 for missing keys instead of raising KeyError. Use defaultdict(int) when counting is part of a larger operation and you need the auto-initialization behavior for general integer operations. Counter is more expressive for pure counting tasks: Counter([1,2,1]).most_common() is clearer than manually sorting defaultdict items.",
+      "Use Counter when you need counting-specific features like most_common(), arithmetic operations (+, -, &, |), or when you want to emphasize that you're counting. Counter also returns 0 for missing keys instead of raising KeyError. Use defaultdict (int) when counting is part of a larger operation and you need the auto-initialization behavior for general integer operations. Counter is more expressive for pure counting tasks: Counter([1,2,1]).most_common() is clearer than manually sorting defaultdict items.",
     keyPoints: [
       'Counter: pure counting, has most_common()',
       'Counter: math operations between counters',
       'Counter: more explicit intent',
-      'defaultdict(int): part of larger logic',
+      'defaultdict (int): part of larger logic',
       'Both avoid KeyError for missing keys',
     ],
   },
@@ -34,7 +34,7 @@ export const collectionsmoduleQuiz = [
     question:
       'Explain the practical differences between OrderedDict and regular dict in Python 3.7+.',
     sampleAnswer:
-      'In Python 3.7+, regular dicts maintain insertion order, making OrderedDict less critical. However, OrderedDict still has unique features: (1) move_to_end(key) to reorder items, (2) popitem(last=False/True) to remove from specific end, (3) Explicit ordering semantics - code intent is clearer, (4) Equality checks consider order: OrderedDict(a=1, b=2) != OrderedDict(b=2, a=1), but regular dicts with same items are equal regardless of order. Use OrderedDict when you need these operations or want to explicitly signal that order matters for correctness (e.g., LRU cache implementation).',
+      'In Python 3.7+, regular dicts maintain insertion order, making OrderedDict less critical. However, OrderedDict still has unique features: (1) move_to_end (key) to reorder items, (2) popitem (last=False/True) to remove from specific end, (3) Explicit ordering semantics - code intent is clearer, (4) Equality checks consider order: OrderedDict (a=1, b=2) != OrderedDict (b=2, a=1), but regular dicts with same items are equal regardless of order. Use OrderedDict when you need these operations or want to explicitly signal that order matters for correctness (e.g., LRU cache implementation).',
     keyPoints: [
       'Both maintain insertion order in Python 3.7+',
       'OrderedDict has move_to_end() and directional popitem()',

@@ -43,7 +43,7 @@ export const streamProcessingMC: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Watermarks track event-time progress in a stream, indicating "all events with timestamp < watermark have been received". This helps determine when to close time windows and how to handle late data. For example, watermark = max(event_time) - 30 seconds. A window [10:00-10:05) closes when watermark >= 10:05:00 (i.e., max event_time >= 10:05:30). Late data arriving before watermark is included; after watermark, it\'s dropped or triggers late-data handling. Essential for out-of-order event processing.',
+      'Watermarks track event-time progress in a stream, indicating "all events with timestamp < watermark have been received". This helps determine when to close time windows and how to handle late data. For example, watermark = max (event_time) - 30 seconds. A window [10:00-10:05) closes when watermark >= 10:05:00 (i.e., max event_time >= 10:05:30). Late data arriving before watermark is included; after watermark, it\'s dropped or triggers late-data handling. Essential for out-of-order event processing.',
   },
   {
     id: 'stream-processing-mc-4',

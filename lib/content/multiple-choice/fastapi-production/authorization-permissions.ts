@@ -27,7 +27,7 @@ export const authorizationPermissionsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "A RoleChecker class that accepts a list of allowed roles and uses OR logic (any() function) is the most maintainable approach. It's reusable across endpoints, declarative (clear from the dependency what roles are allowed), and centralized (role checking logic in one place). Checking inside endpoint functions spreads authorization logic throughout your codebase. The RoleChecker pattern: class RoleChecker: def __init__(self, allowed_roles): self.allowed_roles = allowed_roles; def __call__(self, user): if not any(user.has_role(r) for r in self.allowed_roles): raise HTTPException(403)",
+      "A RoleChecker class that accepts a list of allowed roles and uses OR logic (any() function) is the most maintainable approach. It\'s reusable across endpoints, declarative (clear from the dependency what roles are allowed), and centralized (role checking logic in one place). Checking inside endpoint functions spreads authorization logic throughout your codebase. The RoleChecker pattern: class RoleChecker: def __init__(self, allowed_roles): self.allowed_roles = allowed_roles; def __call__(self, user): if not any (user.has_role (r) for r in self.allowed_roles): raise HTTPException(403)",
   },
   {
     id: 3,
@@ -55,7 +55,7 @@ export const authorizationPermissionsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "A dependency that implements OR logic (owner OR admin) keeps authorization declarative and reusable. The pattern: async def require_post_owner_or_admin(post: Post = Depends(get_post), user: User = Depends(get_current_user)): if post.author_id != user.id and not user.is_admin: raise HTTPException(403); return post. This dependency chain ensures the post exists (404 if not), validates ownership or admin privilege (403 if neither), and passes the validated post to the endpoint. Option 2 (separate endpoints) duplicates code. Option 3 (inline check) spreads authorization logic. Option 4 (JWT storage) is problematic: JWTs should be stateless and shouldn't contain mutable data like post ownership.",
+      "A dependency that implements OR logic (owner OR admin) keeps authorization declarative and reusable. The pattern: async def require_post_owner_or_admin (post: Post = Depends (get_post), user: User = Depends (get_current_user)): if post.author_id != user.id and not user.is_admin: raise HTTPException(403); return post. This dependency chain ensures the post exists (404 if not), validates ownership or admin privilege (403 if neither), and passes the validated post to the endpoint. Option 2 (separate endpoints) duplicates code. Option 3 (inline check) spreads authorization logic. Option 4 (JWT storage) is problematic: JWTs should be stateless and shouldn't contain mutable data like post ownership.",
   },
   {
     id: 5,

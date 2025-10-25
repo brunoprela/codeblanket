@@ -52,23 +52,23 @@ class Task:
     description: str
     status: TaskStatus = TaskStatus.PENDING
     parent_id: Optional[str] = None
-    subtasks: List['Task'] = field(default_factory=list)
+    subtasks: List['Task'] = field (default_factory=list)
     assigned_to: Optional[str] = None
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: List[str] = field (default_factory=list)
     result: Optional[Any] = None
     
-    def add_subtask(self, subtask: 'Task'):
+    def add_subtask (self, subtask: 'Task'):
         """Add subtask to this task."""
         subtask.parent_id = self.id
-        self.subtasks.append(subtask)
+        self.subtasks.append (subtask)
     
-    def is_leaf(self) -> bool:
+    def is_leaf (self) -> bool:
         """Check if this is a leaf task (no subtasks)."""
-        return len(self.subtasks) == 0
+        return len (self.subtasks) == 0
     
-    def can_execute(self, completed_tasks: set[str]) -> bool:
+    def can_execute (self, completed_tasks: set[str]) -> bool:
         """Check if task can be executed (dependencies met)."""
-        return all(dep in completed_tasks for dep in self.dependencies)
+        return all (dep in completed_tasks for dep in self.dependencies)
 
 class TaskDecomposer:
     """Decomposes complex tasks hierarchically."""
@@ -95,7 +95,7 @@ class TaskDecomposer:
             return root_task
         
         # Break down into subtasks
-        subtask_descriptions = await self._get_subtasks(goal)
+        subtask_descriptions = await self._get_subtasks (goal)
         
         for desc in subtask_descriptions:
             # Create subtask
@@ -106,14 +106,14 @@ class TaskDecomposer:
             )
             
             # Recursively decompose if needed
-            if self._needs_decomposition(desc) and current_depth < max_depth - 1:
-                subtask = await self.decompose(desc, max_depth, current_depth + 1)
+            if self._needs_decomposition (desc) and current_depth < max_depth - 1:
+                subtask = await self.decompose (desc, max_depth, current_depth + 1)
             
-            root_task.add_subtask(subtask)
+            root_task.add_subtask (subtask)
         
         return root_task
     
-    async def _get_subtasks(self, task: str) -> List[str]:
+    async def _get_subtasks (self, task: str) -> List[str]:
         """Get subtasks for a task using LLM."""
         prompt = f"""Break this task into 3-5 specific subtasks:
 
@@ -142,24 +142,24 @@ Format: One subtask per line, starting with "- "
         for line in text.split("\\n"):
             line = line.strip()
             if line.startswith("-"):
-                subtasks.append(line[1:].strip())
+                subtasks.append (line[1:].strip())
             elif line and not line.endswith(":"):
-                subtasks.append(line)
+                subtasks.append (line)
         
         return subtasks
     
-    def _needs_decomposition(self, task: str) -> bool:
+    def _needs_decomposition (self, task: str) -> bool:
         """Heuristic to determine if task needs further decomposition."""
         # Tasks with certain keywords likely need decomposition
         complex_keywords = ["build", "create", "implement", "design", "develop"]
-        return any(keyword in task.lower() for keyword in complex_keywords)
+        return any (keyword in task.lower() for keyword in complex_keywords)
     
-    def _generate_id(self) -> str:
+    def _generate_id (self) -> str:
         """Generate unique task ID."""
         self.task_counter += 1
         return f"task_{self.task_counter}"
     
-    def visualize_tree(self, task: Task, indent: int = 0) -> str:
+    def visualize_tree (self, task: Task, indent: int = 0) -> str:
         """Visualize task tree."""
         lines = []
         prefix = "  " * indent
@@ -171,13 +171,13 @@ Format: One subtask per line, starting with "- "
             TaskStatus.BLOCKED: "🚫"
         }
         
-        icon = status_icon.get(task.status, "⭕")
-        lines.append(f"{prefix}{icon} {task.description} [{task.id}]")
+        icon = status_icon.get (task.status, "⭕")
+        lines.append (f"{prefix}{icon} {task.description} [{task.id}]")
         
         for subtask in task.subtasks:
-            lines.append(self.visualize_tree(subtask, indent + 1))
+            lines.append (self.visualize_tree (subtask, indent + 1))
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Usage
 decomposer = TaskDecomposer()
@@ -188,7 +188,7 @@ root_task = await decomposer.decompose(
     max_depth=3
 )
 
-print(decomposer.visualize_tree(root_task))
+print(decomposer.visualize_tree (root_task))
 # ⭕ Build a web application for task management [task_1]
 #   ⭕ Design database schema [task_2]
 #   ⭕ Create backend API [task_3]
@@ -219,10 +219,10 @@ class DependencyPlanner:
         Returns list of task groups that can be executed in parallel.
         """
         # Analyze dependencies
-        tasks_with_deps = await self._analyze_dependencies(tasks)
+        tasks_with_deps = await self._analyze_dependencies (tasks)
         
         # Create execution stages
-        stages = self._create_execution_stages(tasks_with_deps)
+        stages = self._create_execution_stages (tasks_with_deps)
         
         return stages
     
@@ -234,7 +234,7 @@ class DependencyPlanner:
         # Use LLM to identify dependencies
         task_descriptions = "\\n".join([
             f"{i+1}. {task.description}"
-            for i, task in enumerate(tasks)
+            for i, task in enumerate (tasks)
         ])
         
         prompt = f"""Analyze dependencies between these tasks:
@@ -262,17 +262,17 @@ Task X depends on: [list of task numbers, or "None"]
         import re
         for line in dep_text.split("\\n"):
             # Extract task number and dependencies
-            match = re.search(r'Task (\\d+) depends on: (.+)', line)
+            match = re.search (r'Task (\\d+) depends on: (.+)', line)
             if match:
-                task_num = int(match.group(1)) - 1
+                task_num = int (match.group(1)) - 1
                 dep_text = match.group(2).strip()
                 
-                if task_num < len(tasks):
+                if task_num < len (tasks):
                     if dep_text.lower() != "none":
                         # Extract dependency numbers
-                        dep_nums = [int(d) - 1 for d in re.findall(r'\\d+', dep_text)]
+                        dep_nums = [int (d) - 1 for d in re.findall (r'\\d+', dep_text)]
                         tasks[task_num].dependencies = [
-                            tasks[i].id for i in dep_nums if i < len(tasks)
+                            tasks[i].id for i in dep_nums if i < len (tasks)
                         ]
         
         return tasks
@@ -283,7 +283,7 @@ Task X depends on: [list of task numbers, or "None"]
     ) -> List[List[Task]]:
         """Create stages of tasks that can execute in parallel."""
         stages = []
-        remaining = set(task.id for task in tasks)
+        remaining = set (task.id for task in tasks)
         completed = set()
         task_dict = {task.id: task for task in tasks}
         
@@ -291,55 +291,55 @@ Task X depends on: [list of task numbers, or "None"]
             # Find tasks that can execute now
             current_stage = []
             
-            for task_id in list(remaining):
+            for task_id in list (remaining):
                 task = task_dict[task_id]
-                if task.can_execute(completed):
-                    current_stage.append(task)
-                    remaining.remove(task_id)
+                if task.can_execute (completed):
+                    current_stage.append (task)
+                    remaining.remove (task_id)
             
             if not current_stage:
                 # Circular dependency or error
                 raise ValueError("Circular dependency detected or blocked tasks")
             
-            stages.append(current_stage)
+            stages.append (current_stage)
             
             # Mark current stage as completed
-            completed.update(task.id for task in current_stage)
+            completed.update (task.id for task in current_stage)
         
         return stages
     
-    def visualize_plan(self, stages: List[List[Task]]) -> str:
+    def visualize_plan (self, stages: List[List[Task]]) -> str:
         """Visualize execution plan."""
         output = ["=== EXECUTION PLAN ===" ""]
         
-        for i, stage in enumerate(stages, 1):
-            output.append(f"Stage {i} (Parallel):")
+        for i, stage in enumerate (stages, 1):
+            output.append (f"Stage {i} (Parallel):")
             for task in stage:
-                deps = ", ".join(task.dependencies) if task.dependencies else "None"
-                output.append(f"  - {task.description}")
-                output.append(f"    Dependencies: {deps}")
-                output.append(f"    Assigned to: {task.assigned_to or 'TBD'}")
+                deps = ", ".join (task.dependencies) if task.dependencies else "None"
+                output.append (f"  - {task.description}")
+                output.append (f"    Dependencies: {deps}")
+                output.append (f"    Assigned to: {task.assigned_to or 'TBD'}")
             output.append("")
         
-        return "\\n".join(output)
+        return "\\n".join (output)
 
 # Usage
 planner = DependencyPlanner()
 
 # Create tasks
 tasks = [
-    Task(id="t1", description="Design database schema"),
-    Task(id="t2", description="Set up development environment"),
-    Task(id="t3", description="Implement user authentication"),
-    Task(id="t4", description="Create CRUD API endpoints"),
-    Task(id="t5", description="Build frontend UI"),
-    Task(id="t6", description="Write integration tests"),
+    Task (id="t1", description="Design database schema"),
+    Task (id="t2", description="Set up development environment"),
+    Task (id="t3", description="Implement user authentication"),
+    Task (id="t4", description="Create CRUD API endpoints"),
+    Task (id="t5", description="Build frontend UI"),
+    Task (id="t6", description="Write integration tests"),
 ]
 
 # Analyze and plan
-stages = await planner.create_plan_with_dependencies(tasks)
+stages = await planner.create_plan_with_dependencies (tasks)
 
-print(planner.visualize_plan(stages))
+print(planner.visualize_plan (stages))
 # Stage 1 (Parallel):
 #   - Design database schema
 #   - Set up development environment
@@ -384,7 +384,7 @@ class DynamicPlanner:
         )
         
         # Generate new plan
-        new_tasks = await self._generate_revised_plan(context)
+        new_tasks = await self._generate_revised_plan (context)
         
         return new_tasks
     
@@ -399,23 +399,23 @@ class DynamicPlanner:
         context = f"""Original Goal: {goal}
 
 Completed Tasks:
-{self._format_tasks(completed)}
+{self._format_tasks (completed)}
 
 Failed Tasks:
-{self._format_tasks(failed)}
+{self._format_tasks (failed)}
 
 Remaining Tasks:
-{self._format_tasks(remaining)}
+{self._format_tasks (remaining)}
 """
         return context
     
-    def _format_tasks(self, tasks: List[Task]) -> str:
+    def _format_tasks (self, tasks: List[Task]) -> str:
         """Format tasks for display."""
         if not tasks:
             return "- None"
         return "\\n".join([f"- {task.description}" for task in tasks])
     
-    async def _generate_revised_plan(self, context: str) -> List[Task]:
+    async def _generate_revised_plan (self, context: str) -> List[Task]:
         """Generate revised plan using LLM."""
         prompt = f"""{context}
 
@@ -461,17 +461,17 @@ replanner = DynamicPlanner()
 
 # Some tasks completed, one failed
 completed = [
-    Task(id="t1", description="Research requirements", status=TaskStatus.COMPLETED),
-    Task(id="t2", description="Design architecture", status=TaskStatus.COMPLETED)
+    Task (id="t1", description="Research requirements", status=TaskStatus.COMPLETED),
+    Task (id="t2", description="Design architecture", status=TaskStatus.COMPLETED)
 ]
 
 failed = [
-    Task(id="t3", description="Implement feature X", status=TaskStatus.FAILED)
+    Task (id="t3", description="Implement feature X", status=TaskStatus.FAILED)
 ]
 
 remaining = [
-    Task(id="t4", description="Implement feature Y"),
-    Task(id="t5", description="Write tests")
+    Task (id="t4", description="Implement feature Y"),
+    Task (id="t5", description="Write tests")
 ]
 
 # Replan
@@ -498,27 +498,27 @@ class Agent:
     name: str
     capabilities: List[str]
     max_concurrent_tasks: int
-    current_tasks: List[str] = field(default_factory=list)
+    current_tasks: List[str] = field (default_factory=list)
     
-    def can_handle(self, task: Task) -> bool:
+    def can_handle (self, task: Task) -> bool:
         """Check if agent can handle this task."""
         # Check capacity
-        if len(self.current_tasks) >= self.max_concurrent_tasks:
+        if len (self.current_tasks) >= self.max_concurrent_tasks:
             return False
         
         # Check capabilities (simple keyword matching)
         task_lower = task.description.lower()
-        return any(cap.lower() in task_lower for cap in self.capabilities)
+        return any (cap.lower() in task_lower for cap in self.capabilities)
     
-    def assign_task(self, task_id: str):
+    def assign_task (self, task_id: str):
         """Assign task to agent."""
-        if len(self.current_tasks) < self.max_concurrent_tasks:
-            self.current_tasks.append(task_id)
+        if len (self.current_tasks) < self.max_concurrent_tasks:
+            self.current_tasks.append (task_id)
     
-    def complete_task(self, task_id: str):
+    def complete_task (self, task_id: str):
         """Mark task as complete."""
         if task_id in self.current_tasks:
-            self.current_tasks.remove(task_id)
+            self.current_tasks.remove (task_id)
 
 class ResourcePlanner:
     """Plans considering agent resources."""
@@ -536,35 +536,35 @@ class ResourcePlanner:
         
         for task in tasks:
             # Find best agent
-            best_agent = self._find_best_agent(task)
+            best_agent = self._find_best_agent (task)
             
             if best_agent:
-                best_agent.assign_task(task.id)
+                best_agent.assign_task (task.id)
                 task.assigned_to = best_agent.name
-                assignments[best_agent.name].append(task)
+                assignments[best_agent.name].append (task)
             else:
-                unassigned.append(task)
+                unassigned.append (task)
         
         if unassigned:
-            print(f"Warning: {len(unassigned)} tasks unassigned")
+            print(f"Warning: {len (unassigned)} tasks unassigned")
         
         return assignments
     
-    def _find_best_agent(self, task: Task) -> Optional[Agent]:
+    def _find_best_agent (self, task: Task) -> Optional[Agent]:
         """Find best available agent for task."""
         # Filter to agents that can handle it
-        capable = [agent for agent in self.agents if agent.can_handle(task)]
+        capable = [agent for agent in self.agents if agent.can_handle (task)]
         
         if not capable:
             return None
         
         # Choose least loaded agent
-        return min(capable, key=lambda a: len(a.current_tasks))
+        return min (capable, key=lambda a: len (a.current_tasks))
     
-    def get_workload_distribution(self) -> Dict[str, int]:
+    def get_workload_distribution (self) -> Dict[str, int]:
         """Get current workload per agent."""
         return {
-            agent.name: len(agent.current_tasks)
+            agent.name: len (agent.current_tasks)
             for agent in self.agents
         }
 
@@ -575,7 +575,7 @@ agents = [
     Agent("Tester", ["test", "validate"], max_concurrent_tasks=4)
 ]
 
-resource_planner = ResourcePlanner(agents)
+resource_planner = ResourcePlanner (agents)
 
 tasks = [
     Task("t1", "Research market trends"),
@@ -585,7 +585,7 @@ tasks = [
     Task("t5", "Build API endpoints"),
 ]
 
-assignments = resource_planner.assign_tasks(tasks)
+assignments = resource_planner.assign_tasks (tasks)
 
 for agent_name, agent_tasks in assignments.items():
     print(f"{agent_name}:")
@@ -612,7 +612,7 @@ class AdaptiveDecomposer:
     ) -> List[Task]:
         """Decompose with appropriate granularity."""
         # Determine target granularity
-        granularity = self._determine_granularity(agent_expertise, time_available)
+        granularity = self._determine_granularity (agent_expertise, time_available)
         
         prompt = f"""Break down this task with {granularity} granularity:
 
@@ -621,7 +621,7 @@ Task: {task}
 Agent expertise: {agent_expertise}
 Time available: {time_available}
 
-{self._get_granularity_instructions(granularity)}
+{self._get_granularity_instructions (granularity)}
 
 Output: List of subtasks, one per line.
 """
@@ -644,7 +644,7 @@ Output: List of subtasks, one per line.
             if line and (line.startswith("-") or line[0].isdigit()):
                 desc = line.lstrip("-0123456789. ")
                 if desc:
-                    tasks.append(Task(f"task_{task_id}", desc))
+                    tasks.append(Task (f"task_{task_id}", desc))
                     task_id += 1
         
         return tasks
@@ -664,14 +664,14 @@ Output: List of subtasks, one per line.
         else:
             return "medium"
     
-    def _get_granularity_instructions(self, granularity: str) -> str:
+    def _get_granularity_instructions (self, granularity: str) -> str:
         """Get instructions for granularity level."""
         instructions = {
             "fine": "Break into very specific, detailed steps. Each step should take ~5-10 minutes.",
             "medium": "Break into clear, actionable steps. Each step should take ~30-60 minutes.",
             "coarse": "Break into high-level steps. Each step should take ~2-4 hours."
         }
-        return instructions.get(granularity, instructions["medium"])
+        return instructions.get (granularity, instructions["medium"])
 
 # Usage
 adaptive = AdaptiveDecomposer()
@@ -690,8 +690,8 @@ expert_tasks = await adaptive.decompose_adaptive(
     time_available="urgent"
 )
 
-print("Beginner tasks:", len(beginner_tasks))  # More tasks
-print("Expert tasks:", len(expert_tasks))      # Fewer tasks
+print("Beginner tasks:", len (beginner_tasks))  # More tasks
+print("Expert tasks:", len (expert_tasks))      # Fewer tasks
 \`\`\`
 
 ## Best Practices

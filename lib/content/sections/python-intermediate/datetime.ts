@@ -61,7 +61,7 @@ examples = [
 \`\`\`python
 # Parse string to datetime
 date_string = "2024-01-15 10:30:45"
-dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
+dt = datetime.strptime (date_string, "%Y-%m-%d %H:%M:%S")
 
 # Different formats
 formats = [
@@ -71,7 +71,7 @@ formats = [
 ]
 
 for date_str, fmt in formats:
-    dt = datetime.strptime(date_str, fmt)
+    dt = datetime.strptime (date_str, fmt)
 \`\`\`
 
 ## Date Arithmetic
@@ -79,9 +79,9 @@ for date_str, fmt in formats:
 \`\`\`python
 # Add/subtract time
 now = datetime.now()
-tomorrow = now + timedelta(days=1)
-last_week = now - timedelta(weeks=1)
-in_2_hours = now + timedelta(hours=2)
+tomorrow = now + timedelta (days=1)
+last_week = now - timedelta (weeks=1)
+in_2_hours = now + timedelta (hours=2)
 
 # Difference between dates
 date1 = datetime(2024, 1, 15)
@@ -90,7 +90,7 @@ diff = date1 - date2
 print(diff.days)  # 5
 
 # Time components
-delta = timedelta(days=5, hours=3, minutes=30)
+delta = timedelta (days=5, hours=3, minutes=30)
 print(delta.total_seconds())  # Convert to seconds
 \`\`\`
 
@@ -103,7 +103,7 @@ import time
 timestamp = time.time()  # Seconds since epoch
 
 # Convert timestamp to datetime
-dt = datetime.fromtimestamp(timestamp)
+dt = datetime.fromtimestamp (timestamp)
 
 # Convert datetime to timestamp
 timestamp = dt.timestamp()
@@ -119,15 +119,15 @@ from datetime import timezone
 import pytz  # Third-party library for better timezone support
 
 # Create timezone-aware datetime
-utc_time = datetime.now(timezone.utc)
+utc_time = datetime.now (timezone.utc)
 
 # With pytz (install with: pip install pytz)
 eastern = pytz.timezone('US/Eastern')
-eastern_time = datetime.now(eastern)
+eastern_time = datetime.now (eastern)
 
 # Convert between timezones
-utc_time = datetime.now(pytz.UTC)
-eastern_time = utc_time.astimezone(eastern)
+utc_time = datetime.now (pytz.UTC)
+eastern_time = utc_time.astimezone (eastern)
 \`\`\`
 
 ## Common Operations
@@ -139,12 +139,12 @@ day_of_week = today.strftime("%A")  # "Monday"
 weekday_num = today.weekday()       # 0 = Monday
 
 # First day of month
-first_day = today.replace(day=1)
+first_day = today.replace (day=1)
 
 # Last day of month
 from calendar import monthrange
-last_day_num = monthrange(today.year, today.month)[1]
-last_day = today.replace(day=last_day_num)
+last_day_num = monthrange (today.year, today.month)[1]
+last_day = today.replace (day=last_day_num)
 
 # Age calculation
 birthdate = date(1990, 5, 15)

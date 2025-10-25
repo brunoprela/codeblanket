@@ -49,7 +49,7 @@ export const optimizationMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc4',
     question:
-      'What optimization technique does this demonstrate?\n\n```python\nprefix_sum = [0]\nfor num in arr:\n    prefix_sum.append(prefix_sum[-1] + num)\n```',
+      'What optimization technique does this demonstrate?\n\n```python\nprefix_sum = [0]\nfor num in arr:\n    prefix_sum.append (prefix_sum[-1] + num)\n```',
     options: [
       'Memoization',
       'Two pointers',

@@ -40,10 +40,10 @@ class TradingSignalGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_signal(self, ticker: str, analysis_data: Dict) -> Dict:
+    def generate_signal (self, ticker: str, analysis_data: Dict) -> Dict:
         """
         Generate trading signal from comprehensive analysis
         
@@ -103,13 +103,13 @@ Generate JSON response:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        signal = self._parse_json(response.content[0].text)
+        signal = self._parse_json (response.content[0].text)
         signal['ticker'] = ticker
         signal['timestamp'] = datetime.now().isoformat()
         
         return signal
     
-    def generate_multi_signal(self, watchlist: List[str],
+    def generate_multi_signal (self, watchlist: List[str],
                              market_data: Dict) -> List[Dict]:
         """
         Generate signals for multiple tickers
@@ -125,18 +125,18 @@ Generate JSON response:
         
         for ticker in watchlist:
             # Fetch analysis data for ticker (simplified)
-            analysis_data = self._get_analysis_data(ticker, market_data)
+            analysis_data = self._get_analysis_data (ticker, market_data)
             
             # Generate signal
-            signal = self.generate_signal(ticker, analysis_data)
-            signals.append(signal)
+            signal = self.generate_signal (ticker, analysis_data)
+            signals.append (signal)
         
         # Rank signals by confidence
-        signals.sort(key=lambda x: x.get('confidence', 0), reverse=True)
+        signals.sort (key=lambda x: x.get('confidence', 0), reverse=True)
         
         return signals
     
-    def generate_portfolio_signals(self, current_holdings: List[Dict],
+    def generate_portfolio_signals (self, current_holdings: List[Dict],
                                   watchlist: List[str],
                                   portfolio_constraints: Dict) -> Dict:
         """
@@ -162,7 +162,7 @@ Generate JSON response:
         ])
         
         # Format constraints
-        constraints_summary = json.dumps(portfolio_constraints)
+        constraints_summary = json.dumps (portfolio_constraints)
         
         prompt = f"""Generate portfolio-level trading recommendations.
 
@@ -173,9 +173,9 @@ Portfolio Constraints:
 {constraints_summary}
 
 Analysis:
-- Total portfolio value: \${sum(h['value'] for h in current_holdings):,.2f}
-- Number of holdings: {len(current_holdings)}
-- Largest position: {max(current_holdings, key=lambda x: x['weight'])['ticker']} ({max(h['weight'] for h in current_holdings):.1f}%)
+- Total portfolio value: \${sum (h['value'] for h in current_holdings):,.2f}
+- Number of holdings: {len (current_holdings)}
+- Largest position: {max (current_holdings, key=lambda x: x['weight'])['ticker']} ({max (h['weight'] for h in current_holdings):.1f}%)
 
 Provide recommendations in JSON:
 {{
@@ -204,9 +204,9 @@ Provide recommendations in JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def validate_signal(self, signal: Dict, risk_params: Dict) -> Dict:
+    def validate_signal (self, signal: Dict, risk_params: Dict) -> Dict:
         """
         Validate signal against risk parameters
         
@@ -220,7 +220,7 @@ Provide recommendations in JSON:
         prompt = f"""Validate this trading signal against risk parameters.
 
 Signal:
-{json.dumps(signal, indent=2)}
+{json.dumps (signal, indent=2)}
 
 Risk Parameters:
 - Max position size: {risk_params.get('max_position_size')}%
@@ -252,12 +252,12 @@ Return JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        validation = self._parse_json(response.content[0].text)
+        validation = self._parse_json (response.content[0].text)
         validation['original_signal'] = signal
         
         return validation
     
-    def _get_analysis_data(self, ticker: str, market_data: Dict) -> Dict:
+    def _get_analysis_data (self, ticker: str, market_data: Dict) -> Dict:
         """Get comprehensive analysis data for ticker"""
         # In production, fetch from various data sources
         return {
@@ -267,7 +267,7 @@ Return JSON:
             'market': market_data
         }
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         try:
             if "\`\`\`json" in response_text:
@@ -276,12 +276,12 @@ Return JSON:
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-signal_generator = TradingSignalGenerator(api_key="your-key")
+signal_generator = TradingSignalGenerator (api_key="your-key")
 
 # Sample analysis data
 analysis_data = {
@@ -315,7 +315,7 @@ analysis_data = {
 # Generate signal
 signal = signal_generator.generate_signal('AAPL', analysis_data)
 print("Generated Signal:")
-print(json.dumps(signal, indent=2))
+print(json.dumps (signal, indent=2))
 
 # Validate against risk parameters
 risk_params = {
@@ -326,9 +326,9 @@ risk_params = {
     'portfolio_volatility': 15.0
 }
 
-validation = signal_generator.validate_signal(signal, risk_params)
+validation = signal_generator.validate_signal (signal, risk_params)
 print("\\nValidation Result:")
-print(json.dumps(validation, indent=2))
+print(json.dumps (validation, indent=2))
 \`\`\`
 
 ---
@@ -351,10 +351,10 @@ class MultiFactorSignalIntegrator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def integrate_signals(self, ticker: str, signal_sources: Dict) -> Dict:
+    def integrate_signals (self, ticker: str, signal_sources: Dict) -> Dict:
         """
         Integrate signals from multiple analysis methods
         
@@ -410,13 +410,13 @@ Provide integrated signal as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        integrated = self._parse_json(response.content[0].text)
+        integrated = self._parse_json (response.content[0].text)
         integrated['ticker'] = ticker
         integrated['timestamp'] = datetime.now().isoformat()
         
         return integrated
     
-    def detect_signal_conflicts(self, signals: List[Dict]) -> Dict:
+    def detect_signal_conflicts (self, signals: List[Dict]) -> Dict:
         """
         Detect and analyze conflicts between signals
         
@@ -432,7 +432,7 @@ Provide integrated signal as JSON:
         prompt = f"""Analyze conflicts between these trading signals.
 
 Signals:
-{json.dumps(signals, indent=2)}
+{json.dumps (signals, indent=2)}
 
 Signal Directions: {signal_directions}
 
@@ -451,9 +451,9 @@ Return JSON analysis with recommended resolution."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -463,12 +463,12 @@ Return JSON analysis with recommended resolution."""
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-integrator = MultiFactorSignalIntegrator(api_key="your-key")
+integrator = MultiFactorSignalIntegrator (api_key="your-key")
 
 signal_sources = {
     'ml_model': {'signal': 'BUY', 'confidence': 0.75, 'predicted_return': 8.5},
@@ -485,7 +485,7 @@ signal_sources = {
 
 integrated_signal = integrator.integrate_signals('NVDA', signal_sources)
 print("Integrated Signal:")
-print(json.dumps(integrated_signal, indent=2))
+print(json.dumps (integrated_signal, indent=2))
 \`\`\`
 
 ---
@@ -509,8 +509,8 @@ class RealTimeSignalUpdater:
     """
     
     def __init__(self, api_key: str):
-        self.signal_generator = TradingSignalGenerator(api_key)
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.signal_generator = TradingSignalGenerator (api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
         
         # Store active signals
@@ -521,17 +521,17 @@ class RealTimeSignalUpdater:
         
         self.running = False
     
-    def start(self):
+    def start (self):
         """Start real-time signal updater"""
         self.running = True
         
         # Start event processor thread
-        thread = threading.Thread(target=self._event_processor, daemon=True)
+        thread = threading.Thread (target=self._event_processor, daemon=True)
         thread.start()
         
         print("Real-time signal updater started")
     
-    def add_event(self, event: Dict):
+    def add_event (self, event: Dict):
         """
         Add market event to processing queue
         
@@ -539,20 +539,20 @@ class RealTimeSignalUpdater:
             event: Market event (news, price move, etc.)
         """
         event['timestamp'] = datetime.now()
-        self.event_queue.put(event)
+        self.event_queue.put (event)
     
-    def _event_processor(self):
+    def _event_processor (self):
         """Process market events and update signals"""
         while self.running:
             try:
-                event = self.event_queue.get(timeout=1)
+                event = self.event_queue.get (timeout=1)
                 
                 # Determine which signals are affected
-                affected_tickers = self._get_affected_tickers(event)
+                affected_tickers = self._get_affected_tickers (event)
                 
                 for ticker in affected_tickers:
                     if ticker in self.active_signals:
-                        self._update_signal(ticker, event)
+                        self._update_signal (ticker, event)
                 
                 self.event_queue.task_done()
             
@@ -561,12 +561,12 @@ class RealTimeSignalUpdater:
             except Exception as e:
                 print(f"Error processing event: {e}")
     
-    def _get_affected_tickers(self, event: Dict) -> List[str]:
+    def _get_affected_tickers (self, event: Dict) -> List[str]:
         """Determine which tickers are affected by event"""
         # Extract tickers from event
         return event.get('tickers', [])
     
-    def _update_signal(self, ticker: str, event: Dict):
+    def _update_signal (self, ticker: str, event: Dict):
         """
         Update existing signal based on new event
         
@@ -579,7 +579,7 @@ class RealTimeSignalUpdater:
         prompt = f"""Update this trading signal based on new market event.
 
 Current Signal:
-{json.dumps(current_signal, indent=2)}
+{json.dumps (current_signal, indent=2)}
 
 New Event:
 - Type: {event.get('type')}
@@ -604,14 +604,14 @@ Should the signal change? Return JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        update = self._parse_json(response.content[0].text)
+        update = self._parse_json (response.content[0].text)
         
         # Apply update if signal changed
         if update.get('signal_change') != 'MAINTAIN':
-            self._apply_signal_update(ticker, update)
-            self._emit_signal_update(ticker, current_signal, update)
+            self._apply_signal_update (ticker, update)
+            self._emit_signal_update (ticker, current_signal, update)
     
-    def _apply_signal_update(self, ticker: str, update: Dict):
+    def _apply_signal_update (self, ticker: str, update: Dict):
         """Apply signal update"""
         signal = self.active_signals[ticker]
         
@@ -625,7 +625,7 @@ Should the signal change? Return JSON:
         signal['last_updated'] = datetime.now().isoformat()
         signal['update_reason'] = update.get('reasoning')
     
-    def _emit_signal_update(self, ticker: str, old_signal: Dict, update: Dict):
+    def _emit_signal_update (self, ticker: str, old_signal: Dict, update: Dict):
         """Emit signal update notification"""
         print(f"\\n{'='*60}")
         print(f"SIGNAL UPDATE: {ticker}")
@@ -641,7 +641,7 @@ Should the signal change? Return JSON:
         # - Update dashboard
         # - Send alerts
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -651,12 +651,12 @@ Should the signal change? Return JSON:
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-updater = RealTimeSignalUpdater(api_key="your-key")
+updater = RealTimeSignalUpdater (api_key="your-key")
 updater.start()
 
 # Add initial signal
@@ -675,7 +675,7 @@ event = {
     'sentiment': -0.6
 }
 
-updater.add_event(event)
+updater.add_event (event)
 
 import time
 time.sleep(5)  # Wait for processing

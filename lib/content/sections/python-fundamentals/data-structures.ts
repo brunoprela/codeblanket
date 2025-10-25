@@ -30,7 +30,7 @@ popped = numbers.pop()  # Remove and return last
 numbers[0] = 10        # Change element
 
 # List operations
-len(numbers)           # Length
+len (numbers)           # Length
 3 in numbers          # Membership test
 numbers.sort()        # Sort in place
 numbers.reverse()     # Reverse in place
@@ -55,8 +55,8 @@ a, b, c = point
 # coords[0] = 5  # TypeError!
 
 # Use cases
-def get_min_max(numbers):
-    return min(numbers), max(numbers)
+def get_min_max (numbers):
+    return min (numbers), max (numbers)
 
 min_val, max_val = get_min_max([1, 2, 3])
 \`\`\`
@@ -134,10 +134,10 @@ evens = [x for x in range(10) if x % 2 == 0]
 matrix = [[i*j for j in range(3)] for i in range(3)]
 
 # Dictionary comprehension
-word_lengths = {word: len(word) for word in ["hi", "hello", "hey"]}
+word_lengths = {word: len (word) for word in ["hi", "hello", "hey"]}
 
 # Set comprehension
-unique_lengths = {len(word) for word in ["hi", "hello", "hey"]}
+unique_lengths = {len (word) for word in ["hi", "hello", "hey"]}
 \`\`\``,
   videoUrl: 'https://www.youtube.com/watch?v=W8KRzm-HUcc',
 };

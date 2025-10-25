@@ -30,7 +30,7 @@ Unlike creative writing where "close enough" is fine, code demands exactness:
 "Ths sentance has erors but you can still read it"
 
 # This code is 99% correct - completely broken
-def calculate_total(items:
+def calculate_total (items:
     return sum([item.price for item in items)
 #          ^ Missing bracket breaks everything
 \`\`\`
@@ -50,17 +50,17 @@ Generated code must be validated:
 
 \`\`\`python
 # This looks right but is wrong
-def calculate_average(numbers):
-    return sum(numbers) / len(numbers)
+def calculate_average (numbers):
+    return sum (numbers) / len (numbers)
 
 # What if numbers is empty? Runtime error!
 calculate_average([])  # ZeroDivisionError
 
 # Correct version
-def calculate_average(numbers):
+def calculate_average (numbers):
     if not numbers:
         return 0
-    return sum(numbers) / len(numbers)
+    return sum (numbers) / len (numbers)
 \`\`\`
 
 ## Common Failure Modes
@@ -77,7 +77,7 @@ LLMs can generate invalid syntax, especially with:
 
 \`\`\`python
 # Example: Mismatched brackets (common LLM error)
-def process_data(items):
+def process_data (items):
     result = []
     for item in items:
         if item['status'] == 'active':
@@ -90,16 +90,16 @@ def process_data(items):
 # Detection strategy:
 import ast
 
-def validate_python_syntax(code: str) -> tuple[bool, str]:
+def validate_python_syntax (code: str) -> tuple[bool, str]:
     """Check if Python code is syntactically valid."""
     try:
-        ast.parse(code)
+        ast.parse (code)
         return True, ""
     except SyntaxError as e:
         return False, f"Syntax error at line {e.lineno}: {e.msg}"
 
 # Usage
-is_valid, error = validate_python_syntax(generated_code)
+is_valid, error = validate_python_syntax (generated_code)
 if not is_valid:
     print(f"Generated code has syntax error: {error}")
     # Trigger regeneration or correction
@@ -114,44 +114,44 @@ LLMs often invent non-existent imports or functions:
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.magic import AutoML  # This doesn't exist!
 
-def train_model(data):
+def train_model (data):
     model = AutoML()  # Hallucinated
-    model.fit(data)
+    model.fit (data)
     return model
 
 # Detection strategy:
 import importlib
 import sys
 
-def validate_imports(code: str) -> list[str]:
+def validate_imports (code: str) -> list[str]:
     """Extract and validate all imports in code."""
-    tree = ast.parse(code)
+    tree = ast.parse (code)
     invalid_imports = []
     
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
+    for node in ast.walk (tree):
+        if isinstance (node, ast.Import):
             for name in node.names:
                 try:
-                    importlib.import_module(name.name)
+                    importlib.import_module (name.name)
                 except ImportError:
-                    invalid_imports.append(name.name)
-        elif isinstance(node, ast.ImportFrom):
+                    invalid_imports.append (name.name)
+        elif isinstance (node, ast.ImportFrom):
             if node.module:
                 try:
-                    module = importlib.import_module(node.module)
+                    module = importlib.import_module (node.module)
                     # Check if attributes exist
                     for name in node.names:
-                        if not hasattr(module, name.name):
+                        if not hasattr (module, name.name):
                             invalid_imports.append(
                                 f"{node.module}.{name.name}"
                             )
                 except ImportError:
-                    invalid_imports.append(node.module)
+                    invalid_imports.append (node.module)
     
     return invalid_imports
 
 # Usage
-invalid = validate_imports(generated_code)
+invalid = validate_imports (generated_code)
 if invalid:
     print(f"Invalid imports detected: {invalid}")
 \`\`\`
@@ -164,7 +164,7 @@ Code that's syntactically valid but semantically wrong:
 # Task: "Write a function to find the maximum value in a list"
 
 # LLM generates (looks right, but has bugs):
-def find_max(numbers):
+def find_max (numbers):
     max_val = 0  # Bug: what if all numbers are negative?
     for num in numbers:
         if num > max_val:
@@ -175,10 +175,10 @@ def find_max(numbers):
 find_max([])  # Returns 0, should raise error or return None
 
 # Correct version:
-def find_max(numbers):
+def find_max (numbers):
     if not numbers:
         raise ValueError("Cannot find max of empty list")
-    return max(numbers)
+    return max (numbers)
 
 # Better: Test-driven approach
 def test_find_max():
@@ -202,7 +202,7 @@ from typing import List, Dict
 
 # Task: "Parse user data"
 # LLM generates:
-def parse_user_data(data: str) -> Dict[str, str]:
+def parse_user_data (data: str) -> Dict[str, str]:
     # Forgot to handle JSON parsing
     return data  # Returns str, not dict!
 
@@ -210,26 +210,26 @@ def parse_user_data(data: str) -> Dict[str, str]:
 from typing import cast
 import json
 
-def parse_user_data(data: str) -> Dict[str, str]:
-    parsed = json.loads(data)
+def parse_user_data (data: str) -> Dict[str, str]:
+    parsed = json.loads (data)
     return cast(Dict[str, str], parsed)
 
 # Runtime validation:
-def validate_return_type(func, expected_type):
+def validate_return_type (func, expected_type):
     """Decorator to validate return types at runtime."""
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
-        if not isinstance(result, expected_type):
+        if not isinstance (result, expected_type):
             raise TypeError(
-                f"{func.__name__} returned {type(result)}, "
+                f"{func.__name__} returned {type (result)}, "
                 f"expected {expected_type}"
             )
         return result
     return wrapper
 
-@validate_return_type(dict)
-def parse_user_data_safe(data: str) -> Dict[str, str]:
-    return json.loads(data)
+@validate_return_type (dict)
+def parse_user_data_safe (data: str) -> Dict[str, str]:
+    return json.loads (data)
 \`\`\`
 
 ## Validation Strategies
@@ -267,26 +267,26 @@ class CodeValidator:
             self.check_security,
         ]
     
-    def validate(self, code: str) -> ValidationResult:
+    def validate (self, code: str) -> ValidationResult:
         """Run all validation checks."""
         errors = []
         warnings = []
         
         for check in self.checks:
-            result = check(code)
-            errors.extend(result.errors)
-            warnings.extend(result.warnings)
+            result = check (code)
+            errors.extend (result.errors)
+            warnings.extend (result.warnings)
         
         return ValidationResult(
-            is_valid=len(errors) == 0,
+            is_valid=len (errors) == 0,
             errors=errors,
             warnings=warnings
         )
     
-    def check_syntax(self, code: str) -> ValidationResult:
+    def check_syntax (self, code: str) -> ValidationResult:
         """Validate Python syntax."""
         try:
-            ast.parse(code)
+            ast.parse (code)
             return ValidationResult(True, [], [])
         except SyntaxError as e:
             return ValidationResult(
@@ -295,32 +295,32 @@ class CodeValidator:
                 []
             )
     
-    def check_imports(self, code: str) -> ValidationResult:
+    def check_imports (self, code: str) -> ValidationResult:
         """Validate all imports exist."""
         try:
-            tree = ast.parse(code)
+            tree = ast.parse (code)
         except SyntaxError:
             return ValidationResult(True, [], [])  # Syntax check handles this
         
         errors = []
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Import):
                 for name in node.names:
                     try:
                         __import__(name.name)
                     except ImportError:
-                        errors.append(f"Import not found: {name.name}")
+                        errors.append (f"Import not found: {name.name}")
         
-        return ValidationResult(len(errors) == 0, errors, [])
+        return ValidationResult (len (errors) == 0, errors, [])
     
-    def check_style(self, code: str) -> ValidationResult:
+    def check_style (self, code: str) -> ValidationResult:
         """Check code style with pylint."""
         warnings = []
         
         with tempfile.NamedTemporaryFile(
             mode='w', suffix='.py', delete=False
         ) as f:
-            f.write(code)
+            f.write (code)
             temp_path = f.name
         
         try:
@@ -334,31 +334,31 @@ class CodeValidator:
             # Parse pylint output
             if result.stdout:
                 import json
-                issues = json.loads(result.stdout)
+                issues = json.loads (result.stdout)
                 for issue in issues:
                     if issue['type'] == 'error':
-                        warnings.append(f"Style error: {issue['message']}")
+                        warnings.append (f"Style error: {issue['message']}")
         
         except (subprocess.TimeoutExpired, FileNotFoundError):
             pass  # pylint not available or timeout
         finally:
-            os.unlink(temp_path)
+            os.unlink (temp_path)
         
         return ValidationResult(True, [], warnings)
     
-    def check_security(self, code: str) -> ValidationResult:
+    def check_security (self, code: str) -> ValidationResult:
         """Check for basic security issues."""
         try:
-            tree = ast.parse(code)
+            tree = ast.parse (code)
         except SyntaxError:
             return ValidationResult(True, [], [])
         
         warnings = []
         dangerous_functions = {'eval', 'exec', '__import__'}
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Name):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Call):
+                if isinstance (node.func, ast.Name):
                     if node.func.id in dangerous_functions:
                         warnings.append(
                             f"Dangerous function used: {node.func.id}"
@@ -368,7 +368,7 @@ class CodeValidator:
 
 # Usage
 validator = CodeValidator()
-result = validator.validate(generated_code)
+result = validator.validate (generated_code)
 
 if result:
     print("✓ Code is valid")
@@ -410,9 +410,9 @@ class CodeSandbox:
         """
         with tempfile.TemporaryDirectory() as tmpdir:
             # Write code to file
-            code_path = os.path.join(tmpdir, "script.py")
-            with open(code_path, 'w') as f:
-                f.write(code)
+            code_path = os.path.join (tmpdir, "script.py")
+            with open (code_path, 'w') as f:
+                f.write (code)
             
             try:
                 # Run container
@@ -427,17 +427,17 @@ class CodeSandbox:
                 )
                 
                 # Wait for completion
-                result = container.wait(timeout=timeout)
+                result = container.wait (timeout=timeout)
                 
                 # Get output
-                stdout = container.logs(stdout=True, stderr=False).decode()
-                stderr = container.logs(stdout=False, stderr=True).decode()
+                stdout = container.logs (stdout=True, stderr=False).decode()
+                stderr = container.logs (stdout=False, stderr=True).decode()
                 
                 success = result['StatusCode'] == 0
                 return success, stdout, stderr
             
             except docker.errors.ContainerError as e:
-                return False, "", str(e)
+                return False, "", str (e)
             except Exception as e:
                 return False, "", f"Sandbox error: {e}"
 
@@ -445,15 +445,15 @@ class CodeSandbox:
 sandbox = CodeSandbox()
 
 generated_code = ''
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 
 print(factorial(5))
 ''
 
-success, stdout, stderr = sandbox.execute(generated_code)
+success, stdout, stderr = sandbox.execute (generated_code)
 
 if success:
     print(f"Output: {stdout}")
@@ -485,18 +485,18 @@ class HallucinationDetector:
         # Track project-specific valid imports
         self.project_imports: Set[str] = set()
     
-    def check_code(self, code: str) -> List[str]:
+    def check_code (self, code: str) -> List[str]:
         """Return list of potentially hallucinated elements."""
         hallucinations = []
         
         try:
-            tree = ast.parse(code)
+            tree = ast.parse (code)
         except SyntaxError:
             return ["Code has syntax errors"]
         
         # Check imports
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ImportFrom):
                 if node.module:
                     base_module = node.module.split('.')[0]
                     if (base_module not in self.known_modules and
@@ -506,27 +506,27 @@ class HallucinationDetector:
                         )
             
             # Check for AI-sounding function names (often hallucinated)
-            elif isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Attribute):
+            elif isinstance (node, ast.Call):
+                if isinstance (node.func, ast.Attribute):
                     # Functions like .auto_optimize() or .magic_fix()
                     func_name = node.func.attr
                     suspicious = ['auto_', 'magic_', 'smart_', 'ai_']
-                    if any(func_name.startswith(s) for s in suspicious):
+                    if any (func_name.startswith (s) for s in suspicious):
                         hallucinations.append(
                             f"Suspicious function name: {func_name}"
                         )
         
         return hallucinations
     
-    def add_valid_import(self, module: str):
+    def add_valid_import (self, module: str):
         """Register a project-specific valid import."""
-        self.project_imports.add(module)
+        self.project_imports.add (module)
 
 # Usage
 detector = HallucinationDetector()
 detector.add_valid_import('myproject')
 
-hallucinations = detector.check_code(generated_code)
+hallucinations = detector.check_code (generated_code)
 if hallucinations:
     print("⚠️  Potential hallucinations detected:")
     for h in hallucinations:
@@ -570,7 +570,7 @@ class GeneratedCodeTester:
         namespace = {}
         
         try:
-            exec(code, namespace)
+            exec (code, namespace)
         except Exception as e:
             return False, f"Execution error: {e}"
         
@@ -580,9 +580,9 @@ class GeneratedCodeTester:
         solution = namespace['solution']
         
         # Test each case
-        for i, (input_val, expected) in enumerate(test_cases):
+        for i, (input_val, expected) in enumerate (test_cases):
             try:
-                result = solution(input_val)
+                result = solution (input_val)
                 if result != expected:
                     return False, (
                         f"Test case {i+1} failed: "
@@ -600,7 +600,7 @@ tester = GeneratedCodeTester()
 
 prompt = "Write a function that returns the sum of two numbers"
 generated_code = """
-def solution(x, y):
+def solution (x, y):
     return x + y
 """
 
@@ -611,7 +611,7 @@ test_cases = [
     ((100, 200), 300),
 ]
 
-passed, error = tester.test_with_examples(generated_code, test_cases)
+passed, error = tester.test_with_examples (generated_code, test_cases)
 
 if passed:
     print("✓ All tests passed!")
@@ -664,14 +664,14 @@ class SafeCodeGenerator:
         Returns:
             Valid code or None if generation failed
         """
-        for attempt in range(self.config.max_retries):
-            self.logger.info(f"Generation attempt {attempt + 1}")
+        for attempt in range (self.config.max_retries):
+            self.logger.info (f"Generation attempt {attempt + 1}")
             
             # Generate code (using your LLM)
-            code = self._call_llm(prompt)
+            code = self._call_llm (prompt)
             
             # Validate
-            validation_result = self._validate(code)
+            validation_result = self._validate (code)
             if not validation_result.is_valid:
                 self.logger.warning(
                     f"Validation failed: {validation_result.errors}"
@@ -684,10 +684,10 @@ class SafeCodeGenerator:
             # Test if test cases provided
             if test_cases and self.config.require_tests:
                 tester = GeneratedCodeTester()
-                passed, error = tester.test_with_examples(code, test_cases)
+                passed, error = tester.test_with_examples (code, test_cases)
                 if not passed:
-                    self.logger.warning(f"Tests failed: {error}")
-                    prompt = self._add_test_failure_context(prompt, error)
+                    self.logger.warning (f"Tests failed: {error}")
+                    prompt = self._add_test_failure_context (prompt, error)
                     continue
             
             # If we get here, code is valid
@@ -697,15 +697,15 @@ class SafeCodeGenerator:
         self.logger.error("Max retries exceeded")
         return None
     
-    def _validate(self, code: str) -> ValidationResult:
+    def _validate (self, code: str) -> ValidationResult:
         """Run all validation checks."""
         # Syntax and imports
-        result = self.validator.validate(code)
+        result = self.validator.validate (code)
         if not result.is_valid:
             return result
         
         # Hallucinations
-        hallucinations = self.detector.check_code(code)
+        hallucinations = self.detector.check_code (code)
         if hallucinations:
             return ValidationResult(
                 False,
@@ -715,7 +715,7 @@ class SafeCodeGenerator:
         
         return result
     
-    def _call_llm(self, prompt: str) -> str:
+    def _call_llm (self, prompt: str) -> str:
         """Call LLM to generate code."""
         # This would be your actual LLM call
         # For now, placeholder
@@ -741,7 +741,7 @@ class SafeCodeGenerator:
         self, prompt: str, errors: List[str]
     ) -> str:
         """Add error context to prompt for retry."""
-        error_str = "\\n".join(errors)
+        error_str = "\\n".join (errors)
         return f"""{prompt}
 
 IMPORTANT: Previous attempt had these errors:
@@ -767,7 +767,7 @@ config = GenerationConfig(
     sandbox_execution=True
 )
 
-generator = SafeCodeGenerator(config)
+generator = SafeCodeGenerator (config)
 
 code = generator.generate(
     prompt="Write a function to calculate factorial",

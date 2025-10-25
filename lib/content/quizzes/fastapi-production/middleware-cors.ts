@@ -18,29 +18,29 @@ Order (outer to inner):
 \`\`\`python
 # 1. Exception handling (first - catches everything)
 @app.middleware("http")
-async def exception_middleware(request: Request, call_next):
+async def exception_middleware (request: Request, call_next):
     try:
-        return await call_next(request)
+        return await call_next (request)
     except Exception as e:
-        logger.error(f"Unhandled: {e}")
+        logger.error (f"Unhandled: {e}")
         return JSONResponse({"error": "Internal error"}, 500)
 
 # 2. Request ID (early - used in logging)
 @app.middleware("http")
-async def request_id_middleware(request: Request, call_next):
-    request_id = str(uuid4())
+async def request_id_middleware (request: Request, call_next):
+    request_id = str (uuid4())
     request.state.request_id = request_id
-    response = await call_next(request)
+    response = await call_next (request)
     response.headers["X-Request-ID"] = request_id
     return response
 
 # 3. Logging (after request ID available)
 @app.middleware("http")
-async def logging_middleware(request: Request, call_next):
+async def logging_middleware (request: Request, call_next):
     start = time.time()
-    logger.info(f"{request.method} {request.url.path}", extra={"request_id": request.state.request_id})
-    response = await call_next(request)
-    logger.info(f"Status: {response.status_code} ({time.time()-start:.3f}s)")
+    logger.info (f"{request.method} {request.url.path}", extra={"request_id": request.state.request_id})
+    response = await call_next (request)
+    logger.info (f"Status: {response.status_code} ({time.time()-start:.3f}s)")
     return response
 
 # 4. CORS (before security headers)
@@ -48,20 +48,20 @@ app.add_middleware(CORSMiddleware, allow_origins=["https://example.com"])
 
 # 5. Security headers
 @app.middleware("http")
-async def security_headers(request: Request, call_next):
-    response = await call_next(request)
+async def security_headers (request: Request, call_next):
+    response = await call_next (request)
     response.headers["X-Frame-Options"] = "DENY"
     return response
 
 # 6. Rate limiting (before auth to prevent auth spam)
 @app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
-    if await is_rate_limited(request.client.host):
+async def rate_limit_middleware (request: Request, call_next):
+    if await is_rate_limited (request.client.host):
         return JSONResponse({"error": "Rate limited"}, 429)
-    return await call_next(request)
+    return await call_next (request)
 
 # 7. Authentication (innermost - closest to routes)
-# Applied per-route via Depends(get_current_user)
+# Applied per-route via Depends (get_current_user)
 \`\`\`
 
 Why order matters: Exception handler must be outermost to catch errors from all other middleware. Request ID must be early so logging can use it. Rate limiting before auth prevents attackers from discovering valid credentials through timing attacks.`,
@@ -105,7 +105,7 @@ Origin = protocol + domain + port
 
 \`\`\`python
 # Determine allowed origins based on request
-def get_allowed_origins(request: Request) -> List[str]:
+def get_allowed_origins (request: Request) -> List[str]:
     origin = request.headers.get("origin")
     
     allowed = [
@@ -115,7 +115,7 @@ def get_allowed_origins(request: Request) -> List[str]:
     
     # Mobile app (capacitor-based)
     if origin and origin.startswith("capacitor://"):
-        allowed.append(origin)
+        allowed.append (origin)
     
     return allowed
 
@@ -165,23 +165,23 @@ async def check_rate_limit(
     pipe = redis_client.pipeline()
     
     # Remove old entries outside window
-    pipe.zremrangebyscore(key, 0, now - window)
+    pipe.zremrangebyscore (key, 0, now - window)
     
     # Count requests in window
-    pipe.zcard(key)
+    pipe.zcard (key)
     
     # Add current request
-    pipe.zadd(key, {str(now): now})
+    pipe.zadd (key, {str (now): now})
     
     # Set expiry
-    pipe.expire(key, window)
+    pipe.expire (key, window)
     
     results = await pipe.execute()
     request_count = results[1]
     
     allowed = request_count < limit
     remaining = max(0, limit - request_count - 1)
-    reset_at = int(now + window)
+    reset_at = int (now + window)
     
     return {
         "allowed": allowed,
@@ -192,9 +192,9 @@ async def check_rate_limit(
 
 # Rate limit middleware
 @app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
+async def rate_limit_middleware (request: Request, call_next):
     # Determine identifier and limit
-    if hasattr(request.state, "user"):
+    if hasattr (request.state, "user"):
         # Authenticated
         user = request.state.user
         identifier = f"user:{user.id}"
@@ -209,13 +209,13 @@ async def rate_limit_middleware(request: Request, call_next):
         limit = 10  # IP: 10/min
     
     # Check rate limit
-    rate_limit = await check_rate_limit(identifier, limit)
+    rate_limit = await check_rate_limit (identifier, limit)
     
     # Add headers (always, even if not rate limited)
     headers = {
-        "X-RateLimit-Limit": str(rate_limit["limit"]),
-        "X-RateLimit-Remaining": str(rate_limit["remaining"]),
-        "X-RateLimit-Reset": str(rate_limit["reset_at"])
+        "X-RateLimit-Limit": str (rate_limit["limit"]),
+        "X-RateLimit-Remaining": str (rate_limit["remaining"]),
+        "X-RateLimit-Reset": str (rate_limit["reset_at"])
     }
     
     if not rate_limit["allowed"]:
@@ -230,12 +230,12 @@ async def rate_limit_middleware(request: Request, call_next):
             },
             headers={
                 **headers,
-                "Retry-After": str(rate_limit["reset_at"] - int(datetime.utcnow().timestamp()))
+                "Retry-After": str (rate_limit["reset_at"] - int (datetime.utcnow().timestamp()))
             }
         )
     
     # Continue request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add rate limit headers to response
     for key, value in headers.items():

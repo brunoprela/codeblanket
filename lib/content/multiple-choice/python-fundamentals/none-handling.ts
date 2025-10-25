@@ -29,7 +29,7 @@ export const nonehandlingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'pf-none-mc-3',
     question:
-      'What is wrong with this code?\n\ndef add_item(item, items=[]):\n    items.append(item)\n    return items',
+      'What is wrong with this code?\n\ndef add_item (item, items=[]):\n    items.append (item)\n    return items',
     options: [
       'Nothing, it works fine',
       'The default list is shared between calls',

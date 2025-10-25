@@ -9,7 +9,7 @@ export const instagramarchitectureSection = {
 
 ## Overview
 
-Instagram's architecture is notable for several achievements:
+Instagram\'s architecture is notable for several achievements:
 - **2+ billion users** with 500 million daily active users
 - **100+ million photos/videos** uploaded daily
 - **4.2 billion likes** per day
@@ -151,7 +151,7 @@ Instagram stores and delivers billions of photos efficiently.
 
 ### 2. Feed Generation
 
-Instagram's feed is a personalized timeline of photos/videos from followed accounts.
+Instagram\'s feed is a personalized timeline of photos/videos from followed accounts.
 
 **Challenge**: User with 1,000 followers, each posting 10 times/day = 10,000 potential posts. How to select and rank?
 
@@ -211,7 +211,7 @@ Cons: Slow read (compute at read time)
 
 ### 3. Relationships and Graph Storage
 
-Instagram's core is a social graph: users follow other users.
+Instagram\'s core is a social graph: users follow other users.
 
 **Data Model** (PostgreSQL):
 
@@ -446,7 +446,7 @@ Instagram search covers users, hashtags, and locations.
 **Ranking Factors**:
 - Follower count (popular users ranked higher)
 - Verification status
-- User's social graph (prioritize followed users)
+- User\'s social graph (prioritize followed users)
 - Engagement rate
 
 **Autocomplete**:
@@ -477,10 +477,10 @@ Instagram uses aggressive caching at multiple layers.
 
 **Example**:
 \`\`\`python
-def get_user_profile(user_id):
+def get_user_profile (user_id):
     # Try cache first
     cache_key = f"user_profile:{user_id}"
-    profile = memcached.get(cache_key)
+    profile = memcached.get (cache_key)
     
     if profile:
         return profile  # Cache hit
@@ -489,7 +489,7 @@ def get_user_profile(user_id):
     profile = db.query("SELECT * FROM users WHERE user_id = ?", user_id)
     
     # Store in cache (TTL: 5 minutes)
-    memcached.set(cache_key, profile, ttl=300)
+    memcached.set (cache_key, profile, ttl=300)
     
     return profile
 \`\`\`
@@ -622,7 +622,7 @@ Result: Single partition, single row lookup (very fast)
 
 ---
 
-## Migration to TAO (Facebook's Data Store)
+## Migration to TAO (Facebook\'s Data Store)
 
 After acquisition, Instagram migrated from PostgreSQL to **TAO** for social graph data.
 
@@ -667,7 +667,7 @@ Instagram monitors system health extensively.
 **Tools**:
 - **Prometheus**: Metrics collection
 - **Grafana**: Dashboards
-- **ODS (Operational Data Store)**: Facebook's internal metrics system
+- **ODS (Operational Data Store)**: Facebook\'s internal metrics system
 
 ### Alerting
 
@@ -720,7 +720,7 @@ After Facebook acquisition, migrated to Facebook's TAO and infrastructure. Don't
 
 ## Interview Tips
 
-**Q: How would you design Instagram's feed generation?**
+**Q: How would you design Instagram\'s feed generation?**
 
 A: Use hybrid fanout approach. For regular users (<1M followers), fanout-on-write: when user posts, write to followers' feeds immediately (stored in Cassandra). For celebrities (>1M followers), fanout-on-read: fetch recent posts when user requests feed. Merge both sources. Cache generated feed in Redis (5 min TTL). Use ML ranking model to score posts based on predicted engagement. Paginate results (return 50 posts initially, load more on scroll). Handle staleness with background refresh jobs.
 
@@ -736,7 +736,7 @@ A: PostgreSQL for structured, relational data (users, follows) where consistency
 
 ## Summary
 
-Instagram's architecture demonstrates scaling a social platform from startup to billions of users:
+Instagram\'s architecture demonstrates scaling a social platform from startup to billions of users:
 
 **Key Takeaways**:
 

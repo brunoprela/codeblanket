@@ -1,8 +1,9 @@
 export const commoditiesMarkets = {
-    title: "Commodities Markets",
-    slug: "commodities-markets",
-    description: "Master physical commodity trading from oil to gold - futures, storage, and real-world delivery",
-    content: `
+  title: 'Commodities Markets',
+  slug: 'commodities-markets',
+  description:
+    'Master physical commodity trading from oil to gold - futures, storage, and real-world delivery',
+  content: `
 # Commodities Markets
 
 ## Introduction: Trading Physical Goods
@@ -63,13 +64,13 @@ class Commodity:
     typical_volatility: float  # Annual volatility
     primary_exchange: str
     
-    def calculate_position_value(self, 
+    def calculate_position_value (self, 
                                  price: float,
                                  num_contracts: int = 1) -> float:
         """Calculate notional value of position"""
         return price * self.contract_size * num_contracts
     
-    def calculate_storage_cost(self,
+    def calculate_storage_cost (self,
                               price: float,
                               holding_period_days: int) -> float:
         """
@@ -155,14 +156,13 @@ for symbol, commodity in COMMODITIES.items():
 oil = COMMODITIES['CL']
 oil_price = 75  # $75/barrel
 
-position_value = oil.calculate_position_value(oil_price, num_contracts=10)
+position_value = oil.calculate_position_value (oil_price, num_contracts=10)
 print(f"Example: Long 10 WTI Crude contracts at \${oil_price}/barrel")
-print(f"Position Value: \${position_value:,
-}")
+print(f"Position Value: \${position_value:,}")
 print(f"(10 contracts × 1,000 barrels × \${oil_price})")
 
 # Storage cost for 6 months
-storage = oil.calculate_storage_cost(oil_price, holding_period_days = 180)
+storage = oil.calculate_storage_cost (oil_price, holding_period_days = 180)
 print(f"\\nStorage cost for 6 months: \${storage:.2f} per barrel")
 print(f"Total storage: \${storage * oil.contract_size * 10:,.0f} for position")
 \`\`\`
@@ -198,7 +198,7 @@ class FuturesCurve:
         self.commodity = commodity
         self.curve_points = {}
     
-    def calculate_contango_curve(self,
+    def calculate_contango_curve (self,
                                  risk_free_rate: float,
                                  months_forward: list[int]) -> dict:
         """
@@ -220,7 +220,7 @@ class FuturesCurve:
             cost_of_carry = risk_free_rate + self.commodity.storage_cost_annual
             
             # Futures price
-            futures_price = self.spot_price * np.exp(cost_of_carry * years)
+            futures_price = self.spot_price * np.exp (cost_of_carry * years)
             
             curve[months] = {
                 'months': months,
@@ -233,7 +233,7 @@ class FuturesCurve:
         
         return curve
     
-    def calculate_backwardation_curve(self,
+    def calculate_backwardation_curve (self,
                                      convenience_yield: float,
                                      risk_free_rate: float,
                                      months_forward: list[int]) -> dict:
@@ -255,7 +255,7 @@ class FuturesCurve:
             # Net cost of carry = interest + storage - convenience yield
             net_carry = risk_free_rate + self.commodity.storage_cost_annual - convenience_yield
             
-            futures_price = self.spot_price * np.exp(net_carry * years)
+            futures_price = self.spot_price * np.exp (net_carry * years)
             
             curve[months] = {
                 'months': months,
@@ -268,7 +268,7 @@ class FuturesCurve:
         
         return curve
     
-    def determine_curve_shape(self, 
+    def determine_curve_shape (self, 
                              near_month_future: float,
                              far_month_future: float) -> str:
         """Determine if curve is in contango or backwardation"""
@@ -281,7 +281,7 @@ class FuturesCurve:
 
 # Example 1: Oil in Contango (normal market)
 oil = COMMODITIES['CL']
-oil_curve = FuturesCurve(spot_price=75.00, commodity=oil)
+oil_curve = FuturesCurve (spot_price=75.00, commodity=oil)
 
 print("\\n=== Crude Oil Futures Curve ===\\n")
 print("Scenario 1: CONTANGO (Normal Market)\\n")
@@ -291,11 +291,11 @@ contango = oil_curve.calculate_contango_curve(
     months_forward=[1, 3, 6, 12, 24]
 )
 
-print(f"Spot Price: \${oil_curve.spot_price: .2f}/barrel\\n")
+print(f"Spot Price: \${oil_curve.spot_price:.2f}/barrel\\n")
 print("Futures Prices:")
 for months, data in contango.items():
     print(f"  {months}M: \${data['futures_price']:.2f} "
-          f"(+${data['premium']:.2f}, +{data['premium_pct']:.1f}%)")
+          f"(+\${data['premium']:.2f}, +{data['premium_pct']:.1f}%)")
 
 print(f"\\nInterpretation:")
 print(f"• Futures trade ABOVE spot (normal)")
@@ -303,11 +303,11 @@ print(f"• Reflects storage costs + interest")
 print(f"• Roll cost: ~{contango[12]['annualized_roll_cost']:.1f}% annually")
 print(f"• Long-only commodity funds LOSE from rolling futures")
 
-# Example 2: Oil in Backwardation(shortage)
+# Example 2: Oil in Backwardation (shortage)
 print("\\n\\nScenario 2: BACKWARDATION (Shortage/High Demand)\\n")
 
 backwardation = oil_curve.calculate_backwardation_curve(
-    convenience_yield = 0.12,  # 12 % convenience yield(shortage!)
+    convenience_yield = 0.12,  # 12 % convenience yield (shortage!)
     risk_free_rate = 0.05,
     months_forward = [1, 3, 6, 12, 24]
 )
@@ -316,7 +316,7 @@ print(f"Spot Price: \${oil_curve.spot_price:.2f}/barrel\\n")
 print("Futures Prices:")
 for months, data in backwardation.items():
     print(f"  {months}M: \${data['futures_price']:.2f} "
-          f"(-${data['discount']:.2f}, -{data['discount_pct']:.1f}%)")
+          f"(-\${data['discount']:.2f}, -{data['discount_pct']:.1f}%)")
 
 print(f"\\nInterpretation:")
 print(f"• Futures trade BELOW spot (shortage)")
@@ -343,7 +343,7 @@ print(f"• Long-only commodity funds GAIN from rolling futures")
 
 ## The 2020 Oil Price Crisis: Negative Prices!
 
-April 20, 2020: WTI crude futures went **NEGATIVE $37/barrel**. Here's what happened:
+April 20, 2020: WTI crude futures went **NEGATIVE $37/barrel**. Here\'s what happened:
 
 \`\`\`python
 class OilCrisis2020:
@@ -415,15 +415,15 @@ class OilCrisis2020:
             if contract_expiration_days == 0:
                 # Must close today at ANY price
                 decision = "Panic sell at market"
-                cost = abs(current_price) if current_price < 0 else 0
-                outcome = f"{'Pay' if current_price < 0 else 'Receive'} ${abs(current_price)}/barrel to close"
+                cost = abs (current_price) if current_price < 0 else 0
+                outcome = f"{'Pay' if current_price < 0 else 'Receive'} \${abs (current_price)}/barrel to close"
             else:
                 # Can roll to next month
                 next_month_price = 20  # June futures ~$20
                 roll_cost = next_month_price - current_price
                 decision = "Roll to next month"
                 cost = roll_cost
-                outcome = f"Pay ${roll_cost}/barrel to roll"
+                outcome = f"Pay \${roll_cost}/barrel to roll"
         
         return {
             'storage_available': storage_available,
@@ -592,7 +592,7 @@ farmer = CommodityHedge.farmer_hedge(
     crop="Corn",
     expected_production=50_000,  # 50,000 bushels
     current_futures_price=4.50,  # $4.50/bushel
-    harvest_date=datetime.now() + timedelta(days=180),
+    harvest_date=datetime.now() + timedelta (days=180),
     production_cost=3.80  # $3.80/bushel to produce
 )
 
@@ -603,7 +603,7 @@ print(f"Production: {farmer['production']:,} bushels")
 print(f"Current Futures: \${farmer['current_futures']}/bushel")
 print(f"Production Cost: \${farmer['production_cost']}/bushel")
 print(f"\\nHedge Strategy: {farmer['hedge_strategy']}")
-print(f"Locked-in Revenue: \${farmer['locked_in_revenue']:, .0f}")
+print(f"Locked-in Revenue: \${farmer['locked_in_revenue']:,.0f}")
 print(f"Locked-in Profit: \${farmer['locked_in_profit']:,.0f}")
 print(f"Profit Margin: {farmer['profit_margin']:.1f}%")
 print(f"\\n✓ {farmer['protection']}")
@@ -764,7 +764,7 @@ class CommodityTradingSystem:
         self.margin_account = 100_000  # $100K
         self.trade_history = []
     
-    def get_commodity_quote(self, symbol: str) -> dict:
+    def get_commodity_quote (self, symbol: str) -> dict:
         """
         Get commodity futures quote
         In production: API call to CME, ICE, etc.
@@ -778,11 +778,11 @@ class CommodityTradingSystem:
         
         return {
             'symbol': symbol,
-            **quotes.get(symbol, {}),
+            **quotes.get (symbol, {}),
             'timestamp': datetime.now()
         }
     
-    def calculate_margin_requirement(self, 
+    def calculate_margin_requirement (self, 
                                     symbol: str,
                                     num_contracts: int) -> float:
         """
@@ -792,7 +792,7 @@ class CommodityTradingSystem:
         Typically 5-15% of contract value
         """
         commodity = COMMODITIES[symbol]
-        quote = self.get_commodity_quote(symbol)
+        quote = self.get_commodity_quote (symbol)
         
         # Contract value
         contract_value = quote['last'] * commodity.contract_size
@@ -804,21 +804,21 @@ class CommodityTradingSystem:
             'NG': 0.10   # 10% for natural gas (volatile!)
         }
         
-        margin_per_contract = contract_value * margin_rates.get(symbol, 0.10)
+        margin_per_contract = contract_value * margin_rates.get (symbol, 0.10)
         total_margin = margin_per_contract * num_contracts
         
         return total_margin
     
-    def open_position(self,
+    def open_position (self,
                      symbol: str,
                      side: Literal['long', 'short'],
                      num_contracts: int) -> dict:
         """Open commodity futures position"""
         commodity = COMMODITIES[symbol]
-        quote = self.get_commodity_quote(symbol)
+        quote = self.get_commodity_quote (symbol)
         
         # Calculate margin
-        required_margin = self.calculate_margin_requirement(symbol, num_contracts)
+        required_margin = self.calculate_margin_requirement (symbol, num_contracts)
         
         if required_margin > self.margin_account:
             return {
@@ -831,7 +831,7 @@ class CommodityTradingSystem:
         # Execute trade
         entry_price = quote['ask'] if side == 'long' else quote['bid']
         
-        position_id = f"{symbol}_{side}_{int(time.time())}"
+        position_id = f"{symbol}_{side}_{int (time.time())}"
         
         position = {
             'position_id': position_id,
@@ -855,11 +855,11 @@ class CommodityTradingSystem:
             **position
         }
     
-    def calculate_position_pnl(self, position_id: str) -> dict:
+    def calculate_position_pnl (self, position_id: str) -> dict:
         """Calculate current P&L on position"""
         position = self.positions[position_id]
         commodity = COMMODITIES[position['symbol']]
-        quote = self.get_commodity_quote(position['symbol'])
+        quote = self.get_commodity_quote (position['symbol'])
         
         current_price = quote['bid'] if position['side'] == 'long' else quote['ask']
         
@@ -887,7 +887,7 @@ class CommodityTradingSystem:
 system = CommodityTradingSystem()
 
 print("\\n=== Commodity Trading System ===\\n")
-print(f"Initial Margin: \${system.margin_account:, .0f}")
+print(f"Initial Margin: \${system.margin_account:,.0f}")
 
 # Trade 1: Long crude oil
 oil_trade = system.open_position(
@@ -907,7 +907,7 @@ print(f"  Margin: \${oil_trade['margin_posted']:,.0f}")
 print(f"  Leverage: {oil_trade['leverage']:.1f}x")
 
 # Check P & L(simulated price move)
-pnl = system.calculate_position_pnl(oil_trade['position_id'])
+pnl = system.calculate_position_pnl (oil_trade['position_id'])
 print(f"\\nCurrent P&L:")
 print(f"  Current Price: \${pnl['current_price']:.2f}")
 print(f"  Price Change: \${pnl['price_change']:+.2f}")
@@ -944,15 +944,18 @@ print(f"  Return: {pnl['pnl_percent']:+.1f}%")
 
 You now understand commodity markets - ready to build commodity trading systems!
 `,
-    exercises: [
-        {
-            prompt: "Build a contango/backwardation detector that monitors futures curves for all major commodities, calculates roll yields, and alerts when curve shifts from contango to backwardation (often signals supply shortage and buying opportunity).",
-            solution: "// Implementation: 1) Fetch futures prices for multiple maturities (1M, 3M, 6M, 12M), 2) Calculate slope of futures curve, 3) Determine contango (upward slope) vs backwardation (downward slope), 4) Calculate annualized roll yield, 5) Detect curve inversions (regime changes), 6) Alert on backwardation as potential buy signal, 7) Track historical curve shapes for pattern recognition"
-        },
-        {
-            prompt: "Create a commodity hedging calculator for farmers that suggests optimal hedge ratios based on historical price volatility, production costs, and risk tolerance. Include scenario analysis showing P&L under different price outcomes.",
-            solution: "// Implementation: 1) Input expected production, costs, current futures prices, 2) Fetch historical price volatility, 3) Calculate value-at-risk for unhedged position, 4) Optimize hedge ratio using portfolio theory (minimize downside while allowing some upside), 5) Simulate outcomes across price scenarios (-50% to +50%), 6) Display breakeven analysis, max loss protection, opportunity cost of hedging, 7) Recommend partial hedge (e.g., 60-80%) vs full hedge"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a contango/backwardation detector that monitors futures curves for all major commodities, calculates roll yields, and alerts when curve shifts from contango to backwardation (often signals supply shortage and buying opportunity).',
+      solution:
+        '// Implementation: 1) Fetch futures prices for multiple maturities (1M, 3M, 6M, 12M), 2) Calculate slope of futures curve, 3) Determine contango (upward slope) vs backwardation (downward slope), 4) Calculate annualized roll yield, 5) Detect curve inversions (regime changes), 6) Alert on backwardation as potential buy signal, 7) Track historical curve shapes for pattern recognition',
+    },
+    {
+      prompt:
+        'Create a commodity hedging calculator for farmers that suggests optimal hedge ratios based on historical price volatility, production costs, and risk tolerance. Include scenario analysis showing P&L under different price outcomes.',
+      solution:
+        '// Implementation: 1) Input expected production, costs, current futures prices, 2) Fetch historical price volatility, 3) Calculate value-at-risk for unhedged position, 4) Optimize hedge ratio using portfolio theory (minimize downside while allowing some upside), 5) Simulate outcomes across price scenarios (-50% to +50%), 6) Display breakeven analysis, max loss protection, opportunity cost of hedging, 7) Recommend partial hedge (e.g., 60-80%) vs full hedge',
+    },
+  ],
 };
-

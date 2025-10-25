@@ -26,8 +26,8 @@ engine = create_engine("postgresql://prod:password@prod-db/production")
 **Anti-pattern 2**: Shared test database without cleanup
 \`\`\`python
 def test_create_user():
-    user = User(username="alice")
-    db.session.add(user)
+    user = User (username="alice")
+    db.session.add (user)
     db.session.commit()
     # Never cleaned up—affects next test
 \`\`\`
@@ -67,7 +67,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from myapp.models import Base
 
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def engine():
     """
     Create in-memory SQLite database for entire test session.
@@ -88,12 +88,12 @@ def engine():
     )
     
     # Create all tables
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all (engine)
     
     return engine
 
-@pytest.fixture(scope="function")
-def db_session(engine):
+@pytest.fixture (scope="function")
+def db_session (engine):
     """
     Provide clean database session for each test.
     
@@ -106,7 +106,7 @@ def db_session(engine):
     transaction = connection.begin()
     
     # Create session bound to this connection
-    Session = scoped_session(sessionmaker(bind=connection))
+    Session = scoped_session (sessionmaker (bind=connection))
     session = Session()
     
     yield session
@@ -120,9 +120,9 @@ def db_session(engine):
 
 **Usage**:
 \`\`\`python
-def test_create_user(db_session):
-    user = User(username="alice", email="alice@example.com")
-    db_session.add(user)
+def test_create_user (db_session):
+    user = User (username="alice", email="alice@example.com")
+    db_session.add (user)
     db_session.commit()
     
     assert user.id is not None
@@ -140,7 +140,7 @@ import pytest
 from sqlalchemy import create_engine
 from myapp.models import Base
 
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def engine():
     """
     Create PostgreSQL test database.
@@ -156,27 +156,27 @@ def engine():
     """
     # Use test database (never production!)
     db_url = "postgresql://test_user:test_pass@localhost:5432/test_db"
-    engine = create_engine(db_url, echo=False)
+    engine = create_engine (db_url, echo=False)
     
     # Drop all tables (clean slate)
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all (engine)
     
     # Create all tables
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all (engine)
     
     yield engine
     
     # Cleanup after all tests
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all (engine)
     engine.dispose()
 
-@pytest.fixture(scope="function")
-def db_session(engine):
+@pytest.fixture (scope="function")
+def db_session (engine):
     """Same transaction rollback pattern as SQLite"""
     connection = engine.connect()
     transaction = connection.begin()
     
-    Session = scoped_session(sessionmaker(bind=connection))
+    Session = scoped_session (sessionmaker (bind=connection))
     session = Session()
     
     yield session
@@ -216,7 +216,7 @@ import pytest
 import subprocess
 import time
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture (scope="session", autouse=True)
 def docker_db():
     """Start PostgreSQL in Docker for tests"""
     # Start containers
@@ -250,8 +250,8 @@ def docker_db():
 ### How It Works
 
 \`\`\`python
-@pytest.fixture(scope="function")
-def db_session(engine):
+@pytest.fixture (scope="function")
+def db_session (engine):
     # 1. Create connection
     connection = engine.connect()
     
@@ -259,7 +259,7 @@ def db_session(engine):
     transaction = connection.begin()
     
     # 3. Create session bound to this transaction
-    session = Session(bind=connection)
+    session = Session (bind=connection)
     
     # 4. Run test (all changes in transaction)
     yield session
@@ -286,17 +286,17 @@ def db_session(engine):
 
 \`\`\`python
 # Approach 1: Rollback (BEST)
-def cleanup_rollback(session):
+def cleanup_rollback (session):
     session.rollback()  # 1ms
     
 # Approach 2: Truncate (SLOW)
-def cleanup_truncate(session):
+def cleanup_truncate (session):
     session.execute("TRUNCATE users, posts, comments CASCADE")  # 100ms
     
 # Approach 3: Drop/Create (VERY SLOW)
-def cleanup_drop_create(engine):
-    Base.metadata.drop_all(engine)   # 500ms
-    Base.metadata.create_all(engine)  # 500ms
+def cleanup_drop_create (engine):
+    Base.metadata.drop_all (engine)   # 500ms
+    Base.metadata.create_all (engine)  # 500ms
 \`\`\`
 
 **Performance for 100 tests**:
@@ -313,14 +313,14 @@ def cleanup_drop_create(engine):
 \`\`\`python
 from myapp.models import User, Post
 
-def test_user_creation(db_session):
+def test_user_creation (db_session):
     """Test creating user model"""
     user = User(
         username="alice",
         email="alice@example.com",
         age=30
     )
-    db_session.add(user)
+    db_session.add (user)
     db_session.commit()
     
     # Verify auto-generated ID
@@ -334,15 +334,15 @@ def test_user_creation(db_session):
     # Verify timestamps (if using created_at)
     assert user.created_at is not None
 
-def test_user_repr(db_session):
+def test_user_repr (db_session):
     """Test string representation"""
-    user = User(username="alice")
-    assert "alice" in repr(user)
+    user = User (username="alice")
+    assert "alice" in repr (user)
 
-def test_user_validation(db_session):
+def test_user_validation (db_session):
     """Test model validation"""
-    user = User(username="a", email="invalid")  # Too short, invalid email
-    db_session.add(user)
+    user = User (username="a", email="invalid")  # Too short, invalid email
+    db_session.add (user)
     
     with pytest.raises(ValueError):
         db_session.commit()
@@ -351,21 +351,21 @@ def test_user_validation(db_session):
 ### Testing Relationships
 
 \`\`\`python
-def test_one_to_many_relationship(db_session):
+def test_one_to_many_relationship (db_session):
     """Test user → posts relationship"""
     # Create user
-    user = User(username="alice")
-    db_session.add(user)
+    user = User (username="alice")
+    db_session.add (user)
     db_session.commit()
     
     # Create posts
-    post1 = Post(title="First Post", content="Hello", author=user)
-    post2 = Post(title="Second Post", content="World", author=user)
+    post1 = Post (title="First Post", content="Hello", author=user)
+    post2 = Post (title="Second Post", content="World", author=user)
     db_session.add_all([post1, post2])
     db_session.commit()
     
     # Test relationship access
-    assert len(user.posts) == 2
+    assert len (user.posts) == 2
     assert user.posts[0].title == "First Post"
     assert user.posts[1].title == "Second Post"
     
@@ -373,33 +373,33 @@ def test_one_to_many_relationship(db_session):
     assert post1.author == user
     assert post2.author == user
 
-def test_many_to_many_relationship(db_session):
+def test_many_to_many_relationship (db_session):
     """Test users ↔ groups relationship"""
     # Create users
-    alice = User(username="alice")
-    bob = User(username="bob")
+    alice = User (username="alice")
+    bob = User (username="bob")
     
     # Create groups
-    admins = Group(name="Admins")
-    users = Group(name="Users")
+    admins = Group (name="Admins")
+    users = Group (name="Users")
     
     # Setup relationships
     alice.groups.extend([admins, users])
-    bob.groups.append(users)
+    bob.groups.append (users)
     
     db_session.add_all([alice, bob, admins, users])
     db_session.commit()
     
     # Test relationships
-    assert len(alice.groups) == 2
-    assert len(bob.groups) == 1
-    assert len(admins.users) == 1
-    assert len(users.users) == 2
+    assert len (alice.groups) == 2
+    assert len (bob.groups) == 1
+    assert len (admins.users) == 1
+    assert len (users.users) == 2
 
-def test_cascade_delete(db_session):
+def test_cascade_delete (db_session):
     """Test cascade deletion"""
-    user = User(username="alice")
-    post = Post(title="Test", author=user)
+    user = User (username="alice")
+    post = Post (title="Test", author=user)
     
     db_session.add_all([user, post])
     db_session.commit()
@@ -407,33 +407,33 @@ def test_cascade_delete(db_session):
     post_id = post.id
     
     # Delete user (should cascade to posts)
-    db_session.delete(user)
+    db_session.delete (user)
     db_session.commit()
     
     # Verify post was deleted
-    assert db_session.query(Post).filter_by(id=post_id).first() is None
+    assert db_session.query(Post).filter_by (id=post_id).first() is None
 \`\`\`
 
 ### Testing Queries
 
 \`\`\`python
-def test_simple_query(db_session):
+def test_simple_query (db_session):
     """Test basic querying"""
     # Create test data
-    alice = User(username="alice", age=30)
-    bob = User(username="bob", age=25)
-    charlie = User(username="charlie", age=35)
+    alice = User (username="alice", age=30)
+    bob = User (username="bob", age=25)
+    charlie = User (username="charlie", age=35)
     
     db_session.add_all([alice, bob, charlie])
     db_session.commit()
     
     # Query all
     users = db_session.query(User).all()
-    assert len(users) == 3
+    assert len (users) == 3
     
     # Query with filter
     young_users = db_session.query(User).filter(User.age < 30).all()
-    assert len(young_users) == 1
+    assert len (young_users) == 1
     assert young_users[0].username == "bob"
     
     # Query with order
@@ -442,15 +442,15 @@ def test_simple_query(db_session):
     assert ordered[1].username == "alice"
     assert ordered[2].username == "bob"
 
-def test_complex_query(db_session):
+def test_complex_query (db_session):
     """Test joins and aggregations"""
     # Setup data
-    alice = User(username="alice")
-    bob = User(username="bob")
+    alice = User (username="alice")
+    bob = User (username="bob")
     
-    Post(title="Alice Post 1", author=alice)
-    Post(title="Alice Post 2", author=alice)
-    Post(title="Bob Post 1", author=bob)
+    Post (title="Alice Post 1", author=alice)
+    Post (title="Alice Post 2", author=alice)
+    Post (title="Bob Post 1", author=bob)
     
     db_session.add_all([alice, bob])
     db_session.commit()
@@ -462,19 +462,19 @@ def test_complex_query(db_session):
         func.count(Post.id).label("post_count")
     ).join(Post).group_by(User.id).all()
     
-    assert len(result) == 2
-    assert dict(result)[("alice",)] == 2
-    assert dict(result)[("bob",)] == 1
+    assert len (result) == 2
+    assert dict (result)[("alice",)] == 2
+    assert dict (result)[("bob",)] == 1
 
-def test_query_performance(db_session):
+def test_query_performance (db_session):
     """Test N+1 query problem"""
     # Create data with relationships
-    users = [User(username=f"user{i}") for i in range(10)]
-    db_session.add_all(users)
+    users = [User (username=f"user{i}") for i in range(10)]
+    db_session.add_all (users)
     db_session.commit()
     
     for user in users:
-        db_session.add(Post(title=f"Post by {user.username}", author=user))
+        db_session.add(Post (title=f"Post by {user.username}", author=user))
     db_session.commit()
     
     # Bad: N+1 queries (1 for users + 10 for each user's posts)
@@ -484,7 +484,7 @@ def test_query_performance(db_session):
     
     # Good: Eager loading (1 query with join)
     from sqlalchemy.orm import joinedload
-    users = db_session.query(User).options(joinedload(User.posts)).all()
+    users = db_session.query(User).options (joinedload(User.posts)).all()
     for user in users:
         _ = user.posts  # No additional query
 \`\`\`
@@ -515,8 +515,8 @@ class UserFactory(SQLAlchemyModelFactory):
         sqlalchemy_session = None  # Set per test
         sqlalchemy_session_persistence = "commit"
     
-    username = factory.Sequence(lambda n: f"user{n}")
-    email = factory.LazyAttribute(lambda obj: f"{obj.username}@example.com")
+    username = factory.Sequence (lambda n: f"user{n}")
+    email = factory.LazyAttribute (lambda obj: f"{obj.username}@example.com")
     age = factory.Faker("random_int", min=18, max=80)
     created_at = factory.Faker("date_time_this_year")
 
@@ -534,7 +534,7 @@ class PostFactory(SQLAlchemyModelFactory):
 ### Using Factories in Tests
 
 \`\`\`python
-def test_with_factory(db_session):
+def test_with_factory (db_session):
     """Clean, concise test data creation"""
     # Set session for factories
     UserFactory._meta.sqlalchemy_session = db_session
@@ -547,25 +547,25 @@ def test_with_factory(db_session):
     
     # Create batch of users
     users = UserFactory.create_batch(5)
-    assert len(users) == 5
+    assert len (users) == 5
     
     # Create with overrides
-    admin = UserFactory.create(username="admin", age=40)
+    admin = UserFactory.create (username="admin", age=40)
     assert admin.username == "admin"
     assert admin.age == 40
     
     # Create with relationships
-    post = PostFactory.create(author=user)
+    post = PostFactory.create (author=user)
     assert post.author == user
 
-def test_factory_traits(db_session):
+def test_factory_traits (db_session):
     """Use traits for variations"""
     class UserFactory(SQLAlchemyModelFactory):
         class Meta:
             model = User
             sqlalchemy_session = db_session
         
-        username = factory.Sequence(lambda n: f"user{n}")
+        username = factory.Sequence (lambda n: f"user{n}")
         age = 30
         is_active = True
         
@@ -583,11 +583,11 @@ def test_factory_traits(db_session):
     assert not user.is_admin
     
     # Admin user
-    admin = UserFactory.create(admin=True)
+    admin = UserFactory.create (admin=True)
     assert admin.is_admin
     
     # Inactive admin
-    inactive_admin = UserFactory.create(admin=True, inactive=True)
+    inactive_admin = UserFactory.create (admin=True, inactive=True)
     assert inactive_admin.is_admin
     assert not inactive_admin.is_active
 \`\`\`
@@ -597,7 +597,7 @@ def test_factory_traits(db_session):
 \`\`\`python
 # conftest.py
 @pytest.fixture
-def factories(db_session):
+def factories (db_session):
     """Configure all factories with session"""
     UserFactory._meta.sqlalchemy_session = db_session
     PostFactory._meta.sqlalchemy_session = db_session
@@ -608,9 +608,9 @@ def factories(db_session):
     }
 
 # Usage in tests
-def test_with_factory_fixture(factories):
-    user = factories["User"].create(username="alice")
-    post = factories["Post"].create(author=user)
+def test_with_factory_fixture (factories):
+    user = factories["User"].create (username="alice")
+    post = factories["Post"].create (author=user)
     assert post.author == user
 \`\`\`
 
@@ -625,30 +625,30 @@ import pytest
 from alembic.config import Config
 from alembic import command
 
-def test_migration_up_down(engine):
+def test_migration_up_down (engine):
     """Test migration is reversible"""
     alembic_cfg = Config("alembic.ini")
     
     # Start from base
-    command.downgrade(alembic_cfg, "base")
+    command.downgrade (alembic_cfg, "base")
     
     # Migrate up
-    command.upgrade(alembic_cfg, "head")
+    command.upgrade (alembic_cfg, "head")
     
     # Verify migration applied
-    inspector = inspect(engine)
+    inspector = inspect (engine)
     tables = inspector.get_table_names()
     assert "users" in tables
     assert "posts" in tables
     
     # Migrate down
-    command.downgrade(alembic_cfg, "-1")
+    command.downgrade (alembic_cfg, "-1")
     
     # Verify rollback
     tables = inspector.get_table_names()
     assert "posts" not in tables
 
-def test_migration_data_transformation(engine):
+def test_migration_data_transformation (engine):
     """Test data is preserved during migration"""
     # Create test data with old schema
     # Run migration
@@ -659,25 +659,25 @@ def test_migration_data_transformation(engine):
 ### Testing Multi-Tenancy
 
 \`\`\`python
-def test_tenant_isolation(db_session):
+def test_tenant_isolation (db_session):
     """Test tenant data isolation"""
     # Create tenant 1 data
-    tenant1_user = User(username="alice", tenant_id=1)
-    db_session.add(tenant1_user)
+    tenant1_user = User (username="alice", tenant_id=1)
+    db_session.add (tenant1_user)
     db_session.commit()
     
     # Create tenant 2 data
-    tenant2_user = User(username="bob", tenant_id=2)
-    db_session.add(tenant2_user)
+    tenant2_user = User (username="bob", tenant_id=2)
+    db_session.add (tenant2_user)
     db_session.commit()
     
     # Query with tenant filter
-    tenant1_users = db_session.query(User).filter_by(tenant_id=1).all()
-    assert len(tenant1_users) == 1
+    tenant1_users = db_session.query(User).filter_by (tenant_id=1).all()
+    assert len (tenant1_users) == 1
     assert tenant1_users[0].username == "alice"
     
-    tenant2_users = db_session.query(User).filter_by(tenant_id=2).all()
-    assert len(tenant2_users) == 1
+    tenant2_users = db_session.query(User).filter_by (tenant_id=2).all()
+    assert len (tenant2_users) == 1
     assert tenant2_users[0].username == "bob"
 \`\`\`
 

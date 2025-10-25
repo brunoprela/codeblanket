@@ -13,11 +13,11 @@ Gradient Boosting is a powerful ensemble technique that builds models sequential
 
 **Key Idea**: Fit new models to residuals (errors) of ensemble so far.
 
-\\[ F_m(x) = F_{m-1}(x) + \\nu \\cdot h_m(x) \\]
+\\[ F_m (x) = F_{m-1}(x) + \\nu \\cdot h_m (x) \\]
 
 Where:
-- \\( F_m(x) \\): Ensemble after m iterations
-- \\( h_m(x) \\): New weak learner
+- \\( F_m (x) \\): Ensemble after m iterations
+- \\( h_m (x) \\): New weak learner
 - \\( \\nu \\): Learning rate (shrinkage)
 
 **Popular Implementations**:
@@ -63,16 +63,16 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Compare models
 models = {
-    'Single Tree': DecisionTreeRegressor(max_depth=3),
-    'Random Forest': RandomForestRegressor(n_estimators=100, max_depth=3, random_state=42),
-    'Gradient Boosting': GradientBoostingRegressor(n_estimators=100, max_depth=3, learning_rate=0.1, random_state=42)
+    'Single Tree': DecisionTreeRegressor (max_depth=3),
+    'Random Forest': RandomForestRegressor (n_estimators=100, max_depth=3, random_state=42),
+    'Gradient Boosting': GradientBoostingRegressor (n_estimators=100, max_depth=3, learning_rate=0.1, random_state=42)
 }
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 X_plot = np.arange(0.0, 5.0, 0.01)[:, np.newaxis]
 
-for ax, (name, model) in zip(axes, models.items()):
+for ax, (name, model) in zip (axes, models.items()):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_plot)
     
@@ -84,7 +84,7 @@ for ax, (name, model) in zip(axes, models.items()):
     train_score = model.score(X_train, y_train)
     test_score = model.score(X_test, y_test)
     
-    ax.set_title(f'{name}\\nTrain R²: {train_score:.3f}, Test R²: {test_score:.3f}')
+    ax.set_title (f'{name}\\nTrain R²: {train_score:.3f}, Test R²: {test_score:.3f}')
     ax.set_xlabel("X")
     ax.set_ylabel("y")
     ax.legend()
@@ -103,7 +103,7 @@ print("Gradient Boosting typically achieves best test performance!")
 2. For m = 1 to M iterations:
    a. Compute residuals: \\( r_i = y_i - F_{m-1}(x_i) \\)
    b. Fit weak learner \\( h_m \\) to residuals
-   c. Update: \\( F_m(x) = F_{m-1}(x) + \\nu \\cdot h_m(x) \\)
+   c. Update: \\( F_m (x) = F_{m-1}(x) + \\nu \\cdot h_m (x) \\)
 3. Final prediction: \\( F_M(x) \\)
 
 \`\`\`python
@@ -115,7 +115,7 @@ X_simple = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])
 y_simple = np.array([2, 4, 3, 8, 7, 10, 9, 14, 13, 16])
 
 # Initialize with mean
-F = np.full(len(y_simple), y_simple.mean())
+F = np.full (len (y_simple), y_simple.mean())
 learning_rate = 0.5
 n_iterations = 5
 
@@ -126,12 +126,12 @@ print("Gradient Boosting Iterations:")
 print(f"Initial prediction (mean): {F[0]:.2f}")
 print()
 
-for iteration in range(n_iterations):
+for iteration in range (n_iterations):
     # Compute residuals
     residuals = y_simple - F
     
     # Fit tree to residuals
-    tree = DecisionTreeRegressor(max_depth=2)
+    tree = DecisionTreeRegressor (max_depth=2)
     tree.fit(X_simple, residuals)
     
     # Update predictions
@@ -144,18 +144,18 @@ for iteration in range(n_iterations):
     print(f"Iteration {iteration+1}: MSE = {mse:.4f}")
 
 # Visualize progression
-plt.figure(figsize=(15, 10))
+plt.figure (figsize=(15, 10))
 
-for i, preds in enumerate(predictions_over_time):
+for i, preds in enumerate (predictions_over_time):
     plt.subplot(2, 3, i+1)
     plt.scatter(X_simple, y_simple, s=100, color='blue', label='Actual', zorder=3)
     plt.scatter(X_simple, preds, s=100, color='red', marker='x', s=100, label='Predicted', zorder=3)
     plt.plot(X_simple, preds, 'r--', alpha=0.5)
     
     if i == 0:
-        plt.title(f'Initial (Mean): MSE={np.mean((y_simple-preds)**2):.2f}')
+        plt.title (f'Initial (Mean): MSE={np.mean((y_simple-preds)**2):.2f}')
     else:
-        plt.title(f'After {i} iterations: MSE={np.mean((y_simple-preds)**2):.2f}')
+        plt.title (f'After {i} iterations: MSE={np.mean((y_simple-preds)**2):.2f}')
     
     plt.xlabel('X')
     plt.ylabel('y')
@@ -184,7 +184,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 learning_rates = [0.001, 0.01, 0.1, 0.5, 1.0]
 n_estimators = 200
 
-plt.figure(figsize=(12, 8))
+plt.figure (figsize=(12, 8))
 
 for lr in learning_rates:
     gb = GradientBoostingClassifier(
@@ -205,7 +205,7 @@ for lr in learning_rates:
     # Use staged_predict_proba
     test_scores = [gb.score(X_test, y_test) for _ in gb.staged_predict(X_test)]
     
-    plt.plot(range(1, len(test_scores)+1), test_scores, label=f'lr={lr}', linewidth=2)
+    plt.plot (range(1, len (test_scores)+1), test_scores, label=f'lr={lr}', linewidth=2)
 
 plt.xlabel('Number of Trees')
 plt.ylabel('Test Accuracy')
@@ -262,18 +262,18 @@ xgb_model = xgb.train(
 )
 
 # Predictions
-y_pred_proba = xgb_model.predict(dtest)
-y_pred = (y_pred_proba > 0.5).astype(int)
+y_pred_proba = xgb_model.predict (dtest)
+y_pred = (y_pred_proba > 0.5).astype (int)
 
 print("\\n" + "="*60)
 print("XGBOOST RESULTS")
 print("="*60)
-print(f"Test Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+print(f"Test Accuracy: {accuracy_score (y_test, y_pred):.4f}")
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=['Malignant', 'Benign']))
+print(classification_report (y_test, y_pred, target_names=['Malignant', 'Benign']))
 
 # Feature importance
-xgb.plot_importance(xgb_model, max_num_features=15, height=0.8, title="XGBoost Feature Importance")
+xgb.plot_importance (xgb_model, max_num_features=15, height=0.8, title="XGBoost Feature Importance")
 plt.tight_layout()
 plt.show()
 \`\`\`
@@ -309,7 +309,7 @@ print(f"Best score: {xgb_clf.best_score:.4f}")
 print(f"Test accuracy: {xgb_clf.score(X_test, y_test):.4f}")
 \`\`\`
 
-## LightGBM: Microsoft's Fast GB
+## LightGBM: Microsoft\'s Fast GB
 
 LightGBM is faster and more memory-efficient than XGBoost for large datasets.
 
@@ -351,9 +351,9 @@ lgb_model = lgb.train(
 
 # Predictions
 y_pred_lgb = lgb_model.predict(X_test)
-y_pred_lgb_binary = (y_pred_lgb > 0.5).astype(int)
+y_pred_lgb_binary = (y_pred_lgb > 0.5).astype (int)
 
-print(f"LightGBM Test Accuracy: {accuracy_score(y_test, y_pred_lgb_binary):.4f}")
+print(f"LightGBM Test Accuracy: {accuracy_score (y_test, y_pred_lgb_binary):.4f}")
 
 # Scikit-learn API
 from lightgbm import LGBMClassifier
@@ -417,7 +417,7 @@ param_grid = {
 
 # Grid search
 xgb_search = GridSearchCV(
-    XGBClassifier(random_state=42, n_jobs=-1),
+    XGBClassifier (random_state=42, n_jobs=-1),
     param_grid,
     cv=5,
     scoring='accuracy',
@@ -446,9 +446,9 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Compare GB implementations
 models = {
-    'scikit-learn GB': GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, random_state=42),
-    'XGBoost': XGBRegressor(n_estimators=100, learning_rate=0.1, random_state=42, n_jobs=-1),
-    'LightGBM': LGBMRegressor(n_estimators=100, learning_rate=0.1, random_state=42, n_jobs=-1)
+    'scikit-learn GB': GradientBoostingRegressor (n_estimators=100, learning_rate=0.1, random_state=42),
+    'XGBoost': XGBRegressor (n_estimators=100, learning_rate=0.1, random_state=42, n_jobs=-1),
+    'LightGBM': LGBMRegressor (n_estimators=100, learning_rate=0.1, random_state=42, n_jobs=-1)
 }
 
 import pandas as pd
@@ -461,8 +461,8 @@ for name, model in models.items():
     train_time = time.time() - start
     
     y_pred = model.predict(X_test)
-    r2 = r2_score(y_test, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score (y_test, y_pred)
+    rmse = np.sqrt (mean_squared_error (y_test, y_pred))
     
     results.append({
         'Model': name,
@@ -471,9 +471,9 @@ for name, model in models.items():
         'Train Time (s)': train_time
     })
 
-df_results = pd.DataFrame(results)
+df_results = pd.DataFrame (results)
 print("\\nRegression Comparison:")
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 \`\`\`
 
 ## Overfitting Prevention

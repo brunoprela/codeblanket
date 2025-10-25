@@ -10,7 +10,7 @@ export const functionsSection = {
 ## Defining Functions
 
 \`\`\`python
-def greet(name):
+def greet (name):
     """Function with one parameter."""
     return f"Hello, {name}!"
 
@@ -23,22 +23,22 @@ print(message)  # Hello, Alice!
 
 \`\`\`python
 # Default parameters
-def power(base, exponent=2):
+def power (base, exponent=2):
     return base ** exponent
 
 power(3)      # 9 (uses default exponent=2)
 power(3, 3)   # 27
 
 # Keyword arguments
-def describe_pet(animal, name):
+def describe_pet (animal, name):
     print(f"I have a {animal} named {name}")
 
-describe_pet(animal="dog", name="Max")
-describe_pet(name="Max", animal="dog")  # Order doesn't matter
+describe_pet (animal="dog", name="Max")
+describe_pet (name="Max", animal="dog")  # Order doesn't matter
 
 # *args - variable number of positional arguments
 def sum_all(*numbers):
-    return sum(numbers)
+    return sum (numbers)
 
 sum_all(1, 2, 3, 4)  # 10
 
@@ -47,24 +47,24 @@ def print_info(**info):
     for key, value in info.items():
         print(f"{key}: {value}")
 
-print_info(name="Alice", age=30, city="NYC")
+print_info (name="Alice", age=30, city="NYC")
 \`\`\`
 
 ## Return Values
 
 \`\`\`python
 # Single return value
-def square(x):
+def square (x):
     return x ** 2
 
 # Multiple return values (tuple)
-def get_min_max(numbers):
-    return min(numbers), max(numbers)
+def get_min_max (numbers):
+    return min (numbers), max (numbers)
 
 minimum, maximum = get_min_max([1, 2, 3, 4, 5])
 
 # No return (returns None)
-def print_greeting(name):
+def print_greeting (name):
     print(f"Hello, {name}")
 \`\`\`
 
@@ -80,12 +80,12 @@ add = lambda x, y: x + y
 # Common use with map, filter, sorted
 numbers = [1, 2, 3, 4, 5]
 
-squared = list(map(lambda x: x**2, numbers))
-evens = list(filter(lambda x: x % 2 == 0, numbers))
+squared = list (map (lambda x: x**2, numbers))
+evens = list (filter (lambda x: x % 2 == 0, numbers))
 
 # Sorting with key
 people = [("Alice", 30), ("Bob", 25), ("Charlie", 35)]
-sorted_by_age = sorted(people, key=lambda person: person[1])
+sorted_by_age = sorted (people, key=lambda person: person[1])
 \`\`\`
 
 ## Scope
@@ -110,7 +110,7 @@ def my_function():
 ## Docstrings
 
 \`\`\`python
-def calculate_area(length, width):
+def calculate_area (length, width):
     """
     Calculate the area of a rectangle.
     

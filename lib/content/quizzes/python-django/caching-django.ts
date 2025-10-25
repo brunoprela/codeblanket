@@ -94,10 +94,10 @@ cache.set('user:123', user_data, timeout=3600)  # 1 hour
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-@receiver(post_save, sender=Article)
-def invalidate_article_cache(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def invalidate_article_cache (sender, instance, **kwargs):
     cache_key = f'article:{instance.id}'
-    cache.delete(cache_key)
+    cache.delete (cache_key)
     cache.delete('articles:list')  # Invalidate list too
 \`\`\`
 
@@ -105,18 +105,18 @@ def invalidate_article_cache(sender, instance, **kwargs):
 \`\`\`python
 VERSION = 1
 cache_key = f'article:{article_id}:v{VERSION}'
-cache.set(cache_key, data)
+cache.set (cache_key, data)
 # Increment VERSION to invalidate all keys
 \`\`\`
 
 **Cache Key Generation:**
 
 \`\`\`python
-def generate_cache_key(prefix, *args, **kwargs):
-    key_parts = [prefix] + [str(arg) for arg in args]
-    for k, v in sorted(kwargs.items()):
-        key_parts.append(f'{k}:{v}')
-    return ':'.join(key_parts)
+def generate_cache_key (prefix, *args, **kwargs):
+    key_parts = [prefix] + [str (arg) for arg in args]
+    for k, v in sorted (kwargs.items()):
+        key_parts.append (f'{k}:{v}')
+    return ':'.join (key_parts)
 
 # Example
 key = generate_cache_key('articles', 'list', status='published', page=1)
@@ -142,18 +142,18 @@ cache.set('categories', data, timeout=CACHE_TTL['long'])
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
+    def handle (self, *args, **options):
         # Warm popular articles
-        popular = Article.objects.filter(featured=True)[:10]
+        popular = Article.objects.filter (featured=True)[:10]
         for article in popular:
             key = f'article:{article.id}'
-            cache.set(key, article.to_dict(), timeout=3600)
+            cache.set (key, article.to_dict(), timeout=3600)
         
         # Warm category lists
         for category in Category.objects.all():
             key = f'category:{category.slug}:articles'
             articles = category.articles.all()[:20]
-            cache.set(key, list(articles.values()), timeout=3600)
+            cache.set (key, list (articles.values()), timeout=3600)
 \`\`\`
 
 **Best Practices:**
@@ -173,14 +173,14 @@ class Command(BaseCommand):
 from django.views.decorators.cache import cache_page
 
 @cache_page(60 * 15)  # 15 minutes
-def article_list(request):
+def article_list (request):
     articles = Article.objects.all()
-    return render(request, 'articles.html', {'articles': articles})
+    return render (request, 'articles.html', {'articles': articles})
 
 # Per-user caching
 @cache_page(60 * 15, key_prefix='user_%(user_id)s')
-def dashboard(request):
-    return render(request, 'dashboard.html')
+def dashboard (request):
+    return render (request, 'dashboard.html')
 \`\`\`
 
 **Template Fragment Caching:**
@@ -210,7 +210,7 @@ cache.delete('key')
 # Get or set pattern
 articles = cache.get('articles:featured')
 if articles is None:
-    articles = Article.objects.filter(featured=True)
+    articles = Article.objects.filter (featured=True)
     cache.set('articles:featured', articles, timeout=3600)
 
 # Many keys
@@ -229,13 +229,13 @@ cache.decr('counter')
 from rest_framework.decorators import action
 from django.utils.decorators import method_decorator
 
-class ArticleViewSet(viewsets.ModelViewSet):
-    @method_decorator(cache_page(60 * 15))
-    @action(detail=False)
-    def featured(self, request):
-        articles = self.get_queryset().filter(featured=True)
-        serializer = self.get_serializer(articles, many=True)
-        return Response(serializer.data)
+class ArticleViewSet (viewsets.ModelViewSet):
+    @method_decorator (cache_page(60 * 15))
+    @action (detail=False)
+    def featured (self, request):
+        articles = self.get_queryset().filter (featured=True)
+        serializer = self.get_serializer (articles, many=True)
+        return Response (serializer.data)
 \`\`\`
 
 **When to Use Each:**
@@ -259,16 +259,16 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **Production Pattern:**
 
 \`\`\`python
-def get_articles_cached(status='published', category=None):
+def get_articles_cached (status='published', category=None):
     key = f'articles:{status}:{category or "all"}'
-    articles = cache.get(key)
+    articles = cache.get (key)
     
     if articles is None:
-        articles = Article.objects.filter(status=status)
+        articles = Article.objects.filter (status=status)
         if category:
-            articles = articles.filter(category=category)
-        articles = list(articles.values())
-        cache.set(key, articles, timeout=600)
+            articles = articles.filter (category=category)
+        articles = list (articles.values())
+        cache.set (key, articles, timeout=600)
     
     return articles
 \`\`\`

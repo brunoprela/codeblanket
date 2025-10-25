@@ -53,11 +53,11 @@ spy = yf.download('SPY', start='2020-01-01', end='2024-01-01')
 print("=== SPY Data ===")
 print(spy.head())
 print(f"\\nColumns: {spy.columns.tolist()}")
-print(f"Rows: {len(spy)}")
+print(f"Rows: {len (spy)}")
 
 # Multiple tickers
 tickers = ['SPY', 'QQQ', 'IWM', 'TLT', 'GLD']
-data = yf.download(tickers, start='2020-01-01', end='2024-01-01')
+data = yf.download (tickers, start='2020-01-01', end='2024-01-01')
 
 print(f"\\nMulti-ticker shape: {data.shape}")
 print(f"Columns: {data.columns.levels[0].tolist()}")
@@ -95,37 +95,37 @@ options_dates = ticker.options
 print(f"\\nAvailable option dates: {options_dates[:5]}")
 
 # Get option chain for specific date
-opt = ticker.option_chain(options_dates[0])
+opt = ticker.option_chain (options_dates[0])
 calls = opt.calls
 puts = opt.puts
 
 print("\\nCall options:")
 print(calls[['strike', 'lastPrice', 'volume', 'openInterest', 'impliedVolatility']].head())
 
-# Actions(dividends, splits)
+# Actions (dividends, splits)
 actions = ticker.actions
 print("\\nRecent corporate actions:")
 print(actions.tail())
 
 # Data validation
-def validate_data(df):
+def validate_data (df):
 """Validate OHLCV data quality"""
 issues = []
     
     # Check for missing data
     missing = df.isnull().sum()
     if missing.any():
-        issues.append(f"Missing values: {missing[missing > 0].to_dict()}")
+        issues.append (f"Missing values: {missing[missing > 0].to_dict()}")
     
-    # Check for invalid prices(negative, zero)
+    # Check for invalid prices (negative, zero)
     if (df['Close'] <= 0).any():
 issues.append("Invalid prices (<= 0) detected")
     
     # Check for price discontinuities(> 50 % jumps)
     returns = df['Close'].pct_change()
-    large_jumps = returns[abs(returns) > 0.5]
-if len(large_jumps) > 0:
-    issues.append(f"Large price jumps detected: {len(large_jumps)} occurrences")
+    large_jumps = returns[abs (returns) > 0.5]
+if len (large_jumps) > 0:
+    issues.append (f"Large price jumps detected: {len (large_jumps)} occurrences")
     
     # Check for duplicate dates
     if df.index.duplicated().any():
@@ -140,7 +140,7 @@ invalid_ohlc = (
     (df['Low'] > df['Close'])
 )
 if invalid_ohlc.any():
-    issues.append(f"Invalid OHLC relationships: {invalid_ohlc.sum()} occurrences")
+    issues.append (f"Invalid OHLC relationships: {invalid_ohlc.sum()} occurrences")
 
 if issues:
     print("\\nData Quality Issues:")
@@ -149,10 +149,10 @@ for issue in issues:
     else:
 print("\\n✓ Data quality checks passed")
 
-return len(issues) == 0
+return len (issues) == 0
 
 # Validate SPY data
-is_valid = validate_data(spy)
+is_valid = validate_data (spy)
 \`\`\`
 
 ---
@@ -170,7 +170,7 @@ import json
 # Get free API key from alphavantage.co
 API_KEY = 'your_api_key_here'
 
-def get_alpha_vantage_data(symbol, function='TIME_SERIES_DAILY', outputsize='compact'):
+def get_alpha_vantage_data (symbol, function='TIME_SERIES_DAILY', outputsize='compact'):
     """
     Get data from Alpha Vantage
     
@@ -189,7 +189,7 @@ def get_alpha_vantage_data(symbol, function='TIME_SERIES_DAILY', outputsize='com
         'datatype': 'json'
     }
     
-    response = requests.get(base_url, params=params)
+    response = requests.get (base_url, params=params)
     data = response.json()
     
     return data
@@ -199,9 +199,9 @@ daily_data = get_alpha_vantage_data('SPY', 'TIME_SERIES_DAILY', 'full')
 
 # Parse into DataFrame
 if 'Time Series (Daily)' in daily_data:
-    df = pd.DataFrame(daily_data['Time Series (Daily)']).T
-    df.index = pd.to_datetime(df.index)
-    df = df.astype(float)
+    df = pd.DataFrame (daily_data['Time Series (Daily)']).T
+    df.index = pd.to_datetime (df.index)
+    df = df.astype (float)
     df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
     df = df.sort_index()
     
@@ -211,23 +211,23 @@ else:
     print("Error:", daily_data.get('Note') or daily_data.get('Error Message'))
 
 # Get real-time quote
-def get_quote(symbol):
+def get_quote (symbol):
     """Get real-time quote"""
-    data = get_alpha_vantage_data(symbol, 'GLOBAL_QUOTE')
+    data = get_alpha_vantage_data (symbol, 'GLOBAL_QUOTE')
     
     if 'Global Quote' in data:
         quote = data['Global Quote']
         return {
             'symbol': quote['01. symbol'],
-            'price': float(quote['05. price']),
-            'volume': int(quote['06. volume']),
-            'change': float(quote['09. change']),
+            'price': float (quote['05. price']),
+            'volume': int (quote['06. volume']),
+            'change': float (quote['09. change']),
             'change_percent': quote['10. change percent']
         }
     return None
 
 # Get technical indicators
-def get_rsi(symbol, interval='daily', time_period=14):
+def get_rsi (symbol, interval='daily', time_period=14):
     """Get RSI indicator"""
     params = {
         'function': 'RSI',
@@ -242,9 +242,9 @@ def get_rsi(symbol, interval='daily', time_period=14):
     data = response.json()
     
     if 'Technical Analysis: RSI' in data:
-        rsi = pd.DataFrame(data['Technical Analysis: RSI']).T
-        rsi.index = pd.to_datetime(rsi.index)
-        rsi = rsi.astype(float)
+        rsi = pd.DataFrame (data['Technical Analysis: RSI']).T
+        rsi.index = pd.to_datetime (rsi.index)
+        rsi = rsi.astype (float)
         rsi = rsi.sort_index()
         return rsi
     
@@ -266,7 +266,7 @@ def get_sector_performance():
 # Example: Rate limiting (5 calls/minute for free tier)
 import time
 
-def rate_limited_download(symbols, delay=12):
+def rate_limited_download (symbols, delay=12):
     """
     Download data with rate limiting
     
@@ -278,13 +278,13 @@ def rate_limited_download(symbols, delay=12):
     
     for symbol in symbols:
         print(f"Downloading {symbol}...")
-        data[symbol] = get_alpha_vantage_data(symbol, 'TIME_SERIES_DAILY', 'compact')
-        time.sleep(delay)
+        data[symbol] = get_alpha_vantage_data (symbol, 'TIME_SERIES_DAILY', 'compact')
+        time.sleep (delay)
     
     return data
 
 # tickers = ['SPY', 'QQQ', 'IWM']
-# data = rate_limited_download(tickers, delay=12)
+# data = rate_limited_download (tickers, delay=12)
 \`\`\`
 
 ---
@@ -302,7 +302,7 @@ from datetime import datetime, timedelta
 # Get API key from polygon.io (paid plans start at $29/month)
 POLYGON_API_KEY = 'your_polygon_key'
 
-def get_polygon_bars(ticker, multiplier=1, timespan='day', from_date=None, to_date=None):
+def get_polygon_bars (ticker, multiplier=1, timespan='day', from_date=None, to_date=None):
     """
     Get aggregated bars from Polygon
     
@@ -314,7 +314,7 @@ def get_polygon_bars(ticker, multiplier=1, timespan='day', from_date=None, to_da
         to_date: End date (YYYY-MM-DD)
     """
     if not from_date:
-        from_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+        from_date = (datetime.now() - timedelta (days=365)).strftime('%Y-%m-%d')
     if not to_date:
         to_date = datetime.now().strftime('%Y-%m-%d')
     
@@ -327,14 +327,14 @@ def get_polygon_bars(ticker, multiplier=1, timespan='day', from_date=None, to_da
         'apiKey': POLYGON_API_KEY
     }
     
-    response = requests.get(url, params=params)
+    response = requests.get (url, params=params)
     data = response.json()
     
     if data['status'] == 'OK' and 'results' in data:
-        df = pd.DataFrame(data['results'])
-        df['date'] = pd.to_datetime(df['t'], unit='ms')
+        df = pd.DataFrame (data['results'])
+        df['date'] = pd.to_datetime (df['t'], unit='ms')
         df = df.set_index('date')
-        df = df.rename(columns={
+        df = df.rename (columns={
             'o': 'Open',
             'h': 'High',
             'l': 'Low',
@@ -357,7 +357,7 @@ print("\\n=== Polygon 5-Minute Data ===")
 print(spy_5min.head(10))
 
 # Get tick data (trades)
-def get_polygon_trades(ticker, date):
+def get_polygon_trades (ticker, date):
     """Get all trades for a specific date"""
     url = f'https://api.polygon.io/v3/trades/{ticker}'
     
@@ -369,25 +369,25 @@ def get_polygon_trades(ticker, date):
         'apiKey': POLYGON_API_KEY
     }
     
-    response = requests.get(url, params=params)
+    response = requests.get (url, params=params)
     data = response.json()
     
     if 'results' in data:
-        df = pd.DataFrame(data['results'])
-        df['timestamp'] = pd.to_datetime(df['participant_timestamp'], unit='ns')
+        df = pd.DataFrame (data['results'])
+        df['timestamp'] = pd.to_datetime (df['participant_timestamp'], unit='ns')
         df = df.set_index('timestamp')
         return df[['price', 'size', 'exchange']]
     
     return None
 
 # Get real-time quote
-def get_polygon_snapshot(ticker):
+def get_polygon_snapshot (ticker):
     """Get real-time snapshot"""
     url = f'https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers/{ticker}'
     
     params = {'apiKey': POLYGON_API_KEY}
     
-    response = requests.get(url, params=params)
+    response = requests.get (url, params=params)
     data = response.json()
     
     if data['status'] == 'OK' and 'ticker' in data:
@@ -426,14 +426,14 @@ Alternative Data for Trading
 # 1. News Sentiment
 import feedparser
 
-def get_news_sentiment(ticker):
+def get_news_sentiment (ticker):
     """
     Get news headlines for sentiment analysis
     """
     # Example: Using Google News RSS
     url = f'https://news.google.com/rss/search?q={ticker}+stock&hl=en-US&gl=US&ceid=US:en'
     
-    feed = feedparser.parse(url)
+    feed = feedparser.parse (url)
     
     articles = []
     for entry in feed.entries[:10]:
@@ -458,7 +458,7 @@ for article in news[:3]:
 from fredapi import Fred
 
 # Get FRED API key from https://fred.stlouisfed.org/
-fred = Fred(api_key='your_fred_api_key')
+fred = Fred (api_key='your_fred_api_key')
 
 # Get economic indicators
 gdp = fred.get_series('GDP', observation_start='2010-01-01')
@@ -473,10 +473,10 @@ print(f"Latest Fed Funds Rate: {fed_funds.iloc[-1]:.2f}%")
 print(f"Latest VIX: {vix.iloc[-1]:.2f}")
 
 
-# 3. Options Flow(example structure)
-def get_unusual_options_activity(ticker):
+# 3. Options Flow (example structure)
+def get_unusual_options_activity (ticker):
 """
-    Detect unusual options activity(requires paid data source)
+    Detect unusual options activity (requires paid data source)
 
 Returns:
         List of unusual trades with volume, OI, IV changes
@@ -496,9 +496,9 @@ return unusual_activity
 
 
 # 4. Insider Trading Data
-def get_insider_trades(ticker):
+def get_insider_trades (ticker):
 """
-    Get insider trading data(requires SEC EDGAR or commercial API)
+    Get insider trading data (requires SEC EDGAR or commercial API)
 """
     # Would scrape SEC Form 4 filings or use a service like:
     # - OpenInsider
@@ -509,24 +509,24 @@ insider_trades = []
     
     # Look for:
     # - C - level executives buying / selling
-    # - Unusual timing(before earnings)
+    # - Unusual timing (before earnings)
     # - Size of transactions
 
 return insider_trades
 
 
 # 5. Social Media Sentiment
-def get_reddit_sentiment(ticker):
+def get_reddit_sentiment (ticker):
 """
-    Get sentiment from Reddit(r / wallstreetbets, r / stocks)
+    Get sentiment from Reddit (r / wallstreetbets, r / stocks)
 """
     # Would use Reddit API(PRAW library)
     # or scrape specific subreddits
     
     # Analyze:
     # - Mention frequency
-    # - Sentiment(positive / negative)
-    # - Engagement(upvotes, comments)
+    # - Sentiment (positive / negative)
+    # - Engagement (upvotes, comments)
 
 return { 'sentiment': 'bullish', 'mentions': 1234 }
 \`\`\`
@@ -552,9 +552,9 @@ class TradingDataPipeline:
         self.db_path = db_path
         self.init_database()
     
-    def init_database(self):
+    def init_database (self):
         """Initialize SQLite database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Create tables
@@ -582,28 +582,28 @@ class TradingDataPipeline:
         conn.commit()
         conn.close()
     
-    def download_and_store(self, symbols, start_date, end_date):
+    def download_and_store (self, symbols, start_date, end_date):
         """Download and store data"""
         for symbol in symbols:
             print(f"Downloading {symbol}...")
             
             # Download from yfinance
-            data = yf.download(symbol, start=start_date, end=end_date, progress=False)
+            data = yf.download (symbol, start=start_date, end=end_date, progress=False)
             
-            if len(data) == 0:
+            if len (data) == 0:
                 print(f"  No data for {symbol}")
                 continue
             
             # Validate
-            if not self.validate_data(data):
+            if not self.validate_data (data):
                 print(f"  ✗ Validation failed for {symbol}")
                 continue
             
             # Store
-            self.store_data(symbol, data)
-            print(f"  ✓ Stored {len(data)} rows for {symbol}")
+            self.store_data (symbol, data)
+            print(f"  ✓ Stored {len (data)} rows for {symbol}")
     
-    def validate_data(self, df):
+    def validate_data (self, df):
         """Validate data quality"""
         # Check for missing values
         if df.isnull().any().any():
@@ -624,14 +624,14 @@ class TradingDataPipeline:
         
         return True
     
-    def store_data(self, symbol, df):
+    def store_data (self, symbol, df):
         """Store data in database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         # Prepare data
         df_reset = df.reset_index()
         df_reset['symbol'] = symbol
-        df_reset['date'] = df_reset['Date'].astype(str)
+        df_reset['date'] = df_reset['Date'].astype (str)
         
         # Store OHLCV
         df_reset[['date', 'symbol', 'Open', 'High', 'Low', 'Close', 'Volume']].to_sql(
@@ -651,9 +651,9 @@ class TradingDataPipeline:
         conn.commit()
         conn.close()
     
-    def get_data(self, symbol, start_date=None, end_date=None):
+    def get_data (self, symbol, start_date=None, end_date=None):
         """Retrieve data from database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         query = f"SELECT * FROM ohlcv WHERE symbol = '{symbol}'"
         
@@ -664,19 +664,19 @@ class TradingDataPipeline:
         
         query += " ORDER BY date"
         
-        df = pd.read_sql_query(query, conn)
+        df = pd.read_sql_query (query, conn)
         conn.close()
         
-        if len(df) > 0:
-            df['date'] = pd.to_datetime(df['date'])
+        if len (df) > 0:
+            df['date'] = pd.to_datetime (df['date'])
             df = df.set_index('date')
             return df[['Open', 'High', 'Low', 'Close', 'Volume']]
         
         return None
     
-    def update_data(self, symbols):
+    def update_data (self, symbols):
         """Update data with latest available"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         for symbol in symbols:
             # Get last update date
@@ -685,8 +685,8 @@ class TradingDataPipeline:
             result = cursor.fetchone()
             
             if result:
-                last_date = datetime.fromisoformat(result[0]).date()
-                start_date = (last_date + timedelta(days=1)).isoformat()
+                last_date = datetime.fromisoformat (result[0]).date()
+                start_date = (last_date + timedelta (days=1)).isoformat()
                 end_date = datetime.now().date().isoformat()
                 
                 print(f"Updating {symbol} from {start_date} to {end_date}")
@@ -702,7 +702,7 @@ pipeline = TradingDataPipeline('trading_data.db')
 
 # Initial download
 tickers = ['SPY', 'QQQ', 'IWM', 'TLT', 'GLD']
-pipeline.download_and_store(tickers, '2015-01-01', '2024-01-01')
+pipeline.download_and_store (tickers, '2015-01-01', '2024-01-01')
 
 # Retrieve data
 spy_data = pipeline.get_data('SPY', '2023-01-01', '2024-01-01')
@@ -710,7 +710,7 @@ print("\\n=== Retrieved Data ===")
 print(spy_data.tail())
 
 # Update with latest data
-pipeline.update_data(tickers)
+pipeline.update_data (tickers)
 \`\`\`
 
 ---

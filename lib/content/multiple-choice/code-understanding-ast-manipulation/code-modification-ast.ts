@@ -50,7 +50,7 @@ export const codemodificationastMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-codemodificationast-mc-4',
     question:
-      "What does this NodeTransformer do?\n\nclass RemovePrints(ast.NodeTransformer):\n    def visit_Call(self, node):\n        if isinstance(node.func, ast.Name) and node.func.id == 'print':\n            return None\n        return node",
+      "What does this NodeTransformer do?\n\nclass RemovePrints (ast.NodeTransformer):\n    def visit_Call (self, node):\n        if isinstance (node.func, ast.Name) and node.func.id == 'print':\n            return None\n        return node",
     options: [
       'Converts print to log',
       'Removes all print() calls from code',

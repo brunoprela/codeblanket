@@ -48,7 +48,7 @@ export const evaluationDatasetsBenchmarksMultipleChoice = [
   {
     id: 'eval-datasets-mc-4',
     question:
-      "Your test set was created by sampling production logs from 2022. It's now 2024 and model performance on this test set is stable, but production performance is degrading. What should you do?",
+      "Your test set was created by sampling production logs from 2022. It\'s now 2024 and model performance on this test set is stable, but production performance is degrading. What should you do?",
     options: [
       'The model is fine since test performance is stable; production issues must be from other factors',
       'Create a new test set sampled from recent 2024 production data to reflect current distribution',

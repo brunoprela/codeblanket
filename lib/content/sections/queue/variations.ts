@@ -28,7 +28,7 @@ class CircularQueue:
         self.rear = 0
         self.size = 0
     
-    def enqueue(self, item):
+    def enqueue (self, item):
         """Add to rear"""
         if self.is_full():
             raise IndexError("Queue is full")
@@ -37,7 +37,7 @@ class CircularQueue:
         self.rear = (self.rear + 1) % self.capacity  # Wrap around
         self.size += 1
     
-    def dequeue(self):
+    def dequeue (self):
         """Remove from front"""
         if self.is_empty():
             raise IndexError("Queue is empty")
@@ -47,10 +47,10 @@ class CircularQueue:
         self.size -= 1
         return item
     
-    def is_empty(self):
+    def is_empty (self):
         return self.size == 0
     
-    def is_full(self):
+    def is_full (self):
         return self.size == self.capacity
     
     def __repr__(self):
@@ -60,8 +60,8 @@ class CircularQueue:
         
         items = []
         index = self.front
-        for _ in range(self.size):
-            items.append(self.queue[index])
+        for _ in range (self.size):
+            items.append (self.queue[index])
             index = (index + 1) % self.capacity
         
         return f"CircularQueue({items})"
@@ -86,7 +86,7 @@ print(cq)  # CircularQueue([2, 3, 4])
 
 Elements have priorities; highest priority element is dequeued first, not FIFO.
 
-**Use Case:** Task scheduling, Dijkstra's algorithm, A* search
+**Use Case:** Task scheduling, Dijkstra\'s algorithm, A* search
 
 \`\`\`python
 import heapq
@@ -98,26 +98,26 @@ class PriorityQueue:
         self.heap = []
         self.count = 0  # For tie-breaking
     
-    def enqueue(self, item, priority):
+    def enqueue (self, item, priority):
         """Add with priority (lower number = higher priority)"""
         # Tuple: (priority, count, item)
         # count ensures FIFO for same priority
-        heapq.heappush(self.heap, (priority, self.count, item))
+        heapq.heappush (self.heap, (priority, self.count, item))
         self.count += 1
     
-    def dequeue(self):
+    def dequeue (self):
         """Remove highest priority item"""
         if self.is_empty():
             raise IndexError("Queue is empty")
         
-        priority, _, item = heapq.heappop(self.heap)
+        priority, _, item = heapq.heappop (self.heap)
         return item
     
-    def is_empty(self):
-        return len(self.heap) == 0
+    def is_empty (self):
+        return len (self.heap) == 0
     
-    def size(self):
-        return len(self.heap)
+    def size (self):
+        return len (self.heap)
 
 # Usage
 pq = PriorityQueue()
@@ -176,12 +176,12 @@ from queue import Queue  # Python's thread-safe queue
 import threading
 
 # Thread-safe queue
-q = Queue(maxsize=10)  # Optional size limit
+q = Queue (maxsize=10)  # Optional size limit
 
 # Producer thread
 def producer():
     for i in range(5):
-        q.put(i)  # Blocks if queue is full
+        q.put (i)  # Blocks if queue is full
         print(f"Produced {i}")
 
 # Consumer thread
@@ -192,8 +192,8 @@ def consumer():
         q.task_done()
 
 # Start threads
-t1 = threading.Thread(target=producer)
-t2 = threading.Thread(target=consumer)
+t1 = threading.Thread (target=producer)
+t2 = threading.Thread (target=consumer)
 t1.start()
 t2.start()
 t1.join()

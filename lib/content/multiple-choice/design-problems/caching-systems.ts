@@ -37,7 +37,7 @@ export const cachingsystemsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "An item becomes most recently used on BOTH get() and put(). When we get(key), we're accessing it (used recently). When we put(key, val), we're either adding new (definitely recent) or updating existing (also recent). Both operations move the node to front.",
+      "An item becomes most recently used on BOTH get() and put(). When we get (key), we're accessing it (used recently). When we put (key, val), we're either adding new (definitely recent) or updating existing (also recent). Both operations move the node to front.",
   },
   {
     id: 'mc4',
@@ -64,6 +64,6 @@ export const cachingsystemsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "We must remove from HashMap to prevent: (1) Memory leak - HashMap holds reference to evicted node, preventing garbage collection. (2) Incorrect behavior - future get(key) would find stale node that's not in LinkedList anymore. Always maintain consistency: if node is evicted from list, it must be removed from HashMap.",
+      "We must remove from HashMap to prevent: (1) Memory leak - HashMap holds reference to evicted node, preventing garbage collection. (2) Incorrect behavior - future get (key) would find stale node that's not in LinkedList anymore. Always maintain consistency: if node is evicted from list, it must be removed from HashMap.",
   },
 ];

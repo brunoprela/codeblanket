@@ -79,36 +79,36 @@ Verify requests come from your API:
 const crypto = require('crypto');
 
 // Server: Sign webhook payload
-function signWebhook(payload, secret) {
+function signWebhook (payload, secret) {
   const signature = crypto
     .createHmac('sha256', secret)
-    .update(JSON.stringify(payload))
+    .update(JSON.stringify (payload))
     .digest('hex');
   
   return signature;
 }
 
 // Send webhook
-async function sendWebhook(url, payload, secret) {
-  const signature = signWebhook(payload, secret);
+async function sendWebhook (url, payload, secret) {
+  const signature = signWebhook (payload, secret);
   
-  await fetch(url, {
+  await fetch (url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-Webhook-Signature': signature,
       'X-Webhook-ID': payload.id
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify (payload)
   });
 }
 
 // Client: Verify signature
-function verifyWebhook(payload, signature, secret) {
-  const expectedSignature = signWebhook(payload, secret);
+function verifyWebhook (payload, signature, secret) {
+  const expectedSignature = signWebhook (payload, secret);
   return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
+    Buffer.from (signature),
+    Buffer.from (expectedSignature)
   );
 }
 
@@ -117,12 +117,12 @@ app.post('/webhooks', (req, res) => {
   const signature = req.headers['x-webhook-signature'];
   const secret = process.env.WEBHOOK_SECRET;
   
-  if (!verifyWebhook(req.body, signature, secret)) {
+  if (!verifyWebhook (req.body, signature, secret)) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
   
   // Process webhook
-  processWebhook(req.body);
+  processWebhook (req.body);
   res.status(200).send('OK');
 });
 \`\`\`
@@ -132,7 +132,7 @@ app.post('/webhooks', (req, res) => {
 Prevent replay attacks:
 
 \`\`\`javascript
-function verifyWebhookTimestamp(timestamp, maxAge = 300) {
+function verifyWebhookTimestamp (timestamp, maxAge = 300) {
   const now = Math.floor(Date.now() / 1000);
   const age = now - timestamp;
   
@@ -149,13 +149,13 @@ function verifyWebhookTimestamp(timestamp, maxAge = 300) {
 Retry failed webhooks with exponential backoff:
 
 \`\`\`javascript
-async function sendWebhookWithRetry(url, payload, maxRetries = 3) {
+async function sendWebhookWithRetry (url, payload, maxRetries = 3) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(url, {
+      const response = await fetch (url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify (payload),
         timeout: 10000  // 10s timeout
       });
       
@@ -178,7 +178,7 @@ async function sendWebhookWithRetry(url, payload, maxRetries = 3) {
       
       // Exponential backoff: 1s, 2s, 4s
       const delay = Math.pow(2, attempt) * 1000;
-      await sleep(delay);
+      await sleep (delay);
     }
   }
 }
@@ -198,7 +198,7 @@ async function processWebhookQueue() {
       continue;
     }
     
-    const result = await sendWebhookWithRetry(webhook.url, webhook.payload);
+    const result = await sendWebhookWithRetry (webhook.url, webhook.payload);
     
     if (!result.success) {
       // Move to dead letter queue
@@ -209,7 +209,7 @@ async function processWebhookQueue() {
       });
       
       // Alert team
-      await alertFailedWebhook(webhook);
+      await alertFailedWebhook (webhook);
     }
   }
 }
@@ -227,15 +227,15 @@ app.post('/webhooks', (req, res) => {
   const webhookId = req.body.id;
   
   // Check if already processed
-  if (processedWebhooks.has(webhookId)) {
+  if (processedWebhooks.has (webhookId)) {
     return res.status(200).send('Already processed');
   }
   
   // Process webhook
-  processWebhook(req.body);
+  processWebhook (req.body);
   
   // Mark as processed
-  processedWebhooks.add(webhookId);
+  processedWebhooks.add (webhookId);
   
   res.status(200).send('OK');
 });

@@ -26,7 +26,7 @@ export const dropboxMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "TIMESTAMP PROBLEMS: (1) Clock skew: Laptop clock wrong → Timestamp unreliable. (2) False positives: Touch file (update timestamp) without changing content → Unnecessary upload. (3) No deduplication: Cannot detect identical blocks across users. CONTENT HASHING BENEFITS: (1) Accurate: Only actual content changes trigger upload. (2) Deduplication: Same content → Same hash → Reuse existing blocks. (3) Idempotent: Uploading same file twice recognized as duplicate. TRADE-OFF: Must hash entire file (CPU cost) vs checking timestamps (cheap). For file sync where bandwidth/storage more expensive than CPU, hashing wins. This is foundational to Dropbox's efficiency (20-30% storage savings).",
+      "TIMESTAMP PROBLEMS: (1) Clock skew: Laptop clock wrong → Timestamp unreliable. (2) False positives: Touch file (update timestamp) without changing content → Unnecessary upload. (3) No deduplication: Cannot detect identical blocks across users. CONTENT HASHING BENEFITS: (1) Accurate: Only actual content changes trigger upload. (2) Deduplication: Same content → Same hash → Reuse existing blocks. (3) Idempotent: Uploading same file twice recognized as duplicate. TRADE-OFF: Must hash entire file (CPU cost) vs checking timestamps (cheap). For file sync where bandwidth/storage more expensive than CPU, hashing wins. This is foundational to Dropbox\'s efficiency (20-30% storage savings).",
   },
   {
     id: 'mc3',

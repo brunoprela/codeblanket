@@ -101,15 +101,15 @@ import numpy as np
 from openpyxl import load_workbook
 
 # Run 10,000 MC simulations in Python (fast)
-valuations = monte_carlo_dcf(simulations=10000)
+valuations = monte_carlo_dcf (simulations=10000)
 
 # Write summary statistics to Excel template
 wb = load_workbook('DCF_Template.xlsx')
 ws = wb['Summary']
 ws['B10'] = valuations.mean()
 ws['B11'] = valuations.std()
-ws['B12'] = np.percentile(valuations, 5)
-ws['B13'] = np.percentile(valuations, 95)
+ws['B12'] = np.percentile (valuations, 5)
+ws['B13'] = np.percentile (valuations, 95)
 
 # Client receives familiar Excel file
 wb.save('Client_Valuation.xlsx')
@@ -124,7 +124,7 @@ The industry is evolving:
 - **Excel with Python integration** (via xlwings, Excel Python API)
 
 **Conclusion:**
-Excel isn't going anywhere soon. It's the communication layer between technical and non-technical finance professionals. Master both, and use the right tool for each task. The best analysts fluidly move between Excel for client work and Python for heavy lifting.`,
+Excel isn't going anywhere soon. It\'s the communication layer between technical and non-technical finance professionals. Master both, and use the right tool for each task. The best analysts fluidly move between Excel for client work and Python for heavy lifting.`,
     keyPoints: [],
   },
   {
@@ -161,7 +161,7 @@ Excel isn't going anywhere soon. It's the communication layer between technical 
 │ Key Metrics              Year 1    Year 2    Year 3 │
 │ Revenue                  $5.0M     $12.0M    $25.0M │
 │ Gross Margin             70%       75%       78%    │
-│ EBITDA                   ($2.0M)   ($0.5M)   $2.5M  │
+│ EBITDA                   (\$2.0M)   (\$0.5M)   $2.5M  │
 │ Cash Balance             $15.0M    $11.2M    $13.5M │
 │ Months of Runway         18        15        n/a    │
 │ ARR                      $4.5M     $11.0M    $23.0M │
@@ -171,7 +171,7 @@ Excel isn't going anywhere soon. It's the communication layer between technical 
 ├─────────────────────────────────────────────────────┤
 │ Funding Status                                      │
 │ Current Cash             $15.0M                     │
-│ Burn Rate (Monthly)      ($250K)                    │
+│ Burn Rate (Monthly)      (\$250K)                    │
 │ Next Funding Needed      Q4 2025                    │
 │ Amount Needed            $20-25M                    │
 └─────────────────────────────────────────────────────┘
@@ -294,7 +294,7 @@ REVENUE BUILD
                 2024      2025      2026      2027      2028
 ARR             $4.5M     $11.0M    $23.0M    $45.0M   $80.0M
 Revenue (GAAP)  $5.0M     $12.0M    $25.0M    $48.0M   $85.0M
-Deferred Rev    ($0.5M)   ($1.0M)   ($2.0M)   ($3.0M)  ($5.0M)
+Deferred Rev    (\$0.5M)   (\$1.0M)   (\$2.0M)   (\$3.0M)  (\$5.0M)
 
 // Revenue recognition (annual contracts, monthly recognition)
 =ARR / 12 * Months_in_Period + Beginning_Deferred - Ending_Deferred
@@ -325,18 +325,18 @@ General & Admin      $1.0M     $2.0M     $3.0M     $4.5M    $6.5M
   % of Revenue       20%       17%       12%       9%       8%
 Total OpEx           $5.5M     $9.5M     $15.0M    $22.5M   $33.5M
 
-EBITDA               ($2.0M)   ($0.5M)   $4.5M     $16.0M   $36.0M
+EBITDA               (\$2.0M)   (\$0.5M)   $4.5M     $16.0M   $36.0M
 EBITDA Margin %      -40%      -4%       18%       33%      42%
 
 D&A                  $0.2M     $0.3M     $0.5M     $0.8M    $1.0M
-EBIT                 ($2.2M)   ($0.8M)   $4.0M     $15.2M   $35.0M
+EBIT                 (\$2.2M)   (\$0.8M)   $4.0M     $15.2M   $35.0M
 
 Interest Income      $0.2M     $0.3M     $0.4M     $0.5M    $0.8M
 Interest Expense     $0.0M     $0.0M     $0.0M     $0.0M    $0.0M
-EBT                  ($2.0M)   ($0.5M)   $4.4M     $15.7M   $35.8M
+EBT                  (\$2.0M)   (\$0.5M)   $4.4M     $15.7M   $35.8M
 
 Tax Expense          $0.0M     $0.0M     $0.9M     $3.3M    $7.5M
-NET INCOME           ($2.0M)   ($0.5M)   $3.5M     $12.4M   $28.3M
+NET INCOME           (\$2.0M)   (\$0.5M)   $3.5M     $12.4M   $28.3M
 
 // Key formulas:
 // YoY Growth
@@ -404,21 +404,21 @@ TOTAL L + E          $16.0M    $13.2M    $17.1M    $30.1M   $58.6M
 \`\`\`excel
                      2024      2025      2026      2027      2028
 OPERATING ACTIVITIES
-Net Income           ($2.0M)   ($0.5M)   $3.5M     $12.4M   $28.3M
+Net Income           (\$2.0M)   (\$0.5M)   $3.5M     $12.4M   $28.3M
 Adjustments:
   D&A                $0.2M     $0.3M     $0.5M     $0.8M    $1.0M
   Stock Comp         $0.3M     $0.5M     $0.8M     $1.2M    $1.8M
 Changes in WC:
-  AR                 ($0.4M)   ($0.6M)   ($1.1M)   ($1.9M)  ($3.1M)
-  Prepaid            ($0.1M)   ($0.1M)   ($0.1M)   ($0.1M)  ($0.2M)
+  AR                 (\$0.4M)   (\$0.6M)   (\$1.1M)   (\$1.9M)  (\$3.1M)
+  Prepaid            (\$0.1M)   (\$0.1M)   (\$0.1M)   (\$0.1M)  (\$0.2M)
   AP                 $0.3M     $0.3M     $0.4M     $0.5M    $0.7M
   Deferred Rev       $0.5M     $0.5M     $1.0M     $1.0M    $2.0M
-Cash from Ops        ($1.2M)   $0.4M     $5.0M     $13.9M   $30.5M
+Cash from Ops        (\$1.2M)   $0.4M     $5.0M     $13.9M   $30.5M
 
 INVESTING ACTIVITIES
-CapEx                ($0.3M)   ($0.5M)   ($0.8M)   ($1.2M)  ($1.8M)
+CapEx                (\$0.3M)   (\$0.5M)   (\$0.8M)   (\$1.2M)  (\$1.8M)
 Acquisitions         $0.0M     $0.0M     $0.0M     $0.0M    $0.0M
-Cash from Investing  ($0.3M)   ($0.5M)   ($0.8M)   ($1.2M)  ($1.8M)
+Cash from Investing  (\$0.3M)   (\$0.5M)   (\$0.8M)   (\$1.2M)  (\$1.8M)
 
 FINANCING ACTIVITIES
 Equity Raised        $20.0M    $25.0M    $0.0M     $0.0M    $0.0M
@@ -427,7 +427,7 @@ Debt Repayment       $0.0M     $0.0M     $0.0M     $0.0M    $0.0M
 Cash from Financing  $20.0M    $25.0M    $0.0M     $0.0M    $0.0M
 
 NET CHANGE IN CASH   $18.5M    $24.9M    $4.2M     $12.7M   $28.7M
-Beginning Cash       ($3.5M)   $15.0M    $39.9M    $44.1M   $56.8M
+Beginning Cash       (\$3.5M)   $15.0M    $39.9M    $44.1M   $56.8M
 Ending Cash          $15.0M    $39.9M    $44.1M    $56.8M   $85.5M
 
 // Must tie to Balance Sheet
@@ -565,7 +565,7 @@ Sub FindVolatileFunctions()
                           "RAND", "RANDBETWEEN", "INFO", "CELL")
     
     For Each ws In ActiveWorkbook.Worksheets
-        For Each cell In ws.UsedRange.SpecialCells(xlCellTypeFormulas)
+        For Each cell In ws.UsedRange.SpecialCells (xlCellTypeFormulas)
             For Each func In volatileFuncs
                 If InStr(1, cell.Formula, func, vbTextCompare) > 0 Then
                     Debug.Print ws.Name & "!" & cell.Address & ": " & cell.Formula
@@ -597,7 +597,7 @@ Sub ProfileCalculationTime()
         ws.Calculate
         calcTime = Timer - startTime
         
-        Debug.Print ws.Name & ": " & Format(calcTime, "0.000") & " seconds"
+        Debug.Print ws.Name & ": " & Format (calcTime, "0.000") & " seconds"
     Next ws
     
     Application.Calculation = xlCalculationAutomatic
@@ -797,15 +797,15 @@ Sub CalculateMetrics()
     Dim i As Long
     
     Set ws = Sheets("Data")
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = ws.Cells (ws.Rows.Count, 1).End (xlUp).Row
     
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
     
     ' Loop is faster than array formulas for complex logic
     For i = 2 To lastRow
-        ws.Cells(i, 5).Value = CustomCalculation(ws.Cells(i, 2).Value, _
-                                                  ws.Cells(i, 3).Value)
+        ws.Cells (i, 5).Value = CustomCalculation (ws.Cells (i, 2).Value, _
+                                                  ws.Cells (i, 3).Value)
     Next i
     
     Application.Calculation = xlCalculationAutomatic

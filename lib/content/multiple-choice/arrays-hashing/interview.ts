@@ -47,13 +47,13 @@ export const interviewMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'How should you respond if asked "What about hash collisions?"',
     options: [
       'Say hash collisions never happen',
-      "Explain that Python's hash function is robust, average case is O(1) but worst case is O(n)",
+      "Explain that Python\'s hash function is robust, average case is O(1) but worst case is O(n)",
       'Say you would use a different data structure',
       'Say you would sort the data instead',
     ],
     correctAnswer: 1,
     explanation:
-      "Acknowledge that collisions exist and affect worst-case complexity (O(n)), but Python's hash function is well-designed for average-case O(1) performance.",
+      "Acknowledge that collisions exist and affect worst-case complexity (O(n)), but Python\'s hash function is well-designed for average-case O(1) performance.",
   },
   {
     id: 'mc5',

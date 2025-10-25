@@ -56,7 +56,7 @@ Before data can be sent, TCP establishes a connection:
 Client                                Server
   |                                     |
   |------ SYN (seq=1000) -------------->|
-  |       "Let's establish connection"  |
+  |       "Let\'s establish connection"  |
   |                                     |
   |<----- SYN-ACK (seq=5000, ack=1001) -|
   |       "Acknowledged, here's my seq" |
@@ -120,7 +120,7 @@ Client                                Server
 **Solution**: **Sliding window**
 
 \`\`\`
-Sender's view:
+Sender\'s view:
 [Sent & ACKed][Sent, awaiting ACK][Can send now][Can't send yet]
               Window size = what receiver can handle
 \`\`\`
@@ -170,7 +170,7 @@ If 3 duplicate ACKs received:
 **Algorithms**:
 - **TCP Reno**: Basic congestion control
 - **TCP Cubic**: Modern (Linux default), better for high-bandwidth networks
-- **BBR** (Bottleneck Bandwidth and RTT): Google's algorithm, optimizes for throughput
+- **BBR** (Bottleneck Bandwidth and RTT): Google\'s algorithm, optimizes for throughput
 
 ---
 
@@ -404,7 +404,7 @@ Server validates cookie, sends SYN-ACK + Response
 
 ### **TCP BBR (Bottleneck Bandwidth and RTT)**
 
-- Google's congestion control algorithm
+- Google\'s congestion control algorithm
 - Measures actual bottleneck bandwidth
 - Better than Cubic for high-bandwidth networks
 - 2-5x faster for YouTube, Google services
@@ -458,7 +458,7 @@ Server validates cookie, sends SYN-ACK + Response
 ### ❌ **Using UDP without considering packet loss**
 \`\`\`python
 # Bad: Just send and forget
-udp_socket.sendto(critical_data, address)
+udp_socket.sendto (critical_data, address)
 # If packet lost, data gone forever!
 \`\`\`
 

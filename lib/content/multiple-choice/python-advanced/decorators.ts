@@ -30,7 +30,7 @@ export const decoratorsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Without memoization, recursive fibonacci is O(2^n) due to redundant calculations. With @lru_cache, each fibonacci(n) is calculated only once, reducing time complexity to O(n).',
+      'Without memoization, recursive fibonacci is O(2^n) due to redundant calculations. With @lru_cache, each fibonacci (n) is calculated only once, reducing time complexity to O(n).',
   },
   {
     id: 'mc3',

@@ -16,7 +16,7 @@ export const convexoptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Convexity means the chord (line segment) between any two points on the graph lies above or on the graph: f(θx + (1-θ)y) ≤ θf(x) + (1-θ)f(y).',
+      'Convexity means the chord (line segment) between any two points on the graph lies above or on the graph: f(θx + (1-θ)y) ≤ θf (x) + (1-θ)f (y).',
   },
   {
     id: 'convex-2',
@@ -30,7 +30,7 @@ export const convexoptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Second-order condition: f is convex iff ∇²f(x) ⪰ 0 (Hessian positive semidefinite) for all x.',
+      'Second-order condition: f is convex iff ∇²f (x) ⪰ 0 (Hessian positive semidefinite) for all x.',
   },
   {
     id: 'convex-3',

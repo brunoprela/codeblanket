@@ -6,7 +6,7 @@ const treeSitterParsing = {
 
 ## Introduction
 
-While Python's \`ast\` module is excellent for Python code, modern AI coding tools like Cursor need to understand code in dozens of languages—JavaScript, TypeScript, Go, Rust, Java, C++, and more. This is where tree-sitter becomes invaluable.
+While Python\'s \`ast\` module is excellent for Python code, modern AI coding tools like Cursor need to understand code in dozens of languages—JavaScript, TypeScript, Go, Rust, Java, C++, and more. This is where tree-sitter becomes invaluable.
 
 Tree-sitter is a parser generator and incremental parsing library that can parse source code in any language into a concrete syntax tree. It's used by GitHub, Atom, Neovim, and yes—tools like Cursor—to provide fast, accurate, multi-language code understanding.
 
@@ -86,7 +86,7 @@ This makes it perfect for real-time code analysis in editors.
 Unlike traditional parsers that fail on syntax errors, tree-sitter creates a best-effort tree with ERROR nodes:
 
 \`\`\`python
-def calculate(x, y):
+def calculate (x, y):
     result = x + y  # Missing closing paren
     return result
 \`\`\`
@@ -178,11 +178,11 @@ import tree_sitter_javascript as tsjavascript
 import tree_sitter_typescript as tstypescript
 
 # Build language objects
-PY_LANGUAGE = Language(tspython.language())
-JS_LANGUAGE = Language(tsjavascript.language())
-TS_LANGUAGE = Language(tstypescript.language_typescript())
+PY_LANGUAGE = Language (tspython.language())
+JS_LANGUAGE = Language (tsjavascript.language())
+TS_LANGUAGE = Language (tstypescript.language_typescript())
 
-def parse_code(code: str, language: Language) -> 'Tree':
+def parse_code (code: str, language: Language) -> 'Tree':
     """
     Parse code using tree-sitter.
     
@@ -194,17 +194,17 @@ def parse_code(code: str, language: Language) -> 'Tree':
         Parse tree
     """
     parser = Parser()
-    parser.set_language(language)
+    parser.set_language (language)
     
     # Parse (returns Tree object)
-    tree = parser.parse(bytes(code, 'utf8'))
+    tree = parser.parse (bytes (code, 'utf8'))
     return tree
 
 # Example: Parse Python code
 python_code = """
-def calculate_total(items, tax_rate=0.1):
+def calculate_total (items, tax_rate=0.1):
     ''Calculate total with tax.''
-    subtotal = sum(item['price'] for item in items)
+    subtotal = sum (item['price'] for item in items)
     tax = subtotal * tax_rate
     return subtotal + tax
 
@@ -212,18 +212,18 @@ class ShoppingCart:
     def __init__(self):
         self.items = []
     
-    def add_item(self, item):
-        self.items.append(item)
+    def add_item (self, item):
+        self.items.append (item)
 """
 
-tree = parse_code(python_code, PY_LANGUAGE)
+tree = parse_code (python_code, PY_LANGUAGE)
 print(f"Root node: {tree.root_node.type}")
-print(f"Children: {len(tree.root_node.children)}")
+print(f"Children: {len (tree.root_node.children)}")
 print(f"Has errors: {tree.root_node.has_error}")
 
 # Example: Parse JavaScript code
 javascript_code = """
-function calculateTotal(items, taxRate = 0.1) {
+function calculateTotal (items, taxRate = 0.1) {
     const subtotal = items.reduce((sum, item) => sum + item.price, 0);
     const tax = subtotal * taxRate;
     return subtotal + tax;
@@ -234,15 +234,15 @@ class ShoppingCart {
         this.items = [];
     }
     
-    addItem(item) {
-        this.items.push(item);
+    addItem (item) {
+        this.items.push (item);
     }
 }
 """
 
-js_tree = parse_code(javascript_code, JS_LANGUAGE)
+js_tree = parse_code (javascript_code, JS_LANGUAGE)
 print(f"\\nJavaScript root: {js_tree.root_node.type}")
-print(f"Children: {len(js_tree.root_node.children)}")
+print(f"Children: {len (js_tree.root_node.children)}")
 \`\`\`
 
 ### Traversing Tree-sitter Trees
@@ -251,16 +251,16 @@ print(f"Children: {len(js_tree.root_node.children)}")
 from tree_sitter import Node, Tree
 from typing import List, Iterator
 
-def traverse_tree(node: Node, depth: int = 0) -> Iterator[tuple]:
+def traverse_tree (node: Node, depth: int = 0) -> Iterator[tuple]:
     """
     Traverse tree-sitter tree depth-first.
     Yields (node, depth) tuples.
     """
     yield (node, depth)
     for child in node.children:
-        yield from traverse_tree(child, depth + 1)
+        yield from traverse_tree (child, depth + 1)
 
-def print_tree(node: Node, code_bytes: bytes, max_depth: int = 3):
+def print_tree (node: Node, code_bytes: bytes, max_depth: int = 3):
     """
     Print a visual representation of parse tree.
     
@@ -269,7 +269,7 @@ def print_tree(node: Node, code_bytes: bytes, max_depth: int = 3):
         code_bytes: Source code as bytes
         max_depth: Maximum depth to print
     """
-    for node, depth in traverse_tree(node):
+    for node, depth in traverse_tree (node):
         if depth > max_depth:
             continue
             
@@ -277,12 +277,12 @@ def print_tree(node: Node, code_bytes: bytes, max_depth: int = 3):
         node_text = ""
         
         # For leaf nodes, show the actual text
-        if len(node.children) == 0:
+        if len (node.children) == 0:
             start = node.start_byte
             end = node.end_byte
             node_text = code_bytes[start:end].decode('utf8')
             # Truncate long text
-            if len(node_text) > 30:
+            if len (node_text) > 30:
                 node_text = node_text[:27] + "..."
             node_text = f" → '{node_text}'"
         
@@ -290,15 +290,15 @@ def print_tree(node: Node, code_bytes: bytes, max_depth: int = 3):
 
 # Example usage
 code = """
-def greet(name: str) -> str:
+def greet (name: str) -> str:
     return f"Hello, {name}!"
 """
 
-tree = parse_code(code, PY_LANGUAGE)
-code_bytes = bytes(code, 'utf8')
+tree = parse_code (code, PY_LANGUAGE)
+code_bytes = bytes (code, 'utf8')
 
 print("=== Tree Structure ===")
-print_tree(tree.root_node, code_bytes)
+print_tree (tree.root_node, code_bytes)
 \`\`\`
 
 ### Finding Specific Nodes
@@ -307,7 +307,7 @@ print_tree(tree.root_node, code_bytes)
 from tree_sitter import Node
 from typing import List
 
-def find_nodes_by_type(node: Node, node_type: str) -> List[Node]:
+def find_nodes_by_type (node: Node, node_type: str) -> List[Node]:
     """
     Find all nodes of a specific type.
     
@@ -320,16 +320,16 @@ def find_nodes_by_type(node: Node, node_type: str) -> List[Node]:
     """
     results = []
     
-    def walk(n: Node):
+    def walk (n: Node):
         if n.type == node_type:
-            results.append(n)
+            results.append (n)
         for child in n.children:
-            walk(child)
+            walk (child)
     
-    walk(node)
+    walk (node)
     return results
 
-def get_node_text(node: Node, code_bytes: bytes) -> str:
+def get_node_text (node: Node, code_bytes: bytes) -> str:
     """Extract text for a node."""
     return code_bytes[node.start_byte:node.end_byte].decode('utf8')
 
@@ -339,28 +339,28 @@ def function_one():
     pass
 
 class MyClass:
-    def method_one(self):
+    def method_one (self):
         pass
     
-    def method_two(self, x):
+    def method_two (self, x):
         return x * 2
 
-def function_two(a, b):
+def function_two (a, b):
     return a + b
 """
 
-tree = parse_code(python_code, PY_LANGUAGE)
-code_bytes = bytes(python_code, 'utf8')
+tree = parse_code (python_code, PY_LANGUAGE)
+code_bytes = bytes (python_code, 'utf8')
 
 # Find all function definitions
-functions = find_nodes_by_type(tree.root_node, 'function_definition')
+functions = find_nodes_by_type (tree.root_node, 'function_definition')
 
-print(f"Found {len(functions)} functions:\\n")
+print(f"Found {len (functions)} functions:\\n")
 for func in functions:
     # Get function name (first identifier child)
     name_node = func.child_by_field_name('name')
     if name_node:
-        name = get_node_text(name_node, code_bytes)
+        name = get_node_text (name_node, code_bytes)
         line = func.start_point[0] + 1
         print(f"  {name} at line {line}")
 \`\`\`
@@ -399,22 +399,22 @@ class MultiLanguageFunctionExtractor:
     
     def __init__(self):
         self.languages = {
-            'python': Language(tspython.language()),
-            'javascript': Language(tsjavascript.language()),
-            'typescript': Language(tstypescript.language_typescript()),
+            'python': Language (tspython.language()),
+            'javascript': Language (tsjavascript.language()),
+            'typescript': Language (tstypescript.language_typescript()),
         }
         self.parsers = {
-            lang: self._create_parser(lang_obj)
+            lang: self._create_parser (lang_obj)
             for lang, lang_obj in self.languages.items()
         }
     
-    def _create_parser(self, language: Language) -> Parser:
+    def _create_parser (self, language: Language) -> Parser:
         """Create parser for a language."""
         parser = Parser()
-        parser.set_language(language)
+        parser.set_language (language)
         return parser
     
-    def extract_functions(self, code: str, language: str) -> List[FunctionInfo]:
+    def extract_functions (self, code: str, language: str) -> List[FunctionInfo]:
         """
         Extract all functions from code.
         
@@ -426,22 +426,22 @@ class MultiLanguageFunctionExtractor:
             List of function information
         """
         if language not in self.parsers:
-            raise ValueError(f"Unsupported language: {language}")
+            raise ValueError (f"Unsupported language: {language}")
         
         parser = self.parsers[language]
-        tree = parser.parse(bytes(code, 'utf8'))
-        code_bytes = bytes(code, 'utf8')
+        tree = parser.parse (bytes (code, 'utf8'))
+        code_bytes = bytes (code, 'utf8')
         
-        function_type = self.FUNCTION_TYPES.get(language)
+        function_type = self.FUNCTION_TYPES.get (language)
         if not function_type:
             return []
         
         functions = []
-        func_nodes = find_nodes_by_type(tree.root_node, function_type)
+        func_nodes = find_nodes_by_type (tree.root_node, function_type)
         
         for func_node in func_nodes:
-            name = self._extract_function_name(func_node, language, code_bytes)
-            signature = self._extract_signature(func_node, code_bytes)
+            name = self._extract_function_name (func_node, language, code_bytes)
+            signature = self._extract_signature (func_node, code_bytes)
             
             functions.append(FunctionInfo(
                 name=name,
@@ -453,24 +453,24 @@ class MultiLanguageFunctionExtractor:
         
         return functions
     
-    def _extract_function_name(self, node: Node, language: str, code_bytes: bytes) -> str:
+    def _extract_function_name (self, node: Node, language: str, code_bytes: bytes) -> str:
         """Extract function name from node."""
         # Most languages have a 'name' field
         name_node = node.child_by_field_name('name')
         if name_node:
-            return get_node_text(name_node, code_bytes)
+            return get_node_text (name_node, code_bytes)
         
         # Fallback: look for identifier child
         for child in node.children:
             if 'identifier' in child.type:
-                return get_node_text(child, code_bytes)
+                return get_node_text (child, code_bytes)
         
         return "anonymous"
     
-    def _extract_signature(self, node: Node, code_bytes: bytes) -> str:
+    def _extract_signature (self, node: Node, code_bytes: bytes) -> str:
         """Extract full function signature."""
         # Get text from function keyword to body start
-        for i, child in enumerate(node.children):
+        for i, child in enumerate (node.children):
             if child.type == 'block' or child.type == 'statement_block':
                 # Get everything before the body
                 end_byte = child.start_byte
@@ -478,7 +478,7 @@ class MultiLanguageFunctionExtractor:
                 return signature_text.strip()
         
         # Fallback: entire node text (first line)
-        text = get_node_text(node, code_bytes)
+        text = get_node_text (node, code_bytes)
         return text.split('\\n')[0]
 
 # Example: Extract functions from multiple languages
@@ -486,41 +486,41 @@ extractor = MultiLanguageFunctionExtractor()
 
 # Python code
 py_code = """
-def calculate(x, y):
+def calculate (x, y):
     return x + y
 
-async def fetch_data(url):
-    return await request(url)
+async def fetch_data (url):
+    return await request (url)
 
 class Helper:
-    def process(self, data):
+    def process (self, data):
         return data * 2
 """
 
 # JavaScript code
 js_code = """
-function calculate(x, y) {
+function calculate (x, y) {
     return x + y;
 }
 
-async function fetchData(url) {
-    return await fetch(url);
+async function fetchData (url) {
+    return await fetch (url);
 }
 
 class Helper {
-    process(data) {
+    process (data) {
         return data * 2;
     }
 }
 """
 
 print("=== Python Functions ===")
-for func in extractor.extract_functions(py_code, 'python'):
+for func in extractor.extract_functions (py_code, 'python'):
     print(f"{func.name} (lines {func.start_line}-{func.end_line})")
     print(f"  Signature: {func.signature}")
 
 print("\\n=== JavaScript Functions ===")
-for func in extractor.extract_functions(js_code, 'javascript'):
+for func in extractor.extract_functions (js_code, 'javascript'):
     print(f"{func.name} (lines {func.start_line}-{func.end_line})")
     print(f"  Signature: {func.signature}")
 \`\`\`
@@ -530,7 +530,7 @@ for func in extractor.extract_functions(js_code, 'javascript'):
 \`\`\`python
 from tree_sitter import Language, Parser, Query
 
-def query_code(code: str, language: Language, query_string: str) -> List:
+def query_code (code: str, language: Language, query_string: str) -> List:
     """
     Execute tree-sitter query on code.
     
@@ -543,17 +543,17 @@ def query_code(code: str, language: Language, query_string: str) -> List:
         Query results
     """
     parser = Parser()
-    parser.set_language(language)
-    tree = parser.parse(bytes(code, 'utf8'))
+    parser.set_language (language)
+    tree = parser.parse (bytes (code, 'utf8'))
     
-    query = language.query(query_string)
-    captures = query.captures(tree.root_node)
+    query = language.query (query_string)
+    captures = query.captures (tree.root_node)
     
-    code_bytes = bytes(code, 'utf8')
+    code_bytes = bytes (code, 'utf8')
     results = []
     
     for node, capture_name in captures:
-        text = get_node_text(node, code_bytes)
+        text = get_node_text (node, code_bytes)
         results.append({
             'capture': capture_name,
             'text': text,
@@ -564,14 +564,14 @@ def query_code(code: str, language: Language, query_string: str) -> List:
 
 # Example: Find all async functions in Python
 python_code = """
-async def fetch_user(user_id):
-    return await db.get_user(user_id)
+async def fetch_user (user_id):
+    return await db.get_user (user_id)
 
-def process_data(data):
+def process_data (data):
     return data * 2
 
-async def save_user(user):
-    await db.save(user)
+async def save_user (user):
+    await db.save (user)
 """
 
 # Query for async functions
@@ -581,7 +581,7 @@ async_query = """
   name: (identifier) @function_name)
 """
 
-results = query_code(python_code, PY_LANGUAGE, async_query)
+results = query_code (python_code, PY_LANGUAGE, async_query)
 
 print("=== Async Functions ===")
 for result in results:
@@ -598,18 +598,18 @@ class_method_query = """
 
 code_with_classes = """
 class UserService:
-    def get_user(self, user_id):
+    def get_user (self, user_id):
         pass
     
-    def save_user(self, user):
+    def save_user (self, user):
         pass
 
 class ProductService:
-    def get_product(self, product_id):
+    def get_product (self, product_id):
         pass
 """
 
-results = query_code(code_with_classes, PY_LANGUAGE, class_method_query)
+results = query_code (code_with_classes, PY_LANGUAGE, class_method_query)
 
 print("\\n=== Class Methods ===")
 for result in results:
@@ -619,33 +619,33 @@ for result in results:
 ### Error Recovery Example
 
 \`\`\`python
-def analyze_with_errors(code: str, language: Language):
+def analyze_with_errors (code: str, language: Language):
     """
     Demonstrate tree-sitter's error recovery.
     It can still parse and analyze code with syntax errors.
     """
     parser = Parser()
-    parser.set_language(language)
-    tree = parser.parse(bytes(code, 'utf8'))
+    parser.set_language (language)
+    tree = parser.parse (bytes (code, 'utf8'))
     
-    code_bytes = bytes(code, 'utf8')
+    code_bytes = bytes (code, 'utf8')
     
     print("=== Parse Result ===")
     print(f"Has errors: {tree.root_node.has_error}")
     
     # Find ERROR nodes
-    def find_errors(node: Node, errors: List):
+    def find_errors (node: Node, errors: List):
         if node.type == 'ERROR' or node.is_missing:
             errors.append({
                 'line': node.start_point[0] + 1,
                 'col': node.start_point[1],
-                'text': get_node_text(node, code_bytes)
+                'text': get_node_text (node, code_bytes)
             })
         for child in node.children:
-            find_errors(child, errors)
+            find_errors (child, errors)
     
     errors = []
-    find_errors(tree.root_node, errors)
+    find_errors (tree.root_node, errors)
     
     if errors:
         print("\\n=== Syntax Errors ===")
@@ -654,29 +654,29 @@ def analyze_with_errors(code: str, language: Language):
             print(f"  Near: {error['text'][:50]}")
     
     # Still try to extract functions
-    functions = find_nodes_by_type(tree.root_node, 'function_definition')
-    print(f"\\n=== Functions Found (despite errors): {len(functions)} ===")
+    functions = find_nodes_by_type (tree.root_node, 'function_definition')
+    print(f"\\n=== Functions Found (despite errors): {len (functions)} ===")
     for func in functions:
         name_node = func.child_by_field_name('name')
         if name_node:
-            print(f"  {get_node_text(name_node, code_bytes)}")
+            print(f"  {get_node_text (name_node, code_bytes)}")
 
 # Code with syntax errors
 buggy_code = """
-def valid_function(x, y):
+def valid_function (x, y):
     return x + y
 
-def missing_colon(x, y)  # Missing colon!
+def missing_colon (x, y)  # Missing colon!
     return x + y
 
-def unclosed_paren(x, y:
+def unclosed_paren (x, y:
     return x + y
 
 def another_valid():
     return 42
 """
 
-analyze_with_errors(buggy_code, PY_LANGUAGE)
+analyze_with_errors (buggy_code, PY_LANGUAGE)
 \`\`\`
 
 ### Incremental Parsing
@@ -692,17 +692,17 @@ class IncrementalCodeAnalyzer:
     
     def __init__(self, language: Language):
         self.parser = Parser()
-        self.parser.set_language(language)
+        self.parser.set_language (language)
         self.code = ""
         self.tree = None
     
-    def set_code(self, code: str):
+    def set_code (self, code: str):
         """Set initial code and parse."""
         self.code = code
-        self.tree = self.parser.parse(bytes(code, 'utf8'))
-        print(f"Initial parse complete: {len(self.code)} bytes")
+        self.tree = self.parser.parse (bytes (code, 'utf8'))
+        print(f"Initial parse complete: {len (self.code)} bytes")
     
-    def edit_code(self, start_byte: int, old_end_byte: int, new_text: str):
+    def edit_code (self, start_byte: int, old_end_byte: int, new_text: str):
         """
         Edit code and re-parse incrementally.
         
@@ -720,10 +720,10 @@ class IncrementalCodeAnalyzer:
         )
         
         # Calculate position info
-        start_point = self._byte_to_point(old_code, start_byte)
-        old_end_point = self._byte_to_point(old_code, old_end_byte)
-        new_end_byte = start_byte + len(new_text)
-        new_end_point = self._byte_to_point(self.code, new_end_byte)
+        start_point = self._byte_to_point (old_code, start_byte)
+        old_end_point = self._byte_to_point (old_code, old_end_byte)
+        new_end_byte = start_byte + len (new_text)
+        new_end_point = self._byte_to_point (self.code, new_end_byte)
         
         # Edit tree
         self.tree.edit(
@@ -738,31 +738,31 @@ class IncrementalCodeAnalyzer:
         # Re-parse (only changed regions)
         import time
         start = time.time()
-        self.tree = self.parser.parse(bytes(self.code, 'utf8'), self.tree)
+        self.tree = self.parser.parse (bytes (self.code, 'utf8'), self.tree)
         elapsed = (time.time() - start) * 1000
         print(f"Incremental re-parse: {elapsed:.2f}ms")
     
-    def _byte_to_point(self, code: str, byte_offset: int) -> tuple:
+    def _byte_to_point (self, code: str, byte_offset: int) -> tuple:
         """Convert byte offset to (row, column) point."""
         text_before = code[:byte_offset]
         lines = text_before.split('\\n')
-        row = len(lines) - 1
-        col = len(lines[-1])
+        row = len (lines) - 1
+        col = len (lines[-1])
         return (row, col)
 
 # Example usage
 analyzer = IncrementalCodeAnalyzer(PY_LANGUAGE)
 
 initial_code = """
-def calculate(x, y):
+def calculate (x, y):
     result = x + y
     return result
 
-def process(data):
+def process (data):
     return data * 2
 """
 
-analyzer.set_code(initial_code)
+analyzer.set_code (initial_code)
 
 # Edit: Change "x + y" to "x + y + 10"
 # Find position of "x + y" in the first function
@@ -770,7 +770,7 @@ start = initial_code.index("x + y")
 old_end = start + len("x + y")
 new_text = "x + y + 10"
 
-analyzer.edit_code(start, old_end, new_text)
+analyzer.edit_code (start, old_end, new_text)
 
 print(f"\\nNew code:\\n{analyzer.code}")
 \`\`\`
@@ -803,13 +803,13 @@ As you type:
 // Cursor can find similar patterns across languages
 
 // JavaScript
-function calculateTotal(items) {
+function calculateTotal (items) {
     return items.reduce((sum, item) => sum + item.price, 0);
 }
 
 // Python equivalent Cursor can suggest
-def calculate_total(items):
-    return sum(item['price'] for item in items)
+def calculate_total (items):
+    return sum (item['price'] for item in items)
 \`\`\`
 
 **4. Syntax-Aware Editing:**
@@ -857,12 +857,12 @@ class UniversalCodeAnalyzer:
     
     LANGUAGES = {
         'python': {
-            'parser': Language(tspython.language()),
+            'parser': Language (tspython.language()),
             'function': 'function_definition',
             'class': 'class_definition',
         },
         'javascript': {
-            'parser': Language(tsjavascript.language()),
+            'parser': Language (tsjavascript.language()),
             'function': 'function_declaration',
             'class': 'class_declaration',
         },
@@ -872,10 +872,10 @@ class UniversalCodeAnalyzer:
         self.parsers = {}
         for lang, config in self.LANGUAGES.items():
             parser = Parser()
-            parser.set_language(config['parser'])
+            parser.set_language (config['parser'])
             self.parsers[lang] = parser
     
-    def analyze_file(self, code: str, language: str) -> List[CodeSymbol]:
+    def analyze_file (self, code: str, language: str) -> List[CodeSymbol]:
         """
         Analyze a file and extract all symbols.
         
@@ -885,16 +885,16 @@ class UniversalCodeAnalyzer:
             return []
         
         parser = self.parsers[language]
-        tree = parser.parse(bytes(code, 'utf8'))
-        code_bytes = bytes(code, 'utf8')
+        tree = parser.parse (bytes (code, 'utf8'))
+        code_bytes = bytes (code, 'utf8')
         
         symbols = []
         config = self.LANGUAGES[language]
         
         # Find classes
-        class_nodes = find_nodes_by_type(tree.root_node, config['class'])
+        class_nodes = find_nodes_by_type (tree.root_node, config['class'])
         for class_node in class_nodes:
-            class_name = self._get_name(class_node, code_bytes)
+            class_name = self._get_name (class_node, code_bytes)
             symbols.append(CodeSymbol(
                 type='class',
                 name=class_name,
@@ -903,9 +903,9 @@ class UniversalCodeAnalyzer:
             ))
             
             # Find methods in class
-            methods = find_nodes_by_type(class_node, config['function'])
+            methods = find_nodes_by_type (class_node, config['function'])
             for method in methods:
-                method_name = self._get_name(method, code_bytes)
+                method_name = self._get_name (method, code_bytes)
                 symbols.append(CodeSymbol(
                     type='method',
                     name=method_name,
@@ -915,13 +915,13 @@ class UniversalCodeAnalyzer:
                 ))
         
         # Find top-level functions
-        func_nodes = find_nodes_by_type(tree.root_node, config['function'])
+        func_nodes = find_nodes_by_type (tree.root_node, config['function'])
         for func_node in func_nodes:
             # Skip if it's a method (inside a class)
-            if self._is_inside_class(func_node, class_nodes):
+            if self._is_inside_class (func_node, class_nodes):
                 continue
             
-            func_name = self._get_name(func_node, code_bytes)
+            func_name = self._get_name (func_node, code_bytes)
             symbols.append(CodeSymbol(
                 type='function',
                 name=func_name,
@@ -931,14 +931,14 @@ class UniversalCodeAnalyzer:
         
         return symbols
     
-    def _get_name(self, node: Node, code_bytes: bytes) -> str:
+    def _get_name (self, node: Node, code_bytes: bytes) -> str:
         """Extract name from function or class node."""
         name_node = node.child_by_field_name('name')
         if name_node:
-            return get_node_text(name_node, code_bytes)
+            return get_node_text (name_node, code_bytes)
         return "anonymous"
     
-    def _is_inside_class(self, func_node: Node, class_nodes: List[Node]) -> bool:
+    def _is_inside_class (self, func_node: Node, class_nodes: List[Node]) -> bool:
         """Check if function is inside any of the class nodes."""
         func_start = func_node.start_byte
         func_end = func_node.end_byte
@@ -948,10 +948,10 @@ class UniversalCodeAnalyzer:
                 return True
         return False
     
-    def generate_context_summary(self, symbols: List[CodeSymbol]) -> str:
+    def generate_context_summary (self, symbols: List[CodeSymbol]) -> str:
         """
         Generate text summary for LLM context.
-        This is what you'd send to an AI like Cursor's backend.
+        This is what you'd send to an AI like Cursor\'s backend.
         """
         lines = ["# Code Structure\\n"]
         
@@ -963,61 +963,61 @@ class UniversalCodeAnalyzer:
         if classes:
             lines.append("## Classes")
             for cls in classes:
-                lines.append(f"- {cls.name} (line {cls.line})")
+                lines.append (f"- {cls.name} (line {cls.line})")
                 class_methods = [m for m in methods if m.parent == cls.name]
                 if class_methods:
                     for method in class_methods:
-                        lines.append(f"  - {method.name}() (line {method.line})")
+                        lines.append (f"  - {method.name}() (line {method.line})")
             lines.append("")
         
         if functions:
             lines.append("## Functions")
             for func in functions:
-                lines.append(f"- {func.name}() (line {func.line})")
+                lines.append (f"- {func.name}() (line {func.line})")
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Test the analyzer
 analyzer = UniversalCodeAnalyzer()
 
 python_code = """
 class UserService:
-    def get_user(self, user_id):
-        return db.query(user_id)
+    def get_user (self, user_id):
+        return db.query (user_id)
     
-    def save_user(self, user):
-        db.save(user)
+    def save_user (self, user):
+        db.save (user)
 
-def authenticate(username, password):
-    user = UserService().get_user(username)
-    return verify_password(user, password)
+def authenticate (username, password):
+    user = UserService().get_user (username)
+    return verify_password (user, password)
 """
 
 javascript_code = """
 class UserService {
-    getUser(userId) {
-        return db.query(userId);
+    getUser (userId) {
+        return db.query (userId);
     }
     
-    saveUser(user) {
-        db.save(user);
+    saveUser (user) {
+        db.save (user);
     }
 }
 
-function authenticate(username, password) {
-    const user = new UserService().getUser(username);
-    return verifyPassword(user, password);
+function authenticate (username, password) {
+    const user = new UserService().getUser (username);
+    return verifyPassword (user, password);
 }
 """
 
 print("=== Python Analysis ===")
-py_symbols = analyzer.analyze_file(python_code, 'python')
-print(analyzer.generate_context_summary(py_symbols))
+py_symbols = analyzer.analyze_file (python_code, 'python')
+print(analyzer.generate_context_summary (py_symbols))
 
 print("=== JavaScript Analysis ===")
-js_symbols = analyzer.analyze_file(javascript_code, 'javascript')
-print(analyzer.generate_context_summary(js_symbols))
+js_symbols = analyzer.analyze_file (javascript_code, 'javascript')
+print(analyzer.generate_context_summary (js_symbols))
 \`\`\`
 
 **Exercise Tasks:**
@@ -1033,8 +1033,8 @@ print(analyzer.generate_context_summary(js_symbols))
 
 \`\`\`python
 # ❌ Wrong: Assumes same node types
-def find_functions(tree):
-    return find_nodes_by_type(tree.root_node, 'function_definition')
+def find_functions (tree):
+    return find_nodes_by_type (tree.root_node, 'function_definition')
     # Doesn't work for JavaScript!
 
 # ✅ Correct: Language-specific node types
@@ -1044,21 +1044,21 @@ FUNCTION_TYPES = {
     'java': 'method_declaration',
 }
 
-def find_functions(tree, language):
-    node_type = FUNCTION_TYPES.get(language)
+def find_functions (tree, language):
+    node_type = FUNCTION_TYPES.get (language)
     if not node_type:
         return []
-    return find_nodes_by_type(tree.root_node, node_type)
+    return find_nodes_by_type (tree.root_node, node_type)
 \`\`\`
 
 ### 2. Forgetting to Convert Bytes
 
 \`\`\`python
 # ❌ Wrong: Passing string to parse
-tree = parser.parse(code)  # Error!
+tree = parser.parse (code)  # Error!
 
 # ✅ Correct: Convert to bytes
-tree = parser.parse(bytes(code, 'utf8'))
+tree = parser.parse (bytes (code, 'utf8'))
 \`\`\`
 
 ### 3. Not Checking for None
@@ -1070,24 +1070,24 @@ name = node.child_by_field_name('name').text
 # ✅ Correct: Check for None
 name_node = node.child_by_field_name('name')
 if name_node:
-    name = get_node_text(name_node, code_bytes)
+    name = get_node_text (name_node, code_bytes)
 \`\`\`
 
 ### 4. Ignoring Error Recovery
 
 \`\`\`python
 # ❌ Wrong: Assuming no errors
-tree = parser.parse(bytes(code, 'utf8'))
-functions = find_nodes_by_type(tree.root_node, 'function_definition')
+tree = parser.parse (bytes (code, 'utf8'))
+functions = find_nodes_by_type (tree.root_node, 'function_definition')
 # May have ERROR nodes mixed in!
 
 # ✅ Correct: Check for errors
-tree = parser.parse(bytes(code, 'utf8'))
+tree = parser.parse (bytes (code, 'utf8'))
 if tree.root_node.has_error:
     print("Warning: Parse errors detected")
 # Filter out ERROR nodes
 functions = [
-    n for n in find_nodes_by_type(tree.root_node, 'function_definition')
+    n for n in find_nodes_by_type (tree.root_node, 'function_definition')
     if not n.has_error
 ]
 \`\`\`
@@ -1096,19 +1096,19 @@ functions = [
 
 \`\`\`python
 # ❌ Wrong: Re-walking tree multiple times
-functions = find_nodes_by_type(root, 'function_definition')
-classes = find_nodes_by_type(root, 'class_definition')
-imports = find_nodes_by_type(root, 'import_statement')
+functions = find_nodes_by_type (root, 'function_definition')
+classes = find_nodes_by_type (root, 'class_definition')
+imports = find_nodes_by_type (root, 'import_statement')
 
 # ✅ Correct: Walk once, collect all
-def collect_nodes(root, types_wanted):
+def collect_nodes (root, types_wanted):
     found = {t: [] for t in types_wanted}
-    for node, _ in traverse_tree(root):
+    for node, _ in traverse_tree (root):
         if node.type in types_wanted:
-            found[node.type].append(node)
+            found[node.type].append (node)
     return found
 
-nodes = collect_nodes(root, ['function_definition', 'class_definition', 'import_statement'])
+nodes = collect_nodes (root, ['function_definition', 'class_definition', 'import_statement'])
 \`\`\`
 
 ## Production Checklist
@@ -1158,7 +1158,7 @@ Tree-sitter enables universal code understanding:
 - **Query Language**: Powerful pattern matching
 - **Production Ready**: Used by GitHub, Atom, Neovim, and Cursor
 
-Understanding tree-sitter is essential for building multi-language AI coding tools. It provides the foundation for Cursor's ability to understand any codebase, regardless of programming language, and offer intelligent suggestions across your entire project.
+Understanding tree-sitter is essential for building multi-language AI coding tools. It provides the foundation for Cursor\'s ability to understand any codebase, regardless of programming language, and offer intelligent suggestions across your entire project.
 
 In the next section, we'll explore how to analyze code structure systematically to extract architectural patterns and relationships.
 `,

@@ -72,6 +72,6 @@ export const writingFirstTasksMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "datetime objects are NOT JSON serializable. JSON supports: int, float, str, bool, list, dict, None only. Passing datetime raises TypeError. Fix: Convert to string: datetime.now().isoformat(), then parse in worker: datetime.fromisoformat(date_str). Same for Decimal (pass as float), bytes (pass as base64 string), custom objects (pass ID). Celery doesn't auto-convert - you must handle serialization explicitly.",
+      "datetime objects are NOT JSON serializable. JSON supports: int, float, str, bool, list, dict, None only. Passing datetime raises TypeError. Fix: Convert to string: datetime.now().isoformat(), then parse in worker: datetime.fromisoformat (date_str). Same for Decimal (pass as float), bytes (pass as base64 string), custom objects (pass ID). Celery doesn't auto-convert - you must handle serialization explicitly.",
   },
 ];

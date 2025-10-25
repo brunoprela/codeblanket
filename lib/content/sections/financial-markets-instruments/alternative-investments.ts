@@ -1,7 +1,8 @@
 export const alternativeInvestments = {
-  title: "Alternative Investments",
-  slug: "alternative-investments",
-  description: "Master hedge funds, private equity, real estate, and collectibles",
+  title: 'Alternative Investments',
+  slug: 'alternative-investments',
+  description:
+    'Master hedge funds, private equity, real estate, and collectibles',
   content: `
 # Alternative Investments
 
@@ -16,7 +17,7 @@ Alternative investments offer diversification and uncorrelated returns:
 
 **What makes them "alternative":**
 - Illiquid (can't sell instantly)
-- High minimums ($100K-$1M+)
+- High minimums (\$100K-$1M+)
 - Limited transparency
 - Different risk/return profile
 - Low correlation with stocks/bonds
@@ -65,7 +66,7 @@ class HedgeFund:
     target_return: float
     target_volatility: float
     
-    def calculate_fees(self, 
+    def calculate_fees (self, 
                       starting_aum: float,
                       ending_aum: float,
                       benchmark_return: float = 0) -> Dict:
@@ -178,9 +179,9 @@ print(f"  Starting: $10,000,000")
 print(f"  Ending: $11,500,000")
 print(f"  Gross Return: {fees['gross_return']:.2f}%")
 print(f"\\nFees (2-and-20):")
-print(f"  Management Fee (2%): ${fees['management_fee']:,.0f}")
-print(f"  Performance Fee (20%): ${fees['performance_fee']:,.0f}")
-print(f"  Total Fees: ${fees['total_fees']:,.0f}")
+print(f"  Management Fee (2%): \${fees['management_fee']:,.0f}")
+print(f"  Performance Fee (20%): \${fees['performance_fee']:,.0f}")
+print(f"  Total Fees: \${fees['total_fees']:,.0f}")
 print(f"  Fees as % of Profit: {fees['fee_as_pct_of_profit']:.1f}%")
 print(f"\\nNet Return to Investor: {fees['net_return']:.2f}%")
 
@@ -188,7 +189,7 @@ print(f"\\nNet Return to Investor: {fees['net_return']:.2f}%")
 print("\\n\\n=== Hedge Fund Strategies ===\\n")
 profiles = HedgeFund.strategy_profiles()
 
-for strategy, details in list(profiles.items())[:3]:
+for strategy, details in list (profiles.items())[:3]:
     print(f"{strategy}:")
     print(f"  Description: {details['description']}")
     print(f"  Target Return: {details['target_return']}")
@@ -218,7 +219,7 @@ class PrivateEquityFund:
         self.carried_interest = 0.20  # 20% of profits
         self.hurdle_rate = 0.08  # 8% preferred return to LPs
         
-    def lbo_model(self,
+    def lbo_model (self,
                   purchase_price: float,
                   ebitda: float,
                   entry_multiple: float,
@@ -270,7 +271,7 @@ class PrivateEquityFund:
             'holding_period': holding_period_years
         }
     
-    def calculate_waterfall(self, 
+    def calculate_waterfall (self, 
                            total_profit: float,
                            lp_commitment: float) -> Dict:
         """
@@ -287,12 +288,12 @@ class PrivateEquityFund:
         
         # Preferred return (8% annually over holding period, simplified)
         preferred_return = lp_commitment * (1.08 ** 5 - 1)  # 5-year hold
-        lp_preferred = min(preferred_return, remaining)
+        lp_preferred = min (preferred_return, remaining)
         remaining -= lp_preferred
         
         # Catch-up (GP gets 100% until they have 20% of all profits)
         catchup = lp_preferred / 4  # Simplified
-        gp_catchup = min(catchup, remaining)
+        gp_catchup = min (catchup, remaining)
         remaining -= gp_catchup
         
         # 80/20 split
@@ -319,7 +320,7 @@ class PrivateEquityFund:
         }
 
 # LBO example
-pe_fund = PrivateEquityFund(fund_size=1_000_000_000)
+pe_fund = PrivateEquityFund (fund_size=1_000_000_000)
 
 lbo = pe_fund.lbo_model(
     purchase_price=500_000_000,  # Ignored, calculated from EBITDA
@@ -334,19 +335,19 @@ lbo = pe_fund.lbo_model(
 
 print("\\n=== Leveraged Buyout Model ===\\n")
 print(f"Entry:")
-print(f"  Purchase Price: ${lbo['purchase_price']/1e6:.0f}M")
+print(f"  Purchase Price: \${lbo['purchase_price']/1e6:.0f}M")
 print(f"  Entry Multiple: {lbo['entry_multiple']}x EBITDA")
-print(f"  Equity Investment: ${lbo['equity_investment']/1e6:.0f}M")
-print(f"  Initial Debt: ${lbo['initial_debt']/1e6:.0f}M")
+print(f"  Equity Investment: \${lbo['equity_investment']/1e6:.0f}M")
+print(f"  Initial Debt: \${lbo['initial_debt']/1e6:.0f}M")
 print(f"\\nOperations (5 years):")
 print(f"  Revenue Growth: 5% annually")
 print(f"  Margin Improvement: 10%")
-print(f"  Final EBITDA: ${lbo['final_ebitda']/1e6:.0f}M")
+print(f"  Final EBITDA: \${lbo['final_ebitda']/1e6:.0f}M")
 print(f"\\nExit:")
-print(f"  Enterprise Value: ${lbo['enterprise_value_exit']/1e6:.0f}M")
+print(f"  Enterprise Value: \${lbo['enterprise_value_exit']/1e6:.0f}M")
 print(f"  Exit Multiple: {lbo['exit_multiple']}x EBITDA")
-print(f"  Remaining Debt: ${lbo['remaining_debt']/1e6:.0f}M")
-print(f"  Equity Value: ${lbo['equity_value_exit']/1e6:.0f}M")
+print(f"  Remaining Debt: \${lbo['remaining_debt']/1e6:.0f}M")
+print(f"  Equity Value: \${lbo['equity_value_exit']/1e6:.0f}M")
 print(f"\\nReturns:")
 print(f"  MOIC: {lbo['moic']:.2f}x")
 print(f"  IRR: {lbo['irr']:.1f}%")
@@ -370,7 +371,7 @@ class RealEstateInvestment:
     Model real estate investment returns
     """
     
-    def calculate_reit_metrics(self,
+    def calculate_reit_metrics (self,
                                property_value: float,
                                annual_noi: float,  # Net Operating Income
                                debt: float,
@@ -478,15 +479,15 @@ metrics = re_investment.calculate_reit_metrics(
 
 print("\\n\\n=== Real Estate Investment Analysis ===\\n")
 print(f"Property: $10M Apartment Building")
-print(f"Equity Investment: ${metrics['equity_investment']/1e6:.1f}M")
-print(f"Debt: ${metrics['debt']/1e6:.1f}M (60% LTV)")
+print(f"Equity Investment: \${metrics['equity_investment']/1e6:.1f}M")
+print(f"Debt: \${metrics['debt']/1e6:.1f}M (60% LTV)")
 print(f"\\nIncome Metrics:")
-print(f"  Annual NOI: ${metrics['annual_noi']:,.0f}")
+print(f"  Annual NOI: \${metrics['annual_noi']:,.0f}")
 print(f"  Cap Rate: {metrics['cap_rate']:.2f}%")
-print(f"  Annual Cash Flow: ${metrics['annual_cash_flow']:,.0f}")
+print(f"  Annual Cash Flow: \${metrics['annual_cash_flow']:,.0f}")
 print(f"  Cash-on-Cash Return: {metrics['cash_on_cash_return']:.2f}%")
 print(f"\\n10-Year Returns:")
-print(f"  Future Value: ${metrics['future_value']/1e6:.1f}M")
+print(f"  Future Value: \${metrics['future_value']/1e6:.1f}M")
 print(f"  Total Return: {metrics['total_return']:.1f}%")
 print(f"  IRR: {metrics['irr']:.2f}%")
 \`\`\`
@@ -507,7 +508,7 @@ class AlternativesPortfolio:
         self.real_estate = []
         self.collectibles = []
         
-    def calculate_illiquidity_premium(self,
+    def calculate_illiquidity_premium (self,
                                      liquid_return: float,
                                      illiquid_return: float,
                                      lockup_years: float) -> Dict:
@@ -533,7 +534,7 @@ class AlternativesPortfolio:
             'recommendation': 'INVEST' if acceptable else 'PASS'
         }
     
-    def due_diligence_checklist(self) -> Dict:
+    def due_diligence_checklist (self) -> Dict:
         """
         Due diligence for alternative investments
         """
@@ -637,13 +638,16 @@ You now understand alternatives - diversification beyond stocks/bonds!
 `,
   exercises: [
     {
-      prompt: "Build a private equity LBO modeling system that calculates IRR and MOIC across different scenarios (base, bull, bear). Include leverage ratios, operational improvements, multiple expansion, and debt paydown. Visualize which factors drive returns most.",
-      solution: "// Implementation: 1) Input: Entry multiple, exit multiple, EBITDA, revenue growth, margin improvement, leverage, debt paydown, 2) Calculate purchase price, equity investment, debt, 3) Project financials over 5 years, 4) Calculate exit enterprise value and equity value, 5) Compute IRR and MOIC, 6) Run Monte Carlo with 1000 scenarios (vary all inputs), 7) Sensitivity analysis: Which variable drives returns most? (usually exit multiple), 8) Visualize tornado chart of sensitivities"
+      prompt:
+        'Build a private equity LBO modeling system that calculates IRR and MOIC across different scenarios (base, bull, bear). Include leverage ratios, operational improvements, multiple expansion, and debt paydown. Visualize which factors drive returns most.',
+      solution:
+        '// Implementation: 1) Input: Entry multiple, exit multiple, EBITDA, revenue growth, margin improvement, leverage, debt paydown, 2) Calculate purchase price, equity investment, debt, 3) Project financials over 5 years, 4) Calculate exit enterprise value and equity value, 5) Compute IRR and MOIC, 6) Run Monte Carlo with 1000 scenarios (vary all inputs), 7) Sensitivity analysis: Which variable drives returns most? (usually exit multiple), 8) Visualize tornado chart of sensitivities',
     },
     {
-      prompt: "Create a hedge fund due diligence system that fetches hedge fund return data, calculates risk-adjusted metrics (Sharpe, Sortino, max drawdown, downside capture), detects smoothing/fraud indicators (too-consistent returns), and flags red flags based on a scoring rubric.",
-      solution: "// Implementation: 1) Fetch monthly returns (from HFR, PivotalPath, or manual), 2) Calculate: Sharpe ratio, Sortino ratio, Calmar ratio, max drawdown, up/down capture vs S&P 500, 3) Fraud detection: Check if monthly volatility is suspiciously low (Madoff had 0.5% vol with 10%+ returns = impossible), 4) Rolling correlations with major indices, 5) Red flags: Consistent smooth returns, same administrator as fund (not independent), unclear strategy, 6) Score fund 0-100, flag if < 60"
-    }
-  ]
+      prompt:
+        'Create a hedge fund due diligence system that fetches hedge fund return data, calculates risk-adjusted metrics (Sharpe, Sortino, max drawdown, downside capture), detects smoothing/fraud indicators (too-consistent returns), and flags red flags based on a scoring rubric.',
+      solution:
+        '// Implementation: 1) Fetch monthly returns (from HFR, PivotalPath, or manual), 2) Calculate: Sharpe ratio, Sortino ratio, Calmar ratio, max drawdown, up/down capture vs S&P 500, 3) Fraud detection: Check if monthly volatility is suspiciously low (Madoff had 0.5% vol with 10%+ returns = impossible), 4) Rolling correlations with major indices, 5) Red flags: Consistent smooth returns, same administrator as fund (not independent), unclear strategy, 6) Score fund 0-100, flag if < 60',
+    },
+  ],
 };
-

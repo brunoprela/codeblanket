@@ -13,7 +13,7 @@ export const anomalyDetection = {
 
 ## Introduction
 
-Anomaly detection (also called outlier detection or novelty detection) is the identification of rare items, events, or observations that differ significantly from the majority of the data. It's a critical unsupervised learning technique used in:
+Anomaly detection (also called outlier detection or novelty detection) is the identification of rare items, events, or observations that differ significantly from the majority of the data. It\'s a critical unsupervised learning technique used in:
 
 - **Fraud Detection**: Credit card fraud, insurance fraud
 - **Intrusion Detection**: Network security, cybersecurity
@@ -33,13 +33,13 @@ np.random.seed(42)
 X_normal = np.random.randn(300, 2) * 0.5 + np.array([0, 0])
 
 # Generate anomalies
-X_anomalies = np.random.uniform(low=-4, high=4, size=(20, 2))
+X_anomalies = np.random.uniform (low=-4, high=4, size=(20, 2))
 
 # Combine
 X = np.vstack([X_normal, X_anomalies])
 y = np.array([0]*300 + [1]*20)  # 0=normal, 1=anomaly
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X[y==0, 0], X[y==0, 1], c='blue', alpha=0.5, s=30, label='Normal')
 plt.scatter(X[y==1, 0], X[y==1, 1], c='red', alpha=0.8, s=100, 
            marker='*', edgecolors='black', linewidths=1, label='Anomalies')
@@ -51,8 +51,8 @@ plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 
-print(f"Normal samples: {sum(y==0)} ({sum(y==0)/len(y)*100:.1f}%)")
-print(f"Anomalies: {sum(y==1)} ({sum(y==1)/len(y)*100:.1f}%)")
+print(f"Normal samples: {sum (y==0)} ({sum (y==0)/len (y)*100:.1f}%)")
+print(f"Anomalies: {sum (y==1)} ({sum (y==1)/len (y)*100:.1f}%)")
 \`\`\`
 
 ## Statistical Methods
@@ -67,15 +67,15 @@ Identifies points that are many standard deviations away from the mean
 # Calculate Z-scores
 from scipy import stats
 
-z_scores = np.abs(stats.zscore(X))
+z_scores = np.abs (stats.zscore(X))
 threshold = 3
 
 # Points with z-score > 3 in any dimension are anomalies
-anomalies_zscore = (z_scores > threshold).any(axis=1)
+anomalies_zscore = (z_scores > threshold).any (axis=1)
 
-print(f"Z-score method detected: {sum(anomalies_zscore)} anomalies")
+print(f"Z-score method detected: {sum (anomalies_zscore)} anomalies")
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X[~anomalies_zscore, 0], X[~anomalies_zscore, 1], 
            c='blue', alpha=0.5, s=30, label='Normal')
 plt.scatter(X[anomalies_zscore, 0], X[anomalies_zscore, 1], 
@@ -100,10 +100,10 @@ Less sensitive to extreme values than z-score
 **Threshold**: Points outside [Q1 - 1.5×IQR, Q3 + 1.5×IQR] are outliers
 
 \`\`\`python
-def detect_outliers_iqr(data):
+def detect_outliers_iqr (data):
     ''Detect outliers using IQR method''
-    Q1 = np.percentile(data, 25, axis=0)
-    Q3 = np.percentile(data, 75, axis=0)
+    Q1 = np.percentile (data, 25, axis=0)
+    Q3 = np.percentile (data, 75, axis=0)
     IQR = Q3 - Q1
     
     # Outlier boundaries
@@ -111,13 +111,13 @@ def detect_outliers_iqr(data):
     upper_bound = Q3 + 1.5 * IQR
     
     # Points outside boundaries
-    outliers = ((data < lower_bound) | (data > upper_bound)).any(axis=1)
+    outliers = ((data < lower_bound) | (data > upper_bound)).any (axis=1)
     return outliers
 
 anomalies_iqr = detect_outliers_iqr(X)
-print(f"IQR method detected: {sum(anomalies_iqr)} anomalies")
+print(f"IQR method detected: {sum (anomalies_iqr)} anomalies")
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X[~anomalies_iqr, 0], X[~anomalies_iqr, 1], 
            c='blue', alpha=0.5, s=30, label='Normal')
 plt.scatter(X[anomalies_iqr, 0], X[anomalies_iqr, 1], 
@@ -156,13 +156,13 @@ y_pred_iso = iso_forest.fit_predict(X)
 # -1 = anomaly, 1 = normal
 
 anomalies_iso = (y_pred_iso == -1)
-print(f"Isolation Forest detected: {sum(anomalies_iso)} anomalies")
+print(f"Isolation Forest detected: {sum (anomalies_iso)} anomalies")
 
 # Get anomaly scores
 anomaly_scores = iso_forest.score_samples(X)
 # More negative = more anomalous
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X[~anomalies_iso, 0], X[~anomalies_iso, 1], 
@@ -179,7 +179,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 scatter = plt.scatter(X[:, 0], X[:, 1], c=anomaly_scores, 
                      cmap='RdYlBu_r', s=50, alpha=0.7, edgecolors='black', linewidths=0.5)
-plt.colorbar(scatter, label='Anomaly Score\\n(lower = more anomalous)')
+plt.colorbar (scatter, label='Anomaly Score\\n (lower = more anomalous)')
 plt.title('Isolation Forest: Anomaly Scores')
 plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
@@ -204,7 +204,7 @@ fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 # Normal point (hard to isolate)
 axes[0].scatter(X[y==0, 0], X[y==0, 1], c='blue', alpha=0.3, s=20)
 normal_point = X[y==0][0]
-axes[0].scatter(normal_point[0], normal_point[1], c='green', s=200, 
+axes[0].scatter (normal_point[0], normal_point[1], c='green', s=200, 
                marker='o', edgecolors='black', linewidths=2, label='Normal Point')
 axes[0].set_title('Normal Point\\n(Many splits needed to isolate)')
 axes[0].set_xlabel('Feature 1')
@@ -215,7 +215,7 @@ axes[0].grid(True, alpha=0.3)
 # Anomaly (easy to isolate)
 axes[1].scatter(X[y==0, 0], X[y==0, 1], c='blue', alpha=0.3, s=20)
 anomaly_point = X[y==1][0]
-axes[1].scatter(anomaly_point[0], anomaly_point[1], c='red', s=200, 
+axes[1].scatter (anomaly_point[0], anomaly_point[1], c='red', s=200, 
                marker='*', edgecolors='black', linewidths=2, label='Anomaly')
 axes[1].set_title('Anomaly\\n(Few splits needed to isolate)')
 axes[1].set_xlabel('Feature 1')
@@ -239,8 +239,8 @@ contamination_values = [0.05, 0.1, 0.15, 0.2]
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, cont in enumerate(contamination_values):
-    iso_temp = IsolationForest(contamination=cont, random_state=42)
+for idx, cont in enumerate (contamination_values):
+    iso_temp = IsolationForest (contamination=cont, random_state=42)
     y_pred_temp = iso_temp.fit_predict(X)
     anomalies_temp = (y_pred_temp == -1)
     
@@ -249,7 +249,7 @@ for idx, cont in enumerate(contamination_values):
     axes[idx].scatter(X[anomalies_temp, 0], X[anomalies_temp, 1], 
                      c='red', alpha=0.8, s=100, marker='*', 
                      edgecolors='black', linewidths=1)
-    axes[idx].set_title(f'Contamination = {cont}\\n{sum(anomalies_temp)} anomalies detected')
+    axes[idx].set_title (f'Contamination = {cont}\\n{sum (anomalies_temp)} anomalies detected')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
     axes[idx].grid(True, alpha=0.3)
@@ -285,9 +285,9 @@ anomalies_lof = (y_pred_lof == -1)
 # Get LOF scores
 lof_scores = -lof.negative_outlier_factor_  # Higher = more anomalous
 
-print(f"LOF detected: {sum(anomalies_lof)} anomalies")
+print(f"LOF detected: {sum (anomalies_lof)} anomalies")
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X[~anomalies_lof, 0], X[~anomalies_lof, 1], 
@@ -304,7 +304,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 scatter = plt.scatter(X[:, 0], X[:, 1], c=lof_scores, 
                      cmap='RdYlBu_r', s=50, alpha=0.7, edgecolors='black', linewidths=0.5)
-plt.colorbar(scatter, label='LOF Score\\n(higher = more anomalous)')
+plt.colorbar (scatter, label='LOF Score\\n (higher = more anomalous)')
 plt.title('LOF: Anomaly Scores')
 plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
@@ -344,7 +344,7 @@ axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 
 # Isolation Forest
-iso_varying = IsolationForest(contamination=0.05, random_state=42)
+iso_varying = IsolationForest (contamination=0.05, random_state=42)
 y_pred_iso_varying = iso_varying.fit_predict(X_varying)
 anomalies_iso_varying = (y_pred_iso_varying == -1)
 
@@ -352,11 +352,11 @@ axes[1].scatter(X_varying[~anomalies_iso_varying, 0], X_varying[~anomalies_iso_v
                c='blue', alpha=0.5, s=30)
 axes[1].scatter(X_varying[anomalies_iso_varying, 0], X_varying[anomalies_iso_varying, 1], 
                c='red', alpha=0.8, s=100, marker='*', edgecolors='black', linewidths=1)
-axes[1].set_title(f'Isolation Forest\\n{sum(anomalies_iso_varying)} anomalies')
+axes[1].set_title (f'Isolation Forest\\n{sum (anomalies_iso_varying)} anomalies')
 axes[1].grid(True, alpha=0.3)
 
 # LOF
-lof_varying = LocalOutlierFactor(n_neighbors=20, contamination=0.05)
+lof_varying = LocalOutlierFactor (n_neighbors=20, contamination=0.05)
 y_pred_lof_varying = lof_varying.fit_predict(X_varying)
 anomalies_lof_varying = (y_pred_lof_varying == -1)
 
@@ -364,7 +364,7 @@ axes[2].scatter(X_varying[~anomalies_lof_varying, 0], X_varying[~anomalies_lof_v
                c='blue', alpha=0.5, s=30)
 axes[2].scatter(X_varying[anomalies_lof_varying, 0], X_varying[anomalies_lof_varying, 1], 
                c='red', alpha=0.8, s=100, marker='*', edgecolors='black', linewidths=1)
-axes[2].set_title(f'LOF\\n{sum(anomalies_lof_varying)} anomalies')
+axes[2].set_title (f'LOF\\n{sum (anomalies_lof_varying)} anomalies')
 axes[2].grid(True, alpha=0.3)
 
 plt.tight_layout()
@@ -390,12 +390,12 @@ oc_svm = OneClassSVM(
 y_pred_svm = oc_svm.fit_predict(X)
 anomalies_svm = (y_pred_svm == -1)
 
-print(f"One-Class SVM detected: {sum(anomalies_svm)} anomalies")
+print(f"One-Class SVM detected: {sum (anomalies_svm)} anomalies")
 
 # Decision function (distance to separating hyperplane)
 decision_scores = oc_svm.decision_function(X)
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X[~anomalies_svm, 0], X[~anomalies_svm, 1], 
@@ -412,7 +412,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 scatter = plt.scatter(X[:, 0], X[:, 1], c=decision_scores, 
                      cmap='RdYlBu_r', s=50, alpha=0.7, edgecolors='black', linewidths=0.5)
-plt.colorbar(scatter, label='Decision Score\\n(lower = more anomalous)')
+plt.colorbar (scatter, label='Decision Score\\n (lower = more anomalous)')
 plt.title('One-Class SVM: Decision Scores')
 plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
@@ -445,12 +445,12 @@ labels = dbscan.fit_predict(X)
 # -1 = noise (potential anomalies)
 anomalies_dbscan = (labels == -1)
 
-print(f"DBSCAN identified: {sum(anomalies_dbscan)} noise points (potential anomalies)")
+print(f"DBSCAN identified: {sum (anomalies_dbscan)} noise points (potential anomalies)")
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 
 # Plot clusters
-for label in set(labels):
+for label in set (labels):
     if label == -1:
         # Noise points
         mask = labels == label
@@ -490,10 +490,10 @@ methods = {
 
 results = []
 for name, predictions in methods.items():
-    precision = precision_score(y, predictions)
-    recall = recall_score(y, predictions)
-    f1 = f1_score(y, predictions)
-    n_detected = sum(predictions)
+    precision = precision_score (y, predictions)
+    recall = recall_score (y, predictions)
+    f1 = f1_score (y, predictions)
+    n_detected = sum (predictions)
     
     results.append({
         'Method': name,
@@ -504,30 +504,30 @@ for name, predictions in methods.items():
     })
 
 import pandas as pd
-results_df = pd.DataFrame(results)
-print(results_df.to_string(index=False))
+results_df = pd.DataFrame (results)
+print(results_df.to_string (index=False))
 
 # Visualize
 fig, axes = plt.subplots(1, 3, figsize=(16, 5))
 
-results_df.plot(x='Method', y='Precision', kind='bar', ax=axes[0], legend=False, color='steelblue')
+results_df.plot (x='Method', y='Precision', kind='bar', ax=axes[0], legend=False, color='steelblue')
 axes[0].set_ylabel('Precision')
 axes[0].set_title('Precision')
-axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=45, ha='right')
+axes[0].set_xticklabels (axes[0].get_xticklabels(), rotation=45, ha='right')
 axes[0].set_ylim([0, 1])
 axes[0].grid(True, alpha=0.3, axis='y')
 
-results_df.plot(x='Method', y='Recall', kind='bar', ax=axes[1], legend=False, color='orange')
+results_df.plot (x='Method', y='Recall', kind='bar', ax=axes[1], legend=False, color='orange')
 axes[1].set_ylabel('Recall')
 axes[1].set_title('Recall')
-axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=45, ha='right')
+axes[1].set_xticklabels (axes[1].get_xticklabels(), rotation=45, ha='right')
 axes[1].set_ylim([0, 1])
 axes[1].grid(True, alpha=0.3, axis='y')
 
-results_df.plot(x='Method', y='F1', kind='bar', ax=axes[2], legend=False, color='green')
+results_df.plot (x='Method', y='F1', kind='bar', ax=axes[2], legend=False, color='green')
 axes[2].set_ylabel('F1 Score')
 axes[2].set_title('F1 Score')
-axes[2].set_xticklabels(axes[2].get_xticklabels(), rotation=45, ha='right')
+axes[2].set_xticklabels (axes[2].get_xticklabels(), rotation=45, ha='right')
 axes[2].set_ylim([0, 1])
 axes[2].grid(True, alpha=0.3, axis='y')
 
@@ -544,15 +544,15 @@ plt.show()
 from sklearn.metrics import confusion_matrix, classification_report
 
 # Example: Isolation Forest
-cm = confusion_matrix(y, anomalies_iso)
+cm = confusion_matrix (y, anomalies_iso)
 
-plt.figure(figsize=(8, 6))
-plt.imshow(cm, cmap='Blues', alpha=0.7)
+plt.figure (figsize=(8, 6))
+plt.imshow (cm, cmap='Blues', alpha=0.7)
 plt.colorbar()
 
 for i in range(2):
     for j in range(2):
-        plt.text(j, i, cm[i, j], ha='center', va='center', fontsize=16, fontweight='bold')
+        plt.text (j, i, cm[i, j], ha='center', va='center', fontsize=16, fontweight='bold')
 
 plt.xticks([0, 1], ['Predicted Normal', 'Predicted Anomaly'])
 plt.yticks([0, 1], ['Actual Normal', 'Actual Anomaly'])
@@ -561,7 +561,7 @@ plt.tight_layout()
 plt.show()
 
 print("Classification Report:")
-print(classification_report(y, anomalies_iso, target_names=['Normal', 'Anomaly']))
+print(classification_report (y, anomalies_iso, target_names=['Normal', 'Anomaly']))
 
 # In real scenarios, we often don't have labels!
 # Use domain experts to validate detected anomalies
@@ -575,10 +575,10 @@ from sklearn.metrics import precision_recall_curve, auc
 # Use anomaly scores from Isolation Forest
 anomaly_scores_iso = -iso_forest.score_samples(X)  # Negate so higher = more anomalous
 
-precision, recall, thresholds = precision_recall_curve(y, anomaly_scores_iso)
+precision, recall, thresholds = precision_recall_curve (y, anomaly_scores_iso)
 
-plt.figure(figsize=(10, 6))
-plt.plot(recall, precision, linewidth=2, label=f'PR curve (AUC={auc(recall, precision):.3f})')
+plt.figure (figsize=(10, 6))
+plt.plot (recall, precision, linewidth=2, label=f'PR curve (AUC={auc (recall, precision):.3f})')
 plt.xlabel('Recall', fontsize=12)
 plt.ylabel('Precision', fontsize=12)
 plt.title('Precision-Recall Curve: Isolation Forest', fontsize=14)
@@ -611,14 +611,14 @@ X_transactions = np.vstack([normal_transactions, fraud_transactions])
 y_transactions = np.array([0]*950 + [1]*50)
 
 print(f"Total transactions: {len(X_transactions)}")
-print(f"Fraud rate: {sum(y_transactions)/len(y_transactions)*100:.2f}%")
+print(f"Fraud rate: {sum (y_transactions)/len (y_transactions)*100:.2f}%")
 
 # Scale features
 scaler = StandardScaler()
 X_transactions_scaled = scaler.fit_transform(X_transactions)
 
 # Apply Isolation Forest
-iso_fraud = IsolationForest(contamination=0.05, random_state=42)
+iso_fraud = IsolationForest (contamination=0.05, random_state=42)
 y_pred_fraud = iso_fraud.fit_predict(X_transactions_scaled)
 detected_fraud = (y_pred_fraud == -1)
 
@@ -626,7 +626,7 @@ detected_fraud = (y_pred_fraud == -1)
 from sklearn.metrics import classification_report
 
 print("\\nFraud Detection Results:")
-print(classification_report(y_transactions, detected_fraud, 
+print(classification_report (y_transactions, detected_fraud, 
                           target_names=['Legitimate', 'Fraud']))
 
 # In production:
@@ -656,16 +656,16 @@ feature_names = ['Temperature', 'Pressure', 'Vibration']
 X_manufacturing_scaled = StandardScaler().fit_transform(X_manufacturing)
 
 # Apply LOF
-lof_defects = LocalOutlierFactor(n_neighbors=20, contamination=0.05)
+lof_defects = LocalOutlierFactor (n_neighbors=20, contamination=0.05)
 y_pred_defects = lof_defects.fit_predict(X_manufacturing_scaled)
 detected_defects = (y_pred_defects == -1)
 
 print(f"Defect Detection Results:")
-print(f"Actual defects: {sum(y_manufacturing)}")
-print(f"Detected defects: {sum(detected_defects)}")
+print(f"Actual defects: {sum (y_manufacturing)}")
+print(f"Detected defects: {sum (detected_defects)}")
 
 # Visualize first two features
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X_manufacturing[~detected_defects, 0], X_manufacturing[~detected_defects, 1], 
            c='blue', alpha=0.5, s=30, label='Normal')
 plt.scatter(X_manufacturing[detected_defects, 0], X_manufacturing[detected_defects, 1], 

@@ -96,7 +96,7 @@ prompt = """
 
 **❌ Bad Prompt:**
 \`\`\`python
-prompt = "Make this better: def foo(x): return [i*2 for i in x if i>0]"
+prompt = "Make this better: def foo (x): return [i*2 for i in x if i>0]"
 \`\`\`
 
 **✅ Good Prompt:**
@@ -111,7 +111,7 @@ Task: Improve this Python function by:
 4. Improving variable names
 
 Original code:
-def foo(x): return [i*2 for i in x if i>0]
+def foo (x): return [i*2 for i in x if i>0]
 
 Format your response as:
 \`\`\`python
@@ -284,7 +284,7 @@ Classification: positive
 Review: "Terrible customer service, would not recommend."
 Classification: negative
 
-Review: "It's okay, nothing special."
+Review: "It\'s okay, nothing special."
 Classification: neutral
 
 Now classify this review:
@@ -347,7 +347,7 @@ Now complete this task:
 """
 
 # Concrete implementation
-def tex_prompt(task: str, examples: list, input_data: str) -> str:
+def tex_prompt (task: str, examples: list, input_data: str) -> str:
     """Create TEX pattern prompt."""
     
     example_text = "\\n\\n".join([
@@ -386,7 +386,7 @@ Guide the model to show reasoning steps.
 cot_template = """
 {task}
 
-Let's solve this step by step:
+Let\'s solve this step by step:
 
 1. First, {first_step}
 2. Then, {second_step}
@@ -401,7 +401,7 @@ Solution:
 math_prompt = cot_template.format(
     task="Solve this math word problem",
     first_step="identify the key numbers and what they represent",
-    second_step="determine which operation(s) to use",
+    second_step="determine which operation (s) to use",
     final_step="calculate and verify the answer makes sense",
     input_data="Sarah has 15 apples. She gives away 1/3 to her friend and eats 2. How many does she have left?"
 )
@@ -477,10 +477,10 @@ def optimize_context(
     # Token counting
     encoding = tiktoken.encoding_for_model("gpt-4")
     
-    def count_tokens(text: str) -> int:
-        return len(encoding.encode(text))
+    def count_tokens (text: str) -> int:
+        return len (encoding.encode (text))
     
-    base_tokens = count_tokens(base_prompt)
+    base_tokens = count_tokens (base_prompt)
     remaining_tokens = model_context_limit - base_tokens - 500  # safety margin
     
     # Prioritize context by relevance
@@ -495,7 +495,7 @@ def optimize_context(
     # Sort by priority
     sorted_context = sorted(
         available_context.items(),
-        key=lambda x: context_priority.get(x[0], 0.5),
+        key=lambda x: context_priority.get (x[0], 0.5),
         reverse=True
     )
     
@@ -504,7 +504,7 @@ def optimize_context(
     tokens_used = 0
     
     for key, value in sorted_context:
-        tokens = count_tokens(str(value))
+        tokens = count_tokens (str (value))
         if tokens_used + tokens <= remaining_tokens:
             selected_context[key] = value
             tokens_used += tokens
@@ -525,7 +525,7 @@ def optimize_context(
 prompt = optimize_context(
     base_prompt="Refactor this function to be more efficient.",
     available_context={
-        'current_file': "def slow_func(data): ...",  # High priority
+        'current_file': "def slow_func (data): ...",  # High priority
         'user_history': "User prefers list comprehensions",  # High priority
         'documentation': "10 pages of Python docs...",  # Lower priority
         'related_files': "5 other files..."  # Medium priority
@@ -577,12 +577,12 @@ class PromptTester:
         results = {
             'name': name,
             'prompt': prompt_template,
-            'test_cases': len(test_cases),
+            'test_cases': len (test_cases),
             'scores': [],
             'examples': []
         }
         
-        for i, test_case in enumerate(test_cases):
+        for i, test_case in enumerate (test_cases):
             # Fill template
             prompt = prompt_template.format(**test_case['input'])
             
@@ -595,9 +595,9 @@ class PromptTester:
             output = response.choices[0].message.content
             
             # Evaluate
-            score = evaluation_func(output, test_case.get('expected'))
+            score = evaluation_func (output, test_case.get('expected'))
             
-            results['scores'].append(score)
+            results['scores'].append (score)
             
             # Save examples (first 3)
             if i < 3:
@@ -609,15 +609,15 @@ class PromptTester:
                 })
         
         # Summary stats
-        results['avg_score'] = sum(results['scores']) / len(results['scores'])
-        results['min_score'] = min(results['scores'])
-        results['pass_rate'] = sum(1 for s in results['scores'] if s >= 0.8) / len(results['scores'])
+        results['avg_score'] = sum (results['scores']) / len (results['scores'])
+        results['min_score'] = min (results['scores'])
+        results['pass_rate'] = sum(1 for s in results['scores'] if s >= 0.8) / len (results['scores'])
         
-        self.results.append(results)
+        self.results.append (results)
         
         return results
     
-    def compare_prompts(self, prompt_variants: List[Dict]) -> None:
+    def compare_prompts (self, prompt_variants: List[Dict]) -> None:
         """
         Compare multiple prompt variants and print results.
         
@@ -643,12 +643,12 @@ class PromptTester:
             print(f"  Min Score: {results['min_score']:.2f}")
         
         # Winner
-        best = max(self.results, key=lambda x: x['avg_score'])
+        best = max (self.results, key=lambda x: x['avg_score'])
         print(f"\\n🏆 Winner: {best['name']} (score: {best['avg_score']:.2f})")
         print("="*70 + "\\n")
 
 # Example usage
-def sentiment_accuracy(output: str, expected: str) -> float:
+def sentiment_accuracy (output: str, expected: str) -> float:
     """Score sentiment classification accuracy."""
     output_clean = output.strip().lower()
     expected_clean = expected.strip().lower()
@@ -667,7 +667,7 @@ test_cases = [
         'expected': 'negative'
     },
     {
-        'input': {'review': "It's okay, nothing special."},
+        'input': {'review': "It\'s okay, nothing special."},
         'expected': 'neutral'
     },
 ]
@@ -688,7 +688,7 @@ variant2 = {
 Examples:
 "Great product!" → positive
 "Didn't work." → negative  
-"It's fine." → neutral
+"It\'s fine." → neutral
 
 Review: {review}
 Sentiment:'',
@@ -741,7 +741,7 @@ class PromptVersion:
     ) -> str:
         """Create a new prompt version."""
         
-        version_id = f"v{len(self.versions) + 1}"
+        version_id = f"v{len (self.versions) + 1}"
         
         version_data = {
             'id': version_id,
@@ -763,7 +763,7 @@ class PromptVersion:
         
         return version_id
     
-    def get_prompt(self, version: Optional[str] = None) -> str:
+    def get_prompt (self, version: Optional[str] = None) -> str:
         """Get prompt template for a version."""
         version = version or self.current_version
         return self.versions[version]['template']
@@ -786,7 +786,7 @@ class PromptVersion:
         perf['success_rate'] = (perf['success_rate'] * n + (1 if success else 0)) / (n + 1)
         perf['uses'] += 1
     
-    def compare_versions(self, v1: str, v2: str) -> Dict:
+    def compare_versions (self, v1: str, v2: str) -> Dict:
         """Compare performance of two versions."""
         
         perf1 = self.versions[v1]['performance']
@@ -796,10 +796,10 @@ class PromptVersion:
             'latency_diff': perf2['avg_latency'] - perf1['avg_latency'],
             'cost_diff': perf2['avg_cost'] - perf1['avg_cost'],
             'success_diff': perf2['success_rate'] - perf1['success_rate'],
-            'recommendation': self._recommend_version(perf1, perf2, v1, v2)
+            'recommendation': self._recommend_version (perf1, perf2, v1, v2)
         }
     
-    def _recommend_version(self, perf1, perf2, v1, v2):
+    def _recommend_version (self, perf1, perf2, v1, v2):
         """Recommend which version to use."""
         
         # Weight factors
@@ -822,9 +822,9 @@ class PromptVersion:
         
         return v1 if score1 > score2 else v2
     
-    def export(self, filepath: str):
+    def export (self, filepath: str):
         """Export prompt versions to JSON."""
-        with open(filepath, 'w') as f:
+        with open (filepath, 'w') as f:
             json.dump({
                 'prompt_id': self.prompt_id,
                 'current_version': self.current_version,
@@ -869,8 +869,8 @@ Be specific and actionable.
 )
 
 # Simulate performance tracking
-code_review_prompt.record_performance(v2, latency=1.2, cost=0.003, success=True)
-code_review_prompt.record_performance(v2, latency=1.5, cost=0.004, success=True)
+code_review_prompt.record_performance (v2, latency=1.2, cost=0.003, success=True)
+code_review_prompt.record_performance (v2, latency=1.5, cost=0.004, success=True)
 
 # Export
 code_review_prompt.export('prompt_versions.json')
@@ -920,7 +920,7 @@ step4 = "Classify sentiment: {summary}"
 bad = "Continue the pattern"
 
 # ✅ Provides full context
-good = """This sequence follows the pattern: f(n) = 2n + 1
+good = """This sequence follows the pattern: f (n) = 2n + 1
 Sequence so far: 1, 3, 5, 7, 9
 
 Generate the next 5 numbers following this pattern."""

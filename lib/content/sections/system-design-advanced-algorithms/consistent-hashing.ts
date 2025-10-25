@@ -14,7 +14,7 @@ Imagine you have a cache cluster with 3 servers. You need to decide which server
 ### Naive Approach: Modulo Hashing
 
 \`\`\`python
-server_index = hash(key) % num_servers
+server_index = hash (key) % num_servers
 
 Examples with 3 servers:
 hash("user:1") = 8473 → 8473 % 3 = 2 → Server 2
@@ -28,7 +28,7 @@ This works fine until you add or remove a server.
 
 Now with 4 servers, the formula changes:
 \`\`\`
-server_index = hash(key) % 4
+server_index = hash (key) % 4
 
 hash("user:1") = 8473 → 8473 % 4 = 1 → Server 1 (was Server 2!)
 hash("user:2") = 3241 → 3241 % 4 = 1 → Server 1 (was Server 1) ✓
@@ -155,7 +155,7 @@ Ring visualization:
 
 ## Adding a Server: Minimal Disruption
 
-Let's add **Server D** to the ring:
+Let\'s add **Server D** to the ring:
 
 \`\`\`python
 hash("Server D") = 55000000
@@ -222,8 +222,8 @@ Server C gets 33% more load than A/B! With random hash distribution, servers can
 \`\`\`python
 # Place Server A at 100 positions
 for i in range(100):
-    position = hash(f"Server A-{i}")
-    ring.add(position, "Server A")
+    position = hash (f"Server A-{i}")
+    ring.add (position, "Server A")
 \`\`\`
 
 \`\`\`
@@ -285,43 +285,43 @@ class ConsistentHashRing:
         self.ring = []  # Sorted list of (hash_value, server) tuples
         self.hash_to_server = {}
     
-    def _hash(self, key):
+    def _hash (self, key):
         """Hash function producing integer"""
-        return int(hashlib.md5(key.encode()).hexdigest(), 16)
+        return int (hashlib.md5(key.encode()).hexdigest(), 16)
     
-    def add_server(self, server):
+    def add_server (self, server):
         """Add server with virtual nodes"""
-        for i in range(self.num_virtual_nodes):
+        for i in range (self.num_virtual_nodes):
             vnode_key = f"{server}:{i}"
-            hash_value = self._hash(vnode_key)
+            hash_value = self._hash (vnode_key)
             self.ring.append((hash_value, server))
             self.hash_to_server[hash_value] = server
         
         # Keep ring sorted
         self.ring.sort()
     
-    def remove_server(self, server):
+    def remove_server (self, server):
         """Remove server and its virtual nodes"""
         self.ring = [(h, s) for h, s in self.ring if s != server]
     
-    def get_server(self, key):
+    def get_server (self, key):
         """Get server for given key"""
         if not self.ring:
             return None
         
-        hash_value = self._hash(key)
+        hash_value = self._hash (key)
         
         # Binary search for first server >= hash_value
-        index = bisect_right(self.ring, (hash_value, ''))
+        index = bisect_right (self.ring, (hash_value, ''))
         
         # Wrap around to beginning if needed
-        if index == len(self.ring):
+        if index == len (self.ring):
             index = 0
         
         return self.ring[index][1]
 
 # Usage
-ring = ConsistentHashRing(num_virtual_nodes=150)
+ring = ConsistentHashRing (num_virtual_nodes=150)
 
 # Add servers
 ring.add_server("Server A")
@@ -343,15 +343,15 @@ print(ring.get_server("user:1"))  # Maybe Server D now
 ### Optimized: Binary Search for Performance
 
 \`\`\`python
-def get_server_fast(self, key):
+def get_server_fast (self, key):
     """O(log n) lookup using binary search"""
     if not self.ring:
         return None
     
-    hash_value = self._hash(key)
+    hash_value = self._hash (key)
     
     # Binary search in sorted ring
-    left, right = 0, len(self.ring)
+    left, right = 0, len (self.ring)
     
     while left < right:
         mid = (left + right) // 2
@@ -361,7 +361,7 @@ def get_server_fast(self, key):
             right = mid
     
     # Wrap around
-    if left >= len(self.ring):
+    if left >= len (self.ring):
         left = 0
     
     return self.ring[left][1]
@@ -430,11 +430,11 @@ servers = ["10.0.0.1:11211", "10.0.0.2:11211", "10.0.0.3:11211"]
 ring = ConsistentHashRing()
 
 for server in servers:
-    ring.add_server(server)
+    ring.add_server (server)
 
 # Route request
 key = "user:session:1234"
-server = ring.get_server(key)
+server = ring.get_server (key)
 # Connect to that specific server
 \`\`\`
 
@@ -482,23 +482,23 @@ server = ring.get_server(key)
 Store data on **R consecutive nodes** for fault tolerance:
 
 \`\`\`python
-def get_servers(self, key, replication_factor=3):
+def get_servers (self, key, replication_factor=3):
     """Get R servers for replication"""
     if not self.ring:
         return []
     
-    hash_value = self._hash(key)
-    index = bisect_right(self.ring, (hash_value, ''))
+    hash_value = self._hash (key)
+    index = bisect_right (self.ring, (hash_value, ''))
     
     servers = []
     seen = set()
     
     # Get next R unique servers clockwise
-    while len(servers) < replication_factor:
-        server = self.ring[index % len(self.ring)][1]
+    while len (servers) < replication_factor:
+        server = self.ring[index % len (self.ring)][1]
         if server not in seen:
-            servers.append(server)
-            seen.add(server)
+            servers.append (server)
+            seen.add (server)
         index += 1
     
     return servers
@@ -529,7 +529,7 @@ ring.add_server("Server C", num_vnodes=50)
 
 **Problem**: One server becomes hot (popular keys cluster)
 
-**Google's solution**: Bounded-load consistent hashing
+**Google\'s solution**: Bounded-load consistent hashing
 - Set max load threshold (e.g., 1.25 × average load)
 - If server exceeds threshold, route to next server
 - Prevents any server from being more than 25% overloaded

@@ -22,7 +22,7 @@ Candidate: "We'll use microservices, Kubernetes, Kafka, and React for the fronte
 ### **The Right Approach:**
 ✅ "Before I start, let me clarify a few things:
 - Should we focus on core features like posting tweets and viewing timelines, or also direct messaging and notifications?
-- What's the expected scale? Daily active users? Tweets per day?
+- What\'s the expected scale? Daily active users? Tweets per day?
 - What are the latency requirements for timeline loading?
 - Do we need strong consistency or is eventual consistency acceptable?"
 
@@ -150,7 +150,7 @@ For Twitter tweets, I choose Cassandra because:
 
 But for user authentication, I'd use PostgreSQL because we need strong consistency."
 
-**Key principle:** Always discuss **trade-offs**. There's no perfect solution—show you understand pros and cons.
+**Key principle:** Always discuss **trade-offs**. There\'s no perfect solution—show you understand pros and cons.
 
 ---
 
@@ -243,7 +243,7 @@ Candidate: *immediately starts drawing architecture*
 ✅ Ask clarifying questions:
 - "Should we focus on photo sharing or also stories, reels, messaging?"
 - "Is this mobile-first or web-first?"
-- "What's more important: upload speed or viewing speed?"
+- "What\'s more important: upload speed or viewing speed?"
 - "Do we need real-time notifications?"
 - "Any specific compliance requirements (GDPR, data residency)?"
 
@@ -271,7 +271,7 @@ Candidate: "I don't know. I haven't worked with that before."
 - This handles distributed system by centralizing count in Redis
 Does this approach make sense?"
 
-**Key principle:** Show your **thought process**. It's okay not to know everything—it's not okay to give up.
+**Key principle:** Show your **thought process**. It\'s okay not to know everything—it's not okay to give up.
 
 ---
 

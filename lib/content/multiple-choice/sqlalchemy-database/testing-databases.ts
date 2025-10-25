@@ -39,7 +39,7 @@ export const testingDatabasesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Factory Boy generates realistic test data efficiently. Benefits: (1) DRY - define data structure once, (2) Faker integration for realistic data, (3) Handles relationships automatically, (4) Sequences for unique values, (5) Override specific fields per test. Example: UserFactory.create() generates user with realistic name, email. UserFactory.create(email="specific@example.com") overrides email. PostFactory.create(user=user) creates post with relationship.',
+      'Factory Boy generates realistic test data efficiently. Benefits: (1) DRY - define data structure once, (2) Faker integration for realistic data, (3) Handles relationships automatically, (4) Sequences for unique values, (5) Override specific fields per test. Example: UserFactory.create() generates user with realistic name, email. UserFactory.create (email="specific@example.com") overrides email. PostFactory.create (user=user) creates post with relationship.',
   },
   {
     id: 'sql-test-mc-4',

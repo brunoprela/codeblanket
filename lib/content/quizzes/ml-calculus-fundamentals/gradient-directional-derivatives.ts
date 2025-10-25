@@ -90,7 +90,7 @@ where:
 
 **1. Faster Convergence in Ravines:**
 
-Consider f(x,y) = x²/2 + 10y² (steep in y, shallow in x):
+Consider f (x,y) = x²/2 + 10y² (steep in y, shallow in x):
 
 Vanilla GD:
 - Large gradient in y-direction causes oscillation
@@ -172,7 +172,7 @@ This makes momentum especially valuable for:
     sampleAnswer: `**Projected Gradient Descent (PGD):**
 
 **Algorithm:**
-1. Compute gradient: g = ∇f(x_t)
+1. Compute gradient: g = ∇f (x_t)
 2. Take gradient step: y = x_t - αg
 3. Project onto constraint set: x_{t+1} = Proj_C(y)
 
@@ -181,10 +181,10 @@ where Proj_C(y) = argmin_{x∈C} ||x - y||² (closest point in C)
 **Why Project Rather Than Penalize?**
 
 **Penalty Method:**
-Minimize: f(x) + λ·penalty(constraint violation)
+Minimize: f (x) + λ·penalty (constraint violation)
 
 Example: Optimize on unit sphere
-L(x) = f(x) + λ(||x||² - 1)²
+L(x) = f (x) + λ(||x||² - 1)²
 
 Problems:
 - Never exactly satisfies constraints
@@ -203,13 +203,13 @@ Problems:
 **1. Unit Sphere (Orthogonality):**
 
 Constraint: ||x|| = 1
-Projection: Proj(y) = y/||y||
+Projection: Proj (y) = y/||y||
 
 Application: Spectral normalization in GANs, weight normalization
 
 \`\`\`python
-def project_sphere(x):
-    return x / np.linalg.norm(x)
+def project_sphere (x):
+    return x / np.linalg.norm (x)
 \`\`\`
 
 **2. Probability Simplex:**
@@ -222,13 +222,13 @@ Application: Attention weights, mixture models, portfolio optimization
 **3. Box Constraints:**
 
 Constraint: a ≤ x ≤ b
-Projection: Proj(y)ᵢ = clip(yᵢ, aᵢ, bᵢ)
+Projection: Proj (y)ᵢ = clip (yᵢ, aᵢ, bᵢ)
 
 Application: Bounded parameters, adversarial perturbations (ε-ball)
 
 \`\`\`python
-def project_box(x, a, b):
-    return np.clip(x, a, b)
+def project_box (x, a, b):
+    return np.clip (x, a, b)
 \`\`\`
 
 **4. Low-Rank Matrices:**
@@ -248,11 +248,11 @@ Generate adversarial examples within ε-ball:
 - Use projected gradient ascent
 
 \`\`\`python
-for step in range(num_steps):
-    grad = compute_gradient(x_adv, target)
-    x_adv = x_adv + alpha * np.sign(grad)
+for step in range (num_steps):
+    grad = compute_gradient (x_adv, target)
+    x_adv = x_adv + alpha * np.sign (grad)
     # Project to ε-ball around x
-    x_adv = np.clip(x_adv, x - epsilon, x + epsilon)
+    x_adv = np.clip (x_adv, x - epsilon, x + epsilon)
 \`\`\`
 
 **2. Fairness Constraints:**
@@ -269,9 +269,9 @@ L0 constraint (at most k non-zeros):
 - Project to k-sparse vectors
 
 \`\`\`python
-def project_sparse(x, k):
-    indices = np.argsort(np.abs(x))[-k:]
-    x_sparse = np.zeros_like(x)
+def project_sparse (x, k):
+    indices = np.argsort (np.abs (x))[-k:]
+    x_sparse = np.zeros_like (x)
     x_sparse[indices] = x[indices]
     return x_sparse
 \`\`\`

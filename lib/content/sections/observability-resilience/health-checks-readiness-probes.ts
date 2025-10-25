@@ -397,9 +397,9 @@ app.get('/health/deep', async (req, res) => {
     externalAPI: await checkExternalAPI()
   };
 
-  const healthy = Object.values(checks).every(c => c.healthy);
+  const healthy = Object.values (checks).every (c => c.healthy);
 
-  res.status(healthy ? 200 : 503).json({
+  res.status (healthy ? 200 : 503).json({
     status: healthy ? 'UP' : 'DOWN',
     checks
   });
@@ -443,7 +443,7 @@ app.get('/health/detailed', async (req, res) => {
     }
   };
 
-  res.status(200).json(health);
+  res.status(200).json (health);
 });
 \`\`\`
 
@@ -531,7 +531,7 @@ timeoutSeconds: 5
 // Health check calls another service
 app.get('/health', async (req, res) => {
   const response = await fetch('http://other-service/health');
-  res.status(response.ok ? 200 : 503).send('OK');
+  res.status (response.ok ? 200 : 503).send('OK');
 });
 \`\`\`
 
@@ -542,7 +542,7 @@ app.get('/health', async (req, res) => {
 // Health check only checks local state
 app.get('/health', (req, res) => {
   const healthy = localStateOK();
-  res.status(healthy ? 200 : 503).send('OK');
+  res.status (healthy ? 200 : 503).send('OK');
 });
 \`\`\`
 
@@ -672,8 +672,8 @@ app.get('/healthz/ready', async (req, res) => {
   
   // Use cached result if fresh
   if (cachedHealthStatus && (now - lastCheck) < CACHE_TTL) {
-    return res.status(cachedHealthStatus.code)
-              .json(cachedHealthStatus.body);
+    return res.status (cachedHealthStatus.code)
+              .json (cachedHealthStatus.body);
   }
   
   // Perform checks
@@ -686,7 +686,7 @@ app.get('/healthz/ready', async (req, res) => {
   };
   lastCheck = now;
   
-  res.status(cachedHealthStatus.code).json(cachedHealthStatus.body);
+  res.status (cachedHealthStatus.code).json (cachedHealthStatus.body);
 });
 \`\`\`
 
@@ -769,7 +769,7 @@ Action: Check for transient issues
 
 ### **Common Questions**
 
-**Q: What's the difference between liveness and readiness?**
+**Q: What\'s the difference between liveness and readiness?**
 A: Liveness checks if app is running (restart if fails). Readiness checks if app is ready for traffic (remove from load balancer if fails). Liveness should be simple, readiness can check dependencies.
 
 **Q: What should you check in a liveness probe?**

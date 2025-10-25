@@ -7,7 +7,7 @@ export const magicmethodsSection = {
   title: 'Magic Methods (Dunder Methods)',
   content: `# Magic Methods (Dunder Methods)
 
-Magic methods (also called **dunder methods** for "double underscore") allow you to define custom behavior for Python's built-in operations. They make your objects feel like native Python types.
+Magic methods (also called **dunder methods** for "double underscore") allow you to define custom behavior for Python\'s built-in operations. They make your objects feel like native Python types.
 
 ## Why Magic Methods Matter
 
@@ -40,15 +40,15 @@ class Point:
         return f"Point({self.x}, {self.y})"
 
 p = Point(3, 4)
-print(str(p))   # Point at (3, 4)  - uses __str__
-print(repr(p))  # Point(3, 4)      - uses __repr__
+print(str (p))   # Point at (3, 4)  - uses __str__
+print(repr (p))  # Point(3, 4)      - uses __repr__
 print(p)        # Point at (3, 4)  - print uses __str__ if available
 print([p])      # [Point(3, 4)]    - containers use __repr__
 \`\`\`
 
 **Rule of thumb:**
 - \`__str__\`: User-friendly output
-- \`__repr__\`: Unambiguous, ideally \`eval(repr(obj)) == obj\`
+- \`__repr__\`: Unambiguous, ideally \`eval (repr (obj)) == obj\`
 - Always implement \`__repr__\`; \`__str__\` is optional
 
 ---
@@ -65,7 +65,7 @@ class Student:
     
     def __eq__(self, other):
         """Check equality (==)"""
-        if not isinstance(other, Student):
+        if not isinstance (other, Student):
             return False
         return self.name == other.name and self.grade == other.grade
     
@@ -129,19 +129,19 @@ class Vector:
     
     def __add__(self, other):
         """Addition (+)"""
-        return Vector(self.x + other.x, self.y + other.y)
+        return Vector (self.x + other.x, self.y + other.y)
     
     def __sub__(self, other):
         """Subtraction (-)"""
-        return Vector(self.x - other.x, self.y - other.y)
+        return Vector (self.x - other.x, self.y - other.y)
     
     def __mul__(self, scalar):
         """Multiplication (*)"""
-        return Vector(self.x * scalar, self.y * scalar)
+        return Vector (self.x * scalar, self.y * scalar)
     
     def __truediv__(self, scalar):
         """Division (/)"""
-        return Vector(self.x / scalar, self.y / scalar)
+        return Vector (self.x / scalar, self.y / scalar)
     
     def __repr__(self):
         return f"Vector({self.x}, {self.y})"
@@ -190,7 +190,7 @@ class ShoppingCart:
     
     def __len__(self):
         """Support len()"""
-        return len(self.items)
+        return len (self.items)
     
     def __getitem__(self, index):
         """Support indexing: cart[0]"""
@@ -210,16 +210,16 @@ class ShoppingCart:
     
     def __iter__(self):
         """Make iterable (for loops)"""
-        return iter(self.items)
+        return iter (self.items)
     
-    def add(self, item):
-        self.items.append(item)
+    def add (self, item):
+        self.items.append (item)
 
 cart = ShoppingCart()
 cart.add("apple")
 cart.add("banana")
 
-print(len(cart))         # 2 - uses __len__
+print(len (cart))         # 2 - uses __len__
 print(cart[0])           # 'apple' - uses __getitem__
 print("apple" in cart)   # True - uses __contains__
 
@@ -274,7 +274,7 @@ class Timer:
 
 with Timer():
     # Code to time
-    sum(range(1000000))
+    sum (range(1000000))
 # Output: Elapsed: 0.0234 seconds
 
 # Classic use: file handling, database connections, locks
@@ -294,13 +294,13 @@ class Person:
     
     def __eq__(self, other):
         """Objects are equal if SSNs match"""
-        if not isinstance(other, Person):
+        if not isinstance (other, Person):
             return False
         return self.ssn == other.ssn
     
     def __hash__(self):
         """Hash based on immutable attribute"""
-        return hash(self.ssn)
+        return hash (self.ssn)
     
     def __repr__(self):
         return f"Person('{self.name}', '{self.ssn}')"
@@ -314,7 +314,7 @@ print(p1 is p2)  # False - different objects
 
 # Can use in sets/dicts
 people = {p1, p2, p3}
-print(len(people))  # 2 - p1 and p2 treated as same
+print(len (people))  # 2 - p1 and p2 treated as same
 
 lookup = {p1: "Manager", p3: "Engineer"}
 print(lookup[p2])  # "Manager" - p2 treated as same key as p1
@@ -336,7 +336,7 @@ class DynamicAttributes:
     def __getattr__(self, name):
         """Called when attribute not found"""
         print(f"Getting {name}")
-        return self._data.get(name, f"No attribute '{name}'")
+        return self._data.get (name, f"No attribute '{name}'")
     
     def __setattr__(self, name, value):
         """Called on all attribute assignment"""
@@ -396,9 +396,9 @@ del obj.x      # Deleting x
 5. **Return \`NotImplemented\`** - when operation not supported with given type
 \`\`\`python
 def __add__(self, other):
-    if not isinstance(other, Vector):
+    if not isinstance (other, Vector):
         return NotImplemented  # Let Python try other.__radd__(self)
-    return Vector(self.x + other.x, self.y + other.y)
+    return Vector (self.x + other.x, self.y + other.y)
 \`\`\`
 6. **Immutable hash** - \`__hash__\` must be based on immutable attributes
 
@@ -435,8 +435,8 @@ class Dataset:
     
     def __len__(self):
         if self._data is None:
-            self._data = load_data(self.path)  # Load on first access
-        return len(self._data)
+            self._data = load_data (self.path)  # Load on first access
+        return len (self._data)
 \`\`\`
 
 ---
@@ -458,6 +458,6 @@ class ListNode:
 # Now can use with heapq!
 import heapq
 heap = [node1, node2, node3]
-heapq.heapify(heap)
+heapq.heapify (heap)
 \`\`\``,
 };

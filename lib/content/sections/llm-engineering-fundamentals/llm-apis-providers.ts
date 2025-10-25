@@ -46,7 +46,7 @@ The LLM ecosystem has exploded with options. Understanding each provider's stren
 
 ## OpenAI API Deep Dive
 
-OpenAI provides the most mature and powerful LLM APIs. Let's start here.
+OpenAI provides the most mature and powerful LLM APIs. Let\'s start here.
 
 ### Setup and Authentication
 
@@ -68,7 +68,7 @@ import json
 
 def load_config():
     with open("config.json") as f:
-        return json.load(f)
+        return json.load (f)
 
 config = load_config()
 client = OpenAI(api_key=config["openai_api_key"])
@@ -238,7 +238,7 @@ class OpenAIClient:
             },
         }
         
-        rates = pricing.get(model, pricing['gpt-3.5-turbo'])
+        rates = pricing.get (model, pricing['gpt-3.5-turbo'])
         
         prompt_cost = (prompt_tokens / 1_000_000) * rates['prompt']
         completion_cost = (completion_tokens / 1_000_000) * rates['completion']
@@ -253,11 +253,10 @@ messages = [
     {"role": "user", "content": "What is machine learning?"}
 ]
 
-result = client.chat(messages, model="gpt-3.5-turbo")
+result = client.chat (messages, model="gpt-3.5-turbo")
 
 print(result['content'])
-print(f"Cost: \${result['cost']: .6f
-}")
+print(f"Cost: \${result['cost']:.6f}")
 print(f"Latency: {result['latency']:.2f}s")
 print(f"Tokens: {result['usage']['total_tokens']}")
 \`\`\`
@@ -273,7 +272,7 @@ Claude excels at following instructions and has massive context windows.
 
 from anthropic import Anthropic
 
-client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+client = Anthropic (api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 # Claude API call
 response = client.messages.create(
@@ -313,7 +312,7 @@ claude-3-haiku-20240307:
 - Low cost
 """
 
-def select_claude_model(task_type: str, budget: str) -> str:
+def select_claude_model (task_type: str, budget: str) -> str:
     """Select appropriate Claude model."""
     if budget == 'low' or task_type == 'simple':
         return 'claude-3-haiku-20240307'
@@ -345,7 +344,7 @@ print(response.content[0].text)
 
 ## Google Gemini API
 
-Google's newest models with strong multimodal capabilities.
+Google\'s newest models with strong multimodal capabilities.
 
 ### Setup and Usage
 
@@ -354,7 +353,7 @@ Google's newest models with strong multimodal capabilities.
 
 import google.generativeai as genai
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure (api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Gemini API call
 model = genai.GenerativeModel('gemini-pro')
@@ -400,7 +399,7 @@ Running models locally or on your own infrastructure.
 import requests
 import json
 
-def ollama_chat(prompt: str, model: str = "llama3") -> str:
+def ollama_chat (prompt: str, model: str = "llama3") -> str:
     """Call local Ollama model."""
     response = requests.post(
         'http://localhost:11434/api/generate',
@@ -425,7 +424,7 @@ print(result)
 
 from huggingface_hub import InferenceClient
 
-client = InferenceClient(token=os.getenv("HF_TOKEN"))
+client = InferenceClient (token=os.getenv("HF_TOKEN"))
 
 # Call Llama or Mistral models
 response = client.text_generation(
@@ -458,7 +457,7 @@ class UnifiedLLMClient:
     def __init__(self):
         self.openai_client = OpenAI()
         self.anthropic_client = Anthropic()
-        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        genai.configure (api_key=os.getenv("GOOGLE_API_KEY"))
     
     def chat(
         self,
@@ -482,13 +481,13 @@ class UnifiedLLMClient:
             Generated text response
         """
         if provider == "openai":
-            return self._call_openai(messages, model, temperature, max_tokens)
+            return self._call_openai (messages, model, temperature, max_tokens)
         elif provider == "anthropic":
-            return self._call_anthropic(messages, model, temperature, max_tokens)
+            return self._call_anthropic (messages, model, temperature, max_tokens)
         elif provider == "google":
-            return self._call_google(messages, model, temperature, max_tokens)
+            return self._call_google (messages, model, temperature, max_tokens)
         else:
-            raise ValueError(f"Unknown provider: {provider}")
+            raise ValueError (f"Unknown provider: {provider}")
     
     def _call_openai(
         self,
@@ -525,7 +524,7 @@ class UnifiedLLMClient:
             if msg['role'] == 'system':
                 system = msg['content']
             else:
-                user_messages.append(msg)
+                user_messages.append (msg)
         
         response = self.anthropic_client.messages.create(
             model=model,
@@ -552,7 +551,7 @@ class UnifiedLLMClient:
             for msg in messages
         ])
         
-        gemini_model = genai.GenerativeModel(model)
+        gemini_model = genai.GenerativeModel (model)
         response = gemini_model.generate_content(
             prompt,
             generation_config=genai.GenerationConfig(
@@ -574,7 +573,7 @@ messages = [
 # Try all providers
 for provider in ["openai", "anthropic", "google"]:
     print(f"\\n{provider.upper()}:")
-    response = client.chat(messages, provider=provider)
+    response = client.chat (messages, provider=provider)
     print(response[:100] + "...")
 \`\`\`
 
@@ -675,10 +674,10 @@ def compare_provider_costs(
         results.append((model, total))
     
     # Sort by cost
-    results.sort(key=lambda x: x[1])
+    results.sort (key=lambda x: x[1])
     
     for model, cost in results:
-        print(f"{model:30s} \${cost: .6f}")
+        print(f"{model:30s} \${cost:.6f}")
 
 cheapest = results[0]
 most_expensive = results[-1]
@@ -687,7 +686,7 @@ print(f"\\nCheapest: {cheapest[0]} (\${cheapest[1]:.6f})")
 print(f"Most expensive: {most_expensive[0]} (\${most_expensive[1]:.6f})")
 print(f"Difference: {most_expensive[1] / cheapest[1]:.1f}x more expensive")
 
-compare_provider_costs(prompt_tokens = 1000, completion_tokens = 500)
+compare_provider_costs (prompt_tokens = 1000, completion_tokens = 500)
 \`\`\`
 
 ## Choosing the Right Provider

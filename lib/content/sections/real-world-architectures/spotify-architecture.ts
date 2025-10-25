@@ -5,7 +5,7 @@
 export const spotifyarchitectureSection = {
   id: 'spotify-architecture',
   title: 'Spotify Architecture',
-  content: `Spotify is the world's largest music streaming platform with over 500 million users streaming 100 billion songs monthly. With a catalog of 100+ million tracks, Spotify's architecture must handle massive scale audio streaming, personalized recommendations, and real-time social features. This section explores the technical systems behind Spotify.
+  content: `Spotify is the world's largest music streaming platform with over 500 million users streaming 100 billion songs monthly. With a catalog of 100+ million tracks, Spotify\'s architecture must handle massive scale audio streaming, personalized recommendations, and real-time social features. This section explores the technical systems behind Spotify.
 
 ## Overview
 
@@ -166,7 +166,7 @@ Return top 20
 
 ### 4. Recommendation System
 
-Spotify's recommendations drive discovery and engagement.
+Spotify\'s recommendations drive discovery and engagement.
 
 **Recommendation Types**:
 
@@ -243,7 +243,7 @@ Playlists are core to Spotify's user experience.
 
 **2. Spotify-Curated Playlists**:
 - Created by Spotify editors
-- Examples: Today's Top Hits, RapCaviar, Hot Country
+- Examples: Today\'s Top Hits, RapCaviar, Hot Country
 - Updated frequently (daily/weekly)
 
 **3. Algorithmic Playlists**:
@@ -472,7 +472,7 @@ Rights management, royalty calculation, regional availability require sophistica
 
 ## Interview Tips
 
-**Q: How would you design Spotify's audio streaming system?**
+**Q: How would you design Spotify\'s audio streaming system?**
 
 A: Use chunked HTTP streaming with adaptive bitrate. Store audio files in multiple encodings (128 kbps, 320 kbps) and formats (Ogg Vorbis, AAC) in GCS. Deliver via CDN (Google Cloud CDN + custom edge locations) with cache hit rate 90%+. Playback flow: User clicks play → Backend returns manifest (audio chunks) with CDN URLs → Client requests chunks sequentially → CDN serves from cache or fetches from origin. Pre-fetch next track while current track playing (seamless transition). Local cache stores recently played tracks (save bandwidth). Support offline mode (Premium users download tracks). Handle network changes with adaptive bitrate (switch quality based on bandwidth).
 
@@ -488,7 +488,7 @@ A: Use WebSocket for real-time updates. When user plays track: (1) Client sends 
 
 ## Summary
 
-Spotify's architecture demonstrates building a music streaming platform at massive scale:
+Spotify\'s architecture demonstrates building a music streaming platform at massive scale:
 
 **Key Takeaways**:
 

@@ -40,7 +40,7 @@ export const chaosEngineeringSection = {
 - Integration tests: Test component interactions
 - Load tests: Test performance
 
-**What's Missing?**: Real-world failure scenarios
+**What\'s Missing?**: Real-world failure scenarios
 - Network partitions
 - Hardware failures
 - Cascading failures
@@ -618,7 +618,7 @@ A: Production has unique characteristics (traffic patterns, data, dependencies) 
 **Q: How do you convince management to do chaos engineering?**
 A: Frame as risk reduction (find issues before customers do), show cost of outages, start small in non-prod, demonstrate value with metrics.
 
-**Q: What's the difference between chaos engineering and testing?**
+**Q: What\'s the difference between chaos engineering and testing?**
 A: Testing validates known scenarios. Chaos engineering discovers unknown failure modes and emergent behaviors in complex systems.
 
 ---

@@ -46,10 +46,10 @@ This section covers dimensional modeling, star/snowflake schemas, slowly changin
 \`\`\`sql
 CREATE TABLE fact_sales (
     sale_id BIGINT PRIMARY KEY,
-    date_key INTEGER REFERENCES dim_date(date_key),
-    product_key INTEGER REFERENCES dim_product(product_key),
-    customer_key INTEGER REFERENCES dim_customer(customer_key),
-    store_key INTEGER REFERENCES dim_store(store_key),
+    date_key INTEGER REFERENCES dim_date (date_key),
+    product_key INTEGER REFERENCES dim_product (product_key),
+    customer_key INTEGER REFERENCES dim_customer (customer_key),
+    store_key INTEGER REFERENCES dim_store (store_key),
     
     -- Measures (facts)
     quantity INTEGER,
@@ -154,13 +154,13 @@ GROUP BY d.year, d.quarter, p.category, s.region;
 CREATE TABLE dim_product (
     product_key INTEGER PRIMARY KEY,
     product_name VARCHAR(200),
-    category_key INTEGER REFERENCES dim_category(category_key)
+    category_key INTEGER REFERENCES dim_category (category_key)
 );
 
 CREATE TABLE dim_category (
     category_key INTEGER PRIMARY KEY,
     category_name VARCHAR(100),
-    department_key INTEGER REFERENCES dim_department(department_key)
+    department_key INTEGER REFERENCES dim_department (department_key)
 );
 
 CREATE TABLE dim_department (

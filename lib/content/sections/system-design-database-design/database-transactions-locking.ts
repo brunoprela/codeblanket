@@ -493,8 +493,8 @@ COMMIT;  -- Locks held for minimal time
 
 **4. Timeout and Retry:**
 \`\`\`python
-def transfer_with_retry(from_account, to_account, amount, max_retries=3):
-    for attempt in range(max_retries):
+def transfer_with_retry (from_account, to_account, amount, max_retries=3):
+    for attempt in range (max_retries):
         try:
             with db.transaction():
                 db.execute("UPDATE accounts SET balance = balance - %s WHERE id = %s", 
@@ -593,7 +593,7 @@ CREATE TABLE products (
 );
 
 -- Application code
-def update_product(product_id, new_data):
+def update_product (product_id, new_data):
     product = db.query("SELECT * FROM products WHERE product_id = %s", product_id)
     
     # User modifies data...

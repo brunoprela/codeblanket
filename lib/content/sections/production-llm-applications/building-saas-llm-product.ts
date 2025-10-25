@@ -34,29 +34,29 @@ class User(Base):
     
     tenant = relationship("Tenant", back_populates="users")
 
-def get_tenant_from_request(request: Request):
+def get_tenant_from_request (request: Request):
     """Get tenant from subdomain or API key."""
     # Check subdomain
     host = request.headers.get('host', ')
     subdomain = host.split('.')[0]
-    tenant = session.query(Tenant).filter_by(subdomain=subdomain).first()
+    tenant = session.query(Tenant).filter_by (subdomain=subdomain).first()
     
     if not tenant:
         # Check API key
         api_key = request.headers.get('X-API-Key')
-        tenant = session.query(Tenant).filter_by(api_key=api_key).first()
+        tenant = session.query(Tenant).filter_by (api_key=api_key).first()
     
     return tenant
 
 @app.middleware("http")
-async def tenant_middleware(request: Request, call_next):
+async def tenant_middleware (request: Request, call_next):
     """Add tenant to request context."""
-    tenant = get_tenant_from_request(request)
+    tenant = get_tenant_from_request (request)
     if not tenant and request.url.path not in ['/health', '/docs']:
-        return JSONResponse(status_code=401, content={"error": "Tenant not found"})
+        return JSONResponse (status_code=401, content={"error": "Tenant not found"})
     
     request.state.tenant = tenant
-    response = await call_next(request)
+    response = await call_next (request)
     return response
 \`\`\`
 
@@ -76,7 +76,7 @@ class SubscriptionManager:
         'enterprise': {'price_id': 'price_456', 'requests_per_month': float('inf')}
     }
     
-    def create_customer(self, tenant: Tenant, email: str):
+    def create_customer (self, tenant: Tenant, email: str):
         """Create Stripe customer."""
         customer = stripe.Customer.create(
             email=email,
@@ -86,7 +86,7 @@ class SubscriptionManager:
         session.commit()
         return customer
     
-    def create_subscription(self, tenant: Tenant, plan: str):
+    def create_subscription (self, tenant: Tenant, plan: str):
         """Create subscription."""
         price_id = self.PLANS[plan]['price_id']
         
@@ -101,14 +101,14 @@ class SubscriptionManager:
         
         return subscription
     
-    def cancel_subscription(self, tenant: Tenant):
+    def cancel_subscription (self, tenant: Tenant):
         """Cancel subscription."""
-        stripe.Subscription.delete(tenant.stripe_subscription_id)
+        stripe.Subscription.delete (tenant.stripe_subscription_id)
         tenant.tier = 'free'
         session.commit()
 
 @app.post("/webhooks/stripe")
-async def stripe_webhook(request: Request):
+async def stripe_webhook (request: Request):
     """Handle Stripe webhooks."""
     payload = await request.body()
     sig_header = request.headers.get('stripe-signature')
@@ -120,7 +120,7 @@ async def stripe_webhook(request: Request):
     if event['type'] == 'customer.subscription.deleted':
         # Downgrade tenant to free
         subscription = event['data']['object']
-        tenant = get_tenant_by_subscription(subscription['id'])
+        tenant = get_tenant_by_subscription (subscription['id'])
         tenant.tier = 'free'
         session.commit()
     
@@ -142,7 +142,7 @@ class UsageRecord(Base):
     
     tenant = relationship("Tenant", back_populates="usage")
 
-def track_usage(tenant_id: int, tokens: int, cost: float):
+def track_usage (tenant_id: int, tokens: int, cost: float):
     """Track daily usage for billing."""
     today = datetime.utcnow().date()
     
@@ -152,8 +152,8 @@ def track_usage(tenant_id: int, tokens: int, cost: float):
     ).first()
     
     if not record:
-        record = UsageRecord(tenant_id=tenant_id, date=today)
-        session.add(record)
+        record = UsageRecord (tenant_id=tenant_id, date=today)
+        session.add (record)
     
     record.requests_count += 1
     record.tokens_used += tokens
@@ -162,9 +162,9 @@ def track_usage(tenant_id: int, tokens: int, cost: float):
     session.commit()
 
 @app.get("/usage")
-async def get_usage(tenant: Tenant = Depends(get_current_tenant)):
+async def get_usage (tenant: Tenant = Depends (get_current_tenant)):
     """Get usage for current billing period."""
-    start_of_month = datetime.utcnow().replace(day=1).date()
+    start_of_month = datetime.utcnow().replace (day=1).date()
     
     usage = session.query(
         func.sum(UsageRecord.requests_count),
@@ -187,7 +187,7 @@ async def get_usage(tenant: Tenant = Depends(get_current_tenant)):
 
 \`\`\`python
 @app.get("/admin/stats")
-async def admin_stats(user=Depends(require_admin)):
+async def admin_stats (user=Depends (require_admin)):
     """Admin dashboard statistics."""
     return {
         'tenants': {
@@ -208,7 +208,7 @@ async def admin_stats(user=Depends(require_admin)):
     }
 
 @app.get("/admin/tenants")
-async def list_tenants(user=Depends(require_admin)):
+async def list_tenants (user=Depends (require_admin)):
     """List all tenants for admin."""
     tenants = session.query(Tenant).all()
     
@@ -216,7 +216,7 @@ async def list_tenants(user=Depends(require_admin)):
         'id': t.id,
         'name': t.name,
         'tier': t.tier,
-        'usage_this_month': get_tenant_usage(t.id),
+        'usage_this_month': get_tenant_usage (t.id),
         'created_at': t.created_at
     } for t in tenants]
 \`\`\`
@@ -238,7 +238,7 @@ class SupportTicket(Base):
 async def create_ticket(
     subject: str,
     description: str,
-    tenant=Depends(get_current_tenant)
+    tenant=Depends (get_current_tenant)
 ):
     """Create support ticket."""
     ticket = SupportTicket(
@@ -246,11 +246,11 @@ async def create_ticket(
         subject=subject,
         description=description
     )
-    session.add(ticket)
+    session.add (ticket)
     session.commit()
     
     # Notify support team
-    send_slack_notification(f"New ticket from {tenant.name}: {subject}")
+    send_slack_notification (f"New ticket from {tenant.name}: {subject}")
     
     return {"ticket_id": ticket.id}
 \`\`\`
@@ -268,11 +268,11 @@ async def onboard_tenant(
     # Create tenant
     tenant = Tenant(
         name=company_name,
-        subdomain=generate_subdomain(company_name),
+        subdomain=generate_subdomain (company_name),
         api_key=generate_api_key(),
         tier=plan
     )
-    session.add(tenant)
+    session.add (tenant)
     session.flush()
     
     # Create first user (admin)
@@ -281,17 +281,17 @@ async def onboard_tenant(
         email=email,
         role='admin'
     )
-    session.add(user)
+    session.add (user)
     
     # Create Stripe customer if paid plan
     if plan != 'free':
-        subscription_manager.create_customer(tenant, email)
-        subscription_manager.create_subscription(tenant, plan)
+        subscription_manager.create_customer (tenant, email)
+        subscription_manager.create_subscription (tenant, plan)
     
     session.commit()
     
     # Send welcome email
-    send_welcome_email(email, tenant.api_key, tenant.subdomain)
+    send_welcome_email (email, tenant.api_key, tenant.subdomain)
     
     return {
         'tenant_id': tenant.id,

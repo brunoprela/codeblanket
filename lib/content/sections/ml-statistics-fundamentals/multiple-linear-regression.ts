@@ -41,8 +41,8 @@ def demonstrate_multiple_regression():
     
     # Generate data
     n = 200
-    X1 = np.random.rand(n) * 10  # e.g., years experience
-    X2 = np.random.rand(n) * 10  # e.g., education level
+    X1 = np.random.rand (n) * 10  # e.g., years experience
+    X2 = np.random.rand (n) * 10  # e.g., education level
     
     # Y depends on both (e.g., salary)
     Y = 30000 + 2000*X1 + 3000*X2 + np.random.normal(0, 5000, n)
@@ -63,7 +63,7 @@ def demonstrate_multiple_regression():
     print(f"R² = {r2:.4f}")
     
     # 3D visualization
-    fig = plt.figure(figsize=(12, 5))
+    fig = plt.figure (figsize=(12, 5))
     
     # 3D scatter
     ax1 = fig.add_subplot(121, projection='3d')
@@ -72,7 +72,7 @@ def demonstrate_multiple_regression():
     # Create regression plane
     x1_range = np.linspace(X1.min(), X1.max(), 20)
     x2_range = np.linspace(X2.min(), X2.max(), 20)
-    X1_grid, X2_grid = np.meshgrid(x1_range, x2_range)
+    X1_grid, X2_grid = np.meshgrid (x1_range, x2_range)
     Y_grid = model.intercept_ + model.coef_[0]*X1_grid + model.coef_[1]*X2_grid
     
     ax1.plot_surface(X1_grid, X2_grid, Y_grid, alpha=0.3, cmap='viridis')
@@ -109,7 +109,7 @@ def ols_matrix_form(X, y):
     """OLS using matrix formulation"""
     
     # Add intercept column
-    X_with_intercept = np.column_stack([np.ones(len(X)), X])
+    X_with_intercept = np.column_stack([np.ones (len(X)), X])
     
     # β = (X'X)^(-1) X'y
     XtX = X_with_intercept.T @ X_with_intercept
@@ -124,21 +124,21 @@ def ols_matrix_form(X, y):
     
     # MSE
     n, p = X_with_intercept.shape
-    mse = np.sum(residuals**2) / (n - p)
+    mse = np.sum (residuals**2) / (n - p)
     
     # Coefficient standard errors
     cov_matrix = mse * np.linalg.inv(XtX)
-    se = np.sqrt(np.diag(cov_matrix))
+    se = np.sqrt (np.diag (cov_matrix))
     
     # t-statistics
     t_stats = beta / se
     
     # p-values
-    p_values = 2 * (1 - stats.t.cdf(np.abs(t_stats), df=n-p))
+    p_values = 2 * (1 - stats.t.cdf (np.abs (t_stats), df=n-p))
     
     # R²
     ss_total = np.sum((y - y.mean())**2)
-    ss_residual = np.sum(residuals**2)
+    ss_residual = np.sum (residuals**2)
     r_squared = 1 - (ss_residual / ss_total)
     
     # Adjusted R²
@@ -157,7 +157,7 @@ def ols_matrix_form(X, y):
 
 # Example
 n = 100
-X = np.random.randn(n, 3)  # 3 predictors
+X = np.random.randn (n, 3)  # 3 predictors
 true_beta = np.array([5, 2, -3, 1.5])  # intercept + 3 slopes
 y = true_beta[0] + X @ true_beta[1:] + np.random.normal(0, 1, n)
 
@@ -205,8 +205,7 @@ def interpret_coefficients():
     print(model.summary())
     print()
     print("Interpretation:")
-    print(f"Intercept: \${model.params['const']: .0f
-}")
+    print(f"Intercept: \${model.params['const']:.0f}")
 print(f"  → Base price with sqft=0, bedrooms=0, age=0")
 print()
 print(f"sqft: \${model.params['sqft']:.2f} per sq ft")
@@ -233,12 +232,12 @@ def analyze_multicollinearity():
     """Detect and handle multicollinearity"""
     
     n = 100
-    X1 = np.random.randn(n)
-    X2 = np.random.randn(n)
-    X3 = 0.95 * X1 + 0.05 * np.random.randn(n)  # Highly correlated with X1!
+    X1 = np.random.randn (n)
+    X2 = np.random.randn (n)
+    X3 = 0.95 * X1 + 0.05 * np.random.randn (n)  # Highly correlated with X1!
     
     X = pd.DataFrame({'X1': X1, 'X2': X2, 'X3': X3})
-    y = 2*X1 + 3*X2 + 1*X3 + np.random.randn(n)
+    y = 2*X1 + 3*X2 + 1*X3 + np.random.randn (n)
     
     # Calculate VIF
     vif_data = pd.DataFrame()
@@ -287,14 +286,14 @@ def compare_r_squared_adjusted():
     """Show why adjusted R² is better for model comparison"""
     
     n = 100
-    X_base = np.random.randn(n, 2)  # 2 useful predictors
-    y = X_base @ np.array([2, 3]) + np.random.randn(n)
+    X_base = np.random.randn (n, 2)  # 2 useful predictors
+    y = X_base @ np.array([2, 3]) + np.random.randn (n)
     
     results = []
     
     # Add noise predictors
     for n_noise in [0, 2, 5, 10]:
-        X_noise = np.random.randn(n, n_noise)
+        X_noise = np.random.randn (n, n_noise)
         X = np.column_stack([X_base, X_noise]) if n_noise > 0 else X_base
         
         model = LinearRegression()
@@ -310,9 +309,9 @@ def compare_r_squared_adjusted():
             'Adj R²': adj_r2
         })
     
-    results_df = pd.DataFrame(results)
+    results_df = pd.DataFrame (results)
     print("=== R² vs Adjusted R² ===")
-    print(results_df.to_string(index=False))
+    print(results_df.to_string (index=False))
     print()
     print("Notice:")
     print("  • R² always increases with more predictors (even noise!)")
@@ -333,8 +332,8 @@ def overall_f_test():
     """F-test for overall model significance"""
     
     n = 100
-    X = np.random.randn(n, 3)
-    y = 2*X[:, 0] + 3*X[:, 1] + np.random.randn(n)
+    X = np.random.randn (n, 3)
+    y = 2*X[:, 0] + 3*X[:, 1] + np.random.randn (n)
     
     model = sm.OLS(y, sm.add_constant(X)).fit()
     
@@ -367,25 +366,25 @@ def feature_selection_comparison():
     
     # Generate data with some useless features
     n = 200
-    X = np.random.randn(n, 10)
+    X = np.random.randn (n, 10)
     # Only first 3 features are useful
-    y = 2*X[:, 0] + 3*X[:, 1] - 1.5*X[:, 2] + np.random.randn(n)
+    y = 2*X[:, 0] + 3*X[:, 1] - 1.5*X[:, 2] + np.random.randn (n)
     
     feature_names = [f'X{i}' for i in range(10)]
     
     # Method 1: Univariate (F-statistic)
-    selector_univariate = SelectKBest(f_regression, k=5)
+    selector_univariate = SelectKBest (f_regression, k=5)
     selector_univariate.fit(X, y)
-    selected_univariate = [feature_names[i] for i in selector_univariate.get_support(indices=True)]
+    selected_univariate = [feature_names[i] for i in selector_univariate.get_support (indices=True)]
     
     # Method 2: Recursive Feature Elimination
     model = LinearRegression()
     selector_rfe = RFE(model, n_features_to_select=5)
     selector_rfe.fit(X, y)
-    selected_rfe = [feature_names[i] for i in selector_rfe.get_support(indices=True)]
+    selected_rfe = [feature_names[i] for i in selector_rfe.get_support (indices=True)]
     
     # Method 3: Feature importance (Random Forest)
-    rf = RandomForestRegressor(n_estimators=100, random_state=42)
+    rf = RandomForestRegressor (n_estimators=100, random_state=42)
     rf.fit(X, y)
     importances = pd.DataFrame({
         'Feature': feature_names,
@@ -401,7 +400,7 @@ def feature_selection_comparison():
     print(f"Random Forest importance: {selected_rf}")
     print()
     print("Feature Importances (Random Forest):")
-    print(importances.to_string(index=False))
+    print(importances.to_string (index=False))
 
 feature_selection_comparison()
 \`\`\`
@@ -444,32 +443,32 @@ def real_estate_model():
     model = sm.OLS(y_train, sm.add_constant(X_train)).fit()
     
     # Predictions
-    y_pred = model.predict(sm.add_constant(X_test))
+    y_pred = model.predict (sm.add_constant(X_test))
     
     # Evaluate
     from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
     
-    r2 = r2_score(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score (y_test, y_pred)
+    mae = mean_absolute_error (y_test, y_pred)
+    rmse = np.sqrt (mean_squared_error (y_test, y_pred))
     
     print("=== Real Estate Price Prediction ===")
     print(model.summary())
     print()
     print("Test Set Performance:")
     print(f"  R² = {r2:.4f}")
-    print(f"  MAE = \${mae:, .0f}")
+    print(f"  MAE = \${mae:,.0f}")
 print(f"  RMSE = \${rmse:,.0f}")
     
-    # Feature importance(by absolute t - statistic)
+    # Feature importance (by absolute t - statistic)
 importance = pd.DataFrame({
     'Feature': model.params.index[1:],  # Exclude intercept
         'Coefficient': model.params.values[1:],
-    '|t-stat|': np.abs(model.tvalues.values[1:])
+    '|t-stat|': np.abs (model.tvalues.values[1:])
 }).sort_values('|t-stat|', ascending = False)
 
 print("\\nFeature Importance (by |t-statistic|):")
-print(importance.to_string(index = False))
+print(importance.to_string (index = False))
 
 real_estate_model()
 \`\`\`

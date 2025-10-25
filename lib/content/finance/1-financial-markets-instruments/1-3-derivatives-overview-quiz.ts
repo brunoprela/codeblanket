@@ -59,7 +59,7 @@ export const derivativesMultipleChoiceQuestions = [
     ],
     correctAnswer: 2,
     explanation:
-      "You **pay fixed 4%** and **receive floating** (SOFR). You profit when the floating rate > 4%. **Scenario**: SOFR rises to 6%. You pay 4% (fixed) but receive 6% (floating) = net receive 2%. You profit! **Why use this**: If you have floating-rate debt (paying SOFR + spread), this swap converts it to fixed-rate debt. Or, speculatively, you're betting rates will rise. **Example**: You pay a bank 4% on $10M notional, they pay you SOFR on $10M. If SOFR = 3%, you pay net 1% ($100K loss). If SOFR = 6%, you receive net 2% ($200K gain). **Real-world use**: Companies with floating-rate debt use swaps to 'lock in' fixed rates when they expect rates to rise.",
+      "You **pay fixed 4%** and **receive floating** (SOFR). You profit when the floating rate > 4%. **Scenario**: SOFR rises to 6%. You pay 4% (fixed) but receive 6% (floating) = net receive 2%. You profit! **Why use this**: If you have floating-rate debt (paying SOFR + spread), this swap converts it to fixed-rate debt. Or, speculatively, you're betting rates will rise. **Example**: You pay a bank 4% on $10M notional, they pay you SOFR on $10M. If SOFR = 3%, you pay net 1% (\$100K loss). If SOFR = 6%, you receive net 2% (\$200K gain). **Real-world use**: Companies with floating-rate debt use swaps to 'lock in' fixed rates when they expect rates to rise.",
     difficulty: 'intermediate',
   },
   {
@@ -75,7 +75,7 @@ export const derivativesMultipleChoiceQuestions = [
     ],
     correctAnswer: 1,
     explanation:
-      "Derivatives **amplified** the crisis through: (1) **Leverage**: Banks held 30-40x leveraged positions in CDOs, turning small losses into catastrophic ones, (2) **Complexity**: No one understood the risk - AAA-rated CDOs contained junk mortgages, (3) **Interconnection**: AIG sold $500B+ in CDS 'insurance' without capital to pay. When AIG nearly failed, it threatened to bring down everyone who bought protection from them, (4) **Lack of transparency**: OTC markets hid systemic risk. **Result**: A $1T mortgage problem became a $10T+ global crisis. **Warren Buffett's warning**: 'Financial weapons of mass destruction' - he was right. **Key lesson**: Derivatives don't cause crises, but they can turn small problems into catastrophic ones through leverage and counterparty chains.",
+      "Derivatives **amplified** the crisis through: (1) **Leverage**: Banks held 30-40x leveraged positions in CDOs, turning small losses into catastrophic ones, (2) **Complexity**: No one understood the risk - AAA-rated CDOs contained junk mortgages, (3) **Interconnection**: AIG sold $500B+ in CDS 'insurance' without capital to pay. When AIG nearly failed, it threatened to bring down everyone who bought protection from them, (4) **Lack of transparency**: OTC markets hid systemic risk. **Result**: A $1T mortgage problem became a $10T+ global crisis. **Warren Buffett\'s warning**: 'Financial weapons of mass destruction' - he was right. **Key lesson**: Derivatives don't cause crises, but they can turn small problems into catastrophic ones through leverage and counterparty chains.",
     difficulty: 'advanced',
   },
 ];

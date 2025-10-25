@@ -14,22 +14,22 @@ MoE models use multiple specialized "expert" networks, routing each input to rel
 
 \`\`\`python
 """MoE implementation concept"""
-class MixtureOfExperts(nn.Module):
+class MixtureOfExperts (nn.Module):
     def __init__(self, n_experts=8, expert_dim=512, top_k=2):
-        self.experts = nn.ModuleList([Expert(expert_dim) for _ in range(n_experts)])
-        self.router = nn.Linear(expert_dim, n_experts)
+        self.experts = nn.ModuleList([Expert (expert_dim) for _ in range (n_experts)])
+        self.router = nn.Linear (expert_dim, n_experts)
         self.top_k = top_k
     
-    def forward(self, x):
+    def forward (self, x):
         # Router selects top-k experts
-        router_logits = self.router(x)
-        top_k_indices = torch.topk(router_logits, self.top_k).indices
+        router_logits = self.router (x)
+        top_k_indices = torch.topk (router_logits, self.top_k).indices
         
         # Combine expert outputs
         outputs = []
         for idx in top_k_indices:
-            outputs.append(self.experts[idx](x))
-        return torch.mean(torch.stack(outputs), dim=0)
+            outputs.append (self.experts[idx](x))
+        return torch.mean (torch.stack (outputs), dim=0)
 \`\`\`
 
 ## Long Context Models

@@ -502,17 +502,17 @@ PSUBSCRIBE news:*
 ### 1. Caching
 
 \`\`\`python
-def get_user(user_id):
+def get_user (user_id):
     # Try cache
-    cached = redis.get(f"user:{user_id}")
+    cached = redis.get (f"user:{user_id}")
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Cache miss - fetch from DB
     user = db.query("SELECT * FROM users WHERE id = ?", user_id)
     
     # Store in cache (1 hour TTL)
-    redis.setex(f"user:{user_id}", 3600, json.dumps(user))
+    redis.setex (f"user:{user_id}", 3600, json.dumps (user))
     return user
 \`\`\`
 
@@ -520,13 +520,13 @@ def get_user(user_id):
 
 \`\`\`python
 # Store session
-redis.setex(f"session:{session_id}", 1800, json.dumps(session_data))
+redis.setex (f"session:{session_id}", 1800, json.dumps (session_data))
 
 # Get session
-session = redis.get(f"session:{session_id}")
+session = redis.get (f"session:{session_id}")
 
 # Extend session
-redis.expire(f"session:{session_id}", 1800)
+redis.expire (f"session:{session_id}", 1800)
 \`\`\`
 
 ### 3. Rate Limiting
@@ -534,8 +534,8 @@ redis.expire(f"session:{session_id}", 1800)
 **Fixed window**:
 \`\`\`python
 key = f"rate_limit:{user_id}:{current_minute}"
-count = redis.incr(key)
-redis.expire(key, 60)
+count = redis.incr (key)
+redis.expire (key, 60)
 
 if count > 100:
     raise RateLimitExceeded()
@@ -548,17 +548,17 @@ window = 60  # 60 seconds
 key = f"rate_limit:{user_id}"
 
 # Remove old entries
-redis.zremrangebyscore(key, 0, now - window)
+redis.zremrangebyscore (key, 0, now - window)
 
 # Count requests in window
-count = redis.zcard(key)
+count = redis.zcard (key)
 
 if count >= 100:
     raise RateLimitExceeded()
 
 # Add current request
-redis.zadd(key, {str(uuid.uuid4()): now})
-redis.expire(key, window)
+redis.zadd (key, {str (uuid.uuid4()): now})
+redis.expire (key, window)
 \`\`\`
 
 ### 4. Leaderboard
@@ -610,22 +610,22 @@ if acquired:
 **Bad** (N round trips):
 \`\`\`python
 for key in keys:
-    redis.get(key)
+    redis.get (key)
 \`\`\`
 
 **Good** (1 round trip):
 \`\`\`python
 pipe = redis.pipeline()
 for key in keys:
-    pipe.get(key)
+    pipe.get (key)
 results = pipe.execute()
 \`\`\`
 
 ### 2. Use Connection Pooling
 
 \`\`\`python
-pool = redis.ConnectionPool(host='localhost', port=6379, max_connections=50)
-redis_client = redis.Redis(connection_pool=pool)
+pool = redis.ConnectionPool (host='localhost', port=6379, max_connections=50)
+redis_client = redis.Redis (connection_pool=pool)
 \`\`\`
 
 ### 3. Avoid KEYS Command
@@ -682,7 +682,7 @@ SLOWLOG GET 10  # Get 10 slowest commands
 ## Interview Tips
 
 **Explain Redis in 2 minutes**:
-"Redis is an in-memory data structure store providing sub-millisecond latency. It's not just key-value - supports strings, hashes, lists, sets, sorted sets, bitmaps, HyperLogLog, and streams. Single-threaded for simplicity and atomicity. Persistence via RDB snapshots or AOF log. Replication for read scaling and HA. Sentinel for automatic failover. Redis Cluster for horizontal scaling with automatic sharding. Common use cases: caching, session storage, rate limiting, leaderboards, pub/sub, distributed locks. All operations are atomic. Lua scripting for complex atomic operations."
+"Redis is an in-memory data structure store providing sub-millisecond latency. It\'s not just key-value - supports strings, hashes, lists, sets, sorted sets, bitmaps, HyperLogLog, and streams. Single-threaded for simplicity and atomicity. Persistence via RDB snapshots or AOF log. Replication for read scaling and HA. Sentinel for automatic failover. Redis Cluster for horizontal scaling with automatic sharding. Common use cases: caching, session storage, rate limiting, leaderboards, pub/sub, distributed locks. All operations are atomic. Lua scripting for complex atomic operations."
 
 **Key trade-offs**:
 - In-memory vs persistence: Speed vs durability

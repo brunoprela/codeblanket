@@ -199,49 +199,49 @@ from typing import Dict, List, Optional
 class VectorClock:
     def __init__(self, server_id: str, num_servers: int):
         self.server_id = server_id
-        self.server_index = int(server_id.split('_')[1])  # e.g., "server_0" → 0
+        self.server_index = int (server_id.split('_')[1])  # e.g., "server_0" → 0
         self.clock = [0] * num_servers
     
-    def increment(self):
+    def increment (self):
         """Increment this server's counter"""
         self.clock[self.server_index] += 1
     
-    def update(self, other_clock: List[int]):
+    def update (self, other_clock: List[int]):
         """Update clock based on received message"""
         # Take maximum of each element
-        for i in range(len(self.clock)):
-            self.clock[i] = max(self.clock[i], other_clock[i])
+        for i in range (len (self.clock)):
+            self.clock[i] = max (self.clock[i], other_clock[i])
         
         # Increment own counter
         self.increment()
     
-    def happens_before(self, other_clock: List[int]) -> bool:
+    def happens_before (self, other_clock: List[int]) -> bool:
         """Check if this clock happens before other clock"""
         # All elements ≤ AND at least one element <
-        all_leq = all(self.clock[i] <= other_clock[i] for i in range(len(self.clock)))
-        at_least_one_less = any(self.clock[i] < other_clock[i] for i in range(len(self.clock)))
+        all_leq = all (self.clock[i] <= other_clock[i] for i in range (len (self.clock)))
+        at_least_one_less = any (self.clock[i] < other_clock[i] for i in range (len (self.clock)))
         
         return all_leq and at_least_one_less
     
-    def concurrent_with(self, other_clock: List[int]) -> bool:
+    def concurrent_with (self, other_clock: List[int]) -> bool:
         """Check if this clock is concurrent with other clock"""
-        return (not self.happens_before(other_clock) and 
-                not VectorClock.happens_before_static(other_clock, self.clock))
+        return (not self.happens_before (other_clock) and 
+                not VectorClock.happens_before_static (other_clock, self.clock))
     
     @staticmethod
-    def happens_before_static(clock1: List[int], clock2: List[int]) -> bool:
-        all_leq = all(clock1[i] <= clock2[i] for i in range(len(clock1)))
-        at_least_one_less = any(clock1[i] < clock2[i] for i in range(len(clock1)))
+    def happens_before_static (clock1: List[int], clock2: List[int]) -> bool:
+        all_leq = all (clock1[i] <= clock2[i] for i in range (len (clock1)))
+        at_least_one_less = any (clock1[i] < clock2[i] for i in range (len (clock1)))
         return all_leq and at_least_one_less
 
 # Usage
 class DistributedStore:
     def __init__(self, server_id: str, num_servers: int):
         self.server_id = server_id
-        self.vc = VectorClock(server_id, num_servers)
+        self.vc = VectorClock (server_id, num_servers)
         self.data = {}
     
-    def write(self, key: str, value: any):
+    def write (self, key: str, value: any):
         """Local write"""
         self.vc.increment()
         self.data[key] = {
@@ -250,9 +250,9 @@ class DistributedStore:
         }
         return self.data[key]
     
-    def receive_write(self, key: str, value: any, remote_vc: List[int]):
+    def receive_write (self, key: str, value: any, remote_vc: List[int]):
         """Receive write from another server"""
-        self.vc.update(remote_vc)
+        self.vc.update (remote_vc)
         
         if key not in self.data:
             # New key, just store
@@ -260,10 +260,10 @@ class DistributedStore:
         else:
             local_vc = self.data[key]['vector_clock']
             
-            if self.vc.happens_before_static(local_vc, remote_vc):
+            if self.vc.happens_before_static (local_vc, remote_vc):
                 # Remote write is newer, replace
                 self.data[key] = {'value': value, 'vector_clock': remote_vc}
-            elif self.vc.happens_before_static(remote_vc, local_vc):
+            elif self.vc.happens_before_static (remote_vc, local_vc):
                 # Local write is newer, keep local
                 pass
             else:
@@ -389,9 +389,9 @@ When vector clocks detect concurrent writes, application must resolve:
 ### 1. Last-Write-Wins (LWW)
 
 \`\`\`python
-def resolve_conflict(versions):
+def resolve_conflict (versions):
     # Pick version with highest timestamp
-    return max(versions, key=lambda v: v['timestamp'])
+    return max (versions, key=lambda v: v['timestamp'])
 \`\`\`
 
 **Pros**: Simple, deterministic
@@ -400,7 +400,7 @@ def resolve_conflict(versions):
 ### 2. Merge Conflicting Versions
 
 \`\`\`python
-def merge_shopping_carts(cart1, cart2):
+def merge_shopping_carts (cart1, cart2):
     # Union of items
     return cart1['items'] + cart2['items']
 \`\`\`

@@ -19,7 +19,7 @@ CREATE TABLE companies (
 -- Financial statements (normalized)
 CREATE TABLE income_statements (
     id SERIAL PRIMARY KEY,
-    company_id INTEGER REFERENCES companies(company_id),
+    company_id INTEGER REFERENCES companies (company_id),
     period_end DATE,
     fiscal_year INTEGER,
     fiscal_quarter INTEGER,
@@ -36,15 +36,15 @@ CREATE TABLE income_statements (
 );
 
 -- Indexes for performance
-CREATE INDEX idx_income_company_period ON income_statements(company_id, period_end);
-CREATE INDEX idx_income_fiscal ON income_statements(fiscal_year, fiscal_quarter);
+CREATE INDEX idx_income_company_period ON income_statements (company_id, period_end);
+CREATE INDEX idx_income_fiscal ON income_statements (fiscal_year, fiscal_quarter);
 
 -- Similar tables for balance_sheets, cash_flow_statements
 
 -- Computed metrics table
 CREATE TABLE financial_metrics (
     id SERIAL PRIMARY KEY,
-    company_id INTEGER REFERENCES companies(company_id),
+    company_id INTEGER REFERENCES companies (company_id),
     period_end DATE,
     roe NUMERIC(10,4),
     roa NUMERIC(10,4),
@@ -66,37 +66,37 @@ CREATE TABLE financial_metrics (
     answer: `**Error Handling Strategy**:
 
 \`\`\`python
-def run_pipeline_with_error_handling(companies):
+def run_pipeline_with_error_handling (companies):
     results = {'success': [], 'failed': []}
     
     for company in companies:
         try:
             # Extract
-            data = extract_data(company)
+            data = extract_data (company)
             
             # Transform
-            clean = transform(data)
+            clean = transform (data)
             
             # Load
-            load_to_db(clean)
+            load_to_db (clean)
             
-            results['success'].append(company)
+            results['success'].append (company)
             
         except XBRLParseError as e:
-            logger.error(f"XBRL parse failed for {company}: {e}")
-            results['failed'].append({'company': company, 'error': str(e)})
+            logger.error (f"XBRL parse failed for {company}: {e}")
+            results['failed'].append({'company': company, 'error': str (e)})
             continue  # Skip this company, process others
         
         except DatabaseError as e:
-            logger.critical(f"DB error for {company}: {e}")
+            logger.critical (f"DB error for {company}: {e}")
             # Retry logic or alert DevOps
         
         except Exception as e:
-            logger.exception(f"Unexpected error for {company}: {e}")
-            results['failed'].append({'company': company, 'error': str(e)})
+            logger.exception (f"Unexpected error for {company}: {e}")
+            results['failed'].append({'company': company, 'error': str (e)})
     
     # Summary email
-    send_summary_email(results)
+    send_summary_email (results)
     
     return results
 \`\`\`
@@ -107,7 +107,7 @@ def run_pipeline_with_error_handling(companies):
   {
     id: 3,
     question:
-      "Build alert system that notifies when any company's Debt/EBITDA crosses 5.0x. What's the architecture?",
+      "Build alert system that notifies when any company's Debt/EBITDA crosses 5.0x. What\'s the architecture?",
     answer: `**Alert System Architecture**:
 
 \`\`\`python
@@ -119,7 +119,7 @@ class AlertSystem:
             'current_ratio': {'critical': 1.0, 'warning': 1.2}
         }
     
-    def check_metrics(self, company_id, metrics):
+    def check_metrics (self, company_id, metrics):
         alerts = []
         
         # Debt/EBITDA check
@@ -135,15 +135,15 @@ class AlertSystem:
         
         return alerts
     
-    def send_alert(self, alert):
+    def send_alert (self, alert):
         # Email
-        send_email(to='analyst@firm.com', subject=f"ALERT: {alert['company']}", body=alert['message'])
+        send_email (to='analyst@firm.com', subject=f"ALERT: {alert['company']}", body=alert['message'])
         
         # Slack
-        post_to_slack(channel='#credit-alerts', message=alert['message'])
+        post_to_slack (channel='#credit-alerts', message=alert['message'])
         
         # Database logging
-        log_alert_to_db(alert)
+        log_alert_to_db (alert)
 \`\`\`
 
 **Components**: (1) Threshold configuration, (2) Real-time metric checking after each pipeline run, (3) Multi-channel alerts (email, Slack, SMS), (4) Alert history in database, (5) Escalation for critical alerts.`,

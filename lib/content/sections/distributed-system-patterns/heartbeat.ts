@@ -5,7 +5,7 @@
 export const heartbeatSection = {
   id: 'heartbeat',
   title: 'Heartbeat',
-  content: `Heartbeat is a simple yet critical pattern in distributed systems for detecting node failures and monitoring system health. It's the foundation for automatic failover, leader election, and cluster membership management.
+  content: `Heartbeat is a simple yet critical pattern in distributed systems for detecting node failures and monitoring system health. It\'s the foundation for automatic failover, leader election, and cluster membership management.
 
 ## What is a Heartbeat?
 
@@ -106,7 +106,7 @@ If server doesn't respond → Remove from pool
 **Sender (Node A)**:
 \`\`\`
 Every heartbeat_interval:
-    send_heartbeat(to=Node B, payload={
+    send_heartbeat (to=Node B, payload={
         node_id: "A",
         timestamp: current_time(),
         sequence: counter++
@@ -124,8 +124,8 @@ Background thread:
         for each node in cluster:
             time_since_last_heartbeat = current_time() - last_heartbeat_time[node]
             if time_since_last_heartbeat > timeout_threshold:
-                mark_node_dead(node)
-                trigger_failure_handling(node)
+                mark_node_dead (node)
+                trigger_failure_handling (node)
 \`\`\`
 
 ### **Heartbeat Message**
@@ -574,7 +574,7 @@ If DC1 and DC2 partitioned:
 Thread {
   while (true) {
     send_heartbeat();
-    sleep(interval);
+    sleep (interval);
   }
 }
 \`\`\`
@@ -584,7 +584,7 @@ Thread {
 
 **Event Loop / Timer**:
 \`\`\`
-EventLoop.schedule(interval) {
+EventLoop.schedule (interval) {
   send_heartbeat();
 }
 \`\`\`

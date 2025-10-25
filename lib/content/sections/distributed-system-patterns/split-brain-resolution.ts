@@ -178,7 +178,7 @@ Database:
 **Implementation**:
 \`\`\`
 Every operation includes fencing token:
-  write(key, value, token)
+  write (key, value, token)
 
 Resource checks:
   if token < last_seen_token:
@@ -630,7 +630,7 @@ Eventually discovered days later. ❌
 **Q: How do you prevent split-brain in a distributed system?**
 A: "Use quorum-based decisions. Require majority (n/2 + 1) for leadership election and critical operations. For 5 nodes, quorum is 3. If network partitions into {3} and {2}, only the 3-node partition has quorum and can elect a leader. The 2-node partition cannot, ensuring only one active leader. Also use fencing tokens: each leader gets monotonically increasing token. Resources reject operations from old tokens, preventing stale leaders from causing issues."
 
-**Q: What's the trade-off of using quorum to prevent split-brain?**
+**Q: What\'s the trade-off of using quorum to prevent split-brain?**
 A: "Trade-off is availability. With quorum, the minority partition becomes unavailable—it can't elect a leader or accept writes. For 5 nodes split {3, 2}, the 2-node partition is down. This is CAP theorem in action: we choose consistency (no split-brain) over availability (minority down). Alternative approaches like multi-master allow both partitions to operate but accept eventual consistency and conflict resolution."
 
 **Q: How would you detect if split-brain has occurred?**

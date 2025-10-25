@@ -15,8 +15,8 @@ Understanding common mistakes helps you avoid them and debug faster.
 
 \`\`\`python
 # ❌ BAD - Mutable default argument
-def add_item(item, items=[]):
-    items.append(item)
+def add_item (item, items=[]):
+    items.append (item)
     return items
 
 print(add_item(1))  # [1]
@@ -31,10 +31,10 @@ print(add_item(3))  # [1, 2, 3]  # Same list!
 
 \`\`\`python
 # ✅ GOOD - Use None and create new list inside
-def add_item(item, items=None):
+def add_item (item, items=None):
     if items is None:
         items = []
-    items.append(item)
+    items.append (item)
     return items
 
 print(add_item(1))  # [1]
@@ -54,7 +54,7 @@ print(add_item(3))  # [3]
 # ❌ BAD - All functions use final value of i
 functions = []
 for i in range(3):
-    functions.append(lambda: i)
+    functions.append (lambda: i)
 
 print([f() for f in functions])  # [2, 2, 2]
 # Expected [0, 1, 2] but all return 2!
@@ -69,13 +69,13 @@ print([f() for f in functions])  # [2, 2, 2]
 # ✅ GOOD - Capture i by value using default argument
 functions = []
 for i in range(3):
-    functions.append(lambda x=i: x)  # x=i captures current value
+    functions.append (lambda x=i: x)  # x=i captures current value
 
 print([f() for f in functions])  # [0, 1, 2]
 
 # Alternative: Use functools.partial
 from functools import partial
-functions = [partial(lambda x: x, i) for i in range(3)]
+functions = [partial (lambda x: x, i) for i in range(3)]
 \`\`\`
 
 ---
@@ -89,7 +89,7 @@ functions = [partial(lambda x: x, i) for i in range(3)]
 numbers = [1, 2, 3, 4, 5]
 for num in numbers:
     if num % 2 == 0:
-        numbers.remove(num)
+        numbers.remove (num)
 
 print(numbers)  # [1, 3, 4, 5]  # 4 still there!
 # Iterator gets confused when list changes
@@ -102,7 +102,7 @@ print(numbers)  # [1, 3, 4, 5]  # 4 still there!
 numbers = [1, 2, 3, 4, 5]
 for num in numbers[:]:  # Slice creates copy
     if num % 2 == 0:
-        numbers.remove(num)
+        numbers.remove (num)
 
 print(numbers)  # [1, 3, 5]
 
@@ -148,13 +148,13 @@ print(list1)  # [[99, 2], [3, 4]]  # Original changed!
 # ✅ Shallow copy (copies outer list only)
 import copy
 list1 = [[1, 2], [3, 4]]
-list2 = copy.copy(list1)  # or list1.copy() or list1[:]
+list2 = copy.copy (list1)  # or list1.copy() or list1[:]
 list2[0][0] = 99
 print(list1)  # [[99, 2], [3, 4]]  # Inner lists still shared!
 
 # ✅ Deep copy (copies everything)
 list1 = [[1, 2], [3, 4]]
-list2 = copy.deepcopy(list1)
+list2 = copy.deepcopy (list1)
 list2[0][0] = 99
 print(list1)  # [[1, 2], [3, 4]]  # Original unchanged
 \`\`\`
@@ -183,16 +183,16 @@ my_list = [1, 2, 3]
 # ❌ BAD - O(n²) due to string immutability
 result = ""
 for i in range(10000):
-    result += str(i)  # Creates new string each time!
+    result += str (i)  # Creates new string each time!
 
 # ✅ GOOD - O(n) using list and join
 parts = []
 for i in range(10000):
-    parts.append(str(i))
-result = '.join(parts)
+    parts.append (str (i))
+result = '.join (parts)
 
 # ✅ BEST - List comprehension
-result = '.join([str(i) for i in range(10000)])
+result = '.join([str (i) for i in range(10000)])
 \`\`\`
 
 ---
@@ -201,13 +201,13 @@ result = '.join([str(i) for i in range(10000)])
 
 \`\`\`python
 # ❌ BAD - Forgot return statement
-def add(a, b):
+def add (a, b):
     result = a + b  # Calculated but not returned!
 
 print(add(2, 3))  # None
 
 # ✅ GOOD - Return the result
-def add(a, b):
+def add (a, b):
     return a + b
 
 print(add(2, 3))  # 5
@@ -262,7 +262,7 @@ except KeyError:
 try:
     risky_operation()
 except Exception as e:
-    log_error(e)
+    log_error (e)
     # Still allows KeyboardInterrupt, SystemExit to pass through
 \`\`\`
 
@@ -331,10 +331,10 @@ def increment():
     count = count + 1
 
 # ✅ BETTER - Avoid globals, use return values
-def increment(count):
+def increment (count):
     return count + 1
 
-count = increment(count)
+count = increment (count)
 \`\`\`
 
 ---

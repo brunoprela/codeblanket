@@ -69,6 +69,6 @@ export const incidentManagementMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 3,
     explanation:
-      'Complete service outage affecting all users is SEV-1 (Critical): Most/all users affected, significant revenue impact ($10K+/hour), requires immediate all-hands response, page on-call immediately. Other SEV levels: SEV-2 (High) = Significant degradation, subset of users affected, respond within 15 min. SEV-3 (Medium) = Minor degradation, small subset, respond within 1 hour. SEV-4 (Low) = Cosmetic, minimal impact, next business day. Proper severity classification ensures appropriate response urgency.',
+      'Complete service outage affecting all users is SEV-1 (Critical): Most/all users affected, significant revenue impact (\$10K+/hour), requires immediate all-hands response, page on-call immediately. Other SEV levels: SEV-2 (High) = Significant degradation, subset of users affected, respond within 15 min. SEV-3 (Medium) = Minor degradation, small subset, respond within 1 hour. SEV-4 (Low) = Cosmetic, minimal impact, next business day. Proper severity classification ensures appropriate response urgency.',
   },
 ];

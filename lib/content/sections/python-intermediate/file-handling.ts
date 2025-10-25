@@ -43,7 +43,7 @@ with open('output.txt', 'a') as f:
 # Write multiple lines
 lines = ['Line 1\\n', 'Line 2\\n', 'Line 3\\n']
 with open('output.txt', 'w') as f:
-    f.writelines(lines)
+    f.writelines (lines)
 \`\`\`
 
 ## File Modes
@@ -66,7 +66,7 @@ with open('file.txt', 'r') as f:
 # Multiple files
 with open('input.txt', 'r') as fin, open('output.txt', 'w') as fout:
     for line in fin:
-        fout.write(line.upper())
+        fout.write (line.upper())
 \`\`\`
 
 ## File Operations

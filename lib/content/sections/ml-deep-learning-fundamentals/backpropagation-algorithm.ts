@@ -31,24 +31,24 @@ export const backpropagationAlgorithmSection = {
 ### What We Need
 
 To train a neural network, we need:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂W  for all weight matrices
 ∂L/∂b  for all bias vectors
-\\\`\\\`\\\`
+\`\`\`
 
 Where L is the loss function. These gradients tell us how to adjust parameters to reduce loss.
 
 ### Naive Approach (Numerical Gradients)
 
 \`\`\`python
-def numerical_gradient(f, x, epsilon=1e-5):
+def numerical_gradient (f, x, epsilon=1e-5):
     """
     Compute gradient numerically using finite differences
     SLOW but useful for gradient checking
     """
-    grad = np.zeros_like(x)
+    grad = np.zeros_like (x)
     
-    for i in range(len(x)):
+    for i in range (len (x)):
         x_plus = x.copy()
         x_plus[i] += epsilon
         
@@ -56,7 +56,7 @@ def numerical_gradient(f, x, epsilon=1e-5):
         x_minus[i] -= epsilon
         
         # Finite difference approximation
-        grad[i] = (f(x_plus) - f(x_minus)) / (2 * epsilon)
+        grad[i] = (f (x_plus) - f (x_minus)) / (2 * epsilon)
     
     return grad
 
@@ -75,18 +75,18 @@ def numerical_gradient(f, x, epsilon=1e-5):
 ### Univariate Chain Rule
 
 For composition of functions:
-\\\`\\\`\\\`
-If y = f(u) and u = g(x), then:
+\`\`\`
+If y = f (u) and u = g (x), then:
 dy/dx = dy/du · du/dx
-\\\`\\\`\\\`
+\`\`\`
 
 ### Multivariate Chain Rule
 
 For multiple paths:
-\\\`\\\`\\\`
-If z = f(x, y), x = g(t), y = h(t), then:
+\`\`\`
+If z = f (x, y), x = g (t), y = h (t), then:
 dz/dt = (∂z/∂x)(dx/dt) + (∂z/∂y)(dy/dt)
-\\\`\\\`\\\`
+\`\`\`
 
 ### Neural Network Application
 
@@ -105,11 +105,11 @@ To find ∂L/∂W, we chain:
 ### Two-Layer Network Example
 
 Network:
-\\\`\\\`\\\`
+\`\`\`
 Layer 1: z₁ = W₁x + b₁,  a₁ = σ(z₁)
 Layer 2: z₂ = W₂a₁ + b₂, a₂ = σ(z₂)
 Loss:    L = MSE(y, a₂)
-\\\`\\\`\\\`
+\`\`\`
 
 ### Forward Pass (Compute outputs)
 
@@ -122,32 +122,32 @@ class TwoLayerNetwork:
     """
     def __init__(self, input_size, hidden_size, output_size):
         # Initialize weights (small random values)
-        self.W1 = np.random.randn(input_size, hidden_size) * 0.01
+        self.W1 = np.random.randn (input_size, hidden_size) * 0.01
         self.b1 = np.zeros((1, hidden_size))
-        self.W2 = np.random.randn(hidden_size, output_size) * 0.01
+        self.W2 = np.random.randn (hidden_size, output_size) * 0.01
         self.b2 = np.zeros((1, output_size))
     
-    def sigmoid(self, z):
+    def sigmoid (self, z):
         """Sigmoid activation"""
-        return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+        return 1 / (1 + np.exp(-np.clip (z, -500, 500)))
     
-    def sigmoid_derivative(self, z):
+    def sigmoid_derivative (self, z):
         """Derivative of sigmoid"""
-        s = self.sigmoid(z)
+        s = self.sigmoid (z)
         return s * (1 - s)
     
-    def forward(self, X):
+    def forward (self, X):
         """
         Forward propagation
         Returns outputs and cache for backprop
         """
         # Layer 1
         self.z1 = X @ self.W1 + self.b1        # Pre-activation
-        self.a1 = self.sigmoid(self.z1)        # Post-activation
+        self.a1 = self.sigmoid (self.z1)        # Post-activation
         
         # Layer 2
         self.z2 = self.a1 @ self.W2 + self.b2  # Pre-activation
-        self.a2 = self.sigmoid(self.z2)        # Post-activation (output)
+        self.a2 = self.sigmoid (self.z2)        # Post-activation (output)
         
         # Cache for backward pass
         self.cache = {
@@ -158,20 +158,20 @@ class TwoLayerNetwork:
         
         return self.a2
     
-    def compute_loss(self, y_true, y_pred):
+    def compute_loss (self, y_true, y_pred):
         """MSE loss"""
         return np.mean((y_true - y_pred) ** 2)
 
 
 # Test forward pass
 np.random.seed(42)
-network = TwoLayerNetwork(input_size=3, hidden_size=4, output_size=2)
+network = TwoLayerNetwork (input_size=3, hidden_size=4, output_size=2)
 
 X = np.array([[1, 2, 3]])  # Single sample
 y = np.array([[0, 1]])      # True label
 
 output = network.forward(X)
-loss = network.compute_loss(y, output)
+loss = network.compute_loss (y, output)
 
 print("Forward Pass:")
 print(f"  Input shape: {X.shape}")
@@ -183,7 +183,7 @@ print(f"  Loss: {loss:.4f}")
 ### Backward Pass (Compute gradients)
 
 \`\`\`python
-def backward(self, y_true):
+def backward (self, y_true):
     """
     Backward propagation - compute all gradients
     
@@ -214,13 +214,13 @@ def backward(self, y_true):
     # Step 2: Gradient w.r.t. pre-activation z₂
     # Apply chain rule: ∂L/∂z₂ = ∂L/∂a₂ · ∂a₂/∂z₂
     # where ∂a₂/∂z₂ = σ'(z₂) = a₂(1 - a₂)
-    dL_dz2 = dL_da2 * self.sigmoid_derivative(z2)
+    dL_dz2 = dL_da2 * self.sigmoid_derivative (z2)
     
     # Step 3: Gradients for W₂ and b₂
     # z₂ = W₂a₁ + b₂
     # ∂z₂/∂W₂ = a₁, so ∂L/∂W₂ = a₁ᵀ · ∂L/∂z₂
     dL_dW2 = a1.T @ dL_dz2
-    dL_db2 = np.sum(dL_dz2, axis=0, keepdims=True)
+    dL_db2 = np.sum (dL_dz2, axis=0, keepdims=True)
     
     # ====================
     # HIDDEN LAYER (Layer 1)
@@ -233,12 +233,12 @@ def backward(self, y_true):
     
     # Step 5: Gradient w.r.t. pre-activation z₁
     # Apply chain rule: ∂L/∂z₁ = ∂L/∂a₁ · ∂a₁/∂z₁
-    dL_dz1 = dL_da1 * self.sigmoid_derivative(z1)
+    dL_dz1 = dL_da1 * self.sigmoid_derivative (z1)
     
     # Step 6: Gradients for W₁ and b₁
     # z₁ = W₁X + b₁
     dL_dW1 = X.T @ dL_dz1
-    dL_db1 = np.sum(dL_dz1, axis=0, keepdims=True)
+    dL_db1 = np.sum (dL_dz1, axis=0, keepdims=True)
     
     # Store gradients
     self.gradients = {
@@ -252,19 +252,19 @@ def backward(self, y_true):
 TwoLayerNetwork.backward = backward
 
 # Test backward pass
-gradients = network.backward(y)
+gradients = network.backward (y)
 
 print("\\nBackward Pass (Gradients):")
-print(f"  dW1 shape: {gradients['dW1'].shape}, mean: {np.mean(np.abs(gradients['dW1'])):.6f}")
-print(f"  db1 shape: {gradients['db1'].shape}, mean: {np.mean(np.abs(gradients['db1'])):.6f}")
-print(f"  dW2 shape: {gradients['dW2'].shape}, mean: {np.mean(np.abs(gradients['dW2'])):.6f}")
-print(f"  db2 shape: {gradients['db2'].shape}, mean: {np.mean(np.abs(gradients['db2'])):.6f}")
+print(f"  dW1 shape: {gradients['dW1'].shape}, mean: {np.mean (np.abs (gradients['dW1'])):.6f}")
+print(f"  db1 shape: {gradients['db1'].shape}, mean: {np.mean (np.abs (gradients['db1'])):.6f}")
+print(f"  dW2 shape: {gradients['dW2'].shape}, mean: {np.mean (np.abs (gradients['dW2'])):.6f}")
+print(f"  db2 shape: {gradients['db2'].shape}, mean: {np.mean (np.abs (gradients['db2'])):.6f}")
 \`\`\`
 
 ### Gradient Descent Update
 
 \`\`\`python
-def update_parameters(self, learning_rate=0.01):
+def update_parameters (self, learning_rate=0.01):
     """Update parameters using computed gradients"""
     self.W1 -= learning_rate * self.gradients['dW1']
     self.b1 -= learning_rate * self.gradients['db1']
@@ -278,11 +278,11 @@ TwoLayerNetwork.update_parameters = update_parameters
 print("\\nTraining Step:")
 print(f"  Loss before: {loss:.4f}")
 
-network.update_parameters(learning_rate=0.1)
+network.update_parameters (learning_rate=0.1)
 
 # Forward pass again
 output_after = network.forward(X)
-loss_after = network.compute_loss(y, output_after)
+loss_after = network.compute_loss (y, output_after)
 print(f"  Loss after: {loss_after:.4f}")
 print(f"  Improvement: {loss - loss_after:.6f}")
 \`\`\`
@@ -310,12 +310,12 @@ For a network with L layers and n parameters:
 # Two strategies for backpropagation:
 
 # Strategy 1: Store all activations (Fast, Memory-heavy)
-def forward_store_all(network, X):
+def forward_store_all (network, X):
     cache = {}
     a = X
     for l in range(L):
         z = a @ W[l] + b[l]
-        a = activation(z)
+        a = activation (z)
         cache[l] = (z, a)  # Store everything
     return a, cache
 
@@ -323,12 +323,12 @@ def forward_store_all(network, X):
 # Speed: Fast backward pass (no recomputation)
 
 # Strategy 2: Gradient checkpointing (Slow, Memory-light)
-def forward_checkpoint(network, X, checkpoint_layers):
+def forward_checkpoint (network, X, checkpoint_layers):
     cache = {}
     a = X
     for l in range(L):
         z = a @ W[l] + b[l]
-        a = activation(z)
+        a = activation (z)
         if l in checkpoint_layers:
             cache[l] = (z, a)  # Only store checkpoints
     return a, cache
@@ -343,26 +343,26 @@ def forward_checkpoint(network, X, checkpoint_layers):
 ### ReLU Backprop
 
 \`\`\`python
-def relu_forward(z):
+def relu_forward (z):
     """ReLU forward"""
     return np.maximum(0, z)
 
-def relu_backward(dL_da, z):
+def relu_backward (dL_da, z):
     """
     ReLU backward
     
     ∂a/∂z = 1 if z > 0, else 0
     ∂L/∂z = ∂L/∂a · (1 if z > 0 else 0)
     """
-    dL_dz = dL_da * (z > 0).astype(float)
+    dL_dz = dL_da * (z > 0).astype (float)
     return dL_dz
 
 # Example
 z = np.array([[-1, 0.5, 2], [0, -0.5, 1]])
-a = relu_forward(z)
-dL_da = np.ones_like(a)  # Assume gradient from next layer
+a = relu_forward (z)
+dL_da = np.ones_like (a)  # Assume gradient from next layer
 
-dL_dz = relu_backward(dL_da, z)
+dL_dz = relu_backward (dL_da, z)
 
 print("ReLU Backpropagation:")
 print(f"  z:\\n{z}")
@@ -374,12 +374,12 @@ print("  → Gradient passes through only where z > 0")
 ### Softmax + Cross-Entropy Backprop
 
 \`\`\`python
-def softmax_cross_entropy_backward(y_pred, y_true):
+def softmax_cross_entropy_backward (y_pred, y_true):
     """
     Combined softmax + cross-entropy backward pass
     
     Forward:
-      ŷ = softmax(z)
+      ŷ = softmax (z)
       L = -Σ yᵢ log(ŷᵢ)
     
     Backward (amazing simplification!):
@@ -393,7 +393,7 @@ y_pred = np.array([[0.7, 0.2, 0.1],   # Sample 1
 y_true = np.array([[1, 0, 0],         # Sample 1: class 0
                    [0, 1, 0]])         # Sample 2: class 1
 
-dL_dz = softmax_cross_entropy_backward(y_pred, y_true)
+dL_dz = softmax_cross_entropy_backward (y_pred, y_true)
 
 print("\\nSoftmax + Cross-Entropy Backprop:")
 print(f"  Predicted probabilities:\\n{y_pred}")
@@ -437,13 +437,13 @@ def compute_jacobian_dz_dW(a, z):
 Critical for debugging backprop:
 
 \`\`\`python
-def check_gradient_shapes(network, X, y):
+def check_gradient_shapes (network, X, y):
     """
     Verify gradient shapes match parameter shapes
     Essential for debugging!
     """
     network.forward(X)
-    gradients = network.backward(y)
+    gradients = network.backward (y)
     
     print("Gradient Shape Check:")
     print("-" * 60)
@@ -471,7 +471,7 @@ def check_gradient_shapes(network, X, y):
     print("\\nAll gradient shapes correct!")
 
 # Test
-check_gradient_shapes(network, X, y)
+check_gradient_shapes (network, X, y)
 \`\`\`
 
 ## Gradient Checking
@@ -479,36 +479,36 @@ check_gradient_shapes(network, X, y)
 ### Numerical Gradient Verification
 
 \`\`\`python
-def gradient_check(network, X, y, epsilon=1e-5):
+def gradient_check (network, X, y, epsilon=1e-5):
     """
     Verify backprop gradients against numerical gradients
     Should only be used for debugging, not training!
     """
     # Compute analytical gradients (backprop)
     network.forward(X)
-    network.backward(y)
+    network.backward (y)
     analytical_grads = network.gradients
     
     # Compute numerical gradients
-    def compute_numerical_gradient(param_name):
-        param = getattr(network, param_name)
-        numerical_grad = np.zeros_like(param)
+    def compute_numerical_gradient (param_name):
+        param = getattr (network, param_name)
+        numerical_grad = np.zeros_like (param)
         
         # Iterate over each parameter
-        it = np.nditer(param, flags=['multi_index'], op_flags=['readwrite'])
+        it = np.nditer (param, flags=['multi_index'], op_flags=['readwrite'])
         while not it.finished:
             idx = it.multi_index
             old_value = param[idx]
             
-            # f(x + epsilon)
+            # f (x + epsilon)
             param[idx] = old_value + epsilon
             output_plus = network.forward(X)
-            loss_plus = network.compute_loss(y, output_plus)
+            loss_plus = network.compute_loss (y, output_plus)
             
-            # f(x - epsilon)
+            # f (x - epsilon)
             param[idx] = old_value - epsilon
             output_minus = network.forward(X)
-            loss_minus = network.compute_loss(y, output_minus)
+            loss_minus = network.compute_loss (y, output_minus)
             
             # Numerical gradient
             numerical_grad[idx] = (loss_plus - loss_minus) / (2 * epsilon)
@@ -525,11 +525,11 @@ def gradient_check(network, X, y, epsilon=1e-5):
     # Check each parameter
     for param_name in ['W1', 'b1', 'W2', 'b2']:
         analytical = analytical_grads[f'd{param_name}']
-        numerical = compute_numerical_gradient(param_name)
+        numerical = compute_numerical_gradient (param_name)
         
         # Compute relative difference
-        diff = np.linalg.norm(analytical - numerical)
-        norm_sum = np.linalg.norm(analytical) + np.linalg.norm(numerical)
+        diff = np.linalg.norm (analytical - numerical)
+        norm_sum = np.linalg.norm (analytical) + np.linalg.norm (numerical)
         relative_diff = diff / (norm_sum + 1e-8)
         
         status = "✓ PASS" if relative_diff < 1e-5 else "✗ FAIL"
@@ -543,7 +543,7 @@ small_net = TwoLayerNetwork(2, 3, 1)
 X_small = np.random.randn(1, 2)
 y_small = np.random.randn(1, 1)
 
-gradient_check(small_net, X_small, y_small)
+gradient_check (small_net, X_small, y_small)
 \`\`\`
 
 ## Common Backprop Mistakes and Solutions
@@ -569,7 +569,7 @@ dW = (dL_dz.T @ a) / batch_size  # (n_out, batch) @ (batch, n_in) = (n_out, n_in
 dL_dW = dL_da @ a.T  # Skips the activation derivative!
 
 # ✓ CORRECT: Apply chain rule through activation
-dL_dz = dL_da * activation_derivative(z)  # Chain through activation
+dL_dz = dL_da * activation_derivative (z)  # Chain through activation
 dL_dW = dL_dz.T @ input  # Then compute weight gradient
 \`\`\`
 
@@ -587,11 +587,11 @@ dW = (X.T @ dL_dz) / batch_size  # Gradient independent of batch size
 
 \`\`\`python
 # ❌ WRONG: In-place operations corrupt cache
-a = relu(z)
+a = relu (z)
 a += 0.1  # Modifies cached value!
 
 # ✓ CORRECT: Create new arrays
-a = relu(z)
+a = relu (z)
 a_modified = a + 0.1  # Doesn't affect cache
 \`\`\`
 
@@ -600,36 +600,36 @@ a_modified = a + 0.1  # Doesn't affect cache
 \`\`\`python
 import matplotlib.pyplot as plt
 
-def visualize_gradient_flow(network, X, y):
+def visualize_gradient_flow (network, X, y):
     """Visualize how gradients flow backward through network"""
     network.forward(X)
-    network.backward(y)
+    network.backward (y)
     
     # Compute gradient magnitudes
     layers = ['Layer 1', 'Layer 2']
     weight_grads = [
-        np.mean(np.abs(network.gradients['dW1'])),
-        np.mean(np.abs(network.gradients['dW2']))
+        np.mean (np.abs (network.gradients['dW1'])),
+        np.mean (np.abs (network.gradients['dW2']))
     ]
     bias_grads = [
-        np.mean(np.abs(network.gradients['db1'])),
-        np.mean(np.abs(network.gradients['db2']))
+        np.mean (np.abs (network.gradients['db1'])),
+        np.mean (np.abs (network.gradients['db2']))
     ]
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
     
     # Plot weight gradients
-    ax1.bar(layers, weight_grads, alpha=0.7, color='blue')
+    ax1.bar (layers, weight_grads, alpha=0.7, color='blue')
     ax1.set_ylabel('Mean Absolute Gradient')
     ax1.set_title('Weight Gradients by Layer')
-    ax1.set_ylim(0, max(weight_grads) * 1.2)
+    ax1.set_ylim(0, max (weight_grads) * 1.2)
     ax1.grid(True, alpha=0.3, axis='y')
     
     # Plot bias gradients
-    ax2.bar(layers, bias_grads, alpha=0.7, color='green')
+    ax2.bar (layers, bias_grads, alpha=0.7, color='green')
     ax2.set_ylabel('Mean Absolute Gradient')
     ax2.set_title('Bias Gradients by Layer')
-    ax2.set_ylim(0, max(bias_grads) * 1.2)
+    ax2.set_ylim(0, max (bias_grads) * 1.2)
     ax2.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
@@ -643,7 +643,7 @@ def visualize_gradient_flow(network, X, y):
     if weight_grads[0] / weight_grads[1] < 0.1:
         print("  ⚠ Warning: Potential vanishing gradient in early layers")
 
-visualize_gradient_flow(network, X, y)
+visualize_gradient_flow (network, X, y)
 \`\`\`
 
 ## Key Takeaways

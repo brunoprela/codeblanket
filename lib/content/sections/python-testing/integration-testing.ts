@@ -75,13 +75,13 @@ from myapp import create_app
 from myapp.models import User
 
 @pytest.fixture
-def client(db_session):
+def client (db_session):
     """Test client with real database"""
     app = create_app()
     app.dependency_overrides[get_db] = lambda: db_session
-    return TestClient(app)
+    return TestClient (app)
 
-def test_create_user_endpoint(client, db_session):
+def test_create_user_endpoint (client, db_session):
     """Test complete POST /users flow"""
     # Make API request
     response = client.post("/api/users", json={
@@ -98,7 +98,7 @@ def test_create_user_endpoint(client, db_session):
     assert data["id"] is not None
     
     # Verify data persisted in database
-    user = db_session.query(User).filter_by(username="alice").first()
+    user = db_session.query(User).filter_by (username="alice").first()
     assert user is not None
     assert user.email == "alice@example.com"
     assert user.age == 30
@@ -114,7 +114,7 @@ def test_create_user_endpoint(client, db_session):
 ### Testing Error Cases
 
 \`\`\`python
-def test_create_user_duplicate_username(client):
+def test_create_user_duplicate_username (client):
     """Test duplicate username returns 409"""
     # Create first user
     client.post("/api/users", json={
@@ -131,7 +131,7 @@ def test_create_user_duplicate_username(client):
     assert response.status_code == 409
     assert "already exists" in response.json()["detail"].lower()
 
-def test_create_user_invalid_email(client):
+def test_create_user_invalid_email (client):
     """Test invalid email returns 422"""
     response = client.post("/api/users", json={
         "username": "alice",
@@ -140,9 +140,9 @@ def test_create_user_invalid_email(client):
     
     assert response.status_code == 422
     error = response.json()
-    assert "email" in str(error).lower()
+    assert "email" in str (error).lower()
 
-def test_create_user_missing_fields(client):
+def test_create_user_missing_fields (client):
     """Test missing required fields returns 422"""
     response = client.post("/api/users", json={
         "username": "alice"
@@ -151,13 +151,13 @@ def test_create_user_missing_fields(client):
     
     assert response.status_code == 422
     error = response.json()
-    assert any(e["loc"] == ["body", "email"] for e in error["detail"])
+    assert any (e["loc"] == ["body", "email"] for e in error["detail"])
 \`\`\`
 
 ### Testing Complete CRUD Operations
 
 \`\`\`python
-def test_user_crud_workflow(client, db_session):
+def test_user_crud_workflow (client, db_session):
     """Test complete Create, Read, Update, Delete workflow"""
     
     # CREATE
@@ -170,7 +170,7 @@ def test_user_crud_workflow(client, db_session):
     user_id = create_response.json()["id"]
     
     # READ (get specific)
-    get_response = client.get(f"/api/users/{user_id}")
+    get_response = client.get (f"/api/users/{user_id}")
     assert get_response.status_code == 200
     assert get_response.json()["username"] == "alice"
     
@@ -178,11 +178,11 @@ def test_user_crud_workflow(client, db_session):
     list_response = client.get("/api/users")
     assert list_response.status_code == 200
     users = list_response.json()
-    assert len(users) == 1
+    assert len (users) == 1
     assert users[0]["username"] == "alice"
     
     # UPDATE
-    update_response = client.put(f"/api/users/{user_id}", json={
+    update_response = client.put (f"/api/users/{user_id}", json={
         "username": "alice_updated",
         "email": "alice_new@example.com",
         "age": 31
@@ -191,20 +191,20 @@ def test_user_crud_workflow(client, db_session):
     assert update_response.json()["username"] == "alice_updated"
     
     # Verify update in database
-    user = db_session.query(User).get(user_id)
+    user = db_session.query(User).get (user_id)
     assert user.username == "alice_updated"
     assert user.age == 31
     
     # DELETE
-    delete_response = client.delete(f"/api/users/{user_id}")
+    delete_response = client.delete (f"/api/users/{user_id}")
     assert delete_response.status_code == 204
     
     # Verify deletion
-    get_after_delete = client.get(f"/api/users/{user_id}")
+    get_after_delete = client.get (f"/api/users/{user_id}")
     assert get_after_delete.status_code == 404
     
     # Verify in database
-    user = db_session.query(User).get(user_id)
+    user = db_session.query(User).get (user_id)
     assert user is None
 \`\`\`
 
@@ -268,7 +268,7 @@ import time
 import psycopg2
 from psycopg2 import OperationalError
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture (scope="session", autouse=True)
 def docker_services():
     """Start all Docker services for tests"""
     # Start containers
@@ -290,9 +290,9 @@ def docker_services():
         check=True
     )
 
-def wait_for_postgres(max_attempts=30):
+def wait_for_postgres (max_attempts=30):
     """Wait for PostgreSQL to be ready"""
-    for attempt in range(max_attempts):
+    for attempt in range (max_attempts):
         try:
             conn = psycopg2.connect(
                 host="localhost",
@@ -308,12 +308,12 @@ def wait_for_postgres(max_attempts=30):
                 raise
             time.sleep(1)
 
-def wait_for_redis(max_attempts=30):
+def wait_for_redis (max_attempts=30):
     """Wait for Redis to be ready"""
     import redis
-    for attempt in range(max_attempts):
+    for attempt in range (max_attempts):
         try:
-            r = redis.Redis(host="localhost", port=6380)
+            r = redis.Redis (host="localhost", port=6380)
             r.ping()
             return
         except redis.ConnectionError:
@@ -321,10 +321,10 @@ def wait_for_redis(max_attempts=30):
                 raise
             time.sleep(1)
 
-def wait_for_rabbitmq(max_attempts=30):
+def wait_for_rabbitmq (max_attempts=30):
     """Wait for RabbitMQ to be ready"""
     import pika
-    for attempt in range(max_attempts):
+    for attempt in range (max_attempts):
         try:
             connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
@@ -350,12 +350,12 @@ import redis
 @pytest.fixture
 def redis_client():
     """Redis client for testing"""
-    client = redis.Redis(host="localhost", port=6380, decode_responses=True)
+    client = redis.Redis (host="localhost", port=6380, decode_responses=True)
     yield client
     # Cleanup: flush test data
     client.flushdb()
 
-def test_caching_integration(client, redis_client):
+def test_caching_integration (client, redis_client):
     """Test API caching with Redis"""
     # First request: Cache miss, hits database
     response1 = client.get("/api/users/1")
@@ -432,7 +432,7 @@ interactions:
 
 \`\`\`python
 @pytest.fixture
-def mock_payment_api(mocker):
+def mock_payment_api (mocker):
     """Mock external payment API"""
     mock_response = mocker.Mock()
     mock_response.status_code = 200
@@ -445,7 +445,7 @@ def mock_payment_api(mocker):
     mocker.patch("requests.post", return_value=mock_response)
     return mock_response
 
-def test_payment_processing(client, mock_payment_api):
+def test_payment_processing (client, mock_payment_api):
     """Test payment processing with mocked external API"""
     response = client.post("/api/checkout", json={
         "amount": 99.99,
@@ -464,7 +464,7 @@ def test_payment_processing(client, mock_payment_api):
 ### Complete User Registration Flow
 
 \`\`\`python
-def test_user_registration_workflow(client, db_session, redis_client, mocker):
+def test_user_registration_workflow (client, db_session, redis_client, mocker):
     """Test complete user registration and authentication flow"""
     
     # Mock email service
@@ -483,30 +483,30 @@ def test_user_registration_workflow(client, db_session, redis_client, mocker):
     assert "password" not in user_data  # Password should be hidden
     
     # Verify user in database
-    user = db_session.query(User).filter_by(username="alice").first()
+    user = db_session.query(User).filter_by (username="alice").first()
     assert user is not None
     assert not user.email_confirmed  # Not confirmed yet
     
     # Verify confirmation email sent
     mock_email.assert_called_once()
     email_call = mock_email.call_args
-    assert "alice@example.com" in str(email_call)
-    assert "confirm" in str(email_call).lower()
+    assert "alice@example.com" in str (email_call)
+    assert "confirm" in str (email_call).lower()
     
     # Step 2: Confirm email
     # Extract confirmation token from Redis
-    confirmation_token = redis_client.get(f"confirm:{user.id}")
+    confirmation_token = redis_client.get (f"confirm:{user.id}")
     assert confirmation_token is not None
     
-    confirm_response = client.get(f"/api/confirm-email?token={confirmation_token}")
+    confirm_response = client.get (f"/api/confirm-email?token={confirmation_token}")
     assert confirm_response.status_code == 200
     
     # Verify email confirmed in database
-    db_session.refresh(user)
+    db_session.refresh (user)
     assert user.email_confirmed
     
     # Verify token removed from Redis
-    assert redis_client.get(f"confirm:{user.id}") is None
+    assert redis_client.get (f"confirm:{user.id}") is None
     
     # Step 3: Login
     login_response = client.post("/api/login", json={
@@ -535,15 +535,15 @@ def test_user_registration_workflow(client, db_session, redis_client, mocker):
 ### E-commerce Checkout Flow
 
 \`\`\`python
-def test_ecommerce_checkout_workflow(client, db_session, redis_client, factories):
+def test_ecommerce_checkout_workflow (client, db_session, redis_client, factories):
     """Test complete e-commerce checkout flow"""
     
     # Setup: Create products
-    product1 = factories["Product"].create(name="Widget", price=29.99, stock=10)
-    product2 = factories["Product"].create(name="Gadget", price=49.99, stock=5)
+    product1 = factories["Product"].create (name="Widget", price=29.99, stock=10)
+    product2 = factories["Product"].create (name="Gadget", price=49.99, stock=5)
     
     # Setup: Create and login user
-    user = factories["User"].create(username="alice")
+    user = factories["User"].create (username="alice")
     login_response = client.post("/api/login", json={
         "username": "alice",
         "password": "password"
@@ -565,7 +565,7 @@ def test_ecommerce_checkout_workflow(client, db_session, redis_client, factories
     
     # Verify cart
     cart_view = client.get("/api/cart", headers=headers)
-    assert len(cart_view.json()["items"]) == 2
+    assert len (cart_view.json()["items"]) == 2
     assert cart_view.json()["total"] == (29.99 * 2) + 49.99
     
     # Step 2: Apply discount code
@@ -576,7 +576,7 @@ def test_ecommerce_checkout_workflow(client, db_session, redis_client, factories
     
     cart_with_discount = client.get("/api/cart", headers=headers)
     expected_total = ((29.99 * 2) + 49.99) * 0.9  # 10% off
-    assert abs(cart_with_discount.json()["total"] - expected_total) < 0.01
+    assert abs (cart_with_discount.json()["total"] - expected_total) < 0.01
     
     # Step 3: Checkout
     checkout_response = client.post("/api/checkout", headers=headers, json={
@@ -595,20 +595,20 @@ def test_ecommerce_checkout_workflow(client, db_session, redis_client, factories
     assert order_data["total"] == expected_total
     
     # Verify order in database
-    order = db_session.query(Order).get(order_data["order_id"])
+    order = db_session.query(Order).get (order_data["order_id"])
     assert order is not None
     assert order.user_id == user.id
-    assert len(order.items) == 2
+    assert len (order.items) == 2
     
     # Verify stock reduced
-    db_session.refresh(product1)
-    db_session.refresh(product2)
+    db_session.refresh (product1)
+    db_session.refresh (product2)
     assert product1.stock == 8  # 10 - 2
     assert product2.stock == 4  # 5 - 1
     
     # Verify cart cleared
     cart_after_checkout = client.get("/api/cart", headers=headers)
-    assert len(cart_after_checkout.json()["items"]) == 0
+    assert len (cart_after_checkout.json()["items"]) == 0
 \`\`\`
 
 ---
@@ -616,7 +616,7 @@ def test_ecommerce_checkout_workflow(client, db_session, redis_client, factories
 ## Testing Microservices Communication
 
 \`\`\`python
-def test_microservices_communication(docker_services):
+def test_microservices_communication (docker_services):
     """Test Service A → Service B communication"""
     from testcontainers.compose import DockerCompose
     

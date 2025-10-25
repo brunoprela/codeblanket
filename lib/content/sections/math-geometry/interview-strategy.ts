@@ -13,7 +13,7 @@ export const interviewstrategySection = {
 - "Prime" → Number theory
 - "Factorial", "Combinations" → Combinatorics
 - "Distance", "Area", "Angle" → Geometry
-- "Cycle", "Repeating" → Floyd's cycle detection
+- "Cycle", "Repeating" → Floyd\'s cycle detection
 - "Power", "Exponent" → Fast exponentiation
 
 **Problem-Solving Framework:**
@@ -30,7 +30,7 @@ export const interviewstrategySection = {
 - Single element
 
 **3. Optimize with Math:**
-- Don't check all divisors, only up to sqrt(n)
+- Don't check all divisors, only up to sqrt (n)
 - Use fast exponentiation for powers
 - Apply modular arithmetic for large numbers
 

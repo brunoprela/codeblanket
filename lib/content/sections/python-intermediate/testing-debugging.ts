@@ -18,26 +18,26 @@ Writing tests and debugging effectively are critical skills for production code 
 
 ## Unit Testing with \`unittest\`
 
-Python's built-in testing framework.
+Python\'s built-in testing framework.
 
 \`\`\`python
 import unittest
 
-def add(a, b):
+def add (a, b):
     return a + b
 
-class TestMathOperations(unittest.TestCase):
-    def test_add_positive_numbers(self):
-        self.assertEqual(add(2, 3), 5)
+class TestMathOperations (unittest.TestCase):
+    def test_add_positive_numbers (self):
+        self.assertEqual (add(2, 3), 5)
     
-    def test_add_negative_numbers(self):
-        self.assertEqual(add(-1, -1), -2)
+    def test_add_negative_numbers (self):
+        self.assertEqual (add(-1, -1), -2)
     
-    def test_add_zero(self):
-        self.assertEqual(add(5, 0), 5)
+    def test_add_zero (self):
+        self.assertEqual (add(5, 0), 5)
     
-    def test_add_floats(self):
-        self.assertAlmostEqual(add(0.1, 0.2), 0.3, places=7)
+    def test_add_floats (self):
+        self.assertAlmostEqual (add(0.1, 0.2), 0.3, places=7)
 
 if __name__ == '__main__':
     unittest.main()
@@ -47,50 +47,50 @@ if __name__ == '__main__':
 
 \`\`\`python
 # Equality
-self.assertEqual(a, b)
-self.assertNotEqual(a, b)
+self.assertEqual (a, b)
+self.assertNotEqual (a, b)
 
 # Truth
-self.assertTrue(x)
-self.assertFalse(x)
+self.assertTrue (x)
+self.assertFalse (x)
 
 # Identity
-self.assertIs(a, b)       # Same object
-self.assertIsNot(a, b)
+self.assertIs (a, b)       # Same object
+self.assertIsNot (a, b)
 
 # Membership
-self.assertIn(item, collection)
-self.assertNotIn(item, collection)
+self.assertIn (item, collection)
+self.assertNotIn (item, collection)
 
 # Exceptions
 with self.assertRaises(ValueError):
     function_that_raises()
 
 # Floating point
-self.assertAlmostEqual(a, b, places=7)
+self.assertAlmostEqual (a, b, places=7)
 
 # None
-self.assertIsNone(x)
-self.assertIsNotNone(x)
+self.assertIsNone (x)
+self.assertIsNotNone (x)
 \`\`\`
 
 ### Setup and Teardown
 
 \`\`\`python
-class TestDatabase(unittest.TestCase):
-    def setUp(self):
+class TestDatabase (unittest.TestCase):
+    def setUp (self):
         """Run before each test"""
         self.db = Database('test.db')
         self.db.connect()
     
-    def tearDown(self):
+    def tearDown (self):
         """Run after each test"""
         self.db.close()
         os.remove('test.db')
     
-    def test_insert(self):
+    def test_insert (self):
         self.db.insert('key', 'value')
-        self.assertEqual(self.db.get('key'), 'value')
+        self.assertEqual (self.db.get('key'), 'value')
 \`\`\`
 
 ## \`pytest\` - Modern Testing
@@ -99,7 +99,7 @@ More concise and powerful than unittest.
 
 \`\`\`python
 # test_math.py
-def add(a, b):
+def add (a, b):
     return a + b
 
 def test_add_positive():
@@ -120,8 +120,8 @@ import pytest
     (0, 0, 0),
     (100, 200, 300),
 ])
-def test_add_parametrized(a, b, expected):
-    assert add(a, b) == expected
+def test_add_parametrized (a, b, expected):
+    assert add (a, b) == expected
 \`\`\`
 
 ### Fixtures (pytest)
@@ -132,11 +132,11 @@ def sample_list():
     """Reusable test data"""
     return [1, 2, 3, 4, 5]
 
-def test_length(sample_list):
-    assert len(sample_list) == 5
+def test_length (sample_list):
+    assert len (sample_list) == 5
 
-def test_sum(sample_list):
-    assert sum(sample_list) == 15
+def test_sum (sample_list):
+    assert sum (sample_list) == 15
 
 # Fixture with cleanup
 @pytest.fixture
@@ -152,8 +152,8 @@ def temp_file():
 ### 1. Print Debugging
 
 \`\`\`python
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
+def binary_search (arr, target):
+    left, right = 0, len (arr) - 1
     
     while left <= right:
         mid = (left + right) // 2
@@ -182,15 +182,15 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-def process_data(data):
-    logging.debug(f"Processing {len(data)} items")
+def process_data (data):
+    logging.debug (f"Processing {len (data)} items")
     
     for item in data:
         try:
-            result = expensive_operation(item)
-            logging.info(f"Processed {item}: {result}")
+            result = expensive_operation (item)
+            logging.info (f"Processed {item}: {result}")
         except Exception as e:
-            logging.error(f"Failed to process {item}: {e}")
+            logging.error (f"Failed to process {item}: {e}")
 
 # Levels: DEBUG < INFO < WARNING < ERROR < CRITICAL
 \`\`\`
@@ -202,12 +202,12 @@ Interactive debugging.
 \`\`\`python
 import pdb
 
-def problematic_function(data):
+def problematic_function (data):
     result = []
     for item in data:
         pdb.set_trace()  # Breakpoint here
         processed = item * 2
-        result.append(processed)
+        result.append (processed)
     return result
 
 # In pdb:
@@ -224,13 +224,13 @@ def problematic_function(data):
 Check assumptions during development.
 
 \`\`\`python
-def divide(a, b):
+def divide (a, b):
     assert b != 0, "Division by zero!"
     return a / b
 
-def binary_search(arr, target):
-    assert len(arr) > 0, "Array must not be empty"
-    assert all(arr[i] <= arr[i+1] for i in range(len(arr)-1)), "Array must be sorted"
+def binary_search (arr, target):
+    assert len (arr) > 0, "Array must not be empty"
+    assert all (arr[i] <= arr[i+1] for i in range (len (arr)-1)), "Array must be sorted"
     # ... implementation
 \`\`\`
 
@@ -246,12 +246,12 @@ def test_is_palindrome():
     assert is_palindrome("") == True
 
 # Step 2: Write minimal code to pass
-def is_palindrome(s):
+def is_palindrome (s):
     return s == s[::-1]
 
 # Step 3: Refactor if needed
-def is_palindrome(s):
-    left, right = 0, len(s) - 1
+def is_palindrome (s):
+    left, right = 0, len (s) - 1
     while left < right:
         if s[left] != s[right]:
             return False

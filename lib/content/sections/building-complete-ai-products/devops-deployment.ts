@@ -371,7 +371,7 @@ from mangum import Mangum
 from app.main import app
 
 # FastAPI app wrapped for Lambda
-handler = Mangum(app)
+handler = Mangum (app)
 
 # serverless.yml
 """
@@ -463,7 +463,7 @@ image = modal.Image.debian_slim().pip_install(
     timeout=300,
     container_idle_timeout=60
 )
-def generate_image(prompt: str) -> bytes:
+def generate_image (prompt: str) -> bytes:
     """
     Generate image with Stable Diffusion
     """
@@ -479,18 +479,18 @@ def generate_image(prompt: str) -> bytes:
     pipe = pipe.to("cuda")
     
     # Generate
-    image = pipe(prompt).images[0]
+    image = pipe (prompt).images[0]
     
     # Return as bytes
     buf = io.BytesIO()
-    image.save(buf, format='PNG')
+    image.save (buf, format='PNG')
     return buf.getvalue()
 
 @stub.local_entrypoint()
 def main():
     # Test locally
     result = generate_image.remote("A beautiful sunset")
-    print(f"Generated {len(result)} bytes")
+    print(f"Generated {len (result)} bytes")
 \`\`\`
 
 ---
@@ -645,31 +645,31 @@ gpu_utilization = Gauge(
 
 # Middleware
 @app.middleware("http")
-async def metrics_middleware(request: Request, call_next):
+async def metrics_middleware (request: Request, call_next):
     endpoint = request.url.path
     
-    active_requests.labels(endpoint=endpoint).inc()
+    active_requests.labels (endpoint=endpoint).inc()
     start = time.time()
     
     try:
-        response = await call_next(request)
+        response = await call_next (request)
         
         duration = time.time() - start
         request_duration.labels(
             endpoint=endpoint,
-            model=getattr(request.state, 'model', 'unknown')
-        ).observe(duration)
+            model=getattr (request.state, 'model', 'unknown')
+        ).observe (duration)
         
         request_count.labels(
             endpoint=endpoint,
-            model=getattr(request.state, 'model', 'unknown'),
+            model=getattr (request.state, 'model', 'unknown'),
             status=response.status_code
         ).inc()
         
         return response
         
     finally:
-        active_requests.labels(endpoint=endpoint).dec()
+        active_requests.labels (endpoint=endpoint).dec()
 
 # Metrics endpoint
 @app.get("/metrics")
@@ -680,10 +680,10 @@ async def metrics():
     )
 
 # Track LLM usage
-def track_llm_usage(model: str, input_tokens: int, output_tokens: int, cost: float):
-    token_count.labels(model=model, type="input").inc(input_tokens)
-    token_count.labels(model=model, type="output").inc(output_tokens)
-    cost_total.labels(model=model).inc(cost)
+def track_llm_usage (model: str, input_tokens: int, output_tokens: int, cost: float):
+    token_count.labels (model=model, type="input").inc (input_tokens)
+    token_count.labels (model=model, type="output").inc (output_tokens)
+    cost_total.labels (model=model).inc (cost)
 \`\`\`
 
 ### Grafana Dashboard
@@ -699,7 +699,7 @@ def track_llm_usage(model: str, input_tokens: int, output_tokens: int, cost: flo
         "title": "Requests per Second",
         "targets": [
           {
-            "expr": "rate(api_requests_total[5m])"
+            "expr": "rate (api_requests_total[5m])"
           }
         ]
       },
@@ -707,7 +707,7 @@ def track_llm_usage(model: str, input_tokens: int, output_tokens: int, cost: flo
         "title": "Average Latency",
         "targets": [
           {
-            "expr": "rate(api_request_duration_seconds_sum[5m]) / rate(api_request_duration_seconds_count[5m])"
+            "expr": "rate (api_request_duration_seconds_sum[5m]) / rate (api_request_duration_seconds_count[5m])"
           }
         ]
       },
@@ -715,7 +715,7 @@ def track_llm_usage(model: str, input_tokens: int, output_tokens: int, cost: flo
         "title": "Token Usage",
         "targets": [
           {
-            "expr": "rate(llm_tokens_total[5m])"
+            "expr": "rate (llm_tokens_total[5m])"
           }
         ]
       },
@@ -723,7 +723,7 @@ def track_llm_usage(model: str, input_tokens: int, output_tokens: int, cost: flo
         "title": "Cost per Hour",
         "targets": [
           {
-            "expr": "increase(llm_cost_usd_total[1h])"
+            "expr": "increase (llm_cost_usd_total[1h])"
           }
         ]
       },

@@ -7,7 +7,7 @@ export const templatesSection = {
   title: 'Code Templates',
   content: `**Template 1: Basic Traversal**
 \`\`\`python
-def traverse(head: ListNode) -> None:
+def traverse (head: ListNode) -> None:
     """
     Traverse and process each node.
     """
@@ -21,7 +21,7 @@ def traverse(head: ListNode) -> None:
 
 **Template 2: Two Pointers (Fast & Slow)**
 \`\`\`python
-def two_pointer_pattern(head: ListNode) -> ListNode:
+def two_pointer_pattern (head: ListNode) -> ListNode:
     """
     Generic fast & slow pointer template.
     """
@@ -43,7 +43,7 @@ def two_pointer_pattern(head: ListNode) -> ListNode:
 
 **Template 3: Dummy Node Pattern**
 \`\`\`python
-def dummy_node_pattern(head: ListNode) -> ListNode:
+def dummy_node_pattern (head: ListNode) -> ListNode:
     """
     Use dummy node to simplify edge cases.
     """
@@ -67,7 +67,7 @@ def dummy_node_pattern(head: ListNode) -> ListNode:
 
 **Template 4: Reverse List (Iterative)**
 \`\`\`python
-def reverse_list(head: ListNode) -> ListNode:
+def reverse_list (head: ListNode) -> ListNode:
     """
     Standard iterative reversal pattern.
     """
@@ -85,7 +85,7 @@ def reverse_list(head: ListNode) -> ListNode:
 
 **Template 5: Reverse List (Recursive)**
 \`\`\`python
-def reverse_list_recursive(head: ListNode) -> ListNode:
+def reverse_list_recursive (head: ListNode) -> ListNode:
     """
     Recursive reversal pattern.
     """
@@ -94,7 +94,7 @@ def reverse_list_recursive(head: ListNode) -> ListNode:
         return head
     
     # Recursive case
-    new_head = reverse_list_recursive(head.next)
+    new_head = reverse_list_recursive (head.next)
     
     # Reverse the link
     head.next.next = head
@@ -105,7 +105,7 @@ def reverse_list_recursive(head: ListNode) -> ListNode:
 
 **Template 6: Merge Two Lists**
 \`\`\`python
-def merge_two_lists(l1: ListNode, l2: ListNode) -> ListNode:
+def merge_two_lists (l1: ListNode, l2: ListNode) -> ListNode:
     """
     Merge two sorted lists.
     """
@@ -129,14 +129,14 @@ def merge_two_lists(l1: ListNode, l2: ListNode) -> ListNode:
 
 **Template 7: Runner Technique (Kth from End)**
 \`\`\`python
-def kth_from_end(head: ListNode, k: int) -> ListNode:
+def kth_from_end (head: ListNode, k: int) -> ListNode:
     """
     Find kth node from the end.
     """
     first = second = head
     
     # Move first k steps ahead
-    for _ in range(k):
+    for _ in range (k):
         if not first:
             return None
         first = first.next

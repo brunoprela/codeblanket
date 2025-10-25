@@ -41,13 +41,13 @@ This ensures all traffic uses encrypted HTTPS connections.
 
 \`\`\`python
 # Safe - parameterized
-User.objects.filter(username=user_input)
+User.objects.filter (username=user_input)
 
 # Safe - raw with params
 User.objects.raw('SELECT * FROM users WHERE id = %s', [user_id])
 
 # UNSAFE
-User.objects.raw(f'SELECT * FROM users WHERE id = {user_id}')
+User.objects.raw (f'SELECT * FROM users WHERE id = {user_id}')
 \`\`\`
 
 Django ORM parameterizes queries automatically, preventing SQL injection.

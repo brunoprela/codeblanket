@@ -14,13 +14,13 @@ export const rpcremoteprocedurecallSection = {
 **Conceptual Flow**:
 \`\`\`
 Client Code:
-  result = calculateTax(amount, state)
+  result = calculateTax (amount, state)
   
 Behind the Scenes:
   1. Client stub marshals parameters (serializes)
   2. Message sent over network
   3. Server stub unmarshals parameters
-  4. Server executes calculateTax(amount, state)
+  4. Server executes calculateTax (amount, state)
   5. Result marshaled and sent back
   6. Client receives and unmarshals result
 \`\`\`
@@ -88,10 +88,10 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const packageDefinition = protoLoader.loadSync('user.proto');
-const userProto = grpc.loadPackageDefinition(packageDefinition).user;
+const userProto = grpc.loadPackageDefinition (packageDefinition).user;
 
 // Implement service methods
-function getUser(call, callback) {
+function getUser (call, callback) {
   const userId = call.request.id;
   
   // Fetch from database
@@ -102,10 +102,10 @@ function getUser(call, callback) {
     age: 30
   };
   
-  callback(null, user);
+  callback (null, user);
 }
 
-function listUsers(call) {
+function listUsers (call) {
   const users = [
     { id: '1', name: 'Alice', email: 'alice@example.com', age: 25 },
     { id: '2', name: 'Bob', email: 'bob@example.com', age: 30 },
@@ -113,11 +113,11 @@ function listUsers(call) {
   ];
   
   // Stream users one by one
-  users.forEach(user => call.write(user));
+  users.forEach (user => call.write (user));
   call.end();
 }
 
-function createUser(call, callback) {
+function createUser (call, callback) {
   const newUser = {
     id: generateId(),
     name: call.request.name,
@@ -126,12 +126,12 @@ function createUser(call, callback) {
   };
   
   // Save to database
-  callback(null, newUser);
+  callback (null, newUser);
 }
 
 // Create and start server
 const server = new grpc.Server();
-server.addService(userProto.UserService.service, {
+server.addService (userProto.UserService.service, {
   getUser,
   listUsers,
   createUser
@@ -153,7 +153,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const packageDefinition = protoLoader.loadSync('user.proto');
-const userProto = grpc.loadPackageDefinition(packageDefinition).user;
+const userProto = grpc.loadPackageDefinition (packageDefinition).user;
 
 const client = new userProto.UserService(
   'localhost:50051',
@@ -314,11 +314,11 @@ rpc ListUsers(ListUsersRequest) returns (stream User);
 **Example**:
 \`\`\`javascript
 // Server
-function listUsers(call) {
+function listUsers (call) {
   const users = fetchAllUsers(); // Could be millions
   
-  users.forEach(user => {
-    call.write(user); // Stream one by one
+  users.forEach (user => {
+    call.write (user); // Stream one by one
   });
   
   call.end();
@@ -327,7 +327,7 @@ function listUsers(call) {
 // Client
 const call = client.listUsers({});
 call.on('data', (user) => {
-  processUser(user); // Process as they arrive
+  processUser (user); // Process as they arrive
 });
 \`\`\`
 
@@ -338,7 +338,7 @@ call.on('data', (user) => {
 Stream of requests → Single response
 
 \`\`\`protobuf
-rpc UploadFile(stream FileChunk) returns (UploadResponse);
+rpc UploadFile (stream FileChunk) returns (UploadResponse);
 \`\`\`
 
 **Use Cases**:
@@ -354,24 +354,24 @@ const call = client.uploadFile((error, response) => {
 });
 
 // Stream file chunks
-fileChunks.forEach(chunk => {
-  call.write(chunk);
+fileChunks.forEach (chunk => {
+  call.write (chunk);
 });
 
 call.end();
 
 // Server
-function uploadFile(call, callback) {
+function uploadFile (call, callback) {
   const chunks = [];
   
   call.on('data', (chunk) => {
-    chunks.push(chunk);
+    chunks.push (chunk);
   });
   
   call.on('end', () => {
-    const file = Buffer.concat(chunks);
-    saveFile(file);
-    callback(null, { success: true, size: file.length });
+    const file = Buffer.concat (chunks);
+    saveFile (file);
+    callback (null, { success: true, size: file.length });
   });
 }
 \`\`\`
@@ -383,7 +383,7 @@ function uploadFile(call, callback) {
 Stream of requests ↔ Stream of responses (independent)
 
 \`\`\`protobuf
-rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+rpc Chat (stream ChatMessage) returns (stream ChatMessage);
 \`\`\`
 
 **Use Cases**:
@@ -406,10 +406,10 @@ call.on('data', (message) => {
 });
 
 // Server
-function chat(call) {
+function chat (call) {
   call.on('data', (message) => {
     // Broadcast to all connected clients
-    broadcastToAll(message);
+    broadcastToAll (message);
   });
   
   call.on('end', () => {
@@ -512,7 +512,7 @@ grpc.status.INTERNAL            // 13 - Internal error
 
 **Server-Side Error Handling**:
 \`\`\`javascript
-function getUser(call, callback) {
+function getUser (call, callback) {
   const userId = call.request.id;
   
   if (!userId) {
@@ -522,7 +522,7 @@ function getUser(call, callback) {
     });
   }
   
-  const user = database.findUser(userId);
+  const user = database.findUser (userId);
   
   if (!user) {
     return callback({
@@ -531,13 +531,13 @@ function getUser(call, callback) {
     });
   }
   
-  callback(null, user);
+  callback (null, user);
 }
 \`\`\`
 
 **Client-Side Error Handling with Retry**:
 \`\`\`javascript
-function getUserWithRetry(userId, maxRetries = 3) {
+function getUserWithRetry (userId, maxRetries = 3) {
   return new Promise((resolve, reject) => {
     let attempts = 0;
     
@@ -546,7 +546,7 @@ function getUserWithRetry(userId, maxRetries = 3) {
       
       client.getUser({ id: userId }, (error, user) => {
         if (!error) {
-          return resolve(user);
+          return resolve (user);
         }
         
         // Retry on transient errors
@@ -557,13 +557,13 @@ function getUserWithRetry(userId, maxRetries = 3) {
           if (attempts < maxRetries) {
             const delay = Math.min(1000 * Math.pow(2, attempts), 10000);
             console.log(\`Retry \${attempts} after \${delay}ms\`);
-            setTimeout(attempt, delay);
+            setTimeout (attempt, delay);
             return;
           }
         }
         
         // Non-retryable error or max retries exceeded
-        reject(error);
+        reject (error);
       });
     }
     
@@ -598,7 +598,7 @@ function makeRequest() {
 \`\`\`javascript
 // Set deadline (absolute time)
 const deadline = new Date();
-deadline.setSeconds(deadline.getSeconds() + 5);
+deadline.setSeconds (deadline.getSeconds() + 5);
 
 client.getUser(
   { id: '123' },
@@ -675,7 +675,7 @@ metadata.add('authorization', 'Bearer eyJhbGc...');
 client.getUser({ id: '123' }, metadata, callback);
 
 // Server: Verify token
-function getUser(call, callback) {
+function getUser (call, callback) {
   const metadata = call.metadata;
   const authHeader = metadata.get('authorization')[0];
   
@@ -689,9 +689,9 @@ function getUser(call, callback) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify (token, SECRET_KEY);
     // Proceed with request
-    callback(null, user);
+    callback (null, user);
   } catch (error) {
     callback({
       code: grpc.status.UNAUTHENTICATED,
@@ -705,11 +705,11 @@ function getUser(call, callback) {
 
 \`\`\`javascript
 // Client interceptor (add auth to all requests)
-function authInterceptor(options, nextCall) {
-  return new grpc.InterceptingCall(nextCall(options), {
+function authInterceptor (options, nextCall) {
+  return new grpc.InterceptingCall (nextCall (options), {
     start: (metadata, listener, next) => {
       metadata.add('authorization', \`Bearer \${getAuthToken()}\`);
-      next(metadata, listener);
+      next (metadata, listener);
     }
   });
 }
@@ -721,7 +721,7 @@ const client = new UserService(
 );
 
 // Server interceptor (logging, auth)
-function loggingInterceptor(call, callback) {
+function loggingInterceptor (call, callback) {
   const start = Date.now();
   const method = call.handler.path;
   
@@ -732,7 +732,7 @@ function loggingInterceptor(call, callback) {
     originalCallback((error, response) => {
       const duration = Date.now() - start;
       console.log(\`[RPC] \${method} completed in \${duration}ms\`);
-      callback(error, response);
+      callback (error, response);
     });
   };
 }
@@ -841,7 +841,7 @@ client.getUser({ id: '123' }, (error, user) => {
       return res.status(404).send('User not found');
     } else {
       // Log and return 500
-      logger.error(error);
+      logger.error (error);
       return res.status(500).send('Internal error');
     }
   }
@@ -935,7 +935,7 @@ message Order {
 
 **Order Service Implementation**:
 \`\`\`javascript
-async function createOrder(call, callback) {
+async function createOrder (call, callback) {
   const { user_id, items, payment_info } = call.request;
   
   try {
@@ -946,8 +946,8 @@ async function createOrder(call, callback) {
         { items },
         { deadline: Date.now() + 2000 },
         (error, response) => {
-          if (error) reject(error);
-          else resolve(response);
+          if (error) reject (error);
+          else resolve (response);
         }
       );
     });
@@ -969,8 +969,8 @@ async function createOrder(call, callback) {
         },
         { deadline: Date.now() + 5000 },
         (error, response) => {
-          if (error) reject(error);
-          else resolve(response);
+          if (error) reject (error);
+          else resolve (response);
         }
       );
     });
@@ -988,8 +988,8 @@ async function createOrder(call, callback) {
         { items, order_id: generateOrderId() },
         { deadline: Date.now() + 2000 },
         (error, response) => {
-          if (error) reject(error);
-          else resolve(response);
+          if (error) reject (error);
+          else resolve (response);
         }
       );
     });
@@ -1003,9 +1003,9 @@ async function createOrder(call, callback) {
       total: inventoryCheck.total
     };
     
-    await saveOrder(order);
+    await saveOrder (order);
     
-    callback(null, order);
+    callback (null, order);
     
   } catch (error) {
     logger.error('Order creation failed:', error);

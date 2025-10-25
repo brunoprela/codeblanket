@@ -5,7 +5,7 @@
 export const gossipprotocolSection = {
   id: 'gossip-protocol',
   title: 'Gossip Protocol',
-  content: `Gossip Protocol is a communication pattern where nodes randomly share information with each other, similar to how rumors or gossip spreads in social networks. It's a powerful approach for achieving eventual consistency, failure detection, and data dissemination in large-scale distributed systems.
+  content: `Gossip Protocol is a communication pattern where nodes randomly share information with each other, similar to how rumors or gossip spreads in social networks. It\'s a powerful approach for achieving eventual consistency, failure detection, and data dissemination in large-scale distributed systems.
 
 ## What is Gossip Protocol?
 
@@ -113,18 +113,18 @@ Each node runs this loop continuously:
 \`\`\`
 while (true):
     // Step 1: Select random peers
-    peers = select_random_nodes(fanout=3)
+    peers = select_random_nodes (fanout=3)
     
     // Step 2: Send current state to peers
     for peer in peers:
-        send_gossip_message(peer, my_state)
+        send_gossip_message (peer, my_state)
     
     // Step 3: Receive and merge state from others
     incoming = receive_gossip_messages()
-    my_state = merge_state(my_state, incoming)
+    my_state = merge_state (my_state, incoming)
     
     // Step 4: Wait before next round
-    sleep(gossip_interval)  // e.g., 1 second
+    sleep (gossip_interval)  // e.g., 1 second
 \`\`\`
 
 ### **Gossip Message**
@@ -194,7 +194,7 @@ Node **pulls** information from others by asking for their state.
 
 \`\`\`
 Node A: "What's your state?"
-Node B: "Here's my state: {...}"
+Node B: "Here\'s my state: {...}"
 Node A: "I'll update my state based on yours."
 \`\`\`
 
@@ -213,7 +213,7 @@ Combination: Push your state, pull their state.
 
 \`\`\`
 Node A → Node B: "Here's my state: {...}, send me yours."
-Node B → Node A: "Here's my state: {...}"
+Node B → Node A: "Here\'s my state: {...}"
 Both merge and update their state.
 \`\`\`
 
@@ -589,7 +589,7 @@ Load statistics: Every 30s (informational only)
 
 **Random Selection**:
 \`\`\`
-peers = random_sample(cluster_members, fanout)
+peers = random_sample (cluster_members, fanout)
 \`\`\`
 
 **Pros**: Simple, load balanced
@@ -597,7 +597,7 @@ peers = random_sample(cluster_members, fanout)
 
 **Weighted Random** (prefer healthy nodes):
 \`\`\`
-peers = weighted_sample(cluster_members, fanout, weights)
+peers = weighted_sample (cluster_members, fanout, weights)
 weights based on: latency, load, recent success
 \`\`\`
 

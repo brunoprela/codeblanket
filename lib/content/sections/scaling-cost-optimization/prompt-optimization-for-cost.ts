@@ -43,8 +43,8 @@ def calculate_prompt_cost(
     }
     
     # Count tokens
-    encoding = tiktoken.encoding_for_model(model)
-    input_tokens = len(encoding.encode(prompt))
+    encoding = tiktoken.encoding_for_model (model)
+    input_tokens = len (encoding.encode (prompt))
     
     # Calculate cost
     input_cost = (input_tokens / 1_000_000) * pricing[model]["input"]
@@ -74,9 +74,8 @@ and I would definitely recommend it to anyone looking for quality."
 Please provide your analysis of the sentiment below. Thank you!
 """
 
-costs = calculate_prompt_cost(verbose_prompt)
-print(f"Verbose prompt: {costs['input_tokens']} tokens = \${costs['total_cost']: .4f
-}")
+costs = calculate_prompt_cost (verbose_prompt)
+print(f"Verbose prompt: {costs['input_tokens']} tokens = \${costs['total_cost']:.4f}")
 # Output: Verbose prompt: 95 tokens = $0.0003
 
 # Optimized prompt
@@ -87,7 +86,7 @@ and I would definitely recommend it to anyone looking for quality."
 
 Sentiment: """
 
-costs = calculate_prompt_cost(optimized_prompt)
+costs = calculate_prompt_cost (optimized_prompt)
 print(f"Optimized prompt: {costs['input_tokens']} tokens = \${costs['total_cost']:.4f}")
 # Output: Optimized prompt: 38 tokens = $0.0001
 
@@ -201,7 +200,7 @@ concise_fewshot = """Classify sentiment:
 verbose = "Generate a Python function that calculates the sum of all numbers in a list"
 
 # ✅ ABBREVIATED  
-abbreviated = "Generate Python function: sum(list) → int"
+abbreviated = "Generate Python function: sum (list) → int"
 
 # Still clear, but 60% fewer tokens
 \`\`\`
@@ -278,8 +277,8 @@ compressed_result = compressor.compress_prompt(
     compress_ratio=0.5  # Compress to 50% of original
 )
 
-print(f"Original: {len(long_prompt.split())} words")
-print(f"Compressed: {len(compressed_result['compressed_prompt'].split())} words")
+print(f"Original: {len (long_prompt.split())} words")
+print(f"Compressed: {len (compressed_result['compressed_prompt'].split())} words")
 print(f"Compression ratio: {compressed_result['ratio']:.1f}x")
 print(f"\nCompressed prompt:\n{compressed_result['compressed_prompt']}")
 
@@ -332,13 +331,13 @@ class CostAwarePromptTemplate:
         """Generate prompt with specified verbosity"""
         
         if self.task_type == "sentiment_analysis":
-            return self._sentiment_prompt(input_text, verbosity, examples)
+            return self._sentiment_prompt (input_text, verbosity, examples)
         elif self.task_type == "summarization":
-            return self._summary_prompt(input_text, verbosity)
+            return self._summary_prompt (input_text, verbosity)
         elif self.task_type == "extraction":
-            return self._extraction_prompt(input_text, verbosity)
+            return self._extraction_prompt (input_text, verbosity)
         else:
-            raise ValueError(f"Unknown task type: {self.task_type}")
+            raise ValueError (f"Unknown task type: {self.task_type}")
     
     def _sentiment_prompt(
         self,
@@ -379,7 +378,7 @@ Classify as positive, negative, or neutral.\n\n"""
             prompt += f'Text: "{text}"\nSentiment:'
             return prompt
     
-    def _summary_prompt(self, text: str, verbosity: VerbosityLevel) -> str:
+    def _summary_prompt (self, text: str, verbosity: VerbosityLevel) -> str:
         """Generate summarization prompt"""
         
         if verbosity == VerbosityLevel.MINIMAL:
@@ -399,7 +398,7 @@ Text:
 
 Summary:"""
     
-    def _extraction_prompt(self, text: str, verbosity: VerbosityLevel) -> str:
+    def _extraction_prompt (self, text: str, verbosity: VerbosityLevel) -> str:
         """Generate extraction prompt"""
         
         if verbosity == VerbosityLevel.MINIMAL:
@@ -432,7 +431,7 @@ minimal_prompt = template.generate_prompt(
     "I love this product!",
     verbosity=VerbosityLevel.MINIMAL
 )
-print(f"Minimal ({len(minimal_prompt)} chars): {minimal_prompt}")
+print(f"Minimal ({len (minimal_prompt)} chars): {minimal_prompt}")
 
 # For production: use standard  
 standard_prompt = template.generate_prompt(
@@ -443,7 +442,7 @@ standard_prompt = template.generate_prompt(
         {"text": "Terrible", "sentiment": "negative"}
     ]
 )
-print(f"Standard ({len(standard_prompt)} chars): {standard_prompt}")
+print(f"Standard ({len (standard_prompt)} chars): {standard_prompt}")
 
 # For complex/ambiguous cases: use detailed
 detailed_prompt = template.generate_prompt(
@@ -454,7 +453,7 @@ detailed_prompt = template.generate_prompt(
         {"text": "Terrible", "sentiment": "negative", "reason": "Explicit negative language"}
     ]
 )
-print(f"Detailed ({len(detailed_prompt)} chars): {detailed_prompt}")
+print(f"Detailed ({len (detailed_prompt)} chars): {detailed_prompt}")
 \`\`\`
 
 ---
@@ -474,7 +473,7 @@ class SmartContextSelector:
     """Select only the most relevant context chunks"""
     
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
-        self.encoder = SentenceTransformer(model_name)
+        self.encoder = SentenceTransformer (model_name)
     
     def select_relevant_chunks(
         self,
@@ -486,8 +485,8 @@ class SmartContextSelector:
         """Select most relevant chunks for the query"""
         
         # Encode query and chunks
-        query_embedding = self.encoder.encode(query, convert_to_tensor=True)
-        chunk_embeddings = self.encoder.encode(chunks, convert_to_tensor=True)
+        query_embedding = self.encoder.encode (query, convert_to_tensor=True)
+        chunk_embeddings = self.encoder.encode (chunks, convert_to_tensor=True)
         
         # Calculate similarity scores
         from torch.nn.functional import cosine_similarity
@@ -497,7 +496,7 @@ class SmartContextSelector:
         ).cpu().numpy()
         
         # Sort chunks by relevance
-        ranked_indices = np.argsort(scores)[::-1]
+        ranked_indices = np.argsort (scores)[::-1]
         
         # Select top chunks within token budget
         selected_chunks = []
@@ -507,10 +506,10 @@ class SmartContextSelector:
         
         for idx in ranked_indices[:top_k]:
             chunk = chunks[idx]
-            chunk_tokens = len(encoding.encode(chunk))
+            chunk_tokens = len (encoding.encode (chunk))
             
             if total_tokens + chunk_tokens <= max_tokens:
-                selected_chunks.append(chunk)
+                selected_chunks.append (chunk)
                 total_tokens += chunk_tokens
             else:
                 break
@@ -541,7 +540,7 @@ relevant_chunks = selector.select_relevant_chunks(
     top_k=5
 )
 
-print(f"Selected {len(relevant_chunks)} most relevant chunks")
+print(f"Selected {len (relevant_chunks)} most relevant chunks")
 print(f"Token budget: ~2000 tokens (vs potentially 50,000+ for all chunks)")
 
 # Cost reduction: 95%+
@@ -557,11 +556,11 @@ class ConversationPruner:
         self.max_tokens = max_tokens
         self.encoding = tiktoken.get_encoding("cl100k_base")
     
-    def count_tokens(self, messages: List[dict]) -> int:
+    def count_tokens (self, messages: List[dict]) -> int:
         """Count tokens in message history"""
         total = 0
         for message in messages:
-            total += len(self.encoding.encode(message["content"]))
+            total += len (self.encoding.encode (message["content"]))
         return total
     
     def prune_history(
@@ -571,7 +570,7 @@ class ConversationPruner:
     ) -> List[dict]:
         """Prune conversation history intelligently"""
         
-        if len(messages) <= keep_recent:
+        if len (messages) <= keep_recent:
             return messages
         
         # Always keep system message (first)
@@ -583,13 +582,13 @@ class ConversationPruner:
         
         # Check if within token budget
         pruned = [system_message] + recent_messages if system_message else recent_messages
-        token_count = self.count_tokens(pruned)
+        token_count = self.count_tokens (pruned)
         
         if token_count <= self.max_tokens:
             return pruned
         
         # Strategy 2: Summarize middle, keep recent
-        if len(conversation_messages) > keep_recent * 2:
+        if len (conversation_messages) > keep_recent * 2:
             # Keep first few and last few, summarize middle
             keep_start = conversation_messages[:keep_recent]
             keep_end = conversation_messages[-keep_recent:]
@@ -598,22 +597,22 @@ class ConversationPruner:
             # Create summary of middle messages
             summary = {
                 "role": "system",
-                "content": f"[Previous conversation summary: {len(middle)} messages exchanged about various topics]"
+                "content": f"[Previous conversation summary: {len (middle)} messages exchanged about various topics]"
             }
             
             pruned = [system_message, summary] + keep_start + keep_end if system_message else [summary] + keep_start + keep_end
             return pruned
         
         # Strategy 3: Progressive removal of older messages
-        while token_count > self.max_tokens and len(recent_messages) > 1:
+        while token_count > self.max_tokens and len (recent_messages) > 1:
             recent_messages.pop(0)
             pruned = [system_message] + recent_messages if system_message else recent_messages
-            token_count = self.count_tokens(pruned)
+            token_count = self.count_tokens (pruned)
         
         return pruned
 
 # Usage
-pruner = ConversationPruner(max_tokens=4000)
+pruner = ConversationPruner (max_tokens=4000)
 
 # Long conversation history
 messages = [
@@ -625,11 +624,11 @@ messages = [
 ]
 
 # Prune to save tokens
-pruned = pruner.prune_history(messages, keep_recent=5)
+pruned = pruner.prune_history (messages, keep_recent=5)
 
-print(f"Original: {len(messages)} messages, {pruner.count_tokens(messages)} tokens")
-print(f"Pruned: {len(pruned)} messages, {pruner.count_tokens(pruned)} tokens")
-print(f"Token reduction: {(1 - pruner.count_tokens(pruned)/pruner.count_tokens(messages))*100:.0f}%")
+print(f"Original: {len (messages)} messages, {pruner.count_tokens (messages)} tokens")
+print(f"Pruned: {len (pruned)} messages, {pruner.count_tokens (pruned)} tokens")
+print(f"Token reduction: {(1 - pruner.count_tokens (pruned)/pruner.count_tokens (messages))*100:.0f}%")
 
 # Typical result: 70-90% token reduction
 \`\`\`
@@ -650,7 +649,7 @@ def cost_aware_completion(
     
     # Estimate input tokens
     encoding = tiktoken.get_encoding("cl100k_base")
-    input_tokens = len(encoding.encode(prompt))
+    input_tokens = len (encoding.encode (prompt))
     
     # Calculate max output tokens within budget
     # For GPT-3.5: $0.50 input, $1.50 output per 1M tokens
@@ -673,10 +672,10 @@ def cost_aware_completion(
         "essay": 1000
     }
     
-    recommended_limit = task_limits.get(task_type, 150)
-    actual_limit = min(max_output_tokens, recommended_limit)
+    recommended_limit = task_limits.get (task_type, 150)
+    actual_limit = min (max_output_tokens, recommended_limit)
     
-    print(f"Input: {input_tokens} tokens (\${input_cost: .4f}) ")
+    print(f"Input: {input_tokens} tokens (\${input_cost:.4f}) ")
 print(f"Max output within budget: {max_output_tokens} tokens")
 print(f"Using: {actual_limit} tokens for {task_type}")
 
@@ -718,7 +717,7 @@ class PromptVersion:
     quality_score: float  # 0-1, from evaluation
     
     @property
-    def efficiency_score(self) -> float:
+    def efficiency_score (self) -> float:
         """Balance between cost and quality"""
         return self.quality_score / self.avg_cost if self.avg_cost > 0 else 0
 
@@ -728,7 +727,7 @@ class PromptOptimizer:
     def __init__(self, model: str = "gpt-3.5-turbo"):
         self.model = model
         self.versions = []
-        self.encoding = tiktoken.encoding_for_model(model)
+        self.encoding = tiktoken.encoding_for_model (model)
     
     async def test_prompt_version(
         self,
@@ -747,8 +746,8 @@ class PromptOptimizer:
             prompt = prompt_template.format(**case["input"])
             
             # Count input tokens
-            input_tokens = len(self.encoding.encode(prompt))
-            token_counts.append(input_tokens)
+            input_tokens = len (self.encoding.encode (prompt))
+            token_counts.append (input_tokens)
             
             # Get response
             response = await openai.ChatCompletion.acreate(
@@ -761,41 +760,41 @@ class PromptOptimizer:
             usage = response.usage
             cost = (usage.prompt_tokens / 1_000_000 * 0.5) + \
                    (usage.completion_tokens / 1_000_000 * 1.5)
-            costs.append(cost)
+            costs.append (cost)
             
             # Evaluate quality
             quality = quality_evaluator(
                 response.choices[0].message.content,
                 case["expected_output"]
             )
-            quality_scores.append(quality)
+            quality_scores.append (quality)
         
         version = PromptVersion(
-            version=len(self.versions) + 1,
+            version=len (self.versions) + 1,
             prompt=prompt_template,
-            avg_tokens=statistics.mean(token_counts),
-            avg_cost=statistics.mean(costs),
-            quality_score=statistics.mean(quality_scores)
+            avg_tokens=statistics.mean (token_counts),
+            avg_cost=statistics.mean (costs),
+            quality_score=statistics.mean (quality_scores)
         )
         
-        self.versions.append(version)
+        self.versions.append (version)
         return version
     
-    def compare_versions(self) -> str:
+    def compare_versions (self) -> str:
         """Compare all tested versions"""
         
         report = "Prompt Optimization Results:\n"
         report += "=" * 60 + "\n\n"
         
-        for v in sorted(self.versions, key=lambda x: x.efficiency_score, reverse=True):
+        for v in sorted (self.versions, key=lambda x: x.efficiency_score, reverse=True):
             report += f"Version {v.version}:\n"
             report += f"  Avg Tokens: {v.avg_tokens:.0f}\n"
-            report += f"  Avg Cost: \${v.avg_cost: .6f}\n"
+            report += f"  Avg Cost: \${v.avg_cost:.6f}\n"
 report += f"  Quality: {v.quality_score:.2%}\n"
 report += f"  Efficiency: {v.efficiency_score:.2f}\n"
 report += f"  Prompt: {v.prompt[:100]}...\n\n"
 
-best = max(self.versions, key = lambda x: x.efficiency_score)
+best = max (self.versions, key = lambda x: x.efficiency_score)
 report += f"🏆 Best Version: #{best.version}\n"
 
 return report
@@ -883,17 +882,17 @@ Review: {review_text}"""
 # - Faster response time
 # - Same accuracy
 
-def measure_prompt_efficiency(prompt_template: str, test_cases: List[str]):
+def measure_prompt_efficiency (prompt_template: str, test_cases: List[str]):
     """Measure actual efficiency"""
     encoding = tiktoken.get_encoding("cl100k_base")
     
     total_input_tokens = 0
     for case in test_cases:
-        prompt = prompt_template.format(review_text=case)
-        tokens = len(encoding.encode(prompt))
+        prompt = prompt_template.format (review_text=case)
+        tokens = len (encoding.encode (prompt))
         total_input_tokens += tokens
     
-    avg_tokens = total_input_tokens / len(test_cases)
+    avg_tokens = total_input_tokens / len (test_cases)
     cost_per_1m = (avg_tokens / 1_000_000 * 0.5) * 1_000_000  # Input cost
     
     return {
@@ -907,12 +906,12 @@ test_reviews = [
     # ... more test cases
 ]
 
-before_stats = measure_prompt_efficiency(before_prompt, test_reviews)
-after_stats = measure_prompt_efficiency(after_prompt, test_reviews)
+before_stats = measure_prompt_efficiency (before_prompt, test_reviews)
+after_stats = measure_prompt_efficiency (after_prompt, test_reviews)
 
 print("BEFORE:")
 print(f"  Avg tokens: {before_stats['avg_tokens']:.0f}")
-print(f"  Cost/1M: \${before_stats['cost_per_1m_requests']: .2f}")
+print(f"  Cost/1M: \${before_stats['cost_per_1m_requests']:.2f}")
 
 print("\nAFTER:")
 print(f"  Avg tokens: {after_stats['avg_tokens']:.0f}")

@@ -11,13 +11,13 @@ export const instagramarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
       'What database technology does Instagram primarily use for its social graph and feed data after migrating from PostgreSQL?',
     options: [
       'MySQL with custom sharding',
-      "TAO (The Associations and Objects), Facebook's graph database",
+      "TAO (The Associations and Objects), Facebook\'s graph database",
       'MongoDB for document storage',
       'Redis with persistence enabled',
     ],
     correctAnswer: 1,
     explanation:
-      "After Facebook's acquisition, Instagram migrated to TAO (The Associations and Objects), Facebook's distributed data store optimized for social graph queries. TAO provides a graph-oriented API with objects and associations while using MySQL and Memcached underneath. It offers 99%+ cache hit rates and is optimized for the read-heavy workload typical of social networks.",
+      "After Facebook\'s acquisition, Instagram migrated to TAO (The Associations and Objects), Facebook's distributed data store optimized for social graph queries. TAO provides a graph-oriented API with objects and associations while using MySQL and Memcached underneath. It offers 99%+ cache hit rates and is optimized for the read-heavy workload typical of social networks.",
   },
   {
     id: 'mc2',
@@ -44,7 +44,7 @@ export const instagramarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Instagram stores photos in Amazon S3 (master and processed versions) and delivers them through CloudFront CDN with a 95%+ cache hit rate. Photos are processed into multiple sizes (thumbnail, medium, full) and compressed to reduce storage costs. The combination of S3's durability and CloudFront's global edge network ensures fast photo delivery worldwide.",
+      "Instagram stores photos in Amazon S3 (master and processed versions) and delivers them through CloudFront CDN with a 95%+ cache hit rate. Photos are processed into multiple sizes (thumbnail, medium, full) and compressed to reduce storage costs. The combination of S3's durability and CloudFront\'s global edge network ensures fast photo delivery worldwide.",
   },
   {
     id: 'mc4',

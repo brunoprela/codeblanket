@@ -90,7 +90,7 @@ Conceptual Video Diffusion Model Architecture
 import torch
 import torch.nn as nn
 
-class VideoAttentionBlock(nn.Module):
+class VideoAttentionBlock (nn.Module):
     """
     Attention block that handles both spatial and temporal dimensions
     """
@@ -113,10 +113,10 @@ class VideoAttentionBlock(nn.Module):
             batch_first=True
         )
         
-        self.norm1 = nn.LayerNorm(channels)
-        self.norm2 = nn.LayerNorm(channels)
+        self.norm1 = nn.LayerNorm (channels)
+        self.norm2 = nn.LayerNorm (channels)
         
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward (self, x: torch.Tensor) -> torch.Tensor:
         """
         x: (batch, frames, height, width, channels)
         """
@@ -124,20 +124,20 @@ class VideoAttentionBlock(nn.Module):
         
         # Spatial attention: attend within each frame
         # Reshape to (batch * frames, height * width, channels)
-        x_spatial = x.reshape(batch * frames, height * width, channels)
+        x_spatial = x.reshape (batch * frames, height * width, channels)
         x_spatial_attended, _ = self.spatial_attention(
             x_spatial, x_spatial, x_spatial
         )
         x_spatial_attended = self.norm1(x_spatial_attended + x_spatial)
         
         # Reshape back to (batch, frames, height, width, channels)
-        x = x_spatial_attended.reshape(batch, frames, height, width, channels)
+        x = x_spatial_attended.reshape (batch, frames, height, width, channels)
         
         # Temporal attention: attend across frames
         # Reshape to (batch, height * width, frames, channels)
         # Then to (batch * height * width, frames, channels)
         x_temporal = x.permute(0, 2, 3, 1, 4)  # (batch, height, width, frames, channels)
-        x_temporal = x_temporal.reshape(batch * height * width, frames, channels)
+        x_temporal = x_temporal.reshape (batch * height * width, frames, channels)
         
         x_temporal_attended, _ = self.temporal_attention(
             x_temporal, x_temporal, x_temporal
@@ -152,7 +152,7 @@ class VideoAttentionBlock(nn.Module):
         
         return x_out
 
-class SimplifiedVideoDiffusionModel(nn.Module):
+class SimplifiedVideoDiffusionModel (nn.Module):
     """
     Simplified video diffusion model showing key concepts
     """
@@ -170,11 +170,11 @@ class SimplifiedVideoDiffusionModel(nn.Module):
         
         # Encode frames to latent space
         self.encoder = nn.Sequential(
-            nn.Conv3d(channels, latent_channels // 4, kernel_size=3, padding=1),
+            nn.Conv3d (channels, latent_channels // 4, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv3d(latent_channels // 4, latent_channels // 2, kernel_size=3, padding=1),
+            nn.Conv3d (latent_channels // 4, latent_channels // 2, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv3d(latent_channels // 2, latent_channels, kernel_size=3, padding=1),
+            nn.Conv3d (latent_channels // 2, latent_channels, kernel_size=3, padding=1),
         )
         
         # Text condition embedding
@@ -185,17 +185,17 @@ class SimplifiedVideoDiffusionModel(nn.Module):
         
         # Attention layers
         self.attention_layers = nn.ModuleList([
-            VideoAttentionBlock(latent_channels, num_frames)
-            for _ in range(num_layers)
+            VideoAttentionBlock (latent_channels, num_frames)
+            for _ in range (num_layers)
         ])
         
         # Decode latent to frames
         self.decoder = nn.Sequential(
-            nn.Conv3d(latent_channels, latent_channels // 2, kernel_size=3, padding=1),
+            nn.Conv3d (latent_channels, latent_channels // 2, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv3d(latent_channels // 2, latent_channels // 4, kernel_size=3, padding=1),
+            nn.Conv3d (latent_channels // 2, latent_channels // 4, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv3d(latent_channels // 4, channels, kernel_size=3, padding=1),
+            nn.Conv3d (latent_channels // 4, channels, kernel_size=3, padding=1),
         )
         
     def forward(
@@ -208,15 +208,15 @@ class SimplifiedVideoDiffusionModel(nn.Module):
         Predict the noise to remove from noisy_video
         """
         # Encode video to latent space
-        latent = self.encoder(noisy_video)  # (batch, latent_channels, frames, h, w)
+        latent = self.encoder (noisy_video)  # (batch, latent_channels, frames, h, w)
         
         # Add text condition
-        text_cond = self.text_embedding(text_embedding)  # (batch, latent_channels)
+        text_cond = self.text_embedding (text_embedding)  # (batch, latent_channels)
         text_cond = text_cond.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1)  # Broadcast dims
         latent = latent + text_cond
         
         # Add timestep embedding
-        time_emb = self.time_embedding(timestep)  # (batch, latent_channels)
+        time_emb = self.time_embedding (timestep)  # (batch, latent_channels)
         time_emb = time_emb.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1)  # Broadcast dims
         latent = latent + time_emb
         
@@ -226,13 +226,13 @@ class SimplifiedVideoDiffusionModel(nn.Module):
         
         # Apply attention layers
         for attention_layer in self.attention_layers:
-            latent = attention_layer(latent)
+            latent = attention_layer (latent)
         
         # Reshape back: (batch, channels, frames, height, width)
         latent = latent.permute(0, 4, 1, 2, 3)
         
         # Decode to predicted noise
-        predicted_noise = self.decoder(latent)
+        predicted_noise = self.decoder (latent)
         
         return predicted_noise
 
@@ -245,24 +245,24 @@ def generate_video_from_text(
     """
     Generate video using diffusion process
     """
-    device = next(model.parameters()).device
+    device = next (model.parameters()).device
     
     # Get text embedding (simplified - would use CLIP or similar)
     # text_encoder would be a pretrained model like CLIP
-    text_embedding = torch.randn(1, 768).to(device)  # Placeholder
+    text_embedding = torch.randn(1, 768).to (device)  # Placeholder
     
     # Start with pure noise
     video = torch.randn(
         1, 3, model.num_frames, model.frame_size, model.frame_size
-    ).to(device)
+    ).to (device)
     
     # Diffusion process: gradually denoise
-    for t in range(num_inference_steps - 1, -1, -1):
-        timestep = torch.tensor([t]).to(device)
+    for t in range (num_inference_steps - 1, -1, -1):
+        timestep = torch.tensor([t]).to (device)
         
         # Predict noise
         with torch.no_grad():
-            predicted_noise = model(video, text_embedding, timestep)
+            predicted_noise = model (video, text_embedding, timestep)
         
         # Remove a portion of the noise
         alpha = 1.0 - (t / num_inference_steps)
@@ -271,7 +271,7 @@ def generate_video_from_text(
         # Add smaller noise for next iteration (except last step)
         if t > 0:
             noise_scale = 0.1 * (t / num_inference_steps)
-            video = video + noise_scale * torch.randn_like(video)
+            video = video + noise_scale * torch.randn_like (video)
     
     return video
 
@@ -286,7 +286,7 @@ if __name__ == "__main__":
         num_layers=4,
     )
     
-    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"Model parameters: {sum (p.numel() for p in model.parameters()):,}")
     
     # Generate video
     video = generate_video_from_text(
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     )
     
     print(f"Generated video shape: {video.shape}")  # (1, 3, 16, 64, 64)
-    print(f"That's {video.shape[2]} frames of {video.shape[3]}x{video.shape[4]} video")
+    print(f"That\'s {video.shape[2]} frames of {video.shape[3]}x{video.shape[4]} video")
 \`\`\`
 
 ### Key Architectural Components
@@ -327,7 +327,7 @@ if __name__ == "__main__":
 
 OpenAI's **Sora** (announced February 2024) represents a major breakthrough in video generation. While the full technical details aren't public, we can infer the architecture from the demo videos and OpenAI's description:
 
-### Sora's Key Innovations
+### Sora\'s Key Innovations
 
 **1. Spacetime Patches**
 
@@ -342,7 +342,7 @@ import torch
 import torch.nn as nn
 from typing import Tuple
 
-class SpacetimePatchEmbedding(nn.Module):
+class SpacetimePatchEmbedding (nn.Module):
     """
     Convert video into spacetime patches similar to how ViT tokenizes images
     """
@@ -381,7 +381,7 @@ class SpacetimePatchEmbedding(nn.Module):
             torch.randn(1, self.total_patches, embed_dim)
         )
         
-    def forward(self, video: torch.Tensor) -> torch.Tensor:
+    def forward (self, video: torch.Tensor) -> torch.Tensor:
         """
         video: (batch, channels, frames, height, width)
         Returns: (batch, num_patches, embed_dim)
@@ -389,7 +389,7 @@ class SpacetimePatchEmbedding(nn.Module):
         batch_size = video.shape[0]
         
         # Project to patches
-        patches = self.projection(video)  # (batch, embed_dim, t_patches, h_patches, w_patches)
+        patches = self.projection (video)  # (batch, embed_dim, t_patches, h_patches, w_patches)
         
         # Flatten spatial and temporal dimensions
         patches = patches.flatten(2)  # (batch, embed_dim, total_patches)
@@ -400,7 +400,7 @@ class SpacetimePatchEmbedding(nn.Module):
         
         return patches
 
-class SpacetimeTransformer(nn.Module):
+class SpacetimeTransformer (nn.Module):
     """
     Transformer that processes spacetime patches
     """
@@ -421,19 +421,19 @@ class SpacetimeTransformer(nn.Module):
                 batch_first=True,
                 norm_first=True,
             )
-            for _ in range(num_layers)
+            for _ in range (num_layers)
         ])
         
-    def forward(self, patches: torch.Tensor) -> torch.Tensor:
+    def forward (self, patches: torch.Tensor) -> torch.Tensor:
         """
         patches: (batch, num_patches, embed_dim)
         """
         x = patches
         for layer in self.layers:
-            x = layer(x)
+            x = layer (x)
         return x
 
-class SoraLikeModel(nn.Module):
+class SoraLikeModel (nn.Module):
     """
     Simplified Sora-like architecture
     """
@@ -466,7 +466,7 @@ class SoraLikeModel(nn.Module):
         self.time_embed = nn.Sequential(
             nn.Embedding(1000, embed_dim),
             nn.SiLU(),
-            nn.Linear(embed_dim, embed_dim),
+            nn.Linear (embed_dim, embed_dim),
         )
         
         # Spacetime transformer
@@ -477,7 +477,7 @@ class SoraLikeModel(nn.Module):
         )
         
         # Decoder to reconstruct video from patches
-        self.decoder = nn.Linear(embed_dim, 3 * temporal_patch_size * patch_size[0] * patch_size[1])
+        self.decoder = nn.Linear (embed_dim, 3 * temporal_patch_size * patch_size[0] * patch_size[1])
         
         self.video_size = video_size
         self.num_frames = num_frames
@@ -496,31 +496,31 @@ class SoraLikeModel(nn.Module):
         batch_size = noisy_video.shape[0]
         
         # Convert video to spacetime patches
-        patches = self.patch_embed(noisy_video)  # (batch, num_patches, embed_dim)
+        patches = self.patch_embed (noisy_video)  # (batch, num_patches, embed_dim)
         
         # Add text conditioning (broadcast to all patches)
-        text_cond = self.text_projection(text_embedding)  # (batch, embed_dim)
+        text_cond = self.text_projection (text_embedding)  # (batch, embed_dim)
         text_cond = text_cond.unsqueeze(1)  # (batch, 1, embed_dim)
         patches = patches + text_cond
         
         # Add timestep conditioning
-        time_emb = self.time_embed(timestep)  # (batch, embed_dim)
+        time_emb = self.time_embed (timestep)  # (batch, embed_dim)
         time_emb = time_emb.unsqueeze(1)  # (batch, 1, embed_dim)
         patches = patches + time_emb
         
         # Process through transformer
-        patches = self.transformer(patches)
+        patches = self.transformer (patches)
         
         # Decode patches back to video
-        pixel_values = self.decoder(patches)  # (batch, num_patches, patch_dim)
+        pixel_values = self.decoder (patches)  # (batch, num_patches, patch_dim)
         
         # Reshape to video
         # This is simplified - actual implementation would be more complex
-        predicted_noise = self.unpatchify(pixel_values)
+        predicted_noise = self.unpatchify (pixel_values)
         
         return predicted_noise
     
-    def unpatchify(self, patches: torch.Tensor) -> torch.Tensor:
+    def unpatchify (self, patches: torch.Tensor) -> torch.Tensor:
         """
         Convert patches back to video tensor
         patches: (batch, num_patches, patch_dim)
@@ -566,14 +566,14 @@ if __name__ == "__main__":
         num_heads=16,
     )
     
-    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"Model parameters: {sum (p.numel() for p in model.parameters()):,}")
     
     # Test forward pass
     noisy_video = torch.randn(1, 3, 16, 256, 256)
     text_embedding = torch.randn(1, 768)
     timestep = torch.tensor([500])
     
-    output = model(noisy_video, text_embedding, timestep)
+    output = model (noisy_video, text_embedding, timestep)
     print(f"Output shape: {output.shape}")
 \`\`\`
 
@@ -651,7 +651,7 @@ class VideoGenerationService(ABC):
         pass
     
     @abstractmethod
-    def get_status(self, video_id: str) -> VideoGenerationResult:
+    def get_status (self, video_id: str) -> VideoGenerationResult:
         """Check status of video generation"""
         pass
 
@@ -690,7 +690,7 @@ class RunwayGen2Service(VideoGenerationService):
         
         payload = {
             "prompt": prompt,
-            "duration": min(duration, 16.0),  # Max 16 seconds
+            "duration": min (duration, 16.0),  # Max 16 seconds
             "resolution": f"{resolution[0]}x{resolution[1]}",
             "style": style,
         }
@@ -710,9 +710,9 @@ class RunwayGen2Service(VideoGenerationService):
         video_id = result["id"]
         
         # Poll for completion
-        return self._wait_for_completion(video_id)
+        return self._wait_for_completion (video_id)
     
-    def get_status(self, video_id: str) -> VideoGenerationResult:
+    def get_status (self, video_id: str) -> VideoGenerationResult:
         """Check generation status"""
         headers = {"Authorization": f"Bearer {self.api_key}"}
         
@@ -728,7 +728,7 @@ class RunwayGen2Service(VideoGenerationService):
             video_url=data.get("url", ""),
             video_id=video_id,
             duration=data.get("duration", 0),
-            resolution=tuple(map(int, data.get("resolution", "0x0").split("x"))),
+            resolution=tuple (map (int, data.get("resolution", "0x0").split("x"))),
             status=data["status"],
             error=data.get("error")
         )
@@ -743,16 +743,16 @@ class RunwayGen2Service(VideoGenerationService):
         start_time = time.time()
         
         while time.time() - start_time < max_wait:
-            result = self.get_status(video_id)
+            result = self.get_status (video_id)
             
             if result.status == "completed":
                 return result
             elif result.status == "failed":
-                raise Exception(f"Generation failed: {result.error}")
+                raise Exception (f"Generation failed: {result.error}")
             
-            time.sleep(poll_interval)
+            time.sleep (poll_interval)
         
-        raise TimeoutError(f"Generation timed out after {max_wait} seconds")
+        raise TimeoutError (f"Generation timed out after {max_wait} seconds")
 
 class StableVideoDiffusionService(VideoGenerationService):
     """
@@ -786,13 +786,13 @@ class StableVideoDiffusionService(VideoGenerationService):
         # Placeholder implementation
         return VideoGenerationResult(
             video_url="/path/to/generated/video.mp4",
-            video_id="svd_" + str(time.time()),
+            video_id="svd_" + str (time.time()),
             duration=duration,
             resolution=resolution,
             status="completed"
         )
     
-    def get_status(self, video_id: str) -> VideoGenerationResult:
+    def get_status (self, video_id: str) -> VideoGenerationResult:
         """Local generation completes immediately"""
         # Would return actual status in real implementation
         pass
@@ -803,7 +803,7 @@ def demonstrate_video_generation():
     Demonstrate using different video generation services
     """
     # Example with Runway Gen-2
-    runway = RunwayGen2Service(api_key="your_api_key_here")
+    runway = RunwayGen2Service (api_key="your_api_key_here")
     
     try:
         print("Generating video with Runway Gen-2...")
@@ -866,7 +866,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class TemporalConsistencyLoss(nn.Module):
+class TemporalConsistencyLoss (nn.Module):
     """
     Loss function to enforce temporal consistency between frames
     """
@@ -885,13 +885,13 @@ class TemporalConsistencyLoss(nn.Module):
         Ensure predicted optical flow matches actual frame difference
         """
         # Warp frame1 using predicted flow
-        warped_frame1 = self.warp_frame(frame1, predicted_flow)
+        warped_frame1 = self.warp_frame (frame1, predicted_flow)
         
         # Compute photometric loss
-        photometric_loss = F.l1_loss(warped_frame1, frame2)
+        photometric_loss = F.l1_loss (warped_frame1, frame2)
         
         # Compute flow smoothness loss
-        flow_smoothness = self.compute_smoothness_loss(predicted_flow)
+        flow_smoothness = self.compute_smoothness_loss (predicted_flow)
         
         return photometric_loss + 0.1 * flow_smoothness
     
@@ -915,7 +915,7 @@ class TemporalConsistencyLoss(nn.Module):
         
         return consistency_loss
     
-    def compute_smoothness_loss(self, flow: torch.Tensor) -> torch.Tensor:
+    def compute_smoothness_loss (self, flow: torch.Tensor) -> torch.Tensor:
         """
         Penalize abrupt changes in optical flow (encourages smooth motion)
         """
@@ -940,12 +940,12 @@ class TemporalConsistencyLoss(nn.Module):
         
         # Create sampling grid
         grid_y, grid_x = torch.meshgrid(
-            torch.arange(height, device=frame.device),
-            torch.arange(width, device=frame.device),
+            torch.arange (height, device=frame.device),
+            torch.arange (width, device=frame.device),
             indexing='ij'
         )
         grid = torch.stack([grid_x, grid_y], dim=0).float()
-        grid = grid.unsqueeze(0).repeat(batch, 1, 1, 1)
+        grid = grid.unsqueeze(0).repeat (batch, 1, 1, 1)
         
         # Add flow to grid
         new_grid = grid + flow
@@ -981,7 +981,7 @@ class TemporalConsistencyLoss(nn.Module):
         total_loss = 0.0
         
         # Iterate through adjacent frame pairs
-        for t in range(num_frames - 1):
+        for t in range (num_frames - 1):
             frame_t = frames[:, t]
             frame_t_plus_1 = frames[:, t + 1]
             flow_t = predicted_flows[:, t]
@@ -1006,7 +1006,7 @@ class TemporalConsistencyLoss(nn.Module):
         return total_loss
 
 # Example: Enforcing consistency during training
-class ConsistentVideoGenerator(nn.Module):
+class ConsistentVideoGenerator (nn.Module):
     """
     Video generator with explicit consistency enforcement
     """
@@ -1027,7 +1027,7 @@ class ConsistentVideoGenerator(nn.Module):
         
         self.consistency_loss = TemporalConsistencyLoss()
         
-    def forward(self, initial_frame: torch.Tensor, num_frames: int = 16):
+    def forward (self, initial_frame: torch.Tensor, num_frames: int = 16):
         """
         Generate video starting from initial frame
         """
@@ -1035,19 +1035,19 @@ class ConsistentVideoGenerator(nn.Module):
         flows = []
         
         # Autoregressive generation
-        for t in range(num_frames - 1):
+        for t in range (num_frames - 1):
             current_frame = frames[-1]
             
             # Predict next frame
-            next_frame = self.frame_generator(current_frame)
-            frames.append(next_frame)
+            next_frame = self.frame_generator (current_frame)
+            frames.append (next_frame)
             
             # Predict optical flow
             frame_pair = torch.cat([current_frame, next_frame], dim=1)
-            flow = self.flow_predictor(frame_pair)
-            flows.append(flow)
+            flow = self.flow_predictor (frame_pair)
+            flows.append (flow)
         
-        return torch.stack(frames, dim=1), torch.stack(flows, dim=1)
+        return torch.stack (frames, dim=1), torch.stack (flows, dim=1)
 
 # Training with consistency loss
 def train_with_consistency():
@@ -1055,7 +1055,7 @@ def train_with_consistency():
     Training loop that enforces temporal consistency
     """
     model = ConsistentVideoGenerator()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+    optimizer = torch.optim.Adam (model.parameters(), lr=1e-4)
     
     # Dummy training data
     real_videos = torch.randn(4, 16, 3, 64, 64)  # (batch, frames, channels, h, w)
@@ -1065,10 +1065,10 @@ def train_with_consistency():
         
         # Generate video
         initial_frames = real_videos[:, 0]
-        generated_frames, predicted_flows = model(initial_frames, num_frames=16)
+        generated_frames, predicted_flows = model (initial_frames, num_frames=16)
         
         # Reconstruction loss
-        recon_loss = F.mse_loss(generated_frames, real_videos)
+        recon_loss = F.mse_loss (generated_frames, real_videos)
         
         # Consistency loss (requires features - simplified here)
         # In practice, would extract features from a pretrained network
@@ -1166,16 +1166,16 @@ class EfficientVideoGeneration:
         num_keyframes = num_frames // keyframe_interval
         
         keyframes = []
-        for i in range(num_keyframes):
+        for i in range (num_keyframes):
             # Generate keyframe (simplified)
-            keyframe = model.generate_single_frame(prompt, frame_index=i * keyframe_interval)
-            keyframes.append(keyframe)
+            keyframe = model.generate_single_frame (prompt, frame_index=i * keyframe_interval)
+            keyframes.append (keyframe)
         
         # Interpolate between keyframes
         all_frames = []
-        for i in range(len(keyframes) - 1):
+        for i in range (len (keyframes) - 1):
             # Add keyframe
-            all_frames.append(keyframes[i])
+            all_frames.append (keyframes[i])
             
             # Interpolate intermediate frames
             for j in range(1, keyframe_interval):
@@ -1185,12 +1185,12 @@ class EfficientVideoGeneration:
                     keyframes[i + 1],
                     alpha
                 )
-                all_frames.append(interpolated)
+                all_frames.append (interpolated)
         
         # Add final keyframe
-        all_frames.append(keyframes[-1])
+        all_frames.append (keyframes[-1])
         
-        return torch.stack(all_frames)
+        return torch.stack (all_frames)
     
     @staticmethod
     def interpolate_frames(
@@ -1265,7 +1265,7 @@ class EfficientVideoGeneration:
         latent_cache = {}
         
         frames = []
-        for t in range(num_frames):
+        for t in range (num_frames):
             # Check if we can reuse cached latents
             cache_key = f"frame_{t}_latent"
             
@@ -1273,22 +1273,22 @@ class EfficientVideoGeneration:
                 latent = latent_cache[cache_key]
             else:
                 # Compute latent representation
-                latent = model.encode_frame(prompt, t)
+                latent = model.encode_frame (prompt, t)
                 
                 # Cache for future use
                 latent_cache[cache_key] = latent
                 
                 # Limit cache size
-                if len(latent_cache) > 16:
+                if len (latent_cache) > 16:
                     # Remove oldest
                     oldest_key = f"frame_{t-16}_latent"
-                    latent_cache.pop(oldest_key, None)
+                    latent_cache.pop (oldest_key, None)
             
             # Decode latent to frame
-            frame = model.decode_latent(latent)
-            frames.append(frame)
+            frame = model.decode_latent (latent)
+            frames.append (frame)
         
-        return torch.stack(frames)
+        return torch.stack (frames)
 
 # Demonstration
 def compare_generation_methods():
@@ -1298,20 +1298,20 @@ def compare_generation_methods():
     import time
     
     # Mock model for demonstration
-    class MockVideoModel(nn.Module):
-        def generate(self, prompt, resolution, num_frames):
+    class MockVideoModel (nn.Module):
+        def generate (self, prompt, resolution, num_frames):
             # Simulate computation time based on resolution and frames
             compute_cost = (resolution[0] * resolution[1] * num_frames) / 1e6
-            time.sleep(compute_cost * 0.1)  # Simulate
+            time.sleep (compute_cost * 0.1)  # Simulate
             return torch.randn(1, 3, num_frames, resolution[1], resolution[0])
         
-        def generate_single_frame(self, prompt, frame_index):
+        def generate_single_frame (self, prompt, frame_index):
             return torch.randn(1, 3, 256, 256)
         
-        def encode_frame(self, prompt, t):
+        def encode_frame (self, prompt, t):
             return torch.randn(1, 512)
         
-        def decode_latent(self, latent):
+        def decode_latent (self, latent):
             return torch.randn(1, 3, 256, 256)
     
     model = MockVideoModel()

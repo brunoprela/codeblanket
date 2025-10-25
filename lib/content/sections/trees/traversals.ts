@@ -23,12 +23,12 @@ Visit order: **1**, 2, 4, 5, 3
 - Process root first
 - Useful for: Copying tree, prefix expressions
 \`\`\`python
-def preorder(root):
+def preorder (root):
     if not root:
         return
     print(root.val)        # Process root
-    preorder(root.left)    # Left subtree
-    preorder(root.right)   # Right subtree
+    preorder (root.left)    # Left subtree
+    preorder (root.right)   # Right subtree
 \`\`\`
 
 **2. Inorder (Left → Root → Right)**
@@ -37,12 +37,12 @@ Visit order: 4, 2, 5, **1**, 3
 - **Gives sorted order for BST!**
 - Useful for: BST validation, sorted output
 \`\`\`python
-def inorder(root):
+def inorder (root):
     if not root:
         return
-    inorder(root.left)     # Left subtree
+    inorder (root.left)     # Left subtree
     print(root.val)        # Process root
-    inorder(root.right)    # Right subtree
+    inorder (root.right)    # Right subtree
 \`\`\`
 
 **3. Postorder (Left → Right → Root)**
@@ -50,11 +50,11 @@ Visit order: 4, 5, 2, 3, **1**
 - Process root last
 - Useful for: Deleting tree, postfix expressions
 \`\`\`python
-def postorder(root):
+def postorder (root):
     if not root:
         return
-    postorder(root.left)   # Left subtree
-    postorder(root.right)  # Right subtree
+    postorder (root.left)   # Left subtree
+    postorder (root.right)  # Right subtree
     print(root.val)        # Process root
 \`\`\`
 
@@ -68,7 +68,7 @@ Visit order: 1, 2, 3, 4, 5
 \`\`\`python
 from collections import deque
 
-def level_order(root):
+def level_order (root):
     if not root:
         return
     
@@ -79,9 +79,9 @@ def level_order(root):
         print(node.val)
         
         if node.left:
-            queue.append(node.left)
+            queue.append (node.left)
         if node.right:
-            queue.append(node.right)
+            queue.append (node.right)
 \`\`\`
 
 ---
@@ -89,7 +89,7 @@ def level_order(root):
 **Iterative DFS (Using Stack):**
 
 \`\`\`python
-def preorder_iterative(root):
+def preorder_iterative (root):
     if not root:
         return
     
@@ -101,21 +101,21 @@ def preorder_iterative(root):
         
         # Push right first (so left is processed first)
         if node.right:
-            stack.append(node.right)
+            stack.append (node.right)
         if node.left:
-            stack.append(node.left)
+            stack.append (node.left)
 \`\`\`
 
 **Inorder Iterative (More Complex):**
 \`\`\`python
-def inorder_iterative(root):
+def inorder_iterative (root):
     stack = []
     curr = root
     
     while stack or curr:
         # Go to leftmost node
         while curr:
-            stack.append(curr)
+            stack.append (curr)
             curr = curr.left
         
         # Process node

@@ -21,16 +21,16 @@ export const dataclassesMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc2',
     question:
-      'Why must you use field(default_factory=list) for mutable defaults?',
+      'Why must you use field (default_factory=list) for mutable defaults?',
     options: [
-      "It's faster",
+      "It\'s faster",
       'To avoid sharing mutable objects between instances',
       'Required by Python syntax',
       'To make the list immutable',
     ],
     correctAnswer: 1,
     explanation:
-      'field(default_factory=list) creates a new list for each instance, preventing the shared mutable default argument gotcha where all instances would share the same list.',
+      'field (default_factory=list) creates a new list for each instance, preventing the shared mutable default argument gotcha where all instances would share the same list.',
   },
   {
     id: 'mc3',

@@ -7,7 +7,7 @@ export const whennottouseSection = {
   title: 'When NOT to Use Two Pointers',
   content: `## 🚫 When Two Pointers Won't Work
 
-Two pointers is powerful, but it's not a universal solution. Here's when to **avoid** it and what to use instead:
+Two pointers is powerful, but it's not a universal solution. Here\'s when to **avoid** it and what to use instead:
 
 ---
 
@@ -17,9 +17,9 @@ Two pointers is powerful, but it's not a universal solution. Here's when to **av
 
 \`\`\`python
 # ❌ BAD: Using two pointers to find all pairs summing to target
-def findAllPairs(nums, target):
+def findAllPairs (nums, target):
     nums.sort()
-    left, right = 0, len(nums) - 1
+    left, right = 0, len (nums) - 1
     result = []
     
     while left < right:
@@ -40,7 +40,7 @@ def findAllPairs(nums, target):
 # Misses (2,2) pair!
 
 # ✅ BETTER: Use hash map for all pairs
-def findAllPairs(nums, target):
+def findAllPairs (nums, target):
     seen = {}
     result = []
     
@@ -48,9 +48,9 @@ def findAllPairs(nums, target):
         complement = target - num
         if complement in seen:
             # Add all combinations with this complement
-            for _ in range(seen[complement]):
+            for _ in range (seen[complement]):
                 result.append([complement, num])
-        seen[num] = seen.get(num, 0) + 1
+        seen[num] = seen.get (num, 0) + 1
     
     return result
 
@@ -72,10 +72,10 @@ def findAllPairs(nums, target):
 
 \`\`\`python
 # ❌ BAD: Sorting when you need original indices
-def twoSum(nums, target):
+def twoSum (nums, target):
     # Two Sum asks for INDICES of the two numbers
     nums.sort()  # ❌ WRONG! Lost original indices
-    left, right = 0, len(nums) - 1
+    left, right = 0, len (nums) - 1
     
     while left < right:
         current_sum = nums[left] + nums[right]
@@ -94,10 +94,10 @@ def twoSum(nums, target):
 # WRONG! These aren't the original indices.
 
 # ✅ GOOD: Use hash map to preserve indices
-def twoSum(nums, target):
+def twoSum (nums, target):
     seen = {}  # value -> original index
     
-    for i, num in enumerate(nums):
+    for i, num in enumerate (nums):
         complement = target - num
         if complement in seen:
             return [seen[complement], i]  # ✅ Original indices!
@@ -121,12 +121,12 @@ def twoSum(nums, target):
 
 \`\`\`python
 # ❌ BAD: Two pointers when you need fast lookup
-def hasTripleSumDivisibleByThree(nums):
+def hasTripleSumDivisibleByThree (nums):
     # Check if any three numbers sum to value divisible by 3
     nums.sort()
     
-    for i in range(len(nums)):
-        left, right = i + 1, len(nums) - 1
+    for i in range (len (nums)):
+        left, right = i + 1, len (nums) - 1
         while left < right:
             total = nums[i] + nums[left] + nums[right]
             if total % 3 == 0:
@@ -140,7 +140,7 @@ def hasTripleSumDivisibleByThree(nums):
 # O(n²) but checks many unnecessary combinations
 
 # ✅ BETTER: Hash set for O(1) lookup
-def hasTripleSumDivisibleByThree(nums):
+def hasTripleSumDivisibleByThree (nums):
     # Use modulo properties
     remainders = [0, 0, 0]
     for num in nums:
@@ -176,12 +176,12 @@ def hasTripleSumDivisibleByThree(nums):
 
 \`\`\`python
 # ❌ BAD: Two pointers for independent pointer movement
-def longestMountain(arr):
+def longestMountain (arr):
     # Find longest mountain (increasing then decreasing)
     left, right = 0, 0
     max_length = 0
     
-    while right < len(arr):
+    while right < len (arr):
         # ❌ Can't decide: should left move? should right move?
         # Both need to move independently based on mountain structure
         if arr[right] > arr[right - 1]:
@@ -196,8 +196,8 @@ def longestMountain(arr):
 # Two pointer logic breaks down - movements aren't coordinated!
 
 # ✅ GOOD: Use iteration with state tracking
-def longestMountain(arr):
-    n = len(arr)
+def longestMountain (arr):
+    n = len (arr)
     max_length = 0
     i = 0
     
@@ -217,7 +217,7 @@ def longestMountain(arr):
         
         # Valid mountain?
         if start < peak < i:
-            max_length = max(max_length, i - start + 1)
+            max_length = max (max_length, i - start + 1)
         
         # Move to next potential start
         if i == peak:
@@ -241,7 +241,7 @@ def longestMountain(arr):
 
 \`\`\`python
 # ❌ BAD: Sliding window for maximum sum of non-overlapping subarrays
-def maxSumTwoNoOverlap(nums, firstLen, secondLen):
+def maxSumTwoNoOverlap (nums, firstLen, secondLen):
     # Find max sum of two non-overlapping subarrays
     left, right = 0, 0
     window_sum = 0
@@ -249,7 +249,7 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
     
     # ❌ WRONG! Need to track TWO windows simultaneously
     # Can't track both first and second subarray with one window
-    while right < len(nums):
+    while right < len (nums):
         window_sum += nums[right]
         
         if right - left + 1 == firstLen:
@@ -262,24 +262,24 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
     return max_sum
 
 # ✅ GOOD: Use prefix sums or DP
-def maxSumTwoNoOverlap(nums, firstLen, secondLen):
+def maxSumTwoNoOverlap (nums, firstLen, secondLen):
     def maxSum(L, M):
         # Max sum when L-length subarray comes before M-length
         result = 0
-        sum_L = sum(nums[:L])
+        sum_L = sum (nums[:L])
         max_L = sum_L
-        sum_M = sum(nums[L:L + M])
+        sum_M = sum (nums[L:L + M])
         result = max_L + sum_M
         
-        for i in range(L + M, len(nums)):
+        for i in range(L + M, len (nums)):
             sum_M += nums[i] - nums[i - M]
             sum_L += nums[i - M] - nums[i - M - L]
-            max_L = max(max_L, sum_L)
-            result = max(result, max_L + sum_M)
+            max_L = max (max_L, sum_L)
+            result = max (result, max_L + sum_M)
         
         return result
     
-    return max(maxSum(firstLen, secondLen), maxSum(secondLen, firstLen))
+    return max (maxSum (firstLen, secondLen), maxSum (secondLen, firstLen))
 \`\`\`
 
 **When this happens:**
@@ -297,9 +297,9 @@ def maxSumTwoNoOverlap(nums, firstLen, secondLen):
 
 \`\`\`python
 # ❌ BAD: Two pointers for permutations
-def permute(nums):
+def permute (nums):
     # Generate all permutations
-    left, right = 0, len(nums) - 1
+    left, right = 0, len (nums) - 1
     result = []
     
     # ❌ Can't generate permutations with two pointers
@@ -311,17 +311,17 @@ def permute(nums):
     return result
 
 # ✅ GOOD: Use backtracking
-def permute(nums):
+def permute (nums):
     result = []
     
-    def backtrack(path, remaining):
+    def backtrack (path, remaining):
         if not remaining:
-            result.append(path[:])
+            result.append (path[:])
             return
         
-        for i in range(len(remaining)):
-            path.append(remaining[i])
-            backtrack(path, remaining[:i] + remaining[i+1:])
+        for i in range (len (remaining)):
+            path.append (remaining[i])
+            backtrack (path, remaining[:i] + remaining[i+1:])
             path.pop()  # Backtrack!
     
     backtrack([], nums)
@@ -343,12 +343,12 @@ def permute(nums):
 
 \`\`\`python
 # ❌ BAD: Two pointers for 2D matrix search
-def searchMatrix(matrix, target):
+def searchMatrix (matrix, target):
     # Search in row-wise and column-wise sorted matrix
-    left, right = 0, len(matrix[0]) - 1
+    left, right = 0, len (matrix[0]) - 1
     
     # ❌ Can't navigate 2D space with just two 1D pointers
-    while left < len(matrix) and right >= 0:
+    while left < len (matrix) and right >= 0:
         # This works for SOME 2D problems but not general case
         if matrix[left][right] == target:
             return True
@@ -366,11 +366,11 @@ def searchMatrix(matrix, target):
 
 # ✅ GOOD: Use appropriate 2D technique
 # For search: Binary search on flattened index
-def searchMatrix(matrix, target):
+def searchMatrix (matrix, target):
     if not matrix:
         return False
     
-    m, n = len(matrix), len(matrix[0])
+    m, n = len (matrix), len (matrix[0])
     left, right = 0, m * n - 1
     
     while left <= right:

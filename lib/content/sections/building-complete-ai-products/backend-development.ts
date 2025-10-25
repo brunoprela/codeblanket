@@ -78,7 +78,7 @@ async def stream_llm_response(
     """
     Stream tokens from Claude API
     """
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic (api_key=os.getenv("ANTHROPIC_API_KEY"))
     
     try:
         with client.messages.stream(
@@ -97,10 +97,10 @@ async def stream_llm_response(
         yield f"data: [DONE]\\n\\n"
         
     except Exception as e:
-        yield f"data: {json.dumps({'error': str(e)})}\\n\\n"
+        yield f"data: {json.dumps({'error': str (e)})}\\n\\n"
 
 @app.post("/api/chat/stream")
-async def chat_stream(request: ChatRequest):
+async def chat_stream (request: ChatRequest):
     """
     Streaming chat endpoint
     """
@@ -150,9 +150,9 @@ class TokenTracker:
     def __init__(self):
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
     
-    def count_tokens(self, text: str) -> int:
+    def count_tokens (self, text: str) -> int:
         """Count tokens in text"""
-        return len(self.tokenizer.encode(text))
+        return len (self.tokenizer.encode (text))
     
     def calculate_cost(
         self,
@@ -177,10 +177,10 @@ async def stream_with_tracking(
     user_id: str
 ) -> AsyncGenerator[str, None]:
     tracker = TokenTracker()
-    input_tokens = tracker.count_tokens(prompt)
+    input_tokens = tracker.count_tokens (prompt)
     output_tokens = 0
     
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic (api_key=os.getenv("ANTHROPIC_API_KEY"))
     
     with client.messages.stream(
         model=model,
@@ -188,12 +188,12 @@ async def stream_with_tracking(
         messages=[{"role": "user", "content": prompt}]
     ) as stream:
         for text in stream.text_stream:
-            output_tokens += tracker.count_tokens(text)
+            output_tokens += tracker.count_tokens (text)
             
             yield f"data: {json.dumps({'token': text})}\\n\\n"
     
     # Calculate final cost
-    cost = tracker.calculate_cost(model, input_tokens, output_tokens)
+    cost = tracker.calculate_cost (model, input_tokens, output_tokens)
     
     # Log to database
     await log_usage(
@@ -207,7 +207,7 @@ async def stream_with_tracking(
     # Send final stats
     yield f"data: {json.dumps({
         'tokens': output_tokens,
-        'cost': round(cost, 4)
+        'cost': round (cost, 4)
     })}\\n\\n"
 \`\`\`
 
@@ -244,8 +244,8 @@ celery_app.conf.update(
     task_soft_time_limit=540  # 9 minutes soft limit
 )
 
-@celery_app.task(bind=True, max_retries=3)
-def generate_image(self, prompt: str, user_id: str):
+@celery_app.task (bind=True, max_retries=3)
+def generate_image (self, prompt: str, user_id: str):
     """
     Background image generation task
     """
@@ -267,7 +267,7 @@ def generate_image(self, prompt: str, user_id: str):
             meta={'progress': 50, 'status': 'Generating...'}
         )
         
-        result = generator.generate(prompt)
+        result = generator.generate (prompt)
         
         # Upload to S3
         self.update_state(
@@ -292,23 +292,23 @@ def generate_image(self, prompt: str, user_id: str):
         
     except Exception as e:
         # Retry with exponential backoff
-        raise self.retry(exc=e, countdown=2 ** self.request.retries)
+        raise self.retry (exc=e, countdown=2 ** self.request.retries)
 
 # FastAPI endpoint to trigger job
 @app.post("/api/images/generate")
 async def create_image_job(
     prompt: str,
-    user: User = Depends(get_current_user)
+    user: User = Depends (get_current_user)
 ):
     """
     Create async image generation job
     """
     # Check user has credits
     if user.credits < 10:
-        raise HTTPException(status_code=402, detail="Insufficient credits")
+        raise HTTPException (status_code=402, detail="Insufficient credits")
     
     # Create job
-    task = generate_image.delay(prompt, user.id)
+    task = generate_image.delay (prompt, user.id)
     
     # Store job metadata
     await db.jobs.insert_one({
@@ -324,11 +324,11 @@ async def create_image_job(
 
 # Job status endpoint
 @app.get("/api/jobs/{job_id}")
-async def get_job_status(job_id: str):
+async def get_job_status (job_id: str):
     """
     Poll job status
     """
-    task = celery_app.AsyncResult(job_id)
+    task = celery_app.AsyncResult (job_id)
     
     if task.state == 'PENDING':
         response = {
@@ -350,7 +350,7 @@ async def get_job_status(job_id: str):
     elif task.state == 'FAILURE':
         response = {
             'status': 'failed',
-            'error': str(task.info)
+            'error': str (task.info)
         }
     else:
         response = {
@@ -406,14 +406,14 @@ class RateLimiter:
             "pro": {"minute": 100, "hour": 1000, "day": 10000}
         }
         
-        tier_limits = limits.get(tier, limits["free"])
+        tier_limits = limits.get (tier, limits["free"])
         
-        now = int(time.time())
+        now = int (time.time())
         
         # Check minute limit
         minute_key = f"rate_limit:{user_id}:minute:{now // 60}"
-        minute_count = self.redis.incr(minute_key)
-        self.redis.expire(minute_key, 60)
+        minute_count = self.redis.incr (minute_key)
+        self.redis.expire (minute_key, 60)
         
         if minute_count > tier_limits["minute"]:
             return {
@@ -425,8 +425,8 @@ class RateLimiter:
         
         # Check hourly limit
         hour_key = f"rate_limit:{user_id}:hour:{now // 3600}"
-        hour_count = self.redis.incr(hour_key)
-        self.redis.expire(hour_key, 3600)
+        hour_count = self.redis.incr (hour_key)
+        self.redis.expire (hour_key, 3600)
         
         if hour_count > tier_limits["hour"]:
             return {
@@ -438,8 +438,8 @@ class RateLimiter:
         
         # Check daily limit
         day_key = f"rate_limit:{user_id}:day:{now // 86400}"
-        day_count = self.redis.incr(day_key)
-        self.redis.expire(day_key, 86400)
+        day_count = self.redis.incr (day_key)
+        self.redis.expire (day_key, 86400)
         
         if day_count > tier_limits["day"]:
             return {
@@ -459,25 +459,25 @@ class RateLimiter:
         }
 
 # Dependency for FastAPI
-redis_client = Redis.from_url(os.getenv("REDIS_URL"))
-rate_limiter = RateLimiter(redis_client)
+redis_client = Redis.from_url (os.getenv("REDIS_URL"))
+rate_limiter = RateLimiter (redis_client)
 
 async def check_rate_limit(
     request: Request,
-    user: User = Depends(get_current_user)
+    user: User = Depends (get_current_user)
 ):
     """
     Rate limit middleware
     """
-    result = await rate_limiter.check_limit(user.id, user.tier)
+    result = await rate_limiter.check_limit (user.id, user.tier)
     
     if not result["allowed"]:
         raise HTTPException(
             status_code=429,
             detail=f"Rate limit exceeded. Try again in {result['retry_after']}s",
             headers={
-                "Retry-After": str(result["retry_after"]),
-                "X-RateLimit-Limit": str(result["limit"]),
+                "Retry-After": str (result["retry_after"]),
+                "X-RateLimit-Limit": str (result["limit"]),
                 "X-RateLimit-Window": result["window"]
             }
         )
@@ -486,8 +486,8 @@ async def check_rate_limit(
     request.state.rate_limit = result["remaining"]
 
 # Apply to endpoints
-@app.post("/api/chat", dependencies=[Depends(check_rate_limit)])
-async def chat(request: ChatRequest, user: User = Depends(get_current_user)):
+@app.post("/api/chat", dependencies=[Depends (check_rate_limit)])
+async def chat (request: ChatRequest, user: User = Depends (get_current_user)):
     ...
 \`\`\`
 
@@ -546,13 +546,13 @@ class ProviderRouter:
             )
         }
         
-        self.redis = Redis.from_url(os.getenv("REDIS_URL"))
+        self.redis = Redis.from_url (os.getenv("REDIS_URL"))
     
-    async def get_provider_usage(self, provider: Provider) -> int:
+    async def get_provider_usage (self, provider: Provider) -> int:
         """Get current minute's request count"""
-        minute = int(time.time()) // 60
+        minute = int (time.time()) // 60
         key = f"provider_usage:{provider.value}:{minute}"
-        return int(self.redis.get(key) or 0)
+        return int (self.redis.get (key) or 0)
     
     async def select_provider(
         self,
@@ -567,11 +567,11 @@ class ProviderRouter:
         
         for provider, config in self.providers.items():
             # Check if provider supports model type
-            if not any(model_type in model for model in config.models):
+            if not any (model_type in model for model in config.models):
                 continue
             
             # Check rate limit
-            usage = await self.get_provider_usage(provider)
+            usage = await self.get_provider_usage (provider)
             if usage >= config.rate_limit:
                 continue
             
@@ -595,7 +595,7 @@ class ProviderRouter:
             return None
         
         # Return best provider
-        return max(candidates, key=lambda x: x[1])[0]
+        return max (candidates, key=lambda x: x[1])[0]
     
     async def execute_with_fallback(
         self,
@@ -613,31 +613,31 @@ class ProviderRouter:
         for provider in providers:
             try:
                 # Track usage
-                minute = int(time.time()) // 60
+                minute = int (time.time()) // 60
                 key = f"provider_usage:{provider.value}:{minute}"
-                self.redis.incr(key)
-                self.redis.expire(key, 60)
+                self.redis.incr (key)
+                self.redis.expire (key, 60)
                 
                 # Execute
-                return await func(provider, *args, **kwargs)
+                return await func (provider, *args, **kwargs)
                 
             except Exception as e:
                 last_error = e
-                logger.warning(f"Provider {provider} failed: {e}")
+                logger.warning (f"Provider {provider} failed: {e}")
                 continue
         
-        raise Exception(f"All providers failed. Last error: {last_error}")
+        raise Exception (f"All providers failed. Last error: {last_error}")
 
 # Usage
 router = ProviderRouter()
 
 @app.post("/api/chat")
-async def chat(request: ChatRequest):
+async def chat (request: ChatRequest):
     """
     Chat with automatic provider selection
     """
     
-    async def call_provider(provider: Provider, prompt: str):
+    async def call_provider (provider: Provider, prompt: str):
         if provider == Provider.ANTHROPIC:
             client = anthropic.Anthropic()
             response = client.messages.create(
@@ -683,7 +683,7 @@ CREATE TABLE users (
 -- API usage logs
 CREATE TABLE api_logs (
     id BIGSERIAL PRIMARY KEY,
-    user_id UUID REFERENCES users(id),
+    user_id UUID REFERENCES users (id),
     endpoint VARCHAR(100),
     model VARCHAR(50),
     input_tokens INTEGER,
@@ -694,12 +694,12 @@ CREATE TABLE api_logs (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_api_logs_user_created ON api_logs(user_id, created_at DESC);
+CREATE INDEX idx_api_logs_user_created ON api_logs (user_id, created_at DESC);
 
 -- Jobs table
 CREATE TABLE jobs (
     id UUID PRIMARY KEY,
-    user_id UUID REFERENCES users(id),
+    user_id UUID REFERENCES users (id),
     type VARCHAR(50),
     status VARCHAR(20),
     prompt TEXT,
@@ -709,12 +709,12 @@ CREATE TABLE jobs (
     completed_at TIMESTAMP
 );
 
-CREATE INDEX idx_jobs_user_status ON jobs(user_id, status);
+CREATE INDEX idx_jobs_user_status ON jobs (user_id, status);
 
 -- Generations table
 CREATE TABLE generations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id),
+    user_id UUID REFERENCES users (id),
     type VARCHAR(20),
     prompt TEXT,
     url VARCHAR(500),
@@ -734,7 +734,7 @@ SELECT
 FROM api_logs
 GROUP BY user_id, DATE(created_at);
 
-CREATE INDEX idx_daily_usage_user_date ON daily_usage(user_id, date DESC);
+CREATE INDEX idx_daily_usage_user_date ON daily_usage (user_id, date DESC);
 \`\`\`
 
 ---

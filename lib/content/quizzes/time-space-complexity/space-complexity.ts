@@ -27,7 +27,7 @@ export const spacecomplexityQuiz = [
       'Each recursive call adds a frame to the call stack',
       'Stack frames accumulate until base case is reached',
       'Maximum stack depth = space complexity',
-      'factorial(n) has n frames → O(n) space',
+      'factorial (n) has n frames → O(n) space',
     ],
   },
   {

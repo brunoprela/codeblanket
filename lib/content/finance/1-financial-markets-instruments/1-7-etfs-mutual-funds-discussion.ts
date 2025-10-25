@@ -34,7 +34,7 @@ export const etfsMutualFundsDiscussion = {
 **Fees and Incentives:**
 - Financial advisors earn higher commissions on active funds (0.75%+ expense ratio)
 - Passive funds (0.03%) don't generate enough fees
-- Conflict of interest: What's best for advisor ≠ what's best for client
+- Conflict of interest: What\'s best for advisor ≠ what's best for client
 
 **Marketing and Distribution:**
 - Active funds spend millions on marketing
@@ -73,7 +73,7 @@ class ActiveManagerEvaluationSystem:
     Spoiler: Very few pass these tests
     """
     
-    def evaluate_manager(self, 
+    def evaluate_manager (self, 
                         manager_returns: np.array,
                         benchmark_returns: np.array,
                         expense_ratio: float,
@@ -82,23 +82,23 @@ class ActiveManagerEvaluationSystem:
         Rigorous evaluation framework
         """
         # 1. Alpha (risk-adjusted outperformance)
-        alpha = self.calculate_alpha(manager_returns, benchmark_returns)
+        alpha = self.calculate_alpha (manager_returns, benchmark_returns)
         
         # 2. Information Ratio (alpha per unit of tracking error)
-        ir = self.calculate_information_ratio(manager_returns, benchmark_returns)
+        ir = self.calculate_information_ratio (manager_returns, benchmark_returns)
         
         # 3. Statistical Significance (is alpha due to skill or luck?)
-        t_stat = self.t_statistic(alpha, tracking_error, years)
-        p_value = self.p_value(t_stat)
+        t_stat = self.t_statistic (alpha, tracking_error, years)
+        p_value = self.p_value (t_stat)
         
         # 4. Consistency (outperform in multiple periods)
-        consistency = self.rolling_outperformance_pct(manager_returns, benchmark_returns)
+        consistency = self.rolling_outperformance_pct (manager_returns, benchmark_returns)
         
         # 5. Downside Protection (outperform in bad markets)
-        downside_ratio = self.downside_performance(manager_returns, benchmark_returns)
+        downside_ratio = self.downside_performance (manager_returns, benchmark_returns)
         
         # 6. Style Drift (does strategy stay consistent)
-        style_drift = self.style_consistency(manager_returns)
+        style_drift = self.style_consistency (manager_returns)
         
         # 7. Fees (after fees, still outperform?)
         net_alpha = alpha - expense_ratio
@@ -114,7 +114,7 @@ class ActiveManagerEvaluationSystem:
             'positive_net_alpha': net_alpha > 0  # After fees
         }
         
-        all_pass = all(passes.values())
+        all_pass = all (passes.values())
         
         return {
             'alpha': alpha * 100,
@@ -130,7 +130,7 @@ class ActiveManagerEvaluationSystem:
             'failures': [k for k, v in passes.items() if not v]
         }
     
-    def survival_bias_adjustment(self, fund_universe: List) -> List:
+    def survival_bias_adjustment (self, fund_universe: List) -> List:
         """
         Include dead/merged funds (don't just look at survivors)
         """
@@ -145,7 +145,7 @@ class ActiveManagerEvaluationSystem:
         
         return alive_funds + dead_funds
     
-    def monte_carlo_luck_test(self,
+    def monte_carlo_luck_test (self,
                               observed_alpha: float,
                               num_simulations: int = 10000) -> float:
         """
@@ -156,11 +156,11 @@ class ActiveManagerEvaluationSystem:
         """
         # Simulate random managers
         lucky_alphas = []
-        for _ in range(num_simulations):
+        for _ in range (num_simulations):
             # Random returns (no skill)
             random_returns = np.random.normal(0, 0.10, 120)  # 10 years
-            random_alpha = np.mean(random_returns)
-            lucky_alphas.append(random_alpha)
+            random_alpha = np.mean (random_returns)
+            lucky_alphas.append (random_alpha)
         
         # How many random managers beat observed alpha?
         better_by_luck = sum(1 for a in lucky_alphas if a >= observed_alpha)
@@ -192,7 +192,7 @@ print(f"Consistency: {evaluation['consistency']:.0f}% of periods outperform")
 print(f"Net Alpha (after fees): {evaluation['net_alpha']:.2f}%")
 print(f"\\nRecommendation: {evaluation['recommendation']}")
 if not evaluation['passes_all_criteria']:
-    print(f"Failed criteria: {', '.join(evaluation['failures'])}")
+    print(f"Failed criteria: {', '.join (evaluation['failures'])}")
 \`\`\`
 
 **Key Metrics for Identifying Skill:**
@@ -264,7 +264,7 @@ class TaxEfficiencyComparison:
     Compare ETF vs Mutual Fund tax efficiency
     """
     
-    def mutual_fund_redemption(self,
+    def mutual_fund_redemption (self,
                                redemption_amount: float,
                                portfolio_value: float,
                                unrealized_gains: float,
@@ -290,7 +290,7 @@ class TaxEfficiencyComparison:
             'structure': 'CASH redemption'
         }
     
-    def etf_redemption(self,
+    def etf_redemption (self,
                       redemption_amount: float,
                       portfolio_value: float,
                       unrealized_gains: float) -> Dict:
@@ -347,7 +347,7 @@ class ETFArbitrageMonitor:
         self.threshold = 0.005  # 0.5% deviation
         self.creation_unit_size = 50000
     
-    def calculate_premium_discount(self, 
+    def calculate_premium_discount (self, 
                                    etf_ticker: str,
                                    market_price: float,
                                    nav: float) -> Dict:
@@ -357,7 +357,7 @@ class ETFArbitrageMonitor:
         premium_discount = (market_price - nav) / nav
         
         # Arbitrage opportunity?
-        if abs(premium_discount) > self.threshold:
+        if abs (premium_discount) > self.threshold:
             if premium_discount > 0:
                 action = "CREATE"
                 trade = "Buy stocks → Create ETF → Sell ETF"
@@ -370,7 +370,7 @@ class ETFArbitrageMonitor:
             profit_per_unit = profit_per_share * self.creation_unit_size
             
             # Account for transaction costs
-            transaction_costs = self.estimate_costs(etf_ticker)
+            transaction_costs = self.estimate_costs (etf_ticker)
             net_profit = profit_per_unit - transaction_costs
             
             return {
@@ -395,7 +395,7 @@ class ETFArbitrageMonitor:
             'arbitrage_opportunity': False
         }
     
-    def estimate_costs(self, etf_ticker: str) -> float:
+    def estimate_costs (self, etf_ticker: str) -> float:
         """
         Transaction costs for creation/redemption
         
@@ -409,18 +409,18 @@ class ETFArbitrageMonitor:
         else:
             return 5000  # Higher costs for less liquid ETFs
     
-    def monitor_realtime(self):
+    def monitor_realtime (self):
         """
         Real-time monitoring
         """
         for etf in self.etfs_to_monitor:
-            market_price = self.get_market_price(etf)
-            nav = self.get_intraday_nav(etf)  # iNAV updated every 15 seconds
+            market_price = self.get_market_price (etf)
+            nav = self.get_intraday_nav (etf)  # iNAV updated every 15 seconds
             
-            opportunity = self.calculate_premium_discount(etf, market_price, nav)
+            opportunity = self.calculate_premium_discount (etf, market_price, nav)
             
             if opportunity.get('attractive'):
-                self.alert_traders(opportunity)
+                self.alert_traders (opportunity)
 
 # Example
 monitor = ETFArbitrageMonitor()
@@ -586,7 +586,7 @@ class DynamicMultiFactorSystem:
         self.lookback_period = 252 * 3  # 3 years
         self.regime_indicators = ['VIX', 'YIELD_CURVE', 'GDP_GROWTH']
     
-    def calculate_factor_returns(self, 
+    def calculate_factor_returns (self, 
                                 factor: str,
                                 period: int) -> np.array:
         """
@@ -607,7 +607,7 @@ class DynamicMultiFactorSystem:
             return np.random.normal(0.07/252, 0.12/np.sqrt(252), period)
         # ... etc
     
-    def detect_market_regime(self) -> str:
+    def detect_market_regime (self) -> str:
         """
         Identify current market regime
         
@@ -631,7 +631,7 @@ class DynamicMultiFactorSystem:
         else:
             return "NORMAL"  # Balanced
     
-    def regime_based_weights(self, regime: str) -> Dict[str, float]:
+    def regime_based_weights (self, regime: str) -> Dict[str, float]:
         """
         Adjust factor weights based on regime
         """
@@ -666,9 +666,9 @@ class DynamicMultiFactorSystem:
             }
         }
         
-        return weights.get(regime, weights["NORMAL"])
+        return weights.get (regime, weights["NORMAL"])
     
-    def markowitz_optimization(self,
+    def markowitz_optimization (self,
                               factor_returns: Dict[str, np.array],
                               target_return: float = 0.10) -> Dict[str, float]:
         """
@@ -680,21 +680,21 @@ class DynamicMultiFactorSystem:
         returns_matrix = np.column_stack([factor_returns[f] for f in self.factors])
         
         # Calculate mean returns and covariance
-        mean_returns = np.mean(returns_matrix, axis=0)
-        cov_matrix = np.cov(returns_matrix.T)
+        mean_returns = np.mean (returns_matrix, axis=0)
+        cov_matrix = np.cov (returns_matrix.T)
         
         # Optimization
-        num_factors = len(self.factors)
+        num_factors = len (self.factors)
         
-        def portfolio_variance(weights):
+        def portfolio_variance (weights):
             return weights.T @ cov_matrix @ weights
         
         constraints = [
-            {'type': 'eq', 'fun': lambda w: np.sum(w) - 1},  # Weights sum to 1
-            {'type': 'eq', 'fun': lambda w: np.dot(w, mean_returns) - target_return}  # Target return
+            {'type': 'eq', 'fun': lambda w: np.sum (w) - 1},  # Weights sum to 1
+            {'type': 'eq', 'fun': lambda w: np.dot (w, mean_returns) - target_return}  # Target return
         ]
         
-        bounds = [(0, 1) for _ in range(num_factors)]  # Long only
+        bounds = [(0, 1) for _ in range (num_factors)]  # Long only
         
         initial_weights = np.array([1/num_factors] * num_factors)
         
@@ -706,11 +706,11 @@ class DynamicMultiFactorSystem:
             constraints=constraints
         )
         
-        optimal_weights = {self.factors[i]: result.x[i] for i in range(num_factors)}
+        optimal_weights = {self.factors[i]: result.x[i] for i in range (num_factors)}
         
         return optimal_weights
     
-    def combine_regime_and_optimization(self, 
+    def combine_regime_and_optimization (self, 
                                        regime_weights: Dict[str, float],
                                        optimal_weights: Dict[str, float],
                                        regime_confidence: float = 0.6) -> Dict[str, float]:
@@ -727,12 +727,12 @@ class DynamicMultiFactorSystem:
             )
         
         # Normalize
-        total = sum(combined.values())
+        total = sum (combined.values())
         combined = {k: v/total for k, v in combined.items()}
         
         return combined
     
-    def prevent_overfitting(self) -> Dict:
+    def prevent_overfitting (self) -> Dict:
         """
         Techniques to prevent overfitting
         """
@@ -751,7 +751,7 @@ class DynamicMultiFactorSystem:
             },
             'Economic Rationale': {
                 'method': 'Only use factors with clear economic story',
-                'why': 'Value makes sense (mean reversion), "Stocks up on Tuesdays" doesn\\'t'
+                'why': 'Value makes sense (mean reversion), "Stocks up on Tuesdays" doesn't'
             },
             'Transaction Costs': {
                 'method': 'Include realistic costs (0.2%+ per rebalance)',
@@ -780,15 +780,15 @@ print(f"=== Dynamic Multi-Factor System ===\\n")
 print(f"Current Regime: {current_regime}\\n")
 
 # Get regime-based weights
-regime_weights = system.regime_based_weights(current_regime)
+regime_weights = system.regime_based_weights (current_regime)
 
 print("Regime-Based Weights:")
 for factor, weight in regime_weights.items():
     print(f"  {factor}: {weight*100:.0f}%")
 
 # Get optimization-based weights (simplified)
-factor_returns = {f: system.calculate_factor_returns(f, 252*10) for f in system.factors}
-optimal_weights = system.markowitz_optimization(factor_returns, target_return=0.10/252)
+factor_returns = {f: system.calculate_factor_returns (f, 252*10) for f in system.factors}
+optimal_weights = system.markowitz_optimization (factor_returns, target_return=0.10/252)
 
 print("\\nOptimization-Based Weights:")
 for factor, weight in optimal_weights.items():
@@ -806,7 +806,7 @@ for factor, weight in combined_weights.items():
 # Overfitting prevention
 print("\\n\\nOverfitting Prevention Techniques:")
 prevention = system.prevent_overfitting()
-for technique, details in list(prevention.items())[:3]:
+for technique, details in list (prevention.items())[:3]:
     print(f"\\n{technique}:")
     print(f"  Method: {details['method']}")
     print(f"  Why: {details['why']}")

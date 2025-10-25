@@ -1,16 +1,17 @@
 export const cashFlowMultipleChoiceQuestions = [
   {
-      id: 1,
-      question: "A company reports Net Income of $500M and Operating Cash Flow of $300M. The $200M difference is primarily due to a $150M increase in Accounts Receivable and $50M in other working capital changes. The CEO states 'Our profitability is strong at $500M.' What is the MOST accurate assessment?",
-      options: [
-        "The company is highly profitable with strong cash generation",
-        "The $200M gap suggests potential earnings quality issues; the company may be recognizing revenue before collecting cash, indicating possible channel stuffing or aggressive accounting",
-        "This is normal for growing companies; the gap will reverse next year",
-        "Operating cash flow doesn't matter as long as net income is positive",
-        "The company should focus on improving net income further"
-      ],
-      correctAnswer: 1,
-      explanation: `The correct answer is B: The $200M gap suggests potential earnings quality issues; the company may be recognizing revenue before collecting cash, indicating possible channel stuffing or aggressive accounting.
+    id: 1,
+    question:
+      "A company reports Net Income of $500M and Operating Cash Flow of $300M. The $200M difference is primarily due to a $150M increase in Accounts Receivable and $50M in other working capital changes. The CEO states 'Our profitability is strong at $500M.' What is the MOST accurate assessment?",
+    options: [
+      'The company is highly profitable with strong cash generation',
+      'The $200M gap suggests potential earnings quality issues; the company may be recognizing revenue before collecting cash, indicating possible channel stuffing or aggressive accounting',
+      'This is normal for growing companies; the gap will reverse next year',
+      "Operating cash flow doesn't matter as long as net income is positive",
+      'The company should focus on improving net income further',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: The $200M gap suggests potential earnings quality issues; the company may be recognizing revenue before collecting cash, indicating possible channel stuffing or aggressive accounting.
 
 **Why This Is A Problem**:
 
@@ -63,7 +64,7 @@ def analyze_ni_cfo_gap():
     print()
     print("3. ACCRUALS")
     print(f"   • Total accruals = NI - CFO = \${ni_cfo_gap:,}")
-    print(f"   • Accruals ratio = \${ni_cfo_gap:,} / ${net_income:,} = {ni_cfo_gap/net_income:.0%}")
+    print(f"   • Accruals ratio = \${ni_cfo_gap:,} / \${net_income:,} = {ni_cfo_gap/net_income:.0%}")
     print("   • 40% of earnings are accruals (non-cash)")
     print("   • Research shows high accruals predict future underperformance")
 
@@ -126,7 +127,7 @@ generate_investigation_steps()
 **Why Other Options Are Wrong**:
 
 A) "Highly profitable with strong cash generation" - WRONG
-- Cash generation is NOT strong ($300M vs $500M NI)
+- Cash generation is NOT strong (\$300M vs $500M NI)
 - Only converting 60% of profits to cash is concerning
 
 C) "Normal for growing companies" - DANGEROUS ASSUMPTION
@@ -143,21 +144,22 @@ E) "Focus on improving net income" - MISSES THE POINT
 - The problem isn't net income level; it's the QUALITY of earnings
 - Focusing on NI could encourage more aggressive accounting
 
-**Key Takeaway**: A large, persistent gap between Net Income and Operating Cash Flow is a major red flag for earnings quality. The cash flow statement reveals what the income statement may be hiding.`
-    },
-    
-    {
-      id: 2,
-      question: "Two retail companies both report Free Cash Flow of $100M. Company A has CFO of $200M and CapEx of $100M. Company B has CFO of $150M and CapEx of $50M. An analyst concludes 'Both have identical FCF, so they're equally attractive.' What critical factor does this analysis miss?",
-      options: [
-        "The analysis is correct; FCF is the ultimate metric and both are equal",
-        "Company B is more efficient due to lower CapEx intensity",
-        "Company A may be investing more for growth; need to analyze revenue growth rates, CapEx productivity (revenue growth per $ CapEx), and whether CapEx is maintenance vs growth to determine true attractiveness",
-        "Company A has better operations since CFO is higher",
-        "Company B is better because it needs less capital"
-      ],
-      correctAnswer: 2,
-      explanation: `The correct answer is C: Company A may be investing more for growth; need to analyze revenue growth rates, CapEx productivity, and whether CapEx is maintenance vs growth to determine true attractiveness.
+**Key Takeaway**: A large, persistent gap between Net Income and Operating Cash Flow is a major red flag for earnings quality. The cash flow statement reveals what the income statement may be hiding.`,
+  },
+
+  {
+    id: 2,
+    question:
+      "Two retail companies both report Free Cash Flow of $100M. Company A has CFO of $200M and CapEx of $100M. Company B has CFO of $150M and CapEx of $50M. An analyst concludes 'Both have identical FCF, so they're equally attractive.' What critical factor does this analysis miss?",
+    options: [
+      'The analysis is correct; FCF is the ultimate metric and both are equal',
+      'Company B is more efficient due to lower CapEx intensity',
+      'Company A may be investing more for growth; need to analyze revenue growth rates, CapEx productivity (revenue growth per $ CapEx), and whether CapEx is maintenance vs growth to determine true attractiveness',
+      'Company A has better operations since CFO is higher',
+      'Company B is better because it needs less capital',
+    ],
+    correctAnswer: 2,
+    explanation: `The correct answer is C: Company A may be investing more for growth; need to analyze revenue growth rates, CapEx productivity, and whether CapEx is maintenance vs growth to determine true attractiveness.
 
 **The Missing Context: Growth and Capital Efficiency**:
 
@@ -284,7 +286,7 @@ def show_valuation_impact():
     print()
     
     print(f"RESULT:")
-    print(f"  Despite IDENTICAL FCF ($100M), Company A worth \${valuation_a:,}")
+    print(f"  Despite IDENTICAL FCF (\$100M), Company A worth \${valuation_a:,}")
     print(f"  while Company B worth only \${valuation_b:,}")
     print(f"  Difference: \${valuation_a - valuation_b:,} (Company A is 2.1x more valuable!)")
     print()
@@ -382,21 +384,22 @@ E) "Company B better because needs less capital" - DANGEROUS LOGIC
 4. Strategic position and optionality
 5. FCF growth trajectory
 
-Company A is likely more attractive if it's investing for high-quality growth.`
-    },
-    
-    {
-      id: 3,
-      question: "A SaaS company shows: Year 1: CFO = -$20M, CFI = -$5M, CFF = +$50M; Year 2: CFO = -$10M, CFI = -$8M, CFF = +$30M; Year 3: CFO = +$15M, CFI = -$10M, CFF = -$5M. What does this cash flow pattern indicate?",
-      options: [
-        "The company is struggling with deteriorating cash flows",
-        "Classic startup to mature company transition: burning cash & raising capital (Years 1-2) → generating cash & returning capital (Year 3); demonstrates successful progression to cash-positive operations",
-        "The company has poor management as CFI is negative every year",
-        "Years 1-2 are concerning but Year 3 shows temporary improvement",
-        "The negative CFF in Year 3 indicates financial distress"
-      ],
-      correctAnswer: 1,
-      explanation: `The correct answer is B: Classic startup to mature company transition: burning cash & raising capital (Years 1-2) → generating cash & returning capital (Year 3); demonstrates successful progression to cash-positive operations.
+Company A is likely more attractive if it's investing for high-quality growth.`,
+  },
+
+  {
+    id: 3,
+    question:
+      'A SaaS company shows: Year 1: CFO = -$20M, CFI = -$5M, CFF = +$50M; Year 2: CFO = -$10M, CFI = -$8M, CFF = +$30M; Year 3: CFO = +$15M, CFI = -$10M, CFF = -$5M. What does this cash flow pattern indicate?',
+    options: [
+      'The company is struggling with deteriorating cash flows',
+      'Classic startup to mature company transition: burning cash & raising capital (Years 1-2) → generating cash & returning capital (Year 3); demonstrates successful progression to cash-positive operations',
+      'The company has poor management as CFI is negative every year',
+      'Years 1-2 are concerning but Year 3 shows temporary improvement',
+      'The negative CFF in Year 3 indicates financial distress',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: Classic startup to mature company transition: burning cash & raising capital (Years 1-2) → generating cash & returning capital (Year 3); demonstrates successful progression to cash-positive operations.
 
 **Understanding Business Life Cycle Stages**:
 
@@ -415,12 +418,12 @@ def analyze_cash_flow_lifecycle():
         'Net_Change_M': [25, 12, 0],  # CFO + CFI + CFF
     }
     
-    df = pd.DataFrame(data)
+    df = pd.DataFrame (data)
     df['FCF_M'] = df['CFO_M'] + df['CFI_M']  # CFO - CapEx
     
     print("CASH FLOW PATTERN ANALYSIS")
     print("=" * 70)
-    print(df.to_string(index=False))
+    print(df.to_string (index=False))
     print()
     
     # Identify stages
@@ -435,7 +438,7 @@ def analyze_cash_flow_lifecycle():
         else:
             stage = "TRANSITION"
         
-        stages.append(stage)
+        stages.append (stage)
         print(f"Year {row['Year']}: {stage}")
     
     print()
@@ -444,7 +447,7 @@ def analyze_cash_flow_lifecycle():
     print("  Year 2 → Year 3: INFLECTION POINT - Cash positive!")
     print()
     print("This is the IDEAL progression for a SaaS startup:")
-    print("  ✓ Started with capital raise ($50M)")
+    print("  ✓ Started with capital raise (\$50M)")
     print("  ✓ Reduced burn rate each year (-$20M → -$10M → +$15M)")
     print("  ✓ Achieved cash-positive operations by Year 3")
     print("  ✓ Now returning capital (likely paying down debt or dividends)")
@@ -475,7 +478,7 @@ def explain_each_year():
             • CFI: -$5M (investing in infrastructure, servers, software)
             • CFF: +$50M (raised Series B/C funding)
             
-            What's happening:
+            What\'s happening:
             → Company is pre-profitable, investing heavily in growth
             → Raised $50M from VCs to fund 2-3 years of operations
             → Burn rate: -$25M/year (CFO + CFI)
@@ -496,7 +499,7 @@ def explain_each_year():
             • CFI: -$8M (still investing in growth infrastructure)
             • CFF: +$30M (raised Series D or bridge round)
             
-            What's happening:
+            What\'s happening:
             → Unit economics improving (CAC payback, LTV/CAC ratio)
             → Revenue growing faster than expenses (operating leverage)
             → Needed additional capital but less than Year 1
@@ -517,7 +520,7 @@ def explain_each_year():
             • CFI: -$10M (still investing for growth, but from own cash)
             • CFF: -$5M (paying down debt or returning capital)
             
-            What's happening:
+            What\'s happening:
             → Achieved cash-positive operations (holy grail for startups)
             → No longer needs external funding
             → Can fund growth from own operations
@@ -574,7 +577,7 @@ def compare_to_failed_pattern():
         }
     }
     
-    df = pd.DataFrame(patterns).T
+    df = pd.DataFrame (patterns).T
     print(df)
     print()
     
@@ -626,8 +629,8 @@ def infer_saas_metrics_improvement():
         ]
     }
     
-    df = pd.DataFrame(metrics)
-    print(df.to_string(index=False))
+    df = pd.DataFrame (metrics)
+    print(df.to_string (index=False))
     print()
     
     print("HOW THESE METRICS DRIVE CASH FLOW:")
@@ -684,21 +687,22 @@ E) "Negative CFF in Year 3 indicates distress" - BACKWARDS
 3. Achieve cash-positive operations (Year 3)
 4. Become self-sustaining and return capital
 
-This pattern is exactly what VCs look for and what successful SaaS companies (Snowflake, Datadog, etc.) demonstrated on their path to profitability.`
-    },
-    
-    {
-      id: 4,
-      question: "A company's CFO is $500M, but includes a one-time $200M tax refund. Depreciation is $80M, and working capital consumed $50M of cash. What is the 'normalized' operating cash flow that represents sustainable operations?",
-      options: [
-        "$500M (as reported)",
-        "$300M (removing the one-time tax refund)",
-        "$250M (CFO $300M - working capital $50M)",
-        "$220M (CFO $500M - tax refund $200M - working capital $50M - depreciation $80M)",
-        "$380M (CFO $500M - non-cash depreciation $80M - working capital $50M)"
-      ],
-      correctAnswer: 1,
-      explanation: `The correct answer is B: $300M (removing the one-time tax refund).
+This pattern is exactly what VCs look for and what successful SaaS companies (Snowflake, Datadog, etc.) demonstrated on their path to profitability.`,
+  },
+
+  {
+    id: 4,
+    question:
+      "A company's CFO is $500M, but includes a one-time $200M tax refund. Depreciation is $80M, and working capital consumed $50M of cash. What is the 'normalized' operating cash flow that represents sustainable operations?",
+    options: [
+      '$500M (as reported)',
+      '$300M (removing the one-time tax refund)',
+      '$250M (CFO $300M - working capital $50M)',
+      '$220M (CFO $500M - tax refund $200M - working capital $50M - depreciation $80M)',
+      '$380M (CFO $500M - non-cash depreciation $80M - working capital $50M)',
+    ],
+    correctAnswer: 1,
+    explanation: `The correct answer is B: $300M (removing the one-time tax refund).
 
 **Understanding Cash Flow Normalization**:
 
@@ -775,7 +779,7 @@ def explain_each_adjustment():
     
     adjustments = [
         {
-            'item': 'One-Time Tax Refund ($200M)',
+            'item': 'One-Time Tax Refund (\$200M)',
             'action': 'REMOVE from CFO',
             'reason': 'Non-recurring cash inflow',
             'detail': """
@@ -790,7 +794,7 @@ def explain_each_adjustment():
             """,
         },
         {
-            'item': 'Depreciation ($80M)',
+            'item': 'Depreciation (\$80M)',
             'action': 'DO NOT remove from CFO',
             'reason': 'Already accounted for in CFO calculation',
             'detail': """
@@ -806,11 +810,11 @@ def explain_each_adjustment():
             • CFO already represents cash reality (no depreciation impact)
             
             Common Mistake: Trying to "adjust" for depreciation again
-            Reality: It's already handled in the CFO calculation
+            Reality: It\'s already handled in the CFO calculation
             """,
         },
         {
-            'item': 'Working Capital Consumed ($50M)',
+            'item': 'Working Capital Consumed (\$50M)',
             'action': 'DO NOT adjust separately',
             'reason': 'Already reflected in reported CFO',
             'detail': """
@@ -910,21 +914,22 @@ E) "$380M (CFO $500M - depreciation $80M - WC $50M)" - BACKWARDS
 3. Don't adjust for working capital (already in CFO)
 4. Focus on sustainability of cash generation
 
-Normalized CFO = $300M represents the company's true recurring cash generation capability.`
-    },
-    
-    {
-      id: 5,
-      question: "An analyst calculates a company's Free Cash Flow as: FCF = Net Income + Depreciation - CapEx = $100M + $50M - $30M = $120M. Another analyst calculates FCF = CFO - CapEx = $130M - $30M = $100M. Both used the same financial statements. What explains the $20M difference?",
-      options: [
-        "One analyst made a calculation error",
-        "The first method is wrong; only CFO - CapEx is correct",
-        "The $20M difference is due to working capital changes that are included in CFO but not in the first formula (NI + D&A); FCF = CFO - CapEx = $100M is the correct standard definition",
-        "Both methods are equally valid and the difference doesn't matter",
-        "The second analyst forgot to add back depreciation"
-      ],
-      correctAnswer: 2,
-      explanation: `The correct answer is C: The $20M difference is due to working capital changes that are included in CFO but not in the first formula (NI + D&A); FCF = CFO - CapEx = $100M is the correct standard definition.
+Normalized CFO = $300M represents the company's true recurring cash generation capability.`,
+  },
+
+  {
+    id: 5,
+    question:
+      "An analyst calculates a company's Free Cash Flow as: FCF = Net Income + Depreciation - CapEx = $100M + $50M - $30M = $120M. Another analyst calculates FCF = CFO - CapEx = $130M - $30M = $100M. Both used the same financial statements. What explains the $20M difference?",
+    options: [
+      'One analyst made a calculation error',
+      'The first method is wrong; only CFO - CapEx is correct',
+      'The $20M difference is due to working capital changes that are included in CFO but not in the first formula (NI + D&A); FCF = CFO - CapEx = $100M is the correct standard definition',
+      "Both methods are equally valid and the difference doesn't matter",
+      'The second analyst forgot to add back depreciation',
+    ],
+    correctAnswer: 2,
+    explanation: `The correct answer is C: The $20M difference is due to working capital changes that are included in CFO but not in the first formula (NI + D&A); FCF = CFO - CapEx = $100M is the correct standard definition.
 
 **Understanding the Two FCF Formulas**:
 
@@ -1080,20 +1085,20 @@ def show_real_world_impact():
     print()
     print("Method 1 (WRONG - ignores WC):")
     print(f"  FCF = NI + D&A - CapEx")
-    print(f"      = \${scenario['Net Income']:,} + ${scenario['Depreciation']:,} - ${scenario['CapEx']:,}")
+    print(f"      = \${scenario['Net Income']:,} + \${scenario['Depreciation']:,} - \${scenario['CapEx']:,}")
     print(f"      = \${fcf_method_1_wrong:,}")
     print()
     print("Method 2 (CORRECT - includes WC):")
     print(f"  FCF = CFO - CapEx")
-    print(f"      = \${scenario['CFO']:,} - ${scenario['CapEx']:,}")
+    print(f"      = \${scenario['CFO']:,} - \${scenario['CapEx']:,}")
     print(f"      = \${fcf_method_2_correct:,}")
     print()
     print(f"DIFFERENCE: \${fcf_method_1_wrong - fcf_method_2_correct:,}")
     print()
     print("IMPACT ON VALUATION:")
     print(f"  If using 15x FCF multiple:")
-    print(f"    Method 1: \${fcf_method_1_wrong:,} × 15 = ${fcf_method_1_wrong * 15:,}")
-    print(f"    Method 2: \${fcf_method_2_correct:,} × 15 = ${fcf_method_2_correct * 15:,}")
+    print(f"    Method 1: \${fcf_method_1_wrong:,} × 15 = \${fcf_method_1_wrong * 15:,}")
+    print(f"    Method 2: \${fcf_method_2_correct:,} × 15 = \${fcf_method_2_correct * 15:,}")
     print(f"    Overvaluation: \${(fcf_method_1_wrong - fcf_method_2_correct) * 15:,}")
     print()
     print("  Using Method 1 would OVERVALUE the company by $1.5B!")
@@ -1194,6 +1199,6 @@ show_correct_fcf_formulas()
 The simplified "NI + D&A - CapEx" is incomplete and can significantly misstate FCF, especially for:
 - Fast-growing companies (large WC consumption)
 - Companies with significant stock-based compensation
-- Companies with large deferred tax changes`
-    }
+- Companies with large deferred tax changes`,
+  },
 ];

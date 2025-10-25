@@ -5,7 +5,7 @@
 export const authenticationfundamentalsSection = {
   id: 'authentication-fundamentals',
   title: 'Authentication Fundamentals',
-  content: `Authentication is the process of verifying **who you are**. It's one of the most critical aspects of system design and security.
+  content: `Authentication is the process of verifying **who you are**. It\'s one of the most critical aspects of system design and security.
 
 ## Authentication vs Authorization
 
@@ -138,7 +138,7 @@ App A, App B, App C (trust IdP's token)
 3. **User authenticates at IdP**: User enters credentials at Okta, does MFA
 4. **IdP creates token**: Okta creates signed assertion "User X is authenticated"
 5. **IdP redirects back to SP**: Browser redirected to Salesforce with token
-6. **SP validates token**: Salesforce validates Okta's signature
+6. **SP validates token**: Salesforce validates Okta\'s signature
 7. **SP grants access**: Salesforce creates session, user is logged in
 
 **Key point**: User never enters password at Salesforce. Salesforce trusts Okta's assertion.

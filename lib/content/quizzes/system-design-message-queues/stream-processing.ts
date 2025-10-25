@@ -88,13 +88,13 @@ KStream<Windowed<String>, Long> topSongsStream = topSongs.toStream();
 KTable<Windowed<String>, List<Song>> top10 = topSongsStream
     .groupBy(
         (windowedKey, count) -> windowedKey.window(),  // Group by window
-        Grouped.with(windowSerde, Serdes.Long())
+        Grouped.with (windowSerde, Serdes.Long())
     )
     .aggregate(
         () -> new ArrayList<>(),
         (window, songCount, topList) -> {
-            topList.add(new Song(songCount.getKey(), songCount.getValue()));
-            topList.sort((a, b) -> Long.compare(b.getCount(), a.getCount()));
+            topList.add (new Song (songCount.getKey(), songCount.getValue()));
+            topList.sort((a, b) -> Long.compare (b.getCount(), a.getCount()));
             if (topList.size() > 10) {
                 topList.remove(10);  // Keep top 10
             }
@@ -206,7 +206,7 @@ builder.stream("song-plays")
 // Late events after 10:05:30 dropped ❌
 
 2. Watermarks (event time progress indicator)
-// Watermark = max(event_time) - allowed_lateness
+// Watermark = max (event_time) - allowed_lateness
 // Example: Max event time 10:05:00, lateness 30s
 // Watermark: 10:04:30
 
@@ -228,8 +228,8 @@ builder.stream("song-plays")
 
 // Downstream consumers handle retractions:
 topSongs.toStream().foreach((windowedKey, count) -> {
-    if (isRetraction(count)) {
-        updateDashboard(windowedKey, count);
+    if (isRetraction (count)) {
+        updateDashboard (windowedKey, count);
     }
 });
 \`\`\`
@@ -317,7 +317,7 @@ env.getCheckpointConfig().setCheckpointTimeout(180000);  // 3 min timeout
 env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
 
 // State backend (RocksDB for large state)
-env.setStateBackend(new RocksDBStateBackend("s3://checkpoints/fraud-detection"));
+env.setStateBackend (new RocksDBStateBackend("s3://checkpoints/fraud-detection"));
 
 // Kafka source (exactly-once)
 FlinkKafkaConsumer<Transaction> source = new FlinkKafkaConsumer<>(
@@ -327,12 +327,12 @@ FlinkKafkaConsumer<Transaction> source = new FlinkKafkaConsumer<>(
 );
 source.setStartFromLatest();
 
-DataStream<Transaction> transactions = env.addSource(source);
+DataStream<Transaction> transactions = env.addSource (source);
 
 // Fraud detection (stateful function)
 DataStream<FraudAlert> alerts = transactions
     .keyBy(Transaction::getCardId)  // Partition by card_id
-    .process(new FraudDetectionFunction());
+    .process (new FraudDetectionFunction());
 
 // Kafka sink (exactly-once)
 FlinkKafkaProducer<FraudAlert> sink = new FlinkKafkaProducer<>(
@@ -342,7 +342,7 @@ FlinkKafkaProducer<FraudAlert> sink = new FlinkKafkaProducer<>(
     FlinkKafkaProducer.Semantic.EXACTLY_ONCE
 );
 
-alerts.addSink(sink);
+alerts.addSink (sink);
 
 env.execute("Fraud Detection");
 
@@ -380,12 +380,12 @@ public class FraudDetectionFunction extends KeyedProcessFunction<String, Transac
         long now = tx.getTimestamp();
         
         // Add current transaction to state
-        recentTransactions.add(tx);
+        recentTransactions.add (tx);
         
         // Update country count
         String country = tx.getCountry();
-        Integer count = countryCount.get(country);
-        countryCount.put(country, (count == null ? 0 : count) + 1);
+        Integer count = countryCount.get (country);
+        countryCount.put (country, (count == null ? 0 : count) + 1);
         
         // Clean up old transactions (>10 minutes)
         List<Transaction> validTransactions = new ArrayList<>();
@@ -393,24 +393,24 @@ public class FraudDetectionFunction extends KeyedProcessFunction<String, Transac
         
         for (Transaction t : recentTransactions.get()) {
             if (now - t.getTimestamp() <= 600_000) {  // 10 minutes
-                validTransactions.add(t);
+                validTransactions.add (t);
                 totalCount++;
             } else {
                 // Remove from country count
                 String oldCountry = t.getCountry();
-                Integer oldCount = countryCount.get(oldCountry);
+                Integer oldCount = countryCount.get (oldCountry);
                 if (oldCount != null) {
                     if (oldCount == 1) {
-                        countryCount.remove(oldCountry);
+                        countryCount.remove (oldCountry);
                     } else {
-                        countryCount.put(oldCountry, oldCount - 1);
+                        countryCount.put (oldCountry, oldCount - 1);
                     }
                 }
             }
         }
         
         // Update state with valid transactions
-        recentTransactions.update(validTransactions);
+        recentTransactions.update (validTransactions);
         
         // Fraud detection: >5 transactions from >2 countries
         int uniqueCountries = 0;
@@ -433,37 +433,37 @@ public class FraudDetectionFunction extends KeyedProcessFunction<String, Transac
                     now
                 );
                 
-                out.collect(alert);
+                out.collect (alert);
                 
                 // Update last alert time
-                lastAlertTime.update(now);
+                lastAlertTime.update (now);
             }
         }
         
         // Register timer to clean up state (10 minutes)
-        ctx.timerService().registerEventTimeTimer(now + 600_000);
+        ctx.timerService().registerEventTimeTimer (now + 600_000);
     }
     
     @Override
-    public void onTimer(long timestamp, OnTimerContext ctx, Collector<FraudAlert> out) throws Exception {
+    public void onTimer (long timestamp, OnTimerContext ctx, Collector<FraudAlert> out) throws Exception {
         // Timer fired: Clean up expired transactions
         long now = timestamp;
         
         List<Transaction> validTransactions = new ArrayList<>();
         for (Transaction t : recentTransactions.get()) {
             if (now - t.getTimestamp() <= 600_000) {
-                validTransactions.add(t);
+                validTransactions.add (t);
             }
         }
         
-        recentTransactions.update(validTransactions);
+        recentTransactions.update (validTransactions);
         
         // Rebuild country count
         countryCount.clear();
         for (Transaction t : validTransactions) {
             String country = t.getCountry();
-            Integer count = countryCount.get(country);
-            countryCount.put(country, (count == null ? 0 : count) + 1);
+            Integer count = countryCount.get (country);
+            countryCount.put (country, (count == null ? 0 : count) + 1);
         }
     }
 }
@@ -555,10 +555,10 @@ producer.initTransactions();
 producer.beginTransaction();
 
 // Write alert
-producer.send(new ProducerRecord<>("fraud-alerts", alert));
+producer.send (new ProducerRecord<>("fraud-alerts", alert));
 
 // Commit input offset
-producer.sendOffsetsToTransaction(offsets, consumerGroupId);
+producer.sendOffsetsToTransaction (offsets, consumerGroupId);
 
 producer.commitTransaction();
 
@@ -701,7 +701,7 @@ clickCounts.toStream().to("click-counts");
 // Deploy:
 java -jar click-aggregator.jar
 
-// That's it! No cluster management ✅
+// That\'s it! No cluster management ✅
 \`\`\`
 
 **Use Case 2: Complex CEP with ML inference**
@@ -720,14 +720,14 @@ java -jar click-aggregator.jar
 \`\`\`java
 // CEP pattern
 Pattern<Transaction, ?> pattern = Pattern.<Transaction>begin("start")
-    .where(new SimpleCondition<Transaction>() {
+    .where (new SimpleCondition<Transaction>() {
         @Override
         public boolean filter(Transaction tx) {
             return tx.getAmount() > 1000;  // Large transaction
         }
     })
     .next("next")
-    .where(new SimpleCondition<Transaction>() {
+    .where (new SimpleCondition<Transaction>() {
         @Override
         public boolean filter(Transaction tx) {
             return tx.getCountry() != getPreviousCountry();  // Different country
@@ -735,7 +735,7 @@ Pattern<Transaction, ?> pattern = Pattern.<Transaction>begin("start")
     })
     .within(Time.minutes(10));
 
-PatternStream<Transaction> patternStream = CEP.pattern(transactions, pattern);
+PatternStream<Transaction> patternStream = CEP.pattern (transactions, pattern);
 
 DataStream<FraudAlert> alerts = patternStream.select(
     new PatternSelectFunction<Transaction, FraudAlert>() {
@@ -745,10 +745,10 @@ DataStream<FraudAlert> alerts = patternStream.select(
             Transaction t2 = pattern.get("next").get(0);
             
             // ML inference
-            double fraudScore = mlModel.predict(t1, t2);
+            double fraudScore = mlModel.predict (t1, t2);
             
             if (fraudScore > 0.8) {
-                return new FraudAlert(t1, t2, fraudScore);
+                return new FraudAlert (t1, t2, fraudScore);
             }
             return null;
         }
@@ -789,14 +789,14 @@ logs = spark.readStream.format("kafka") \\
 
 # Micro-batch: 30 seconds
 aggregated = logs.groupBy(
-    window(logs.timestamp, "30 seconds"),
+    window (logs.timestamp, "30 seconds"),
     logs.level
-).agg(count("*").alias("count"))
+).agg (count("*").alias("count"))
 
 query = aggregated.writeStream \\
     .outputMode("complete") \\
     .format("console") \\
-    .trigger(processingTime="30 seconds") \\  # Micro-batch interval
+    .trigger (processingTime="30 seconds") \\  # Micro-batch interval
     .start()
 
 # Cost savings:
@@ -841,7 +841,7 @@ events
 
 // Behavior:
 // Window [10:00-10:05) processes events with timestamps in that range
-// Watermark: max(event_time) - 30 sec
+// Watermark: max (event_time) - 30 sec
 // Window closes when watermark >= 10:05:00 (i.e., event time >= 10:05:30)
 // Late data accepted until 10:06:00 (allowed lateness)
 // Late data after 10:06:00 dropped ❌

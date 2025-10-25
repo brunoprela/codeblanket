@@ -107,11 +107,11 @@ public String callPaymentService() {
         discoveryClient.getInstances("payment-service");
     
     // Choose instance (round robin, random, etc.)
-    ServiceInstance instance = chooseInstance(instances);
+    ServiceInstance instance = chooseInstance (instances);
     
     // Make HTTP call
     String url = instance.getUri() + "/charge";
-    return restTemplate.postForObject(url, payment, String.class);
+    return restTemplate.postForObject (url, payment, String.class);
 }
 \`\`\`
 

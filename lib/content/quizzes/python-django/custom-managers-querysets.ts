@@ -14,11 +14,11 @@ export const customManagersQuerysetsQuiz = [
 
 Example:
 \`\`\`python
-class PublishedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(status='published')
+class PublishedManager (models.Manager):
+    def get_queryset (self):
+        return super().get_queryset().filter (status='published')
 
-class Article(models.Model):
+class Article (models.Model):
     objects = models.Manager()  # Default
     published = PublishedManager()  # Custom
 
@@ -34,20 +34,20 @@ Article.published.all()  # Only published articles
 
 Example:
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status='published')
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
+        return self.filter (status='published')
     
-    def featured(self):
-        return self.filter(featured=True)
+    def featured (self):
+        return self.filter (featured=True)
     
-    def recent(self):
+    def recent (self):
         from django.utils import timezone
         from datetime.timedelta import timedelta
-        week_ago = timezone.now() - timedelta(days=7)
-        return self.filter(published_at__gte=week_ago)
+        week_ago = timezone.now() - timedelta (days=7)
+        return self.filter (published_at__gte=week_ago)
 
-class Article(models.Model):
+class Article (models.Model):
     objects = ArticleQuerySet.as_manager()
 
 # Usage (chainable!):
@@ -56,22 +56,22 @@ Article.objects.published().featured().recent()
 
 **Best Practice - Combining Both:**
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status='published')
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
+        return self.filter (status='published')
     
-    def by_author(self, author):
-        return self.filter(author=author)
+    def by_author (self, author):
+        return self.filter (author=author)
 
-class ArticleManager(models.Manager.from_queryset(ArticleQuerySet)):
-    def get_queryset(self):
+class ArticleManager (models.Manager.from_queryset(ArticleQuerySet)):
+    def get_queryset (self):
         return super().get_queryset().select_related('author', 'category')
 
-class Article(models.Model):
+class Article (models.Model):
     objects = ArticleManager()
 
 # Combines manager optimization + queryset methods
-Article.objects.published().by_author(user)  # Optimized + chainable
+Article.objects.published().by_author (user)  # Optimized + chainable
 \`\`\`
 
 **When to Use Each:**
@@ -95,14 +95,14 @@ from django.db.models import Prefetch
 Article.objects.prefetch_related(
     Prefetch(
         'comments',
-        queryset=Comment.objects.filter(approved=True).select_related('user')
+        queryset=Comment.objects.filter (approved=True).select_related('user')
     )
 )
 
 # Multiple prefetches with to_attr
 Article.objects.prefetch_related(
-    Prefetch('comments', queryset=Comment.objects.filter(approved=True), to_attr='approved_comments'),
-    Prefetch('tags', queryset=Tag.objects.filter(active=True), to_attr='active_tags')
+    Prefetch('comments', queryset=Comment.objects.filter (approved=True), to_attr='approved_comments'),
+    Prefetch('tags', queryset=Tag.objects.filter (active=True), to_attr='active_tags')
 )
 
 # Access:
@@ -119,9 +119,9 @@ from django.db.models import Case, When, Value, F, Q, CharField, DecimalField
 # Categorize products
 Product.objects.annotate(
     price_category=Case(
-        When(price__lt=10, then=Value('budget')),
-        When(price__lt=50, then=Value('mid-range')),
-        When(price__gte=50, then=Value('premium')),
+        When (price__lt=10, then=Value('budget')),
+        When (price__lt=50, then=Value('mid-range')),
+        When (price__gte=50, then=Value('premium')),
         default=Value('uncategorized'),
         output_field=CharField()
     )
@@ -130,11 +130,11 @@ Product.objects.annotate(
 # Conditional aggregation
 Order.objects.annotate(
     premium_items=Count(
-        Case(When(items__price__gt=100, then=1))
+        Case(When (items__price__gt=100, then=1))
     ),
     discount_amount=Case(
-        When(total__gt=500, then=F('total') * 0.20),
-        When(total__gt=200, then=F('total') * 0.10),
+        When (total__gt=500, then=F('total') * 0.20),
+        When (total__gt=200, then=F('total') * 0.10),
         default=Value(0),
         output_field=DecimalField()
     )
@@ -152,17 +152,17 @@ latest_comment = Comment.objects.filter(
 ).order_by('-created_at')
 
 Article.objects.annotate(
-    latest_comment_text=Subquery(latest_comment.values('text')[:1]),
-    latest_comment_date=Subquery(latest_comment.values('created_at')[:1])
+    latest_comment_text=Subquery (latest_comment.values('text')[:1]),
+    latest_comment_date=Subquery (latest_comment.values('created_at')[:1])
 )
 
 # Exists subquery for filtering
 has_recent_activity = Comment.objects.filter(
     article=OuterRef('pk'),
-    created_at__gte=timezone.now() - timedelta(days=7)
+    created_at__gte=timezone.now() - timedelta (days=7)
 )
 
-Article.objects.filter(Exists(has_recent_activity))
+Article.objects.filter(Exists (has_recent_activity))
 \`\`\`
 
 **Production Example - E-commerce Dashboard:**
@@ -189,25 +189,25 @@ products = Product.objects.annotate(
     
     # Conditionals
     performance_tier=Case(
-        When(order_count__gte=100, then=Value('platinum')),
-        When(order_count__gte=50, then=Value('gold')),
-        When(order_count__gte=10, then=Value('silver')),
+        When (order_count__gte=100, then=Value('platinum')),
+        When (order_count__gte=50, then=Value('gold')),
+        When (order_count__gte=10, then=Value('silver')),
         default=Value('bronze'),
         output_field=CharField()
     ),
     
     # Subqueries
-    latest_review_text=Subquery(latest_review.values('text')[:1]),
+    latest_review_text=Subquery (latest_review.values('text')[:1]),
     has_recent_orders=Exists(
         Order.objects.filter(
             product=OuterRef('pk'),
-            created_at__gte=timezone.now() - timedelta(days=30)
+            created_at__gte=timezone.now() - timedelta (days=30)
         )
     )
 ).select_related('category').prefetch_related(
     Prefetch(
         'reviews',
-        queryset=Review.objects.filter(rating__gte=4).select_related('user')[:5],
+        queryset=Review.objects.filter (rating__gte=4).select_related('user')[:5],
         to_attr='top_reviews'
     )
 ).filter(
@@ -233,7 +233,7 @@ class ArticleFilter:
     def __init__(self, queryset=None):
         self.queryset = queryset or Article.objects.all()
     
-    def filter_by_fields(self, **filters):
+    def filter_by_fields (self, **filters):
         """Apply multiple filters dynamically"""
         query = Q()
         
@@ -241,18 +241,18 @@ class ArticleFilter:
             if value is not None:
                 query &= Q(**{field: value})
         
-        return self.queryset.filter(query)
+        return self.queryset.filter (query)
     
-    def search(self, search_term, fields):
+    def search (self, search_term, fields):
         """Search across multiple fields"""
         query = Q()
         
         for field in fields:
             query |= Q(**{f'{field}__icontains': search_term})
         
-        return self.queryset.filter(query)
+        return self.queryset.filter (query)
     
-    def filter_range(self, field, min_val=None, max_val=None):
+    def filter_range (self, field, min_val=None, max_val=None):
         """Filter by range"""
         query = Q()
         
@@ -261,7 +261,7 @@ class ArticleFilter:
         if max_val is not None:
             query &= Q(**{f'{field}__lte': max_val})
         
-        return self.queryset.filter(query)
+        return self.queryset.filter (query)
 
 # Usage:
 filter_obj = ArticleFilter()
@@ -304,7 +304,7 @@ class SafeQueryFilter:
         self.model = model_class
         self.queryset = model_class.objects.all()
     
-    def filter(self, filters: dict):
+    def filter (self, filters: dict):
         """Safely apply filters from user input"""
         q_objects = []
         
@@ -312,8 +312,8 @@ class SafeQueryFilter:
             # Parse filter expression
             parts = filter_expr.split('__')
             
-            if len(parts) >= 2:
-                field = '__'.join(parts[:-1])
+            if len (parts) >= 2:
+                field = '__'.join (parts[:-1])
                 operator_key = parts[-1]
             else:
                 field = parts[0]
@@ -321,11 +321,11 @@ class SafeQueryFilter:
             
             # Validate field is allowed
             if field not in self.ALLOWED_FIELDS:
-                raise ValidationError(f'Filtering on {field} not allowed')
+                raise ValidationError (f'Filtering on {field} not allowed')
             
             # Validate operator
             if operator_key not in self.OPERATORS:
-                raise ValidationError(f'Operator {operator_key} not allowed')
+                raise ValidationError (f'Operator {operator_key} not allowed')
             
             # Build Q object
             lookup = f'{field}{self.OPERATORS[operator_key]}'
@@ -334,12 +334,12 @@ class SafeQueryFilter:
         # Combine with AND
         if q_objects:
             self.queryset = self.queryset.filter(
-                reduce(operator.and_, q_objects)
+                reduce (operator.and_, q_objects)
             )
         
         return self
     
-    def search(self, search_term: str, fields: list = None):
+    def search (self, search_term: str, fields: list = None):
         """Full-text search across multiple fields"""
         if not search_term:
             return self
@@ -349,15 +349,15 @@ class SafeQueryFilter:
         # Validate fields
         for field in search_fields:
             if field not in self.ALLOWED_FIELDS:
-                raise ValidationError(f'Search on {field} not allowed')
+                raise ValidationError (f'Search on {field} not allowed')
         
         # Build OR query
         q_objects = [Q(**{f'{field}__icontains': search_term}) for field in search_fields]
-        self.queryset = self.queryset.filter(reduce(operator.or_, q_objects))
+        self.queryset = self.queryset.filter (reduce (operator.or_, q_objects))
         
         return self
     
-    def order_by(self, *fields):
+    def order_by (self, *fields):
         """Safe ordering"""
         safe_fields = []
         
@@ -371,18 +371,18 @@ class SafeQueryFilter:
                 prefix = ''
             
             if actual_field in self.ALLOWED_FIELDS:
-                safe_fields.append(f'{prefix}{actual_field}')
+                safe_fields.append (f'{prefix}{actual_field}')
         
         if safe_fields:
             self.queryset = self.queryset.order_by(*safe_fields)
         
         return self
     
-    def get_results(self):
+    def get_results (self):
         return self.queryset
 
 # Usage in API view:
-def article_list_api(request):
+def article_list_api (request):
     filter_obj = SafeQueryFilter(Article)
     
     # Parse query parameters
@@ -390,20 +390,20 @@ def article_list_api(request):
     if request.GET.get('status'):
         filters['status__exact'] = request.GET['status']
     if request.GET.get('min_views'):
-        filters['view_count__gte'] = int(request.GET['min_views'])
+        filters['view_count__gte'] = int (request.GET['min_views'])
     if request.GET.get('category'):
         filters['category__name__iexact'] = request.GET['category']
     
     # Apply filters
     try:
-        results = filter_obj.filter(filters).search(
+        results = filter_obj.filter (filters).search(
             request.GET.get('q', ''),
             ['title', 'content']
         ).order_by('-created_at').get_results()
     except ValidationError as e:
-        return JsonResponse({'error': str(e)}, status=400)
+        return JsonResponse({'error': str (e)}, status=400)
     
-    return JsonResponse({'results': list(results.values())})
+    return JsonResponse({'results': list (results.values())})
 \`\`\`
 
 **3. Using django-filter (Production-Ready):**
@@ -412,20 +412,20 @@ def article_list_api(request):
 import django_filters
 from django_filters import rest_framework as filters
 
-class ArticleFilter(filters.FilterSet):
-    title = filters.CharFilter(lookup_expr='icontains')
-    min_views = filters.NumberFilter(field_name='view_count', lookup_expr='gte')
-    max_views = filters.NumberFilter(field_name='view_count', lookup_expr='lte')
-    created_after = filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
-    created_before = filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
-    author_name = filters.CharFilter(field_name='author__username', lookup_expr='icontains')
+class ArticleFilter (filters.FilterSet):
+    title = filters.CharFilter (lookup_expr='icontains')
+    min_views = filters.NumberFilter (field_name='view_count', lookup_expr='gte')
+    max_views = filters.NumberFilter (field_name='view_count', lookup_expr='lte')
+    created_after = filters.DateTimeFilter (field_name='created_at', lookup_expr='gte')
+    created_before = filters.DateTimeFilter (field_name='created_at', lookup_expr='lte')
+    author_name = filters.CharFilter (field_name='author__username', lookup_expr='icontains')
     
     class Meta:
         model = Article
         fields = ['status', 'featured', 'category']
 
 # In DRF ViewSet:
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.DjangoFilterBackend]

@@ -89,17 +89,17 @@ export const servicediscoveryQuiz = [
     \`\`\`javascript
     // services/client.js
     class ServiceClient {
-      constructor(serviceName) {
+      constructor (serviceName) {
         // Use Cloud Map DNS name
         this.baseUrl = \`http://\${serviceName}.internal.mycompany.local\`;
       }
       
-      async call(path, options = {}) {
+      async call (path, options = {}) {
         const url = \`\${this.baseUrl}\${path}\`;
         
         // Add retry logic
-        return this.retry(async () => {
-          const response = await fetch(url, {
+        return this.retry (async () => {
+          const response = await fetch (url, {
             ...options,
             timeout: 5000
           });
@@ -112,7 +112,7 @@ export const servicediscoveryQuiz = [
         });
       }
       
-      async retry(fn, maxAttempts = 3) {
+      async retry (fn, maxAttempts = 3) {
         let lastError;
         
         for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -124,7 +124,7 @@ export const servicediscoveryQuiz = [
             if (attempt < maxAttempts) {
               // Exponential backoff
               const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
-              await new Promise(resolve => setTimeout(resolve, delay));
+              await new Promise (resolve => setTimeout (resolve, delay));
             }
           }
         }
@@ -158,7 +158,7 @@ export const servicediscoveryQuiz = [
     const servicediscovery = new AWS.ServiceDiscovery();
     
     class CloudMapClient {
-      constructor(serviceName, namespace) {
+      constructor (serviceName, namespace) {
         this.serviceName = serviceName;
         this.namespace = namespace;
         this.instances = [];
@@ -177,7 +177,7 @@ export const servicediscoveryQuiz = [
             HealthStatus: 'HEALTHY'
           }).promise();
           
-          this.instances = services.Instances.map(inst => ({
+          this.instances = services.Instances.map (inst => ({
             ip: inst.Attributes.AWS_INSTANCE_IPV4,
             port: inst.Attributes.AWS_INSTANCE_PORT
           }));
@@ -299,7 +299,7 @@ export const servicediscoveryQuiz = [
       next();
     });
     
-    async function gracefulShutdown(signal) {
+    async function gracefulShutdown (signal) {
       console.log(\`Received \${signal}, starting graceful shutdown...\`);
       isShuttingDown = true;
       
@@ -310,7 +310,7 @@ export const servicediscoveryQuiz = [
       
       // 2. Wait a bit for ALB to detect unhealthy (deregistration delay)
       console.log('Waiting for deregistration...');
-      await new Promise(resolve => setTimeout(resolve, 15000)); // 15 seconds
+      await new Promise (resolve => setTimeout (resolve, 15000)); // 15 seconds
       
       // 3. Stop accepting new connections
       console.log('Stopping server...');
@@ -321,7 +321,7 @@ export const servicediscoveryQuiz = [
       // 4. Wait for active connections to complete
       console.log(\`Draining \${activeConnections} active connections...\`);
       while (activeConnections > 0) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise (resolve => setTimeout (resolve, 1000));
         console.log(\`Remaining connections: \${activeConnections}\`);
       }
       
@@ -362,7 +362,7 @@ export const servicediscoveryQuiz = [
               Unit: 'Milliseconds',
               Dimensions: [
                 { Name: 'Endpoint', Value: req.path },
-                { Name: 'StatusCode', Value: String(res.statusCode) }
+                { Name: 'StatusCode', Value: String (res.statusCode) }
               ]
             },
             {
@@ -371,11 +371,11 @@ export const servicediscoveryQuiz = [
               Unit: 'Count',
               Dimensions: [
                 { Name: 'Endpoint', Value: req.path },
-                { Name: 'StatusCode', Value: String(res.statusCode) }
+                { Name: 'StatusCode', Value: String (res.statusCode) }
               ]
             }
           ]
-        }).promise().catch(console.error);
+        }).promise().catch (console.error);
       });
       
       next();
@@ -385,7 +385,7 @@ export const servicediscoveryQuiz = [
     **Service Discovery Metrics**:
     \`\`\`javascript
     // Track service discovery health
-    setInterval(async () => {
+    setInterval (async () => {
       const services = ['user-service', 'inventory-service', 'payment-service',];
       
       for (const service of services) {
@@ -444,19 +444,19 @@ export const servicediscoveryQuiz = [
       it('should discover user-service instances', async () => {
         const client = new ServiceClient('user-service');
         const response = await client.call('/health');
-        expect(response.status).toBe('healthy');
+        expect (response.status).toBe('healthy');
       });
       
       it('should handle service unavailability gracefully', async () => {
         const client = new ServiceClient('nonexistent-service');
-        await expect(client.call('/test')).rejects.toThrow();
+        await expect (client.call('/test')).rejects.toThrow();
       });
       
       it('should retry on transient failures', async () => {
         const client = new ServiceClient('flaky-service');
         // Mock: First 2 calls fail, 3rd succeeds
         const response = await client.call('/test');
-        expect(response).toBeDefined();
+        expect (response).toBeDefined();
       });
     });
     \`\`\`
@@ -824,7 +824,7 @@ export const servicediscoveryQuiz = [
         rules:
           # No leader elected
           - alert: ConsulNoLeader
-            expr: sum(consul_raft_leader) == 0
+            expr: sum (consul_raft_leader) == 0
             for: 1m
             annotations:
               summary: "Consul cluster has no leader"
@@ -1058,17 +1058,17 @@ export const servicediscoveryQuiz = [
     \`\`\`javascript
     const dns = require('dns');
     const { promisify } = require('util');
-    const resolve4 = promisify(dns.resolve4);
+    const resolve4 = promisify (dns.resolve4);
     
     class CachedDNSResolver {
-      constructor(ttl = 30000) {
+      constructor (ttl = 30000) {
         this.cache = new Map();
         this.ttl = ttl;
       }
       
-      async resolve(hostname) {
+      async resolve (hostname) {
         const now = Date.now();
-        const cached = this.cache.get(hostname);
+        const cached = this.cache.get (hostname);
         
         // Return cached if fresh
         if (cached && now - cached.timestamp < this.ttl) {
@@ -1077,7 +1077,7 @@ export const servicediscoveryQuiz = [
         
         // Resolve and cache
         const addresses = await resolve4(hostname);
-        this.cache.set(hostname, {
+        this.cache.set (hostname, {
           addresses,
           timestamp: now
         });
@@ -1237,7 +1237,7 @@ export const servicediscoveryQuiz = [
     **Before**:
     \`\`\`javascript
     // Bad: New connection per query
-    async function getService(name) {
+    async function getService (name) {
       const consul = new Consul();
       return await consul.health.service({ service: name });
     }
@@ -1258,22 +1258,22 @@ export const servicediscoveryQuiz = [
     
     // Cache service locations
     class ServiceCache {
-      constructor(refreshInterval = 30000) {
+      constructor (refreshInterval = 30000) {
         this.cache = new Map();
         setInterval(() => this.refresh(), refreshInterval);
       }
       
-      async get(serviceName) {
-        if (!this.cache.has(serviceName)) {
-          await this.refresh(serviceName);
+      async get (serviceName) {
+        if (!this.cache.has (serviceName)) {
+          await this.refresh (serviceName);
         }
         
-        const instances = this.cache.get(serviceName);
+        const instances = this.cache.get (serviceName);
         return instances[Math.floor(Math.random() * instances.length)];
       }
       
-      async refresh(serviceName = null) {
-        const services = serviceName ? [serviceName] : Array.from(this.cache.keys());
+      async refresh (serviceName = null) {
+        const services = serviceName ? [serviceName] : Array.from (this.cache.keys());
         
         for (const service of services) {
           const instances = await consul.health.service({
@@ -1282,7 +1282,7 @@ export const servicediscoveryQuiz = [
             stale: true
           });
           
-          this.cache.set(service, instances.map(i => ({
+          this.cache.set (service, instances.map (i => ({
             address: i.Service.Address,
             port: i.Service.Port
           })));
@@ -1311,18 +1311,18 @@ export const servicediscoveryQuiz = [
     
     # DNS query latency
     histogram_quantile(0.99, 
-      rate(consul_dns_query_time_bucket[5m])
+      rate (consul_dns_query_time_bucket[5m])
     )
     
     # Service cache hit rate
-    rate(service_cache_hits[5m]) / 
-      (rate(service_cache_hits[5m]) + rate(service_cache_misses[5m]))
+    rate (service_cache_hits[5m]) / 
+      (rate (service_cache_hits[5m]) + rate (service_cache_misses[5m]))
     
     # Raft apply latency
     consul_raft_apply_time
     
     # Registration rate
-    rate(consul_catalog_register[5m])
+    rate (consul_catalog_register[5m])
     \`\`\`
     
     **Key Takeaways**:

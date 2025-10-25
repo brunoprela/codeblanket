@@ -68,10 +68,10 @@ START: Is this a DP problem?
 | Pattern | State Definition | Recurrence | Complexity | Example Problems |
 |---------|------------------|------------|------------|------------------|
 | **Fibonacci** | dp[i] = answer for i | dp[i] = dp[i-1] + dp[i-2] | O(n), O(1) | Climbing Stairs, Decode Ways |
-| **House Robber** | dp[i] = max money robbing 0..i | dp[i] = max(dp[i-1], dp[i-2]+nums[i]) | O(n), O(1) | House Robber, Delete and Earn |
-| **Coin Change** | dp[i] = ways/min coins for amount i | dp[i] = min(dp[i-coin]+1) for each coin | O(n*m), O(n) | Coin Change, Perfect Squares |
-| **Knapsack 0/1** | dp[i][w] = max value with i items, weight w | dp[i][w] = max(dp[i-1][w], dp[i-1][w-wt[i]]+val[i]) | O(n*W), O(W) | Partition Equal Subset, Target Sum |
-| **LCS** | dp[i][j] = LCS length of s1[0..i], s2[0..j] | dp[i][j] = dp[i-1][j-1]+1 if match else max(dp[i-1][j], dp[i][j-1]) | O(m*n), O(n) | Longest Common Subsequence, Edit Distance |
+| **House Robber** | dp[i] = max money robbing 0..i | dp[i] = max (dp[i-1], dp[i-2]+nums[i]) | O(n), O(1) | House Robber, Delete and Earn |
+| **Coin Change** | dp[i] = ways/min coins for amount i | dp[i] = min (dp[i-coin]+1) for each coin | O(n*m), O(n) | Coin Change, Perfect Squares |
+| **Knapsack 0/1** | dp[i][w] = max value with i items, weight w | dp[i][w] = max (dp[i-1][w], dp[i-1][w-wt[i]]+val[i]) | O(n*W), O(W) | Partition Equal Subset, Target Sum |
+| **LCS** | dp[i][j] = LCS length of s1[0..i], s2[0..j] | dp[i][j] = dp[i-1][j-1]+1 if match else max (dp[i-1][j], dp[i][j-1]) | O(m*n), O(n) | Longest Common Subsequence, Edit Distance |
 | **Grid Paths** | dp[i][j] = ways/min cost to reach (i,j) | dp[i][j] = dp[i-1][j] + dp[i][j-1] | O(m*n), O(n) | Unique Paths, Minimum Path Sum |
 | **Palindrome** | dp[i][j] = is s[i..j] palindrome | dp[i][j] = s[i]==s[j] && dp[i+1][j-1] | O(n²), O(n²) | Longest Palindromic Substring, Palindrome Partitioning |
 
@@ -98,23 +98,23 @@ START: Is this a DP problem?
 
 \`\`\`python
 # ❌ BAD: Missing base case
-def coinChange(coins, amount):
+def coinChange (coins, amount):
     dp = [float('inf')] * (amount + 1)
     # Forgot dp[0] = 0!
     for i in range(1, amount + 1):
         for coin in coins:
             if i >= coin:
-                dp[i] = min(dp[i], dp[i-coin] + 1)
+                dp[i] = min (dp[i], dp[i-coin] + 1)
     return dp[amount]
 
 # ✅ GOOD: Proper base case
-def coinChange(coins, amount):
+def coinChange (coins, amount):
     dp = [float('inf')] * (amount + 1)
     dp[0] = 0  # Base case: 0 coins needed for amount 0
     for i in range(1, amount + 1):
         for coin in coins:
             if i >= coin:
-                dp[i] = min(dp[i], dp[i-coin] + 1)
+                dp[i] = min (dp[i], dp[i-coin] + 1)
     return dp[amount] if dp[amount] != float('inf') else -1
 \`\`\`
 
@@ -123,30 +123,30 @@ def coinChange(coins, amount):
 
 \`\`\`python
 # ❌ BAD: Wrong order for LCS
-def longestCommonSubsequence(text1, text2):
-    m, n = len(text1), len(text2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+def longestCommonSubsequence (text1, text2):
+    m, n = len (text1), len (text2)
+    dp = [[0] * (n + 1) for _ in range (m + 1)]
     
     # WRONG: Going backwards when we need forward
-    for i in range(m, 0, -1):  # ❌
-        for j in range(n, 0, -1):  # ❌
+    for i in range (m, 0, -1):  # ❌
+        for j in range (n, 0, -1):  # ❌
             if text1[i-1] == text2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1  # Depends on smaller indices!
             else:
-                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+                dp[i][j] = max (dp[i-1][j], dp[i][j-1])
     return dp[m][n]
 
 # ✅ GOOD: Forward iteration
-def longestCommonSubsequence(text1, text2):
-    m, n = len(text1), len(text2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+def longestCommonSubsequence (text1, text2):
+    m, n = len (text1), len (text2)
+    dp = [[0] * (n + 1) for _ in range (m + 1)]
     
     for i in range(1, m + 1):  # ✅
         for j in range(1, n + 1):  # ✅
             if text1[i-1] == text2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
-                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+                dp[i][j] = max (dp[i-1][j], dp[i][j-1])
     return dp[m][n]
 \`\`\`
 
@@ -155,25 +155,25 @@ def longestCommonSubsequence(text1, text2):
 
 \`\`\`python
 # ❌ UNOPTIMIZED: O(n) space when O(1) possible
-def rob(nums):
+def rob (nums):
     if not nums:
         return 0
-    n = len(nums)
+    n = len (nums)
     dp = [0] * n
     dp[0] = nums[0]
     if n > 1:
-        dp[1] = max(nums[0], nums[1])
+        dp[1] = max (nums[0], nums[1])
     for i in range(2, n):
-        dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+        dp[i] = max (dp[i-1], dp[i-2] + nums[i])
     return dp[n-1]
 
 # ✅ OPTIMIZED: O(1) space
-def rob(nums):
+def rob (nums):
     if not nums:
         return 0
     prev2, prev1 = 0, 0
     for num in nums:
-        prev2, prev1 = prev1, max(prev1, prev2 + num)
+        prev2, prev1 = prev1, max (prev1, prev2 + num)
     return prev1
 \`\`\`
 
@@ -182,11 +182,11 @@ def rob(nums):
 
 \`\`\`python
 # ❌ OVERKILL: Using DP for jump game when greedy works
-def canJump(nums):
-    n = len(nums)
+def canJump (nums):
+    n = len (nums)
     dp = [False] * n
     dp[0] = True
-    for i in range(n):
+    for i in range (n):
         if dp[i]:
             for j in range(1, nums[i] + 1):
                 if i + j < n:
@@ -194,12 +194,12 @@ def canJump(nums):
     return dp[n-1]
 
 # ✅ BETTER: Greedy approach - O(n) time, O(1) space
-def canJump(nums):
+def canJump (nums):
     max_reach = 0
-    for i in range(len(nums)):
+    for i in range (len (nums)):
         if i > max_reach:
             return False
-        max_reach = max(max_reach, i + nums[i])
+        max_reach = max (max_reach, i + nums[i])
     return True
 \`\`\`
 
@@ -249,7 +249,7 @@ I take the maximum of these two choices."
 Common question → Pattern mapping:
 
 "Climbing stairs" → Fibonacci pattern
-"Maximum subarray" → Kadane's algorithm (1D DP)
+"Maximum subarray" → Kadane\'s algorithm (1D DP)
 "Longest increasing subsequence" → LIS pattern
 "Can partition to equal sum" → 0/1 Knapsack
 "Minimum cost path" → Grid DP
@@ -292,7 +292,7 @@ just the last two values."
 
 **Examples:**
 \`\`\`
-Fibonacci: dp[i] = fibonacci(i)
+Fibonacci: dp[i] = fibonacci (i)
 House Robber: dp[i] = max money robbing houses[0..i]
 Knapsack: dp[i][w] = max value with first i items, capacity w
 LCS: dp[i][j] = LCS length of s1[0..i] and s2[0..j]
@@ -305,7 +305,7 @@ LCS: dp[i][j] = LCS length of s1[0..i] and s2[0..j]
 
 **Common patterns:**
 \`\`\`
-Take/Skip: max(skip_it, take_it + prev)
+Take/Skip: max (skip_it, take_it + prev)
 Min/Max: min/max over all choices
 Count ways: sum of ways from previous states
 Path problems: sum of ways to reach current from previous cells
@@ -379,11 +379,11 @@ Path problems: sum of ways to reach current from previous cells
 
 **"Rob houses, can't rob adjacent"** → House Robber
 - State: dp[i] = max money from houses[0..i]
-- Recurrence: dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+- Recurrence: dp[i] = max (dp[i-1], dp[i-2] + nums[i])
 
 **"Minimum coins to make amount"** → Coin Change
 - State: dp[i] = min coins for amount i
-- Recurrence: dp[i] = min(dp[i-coin] + 1) for all coins
+- Recurrence: dp[i] = min (dp[i-coin] + 1) for all coins
 
 **"Can partition into equal sum"** → 0/1 Knapsack
 - State: dp[i][sum] = can make sum with first i nums
@@ -391,7 +391,7 @@ Path problems: sum of ways to reach current from previous cells
 
 **"Longest common subsequence"** → 2D String DP
 - State: dp[i][j] = LCS of s1[0..i], s2[0..j]
-- Recurrence: if match → dp[i-1][j-1]+1, else max(dp[i-1][j], dp[i][j-1])
+- Recurrence: if match → dp[i-1][j-1]+1, else max (dp[i-1][j], dp[i][j-1])
 
 **"Unique paths in grid"** → Grid DP
 - State: dp[i][j] = paths to reach (i,j)

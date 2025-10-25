@@ -34,7 +34,7 @@ export const relationshipLoadingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'joinedload + LIMIT is a common bug. LIMIT applies AFTER the JOIN, limiting rows not parent objects. Example: select(User).options(joinedload(User.posts)).limit(10) with first user having 10 posts returns 10 ROWS (1 user with 10 posts), not 10 users. This is almost never the desired behavior. Solution: Always use selectinload with LIMIT. selectinload limits users first (correct), then loads posts for those users.',
+      'joinedload + LIMIT is a common bug. LIMIT applies AFTER the JOIN, limiting rows not parent objects. Example: select(User).options (joinedload(User.posts)).limit(10) with first user having 10 posts returns 10 ROWS (1 user with 10 posts), not 10 users. This is almost never the desired behavior. Solution: Always use selectinload with LIMIT. selectinload limits users first (correct), then loads posts for those users.',
   },
   {
     id: 'sql-loading-mc-4',
@@ -48,7 +48,7 @@ export const relationshipLoadingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Use contains_eager when you have explicitly joined tables (usually for filtering) and want to reuse that JOIN to populate the relationship instead of issuing a separate query. Example: select(User).join(User.posts).where(Post.published == True).options(contains_eager(User.posts)) - the explicit JOIN is already there for filtering, contains_eager reuses it. Without contains_eager, SQLAlchemy would load posts again with a separate query (inefficient).',
+      'Use contains_eager when you have explicitly joined tables (usually for filtering) and want to reuse that JOIN to populate the relationship instead of issuing a separate query. Example: select(User).join(User.posts).where(Post.published == True).options (contains_eager(User.posts)) - the explicit JOIN is already there for filtering, contains_eager reuses it. Without contains_eager, SQLAlchemy would load posts again with a separate query (inefficient).',
   },
   {
     id: 'sql-loading-mc-5',
@@ -62,6 +62,6 @@ export const relationshipLoadingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'joinedload performs a LEFT OUTER JOIN, creating a cartesian product where each parent appears once per child. Example: User with 10 posts returns 10 rows, all with the same User data. Without unique(), you get 10 duplicate User objects in your results list. unique() deduplicates them. selectinload uses separate queries (no JOIN), so no cartesian product and no duplicates. Code: joinedload: session.execute(stmt).scalars().unique().all(). selectinload: session.execute(stmt).scalars().all() - no unique() needed.',
+      'joinedload performs a LEFT OUTER JOIN, creating a cartesian product where each parent appears once per child. Example: User with 10 posts returns 10 rows, all with the same User data. Without unique(), you get 10 duplicate User objects in your results list. unique() deduplicates them. selectinload uses separate queries (no JOIN), so no cartesian product and no duplicates. Code: joinedload: session.execute (stmt).scalars().unique().all(). selectinload: session.execute (stmt).scalars().all() - no unique() needed.',
   },
 ];

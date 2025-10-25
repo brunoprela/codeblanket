@@ -53,7 +53,7 @@ import torch.nn as nn
 import time
 import numpy as np
 
-class SimpleModel(nn.Module):
+class SimpleModel (nn.Module):
     """Example model for quantization"""
     def __init__(self):
         super().__init__()
@@ -65,23 +65,23 @@ class SimpleModel(nn.Module):
             nn.Linear(500, 10)
         )
     
-    def forward(self, x):
-        return self.layers(x)
+    def forward (self, x):
+        return self.layers (x)
 
 
-def benchmark_model(model, input_data, n_runs=1000):
+def benchmark_model (model, input_data, n_runs=1000):
     """
     Benchmark model inference speed
     """
     # Warm-up
     for _ in range(10):
-        _ = model(input_data)
+        _ = model (input_data)
     
     # Benchmark
     start = time.time()
-    for _ in range(n_runs):
+    for _ in range (n_runs):
         with torch.no_grad():
-            _ = model(input_data)
+            _ = model (input_data)
     duration = time.time() - start
     
     latency_ms = (duration / n_runs) * 1000
@@ -104,12 +104,12 @@ input_data = torch.randn(1, 100)
 # Benchmark original model
 print("=== Model Quantization Comparison ===\\n")
 print("Original Model (FP32):")
-fp32_metrics = benchmark_model(model, input_data)
+fp32_metrics = benchmark_model (model, input_data)
 print(f"  Latency: {fp32_metrics['latency_ms']:.3f}ms")
 print(f"  Throughput: {fp32_metrics['throughput']:.0f} inferences/sec")
 
 # Get model size
-fp32_size = sum(p.numel() * p.element_size() for p in model.parameters()) / 1024 / 1024
+fp32_size = sum (p.numel() * p.element_size() for p in model.parameters()) / 1024 / 1024
 print(f"  Model size: {fp32_size:.2f} MB")
 
 # Dynamic Quantization (INT8)
@@ -120,11 +120,11 @@ quantized_dynamic = torch.quantization.quantize_dynamic(
 )
 
 print("\\nDynamic Quantization (INT8):")
-int8_metrics = benchmark_model(quantized_dynamic, input_data)
+int8_metrics = benchmark_model (quantized_dynamic, input_data)
 print(f"  Latency: {int8_metrics['latency_ms']:.3f}ms ({fp32_metrics['latency_ms']/int8_metrics['latency_ms']:.1f}x faster)")
 print(f"  Throughput: {int8_metrics['throughput']:.0f} inferences/sec")
 
-int8_size = sum(p.numel() * p.element_size() for p in quantized_dynamic.parameters()) / 1024 / 1024
+int8_size = sum (p.numel() * p.element_size() for p in quantized_dynamic.parameters()) / 1024 / 1024
 print(f"  Model size: {int8_size:.2f} MB ({fp32_size/int8_size:.1f}x smaller)")
 
 print("\\n✓ Quantization benefits:")
@@ -143,7 +143,7 @@ Model Pruning - Remove Unnecessary Weights
 import torch
 import torch.nn.utils.prune as prune
 
-def prune_model(model, amount=0.3):
+def prune_model (model, amount=0.3):
     """
     Prune model by removing smallest weights
     
@@ -153,13 +153,13 @@ def prune_model(model, amount=0.3):
     print(f"\\n=== Pruning Model ({amount*100}% of weights) ===\\n")
     
     # Count original parameters
-    original_params = sum(p.numel() for p in model.parameters())
+    original_params = sum (p.numel() for p in model.parameters())
     
     # Prune each Linear layer
     for name, module in model.named_modules():
-        if isinstance(module, nn.Linear):
-            prune.l1_unstructured(module, name='weight', amount=amount)
-            prune.remove(module, 'weight')  # Make pruning permanent
+        if isinstance (module, nn.Linear):
+            prune.l1_unstructured (module, name='weight', amount=amount)
+            prune.remove (module, 'weight')  # Make pruning permanent
     
     # Count remaining non-zero parameters
     remaining_params = sum((p != 0).sum().item() for p in model.parameters())
@@ -174,10 +174,10 @@ def prune_model(model, amount=0.3):
 # Create and prune model
 pruned_model = SimpleModel()
 pruned_model.eval()
-pruned_model = prune_model(pruned_model, amount=0.5)  # Prune 50%
+pruned_model = prune_model (pruned_model, amount=0.5)  # Prune 50%
 
 # Benchmark
-pruned_metrics = benchmark_model(pruned_model, input_data)
+pruned_metrics = benchmark_model (pruned_model, input_data)
 print(f"\\nPruned Model Performance:")
 print(f"  Latency: {pruned_metrics['latency_ms']:.3f}ms")
 print(f"  Throughput: {pruned_metrics['throughput']:.0f} inferences/sec")
@@ -193,7 +193,7 @@ Knowledge Distillation - Train Small Model from Large Model
 import torch.nn.functional as F
 import torch.optim as optim
 
-class TeacherModel(nn.Module):
+class TeacherModel (nn.Module):
     """Large, accurate model"""
     def __init__(self):
         super().__init__()
@@ -207,11 +207,11 @@ class TeacherModel(nn.Module):
             nn.Linear(500, 10)
         )
     
-    def forward(self, x):
-        return self.layers(x)
+    def forward (self, x):
+        return self.layers (x)
 
 
-class StudentModel(nn.Module):
+class StudentModel (nn.Module):
     """Small, fast model"""
     def __init__(self):
         super().__init__()
@@ -221,11 +221,11 @@ class StudentModel(nn.Module):
             nn.Linear(200, 10)
         )
     
-    def forward(self, x):
-        return self.layers(x)
+    def forward (self, x):
+        return self.layers (x)
 
 
-def distillation_loss(student_logits, teacher_logits, labels, temperature=3.0, alpha=0.7):
+def distillation_loss (student_logits, teacher_logits, labels, temperature=3.0, alpha=0.7):
     """
     Combined loss for knowledge distillation
     
@@ -235,37 +235,37 @@ def distillation_loss(student_logits, teacher_logits, labels, temperature=3.0, a
     """
     # Soft targets from teacher
     soft_loss = F.kl_div(
-        F.log_softmax(student_logits / temperature, dim=1),
-        F.softmax(teacher_logits / temperature, dim=1),
+        F.log_softmax (student_logits / temperature, dim=1),
+        F.softmax (teacher_logits / temperature, dim=1),
         reduction='batchmean'
     ) * (temperature ** 2)
     
     # Hard targets (true labels)
-    hard_loss = F.cross_entropy(student_logits, labels)
+    hard_loss = F.cross_entropy (student_logits, labels)
     
     # Combined loss
     return alpha * soft_loss + (1 - alpha) * hard_loss
 
 
-def train_with_distillation(teacher, student, train_loader, epochs=5):
+def train_with_distillation (teacher, student, train_loader, epochs=5):
     """
     Train student model with knowledge distillation
     """
     teacher.eval()  # Teacher in eval mode
     student.train()
     
-    optimizer = optim.Adam(student.parameters(), lr=0.001)
+    optimizer = optim.Adam (student.parameters(), lr=0.001)
     
-    for epoch in range(epochs):
+    for epoch in range (epochs):
         total_loss = 0
         
         for batch_X, batch_y in train_loader:
             # Get teacher predictions (no gradients needed)
             with torch.no_grad():
-                teacher_logits = teacher(batch_X)
+                teacher_logits = teacher (batch_X)
             
             # Student predictions
-            student_logits = student(batch_X)
+            student_logits = student (batch_X)
             
             # Distillation loss
             loss = distillation_loss(
@@ -283,7 +283,7 @@ def train_with_distillation(teacher, student, train_loader, epochs=5):
             
             total_loss += loss.item()
         
-        avg_loss = total_loss / len(train_loader)
+        avg_loss = total_loss / len (train_loader)
         print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}")
     
     return student
@@ -293,15 +293,15 @@ def train_with_distillation(teacher, student, train_loader, epochs=5):
 teacher = TeacherModel()
 student = StudentModel()
 
-teacher_params = sum(p.numel() for p in teacher.parameters())
-student_params = sum(p.numel() for p in student.parameters())
+teacher_params = sum (p.numel() for p in teacher.parameters())
+student_params = sum (p.numel() for p in student.parameters())
 
 print(f"\\n=== Knowledge Distillation ===")
 print(f"Teacher parameters: {teacher_params:,}")
 print(f"Student parameters: {student_params:,}")
 print(f"Compression: {teacher_params/student_params:.1f}x smaller")
 
-# In practice: train_with_distillation(teacher, student, train_loader)
+# In practice: train_with_distillation (teacher, student, train_loader)
 \`\`\`
 
 ---
@@ -344,28 +344,28 @@ class PredictionCache:
             'total_requests': 0
         }
     
-    def _generate_key(self, features: list) -> str:
+    def _generate_key (self, features: list) -> str:
         """Generate cache key from features"""
-        features_str = str(sorted(features))
+        features_str = str (sorted (features))
         return hashlib.md5(features_str.encode()).hexdigest()
     
-    @lru_cache(maxsize=1000)
-    def _memory_cache_get(self, key: str) -> Optional[float]:
+    @lru_cache (maxsize=1000)
+    def _memory_cache_get (self, key: str) -> Optional[float]:
         """In-memory cache (LRU)"""
         # LRU cache is handled by decorator
         return None
     
-    def get_prediction(self, features: list, model) -> dict:
+    def get_prediction (self, features: list, model) -> dict:
         """
         Get prediction with multi-level caching
         """
         self.stats['total_requests'] += 1
         
-        key = self._generate_key(features)
+        key = self._generate_key (features)
         start = time.time()
         
         # Level 1: In-memory cache
-        cached = self._memory_cache_get(key)
+        cached = self._memory_cache_get (key)
         if cached is not None:
             self.stats['memory_hits'] += 1
             return {
@@ -377,13 +377,13 @@ class PredictionCache:
         # Level 2: Redis cache
         if self.redis_client:
             try:
-                cached = self.redis_client.get(key)
+                cached = self.redis_client.get (key)
                 if cached:
-                    prediction = pickle.loads(cached)
+                    prediction = pickle.loads (cached)
                     self.stats['redis_hits'] += 1
                     
                     # Populate memory cache
-                    self._memory_cache_get(key)  # This will cache it
+                    self._memory_cache_get (key)  # This will cache it
                     
                     return {
                         'prediction': prediction,
@@ -397,8 +397,8 @@ class PredictionCache:
         self.stats['misses'] += 1
         
         import numpy as np
-        features_array = np.array(features).reshape(1, -1)
-        prediction = model.predict(features_array)[0]
+        features_array = np.array (features).reshape(1, -1)
+        prediction = model.predict (features_array)[0]
         
         # Cache in Redis
         if self.redis_client:
@@ -406,13 +406,13 @@ class PredictionCache:
                 self.redis_client.setex(
                     key,
                     self.ttl,
-                    pickle.dumps(prediction)
+                    pickle.dumps (prediction)
                 )
             except Exception as e:
                 print(f"Redis cache write error: {e}")
         
         # Cache in memory (via LRU)
-        self._memory_cache_get(key)
+        self._memory_cache_get (key)
         
         return {
             'prediction': prediction,
@@ -420,7 +420,7 @@ class PredictionCache:
             'latency_ms': (time.time() - start) * 1000
         }
     
-    def get_stats(self) -> dict:
+    def get_stats (self) -> dict:
         """Get cache statistics"""
         total = self.stats['total_requests']
         if total == 0:
@@ -439,13 +439,13 @@ class PredictionCache:
 from sklearn.ensemble import RandomForestRegressor
 
 # Train simple model
-model = RandomForestRegressor(n_estimators=100)
+model = RandomForestRegressor (n_estimators=100)
 X_train = np.random.randn(1000, 10)
 y_train = np.random.randn(1000)
 model.fit(X_train, y_train)
 
 # Create cache (without Redis for demo)
-cache = PredictionCache(redis_client=None)
+cache = PredictionCache (redis_client=None)
 
 # Simulate requests
 print("\\n=== Caching Performance ===\\n")
@@ -462,11 +462,11 @@ print(f"Request 2: {result2['cache_level']} ({result2['latency_ms']:.2f}ms)")
 for i in range(1000):
     # 80% of requests are from 20 unique feature sets
     if np.random.random() < 0.8:
-        features = [float(np.random.randint(0, 20))] * 10
+        features = [float (np.random.randint(0, 20))] * 10
     else:
-        features = [float(np.random.randn())] * 10
+        features = [float (np.random.randn())] * 10
     
-    cache.get_prediction(features, model)
+    cache.get_prediction (features, model)
 
 # Statistics
 stats = cache.get_stats()
@@ -498,12 +498,12 @@ class FeatureCache:
         self.cache = {}
         self.compute_times = []
     
-    def cached_feature(self, key_func):
+    def cached_feature (self, key_func):
         """
         Decorator for caching feature computations
         """
-        def decorator(func):
-            @functools.wraps(func)
+        def decorator (func):
+            @functools.wraps (func)
             def wrapper(*args, **kwargs):
                 # Generate cache key
                 key = key_func(*args, **kwargs)
@@ -519,7 +519,7 @@ class FeatureCache:
                 
                 # Cache result
                 self.cache[key] = result
-                self.compute_times.append(compute_time)
+                self.compute_times.append (compute_time)
                 
                 return result
             
@@ -530,8 +530,8 @@ class FeatureCache:
 # Example: Cache technical indicators
 feature_cache = FeatureCache()
 
-@feature_cache.cached_feature(lambda symbol, date: f"{symbol}:{date}")
-def compute_technical_indicators(symbol: str, date: str) -> Dict[str, float]:
+@feature_cache.cached_feature (lambda symbol, date: f"{symbol}:{date}")
+def compute_technical_indicators (symbol: str, date: str) -> Dict[str, float]:
     """
     Expensive feature computation
     """
@@ -588,10 +588,10 @@ class LoadBalancer:
         self.current_index = 0
         
         # Track server load
-        self.request_counts = defaultdict(int)
-        self.response_times = defaultdict(list)
+        self.request_counts = defaultdict (int)
+        self.response_times = defaultdict (list)
     
-    def get_server(self) -> str:
+    def get_server (self) -> str:
         """
         Select server based on strategy
         """
@@ -602,38 +602,38 @@ class LoadBalancer:
         elif self.strategy == 'least_response_time':
             return self._least_response_time()
         elif self.strategy == 'random':
-            return random.choice(self.servers)
+            return random.choice (self.servers)
         else:
             return self.servers[0]
     
-    def _round_robin(self) -> str:
+    def _round_robin (self) -> str:
         """Round-robin selection"""
         server = self.servers[self.current_index]
-        self.current_index = (self.current_index + 1) % len(self.servers)
+        self.current_index = (self.current_index + 1) % len (self.servers)
         return server
     
-    def _least_connections(self) -> str:
+    def _least_connections (self) -> str:
         """Select server with fewest active connections"""
-        return min(self.servers, key=lambda s: self.request_counts[s])
+        return min (self.servers, key=lambda s: self.request_counts[s])
     
-    def _least_response_time(self) -> str:
+    def _least_response_time (self) -> str:
         """Select server with lowest average response time"""
-        def avg_response_time(server):
+        def avg_response_time (server):
             times = self.response_times[server]
-            return np.mean(times) if times else 0
+            return np.mean (times) if times else 0
         
-        return min(self.servers, key=avg_response_time)
+        return min (self.servers, key=avg_response_time)
     
-    def record_request(self, server: str, response_time_ms: float):
+    def record_request (self, server: str, response_time_ms: float):
         """Record request completion"""
         self.request_counts[server] += 1
-        self.response_times[server].append(response_time_ms)
+        self.response_times[server].append (response_time_ms)
         
         # Keep only recent 100 response times
-        if len(self.response_times[server]) > 100:
+        if len (self.response_times[server]) > 100:
             self.response_times[server] = self.response_times[server][-100:]
     
-    def get_stats(self) -> dict:
+    def get_stats (self) -> dict:
         """Get load balancer statistics"""
         stats = {}
         
@@ -642,8 +642,8 @@ class LoadBalancer:
             
             stats[server] = {
                 'requests': self.request_counts[server],
-                'avg_response_ms': np.mean(times) if times else 0,
-                'p95_response_ms': np.percentile(times, 95) if times else 0
+                'avg_response_ms': np.mean (times) if times else 0,
+                'p95_response_ms': np.percentile (times, 95) if times else 0
             }
         
         return stats
@@ -664,7 +664,7 @@ for i in range(1000):
     # Simulate variable response times
     response_time = np.random.uniform(10, 50)
     
-    lb.record_request(server, response_time)
+    lb.record_request (server, response_time)
 
 # Statistics
 stats = lb.get_stats()
@@ -681,7 +681,7 @@ print("\\n=== Strategy Comparison ===")
 strategies = ['round_robin', 'least_connections', 'random']
 
 for strategy in strategies:
-    lb_test = LoadBalancer(servers=['s1', 's2', 's3'], strategy=strategy)
+    lb_test = LoadBalancer (servers=['s1', 's2', 's3'], strategy=strategy)
     
     # Simulate uneven server performance
     server_latencies = {'s1': 20, 's2': 40, 's3': 60}  # ms
@@ -689,7 +689,7 @@ for strategy in strategies:
     for _ in range(1000):
         server = lb_test.get_server()
         latency = server_latencies[server] + np.random.uniform(-5, 5)
-        lb_test.record_request(server, latency)
+        lb_test.record_request (server, latency)
     
     stats = lb_test.get_stats()
     
@@ -727,7 +727,7 @@ class AutoScaler:
         self.current_instances = min_instances
         self.scale_history = []
     
-    def should_scale_up(self, cpu_percent: float, latency_ms: float) -> bool:
+    def should_scale_up (self, cpu_percent: float, latency_ms: float) -> bool:
         """
         Determine if should scale up
         """
@@ -736,7 +736,7 @@ class AutoScaler:
             latency_ms > self.target_latency
         ) and self.current_instances < self.max_instances
     
-    def should_scale_down(self, cpu_percent: float, latency_ms: float) -> bool:
+    def should_scale_down (self, cpu_percent: float, latency_ms: float) -> bool:
         """
         Determine if should scale down
         """
@@ -745,26 +745,26 @@ class AutoScaler:
             latency_ms < self.target_latency * 0.5
         ) and self.current_instances > self.min_instances
     
-    def scale(self, cpu_percent: float, latency_ms: float, requests_per_sec: float):
+    def scale (self, cpu_percent: float, latency_ms: float, requests_per_sec: float):
         """
         Make scaling decision
         """
         old_instances = self.current_instances
         
-        if self.should_scale_up(cpu_percent, latency_ms):
+        if self.should_scale_up (cpu_percent, latency_ms):
             # Scale up by 50%
             new_instances = min(
-                int(self.current_instances * 1.5),
+                int (self.current_instances * 1.5),
                 self.max_instances
             )
             self.current_instances = new_instances
             
             action = 'SCALE_UP'
         
-        elif self.should_scale_down(cpu_percent, latency_ms):
+        elif self.should_scale_down (cpu_percent, latency_ms):
             # Scale down by 25%
             new_instances = max(
-                int(self.current_instances * 0.75),
+                int (self.current_instances * 0.75),
                 self.min_instances
             )
             self.current_instances = new_instances
@@ -816,10 +816,10 @@ for minute in range(30):
         latency = np.random.uniform(40, 80)
         rps = np.random.uniform(200, 400)
     
-    scaler.scale(cpu, latency, rps)
+    scaler.scale (cpu, latency, rps)
 
 print(f"\\nFinal instances: {scaler.current_instances}")
-print(f"Scaling events: {len(scaler.scale_history)}")
+print(f"Scaling events: {len (scaler.scale_history)}")
 \`\`\`
 
 ---
@@ -838,11 +838,11 @@ import pstats
 from functools import wraps
 import time
 
-def profile(func):
+def profile (func):
     """
     Decorator to profile function
     """
-    @wraps(func)
+    @wraps (func)
     def wrapper(*args, **kwargs):
         profiler = cProfile.Profile()
         profiler.enable()
@@ -852,7 +852,7 @@ def profile(func):
         profiler.disable()
         
         # Print stats
-        stats = pstats.Stats(profiler)
+        stats = pstats.Stats (profiler)
         stats.sort_stats('cumulative')
         print(f"\\n=== Profile for {func.__name__} ===")
         stats.print_stats(10)  # Top 10 functions
@@ -863,32 +863,32 @@ def profile(func):
 
 
 @profile
-def expensive_prediction_pipeline(n_samples=1000):
+def expensive_prediction_pipeline (n_samples=1000):
     """
     Example prediction pipeline with bottlenecks
     """
     # Load data (slow)
-    data = np.random.randn(n_samples, 100)
+    data = np.random.randn (n_samples, 100)
     
     # Feature engineering (expensive)
     features = []
-    for i in range(n_samples):
+    for i in range (n_samples):
         row_features = []
         for j in range(100):
             # Expensive computation
-            row_features.append(np.sum(data[i] ** 2))
-        features.append(row_features)
+            row_features.append (np.sum (data[i] ** 2))
+        features.append (row_features)
     
-    features = np.array(features)
+    features = np.array (features)
     
     # Model prediction
-    predictions = model.predict(features)
+    predictions = model.predict (features)
     
     return predictions
 
 
 # Run profiled function
-# expensive_prediction_pipeline(n_samples=100)
+# expensive_prediction_pipeline (n_samples=100)
 
 print("Profiling example defined (uncomment to run)")
 \`\`\`
@@ -962,7 +962,7 @@ class RequestBatcher:
         self.queue = deque()
         self.processing = False
     
-    async def add_request(self, features: list) -> float:
+    async def add_request (self, features: list) -> float:
         """
         Add request to batch
         """
@@ -973,12 +973,12 @@ class RequestBatcher:
         
         # Start processing if not already
         if not self.processing:
-            asyncio.create_task(self._process_batch())
+            asyncio.create_task (self._process_batch())
         
         # Wait for result
         return await future
     
-    async def _process_batch(self):
+    async def _process_batch (self):
         """
         Process accumulated batch
         """
@@ -987,7 +987,7 @@ class RequestBatcher:
         # Wait for batch to accumulate or timeout
         start = time.time()
         
-        while len(self.queue) < self.batch_size:
+        while len (self.queue) < self.batch_size:
             await asyncio.sleep(0.001)  # 1ms
             
             # Timeout
@@ -1002,29 +1002,29 @@ class RequestBatcher:
         batch = []
         futures = []
         
-        while self.queue and len(batch) < self.batch_size:
+        while self.queue and len (batch) < self.batch_size:
             features, future = self.queue.popleft()
-            batch.append(features)
-            futures.append(future)
+            batch.append (features)
+            futures.append (future)
         
         # Process batch
-        batch_array = np.array(batch)
-        predictions = model.predict(batch_array)
+        batch_array = np.array (batch)
+        predictions = model.predict (batch_array)
         
         # Return results
-        for future, prediction in zip(futures, predictions):
-            future.set_result(prediction)
+        for future, prediction in zip (futures, predictions):
+            future.set_result (prediction)
         
         self.processing = False
         
         # Process next batch if queue not empty
         if self.queue:
-            asyncio.create_task(self._process_batch())
+            asyncio.create_task (self._process_batch())
 
 
 # Example usage
 async def test_batching():
-    batcher = RequestBatcher(batch_size=32, max_wait_ms=10)
+    batcher = RequestBatcher (batch_size=32, max_wait_ms=10)
     
     print("\\n=== Request Batching ===\\n")
     
@@ -1034,7 +1034,7 @@ async def test_batching():
     
     for i in range(100):
         task = batcher.add_request([np.random.randn() for _ in range(10)])
-        tasks.append(task)
+        tasks.append (task)
     
     # Wait for all
     results = await asyncio.gather(*tasks)
@@ -1047,7 +1047,7 @@ async def test_batching():
 
 
 # Run async example
-# asyncio.run(test_batching())
+# asyncio.run (test_batching())
 print("Batching example defined (uncomment to run)")
 \`\`\`
 

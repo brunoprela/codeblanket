@@ -26,7 +26,7 @@ export const apigatewaypatternsMultipleChoice: MultipleChoiceQuestion[] = [
       'Gateways are too slow to execute complex logic',
       'It violates separation of concerns and makes the gateway harder to maintain',
       'Gateways cannot access databases',
-      "It's impossible to test business logic in gateways",
+      "It\'s impossible to test business logic in gateways",
     ],
     correctAnswer: 1,
     explanation:

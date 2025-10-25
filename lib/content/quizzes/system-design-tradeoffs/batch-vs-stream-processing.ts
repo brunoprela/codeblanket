@@ -14,7 +14,7 @@ export const batchvsstreamprocessingQuiz = [
       'Must detect fraud within 1 second (before transaction completes)',
       'Batch processing too slow (fraud detected next day, money already stolen)',
       'Implementation: Kafka → Flink/Kafka Streams → Block/Approve',
-      'ROI: Stream processing cost ($7K/month) << Fraud prevented ($15M/month)',
+      'ROI: Stream processing cost (\$7K/month) << Fraud prevented (\$15M/month)',
     ],
   },
   {

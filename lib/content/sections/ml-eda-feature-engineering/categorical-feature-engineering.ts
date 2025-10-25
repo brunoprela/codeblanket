@@ -22,7 +22,7 @@ Categorical features (gender, country, product category) require special encodin
 
 ### Simple Ordinal Encoding
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
@@ -61,18 +61,18 @@ print(df[['quality', 'quality_encoded', 'size', 'size_encoded']])
 
 print("\\n✓ Use for ordinal features with natural ordering")
 print("⚠️  DON'T use for nominal features (model assumes order)")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## One-Hot Encoding
 
 ### Creating Binary Columns
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 print("\\nONE-HOT ENCODING")
 print("=" * 70)
 
 # One-hot encoding for nominal features (no natural order)
-df_onehot = pd.get_dummies(df, columns=['color'], prefix='color')
+df_onehot = pd.get_dummies (df, columns=['color'], prefix='color')
 
 print("\\nAfter One-Hot Encoding 'color':")
 print(df_onehot)
@@ -81,7 +81,7 @@ print("\\nOriginal shape:", df.shape)
 print("After one-hot shape:", df_onehot.shape)
 
 # Drop first column to avoid multicollinearity (dummy variable trap)
-df_onehot_dropped = pd.get_dummies(df, columns=['color'], 
+df_onehot_dropped = pd.get_dummies (df, columns=['color'], 
                                    prefix='color', drop_first=True)
 
 print("\\nWith drop_first=True (avoid multicollinearity):")
@@ -90,13 +90,13 @@ print(df_onehot_dropped[['color_Green', 'color_Red']])
 print("\\n✓ Use for nominal features (no order)")
 print("✓ Drop first column for linear models")
 print("⚠️  Creates many columns with high cardinality")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Target Encoding
 
 ### Mean/Frequency-Based Encoding
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 from category_encoders import TargetEncoder
 
 print("\\nTARGET ENCODING")
@@ -108,8 +108,8 @@ n = 1000
 
 categories = ['A', 'B', 'C', 'D', 'E']
 df_large = pd.DataFrame({
-    'category': np.random.choice(categories, n),
-    'value': np.random.randn(n)
+    'category': np.random.choice (categories, n),
+    'value': np.random.randn (n)
 })
 
 # Category 'A' tends to have higher target values
@@ -122,7 +122,7 @@ target_means = df_large.groupby('category')['value'].mean()
 print("\\nTarget Encoding (Mean per Category):")
 print(target_means)
 
-df_large['category_encoded'] = df_large['category'].map(target_means)
+df_large['category_encoded'] = df_large['category'].map (target_means)
 
 print("\\nOriginal vs Encoded:")
 print(df_large[['category', 'category_encoded', 'value']].head(10))
@@ -130,12 +130,12 @@ print(df_large[['category', 'category_encoded', 'value']].head(10))
 # Visualization
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-df_large.boxplot(column='value', by='category', ax=axes[0])
+df_large.boxplot (column='value', by='category', ax=axes[0])
 axes[0].set_title('Target Value by Category')
 axes[0].set_xlabel('Category')
 axes[0].set_ylabel('Target Value')
 
-axes[1].scatter(df_large['category_encoded'], df_large['value'], alpha=0.5)
+axes[1].scatter (df_large['category_encoded'], df_large['value'], alpha=0.5)
 axes[1].set_xlabel('Category Encoded (Mean Target)')
 axes[1].set_ylabel('Target Value')
 axes[1].set_title('Target Encoding Relationship')
@@ -146,21 +146,21 @@ plt.show()
 
 print("\\n✓ Powerful for high-cardinality features")
 print("⚠️  Risk of target leakage - use with cross-validation!")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Frequency Encoding
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 print("\\nFREQUENCY ENCODING")
 print("=" * 70)
 
 # Count frequency of each category
 freq_map = df_large['category'].value_counts().to_dict()
 
-df_large['category_freq'] = df_large['category'].map(freq_map)
+df_large['category_freq'] = df_large['category'].map (freq_map)
 
 print("\\nFrequency Encoding:")
-print(df_large.groupby('category')['category_freq'].first().sort_values(ascending=False))
+print(df_large.groupby('category')['category_freq'].first().sort_values (ascending=False))
 
 print("\\nSample data:")
 print(df_large[['category', 'category_freq']].head(10))
@@ -168,12 +168,12 @@ print(df_large[['category', 'category_freq']].head(10))
 print("\\n✓ Simple and effective")
 print("✓ No risk of target leakage")
 print("✓ Good for tree-based models")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Handling High Cardinality
 
-\\\\\`\\\\\`\\\\\`python
-def handle_high_cardinality(df, column, target, top_n=10, method='target'):
+\\\`\\\`\\\`python
+def handle_high_cardinality (df, column, target, top_n=10, method='target'):
     """Handle categorical features with many unique values"""
     
     print(f"\\nHANDLING HIGH CARDINALITY: {column}")
@@ -184,24 +184,24 @@ def handle_high_cardinality(df, column, target, top_n=10, method='target'):
     
     if n_unique <= top_n:
         print(f"✓ Low cardinality - use one-hot encoding")
-        return pd.get_dummies(df, columns=[column], prefix=column)
+        return pd.get_dummies (df, columns=[column], prefix=column)
     
     print(f"⚠️  High cardinality - using grouping strategy")
     
     # Strategy 1: Keep top N, group rest as "Other"
-    top_categories = df[column].value_counts().head(top_n).index
+    top_categories = df[column].value_counts().head (top_n).index
     df[f'{column}_grouped'] = df[column].apply(
         lambda x: x if x in top_categories else 'Other'
     )
     
     # Strategy 2: Target encoding for high cardinality
     if method == 'target' and target in df.columns:
-        target_means = df.groupby(column)[target].mean()
-        df[f'{column}_target_encoded'] = df[column].map(target_means)
+        target_means = df.groupby (column)[target].mean()
+        df[f'{column}_target_encoded'] = df[column].map (target_means)
     
     # Strategy 3: Frequency encoding
     freq_map = df[column].value_counts().to_dict()
-    df[f'{column}_freq'] = df[column].map(freq_map)
+    df[f'{column}_freq'] = df[column].map (freq_map)
     
     print(f"\\n✓ Created grouped version (top {top_n} + Other)")
     print(f"✓ Created target encoding")
@@ -225,11 +225,11 @@ df_encoded = handle_high_cardinality(
 
 print("\\nResult columns:")
 print([col for col in df_encoded.columns if 'country' in col])
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Binary Encoding
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 print("\\nBINARY ENCODING")
 print("=" * 70)
 
@@ -239,14 +239,14 @@ from category_encoders import BinaryEncoder
 
 categories_list = [f'cat_{i}' for i in range(20)]
 df_binary = pd.DataFrame({
-    'category': np.random.choice(categories_list, 100)
+    'category': np.random.choice (categories_list, 100)
 })
 
-encoder = BinaryEncoder(cols=['category'])
-df_binary_encoded = encoder.fit_transform(df_binary)
+encoder = BinaryEncoder (cols=['category'])
+df_binary_encoded = encoder.fit_transform (df_binary)
 
 print(f"\\nOriginal unique values: {df_binary['category'].nunique()}")
-print(f"Binary encoded columns: {len(df_binary_encoded.columns)}")
+print(f"Binary encoded columns: {len (df_binary_encoded.columns)}")
 print(f"\\nBinary encoding uses log2(n) columns instead of n")
 print(f"For 20 categories: log2(20) ≈ 5 columns instead of 20")
 
@@ -255,11 +255,11 @@ print(df_binary_encoded.head(10))
 
 print("\\n✓ Reduces dimensionality for high cardinality")
 print("✓ Maintains some ordinal information")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Embeddings for Categorical Features
 
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 print("\\nEMBEDDINGS (Entity Embeddings)")
 print("=" * 70)
 
@@ -288,23 +288,23 @@ EXAMPLE USE CASES:
 - Any high-cardinality nominal feature
 
 CODE EXAMPLE:
-\\\\\`\\\\\`\\\\\`python
+\\\`\\\`\\\`python
 from tensorflow.keras.layers import Input, Embedding, Flatten
 from tensorflow.keras.models import Model
 
 # Input for categorical feature
-cat_input = Input(shape=(1,))
+cat_input = Input (shape=(1,))
 
 # Embedding layer: vocab_size categories → embedding_dim dimensions
-embedding = Embedding(input_dim=1000, output_dim=10)(cat_input)
+embedding = Embedding (input_dim=1000, output_dim=10)(cat_input)
 flat = Flatten()(embedding)
 
 # Use in larger model...
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 """)
 
 print("\\n✓ Most powerful for high-cardinality features in deep learning")
-\\\\\`\\\\\`\\\\\`
+\\\`\\\`\\\`
 
 ## Key Takeaways
 

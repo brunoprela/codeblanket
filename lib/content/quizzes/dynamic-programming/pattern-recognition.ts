@@ -24,7 +24,7 @@ export const patternrecognitionQuiz = [
       'Explain the difference between counting DP and optimization DP. How does this affect your state definition?',
     hint: 'Think about what you are accumulating in your dp array.',
     sampleAnswer:
-      'Counting DP counts number of ways to achieve something. State stores count, recurrence sums up counts from different paths. Example: "How many ways to climb n stairs?" dp[i] = dp[i-1] + dp[i-2] (sum). Optimization DP finds maximum or minimum. State stores best value, recurrence picks best option. Example: "Maximum money robbing houses?" dp[i] = max(dp[i-1], dp[i-2]+nums[i]) (max). The key difference: counting uses sum/addition to combine paths, optimization uses min/max to pick best path. This affects state definition - counting needs count type, optimization needs value type that you are optimizing.',
+      'Counting DP counts number of ways to achieve something. State stores count, recurrence sums up counts from different paths. Example: "How many ways to climb n stairs?" dp[i] = dp[i-1] + dp[i-2] (sum). Optimization DP finds maximum or minimum. State stores best value, recurrence picks best option. Example: "Maximum money robbing houses?" dp[i] = max (dp[i-1], dp[i-2]+nums[i]) (max). The key difference: counting uses sum/addition to combine paths, optimization uses min/max to pick best path. This affects state definition - counting needs count type, optimization needs value type that you are optimizing.',
     keyPoints: [
       'Counting DP: accumulates number of ways (sum)',
       'Optimization DP: finds best value (min/max)',

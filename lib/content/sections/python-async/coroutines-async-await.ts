@@ -41,7 +41,7 @@ async def async_main():
     print(f"Async: {time.time() - start:.2f}s")  # ~1.00s
 
 sync_main()
-asyncio.run(async_main())
+asyncio.run (async_main())
 
 # 3× speedup with just async/await!
 \`\`\`
@@ -107,8 +107,8 @@ async def example_coroutine():
 
 # Create coroutine object (doesn't execute yet)
 coro = example_coroutine()
-print(f"Type: {type(coro)}")  # <class 'coroutine'>
-print(f"State: {inspect.getcoroutinestate(coro)}")  # CORO_CREATED
+print(f"Type: {type (coro)}")  # <class 'coroutine'>
+print(f"State: {inspect.getcoroutinestate (coro)}")  # CORO_CREATED
 
 # Coroutine object is waiting to be executed
 # Need to either:
@@ -117,7 +117,7 @@ print(f"State: {inspect.getcoroutinestate(coro)}")  # CORO_CREATED
 # 3. create a Task from it
 
 # Execute it
-result = asyncio.run(coro)
+result = asyncio.run (coro)
 print(f"Result: {result}")
 
 # States during lifecycle:
@@ -141,7 +141,7 @@ Defining Coroutines with async def
 """
 
 # Define a coroutine
-async def greet(name):
+async def greet (name):
     """A simple coroutine"""
     return f"Hello, {name}!"
 
@@ -150,7 +150,7 @@ coro = greet("Alice")
 print(coro)  # <coroutine object greet at 0x...>
 
 # To actually execute it:
-result = asyncio.run(coro)
+result = asyncio.run (coro)
 print(result)  # "Hello, Alice!"
 
 # Warning: Forgetting to await a coroutine
@@ -163,7 +163,7 @@ async def good_example():
     result = await greet("Bob")  # ✅ Correct!
     print(result)  # Prints: "Hello, Bob!"
 
-asyncio.run(good_example())
+asyncio.run (good_example())
 \`\`\`
 
 ### Coroutine Function Characteristics
@@ -179,13 +179,13 @@ async def async_function():
 
 # Check if it's a coroutine function
 import asyncio
-print(asyncio.iscoroutinefunction(async_function))  # True
+print(asyncio.iscoroutinefunction (async_function))  # True
 
 # Regular function
 def regular_function():
     return 42
 
-print(asyncio.iscoroutinefunction(regular_function))  # False
+print(asyncio.iscoroutinefunction (regular_function))  # False
 
 # Coroutine functions can:
 # 1. Use 'await' expressions
@@ -206,7 +206,7 @@ async def full_featured_coroutine():
     
     # async for
     async for item in async_generator():
-        process(item)
+        process (item)
     
     # Regular Python code
     result = compute_something()
@@ -224,28 +224,28 @@ Migration Pattern: Sync to Async
 # Original synchronous code
 import requests
 
-def fetch_user(user_id):
-    response = requests.get(f"https://api.example.com/users/{user_id}")
+def fetch_user (user_id):
+    response = requests.get (f"https://api.example.com/users/{user_id}")
     return response.json()
 
-def get_users(user_ids):
-    return [fetch_user(uid) for uid in user_ids]
+def get_users (user_ids):
+    return [fetch_user (uid) for uid in user_ids]
 
 # Time: N × request_time (sequential)
 
 # Converted to async
 import aiohttp
 
-async def fetch_user(user_id):
+async def fetch_user (user_id):
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"https://api.example.com/users/{user_id}") as response:
+        async with session.get (f"https://api.example.com/users/{user_id}") as response:
             return await response.json()
 
-async def get_users(user_ids):
-    tasks = [fetch_user(uid) for uid in user_ids]
+async def get_users (user_ids):
+    tasks = [fetch_user (uid) for uid in user_ids]
     return await asyncio.gather(*tasks)
 
-# Time: max(request_times) (concurrent!)
+# Time: max (request_times) (concurrent!)
 
 # Pattern: Add 'async' to def, add 'await' to I/O operations
 \`\`\`
@@ -275,7 +275,7 @@ async def main():
 
 # 2. Tasks
 async def main():
-    task = asyncio.create_task(my_coroutine())
+    task = asyncio.create_task (my_coroutine())
     result = await task  # ✅ Can await tasks
     print(result)
 
@@ -298,7 +298,7 @@ async def bad_example():
     result = await regular_function()  # ❌ TypeError!
     # TypeError: object 'str' can't be used in 'await' expression
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### await Behavior
@@ -339,8 +339,8 @@ async def concurrent():
     start = time.time()
     
     # Start both without waiting
-    task1 = asyncio.create_task(step1())
-    task2 = asyncio.create_task(step2())
+    task1 = asyncio.create_task (step1())
+    task2 = asyncio.create_task (step2())
     
     # Now wait for both
     result1 = await task1  # Waits ~1s (both run concurrently)
@@ -350,8 +350,8 @@ async def concurrent():
     print(f"Concurrent: {elapsed:.2f}s")  # ~1.0s
     return result1, result2
 
-asyncio.run(sequential())
-asyncio.run(concurrent())
+asyncio.run (sequential())
+asyncio.run (concurrent())
 
 # Output:
 # Sequential: step1 then step2 = 1.5s
@@ -409,7 +409,7 @@ async def passthrough():
 
 # - 'just return': NEVER for coroutines (wrong!)
 
-asyncio.run(test())
+asyncio.run (test())
 \`\`\`
 
 ---
@@ -427,9 +427,9 @@ Async Generators with async def + yield
 
 import asyncio
 
-async def async_range(count):
+async def async_range (count):
     """Async version of range()"""
-    for i in range(count):
+    for i in range (count):
         await asyncio.sleep(0.1)  # Simulate async operation
         yield i
 
@@ -438,7 +438,7 @@ async def main():
     async for value in async_range(5):
         print(f"  Got: {value}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Iterating async generator:
@@ -459,12 +459,12 @@ Real-World Async Generator: Data Streaming
 import asyncio
 import aiohttp
 
-async def fetch_pages(urls):
+async def fetch_pages (urls):
     """Stream webpage contents as they're fetched"""
     async with aiohttp.ClientSession() as session:
         for url in urls:
             try:
-                async with session.get(url) as response:
+                async with session.get (url) as response:
                     content = await response.text()
                     yield (url, content)
             except Exception as e:
@@ -477,8 +477,8 @@ async def main():
         "https://httpbin.org/delay/3",
     ]
     
-    async for url, content in fetch_pages(urls):
-        print(f"Fetched {url}: {len(content)} bytes")
+    async for url, content in fetch_pages (urls):
+        print(f"Fetched {url}: {len (content)} bytes")
 
 # Fetched https://httpbin.org/delay/1: ... (after 1s)
 # Fetched https://httpbin.org/delay/2: ... (after 3s total)
@@ -496,9 +496,9 @@ Async Generator Expressions (Python 3.6+)
 
 import asyncio
 
-async def async_squares(n):
+async def async_squares (n):
     """Generate squares asynchronously"""
-    for i in range(n):
+    for i in range (n):
         await asyncio.sleep(0.1)
         yield i ** 2
 
@@ -509,17 +509,17 @@ async def main():
     async for value in gen:
         print(value)
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output: 9, 16 (values > 5)
 
 # Use case: Filter async streams
-async def filter_large_files(file_paths):
+async def filter_large_files (file_paths):
     """Yield only files larger than 1MB"""
     return (
         path 
-        async for path in async_scan_files(file_paths)
-        if (await async_get_size(path)) > 1_000_000
+        async for path in async_scan_files (file_paths)
+        if (await async_get_size (path)) > 1_000_000
     )
 \`\`\`
 
@@ -538,8 +538,8 @@ Async Comprehensions (Python 3.6+)
 
 import asyncio
 
-async def async_range(count):
-    for i in range(count):
+async def async_range (count):
+    for i in range (count):
         await asyncio.sleep(0.1)
         yield i
 
@@ -560,7 +560,7 @@ async def main():
     unique = {x % 3 async for x in async_range(10)}
     print(f"Unique: {unique}")  # {0, 1, 2}
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### await in Comprehensions
@@ -573,12 +573,12 @@ Using await Inside Comprehensions
 import asyncio
 import aiohttp
 
-async def fetch_size(url):
+async def fetch_size (url):
     """Fetch URL and return content size"""
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
+        async with session.get (url) as response:
             content = await response.text()
-            return len(content)
+            return len (content)
 
 async def main():
     urls = [
@@ -588,11 +588,11 @@ async def main():
     ]
     
     # ❌ Wrong: This runs sequentially!
-    sizes_sequential = [await fetch_size(url) for url in urls]
+    sizes_sequential = [await fetch_size (url) for url in urls]
     # Each await blocks before starting next
     
     # ✅ Correct: Create tasks, then gather
-    sizes_concurrent = await asyncio.gather(*[fetch_size(url) for url in urls])
+    sizes_concurrent = await asyncio.gather(*[fetch_size (url) for url in urls])
     # All fetches start immediately, wait for all to complete
     
     print(f"Sequential: {sizes_sequential}")
@@ -612,9 +612,9 @@ Async Comprehension for Batch Processing
 import asyncio
 import aiohttp
 
-async def process_user(session, user_id):
+async def process_user (session, user_id):
     """Fetch and process user data"""
-    async with session.get(f"https://api.example.com/users/{user_id}") as response:
+    async with session.get (f"https://api.example.com/users/{user_id}") as response:
         user = await response.json()
         return {
             'id': user_id,
@@ -627,14 +627,14 @@ async def main():
     
     async with aiohttp.ClientSession() as session:
         # Process all users concurrently
-        tasks = [process_user(session, uid) for uid in user_ids]
+        tasks = [process_user (session, uid) for uid in user_ids]
         users = await asyncio.gather(*tasks)
     
     # Filter using list comprehension (sync, already have data)
     verified_users = [u for u in users if u.get('verified')]
     
-    print(f"Processed {len(users)} users")
-    print(f"Verified: {len(verified_users)}")
+    print(f"Processed {len (users)} users")
+    print(f"Verified: {len (verified_users)}")
 
 # 100 users fetched concurrently in ~1 second
 # vs 50-100 seconds sequentially
@@ -653,7 +653,7 @@ Running Multiple Coroutines Concurrently
 
 import asyncio
 
-async def fetch_data(source):
+async def fetch_data (source):
     await asyncio.sleep(1)
     return f"data from {source}"
 
@@ -682,7 +682,7 @@ Error Handling in Async Code
 
 import asyncio
 
-async def risky_operation(will_fail=False):
+async def risky_operation (will_fail=False):
     await asyncio.sleep(0.5)
     if will_fail:
         raise ValueError("Operation failed!")
@@ -691,20 +691,20 @@ async def risky_operation(will_fail=False):
 async def main():
     # Try/except works normally
     try:
-        result = await risky_operation(will_fail=True)
+        result = await risky_operation (will_fail=True)
     except ValueError as e:
         print(f"Caught: {e}")
     
     # With gather, use return_exceptions=True
     results = await asyncio.gather(
-        risky_operation(will_fail=False),
-        risky_operation(will_fail=True),
-        risky_operation(will_fail=False),
+        risky_operation (will_fail=False),
+        risky_operation (will_fail=True),
+        risky_operation (will_fail=False),
         return_exceptions=True,  # Don't stop on first error
     )
     
-    for i, result in enumerate(results):
-        if isinstance(result, Exception):
+    for i, result in enumerate (results):
+        if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
         else:
             print(f"Task {i} succeeded: {result}")
@@ -732,7 +732,7 @@ async def slow_operation():
 async def main():
     try:
         # Wait at most 2 seconds
-        result = await asyncio.wait_for(slow_operation(), timeout=2.0)
+        result = await asyncio.wait_for (slow_operation(), timeout=2.0)
     except asyncio.TimeoutError:
         print("Operation timed out!")
     
@@ -749,11 +749,11 @@ async def main():
         print("Batch timed out!")
 
 # Use case: API requests with timeout
-async def fetch_with_timeout(url, timeout=5.0):
+async def fetch_with_timeout (url, timeout=5.0):
     async with aiohttp.ClientSession() as session:
         try:
-            async with asyncio.timeout(timeout):  # Python 3.11+
-                async with session.get(url) as response:
+            async with asyncio.timeout (timeout):  # Python 3.11+
+                async with session.get (url) as response:
                     return await response.json()
         except asyncio.TimeoutError:
             return {"error": "Request timed out"}
@@ -820,7 +820,7 @@ async def test():
     
     print(f"Bad: {time.time() - start:.2f}s")  # ~6.0s (sequential!)
 
-asyncio.run(test())
+asyncio.run (test())
 
 # Even though using asyncio.gather, time.sleep() blocks!
 # Result: 6 seconds (2+2+2) instead of 2 seconds
@@ -846,7 +846,7 @@ def sync_function():
     result = await async_function()  # SyntaxError: await outside async function
     
     # ✅ Correct way: Create event loop
-    result = asyncio.run(async_function())  # Works, but creates new loop
+    result = asyncio.run (async_function())  # Works, but creates new loop
     
     # ✅ Or use run_in_executor to call sync from async context
     # (Reverse: call sync from async)
@@ -898,10 +898,10 @@ async def my_coroutine():
 result = await my_coroutine()
 
 # Run multiple concurrently
-results = await asyncio.gather(coro1(), coro2(), coro3())
+results = await asyncio.gather (coro1(), coro2(), coro3())
 
 # With timeout
-result = await asyncio.wait_for(my_coroutine(), timeout=5.0)
+result = await asyncio.wait_for (my_coroutine(), timeout=5.0)
 
 # Async generator
 async def gen():

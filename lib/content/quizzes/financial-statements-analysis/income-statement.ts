@@ -1,9 +1,9 @@
 export const incomeStatementDiscussionQuestions = [
-  {
-      id: 1,
-      question:
-        "You're building a machine learning model to predict quarterly earnings surprises (actual EPS vs analyst estimates). Design a feature engineering pipeline that extracts predictive signals from income statements. What features would you create from the revenue, expense, and margin data? How would you handle seasonality, one-time items, and the fact that companies can manage earnings to meet targets?",
-      answer: `A sophisticated earnings prediction model requires careful feature engineering that captures both fundamental trends and potential earnings management:
+    {
+        id: 1,
+        question:
+            "You're building a machine learning model to predict quarterly earnings surprises (actual EPS vs analyst estimates). Design a feature engineering pipeline that extracts predictive signals from income statements. What features would you create from the revenue, expense, and margin data? How would you handle seasonality, one-time items, and the fact that companies can manage earnings to meet targets?",
+        answer: `A sophisticated earnings prediction model requires careful feature engineering that captures both fundamental trends and potential earnings management:
 
 **1. Core Financial Features**
 
@@ -18,7 +18,7 @@ class IncomeStatementFeatureEngine:
     def __init__(self, lookback_periods: int = 8):
         self.lookback = lookback_periods
     
-    def create_features(self, company_data: pd.DataFrame) -> pd.DataFrame:
+    def create_features (self, company_data: pd.DataFrame) -> pd.DataFrame:
         """
         Generate comprehensive feature set.
         
@@ -31,26 +31,26 @@ class IncomeStatementFeatureEngine:
         df = company_data.sort_values('period_end').copy()
         
         # 1. Growth Features (YoY and QoQ)
-        df = self._add_growth_features(df)
+        df = self._add_growth_features (df)
         
         # 2. Margin Features and Trends
-        df = self._add_margin_features(df)
+        df = self._add_margin_features (df)
         
         # 3. Quality Metrics
-        df = self._add_quality_features(df)
+        df = self._add_quality_features (df)
         
         # 4. Seasonality Features
-        df = self._add_seasonality_features(df)
+        df = self._add_seasonality_features (df)
         
         # 5. Earnings Management Indicators
-        df = self._add_em_features(df)
+        df = self._add_em_features (df)
         
         # 6. Momentum and Acceleration
-        df = self._add_momentum_features(df)
+        df = self._add_momentum_features (df)
         
         return df
     
-    def _add_growth_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_growth_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Growth rates and acceleration."""
         
         # Quarter-over-quarter growth
@@ -72,7 +72,7 @@ class IncomeStatementFeatureEngine:
         
         return df
     
-    def _add_margin_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_margin_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Margin calculations and trends."""
         
         # Current margins
@@ -97,7 +97,7 @@ class IncomeStatementFeatureEngine:
         
         return df
     
-    def _add_quality_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_quality_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Revenue and earnings quality indicators."""
         
         # Days Sales Outstanding
@@ -121,7 +121,7 @@ class IncomeStatementFeatureEngine:
         
         return df
     
-    def _add_seasonality_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_seasonality_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Capture seasonal patterns."""
         
         # Extract quarter
@@ -140,14 +140,14 @@ class IncomeStatementFeatureEngine:
         
         return df
     
-    def _add_em_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_em_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Earnings management detection features."""
         
         # 1. Unusual accruals (earnings management indicator)
         if 'accruals_ratio' in df.columns:
             # High accruals relative to history = potential EM
             df['accruals_percentile'] = df['accruals_ratio'].rolling(8).apply(
-                lambda x: pd.Series(x).rank(pct=True).iloc[-1]
+                lambda x: pd.Series (x).rank (pct=True).iloc[-1]
             )
         
         # 2. "Just beat" indicator (suspiciously close to estimates)
@@ -177,7 +177,7 @@ class IncomeStatementFeatureEngine:
         
         return df
     
-    def _add_momentum_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _add_momentum_features (self, df: pd.DataFrame) -> pd.DataFrame:
         """Momentum and mean reversion features."""
         
         # Revenue momentum (consecutive beats)
@@ -209,7 +209,7 @@ class IncomeStatementFeatureEngine:
 **2. Handling Seasonality**
 
 \`\`\`python
-def adjust_for_seasonality(df: pd.DataFrame, target_col: str) -> pd.Series:
+def adjust_for_seasonality (df: pd.DataFrame, target_col: str) -> pd.Series:
     """
     Remove seasonal component using additive decomposition.
     Critical for retail, travel, holiday-driven businesses.
@@ -228,7 +228,7 @@ def adjust_for_seasonality(df: pd.DataFrame, target_col: str) -> pd.Series:
     return df[target_col] - decomposition.seasonal
 
 # Feature: Seasonally-adjusted revenue growth
-df['revenue_sa'] = adjust_for_seasonality(df, 'revenue')
+df['revenue_sa'] = adjust_for_seasonality (df, 'revenue')
 df['revenue_growth_sa'] = df['revenue_sa'].pct_change()
 \`\`\`
 
@@ -238,7 +238,7 @@ df['revenue_growth_sa'] = df['revenue_sa'].pct_change()
 class OneTimeItemDetector:
     """Identify and adjust for non-recurring items."""
     
-    def detect_one_time_items(self, df: pd.DataFrame) -> pd.DataFrame:
+    def detect_one_time_items (self, df: pd.DataFrame) -> pd.DataFrame:
         """Flag unusual items that may distort comparisons."""
         
         # 1. Statistical outliers
@@ -284,7 +284,7 @@ Companies can "manage" earnings to hit targets. Detect this:
 class EarningsManagementDetector:
     """Detect potential earnings manipulation."""
     
-    def calculate_beneish_m_score(self, current: Dict, prior: Dict) -> float:
+    def calculate_beneish_m_score (self, current: Dict, prior: Dict) -> float:
         """
         Beneish M-Score: Probability of earnings manipulation.
         M-Score > -2.22 suggests potential manipulation.
@@ -330,7 +330,7 @@ class EarningsManagementDetector:
         
         return m_score
     
-    def assess_em_risk(self, m_score: float) -> str:
+    def assess_em_risk (self, m_score: float) -> str:
         """Interpret M-Score."""
         if m_score > -2.22:
             return "HIGH RISK - Likely manipulator"
@@ -368,7 +368,7 @@ class EarningsSurprisePredictor:
             'revenue_growth_zscore', 'is_q1', 'is_q2', 'is_q3', 'is_q4'
         ]
     
-    def train(self, historical_data: pd.DataFrame, analyst_estimates: pd.DataFrame):
+    def train (self, historical_data: pd.DataFrame, analyst_estimates: pd.DataFrame):
         """
         Train model to predict earnings surprises.
         
@@ -376,10 +376,10 @@ class EarningsSurprisePredictor:
         """
         
         # Generate features
-        features = self.feature_engine.create_features(historical_data)
+        features = self.feature_engine.create_features (historical_data)
         
         # Merge with analyst estimates
-        data = features.merge(analyst_estimates, on='period_end')
+        data = features.merge (analyst_estimates, on='period_end')
         
         # Calculate actual surprise
         data['eps_surprise_pct'] = (
@@ -391,7 +391,7 @@ class EarningsSurprisePredictor:
         y = data.loc[X.index, 'eps_surprise_pct']
         
         # Time series cross-validation (no lookahead!)
-        tscv = TimeSeriesSplit(n_splits=5)
+        tscv = TimeSeriesSplit (n_splits=5)
         
         scores = []
         for train_idx, test_idx in tscv.split(X):
@@ -400,9 +400,9 @@ class EarningsSurprisePredictor:
             
             self.model.fit(X_train, y_train)
             score = self.model.score(X_test, y_test)
-            scores.append(score)
+            scores.append (score)
         
-        print(f"Cross-validated R²: {np.mean(scores):.3f}")
+        print(f"Cross-validated R²: {np.mean (scores):.3f}")
         
         # Final model on all data
         self.model.fit(X, y)
@@ -416,13 +416,13 @@ class EarningsSurprisePredictor:
     ) -> Dict:
         """Predict if company will beat/miss earnings."""
         
-        features = self.feature_engine.create_features(current_financials)
+        features = self.feature_engine.create_features (current_financials)
         X = features[self.feature_cols].iloc[-1:].dropna()
         
         predicted_surprise_pct = self.model.predict(X)[0]
         
         # Feature importance
-        importance = dict(zip(
+        importance = dict (zip(
             self.feature_cols,
             self.model.feature_importances_
         ))
@@ -460,10 +460,10 @@ This approach has been used successfully by quantitative hedge funds to generate
     },
 
     {
-      id: 2,
-      question:
-        "Design a system to automatically classify operating expenses (SG&A, R&D, etc.) from unstructured 10-K text when companies don't break them out clearly. You have the full text of the filing but line items are aggregated or described inconsistently. How would you extract and normalize these figures across thousands of companies with different reporting formats?",
-      answer: `Building a robust expense classification system requires combining NLP, accounting knowledge, and pattern matching:
+        id: 2,
+        question:
+            "Design a system to automatically classify operating expenses (SG&A, R&D, etc.) from unstructured 10-K text when companies don't break them out clearly. You have the full text of the filing but line items are aggregated or described inconsistently. How would you extract and normalize these figures across thousands of companies with different reporting formats?",
+        answer: `Building a robust expense classification system requires combining NLP, accounting knowledge, and pattern matching:
 
 **1. System Architecture**
 
@@ -493,7 +493,7 @@ class ExpenseClassificationSystem:
         self.category_keywords = self._load_category_keywords()
         self.ml_classifier = None  # Trained ML model
         
-    def process_filing(self, filing_text: str, cik: str) -> Dict:
+    def process_filing (self, filing_text: str, cik: str) -> Dict:
         """
         Full pipeline to extract and classify expenses.
         
@@ -506,22 +506,22 @@ class ExpenseClassificationSystem:
         """
         
         # Step 1: Find income statement
-        income_stmt_text = self._extract_income_statement(filing_text)
+        income_stmt_text = self._extract_income_statement (filing_text)
         
         # Step 2: Parse line items
-        line_items = self._extract_line_items(income_stmt_text)
+        line_items = self._extract_line_items (income_stmt_text)
         
         # Step 3: Classify each
         classified_items = []
         for item in line_items:
-            category = self._classify_expense(item)
-            classified_items.append(category)
+            category = self._classify_expense (item)
+            classified_items.append (category)
         
         # Step 4: Aggregate
-        aggregated = self._aggregate_by_category(classified_items)
+        aggregated = self._aggregate_by_category (classified_items)
         
         # Step 5: Validate
-        validation = self._validate_classification(aggregated, filing_text)
+        validation = self._validate_classification (aggregated, filing_text)
         
         return {
             'cik': cik,
@@ -530,24 +530,24 @@ class ExpenseClassificationSystem:
             'validation': validation
         }
     
-    def _compile_amount_patterns(self) -> List[re.Pattern]:
+    def _compile_amount_patterns (self) -> List[re.Pattern]:
         """Regex patterns to extract dollar amounts."""
         
         return [
             # Parentheses notation: $(1,234) or (1,234)
-            re.compile(r'\\$?\\(([\\d,]+)\\)'),
+            re.compile (r'\\$?\\(([\\d,]+)\\)'),
             
             # Dollar sign: $1,234 or $1,234.5
-            re.compile(r'\\$([\\d,]+\\.?\\d*)'),
+            re.compile (r'\\$([\\d,]+\\.?\\d*)'),
             
             # No dollar sign: 1,234 or 1234
-            re.compile(r'([\\d,]{4,})'),
+            re.compile (r'([\\d,]{4,})'),
             
             # With millions/thousands notation
-            re.compile(r'([\\d,]+\\.?\\d*)\\s*(?:million|thousand)', re.I),
+            re.compile (r'([\\d,]+\\.?\\d*)\\s*(?:million|thousand)', re.I),
         ]
     
-    def _load_category_keywords(self) -> Dict[str, List[str]]:
+    def _load_category_keywords (self) -> Dict[str, List[str]]:
         """Keyword dictionary for each expense category."""
         
         return {
@@ -583,7 +583,7 @@ class ExpenseClassificationSystem:
             ]
         }
     
-    def _extract_income_statement(self, filing_text: str) -> str:
+    def _extract_income_statement (self, filing_text: str) -> str:
         """Locate income statement section in 10-K."""
         
         # Common section headers
@@ -605,7 +605,7 @@ class ExpenseClassificationSystem:
                     r'The accompanying notes are an integral part'
                 ]
                 
-                end = len(filing_text)
+                end = len (filing_text)
                 for end_pattern in end_patterns:
                     end_match = re.search(
                         end_pattern,
@@ -620,27 +620,27 @@ class ExpenseClassificationSystem:
         
         return ""  # Not found
     
-    def _extract_line_items(self, text: str) -> List[Dict]:
+    def _extract_line_items (self, text: str) -> List[Dict]:
         """Parse line items from income statement text."""
         
         lines = text.split('\\n')
         line_items = []
         
-        for i, line in enumerate(lines):
+        for i, line in enumerate (lines):
             # Skip if line doesn't contain numbers
-            if not any(char.isdigit() for char in line):
+            if not any (char.isdigit() for char in line):
                 continue
             
             # Extract amounts
-            amounts = self._parse_amounts(line)
+            amounts = self._parse_amounts (line)
             if not amounts:
                 continue
             
             # Extract description (text before amount)
-            description = self._extract_description(line, amounts[0])
+            description = self._extract_description (line, amounts[0])
             
             # Skip if it's a header or total line
-            if self._is_header_or_total(description):
+            if self._is_header_or_total (description):
                 continue
             
             line_items.append({
@@ -652,7 +652,7 @@ class ExpenseClassificationSystem:
         
         return line_items
     
-    def _parse_amounts(self, line: str) -> List[float]:
+    def _parse_amounts (self, line: str) -> List[float]:
         """Extract all monetary amounts from a line."""
         
         amounts = []
@@ -670,28 +670,28 @@ class ExpenseClassificationSystem:
         
         return amounts
     
-    def _extract_description(self, line: str, first_amount: float) -> str:
+    def _extract_description (self, line: str, first_amount: float) -> str:
         """Extract descriptive text before the first amount."""
         
         # Find position of first amount
         amount_str = f"{first_amount:,.0f}"
         
         # Try different formats
-        for fmt in [amount_str, f"${amount_str}", f"({amount_str})"]:
-            pos = line.find(fmt)
+        for fmt in [amount_str, f"\${amount_str}", f"({amount_str})"]:
+            pos = line.find (fmt)
             if pos > 0:
                 return line[:pos]
         
         # Fallback: take first half of line
-        return line[:len(line)//2]
+        return line[:len (line)//2]
     
-    def _is_header_or_total(self, text: str) -> bool:
+    def _is_header_or_total (self, text: str) -> bool:
         """Check if line is a header or total line."""
         
         text_lower = text.lower()
         
         # Headers
-        if any(h in text_lower for h in ['year ended', 'three months', 'quarter ended']):
+        if any (h in text_lower for h in ['year ended', 'three months', 'quarter ended']):
             return True
         
         # Totals (but not "total operating expenses")
@@ -708,7 +708,7 @@ class ExpenseClassificationSystem:
         
         return False
     
-    def _classify_expense(self, line_item: Dict) -> ExpenseLineItem:
+    def _classify_expense (self, line_item: Dict) -> ExpenseLineItem:
         """
         Classify expense line item into category.
         
@@ -721,7 +721,7 @@ class ExpenseClassificationSystem:
         description = line_item['description'].lower()
         
         # Try keyword matching first (high precision)
-        keyword_category = self._keyword_classify(description)
+        keyword_category = self._keyword_classify (description)
         if keyword_category:
             return ExpenseLineItem(
                 description=line_item['description'],
@@ -733,7 +733,7 @@ class ExpenseClassificationSystem:
         
         # Try ML classification (broader coverage)
         if self.ml_classifier:
-            ml_category, confidence = self._ml_classify(description)
+            ml_category, confidence = self._ml_classify (description)
             if confidence > 0.7:
                 return ExpenseLineItem(
                     description=line_item['description'],
@@ -744,7 +744,7 @@ class ExpenseClassificationSystem:
                 )
         
         # Fallback: heuristic rules
-        heuristic_category = self._heuristic_classify(description)
+        heuristic_category = self._heuristic_classify (description)
         
         return ExpenseLineItem(
             description=line_item['description'],
@@ -754,7 +754,7 @@ class ExpenseClassificationSystem:
             source_text=line_item['raw_line']
         )
     
-    def _keyword_classify(self, description: str) -> str:
+    def _keyword_classify (self, description: str) -> str:
         """Classify using keyword matching."""
         
         for category, keywords in self.category_keywords.items():
@@ -764,32 +764,32 @@ class ExpenseClassificationSystem:
         
         return None
     
-    def _ml_classify(self, description: str) -> Tuple[str, float]:
+    def _ml_classify (self, description: str) -> Tuple[str, float]:
         """Classify using trained ML model."""
         
         # Extract features (TF-IDF, etc.)
-        features = self._extract_text_features(description)
+        features = self._extract_text_features (description)
         
         # Predict
         proba = self.ml_classifier.predict_proba([features])[0]
         category_idx = proba.argmax()
         confidence = proba[category_idx]
         
-        categories = list(self.category_keywords.keys())
+        categories = list (self.category_keywords.keys())
         return categories[category_idx], confidence
     
-    def _heuristic_classify(self, description: str) -> str:
+    def _heuristic_classify (self, description: str) -> str:
         """Fallback heuristic classification."""
         
         # Check word patterns
-        doc = self.nlp(description)
+        doc = self.nlp (description)
         
         # If contains "sales" or "marketing" → selling
-        if any(token.text.lower() in ['sales', 'marketing'] for token in doc):
+        if any (token.text.lower() in ['sales', 'marketing'] for token in doc):
             return 'selling'
         
         # If contains "research" or "development" → R&D
-        if any(token.text.lower() in ['research', 'development'] for token in doc):
+        if any (token.text.lower() in ['research', 'development'] for token in doc):
             return 'research_dev'
         
         # Default: general & administrative
@@ -816,7 +816,7 @@ class ExpenseClassificationSystem:
             aggregated.get('general_admin', 0)
         )
         
-        aggregated['operating_expenses'] = sum(aggregated.values())
+        aggregated['operating_expenses'] = sum (aggregated.values())
         
         return aggregated
     
@@ -851,7 +851,7 @@ class ExpenseClassificationSystem:
 **2. Training the ML Classifier**
 
 \`\`\`python
-def train_expense_classifier(training_data: pd.DataFrame):
+def train_expense_classifier (training_data: pd.DataFrame):
     """
     Train ML model on manually labeled examples.
     
@@ -867,7 +867,7 @@ def train_expense_classifier(training_data: pd.DataFrame):
         min_df=2
     )
     
-    X = vectorizer.fit_transform(training_data['description'])
+    X = vectorizer.fit_transform (training_data['description'])
     y = training_data['category']
     
     # Train classifier
@@ -882,7 +882,7 @@ def train_expense_classifier(training_data: pd.DataFrame):
     
     # Evaluate
     from sklearn.model_selection import cross_val_score
-    scores = cross_val_score(clf, X, y, cv=5)
+    scores = cross_val_score (clf, X, y, cv=5)
     print(f"Cross-validated accuracy: {scores.mean():.2%}")
     
     return clf, vectorizer
@@ -894,7 +894,7 @@ def train_expense_classifier(training_data: pd.DataFrame):
 class EdgeCaseHandler:
     """Handle non-standard reporting formats."""
     
-    def handle_combined_line_items(self, description: str, amount: float) -> List[ExpenseLineItem]:
+    def handle_combined_line_items (self, description: str, amount: float) -> List[ExpenseLineItem]:
         """
         Some companies combine categories:
         "Sales, general, and administrative expenses"
@@ -915,7 +915,7 @@ class EdgeCaseHandler:
         
         return []
     
-    def handle_xbrl_data(self, xbrl_facts: Dict) -> Dict:
+    def handle_xbrl_data (self, xbrl_facts: Dict) -> Dict:
         """
         Extract from XBRL when available (more structured).
         XBRL has standard tags.
@@ -1010,15 +1010,15 @@ This system can achieve ~95% accuracy on standard filings and ~75% on non-standa
     },
 
     {
-      id: 3,
-      question:
-        "You're analyzing two companies: Company A (SaaS) has 80% gross margins, Company B (Hardware) has 35% gross margins. Company B's stock trades at a higher P/E ratio. Explain the economic factors that could justify this valuation difference, and build a framework to compare companies with fundamentally different business models based on their income statements.",
-      answer: `Comparing companies across different business models requires understanding the **economic drivers** behind margins and translating them into comparable metrics:
+        id: 3,
+        question:
+            "You're analyzing two companies: Company A (SaaS) has 80% gross margins, Company B (Hardware) has 35% gross margins. Company B's stock trades at a higher P/E ratio. Explain the economic factors that could justify this valuation difference, and build a framework to compare companies with fundamentally different business models based on their income statements.",
+        answer: `Comparing companies across different business models requires understanding the **economic drivers** behind margins and translating them into comparable metrics:
 
 **1. Why Gross Margin Differences Don't Tell the Full Story**
 
 \`\`\`python
-def analyze_business_economics(company_a_saas: Dict, company_b_hardware: Dict):
+def analyze_business_economics (company_a_saas: Dict, company_b_hardware: Dict):
     """
     Deep comparison of business economics beyond gross margin.
     """
@@ -1074,7 +1074,7 @@ hardware_company = {
     'growth_rate': 0.10  # 10% growth
 }
 
-analyze_business_economics(saas_company, hardware_company)
+analyze_business_economics (saas_company, hardware_company)
 \`\`\`
 
 **Output**:
@@ -1112,7 +1112,7 @@ class BusinessModelComparator:
             'capital_efficiency': 0.10
         }
     
-    def calculate_quality_score(self, company: Dict) -> float:
+    def calculate_quality_score (self, company: Dict) -> float:
         """
         Comprehensive quality score accounting for business model differences.
         """
@@ -1120,15 +1120,15 @@ class BusinessModelComparator:
         scores = {}
         
         # 1. Growth Quality (higher for young companies)
-        scores['growth'] = min(company['revenue_growth'] / 0.30, 1.0)
+        scores['growth'] = min (company['revenue_growth'] / 0.30, 1.0)
         
         # 2. Return on Invested Capital (ultimate measure)
         roic = company['nopat'] / company['invested_capital']
-        scores['roic'] = min(roic / 0.25, 1.0)  # 25% ROIC = perfect score
+        scores['roic'] = min (roic / 0.25, 1.0)  # 25% ROIC = perfect score
         
         # 3. Cash Generation
         fcf_margin = company['fcf'] / company['revenue']
-        scores['cash_generation'] = min(fcf_margin / 0.20, 1.0)
+        scores['cash_generation'] = min (fcf_margin / 0.20, 1.0)
         
         # 4. Profitability
         scores['profitability'] = company['operating_margin'] / 0.25
@@ -1237,8 +1237,8 @@ snowflake = {
 
 comparator = BusinessModelComparator()
 
-quality_nvidia = comparator.calculate_quality_score(nvidia)
-quality_snowflake = comparator.calculate_quality_score(snowflake)
+quality_nvidia = comparator.calculate_quality_score (nvidia)
+quality_snowflake = comparator.calculate_quality_score (snowflake)
 
 print(f"Nvidia Quality Score: {quality_nvidia:.1f}/100")
 print(f"Snowflake Quality Score: {quality_snowflake:.1f}/100")
@@ -1247,7 +1247,7 @@ print(f"Snowflake Quality Score: {quality_snowflake:.1f}/100")
 **3. Normalized Comparison Framework**
 
 \`\`\`python
-def create_normalized_comparison(companies: List[Dict]) -> pd.DataFrame:
+def create_normalized_comparison (companies: List[Dict]) -> pd.DataFrame:
     """
     Create apples-to-apples comparison across business models.
     """
@@ -1261,20 +1261,20 @@ def create_normalized_comparison(companies: List[Dict]) -> pd.DataFrame:
             'Business Model': company['model'],
             
             # Profitability (normalized)
-            'Gross Margin Score': min(company['gross_margin'] / 0.80, 1.0) * 100,
-            'Operating Margin Score': min(company['operating_margin'] / 0.30, 1.0) * 100,
-            'FCF Margin Score': min(company['fcf_margin'] / 0.25, 1.0) * 100,
+            'Gross Margin Score': min (company['gross_margin'] / 0.80, 1.0) * 100,
+            'Operating Margin Score': min (company['operating_margin'] / 0.30, 1.0) * 100,
+            'FCF Margin Score': min (company['fcf_margin'] / 0.25, 1.0) * 100,
             
             # Growth (normalized)
-            'Growth Score': min(company['revenue_growth'] / 0.50, 1.0) * 100,
+            'Growth Score': min (company['revenue_growth'] / 0.50, 1.0) * 100,
             
             # Returns (normalized)
-            'ROIC Score': min(company['roic'] / 0.35, 1.0) * 100,
-            'ROE Score': min(company['roe'] / 0.25, 1.0) * 100,
+            'ROIC Score': min (company['roic'] / 0.35, 1.0) * 100,
+            'ROE Score': min (company['roe'] / 0.25, 1.0) * 100,
             
             # Efficiency
-            'Capital Efficiency Score': (1 - min(company['capital_intensity'], 1.0)) * 100,
-            'Asset Turnover Score': min(company['asset_turnover'] / 2.0, 1.0) * 100,
+            'Capital Efficiency Score': (1 - min (company['capital_intensity'], 1.0)) * 100,
+            'Asset Turnover Score': min (company['asset_turnover'] / 2.0, 1.0) * 100,
         }
         
         # Composite score
@@ -1286,9 +1286,9 @@ def create_normalized_comparison(companies: List[Dict]) -> pd.DataFrame:
             normalized['Capital Efficiency Score'] * 0.10
         ])
         
-        comparison.append(normalized)
+        comparison.append (normalized)
     
-    return pd.DataFrame(comparison)
+    return pd.DataFrame (comparison)
 
 # Usage
 companies = [
@@ -1330,7 +1330,7 @@ companies = [
     }
 ]
 
-comparison_df = create_normalized_comparison(companies)
+comparison_df = create_normalized_comparison (companies)
 print(comparison_df.to_string())
 \`\`\`
 
@@ -1369,7 +1369,7 @@ Don't compare P/E ratios directly. Instead:
 **Production Implementation**:
 \`\`\`python
 # Automated comparable company analysis accounting for business model differences
-def find_true_comparables(target_company: Dict, universe: List[Dict]) -> List[Dict]:
+def find_true_comparables (target_company: Dict, universe: List[Dict]) -> List[Dict]:
     """Find companies with similar economics, not just similar industries."""
     
     scores = []
@@ -1401,5 +1401,5 @@ def find_true_comparables(target_company: Dict, universe: List[Dict]) -> List[Di
 
 **Bottom Line**: P/E ratios are meaningless without context. A hardware company at 30x P/E generating 20% ROIC might be cheaper than a SaaS company at 20x P/E with 15% ROIC and negative FCF. Always look at ROIC, FCF, and growth-adjusted metrics.`,
     },
-  ],
+],
 ];

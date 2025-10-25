@@ -25,7 +25,7 @@ export const testingAsyncCodeMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'AsyncMock for async functions: from unittest.mock import AsyncMock; mock = AsyncMock(); mock.return_value = "result"; await mock(). Regular Mock doesn\'t work: await mock() fails. With mocker: mock_func = mocker.patch("module.async_func", new_callable=AsyncMock). Example: @pytest.mark.asyncio async def test(): mock_api = AsyncMock(); mock_api.return_value = {"data": "test"}; result = await fetch_with_api(mock_api). AsyncMock essential for testing async integrations.',
+      'AsyncMock for async functions: from unittest.mock import AsyncMock; mock = AsyncMock(); mock.return_value = "result"; await mock(). Regular Mock doesn\'t work: await mock() fails. With mocker: mock_func = mocker.patch("module.async_func", new_callable=AsyncMock). Example: @pytest.mark.asyncio async def test(): mock_api = AsyncMock(); mock_api.return_value = {"data": "test"}; result = await fetch_with_api (mock_api). AsyncMock essential for testing async integrations.',
   },
   {
     id: 'tac-mc-3',
@@ -38,7 +38,7 @@ export const testingAsyncCodeMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "asyncio.gather() runs async operations concurrently: results = await asyncio.gather(fetch(1), fetch(2), fetch(3)) → runs all 3 fetches in parallel, returns [result1, result2, result3]. Use in tests: Test concurrent behavior, verify race conditions, test parallelism. Example: @pytest.mark.asyncio async def test_concurrent(): results = await asyncio.gather(*[api_call() for _ in range(10)]); assert len(results) == 10. Not sequential (that's for loops), not cancellation (asyncio.cancel), not conversion. Essential for testing async performance.",
+      "asyncio.gather() runs async operations concurrently: results = await asyncio.gather (fetch(1), fetch(2), fetch(3)) → runs all 3 fetches in parallel, returns [result1, result2, result3]. Use in tests: Test concurrent behavior, verify race conditions, test parallelism. Example: @pytest.mark.asyncio async def test_concurrent(): results = await asyncio.gather(*[api_call() for _ in range(10)]); assert len (results) == 10. Not sequential (that's for loops), not cancellation (asyncio.cancel), not conversion. Essential for testing async performance.",
   },
   {
     id: 'tac-mc-4',
@@ -51,7 +51,7 @@ export const testingAsyncCodeMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Async fixtures use async def: @pytest.fixture async def async_client(): async with aiohttp.ClientSession() as session: yield session. Usage: @pytest.mark.asyncio async def test(async_client): result = await async_client.get(...). Can await inside fixture, yield for cleanup, compose with other async fixtures. Not sync def (can't await), not @pytest.async_fixture (doesn't exist). Pattern: @pytest.fixture async def with yield for cleanup. Essential for async test setup.",
+      "Async fixtures use async def: @pytest.fixture async def async_client(): async with aiohttp.ClientSession() as session: yield session. Usage: @pytest.mark.asyncio async def test (async_client): result = await async_client.get(...). Can await inside fixture, yield for cleanup, compose with other async fixtures. Not sync def (can't await), not @pytest.async_fixture (doesn't exist). Pattern: @pytest.fixture async def with yield for cleanup. Essential for async test setup.",
   },
   {
     id: 'tac-mc-5',
@@ -64,6 +64,6 @@ export const testingAsyncCodeMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "asyncio.wait_for() enforces timeout: with pytest.raises(asyncio.TimeoutError): await asyncio.wait_for(slow_operation(), timeout=1.0) → raises if >1s. Use in tests: Verify timeout handling, test slow operations fail fast, ensure responsiveness. Example: result = await asyncio.wait_for(api_call(), 5.0) → max 5 seconds. Not indefinite (that's await alone), not multiple ops (that's gather), not blocking (still async). Essential for testing timeout behavior.",
+      "asyncio.wait_for() enforces timeout: with pytest.raises (asyncio.TimeoutError): await asyncio.wait_for (slow_operation(), timeout=1.0) → raises if >1s. Use in tests: Verify timeout handling, test slow operations fail fast, ensure responsiveness. Example: result = await asyncio.wait_for (api_call(), 5.0) → max 5 seconds. Not indefinite (that's await alone), not multiple ops (that's gather), not blocking (still async). Essential for testing timeout behavior.",
   },
 ];

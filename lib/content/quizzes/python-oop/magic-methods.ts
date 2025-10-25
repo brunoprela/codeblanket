@@ -8,7 +8,7 @@ export const magicmethodsQuiz = [
     question:
       'What is the difference between __str__ and __repr__? When would you use each?',
     sampleAnswer:
-      '__str__ provides a user-friendly, human-readable string representation (called by str() and print()), while __repr__ provides an unambiguous, developer-focused representation for debugging (called by repr() and used in containers). __repr__ should ideally allow recreating the object: eval(repr(obj)) == obj. Always implement __repr__ since Python falls back to it if __str__ is missing. Use __str__ when you need different user-facing output. Example: Point.__repr__ might be "Point(3, 4)" while __str__ might be "Point at (3, 4)".',
+      '__str__ provides a user-friendly, human-readable string representation (called by str() and print()), while __repr__ provides an unambiguous, developer-focused representation for debugging (called by repr() and used in containers). __repr__ should ideally allow recreating the object: eval (repr (obj)) == obj. Always implement __repr__ since Python falls back to it if __str__ is missing. Use __str__ when you need different user-facing output. Example: Point.__repr__ might be "Point(3, 4)" while __str__ might be "Point at (3, 4)".',
     keyPoints: [
       '__str__: user-friendly, called by print()',
       '__repr__: developer-friendly, unambiguous',
@@ -22,7 +22,7 @@ export const magicmethodsQuiz = [
     question:
       'Why must __hash__ be implemented when __eq__ is customized for hashable objects?',
     sampleAnswer:
-      'Python requires that if a == b, then hash(a) == hash(b). The default __hash__ uses object identity (id), but custom __eq__ might consider two different objects equal based on their values. Without a custom __hash__, equal objects could have different hashes, breaking sets and dictionaries. For example, Person("Alice", "123") == Person("Alice", "123") with custom __eq__, but they would have different default hashes. The fix is to hash based on the same attributes used in __eq__: def __hash__(self): return hash(self.ssn). Note: only hash immutable attributes.',
+      'Python requires that if a == b, then hash (a) == hash (b). The default __hash__ uses object identity (id), but custom __eq__ might consider two different objects equal based on their values. Without a custom __hash__, equal objects could have different hashes, breaking sets and dictionaries. For example, Person("Alice", "123") == Person("Alice", "123") with custom __eq__, but they would have different default hashes. The fix is to hash based on the same attributes used in __eq__: def __hash__(self): return hash (self.ssn). Note: only hash immutable attributes.',
     keyPoints: [
       'Equal objects must have equal hashes (hash invariant)',
       'Default __hash__ uses object identity (id)',

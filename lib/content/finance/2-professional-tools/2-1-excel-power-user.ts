@@ -31,7 +31,7 @@ Despite the rise of Python, R, and sophisticated analytics platforms, Microsoft 
 
 ### Time Value of Money Functions
 
-Excel's financial functions are the backbone of valuation and corporate finance:
+Excel\'s financial functions are the backbone of valuation and corporate finance:
 
 \`\`\`excel
 =NPV(rate, value1, [value2], ...)
@@ -240,7 +240,7 @@ Result: Dynamic table showing product sales by region
 
 ### What-If Analysis Tools
 
-Excel's suite for scenario modeling and optimization:
+Excel\'s suite for scenario modeling and optimization:
 
 #### Goal Seek
 Find the input needed to achieve a target output.
@@ -480,7 +480,7 @@ Alt + Enter          // New line in cell
 
 ## Real-World Example: DCF Model in Excel
 
-Let's build a simplified DCF model step-by-step:
+Let\'s build a simplified DCF model step-by-step:
 
 ### Step 1: Assumptions Sheet
 
@@ -631,23 +631,23 @@ df.to_excel('output.xlsx', sheet_name='Results', index=False)
 
 # Write multiple sheets
 with pd.ExcelWriter('multi_sheet.xlsx') as writer:
-    df_income.to_excel(writer, sheet_name='Income Statement')
-    df_balance.to_excel(writer, sheet_name='Balance Sheet')
-    df_cashflow.to_excel(writer, sheet_name='Cash Flow')
+    df_income.to_excel (writer, sheet_name='Income Statement')
+    df_balance.to_excel (writer, sheet_name='Balance Sheet')
+    df_cashflow.to_excel (writer, sheet_name='Cash Flow')
 
 # Advanced formatting
 wb = load_workbook('template.xlsx')
 ws = wb['Sheet1']
 
 # Write data
-for r_idx, row in enumerate(dataframe_to_rows(df, index=False, header=True), 1):
-    for c_idx, value in enumerate(row, 1):
-        cell = ws.cell(row=r_idx, column=c_idx, value=value)
+for r_idx, row in enumerate (dataframe_to_rows (df, index=False, header=True), 1):
+    for c_idx, value in enumerate (row, 1):
+        cell = ws.cell (row=r_idx, column=c_idx, value=value)
         
         # Format header
         if r_idx == 1:
-            cell.font = Font(bold=True)
-            cell.fill = PatternFill(start_color='366092', end_color='366092', fill_type='solid')
+            cell.font = Font (bold=True)
+            cell.fill = PatternFill (start_color='366092', end_color='366092', fill_type='solid')
 
 # Add formulas
 ws['E2'] = '=C2*D2'  # Price * Quantity
@@ -665,13 +665,13 @@ from scipy import stats
 
 # Excel: =VLOOKUP()
 # Python:
-df.merge(lookup_df, on='key', how='left')
+df.merge (lookup_df, on='key', how='left')
 # or
-df.set_index('key').join(lookup_df.set_index('key'))
+df.set_index('key').join (lookup_df.set_index('key'))
 
 # Excel: =IF()
 # Python:
-df['result'] = np.where(df['value'] > 100, 'High', 'Low')
+df['result'] = np.where (df['value'] > 100, 'High', 'Low')
 # or for multiple conditions
 df['result'] = np.select(
     [df['value'] < 50, df['value'] < 100, df['value'] >= 100],
@@ -687,11 +687,11 @@ df.groupby('category')['amount'].sum()
 # Excel: =NPV()
 # Python:
 import numpy_financial as npf
-npv = npf.npv(rate, cash_flows)
+npv = npf.npv (rate, cash_flows)
 
 # Excel: =IRR()
 # Python:
-irr = npf.irr(cash_flows)
+irr = npf.irr (cash_flows)
 
 # Excel: Pivot Table
 # Python:
@@ -835,7 +835,7 @@ Excel remains the lingua franca of finance. Mastering these skills will:
 4. Learn keyboard shortcuts until they're muscle memory
 5. Start building your model library
 
-Remember: Excel proficiency is expected, not impressive. It's table stakes for finance roles, but combined with Python and data science skills, you become truly valuable.
+Remember: Excel proficiency is expected, not impressive. It\'s table stakes for finance roles, but combined with Python and data science skills, you become truly valuable.
 `,
   quiz: '2-1-quiz',
   discussionQuestions: '2-1-discussion',

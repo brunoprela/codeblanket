@@ -36,7 +36,7 @@ export const treebfsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the pattern for level-by-level BFS?',
     options: [
       'Random',
-      'While queue: level_size = len(queue), for i in range(level_size): process node, add children',
+      'While queue: level_size = len (queue), for i in range (level_size): process node, add children',
       'Single loop only',
       'No pattern',
     ],

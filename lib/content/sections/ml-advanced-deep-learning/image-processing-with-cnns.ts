@@ -39,8 +39,8 @@ import numpy as np
 
 # Common augmentation techniques
 augmentations = transforms.Compose([
-    transforms.RandomHorizontalFlip(p=0.5),      # Flip horizontally
-    transforms.RandomRotation(degrees=15),        # Rotate ±15°
+    transforms.RandomHorizontalFlip (p=0.5),      # Flip horizontally
+    transforms.RandomRotation (degrees=15),        # Rotate ±15°
     transforms.ColorJitter(                       # Color variations
         brightness=0.2,
         contrast=0.2,
@@ -60,23 +60,23 @@ augmentations = transforms.Compose([
 ])
 
 # Load and augment image
-def show_augmentations(image_path, num_samples=8):
+def show_augmentations (image_path, num_samples=8):
     """Display original image and augmented versions."""
-    original = Image.open(image_path)
+    original = Image.open (image_path)
     
     fig, axes = plt.subplots(3, 3, figsize=(12, 12))
     axes = axes.ravel()
     
     # Show original
-    axes[0].imshow(original)
+    axes[0].imshow (original)
     axes[0].set_title('Original')
     axes[0].axis('off')
     
     # Show augmented versions
     for i in range(1, 9):
-        augmented = augmentations(original)
-        axes[i].imshow(augmented)
-        axes[i].set_title(f'Augmented {i}')
+        augmented = augmentations (original)
+        axes[i].imshow (augmented)
+        axes[i].set_title (f'Augmented {i}')
         axes[i].axis('off')
     
     plt.tight_layout()
@@ -108,7 +108,7 @@ try:
             A.Emboss(),
             A.RandomBrightnessContrast(),
         ], p=0.3),
-        A.HueSaturationValue(p=0.3),
+        A.HueSaturationValue (p=0.3),
     ])
     
     print("Advanced augmentation pipeline loaded!")
@@ -147,7 +147,7 @@ import torchvision.models as models
 import torch.optim as optim
 
 # Load pretrained ResNet
-def create_transfer_model(num_classes, freeze_features=True):
+def create_transfer_model (num_classes, freeze_features=True):
     """
     Create transfer learning model from pretrained ResNet.
     
@@ -169,17 +169,17 @@ def create_transfer_model(num_classes, freeze_features=True):
     
     # Replace final fully connected layer
     num_features = model.fc.in_features
-    model.fc = nn.Linear(num_features, num_classes)
+    model.fc = nn.Linear (num_features, num_classes)
     print(f"\\n✓ Replaced classifier: {num_features} → {num_classes} classes")
     
     return model
 
 # Example: Fine-tuning for 10-class dataset
-model = create_transfer_model(num_classes=10, freeze_features=True)
+model = create_transfer_model (num_classes=10, freeze_features=True)
 
 # Count trainable parameters
-trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-total_params = sum(p.numel() for p in model.parameters())
+trainable_params = sum (p.numel() for p in model.parameters() if p.requires_grad)
+total_params = sum (p.numel() for p in model.parameters())
 
 print(f"\\nTrainable parameters: {trainable_params:,}")
 print(f"Total parameters: {total_params:,}")
@@ -203,16 +203,16 @@ print("  - Very low learning rate")
 print("  - Small datasets: skip this step")
 
 # Implement progressive unfreezing
-def set_parameter_requires_grad(model, feature_extracting):
+def set_parameter_requires_grad (model, feature_extracting):
     """Set requires_grad for model parameters."""
     if feature_extracting:
         for param in model.parameters():
             param.requires_grad = False
 
-def unfreeze_layers(model, num_layers):
+def unfreeze_layers (model, num_layers):
     """Unfreeze last N layers of model."""
     # Get all layers
-    layers = list(model.children())
+    layers = list (model.children())
     
     # Freeze all
     for param in model.parameters():
@@ -223,7 +223,7 @@ def unfreeze_layers(model, num_layers):
         for param in layer.parameters():
             param.requires_grad = True
     
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    trainable = sum (p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Unfroze last {num_layers} layers: {trainable:,} trainable params")
 
 # Example: Progressive fine-tuning
@@ -232,13 +232,13 @@ print("Progressive Fine-Tuning Example:")
 print("=" * 60)
 
 # Phase 1: Train classifier only
-optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
+optimizer = optim.Adam (model.fc.parameters(), lr=0.001)
 print("\\nPhase 1: Training classifier only (lr=0.001)")
 
 # Phase 2: Fine-tune last layer
-unfreeze_layers(model, num_layers=2)
+unfreeze_layers (model, num_layers=2)
 optimizer = optim.Adam(
-    filter(lambda p: p.requires_grad, model.parameters()),
+    filter (lambda p: p.requires_grad, model.parameters()),
     lr=0.0001
 )
 print("Phase 2: Fine-tuning last 2 layers (lr=0.0001)")
@@ -248,7 +248,7 @@ print("Phase 2: Fine-tuning last 2 layers (lr=0.0001)")
 
 ### From Classification to Detection
 
-**Classification**: What's in the image?
+**Classification**: What\'s in the image?
 **Detection**: What's in the image and **where**?
 
 **Challenges**:
@@ -296,12 +296,12 @@ class SimpleYOLO(nn.Module):
             nn.Linear(4096, output_size),
         )
     
-    def forward(self, x):
+    def forward (self, x):
         # Extract features
-        features = self.features(x)
+        features = self.features (x)
         
         # Predict detections
-        detections = self.detector(features)
+        detections = self.detector (features)
         
         # Reshape to grid format
         batch_size = x.size(0)
@@ -325,7 +325,7 @@ print("  → 7×7 grid, each cell predicts 2 boxes (x,y,w,h,conf) + 20 class pro
 
 # Test
 x = torch.randn(1, 3, 224, 224)
-output = yolo(x)
+output = yolo (x)
 print(f"\\nInput: {x.shape}")
 print(f"Output: {output.shape}")
 
@@ -368,7 +368,7 @@ Encoder (Downsampling)    Decoder (Upsampling)
 \`\`\`
 
 \`\`\`python
-class UNet(nn.Module):
+class UNet (nn.Module):
     """
     U-Net for semantic segmentation.
     """
@@ -376,7 +376,7 @@ class UNet(nn.Module):
         super(UNet, self).__init__()
         
         # Encoder (downsampling)
-        self.enc1 = self.conv_block(in_channels, 64)
+        self.enc1 = self.conv_block (in_channels, 64)
         self.enc2 = self.conv_block(64, 128)
         self.enc3 = self.conv_block(128, 256)
         self.enc4 = self.conv_block(256, 512)
@@ -401,26 +401,26 @@ class UNet(nn.Module):
         self.out = nn.Conv2d(64, num_classes, kernel_size=1)
         
         # Pooling
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.pool = nn.MaxPool2d (kernel_size=2, stride=2)
     
-    def conv_block(self, in_channels, out_channels):
+    def conv_block (self, in_channels, out_channels):
         """Two conv layers with ReLU."""
         return nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.Conv2d (in_channels, out_channels, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.Conv2d (out_channels, out_channels, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
         )
     
-    def forward(self, x):
+    def forward (self, x):
         # Encoder
         enc1 = self.enc1(x)           # 64 channels
-        enc2 = self.enc2(self.pool(enc1))  # 128 channels, /2 spatial
-        enc3 = self.enc3(self.pool(enc2))  # 256 channels, /4 spatial
-        enc4 = self.enc4(self.pool(enc3))  # 512 channels, /8 spatial
+        enc2 = self.enc2(self.pool (enc1))  # 128 channels, /2 spatial
+        enc3 = self.enc3(self.pool (enc2))  # 256 channels, /4 spatial
+        enc4 = self.enc4(self.pool (enc3))  # 512 channels, /8 spatial
         
         # Bottleneck
-        bottleneck = self.bottleneck(self.pool(enc4))  # 1024 channels, /16 spatial
+        bottleneck = self.bottleneck (self.pool (enc4))  # 1024 channels, /16 spatial
         
         # Decoder with skip connections
         dec4 = self.upconv4(bottleneck)
@@ -440,18 +440,18 @@ class UNet(nn.Module):
         dec1 = self.dec1(dec1)
         
         # Final classification
-        out = self.out(dec1)
+        out = self.out (dec1)
         
         return out
 
 # Create U-Net
-unet = UNet(in_channels=3, num_classes=1)  # Binary segmentation
+unet = UNet (in_channels=3, num_classes=1)  # Binary segmentation
 print("U-Net Architecture:")
 print(unet)
 
 # Test
 x = torch.randn(1, 3, 256, 256)
-output = unet(x)
+output = unet (x)
 print(f"\\nInput: {x.shape}")
 print(f"Output: {output.shape}")
 print("Output is same spatial size as input! (pixel-wise prediction)")
@@ -486,7 +486,7 @@ class StyleTransfer:
         self.device = device
         
         # Use pretrained VGG for feature extraction
-        vgg = models.vgg19(pretrained=True).features.to(device).eval()
+        vgg = models.vgg19(pretrained=True).features.to (device).eval()
         
         # Freeze parameters
         for param in vgg.parameters():
@@ -498,7 +498,7 @@ class StyleTransfer:
         self.content_layers = ['conv4_2']
         self.style_layers = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
     
-    def get_features(self, image):
+    def get_features (self, image):
         """Extract features from image."""
         features = {}
         x = image
@@ -509,13 +509,13 @@ class StyleTransfer:
         }
         
         for name, layer in self.vgg._modules.items():
-            x = layer(x)
+            x = layer (x)
             if name in layer_names:
                 features[layer_names[name]] = x
         
         return features
     
-    def gram_matrix(self, tensor):
+    def gram_matrix (self, tensor):
         """
         Compute Gram matrix for style representation.
         Measures correlations between feature maps.
@@ -523,26 +523,26 @@ class StyleTransfer:
         batch, channels, height, width = tensor.size()
         
         # Reshape to (channels, height*width)
-        features = tensor.view(batch * channels, height * width)
+        features = tensor.view (batch * channels, height * width)
         
         # Compute Gram matrix: G = F * F^T
-        gram = torch.mm(features, features.t())
+        gram = torch.mm (features, features.t())
         
         # Normalize
         return gram / (batch * channels * height * width)
     
-    def style_loss(self, style_grams, generated_grams):
+    def style_loss (self, style_grams, generated_grams):
         """Compute style loss (difference in Gram matrices)."""
         loss = 0
         for layer in self.style_layers:
-            loss += F.mse_loss(generated_grams[layer], style_grams[layer])
+            loss += F.mse_loss (generated_grams[layer], style_grams[layer])
         return loss
     
-    def content_loss(self, content_features, generated_features):
+    def content_loss (self, content_features, generated_features):
         """Compute content loss."""
         loss = 0
         for layer in self.content_layers:
-            loss += F.mse_loss(generated_features[layer], content_features[layer])
+            loss += F.mse_loss (generated_features[layer], content_features[layer])
         return loss
 
 print("Neural Style Transfer:")
@@ -557,7 +557,7 @@ print("\\nResult: Content image painted in style of style image!")
 
 print("\\nExample:")
 print("Content: Photo of dog")
-print("Style: Van Gogh's Starry Night")
+print("Style: Van Gogh\'s Starry Night")
 print("Output: Dog painted in Van Gogh style ✨")
 \`\`\`
 
@@ -569,10 +569,10 @@ Visualizing CNN internals helps understand and debug models.
 
 \`\`\`python
 # Visualize filters
-def visualize_filters(model, layer_name, num_filters=16):
+def visualize_filters (model, layer_name, num_filters=16):
     """Visualize learned filters."""
     # Get specific layer
-    layer = dict(model.named_modules())[layer_name]
+    layer = dict (model.named_modules())[layer_name]
     
     # Get weights
     weights = layer.weight.data.cpu()
@@ -581,22 +581,22 @@ def visualize_filters(model, layer_name, num_filters=16):
     fig, axes = plt.subplots(4, 4, figsize=(12, 12))
     axes = axes.ravel()
     
-    for i in range(min(num_filters, 16)):
+    for i in range (min (num_filters, 16)):
         # Get filter
         filt = weights[i, 0]  # First channel
         
         # Normalize for visualization
         filt = (filt - filt.min()) / (filt.max() - filt.min())
         
-        axes[i].imshow(filt, cmap='gray')
-        axes[i].set_title(f'Filter {i}')
+        axes[i].imshow (filt, cmap='gray')
+        axes[i].set_title (f'Filter {i}')
         axes[i].axis('off')
     
     plt.tight_layout()
     plt.show()
 
 # Activation maximization
-def visualize_activation(model, layer, filter_index, size=224, iterations=100):
+def visualize_activation (model, layer, filter_index, size=224, iterations=100):
     """
     Generate image that maximally activates a specific filter.
     Shows what the filter is 'looking for'.
@@ -606,11 +606,11 @@ def visualize_activation(model, layer, filter_index, size=224, iterations=100):
     
     optimizer = optim.Adam([img], lr=0.1)
     
-    for i in range(iterations):
+    for i in range (iterations):
         optimizer.zero_grad()
         
         # Forward pass
-        features = model(img)
+        features = model (img)
         
         # Loss: negative activation (we want to maximize)
         loss = -features[0, filter_index].mean()

@@ -27,7 +27,7 @@ export const databaseIntegrationSqlalchemyMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'N+1 problem: Query 1 fetches N items, then N additional queries fetch related data for each item. Example: posts = db.query(Post).all(); for post in posts: print(post.author.username) → 1 query for posts + N queries for authors = N+1 total! Fix with joinedload (JOIN): db.query(Post).options(joinedload(Post.author)).all() → 1 query total. Or selectinload (SELECT IN): options(selectinload(Post.author)) → 2 queries total (posts, then all authors in one query). Can cause severe performance issues (100 posts = 101 queries = 1000ms instead of 1-2 queries = 50ms). Always profile and fix N+1 issues!',
+      'N+1 problem: Query 1 fetches N items, then N additional queries fetch related data for each item. Example: posts = db.query(Post).all(); for post in posts: print(post.author.username) → 1 query for posts + N queries for authors = N+1 total! Fix with joinedload (JOIN): db.query(Post).options (joinedload(Post.author)).all() → 1 query total. Or selectinload (SELECT IN): options (selectinload(Post.author)) → 2 queries total (posts, then all authors in one query). Can cause severe performance issues (100 posts = 101 queries = 1000ms instead of 1-2 queries = 50ms). Always profile and fix N+1 issues!',
   },
   {
     id: 'fastapi-db-mc-3',
@@ -40,7 +40,7 @@ export const databaseIntegrationSqlalchemyMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'orm_mode = True allows Pydantic models to be created from ORM objects (SQLAlchemy models) that use attribute access (user.username) instead of dict access (user["username"]). Without orm_mode: UserResponse(**db_user.__dict__) or manual mapping. With orm_mode: UserResponse.from_orm(db_user) works automatically. Essential for FastAPI + SQLAlchemy integration. In FastAPI endpoints with response_model: @app.get("/users/{id}", response_model=UserResponse); return db_user → FastAPI calls from_orm internally. Bridges SQLAlchemy models and Pydantic schemas elegantly.',
+      'orm_mode = True allows Pydantic models to be created from ORM objects (SQLAlchemy models) that use attribute access (user.username) instead of dict access (user["username"]). Without orm_mode: UserResponse(**db_user.__dict__) or manual mapping. With orm_mode: UserResponse.from_orm (db_user) works automatically. Essential for FastAPI + SQLAlchemy integration. In FastAPI endpoints with response_model: @app.get("/users/{id}", response_model=UserResponse); return db_user → FastAPI calls from_orm internally. Bridges SQLAlchemy models and Pydantic schemas elegantly.',
   },
   {
     id: 'fastapi-db-mc-4',
@@ -68,6 +68,6 @@ export const databaseIntegrationSqlalchemyMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'Without db.commit(), changes are lost when the session closes. SQLAlchemy sessions use transactions—changes are staged but not persisted until commit. Example: db.add(user); db.close() without commit → user not saved! Session closure triggers automatic rollback of uncommitted changes. This is a safety feature preventing accidental data corruption. Always explicitly commit: db.add(user); db.commit(); db.refresh(user). Or use autocommit=True (not recommended—lose transaction control). In FastAPI with get_db dependency, commit in endpoint, not in dependency (keeps transactions explicit and testable).',
+      'Without db.commit(), changes are lost when the session closes. SQLAlchemy sessions use transactions—changes are staged but not persisted until commit. Example: db.add (user); db.close() without commit → user not saved! Session closure triggers automatic rollback of uncommitted changes. This is a safety feature preventing accidental data corruption. Always explicitly commit: db.add (user); db.commit(); db.refresh (user). Or use autocommit=True (not recommended—lose transaction control). In FastAPI with get_db dependency, commit in endpoint, not in dependency (keeps transactions explicit and testable).',
   },
 ];

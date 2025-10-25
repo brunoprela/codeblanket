@@ -16,14 +16,14 @@ Find K largest/smallest elements efficiently.
 
 **Example: K Largest Elements**
 \`\`\`python
-def k_largest(nums, k):
+def k_largest (nums, k):
     # Use min heap of size k
     heap = []
     
     for num in nums:
-        heapq.heappush(heap, num)
-        if len(heap) > k:
-            heapq.heappop(heap)  # Remove smallest
+        heapq.heappush (heap, num)
+        if len (heap) > k:
+            heapq.heappop (heap)  # Remove smallest
     
     return heap  # All elements are k largest
 \`\`\`
@@ -101,15 +101,15 @@ Find K elements closest to target.
 
 **Approach 1**: Max heap of size K
 \`\`\`python
-def k_closest(nums, target, k):
+def k_closest (nums, target, k):
     # Max heap of (distance, num)
     heap = []
     
     for num in nums:
-        dist = abs(num - target)
-        heapq.heappush(heap, (-dist, num))
-        if len(heap) > k:
-            heapq.heappop(heap)
+        dist = abs (num - target)
+        heapq.heappush (heap, (-dist, num))
+        if len (heap) > k:
+            heapq.heappop (heap)
     
     return [num for _, num in heap]
 \`\`\`
@@ -148,16 +148,16 @@ class KthLargest:
     def __init__(self, k, nums):
         self.k = k
         self.heap = nums
-        heapq.heapify(self.heap)
+        heapq.heapify (self.heap)
         
         # Keep only k largest
-        while len(self.heap) > k:
-            heapq.heappop(self.heap)
+        while len (self.heap) > k:
+            heapq.heappop (self.heap)
     
-    def add(self, val):
-        heapq.heappush(self.heap, val)
-        if len(self.heap) > self.k:
-            heapq.heappop(self.heap)
+    def add (self, val):
+        heapq.heappush (self.heap, val)
+        if len (self.heap) > self.k:
+            heapq.heappop (self.heap)
         return self.heap[0]  # kth largest
 \`\`\``,
 };

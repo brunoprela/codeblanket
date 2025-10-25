@@ -37,7 +37,7 @@ export const incidentManagementSection = {
 **SEV-1 (Critical)**:
 - **Impact**: Complete outage or major data loss
 - **Users Affected**: Most or all users
-- **Revenue Impact**: Significant ($10K+/hour)
+- **Revenue Impact**: Significant (\$10K+/hour)
 - **Response**: Immediate, all-hands
 - **Examples**:
   - Entire service down
@@ -117,7 +117,7 @@ export const incidentManagementSection = {
 
 **Process**:
 1. **Gather Info**: Metrics, logs, traces
-2. **Form Hypothesis**: What's causing it?
+2. **Form Hypothesis**: What\'s causing it?
 3. **Test Hypothesis**: Validate with data
 4. **Identify Root Cause**: Find source
 
@@ -604,7 +604,7 @@ Target: > 90%
 **Q: Walk through how you would respond to a production outage.**
 A: Acknowledge alert, assess severity, declare incident, mobilize team, investigate root cause, implement fix, verify recovery, communicate throughout, conduct post-mortem.
 
-**Q: What's the role of an Incident Commander?**
+**Q: What\'s the role of an Incident Commander?**
 A: Coordinate response, make decisions, communicate with stakeholders, delegate technical work. They don't fix the issue—they organize the response.
 
 **Q: Why blameless post-mortems?**

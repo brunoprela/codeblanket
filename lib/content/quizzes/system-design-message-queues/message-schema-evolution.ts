@@ -91,7 +91,7 @@ KafkaProducer<String, PaymentEvent> producer = new KafkaProducer<>(props);
 // Register V2 schema
 SchemaRegistryClient schemaRegistry = new CachedSchemaRegistryClient("http://schema-registry:8081", 100);
 
-Schema v2Schema = new Schema.Parser().parse(v2SchemaString);
+Schema v2Schema = new Schema.Parser().parse (v2SchemaString);
 
 // Validate compatibility before registering
 boolean compatible = schemaRegistry.testCompatibility("payments-value", v2Schema);
@@ -111,7 +111,7 @@ PaymentEvent payment = PaymentEvent.newBuilder()
     .setCustomerId("cust_456")  // V2 field
     .build();
 
-producer.send(new ProducerRecord<>("payments", payment));
+producer.send (new ProducerRecord<>("payments", payment));
 
 // Message format in Kafka:
 // [Magic Byte (0x00)] [Schema ID (4 bytes)] [Avro serialized data]
@@ -219,11 +219,11 @@ Solutions:
    - Con: Dual write during migration ❌
 
 // Dual write during migration
-producer.send(new ProducerRecord<>("payments", v1Payment));  // Old
-producer.send(new ProducerRecord<>("payments-v2", v3Payment));  // New
+producer.send (new ProducerRecord<>("payments", v1Payment));  // Old
+producer.send (new ProducerRecord<>("payments-v2", v3Payment));  // New
 
 // After migration:
-producer.send(new ProducerRecord<>("payments-v2", v3Payment));  // New only
+producer.send (new ProducerRecord<>("payments-v2", v3Payment));  // New only
 
 2. Versioned Message Strategy:
    - Include version field in message
@@ -258,7 +258,7 @@ Schema Registry subjects:
 - payments-value-v3 (new)
 
 Producer:
-producer.send(new ProducerRecord<>("payments", v3Payment));
+producer.send (new ProducerRecord<>("payments", v3Payment));
 // Schema ID references v3 schema
 
 Consumer (migration period):
@@ -310,10 +310,10 @@ public class SchemaCompatibilityTest {
         
         // V2 consumer reads V1 message
         GenericRecord v1Record = createV1Record();
-        GenericRecord v2Record = convertUsingSchema(v1Record, v2);
+        GenericRecord v2Record = convertUsingSchema (v1Record, v2);
         
-        assertNotNull(v2Record.get("payment_id"));
-        assertNotNull(v2Record.get("amount"));
+        assertNotNull (v2Record.get("payment_id"));
+        assertNotNull (v2Record.get("amount"));
         assertEquals("USD", v2Record.get("currency"));  // Default ✅
     }
     
@@ -321,10 +321,10 @@ public class SchemaCompatibilityTest {
     public void testForwardCompatibility() {
         // V1 consumer reads V2 message
         GenericRecord v2Record = createV2Record();
-        GenericRecord v1Record = convertUsingSchema(v2Record, v1);
+        GenericRecord v1Record = convertUsingSchema (v2Record, v1);
         
-        assertNotNull(v1Record.get("payment_id"));
-        assertNotNull(v1Record.get("amount"));
+        assertNotNull (v1Record.get("payment_id"));
+        assertNotNull (v1Record.get("amount"));
         // customer_id ignored by V1 consumer ✅
     }
 }
@@ -467,11 +467,11 @@ public class SchemaValidator {
         
         for (String json : jsonMessages) {
             try {
-                GenericRecord avroRecord = jsonToAvro(json);
+                GenericRecord avroRecord = jsonToAvro (json);
                 valid++;
             } catch (Exception e) {
                 invalid++;
-                errors.add(json + ": " + e.getMessage());
+                errors.add (json + ": " + e.getMessage());
             }
         }
         
@@ -501,12 +501,12 @@ public class DualWriteProducer {
         
         try {
             // Write JSON (original format)
-            String jsonPayload = toJson(payment);
-            jsonProducer.send(new ProducerRecord<>("payments-json", key, jsonPayload));
+            String jsonPayload = toJson (payment);
+            jsonProducer.send (new ProducerRecord<>("payments-json", key, jsonPayload));
             
             // Write Avro (new format)
-            GenericRecord avroPayload = toAvro(payment);
-            avroProducer.send(new ProducerRecord<>("payments-avro", key, avroPayload));
+            GenericRecord avroPayload = toAvro (payment);
+            avroProducer.send (new ProducerRecord<>("payments-avro", key, avroPayload));
             
             metrics.increment("dual_write_success");
             
@@ -514,8 +514,8 @@ public class DualWriteProducer {
             logger.error("Dual write failed", e);
             
             // Fallback: JSON only (don't break existing system)
-            String jsonPayload = toJson(payment);
-            jsonProducer.send(new ProducerRecord<>("payments-json", key, jsonPayload));
+            String jsonPayload = toJson (payment);
+            jsonProducer.send (new ProducerRecord<>("payments-json", key, jsonPayload));
             
             metrics.increment("dual_write_fallback");
         }
@@ -558,9 +558,9 @@ public class AvroOnlyProducer {
     
     public void sendPayment(Payment payment) {
         String key = payment.getPaymentId();
-        GenericRecord avroPayload = toAvro(payment);
+        GenericRecord avroPayload = toAvro (payment);
         
-        avroProducer.send(new ProducerRecord<>("payments-avro", key, avroPayload));
+        avroProducer.send (new ProducerRecord<>("payments-avro", key, avroPayload));
     }
 }
 
@@ -598,10 +598,10 @@ public class HistoricalMigrationJob {
             for (ConsumerRecord<String, String> record : records) {
                 try {
                     // Convert JSON → Avro
-                    GenericRecord avroRecord = jsonToAvro(record.value());
+                    GenericRecord avroRecord = jsonToAvro (record.value());
                     
                     // Add to batch
-                    avroBatch.add(new ProducerRecord<>(
+                    avroBatch.add (new ProducerRecord<>(
                         "payments-avro-historical",  // Separate topic for historical
                         record.key(),
                         avroRecord
@@ -613,14 +613,14 @@ public class HistoricalMigrationJob {
                     logger.error("Conversion failed for message: " + record.key(), e);
                     failed++;
                     
-                    failures.add(new FailedMessage(
+                    failures.add (new FailedMessage(
                         record.key(),
                         record.value(),
                         e.getMessage()
                     ));
                     
                     // Write to DLQ
-                    dlqProducer.send(new ProducerRecord<>(
+                    dlqProducer.send (new ProducerRecord<>(
                         "payments-json-migration-dlq",
                         record.key(),
                         record.value()
@@ -630,7 +630,7 @@ public class HistoricalMigrationJob {
             
             // Batch write to Avro topic
             for (ProducerRecord<String, GenericRecord> avroRecord : avroBatch) {
-                avroProducer.send(avroRecord);
+                avroProducer.send (avroRecord);
             }
             
             // Commit offset
@@ -646,11 +646,11 @@ public class HistoricalMigrationJob {
         logger.info("Migration complete. Total: {}, Failed: {}", processed, failed);
         
         // Write failed messages to file for manual review
-        writeFailuresToFile(failures);
+        writeFailuresToFile (failures);
     }
     
     private GenericRecord jsonToAvro(String json) throws Exception {
-        JsonNode jsonNode = objectMapper.readTree(json);
+        JsonNode jsonNode = objectMapper.readTree (json);
         
         // Validate required fields
         if (!jsonNode.has("payment_id")) {
@@ -661,12 +661,12 @@ public class HistoricalMigrationJob {
         }
         
         // Build Avro record
-        GenericRecord avroRecord = new GenericData.Record(avroSchema);
+        GenericRecord avroRecord = new GenericData.Record (avroSchema);
         avroRecord.put("payment_id", jsonNode.get("payment_id").asText());
         avroRecord.put("amount", jsonNode.get("amount").asDouble());
         avroRecord.put("currency", jsonNode.has("currency") ? 
                       jsonNode.get("currency").asText() : "USD");  // Default
-        avroRecord.put("timestamp", parseTimestamp(jsonNode.get("timestamp").asText()));
+        avroRecord.put("timestamp", parseTimestamp (jsonNode.get("timestamp").asText()));
         avroRecord.put("schema_version", "v2_migrated");  // Mark as migrated
         
         return avroRecord;
@@ -695,14 +695,14 @@ public class HistoricalMigrationJob {
    {"amount": "99.99"}  // String instead of double ❌
    
    Solution: Type coercion
-   double amount = Double.parseDouble(jsonNode.get("amount").asText());
+   double amount = Double.parseDouble (jsonNode.get("amount").asText());
    avroRecord.put("amount", amount);  ✅
 
 3. Invalid timestamp format:
    {"timestamp": "2023-06-01"}  // Missing time ❌
    
    Solution: Default time or skip
-   long timestamp = parseTimestampWithDefault(timestampStr, System.currentTimeMillis());
+   long timestamp = parseTimestampWithDefault (timestampStr, System.currentTimeMillis());
 
 4. Null values:
    {"payment_id": null}  // Null required field ❌
@@ -942,7 +942,7 @@ PaymentRequest request = PaymentRequest.newBuilder()
 
 byte[] serialized = request.toByteArray();  // Very fast ✅
 
-PaymentRequest deserialized = PaymentRequest.parseFrom(serialized);
+PaymentRequest deserialized = PaymentRequest.parseFrom (serialized);
 
 // Performance:
 Serialization: ~1 microsecond (vs 5-10 μs for JSON)
@@ -1009,8 +1009,8 @@ request.setAmount("invalid");  // Compile error ✅ (vs runtime error in JSON)
 4. Schema validation ✅
    const Ajv = require('ajv');
    const ajv = new Ajv();
-   const validate = ajv.compile(schema);
-   const valid = validate(data);  // true/false
+   const validate = ajv.compile (schema);
+   const valid = validate (data);  // true/false
 
 // Trade-offs accepted:
 ❌ Larger size (100 bytes vs 20 bytes Avro)

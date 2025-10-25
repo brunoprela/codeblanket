@@ -45,7 +45,7 @@ class ValueAtRiskCalculator:
     """
     
     @staticmethod
-    def parametric_var(returns: Union[pd.Series, np.ndarray],
+    def parametric_var (returns: Union[pd.Series, np.ndarray],
                       confidence: float = 0.95,
                       horizon: int = 1) -> float:
         """
@@ -61,19 +61,19 @@ class ValueAtRiskCalculator:
         Returns:
             VaR as fraction
         """
-        mean = np.mean(returns)
-        std = np.std(returns)
+        mean = np.mean (returns)
+        std = np.std (returns)
         
         # Z-score for confidence level
         z_score = stats.norm.ppf(1 - confidence)
         
         # Scale for horizon
-        var = (mean + z_score * std) * np.sqrt(horizon)
+        var = (mean + z_score * std) * np.sqrt (horizon)
         
         return var
     
     @staticmethod
-    def historical_var(returns: Union[pd.Series, np.ndarray],
+    def historical_var (returns: Union[pd.Series, np.ndarray],
                       confidence: float = 0.95,
                       horizon: int = 1) -> float:
         """
@@ -84,16 +84,16 @@ class ValueAtRiskCalculator:
         """
         # For multi-day horizon, use overlapping windows
         if horizon > 1:
-            rolling_returns = pd.Series(returns).rolling(horizon).sum().dropna()
+            rolling_returns = pd.Series (returns).rolling (horizon).sum().dropna()
             returns_to_use = rolling_returns
         else:
             returns_to_use = returns
         
-        var = np.percentile(returns_to_use, (1 - confidence) * 100)
+        var = np.percentile (returns_to_use, (1 - confidence) * 100)
         return var
     
     @staticmethod
-    def monte_carlo_var(returns: Union[pd.Series, np.ndarray],
+    def monte_carlo_var (returns: Union[pd.Series, np.ndarray],
                        confidence: float = 0.95,
                        horizon: int = 1,
                        n_simulations: int = 10000) -> float:
@@ -102,20 +102,20 @@ class ValueAtRiskCalculator:
         
         Simulates future returns based on historical parameters
         """
-        mean = np.mean(returns)
-        std = np.std(returns)
+        mean = np.mean (returns)
+        std = np.std (returns)
         
         # Simulate future paths
-        simulated = np.random.normal(mean, std, (n_simulations, horizon))
+        simulated = np.random.normal (mean, std, (n_simulations, horizon))
         
         # Calculate cumulative returns for each path
-        cumulative = simulated.sum(axis=1)
+        cumulative = simulated.sum (axis=1)
         
-        var = np.percentile(cumulative, (1 - confidence) * 100)
+        var = np.percentile (cumulative, (1 - confidence) * 100)
         return var
     
     @staticmethod
-    def cornish_fisher_var(returns: Union[pd.Series, np.ndarray],
+    def cornish_fisher_var (returns: Union[pd.Series, np.ndarray],
                           confidence: float = 0.95,
                           horizon: int = 1) -> float:
         """
@@ -123,10 +123,10 @@ class ValueAtRiskCalculator:
         
         Better for fat-tailed, skewed distributions
         """
-        mean = np.mean(returns)
-        std = np.std(returns)
-        skew = stats.skew(returns)
-        kurt = stats.kurtosis(returns)
+        mean = np.mean (returns)
+        std = np.std (returns)
+        skew = stats.skew (returns)
+        kurt = stats.kurtosis (returns)
         
         # Standard normal quantile
         z = stats.norm.ppf(1 - confidence)
@@ -136,7 +136,7 @@ class ValueAtRiskCalculator:
                (z**3 - 3*z) * kurt / 24 -
                (2*z**3 - 5*z) * skew**2 / 36)
         
-        var = (mean + z_cf * std) * np.sqrt(horizon)
+        var = (mean + z_cf * std) * np.sqrt (horizon)
         return var
 
 
@@ -149,14 +149,14 @@ class ConditionalValueAtRisk:
     """
     
     @staticmethod
-    def cvar(returns: Union[pd.Series, np.ndarray],
+    def cvar (returns: Union[pd.Series, np.ndarray],
             confidence: float = 0.95) -> float:
         """
         Calculate Conditional VaR (Expected Shortfall)
         
         CVaR = Average loss when loss exceeds VaR
         """
-        var = ValueAtRiskCalculator.historical_var(returns, confidence)
+        var = ValueAtRiskCalculator.historical_var (returns, confidence)
         
         # Average of returns worse than VaR
         tail_losses = returns[returns <= var]
@@ -165,7 +165,7 @@ class ConditionalValueAtRisk:
         return cvar
     
     @staticmethod
-    def marginal_cvar(returns: Union[pd.Series, np.ndarray],
+    def marginal_cvar (returns: Union[pd.Series, np.ndarray],
                      position_returns: Union[pd.Series, np.ndarray],
                      confidence: float = 0.95) -> float:
         """
@@ -173,10 +173,10 @@ class ConditionalValueAtRisk:
         
         Used for risk budgeting
         """
-        portfolio_cvar = ConditionalValueAtRisk.cvar(returns, confidence)
+        portfolio_cvar = ConditionalValueAtRisk.cvar (returns, confidence)
         
         # Calculate correlation in tail
-        var = ValueAtRiskCalculator.historical_var(returns, confidence)
+        var = ValueAtRiskCalculator.historical_var (returns, confidence)
         tail_periods = returns <= var
         
         tail_correlation = np.corrcoef(
@@ -185,8 +185,8 @@ class ConditionalValueAtRisk:
         )[0, 1]
         
         # Marginal CVaR
-        position_vol = np.std(position_returns)
-        portfolio_vol = np.std(returns)
+        position_vol = np.std (position_returns)
+        portfolio_vol = np.std (returns)
         
         marginal = tail_correlation * position_vol / portfolio_vol
         
@@ -202,10 +202,10 @@ np.random.seed(42)
 n = 1000
 
 # Mix of normal and extreme events (fat tails)
-normal_returns = np.random.normal(0.001, 0.015, int(n * 0.95))
-extreme_returns = np.random.normal(0, 0.05, int(n * 0.05))
+normal_returns = np.random.normal(0.001, 0.015, int (n * 0.95))
+extreme_returns = np.random.normal(0, 0.05, int (n * 0.05))
 returns = np.concatenate([normal_returns, extreme_returns])
-np.random.shuffle(returns)
+np.random.shuffle (returns)
 
 print("="*70)
 print("VALUE AT RISK COMPARISON")
@@ -214,10 +214,10 @@ print("="*70)
 calculator = ValueAtRiskCalculator()
 
 # Calculate VaR using different methods
-var_parametric = calculator.parametric_var(returns, confidence=0.95)
-var_historical = calculator.historical_var(returns, confidence=0.95)
-var_monte_carlo = calculator.monte_carlo_var(returns, confidence=0.95, n_simulations=10000)
-var_cornish_fisher = calculator.cornish_fisher_var(returns, confidence=0.95)
+var_parametric = calculator.parametric_var (returns, confidence=0.95)
+var_historical = calculator.historical_var (returns, confidence=0.95)
+var_monte_carlo = calculator.monte_carlo_var (returns, confidence=0.95, n_simulations=10000)
+var_cornish_fisher = calculator.cornish_fisher_var (returns, confidence=0.95)
 
 print(f"\\n1-Day VaR (95% confidence):")
 print(f"  Parametric (Normal):    {var_parametric:.4f} ({var_parametric:.2%})")
@@ -227,8 +227,8 @@ print(f"  Cornish-Fisher:         {var_cornish_fisher:.4f} ({var_cornish_fisher:
 
 # Calculate CVaR
 cvar_calc = ConditionalValueAtRisk()
-cvar_95 = cvar_calc.cvar(returns, confidence=0.95)
-cvar_99 = cvar_calc.cvar(returns, confidence=0.99)
+cvar_95 = cvar_calc.cvar (returns, confidence=0.95)
+cvar_99 = cvar_calc.cvar (returns, confidence=0.99)
 
 print(f"\\nConditional VaR (Expected Shortfall):")
 print(f"  CVaR 95%: {cvar_95:.4f} ({cvar_95:.2%})")
@@ -236,13 +236,13 @@ print(f"  CVaR 99%: {cvar_99:.4f} ({cvar_99:.2%})")
 
 # Portfolio example with $100K
 portfolio_value = 100000
-var_dollar = abs(var_historical * portfolio_value)
-cvar_dollar = abs(cvar_95 * portfolio_value)
+var_dollar = abs (var_historical * portfolio_value)
+cvar_dollar = abs (cvar_95 * portfolio_value)
 
 print(f"\\nPortfolio Risk ($100,000):")
 print(f"  1-Day VaR (95%): \${var_dollar:,.0f}")
 print(f"  1-Day CVaR (95%): \${cvar_dollar:,.0f}")
-print(f"  Worst expected day (99%): \${abs(cvar_99 * portfolio_value):,.0f}")
+print(f"  Worst expected day (99%): \${abs (cvar_99 * portfolio_value):,.0f}")
 
 print("="*70)
 \`\`\`
@@ -269,9 +269,9 @@ class StressTester:
         """
         self.positions = positions
         self.prices = prices
-        self.portfolio_value = sum(pos * prices[sym] for sym, pos in positions.items())
+        self.portfolio_value = sum (pos * prices[sym] for sym, pos in positions.items())
     
-    def historical_stress_test(self) -> dict:
+    def historical_stress_test (self) -> dict:
         """
         Test historical crisis scenarios
         """
@@ -292,7 +292,7 @@ class StressTester:
                 current_value = quantity * self.prices[symbol]
                 
                 # Apply shock (default to market shock if symbol not specified)
-                shock = shocks.get(symbol, shocks.get('SPY', -0.20))
+                shock = shocks.get (symbol, shocks.get('SPY', -0.20))
                 shocked_value = current_value * (1 + shock)
                 loss = current_value - shocked_value
                 
@@ -306,7 +306,7 @@ class StressTester:
         
         return results
     
-    def factor_stress_test(self, factor_shocks: dict) -> dict:
+    def factor_stress_test (self, factor_shocks: dict) -> dict:
         """
         Test factor-based shocks
         
@@ -331,7 +331,7 @@ class StressTester:
         
         return results
     
-    def correlation_breakdown_test(self) -> dict:
+    def correlation_breakdown_test (self) -> dict:
         """
         Test scenario where all correlations → 1
         
@@ -341,7 +341,7 @@ class StressTester:
         # Assume all assets drop by market average
         uniform_shock = -0.30  # 30% market-wide decline
         
-        total_loss = self.portfolio_value * abs(uniform_shock)
+        total_loss = self.portfolio_value * abs (uniform_shock)
         
         return {
             'scenario': 'Correlation Breakdown',
@@ -351,7 +351,7 @@ class StressTester:
             'diversification_benefit': 0  # Diversification doesn't help
         }
     
-    def liquidity_stress_test(self, liquidation_pct: float = 0.50) -> dict:
+    def liquidity_stress_test (self, liquidation_pct: float = 0.50) -> dict:
         """
         Test forced liquidation at bad prices
         
@@ -382,45 +382,45 @@ class StressTester:
             'cost_bps': (liquidation_cost / (self.portfolio_value * liquidation_pct)) * 10000
         }
     
-    def monte_carlo_stress_test(self, n_simulations: int = 10000,
+    def monte_carlo_stress_test (self, n_simulations: int = 10000,
                                 correlation_matrix: np.ndarray = None) -> dict:
         """
         Monte Carlo simulation of portfolio under stress
         """
         if correlation_matrix is None:
             # Default: moderate correlation
-            n_assets = len(self.positions)
+            n_assets = len (self.positions)
             correlation_matrix = np.full((n_assets, n_assets), 0.3)
-            np.fill_diagonal(correlation_matrix, 1.0)
+            np.fill_diagonal (correlation_matrix, 1.0)
         
         # Simulate correlated returns
-        mean_returns = np.array([-0.05] * len(self.positions))  # Stress: negative drift
-        volatilities = np.array([0.30] * len(self.positions))    # High vol
+        mean_returns = np.array([-0.05] * len (self.positions))  # Stress: negative drift
+        volatilities = np.array([0.30] * len (self.positions))    # High vol
         
         # Cholesky decomposition for correlated random variables
-        cov_matrix = np.outer(volatilities, volatilities) * correlation_matrix
-        L = np.linalg.cholesky(cov_matrix)
+        cov_matrix = np.outer (volatilities, volatilities) * correlation_matrix
+        L = np.linalg.cholesky (cov_matrix)
         
         # Simulate
         simulated_losses = []
         
-        for _ in range(n_simulations):
-            z = np.random.normal(0, 1, len(self.positions))
+        for _ in range (n_simulations):
+            z = np.random.normal(0, 1, len (self.positions))
             returns = mean_returns + L @ z
             
             portfolio_return = sum(
                 (qty * self.prices[sym]) / self.portfolio_value * ret
-                for (sym, qty), ret in zip(self.positions.items(), returns)
+                for (sym, qty), ret in zip (self.positions.items(), returns)
             )
             
-            simulated_losses.append(portfolio_return)
+            simulated_losses.append (portfolio_return)
         
-        simulated_losses = np.array(simulated_losses)
+        simulated_losses = np.array (simulated_losses)
         
         return {
             'mean_loss': simulated_losses.mean(),
-            'var_95': np.percentile(simulated_losses, 5),
-            'var_99': np.percentile(simulated_losses, 1),
+            'var_95': np.percentile (simulated_losses, 5),
+            'var_99': np.percentile (simulated_losses, 1),
             'worst_case': simulated_losses.min(),
             'best_case': simulated_losses.max()
         }
@@ -443,7 +443,7 @@ prices = {
     'GLD': 180,
 }
 
-stress_tester = StressTester(positions, prices)
+stress_tester = StressTester (positions, prices)
 
 print("\\n" + "="*70)
 print("STRESS TEST RESULTS")
@@ -468,13 +468,13 @@ print(f"  Loss: \${corr_breakdown['loss']:,.0f} ({corr_breakdown['loss_pct']:.2%
 
 # Liquidity stress
 print("\\n3. Forced Liquidation (50% of portfolio):")
-liquidity_result = stress_tester.liquidity_stress_test(liquidation_pct=0.50)
+liquidity_result = stress_tester.liquidity_stress_test (liquidation_pct=0.50)
 print(f"  Liquidation Cost: \${liquidity_result['liquidation_cost']:,.0f}")
 print(f"  Cost (bps): {liquidity_result['cost_bps']:.0f} bps")
 
 # Monte Carlo
 print("\\n4. Monte Carlo Stress Simulation (10,000 scenarios):")
-mc_results = stress_tester.monte_carlo_stress_test(n_simulations=10000)
+mc_results = stress_tester.monte_carlo_stress_test (n_simulations=10000)
 print(f"  Mean Loss: {mc_results['mean_loss']:.2%}")
 print(f"  VaR 95%: {mc_results['var_95']:.2%}")
 print(f"  VaR 99%: {mc_results['var_99']:.2%}")
@@ -504,7 +504,7 @@ class DynamicRiskManager:
         """
         self.target_volatility = target_volatility
     
-    def volatility_targeting(self, current_volatility: float,
+    def volatility_targeting (self, current_volatility: float,
                             base_allocation: float) -> float:
         """
         Volatility Targeting: Scale position to maintain constant risk
@@ -515,11 +515,11 @@ class DynamicRiskManager:
         adjusted_allocation = base_allocation * scaling_factor
         
         # Cap at reasonable levels
-        adjusted_allocation = np.clip(adjusted_allocation, 0.1, 2.0)
+        adjusted_allocation = np.clip (adjusted_allocation, 0.1, 2.0)
         
         return adjusted_allocation
     
-    def drawdown_based_scaling(self, current_drawdown: float,
+    def drawdown_based_scaling (self, current_drawdown: float,
                                max_drawdown_threshold: float = 0.10) -> float:
         """
         Reduce exposure as drawdown increases
@@ -537,7 +537,7 @@ class DynamicRiskManager:
         
         return scaling
     
-    def regime_based_allocation(self, regime: str) -> dict:
+    def regime_based_allocation (self, regime: str) -> dict:
         """
         Adjust allocation based on market regime
         
@@ -551,18 +551,18 @@ class DynamicRiskManager:
             'crisis': {'stocks': 0.20, 'bonds': 0.60, 'alternatives': 0.20},
         }
         
-        return allocations.get(regime, allocations['bull'])
+        return allocations.get (regime, allocations['bull'])
 
 
 # Example: Dynamic risk adjustment
-drm = DynamicRiskManager(target_volatility=0.15)
+drm = DynamicRiskManager (target_volatility=0.15)
 
 # Current market conditions
 current_vol = 0.25  # 25% vol (high)
 base_allocation = 1.0  # 100% invested normally
 
 # Volatility targeting
-adjusted_allocation = drm.volatility_targeting(current_vol, base_allocation)
+adjusted_allocation = drm.volatility_targeting (current_vol, base_allocation)
 print(f"\\nVolatility Targeting:")
 print(f"  Current Vol: {current_vol:.1%}")
 print(f"  Target Vol: {drm.target_volatility:.1%}")
@@ -570,7 +570,7 @@ print(f"  Adjusted Allocation: {adjusted_allocation:.1%} (from {base_allocation:
 
 # Drawdown scaling
 current_dd = 0.08  # 8% drawdown
-dd_scaling = drm.drawdown_based_scaling(current_dd, max_drawdown_threshold=0.10)
+dd_scaling = drm.drawdown_based_scaling (current_dd, max_drawdown_threshold=0.10)
 print(f"\\nDrawdown Scaling:")
 print(f"  Current Drawdown: {current_dd:.1%}")
 print(f"  Position Scaling: {dd_scaling:.1%}")

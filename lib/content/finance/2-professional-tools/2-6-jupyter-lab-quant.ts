@@ -1,13 +1,14 @@
 import { Content } from '@/lib/types';
 
 export const jupyterLabQuantContent: Content = {
-    title: "Jupyter Lab for Quantitative Research",
-    subtitle: "Professional computational research environment for finance",
-    description: "Master Jupyter Lab and Jupyter Notebook for quantitative financial research, from basic data analysis to sophisticated backtesting and strategy development. Learn the tools used by quantitative researchers at leading hedge funds and banks.",
-    sections: [
-        {
-            title: "Jupyter Ecosystem Overview",
-            content: `
+  title: 'Jupyter Lab for Quantitative Research',
+  subtitle: 'Professional computational research environment for finance',
+  description:
+    'Master Jupyter Lab and Jupyter Notebook for quantitative financial research, from basic data analysis to sophisticated backtesting and strategy development. Learn the tools used by quantitative researchers at leading hedge funds and banks.',
+  sections: [
+    {
+      title: 'Jupyter Ecosystem Overview',
+      content: `
 # Understanding the Jupyter Ecosystem
 
 ## Jupyter Notebook vs Jupyter Lab
@@ -146,11 +147,11 @@ Quick access to all Jupyter Lab commands.
 
 ### 5. Property Inspector
 View notebook metadata and cell properties.
-      `
-        },
-        {
-            title: "Essential Jupyter Lab Features",
-            content: `
+      `,
+    },
+    {
+      title: 'Essential Jupyter Lab Features',
+      content: `
 # Power User Features for Quantitative Research
 
 ## Cell Types and Execution
@@ -166,17 +167,17 @@ import yfinance as yf
 
 # Download data
 ticker = "AAPL"
-df = yf.download(ticker, start="2020-01-01", end="2024-01-01")
-print(f"Downloaded {len(df)} rows for {ticker}")
+df = yf.download (ticker, start="2020-01-01", end="2024-01-01")
+print(f"Downloaded {len (df)} rows for {ticker}")
 \`\`\`
 
 **Keyboard Shortcuts:**
-- `Shift + Enter`: Execute cell and move to next
-- `Ctrl + Enter`: Execute cell and stay
-- `Alt + Enter`: Execute cell and insert new cell below
-- `DD`: Delete selected cell (in command mode)
-- `A`: Insert cell above
-- `B`: Insert cell below
+- \`Shift + Enter\`: Execute cell and move to next
+- \`Ctrl + Enter\`: Execute cell and stay
+- \`Alt + Enter\`: Execute cell and insert new cell below
+- \`DD\`: Delete selected cell (in command mode)
+- \`A\`: Insert cell above
+- \`B\`: Insert cell below
 
 ### Markdown Cells
 Document your research with formatted text.
@@ -255,7 +256,7 @@ Multi-line commands.
 # Time entire cell execution
 result = []
 for i in range(1000000):
-    result.append(i**2)
+    result.append (i**2)
 
 %%timeit
 # Benchmark cell with multiple runs
@@ -263,9 +264,9 @@ result = [x**2 for x in range(1000)]
 
 %%writefile strategy.py
 # Write cell contents to file
-def moving_average_crossover(df, fast=20, slow=50):
-    df['fast_ma'] = df['Close'].rolling(fast).mean()
-    df['slow_ma'] = df['Close'].rolling(slow).mean()
+def moving_average_crossover (df, fast=20, slow=50):
+    df['fast_ma'] = df['Close'].rolling (fast).mean()
+    df['slow_ma'] = df['Close'].rolling (slow).mean()
     df['signal'] = 0
     df.loc[df['fast_ma'] > df['slow_ma'], 'signal'] = 1
     df.loc[df['fast_ma'] < df['slow_ma'], 'signal'] = -1
@@ -314,13 +315,13 @@ display(Markdown("""
 """))
 
 # Display mathematical notation
-display(Math(r'SR = \\frac{E[R_p - R_f]}{\\sigma_p}'))
+display(Math (r'SR = \\frac{E[R_p - R_f]}{\\sigma_p}'))
 
 # Display images
-display(Image(filename='./charts/returns_distribution.png'))
+display(Image (filename='./charts/returns_distribution.png'))
 
 # Display multiple objects
-display(df.head(), df.describe(), df.corr())
+display (df.head(), df.describe(), df.corr())
 \`\`\`
 
 ### Rich Output
@@ -333,16 +334,16 @@ import seaborn as sns
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 # Price chart
-df['Close'].plot(ax=axes[0, 0], title='Price History')
+df['Close'].plot (ax=axes[0, 0], title='Price History')
 
 # Returns distribution
-df['Returns'].hist(ax=axes[0, 1], bins=50, title='Returns Distribution')
+df['Returns'].hist (ax=axes[0, 1], bins=50, title='Returns Distribution')
 
 # Cumulative returns
-(1 + df['Returns']).cumprod().plot(ax=axes[1, 0], title='Cumulative Returns')
+(1 + df['Returns']).cumprod().plot (ax=axes[1, 0], title='Cumulative Returns')
 
 # Volatility over time
-df['Returns'].rolling(30).std().plot(ax=axes[1, 1], title='Rolling Volatility')
+df['Returns'].rolling(30).std().plot (ax=axes[1, 1], title='Rolling Volatility')
 
 plt.tight_layout()
 plt.show()
@@ -412,11 +413,11 @@ Interactive debugging like VS Code.
 # Enable: View -> Activate Debugger
 # Set breakpoints by clicking line numbers
 \`\`\`
-      `
+      `,
     },
     {
-        title: "Organizing Quantitative Research",
-        content: `
+      title: 'Organizing Quantitative Research',
+      content: `
 # Professional Notebook Organization
 
 ## Project Structure for Quant Research
@@ -614,10 +615,10 @@ df.head()
 # Price chart
 fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
-df['Close'].plot(ax=axes[0], title=f'{TICKER} Price History')
+df['Close'].plot (ax=axes[0], title=f'{TICKER} Price History')
 axes[0].set_ylabel('Price ($)')
 
-df['Volume'].plot(ax=axes[1], title='Volume')
+df['Volume'].plot (ax=axes[1], title='Volume')
 axes[1].set_ylabel('Volume')
 
 plt.tight_layout()
@@ -625,8 +626,8 @@ plt.show()
 
 # Cell 6: Feature Engineering
 # Calculate moving averages
-df['MA_fast'] = df['Close'].rolling(window=FAST_PERIOD).mean()
-df['MA_slow'] = df['Close'].rolling(window=SLOW_PERIOD).mean()
+df['MA_fast'] = df['Close'].rolling (window=FAST_PERIOD).mean()
+df['MA_slow'] = df['Close'].rolling (window=SLOW_PERIOD).mean()
 
 # Generate signals
 df['signal'] = 0
@@ -637,23 +638,23 @@ df.loc[df['MA_fast'] < df['MA_slow'], 'signal'] = -1
 df['position_change'] = df['signal'].diff()
 
 # Visualization
-plt.figure(figsize=(14, 7))
-plt.plot(df.index, df['Close'], label='Price', alpha=0.5)
-plt.plot(df.index, df['MA_fast'], label=f'{FAST_PERIOD}-day MA')
-plt.plot(df.index, df['MA_slow'], label=f'{SLOW_PERIOD}-day MA')
+plt.figure (figsize=(14, 7))
+plt.plot (df.index, df['Close'], label='Price', alpha=0.5)
+plt.plot (df.index, df['MA_fast'], label=f'{FAST_PERIOD}-day MA')
+plt.plot (df.index, df['MA_slow'], label=f'{SLOW_PERIOD}-day MA')
 
 # Mark buy signals
 buy_signals = df[df['position_change'] == 2]
-plt.scatter(buy_signals.index, buy_signals['Close'], 
+plt.scatter (buy_signals.index, buy_signals['Close'], 
            color='green', marker='^', s=100, label='Buy', zorder=5)
 
 # Mark sell signals
 sell_signals = df[df['position_change'] == -2]
-plt.scatter(sell_signals.index, sell_signals['Close'],
+plt.scatter (sell_signals.index, sell_signals['Close'],
            color='red', marker='v', s=100, label='Sell', zorder=5)
 
 plt.legend()
-plt.title(f'{TICKER} - Moving Average Crossover Signals')
+plt.title (f'{TICKER} - Moving Average Crossover Signals')
 plt.show()
 
 # Cell 7: Backtesting
@@ -671,9 +672,9 @@ df['cumulative_market'] = (1 + df['returns']).cumprod()
 df['cumulative_strategy'] = (1 + df['strategy_returns_net']).cumprod()
 
 # Plot performance
-plt.figure(figsize=(14, 7))
-plt.plot(df.index, df['cumulative_market'], label='Buy & Hold', linewidth=2)
-plt.plot(df.index, df['cumulative_strategy'], label='Strategy', linewidth=2)
+plt.figure (figsize=(14, 7))
+plt.plot (df.index, df['cumulative_market'], label='Buy & Hold', linewidth=2)
+plt.plot (df.index, df['cumulative_strategy'], label='Strategy', linewidth=2)
 plt.legend()
 plt.title('Cumulative Returns: Strategy vs Buy & Hold')
 plt.ylabel('Cumulative Return')
@@ -681,11 +682,11 @@ plt.grid(True, alpha=0.3)
 plt.show()
 
 # Cell 8: Performance Metrics
-def calculate_metrics(returns, periods_per_year=252):
+def calculate_metrics (returns, periods_per_year=252):
     """Calculate strategy performance metrics"""
     total_return = (1 + returns).prod() - 1
-    annual_return = (1 + total_return) ** (periods_per_year / len(returns)) - 1
-    annual_vol = returns.std() * np.sqrt(periods_per_year)
+    annual_return = (1 + total_return) ** (periods_per_year / len (returns)) - 1
+    annual_vol = returns.std() * np.sqrt (periods_per_year)
     sharpe = annual_return / annual_vol if annual_vol > 0 else 0
     
     # Maximum drawdown
@@ -704,13 +705,13 @@ def calculate_metrics(returns, periods_per_year=252):
     }
 
 # Calculate metrics
-strategy_metrics = calculate_metrics(df['strategy_returns_net'].dropna())
-market_metrics = calculate_metrics(df['returns'].dropna())
+strategy_metrics = calculate_metrics (df['strategy_returns_net'].dropna())
+market_metrics = calculate_metrics (df['returns'].dropna())
 
 # Display results
 results_df = pd.DataFrame([strategy_metrics, market_metrics],
                           index=['Strategy', 'Buy & Hold'])
-display(results_df)
+display (results_df)
 
 # Cell 9: Conclusions and Next Steps
 """
@@ -760,13 +761,13 @@ print("Results saved successfully!")
 df = load_data('SPY')
 
 # Good: Next logical step
-df_clean = clean_data(df)
+df_clean = clean_data (df)
 
 # Bad: Multiple unrelated operations in one cell
 df = load_data('SPY')
-model = train_model(df)
-results = backtest(model)
-charts = create_visualizations(results)
+model = train_model (df)
+results = backtest (model)
+charts = create_visualizations (results)
 \`\`\`
 
 ### 2. Restart and Run All
@@ -787,11 +788,11 @@ nbstripout --install
 
 # Now outputs won't be committed to git
 \`\`\`
-      `
+      `,
     },
-{
-    title: "Advanced Workflow Techniques",
-        content: `
+    {
+      title: 'Advanced Workflow Techniques',
+      content: `
 # Professional Workflows for Quantitative Research
 
 ## Converting Notebooks to Production Code
@@ -803,12 +804,12 @@ nbstripout --install
 # Cell in notebook
 df['MA_20'] = df['Close'].rolling(20).mean()
 df['MA_50'] = df['Close'].rolling(50).mean()
-df['signal'] = np.where(df['MA_20'] > df['MA_50'], 1, -1)
+df['signal'] = np.where (df['MA_20'] > df['MA_50'], 1, -1)
 \`\`\`
 
 **To Module (src/features/technical.py):**
 \`\`\`python
-def moving_average_crossover(df, fast_period=20, slow_period=50):
+def moving_average_crossover (df, fast_period=20, slow_period=50):
     """
     Generate trading signals based on moving average crossover.
     
@@ -827,9 +828,9 @@ def moving_average_crossover(df, fast_period=20, slow_period=50):
         Original DataFrame with added MA columns and signal column
     """
     df = df.copy()
-    df[f'MA_{fast_period}'] = df['Close'].rolling(fast_period).mean()
-    df[f'MA_{slow_period}'] = df['Close'].rolling(slow_period).mean()
-    df['signal'] = np.where(df[f'MA_{fast_period}'] > df[f'MA_{slow_period}'], 1, -1)
+    df[f'MA_{fast_period}'] = df['Close'].rolling (fast_period).mean()
+    df[f'MA_{slow_period}'] = df['Close'].rolling (slow_period).mean()
+    df['signal'] = np.where (df[f'MA_{fast_period}'] > df[f'MA_{slow_period}'], 1, -1)
     return df
 \`\`\`
 
@@ -837,7 +838,7 @@ def moving_average_crossover(df, fast_period=20, slow_period=50):
 \`\`\`python
 from src.features.technical import moving_average_crossover
 
-df = moving_average_crossover(df, fast_period=20, slow_period=50)
+df = moving_average_crossover (df, fast_period=20, slow_period=50)
 \`\`\`
 
 ### Workflow: Notebook → Module → Test
@@ -925,26 +926,26 @@ from IPython.display import display
 # Download data once
 df = yf.download('AAPL', start='2020-01-01', end='2024-01-01')
 
-def plot_ma_crossover(fast_period, slow_period):
+def plot_ma_crossover (fast_period, slow_period):
     """Interactive MA crossover visualization"""
     df_copy = df.copy()
-    df_copy['MA_fast'] = df_copy['Close'].rolling(fast_period).mean()
-    df_copy['MA_slow'] = df_copy['Close'].rolling(slow_period).mean()
+    df_copy['MA_fast'] = df_copy['Close'].rolling (fast_period).mean()
+    df_copy['MA_slow'] = df_copy['Close'].rolling (slow_period).mean()
     
-    plt.figure(figsize=(14, 7))
-    plt.plot(df_copy.index, df_copy['Close'], label='Price', alpha=0.5)
-    plt.plot(df_copy.index, df_copy['MA_fast'], label=f'{fast_period}-day MA')
-    plt.plot(df_copy.index, df_copy['MA_slow'], label=f'{slow_period}-day MA')
+    plt.figure (figsize=(14, 7))
+    plt.plot (df_copy.index, df_copy['Close'], label='Price', alpha=0.5)
+    plt.plot (df_copy.index, df_copy['MA_fast'], label=f'{fast_period}-day MA')
+    plt.plot (df_copy.index, df_copy['MA_slow'], label=f'{slow_period}-day MA')
     plt.legend()
-    plt.title(f'Moving Average Crossover: {fast_period}/{slow_period}')
+    plt.title (f'Moving Average Crossover: {fast_period}/{slow_period}')
     plt.show()
 
 # Create interactive sliders
-fast_slider = widgets.IntSlider(value=20, min=5, max=50, step=5, description='Fast MA:')
-slow_slider = widgets.IntSlider(value=50, min=20, max=200, step=10, description='Slow MA:')
+fast_slider = widgets.IntSlider (value=20, min=5, max=50, step=5, description='Fast MA:')
+slow_slider = widgets.IntSlider (value=50, min=20, max=200, step=10, description='Slow MA:')
 
 # Link sliders to function
-widgets.interact(plot_ma_crossover, fast_period=fast_slider, slow_period=slow_slider)
+widgets.interact (plot_ma_crossover, fast_period=fast_slider, slow_period=slow_slider)
 \`\`\`
 
 ### Advanced Interactive Dashboard
@@ -955,23 +956,23 @@ class StrategyDashboard:
     
     def __init__(self, ticker='AAPL'):
         self.ticker = ticker
-        self.df = yf.download(ticker, start='2020-01-01', end='2024-01-01')
+        self.df = yf.download (ticker, start='2020-01-01', end='2024-01-01')
         
         # Create widgets
-        self.fast_ma = widgets.IntSlider(value=20, min=5, max=50, step=5, 
+        self.fast_ma = widgets.IntSlider (value=20, min=5, max=50, step=5, 
                                          description='Fast MA')
-        self.slow_ma = widgets.IntSlider(value=50, min=20, max=200, step=10,
+        self.slow_ma = widgets.IntSlider (value=50, min=20, max=200, step=10,
                                         description='Slow MA')
-        self.capital = widgets.FloatText(value=100000, description='Capital')
-        self.commission = widgets.FloatText(value=0.001, description='Commission')
+        self.capital = widgets.FloatText (value=100000, description='Capital')
+        self.commission = widgets.FloatText (value=0.001, description='Commission')
         
-        self.run_button = widgets.Button(description='Run Backtest',
+        self.run_button = widgets.Button (description='Run Backtest',
                                          button_style='success')
-        self.run_button.on_click(self.run_backtest)
+        self.run_button.on_click (self.run_backtest)
         
         self.output = widgets.Output()
         
-    def display(self):
+    def display (self):
         """Display dashboard"""
         controls = widgets.VBox([
             widgets.HTML(f'<h2>Strategy Dashboard: {self.ticker}</h2>'),
@@ -982,20 +983,20 @@ class StrategyDashboard:
             self.run_button,
             self.output
         ])
-        display(controls)
+        display (controls)
     
-    def run_backtest(self, button):
+    def run_backtest (self, button):
         """Execute backtest with current parameters"""
         with self.output:
             self.output.clear_output()
             
             # Calculate MAs
             df = self.df.copy()
-            df['MA_fast'] = df['Close'].rolling(self.fast_ma.value).mean()
-            df['MA_slow'] = df['Close'].rolling(self.slow_ma.value).mean()
+            df['MA_fast'] = df['Close'].rolling (self.fast_ma.value).mean()
+            df['MA_slow'] = df['Close'].rolling (self.slow_ma.value).mean()
             
             # Generate signals
-            df['signal'] = np.where(df['MA_fast'] > df['MA_slow'], 1, -1)
+            df['signal'] = np.where (df['MA_fast'] > df['MA_slow'], 1, -1)
             df['position_change'] = df['signal'].diff()
             
             # Calculate returns
@@ -1009,7 +1010,7 @@ class StrategyDashboard:
             
             # Performance metrics
             total_return = (1 + df['strategy_returns_net']).prod() - 1
-            annual_return = (1 + total_return) ** (252 / len(df)) - 1
+            annual_return = (1 + total_return) ** (252 / len (df)) - 1
             sharpe = df['strategy_returns_net'].mean() / df['strategy_returns_net'].std() * np.sqrt(252)
             
             # Display results
@@ -1021,21 +1022,21 @@ class StrategyDashboard:
             print(f"Total Return: {total_return:.2%}")
             print(f"Annual Return: {annual_return:.2%}")
             print(f"Sharpe Ratio: {sharpe:.2f}")
-            print(f"Number of Trades: {int(df['trades'].sum() / 2)}")
+            print(f"Number of Trades: {int (df['trades'].sum() / 2)}")
             
             # Plot
             fig, axes = plt.subplots(2, 1, figsize=(14, 10))
             
             # Cumulative returns
             cumulative = (1 + df['strategy_returns_net']).cumprod()
-            cumulative.plot(ax=axes[0], title='Cumulative Returns')
+            cumulative.plot (ax=axes[0], title='Cumulative Returns')
             axes[0].set_ylabel('Cumulative Return')
             axes[0].grid(True, alpha=0.3)
             
             # Drawdown
             running_max = cumulative.expanding().max()
             drawdown = (cumulative - running_max) / running_max
-            drawdown.plot(ax=axes[1], title='Drawdown', color='red')
+            drawdown.plot (ax=axes[1], title='Drawdown', color='red')
             axes[1].set_ylabel('Drawdown')
             axes[1].grid(True, alpha=0.3)
             
@@ -1148,11 +1149,11 @@ git diff notebook.ipynb
 # Web-based diff viewer
 nbdiff-web notebook_old.ipynb notebook_new.ipynb
 \`\`\`
-      `
-},
-{
-    title: "Performance Optimization",
-        content: `
+      `,
+    },
+    {
+      title: 'Performance Optimization',
+      content: `
 # Optimizing Jupyter Notebooks for Large-Scale Analysis
 
 ## Profiling and Benchmarking
@@ -1166,10 +1167,10 @@ pip install line_profiler
 %load_ext line_profiler
 
 # Profile specific function
-def slow_function(n):
+def slow_function (n):
     result = []
-    for i in range(n):
-        result.append(i ** 2)
+    for i in range (n):
+        result.append (i ** 2)
     return result
 
 %lprun -f slow_function slow_function(100000)
@@ -1244,10 +1245,10 @@ chunks = []
 for chunk in pd.read_csv('huge_file.csv', chunksize=chunk_size):
     # Process each chunk
     chunk_processed = chunk[chunk['volume'] > 1000000]
-    chunks.append(chunk_processed)
+    chunks.append (chunk_processed)
 
 # Combine processed chunks
-df = pd.concat(chunks, ignore_index=True)
+df = pd.concat (chunks, ignore_index=True)
 \`\`\`
 
 ### Selective Column Loading
@@ -1269,7 +1270,7 @@ df = pd.read_csv('data.csv',
 %%timeit
 result = []
 for value in df['close']:
-    result.append(value * 1.05)
+    result.append (value * 1.05)
 
 # Fast: Vectorized
 %%timeit
@@ -1285,15 +1286,15 @@ import numpy as np
 
 # Slow: Pandas apply
 %%timeit
-df['returns'] = df['close'].apply(lambda x: np.log(x / df['close'].shift(1)))
+df['returns'] = df['close'].apply (lambda x: np.log (x / df['close'].shift(1)))
 
 # Fast: NumPy
 %%timeit
-df['returns'] = np.log(df['close'] / df['close'].shift(1))
+df['returns'] = np.log (df['close'] / df['close'].shift(1))
 
 # Faster: Direct division then log
 %%timeit
-df['returns'] = np.log(df['close'].values[1:] / df['close'].values[:-1])
+df['returns'] = np.log (df['close'].values[1:] / df['close'].values[:-1])
 \`\`\`
 
 ## Parallel Processing
@@ -1303,20 +1304,20 @@ df['returns'] = np.log(df['close'].values[1:] / df['close'].values[:-1])
 \`\`\`python
 from joblib import Parallel, delayed
 
-def backtest_ticker(ticker, start_date, end_date):
+def backtest_ticker (ticker, start_date, end_date):
     """Backtest single ticker"""
-    df = yf.download(ticker, start=start_date, end=end_date, progress=False)
+    df = yf.download (ticker, start=start_date, end=end_date, progress=False)
     # ... backtest logic ...
     return results
 
 tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']  # ...100+ tickers
 
 # Sequential (slow)
-results = [backtest_ticker(t, '2020-01-01', '2023-12-31') for t in tickers]
+results = [backtest_ticker (t, '2020-01-01', '2023-12-31') for t in tickers]
 
 # Parallel (fast)
-results = Parallel(n_jobs=-1)(
-    delayed(backtest_ticker)(t, '2020-01-01', '2023-12-31') 
+results = Parallel (n_jobs=-1)(
+    delayed (backtest_ticker)(t, '2020-01-01', '2023-12-31') 
     for t in tickers
 )
 
@@ -1329,21 +1330,21 @@ results = Parallel(n_jobs=-1)(
 from multiprocessing import Pool
 import pandas as pd
 
-def process_ticker(ticker):
+def process_ticker (ticker):
     """CPU-intensive processing"""
-    df = yf.download(ticker, start='2020-01-01', end='2023-12-31', progress=False)
+    df = yf.download (ticker, start='2020-01-01', end='2023-12-31', progress=False)
     
     # Heavy computation
     for i in range(100):
-        df[f'feature_{i}'] = df['close'].rolling(i+1).mean()
+        df[f'feature_{i}'] = df['close'].rolling (i+1).mean()
     
     return ticker, df.shape[0]
 
 if __name__ == '__main__':
     tickers = ['AAPL', 'MSFT', 'GOOGL']  # ... many more
     
-    with Pool(processes=8) as pool:
-        results = pool.map(process_ticker, tickers)
+    with Pool (processes=8) as pool:
+        results = pool.map (process_ticker, tickers)
     
     print(results)
 \`\`\`
@@ -1382,10 +1383,10 @@ from joblib import Memory
 memory = Memory('./cache', verbose=0)
 
 @memory.cache
-def expensive_computation(ticker, start_date, end_date):
+def expensive_computation (ticker, start_date, end_date):
     """Expensive function - results will be cached"""
     print(f"Computing {ticker}...")
-    df = yf.download(ticker, start=start_date, end=end_date)
+    df = yf.download (ticker, start=start_date, end=end_date)
     # ... expensive processing ...
     return results
 
@@ -1405,19 +1406,19 @@ result3 = expensive_computation('MSFT', '2020-01-01', '2023-12-31')
 import pickle
 from pathlib import Path
 
-def load_or_compute(cache_path, compute_func, *args, **kwargs):
+def load_or_compute (cache_path, compute_func, *args, **kwargs):
     """Load from cache if exists, otherwise compute"""
-    cache_file = Path(cache_path)
+    cache_file = Path (cache_path)
     
     if cache_file.exists():
         print(f"Loading from cache: {cache_path}")
-        with open(cache_file, 'rb') as f:
-            return pickle.load(f)
+        with open (cache_file, 'rb') as f:
+            return pickle.load (f)
     else:
         print(f"Computing and caching to: {cache_path}")
         result = compute_func(*args, **kwargs)
-        with open(cache_file, 'wb') as f:
-            pickle.dump(result, f)
+        with open (cache_file, 'wb') as f:
+            pickle.dump (result, f)
         return result
 
 # Usage
@@ -1449,7 +1450,7 @@ query = """
     ORDER BY date
 """
 
-df = pd.read_sql(query, engine)
+df = pd.read_sql (query, engine)
 
 # Much faster than loading entire table then filtering in Python
 \`\`\`
@@ -1460,61 +1461,64 @@ df = pd.read_sql(query, engine)
 # Write large DataFrame to database in chunks
 chunk_size = 10000
 
-for i in range(0, len(df), chunk_size):
+for i in range(0, len (df), chunk_size):
     chunk = df.iloc[i:i+chunk_size]
     chunk.to_sql('prices', engine, if_exists='append', index=False)
-    print(f"Written rows {i} to {i+len(chunk)}")
+    print(f"Written rows {i} to {i+len (chunk)}")
 \`\`\`
-      `
-}
+      `,
+    },
   ],
-exercises: [
+  exercises: [
     {
-        title: "Build a Research Workflow",
-        description: "Create a complete Jupyter Lab research workflow for testing a momentum strategy across multiple stocks.",
-        difficulty: "intermediate",
-        hints: [
-            "Set up proper directory structure with data/, notebooks/, src/, tests/",
-            "Create parameterized notebook that can test any ticker",
-            "Extract reusable functions to .py modules",
-            "Use papermill to run notebook for 20+ tickers automatically"
-        ]
+      title: 'Build a Research Workflow',
+      description:
+        'Create a complete Jupyter Lab research workflow for testing a momentum strategy across multiple stocks.',
+      difficulty: 'intermediate',
+      hints: [
+        'Set up proper directory structure with data/, notebooks/, src/, tests/',
+        'Create parameterized notebook that can test any ticker',
+        'Extract reusable functions to .py modules',
+        'Use papermill to run notebook for 20+ tickers automatically',
+      ],
     },
     {
-        title: "Interactive Strategy Dashboard",
-        description: "Build an interactive dashboard using ipywidgets that allows real-time parameter adjustment and visualization.",
-        difficulty: "intermediate",
-        hints: [
-            "Use widgets.IntSlider for MA periods, position size, etc.",
-            "Create real-time chart updates as parameters change",
-            "Display performance metrics dynamically",
-            "Add export functionality for optimal parameters"
-        ]
+      title: 'Interactive Strategy Dashboard',
+      description:
+        'Build an interactive dashboard using ipywidgets that allows real-time parameter adjustment and visualization.',
+      difficulty: 'intermediate',
+      hints: [
+        'Use widgets.IntSlider for MA periods, position size, etc.',
+        'Create real-time chart updates as parameters change',
+        'Display performance metrics dynamically',
+        'Add export functionality for optimal parameters',
+      ],
     },
     {
-        title: "Performance Optimization",
-        description: "Optimize a slow notebook that processes 500 stocks for 5 years of daily data.",
-        difficulty: "advanced",
-        hints: [
-            "Profile code to find bottlenecks using %lprun and %memit",
-            "Vectorize loops and use NumPy where possible",
-            "Implement parallel processing with joblib or multiprocessing",
-            "Use parquet instead of CSV for faster loading",
-            "Cache expensive computations"
-        ]
+      title: 'Performance Optimization',
+      description:
+        'Optimize a slow notebook that processes 500 stocks for 5 years of daily data.',
+      difficulty: 'advanced',
+      hints: [
+        'Profile code to find bottlenecks using %lprun and %memit',
+        'Vectorize loops and use NumPy where possible',
+        'Implement parallel processing with joblib or multiprocessing',
+        'Use parquet instead of CSV for faster loading',
+        'Cache expensive computations',
+      ],
     },
     {
-        title: "Production Pipeline",
-        description: "Convert a research notebook into a production-ready pipeline with proper error handling, logging, and testing.",
-        difficulty: "advanced",
-        hints: [
-            "Extract all code to proper Python modules with docstrings",
-            "Write unit tests for each function",
-            "Add comprehensive error handling and logging",
-            "Create command-line interface using argparse",
-            "Set up automated execution with cron or Airflow"
-        ]
-    }
-]
+      title: 'Production Pipeline',
+      description:
+        'Convert a research notebook into a production-ready pipeline with proper error handling, logging, and testing.',
+      difficulty: 'advanced',
+      hints: [
+        'Extract all code to proper Python modules with docstrings',
+        'Write unit tests for each function',
+        'Add comprehensive error handling and logging',
+        'Create command-line interface using argparse',
+        'Set up automated execution with cron or Airflow',
+      ],
+    },
+  ],
 };
-

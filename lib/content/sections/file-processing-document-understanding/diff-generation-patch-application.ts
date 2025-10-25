@@ -23,10 +23,10 @@ Diffs show changes between two versions of text. Essential for:
 \`\`\`python
 import difflib
 
-def generate_unified_diff(old_text: str, new_text: str):
+def generate_unified_diff (old_text: str, new_text: str):
     """Generate unified diff (git-style)."""
-    old_lines = old_text.splitlines(keepends=True)
-    new_lines = new_text.splitlines(keepends=True)
+    old_lines = old_text.splitlines (keepends=True)
+    new_lines = new_text.splitlines (keepends=True)
     
     diff = difflib.unified_diff(
         old_lines,
@@ -36,7 +36,7 @@ def generate_unified_diff(old_text: str, new_text: str):
         lineterm='
     )
     
-    return '\\n'.join(diff)
+    return '\\n'.join (diff)
 
 # Usage - similar to how Cursor shows changes
 old_code = ''def hello():
@@ -45,14 +45,14 @@ old_code = ''def hello():
 new_code = ''def hello():
     print("Hello, World!")''
 
-diff = generate_unified_diff(old_code, new_code)
+diff = generate_unified_diff (old_code, new_code)
 print(diff)
 \`\`\`
 
 ## Finding Changes
 
 \`\`\`python
-def find_changes(old_text: str, new_text: str):
+def find_changes (old_text: str, new_text: str):
     """Find all changes between texts."""
     old_lines = old_text.splitlines()
     new_lines = new_text.splitlines()
@@ -82,9 +82,9 @@ def find_changes(old_text: str, new_text: str):
 # pip install whatthepatch
 import whatthepatch
 
-def apply_patch(original_text: str, patch_text: str):
+def apply_patch (original_text: str, patch_text: str):
     """Apply unified diff patch to text."""
-    patches = list(whatthepatch.parse_patch(patch_text))
+    patches = list (whatthepatch.parse_patch (patch_text))
     
     if not patches:
         return original_text
@@ -96,7 +96,7 @@ def apply_patch(original_text: str, patch_text: str):
             old_line_no, new_line_no, text = change
             # Apply change logic here
     
-    return '\\n'.join(lines)
+    return '\\n'.join (lines)
 \`\`\`
 
 ## Key Takeaways

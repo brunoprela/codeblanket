@@ -7,7 +7,7 @@ export const lambdafunctionsQuiz = [
     id: 'q1',
     question: 'When should you use a lambda function vs a regular function?',
     sampleAnswer:
-      'Use lambda for simple, one-line operations that are used once or passed to functions like map(), filter(), sorted(). Use regular functions for complex logic, reusable code, or anything needing documentation. For example, use lambda for sorting by a key (sorted(items, key=lambda x: x[1])), but use a regular function for data processing with multiple steps, validation, and error handling. Lambda is for convenience, not complexity.',
+      'Use lambda for simple, one-line operations that are used once or passed to functions like map(), filter(), sorted(). Use regular functions for complex logic, reusable code, or anything needing documentation. For example, use lambda for sorting by a key (sorted (items, key=lambda x: x[1])), but use a regular function for data processing with multiple steps, validation, and error handling. Lambda is for convenience, not complexity.',
     keyPoints: [
       'Lambda: simple, one-line, single use',
       'Lambda: with map, filter, sorted',
@@ -21,9 +21,9 @@ export const lambdafunctionsQuiz = [
     question:
       'Explain the difference between map() with lambda and list comprehension. Which is more Pythonic?',
     sampleAnswer:
-      'Both transform lists but with different syntax. map() with lambda: result = list(map(lambda x: x**2, numbers)). List comprehension: result = [x**2 for x in numbers]. List comprehension is more Pythonic because it is more readable, self-contained, and supports filtering inline (e.g., [x**2 for x in numbers if x > 0]). Map with lambda requires wrapping in list() and filter() separately. However, map can be slightly faster for large datasets and more composable with other functional tools. In practice, Python community prefers list/dict comprehensions for readability.',
+      'Both transform lists but with different syntax. map() with lambda: result = list (map (lambda x: x**2, numbers)). List comprehension: result = [x**2 for x in numbers]. List comprehension is more Pythonic because it is more readable, self-contained, and supports filtering inline (e.g., [x**2 for x in numbers if x > 0]). Map with lambda requires wrapping in list() and filter() separately. However, map can be slightly faster for large datasets and more composable with other functional tools. In practice, Python community prefers list/dict comprehensions for readability.',
     keyPoints: [
-      'map(lambda x: x**2, nums) vs [x**2 for x in nums]',
+      'map (lambda x: x**2, nums) vs [x**2 for x in nums]',
       'List comprehension more Pythonic and readable',
       'Comprehension supports inline filtering',
       'map() can be faster for very large data',

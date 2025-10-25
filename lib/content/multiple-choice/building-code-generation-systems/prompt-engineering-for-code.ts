@@ -42,7 +42,7 @@ export const promptengineeringforcodeMultipleChoice: MultipleChoiceQuestion[] =
         'It makes the prompt longer and more detailed',
         'It prevents the LLM from hallucinating non-existent function interfaces',
         'It helps with style consistency',
-        "It's required by the API",
+        "It\'s required by the API",
       ],
       correctAnswer: 1,
       explanation:

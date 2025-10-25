@@ -143,14 +143,14 @@ def text_to_image_to_text(
     
     # Download image
     import requests
-    img_data = requests.get(image_url).content
+    img_data = requests.get (image_url).content
     
     # Save image
     with open("generated_image.png", "wb") as f:
-        f.write(img_data)
+        f.write (img_data)
     
     # Step 2: Analyze the generated image
-    base64_image = base64.b64encode(img_data).decode('utf-8')
+    base64_image = base64.b64encode (img_data).decode('utf-8')
     
     analysis_response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -212,10 +212,10 @@ def image_edit_pipeline(
         Results with analysis and new image
     """
     # Step 1: Analyze original image
-    with open(original_image_path, "rb") as f:
+    with open (original_image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     analysis_response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -248,7 +248,7 @@ Format as JSON:
     )
     
     import json
-    response_data = json.loads(analysis_response.choices[0].message.content)
+    response_data = json.loads (analysis_response.choices[0].message.content)
     
     # Step 2: Generate new image based on prompt
     new_image_response = client.images.generate(
@@ -261,9 +261,9 @@ Format as JSON:
     new_image_url = new_image_response.data[0].url
     
     # Download new image
-    new_img_data = requests.get(new_image_url).content
+    new_img_data = requests.get (new_image_url).content
     with open("edited_image.png", "wb") as f:
-        f.write(new_img_data)
+        f.write (new_img_data)
     
     return {
         "original_description": response_data["original_description"],
@@ -388,7 +388,7 @@ def video_to_audio_to_text(
     ], check=True)
     
     # Step 2: Transcribe audio
-    with open(audio_path, "rb") as audio_file:
+    with open (audio_path, "rb") as audio_file:
         transcription = client.audio.transcriptions.create(
             model="whisper-1",
             file=audio_file,
@@ -414,7 +414,7 @@ Return as JSON."""
     )
     
     import json
-    analysis = json.loads(analysis_response.choices[0].message.content)
+    analysis = json.loads (analysis_response.choices[0].message.content)
     
     return {
         "video_path": video_path,
@@ -455,10 +455,10 @@ def generate_image_variations_via_text(
         List of paths to generated variation images
     """
     # Step 1: Describe the original image
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     description_response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -502,12 +502,12 @@ Return as JSON array of strings: ["variation 1", "variation 2", ...]"""
     )
     
     import json
-    variations = json.loads(variations_response.choices[0].message.content)
+    variations = json.loads (variations_response.choices[0].message.content)
     
     # Step 3: Generate images from variations
     generated_images = []
     
-    for i, variation in enumerate(variations):
+    for i, variation in enumerate (variations):
         image_response = client.images.generate(
             model="dall-e-3",
             prompt=variation,
@@ -517,19 +517,19 @@ Return as JSON array of strings: ["variation 1", "variation 2", ...]"""
         
         # Download image
         img_url = image_response.data[0].url
-        img_data = requests.get(img_url).content
+        img_data = requests.get (img_url).content
         
         output_path = f"variation_{i+1}.png"
-        with open(output_path, "wb") as f:
-            f.write(img_data)
+        with open (output_path, "wb") as f:
+            f.write (img_data)
         
-        generated_images.append(output_path)
+        generated_images.append (output_path)
     
     return generated_images
 
 # Generate variations
 variations = generate_image_variations_via_text("photo.jpg", num_variations=3)
-print(f"Generated {len(variations)} variations")
+print(f"Generated {len (variations)} variations")
 \`\`\`
 
 ### Multi-Step Content Generation
@@ -583,7 +583,7 @@ Return as JSON:
     )
     
     import json
-    outline = json.loads(outline_response.choices[0].message.content)
+    outline = json.loads (outline_response.choices[0].message.content)
     
     # Step 2: Write each section
     sections_content = []
@@ -592,7 +592,7 @@ Return as JSON:
         section_prompt = f"""Write a detailed blog post section:
 
 Title: {section['title']}
-Key points to cover: {', '.join(section['key_points'])}
+Key points to cover: {', '.join (section['key_points'])}
 
 Write 2-3 paragraphs of engaging, informative content."""
 
@@ -619,11 +619,11 @@ Style: Clean, professional, informative. Suitable for a blog post."""
             )
             
             img_url = image_response.data[0].url
-            img_data = requests.get(img_url).content
+            img_data = requests.get (img_url).content
             
-            image_path = f"section_{len(sections_content) + 1}.png"
-            with open(image_path, "wb") as f:
-                f.write(img_data)
+            image_path = f"section_{len (sections_content) + 1}.png"
+            with open (image_path, "wb") as f:
+                f.write (img_data)
         
         sections_content.append({
             "title": section['title'],
@@ -639,7 +639,7 @@ Style: Clean, professional, informative. Suitable for a blog post."""
         "conclusion": outline["conclusion"],
         "metadata": {
             "topic": topic,
-            "word_count": sum(len(s["content"].split()) for s in sections_content),
+            "word_count": sum (len (s["content"].split()) for s in sections_content),
             "num_images": len([s for s in sections_content if s["image"]])
         }
     }
@@ -650,7 +650,7 @@ Style: Clean, professional, informative. Suitable for a blog post."""
 post = generate_complete_blog_post("The Future of Artificial Intelligence", include_images=True)
 
 print(f"Title: {post['title']}")
-print(f"Sections: {len(post['sections'])}")
+print(f"Sections: {len (post['sections'])}")
 print(f"Word count: {post['metadata']['word_count']}")
 print(f"Images: {post['metadata']['num_images']}")
 \`\`\`
@@ -696,7 +696,7 @@ Return as JSON array."""
     )
     
     import json
-    scenes = json.loads(scenes_response.choices[0].message.content)
+    scenes = json.loads (scenes_response.choices[0].message.content)
     
     # Step 2: Generate image for each scene
     storyboard = []
@@ -726,11 +726,11 @@ Style: Cinematic, professional video production style."""
         )
         
         img_url = image_response.data[0].url
-        img_data = requests.get(img_url).content
+        img_data = requests.get (img_url).content
         
         image_path = f"scene_{scene['scene_number']}.png"
-        with open(image_path, "wb") as f:
-            f.write(img_data)
+        with open (image_path, "wb") as f:
+            f.write (img_data)
         
         storyboard.append({
             "scene_number": scene['scene_number'],
@@ -741,8 +741,8 @@ Style: Cinematic, professional video production style."""
     
     return {
         "original_script": script,
-        "num_scenes": len(storyboard),
-        "total_duration": sum(s['duration'] for s in storyboard),
+        "num_scenes": len (storyboard),
+        "total_duration": sum (s['duration'] for s in storyboard),
         "storyboard": storyboard
     }
 
@@ -753,7 +753,7 @@ Scene 2: Close-up of a coffee shop. Steam rising from cups.
 Scene 3: Inside the coffee shop. A barista making coffee.
 """
 
-storyboard = script_to_storyboard_to_images(script)
+storyboard = script_to_storyboard_to_images (script)
 print(f"Generated {storyboard['num_scenes']} scenes")
 print(f"Total duration: {storyboard['total_duration']} seconds")
 \`\`\`
@@ -766,7 +766,7 @@ from dataclasses import dataclass
 from enum import Enum
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class Modality(Enum):
@@ -806,9 +806,9 @@ class CrossModalPipeline:
             model=model,
             parameters=parameters
         )
-        self.steps.append(step)
+        self.steps.append (step)
     
-    def execute(self, initial_input: Union[str, bytes]) -> List[Dict[str, Any]]:
+    def execute (self, initial_input: Union[str, bytes]) -> List[Dict[str, Any]]:
         """
         Execute the pipeline.
         
@@ -821,19 +821,19 @@ class CrossModalPipeline:
         self.results = []
         current_input = initial_input
         
-        for i, step in enumerate(self.steps):
+        for i, step in enumerate (self.steps):
             logger.info(
-                f"Executing step {i+1}/{len(self.steps)}: "
+                f"Executing step {i+1}/{len (self.steps)}: "
                 f"{step.input_modality.value} → {step.output_modality.value}"
             )
             
             try:
-                result = self._execute_step(step, current_input)
-                self.results.append(result)
+                result = self._execute_step (step, current_input)
+                self.results.append (result)
                 current_input = result["output"]
             
             except Exception as e:
-                logger.error(f"Step {i+1} failed: {e}")
+                logger.error (f"Step {i+1} failed: {e}")
                 raise
         
         return self.results
@@ -848,21 +848,21 @@ class CrossModalPipeline:
         transform = f"{step.input_modality.value}_to_{step.output_modality.value}"
         
         if transform == "text_to_image":
-            return self._text_to_image(input_data, step.parameters)
+            return self._text_to_image (input_data, step.parameters)
         
         elif transform == "image_to_text":
-            return self._image_to_text(input_data, step.parameters)
+            return self._image_to_text (input_data, step.parameters)
         
         elif transform == "text_to_audio":
-            return self._text_to_audio(input_data, step.parameters)
+            return self._text_to_audio (input_data, step.parameters)
         
         elif transform == "audio_to_text":
-            return self._audio_to_text(input_data, step.parameters)
+            return self._audio_to_text (input_data, step.parameters)
         
         else:
-            raise NotImplementedError(f"Transform {transform} not implemented")
+            raise NotImplementedError (f"Transform {transform} not implemented")
     
-    def _text_to_image(self, text: str, params: Dict) -> Dict[str, Any]:
+    def _text_to_image (self, text: str, params: Dict) -> Dict[str, Any]:
         """Generate image from text."""
         response = self.client.images.generate(
             model=params.get("model", "dall-e-3"),
@@ -874,11 +874,11 @@ class CrossModalPipeline:
         # Download image
         img_url = response.data[0].url
         import requests
-        img_data = requests.get(img_url).content
+        img_data = requests.get (img_url).content
         
         output_path = params.get("output_path", "generated.png")
-        with open(output_path, "wb") as f:
-            f.write(img_data)
+        with open (output_path, "wb") as f:
+            f.write (img_data)
         
         return {
             "input": text,
@@ -889,12 +889,12 @@ class CrossModalPipeline:
             }
         }
     
-    def _image_to_text(self, image_path: str, params: Dict) -> Dict[str, Any]:
+    def _image_to_text (self, image_path: str, params: Dict) -> Dict[str, Any]:
         """Analyze image and generate text."""
-        with open(image_path, "rb") as f:
+        with open (image_path, "rb") as f:
             image_data = f.read()
         
-        base64_image = base64.b64encode(image_data).decode('utf-8')
+        base64_image = base64.b64encode (image_data).decode('utf-8')
         
         prompt = params.get("prompt", "Describe this image in detail.")
         
@@ -923,7 +923,7 @@ class CrossModalPipeline:
             "output_type": "text"
         }
     
-    def _text_to_audio(self, text: str, params: Dict) -> Dict[str, Any]:
+    def _text_to_audio (self, text: str, params: Dict) -> Dict[str, Any]:
         """Generate audio from text."""
         response = self.client.audio.speech.create(
             model=params.get("model", "tts-1"),
@@ -932,7 +932,7 @@ class CrossModalPipeline:
         )
         
         output_path = params.get("output_path", "speech.mp3")
-        response.stream_to_file(output_path)
+        response.stream_to_file (output_path)
         
         return {
             "input": text,
@@ -940,9 +940,9 @@ class CrossModalPipeline:
             "output_type": "audio"
         }
     
-    def _audio_to_text(self, audio_path: str, params: Dict) -> Dict[str, Any]:
+    def _audio_to_text (self, audio_path: str, params: Dict) -> Dict[str, Any]:
         """Transcribe audio to text."""
-        with open(audio_path, "rb") as audio_file:
+        with open (audio_path, "rb") as audio_file:
             transcription = self.client.audio.transcriptions.create(
                 model="whisper-1",
                 file=audio_file
@@ -955,7 +955,7 @@ class CrossModalPipeline:
         }
 
 # Example: Complex pipeline
-pipeline = CrossModalPipeline(openai_api_key=os.getenv("OPENAI_API_KEY"))
+pipeline = CrossModalPipeline (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 # Text → Image → Text → Audio pipeline
 pipeline.add_step(
@@ -984,7 +984,7 @@ pipeline.add_step(
 results = pipeline.execute("A serene mountain landscape at sunrise")
 
 print("Pipeline completed!")
-for i, result in enumerate(results):
+for i, result in enumerate (results):
     print(f"Step {i+1}: {result['output_type']} - {result['output']}")
 \`\`\`
 
@@ -1002,23 +1002,23 @@ def validate_generation_quality(
     if output_type == "image":
         # Check image properties
         from PIL import Image
-        img = Image.open(output_path)
+        img = Image.open (output_path)
         
         # Check size
         if img.size[0] < 512 or img.size[1] < 512:
             return False
         
         # Check if image is mostly one color (likely error)
-        colors = img.getcolors(img.size[0] * img.size[1])
-        if colors and len(colors) < 10:
+        colors = img.getcolors (img.size[0] * img.size[1])
+        if colors and len (colors) < 10:
             return False
     
     elif output_type == "audio":
         # Check audio duration
         from pydub import AudioSegment
-        audio = AudioSegment.from_file(output_path)
+        audio = AudioSegment.from_file (output_path)
         
-        if len(audio) < 100:  # Less than 0.1 seconds
+        if len (audio) < 100:  # Less than 0.1 seconds
             return False
     
     return True
@@ -1027,7 +1027,7 @@ def validate_generation_quality(
 ### 2. Cost Monitoring
 
 \`\`\`python
-def estimate_pipeline_cost(steps: List[GenerationStep]) -> float:
+def estimate_pipeline_cost (steps: List[GenerationStep]) -> float:
     """Estimate cost of cross-modal pipeline."""
     cost = 0.0
     
@@ -1062,22 +1062,22 @@ def safe_cross_modal_generation(
     max_retries: int = 3
 ) -> Optional[List[Dict[str, Any]]]:
     """Execute pipeline with error handling."""
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
-            results = pipeline.execute(initial_input)
+            results = pipeline.execute (initial_input)
             
             # Validate each result
-            for i, result in enumerate(results):
+            for i, result in enumerate (results):
                 if not validate_generation_quality(
                     result["output"],
                     result["output_type"]
                 ):
-                    raise ValueError(f"Step {i+1} produced low quality output")
+                    raise ValueError (f"Step {i+1} produced low quality output")
             
             return results
         
         except Exception as e:
-            logger.warning(f"Attempt {attempt + 1} failed: {e}")
+            logger.warning (f"Attempt {attempt + 1} failed: {e}")
             if attempt < max_retries - 1:
                 time.sleep(2 ** attempt)
                 continue
@@ -1115,7 +1115,7 @@ Return as JSON."""
     )
     
     import json
-    copy = json.loads(copy_response.choices[0].message.content)
+    copy = json.loads (copy_response.choices[0].message.content)
     
     # Generate product image
     image_prompt = f"""Professional product photograph: {product_description}. 

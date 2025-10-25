@@ -15,22 +15,22 @@ export const alternativeInvestmentsQuiz = [
 
 \`\`\`python
 class HedgeFundAlphaEvaluation:
-    def evaluate_net_alpha(self, hf_returns, benchmark_returns):
+    def evaluate_net_alpha (self, hf_returns, benchmark_returns):
         # Gross alpha
-        gross_alpha = mean(hf_returns) - mean(benchmark_returns)
+        gross_alpha = mean (hf_returns) - mean (benchmark_returns)
         
         # Fees: 2% + 20% of returns above risk-free
-        total_fee = 0.02 + (max(0, mean(hf_returns) - 0.03) * 0.20)
+        total_fee = 0.02 + (max(0, mean (hf_returns) - 0.03) * 0.20)
         
         # Net alpha
         net_alpha = gross_alpha - total_fee
         
         # Statistical significance
-        t_stat = gross_alpha / std(hf_returns - benchmark_returns) * sqrt(n)
-        p_value = t_test(t_stat)
+        t_stat = gross_alpha / std (hf_returns - benchmark_returns) * sqrt (n)
+        p_value = t_test (t_stat)
         
         # Downside protection
-        down_capture = mean(hf_returns[benchmark < 0]) / mean(benchmark_returns[benchmark < 0])
+        down_capture = mean (hf_returns[benchmark < 0]) / mean (benchmark_returns[benchmark < 0])
         
         # Fees justified if:
         justified = (
@@ -73,7 +73,7 @@ Net: ~15-18% IRR historically
 
 \`\`\`python
 class PEAllocationDecision:
-    def should_invest(self, pe_return, public_return, lockup_years, liquidity_need):
+    def should_invest (self, pe_return, public_return, lockup_years, liquidity_need):
         required_premium = 0.03 * lockup_years
         min_acceptable = public_return + required_premium
         
@@ -122,10 +122,10 @@ decision = should_invest(0.18, 0.10, 5, 0.15)
 
 \`\`\`python
 class FraudDetection:
-    def detect_return_smoothing(self, monthly_returns):
-        """Madoff's returns were too smooth"""
-        vol = std(monthly_returns)
-        sharpe = mean(monthly_returns) / vol
+    def detect_return_smoothing (self, monthly_returns):
+        """Madoff\'s returns were too smooth"""
+        vol = std (monthly_returns)
+        sharpe = mean (monthly_returns) / vol
         
         # Red flags:
         red_flags = []
@@ -133,22 +133,22 @@ class FraudDetection:
             red_flags.append("Too smooth (Madoff: 0.5% vol)")
         if sharpe > 2.0:  # Sharpe > 2 very rare
             red_flags.append("Suspiciously high risk-adjusted return")
-        if max_drawdown(monthly_returns) < 0.05:
+        if max_drawdown (monthly_returns) < 0.05:
             red_flags.append("No meaningful drawdown (unrealistic)")
         
         return red_flags
     
-    def detect_style_drift(self, returns, market_returns):
+    def detect_style_drift (self, returns, market_returns):
         """Check if returns match stated strategy"""
-        correlation = corr(returns, market_returns)
+        correlation = corr (returns, market_returns)
         
         # Madoff claimed market-neutral but had 0.7 correlation to S&P
-        if abs(correlation) > 0.3 and strategy == "market_neutral":
+        if abs (correlation) > 0.3 and strategy == "market_neutral":
             return "Style drift: Not actually market neutral"
     
-    def check_consistency(self, monthly_returns):
+    def check_consistency (self, monthly_returns):
         """Too many positive months"""
-        pct_positive = sum(returns > 0) / len(returns)
+        pct_positive = sum (returns > 0) / len (returns)
         
         if pct_positive > 0.85:  # >85% positive months
             return "Unrealistic: Even best managers have 65-70% win rate"
@@ -180,7 +180,7 @@ class FraudDetection:
 
 \`\`\`python
 class DueDiligenceChecklist:
-    def evaluate(self, fund):
+    def evaluate (self, fund):
         checks = {
             'Statistical': {
                 'Return smoothness': check_smoothness(),
@@ -208,7 +208,7 @@ class DueDiligenceChecklist:
         }
         
         # ALL must pass
-        passed = all(all(category.values()) for category in checks.values())
+        passed = all (all (category.values()) for category in checks.values())
         
         return passed
 \`\`\`

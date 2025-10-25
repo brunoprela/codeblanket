@@ -72,8 +72,8 @@ message = f"My name is {name} and I'm {age} years old"
 formatted = f"Pi is approximately {3.14159:.2f}"  # 3.14
 
 # Format method
-message = "Name: {}, Age: {}".format(name, age)
-message = "Name: {n}, Age: {a}".format(n=name, a=age)
+message = "Name: {}, Age: {}".format (name, age)
+message = "Name: {n}, Age: {a}".format (n=name, a=age)
 
 # Old style (avoid)
 message = "Name: %s, Age: %d" % (name, age)

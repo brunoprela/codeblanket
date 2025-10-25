@@ -56,12 +56,12 @@ class TokenBucket:
         self.refill_rate = refill_rate  # Tokens per second
         self.last_refill = time.time()
     
-    def allow_request(self):
+    def allow_request (self):
         # Refill tokens based on time passed
         now = time.time()
         elapsed = now - self.last_refill
         tokens_to_add = elapsed * self.refill_rate
-        self.tokens = min(self.capacity, self.tokens + tokens_to_add)
+        self.tokens = min (self.capacity, self.tokens + tokens_to_add)
         self.last_refill = now
         
         # Check if request allowed
@@ -71,7 +71,7 @@ class TokenBucket:
         return False
 
 # Usage: 10 requests/second, burst of 20
-bucket = TokenBucket(capacity=20, refill_rate=10)
+bucket = TokenBucket (capacity=20, refill_rate=10)
 \`\`\`
 
 **Use cases**: API rate limiting (AWS, Stripe), network traffic shaping
@@ -109,20 +109,20 @@ class LeakyBucket:
         self.leak_rate = leak_rate  # Requests per second
         self.last_leak = time.time()
     
-    def add_request(self, request):
+    def add_request (self, request):
         self._leak()
         
-        if len(self.queue) < self.capacity:
-            self.queue.append(request)
+        if len (self.queue) < self.capacity:
+            self.queue.append (request)
             return True
         return False  # Queue full, reject
     
-    def _leak(self):
+    def _leak (self):
         now = time.time()
         elapsed = now - self.last_leak
-        leaks = int(elapsed * self.leak_rate)
+        leaks = int (elapsed * self.leak_rate)
         
-        for _ in range(min(leaks, len(self.queue))):
+        for _ in range (min (leaks, len (self.queue))):
             self.queue.popleft()  # Process request
         
         self.last_refill = now
@@ -170,7 +170,7 @@ class FixedWindowCounter:
         self.counter = 0
         self.window_start = time.time()
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         
         # New window?
@@ -185,7 +185,7 @@ class FixedWindowCounter:
         return False
 
 # Usage: 100 requests per 60 seconds
-limiter = FixedWindowCounter(limit=100, window_size=60)
+limiter = FixedWindowCounter (limit=100, window_size=60)
 \`\`\`
 
 **Properties**:
@@ -223,7 +223,7 @@ class SlidingWindowLog:
         self.window_size = window_size
         self.requests = deque()  # Timestamps
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         
         # Remove old timestamps
@@ -231,8 +231,8 @@ class SlidingWindowLog:
             self.requests.popleft()
         
         # Check limit
-        if len(self.requests) < self.limit:
-            self.requests.append(now)
+        if len (self.requests) < self.limit:
+            self.requests.append (now)
             return True
         return False
 \`\`\`
@@ -278,7 +278,7 @@ class SlidingWindowCounter:
         self.current_count = 0
         self.previous_count = 0
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         
         # Roll window if needed
@@ -326,14 +326,14 @@ class DistributedRateLimiter:
         self.limit = limit
         self.window = window
     
-    def allow_request(self, user_id):
+    def allow_request (self, user_id):
         key = f"rate_limit:{user_id}"
-        now = int(time.time())
+        now = int (time.time())
         
         # Fixed window with Redis
         pipe = self.redis.pipeline()
-        pipe.incr(key)
-        pipe.expire(key, self.window)
+        pipe.incr (key)
+        pipe.expire (key, self.window)
         results = pipe.execute()
         
         count = results[0]
@@ -341,7 +341,7 @@ class DistributedRateLimiter:
 
 # Usage
 redis_client = redis.Redis()
-limiter = DistributedRateLimiter(redis_client, limit=100, window=60)
+limiter = DistributedRateLimiter (redis_client, limit=100, window=60)
 
 if limiter.allow_request("user123"):
     # Process request

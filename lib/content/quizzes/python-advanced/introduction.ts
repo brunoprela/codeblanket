@@ -36,7 +36,7 @@ export const introductionQuiz = [
     question:
       'Explain the with statement and context managers. Why are they important for resource management?',
     sampleAnswer:
-      'Context managers handle setup and cleanup of resources automatically using the with statement. They implement __enter__ and __exit__ methods. This is crucial because it guarantees cleanup happens even if errors occur. For example: "with open(file) as f:" ensures the file is closed even if an exception is raised while reading. Without context managers, you need try/finally blocks everywhere, which is error-prone. Context managers are used for files, database connections, locks, and any resource that needs cleanup.',
+      'Context managers handle setup and cleanup of resources automatically using the with statement. They implement __enter__ and __exit__ methods. This is crucial because it guarantees cleanup happens even if errors occur. For example: "with open (file) as f:" ensures the file is closed even if an exception is raised while reading. Without context managers, you need try/finally blocks everywhere, which is error-prone. Context managers are used for files, database connections, locks, and any resource that needs cleanup.',
     keyPoints: [
       'Automatic resource setup and cleanup',
       '__enter__ and __exit__ methods',

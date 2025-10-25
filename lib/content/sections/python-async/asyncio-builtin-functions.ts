@@ -18,22 +18,22 @@ Without Built-in Functions vs With
 import asyncio
 
 # ❌ Without: Manual coordination
-async def fetch_all_manual(urls):
+async def fetch_all_manual (urls):
     results = []
     tasks = []
     for url in urls:
-        task = asyncio.create_task(fetch(url))
-        tasks.append(task)
+        task = asyncio.create_task (fetch (url))
+        tasks.append (task)
     
     for task in tasks:
         result = await task
-        results.append(result)
+        results.append (result)
     
     return results
 
 # ✅ With: Built-in gather()
-async def fetch_all_builtin(urls):
-    return await asyncio.gather(*[fetch(url) for url in urls])
+async def fetch_all_builtin (urls):
+    return await asyncio.gather(*[fetch (url) for url in urls])
 
 # Much cleaner and handles errors properly!
 \`\`\`
@@ -67,7 +67,7 @@ async def main():
     return "Done"
 
 # Run the async program
-result = asyncio.run(main())
+result = asyncio.run (main())
 print(f"Result: {result}")
 
 # What asyncio.run() does:
@@ -79,12 +79,12 @@ print(f"Result: {result}")
 # Equivalent manual code:
 loop = asyncio.new_event_loop()
 try:
-    result = loop.run_until_complete(main())
+    result = loop.run_until_complete (main())
 finally:
     loop.close()
 
 # Always use asyncio.run() in Python 3.7+
-# It's simpler and handles cleanup properly
+# It\'s simpler and handles cleanup properly
 \`\`\`
 
 ---
@@ -101,8 +101,8 @@ asyncio.gather(): Concurrent Execution
 import asyncio
 import time
 
-async def fetch_data(source, delay):
-    await asyncio.sleep(delay)
+async def fetch_data (source, delay):
+    await asyncio.sleep (delay)
     return f"Data from {source}"
 
 async def main():
@@ -119,7 +119,7 @@ async def main():
     print(f"Results: {results}")
     print(f"Time: {elapsed:.2f}s")  # ~2.0s (max delay)
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Results: ['Data from API-1', 'Data from API-2', 'Data from API-3']
@@ -137,13 +137,13 @@ gather() Error Handling Strategies
 
 import asyncio
 
-async def task_success(n):
+async def task_success (n):
     await asyncio.sleep(0.5)
     return f"Success {n}"
 
-async def task_failure(n):
+async def task_failure (n):
     await asyncio.sleep(0.5)
-    raise ValueError(f"Failed {n}")
+    raise ValueError (f"Failed {n}")
 
 async def test_gather_errors():
     # Strategy 1: Stop on first exception (default)
@@ -166,13 +166,13 @@ async def test_gather_errors():
         return_exceptions=True  # Don't raise, collect exceptions
     )
     
-    for i, result in enumerate(results):
-        if isinstance(result, Exception):
+    for i, result in enumerate (results):
+        if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
         else:
             print(f"Task {i} succeeded: {result}")
 
-asyncio.run(test_gather_errors())
+asyncio.run (test_gather_errors())
 
 # Output:
 # Strategy 1: Stop on first exception
@@ -198,28 +198,28 @@ asyncio.wait(): Fine-Grained Control
 import asyncio
 import time
 
-async def worker(n, delay):
-    await asyncio.sleep(delay)
+async def worker (n, delay):
+    await asyncio.sleep (delay)
     return f"Worker {n} done"
 
 async def test_wait():
     # Create tasks
     tasks = {
-        asyncio.create_task(worker(1, 1.0)),
-        asyncio.create_task(worker(2, 2.0)),
-        asyncio.create_task(worker(3, 3.0)),
+        asyncio.create_task (worker(1, 1.0)),
+        asyncio.create_task (worker(2, 2.0)),
+        asyncio.create_task (worker(3, 3.0)),
     }
     
     # Wait for all to complete
-    done, pending = await asyncio.wait(tasks)
+    done, pending = await asyncio.wait (tasks)
     
-    print(f"Completed: {len(done)}")
-    print(f"Pending: {len(pending)}")
+    print(f"Completed: {len (done)}")
+    print(f"Pending: {len (pending)}")
     
     for task in done:
         print(f"Result: {task.result()}")
 
-asyncio.run(test_wait())
+asyncio.run (test_wait())
 
 # Output:
 # Completed: 3
@@ -239,17 +239,17 @@ wait() Return Conditions
 import asyncio
 import time
 
-async def worker(n):
-    await asyncio.sleep(n)
+async def worker (n):
+    await asyncio.sleep (n)
     return f"Worker {n}"
 
 async def test_wait_strategies():
     # Strategy 1: Wait for first completion
     print("Wait for FIRST_COMPLETED:")
     tasks = {
-        asyncio.create_task(worker(3)),
-        asyncio.create_task(worker(1)),
-        asyncio.create_task(worker(2)),
+        asyncio.create_task (worker(3)),
+        asyncio.create_task (worker(1)),
+        asyncio.create_task (worker(2)),
     }
     
     start = time.time()
@@ -260,7 +260,7 @@ async def test_wait_strategies():
     elapsed = time.time() - start
     
     print(f"Time: {elapsed:.1f}s")  # ~1.0s
-    print(f"Done: {len(done)}, Pending: {len(pending)}")
+    print(f"Done: {len (done)}, Pending: {len (pending)}")
     
     # Cancel remaining
     for task in pending:
@@ -269,9 +269,9 @@ async def test_wait_strategies():
     # Strategy 2: Wait with timeout
     print("\nWait with timeout:")
     tasks = {
-        asyncio.create_task(worker(3)),
-        asyncio.create_task(worker(1)),
-        asyncio.create_task(worker(2)),
+        asyncio.create_task (worker(3)),
+        asyncio.create_task (worker(1)),
+        asyncio.create_task (worker(2)),
     }
     
     start = time.time()
@@ -282,13 +282,13 @@ async def test_wait_strategies():
     elapsed = time.time() - start
     
     print(f"Time: {elapsed:.1f}s")  # ~1.5s
-    print(f"Done: {len(done)}, Pending: {len(pending)}")
+    print(f"Done: {len (done)}, Pending: {len (pending)}")
     
     # Cancel remaining
     for task in pending:
         task.cancel()
 
-asyncio.run(test_wait_strategies())
+asyncio.run (test_wait_strategies())
 
 # Output:
 # Wait for FIRST_COMPLETED:
@@ -353,7 +353,7 @@ async def test_sleeps():
     elapsed = time.time() - start
     print(f"Total time: {elapsed:.1f}s")  # ~2.0s (concurrent!)
 
-asyncio.run(test_sleeps())
+asyncio.run (test_sleeps())
 
 # Always use await asyncio.sleep() in async code!
 # Never use time.sleep() (blocks event loop)
@@ -374,15 +374,15 @@ import asyncio
 import time
 import requests  # Blocking HTTP library
 
-def blocking_http_request(url):
+def blocking_http_request (url):
     """Blocking function (not async)"""
-    response = requests.get(url)
+    response = requests.get (url)
     return response.json()
 
-async def fetch_data_correctly(url):
+async def fetch_data_correctly (url):
     """Run blocking code in thread"""
     # This runs in a thread pool, not blocking event loop
-    data = await asyncio.to_thread(blocking_http_request, url)
+    data = await asyncio.to_thread (blocking_http_request, url)
     return data
 
 async def main():
@@ -395,12 +395,12 @@ async def main():
     ]
     
     results = await asyncio.gather(*[
-        fetch_data_correctly(url) for url in urls
+        fetch_data_correctly (url) for url in urls
     ])
     
     return results
 
-# asyncio.run(main())
+# asyncio.run (main())
 
 # Use cases for to_thread():
 # - Blocking I/O (file operations, subprocess)
@@ -425,24 +425,24 @@ asyncio.Queue: Producer-Consumer Pattern
 import asyncio
 import random
 
-async def producer(queue, producer_id):
+async def producer (queue, producer_id):
     """Produce items and put in queue"""
     for i in range(5):
         item = f"Item-{producer_id}-{i}"
-        await asyncio.sleep(random.uniform(0.1, 0.5))
-        await queue.put(item)
+        await asyncio.sleep (random.uniform(0.1, 0.5))
+        await queue.put (item)
         print(f"Producer {producer_id}: Produced {item}")
     
     print(f"Producer {producer_id}: Done")
 
-async def consumer(queue, consumer_id):
+async def consumer (queue, consumer_id):
     """Consume items from queue"""
     while True:
         try:
             # Wait up to 2 seconds for item
-            item = await asyncio.wait_for(queue.get(), timeout=2.0)
+            item = await asyncio.wait_for (queue.get(), timeout=2.0)
             print(f"  Consumer {consumer_id}: Processing {item}")
-            await asyncio.sleep(random.uniform(0.1, 0.3))
+            await asyncio.sleep (random.uniform(0.1, 0.3))
             queue.task_done()
         except asyncio.TimeoutError:
             print(f"  Consumer {consumer_id}: Timeout, exiting")
@@ -450,16 +450,16 @@ async def consumer(queue, consumer_id):
 
 async def main():
     # Create queue
-    queue = asyncio.Queue(maxsize=10)
+    queue = asyncio.Queue (maxsize=10)
     
     # Start producers and consumers
     producers = [
-        asyncio.create_task(producer(queue, i))
+        asyncio.create_task (producer (queue, i))
         for i in range(2)
     ]
     
     consumers = [
-        asyncio.create_task(consumer(queue, i))
+        asyncio.create_task (consumer (queue, i))
         for i in range(3)
     ]
     
@@ -473,7 +473,7 @@ async def main():
     for c in consumers:
         c.cancel()
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output: Producers create items, consumers process them concurrently
 # Multiple consumers can process items in parallel
@@ -494,7 +494,7 @@ asyncio.Semaphore: Rate Limiting
 import asyncio
 import time
 
-async def access_resource(semaphore, n):
+async def access_resource (semaphore, n):
     """Access resource with semaphore"""
     async with semaphore:
         print(f"Task {n}: Acquired semaphore")
@@ -509,14 +509,14 @@ async def test_semaphore():
     
     # Create 10 tasks, but only 3 can run at once
     await asyncio.gather(*[
-        access_resource(semaphore, i)
+        access_resource (semaphore, i)
         for i in range(10)
     ])
     
     elapsed = time.time() - start
     print(f"\nTotal time: {elapsed:.1f}s")  # ~4s (10 tasks / 3 concurrent / 1s each)
 
-asyncio.run(test_semaphore())
+asyncio.run (test_semaphore())
 
 # Output shows only 3 tasks running at a time
 # Useful for:
@@ -554,7 +554,7 @@ async def test_bounded():
     
     print("BoundedSemaphore prevents bugs from over-release")
 
-asyncio.run(test_bounded())
+asyncio.run (test_bounded())
 
 # Use BoundedSemaphore by default (safer)
 \`\`\`
@@ -579,7 +579,7 @@ class Counter:
         self.value = 0
         self.lock = asyncio.Lock()
     
-    async def increment(self):
+    async def increment (self):
         """Increment counter (critical section)"""
         async with self.lock:
             # Only one coroutine can be here at a time
@@ -598,7 +598,7 @@ async def test_lock():
     
     print(f"Final count: {counter.value}")  # 100 (correct!)
 
-asyncio.run(test_lock())
+asyncio.run (test_lock())
 
 # Without lock, would get race conditions
 # Lock ensures only one coroutine in critical section
@@ -617,13 +617,13 @@ asyncio.Event: Signaling
 
 import asyncio
 
-async def waiter(event, n):
+async def waiter (event, n):
     """Wait for event to be set"""
     print(f"Waiter {n}: Waiting for event")
     await event.wait()
     print(f"Waiter {n}: Event received!")
 
-async def setter(event):
+async def setter (event):
     """Set event after delay"""
     print("Setter: Waiting 2 seconds...")
     await asyncio.sleep(2)
@@ -635,17 +635,17 @@ async def test_event():
     
     # Multiple waiters
     waiters = [
-        asyncio.create_task(waiter(event, i))
+        asyncio.create_task (waiter (event, i))
         for i in range(3)
     ]
     
     # One setter
-    setter_task = asyncio.create_task(setter(event))
+    setter_task = asyncio.create_task (setter (event))
     
     # Wait for all
     await asyncio.gather(*waiters, setter_task)
 
-asyncio.run(test_event())
+asyncio.run (test_event())
 
 # Output:
 # All waiters wait

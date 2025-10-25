@@ -46,7 +46,7 @@ export const complexitySection = {
 **Why O(N) for Variable Window?**
 \`\`\`python
 left = 0
-for right in range(len(arr)):  # N iterations
+for right in range (len (arr)):  # N iterations
     # ... add arr[right]
     
     while condition:  # How many times does this run?

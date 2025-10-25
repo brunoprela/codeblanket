@@ -378,7 +378,7 @@ Instead of parsing unstructured logs, emit structured logs from the start.
 ### Traditional (Unstructured)
 
 \`\`\`python
-logger.info(f"User {user_id} logged in from {ip} in {duration}ms")
+logger.info (f"User {user_id} logged in from {ip} in {duration}ms")
 # Output: "User 12345 logged in from 192.168.1.1 in 23ms"
 \`\`\`
 
@@ -436,7 +436,7 @@ logger = logger.bind(
 
 **2. Add request context**:
 \`\`\`python
-def process_request(request):
+def process_request (request):
     logger = logger.bind(
         request_id=request.headers.get("X-Request-ID"),
         user_id=request.user.id,
@@ -448,13 +448,13 @@ def process_request(request):
 **3. Log errors with stack traces**:
 \`\`\`python
 try:
-    process_payment(order)
+    process_payment (order)
 except Exception as e:
     logger.error(
         "payment_failed",
         order_id=order.id,
         amount=order.total,
-        error=str(e),
+        error=str (e),
         stack_trace=traceback.format_exc()
     )
     raise
@@ -625,7 +625,7 @@ Applications (5,000 instances)
 **With Kafka**:
 1. Logs written to Kafka (never blocks, never drops)
 2. Kafka buffers spikes (7-day retention)
-3. Logstash consumes at Elasticsearch's max rate
+3. Logstash consumes at Elasticsearch\'s max rate
 4. After spike, Logstash catches up from Kafka
 
 **Benefits**:
@@ -1024,9 +1024,9 @@ import uuid
 
 @app.before_request
 def before_request():
-    trace_id = request.headers.get('X-Trace-ID') or str(uuid.uuid4())
+    trace_id = request.headers.get('X-Trace-ID') or str (uuid.uuid4())
     g.trace_id = trace_id
-    g.logger = logger.bind(trace_id=trace_id)
+    g.logger = logger.bind (trace_id=trace_id)
 \`\`\`
 
 **2. Each service logs with trace ID**:
@@ -1083,7 +1083,7 @@ filter {
   ruby {
     code => "
       if event.get('email')
-        event.set('email_hash', Digest::SHA256.hexdigest(event.get('email')))
+        event.set('email_hash', Digest::SHA256.hexdigest (event.get('email')))
         event.remove('email')
       end
     "

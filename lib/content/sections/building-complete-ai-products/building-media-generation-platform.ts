@@ -95,36 +95,36 @@ celery_app.conf.update(
     task_priority_steps=[0, 1, 2, 3],  # Map to JobPriority
 )
 
-@celery_app.task(bind=True, priority=1)
-def generate_image(self, job: MediaGenerationJob):
+@celery_app.task (bind=True, priority=1)
+def generate_image (self, job: MediaGenerationJob):
     """Generate image (GPU task)"""
     try:
         # Update status
-        update_job_status(job.job_id, "processing")
+        update_job_status (job.job_id, "processing")
         
         # Generate image
-        result = run_image_generation(job.params)
+        result = run_image_generation (job.params)
         
         # Upload to S3
         url = upload_to_s3(result, job.job_id)
         
         # Update status
-        update_job_status(job.job_id, "completed", {"url": url})
+        update_job_status (job.job_id, "completed", {"url": url})
         
         return {"url": url}
     
     except Exception as e:
-        update_job_status(job.job_id, "failed", {"error": str(e)})
+        update_job_status (job.job_id, "failed", {"error": str (e)})
         raise
 
-@celery_app.task(bind=True, priority=0)
-def generate_video(self, job: MediaGenerationJob):
+@celery_app.task (bind=True, priority=0)
+def generate_video (self, job: MediaGenerationJob):
     """Generate video (GPU task, lower priority)"""
     # Similar to image generation
     pass
 
-@celery_app.task(bind=True, priority=1)
-def generate_audio(self, job: MediaGenerationJob):
+@celery_app.task (bind=True, priority=1)
+def generate_audio (self, job: MediaGenerationJob):
     """Generate audio (CPU task)"""
     # Audio generation
     pass
@@ -168,13 +168,13 @@ class ImageGenerator:
         Generate image with specified model
         """
         if model == "dall-e-3":
-            return await self._generate_dalle(prompt, size, quality, style)
+            return await self._generate_dalle (prompt, size, quality, style)
         elif model == "stable-diffusion":
-            return await self._generate_sd(prompt, size)
+            return await self._generate_sd (prompt, size)
         elif model == "midjourney":
-            return await self._generate_midjourney(prompt)
+            return await self._generate_midjourney (prompt)
         else:
-            raise ValueError(f"Unknown model: {model}")
+            raise ValueError (f"Unknown model: {model}")
     
     async def _generate_dalle(
         self,
@@ -200,14 +200,14 @@ class ImageGenerator:
             "cost": 0.04 if quality == "standard" else 0.08
         }
     
-    async def _generate_sd(self, prompt: str, size: str) -> Dict:
+    async def _generate_sd (self, prompt: str, size: str) -> Dict:
         """Generate with Stable Diffusion via Replicate"""
         output = replicate.run(
             "stability-ai/sdxl:latest",
             input={
                 "prompt": prompt,
-                "width": int(size.split("x")[0]),
-                "height": int(size.split("x")[1])
+                "width": int (size.split("x")[0]),
+                "height": int (size.split("x")[1])
             }
         )
         
@@ -217,7 +217,7 @@ class ImageGenerator:
             "cost": 0.005
         }
     
-    async def _generate_midjourney(self, prompt: str) -> Dict:
+    async def _generate_midjourney (self, prompt: str) -> Dict:
         """Generate with Midjourney-style model"""
         # Use Midjourney API proxy or similar model
         pass
@@ -286,7 +286,7 @@ class VideoGenerator:
         
         # Poll for completion
         job_id = data["id"]
-        video_url = await self._poll_runway_job(job_id)
+        video_url = await self._poll_runway_job (job_id)
         
         return video_url
     
@@ -301,7 +301,7 @@ class VideoGenerator:
         from PIL import Image
         
         # Load image
-        image = Image.open(image_path).convert("RGB")
+        image = Image.open (image_path).convert("RGB")
         image = image.resize((1024, 576))
         
         # Generate video frames
@@ -314,11 +314,11 @@ class VideoGenerator:
         
         # Save as video
         output_path = f"/tmp/video_{uuid.uuid4()}.mp4"
-        export_to_video(frames, output_path, fps=7)
+        export_to_video (frames, output_path, fps=7)
         
         return output_path
     
-    async def _poll_runway_job(self, job_id: str) -> str:
+    async def _poll_runway_job (self, job_id: str) -> str:
         """Poll Runway until video is ready"""
         import asyncio
         
@@ -333,7 +333,7 @@ class VideoGenerator:
             if data["status"] == "completed":
                 return data["output"]["url"]
             elif data["status"] == "failed":
-                raise Exception(f"Video generation failed: {data['error']}")
+                raise Exception (f"Video generation failed: {data['error']}")
             
             await asyncio.sleep(5)
 
@@ -366,7 +366,7 @@ class AudioGenerator:
     """
     
     def __init__(self):
-        set_api_key(os.getenv("ELEVENLABS_API_KEY"))
+        set_api_key (os.getenv("ELEVENLABS_API_KEY"))
         
         # Load MusicGen
         self.music_model = MusicGen.get_pretrained('facebook/musicgen-medium')
@@ -405,7 +405,7 @@ class AudioGenerator:
         
         return wav[0]
     
-    def list_voices(self) -> List[str]:
+    def list_voices (self) -> List[str]:
         """List available voices"""
         return [v.name for v in voices()]
 
@@ -452,11 +452,11 @@ class GPUManager:
         self.gpu_queue = queue.Queue()
         
         # Initialize queue with GPU IDs
-        for i in range(self.num_gpus):
-            self.gpu_queue.put(i)
+        for i in range (self.num_gpus):
+            self.gpu_queue.put (i)
     
     @contextmanager
-    def allocate_gpu(self):
+    def allocate_gpu (self):
         """
         Context manager to allocate GPU
         """
@@ -464,16 +464,16 @@ class GPUManager:
         
         try:
             # Set CUDA device
-            os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu_id)
+            os.environ['CUDA_VISIBLE_DEVICES'] = str (gpu_id)
             yield gpu_id
         finally:
             # Release GPU back to pool
-            self.gpu_queue.put(gpu_id)
+            self.gpu_queue.put (gpu_id)
     
-    def get_gpu_memory(self, gpu_id: int) -> Dict:
+    def get_gpu_memory (self, gpu_id: int) -> Dict:
         """Get GPU memory usage"""
-        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(gpu_id)
-        info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
+        handle = nvidia_smi.nvmlDeviceGetHandleByIndex (gpu_id)
+        info = nvidia_smi.nvmlDeviceGetMemoryInfo (handle)
         
         return {
             "total": info.total,
@@ -482,22 +482,22 @@ class GPUManager:
             "percent": (info.used / info.total) * 100
         }
     
-    def get_all_gpu_stats(self) -> List[Dict]:
+    def get_all_gpu_stats (self) -> List[Dict]:
         """Get stats for all GPUs"""
         stats = []
-        for i in range(self.num_gpus):
-            stats.append(self.get_gpu_memory(i))
+        for i in range (self.num_gpus):
+            stats.append (self.get_gpu_memory (i))
         return stats
 
 # Usage in worker
 gpu_manager = GPUManager()
 
 @celery_app.task
-def generate_image_task(prompt: str):
+def generate_image_task (prompt: str):
     with gpu_manager.allocate_gpu() as gpu_id:
         print(f"Using GPU {gpu_id}")
         # Run model on allocated GPU
-        result = model.generate(prompt)
+        result = model.generate (prompt)
     return result
 \`\`\`
 
@@ -553,7 +553,7 @@ class MediaStorage:
             return f"{self.cdn_url}/{file_name}"
         
         except ClientError as e:
-            raise Exception(f"Upload failed: {e}")
+            raise Exception (f"Upload failed: {e}")
     
     def generate_presigned_url(
         self,
@@ -567,7 +567,7 @@ class MediaStorage:
             ExpiresIn=expiration
         )
     
-    def delete(self, file_name: str):
+    def delete (self, file_name: str):
         """Delete file from S3"""
         self.s3.delete_object(Bucket=self.bucket, Key=file_name)
 
@@ -620,11 +620,11 @@ class JobResponse(BaseModel):
     estimated_time_seconds: int
 
 @app.post("/api/images/generate", response_model=JobResponse)
-async def generate_image(request: GenerateImageRequest):
+async def generate_image (request: GenerateImageRequest):
     """
     Queue image generation job
     """
-    job_id = str(uuid.uuid4())
+    job_id = str (uuid.uuid4())
     
     # Create job
     job = MediaGenerationJob(
@@ -649,11 +649,11 @@ async def generate_image(request: GenerateImageRequest):
     )
 
 @app.get("/api/jobs/{job_id}")
-async def get_job_status(job_id: str):
+async def get_job_status (job_id: str):
     """
     Get job status
     """
-    result = celery_app.AsyncResult(job_id)
+    result = celery_app.AsyncResult (job_id)
     
     if result.ready():
         if result.successful():
@@ -664,7 +664,7 @@ async def get_job_status(job_id: str):
         else:
             return {
                 "status": "failed",
-                "error": str(result.info)
+                "error": str (result.info)
             }
     else:
         return {
@@ -673,9 +673,9 @@ async def get_job_status(job_id: str):
         }
 
 @app.post("/api/videos/generate", response_model=JobResponse)
-async def generate_video(request: GenerateVideoRequest):
+async def generate_video (request: GenerateVideoRequest):
     """Queue video generation"""
-    job_id = str(uuid.uuid4())
+    job_id = str (uuid.uuid4())
     
     job = MediaGenerationJob(
         job_id=job_id,
@@ -685,7 +685,7 @@ async def generate_video(request: GenerateVideoRequest):
         params=request.dict()
     )
     
-    generate_video.apply_async(args=[job], task_id=job_id)
+    generate_video.apply_async (args=[job], task_id=job_id)
     
     return JobResponse(
         job_id=job_id,
@@ -742,11 +742,11 @@ interface Generation {
 export const MediaGenerator: React.FC = () => {
   const [prompt, setPrompt] = useState(');
   const [type, setType] = useState<'image' | 'video'>('image');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState (false);
   const [generations, setGenerations] = useState<Generation[]>([]);
 
   const generate = async () => {
-    setLoading(true);
+    setLoading (true);
     
     try {
       const response = await axios.post(\`/api/\${type}s/generate\`, {
@@ -757,21 +757,21 @@ export const MediaGenerator: React.FC = () => {
       const { job_id } = response.data;
       
       // Poll for completion
-      await pollJobStatus(job_id);
+      await pollJobStatus (job_id);
       
     } catch (error) {
       console.error('Generation failed:', error);
     } finally {
-      setLoading(false);
+      setLoading (false);
     }
   };
 
   const pollJobStatus = async (jobId: string) => {
-    const interval = setInterval(async () => {
+    const interval = setInterval (async () => {
       const response = await axios.get(\`/api/jobs/\${jobId}\`);
       
       if (response.data.status === 'completed') {
-        clearInterval(interval);
+        clearInterval (interval);
         // Add to gallery
         const newGen: Generation = {
           id: jobId,
@@ -783,7 +783,7 @@ export const MediaGenerator: React.FC = () => {
         };
         setGenerations([newGen, ...generations]);
       } else if (response.data.status === 'failed') {
-        clearInterval(interval);
+        clearInterval (interval);
         alert('Generation failed');
       }
     }, 2000);
@@ -792,14 +792,14 @@ export const MediaGenerator: React.FC = () => {
   return (
     <div className="media-generator">
       <div className="controls">
-        <select value={type} onChange={e => setType(e.target.value as any)}>
+        <select value={type} onChange={e => setType (e.target.value as any)}>
           <option value="image">Image</option>
           <option value="video">Video</option>
         </select>
         
         <textarea
           value={prompt}
-          onChange={e => setPrompt(e.target.value)}
+          onChange={e => setPrompt (e.target.value)}
           placeholder="Describe what you want to create..."
           rows={3}
         />
@@ -810,7 +810,7 @@ export const MediaGenerator: React.FC = () => {
       </div>
 
       <div className="gallery">
-        {generations.map(gen => (
+        {generations.map (gen => (
           <div key={gen.id} className="generation-item">
             {gen.type === 'image' ? (
               <img src={gen.url} alt={gen.prompt} />

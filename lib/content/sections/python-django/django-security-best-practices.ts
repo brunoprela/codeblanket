@@ -31,7 +31,7 @@ By the end of this section, you'll master:
 
 ---
 
-## Django's Security Features
+## Django\'s Security Features
 
 ### SECRET_KEY Protection
 
@@ -44,12 +44,12 @@ SECRET_KEY = 'django-insecure-hardcoded-key'  # BAD
 import os
 from django.core.exceptions import ImproperlyConfigured
 
-def get_env_variable(var_name):
+def get_env_variable (var_name):
     try:
         return os.environ[var_name]
     except KeyError:
         error_msg = f'Set the {var_name} environment variable'
-        raise ImproperlyConfigured(error_msg)
+        raise ImproperlyConfigured (error_msg)
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET_KEY')
 
@@ -101,14 +101,14 @@ Django automatically protects against Cross-Site Request Forgery by:
 
 \`\`\`javascript
 // Get CSRF token from cookie
-function getCookie(name) {
+function getCookie (name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                cookieValue = decodeURIComponent (cookie.substring (name.length + 1));
                 break;
             }
         }
@@ -125,7 +125,7 @@ fetch('/api/articles/', {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify (data)
 });
 \`\`\`
 
@@ -138,11 +138,11 @@ from rest_framework.authentication import SessionAuthentication
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     """Session auth without CSRF for APIs"""
     
-    def enforce_csrf(self, request):
+    def enforce_csrf (self, request):
         return  # Skip CSRF check
 
 # In views
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     authentication_classes = [CsrfExemptSessionAuthentication]
     # Or use TokenAuthentication, JWTAuthentication
 \`\`\`
@@ -172,16 +172,16 @@ class ArticleViewSet(viewsets.ModelViewSet):
 from django.utils.html import escape, format_html
 
 # ❌ Dangerous
-def dangerous_view(request):
+def dangerous_view (request):
     user_input = request.GET.get('name', '')
     html = f'<p>Hello {user_input}</p>'  # XSS vulnerable
-    return HttpResponse(html)
+    return HttpResponse (html)
 
 # ✅ Safe
-def safe_view(request):
+def safe_view (request):
     user_input = request.GET.get('name', '')
     html = format_html('<p>Hello {}</p>', user_input)  # Automatically escaped
-    return HttpResponse(html)
+    return HttpResponse (html)
 \`\`\`
 
 ---
@@ -192,12 +192,12 @@ def safe_view(request):
 
 \`\`\`python
 # ✅ Safe: Django ORM automatically escapes
-articles = Article.objects.filter(title=user_input)
+articles = Article.objects.filter (title=user_input)
 
 # ❌ NEVER do this
 from django.db import connection
 cursor = connection.cursor()
-cursor.execute(f"SELECT * FROM articles WHERE title = '{user_input}'")  # SQL injection!
+cursor.execute (f"SELECT * FROM articles WHERE title = '{user_input}'")  # SQL injection!
 
 # ✅ If you must use raw SQL, use parameters
 cursor.execute("SELECT * FROM articles WHERE title = %s", [user_input])
@@ -212,19 +212,19 @@ articles = Article.objects.raw("SELECT * FROM articles WHERE title = %s", [user_
 from django.db.models import Q
 
 # ✅ Safe: Build complex queries with ORM
-def search_articles(query):
+def search_articles (query):
     return Article.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query)
     )
 
 # ❌ Dangerous
-def unsafe_search(query):
+def unsafe_search (query):
     return Article.objects.extra(
         where=[f"title LIKE '%{query}%'"]  # SQL injection!
     )
 
 # ✅ Safe with extra()
-def safe_search(query):
+def safe_search (query):
     return Article.objects.extra(
         where=["title LIKE %s"],
         params=[f'%{query}%']
@@ -268,24 +268,24 @@ from django.views.decorators.csrf import csrf_protect
 
 @csrf_protect
 @never_cache
-def secure_login(request):
+def secure_login (request):
     """Secure login view"""
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         
-        user = authenticate(request, username=username, password=password)
+        user = authenticate (request, username=username, password=password)
         
         if user is not None:
-            login(request, user)
+            login (request, user)
             return redirect('dashboard')
         else:
             # Don't reveal whether username or password was wrong
-            return render(request, 'login.html', {
+            return render (request, 'login.html', {
                 'error': 'Invalid credentials'
             })
     
-    return render(request, 'login.html')
+    return render (request, 'login.html')
 \`\`\`
 
 ### Rate Limiting
@@ -296,14 +296,14 @@ def secure_login(request):
 
 from django_ratelimit.decorators import ratelimit
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=True)
-def login_view(request):
+@ratelimit (key='ip', rate='5/m', method='POST', block=True)
+def login_view (request):
     """Login with rate limiting (5 attempts per minute)"""
     # Login logic
     pass
 
-@ratelimit(key='user', rate='100/h')
-def api_endpoint(request):
+@ratelimit (key='user', rate='100/h')
+def api_endpoint (request):
     """API with user-based rate limiting"""
     # API logic
     pass
@@ -358,7 +358,7 @@ class SecurityHeadersMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Content Security Policy
         response['Content-Security-Policy'] = "default-src 'self'"
@@ -389,15 +389,15 @@ class EncryptionService:
     """Encrypt/decrypt sensitive data"""
     
     def __init__(self):
-        self.cipher = Fernet(settings.ENCRYPTION_KEY.encode())
+        self.cipher = Fernet (settings.ENCRYPTION_KEY.encode())
     
-    def encrypt(self, data: str) -> str:
+    def encrypt (self, data: str) -> str:
         """Encrypt string data"""
-        return self.cipher.encrypt(data.encode()).decode()
+        return self.cipher.encrypt (data.encode()).decode()
     
-    def decrypt(self, encrypted_data: str) -> str:
+    def decrypt (self, encrypted_data: str) -> str:
         """Decrypt string data"""
-        return self.cipher.decrypt(encrypted_data.encode()).decode()
+        return self.cipher.decrypt (encrypted_data.encode()).decode()
 
 # Usage
 encryption = EncryptionService()
@@ -405,7 +405,7 @@ encrypted_ssn = encryption.encrypt('123-45-6789')
 
 # Store encrypted_ssn in database
 # Decrypt when needed
-original_ssn = encryption.decrypt(encrypted_ssn)
+original_ssn = encryption.decrypt (encrypted_ssn)
 \`\`\`
 
 ### Secure File Uploads
@@ -413,20 +413,20 @@ original_ssn = encryption.decrypt(encrypted_ssn)
 \`\`\`python
 from django.core.exceptions import ValidationError
 
-def validate_file_size(file):
+def validate_file_size (file):
     """Limit file size to 5MB"""
     max_size = 5 * 1024 * 1024  # 5MB
     if file.size > max_size:
         raise ValidationError('File too large (max 5MB)')
 
-def validate_file_extension(file):
+def validate_file_extension (file):
     """Only allow specific file types"""
     allowed_extensions = ['.jpg', '.jpeg', '.png', '.pdf']
-    ext = os.path.splitext(file.name)[1].lower()
+    ext = os.path.splitext (file.name)[1].lower()
     if ext not in allowed_extensions:
-        raise ValidationError(f'File type not allowed. Allowed: {allowed_extensions}')
+        raise ValidationError (f'File type not allowed. Allowed: {allowed_extensions}')
 
-class Document(models.Model):
+class Document (models.Model):
     file = models.FileField(
         upload_to='documents/',
         validators=[validate_file_size, validate_file_extension]
@@ -439,19 +439,19 @@ class Document(models.Model):
 import os
 import re
 
-def sanitize_filename(filename):
+def sanitize_filename (filename):
     """Remove potentially dangerous characters from filename"""
     # Remove path separators
-    filename = os.path.basename(filename)
+    filename = os.path.basename (filename)
     
     # Replace spaces and special characters
-    filename = re.sub(r'[^\w\s.-]', '', filename)
-    filename = re.sub(r'[-\s]+', '-', filename)
+    filename = re.sub (r'[^\w\s.-]', '', filename)
+    filename = re.sub (r'[-\s]+', '-', filename)
     
     return filename.lower()
 
 # Usage
-safe_name = sanitize_filename(request.FILES['file'].name)
+safe_name = sanitize_filename (request.FILES['file'].name)
 \`\`\`
 
 ---
@@ -474,8 +474,8 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta (minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta (days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
@@ -494,10 +494,10 @@ urlpatterns = [
 \`\`\`python
 from rest_framework import permissions
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOrReadOnly (permissions.BasePermission):
     """Custom permission: only owner can edit"""
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         # Read permissions for any request
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -506,7 +506,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.author == request.user
 
 # Usage in viewset
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 \`\`\`
 
@@ -517,7 +517,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 ### Django Security Check
 
 \`\`\`bash
-# Run Django's security check
+# Run Django\'s security check
 python manage.py check --deploy
 
 # Check for common security issues

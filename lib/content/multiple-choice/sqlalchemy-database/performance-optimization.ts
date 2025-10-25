@@ -86,7 +86,7 @@ export const performanceOptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     correctAnswer: 1,
     explanation:
       'Composite index: Index on multiple columns of same table. ' +
-      'Example: CREATE INDEX idx_user_status_created ON users(status, created_at). ' +
+      'Example: CREATE INDEX idx_user_status_created ON users (status, created_at). ' +
       'Use when: Query filters/sorts on multiple columns: WHERE status = "active" ORDER BY created_at. ' +
       'Column order matters: Most selective column first (status - 3 values, created_at - many values). ' +
       'Supports prefix queries: WHERE status = "active" uses index. WHERE created_at > ... does NOT (wrong order). ' +

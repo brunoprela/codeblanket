@@ -12,12 +12,12 @@ export const noncomparisonsortsSection = {
 Works for integers in a known range [0, k]. Counts occurrences of each value.
 
 \`\`\`python
-def counting_sort(arr):
+def counting_sort (arr):
     if not arr:
         return arr
     
-    max_val = max(arr)
-    min_val = min(arr)
+    max_val = max (arr)
+    min_val = min (arr)
     range_size = max_val - min_val + 1
     
     # Count occurrences
@@ -27,7 +27,7 @@ def counting_sort(arr):
     
     # Reconstruct sorted array
     result = []
-    for i in range(range_size):
+    for i in range (range_size):
         result.extend([i + min_val] * count[i])
     
     return result
@@ -43,26 +43,26 @@ def counting_sort(arr):
 Sorts integers digit by digit, from least to most significant.
 
 \`\`\`python
-def radix_sort(arr):
+def radix_sort (arr):
     if not arr:
         return arr
     
-    max_val = max(arr)
+    max_val = max (arr)
     exp = 1  # Current digit position
     
     while max_val // exp > 0:
-        counting_sort_by_digit(arr, exp)
+        counting_sort_by_digit (arr, exp)
         exp *= 10
     
     return arr
 
-def counting_sort_by_digit(arr, exp):
-    n = len(arr)
+def counting_sort_by_digit (arr, exp):
+    n = len (arr)
     output = [0] * n
     count = [0] * 10  # Digits 0-9
     
     # Count occurrences of digits
-    for i in range(n):
+    for i in range (n):
         digit = (arr[i] // exp) % 10
         count[digit] += 1
     
@@ -71,13 +71,13 @@ def counting_sort_by_digit(arr, exp):
         count[i] += count[i - 1]
     
     # Build output array
-    for i in range(n - 1, -1, -1):
+    for i in range (n - 1, -1, -1):
         digit = (arr[i] // exp) % 10
         output[count[digit] - 1] = arr[i]
         count[digit] -= 1
     
     # Copy back
-    for i in range(n):
+    for i in range (n):
         arr[i] = output[i]
 \`\`\`
 
@@ -91,27 +91,27 @@ def counting_sort_by_digit(arr, exp):
 Distributes elements into buckets, sorts each bucket, then concatenates.
 
 \`\`\`python
-def bucket_sort(arr):
+def bucket_sort (arr):
     if not arr:
         return arr
     
     # Create buckets
-    bucket_count = len(arr)
-    max_val = max(arr)
-    min_val = min(arr)
+    bucket_count = len (arr)
+    max_val = max (arr)
+    min_val = min (arr)
     bucket_range = (max_val - min_val) / bucket_count + 1
     
-    buckets = [[] for _ in range(bucket_count)]
+    buckets = [[] for _ in range (bucket_count)]
     
     # Distribute into buckets
     for num in arr:
         index = int((num - min_val) / bucket_range)
-        buckets[index].append(num)
+        buckets[index].append (num)
     
     # Sort each bucket and concatenate
     result = []
     for bucket in buckets:
-        result.extend(sorted(bucket))  # Use insertion sort for small buckets
+        result.extend (sorted (bucket))  # Use insertion sort for small buckets
     
     return result
 \`\`\`

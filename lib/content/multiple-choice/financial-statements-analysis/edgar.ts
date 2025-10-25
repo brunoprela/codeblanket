@@ -51,7 +51,7 @@ export const edgarMultipleChoiceQuestions = [
     options: [
       'Accept the data as filed with SEC',
       'Calculate ratios using these numbers',
-      'Flag as data integrity issue: Assets ($500M) ≠ Liabilities + Equity ($490M); investigate before using data',
+      'Flag as data integrity issue: Assets (\$500M) ≠ Liabilities + Equity (\$490M); investigate before using data',
       'Ignore the $10M difference as immaterial',
       "Assume it's a rounding difference",
     ],
@@ -65,7 +65,7 @@ export const edgarMultipleChoiceQuestions = [
       "You're building an automated system to monitor Form 4 insider transactions. Which pattern is most concerning?",
     options: [
       'CEO sells $1M of stock through pre-arranged 10b5-1 plan',
-      'CFO and CEO both sell large amounts ($5M+) within same week, shortly after 10-Q filing',
+      'CFO and CEO both sell large amounts (\$5M+) within same week, shortly after 10-Q filing',
       'Multiple executives exercise options and immediately sell',
       'Director purchases $100K of stock on open market',
       'CEO sells small amount for tax withholding on vested RSUs',

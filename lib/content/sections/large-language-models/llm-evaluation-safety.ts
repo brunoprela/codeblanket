@@ -22,13 +22,13 @@ export const llmEvaluationSafety = {
 """Evaluation example"""
 from datasets import load_dataset
 
-def evaluate_model(model, benchmark="mmlu"):
-    dataset = load_dataset(benchmark)
+def evaluate_model (model, benchmark="mmlu"):
+    dataset = load_dataset (benchmark)
     correct = 0
     total = 0
     
     for example in dataset['test']:
-        prediction = model.generate(example['question'])
+        prediction = model.generate (example['question'])
         if prediction.strip() == example['answer'].strip():
             correct += 1
         total += 1
@@ -46,17 +46,17 @@ def evaluate_model(model, benchmark="mmlu"):
 
 \`\`\`python
 """Safety layer"""
-def safe_generation(prompt):
+def safe_generation (prompt):
     # Pre-check
-    if contains_harmful_content(prompt):
+    if contains_harmful_content (prompt):
         return "I cannot respond to that request."
     
     # Generate
-    response = model.generate(prompt)
+    response = model.generate (prompt)
     
     # Post-check
-    if contains_pii(response):
-        response = redact_pii(response)
+    if contains_pii (response):
+        response = redact_pii (response)
     
     return response
 \`\`\`

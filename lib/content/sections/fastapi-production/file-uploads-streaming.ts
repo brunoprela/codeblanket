@@ -50,10 +50,10 @@ from pathlib import Path
 app = FastAPI()
 
 UPLOAD_DIR = Path("uploads")
-UPLOAD_DIR.mkdir(exist_ok=True)
+UPLOAD_DIR.mkdir (exist_ok=True)
 
 @app.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file (file: UploadFile = File(...)):
     """
     Upload a single file
     
@@ -66,7 +66,7 @@ async def upload_file(file: UploadFile = File(...)):
     file_path = UPLOAD_DIR / file.filename
     
     with file_path.open("wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        shutil.copyfileobj (file.file, buffer)
     
     return {
         "filename": file.filename,
@@ -76,7 +76,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 # Multiple files
 @app.post("/upload/multiple/")
-async def upload_multiple_files(files: List[UploadFile] = File(...)):
+async def upload_multiple_files (files: List[UploadFile] = File(...)):
     """
     Upload multiple files at once
     """
@@ -86,14 +86,14 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
         file_path = UPLOAD_DIR / file.filename
         
         with file_path.open("wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+            shutil.copyfileobj (file.file, buffer)
         
         uploaded.append({
             "filename": file.filename,
             "size": file_path.stat().st_size
         })
     
-    return {"files": uploaded, "count": len(uploaded)}
+    return {"files": uploaded, "count": len (uploaded)}
 \`\`\`
 
 ---
@@ -118,7 +118,7 @@ ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 ALLOWED_DOCUMENT_TYPES = {"application/pdf", "application/msword", 
                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
 
-async def validate_file_size(file: UploadFile, max_size: int = MAX_FILE_SIZE):
+async def validate_file_size (file: UploadFile, max_size: int = MAX_FILE_SIZE):
     """
     Validate file size without loading entire file
     """
@@ -126,7 +126,7 @@ async def validate_file_size(file: UploadFile, max_size: int = MAX_FILE_SIZE):
     size = 0
     
     while chunk := await file.read(8192):  # 8KB chunks
-        size += len(chunk)
+        size += len (chunk)
         
         if size > max_size:
             raise HTTPException(
@@ -151,7 +151,7 @@ async def validate_file_type(
     await file.seek(0)
     
     # Detect actual file type
-    mime_type = magic.from_buffer(header, mime=True)
+    mime_type = magic.from_buffer (header, mime=True)
     
     if mime_type not in allowed_types:
         raise HTTPException(
@@ -161,7 +161,7 @@ async def validate_file_type(
     
     return mime_type
 
-async def validate_image(file: UploadFile) -> dict:
+async def validate_image (file: UploadFile) -> dict:
     """
     Validate image file: dimensions, format
     """
@@ -170,7 +170,7 @@ async def validate_image(file: UploadFile) -> dict:
     await file.seek(0)
     
     try:
-        image = Image.open(io.BytesIO(contents))
+        image = Image.open (io.BytesIO(contents))
         
         # Check dimensions
         width, height = image.size
@@ -195,30 +195,30 @@ async def validate_image(file: UploadFile) -> dict:
         }
         
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid image: {str(e)}")
+        raise HTTPException (status_code=400, detail=f"Invalid image: {str (e)}")
 
 # Validated upload endpoint
 @app.post("/upload/image/")
-async def upload_image(file: UploadFile = File(...)):
+async def upload_image (file: UploadFile = File(...)):
     """
     Upload image with validation
     """
     # Validate size
-    file_size = await validate_file_size(file, max_size=10*1024*1024)
+    file_size = await validate_file_size (file, max_size=10*1024*1024)
     
     # Validate type
-    mime_type = await validate_file_type(file, ALLOWED_IMAGE_TYPES)
+    mime_type = await validate_file_type (file, ALLOWED_IMAGE_TYPES)
     
     # Validate image properties
-    image_info = await validate_image(file)
+    image_info = await validate_image (file)
     
     # Generate safe filename
-    safe_filename = generate_safe_filename(file.filename)
+    safe_filename = generate_safe_filename (file.filename)
     file_path = UPLOAD_DIR / safe_filename
     
     # Save file
     with file_path.open("wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        shutil.copyfileobj (file.file, buffer)
     
     return {
         "filename": safe_filename,
@@ -227,7 +227,7 @@ async def upload_image(file: UploadFile = File(...)):
         **image_info
     }
 
-def generate_safe_filename(filename: str) -> str:
+def generate_safe_filename (filename: str) -> str:
     """
     Generate safe filename: sanitize, add UUID
     """
@@ -235,13 +235,13 @@ def generate_safe_filename(filename: str) -> str:
     from pathlib import Path
     
     # Get extension
-    ext = Path(filename).suffix
+    ext = Path (filename).suffix
     
     # Generate UUID
     unique_id = uuid.uuid4().hex[:8]
     
     # Sanitize original name (remove special chars)
-    safe_name = "".join(c for c in Path(filename).stem if c.isalnum() or c in (' ', '-', '_'))
+    safe_name = "".join (c for c in Path (filename).stem if c.isalnum() or c in (' ', '-', '_'))
     safe_name = safe_name[:50]  # Limit length
     
     return f"{safe_name}_{unique_id}{ext}"
@@ -259,21 +259,21 @@ Stream large files in chunks
 """
 
 @app.post("/upload/chunked/")
-async def upload_large_file(file: UploadFile = File(...)):
+async def upload_large_file (file: UploadFile = File(...)):
     """
     Stream large file upload (e.g., 1GB video)
     Memory-efficient: processes chunks without loading entire file
     """
-    file_path = UPLOAD_DIR / generate_safe_filename(file.filename)
+    file_path = UPLOAD_DIR / generate_safe_filename (file.filename)
     
     # Stream file in chunks
     chunk_size = 1024 * 1024  # 1MB chunks
     total_size = 0
     
     with file_path.open("wb") as buffer:
-        while chunk := await file.read(chunk_size):
-            buffer.write(chunk)
-            total_size += len(chunk)
+        while chunk := await file.read (chunk_size):
+            buffer.write (chunk)
+            total_size += len (chunk)
             
             # Could add progress tracking here
             print(f"Uploaded: {total_size / (1024*1024):.2f}MB")
@@ -298,7 +298,7 @@ from fastapi import WebSocket
 upload_progress: Dict[str, dict] = {}
 
 @app.websocket("/ws/upload/{upload_id}")
-async def upload_progress_ws(websocket: WebSocket, upload_id: str):
+async def upload_progress_ws (websocket: WebSocket, upload_id: str):
     """
     WebSocket for real-time upload progress
     """
@@ -308,7 +308,7 @@ async def upload_progress_ws(websocket: WebSocket, upload_id: str):
         while True:
             # Send progress updates
             if upload_id in upload_progress:
-                await websocket.send_json(upload_progress[upload_id])
+                await websocket.send_json (upload_progress[upload_id])
             
             await asyncio.sleep(0.5)  # Update every 500ms
             
@@ -323,7 +323,7 @@ async def upload_with_progress(
     """
     Upload file with progress tracking
     """
-    file_path = UPLOAD_DIR / generate_safe_filename(file.filename)
+    file_path = UPLOAD_DIR / generate_safe_filename (file.filename)
     
     chunk_size = 1024 * 1024  # 1MB
     total_size = 0
@@ -337,9 +337,9 @@ async def upload_with_progress(
     }
     
     with file_path.open("wb") as buffer:
-        while chunk := await file.read(chunk_size):
-            buffer.write(chunk)
-            total_size += len(chunk)
+        while chunk := await file.read (chunk_size):
+            buffer.write (chunk)
+            total_size += len (chunk)
             
             # Update progress
             upload_progress[upload_id] = {
@@ -386,7 +386,7 @@ s3_client = boto3.client(
 async def get_presigned_upload_url(
     filename: str,
     content_type: str,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends (get_current_user)
 ):
     """
     Generate presigned URL for direct S3 upload
@@ -398,7 +398,7 @@ async def get_presigned_upload_url(
     4. Client notifies server of completion
     """
     # Generate unique S3 key
-    file_key = f"uploads/{current_user.id}/{generate_safe_filename(filename)}"
+    file_key = f"uploads/{current_user.id}/{generate_safe_filename (filename)}"
     
     try:
         # Generate presigned POST URL
@@ -407,7 +407,7 @@ async def get_presigned_upload_url(
             Key=file_key,
             Fields={
                 "Content-Type": content_type,
-                "x-amz-meta-user-id": str(current_user.id)
+                "x-amz-meta-user-id": str (current_user.id)
             },
             Conditions=[
                 ["content-length-range", 1, 100*1024*1024],  # 1 byte - 100MB
@@ -424,13 +424,13 @@ async def get_presigned_upload_url(
         }
         
     except ClientError as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException (status_code=500, detail=str (e))
 
 @app.post("/upload/confirm/")
 async def confirm_s3_upload(
     file_key: str,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Confirm S3 upload and create database record
@@ -442,19 +442,19 @@ async def confirm_s3_upload(
         content_type = response["ContentType"]
         
     except ClientError:
-        raise HTTPException(status_code=404, detail="File not found in S3")
+        raise HTTPException (status_code=404, detail="File not found in S3")
     
     # Create database record
     upload = Upload(
         user_id=current_user.id,
         file_key=file_key,
-        filename=Path(file_key).name,
+        filename=Path (file_key).name,
         size=file_size,
         content_type=content_type,
         storage="s3"
     )
     
-    db.add(upload)
+    db.add (upload)
     db.commit()
     
     return {
@@ -481,8 +481,8 @@ import aiofiles
 @app.get("/download/{file_id}")
 async def download_file(
     file_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Stream file download
@@ -495,17 +495,17 @@ async def download_file(
     ).first()
     
     if not upload:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     
     # Stream file
     file_path = UPLOAD_DIR / upload.file_key
     
     if not file_path.exists():
-        raise HTTPException(status_code=404, detail="File not found")
+        raise HTTPException (status_code=404, detail="File not found")
     
     async def file_stream():
         """Generator that yields file chunks"""
-        async with aiofiles.open(file_path, mode='rb') as f:
+        async with aiofiles.open (file_path, mode='rb') as f:
             while chunk := await f.read(1024*1024):  # 1MB chunks
                 yield chunk
     
@@ -521,8 +521,8 @@ async def download_file(
 @app.get("/download/s3/{file_id}")
 async def download_from_s3(
     file_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Stream file from S3
@@ -533,7 +533,7 @@ async def download_from_s3(
     ).first()
     
     if not upload:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     
     # Get S3 object
     try:
@@ -541,7 +541,7 @@ async def download_from_s3(
         
         async def s3_stream():
             """Stream from S3"""
-            for chunk in s3_object['Body'].iter_chunks(chunk_size=1024*1024):
+            for chunk in s3_object['Body'].iter_chunks (chunk_size=1024*1024):
                 yield chunk
         
         return StreamingResponse(
@@ -553,7 +553,7 @@ async def download_from_s3(
         )
         
     except ClientError:
-        raise HTTPException(status_code=404, detail="File not found in S3")
+        raise HTTPException (status_code=404, detail="File not found in S3")
 \`\`\`
 
 ### Stream Generated Content
@@ -565,8 +565,8 @@ Stream generated content (CSV, reports)
 
 @app.get("/export/users.csv")
 async def export_users_csv(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Stream CSV export
@@ -582,7 +582,7 @@ async def export_users_csv(
         batch_size = 1000
         
         while True:
-            users = db.query(User).offset(offset).limit(batch_size).all()
+            users = db.query(User).offset (offset).limit (batch_size).all()
             
             if not users:
                 break
@@ -616,13 +616,13 @@ import clamd  # ClamAV integration
 
 clam = clamd.ClamAV()
 
-async def scan_file_for_viruses(file_path: Path) -> bool:
+async def scan_file_for_viruses (file_path: Path) -> bool:
     """
     Scan file using ClamAV
     Returns True if clean, raises exception if infected
     """
     try:
-        scan_result = clam.scan(str(file_path))
+        scan_result = clam.scan (str (file_path))
         
         if scan_result:
             # Virus found
@@ -635,8 +635,8 @@ async def scan_file_for_viruses(file_path: Path) -> bool:
         return True
         
     except Exception as e:
-        logger.error(f"Virus scan failed: {e}")
-        raise HTTPException(status_code=500, detail="Virus scan failed")
+        logger.error (f"Virus scan failed: {e}")
+        raise HTTPException (status_code=500, detail="Virus scan failed")
 \`\`\`
 
 ---

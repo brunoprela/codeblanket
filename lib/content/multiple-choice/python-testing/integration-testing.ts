@@ -39,7 +39,7 @@ export const integrationTestingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Clean state between tests essential: Transaction rollback (fast): Begin transaction → test → rollback. Truncate (slower): Delete all rows between tests. Example: @pytest.fixture def db_session(engine): connection.begin(); yield session; transaction.rollback(). Ensures test isolation: Test 1 creates user "alice", doesn\'t affect test 2. New database per test too slow (10s per test). Shared state causes flaky tests (test order matters). Database state critical—dirty state = false positives/negatives.',
+      'Clean state between tests essential: Transaction rollback (fast): Begin transaction → test → rollback. Truncate (slower): Delete all rows between tests. Example: @pytest.fixture def db_session (engine): connection.begin(); yield session; transaction.rollback(). Ensures test isolation: Test 1 creates user "alice", doesn\'t affect test 2. New database per test too slow (10s per test). Shared state causes flaky tests (test order matters). Database state critical—dirty state = false positives/negatives.',
   },
   {
     id: 'it-mc-4',

@@ -46,7 +46,7 @@ def medical_diagnosis_demo():
     n_patients = 10000
     
     # Ground truth: 1% of patients have the disease
-    has_disease = np.random.rand(n_patients) < 0.01
+    has_disease = np.random.rand (n_patients) < 0.01
     
     # Test characteristics
     # Sensitivity: P(positive test | has disease) = 0.95
@@ -55,14 +55,14 @@ def medical_diagnosis_demo():
     
     test_positive = np.where(
         has_disease,
-        np.random.rand(n_patients) < 0.95,  # true positives
-        np.random.rand(n_patients) < 0.10   # false positives
+        np.random.rand (n_patients) < 0.95,  # true positives
+        np.random.rand (n_patients) < 0.10   # false positives
     )
     
     # Calculate probabilities
-    p_disease = np.mean(has_disease)
-    p_positive = np.mean(test_positive)
-    p_disease_and_positive = np.mean(has_disease & test_positive)
+    p_disease = np.mean (has_disease)
+    p_positive = np.mean (test_positive)
+    p_disease_and_positive = np.mean (has_disease & test_positive)
     
     # Conditional probabilities
     p_positive_given_disease = p_disease_and_positive / p_disease if p_disease > 0 else 0
@@ -111,15 +111,15 @@ def visualize_conditional_probability():
     
     # Event A: Feature X > 0.5
     # Event B: Label = 1
-    X = np.random.rand(n)
+    X = np.random.rand (n)
     
     # Generate labels with dependency on X
     # P(Y=1 | X>0.5) = 0.7
     # P(Y=1 | X≤0.5) = 0.3
     Y = np.where(
         X > 0.5,
-        np.random.rand(n) < 0.7,
-        np.random.rand(n) < 0.3
+        np.random.rand (n) < 0.7,
+        np.random.rand (n) < 0.3
     )
     
     # Define events
@@ -127,11 +127,11 @@ def visualize_conditional_probability():
     event_B = Y == 1   # Positive label
     
     # Calculate probabilities
-    p_a = np.mean(event_A)
-    p_b = np.mean(event_B)
-    p_a_and_b = np.mean(event_A & event_B)
+    p_a = np.mean (event_A)
+    p_b = np.mean (event_B)
+    p_a_and_b = np.mean (event_A & event_B)
     p_b_given_a = p_a_and_b / p_a
-    p_b_given_not_a = np.mean(event_B & ~event_A) / np.mean(~event_A)
+    p_b_given_not_a = np.mean (event_B & ~event_A) / np.mean(~event_A)
     
     print("=== Feature Importance Analysis ===")
     print(f"P(X > 0.5) = {p_a:.3f}")
@@ -146,8 +146,8 @@ def visualize_conditional_probability():
     
     # Create contingency table
     contingency = pd.crosstab(
-        pd.Series(event_A, name='X > 0.5'),
-        pd.Series(event_B, name='Y = 1'),
+        pd.Series (event_A, name='X > 0.5'),
+        pd.Series (event_B, name='Y = 1'),
         normalize='index'  # Show conditional probabilities
     )
     print("\\nContingency Table (row-normalized):")
@@ -204,10 +204,10 @@ def test_independence():
     coin1 = np.random.choice([0, 1], size=n)
     coin2 = np.random.choice([0, 1], size=n)
     
-    p_coin1 = np.mean(coin1)
-    p_coin2 = np.mean(coin2)
-    p_both = np.mean(coin1 & coin2)
-    p_coin2_given_coin1 = np.mean(coin2[coin1 == 1])
+    p_coin1 = np.mean (coin1)
+    p_coin2 = np.mean (coin2)
+    p_both = np.mean (coin1 & coin2)
+    p_coin2_given_coin1 = np.mean (coin2[coin1 == 1])
     
     print("=== Example 1: Independent Events (Coin Flips) ===")
     print(f"P(Coin1 = 1) = {p_coin1:.3f}")
@@ -215,7 +215,7 @@ def test_independence():
     print(f"P(Both = 1) = {p_both:.3f}")
     print(f"P(Coin1) × P(Coin2) = {p_coin1 * p_coin2:.3f}")
     print(f"P(Coin2 = 1 | Coin1 = 1) = {p_coin2_given_coin1:.3f}")
-    print(f"Independent? {abs(p_both - p_coin1 * p_coin2) < 0.01}")
+    print(f"Independent? {abs (p_both - p_coin1 * p_coin2) < 0.01}")
     print()
     
     # Example 2: Dependent events (card draws without replacement)
@@ -226,17 +226,17 @@ def test_independence():
     second_card_ace = []
     
     for _ in range(10000):
-        np.random.shuffle(deck)
-        first_card_ace.append(deck[0] == 1)
-        second_card_ace.append(deck[1] == 1)
+        np.random.shuffle (deck)
+        first_card_ace.append (deck[0] == 1)
+        second_card_ace.append (deck[1] == 1)
     
-    first_card_ace = np.array(first_card_ace)
-    second_card_ace = np.array(second_card_ace)
+    first_card_ace = np.array (first_card_ace)
+    second_card_ace = np.array (second_card_ace)
     
-    p_first = np.mean(first_card_ace)
-    p_second = np.mean(second_card_ace)
-    p_both_ace = np.mean(first_card_ace & second_card_ace)
-    p_second_given_first = np.mean(second_card_ace[first_card_ace])
+    p_first = np.mean (first_card_ace)
+    p_second = np.mean (second_card_ace)
+    p_both_ace = np.mean (first_card_ace & second_card_ace)
+    p_second_given_first = np.mean (second_card_ace[first_card_ace])
     
     print("=== Example 2: Dependent Events (Cards Without Replacement) ===")
     print(f"P(1st card ace) = {p_first:.3f}")
@@ -244,7 +244,7 @@ def test_independence():
     print(f"P(Both aces) = {p_both_ace:.3f}")
     print(f"P(1st) × P(2nd) = {p_first * p_second:.3f}")
     print(f"P(2nd ace | 1st ace) = {p_second_given_first:.3f}")
-    print(f"Independent? {abs(p_both_ace - p_first * p_second) < 0.01}")
+    print(f"Independent? {abs (p_both_ace - p_first * p_second) < 0.01}")
     print(f"\\nNotice: P(2nd|1st) = {p_second_given_first:.3f} ≠ P(2nd) = {p_second:.3f}")
     print(f"Drawing first ace reduces probability of second ace!")
 
@@ -310,7 +310,7 @@ def conditional_independence_demo():
     )
     
     # Test 1 and Test 2 are correlated (both depend on study time)
-    correlation_overall = np.corrcoef(test1, test2)[0, 1]
+    correlation_overall = np.corrcoef (test1, test2)[0, 1]
     print("=== Conditional Independence Example ===")
     print(f"Correlation(Test1, Test2) overall: {correlation_overall:.3f}")
     print("Tests are correlated! (because both depend on study time)")
@@ -320,8 +320,8 @@ def conditional_independence_demo():
     mask_low = study_time == 'low'
     mask_high = study_time == 'high'
     
-    corr_given_low = np.corrcoef(test1[mask_low], test2[mask_low])[0, 1]
-    corr_given_high = np.corrcoef(test1[mask_high], test2[mask_high])[0, 1]
+    corr_given_low = np.corrcoef (test1[mask_low], test2[mask_low])[0, 1]
+    corr_given_high = np.corrcoef (test1[mask_high], test2[mask_high])[0, 1]
     
     print(f"Correlation(Test1, Test2 | study=low): {corr_given_low:.3f}")
     print(f"Correlation(Test1, Test2 | study=high): {corr_given_high:.3f}")
@@ -364,7 +364,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # Generate data
-X, y = make_classification(n_samples=1000, n_features=5, n_informative=3, random_state=42)
+X, y = make_classification (n_samples=1000, n_features=5, n_informative=3, random_state=42)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train Naive Bayes
@@ -373,7 +373,7 @@ nb.fit(X_train, y_train)
 
 # Predictions
 y_pred = nb.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 
 print("=== Naive Bayes Classifier ===")
 print(f"Accuracy: {accuracy:.3f}")
@@ -403,22 +403,22 @@ def feature_importance_conditional():
     feature_names = data.feature_names
     
     # For binary classification
-    p_positive = np.mean(y == 1)
+    p_positive = np.mean (y == 1)
     
     # Measure how much each feature changes probability
     importances = []
     
-    for i in range(min(5, X.shape[1])):  # First 5 features
+    for i in range (min(5, X.shape[1])):  # First 5 features
         # Split by median
         threshold = np.median(X[:, i])
         above_threshold = X[:, i] > threshold
         
-        p_pos_given_high = np.mean(y[above_threshold] == 1)
-        p_pos_given_low = np.mean(y[~above_threshold] == 1)
+        p_pos_given_high = np.mean (y[above_threshold] == 1)
+        p_pos_given_low = np.mean (y[~above_threshold] == 1)
         
         # Information gain
-        importance = abs(p_pos_given_high - p_pos_given_low)
-        importances.append(importance)
+        importance = abs (p_pos_given_high - p_pos_given_low)
+        importances.append (importance)
         
         print(f"{feature_names[i][:30]:30s}: ", end=')
         print(f"P(+|high)={p_pos_given_high:.2f}, P(+|low)={p_pos_given_low:.2f}, ", end=')
@@ -450,7 +450,7 @@ feature_importance_conditional()
 6. **ML applications**: Naive Bayes, feature importance, causal inference
 7. **Common mistake**: Correlation ≠ causation - need conditional probability analysis
 
-## Caution: Simpson's Paradox
+## Caution: Simpson\'s Paradox
 
 A trend can appear in different groups but disappear or reverse when groups are combined!
 

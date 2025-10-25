@@ -1,8 +1,9 @@
 export const derivativesOverview = {
-    title: "Derivatives Overview",
-    slug: "derivatives-overview",
-    description: "Master forwards, futures, options, and swaps - the building blocks of modern finance",
-    content: `
+  title: 'Derivatives Overview',
+  slug: 'derivatives-overview',
+  description:
+    'Master forwards, futures, options, and swaps - the building blocks of modern finance',
+  content: `
 # Derivatives Overview
 
 ## Introduction: The Power and Peril of Derivatives
@@ -11,7 +12,7 @@ Derivatives are financial contracts whose value is **derived** from an underlyin
 - 🎯 **Essential risk management tools** (hedging)
 - 💰 **Speculative vehicles** (directional bets)
 - 🔧 **Arbitrage instruments** (exploiting mispricings)
-- ⚠️ **Potential weapons of mass destruction** (Warren Buffett's words after 2008)
+- ⚠️ **Potential weapons of mass destruction** (Warren Buffett\'s words after 2008)
 
 **Market Size**: The notional value of global derivatives exceeds **$600 TRILLION** (yes, trillion), more than 10x global GDP. Yet most people don't understand them.
 
@@ -59,19 +60,19 @@ class DerivativeContract:
     counterparty_a: str
     counterparty_b: str
     
-    def time_to_maturity_days(self) -> int:
+    def time_to_maturity_days (self) -> int:
         """Days remaining until settlement"""
         return (self.maturity_date - datetime.now()).days
     
-    def time_to_maturity_years(self) -> float:
+    def time_to_maturity_years (self) -> float:
         """Years remaining until settlement"""
         return self.time_to_maturity_days() / 365.25
     
-    def is_expired(self) -> bool:
+    def is_expired (self) -> bool:
         """Check if contract has expired"""
         return datetime.now() >= self.maturity_date
     
-    def calculate_leverage_ratio(self, upfront_margin: float) -> float:
+    def calculate_leverage_ratio (self, upfront_margin: float) -> float:
         """
         Calculate leverage
         Leverage = Notional Amount / Margin Posted
@@ -88,18 +89,17 @@ oil_future = DerivativeContract(
     underlying_asset="Crude Oil (WTI)",
     notional_amount=100_000,  # 1,000 barrels × $100/barrel
     contract_date=datetime.now(),
-    maturity_date=datetime.now() + timedelta(days=90),
+    maturity_date=datetime.now() + timedelta (days=90),
     counterparty_a="Trader",
     counterparty_b="Exchange",
 )
 
 # Futures typically require 5-15% margin
 margin_required = 10_000  # $10K margin
-leverage = oil_future.calculate_leverage_ratio(margin_required)
+leverage = oil_future.calculate_leverage_ratio (margin_required)
 
 print(f"Oil Futures Contract:")
-print(f"Notional Value: \${oil_future.notional_amount:,
-}")
+print(f"Notional Value: \${oil_future.notional_amount:,}")
 print(f"Margin Required: \${margin_required:,}")
 print(f"Leverage: {leverage:.1f}x")
 print(f"\\n⚠️  If oil moves 1%, your P&L moves {leverage}%!")
@@ -158,7 +158,7 @@ class HedgingExample:
             'unhedged_cost': unhedged_actual_cost,
             'hedged_cost': hedged_actual_cost,
             'savings': savings,
-            'interpretation': f'Hedging saved ${savings / 1e6: .0f}M when fuel spiked'
+            'interpretation': f'Hedging saved \${savings / 1e6:.0f}M when fuel spiked'
         }
 
 @staticmethod
@@ -177,7 +177,7 @@ forward_rate = 1.08  # Lock in at $1.08
         # Expected revenue at current rate
 expected_usd = euro_receivable * current_rate
         
-        # Hedged revenue(locked in)
+        # Hedged revenue (locked in)
 hedged_usd = euro_receivable * forward_rate
         
         # Scenario: EUR weakens to 1.00(10 % drop)
@@ -194,7 +194,7 @@ return {
     'unhedged_revenue': unhedged_usd,
     'hedged_revenue': hedged_usd,
     'protection_value': protection,
-    'interpretation': f'Forward contract protected ${protection/1e6:.1f}M of revenue'
+    'interpretation': f'Forward contract protected \${protection/1e6:.1f}M of revenue'
         }
 
 @staticmethod
@@ -220,7 +220,7 @@ total_premium = contracts_needed * put_premium * 100
 unhedged_loss = portfolio_value * 0.20
         
         # Put payoff = max(Strike - Spot, 0)
-put_payoff_per_share = max(put_strike - crash_spy_price, 0)
+put_payoff_per_share = max (put_strike - crash_spy_price, 0)
 total_put_payoff = contracts_needed * put_payoff_per_share * 100
 
 net_loss_hedged = unhedged_loss - total_put_payoff + total_premium
@@ -310,7 +310,7 @@ class SpeculationExample:
         
         # Scenario: Stock crashes to $80 (-20%)
         new_price = 80
-        put_value = max(put_strike - new_price, 0)
+        put_value = max (put_strike - new_price, 0)
         payoff = put_value * 100 * contracts
         net_profit = payoff - cost
         return_pct = net_profit / cost
@@ -379,11 +379,11 @@ class ArbitrageExample:
         if mispricing > 0:
             # Execute arbitrage
             steps = [
-                f"1. Borrow ${spot_price} at {risk_free_rate*100}% for {time_to_maturity*12:.0f} months",
-                f"2. Buy spot at ${spot_price}",
-                f"3. Sell futures at ${futures_price}",
-                f"4. At maturity: Deliver spot, collect ${futures_price}",
-                f"5. Repay loan: ${spot_price * (1 + risk_free_rate * time_to_maturity): .2f}"
+                f"1. Borrow \${spot_price} at {risk_free_rate*100}% for {time_to_maturity*12:.0f} months",
+                f"2. Buy spot at \${spot_price}",
+                f"3. Sell futures at \${futures_price}",
+                f"4. At maturity: Deliver spot, collect \${futures_price}",
+                f"5. Repay loan: \${spot_price * (1 + risk_free_rate * time_to_maturity):.2f}"
             ]
 
 profit = futures_price - spot_price * (1 + risk_free_rate * time_to_maturity)
@@ -397,7 +397,7 @@ return {
     'steps': steps,
     'risk_free_profit': profit,
     'return': (profit / spot_price) * 100,
-    'interpretation': f'Lock in ${profit:.2f} profit per unit with ZERO risk'
+    'interpretation': f'Lock in \${profit:.2f} profit per unit with ZERO risk'
             }
 
 return { 'arbitrage_opportunity': False }
@@ -424,7 +424,7 @@ left_side = call_price - put_price
 pv_strike = strike * np.exp(-risk_free_rate * time_to_maturity)
 right_side = stock_price - pv_strike
 
-discrepancy = abs(left_side - right_side)
+discrepancy = abs (left_side - right_side)
 
 if discrepancy > 0.10:  # More than $0.10 mispricing
 if left_side > right_side:
@@ -480,7 +480,7 @@ class ForwardContract(DerivativeContract):
     def __post_init__(self):
         self.contract_type = DerivativeType.FORWARD
     
-    def calculate_payoff(self, spot_price_at_maturity: float) -> dict:
+    def calculate_payoff (self, spot_price_at_maturity: float) -> dict:
         """
         Calculate payoff at maturity
         
@@ -500,7 +500,7 @@ class ForwardContract(DerivativeContract):
             'winner': self.long_party if long_payoff > 0 else self.short_party
         }
     
-    def mark_to_market(self, current_spot_price: float, risk_free_rate: float) -> dict:
+    def mark_to_market (self, current_spot_price: float, risk_free_rate: float) -> dict:
         """
         Calculate current market value before maturity
         
@@ -521,10 +521,10 @@ class ForwardContract(DerivativeContract):
             'time_remaining_years': time_remaining,
             'value_to_long': forward_value,
             'value_to_short': -forward_value,
-            'interpretation': f'Long party {"gains" if forward_value > 0 else "loses"} ${abs(forward_value): .2f} if closed now'
+            'interpretation': f'Long party {"gains" if forward_value > 0 else "loses"} \${abs (forward_value):.2f} if closed now'
         }
     
-    def calculate_fair_forward_price(self,
+    def calculate_fair_forward_price (self,
     spot_price: float,
     risk_free_rate: float,
     dividend_yield: float = 0) -> float:
@@ -536,7 +536,7 @@ where:
 F = forward price
 S = spot price
 r = risk - free rate
-q = dividend yield(or convenience yield for commodities)
+q = dividend yield (or convenience yield for commodities)
     T = time to maturity
 """
 time_years = self.time_to_maturity_years()
@@ -548,7 +548,7 @@ usd_eur_forward = ForwardContract(
     underlying_asset = "EUR/USD",
     notional_amount = 1_000_000,  # €1M
     contract_date = datetime.now(),
-    maturity_date = datetime.now() + timedelta(days = 180),  # 6 months
+    maturity_date = datetime.now() + timedelta (days = 180),  # 6 months
     counterparty_a = "U.S. Importer",
     counterparty_b = "Bank",
     forward_price = 1.10,  # Lock in at $1.10 per euro
@@ -564,17 +564,17 @@ print(f"Maturity: {usd_eur_forward.time_to_maturity_days()} days")
 # Scenario 1: EUR strengthens to 1.15
 payoff1 = usd_eur_forward.calculate_payoff(1.15)
 print(f"\\nScenario 1: EUR at \${payoff1['spot_at_maturity']}")
-print(f"  {payoff1['long_party']}: {'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} \${abs(payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"  {payoff1['long_party']}: {'Gains' if payoff1['long_payoff'] > 0 else 'Loses'} \${abs (payoff1['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.15, saved $0.05 per euro)")
 
 # Scenario 2: EUR weakens to 1.05
 payoff2 = usd_eur_forward.calculate_payoff(1.05)
 print(f"\\nScenario 2: EUR at \${payoff2['spot_at_maturity']}")
-print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} \${abs(payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
+print(f"  {payoff2['long_party']}: {'Gains' if payoff2['long_payoff'] > 0 else 'Loses'} \${abs (payoff2['long_payoff'] * usd_eur_forward.notional_amount):,.0f}")
 print(f"  (Locked in $1.10, market is $1.05, overpaid $0.05 per euro)")
 
 # Mark to market now
-mtm = usd_eur_forward.mark_to_market(current_spot_price = 1.12, risk_free_rate = 0.03)
+mtm = usd_eur_forward.mark_to_market (current_spot_price = 1.12, risk_free_rate = 0.03)
 print(f"\\nCurrent Market Value (spot at $1.12):")
 print(f"  {mtm['interpretation']}")
 \`\`\`
@@ -607,7 +607,7 @@ class FuturesContract(DerivativeContract):
     def __post_init__(self):
         self.contract_type = DerivativeType.FUTURE
     
-    def calculate_daily_pnl(self, 
+    def calculate_daily_pnl (self, 
                            yesterday_price: float, 
                            today_price: float,
                            position: Literal['long', 'short'],
@@ -635,7 +635,7 @@ class FuturesContract(DerivativeContract):
             'settlement': 'Cash transferred today (mark-to-market)'
         }
     
-    def check_margin_call(self,
+    def check_margin_call (self,
                          account_balance: float,
                          position_value: float,
                          position: Literal['long', 'short']) -> dict:
@@ -657,7 +657,7 @@ class FuturesContract(DerivativeContract):
             'warning': 'MARGIN CALL! Deposit funds or position will be liquidated' if is_margin_call else 'Account OK'
         }
     
-    def calculate_contract_value(self, price: float) -> float:
+    def calculate_contract_value (self, price: float) -> float:
         """Calculate notional value of one contract"""
         return price * self.contract_size
 
@@ -666,7 +666,7 @@ sp500_future = FuturesContract(
     underlying_asset="S&P 500 E-mini",
     notional_amount=225_000,  # $4,500 × 50 multiplier
     contract_date=datetime.now(),
-    maturity_date=datetime.now() + timedelta(days=90),
+    maturity_date=datetime.now() + timedelta (days=90),
     counterparty_a="Trader",
     counterparty_b="CME Exchange",
     contract_size=50,  # $50 per index point
@@ -766,7 +766,7 @@ class OptionContract:
         self.underlying_price = underlying_price
         self.premium = premium
     
-    def calculate_payoff(self, spot_price_at_expiration: float) -> dict:
+    def calculate_payoff (self, spot_price_at_expiration: float) -> dict:
         """
         Intrinsic value at expiration
         
@@ -774,9 +774,9 @@ class OptionContract:
         Put: max(K - S, 0)
         """
         if self.option_type == 'call':
-            intrinsic_value = max(spot_price_at_expiration - self.strike, 0)
+            intrinsic_value = max (spot_price_at_expiration - self.strike, 0)
         else:  # put
-            intrinsic_value = max(self.strike - spot_price_at_expiration, 0)
+            intrinsic_value = max (self.strike - spot_price_at_expiration, 0)
         
         # Profit = Payoff - Premium Paid
         profit = intrinsic_value - self.premium
@@ -790,7 +790,7 @@ class OptionContract:
             'return': (profit / self.premium) * 100 if self.premium > 0 else 0
         }
     
-    def moneyness(self) -> str:
+    def moneyness (self) -> str:
         """
         Determine if option is ITM, ATM, or OTM
         """
@@ -813,7 +813,7 @@ class OptionContract:
 call = OptionContract(
     option_type='call',
     strike_price=100,
-    expiration=datetime.now() + timedelta(days=30),
+    expiration=datetime.now() + timedelta (days=30),
     underlying_price=100,
     premium=5
 )
@@ -824,9 +824,9 @@ print(f"Moneyness: {call.moneyness()}")
 
 # Calculate payoffs at different prices
 for price in [80, 90, 100, 110, 120]:
-    result = call.calculate_payoff(price)
+    result = call.calculate_payoff (price)
     print(f"\\nStock at \${price}:")
-    print(f"  Intrinsic Value: \${result['intrinsic_value']: .2f}")
+    print(f"  Intrinsic Value: \${result['intrinsic_value']:.2f}")
 print(f"  Net Profit: \${result['net_profit']:.2f}")
 print(f"  Return: {result['return']:.0f}%")
 
@@ -863,19 +863,19 @@ class InterestRateSwap:
         self.payment_frequency = payment_frequency
         self.num_payments = tenor_years * payment_frequency
     
-    def calculate_payments(self, floating_rates: list[float]) -> pd.DataFrame:
+    def calculate_payments (self, floating_rates: list[float]) -> pd.DataFrame:
         """
         Calculate swap cash flows
         
         Fixed payer: Pays fixed, receives floating
         Floating payer: Pays floating, receives fixed
         """
-        if len(floating_rates) != self.num_payments:
-            raise ValueError(f"Need {self.num_payments} floating rates")
+        if len (floating_rates) != self.num_payments:
+            raise ValueError (f"Need {self.num_payments} floating rates")
         
         payments = []
         
-        for period in range(self.num_payments):
+        for period in range (self.num_payments):
             # Fixed leg
             fixed_payment = (self.fixed_rate / self.payment_frequency) * self.notional
             
@@ -892,11 +892,11 @@ class InterestRateSwap:
                 'fixed_payment': fixed_payment,
                 'floating_payment': floating_payment,
                 'net_payment_fixed_payer': net_payment,
-                'cumulative_pnl': sum(p['net_payment_fixed_payer'] 
+                'cumulative_pnl': sum (p['net_payment_fixed_payer'] 
                                      for p in payments)
             })
         
-        return pd.DataFrame(payments)
+        return pd.DataFrame (payments)
 
 # Example: $10M interest rate swap
 swap = InterestRateSwap(
@@ -910,16 +910,16 @@ swap = InterestRateSwap(
 # Simulate floating rates
 np.random.seed(42)
 floating_rates = [0.03 + np.random.normal(0, 0.005) 
-                 for _ in range(swap.num_payments)]
+                 for _ in range (swap.num_payments)]
 
-payments_df = swap.calculate_payments(floating_rates)
+payments_df = swap.calculate_payments (floating_rates)
 
 print("\\n=== Interest Rate Swap Example ===\\n")
 print(f"Notional: \${swap.notional:,}")
 print(f"Fixed Rate: {swap.fixed_rate*100}%")
 print(f"Tenor: {swap.tenor_years} years")
 print(f"\\nPayment Schedule:")
-print(payments_df.to_string(index = False))
+print(payments_df.to_string (index = False))
 
 final_pnl = payments_df['cumulative_pnl'].iloc[-1]
 print(f"\\nFinal P&L (Fixed Payer): \${final_pnl:,.0f}")
@@ -1012,7 +1012,7 @@ def explain_2008_crisis():
 explain_2008_crisis()
 \`\`\`
 
-**Warren Buffett's Warning (2003):**
+**Warren Buffett\'s Warning (2003):**
 > "Derivatives are financial weapons of mass destruction, carrying dangers that, while now latent, are potentially lethal."
 
 He was right.
@@ -1047,15 +1047,18 @@ He was right.
 
 You now understand derivatives - the most powerful and dangerous instruments in finance!
 `,
-    exercises: [
-        {
-            prompt: "Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).",
-            solution: "// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns"
-        },
-        {
-            prompt: "Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.",
-            solution: "// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a futures margin calculator that simulates daily mark-to-market, detects margin calls, and calculates optimal position sizing given risk tolerance. Include scenarios for extreme market moves (circuit breakers, limit moves).',
+      solution:
+        '// Implementation: 1) Track daily P&L with mark-to-market, 2) Monitor account balance vs maintenance margin, 3) Simulate gap risk (overnight moves), 4) Calculate VAR and position limits, 5) Alert on margin calls, 6) Handle forced liquidation scenarios, 7) Optimize position size using Kelly criterion or risk-adjusted returns',
+    },
+    {
+      prompt:
+        'Create an arbitrage detector that monitors cash-and-carry opportunities between spot and futures markets. Calculate fair value, detect mispricings, and simulate arbitrage execution accounting for transaction costs and funding costs.',
+      solution:
+        '// Implementation: 1) Real-time spot and futures price feeds, 2) Calculate fair futures value using cost-of-carry model, 3) Detect mispricings > threshold, 4) Account for bid-ask spreads, borrowing costs, storage costs (commodities), 5) Simulate P&L including all costs, 6) Alert when net profit > minimum threshold, 7) Track arbitrage convergence over time',
+    },
+  ],
 };
-

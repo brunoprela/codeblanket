@@ -5,7 +5,7 @@
 export const writeaheadlogSection = {
   id: 'write-ahead-log',
   title: 'Write-Ahead Log (WAL)',
-  content: `The Write-Ahead Log (WAL) is a fundamental technique in database systems and distributed systems that ensures **durability** and **atomicity** of operations. It's the backbone of crash recovery in most production databases.
+  content: `The Write-Ahead Log (WAL) is a fundamental technique in database systems and distributed systems that ensures **durability** and **atomicity** of operations. It\'s the backbone of crash recovery in most production databases.
 
 ## What is a Write-Ahead Log?
 
@@ -329,7 +329,7 @@ innodb_flush_log_at_trx_commit = 1  # Durability setting
 
 ### **Apache Kafka**
 
-Kafka's log is effectively a distributed WAL.
+Kafka\'s log is effectively a distributed WAL.
 
 **Concept**: Messages are appended to log, never updated.
 

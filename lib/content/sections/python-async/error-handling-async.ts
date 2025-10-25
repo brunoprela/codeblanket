@@ -42,9 +42,9 @@ async def async_function():
     # results may contain exceptions!
     
     # Scenario 3: Task cancellation
-    task = asyncio.create_task(long_operation())
+    task = asyncio.create_task (long_operation())
     try:
-        result = await asyncio.wait_for(task, timeout=5.0)
+        result = await asyncio.wait_for (task, timeout=5.0)
     except asyncio.TimeoutError:
         task.cancel()  # Must handle cancellation
 \`\`\`
@@ -71,14 +71,14 @@ Basic Async Exception Handling
 
 import asyncio
 
-async def fetch_data(url):
+async def fetch_data (url):
     """Fetch data with error handling"""
     try:
         # Simulated network request
         await asyncio.sleep(0.1)
         
         if 'invalid' in url:
-            raise ValueError(f"Invalid URL: {url}")
+            raise ValueError (f"Invalid URL: {url}")
         
         return f"Data from {url}"
     
@@ -98,7 +98,7 @@ async def main():
     result = await fetch_data("invalid-url")
     print(f"Result: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # ❌ Error: Invalid URL: invalid-url
@@ -140,7 +140,7 @@ async def main():
     result = await high_level_operation()
     print(f"Final result: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Mid-level caught: Database connection failed
@@ -161,11 +161,11 @@ Handle Errors in Multiple Concurrent Tasks
 
 import asyncio
 
-async def task(n):
+async def task (n):
     """Task that may fail"""
     await asyncio.sleep(0.1)
     if n == 2:
-        raise ValueError(f"Task {n} failed")
+        raise ValueError (f"Task {n} failed")
     return f"Task {n} succeeded"
 
 async def without_return_exceptions():
@@ -187,8 +187,8 @@ async def with_return_exceptions():
         return_exceptions=True  # Critical!
     )
     
-    for i, result in enumerate(results, 1):
-        if isinstance(result, Exception):
+    for i, result in enumerate (results, 1):
+        if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
         else:
             print(f"Task {i} succeeded: {result}")
@@ -200,7 +200,7 @@ async def main():
     print("\\nWith return_exceptions:")
     await with_return_exceptions()
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Without return_exceptions:
@@ -222,18 +222,18 @@ Robust Pattern for Handling Multiple Task Results
 import asyncio
 from typing import List, Union
 
-async def fetch_url(url: str) -> str:
+async def fetch_url (url: str) -> str:
     """Fetch URL (may fail)"""
     await asyncio.sleep(0.1)
     if 'error' in url:
-        raise ConnectionError(f"Failed to fetch {url}")
+        raise ConnectionError (f"Failed to fetch {url}")
     return f"Content from {url}"
 
-async def fetch_all_urls(urls: List[str]):
+async def fetch_all_urls (urls: List[str]):
     """Fetch all URLs, handle errors individually"""
     # Execute all tasks concurrently
     results = await asyncio.gather(
-        *[fetch_url(url) for url in urls],
+        *[fetch_url (url) for url in urls],
         return_exceptions=True
     )
     
@@ -241,15 +241,15 @@ async def fetch_all_urls(urls: List[str]):
     successes = []
     failures = []
     
-    for url, result in zip(urls, results):
-        if isinstance(result, Exception):
-            failures.append({'url': url, 'error': str(result)})
+    for url, result in zip (urls, results):
+        if isinstance (result, Exception):
+            failures.append({'url': url, 'error': str (result)})
         else:
             successes.append({'url': url, 'content': result})
     
     # Report
-    print(f"✅ Successes: {len(successes)}")
-    print(f"❌ Failures: {len(failures)}")
+    print(f"✅ Successes: {len (successes)}")
+    print(f"❌ Failures: {len (failures)}")
     
     return successes, failures
 
@@ -260,12 +260,12 @@ async def main():
         'https://another.com',
     ]
     
-    successes, failures = await fetch_all_urls(urls)
+    successes, failures = await fetch_all_urls (urls)
     
     for failure in failures:
         print(f"Failed: {failure['url']} - {failure['error']}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -299,7 +299,7 @@ async def cancellable_task():
 
 async def main():
     # Create task
-    task = asyncio.create_task(cancellable_task())
+    task = asyncio.create_task (cancellable_task())
     
     # Let it run briefly
     await asyncio.sleep(0.5)
@@ -312,7 +312,7 @@ async def main():
     except asyncio.CancelledError:
         print("Main caught cancellation")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Task started
@@ -336,7 +336,7 @@ class Application:
         self.tasks = []
         self.shutdown_event = asyncio.Event()
     
-    async def worker(self, name: str):
+    async def worker (self, name: str):
         """Worker task"""
         try:
             while not self.shutdown_event.is_set():
@@ -348,11 +348,11 @@ class Application:
             await asyncio.sleep(0.1)  # Simulate state save
             raise
     
-    async def start(self):
+    async def start (self):
         """Start application"""
         # Create worker tasks
         self.tasks = [
-            asyncio.create_task(self.worker(f"Worker-{i}"))
+            asyncio.create_task (self.worker (f"Worker-{i}"))
             for i in range(3)
         ]
         
@@ -368,7 +368,7 @@ class Application:
         await asyncio.gather(*self.tasks, return_exceptions=True)
         print("Shutdown complete")
     
-    def shutdown(self):
+    def shutdown (self):
         """Trigger shutdown"""
         self.shutdown_event.set()
 
@@ -384,7 +384,7 @@ async def main():
     
     await app.start()
 
-# asyncio.run(main())
+# asyncio.run (main())
 # Press Ctrl+C to trigger graceful shutdown
 \`\`\`
 
@@ -418,7 +418,7 @@ async def with_timeout():
     except asyncio.TimeoutError:
         print("Operation timed out")
 
-asyncio.run(with_timeout())
+asyncio.run (with_timeout())
 
 # Output: Operation timed out
 \`\`\`
@@ -460,7 +460,7 @@ async def main():
     except asyncio.TimeoutError:
         print("Timed out")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Acquiring resources...
@@ -487,15 +487,15 @@ class BackgroundTaskManager:
     def __init__(self):
         self.tasks = set()
     
-    def create_task(self, coro):
+    def create_task (self, coro):
         """Create background task with error handling"""
-        task = asyncio.create_task(coro)
-        self.tasks.add(task)
-        task.add_done_callback(self.tasks.discard)
-        task.add_done_callback(self._handle_task_result)
+        task = asyncio.create_task (coro)
+        self.tasks.add (task)
+        task.add_done_callback (self.tasks.discard)
+        task.add_done_callback (self._handle_task_result)
         return task
     
-    def _handle_task_result(self, task):
+    def _handle_task_result (self, task):
         """Handle task completion/errors"""
         try:
             # Retrieve exception if any
@@ -505,20 +505,20 @@ class BackgroundTaskManager:
         except asyncio.CancelledError:
             print(f"⚠️  Background task cancelled")
     
-    async def shutdown(self):
+    async def shutdown (self):
         """Shutdown all background tasks"""
         if self.tasks:
-            print(f"Shutting down {len(self.tasks)} tasks...")
+            print(f"Shutting down {len (self.tasks)} tasks...")
             for task in self.tasks:
                 task.cancel()
             
             await asyncio.gather(*self.tasks, return_exceptions=True)
 
-async def background_worker(n):
+async def background_worker (n):
     """Background worker that may fail"""
     await asyncio.sleep(1)
     if n == 2:
-        raise ValueError(f"Worker {n} failed")
+        raise ValueError (f"Worker {n} failed")
     print(f"Worker {n} completed")
 
 async def main():
@@ -526,7 +526,7 @@ async def main():
     
     # Create background tasks
     for i in range(5):
-        manager.create_task(background_worker(i))
+        manager.create_task (background_worker (i))
     
     # Let them run
     await asyncio.sleep(2)
@@ -534,7 +534,7 @@ async def main():
     # Shutdown
     await manager.shutdown()
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -563,7 +563,7 @@ async def retry_with_backoff(
     """Retry coroutine with exponential backoff"""
     delay = initial_delay
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             return await coro_func(*args, **kwargs)
         
@@ -574,7 +574,7 @@ async def retry_with_backoff(
             
             print(f"Attempt {attempt + 1} failed: {e}")
             print(f"Retrying in {delay}s...")
-            await asyncio.sleep(delay)
+            await asyncio.sleep (delay)
             delay *= backoff_factor
 
 async def flaky_operation():
@@ -596,7 +596,7 @@ async def main():
     except Exception as e:
         print(f"All retries failed: {e}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Circuit Breaker Pattern
@@ -630,7 +630,7 @@ class CircuitBreaker:
         self.failure_count = 0
         self.last_failure_time = None
     
-    async def call(self, coro_func, *args, **kwargs):
+    async def call (self, coro_func, *args, **kwargs):
         """Execute function through circuit breaker"""
         if self.state == CircuitState.OPEN:
             # Check if recovery timeout passed
@@ -669,18 +669,18 @@ async def unreliable_service():
     return "success"
 
 async def main():
-    breaker = CircuitBreaker(failure_threshold=3)
+    breaker = CircuitBreaker (failure_threshold=3)
     
     for i in range(10):
         try:
-            result = await breaker.call(unreliable_service)
+            result = await breaker.call (unreliable_service)
             print(f"Request {i}: {result}")
         except Exception as e:
             print(f"Request {i} failed: {e}")
         
         await asyncio.sleep(1)
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -706,7 +706,7 @@ async def main():
     await problematic_task()
 
 # Enable debug mode
-asyncio.run(main(), debug=True)
+asyncio.run (main(), debug=True)
 
 # Or set environment variable:
 # PYTHONASYNCIODEBUG=1 python script.py
@@ -730,14 +730,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def log_exceptions(func):
+def log_exceptions (func):
     """Decorator to log exceptions in async functions"""
-    @functools.wraps(func)
+    @functools.wraps (func)
     async def wrapper(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
         except Exception as e:
-            logger.exception(f"Exception in {func.__name__}: {e}")
+            logger.exception (f"Exception in {func.__name__}: {e}")
             raise
     return wrapper
 
@@ -753,7 +753,7 @@ async def main():
     except ValueError:
         pass  # Already logged
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---

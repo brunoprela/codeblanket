@@ -9,7 +9,7 @@ export const propertiesQuiz = [
       'When should you use a property versus a regular method? What are the design guidelines?',
     hint: 'Consider parameters, speed, side effects, and how the operation feels.',
     sampleAnswer:
-      'Use properties when the operation feels like attribute access: no parameters needed, fast execution (< 0.1s), and minimal side effects beyond validation. Properties should act like attributes—getting a value should be cheap and idempotent. Use methods when: 1) the operation is expensive (database query, file I/O), 2) parameters are needed, 3) significant side effects occur (sending email, modifying external state), 4) the operation might fail frequently. For example, user.age is a property (fast, no parameters), but user.send_email(subject, body) must be a method (side effects, parameters). Think: "Would I be surprised if this had a getter/setter?" If yes, use a method.',
+      'Use properties when the operation feels like attribute access: no parameters needed, fast execution (< 0.1s), and minimal side effects beyond validation. Properties should act like attributes—getting a value should be cheap and idempotent. Use methods when: 1) the operation is expensive (database query, file I/O), 2) parameters are needed, 3) significant side effects occur (sending email, modifying external state), 4) the operation might fail frequently. For example, user.age is a property (fast, no parameters), but user.send_email (subject, body) must be a method (side effects, parameters). Think: "Would I be surprised if this had a getter/setter?" If yes, use a method.',
     keyPoints: [
       'Property: fast, no parameters, minimal side effects',
       'Method: expensive, needs parameters, side effects',

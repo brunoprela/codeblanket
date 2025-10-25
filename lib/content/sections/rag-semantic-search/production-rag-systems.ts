@@ -18,7 +18,7 @@ from datetime import datetime, timedelta
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class ProductionRAGSystem:
@@ -65,7 +65,7 @@ class ProductionRAGSystem:
         Query RAG system with production features.
         
         Args:
-            user_query: User's question
+            user_query: User\'s question
             top_k: Number of documents to retrieve
             use_cache: Whether to use cache
         
@@ -78,7 +78,7 @@ class ProductionRAGSystem:
         try:
             # Check cache first
             if use_cache:
-                cached_result = await self._check_cache(user_query)
+                cached_result = await self._check_cache (user_query)
                 if cached_result:
                     self.metrics["cache_hits"] += 1
                     self.monitor.log_event("cache_hit", {"query": user_query})
@@ -108,34 +108,34 @@ class ProductionRAGSystem:
             
             # Cache result
             if use_cache:
-                await self._cache_result(user_query, response)
+                await self._cache_result (user_query, response)
             
             # Log metrics
-            await self._log_metrics(response)
+            await self._log_metrics (response)
             
             return response
             
         except Exception as e:
             self.metrics["errors"] += 1
-            logger.error(f"Error processing query: {e}")
-            await self._handle_error(e, user_query)
+            logger.error (f"Error processing query: {e}")
+            await self._handle_error (e, user_query)
             raise
     
-    async def _check_cache(self, query: str) -> Optional[Dict]:
+    async def _check_cache (self, query: str) -> Optional[Dict]:
         """Check if query result is cached."""
-        cache_key = self._generate_cache_key(query)
-        return await self.cache.get(cache_key)
+        cache_key = self._generate_cache_key (query)
+        return await self.cache.get (cache_key)
     
-    async def _cache_result(self, query: str, response: Dict):
+    async def _cache_result (self, query: str, response: Dict):
         """Cache query result."""
-        cache_key = self._generate_cache_key(query)
+        cache_key = self._generate_cache_key (query)
         await self.cache.set(
             cache_key,
             response,
             ttl=3600  # 1 hour TTL
         )
     
-    def _generate_cache_key(self, query: str) -> str:
+    def _generate_cache_key (self, query: str) -> str:
         """Generate cache key for query."""
         import hashlib
         return f"rag_query:{hashlib.md5(query.encode()).hexdigest()}"
@@ -147,16 +147,16 @@ class ProductionRAGSystem:
         max_retries: int = 3
     ) -> List[Dict]:
         """Retrieve with exponential backoff retry."""
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
-                return await self.vector_store.search(query, top_k=top_k)
+                return await self.vector_store.search (query, top_k=top_k)
             except Exception as e:
                 if attempt == max_retries - 1:
                     raise
                 
                 wait_time = 2 ** attempt  # Exponential backoff
-                logger.warning(f"Retrieval attempt {attempt + 1} failed, retrying in {wait_time}s")
-                await asyncio.sleep(wait_time)
+                logger.warning (f"Retrieval attempt {attempt + 1} failed, retrying in {wait_time}s")
+                await asyncio.sleep (wait_time)
     
     async def _generate_with_timeout(
         self,
@@ -167,7 +167,7 @@ class ProductionRAGSystem:
         """Generate answer with timeout."""
         try:
             return await asyncio.wait_for(
-                self._generate_answer(query, docs),
+                self._generate_answer (query, docs),
                 timeout=timeout
             )
         except asyncio.TimeoutError:
@@ -198,20 +198,20 @@ class ProductionRAGSystem:
         
         return response.choices[0].message.content
     
-    async def _log_metrics(self, response: Dict):
+    async def _log_metrics (self, response: Dict):
         """Log performance metrics."""
         await self.monitor.log_metric("query_latency", response["latency_ms"])
-        await self.monitor.log_metric("num_sources", len(response["sources"]))
+        await self.monitor.log_metric("num_sources", len (response["sources"]))
     
-    async def _handle_error(self, error: Exception, query: str):
+    async def _handle_error (self, error: Exception, query: str):
         """Handle and log errors."""
         await self.monitor.log_error({
-            "error": str(error),
+            "error": str (error),
             "query": query,
             "timestamp": datetime.now().isoformat()
         })
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get system metrics."""
         cache_hit_rate = (
             self.metrics["cache_hits"] / self.metrics["total_queries"]
@@ -247,10 +247,10 @@ class RAGCache:
         Args:
             redis_url: Redis connection URL
         """
-        self.redis_client = redis.from_url(redis_url)
+        self.redis_client = redis.from_url (redis_url)
         self.default_ttl = 3600  # 1 hour
     
-    def get(self, query: str) -> Optional[Dict]:
+    def get (self, query: str) -> Optional[Dict]:
         """
         Get cached result for query.
         
@@ -260,11 +260,11 @@ class RAGCache:
         Returns:
             Cached result or None
         """
-        cache_key = self._generate_key(query)
+        cache_key = self._generate_key (query)
         
-        cached_data = self.redis_client.get(cache_key)
+        cached_data = self.redis_client.get (cache_key)
         if cached_data:
-            return json.loads(cached_data)
+            return json.loads (cached_data)
         
         return None
     
@@ -282,7 +282,7 @@ class RAGCache:
             result: Query result to cache
             ttl: Time to live in seconds
         """
-        cache_key = self._generate_key(query)
+        cache_key = self._generate_key (query)
         ttl = ttl or self.default_ttl
         
         # Mark as cached
@@ -292,10 +292,10 @@ class RAGCache:
         self.redis_client.setex(
             cache_key,
             ttl,
-            json.dumps(result)
+            json.dumps (result)
         )
     
-    def _generate_key(self, query: str) -> str:
+    def _generate_key (self, query: str) -> str:
         """Generate cache key from query."""
         # Normalize query
         normalized = query.lower().strip()
@@ -305,12 +305,12 @@ class RAGCache:
         
         return f"rag:query:{query_hash}"
     
-    def invalidate_pattern(self, pattern: str):
+    def invalidate_pattern (self, pattern: str):
         """Invalidate all keys matching pattern."""
-        for key in self.redis_client.scan_iter(f"rag:*{pattern}*"):
-            self.redis_client.delete(key)
+        for key in self.redis_client.scan_iter (f"rag:*{pattern}*"):
+            self.redis_client.delete (key)
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get cache statistics."""
         info = self.redis_client.info("stats")
         
@@ -329,10 +329,10 @@ cache = RAGCache()
 # Cache query result
 query = "What is machine learning?"
 result = {"answer": "ML is...", "sources": [...]}
-cache.set(query, result, ttl=3600)
+cache.set (query, result, ttl=3600)
 
 # Retrieve from cache
-cached = cache.get(query)
+cached = cache.get (query)
 if cached:
     print("Cache hit!")
 \`\`\`
@@ -375,7 +375,7 @@ class StreamingRAG:
         }
         
         # 2. Retrieve documents
-        docs = await self.vector_store.search(user_query, top_k=top_k)
+        docs = await self.vector_store.search (user_query, top_k=top_k)
         
         # Yield sources
         yield {
@@ -429,12 +429,12 @@ app = FastAPI()
 streaming_rag = StreamingRAG(vector_store, llm_client)
 
 @app.get("/stream-query")
-async def stream_query(query: str):
+async def stream_query (query: str):
     """Stream RAG response."""
     
     async def generate():
-        async for chunk in streaming_rag.stream_query(query):
-            yield json.dumps(chunk) + "\\n"
+        async for chunk in streaming_rag.stream_query (query):
+            yield json.dumps (chunk) + "\\n"
     
     return StreamingResponse(
         generate(),
@@ -501,7 +501,7 @@ class RAGMonitor:
             error=error
         )
         
-        self.metrics.append(metrics)
+        self.metrics.append (metrics)
         
         if error:
             self.errors.append({
@@ -510,7 +510,7 @@ class RAGMonitor:
                 "timestamp": datetime.now().isoformat()
             })
     
-    def get_summary(self, last_n: int = 100) -> Dict:
+    def get_summary (self, last_n: int = 100) -> Dict:
         """
         Get performance summary.
         
@@ -525,13 +525,13 @@ class RAGMonitor:
         if not recent:
             return {}
         
-        total_queries = len(recent)
+        total_queries = len (recent)
         cache_hits = sum(1 for m in recent if m.cache_hit)
         errors = sum(1 for m in recent if m.error)
         
-        avg_retrieval = sum(m.retrieval_time_ms for m in recent) / total_queries
-        avg_generation = sum(m.generation_time_ms for m in recent) / total_queries
-        avg_total = sum(m.total_time_ms for m in recent) / total_queries
+        avg_retrieval = sum (m.retrieval_time_ms for m in recent) / total_queries
+        avg_generation = sum (m.generation_time_ms for m in recent) / total_queries
+        avg_total = sum (m.total_time_ms for m in recent) / total_queries
         
         return {
             "total_queries": total_queries,
@@ -550,37 +550,37 @@ class RAGMonitor:
             )
         }
     
-    def _percentile(self, values: List[float], percentile: float) -> float:
+    def _percentile (self, values: List[float], percentile: float) -> float:
         """Calculate percentile."""
-        sorted_values = sorted(values)
-        index = int(len(sorted_values) * percentile)
-        return sorted_values[min(index, len(sorted_values) - 1)]
+        sorted_values = sorted (values)
+        index = int (len (sorted_values) * percentile)
+        return sorted_values[min (index, len (sorted_values) - 1)]
     
-    def export_metrics(self) -> List[Dict]:
+    def export_metrics (self) -> List[Dict]:
         """Export metrics for analysis."""
-        return [asdict(m) for m in self.metrics]
+        return [asdict (m) for m in self.metrics]
 
 
 # Example usage with instrumentation
 monitor = RAGMonitor()
 
-async def query_with_monitoring(query: str):
+async def query_with_monitoring (query: str):
     """Query RAG with full monitoring."""
     
     # Track retrieval
     retrieval_start = time.time()
-    docs = await vector_store.search(query)
+    docs = await vector_store.search (query)
     retrieval_time = (time.time() - retrieval_start) * 1000
     
     # Track generation
     generation_start = time.time()
     try:
-        answer = await generate(query, docs)
+        answer = await generate (query, docs)
         generation_time = (time.time() - generation_start) * 1000
         error = None
     except Exception as e:
         generation_time = (time.time() - generation_start) * 1000
-        error = str(e)
+        error = str (e)
         raise
     finally:
         # Log metrics
@@ -588,7 +588,7 @@ async def query_with_monitoring(query: str):
             query=query,
             retrieval_time=retrieval_time,
             generation_time=generation_time,
-            num_docs=len(docs),
+            num_docs=len (docs),
             cache_hit=False,
             error=error
         )
@@ -596,7 +596,7 @@ async def query_with_monitoring(query: str):
     return answer
 
 # Get performance summary
-summary = monitor.get_summary(last_n=100)
+summary = monitor.get_summary (last_n=100)
 print(f"Avg latency: {summary['avg_total_ms']:.2f}ms")
 print(f"P95 latency: {summary['p95_latency_ms']:.2f}ms")
 print(f"Cache hit rate: {summary['cache_hit_rate']:.2%}")
@@ -649,7 +649,7 @@ class ResilientRAG:
         Query with error handling.
         
         Args:
-            user_query: User's question
+            user_query: User\'s question
             top_k: Number of documents
         
         Returns:
@@ -657,13 +657,13 @@ class ResilientRAG:
         """
         try:
             # Validate input
-            self._validate_query(user_query)
+            self._validate_query (user_query)
             
             # Retrieve with fallback
-            docs = await self._retrieve_with_fallback(user_query, top_k)
+            docs = await self._retrieve_with_fallback (user_query, top_k)
             
             # Generate with fallback
-            answer = await self._generate_with_fallback(user_query, docs)
+            answer = await self._generate_with_fallback (user_query, docs)
             
             return {
                 "success": True,
@@ -672,24 +672,24 @@ class ResilientRAG:
             }
             
         except RAGError as e:
-            logger.error(f"RAG error: {e.error_type.value} - {e.message}")
+            logger.error (f"RAG error: {e.error_type.value} - {e.message}")
             return {
                 "success": False,
                 "error_type": e.error_type.value,
                 "error_message": e.message,
-                "fallback_answer": self._get_fallback_answer(e.error_type)
+                "fallback_answer": self._get_fallback_answer (e.error_type)
             }
         
         except Exception as e:
-            logger.error(f"Unexpected error: {e}")
+            logger.error (f"Unexpected error: {e}")
             return {
                 "success": False,
                 "error_type": "unknown",
-                "error_message": str(e),
+                "error_message": str (e),
                 "fallback_answer": "I'm sorry, but I encountered an unexpected error."
             }
     
-    def _validate_query(self, query: str):
+    def _validate_query (self, query: str):
         """Validate query input."""
         if not query or not query.strip():
             raise RAGError(
@@ -697,7 +697,7 @@ class ResilientRAG:
                 "Query cannot be empty"
             )
         
-        if len(query) > 1000:
+        if len (query) > 1000:
             raise RAGError(
                 RAGErrorType.INVALID_INPUT,
                 "Query too long (max 1000 characters)"
@@ -710,7 +710,7 @@ class ResilientRAG:
     ) -> List[Dict]:
         """Retrieve with fallback strategies."""
         try:
-            docs = await self.vector_store.search(query, top_k=top_k)
+            docs = await self.vector_store.search (query, top_k=top_k)
             
             if not docs:
                 # Fallback: Try broader search
@@ -725,7 +725,7 @@ class ResilientRAG:
         except Exception as e:
             raise RAGError(
                 RAGErrorType.RETRIEVAL_FAILED,
-                f"Document retrieval failed: {str(e)}"
+                f"Document retrieval failed: {str (e)}"
             )
     
     async def _generate_with_fallback(
@@ -736,19 +736,19 @@ class ResilientRAG:
         """Generate with fallback strategies."""
         try:
             # Try primary model
-            return await self._generate(query, docs, model="gpt-4")
+            return await self._generate (query, docs, model="gpt-4")
         
         except Exception as e:
-            logger.warning(f"Primary generation failed: {e}, trying fallback")
+            logger.warning (f"Primary generation failed: {e}, trying fallback")
             
             try:
                 # Fallback to cheaper/faster model
-                return await self._generate(query, docs, model="gpt-3.5-turbo")
+                return await self._generate (query, docs, model="gpt-3.5-turbo")
             
             except Exception as e:
                 raise RAGError(
                     RAGErrorType.GENERATION_FAILED,
-                    f"Answer generation failed: {str(e)}"
+                    f"Answer generation failed: {str (e)}"
                 )
     
     async def _generate(
@@ -776,7 +776,7 @@ class ResilientRAG:
         
         return response.choices[0].message.content
     
-    def _get_fallback_answer(self, error_type: RAGErrorType) -> str:
+    def _get_fallback_answer (self, error_type: RAGErrorType) -> str:
         """Get fallback answer based on error type."""
         fallbacks = {
             RAGErrorType.RETRIEVAL_FAILED: "I'm having trouble accessing the knowledge base. Please try again.",
@@ -826,20 +826,20 @@ class CostOptimizedRAG:
             Response with cost info
         """
         # Select model based on budget
-        model = self._select_model(budget_mode)
+        model = self._select_model (budget_mode)
         
         # Optimize retrieval count
-        top_k = self._select_top_k(budget_mode)
+        top_k = self._select_top_k (budget_mode)
         
         # Track costs
         query_cost = 0
         
         # Retrieval cost
-        embedding_tokens = len(user_query.split()) * 1.3  # Rough estimate
+        embedding_tokens = len (user_query.split()) * 1.3  # Rough estimate
         query_cost += (embedding_tokens / 1000) * self.costs["embedding"]
         
         # Retrieve docs
-        docs = await self.vector_store.search(user_query, top_k=top_k)
+        docs = await self.vector_store.search (user_query, top_k=top_k)
         
         # Generation cost
         context = "\\n\\n".join([doc["text"] for doc in docs])
@@ -852,7 +852,7 @@ class CostOptimizedRAG:
             ]
         )
         
-        output_tokens = len(response.choices[0].message.content.split()) * 1.3
+        output_tokens = len (response.choices[0].message.content.split()) * 1.3
         
         # Calculate generation cost
         query_cost += (input_tokens / 1000) * self.costs[model]["input"]
@@ -867,23 +867,23 @@ class CostOptimizedRAG:
             "total_cost_usd": self.total_cost
         }
     
-    def _select_model(self, budget_mode: str) -> str:
+    def _select_model (self, budget_mode: str) -> str:
         """Select model based on budget."""
         models = {
             "cheap": "gpt-3.5-turbo",
             "balanced": "gpt-3.5-turbo",
             "premium": "gpt-4"
         }
-        return models.get(budget_mode, "gpt-3.5-turbo")
+        return models.get (budget_mode, "gpt-3.5-turbo")
     
-    def _select_top_k(self, budget_mode: str) -> int:
+    def _select_top_k (self, budget_mode: str) -> int:
         """Select top_k based on budget."""
         top_k_map = {
             "cheap": 3,
             "balanced": 5,
             "premium": 10
         }
-        return top_k_map.get(budget_mode, 5)
+        return top_k_map.get (budget_mode, 5)
 \`\`\`
 
 ## Best Practices

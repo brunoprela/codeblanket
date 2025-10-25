@@ -45,7 +45,7 @@ print(f"10 in A: {10 in A}")
 
 # Set from list (removes duplicates)
 numbers = [1, 2, 2, 3, 3, 3, 4]
-unique_numbers = set(numbers)
+unique_numbers = set (numbers)
 print(f"\\nOriginal list: {numbers}")
 print(f"Set (unique): {unique_numbers}")
 
@@ -55,10 +55,10 @@ print(f"\\nSquares: {squares}")
 
 # ML Application: Unique classes in dataset
 labels = ['cat', 'dog', 'cat', 'bird', 'dog', 'cat']
-unique_classes = set(labels)
+unique_classes = set (labels)
 print(f"\\nLabels: {labels}")
 print(f"Unique classes: {unique_classes}")
-print(f"Number of classes: {len(unique_classes)}")
+print(f"Number of classes: {len (unique_classes)}")
 \`\`\`
 
 ### Special Sets
@@ -73,17 +73,17 @@ print(f"Number of classes: {len(unique_classes)}")
 # Empty set
 empty = set()  # Not {} (that's empty dict)
 print(f"Empty set: {empty}")
-print(f"Size: {len(empty)}")
+print(f"Size: {len (empty)}")
 
 # Infinite sets (represented by rules)
-def is_natural(x):
-    return isinstance(x, int) and x > 0
+def is_natural (x):
+    return isinstance (x, int) and x > 0
 
-def is_integer(x):
-    return isinstance(x, int)
+def is_integer (x):
+    return isinstance (x, int)
 
-def is_even(x):
-    return isinstance(x, int) and x % 2 == 0
+def is_even (x):
+    return isinstance (x, int) and x % 2 == 0
 
 # Test membership
 print(f"\\n5 is natural: {is_natural(5)}")
@@ -193,7 +193,7 @@ from matplotlib_venn import venn2, venn3
 A = {1, 2, 3, 4, 5}
 B = {3, 4, 5, 6, 7}
 
-plt.figure(figsize=(8, 6))
+plt.figure (figsize=(8, 6))
 venn2([A, B], set_labels=('A', 'B'))
 plt.title('Venn Diagram: A and B')
 plt.show()
@@ -203,7 +203,7 @@ A = {1, 2, 3, 4}
 B = {3, 4, 5, 6}
 C = {4, 5, 6, 7}
 
-plt.figure(figsize=(8, 6))
+plt.figure (figsize=(8, 6))
 venn3([A, B, C], set_labels=('A', 'B', 'C'))
 plt.title('Venn Diagram: A, B, and C')
 plt.show()
@@ -226,9 +226,9 @@ customers = pd.DataFrame({
 })
 
 # Define customer segments using sets
-young = set(customers[customers['age'] < 35]['customer_id'])
-high_income = set(customers[customers['income'] > 60000]['customer_id'])
-purchasers = set(customers[customers['purchased']]['customer_id'])
+young = set (customers[customers['age'] < 35]['customer_id'])
+high_income = set (customers[customers['income'] > 60000]['customer_id'])
+purchasers = set (customers[customers['purchased']]['customer_id'])
 
 print("Customer Segments:")
 print(f"Young (< 35): {young}")
@@ -342,27 +342,27 @@ print(f"Is confident: {is_confident}")
 **IFF (↔)**: If and only if
 
 \`\`\`python
-def logical_not(p):
+def logical_not (p):
     """NOT: ¬p"""
     return not p
 
-def logical_and(p, q):
+def logical_and (p, q):
     """AND: p ∧ q"""
     return p and q
 
-def logical_or(p, q):
+def logical_or (p, q):
     """OR: p ∨ q"""
     return p or q
 
-def logical_xor(p, q):
+def logical_xor (p, q):
     """XOR: p ⊕ q (exclusive or)"""
     return p != q
 
-def logical_implies(p, q):
+def logical_implies (p, q):
     """IMPLIES: p → q (if p then q)"""
     return (not p) or q
 
-def logical_iff(p, q):
+def logical_iff (p, q):
     """IFF: p ↔ q (if and only if)"""
     return p == q
 
@@ -376,12 +376,12 @@ print("-" * 50)
 
 for p in p_values:
     for q in q_values:
-        print(f"{p!s:<6} {q!s:<6} {logical_not(p)!s:<6} {logical_and(p, q)!s:<6} "
-              f"{logical_or(p, q)!s:<6} {logical_xor(p, q)!s:<6} "
-              f"{logical_implies(p, q)!s:<6} {logical_iff(p, q)!s:<6}")
+        print(f"{p!s:<6} {q!s:<6} {logical_not (p)!s:<6} {logical_and (p, q)!s:<6} "
+              f"{logical_or (p, q)!s:<6} {logical_xor (p, q)!s:<6} "
+              f"{logical_implies (p, q)!s:<6} {logical_iff (p, q)!s:<6}")
 \`\`\`
 
-### De Morgan's Laws
+### De Morgan\'s Laws
 
 **¬(p ∧ q) = ¬p ∨ ¬q**
 **¬(p ∨ q) = ¬p ∧ ¬q**
@@ -419,7 +419,7 @@ has_degree = True
 condition1 = (age >= 25 and income > 60000) or has_degree
 print(f"\\nCondition 1 (original): {condition1}")
 
-# Apply De Morgan's law to negate
+# Apply De Morgan\'s law to negate
 # NOT[(age >= 25 AND income > 60000) OR has_degree]
 # = NOT(age >= 25 AND income > 60000) AND NOT(has_degree)
 # = (NOT(age >= 25) OR NOT(income > 60000)) AND NOT(has_degree)
@@ -437,18 +437,18 @@ Complete enumeration of logical outcomes:
 \`\`\`python
 import pandas as pd
 
-def generate_truth_table(n_variables):
+def generate_truth_table (n_variables):
     """Generate truth table for n Boolean variables"""
     from itertools import product
     
     # Generate all combinations
-    combinations = list(product([False, True], repeat=n_variables))
+    combinations = list (product([False, True], repeat=n_variables))
     
     # Create column names
-    var_names = [f'p{i+1}' for i in range(n_variables)]
+    var_names = [f'p{i+1}' for i in range (n_variables)]
     
     # Create DataFrame
-    df = pd.DataFrame(combinations, columns=var_names)
+    df = pd.DataFrame (combinations, columns=var_names)
     
     return df
 
@@ -494,7 +494,7 @@ print(data)
 Decision trees use logical operations:
 
 \`\`\`python
-def decision_tree_logic(age, income, credit_score):
+def decision_tree_logic (age, income, credit_score):
     """
     Simple decision tree as logical expressions
     Approve loan if:
@@ -520,7 +520,7 @@ print(f"{'Age':<5} {'Income':<8} {'Credit':<7} {'Cond1':<7} {'Cond2':<7} {'Appro
 print("-" * 50)
 
 for age, income, credit in test_cases:
-    approve, cond1, cond2 = decision_tree_logic(age, income, credit)
+    approve, cond1, cond2 = decision_tree_logic (age, income, credit)
     print(f"{age:<5} {income:<8} {credit:<7} {cond1!s:<7} {cond2!s:<7} {approve!s:<8}")
 \`\`\`
 
@@ -531,9 +531,9 @@ Boolean logic can be implemented with neural networks:
 \`\`\`python
 # Perceptron implementing logic gates
 
-def perceptron(inputs, weights, bias):
+def perceptron (inputs, weights, bias):
     """Simple perceptron"""
-    activation = np.dot(inputs, weights) + bias
+    activation = np.dot (inputs, weights) + bias
     return 1 if activation > 0 else 0
 
 # AND gate
@@ -568,14 +568,14 @@ for x1 in [0, 1]:
 
 \`\`\`python
 # Train/test split using sets
-all_indices = set(range(100))
-train_indices = set(np.random.choice(100, 70, replace=False))
+all_indices = set (range(100))
+train_indices = set (np.random.choice(100, 70, replace=False))
 test_indices = all_indices - train_indices
 
-print(f"Total samples: {len(all_indices)}")
-print(f"Training samples: {len(train_indices)}")
-print(f"Test samples: {len(test_indices)}")
-print(f"No overlap: {len(train_indices & test_indices) == 0}")
+print(f"Total samples: {len (all_indices)}")
+print(f"Training samples: {len (train_indices)}")
+print(f"Test samples: {len (test_indices)}")
+print(f"No overlap: {len (train_indices & test_indices) == 0}")
 
 # Feature selection using sets
 available_features = {'age', 'income', 'education', 'credit_score', 

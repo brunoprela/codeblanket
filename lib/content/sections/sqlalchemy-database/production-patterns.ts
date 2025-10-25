@@ -76,18 +76,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-@event.listens_for(engine, "connect")
-def receive_connect(dbapi_conn, connection_record):
+@event.listens_for (engine, "connect")
+def receive_connect (dbapi_conn, connection_record):
     """Log when connection created"""
     logger.info("New database connection created")
 
-@event.listens_for(engine, "checkout")
-def receive_checkout(dbapi_conn, connection_record, connection_proxy):
+@event.listens_for (engine, "checkout")
+def receive_checkout (dbapi_conn, connection_record, connection_proxy):
     """Log when connection checked out from pool"""
     logger.debug("Connection checked out from pool")
 
-@event.listens_for(engine, "checkin")
-def receive_checkin(dbapi_conn, connection_record):
+@event.listens_for (engine, "checkin")
+def receive_checkin (dbapi_conn, connection_record):
     """Log when connection returned to pool"""
     logger.debug("Connection returned to pool")
 
@@ -104,7 +104,7 @@ def get_pool_status():
 
 # Usage
 stats = get_pool_status()
-logger.info(f"Pool stats: {stats}")
+logger.info (f"Pool stats: {stats}")
 \`\`\`
 
 ---
@@ -122,21 +122,21 @@ import redis
 import json
 from functools import wraps
 
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
+redis_client = redis.Redis (host='localhost', port=6379, db=0)
 
-def cache_query(key_prefix: str, ttl: int = 300):
+def cache_query (key_prefix: str, ttl: int = 300):
     """Cache query results decorator"""
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
             # Generate cache key
             cache_key = f"{key_prefix}:{args}:{kwargs}"
             
             # Check cache
-            cached = redis_client.get(cache_key)
+            cached = redis_client.get (cache_key)
             if cached:
-                logger.info(f"Cache hit: {cache_key}")
-                return json.loads(cached)
+                logger.info (f"Cache hit: {cache_key}")
+                return json.loads (cached)
             
             # Execute query
             result = func(*args, **kwargs)
@@ -145,9 +145,9 @@ def cache_query(key_prefix: str, ttl: int = 300):
             redis_client.setex(
                 cache_key,
                 ttl,
-                json.dumps(result, default=str)  # default=str for datetime
+                json.dumps (result, default=str)  # default=str for datetime
             )
-            logger.info(f"Cache miss: {cache_key}")
+            logger.info (f"Cache miss: {cache_key}")
             
             return result
         return wrapper
@@ -155,7 +155,7 @@ def cache_query(key_prefix: str, ttl: int = 300):
 
 # Usage
 @cache_query("user_by_id", ttl=600)
-def get_user(user_id: int):
+def get_user (user_id: int):
     with Session() as session:
         user = session.execute(
             select(User).where(User.id == user_id)
@@ -180,17 +180,17 @@ user = get_user(123)
 Cache Invalidation Strategies
 """
 
-def invalidate_user_cache(user_id: int):
+def invalidate_user_cache (user_id: int):
     """Invalidate cached user data"""
-    redis_client.delete(f"user_by_id:{user_id}")
+    redis_client.delete (f"user_by_id:{user_id}")
 
-def invalidate_pattern(pattern: str):
+def invalidate_pattern (pattern: str):
     """Invalidate all keys matching pattern"""
-    for key in redis_client.scan_iter(pattern):
-        redis_client.delete(key)
+    for key in redis_client.scan_iter (pattern):
+        redis_client.delete (key)
 
 # Invalidate on update
-def update_user(user_id: int, **kwargs):
+def update_user (user_id: int, **kwargs):
     with Session() as session:
         session.execute(
             update(User)
@@ -200,8 +200,8 @@ def update_user(user_id: int, **kwargs):
         session.commit()
         
         # Invalidate cache
-        invalidate_user_cache(user_id)
-        invalidate_pattern(f"users_list:*")  # Invalidate list queries
+        invalidate_user_cache (user_id)
+        invalidate_pattern (f"users_list:*")  # Invalidate list queries
 
 # Two strategies:
 # 1. TTL (time-to-live): Cache expires after X seconds
@@ -225,16 +225,16 @@ import time
 from sqlalchemy import event
 
 logger = logging.getLogger("sqlalchemy.engine")
-logger.setLevel(logging.INFO)
+logger.setLevel (logging.INFO)
 
-@event.listens_for(engine, "before_cursor_execute")
-def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+@event.listens_for (engine, "before_cursor_execute")
+def before_cursor_execute (conn, cursor, statement, parameters, context, executemany):
     """Log query start and store start time"""
     context._query_start_time = time.time()
-    logger.debug(f"Query started: {statement[:100]}")
+    logger.debug (f"Query started: {statement[:100]}")
 
-@event.listens_for(engine, "after_cursor_execute")
-def after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+@event.listens_for (engine, "after_cursor_execute")
+def after_cursor_execute (conn, cursor, statement, parameters, context, executemany):
     """Log query completion and duration"""
     duration = time.time() - context._query_start_time
     
@@ -244,7 +244,7 @@ def after_cursor_execute(conn, cursor, statement, parameters, context, executema
             f"SLOW QUERY ({duration:.2f}s): {statement[:200]}"
         )
     else:
-        logger.debug(f"Query completed in {duration:.3f}s")
+        logger.debug (f"Query completed in {duration:.3f}s")
 \`\`\`
 
 ### Prometheus Metrics
@@ -280,26 +280,26 @@ db_pool_checked_out = Gauge(
 )
 
 # Track metrics
-@event.listens_for(engine, "before_cursor_execute")
-def track_query_start(conn, cursor, statement, parameters, context, executemany):
+@event.listens_for (engine, "before_cursor_execute")
+def track_query_start (conn, cursor, statement, parameters, context, executemany):
     context._query_start_time = time.time()
     
     # Determine operation
     operation = statement.strip().split()[0].upper()
-    db_query_count.labels(operation=operation).inc()
+    db_query_count.labels (operation=operation).inc()
 
-@event.listens_for(engine, "after_cursor_execute")
-def track_query_duration(conn, cursor, statement, parameters, context, executemany):
+@event.listens_for (engine, "after_cursor_execute")
+def track_query_duration (conn, cursor, statement, parameters, context, executemany):
     duration = time.time() - context._query_start_time
     operation = statement.strip().split()[0].upper()
-    db_query_duration.labels(operation=operation).observe(duration)
+    db_query_duration.labels (operation=operation).observe (duration)
 
 # Update pool metrics periodically
 def update_pool_metrics():
     """Update pool metrics (call every 10s)"""
     pool = engine.pool
-    db_pool_size.set(pool.size())
-    db_pool_checked_out.set(pool.checkedout())
+    db_pool_size.set (pool.size())
+    db_pool_checked_out.set (pool.checkedout())
 
 # Expose metrics endpoint
 from flask import Flask
@@ -307,7 +307,7 @@ from prometheus_client import make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
-app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+app.wsgi_app = DispatcherMiddleware (app.wsgi_app, {
     '/metrics': make_wsgi_app()
 })
 \`\`\`
@@ -328,18 +328,18 @@ from sqlalchemy.exc import OperationalError, DBAPIError
 
 @retry(
     stop=stop_after_attempt(3),           # Max 3 attempts
-    wait=wait_exponential(multiplier=1, min=1, max=10),  # Exponential backoff
+    wait=wait_exponential (multiplier=1, min=1, max=10),  # Exponential backoff
     retry=retry_if_exception_type(OperationalError)  # Only retry operational errors
 )
-def query_with_retry(session, stmt):
+def query_with_retry (session, stmt):
     """Execute query with automatic retry"""
-    return session.execute(stmt).scalars().all()
+    return session.execute (stmt).scalars().all()
 
 # Usage
 try:
-    users = query_with_retry(session, select(User))
+    users = query_with_retry (session, select(User))
 except OperationalError as e:
-    logger.error(f"Database query failed after retries: {e}")
+    logger.error (f"Database query failed after retries: {e}")
     raise
 \`\`\`
 
@@ -352,33 +352,33 @@ Production Error Handling
 
 from sqlalchemy.exc import IntegrityError, DataError
 
-def safe_create_user(email: str):
+def safe_create_user (email: str):
     """Create user with proper error handling"""
     try:
         with Session() as session:
-            user = User(email=email)
-            session.add(user)
+            user = User (email=email)
+            session.add (user)
             session.commit()
             return {"success": True, "user_id": user.id}
     
     except IntegrityError as e:
         # Constraint violation (duplicate email, etc.)
-        logger.warning(f"Integrity error creating user: {e}")
+        logger.warning (f"Integrity error creating user: {e}")
         return {"success": False, "error": "User already exists"}
     
     except DataError as e:
         # Invalid data (email too long, invalid type, etc.)
-        logger.warning(f"Data error creating user: {e}")
+        logger.warning (f"Data error creating user: {e}")
         return {"success": False, "error": "Invalid data"}
     
     except OperationalError as e:
         # Database connection issues
-        logger.error(f"Database operational error: {e}")
+        logger.error (f"Database operational error: {e}")
         return {"success": False, "error": "Database temporarily unavailable"}
     
     except Exception as e:
         # Unexpected error
-        logger.exception(f"Unexpected error creating user: {e}")
+        logger.exception (f"Unexpected error creating user: {e}")
         return {"success": False, "error": "Internal server error"}
 \`\`\`
 
@@ -400,27 +400,27 @@ class UserRepository(ABC):
     """Abstract repository interface"""
     
     @abstractmethod
-    def find_by_id(self, user_id: int) -> Optional[User]:
+    def find_by_id (self, user_id: int) -> Optional[User]:
         pass
     
     @abstractmethod
-    def find_by_email(self, email: str) -> Optional[User]:
+    def find_by_email (self, email: str) -> Optional[User]:
         pass
     
     @abstractmethod
-    def find_all(self, skip: int = 0, limit: int = 100) -> List[User]:
+    def find_all (self, skip: int = 0, limit: int = 100) -> List[User]:
         pass
     
     @abstractmethod
-    def create(self, user: User) -> User:
+    def create (self, user: User) -> User:
         pass
     
     @abstractmethod
-    def update(self, user: User) -> User:
+    def update (self, user: User) -> User:
         pass
     
     @abstractmethod
-    def delete(self, user_id: int) -> bool:
+    def delete (self, user_id: int) -> bool:
         pass
 
 class SQLAlchemyUserRepository(UserRepository):
@@ -429,41 +429,41 @@ class SQLAlchemyUserRepository(UserRepository):
     def __init__(self, session: Session):
         self.session = session
     
-    def find_by_id(self, user_id: int) -> Optional[User]:
+    def find_by_id (self, user_id: int) -> Optional[User]:
         return self.session.execute(
             select(User).where(User.id == user_id)
         ).scalar_one_or_none()
     
-    def find_by_email(self, email: str) -> Optional[User]:
+    def find_by_email (self, email: str) -> Optional[User]:
         return self.session.execute(
             select(User).where(User.email == email)
         ).scalar_one_or_none()
     
-    def find_all(self, skip: int = 0, limit: int = 100) -> List[User]:
+    def find_all (self, skip: int = 0, limit: int = 100) -> List[User]:
         return self.session.execute(
-            select(User).offset(skip).limit(limit)
+            select(User).offset (skip).limit (limit)
         ).scalars().all()
     
-    def create(self, user: User) -> User:
-        self.session.add(user)
+    def create (self, user: User) -> User:
+        self.session.add (user)
         self.session.flush()  # Get user.id without commit
         return user
     
-    def update(self, user: User) -> User:
-        self.session.merge(user)
+    def update (self, user: User) -> User:
+        self.session.merge (user)
         return user
     
-    def delete(self, user_id: int) -> bool:
+    def delete (self, user_id: int) -> bool:
         result = self.session.execute(
             delete(User).where(User.id == user_id)
         )
         return result.rowcount > 0
 
 # Usage
-def get_user_service(user_id: int):
+def get_user_service (user_id: int):
     with Session() as session:
-        repo = SQLAlchemyUserRepository(session)
-        user = repo.find_by_id(user_id)
+        repo = SQLAlchemyUserRepository (session)
+        user = repo.find_by_id (user_id)
         return user
 \`\`\`
 
@@ -487,8 +487,8 @@ class UnitOfWork:
     
     def __enter__(self):
         self.session = self.session_factory()
-        self.users = SQLAlchemyUserRepository(self.session)
-        self.posts = SQLAlchemyPostRepository(self.session)
+        self.users = SQLAlchemyUserRepository (self.session)
+        self.posts = SQLAlchemyPostRepository (self.session)
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -496,25 +496,25 @@ class UnitOfWork:
             self.rollback()
         self.session.close()
     
-    def commit(self):
+    def commit (self):
         """Commit transaction"""
         self.session.commit()
     
-    def rollback(self):
+    def rollback (self):
         """Rollback transaction"""
         self.session.rollback()
 
 # Usage
-def create_user_with_post(email: str, post_title: str):
+def create_user_with_post (email: str, post_title: str):
     """Create user and post in single transaction"""
     with UnitOfWork(Session) as uow:
         # Create user
-        user = User(email=email)
-        uow.users.create(user)
+        user = User (email=email)
+        uow.users.create (user)
         
         # Create post
-        post = Post(title=post_title, user=user)
-        uow.posts.create(post)
+        post = Post (title=post_title, user=user)
+        uow.posts.create (post)
         
         # Commit both (or rollback both on error)
         uow.commit()
@@ -589,7 +589,7 @@ def health_check():
     try:
         # Test database connection
         with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
+            conn.execute (text("SELECT 1"))
         
         # Check pool status
         pool = engine.pool
@@ -598,7 +598,7 @@ def health_check():
         
         # Alert if pool nearly exhausted
         if checked_out > size * 0.8:
-            logger.warning(f"Pool nearly exhausted: {checked_out}/{size}")
+            logger.warning (f"Pool nearly exhausted: {checked_out}/{size}")
         
         return jsonify({
             "status": "healthy",
@@ -611,11 +611,11 @@ def health_check():
         }), 200
     
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
+        logger.error (f"Health check failed: {e}")
         return jsonify({
             "status": "unhealthy",
             "database": "disconnected",
-            "error": str(e)
+            "error": str (e)
         }), 503
 \`\`\`
 

@@ -1,7 +1,7 @@
 export const tradingVenuesExchanges = {
-  title: "Trading Venues & Exchanges",
-  slug: "trading-venues-exchanges",
-  description: "Master where and how financial instruments trade globally",
+  title: 'Trading Venues & Exchanges',
+  slug: 'trading-venues-exchanges',
+  description: 'Master where and how financial instruments trade globally',
   content: `
 # Trading Venues & Exchanges
 
@@ -60,7 +60,7 @@ class TradingVenue:
     latency_advantage: str
     owned_by: str
     
-    def get_characteristics(self) -> Dict:
+    def get_characteristics (self) -> Dict:
         """Describe venue's unique features"""
         
         characteristics = {
@@ -102,9 +102,9 @@ class TradingVenue:
             }
         }
         
-        return characteristics.get(self.name, {})
+        return characteristics.get (self.name, {})
     
-    def calculate_trading_cost(self,
+    def calculate_trading_cost (self,
                               shares: int,
                               is_maker: bool,
                               price: float) -> Dict:
@@ -191,8 +191,8 @@ for venue in venues:
     print(f"{venue.name} ({venue.ticker}):")
     print(f"  Market Share: {venue.market_share*100:.1f}%")
     print(f"  Fee Model: {venue.fee_model}")
-    print(f"  Maker Rebate: ${venue.maker_rebate:.2f}/100 shares")
-    print(f"  Taker Fee: ${venue.taker_fee:.2f}/100 shares")
+    print(f"  Maker Rebate: \${venue.maker_rebate:.2f}/100 shares")
+    print(f"  Taker Fee: \${venue.taker_fee:.2f}/100 shares")
     if chars:
         print(f"  Advantage: {chars['advantage']}")
         print(f"  Best For: {chars['best_for']}")
@@ -207,9 +207,9 @@ cost = nyse.calculate_trading_cost(
 )
 
 print("Trading Cost Example (10K shares @ $50 on NYSE):")
-print(f"  Notional: ${cost['notional']:,.0f}")
+print(f"  Notional: \${cost['notional']:,.0f}")
 print(f"  Role: {cost['role']}")
-print(f"  Exchange Fee: ${cost['exchange_fee']:.2f}")
+print(f"  Exchange Fee: \${cost['exchange_fee']:.2f}")
 print(f"  Cost in bps: {cost['fee_in_bps']:.2f} bps")
 \`\`\`
 
@@ -280,7 +280,7 @@ class DarkPool:
             'Regulatory scrutiny (SEC investigating dark pools)'
         ]
     
-    def calculate_price_improvement(self,
+    def calculate_price_improvement (self,
                                    lit_market_bid: float,
                                    lit_market_ask: float,
                                    dark_pool_price: float,
@@ -325,7 +325,7 @@ dark_pools = [
 print("\\n\\n=== Dark Pools ===\\n")
 
 types = DarkPool.dark_pool_types()
-for pool_type, details in list(types.items())[:2]:
+for pool_type, details in list (types.items())[:2]:
     print(f"{pool_type}:")
     print(f"  Examples: {details['examples']}")
     print(f"  Purpose: {details['purpose']}")
@@ -341,9 +341,9 @@ improvement = dp.calculate_price_improvement(
 )
 
 print("\\nPrice Improvement Example (Buying 1000 shares):")
-print(f"  Lit Market Ask: ${improvement['lit_market_price']:.2f}")
-print(f"  Dark Pool Price: ${improvement['dark_pool_price']:.2f}")
-print(f"  Savings per Share: ${improvement['price_improvement']:.2f}")
+print(f"  Lit Market Ask: \${improvement['lit_market_price']:.2f}")
+print(f"  Dark Pool Price: \${improvement['dark_pool_price']:.2f}")
+print(f"  Savings per Share: \${improvement['price_improvement']:.2f}")
 print(f"  Improvement: {improvement['improvement_bps']:.1f} bps")
 print(f"  Captured: {improvement['pct_of_spread_captured']:.0f}% of spread")
 \`\`\`
@@ -370,7 +370,7 @@ class SmartOrderRouter:
         self.venues = []  # Available venues
         self.dark_pools = []
     
-    def evaluate_venues(self,
+    def evaluate_venues (self,
                        order_size: int,
                        side: str,  # 'BUY' or 'SELL'
                        urgency: str) -> List[Dict]:
@@ -401,7 +401,7 @@ class SmartOrderRouter:
                     max_fill = order_size * venue['fill_prob']
                 else:
                     effective_price = venue['ask'] + (venue['taker_fee'] / 100)
-                    max_fill = min(order_size, venue['ask_size'])
+                    max_fill = min (order_size, venue['ask_size'])
                 
                 scored.append({
                     'venue': venue['name'],
@@ -410,7 +410,7 @@ class SmartOrderRouter:
                     'score': -effective_price  # Lower price = higher score
                 })
             
-            return sorted(scored, key=lambda x: x['score'], reverse=True)
+            return sorted (scored, key=lambda x: x['score'], reverse=True)
         
         else:  # SELL
             scored = []
@@ -420,7 +420,7 @@ class SmartOrderRouter:
                     max_fill = order_size * venue['fill_prob']
                 else:
                     effective_price = venue['bid'] - (venue['taker_fee'] / 100)
-                    max_fill = min(order_size, venue['bid_size'])
+                    max_fill = min (order_size, venue['bid_size'])
                 
                 scored.append({
                     'venue': venue['name'],
@@ -429,9 +429,9 @@ class SmartOrderRouter:
                     'score': effective_price  # Higher price = higher score
                 })
             
-            return sorted(scored, key=lambda x: x['score'], reverse=True)
+            return sorted (scored, key=lambda x: x['score'], reverse=True)
     
-    def route_order(self, order_size: int, side: str) -> List[Dict]:
+    def route_order (self, order_size: int, side: str) -> List[Dict]:
         """
         Execute routing strategy
         
@@ -440,7 +440,7 @@ class SmartOrderRouter:
         2. Route to best lit venues
         3. Split order if needed
         """
-        ranked_venues = self.evaluate_venues(order_size, side, 'NORMAL')
+        ranked_venues = self.evaluate_venues (order_size, side, 'NORMAL')
         
         routing_plan = []
         remaining = order_size
@@ -449,7 +449,7 @@ class SmartOrderRouter:
             if remaining <= 0:
                 break
             
-            fill_size = min(remaining, int(venue['max_fill']))
+            fill_size = min (remaining, int (venue['max_fill']))
             
             if fill_size > 0:
                 routing_plan.append({
@@ -468,20 +468,20 @@ sor = SmartOrderRouter()
 order_size = 10000
 side = 'BUY'
 
-routing_plan = sor.route_order(order_size, side)
+routing_plan = sor.route_order (order_size, side)
 
 print("\\n\\n=== Smart Order Routing ===\\n")
 print(f"Order: BUY {order_size:,} shares\\n")
 print("Routing Plan:")
 
 total_cost = 0
-for i, route in enumerate(routing_plan, 1):
-    print(f"{i}. {route['venue']}: {route['size']:,} shares @ ${route['price']:.4f}")
+for i, route in enumerate (routing_plan, 1):
+    print(f"{i}. {route['venue']}: {route['size']:,} shares @ \${route['price']:.4f}")
     total_cost += route['cost']
 
 avg_price = total_cost / order_size
-print(f"\\nTotal Cost: ${total_cost:,.2f}")
-print(f"Average Price: ${avg_price:.4f}")
+print(f"\\nTotal Cost: \${total_cost:,.2f}")
+print(f"Average Price: \${avg_price:.4f}")
 \`\`\`
 
 **Key Insight**: SOR can save 0.1-0.5% per trade by optimizing venue selection!
@@ -545,7 +545,7 @@ rules = reg_nms.key_rules()
 
 print("\\n\\n=== Regulation NMS ===\\n")
 
-for rule, details in list(rules.items())[:3]:
+for rule, details in list (rules.items())[:3]:
     print(f"{rule}:")
     print(f"  Requirement: {details['requirement']}")
     print(f"  Impact: {details['impact']}")
@@ -566,7 +566,7 @@ class MultiVenueTradingSystem:
         self.connections = {}  # Venue connections
         self.market_data = {}  # Real-time quotes
         
-    def connect_to_venues(self, venues: List[str]):
+    def connect_to_venues (self, venues: List[str]):
         """
         Establish FIX connections to venues
         
@@ -580,7 +580,7 @@ class MultiVenueTradingSystem:
                 'latency_ms': np.random.uniform(0.5, 2.0)
             }
     
-    def aggregate_market_data(self, symbol: str) -> Dict:
+    def aggregate_market_data (self, symbol: str) -> Dict:
         """
         Aggregate quotes from all venues
         
@@ -593,8 +593,8 @@ class MultiVenueTradingSystem:
         }
         
         # Calculate NBBO
-        best_bid = max(q['bid'] for q in quotes.values())
-        best_ask = min(q['ask'] for q in quotes.values())
+        best_bid = max (q['bid'] for q in quotes.values())
+        best_ask = min (q['ask'] for q in quotes.values())
         
         # Find venues at NBBO
         nbbo_bid_venues = [v for v, q in quotes.items() if q['bid'] == best_bid]
@@ -608,12 +608,12 @@ class MultiVenueTradingSystem:
             'all_quotes': quotes
         }
     
-    def execute_with_routing(self, symbol: str, side: str, size: int):
+    def execute_with_routing (self, symbol: str, side: str, size: int):
         """
         Execute order with smart routing
         """
         # Get market data
-        nbbo = self.aggregate_market_data(symbol)
+        nbbo = self.aggregate_market_data (symbol)
         
         # Route to best venue
         if side == 'BUY':
@@ -643,15 +643,15 @@ print("\\n\\n=== Multi-Venue Trading System ===\\n")
 
 # Get NBBO
 nbbo = system.aggregate_market_data('AAPL')
-print(f"NBBO Bid: ${nbbo['nbbo_bid']:.2f} on {', '.join(nbbo['nbbo_bid_venues'])}")
-print(f"NBBO Ask: ${nbbo['nbbo_ask']:.2f} on {', '.join(nbbo['nbbo_ask_venues'])}")
+print(f"NBBO Bid: \${nbbo['nbbo_bid']:.2f} on {', '.join (nbbo['nbbo_bid_venues'])}")
+print(f"NBBO Ask: \${nbbo['nbbo_ask']:.2f} on {', '.join (nbbo['nbbo_ask_venues'])}")
 
 # Execute
 execution = system.execute_with_routing('AAPL', 'BUY', 1000)
 print(f"\\nExecution:")
 print(f"  {execution['side']} {execution['size']} {execution['symbol']}")
-print(f"  @ ${execution['price']:.2f}")
-print(f"  on {', '.join(execution['venues'])}")
+print(f"  @ \${execution['price']:.2f}")
+print(f"  on {', '.join (execution['venues'])}")
 print(f"  Status: {execution['status']}")
 \`\`\`
 
@@ -684,13 +684,16 @@ You now understand where trades happen - ready to learn how!
 `,
   exercises: [
     {
-      prompt: "Build a Smart Order Router that connects to multiple venues (NYSE, Nasdaq, IEX simulated), aggregates quotes to calculate NBBO, routes orders to best venue considering price and fees, and generates execution reports showing price improvement vs naive routing.",
-      solution: "// Implementation: 1) Simulate 3 venues with different bid/ask/sizes/fees, 2) Create NBBO calculator (max bid, min ask across venues), 3) Score venues: effective_price = price + fees - rebates, 4) Route to best venue, split if size exceeds, 5) Compare vs sending all to single venue, 6) Calculate savings = (naive_avg_price - smart_avg_price) × shares, 7) Display: venue breakdown, avg price, total savings"
+      prompt:
+        'Build a Smart Order Router that connects to multiple venues (NYSE, Nasdaq, IEX simulated), aggregates quotes to calculate NBBO, routes orders to best venue considering price and fees, and generates execution reports showing price improvement vs naive routing.',
+      solution:
+        '// Implementation: 1) Simulate 3 venues with different bid/ask/sizes/fees, 2) Create NBBO calculator (max bid, min ask across venues), 3) Score venues: effective_price = price + fees - rebates, 4) Route to best venue, split if size exceeds, 5) Compare vs sending all to single venue, 6) Calculate savings = (naive_avg_price - smart_avg_price) × shares, 7) Display: venue breakdown, avg price, total savings',
     },
     {
-      prompt: "Create a dark pool price improvement analyzer that simulates lit market quotes (bid/ask/spread) and dark pool mid-point execution, calculates price improvement in bps, tracks fill rates, and determines optimal dark pool usage strategy based on order size and spread width.",
-      solution: "// Implementation: 1) Simulate lit market: bid=100.00, ask=100.10 (10 cent spread), 2) Dark pool executes at mid=100.05, 3) Calculate: if buying, savings = 100.10 - 100.05 = 5 cents = 50% of spread, 4) Model fill rate: small orders 30%, large orders 10% (liquidity limited), 5) Strategy: Try dark pool first if spread > 5 cents, use lit if urgent, 6) Backtest: Expected savings = (fill_rate × spread/2) - (1-fill_rate) × market_impact"
-    }
-  ]
+      prompt:
+        'Create a dark pool price improvement analyzer that simulates lit market quotes (bid/ask/spread) and dark pool mid-point execution, calculates price improvement in bps, tracks fill rates, and determines optimal dark pool usage strategy based on order size and spread width.',
+      solution:
+        '// Implementation: 1) Simulate lit market: bid=100.00, ask=100.10 (10 cent spread), 2) Dark pool executes at mid=100.05, 3) Calculate: if buying, savings = 100.10 - 100.05 = 5 cents = 50% of spread, 4) Model fill rate: small orders 30%, large orders 10% (liquidity limited), 5) Strategy: Try dark pool first if spread > 5 cents, use lit if urgent, 6) Backtest: Expected savings = (fill_rate × spread/2) - (1-fill_rate) × market_impact',
+    },
+  ],
 };
-

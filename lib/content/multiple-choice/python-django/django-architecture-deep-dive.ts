@@ -4,7 +4,7 @@ export const DjangoArchitectureDeepDiveMultipleChoice = [
   {
     id: 1,
     question:
-      "In Django's MVT architecture, what is the primary role of the View component?",
+      "In Django\'s MVT architecture, what is the primary role of the View component?",
     options: [
       'A) Render HTML templates and handle presentation logic',
       'B) Define database schema and handle data persistence',
@@ -16,13 +16,13 @@ export const DjangoArchitectureDeepDiveMultipleChoice = [
 **Correct Answer: C) Process HTTP requests and contain business logic**
 
 **Why C is correct:**
-In Django's MVT (Model-View-Template) architecture, the View is responsible for processing HTTP requests and containing the business logic. Views receive requests, interact with models to retrieve/modify data, and return responses (often rendering templates). This is equivalent to the Controller in traditional MVC architecture.
+In Django\'s MVT (Model-View-Template) architecture, the View is responsible for processing HTTP requests and containing the business logic. Views receive requests, interact with models to retrieve/modify data, and return responses (often rendering templates). This is equivalent to the Controller in traditional MVC architecture.
 
 \`\`\`python
-def article_list(request):
+def article_list (request):
     # View contains business logic
-    articles = Article.objects.filter(status='published')
-    return render(request, 'articles/list.html', {'articles': articles})
+    articles = Article.objects.filter (status='published')
+    return render (request, 'articles/list.html', {'articles': articles})
 \`\`\`
 
 **Why A is incorrect:**
@@ -42,7 +42,7 @@ Understanding the distinction between Views (business logic) and Templates (pres
     question:
       'Which Django ORM method would you use to optimize a query that retrieves articles with their related authors and categories, avoiding N+1 query problems?',
     options: [
-      'A) Article.objects.all().filter(author__isnull=False)',
+      'A) Article.objects.all().filter (author__isnull=False)',
       'B) Article.objects.select_related("author", "category")',
       'C) Article.objects.prefetch_related("author", "category")',
       'D) Article.objects.raw("SELECT * FROM articles JOIN authors")',
@@ -63,13 +63,13 @@ for article in articles:
 \`\`\`
 
 **Why A is incorrect:**
-\`filter(author__isnull=False)\` simply filters articles that have authors but doesn't optimize the query. Each access to \`article.author\` would still trigger a separate database query (N+1 problem).
+\`filter (author__isnull=False)\` simply filters articles that have authors but doesn't optimize the query. Each access to \`article.author\` would still trigger a separate database query (N+1 problem).
 
 **Why C is incorrect:**
 \`prefetch_related()\` is for ManyToManyField and reverse ForeignKey relationships, not for forward ForeignKey relationships like author and category. It uses separate queries and performs the join in Python, which is less efficient for this case.
 
 **Why D is incorrect:**
-Using raw SQL bypasses Django's ORM benefits (query optimization, database portability, security) and is harder to maintain. While it might work, it's not the recommended approach and doesn't provide the same safety and convenience as \`select_related()\`.
+Using raw SQL bypasses Django\'s ORM benefits (query optimization, database portability, security) and is harder to maintain. While it might work, it's not the recommended approach and doesn't provide the same safety and convenience as \`select_related()\`.
 
 **Production Note:**
 Always use \`select_related()\` for "to-one" relationships (ForeignKey, OneToOneField) and \`prefetch_related()\` for "to-many" relationships (ManyToManyField, reverse ForeignKey). This can reduce database queries from hundreds to just a few, dramatically improving performance.
@@ -82,7 +82,7 @@ Always use \`select_related()\` for "to-one" relationships (ForeignKey, OneToOne
   },
   {
     question:
-      "In Django's request/response cycle, at what stage does middleware execute its request processing methods?",
+      "In Django\'s request/response cycle, at what stage does middleware execute its request processing methods?",
     options: [
       'A) After the view function executes but before the template is rendered',
       'B) Before the URL resolver determines which view to call',
@@ -114,10 +114,10 @@ class AuthenticationMiddleware:
     
     def __call__(self, request):
         # Executed BEFORE URL resolution and view
-        request.user = authenticate(request)
+        request.user = authenticate (request)
         
         # Call next middleware/view
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Executed AFTER view but before sending response
         return response
@@ -155,14 +155,14 @@ MIDDLEWARE = [
     question:
       'What is the most efficient way to count related objects in Django ORM without loading them into memory?',
     options: [
-      'A) len(article.comments.all())',
+      'A) len (article.comments.all())',
       'B) article.comments.count()',
-      'C) Article.objects.annotate(comment_count=Count("comments"))',
+      'C) Article.objects.annotate (comment_count=Count("comments"))',
       'D) len([c for c in article.comments.iterator()])',
     ],
     correctAnswer: 2,
     explanation: `
-**Correct Answer: C) Article.objects.annotate(comment_count=Count("comments"))**
+**Correct Answer: C) Article.objects.annotate (comment_count=Count("comments"))**
 
 **Why C is correct:**
 Using \`annotate()\` with \`Count()\` performs the counting at the database level as part of the main query, which is the most efficient approach, especially when retrieving multiple articles. The count is calculated using SQL's COUNT() function and returned as part of the queryset.
@@ -187,11 +187,11 @@ GROUP BY article.id
 \`\`\`
 
 **Why A is incorrect:**
-\`len(article.comments.all())\` fetches ALL comment objects from the database into Python memory and then counts them. This is extremely inefficient for large datasets.
+\`len (article.comments.all())\` fetches ALL comment objects from the database into Python memory and then counts them. This is extremely inefficient for large datasets.
 
 \`\`\`python
 # ❌ Bad: Fetches all comments into memory
-count = len(article.comments.all())  # Loads 1000 comment objects just to count them
+count = len (article.comments.all())  # Loads 1000 comment objects just to count them
 \`\`\`
 
 **Why B is incorrect:**
@@ -218,8 +218,8 @@ Always prefer database-level aggregations using \`annotate()\` when displaying l
 **Best Practice:**
 \`\`\`python
 # For list views with counts
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         return Article.objects.annotate(
             comment_count=Count('comments'),
             like_count=Count('likes'),
@@ -227,8 +227,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
         )
 
 # Serializer can use annotated fields
-class ArticleSerializer(serializers.ModelSerializer):
-    comment_count = serializers.IntegerField(read_only=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    comment_count = serializers.IntegerField (read_only=True)
     
     class Meta:
         model = Article
@@ -259,12 +259,12 @@ from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-@receiver(post_save, sender=Order)
-def send_order_confirmation(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def send_order_confirmation (sender, instance, created, **kwargs):
     if created:
         # ✅ Correct: Only send email after transaction commits
         transaction.on_commit(
-            lambda: send_confirmation_email(instance.id)
+            lambda: send_confirmation_email (instance.id)
         )
 
 # If the transaction rolls back, email is never sent
@@ -275,16 +275,16 @@ Without \`transaction.on_commit()\`, the signal fires immediately after the mode
 
 \`\`\`python
 # ❌ Problem: Email sent even if transaction rolls back
-@receiver(post_save, sender=Order)
-def send_email(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def send_email (sender, instance, created, **kwargs):
     if created:
-        send_confirmation_email(instance.id)  # Sent immediately!
+        send_confirmation_email (instance.id)  # Sent immediately!
 
 # Later in the view:
 try:
     with transaction.atomic():
         order = Order.objects.create(...)  # Signal fires here
-        process_payment(order)  # This might fail and rollback
+        process_payment (order)  # This might fail and rollback
 except:
     pass  # Transaction rolled back, but email was already sent!
 \`\`\`
@@ -304,20 +304,20 @@ This is a critical issue in production systems. Without \`transaction.on_commit(
 
 **Best Practice Pattern:**
 \`\`\`python
-@receiver(post_save, sender=Order)
-def handle_order_creation(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def handle_order_creation (sender, instance, created, **kwargs):
     if created:
         # Multiple side effects, all deferred until commit
-        transaction.on_commit(lambda: send_confirmation_email(instance.id))
-        transaction.on_commit(lambda: update_inventory(instance.id))
-        transaction.on_commit(lambda: trigger_analytics_event(instance.id))
+        transaction.on_commit (lambda: send_confirmation_email (instance.id))
+        transaction.on_commit (lambda: update_inventory (instance.id))
+        transaction.on_commit (lambda: trigger_analytics_event (instance.id))
 
 # Alternative: Celery tasks with on_commit
-@receiver(post_save, sender=Order)
-def queue_order_tasks(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def queue_order_tasks (sender, instance, created, **kwargs):
     if created:
         transaction.on_commit(
-            lambda: process_order.delay(instance.id)
+            lambda: process_order.delay (instance.id)
         )
 \`\`\`
 

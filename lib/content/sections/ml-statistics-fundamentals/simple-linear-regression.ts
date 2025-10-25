@@ -47,7 +47,7 @@ def visualize_linear_relationship():
     
     # Generate data
     n = 100
-    X = np.random.rand(n) * 10
+    X = np.random.rand (n) * 10
     true_slope = 2.5
     true_intercept = 5
     noise = np.random.normal(0, 2, n)
@@ -70,12 +70,12 @@ def visualize_linear_relationship():
                  label=f'True: y = {true_intercept} + {true_slope}x')
     axes[0].set_xlabel('X', fontsize=12)
     axes[0].set_ylabel('y', fontsize=12)
-    axes[0].set_title(f'Linear Regression (R² = {r_value**2:.3f})')
+    axes[0].set_title (f'Linear Regression (R² = {r_value**2:.3f})')
     axes[0].legend()
     axes[0].grid(True, alpha=0.3)
     
     # 2. Residuals vs fitted
-    axes[1].scatter(y_pred, residuals, alpha=0.6, s=50)
+    axes[1].scatter (y_pred, residuals, alpha=0.6, s=50)
     axes[1].axhline(0, color='r', linestyle='--', linewidth=2)
     axes[1].set_xlabel('Fitted Values', fontsize=12)
     axes[1].set_ylabel('Residuals', fontsize=12)
@@ -83,7 +83,7 @@ def visualize_linear_relationship():
     axes[1].grid(True, alpha=0.3)
     
     # 3. Residual histogram
-    axes[2].hist(residuals, bins=20, edgecolor='black', alpha=0.7)
+    axes[2].hist (residuals, bins=20, edgecolor='black', alpha=0.7)
     axes[2].axvline(0, color='r', linestyle='--', linewidth=2)
     axes[2].set_xlabel('Residuals', fontsize=12)
     axes[2].set_ylabel('Frequency', fontsize=12)
@@ -98,7 +98,7 @@ def visualize_linear_relationship():
     print(f"Estimated equation: y = {intercept:.4f} + {slope:.4f}x")
     print(f"True equation: y = {true_intercept} + {true_slope}x")
     print(f"\\nR² = {r_value**2:.4f} ({r_value**2*100:.1f}% variance explained)")
-    print(f"RMSE = {np.sqrt(mean_squared_error(y, y_pred)):.4f}")
+    print(f"RMSE = {np.sqrt (mean_squared_error (y, y_pred)):.4f}")
     print(f"p-value: {p_value:.6f} (highly significant)")
 
 visualize_linear_relationship()
@@ -112,7 +112,7 @@ visualize_linear_relationship()
 
 **Closed-form solution**:
 
-\\[ \\beta_1 = \\frac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum(x_i - \\bar{x})^2} \\]
+\\[ \\beta_1 = \\frac{\\sum (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum (x_i - \\bar{x})^2} \\]
 
 \\[ \\beta_0 = \\bar{y} - \\beta_1 \\bar{x} \\]
 
@@ -122,7 +122,7 @@ def ols_from_scratch(X, y):
     
     # Calculate means
     x_mean = np.mean(X)
-    y_mean = np.mean(y)
+    y_mean = np.mean (y)
     
     # Calculate slope (beta_1)
     numerator = np.sum((X - x_mean) * (y - y_mean))
@@ -140,20 +140,20 @@ def ols_from_scratch(X, y):
     
     # Standard error of residuals
     n = len(X)
-    rss = np.sum(residuals ** 2)
+    rss = np.sum (residuals ** 2)
     sigma_squared = rss / (n - 2)  # degrees of freedom = n - 2
     
     # Standard errors of coefficients
-    se_beta_1 = np.sqrt(sigma_squared / np.sum((X - x_mean) ** 2))
-    se_beta_0 = np.sqrt(sigma_squared * (1/n + x_mean**2 / np.sum((X - x_mean) ** 2)))
+    se_beta_1 = np.sqrt (sigma_squared / np.sum((X - x_mean) ** 2))
+    se_beta_0 = np.sqrt (sigma_squared * (1/n + x_mean**2 / np.sum((X - x_mean) ** 2)))
     
     # t-statistics
     t_beta_1 = beta_1 / se_beta_1
     t_beta_0 = beta_0 / se_beta_0
     
     # p-values (two-tailed)
-    p_beta_1 = 2 * (1 - stats.t.cdf(abs(t_beta_1), df=n-2))
-    p_beta_0 = 2 * (1 - stats.t.cdf(abs(t_beta_0), df=n-2))
+    p_beta_1 = 2 * (1 - stats.t.cdf (abs (t_beta_1), df=n-2))
+    p_beta_0 = 2 * (1 - stats.t.cdf (abs (t_beta_0), df=n-2))
     
     # R-squared
     ss_total = np.sum((y - y_mean) ** 2)
@@ -193,7 +193,7 @@ print(f"Slope: {slope_scipy:.4f}, Intercept: {intercept_scipy:.4f}, R²: {r_scip
 
 ## R-Squared (Coefficient of Determination)
 
-\\[ R^2 = 1 - \\frac{SS_{\\text{residual}}}{SS_{\\text{total}}} = 1 - \\frac{\\sum(y_i - \\hat{y}_i)^2}{\\sum(y_i - \\bar{y})^2} \\]
+\\[ R^2 = 1 - \\frac{SS_{\\text{residual}}}{SS_{\\text{total}}} = 1 - \\frac{\\sum (y_i - \\hat{y}_i)^2}{\\sum (y_i - \\bar{y})^2} \\]
 
 **Interpretation**:
 - R² = 0: Model explains 0% of variance (useless)
@@ -205,7 +205,7 @@ def demonstrate_r_squared():
     """Show different R² values"""
     
     n = 100
-    X = np.random.rand(n) * 10
+    X = np.random.rand (n) * 10
     
     # Create data with different noise levels
     scenarios = [
@@ -216,13 +216,13 @@ def demonstrate_r_squared():
     
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     
-    for idx, (title, y) in enumerate(scenarios):
+    for idx, (title, y) in enumerate (scenarios):
         slope, intercept, r_value, _, _ = stats.linregress(X, y)
         y_pred = intercept + slope * X
         
         axes[idx].scatter(X, y, alpha=0.6, s=30)
         axes[idx].plot(X, y_pred, 'r-', linewidth=2)
-        axes[idx].set_title(f'{title}\\nR² = {r_value**2:.3f}')
+        axes[idx].set_title (f'{title}\\nR² = {r_value**2:.3f}')
         axes[idx].set_xlabel('X')
         axes[idx].set_ylabel('y')
         axes[idx].grid(True, alpha=0.3)
@@ -247,7 +247,7 @@ def regression_inference():
     
     # Generate data
     n = 50
-    X = np.random.rand(n) * 10
+    X = np.random.rand (n) * 10
     y = 5 + 2 * X + np.random.normal(0, 2, n)
     
     # Fit model
@@ -285,7 +285,7 @@ def regression_inference():
     ci_lower = y_pred - t_crit * se_pred
     ci_upper = y_pred + t_crit * se_pred
     
-    plt.figure(figsize=(10, 6))
+    plt.figure (figsize=(10, 6))
     plt.scatter(X, y, alpha=0.6, s=50, label='Data')
     plt.plot(X_range, y_pred, 'r-', linewidth=2, label='Regression line')
     plt.fill_between(X_range, ci_lower, ci_upper, alpha=0.2, color='red', 
@@ -312,7 +312,7 @@ def compare_intervals():
     """Compare confidence and prediction intervals"""
     
     n = 30
-    X = np.random.rand(n) * 10
+    X = np.random.rand (n) * 10
     y = 5 + 2 * X + np.random.normal(0, 2, n)
     
     # Fit model
@@ -324,8 +324,8 @@ def compare_intervals():
     
     # Residual standard error
     residuals = y - (intercept + slope * X)
-    rss = np.sum(residuals ** 2)
-    sigma = np.sqrt(rss / (n - 2))
+    rss = np.sum (residuals ** 2)
+    sigma = np.sqrt (rss / (n - 2))
     
     # Standard errors
     se_mean = sigma * np.sqrt(1/n + (X_new - X.mean())**2 / np.sum((X - X.mean())**2))
@@ -341,7 +341,7 @@ def compare_intervals():
     pi_upper = y_pred + t_crit * se_pred
     
     # Plot
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     plt.scatter(X, y, alpha=0.6, s=50, label='Data', zorder=3)
     plt.plot(X_new, y_pred, 'r-', linewidth=2, label='Regression line', zorder=2)
     plt.fill_between(X_new, ci_lower, ci_upper, alpha=0.3, color='blue',
@@ -351,7 +351,7 @@ def compare_intervals():
     plt.xlabel('X', fontsize=12)
     plt.ylabel('y', fontsize=12)
     plt.title('Confidence vs Prediction Intervals', fontsize=14, fontweight='bold')
-    plt.legend(fontsize=10)
+    plt.legend (fontsize=10)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.savefig('confidence_vs_prediction.png', dpi=300, bbox_inches='tight')
@@ -361,7 +361,7 @@ def compare_intervals():
     print("Confidence Interval (CI):")
     print("  • For the MEAN response at a given X")
     print("  • Narrower (less uncertainty)")
-    print("  • Answers: "What's the average y for this X?"")
+    print("  • Answers: "What\'s the average y for this X?"")
     print()
     print("Prediction Interval (PI):")
     print("  • For an INDIVIDUAL response at a given X")
@@ -386,15 +386,15 @@ def comprehensive_residual_analysis(X, y):
     residuals = y - y_pred
     
     # Standardized residuals
-    rss = np.sum(residuals ** 2)
-    sigma = np.sqrt(rss / (len(X) - 2))
+    rss = np.sum (residuals ** 2)
+    sigma = np.sqrt (rss / (len(X) - 2))
     standardized_residuals = residuals / sigma
     
     # Create diagnostic plots
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
     
     # 1. Residuals vs Fitted
-    axes[0, 0].scatter(y_pred, residuals, alpha=0.6)
+    axes[0, 0].scatter (y_pred, residuals, alpha=0.6)
     axes[0, 0].axhline(0, color='r', linestyle='--', linewidth=2)
     axes[0, 0].set_xlabel('Fitted Values')
     axes[0, 0].set_ylabel('Residuals')
@@ -402,19 +402,19 @@ def comprehensive_residual_analysis(X, y):
     axes[0, 0].grid(True, alpha=0.3)
     
     # 2. Q-Q Plot
-    stats.probplot(residuals, dist="norm", plot=axes[0, 1])
+    stats.probplot (residuals, dist="norm", plot=axes[0, 1])
     axes[0, 1].set_title('Q-Q Plot\\n(Check normality)')
     axes[0, 1].grid(True, alpha=0.3)
     
     # 3. Scale-Location
-    axes[1, 0].scatter(y_pred, np.sqrt(np.abs(standardized_residuals)), alpha=0.6)
+    axes[1, 0].scatter (y_pred, np.sqrt (np.abs (standardized_residuals)), alpha=0.6)
     axes[1, 0].set_xlabel('Fitted Values')
     axes[1, 0].set_ylabel('√|Standardized Residuals|')
     axes[1, 0].set_title('Scale-Location\\n(Check homoscedasticity)')
     axes[1, 0].grid(True, alpha=0.3)
     
     # 4. Residuals Histogram
-    axes[1, 1].hist(residuals, bins=20, edgecolor='black', alpha=0.7)
+    axes[1, 1].hist (residuals, bins=20, edgecolor='black', alpha=0.7)
     axes[1, 1].axvline(0, color='r', linestyle='--', linewidth=2)
     axes[1, 1].set_xlabel('Residuals')
     axes[1, 1].set_ylabel('Frequency')
@@ -428,11 +428,11 @@ def comprehensive_residual_analysis(X, y):
     # Statistical tests
     print("=== Residual Diagnostics ===")
     print(f"R² = {r_value**2:.4f}")
-    print(f"RMSE = {np.sqrt(np.mean(residuals**2)):.4f}")
+    print(f"RMSE = {np.sqrt (np.mean (residuals**2)):.4f}")
     print()
     
     # Normality test
-    _, p_norm = stats.shapiro(residuals)
+    _, p_norm = stats.shapiro (residuals)
     print(f"Shapiro-Wilk test (normality): p = {p_norm:.4f}")
     print(f"  {'✓ Residuals appear normal' if p_norm > 0.05 else '✗ Residuals not normal'}")
     print()
@@ -460,7 +460,7 @@ def assess_feature_importance_with_regression():
     """Use univariate regression to assess feature importance"""
     
     # Generate dataset with multiple features
-    X, y = make_regression(n_samples=200, n_features=10, n_informative=5,
+    X, y = make_regression (n_samples=200, n_features=10, n_informative=5,
                             noise=10, random_state=42)
     
     feature_names = [f'Feature_{i}' for i in range(X.shape[1])]
@@ -480,15 +480,15 @@ def assess_feature_importance_with_regression():
             'p-value': p_value
         })
     
-    results_df = pd.DataFrame(results).sort_values('R²', ascending=False)
+    results_df = pd.DataFrame (results).sort_values('R²', ascending=False)
     
     print("=== Feature Importance via Univariate Regression ===")
-    print(results_df.to_string(index=False))
+    print(results_df.to_string (index=False))
     
     # Visualize
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots (figsize=(10, 6))
     colors = ['green' if p < 0.05 else 'gray' for p in results_df['p-value']]
-    ax.barh(results_df['Feature'], results_df['R²'], color=colors, alpha=0.7)
+    ax.barh (results_df['Feature'], results_df['R²'], color=colors, alpha=0.7)
     ax.set_xlabel('R² (Variance Explained)', fontsize=12)
     ax.set_title('Feature Importance (Univariate Regression)', fontsize=14, fontweight='bold')
     ax.invert_yaxis()

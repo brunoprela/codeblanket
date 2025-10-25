@@ -26,7 +26,7 @@ export const restfulapidesignQuiz = [
 - Internal microservices where caching isn't needed
 - Legacy system constraints
 
-**Recommendation**: Use proper HTTP methods (Level 2 REST) as the default. It's an industry standard that provides caching, idempotency, and better developer experience with minimal additional complexity.`,
+**Recommendation**: Use proper HTTP methods (Level 2 REST) as the default. It\'s an industry standard that provides caching, idempotency, and better developer experience with minimal additional complexity.`,
     keyPoints: [
       'HTTP methods provide idempotency (safe retries)',
       'GET enables caching at multiple layers',
@@ -65,7 +65,7 @@ PUT /api/users/123
 // Result: name, phone, address, etc. all set to null!
 \`\`\`
 
-**Production Issue**: User's profile is wiped except for email. They lose their profile picture, bio, notification preferences, etc. This actually happened at a company I consulted for - a mobile app bug sent incomplete PUT requests, causing customer data loss.
+**Production Issue**: User\'s profile is wiped except for email. They lose their profile picture, bio, notification preferences, etc. This actually happened at a company I consulted for - a mobile app bug sent incomplete PUT requests, causing customer data loss.
 
 **Solution - Use PATCH:**
 \`\`\`javascript
@@ -130,7 +130,7 @@ Include related resources in a single response with relationships.
 Let clients specify exactly what they need:
 \`\`\`graphql
 query {
-  user(id: 123) {
+  user (id: 123) {
     name
     posts {
       title

@@ -101,7 +101,7 @@ Make it engaging and well-structured for the audience."""
         temperature=0.7
     )
     
-    outline = json.loads(response.choices[0].message.content)
+    outline = json.loads (response.choices[0].message.content)
     return outline
 
 # Generate outline
@@ -113,7 +113,7 @@ outline = generate_presentation_outline(
 )
 
 print(f"Title: {outline['title']}")
-print(f"Slides: {len(outline['slides'])}")
+print(f"Slides: {len (outline['slides'])}")
 \`\`\`
 
 ### Creating PowerPoint Slides
@@ -131,7 +131,7 @@ def create_title_slide(
 ):
     """Create title slide."""
     slide_layout = prs.slide_layouts[0]  # Title slide layout
-    slide = prs.slides.add_slide(slide_layout)
+    slide = prs.slides.add_slide (slide_layout)
     
     # Set title
     title_shape = slide.shapes.title
@@ -152,7 +152,7 @@ def create_content_slide(
     """Create content slide with bullet points and optional image."""
     # Use title and content layout
     slide_layout = prs.slide_layouts[1]
-    slide = prs.slides.add_slide(slide_layout)
+    slide = prs.slides.add_slide (slide_layout)
     
     # Set title
     title_shape = slide.shapes.title
@@ -174,7 +174,7 @@ def create_content_slide(
         left = Inches(7)
         top = Inches(2)
         width = Inches(3)
-        slide.shapes.add_picture(image_path, left, top, width=width)
+        slide.shapes.add_picture (image_path, left, top, width=width)
     
     return slide
 
@@ -186,7 +186,7 @@ def create_image_slide(
 ):
     """Create slide with large image."""
     slide_layout = prs.slide_layouts[6]  # Blank layout
-    slide = prs.slides.add_slide(slide_layout)
+    slide = prs.slides.add_slide (slide_layout)
     
     # Add title
     title_shape = slide.shapes.add_textbox(
@@ -205,7 +205,7 @@ def create_image_slide(
     left = Inches(1)
     top = Inches(1.5)
     width = Inches(8)
-    slide.shapes.add_picture(image_path, left, top, width=width)
+    slide.shapes.add_picture (image_path, left, top, width=width)
     
     # Add caption if provided
     if caption:
@@ -243,15 +243,15 @@ High quality, 16:9 aspect ratio."""
     
     # Download image
     img_url = response.data[0].url
-    img_data = requests.get(img_url).content
+    img_data = requests.get (img_url).content
     
     # Save image
     import hashlib
     img_hash = hashlib.md5(description.encode()).hexdigest()[:8]
     img_path = f"slide_image_{img_hash}.png"
     
-    with open(img_path, "wb") as f:
-        f.write(img_data)
+    with open (img_path, "wb") as f:
+        f.write (img_data)
     
     return img_path
 
@@ -339,7 +339,7 @@ def create_presentation_from_outline(
             )
     
     # Save presentation
-    prs.save(output_filename)
+    prs.save (output_filename)
     
     return output_filename
 
@@ -367,7 +367,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -421,24 +421,24 @@ class ProductionPresentationGenerator:
         if config is None:
             config = PresentationConfig()
         
-        logger.info(f"Generating presentation on '{topic}' for {target_audience}")
+        logger.info (f"Generating presentation on '{topic}' for {target_audience}")
         
         # Step 1: Generate outline
         num_slides = max(5, duration_minutes // 2)  # ~2 minutes per slide
-        outline = self._generate_outline(topic, target_audience, num_slides)
+        outline = self._generate_outline (topic, target_audience, num_slides)
         
         # Step 2: Enhance slide content
-        enhanced_outline = self._enhance_slides(outline, config)
+        enhanced_outline = self._enhance_slides (outline, config)
         
         # Step 3: Generate images if requested
         if config.include_images:
-            enhanced_outline = self._add_images(enhanced_outline, config.image_style)
+            enhanced_outline = self._add_images (enhanced_outline, config.image_style)
         
         # Step 4: Create PowerPoint
         output_filename = f"{topic.replace(' ', '_').lower()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pptx"
-        self._create_pptx(enhanced_outline, config, output_filename)
+        self._create_pptx (enhanced_outline, config, output_filename)
         
-        logger.info(f"Presentation created: {output_filename}")
+        logger.info (f"Presentation created: {output_filename}")
         
         return output_filename
     
@@ -450,7 +450,7 @@ class ProductionPresentationGenerator:
     ) -> Dict[str, Any]:
         """Generate presentation outline."""
         # Use generate_presentation_outline function from above
-        return generate_presentation_outline(topic, audience, num_slides * 2, num_slides)
+        return generate_presentation_outline (topic, audience, num_slides * 2, num_slides)
     
     def _enhance_slides(
         self,
@@ -463,7 +463,7 @@ class ProductionPresentationGenerator:
             if "key_points" in slide and slide["key_points"]:
                 enhancement_prompt = f"""Improve these bullet points for a presentation:
 
-{chr(10).join(slide["key_points"])}
+{chr(10).join (slide["key_points"])}
 
 Make them:
 - Concise and punchy
@@ -480,10 +480,10 @@ Return as JSON array of strings."""
                         temperature=0.7
                     )
                     
-                    enhanced_points = json.loads(response.choices[0].message.content)
+                    enhanced_points = json.loads (response.choices[0].message.content)
                     slide["key_points"] = enhanced_points
                 except Exception as e:
-                    logger.warning(f"Failed to enhance slide content: {e}")
+                    logger.warning (f"Failed to enhance slide content: {e}")
         
         return outline
     
@@ -502,7 +502,7 @@ Return as JSON array of strings."""
                     )
                     slide["image_path"] = image_path
                 except Exception as e:
-                    logger.warning(f"Failed to generate image for slide: {e}")
+                    logger.warning (f"Failed to generate image for slide: {e}")
                     slide["image_path"] = None
         
         return outline
@@ -568,7 +568,7 @@ def create_chart_slide(
 ) -> None:
     """Create slide with chart."""
     slide_layout = prs.slide_layouts[5]  # Blank layout
-    slide = prs.slides.add_slide(slide_layout)
+    slide = prs.slides.add_slide (slide_layout)
     
     # Add title
     title_shape = slide.shapes.add_textbox(
@@ -579,8 +579,8 @@ def create_chart_slide(
     
     # Prepare chart data
     chart_data_obj = CategoryChartData()
-    chart_data_obj.categories = list(chart_data.keys())
-    chart_data_obj.add_series('Series 1', list(chart_data.values()))
+    chart_data_obj.categories = list (chart_data.keys())
+    chart_data_obj.add_series('Series 1', list (chart_data.values()))
     
     # Add chart
     x, y, cx, cy = Inches(1), Inches(2), Inches(8), Inches(4.5)
@@ -593,7 +593,7 @@ def create_chart_slide(
     }
     
     chart = slide.shapes.add_chart(
-        chart_type_map.get(chart_type, XL_CHART_TYPE.BAR_CLUSTERED),
+        chart_type_map.get (chart_type, XL_CHART_TYPE.BAR_CLUSTERED),
         x, y, cx, cy,
         chart_data_obj
     ).chart
@@ -625,7 +625,7 @@ Return as JSON:
         messages=[{"role": "user", "content": prompt}]
     )
     
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Example
 chart_info = generate_chart_from_description(
@@ -662,7 +662,7 @@ class PresentationTheme:
         self.background_color = RGBColor(*background_color)
         self.text_color = RGBColor(*text_color)
     
-    def apply_to_slide(self, slide):
+    def apply_to_slide (self, slide):
         """Apply theme to slide."""
         # Set background
         background = slide.background
@@ -718,7 +718,7 @@ def generate_speaker_notes(
 Title: {slide_title}
 
 Content:
-{chr(10).join(f'- {point}' for point in slide_content)}
+{chr(10).join (f'- {point}' for point in slide_content)}
 
 Provide notes that:
 - Expand on the bullet points
@@ -788,7 +788,7 @@ def generate_sales_presentation(
     outline_prompt = f"""Create a sales presentation outline for {product_name}
 
 Target market: {target_market}
-Key features: {', '.join(features)}
+Key features: {', '.join (features)}
 
 Include:
 - Problem statement
@@ -805,7 +805,7 @@ Include:
         num_slides=15
     )
     
-    return create_presentation_from_outline(outline)
+    return create_presentation_from_outline (outline)
 \`\`\`
 
 ### 2. Educational Content

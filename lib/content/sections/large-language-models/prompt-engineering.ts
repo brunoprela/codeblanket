@@ -40,13 +40,13 @@ class PromptComponents:
     6. Examples: Few-shot demonstrations
     """
     
-    def basic_prompt(self, text):
+    def basic_prompt (self, text):
         """
         Simple prompt
         """
         return f"Summarize: {text}"
     
-    def structured_prompt(self, text):
+    def structured_prompt (self, text):
         """
         Well-structured prompt with all components
         """
@@ -64,18 +64,18 @@ Requirements:
 
 Summary:"""
     
-    def compare_approaches(self):
+    def compare_approaches (self):
         """
         Demonstrate impact of structure
         """
         text = "Transformers use attention mechanisms..."
         
         # Basic prompt
-        basic = self.basic_prompt(text)
+        basic = self.basic_prompt (text)
         # Result: Variable quality, unpredictable format
         
         # Structured prompt
-        structured = self.structured_prompt(text)
+        structured = self.structured_prompt (text)
         # Result: Consistent quality, predictable format
         
         return basic, structured
@@ -84,7 +84,7 @@ Summary:"""
 import anthropic
 client = anthropic.Anthropic()
 
-def test_prompts(text):
+def test_prompts (text):
     """
     Compare different prompt structures
     """
@@ -117,7 +117,7 @@ Summary:"""
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}]
         )
-        results.append(response.content[0].text)
+        results.append (response.content[0].text)
     
     return results
 \`\`\`
@@ -138,7 +138,7 @@ class ZeroShotPrompting:
     Techniques for zero-shot prompts
     """
     
-    def clear_instruction(self, task):
+    def clear_instruction (self, task):
         """
         Be explicit and specific
         """
@@ -152,11 +152,11 @@ Include an analogy to help understanding."""
         
         return bad, good
     
-    def classification_prompt(self, text, labels):
+    def classification_prompt (self, text, labels):
         """
         Zero-shot classification
         """
-        prompt = f"""Classify the following text into one of these categories: {', '.join(labels)}
+        prompt = f"""Classify the following text into one of these categories: {', '.join (labels)}
 
 Text: "{text}"
 
@@ -164,23 +164,23 @@ Category:"""
         
         return prompt
     
-    def extraction_prompt(self, text, fields):
+    def extraction_prompt (self, text, fields):
         """
         Zero-shot information extraction
         """
         prompt = f"""Extract the following information from the text below.
 
-Fields to extract: {', '.join(fields)}
+Fields to extract: {', '.join (fields)}
 
 Text: {text}
 
-Provide output as JSON with keys: {', '.join(fields)}
+Provide output as JSON with keys: {', '.join (fields)}
 
 JSON:"""
         
         return prompt
     
-    def generation_prompt(self, spec):
+    def generation_prompt (self, spec):
         """
         Zero-shot generation with constraints
         """
@@ -208,7 +208,7 @@ def zero_shot_examples():
     client = openai.OpenAI()
     
     # 1. Sentiment analysis
-    def sentiment(text):
+    def sentiment (text):
         prompt = f"""Analyze the sentiment of this text. 
 Respond with: Positive, Negative, or Neutral.
 
@@ -224,7 +224,7 @@ Sentiment:"""
         return response.choices[0].message.content
     
     # 2. Translation
-    def translate(text, target_language):
+    def translate (text, target_language):
         prompt = f"""Translate the following text to {target_language}. 
 Maintain the original tone and meaning.
 
@@ -239,7 +239,7 @@ Translation:"""
         return response.choices[0].message.content
     
     # 3. Code generation
-    def generate_code(description):
+    def generate_code (description):
         prompt = f"""Write Python code to accomplish this task:
 
 Task: {description}
@@ -281,7 +281,7 @@ class FewShotPrompting:
     Few-shot learning techniques
     """
     
-    def format_examples(self, examples):
+    def format_examples (self, examples):
         """
         Format few-shot examples
         """
@@ -291,30 +291,30 @@ class FewShotPrompting:
             formatted += f"Output: {ex['output']}\\n\\n"
         return formatted
     
-    def few_shot_prompt(self, examples, new_input):
+    def few_shot_prompt (self, examples, new_input):
         """
         Create few-shot prompt
         """
-        prompt = self.format_examples(examples)
+        prompt = self.format_examples (examples)
         prompt += f"Input: {new_input}\\nOutput:"
         return prompt
     
-    def classification_few_shot(self):
+    def classification_few_shot (self):
         """
         Few-shot classification
         """
         examples = [
             {"input": "I love this product!", "output": "Positive"},
             {"input": "Terrible experience", "output": "Negative"},
-            {"input": "It's okay", "output": "Neutral"}
+            {"input": "It\'s okay", "output": "Neutral"}
         ]
         
         new_text = "This is amazing!"
-        prompt = self.few_shot_prompt(examples, new_text)
+        prompt = self.few_shot_prompt (examples, new_text)
         
         return prompt
     
-    def extraction_few_shot(self):
+    def extraction_few_shot (self):
         """
         Few-shot information extraction
         """
@@ -330,7 +330,7 @@ class FewShotPrompting:
         ]
         
         new_text = "Mike Brown is a developer at Apple in Cupertino"
-        prompt = self.few_shot_prompt(examples, new_text)
+        prompt = self.few_shot_prompt (examples, new_text)
         
         return prompt
 
@@ -340,7 +340,7 @@ class AdvancedFewShot:
     Advanced few-shot strategies
     """
     
-    def select_diverse_examples(self, examples, n=5):
+    def select_diverse_examples (self, examples, n=5):
         """
         Choose diverse examples for better coverage
         """
@@ -357,27 +357,27 @@ class AdvancedFewShot:
         
         # Start with random example
         idx = 0
-        selected.append(examples[idx])
-        selected_indices.append(idx)
+        selected.append (examples[idx])
+        selected_indices.append (idx)
         
         # Iteratively select most different examples
-        while len(selected) < n:
+        while len (selected) < n:
             similarities = cosine_similarity(
                 embeddings[selected_indices],
                 embeddings
             )
-            avg_similarity = similarities.mean(axis=0)
+            avg_similarity = similarities.mean (axis=0)
             
             # Select least similar (most diverse)
-            remaining = [i for i in range(len(examples)) if i not in selected_indices]
+            remaining = [i for i in range (len (examples)) if i not in selected_indices]
             next_idx = remaining[avg_similarity[remaining].argmin()]
             
-            selected.append(examples[next_idx])
-            selected_indices.append(next_idx)
+            selected.append (examples[next_idx])
+            selected_indices.append (next_idx)
         
         return selected
     
-    def dynamic_few_shot(self, examples, query, k=3):
+    def dynamic_few_shot (self, examples, query, k=3):
         """
         Select most relevant examples for query
         """
@@ -390,14 +390,14 @@ class AdvancedFewShot:
         example_embs = model.encode([ex['input'] for ex in examples])
         
         # Find most similar examples
-        similarities = cosine_similarity(query_emb, example_embs)[0]
+        similarities = cosine_similarity (query_emb, example_embs)[0]
         top_k_indices = similarities.argsort()[-k:][::-1]
         
         selected = [examples[i] for i in top_k_indices]
         
         return selected
     
-    def format_with_reasoning(self, examples):
+    def format_with_reasoning (self, examples):
         """
         Include reasoning in examples
         """
@@ -430,7 +430,7 @@ def math_problem_few_shot():
     
     prompt = f"""Solve these math problems:
 
-{chr(10).join(f"Q: {ex['input']}\\nA: {ex['output']}\\n" for ex in examples)}
+{chr(10).join (f"Q: {ex['input']}\\nA: {ex['output']}\\n" for ex in examples)}
 Q: Mike has 20 marbles and loses 8. How many does he have left?
 A:"""
     
@@ -461,9 +461,9 @@ class ChainOfThoughtPrompting:
     CoT techniques for complex reasoning
     """
     
-    def standard_cot(self, problem):
+    def standard_cot (self, problem):
         """
-        Standard CoT with "Let's think step by step"
+        Standard CoT with "Let\'s think step by step"
         """
         prompt = f"""{problem}
 
@@ -471,22 +471,22 @@ Let's think step by step."""
         
         return prompt
     
-    def few_shot_cot(self, examples, problem):
+    def few_shot_cot (self, examples, problem):
         """
         Few-shot CoT with reasoning examples
         """
         prompt = ""
         for ex in examples:
             prompt += f"Q: {ex['question']}\\n"
-            prompt += f"A: Let's think step by step.\\n{ex['reasoning']}\\n"
+            prompt += f"A: Let\'s think step by step.\\n{ex['reasoning']}\\n"
             prompt += f"Therefore, the answer is {ex['answer']}.\\n\\n"
         
         prompt += f"Q: {problem}\\n"
-        prompt += f"A: Let's think step by step.\\n"
+        prompt += f"A: Let\'s think step by step.\\n"
         
         return prompt
     
-    def zero_shot_cot(self):
+    def zero_shot_cot (self):
         """
         Zero-shot CoT (surprisingly effective!)
         """
@@ -502,24 +502,24 @@ does he have now?"""
         
         return simple_prompt, cot_prompt
     
-    def self_consistency(self, problem, n_samples=5):
+    def self_consistency (self, problem, n_samples=5):
         """
         Generate multiple reasoning paths, take majority vote
         """
         prompt = f"""{problem}
 
-Let's think step by step."""
+Let\'s think step by step."""
         
         # Generate multiple solutions
         solutions = []
-        for _ in range(n_samples):
-            response = generate(prompt, temperature=0.7)
-            answer = extract_final_answer(response)
-            solutions.append(answer)
+        for _ in range (n_samples):
+            response = generate (prompt, temperature=0.7)
+            answer = extract_final_answer (response)
+            solutions.append (answer)
         
         # Majority vote
         from collections import Counter
-        final_answer = Counter(solutions).most_common(1)[0][0]
+        final_answer = Counter (solutions).most_common(1)[0][0]
         
         return final_answer
 
@@ -529,7 +529,7 @@ class ComplexReasoning:
     CoT for challenging problems
     """
     
-    def math_reasoning(self):
+    def math_reasoning (self):
         """
         Multi-step math problem
         """
@@ -560,11 +560,11 @@ Q: A restaurant bill is $85. You want to leave a 20% tip, and there's
 an 8% tax. If tip is calculated on the pre-tax amount, what's the 
 total you pay?
 
-A: Let's solve this step by step."""
+A: Let\'s solve this step by step."""
         
         return prompt
     
-    def logical_reasoning(self):
+    def logical_reasoning (self):
         """
         Logic puzzles with CoT
         """
@@ -594,20 +594,20 @@ Therefore, the answer is No - the conclusion doesn't follow logically.
 
 Q: If it's raining, the ground is wet. The ground is wet. Is it raining?
 
-A: Let's reason through this step by step."""
+A: Let\'s reason through this step by step."""
         
         return prompt
     
-    def code_reasoning(self):
+    def code_reasoning (self):
         """
         Code tracing with CoT
         """
         prompt = """Q: What does this code output?
 
-def f(n):
+def f (n):
     if n <= 1:
         return 1
-    return n * f(n-1)
+    return n * f (n-1)
 
 print(f(4))
 
@@ -635,11 +635,11 @@ Therefore, the code outputs 24.
 
 Q: What does this code output?
 
-def g(x):
+def g (x):
     return x + 1
 
-def h(x):
-    return g(x) * 2
+def h (x):
+    return g (x) * 2
 
 print(h(h(3)))
 
@@ -653,7 +653,7 @@ class TreeOfThoughts:
     Explore multiple reasoning paths (more advanced than CoT)
     """
     
-    def generate_thoughts(self, problem, n=3):
+    def generate_thoughts (self, problem, n=3):
         """
         Generate multiple next steps
         """
@@ -664,7 +664,7 @@ Generate {n} different possible next steps:"""
         # Returns multiple reasoning directions
         return prompt
     
-    def evaluate_thoughts(self, problem, thought):
+    def evaluate_thoughts (self, problem, thought):
         """
         Evaluate quality of reasoning path
         """
@@ -681,7 +681,7 @@ Rating:"""
         
         return prompt
     
-    def search_tree(self, problem, depth=3, breadth=3):
+    def search_tree (self, problem, depth=3, breadth=3):
         """
         Search tree of possible reasoning paths
         """
@@ -727,7 +727,7 @@ class AdvancedPrompting:
     Sophisticated prompting techniques
     """
     
-    def system_message_design(self):
+    def system_message_design (self):
         """
         Effective system messages
         """
@@ -751,7 +751,7 @@ Your tone is professional but approachable."""
         
         return basic, better, best
     
-    def multi_role_prompting(self):
+    def multi_role_prompting (self):
         """
         Simulate multiple experts
         """
@@ -762,14 +762,14 @@ Your tone is professional but approachable."""
 3. Code Reviewer: Check for best practices
 
 Code:
-def process_user_input(data):
-    return eval(data)
+def process_user_input (data):
+    return eval (data)
 
 Analysis:"""
         
         return prompt
     
-    def constitutional_ai_principles(self):
+    def constitutional_ai_principles (self):
         """
         Add behavioral constraints
         """
@@ -795,11 +795,11 @@ class PromptTemplates:
     Reusable prompt patterns
     """
     
-    def classification_template(self, text, categories):
+    def classification_template (self, text, categories):
         """
         Classification with confidence
         """
-        return f"""Classify the following text into one of these categories: {', '.join(categories)}
+        return f"""Classify the following text into one of these categories: {', '.join (categories)}
 
 Text: "{text}"
 
@@ -810,14 +810,14 @@ Reasoning: [brief explanation]
 
 Classification:"""
     
-    def extraction_template(self, text, schema):
+    def extraction_template (self, text, schema):
         """
         Structured extraction
         """
         return f"""Extract information from the text according to this schema:
 
 Schema:
-{json.dumps(schema, indent=2)}
+{json.dumps (schema, indent=2)}
 
 Text:
 {text}
@@ -826,7 +826,7 @@ Return valid JSON matching the schema. If a field is not present, use null.
 
 JSON:"""
     
-    def transformation_template(self, text, transformation):
+    def transformation_template (self, text, transformation):
         """
         Text transformation
         """
@@ -839,7 +839,7 @@ Transformation: {transformation}
 
 Transformed text:"""
     
-    def comparison_template(self, item1, item2, criteria):
+    def comparison_template (self, item1, item2, criteria):
         """
         Structured comparison
         """
@@ -848,7 +848,7 @@ Transformed text:"""
 Item 1: {item1}
 Item 2: {item2}
 
-Criteria: {', '.join(criteria)}
+Criteria: {', '.join (criteria)}
 
 Provide comparison in this format:
 For each criterion:
@@ -862,7 +862,7 @@ class PromptChaining:
     Break complex tasks into steps
     """
     
-    def research_paper_summary(self, paper_text):
+    def research_paper_summary (self, paper_text):
         """
         Multi-step summarization
         """
@@ -877,7 +877,7 @@ Paper: {paper_text}
 
 Extracted information:"""
         
-        extracted = generate(extraction_prompt)
+        extracted = generate (extraction_prompt)
         
         # Step 2: Generate summary
         summary_prompt = f"""Based on this extracted information, write a 
@@ -887,7 +887,7 @@ Extracted information:"""
 
 Summary:"""
         
-        summary = generate(summary_prompt)
+        summary = generate (summary_prompt)
         
         # Step 3: Generate key takeaways
         takeaways_prompt = f"""Based on this summary, list 3 key takeaways:
@@ -896,11 +896,11 @@ Summary:"""
 
 Key takeaways:"""
         
-        takeaways = generate(takeaways_prompt)
+        takeaways = generate (takeaways_prompt)
         
         return summary, takeaways
     
-    def code_generation_pipeline(self, spec):
+    def code_generation_pipeline (self, spec):
         """
         Chained code generation
         """
@@ -916,10 +916,10 @@ Provide:
 
 Design:"""
         
-        design = generate(design_prompt)
+        design = generate (design_prompt)
         
         # Step 2: Generate code for each component
-        components = extract_components(design)
+        components = extract_components (design)
         code_parts = []
         
         for component in components:
@@ -929,18 +929,18 @@ Component: {component}
 Context: {design}
 
 Code:"""
-            code = generate(code_prompt)
-            code_parts.append(code)
+            code = generate (code_prompt)
+            code_parts.append (code)
         
         # Step 3: Integration
         integration_prompt = f"""Integrate these components:
 
 Components:
-{chr(10).join(code_parts)}
+{chr(10).join (code_parts)}
 
 Generate the main integration code:"""
         
-        final_code = generate(integration_prompt)
+        final_code = generate (integration_prompt)
         
         return final_code
 \`\`\`
@@ -961,7 +961,7 @@ class PromptOptimization:
     Methods to improve prompts
     """
     
-    def ab_test_prompts(self, prompt_a, prompt_b, test_cases):
+    def ab_test_prompts (self, prompt_a, prompt_b, test_cases):
         """
         Compare prompt performance
         """
@@ -969,24 +969,24 @@ class PromptOptimization:
         results_b = []
         
         for test in test_cases:
-            response_a = generate(prompt_a + test['input'])
-            response_b = generate(prompt_b + test['input'])
+            response_a = generate (prompt_a + test['input'])
+            response_b = generate (prompt_b + test['input'])
             
-            score_a = evaluate(response_a, test['expected'])
-            score_b = evaluate(response_b, test['expected'])
+            score_a = evaluate (response_a, test['expected'])
+            score_b = evaluate (response_b, test['expected'])
             
-            results_a.append(score_a)
-            results_b.append(score_b)
+            results_a.append (score_a)
+            results_b.append (score_b)
         
         # Statistical comparison
         import numpy as np
         from scipy import stats
         
-        mean_a = np.mean(results_a)
-        mean_b = np.mean(results_b)
+        mean_a = np.mean (results_a)
+        mean_b = np.mean (results_b)
         
         # T-test
-        t_stat, p_value = stats.ttest_ind(results_a, results_b)
+        t_stat, p_value = stats.ttest_ind (results_a, results_b)
         
         return {
             'prompt_a_mean': mean_a,
@@ -995,50 +995,50 @@ class PromptOptimization:
             'winner': 'A' if mean_a > mean_b else 'B'
         }
     
-    def iterative_refinement(self, initial_prompt, test_cases, iterations=5):
+    def iterative_refinement (self, initial_prompt, test_cases, iterations=5):
         """
         Automatically improve prompts
         """
         current_prompt = initial_prompt
         best_score = 0
         
-        for i in range(iterations):
+        for i in range (iterations):
             # Test current prompt
-            score = self.evaluate_prompt(current_prompt, test_cases)
+            score = self.evaluate_prompt (current_prompt, test_cases)
             
             if score > best_score:
                 best_score = score
                 best_prompt = current_prompt
             
             # Generate variations
-            variations = self.generate_variations(current_prompt)
+            variations = self.generate_variations (current_prompt)
             
             # Test variations
             variation_scores = [
-                self.evaluate_prompt(v, test_cases) 
+                self.evaluate_prompt (v, test_cases) 
                 for v in variations
             ]
             
             # Select best
-            best_variation_idx = np.argmax(variation_scores)
+            best_variation_idx = np.argmax (variation_scores)
             current_prompt = variations[best_variation_idx]
         
         return best_prompt, best_score
     
-    def evaluate_prompt(self, prompt, test_cases):
+    def evaluate_prompt (self, prompt, test_cases):
         """
         Score prompt on test cases
         """
         scores = []
         
         for test in test_cases:
-            response = generate(prompt + test['input'])
-            score = compute_similarity(response, test['expected'])
-            scores.append(score)
+            response = generate (prompt + test['input'])
+            score = compute_similarity (response, test['expected'])
+            scores.append (score)
         
-        return np.mean(scores)
+        return np.mean (scores)
     
-    def generate_variations(self, prompt):
+    def generate_variations (self, prompt):
         """
         Create prompt variations
         """
@@ -1050,8 +1050,8 @@ Original: {prompt}
 
 Variations:"""
         
-        response = generate(meta_prompt)
-        variations = parse_variations(response)
+        response = generate (meta_prompt)
+        variations = parse_variations (response)
         
         return variations
 

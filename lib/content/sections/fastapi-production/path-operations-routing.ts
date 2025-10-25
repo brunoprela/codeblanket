@@ -6,7 +6,7 @@ export const pathOperationsRouting = {
 
 ## Introduction
 
-Routing is the backbone of any API—it maps URLs to handler functions. FastAPI's routing system is powerful, flexible, and designed for building well-structured, maintainable APIs. Unlike Flask's simple decorator approach or Django's complex URL configuration, FastAPI strikes the perfect balance between simplicity and features.
+Routing is the backbone of any API—it maps URLs to handler functions. FastAPI's routing system is powerful, flexible, and designed for building well-structured, maintainable APIs. Unlike Flask\'s simple decorator approach or Django's complex URL configuration, FastAPI strikes the perfect balance between simplicity and features.
 
 **Why routing matters in production:**
 - **Organization**: Structure large APIs with routers and sub-applications
@@ -70,10 +70,10 @@ async def list_items() -> List[Item]:
     - Cacheable
     - Safe (no side effects)
     """
-    return list(items_db.values())
+    return list (items_db.values())
 
 @app.get("/items/{item_id}")
-async def get_item(item_id: int) -> Item:
+async def get_item (item_id: int) -> Item:
     """
     GET: Retrieve single resource
     
@@ -88,7 +88,7 @@ async def get_item(item_id: int) -> Item:
     return items_db[item_id]
 
 @app.post("/items", status_code=status.HTTP_201_CREATED)
-async def create_item(item: Item) -> Item:
+async def create_item (item: Item) -> Item:
     """
     POST: Create new resource
     
@@ -105,7 +105,7 @@ async def create_item(item: Item) -> Item:
     return item
 
 @app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item) -> Item:
+async def update_item (item_id: int, item: Item) -> Item:
     """
     PUT: Replace entire resource
     
@@ -135,7 +135,7 @@ async def partial_update_item(
     - More flexible than PUT
     """
     if item_id not in items_db:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException (status_code=404, detail="Item not found")
     
     item = items_db[item_id]
     if name is not None:
@@ -146,7 +146,7 @@ async def partial_update_item(
     return item
 
 @app.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_item(item_id: int):
+async def delete_item (item_id: int):
     """
     DELETE: Remove resource
     
@@ -155,13 +155,13 @@ async def delete_item(item_id: int):
     - Return 404 if not found
     """
     if item_id not in items_db:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException (status_code=404, detail="Item not found")
     
     del items_db[item_id]
     return None  # 204 No Content
 
 @app.head("/items/{item_id}")
-async def check_item_exists(item_id: int):
+async def check_item_exists (item_id: int):
     """
     HEAD: Check resource exists (same as GET but no body)
     
@@ -170,7 +170,7 @@ async def check_item_exists(item_id: int):
     - Checking metadata (Last-Modified, ETag)
     """
     if item_id not in items_db:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     return None  # Headers only, no body
 
 @app.options("/items")
@@ -202,40 +202,40 @@ app = FastAPI()
 
 # ✅ Good: Proper status codes
 @app.post("/users", status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate):
+async def create_user (user: UserCreate):
     """POST returns 201 Created"""
     return {"id": 1, **user.dict()}
 
 # ✅ Good: Idempotent PUT
 @app.put("/users/{user_id}")
-async def replace_user(user_id: int, user: UserCreate):
+async def replace_user (user_id: int, user: UserCreate):
     """PUT replaces entire resource"""
     # Idempotent: same request = same result
     return {"id": user_id, **user.dict()}
 
 # ✅ Good: PATCH for partial updates
 @app.patch("/users/{user_id}")
-async def update_user(user_id: int, user: UserUpdate):
+async def update_user (user_id: int, user: UserUpdate):
     """PATCH updates only provided fields"""
     # More flexible than PUT
     return updated_user
 
 # ✅ Good: DELETE returns 204
 @app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(user_id: int):
+async def delete_user (user_id: int):
     """DELETE returns 204 No Content"""
-    delete_from_db(user_id)
+    delete_from_db (user_id)
     return None
 
 # ❌ Bad: POST for updates (should use PUT/PATCH)
 @app.post("/users/{user_id}/update")
-async def bad_update(user_id: int, user: User):
+async def bad_update (user_id: int, user: User):
     """Don't use POST for updates"""
     pass
 
 # ❌ Bad: GET with side effects (should use POST)
 @app.get("/users/{user_id}/delete")
-async def bad_delete(user_id: int):
+async def bad_delete (user_id: int):
     """Don't use GET for actions with side effects"""
     pass
 \`\`\`
@@ -259,7 +259,7 @@ app = FastAPI()
 
 # Simple path parameter
 @app.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     """
     Path parameter with type conversion
     
@@ -270,7 +270,7 @@ async def get_user(user_id: int):
 
 # Multiple path parameters
 @app.get("/users/{user_id}/posts/{post_id}")
-async def get_user_post(user_id: int, post_id: int):
+async def get_user_post (user_id: int, post_id: int):
     """
     Multiple path parameters
     
@@ -305,13 +305,13 @@ async def get_user_by_username(
     return {"username": username}
 
 # Enum path parameters
-class Category(str, Enum):
+class Category (str, Enum):
     ELECTRONICS = "electronics"
     BOOKS = "books"
     CLOTHING = "clothing"
 
 @app.get("/products/{category}")
-async def get_products_by_category(category: Category):
+async def get_products_by_category (category: Category):
     """
     Enum path parameter
     
@@ -330,7 +330,7 @@ async def get_current_user():
     return {"user": "current user"}
 
 @app.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     """
     Dynamic route (with parameter)
     Comes after static routes
@@ -353,7 +353,7 @@ app = FastAPI()
 
 # UUID path parameters
 @app.get("/sessions/{session_id}")
-async def get_session(session_id: UUID):
+async def get_session (session_id: UUID):
     """
     UUID path parameter
     
@@ -364,7 +364,7 @@ async def get_session(session_id: UUID):
 
 # Date path parameters
 @app.get("/reports/{report_date}")
-async def get_report(report_date: date):
+async def get_report (report_date: date):
     """
     Date path parameter (ISO 8601)
     
@@ -375,7 +375,7 @@ async def get_report(report_date: date):
 
 # File paths as parameters
 @app.get("/files/{file_path:path}")
-async def get_file(file_path: str):
+async def get_file (file_path: str):
     """
     :path allows slashes in parameter
     
@@ -401,16 +401,16 @@ async def get_product_by_sku(
 from typing import Union
 
 @app.get("/items/{item_identifier}")
-async def get_item(item_identifier: Union[int, UUID]):
+async def get_item (item_identifier: Union[int, UUID]):
     """
     Accept either int or UUID
     
     /items/123 → int
     /items/550e8400-e29b-41d4-a716-446655440000 → UUID
     """
-    if isinstance(item_identifier, int):
+    if isinstance (item_identifier, int):
         return {"type": "id", "value": item_identifier}
-    return {"type": "uuid", "value": str(item_identifier)}
+    return {"type": "uuid", "value": str (item_identifier)}
 \`\`\`
 
 ---
@@ -559,11 +559,11 @@ class Pagination(BaseModel):
     page_size: int = Field(20, ge=1, le=100)
     
     @property
-    def offset(self) -> int:
+    def offset (self) -> int:
         return (self.page - 1) * self.page_size
     
     @property
-    def limit(self) -> int:
+    def limit (self) -> int:
         return self.page_size
 
 # Sorting model
@@ -601,7 +601,7 @@ async def list_users(
     - Flexible sorting
     - Date range filtering
     """
-    pagination = Pagination(page=page, page_size=page_size)
+    pagination = Pagination (page=page, page_size=page_size)
     
     # Validate date range
     if created_after and created_before and created_after > created_before:
@@ -660,28 +660,28 @@ async def list_users():
     return []
 
 @users_router.get("/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     """Get user by ID"""
     return {"user_id": user_id}
 
 @users_router.post("/", status_code=201)
-async def create_user(user: UserCreate):
+async def create_user (user: UserCreate):
     """Create new user"""
     return user
 
 @users_router.put("/{user_id}")
-async def update_user(user_id: int, user: UserUpdate):
+async def update_user (user_id: int, user: UserUpdate):
     """Update user"""
     return user
 
 @users_router.delete("/{user_id}", status_code=204)
-async def delete_user(user_id: int):
+async def delete_user (user_id: int):
     """Delete user"""
     return None
 
 # Create app and include router
 app = FastAPI()
-app.include_router(users_router)
+app.include_router (users_router)
 
 # Routes become:
 # GET /users/
@@ -705,11 +705,11 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 @router.get("/")
-async def list_users(db: Session = Depends(get_db)):
+async def list_users (db: Session = Depends (get_db)):
     return []
 
 @router.get("/{user_id}")
-async def get_user(user_id: int, db: Session = Depends(get_db)):
+async def get_user (user_id: int, db: Session = Depends (get_db)):
     return {"user_id": user_id}
 
 # app/api/v1/endpoints/products.py
@@ -722,7 +722,7 @@ async def list_products():
     return []
 
 @router.get("/{product_id}")
-async def get_product(product_id: int):
+async def get_product (product_id: int):
     return {"product_id": product_id}
 
 # app/api/v1/endpoints/orders.py
@@ -735,7 +735,7 @@ async def list_orders():
     return []
 
 @router.post("/")
-async def create_order(order: OrderCreate):
+async def create_order (order: OrderCreate):
     return order
 
 # app/api/v1/router.py
@@ -770,7 +770,7 @@ from app.api.v1.router import api_router
 
 app = FastAPI(title="My API")
 
-app.include_router(api_router, prefix="/api/v1")
+app.include_router (api_router, prefix="/api/v1")
 
 # Final routes:
 # GET /api/v1/users/
@@ -797,7 +797,7 @@ from fastapi import FastAPI, APIRouter
 app = FastAPI()
 
 # API v1
-v1_router = APIRouter(prefix="/api/v1", tags=["v1"])
+v1_router = APIRouter (prefix="/api/v1", tags=["v1"])
 
 @v1_router.get("/users")
 async def list_users_v1():
@@ -805,7 +805,7 @@ async def list_users_v1():
     return [{"id": 1, "name": "Alice"}]
 
 # API v2 (with pagination)
-v2_router = APIRouter(prefix="/api/v2", tags=["v2"])
+v2_router = APIRouter (prefix="/api/v2", tags=["v2"])
 
 @v2_router.get("/users")
 async def list_users_v2(page: int = 1, page_size: int = 20):
@@ -816,7 +816,7 @@ async def list_users_v2(page: int = 1, page_size: int = 20):
     }
 
 # API v3 (with filtering)
-v3_router = APIRouter(prefix="/api/v3", tags=["v3"])
+v3_router = APIRouter (prefix="/api/v3", tags=["v3"])
 
 @v3_router.get("/users")
 async def list_users_v3(
@@ -832,9 +832,9 @@ async def list_users_v3(
         "filters": {"search": search, "is_active": is_active}
     }
 
-app.include_router(v1_router)
-app.include_router(v2_router)
-app.include_router(v3_router)
+app.include_router (v1_router)
+app.include_router (v2_router)
+app.include_router (v3_router)
 
 # Routes:
 # GET /api/v1/users  (simple)
@@ -855,7 +855,7 @@ from typing import Optional
 app = FastAPI()
 
 @app.get("/users")
-async def list_users(api_version: Optional[str] = Header(None)):
+async def list_users (api_version: Optional[str] = Header(None)):
     """
     API version from header
     
@@ -876,7 +876,7 @@ async def list_users(api_version: Optional[str] = Header(None)):
         return {"data": [{"id": 1, "first_name": "Alice", "last_name": "Johnson"}]}
     
     else:
-        raise HTTPException(status_code=400, detail="Unsupported API version")
+        raise HTTPException (status_code=400, detail="Unsupported API version")
 \`\`\`
 
 ---
@@ -892,10 +892,10 @@ Router-Level Dependencies
 
 from fastapi import APIRouter, Depends, HTTPException
 
-async def verify_api_key(api_key: str = Header(...)):
+async def verify_api_key (api_key: str = Header(...)):
     """Verify API key for all routes"""
     if api_key != "secret":
-        raise HTTPException(status_code=401, detail="Invalid API key")
+        raise HTTPException (status_code=401, detail="Invalid API key")
     return api_key
 
 async def rate_limit():
@@ -907,7 +907,7 @@ async def rate_limit():
 admin_router = APIRouter(
     prefix="/admin",
     tags=["admin"],
-    dependencies=[Depends(verify_api_key), Depends(rate_limit)]
+    dependencies=[Depends (verify_api_key), Depends (rate_limit)]
 )
 
 @admin_router.get("/users")
@@ -919,7 +919,7 @@ async def admin_list_users():
     return []
 
 @admin_router.delete("/users/{user_id}")
-async def admin_delete_user(user_id: int):
+async def admin_delete_user (user_id: int):
     """
     Also protected by same dependencies
     """
@@ -975,17 +975,17 @@ app = FastAPI()
 resources = ["users", "products", "orders", "customers"]
 
 for resource in resources:
-    router = APIRouter(prefix=f"/{resource}", tags=[resource])
+    router = APIRouter (prefix=f"/{resource}", tags=[resource])
     
     @router.get("/")
-    async def list_items(resource=resource):
+    async def list_items (resource=resource):
         return {f"{resource}": []}
     
     @router.get("/{item_id}")
-    async def get_item(item_id: int, resource=resource):
+    async def get_item (item_id: int, resource=resource):
         return {f"{resource}_id": item_id}
     
-    app.include_router(router)
+    app.include_router (router)
 
 # Generates:
 # GET /users/, /users/{item_id}

@@ -13,7 +13,7 @@ Often you need to sort by custom criteria:
 # Sort by multiple criteria
 students = [("Alice", 85), ("Bob", 90), ("Charlie", 85)]
 # Sort by grade desc, then name asc
-students.sort(key=lambda x: (-x[1], x[0]))
+students.sort (key=lambda x: (-x[1], x[0]))
 # Result: [("Bob", 90), ("Alice", 85), ("Charlie", 85)]
 \`\`\`
 
@@ -23,9 +23,9 @@ Many problems become easier after sorting:
 
 \`\`\`python
 # Find if any two numbers sum to target
-def two_sum_sorted(arr, target):
+def two_sum_sorted (arr, target):
     arr.sort()  # O(n log n)
-    left, right = 0, len(arr) - 1
+    left, right = 0, len (arr) - 1
     while left < right:  # O(n)
         curr_sum = arr[left] + arr[right]
         if curr_sum == target:
@@ -44,27 +44,27 @@ Sometimes you don't need a complete sort:
 
 \`\`\`python
 # Kth largest element
-def findKthLargest(nums, k):
+def findKthLargest (nums, k):
     import heapq
-    return heapq.nlargest(k, nums)[-1]
+    return heapq.nlargest (k, nums)[-1]
 # O(n log k) vs O(n log n) for full sort
 \`\`\`
 
 **Pattern 4: Merge Sorted Arrays/Lists**
 
 \`\`\`python
-def merge_sorted_arrays(arr1, arr2):
+def merge_sorted_arrays (arr1, arr2):
     result = []
     i = j = 0
-    while i < len(arr1) and j < len(arr2):
+    while i < len (arr1) and j < len (arr2):
         if arr1[i] <= arr2[j]:
-            result.append(arr1[i])
+            result.append (arr1[i])
             i += 1
         else:
-            result.append(arr2[j])
+            result.append (arr2[j])
             j += 1
-    result.extend(arr1[i:])
-    result.extend(arr2[j:])
+    result.extend (arr1[i:])
+    result.extend (arr2[j:])
     return result
 # O(n + m) - linear time!
 \`\`\`
@@ -74,9 +74,9 @@ def merge_sorted_arrays(arr1, arr2):
 \`\`\`python
 # Sort colors (Dutch National Flag)
 # Array contains only 0s, 1s, 2s - sort in-place in one pass
-def sort_colors(nums):
+def sort_colors (nums):
     low = mid = 0
-    high = len(nums) - 1
+    high = len (nums) - 1
     
     while mid <= high:
         if nums[mid] == 0:
@@ -95,12 +95,12 @@ def sort_colors(nums):
 **Pattern 6: Finding Duplicates After Sorting**
 
 \`\`\`python
-def find_duplicates(arr):
+def find_duplicates (arr):
     arr.sort()  # O(n log n)
     duplicates = []
-    for i in range(1, len(arr)):  # O(n)
+    for i in range(1, len (arr)):  # O(n)
         if arr[i] == arr[i-1] and (not duplicates or duplicates[-1] != arr[i]):
-            duplicates.append(arr[i])
+            duplicates.append (arr[i])
     return duplicates
 \`\`\`
 
@@ -108,19 +108,19 @@ def find_duplicates(arr):
 
 \`\`\`python
 # Merge overlapping intervals
-def merge_intervals(intervals):
+def merge_intervals (intervals):
     if not intervals:
         return []
     
-    intervals.sort(key=lambda x: x[0])  # Sort by start time
+    intervals.sort (key=lambda x: x[0])  # Sort by start time
     merged = [intervals[0]]
     
     for current in intervals[1:]:
         last = merged[-1]
         if current[0] <= last[1]:  # Overlapping
-            last[1] = max(last[1], current[1])
+            last[1] = max (last[1], current[1])
         else:
-            merged.append(current)
+            merged.append (current)
     
     return merged
 \`\`\`

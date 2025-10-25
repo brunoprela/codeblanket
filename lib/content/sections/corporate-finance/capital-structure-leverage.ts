@@ -1,7 +1,7 @@
 export const capitalStructureLeverage = {
-    title: 'Capital Structure & Leverage',
-    id: 'capital-structure-leverage',
-    content: `
+  title: 'Capital Structure & Leverage',
+  id: 'capital-structure-leverage',
+  content: `
 # Capital Structure & Leverage
 
 ## Introduction
@@ -39,7 +39,7 @@ By the end of this section, you'll understand:
 - More flexible
 - No mandatory payments
 
-**The answer: It depends!** Let's understand the theory.
+**The answer: It depends!** Let\'s understand the theory.
 
 ---
 
@@ -104,19 +104,19 @@ def mm_prop2_no_tax(
     for de_ratio in debt_to_equity_range:
         # MM Prop II: Re = RU + (RU - Rd)(D/E)
         cost_equity = unlevered_cost + (unlevered_cost - cost_of_debt) * de_ratio
-        costs_of_equity.append(cost_equity)
+        costs_of_equity.append (cost_equity)
         
         # Calculate WACC
         # E/(D+E) = 1/(1+D/E), D/(D+E) = (D/E)/(1+D/E)
         equity_weight = 1 / (1 + de_ratio)
         debt_weight = de_ratio / (1 + de_ratio)
         wacc = equity_weight * cost_equity + debt_weight * cost_of_debt
-        waccs.append(wacc)
+        waccs.append (wacc)
     
     return {
         'de_ratios': debt_to_equity_range,
-        'cost_of_equity': np.array(costs_of_equity),
-        'wacc': np.array(waccs),
+        'cost_of_equity': np.array (costs_of_equity),
+        'wacc': np.array (waccs),
         'cost_of_debt': cost_of_debt
     }
 
@@ -126,7 +126,7 @@ ru = 0.12  # 12% unlevered cost
 rd = 0.06  # 6% cost of debt
 de_range = np.linspace(0, 2, 50)
 
-mm_results = mm_prop2_no_tax(ru, rd, de_range)
+mm_results = mm_prop2_no_tax (ru, rd, de_range)
 
 print("MM Proposition II (No Taxes):")
 print("=" * 70)
@@ -146,13 +146,13 @@ print("=" * 70)
 print("\\nKey insight: WACC remains constant at 12% regardless of leverage!")
 
 # Visualize
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots (figsize=(12, 8))
 
-ax.plot(mm_results['de_ratios'], mm_results['cost_of_equity'] * 100, 
+ax.plot (mm_results['de_ratios'], mm_results['cost_of_equity'] * 100, 
         label='Cost of Equity (Re)', linewidth=2)
-ax.plot(mm_results['de_ratios'], mm_results['wacc'] * 100,
+ax.plot (mm_results['de_ratios'], mm_results['wacc'] * 100,
         label='WACC', linewidth=2, linestyle='--')
-ax.axhline(y=rd * 100, color='gray', linestyle=':', alpha=0.7, 
+ax.axhline (y=rd * 100, color='gray', linestyle=':', alpha=0.7, 
            label='Cost of Debt (Rd)')
 
 ax.set_xlabel('Debt-to-Equity Ratio', fontsize=12)
@@ -160,7 +160,7 @@ ax.set_ylabel('Cost of Capital (%)', fontsize=12)
 ax.set_title('MM Proposition II (No Taxes)\\nWACC Constant, Re Increases', 
              fontsize=14, fontweight='bold')
 ax.legend()
-ax.grid(alpha=0.3)
+ax.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('mm_prop2_no_tax.png', dpi=300)
@@ -214,11 +214,11 @@ vu = 1_000_000_000  # $1B unlevered value
 tax = 0.25  # 25% tax rate
 debt_range = np.linspace(0, 600_000_000, 50)  # $0 to $600M debt
 
-mm_tax_results = mm_prop1_with_tax(vu, tax, debt_range)
+mm_tax_results = mm_prop1_with_tax (vu, tax, debt_range)
 
 print("\\nMM Proposition I (With Taxes):")
 print("=" * 80)
-print(f"Unlevered firm value: ${vu / 1e9:.2f}B")
+print(f"Unlevered firm value: \${vu / 1e9:.2f}B")
 print(f"Tax rate: {tax:.0%}")
 print()
 print(f"{'Debt ($M)':<15} {'Tax Shield ($M)':<20} {'Levered Value ($M)'}")
@@ -264,23 +264,23 @@ def mm_prop2_with_tax(
     for de_ratio in debt_to_equity_range:
         # MM Prop II with tax: Re = RU + (RU - Rd)(1-T)(D/E)
         cost_equity = unlevered_cost + (unlevered_cost - cost_of_debt) * (1 - tax_rate) * de_ratio
-        costs_of_equity.append(cost_equity)
+        costs_of_equity.append (cost_equity)
         
         # Calculate WACC (with tax shield)
         equity_weight = 1 / (1 + de_ratio)
         debt_weight = de_ratio / (1 + de_ratio)
         wacc = equity_weight * cost_equity + debt_weight * cost_of_debt * (1 - tax_rate)
-        waccs.append(wacc)
+        waccs.append (wacc)
     
     return {
         'de_ratios': debt_to_equity_range,
-        'cost_of_equity': np.array(costs_of_equity),
-        'wacc': np.array(waccs)
+        'cost_of_equity': np.array (costs_of_equity),
+        'wacc': np.array (waccs)
     }
 
 
 # Example with taxes
-mm_tax = mm_prop2_with_tax(ru, rd, 0.25, de_range)
+mm_tax = mm_prop2_with_tax (ru, rd, 0.25, de_range)
 
 print("\\nMM Proposition II (With Taxes):")
 print("=" * 70)
@@ -367,7 +367,7 @@ def tradeoff_theory_value(
     firm_value = unlevered_value + tax_shield - distress_costs
     
     # Find optimal debt
-    optimal_idx = np.argmax(firm_value)
+    optimal_idx = np.argmax (firm_value)
     optimal_debt = debt_range[optimal_idx]
     optimal_value = firm_value[optimal_idx]
     
@@ -387,39 +387,39 @@ vu = 1_000_000_000
 tax = 0.25
 debt_range = np.linspace(0, 800_000_000, 100)
 
-tradeoff = tradeoff_theory_value(vu, tax, debt_range, distress_cost_factor=0.15)
+tradeoff = tradeoff_theory_value (vu, tax, debt_range, distress_cost_factor=0.15)
 
 print("Trade-Off Theory:")
 print("=" * 80)
-print(f"Unlevered firm value: ${vu / 1e9: .2f}B")
-print(f"Optimal debt level: ${tradeoff['optimal_debt']/1e6:.0f}M")
-print(f"Optimal firm value: ${tradeoff['optimal_value']/1e6:.0f}M")
-print(f"Value increase from optimal leverage: ${(tradeoff['optimal_value']-vu)/1e6:.0f}M")
+print(f"Unlevered firm value: \${vu / 1e9:.2f}B")
+print(f"Optimal debt level: \${tradeoff['optimal_debt']/1e6:.0f}M")
+print(f"Optimal firm value: \${tradeoff['optimal_value']/1e6:.0f}M")
+print(f"Value increase from optimal leverage: \${(tradeoff['optimal_value']-vu)/1e6:.0f}M")
 print(f"Optimal D/V ratio: {tradeoff['optimal_debt']/tradeoff['optimal_value']:.1%}")
 print("=" * 80)
 
 # Visualize
-fig, ax = plt.subplots(figsize = (14, 8))
+fig, ax = plt.subplots (figsize = (14, 8))
 
-ax.plot(tradeoff['debt'] / 1e6, tradeoff['unlevered_value'] / 1e6 * np.ones(len(debt_range)),
+ax.plot (tradeoff['debt'] / 1e6, tradeoff['unlevered_value'] / 1e6 * np.ones (len (debt_range)),
     'k--', label = 'Unlevered Value', linewidth = 2, alpha = 0.5)
-ax.plot(tradeoff['debt'] / 1e6, (vu + tradeoff['tax_shield']) / 1e6,
+ax.plot (tradeoff['debt'] / 1e6, (vu + tradeoff['tax_shield']) / 1e6,
     'g:', label = 'VU + Tax Shield', linewidth = 2, alpha = 0.7)
-ax.plot(tradeoff['debt'] / 1e6, tradeoff['distress_costs'] / 1e6,
+ax.plot (tradeoff['debt'] / 1e6, tradeoff['distress_costs'] / 1e6,
     'r:', label = 'Distress Costs', linewidth = 2, alpha = 0.7)
-ax.plot(tradeoff['debt'] / 1e6, tradeoff['firm_value'] / 1e6,
+ax.plot (tradeoff['debt'] / 1e6, tradeoff['firm_value'] / 1e6,
     'b-', label = 'Levered Firm Value', linewidth = 3)
 
 # Mark optimal point
 ax.scatter([tradeoff['optimal_debt'] / 1e6], [tradeoff['optimal_value'] / 1e6],
     color = 'red', s = 200, zorder = 5, marker = '*', label = 'Optimal')
-ax.axvline(x = tradeoff['optimal_debt'] / 1e6, color = 'red', linestyle = '--', alpha = 0.3)
+ax.axvline (x = tradeoff['optimal_debt'] / 1e6, color = 'red', linestyle = '--', alpha = 0.3)
 
 ax.set_xlabel('Debt ($M)', fontsize = 12)
 ax.set_ylabel('Firm Value ($M)', fontsize = 12)
 ax.set_title('Trade-Off Theory: Optimal Capital Structure', fontsize = 14, fontweight = 'bold')
-ax.legend(loc = 'upper right')
-ax.grid(alpha = 0.3)
+ax.legend (loc = 'upper right')
+ax.grid (alpha = 0.3)
 
 plt.tight_layout()
 plt.savefig('tradeoff_theory.png', dpi = 300)
@@ -576,11 +576,11 @@ def pecking_order_financing(
         Financing breakdown
     """
     # Use internal funds first
-    internal_used = min(investment_need, internal_funds)
+    internal_used = min (investment_need, internal_funds)
     remaining = investment_need - internal_used
     
     # Use debt second
-    debt_used = min(remaining, debt_capacity)
+    debt_used = min (remaining, debt_capacity)
     remaining -= debt_used
     
     # Issue equity as last resort
@@ -615,10 +615,10 @@ for scenario in scenarios:
     )
     
     print(f"\\n{scenario['name']}:")
-    print(f"  Investment need: ${result['investment_need']: .0f}M")
-print(f"  Internal funds:  ${result['internal_funds']:.0f}M ({result['internal_pct']:.0%})")
-print(f"  Debt issued:     ${result['debt']:.0f}M ({result['debt_pct']:.0%})")
-print(f"  Equity issued:   ${result['equity']:.0f}M ({result['equity_pct']:.0%})")
+    print(f"  Investment need: \${result['investment_need']:.0f}M")
+print(f"  Internal funds:  \${result['internal_funds']:.0f}M ({result['internal_pct']:.0%})")
+print(f"  Debt issued:     \${result['debt']:.0f}M ({result['debt_pct']:.0%})")
+print(f"  Equity issued:   \${result['equity']:.0f}M ({result['equity_pct']:.0%})")
 
 print("=" * 90)
 print("\\nKey insight: Companies use internal funds first, avoiding equity when possible")
@@ -691,7 +691,7 @@ print(f"{'D/E Ratio':<15} {'ROE Unlevered':<20} {'ROE Levered':<20} {'Amplificat
 print("-" * 80)
 
 for de in de_scenarios:
-    result = leverage_impact_on_roe(roa, de, rd, tax)
+    result = leverage_impact_on_roe (roa, de, rd, tax)
     print(f"{de:<15.1f} {result['roe_unlevered']:<20.1%} "
           f"{result['roe_levered']:<20.1%} {result['amplification']:+.1%}")
 
@@ -709,7 +709,7 @@ print(f"{'D/E Ratio':<15} {'ROE Unlevered':<20} {'ROE Levered':<20} {'Amplificat
 print("-" * 80)
 
 for de in de_scenarios:
-    result = leverage_impact_on_roe(roa_down, de, rd, tax)
+    result = leverage_impact_on_roe (roa_down, de, rd, tax)
     print(f"{de:<15.1f} {result['roe_unlevered']:<20.1%} "
           f"{result['roe_levered']:<20.1%} {result['amplification']:+.1%}")
 
@@ -792,27 +792,27 @@ price = 40             # $40/share
 rate = 0.06            # 6% interest
 tax = 0.25             # 25% tax
 
-analysis = eps_analysis_debt_vs_equity(ebit, shares, capital, price, rate, tax)
+analysis = eps_analysis_debt_vs_equity (ebit, shares, capital, price, rate, tax)
 
 print("\\nEPS Analysis: Debt vs Equity Financing:")
 print("=" * 80)
-print(f"Current EBIT: ${ebit / 1e6: .1f}M")
-print(f"Capital needed: ${capital/1e6:.1f}M")
+print(f"Current EBIT: \${ebit / 1e6:.1f}M")
+print(f"Capital needed: \${capital/1e6:.1f}M")
 print(f"Current shares: {shares/1e6:.1f}M")
 print()
 print("Debt Financing:")
-print(f"  Interest expense: ${analysis['debt_financing']['interest_expense']/1e6:.1f}M")
-print(f"  Net income: ${analysis['debt_financing']['net_income']/1e6:.1f}M")
+print(f"  Interest expense: \${analysis['debt_financing']['interest_expense']/1e6:.1f}M")
+print(f"  Net income: \${analysis['debt_financing']['net_income']/1e6:.1f}M")
 print(f"  Shares: {analysis['debt_financing']['shares']/1e6:.1f}M")
-print(f"  EPS: ${analysis['debt_financing']['eps']:.2f}")
+print(f"  EPS: \${analysis['debt_financing']['eps']:.2f}")
 print()
 print("Equity Financing:")
 print(f"  New shares issued: {analysis['equity_financing']['new_shares']/1e6:.2f}M")
-print(f"  Net income: ${analysis['equity_financing']['net_income']/1e6:.1f}M")
+print(f"  Net income: \${analysis['equity_financing']['net_income']/1e6:.1f}M")
 print(f"  Total shares: {analysis['equity_financing']['shares']/1e6:.2f}M")
-print(f"  EPS: ${analysis['equity_financing']['eps']:.2f}")
+print(f"  EPS: \${analysis['equity_financing']['eps']:.2f}")
 print()
-print(f"Breakeven EBIT: ${analysis['breakeven_ebit']/1e6:.1f}M")
+print(f"Breakeven EBIT: \${analysis['breakeven_ebit']/1e6:.1f}M")
 print(f"\\nRecommendation: {'Debt' if analysis['debt_preferred'] else 'Equity'} financing maximizes EPS")
 print("=" * 80)
 \`\`\`
@@ -878,7 +878,7 @@ class CapitalStructureAnalyzer:
         Calculate WACC at given debt level.
         """
         # Firm value
-        value = self.firm_value_at_leverage(debt, distress_cost_factor)
+        value = self.firm_value_at_leverage (debt, distress_cost_factor)
         equity = value - debt
         
         # Cost of equity (MM Prop II with distress premium)
@@ -908,16 +908,16 @@ class CapitalStructureAnalyzer:
         waccs = []
         
         for debt in debt_range:
-            fv = self.firm_value_at_leverage(debt)
-            wacc = self.wacc_at_leverage(debt)
-            firm_values.append(fv)
-            waccs.append(wacc)
+            fv = self.firm_value_at_leverage (debt)
+            wacc = self.wacc_at_leverage (debt)
+            firm_values.append (fv)
+            waccs.append (wacc)
         
-        firm_values = np.array(firm_values)
-        waccs = np.array(waccs)
+        firm_values = np.array (firm_values)
+        waccs = np.array (waccs)
         
         # Optimal = maximum firm value (or minimum WACC)
-        optimal_idx = np.argmax(firm_values)
+        optimal_idx = np.argmax (firm_values)
         optimal_debt = debt_range[optimal_idx]
         optimal_value = firm_values[optimal_idx]
         optimal_wacc = waccs[optimal_idx]
@@ -947,9 +947,9 @@ optimal = analyzer.find_optimal_structure()
 
 print("\\nOptimal Capital Structure Analysis:")
 print("=" * 80)
-print(f"Optimal debt: ${optimal['optimal_debt'] / 1e6: .0f}M")
-print(f"Optimal equity: ${optimal['optimal_equity']/1e6:.0f}M")
-print(f"Optimal firm value: ${optimal['optimal_value']/1e6:.0f}M")
+print(f"Optimal debt: \${optimal['optimal_debt'] / 1e6:.0f}M")
+print(f"Optimal equity: \${optimal['optimal_equity']/1e6:.0f}M")
+print(f"Optimal firm value: \${optimal['optimal_value']/1e6:.0f}M")
 print(f"Optimal WACC: {optimal['optimal_wacc']:.2%}")
 print(f"Optimal D/E ratio: {optimal['optimal_de_ratio']:.2f}")
 print(f"Optimal Debt/Value: {optimal['optimal_debt_ratio']:.1%}")
@@ -997,4 +997,3 @@ Understanding capital structure prepares you for:
 **Next Section**: [Valuation Basics](./valuation-basics) →
 `,
 };
-

@@ -15,7 +15,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     filterset_fields = ['status', 'category', 'author']
     # /api/articles/?status=published&category=tech
@@ -26,43 +26,43 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 import django_filters
 
-class ArticleFilter(django_filters.FilterSet):
-    title = django_filters.CharFilter(lookup_expr='icontains')
-    min_views = django_filters.NumberFilter(field_name='view_count', lookup_expr='gte')
-    published_after = django_filters.DateFilter(field_name='published_at', lookup_expr='gte')
-    author_name = django_filters.CharFilter(field_name='author__username', lookup_expr='icontains')
+class ArticleFilter (django_filters.FilterSet):
+    title = django_filters.CharFilter (lookup_expr='icontains')
+    min_views = django_filters.NumberFilter (field_name='view_count', lookup_expr='gte')
+    published_after = django_filters.DateFilter (field_name='published_at', lookup_expr='gte')
+    author_name = django_filters.CharFilter (field_name='author__username', lookup_expr='icontains')
     
     class Meta:
         model = Article
         fields = ['status', 'featured']
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     filterset_class = ArticleFilter
 \`\`\`
 
 **Related Field Filtering:**
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
-    category = django_filters.ModelChoiceFilter(queryset=Category.objects.all())
-    tags = django_filters.ModelMultipleChoiceFilter(queryset=Tag.objects.all())
-    has_comments = django_filters.BooleanFilter(method='filter_has_comments')
+class ArticleFilter (django_filters.FilterSet):
+    category = django_filters.ModelChoiceFilter (queryset=Category.objects.all())
+    tags = django_filters.ModelMultipleChoiceFilter (queryset=Tag.objects.all())
+    has_comments = django_filters.BooleanFilter (method='filter_has_comments')
     
-    def filter_has_comments(self, queryset, name, value):
+    def filter_has_comments (self, queryset, name, value):
         if value:
-            return queryset.filter(comments__isnull=False).distinct()
-        return queryset.filter(comments__isnull=True)
+            return queryset.filter (comments__isnull=False).distinct()
+        return queryset.filter (comments__isnull=True)
 \`\`\`
 
 **Production Example:**
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
-    search = django_filters.CharFilter(method='search_filter')
-    min_rating = django_filters.NumberFilter(field_name='avg_rating', lookup_expr='gte')
-    category__in = django_filters.BaseInFilter(field_name='category__slug')
+class ArticleFilter (django_filters.FilterSet):
+    search = django_filters.CharFilter (method='search_filter')
+    min_rating = django_filters.NumberFilter (field_name='avg_rating', lookup_expr='gte')
+    category__in = django_filters.BaseInFilter (field_name='category__slug')
     
-    def search_filter(self, queryset, name, value):
+    def search_filter (self, queryset, name, value):
         return queryset.filter(
             Q(title__icontains=value) | Q(content__icontains=value)
         )
@@ -100,7 +100,7 @@ class StandardPagination(PageNumberPagination):
 SQL LIMIT/OFFSET style.
 
 \`\`\`python
-class LimitOffsetPagination(pagination.LimitOffsetPagination):
+class LimitOffsetPagination (pagination.LimitOffsetPagination):
     default_limit = 25
     max_limit = 100
 
@@ -114,7 +114,7 @@ class LimitOffsetPagination(pagination.LimitOffsetPagination):
 Cursor-based for efficient large datasets.
 
 \`\`\`python
-class CursorPagination(pagination.CursorPagination):
+class CursorPagination (pagination.CursorPagination):
     page_size = 25
     ordering = '-created_at'
 
@@ -133,7 +133,7 @@ class CursorPagination(pagination.CursorPagination):
 
 \`\`\`python
 class CustomPagination(PageNumberPagination):
-    def get_paginated_response(self, data):
+    def get_paginated_response (self, data):
         return Response({
             'links': {
                 'next': self.get_next_link(),
@@ -155,7 +155,7 @@ class CustomPagination(PageNumberPagination):
 \`\`\`python
 from rest_framework import filters
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'content', '^author__username']
     # /api/articles/?search=django
@@ -170,7 +170,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **OrderingFilter:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['created_at', 'view_count', 'title']
     ordering = ['-created_at']  # default
@@ -180,7 +180,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **Combined:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -196,15 +196,15 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from django.contrib.postgres.search import SearchVector
 
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         qs = super().get_queryset()
         search = self.request.query_params.get('search')
         
         if search:
             qs = qs.annotate(
                 search=SearchVector('title', 'content')
-            ).filter(search=search)
+            ).filter (search=search)
         
         return qs
 \`\`\`
@@ -213,13 +213,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 \`\`\`python
 # Add database index
-class Article(models.Model):
-    title = models.CharField(max_length=200, db_index=True)
+class Article (models.Model):
+    title = models.CharField (max_length=200, db_index=True)
     
     class Meta:
         indexes = [
-            models.Index(fields=['title', 'created_at']),
-            GinIndex(fields=['search_vector']),  # PostgreSQL full-text
+            models.Index (fields=['title', 'created_at']),
+            GinIndex (fields=['search_vector']),  # PostgreSQL full-text
         ]
 \`\`\`
       `,

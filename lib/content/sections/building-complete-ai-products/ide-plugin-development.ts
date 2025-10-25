@@ -242,7 +242,7 @@ import { ChatViewProvider } from './views/chatView';
 let aiService: AIService;
 let contextManager: ContextManager;
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate (context: vscode.ExtensionContext) {
     console.log('Cursor AI extension is now active');
 
     // Initialize services
@@ -255,33 +255,33 @@ export function activate(context: vscode.ExtensionContext) {
         );
     }
 
-    aiService = new AIService(apiKey || ', config);
+    aiService = new AIService (apiKey || ', config);
     contextManager = new ContextManager();
 
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand(
             'cursorAI.editCode',
-            () => new EditCodeCommand(aiService, contextManager).execute()
+            () => new EditCodeCommand (aiService, contextManager).execute()
         )
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand(
             'cursorAI.chatAI',
-            () => new ChatAICommand(aiService, contextManager).execute()
+            () => new ChatAICommand (aiService, contextManager).execute()
         )
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand(
             'cursorAI.explainCode',
-            () => new ExplainCodeCommand(aiService, contextManager).execute()
+            () => new ExplainCodeCommand (aiService, contextManager).execute()
         )
     );
 
     // Register completion provider
-    const completionProvider = new CompletionProvider(aiService, contextManager);
+    const completionProvider = new CompletionProvider (aiService, contextManager);
     context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider(
             { scheme: 'file' },
@@ -305,10 +305,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Listen for configuration changes
     context.subscriptions.push(
-        vscode.workspace.onDidChangeConfiguration(e => {
+        vscode.workspace.onDidChangeConfiguration (e => {
             if (e.affectsConfiguration('cursorAI')) {
                 const newConfig = vscode.workspace.getConfiguration('cursorAI');
-                aiService.updateConfig(newConfig);
+                aiService.updateConfig (newConfig);
             }
         })
     );
@@ -321,7 +321,7 @@ export function activate(context: vscode.ExtensionContext) {
     statusBarItem.text = '$(robot) Cursor AI';
     statusBarItem.command = 'cursorAI.chatAI';
     statusBarItem.show();
-    context.subscriptions.push(statusBarItem);
+    context.subscriptions.push (statusBarItem);
 }
 
 export function deactivate() {
@@ -360,7 +360,7 @@ export class EditCodeCommand {
 
         // Get selection or entire document
         const selection = editor.selection;
-        const selectedText = editor.document.getText(selection);
+        const selectedText = editor.document.getText (selection);
         
         if (!selectedText) {
             vscode.window.showErrorMessage('Please select code to edit');
@@ -413,8 +413,8 @@ export class EditCodeCommand {
 
                 if (accepted) {
                     // Apply changes
-                    await editor.edit(editBuilder => {
-                        editBuilder.replace(selection, result.newCode);
+                    await editor.edit (editBuilder => {
+                        editBuilder.replace (selection, result.newCode);
                     });
 
                     vscode.window.showInformationMessage('✓ Code updated');
@@ -558,7 +558,7 @@ export class ChatAICommand {
             await this.aiService.chat({
                 message: userMessage,
                 context,
-                history: this.conversationHistory.map(m => ({
+                history: this.conversationHistory.map (m => ({
                     role: m.role,
                     content: m.content
                 })),
@@ -719,11 +719,11 @@ export class ChatAICommand {
 
             switch (message.command) {
                 case 'addMessage':
-                    addMessage(message.role, message.content);
+                    addMessage (message.role, message.content);
                     break;
                 
                 case 'streamMessage':
-                    streamMessage(message.content);
+                    streamMessage (message.content);
                     break;
                 
                 case 'finalizeMessage':
@@ -740,20 +740,20 @@ export class ChatAICommand {
             }
         });
 
-        function addMessage(role, content) {
+        function addMessage (role, content) {
             const messageDiv = document.createElement('div');
             messageDiv.className = \`message \${role}-message\`;
             
             const contentDiv = document.createElement('div');
-            contentDiv.innerHTML = formatContent(content);
+            contentDiv.innerHTML = formatContent (content);
             
             const timestampDiv = document.createElement('div');
             timestampDiv.className = 'timestamp';
             timestampDiv.textContent = new Date().toLocaleTimeString();
             
-            messageDiv.appendChild(contentDiv);
-            messageDiv.appendChild(timestampDiv);
-            messagesDiv.appendChild(messageDiv);
+            messageDiv.appendChild (contentDiv);
+            messageDiv.appendChild (timestampDiv);
+            messagesDiv.appendChild (messageDiv);
             
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -762,16 +762,16 @@ export class ChatAICommand {
             }
         }
 
-        function streamMessage(chunk) {
+        function streamMessage (chunk) {
             if (!currentMessage) {
                 addMessage('assistant', ');
             }
             
-            currentMessage.innerHTML += formatContent(chunk);
+            currentMessage.innerHTML += formatContent (chunk);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function formatContent(content) {
+        function formatContent (content) {
             // Simple markdown-style formatting
             content = content.replace(/\`\`\`(\\w+)?\\n([\\s\\S]*?)\\n\`\`\`/g, 
                 '<pre><code>$2</code></pre>');
@@ -802,7 +802,7 @@ import * as vscode from 'vscode';
 import { AIService } from '../services/aiService';
 
 export class AIHoverProvider implements vscode.HoverProvider {
-    constructor(private aiService: AIService) {}
+    constructor (private aiService: AIService) {}
 
     async provideHover(
         document: vscode.TextDocument,
@@ -810,18 +810,18 @@ export class AIHoverProvider implements vscode.HoverProvider {
         token: vscode.CancellationToken
     ): Promise<vscode.Hover | undefined> {
         // Get word at position
-        const wordRange = document.getWordRangeAtPosition(position);
+        const wordRange = document.getWordRangeAtPosition (position);
         if (!wordRange) {
             return undefined;
         }
 
-        const word = document.getText(wordRange);
+        const word = document.getText (wordRange);
         
         // Get surrounding code for context
         const lineStart = Math.max(0, position.line - 5);
-        const lineEnd = Math.min(document.lineCount, position.line + 5);
-        const contextRange = new vscode.Range(lineStart, 0, lineEnd, 0);
-        const context = document.getText(contextRange);
+        const lineEnd = Math.min (document.lineCount, position.line + 5);
+        const contextRange = new vscode.Range (lineStart, 0, lineEnd, 0);
+        const context = document.getText (contextRange);
 
         try {
             // Ask AI to explain the symbol
@@ -833,10 +833,10 @@ export class AIHoverProvider implements vscode.HoverProvider {
 
             const markdown = new vscode.MarkdownString();
             markdown.appendMarkdown(\`### \${word}\\n\\n\`);
-            markdown.appendMarkdown(explanation);
+            markdown.appendMarkdown (explanation);
             markdown.isTrusted = true;
 
-            return new vscode.Hover(markdown, wordRange);
+            return new vscode.Hover (markdown, wordRange);
 
         } catch (error) {
             return undefined;
@@ -893,7 +893,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.ui.Messages
 
 class EditCodeAction : AnAction() {
-    override fun actionPerformed(e: AnActionEvent) {
+    override fun actionPerformed (e: AnActionEvent) {
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
         val project = e.project ?: return
         
@@ -910,13 +910,13 @@ class EditCodeAction : AnAction() {
         ) ?: return
         
         // Call AI service (async)
-        AIService.editCode(selectedText, instruction) { newCode ->
+        AIService.editCode (selectedText, instruction) { newCode ->
             // Apply changes
-            WriteCommandAction.runWriteCommandAction(project) {
+            WriteCommandAction.runWriteCommandAction (project) {
                 val document = editor.document
                 val start = selectionModel.selectionStart
                 val end = selectionModel.selectionEnd
-                document.replaceString(start, end, newCode)
+                document.replaceString (start, end, newCode)
             }
         }
     }

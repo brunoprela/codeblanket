@@ -89,7 +89,7 @@ user_id (PK) | order_date (SK)  | amount  | items
 ### How Partitioning Works
 
 \`\`\`
-hash(partition_key) → Partition
+hash (partition_key) → Partition
 \`\`\`
 
 **Example**:
@@ -247,8 +247,8 @@ response = table.query(
 
 **Query operators** on sort key:
 - \`=\`, \`<\`, \`<=\`, \`>\`, \`>=\`
-- \`between(low, high)\`
-- \`begins_with(prefix)\`
+- \`between (low, high)\`
+- \`begins_with (prefix)\`
 
 **Returns**: Items in sort key order (ascending by default)
 
@@ -361,9 +361,9 @@ table.update_item(
 \`\`\`
 
 **Conditions**:
-- \`attribute_exists(path)\`
-- \`attribute_not_exists(path)\`
-- \`attribute_type(path, type)\`
+- \`attribute_exists (path)\`
+- \`attribute_not_exists (path)\`
+- \`attribute_type (path, type)\`
 - Comparisons: \`= \`, \`<>\`, \` < \`, \` <= \`, \` > \`, \` >= \`
 - Logical: \`AND\`, \`OR\`, \`NOT\`
 

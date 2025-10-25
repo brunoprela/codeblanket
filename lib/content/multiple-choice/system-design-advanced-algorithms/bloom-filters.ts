@@ -45,7 +45,7 @@ export const bloomfiltersMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'For a 1% false positive rate (p=0.01), you need approximately 10 bits per element with k≈7 hash functions. Formula: m/n = -ln(p)/(ln(2))² ≈ 9.6 bits/element. Lower FPR requires more bits: 0.1% needs ~15 bits, 0.01% needs ~20 bits.',
+      'For a 1% false positive rate (p=0.01), you need approximately 10 bits per element with k≈7 hash functions. Formula: m/n = -ln (p)/(ln(2))² ≈ 9.6 bits/element. Lower FPR requires more bits: 0.1% needs ~15 bits, 0.01% needs ~20 bits.',
   },
   {
     id: 'mc4',

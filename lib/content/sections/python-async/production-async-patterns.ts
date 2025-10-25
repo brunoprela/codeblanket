@@ -51,7 +51,7 @@ import logging
 from contextlib import asynccontextmanager
 from typing import List
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class AsyncApplication:
@@ -61,7 +61,7 @@ class AsyncApplication:
         self.db_pool = None
         self.http_session = None
     
-    async def startup(self):
+    async def startup (self):
         """Initialize application resources"""
         logger.info("Starting application...")
         
@@ -73,14 +73,14 @@ class AsyncApplication:
         
         # Start background tasks
         self.background_tasks = [
-            asyncio.create_task(self._health_check_task()),
-            asyncio.create_task(self._metrics_task()),
-            asyncio.create_task(self._cleanup_task()),
+            asyncio.create_task (self._health_check_task()),
+            asyncio.create_task (self._metrics_task()),
+            asyncio.create_task (self._cleanup_task()),
         ]
         
         logger.info("Application started")
     
-    async def shutdown(self):
+    async def shutdown (self):
         """Graceful shutdown"""
         logger.info("Shutting down...")
         
@@ -103,7 +103,7 @@ class AsyncApplication:
         
         logger.info("Shutdown complete")
     
-    async def run(self):
+    async def run (self):
         """Main application loop"""
         try:
             await self.startup()
@@ -111,7 +111,7 @@ class AsyncApplication:
         finally:
             await self.shutdown()
     
-    async def _create_db_pool(self):
+    async def _create_db_pool (self):
         """Create database connection pool"""
         import asyncpg
         return await asyncpg.create_pool(
@@ -121,14 +121,14 @@ class AsyncApplication:
             command_timeout=60.0
         )
     
-    async def _create_http_session(self):
+    async def _create_http_session (self):
         """Create HTTP session"""
         import aiohttp
         return aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=30)
+            timeout=aiohttp.ClientTimeout (total=30)
         )
     
-    async def _health_check_task(self):
+    async def _health_check_task (self):
         """Background health check"""
         while not self.shutdown_event.is_set():
             try:
@@ -137,29 +137,29 @@ class AsyncApplication:
                     await conn.fetchval("SELECT 1")
                 logger.info("Health check: OK")
             except Exception as e:
-                logger.error(f"Health check failed: {e}")
+                logger.error (f"Health check failed: {e}")
             
             await asyncio.sleep(30)
     
-    async def _metrics_task(self):
+    async def _metrics_task (self):
         """Background metrics collection"""
         while not self.shutdown_event.is_set():
             try:
-                tasks = len(asyncio.all_tasks())
-                logger.info(f"Metrics: {tasks} active tasks")
+                tasks = len (asyncio.all_tasks())
+                logger.info (f"Metrics: {tasks} active tasks")
             except Exception as e:
-                logger.error(f"Metrics failed: {e}")
+                logger.error (f"Metrics failed: {e}")
             
             await asyncio.sleep(60)
     
-    async def _cleanup_task(self):
+    async def _cleanup_task (self):
         """Background cleanup"""
         while not self.shutdown_event.is_set():
             try:
                 logger.info("Running cleanup...")
                 # Cleanup logic here
             except Exception as e:
-                logger.error(f"Cleanup failed: {e}")
+                logger.error (f"Cleanup failed: {e}")
             
             await asyncio.sleep(300)
 
@@ -171,13 +171,13 @@ async def main():
     for sig in (signal.SIGTERM, signal.SIGINT):
         loop.add_signal_handler(
             sig,
-            lambda: asyncio.create_task(app.shutdown())
+            lambda: asyncio.create_task (app.shutdown())
         )
     
     await app.run()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run (main())
 \`\`\`
 
 ---
@@ -203,7 +203,7 @@ class GracefulShutdown:
         self.shutdown_event = asyncio.Event()
         self.workers: List[asyncio.Task] = []
     
-    async def worker(self, name: str):
+    async def worker (self, name: str):
         """Worker that respects shutdown"""
         try:
             while not self.shutdown_event.is_set():
@@ -216,22 +216,22 @@ class GracefulShutdown:
                 except asyncio.TimeoutError:
                     continue
         except asyncio.CancelledError:
-            logger.info(f"{name} cancelled, cleaning up...")
+            logger.info (f"{name} cancelled, cleaning up...")
             # Cleanup logic
             raise
     
-    async def _do_work(self):
+    async def _do_work (self):
         """Actual work"""
         await asyncio.sleep(0.5)
     
-    async def start(self, n_workers: int = 5):
+    async def start (self, n_workers: int = 5):
         """Start workers"""
         self.workers = [
-            asyncio.create_task(self.worker(f"Worker-{i}"))
-            for i in range(n_workers)
+            asyncio.create_task (self.worker (f"Worker-{i}"))
+            for i in range (n_workers)
         ]
     
-    async def shutdown(self):
+    async def shutdown (self):
         """Graceful shutdown"""
         logger.info("Shutdown initiated...")
         
@@ -254,20 +254,20 @@ class GracefulShutdown:
         logger.info("Shutdown complete")
 
 async def main():
-    app = GracefulShutdown(grace_period=30.0)
-    await app.start(n_workers=10)
+    app = GracefulShutdown (grace_period=30.0)
+    await app.start (n_workers=10)
     
     # Setup signal handler
     loop = asyncio.get_running_loop()
     loop.add_signal_handler(
         signal.SIGTERM,
-        lambda: asyncio.create_task(app.shutdown())
+        lambda: asyncio.create_task (app.shutdown())
     )
     
     # Wait indefinitely
     await asyncio.Event().wait()
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -295,11 +295,11 @@ class HealthChecker:
         self.checks = {}
         self.last_results = {}
     
-    def register(self, name: str, check_func):
+    def register (self, name: str, check_func):
         """Register health check"""
         self.checks[name] = check_func
     
-    async def check(self, name: str) -> dict:
+    async def check (self, name: str) -> dict:
         """Run single health check"""
         start = datetime.now()
         try:
@@ -314,7 +314,7 @@ class HealthChecker:
             message = "Timeout"
         except Exception as e:
             status = HealthStatus.UNHEALTHY
-            message = str(e)
+            message = str (e)
         
         duration = (datetime.now() - start).total_seconds()
         
@@ -328,19 +328,19 @@ class HealthChecker:
         self.last_results[name] = result
         return result
     
-    async def check_all(self) -> dict:
+    async def check_all (self) -> dict:
         """Run all health checks"""
         results = await asyncio.gather(*[
-            self.check(name) for name in self.checks.keys()
+            self.check (name) for name in self.checks.keys()
         ], return_exceptions=True)
         
-        checks_dict = dict(zip(self.checks.keys(), results))
+        checks_dict = dict (zip (self.checks.keys(), results))
         
         # Determine overall status
         statuses = [r['status'] for r in checks_dict.values()]
-        if any(s == HealthStatus.UNHEALTHY.value for s in statuses):
+        if any (s == HealthStatus.UNHEALTHY.value for s in statuses):
             overall = HealthStatus.UNHEALTHY
-        elif any(s == HealthStatus.DEGRADED.value for s in statuses):
+        elif any (s == HealthStatus.DEGRADED.value for s in statuses):
             overall = HealthStatus.DEGRADED
         else:
             overall = HealthStatus.HEALTHY
@@ -409,7 +409,7 @@ async def create_production_pool():
         setup=setup_connection,
     )
 
-async def setup_connection(conn):
+async def setup_connection (conn):
     """Setup new connection"""
     # Set timezone
     await conn.execute("SET timezone TO 'UTC'")
@@ -445,18 +445,18 @@ import asyncio
 
 # Option 1: Set as default event loop policy
 import uvloop
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+asyncio.set_event_loop_policy (uvloop.EventLoopPolicy())
 
 async def main():
     # Your async code here
     pass
 
 # Run normally
-asyncio.run(main())
+asyncio.run (main())
 
 # Option 2: Use directly
 import uvloop
-uvloop.run(main())
+uvloop.run (main())
 
 # Performance gain: 2-4× faster than default asyncio
 # Use in production for better throughput
@@ -479,11 +479,11 @@ class AsyncCache:
         self.ttl = ttl
         self.lock = asyncio.Lock()
     
-    def cached(self, func):
+    def cached (self, func):
         """Cache decorator"""
-        @wraps(func)
+        @wraps (func)
         async def wrapper(*args, **kwargs):
-            key = (func.__name__, args, tuple(sorted(kwargs.items())))
+            key = (func.__name__, args, tuple (sorted (kwargs.items())))
             
             async with self.lock:
                 if key in self.cache:
@@ -502,10 +502,10 @@ class AsyncCache:
         return wrapper
 
 # Usage
-cache = AsyncCache(ttl=60.0)
+cache = AsyncCache (ttl=60.0)
 
 @cache.cached
-async def expensive_operation(param):
+async def expensive_operation (param):
     """Expensive operation"""
     await asyncio.sleep(2)
     return f"Result for {param}"
@@ -542,7 +542,7 @@ async def test_async_function():
 @pytest.mark.asyncio
 async def test_with_timeout():
     """Test with timeout"""
-    with pytest.raises(asyncio.TimeoutError):
+    with pytest.raises (asyncio.TimeoutError):
         await asyncio.wait_for(
             slow_function(),
             timeout=1.0
@@ -556,17 +556,17 @@ async def test_concurrent_operations():
         operation2(),
         operation3()
     )
-    assert len(results) == 3
+    assert len (results) == 3
 
 # Mocking async functions
 @pytest.mark.asyncio
-async def test_with_mock(mocker):
+async def test_with_mock (mocker):
     """Test with mocked async function"""
     mock_db = mocker.AsyncMock()
     mock_db.fetch.return_value = [{'id': 1, 'name': 'Test'}]
     
-    result = await process_users(mock_db)
-    assert len(result) == 1
+    result = await process_users (mock_db)
+    assert len (result) == 1
     mock_db.fetch.assert_called_once()
 \`\`\`
 
@@ -585,24 +585,24 @@ import os
 
 class Config:
     # Database
-    DB_POOL_MIN_SIZE = int(os.getenv('DB_POOL_MIN_SIZE', '10'))
-    DB_POOL_MAX_SIZE = int(os.getenv('DB_POOL_MAX_SIZE', '20'))
-    DB_COMMAND_TIMEOUT = float(os.getenv('DB_COMMAND_TIMEOUT', '60.0'))
+    DB_POOL_MIN_SIZE = int (os.getenv('DB_POOL_MIN_SIZE', '10'))
+    DB_POOL_MAX_SIZE = int (os.getenv('DB_POOL_MAX_SIZE', '20'))
+    DB_COMMAND_TIMEOUT = float (os.getenv('DB_COMMAND_TIMEOUT', '60.0'))
     
     # HTTP
-    HTTP_TIMEOUT = float(os.getenv('HTTP_TIMEOUT', '30.0'))
-    HTTP_MAX_CONNECTIONS = int(os.getenv('HTTP_MAX_CONNECTIONS', '100'))
+    HTTP_TIMEOUT = float (os.getenv('HTTP_TIMEOUT', '30.0'))
+    HTTP_MAX_CONNECTIONS = int (os.getenv('HTTP_MAX_CONNECTIONS', '100'))
     
     # Application
-    WORKER_COUNT = int(os.getenv('WORKER_COUNT', '10'))
-    SHUTDOWN_GRACE_PERIOD = float(os.getenv('SHUTDOWN_GRACE_PERIOD', '30.0'))
+    WORKER_COUNT = int (os.getenv('WORKER_COUNT', '10'))
+    SHUTDOWN_GRACE_PERIOD = float (os.getenv('SHUTDOWN_GRACE_PERIOD', '30.0'))
     
     # Logging
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
     
     # Monitoring
-    HEALTH_CHECK_INTERVAL = float(os.getenv('HEALTH_CHECK_INTERVAL', '30.0'))
-    METRICS_INTERVAL = float(os.getenv('METRICS_INTERVAL', '60.0'))
+    HEALTH_CHECK_INTERVAL = float (os.getenv('HEALTH_CHECK_INTERVAL', '30.0'))
+    METRICS_INTERVAL = float (os.getenv('METRICS_INTERVAL', '60.0'))
 
 # Use in application
 config = Config()

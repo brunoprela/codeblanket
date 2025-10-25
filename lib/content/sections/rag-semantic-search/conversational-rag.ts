@@ -16,8 +16,8 @@ Single-turn vs multi-turn RAG:
 \`\`\`python
 # Single-turn RAG (simple)
 query = "What is machine learning?"
-docs = retrieve(query)
-answer = generate(query, docs)
+docs = retrieve (query)
+answer = generate (query, docs)
 
 # Multi-turn RAG (complex)
 conversation = [
@@ -25,7 +25,7 @@ conversation = [
     {"user": "Can you give me an example?", "assistant": "..."},
     {"user": "How does it differ from deep learning?", "assistant": "..."}
 ]
-# Need to understand: What does "it" refer to? What's the context?
+# Need to understand: What does "it" refer to? What\'s the context?
 \`\`\`
 
 ### Challenges in Conversational RAG
@@ -84,9 +84,9 @@ class ConversationState:
             timestamp=datetime.now(),
             retrieved_docs=retrieved_docs
         )
-        self.turns.append(turn)
+        self.turns.append (turn)
     
-    def get_recent_turns(self, n: int = 5) -> List[ConversationTurn]:
+    def get_recent_turns (self, n: int = 5) -> List[ConversationTurn]:
         """Get last N turns."""
         return self.turns[-n:]
     
@@ -103,18 +103,18 @@ class ConversationState:
         Returns:
             Formatted conversation string
         """
-        recent_turns = self.get_recent_turns(max_turns)
+        recent_turns = self.get_recent_turns (max_turns)
         
         lines = []
         for turn in recent_turns:
             prefix = "User:" if turn.role == "user" else "Assistant:"
-            lines.append(f"{prefix} {turn.content}")
+            lines.append (f"{prefix} {turn.content}")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
-    def clear_old_turns(self, keep_recent: int = 10):
+    def clear_old_turns (self, keep_recent: int = 10):
         """Clear old turns to manage memory."""
-        if len(self.turns) > keep_recent:
+        if len (self.turns) > keep_recent:
             self.turns = self.turns[-keep_recent:]
 
 
@@ -200,7 +200,7 @@ history = [
 ]
 
 current = "Can you give an example?"
-rewritten = rewriter.rewrite_with_context(current, history)
+rewritten = rewriter.rewrite_with_context (current, history)
 
 print(f"Original: {current}")
 print(f"Rewritten: {rewritten}")
@@ -242,7 +242,7 @@ class ConversationalRAG:
     ) -> ConversationState:
         """Get existing conversation or create new one."""
         if conversation_id not in self.conversations:
-            self.conversations[conversation_id] = ConversationState(conversation_id)
+            self.conversations[conversation_id] = ConversationState (conversation_id)
         return self.conversations[conversation_id]
     
     def query(
@@ -255,7 +255,7 @@ class ConversationalRAG:
         Query conversational RAG system.
         
         Args:
-            user_query: User's query
+            user_query: User\'s query
             conversation_id: Conversation ID
             top_k: Number of documents to retrieve
         
@@ -263,10 +263,10 @@ class ConversationalRAG:
             Response with answer and metadata
         """
         # Get conversation state
-        conversation = self.get_or_create_conversation(conversation_id)
+        conversation = self.get_or_create_conversation (conversation_id)
         
         # Rewrite query with conversation context
-        if len(conversation.turns) > 0:
+        if len (conversation.turns) > 0:
             history = [
                 {"role": turn.role, "content": turn.content}
                 for turn in conversation.get_recent_turns(5)
@@ -281,7 +281,7 @@ class ConversationalRAG:
         print(f"Search query: {search_query}")
         
         # Retrieve documents
-        retrieved_docs = self.vector_store.search(search_query, top_k=top_k)
+        retrieved_docs = self.vector_store.search (search_query, top_k=top_k)
         
         # Generate answer with conversation context
         answer = self._generate_with_context(
@@ -325,7 +325,7 @@ class ConversationalRAG:
         # Format retrieved documents
         context = "\\n\\n".join([
             f"[Document {i+1}]\\n{doc['text']}"
-            for i, doc in enumerate(retrieved_docs)
+            for i, doc in enumerate (retrieved_docs)
         ])
         
         # Build messages with conversation history
@@ -431,11 +431,11 @@ class ConversationMemoryManager:
             model: Model for token counting
         """
         self.max_tokens = max_tokens
-        self.encoding = tiktoken.encoding_for_model(model)
+        self.encoding = tiktoken.encoding_for_model (model)
     
-    def count_tokens(self, text: str) -> int:
+    def count_tokens (self, text: str) -> int:
         """Count tokens in text."""
-        return len(self.encoding.encode(text))
+        return len (self.encoding.encode (text))
     
     def truncate_conversation(
         self,
@@ -458,8 +458,8 @@ class ConversationMemoryManager:
         selected_turns = []
         current_tokens = 0
         
-        for turn in reversed(turns):
-            turn_tokens = self.count_tokens(turn.content)
+        for turn in reversed (turns):
+            turn_tokens = self.count_tokens (turn.content)
             
             if current_tokens + turn_tokens <= available_tokens:
                 selected_turns.insert(0, turn)
@@ -509,7 +509,7 @@ class ConversationMemoryManager:
 
 
 # Example usage
-memory_manager = ConversationMemoryManager(max_tokens=4000)
+memory_manager = ConversationMemoryManager (max_tokens=4000)
 
 # Truncate long conversation
 conversation = ConversationState("conv_456")
@@ -520,8 +520,8 @@ truncated_turns = memory_manager.truncate_conversation(
     reserve_tokens=2000
 )
 
-print(f"Original: {len(conversation.turns)} turns")
-print(f"Truncated: {len(truncated_turns)} turns")
+print(f"Original: {len (conversation.turns)} turns")
+print(f"Truncated: {len (truncated_turns)} turns")
 \`\`\`
 
 ## Conversation Summarization
@@ -552,7 +552,7 @@ class ConversationSummarizer:
         Returns:
             True if should summarize
         """
-        return len(conversation.turns) > threshold
+        return len (conversation.turns) > threshold
     
     def summarize_and_compress(
         self,
@@ -569,7 +569,7 @@ class ConversationSummarizer:
         Returns:
             New conversation with summary
         """
-        if len(conversation.turns) <= keep_recent:
+        if len (conversation.turns) <= keep_recent:
             return conversation
         
         # Split into old and recent
@@ -577,16 +577,16 @@ class ConversationSummarizer:
         recent_turns = conversation.turns[-keep_recent:]
         
         # Summarize old turns
-        summary = self._summarize_turns(old_turns)
+        summary = self._summarize_turns (old_turns)
         
         # Create new conversation with summary
-        new_conversation = ConversationState(conversation.conversation_id)
+        new_conversation = ConversationState (conversation.conversation_id)
         new_conversation.context_summary = summary
         new_conversation.turns = recent_turns
         
         return new_conversation
     
-    def _summarize_turns(self, turns: List[ConversationTurn]) -> str:
+    def _summarize_turns (self, turns: List[ConversationTurn]) -> str:
         """Summarize list of turns."""
         conversation_text = "\\n".join([
             f"{turn.role}: {turn.content}"
@@ -619,13 +619,13 @@ summarizer = ConversationSummarizer()
 long_conversation = ConversationState("conv_789")
 # ... add 20 turns ...
 
-if summarizer.should_summarize(long_conversation):
+if summarizer.should_summarize (long_conversation):
     compressed = summarizer.summarize_and_compress(
         long_conversation,
         keep_recent=5
     )
     print(f"Summary: {compressed.context_summary}")
-    print(f"Recent turns: {len(compressed.turns)}")
+    print(f"Recent turns: {len (compressed.turns)}")
 \`\`\`
 
 ## Follow-up Question Detection
@@ -672,17 +672,17 @@ class FollowUpDetector:
                 return True
         
         # Short queries after conversation likely follow-ups
-        if len(query.split()) < 5 and conversation_length > 0:
+        if len (query.split()) < 5 and conversation_length > 0:
             return True
         
         return False
     
-    def requires_context(self, query: str) -> bool:
+    def requires_context (self, query: str) -> bool:
         """Check if query requires conversation context."""
         pronouns = ["it", "that", "this", "they", "them", "these", "those"]
         query_lower = query.lower()
         
-        return any(pronoun in query_lower.split() for pronoun in pronouns)
+        return any (pronoun in query_lower.split() for pronoun in pronouns)
 
 
 # Example usage
@@ -696,8 +696,8 @@ queries = [
 ]
 
 for query in queries:
-    is_followup = detector.is_follow_up(query, conversation_length=2)
-    needs_context = detector.requires_context(query)
+    is_followup = detector.is_follow_up (query, conversation_length=2)
+    needs_context = detector.requires_context (query)
     print(f"Query: {query}")
     print(f"  Follow-up: {is_followup}, Needs context: {needs_context}\\n")
 \`\`\`
@@ -716,8 +716,8 @@ class ConversationStore:
     """
     
     def __init__(self, storage_dir: str = "./conversations"):
-        self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(exist_ok=True)
+        self.storage_dir = Path (storage_dir)
+        self.storage_dir.mkdir (exist_ok=True)
     
     def save_conversation(
         self,
@@ -748,8 +748,8 @@ class ConversationStore:
         }
         
         # Save to file
-        with open(file_path, 'w') as f:
-            json.dump(data, f, indent=2)
+        with open (file_path, 'w') as f:
+            json.dump (data, f, indent=2)
     
     def load_conversation(
         self,
@@ -769,22 +769,22 @@ class ConversationStore:
         if not file_path.exists():
             return None
         
-        with open(file_path, 'r') as f:
-            data = json.load(f)
+        with open (file_path, 'r') as f:
+            data = json.load (f)
         
         # Reconstruct conversation
-        conversation = ConversationState(data["conversation_id"])
+        conversation = ConversationState (data["conversation_id"])
         conversation.context_summary = data.get("context_summary")
         
         for turn_data in data["turns"]:
             turn = ConversationTurn(
                 role=turn_data["role"],
                 content=turn_data["content"],
-                timestamp=datetime.fromisoformat(turn_data["timestamp"]),
+                timestamp=datetime.fromisoformat (turn_data["timestamp"]),
                 retrieved_docs=turn_data.get("retrieved_docs"),
                 metadata=turn_data.get("metadata")
             )
-            conversation.turns.append(turn)
+            conversation.turns.append (turn)
         
         return conversation
 
@@ -796,11 +796,11 @@ store = ConversationStore()
 conversation = ConversationState("user_123_conv_1")
 conversation.add_turn("user", "What is RAG?")
 conversation.add_turn("assistant", "RAG is...")
-store.save_conversation(conversation)
+store.save_conversation (conversation)
 
 # Load conversation later
 loaded = store.load_conversation("user_123_conv_1")
-print(f"Loaded {len(loaded.turns)} turns")
+print(f"Loaded {len (loaded.turns)} turns")
 \`\`\`
 
 ## Best Practices
@@ -829,13 +829,13 @@ print(f"Loaded {len(loaded.turns)} turns")
 class OptimizedConversationalRAG:
     """Performance optimizations."""
     
-    def query(self, user_query: str, conversation_id: str):
+    def query (self, user_query: str, conversation_id: str):
         # 1. Lazy rewriting: Only rewrite if needed
-        if not self._is_follow_up(user_query):
+        if not self._is_follow_up (user_query):
             search_query = user_query  # Skip rewriting
         
         # 2. Selective history: Don't include all turns
-        relevant_turns = self._get_relevant_turns(user_query)
+        relevant_turns = self._get_relevant_turns (user_query)
         
         # 3. Cache summaries: Don't re-summarize
         if conversation_id in self.summary_cache:

@@ -78,7 +78,7 @@ The original Word2Vec paper (Mikolov et al., 2013) found Skip-gram superior for 
     id: 'word-embeddings-dq-2',
     question:
       'FastText can generate embeddings for out-of-vocabulary (OOV) words using character n-grams, while Word2Vec cannot. Explain how this works and why it matters for production NLP systems, especially for handling typos, rare words, and morphological variations.',
-    sampleAnswer: `FastText's character n-gram approach fundamentally changes how words are represented, enabling robust OOV handling:
+    sampleAnswer: `FastText\'s character n-gram approach fundamentally changes how words are represented, enabling robust OOV handling:
 
 **How FastText Works:**
 

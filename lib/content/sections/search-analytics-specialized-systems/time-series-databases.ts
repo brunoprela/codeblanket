@@ -100,8 +100,8 @@ CREATE TABLE metrics (
 );
 
 -- Index for queries
-CREATE INDEX idx_time ON metrics(timestamp);
-CREATE INDEX idx_metric_time ON metrics(metric_name, timestamp);
+CREATE INDEX idx_time ON metrics (timestamp);
+CREATE INDEX idx_metric_time ON metrics (metric_name, timestamp);
 \`\`\`
 
 **Problems**:
@@ -178,17 +178,17 @@ curl -XPOST 'http://localhost:8086/write?db=metrics' \\
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-client = InfluxDBClient(url="http://localhost:8086", token="my-token", org="my-org")
-write_api = client.write_api(write_options=SYNCHRONOUS)
+client = InfluxDBClient (url="http://localhost:8086", token="my-token", org="my-org")
+write_api = client.write_api (write_options=SYNCHRONOUS)
 
 # Batch write
 points = [
-    Point("cpu_usage").tag("host", "server1").field("value", 65.3).time(timestamp1),
-    Point("cpu_usage").tag("host", "server2").field("value", 72.1).time(timestamp2),
+    Point("cpu_usage").tag("host", "server1").field("value", 65.3).time (timestamp1),
+    Point("cpu_usage").tag("host", "server2").field("value", 72.1).time (timestamp2),
     # ... 1000 more points
 ]
 
-write_api.write(bucket="metrics", record=points)
+write_api.write (bucket="metrics", record=points)
 \`\`\`
 
 **Best practice**: Batch 1,000-10,000 points per write for optimal throughput.
@@ -215,11 +215,11 @@ time                  host     mean
 
 **Flux** (functional query language):
 \`\`\`
-from(bucket: "metrics")
-  |> range(start: -1h)
-  |> filter(fn: (r) => r["_measurement"] == "cpu_usage")
-  |> filter(fn: (r) => r["host"] == "server1")
-  |> aggregateWindow(every: 5m, fn: mean)
+from (bucket: "metrics")
+  |> range (start: -1h)
+  |> filter (fn: (r) => r["_measurement"] == "cpu_usage")
+  |> filter (fn: (r) => r["host"] == "server1")
+  |> aggregateWindow (every: 5m, fn: mean)
 \`\`\`
 
 ### Retention Policies
@@ -464,18 +464,18 @@ http_requests_total{method="GET"}
 
 **Rate** (requests per second):
 \`\`\`
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 \`\`\`
 
 **Aggregation**:
 \`\`\`
-sum(rate(http_requests_total[5m])) by (method)
+sum (rate (http_requests_total[5m])) by (method)
 \`\`\`
 
 **Percentile** (P95 latency):
 \`\`\`
 histogram_quantile(0.95, 
-  rate(http_request_duration_seconds_bucket[5m])
+  rate (http_request_duration_seconds_bucket[5m])
 )
 \`\`\`
 
@@ -485,7 +485,7 @@ groups:
   - name: api_alerts
     rules:
       - alert: HighErrorRate
-        expr: rate(http_requests_total{status=~"5.."}[5m]) > 10
+        expr: rate (http_requests_total{status=~"5.."}[5m]) > 10
         for: 5m
         labels:
           severity: critical
@@ -501,7 +501,7 @@ from prometheus_client import Counter
 
 requests = Counter('http_requests_total', 'Total requests', ['method', 'status'])
 
-requests.labels(method='GET', status='200').inc()  # Increment by 1
+requests.labels (method='GET', status='200').inc()  # Increment by 1
 \`\`\`
 
 **Use case**: Total requests, total errors, total bytes sent
@@ -512,7 +512,7 @@ from prometheus_client import Gauge
 
 cpu_usage = Gauge('cpu_usage_percent', 'CPU usage', ['host'])
 
-cpu_usage.labels(host='server1').set(65.3)
+cpu_usage.labels (host='server1').set(65.3)
 \`\`\`
 
 **Use case**: CPU %, memory usage, queue length, active connections
@@ -523,7 +523,7 @@ from prometheus_client import Histogram
 
 latency = Histogram('http_request_duration_seconds', 'Request latency', ['endpoint'])
 
-latency.labels(endpoint='/api/users').observe(0.234)  # 234ms
+latency.labels (endpoint='/api/users').observe(0.234)  # 234ms
 \`\`\`
 
 **Use case**: Request latencies, response sizes
@@ -531,9 +531,9 @@ latency.labels(endpoint='/api/users').observe(0.234)  # 234ms
 **Query**:
 \`\`\`
 # P50, P95, P99 latencies
-histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))
-histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
-histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.50, rate (http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.95, rate (http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.99, rate (http_request_duration_seconds_bucket[5m]))
 \`\`\`
 
 **4. Summary**: Similar to histogram but client-side quantiles
@@ -713,13 +713,13 @@ cpu_usage_percent
 **Queries**:
 \`\`\`
 # Request rate per endpoint
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 
 # P95 latency
-histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.95, rate (http_request_duration_seconds_bucket[5m]))
 
 # Error rate
-rate(http_requests_total{status=~"5.."}[5m])
+rate (http_requests_total{status=~"5.."}[5m])
 \`\`\`
 
 **Dashboard**: Grafana showing request rate, latency, error rate over time.
@@ -865,9 +865,9 @@ Write in batches of 1,000-10,000 points:
 \`\`\`python
 points = []
 for metric in metrics:
-    points.append(create_point(metric))
-    if len(points) >= 1000:
-        write_api.write(bucket="metrics", record=points)
+    points.append (create_point (metric))
+    if len (points) >= 1000:
+        write_api.write (bucket="metrics", record=points)
         points = []
 \`\`\`
 

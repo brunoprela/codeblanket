@@ -10,7 +10,7 @@ export const floydwarshallSection = {
 **Algorithm:**
 For each intermediate vertex k:
   For each pair (i, j):
-    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    dist[i][j] = min (dist[i][j], dist[i][k] + dist[k][j])
 
 **Key Insight:**
 Try using each vertex as intermediate point. If path through k is shorter, use it.

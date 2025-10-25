@@ -16,7 +16,7 @@ class PeerComparator:
     """Build and analyze peer comparison groups."""
     
     @staticmethod
-    def build_comp_table(companies: List[Dict]) -> pd.DataFrame:
+    def build_comp_table (companies: List[Dict]) -> pd.DataFrame:
         """Create peer comparison table."""
         
         comp_data = []
@@ -34,16 +34,16 @@ class PeerComparator:
                 'Revenue Growth': company.get('revenue_growth', 0)
             })
         
-        df = pd.DataFrame(comp_data)
+        df = pd.DataFrame (comp_data)
         
         # Add median/mean rows
-        medians = df.select_dtypes(include=[np.number]).median()
-        means = df.select_dtypes(include=[np.number]).mean()
+        medians = df.select_dtypes (include=[np.number]).median()
+        means = df.select_dtypes (include=[np.number]).mean()
         
         return df
     
     @staticmethod
-    def identify_outliers(df: pd.DataFrame, metric: str) -> pd.DataFrame:
+    def identify_outliers (df: pd.DataFrame, metric: str) -> pd.DataFrame:
         """Identify outliers in specific metric."""
         
         q1 = df[metric].quantile(0.25)
@@ -71,7 +71,7 @@ tech_peers = [
 ]
 
 comparator = PeerComparator()
-comp_table = comparator.build_comp_table(tech_peers)
+comp_table = comparator.build_comp_table (tech_peers)
 print("Peer Comparison Table:")
 print(comp_table)
 \`\`\`
@@ -89,8 +89,8 @@ class ValuationAnalyzer:
     ) -> Dict:
         """Calculate implied valuation using peer multiples."""
         
-        median_multiple = np.median(peer_multiples)
-        mean_multiple = np.mean(peer_multiples)
+        median_multiple = np.median (peer_multiples)
+        mean_multiple = np.mean (peer_multiples)
         
         implied_value_median = target_metric * median_multiple
         implied_value_mean = target_metric * mean_multiple
@@ -103,7 +103,7 @@ class ValuationAnalyzer:
         }
     
     @staticmethod
-    def peg_ratio_analysis(pe: float, growth_rate: float) -> Dict:
+    def peg_ratio_analysis (pe: float, growth_rate: float) -> Dict:
         """
         PEG Ratio = P/E / (Growth Rate × 100)
         < 1.0 = Undervalued
@@ -134,7 +134,7 @@ class RegressionValuation:
     """Use regression to model valuation based on fundamentals."""
     
     @staticmethod
-    def ev_ebitda_model(peers_data: pd.DataFrame) -> Dict:
+    def ev_ebitda_model (peers_data: pd.DataFrame) -> Dict:
         """
         Model: EV/EBITDA = f(Margin, Growth, ROIC)
         """
@@ -160,7 +160,7 @@ class RegressionValuation:
         }
     
     @staticmethod
-    def predict_fair_multiple(model: LinearRegression, company_metrics: Dict) -> float:
+    def predict_fair_multiple (model: LinearRegression, company_metrics: Dict) -> float:
         """Predict fair EV/EBITDA multiple for a company."""
         
         X = np.array([[

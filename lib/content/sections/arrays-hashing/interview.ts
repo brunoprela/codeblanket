@@ -28,7 +28,7 @@ export const interviewSection = {
 - "Can I use extra space?" (Hash table uses O(n) space)
 - "Is the input sorted?" (Might enable different approaches)
 - "Are there duplicates?"
-- "What's the expected size?" (Hash table overhead matters for small inputs)
+- "What\'s the expected size?" (Hash table overhead matters for small inputs)
 
 **2. Brute Force First (1 minute)**
 - State the O(n²) or O(n log n) approach
@@ -61,10 +61,10 @@ export const interviewSection = {
 ✅ **Use .get() or defaultdict**
 
 ❌ **Modifying dict while iterating**
-✅ **Iterate over copy: for key in list(dict.keys())**
+✅ **Iterate over copy: for key in list (dict.keys())**
 
 ❌ **Forgetting unhashable types** (lists, dicts can't be keys)
-✅ **Convert to tuple: tuple(lst)**
+✅ **Convert to tuple: tuple (lst)**
 
 **Follow-Up Questions:**
 
@@ -72,7 +72,7 @@ Q: "What if we can't use extra space?"
 A: "I can use two pointers or sorting, but time complexity increases"
 
 Q: "What about hash collisions?"
-A: "Python's hash function is robust. In theory O(n) worst case, but O(1) average"
+A: "Python\'s hash function is robust. In theory O(n) worst case, but O(1) average"
 
 Q: "Can you do it without hash table?"
 A: "Yes, by sorting first, but that's O(n log n) vs O(n)"

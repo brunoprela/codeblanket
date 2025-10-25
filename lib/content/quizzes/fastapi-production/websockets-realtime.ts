@@ -31,7 +31,7 @@ class CursorMessage(BaseModel):
     user_id: str
     username: str
     position: int
-    color: str  # User's cursor color
+    color: str  # User\'s cursor color
 
 class PresenceMessage(BaseModel):
     type: Literal["presence"]
@@ -91,7 +91,7 @@ class DocumentManager:
     def __init__(self):
         self.documents: Dict[str, DocumentState] = {}
     
-    def get_or_create_document(self, doc_id: str) -> DocumentState:
+    def get_or_create_document (self, doc_id: str) -> DocumentState:
         """Get existing document or create new one"""
         if doc_id not in self.documents:
             self.documents[doc_id] = DocumentState(
@@ -117,7 +117,7 @@ class DocumentManager:
         Apply edit with operational transformation
         Returns: {success, new_version, transformed_operation}
         """
-        doc = self.get_or_create_document(doc_id)
+        doc = self.get_or_create_document (doc_id)
         
         async with doc.lock:
             # Check version conflict
@@ -144,7 +144,7 @@ class DocumentManager:
             elif operation == "delete":
                 doc.content = (
                     doc.content[:position] +
-                    doc.content[position + len(content):]
+                    doc.content[position + len (content):]
                 )
             
             # Increment version
@@ -194,12 +194,12 @@ class DocumentManager:
             if op["operation"] == "insert":
                 if op["position"] <= new_position:
                     # Insert happened before our position, shift right
-                    new_position += len(op["content"])
+                    new_position += len (op["content"])
             
             elif op["operation"] == "delete":
                 if op["position"] < new_position:
                     # Delete happened before our position, shift left
-                    new_position -= len(op["content"])
+                    new_position -= len (op["content"])
                     new_position = max(0, new_position)
         
         return {
@@ -233,7 +233,7 @@ async def document_websocket(
     """
     # Authenticate
     try:
-        user = await get_current_user_ws(websocket, token)
+        user = await get_current_user_ws (websocket, token)
     except HTTPException:
         return
     
@@ -241,10 +241,10 @@ async def document_websocket(
     await websocket.accept()
     
     # Get document
-    doc = doc_manager.get_or_create_document(doc_id)
+    doc = doc_manager.get_or_create_document (doc_id)
     
     # Add user to document
-    user_color = generate_user_color(user.id)
+    user_color = generate_user_color (user.id)
     async with doc.lock:
         doc.active_users[user.id] = {
             "username": user.username,
@@ -271,7 +271,7 @@ async def document_websocket(
     })
     
     # Broadcast presence
-    await broadcast_to_document(doc_id, {
+    await broadcast_to_document (doc_id, {
         "type": "presence",
         "doc_id": doc_id,
         "user_id": user.id,
@@ -297,7 +297,7 @@ async def document_websocket(
                 )
                 
                 # Broadcast edit to all users
-                await broadcast_to_document(doc_id, {
+                await broadcast_to_document (doc_id, {
                     "type": "edit",
                     "doc_id": doc_id,
                     "user_id": user.id,
@@ -315,7 +315,7 @@ async def document_websocket(
                         doc.active_users[user.id]["cursor_pos"] = data["position"]
                 
                 # Broadcast cursor position
-                await broadcast_to_document(doc_id, {
+                await broadcast_to_document (doc_id, {
                     "type": "cursor",
                     "doc_id": doc_id,
                     "user_id": user.id,
@@ -326,7 +326,7 @@ async def document_websocket(
             
             elif message_type == "chat":
                 # Broadcast chat message
-                await broadcast_to_document(doc_id, {
+                await broadcast_to_document (doc_id, {
                     "type": "chat",
                     "doc_id": doc_id,
                     "user_id": user.id,
@@ -360,7 +360,7 @@ async def document_websocket(
                 del doc.active_users[user.id]
         
         # Broadcast user left
-        await broadcast_to_document(doc_id, {
+        await broadcast_to_document (doc_id, {
             "type": "presence",
             "doc_id": doc_id,
             "user_id": user.id,
@@ -376,16 +376,16 @@ async def broadcast_to_document(
     """
     Broadcast message to all users editing document
     """
-    doc = doc_manager.documents.get(doc_id)
+    doc = doc_manager.documents.get (doc_id)
     if not doc:
         return
     
     async with doc.lock:
-        for user_id, user_info in list(doc.active_users.items()):
+        for user_id, user_info in list (doc.active_users.items()):
             ws = user_info["websocket"]
             if ws != exclude:
                 try:
-                    await ws.send_json(message)
+                    await ws.send_json (message)
                 except:
                     # Connection lost, remove user
                     del doc.active_users[user_id]
@@ -396,7 +396,7 @@ async def broadcast_to_document(
 \`\`\`javascript
 // Client-side collaborative editing
 class CollaborativeEditor {
-    constructor(docId, token) {
+    constructor (docId, token) {
         this.docId = docId;
         this.ws = new WebSocket(\`ws://localhost:8000/ws/document/\${docId}?token=\${token}\`);
         this.localVersion = 0;
@@ -412,8 +412,8 @@ class CollaborativeEditor {
         };
         
         this.ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            this.handleMessage(data);
+            const data = JSON.parse (event.data);
+            this.handleMessage (data);
         };
         
         this.ws.onclose = () => {
@@ -422,43 +422,43 @@ class CollaborativeEditor {
         };
     }
     
-    handleMessage(data) {
-        switch(data.type) {
+    handleMessage (data) {
+        switch (data.type) {
             case "sync_response":
                 // Initial sync or reconnect
-                this.editor.setText(data.content);
+                this.editor.setText (data.content);
                 this.localVersion = data.version;
-                this.updateActiveUsers(data.active_users);
+                this.updateActiveUsers (data.active_users);
                 break;
             
             case "edit":
                 // Apply remote edit
                 if (data.user_id !== this.userId) {
-                    this.applyRemoteEdit(data);
+                    this.applyRemoteEdit (data);
                 }
                 this.localVersion = data.version;
                 break;
             
             case "cursor":
                 // Update other user's cursor
-                this.updateCursor(data.user_id, data.position, data.color);
+                this.updateCursor (data.user_id, data.position, data.color);
                 break;
             
             case "presence":
                 if (data.status === "online") {
-                    this.addUser(data.user_id, data.username);
+                    this.addUser (data.user_id, data.username);
                 } else {
-                    this.removeUser(data.user_id);
+                    this.removeUser (data.user_id);
                 }
                 break;
             
             case "chat":
-                this.addChatMessage(data.username, data.message);
+                this.addChatMessage (data.username, data.message);
                 break;
         }
     }
     
-    onEdit(operation, position, content) {
+    onEdit (operation, position, content) {
         // Send edit to server
         this.ws.send(JSON.stringify({
             type: "edit",
@@ -473,9 +473,9 @@ class CollaborativeEditor {
         this.pendingOperations.push({operation, position, content});
     }
     
-    onCursorMove(position) {
+    onCursorMove (position) {
         // Debounced cursor position broadcast
-        clearTimeout(this.cursorTimeout);
+        clearTimeout (this.cursorTimeout);
         this.cursorTimeout = setTimeout(() => {
             this.ws.send(JSON.stringify({
                 type: "cursor",
@@ -577,9 +577,9 @@ class DistributedConnectionManager:
         self.pubsub = self.redis.pubsub()
         
         # Start listening to Redis
-        asyncio.create_task(self._listen_redis())
+        asyncio.create_task (self._listen_redis())
     
-    async def connect(self, websocket: WebSocket, channel: str):
+    async def connect (self, websocket: WebSocket, channel: str):
         """
         Connect client to ticker channel
         """
@@ -588,48 +588,48 @@ class DistributedConnectionManager:
         # Add to local connections
         if channel not in self.local_connections:
             self.local_connections[channel] = set()
-        self.local_connections[channel].add(websocket)
+        self.local_connections[channel].add (websocket)
         
         # Subscribe to Redis channel (if first connection)
-        if len(self.local_connections[channel]) == 1:
-            await self.pubsub.subscribe(channel)
+        if len (self.local_connections[channel]) == 1:
+            await self.pubsub.subscribe (channel)
         
-        print(f"Connected to {channel}. Local: {len(self.local_connections[channel])}")
+        print(f"Connected to {channel}. Local: {len (self.local_connections[channel])}")
     
-    def disconnect(self, websocket: WebSocket, channel: str):
+    def disconnect (self, websocket: WebSocket, channel: str):
         """
         Disconnect client
         """
         if channel in self.local_connections:
-            self.local_connections[channel].discard(websocket)
+            self.local_connections[channel].discard (websocket)
             
             # Unsubscribe if no more local connections
             if not self.local_connections[channel]:
-                asyncio.create_task(self.pubsub.unsubscribe(channel))
+                asyncio.create_task (self.pubsub.unsubscribe (channel))
                 del self.local_connections[channel]
     
-    async def publish(self, channel: str, message: dict):
+    async def publish (self, channel: str, message: dict):
         """
         Publish message to Redis (broadcasts to ALL servers)
         """
         await self.redis.publish(
             channel,
-            json.dumps(message)
+            json.dumps (message)
         )
     
-    async def _listen_redis(self):
+    async def _listen_redis (self):
         """
         Listen for messages from Redis and broadcast to local connections
         """
         async for message in self.pubsub.listen():
             if message["type"] == "message":
                 channel = message["channel"].decode()
-                data = json.loads(message["data"])
+                data = json.loads (message["data"])
                 
                 # Broadcast to local connections only
-                await self._broadcast_local(channel, data)
+                await self._broadcast_local (channel, data)
     
-    async def _broadcast_local(self, channel: str, message: dict):
+    async def _broadcast_local (self, channel: str, message: dict):
         """
         Broadcast to connections on THIS server
         """
@@ -638,13 +638,13 @@ class DistributedConnectionManager:
             
             for websocket in self.local_connections[channel]:
                 try:
-                    await websocket.send_json(message)
+                    await websocket.send_json (message)
                 except:
-                    disconnected.append(websocket)
+                    disconnected.append (websocket)
             
             # Clean up disconnected
             for ws in disconnected:
-                self.disconnect(ws, channel)
+                self.disconnect (ws, channel)
 
 # Global manager
 manager = DistributedConnectionManager()
@@ -667,11 +667,11 @@ async def ticker_websocket(
     """
     channel = f"ticker:{symbol.upper()}"
     
-    await manager.connect(websocket, channel)
+    await manager.connect (websocket, channel)
     
     try:
         # Send initial price
-        current_price = await get_current_price(symbol)
+        current_price = await get_current_price (symbol)
         await websocket.send_json({
             "type": "price",
             "symbol": symbol,
@@ -687,7 +687,7 @@ async def ticker_websocket(
                 await websocket.send_json({"type": "pong"})
     
     except WebSocketDisconnect:
-        manager.disconnect(websocket, channel)
+        manager.disconnect (websocket, channel)
 
 @app.websocket("/ws/ticker/watchlist")
 async def watchlist_websocket(
@@ -704,7 +704,7 @@ async def watchlist_websocket(
     
     # Subscribe to all channels
     for channel in channels:
-        await manager.connect(websocket, channel)
+        await manager.connect (websocket, channel)
     
     try:
         while True:
@@ -714,18 +714,18 @@ async def watchlist_websocket(
                 # Add new symbol to watchlist
                 new_symbol = data["symbol"].upper()
                 new_channel = f"ticker:{new_symbol}"
-                await manager.connect(websocket, new_channel)
+                await manager.connect (websocket, new_channel)
             
             elif data.get("type") == "unsubscribe":
                 # Remove symbol from watchlist
                 symbol = data["symbol"].upper()
                 channel = f"ticker:{symbol}"
-                manager.disconnect(websocket, channel)
+                manager.disconnect (websocket, channel)
     
     except WebSocketDisconnect:
         # Disconnect from all channels
         for channel in channels:
-            manager.disconnect(websocket, channel)
+            manager.disconnect (websocket, channel)
 \`\`\`
 
 **4. Price Feed Publisher**:
@@ -745,12 +745,12 @@ class PriceFeedPublisher:
         self.redis = redis.from_url("redis://localhost:6379")
         self.running = False
     
-    async def start(self):
+    async def start (self):
         """Start publishing price updates"""
         self.running = True
-        asyncio.create_task(self._publish_loop())
+        asyncio.create_task (self._publish_loop())
     
-    async def _publish_loop(self):
+    async def _publish_loop (self):
         """
         Continuously fetch and publish prices
         """
@@ -778,7 +778,7 @@ class PriceFeedPublisher:
             # Wait before next update (e.g., 100ms for high-frequency)
             await asyncio.sleep(0.1)
     
-    async def _fetch_prices(self) -> dict:
+    async def _fetch_prices (self) -> dict:
         """
         Fetch prices from external API or database
         
@@ -790,9 +790,9 @@ class PriceFeedPublisher:
         prices = {}
         for symbol in symbols:
             # Fetch from Redis cache or API
-            price_data = await self.redis.get(f"price:{symbol}")
+            price_data = await self.redis.get (f"price:{symbol}")
             if price_data:
-                prices[symbol] = json.loads(price_data)
+                prices[symbol] = json.loads (price_data)
         
         return prices
 
@@ -889,30 +889,30 @@ WEBSOCKET_LATENCY = Histogram(
 
 # Update metrics in connection manager
 class MonitoredConnectionManager(DistributedConnectionManager):
-    async def connect(self, websocket: WebSocket, channel: str):
-        await super().connect(websocket, channel)
+    async def connect (self, websocket: WebSocket, channel: str):
+        await super().connect (websocket, channel)
         
-        WEBSOCKET_CONNECTIONS.labels(channel=channel).inc()
-        WEBSOCKET_CONNECTIONS_OPENED.labels(channel=channel).inc()
+        WEBSOCKET_CONNECTIONS.labels (channel=channel).inc()
+        WEBSOCKET_CONNECTIONS_OPENED.labels (channel=channel).inc()
     
-    def disconnect(self, websocket: WebSocket, channel: str):
-        super().disconnect(websocket, channel)
+    def disconnect (self, websocket: WebSocket, channel: str):
+        super().disconnect (websocket, channel)
         
-        WEBSOCKET_CONNECTIONS.labels(channel=channel).dec()
-        WEBSOCKET_CONNECTIONS_CLOSED.labels(channel=channel, reason="normal").inc()
+        WEBSOCKET_CONNECTIONS.labels (channel=channel).dec()
+        WEBSOCKET_CONNECTIONS_CLOSED.labels (channel=channel, reason="normal").inc()
     
-    async def _broadcast_local(self, channel: str, message: dict):
+    async def _broadcast_local (self, channel: str, message: dict):
         start_time = time.time()
         
-        await super()._broadcast_local(channel, message)
+        await super()._broadcast_local (channel, message)
         
         # Track latency
         latency = time.time() - start_time
-        WEBSOCKET_LATENCY.labels(channel=channel).observe(latency)
+        WEBSOCKET_LATENCY.labels (channel=channel).observe (latency)
         
         # Track messages sent
-        connection_count = len(self.local_connections.get(channel, []))
-        WEBSOCKET_MESSAGES_SENT.labels(channel=channel).inc(connection_count)
+        connection_count = len (self.local_connections.get (channel, []))
+        WEBSOCKET_MESSAGES_SENT.labels (channel=channel).inc (connection_count)
 \`\`\`
 
 **7. Performance Bottlenecks & Solutions**:
@@ -999,13 +999,13 @@ async def authenticate_device(
     Authenticate IoT device
     """
     if not api_key:
-        raise HTTPException(status_code=401, detail="API key required")
+        raise HTTPException (status_code=401, detail="API key required")
     
     # Validate device and API key
-    device = await get_device(device_id)
+    device = await get_device (device_id)
     
     if not device or device.api_key != api_key:
-        raise HTTPException(status_code=403, detail="Invalid device credentials")
+        raise HTTPException (status_code=403, detail="Invalid device credentials")
     
     return device
 
@@ -1013,31 +1013,31 @@ async def authenticate_device(
 async def ingest_readings(
     device_id: str,
     readings: List[SensorReading],
-    device: dict = Depends(authenticate_device)
+    device: dict = Depends (authenticate_device)
 ):
     """
     Ingest sensor readings from IoT device
     """
     # Process readings asynchronously
     for reading in readings:
-        await process_reading(device_id, reading)
+        await process_reading (device_id, reading)
     
-    return {"status": "accepted", "count": len(readings)}
+    return {"status": "accepted", "count": len (readings)}
 
-async def process_reading(device_id: str, reading: SensorReading):
+async def process_reading (device_id: str, reading: SensorReading):
     """
     Process sensor reading: aggregate, store, broadcast
     """
     # 1. Store in time-series database (InfluxDB, TimescaleDB)
-    await store_time_series(device_id, reading)
+    await store_time_series (device_id, reading)
     
     # 2. Update real-time aggregation
-    await update_aggregation(device_id, reading)
+    await update_aggregation (device_id, reading)
     
     # 3. Check if value changed significantly (delta compression)
-    if await has_significant_change(device_id, reading):
+    if await has_significant_change (device_id, reading):
         # Broadcast only if changed
-        await broadcast_reading(device_id, reading)
+        await broadcast_reading (device_id, reading)
 \`\`\`
 
 **3. Real-Time Aggregation**:
@@ -1057,7 +1057,7 @@ class MetricAggregator:
     def __init__(self):
         self.redis = redis.from_url("redis://localhost:6379")
     
-    async def update(self, device_id: str, reading: SensorReading):
+    async def update (self, device_id: str, reading: SensorReading):
         """
         Update real-time aggregations
         """
@@ -1085,7 +1085,7 @@ class MetricAggregator:
         )
         
         # Min/Max tracking
-        await self._update_minmax(key_prefix, reading.value)
+        await self._update_minmax (key_prefix, reading.value)
     
     async def _update_window(
         self,
@@ -1099,30 +1099,30 @@ class MetricAggregator:
         now = datetime.utcnow().timestamp()
         
         # Add value with timestamp as score
-        await self.redis.zadd(key, {str(value): now})
+        await self.redis.zadd (key, {str (value): now})
         
         # Remove values outside window
         cutoff = now - window_seconds
-        await self.redis.zremrangebyscore(key, '-inf', cutoff)
+        await self.redis.zremrangebyscore (key, '-inf', cutoff)
         
         # Set expiry
-        await self.redis.expire(key, window_seconds * 2)
+        await self.redis.expire (key, window_seconds * 2)
     
-    async def _update_minmax(self, key_prefix: str, value: float):
+    async def _update_minmax (self, key_prefix: str, value: float):
         """
         Track min and max values
         """
         # Update min
-        current_min = await self.redis.get(f"{key_prefix}:min")
-        if not current_min or value < float(current_min):
-            await self.redis.set(f"{key_prefix}:min", value, ex=3600)
+        current_min = await self.redis.get (f"{key_prefix}:min")
+        if not current_min or value < float (current_min):
+            await self.redis.set (f"{key_prefix}:min", value, ex=3600)
         
         # Update max
-        current_max = await self.redis.get(f"{key_prefix}:max")
-        if not current_max or value > float(current_max):
-            await self.redis.set(f"{key_prefix}:max", value, ex=3600)
+        current_max = await self.redis.get (f"{key_prefix}:max")
+        if not current_max or value > float (current_max):
+            await self.redis.set (f"{key_prefix}:max", value, ex=3600)
     
-    async def get_aggregated_metrics(self, device_id: str) -> dict:
+    async def get_aggregated_metrics (self, device_id: str) -> dict:
         """
         Get aggregated metrics for device
         """
@@ -1130,7 +1130,7 @@ class MetricAggregator:
         
         # Get all sensor types for device
         pattern = f"metrics:{device_id}:*:current"
-        keys = await self.redis.keys(pattern)
+        keys = await self.redis.keys (pattern)
         
         for key in keys:
             # Extract sensor type
@@ -1138,7 +1138,7 @@ class MetricAggregator:
             sensor_type = parts[2]
             
             # Get current value
-            current = await self.redis.get(f"metrics:{device_id}:{sensor_type}:current")
+            current = await self.redis.get (f"metrics:{device_id}:{sensor_type}:current")
             
             # Get averages
             avg_1m = await self._get_window_average(
@@ -1149,30 +1149,30 @@ class MetricAggregator:
             )
             
             # Get min/max
-            min_val = await self.redis.get(f"metrics:{device_id}:{sensor_type}:min")
-            max_val = await self.redis.get(f"metrics:{device_id}:{sensor_type}:max")
+            min_val = await self.redis.get (f"metrics:{device_id}:{sensor_type}:min")
+            max_val = await self.redis.get (f"metrics:{device_id}:{sensor_type}:max")
             
             metrics[sensor_type] = {
-                "current": float(current) if current else None,
+                "current": float (current) if current else None,
                 "avg_1m": avg_1m,
                 "avg_5m": avg_5m,
-                "min": float(min_val) if min_val else None,
-                "max": float(max_val) if max_val else None
+                "min": float (min_val) if min_val else None,
+                "max": float (max_val) if max_val else None
             }
         
         return metrics
     
-    async def _get_window_average(self, key: str) -> float:
+    async def _get_window_average (self, key: str) -> float:
         """
         Calculate average from window
         """
-        values = await self.redis.zrange(key, 0, -1)
+        values = await self.redis.zrange (key, 0, -1)
         
         if not values:
             return None
         
-        values = [float(v) for v in values]
-        return sum(values) / len(values)
+        values = [float (v) for v in values]
+        return sum (values) / len (values)
 
 aggregator = MetricAggregator()
 \`\`\`
@@ -1202,7 +1202,7 @@ class DeltaCompression:
         Check if value changed significantly
         """
         key = f"{device_id}:{sensor_type}"
-        last_value = self.last_values.get(key)
+        last_value = self.last_values.get (key)
         
         if last_value is None:
             # First value, always broadcast
@@ -1222,7 +1222,7 @@ class DeltaCompression:
         
         return False
 
-delta_compression = DeltaCompression(threshold_percent=1.0)  # 1% change threshold
+delta_compression = DeltaCompression (threshold_percent=1.0)  # 1% change threshold
 \`\`\`
 
 **5. WebSocket with Backpressure**:
@@ -1256,22 +1256,22 @@ class DashboardConnectionManager:
         
         self.connections[client_id] = {
             "websocket": websocket,
-            "subscriptions": set(subscriptions),
-            "queue": deque(maxlen=self.max_queue_size),  # Bounded queue
+            "subscriptions": set (subscriptions),
+            "queue": deque (maxlen=self.max_queue_size),  # Bounded queue
             "slow": False
         }
         
         # Start send loop
-        asyncio.create_task(self._send_loop(client_id))
+        asyncio.create_task (self._send_loop (client_id))
     
-    def disconnect(self, client_id: str):
+    def disconnect (self, client_id: str):
         """
         Disconnect client
         """
         if client_id in self.connections:
             del self.connections[client_id]
     
-    async def broadcast_reading(self, device_id: str, reading: dict):
+    async def broadcast_reading (self, device_id: str, reading: dict):
         """
         Broadcast reading to subscribed clients
         """
@@ -1279,18 +1279,18 @@ class DashboardConnectionManager:
             # Check if client subscribed to this device
             if device_id in conn["subscriptions"]:
                 # Add to queue (bounded, drops old if full)
-                conn["queue"].append(reading)
+                conn["queue"].append (reading)
                 
                 # Mark as slow if queue is full
-                if len(conn["queue"]) >= self.max_queue_size:
+                if len (conn["queue"]) >= self.max_queue_size:
                     conn["slow"] = True
     
-    async def _send_loop(self, client_id: str):
+    async def _send_loop (self, client_id: str):
         """
         Continuously send queued messages to client
         Implements backpressure
         """
-        conn = self.connections.get(client_id)
+        conn = self.connections.get (client_id)
         if not conn:
             return
         
@@ -1302,8 +1302,8 @@ class DashboardConnectionManager:
                 if queue:
                     # Batch send (reduce WebSocket overhead)
                     batch = []
-                    while queue and len(batch) < 10:  # Max 10 messages per batch
-                        batch.append(queue.popleft())
+                    while queue and len (batch) < 10:  # Max 10 messages per batch
+                        batch.append (queue.popleft())
                     
                     await websocket.send_json({
                         "type": "batch",
@@ -1319,7 +1319,7 @@ class DashboardConnectionManager:
                     await asyncio.sleep(0.1)
         
         except:
-            self.disconnect(client_id)
+            self.disconnect (client_id)
 
 dashboard_manager = DashboardConnectionManager()
 
@@ -1333,16 +1333,16 @@ async def dashboard_websocket(
     Dashboard WebSocket with backpressure handling
     """
     # Authenticate
-    user = await get_current_user_ws(websocket, token)
+    user = await get_current_user_ws (websocket, token)
     
     # Parse subscriptions
     subscriptions = devices.split(",") if devices else []
     
-    await dashboard_manager.connect(websocket, user.id, subscriptions)
+    await dashboard_manager.connect (websocket, user.id, subscriptions)
     
     # Send initial aggregated data
     for device_id in subscriptions:
-        metrics = await aggregator.get_aggregated_metrics(device_id)
+        metrics = await aggregator.get_aggregated_metrics (device_id)
         await websocket.send_json({
             "type": "initial",
             "device_id": device_id,
@@ -1380,7 +1380,7 @@ async def dashboard_websocket(
                 })
     
     except WebSocketDisconnect:
-        dashboard_manager.disconnect(user.id)
+        dashboard_manager.disconnect (user.id)
 \`\`\`
 
 **Key Features**:

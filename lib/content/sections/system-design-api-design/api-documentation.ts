@@ -245,7 +245,7 @@ const response = await fetch('https://api.example.com/v1/users', {
 });
 
 const user = await response.json();
-console.log(user);
+console.log (user);
 \`\`\`
 
 **Python**
@@ -281,7 +281,7 @@ Auto-generated interactive documentation:
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./openapi.json');
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup (swaggerDocument));
 \`\`\`
 
 Developers can:

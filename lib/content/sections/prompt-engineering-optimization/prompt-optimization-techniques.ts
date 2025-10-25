@@ -70,7 +70,7 @@ class PromptOptimizer:
         """
         
         current_prompt = initial_prompt
-        current_score = self._evaluate_prompt(current_prompt, test_cases, evaluation_func)
+        current_score = self._evaluate_prompt (current_prompt, test_cases, evaluation_func)
         
         self.history.append({
             'iteration': 0,
@@ -85,22 +85,22 @@ class PromptOptimizer:
             print(f"\\nIteration {iteration}:")
             
             # Analyze failures
-            failures = self._identify_failures(current_prompt, test_cases, evaluation_func)
+            failures = self._identify_failures (current_prompt, test_cases, evaluation_func)
             
             if not failures:
                 print("No failures to learn from!")
                 break
             
             # Generate improvements based on failures
-            improvements = self._generate_improvements(current_prompt, failures)
+            improvements = self._generate_improvements (current_prompt, failures)
             
             # Test each improvement
             best_variant = current_prompt
             best_score = current_score
             
             for improvement in improvements:
-                variant = self._apply_improvement(current_prompt, improvement)
-                score = self._evaluate_prompt(variant, test_cases, evaluation_func)
+                variant = self._apply_improvement (current_prompt, improvement)
+                score = self._evaluate_prompt (variant, test_cases, evaluation_func)
                 
                 print(f"  Variant '{improvement['name']}': {score:.3f}")
                 
@@ -159,10 +159,10 @@ class PromptOptimizer:
             output = response.choices[0].message.content
             
             # Evaluate
-            score = evaluation_func(output, test_case.get('expected'))
-            scores.append(score)
+            score = evaluation_func (output, test_case.get('expected'))
+            scores.append (score)
         
-        return sum(scores) / len(scores) if scores else 0
+        return sum (scores) / len (scores) if scores else 0
     
     def _identify_failures(
         self,
@@ -185,7 +185,7 @@ class PromptOptimizer:
             )
             
             output = response.choices[0].message.content
-            score = evaluation_func(output, test_case.get('expected'))
+            score = evaluation_func (output, test_case.get('expected'))
             
             if score < threshold:
                 failures.append({
@@ -227,18 +227,18 @@ class PromptOptimizer:
             {
                 'name': 'add_cot',
                 'description': 'Add chain-of-thought',
-                'modify': lambda p: p + "\\n\\nLet's solve this step by step:"
+                'modify': lambda p: p + "\\n\\nLet\'s solve this step by step:"
             }
         ]
         
         return improvements
     
-    def _apply_improvement(self, prompt: str, improvement: Dict) -> str:
+    def _apply_improvement (self, prompt: str, improvement: Dict) -> str:
         """Apply an improvement to the prompt."""
         return improvement['modify'](prompt)
 
 # Example usage
-def email_validation_score(output: str, expected: str) -> float:
+def email_validation_score (output: str, expected: str) -> float:
     """Score email validation accuracy."""
     output_clean = output.strip().lower()
     expected_clean = expected.strip().lower()
@@ -307,19 +307,19 @@ class PromptMetrics:
         """
         
         # Accuracy metrics
-        exact_matches = sum(1 for o, e in zip(outputs, expected) if o.strip() == e.strip())
-        accuracy = exact_matches / len(outputs)
+        exact_matches = sum(1 for o, e in zip (outputs, expected) if o.strip() == e.strip())
+        accuracy = exact_matches / len (outputs)
         
         # Consistency (how similar are outputs for same input)
-        consistency = PromptMetrics._calculate_consistency(outputs)
+        consistency = PromptMetrics._calculate_consistency (outputs)
         
         # Cost metrics
-        avg_cost = sum(costs) / len(costs)
-        total_cost = sum(costs)
+        avg_cost = sum (costs) / len (costs)
+        total_cost = sum (costs)
         
         # Latency metrics
-        avg_latency = sum(latencies) / len(latencies)
-        p95_latency = sorted(latencies)[int(len(latencies) * 0.95)]
+        avg_latency = sum (latencies) / len (latencies)
+        p95_latency = sorted (latencies)[int (len (latencies) * 0.95)]
         
         # Quality score (weighted combination)
         quality_score = (
@@ -337,25 +337,25 @@ class PromptMetrics:
             'avg_latency': avg_latency,
             'p95_latency': p95_latency,
             'quality_score': quality_score,
-            'total_requests': len(outputs)
+            'total_requests': len (outputs)
         }
     
     @staticmethod
-    def _calculate_consistency(outputs: List[str]) -> float:
+    def _calculate_consistency (outputs: List[str]) -> float:
         """
         Calculate output consistency.
         Higher = more consistent formatting and style.
         """
         
-        if len(outputs) < 2:
+        if len (outputs) < 2:
             return 1.0
         
         # Simple consistency: compare output lengths and formats
-        lengths = [len(o) for o in outputs]
-        avg_length = sum(lengths) / len(lengths)
+        lengths = [len (o) for o in outputs]
+        avg_length = sum (lengths) / len (lengths)
         
         # Standard deviation of lengths (normalized)
-        variance = sum((l - avg_length) ** 2 for l in lengths) / len(lengths)
+        variance = sum((l - avg_length) ** 2 for l in lengths) / len (lengths)
         std_dev = variance ** 0.5
         
         # Consistency score: lower std dev = higher consistency
@@ -369,11 +369,11 @@ expected = ["valid", "valid", "valid", "valid"]
 costs = [0.001, 0.001, 0.0015, 0.001]
 latencies = [0.5, 0.6, 0.7, 0.5]
 
-metrics = PromptMetrics.calculate_metrics(outputs, expected, costs, latencies)
+metrics = PromptMetrics.calculate_metrics (outputs, expected, costs, latencies)
 
 print("Prompt Performance Metrics:")
 for key, value in metrics.items():
-    if isinstance(value, float):
+    if isinstance (value, float):
         print(f"  {key}: {value:.3f}")
     else:
         print(f"  {key}: {value}")
@@ -410,18 +410,18 @@ class PromptABTest:
         """
         
         # Test both variants
-        scores_a = self._test_variant(variant_a, test_cases, evaluation_func)
-        scores_b = self._test_variant(variant_b, test_cases, evaluation_func)
+        scores_a = self._test_variant (variant_a, test_cases, evaluation_func)
+        scores_b = self._test_variant (variant_b, test_cases, evaluation_func)
         
         # Calculate statistics
-        mean_a = np.mean(scores_a)
-        mean_b = np.mean(scores_b)
+        mean_a = np.mean (scores_a)
+        mean_b = np.mean (scores_b)
         
         # Statistical significance (t-test)
-        t_stat, p_value = stats.ttest_ind(scores_a, scores_b)
+        t_stat, p_value = stats.ttest_ind (scores_a, scores_b)
         
-        # Effect size (Cohen's d)
-        pooled_std = np.sqrt((np.var(scores_a) + np.var(scores_b)) / 2)
+        # Effect size (Cohen\'s d)
+        pooled_std = np.sqrt((np.var (scores_a) + np.var (scores_b)) / 2)
         cohens_d = (mean_b - mean_a) / pooled_std if pooled_std > 0 else 0
         
         # Determine winner
@@ -441,12 +441,12 @@ class PromptABTest:
         return {
             name_a: {
                 'mean_score': mean_a,
-                'std_dev': np.std(scores_a),
+                'std_dev': np.std (scores_a),
                 'scores': scores_a
             },
             name_b: {
                 'mean_score': mean_b,
-                'std_dev': np.std(scores_b),
+                'std_dev': np.std (scores_b),
                 'scores': scores_b
             },
             'statistics': {
@@ -479,12 +479,12 @@ class PromptABTest:
             )
             
             output = response.choices[0].message.content
-            score = evaluation_func(output, test_case.get('expected'))
-            scores.append(score)
+            score = evaluation_func (output, test_case.get('expected'))
+            scores.append (score)
         
         return scores
     
-    def print_results(self, results: Dict):
+    def print_results (self, results: Dict):
         """Print formatted A/B test results."""
         
         print("\\n" + "="*60)
@@ -500,13 +500,13 @@ class PromptABTest:
         print(f"\\nStatistical Significance:")
         print(f"  p-value: {results['statistics']['p_value']:.4f}")
         print(f"  Significant: {results['statistics']['significant']}")
-        print(f"  Effect Size (Cohen's d): {results['statistics']['cohens_d']:.3f}")
+        print(f"  Effect Size (Cohen\'s d): {results['statistics']['cohens_d']:.3f}")
         
         print(f"\\n🏆 {results['conclusion']}")
         print("="*60 + "\\n")
 
 # Example usage
-def simple_eval(output: str, expected: str) -> float:
+def simple_eval (output: str, expected: str) -> float:
     return 1.0 if expected.lower() in output.lower() else 0.0
 
 variant_a = "Classify this: {text}\\n\\nClassification:"
@@ -519,8 +519,8 @@ test_cases = [
 ]
 
 ab_test = PromptABTest()
-results = ab_test.run_ab_test(variant_a, variant_b, test_cases, simple_eval)
-ab_test.print_results(results)
+results = ab_test.run_ab_test (variant_a, variant_b, test_cases, simple_eval)
+ab_test.print_results (results)
 \`\`\`
 
 ## DSPy: Automated Prompt Optimization
@@ -546,19 +546,19 @@ import dspy
 
 # Configure LLM
 lm = dspy.OpenAI(model="gpt-3.5-turbo")
-dspy.settings.configure(lm=lm)
+dspy.settings.configure (lm=lm)
 
 # Define signature (what the prompt should do)
-class SentimentAnalysis(dspy.Signature):
+class SentimentAnalysis (dspy.Signature):
     """Analyze the sentiment of text."""
     text = dspy.InputField()
-    sentiment = dspy.OutputField(desc="positive, negative, or neutral")
+    sentiment = dspy.OutputField (desc="positive, negative, or neutral")
 
 # Create module
 sentiment_module = dspy.Predict(SentimentAnalysis)
 
 # Use it
-result = sentiment_module(text="This product is amazing!")
+result = sentiment_module (text="This product is amazing!")
 print(result.sentiment)  # "positive"
 
 # Optimize with examples
@@ -566,17 +566,17 @@ from dspy.teleprompt import BootstrapFewShot
 
 # Training examples
 train_examples = [
-    dspy.Example(text="Great!", sentiment="positive").with_inputs('text'),
-    dspy.Example(text="Awful", sentiment="negative").with_inputs('text'),
-    dspy.Example(text="Okay", sentiment="neutral").with_inputs('text'),
+    dspy.Example (text="Great!", sentiment="positive").with_inputs('text'),
+    dspy.Example (text="Awful", sentiment="negative").with_inputs('text'),
+    dspy.Example (text="Okay", sentiment="neutral").with_inputs('text'),
 ]
 
 # Optimizer automatically improves prompts
-optimizer = BootstrapFewShot(metric=lambda example, pred: example.sentiment == pred.sentiment)
-optimized_module = optimizer.compile(sentiment_module, trainset=train_examples)
+optimizer = BootstrapFewShot (metric=lambda example, pred: example.sentiment == pred.sentiment)
+optimized_module = optimizer.compile (sentiment_module, trainset=train_examples)
 
 # Optimized module uses better prompts under the hood
-result = optimized_module(text="Not bad")
+result = optimized_module (text="Not bad")
 print(result.sentiment)
 \`\`\`
 \`\`\`
@@ -593,7 +593,7 @@ class PromptCompressor:
     """
     
     @staticmethod
-    def remove_redundancy(prompt: str) -> str:
+    def remove_redundancy (prompt: str) -> str:
         """Remove redundant phrases and repetition."""
         
         # Remove common redundant phrases
@@ -606,7 +606,7 @@ class PromptCompressor:
         
         compressed = prompt
         for phrase in redundant_phrases:
-            compressed = compressed.replace(phrase, "")
+            compressed = compressed.replace (phrase, "")
         
         # Remove duplicate lines
         lines = compressed.split('\\n')
@@ -615,15 +615,15 @@ class PromptCompressor:
         
         for line in lines:
             if line.strip() and line.strip() not in seen:
-                unique_lines.append(line)
-                seen.add(line.strip())
+                unique_lines.append (line)
+                seen.add (line.strip())
             elif not line.strip():
-                unique_lines.append(line)
+                unique_lines.append (line)
         
-        return '\\n'.join(unique_lines)
+        return '\\n'.join (unique_lines)
     
     @staticmethod
-    def shorten_instructions(prompt: str) -> str:
+    def shorten_instructions (prompt: str) -> str:
         """Make instructions more concise."""
         
         replacements = {
@@ -639,22 +639,22 @@ class PromptCompressor:
         
         compressed = prompt
         for old, new in replacements.items():
-            compressed = compressed.replace(old, new)
+            compressed = compressed.replace (old, new)
         
         return compressed
     
     @staticmethod
-    def compress_examples(examples: List[Dict], max_examples: int = 3) -> List[Dict]:
+    def compress_examples (examples: List[Dict], max_examples: int = 3) -> List[Dict]:
         """Reduce number of examples to most representative."""
         
-        if len(examples) <= max_examples:
+        if len (examples) <= max_examples:
             return examples
         
         # Select diverse examples (simple selection by length)
-        sorted_examples = sorted(examples, key=lambda x: len(x['input']))
+        sorted_examples = sorted (examples, key=lambda x: len (x['input']))
         
         # Take shortest, longest, and middle
-        indices = [0, len(sorted_examples) // 2, len(sorted_examples) - 1]
+        indices = [0, len (sorted_examples) // 2, len (sorted_examples) - 1]
         return [sorted_examples[i] for i in indices[:max_examples]]
     
     @staticmethod
@@ -671,15 +671,15 @@ class PromptCompressor:
         
         # Count original tokens
         encoding = tiktoken.encoding_for_model("gpt-4")
-        original_tokens = len(encoding.encode(prompt))
+        original_tokens = len (encoding.encode (prompt))
         
         # Apply compressions
         compressed = prompt
-        compressed = PromptCompressor.remove_redundancy(compressed)
-        compressed = PromptCompressor.shorten_instructions(compressed)
+        compressed = PromptCompressor.remove_redundancy (compressed)
+        compressed = PromptCompressor.shorten_instructions (compressed)
         
         # Count new tokens
-        compressed_tokens = len(encoding.encode(compressed))
+        compressed_tokens = len (encoding.encode (compressed))
         
         # Calculate savings
         token_reduction = original_tokens - compressed_tokens
@@ -702,14 +702,14 @@ Can you analyze this code and tell me if there are any issues?
 It is important that you check for bugs very carefully.
 
 Code:
-def add(a, b):
+def add (a, b):
     return a + b
 
 Please provide your analysis.
 """
 
 compressor = PromptCompressor()
-result = compressor.compress_full_prompt(verbose_prompt)
+result = compressor.compress_full_prompt (verbose_prompt)
 
 print("Original Prompt:")
 print(result['original_prompt'])
@@ -769,8 +769,8 @@ compressed = compressor.compress_prompt(
     rate=0.5         # Compression rate
 )
 
-print("Original length:", len(long_prompt))
-print("Compressed length:", len(compressed['compressed_prompt']))
+print("Original length:", len (long_prompt))
+print("Compressed length:", len (compressed['compressed_prompt']))
 print("\\nCompressed:", compressed['compressed_prompt'])
 # Result preserves key terms: React, TypeScript, JWT, PostgreSQL, RESTful, scalable, rate limiting
 \`\`\`
@@ -806,8 +806,8 @@ class CostQualityOptimizer:
             model = variant['model']
             
             # Calculate cost
-            encoding = tiktoken.encoding_for_model(model)
-            tokens = len(encoding.encode(prompt))
+            encoding = tiktoken.encoding_for_model (model)
+            tokens = len (encoding.encode (prompt))
             cost_per_request = (tokens / 1000) * cost_per_1k_tokens[model]
             
             # Calculate quality (would normally test with LLM)
@@ -827,28 +827,27 @@ class CostQualityOptimizer:
             })
         
         # Find best overall (highest efficiency)
-        best = max(results, key=lambda x: x['efficiency'])
+        best = max (results, key=lambda x: x['efficiency'])
         
         return {
             'variants': results,
             'best_overall': best['name'],
-            'recommendation': CostQualityOptimizer._make_recommendation(results)
+            'recommendation': CostQualityOptimizer._make_recommendation (results)
         }
     
     @staticmethod
-    def _make_recommendation(results: List[Dict]) -> str:
+    def _make_recommendation (results: List[Dict]) -> str:
         """Make recommendation based on use case."""
         
-        best_quality = max(results, key=lambda x: x['quality'])
-        cheapest = min(results, key=lambda x: x['cost'])
-        most_efficient = max(results, key=lambda x: x['efficiency'])
+        best_quality = max (results, key=lambda x: x['quality'])
+        cheapest = min (results, key=lambda x: x['cost'])
+        most_efficient = max (results, key=lambda x: x['efficiency'])
         
         return f"""
 Recommendations:
-- For highest quality: {best_quality['name']} (quality: {best_quality['quality']:.3f}, cost: \${best_quality['cost']: .4f
-})
-- For lowest cost: { cheapest['name'] } (cost: \${ cheapest['cost']:.4f }, quality: {cheapest['quality']: .3f})
-- Best balance: { most_efficient['name'] } (efficiency: {most_efficient['efficiency']: .1f})
+- For highest quality: {best_quality['name']} (quality: {best_quality['quality']:.3f}, cost: \${best_quality['cost']:.4f})
+- For lowest cost: { cheapest['name'] } (cost: \${ cheapest['cost']:.4f }, quality: {cheapest['quality']:.3f})
+- Best balance: { most_efficient['name'] } (efficiency: {most_efficient['efficiency']:.1f})
 """
 
 # Example
@@ -879,7 +878,7 @@ cost_per_1k = {
 }
 
 optimizer = CostQualityOptimizer()
-result = optimizer.evaluate_tradeoff(variants, [], None, cost_per_1k)
+result = optimizer.evaluate_tradeoff (variants, [], None, cost_per_1k)
 
 print("Cost/Quality Analysis:")
 for v in result['variants']:

@@ -14,29 +14,29 @@ export const graphqlperformanceQuiz = [
 \`\`\`javascript
 // Setup DataLoaders
 const createLoaders = (db) => ({
-  user: new DataLoader(async (ids) => {
+  user: new DataLoader (async (ids) => {
     const users = await db.users.findAll({
       where: { id: ids }
     });
-    return ids.map(id => users.find(u => u.id === id));
+    return ids.map (id => users.find (u => u.id === id));
   }),
   
-  postsByUser: new DataLoader(async (userIds) => {
+  postsByUser: new DataLoader (async (userIds) => {
     const posts = await db.posts.findAll({
       where: { authorId: userIds }
     });
     // Group by userId
-    return userIds.map(userId => 
-      posts.filter(p => p.authorId === userId)
+    return userIds.map (userId => 
+      posts.filter (p => p.authorId === userId)
     );
   }),
   
-  commentsByPost: new DataLoader(async (postIds) => {
+  commentsByPost: new DataLoader (async (postIds) => {
     const comments = await db.comments.findAll({
       where: { postId: postIds }
     });
-    return postIds.map(postId =>
-      comments.filter(c => c.postId === postId)
+    return postIds.map (postId =>
+      comments.filter (c => c.postId === postId)
     );
   })
 });
@@ -45,7 +45,7 @@ const createLoaders = (db) => ({
 const server = new ApolloServer({
   schema,
   context: ({ req }) => ({
-    loaders: createLoaders(db),
+    loaders: createLoaders (db),
     user: req.user
   })
 });
@@ -54,9 +54,9 @@ const server = new ApolloServer({
 const resolvers = {
   Post: {
     author: (post, _, { loaders }) => 
-      loaders.user.load(post.authorId),
+      loaders.user.load (post.authorId),
     comments: (post, _, { loaders }) =>
-      loaders.commentsByPost.load(post.id)
+      loaders.commentsByPost.load (post.id)
   }
 };
 \`\`\`
@@ -128,19 +128,19 @@ const client = redis.createClient();
 
 const cacheResolver = async (resolve, root, args, context, info) => {
   // Create cache key from query + variables
-  const key = \`gql:\${info.fieldName}:\${JSON.stringify(args)}\`;
+  const key = \`gql:\${info.fieldName}:\${JSON.stringify (args)}\`;
   
   // Check cache
-  const cached = await client.get(key);
+  const cached = await client.get (key);
   if (cached) {
-    return JSON.parse(cached);
+    return JSON.parse (cached);
   }
   
   // Execute resolver
-  const result = await resolve(root, args, context, info);
+  const result = await resolve (root, args, context, info);
   
   // Cache for 5 minutes
-  await client.setex(key, 300, JSON.stringify(result));
+  await client.setex (key, 300, JSON.stringify (result));
   
   return result;
 };
@@ -172,7 +172,7 @@ const resolvers = {
         throw new Error(\`Cannot request more than \${MAX_PAGE_SIZE} items\`);
       }
       
-      const cursor = after ? decodeCursor(after) : null;
+      const cursor = after ? decodeCursor (after) : null;
       const posts = await db.posts.findAll({
         where: cursor ? { id: { $gt: cursor.id } } : {},
         limit: first + 1
@@ -182,7 +182,7 @@ const resolvers = {
       const edges = posts.slice(0, first);
       
       return {
-        edges: edges.map(post => ({
+        edges: edges.map (post => ({
           cursor: encodeCursor({ id: post.id }),
           node: post
         })),
@@ -213,7 +213,7 @@ const server = new ApolloServer({
           
           return {
             executionDidEnd() {
-              clearTimeout(timeout);
+              clearTimeout (timeout);
             }
           };
         }
@@ -296,7 +296,7 @@ Combines bandwidth savings with caching:
 // Client
 const link = createPersistedQueryLink({
   sha256: hashQuery
-}).concat(httpLink);
+}).concat (httpLink);
 
 // First request: Send hash
 {
@@ -331,13 +331,13 @@ const server = new ApolloServer({
 // Schema-level cache hints
 type Query {
   # Public data: cache longer
-  posts: [Post!]! @cacheControl(maxAge: 300, scope: PUBLIC)
+  posts: [Post!]! @cacheControl (maxAge: 300, scope: PUBLIC)
   
   # User-specific: shorter cache, private
-  me: User @cacheControl(maxAge: 60, scope: PRIVATE)
+  me: User @cacheControl (maxAge: 60, scope: PRIVATE)
   
   # Real-time: don't cache
-  liveCount: Int! @cacheControl(maxAge: 0)
+  liveCount: Int! @cacheControl (maxAge: 0)
 }
 
 // Response includes cache headers
@@ -370,7 +370,7 @@ const server = new ApolloServer({
           // Check cache
           const cached = await client.get(\`gql:\${key}\`);
           if (cached) {
-            return JSON.parse(cached);
+            return JSON.parse (cached);
           }
           
           return null;  // Execute query
@@ -386,7 +386,7 @@ const server = new ApolloServer({
             await client.setex(
               \`gql:\${key}\`,
               300,
-              JSON.stringify(response)
+              JSON.stringify (response)
             );
           }
         }
@@ -400,9 +400,9 @@ const server = new ApolloServer({
 
 \`\`\`javascript
 // Automatic caching within single request
-const userLoader = new DataLoader(async (ids) => {
+const userLoader = new DataLoader (async (ids) => {
   const users = await db.users.findAll({ where: { id: ids }});
-  return ids.map(id => users.find(u => u.id === id));
+  return ids.map (id => users.find (u => u.id === id));
 }, {
   cache: true  // Caches for request duration
 });
@@ -508,7 +508,7 @@ const server = new ApolloServer({
         },
         
         didEncounterErrors({ errors }) {
-          errors.forEach(error => {
+          errors.forEach (error => {
             queryErrors.labels(
               operationName,
               error.extensions?.code || 'UNKNOWN'
@@ -522,12 +522,12 @@ const server = new ApolloServer({
           queryDuration.labels(
             operationName,
             operationType
-          ).observe(duration);
+          ).observe (duration);
           
           // Log complexity if available
           if (response.extensions?.complexity) {
-            queryComplexity.labels(operationName)
-              .observe(response.extensions.complexity);
+            queryComplexity.labels (operationName)
+              .observe (response.extensions.complexity);
           }
         }
       };
@@ -554,7 +554,7 @@ const instrumentResolver = (typeName, fieldName, resolve) => {
       return await resolve(...args);
     } finally {
       const duration = (Date.now() - start) / 1000;
-      resolverDuration.labels(typeName, fieldName).observe(duration);
+      resolverDuration.labels (typeName, fieldName).observe (duration);
     }
   };
 };
@@ -589,21 +589,21 @@ const loaderMisses = new prometheus.Counter({
 const instrumentedDataLoader = (name, batchFn) => {
   return new DataLoader(
     async (keys) => {
-      loaderMisses.labels(name).inc(keys.length);
-      return batchFn(keys);
+      loaderMisses.labels (name).inc (keys.length);
+      return batchFn (keys);
     },
     {
       cacheMap: {
-        get(key) {
-          const value = cache.get(key);
+        get (key) {
+          const value = cache.get (key);
           if (value) {
-            loaderHits.labels(name).inc();
+            loaderHits.labels (name).inc();
           }
           return value;
         },
-        set: cache.set.bind(cache),
-        delete: cache.delete.bind(cache),
-        clear: cache.clear.bind(cache)
+        set: cache.set.bind (cache),
+        delete: cache.delete.bind (cache),
+        clear: cache.clear.bind (cache)
       }
     }
   );
@@ -621,7 +621,7 @@ groups:
       - alert: GraphQLSlowQueries
         expr: |
           histogram_quantile(0.95,
-            rate(graphql_query_duration_seconds_bucket[5m])
+            rate (graphql_query_duration_seconds_bucket[5m])
           ) > 2
         for: 5m
         labels:
@@ -633,9 +633,9 @@ groups:
       - alert: GraphQLHighErrorRate
         expr: |
           (
-            sum(rate(graphql_query_errors_total[5m]))
+            sum (rate (graphql_query_errors_total[5m]))
             /
-            sum(rate(graphql_query_duration_seconds_count[5m]))
+            sum (rate (graphql_query_duration_seconds_count[5m]))
           ) > 0.05
         for: 5m
         labels:
@@ -647,7 +647,7 @@ groups:
       - alert: GraphQLHighComplexity
         expr: |
           histogram_quantile(0.99,
-            rate(graphql_query_complexity_bucket[5m])
+            rate (graphql_query_complexity_bucket[5m])
           ) > 5000
         for: 10m
         labels:
@@ -659,7 +659,7 @@ groups:
       - alert: GraphQLSlowResolver
         expr: |
           histogram_quantile(0.95,
-            rate(graphql_resolver_duration_seconds_bucket{
+            rate (graphql_resolver_duration_seconds_bucket{
               type="Post",
               field="author"
             }[5m])
@@ -674,10 +674,10 @@ groups:
       - alert: DataLoaderLowHitRate
         expr: |
           (
-            rate(dataloader_cache_hits_total[5m])
+            rate (dataloader_cache_hits_total[5m])
             /
-            (rate(dataloader_cache_hits_total[5m]) +
-             rate(dataloader_cache_misses_total[5m]))
+            (rate (dataloader_cache_hits_total[5m]) +
+             rate (dataloader_cache_misses_total[5m]))
           ) < 0.5
         for: 15m
         labels:
@@ -695,13 +695,13 @@ groups:
       "title": "Query Latency (p50, p95, p99)",
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, rate(graphql_query_duration_seconds_bucket[5m]))"
+          "expr": "histogram_quantile(0.50, rate (graphql_query_duration_seconds_bucket[5m]))"
         },
         {
-          "expr": "histogram_quantile(0.95, rate(graphql_query_duration_seconds_bucket[5m]))"
+          "expr": "histogram_quantile(0.95, rate (graphql_query_duration_seconds_bucket[5m]))"
         },
         {
-          "expr": "histogram_quantile(0.99, rate(graphql_query_duration_seconds_bucket[5m]))"
+          "expr": "histogram_quantile(0.99, rate (graphql_query_duration_seconds_bucket[5m]))"
         }
       ]
     },
@@ -709,7 +709,7 @@ groups:
       "title": "Error Rate",
       "targets": [
         {
-          "expr": "sum(rate(graphql_query_errors_total[5m])) by (error_type)"
+          "expr": "sum (rate (graphql_query_errors_total[5m])) by (error_type)"
         }
       ]
     },
@@ -717,7 +717,7 @@ groups:
       "title": "Top 10 Slowest Queries",
       "targets": [
         {
-          "expr": "topk(10, avg by (operation_name) (rate(graphql_query_duration_seconds_sum[5m]) / rate(graphql_query_duration_seconds_count[5m])))"
+          "expr": "topk(10, avg by (operation_name) (rate (graphql_query_duration_seconds_sum[5m]) / rate (graphql_query_duration_seconds_count[5m])))"
         }
       ]
     }

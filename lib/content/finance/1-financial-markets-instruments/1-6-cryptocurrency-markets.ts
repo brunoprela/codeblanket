@@ -1,7 +1,7 @@
 export const cryptocurrencyMarkets = {
-  title: "Cryptocurrency Markets",
-  slug: "cryptocurrency-markets",
-  description: "Master the 24/7 digital asset markets - from Bitcoin to DeFi",
+  title: 'Cryptocurrency Markets',
+  slug: 'cryptocurrency-markets',
+  description: 'Master the 24/7 digital asset markets - from Bitcoin to DeFi',
   content: `
 # Cryptocurrency Markets
 
@@ -61,17 +61,17 @@ class Cryptocurrency:
     use_case: str
     typical_volatility: float  # Annual volatility
     
-    def calculate_market_cap(self, price: float) -> float:
+    def calculate_market_cap (self, price: float) -> float:
         """Calculate market capitalization"""
         return price * self.current_supply
     
-    def calculate_fully_diluted_value(self, price: float) -> float:
+    def calculate_fully_diluted_value (self, price: float) -> float:
         """Calculate FDV if all coins were minted"""
         if self.max_supply:
             return price * self.max_supply
-        return self.calculate_market_cap(price)
+        return self.calculate_market_cap (price)
     
-    def get_inflation_rate(self) -> float:
+    def get_inflation_rate (self) -> float:
         """Calculate annual supply inflation rate"""
         if self.max_supply and self.max_supply > self.current_supply:
             remaining = self.max_supply - self.current_supply
@@ -152,8 +152,8 @@ for symbol, crypto in CRYPTOCURRENCIES.items():
 # Example: Bitcoin market cap
 btc = CRYPTOCURRENCIES['BTC']
 btc_price = 43000  # $43K per BTC
-market_cap = btc.calculate_market_cap(btc_price)
-fdv = btc.calculate_fully_diluted_value(btc_price)
+market_cap = btc.calculate_market_cap (btc_price)
+fdv = btc.calculate_fully_diluted_value (btc_price)
 
 print(f"Bitcoin at \${btc_price:,}:")
 print(f"  Market Cap: \${market_cap/1e9:.0f}B")
@@ -198,7 +198,7 @@ class CryptoExchange:
         self.order_book = {}
         self.users = {}
     
-    def get_characteristics(self) -> Dict:
+    def get_characteristics (self) -> Dict:
         """Compare CEX vs DEX"""
         if self.type == 'CEX':
             return {
@@ -363,7 +363,7 @@ print(f"  As % of Account: {sizing['position_as_pct_of_account']:.0f}%")
 print(f"\\n💡 {sizing['recommendation']}")
 \`\`\`
 
-**Bitcoin's Historical Drawdowns:**
+**Bitcoin\'s Historical Drawdowns:**
 - 2011: -93% (peak to trough)
 - 2014: -83%
 - 2018: -83%
@@ -456,7 +456,7 @@ for category, info in categories.items():
     print(f"  Total Value Locked: {info['tvl']}\\n")
 
 # APY calculation example
-yield_calc = defi.calculate_apy_vs_apr(apr=0.12, compounding_frequency=365)
+yield_calc = defi.calculate_apy_vs_apr (apr=0.12, compounding_frequency=365)
 
 print("Yield Farming Example:")
 print(f"  APR: {yield_calc['apr']:.2f}%")
@@ -554,7 +554,7 @@ class Crypto2022Crisis:
             'secondary_losses': total_secondary_losses,
             'total_system_loss': total_loss,
             'amplification_factor': total_loss / direct_loss,
-            'interpretation': f'${direct_loss/1e9:.0f}B failure became ${total_loss/1e9:.0f}B crisis'
+            'interpretation': f'\${direct_loss/1e9:.0f}B failure became \${total_loss/1e9:.0f}B crisis'
         }
 
 # Display timeline
@@ -607,7 +607,7 @@ class CryptoTradingSystem:
         self.positions = {}
         self.account_balance = {'USD': 100000, 'BTC': 0, 'ETH': 0}
     
-    def get_price(self, symbol: str) -> Optional[Dict]:
+    def get_price (self, symbol: str) -> Optional[Dict]:
         """
         Get current crypto price
         In production: WebSocket for real-time, REST for snapshots
@@ -615,13 +615,13 @@ class CryptoTradingSystem:
         try:
             # Example: Coinbase API (public endpoint)
             url = f"https://api.coinbase.com/v2/prices/{symbol}-USD/spot"
-            response = requests.get(url, timeout=5)
+            response = requests.get (url, timeout=5)
             
             if response.status_code == 200:
                 data = response.json()
                 return {
                     'symbol': symbol,
-                    'price': float(data['data']['amount']),
+                    'price': float (data['data']['amount']),
                     'currency': 'USD',
                     'timestamp': datetime.now()
                 }
@@ -630,14 +630,14 @@ class CryptoTradingSystem:
         
         return None
     
-    def calculate_position_size(self,
+    def calculate_position_size (self,
                                symbol: str,
                                risk_per_trade: float,
                                stop_loss_pct: float) -> Dict:
         """
         Kelly Criterion-based position sizing for crypto
         
-        Crypto's high volatility requires small position sizes
+        Crypto\'s high volatility requires small position sizes
         """
         available_capital = self.account_balance['USD']
         max_loss_dollars = available_capital * risk_per_trade
@@ -646,7 +646,7 @@ class CryptoTradingSystem:
         position_size_dollars = max_loss_dollars / stop_loss_pct
         
         # Get current price
-        quote = self.get_price(symbol)
+        quote = self.get_price (symbol)
         if not quote:
             return {'error': 'Could not get price'}
         
@@ -664,7 +664,7 @@ class CryptoTradingSystem:
             'position_as_pct_of_capital': (position_size_dollars / available_capital) * 100
         }
     
-    def implement_dollar_cost_averaging(self,
+    def implement_dollar_cost_averaging (self,
                                        symbol: str,
                                        total_amount: float,
                                        num_purchases: int,
@@ -677,8 +677,8 @@ class CryptoTradingSystem:
         amount_per_purchase = total_amount / num_purchases
         
         schedule = []
-        for i in range(num_purchases):
-            purchase_date = datetime.now() + timedelta(days=frequency_days * i)
+        for i in range (num_purchases):
+            purchase_date = datetime.now() + timedelta (days=frequency_days * i)
             schedule.append({
                 'purchase_number': i + 1,
                 'date': purchase_date.strftime('%Y-%m-%d'),
@@ -689,7 +689,7 @@ class CryptoTradingSystem:
         return schedule
 
 # Example usage
-system = CryptoTradingSystem(api_key="test", api_secret="test")
+system = CryptoTradingSystem (api_key="test", api_secret="test")
 
 print("\\n=== Crypto Trading System ===\\n")
 
@@ -754,13 +754,16 @@ You now understand crypto markets - ready to build crypto systems!
 `,
   exercises: [
     {
-      prompt: "Build a crypto portfolio tracker that monitors holdings across multiple wallets (MetaMask, Coinbase, cold storage), fetches real-time prices from CoinGecko/CoinMarketCap, calculates total value, and alerts on 10%+ daily moves.",
-      solution: "// Implementation: 1) Connect to wallet APIs (Web3, exchange APIs), 2) Fetch balances for BTC, ETH, ERC-20 tokens, 3) Get prices from multiple sources, 4) Calculate total value in USD, 5) Store historical values, 6) Calculate 24h change, 7) Send alerts via email/SMS/Telegram when >10% move, 8) Display on dashboard with charts"
+      prompt:
+        'Build a crypto portfolio tracker that monitors holdings across multiple wallets (MetaMask, Coinbase, cold storage), fetches real-time prices from CoinGecko/CoinMarketCap, calculates total value, and alerts on 10%+ daily moves.',
+      solution:
+        '// Implementation: 1) Connect to wallet APIs (Web3, exchange APIs), 2) Fetch balances for BTC, ETH, ERC-20 tokens, 3) Get prices from multiple sources, 4) Calculate total value in USD, 5) Store historical values, 6) Calculate 24h change, 7) Send alerts via email/SMS/Telegram when >10% move, 8) Display on dashboard with charts',
     },
     {
-      prompt: "Create a DCA (Dollar Cost Averaging) automation system that buys $X of Bitcoin weekly regardless of price. Calculate historical returns if this strategy was started 1/5/10 years ago vs lump sum investing.",
-      solution: "// Implementation: 1) Connect to exchange API (Coinbase, Binance), 2) Schedule weekly purchase using cron/scheduler, 3) Execute market buy for fixed USD amount, 4) Track cost basis and holdings, 5) Backtest: fetch historical prices, simulate weekly purchases, 6) Compare DCA vs lump sum (invested all at start), 7) Calculate returns, volatility, max drawdown for both strategies, 8) Visualize cumulative returns over time"
-    }
-  ]
+      prompt:
+        'Create a DCA (Dollar Cost Averaging) automation system that buys $X of Bitcoin weekly regardless of price. Calculate historical returns if this strategy was started 1/5/10 years ago vs lump sum investing.',
+      solution:
+        '// Implementation: 1) Connect to exchange API (Coinbase, Binance), 2) Schedule weekly purchase using cron/scheduler, 3) Execute market buy for fixed USD amount, 4) Track cost basis and holdings, 5) Backtest: fetch historical prices, simulate weekly purchases, 6) Compare DCA vs lump sum (invested all at start), 7) Calculate returns, volatility, max drawdown for both strategies, 8) Visualize cumulative returns over time',
+    },
+  ],
 };
-

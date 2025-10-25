@@ -125,11 +125,11 @@ WHERE seat_id = 'A1' AND version = 5 AND is_available = true;
 ### Approach 3: Redis Distributed Lock (Recommended)
 
 \`\`\`python
-def reserve_seat(seat_id, user_id):
+def reserve_seat (seat_id, user_id):
     lock_key = f"seat_lock:{seat_id}"
     
     # Try to acquire lock (SET NX = set if not exists)
-    lock_acquired = redis.set(lock_key, user_id, nx=True, ex=600)  # 10 min expiry
+    lock_acquired = redis.set (lock_key, user_id, nx=True, ex=600)  # 10 min expiry
     
     if not lock_acquired:
         return {"error": "Seat already reserved"}
@@ -138,7 +138,7 @@ def reserve_seat(seat_id, user_id):
     seat = db.query("SELECT * FROM seats WHERE seat_id = ? AND is_available = true", seat_id)
     
     if not seat:
-        redis.delete(lock_key)
+        redis.delete (lock_key)
         return {"error": "Seat not available"}
     
     # Reserve seat in database
@@ -147,8 +147,8 @@ def reserve_seat(seat_id, user_id):
     return {"success": true, "reservation_expires": time.now() + 600}
 
 # After payment or timeout:
-def release_seat(seat_id):
-    redis.delete(f"seat_lock:{seat_id}")
+def release_seat (seat_id):
+    redis.delete (f"seat_lock:{seat_id}")
     # If timeout: db.execute("UPDATE seats SET is_available = true WHERE seat_id = ? AND user_id IS NULL", seat_id)
 \`\`\`
 

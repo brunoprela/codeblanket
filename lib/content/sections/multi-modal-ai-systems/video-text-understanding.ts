@@ -157,14 +157,14 @@ def extract_uniform_frames(
     Returns:
         List of frame arrays
     """
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture (video_path)
     
     if not cap.isOpened():
-        raise ValueError(f"Could not open video: {video_path}")
+        raise ValueError (f"Could not open video: {video_path}")
     
     # Get video properties
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    total_frames = int (cap.get (cv2.CAP_PROP_FRAME_COUNT))
+    fps = cap.get (cv2.CAP_PROP_FPS)
     
     # Calculate frame indices to extract
     frame_indices = np.linspace(0, total_frames - 1, num_frames, dtype=int)
@@ -172,18 +172,18 @@ def extract_uniform_frames(
     frames = []
     
     for idx in frame_indices:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+        cap.set (cv2.CAP_PROP_POS_FRAMES, idx)
         ret, frame = cap.read()
         
         if ret:
             # Convert BGR to RGB
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frames.append(frame_rgb)
+            frame_rgb = cv2.cvtColor (frame, cv2.COLOR_BGR2RGB)
+            frames.append (frame_rgb)
             
             # Optionally save frame
             if output_dir:
-                output_path = Path(output_dir) / f"frame_{idx:05d}.jpg"
-                cv2.imwrite(str(output_path), frame)
+                output_path = Path (output_dir) / f"frame_{idx:05d}.jpg"
+                cv2.imwrite (str (output_path), frame)
     
     cap.release()
     
@@ -191,7 +191,7 @@ def extract_uniform_frames(
 
 # Example usage
 frames = extract_uniform_frames("video.mp4", num_frames=16)
-print(f"Extracted {len(frames)} frames")
+print(f"Extracted {len (frames)} frames")
 \`\`\`
 
 ### 2. Key Frame Detection
@@ -215,33 +215,33 @@ def extract_key_frames(
     Returns:
         List of key frames
     """
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture (video_path)
     
     frames = []
     prev_frame = None
     frame_count = 0
     
-    while cap.isOpened() and len(frames) < max_frames:
+    while cap.isOpened() and len (frames) < max_frames:
         ret, frame = cap.read()
         if not ret:
             break
         
         # Convert to grayscale for comparison
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor (frame, cv2.COLOR_BGR2GRAY)
         
         # Calculate difference from previous frame
         if prev_frame is not None:
-            diff = cv2.absdiff(gray, prev_frame)
-            mean_diff = np.mean(diff)
+            diff = cv2.absdiff (gray, prev_frame)
+            mean_diff = np.mean (diff)
             
             # If significant change, save frame
             if mean_diff > threshold:
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                frames.append(frame_rgb)
+                frame_rgb = cv2.cvtColor (frame, cv2.COLOR_BGR2RGB)
+                frames.append (frame_rgb)
         else:
             # Always include first frame
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frames.append(frame_rgb)
+            frame_rgb = cv2.cvtColor (frame, cv2.COLOR_BGR2RGB)
+            frames.append (frame_rgb)
         
         prev_frame = gray
         frame_count += 1
@@ -252,7 +252,7 @@ def extract_key_frames(
 
 # Extract key frames
 key_frames = extract_key_frames("video.mp4", threshold=30.0)
-print(f"Detected {len(key_frames)} key frames")
+print(f"Detected {len (key_frames)} key frames")
 \`\`\`
 
 ### 3. Smart Sampling
@@ -271,26 +271,26 @@ def smart_frame_extraction(
     
     Returns frames with their timestamps.
     """
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture (video_path)
     
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    total_frames = int (cap.get (cv2.CAP_PROP_FRAME_COUNT))
+    fps = cap.get (cv2.CAP_PROP_FPS)
     
     # First pass: detect scene changes
     scene_changes = []
     prev_frame = None
     
-    for frame_idx in range(0, total_frames, int(fps)):  # Sample every second
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+    for frame_idx in range(0, total_frames, int (fps)):  # Sample every second
+        cap.set (cv2.CAP_PROP_POS_FRAMES, frame_idx)
         ret, frame = cap.read()
         if not ret:
             break
         
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor (frame, cv2.COLOR_BGR2GRAY)
         
         if prev_frame is not None:
-            diff = cv2.absdiff(gray, prev_frame)
-            if np.mean(diff) > scene_threshold:
+            diff = cv2.absdiff (gray, prev_frame)
+            if np.mean (diff) > scene_threshold:
                 timestamp = frame_idx / fps
                 scene_changes.append((frame_idx, timestamp))
         
@@ -301,30 +301,30 @@ def smart_frame_extraction(
     
     # Always include first and last frame
     frames_to_extract.add(0)
-    frames_to_extract.add(total_frames - 1)
+    frames_to_extract.add (total_frames - 1)
     
     # Add frames around scene changes
     for frame_idx, _ in scene_changes:
-        frames_to_extract.add(frame_idx)
+        frames_to_extract.add (frame_idx)
     
     # If not enough frames, add uniform samples
-    if len(frames_to_extract) < min_frames:
+    if len (frames_to_extract) < min_frames:
         uniform_indices = np.linspace(0, total_frames - 1, min_frames, dtype=int)
-        frames_to_extract.update(uniform_indices)
+        frames_to_extract.update (uniform_indices)
     
     # If too many frames, keep most important
-    if len(frames_to_extract) > max_frames:
+    if len (frames_to_extract) > max_frames:
         # Keep frames around scene changes
-        sorted_frames = sorted(frames_to_extract)
-        frames_to_extract = set(sorted_frames[::len(sorted_frames)//max_frames])
+        sorted_frames = sorted (frames_to_extract)
+        frames_to_extract = set (sorted_frames[::len (sorted_frames)//max_frames])
     
     # Extract selected frames
     results = []
-    for frame_idx in sorted(frames_to_extract):
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+    for frame_idx in sorted (frames_to_extract):
+        cap.set (cv2.CAP_PROP_POS_FRAMES, frame_idx)
         ret, frame = cap.read()
         if ret:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame_rgb = cv2.cvtColor (frame, cv2.COLOR_BGR2RGB)
             timestamp = frame_idx / fps
             results.append((frame_rgb, timestamp))
     
@@ -351,17 +351,17 @@ from typing import List, Dict, Any
 
 client = OpenAI()
 
-def encode_frame(frame: np.ndarray) -> str:
+def encode_frame (frame: np.ndarray) -> str:
     """Encode numpy frame to base64 JPEG."""
     # Convert to PIL Image
-    pil_image = Image.fromarray(frame)
+    pil_image = Image.fromarray (frame)
     
     # Compress to JPEG
     buffer = BytesIO()
-    pil_image.save(buffer, format="JPEG", quality=85)
+    pil_image.save (buffer, format="JPEG", quality=85)
     
     # Encode to base64
-    return base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return base64.b64encode (buffer.getvalue()).decode('utf-8')
 
 def analyze_video_frames(
     frames: List[np.ndarray],
@@ -383,7 +383,7 @@ def analyze_video_frames(
     content = [{"type": "text", "text": prompt}]
     
     for frame in frames:
-        base64_frame = encode_frame(frame)
+        base64_frame = encode_frame (frame)
         content.append({
             "type": "image_url",
             "image_url": {
@@ -455,17 +455,17 @@ def summarize_video(
         Structured video summary
     """
     # Extract frames
-    frames = extract_uniform_frames(video_path, num_frames)
+    frames = extract_uniform_frames (video_path, num_frames)
     
     # Get video metadata
-    cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap = cv2.VideoCapture (video_path)
+    fps = cap.get (cv2.CAP_PROP_FPS)
+    total_frames = int (cap.get (cv2.CAP_PROP_FRAME_COUNT))
     duration = total_frames / fps
     cap.release()
     
     # Analyze frames
-    prompt = f"""These {len(frames)} frames are sampled uniformly from a {duration:.1f}-second video.
+    prompt = f"""These {len (frames)} frames are sampled uniformly from a {duration:.1f}-second video.
 
 Analyze the video and provide a JSON response with:
 
@@ -483,12 +483,12 @@ Analyze the video and provide a JSON response with:
 
 Be specific and detailed."""
 
-    response_text = analyze_video_frames(frames, prompt)
+    response_text = analyze_video_frames (frames, prompt)
     
     # Parse JSON response
     import json
     try:
-        data = json.loads(response_text)
+        data = json.loads (response_text)
     except json.JSONDecodeError:
         # Fallback to basic summary
         data = {
@@ -534,7 +534,7 @@ def recognize_actions(
     
     Returns list of recognized actions with timestamps.
     """
-    frames_with_times = smart_frame_extraction(video_path, max_frames=num_frames)
+    frames_with_times = smart_frame_extraction (video_path, max_frames=num_frames)
     
     frames = [f[0] for f in frames_with_times]
     timestamps = [f[1] for f in frames_with_times]
@@ -555,11 +555,11 @@ For each frame/timestamp, identify the main action or activity happening. Return
 
 Focus on identifying clear actions like walking, talking, sitting, working, etc."""
 
-    response_text = analyze_video_frames(frames, prompt)
+    response_text = analyze_video_frames (frames, prompt)
     
     import json
     try:
-        actions = json.loads(response_text)
+        actions = json.loads (response_text)
         return actions
     except json.JSONDecodeError:
         return []
@@ -593,13 +593,13 @@ def answer_video_question(
     """
     # Extract frames
     if use_key_frames:
-        frames_data = smart_frame_extraction(video_path, max_frames=num_frames)
+        frames_data = smart_frame_extraction (video_path, max_frames=num_frames)
         frames = [f[0] for f in frames_data]
         timestamps = [f[1] for f in frames_data]
         
         timestamp_info = f"Frames are from these timestamps: {', '.join([f'{t:.1f}s' for t in timestamps])}"
     else:
-        frames = extract_uniform_frames(video_path, num_frames)
+        frames = extract_uniform_frames (video_path, num_frames)
         timestamp_info = f"Frames are uniformly sampled from the video"
     
     prompt = f"""These frames are from a video in chronological order. {timestamp_info}
@@ -608,7 +608,7 @@ Question: {question}
 
 Analyze the frames and answer the question. Be specific and reference what you see in the frames."""
 
-    return analyze_video_frames(frames, prompt)
+    return analyze_video_frames (frames, prompt)
 
 # Example questions
 questions = [
@@ -632,14 +632,14 @@ import google.generativeai as genai
 import os
 
 # Configure Gemini
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure (api_key=os.getenv("GOOGLE_API_KEY"))
 
 def analyze_video_with_gemini(
     video_path: str,
     prompt: str
 ) -> str:
     """
-    Analyze video using Gemini's native video understanding.
+    Analyze video using Gemini\'s native video understanding.
     
     Args:
         video_path: Path to video file
@@ -649,18 +649,18 @@ def analyze_video_with_gemini(
         Analysis text
     """
     # Upload video file
-    video_file = genai.upload_file(path=video_path)
+    video_file = genai.upload_file (path=video_path)
     
     # Wait for processing
     while video_file.state.name == "PROCESSING":
         time.sleep(2)
-        video_file = genai.get_file(video_file.name)
+        video_file = genai.get_file (video_file.name)
     
     if video_file.state.name == "FAILED":
         raise Exception("Video processing failed")
     
     # Use Gemini 1.5 Pro for video
-    model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+    model = genai.GenerativeModel (model_name="gemini-1.5-pro")
     
     # Generate content
     response = model.generate_content(
@@ -712,18 +712,18 @@ Provide timestamps and descriptions of when this appears. Return as JSON:
 
 If the content doesn't appear in the video, return an empty array."""
 
-    result_text = analyze_video_with_gemini(video_path, prompt)
+    result_text = analyze_video_with_gemini (video_path, prompt)
     
     import json
     try:
-        results = json.loads(result_text)
+        results = json.loads (result_text)
         return results
     except json.JSONDecodeError:
         return []
 
 # Search video
 results = search_video_content("lecture.mp4", "mentions of machine learning")
-print(f"Found {len(results)} mentions:")
+print(f"Found {len (results)} mentions:")
 for result in results:
     print(f"  {result['timestamp']}: {result['description']}")
 \`\`\`
@@ -740,7 +740,7 @@ import hashlib
 import json
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -766,12 +766,12 @@ class ProductionVideoAnalyzer:
         cache_ttl: int = 86400
     ):
         self.client = OpenAI(api_key=openai_api_key)
-        self.redis_client = redis.Redis(host=redis_host, port=redis_port)
+        self.redis_client = redis.Redis (host=redis_host, port=redis_port)
         self.cache_ttl = cache_ttl
     
-    def _get_video_hash(self, video_path: str) -> str:
+    def _get_video_hash (self, video_path: str) -> str:
         """Generate hash of video file."""
-        with open(video_path, 'rb') as f:
+        with open (video_path, 'rb') as f:
             # Hash first and last 1MB to identify video
             first_chunk = f.read(1024 * 1024)
             f.seek(-1024 * 1024, 2)
@@ -780,7 +780,7 @@ class ProductionVideoAnalyzer:
             combined = first_chunk + last_chunk
             return hashlib.sha256(combined).hexdigest()
     
-    def _get_cache_key(self, video_hash: str, task: str) -> str:
+    def _get_cache_key (self, video_hash: str, task: str) -> str:
         """Generate cache key for video analysis."""
         return f"video_analysis:{video_hash}:{task}"
     
@@ -806,25 +806,25 @@ class ProductionVideoAnalyzer:
         start_time = datetime.now()
         
         # Get video hash
-        video_hash = self._get_video_hash(video_path)
+        video_hash = self._get_video_hash (video_path)
         
         # Check cache
         if use_cache:
-            cache_key = self._get_cache_key(video_hash, f"{task}_{num_frames}")
-            cached_result = self.redis_client.get(cache_key)
+            cache_key = self._get_cache_key (video_hash, f"{task}_{num_frames}")
+            cached_result = self.redis_client.get (cache_key)
             
             if cached_result:
-                logger.info(f"Cache hit for video {video_hash[:8]}")
-                result_dict = json.loads(cached_result)
+                logger.info (f"Cache hit for video {video_hash[:8]}")
+                result_dict = json.loads (cached_result)
                 return VideoAnalysisResult(**result_dict, cached=True)
         
         # Extract frames
-        frames = extract_uniform_frames(video_path, num_frames)
+        frames = extract_uniform_frames (video_path, num_frames)
         
         # Get video metadata
-        cap = cv2.VideoCapture(video_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        cap = cv2.VideoCapture (video_path)
+        fps = cap.get (cv2.CAP_PROP_FPS)
+        total_frames = int (cap.get (cv2.CAP_PROP_FRAME_COUNT))
         duration = total_frames / fps
         cap.release()
         
@@ -838,11 +838,11 @@ class ProductionVideoAnalyzer:
 
 Return as JSON."""
             
-            analysis = analyze_video_frames(frames, prompt)
+            analysis = analyze_video_frames (frames, prompt)
         
         # Parse results (simplified)
         try:
-            data = json.loads(analysis)
+            data = json.loads (analysis)
             summary = data.get("summary", analysis[:200])
             key_points = data.get("key_points", [])
             timestamps = data.get("timestamps", [])
@@ -879,7 +879,7 @@ Return as JSON."""
             self.redis_client.setex(
                 cache_key,
                 self.cache_ttl,
-                json.dumps(result_dict)
+                json.dumps (result_dict)
             )
         
         logger.info(
@@ -890,7 +890,7 @@ Return as JSON."""
         return result
 
 # Usage
-analyzer = ProductionVideoAnalyzer(openai_api_key=os.getenv("OPENAI_API_KEY"))
+analyzer = ProductionVideoAnalyzer (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 result = analyzer.analyze(
     "video.mp4",
@@ -953,29 +953,29 @@ print(f"Estimated cost: \${cost:.4f}")
 ### 3. Error Handling
 
 \`\`\`python
-def safe_video_analysis(video_path: str, max_retries: int = 3):
+def safe_video_analysis (video_path: str, max_retries: int = 3):
     """Video analysis with error handling."""
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             # Check file exists
-            if not os.path.exists(video_path):
-                raise FileNotFoundError(f"Video not found: {video_path}")
+            if not os.path.exists (video_path):
+                raise FileNotFoundError (f"Video not found: {video_path}")
             
             # Check file size (max 100MB for processing)
-            file_size = os.path.getsize(video_path)
+            file_size = os.path.getsize (video_path)
             if file_size > 100 * 1024 * 1024:
-                logger.warning(f"Large video file: {file_size / 1024 / 1024:.1f}MB")
+                logger.warning (f"Large video file: {file_size / 1024 / 1024:.1f}MB")
             
             # Attempt analysis
-            frames = extract_uniform_frames(video_path, num_frames=12)
+            frames = extract_uniform_frames (video_path, num_frames=12)
             
-            if len(frames) == 0:
+            if len (frames) == 0:
                 raise ValueError("No frames extracted from video")
             
-            return analyze_video_frames(frames, "Summarize this video")
+            return analyze_video_frames (frames, "Summarize this video")
         
         except Exception as e:
-            logger.error(f"Attempt {attempt + 1} failed: {e}")
+            logger.error (f"Attempt {attempt + 1} failed: {e}")
             if attempt < max_retries - 1:
                 time.sleep(2 ** attempt)
                 continue
@@ -989,9 +989,9 @@ def safe_video_analysis(video_path: str, max_retries: int = 3):
 ### 1. Content Moderation
 
 \`\`\`python
-def moderate_video_content(video_path: str) -> Dict[str, Any]:
+def moderate_video_content (video_path: str) -> Dict[str, Any]:
     """Check video for inappropriate content."""
-    frames = extract_uniform_frames(video_path, num_frames=20)
+    frames = extract_uniform_frames (video_path, num_frames=20)
     
     prompt = """Review these frames for content moderation. Check for:
 
@@ -1008,16 +1008,16 @@ Return JSON:
   "flagged_timestamps": []
 }"""
 
-    result = analyze_video_frames(frames, prompt)
-    return json.loads(result)
+    result = analyze_video_frames (frames, prompt)
+    return json.loads (result)
 \`\`\`
 
 ### 2. Video Search
 
 \`\`\`python
-def create_video_search_index(video_path: str) -> List[Dict[str, Any]]:
+def create_video_search_index (video_path: str) -> List[Dict[str, Any]]:
     """Create searchable index of video content."""
-    frames_with_times = smart_frame_extraction(video_path, max_frames=30)
+    frames_with_times = smart_frame_extraction (video_path, max_frames=30)
     
     index = []
     for frame, timestamp in frames_with_times:
@@ -1030,7 +1030,7 @@ def create_video_search_index(video_path: str) -> List[Dict[str, Any]]:
         index.append({
             "timestamp": timestamp,
             "description": description,
-            "frame_index": len(index)
+            "frame_index": len (index)
         })
     
     return index
@@ -1044,7 +1044,7 @@ def summarize_video_with_transcript(
     transcript: str
 ) -> str:
     """Summarize video using both visual and transcript."""
-    frames = extract_uniform_frames(video_path, num_frames=12)
+    frames = extract_uniform_frames (video_path, num_frames=12)
     
     prompt = f"""Analyze this video along with its transcript.
 
@@ -1053,7 +1053,7 @@ Transcript:
 
 Provide a comprehensive summary that incorporates both what is seen in the frames and what is said in the transcript."""
 
-    return analyze_video_frames(frames, prompt)
+    return analyze_video_frames (frames, prompt)
 \`\`\`
 
 ## Summary

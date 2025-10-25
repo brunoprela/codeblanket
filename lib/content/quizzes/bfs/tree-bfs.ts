@@ -22,7 +22,7 @@ export const treebfsQuiz = [
     question:
       'Walk me through finding right-side view of binary tree using BFS. What is the pattern?',
     sampleAnswer:
-      'Right-side view: values visible from right side (rightmost node at each level). BFS pattern: level-order, at each level take last node. Algorithm: queue with root, loop: process level (level_size = len(queue)), for each node in level add children, after level add last node value to result. For tree [1, [2, [4, 5]], [3]]: level 0 last is 1, level 1 last is 3, level 2 last is 5. Result: [1, 3, 5]. The pattern: level-order + track last node per level. Can also do DFS: preorder, recurse right before left, track depth, add first node seen at each depth (first from right is rightmost). BFS more intuitive for level-based problems.',
+      'Right-side view: values visible from right side (rightmost node at each level). BFS pattern: level-order, at each level take last node. Algorithm: queue with root, loop: process level (level_size = len (queue)), for each node in level add children, after level add last node value to result. For tree [1, [2, [4, 5]], [3]]: level 0 last is 1, level 1 last is 3, level 2 last is 5. Result: [1, 3, 5]. The pattern: level-order + track last node per level. Can also do DFS: preorder, recurse right before left, track depth, add first node seen at each depth (first from right is rightmost). BFS more intuitive for level-based problems.',
     keyPoints: [
       'Right-side view: rightmost at each level',
       'BFS: process level, take last node',

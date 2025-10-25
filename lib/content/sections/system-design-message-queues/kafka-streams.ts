@@ -85,11 +85,11 @@ KStream<String, String> premiumClicks = clickStream
 
 // Map: Transform values
 KStream<String, Purchase> purchases = clickStream
-    .mapValues(value -> parsePurchase(value));
+    .mapValues (value -> parsePurchase (value));
 
 // FlatMap: One record → Multiple records
 KStream<String, String> words = textStream
-    .flatMapValues(sentence -> Arrays.asList(sentence.split(" ")));
+    .flatMapValues (sentence -> Arrays.asList (sentence.split(" ")));
 
 // Peek: Side effect (logging)
 clickStream
@@ -141,7 +141,7 @@ KTable<String, String> activeUsers = userProfiles
 
 // MapValues: Transform values
 KTable<String, Integer> userAges = userProfiles
-    .mapValues(profile -> extractAge(profile));
+    .mapValues (profile -> extractAge (profile));
 
 // Convert to KStream (changelog)
 KStream<String, String> profileUpdates = userProfiles.toStream();
@@ -181,7 +181,7 @@ KStream<String, EnrichedOrder> enriched = orders
     .join(
         products,
         (orderId, order) -> order.getProductId(),  // Key extractor
-        (order, product) -> new EnrichedOrder(order, product)
+        (order, product) -> new EnrichedOrder (order, product)
     );
 
 ✅ Join works even if order and product have different keys
@@ -256,7 +256,7 @@ KStream<String, String> textLines = builder.stream("text-input");
 
 KTable<String, Long> wordCounts = textLines
     // Split into words
-    .flatMapValues(line -> Arrays.asList(line.toLowerCase().split("\\s+")))
+    .flatMapValues (line -> Arrays.asList (line.toLowerCase().split("\\s+")))
     
     // Group by word
     .groupBy((key, word) -> word)
@@ -350,7 +350,7 @@ KTable<Windowed<String>, Double> movingAverage = clickStream
                            .advanceBy(Duration.ofMinutes(5)))
     .aggregate(
         () -> new AverageTracker(),
-        (key, click, tracker) -> tracker.add(click),
+        (key, click, tracker) -> tracker.add (click),
         Materialized.with(Serdes.String(), averageTrackerSerde)
     );
 
@@ -418,7 +418,7 @@ KStream<String, Purchase> purchases = builder.stream("purchases");
 KStream<String, ClickPurchase> joined = clicks
     .join(
         purchases,
-        (click, purchase) -> new ClickPurchase(click, purchase),
+        (click, purchase) -> new ClickPurchase (click, purchase),
         JoinWindows.of(Duration.ofMinutes(10)),
         StreamJoined.with(Serdes.String(), clickSerde, purchaseSerde)
     );
@@ -450,7 +450,7 @@ KTable<String, UserProfile> users = builder.table("user-profiles");
 KStream<String, EnrichedOrder> enriched = orders
     .join(
         users,
-        (order, profile) -> new EnrichedOrder(order, profile)
+        (order, profile) -> new EnrichedOrder (order, profile)
     );
 
 // Example:
@@ -474,7 +474,7 @@ KTable<String, AccountSettings> settings = builder.table("account-settings");
 KTable<String, UserAccount> combined = profiles
     .join(
         settings,
-        (profile, setting) -> new UserAccount(profile, setting)
+        (profile, setting) -> new UserAccount (profile, setting)
     );
 
 // Triggers:
@@ -528,7 +528,7 @@ KStream<String, String> source = builder.stream("input-topic");
 // Processor: Transform
 KStream<String, String> filtered = source
     .filter((key, value) -> value != null)
-    .mapValues(value -> value.toUpperCase());
+    .mapValues (value -> value.toUpperCase());
 
 // Sink: Write to output topic
 filtered.to("output-topic");
@@ -537,7 +537,7 @@ filtered.to("output-topic");
 Topology topology = builder.build();
 
 // Describe topology (for debugging)
-System.out.println(topology.describe());
+System.out.println (topology.describe());
 
 // Output:
 // Topologies:
@@ -568,7 +568,7 @@ KStream<String, String> activities = builder.stream("user-activities");
 
 // Parse JSON
 KStream<String, Activity> parsed = activities
-    .mapValues(json -> parseActivity(json));
+    .mapValues (json -> parseActivity (json));
 
 // Filter: Only purchases
 KStream<String, Activity> purchases = parsed
@@ -589,7 +589,7 @@ hourlySales
     .toStream()
     .filter((windowedKey, total) -> total > 1000.0)
     .mapValues((windowedKey, total) -> 
-        new Alert(windowedKey.key(), total, "High spender"))
+        new Alert (windowedKey.key(), total, "High spender"))
     .to("alerts");
 
 // Dashboard: Top spenders (queryable state)
@@ -604,12 +604,12 @@ public Map<String, Double> getHourlySales(@PathVariable String userId) {
     Instant hourAgo = now.minus(Duration.ofHours(1));
     
     WindowStoreIterator<Double> iterator = 
-        store.fetch(userId, hourAgo, now);
+        store.fetch (userId, hourAgo, now);
     
     Map<String, Double> result = new HashMap<>();
     while (iterator.hasNext()) {
         KeyValue<Long, Double> next = iterator.next();
-        result.put(new Date(next.key).toString(), next.value);
+        result.put (new Date (next.key).toString(), next.value);
     }
     return result;
 }
@@ -683,7 +683,7 @@ Adding 9th instance: Idle (no work)
 counter++;  // Reprocessing doubles count ❌
 
 // Good: Stateless or idempotent
-max = Math.max(max, value);  // Idempotent ✅
+max = Math.max (max, value);  // Idempotent ✅
 \`\`\`
 
 ### **2. Choose Appropriate Serdes:**
@@ -694,7 +694,7 @@ props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass
 props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.ByteArray().getClass());
 
 // Custom serdes for complex objects
-Serde<MyObject> mySerde = Serdes.serdeFrom(new MySerializer(), new MyDeserializer());
+Serde<MyObject> mySerde = Serdes.serdeFrom (new MySerializer(), new MyDeserializer());
 \`\`\`
 
 ### **3. Monitor State Store Size:**

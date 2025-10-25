@@ -75,8 +75,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Auto-discover tasks in all installed apps
 app.autodiscover_tasks()
 
-@app.task(bind=True, ignore_result=True)
-def debug_task(self):
+@app.task (bind=True, ignore_result=True)
+def debug_task (self):
     print(f'Request: {self.request!r}')
 \`\`\`
 
@@ -118,9 +118,9 @@ from django.core.mail import send_mail
 from .models import Article
 
 @shared_task
-def send_article_notification(article_id):
+def send_article_notification (article_id):
     """Send email notification when article is published"""
-    article = Article.objects.get(id=article_id)
+    article = Article.objects.get (id=article_id)
     
     send_mail(
         subject=f'New Article: {article.title}',
@@ -139,7 +139,7 @@ def send_article_notification(article_id):
 from .tasks import send_article_notification
 
 # Method 1: delay() - simple
-send_article_notification.delay(article_id)
+send_article_notification.delay (article_id)
 
 # Method 2: apply_async() - with options
 send_article_notification.apply_async(
@@ -156,21 +156,21 @@ send_article_notification.apply_async(
 )
 
 # Method 3: apply() - execute synchronously (for testing)
-result = send_article_notification.apply(args=[article_id])
+result = send_article_notification.apply (args=[article_id])
 \`\`\`
 
 ### Task with Return Value
 
 \`\`\`python
 @shared_task
-def generate_report(user_id):
+def generate_report (user_id):
     """Generate user activity report"""
-    user = User.objects.get(id=user_id)
+    user = User.objects.get (id=user_id)
     
     report_data = {
         'total_articles': user.articles.count(),
         'total_views': user.articles.aggregate(Sum('view_count'))['view_count__sum'],
-        'top_articles': list(user.articles.order_by('-view_count')[:5].values('title', 'view_count')),
+        'top_articles': list (user.articles.order_by('-view_count')[:5].values('title', 'view_count')),
     }
     
     return report_data
@@ -178,12 +178,12 @@ def generate_report(user_id):
 # In view
 from celery.result import AsyncResult
 
-def start_report(request):
-    task = generate_report.delay(request.user.id)
+def start_report (request):
+    task = generate_report.delay (request.user.id)
     return JsonResponse({'task_id': task.id})
 
-def check_report(request, task_id):
-    result = AsyncResult(task_id)
+def check_report (request, task_id):
+    result = AsyncResult (task_id)
     
     if result.ready():
         return JsonResponse({
@@ -227,11 +227,11 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'send-daily-report': {
         'task': 'articles.tasks.send_daily_report',
-        'schedule': crontab(hour=9, minute=0),  # Every day at 9 AM
+        'schedule': crontab (hour=9, minute=0),  # Every day at 9 AM
     },
     'cleanup-old-sessions': {
         'task': 'core.tasks.cleanup_sessions',
-        'schedule': crontab(hour=2, minute=0),  # Every day at 2 AM
+        'schedule': crontab (hour=2, minute=0),  # Every day at 2 AM
     },
     'update-trending-articles': {
         'task': 'articles.tasks.update_trending',
@@ -239,7 +239,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'weekly-summary': {
         'task': 'articles.tasks.weekly_summary',
-        'schedule': crontab(day_of_week=1, hour=10, minute=0),  # Monday at 10 AM
+        'schedule': crontab (day_of_week=1, hour=10, minute=0),  # Monday at 10 AM
     },
 }
 \`\`\`
@@ -254,7 +254,7 @@ def cleanup_old_drafts():
     from datetime import timedelta
     from django.utils import timezone
     
-    threshold = timezone.now() - timedelta(days=30)
+    threshold = timezone.now() - timedelta (days=30)
     deleted_count, _ = Article.objects.filter(
         status='draft',
         created_at__lt=threshold
@@ -269,7 +269,7 @@ def send_daily_report():
     from django.utils import timezone
     from django.core.mail import mail_admins
     
-    yesterday = timezone.now() - timedelta(days=1)
+    yesterday = timezone.now() - timedelta (days=1)
     
     stats = {
         'articles_published': Article.objects.filter(
@@ -303,31 +303,31 @@ celery -A myproject beat -l info --scheduler django_celery_beat.schedulers:Datab
 ### Automatic Retries
 
 \`\`\`python
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def send_email_task(self, email, subject, message):
+@shared_task (bind=True, max_retries=3, default_retry_delay=60)
+def send_email_task (self, email, subject, message):
     """Send email with automatic retry on failure"""
     try:
-        send_mail(subject, message, 'noreply@example.com', [email])
+        send_mail (subject, message, 'noreply@example.com', [email])
     except Exception as exc:
         # Retry with exponential backoff
-        raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
+        raise self.retry (exc=exc, countdown=60 * (2 ** self.request.retries))
 \`\`\`
 
 ### Custom Retry Logic
 
 \`\`\`python
-@shared_task(bind=True)
-def process_payment(self, order_id):
+@shared_task (bind=True)
+def process_payment (self, order_id):
     """Process payment with custom retry logic"""
     try:
-        order = Order.objects.get(id=order_id)
-        payment_gateway.charge(order)
+        order = Order.objects.get (id=order_id)
+        payment_gateway.charge (order)
         order.status = 'paid'
         order.save()
     except PaymentError as exc:
         # Retry only for specific errors
         if exc.retriable:
-            raise self.retry(exc=exc, max_retries=5, countdown=120)
+            raise self.retry (exc=exc, max_retries=5, countdown=120)
         else:
             # Don't retry, mark as failed
             order.status = 'failed'
@@ -335,24 +335,24 @@ def process_payment(self, order_id):
             raise
     except Exception as exc:
         # Log unexpected errors
-        logger.error(f'Payment processing error: {exc}', exc_info=True)
-        raise self.retry(exc=exc, max_retries=3)
+        logger.error (f'Payment processing error: {exc}', exc_info=True)
+        raise self.retry (exc=exc, max_retries=3)
 \`\`\`
 
 ### Error Callbacks
 
 \`\`\`python
 @shared_task
-def process_article(article_id):
+def process_article (article_id):
     """Process article"""
-    article = Article.objects.get(id=article_id)
+    article = Article.objects.get (id=article_id)
     # Processing logic
     return article_id
 
 @shared_task
-def on_process_error(request, exc, traceback):
+def on_process_error (request, exc, traceback):
     """Called when process_article fails"""
-    logger.error(f'Task {request.id} failed: {exc}')
+    logger.error (f'Task {request.id} failed: {exc}')
     # Send notification to admin
     mail_admins('Task Failed', f'Task {request.id} failed with error: {exc}')
 
@@ -373,13 +373,13 @@ process_article.apply_async(
 from celery import chain
 
 @shared_task
-def download_image(url):
+def download_image (url):
     """Download image from URL"""
     # Download logic
     return image_path
 
 @shared_task
-def process_image(image_path):
+def process_image (image_path):
     """Process image (resize, optimize)"""
     # Processing logic
     return processed_path
@@ -407,7 +407,7 @@ result = workflow.apply_async()
 from celery import group
 
 @shared_task
-def resize_image(image_path, size):
+def resize_image (image_path, size):
     """Resize image to specific size"""
     # Resize logic
     return resized_path
@@ -428,23 +428,23 @@ result = job.apply_async()
 from celery import chord
 
 @shared_task
-def process_article_chunk(article_ids):
+def process_article_chunk (article_ids):
     """Process a chunk of articles"""
-    return len(article_ids)
+    return len (article_ids)
 
 @shared_task
-def summarize_results(results):
+def summarize_results (results):
     """Called after all chunks are processed"""
-    total_processed = sum(results)
+    total_processed = sum (results)
     print(f'Processed {total_processed} articles')
     return total_processed
 
 # Process in parallel, then summarize
 article_ids = list(Article.objects.values_list('id', flat=True))
-chunks = [article_ids[i:i+100] for i in range(0, len(article_ids), 100)]
+chunks = [article_ids[i:i+100] for i in range(0, len (article_ids), 100)]
 
 workflow = chord(
-    (process_article_chunk.s(chunk) for chunk in chunks),
+    (process_article_chunk.s (chunk) for chunk in chunks),
     summarize_results.s()
 )
 
@@ -473,10 +473,10 @@ celery -A myproject flower
 import logging
 logger = logging.getLogger(__name__)
 
-@shared_task(bind=True)
-def complex_task(self):
+@shared_task (bind=True)
+def complex_task (self):
     """Task with logging"""
-    logger.info(f'Task {self.request.id} started')
+    logger.info (f'Task {self.request.id} started')
     
     try:
         # Task logic
@@ -484,9 +484,9 @@ def complex_task(self):
         # ...
         logger.info('Processing step 2')
         # ...
-        logger.info(f'Task {self.request.id} completed')
+        logger.info (f'Task {self.request.id} completed')
     except Exception as e:
-        logger.error(f'Task {self.request.id} failed: {e}', exc_info=True)
+        logger.error (f'Task {self.request.id} failed: {e}', exc_info=True)
         raise
 \`\`\`
 

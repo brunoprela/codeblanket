@@ -126,9 +126,9 @@ class SimpleWord2Vec:
         self.vocab = {}
         self.inverse_vocab = {}
         
-    def build_vocab(self, sentences):
+    def build_vocab (self, sentences):
         """Build vocabulary from sentences"""
-        word_counts = defaultdict(int)
+        word_counts = defaultdict (int)
         
         for sentence in sentences:
             words = sentence.lower().split()
@@ -137,20 +137,20 @@ class SimpleWord2Vec:
         
         # Create vocabulary (most common words)
         self.vocab = {word: idx for idx, (word, count) in 
-                      enumerate(sorted(word_counts.items(), 
+                      enumerate (sorted (word_counts.items(), 
                                      key=lambda x: x[1], 
                                      reverse=True))}
         self.inverse_vocab = {idx: word for word, idx in self.vocab.items()}
-        self.vocab_size = len(self.vocab)
+        self.vocab_size = len (self.vocab)
         
-    def generate_training_data(self, sentences):
+    def generate_training_data (self, sentences):
         """Generate (target, context) pairs"""
         training_data = []
         
         for sentence in sentences:
             words = sentence.lower().split()
             
-            for idx, target_word in enumerate(words):
+            for idx, target_word in enumerate (words):
                 if target_word not in self.vocab:
                     continue
                     
@@ -158,9 +158,9 @@ class SimpleWord2Vec:
                 
                 # Get context words (within window)
                 start = max(0, idx - self.window_size)
-                end = min(len(words), idx + self.window_size + 1)
+                end = min (len (words), idx + self.window_size + 1)
                 
-                for context_idx in range(start, end):
+                for context_idx in range (start, end):
                     if context_idx != idx:
                         context_word = words[context_idx]
                         if context_word in self.vocab:
@@ -169,69 +169,69 @@ class SimpleWord2Vec:
         
         return training_data
     
-    def initialize_embeddings(self):
+    def initialize_embeddings (self):
         """Initialize embedding matrices"""
         # Input embeddings (target words)
-        self.W_in = np.random.randn(self.vocab_size, self.embedding_dim) * 0.01
+        self.W_in = np.random.randn (self.vocab_size, self.embedding_dim) * 0.01
         
         # Output embeddings (context words)
-        self.W_out = np.random.randn(self.embedding_dim, self.vocab_size) * 0.01
+        self.W_out = np.random.randn (self.embedding_dim, self.vocab_size) * 0.01
     
-    def softmax(self, x):
+    def softmax (self, x):
         """Numerically stable softmax"""
-        exp_x = np.exp(x - np.max(x))
+        exp_x = np.exp (x - np.max (x))
         return exp_x / exp_x.sum()
     
-    def train(self, sentences, epochs=5):
+    def train (self, sentences, epochs=5):
         """Train Skip-gram model"""
-        self.build_vocab(sentences)
-        training_data = self.generate_training_data(sentences)
+        self.build_vocab (sentences)
+        training_data = self.generate_training_data (sentences)
         self.initialize_embeddings()
         
         print(f"Vocabulary size: {self.vocab_size}")
-        print(f"Training pairs: {len(training_data)}")
+        print(f"Training pairs: {len (training_data)}")
         
-        for epoch in range(epochs):
+        for epoch in range (epochs):
             total_loss = 0
             
             for target_idx, context_idx in training_data:
                 # Forward pass
                 h = self.W_in[target_idx]  # Hidden layer (embedding)
-                u = np.dot(h, self.W_out)  # Output scores
-                y_pred = self.softmax(u)   # Probabilities
+                u = np.dot (h, self.W_out)  # Output scores
+                y_pred = self.softmax (u)   # Probabilities
                 
                 # Compute loss
-                loss = -np.log(y_pred[context_idx] + 1e-10)
+                loss = -np.log (y_pred[context_idx] + 1e-10)
                 total_loss += loss
                 
                 # Backpropagation
                 # Gradient of output layer
                 y_pred[context_idx] -= 1  # y_pred - y_true
-                dW_out = np.outer(h, y_pred)
+                dW_out = np.outer (h, y_pred)
                 
                 # Gradient of input layer
-                dh = np.dot(y_pred, self.W_out.T)
+                dh = np.dot (y_pred, self.W_out.T)
                 
                 # Update weights
                 self.W_out -= self.learning_rate * dW_out.T
                 self.W_in[target_idx] -= self.learning_rate * dh
             
             if (epoch + 1) % 1 == 0:
-                avg_loss = total_loss / len(training_data)
+                avg_loss = total_loss / len (training_data)
                 print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}")
     
-    def get_embedding(self, word):
+    def get_embedding (self, word):
         """Get embedding vector for a word"""
         if word in self.vocab:
             return self.W_in[self.vocab[word]]
         return None
     
-    def most_similar(self, word, top_n=5):
+    def most_similar (self, word, top_n=5):
         """Find most similar words using cosine similarity"""
         if word not in self.vocab:
             return []
         
-        word_vec = self.get_embedding(word)
+        word_vec = self.get_embedding (word)
         
         # Compute cosine similarity with all words
         similarities = []
@@ -242,13 +242,13 @@ class SimpleWord2Vec:
             other_vec = self.W_in[idx]
             
             # Cosine similarity
-            similarity = np.dot(word_vec, other_vec) / (
-                np.linalg.norm(word_vec) * np.linalg.norm(other_vec) + 1e-10
+            similarity = np.dot (word_vec, other_vec) / (
+                np.linalg.norm (word_vec) * np.linalg.norm (other_vec) + 1e-10
             )
             similarities.append((other_word, similarity))
         
         # Return top N
-        similarities.sort(key=lambda x: x[1], reverse=True)
+        similarities.sort (key=lambda x: x[1], reverse=True)
         return similarities[:top_n]
 
 # Example usage
@@ -263,8 +263,8 @@ sentences = [
 ] * 100  # Repeat for more training data
 
 # Train
-w2v = SimpleWord2Vec(embedding_dim=50, window_size=2, learning_rate=0.01)
-w2v.train(sentences, epochs=10)
+w2v = SimpleWord2Vec (embedding_dim=50, window_size=2, learning_rate=0.01)
+w2v.train (sentences, epochs=10)
 
 # Test similarity
 print("\\nMost similar to 'cat':")
@@ -326,7 +326,7 @@ for word, score in similar:
     print(f"  {word}: {score:.4f}")
 
 # Word analogy: king - man + woman ≈ queen
-result = model_sg.wv.most_similar(positive=['natural', 'processing'], 
+result = model_sg.wv.most_similar (positive=['natural', 'processing'], 
                                    negative=['language'], 
                                    topn=3)
 print(f"\\nAnalogy (natural + processing - language):")
@@ -381,7 +381,7 @@ wv = KeyedVectors.load('word2vec_vectors.kv')
 
 ## GloVe (Global Vectors)
 
-GloVe (Pennington et al., 2014) learns embeddings by factorizing word co-occurrence matrices. Unlike Word2Vec's local context windows, GloVe uses global corpus statistics.
+GloVe (Pennington et al., 2014) learns embeddings by factorizing word co-occurrence matrices. Unlike Word2Vec\'s local context windows, GloVe uses global corpus statistics.
 
 **Key Idea:**
 - Construct word co-occurrence matrix from entire corpus
@@ -399,10 +399,10 @@ from gensim.models import KeyedVectors
 # Convert GloVe format to Word2Vec format
 glove_input_file = 'glove.6B.100d.txt'
 word2vec_output_file = 'glove.6B.100d.word2vec.txt'
-glove2word2vec(glove_input_file, word2vec_output_file)
+glove2word2vec (glove_input_file, word2vec_output_file)
 
 # Load GloVe vectors
-glove_model = KeyedVectors.load_word2vec_format(word2vec_output_file, binary=False)
+glove_model = KeyedVectors.load_word2vec_format (word2vec_output_file, binary=False)
 
 # Use like Word2Vec
 vector = glove_model['computer']
@@ -413,7 +413,7 @@ for word, score in similar:
     print(f"  {word}: {score:.4f}")
 
 # Famous analogy: king - man + woman ≈ queen
-result = glove_model.most_similar(positive=['king', 'woman'], 
+result = glove_model.most_similar (positive=['king', 'woman'], 
                                    negative=['man'], 
                                    topn=1)
 print(f"\\nking - man + woman ≈ {result[0][0]} (score: {result[0][1]:.4f})")
@@ -501,10 +501,10 @@ from gensim.models import Word2Vec, FastText, KeyedVectors
 sentences = [['machine', 'learning']] * 1000  # Simplified
 
 # Word2Vec
-w2v = Word2Vec(sentences, vector_size=100, window=5, min_count=1, sg=1, epochs=10)
+w2v = Word2Vec (sentences, vector_size=100, window=5, min_count=1, sg=1, epochs=10)
 
 # FastText
-ft = FastText(sentences, vector_size=100, window=5, min_count=1, sg=1, epochs=10)
+ft = FastText (sentences, vector_size=100, window=5, min_count=1, sg=1, epochs=10)
 
 # GloVe (load pre-trained for comparison)
 # glove = KeyedVectors.load_word2vec_format('glove.txt')
@@ -536,7 +536,7 @@ for w1 in words:
     for w2 in words:
         if w1 != w2:
             try:
-                sim_ft = ft.wv.similarity(w1, w2)
+                sim_ft = ft.wv.similarity (w1, w2)
                 print(f"   FastText: {w1} <-> {w2}: {sim_ft:.4f}")
             except:
                 pass
@@ -565,18 +565,18 @@ from gensim.models import Word2Vec
 
 # Train model
 sentences = [['machine', 'learning'], ['deep', 'learning']] * 100
-model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, sg=1)
+model = Word2Vec (sentences, vector_size=100, window=5, min_count=1, sg=1)
 
-def document_vector(doc, model):
+def document_vector (doc, model):
     """Compute document embedding by averaging word embeddings"""
     vectors = []
     for word in doc.split():
         if word in model.wv:
-            vectors.append(model.wv[word])
+            vectors.append (model.wv[word])
     
     if vectors:
-        return np.mean(vectors, axis=0)
-    return np.zeros(model.vector_size)
+        return np.mean (vectors, axis=0)
+    return np.zeros (model.vector_size)
 
 # Documents
 doc1 = "machine learning is amazing"
@@ -584,9 +584,9 @@ doc2 = "deep learning uses neural networks"
 doc3 = "the cat sat on the mat"
 
 # Get document vectors
-vec1 = document_vector(doc1, model)
-vec2 = document_vector(doc2, model)
-vec3 = document_vector(doc3, model)
+vec1 = document_vector (doc1, model)
+vec2 = document_vector (doc2, model)
+vec3 = document_vector (doc3, model)
 
 # Compute similarities
 from sklearn.metrics.pairwise import cosine_similarity
@@ -616,8 +616,8 @@ texts = [
 labels = [1, 1, 0, 0] * 100  # 1=positive, 0=negative
 
 # Convert texts to vectors using word embeddings
-X = np.array([document_vector(text, model) for text in texts])
-y = np.array(labels)
+X = np.array([document_vector (text, model) for text in texts])
+y = np.array (labels)
 
 # Split and train
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
@@ -645,14 +645,14 @@ vectors = np.array([model.wv[w] for w in words_in_vocab])
 
 # Reduce to 2D using t-SNE
 tsne = TSNE(n_components=2, random_state=42)
-vectors_2d = tsne.fit_transform(vectors)
+vectors_2d = tsne.fit_transform (vectors)
 
 # Plot
-plt.figure(figsize=(12, 8))
-plt.scatter(vectors_2d[:, 0], vectors_2d[:, 1])
+plt.figure (figsize=(12, 8))
+plt.scatter (vectors_2d[:, 0], vectors_2d[:, 1])
 
-for i, word in enumerate(words_in_vocab):
-    plt.annotate(word, xy=(vectors_2d[i, 0], vectors_2d[i, 1]))
+for i, word in enumerate (words_in_vocab):
+    plt.annotate (word, xy=(vectors_2d[i, 0], vectors_2d[i, 1]))
 
 plt.title("Word Embeddings Visualization (t-SNE)")
 plt.xlabel("Dimension 1")

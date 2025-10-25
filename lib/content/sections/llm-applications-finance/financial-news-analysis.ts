@@ -48,7 +48,7 @@ class NewsDataRetriever:
             'rss_feeds': 'Free RSS feeds from major outlets'
         }
     
-    def get_alpha_vantage_news(self, api_key: str, tickers: List[str] = None,
+    def get_alpha_vantage_news (self, api_key: str, tickers: List[str] = None,
                                 topics: List[str] = None,
                                 time_from: str = None,
                                 limit: int = 50) -> List[Dict]:
@@ -74,16 +74,16 @@ class NewsDataRetriever:
         }
         
         if tickers:
-            params['tickers'] = ','.join(tickers)
+            params['tickers'] = ','.join (tickers)
         
         if topics:
-            params['topics'] = ','.join(topics)
+            params['topics'] = ','.join (topics)
         
         if time_from:
             params['time_from'] = time_from
         
         try:
-            response = requests.get(url, params=params)
+            response = requests.get (url, params=params)
             data = response.json()
             
             if 'feed' in data:
@@ -96,7 +96,7 @@ class NewsDataRetriever:
             print(f"Error fetching news: {e}")
             return []
     
-    def get_news_api_articles(self, api_key: str, query: str = 'stock market',
+    def get_news_api_articles (self, api_key: str, query: str = 'stock market',
                               from_date: str = None,
                               language: str = 'en',
                               sort_by: str = 'publishedAt') -> List[Dict]:
@@ -116,7 +116,7 @@ class NewsDataRetriever:
         url = "https://newsapi.org/v2/everything"
         
         if not from_date:
-            from_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+            from_date = (datetime.now() - timedelta (days=1)).strftime('%Y-%m-%d')
         
         params = {
             'q': query,
@@ -127,7 +127,7 @@ class NewsDataRetriever:
         }
         
         try:
-            response = requests.get(url, params=params)
+            response = requests.get (url, params=params)
             data = response.json()
             
             if data.get('status') == 'ok':
@@ -140,7 +140,7 @@ class NewsDataRetriever:
             print(f"Error fetching news: {e}")
             return []
     
-    def get_rss_feeds(self, feed_urls: List[str]) -> List[Dict]:
+    def get_rss_feeds (self, feed_urls: List[str]) -> List[Dict]:
         """
         Parse RSS feeds from financial news sites
         
@@ -154,7 +154,7 @@ class NewsDataRetriever:
         
         for url in feed_urls:
             try:
-                feed = feedparser.parse(url)
+                feed = feedparser.parse (url)
                 
                 for entry in feed.entries:
                     articles.append({
@@ -171,7 +171,7 @@ class NewsDataRetriever:
         
         return articles
     
-    def get_polygon_news(self, api_key: str, ticker: str = None,
+    def get_polygon_news (self, api_key: str, ticker: str = None,
                          limit: int = 100) -> List[Dict]:
         """
         Get news from Polygon.io
@@ -195,7 +195,7 @@ class NewsDataRetriever:
         }
         
         try:
-            response = requests.get(url, params=params)
+            response = requests.get (url, params=params)
             data = response.json()
             
             if data.get('status') == 'OK':
@@ -222,7 +222,7 @@ retriever = NewsDataRetriever()
 
 # Get news from RSS feeds (free)
 rss_articles = retriever.get_rss_feeds(FINANCIAL_RSS_FEEDS)
-print(f"Retrieved {len(rss_articles)} articles from RSS feeds")
+print(f"Retrieved {len (rss_articles)} articles from RSS feeds")
 
 # Show sample articles
 for article in rss_articles[:3]:
@@ -251,10 +251,10 @@ class NewsEntityExtractor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def extract_entities(self, article_text: str, article_title: str = "") -> Dict:
+    def extract_entities (self, article_text: str, article_title: str = "") -> Dict:
         """
         Extract entities from news article
         
@@ -304,12 +304,12 @@ Return only the JSON."""
             else:
                 json_str = response_text
             
-            return json.loads(json_str)
+            return json.loads (json_str)
         except Exception as e:
             print(f"Error parsing JSON: {{e}}")
             return {}
     
-    def classify_event_type(self, article_text: str) -> Dict:
+    def classify_event_type (self, article_text: str) -> Dict:
         """
         Classify the type of event in the news
         
@@ -350,9 +350,9 @@ Return JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json_response(response.content[0].text)
+        return self._parse_json_response (response.content[0].text)
     
-    def extract_key_facts(self, article_text: str) -> List[str]:
+    def extract_key_facts (self, article_text: str) -> List[str]:
         """
         Extract key factual statements from article
         
@@ -382,10 +382,10 @@ Return as JSON list of facts:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        data = self._parse_json_response(response.content[0].text)
+        data = self._parse_json_response (response.content[0].text)
         return data.get('facts', [])
     
-    def _parse_json_response(self, response_text: str) -> Dict:
+    def _parse_json_response (self, response_text: str) -> Dict:
         """Helper to parse JSON from LLM response"""
         try:
             if "\`\`\`json" in response_text:
@@ -395,19 +395,19 @@ Return as JSON list of facts:
             else:
                 json_str = response_text
             
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-extractor = NewsEntityExtractor(api_key="your-key")
+extractor = NewsEntityExtractor (api_key="your-key")
 
 sample_article = """
 Tesla Inc. (TSLA) shares surged 8% in after-hours trading following the company's third-quarter earnings report, which beat analyst expectations on both revenue and earnings per share. 
 
 CEO Elon Musk announced that the company's new Gigafactory in Texas has reached full production capacity, producing 5,000 vehicles per week. The company also raised its full-year delivery guidance to 1.8 million vehicles, up from previous guidance of 1.6 million.
 
-Despite ongoing supply chain challenges, Tesla reported automotive gross margins of 27.9%, exceeding Wall Street's estimate of 26.2%. The company also confirmed that production of the Cybertruck will begin in late Q1 2024.
+Despite ongoing supply chain challenges, Tesla reported automotive gross margins of 27.9%, exceeding Wall Street\'s estimate of 26.2%. The company also confirmed that production of the Cybertruck will begin in late Q1 2024.
 """
 
 # Extract entities
@@ -417,17 +417,17 @@ entities = extractor.extract_entities(
 )
 
 print("Extracted Entities:")
-print(json.dumps(entities, indent=2))
+print(json.dumps (entities, indent=2))
 
 # Classify event
-event_class = extractor.classify_event_type(sample_article)
+event_class = extractor.classify_event_type (sample_article)
 print("\\nEvent Classification:")
-print(json.dumps(event_class, indent=2))
+print(json.dumps (event_class, indent=2))
 
 # Extract key facts
-facts = extractor.extract_key_facts(sample_article)
+facts = extractor.extract_key_facts (sample_article)
 print("\\nKey Facts:")
-for i, fact in enumerate(facts, 1):
+for i, fact in enumerate (facts, 1):
     print(f"{i}. {fact}")
 \`\`\`
 
@@ -452,10 +452,10 @@ class NewsSentimentAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_article_sentiment(self, article: Dict) -> Dict:
+    def analyze_article_sentiment (self, article: Dict) -> Dict:
         """
         Analyze sentiment of a single article
         
@@ -490,9 +490,9 @@ Provide JSON response:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def batch_analyze_sentiment(self, articles: List[Dict], 
+    def batch_analyze_sentiment (self, articles: List[Dict], 
                                max_concurrent: int = 5) -> List[Dict]:
         """
         Analyze sentiment for multiple articles concurrently
@@ -508,15 +508,15 @@ Provide JSON response:
         
         results = []
         
-        with ThreadPoolExecutor(max_workers=max_concurrent) as executor:
+        with ThreadPoolExecutor (max_workers=max_concurrent) as executor:
             # Submit all tasks
             future_to_article = {
-                executor.submit(self.analyze_article_sentiment, article): article
+                executor.submit (self.analyze_article_sentiment, article): article
                 for article in articles
             }
             
             # Collect results as they complete
-            for future in as_completed(future_to_article):
+            for future in as_completed (future_to_article):
                 article = future_to_article[future]
                 try:
                     sentiment = future.result()
@@ -529,7 +529,7 @@ Provide JSON response:
         
         return results
     
-    def aggregate_sentiment(self, articles_with_sentiment: List[Dict],
+    def aggregate_sentiment (self, articles_with_sentiment: List[Dict],
                            ticker: str) -> Dict:
         """
         Aggregate sentiment across multiple articles for a ticker
@@ -557,7 +557,7 @@ Provide JSON response:
         
         # Calculate aggregates
         sentiments = [a['sentiment']['sentiment_score'] for a in relevant]
-        avg_sentiment = sum(sentiments) / len(sentiments)
+        avg_sentiment = sum (sentiments) / len (sentiments)
         
         positive_count = sum(1 for s in sentiments if s > 0.2)
         negative_count = sum(1 for s in sentiments if s < -0.2)
@@ -576,11 +576,11 @@ Provide JSON response:
         
         return {
             'ticker': ticker,
-            'article_count': len(relevant),
+            'article_count': len (relevant),
             'avg_sentiment': avg_sentiment,
             'positive_articles': positive_count,
             'negative_articles': negative_count,
-            'neutral_articles': len(relevant) - positive_count - negative_count,
+            'neutral_articles': len (relevant) - positive_count - negative_count,
             'sentiment_trend': trend,
             'recent_articles': [
                 {
@@ -592,7 +592,7 @@ Provide JSON response:
             ]
         }
     
-    def detect_sentiment_shift(self, historical_sentiment: List[float],
+    def detect_sentiment_shift (self, historical_sentiment: List[float],
                               window: int = 10) -> Dict:
         """
         Detect significant shifts in sentiment
@@ -604,29 +604,29 @@ Provide JSON response:
         Returns:
             Shift detection results
         """
-        if len(historical_sentiment) < window * 2:
+        if len (historical_sentiment) < window * 2:
             return {'shift_detected': False}
         
         # Compare recent average to previous average
-        recent_avg = sum(historical_sentiment[-window:]) / window
-        previous_avg = sum(historical_sentiment[-2*window:-window]) / window
+        recent_avg = sum (historical_sentiment[-window:]) / window
+        previous_avg = sum (historical_sentiment[-2*window:-window]) / window
         
         change = recent_avg - previous_avg
         
         # Significant shift threshold
-        if abs(change) > 0.3:
+        if abs (change) > 0.3:
             return {
                 'shift_detected': True,
                 'direction': 'Positive' if change > 0 else 'Negative',
-                'magnitude': abs(change),
+                'magnitude': abs (change),
                 'previous_avg': previous_avg,
                 'recent_avg': recent_avg,
-                'alert_level': 'High' if abs(change) > 0.5 else 'Medium'
+                'alert_level': 'High' if abs (change) > 0.5 else 'Medium'
             }
         
         return {'shift_detected': False}
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         import json
         try:
@@ -636,12 +636,12 @@ Provide JSON response:
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-sentiment_analyzer = NewsSentimentAnalyzer(api_key="your-key")
+sentiment_analyzer = NewsSentimentAnalyzer (api_key="your-key")
 
 # Analyze single article
 sentiment = sentiment_analyzer.analyze_article_sentiment({
@@ -650,7 +650,7 @@ sentiment = sentiment_analyzer.analyze_article_sentiment({
 })
 
 print("Article Sentiment:")
-print(json.dumps(sentiment, indent=2))
+print(json.dumps (sentiment, indent=2))
 
 # Batch analyze multiple articles
 articles = [
@@ -659,13 +659,13 @@ articles = [
     {'title': 'Analysts upgrade Tesla price target', 'content': '...'}
 ]
 
-batch_results = sentiment_analyzer.batch_analyze_sentiment(articles)
-print(f"\\nAnalyzed {len(batch_results)} articles")
+batch_results = sentiment_analyzer.batch_analyze_sentiment (articles)
+print(f"\\nAnalyzed {len (batch_results)} articles")
 
 # Aggregate sentiment for ticker
-agg_sentiment = sentiment_analyzer.aggregate_sentiment(batch_results, 'TSLA')
+agg_sentiment = sentiment_analyzer.aggregate_sentiment (batch_results, 'TSLA')
 print("\\nAggregated Sentiment for TSLA:")
-print(json.dumps(agg_sentiment, indent=2))
+print(json.dumps (agg_sentiment, indent=2))
 \`\`\`
 
 ---
@@ -690,28 +690,28 @@ class RealTimeNewsProcessor:
     """
     
     def __init__(self, anthropic_key: str):
-        self.entity_extractor = NewsEntityExtractor(anthropic_key)
-        self.sentiment_analyzer = NewsSentimentAnalyzer(anthropic_key)
+        self.entity_extractor = NewsEntityExtractor (anthropic_key)
+        self.sentiment_analyzer = NewsSentimentAnalyzer (anthropic_key)
         
         # Queue for incoming news
         self.news_queue = queue.Queue()
         
         # Store recent sentiment by ticker
-        self.ticker_sentiment = defaultdict(list)
+        self.ticker_sentiment = defaultdict (list)
         
         # Trading signals
         self.signals = []
         
         self.running = False
     
-    def start(self):
+    def start (self):
         """Start the real-time processor"""
         self.running = True
         
         # Start worker threads
         threads = [
-            threading.Thread(target=self._news_processor, daemon=True),
-            threading.Thread(target=self._signal_generator, daemon=True)
+            threading.Thread (target=self._news_processor, daemon=True),
+            threading.Thread (target=self._signal_generator, daemon=True)
         ]
         
         for thread in threads:
@@ -719,24 +719,24 @@ class RealTimeNewsProcessor:
         
         print("Real-time news processor started")
     
-    def stop(self):
+    def stop (self):
         """Stop the processor"""
         self.running = False
     
-    def add_news(self, article: Dict):
+    def add_news (self, article: Dict):
         """Add news article to processing queue"""
         article['received_at'] = datetime.now()
-        self.news_queue.put(article)
+        self.news_queue.put (article)
     
-    def _news_processor(self):
+    def _news_processor (self):
         """Worker thread that processes incoming news"""
         while self.running:
             try:
                 # Get article from queue (with timeout)
-                article = self.news_queue.get(timeout=1)
+                article = self.news_queue.get (timeout=1)
                 
                 # Process article
-                self._process_article(article)
+                self._process_article (article)
                 
                 self.news_queue.task_done()
             
@@ -745,7 +745,7 @@ class RealTimeNewsProcessor:
             except Exception as e:
                 print(f"Error processing news: {e}")
     
-    def _process_article(self, article: Dict):
+    def _process_article (self, article: Dict):
         """Process a single article"""
         print(f"\\nProcessing: {article.get('title', 'Untitled')}")
         
@@ -756,7 +756,7 @@ class RealTimeNewsProcessor:
         )
         
         # Analyze sentiment
-        sentiment = self.sentiment_analyzer.analyze_article_sentiment(article)
+        sentiment = self.sentiment_analyzer.analyze_article_sentiment (article)
         
         # Store analysis
         article['entities'] = entities
@@ -771,9 +771,9 @@ class RealTimeNewsProcessor:
             })
         
         # Check for trading signal
-        self._check_for_signal(article)
+        self._check_for_signal (article)
     
-    def _check_for_signal(self, article: Dict):
+    def _check_for_signal (self, article: Dict):
         """Check if article should generate trading signal"""
         entities = article.get('entities', {})
         sentiment = article.get('sentiment', {})
@@ -794,10 +794,10 @@ class RealTimeNewsProcessor:
                     impact=market_impact
                 )
                 
-                self.signals.append(signal)
-                self._emit_signal(signal)
+                self.signals.append (signal)
+                self._emit_signal (signal)
     
-    def _generate_signal(self, ticker: str, article: Dict,
+    def _generate_signal (self, ticker: str, article: Dict,
                         sentiment_score: float, urgency: str,
                         impact: str) -> Dict:
         """Generate trading signal"""
@@ -805,10 +805,10 @@ class RealTimeNewsProcessor:
         # Determine action
         if sentiment_score > 0.4:
             action = 'BUY'
-            confidence = min(sentiment_score, 0.9)
+            confidence = min (sentiment_score, 0.9)
         elif sentiment_score < -0.4:
             action = 'SELL'
-            confidence = min(abs(sentiment_score), 0.9)
+            confidence = min (abs (sentiment_score), 0.9)
         else:
             action = 'HOLD'
             confidence = 0.3
@@ -819,13 +819,13 @@ class RealTimeNewsProcessor:
         if impact == 'High':
             confidence *= 1.1
         
-        confidence = min(confidence, 1.0)
+        confidence = min (confidence, 1.0)
         
         return {
             'timestamp': datetime.now().isoformat(),
             'ticker': ticker,
             'action': action,
-            'confidence': round(confidence, 2),
+            'confidence': round (confidence, 2),
             'reason': article['sentiment'].get('key_sentiment_drivers', []),
             'article_title': article.get('title', ''),
             'sentiment_score': sentiment_score,
@@ -833,12 +833,12 @@ class RealTimeNewsProcessor:
             'impact': impact
         }
     
-    def _emit_signal(self, signal: Dict):
+    def _emit_signal (self, signal: Dict):
         """Emit trading signal"""
         print(f"\\n{'='*60}")
         print(f"TRADING SIGNAL: {signal['action']} {signal['ticker']}")
         print(f"Confidence: {signal['confidence']}")
-        print(f"Reason: {', '.join(signal['reason'][:2])}")
+        print(f"Reason: {', '.join (signal['reason'][:2])}")
         print(f"Article: {signal['article_title']}")
         print(f"{'='*60}")
         
@@ -848,35 +848,35 @@ class RealTimeNewsProcessor:
         # 3. Send push notifications
         # 4. Log to database
     
-    def _signal_generator(self):
+    def _signal_generator (self):
         """Background thread that checks for aggregate signals"""
         while self.running:
             time.sleep(60)  # Check every minute
             
             # Check for sentiment shifts across tracked tickers
             for ticker, history in self.ticker_sentiment.items():
-                if len(history) >= 10:
+                if len (history) >= 10:
                     scores = [h['score'] for h in history[-10:]]
-                    shift = self.sentiment_analyzer.detect_sentiment_shift(scores)
+                    shift = self.sentiment_analyzer.detect_sentiment_shift (scores)
                     
                     if shift.get('shift_detected'):
                         print(f"\\nSENTIMENT SHIFT DETECTED: {ticker}")
                         print(f"Direction: {shift['direction']}")
                         print(f"Magnitude: {shift['magnitude']:.2f}")
     
-    def get_ticker_summary(self, ticker: str) -> Dict:
+    def get_ticker_summary (self, ticker: str) -> Dict:
         """Get summary of recent news for a ticker"""
-        history = self.ticker_sentiment.get(ticker, [])
+        history = self.ticker_sentiment.get (ticker, [])
         
         if not history:
             return {'ticker': ticker, 'article_count': 0}
         
         recent = history[-10:]
-        avg_sentiment = sum(h['score'] for h in recent) / len(recent)
+        avg_sentiment = sum (h['score'] for h in recent) / len (recent)
         
         return {
             'ticker': ticker,
-            'article_count': len(history),
+            'article_count': len (history),
             'recent_sentiment': avg_sentiment,
             'latest_articles': [
                 {'title': h['title'], 'score': h['score']}
@@ -885,7 +885,7 @@ class RealTimeNewsProcessor:
         }
 
 # Example usage
-processor = RealTimeNewsProcessor(anthropic_key="your-key")
+processor = RealTimeNewsProcessor (anthropic_key="your-key")
 processor.start()
 
 # Simulate news feed
@@ -908,7 +908,7 @@ simulated_news = [
 ]
 
 for article in simulated_news:
-    processor.add_news(article)
+    processor.add_news (article)
     time.sleep(5)
 
 # Wait for processing
@@ -917,10 +917,10 @@ time.sleep(10)
 # Get summary
 summary = processor.get_ticker_summary('TSLA')
 print("\\nTSLA News Summary:")
-print(json.dumps(summary, indent=2))
+print(json.dumps (summary, indent=2))
 
 # Check signals
-print(f"\\nTotal signals generated: {len(processor.signals)}")
+print(f"\\nTotal signals generated: {len (processor.signals)}")
 
 # processor.stop()
 \`\`\`
@@ -946,10 +946,10 @@ class NewsImpactAssessor:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def assess_impact(self, article: Dict, entities: Dict, 
+    def assess_impact (self, article: Dict, entities: Dict, 
                      sentiment: Dict) -> Dict:
         """
         Assess potential market impact of news article
@@ -967,8 +967,8 @@ class NewsImpactAssessor:
 Title: {article.get('title', '')}
 Content: {article.get('content', '')[:2000]}
 
-Entities: {json.dumps(entities)}
-Sentiment: {json.dumps(sentiment)}
+Entities: {json.dumps (entities)}
+Sentiment: {json.dumps (sentiment)}
 
 Provide JSON response:
 {{
@@ -994,9 +994,9 @@ Provide JSON response:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def compare_to_historical(self, current_event: Dict,
+    def compare_to_historical (self, current_event: Dict,
                              historical_events: List[Dict]) -> Dict:
         """
         Compare current event to historical similar events
@@ -1016,7 +1016,7 @@ Provide JSON response:
         prompt = f"""Compare this current event to historical similar events.
 
 Current Event:
-{json.dumps(current_event, indent=2)}
+{json.dumps (current_event, indent=2)}
 
 Historical Similar Events:
 {historical_summary}
@@ -1037,7 +1037,7 @@ Provide analysis with expected outcome."""
         
         return response.content[0].text
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -1047,12 +1047,12 @@ Provide analysis with expected outcome."""
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-assessor = NewsImpactAssessor(api_key="your-key")
+assessor = NewsImpactAssessor (api_key="your-key")
 
 article = {
     'title': 'Fed Announces Emergency Rate Cut',
@@ -1069,9 +1069,9 @@ sentiment = {
     'market_impact_estimate': 'High'
 }
 
-impact = assessor.assess_impact(article, entities, sentiment)
+impact = assessor.assess_impact (article, entities, sentiment)
 print("Market Impact Assessment:")
-print(json.dumps(impact, indent=2))
+print(json.dumps (impact, indent=2))
 \`\`\`
 
 ---
@@ -1098,17 +1098,17 @@ class NewsAnalysisPipeline:
                  db_path: str = "news_analysis.db"):
         
         self.retriever = NewsDataRetriever()
-        self.processor = RealTimeNewsProcessor(anthropic_key)
-        self.assessor = NewsImpactAssessor(anthropic_key)
+        self.processor = RealTimeNewsProcessor (anthropic_key)
+        self.assessor = NewsImpactAssessor (anthropic_key)
         
         self.api_keys = news_api_keys
         self.db_path = db_path
         
         self._init_database()
     
-    def _init_database(self):
+    def _init_database (self):
         """Initialize database for storing news and analysis"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1130,7 +1130,7 @@ class NewsAnalysisPipeline:
                 ticker TEXT,
                 sentiment_score REAL,
                 market_impact TEXT,
-                FOREIGN KEY (article_id) REFERENCES news_articles(id)
+                FOREIGN KEY (article_id) REFERENCES news_articles (id)
             )
         """)
         
@@ -1143,14 +1143,14 @@ class NewsAnalysisPipeline:
                 confidence REAL,
                 reason TEXT,
                 article_id INTEGER,
-                FOREIGN KEY (article_id) REFERENCES news_articles(id)
+                FOREIGN KEY (article_id) REFERENCES news_articles (id)
             )
         """)
         
         conn.commit()
         conn.close()
     
-    def run_continuous(self, watchlist: List[str]):
+    def run_continuous (self, watchlist: List[str]):
         """
         Run continuous news monitoring
         
@@ -1161,15 +1161,15 @@ class NewsAnalysisPipeline:
         self.processor.start()
         
         # Schedule periodic checks
-        schedule.every(5).minutes.do(self._fetch_news, watchlist)
+        schedule.every(5).minutes.do (self._fetch_news, watchlist)
         
-        print(f"Monitoring news for: {', '.join(watchlist)}")
+        print(f"Monitoring news for: {', '.join (watchlist)}")
         
         while True:
             schedule.run_pending()
             time.sleep(30)
     
-    def _fetch_news(self, watchlist: List[str]):
+    def _fetch_news (self, watchlist: List[str]):
         """Fetch latest news for watchlist"""
         print(f"\\n[{datetime.now()}] Fetching latest news...")
         
@@ -1184,19 +1184,19 @@ class NewsAnalysisPipeline:
                     tickers=[ticker],
                     limit=10
                 )
-                all_articles.extend(articles)
+                all_articles.extend (articles)
         
         # Process new articles
         for article in all_articles:
-            if not self._is_processed(article.get('url')):
-                self.processor.add_news(article)
-                self._store_article(article)
+            if not self._is_processed (article.get('url')):
+                self.processor.add_news (article)
+                self._store_article (article)
         
-        print(f"Added {len(all_articles)} articles to processing queue")
+        print(f"Added {len (all_articles)} articles to processing queue")
     
-    def _is_processed(self, url: str) -> bool:
+    def _is_processed (self, url: str) -> bool:
         """Check if article already processed"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute(
@@ -1209,9 +1209,9 @@ class NewsAnalysisPipeline:
         
         return count > 0
     
-    def _store_article(self, article: Dict):
+    def _store_article (self, article: Dict):
         """Store article in database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1241,7 +1241,7 @@ class NewsAnalysisPipeline:
 
 # Run continuous monitoring
 # watchlist = ['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'NVDA']
-# pipeline.run_continuous(watchlist)
+# pipeline.run_continuous (watchlist)
 \`\`\`
 
 ---

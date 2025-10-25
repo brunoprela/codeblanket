@@ -189,7 +189,7 @@ Time T4: Eventually consistent → User sees $45
 
 **Should We Switch to Strongly Consistent Reads?**
 
-**Short answer: No, not for everything.** Here's why:
+**Short answer: No, not for everything.** Here\'s why:
 
 **Trade-Offs of Strongly Consistent Reads:**
 
@@ -511,7 +511,7 @@ Why it works:
 
 \`\`\`typescript
 // Accurate rate limiting using sorted set
-async function checkRateLimit(userId: string): Promise<boolean> {
+async function checkRateLimit (userId: string): Promise<boolean> {
   const now = Date.now();
   const windowStart = now - 60000; // 60 seconds ago
   

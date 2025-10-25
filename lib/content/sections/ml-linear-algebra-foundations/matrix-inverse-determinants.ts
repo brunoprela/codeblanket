@@ -33,7 +33,7 @@ For a 3×3 matrix, use cofactor expansion:
       ⎢d  e  f⎥
       ⎣g  h  i⎦
 
-det(**A**) = a(ei - fh) - b(di - fg) + c(dh - eg)
+det(**A**) = a (ei - fh) - b (di - fg) + c (dh - eg)
 
 ### General Case
 
@@ -95,27 +95,27 @@ det_AB = np.linalg.det(AB)
 
 print(f"det(A) * det(B) = {det_A:.4f} * {det_B:.4f} = {det_A * det_B:.4f}")
 print(f"det(AB) = {det_AB:.4f}")
-print(f"Equal: {np.isclose(det_A * det_B, det_AB)}")
+print(f"Equal: {np.isclose (det_A * det_B, det_AB)}")
 print()
 
 # Property 2: det(Aᵀ) = det(A)
 det_A_T = np.linalg.det(A.T)
 print(f"det(A) = {det_A:.4f}")
 print(f"det(Aᵀ) = {det_A_T:.4f}")
-print(f"Equal: {np.isclose(det_A, det_A_T)}")
+print(f"Equal: {np.isclose (det_A, det_A_T)}")
 print()
 
-# Property 3: det(cA) = c^n det(A) for n×n matrix
+# Property 3: det (cA) = c^n det(A) for n×n matrix
 c = 2
 cA = c * A
-det_cA = np.linalg.det(cA)
+det_cA = np.linalg.det (cA)
 n = A.shape[0]
 expected = c**n * det_A
 
 print(f"For scalar c={c} and {n}×{n} matrix A:")
-print(f"det(cA) = {det_cA:.4f}")
+print(f"det (cA) = {det_cA:.4f}")
 print(f"c^n * det(A) = {c}^{n} * {det_A:.4f} = {expected:.4f}")
-print(f"Equal: {np.isclose(det_cA, expected)}")
+print(f"Equal: {np.isclose (det_cA, expected)}")
 \`\`\`
 
 ### Geometric Interpretation
@@ -158,27 +158,27 @@ print(f"Transformed area: {transformed_area:.4f}")
 print(f"Area scaled by factor of {det_transform:.4f}")
 
 # Visualize
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.plot(square[0, :], square[1, :], 'b-', linewidth=2)
-plt.fill(square[0, :], square[1, :], alpha=0.3)
+plt.plot (square[0, :], square[1, :], 'b-', linewidth=2)
+plt.fill (square[0, :], square[1, :], alpha=0.3)
 plt.grid(True, alpha=0.3)
 plt.axis('equal')
 plt.xlim(-0.5, 3)
 plt.ylim(-0.5, 3)
-plt.title(f'Original Square (Area = {original_area})')
+plt.title (f'Original Square (Area = {original_area})')
 plt.xlabel('x')
 plt.ylabel('y')
 
 plt.subplot(1, 2, 2)
-plt.plot(transformed_square[0, :], transformed_square[1, :], 'r-', linewidth=2)
-plt.fill(transformed_square[0, :], transformed_square[1, :], alpha=0.3, color='red')
+plt.plot (transformed_square[0, :], transformed_square[1, :], 'r-', linewidth=2)
+plt.fill (transformed_square[0, :], transformed_square[1, :], alpha=0.3, color='red')
 plt.grid(True, alpha=0.3)
 plt.axis('equal')
 plt.xlim(-0.5, 3)
 plt.ylim(-0.5, 3)
-plt.title(f'Transformed (Area = {transformed_area:.2f}, det = {det_transform:.2f})')
+plt.title (f'Transformed (Area = {transformed_area:.2f}, det = {det_transform:.2f})')
 plt.xlabel('x')
 plt.ylabel('y')
 
@@ -205,17 +205,17 @@ det_singular = np.linalg.det(A_singular)
 print("Singular matrix A:")
 print(A_singular)
 print(f"det(A) = {det_singular:.10f}")
-print(f"Is singular: {np.isclose(det_singular, 0)}")
+print(f"Is singular: {np.isclose (det_singular, 0)}")
 print()
 
 # Transform unit square (collapses to line)
 transformed_singular = A_singular @ square
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.plot(square[0, :], square[1, :], 'b-', linewidth=2)
-plt.fill(square[0, :], square[1, :], alpha=0.3)
+plt.plot (square[0, :], square[1, :], 'b-', linewidth=2)
+plt.fill (square[0, :], square[1, :], alpha=0.3)
 plt.grid(True, alpha=0.3)
 plt.axis('equal')
 plt.xlim(-0.5, 5)
@@ -223,7 +223,7 @@ plt.ylim(-0.5, 5)
 plt.title('Original Square')
 
 plt.subplot(1, 2, 2)
-plt.plot(transformed_singular[0, :], transformed_singular[1, :], 'r-', linewidth=3)
+plt.plot (transformed_singular[0, :], transformed_singular[1, :], 'r-', linewidth=3)
 plt.grid(True, alpha=0.3)
 plt.axis('equal')
 plt.xlim(-0.5, 5)
@@ -333,7 +333,7 @@ det_A_inv = np.linalg.det(A_inv)
 print(f"det(A) = {det_A:.4f}")
 print(f"det(A⁻¹) = {det_A_inv:.4f}")
 print(f"1/det(A) = {1/det_A:.4f}")
-print(f"Equal: {np.isclose(det_A_inv, 1/det_A)}")
+print(f"Equal: {np.isclose (det_A_inv, 1/det_A)}")
 \`\`\`
 
 ### Geometric Interpretation
@@ -359,7 +359,7 @@ x_recovered = A_inv @ y
 print(f"Original x: {x}")
 print(f"Transformed y = Ax: {y}")
 print(f"Recovered x = A⁻¹y: {x_recovered}")
-print(f"Recovered correctly: {np.allclose(x, x_recovered)}")
+print(f"Recovered correctly: {np.allclose (x, x_recovered)}")
 \`\`\`
 
 ## Applications in Machine Learning
@@ -409,8 +409,8 @@ np.random.seed(42)
 data = np.random.randn(100, 3)
 
 # Covariance matrix
-cov = np.cov(data.T)
-cov_inv = np.linalg.inv(cov)
+cov = np.cov (data.T)
+cov_inv = np.linalg.inv (cov)
 
 print("Covariance matrix Σ:")
 print(cov.round(3))
@@ -424,7 +424,7 @@ mean = np.zeros(3)
 
 # Mahalanobis distance: sqrt((x-μ)ᵀ Σ⁻¹ (x-μ))
 diff = x - mean
-mahal_dist = np.sqrt(diff @ cov_inv @ diff)
+mahal_dist = np.sqrt (diff @ cov_inv @ diff)
 
 print(f"Point: {x}")
 print(f"Mahalanobis distance: {mahal_dist:.4f}")
@@ -539,7 +539,7 @@ print(f"Using inverse: {time_inv:.6f}s")
 print(f"Using solver: {time_solve:.6f}s")
 print(f"Solver is {time_inv/time_solve:.2f}x faster")
 print()
-print(f"Solutions equal: {np.allclose(x_bad, x_good)}")
+print(f"Solutions equal: {np.allclose (x_bad, x_good)}")
 print()
 
 print("Remember: Never compute A⁻¹ explicitly unless you need it!")

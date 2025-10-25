@@ -58,7 +58,7 @@ export const servicediscoveryMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Kubernetes has built-in service discovery: You create a Service resource with label selectors. Kubernetes automatically discovers all pods matching those labels and adds them to the Service. CoreDNS creates DNS entries (service-name.namespace.svc.cluster.local) that resolve to the Service's ClusterIP, which load balances to healthy pods. It's completely automatic - no manual registration needed. Option 1 is false (Kubernetes doesn't use Eureka). Option 2 is false (automatic via label matching). Option 4 is good practice but not required for basic discovery.",
+      "Kubernetes has built-in service discovery: You create a Service resource with label selectors. Kubernetes automatically discovers all pods matching those labels and adds them to the Service. CoreDNS creates DNS entries (service-name.namespace.svc.cluster.local) that resolve to the Service\'s ClusterIP, which load balances to healthy pods. It's completely automatic - no manual registration needed. Option 1 is false (Kubernetes doesn't use Eureka). Option 2 is false (automatic via label matching). Option 4 is good practice but not required for basic discovery.",
   },
   {
     id: 'mc-discovery-5',

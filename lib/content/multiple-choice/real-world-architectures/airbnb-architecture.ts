@@ -35,7 +35,7 @@ export const airbnbarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "What is Airbnb's service fee split between guests and hosts?",
+    question: "What is Airbnb\'s service fee split between guests and hosts?",
     options: [
       'Guests: 5%, Hosts: 5%',
       'Guests: 10%, Hosts: 10%',
@@ -44,7 +44,7 @@ export const airbnbarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Airbnb charges guests a 14% service fee and hosts a 3% service fee (percentages may vary by region/promotion). For a $1500 booking, the guest pays ~$210 service fee ($1710 total), and the host receives $1455 after Airbnb's $45 fee. This fee structure covers payment processing, customer support, insurance, and platform operations. Payments are held in escrow with a 24-hour cancellation window before releasing to hosts.",
+      "Airbnb charges guests a 14% service fee and hosts a 3% service fee (percentages may vary by region/promotion). For a $1500 booking, the guest pays ~$210 service fee ($1710 total), and the host receives $1455 after Airbnb\'s $45 fee. This fee structure covers payment processing, customer support, insurance, and platform operations. Payments are held in escrow with a 24-hour cancellation window before releasing to hosts.",
   },
   {
     id: 'mc4',
@@ -57,7 +57,7 @@ export const airbnbarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Airbnb supports 191 currencies for payments. The payment system handles multi-currency conversions when guests and hosts use different currencies. For example, a US guest booking a French listing might pay in USD while the host receives EUR. Airbnb's payment service orchestrates currency conversion, fee calculations, tax withholdings, and transfers to various payout methods (bank transfer, PayPal, Payoneer) across different jurisdictions.",
+      "Airbnb supports 191 currencies for payments. The payment system handles multi-currency conversions when guests and hosts use different currencies. For example, a US guest booking a French listing might pay in USD while the host receives EUR. Airbnb\'s payment service orchestrates currency conversion, fee calculations, tax withholdings, and transfers to various payout methods (bank transfer, PayPal, Payoneer) across different jurisdictions.",
   },
   {
     id: 'mc5',

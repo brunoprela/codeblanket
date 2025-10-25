@@ -69,17 +69,17 @@ const redis = new Redis.Cluster([
 
 class ComprehensiveRateLimiter {
   // Sliding window counter for hourly/daily limits
-  async slidingWindowLimit(userId, limit, windowSeconds) {
+  async slidingWindowLimit (userId, limit, windowSeconds) {
     const now = Date.now() / 1000;
-    const currentWindow = Math.floor(now / windowSeconds);
+    const currentWindow = Math.floor (now / windowSeconds);
     const previousWindow = currentWindow - 1;
     
     const currentKey = \`ratelimit:\${userId}:\${windowSeconds}:\${currentWindow}\`;
     const previousKey = \`ratelimit:\${userId}:\${windowSeconds}:\${previousWindow}\`;
     
     const [currentCount, previousCount] = await Promise.all([
-      redis.get(currentKey).then(v => parseInt(v || '0')),
-      redis.get(previousKey).then(v => parseInt(v || '0'))
+      redis.get (currentKey).then (v => parseInt (v || '0')),
+      redis.get (previousKey).then (v => parseInt (v || '0'))
     ]);
     
     const percentageInCurrent = (now % windowSeconds) / windowSeconds;
@@ -94,25 +94,25 @@ class ComprehensiveRateLimiter {
       };
     }
     
-    await redis.incr(currentKey);
-    await redis.expire(currentKey, windowSeconds * 2);
+    await redis.incr (currentKey);
+    await redis.expire (currentKey, windowSeconds * 2);
     
     return {
       allowed: true,
-      remaining: Math.floor(limit - weightedCount - 1),
+      remaining: Math.floor (limit - weightedCount - 1),
       resetAt: (currentWindow + 1) * windowSeconds
     };
   }
   
   // Cost-based limiting
-  async costBasedLimit(userId, operation, budget) {
+  async costBasedLimit (userId, operation, budget) {
     const cost = OPERATION_COSTS[operation] || 1;
     const key = \`ratelimit:cost:\${userId}\`;
     const now = Date.now();
-    const hourStart = Math.floor(now / 1000 / 3600);
+    const hourStart = Math.floor (now / 1000 / 3600);
     const hourKey = \`\${key}:\${hourStart}\`;
     
-    const spent = parseInt(await redis.get(hourKey) || '0');
+    const spent = parseInt (await redis.get (hourKey) || '0');
     
     if (spent + cost > budget) {
       return {
@@ -124,8 +124,8 @@ class ComprehensiveRateLimiter {
       };
     }
     
-    await redis.incrby(hourKey, cost);
-    await redis.expire(hourKey, 7200); // 2 hours
+    await redis.incrby (hourKey, cost);
+    await redis.expire (hourKey, 7200); // 2 hours
     
     return {
       allowed: true,
@@ -137,12 +137,12 @@ class ComprehensiveRateLimiter {
   }
   
   // Concurrent request limiting
-  async concurrentLimit(userId, maxConcurrent) {
+  async concurrentLimit (userId, maxConcurrent) {
     const key = \`ratelimit:concurrent:\${userId}\`;
-    const current = await redis.incr(key);
+    const current = await redis.incr (key);
     
     if (current > maxConcurrent) {
-      await redis.decr(key);
+      await redis.decr (key);
       return {
         allowed: false,
         current: current - 1,
@@ -150,25 +150,25 @@ class ComprehensiveRateLimiter {
       };
     }
     
-    await redis.expire(key, 300);
+    await redis.expire (key, 300);
     
     return {
       allowed: true,
       current,
       max: maxConcurrent,
-      release: async () => await redis.decr(key)
+      release: async () => await redis.decr (key)
     };
   }
   
   // Token bucket for burst handling
-  async tokenBucketLimit(userId, capacity, refillRate) {
+  async tokenBucketLimit (userId, capacity, refillRate) {
     const key = \`ratelimit:burst:\${userId}\`;
     
-    const data = await redis.get(key);
+    const data = await redis.get (key);
     let tokens, lastRefill;
     
     if (data) {
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse (data);
       tokens = parsed.tokens;
       lastRefill = parsed.lastRefill;
     } else {
@@ -180,7 +180,7 @@ class ComprehensiveRateLimiter {
     const now = Date.now();
     const elapsed = (now - lastRefill) / 1000;
     const tokensToAdd = elapsed * refillRate;
-    tokens = Math.min(capacity, tokens + tokensToAdd);
+    tokens = Math.min (capacity, tokens + tokensToAdd);
     
     if (tokens < 1) {
       return {
@@ -192,14 +192,14 @@ class ComprehensiveRateLimiter {
     
     tokens -= 1;
     
-    await redis.set(key, JSON.stringify({
+    await redis.set (key, JSON.stringify({
       tokens,
       lastRefill: now
     }), 'EX', 3600);
     
     return {
       allowed: true,
-      remaining: Math.floor(tokens)
+      remaining: Math.floor (tokens)
     };
   }
 }
@@ -210,7 +210,7 @@ const limiter = new ComprehensiveRateLimiter();
 **3. Middleware Implementation**
 
 \`\`\`javascript
-async function rateLimitMiddleware(req, res, next) {
+async function rateLimitMiddleware (req, res, next) {
   const userId = req.user.id;
   const plan = req.user.plan || 'free';
   const limits = RATE_LIMITS[plan];
@@ -224,7 +224,7 @@ async function rateLimitMiddleware(req, res, next) {
   );
   
   if (!hourly.allowed) {
-    return rateLimitError(res, {
+    return rateLimitError (res, {
       type: 'hourly_limit',
       limit: limits.hourly,
       resetAt: hourly.resetAt
@@ -239,7 +239,7 @@ async function rateLimitMiddleware(req, res, next) {
   );
   
   if (!daily.allowed) {
-    return rateLimitError(res, {
+    return rateLimitError (res, {
       type: 'daily_limit',
       limit: limits.daily,
       resetAt: daily.resetAt
@@ -254,7 +254,7 @@ async function rateLimitMiddleware(req, res, next) {
   );
   
   if (!cost.allowed) {
-    return rateLimitError(res, {
+    return rateLimitError (res, {
       type: 'cost_budget',
       cost: cost.cost,
       spent: cost.spent,
@@ -269,7 +269,7 @@ async function rateLimitMiddleware(req, res, next) {
   );
   
   if (!concurrent.allowed) {
-    return rateLimitError(res, {
+    return rateLimitError (res, {
       type: 'concurrent_limit',
       current: concurrent.current,
       max: concurrent.max
@@ -288,7 +288,7 @@ async function rateLimitMiddleware(req, res, next) {
   );
   
   if (!burst.allowed) {
-    return rateLimitError(res, {
+    return rateLimitError (res, {
       type: 'burst_limit',
       retryAfter: burst.retryAfter
     });
@@ -315,7 +315,7 @@ async function rateLimitMiddleware(req, res, next) {
   next();
 }
 
-function rateLimitError(res, details) {
+function rateLimitError (res, details) {
   res.status(429).json({
     error: 'Rate limit exceeded',
     type: details.type,
@@ -325,7 +325,7 @@ function rateLimitError(res, details) {
   });
 }
 
-app.use(rateLimitMiddleware);
+app.use (rateLimitMiddleware);
 \`\`\`
 
 **4. Admin Dashboard**
@@ -334,7 +334,7 @@ app.use(rateLimitMiddleware);
 // Real-time rate limit monitoring
 app.get('/admin/rate-limits/:userId', async (req, res) => {
   const { userId } = req.params;
-  const plan = await getUserPlan(userId);
+  const plan = await getUserPlan (userId);
   const limits = RATE_LIMITS[plan];
   
   const [hourly, daily, costSpent, concurrent] = await Promise.all([
@@ -349,22 +349,22 @@ app.get('/admin/rate-limits/:userId', async (req, res) => {
     plan,
     hourly: {
       limit: limits.hourly,
-      used: parseInt(hourly || '0'),
-      remaining: limits.hourly - parseInt(hourly || '0')
+      used: parseInt (hourly || '0'),
+      remaining: limits.hourly - parseInt (hourly || '0')
     },
     daily: {
       limit: limits.daily,
-      used: parseInt(daily || '0'),
-      remaining: limits.daily - parseInt(daily || '0')
+      used: parseInt (daily || '0'),
+      remaining: limits.daily - parseInt (daily || '0')
     },
     cost: {
       budget: limits.costBudget,
-      spent: parseInt(costSpent || '0'),
-      remaining: limits.costBudget - parseInt(costSpent || '0')
+      spent: parseInt (costSpent || '0'),
+      remaining: limits.costBudget - parseInt (costSpent || '0')
     },
     concurrent: {
       max: limits.concurrent,
-      current: parseInt(concurrent || '0')
+      current: parseInt (concurrent || '0')
     }
   });
 });
@@ -380,8 +380,8 @@ const WHITELISTED_USERS = new Set([
 ]);
 
 // Skip rate limiting for whitelisted users
-async function rateLimitMiddleware(req, res, next) {
-  if (WHITELISTED_USERS.has(req.user.id)) {
+async function rateLimitMiddleware (req, res, next) {
+  if (WHITELISTED_USERS.has (req.user.id)) {
     return next();
   }
   
@@ -432,19 +432,19 @@ async function getDeviceFingerprint(req) {
   ];
   
   const hash = crypto.createHash('sha256')
-    .update(factors.join('|'))
+    .update (factors.join('|'))
     .digest('hex');
   
   return hash;
 }
 
-// Rate limit by fingerprint (catches IP rotation)
-async function fingerprintRateLimit(req, res, next) {
+// Rate limit by fingerprint(catches IP rotation)
+async function fingerprintRateLimit (req, res, next) {
   const fingerprint = await getDeviceFingerprint(req);
   const key = \`ratelimit:fingerprint:\${fingerprint}\`;
   
-  const count = await redis.incr(key);
-  await redis.expire(key, 3600);
+  const count = await redis.incr (key);
+  await redis.expire (key, 3600);
   
   if (count > 100) {  // 100 requests/hour per device
     return res.status(429).json({
@@ -462,34 +462,34 @@ async function fingerprintRateLimit(req, res, next) {
 \`\`\`javascript
 // Track suspicious patterns
 class BehavioralAnalyzer {
-  async analyzeRequest(req) {
+  async analyzeRequest (req) {
     const userId = req.user?.id || req.ip;
-    const patterns = await this.getPatterns(userId);
+    const patterns = await this.getPatterns (userId);
     
     const signals = {
       // Signal 1: Rapid account creation
-      newAccountRate: await this.checkAccountCreationRate(req.ip),
+      newAccountRate: await this.checkAccountCreationRate (req.ip),
       
       // Signal 2: Unusual access patterns
-      accessPattern: await this.checkAccessPattern(userId),
+      accessPattern: await this.checkAccessPattern (userId),
       
       // Signal 3: Low-value interactions
-      interactionQuality: await this.checkInteractionQuality(userId),
+      interactionQuality: await this.checkInteractionQuality (userId),
       
       // Signal 4: Automation detection
-      isAutomated: await this.detectAutomation(req)
+      isAutomated: await this.detectAutomation (req)
     };
     
-    const suspicionScore = this.calculateSuspicionScore(signals);
+    const suspicionScore = this.calculateSuspicionScore (signals);
     
     return {
       suspicionScore,
       signals,
-      action: this.determineAction(suspicionScore)
+      action: this.determineAction (suspicionScore)
     };
   }
   
-  async checkAccountCreationRate(ip) {
+  async checkAccountCreationRate (ip) {
     const key = \`behavioral:accounts:\${ip}\`;
     const accounts = await redis.zcount(
       key,
@@ -501,36 +501,36 @@ class BehavioralAnalyzer {
     return accounts > 5 ? 1.0 : accounts / 5;
   }
   
-  async checkAccessPattern(userId) {
+  async checkAccessPattern (userId) {
     const key = \`behavioral:pattern:\${userId}\`;
-    const requests = await redis.lrange(key, 0, -1);
+    const requests = await redis.lrange (key, 0, -1);
     
     // Check for bot-like patterns:
     // - Too consistent timing (exactly every N seconds)
     // - Sequential resource access (user1, user2, user3...)
     // - No variation in user-agent
     
-    const timestamps = requests.map(r => JSON.parse(r).timestamp);
+    const timestamps = requests.map (r => JSON.parse (r).timestamp);
     const intervals = [];
     for (let i = 1; i < timestamps.length; i++) {
-      intervals.push(timestamps[i] - timestamps[i-1]);
+      intervals.push (timestamps[i] - timestamps[i-1]);
     }
     
     // Calculate variance (bots have low variance)
     const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
     const variance = intervals.reduce((sum, interval) => 
-      sum + Math.pow(interval - mean, 2), 0) / intervals.length;
+      sum + Math.pow (interval - mean, 2), 0) / intervals.length;
     
     // Low variance = bot-like
     return variance < 100 ? 1.0 : 0.0;
   }
   
-  async checkInteractionQuality(userId) {
+  async checkInteractionQuality (userId) {
     const key = \`behavioral:quality:\${userId}\`;
-    const actions = await redis.hgetall(key);
+    const actions = await redis.hgetall (key);
     
-    const reads = parseInt(actions.reads || '0');
-    const writes = parseInt(actions.writes || '0');
+    const reads = parseInt (actions.reads || '0');
+    const writes = parseInt (actions.writes || '0');
     
     // Attackers mostly read (scraping), legitimate users write
     const readWriteRatio = writes === 0 ? reads : reads / writes;
@@ -539,14 +539,14 @@ class BehavioralAnalyzer {
     return readWriteRatio > 100 ? 1.0 : readWriteRatio / 100;
   }
   
-  async detectAutomation(req) {
+  async detectAutomation (req) {
     // Check for automation signals
     const signals = [
       // No cookies/session
       !req.headers.cookie,
       
       // Suspicious user-agent
-      /bot|crawler|spider|scraper/i.test(req.headers['user-agent',]),
+      /bot|crawler|spider|scraper/i.test (req.headers['user-agent',]),
       
       // Missing common headers
       !req.headers['accept-language',],
@@ -555,14 +555,14 @@ class BehavioralAnalyzer {
       req.headers['chrome-lighthouse',] !== undefined,
       
       // Too fast (< 100ms between requests)
-      await this.checkRequestTiming(req.user?.id || req.ip)
+      await this.checkRequestTiming (req.user?.id || req.ip)
     ];
     
     const automationScore = signals.filter(Boolean).length / signals.length;
     return automationScore;
   }
   
-  calculateSuspicionScore(signals) {
+  calculateSuspicionScore (signals) {
     // Weighted scoring
     return (
       signals.newAccountRate * 0.3 +
@@ -572,7 +572,7 @@ class BehavioralAnalyzer {
     );
   }
   
-  determineAction(score) {
+  determineAction (score) {
     if (score > 0.8) return 'block';
     if (score > 0.6) return 'challenge';  // CAPTCHA
     if (score > 0.4) return 'throttle';   // Stricter rate limit
@@ -582,8 +582,8 @@ class BehavioralAnalyzer {
 
 const analyzer = new BehavioralAnalyzer();
 
-app.use(async (req, res, next) => {
-  const analysis = await analyzer.analyzeRequest(req);
+app.use (async (req, res, next) => {
+  const analysis = await analyzer.analyzeRequest (req);
   
   if (analysis.action === 'block') {
     return res.status(403).json({
@@ -615,9 +615,9 @@ app.use(async (req, res, next) => {
 
 \`\`\`javascript
 // Gradually tighten limits for suspicious users
-async function progressiveRateLimit(userId) {
+async function progressiveRateLimit (userId) {
   const violationsKey = \`ratelimit:violations:\${userId}\`;
-  const violations = parseInt(await redis.get(violationsKey) || '0');
+  const violations = parseInt (await redis.get (violationsKey) || '0');
   
   // Base limit
   let limit = 1000;
@@ -628,12 +628,12 @@ async function progressiveRateLimit(userId) {
     limit = Math.max(10, limit / Math.pow(2, violations));
   }
   
-  const result = await slidingWindowCounter(userId, limit, window);
+  const result = await slidingWindowCounter (userId, limit, window);
   
   if (!result.allowed) {
     // Increment violations
-    await redis.incr(violationsKey);
-    await redis.expire(violationsKey, 86400);  // Reset daily
+    await redis.incr (violationsKey);
+    await redis.expire (violationsKey, 86400);  // Reset daily
     
     // Exponentially increase penalty
     const penaltySeconds = Math.min(
@@ -657,7 +657,7 @@ async function progressiveRateLimit(userId) {
 
 \`\`\`javascript
 // Detect multiple accounts from same entity
-async function detectSiblingAccounts(userId, fingerprint, email) {
+async function detectSiblingAccounts (userId, fingerprint, email) {
   const emailDomain = email.split('@')[1];
   
   // Find accounts with similar signals
@@ -668,19 +668,19 @@ async function detectSiblingAccounts(userId, fingerprint, email) {
   
   const siblings = new Set();
   for (const key of siblingKeys) {
-    const accounts = await redis.smembers(key);
-    accounts.forEach(id => siblings.add(id));
+    const accounts = await redis.smembers (key);
+    accounts.forEach (id => siblings.add (id));
   }
   
   // Add current user to sibling groups
   for (const key of siblingKeys) {
-    await redis.sadd(key, userId);
-    await redis.expire(key, 86400);
+    await redis.sadd (key, userId);
+    await redis.expire (key, 86400);
   }
   
   // Share rate limit across sibling accounts
   if (siblings.size > 1) {
-    const combinedKey = \`ratelimit:siblings:\${Array.from(siblings).sort().join(':')}\`;
+    const combinedKey = \`ratelimit:siblings:\${Array.from (siblings).sort().join(':')}\`;
     return combinedKey;  // Use this key for rate limiting
   }
   
@@ -693,7 +693,7 @@ async function detectSiblingAccounts(userId, fingerprint, email) {
 \`\`\`javascript
 const axios = require('axios');
 
-async function verifyCaptcha(token) {
+async function verifyCaptcha (token) {
   const response = await axios.post(
     'https://www.google.com/recaptcha/api/siteverify',
     null,
@@ -708,8 +708,8 @@ async function verifyCaptcha(token) {
   return response.data.success && response.data.score > 0.5;
 }
 
-app.use(async (req, res, next) => {
-  const suspicionScore = await analyzer.analyzeRequest(req);
+app.use (async (req, res, next) => {
+  const suspicionScore = await analyzer.analyzeRequest (req);
   
   if (suspicionScore.action === 'challenge') {
     if (!req.body.captchaToken) {
@@ -719,7 +719,7 @@ app.use(async (req, res, next) => {
       });
     }
     
-    const captchaValid = await verifyCaptcha(req.body.captchaToken);
+    const captchaValid = await verifyCaptcha (req.body.captchaToken);
     if (!captchaValid) {
       return res.status(403).json({
         error: 'Invalid CAPTCHA',
@@ -736,7 +736,7 @@ app.use(async (req, res, next) => {
 
 \`\`\`javascript
 // Integrate with IP reputation services
-async function checkIPReputation(ip) {
+async function checkIPReputation (ip) {
   // Check against known VPN/proxy/datacenter IPs
   const response = await axios.get(
     \`https://ipqualityscore.com/api/json/ip/\${process.env.IPQS_KEY}/\${ip}\`
@@ -755,8 +755,8 @@ async function checkIPReputation(ip) {
   return { suspicious: false };
 }
 
-app.use(async (req, res, next) => {
-  const reputation = await checkIPReputation(req.ip);
+app.use (async (req, res, next) => {
+  const reputation = await checkIPReputation (req.ip);
   
   if (reputation.suspicious) {
     // Apply stricter rate limit or require CAPTCHA
@@ -805,10 +805,10 @@ Requirements:
 
 \`\`\`javascript
 // 10 messages per 60 seconds
-async function fixedWindowChat(userId, limit = 10, window = 60) {
+async function fixedWindowChat (userId, limit = 10, window = 60) {
   const key = \`chat:ratelimit:\${userId}:\${Math.floor(Date.now() / 1000 / window)}\`;
-  const count = await redis.incr(key);
-  await redis.expire(key, window);
+  const count = await redis.incr (key);
+  await redis.expire (key, window);
   
   return {
     allowed: count <= limit,
@@ -831,16 +831,16 @@ async function fixedWindowChat(userId, limit = 10, window = 60) {
 
 \`\`\`javascript
 // 10 messages per 60 seconds (smooth)
-async function slidingWindowChat(userId, limit = 10, window = 60) {
+async function slidingWindowChat (userId, limit = 10, window = 60) {
   const now = Date.now() / 1000;
-  const currentWindow = Math.floor(now / window);
+  const currentWindow = Math.floor (now / window);
   const previousWindow = currentWindow - 1;
   
   const currentKey = \`chat:\${userId}:\${currentWindow}\`;
   const previousKey = \`chat:\${userId}:\${previousWindow}\`;
   
-  const currentCount = parseInt(await redis.get(currentKey) || '0');
-  const previousCount = parseInt(await redis.get(previousKey) || '0');
+  const currentCount = parseInt (await redis.get (currentKey) || '0');
+  const previousCount = parseInt (await redis.get (previousKey) || '0');
   
   const percentageInCurrent = (now % window) / window;
   const weightedCount = 
@@ -850,12 +850,12 @@ async function slidingWindowChat(userId, limit = 10, window = 60) {
     return { allowed: false, remaining: 0 };
   }
   
-  await redis.incr(currentKey);
-  await redis.expire(currentKey, window * 2);
+  await redis.incr (currentKey);
+  await redis.expire (currentKey, window * 2);
   
   return {
     allowed: true,
-    remaining: Math.floor(limit - weightedCount - 1)
+    remaining: Math.floor (limit - weightedCount - 1)
   };
 }
 \`\`\`
@@ -874,14 +874,14 @@ async function slidingWindowChat(userId, limit = 10, window = 60) {
 
 \`\`\`javascript
 // 10 token capacity, refill 1 token every 6 seconds
-async function tokenBucketChat(userId, capacity = 10, refillRate = 1/6) {
+async function tokenBucketChat (userId, capacity = 10, refillRate = 1/6) {
   const key = \`chat:bucket:\${userId}\`;
   
-  const data = await redis.get(key);
+  const data = await redis.get (key);
   let tokens, lastRefill;
   
   if (data) {
-    ({ tokens, lastRefill } = JSON.parse(data));
+    ({ tokens, lastRefill } = JSON.parse (data));
   } else {
     tokens = capacity;
     lastRefill = Date.now();
@@ -891,7 +891,7 @@ async function tokenBucketChat(userId, capacity = 10, refillRate = 1/6) {
   const now = Date.now();
   const elapsed = (now - lastRefill) / 1000;
   const tokensToAdd = elapsed * refillRate;
-  tokens = Math.min(capacity, tokens + tokensToAdd);
+  tokens = Math.min (capacity, tokens + tokensToAdd);
   
   if (tokens < 1) {
     return {
@@ -904,14 +904,14 @@ async function tokenBucketChat(userId, capacity = 10, refillRate = 1/6) {
   // Consume 1 token
   tokens -= 1;
   
-  await redis.set(key, JSON.stringify({
+  await redis.set (key, JSON.stringify({
     tokens,
     lastRefill: now
   }), 'EX', 3600);
   
   return {
     allowed: true,
-    remaining: Math.floor(tokens)
+    remaining: Math.floor (tokens)
   };
 }
 \`\`\`
@@ -932,25 +932,25 @@ async function tokenBucketChat(userId, capacity = 10, refillRate = 1/6) {
 
 \`\`\`javascript
 // Process messages at fixed rate (1 message every 6 seconds)
-async function leakyBucketChat(userId, capacity = 10, leakRate = 1/6) {
+async function leakyBucketChat (userId, capacity = 10, leakRate = 1/6) {
   const queueKey = \`chat:queue:\${userId}\`;
   const lastLeakKey = \`chat:lastleak:\${userId}\`;
   
-  let queueSize = await redis.llen(queueKey);
-  const lastLeak = parseInt(await redis.get(lastLeakKey) || Date.now());
+  let queueSize = await redis.llen (queueKey);
+  const lastLeak = parseInt (await redis.get (lastLeakKey) || Date.now());
   
   // Leak messages
   const now = Date.now();
   const elapsed = (now - lastLeak) / 1000;
-  const messagesToLeak = Math.floor(elapsed * leakRate);
+  const messagesToLeak = Math.floor (elapsed * leakRate);
   
   if (messagesToLeak > 0) {
-    const leaked = Math.min(messagesToLeak, queueSize);
+    const leaked = Math.min (messagesToLeak, queueSize);
     for (let i = 0; i < leaked; i++) {
-      await redis.rpop(queueKey);
+      await redis.rpop (queueKey);
     }
     queueSize -= leaked;
-    await redis.set(lastLeakKey, now);
+    await redis.set (lastLeakKey, now);
   }
   
   if (queueSize >= capacity) {
@@ -961,8 +961,8 @@ async function leakyBucketChat(userId, capacity = 10, leakRate = 1/6) {
     };
   }
   
-  await redis.lpush(queueKey, now);
-  await redis.expire(queueKey, 3600);
+  await redis.lpush (queueKey, now);
+  await redis.expire (queueKey, 3600);
   
   return {
     allowed: true,
@@ -1009,7 +1009,7 @@ class ChatRateLimiter {
     this.refillRate = 1/6;   // Refill 1 token every 6 seconds (10/minute)
   }
   
-  async checkLimit(userId) {
+  async checkLimit (userId) {
     return await tokenBucketChat(
       userId,
       this.capacity,
@@ -1025,14 +1025,14 @@ wss.on('connection', (ws, req) => {
   
   ws.on('message', async (message) => {
     // Rate limit check
-    const limit = await rateLimiter.checkLimit(userId);
+    const limit = await rateLimiter.checkLimit (userId);
     
     if (!limit.allowed) {
       ws.send(JSON.stringify({
         type: 'error',
         error: 'Rate limit exceeded',
         message: 'Please slow down. You can send another message in ' + 
-                 Math.ceil(limit.retryAfter) + ' seconds.',
+                 Math.ceil (limit.retryAfter) + ' seconds.',
         retryAfter: limit.retryAfter
       }));
       return;
@@ -1073,7 +1073,7 @@ app.listen(3000);
 **Example Usage Patterns**:
 
 \`\`\`
-User sends: "Hey" "How are you?" "What's up?"
+User sends: "Hey" "How are you?" "What\'s up?"
 Result: 3 tokens consumed, 7 remaining (burst allowed)
 
 User tries to send 15 messages rapidly:
@@ -1089,15 +1089,15 @@ Tokens refilled to 10 (ready for next conversation)
 For production chat, consider combining Token Bucket + Sliding Window:
 
 \`\`\`javascript
-async function hybridChatRateLimit(userId) {
+async function hybridChatRateLimit (userId) {
   // Token bucket: Allow bursts
-  const burst = await tokenBucketChat(userId, 10, 1/6);
+  const burst = await tokenBucketChat (userId, 10, 1/6);
   if (!burst.allowed) {
     return burst;
   }
   
   // Sliding window: Hard limit (100/hour)
-  const hourly = await slidingWindowChat(userId, 100, 3600);
+  const hourly = await slidingWindowChat (userId, 100, 3600);
   if (!hourly.allowed) {
     return hourly;
   }

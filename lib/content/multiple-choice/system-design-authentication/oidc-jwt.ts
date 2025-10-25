@@ -29,7 +29,7 @@ export const oidcjwtMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "ID token proves user identity to the client application. It's a JWT containing user claims (sub, email, name). Client validates signature and extracts user info. For API access, use access token. For authentication, use ID token.",
+      "ID token proves user identity to the client application. It\'s a JWT containing user claims (sub, email, name). Client validates signature and extracts user info. For API access, use access token. For authentication, use ID token.",
   },
   {
     id: 'mc3',

@@ -45,15 +45,15 @@ class TokenManager:
     def __init__(self, model: str = "gpt-4", max_tokens: int = 8000):
         self.model = model
         self.max_tokens = max_tokens
-        self.encoding = tiktoken.encoding_for_model(model)
+        self.encoding = tiktoken.encoding_for_model (model)
     
-    def count_tokens(self, text: str) -> int:
+    def count_tokens (self, text: str) -> int:
         """Count tokens in text."""
-        return len(self.encoding.encode(text))
+        return len (self.encoding.encode (text))
     
-    def fits_in_context(self, text: str, reserve_tokens: int = 500) -> bool:
+    def fits_in_context (self, text: str, reserve_tokens: int = 500) -> bool:
         """Check if text fits in context window."""
-        tokens = self.count_tokens(text)
+        tokens = self.count_tokens (text)
         return tokens + reserve_tokens <= self.max_tokens
     
     def truncate_to_fit(
@@ -65,9 +65,9 @@ class TokenManager:
         """Truncate text to fit in token budget."""
         
         max_tokens = max_tokens or self.max_tokens
-        tokens = self.encoding.encode(text)
+        tokens = self.encoding.encode (text)
         
-        if len(tokens) <= max_tokens:
+        if len (tokens) <= max_tokens:
             return text
         
         # Truncate tokens
@@ -77,7 +77,7 @@ class TokenManager:
             truncated_tokens = tokens[-max_tokens:]
         
         # Decode back to text
-        return self.encoding.decode(truncated_tokens)
+        return self.encoding.decode (truncated_tokens)
     
     def smart_truncate(
         self,
@@ -91,9 +91,9 @@ class TokenManager:
         Used by Cursor for large files.
         """
         
-        tokens = self.encoding.encode(text)
+        tokens = self.encoding.encode (text)
         
-        if len(tokens) <= max_tokens:
+        if len (tokens) <= max_tokens:
             return text
         
         # Keep start and end, truncate middle
@@ -112,18 +112,18 @@ class TokenManager:
         middle_marker = self.encoding.encode("\\n\\n[... content truncated ...]\\n\\n")
         combined_tokens = start_tokens + middle_marker + end_tokens
         
-        return self.encoding.decode(combined_tokens)
+        return self.encoding.decode (combined_tokens)
 
 # Usage
-manager = TokenManager(model="gpt-4", max_tokens=8000)
+manager = TokenManager (model="gpt-4", max_tokens=8000)
 
 long_text = "Your code here..." * 1000
 
-print(f"Original tokens: {manager.count_tokens(long_text)}")
-print(f"Fits in context: {manager.fits_in_context(long_text)}")
+print(f"Original tokens: {manager.count_tokens (long_text)}")
+print(f"Fits in context: {manager.fits_in_context (long_text)}")
 
-truncated = manager.smart_truncate(long_text, max_tokens=2000)
-print(f"Truncated tokens: {manager.count_tokens(truncated)}")
+truncated = manager.smart_truncate (long_text, max_tokens=2000)
+print(f"Truncated tokens: {manager.count_tokens (truncated)}")
 \`\`\`
 
 ## Truncation Methods
@@ -159,33 +159,33 @@ class ContextTruncator:
         """Truncate using specified strategy."""
         
         if strategy == TruncationStrategy.BEGINNING:
-            return self._keep_beginning(text, max_tokens)
+            return self._keep_beginning (text, max_tokens)
         elif strategy == TruncationStrategy.END:
-            return self._keep_end(text, max_tokens)
+            return self._keep_end (text, max_tokens)
         elif strategy == TruncationStrategy.MIDDLE:
-            return self._keep_middle(text, max_tokens)
+            return self._keep_middle (text, max_tokens)
         elif strategy == TruncationStrategy.SMART:
-            return self._smart_sliding(text, max_tokens)
+            return self._smart_sliding (text, max_tokens)
         elif strategy == TruncationStrategy.SUMMARIZE:
-            return self._summarize_then_use(text, max_tokens)
+            return self._summarize_then_use (text, max_tokens)
         
         return text
     
-    def _keep_beginning(self, text: str, max_tokens: int) -> str:
+    def _keep_beginning (self, text: str, max_tokens: int) -> str:
         """Keep beginning, truncate end."""
-        return self.tm.truncate_to_fit(text, max_tokens, from_start=True)
+        return self.tm.truncate_to_fit (text, max_tokens, from_start=True)
     
-    def _keep_end(self, text: str, max_tokens: int) -> str:
+    def _keep_end (self, text: str, max_tokens: int) -> str:
         """Keep end, truncate beginning."""
-        return self.tm.truncate_to_fit(text, max_tokens, from_start=False)
+        return self.tm.truncate_to_fit (text, max_tokens, from_start=False)
     
-    def _keep_middle(self, text: str, max_tokens: int) -> str:
+    def _keep_middle (self, text: str, max_tokens: int) -> str:
         """
         Keep middle section.
         Useful when you know relevant content is in the middle.
         """
-        tokens = self.tm.encoding.encode(text)
-        total_tokens = len(tokens)
+        tokens = self.tm.encoding.encode (text)
+        total_tokens = len (tokens)
         
         if total_tokens <= max_tokens:
             return text
@@ -195,9 +195,9 @@ class ContextTruncator:
         end_idx = start_idx + max_tokens
         
         middle_tokens = tokens[start_idx:end_idx]
-        return self.tm.encoding.decode(middle_tokens)
+        return self.tm.encoding.decode (middle_tokens)
     
-    def _smart_sliding(self, text: str, max_tokens: int) -> str:
+    def _smart_sliding (self, text: str, max_tokens: int) -> str:
         """
         Preserve important parts (beginning and end).
         How Cursor handles large files.
@@ -209,36 +209,36 @@ class ContextTruncator:
             preserve_end=max_tokens // 3
         )
     
-    def _summarize_then_use(self, text: str, max_tokens: int) -> str:
+    def _summarize_then_use (self, text: str, max_tokens: int) -> str:
         """
         Summarize content first, then provide full details.
         Best for analysis tasks.
         """
         # This would call LLM to summarize
         # For demo, just show the concept
-        if self.tm.count_tokens(text) <= max_tokens:
+        if self.tm.count_tokens (text) <= max_tokens:
             return text
         
         # In production: call LLM to summarize
         summary = "[Summary of content would go here]"
         
         # Then include as much original as fits
-        remaining_budget = max_tokens - self.tm.count_tokens(summary)
-        partial_text = self.tm.truncate_to_fit(text, remaining_budget)
+        remaining_budget = max_tokens - self.tm.count_tokens (summary)
+        partial_text = self.tm.truncate_to_fit (text, remaining_budget)
         
         return f"{summary}\\n\\n[Original content (truncated)]:\\n{partial_text}"
 
 # Example usage
-truncator = ContextTruncator(manager)
+truncator = ContextTruncator (manager)
 
 long_doc = "Your long document..." * 500
 
 # Different strategies for different needs
-beginning = truncator.truncate(long_doc, 1000, TruncationStrategy.BEGINNING)
-smart = truncator.truncate(long_doc, 1000, TruncationStrategy.SMART)
+beginning = truncator.truncate (long_doc, 1000, TruncationStrategy.BEGINNING)
+smart = truncator.truncate (long_doc, 1000, TruncationStrategy.SMART)
 
-print("Beginning strategy tokens:", manager.count_tokens(beginning))
-print("Smart strategy tokens:", manager.count_tokens(smart))
+print("Beginning strategy tokens:", manager.count_tokens (beginning))
+print("Smart strategy tokens:", manager.count_tokens (smart))
 \`\`\`
 
 ## Hierarchical Context Management
@@ -279,11 +279,11 @@ class HierarchicalContextManager:
         """
         
         # Calculate available budget
-        query_tokens = self.tm.count_tokens(query)
+        query_tokens = self.tm.count_tokens (query)
         available_tokens = self.max_tokens - query_tokens - self.reserve_tokens
         
         # Sort by priority (higher first)
-        sorted_items = sorted(items, key=lambda x: x.priority, reverse=True)
+        sorted_items = sorted (items, key=lambda x: x.priority, reverse=True)
         
         # Add items until budget exhausted
         selected_items = []
@@ -291,7 +291,7 @@ class HierarchicalContextManager:
         
         for item in sorted_items:
             if tokens_used + item.tokens <= available_tokens:
-                selected_items.append(item)
+                selected_items.append (item)
                 tokens_used += item.tokens
             else:
                 # Try to fit truncated version
@@ -320,16 +320,16 @@ class HierarchicalContextManager:
             ]
             
             if category_items:
-                context_parts.append(f"# {category.upper()}\\n")
+                context_parts.append (f"# {category.upper()}\\n")
                 for item in category_items:
-                    context_parts.append(item.content)
+                    context_parts.append (item.content)
                 context_parts.append("\\n")
         
-        return "\\n".join(context_parts)
+        return "\\n".join (context_parts)
 
 # Example usage
 tm = TokenManager()
-manager = HierarchicalContextManager(tm, max_tokens=8000)
+manager = HierarchicalContextManager (tm, max_tokens=8000)
 
 # Multiple context items with priorities
 items = [
@@ -360,11 +360,11 @@ items = [
 ]
 
 query = "Add error handling to User class"
-context = manager.build_context(items, query)
+context = manager.build_context (items, query)
 
 print("Built context:")
 print(context)
-print(f"\\nTotal tokens: {tm.count_tokens(context)}")
+print(f"\\nTotal tokens: {tm.count_tokens (context)}")
 \`\`\`
 
 ## Sliding Window Techniques
@@ -385,18 +385,18 @@ class SlidingWindowProcessor:
         self.window_size = window_size
         self.overlap = window_size // 4  # 25% overlap
     
-    def create_windows(self, text: str) -> List[str]:
+    def create_windows (self, text: str) -> List[str]:
         """Split text into overlapping windows."""
         
-        tokens = self.tm.encoding.encode(text)
+        tokens = self.tm.encoding.encode (text)
         windows = []
         
         position = 0
-        while position < len(tokens):
+        while position < len (tokens):
             # Extract window
             window_tokens = tokens[position:position + self.window_size]
-            window_text = self.tm.encoding.decode(window_tokens)
-            windows.append(window_text)
+            window_text = self.tm.encoding.decode (window_tokens)
+            windows.append (window_text)
             
             # Move position with overlap
             position += self.window_size - self.overlap
@@ -418,18 +418,18 @@ class SlidingWindowProcessor:
             aggregate_func: Function to combine window results
         """
         
-        windows = self.create_windows(text)
+        windows = self.create_windows (text)
         results = []
         
-        print(f"Processing {len(windows)} windows...")
+        print(f"Processing {len (windows)} windows...")
         
-        for i, window in enumerate(windows):
-            print(f"  Window {i+1}/{len(windows)}")
-            result = process_func(window)
-            results.append(result)
+        for i, window in enumerate (windows):
+            print(f"  Window {i+1}/{len (windows)}")
+            result = process_func (window)
+            results.append (result)
         
         if aggregate_func:
-            return aggregate_func(results)
+            return aggregate_func (results)
         
         return results
 
@@ -438,9 +438,9 @@ from openai import OpenAI
 
 client = OpenAI()
 tm = TokenManager()
-processor = SlidingWindowProcessor(tm, window_size=2000)
+processor = SlidingWindowProcessor (tm, window_size=2000)
 
-def summarize_window(text: str) -> str:
+def summarize_window (text: str) -> str:
     """Summarize a window of text."""
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -451,12 +451,12 @@ def summarize_window(text: str) -> str:
     )
     return response.choices[0].message.content
 
-def combine_summaries(summaries: List[str]) -> str:
+def combine_summaries (summaries: List[str]) -> str:
     """Combine window summaries into final summary."""
-    combined = "\\n\\n".join(summaries)
+    combined = "\\n\\n".join (summaries)
     
     # If combined still too long, summarize the summaries
-    if tm.count_tokens(combined) > 2000:
+    if tm.count_tokens (combined) > 2000:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -506,14 +506,14 @@ class CursorStyleContextManager:
         """
         
         # Budget allocation
-        query_tokens = self.tm.count_tokens(user_query)
+        query_tokens = self.tm.count_tokens (user_query)
         available = self.max_context - query_tokens - 500
         
         # Priority allocation
         budgets = {
-            'current_selection': int(available * 0.3),  # 30% for selection
-            'current_file': int(available * 0.4),       # 40% for current file
-            'related_files': int(available * 0.3),      # 30% for related files
+            'current_selection': int (available * 0.3),  # 30% for selection
+            'current_file': int (available * 0.4),       # 40% for current file
+            'related_files': int (available * 0.3),      # 30% for related files
         }
         
         context_parts = []
@@ -524,7 +524,7 @@ class CursorStyleContextManager:
                 current_selection,
                 budgets['current_selection']
             )
-            context_parts.append(f"# CURRENT SELECTION\\n{selection}\\n")
+            context_parts.append (f"# CURRENT SELECTION\\n{selection}\\n")
         
         # 2. Current file context
         if current_file:
@@ -533,11 +533,11 @@ class CursorStyleContextManager:
                 current_file,
                 budgets['current_file']
             )
-            context_parts.append(f"# CURRENT FILE\\n{file_context}\\n")
+            context_parts.append (f"# CURRENT FILE\\n{file_context}\\n")
         
         # 3. Related files (most relevant first)
         related_budget = budgets['related_files']
-        related_budget_per_file = related_budget // len(related_files) if related_files else 0
+        related_budget_per_file = related_budget // len (related_files) if related_files else 0
         
         if related_files and related_budget_per_file > 100:
             context_parts.append("# RELATED FILES\\n")
@@ -546,16 +546,16 @@ class CursorStyleContextManager:
                     f"## {file_info['path']}\\n{file_info['content']}",
                     related_budget_per_file
                 )
-                context_parts.append(file_summary + "\\n")
+                context_parts.append (file_summary + "\\n")
         
-        return "\\n".join(context_parts)
+        return "\\n".join (context_parts)
 
 # Example
-cursor_manager = CursorStyleContextManager(tm)
+cursor_manager = CursorStyleContextManager (tm)
 
 context = cursor_manager.build_codebase_context(
     current_file="class User:\\n    def __init__(self):...",
-    current_selection="def login(self, username, password):\\n    ...",
+    current_selection="def login (self, username, password):\\n    ...",
     related_files=[
         {'path': 'auth.py', 'content': 'class Auth:...'},
         {'path': 'database.py', 'content': 'class DB:...'}
@@ -610,7 +610,7 @@ print(context)
 3. **Smart truncation preserves value** - Keep beginning and end
 4. **Prioritize context items** - Most important first
 5. **Sliding windows for long documents** - Process in chunks
-6. **Cursor's approach works** - Current file + selection + related
+6. **Cursor\'s approach works** - Current file + selection + related
 7. **Hierarchical context helps** - System > Recent > Relevant > Background
 8. **Overlap prevents information loss** - Use in sliding windows
 9. **Monitor token usage** - Critical for cost control

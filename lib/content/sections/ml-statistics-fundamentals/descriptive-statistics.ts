@@ -51,7 +51,7 @@ np.random.seed(42)
 # Example: House prices (in thousands)
 house_prices = np.array([200, 250, 180, 300, 220, 240, 260, 280, 210, 3000])
 
-mean_price = np.mean(house_prices)
+mean_price = np.mean (house_prices)
 print(f"Mean price: \${mean_price:.2f}k")
 print(f"Notice: The $3000k mansion drastically pulls the mean up!")
 
@@ -61,7 +61,7 @@ print(f"Notice: The $3000k mansion drastically pulls the mean up!")
 
 # More realistic example without outlier
 typical_prices = house_prices[house_prices < 1000]
-mean_typical = np.mean(typical_prices)
+mean_typical = np.mean (typical_prices)
 print(f"\\nMean of typical houses: \${mean_typical:.2f}k")
 # Output:
 # Mean of typical houses: $235.56k
@@ -82,7 +82,7 @@ The **median** is the middle value when data is sorted:
 **When to use**: Data has outliers or is skewed
 
 \`\`\`python
-median_price = np.median(house_prices)
+median_price = np.median (house_prices)
 print(f"Median price: \${median_price:.2f}k")
 print(f"\\nCompare:")
 print(f"Mean: \${mean_price:.2f}k (pulled up by outlier)")
@@ -114,7 +114,7 @@ from scipy import stats
 
 # Example: T-shirt sizes
 sizes = ['S', 'M', 'M', 'L', 'M', 'XL', 'M', 'L', 'M', 'S']
-mode_result = stats.mode(sizes, keepdims=True)
+mode_result = stats.mode (sizes, keepdims=True)
 print(f"Most common size: {mode_result.mode[0]}")
 print(f"Frequency: {mode_result.count[0]}")
 
@@ -124,7 +124,7 @@ print(f"Frequency: {mode_result.count[0]}")
 
 # For numerical data
 grades = [85, 90, 85, 78, 92, 85, 88, 90]
-mode_grade = stats.mode(grades, keepdims=True)
+mode_grade = stats.mode (grades, keepdims=True)
 print(f"\\nMost common grade: {mode_grade.mode[0]}")
 # Output:
 # Most common grade: 85
@@ -156,16 +156,16 @@ def compare_central_tendency():
     
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
     
-    for (name, data), ax in zip(distributions.items(), axes):
-        ax.hist(data, bins=30, density=True, alpha=0.7, edgecolor='black')
+    for (name, data), ax in zip (distributions.items(), axes):
+        ax.hist (data, bins=30, density=True, alpha=0.7, edgecolor='black')
         
-        mean_val = np.mean(data)
-        median_val = np.median(data)
+        mean_val = np.mean (data)
+        median_val = np.median (data)
         
-        ax.axvline(mean_val, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean_val:.1f}')
-        ax.axvline(median_val, color='blue', linestyle='--', linewidth=2, label=f'Median: {median_val:.1f}')
+        ax.axvline (mean_val, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean_val:.1f}')
+        ax.axvline (median_val, color='blue', linestyle='--', linewidth=2, label=f'Median: {median_val:.1f}')
         
-        ax.set_title(name)
+        ax.set_title (name)
         ax.set_xlabel('Value')
         ax.set_ylabel('Density')
         ax.legend()
@@ -188,15 +188,15 @@ compare_central_tendency()
 
 The **range** is the difference between maximum and minimum:
 
-\\[ \\text{Range} = \\max(x) - \\min(x) \\]
+\\[ \\text{Range} = \\max (x) - \\min (x) \\]
 
 **Limitations**: Sensitive to outliers, uses only two values
 
 \`\`\`python
 data = np.array([10, 12, 15, 18, 100])
-data_range = np.ptp(data)  # peak-to-peak
+data_range = np.ptp (data)  # peak-to-peak
 print(f"Range: {data_range}")
-print(f"Min: {np.min(data)}, Max: {np.max(data)}")
+print(f"Min: {np.min (data)}, Max: {np.max (data)}")
 
 # Output:
 # Range: 90
@@ -213,16 +213,16 @@ The **variance** measures average squared deviation from the mean:
 **Sample variance** (unbiased estimator):
 \\[ s^2 = \\frac{1}{n-1} \\sum_{i=1}^{n} (x_i - \\bar{x})^2 \\]
 
-**Why n-1?** Bessel's correction for unbiased estimation from samples.
+**Why n-1?** Bessel\'s correction for unbiased estimation from samples.
 
 \`\`\`python
 data = np.array([2, 4, 4, 4, 5, 5, 7, 9])
 
 # Population variance (ddof=0)
-var_pop = np.var(data, ddof=0)
+var_pop = np.var (data, ddof=0)
 
 # Sample variance (ddof=1) - default
-var_sample = np.var(data, ddof=1)
+var_sample = np.var (data, ddof=1)
 
 print(f"Population variance: {var_pop:.3f}")
 print(f"Sample variance: {var_sample:.3f}")
@@ -244,9 +244,9 @@ The **standard deviation** is the square root of variance:
 **Advantage over variance**: Same units as original data
 
 \`\`\`python
-std_dev = np.std(data, ddof=1)
+std_dev = np.std (data, ddof=1)
 print(f"Standard deviation: {std_dev:.3f}")
-print(f"Mean: {np.mean(data):.3f}")
+print(f"Mean: {np.mean (data):.3f}")
 print(f"\\nInterpretation: Data typically deviates ±{std_dev:.2f} from mean")
 
 # Output:
@@ -269,8 +269,8 @@ The **CV** is the ratio of standard deviation to mean:
 height_cm = np.array([170, 175, 180, 172, 178])  # cm
 weight_kg = np.array([70, 75, 80, 72, 78])       # kg
 
-cv_height = (np.std(height_cm) / np.mean(height_cm)) * 100
-cv_weight = (np.std(weight_kg) / np.mean(weight_kg)) * 100
+cv_height = (np.std (height_cm) / np.mean (height_cm)) * 100
+cv_weight = (np.std (weight_kg) / np.mean (weight_kg)) * 100
 
 print(f"Height CV: {cv_height:.2f}%")
 print(f"Weight CV: {cv_weight:.2f}%")
@@ -297,7 +297,7 @@ The **p-th percentile** is the value below which p% of data falls.
 \`\`\`python
 data = np.random.normal(100, 15, 1000)
 
-percentiles = np.percentile(data, [25, 50, 75])
+percentiles = np.percentile (data, [25, 50, 75])
 print(f"25th percentile (Q1): {percentiles[0]:.2f}")
 print(f"50th percentile (Median): {percentiles[1]:.2f}")
 print(f"75th percentile (Q3): {percentiles[2]:.2f}")
@@ -317,7 +317,7 @@ The **IQR** is the range of the middle 50% of data:
 **Use**: Robust measure of spread, outlier detection
 
 \`\`\`python
-q1, q3 = np.percentile(data, [25, 75])
+q1, q3 = np.percentile (data, [25, 75])
 iqr = q3 - q1
 print(f"IQR: {iqr:.2f}")
 
@@ -326,7 +326,7 @@ lower_bound = q1 - 1.5 * iqr
 upper_bound = q3 + 1.5 * iqr
 
 outliers = data[(data < lower_bound) | (data > upper_bound)]
-print(f"\\nOutliers detected: {len(outliers)}")
+print(f"\\nOutliers detected: {len (outliers)}")
 print(f"Outlier bounds: [{lower_bound:.2f}, {upper_bound:.2f}]")
 
 # Output:
@@ -357,9 +357,9 @@ right_skewed = np.random.exponential(1, 1000)
 left_skewed = -np.random.exponential(1, 1000)
 
 print("=== Skewness ===")
-print(f"Symmetric: {skew(symmetric):.3f}")
-print(f"Right-skewed: {skew(right_skewed):.3f}")
-print(f"Left-skewed: {skew(left_skewed):.3f}")
+print(f"Symmetric: {skew (symmetric):.3f}")
+print(f"Right-skewed: {skew (right_skewed):.3f}")
+print(f"Left-skewed: {skew (left_skewed):.3f}")
 
 # Output:
 # === Skewness ===
@@ -380,9 +380,9 @@ print(f"Left-skewed: {skew(left_skewed):.3f}")
 
 \`\`\`python
 print("\\n=== Kurtosis (excess) ===")
-print(f"Normal: {kurtosis(symmetric):.3f}")
-print(f"Heavy-tailed: {kurtosis(np.random.laplace(0, 1, 1000)):.3f}")
-print(f"Light-tailed: {kurtosis(np.random.uniform(-1, 1, 1000)):.3f}")
+print(f"Normal: {kurtosis (symmetric):.3f}")
+print(f"Heavy-tailed: {kurtosis (np.random.laplace(0, 1, 1000)):.3f}")
+print(f"Light-tailed: {kurtosis (np.random.uniform(-1, 1, 1000)):.3f}")
 
 # Output:
 # === Kurtosis (excess) ===
@@ -402,10 +402,10 @@ print(f"Light-tailed: {kurtosis(np.random.uniform(-1, 1, 1000)):.3f}")
 **Rule**: |z| > 3 indicates potential outlier
 
 \`\`\`python
-def detect_outliers_zscore(data, threshold=3):
+def detect_outliers_zscore (data, threshold=3):
     """Detect outliers using z-score method"""
-    mean = np.mean(data)
-    std = np.std(data)
+    mean = np.mean (data)
+    std = np.std (data)
     z_scores = np.abs((data - mean) / std)
     
     outliers = data[z_scores > threshold]
@@ -417,8 +417,8 @@ data = np.concatenate([
     np.array([50, 150, 160, 45, 155])  # outliers
 ])
 
-outliers, z_scores = detect_outliers_zscore(data)
-print(f"Detected {len(outliers)} outliers:")
+outliers, z_scores = detect_outliers_zscore (data)
+print(f"Detected {len (outliers)} outliers:")
 print(outliers)
 
 # Output:
@@ -429,10 +429,10 @@ print(outliers)
 ### IQR Method (More Robust)
 
 \`\`\`python
-def detect_outliers_iqr(data, factor=1.5):
+def detect_outliers_iqr (data, factor=1.5):
     """Detect outliers using IQR method"""
-    q1 = np.percentile(data, 25)
-    q3 = np.percentile(data, 75)
+    q1 = np.percentile (data, 25)
+    q3 = np.percentile (data, 75)
     iqr = q3 - q1
     
     lower_bound = q1 - factor * iqr
@@ -441,8 +441,8 @@ def detect_outliers_iqr(data, factor=1.5):
     outliers = data[(data < lower_bound) | (data > upper_bound)]
     return outliers, (lower_bound, upper_bound)
 
-outliers_iqr, bounds = detect_outliers_iqr(data)
-print(f"\\nIQR method detected {len(outliers_iqr)} outliers")
+outliers_iqr, bounds = detect_outliers_iqr (data)
+print(f"\\nIQR method detected {len (outliers_iqr)} outliers")
 print(f"Bounds: [{bounds[0]:.2f}, {bounds[1]:.2f}]")
 
 # Output:
@@ -480,16 +480,16 @@ print(data.kurtosis())
 ## Box Plot for Visual Summary
 
 \`\`\`python
-def create_comprehensive_boxplot(data):
+def create_comprehensive_boxplot (data):
     """Create detailed box plot showing all key statistics"""
     
-    fig, axes = plt.subplots(1, len(data.columns), figsize=(15, 5))
+    fig, axes = plt.subplots(1, len (data.columns), figsize=(15, 5))
     
-    for idx, col in enumerate(data.columns):
-        ax = axes[idx] if len(data.columns) > 1 else axes
+    for idx, col in enumerate (data.columns):
+        ax = axes[idx] if len (data.columns) > 1 else axes
         
         # Create box plot
-        bp = ax.boxplot(data[col], vert=True, patch_artist=True)
+        bp = ax.boxplot (data[col], vert=True, patch_artist=True)
         bp['boxes'][0].set_facecolor('lightblue')
         
         # Add mean
@@ -498,7 +498,7 @@ def create_comprehensive_boxplot(data):
                 markersize=10, label='Mean')
         
         # Labels
-        ax.set_title(f'{col}\\n(n={len(data)})')
+        ax.set_title (f'{col}\\n (n={len (data)})')
         ax.set_xticklabels(['])
         ax.legend()
         
@@ -521,7 +521,7 @@ def create_comprehensive_boxplot(data):
     plt.savefig('comprehensive_boxplot.png', dpi=300, bbox_inches='tight')
     plt.show()
 
-create_comprehensive_boxplot(data[['price', 'sqft']])
+create_comprehensive_boxplot (data[['price', 'sqft']])
 \`\`\`
 
 ## Machine Learning Applications
@@ -544,7 +544,7 @@ from sklearn.preprocessing import StandardScaler
 
 scaler = StandardScaler()
 features_scaled = pd.DataFrame(
-    scaler.fit_transform(features),
+    scaler.fit_transform (features),
     columns=features.columns
 )
 
@@ -557,27 +557,27 @@ print(features_scaled.describe().loc[['mean', 'std']])
 ### Detecting Data Quality Issues
 
 \`\`\`python
-def data_quality_report(df):
+def data_quality_report (df):
     """Comprehensive data quality analysis"""
     
     report = []
     
-    for col in df.select_dtypes(include=[np.number]).columns:
+    for col in df.select_dtypes (include=[np.number]).columns:
         stats = {
             'column': col,
             'missing': df[col].isna().sum(),
             'zeros': (df[col] == 0).sum(),
             'negative': (df[col] < 0).sum(),
-            'outliers_iqr': len(detect_outliers_iqr(df[col].dropna())[0]),
+            'outliers_iqr': len (detect_outliers_iqr (df[col].dropna())[0]),
             'skewness': df[col].skew(),
             'cv': (df[col].std() / df[col].mean()) * 100 if df[col].mean() != 0 else np.nan
         }
-        report.append(stats)
+        report.append (stats)
     
-    return pd.DataFrame(report)
+    return pd.DataFrame (report)
 
 print("\\n=== Data Quality Report ===")
-print(data_quality_report(data))
+print(data_quality_report (data))
 \`\`\`
 
 ## Key Takeaways

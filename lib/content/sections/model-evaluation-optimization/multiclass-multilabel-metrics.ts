@@ -35,7 +35,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
@@ -43,14 +43,14 @@ print("Multi-class & Multi-label Metrics")
 print("="*70)
 
 # Multi-class confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 
 print("\\nMulti-class Confusion Matrix:")
 print(cm)
 
 # Visualize
-plt.figure(figsize=(10, 8))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+plt.figure (figsize=(10, 8))
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues',
            xticklabels=iris.target_names,
            yticklabels=iris.target_names)
 plt.ylabel('Actual Class', fontsize=12)
@@ -58,10 +58,10 @@ plt.xlabel('Predicted Class', fontsize=12)
 plt.title('Multi-class Confusion Matrix', fontsize=14, fontweight='bold')
 
 # Add percentages
-for i in range(len(iris.target_names)):
-    for j in range(len(iris.target_names)):
+for i in range (len (iris.target_names)):
+    for j in range (len (iris.target_names)):
         percentage = cm[i, j] / cm[i, :].sum() * 100
-        plt.text(j + 0.5, i + 0.7, f'({percentage:.1f}%)',
+        plt.text (j + 0.5, i + 0.7, f'({percentage:.1f}%)',
                 ha='center', va='center', fontsize=9, color='gray')
 
 plt.tight_layout()
@@ -73,12 +73,12 @@ print("\\n" + "="*70)
 print("Per-class Analysis:")
 print("="*70)
 
-for i, class_name in enumerate(iris.target_names):
+for i, class_name in enumerate (iris.target_names):
     # For each class, calculate metrics
-    y_test_binary = (y_test == i).astype(int)
-    y_pred_binary = (y_pred == i).astype(int)
+    y_test_binary = (y_test == i).astype (int)
+    y_pred_binary = (y_pred == i).astype (int)
     
-    cm_binary = confusion_matrix(y_test_binary, y_pred_binary)
+    cm_binary = confusion_matrix (y_test_binary, y_pred_binary)
     tn, fp, fn, tp = cm_binary.ravel()
     
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
@@ -106,23 +106,23 @@ metrics = {}
 
 # Macro average: Calculate metric for each class, then average
 metrics['macro'] = {
-    'precision': precision_score(y_test, y_pred, average='macro'),
-    'recall': recall_score(y_test, y_pred, average='macro'),
-    'f1': f1_score(y_test, y_pred, average='macro')
+    'precision': precision_score (y_test, y_pred, average='macro'),
+    'recall': recall_score (y_test, y_pred, average='macro'),
+    'f1': f1_score (y_test, y_pred, average='macro')
 }
 
 # Weighted average: Like macro but weighted by support (class frequency)
 metrics['weighted'] = {
-    'precision': precision_score(y_test, y_pred, average='weighted'),
-    'recall': recall_score(y_test, y_pred, average='weighted'),
-    'f1': f1_score(y_test, y_pred, average='weighted')
+    'precision': precision_score (y_test, y_pred, average='weighted'),
+    'recall': recall_score (y_test, y_pred, average='weighted'),
+    'f1': f1_score (y_test, y_pred, average='weighted')
 }
 
 # Micro average: Calculate metrics globally by counting total TP, FP, FN
 metrics['micro'] = {
-    'precision': precision_score(y_test, y_pred, average='micro'),
-    'recall': recall_score(y_test, y_pred, average='micro'),
-    'f1': f1_score(y_test, y_pred, average='micro')
+    'precision': precision_score (y_test, y_pred, average='micro'),
+    'recall': recall_score (y_test, y_pred, average='micro'),
+    'f1': f1_score (y_test, y_pred, average='micro')
 }
 
 # Display results
@@ -145,8 +145,8 @@ print("="*70)
 
 # For micro, we treat it as binary classification
 # TP = all correct predictions, FP = all wrong predictions
-total_tp = np.sum(y_test == y_pred)
-total_fp = np.sum(y_test != y_pred)
+total_tp = np.sum (y_test == y_pred)
+total_fp = np.sum (y_test != y_pred)
 total_fn = total_fp  # In multi-class, FP of one class is FN of another
 
 micro_precision_manual = total_tp / (total_tp + total_fp)
@@ -160,7 +160,7 @@ print(f"Micro Recall (manual):    {micro_recall_manual:.4f}")
 print(f"Micro F1 (manual):        {micro_f1_manual:.4f}")
 
 # Note: For balanced multi-class, micro precision = micro recall = accuracy
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 print(f"\\nAccuracy: {accuracy:.4f}")
 print(f"Micro F1: {metrics['micro']['f1']:.4f}")
 print("→ In multi-class, micro average equals accuracy")
@@ -222,7 +222,7 @@ X_train_imb, X_test_imb, y_train_imb, y_test_imb = train_test_split(
 )
 
 # Train model
-model_imb = RandomForestClassifier(n_estimators=100, random_state=42)
+model_imb = RandomForestClassifier (n_estimators=100, random_state=42)
 model_imb.fit(X_train_imb, y_train_imb)
 y_pred_imb = model_imb.predict(X_test_imb)
 
@@ -230,7 +230,7 @@ y_pred_imb = model_imb.predict(X_test_imb)
 print("Class distribution in test set:")
 for i in range(3):
     count = (y_test_imb == i).sum()
-    print(f"  Class {i}: {count:3d} samples ({count/len(y_test_imb)*100:5.1f}%)")
+    print(f"  Class {i}: {count:3d} samples ({count/len (y_test_imb)*100:5.1f}%)")
 
 # Calculate all averaging methods
 print("\\n" + "="*70)
@@ -238,9 +238,9 @@ print("Performance with Different Averages:")
 print("="*70)
 
 for average in ['macro', 'weighted', 'micro']:
-    precision = precision_score(y_test_imb, y_pred_imb, average=average)
-    recall = recall_score(y_test_imb, y_pred_imb, average=average)
-    f1 = f1_score(y_test_imb, y_pred_imb, average=average)
+    precision = precision_score (y_test_imb, y_pred_imb, average=average)
+    recall = recall_score (y_test_imb, y_pred_imb, average=average)
+    f1 = f1_score (y_test_imb, y_pred_imb, average=average)
     
     print(f"\\n{average.upper()} Average:")
     print(f"  Precision: {precision:.4f}")
@@ -252,9 +252,9 @@ print("\\n" + "="*70)
 print("Per-class Scores:")
 print("="*70)
 
-precision_per_class = precision_score(y_test_imb, y_pred_imb, average=None)
-recall_per_class = recall_score(y_test_imb, y_pred_imb, average=None)
-f1_per_class = f1_score(y_test_imb, y_pred_imb, average=None)
+precision_per_class = precision_score (y_test_imb, y_pred_imb, average=None)
+recall_per_class = recall_score (y_test_imb, y_pred_imb, average=None)
+f1_per_class = f1_score (y_test_imb, y_pred_imb, average=None)
 
 print(f"\\n{'Class':<8s} {'Support':<10s} {'Precision':<12s} {'Recall':<12s} {'F1':<12s}")
 print("-"*70)
@@ -284,7 +284,7 @@ print("="*70)
 y_prob = model.predict_proba(X_test)
 
 # Binarize the labels for OvR
-y_test_bin = label_binarize(y_test, classes=[0, 1, 2])
+y_test_bin = label_binarize (y_test, classes=[0, 1, 2])
 n_classes = y_test_bin.shape[1]
 
 # Calculate ROC curve and AUC for each class
@@ -292,16 +292,16 @@ fpr = dict()
 tpr = dict()
 roc_auc = dict()
 
-for i in range(n_classes):
-    fpr[i], tpr[i], _ = roc_curve(y_test_bin[:, i], y_prob[:, i])
-    roc_auc[i] = auc(fpr[i], tpr[i])
+for i in range (n_classes):
+    fpr[i], tpr[i], _ = roc_curve (y_test_bin[:, i], y_prob[:, i])
+    roc_auc[i] = auc (fpr[i], tpr[i])
 
 # Plot
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 
 colors = ['blue', 'red', 'green']
-for i, color in zip(range(n_classes), colors):
-    plt.plot(fpr[i], tpr[i], color=color, linewidth=2,
+for i, color in zip (range (n_classes), colors):
+    plt.plot (fpr[i], tpr[i], color=color, linewidth=2,
             label=f'{iris.target_names[i]} (AUC = {roc_auc[i]:.3f})')
 
 plt.plot([0, 1], [0, 1], 'k--', linewidth=2, label='Random')
@@ -310,35 +310,35 @@ plt.ylim([-0.05, 1.05])
 plt.xlabel('False Positive Rate', fontsize=12)
 plt.ylabel('True Positive Rate', fontsize=12)
 plt.title('Multi-class ROC Curves (One-vs-Rest)', fontsize=14, fontweight='bold')
-plt.legend(loc='lower right', fontsize=11)
-plt.grid(alpha=0.3)
+plt.legend (loc='lower right', fontsize=11)
+plt.grid (alpha=0.3)
 plt.tight_layout()
 plt.savefig('multiclass_roc.png', dpi=150, bbox_inches='tight')
 print("\\nMulti-class ROC curves saved to 'multiclass_roc.png'")
 
 # Calculate macro and weighted average AUC
 print("\\nAUC Scores:")
-for i in range(n_classes):
+for i in range (n_classes):
     print(f"  {iris.target_names[i]}: {roc_auc[i]:.4f}")
 
 # Macro-average AUC
-macro_auc = np.mean(list(roc_auc.values()))
+macro_auc = np.mean (list (roc_auc.values()))
 print(f"\\nMacro-average AUC: {macro_auc:.4f}")
 
 # Using sklearn's built-in
 from sklearn.metrics import roc_auc_score
 
 # One-vs-Rest AUC
-ovr_auc_macro = roc_auc_score(y_test, y_prob, multi_class='ovr', average='macro')
-ovr_auc_weighted = roc_auc_score(y_test, y_prob, multi_class='ovr', average='weighted')
+ovr_auc_macro = roc_auc_score (y_test, y_prob, multi_class='ovr', average='macro')
+ovr_auc_weighted = roc_auc_score (y_test, y_prob, multi_class='ovr', average='weighted')
 
 print(f"\\nOne-vs-Rest AUC:")
 print(f"  Macro:    {ovr_auc_macro:.4f}")
 print(f"  Weighted: {ovr_auc_weighted:.4f}")
 
 # One-vs-One AUC
-ovo_auc_macro = roc_auc_score(y_test, y_prob, multi_class='ovo', average='macro')
-ovo_auc_weighted = roc_auc_score(y_test, y_prob, multi_class='ovo', average='weighted')
+ovo_auc_macro = roc_auc_score (y_test, y_prob, multi_class='ovo', average='macro')
+ovo_auc_weighted = roc_auc_score (y_test, y_prob, multi_class='ovo', average='weighted')
 
 print(f"\\nOne-vs-One AUC:")
 print(f"  Macro:    {ovo_auc_macro:.4f}")
@@ -368,8 +368,8 @@ print(f"\\nExample samples (first 5):")
 print(f"{'Sample':<8s} {'Labels':<30s}")
 print("-"*70)
 for i in range(5):
-    labels = np.where(y_ml[i] == 1)[0]
-    print(f"{i:<8d} {str(labels):<30s}")
+    labels = np.where (y_ml[i] == 1)[0]
+    print(f"{i:<8d} {str (labels):<30s}")
 
 # Split data
 X_train_ml, X_test_ml, y_train_ml, y_test_ml = train_test_split(
@@ -377,7 +377,7 @@ X_train_ml, X_test_ml, y_train_ml, y_test_ml = train_test_split(
 )
 
 # Train multi-label model
-model_ml = MultiOutputClassifier(RandomForestClassifier(n_estimators=100, random_state=42))
+model_ml = MultiOutputClassifier(RandomForestClassifier (n_estimators=100, random_state=42))
 model_ml.fit(X_train_ml, y_train_ml)
 y_pred_ml = model_ml.predict(X_test_ml)
 
@@ -385,9 +385,9 @@ print(f"\\nPredictions (first 5):")
 print(f"{'Sample':<8s} {'True Labels':<25s} {'Predicted Labels':<25s}")
 print("-"*70)
 for i in range(5):
-    true_labels = np.where(y_test_ml[i] == 1)[0]
-    pred_labels = np.where(y_pred_ml[i] == 1)[0]
-    print(f"{i:<8d} {str(true_labels):<25s} {str(pred_labels):<25s}")
+    true_labels = np.where (y_test_ml[i] == 1)[0]
+    pred_labels = np.where (y_pred_ml[i] == 1)[0]
+    print(f"{i:<8d} {str (true_labels):<25s} {str (pred_labels):<25s}")
 \`\`\`
 
 ### Multi-label Metrics
@@ -398,33 +398,33 @@ print("Multi-label Metrics")
 print("="*70)
 
 # 1. Hamming Loss: Fraction of labels that are incorrectly predicted
-hamming = hamming_loss(y_test_ml, y_pred_ml)
+hamming = hamming_loss (y_test_ml, y_pred_ml)
 print(f"\\n1. Hamming Loss: {hamming:.4f}")
 print(f"   Interpretation: {hamming*100:.2f}% of labels are incorrectly predicted")
 print(f"   (Lower is better, 0 is perfect)")
 
 # Manual calculation
 n_samples, n_labels = y_test_ml.shape
-errors = np.sum(y_test_ml != y_pred_ml)
+errors = np.sum (y_test_ml != y_pred_ml)
 hamming_manual = errors / (n_samples * n_labels)
 print(f"   Manual calculation: {errors} errors / ({n_samples} × {n_labels}) = {hamming_manual:.4f} ✓")
 
 # 2. Jaccard Score (Intersection over Union)
-jaccard = jaccard_score(y_test_ml, y_pred_ml, average='samples')
+jaccard = jaccard_score (y_test_ml, y_pred_ml, average='samples')
 print(f"\\n2. Jaccard Score: {jaccard:.4f}")
 print(f"   Interpretation: Average IoU across samples")
 print(f"   Formula: |intersection| / |union|")
 
 # Show example calculation
 for i in range(3):
-    true_set = set(np.where(y_test_ml[i] == 1)[0])
-    pred_set = set(np.where(y_pred_ml[i] == 1)[0])
+    true_set = set (np.where (y_test_ml[i] == 1)[0])
+    pred_set = set (np.where (y_pred_ml[i] == 1)[0])
     
     intersection = true_set & pred_set
     union = true_set | pred_set
     
-    if len(union) > 0:
-        sample_jaccard = len(intersection) / len(union)
+    if len (union) > 0:
+        sample_jaccard = len (intersection) / len (union)
     else:
         sample_jaccard = 1.0
     
@@ -434,15 +434,15 @@ for i in range(3):
 # 3. Exact Match Ratio (Subset Accuracy)
 from sklearn.metrics import accuracy_score
 
-exact_match = accuracy_score(y_test_ml, y_pred_ml)
+exact_match = accuracy_score (y_test_ml, y_pred_ml)
 print(f"\\n3. Exact Match Ratio: {exact_match:.4f}")
 print(f"   Interpretation: {exact_match*100:.1f}% of samples have ALL labels correct")
 print(f"   (Strictest metric - all labels must match exactly)")
 
 # 4. Precision, Recall, F1 for Multi-label
-precision_ml = precision_score(y_test_ml, y_pred_ml, average='samples')
-recall_ml = recall_score(y_test_ml, y_pred_ml, average='samples')
-f1_ml = f1_score(y_test_ml, y_pred_ml, average='samples')
+precision_ml = precision_score (y_test_ml, y_pred_ml, average='samples')
+recall_ml = recall_score (y_test_ml, y_pred_ml, average='samples')
+f1_ml = f1_score (y_test_ml, y_pred_ml, average='samples')
 
 print(f"\\n4. Sample-averaged Metrics:")
 print(f"   Precision: {precision_ml:.4f}")
@@ -456,9 +456,9 @@ print("="*70)
 
 for average in ['micro', 'macro', 'weighted', 'samples']:
     try:
-        p = precision_score(y_test_ml, y_pred_ml, average=average)
-        r = recall_score(y_test_ml, y_pred_ml, average=average)
-        f = f1_score(y_test_ml, y_pred_ml, average=average)
+        p = precision_score (y_test_ml, y_pred_ml, average=average)
+        r = recall_score (y_test_ml, y_pred_ml, average=average)
+        f = f1_score (y_test_ml, y_pred_ml, average=average)
         
         print(f"\\n{average.upper()} average:")
         print(f"  Precision: {p:.4f}, Recall: {r:.4f}, F1: {f:.4f}")
@@ -484,14 +484,14 @@ print("\\nPer-label Performance:")
 print(f"{'Label':<8s} {'Support':<10s} {'Precision':<12s} {'Recall':<12s} {'F1':<12s}")
 print("-"*70)
 
-for label_idx in range(y_test_ml.shape[1]):
+for label_idx in range (y_test_ml.shape[1]):
     y_true_label = y_test_ml[:, label_idx]
     y_pred_label = y_pred_ml[:, label_idx]
     
-    support = np.sum(y_true_label)
-    precision = precision_score(y_true_label, y_pred_label, zero_division=0)
-    recall = recall_score(y_true_label, y_pred_label, zero_division=0)
-    f1 = f1_score(y_true_label, y_pred_label, zero_division=0)
+    support = np.sum (y_true_label)
+    precision = precision_score (y_true_label, y_pred_label, zero_division=0)
+    recall = recall_score (y_true_label, y_pred_label, zero_division=0)
+    f1 = f1_score (y_true_label, y_pred_label, zero_division=0)
     
     print(f"{label_idx:<8d} {support:<10d} {precision:<12.4f} "
           f"{recall:<12.4f} {f1:<12.4f}")
@@ -502,15 +502,15 @@ print("Summary Metrics:")
 print("="*70)
 
 summary = {
-    'Hamming Loss': hamming_loss(y_test_ml, y_pred_ml),
-    'Exact Match Ratio': accuracy_score(y_test_ml, y_pred_ml),
-    'Jaccard Score': jaccard_score(y_test_ml, y_pred_ml, average='samples'),
-    'Precision (micro)': precision_score(y_test_ml, y_pred_ml, average='micro'),
-    'Recall (micro)': recall_score(y_test_ml, y_pred_ml, average='micro'),
-    'F1 (micro)': f1_score(y_test_ml, y_pred_ml, average='micro'),
-    'Precision (macro)': precision_score(y_test_ml, y_pred_ml, average='macro'),
-    'Recall (macro)': recall_score(y_test_ml, y_pred_ml, average='macro'),
-    'F1 (macro)': f1_score(y_test_ml, y_pred_ml, average='macro'),
+    'Hamming Loss': hamming_loss (y_test_ml, y_pred_ml),
+    'Exact Match Ratio': accuracy_score (y_test_ml, y_pred_ml),
+    'Jaccard Score': jaccard_score (y_test_ml, y_pred_ml, average='samples'),
+    'Precision (micro)': precision_score (y_test_ml, y_pred_ml, average='micro'),
+    'Recall (micro)': recall_score (y_test_ml, y_pred_ml, average='micro'),
+    'F1 (micro)': f1_score (y_test_ml, y_pred_ml, average='micro'),
+    'Precision (macro)': precision_score (y_test_ml, y_pred_ml, average='macro'),
+    'Recall (macro)': recall_score (y_test_ml, y_pred_ml, average='macro'),
+    'F1 (macro)': f1_score (y_test_ml, y_pred_ml, average='macro'),
 }
 
 for metric, value in summary.items():
@@ -533,13 +533,13 @@ y_score_ml = np.array([
 ]).T
 
 # Label Ranking Average Precision
-lrap = label_ranking_average_precision_score(y_test_ml, y_score_ml)
+lrap = label_ranking_average_precision_score (y_test_ml, y_score_ml)
 print(f"\\nLabel Ranking Average Precision: {lrap:.4f}")
 print("  Measures average precision for ranking problem")
 print("  Higher is better (1.0 is perfect)")
 
 # Coverage Error
-coverage = coverage_error(y_test_ml, y_score_ml)
+coverage = coverage_error (y_test_ml, y_score_ml)
 print(f"\\nCoverage Error: {coverage:.4f}")
 print("  Average number of labels to go through to cover all true labels")
 print("  Lower is better")
@@ -550,16 +550,16 @@ print("Example Label Rankings:")
 print("="*70)
 
 for i in range(3):
-    true_labels = set(np.where(y_test_ml[i] == 1)[0])
+    true_labels = set (np.where (y_test_ml[i] == 1)[0])
     
     # Rank labels by score
     scores = y_score_ml[i]
-    ranked_labels = np.argsort(scores)[::-1]  # Descending order
+    ranked_labels = np.argsort (scores)[::-1]  # Descending order
     
     print(f"\\nSample {i}:")
     print(f"  True labels: {true_labels}")
     print(f"  Ranked prediction (label: score):")
-    for rank, label in enumerate(ranked_labels[:5], 1):
+    for rank, label in enumerate (ranked_labels[:5], 1):
         marker = "✓" if label in true_labels else " "
         print(f"    {rank}. Label {label}: {scores[label]:.3f} {marker}")
 \`\`\`
@@ -601,7 +601,7 @@ comparison = pd.DataFrame({
     ]
 })
 
-print("\\n" + comparison.to_string(index=False))
+print("\\n" + comparison.to_string (index=False))
 \`\`\`
 
 ## Trading Application: Multi-class Regime Detection
@@ -617,16 +617,16 @@ n_days = 300
 
 # Generate features
 features = {
-    'returns': np.random.randn(n_days) * 0.02,
-    'volatility': np.abs(np.random.randn(n_days) * 0.01),
+    'returns': np.random.randn (n_days) * 0.02,
+    'volatility': np.abs (np.random.randn (n_days) * 0.01),
     'volume': np.random.uniform(0.5, 1.5, n_days),
-    'momentum': np.random.randn(n_days) * 0.01
+    'momentum': np.random.randn (n_days) * 0.01
 }
 
 # Define regimes: 0=Bull, 1=Bear, 2=Sideways
 # Simple logic based on returns and volatility
 regimes = []
-for i in range(n_days):
+for i in range (n_days):
     if features['returns'][i] > 0.01 and features['volatility'][i] < 0.015:
         regimes.append(0)  # Bull
     elif features['returns'][i] < -0.01:
@@ -635,38 +635,38 @@ for i in range(n_days):
         regimes.append(2)  # Sideways
 
 X_regime = np.column_stack([features[k] for k in features.keys()])
-y_regime = np.array(regimes)
+y_regime = np.array (regimes)
 
 # Split and train
 X_train_reg, X_test_reg, y_train_reg, y_test_reg = train_test_split(
     X_regime, y_regime, test_size=0.3, random_state=42, stratify=y_regime
 )
 
-model_regime = RandomForestClassifier(n_estimators=100, random_state=42)
+model_regime = RandomForestClassifier (n_estimators=100, random_state=42)
 model_regime.fit(X_train_reg, y_train_reg)
 y_pred_reg = model_regime.predict(X_test_reg)
 
 # Evaluate
 regime_names = ['Bull', 'Bear', 'Sideways']
-cm_regime = confusion_matrix(y_test_reg, y_pred_reg)
+cm_regime = confusion_matrix (y_test_reg, y_pred_reg)
 
 print("\\nMarket Regime Classification Results:")
 print("="*70)
 
 # Detailed report
 print("\\nClassification Report:")
-print(classification_report(y_test_reg, y_pred_reg, target_names=regime_names))
+print(classification_report (y_test_reg, y_pred_reg, target_names=regime_names))
 
 # Trading implications
 print("\\nTrading Implications:")
 print("-"*70)
 
-for i, regime in enumerate(regime_names):
-    y_true_binary = (y_test_reg == i).astype(int)
-    y_pred_binary = (y_pred_reg == i).astype(int)
+for i, regime in enumerate (regime_names):
+    y_true_binary = (y_test_reg == i).astype (int)
+    y_pred_binary = (y_pred_reg == i).astype (int)
     
-    precision = precision_score(y_true_binary, y_pred_binary)
-    recall = recall_score(y_true_binary, y_pred_binary)
+    precision = precision_score (y_true_binary, y_pred_binary)
+    recall = recall_score (y_true_binary, y_pred_binary)
     
     print(f"\\n{regime} Market:")
     print(f"  Precision: {precision:.3f} - When we predict {regime}, "

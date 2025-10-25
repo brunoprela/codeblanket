@@ -114,12 +114,12 @@ class PortfolioOptimizer:
         self.risk_free_rate = risk_free_rate
         
         # Download data
-        print(f"Downloading data for {len(tickers)} assets...")
-        self.data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+        print(f"Downloading data for {len (tickers)} assets...")
+        self.data = yf.download (tickers, start=start_date, end=end_date)['Adj Close']
         
         # Handle single ticker case
-        if len(tickers) == 1:
-            self.data = pd.DataFrame(self.data, columns=tickers)
+        if len (tickers) == 1:
+            self.data = pd.DataFrame (self.data, columns=tickers)
         
         # Calculate returns
         self.returns = self.data.pct_change().dropna()
@@ -128,9 +128,9 @@ class PortfolioOptimizer:
         self.mean_returns = self.returns.mean() * 252
         self.cov_matrix = self.returns.cov() * 252
         
-        print(f"✓ Data loaded: {len(self.returns)} days")
+        print(f"✓ Data loaded: {len (self.returns)} days")
     
-    def portfolio_performance(self, weights):
+    def portfolio_performance (self, weights):
         """
         Calculate portfolio metrics
         
@@ -140,28 +140,28 @@ class PortfolioOptimizer:
         Returns:
             (return, volatility, sharpe_ratio)
         """
-        weights = np.array(weights)
+        weights = np.array (weights)
         
         # Portfolio return
-        portfolio_return = np.dot(weights, self.mean_returns)
+        portfolio_return = np.dot (weights, self.mean_returns)
         
         # Portfolio volatility
-        portfolio_vol = np.sqrt(np.dot(weights.T, np.dot(self.cov_matrix, weights)))
+        portfolio_vol = np.sqrt (np.dot (weights.T, np.dot (self.cov_matrix, weights)))
         
         # Sharpe ratio
         sharpe_ratio = (portfolio_return - self.risk_free_rate) / portfolio_vol
         
         return portfolio_return, portfolio_vol, sharpe_ratio
     
-    def negative_sharpe(self, weights):
+    def negative_sharpe (self, weights):
         """Objective function: Minimize negative Sharpe"""
-        return -self.portfolio_performance(weights)[2]
+        return -self.portfolio_performance (weights)[2]
     
-    def portfolio_volatility(self, weights):
+    def portfolio_volatility (self, weights):
         """Portfolio volatility (for minimum variance portfolio)"""
-        return np.sqrt(np.dot(weights.T, np.dot(self.cov_matrix, weights)))
+        return np.sqrt (np.dot (weights.T, np.dot (self.cov_matrix, weights)))
     
-    def max_sharpe_portfolio(self, long_only=True, max_weight=1.0, min_weight=0.0):
+    def max_sharpe_portfolio (self, long_only=True, max_weight=1.0, min_weight=0.0):
         """
         Find maximum Sharpe ratio portfolio
         
@@ -173,21 +173,21 @@ class PortfolioOptimizer:
         Returns:
             Optimal weights
         """
-        n_assets = len(self.tickers)
+        n_assets = len (self.tickers)
         
         # Initial guess: equal weights
         initial_guess = np.array([1/n_assets] * n_assets)
         
         # Constraints
         constraints = [
-            {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}  # Weights sum to 1
+            {'type': 'eq', 'fun': lambda x: np.sum (x) - 1}  # Weights sum to 1
         ]
         
         # Bounds
         if long_only:
-            bounds = tuple((min_weight, max_weight) for _ in range(n_assets))
+            bounds = tuple((min_weight, max_weight) for _ in range (n_assets))
         else:
-            bounds = tuple((-1, 1) for _ in range(n_assets))
+            bounds = tuple((-1, 1) for _ in range (n_assets))
         
         # Optimize
         result = minimize(
@@ -204,7 +204,7 @@ class PortfolioOptimizer:
         
         return result.x
     
-    def min_volatility_portfolio(self, target_return=None, long_only=True):
+    def min_volatility_portfolio (self, target_return=None, long_only=True):
         """
         Find minimum volatility portfolio
         
@@ -215,23 +215,23 @@ class PortfolioOptimizer:
         Returns:
             Optimal weights
         """
-        n_assets = len(self.tickers)
+        n_assets = len (self.tickers)
         initial_guess = np.array([1/n_assets] * n_assets)
         
         # Constraints
         constraints = [
-            {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+            {'type': 'eq', 'fun': lambda x: np.sum (x) - 1}
         ]
         
         # Add return constraint if specified
         if target_return is not None:
             constraints.append({
                 'type': 'eq',
-                'fun': lambda x: np.dot(x, self.mean_returns) - target_return
+                'fun': lambda x: np.dot (x, self.mean_returns) - target_return
             })
         
         # Bounds
-        bounds = tuple((0, 1) if long_only else (-1, 1) for _ in range(n_assets))
+        bounds = tuple((0, 1) if long_only else (-1, 1) for _ in range (n_assets))
         
         # Optimize
         result = minimize(
@@ -244,7 +244,7 @@ class PortfolioOptimizer:
         
         return result.x
     
-    def efficient_frontier(self, n_portfolios=100):
+    def efficient_frontier (self, n_portfolios=100):
         """
         Generate efficient frontier
         
@@ -257,14 +257,14 @@ class PortfolioOptimizer:
         # Range of returns
         min_return = self.mean_returns.min()
         max_return = self.mean_returns.max()
-        target_returns = np.linspace(min_return, max_return, n_portfolios)
+        target_returns = np.linspace (min_return, max_return, n_portfolios)
         
         frontier = []
         
         for target_ret in target_returns:
             try:
-                weights = self.min_volatility_portfolio(target_return=target_ret)
-                ret, vol, sharpe = self.portfolio_performance(weights)
+                weights = self.min_volatility_portfolio (target_return=target_ret)
+                ret, vol, sharpe = self.portfolio_performance (weights)
                 
                 frontier.append({
                     'return': ret,
@@ -275,26 +275,26 @@ class PortfolioOptimizer:
             except:
                 continue
         
-        return pd.DataFrame(frontier)
+        return pd.DataFrame (frontier)
     
-    def max_diversification_portfolio(self):
+    def max_diversification_portfolio (self):
         """
         Maximum diversification portfolio
         Maximizes weighted average volatility / portfolio volatility
         """
-        n_assets = len(self.tickers)
+        n_assets = len (self.tickers)
         
         # Asset volatilities
-        asset_vols = np.sqrt(np.diag(self.cov_matrix))
+        asset_vols = np.sqrt (np.diag (self.cov_matrix))
         
-        def negative_diversification_ratio(weights):
+        def negative_diversification_ratio (weights):
             """Negative of diversification ratio"""
-            weighted_vol = np.dot(weights, asset_vols)
-            portfolio_vol = self.portfolio_volatility(weights)
+            weighted_vol = np.dot (weights, asset_vols)
+            portfolio_vol = self.portfolio_volatility (weights)
             return -weighted_vol / portfolio_vol
         
-        constraints = [{'type': 'eq', 'fun': lambda x: np.sum(x) - 1}]
-        bounds = tuple((0, 1) for _ in range(n_assets))
+        constraints = [{'type': 'eq', 'fun': lambda x: np.sum (x) - 1}]
+        bounds = tuple((0, 1) for _ in range (n_assets))
         initial_guess = np.array([1/n_assets] * n_assets)
         
         result = minimize(
@@ -307,9 +307,9 @@ class PortfolioOptimizer:
         
         return result.x
     
-    def display_portfolio(self, weights, name="Portfolio"):
+    def display_portfolio (self, weights, name="Portfolio"):
         """Display portfolio composition and metrics"""
-        ret, vol, sharpe = self.portfolio_performance(weights)
+        ret, vol, sharpe = self.portfolio_performance (weights)
         
         print(f"\\n{'='*50}")
         print(f"{name}")
@@ -319,8 +319,8 @@ class PortfolioOptimizer:
         print(f"Sharpe Ratio:           {sharpe:.2f}")
         print(f"\\nWeights:")
         
-        for ticker, weight in zip(self.tickers, weights):
-            if abs(weight) > 0.001:  # Only show non-trivial weights
+        for ticker, weight in zip (self.tickers, weights):
+            if abs (weight) > 0.001:  # Only show non-trivial weights
                 print(f"  {ticker:6s}: {weight:7.2%}")
         
         print(f"{'='*50}")
@@ -341,15 +341,15 @@ if __name__ == "__main__":
     
     # Maximum Sharpe portfolio
     max_sharpe_weights = optimizer.max_sharpe_portfolio()
-    optimizer.display_portfolio(max_sharpe_weights, "Maximum Sharpe Portfolio")
+    optimizer.display_portfolio (max_sharpe_weights, "Maximum Sharpe Portfolio")
     
     # Minimum volatility portfolio
     min_vol_weights = optimizer.min_volatility_portfolio()
-    optimizer.display_portfolio(min_vol_weights, "Minimum Volatility Portfolio")
+    optimizer.display_portfolio (min_vol_weights, "Minimum Volatility Portfolio")
     
     # Equal weight portfolio (benchmark)
-    equal_weights = np.array([1/len(tickers)] * len(tickers))
-    optimizer.display_portfolio(equal_weights, "Equal Weight Portfolio")
+    equal_weights = np.array([1/len (tickers)] * len (tickers))
+    optimizer.display_portfolio (equal_weights, "Equal Weight Portfolio")
 \`\`\`
 
 ### Output Example
@@ -394,50 +394,50 @@ class RiskParityOptimizer:
         self.returns = returns
         self.cov_matrix = returns.cov() * 252
     
-    def risk_contribution(self, weights):
+    def risk_contribution (self, weights):
         """
         Calculate risk contribution of each asset
         
         Risk contribution_i = w_i * (Σw)_i / σ_portfolio
         """
-        weights = np.array(weights)
-        portfolio_vol = np.sqrt(np.dot(weights.T, np.dot(self.cov_matrix, weights)))
+        weights = np.array (weights)
+        portfolio_vol = np.sqrt (np.dot (weights.T, np.dot (self.cov_matrix, weights)))
         
         # Marginal contribution to risk
-        marginal_contrib = np.dot(self.cov_matrix, weights) / portfolio_vol
+        marginal_contrib = np.dot (self.cov_matrix, weights) / portfolio_vol
         
         # Risk contribution
         risk_contrib = weights * marginal_contrib
         
         return risk_contrib
     
-    def risk_parity_objective(self, weights):
+    def risk_parity_objective (self, weights):
         """
         Objective: Minimize sum of squared differences from equal risk
         """
-        risk_contrib = self.risk_contribution(weights)
+        risk_contrib = self.risk_contribution (weights)
         
         # Target: equal risk from each asset
-        n_assets = len(weights)
-        target_risk = np.sum(risk_contrib) / n_assets
+        n_assets = len (weights)
+        target_risk = np.sum (risk_contrib) / n_assets
         
         # Sum of squared differences
         return np.sum((risk_contrib - target_risk) ** 2)
     
-    def optimize(self):
+    def optimize (self):
         """Find risk parity portfolio"""
-        n_assets = len(self.returns.columns)
+        n_assets = len (self.returns.columns)
         
         # Initial guess: equal weights
         initial_guess = np.array([1/n_assets] * n_assets)
         
         # Constraints
         constraints = [
-            {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+            {'type': 'eq', 'fun': lambda x: np.sum (x) - 1}
         ]
         
         # Bounds: long-only
-        bounds = tuple((0, 1) for _ in range(n_assets))
+        bounds = tuple((0, 1) for _ in range (n_assets))
         
         # Optimize
         result = minimize(
@@ -451,17 +451,17 @@ class RiskParityOptimizer:
         return result.x
 
 # Example: Risk Parity vs Equal Weight
-rp_optimizer = RiskParityOptimizer(optimizer.returns)
+rp_optimizer = RiskParityOptimizer (optimizer.returns)
 rp_weights = rp_optimizer.optimize()
 
 print("\\n=== Risk Parity vs Equal Weight ===")
-for ticker, rp_w, eq_w in zip(tickers, rp_weights, equal_weights):
+for ticker, rp_w, eq_w in zip (tickers, rp_weights, equal_weights):
     print(f"{ticker:6s}: RP={rp_w:6.2%}  Equal={eq_w:6.2%}")
 
 # Show risk contributions
-risk_contrib = rp_optimizer.risk_contribution(rp_weights)
+risk_contrib = rp_optimizer.risk_contribution (rp_weights)
 print("\\nRisk Contributions:")
-for ticker, rc in zip(tickers, risk_contrib):
+for ticker, rc in zip (tickers, risk_contrib):
     print(f"{ticker:6s}: {rc:.4f}")
 \`\`\`
 
@@ -470,7 +470,7 @@ for ticker, rc in zip(tickers, risk_contrib):
 Simple risk parity approximation:
 
 \`\`\`python
-def inverse_volatility_portfolio(returns):
+def inverse_volatility_portfolio (returns):
     """
     Weight inversely proportional to volatility
     
@@ -481,9 +481,9 @@ def inverse_volatility_portfolio(returns):
     weights = inv_vol / inv_vol.sum()
     return weights.values
 
-inv_vol_weights = inverse_volatility_portfolio(optimizer.returns)
+inv_vol_weights = inverse_volatility_portfolio (optimizer.returns)
 print("\\nInverse Volatility Weights:")
-for ticker, weight in zip(tickers, inv_vol_weights):
+for ticker, weight in zip (tickers, inv_vol_weights):
     print(f"{ticker:6s}: {weight:.2%}")
 \`\`\`
 
@@ -523,11 +523,11 @@ class BlackLittermanOptimizer:
         # Market equilibrium weights
         if market_caps is None:
             # Equal weights if no market caps provided
-            self.market_weights = np.array([1/len(returns.columns)] * len(returns.columns))
+            self.market_weights = np.array([1/len (returns.columns)] * len (returns.columns))
         else:
             self.market_weights = market_caps / market_caps.sum()
     
-    def implied_returns(self, risk_aversion=2.5):
+    def implied_returns (self, risk_aversion=2.5):
         """
         Calculate implied equilibrium returns using reverse optimization
         
@@ -539,9 +539,9 @@ class BlackLittermanOptimizer:
         Returns:
             Implied returns vector
         """
-        return risk_aversion * np.dot(self.cov_matrix, self.market_weights)
+        return risk_aversion * np.dot (self.cov_matrix, self.market_weights)
     
-    def posterior_returns(self, views_matrix, views_returns, views_confidence):
+    def posterior_returns (self, views_matrix, views_returns, views_confidence):
         """
         Calculate posterior returns incorporating views
         
@@ -560,8 +560,8 @@ class BlackLittermanOptimizer:
         tau_sigma = self.tau * self.cov_matrix
         
         # M = [(τΣ)^-1 + P'Ω^-1P]^-1
-        inv_tau_sigma = np.linalg.inv(tau_sigma)
-        inv_omega = np.linalg.inv(views_confidence)
+        inv_tau_sigma = np.linalg.inv (tau_sigma)
+        inv_omega = np.linalg.inv (views_confidence)
         
         M = np.linalg.inv(
             inv_tau_sigma + views_matrix.T @ inv_omega @ views_matrix
@@ -575,13 +575,13 @@ class BlackLittermanOptimizer:
         
         return posterior_returns
     
-    def optimize(self, posterior_returns, risk_aversion=2.5):
+    def optimize (self, posterior_returns, risk_aversion=2.5):
         """
         Optimize portfolio using posterior returns
         
         w* = (λΣ)^-1 μ_BL
         """
-        weights = np.linalg.inv(risk_aversion * self.cov_matrix) @ posterior_returns
+        weights = np.linalg.inv (risk_aversion * self.cov_matrix) @ posterior_returns
         
         # Normalize to sum to 1
         weights = weights / weights.sum()
@@ -590,7 +590,7 @@ class BlackLittermanOptimizer:
 
 
 # Example: Tech stock views
-bl_optimizer = BlackLittermanOptimizer(optimizer.returns)
+bl_optimizer = BlackLittermanOptimizer (optimizer.returns)
 
 # Define views
 # View 1: NVDA will outperform AAPL by 10%
@@ -615,20 +615,20 @@ Omega = np.diag([0.0004, 0.0001])  # Variance of view errors
 posterior_returns = bl_optimizer.posterior_returns(P, Q, Omega)
 
 # Optimize
-bl_weights = bl_optimizer.optimize(posterior_returns)
+bl_weights = bl_optimizer.optimize (posterior_returns)
 
 print("\\n=== Black-Litterman Portfolio ===")
 print("\\nImplied Equilibrium Returns:")
 implied_ret = bl_optimizer.implied_returns()
-for ticker, ret in zip(tickers, implied_ret):
+for ticker, ret in zip (tickers, implied_ret):
     print(f"{ticker:6s}: {ret:.2%}")
 
 print("\\nPosterior Returns (with views):")
-for ticker, ret in zip(tickers, posterior_returns):
+for ticker, ret in zip (tickers, posterior_returns):
     print(f"{ticker:6s}: {ret:.2%}")
 
 print("\\nOptimal Weights:")
-for ticker, weight in zip(tickers, bl_weights):
+for ticker, weight in zip (tickers, bl_weights):
     print(f"{ticker:6s}: {weight:.2%}")
 \`\`\`
 
@@ -641,7 +641,7 @@ Real-world portfolios require constraints beyond basic long-only.
 ### Common Constraints
 
 \`\`\`python
-def optimize_with_constraints(optimizer, constraints_dict):
+def optimize_with_constraints (optimizer, constraints_dict):
     """
     Optimize with realistic constraints
     
@@ -655,18 +655,18 @@ def optimize_with_constraints(optimizer, constraints_dict):
             - 'max_positions': Maximum number of positions
             - 'max_turnover': Maximum turnover from current portfolio
     """
-    n_assets = len(optimizer.tickers)
+    n_assets = len (optimizer.tickers)
     
     # Extract constraints
     min_weight = constraints_dict.get('min_weight', 0.0)
     max_weight = constraints_dict.get('max_weight', 1.0)
     
     # Bounds
-    bounds = tuple((min_weight, max_weight) for _ in range(n_assets))
+    bounds = tuple((min_weight, max_weight) for _ in range (n_assets))
     
     # Constraints list
     constraints = [
-        {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}  # Weights sum to 1
+        {'type': 'eq', 'fun': lambda x: np.sum (x) - 1}  # Weights sum to 1
     ]
     
     # Cardinality constraint (min/max positions)
@@ -698,7 +698,7 @@ constrained_weights = optimize_with_constraints(
 )
 
 print("\\n=== Constrained Portfolio (5% min, 30% max) ===")
-for ticker, weight in zip(tickers, constrained_weights):
+for ticker, weight in zip (tickers, constrained_weights):
     print(f"{ticker:6s}: {weight:.2%}")
 \`\`\`
 
@@ -707,7 +707,7 @@ for ticker, weight in zip(tickers, constrained_weights):
 Penalize extreme weights to improve out-of-sample stability:
 
 \`\`\`python
-def optimize_with_regularization(optimizer, lambda_reg=0.01):
+def optimize_with_regularization (optimizer, lambda_reg=0.01):
     """
     Optimize with L2 regularization
     
@@ -715,14 +715,14 @@ def optimize_with_regularization(optimizer, lambda_reg=0.01):
     
     Penalizes extreme weights, encourages diversification
     """
-    def regularized_objective(weights):
-        sharpe = -optimizer.negative_sharpe(weights)
-        penalty = lambda_reg * np.sum(weights ** 2)
+    def regularized_objective (weights):
+        sharpe = -optimizer.negative_sharpe (weights)
+        penalty = lambda_reg * np.sum (weights ** 2)
         return -(sharpe - penalty)
     
-    n_assets = len(optimizer.tickers)
-    constraints = [{'type': 'eq', 'fun': lambda x: np.sum(x) - 1}]
-    bounds = tuple((0, 1) for _ in range(n_assets))
+    n_assets = len (optimizer.tickers)
+    constraints = [{'type': 'eq', 'fun': lambda x: np.sum (x) - 1}]
+    bounds = tuple((0, 1) for _ in range (n_assets))
     initial_guess = np.array([1/n_assets] * n_assets)
     
     result = minimize(
@@ -737,22 +737,22 @@ def optimize_with_regularization(optimizer, lambda_reg=0.01):
 
 
 # Compare: Regularized vs Non-regularized
-reg_weights = optimize_with_regularization(optimizer, lambda_reg=0.05)
+reg_weights = optimize_with_regularization (optimizer, lambda_reg=0.05)
 
 print("\\n=== Effect of Regularization ===")
 print(f"{'Ticker':<8} {'Original':<10} {'Regularized':<12}")
-for ticker, orig_w, reg_w in zip(tickers, max_sharpe_weights, reg_weights):
+for ticker, orig_w, reg_w in zip (tickers, max_sharpe_weights, reg_weights):
     print(f"{ticker:<8} {orig_w:>8.2%}   {reg_w:>10.2%}")
 
 # Concentration metrics
-def herfindahl_index(weights):
+def herfindahl_index (weights):
     """Herfindahl–Hirschman Index: sum of squared weights"""
-    return np.sum(weights ** 2)
+    return np.sum (weights ** 2)
 
 print(f"\\nConcentration (HHI):")
-print(f"Original:     {herfindahl_index(max_sharpe_weights):.4f}")
-print(f"Regularized:  {herfindahl_index(reg_weights):.4f}")
-print(f"Equal Weight: {herfindahl_index(equal_weights):.4f}")
+print(f"Original:     {herfindahl_index (max_sharpe_weights):.4f}")
+print(f"Regularized:  {herfindahl_index (reg_weights):.4f}")
+print(f"Equal Weight: {herfindahl_index (equal_weights):.4f}")
 \`\`\`
 
 ---
@@ -775,10 +775,10 @@ class PortfolioRebalancer:
             target_weights: Target portfolio weights
             transaction_cost: Cost per dollar traded (e.g., 0.001 = 0.1%)
         """
-        self.target_weights = np.array(target_weights)
+        self.target_weights = np.array (target_weights)
         self.transaction_cost = transaction_cost
     
-    def calendar_rebalance(self, current_weights, frequency='quarterly'):
+    def calendar_rebalance (self, current_weights, frequency='quarterly'):
         """
         Rebalance on fixed calendar schedule
         
@@ -793,11 +793,11 @@ class PortfolioRebalancer:
         trades = self.target_weights - current_weights
         
         # Transaction cost
-        cost = np.sum(np.abs(trades)) * self.transaction_cost
+        cost = np.sum (np.abs (trades)) * self.transaction_cost
         
         return trades, cost
     
-    def threshold_rebalance(self, current_weights, threshold=0.05):
+    def threshold_rebalance (self, current_weights, threshold=0.05):
         """
         Rebalance when any asset deviates by threshold
         
@@ -808,18 +808,18 @@ class PortfolioRebalancer:
         Returns:
             trades: Dollar amount to trade
         """
-        deviations = np.abs(current_weights - self.target_weights)
+        deviations = np.abs (current_weights - self.target_weights)
         
         # Rebalance only if threshold exceeded
-        if np.max(deviations) > threshold:
+        if np.max (deviations) > threshold:
             trades = self.target_weights - current_weights
-            cost = np.sum(np.abs(trades)) * self.transaction_cost
+            cost = np.sum (np.abs (trades)) * self.transaction_cost
             return trades, cost
         else:
             # No rebalancing needed
-            return np.zeros_like(current_weights), 0.0
+            return np.zeros_like (current_weights), 0.0
     
-    def tolerance_band_rebalance(self, current_weights, bands=None):
+    def tolerance_band_rebalance (self, current_weights, bands=None):
         """
         Rebalance only when weights exit tolerance bands
         
@@ -834,10 +834,10 @@ class PortfolioRebalancer:
             # Default: ±5% absolute band
             bands = [(w - 0.05, w + 0.05) for w in self.target_weights]
         
-        trades = np.zeros_like(current_weights)
+        trades = np.zeros_like (current_weights)
         
         for i, (current, target, (lower, upper)) in enumerate(
-            zip(current_weights, self.target_weights, bands)
+            zip (current_weights, self.target_weights, bands)
         ):
             if current < lower:
                 # Below band: buy to target
@@ -846,7 +846,7 @@ class PortfolioRebalancer:
                 # Above band: sell to target
                 trades[i] = target - current
         
-        cost = np.sum(np.abs(trades)) * self.transaction_cost
+        cost = np.sum (np.abs (trades)) * self.transaction_cost
         
         return trades, cost
 
@@ -859,9 +859,9 @@ portfolio_value = 100000
 target_weights = max_sharpe_weights
 
 # Simulate 12 months of returns
-monthly_returns = np.random.normal(0.01, 0.05, (12, len(tickers)))
+monthly_returns = np.random.normal(0.01, 0.05, (12, len (tickers)))
 
-rebalancer = PortfolioRebalancer(target_weights, transaction_cost=0.001)
+rebalancer = PortfolioRebalancer (target_weights, transaction_cost=0.001)
 
 current_weights = target_weights.copy()
 cumulative_cost = 0
@@ -871,7 +871,7 @@ print(f"{'Month':<6} {'Drift':<8} {'Action':<12} {'Cost':<8}")
 
 for month in range(12):
     # Portfolio returns
-    monthly_ret = np.dot(current_weights, monthly_returns[month])
+    monthly_ret = np.dot (current_weights, monthly_returns[month])
     portfolio_value *= (1 + monthly_ret)
     
     # Weights drift
@@ -879,10 +879,10 @@ for month in range(12):
     current_weights /= current_weights.sum()  # Renormalize
     
     # Max drift from target
-    max_drift = np.max(np.abs(current_weights - target_weights))
+    max_drift = np.max (np.abs (current_weights - target_weights))
     
     # Threshold rebalancing (5% threshold)
-    trades, cost = rebalancer.threshold_rebalance(current_weights, threshold=0.05)
+    trades, cost = rebalancer.threshold_rebalance (current_weights, threshold=0.05)
     
     if cost > 0:
         action = "REBALANCE"

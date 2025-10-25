@@ -15,7 +15,7 @@ Alternative investments are assets beyond traditional stocks and bonds-hedge fun
 - **Inflation hedging**: Commodities and real estate offset purchasing power erosion
 - **Access to unique strategies**: Venture capital, distressed debt, merger arbitrage
 
-**Institutional adoption:** Yale endowment allocates 50%+ to alternatives (David Swensen's "Yale Model"), earning 12-13% annually (1985-2020) vs 9% for 60/40 portfolio.
+**Institutional adoption:** Yale endowment allocates 50%+ to alternatives (David Swensen\'s "Yale Model"), earning 12-13% annually (1985-2020) vs 9% for 60/40 portfolio.
 
 **Challenges:**
 - **Illiquidity**: 5-10 year lockups (private equity, venture capital)
@@ -48,7 +48,7 @@ This section provides comprehensive coverage of each alternative asset class, in
 **Example:** Fund starts at $100M.
 - Year 1: Returns 20% → $120M (manager earns 2% × $100M + 20% × $20M = $2M + $4M = $6M)
 - Year 2: Returns -10% → $108M (manager earns 2% × $120M = $2.4M, no performance fee because below high-water mark of $120M)
-- Year 3: Returns 15% → $124.2M (manager earns 2% × $108M + 20% × ($124.2M - $120M) = $2.16M + $0.84M = $3M)
+- Year 3: Returns 15% → $124.2M (manager earns 2% × $108M + 20% × (\$124.2M - $120M) = $2.16M + $0.84M = $3M)
 
 ### Hedge Fund Strategies
 
@@ -549,7 +549,7 @@ After 5 years:
 
 ### Yale Endowment Model
 
-**David Swensen's allocation (Yale, 2020):**
+**David Swensen\'s allocation (Yale, 2020):**
 - **Absolute Return (hedge funds)**: 23.5%
 - **Private Equity**: 39.0%
 - **Real estate**: 10.9%
@@ -577,31 +577,31 @@ import yfinance as yf
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
-def download_data(tickers, start='2010-01-01', end='2023-12-31'):
+def download_data (tickers, start='2010-01-01', end='2023-12-31'):
     """Download historical data for portfolio optimization."""
-    data = yf.download(tickers, start=start, end=end, progress=False)['Adj Close']
+    data = yf.download (tickers, start=start, end=end, progress=False)['Adj Close']
     returns = data.pct_change().dropna()
     return returns
 
-def portfolio_stats(weights, returns):
+def portfolio_stats (weights, returns):
     """Calculate portfolio return, volatility, and Sharpe ratio."""
-    portfolio_return = np.sum(returns.mean() * weights) * 252
-    portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(returns.cov() * 252, weights)))
+    portfolio_return = np.sum (returns.mean() * weights) * 252
+    portfolio_volatility = np.sqrt (np.dot (weights.T, np.dot (returns.cov() * 252, weights)))
     sharpe_ratio = portfolio_return / portfolio_volatility
     return portfolio_return, portfolio_volatility, sharpe_ratio
 
-def optimize_sharpe(returns):
+def optimize_sharpe (returns):
     """Optimize portfolio for maximum Sharpe ratio."""
-    n_assets = len(returns.columns)
+    n_assets = len (returns.columns)
     
-    def neg_sharpe(weights):
-        return -portfolio_stats(weights, returns)[2]
+    def neg_sharpe (weights):
+        return -portfolio_stats (weights, returns)[2]
     
-    constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
-    bounds = tuple((0, 1) for _ in range(n_assets))
+    constraints = {'type': 'eq', 'fun': lambda x: np.sum (x) - 1}
+    bounds = tuple((0, 1) for _ in range (n_assets))
     initial_weights = np.array([1/n_assets] * n_assets)
     
-    result = minimize(neg_sharpe, initial_weights, method='SLSQP', 
+    result = minimize (neg_sharpe, initial_weights, method='SLSQP', 
                       bounds=bounds, constraints=constraints)
     
     return result.x
@@ -616,12 +616,12 @@ traditional_tickers = ['SPY', 'AGG']  # S&P 500, Aggregate Bonds
 alternative_tickers = ['SPY', 'AGG', 'VNQ', 'GLD', 'DBC']  # Add REITs, Gold, Commodities
 
 # Download data
-trad_returns = download_data(traditional_tickers)
-alt_returns = download_data(alternative_tickers)
+trad_returns = download_data (traditional_tickers)
+alt_returns = download_data (alternative_tickers)
 
 # Traditional 60/40
 trad_weights = np.array([0.6, 0.4])
-trad_ret, trad_vol, trad_sharpe = portfolio_stats(trad_weights, trad_returns)
+trad_ret, trad_vol, trad_sharpe = portfolio_stats (trad_weights, trad_returns)
 
 print(f"\\nTraditional 60/40 Portfolio:")
 print(f"  Allocation: 60% SPY, 40% AGG")
@@ -630,12 +630,12 @@ print(f"  Annual Volatility: {trad_vol*100:.2f}%")
 print(f"  Sharpe Ratio: {trad_sharpe:.2f}")
 
 # Optimized alternatives portfolio
-alt_opt_weights = optimize_sharpe(alt_returns)
-alt_ret, alt_vol, alt_sharpe = portfolio_stats(alt_opt_weights, alt_returns)
+alt_opt_weights = optimize_sharpe (alt_returns)
+alt_ret, alt_vol, alt_sharpe = portfolio_stats (alt_opt_weights, alt_returns)
 
 print(f"\\nOptimized Alternatives Portfolio:")
 print(f"  Allocation:")
-for ticker, weight in zip(alternative_tickers, alt_opt_weights):
+for ticker, weight in zip (alternative_tickers, alt_opt_weights):
     print(f"    {ticker}: {weight*100:.1f}%")
 print(f"  Annual Return: {alt_ret*100:.2f}%")
 print(f"  Annual Volatility: {alt_vol*100:.2f}%")
@@ -646,15 +646,15 @@ print(f"  Sharpe increase: {(alt_sharpe/trad_sharpe - 1)*100:.1f}%")
 print(f"  Volatility reduction: {(1 - alt_vol/trad_vol)*100:.1f}%")
 
 # Plot efficient frontier
-def efficient_frontier(returns, n_portfolios=1000):
+def efficient_frontier (returns, n_portfolios=1000):
     """Generate efficient frontier."""
     results = np.zeros((3, n_portfolios))
     
-    for i in range(n_portfolios):
-        weights = np.random.random(len(returns.columns))
-        weights /= np.sum(weights)
+    for i in range (n_portfolios):
+        weights = np.random.random (len (returns.columns))
+        weights /= np.sum (weights)
         
-        ret, vol, sharpe = portfolio_stats(weights, returns)
+        ret, vol, sharpe = portfolio_stats (weights, returns)
         results[0, i] = ret
         results[1, i] = vol
         results[2, i] = sharpe
@@ -662,27 +662,27 @@ def efficient_frontier(returns, n_portfolios=1000):
     return results
 
 # Generate frontiers
-trad_frontier = efficient_frontier(trad_returns)
-alt_frontier = efficient_frontier(alt_returns)
+trad_frontier = efficient_frontier (trad_returns)
+alt_frontier = efficient_frontier (alt_returns)
 
 # Plot
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 
-plt.scatter(trad_frontier[1,:], trad_frontier[0,:], c=trad_frontier[2,:], 
+plt.scatter (trad_frontier[1,:], trad_frontier[0,:], c=trad_frontier[2,:], 
             cmap='Blues', marker='o', s=10, alpha=0.5, label='Traditional (SPY+AGG)')
-plt.scatter(alt_frontier[1,:], alt_frontier[0,:], c=alt_frontier[2,:], 
+plt.scatter (alt_frontier[1,:], alt_frontier[0,:], c=alt_frontier[2,:], 
             cmap='Reds', marker='o', s=10, alpha=0.5, label='With Alternatives')
 
 # Mark optimal portfolios
-plt.scatter(trad_vol, trad_ret, marker='*', color='blue', s=500, 
+plt.scatter (trad_vol, trad_ret, marker='*', color='blue', s=500, 
             edgecolors='black', label='60/40 Portfolio')
-plt.scatter(alt_vol, alt_ret, marker='*', color='red', s=500, 
+plt.scatter (alt_vol, alt_ret, marker='*', color='red', s=500, 
             edgecolors='black', label='Optimized Alternatives')
 
 plt.xlabel('Volatility (Annual)', fontweight='bold')
 plt.ylabel('Return (Annual)', fontweight='bold')
 plt.title('Efficient Frontier: Traditional vs Alternatives', fontweight='bold')
-plt.colorbar(label='Sharpe Ratio')
+plt.colorbar (label='Sharpe Ratio')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.savefig('alternatives_efficient_frontier.png', dpi=300, bbox_inches='tight')

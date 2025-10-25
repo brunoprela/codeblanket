@@ -30,9 +30,9 @@ from PIL import Image
 import os
 from pathlib import Path
 
-def read_image_basic(filepath: str):
+def read_image_basic (filepath: str):
     """Basic image reading with Pillow."""
-    img = Image.open(filepath)
+    img = Image.open (filepath)
     
     print(f"Format: {img.format}")
     print(f"Size: {img.size}")  # (width, height)
@@ -51,30 +51,30 @@ img = read_image_basic("document.png")
 from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
 
-def preprocess_for_ocr(image_path: str, output_path: str = None):
+def preprocess_for_ocr (image_path: str, output_path: str = None):
     """
     Preprocess image for better OCR results.
     
     Steps: convert to grayscale, increase contrast, denoise.
     """
-    img = Image.open(image_path)
+    img = Image.open (image_path)
     
     # Convert to grayscale
     img = img.convert('L')
     
     # Increase contrast
-    enhancer = ImageEnhance.Contrast(img)
+    enhancer = ImageEnhance.Contrast (img)
     img = enhancer.enhance(2.0)
     
     # Denoise
-    img = img.filter(ImageFilter.MedianFilter(size=3))
+    img = img.filter(ImageFilter.MedianFilter (size=3))
     
     # Threshold to binary (black and white)
     threshold = 128
-    img = img.point(lambda p: 255 if p > threshold else 0)
+    img = img.point (lambda p: 255 if p > threshold else 0)
     
     if output_path:
-        img.save(output_path)
+        img.save (output_path)
     
     return img
 
@@ -89,26 +89,26 @@ preprocessed = preprocess_for_ocr("scanned_doc.jpg", "preprocessed.png")
 import pytesseract
 from PIL import Image
 
-def extract_text_from_image(image_path: str) -> str:
+def extract_text_from_image (image_path: str) -> str:
     """Extract text from image using OCR."""
-    img = Image.open(image_path)
+    img = Image.open (image_path)
     
     # Run OCR
-    text = pytesseract.image_to_string(img)
+    text = pytesseract.image_to_string (img)
     
     return text.strip()
 
-def extract_text_with_confidence(image_path: str):
+def extract_text_with_confidence (image_path: str):
     """Extract text with confidence scores."""
-    img = Image.open(image_path)
+    img = Image.open (image_path)
     
     # Get detailed data
-    data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
+    data = pytesseract.image_to_data (img, output_type=pytesseract.Output.DICT)
     
     # Extract words with confidence > 60
     results = []
-    for i in range(len(data['text'])):
-        if int(data['conf'][i]) > 60:
+    for i in range (len (data['text'])):
+        if int (data['conf'][i]) > 60:
             results.append({
                 'text': data['text'][i],
                 'confidence': data['conf'][i],
@@ -135,10 +135,10 @@ from pathlib import Path
 
 def image_to_base64(image_path: str) -> str:
     """Convert image to base64 for API."""
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode('utf-8')
+    with open (image_path, "rb") as img_file:
+        return base64.b64encode (img_file.read()).decode('utf-8')
 
-def analyze_image_gpt4v(image_path: str, prompt: str) -> str:
+def analyze_image_gpt4v (image_path: str, prompt: str) -> str:
     """
     Analyze image using GPT-4V.
     
@@ -170,7 +170,7 @@ def analyze_image_gpt4v(image_path: str, prompt: str) -> str:
     
     return response.choices[0].message.content
 
-def analyze_image_claude(image_path: str, prompt: str) -> str:
+def analyze_image_claude (image_path: str, prompt: str) -> str:
     """
     Analyze image using Claude 3.
     
@@ -179,11 +179,11 @@ def analyze_image_claude(image_path: str, prompt: str) -> str:
     client = Anthropic()
     
     # Read image
-    with open(image_path, "rb") as img_file:
-        image_data = base64.b64encode(img_file.read()).decode('utf-8')
+    with open (image_path, "rb") as img_file:
+        image_data = base64.b64encode (img_file.read()).decode('utf-8')
     
     # Determine media type
-    ext = Path(image_path).suffix.lower()
+    ext = Path (image_path).suffix.lower()
     media_types = {
         '.jpg': 'image/jpeg',
         '.jpeg': 'image/jpeg',
@@ -191,7 +191,7 @@ def analyze_image_claude(image_path: str, prompt: str) -> str:
         '.gif': 'image/gif',
         '.webp': 'image/webp'
     }
-    media_type = media_types.get(ext, 'image/jpeg')
+    media_type = media_types.get (ext, 'image/jpeg')
     
     message = client.messages.create(
         model="claude-3-opus-20240229",
@@ -241,20 +241,20 @@ analysis = analyze_image_gpt4v(
 \`\`\`python
 from PIL import Image, ImageDraw, ImageFont
 
-def resize_image(image_path: str, max_size: tuple = (1024, 1024)) -> Image:
+def resize_image (image_path: str, max_size: tuple = (1024, 1024)) -> Image:
     """Resize image while maintaining aspect ratio."""
-    img = Image.open(image_path)
-    img.thumbnail(max_size, Image.Resampling.LANCZOS)
+    img = Image.open (image_path)
+    img.thumbnail (max_size, Image.Resampling.LANCZOS)
     return img
 
-def crop_image(image_path: str, box: tuple) -> Image:
+def crop_image (image_path: str, box: tuple) -> Image:
     """
     Crop image to specified box.
     
     box: (left, top, right, bottom)
     """
-    img = Image.open(image_path)
-    return img.crop(box)
+    img = Image.open (image_path)
+    return img.crop (box)
 
 def add_text_to_image(
     image_path: str,
@@ -263,8 +263,8 @@ def add_text_to_image(
     output_path: str
 ):
     """Add text annotation to image."""
-    img = Image.open(image_path)
-    draw = ImageDraw.Draw(img)
+    img = Image.open (image_path)
+    draw = ImageDraw.Draw (img)
     
     # Use default font or load custom
     try:
@@ -273,9 +273,9 @@ def add_text_to_image(
         font = ImageFont.load_default()
     
     # Add text
-    draw.text(position, text, fill="red", font=font)
+    draw.text (position, text, fill="red", font=font)
     
-    img.save(output_path)
+    img.save (output_path)
 
 # Usage
 resized = resize_image("large_image.jpg")
@@ -290,13 +290,13 @@ from PIL import Image
 import pytesseract
 from typing import Dict, List
 
-def analyze_screenshot(screenshot_path: str) -> Dict:
+def analyze_screenshot (screenshot_path: str) -> Dict:
     """
     Analyze screenshot to extract UI elements and text.
     
     Useful for UI testing, automation, accessibility.
     """
-    img = Image.open(screenshot_path)
+    img = Image.open (screenshot_path)
     
     # Extract text with positions
     ocr_data = pytesseract.image_to_data(
@@ -306,7 +306,7 @@ def analyze_screenshot(screenshot_path: str) -> Dict:
     
     # Group text by regions
     text_regions = []
-    for i in range(len(ocr_data['text'])):
+    for i in range (len (ocr_data['text'])):
         if ocr_data['text'][i].strip():
             text_regions.append({
                 'text': ocr_data['text'][i],
@@ -322,15 +322,15 @@ def analyze_screenshot(screenshot_path: str) -> Dict:
     return {
         'image_size': img.size,
         'text_regions': text_regions,
-        'full_text': pytesseract.image_to_string(img)
+        'full_text': pytesseract.image_to_string (img)
     }
 
 # Usage with vision LLM for deeper understanding
-def understand_ui_with_llm(screenshot_path: str) -> Dict:
+def understand_ui_with_llm (screenshot_path: str) -> Dict:
     """Use vision LLM to understand UI structure."""
     
     # First get basic OCR
-    basic_analysis = analyze_screenshot(screenshot_path)
+    basic_analysis = analyze_screenshot (screenshot_path)
     
     # Then use vision LLM for semantic understanding
     prompt = """Analyze this UI screenshot and provide:
@@ -339,7 +339,7 @@ def understand_ui_with_llm(screenshot_path: str) -> Dict:
     3. Accessibility issues
     4. Improvement suggestions"""
     
-    llm_analysis = analyze_image_claude(screenshot_path, prompt)
+    llm_analysis = analyze_image_claude (screenshot_path, prompt)
     
     return {
         'ocr_data': basic_analysis,
@@ -370,21 +370,21 @@ class ImageProcessor:
         if use_vision_llm:
             self.client = OpenAI()
     
-    def process_image(self, image_path: str) -> Dict:
+    def process_image (self, image_path: str) -> Dict:
         """
         Process image with OCR and optional vision LLM.
         
         Returns comprehensive analysis.
         """
-        path = Path(image_path)
+        path = Path (image_path)
         
         if not path.exists():
-            self.logger.error(f"Image not found: {image_path}")
+            self.logger.error (f"Image not found: {image_path}")
             return {}
         
         try:
             result = {
-                'filepath': str(path),
+                'filepath': str (path),
                 'filename': path.name,
                 'metadata': {},
                 'ocr_text': ',
@@ -393,7 +393,7 @@ class ImageProcessor:
             }
             
             # Load image and get metadata
-            img = Image.open(image_path)
+            img = Image.open (image_path)
             result['metadata'] = {
                 'format': img.format,
                 'size': img.size,
@@ -402,29 +402,29 @@ class ImageProcessor:
             }
             
             # Run OCR
-            result['ocr_text'] = self._extract_text_ocr(img)
-            result['ocr_data'] = self._extract_detailed_ocr(img)
+            result['ocr_text'] = self._extract_text_ocr (img)
+            result['ocr_data'] = self._extract_detailed_ocr (img)
             
             # Run vision LLM if enabled
             if self.use_vision_llm:
-                result['vision_analysis'] = self._analyze_with_vision_llm(image_path)
+                result['vision_analysis'] = self._analyze_with_vision_llm (image_path)
             
-            self.logger.info(f"Processed image: {image_path}")
+            self.logger.info (f"Processed image: {image_path}")
             return result
             
         except Exception as e:
-            self.logger.error(f"Failed to process image: {e}")
+            self.logger.error (f"Failed to process image: {e}")
             return {}
     
-    def _extract_text_ocr(self, img: Image) -> str:
+    def _extract_text_ocr (self, img: Image) -> str:
         """Extract text using OCR."""
         try:
-            return pytesseract.image_to_string(img).strip()
+            return pytesseract.image_to_string (img).strip()
         except Exception as e:
-            self.logger.warning(f"OCR failed: {e}")
+            self.logger.warning (f"OCR failed: {e}")
             return ""
     
-    def _extract_detailed_ocr(self, img: Image) -> List[Dict]:
+    def _extract_detailed_ocr (self, img: Image) -> List[Dict]:
         """Extract text with positions and confidence."""
         try:
             data = pytesseract.image_to_data(
@@ -433,11 +433,11 @@ class ImageProcessor:
             )
             
             results = []
-            for i in range(len(data['text'])):
-                if data['text'][i].strip() and int(data['conf'][i]) > 50:
+            for i in range (len (data['text'])):
+                if data['text'][i].strip() and int (data['conf'][i]) > 50:
                     results.append({
                         'text': data['text'][i],
-                        'confidence': int(data['conf'][i]),
+                        'confidence': int (data['conf'][i]),
                         'bbox': (
                             data['left'][i],
                             data['top'][i],
@@ -448,10 +448,10 @@ class ImageProcessor:
             
             return results
         except Exception as e:
-            self.logger.warning(f"Detailed OCR failed: {e}")
+            self.logger.warning (f"Detailed OCR failed: {e}")
             return []
     
-    def _analyze_with_vision_llm(self, image_path: str) -> str:
+    def _analyze_with_vision_llm (self, image_path: str) -> str:
         """Analyze image using vision LLM."""
         try:
             base64_image = self._image_to_base64(image_path)
@@ -481,14 +481,14 @@ class ImageProcessor:
             return response.choices[0].message.content
             
         except Exception as e:
-            self.logger.warning(f"Vision LLM analysis failed: {e}")
+            self.logger.warning (f"Vision LLM analysis failed: {e}")
             return ""
     
     def _image_to_base64(self, image_path: str) -> str:
         """Convert image to base64."""
         import base64
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode('utf-8')
+        with open (image_path, "rb") as img_file:
+            return base64.b64encode (img_file.read()).decode('utf-8')
     
     def extract_structured_data(
         self,
@@ -534,11 +534,11 @@ Return the data in JSON format."""
             return response.choices[0].message.content
             
         except Exception as e:
-            self.logger.error(f"Structured extraction failed: {e}")
+            self.logger.error (f"Structured extraction failed: {e}")
             return ""
 
 # Usage Examples
-processor = ImageProcessor(use_vision_llm=True)
+processor = ImageProcessor (use_vision_llm=True)
 
 # Process image with OCR and vision analysis
 result = processor.process_image("document.jpg")

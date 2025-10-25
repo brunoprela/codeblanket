@@ -260,8 +260,8 @@ Client polls server repeatedly at fixed intervals.
 \`\`\`javascript
 setInterval(() => {
   fetch('/api/messages')
-    .then(res => res.json())
-    .then(messages => updateUI(messages));
+    .then (res => res.json())
+    .then (messages => updateUI(messages));
 }, 5000); // Poll every 5 seconds
 \`\`\`
 

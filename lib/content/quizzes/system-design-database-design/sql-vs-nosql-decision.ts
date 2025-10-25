@@ -41,7 +41,7 @@ export const sqlvsnosqldecisionQuiz = [
 
 **PostgreSQL-Only Approach:**
 - ✅ **Pros**: Simple, single system, easy transactions, excellent for < 1M users
-- ❌ **Cons**: Won't scale to Twitter's billions of tweets, sharding PostgreSQL is complex
+- ❌ **Cons**: Won't scale to Twitter\'s billions of tweets, sharding PostgreSQL is complex
 
 **Polyglot Approach (My Recommendation):**
 - ✅ **Pros**: Each database optimized for its use case, scales to billions of users
@@ -50,7 +50,7 @@ export const sqlvsnosqldecisionQuiz = [
 **Why This Trade-off is Worth It:**
 At Twitter's scale (500M tweets/day, 300M users), a single PostgreSQL instance cannot handle the write throughput or storage. The operational complexity of multiple databases is offset by performance and scalability gains. However, I'd start with PostgreSQL for an MVP and migrate to polyglot as scale demands it.
 
-**Key Insight**: There's no single "correct" answer. For a small startup (< 100K users), PostgreSQL for everything is pragmatic. For Twitter scale, polyglot persistence is necessary despite added complexity. The decision depends on current scale, growth trajectory, and team expertise.`,
+**Key Insight**: There\'s no single "correct" answer. For a small startup (< 100K users), PostgreSQL for everything is pragmatic. For Twitter scale, polyglot persistence is necessary despite added complexity. The decision depends on current scale, growth trajectory, and team expertise.`,
     keyPoints: [
       'Use PostgreSQL for transactional data requiring strong consistency (users, follows)',
       'Use Cassandra for high-volume, write-heavy data with simple access patterns (tweets, timelines)',
@@ -184,7 +184,7 @@ Access pattern: "Get events for user X on date Y"
 **Phase 1: Stop the Bleeding**
 \`\`\`
     1. Add Redis cache for hot queries
-2. Partition PostgreSQL table by date(recent data in hot partition)
+2. Partition PostgreSQL table by date (recent data in hot partition)
     3. Archive old events to cold storage(S3)
         \`\`\`
 

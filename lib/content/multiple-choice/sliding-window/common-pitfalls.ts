@@ -31,7 +31,7 @@ export const commonpitfallsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'After decrementing a count to 0, you must delete the entry from the map. Otherwise, len(freq) includes keys with 0 count, giving incorrect distinct element counts.',
+      'After decrementing a count to 0, you must delete the entry from the map. Otherwise, len (freq) includes keys with 0 count, giving incorrect distinct element counts.',
   },
   {
     id: 'mc3',

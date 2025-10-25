@@ -24,7 +24,7 @@ prompt = "If John has 15 apples and gives away 1/3 to Mary and 2 to Bob, how man
 # With CoT: Step-by-step reasoning (much more reliable)
 prompt = """If John has 15 apples and gives away 1/3 to Mary and 2 to Bob, how many does he have left?
 
-Let's solve this step by step:"""
+Let\'s solve this step by step:"""
 # Model shows work:
 # 1. John starts with 15 apples
 # 2. 1/3 of 15 is 5 apples, so Mary gets 5
@@ -45,7 +45,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def without_cot(problem: str) -> str:
+def without_cot (problem: str) -> str:
     """Direct answer without reasoning."""
     response = client.chat.completions.create(
         model="gpt-4",
@@ -55,7 +55,7 @@ def without_cot(problem: str) -> str:
     )
     return response.choices[0].message.content
 
-def with_cot(problem: str) -> str:
+def with_cot (problem: str) -> str:
     """Answer with step-by-step reasoning."""
     response = client.chat.completions.create(
         model="gpt-4",
@@ -76,11 +76,11 @@ problem = """A store sells notebooks for $3 each. If you buy 10 or more,
 you get a 20% discount. How much would 12 notebooks cost?"""
 
 print("Without CoT:")
-print(without_cot(problem))
+print(without_cot (problem))
 print("\\n" + "="*50 + "\\n")
 
 print("With CoT:")
-print(with_cot(problem))
+print(with_cot (problem))
 # CoT version will show calculation steps, leading to more accurate answer
 \`\`\`
 
@@ -95,16 +95,16 @@ def cot_templates():
     """Common CoT trigger phrases that work well."""
     
     return {
-        'general': "Let's think step by step:",
-        'analytical': "Let's analyze this systematically:",
-        'problem_solving': "Let's break this problem down:",
-        'reasoning': "Let's reason through this carefully:",
-        'methodical': "Let's approach this methodically:",
-        'detailed': "Let's work through this in detail:",
+        'general': "Let\'s think step by step:",
+        'analytical': "Let\'s analyze this systematically:",
+        'problem_solving': "Let\'s break this problem down:",
+        'reasoning': "Let\'s reason through this carefully:",
+        'methodical': "Let\'s approach this methodically:",
+        'detailed': "Let\'s work through this in detail:",
     }
 
 # Usage examples
-def solve_with_cot(problem: str, trigger: str = "Let's think step by step:"):
+def solve_with_cot (problem: str, trigger: str = "Let's think step by step:"):
     """Solve problem with CoT prompting."""
     
     prompt = f"""{problem}
@@ -122,7 +122,7 @@ def solve_with_cot(problem: str, trigger: str = "Let's think step by step:"):
 # Test with math problem
 math_problem = "If a train travels 120 miles in 2 hours, how far will it travel in 5 hours at the same speed?"
 
-print(solve_with_cot(math_problem))
+print(solve_with_cot (math_problem))
 # Model will show:
 # 1. Calculate speed: 120 miles / 2 hours = 60 mph
 # 2. Calculate distance: 60 mph × 5 hours = 300 miles
@@ -144,7 +144,7 @@ def create_structured_cot(
     More reliable than free-form "think step by step".
     """
     
-    steps_text = "\\n".join([f"{i+1}. {step}" for i, step in enumerate(steps)])
+    steps_text = "\\n".join([f"{i+1}. {step}" for i, step in enumerate (steps)])
     
     constraints_text = ""
     if constraints:
@@ -162,9 +162,9 @@ Solution:"""
 debugging_problem = """
 This Python function should calculate factorial but returns wrong results:
 
-def factorial(n):
+def factorial (n):
     result = 0
-    for i in range(n):
+    for i in range (n):
         result *= i
     return result
 
@@ -197,11 +197,11 @@ class CoTTemplates:
     """Production-ready CoT templates for different domains."""
     
     @staticmethod
-    def mathematical_cot(problem: str) -> str:
+    def mathematical_cot (problem: str) -> str:
         """CoT for math problems."""
         return f"""{problem}
 
-Let's solve this mathematically:
+Let\'s solve this mathematically:
 
 Step 1: Identify what we're given
 Step 2: Identify what we need to find
@@ -212,7 +212,7 @@ Step 5: Verify the answer makes sense
 Solution:"""
     
     @staticmethod
-    def logical_reasoning_cot(problem: str) -> str:
+    def logical_reasoning_cot (problem: str) -> str:
         """CoT for logical reasoning."""
         return f"""{problem}
 
@@ -227,7 +227,7 @@ Step 5: Reach conclusion
 Reasoning:"""
     
     @staticmethod
-    def code_analysis_cot(code: str, question: str) -> str:
+    def code_analysis_cot (code: str, question: str) -> str:
         """CoT for code analysis."""
         return f"""Analyze this code:
 
@@ -235,7 +235,7 @@ Reasoning:"""
 
 Question: {question}
 
-Let's analyze systematically:
+Let\'s analyze systematically:
 
 Step 1: Understand what the code does
 Step 2: Identify potential issues
@@ -246,7 +246,7 @@ Step 5: Provide recommendations
 Analysis:"""
     
     @staticmethod
-    def debugging_cot(code: str, error: str) -> str:
+    def debugging_cot (code: str, error: str) -> str:
         """CoT for debugging."""
         return f"""Code:
 {code}
@@ -264,7 +264,7 @@ Step 5: Propose fix with explanation
 Debugging:"""
     
     @staticmethod
-    def design_decision_cot(problem: str, options: list) -> str:
+    def design_decision_cot (problem: str, options: list) -> str:
         """CoT for design decisions."""
         options_text = "\\n".join([f"- {opt}" for opt in options])
         
@@ -293,7 +293,7 @@ math_prompt = templates.mathematical_cot(
 
 # Code analysis
 code_prompt = templates.code_analysis_cot(
-    code="def process(items):\\n    return [x*2 for x in items if x > 0]",
+    code="def process (items):\\n    return [x*2 for x in items if x > 0]",
     question="Is this code efficient for large datasets?"
 )
 
@@ -313,7 +313,7 @@ print(design_prompt)
 **ReAct** is a powerful extension of CoT that interleaves reasoning and actions (like tool calls).
 
 \`\`\`python
-def react_pattern(task: str, available_tools: list) -> str:
+def react_pattern (task: str, available_tools: list) -> str:
     """
     ReAct pattern: Thought -> Action -> Observation -> Thought -> ...
     Used in advanced agents like Cursor.
@@ -341,19 +341,19 @@ Thought:"""
 # Example: Web search task
 task = "Find the current population of Tokyo and compare it to New York City."
 tools = [
-    "search(query): Search the web",
-    "calculate(expression): Perform calculations",
-    "compare(a, b): Compare two values"
+    "search (query): Search the web",
+    "calculate (expression): Perform calculations",
+    "compare (a, b): Compare two values"
 ]
 
-prompt = react_pattern(task, tools)
+prompt = react_pattern (task, tools)
 print(prompt)
 
 # Model would generate:
 # Thought: I need to find population data for both cities
 # Action: search("Tokyo population 2024")
 # Observation: Tokyo has 37.4 million people
-# Thought: Now I need New York's population
+# Thought: Now I need New York\'s population
 # Action: search("New York City population 2024")
 # Observation: New York City has 8.3 million people
 # Thought: Now I can compare them
@@ -384,7 +384,7 @@ class ReActAgent:
         self.tools = tools
         self.max_iterations = 5
     
-    def run(self, task: str) -> str:
+    def run (self, task: str) -> str:
         """
         Execute task using ReAct pattern.
         """
@@ -402,7 +402,7 @@ Available tools:
 
 Use this format:
 Thought: [reasoning about what to do]
-Action: tool_name(arguments)
+Action: tool_name (arguments)
 Observation: [result will be provided]
 
 Repeat until you can provide the final answer.
@@ -411,7 +411,7 @@ When done: Answer: [your final answer]"""
         conversation.append({"role": "system", "content": system_prompt})
         conversation.append({"role": "user", "content": task})
         
-        for iteration in range(self.max_iterations):
+        for iteration in range (self.max_iterations):
             # Get model's next thought/action
             response = self.client.chat.completions.create(
                 model="gpt-4",
@@ -454,20 +454,20 @@ When done: Answer: [your final answer]"""
         return "Max iterations reached without answer"
 
 # Define tools
-def search(query: str) -> str:
+def search (query: str) -> str:
     """Search for information (simulated)."""
     # In production, this would call a real search API
     mock_results = {
         "python tutorial": "Python is a high-level programming language...",
         "factorial algorithm": "Factorial can be computed iteratively or recursively...",
     }
-    return mock_results.get(query.strip('"'), f"Results for: {query}")
+    return mock_results.get (query.strip('"'), f"Results for: {query}")
 
-def calculate(expression: str) -> str:
+def calculate (expression: str) -> str:
     """Calculate mathematical expression."""
     try:
-        result = eval(expression)  # In production, use safe math parser
-        return str(result)
+        result = eval (expression)  # In production, use safe math parser
+        return str (result)
     except:
         return "Error in calculation"
 
@@ -519,12 +519,12 @@ class SelfConsistencyCoT:
         
         cot_prompt = f"""{problem}
 
-Let's think step by step:"""
+Let\'s think step by step:"""
         
         solutions = []
         
         # Generate multiple reasoning paths
-        for i in range(num_paths):
+        for i in range (num_paths):
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": cot_prompt}],
@@ -534,7 +534,7 @@ Let's think step by step:"""
             reasoning = response.choices[0].message.content
             
             # Extract final answer (look for patterns like "Answer: X" or "= X")
-            answer = self._extract_answer(reasoning)
+            answer = self._extract_answer (reasoning)
             
             solutions.append({
                 'reasoning': reasoning,
@@ -543,17 +543,17 @@ Let's think step by step:"""
         
         # Find consensus answer
         answers = [sol['answer'] for sol in solutions if sol['answer']]
-        answer_counts = Counter(answers)
+        answer_counts = Counter (answers)
         consensus = answer_counts.most_common(1)[0] if answer_counts else (None, 0)
         
         return {
             'consensus_answer': consensus[0],
             'confidence': consensus[1] / num_paths if num_paths > 0 else 0,
             'all_solutions': solutions,
-            'answer_distribution': dict(answer_counts)
+            'answer_distribution': dict (answer_counts)
         }
     
-    def _extract_answer(self, text: str) -> str:
+    def _extract_answer (self, text: str) -> str:
         """Extract final answer from reasoning text."""
         
         # Look for common answer patterns
@@ -567,11 +567,11 @@ Let's think step by step:"""
         
         lines = text.lower().split("\\n")
         
-        for line in reversed(lines):  # Start from end
+        for line in reversed (lines):  # Start from end
             for pattern in patterns:
                 if pattern.lower() in line:
                     # Extract everything after pattern
-                    answer = line.split(pattern.lower())[-1].strip()
+                    answer = line.split (pattern.lower())[-1].strip()
                     # Clean up
                     answer = answer.rstrip('.').strip()
                     return answer
@@ -594,7 +594,7 @@ print("Consensus Answer:", result['consensus_answer'])
 print("Confidence:", f"{result['confidence']:.0%}")
 print("\\nAnswer Distribution:", result['answer_distribution'])
 print("\\nReasoning paths:")
-for i, sol in enumerate(result['all_solutions'], 1):
+for i, sol in enumerate (result['all_solutions'], 1):
     print(f"\\nPath {i}:")
     print(sol['reasoning'][:200] + "...")
     print(f"Answer: {sol['answer']}")
@@ -602,7 +602,7 @@ for i, sol in enumerate(result['all_solutions'], 1):
 
 ## How Cursor Uses CoT for Code Generation
 
-### Reverse Engineering Cursor's Approach
+### Reverse Engineering Cursor\'s Approach
 
 \`\`\`python
 def cursor_style_cot(
@@ -646,12 +646,12 @@ Analysis:"""
 # Example usage
 request = "Add error handling to this function"
 current = """
-def divide(a, b):
+def divide (a, b):
     return a / b
 """
 context = "This is a math utilities file with basic operations"
 
-prompt = cursor_style_cot(request, current, context)
+prompt = cursor_style_cot (request, current, context)
 print(prompt)
 
 # Cursor would generate reasoning like:
@@ -667,7 +667,7 @@ print(prompt)
 ### Task Types That Benefit Most
 
 \`\`\`python
-def should_use_cot(task_type: str, complexity: str) -> Dict[str, any]:
+def should_use_cot (task_type: str, complexity: str) -> Dict[str, any]:
     """
     Determine if CoT is beneficial for a task.
     """
@@ -747,7 +747,7 @@ class ProductionCoT:
         # Build CoT prompt
         if steps:
             # Structured CoT with specific steps
-            steps_text = "\\n".join([f"{i+1}. {step}" for i, step in enumerate(steps)])
+            steps_text = "\\n".join([f"{i+1}. {step}" for i, step in enumerate (steps)])
             prompt = f"""{problem}
 
 Solve this step by step:
@@ -758,7 +758,7 @@ Solution:"""
             # Free-form CoT
             prompt = f"""{problem}
 
-Let's solve this step by step:"""
+Let\'s solve this step by step:"""
         
         # Get solution
         response = self.client.chat.completions.create(
@@ -772,30 +772,30 @@ Let's solve this step by step:"""
         result = {
             'problem': problem,
             'reasoning': reasoning,
-            'answer': self._extract_answer(reasoning),
+            'answer': self._extract_answer (reasoning),
             'verified': False
         }
         
         # Optional verification step
         if require_verification:
-            verification = self._verify_solution(problem, reasoning)
+            verification = self._verify_solution (problem, reasoning)
             result['verified'] = verification['is_correct']
             result['verification_reasoning'] = verification['reasoning']
         
         return result
     
-    def _extract_answer(self, reasoning: str) -> str:
+    def _extract_answer (self, reasoning: str) -> str:
         """Extract final answer from reasoning."""
         lines = reasoning.split("\\n")
         
         # Look for answer indicators
-        for line in reversed(lines):
-            if any(word in line.lower() for word in ['answer:', 'therefore:', 'result:']):
+        for line in reversed (lines):
+            if any (word in line.lower() for word in ['answer:', 'therefore:', 'result:']):
                 return line.split(":")[-1].strip()
         
         return lines[-1].strip()
     
-    def _verify_solution(self, problem: str, reasoning: str) -> Dict:
+    def _verify_solution (self, problem: str, reasoning: str) -> Dict:
         """
         Verify the solution makes sense.
         Second pass to catch errors.
@@ -886,7 +886,7 @@ if 'verification_reasoning' in result:
 ## Key Takeaways
 
 1. **CoT dramatically improves complex reasoning** - 30-50% better on hard tasks
-2. **"Let's think step by step" is powerful** - Simple phrase, huge impact
+2. **"Let\'s think step by step" is powerful** - Simple phrase, huge impact
 3. **Structured CoT > free-form** - Explicit steps increase reliability
 4. **ReAct combines thought and action** - Used in advanced agents
 5. **Self-consistency increases confidence** - Multiple paths, majority vote

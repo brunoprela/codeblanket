@@ -30,7 +30,7 @@ This section covers the foundational principles for designing **scalable, reliab
 
 \`\`\`python
 """
-ML System Components (Google's estimate)
+ML System Components (Google\'s estimate)
 """
 
 # What people think ML systems look like:
@@ -151,7 +151,7 @@ class MLSystemRequirements:
         self.project_name = project_name
         self.requirements = {}
     
-    def define_functional_requirements(self):
+    def define_functional_requirements (self):
         """What the system must do"""
         return {
             "prediction_task": "What are we predicting?",
@@ -161,7 +161,7 @@ class MLSystemRequirements:
             "integrations": "What systems to integrate with?"
         }
     
-    def define_non_functional_requirements(self):
+    def define_non_functional_requirements (self):
         """How well the system must perform"""
         return {
             "performance": {
@@ -195,7 +195,7 @@ class MLSystemRequirements:
             }
         }
     
-    def define_constraints(self):
+    def define_constraints (self):
         """System limitations"""
         return {
             "budget": "Infrastructure costs",
@@ -205,7 +205,7 @@ class MLSystemRequirements:
             "legacy": "Existing systems to work with"
         }
     
-    def prioritize_requirements(self):
+    def prioritize_requirements (self):
         """Must-have vs nice-to-have"""
         return {
             "must_have": [
@@ -290,7 +290,7 @@ advanced = {
     "goal": "Maximize Sharpe ratio"
 }
 
-def evaluate_complexity_tradeoff(phase):
+def evaluate_complexity_tradeoff (phase):
     """
     Evaluate effort vs value
     """
@@ -301,7 +301,7 @@ def evaluate_complexity_tradeoff(phase):
         "advanced": {"effort": 10, "value": 9}
     }
     
-    score = complexity_scores.get(phase, {"effort": 0, "value": 0})
+    score = complexity_scores.get (phase, {"effort": 0, "value": 0})
     roi = score["value"] / score["effort"] if score["effort"] > 0 else 0
     
     return {
@@ -311,7 +311,7 @@ def evaluate_complexity_tradeoff(phase):
     }
 
 for phase in ["baseline", "improved", "production", "advanced"]:
-    result = evaluate_complexity_tradeoff(phase)
+    result = evaluate_complexity_tradeoff (phase)
     print(f"{phase.capitalize()}: Effort={result['effort']}, "
           f"Value={result['value']}, ROI={result['roi']:.2f}")
 \`\`\`
@@ -346,30 +346,30 @@ class MLPipeline:
         self.predictor = Predictor()
         self.monitor = Monitor()
     
-    def train(self, training_data):
+    def train (self, training_data):
         """Training pipeline"""
         # Each component handles one responsibility
-        raw_data = self.data_loader.load(training_data)
-        features = self.feature_engineer.transform(raw_data)
-        self.model.fit(features)
+        raw_data = self.data_loader.load (training_data)
+        features = self.feature_engineer.transform (raw_data)
+        self.model.fit (features)
         
         # Monitoring separate from training logic
-        self.monitor.log_training_metrics(self.model.metrics)
+        self.monitor.log_training_metrics (self.model.metrics)
     
-    def predict(self, input_data):
+    def predict (self, input_data):
         """Inference pipeline"""
-        raw_data = self.data_loader.load(input_data)
-        features = self.feature_engineer.transform(raw_data)
-        predictions = self.predictor.predict(features, self.model)
+        raw_data = self.data_loader.load (input_data)
+        features = self.feature_engineer.transform (raw_data)
+        predictions = self.predictor.predict (features, self.model)
         
         # Monitoring separate from prediction logic
-        self.monitor.log_predictions(predictions)
+        self.monitor.log_predictions (predictions)
         
         return predictions
 
 
 # BAD: Everything mixed together
-def train_and_predict_mixed(data, test_data):
+def train_and_predict_mixed (data, test_data):
     """
     ❌ Don't do this: mixed concerns
     """
@@ -378,20 +378,20 @@ def train_and_predict_mixed(data, test_data):
     from sklearn.ensemble import RandomForestRegressor
     
     # Load data (should be separate)
-    df = pd.read_csv(data)
+    df = pd.read_csv (data)
     
     # Feature engineering (should be separate)
     df['sma_20'] = df['close'].rolling(20).mean()
-    df['rsi'] = calculate_rsi(df['close'])
+    df['rsi'] = calculate_rsi (df['close'])
     
     # Training (should be separate)
     model = RandomForestRegressor()
-    model.fit(df[['sma_20', 'rsi']], df['target'])
+    model.fit (df[['sma_20', 'rsi']], df['target'])
     
     # Prediction (should be separate)
-    test_df = pd.read_csv(test_data)
+    test_df = pd.read_csv (test_data)
     test_df['sma_20'] = test_df['close'].rolling(20).mean()
-    predictions = model.predict(test_df[['sma_20', 'rsi']])
+    predictions = model.predict (test_df[['sma_20', 'rsi']])
     
     # Logging (should be separate)
     print(f"Predictions: {predictions}")
@@ -415,7 +415,7 @@ class DataCentricPipeline:
         self.data_version = "v1.0"
         self.data_schema = self.define_schema()
     
-    def define_schema(self):
+    def define_schema (self):
         """
         Explicit data schema (contract)
         """
@@ -430,7 +430,7 @@ class DataCentricPipeline:
             }
         }
     
-    def validate_data(self, data):
+    def validate_data (self, data):
         """
         Enforce data quality
         """
@@ -438,31 +438,31 @@ class DataCentricPipeline:
         
         for col, spec in self.data_schema["features"].items():
             if col not in data.columns:
-                issues.append(f"Missing column: {col}")
+                issues.append (f"Missing column: {col}")
                 continue
             
             # Type check
             if data[col].dtype != spec["type"]:
-                issues.append(f"{col}: wrong type {data[col].dtype} vs {spec['type']}")
+                issues.append (f"{col}: wrong type {data[col].dtype} vs {spec['type']}")
             
             # Range check
             if spec["range"]:
                 min_val, max_val = spec["range"]
                 out_of_range = ((data[col] < min_val) | (data[col] > max_val)).sum()
                 if out_of_range > 0:
-                    issues.append(f"{col}: {out_of_range} values out of range")
+                    issues.append (f"{col}: {out_of_range} values out of range")
             
             # Null check
             if not spec["nullable"] and data[col].isnull().any():
-                issues.append(f"{col}: contains nulls but shouldn't")
+                issues.append (f"{col}: contains nulls but shouldn't")
         
         return {
-            "valid": len(issues) == 0,
+            "valid": len (issues) == 0,
             "issues": issues,
             "data_version": self.data_version
         }
     
-    def version_data(self, data, metadata):
+    def version_data (self, data, metadata):
         """
         Version data for reproducibility
         """
@@ -500,7 +500,7 @@ sample_data = pd.DataFrame({
     "returns": np.random.normal(0, 0.02, 1000)
 })
 
-validation = pipeline.validate_data(sample_data)
+validation = pipeline.validate_data (sample_data)
 print(f"Data valid: {validation['valid']}")
 if not validation['valid']:
     print("Issues:")
@@ -538,19 +538,19 @@ class RobustMLService:
         self.error_count = 0
         self.max_errors = 10
     
-    def predict_with_fallback(self, features):
+    def predict_with_fallback (self, features):
         """
         Try primary model, fallback if fails
         """
         try:
             # Validate input
-            self._validate_input(features)
+            self._validate_input (features)
             
             # Try primary model
-            prediction = self.primary_model.predict(features)
+            prediction = self.primary_model.predict (features)
             
             # Validate output
-            self._validate_output(prediction)
+            self._validate_output (prediction)
             
             return {
                 "prediction": prediction,
@@ -570,7 +570,7 @@ class RobustMLService:
             
             # Try fallback model
             try:
-                prediction = self.fallback_model.predict(features)
+                prediction = self.fallback_model.predict (features)
                 
                 return {
                     "prediction": prediction,
@@ -583,35 +583,35 @@ class RobustMLService:
                 
                 # Last resort: return safe default
                 return {
-                    "prediction": self._safe_default(features),
+                    "prediction": self._safe_default (features),
                     "model": "default",
                     "confidence": "none"
                 }
     
-    def _validate_input(self, features):
+    def _validate_input (self, features):
         """Input validation"""
         if features is None:
             raise ValueError("Features cannot be None")
         
-        if len(features.shape) != 2:
-            raise ValueError(f"Expected 2D array, got shape {features.shape}")
+        if len (features.shape) != 2:
+            raise ValueError (f"Expected 2D array, got shape {features.shape}")
         
-        if np.isnan(features).any():
+        if np.isnan (features).any():
             raise ValueError("Features contain NaN values")
     
-    def _validate_output(self, prediction):
+    def _validate_output (self, prediction):
         """Output validation"""
         if prediction is None:
             raise ValueError("Prediction is None")
         
-        if np.isnan(prediction).any():
+        if np.isnan (prediction).any():
             raise ValueError("Prediction contains NaN")
         
         # Sanity check: returns should be reasonable
-        if np.abs(prediction).max() > 0.5:
-            raise ValueError(f"Prediction out of range: {prediction}")
+        if np.abs (prediction).max() > 0.5:
+            raise ValueError (f"Prediction out of range: {prediction}")
     
-    def _safe_default(self, features):
+    def _safe_default (self, features):
         """
         Safe default prediction when all else fails
         """
@@ -634,11 +634,11 @@ fallback = LinearRegression().fit(
     np.random.randn(50, 1)
 )
 
-service = RobustMLService(primary, fallback)
+service = RobustMLService (primary, fallback)
 
 # Normal case
 features = np.random.randn(5, 10)
-result = service.predict_with_fallback(features)
+result = service.predict_with_fallback (features)
 print(f"\\nPrediction: {result['prediction'][:3]}")
 print(f"Model used: {result['model']}")
 print(f"Confidence: {result['confidence']}")
@@ -681,7 +681,7 @@ class BatchPredictionSystem:
         self.model = None
         self.storage = None  # e.g., S3, database
     
-    def daily_batch_job(self):
+    def daily_batch_job (self):
         """
         Run once per day
         """
@@ -689,25 +689,25 @@ class BatchPredictionSystem:
         
         # 1. Load data
         data = self.load_data()
-        print(f"Loaded {len(data)} records")
+        print(f"Loaded {len (data)} records")
         
         # 2. Preprocess
-        features = self.preprocess(data)
+        features = self.preprocess (data)
         
         # 3. Predict (can take minutes)
-        predictions = self.model.predict(features)
+        predictions = self.model.predict (features)
         
         # 4. Post-process
-        results = self.post_process(predictions, data)
+        results = self.post_process (predictions, data)
         
         # 5. Store results
-        self.store_predictions(results)
+        self.store_predictions (results)
         
         print("Batch job complete")
         
         return results
     
-    def load_data(self):
+    def load_data (self):
         """Load data from database"""
         # In practice: query database
         import pandas as pd
@@ -716,21 +716,21 @@ class BatchPredictionSystem:
             "price": [150, 2800, 300]
         })
     
-    def preprocess(self, data):
+    def preprocess (self, data):
         """Feature engineering"""
         # Can afford expensive computations
         return data  # Simplified
     
-    def post_process(self, predictions, data):
+    def post_process (self, predictions, data):
         """Add metadata, filtering"""
         data['prediction'] = predictions
         data['timestamp'] = pd.Timestamp.now()
         return data
     
-    def store_predictions(self, results):
+    def store_predictions (self, results):
         """Store for later use"""
         # In practice: write to database, S3, etc.
-        print(f"Stored {len(results)} predictions")
+        print(f"Stored {len (results)} predictions")
 
 
 # Usage
@@ -769,7 +769,7 @@ class RealTimePredictionSystem:
         self.feature_cache = feature_cache  # Redis, in-memory
         self.latency_budget_ms = 50
     
-    def predict_realtime(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    def predict_realtime (self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle real-time prediction request
         
@@ -779,19 +779,19 @@ class RealTimePredictionSystem:
         
         try:
             # 1. Validate (< 1ms)
-            self._validate_request(request)
+            self._validate_request (request)
             
             # 2. Fetch cached features (< 5ms)
-            features = self._get_cached_features(request)
+            features = self._get_cached_features (request)
             
             # 3. Predict (< 30ms)
-            prediction = self.model.predict(features)
+            prediction = self.model.predict (features)
             
             # 4. Post-process (< 5ms)
-            result = self._format_response(prediction, request)
+            result = self._format_response (prediction, request)
             
             # 5. Log async (don't wait)
-            self._log_async(request, result)
+            self._log_async (request, result)
             
             # Check latency
             latency_ms = (time.time() - start_time) * 1000
@@ -805,18 +805,18 @@ class RealTimePredictionSystem:
         except Exception as e:
             # Fast failure
             return {
-                "error": str(e),
+                "error": str (e),
                 "latency_ms": (time.time() - start_time) * 1000
             }
     
-    def _validate_request(self, request):
+    def _validate_request (self, request):
         """Quick validation"""
         required = ['symbol', 'timestamp']
         for field in required:
             if field not in request:
-                raise ValueError(f"Missing field: {field}")
+                raise ValueError (f"Missing field: {field}")
     
-    def _get_cached_features(self, request):
+    def _get_cached_features (self, request):
         """
         Fetch pre-computed features from cache
         
@@ -834,15 +834,15 @@ class RealTimePredictionSystem:
         
         return np.array([[features['sma_20'], features['rsi'], features['volume_ratio']]])
     
-    def _format_response(self, prediction, request):
+    def _format_response (self, prediction, request):
         """Format response"""
         return {
             'symbol': request['symbol'],
-            'prediction': float(prediction[0]),
+            'prediction': float (prediction[0]),
             'timestamp': time.time()
         }
     
-    def _log_async(self, request, result):
+    def _log_async (self, request, result):
         """
         Async logging (don't block)
         """
@@ -860,7 +860,7 @@ model = LinearRegression().fit(
     np.random.randn(1000)
 )
 
-realtime_system = RealTimePredictionSystem(model, feature_cache={})
+realtime_system = RealTimePredictionSystem (model, feature_cache={})
 
 # Simulate request
 request = {
@@ -868,7 +868,7 @@ request = {
     "timestamp": time.time()
 }
 
-result = realtime_system.predict_realtime(request)
+result = realtime_system.predict_realtime (request)
 print(f"\\nPrediction: {result['prediction']:.4f}")
 print(f"Latency: {result['latency_ms']:.2f}ms")
 \`\`\`
@@ -893,7 +893,7 @@ class HybridMLSystem:
         self.batch_system = BatchPredictionSystem()
         self.realtime_system = RealTimePredictionSystem(None, None)
     
-    def daily_feature_computation(self):
+    def daily_feature_computation (self):
         """
         Batch job: Compute expensive features
         Run daily at 6am
@@ -911,16 +911,16 @@ class HybridMLSystem:
         }
         
         # Store in cache for real-time access
-        self._update_feature_cache(features)
+        self._update_feature_cache (features)
         
         print("Features cached for real-time use")
     
-    def realtime_prediction(self, symbol, live_price):
+    def realtime_prediction (self, symbol, live_price):
         """
         Real-time: Use cached features + live data
         """
         # Fast: just lookup cached features
-        cached_features = self._get_cached_features(symbol)
+        cached_features = self._get_cached_features (symbol)
         
         # Fast: add live data
         live_features = {
@@ -930,19 +930,19 @@ class HybridMLSystem:
         
         # Fast: predict
         features = {**cached_features, **live_features}
-        prediction = self._fast_model_predict(features)
+        prediction = self._fast_model_predict (features)
         
         return prediction
     
-    def _update_feature_cache(self, features):
+    def _update_feature_cache (self, features):
         """Update Redis/cache"""
         pass
     
-    def _get_cached_features(self, symbol):
+    def _get_cached_features (self, symbol):
         """Get from cache"""
         return {"prev_close": 150.0}
     
-    def _fast_model_predict(self, features):
+    def _fast_model_predict (self, features):
         """Fast model inference"""
         return 0.005  # Predicted return
 
@@ -984,8 +984,8 @@ X_test = np.random.randn(1, 50)
 # Train models
 models = {
     "Linear": LinearRegression(),
-    "RandomForest": RandomForestRegressor(n_estimators=100, max_depth=10),
-    "XGBoost": xgb.XGBRegressor(n_estimators=100, max_depth=6)
+    "RandomForest": RandomForestRegressor (n_estimators=100, max_depth=10),
+    "XGBoost": xgb.XGBRegressor (n_estimators=100, max_depth=6)
 }
 
 for name, model in models.items():
@@ -1029,7 +1029,7 @@ print("   Solution: Use Linear for real-time, XGBoost for batch")
 Infrastructure Cost Analysis
 """
 
-def estimate_monthly_cost(architecture: str):
+def estimate_monthly_cost (architecture: str):
     """
     Estimate infrastructure costs
     """
@@ -1053,12 +1053,12 @@ def estimate_monthly_cost(architecture: str):
         }
     }
     
-    return costs.get(architecture, {"total": 0})
+    return costs.get (architecture, {"total": 0})
 
 # Compare architectures
 print("\\n=== Monthly Infrastructure Costs ===")
 for arch in ["simple_batch", "realtime_cpu", "realtime_gpu"]:
-    cost = estimate_monthly_cost(arch)
+    cost = estimate_monthly_cost (arch)
     print(f"{arch}: \${cost['total']}/month")
 
 print("\\n💡 Tip: Start with batch, upgrade to real-time only if needed")

@@ -36,7 +36,7 @@ export const geometryQuiz = [
     question:
       'Describe closest pair of points problem. What is the efficient algorithm?',
     sampleAnswer:
-      'Problem: given n points, find pair with minimum distance. Brute force: check all pairs O(n²). Efficient: divide-and-conquer O(n log n). Algorithm: 1) Sort by x-coordinate. 2) Divide points into left and right halves. 3) Recursively find closest pairs in each half: dL and dR. 4) Let d = min(dL, dR). 5) Check strip of width 2d around dividing line for closer pairs (points within d of line). 6) Sort strip by y, check next 7 points for each (geometric proof: at most 7 candidates). For example, 8 points: divide into 4+4, solve recursively, merge with strip check. Why O(n log n)? Divide: O(n log n) sort, conquer: T(n) = 2T(n/2) + O(n), gives O(n log n). Key insight: only need to check 7 neighbors in strip.',
+      'Problem: given n points, find pair with minimum distance. Brute force: check all pairs O(n²). Efficient: divide-and-conquer O(n log n). Algorithm: 1) Sort by x-coordinate. 2) Divide points into left and right halves. 3) Recursively find closest pairs in each half: dL and dR. 4) Let d = min (dL, dR). 5) Check strip of width 2d around dividing line for closer pairs (points within d of line). 6) Sort strip by y, check next 7 points for each (geometric proof: at most 7 candidates). For example, 8 points: divide into 4+4, solve recursively, merge with strip check. Why O(n log n)? Divide: O(n log n) sort, conquer: T(n) = 2T(n/2) + O(n), gives O(n log n). Key insight: only need to check 7 neighbors in strip.',
     keyPoints: [
       'Brute force: O(n²) check all pairs',
       'Efficient: O(n log n) divide-and-conquer',

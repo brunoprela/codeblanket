@@ -16,7 +16,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      '1D DP: dp[i] represents state at position i. Depends on earlier indices. Examples: Fibonacci, climbing stairs, house robber. Recurrence: dp[i] = f(dp[i-1], dp[i-2], ...).',
+      '1D DP: dp[i] represents state at position i. Depends on earlier indices. Examples: Fibonacci, climbing stairs, house robber. Recurrence: dp[i] = f (dp[i-1], dp[i-2], ...).',
   },
   {
     id: 'mc2',
@@ -29,7 +29,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      '2D DP: dp[i][j] for problems with two sequences/dimensions. Examples: longest common subsequence, edit distance, grid paths. Often dp[i][j] = f(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]).',
+      '2D DP: dp[i][j] for problems with two sequences/dimensions. Examples: longest common subsequence, edit distance, grid paths. Often dp[i][j] = f (dp[i-1][j], dp[i][j-1], dp[i-1][j-1]).',
   },
   {
     id: 'mc3',

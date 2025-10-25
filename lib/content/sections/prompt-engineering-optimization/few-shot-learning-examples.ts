@@ -100,7 +100,7 @@ print("Few-shot:", few_shot_example())
 ### How Many Shots (Examples)?
 
 \`\`\`python
-def optimal_example_count(task_complexity: str, model_capability: str) -> int:
+def optimal_example_count (task_complexity: str, model_capability: str) -> int:
     """
     Determine optimal number of examples.
     
@@ -152,7 +152,7 @@ class ExampleSelector:
         """
         self.example_pool = example_pool
     
-    def select_diverse_examples(self, n: int = 3) -> List[Dict]:
+    def select_diverse_examples (self, n: int = 3) -> List[Dict]:
         """
         Select diverse examples covering different patterns.
         
@@ -163,26 +163,26 @@ class ExampleSelector:
         - Representative of common cases
         """
         
-        if n >= len(self.example_pool):
+        if n >= len (self.example_pool):
             return self.example_pool
         
         selected = []
         
         # 1. Include shortest example
-        shortest = min(self.example_pool, key=lambda x: len(x['input']))
-        selected.append(shortest)
+        shortest = min (self.example_pool, key=lambda x: len (x['input']))
+        selected.append (shortest)
         
         # 2. Include longest example  
-        longest = max(self.example_pool, key=lambda x: len(x['input']))
+        longest = max (self.example_pool, key=lambda x: len (x['input']))
         if longest != shortest:
-            selected.append(longest)
+            selected.append (longest)
         
         # 3. Fill remaining with random diverse examples
         remaining = [e for e in self.example_pool if e not in selected]
-        remaining_needed = n - len(selected)
+        remaining_needed = n - len (selected)
         
         if remaining_needed > 0:
-            selected.extend(random.sample(remaining, min(remaining_needed, len(remaining))))
+            selected.extend (random.sample (remaining, min (remaining_needed, len (remaining))))
         
         return selected[:n]
     
@@ -199,27 +199,27 @@ class ExampleSelector:
         
         if similarity_func is None:
             # Simple similarity: shared words
-            def default_similarity(a: str, b: str) -> float:
-                words_a = set(a.lower().split())
-                words_b = set(b.lower().split())
+            def default_similarity (a: str, b: str) -> float:
+                words_a = set (a.lower().split())
+                words_b = set (b.lower().split())
                 intersection = words_a & words_b
                 union = words_a | words_b
-                return len(intersection) / len(union) if union else 0
+                return len (intersection) / len (union) if union else 0
             
             similarity_func = default_similarity
         
         # Score each example
         scored = [
-            (example, similarity_func(query, example['input']))
+            (example, similarity_func (query, example['input']))
             for example in self.example_pool
         ]
         
         # Sort by similarity and take top n
-        scored.sort(key=lambda x: x[1], reverse=True)
+        scored.sort (key=lambda x: x[1], reverse=True)
         
         return [example for example, score in scored[:n]]
     
-    def select_by_difficulty(self, difficulty: str, n: int = 3) -> List[Dict]:
+    def select_by_difficulty (self, difficulty: str, n: int = 3) -> List[Dict]:
         """
         Select examples by difficulty level.
         Start easy, show progressively harder examples.
@@ -231,12 +231,12 @@ class ExampleSelector:
             if ex.get('metadata', {}).get('difficulty') == difficulty
         ]
         
-        if len(filtered) >= n:
-            return random.sample(filtered, n)
+        if len (filtered) >= n:
+            return random.sample (filtered, n)
         
         return filtered + random.sample(
             [e for e in self.example_pool if e not in filtered],
-            n - len(filtered)
+            n - len (filtered)
         )
 
 # Usage example
@@ -263,10 +263,10 @@ examples_pool = [
     }
 ]
 
-selector = ExampleSelector(examples_pool)
+selector = ExampleSelector (examples_pool)
 
 # Get diverse examples
-diverse = selector.select_diverse_examples(n=2)
+diverse = selector.select_diverse_examples (n=2)
 print("Diverse examples:", [e['input'] for e in diverse])
 
 # Get similar examples for a query
@@ -333,7 +333,7 @@ class ExampleOrganizer:
     """
     
     @staticmethod
-    def order_by_complexity(examples: List[Dict], complexity_key: str = 'length') -> List[Dict]:
+    def order_by_complexity (examples: List[Dict], complexity_key: str = 'length') -> List[Dict]:
         """
         Order examples from simple to complex.
         
@@ -343,7 +343,7 @@ class ExampleOrganizer:
         """
         
         if complexity_key == 'length':
-            return sorted(examples, key=lambda x: len(x['input']))
+            return sorted (examples, key=lambda x: len (x['input']))
         elif complexity_key == 'difficulty':
             difficulty_order = {'easy': 1, 'medium': 2, 'hard': 3}
             return sorted(
@@ -357,7 +357,7 @@ class ExampleOrganizer:
             return examples
     
     @staticmethod
-    def order_by_recency(examples: List[Dict]) -> List[Dict]:
+    def order_by_recency (examples: List[Dict]) -> List[Dict]:
         """
         Most recent examples first (for evolving tasks).
         """
@@ -368,7 +368,7 @@ class ExampleOrganizer:
         )
     
     @staticmethod
-    def order_by_success_rate(examples: List[Dict]) -> List[Dict]:
+    def order_by_success_rate (examples: List[Dict]) -> List[Dict]:
         """
         Put examples that historically led to best results first.
         """
@@ -386,7 +386,7 @@ examples = [
 ]
 
 organizer = ExampleOrganizer()
-ordered = organizer.order_by_complexity(examples)
+ordered = organizer.order_by_complexity (examples)
 print("Ordered examples:", [e['input'][:30] for e in ordered])
 \`\`\`
 
@@ -397,7 +397,7 @@ class ExamplePlacementStrategy:
     """Different ways to place examples in prompts."""
     
     @staticmethod
-    def prefix_examples(task: str, examples: List[Dict], query: str) -> str:
+    def prefix_examples (task: str, examples: List[Dict], query: str) -> str:
         """
         Examples before task (most common).
         """
@@ -416,7 +416,7 @@ Input: {query}
 Output:"""
     
     @staticmethod
-    def sandwich_examples(task: str, examples: List[Dict], query: str) -> str:
+    def sandwich_examples (task: str, examples: List[Dict], query: str) -> str:
         """
         Task - Examples - Task pattern (very effective).
         """
@@ -435,13 +435,13 @@ Input: {query}
 Output:"""
     
     @staticmethod
-    def inline_examples(task: str, examples: List[Dict], query: str) -> str:
+    def inline_examples (task: str, examples: List[Dict], query: str) -> str:
         """
         Examples interwoven with instructions.
         """
         prompt = f"{task}\\n\\n"
         
-        for i, ex in enumerate(examples, 1):
+        for i, ex in enumerate (examples, 1):
             prompt += f"Example {i}:\\n"
             prompt += f"  Input: {ex['input']}\\n"
             prompt += f"  Output: {ex['output']}\\n"
@@ -462,11 +462,11 @@ query = "My name is Alice and I am 28"
 strategy = ExamplePlacementStrategy()
 
 print("PREFIX:")
-print(strategy.prefix_examples(task, examples, query))
+print(strategy.prefix_examples (task, examples, query))
 print("\\n" + "="*50 + "\\n")
 
 print("SANDWICH:")
-print(strategy.sandwich_examples(task, examples, query))
+print(strategy.sandwich_examples (task, examples, query))
 \`\`\`
 
 ## Example Diversity
@@ -483,42 +483,42 @@ class DiversityChecker:
     """
     
     @staticmethod
-    def check_input_diversity(examples: List[Dict]) -> Dict[str, any]:
+    def check_input_diversity (examples: List[Dict]) -> Dict[str, any]:
         """
         Analyze diversity of examples.
         """
         
-        lengths = [len(ex['input']) for ex in examples]
+        lengths = [len (ex['input']) for ex in examples]
         
         # Check length variance
-        avg_length = sum(lengths) / len(lengths)
-        length_variance = sum((l - avg_length) ** 2 for l in lengths) / len(lengths)
+        avg_length = sum (lengths) / len (lengths)
+        length_variance = sum((l - avg_length) ** 2 for l in lengths) / len (lengths)
         
         # Check vocabulary diversity
         all_words = set()
         for ex in examples:
-            all_words.update(ex['input'].lower().split())
+            all_words.update (ex['input'].lower().split())
         
         # Check pattern diversity (simple heuristic)
         patterns: Set[str] = set()
         for ex in examples:
             # Simple pattern: length category + has numbers
-            length_cat = 'short' if len(ex['input']) < 20 else 'medium' if len(ex['input']) < 50 else 'long'
-            has_numbers = 'nums' if any(c.isdigit() for c in ex['input']) else 'no_nums'
-            patterns.add(f"{length_cat}_{has_numbers}")
+            length_cat = 'short' if len (ex['input']) < 20 else 'medium' if len (ex['input']) < 50 else 'long'
+            has_numbers = 'nums' if any (c.isdigit() for c in ex['input']) else 'no_nums'
+            patterns.add (f"{length_cat}_{has_numbers}")
         
         return {
-            'num_examples': len(examples),
+            'num_examples': len (examples),
             'avg_length': avg_length,
             'length_variance': length_variance,
-            'unique_words': len(all_words),
-            'unique_patterns': len(patterns),
-            'diversity_score': len(patterns) / len(examples),  # 0-1 score
-            'recommendation': 'Good diversity' if len(patterns) / len(examples) > 0.5 else 'Add more diverse examples'
+            'unique_words': len (all_words),
+            'unique_patterns': len (patterns),
+            'diversity_score': len (patterns) / len (examples),  # 0-1 score
+            'recommendation': 'Good diversity' if len (patterns) / len (examples) > 0.5 else 'Add more diverse examples'
         }
     
     @staticmethod
-    def suggest_missing_cases(examples: List[Dict], task_type: str) -> List[str]:
+    def suggest_missing_cases (examples: List[Dict], task_type: str) -> List[str]:
         """
         Suggest what types of examples are missing.
         """
@@ -526,11 +526,11 @@ class DiversityChecker:
         suggestions = []
         
         # Check for edge cases
-        has_empty = any(len(ex['input'].strip()) == 0 for ex in examples)
-        has_long = any(len(ex['input']) > 100 for ex in examples)
-        has_short = any(len(ex['input']) < 10 for ex in examples)
-        has_numbers = any(any(c.isdigit() for c in ex['input']) for ex in examples)
-        has_special_chars = any(any(not c.isalnum() and not c.isspace() for c in ex['input']) for ex in examples)
+        has_empty = any (len (ex['input'].strip()) == 0 for ex in examples)
+        has_long = any (len (ex['input']) > 100 for ex in examples)
+        has_short = any (len (ex['input']) < 10 for ex in examples)
+        has_numbers = any (any (c.isdigit() for c in ex['input']) for ex in examples)
+        has_special_chars = any (any (not c.isalnum() and not c.isspace() for c in ex['input']) for ex in examples)
         
         if not has_empty and task_type in ['classification', 'extraction']:
             suggestions.append("Add example with empty/null input")
@@ -557,14 +557,14 @@ examples = [
 ]
 
 checker = DiversityChecker()
-diversity_report = checker.check_input_diversity(examples)
+diversity_report = checker.check_input_diversity (examples)
 
 print("Diversity Analysis:")
 for key, value in diversity_report.items():
     print(f"  {key}: {value}")
 
 print("\\nMissing cases:")
-suggestions = checker.suggest_missing_cases(examples, 'extraction')
+suggestions = checker.suggest_missing_cases (examples, 'extraction')
 for suggestion in suggestions:
     print(f"  - {suggestion}")
 \`\`\`
@@ -592,7 +592,7 @@ class DynamicExampleRetriever:
         self.examples = example_database
         self.embeddings = None
     
-    def embed_examples(self, embed_func=None):
+    def embed_examples (self, embed_func=None):
         """
         Create embeddings for all examples.
         In production, use OpenAI embeddings or sentence-transformers.
@@ -600,16 +600,16 @@ class DynamicExampleRetriever:
         
         if embed_func is None:
             # Placeholder: simple word-based embedding
-            def simple_embed(text: str) -> np.ndarray:
+            def simple_embed (text: str) -> np.ndarray:
                 words = text.lower().split()
                 # Create a simple bag-of-words style embedding
                 vocab = set()
                 for ex in self.examples:
-                    vocab.update(ex['input'].lower().split())
-                vocab = sorted(vocab)
+                    vocab.update (ex['input'].lower().split())
+                vocab = sorted (vocab)
                 
-                vec = np.zeros(len(vocab))
-                for i, word in enumerate(vocab):
+                vec = np.zeros (len (vocab))
+                for i, word in enumerate (vocab):
                     if word in words:
                         vec[i] = 1
                 
@@ -618,7 +618,7 @@ class DynamicExampleRetriever:
             embed_func = simple_embed
         
         self.embeddings = [
-            embed_func(ex['input'])
+            embed_func (ex['input'])
             for ex in self.examples
         ]
     
@@ -633,7 +633,7 @@ class DynamicExampleRetriever:
         """
         
         if self.embeddings is None:
-            self.embed_examples(embed_func)
+            self.embed_examples (embed_func)
         
         # Embed query
         if embed_func is None:
@@ -641,27 +641,27 @@ class DynamicExampleRetriever:
             words = query.lower().split()
             vocab = set()
             for ex in self.examples:
-                vocab.update(ex['input'].lower().split())
-            vocab = sorted(vocab)
+                vocab.update (ex['input'].lower().split())
+            vocab = sorted (vocab)
             
-            query_vec = np.zeros(len(vocab))
-            for i, word in enumerate(vocab):
+            query_vec = np.zeros (len (vocab))
+            for i, word in enumerate (vocab):
                 if word in words:
                     query_vec[i] = 1
         else:
-            query_vec = embed_func(query)
+            query_vec = embed_func (query)
         
         # Calculate similarities
         similarities = []
-        for i, ex_vec in enumerate(self.embeddings):
+        for i, ex_vec in enumerate (self.embeddings):
             # Cosine similarity
-            dot_product = np.dot(query_vec, ex_vec)
-            norm_product = (np.linalg.norm(query_vec) * np.linalg.norm(ex_vec))
+            dot_product = np.dot (query_vec, ex_vec)
+            norm_product = (np.linalg.norm (query_vec) * np.linalg.norm (ex_vec))
             similarity = dot_product / norm_product if norm_product > 0 else 0
             similarities.append((self.examples[i], similarity))
         
         # Sort by similarity and return top n
-        similarities.sort(key=lambda x: x[1], reverse=True)
+        similarities.sort (key=lambda x: x[1], reverse=True)
         
         return [ex for ex, sim in similarities[:n]]
     
@@ -675,7 +675,7 @@ class DynamicExampleRetriever:
         Create a prompt with dynamically selected examples.
         """
         
-        relevant_examples = self.retrieve_similar(query, n=n_examples)
+        relevant_examples = self.retrieve_similar (query, n=n_examples)
         
         examples_text = "\\n\\n".join([
             f"Input: {ex['input']}\\nOutput: {ex['output']}"
@@ -715,11 +715,11 @@ example_database = [
     }
 ]
 
-retriever = DynamicExampleRetriever(example_database)
+retriever = DynamicExampleRetriever (example_database)
 
 # For a query about Java, it should retrieve programming language examples
 query = "What is Java?"
-relevant = retriever.retrieve_similar(query, n=2)
+relevant = retriever.retrieve_similar (query, n=2)
 
 print("Query:", query)
 print("\\nMost relevant examples:")
@@ -756,7 +756,7 @@ class ExampleDatabase:
         self.filepath = filepath
         
         if filepath:
-            self.load(filepath)
+            self.load (filepath)
     
     def add_example(
         self,
@@ -779,7 +779,7 @@ class ExampleDatabase:
             'success_rate': 1.0  # Start optimistic
         }
         
-        self.examples[task_id].append(example)
+        self.examples[task_id].append (example)
     
     def get_examples(
         self,
@@ -804,7 +804,7 @@ class ExampleDatabase:
         
         if strategy == 'random':
             import random
-            return random.sample(examples, min(n, len(examples)))
+            return random.sample (examples, min (n, len (examples)))
         
         elif strategy == 'best_performing':
             sorted_examples = sorted(
@@ -840,7 +840,7 @@ class ExampleDatabase:
     ):
         """Record that an example was used and whether it led to success."""
         
-        if task_id in self.examples and example_index < len(self.examples[task_id]):
+        if task_id in self.examples and example_index < len (self.examples[task_id]):
             example = self.examples[task_id][example_index]
             
             # Update usage count
@@ -852,7 +852,7 @@ class ExampleDatabase:
             new_rate = (old_rate * (n - 1) + (1 if success else 0)) / n
             example['success_rate'] = new_rate
     
-    def get_statistics(self, task_id: str) -> Dict:
+    def get_statistics (self, task_id: str) -> Dict:
         """Get statistics about examples for a task."""
         
         if task_id not in self.examples:
@@ -861,25 +861,25 @@ class ExampleDatabase:
         examples = self.examples[task_id]
         
         return {
-            'total_examples': len(examples),
-            'avg_success_rate': sum(ex['success_rate'] for ex in examples) / len(examples),
-            'total_uses': sum(ex['usage_count'] for ex in examples),
-            'best_example': max(examples, key=lambda x: x['success_rate'])['input'][:50],
-            'most_used': max(examples, key=lambda x: x['usage_count'])['input'][:50]
+            'total_examples': len (examples),
+            'avg_success_rate': sum (ex['success_rate'] for ex in examples) / len (examples),
+            'total_uses': sum (ex['usage_count'] for ex in examples),
+            'best_example': max (examples, key=lambda x: x['success_rate'])['input'][:50],
+            'most_used': max (examples, key=lambda x: x['usage_count'])['input'][:50]
         }
     
-    def save(self, filepath: Optional[str] = None):
+    def save (self, filepath: Optional[str] = None):
         """Save database to file."""
         filepath = filepath or self.filepath
         if filepath:
-            with open(filepath, 'w') as f:
-                json.dump(self.examples, f, indent=2)
+            with open (filepath, 'w') as f:
+                json.dump (self.examples, f, indent=2)
     
-    def load(self, filepath: str):
+    def load (self, filepath: str):
         """Load database from file."""
         try:
-            with open(filepath, 'r') as f:
-                self.examples = json.load(f)
+            with open (filepath, 'r') as f:
+                self.examples = json.load (f)
         except FileNotFoundError:
             self.examples = {}
 

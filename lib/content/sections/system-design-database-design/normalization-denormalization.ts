@@ -34,7 +34,7 @@ Orders Table:
 **Problems:**
 1. **Update Anomaly:** If Alice changes email, must update multiple rows
 2. **Insertion Anomaly:** Can't add customer without order
-3. **Deletion Anomaly:** Deleting Bob's order loses Bob's info entirely
+3. **Deletion Anomaly:** Deleting Bob\'s order loses Bob's info entirely
 4. **Storage Waste:** Alice's info duplicated
 
 ## Normal Forms
@@ -123,8 +123,8 @@ CREATE TABLE order_items (
     product_id INT,
     quantity INT,
     PRIMARY KEY (order_id, product_id),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 \`\`\`
 
@@ -152,7 +152,7 @@ CREATE TABLE employees (
     employee_id INT PRIMARY KEY,
     employee_name VARCHAR(255),
     department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+    FOREIGN KEY (department_id) REFERENCES departments (department_id)
 );
 
 CREATE TABLE departments (
@@ -193,7 +193,7 @@ CREATE TABLE course_instructors (
     course_id INT,
     instructor_id INT,
     PRIMARY KEY (course_id, instructor_id),
-    FOREIGN KEY (instructor_id) REFERENCES instructors(instructor_id)
+    FOREIGN KEY (instructor_id) REFERENCES instructors (instructor_id)
 );
 
 CREATE TABLE instructors (
@@ -233,7 +233,7 @@ CREATE TABLE orders (
     order_id INT PRIMARY KEY,
     customer_id INT,
     order_date TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
 );
 
 CREATE TABLE order_items (
@@ -241,8 +241,8 @@ CREATE TABLE order_items (
     order_id INT,
     product_id INT,
     quantity INT,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (order_id) REFERENCES orders (order_id),
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 CREATE TABLE products (
@@ -326,7 +326,7 @@ CREATE TABLE comments (
     post_id INT,
     user_id INT,
     content TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 -- To display comments, need JOIN to get username
@@ -540,15 +540,15 @@ CREATE TABLE posts (
     content TEXT,
     created_at TIMESTAMP,
     like_count INT DEFAULT 0,  -- Denormalized for performance
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 CREATE TABLE likes (
     like_id INT PRIMARY KEY,
     post_id INT,
     user_id INT,
-    FOREIGN KEY (post_id) REFERENCES posts(post_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (post_id) REFERENCES posts (post_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 -- Update denormalized like_count

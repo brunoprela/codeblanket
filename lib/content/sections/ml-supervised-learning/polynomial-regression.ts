@@ -46,7 +46,7 @@ X = np.linspace(0, 10, 100).reshape(-1, 1)
 y = 0.5 * X.ravel()**2 - 3 * X.ravel() + 5 + np.random.randn(100) * 3
 
 # Visualize true relationship
-plt.figure(figsize=(12, 4))
+plt.figure (figsize=(12, 4))
 plt.subplot(1, 3, 1)
 plt.scatter(X, y, alpha=0.5)
 plt.xlabel('X')
@@ -64,12 +64,12 @@ plt.scatter(X, y, alpha=0.5, label='Data')
 plt.plot(X, y_pred_linear, 'r-', linewidth=2, label='Linear fit')
 plt.xlabel('X')
 plt.ylabel('y')
-plt.title(f'Linear Model (R²={r2_score(y, y_pred_linear):.3f})')
+plt.title (f'Linear Model (R²={r2_score (y, y_pred_linear):.3f})')
 plt.legend()
 plt.grid(True, alpha=0.3)
 
 # Fit polynomial regression (degree 2)
-poly = PolynomialFeatures(degree=2)
+poly = PolynomialFeatures (degree=2)
 X_poly = poly.fit_transform(X)
 
 model_poly = LinearRegression()
@@ -81,15 +81,15 @@ plt.scatter(X, y, alpha=0.5, label='Data')
 plt.plot(X, y_pred_poly, 'g-', linewidth=2, label='Polynomial fit (degree=2)')
 plt.xlabel('X')
 plt.ylabel('y')
-plt.title(f'Polynomial Model (R²={r2_score(y, y_pred_poly):.3f})')
+plt.title (f'Polynomial Model (R²={r2_score (y, y_pred_poly):.3f})')
 plt.legend()
 plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()
 
-print(f"Linear Model R²: {r2_score(y, y_pred_linear):.4f}")
-print(f"Polynomial Model R²: {r2_score(y, y_pred_poly):.4f}")
+print(f"Linear Model R²: {r2_score (y, y_pred_linear):.4f}")
+print(f"Polynomial Model R²: {r2_score (y, y_pred_poly):.4f}")
 \`\`\`
 
 ## Choosing Polynomial Degree
@@ -119,7 +119,7 @@ results = []
 
 for degree in degrees:
     # Transform features
-    poly = PolynomialFeatures(degree=degree)
+    poly = PolynomialFeatures (degree=degree)
     X_train_poly = poly.fit_transform(X_train)
     X_test_poly = poly.transform(X_test)
     
@@ -131,8 +131,8 @@ for degree in degrees:
     train_pred = model.predict(X_train_poly)
     test_pred = model.predict(X_test_poly)
     
-    train_r2 = r2_score(y_train, train_pred)
-    test_r2 = r2_score(y_test, test_pred)
+    train_r2 = r2_score (y_train, train_pred)
+    test_r2 = r2_score (y_test, test_pred)
     
     results.append({
         'degree': degree,
@@ -147,17 +147,17 @@ for degree in degrees:
 # Plot the tradeoff
 import pandas as pd
 
-df_results = pd.DataFrame(results)
+df_results = pd.DataFrame (results)
 
-plt.figure(figsize=(10, 6))
-plt.plot(df_results['degree'], df_results['train_r2'], 'o-', label='Training R²')
-plt.plot(df_results['degree'], df_results['test_r2'], 's-', label='Test R²')
+plt.figure (figsize=(10, 6))
+plt.plot (df_results['degree'], df_results['train_r2'], 'o-', label='Training R²')
+plt.plot (df_results['degree'], df_results['test_r2'], 's-', label='Test R²')
 plt.xlabel('Polynomial Degree')
 plt.ylabel('R² Score')
 plt.title('Bias-Variance Tradeoff: Model Complexity')
 plt.legend()
 plt.grid(True, alpha=0.3)
-plt.axhline(y=1.0, color='r', linestyle='--', alpha=0.3, label='Perfect fit')
+plt.axhline (y=1.0, color='r', linestyle='--', alpha=0.3, label='Perfect fit')
 plt.show()
 
 # Find optimal degree
@@ -175,9 +175,9 @@ from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 
 # Create pipeline combining polynomial features and linear regression
-def make_polynomial_pipeline(degree):
+def make_polynomial_pipeline (degree):
     return Pipeline([
-        ('poly', PolynomialFeatures(degree=degree)),
+        ('poly', PolynomialFeatures (degree=degree)),
         ('linear', LinearRegression())
     ])
 
@@ -186,21 +186,21 @@ degrees = range(1, 16)
 cv_scores = []
 
 for degree in degrees:
-    pipeline = make_polynomial_pipeline(degree)
-    scores = cross_val_score(pipeline, X, y, cv=5, scoring='r2')
+    pipeline = make_polynomial_pipeline (degree)
+    scores = cross_val_score (pipeline, X, y, cv=5, scoring='r2')
     cv_scores.append({
         'degree': degree,
         'mean_cv_score': scores.mean(),
         'std_cv_score': scores.std()
     })
 
-df_cv = pd.DataFrame(cv_scores)
+df_cv = pd.DataFrame (cv_scores)
 
 # Plot cross-validation scores
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
-plt.errorbar(df_cv['degree'], df_cv['mean_cv_score'], 
+plt.errorbar (df_cv['degree'], df_cv['mean_cv_score'], 
              yerr=df_cv['std_cv_score'], capsize=5)
 plt.xlabel('Polynomial Degree')
 plt.ylabel('Cross-Validation R² Score')
@@ -217,7 +217,7 @@ X_plot = np.linspace(0, 10, 200).reshape(-1, 1)
 plt.scatter(X, y, alpha=0.3, label='Data')
 
 for degree in [1, 2, 5, 10]:
-    pipeline = make_polynomial_pipeline(degree)
+    pipeline = make_polynomial_pipeline (degree)
     pipeline.fit(X, y)
     y_plot = pipeline.predict(X_plot)
     plt.plot(X_plot, y_plot, label=f'Degree {degree}', linewidth=2)
@@ -254,7 +254,7 @@ price = (
     80 * size +
     20000 * location +
     15 * size * location +  # Interaction effect
-    np.random.randn(n) * 20000
+    np.random.randn (n) * 20000
 )
 
 X = np.column_stack([size, location])
@@ -263,21 +263,21 @@ X = np.column_stack([size, location])
 model_no_interact = LinearRegression()
 model_no_interact.fit(X, price)
 pred_no_interact = model_no_interact.predict(X)
-r2_no_interact = r2_score(price, pred_no_interact)
+r2_no_interact = r2_score (price, pred_no_interact)
 
 # Model with interactions (degree=2 includes x1*x2)
-poly = PolynomialFeatures(degree=2, interaction_only=False)
+poly = PolynomialFeatures (degree=2, interaction_only=False)
 X_poly = poly.fit_transform(X)
 model_with_interact = LinearRegression()
 model_with_interact.fit(X_poly, price)
 pred_with_interact = model_with_interact.predict(X_poly)
-r2_with_interact = r2_score(price, pred_with_interact)
+r2_with_interact = r2_score (price, pred_with_interact)
 
 print("Feature names:", poly.get_feature_names_out(['size', 'location']))
 print(f"\\nWithout interactions R²: {r2_no_interact:.4f}")
 print(f"With interactions R²: {r2_with_interact:.4f}")
 print(f"\\nCoefficients (with interactions):")
-for name, coef in zip(poly.get_feature_names_out(), model_with_interact.coef_):
+for name, coef in zip (poly.get_feature_names_out(), model_with_interact.coef_):
     print(f"  {name:20s}: {coef:12,.2f}")
 \`\`\`
 
@@ -302,17 +302,17 @@ model_linear.fit(X_exp, y_exp)
 y_pred_linear = model_linear.predict(X_exp)
 
 # Log-transformed target
-y_log = np.log(y_exp)
+y_log = np.log (y_exp)
 model_log = LinearRegression()
 model_log.fit(X_exp, y_log)
-y_pred_log_transformed = np.exp(model_log.predict(X_exp))
+y_pred_log_transformed = np.exp (model_log.predict(X_exp))
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_exp, y_exp, alpha=0.5, label='Data')
 plt.plot(X_exp, y_pred_linear, 'r-', linewidth=2, 
-         label=f'Linear (R²={r2_score(y_exp, y_pred_linear):.3f})')
+         label=f'Linear (R²={r2_score (y_exp, y_pred_linear):.3f})')
 plt.xlabel('X')
 plt.ylabel('y')
 plt.title('Linear Model on Exponential Data')
@@ -322,7 +322,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 plt.scatter(X_exp, y_exp, alpha=0.5, label='Data')
 plt.plot(X_exp, y_pred_log_transformed, 'g-', linewidth=2,
-         label=f'Log-transformed (R²={r2_score(y_exp, y_pred_log_transformed):.3f})')
+         label=f'Log-transformed (R²={r2_score (y_exp, y_pred_log_transformed):.3f})')
 plt.xlabel('X')
 plt.ylabel('y')
 plt.title('Model with Log-Transformed Target')
@@ -343,12 +343,12 @@ X_count = np.linspace(0, 10, 100).reshape(-1, 1)
 y_count = 2 * X_count.ravel()**2 + np.random.poisson(5 * X_count.ravel())
 
 # Model with square root transformation
-y_sqrt = np.sqrt(y_count)
+y_sqrt = np.sqrt (y_count)
 model_sqrt = LinearRegression()
 model_sqrt.fit(X_count, y_sqrt)
 y_pred_sqrt = model_sqrt.predict(X_count)**2
 
-print(f"R² with sqrt transformation: {r2_score(y_count, y_pred_sqrt):.4f}")
+print(f"R² with sqrt transformation: {r2_score (y_count, y_pred_sqrt):.4f}")
 \`\`\`
 
 ## Splines and Piecewise Polynomials
@@ -367,7 +367,7 @@ y_spline = np.where(X_spline.ravel() < 5,
 y_spline += np.random.randn(200) * 2
 
 # Fit spline model
-spline = SplineTransformer(n_knots=5, degree=3)
+spline = SplineTransformer (n_knots=5, degree=3)
 X_spline_features = spline.fit_transform(X_spline)
 
 model_spline = LinearRegression()
@@ -375,18 +375,18 @@ model_spline.fit(X_spline_features, y_spline)
 y_pred_spline = model_spline.predict(X_spline_features)
 
 # Compare with polynomial
-poly = PolynomialFeatures(degree=5)
+poly = PolynomialFeatures (degree=5)
 X_poly_global = poly.fit_transform(X_spline)
 model_poly_global = LinearRegression()
 model_poly_global.fit(X_poly_global, y_spline)
 y_pred_poly = model_poly_global.predict(X_poly_global)
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_spline, y_spline, alpha=0.3, label='Data')
 plt.plot(X_spline, y_pred_poly, 'r-', linewidth=2, 
-         label=f'Global Polynomial (R²={r2_score(y_spline, y_pred_poly):.3f})')
+         label=f'Global Polynomial (R²={r2_score (y_spline, y_pred_poly):.3f})')
 plt.xlabel('X')
 plt.ylabel('y')
 plt.title('Global Polynomial (Degree 5)')
@@ -396,7 +396,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 plt.scatter(X_spline, y_spline, alpha=0.3, label='Data')
 plt.plot(X_spline, y_pred_spline, 'g-', linewidth=2,
-         label=f'Spline (R²={r2_score(y_spline, y_pred_spline):.3f})')
+         label=f'Spline (R²={r2_score (y_spline, y_pred_spline):.3f})')
 plt.xlabel('X')
 plt.ylabel('y')
 plt.title('Spline Regression')
@@ -419,7 +419,7 @@ ad_spend = np.random.uniform(10, 200, n_campaigns).reshape(-1, 1)
 
 # Revenue with diminishing returns (log relationship)
 # ROI decreases as spend increases
-revenue = 50 + 30 * np.log(ad_spend.ravel()) + np.random.randn(n_campaigns) * 10
+revenue = 50 + 30 * np.log (ad_spend.ravel()) + np.random.randn (n_campaigns) * 10
 
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(
@@ -432,20 +432,20 @@ models = {
         ('linear', LinearRegression())
     ]),
     'Polynomial (degree=2)': Pipeline([
-        ('poly', PolynomialFeatures(degree=2)),
+        ('poly', PolynomialFeatures (degree=2)),
         ('linear', LinearRegression())
     ]),
     'Log-transformed': Pipeline([
-        ('log', FunctionTransformer(np.log, validate=True)),
+        ('log', FunctionTransformer (np.log, validate=True)),
         ('linear', LinearRegression())
     ]),
 }
 
 results = []
 
-plt.figure(figsize=(15, 5))
+plt.figure (figsize=(15, 5))
 
-for idx, (name, model) in enumerate(models.items(), 1):
+for idx, (name, model) in enumerate (models.items(), 1):
     # Fit model
     model.fit(X_train, y_train)
     
@@ -454,9 +454,9 @@ for idx, (name, model) in enumerate(models.items(), 1):
     y_test_pred = model.predict(X_test)
     
     # Metrics
-    train_r2 = r2_score(y_train, y_train_pred)
-    test_r2 = r2_score(y_test, y_test_pred)
-    test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
+    train_r2 = r2_score (y_train, y_train_pred)
+    test_r2 = r2_score (y_test, y_test_pred)
+    test_rmse = np.sqrt (mean_squared_error (y_test, y_test_pred))
     
     results.append({
         'Model': name,
@@ -477,7 +477,7 @@ for idx, (name, model) in enumerate(models.items(), 1):
     
     plt.xlabel('Ad Spend ($1000s)')
     plt.ylabel('Revenue ($1000s)')
-    plt.title(f'{name}\\nTest R² = {test_r2:.3f}')
+    plt.title (f'{name}\\nTest R² = {test_r2:.3f}')
     plt.legend()
     plt.grid(True, alpha=0.3)
 
@@ -486,7 +486,7 @@ plt.show()
 
 # Print results
 print("\\nModel Comparison:")
-print(pd.DataFrame(results).to_string(index=False))
+print(pd.DataFrame (results).to_string (index=False))
 
 # Business insights
 best_model = models['Log-transformed']
@@ -494,13 +494,12 @@ print("\\n--- Business Insights (Log-transformed Model) ---")
 
 # Marginal ROI at different spend levels
 spend_levels = np.array([50, 100, 150, 200]).reshape(-1, 1)
-base_revenue = best_model.predict(spend_levels)
-marginal_revenue = best_model.predict(spend_levels + 10) - base_revenue
+base_revenue = best_model.predict (spend_levels)
+marginal_revenue = best_model.predict (spend_levels + 10) - base_revenue
 
-for spend, marginal in zip(spend_levels.ravel(), marginal_revenue):
+for spend, marginal in zip (spend_levels.ravel(), marginal_revenue):
     roi = (marginal / 10) * 100
-    print(f"At \${spend}k spend: Additional $10k returns \${marginal: .2f
-}k (ROI: { roi: .1f }%) ")
+    print(f"At \${spend}k spend: Additional $10k returns \${marginal:.2f}k (ROI: { roi: .1f }%) ")
 \`\`\`
 
 ## Best Practices
@@ -560,7 +559,7 @@ optimal_temp = 22
 yield_crop = (
     100 -  # Maximum yield
     0.5 * (temperature - optimal_temp)**2 +  # Quadratic penalty from optimal
-    np.random.randn(n_samples) * 5  # Noise
+    np.random.randn (n_samples) * 5  # Noise
 )
 
 # Create DataFrame
@@ -573,15 +572,15 @@ print("="*70)
 print("POLYNOMIAL REGRESSION: CROP YIELD PREDICTION")
 print("="*70)
 
-print(f"\\nDataset: {len(df)} observations")
+print(f"\\nDataset: {len (df)} observations")
 print(f"\\nYield statistics:")
 print(df['yield'].describe())
 
 # Visualize data
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.scatter(df['temperature'], df['yield'], alpha=0.6)
+plt.scatter (df['temperature'], df['yield'], alpha=0.6)
 plt.xlabel('Temperature (°C)')
 plt.ylabel('Crop Yield (tons/hectare)')
 plt.title('Temperature vs. Crop Yield\\n(Non-linear Relationship)')
@@ -612,7 +611,7 @@ for degree in degrees:
     # Create pipeline
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
-        ('poly', PolynomialFeatures(degree=degree)),
+        ('poly', PolynomialFeatures (degree=degree)),
         ('regressor', LinearRegression())
     ])
     
@@ -625,17 +624,17 @@ for degree in degrees:
     y_test_pred = pipeline.predict(X_test)
     
     # Cross-validation
-    cv_scores = cross_val_score(pipeline, X_train, y_train, cv=5, scoring='r2')
+    cv_scores = cross_val_score (pipeline, X_train, y_train, cv=5, scoring='r2')
     
     # Calculate metrics
-    train_r2 = r2_score(y_train, y_train_pred)
-    test_r2 = r2_score(y_test, y_test_pred)
-    test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
-    test_mae = mean_absolute_error(y_test, y_test_pred)
+    train_r2 = r2_score (y_train, y_train_pred)
+    test_r2 = r2_score (y_test, y_test_pred)
+    test_rmse = np.sqrt (mean_squared_error (y_test, y_test_pred))
+    test_mae = mean_absolute_error (y_test, y_test_pred)
     cv_mean = cv_scores.mean()
     
     # Get number of features after transformation
-    poly_temp = PolynomialFeatures(degree=degree)
+    poly_temp = PolynomialFeatures (degree=degree)
     n_features = poly_temp.fit_transform(X_train).shape[1]
     
     results.append({
@@ -650,8 +649,8 @@ for degree in degrees:
     })
 
 # Display results
-df_results = pd.DataFrame(results)
-print("\\n", df_results.to_string(index=False))
+df_results = pd.DataFrame (results)
+print("\\n", df_results.to_string (index=False))
 
 # Find best model
 best_idx = df_results['CV R²'].idxmax()
@@ -667,15 +666,15 @@ print(f"Overfitting gap: {df_results.loc[best_idx, 'Overfit Gap']:.4f}")
 
 # Visualize model comparisons
 plt.subplot(1, 2, 2)
-plt.plot(df_results['Degree'], df_results['Train R²'], 'o-', label='Train R²')
-plt.plot(df_results['Degree'], df_results['CV R²'], 's-', label='CV R²')
-plt.plot(df_results['Degree'], df_results['Test R²'], '^-', label='Test R²')
+plt.plot (df_results['Degree'], df_results['Train R²'], 'o-', label='Train R²')
+plt.plot (df_results['Degree'], df_results['CV R²'], 's-', label='CV R²')
+plt.plot (df_results['Degree'], df_results['Test R²'], '^-', label='Test R²')
 plt.xlabel('Polynomial Degree')
 plt.ylabel('R² Score')
 plt.title('Model Complexity vs. Performance')
 plt.legend()
 plt.grid(True, alpha=0.3)
-plt.axvline(x=best_degree, color='r', linestyle='--', alpha=0.5, label='Best')
+plt.axvline (x=best_degree, color='r', linestyle='--', alpha=0.5, label='Best')
 
 plt.tight_layout()
 plt.show()
@@ -686,7 +685,7 @@ axes = axes.ravel()
 
 X_plot = np.linspace(10, 35, 200).reshape(-1, 1)
 
-for idx, degree in enumerate(degrees):
+for idx, degree in enumerate (degrees):
     ax = axes[idx]
     
     # Get model
@@ -702,12 +701,12 @@ for idx, degree in enumerate(degrees):
     ax.plot(X_plot, y_plot, 'g-', linewidth=2.5, label='Fitted curve')
     
     # Metrics
-    test_r2 = r2_score(y_test, y_test_pred)
+    test_r2 = r2_score (y_test, y_test_pred)
     
     ax.set_xlabel('Temperature (°C)')
     ax.set_ylabel('Crop Yield')
-    ax.set_title(f'Degree {degree} | Test R² = {test_r2:.3f}')
-    ax.legend(fontsize=8)
+    ax.set_title (f'Degree {degree} | Test R² = {test_r2:.3f}')
+    ax.legend (fontsize=8)
     ax.grid(True, alpha=0.3)
     ax.set_xlim(10, 35)
     
@@ -733,7 +732,7 @@ best_model = models[best_degree]
 
 # Find optimal temperature
 temp_range = np.linspace(10, 35, 200).reshape(-1, 1)
-predicted_yields = best_model.predict(temp_range)
+predicted_yields = best_model.predict (temp_range)
 optimal_idx = predicted_yields.argmax()
 optimal_temp_pred = temp_range[optimal_idx][0]
 max_yield_pred = predicted_yields[optimal_idx]
@@ -752,7 +751,7 @@ print("\\n" + "="*70)
 print("EXAMPLE TEST PREDICTIONS")
 print("="*70)
 
-sample_indices = np.random.choice(len(X_test), 5, replace=False)
+sample_indices = np.random.choice (len(X_test), 5, replace=False)
 print(f"\\n{'Temperature':>12s} {'Actual':>10s} {'Predicted':>10s} {'Error':>10s}")
 print("-" * 45)
 

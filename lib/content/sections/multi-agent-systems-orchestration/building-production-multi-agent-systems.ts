@@ -27,7 +27,7 @@ Production multi-agent systems need:
 **State Management**: Consistent state across agents  
 **Error Handling**: Cascading failures  
 **Cost Control**: LLM API costs add up  
-**Monitoring**: What's each agent doing?  
+**Monitoring**: What\'s each agent doing?  
 **Deployment**: Update without downtime  
 
 ## Production Architecture
@@ -69,25 +69,25 @@ class ProductionMultiAgentSystem:
     def __init__(self, config: ProductionConfig):
         self.config = config
         self.agents: Dict[str, Any] = {}
-        self.agent_pool: asyncio.Queue = asyncio.Queue(maxsize=config.agent_pool_size)
+        self.agent_pool: asyncio.Queue = asyncio.Queue (maxsize=config.agent_pool_size)
         self.metrics = MetricsCollector()
-        self.cost_tracker = CostTracker(max_per_hour=config.max_cost_per_hour)
+        self.cost_tracker = CostTracker (max_per_hour=config.max_cost_per_hour)
         self.circuit_breaker = CircuitBreaker() if config.enable_circuit_breaker else None
         self.cache = Cache() if config.enable_caching else None
         
         # Setup logging
-        logging.basicConfig(level=getattr(logging, config.log_level))
+        logging.basicConfig (level=getattr (logging, config.log_level))
         self.logger = logging.getLogger("MultiAgentSystem")
     
-    async def initialize(self):
+    async def initialize (self):
         """Initialize system."""
         self.logger.info("Initializing production system...")
         
         # Initialize agent pool
-        for i in range(self.config.agent_pool_size):
-            await self.agent_pool.put(f"agent_{i}")
+        for i in range (self.config.agent_pool_size):
+            await self.agent_pool.put (f"agent_{i}")
         
-        self.logger.info(f"Initialized with {self.config.agent_pool_size} agents")
+        self.logger.info (f"Initialized with {self.config.agent_pool_size} agents")
     
     async def execute_task(
         self,
@@ -99,20 +99,20 @@ class ProductionMultiAgentSystem:
         
         # Check circuit breaker
         if self.circuit_breaker and not self.circuit_breaker.allow_request():
-            self.logger.warning(f"Circuit breaker open, rejecting task {task_id}")
+            self.logger.warning (f"Circuit breaker open, rejecting task {task_id}")
             return {"error": "Circuit breaker open", "task_id": task_id}
         
         # Check cache
         if self.cache:
-            cached = self.cache.get(task_id)
+            cached = self.cache.get (task_id)
             if cached:
-                self.logger.info(f"Cache hit for task {task_id}")
+                self.logger.info (f"Cache hit for task {task_id}")
                 self.metrics.record("cache_hit")
                 return cached
         
         # Check cost limits
-        if self.cost_tracker.would_exceed_limit(estimated_cost=0.01):
-            self.logger.error(f"Cost limit would be exceeded")
+        if self.cost_tracker.would_exceed_limit (estimated_cost=0.01):
+            self.logger.error (f"Cost limit would be exceeded")
             return {"error": "Cost limit exceeded", "task_id": task_id}
         
         # Acquire agent from pool
@@ -120,11 +120,11 @@ class ProductionMultiAgentSystem:
         
         try:
             # Execute with retries
-            result = await self._execute_with_retry(agent_id, task)
+            result = await self._execute_with_retry (agent_id, task)
             
             # Cache result
             if self.cache and not result.get('error'):
-                self.cache.set(task_id, result, ttl=self.config.cache_ttl_seconds)
+                self.cache.set (task_id, result, ttl=self.config.cache_ttl_seconds)
             
             # Track success
             if self.circuit_breaker:
@@ -133,17 +133,17 @@ class ProductionMultiAgentSystem:
             return result
         
         except Exception as e:
-            self.logger.error(f"Task {task_id} failed: {e}")
+            self.logger.error (f"Task {task_id} failed: {e}")
             
             # Track failure
             if self.circuit_breaker:
                 self.circuit_breaker.record_failure()
             
-            return {"error": str(e), "task_id": task_id}
+            return {"error": str (e), "task_id": task_id}
         
         finally:
             # Return agent to pool
-            await self.agent_pool.put(agent_id)
+            await self.agent_pool.put (agent_id)
     
     async def _execute_with_retry(
         self,
@@ -151,10 +151,10 @@ class ProductionMultiAgentSystem:
         task: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Execute with retry logic."""
-        for attempt in range(self.config.max_retries):
+        for attempt in range (self.config.max_retries):
             try:
                 result = await asyncio.wait_for(
-                    self._execute_single(agent_id, task),
+                    self._execute_single (agent_id, task),
                     timeout=self.config.timeout_seconds
                 )
                 
@@ -164,13 +164,13 @@ class ProductionMultiAgentSystem:
                 return result
             
             except asyncio.TimeoutError:
-                self.logger.warning(f"Attempt {attempt + 1} timed out")
+                self.logger.warning (f"Attempt {attempt + 1} timed out")
                 if attempt == self.config.max_retries - 1:
                     raise
                 await asyncio.sleep(2 ** attempt)  # Exponential backoff
             
             except Exception as e:
-                self.logger.warning(f"Attempt {attempt + 1} failed: {e}")
+                self.logger.warning (f"Attempt {attempt + 1} failed: {e}")
                 if attempt == self.config.max_retries - 1:
                     raise
                 await asyncio.sleep(2 ** attempt)
@@ -181,14 +181,14 @@ class ProductionMultiAgentSystem:
         task: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Execute single task."""
-        self.logger.info(f"Agent {agent_id} executing task {task.get('id')}")
+        self.logger.info (f"Agent {agent_id} executing task {task.get('id')}")
         
         # Simulate work
         await asyncio.sleep(0.5)
         
         # Track cost
         cost = 0.01  # Estimated cost
-        self.cost_tracker.add_cost(cost)
+        self.cost_tracker.add_cost (cost)
         
         return {
             "task_id": task.get('id'),
@@ -196,7 +196,7 @@ class ProductionMultiAgentSystem:
             "cost": cost
         }
     
-    async def shutdown(self):
+    async def shutdown (self):
         """Graceful shutdown."""
         self.logger.info("Shutting down system...")
         
@@ -205,7 +205,7 @@ class ProductionMultiAgentSystem:
         
         # Export metrics
         metrics = self.metrics.get_summary()
-        self.logger.info(f"Final metrics: {metrics}")
+        self.logger.info (f"Final metrics: {metrics}")
         
         # Close resources
         if self.cache:
@@ -218,7 +218,7 @@ config = ProductionConfig(
     enable_cost_tracking=True
 )
 
-system = ProductionMultiAgentSystem(config)
+system = ProductionMultiAgentSystem (config)
 await system.initialize()
 
 # Execute tasks
@@ -228,7 +228,7 @@ tasks = [
 ]
 
 results = await asyncio.gather(*[
-    system.execute_task(task) for task in tasks
+    system.execute_task (task) for task in tasks
 ])
 
 await system.shutdown()
@@ -255,7 +255,7 @@ class CircuitBreaker:
         self.state = "closed"  # closed, open, half_open
         self.last_failure_time = None
     
-    def allow_request(self) -> bool:
+    def allow_request (self) -> bool:
         """Check if request should be allowed."""
         if self.state == "closed":
             return True
@@ -275,7 +275,7 @@ class CircuitBreaker:
         
         return False
     
-    def record_success(self):
+    def record_success (self):
         """Record successful request."""
         if self.state == "half_open":
             self.successes += 1
@@ -285,7 +285,7 @@ class CircuitBreaker:
         elif self.state == "closed":
             self.failures = max(0, self.failures - 1)
     
-    def record_failure(self):
+    def record_failure (self):
         """Record failed request."""
         self.failures += 1
         self.last_failure_time = time.time()
@@ -304,26 +304,26 @@ class MetricsCollector:
         self.metrics: Dict[str, int] = {}
         self.timings: Dict[str, List[float]] = {}
     
-    def record(self, metric: str, value: float = 1):
+    def record (self, metric: str, value: float = 1):
         """Record metric."""
-        self.metrics[metric] = self.metrics.get(metric, 0) + value
+        self.metrics[metric] = self.metrics.get (metric, 0) + value
     
-    def record_timing(self, operation: str, duration: float):
+    def record_timing (self, operation: str, duration: float):
         """Record operation timing."""
         if operation not in self.timings:
             self.timings[operation] = []
-        self.timings[operation].append(duration)
+        self.timings[operation].append (duration)
     
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary (self) -> Dict[str, Any]:
         """Get metrics summary."""
-        summary = dict(self.metrics)
+        summary = dict (self.metrics)
         
         # Add timing statistics
         for operation, durations in self.timings.items():
             if durations:
-                summary[f"{operation}_avg"] = sum(durations) / len(durations)
-                summary[f"{operation}_min"] = min(durations)
-                summary[f"{operation}_max"] = max(durations)
+                summary[f"{operation}_avg"] = sum (durations) / len (durations)
+                summary[f"{operation}_min"] = min (durations)
+                summary[f"{operation}_max"] = max (durations)
         
         return summary
 \`\`\`
@@ -338,7 +338,7 @@ class CostTracker:
         self.max_per_hour = max_per_hour
         self.costs: List[tuple[float, float]] = []  # (timestamp, cost)
     
-    def add_cost(self, cost: float):
+    def add_cost (self, cost: float):
         """Add cost."""
         self.costs.append((time.time(), cost))
         
@@ -346,15 +346,15 @@ class CostTracker:
         cutoff = time.time() - 3600
         self.costs = [(t, c) for t, c in self.costs if t > cutoff]
     
-    def get_hourly_cost(self) -> float:
+    def get_hourly_cost (self) -> float:
         """Get cost in last hour."""
-        return sum(cost for _, cost in self.costs)
+        return sum (cost for _, cost in self.costs)
     
-    def would_exceed_limit(self, estimated_cost: float) -> bool:
+    def would_exceed_limit (self, estimated_cost: float) -> bool:
         """Check if adding cost would exceed limit."""
         return (self.get_hourly_cost() + estimated_cost) > self.max_per_hour
     
-    def get_remaining_budget(self) -> float:
+    def get_remaining_budget (self) -> float:
         """Get remaining budget this hour."""
         return max(0, self.max_per_hour - self.get_hourly_cost())
 \`\`\`
@@ -370,13 +370,13 @@ class Cache:
     def __init__(self):
         self.data: Dict[str, tuple[Any, float]] = {}  # key -> (value, expiry)
     
-    def _hash_key(self, key: Any) -> str:
+    def _hash_key (self, key: Any) -> str:
         """Hash key for storage."""
-        return hashlib.md5(str(key).encode()).hexdigest()
+        return hashlib.md5(str (key).encode()).hexdigest()
     
-    def get(self, key: Any) -> Optional[Any]:
+    def get (self, key: Any) -> Optional[Any]:
         """Get from cache."""
-        hashed = self._hash_key(key)
+        hashed = self._hash_key (key)
         
         if hashed in self.data:
             value, expiry = self.data[hashed]
@@ -389,20 +389,20 @@ class Cache:
         
         return None
     
-    def set(self, key: Any, value: Any, ttl: int = 3600):
+    def set (self, key: Any, value: Any, ttl: int = 3600):
         """Set in cache."""
-        hashed = self._hash_key(key)
+        hashed = self._hash_key (key)
         expiry = time.time() + ttl
         self.data[hashed] = (value, expiry)
     
-    def clear_expired(self):
+    def clear_expired (self):
         """Clear expired entries."""
         now = time.time()
         expired = [k for k, (_, exp) in self.data.items() if exp < now]
         for k in expired:
             del self.data[k]
     
-    def close(self):
+    def close (self):
         """Cleanup."""
         self.data.clear()
 \`\`\`
@@ -416,7 +416,7 @@ class HealthChecker:
     def __init__(self, system: ProductionMultiAgentSystem):
         self.system = system
     
-    async def check_health(self) -> Dict[str, Any]:
+    async def check_health (self) -> Dict[str, Any]:
         """Comprehensive health check."""
         checks = {
             "agents": await self._check_agents(),
@@ -425,7 +425,7 @@ class HealthChecker:
             "cache": self._check_cache()
         }
         
-        overall = all(c["healthy"] for c in checks.values())
+        overall = all (c["healthy"] for c in checks.values())
         
         return {
             "healthy": overall,
@@ -433,7 +433,7 @@ class HealthChecker:
             "timestamp": time.time()
         }
     
-    async def _check_agents(self) -> Dict[str, Any]:
+    async def _check_agents (self) -> Dict[str, Any]:
         """Check agent pool."""
         available = self.system.agent_pool.qsize()
         total = self.system.config.agent_pool_size
@@ -447,7 +447,7 @@ class HealthChecker:
             "utilization": 1 - (available / total) if total > 0 else 0
         }
     
-    def _check_costs(self) -> Dict[str, Any]:
+    def _check_costs (self) -> Dict[str, Any]:
         """Check cost status."""
         current = self.system.cost_tracker.get_hourly_cost()
         limit = self.system.cost_tracker.max_per_hour
@@ -461,7 +461,7 @@ class HealthChecker:
             "utilization": current / limit if limit > 0 else 0
         }
     
-    def _check_circuit_breaker(self) -> Dict[str, Any]:
+    def _check_circuit_breaker (self) -> Dict[str, Any]:
         """Check circuit breaker status."""
         if not self.system.circuit_breaker:
             return {"healthy": True, "state": "disabled"}
@@ -475,12 +475,12 @@ class HealthChecker:
             "failures": self.system.circuit_breaker.failures
         }
     
-    def _check_cache(self) -> Dict[str, Any]:
+    def _check_cache (self) -> Dict[str, Any]:
         """Check cache status."""
         if not self.system.cache:
             return {"healthy": True, "state": "disabled"}
         
-        size = len(self.system.cache.data)
+        size = len (self.system.cache.data)
         
         return {
             "healthy": True,
@@ -488,7 +488,7 @@ class HealthChecker:
         }
 
 # Usage
-checker = HealthChecker(system)
+checker = HealthChecker (system)
 health = await checker.check_health()
 
 if health["healthy"]:
@@ -520,12 +520,12 @@ class DeploymentManager:
         
         # Start new system (green)
         print("  1. Starting new system...")
-        self.new_system = ProductionMultiAgentSystem(new_config)
+        self.new_system = ProductionMultiAgentSystem (new_config)
         await self.new_system.initialize()
         
         # Health check new system
         print("  2. Health checking new system...")
-        checker = HealthChecker(self.new_system)
+        checker = HealthChecker (self.new_system)
         health = await checker.check_health()
         
         if not health["healthy"]:
@@ -553,7 +553,7 @@ class DeploymentManager:
         print("Starting canary deployment...")
         
         # Start new system
-        self.new_system = ProductionMultiAgentSystem(new_config)
+        self.new_system = ProductionMultiAgentSystem (new_config)
         await self.new_system.initialize()
         
         # Gradually increase traffic
@@ -565,7 +565,7 @@ class DeploymentManager:
             await asyncio.sleep(60)  # Wait 1 minute
             
             # Check health
-            checker = HealthChecker(self.new_system)
+            checker = HealthChecker (self.new_system)
             health = await checker.check_health()
             
             if not health["healthy"]:
@@ -584,7 +584,7 @@ class DeploymentManager:
         
         return True
     
-    async def rollback(self):
+    async def rollback (self):
         """Rollback to old system."""
         print("Rolling back deployment...")
         
@@ -595,7 +595,7 @@ class DeploymentManager:
         self.cutover_percentage = 0
         print("  ✅ Rollback complete")
     
-    def route_request(self, task: Dict) -> ProductionMultiAgentSystem:
+    def route_request (self, task: Dict) -> ProductionMultiAgentSystem:
         """Route request to appropriate system."""
         if not self.new_system:
             return self.old_system
@@ -611,10 +611,10 @@ class DeploymentManager:
 deployment = DeploymentManager()
 
 # Blue-green deployment
-await deployment.blue_green_deploy(new_config)
+await deployment.blue_green_deploy (new_config)
 
 # Or canary deployment
-await deployment.canary_deploy(new_config, steps=[10, 25, 50, 100])
+await deployment.canary_deploy (new_config, steps=[10, 25, 50, 100])
 \`\`\`
 
 ## Monitoring Dashboard
@@ -626,7 +626,7 @@ class MonitoringDashboard:
     def __init__(self, system: ProductionMultiAgentSystem):
         self.system = system
     
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data (self) -> Dict[str, Any]:
         """Get current dashboard data."""
         return {
             "timestamp": time.time(),
@@ -645,7 +645,7 @@ class MonitoringDashboard:
             }
         }
     
-    def print_dashboard(self):
+    def print_dashboard (self):
         """Print dashboard to console."""
         data = self.get_dashboard_data()
         
@@ -671,7 +671,7 @@ print(f"  Failures: {data['circuit_breaker']['failures']}")
 print("=" * 60)
 
 # Usage
-dashboard = MonitoringDashboard(system)
+dashboard = MonitoringDashboard (system)
 dashboard.print_dashboard()
 \`\`\`
 
@@ -682,7 +682,7 @@ class ProductionChecklist:
     """Verify system is production-ready."""
     
     @staticmethod
-    def verify_readiness(system: ProductionMultiAgentSystem) -> Dict[str, bool]:
+    def verify_readiness (system: ProductionMultiAgentSystem) -> Dict[str, bool]:
         """Check production readiness."""
         checks = {
             "logging_enabled": system.logger is not None,
@@ -695,7 +695,7 @@ class ProductionChecklist:
             "health_checks": True  # Would check if health endpoint exists
         }
         
-        all_passed = all(checks.values())
+        all_passed = all (checks.values())
         
         return {
             "ready": all_passed,
@@ -703,7 +703,7 @@ class ProductionChecklist:
         }
 
 # Usage
-readiness = ProductionChecklist.verify_readiness(system)
+readiness = ProductionChecklist.verify_readiness (system)
 
 if readiness["ready"]:
     print("✅ System is production-ready")

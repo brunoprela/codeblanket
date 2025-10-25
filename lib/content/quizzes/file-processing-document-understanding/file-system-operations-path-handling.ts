@@ -24,11 +24,11 @@ export const filesystemoperationspathhandlingQuiz = [
       'When processing large files for LLM applications (e.g., analyzing a 500MB log file), what strategies would you use to avoid memory issues? Compare different approaches with code examples.',
     hint: 'Consider loading the entire file into memory versus streaming approaches, and memory limits.',
     sampleAnswer:
-      'For large files, avoid loading the entire content into memory with read_text() or read(). Instead, use streaming approaches: (1) Line-by-line iteration using "for line in file:" which reads one line at a time, (2) Chunk reading with read(chunk_size) in a loop, (3) Memory-mapped files with mmap for random access without loading into RAM. For LLM applications, you might process files in chunks, send each chunk to the LLM separately, and aggregate results. For a 500MB log file, reading line-by-line uses constant memory (~1 line worth) versus 500MB if loaded all at once. Use generators to process data lazily without materializing everything in memory.',
+      'For large files, avoid loading the entire content into memory with read_text() or read(). Instead, use streaming approaches: (1) Line-by-line iteration using "for line in file:" which reads one line at a time, (2) Chunk reading with read (chunk_size) in a loop, (3) Memory-mapped files with mmap for random access without loading into RAM. For LLM applications, you might process files in chunks, send each chunk to the LLM separately, and aggregate results. For a 500MB log file, reading line-by-line uses constant memory (~1 line worth) versus 500MB if loaded all at once. Use generators to process data lazily without materializing everything in memory.',
     keyPoints: [
       'Never use read_text() or read() for large files',
       'Stream line-by-line: "for line in file:" uses constant memory',
-      'Chunk reading: read(chunk_size) for binary or text chunks',
+      'Chunk reading: read (chunk_size) for binary or text chunks',
       'Memory-mapped files (mmap) for random access patterns',
       'Process and aggregate results incrementally',
     ],

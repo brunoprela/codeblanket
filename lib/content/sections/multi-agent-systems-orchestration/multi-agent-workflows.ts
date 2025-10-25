@@ -79,14 +79,14 @@ class StateMachineWorkflow:
             self.transitions[from_state] = []
         
         self.transitions[from_state].append(
-            StateTransition(from_state, to_state, condition, action)
+            StateTransition (from_state, to_state, condition, action)
         )
     
-    def register_handler(self, state: WorkflowState, handler: Callable):
+    def register_handler (self, state: WorkflowState, handler: Callable):
         """Register handler for a state."""
         self.state_handlers[state] = handler
     
-    async def execute(self, initial_context: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute (self, initial_context: Dict[str, Any]) -> Dict[str, Any]:
         """Execute workflow."""
         self.context = initial_context.copy()
         
@@ -96,7 +96,7 @@ class StateMachineWorkflow:
             # Execute handler for current state
             if self.current_state in self.state_handlers:
                 handler = self.state_handlers[self.current_state]
-                self.context = await handler(self.context)
+                self.context = await handler (self.context)
             
             # Find next state
             next_state = await self._find_next_state()
@@ -107,7 +107,7 @@ class StateMachineWorkflow:
                 break
             
             # Transition to next state
-            await self._transition_to(next_state)
+            await self._transition_to (next_state)
         
         return {
             "final_state": self.current_state,
@@ -115,42 +115,42 @@ class StateMachineWorkflow:
             "history": [s.value for s in self.state_history]
         }
     
-    async def _find_next_state(self) -> Optional[WorkflowState]:
+    async def _find_next_state (self) -> Optional[WorkflowState]:
         """Find next state based on transitions."""
-        transitions = self.transitions.get(self.current_state, [])
+        transitions = self.transitions.get (self.current_state, [])
         
         for transition in transitions:
             # Check condition if exists
-            if transition.condition is None or await self._check_condition(transition.condition):
+            if transition.condition is None or await self._check_condition (transition.condition):
                 # Execute action if exists
                 if transition.action:
-                    await transition.action(self.context)
+                    await transition.action (self.context)
                 
                 return transition.to_state
         
         return None
     
-    async def _check_condition(self, condition: Callable) -> bool:
+    async def _check_condition (self, condition: Callable) -> bool:
         """Check if condition is met."""
-        if asyncio.iscoroutinefunction(condition):
-            return await condition(self.context)
+        if asyncio.iscoroutinefunction (condition):
+            return await condition (self.context)
         else:
-            return condition(self.context)
+            return condition (self.context)
     
-    async def _transition_to(self, new_state: WorkflowState):
+    async def _transition_to (self, new_state: WorkflowState):
         """Transition to new state."""
         print(f"Transitioning: {self.current_state.value} -> {new_state.value}")
         self.current_state = new_state
-        self.state_history.append(new_state)
+        self.state_history.append (new_state)
 
 # Example: Content creation workflow
-async def init_handler(context: Dict) -> Dict:
+async def init_handler (context: Dict) -> Dict:
     """Initialize workflow."""
     print("  [Initializing workflow]")
     context['topic'] = context.get('topic', 'AI')
     return context
 
-async def research_handler(context: Dict) -> Dict:
+async def research_handler (context: Dict) -> Dict:
     """Research phase."""
     print("  [Researcher working...]")
     await asyncio.sleep(1)
@@ -158,14 +158,14 @@ async def research_handler(context: Dict) -> Dict:
     context['research_quality'] = 0.8
     return context
 
-async def plan_handler(context: Dict) -> Dict:
+async def plan_handler (context: Dict) -> Dict:
     """Planning phase."""
     print("  [Planner working...]")
     await asyncio.sleep(0.5)
     context['outline'] = ["Intro", "Body", "Conclusion"]
     return context
 
-async def implement_handler(context: Dict) -> Dict:
+async def implement_handler (context: Dict) -> Dict:
     """Implementation phase."""
     print("  [Writer working...]")
     await asyncio.sleep(1)
@@ -173,7 +173,7 @@ async def implement_handler(context: Dict) -> Dict:
     context['content_quality'] = 0.7
     return context
 
-async def review_handler(context: Dict) -> Dict:
+async def review_handler (context: Dict) -> Dict:
     """Review phase."""
     print("  [Reviewer working...]")
     await asyncio.sleep(0.5)
@@ -181,7 +181,7 @@ async def review_handler(context: Dict) -> Dict:
     context['review_passed'] = quality >= 0.8
     return context
 
-async def revise_handler(context: Dict) -> Dict:
+async def revise_handler (context: Dict) -> Dict:
     """Revise phase."""
     print("  [Revising content...]")
     await asyncio.sleep(0.5)
@@ -240,7 +240,7 @@ class DAGNode:
     id: str
     task: str
     agent: str
-    dependencies: Set[str] = field(default_factory=set)
+    dependencies: Set[str] = field (default_factory=set)
     status: str = "pending"  # pending, running, completed, failed
     result: Any = None
 
@@ -250,74 +250,74 @@ class DAGWorkflow:
     def __init__(self):
         self.nodes: Dict[str, DAGNode] = {}
     
-    def add_node(self, node: DAGNode):
+    def add_node (self, node: DAGNode):
         """Add node to DAG."""
         if node.id in self.nodes:
-            raise ValueError(f"Node {node.id} already exists")
+            raise ValueError (f"Node {node.id} already exists")
         
         self.nodes[node.id] = node
     
-    def add_dependency(self, node_id: str, depends_on: str):
+    def add_dependency (self, node_id: str, depends_on: str):
         """Add dependency between nodes."""
         if node_id not in self.nodes or depends_on not in self.nodes:
             raise ValueError("Both nodes must exist")
         
-        self.nodes[node_id].dependencies.add(depends_on)
+        self.nodes[node_id].dependencies.add (depends_on)
         
         # Check for cycles
         if self._has_cycle():
-            self.nodes[node_id].dependencies.remove(depends_on)
+            self.nodes[node_id].dependencies.remove (depends_on)
             raise ValueError("Adding this dependency creates a cycle")
     
-    def _has_cycle(self) -> bool:
+    def _has_cycle (self) -> bool:
         """Check if DAG has cycles."""
         visited = set()
         rec_stack = set()
         
-        def visit(node_id: str) -> bool:
-            visited.add(node_id)
-            rec_stack.add(node_id)
+        def visit (node_id: str) -> bool:
+            visited.add (node_id)
+            rec_stack.add (node_id)
             
             for dep in self.nodes[node_id].dependencies:
                 if dep not in visited:
-                    if visit(dep):
+                    if visit (dep):
                         return True
                 elif dep in rec_stack:
                     return True
             
-            rec_stack.remove(node_id)
+            rec_stack.remove (node_id)
             return False
         
         for node_id in self.nodes:
             if node_id not in visited:
-                if visit(node_id):
+                if visit (node_id):
                     return True
         
         return False
     
-    async def execute(self, agents: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute (self, agents: Dict[str, Any]) -> Dict[str, Any]:
         """Execute DAG workflow."""
         completed = set()
         
-        while len(completed) < len(self.nodes):
+        while len (completed) < len (self.nodes):
             # Find nodes ready to execute
-            ready = self._get_ready_nodes(completed)
+            ready = self._get_ready_nodes (completed)
             
             if not ready:
                 # Check for failures
                 failed = [n for n in self.nodes.values() if n.status == "failed"]
                 if failed:
-                    raise RuntimeError(f"Workflow failed: {[n.id for n in failed]}")
+                    raise RuntimeError (f"Workflow failed: {[n.id for n in failed]}")
                 else:
                     raise RuntimeError("Workflow stuck - possible circular dependency")
             
             # Execute ready nodes in parallel
-            await self._execute_nodes(ready, agents)
+            await self._execute_nodes (ready, agents)
             
             # Mark as completed
             for node in ready:
                 if node.status == "completed":
-                    completed.add(node.id)
+                    completed.add (node.id)
         
         return {
             "nodes": {
@@ -330,15 +330,15 @@ class DAGWorkflow:
             }
         }
     
-    def _get_ready_nodes(self, completed: Set[str]) -> List[DAGNode]:
+    def _get_ready_nodes (self, completed: Set[str]) -> List[DAGNode]:
         """Get nodes ready to execute."""
         ready = []
         
         for node in self.nodes.values():
             if node.status == "pending":
                 # Check if all dependencies completed
-                if node.dependencies.issubset(completed):
-                    ready.append(node)
+                if node.dependencies.issubset (completed):
+                    ready.append (node)
         
         return ready
     
@@ -352,13 +352,13 @@ class DAGWorkflow:
         
         for node in nodes:
             node.status = "running"
-            tasks.append(self._execute_node(node, agents))
+            tasks.append (self._execute_node (node, agents))
         
         await asyncio.gather(*tasks, return_exceptions=True)
     
-    async def _execute_node(self, node: DAGNode, agents: Dict[str, Any]):
+    async def _execute_node (self, node: DAGNode, agents: Dict[str, Any]):
         """Execute single node."""
-        agent = agents.get(node.agent)
+        agent = agents.get (node.agent)
         
         if not agent:
             node.status = "failed"
@@ -367,14 +367,14 @@ class DAGWorkflow:
         
         try:
             print(f"[{node.agent}] Executing: {node.task}")
-            result = await agent.execute(node.task)
+            result = await agent.execute (node.task)
             node.status = "completed"
             node.result = result
         except Exception as e:
             node.status = "failed"
-            node.result = str(e)
+            node.result = str (e)
     
-    def visualize(self) -> str:
+    def visualize (self) -> str:
         """Visualize DAG."""
         lines = ["DAG Workflow:", ""]
         
@@ -388,16 +388,16 @@ class DAGWorkflow:
                 "running": "🔄",
                 "completed": "✅",
                 "failed": "❌"
-            }.get(node.status, "?")
+            }.get (node.status, "?")
             
-            deps = ", ".join(node.dependencies) if node.dependencies else "None"
-            lines.append(f"{status_icon} {node.id}: {node.task}")
-            lines.append(f"   Agent: {node.agent}, Dependencies: {deps}")
+            deps = ", ".join (node.dependencies) if node.dependencies else "None"
+            lines.append (f"{status_icon} {node.id}: {node.task}")
+            lines.append (f"   Agent: {node.agent}, Dependencies: {deps}")
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
-    def _topological_sort(self) -> List[str]:
+    def _topological_sort (self) -> List[str]:
         """Topological sort of nodes."""
         in_degree = {node_id: 0 for node_id in self.nodes}
         
@@ -410,14 +410,14 @@ class DAGWorkflow:
         
         while queue:
             node_id = queue.pop(0)
-            result.append(node_id)
+            result.append (node_id)
             
             # Reduce in-degree for dependent nodes
             for other_id, other_node in self.nodes.items():
                 if node_id in other_node.dependencies:
                     in_degree[other_id] -= 1
                     if in_degree[other_id] == 0:
-                        queue.append(other_id)
+                        queue.append (other_id)
         
         return result
 
@@ -452,7 +452,7 @@ agents = {
     "tester": Agent("Tester", lambda t: f"Tests: {t}")
 }
 
-result = await dag.execute(agents)
+result = await dag.execute (agents)
 \`\`\`
 
 ## Pipeline Workflows
@@ -475,12 +475,12 @@ class PipelineWorkflow:
         self.stages = stages
         self.stage_results: List[Dict] = []
     
-    async def execute(self, initial_input: Any) -> Dict[str, Any]:
+    async def execute (self, initial_input: Any) -> Dict[str, Any]:
         """Execute pipeline."""
         current_input = initial_input
         
-        for i, stage in enumerate(self.stages):
-            print(f"\\nStage {i+1}/{len(self.stages)}: {stage.name}")
+        for i, stage in enumerate (self.stages):
+            print(f"\\nStage {i+1}/{len (self.stages)}: {stage.name}")
             
             # Execute stage with retries
             result = await self._execute_stage_with_retry(
@@ -489,7 +489,7 @@ class PipelineWorkflow:
             )
             
             # Store result
-            self.stage_results.append(result)
+            self.stage_results.append (result)
             
             # Check if stage succeeded
             if not result['success']:
@@ -520,11 +520,11 @@ class PipelineWorkflow:
         while attempts < max_attempts:
             try:
                 # Execute agent
-                output = await stage.agent.execute(input)
+                output = await stage.agent.execute (input)
                 
                 # Validate if validator exists
                 if stage.validator:
-                    is_valid = await self._validate(stage.validator, output)
+                    is_valid = await self._validate (stage.validator, output)
                     if not is_valid:
                         if attempts < max_attempts - 1:
                             print(f"  Validation failed, retrying...")
@@ -554,25 +554,25 @@ class PipelineWorkflow:
                     return {
                         "stage": stage.name,
                         "success": False,
-                        "error": str(e),
+                        "error": str (e),
                         "output": None
                     }
     
-    async def _validate(self, validator: Callable, output: Any) -> bool:
+    async def _validate (self, validator: Callable, output: Any) -> bool:
         """Run validator."""
-        if asyncio.iscoroutinefunction(validator):
-            return await validator(output)
+        if asyncio.iscoroutinefunction (validator):
+            return await validator (output)
         else:
-            return validator(output)
+            return validator (output)
 
 # Example: Content pipeline with validation
-def validate_research(research: str) -> bool:
+def validate_research (research: str) -> bool:
     """Validate research quality."""
-    return len(research) > 100  # Simple check
+    return len (research) > 100  # Simple check
 
-def validate_article(article: str) -> bool:
+def validate_article (article: str) -> bool:
     """Validate article quality."""
-    return len(article) > 200 and "." in article
+    return len (article) > 200 and "." in article
 
 pipeline = PipelineWorkflow([
     PipelineStage(
@@ -622,18 +622,18 @@ class LoopWorkflow:
         self.max_iterations = max_iterations
         self.quality_threshold = quality_threshold
     
-    async def execute(self, task: str) -> Dict[str, Any]:
+    async def execute (self, task: str) -> Dict[str, Any]:
         """Execute iterative workflow."""
         iterations = []
         
         # Initial generation
-        current_output = await self.generator.execute(task)
+        current_output = await self.generator.execute (task)
         
-        for i in range(self.max_iterations):
+        for i in range (self.max_iterations):
             print(f"\\nIteration {i+1}/{self.max_iterations}")
             
             # Evaluate
-            evaluation = await self.evaluator.execute(current_output)
+            evaluation = await self.evaluator.execute (current_output)
             quality = evaluation.get('score', 0)
             
             iterations.append({
@@ -673,15 +673,15 @@ class LoopWorkflow:
 # Example: Iterative article refinement
 class Generator:
     name = "Generator"
-    async def execute(self, task: str) -> str:
+    async def execute (self, task: str) -> str:
         return f"Draft article on {task}: Basic content..."
 
 class Evaluator:
     name = "Evaluator"
-    async def execute(self, output: str) -> Dict:
+    async def execute (self, output: str) -> Dict:
         # Simulate evaluation
         import random
-        score = min(1.0, len(output) / 500 + random.random() * 0.2)
+        score = min(1.0, len (output) / 500 + random.random() * 0.2)
         return {
             "score": score,
             "feedback": "Add more detail" if score < 0.8 else "Good"
@@ -689,7 +689,7 @@ class Evaluator:
 
 class Refiner:
     name = "Refiner"
-    async def execute(self, data: Dict) -> str:
+    async def execute (self, data: Dict) -> str:
         output = data['output']
         feedback = data['feedback']
         # Simulate refinement
@@ -705,7 +705,7 @@ loop_workflow = LoopWorkflow(
 
 result = await loop_workflow.execute("quantum computing")
 print(f"\\nSuccess: {result['success']}")
-print(f"Iterations: {len(result['iterations'])}")
+print(f"Iterations: {len (result['iterations'])}")
 print(f"Final quality: {result['iterations'][-1]['quality']:.2f}")
 \`\`\`
 
@@ -720,7 +720,7 @@ class ConditionalWorkflow:
     def __init__(self):
         self.branches: Dict[str, Callable] = {}
     
-    def add_branch(self, name: str, handler: Callable):
+    def add_branch (self, name: str, handler: Callable):
         """Add a branch handler."""
         self.branches[name] = handler
     
@@ -731,16 +731,16 @@ class ConditionalWorkflow:
     ) -> Dict[str, Any]:
         """Execute workflow with routing."""
         # Determine which branch to take
-        branch_name = await router(input)
+        branch_name = await router (input)
         
         print(f"Routing to branch: {branch_name}")
         
         if branch_name not in self.branches:
-            raise ValueError(f"Branch {branch_name} not found")
+            raise ValueError (f"Branch {branch_name} not found")
         
         # Execute selected branch
         handler = self.branches[branch_name]
-        result = await handler(input)
+        result = await handler (input)
         
         return {
             "branch_taken": branch_name,
@@ -748,7 +748,7 @@ class ConditionalWorkflow:
         }
 
 # Example: Content type routing
-async def determine_content_type(request: Dict) -> str:
+async def determine_content_type (request: Dict) -> str:
     """Route based on content type."""
     content_type = request.get('type', 'article')
     
@@ -761,15 +761,15 @@ async def determine_content_type(request: Dict) -> str:
     else:
         return 'default_branch'
 
-async def code_branch_handler(request: Dict) -> str:
+async def code_branch_handler (request: Dict) -> str:
     print("  [Code workflow: Research -> Code -> Test]")
     return "Code generated"
 
-async def article_branch_handler(request: Dict) -> str:
+async def article_branch_handler (request: Dict) -> str:
     print("  [Article workflow: Research -> Write -> Review]")
     return "Article written"
 
-async def video_branch_handler(request: Dict) -> str:
+async def video_branch_handler (request: Dict) -> str:
     print("  [Video workflow: Script -> Record -> Edit]")
     return "Video created"
 

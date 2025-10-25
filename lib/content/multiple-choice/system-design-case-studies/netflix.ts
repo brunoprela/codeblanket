@@ -36,7 +36,7 @@ export const netflixMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "Netflix's CDN cache hit rate is 95%. What percentage of video requests hit the origin (S3)?",
+      "Netflix\'s CDN cache hit rate is 95%. What percentage of video requests hit the origin (S3)?",
     options: [
       '5% (cache misses)',
       '95% (cache hits also hit origin)',

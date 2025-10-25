@@ -6,14 +6,14 @@ export const featureImportanceInterpretationMultipleChoice = {
       question:
         'What is the main limitation of built-in feature importance from Random Forest models?',
       options: [
-        "It's too slow to compute",
+        "It\'s too slow to compute",
         "It's biased toward high-cardinality features and doesn't work for non-tree models",
         'It only works for classification',
         'It requires labeled data',
       ],
       correctAnswer: 1,
       explanation:
-        "Built-in tree importance (Gini/impurity reduction) is biased toward features with more unique values (high cardinality) and can be misleading with correlated features. It's also specific to tree models. Permutation importance and SHAP are more robust alternatives.",
+        "Built-in tree importance (Gini/impurity reduction) is biased toward features with more unique values (high cardinality) and can be misleading with correlated features. It\'s also specific to tree models. Permutation importance and SHAP are more robust alternatives.",
       difficulty: 'intermediate' as const,
       category: 'Limitations',
     },
@@ -28,7 +28,7 @@ export const featureImportanceInterpretationMultipleChoice = {
       ],
       correctAnswer: 1,
       explanation:
-        "Permutation importance randomly shuffles each feature's values (breaking its relationship with target) and measures how much model performance drops. Large drop = important feature. It's model-agnostic and accounts for feature interactions.",
+        "Permutation importance randomly shuffles each feature's values (breaking its relationship with target) and measures how much model performance drops. Large drop = important feature. It\'s model-agnostic and accounts for feature interactions.",
       difficulty: 'beginner' as const,
       category: 'Methods',
     },

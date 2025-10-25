@@ -45,7 +45,7 @@ export const acidvsbaseMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Basically Available is the correct BASE property being demonstrated. \"Basically Available\" means the system guarantees availability by responding to queries even if it returns stale or incomplete data. In this scenario, European users can still browse the movie catalog during a partition, even though they're seeing slightly outdated information. This is better than the alternative (system being unavailable) for Netflix's use case. Option A and D are ACID properties, not BASE. Option B (Consistency) is actually what's being sacrificed - the nodes don't have the same data, but availability is maintained.",
+      "Basically Available is the correct BASE property being demonstrated. \"Basically Available\" means the system guarantees availability by responding to queries even if it returns stale or incomplete data. In this scenario, European users can still browse the movie catalog during a partition, even though they're seeing slightly outdated information. This is better than the alternative (system being unavailable) for Netflix\'s use case. Option A and D are ACID properties, not BASE. Option B (Consistency) is actually what's being sacrificed - the nodes don't have the same data, but availability is maintained.",
   },
   {
     id: 'acid-base-q4',

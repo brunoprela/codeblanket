@@ -142,7 +142,7 @@ app.get('/product/:id', async (req, res) => {
   res.json({
     ...product,
     reviews: reviews,
-    displayPrice: formatCurrency(product.price)  // Web-specific formatting
+    displayPrice: formatCurrency (product.price)  // Web-specific formatting
   });
 });
 \`\`\`
@@ -191,7 +191,7 @@ server.listen(4000);
 
 \`\`\`graphql
 query {
-  user(id: "123") {
+  user (id: "123") {
     name
     orders {           # From orders service
       product {        # From products service
@@ -268,7 +268,7 @@ spec:
 const jwt = require('jsonwebtoken');
 
 // Middleware
-async function authenticate(req, res, next) {
+async function authenticate (req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   
   if (!token) {
@@ -276,7 +276,7 @@ async function authenticate(req, res, next) {
   }
   
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify (token, process.env.JWT_SECRET);
     req.user = decoded;
     
     // Add user context to downstream services
@@ -392,7 +392,7 @@ app.get('/users/:id', async (req, res) => {
     }
     
     // Return as JSON
-    res.json(response);
+    res.json (response);
   });
 });
 \`\`\`
@@ -403,21 +403,21 @@ app.get('/users/:id', async (req, res) => {
 const redis = require('redis');
 const client = redis.createClient();
 
-async function cacheMiddleware(req, res, next) {
+async function cacheMiddleware (req, res, next) {
   const cacheKey = \`cache:\${req.method}:\${req.url}\`;
   
   // Check cache
-  const cached = await client.get(cacheKey);
+  const cached = await client.get (cacheKey);
   if (cached) {
-    return res.json(JSON.parse(cached));
+    return res.json(JSON.parse (cached));
   }
   
   // Override res.json to cache response
   const originalJson = res.json;
-  res.json = function(data) {
+  res.json = function (data) {
     // Cache for 5 minutes
-    client.setex(cacheKey, 300, JSON.stringify(data));
-    originalJson.call(this, data);
+    client.setex (cacheKey, 300, JSON.stringify (data));
+    originalJson.call (this, data);
   };
   
   next();
@@ -426,7 +426,7 @@ async function cacheMiddleware(req, res, next) {
 // Cache GET requests
 app.get('/products', cacheMiddleware, async (req, res) => {
   const products = await fetch('http://product-service/products');
-  res.json(await products.json());
+  res.json (await products.json());
 });
 \`\`\`
 
@@ -457,8 +457,8 @@ breaker.fallback(() => ({
 
 app.get('/users/:id', async (req, res) => {
   try {
-    const user = await breaker.fire(req.params.id);
-    res.json(user);
+    const user = await breaker.fire (req.params.id);
+    res.json (user);
   } catch (error) {
     res.status(503).json({ error: 'Service unavailable' });
   }
@@ -472,7 +472,7 @@ const morgan = require('morgan');
 const prometheus = require('prom-client');
 
 // HTTP request logger
-app.use(morgan('combined'));
+app.use (morgan('combined'));
 
 // Prometheus metrics
 const httpRequestDuration = new prometheus.Histogram({
@@ -490,7 +490,7 @@ app.use((req, res, next) => {
       req.method,
       req.route?.path || req.path,
       res.statusCode
-    ).observe(duration);
+    ).observe (duration);
   });
   
   next();
@@ -499,7 +499,7 @@ app.use((req, res, next) => {
 // Metrics endpoint
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', prometheus.register.contentType);
-  res.end(await prometheus.register.metrics());
+  res.end (await prometheus.register.metrics());
 });
 \`\`\`
 
@@ -601,7 +601,7 @@ app.get('/orders/:id', async (req, res) => {
     return res.status(403).json({ error: 'Premium users only' });
   }
   
-  res.json(order);
+  res.json (order);
 });
 \`\`\`
 
@@ -622,12 +622,12 @@ const express = require('express');
 const app = express();
 
 // Authentication
-app.use(authenticate);
+app.use (authenticate);
 
 // Product search (cached, public)
 app.get('/search', cache(60), rateLimit(1000), async (req, res) => {
   const results = await fetch(\`http://search-service/search?q=\${req.query.q}\`);
-  res.json(await results.json());
+  res.json (await results.json());
 });
 
 // User dashboard (aggregated, authenticated)
@@ -650,7 +650,7 @@ app.post('/checkout', rateLimit(10), async (req, res) => {
   // Orchestrate checkout across services
   const payment = await fetch('http://payment-service/charge', {
     method: 'POST',
-    body: JSON.stringify(req.body)
+    body: JSON.stringify (req.body)
   });
   
   if (!payment.ok) {
@@ -662,7 +662,7 @@ app.post('/checkout', rateLimit(10), async (req, res) => {
     body: JSON.stringify({ userId: req.user.id, ...req.body })
   });
   
-  res.json(await order.json());
+  res.json (await order.json());
 });
 
 app.listen(80);

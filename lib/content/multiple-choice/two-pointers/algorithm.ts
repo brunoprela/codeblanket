@@ -32,7 +32,7 @@ export const algorithmMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc3',
     question:
       'In the remove duplicates algorithm, what is the initial value of the slow pointer?',
-    options: ['-1', '0', '1', 'len(array) - 1'],
+    options: ['-1', '0', '1', 'len (array) - 1'],
     correctAnswer: 1,
     explanation:
       'The slow pointer starts at 0 (the first element) since the first element is always unique. The fast pointer typically starts at 1 to begin comparing.',

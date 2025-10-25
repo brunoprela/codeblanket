@@ -16,7 +16,7 @@ export const templatesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      '1D template: 1) Create dp[n+1], 2) Base case dp[0], 3) for i in 1..n: dp[i] = f(dp[i-1], dp[i-2],...), 4) return dp[n]. Works for most 1D problems.',
+      '1D template: 1) Create dp[n+1], 2) Base case dp[0], 3) for i in 1..n: dp[i] = f (dp[i-1], dp[i-2],...), 4) return dp[n]. Works for most 1D problems.',
   },
   {
     id: 'mc2',
@@ -29,7 +29,7 @@ export const templatesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      '2D template: 1) Create dp[m][n], 2) Base: dp[0][j] and dp[i][0], 3) for i,j: dp[i][j] = f(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]), 4) return dp[m-1][n-1] or max.',
+      '2D template: 1) Create dp[m][n], 2) Base: dp[0][j] and dp[i][0], 3) for i,j: dp[i][j] = f (dp[i-1][j], dp[i][j-1], dp[i-1][j-1]), 4) return dp[m-1][n-1] or max.',
   },
   {
     id: 'mc3',
@@ -42,20 +42,20 @@ export const templatesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Memoization template: def solve(params, memo={}): if base_case: return value; if params in memo: return memo[params]; result = recurse; memo[params] = result; return result.',
+      'Memoization template: def solve (params, memo={}): if base_case: return value; if params in memo: return memo[params]; result = recurse; memo[params] = result; return result.',
   },
   {
     id: 'mc4',
     question: 'What is the knapsack template?',
     options: [
       'Random',
-      'dp[i][w] = max value with i items, capacity w. For each item: max(take, skip)',
+      'dp[i][w] = max value with i items, capacity w. For each item: max (take, skip)',
       'Sorting only',
       'No template',
     ],
     correctAnswer: 1,
     explanation:
-      'Knapsack: dp[i][w] for i items, capacity w. Recurrence: dp[i][w] = max(dp[i-1][w] skip, dp[i-1][w-weight[i]]+value[i] take). Return dp[n][W].',
+      'Knapsack: dp[i][w] for i items, capacity w. Recurrence: dp[i][w] = max (dp[i-1][w] skip, dp[i-1][w-weight[i]]+value[i] take). Return dp[n][W].',
   },
   {
     id: 'mc5',

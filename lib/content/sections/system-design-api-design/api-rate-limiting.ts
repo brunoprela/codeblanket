@@ -34,14 +34,14 @@ Count requests in fixed time windows:
 const redis = require('redis');
 const client = redis.createClient();
 
-async function fixedWindowRateLimit(userId, limit, windowSeconds) {
+async function fixedWindowRateLimit (userId, limit, windowSeconds) {
   const key = \`ratelimit:\${userId}:\${Math.floor(Date.now() / 1000 / windowSeconds)}\`;
   
-  const current = await client.incr(key);
+  const current = await client.incr (key);
   
   if (current === 1) {
     // First request in window, set expiry
-    await client.expire(key, windowSeconds);
+    await client.expire (key, windowSeconds);
   }
   
   if (current > limit) {
@@ -76,29 +76,29 @@ Result: 200 requests in 1 second! 💥
 Track timestamp of each request:
 
 \`\`\`javascript
-async function slidingWindowLogRateLimit(userId, limit, windowMs) {
+async function slidingWindowLogRateLimit (userId, limit, windowMs) {
   const key = \`ratelimit:log:\${userId}\`;
   const now = Date.now();
   const windowStart = now - windowMs;
   
   // Remove old entries
-  await client.zremrangebyscore(key, 0, windowStart);
+  await client.zremrangebyscore (key, 0, windowStart);
   
   // Count requests in window
-  const count = await client.zcard(key);
+  const count = await client.zcard (key);
   
   if (count >= limit) {
     return {
       allowed: false,
       remaining: 0,
-      resetAt: await client.zrange(key, 0, 0, 'WITHSCORES')
-        .then(([_, timestamp]) => parseInt(timestamp) + windowMs)
+      resetAt: await client.zrange (key, 0, 0, 'WITHSCORES')
+        .then(([_, timestamp]) => parseInt (timestamp) + windowMs)
     };
   }
   
   // Add current request
-  await client.zadd(key, now, \`\${now}-\${Math.random()}\`);
-  await client.expire(key, Math.ceil(windowMs / 1000));
+  await client.zadd (key, now, \`\${now}-\${Math.random()}\`);
+  await client.expire (key, Math.ceil (windowMs / 1000));
   
   return {
     allowed: true,
@@ -117,17 +117,17 @@ async function slidingWindowLogRateLimit(userId, limit, windowMs) {
 Best of both worlds:
 
 \`\`\`javascript
-async function slidingWindowCounter(userId, limit, windowSeconds) {
+async function slidingWindowCounter (userId, limit, windowSeconds) {
   const now = Date.now() / 1000;
-  const currentWindow = Math.floor(now / windowSeconds);
+  const currentWindow = Math.floor (now / windowSeconds);
   const previousWindow = currentWindow - 1;
   
   const currentKey = \`ratelimit:\${userId}:\${currentWindow}\`;
   const previousKey = \`ratelimit:\${userId}:\${previousWindow}\`;
   
   // Get counts
-  const currentCount = parseInt(await client.get(currentKey) || '0');
-  const previousCount = parseInt(await client.get(previousKey) || '0');
+  const currentCount = parseInt (await client.get (currentKey) || '0');
+  const previousCount = parseInt (await client.get (previousKey) || '0');
   
   // Calculate weighted count based on time elapsed in current window
   const percentageInCurrent = (now % windowSeconds) / windowSeconds;
@@ -143,12 +143,12 @@ async function slidingWindowCounter(userId, limit, windowSeconds) {
   }
   
   // Increment current window
-  await client.incr(currentKey);
-  await client.expire(currentKey, windowSeconds * 2);
+  await client.incr (currentKey);
+  await client.expire (currentKey, windowSeconds * 2);
   
   return {
     allowed: true,
-    remaining: Math.floor(limit - weightedCount - 1),
+    remaining: Math.floor (limit - weightedCount - 1),
     resetAt: (currentWindow + 1) * windowSeconds
   };
 }
@@ -165,14 +165,14 @@ async function slidingWindowCounter(userId, limit, windowSeconds) {
 Tokens replenish at fixed rate:
 
 \`\`\`javascript
-async function tokenBucketRateLimit(userId, capacity, refillRate) {
+async function tokenBucketRateLimit (userId, capacity, refillRate) {
   const key = \`ratelimit:bucket:\${userId}\`;
   
-  const data = await client.get(key);
+  const data = await client.get (key);
   let tokens, lastRefill;
   
   if (data) {
-    ({ tokens, lastRefill } = JSON.parse(data));
+    ({ tokens, lastRefill } = JSON.parse (data));
   } else {
     tokens = capacity;
     lastRefill = Date.now();
@@ -182,7 +182,7 @@ async function tokenBucketRateLimit(userId, capacity, refillRate) {
   const now = Date.now();
   const elapsed = (now - lastRefill) / 1000;
   const tokensToAdd = elapsed * refillRate;
-  tokens = Math.min(capacity, tokens + tokensToAdd);
+  tokens = Math.min (capacity, tokens + tokensToAdd);
   
   if (tokens < 1) {
     return {
@@ -195,14 +195,14 @@ async function tokenBucketRateLimit(userId, capacity, refillRate) {
   // Consume 1 token
   tokens -= 1;
   
-  await client.set(key, JSON.stringify({
+  await client.set (key, JSON.stringify({
     tokens,
     lastRefill: now
   }), 'EX', 3600);
   
   return {
     allowed: true,
-    remaining: Math.floor(tokens),
+    remaining: Math.floor (tokens),
     retryAfter: null
   };
 }
@@ -220,26 +220,26 @@ await tokenBucketRateLimit('user123', 100, 10);
 Process requests at fixed rate, queue overflow:
 
 \`\`\`javascript
-async function leakyBucketRateLimit(userId, capacity, leakRate) {
+async function leakyBucketRateLimit (userId, capacity, leakRate) {
   const queueKey = \`ratelimit:queue:\${userId}\`;
   const lastLeakKey = \`ratelimit:lastleak:\${userId}\`;
   
   // Get current queue size
-  let queueSize = await client.llen(queueKey);
-  const lastLeak = parseInt(await client.get(lastLeakKey) || Date.now());
+  let queueSize = await client.llen (queueKey);
+  const lastLeak = parseInt (await client.get (lastLeakKey) || Date.now());
   
   // Leak tokens based on time elapsed
   const now = Date.now();
   const elapsed = (now - lastLeak) / 1000;
-  const tokensToLeak = Math.floor(elapsed * leakRate);
+  const tokensToLeak = Math.floor (elapsed * leakRate);
   
   if (tokensToLeak > 0) {
-    const leaked = Math.min(tokensToLeak, queueSize);
+    const leaked = Math.min (tokensToLeak, queueSize);
     for (let i = 0; i < leaked; i++) {
-      await client.rpop(queueKey);
+      await client.rpop (queueKey);
     }
     queueSize -= leaked;
-    await client.set(lastLeakKey, now);
+    await client.set (lastLeakKey, now);
   }
   
   if (queueSize >= capacity) {
@@ -250,8 +250,8 @@ async function leakyBucketRateLimit(userId, capacity, leakRate) {
   }
   
   // Add request to queue
-  await client.lpush(queueKey, now);
-  await client.expire(queueKey, 3600);
+  await client.lpush (queueKey, now);
+  await client.expire (queueKey, 3600);
   
   return {
     allowed: true,
@@ -269,10 +269,10 @@ async function leakyBucketRateLimit(userId, capacity, leakRate) {
 ### **1. Per-User Rate Limiting**
 
 \`\`\`javascript
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
   const userId = req.user?.id || req.ip;
   
-  const result = await slidingWindowCounter(userId, 1000, 3600); // 1000/hour
+  const result = await slidingWindowCounter (userId, 1000, 3600); // 1000/hour
   
   res.set({
     'X-RateLimit-Limit': 1000,
@@ -302,11 +302,11 @@ const RATE_LIMITS = {
   premium: { requests: 10000, window: 3600 }
 };
 
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
   const plan = req.user?.plan || 'free';
   const { requests, window } = RATE_LIMITS[plan];
   
-  const result = await slidingWindowCounter(req.user.id, requests, window);
+  const result = await slidingWindowCounter (req.user.id, requests, window);
   
   if (!result.allowed) {
     return res.status(429).json({
@@ -362,11 +362,11 @@ const OPERATION_COSTS = {
   'GET /reports': 100
 };
 
-async function costBasedRateLimit(userId, operation, budget) {
+async function costBasedRateLimit (userId, operation, budget) {
   const cost = OPERATION_COSTS[operation] || 1;
   const key = \`ratelimit:cost:\${userId}\`;
   
-  const spent = parseInt(await client.get(key) || '0');
+  const spent = parseInt (await client.get (key) || '0');
   
   if (spent + cost > budget) {
     return {
@@ -377,8 +377,8 @@ async function costBasedRateLimit(userId, operation, budget) {
     };
   }
   
-  await client.incrby(key, cost);
-  await client.expire(key, 3600);  // Reset hourly
+  await client.incrby (key, cost);
+  await client.expire (key, 3600);  // Reset hourly
   
   return {
     allowed: true,
@@ -388,9 +388,9 @@ async function costBasedRateLimit(userId, operation, budget) {
   };
 }
 
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
   const operation = \`\${req.method} \${req.route.path}\`;
-  const result = await costBasedRateLimit(req.user.id, operation, 10000);
+  const result = await costBasedRateLimit (req.user.id, operation, 10000);
   
   if (!result.allowed) {
     return res.status(429).json({
@@ -412,13 +412,13 @@ Limit simultaneous requests:
 \`\`\`javascript
 const activeSemaphores = new Map();
 
-async function concurrentLimiter(userId, maxConcurrent) {
+async function concurrentLimiter (userId, maxConcurrent) {
   const key = \`ratelimit:concurrent:\${userId}\`;
   
-  const current = await client.incr(key);
+  const current = await client.incr (key);
   
   if (current > maxConcurrent) {
-    await client.decr(key);
+    await client.decr (key);
     return {
       allowed: false,
       current: current - 1,
@@ -426,20 +426,20 @@ async function concurrentLimiter(userId, maxConcurrent) {
     };
   }
   
-  await client.expire(key, 300);  // Safety: expire after 5 min
+  await client.expire (key, 300);  // Safety: expire after 5 min
   
   return {
     allowed: true,
     current,
     max: maxConcurrent,
     release: async () => {
-      await client.decr(key);
+      await client.decr (key);
     }
   };
 }
 
-app.use(async (req, res, next) => {
-  const limiter = await concurrentLimiter(req.user.id, 10);
+app.use (async (req, res, next) => {
+  const limiter = await concurrentLimiter (req.user.id, 10);
   
   if (!limiter.allowed) {
     return res.status(429).json({
@@ -462,8 +462,8 @@ app.use(async (req, res, next) => {
 Standard rate limit headers:
 
 \`\`\`javascript
-app.use(async (req, res, next) => {
-  const result = await rateLimit(req.user.id);
+app.use (async (req, res, next) => {
+  const result = await rateLimit (req.user.id);
   
   // Standard headers (GitHub, Stripe, Twitter use these)
   res.set({
@@ -523,7 +523,7 @@ else
 end
 \`;
 
-async function distributedRateLimit(userId, limit, window) {
+async function distributedRateLimit (userId, limit, window) {
   const key = \`ratelimit:\${userId}:\${Math.floor(Date.now() / 1000 / window)}\`;
   
   const [allowed, max, remaining, ttl] = await redis.eval(
@@ -568,10 +568,10 @@ async function distributedRateLimit(userId, limit, window) {
 ### **Exponential Backoff with Jitter**
 
 \`\`\`javascript
-async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+async function fetchWithRetry (url, options = {}, maxRetries = 3) {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const response = await fetch(url, options);
+      const response = await fetch (url, options);
       
       if (response.status === 429) {
         const retryAfter = response.headers.get('Retry-After');
@@ -582,10 +582,10 @@ async function fetchWithRetry(url, options = {}, maxRetries = 3) {
           
           if (retryAfter) {
             // Use server-provided retry-after
-            delay = parseInt(retryAfter) * 1000;
+            delay = parseInt (retryAfter) * 1000;
           } else if (resetAt) {
             // Calculate delay until reset
-            delay = (parseInt(resetAt) * 1000) - Date.now();
+            delay = (parseInt (resetAt) * 1000) - Date.now();
           } else {
             // Exponential backoff with jitter
             const baseDelay = Math.pow(2, attempt) * 1000;
@@ -594,7 +594,7 @@ async function fetchWithRetry(url, options = {}, maxRetries = 3) {
           }
           
           console.log(\`Rate limited. Retrying in \${delay}ms...\`);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise (resolve => setTimeout (resolve, delay));
           continue;
         }
       }
@@ -620,15 +620,15 @@ const WHITELISTED_USERS = new Set([
   'monitoring-service'
 ]);
 
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
   // Check whitelist
-  if (WHITELISTED_IPS.has(req.ip) || 
-      WHITELISTED_USERS.has(req.user?.id)) {
+  if (WHITELISTED_IPS.has (req.ip) || 
+      WHITELISTED_USERS.has (req.user?.id)) {
     return next();  // Skip rate limiting
   }
   
   // Apply rate limiting
-  const result = await rateLimit(req.user.id);
+  const result = await rateLimit (req.user.id);
   if (!result.allowed) {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
@@ -655,14 +655,14 @@ const rateLimitUsage = new prometheus.Histogram({
   buckets: [10, 25, 50, 75, 90, 95, 100]
 });
 
-app.use(async (req, res, next) => {
-  const result = await rateLimit(req.user.id);
+app.use (async (req, res, next) => {
+  const result = await rateLimit (req.user.id);
   
   const usagePercent = ((result.used / result.limit) * 100);
-  rateLimitUsage.labels(req.user.plan).observe(usagePercent);
+  rateLimitUsage.labels (req.user.plan).observe (usagePercent);
   
   if (!result.allowed) {
-    rateLimitCounter.labels(req.user.plan, req.route.path).inc();
+    rateLimitCounter.labels (req.user.plan, req.route.path).inc();
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
   

@@ -34,7 +34,7 @@ export const applicationdesignsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      'In Autocomplete, what is the time complexity of input(c) if we precompute top K at each Trie node?',
+      'In Autocomplete, what is the time complexity of input (c) if we precompute top K at each Trie node?',
     options: [
       'O(1)',
       'O(p) where p is prefix length',
@@ -43,7 +43,7 @@ export const applicationdesignsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'With precomputed top K at each node, input(c) only needs to navigate to the prefix in O(p) time, then return the cached top_k list. No need to collect all matches and sort - that work was done during insertion. This optimization makes autocomplete very fast.',
+      'With precomputed top K at each node, input (c) only needs to navigate to the prefix in O(p) time, then return the cached top_k list. No need to collect all matches and sort - that work was done during insertion. This optimization makes autocomplete very fast.',
   },
   {
     id: 'mc4',

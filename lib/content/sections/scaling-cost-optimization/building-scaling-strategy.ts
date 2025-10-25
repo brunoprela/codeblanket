@@ -10,7 +10,7 @@ A scaling strategy is your roadmap from today's scale to 10x, 100x, and beyond. 
 
 - **Technical Architecture**: What changes at each scale?
 - **Cost Modeling**: How much will it cost?
-- **Performance Targets**: What's acceptable?
+- **Performance Targets**: What\'s acceptable?
 - **Operational Procedures**: Who does what?
 - **Timeline**: When do we need each phase?
 

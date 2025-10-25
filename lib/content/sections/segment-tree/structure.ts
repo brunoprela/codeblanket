@@ -37,7 +37,7 @@ tree = [0] * (4 * n)
 
 **Building the Tree:**
 \`\`\`python
-def build(arr, tree, node, start, end):
+def build (arr, tree, node, start, end):
     """Build segment tree recursively"""
     if start == end:
         # Leaf node
@@ -49,8 +49,8 @@ def build(arr, tree, node, start, end):
     right_child = 2 * node + 2
     
     # Build left and right subtrees
-    build(arr, tree, left_child, start, mid)
-    build(arr, tree, right_child, mid + 1, end)
+    build (arr, tree, left_child, start, mid)
+    build (arr, tree, right_child, mid + 1, end)
     
     # Internal node = merge of children
     tree[node] = tree[left_child] + tree[right_child]

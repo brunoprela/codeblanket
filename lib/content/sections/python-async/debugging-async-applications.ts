@@ -31,7 +31,7 @@ async def process():
     print(result)  # "data"
 
 # asyncio debug mode catches this!
-asyncio.run(process(), debug=True)
+asyncio.run (process(), debug=True)
 # Warning: coroutine 'fetch_data' was never awaited
 \`\`\`
 
@@ -61,7 +61,7 @@ import warnings
 # PYTHONASYNCIODEBUG=1 python script.py
 
 # Method 2: In code
-asyncio.run(main(), debug=True)
+asyncio.run (main(), debug=True)
 
 # Method 3: Get event loop
 loop = asyncio.get_event_loop()
@@ -98,7 +98,7 @@ async def pending_exception():
     async def failing_task():
         raise ValueError("Task failed")
     
-    task = asyncio.create_task(failing_task())
+    task = asyncio.create_task (failing_task())
     # Forgot to await task!
 
 async def main():
@@ -107,7 +107,7 @@ async def main():
     await pending_exception()
 
 # Run with debug mode
-asyncio.run(main(), debug=True)
+asyncio.run (main(), debug=True)
 
 # Output warnings:
 # Warning: coroutine 'sleep' was never awaited
@@ -137,16 +137,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def log_async(func):
+def log_async (func):
     """Decorator to log async function execution"""
-    @wraps(func)
+    @wraps (func)
     async def wrapper(*args, **kwargs):
-        task_id = id(asyncio.current_task())
-        logger.info(f"{func.__name__} started", extra={'task_id': task_id})
+        task_id = id (asyncio.current_task())
+        logger.info (f"{func.__name__} started", extra={'task_id': task_id})
         
         try:
             result = await func(*args, **kwargs)
-            logger.info(f"{func.__name__} completed", extra={'task_id': task_id})
+            logger.info (f"{func.__name__} completed", extra={'task_id': task_id})
             return result
         except Exception as e:
             logger.error(
@@ -159,7 +159,7 @@ def log_async(func):
     return wrapper
 
 @log_async
-async def fetch_data(url):
+async def fetch_data (url):
     """Fetch data with logging"""
     await asyncio.sleep(1)
     if 'error' in url:
@@ -173,7 +173,7 @@ async def main():
         return_exceptions=True
     )
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Structured Logging
@@ -189,13 +189,13 @@ import logging
 
 class StructuredLogger:
     def __init__(self, name):
-        self.logger = logging.getLogger(name)
+        self.logger = logging.getLogger (name)
     
-    def log(self, level, message, **context):
+    def log (self, level, message, **context):
         """Log with structured context"""
         task = asyncio.current_task()
         context.update({
-            'task_id': id(task) if task else None,
+            'task_id': id (task) if task else None,
             'task_name': task.get_name() if task else None,
         })
         
@@ -204,14 +204,14 @@ class StructuredLogger:
             'context': context
         }
         
-        self.logger.log(level, json.dumps(log_entry))
+        self.logger.log (level, json.dumps (log_entry))
 
 logger = StructuredLogger(__name__)
 
-async def process_item(item_id):
-    logger.log(logging.INFO, "Processing item", item_id=item_id)
+async def process_item (item_id):
+    logger.log (logging.INFO, "Processing item", item_id=item_id)
     await asyncio.sleep(1)
-    logger.log(logging.INFO, "Item processed", item_id=item_id, status="success")
+    logger.log (logging.INFO, "Item processed", item_id=item_id, status="success")
 
 # Logs are easily parseable for analysis
 \`\`\`
@@ -233,32 +233,32 @@ async def monitor_tasks():
     """Monitor all running tasks"""
     while True:
         tasks = asyncio.all_tasks()
-        print(f"Active tasks: {len(tasks)}")
+        print(f"Active tasks: {len (tasks)}")
         
         for task in tasks:
             print(f"  - {task.get_name()}: {task}")
         
         await asyncio.sleep(5)
 
-async def worker(name, duration):
+async def worker (name, duration):
     """Worker task"""
-    await asyncio.sleep(duration)
+    await asyncio.sleep (duration)
     return f"{name} done"
 
 async def main():
     # Start monitor
-    monitor = asyncio.create_task(monitor_tasks(), name="Monitor")
+    monitor = asyncio.create_task (monitor_tasks(), name="Monitor")
     
     # Start workers
     workers = [
-        asyncio.create_task(worker(f"Worker-{i}", i), name=f"Worker-{i}")
+        asyncio.create_task (worker (f"Worker-{i}", i), name=f"Worker-{i}")
         for i in range(5)
     ]
     
     await asyncio.gather(*workers)
     monitor.cancel()
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Task Stack Traces
@@ -283,7 +283,7 @@ async def debug_stuck_tasks():
                 # Get stack trace
                 stack = task.get_stack()
                 for frame in stack:
-                    traceback.print_stack(frame)
+                    traceback.print_stack (frame)
 
 # Helps identify where tasks are stuck
 \`\`\`
@@ -301,11 +301,11 @@ Catch Silent Background Task Failures
 
 import asyncio
 
-def create_task_with_error_handling(coro, name=None):
+def create_task_with_error_handling (coro, name=None):
     """Create task with automatic error logging"""
-    task = asyncio.create_task(coro, name=name)
+    task = asyncio.create_task (coro, name=name)
     
-    def handle_result(task):
+    def handle_result (task):
         try:
             task.result()
         except asyncio.CancelledError:
@@ -313,7 +313,7 @@ def create_task_with_error_handling(coro, name=None):
         except Exception as e:
             print(f"❌ Task {task.get_name()} failed: {e}")
     
-    task.add_done_callback(handle_result)
+    task.add_done_callback (handle_result)
     return task
 
 async def failing_background_task():
@@ -323,7 +323,7 @@ async def failing_background_task():
 
 async def main():
     # ❌ Bad: Error is silent
-    # task = asyncio.create_task(failing_background_task())
+    # task = asyncio.create_task (failing_background_task())
     
     # ✅ Good: Error is logged
     task = create_task_with_error_handling(
@@ -333,7 +333,7 @@ async def main():
     
     await asyncio.sleep(2)
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -351,9 +351,9 @@ import asyncio
 import time
 from functools import wraps
 
-def profile_async(func):
+def profile_async (func):
     """Profile async function execution time"""
-    @wraps(func)
+    @wraps (func)
     async def wrapper(*args, **kwargs):
         start = time.perf_counter()
         try:
@@ -378,7 +378,7 @@ async def main():
     await slow_operation()
     await fast_operation()
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # slow_operation took 2.001s
@@ -409,7 +409,7 @@ async def slow_callback_detection():
     await good_task()
     await bad_task()  # Will trigger warning in debug mode
 
-asyncio.run(slow_callback_detection(), debug=True)
+asyncio.run (slow_callback_detection(), debug=True)
 \`\`\`
 
 ---
@@ -431,7 +431,7 @@ class AsyncApplication:
         self.tasks = {}
         self.start_time = datetime.now()
     
-    def register_task(self, name, task):
+    def register_task (self, name, task):
         """Register task for monitoring"""
         self.tasks[name] = {
             'task': task,
@@ -439,7 +439,7 @@ class AsyncApplication:
             'status': 'running'
         }
     
-    async def health_check(self):
+    async def health_check (self):
         """Return application health status"""
         return {
             'status': 'healthy',
@@ -474,31 +474,31 @@ from contextvars import ContextVar
 # Context variable for request tracing
 request_id: ContextVar[str] = ContextVar('request_id', default=None)
 
-async def fetch_user(user_id):
+async def fetch_user (user_id):
     """Fetch user with tracing"""
     trace_id = request_id.get()
     print(f"[{trace_id}] Fetching user {user_id}")
     await asyncio.sleep(0.1)
     return {'id': user_id, 'name': 'Alice'}
 
-async def fetch_orders(user_id):
+async def fetch_orders (user_id):
     """Fetch orders with tracing"""
     trace_id = request_id.get()
     print(f"[{trace_id}] Fetching orders for user {user_id}")
     await asyncio.sleep(0.1)
     return [{'id': 1}, {'id': 2}]
 
-async def handle_request(user_id):
+async def handle_request (user_id):
     """Handle request with tracing"""
     # Set request ID for this request
-    trace_id = str(uuid.uuid4())
-    request_id.set(trace_id)
+    trace_id = str (uuid.uuid4())
+    request_id.set (trace_id)
     
     print(f"[{trace_id}] Request started")
     
     user, orders = await asyncio.gather(
-        fetch_user(user_id),
-        fetch_orders(user_id)
+        fetch_user (user_id),
+        fetch_orders (user_id)
     )
     
     print(f"[{trace_id}] Request completed")
@@ -513,7 +513,7 @@ async def handle_request(user_id):
 
 ### Key Debugging Techniques
 
-1. **Debug Mode**: \`asyncio.run(main(), debug=True)\` catches common mistakes
+1. **Debug Mode**: \`asyncio.run (main(), debug=True)\` catches common mistakes
 2. **Logging**: Log task start/end with task IDs
 3. **Task Monitoring**: Track active tasks with \`asyncio.all_tasks()\`
 4. **Error Handling**: Use done callbacks for background tasks

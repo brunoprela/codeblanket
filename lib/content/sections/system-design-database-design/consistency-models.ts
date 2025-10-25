@@ -152,7 +152,7 @@ If operations are concurrent (no causal relationship):
 
 \`\`\`
 Alice: Posts "I'm getting married!" (Event A)
-Alice: Posts "Here's the wedding photo!" (Event B - caused by A)
+Alice: Posts "Here\'s the wedding photo!" (Event B - caused by A)
 
 Causal Consistency guarantees:
 - All users see post A before post B
@@ -361,7 +361,7 @@ Different session S2 (Bob):
 
 ---
 
-## Real-World Example: Amazon's Shopping Cart
+## Real-World Example: Amazon\'s Shopping Cart
 
 **Problem**: User adds items to cart, must see items immediately.
 
@@ -387,7 +387,7 @@ Different session S2 (Bob):
 
 **Bad Answer**: "Eventual consistency because it's faster."
 
-**Good Answer**: "Linearizability (strong consistency) because account balances must be immediately accurate. If Alice transfers $100 to Bob, Bob must see the $100 immediately, and Alice's balance must reflect the deduction. Eventual consistency could cause Alice to spend the same $100 twice. I'd use a system like PostgreSQL with ACID transactions or Google Spanner for distributed strong consistency. The higher latency (50-100ms) is acceptable because correctness is more important than speed for financial transactions."
+**Good Answer**: "Linearizability (strong consistency) because account balances must be immediately accurate. If Alice transfers $100 to Bob, Bob must see the $100 immediately, and Alice\'s balance must reflect the deduction. Eventual consistency could cause Alice to spend the same $100 twice. I'd use a system like PostgreSQL with ACID transactions or Google Spanner for distributed strong consistency. The higher latency (50-100ms) is acceptable because correctness is more important than speed for financial transactions."
 
 ### **Show Depth**
 

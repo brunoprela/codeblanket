@@ -100,22 +100,22 @@ def gaussian_elimination(A, b):
     Solve Ax = b using Gaussian elimination
     Returns solution x
     """
-    n = len(b)
+    n = len (b)
     # Create augmented matrix [A|b]
-    Ab = np.column_stack([A.astype(float), b.astype(float)])
+    Ab = np.column_stack([A.astype (float), b.astype (float)])
     
     print("Augmented matrix [A|b]:")
     print(Ab)
     print()
     
     # Forward elimination
-    for i in range(n):
+    for i in range (n):
         # Find pivot
-        max_row = i + np.argmax(np.abs(Ab[i:, i]))
+        max_row = i + np.argmax (np.abs(Ab[i:, i]))
         Ab[[i, max_row]] = Ab[[max_row, i]]  # Swap rows
         
         # Eliminate below
-        for j in range(i + 1, n):
+        for j in range (i + 1, n):
             factor = Ab[j, i] / Ab[i, i]
             Ab[j, i:] -= factor * Ab[i, i:]
         
@@ -124,8 +124,8 @@ def gaussian_elimination(A, b):
         print()
     
     # Back substitution
-    x = np.zeros(n)
-    for i in range(n-1, -1, -1):
+    x = np.zeros (n)
+    for i in range (n-1, -1, -1):
         x[i] = (Ab[i, -1] - np.dot(Ab[i, i+1:n], x[i+1:n])) / Ab[i, i]
     
     return x
@@ -226,10 +226,10 @@ y_true = 2 * x_data + 1
 y_data = y_true + np.random.randn(20) * 2
 
 # Set up overdetermined system
-A = np.column_stack([x_data, np.ones_like(x_data)])
+A = np.column_stack([x_data, np.ones_like (x_data)])
 b = y_data
 
-print(f"Data points: {len(x_data)}")
+print(f"Data points: {len (x_data)}")
 print(f"Parameters to fit: 2 (slope and intercept)")
 print(f"System shape: {A.shape}")
 print()
@@ -255,10 +255,10 @@ print(f"Residual sum of squares: {residuals[0]:.4f}")
 print(f"Residual norm: {np.linalg.norm(A @ x_lstsq - b):.4f}")
 
 # Visualize
-plt.figure(figsize=(10, 6))
-plt.scatter(x_data, y_data, alpha=0.6, label='Data points')
-plt.plot(x_data, y_true, 'g--', label='True line: y = 2x + 1')
-plt.plot(x_data, A @ x_lstsq, 'r-', linewidth=2, label=f'Fitted: y = {x_lstsq[0]:.2f}x + {x_lstsq[1]:.2f}')
+plt.figure (figsize=(10, 6))
+plt.scatter (x_data, y_data, alpha=0.6, label='Data points')
+plt.plot (x_data, y_true, 'g--', label='True line: y = 2x + 1')
+plt.plot (x_data, A @ x_lstsq, 'r-', linewidth=2, label=f'Fitted: y = {x_lstsq[0]:.2f}x + {x_lstsq[1]:.2f}')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.legend()
@@ -294,7 +294,7 @@ Qtb = Q.T @ b
 x_qr = np.linalg.solve(R, Qtb)
 
 print(f"Solution using QR: {x_qr}")
-print(f"Matches lstsq: {np.allclose(x_qr, x_lstsq)}")
+print(f"Matches lstsq: {np.allclose (x_qr, x_lstsq)}")
 print()
 
 print("Advantages of QR over normal equations:")
@@ -314,14 +314,14 @@ from sklearn.datasets import make_regression
 from sklearn.model_selection import train_test_split
 
 # Generate regression data
-X, y = make_regression(n_samples=100, n_features=5, noise=10, random_state=42)
+X, y = make_regression (n_samples=100, n_features=5, noise=10, random_state=42)
 
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Add intercept term
-X_train_int = np.column_stack([X_train, np.ones(len(X_train))])
-X_test_int = np.column_stack([X_test, np.ones(len(X_test))])
+X_train_int = np.column_stack([X_train, np.ones (len(X_train))])
+X_test_int = np.column_stack([X_test, np.ones (len(X_test))])
 
 # Solve using least squares
 weights = np.linalg.lstsq(X_train_int, y_train, rcond=None)[0]
@@ -331,7 +331,7 @@ y_pred = X_test_int @ weights
 
 # Evaluate
 mse = np.mean((y_pred - y_test)**2)
-r2 = 1 - np.sum((y_test - y_pred)**2) / np.sum((y_test - np.mean(y_test))**2)
+r2 = 1 - np.sum((y_test - y_pred)**2) / np.sum((y_test - np.mean (y_test))**2)
 
 print(f"Weights: {weights}")
 print(f"MSE: {mse:.4f}")
@@ -349,7 +349,7 @@ y = np.sin(2 * np.pi * x) + np.random.randn(50) * 0.1
 
 # Create polynomial features [x, x², x³]
 degree = 3
-A_poly = np.column_stack([x**i for i in range(degree + 1)])
+A_poly = np.column_stack([x**i for i in range (degree + 1)])
 
 # Fit
 coeffs = np.linalg.lstsq(A_poly, y, rcond=None)[0]
@@ -358,9 +358,9 @@ coeffs = np.linalg.lstsq(A_poly, y, rcond=None)[0]
 y_pred = A_poly @ coeffs
 
 # Plot
-plt.figure(figsize=(10, 6))
-plt.scatter(x, y, alpha=0.6, label='Data')
-plt.plot(x, y_pred, 'r-', linewidth=2, label=f'Degree {degree} polynomial')
+plt.figure (figsize=(10, 6))
+plt.scatter (x, y, alpha=0.6, label='Data')
+plt.plot (x, y_pred, 'r-', linewidth=2, label=f'Degree {degree} polynomial')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.legend()

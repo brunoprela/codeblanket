@@ -36,7 +36,7 @@ print("=== Diagonal Matrices ===")
 
 # Create diagonal matrix
 d = np.array([2, 3, 4])
-D = np.diag(d)
+D = np.diag (d)
 
 print("Diagonal elements:", d)
 print("\\nDiagonal matrix D:")
@@ -54,7 +54,7 @@ print()
 
 # Matrix power (trivial for diagonal)
 D2 = D @ D
-D2_direct = np.diag(d**2)
+D2_direct = np.diag (d**2)
 
 print("D²:")
 print(D2)
@@ -87,7 +87,7 @@ X = np.array([[1, 2, 3],
 
 # Scale factors for each feature
 scale = np.array([0.1, 0.5, 1.0])
-S = np.diag(scale)
+S = np.diag (scale)
 
 X_scaled = X @ S  # Scale each column
 
@@ -153,12 +153,12 @@ np.random.seed(42)
 data = np.random.randn(100, 3)
 
 # Compute covariance matrix
-cov_matrix = np.cov(data.T)
+cov_matrix = np.cov (data.T)
 
 print("Covariance matrix shape:", cov_matrix.shape)
 print("Covariance matrix:")
 print(cov_matrix.round(3))
-print(f"\\nIs symmetric: {np.allclose(cov_matrix, cov_matrix.T)}")
+print(f"\\nIs symmetric: {np.allclose (cov_matrix, cov_matrix.T)}")
 \`\`\`
 
 ## Orthogonal Matrices
@@ -181,8 +181,8 @@ print("\\n=== Orthogonal Matrices ===")
 # Example: Rotation matrix (orthogonal)
 theta = np.pi / 4  # 45 degrees
 Q = np.array([
-    [np.cos(theta), -np.sin(theta)],
-    [np.sin(theta),  np.cos(theta)]
+    [np.cos (theta), -np.sin (theta)],
+    [np.sin (theta),  np.cos (theta)]
 ])
 
 print("Rotation matrix Q (45°):")
@@ -209,7 +209,7 @@ print()
 v = np.array([3, 4])
 Qv = Q @ v
 
-print(f"||v|| = {np.linalg.norm(v):.4f}")
+print(f"||v|| = {np.linalg.norm (v):.4f}")
 print(f"||Qv|| = {np.linalg.norm(Qv):.4f}")
 print("Length preserved!")
 \`\`\`
@@ -295,27 +295,27 @@ print("\\n=== Sparse Matrices ===")
 # Create a large sparse matrix
 n = 1000
 # Most elements are zero
-dense_matrix = np.eye(n)
+dense_matrix = np.eye (n)
 dense_matrix[0, n-1] = 1
 dense_matrix[n-1, 0] = 1
 
 print(f"Dense matrix size: {dense_matrix.nbytes / 1024:.2f} KB")
-print(f"Number of non-zeros: {np.count_nonzero(dense_matrix)}")
+print(f"Number of non-zeros: {np.count_nonzero (dense_matrix)}")
 print()
 
 # Convert to sparse (CSR format - Compressed Sparse Row)
-sparse_matrix = sparse.csr_matrix(dense_matrix)
+sparse_matrix = sparse.csr_matrix (dense_matrix)
 
 print(f"Sparse matrix size: {(sparse_matrix.data.nbytes + sparse_matrix.indices.nbytes + sparse_matrix.indptr.nbytes) / 1024:.2f} KB")
 print(f"Space saving: {100 * (1 - sparse_matrix.data.nbytes / dense_matrix.nbytes):.1f}%")
 print()
 
 # Operations on sparse matrices
-v = np.ones(n)
+v = np.ones (n)
 result_dense = dense_matrix @ v
 result_sparse = sparse_matrix @ v
 
-print(f"Results equal: {np.allclose(result_dense, result_sparse)}")
+print(f"Results equal: {np.allclose (result_dense, result_sparse)}")
 print(f"Result (first 5 elements): {result_sparse[:5]}")
 \`\`\`
 
@@ -336,7 +336,7 @@ print(data_array)
 print()
 
 # COO (Coordinate) format - good for construction
-coo = sparse.coo_matrix(data_array)
+coo = sparse.coo_matrix (data_array)
 print("COO format:")
 print(f"  Data: {coo.data}")
 print(f"  Rows: {coo.row}")
@@ -344,7 +344,7 @@ print(f"  Cols: {coo.col}")
 print()
 
 # CSR (Compressed Sparse Row) - good for arithmetic and row slicing
-csr = sparse.csr_matrix(data_array)
+csr = sparse.csr_matrix (data_array)
 print("CSR format:")
 print(f"  Data: {csr.data}")
 print(f"  Indices: {csr.indices}")
@@ -352,7 +352,7 @@ print(f"  Indptr: {csr.indptr}")
 print()
 
 # CSC (Compressed Sparse Column) - good for column slicing
-csc = sparse.csc_matrix(data_array)
+csc = sparse.csc_matrix (data_array)
 print("CSC format:")
 print(f"  Data: {csc.data}")
 print(f"  Indices: {csc.indices}")
@@ -379,7 +379,7 @@ documents = [
 ]
 
 vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(documents)
+X = vectorizer.fit_transform (documents)
 
 print(f"Document-term matrix shape: {X.shape}")
 print(f"Sparsity: {100 * (1 - X.nnz / (X.shape[0] * X.shape[1])):.1f}% zeros")
@@ -411,7 +411,7 @@ print()
 # Check eigenvalues (all should be positive)
 eigenvalues = np.linalg.eigvalsh(A_pd)
 print(f"Eigenvalues: {eigenvalues}")
-print(f"All positive: {np.all(eigenvalues > 0)}")
+print(f"All positive: {np.all (eigenvalues > 0)}")
 print()
 
 # Test definition: xᵀAx > 0
@@ -441,7 +441,7 @@ properties = {
 }
 
 import pandas as pd
-df = pd.DataFrame(properties).T
+df = pd.DataFrame (properties).T
 print(df)
 \`\`\`
 

@@ -9,7 +9,7 @@ export const knnSection = {
 
 ## Introduction
 
-k-Nearest Neighbors (kNN) is one of the simplest yet surprisingly effective machine learning algorithms. It's a **non-parametric, instance-based, lazy learning** algorithm that makes predictions based on the k most similar training examples.
+k-Nearest Neighbors (kNN) is one of the simplest yet surprisingly effective machine learning algorithms. It\'s a **non-parametric, instance-based, lazy learning** algorithm that makes predictions based on the k most similar training examples.
 
 **Key Characteristics:**
 - **Non-parametric**: Makes no assumptions about data distribution
@@ -49,14 +49,14 @@ from sklearn.preprocessing import StandardScaler
 
 # Generate data
 np.random.seed(42)
-X, y = make_classification(n_samples=200, n_features=2, n_redundant=0,
+X, y = make_classification (n_samples=200, n_features=2, n_redundant=0,
                            n_informative=2, n_clusters_per_class=1, 
                            random_state=42)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Visualize data
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X_train[y_train==0, 0], X_train[y_train==0, 1], 
            c='blue', label='Class 0', s=50, alpha=0.7, edgecolors='k')
 plt.scatter(X_train[y_train==1, 0], X_train[y_train==1, 1], 
@@ -70,22 +70,22 @@ plt.show()
 
 # Train kNN classifier
 k = 5
-knn = KNeighborsClassifier(n_neighbors=k)
+knn = KNeighborsClassifier (n_neighbors=k)
 knn.fit(X_train, y_train)
 
 # Make prediction for a new point
 new_point = np.array([[0, 0]])
-prediction = knn.predict(new_point)
-probabilities = knn.predict_proba(new_point)
+prediction = knn.predict (new_point)
+probabilities = knn.predict_proba (new_point)
 
 print(f"New point: {new_point[0]}")
 print(f"Predicted class: {prediction[0]}")
 print(f"Probabilities: Class 0: {probabilities[0][0]:.3f}, Class 1: {probabilities[0][1]:.3f}")
 
 # Find nearest neighbors
-distances, indices = knn.kneighbors(new_point, n_neighbors=k)
+distances, indices = knn.kneighbors (new_point, n_neighbors=k)
 print(f"\\nNearest {k} neighbors:")
-for i, (dist, idx) in enumerate(zip(distances[0], indices[0]), 1):
+for i, (dist, idx) in enumerate (zip (distances[0], indices[0]), 1):
     print(f"  {i}. Distance: {dist:.3f}, Class: {y_train[idx]}")
 \`\`\`
 
@@ -122,9 +122,9 @@ from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances, c
 point1 = np.array([[1, 2, 3]])
 point2 = np.array([[4, 5, 6]])
 
-euclidean = euclidean_distances(point1, point2)[0][0]
-manhattan = manhattan_distances(point1, point2)[0][0]
-cosine_sim = cosine_similarity(point1, point2)[0][0]
+euclidean = euclidean_distances (point1, point2)[0][0]
+manhattan = manhattan_distances (point1, point2)[0][0]
+cosine_sim = cosine_similarity (point1, point2)[0][0]
 
 print("Distance Metrics:")
 print(f"Euclidean: {euclidean:.3f}")
@@ -137,26 +137,26 @@ metrics = ['euclidean', 'manhattan', 'chebyshev']
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-for idx, metric in enumerate(metrics):
-    knn_metric = KNeighborsClassifier(n_neighbors=5, metric=metric)
+for idx, metric in enumerate (metrics):
+    knn_metric = KNeighborsClassifier (n_neighbors=5, metric=metric)
     knn_metric.fit(X_train, y_train)
     
     # Create mesh
     h = 0.02
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
+    xx, yy = np.meshgrid (np.arange (x_min, x_max, h),
+                         np.arange (y_min, y_max, h))
     
-    Z = knn_metric.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
+    Z = knn_metric.predict (np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape (xx.shape)
     
-    axes[idx].contourf(xx, yy, Z, alpha=0.3, cmap='RdBu')
+    axes[idx].contourf (xx, yy, Z, alpha=0.3, cmap='RdBu')
     axes[idx].scatter(X_train[y_train==0, 0], X_train[y_train==0, 1], 
                      c='blue', s=50, alpha=0.7, edgecolors='k')
     axes[idx].scatter(X_train[y_train==1, 0], X_train[y_train==1, 1], 
                      c='red', s=50, alpha=0.7, edgecolors='k')
-    axes[idx].set_title(f'{metric.capitalize()} Distance')
+    axes[idx].set_title (f'{metric.capitalize()} Distance')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -186,25 +186,25 @@ k_values = range(1, 51)
 cv_scores = []
 
 for k in k_values:
-    knn = KNeighborsClassifier(n_neighbors=k)
-    scores = cross_val_score(knn, X_train, y_train, cv=5, scoring='accuracy')
-    cv_scores.append(scores.mean())
+    knn = KNeighborsClassifier (n_neighbors=k)
+    scores = cross_val_score (knn, X_train, y_train, cv=5, scoring='accuracy')
+    cv_scores.append (scores.mean())
 
 # Plot results
-plt.figure(figsize=(12, 6))
-plt.plot(k_values, cv_scores, 'o-', linewidth=2)
+plt.figure (figsize=(12, 6))
+plt.plot (k_values, cv_scores, 'o-', linewidth=2)
 plt.xlabel('k (number of neighbors)')
 plt.ylabel('Cross-Validation Accuracy')
 plt.title('kNN: Choosing Optimal k')
 plt.grid(True, alpha=0.3)
-plt.axvline(x=k_values[np.argmax(cv_scores)], color='r', 
-           linestyle='--', label=f'Optimal k={k_values[np.argmax(cv_scores)]}')
+plt.axvline (x=k_values[np.argmax (cv_scores)], color='r', 
+           linestyle='--', label=f'Optimal k={k_values[np.argmax (cv_scores)]}')
 plt.legend()
 plt.show()
 
-optimal_k = k_values[np.argmax(cv_scores)]
+optimal_k = k_values[np.argmax (cv_scores)]
 print(f"Optimal k: {optimal_k}")
-print(f"Best CV Accuracy: {max(cv_scores):.4f}")
+print(f"Best CV Accuracy: {max (cv_scores):.4f}")
 \`\`\`
 
 ## Weighted kNN
@@ -215,8 +215,8 @@ Give more influence to closer neighbors using distance weighting:
 
 \`\`\`python
 # Compare uniform vs weighted
-knn_uniform = KNeighborsClassifier(n_neighbors=15, weights='uniform')
-knn_weighted = KNeighborsClassifier(n_neighbors=15, weights='distance')
+knn_uniform = KNeighborsClassifier (n_neighbors=15, weights='uniform')
+knn_weighted = KNeighborsClassifier (n_neighbors=15, weights='distance')
 
 knn_uniform.fit(X_train, y_train)
 knn_weighted.fit(X_train, y_train)
@@ -237,16 +237,16 @@ kNN is **extremely sensitive** to feature scales because it uses distances.
 X_unscaled = np.random.rand(100, 2)
 X_unscaled[:, 0] *= 1000  # First feature in [0, 1000]
 X_unscaled[:, 1] *= 1     # Second feature in [0, 1]
-y_unscaled = (X_unscaled[:, 0] > 500).astype(int)
+y_unscaled = (X_unscaled[:, 0] > 500).astype (int)
 
 # Without scaling
-knn_unscaled = KNeighborsClassifier(n_neighbors=5)
+knn_unscaled = KNeighborsClassifier (n_neighbors=5)
 knn_unscaled.fit(X_unscaled, y_unscaled)
 
 # With scaling
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X_unscaled)
-knn_scaled = KNeighborsClassifier(n_neighbors=5)
+knn_scaled = KNeighborsClassifier (n_neighbors=5)
 knn_scaled.fit(X_scaled, y_unscaled)
 
 print("\\nImpact of Feature Scaling:")
@@ -255,9 +255,9 @@ print(f"With scaling - both features contribute fairly")
 
 # Calculate distances for a point
 point = np.array([[600, 0.5]])
-distances_unscaled = np.sqrt(np.sum((X_unscaled - point)**2, axis=1))
-point_scaled = scaler.transform(point)
-distances_scaled = np.sqrt(np.sum((X_scaled - point_scaled)**2, axis=1))
+distances_unscaled = np.sqrt (np.sum((X_unscaled - point)**2, axis=1))
+point_scaled = scaler.transform (point)
+distances_scaled = np.sqrt (np.sum((X_scaled - point_scaled)**2, axis=1))
 
 print(f"\\nDistance range without scaling: [{distances_unscaled.min():.1f}, {distances_unscaled.max():.1f}]")
 print(f"Distance range with scaling: [{distances_scaled.min():.3f}, {distances_scaled.max():.3f}]")
@@ -278,8 +278,8 @@ n_samples = 100
 dimensions = [2, 10, 50, 100]
 
 for d in dimensions:
-    X_high = np.random.randn(n_samples, d)
-    nn = NearestNeighbors(n_neighbors=2)
+    X_high = np.random.randn (n_samples, d)
+    nn = NearestNeighbors (n_neighbors=2)
     nn.fit(X_high)
     
     distances, _ = nn.kneighbors(X_high)
@@ -315,7 +315,7 @@ X_test_large = np.random.randn(100, 10)
 algorithms = ['brute', 'kd_tree', 'ball_tree']
 
 for algo in algorithms:
-    knn = KNeighborsClassifier(n_neighbors=10, algorithm=algo)
+    knn = KNeighborsClassifier (n_neighbors=10, algorithm=algo)
     
     # Train (actually just stores data)
     start = time.time()
@@ -355,24 +355,24 @@ k_range = range(1, 31)
 cv_scores = []
 
 for k in k_range:
-    knn = KNeighborsClassifier(n_neighbors=k)
-    scores = cross_val_score(knn, X_train_scaled, y_train, cv=5)
-    cv_scores.append(scores.mean())
+    knn = KNeighborsClassifier (n_neighbors=k)
+    scores = cross_val_score (knn, X_train_scaled, y_train, cv=5)
+    cv_scores.append (scores.mean())
 
-optimal_k = k_range[np.argmax(cv_scores)]
+optimal_k = k_range[np.argmax (cv_scores)]
 print(f"Optimal k: {optimal_k}")
 
 # Train final model
-knn_final = KNeighborsClassifier(n_neighbors=optimal_k)
+knn_final = KNeighborsClassifier (n_neighbors=optimal_k)
 knn_final.fit(X_train_scaled, y_train)
 
 # Evaluate
 y_pred = knn_final.predict(X_test_scaled)
-accuracy = np.mean(y_pred == y_test)
+accuracy = np.mean (y_pred == y_test)
 
 print(f"\\nTest Accuracy: {accuracy:.4f}")
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=wine.target_names))
+print(classification_report (y_test, y_pred, target_names=wine.target_names))
 \`\`\`
 
 ## Advantages and Limitations
@@ -446,7 +446,7 @@ print("k-NEAREST NEIGHBORS: BREAST CANCER CLASSIFICATION")
 print("="*70)
 print(f"\\nDataset: {X.shape[0]} samples, {X.shape[1]} features")
 print(f"Classes: {cancer.target_names}")
-print(f"Class distribution: {np.bincount(y)}")
+print(f"Class distribution: {np.bincount (y)}")
 
 # Split data
 X_train, X_test, y_train, y_test = train_test_split(
@@ -486,20 +486,20 @@ y_pred = best_knn.predict(X_test_scaled)
 y_prob = best_knn.predict_proba(X_test_scaled)[:, 1]
 
 # Evaluate
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 print(f"\\nTest Accuracy: {accuracy:.4f}")
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred, target_names=cancer.target_names))
+print(classification_report (y_test, y_pred, target_names=cancer.target_names))
 
 # Visualizations
-fig = plt.figure(figsize=(15, 10))
+fig = plt.figure (figsize=(15, 10))
 
 # 1. k vs Accuracy
 ax1 = plt.subplot(2, 3, 1)
 results = grid_search.cv_results_
 k_values = param_grid['n_neighbors']
-mean_scores = [results['mean_test_score'][i] for i in range(0, len(results['mean_test_score']), 4)]
-plt.plot(k_values, mean_scores, 'o-', linewidth=2)
+mean_scores = [results['mean_test_score'][i] for i in range(0, len (results['mean_test_score']), 4)]
+plt.plot (k_values, mean_scores, 'o-', linewidth=2)
 plt.xlabel('k (number of neighbors)')
 plt.ylabel('Cross-Validation Accuracy')
 plt.title('Optimal k Selection')
@@ -507,18 +507,18 @@ plt.grid(True, alpha=0.3)
 
 # 2. Confusion Matrix
 ax2 = plt.subplot(2, 3, 2)
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 import seaborn as sns
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues')
 plt.title('Confusion Matrix')
 plt.ylabel('True')
 plt.xlabel('Predicted')
 
 # 3. ROC Curve
 ax3 = plt.subplot(2, 3, 3)
-fpr, tpr, _ = roc_curve(y_test, y_prob)
-roc_auc = auc(fpr, tpr)
-plt.plot(fpr, tpr, linewidth=2, label=f'AUC = {roc_auc:.3f}')
+fpr, tpr, _ = roc_curve (y_test, y_prob)
+roc_auc = auc (fpr, tpr)
+plt.plot (fpr, tpr, linewidth=2, label=f'AUC = {roc_auc:.3f}')
 plt.plot([0, 1], [0, 1], 'k--')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')

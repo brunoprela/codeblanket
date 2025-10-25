@@ -121,7 +121,7 @@ training_args = TrainingArguments(
 
 **3. Early Stopping:**
 \`\`\`python
-EarlyStoppingCallback(early_stopping_patience=2)
+EarlyStoppingCallback (early_stopping_patience=2)
 # Stop when validation metric stops improving
 \`\`\`
 

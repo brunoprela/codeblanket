@@ -16,11 +16,11 @@ Memoization is caching recursive results to avoid redundant calculations. It tra
 ### Naive Fibonacci - Terrible Performance
 
 \`\`\`python
-def fibonacci_naive(n):
+def fibonacci_naive (n):
     """Extremely slow for n > 35"""
     if n <= 1:
         return n
-    return fibonacci_naive(n - 1) + fibonacci_naive(n - 2)
+    return fibonacci_naive (n - 1) + fibonacci_naive (n - 2)
 
 # Time complexity: O(2^n) - EXPONENTIAL!
 # Space complexity: O(n) - call stack depth
@@ -46,12 +46,12 @@ def fibonacci_naive(n):
 \`\`\`python
 call_count = 0
 
-def fibonacci_count(n):
+def fibonacci_count (n):
     global call_count
     call_count += 1
     if n <= 1:
         return n
-    return fibonacci_count(n - 1) + fibonacci_count(n - 2)
+    return fibonacci_count (n - 1) + fibonacci_count (n - 2)
 
 call_count = 0
 print(fibonacci_count(10))  # 55
@@ -69,7 +69,7 @@ print(f"Calls: {call_count}")  # 21,891 calls for n=20!
 **Use a dictionary to cache results:**
 
 \`\`\`python
-def fibonacci_memo(n, cache=None):
+def fibonacci_memo (n, cache=None):
     """Fast Fibonacci with memoization"""
     # Initialize cache on first call
     if cache is None:
@@ -84,7 +84,7 @@ def fibonacci_memo(n, cache=None):
         return n
     
     # Compute and store result
-    result = fibonacci_memo(n - 1, cache) + fibonacci_memo(n - 2, cache)
+    result = fibonacci_memo (n - 1, cache) + fibonacci_memo (n - 2, cache)
     cache[n] = result
     
     return result
@@ -113,26 +113,26 @@ Only 9 calls instead of 15!
 
 ---
 
-## Solution 2: Python's @lru_cache Decorator
+## Solution 2: Python\'s @lru_cache Decorator
 
 **Easiest way to add memoization:**
 
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=None)  # Unlimited cache size
-def fibonacci_cached(n):
+@lru_cache (maxsize=None)  # Unlimited cache size
+def fibonacci_cached (n):
     """Memoized Fibonacci using decorator"""
     if n <= 1:
         return n
-    return fibonacci_cached(n - 1) + fibonacci_cached(n - 2)
+    return fibonacci_cached (n - 1) + fibonacci_cached (n - 2)
 
 print(fibonacci_cached(100))  # Instant!
 print(fibonacci_cached(500))  # Still instant!
 
 # Check cache statistics
 print(fibonacci_cached.cache_info())
-# CacheInfo(hits=X, misses=Y, maxsize=None, currsize=Z)
+# CacheInfo (hits=X, misses=Y, maxsize=None, currsize=Z)
 \`\`\`
 
 **How it works:**
@@ -147,8 +147,8 @@ print(fibonacci_cached.cache_info())
 
 ### Example 1: Climbing Stairs
 \`\`\`python
-@lru_cache(maxsize=None)
-def climb_stairs(n):
+@lru_cache (maxsize=None)
+def climb_stairs (n):
     """
     You can climb 1 or 2 steps at a time.
     How many distinct ways to climb n stairs?
@@ -162,7 +162,7 @@ def climb_stairs(n):
         return 2
     
     # Recursive case: either came from n-1 or n-2
-    return climb_stairs(n - 1) + climb_stairs(n - 2)
+    return climb_stairs (n - 1) + climb_stairs (n - 2)
 
 print(climb_stairs(10))  # 89
 print(climb_stairs(50))  # 20365011074 (instant with cache!)
@@ -170,7 +170,7 @@ print(climb_stairs(50))  # 20365011074 (instant with cache!)
 
 ### Example 2: Longest Common Subsequence
 \`\`\`python
-def lcs(s1, s2, i=0, j=0, cache=None):
+def lcs (s1, s2, i=0, j=0, cache=None):
     """
     Find length of longest common subsequence.
     Example: "ABCD" and "ACDF" → "ACD" (length 3)
@@ -184,17 +184,17 @@ def lcs(s1, s2, i=0, j=0, cache=None):
         return cache[key]
     
     # Base case: reached end of either string
-    if i >= len(s1) or j >= len(s2):
+    if i >= len (s1) or j >= len (s2):
         return 0
     
     # If characters match, include it
     if s1[i] == s2[j]:
-        result = 1 + lcs(s1, s2, i + 1, j + 1, cache)
+        result = 1 + lcs (s1, s2, i + 1, j + 1, cache)
     else:
         # Try skipping character in either string
         result = max(
-            lcs(s1, s2, i + 1, j, cache),  # Skip s1[i]
-            lcs(s1, s2, i, j + 1, cache)   # Skip s2[j]
+            lcs (s1, s2, i + 1, j, cache),  # Skip s1[i]
+            lcs (s1, s2, i, j + 1, cache)   # Skip s2[j]
         )
     
     cache[key] = result
@@ -259,14 +259,14 @@ print(lcs("ABCDEF", "ACDF"))  # 4 ("ACDF")
 
 \`\`\`python
 # Memoization (Top-Down)
-@lru_cache(maxsize=None)
-def fib_memo(n):
+@lru_cache (maxsize=None)
+def fib_memo (n):
     if n <= 1:
         return n
-    return fib_memo(n - 1) + fib_memo(n - 2)
+    return fib_memo (n - 1) + fib_memo (n - 2)
 
 # Dynamic Programming (Bottom-Up)
-def fib_dp(n):
+def fib_dp (n):
     if n <= 1:
         return n
     
@@ -289,15 +289,15 @@ def fib_dp(n):
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=128)  # Or maxsize=None
-def my_function(n):
+@lru_cache (maxsize=128)  # Or maxsize=None
+def my_function (n):
     # Your recursive code
     pass
 \`\`\`
 
 **2. Or implement manual caching for control:**
 \`\`\`python
-def my_function(n, cache=None):
+def my_function (n, cache=None):
     if cache is None:
         cache = {}
     if n in cache:
@@ -310,11 +310,11 @@ def my_function(n, cache=None):
 **3. Consider DP for better space optimization:**
 \`\`\`python
 # Fibonacci with O(1) space
-def fib_optimized(n):
+def fib_optimized (n):
     if n <= 1:
         return n
     prev, curr = 0, 1
-    for _ in range(n - 1):
+    for _ in range (n - 1):
         prev, curr = curr, prev + curr
     return curr
 \`\`\`

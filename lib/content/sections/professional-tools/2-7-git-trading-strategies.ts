@@ -1,13 +1,13 @@
 import { Content } from '@/lib/types';
 
 export const gitTradingStrategies: Content = {
-    title: "Git for Trading Strategies",
-    subtitle: "Version control and collaboration for quantitative research",
-    description: "Master Git and GitHub for managing trading strategies, backtests, and quantitative research. Learn professional workflows used by quant teams at hedge funds and prop trading firms.",
-    sections: [
-        {
-            title: "Why Version Control for Trading?",
-            content: `
+  title: "Git for Trading Strategies",
+  subtitle: "Version control and collaboration for quantitative research",
+  description: "Master Git and GitHub for managing trading strategies, backtests, and quantitative research. Learn professional workflows used by quant teams at hedge funds and prop trading firms.",
+  sections: [
+    {
+      title: "Why Version Control for Trading?",
+      content: `
 # The Critical Need for Version Control in Trading
 
 ## The Problem Without Version Control
@@ -76,10 +76,10 @@ Recreate exact environment and results from any point in history
 ### 6. Code Review
 Team reviews changes before merging to production
       `
-        },
-        {
-            title: "Git Fundamentals for Quants",
-            content: `
+    },
+    {
+      title: "Git Fundamentals for Quants",
+      content: `
 # Essential Git Concepts and Commands
 
 ## Repository Structure
@@ -387,10 +387,10 @@ git diff notebook.ipynb
 nbdiff-web notebook_old.ipynb notebook_new.ipynb
 \`\`\`
       `
-        },
-        {
-            title: "Collaborative Workflows",
-            content: `
+    },
+    {
+      title: "Collaborative Workflows",
+      content: `
 # Team Collaboration for Quantitative Research
 
 ## Pull Request Workflow
@@ -441,7 +441,7 @@ Lead researcher reviews code:
 
 ### Testing
 - [ ] Unit tests added for new functions
-- [ ] All tests pass (`pytest tests/ `)
+- [ ] All tests pass (pytest tests/)
 - [ ] No lookahead bias introduced
 - [ ] Edge cases handled (missing data, zero division, etc.)
 
@@ -477,7 +477,7 @@ Lead researcher reviews code:
 3. Need to test on 2008-2009 crisis period
 
 **Requested Changes:**
-- Add `max_position_size` parameter (default 20% of portfolio)
+- Add \`max_position_size\` parameter (default 20% of portfolio)
 - Include backtest for 2008-2009 period
 - Add docstring explaining Kelly fraction calculation
 
@@ -530,7 +530,7 @@ git push origin v1.2.0
 \`\`\`bash
 # Researcher A: Adds RSI filter
 # File: src/strategies/momentum.py
-def generate_signals(df):
+def generate_signals (df):
     df['signal'] = 0
     df.loc[df['ma_fast'] > df['ma_slow'], 'signal'] = 1
     df.loc[df['rsi'] < 30, 'signal'] = 0  # Don't buy if oversold
@@ -538,7 +538,7 @@ def generate_signals(df):
 
 # Researcher B: Adds volume filter
 # Same file: src/strategies/momentum.py
-def generate_signals(df):
+def generate_signals (df):
     df['signal'] = 0
     df.loc[df['ma_fast'] > df['ma_slow'], 'signal'] = 1
     df.loc[df['volume'] < df['avg_volume'], 'signal'] = 0  # Need volume confirmation
@@ -559,7 +559,7 @@ git merge feature/volume-filter
 # Automatic merge failed; fix conflicts and then commit the result.
 
 # Open file - Git adds conflict markers
-def generate_signals(df):
+def generate_signals (df):
     df['signal'] = 0
     df.loc[df['ma_fast'] > df['ma_slow'], 'signal'] = 1
 <<<<<<< HEAD
@@ -570,7 +570,7 @@ def generate_signals(df):
     return df
 
 # Manually resolve - keep both filters!
-def generate_signals(df):
+def generate_signals (df):
     df['signal'] = 0
     df.loc[df['ma_fast'] > df['ma_slow'], 'signal'] = 1
     df.loc[df['rsi'] < 30, 'signal'] = 0  # Don't buy if oversold
@@ -654,7 +654,7 @@ Need to investigate if this is due to:
 3. Data quality issue
 
 **Steps to Reproduce:**
-1. Run `python scripts / backtest.py--start 2020-01-01 --end 2020 - 12 - 31`
+1. Run python scripts/backtest.py --start 2020-01-01 --end 2020-12-31
 2. Observe max drawdown in results/
 
 **Expected:** ~15-20% max drawdown (based on historical average)
@@ -746,8 +746,8 @@ jobs:
       `
     },
     {
-        title: "Advanced Git for Production Trading",
-        content: `
+      title: "Advanced Git for Production Trading",
+      content: `
 # Production-Grade Version Control
 
 ## Semantic Versioning for Trading Strategies
@@ -877,7 +877,7 @@ API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY')
 # GOOD: Load from config file (not committed)
 import yaml
 with open('config/secrets.yaml') as f:
-    secrets = yaml.safe_load(f)
+    secrets = yaml.safe_load (f)
 API_KEY = secrets['alpha_vantage_key']
 \`\`\`
 
@@ -941,7 +941,7 @@ git-crypt unlock
 
 ## Deployment Tracking
 
-### Track What's Running in Production
+### Track What\'s Running in Production
 
 \`\`\`bash
 # Tag deployment
@@ -1068,10 +1068,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Set up Python ${{ matrix.python - version }}
+    - name: Set up Python \${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python - version }}
+        python-version: \${{ matrix.python-version }}
     
     - name: Cache dependencies
       uses: actions/cache@v2
@@ -1111,9 +1111,9 @@ jobs:
 \`\`\`
       `
     },
-{
-    title: "Git Best Practices for Quants",
-        content: `
+    {
+      title: "Git Best Practices for Quants",
+      content: `
 # Professional Git Practices for Quantitative Trading
 
 ## Commit Hygiene
@@ -1542,51 +1542,50 @@ Git is not just version control - it's the foundation for reproducible, collabor
 }
   ],
 exercises: [
-    {
-        title: "Git Workflow Setup",
-        description: "Initialize a new quantitative trading project with proper Git configuration, including .gitignore, README, and initial structure.",
-        difficulty: "beginner",
-        hints: [
-            "Create comprehensive .gitignore for Python, Jupyter, data files",
-            "Set up nbstripout for notebook output management",
-            "Write clear README with setup instructions",
-            "Create initial directory structure following best practices"
-        ]
-    },
-    {
-        title: "Feature Branch Workflow",
-        description: "Implement a new strategy feature using feature branches, pull requests, and code review process.",
-        difficulty: "intermediate",
-        hints: [
-            "Create feature branch from main",
-            "Make multiple atomic commits with good messages",
-            "Write tests for new feature",
-            "Create pull request with detailed description including backtest results"
-        ]
-    },
-    {
-        title: "Production Deployment Tracking",
-        description: "Set up a deployment tracking system using Git tags, maintain deployment log, and implement rollback procedure.",
-        difficulty: "intermediate",
-        hints: [
-            "Create semantic version tags for releases",
-            "Maintain deployment_log.md with deployment history",
-            "Write rollback script that can revert to previous tag",
-            "Document what's currently running in production"
-        ]
-    },
-    {
-        title: "CI/CD Pipeline",
-        description: "Implement a GitHub Actions workflow that runs tests, performs backtests, and checks for common issues on every push.",
-        difficulty: "advanced",
-        hints: [
-            "Create .github/workflows/ci.yml",
-            "Run pytest, black, flake8",
-            "Execute quick backtest to verify strategy still works",
-            "Check for lookahead bias programmatically",
-            "Upload backtest results as artifacts"
-        ]
-    }
+  {
+    title: "Git Workflow Setup",
+    description: "Initialize a new quantitative trading project with proper Git configuration, including .gitignore, README, and initial structure.",
+    difficulty: "beginner",
+    hints: [
+      "Create comprehensive .gitignore for Python, Jupyter, data files",
+      "Set up nbstripout for notebook output management",
+      "Write clear README with setup instructions",
+      "Create initial directory structure following best practices"
+    ]
+  },
+  {
+    title: "Feature Branch Workflow",
+    description: "Implement a new strategy feature using feature branches, pull requests, and code review process.",
+    difficulty: "intermediate",
+    hints: [
+      "Create feature branch from main",
+      "Make multiple atomic commits with good messages",
+      "Write tests for new feature",
+      "Create pull request with detailed description including backtest results"
+    ]
+  },
+  {
+    title: "Production Deployment Tracking",
+    description: "Set up a deployment tracking system using Git tags, maintain deployment log, and implement rollback procedure.",
+    difficulty: "intermediate",
+    hints: [
+      "Create semantic version tags for releases",
+      "Maintain deployment_log.md with deployment history",
+      "Write rollback script that can revert to previous tag",
+      "Document what's currently running in production"
+    ]
+  },
+  {
+    title: "CI/CD Pipeline",
+    description: "Implement a GitHub Actions workflow that runs tests, performs backtests, and checks for common issues on every push.",
+    difficulty: "advanced",
+    hints: [
+      "Create .github/workflows/ci.yml",
+      "Run pytest, black, flake8",
+      "Execute quick backtest to verify strategy still works",
+      "Check for lookahead bias programmatically",
+      "Upload backtest results as artifacts"
+    ]
+  }
 ]
 };
-

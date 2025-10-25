@@ -58,7 +58,7 @@ class AdversarialAttacks:
     def __init__(self, model):
         self.model = model
     
-    def fgsm_attack(self, X, y, epsilon=0.1):
+    def fgsm_attack (self, X, y, epsilon=0.1):
         """
         Fast Gradient Sign Method
         
@@ -73,7 +73,7 @@ class AdversarialAttacks:
         """
         # Convert to tensors
         X_tensor = torch.FloatTensor(X).requires_grad_(True)
-        y_tensor = torch.LongTensor(y)
+        y_tensor = torch.LongTensor (y)
         
         # Forward pass
         self.model.eval()
@@ -81,14 +81,14 @@ class AdversarialAttacks:
         
         # Calculate loss
         criterion = nn.CrossEntropyLoss()
-        loss = criterion(output, y_tensor)
+        loss = criterion (output, y_tensor)
         
         # Backward pass to get gradient
         self.model.zero_grad()
         loss.backward()
         
         # Create adversarial example
-        # Add epsilon * sign(gradient) to input
+        # Add epsilon * sign (gradient) to input
         X_grad = X_tensor.grad.data
         X_adv = X_tensor + epsilon * X_grad.sign()
         
@@ -97,7 +97,7 @@ class AdversarialAttacks:
         
         return X_adv.detach().numpy()
     
-    def evaluate_robustness(self, X_test, y_test, epsilons=[0.0, 0.05, 0.1, 0.2]):
+    def evaluate_robustness (self, X_test, y_test, epsilons=[0.0, 0.05, 0.1, 0.2]):
         """
         Evaluate model robustness to adversarial attacks
         """
@@ -115,7 +115,7 @@ class AdversarialAttacks:
             with torch.no_grad():
                 X_tensor = torch.FloatTensor(X_adv)
                 output = self.model(X_tensor)
-                predictions = output.argmax(dim=1).numpy()
+                predictions = output.argmax (dim=1).numpy()
                 accuracy = (predictions == y_test).mean()
             
             print(f"Epsilon: {eps:.2f}, Accuracy: {accuracy*100:.2f}%")
@@ -128,17 +128,17 @@ class AdversarialAttacks:
 
 
 # Example: Create simple model
-class SimpleClassifier(nn.Module):
+class SimpleClassifier (nn.Module):
     def __init__(self, input_dim=10, num_classes=3):
         super().__init__()
         self.layers = nn.Sequential(
-            nn.Linear(input_dim, 50),
+            nn.Linear (input_dim, 50),
             nn.ReLU(),
             nn.Linear(50, num_classes)
         )
     
-    def forward(self, x):
-        return self.layers(x)
+    def forward (self, x):
+        return self.layers (x)
 
 
 # Train simple model
@@ -152,7 +152,7 @@ X_test = np.random.randn(100, 10)
 y_test = np.random.randint(0, 3, 100)
 
 # Train model (simplified)
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+optimizer = torch.optim.Adam (model.parameters(), lr=0.01)
 criterion = nn.CrossEntropyLoss()
 
 for epoch in range(50):
@@ -160,16 +160,16 @@ for epoch in range(50):
     optimizer.zero_grad()
     
     X_tensor = torch.FloatTensor(X_train)
-    y_tensor = torch.LongTensor(y_train)
+    y_tensor = torch.LongTensor (y_train)
     
     output = model(X_tensor)
-    loss = criterion(output, y_tensor)
+    loss = criterion (output, y_tensor)
     
     loss.backward()
     optimizer.step()
 
 # Test adversarial robustness
-attacker = AdversarialAttacks(model)
+attacker = AdversarialAttacks (model)
 attacker.evaluate_robustness(X_test, y_test)
 \`\`\`
 
@@ -185,7 +185,7 @@ class AdversarialDefense:
     Techniques to defend against adversarial attacks
     """
     
-    def adversarial_training(self, model, X_train, y_train, epochs=10, epsilon=0.1):
+    def adversarial_training (self, model, X_train, y_train, epochs=10, epsilon=0.1):
         """
         Adversarial Training: Train on mix of clean and adversarial examples
         
@@ -193,17 +193,17 @@ class AdversarialDefense:
         """
         print("\\n=== Adversarial Training ===\\n")
         
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+        optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
         criterion = nn.CrossEntropyLoss()
         
-        attacker = AdversarialAttacks(model)
+        attacker = AdversarialAttacks (model)
         
-        for epoch in range(epochs):
+        for epoch in range (epochs):
             model.train()
             
             # Clean data
             X_tensor = torch.FloatTensor(X_train)
-            y_tensor = torch.LongTensor(y_train)
+            y_tensor = torch.LongTensor (y_train)
             
             # Generate adversarial examples
             X_adv = attacker.fgsm_attack(X_train, y_train, epsilon=epsilon)
@@ -214,7 +214,7 @@ class AdversarialDefense:
                 optimizer.zero_grad()
                 
                 output = model(X)
-                loss = criterion(output, y)
+                loss = criterion (output, y)
                 
                 loss.backward()
                 optimizer.step()
@@ -227,7 +227,7 @@ class AdversarialDefense:
         
         return model
     
-    def input_transformation(self, X, method='jpeg_compression'):
+    def input_transformation (self, X, method='jpeg_compression'):
         """
         Transform inputs to remove adversarial perturbations
         
@@ -247,13 +247,13 @@ class AdversarialDefense:
         else:
             return X
     
-    def _jpeg_compression(self, X):
+    def _jpeg_compression (self, X):
         """Simulate JPEG compression"""
         # Simplified: just add noise and smooth
         compressed = X + np.random.randn(*X.shape) * 0.01
         return compressed
     
-    def ensemble_defense(self, models, X):
+    def ensemble_defense (self, models, X):
         """
         Ensemble of models for robustness
         
@@ -266,13 +266,13 @@ class AdversarialDefense:
             with torch.no_grad():
                 X_tensor = torch.FloatTensor(X)
                 output = model(X_tensor)
-                pred = output.argmax(dim=1).numpy()
-                predictions.append(pred)
+                pred = output.argmax (dim=1).numpy()
+                predictions.append (pred)
         
         # Majority vote
-        predictions = np.array(predictions)
+        predictions = np.array (predictions)
         ensemble_pred = np.apply_along_axis(
-            lambda x: np.bincount(x).argmax(),
+            lambda x: np.bincount (x).argmax(),
             axis=0,
             arr=predictions
         )
@@ -321,7 +321,7 @@ class ModelExtractionAttack:
         self.victim_model = victim_model
         self.query_count = 0
     
-    def query_victim(self, X):
+    def query_victim (self, X):
         """
         Query victim model API
         """
@@ -331,40 +331,40 @@ class ModelExtractionAttack:
             X_tensor = torch.FloatTensor(X)
             output = self.victim_model(X_tensor)
             # Return probabilities
-            probs = torch.softmax(output, dim=1).numpy()
+            probs = torch.softmax (output, dim=1).numpy()
         
         return probs
     
-    def steal_model(self, input_dim=10, num_classes=3, num_queries=1000):
+    def steal_model (self, input_dim=10, num_classes=3, num_queries=1000):
         """
         Steal model by querying and training substitute
         """
         print(f"\\n=== Model Extraction Attack ===\\n")
         
         # Generate synthetic queries
-        X_queries = np.random.randn(num_queries, input_dim)
+        X_queries = np.random.randn (num_queries, input_dim)
         
         # Query victim model
         print(f"Querying victim model {num_queries} times...")
         y_probs = self.query_victim(X_queries)
-        y_labels = y_probs.argmax(axis=1)
+        y_labels = y_probs.argmax (axis=1)
         
         # Train substitute model
         print("Training substitute model...")
-        substitute_model = SimpleClassifier(input_dim, num_classes)
+        substitute_model = SimpleClassifier (input_dim, num_classes)
         
-        optimizer = torch.optim.Adam(substitute_model.parameters(), lr=0.01)
+        optimizer = torch.optim.Adam (substitute_model.parameters(), lr=0.01)
         criterion = nn.CrossEntropyLoss()
         
         X_tensor = torch.FloatTensor(X_queries)
-        y_tensor = torch.LongTensor(y_labels)
+        y_tensor = torch.LongTensor (y_labels)
         
         for epoch in range(50):
             substitute_model.train()
             optimizer.zero_grad()
             
             output = substitute_model(X_tensor)
-            loss = criterion(output, y_tensor)
+            loss = criterion (output, y_tensor)
             
             loss.backward()
             optimizer.step()
@@ -373,19 +373,19 @@ class ModelExtractionAttack:
         
         return substitute_model
     
-    def evaluate_extraction(self, substitute_model, X_test, y_test):
+    def evaluate_extraction (self, substitute_model, X_test, y_test):
         """
         Evaluate how well substitute mimics victim
         """
         # Victim predictions
         victim_probs = self.query_victim(X_test)
-        victim_preds = victim_probs.argmax(axis=1)
+        victim_preds = victim_probs.argmax (axis=1)
         
         # Substitute predictions
         with torch.no_grad():
             X_tensor = torch.FloatTensor(X_test)
             sub_output = substitute_model(X_tensor)
-            sub_preds = sub_output.argmax(dim=1).numpy()
+            sub_preds = sub_output.argmax (dim=1).numpy()
         
         # Agreement rate
         agreement = (victim_preds == sub_preds).mean()
@@ -403,13 +403,13 @@ class ModelExtractionAttack:
 
 # Example: Steal model
 victim = model  # Our trained model
-attacker = ModelExtractionAttack(victim)
+attacker = ModelExtractionAttack (victim)
 
 # Steal model
-stolen_model = attacker.steal_model(input_dim=10, num_classes=3, num_queries=1000)
+stolen_model = attacker.steal_model (input_dim=10, num_classes=3, num_queries=1000)
 
 # Evaluate
-attacker.evaluate_extraction(stolen_model, X_test, y_test)
+attacker.evaluate_extraction (stolen_model, X_test, y_test)
 
 print("\\n⚠️  Defense: Rate limiting, query monitoring, adding noise to outputs")
 \`\`\`
@@ -430,25 +430,25 @@ class ModelExtractionDefense:
         self.model = model
         self.query_log = []
     
-    def rate_limiting(self, user_id, max_queries_per_hour=1000):
+    def rate_limiting (self, user_id, max_queries_per_hour=1000):
         """
         Limit queries per user
         """
         from datetime import datetime, timedelta
         
         # Count recent queries
-        cutoff = datetime.now() - timedelta(hours=1)
+        cutoff = datetime.now() - timedelta (hours=1)
         recent_queries = [
             q for q in self.query_log
             if q['user_id'] == user_id and q['timestamp'] > cutoff
         ]
         
-        if len(recent_queries) >= max_queries_per_hour:
-            raise Exception(f"Rate limit exceeded: {len(recent_queries)} queries in last hour")
+        if len (recent_queries) >= max_queries_per_hour:
+            raise Exception (f"Rate limit exceeded: {len (recent_queries)} queries in last hour")
         
         return True
     
-    def add_prediction_noise(self, predictions, epsilon=0.01):
+    def add_prediction_noise (self, predictions, epsilon=0.01):
         """
         Add noise to predictions to prevent exact extraction
         """
@@ -456,12 +456,12 @@ class ModelExtractionDefense:
         noisy_predictions = predictions + noise
         
         # Renormalize probabilities
-        noisy_predictions = np.maximum(noisy_predictions, 0)
-        noisy_predictions = noisy_predictions / noisy_predictions.sum(axis=1, keepdims=True)
+        noisy_predictions = np.maximum (noisy_predictions, 0)
+        noisy_predictions = noisy_predictions / noisy_predictions.sum (axis=1, keepdims=True)
         
         return noisy_predictions
     
-    def detect_extraction_attempt(self, queries, threshold=100):
+    def detect_extraction_attempt (self, queries, threshold=100):
         """
         Detect potential model extraction
         
@@ -470,27 +470,27 @@ class ModelExtractionDefense:
         - Random-looking inputs
         - Systematic exploration of input space
         """
-        if len(queries) > threshold:
+        if len (queries) > threshold:
             # Check if inputs are random/systematic
-            queries_array = np.array(queries)
+            queries_array = np.array (queries)
             
             # Random inputs have high entropy
-            mean_std = np.mean([np.std(q) for q in queries_array])
+            mean_std = np.mean([np.std (q) for q in queries_array])
             
             if mean_std > 0.8:  # Threshold for randomness
                 print("\\n🚨 ALERT: Potential model extraction detected!")
-                print(f"   - {len(queries)} queries")
+                print(f"   - {len (queries)} queries")
                 print(f"   - High input entropy (random exploration)")
                 return True
         
         return False
     
-    def protected_predict(self, X, user_id):
+    def protected_predict (self, X, user_id):
         """
         Prediction with protections
         """
         # 1. Rate limiting
-        self.rate_limiting(user_id)
+        self.rate_limiting (user_id)
         
         # 2. Log query
         self.query_log.append({
@@ -503,10 +503,10 @@ class ModelExtractionDefense:
         with torch.no_grad():
             X_tensor = torch.FloatTensor(X)
             output = self.model(X_tensor)
-            probs = torch.softmax(output, dim=1).numpy()
+            probs = torch.softmax (output, dim=1).numpy()
         
         # 4. Add noise
-        probs = self.add_prediction_noise(probs, epsilon=0.01)
+        probs = self.add_prediction_noise (probs, epsilon=0.01)
         
         # 5. Check for extraction attempt
         recent_queries = [q for q in self.query_log if q['user_id'] == user_id]
@@ -518,7 +518,7 @@ class ModelExtractionDefense:
 from datetime import datetime
 
 # Example: Protected API
-defender = ModelExtractionDefense(model)
+defender = ModelExtractionDefense (model)
 
 # Normal usage
 result = defender.protected_predict(X_test[:5], user_id='user_123')
@@ -562,7 +562,7 @@ class DifferentialPrivacy:
         self.epsilon = epsilon
         self.delta = delta
     
-    def add_noise_to_gradients(self, gradients, sensitivity, batch_size):
+    def add_noise_to_gradients (self, gradients, sensitivity, batch_size):
         """
         Add Gaussian noise to gradients (DP-SGD)
         
@@ -577,18 +577,18 @@ class DifferentialPrivacy:
         
         return noisy_gradients
     
-    def clip_gradients(self, gradients, max_norm=1.0):
+    def clip_gradients (self, gradients, max_norm=1.0):
         """
         Clip gradients to bound sensitivity
         """
-        grad_norm = np.linalg.norm(gradients)
+        grad_norm = np.linalg.norm (gradients)
         
         if grad_norm > max_norm:
             gradients = gradients * (max_norm / grad_norm)
         
         return gradients
     
-    def dp_sgd_step(self, model, X_batch, y_batch, optimizer, criterion, max_norm=1.0):
+    def dp_sgd_step (self, model, X_batch, y_batch, optimizer, criterion, max_norm=1.0):
         """
         One DP-SGD training step
         """
@@ -596,10 +596,10 @@ class DifferentialPrivacy:
         
         # Forward pass
         X_tensor = torch.FloatTensor(X_batch)
-        y_tensor = torch.LongTensor(y_batch)
+        y_tensor = torch.LongTensor (y_batch)
         
         output = model(X_tensor)
-        loss = criterion(output, y_tensor)
+        loss = criterion (output, y_tensor)
         
         # Backward pass
         loss.backward()
@@ -610,7 +610,7 @@ class DifferentialPrivacy:
                 if param.grad is not None:
                     # Clip
                     grad_numpy = param.grad.numpy()
-                    clipped_grad = self.clip_gradients(grad_numpy, max_norm)
+                    clipped_grad = self.clip_gradients (grad_numpy, max_norm)
                     
                     # Add noise
                     noisy_grad = self.add_noise_to_gradients(
@@ -619,14 +619,14 @@ class DifferentialPrivacy:
                         batch_size=len(X_batch)
                     )
                     
-                    param.grad = torch.FloatTensor(noisy_grad)
+                    param.grad = torch.FloatTensor (noisy_grad)
         
         # Update parameters
         optimizer.step()
         
         return loss.item()
     
-    def train_private_model(self, model, X_train, y_train, epochs=10, batch_size=32):
+    def train_private_model (self, model, X_train, y_train, epochs=10, batch_size=32):
         """
         Train model with differential privacy
         """
@@ -638,10 +638,10 @@ class DifferentialPrivacy:
         
         n_batches = len(X_train) // batch_size
         
-        for epoch in range(epochs):
+        for epoch in range (epochs):
             epoch_loss = 0
             
-            for i in range(n_batches):
+            for i in range (n_batches):
                 start_idx = i * batch_size
                 end_idx = start_idx + batch_size
                 
@@ -667,16 +667,16 @@ class DifferentialPrivacy:
 
 
 # Example: Train private model
-dp = DifferentialPrivacy(epsilon=1.0, delta=1e-5)
+dp = DifferentialPrivacy (epsilon=1.0, delta=1e-5)
 
 private_model = SimpleClassifier()
-private_model = dp.train_private_model(private_model, X_train, y_train, epochs=10)
+private_model = dp.train_private_model (private_model, X_train, y_train, epochs=10)
 
 # Evaluate
 with torch.no_grad():
     X_tensor = torch.FloatTensor(X_test)
     output = private_model(X_tensor)
-    predictions = output.argmax(dim=1).numpy()
+    predictions = output.argmax (dim=1).numpy()
     accuracy = (predictions == y_test).mean()
 
 print(f"\\nPrivate model accuracy: {accuracy*100:.2f}%")
@@ -708,36 +708,36 @@ class FederatedLearning:
         self.num_clients = num_clients
         self.global_model = None
     
-    def initialize_global_model(self, input_dim=10, num_classes=3):
+    def initialize_global_model (self, input_dim=10, num_classes=3):
         """
         Initialize global model
         """
-        self.global_model = SimpleClassifier(input_dim, num_classes)
+        self.global_model = SimpleClassifier (input_dim, num_classes)
         print(f"✓ Initialized global model")
     
-    def client_update(self, client_model, X_local, y_local, epochs=5):
+    def client_update (self, client_model, X_local, y_local, epochs=5):
         """
         Train on local client data
         """
         optimizer = torch.optim.SGD(client_model.parameters(), lr=0.01)
         criterion = nn.CrossEntropyLoss()
         
-        for epoch in range(epochs):
+        for epoch in range (epochs):
             client_model.train()
             optimizer.zero_grad()
             
             X_tensor = torch.FloatTensor(X_local)
-            y_tensor = torch.LongTensor(y_local)
+            y_tensor = torch.LongTensor (y_local)
             
             output = client_model(X_tensor)
-            loss = criterion(output, y_tensor)
+            loss = criterion (output, y_tensor)
             
             loss.backward()
             optimizer.step()
         
         return client_model
     
-    def federated_averaging(self, client_models):
+    def federated_averaging (self, client_models):
         """
         FedAvg: Average client model parameters
         """
@@ -749,12 +749,12 @@ class FederatedLearning:
             global_dict[key] = torch.stack([
                 client.state_dict()[key].float()
                 for client in client_models
-            ]).mean(dim=0)
+            ]).mean (dim=0)
         
         # Update global model
-        self.global_model.load_state_dict(global_dict)
+        self.global_model.load_state_dict (global_dict)
     
-    def train_federated(self, client_datasets, rounds=10):
+    def train_federated (self, client_datasets, rounds=10):
         """
         Federated learning training
         
@@ -762,30 +762,30 @@ class FederatedLearning:
             client_datasets: List of (X, y) tuples for each client
         """
         print(f"\\n=== Federated Learning ===")
-        print(f"Clients: {len(client_datasets)}, Rounds: {rounds}\\n")
+        print(f"Clients: {len (client_datasets)}, Rounds: {rounds}\\n")
         
-        for round_num in range(rounds):
+        for round_num in range (rounds):
             print(f"Round {round_num+1}/{rounds}")
             
             # Each client trains locally
             client_models = []
             
-            for i, (X_local, y_local) in enumerate(client_datasets):
+            for i, (X_local, y_local) in enumerate (client_datasets):
                 # Copy global model to client
                 client_model = SimpleClassifier()
-                client_model.load_state_dict(self.global_model.state_dict())
+                client_model.load_state_dict (self.global_model.state_dict())
                 
                 # Train locally
                 client_model = self.client_update(
                     client_model, X_local, y_local, epochs=5
                 )
                 
-                client_models.append(client_model)
+                client_models.append (client_model)
             
             # Aggregate models
-            self.federated_averaging(client_models)
+            self.federated_averaging (client_models)
             
-            print(f"  ✓ Aggregated {len(client_models)} client updates")
+            print(f"  ✓ Aggregated {len (client_models)} client updates")
         
         print(f"\\n✓ Federated training complete")
         
@@ -793,8 +793,8 @@ class FederatedLearning:
 
 
 # Example: Federated learning
-fl = FederatedLearning(num_clients=5)
-fl.initialize_global_model(input_dim=10, num_classes=3)
+fl = FederatedLearning (num_clients=5)
+fl.initialize_global_model (input_dim=10, num_classes=3)
 
 # Simulate client datasets (non-IID)
 client_datasets = []
@@ -805,13 +805,13 @@ for i in range(5):
     client_datasets.append((X_client, y_client))
 
 # Train federated
-global_model = fl.train_federated(client_datasets, rounds=10)
+global_model = fl.train_federated (client_datasets, rounds=10)
 
 # Evaluate global model
 with torch.no_grad():
     X_tensor = torch.FloatTensor(X_test)
     output = global_model(X_tensor)
-    predictions = output.argmax(dim=1).numpy()
+    predictions = output.argmax (dim=1).numpy()
     accuracy = (predictions == y_test).mean()
 
 print(f"\\nGlobal model accuracy: {accuracy*100:.2f}%")

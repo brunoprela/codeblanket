@@ -6,7 +6,7 @@ export const doordasharchitectureQuiz = [
   {
     id: 'q1',
     question:
-      "Explain DoorDash's dispatch optimization system. How does it assign orders to Dashers while minimizing delivery time and considering multiple constraints?",
+      "Explain DoorDash\'s dispatch optimization system. How does it assign orders to Dashers while minimizing delivery time and considering multiple constraints?",
     sampleAnswer:
       "DoorDash uses batch matching with optimization algorithm. Flow: (1) Collect orders and available Dashers every 30 seconds. (2) For each order, identify candidate Dashers within reasonable range (H3 geospatial indexing). (3) Calculate cost for each (order, Dasher) pair: estimated pickup time, delivery time, Dasher acceptance probability (decline history), stacking potential (can Dasher take 2 orders?), future orders (don't waste good Dasher on suboptimal order). (4) Formulate as optimization problem: Minimize total delivery time subject to constraints (on-time delivery, Dasher capacity ≤2, Dasher shift hours). (5) Solve using Mixed Integer Linear Programming (MILP) or greedy heuristics (MILP for small problems <1000 orders, greedy for scale). (6) Assign orders to Dashers. Trade-offs: Batch delay (30s) vs global optimization. Greedy (nearest Dasher) is suboptimal - better assignment exists considering future demand. Result: 15% improvement in delivery time vs greedy baseline.",
     keyPoints: [
@@ -32,11 +32,11 @@ export const doordasharchitectureQuiz = [
   {
     id: 'q3',
     question:
-      "Describe DoorDash's experimentation platform. How do they run thousands of A/B tests safely and analyze results?",
+      "Describe DoorDash\'s experimentation platform. How do they run thousands of A/B tests safely and analyze results?",
     sampleAnswer:
       'DoorDash experimentation platform enables thousands of concurrent A/B tests. Components: (1) Experiment configuration - Define experiment: variants (control, treatment), traffic allocation (5% treatment), target users (new users, SF Bay Area), metrics (order rate, revenue). (2) Assignment service - When user opens app, query assignment service with user_id. Service hashes user_id + experiment_id → deterministic bucket (0-99). If bucket < 5 → treatment, else control. Cache assignment in Redis. (3) Metrics pipeline - User actions (order, add to cart) logged to Kafka. Flink processes stream, joins with experiment assignments, aggregates metrics per experiment. Write to data warehouse (Snowflake). (4) Analysis dashboard - Statistical significance testing (t-test), confidence intervals, multiple comparison correction (Bonferroni). Visualizations (conversion funnel, time series). Safety: (1) Guardrail metrics - Monitor error rates, crash rates. Auto-stop experiment if guardrails violated. (2) Gradual rollout - Start at 1%, increase to 5%, 10%, 50% if metrics positive. (3) Experiment review - Senior engineers review high-risk experiments before launch.',
     keyPoints: [
-      'Assignment service: Hash(user_id, experiment_id) → deterministic bucket',
+      'Assignment service: Hash (user_id, experiment_id) → deterministic bucket',
       'Metrics pipeline: Kafka + Flink for stream processing, Snowflake for analysis',
       'Safety: Guardrail metrics, auto-stop, gradual rollout, experiment review',
       'Analysis: Statistical testing (t-test), confidence intervals, visualizations',

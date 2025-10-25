@@ -46,7 +46,7 @@ class EarningsTranscriptRetriever:
             'company_ir': 'Free, direct from company'
         }
     
-    def get_from_seeking_alpha(self, ticker: str, year: int, quarter: int) -> Optional[str]:
+    def get_from_seeking_alpha (self, ticker: str, year: int, quarter: int) -> Optional[str]:
         """
         Scrape transcript from Seeking Alpha (educational example)
         Note: Check ToS before scraping
@@ -76,7 +76,7 @@ class EarningsTranscriptRetriever:
         
         return None
     
-    def get_from_company_ir(self, ticker: str, ir_url: str) -> List[Dict]:
+    def get_from_company_ir (self, ticker: str, ir_url: str) -> List[Dict]:
         """
         Get earnings call information from company IR website
         
@@ -100,7 +100,7 @@ class EarningsTranscriptRetriever:
         
         return []
     
-    def get_from_api(self, ticker: str, api_key: str, 
+    def get_from_api (self, ticker: str, api_key: str, 
                     count: int = 4) -> List[Dict]:
         """
         Get transcripts from paid API service
@@ -117,7 +117,7 @@ class EarningsTranscriptRetriever:
         params = {"limit": count}
         
         try:
-            response = requests.get(url, headers=headers, params=params)
+            response = requests.get (url, headers=headers, params=params)
             if response.status_code == 200:
                 return response.json()
         except Exception as e:
@@ -130,7 +130,7 @@ SAMPLE_TRANSCRIPT = """
 Apple Inc. Q4 2023 Earnings Call
 October 26, 2023
 
-OPERATOR: Good day, and welcome to the Apple Inc. Fourth Quarter Fiscal Year 2023 Earnings Conference Call. Today's call is being recorded.
+OPERATOR: Good day, and welcome to the Apple Inc. Fourth Quarter Fiscal Year 2023 Earnings Conference Call. Today\'s call is being recorded.
 
 At this time, for opening remarks and introductions, I would like to turn the call over to Suhasini Chandramouli, Director of Investor Relations. Please go ahead.
 
@@ -215,7 +215,7 @@ class EarningsCallParser:
             ]
         }
     
-    def identify_speakers(self, transcript: str) -> List[Speaker]:
+    def identify_speakers (self, transcript: str) -> List[Speaker]:
         """
         Identify all speakers mentioned in transcript
         
@@ -228,21 +228,21 @@ class EarningsCallParser:
         # Example: "Tim Cook, Chief Executive Officer"
         pattern = r'([A-Z][a-z]+\\s+[A-Z][a-z]+),\\s+([^:\\n]+)'
         
-        matches = re.findall(pattern, transcript)
+        matches = re.findall (pattern, transcript)
         
         for name, title in matches:
             # Determine if company exec or analyst
-            if any(keyword in title.lower() for keyword in 
+            if any (keyword in title.lower() for keyword in 
                   ['ceo', 'cfo', 'chief', 'president', 'director']):
                 affiliation = 'Company'
             else:
                 affiliation = 'Analyst'
             
-            speakers.append(Speaker(name=name, title=title, affiliation=affiliation))
+            speakers.append(Speaker (name=name, title=title, affiliation=affiliation))
         
         return speakers
     
-    def split_into_statements(self, transcript: str) -> List[Statement]:
+    def split_into_statements (self, transcript: str) -> List[Statement]:
         """
         Split transcript into individual statements
         
@@ -255,7 +255,7 @@ class EarningsCallParser:
         # or "SPEAKER NAME (TITLE): statement text"
         pattern = r'([A-Z\\s]+?)(?:\\s+\\([^)]+\\))?:\\s+(.+?)(?=\\n[A-Z\\s]+?:|$)'
         
-        matches = re.findall(pattern, transcript, re.DOTALL)
+        matches = re.findall (pattern, transcript, re.DOTALL)
         
         current_section = 'prepared_remarks'
         
@@ -264,7 +264,7 @@ class EarningsCallParser:
             text = text.strip()
             
             # Check if we've entered Q&A
-            if any(re.search(pattern, text.lower()) 
+            if any (re.search (pattern, text.lower()) 
                   for pattern in self.section_markers['qa_start']):
                 current_section = 'qa'
                 continue
@@ -274,7 +274,7 @@ class EarningsCallParser:
                 continue
             
             # Create Speaker object (simplified - in practice, lookup from identified speakers)
-            speaker = Speaker(name=speaker_name, title='', affiliation='')
+            speaker = Speaker (name=speaker_name, title='', affiliation='')
             
             statements.append(Statement(
                 speaker=speaker,
@@ -284,7 +284,7 @@ class EarningsCallParser:
         
         return statements
     
-    def extract_sections(self, transcript: str) -> Dict[str, str]:
+    def extract_sections (self, transcript: str) -> Dict[str, str]:
         """
         Extract major sections from transcript
         
@@ -296,7 +296,7 @@ class EarningsCallParser:
         # Find Q&A start
         qa_start = None
         for pattern in self.section_markers['qa_start']:
-            match = re.search(pattern, transcript, re.IGNORECASE)
+            match = re.search (pattern, transcript, re.IGNORECASE)
             if match:
                 qa_start = match.start()
                 break
@@ -311,7 +311,7 @@ class EarningsCallParser:
         
         return sections
     
-    def extract_qa_pairs(self, qa_section: str) -> List[Dict[str, str]]:
+    def extract_qa_pairs (self, qa_section: str) -> List[Dict[str, str]]:
         """
         Extract question-answer pairs from Q&A section
         
@@ -325,10 +325,10 @@ class EarningsCallParser:
         # Followed by: Executive name: answer text
         
         # This is a simplified version - production systems need more robust parsing
-        statements = self.split_into_statements(qa_section)
+        statements = self.split_into_statements (qa_section)
         
         i = 0
-        while i < len(statements) - 1:
+        while i < len (statements) - 1:
             current = statements[i]
             next_stmt = statements[i + 1]
             
@@ -354,15 +354,15 @@ parser = EarningsCallParser()
 
 # Parse sample transcript
 sections = parser.extract_sections(SAMPLE_TRANSCRIPT)
-print(f"Prepared Remarks: {len(sections['prepared_remarks'])} chars")
-print(f"Q&A: {len(sections['qa'])} chars")
+print(f"Prepared Remarks: {len (sections['prepared_remarks'])} chars")
+print(f"Q&A: {len (sections['qa'])} chars")
 
 # Extract statements
 statements = parser.split_into_statements(SAMPLE_TRANSCRIPT)
-print(f"\\nTotal statements: {len(statements)}")
+print(f"\\nTotal statements: {len (statements)}")
 
 # Show first few statements
-for i, stmt in enumerate(statements[:3]):
+for i, stmt in enumerate (statements[:3]):
     print(f"\\n{i+1}. {stmt.speaker.name} ({stmt.section}):")
     print(f"   {stmt.text[:100]}...")
 \`\`\`
@@ -387,10 +387,10 @@ class EarningsCallAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_management_tone(self, prepared_remarks: str) -> Dict:
+    def analyze_management_tone (self, prepared_remarks: str) -> Dict:
         """
         Analyze management's tone and sentiment in prepared remarks
         
@@ -425,7 +425,7 @@ Return analysis as JSON."""
         
         return response.content[0].text
     
-    def analyze_qa_session(self, qa_pairs: List[Dict[str, str]]) -> Dict:
+    def analyze_qa_session (self, qa_pairs: List[Dict[str, str]]) -> Dict:
         """
         Analyze Q&A session for insights
         
@@ -446,7 +446,7 @@ Return analysis as JSON."""
 
 Focus on:
 1. Most frequently asked topics (what are analysts concerned about?)
-2. Management's responsiveness (do they answer directly or deflect?)
+2. Management\'s responsiveness (do they answer directly or deflect?)
 3. Defensive vs confident responses
 4. New information revealed (that wasn't in prepared remarks)
 5. Questions that were dodged or answered vaguely
@@ -466,7 +466,7 @@ Provide analysis in structured format."""
         
         return response.content[0].text
     
-    def compare_to_guidance(self, current_remarks: str, 
+    def compare_to_guidance (self, current_remarks: str, 
                            previous_guidance: str) -> str:
         """
         Compare current results to previous guidance
@@ -480,7 +480,7 @@ Provide analysis in structured format."""
         """
         prompt = f"""Compare the current quarter's results to previous guidance.
 
-Previous Quarter's Guidance:
+Previous Quarter\'s Guidance:
 {previous_guidance}
 
 Current Quarter's Results:
@@ -504,7 +504,7 @@ Provide detailed comparison."""
         
         return response.content[0].text
     
-    def identify_key_metrics(self, transcript: str) -> Dict:
+    def identify_key_metrics (self, transcript: str) -> Dict:
         """
         Extract specific metrics and numbers mentioned
         
@@ -544,7 +544,7 @@ Return as structured JSON with metric categories."""
         
         return response.content[0].text
     
-    def generate_investment_summary(self, full_analysis: Dict) -> str:
+    def generate_investment_summary (self, full_analysis: Dict) -> str:
         """
         Generate investment-focused summary from all analyses
         
@@ -591,17 +591,17 @@ Provide a comprehensive but concise investment summary (400-500 words)."""
         return response.content[0].text
 
 # Example usage
-analyzer = EarningsCallAnalyzer(api_key="your-key")
+analyzer = EarningsCallAnalyzer (api_key="your-key")
 
 # Analyze prepared remarks
 sections = parser.extract_sections(SAMPLE_TRANSCRIPT)
-tone_analysis = analyzer.analyze_management_tone(sections['prepared_remarks'])
+tone_analysis = analyzer.analyze_management_tone (sections['prepared_remarks'])
 print("Management Tone Analysis:")
 print(tone_analysis)
 
 # Analyze Q&A
-qa_pairs = parser.extract_qa_pairs(sections['qa'])
-qa_analysis = analyzer.analyze_qa_session(qa_pairs)
+qa_pairs = parser.extract_qa_pairs (sections['qa'])
+qa_analysis = analyzer.analyze_qa_session (qa_pairs)
 print("\\nQ&A Analysis:")
 print(qa_analysis)
 
@@ -616,7 +616,7 @@ full_analysis = {
     'qa_analysis': qa_analysis,
     'metrics': metrics
 }
-summary = analyzer.generate_investment_summary(full_analysis)
+summary = analyzer.generate_investment_summary (full_analysis)
 print("\\nInvestment Summary:")
 print(summary)
 \`\`\`
@@ -643,7 +643,7 @@ class RealTimeEarningsAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.analyzer = EarningsCallAnalyzer(api_key)
+        self.analyzer = EarningsCallAnalyzer (api_key)
         self.parser = EarningsCallParser()
         
         # Queue for transcript chunks
@@ -654,36 +654,36 @@ class RealTimeEarningsAnalyzer:
         self.current_section = 'prepared_remarks'
         self.accumulated_text = ''
         
-    def process_transcript_chunk(self, chunk: str):
+    def process_transcript_chunk (self, chunk: str):
         """
         Process incoming transcript chunk
         
         Args:
             chunk: New text from live transcript
         """
-        self.transcript_queue.put(chunk)
+        self.transcript_queue.put (chunk)
     
-    def start_analysis(self):
+    def start_analysis (self):
         """
         Start real-time analysis thread
         """
-        analysis_thread = threading.Thread(target=self._analysis_worker)
+        analysis_thread = threading.Thread (target=self._analysis_worker)
         analysis_thread.daemon = True
         analysis_thread.start()
     
-    def _analysis_worker(self):
+    def _analysis_worker (self):
         """
         Worker thread that processes transcript chunks
         """
         while True:
             try:
                 # Get chunk from queue (blocks until available)
-                chunk = self.transcript_queue.get(timeout=1)
+                chunk = self.transcript_queue.get (timeout=1)
                 
                 self.accumulated_text += chunk
                 
                 # Analyze when we have enough text
-                if len(self.accumulated_text) > 1000:
+                if len (self.accumulated_text) > 1000:
                     self._perform_incremental_analysis()
                 
                 self.transcript_queue.task_done()
@@ -693,7 +693,7 @@ class RealTimeEarningsAnalyzer:
             except Exception as e:
                 print(f"Analysis error: {e}")
     
-    def _perform_incremental_analysis(self):
+    def _perform_incremental_analysis (self):
         """
         Perform analysis on accumulated text
         """
@@ -719,19 +719,19 @@ Key Point: [one sentence]"""
             
             result = {
                 'timestamp': datetime.now().isoformat(),
-                'text_length': len(self.accumulated_text),
+                'text_length': len (self.accumulated_text),
                 'analysis': response.content[0].text
             }
             
-            self.analysis_results.append(result)
+            self.analysis_results.append (result)
             
             # Emit real-time signal
-            self._emit_signal(result)
+            self._emit_signal (result)
             
         except Exception as e:
             print(f"LLM analysis error: {e}")
     
-    def _emit_signal(self, result: Dict):
+    def _emit_signal (self, result: Dict):
         """
         Emit trading signal based on analysis
         
@@ -769,14 +769,14 @@ Key Point: [one sentence]"""
         # 3. Send alerts
         # 4. Log to database
     
-    def get_final_analysis(self) -> Dict:
+    def get_final_analysis (self) -> Dict:
         """
         Generate comprehensive analysis after call ends
         
         Returns:
             Complete analysis
         """
-        sections = self.parser.extract_sections(self.accumulated_text)
+        sections = self.parser.extract_sections (self.accumulated_text)
         
         # Comprehensive analysis now that we have full transcript
         full_analysis = {
@@ -784,14 +784,14 @@ Key Point: [one sentence]"""
                 sections['prepared_remarks']
             ),
             'qa_analysis': self.analyzer.analyze_qa_session(
-                self.parser.extract_qa_pairs(sections['qa'])
+                self.parser.extract_qa_pairs (sections['qa'])
             ),
-            'metrics': self.analyzer.identify_key_metrics(self.accumulated_text),
+            'metrics': self.analyzer.identify_key_metrics (self.accumulated_text),
             'incremental_results': self.analysis_results
         }
         
         # Generate final summary
-        summary = self.analyzer.generate_investment_summary(full_analysis)
+        summary = self.analyzer.generate_investment_summary (full_analysis)
         full_analysis['investment_summary'] = summary
         
         return full_analysis
@@ -801,15 +801,15 @@ def simulate_real_time_call():
     """
     Simulate receiving transcript in real-time
     """
-    analyzer = RealTimeEarningsAnalyzer(api_key="your-key")
+    analyzer = RealTimeEarningsAnalyzer (api_key="your-key")
     analyzer.start_analysis()
     
     # Simulate transcript chunks arriving
     transcript_chunks = SAMPLE_TRANSCRIPT.split('\\n\\n')
     
-    for i, chunk in enumerate(transcript_chunks):
-        print(f"Receiving chunk {i+1}/{len(transcript_chunks)}...")
-        analyzer.process_transcript_chunk(chunk)
+    for i, chunk in enumerate (transcript_chunks):
+        print(f"Receiving chunk {i+1}/{len (transcript_chunks)}...")
+        analyzer.process_transcript_chunk (chunk)
         
         # Simulate delay between chunks (real calls unfold over 60 min)
         import time
@@ -851,9 +851,9 @@ class EarningsComparator:
     """
     
     def __init__(self, api_key: str):
-        self.analyzer = EarningsCallAnalyzer(api_key)
+        self.analyzer = EarningsCallAnalyzer (api_key)
     
-    def compare_tone_evolution(self, transcripts: List[Dict]) -> pd.DataFrame:
+    def compare_tone_evolution (self, transcripts: List[Dict]) -> pd.DataFrame:
         """
         Track tone evolution across quarters
         
@@ -874,19 +874,19 @@ class EarningsComparator:
             # Parse JSON response (simplified)
             import json
             try:
-                tone_data = json.loads(tone_analysis)
+                tone_data = json.loads (tone_analysis)
                 results.append({
                     'quarter': f"Q{transcript['quarter']} {transcript['year']}",
                     'sentiment': tone_data.get('overall_sentiment'),
                     'confidence': tone_data.get('confidence_level'),
-                    'key_themes': ', '.join(tone_data.get('key_themes', [])),
+                    'key_themes': ', '.join (tone_data.get('key_themes', [])),
                 })
             except:
                 pass
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def identify_narrative_changes(self, current: str, previous: str) -> str:
+    def identify_narrative_changes (self, current: str, previous: str) -> str:
         """
         Identify changes in narrative between quarters
         
@@ -924,7 +924,7 @@ Provide detailed comparison of narrative evolution."""
         
         return response.content[0].text
     
-    def track_management_credibility(self, 
+    def track_management_credibility (self, 
                                     historical_guidances: List[Dict],
                                     actual_results: List[Dict]) -> str:
         """
@@ -939,7 +939,7 @@ Provide detailed comparison of narrative evolution."""
         """
         # Format data for analysis
         comparison_text = ""
-        for guidance, actual in zip(historical_guidances, actual_results):
+        for guidance, actual in zip (historical_guidances, actual_results):
             comparison_text += f"""
 Quarter: {guidance['quarter']}
 Guided Revenue: {guidance.get('revenue_guidance')}
@@ -971,7 +971,7 @@ Deliver credibility assessment."""
         return response.content[0].text
 
 # Example usage
-comparator = EarningsComparator(api_key="your-key")
+comparator = EarningsComparator (api_key="your-key")
 
 # Compare narrative changes
 narrative_analysis = comparator.identify_narrative_changes(
@@ -1004,18 +1004,18 @@ class EarningsAnalysisPipeline:
     """
     
     def __init__(self, anthropic_key: str, db_path: str = "earnings.db"):
-        self.analyzer = EarningsCallAnalyzer(anthropic_key)
+        self.analyzer = EarningsCallAnalyzer (anthropic_key)
         self.parser = EarningsCallParser()
-        self.comparator = EarningsComparator(anthropic_key)
+        self.comparator = EarningsComparator (anthropic_key)
         
         # Initialize database
-        self._init_database(db_path)
+        self._init_database (db_path)
     
-    def _init_database(self, db_path: str):
+    def _init_database (self, db_path: str):
         """Create database for storing analyses"""
         import sqlite3
         
-        conn = sqlite3.connect(db_path)
+        conn = sqlite3.connect (db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1040,7 +1040,7 @@ class EarningsAnalysisPipeline:
         
         self.db_path = db_path
     
-    def monitor_earnings_calendar(self):
+    def monitor_earnings_calendar (self):
         """
         Monitor for upcoming earnings calls
         """
@@ -1052,13 +1052,13 @@ class EarningsAnalysisPipeline:
         today = datetime.now().date()
         
         # Example: Check if companies are reporting today
-        earnings_today = self._get_earnings_calendar(today)
+        earnings_today = self._get_earnings_calendar (today)
         
         for ticker in earnings_today:
             print(f"Processing {ticker} earnings call...")
-            self.process_earnings_call(ticker)
+            self.process_earnings_call (ticker)
     
-    def process_earnings_call(self, ticker: str):
+    def process_earnings_call (self, ticker: str):
         """
         Complete processing of an earnings call
         
@@ -1067,24 +1067,24 @@ class EarningsAnalysisPipeline:
         """
         try:
             # 1. Retrieve transcript
-            transcript = self._retrieve_transcript(ticker)
+            transcript = self._retrieve_transcript (ticker)
             
             if not transcript:
                 print(f"Could not retrieve transcript for {ticker}")
                 return
             
             # 2. Parse sections
-            sections = self.parser.extract_sections(transcript)
+            sections = self.parser.extract_sections (transcript)
             
             # 3. Analyze with LLM
             tone_analysis = self.analyzer.analyze_management_tone(
                 sections['prepared_remarks']
             )
             
-            qa_pairs = self.parser.extract_qa_pairs(sections['qa'])
-            qa_analysis = self.analyzer.analyze_qa_session(qa_pairs)
+            qa_pairs = self.parser.extract_qa_pairs (sections['qa'])
+            qa_analysis = self.analyzer.analyze_qa_session (qa_pairs)
             
-            metrics = self.analyzer.identify_key_metrics(transcript)
+            metrics = self.analyzer.identify_key_metrics (transcript)
             
             # 4. Generate summary
             full_analysis = {
@@ -1093,10 +1093,10 @@ class EarningsAnalysisPipeline:
                 'metrics': metrics
             }
             
-            summary = self.analyzer.generate_investment_summary(full_analysis)
+            summary = self.analyzer.generate_investment_summary (full_analysis)
             
             # 5. Store in database
-            self._store_analysis(ticker, {
+            self._store_analysis (ticker, {
                 'transcript': transcript,
                 'tone_analysis': tone_analysis,
                 'summary': summary,
@@ -1104,25 +1104,25 @@ class EarningsAnalysisPipeline:
             })
             
             # 6. Generate alerts if needed
-            self._generate_alerts(ticker, full_analysis)
+            self._generate_alerts (ticker, full_analysis)
             
             print(f"Successfully processed {ticker} earnings call")
             
         except Exception as e:
             print(f"Error processing {ticker}: {e}")
     
-    def _retrieve_transcript(self, ticker: str) -> Optional[str]:
+    def _retrieve_transcript (self, ticker: str) -> Optional[str]:
         """Retrieve transcript for ticker"""
         # Implementation depends on data source
         # Could be: API call, web scraping, etc.
         pass
     
-    def _store_analysis(self, ticker: str, analysis: Dict):
+    def _store_analysis (self, ticker: str, analysis: Dict):
         """Store analysis in database"""
         import sqlite3
         import json
         
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Extract key fields (simplified)
@@ -1137,14 +1137,14 @@ class EarningsAnalysisPipeline:
             datetime.now().year,
             datetime.now().date().isoformat(),
             analysis['summary'],
-            json.dumps(analysis['metrics']),
+            json.dumps (analysis['metrics']),
             datetime.now().isoformat()
         ))
         
         conn.commit()
         conn.close()
     
-    def _generate_alerts(self, ticker: str, analysis: Dict):
+    def _generate_alerts (self, ticker: str, analysis: Dict):
         """Generate alerts for significant findings"""
         # Parse sentiment from analysis
         # If strongly positive or negative, send alert
@@ -1157,13 +1157,13 @@ class EarningsAnalysisPipeline:
         
         print(f"Alert check complete for {ticker}")
     
-    def run_continuous(self):
+    def run_continuous (self):
         """
         Run continuously, checking for earnings calls
         """
         # Schedule checks
-        schedule.every().day.at("09:00").do(self.monitor_earnings_calendar)
-        schedule.every().day.at("16:00").do(self.monitor_earnings_calendar)
+        schedule.every().day.at("09:00").do (self.monitor_earnings_calendar)
+        schedule.every().day.at("16:00").do (self.monitor_earnings_calendar)
         
         print("Earnings analysis pipeline started...")
         
@@ -1172,7 +1172,7 @@ class EarningsAnalysisPipeline:
             time.sleep(60)
 
 # Initialize pipeline
-# pipeline = EarningsAnalysisPipeline(anthropic_key="your-key")
+# pipeline = EarningsAnalysisPipeline (anthropic_key="your-key")
 # pipeline.run_continuous()
 \`\`\`
 

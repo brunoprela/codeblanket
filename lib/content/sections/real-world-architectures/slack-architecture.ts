@@ -5,7 +5,7 @@
 export const slackarchitectureSection = {
   id: 'slack-architecture',
   title: 'Slack Architecture',
-  content: `Slack is a business communication platform that has become essential for modern workplace collaboration. With 18+ million daily active users across 750,000+ organizations, Slack's architecture must handle real-time messaging, file sharing, search, notifications, and integrations at massive scale while maintaining 99.99% uptime. This section explores the technical systems behind Slack.
+  content: `Slack is a business communication platform that has become essential for modern workplace collaboration. With 18+ million daily active users across 750,000+ organizations, Slack\'s architecture must handle real-time messaging, file sharing, search, notifications, and integrations at massive scale while maintaining 99.99% uptime. This section explores the technical systems behind Slack.
 
 ## Overview
 
@@ -72,7 +72,7 @@ Why shard by workspace_id?
 - No cross-shard queries for 95% of operations
 
 Shard routing:
-workspace_id → hash(workspace_id) % num_shards → Shard N
+workspace_id → hash (workspace_id) % num_shards → Shard N
 \`\`\`
 
 **Vitess** (MySQL Sharding):
@@ -129,7 +129,7 @@ Slack decomposed monolith into microservices.
 
 ### 1. Real-Time Messaging Architecture
 
-Slack's core feature is real-time messaging. Messages must appear instantly (<100ms).
+Slack\'s core feature is real-time messaging. Messages must appear instantly (<100ms).
 
 **WebSocket Connection**:
 
@@ -362,7 +362,7 @@ SELECT EXISTS(
 
 ### 4. Search
 
-Slack's search is a key feature: Search across all messages, files, channels.
+Slack\'s search is a key feature: Search across all messages, files, channels.
 
 **Search Index**: **Elasticsearch**
 
@@ -792,7 +792,7 @@ Don't bombard users. Respect preferences, batch notifications, implement DND. No
 
 ## Interview Tips
 
-**Q: How would you design Slack's real-time messaging system?**
+**Q: How would you design Slack\'s real-time messaging system?**
 
 A: Use WebSocket for persistent connections. Architecture: (1) Gateway servers (Go) handle WebSocket connections (10K-50K per server). (2) User sends message → Gateway forwards to Message Service (gRPC). (3) Message Service validates, stores in MySQL (Vitess-sharded by workspace_id), indexes in Elasticsearch. (4) Publish to Redis Pub/Sub (channel:messages). (5) All Gateway servers subscribed to channel, receive message. (6) Gateway servers push to connected WebSocket clients. (7) Clients display message. Handle scale: Horizontal Gateway scaling, Redis Pub/Sub for broadcast, Vitess sharding for storage. Latency: <50ms P50 (10ms network + 5ms Gateway→Service + 20ms DB write + 5ms Redis + 10ms Gateway→Client).
 
@@ -808,7 +808,7 @@ A: Shard by workspace_id for data isolation and performance. MySQL: Vitess shard
 
 ## Summary
 
-Slack's architecture handles real-time business communication at massive scale:
+Slack\'s architecture handles real-time business communication at massive scale:
 
 **Key Takeaways**:
 

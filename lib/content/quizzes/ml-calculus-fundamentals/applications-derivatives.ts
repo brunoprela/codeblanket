@@ -6,9 +6,9 @@ export const applicationsderivativesQuiz = [
   {
     id: 'app-deriv-disc-1',
     question:
-      "Compare gradient descent and Newton's method. When would you use each?",
+      "Compare gradient descent and Newton\'s method. When would you use each?",
     hint: 'Consider convergence speed, computational cost, and memory.',
-    sampleAnswer: `**Gradient Descent:** Uses only first derivatives. Update: θ - α∇L. Pros: Low memory, scales well. Cons: Slower convergence. Use for: Large-scale ML (millions of parameters), non-smooth functions. **Newton's Method:** Uses second derivatives (Hessian). Update: θ - H⁻¹∇L. Pros: Quadratic convergence (fast). Cons: O(n²) memory, expensive Hessian computation. Use for: Small problems, when Hessian is available/approximated (L-BFGS).`,
+    sampleAnswer: `**Gradient Descent:** Uses only first derivatives. Update: θ - α∇L. Pros: Low memory, scales well. Cons: Slower convergence. Use for: Large-scale ML (millions of parameters), non-smooth functions. **Newton\'s Method:** Uses second derivatives (Hessian). Update: θ - H⁻¹∇L. Pros: Quadratic convergence (fast). Cons: O(n²) memory, expensive Hessian computation. Use for: Small problems, when Hessian is available/approximated (L-BFGS).`,
     keyPoints: [
       'GD: first-order, scalable, slower',
       'Newton: second-order, fast convergence, expensive',

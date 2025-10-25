@@ -56,7 +56,7 @@ print(x)  # tensor([1, 2, 3, 4, 5])
 
 # From NumPy array
 arr = np.array([1, 2, 3])
-x = torch.from_numpy(arr)
+x = torch.from_numpy (arr)
 print(x)  # tensor([1, 2, 3])
 
 # Common creation functions
@@ -129,7 +129,7 @@ print(x.grad)  # tensor([4.]) since dy/dx = 2x = 2*2 = 4
 ### Multi-variable Example
 
 \`\`\`python
-# f(x, y) = x^2 + y^3
+# f (x, y) = x^2 + y^3
 x = torch.tensor([2.0], requires_grad=True)
 y = torch.tensor([3.0], requires_grad=True)
 
@@ -193,26 +193,26 @@ print(f"dL/db = {b.grad}")  # Gradient of loss w.r.t. b
 import torch.nn as nn
 import torch.nn.functional as F
 
-class SimpleNet(nn.Module):
+class SimpleNet (nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(SimpleNet, self).__init__()
         
         # Define layers
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.fc1 = nn.Linear (input_size, hidden_size)
+        self.fc2 = nn.Linear (hidden_size, output_size)
     
-    def forward(self, x):
+    def forward (self, x):
         # Define forward pass
-        x = F.relu(self.fc1(x))
+        x = F.relu (self.fc1(x))
         x = self.fc2(x)
         return x
 
 # Create model
-model = SimpleNet(input_size=784, hidden_size=128, output_size=10)
+model = SimpleNet (input_size=784, hidden_size=128, output_size=10)
 
 # Forward pass
 x = torch.randn(32, 784)  # Batch of 32 samples
-output = model(x)
+output = model (x)
 print(output.shape)  # torch.Size([32, 10])
 
 # Access parameters
@@ -223,7 +223,7 @@ for name, param in model.named_parameters():
 ### More Complex Model
 
 \`\`\`python
-class DeepNet(nn.Module):
+class DeepNet (nn.Module):
     def __init__(self):
         super(DeepNet, self).__init__()
         
@@ -237,15 +237,15 @@ class DeepNet(nn.Module):
         
         self.fc3 = nn.Linear(256, 10)
     
-    def forward(self, x):
+    def forward (self, x):
         x = self.fc1(x)
         x = self.bn1(x)
-        x = F.relu(x)
+        x = F.relu (x)
         x = self.dropout1(x)
         
         x = self.fc2(x)
         x = self.bn2(x)
-        x = F.relu(x)
+        x = F.relu (x)
         x = self.dropout2(x)
         
         x = self.fc3(x)
@@ -290,20 +290,20 @@ y_val = torch.randint(0, 10, (200,))
 train_dataset = TensorDataset(X_train, y_train)
 val_dataset = TensorDataset(X_val, y_val)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+train_loader = DataLoader (train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader (val_dataset, batch_size=32, shuffle=False)
 
 # 2. Define model
 model = DeepNet()
 
 # 3. Define loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam (model.parameters(), lr=0.001)
 
 # 4. Training loop
 num_epochs = 10
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     # Training phase
     model.train()
     train_loss = 0.0
@@ -313,8 +313,8 @@ for epoch in range(num_epochs):
         optimizer.zero_grad()
         
         # Forward pass
-        outputs = model(batch_X)
-        loss = criterion(outputs, batch_y)
+        outputs = model (batch_X)
+        loss = criterion (outputs, batch_y)
         
         # Backward pass
         loss.backward()
@@ -324,7 +324,7 @@ for epoch in range(num_epochs):
         
         train_loss += loss.item()
     
-    train_loss /= len(train_loader)
+    train_loss /= len (train_loader)
     
     # Validation phase
     model.eval()
@@ -334,15 +334,15 @@ for epoch in range(num_epochs):
     
     with torch.no_grad():  # Disable gradient computation
         for batch_X, batch_y in val_loader:
-            outputs = model(batch_X)
-            loss = criterion(outputs, batch_y)
+            outputs = model (batch_X)
+            loss = criterion (outputs, batch_y)
             val_loss += loss.item()
             
-            _, predicted = torch.max(outputs, 1)
+            _, predicted = torch.max (outputs, 1)
             total += batch_y.size(0)
             correct += (predicted == batch_y).sum().item()
     
-    val_loss /= len(val_loader)
+    val_loss /= len (val_loader)
     val_acc = correct / total
     
     print(f"Epoch {epoch+1}/{num_epochs}: "
@@ -359,17 +359,17 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Move model to GPU
-model = model.to(device)
+model = model.to (device)
 
 # Training loop with GPU
 for batch_X, batch_y in train_loader:
     # Move data to GPU
-    batch_X = batch_X.to(device)
-    batch_y = batch_y.to(device)
+    batch_X = batch_X.to (device)
+    batch_y = batch_y.to (device)
     
     # Forward pass (happens on GPU)
-    outputs = model(batch_X)
-    loss = criterion(outputs, batch_y)
+    outputs = model (batch_X)
+    loss = criterion (outputs, batch_y)
     
     # Backward and optimize
     optimizer.zero_grad()
@@ -390,11 +390,11 @@ x_back_to_cpu = x_gpu.cpu()
 
 \`\`\`python
 # Save model
-torch.save(model.state_dict(), 'model.pth')
+torch.save (model.state_dict(), 'model.pth')
 
 # Load model
 model = DeepNet()  # Must create model with same architecture
-model.load_state_dict(torch.load('model.pth'))
+model.load_state_dict (torch.load('model.pth'))
 model.eval()  # Set to evaluation mode
 \`\`\`
 
@@ -402,7 +402,7 @@ model.eval()  # Set to evaluation mode
 
 \`\`\`python
 # Save entire model
-torch.save(model, 'model_complete.pth')
+torch.save (model, 'model_complete.pth')
 
 # Load entire model
 model = torch.load('model_complete.pth')
@@ -419,12 +419,12 @@ checkpoint = {
     'optimizer_state_dict': optimizer.state_dict(),
     'loss': loss,
 }
-torch.save(checkpoint, 'checkpoint.pth')
+torch.save (checkpoint, 'checkpoint.pth')
 
 # Load checkpoint
 checkpoint = torch.load('checkpoint.pth')
-model.load_state_dict(checkpoint['model_state_dict'])
-optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+model.load_state_dict (checkpoint['model_state_dict'])
+optimizer.load_state_dict (checkpoint['optimizer_state_dict'])
 epoch = checkpoint['epoch']
 loss = checkpoint['loss']
 \`\`\`
@@ -436,10 +436,10 @@ loss = checkpoint['loss']
 3. **nn.Module** - base class for all models
 4. **Forward method** - defines computation
 5. **Training loop** - train(), eval(), zero_grad(), backward(), step()
-6. **GPU acceleration** - .to(device) for models and tensors
+6. **GPU acceleration** - .to (device) for models and tensors
 7. **Save/load** - state_dict() for portability
 
-## What's Next
+## What\'s Next
 
 PyTorch is the research standard. **TensorFlow/Keras** is another major framework with different design philosophy and strong production tools. We'll explore it next!
 `,

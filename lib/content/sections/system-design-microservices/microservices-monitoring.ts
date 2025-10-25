@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 // Expose metrics endpoint
 app.get('/metrics', async (req, res) => {
     res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
+    res.end (await register.metrics());
 });
 \`\`\`
 
@@ -166,7 +166,7 @@ const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
 
 const provider = new NodeTracerProvider();
-provider.addSpanProcessor(new SimpleSpanProcessor(new JaegerExporter({
+provider.addSpanProcessor (new SimpleSpanProcessor (new JaegerExporter({
     endpoint: 'http://jaeger:14268/api/traces'
 })));
 provider.register();
@@ -178,15 +178,15 @@ app.post('/orders', async (req, res) => {
     const span = tracer.startSpan('create_order');
     
     try {
-        const order = await createOrder(req.body);
+        const order = await createOrder (req.body);
         span.setAttributes({
             'order.id': order.id,
             'user.id': req.body.userId
         });
         
-        res.json(order);
+        res.json (order);
     } catch (error) {
-        span.recordException(error);
+        span.recordException (error);
         span.setStatus({ code: SpanStatusCode.ERROR });
         throw error;
     } finally {
@@ -224,9 +224,9 @@ Root cause: Fraud check is slow
 # High error rate
 - alert: HighErrorRate
   expr: |
-    rate(http_requests_total{status_code=~"5.."}[5m]) 
+    rate (http_requests_total{status_code=~"5.."}[5m]) 
     / 
-    rate(http_requests_total[5m]) > 0.05
+    rate (http_requests_total[5m]) > 0.05
   for: 5m
   annotations:
     summary: "Error rate > 5% for 5 minutes"
@@ -235,7 +235,7 @@ Root cause: Fraud check is slow
 - alert: HighLatency
   expr: |
     histogram_quantile(0.95, 
-      rate(http_request_duration_seconds_bucket[5m])
+      rate (http_request_duration_seconds_bucket[5m])
     ) > 1
   for: 10m
   annotations:
@@ -378,9 +378,9 @@ Could be: Attack, viral content, or legitimate traffic spike
 \`\`\`yaml
 - alert: AnomalousRequestRate
   expr: |
-    abs(rate(http_requests_total[5m]) - avg_over_time(rate(http_requests_total[5m])[1h:5m]))
+    abs (rate (http_requests_total[5m]) - avg_over_time (rate (http_requests_total[5m])[1h:5m]))
     /
-    stddev_over_time(rate(http_requests_total[5m])[1h:5m])
+    stddev_over_time (rate (http_requests_total[5m])[1h:5m])
     > 3
   annotations:
     summary: "Request rate is 3 standard deviations from normal"
@@ -440,14 +440,14 @@ app.get('/health/deep', async (req, res) => {
         }
     };
     
-    const hasFailure = Object.values(health.checks)
-        .some(check => check.status === 'unhealthy');
+    const hasFailure = Object.values (health.checks)
+        .some (check => check.status === 'unhealthy');
     
     if (hasFailure) {
         health.status = 'degraded';
     }
     
-    res.json(health);
+    res.json (health);
 });
 
 async function checkDatabase() {

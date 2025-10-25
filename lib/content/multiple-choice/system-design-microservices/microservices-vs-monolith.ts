@@ -44,7 +44,7 @@ export const microservicesvsmonolithMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "A distributed monolith is the worst of both worlds: you have the operational complexity of microservices (network calls, multiple deployments, distributed system challenges) but without the benefits (services can't deploy independently due to tight coupling, shared database creates bottleneck). It's an anti-pattern that often results from poorly designed microservices migration. Signs include: shared database, synchronous coupling chains, inability to deploy services independently.",
+      "A distributed monolith is the worst of both worlds: you have the operational complexity of microservices (network calls, multiple deployments, distributed system challenges) but without the benefits (services can't deploy independently due to tight coupling, shared database creates bottleneck). It\'s an anti-pattern that often results from poorly designed microservices migration. Signs include: shared database, synchronous coupling chains, inability to deploy services independently.",
   },
   {
     id: 'mc-microservices-4',

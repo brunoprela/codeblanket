@@ -51,7 +51,7 @@ Send and don't wait for response:
 ProducerRecord<String, String> record = 
     new ProducerRecord<>("topic", "key", "value");
 
-producer.send(record);  // Fire and forget
+producer.send (record);  // Fire and forget
 
 // ❌ No error handling
 // ✅ Highest throughput
@@ -71,7 +71,7 @@ ProducerRecord<String, String> record =
     new ProducerRecord<>("orders", "order_123", orderData);
 
 try {
-    RecordMetadata metadata = producer.send(record).get();
+    RecordMetadata metadata = producer.send (record).get();
     System.out.println("Sent to partition: " + metadata.partition() + 
                        " offset: " + metadata.offset());
 } catch (Exception e) {
@@ -96,7 +96,7 @@ Best of both worlds:
 ProducerRecord<String, String> record = 
     new ProducerRecord<>("user-activity", userId, activityData);
 
-producer.send(record, new Callback() {
+producer.send (record, new Callback() {
     @Override
     public void onCompletion(RecordMetadata metadata, Exception e) {
         if (e != null) {
@@ -145,7 +145,7 @@ Message 3 (key: user_123) → Partition 1  ← Same partition!
 
 \`\`\`java
 // Partitioning Logic:
-partition = hash(key) % numPartitions
+partition = hash (key) % numPartitions
 
 Example:
 Topic: "orders", 4 partitions
@@ -196,7 +196,7 @@ public class CustomPartitioner implements Partitioner {
     @Override
     public int partition(String topic, Object key, byte[] keyBytes,
                          Object value, byte[] valueBytes, Cluster cluster) {
-        int numPartitions = cluster.partitionCountForTopic(topic);
+        int numPartitions = cluster.partitionCountForTopic (topic);
         
         // Custom logic: VIP customers to partition 0
         if (key.toString().startsWith("VIP_")) {
@@ -358,9 +358,9 @@ try {
     producer.beginTransaction();
     
     // Send to multiple topics/partitions atomically
-    producer.send(new ProducerRecord<>("orders", "order_123", orderData));
-    producer.send(new ProducerRecord<>("inventory", "item_456", inventoryUpdate));
-    producer.send(new ProducerRecord<>("analytics", "event_789", analyticsEvent));
+    producer.send (new ProducerRecord<>("orders", "order_123", orderData));
+    producer.send (new ProducerRecord<>("inventory", "item_456", inventoryUpdate));
+    producer.send (new ProducerRecord<>("analytics", "event_789", analyticsEvent));
     
     producer.commitTransaction();  // All succeed or none
     
@@ -519,7 +519,7 @@ Producer throws exception → Application must handle
 ### **Error Handling Pattern:**
 
 \`\`\`java
-producer.send(record, (metadata, exception) -> {
+producer.send (record, (metadata, exception) -> {
     if (exception != null) {
         if (exception instanceof RetriableException) {
             // Already retried, still failed
@@ -610,7 +610,7 @@ props.put("linger.ms", 10);      // 10ms
 ### **5. Handle Errors:**
 \`\`\`java
 // Use callback for error handling:
-producer.send(record, callback);
+producer.send (record, callback);
 \`\`\`
 
 ### **6. Close Producer Gracefully:**

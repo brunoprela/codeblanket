@@ -44,12 +44,12 @@ export const autoencodersSection = {
 
 **Encoder**:
 \`\`\`
-z = f_encoder(x; θ_enc)
+z = f_encoder (x; θ_enc)
 \`\`\`
 
 **Decoder**:
 \`\`\`
-x̂ = f_decoder(z; θ_dec)
+x̂ = f_decoder (z; θ_dec)
 \`\`\`
 
 **Loss function** (reconstruction loss):
@@ -59,7 +59,7 @@ L(x, x̂) = ||x - x̂||² = Σᵢ (xᵢ - x̂ᵢ)²
 
 For binary data (e.g., MNIST), use **binary cross-entropy**:
 \`\`\`
-L(x, x̂) = -Σᵢ [xᵢ log(x̂ᵢ) + (1-xᵢ) log(1-x̂ᵢ)]
+L(x, x̂) = -Σᵢ [xᵢ log (x̂ᵢ) + (1-xᵢ) log(1-x̂ᵢ)]
 \`\`\`
 
 ### Implementation
@@ -72,7 +72,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 
-class Autoencoder(nn.Module):
+class Autoencoder (nn.Module):
     def __init__(self, input_dim=784, latent_dim=64):
         """
         Simple autoencoder with symmetric encoder-decoder.
@@ -85,7 +85,7 @@ class Autoencoder(nn.Module):
         
         # Encoder: compress input to latent space
         self.encoder = nn.Sequential(
-            nn.Linear(input_dim, 512),
+            nn.Linear (input_dim, 512),
             nn.ReLU(),
             nn.Linear(512, 256),
             nn.ReLU(),
@@ -97,7 +97,7 @@ class Autoencoder(nn.Module):
         
         # Decoder: reconstruct input from latent space
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 128),
+            nn.Linear (latent_dim, 128),
             nn.ReLU(),
             nn.Linear(128, 256),
             nn.ReLU(),
@@ -107,7 +107,7 @@ class Autoencoder(nn.Module):
             nn.Sigmoid()  # For images in [0, 1]
         )
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: (batch_size, input_dim)
@@ -116,44 +116,44 @@ class Autoencoder(nn.Module):
             x_recon: (batch_size, input_dim) - Reconstructed input
             z: (batch_size, latent_dim) - Latent representation
         """
-        z = self.encoder(x)
-        x_recon = self.decoder(z)
+        z = self.encoder (x)
+        x_recon = self.decoder (z)
         return x_recon, z
 
 
 # Load MNIST dataset
 transform = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Lambda(lambda x: x.view(-1))  # Flatten 28×28 to 784
+    transforms.Lambda (lambda x: x.view(-1))  # Flatten 28×28 to 784
 ])
 
 train_dataset = datasets.MNIST('data', train=True, download=True, transform=transform)
-train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+train_loader = DataLoader (train_dataset, batch_size=128, shuffle=True)
 
 # Create model
-model = Autoencoder(input_dim=784, latent_dim=64)
+model = Autoencoder (input_dim=784, latent_dim=64)
 print(f"Latent dimension: 64 (12× compression from 784)")
 
 # Training setup
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam (model.parameters(), lr=1e-3)
 criterion = nn.MSELoss()  # Reconstruction loss
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+model = model.to (device)
 
 # Training loop
 num_epochs = 20
 model.train()
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     total_loss = 0.0
     
     for data, _ in train_loader:  # Ignore labels (unsupervised)
-        data = data.to(device)
+        data = data.to (device)
         
         # Forward pass
-        x_recon, z = model(data)
-        loss = criterion(x_recon, data)
+        x_recon, z = model (data)
+        loss = criterion (x_recon, data)
         
         # Backward pass
         optimizer.zero_grad()
@@ -162,7 +162,7 @@ for epoch in range(num_epochs):
         
         total_loss += loss.item()
     
-    avg_loss = total_loss / len(train_loader)
+    avg_loss = total_loss / len (train_loader)
     print(f"Epoch {epoch+1}/{num_epochs}: Loss = {avg_loss:.6f}")
 
 print("Training complete!")
@@ -171,20 +171,20 @@ print("Training complete!")
 model.eval()
 with torch.no_grad():
     # Get test samples
-    test_data = next(iter(train_loader))[0][:8].to(device)
-    reconstructions, latents = model(test_data)
+    test_data = next (iter (train_loader))[0][:8].to (device)
+    reconstructions, latents = model (test_data)
     
     # Plot original vs. reconstruction
     fig, axes = plt.subplots(2, 8, figsize=(16, 4))
     for i in range(8):
         # Original
-        axes[0, i].imshow(test_data[i].cpu().view(28, 28), cmap='gray')
+        axes[0, i].imshow (test_data[i].cpu().view(28, 28), cmap='gray')
         axes[0, i].axis('off')
         if i == 0:
             axes[0, i].set_title('Original', fontsize=12)
         
         # Reconstruction
-        axes[1, i].imshow(reconstructions[i].cpu().view(28, 28), cmap='gray')
+        axes[1, i].imshow (reconstructions[i].cpu().view(28, 28), cmap='gray')
         axes[1, i].axis('off')
         if i == 0:
             axes[1, i].set_title('Reconstructed', fontsize=12)
@@ -207,7 +207,7 @@ For image data, **convolutional** layers preserve spatial structure (better than
 ### Implementation
 
 \`\`\`python
-class ConvAutoencoder(nn.Module):
+class ConvAutoencoder (nn.Module):
     def __init__(self, latent_dim=128):
         """
         Convolutional autoencoder for 28×28 grayscale images.
@@ -231,7 +231,7 @@ class ConvAutoencoder(nn.Module):
         # Decoder: latent → 7×7 → 14×14 → 28×28
         self.decoder = nn.Sequential(
             # Input: (latent_dim)
-            nn.Linear(latent_dim, 64 * 7 * 7),  # → (3136)
+            nn.Linear (latent_dim, 64 * 7 * 7),  # → (3136)
             nn.ReLU(),
             nn.Unflatten(1, (64, 7, 7)),  # → (64, 7, 7)
             # Transposed convolution (upsampling)
@@ -241,7 +241,7 @@ class ConvAutoencoder(nn.Module):
             nn.Sigmoid()
         )
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: (batch_size, 1, 28, 28)
@@ -250,8 +250,8 @@ class ConvAutoencoder(nn.Module):
             x_recon: (batch_size, 1, 28, 28)
             z: (batch_size, latent_dim)
         """
-        z = self.encoder(x)
-        x_recon = self.decoder(z)
+        z = self.encoder (x)
+        x_recon = self.decoder (z)
         return x_recon, z
 
 
@@ -262,11 +262,11 @@ transform = transforms.Compose([
 ])
 
 train_dataset = datasets.MNIST('data', train=True, download=True, transform=transform)
-train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+train_loader = DataLoader (train_dataset, batch_size=128, shuffle=True)
 
 # Train convolutional autoencoder
-model = ConvAutoencoder(latent_dim=128)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+model = ConvAutoencoder (latent_dim=128)
+optimizer = torch.optim.Adam (model.parameters(), lr=1e-3)
 criterion = nn.MSELoss()
 
 # ... training loop same as before ...
@@ -288,8 +288,8 @@ print("Convolutional autoencoder trained!")
 
 **Training**:
 1. Add noise to input: x̃ = x + ε (where ε ~ N(0, σ²))
-2. Encoder: z = f(x̃)
-3. Decoder: x̂ = g(z)
+2. Encoder: z = f (x̃)
+3. Decoder: x̂ = g (z)
 4. Loss: ||x - x̂||² (reconstruct ORIGINAL, not noisy version)
 
 **Benefits**:
@@ -301,34 +301,34 @@ print("Convolutional autoencoder trained!")
 ### Implementation
 
 \`\`\`python
-def add_noise(x, noise_factor=0.3):
+def add_noise (x, noise_factor=0.3):
     """Add Gaussian noise to input"""
-    noisy_x = x + noise_factor * torch.randn_like(x)
-    noisy_x = torch.clamp(noisy_x, 0., 1.)  # Keep in [0, 1]
+    noisy_x = x + noise_factor * torch.randn_like (x)
+    noisy_x = torch.clamp (noisy_x, 0., 1.)  # Keep in [0, 1]
     return noisy_x
 
 
 # Training loop for denoising autoencoder
-model = ConvAutoencoder(latent_dim=128)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+model = ConvAutoencoder (latent_dim=128)
+optimizer = torch.optim.Adam (model.parameters(), lr=1e-3)
 criterion = nn.MSELoss()
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+model = model.to (device)
 model.train()
 
 for epoch in range(20):
     total_loss = 0.0
     
     for data, _ in train_loader:
-        data = data.to(device)
+        data = data.to (device)
         
         # Add noise to input
-        noisy_data = add_noise(data, noise_factor=0.3)
+        noisy_data = add_noise (data, noise_factor=0.3)
         
         # Forward pass: reconstruct CLEAN from NOISY
-        x_recon, _ = model(noisy_data)
-        loss = criterion(x_recon, data)  # Compare to original, not noisy
+        x_recon, _ = model (noisy_data)
+        loss = criterion (x_recon, data)  # Compare to original, not noisy
         
         # Backward pass
         optimizer.zero_grad()
@@ -337,32 +337,32 @@ for epoch in range(20):
         
         total_loss += loss.item()
     
-    avg_loss = total_loss / len(train_loader)
+    avg_loss = total_loss / len (train_loader)
     print(f"Epoch {epoch+1}/20: Loss = {avg_loss:.6f}")
 
 # Visualize denoising
 model.eval()
 with torch.no_grad():
-    test_data = next(iter(train_loader))[0][:8].to(device)
-    noisy_test = add_noise(test_data, noise_factor=0.5)
-    denoised, _ = model(noisy_test)
+    test_data = next (iter (train_loader))[0][:8].to (device)
+    noisy_test = add_noise (test_data, noise_factor=0.5)
+    denoised, _ = model (noisy_test)
     
     fig, axes = plt.subplots(3, 8, figsize=(16, 6))
     for i in range(8):
         # Original
-        axes[0, i].imshow(test_data[i].cpu().squeeze(), cmap='gray')
+        axes[0, i].imshow (test_data[i].cpu().squeeze(), cmap='gray')
         axes[0, i].axis('off')
         if i == 0:
             axes[0, i].set_title('Original', fontsize=12)
         
         # Noisy
-        axes[1, i].imshow(noisy_test[i].cpu().squeeze(), cmap='gray')
+        axes[1, i].imshow (noisy_test[i].cpu().squeeze(), cmap='gray')
         axes[1, i].axis('off')
         if i == 0:
             axes[1, i].set_title('Noisy', fontsize=12)
         
         # Denoised
-        axes[2, i].imshow(denoised[i].cpu().squeeze(), cmap='gray')
+        axes[2, i].imshow (denoised[i].cpu().squeeze(), cmap='gray')
         axes[2, i].axis('off')
         if i == 0:
             axes[2, i].set_title('Denoised', fontsize=12)
@@ -389,7 +389,7 @@ with torch.no_grad():
 
 **Encoder (Recognition Model)**:
 \`\`\`
-q(z|x) = N(μ(x), σ²(x))
+q (z|x) = N(μ(x), σ²(x))
 \`\`\`
 
 Outputs mean μ and variance σ² for each dimension.
@@ -403,17 +403,17 @@ This allows backpropagation through sampling!
 
 **Decoder (Generative Model)**:
 \`\`\`
-p(x|z) = Decoder(z)
+p (x|z) = Decoder (z)
 \`\`\`
 
 **Loss Function** (ELBO - Evidence Lower Bound):
 \`\`\`
-L = E[||x - x̂||²] + KL(q(z|x) || p(z))
+L = E[||x - x̂||²] + KL(q (z|x) || p (z))
      ↑                   ↑
 reconstruction loss   regularization
 \`\`\`
 
-**KL divergence** (forces q(z|x) to be close to prior p(z) = N(0, I)):
+**KL divergence** (forces q (z|x) to be close to prior p (z) = N(0, I)):
 \`\`\`
 KL = -0.5 × Σᵢ [1 + log(σᵢ²) - μᵢ² - σᵢ²]
 \`\`\`
@@ -434,7 +434,7 @@ class VAE(nn.Module):
         
         # Encoder: x → hidden → (μ, log σ²)
         self.encoder_hidden = nn.Sequential(
-            nn.Linear(input_dim, 512),
+            nn.Linear (input_dim, 512),
             nn.ReLU(),
             nn.Linear(512, 256),
             nn.ReLU()
@@ -446,7 +446,7 @@ class VAE(nn.Module):
         
         # Decoder: z → hidden → x
         self.decoder = nn.Sequential(
-            nn.Linear(latent_dim, 256),
+            nn.Linear (latent_dim, 256),
             nn.ReLU(),
             nn.Linear(256, 512),
             nn.ReLU(),
@@ -454,20 +454,20 @@ class VAE(nn.Module):
             nn.Sigmoid()
         )
     
-    def encode(self, x):
+    def encode (self, x):
         """
         Encode x to distribution parameters.
         
         Returns:
-            mu: Mean of q(z|x)
-            logvar: Log variance of q(z|x)
+            mu: Mean of q (z|x)
+            logvar: Log variance of q (z|x)
         """
-        h = self.encoder_hidden(x)
-        mu = self.fc_mu(h)
-        logvar = self.fc_logvar(h)
+        h = self.encoder_hidden (x)
+        mu = self.fc_mu (h)
+        logvar = self.fc_logvar (h)
         return mu, logvar
     
-    def reparameterize(self, mu, logvar):
+    def reparameterize (self, mu, logvar):
         """
         Reparameterization trick: z = μ + σ ⊙ ε
         
@@ -479,15 +479,15 @@ class VAE(nn.Module):
             z: (batch_size, latent_dim)
         """
         std = torch.exp(0.5 * logvar)  # σ = exp(0.5 × log σ²)
-        eps = torch.randn_like(std)     # ε ~ N(0, I)
+        eps = torch.randn_like (std)     # ε ~ N(0, I)
         z = mu + std * eps              # z = μ + σ ⊙ ε
         return z
     
-    def decode(self, z):
+    def decode (self, z):
         """Decode z to reconstruction"""
-        return self.decoder(z)
+        return self.decoder (z)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: (batch_size, input_dim)
@@ -497,13 +497,13 @@ class VAE(nn.Module):
             mu: (batch_size, latent_dim)
             logvar: (batch_size, latent_dim)
         """
-        mu, logvar = self.encode(x)
-        z = self.reparameterize(mu, logvar)
-        x_recon = self.decode(z)
+        mu, logvar = self.encode (x)
+        z = self.reparameterize (mu, logvar)
+        x_recon = self.decode (z)
         return x_recon, mu, logvar
 
 
-def vae_loss(x_recon, x, mu, logvar, beta=1.0):
+def vae_loss (x_recon, x, mu, logvar, beta=1.0):
     """
     VAE loss = Reconstruction + β × KL divergence
     
@@ -517,9 +517,9 @@ def vae_loss(x_recon, x, mu, logvar, beta=1.0):
         total_loss, recon_loss, kl_loss
     """
     # Reconstruction loss (binary cross-entropy for binary data)
-    recon_loss = F.binary_cross_entropy(x_recon, x, reduction='sum')
+    recon_loss = F.binary_cross_entropy (x_recon, x, reduction='sum')
     
-    # KL divergence: KL(q(z|x) || N(0, I))
+    # KL divergence: KL(q (z|x) || N(0, I))
     # -0.5 × Σ[1 + log σ² - μ² - σ²]
     kl_loss = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
     
@@ -532,34 +532,34 @@ def vae_loss(x_recon, x, mu, logvar, beta=1.0):
 # Load data
 transform = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Lambda(lambda x: x.view(-1))
+    transforms.Lambda (lambda x: x.view(-1))
 ])
 
 train_dataset = datasets.MNIST('data', train=True, download=True, transform=transform)
-train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+train_loader = DataLoader (train_dataset, batch_size=128, shuffle=True)
 
 # Create VAE
 model = VAE(input_dim=784, latent_dim=20)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam (model.parameters(), lr=1e-3)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+model = model.to (device)
 
 # Training loop
 num_epochs = 20
 model.train()
 
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     total_loss_epoch = 0.0
     total_recon_epoch = 0.0
     total_kl_epoch = 0.0
     
     for data, _ in train_loader:
-        data = data.to(device)
+        data = data.to (device)
         
         # Forward pass
-        x_recon, mu, logvar = model(data)
-        loss, recon, kl = vae_loss(x_recon, data, mu, logvar, beta=1.0)
+        x_recon, mu, logvar = model (data)
+        loss, recon, kl = vae_loss (x_recon, data, mu, logvar, beta=1.0)
         
         # Backward pass
         optimizer.zero_grad()
@@ -571,7 +571,7 @@ for epoch in range(num_epochs):
         total_kl_epoch += kl.item()
     
     # Average per sample
-    n_samples = len(train_dataset)
+    n_samples = len (train_dataset)
     avg_loss = total_loss_epoch / n_samples
     avg_recon = total_recon_epoch / n_samples
     avg_kl = total_kl_epoch / n_samples
@@ -585,13 +585,13 @@ print("VAE training complete!")
 model.eval()
 with torch.no_grad():
     # Sample from standard normal
-    z_sample = torch.randn(16, 20).to(device)
-    generated = model.decode(z_sample)
+    z_sample = torch.randn(16, 20).to (device)
+    generated = model.decode (z_sample)
     
     # Plot generated images
     fig, axes = plt.subplots(4, 4, figsize=(8, 8))
-    for i, ax in enumerate(axes.flat):
-        ax.imshow(generated[i].cpu().view(28, 28), cmap='gray')
+    for i, ax in enumerate (axes.flat):
+        ax.imshow (generated[i].cpu().view(28, 28), cmap='gray')
         ax.axis('off')
     
     plt.tight_layout()
@@ -604,7 +604,7 @@ with torch.no_grad():
 VAE's smooth latent space enables **interpolation** between images:
 
 \`\`\`python
-def interpolate(model, x1, x2, num_steps=10):
+def interpolate (model, x1, x2, num_steps=10):
     """
     Interpolate between two images in latent space.
     
@@ -619,8 +619,8 @@ def interpolate(model, x1, x2, num_steps=10):
     model.eval()
     with torch.no_grad():
         # Encode both images
-        mu1, logvar1 = model.encode(x1.unsqueeze(0))
-        mu2, logvar2 = model.encode(x2.unsqueeze(0))
+        mu1, logvar1 = model.encode (x1.unsqueeze(0))
+        mu2, logvar2 = model.encode (x2.unsqueeze(0))
         
         # Interpolate in latent space
         alphas = torch.linspace(0, 1, num_steps)
@@ -631,22 +631,22 @@ def interpolate(model, x1, x2, num_steps=10):
             z = (1 - alpha) * mu1 + alpha * mu2
             
             # Decode
-            x_interp = model.decode(z)
-            interpolated.append(x_interp.cpu().squeeze())
+            x_interp = model.decode (z)
+            interpolated.append (x_interp.cpu().squeeze())
         
         return interpolated
 
 
 # Example: Interpolate between two digits
-test_data = next(iter(train_loader))[0]
+test_data = next (iter (train_loader))[0]
 x1, x2 = test_data[0], test_data[10]  # Two different digits
 
-interpolated_images = interpolate(model, x1, x2, num_steps=10)
+interpolated_images = interpolate (model, x1, x2, num_steps=10)
 
 # Visualize
 fig, axes = plt.subplots(1, 10, figsize=(20, 2))
-for i, (ax, img) in enumerate(zip(axes, interpolated_images)):
-    ax.imshow(img.view(28, 28), cmap='gray')
+for i, (ax, img) in enumerate (zip (axes, interpolated_images)):
+    ax.imshow (img.view(28, 28), cmap='gray')
     ax.axis('off')
     if i == 0:
         ax.set_title('Start', fontsize=10)
@@ -685,11 +685,11 @@ L = ||x - x̂||² + λ × Σ zᵢ²  (L2 regularization)
 lambda_sparse = 1e-4
 
 for data, _ in train_loader:
-    x_recon, z = model(data)
+    x_recon, z = model (data)
     
     # Reconstruction + sparsity
-    recon_loss = criterion(x_recon, data)
-    sparsity_loss = lambda_sparse * torch.sum(torch.abs(z))  # L1 sparsity
+    recon_loss = criterion (x_recon, data)
+    sparsity_loss = lambda_sparse * torch.sum (torch.abs (z))  # L1 sparsity
     
     loss = recon_loss + sparsity_loss
     
@@ -712,20 +712,20 @@ with torch.no_grad():
     labels_list = []
     
     for data, labels in train_loader:
-        data = data.to(device)
-        _, z = model(data)  # Get latent representations
-        data_2d.append(z.cpu())
-        labels_list.append(labels)
+        data = data.to (device)
+        _, z = model (data)  # Get latent representations
+        data_2d.append (z.cpu())
+        labels_list.append (labels)
     
-    data_2d = torch.cat(data_2d, dim=0)
-    labels_list = torch.cat(labels_list, dim=0)
+    data_2d = torch.cat (data_2d, dim=0)
+    labels_list = torch.cat (labels_list, dim=0)
 
 # Visualize (if latent_dim = 2)
 if model.latent_dim == 2:
-    plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(data_2d[:, 0], data_2d[:, 1], 
+    plt.figure (figsize=(10, 8))
+    scatter = plt.scatter (data_2d[:, 0], data_2d[:, 1], 
                          c=labels_list, cmap='tab10', alpha=0.5)
-    plt.colorbar(scatter)
+    plt.colorbar (scatter)
     plt.title('Latent Space Visualization')
     plt.xlabel('z1')
     plt.ylabel('z2')
@@ -737,7 +737,7 @@ if model.latent_dim == 2:
 **Idea**: Normal data reconstructs well, anomalies have high reconstruction error.
 
 \`\`\`python
-def detect_anomalies(model, test_loader, threshold=0.01):
+def detect_anomalies (model, test_loader, threshold=0.01):
     """
     Detect anomalies using reconstruction error.
     
@@ -755,27 +755,27 @@ def detect_anomalies(model, test_loader, threshold=0.01):
     
     with torch.no_grad():
         for data, _ in test_loader:
-            data = data.to(device)
-            x_recon, _ = model(data)
+            data = data.to (device)
+            x_recon, _ = model (data)
             
             # Compute per-sample reconstruction error
             error = torch.mean((data - x_recon) ** 2, dim=1)
-            errors.append(error.cpu())
+            errors.append (error.cpu())
     
-    errors = torch.cat(errors)
+    errors = torch.cat (errors)
     anomalies = errors > threshold
     
     return anomalies, errors
 
 
 # Example: Detect anomalies
-anomalies, errors = detect_anomalies(model, test_loader, threshold=0.015)
-print(f"Detected {anomalies.sum().item()} anomalies out of {len(errors)} samples")
+anomalies, errors = detect_anomalies (model, test_loader, threshold=0.015)
+print(f"Detected {anomalies.sum().item()} anomalies out of {len (errors)} samples")
 
 # Visualize reconstruction errors
-plt.figure(figsize=(10, 6))
-plt.hist(errors.numpy(), bins=50)
-plt.axvline(x=0.015, color='r', linestyle='--', label='Threshold')
+plt.figure (figsize=(10, 6))
+plt.hist (errors.numpy(), bins=50)
+plt.axvline (x=0.015, color='r', linestyle='--', label='Threshold')
 plt.xlabel('Reconstruction Error')
 plt.ylabel('Frequency')
 plt.title('Distribution of Reconstruction Errors')

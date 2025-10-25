@@ -64,6 +64,6 @@ export const leveragedBuyoutsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "LBOs use high leverage primarily to amplify equity returns. Example: Buy for $100M with 100% equity → Sell for $150M → 50% return. Buy for $100M with 40% equity ($40M) + 60% debt ($60M) → Sell for $150M, debt paid to $20M → Equity = $130M → ($130M - $40M) / $40M = 225% return! Leverage amplifies returns when business performs well (but also amplifies losses if it underperforms). Tax shield (interest deductibility) is a secondary benefit, not the primary driver. The primary driver is financial engineering—use OPM (other people's money) to boost equity IRR.",
+      "LBOs use high leverage primarily to amplify equity returns. Example: Buy for $100M with 100% equity → Sell for $150M → 50% return. Buy for $100M with 40% equity (\$40M) + 60% debt (\$60M) → Sell for $150M, debt paid to $20M → Equity = $130M → (\$130M - $40M) / $40M = 225% return! Leverage amplifies returns when business performs well (but also amplifies losses if it underperforms). Tax shield (interest deductibility) is a secondary benefit, not the primary driver. The primary driver is financial engineering—use OPM (other people's money) to boost equity IRR.",
   },
 ];

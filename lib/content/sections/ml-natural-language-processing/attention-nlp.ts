@@ -54,14 +54,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class ScaledDotProductAttention(nn.Module):
+class ScaledDotProductAttention (nn.Module):
     """Scaled Dot-Product Attention"""
     
     def __init__(self, d_k):
         super().__init__()
         self.d_k = d_k
         
-    def forward(self, Q, K, V, mask=None):
+    def forward (self, Q, K, V, mask=None):
         """
         Q: (batch, num_heads, seq_len, d_k)
         K: (batch, num_heads, seq_len, d_k)
@@ -73,13 +73,13 @@ class ScaledDotProductAttention(nn.Module):
         
         # Apply mask (if provided, for padding)
         if mask is not None:
-            scores = scores.masked_fill(mask == 0, -1e9)
+            scores = scores.masked_fill (mask == 0, -1e9)
         
         # Apply softmax
-        attention_weights = F.softmax(scores, dim=-1)
+        attention_weights = F.softmax (scores, dim=-1)
         
         # Apply attention to values
-        output = torch.matmul(attention_weights, V)
+        output = torch.matmul (attention_weights, V)
         
         return output, attention_weights
 
@@ -87,11 +87,11 @@ class ScaledDotProductAttention(nn.Module):
 batch_size, seq_len, d_model = 32, 10, 512
 d_k = d_v = 64
 
-Q = torch.randn(batch_size, 1, seq_len, d_k)
-K = torch.randn(batch_size, 1, seq_len, d_k)
-V = torch.randn(batch_size, 1, seq_len, d_v)
+Q = torch.randn (batch_size, 1, seq_len, d_k)
+K = torch.randn (batch_size, 1, seq_len, d_k)
+V = torch.randn (batch_size, 1, seq_len, d_v)
 
-attention = ScaledDotProductAttention(d_k)
+attention = ScaledDotProductAttention (d_k)
 output, weights = attention(Q, K, V)
 
 print(f"Output shape: {output.shape}")  # (32, 1, 10, 64)
@@ -103,7 +103,7 @@ print(f"Attention weights shape: {weights.shape}")  # (32, 1, 10, 10)
 Self-attention computes attention within the same sequence - each position attends to all positions including itself.
 
 \`\`\`python
-class SelfAttention(nn.Module):
+class SelfAttention (nn.Module):
     """Self-Attention Layer"""
     
     def __init__(self, d_model, d_k):
@@ -111,25 +111,25 @@ class SelfAttention(nn.Module):
         self.d_k = d_k
         
         # Linear projections for Q, K, V
-        self.W_q = nn.Linear(d_model, d_k)
-        self.W_k = nn.Linear(d_model, d_k)
-        self.W_v = nn.Linear(d_k, d_k)
+        self.W_q = nn.Linear (d_model, d_k)
+        self.W_k = nn.Linear (d_model, d_k)
+        self.W_v = nn.Linear (d_k, d_k)
         
-    def forward(self, x):
+    def forward (self, x):
         """
         x: (batch, seq_len, d_model)
         """
         # Project to Q, K, V
-        Q = self.W_q(x)  # (batch, seq_len, d_k)
-        K = self.W_k(x)  # (batch, seq_len, d_k)
-        V = self.W_v(x)  # (batch, seq_len, d_k)
+        Q = self.W_q (x)  # (batch, seq_len, d_k)
+        K = self.W_k (x)  # (batch, seq_len, d_k)
+        V = self.W_v (x)  # (batch, seq_len, d_k)
         
         # Compute attention scores
         scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)
-        attention_weights = F.softmax(scores, dim=-1)
+        attention_weights = F.softmax (scores, dim=-1)
         
         # Apply attention
-        output = torch.matmul(attention_weights, V)
+        output = torch.matmul (attention_weights, V)
         
         return output, attention_weights
 
@@ -139,8 +139,8 @@ d_k = 64
 seq_len = 20
 
 x = torch.randn(32, seq_len, d_model)
-self_attn = SelfAttention(d_model, d_k)
-output, weights = self_attn(x)
+self_attn = SelfAttention (d_model, d_k)
+output, weights = self_attn (x)
 
 print(f"Output shape: {output.shape}")  # (32, 20, 64)
 print(f"Attention pattern: {weights[0, 0, :5]}")  # First 5 positions
@@ -151,7 +151,7 @@ print(f"Attention pattern: {weights[0, 0, :5]}")  # First 5 positions
 Multi-head attention runs multiple attention mechanisms in parallel, allowing the model to attend to different aspects simultaneously.
 
 \`\`\`python
-class MultiHeadAttention(nn.Module):
+class MultiHeadAttention (nn.Module):
     """Multi-Head Attention"""
     
     def __init__(self, d_model, num_heads):
@@ -163,38 +163,38 @@ class MultiHeadAttention(nn.Module):
         self.d_k = d_model // num_heads
         
         # Linear layers for Q, K, V
-        self.W_q = nn.Linear(d_model, d_model)
-        self.W_k = nn.Linear(d_model, d_model)
-        self.W_v = nn.Linear(d_model, d_model)
+        self.W_q = nn.Linear (d_model, d_model)
+        self.W_k = nn.Linear (d_model, d_model)
+        self.W_v = nn.Linear (d_model, d_model)
         
         # Output projection
-        self.W_o = nn.Linear(d_model, d_model)
+        self.W_o = nn.Linear (d_model, d_model)
         
-    def forward(self, Q, K, V, mask=None):
+    def forward (self, Q, K, V, mask=None):
         """
         Q, K, V: (batch, seq_len, d_model)
         """
         batch_size = Q.size(0)
         
         # Linear projections and reshape to (batch, num_heads, seq_len, d_k)
-        Q = self.W_q(Q).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
-        K = self.W_k(K).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
-        V = self.W_v(V).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        Q = self.W_q(Q).view (batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        K = self.W_k(K).view (batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
+        V = self.W_v(V).view (batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)
         
         # Apply attention
         scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)
         
         if mask is not None:
-            scores = scores.masked_fill(mask == 0, -1e9)
+            scores = scores.masked_fill (mask == 0, -1e9)
         
-        attention_weights = F.softmax(scores, dim=-1)
-        x = torch.matmul(attention_weights, V)
+        attention_weights = F.softmax (scores, dim=-1)
+        x = torch.matmul (attention_weights, V)
         
         # Concatenate heads
-        x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.d_model)
+        x = x.transpose(1, 2).contiguous().view (batch_size, -1, self.d_model)
         
         # Final linear projection
-        output = self.W_o(x)
+        output = self.W_o (x)
         
         return output, attention_weights
 
@@ -205,7 +205,7 @@ seq_len = 20
 
 Q = K = V = torch.randn(32, seq_len, d_model)
 
-mha = MultiHeadAttention(d_model, num_heads)
+mha = MultiHeadAttention (d_model, num_heads)
 output, weights = mha(Q, K, V)
 
 print(f"Output shape: {output.shape}")  # (32, 20, 512)
@@ -218,7 +218,7 @@ print(f"Attention weights shape: {weights.shape}")  # (32, 8, 20, 20)
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def visualize_attention(attention_weights, tokens, layer=0, head=0):
+def visualize_attention (attention_weights, tokens, layer=0, head=0):
     """
     Visualize attention patterns
     attention_weights: (num_layers, num_heads, seq_len, seq_len)
@@ -227,10 +227,10 @@ def visualize_attention(attention_weights, tokens, layer=0, head=0):
     # Extract specific layer and head
     attn = attention_weights[layer, head].detach().cpu().numpy()
     
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(attn, xticklabels=tokens, yticklabels=tokens, 
+    plt.figure (figsize=(10, 8))
+    sns.heatmap (attn, xticklabels=tokens, yticklabels=tokens, 
                 cmap='viridis', cbar=True)
-    plt.title(f'Attention Pattern (Layer {layer}, Head {head})')
+    plt.title (f'Attention Pattern (Layer {layer}, Head {head})')
     plt.xlabel('Key')
     plt.ylabel('Query')
     plt.tight_layout()
@@ -240,9 +240,9 @@ def visualize_attention(attention_weights, tokens, layer=0, head=0):
 tokens = ['I', 'love', 'machine', 'learning']
 
 # Simulate attention weights
-attention = torch.randn(2, 8, 4, 4).softmax(dim=-1)
+attention = torch.randn(2, 8, 4, 4).softmax (dim=-1)
 
-visualize_attention(attention, tokens, layer=0, head=0)
+visualize_attention (attention, tokens, layer=0, head=0)
 \`\`\`
 
 ## Attention Patterns in Practice
@@ -267,14 +267,14 @@ Different attention heads learn different patterns:
 For generation tasks, prevent attending to future tokens:
 
 \`\`\`python
-def create_causal_mask(seq_len):
+def create_causal_mask (seq_len):
     """Create causal mask for autoregressive generation"""
-    mask = torch.tril(torch.ones(seq_len, seq_len))
+    mask = torch.tril (torch.ones (seq_len, seq_len))
     return mask
 
 # Example
 seq_len = 5
-mask = create_causal_mask(seq_len)
+mask = create_causal_mask (seq_len)
 print(mask)
 # tensor([[1., 0., 0., 0., 0.],
 #         [1., 1., 0., 0., 0.],
@@ -313,25 +313,25 @@ Attention:
 ### Sentiment Analysis with Attention
 
 \`\`\`python
-class AttentionSentimentClassifier(nn.Module):
+class AttentionSentimentClassifier (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, num_heads=4):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        self.attention = MultiHeadAttention(embedding_dim, num_heads)
-        self.fc = nn.Linear(embedding_dim, output_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
+        self.attention = MultiHeadAttention (embedding_dim, num_heads)
+        self.fc = nn.Linear (embedding_dim, output_dim)
         
-    def forward(self, x):
+    def forward (self, x):
         # x: (batch, seq_len)
-        embedded = self.embedding(x)  # (batch, seq_len, embedding_dim)
+        embedded = self.embedding (x)  # (batch, seq_len, embedding_dim)
         
         # Self-attention
-        attn_output, attn_weights = self.attention(embedded, embedded, embedded)
+        attn_output, attn_weights = self.attention (embedded, embedded, embedded)
         
         # Average pooling
-        pooled = attn_output.mean(dim=1)  # (batch, embedding_dim)
+        pooled = attn_output.mean (dim=1)  # (batch, embedding_dim)
         
         # Classify
-        logits = self.fc(pooled)
+        logits = self.fc (pooled)
         
         return logits, attn_weights
 

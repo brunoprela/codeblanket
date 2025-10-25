@@ -6,7 +6,7 @@ export const queryApi = {
 
 ## Introduction
 
-Querying is the heart of database interaction. SQLAlchemy's query API is powerful, expressive, and type-safe. Mastering queries is essential for building efficient applications.
+Querying is the heart of database interaction. SQLAlchemy\'s query API is powerful, expressive, and type-safe. Mastering queries is essential for building efficient applications.
 
 In this section, you'll learn:
 - SELECT queries with modern 2.0 syntax
@@ -34,20 +34,20 @@ from sqlalchemy import select
 
 # Select all columns
 stmt = select(User)
-users = session.execute(stmt).scalars().all()
+users = session.execute (stmt).scalars().all()
 
 # Select specific columns
 stmt = select(User.email, User.username)
-results = session.execute(stmt).all()  # Returns tuples
+results = session.execute (stmt).all()  # Returns tuples
 
 # Select single object
 stmt = select(User).where(User.id == 1)
-user = session.execute(stmt).scalar_one()  # Raises if not found
-user = session.execute(stmt).scalar_one_or_none()  # Returns None if not found
+user = session.execute (stmt).scalar_one()  # Raises if not found
+user = session.execute (stmt).scalar_one_or_none()  # Returns None if not found
 
 # Select first result
 stmt = select(User).where(User.is_active == True)
-user = session.execute(stmt).scalars().first()  # Returns first or None
+user = session.execute (stmt).scalars().first()  # Returns first or None
 \`\`\`
 
 ### Result Methods
@@ -60,24 +60,24 @@ Different Ways to Fetch Results
 stmt = select(User)
 
 # scalars() - extract first column (returns entities)
-users = session.execute(stmt).scalars().all()  # List[User]
-user = session.execute(stmt).scalars().first()  # User | None
-user = session.execute(stmt).scalar_one()  # User (raises if not exactly 1)
+users = session.execute (stmt).scalars().all()  # List[User]
+user = session.execute (stmt).scalars().first()  # User | None
+user = session.execute (stmt).scalar_one()  # User (raises if not exactly 1)
 
 # all() - returns Row objects (tuples)
-rows = session.execute(stmt).all()  # List[Row]
+rows = session.execute (stmt).all()  # List[Row]
 for row in rows:
     print(row[0], row.User, row._mapping)  # Multiple ways to access
 
-# fetchmany(size) - batch fetch
-result = session.execute(stmt)
+# fetchmany (size) - batch fetch
+result = session.execute (stmt)
 while batch := result.scalars().fetchmany(100):
-    process_batch(batch)
+    process_batch (batch)
 
 # fetchone() - one at a time
-result = session.execute(stmt)
+result = session.execute (stmt)
 while row := result.scalars().fetchone():
-    process_row(row)
+    process_row (row)
 \`\`\`
 
 ---
@@ -106,15 +106,15 @@ stmt = select(User).where(
 
 # Alternative AND syntax
 from sqlalchemy import and_
-stmt = select(User).where(and_(User.is_active == True, User.age >= 18))
+stmt = select(User).where (and_(User.is_active == True, User.age >= 18))
 
 # OR conditions
 from sqlalchemy import or_
-stmt = select(User).where(or_(User.role == "admin", User.role == "moderator"))
+stmt = select(User).where (or_(User.role == "admin", User.role == "moderator"))
 
 # NOT
 from sqlalchemy import not_
-stmt = select(User).where(not_(User.is_banned))
+stmt = select(User).where (not_(User.is_banned))
 
 # IN
 stmt = select(User).where(User.role.in_(["admin", "moderator"]))
@@ -141,7 +141,7 @@ stmt = select(User).where(User.deleted_at.is_not(None))
 Build Queries Dynamically
 """
 
-def get_users(email: str | None = None, min_age: int | None = None, is_active: bool | None = None):
+def get_users (email: str | None = None, min_age: int | None = None, is_active: bool | None = None):
     """Build query dynamically based on provided filters"""
     stmt = select(User)
     
@@ -154,10 +154,10 @@ def get_users(email: str | None = None, min_age: int | None = None, is_active: b
     if is_active is not None:
         stmt = stmt.where(User.is_active == is_active)
     
-    return session.execute(stmt).scalars().all()
+    return session.execute (stmt).scalars().all()
 
 # Usage
-users = get_users(min_age=18, is_active=True)
+users = get_users (min_age=18, is_active=True)
 \`\`\`
 
 ---
@@ -178,7 +178,7 @@ stmt = select(User).order_by(User.last_name, User.first_name)
 
 # NULL handling
 from sqlalchemy import nullsfirst, nullslast
-stmt = select(User).order_by(nullslast(User.deleted_at))
+stmt = select(User).order_by (nullslast(User.deleted_at))
 
 # LIMIT
 stmt = select(User).limit(10)
@@ -214,16 +214,16 @@ class Page(BaseModel, Generic[T]):
     page_size: int
     total_pages: int
 
-def paginate(stmt, page: int = 1, page_size: int = 20) -> Page:
+def paginate (stmt, page: int = 1, page_size: int = 20) -> Page:
     """Paginate query results"""
     
     # Count total (without limit/offset)
-    count_stmt = select(func.count()).select_from(stmt.subquery())
-    total = session.execute(count_stmt).scalar()
+    count_stmt = select (func.count()).select_from (stmt.subquery())
+    total = session.execute (count_stmt).scalar()
     
     # Get page of results
-    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
-    items = session.execute(stmt).scalars().all()
+    stmt = stmt.offset((page - 1) * page_size).limit (page_size)
+    items = session.execute (stmt).scalars().all()
     
     return Page(
         items=items,
@@ -234,7 +234,7 @@ def paginate(stmt, page: int = 1, page_size: int = 20) -> Page:
     )
 
 # Usage
-page = paginate(select(User).where(User.is_active == True), page=2, page_size=50)
+page = paginate (select(User).where(User.is_active == True), page=2, page_size=50)
 \`\`\`
 
 ---
@@ -257,7 +257,7 @@ stmt = select(User).join(Post, User.id == Post.user_id)
 # Select from both tables
 stmt = select(User, Post).join(Post, User.id == Post.user_id)
 
-for user, post in session.execute(stmt):
+for user, post in session.execute (stmt):
     print(f"{user.email}: {post.title}")
 
 # Join with filter
@@ -286,7 +286,7 @@ stmt = (
     .group_by(User.id)
 )
 
-for user, post_count in session.execute(stmt):
+for user, post_count in session.execute (stmt):
     print(f"{user.email}: {post_count} posts")
 \`\`\`
 
@@ -327,23 +327,23 @@ Aggregate Functions
 from sqlalchemy import func
 
 # COUNT
-stmt = select(func.count(User.id))
-count = session.execute(stmt).scalar()
+stmt = select (func.count(User.id))
+count = session.execute (stmt).scalar()
 
 # COUNT with condition
-stmt = select(func.count(User.id)).where(User.is_active == True)
+stmt = select (func.count(User.id)).where(User.is_active == True)
 
 # SUM
-stmt = select(func.sum(Order.total))
-total_revenue = session.execute(stmt).scalar()
+stmt = select (func.sum(Order.total))
+total_revenue = session.execute (stmt).scalar()
 
 # AVG
-stmt = select(func.avg(Product.price))
-avg_price = session.execute(stmt).scalar()
+stmt = select (func.avg(Product.price))
+avg_price = session.execute (stmt).scalar()
 
 # MIN / MAX
-stmt = select(func.min(User.created_at), func.max(User.created_at))
-first_user, last_user = session.execute(stmt).one()
+stmt = select (func.min(User.created_at), func.max(User.created_at))
+first_user, last_user = session.execute (stmt).one()
 
 # Multiple aggregates
 stmt = select(
@@ -351,7 +351,7 @@ stmt = select(
     func.sum(Order.total).label('total_revenue'),
     func.avg(Order.total).label('avg_order_value')
 )
-result = session.execute(stmt).one()
+result = session.execute (stmt).one()
 \`\`\`
 
 ### GROUP BY
@@ -365,10 +365,10 @@ GROUP BY Queries
 stmt = (
     select(User.city, func.count(User.id).label('user_count'))
     .group_by(User.city)
-    .order_by(func.count(User.id).desc())
+    .order_by (func.count(User.id).desc())
 )
 
-for city, count in session.execute(stmt):
+for city, count in session.execute (stmt):
     print(f"{city}: {count} users")
 
 # Group by multiple columns
@@ -385,7 +385,7 @@ stmt = (
 stmt = (
     select(User.city, func.count(User.id).label('count'))
     .group_by(User.city)
-    .having(func.count(User.id) > 100)
+    .having (func.count(User.id) > 100)
 )
 \`\`\`
 
@@ -407,11 +407,11 @@ stmt = (
         func.avg(User.age).label('avg_age')
     )
     .where(User.created_at >= func.now() - func.interval('30 days'))
-    .group_by(func.date_trunc('day', User.created_at))
+    .group_by (func.date_trunc('day', User.created_at))
     .order_by('date')
 )
 
-for row in session.execute(stmt):
+for row in session.execute (stmt):
     print(f"{row.date}: {row.signups} signups, {row.gmail_users} Gmail, avg age {row.avg_age:.1f}")
 \`\`\`
 
@@ -425,12 +425,12 @@ Subqueries
 """
 
 # Scalar subquery (single value)
-subq = select(func.avg(User.age)).scalar_subquery()
+subq = select (func.avg(User.age)).scalar_subquery()
 stmt = select(User).where(User.age > subq)  # Users older than average
 
 # Correlated subquery
 subq = (
-    select(func.count(Post.id))
+    select (func.count(Post.id))
     .where(Post.user_id == User.id)
     .correlate(User)
     .scalar_subquery()
@@ -445,7 +445,7 @@ subq = (
 )
 stmt = (
     select(User.username, subq.c.post_count)
-    .join(subq, User.id == subq.c.user_id)
+    .join (subq, User.id == subq.c.user_id)
 )
 \`\`\`
 
@@ -462,7 +462,7 @@ cte = (
     .group_by(User.city)
     .cte('city_counts')
 )
-stmt = select(cte).where(cte.c.count > 1000)
+stmt = select (cte).where (cte.c.count > 1000)
 
 # Recursive CTE (hierarchical data)
 # Get all children of a category
@@ -474,10 +474,10 @@ cte = (
 
 cte = cte.union_all(
     select(Category.id, Category.parent_id, Category.name)
-    .join(cte, Category.parent_id == cte.c.id)
+    .join (cte, Category.parent_id == cte.c.id)
 )
 
-stmt = select(cte)
+stmt = select (cte)
 \`\`\`
 
 ---
@@ -495,14 +495,14 @@ from sqlalchemy import over, func
 stmt = select(
     User.username,
     User.created_at,
-    func.row_number().over(order_by=User.created_at).label('row_num')
+    func.row_number().over (order_by=User.created_at).label('row_num')
 )
 
 # RANK
 stmt = select(
     User.username,
     User.score,
-    func.rank().over(order_by=User.score.desc()).label('rank')
+    func.rank().over (order_by=User.score.desc()).label('rank')
 )
 
 # Partition by
@@ -510,22 +510,22 @@ stmt = select(
     User.city,
     User.username,
     User.age,
-    func.avg(User.age).over(partition_by=User.city).label('city_avg_age')
+    func.avg(User.age).over (partition_by=User.city).label('city_avg_age')
 )
 
 # LAG / LEAD
 stmt = select(
     Order.created_at,
     Order.total,
-    func.lag(Order.total).over(order_by=Order.created_at).label('previous_order'),
-    func.lead(Order.total).over(order_by=Order.created_at).label('next_order')
+    func.lag(Order.total).over (order_by=Order.created_at).label('previous_order'),
+    func.lead(Order.total).over (order_by=Order.created_at).label('next_order')
 )
 
 # NTILE (distribute into N buckets)
 stmt = select(
     User.email,
     User.score,
-    func.ntile(4).over(order_by=User.score).label('quartile')
+    func.ntile(4).over (order_by=User.score).label('quartile')
 )
 \`\`\`
 
@@ -541,13 +541,13 @@ UNION, INTERSECT, EXCEPT
 # UNION (removes duplicates)
 stmt1 = select(User.email).where(User.city == "New York")
 stmt2 = select(User.email).where(User.age > 30)
-stmt = stmt1.union(stmt2)
+stmt = stmt1.union (stmt2)
 
 # UNION ALL (keeps duplicates, faster)
-stmt = stmt1.union_all(stmt2)
+stmt = stmt1.union_all (stmt2)
 
 # INTERSECT (common to both)
-stmt = stmt1.intersect(stmt2)
+stmt = stmt1.intersect (stmt2)
 
 # EXCEPT (in first, not in second)
 stmt = stmt1.except_(stmt2)
@@ -567,12 +567,12 @@ Analyze Query Performance
 stmt = select(User).where(User.email == "test@example.com")
 
 # Get compiled SQL
-print(stmt.compile(compile_kwargs={"literal_binds": True}))
+print(stmt.compile (compile_kwargs={"literal_binds": True}))
 
 # EXPLAIN (PostgreSQL)
 from sqlalchemy import text
-explain_stmt = text(f"EXPLAIN ANALYZE {stmt}")
-result = session.execute(explain_stmt)
+explain_stmt = text (f"EXPLAIN ANALYZE {stmt}")
+result = session.execute (explain_stmt)
 for row in result:
     print(row)
 \`\`\`
@@ -588,7 +588,7 @@ Ensure Queries Use Indexes
 stmt = select(User).where(User.email == "test@example.com")
 
 # ❌ Function on column prevents index use
-stmt = select(User).where(func.lower(User.email) == "test@example.com")
+stmt = select(User).where (func.lower(User.email) == "test@example.com")
 
 # ✅ Use functional index or computed column
 # In migration: Index('idx_email_lower', func.lower(User.email))

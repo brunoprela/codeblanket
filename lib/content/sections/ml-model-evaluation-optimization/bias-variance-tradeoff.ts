@@ -45,12 +45,12 @@ y = y_true + noise  # Observed data
 
 print("Understanding Error Components")
 print("="*60)
-print(f"True function: y = sin(x)")
+print(f"True function: y = sin (x)")
 print(f"Noise (irreducible error): σ = 0.3")
 print(f"Data points: {n_samples}")
 
 # Visualize data
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X, y, alpha=0.5, label='Training data (with noise)')
 plt.plot(X, y_true, 'r-', linewidth=2, label='True function (no noise)')
 plt.xlabel('X')
@@ -91,7 +91,7 @@ print(f"   - In our example: σ = 0.3 (noise std dev)")
 \`\`\`
 Understanding Error Components
 ============================================================
-True function: y = sin(x)
+True function: y = sin (x)
 Noise (irreducible error): σ = 0.3
 Data points: 100
 
@@ -126,15 +126,15 @@ Three Sources of Error:
 # Fit models with different complexity
 models = {
     'Underfitting (High Bias)': Pipeline([
-        ('poly', PolynomialFeatures(degree=1)),
+        ('poly', PolynomialFeatures (degree=1)),
         ('lr', LinearRegression())
     ]),
     'Just Right': Pipeline([
-        ('poly', PolynomialFeatures(degree=3)),
+        ('poly', PolynomialFeatures (degree=3)),
         ('lr', LinearRegression())
     ]),
     'Overfitting (High Variance)': Pipeline([
-        ('poly', PolynomialFeatures(degree=15)),
+        ('poly', PolynomialFeatures (degree=15)),
         ('lr', LinearRegression())
     ]),
 }
@@ -151,7 +151,7 @@ y_plot_true = np.sin(X_plot).ravel()
 # Fit and evaluate
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-for (name, model), ax in zip(models.items(), axes):
+for (name, model), ax in zip (models.items(), axes):
     # Fit model
     model.fit(X_train, y_train)
     
@@ -172,8 +172,8 @@ for (name, model), ax in zip(models.items(), axes):
     
     ax.set_xlabel('X')
     ax.set_ylabel('y')
-    ax.set_title(f'{name}\\nTrain MSE: {train_mse:.3f}, Test MSE: {test_mse:.3f}')
-    ax.legend(fontsize=8)
+    ax.set_title (f'{name}\\nTrain MSE: {train_mse:.3f}, Test MSE: {test_mse:.3f}')
+    ax.legend (fontsize=8)
     ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
@@ -248,7 +248,7 @@ complexity = []
 
 for degree in degrees:
     model = Pipeline([
-        ('poly', PolynomialFeatures(degree=degree)),
+        ('poly', PolynomialFeatures (degree=degree)),
         ('lr', LinearRegression())
     ])
     
@@ -257,9 +257,9 @@ for degree in degrees:
     train_mse = np.mean((y_train - model.predict(X_train))**2)
     test_mse = np.mean((y_test - model.predict(X_test))**2)
     
-    train_errors.append(train_mse)
-    test_errors.append(test_mse)
-    complexity.append(degree)
+    train_errors.append (train_mse)
+    test_errors.append (test_mse)
+    complexity.append (degree)
     
     status = ""
     if degree <= 2:
@@ -272,14 +272,14 @@ for degree in degrees:
     print(f"Degree {degree:2d}: Train={train_mse:.4f}, Test={test_mse:.4f} {status}")
 
 # Visualize tradeoff
-plt.figure(figsize=(10, 6))
-plt.plot(complexity, train_errors, 'b-o', label='Training Error', linewidth=2)
-plt.plot(complexity, test_errors, 'r-o', label='Test Error', linewidth=2)
+plt.figure (figsize=(10, 6))
+plt.plot (complexity, train_errors, 'b-o', label='Training Error', linewidth=2)
+plt.plot (complexity, test_errors, 'r-o', label='Test Error', linewidth=2)
 
 # Mark the sweet spot
-best_degree = complexity[np.argmin(test_errors)]
-best_test_error = min(test_errors)
-plt.axvline(x=best_degree, color='g', linestyle='--', linewidth=2, 
+best_degree = complexity[np.argmin (test_errors)]
+best_test_error = min (test_errors)
+plt.axvline (x=best_degree, color='g', linestyle='--', linewidth=2, 
             label=f'Optimal Complexity (degree={best_degree})')
 
 # Add regions
@@ -339,22 +339,22 @@ print("="*60)
 
 models_to_test = {
     'High Bias (degree=1)': Pipeline([
-        ('poly', PolynomialFeatures(degree=1)),
+        ('poly', PolynomialFeatures (degree=1)),
         ('lr', LinearRegression())
     ]),
     'Good Fit (degree=4)': Pipeline([
-        ('poly', PolynomialFeatures(degree=4)),
+        ('poly', PolynomialFeatures (degree=4)),
         ('lr', LinearRegression())
     ]),
     'High Variance (degree=15)': Pipeline([
-        ('poly', PolynomialFeatures(degree=15)),
+        ('poly', PolynomialFeatures (degree=15)),
         ('lr', LinearRegression())
     ]),
 }
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-for (name, model), ax in zip(models_to_test.items(), axes):
+for (name, model), ax in zip (models_to_test.items(), axes):
     # Calculate learning curve
     train_sizes, train_scores, val_scores = learning_curve(
         model, X, y, train_sizes=np.linspace(0.1, 1.0, 10),
@@ -362,29 +362,29 @@ for (name, model), ax in zip(models_to_test.items(), axes):
     )
     
     # Convert to positive MSE
-    train_scores_mean = -train_scores.mean(axis=1)
-    train_scores_std = train_scores.std(axis=1)
-    val_scores_mean = -val_scores.mean(axis=1)
-    val_scores_std = val_scores.std(axis=1)
+    train_scores_mean = -train_scores.mean (axis=1)
+    train_scores_std = train_scores.std (axis=1)
+    val_scores_mean = -val_scores.mean (axis=1)
+    val_scores_std = val_scores.std (axis=1)
     
     # Plot
-    ax.plot(train_sizes, train_scores_mean, 'o-', label='Training error', linewidth=2)
-    ax.plot(train_sizes, val_scores_mean, 'o-', label='Validation error', linewidth=2)
+    ax.plot (train_sizes, train_scores_mean, 'o-', label='Training error', linewidth=2)
+    ax.plot (train_sizes, val_scores_mean, 'o-', label='Validation error', linewidth=2)
     
     # Shade std dev
-    ax.fill_between(train_sizes, 
+    ax.fill_between (train_sizes, 
                      train_scores_mean - train_scores_std,
                      train_scores_mean + train_scores_std, 
                      alpha=0.1)
-    ax.fill_between(train_sizes,
+    ax.fill_between (train_sizes,
                      val_scores_mean - val_scores_std,
                      val_scores_mean + val_scores_std, 
                      alpha=0.1)
     
     ax.set_xlabel('Training Set Size')
     ax.set_ylabel('Mean Squared Error')
-    ax.set_title(name)
-    ax.legend(loc='best')
+    ax.set_title (name)
+    ax.legend (loc='best')
     ax.grid(True, alpha=0.3)
     
     # Diagnose
@@ -490,7 +490,7 @@ solutions = {
 
 for problem, fixes in solutions.items():
     print(f"\\n{problem}:")
-    for i, fix in enumerate(fixes, 1):
+    for i, fix in enumerate (fixes, 1):
         print(f"  {i}. {fix}")
 
 # Practical example
@@ -503,7 +503,7 @@ depths = [1, 3, 5, 10, 20, None]
 print("\\nDecision Tree: Effect of max_depth on bias-variance")
 
 for depth in depths:
-    tree = DecisionTreeRegressor(max_depth=depth, random_state=42)
+    tree = DecisionTreeRegressor (max_depth=depth, random_state=42)
     tree.fit(X_train, y_train)
     
     train_mse = np.mean((y_train - tree.predict(X_train))**2)

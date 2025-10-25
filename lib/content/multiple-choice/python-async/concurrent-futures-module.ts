@@ -26,7 +26,7 @@ export const concurrentFuturesModuleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'executor.map() returns an iterator that yields results in submission order. Behavior: Tasks execute concurrently, Results returned in submission order (not completion order), Iterator blocks when next result not ready. Example: results = executor.map(task, [1, 2, 3]); for r in results: print(r). If task(2) finishes first, iterator still waits for task(1). Compare to submit() with as_completed(): futures = [executor.submit(task, i) for i in [1,2,3]]; for future in as_completed(futures): print(future.result()). This yields results as they complete (any order). Use map() when: Need results in order, Simple batch processing. Use submit() when: Want results ASAP, Need timeouts/cancellation.',
+      'executor.map() returns an iterator that yields results in submission order. Behavior: Tasks execute concurrently, Results returned in submission order (not completion order), Iterator blocks when next result not ready. Example: results = executor.map (task, [1, 2, 3]); for r in results: print(r). If task(2) finishes first, iterator still waits for task(1). Compare to submit() with as_completed(): futures = [executor.submit (task, i) for i in [1,2,3]]; for future in as_completed (futures): print(future.result()). This yields results as they complete (any order). Use map() when: Need results in order, Simple batch processing. Use submit() when: Want results ASAP, Need timeouts/cancellation.',
   },
   {
     id: 'cfm-mc-3',
@@ -39,7 +39,7 @@ export const concurrentFuturesModuleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'future.result() without timeout blocks indefinitely until task completes. Behavior: If task done: Returns result immediately. If task running: Blocks until complete. If task failed: Raises the exception from task. If task cancelled: Raises CancelledError. Example: future = executor.submit(slow_task); result = future.result() # Blocks forever if slow_task never completes. Safer: Use timeout: result = future.result(timeout=10.0). Raises TimeoutError if not done in 10s. Or check first: if future.done(): result = future.result(). Best practice: Always use timeout for external operations (network, database). Prevents indefinite hangs.',
+      'future.result() without timeout blocks indefinitely until task completes. Behavior: If task done: Returns result immediately. If task running: Blocks until complete. If task failed: Raises the exception from task. If task cancelled: Raises CancelledError. Example: future = executor.submit (slow_task); result = future.result() # Blocks forever if slow_task never completes. Safer: Use timeout: result = future.result (timeout=10.0). Raises TimeoutError if not done in 10s. Or check first: if future.done(): result = future.result(). Best practice: Always use timeout for external operations (network, database). Prevents indefinite hangs.',
   },
   {
     id: 'cfm-mc-4',
@@ -52,7 +52,7 @@ export const concurrentFuturesModuleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "as_completed(futures) returns iterator that yields futures as they finish (any order). Behavior: Yields futures immediately when they complete, Not in submission order (in completion order), Allows progressive processing. Example: futures = [executor.submit(task, i) for i in range(10)]; for future in as_completed(futures): result = future.result(); process(result). If task(5) finishes first, it's yielded first (even though submitted later). Benefits: Process results ASAP (don't wait for all), Show progress as tasks complete, Lower latency (start processing early results). Compare to map(): map() waits for results in order. as_completed() yields results as ready. Use as_completed() when: Want progressive results, Different task durations, Progress tracking.",
+      "as_completed (futures) returns iterator that yields futures as they finish (any order). Behavior: Yields futures immediately when they complete, Not in submission order (in completion order), Allows progressive processing. Example: futures = [executor.submit (task, i) for i in range(10)]; for future in as_completed (futures): result = future.result(); process (result). If task(5) finishes first, it's yielded first (even though submitted later). Benefits: Process results ASAP (don't wait for all), Show progress as tasks complete, Lower latency (start processing early results). Compare to map(): map() waits for results in order. as_completed() yields results as ready. Use as_completed() when: Want progressive results, Different task durations, Progress tracking.",
   },
   {
     id: 'cfm-mc-5',
@@ -65,6 +65,6 @@ export const concurrentFuturesModuleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'future.cancel() only cancels pending futures (not started). Returns True if cancelled, False if running/done. States: Pending: Not started yet. cancel() returns True (cancelled). Running: Currently executing. cancel() returns False (can\'t cancel). Done: Completed. cancel() returns False (already done). Example: future = executor.submit(task); if future.cancel(): print("Cancelled"); else: print("Too late, already running"). Why can\'t cancel running: Thread/process already executing task, No safe way to force stop (could corrupt state). Workaround: Cooperative cancellation: Check flag in task: def task(): while not stop_flag: # work. Then: stop_flag = True (task stops at next check). Best practice: Cancel quickly after submit if needed, Use timeout instead of cancel for running tasks.',
+      'future.cancel() only cancels pending futures (not started). Returns True if cancelled, False if running/done. States: Pending: Not started yet. cancel() returns True (cancelled). Running: Currently executing. cancel() returns False (can\'t cancel). Done: Completed. cancel() returns False (already done). Example: future = executor.submit (task); if future.cancel(): print("Cancelled"); else: print("Too late, already running"). Why can\'t cancel running: Thread/process already executing task, No safe way to force stop (could corrupt state). Workaround: Cooperative cancellation: Check flag in task: def task(): while not stop_flag: # work. Then: stop_flag = True (task stops at next check). Best practice: Cancel quickly after submit if needed, Use timeout instead of cancel for running tasks.',
   },
 ];

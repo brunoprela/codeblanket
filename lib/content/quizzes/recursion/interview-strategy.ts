@@ -8,10 +8,10 @@ export const interviewstrategyQuiz = [
     question:
       'What is the framework for solving recursive problems in interviews?',
     sampleAnswer:
-      'The 4-step framework: 1) **Define the subproblem** - what does the function solve for smaller input?, 2) **Find the base case** - simplest input that can be solved directly, 3) **Write the recursive case** - express solution in terms of subproblem(s), 4) **Analyze complexity** - time and space, consider memoization. Always start by clearly stating: "This function takes X and returns Y by recursing on...". Communicate your thinking process clearly.',
+      'The 4-step framework: 1) **Define the subproblem** - what does the function solve for smaller input?, 2) **Find the base case** - simplest input that can be solved directly, 3) **Write the recursive case** - express solution in terms of subproblem (s), 4) **Analyze complexity** - time and space, consider memoization. Always start by clearly stating: "This function takes X and returns Y by recursing on...". Communicate your thinking process clearly.',
     keyPoints: [
       'Define subproblem: what function does',
-      'Identify base case(s): simplest inputs',
+      'Identify base case (s): simplest inputs',
       'Express recursive case: solution in terms of subproblems',
       'Analyze complexity: time/space',
       'Consider memoization for optimization',

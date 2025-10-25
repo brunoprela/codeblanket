@@ -5,7 +5,7 @@
 export const gfsSection = {
   id: 'google-file-system',
   title: 'Google File System (GFS)',
-  content: `Google File System (GFS) revolutionized distributed storage and became the foundation for modern distributed file systems. Published in 2003, it powers Google's infrastructure and inspired Hadoop's HDFS.
+  content: `Google File System (GFS) revolutionized distributed storage and became the foundation for modern distributed file systems. Published in 2003, it powers Google\'s infrastructure and inspired Hadoop's HDFS.
 
 ## Why GFS Was Created
 
@@ -23,7 +23,7 @@ export const gfsSection = {
 - ❌ Needed to handle **component failures as the norm, not exception**
 - ❌ Optimized for different workload (small files, random access)
 
-### Google's Unique Requirements
+### Google\'s Unique Requirements
 
 1. **Component failures are common**: With 1000s of machines, something is always failing
 2. **Huge files**: Multi-GB files are the norm (not KB/MB files)
@@ -498,7 +498,7 @@ Google replaced GFS with **Colossus** (not publicly documented):
 ## Interview Tips
 
 **Explain GFS in 2 minutes**:
-"GFS is Google's distributed file system for storing petabytes. It has a single master holding metadata in memory, and thousands of chunkservers storing 64 MB chunks with 3x replication. The key insight is separating control (master) from data flow (direct client-to-chunkserver). It's optimized for large files and append-heavy workloads. The weak consistency model is acceptable for Google's batch processing. Master failure is handled by replication and operation log. It inspired HDFS and modern distributed storage."
+"GFS is Google\'s distributed file system for storing petabytes. It has a single master holding metadata in memory, and thousands of chunkservers storing 64 MB chunks with 3x replication. The key insight is separating control (master) from data flow (direct client-to-chunkserver). It's optimized for large files and append-heavy workloads. The weak consistency model is acceptable for Google's batch processing. Master failure is handled by replication and operation log. It inspired HDFS and modern distributed storage."
 
 **Common mistakes**:
 - ❌ Saying "master is single point of failure" without mentioning replication

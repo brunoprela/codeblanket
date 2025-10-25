@@ -21,10 +21,10 @@ export const regressiondiagnosticsQuiz = [
   {
     id: 'q2',
     question:
-      "One observation has Cook's Distance of 2.5 (threshold is 0.08). Should you remove it? What factors should you consider?",
+      "One observation has Cook\'s Distance of 2.5 (threshold is 0.08). Should you remove it? What factors should you consider?",
     hint: 'Consider data quality, domain knowledge, and sensitivity analysis.',
     sampleAnswer:
-      "Cook's D = 2.5 >> 0.08 indicates highly influential point. **Before removing**: (1) Investigate: data error? True outlier? (2) Check leverage and residual. (3) Run model with/without - how much changes? (4) Domain knowledge: is this value plausible? **Decision**: Remove if data error confirmed. Keep if legitimate rare case but report sensitivity. Use robust regression if uncertain. Always document decisions and show both analyses.",
+      "Cook\'s D = 2.5 >> 0.08 indicates highly influential point. **Before removing**: (1) Investigate: data error? True outlier? (2) Check leverage and residual. (3) Run model with/without - how much changes? (4) Domain knowledge: is this value plausible? **Decision**: Remove if data error confirmed. Keep if legitimate rare case but report sensitivity. Use robust regression if uncertain. Always document decisions and show both analyses.",
     keyPoints: [
       'Investigate before removing',
       'Check if data error',

@@ -60,21 +60,21 @@ import heapq
 
 # Min heap (default in Python)
 heap = []
-heapq.heappush(heap, 5)
-heapq.heappush(heap, 1)
-heapq.heappush(heap, 3)
+heapq.heappush (heap, 5)
+heapq.heappush (heap, 1)
+heapq.heappush (heap, 3)
 
-min_val = heapq.heappop(heap)  # Returns 1
+min_val = heapq.heappop (heap)  # Returns 1
 
 # Heapify from array
 arr = [5, 1, 3, 7, 9]
-heapq.heapify(arr)  # Converts to min heap in-place
+heapq.heapify (arr)  # Converts to min heap in-place
 
 # Max heap (negate values)
 max_heap = []
-heapq.heappush(max_heap, -5)
-heapq.heappush(max_heap, -1)
-max_val = -heapq.heappop(max_heap)  # Returns 5
+heapq.heappush (max_heap, -5)
+heapq.heappush (max_heap, -1)
+max_val = -heapq.heappop (max_heap)  # Returns 5
 \`\`\`
 
 **When to Use Heaps:**

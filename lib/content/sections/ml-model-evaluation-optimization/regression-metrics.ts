@@ -25,7 +25,7 @@ Unlike classification (correct/incorrect), regression errors exist on a continuo
 - Some metrics are more robust to outliers
 - The "best" metric depends on your problem and business context
 
-Let's explore the most important regression metrics and when to use each one.
+Let\'s explore the most important regression metrics and when to use each one.
 
 ## Understanding Errors and Residuals
 
@@ -58,11 +58,11 @@ y_pred = model.predict(X_test)
 
 # Calculate errors (residuals)
 errors = y_test - y_pred
-absolute_errors = np.abs(errors)
+absolute_errors = np.abs (errors)
 squared_errors = errors ** 2
 
 print("Understanding Errors:")
-print(f"Number of predictions: {len(y_test)}")
+print(f"Number of predictions: {len (y_test)}")
 print(f"\\nExample predictions:")
 for i in range(5):
     print(f"  True: {y_test[i]:6.2f}, Predicted: {y_pred[i]:6.2f}, Error: {errors[i]:6.2f}")
@@ -71,13 +71,13 @@ print(f"\\nError Statistics:")
 print(f"  Mean error: {errors.mean():.4f} (should be ~0 for unbiased model)")
 print(f"  Mean absolute error: {absolute_errors.mean():.4f}")
 print(f"  Mean squared error: {squared_errors.mean():.4f}")
-print(f"  Root mean squared error: {np.sqrt(squared_errors.mean()):.4f}")
+print(f"  Root mean squared error: {np.sqrt (squared_errors.mean()):.4f}")
 
 # Visualize errors
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
 # Scatter plot with errors
-axes[0].scatter(y_test, y_pred, alpha=0.6)
+axes[0].scatter (y_test, y_pred, alpha=0.6)
 axes[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
 axes[0].set_xlabel('True Values')
 axes[0].set_ylabel('Predictions')
@@ -85,16 +85,16 @@ axes[0].set_title('Predictions vs True Values')
 axes[0].grid(True, alpha=0.3)
 
 # Residual plot
-axes[1].scatter(y_pred, errors, alpha=0.6)
-axes[1].axhline(y=0, color='r', linestyle='--', lw=2)
+axes[1].scatter (y_pred, errors, alpha=0.6)
+axes[1].axhline (y=0, color='r', linestyle='--', lw=2)
 axes[1].set_xlabel('Predictions')
 axes[1].set_ylabel('Residuals (True - Pred)')
 axes[1].set_title('Residual Plot')
 axes[1].grid(True, alpha=0.3)
 
 # Distribution of errors
-axes[2].hist(errors, bins=15, edgecolor='black', alpha=0.7)
-axes[2].axvline(x=0, color='r', linestyle='--', lw=2)
+axes[2].hist (errors, bins=15, edgecolor='black', alpha=0.7)
+axes[2].axvline (x=0, color='r', linestyle='--', lw=2)
 axes[2].set_xlabel('Residuals')
 axes[2].set_ylabel('Frequency')
 axes[2].set_title('Distribution of Residuals')
@@ -136,8 +136,8 @@ $$\\text{MAE} = \\frac{1}{n} \\sum_{i=1}^{n} |y_i - \\hat{y}_i|$$
 
 \`\`\`python
 # Calculate MAE manually and with sklearn
-mae_manual = np.mean(np.abs(y_test - y_pred))
-mae_sklearn = mean_absolute_error(y_test, y_pred)
+mae_manual = np.mean (np.abs (y_test - y_pred))
+mae_sklearn = mean_absolute_error (y_test, y_pred)
 
 print("Mean Absolute Error (MAE):")
 print(f"  Manual calculation: {mae_manual:.4f}")
@@ -153,8 +153,8 @@ datasets = {
 
 print("\\nMAE behavior on different error patterns:")
 for name, (true_vals, pred_vals) in datasets.items():
-    mae = mean_absolute_error(true_vals, pred_vals)
-    errors = np.array(pred_vals) - np.array(true_vals)
+    mae = mean_absolute_error (true_vals, pred_vals)
+    errors = np.array (pred_vals) - np.array (true_vals)
     print(f"  {name:20s}: MAE = {mae:.2f}, Errors = {errors}")
 \`\`\`
 
@@ -198,7 +198,7 @@ $$\\text{MSE} = \\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2$$
 \`\`\`python
 # Calculate MSE
 mse_manual = np.mean((y_test - y_pred) ** 2)
-mse_sklearn = mean_squared_error(y_test, y_pred)
+mse_sklearn = mean_squared_error (y_test, y_pred)
 
 print("Mean Squared Error (MSE):")
 print(f"  Manual calculation: {mse_manual:.4f}")
@@ -208,9 +208,9 @@ print(f"  Note: MSE is in squared units (harder to interpret directly)")
 # Compare MAE vs MSE on different error patterns
 print("\\nComparing MAE vs MSE:")
 for name, (true_vals, pred_vals) in datasets.items():
-    mae = mean_absolute_error(true_vals, pred_vals)
-    mse = mean_squared_error(true_vals, pred_vals)
-    errors = np.array(pred_vals) - np.array(true_vals)
+    mae = mean_absolute_error (true_vals, pred_vals)
+    mse = mean_squared_error (true_vals, pred_vals)
+    errors = np.array (pred_vals) - np.array (true_vals)
     print(f"  {name:20s}: MAE = {mae:5.2f}, MSE = {mse:7.2f}")
 
 print("\\n💡 Key Insight: MSE penalizes large errors much more!")
@@ -262,9 +262,9 @@ $$\\text{RMSE} = \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2}$$
 
 \`\`\`python
 # Calculate RMSE
-rmse_manual = np.sqrt(np.mean((y_test - y_pred) ** 2))
-rmse_sklearn = root_mean_squared_error(y_test, y_pred)  # sklearn 1.4+
-rmse_sklearn_old = np.sqrt(mean_squared_error(y_test, y_pred))  # older sklearn
+rmse_manual = np.sqrt (np.mean((y_test - y_pred) ** 2))
+rmse_sklearn = root_mean_squared_error (y_test, y_pred)  # sklearn 1.4+
+rmse_sklearn_old = np.sqrt (mean_squared_error (y_test, y_pred))  # older sklearn
 
 print("Root Mean Squared Error (RMSE):")
 print(f"  Manual calculation: {rmse_manual:.4f}")
@@ -288,8 +288,8 @@ print("  - Ratio >> 1: errors have high variance (some very large errors)")
 # Demonstrate on different error patterns
 print("\\nRMSE/MAE ratio for different error patterns:")
 for name, (true_vals, pred_vals) in datasets.items():
-    mae = mean_absolute_error(true_vals, pred_vals)
-    rmse = np.sqrt(mean_squared_error(true_vals, pred_vals))
+    mae = mean_absolute_error (true_vals, pred_vals)
+    rmse = np.sqrt (mean_squared_error (true_vals, pred_vals))
     ratio = rmse / mae if mae > 0 else 0
     print(f"  {name:20s}: RMSE/MAE = {ratio:.3f}")
 \`\`\`
@@ -348,7 +348,7 @@ $$R^2 = 1 - \\frac{\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2}{\\sum_{i=1}^{n}(y_i - \\
 \`\`\`python
 # Calculate R²
 r2_manual = 1 - (np.sum((y_test - y_pred)**2) / np.sum((y_test - y_test.mean())**2))
-r2_sklearn = r2_score(y_test, y_pred)
+r2_sklearn = r2_score (y_test, y_pred)
 
 print("R-squared (R²):")
 print(f"  Manual calculation: {r2_manual:.4f}")
@@ -356,9 +356,9 @@ print(f"  Sklearn calculation: {r2_sklearn:.4f}")
 print(f"  Interpretation: Model explains {r2_sklearn*100:.2f}% of variance")
 
 # Compare with baseline (mean prediction)
-baseline_pred = np.full_like(y_test, y_test.mean())
-baseline_mse = mean_squared_error(y_test, baseline_pred)
-model_mse = mean_squared_error(y_test, y_pred)
+baseline_pred = np.full_like (y_test, y_test.mean())
+baseline_mse = mean_squared_error (y_test, baseline_pred)
+model_mse = mean_squared_error (y_test, y_pred)
 
 print("\\n" + "="*60)
 print("Understanding R²:")
@@ -371,29 +371,29 @@ print(f"  R² = 1 - (Model MSE / Baseline MSE) = {r2_sklearn:.4f}")
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
 # Baseline model (always predict mean)
-axes[0].scatter(y_test, baseline_pred, alpha=0.6, label='Predictions')
+axes[0].scatter (y_test, baseline_pred, alpha=0.6, label='Predictions')
 axes[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label='Perfect')
-axes[0].axhline(y=y_test.mean(), color='green', linestyle=':', lw=2, label='Mean')
+axes[0].axhline (y=y_test.mean(), color='green', linestyle=':', lw=2, label='Mean')
 axes[0].set_xlabel('True Values')
 axes[0].set_ylabel('Predictions')
-axes[0].set_title(f'Baseline Model (R²=0.0)\\nMSE={baseline_mse:.2f}')
+axes[0].set_title (f'Baseline Model (R²=0.0)\\nMSE={baseline_mse:.2f}')
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 
 # Our model
-axes[1].scatter(y_test, y_pred, alpha=0.6, label='Predictions')
+axes[1].scatter (y_test, y_pred, alpha=0.6, label='Predictions')
 axes[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label='Perfect')
 axes[1].set_xlabel('True Values')
 axes[1].set_ylabel('Predictions')
-axes[1].set_title(f'Our Model (R²={r2_sklearn:.3f})\\nMSE={model_mse:.2f}')
+axes[1].set_title (f'Our Model (R²={r2_sklearn:.3f})\\nMSE={model_mse:.2f}')
 axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 
 # R² bar chart
 r2_values = [0, r2_sklearn, 1.0]
-labels = ['Baseline\\n(predict mean)', f'Our Model\\n({r2_sklearn:.3f})', 'Perfect\\n(R²=1.0)']
+labels = ['Baseline\\n (predict mean)', f'Our Model\\n({r2_sklearn:.3f})', 'Perfect\\n(R²=1.0)']
 colors = ['red', 'orange', 'green']
-axes[2].bar(labels, r2_values, color=colors, alpha=0.7, edgecolor='black')
+axes[2].bar (labels, r2_values, color=colors, alpha=0.7, edgecolor='black')
 axes[2].set_ylabel('R² Score')
 axes[2].set_title('Model Performance Comparison')
 axes[2].set_ylim([0, 1.1])
@@ -506,10 +506,10 @@ where n = number of samples, p = number of features
 
 \`\`\`python
 # Calculate adjusted R²
-n = len(y_test)
+n = len (y_test)
 p = X_test.shape[1]  # number of features
 
-r2 = r2_score(y_test, y_pred)
+r2 = r2_score (y_test, y_pred)
 r2_adj = 1 - (1 - r2) * (n - 1) / (n - p - 1)
 
 print("Adjusted R-squared:")
@@ -524,7 +524,7 @@ print("\\nScenario: Adding useless features")
 
 # Generate data with useless features
 X_useful = X_test[:, :1]  # 1 useful feature
-X_useless = np.random.randn(len(X_test), 10)  # 10 useless features
+X_useless = np.random.randn (len(X_test), 10)  # 10 useless features
 X_combined = np.hstack([X_useful, X_useless])  # 1 + 10 = 11 features
 
 # Train models
@@ -533,15 +533,15 @@ model_simple.fit(X_train[:, :1], y_train)
 y_pred_simple = model_simple.predict(X_useful)
 
 model_complex = LinearRegression()
-X_train_complex = np.hstack([X_train[:, :1], np.random.randn(len(X_train), 10)])
+X_train_complex = np.hstack([X_train[:, :1], np.random.randn (len(X_train), 10)])
 model_complex.fit(X_train_complex, y_train)
 y_pred_complex = model_complex.predict(X_combined)
 
 # Compare R² and adjusted R²
-r2_simple = r2_score(y_test, y_pred_simple)
-r2_complex = r2_score(y_test, y_pred_complex)
+r2_simple = r2_score (y_test, y_pred_simple)
+r2_complex = r2_score (y_test, y_pred_complex)
 
-n = len(y_test)
+n = len (y_test)
 p_simple = 1
 p_complex = 11
 
@@ -600,8 +600,8 @@ $$\\text{MAPE} = \\frac{100\\%}{n} \\sum_{i=1}^{n} \\left|\\frac{y_i - \\hat{y}_
 
 \`\`\`python
 # Calculate MAPE
-mape_manual = np.mean(np.abs((y_test - y_pred) / y_test)) * 100
-mape_sklearn = mean_absolute_percentage_error(y_test, y_pred) * 100
+mape_manual = np.mean (np.abs((y_test - y_pred) / y_test)) * 100
+mape_sklearn = mean_absolute_percentage_error (y_test, y_pred) * 100
 
 print("Mean Absolute Percentage Error (MAPE):")
 print(f"  Manual calculation: {mape_manual:.2f}%")
@@ -619,10 +619,10 @@ scale1_pred = np.array([11, 22, 33, 44])  # 10% error each
 scale2_true = np.array([1000, 2000, 3000, 4000])
 scale2_pred = np.array([1100, 2200, 3300, 4400])  # Same 10% error
 
-mape1 = mean_absolute_percentage_error(scale1_true, scale1_pred) * 100
-mape2 = mean_absolute_percentage_error(scale2_true, scale2_pred) * 100
-mae1 = mean_absolute_error(scale1_true, scale1_pred)
-mae2 = mean_absolute_error(scale2_true, scale2_pred)
+mape1 = mean_absolute_percentage_error (scale1_true, scale1_pred) * 100
+mape2 = mean_absolute_percentage_error (scale2_true, scale2_pred) * 100
+mae1 = mean_absolute_error (scale1_true, scale1_pred)
+mae2 = mean_absolute_error (scale2_true, scale2_pred)
 
 print(f"\\nSmall scale (10-40):")
 print(f"  MAPE: {mape1:.2f}%")
@@ -644,7 +644,7 @@ print("\\n1. Division by zero when true value is 0:")
 print(f"   True values: {true_with_zero}")
 print(f"   Predictions: {pred_with_zero}")
 try:
-    mape_zero = mean_absolute_percentage_error(true_with_zero, pred_with_zero) * 100
+    mape_zero = mean_absolute_percentage_error (true_with_zero, pred_with_zero) * 100
     print(f"   MAPE: {mape_zero:.2f}% (will error or be infinite)")
 except:
     print("   MAPE: ERROR - cannot divide by zero!")
@@ -655,8 +655,8 @@ true_val = np.array([100])
 over_pred = np.array([150])  # 50% over
 under_pred = np.array([50])   # 50% under
 
-mape_over = mean_absolute_percentage_error(true_val, over_pred) * 100
-mape_under = mean_absolute_percentage_error(true_val, under_pred) * 100
+mape_over = mean_absolute_percentage_error (true_val, over_pred) * 100
+mape_under = mean_absolute_percentage_error (true_val, under_pred) * 100
 
 print(f"   True value: 100")
 print(f"   Predict 150 (50 units over): MAPE = {mape_over:.1f}%")
@@ -671,8 +671,8 @@ examples = [
 ]
 
 for true, pred, desc in examples:
-    mape = mean_absolute_percentage_error(true, pred) * 100
-    mae = mean_absolute_error(true, pred)
+    mape = mean_absolute_percentage_error (true, pred) * 100
+    mae = mean_absolute_error (true, pred)
     print(f"   {desc}: MAE={mae:.0f}, MAPE={mape:.0f}%")
 \`\`\`
 
@@ -751,21 +751,21 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train model
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # Calculate all metrics
 metrics = {
-    'MAE': mean_absolute_error(y_test, y_pred),
-    'MSE': mean_squared_error(y_test, y_pred),
-    'RMSE': root_mean_squared_error(y_test, y_pred),
-    'R²': r2_score(y_test, y_pred),
-    'MAPE': mean_absolute_percentage_error(y_test, y_pred) * 100,
+    'MAE': mean_absolute_error (y_test, y_pred),
+    'MSE': mean_squared_error (y_test, y_pred),
+    'RMSE': root_mean_squared_error (y_test, y_pred),
+    'R²': r2_score (y_test, y_pred),
+    'MAPE': mean_absolute_percentage_error (y_test, y_pred) * 100,
 }
 
 # Calculate adjusted R²
-n = len(y_test)
+n = len (y_test)
 p = X_test.shape[1]
 r2 = metrics['R²']
 metrics['Adjusted R²'] = 1 - (1 - r2) * (n - 1) / (n - p - 1)
@@ -773,7 +773,7 @@ metrics['Adjusted R²'] = 1 - (1 - r2) * (n - 1) / (n - p - 1)
 print("California Housing: All Regression Metrics")
 print("="*60)
 print(f"Target: Median house value (in $100,000s)")
-print(f"Samples: {len(y_test)} test samples")
+print(f"Samples: {len (y_test)} test samples")
 print(f"Features: {p}")
 print()
 
@@ -785,8 +785,7 @@ for metric_name, value in metrics.items():
     else:
         # Convert to actual dollars
         dollars = value * 100_000
-        print(f"{metric_name:15s}: {value:.4f} (\${dollars:, .0f
-})")
+        print(f"{metric_name:15s}: {value:.4f} (\${dollars:,.0f})")
 
 # Metric selection guide
 print("\\n" + "=" * 60)

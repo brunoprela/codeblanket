@@ -17,7 +17,7 @@ export const localllmdeploymentMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Local deployment becomes cost-effective at $2,000+/month API costs. At this scale, GPU hardware ($3K) and electricity ($150/month) pay for themselves quickly. At lower volumes ($100-500/month), API is cheaper when factoring in infrastructure and maintenance costs.',
+      'Local deployment becomes cost-effective at $2,000+/month API costs. At this scale, GPU hardware (\$3K) and electricity ($150/month) pay for themselves quickly. At lower volumes ($100-500/month), API is cheaper when factoring in infrastructure and maintenance costs.',
   },
   {
     id: 'mc2',

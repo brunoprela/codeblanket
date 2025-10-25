@@ -57,13 +57,13 @@ class PromptVersion:
     metrics: Dict[str, float] = None
     status: str = "draft"  # draft, testing, active, archived
     
-    def render(self, **kwargs) -> str:
+    def render (self, **kwargs) -> str:
         """Render prompt with variables."""
         return self.template.format(**kwargs)
     
-    def get_hash(self) -> str:
+    def get_hash (self) -> str:
         """Get unique hash for this version."""
-        content = self.template + str(self.variables)
+        content = self.template + str (self.variables)
         return hashlib.md5(content.encode()).hexdigest()[:8]
 
 class PromptRegistry:
@@ -73,17 +73,17 @@ class PromptRegistry:
         self.prompts: Dict[str, PromptVersion] = {}
         self.active_prompts: Dict[str, str] = {}  # task -> version_id
     
-    def register(self, prompt: PromptVersion) -> str:
+    def register (self, prompt: PromptVersion) -> str:
         """Register new prompt version."""
-        prompt_id = f"{prompt.get_hash()}_{int(prompt.created_at.timestamp())}"
+        prompt_id = f"{prompt.get_hash()}_{int (prompt.created_at.timestamp())}"
         prompt.id = prompt_id
         self.prompts[prompt_id] = prompt
         return prompt_id
     
-    def set_active(self, task: str, version_id: str):
+    def set_active (self, task: str, version_id: str):
         """Set active version for a task."""
         if version_id not in self.prompts:
-            raise ValueError(f"Version {version_id} not found")
+            raise ValueError (f"Version {version_id} not found")
         
         self.prompts[version_id].status = "active"
         
@@ -94,21 +94,21 @@ class PromptRegistry:
         
         self.active_prompts[task] = version_id
     
-    def get_active(self, task: str) -> PromptVersion:
+    def get_active (self, task: str) -> PromptVersion:
         """Get currently active prompt for task."""
-        version_id = self.active_prompts.get(task)
+        version_id = self.active_prompts.get (task)
         if not version_id:
-            raise ValueError(f"No active prompt for task {task}")
+            raise ValueError (f"No active prompt for task {task}")
         return self.prompts[version_id]
     
-    def get_history(self, task: str) -> List[PromptVersion]:
+    def get_history (self, task: str) -> List[PromptVersion]:
         """Get version history for a task."""
         # Find all versions for this task
         versions = [
             p for p in self.prompts.values()
             if task in p.description  # Simple matching; improve in production
         ]
-        return sorted(versions, key=lambda p: p.created_at, reverse=True)
+        return sorted (versions, key=lambda p: p.created_at, reverse=True)
 
 # Usage
 registry = PromptRegistry()
@@ -122,7 +122,7 @@ v1 = PromptVersion(
     created_by="alice",
     description="summarization: Initial version"
 )
-v1_id = registry.register(v1)
+v1_id = registry.register (v1)
 registry.set_active("summarization", v1_id)
 
 # Register improved version
@@ -135,14 +135,14 @@ v2 = PromptVersion(
     description="summarization: Added structure",
     parent_version=v1_id
 )
-v2_id = registry.register(v2)
+v2_id = registry.register (v2)
 
 # After testing shows v2 is better
 registry.set_active("summarization", v2_id)
 
 # Get current active prompt
 active = registry.get_active("summarization")
-prompt = active.render(article="...")
+prompt = active.render (article="...")
 \`\`\`
 
 ## A/B Testing Framework
@@ -177,7 +177,7 @@ class ABTest:
         self.results_b = []
         self.assignments = {}  # user_id -> variant
     
-    def assign_variant(self, user_id: str = None) -> str:
+    def assign_variant (self, user_id: str = None) -> str:
         """Assign user to variant. Returns 'A' or 'B'."""
         
         if user_id and user_id in self.assignments:
@@ -192,9 +192,9 @@ class ABTest:
         
         return variant
     
-    def get_prompt(self, user_id: str = None) -> PromptVersion:
+    def get_prompt (self, user_id: str = None) -> PromptVersion:
         """Get prompt based on A/B assignment."""
-        variant = self.assign_variant(user_id)
+        variant = self.assign_variant (user_id)
         return self.variant_b if variant == 'B' else self.variant_a
     
     def record_result(
@@ -211,11 +211,11 @@ class ABTest:
         }
         
         if variant == 'A':
-            self.results_a.append(result)
+            self.results_a.append (result)
         else:
-            self.results_b.append(result)
+            self.results_b.append (result)
     
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics (self) -> Dict[str, Any]:
         """Calculate test statistics."""
         
         scores_a = [r['score'] for r in self.results_a]
@@ -225,17 +225,17 @@ class ABTest:
             return {'error': 'Insufficient data'}
         
         # Basic statistics
-        mean_a = sum(scores_a) / len(scores_a)
-        mean_b = sum(scores_b) / len(scores_b)
+        mean_a = sum (scores_a) / len (scores_a)
+        mean_b = sum (scores_b) / len (scores_b)
         
         # T-test for significance
-        t_stat, p_value = stats.ttest_ind(scores_a, scores_b)
+        t_stat, p_value = stats.ttest_ind (scores_a, scores_b)
         
-        # Effect size (Cohen's d)
+        # Effect size (Cohen\'s d)
         pooled_std = (
             (sum((x - mean_a)**2 for x in scores_a) + 
              sum((x - mean_b)**2 for x in scores_b)) /
-            (len(scores_a) + len(scores_b) - 2)
+            (len (scores_a) + len (scores_b) - 2)
         ) ** 0.5
         
         cohens_d = (mean_b - mean_a) / pooled_std if pooled_std > 0 else 0
@@ -247,12 +247,12 @@ class ABTest:
         return {
             'variant_a': {
                 'mean_score': mean_a,
-                'n_samples': len(scores_a),
+                'n_samples': len (scores_a),
                 'std': pooled_std
             },
             'variant_b': {
                 'mean_score': mean_b,
-                'n_samples': len(scores_b),
+                'n_samples': len (scores_b),
                 'std': pooled_std
             },
             'difference': mean_b - mean_a,
@@ -264,10 +264,10 @@ class ABTest:
             'confidence': 1 - p_value
         }
     
-    def should_stop(self, min_samples: int = 100, confidence: float = 0.95) -> bool:
+    def should_stop (self, min_samples: int = 100, confidence: float = 0.95) -> bool:
         """Check if we have enough data to make a decision."""
         
-        if len(self.results_a) < min_samples or len(self.results_b) < min_samples:
+        if len (self.results_a) < min_samples or len (self.results_b) < min_samples:
             return False
         
         stats = self.get_statistics()
@@ -287,19 +287,19 @@ ab_test = ABTest(
 
 # In production API
 @app.post("/summarize")
-async def summarize(request: SummarizeRequest):
+async def summarize (request: SummarizeRequest):
     # Get prompt via A/B test
-    prompt_version = ab_test.get_prompt(user_id=request.user_id)
-    variant = ab_test.assign_variant(request.user_id)
+    prompt_version = ab_test.get_prompt (user_id=request.user_id)
+    variant = ab_test.assign_variant (request.user_id)
     
     # Generate summary
-    summary = await model.generate(prompt_version.render(article=request.article))
+    summary = await model.generate (prompt_version.render (article=request.article))
     
     # Evaluate quality (automatic or human feedback)
-    quality_score = await evaluate_quality(summary)
+    quality_score = await evaluate_quality (summary)
     
     # Record result
-    ab_test.record_result(variant, quality_score)
+    ab_test.record_result (variant, quality_score)
     
     # Check if test is conclusive
     if ab_test.should_stop():
@@ -338,25 +338,25 @@ class EpsilonGreedyBandit:
         self.epsilon = epsilon
         
         # Track performance
-        self.counts = [0] * len(variants)  # Times each variant used
-        self.values = [0.0] * len(variants)  # Average reward for each
+        self.counts = [0] * len (variants)  # Times each variant used
+        self.values = [0.0] * len (variants)  # Average reward for each
     
-    def select_variant(self) -> int:
+    def select_variant (self) -> int:
         """Select variant using epsilon-greedy strategy."""
         
         # Exploration: random variant
         if random.random() < self.epsilon:
-            return random.randint(0, len(self.variants) - 1)
+            return random.randint(0, len (self.variants) - 1)
         
         # Exploitation: best performing variant
         # Handle cold start (no data yet)
-        if all(c == 0 for c in self.counts):
-            return random.randint(0, len(self.variants) - 1)
+        if all (c == 0 for c in self.counts):
+            return random.randint(0, len (self.variants) - 1)
         
         # Select variant with highest average reward
-        return int(np.argmax(self.values))
+        return int (np.argmax (self.values))
     
-    def update(self, variant_idx: int, reward: float):
+    def update (self, variant_idx: int, reward: float):
         """Update variant statistics with new reward."""
         self.counts[variant_idx] += 1
         n = self.counts[variant_idx]
@@ -366,9 +366,9 @@ class EpsilonGreedyBandit:
             (self.values[variant_idx] * (n - 1) + reward) / n
         )
     
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics (self) -> Dict[str, Any]:
         """Get current statistics."""
-        total_plays = sum(self.counts)
+        total_plays = sum (self.counts)
         
         return {
             'variants': [
@@ -379,10 +379,10 @@ class EpsilonGreedyBandit:
                     'average_reward': self.values[i],
                     'description': v.description
                 }
-                for i, v in enumerate(self.variants)
+                for i, v in enumerate (self.variants)
             ],
             'total_plays': total_plays,
-            'best_variant': int(np.argmax(self.values)) if any(c > 0 for c in self.counts) else None
+            'best_variant': int (np.argmax (self.values)) if any (c > 0 for c in self.counts) else None
         }
 
 # Usage
@@ -393,19 +393,19 @@ bandit = EpsilonGreedyBandit(
 
 # In production
 @app.post("/generate")
-async def generate(request: GenerateRequest):
+async def generate (request: GenerateRequest):
     # Select variant (more traffic to better performers)
     variant_idx = bandit.select_variant()
     prompt = bandit.variants[variant_idx]
     
     # Generate output
-    output = await model.generate(prompt.render(**request.inputs))
+    output = await model.generate (prompt.render(**request.inputs))
     
     # Get reward (quality score)
-    reward = await evaluate(output)
+    reward = await evaluate (output)
     
     # Update bandit
-    bandit.update(variant_idx, reward)
+    bandit.update (variant_idx, reward)
     
     # Log statistics periodically
     if request.request_count % 100 == 0:
@@ -447,7 +447,7 @@ class BatchPromptEvaluator:
             
             # Generate output
             start = time.time()
-            output = await model_fn(prompt)
+            output = await model_fn (prompt)
             latency = time.time() - start
             
             # Calculate metrics
@@ -461,7 +461,7 @@ class BatchPromptEvaluator:
                 scores[metric.__name__] = score
             
             # Calculate cost
-            cost = self._estimate_cost(prompt, output)
+            cost = self._estimate_cost (prompt, output)
             
             results.append({
                 'input': example['inputs'],
@@ -477,14 +477,14 @@ class BatchPromptEvaluator:
             metric_name = metric.__name__
             values = [r['scores'][metric_name] for r in results]
             aggregate_scores[metric_name] = {
-                'mean': sum(values) / len(values),
-                'min': min(values),
-                'max': max(values),
-                'std': np.std(values)
+                'mean': sum (values) / len (values),
+                'min': min (values),
+                'max': max (values),
+                'std': np.std (values)
             }
         
-        total_cost = sum(r['cost'] for r in results)
-        avg_latency = sum(r['latency'] for r in results) / len(results)
+        total_cost = sum (r['cost'] for r in results)
+        avg_latency = sum (r['latency'] for r in results) / len (results)
         
         return {
             'prompt_id': prompt_version.id,
@@ -492,7 +492,7 @@ class BatchPromptEvaluator:
             'aggregate_scores': aggregate_scores,
             'total_cost': total_cost,
             'avg_latency': avg_latency,
-            'n_examples': len(results),
+            'n_examples': len (results),
             'detailed_results': results
         }
     
@@ -507,8 +507,8 @@ class BatchPromptEvaluator:
         
         for prompt in prompts:
             print(f"Evaluating: {prompt.description}...")
-            result = await self.evaluate_prompt(prompt, model_fn)
-            all_results.append(result)
+            result = await self.evaluate_prompt (prompt, model_fn)
+            all_results.append (result)
         
         # Create comparison dataframe
         comparison = []
@@ -525,20 +525,20 @@ class BatchPromptEvaluator:
             for metric_name, scores in result['aggregate_scores'].items():
                 row[f'{metric_name}_mean'] = scores['mean']
             
-            comparison.append(row)
+            comparison.append (row)
         
-        df = pd.DataFrame(comparison)
+        df = pd.DataFrame (comparison)
         
         # Rank by primary metric
-        primary_metric = list(all_results[0]['aggregate_scores'].keys())[0]
-        df = df.sort_values(f'{primary_metric}_mean', ascending=False)
+        primary_metric = list (all_results[0]['aggregate_scores'].keys())[0]
+        df = df.sort_values (f'{primary_metric}_mean', ascending=False)
         
         return df
     
-    def _estimate_cost(self, prompt: str, output: str) -> float:
+    def _estimate_cost (self, prompt: str, output: str) -> float:
         """Estimate API cost."""
-        input_tokens = len(prompt.split()) * 1.3
-        output_tokens = len(output.split()) * 1.3
+        input_tokens = len (prompt.split()) * 1.3
+        output_tokens = len (output.split()) * 1.3
         total_tokens = input_tokens + output_tokens
         return (total_tokens / 1000) * 0.01  # $0.01 per 1K tokens
 
@@ -554,7 +554,7 @@ prompts_to_test = [
     prompt_v3,  # "Provide a concise summary highlighting key points"
 ]
 
-comparison = await evaluator.compare_prompts(prompts_to_test, model.generate)
+comparison = await evaluator.compare_prompts (prompts_to_test, model.generate)
 
 print(comparison)
 #   prompt_id  accuracy_mean  coherence_mean  avg_latency  total_cost
@@ -629,12 +629,12 @@ class CostQualityOptimizer:
             })
         
         # Sort by composite score
-        scored.sort(key=lambda x: x['composite_score'], reverse=True)
+        scored.sort (key=lambda x: x['composite_score'], reverse=True)
         
         return scored[0]
 
 # Usage
-optimizer = CostQualityOptimizer(quality_weight=0.7)
+optimizer = CostQualityOptimizer (quality_weight=0.7)
 
 results = [
     {'prompt_id': 'v1', 'quality': 0.85, 'cost': 0.02},
@@ -642,7 +642,7 @@ results = [
     {'prompt_id': 'v3', 'quality': 0.88, 'cost': 0.015},  # Best value!
 ]
 
-optimal = optimizer.find_optimal(results)
+optimal = optimizer.find_optimal (results)
 print(f"Optimal prompt: {optimal['prompt_id']}")
 print(f"Quality: {optimal['quality']:.2%}, Cost: \${optimal['cost']}")
 print(f"Composite Score: {optimal['composite_score']:.2f}")
@@ -669,8 +669,8 @@ class ProductionABPlatform:
     ) -> str:
         """Create new A/B test."""
         
-        test = ABTest(control, treatment, traffic_split)
-        test_id = f"{test_name}_{int(time.time())}"
+        test = ABTest (control, treatment, traffic_split)
+        test_id = f"{test_name}_{int (time.time())}"
         
         self.active_tests[test_id] = {
             'test': test,
@@ -690,17 +690,17 @@ class ProductionABPlatform:
         """Handle production request through A/B test."""
         
         if test_id not in self.active_tests:
-            raise ValueError(f"Test {test_id} not found")
+            raise ValueError (f"Test {test_id} not found")
         
         test_data = self.active_tests[test_id]
         test = test_data['test']
         
         # Get prompt via A/B assignment
-        prompt = test.get_prompt(user_id)
-        variant = test.assign_variant(user_id)
+        prompt = test.get_prompt (user_id)
+        variant = test.assign_variant (user_id)
         
         # Generate output
-        output = await model.generate(prompt.render(**inputs))
+        output = await model.generate (prompt.render(**inputs))
         
         # Store for later evaluation
         await self.metrics_db.store_inference(
@@ -727,17 +727,17 @@ class ProductionABPlatform:
         """Record user feedback/evaluation score."""
         
         # Get inference details
-        inference = await self.metrics_db.get_inference(inference_id)
+        inference = await self.metrics_db.get_inference (inference_id)
         
         # Record in A/B test
         test = self.active_tests[test_id]['test']
-        test.record_result(inference['variant'], score)
+        test.record_result (inference['variant'], score)
         
         # Check if test should conclude
         if test.should_stop():
-            await self.conclude_test(test_id)
+            await self.conclude_test (test_id)
     
-    async def conclude_test(self, test_id: str):
+    async def conclude_test (self, test_id: str):
         """Conclude A/B test and make decision."""
         
         test_data = self.active_tests[test_id]
@@ -746,10 +746,10 @@ class ProductionABPlatform:
         stats = test.get_statistics()
         
         # Log results
-        logger.info(f"A/B Test {test_id} concluded:")
-        logger.info(f"Winner: {stats['winner']}")
-        logger.info(f"Improvement: {stats['percent_improvement']:.1f}%")
-        logger.info(f"P-value: {stats['p_value']:.4f}")
+        logger.info (f"A/B Test {test_id} concluded:")
+        logger.info (f"Winner: {stats['winner']}")
+        logger.info (f"Improvement: {stats['percent_improvement']:.1f}%")
+        logger.info (f"P-value: {stats['p_value']:.4f}")
         
         # Automatically promote winner if significant
         if stats['is_significant'] and stats['winner'] != 'inconclusive':
@@ -757,16 +757,16 @@ class ProductionABPlatform:
             
             # Set as active
             task_name = test_id.split('_')[0]
-            self.registry.set_active(task_name, winning_prompt.id)
+            self.registry.set_active (task_name, winning_prompt.id)
             
-            logger.info(f"✅ Promoted {winning_prompt.id} to production")
+            logger.info (f"✅ Promoted {winning_prompt.id} to production")
         
         # Update test status
         test_data['status'] = 'concluded'
         test_data['concluded_at'] = time.time()
         test_data['results'] = stats
     
-    def get_test_status(self, test_id: str) -> Dict[str, Any]:
+    def get_test_status (self, test_id: str) -> Dict[str, Any]:
         """Get current test status."""
         test_data = self.active_tests[test_id]
         test = test_data['test']
@@ -774,15 +774,15 @@ class ProductionABPlatform:
         stats = test.get_statistics()
         
         progress = (
-            (len(test.results_a) + len(test.results_b)) / 
+            (len (test.results_a) + len (test.results_b)) / 
             test_data['target_sample_size']
         )
         
         return {
             'test_id': test_id,
             'status': test_data['status'],
-            'progress': min(progress, 1.0),
-            'samples_collected': len(test.results_a) + len(test.results_b),
+            'progress': min (progress, 1.0),
+            'samples_collected': len (test.results_a) + len (test.results_b),
             'target_samples': test_data['target_sample_size'],
             'current_stats': stats if 'error' not in stats else None,
             'runtime_hours': (time.time() - test_data['started_at']) / 3600
@@ -802,7 +802,7 @@ test_id = platform.create_test(
 
 # In production API
 @app.post("/summarize")
-async def summarize(request: SummarizeRequest):
+async def summarize (request: SummarizeRequest):
     result = await platform.handle_request(
         test_id=test_id,
         user_id=request.user_id,
@@ -811,7 +811,7 @@ async def summarize(request: SummarizeRequest):
     return result
 
 @app.post("/feedback")
-async def feedback(request: FeedbackRequest):
+async def feedback (request: FeedbackRequest):
     await platform.record_feedback(
         test_id=request.test_id,
         inference_id=request.inference_id,
@@ -819,7 +819,7 @@ async def feedback(request: FeedbackRequest):
     )
 
 # Check status
-status = platform.get_test_status(test_id)
+status = platform.get_test_status (test_id)
 print(f"Progress: {status['progress']:.1%}")
 print(f"Status: {status['status']}")
 \`\`\`

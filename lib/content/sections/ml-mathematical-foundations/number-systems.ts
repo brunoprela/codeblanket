@@ -80,7 +80,7 @@ print(f"r1 * r2 = {r1 * r2}")  # 3/8
 print(f"r1 / r2 = {r1 / r2}")  # 2/3
 
 # Convert to float
-print(f"As decimal: {float(r1 + r2)}")  # 1.25
+print(f"As decimal: {float (r1 + r2)}")  # 1.25
 \`\`\`
 
 ### Real Numbers (ℝ)
@@ -160,13 +160,13 @@ print(f"Real part of z1: {z1.real}")
 print(f"Imaginary part of z1: {z1.imag}")
 
 # Magnitude and phase
-magnitude = abs(z1)
-phase = np.angle(z1)
+magnitude = abs (z1)
+phase = np.angle (z1)
 print(f"Magnitude: {magnitude}")
 print(f"Phase: {phase} radians")
 
 # Complex conjugate
-print(f"Conjugate of z1: {np.conj(z1)}")
+print(f"Conjugate of z1: {np.conj (z1)}")
 
 # NumPy complex arrays
 complex_array = np.array([1+2j, 3-4j, 5+0j], dtype=np.complex128)
@@ -250,17 +250,17 @@ print(f"|0| = {abs(0)}")
 # Triangle inequality verification
 x, y = 3, -7
 print(f"\\nTriangle Inequality:")
-print(f"|{x} + {y}| = {abs(x + y)}")
-print(f"|{x}| + |{y}| = {abs(x) + abs(y)}")
-print(f"|x + y| ≤ |x| + |y|? {abs(x + y) <= abs(x) + abs(y)}")
+print(f"|{x} + {y}| = {abs (x + y)}")
+print(f"|{x}| + |{y}| = {abs (x) + abs (y)}")
+print(f"|x + y| ≤ |x| + |y|? {abs (x + y) <= abs (x) + abs (y)}")
 
 # NumPy arrays
 arr = np.array([-5, -3, 0, 2, 4])
 print(f"\\nArray: {arr}")
-print(f"Absolute values: {np.abs(arr)}")
+print(f"Absolute values: {np.abs (arr)}")
 
 # L1 norm (sum of absolute values) - used in ML
-print(f"L1 norm: {np.sum(np.abs(arr))}")
+print(f"L1 norm: {np.sum (np.abs (arr))}")
 \`\`\`
 
 ### Inequalities
@@ -316,7 +316,7 @@ learning_rate = 1e-3
 print(f"Learning rate: {learning_rate}")
 
 # NumPy scientific notation
-np.set_printoptions(precision=2, suppress=False)
+np.set_printoptions (precision=2, suppress=False)
 weights = np.array([1.23e-5, 4.56e3, 7.89e-10])
 print(f"Weights: {weights}")
 \`\`\`
@@ -343,18 +343,18 @@ epochs = 100
 initial_lr = 1e-3
 decay_rate = 0.96
 
-learning_rates = [initial_lr * (decay_rate ** epoch) for epoch in range(epochs)]
+learning_rates = [initial_lr * (decay_rate ** epoch) for epoch in range (epochs)]
 
 # Plot on log scale
-plt.figure(figsize=(10, 4))
+plt.figure (figsize=(10, 4))
 plt.subplot(1, 2, 1)
-plt.plot(learning_rates)
+plt.plot (learning_rates)
 plt.title('Learning Rate - Linear Scale')
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate')
 
 plt.subplot(1, 2, 2)
-plt.semilogy(learning_rates)
+plt.semilogy (learning_rates)
 plt.title('Learning Rate - Log Scale')
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate (log scale)')
@@ -391,12 +391,12 @@ import sys
 float32_val = np.float32(1.0)
 float64_val = np.float64(1.0)
 
-print(f"Float32 info: {np.finfo(np.float32)}")
-print(f"\\nFloat64 info: {np.finfo(np.float64)}")
+print(f"Float32 info: {np.finfo (np.float32)}")
+print(f"\\nFloat64 info: {np.finfo (np.float64)}")
 
 # Machine epsilon (smallest number where 1 + eps != 1)
-eps32 = np.finfo(np.float32).eps
-eps64 = np.finfo(np.float64).eps
+eps32 = np.finfo (np.float32).eps
+eps64 = np.finfo (np.float64).eps
 
 print(f"\\nFloat32 epsilon: {eps32}")
 print(f"Float64 epsilon: {eps64}")
@@ -468,12 +468,12 @@ print(f"Original data:\\n{data}")
 
 # Standard scaling (mean=0, std=1)
 standard_scaler = StandardScaler()
-data_standard = standard_scaler.fit_transform(data)
+data_standard = standard_scaler.fit_transform (data)
 print(f"\\nStandard scaled:\\n{data_standard}")
 
 # Min-Max scaling (range [0, 1])
 minmax_scaler = MinMaxScaler()
-data_minmax = minmax_scaler.fit_transform(data)
+data_minmax = minmax_scaler.fit_transform (data)
 print(f"\\nMin-Max scaled:\\n{data_minmax}")
 \`\`\`
 
@@ -482,7 +482,7 @@ print(f"\\nMin-Max scaled:\\n{data_minmax}")
 Adding a small constant (epsilon) to avoid division by zero:
 
 \`\`\`python
-def safe_divide(numerator, denominator, eps=1e-10):
+def safe_divide (numerator, denominator, eps=1e-10):
     """Safely divide with numerical stability"""
     return numerator / (denominator + eps)
 
@@ -494,18 +494,18 @@ total = counts.sum()
 # probabilities = counts / total  # Could fail if total = 0
 
 # With safety
-probabilities = safe_divide(counts, total)
+probabilities = safe_divide (counts, total)
 print(f"Probabilities: {probabilities}")
 
 # Common in loss functions
-def cross_entropy_loss(y_true, y_pred, eps=1e-10):
+def cross_entropy_loss (y_true, y_pred, eps=1e-10):
     """Cross-entropy with numerical stability"""
-    y_pred = np.clip(y_pred, eps, 1 - eps)  # Avoid log(0)
-    return -np.sum(y_true * np.log(y_pred))
+    y_pred = np.clip (y_pred, eps, 1 - eps)  # Avoid log(0)
+    return -np.sum (y_true * np.log (y_pred))
 
 y_true = np.array([1, 0, 0])
 y_pred = np.array([0.7, 0.2, 0.1])
-loss = cross_entropy_loss(y_true, y_pred)
+loss = cross_entropy_loss (y_true, y_pred)
 print(f"\\nCross-entropy loss: {loss}")
 \`\`\`
 
@@ -514,10 +514,10 @@ print(f"\\nCross-entropy loss: {loss}")
 Model parameters are integers, but understanding their scale matters:
 
 \`\`\`python
-def calculate_parameters(layers):
+def calculate_parameters (layers):
     """Calculate total parameters in a neural network"""
     total_params = 0
-    for i in range(len(layers) - 1):
+    for i in range (len (layers) - 1):
         # Weights + biases
         weights = layers[i] * layers[i+1]
         biases = layers[i+1]
@@ -527,9 +527,9 @@ def calculate_parameters(layers):
 
 # Example: Simple neural network
 network = [784, 128, 64, 10]  # Input, hidden1, hidden2, output
-total = calculate_parameters(network)
+total = calculate_parameters (network)
 print(f"\\nTotal parameters: {total:,}")
-print(f"Order of magnitude: 10^{int(np.log10(total))}")
+print(f"Order of magnitude: 10^{int (np.log10(total))}")
 \`\`\`
 
 ## Best Practices
@@ -538,9 +538,9 @@ print(f"Order of magnitude: 10^{int(np.log10(total))}")
 
 \`\`\`python
 # Memory comparison
-data_float64 = np.random.randn(1000000).astype(np.float64)
-data_float32 = np.random.randn(1000000).astype(np.float32)
-data_float16 = np.random.randn(1000000).astype(np.float16)
+data_float64 = np.random.randn(1000000).astype (np.float64)
+data_float32 = np.random.randn(1000000).astype (np.float32)
+data_float16 = np.random.randn(1000000).astype (np.float16)
 
 print(f"Float64 memory: {data_float64.nbytes / 1024 / 1024:.2f} MB")
 print(f"Float32 memory: {data_float32.nbytes / 1024 / 1024:.2f} MB")
@@ -553,24 +553,24 @@ print(f"Float16 memory: {data_float16.nbytes / 1024 / 1024:.2f} MB")
 
 \`\`\`python
 # Bad: Computing softmax directly
-def softmax_unstable(x):
-    exp_x = np.exp(x)
+def softmax_unstable (x):
+    exp_x = np.exp (x)
     return exp_x / exp_x.sum()
 
 # Good: Numerically stable softmax
-def softmax_stable(x):
-    exp_x = np.exp(x - x.max())  # Subtract max for stability
+def softmax_stable (x):
+    exp_x = np.exp (x - x.max())  # Subtract max for stability
     return exp_x / exp_x.sum()
 
 x = np.array([1000, 1001, 1002])  # Large values
 
 try:
-    result_unstable = softmax_unstable(x)
+    result_unstable = softmax_unstable (x)
     print(f"Unstable result: {result_unstable}")
 except:
     print("Unstable softmax failed (overflow)!")
 
-result_stable = softmax_stable(x)
+result_stable = softmax_stable (x)
 print(f"Stable result: {result_stable}")
 \`\`\`
 
@@ -581,14 +581,14 @@ print(f"Stable result: {result_stable}")
 probabilities = np.array([0.9, 0.8, 0.85, 0.7, 0.95])
 
 # Bad: Direct multiplication (underflow risk)
-product = np.prod(probabilities)
+product = np.prod (probabilities)
 print(f"Direct product: {product}")
 
 # Good: Use log probabilities
-log_probs = np.log(probabilities)
-log_product = np.sum(log_probs)
+log_probs = np.log (probabilities)
+log_product = np.sum (log_probs)
 print(f"Log probabilities sum: {log_product}")
-print(f"Exponentiate back: {np.exp(log_product)}")
+print(f"Exponentiate back: {np.exp (log_product)}")
 \`\`\`
 
 ## Common Pitfalls

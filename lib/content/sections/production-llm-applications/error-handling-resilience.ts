@@ -57,7 +57,7 @@ class LLMErrorHandler:
     @staticmethod
     @retry(
         stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=4, max=60),
+        wait=wait_exponential (multiplier=1, min=4, max=60),
         retry=retry_if_exception_type((
             openai.error.RateLimitError,
             openai.error.APIError,
@@ -68,7 +68,7 @@ class LLMErrorHandler:
             f"Retrying after error: {retry_state.outcome.exception()}"
         )
     )
-    def call_with_retry(prompt: str, model: str = "gpt-3.5-turbo"):
+    def call_with_retry (prompt: str, model: str = "gpt-3.5-turbo"):
         """
         Call LLM with automatic retry for transient errors.
         """
@@ -82,7 +82,7 @@ class LLMErrorHandler:
         
         except openai.error.InvalidRequestError as e:
             # Don't retry invalid requests
-            if "maximum context length" in str(e):
+            if "maximum context length" in str (e):
                 raise TokenLimitExceeded(
                     "Prompt exceeds token limit. Try a shorter prompt."
                 ) from e
@@ -140,7 +140,7 @@ class CircuitBreaker:
         self.last_failure_time = None
         self.state = CircuitState.CLOSED
     
-    def call(self, func: Callable, *args, **kwargs) -> Any:
+    def call (self, func: Callable, *args, **kwargs) -> Any:
         """
         Execute function with circuit breaker protection.
         """
@@ -163,7 +163,7 @@ class CircuitBreaker:
             self._on_failure()
             raise
     
-    def _on_success(self):
+    def _on_success (self):
         """Handle successful call."""
         self.failure_count = 0
         
@@ -171,7 +171,7 @@ class CircuitBreaker:
             self.state = CircuitState.CLOSED
             logging.info("Circuit breaker CLOSED - service recovered")
     
-    def _on_failure(self):
+    def _on_failure (self):
         """Handle failed call."""
         self.failure_count += 1
         self.last_failure_time = datetime.utcnow()
@@ -182,14 +182,14 @@ class CircuitBreaker:
                 f"Circuit breaker OPEN after {self.failure_count} failures"
             )
     
-    def _should_attempt_reset(self) -> bool:
+    def _should_attempt_reset (self) -> bool:
         """Check if enough time has passed to try again."""
         if not self.last_failure_time:
             return True
         
         return (
             datetime.utcnow() - self.last_failure_time
-            > timedelta(seconds=self.recovery_timeout)
+            > timedelta (seconds=self.recovery_timeout)
         )
 
 
@@ -205,7 +205,7 @@ openai_breaker = CircuitBreaker(
     expected_exception=openai.error.APIError
 )
 
-def call_openai_with_breaker(prompt: str):
+def call_openai_with_breaker (prompt: str):
     """Call OpenAI with circuit breaker protection."""
     def _call():
         response = openai.ChatCompletion.create(
@@ -218,7 +218,7 @@ def call_openai_with_breaker(prompt: str):
         return openai_breaker.call(_call)
     except CircuitBreakerOpen as e:
         # Return cached response or error message
-        return get_cached_or_fallback(prompt)
+        return get_cached_or_fallback (prompt)
 \`\`\`
 
 ## Fallback Strategies
@@ -239,21 +239,21 @@ class FallbackChain:
     def __init__(self):
         self.strategies: List[Callable] = []
     
-    def add_strategy(self, strategy: Callable, name: str):
+    def add_strategy (self, strategy: Callable, name: str):
         """Add a fallback strategy."""
         self.strategies.append((name, strategy))
     
-    def execute(self, prompt: str, **kwargs) -> dict:
+    def execute (self, prompt: str, **kwargs) -> dict:
         """
         Execute with fallback chain.
         
         Returns:
             dict with 'result', 'strategy_used', and 'fallback_level'
         """
-        for i, (name, strategy) in enumerate(self.strategies):
+        for i, (name, strategy) in enumerate (self.strategies):
             try:
-                logging.info(f"Trying strategy: {name}")
-                result = strategy(prompt, **kwargs)
+                logging.info (f"Trying strategy: {name}")
+                result = strategy (prompt, **kwargs)
                 
                 return {
                     'result': result,
@@ -263,16 +263,16 @@ class FallbackChain:
                 }
             
             except Exception as e:
-                logging.warning(f"Strategy '{name}' failed: {str(e)}")
+                logging.warning (f"Strategy '{name}' failed: {str (e)}")
                 
-                if i == len(self.strategies) - 1:
+                if i == len (self.strategies) - 1:
                     # Last strategy failed
                     return {
                         'result': None,
                         'strategy_used': None,
-                        'fallback_level': len(self.strategies),
+                        'fallback_level': len (self.strategies),
                         'success': False,
-                        'error': str(e)
+                        'error': str (e)
                     }
                 
                 # Try next strategy
@@ -280,7 +280,7 @@ class FallbackChain:
 
 
 # Define fallback strategies
-def primary_strategy(prompt: str, **kwargs):
+def primary_strategy (prompt: str, **kwargs):
     """Primary: Use GPT-4."""
     response = openai.ChatCompletion.create(
         model="gpt-4",
@@ -289,7 +289,7 @@ def primary_strategy(prompt: str, **kwargs):
     return response.choices[0].message.content
 
 
-def secondary_strategy(prompt: str, **kwargs):
+def secondary_strategy (prompt: str, **kwargs):
     """Secondary: Use GPT-3.5 Turbo."""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -298,7 +298,7 @@ def secondary_strategy(prompt: str, **kwargs):
     return response.choices[0].message.content
 
 
-def tertiary_strategy(prompt: str, **kwargs):
+def tertiary_strategy (prompt: str, **kwargs):
     """Tertiary: Use Claude."""
     client = anthropic.Anthropic()
     message = client.messages.create(
@@ -309,15 +309,15 @@ def tertiary_strategy(prompt: str, **kwargs):
     return message.content[0].text
 
 
-def cache_strategy(prompt: str, cache, **kwargs):
+def cache_strategy (prompt: str, cache, **kwargs):
     """Quaternary: Return cached similar response."""
-    cached = cache.get_semantic_match(prompt, threshold=0.85)
+    cached = cache.get_semantic_match (prompt, threshold=0.85)
     if cached:
         return cached
     raise ValueError("No cached response available")
 
 
-def error_strategy(prompt: str, **kwargs):
+def error_strategy (prompt: str, **kwargs):
     """Final fallback: Return helpful error message."""
     return (
         "I'm experiencing technical difficulties. "
@@ -327,14 +327,14 @@ def error_strategy(prompt: str, **kwargs):
 
 # Build fallback chain
 fallback_chain = FallbackChain()
-fallback_chain.add_strategy(primary_strategy, "GPT-4")
-fallback_chain.add_strategy(secondary_strategy, "GPT-3.5-Turbo")
-fallback_chain.add_strategy(tertiary_strategy, "Claude")
+fallback_chain.add_strategy (primary_strategy, "GPT-4")
+fallback_chain.add_strategy (secondary_strategy, "GPT-3.5-Turbo")
+fallback_chain.add_strategy (tertiary_strategy, "Claude")
 fallback_chain.add_strategy(
-    lambda p, **k: cache_strategy(p, cache=semantic_cache, **k),
+    lambda p, **k: cache_strategy (p, cache=semantic_cache, **k),
     "Semantic Cache"
 )
-fallback_chain.add_strategy(error_strategy, "Error Message")
+fallback_chain.add_strategy (error_strategy, "Error Message")
 
 # Use fallback chain
 result = fallback_chain.execute("What is Python?")
@@ -369,7 +369,7 @@ class GracefulService:
         self.error_window = 60  # seconds
         self.recent_errors = []
     
-    def generate(self, prompt: str, require_quality: bool = False):
+    def generate (self, prompt: str, require_quality: bool = False):
         """
         Generate response with graceful degradation.
         
@@ -385,23 +385,23 @@ class GracefulService:
         
         if self.mode == ServiceMode.NORMAL:
             try:
-                return self._normal_generation(prompt)
+                return self._normal_generation (prompt)
             except Exception as e:
-                self._record_error(e)
+                self._record_error (e)
                 
                 if require_quality:
                     raise
                 
                 # Try degraded mode
-                return self._degraded_generation(prompt)
+                return self._degraded_generation (prompt)
         
         else:  # DEGRADED mode
             if require_quality:
                 raise ServiceDegraded("Service is in degraded mode")
             
-            return self._degraded_generation(prompt)
+            return self._degraded_generation (prompt)
     
-    def _normal_generation(self, prompt: str) -> dict:
+    def _normal_generation (self, prompt: str) -> dict:
         """Normal mode: Use best model."""
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -416,12 +416,12 @@ class GracefulService:
             'quality': 'high'
         }
     
-    def _degraded_generation(self, prompt: str) -> dict:
+    def _degraded_generation (self, prompt: str) -> dict:
         """
         Degraded mode: Use faster/cheaper model or cache.
         """
         # Try cache first
-        cached = cache.get(prompt)
+        cached = cache.get (prompt)
         if cached:
             return {
                 'result': cached,
@@ -449,13 +449,13 @@ class GracefulService:
         except Exception as e:
             # Last resort: template response
             return {
-                'result': self._template_response(prompt),
+                'result': self._template_response (prompt),
                 'mode': 'degraded',
                 'source': 'template',
                 'quality': 'low'
             }
     
-    def _check_health(self):
+    def _check_health (self):
         """Check service health and update mode."""
         now = time.time()
         
@@ -465,7 +465,7 @@ class GracefulService:
             if now - err_time < self.error_window
         ]
         
-        error_rate = len(self.recent_errors) / self.error_window
+        error_rate = len (self.recent_errors) / self.error_window
         
         # Switch modes based on error rate
         if error_rate > 0.1:  # 10% error rate
@@ -479,12 +479,12 @@ class GracefulService:
                 self.mode = ServiceMode.NORMAL
                 logging.info("Returning to NORMAL mode")
     
-    def _record_error(self, error: Exception):
+    def _record_error (self, error: Exception):
         """Record an error for health tracking."""
-        self.recent_errors.append(time.time())
-        logging.error(f"Error in generation: {str(error)}")
+        self.recent_errors.append (time.time())
+        logging.error (f"Error in generation: {str (error)}")
     
-    def _template_response(self, prompt: str) -> str:
+    def _template_response (self, prompt: str) -> str:
         """Generate template response when all else fails."""
         return (
             "I'm currently experiencing high load. "
@@ -553,7 +553,7 @@ class TimeoutHandler:
             return response.choices[0].message.content
         
         except asyncio.TimeoutError:
-            logging.warning(f"Request timed out after {timeout}s")
+            logging.warning (f"Request timed out after {timeout}s")
             return None
     
     @staticmethod
@@ -565,7 +565,7 @@ class TimeoutHandler:
         """
         Try with progressively longer timeouts and different models.
         """
-        for timeout, model in zip(timeouts, models):
+        for timeout, model in zip (timeouts, models):
             try:
                 result = await asyncio.wait_for(
                     openai.ChatCompletion.acreate(
@@ -578,7 +578,7 @@ class TimeoutHandler:
                 return result.choices[0].message.content
             
             except asyncio.TimeoutError:
-                logging.warning(f"Timeout with {model} after {timeout}s, trying next")
+                logging.warning (f"Timeout with {model} after {timeout}s, trying next")
                 continue
         
         return None
@@ -614,19 +614,19 @@ class HealthChecker:
         self.total_calls = 0
         self.failed_calls = 0
     
-    def record_success(self):
+    def record_success (self):
         """Record successful API call."""
         self.last_successful_call = datetime.utcnow()
         self.consecutive_failures = 0
         self.total_calls += 1
     
-    def record_failure(self):
+    def record_failure (self):
         """Record failed API call."""
         self.consecutive_failures += 1
         self.total_calls += 1
         self.failed_calls += 1
     
-    def is_healthy(self) -> tuple[bool, dict]:
+    def is_healthy (self) -> tuple[bool, dict]:
         """
         Check if service is healthy.
         
@@ -693,12 +693,12 @@ async def readiness_check():
     """
     # Check if we can reach LLM provider
     try:
-        openai.Model.list(timeout=5)
+        openai.Model.list (timeout=5)
         return {"status": "ready"}
     except Exception as e:
         return JSONResponse(
             status_code=503,
-            content={"status": "not_ready", "error": str(e)}
+            content={"status": "not_ready", "error": str (e)}
         )
 
 
@@ -735,18 +735,18 @@ class ErrorMonitor:
         self.errors = {}
         self.alert_threshold = alert_threshold
     
-    def record_error(self, error: Exception, context: dict = None):
+    def record_error (self, error: Exception, context: dict = None):
         """
         Record an error and alert if threshold reached.
         """
-        error_type = type(error).__name__
+        error_type = type (error).__name__
         
         if error_type not in self.errors:
             self.errors[error_type] = ErrorMetrics(
                 error_type=error_type,
                 count=0,
                 last_occurrence=datetime.utcnow(),
-                sample_message=str(error)
+                sample_message=str (error)
             )
         
         metrics = self.errors[error_type]
@@ -757,7 +757,7 @@ class ErrorMonitor:
         logging.error(
             f"Error: {error_type}",
             extra={
-                'error_message': str(error),
+                'error_message': str (error),
                 'context': context,
                 'count': metrics.count
             }
@@ -765,9 +765,9 @@ class ErrorMonitor:
         
         # Alert if threshold reached
         if metrics.count >= self.alert_threshold:
-            self._send_alert(metrics, context)
+            self._send_alert (metrics, context)
     
-    def _send_alert(self, metrics: ErrorMetrics, context: dict):
+    def _send_alert (self, metrics: ErrorMetrics, context: dict):
         """Send alert to team."""
         message = (
             f"🚨 Alert: {metrics.error_type}\\n"
@@ -777,20 +777,20 @@ class ErrorMonitor:
         )
         
         # Send to Slack, PagerDuty, etc.
-        send_to_slack(message)
+        send_to_slack (message)
     
-    def get_metrics(self) -> List[ErrorMetrics]:
+    def get_metrics (self) -> List[ErrorMetrics]:
         """Get error metrics for dashboard."""
-        return list(self.errors.values())
+        return list (self.errors.values())
 
 
-error_monitor = ErrorMonitor(alert_threshold=10)
+error_monitor = ErrorMonitor (alert_threshold=10)
 
 # Record errors
 try:
     result = call_llm()
 except Exception as e:
-    error_monitor.record_error(e, context={'prompt': prompt, 'model': model})
+    error_monitor.record_error (e, context={'prompt': prompt, 'model': model})
 \`\`\`
 
 ## Best Practices

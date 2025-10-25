@@ -40,10 +40,10 @@ class CompetitorAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_competitive_landscape(self, company: str,
+    def analyze_competitive_landscape (self, company: str,
                                       competitors: List[Dict],
                                       industry_data: Dict) -> Dict:
         """
@@ -73,7 +73,7 @@ class CompetitorAnalyzer:
 Industry Context:
 - Market Size: \${industry_data.get('market_size')}B
 - Growth Rate: {industry_data.get('growth_rate')}%
-- Key Trends: {', '.join(industry_data.get('trends', []))}
+- Key Trends: {', '.join (industry_data.get('trends', []))}
 - Barriers to Entry: {industry_data.get('barriers', 'Unknown')}
 
 Competitors:
@@ -114,7 +114,7 @@ Provide competitive analysis as JSON:
   ],
   "market_share_trends": {{
     "direction": "Gaining/Losing/Stable",
-    "drivers": ["What's driving the trend"],
+    "drivers": ["What\'s driving the trend"],
     "sustainability": "Assessment of trend sustainability"
   }},
   "competitive_dynamics": {{
@@ -149,13 +149,13 @@ Provide competitive analysis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        analysis = self._parse_json(response.content[0].text)
+        analysis = self._parse_json (response.content[0].text)
         analysis['company'] = company
         analysis['analysis_date'] = datetime.now().isoformat()
         
         return analysis
     
-    def compare_business_models(self, companies: List[Dict]) -> Dict:
+    def compare_business_models (self, companies: List[Dict]) -> Dict:
         """
         Compare business models across companies
         
@@ -196,9 +196,9 @@ Return detailed comparison as JSON."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def identify_market_gaps(self, industry_analysis: Dict,
+    def identify_market_gaps (self, industry_analysis: Dict,
                             competitor_offerings: List[Dict]) -> Dict:
         """
         Identify gaps and opportunities in the market
@@ -210,12 +210,12 @@ Return detailed comparison as JSON."""
         Returns:
             Market gap analysis
         """
-        offerings_summary = json.dumps(competitor_offerings, indent=2)
+        offerings_summary = json.dumps (competitor_offerings, indent=2)
         
         prompt = f"""Identify market gaps and opportunities.
 
 Industry Landscape:
-{json.dumps(industry_analysis, indent=2)}
+{json.dumps (industry_analysis, indent=2)}
 
 Current Competitor Offerings:
 {offerings_summary}
@@ -242,9 +242,9 @@ Return opportunity analysis as JSON with:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from LLM response"""
         try:
             if "\`\`\`json" in response_text:
@@ -253,12 +253,12 @@ Return opportunity analysis as JSON with:
                 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
                 json_str = response_text
-            return json.loads(json_str)
+            return json.loads (json_str)
         except:
             return {}
 
 # Example usage
-competitor_analyzer = CompetitorAnalyzer(api_key = "your-key")
+competitor_analyzer = CompetitorAnalyzer (api_key = "your-key")
 
 company = "Tesla"
 competitors =[
@@ -297,7 +297,7 @@ analysis = competitor_analyzer.analyze_competitive_landscape(
     )
 
 print("Competitive Analysis:")
-print(json.dumps(analysis, indent = 2))
+print(json.dumps (analysis, indent = 2))
 \`\`\`
 
 ---
@@ -317,10 +317,10 @@ class IndustryTrendAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_industry_trends(self, industry: str,
+    def analyze_industry_trends (self, industry: str,
                                 data_sources: Dict) -> Dict:
         """
         Analyze key trends affecting an industry
@@ -337,7 +337,7 @@ class IndustryTrendAnalyzer:
 Industry Data:
 - Market Size: \${data_sources.get('market_size')}B
 - Historical Growth: {data_sources.get('historical_growth')}%
-- Major Players: {', '.join(data_sources.get('major_players', []))}
+- Major Players: {', '.join (data_sources.get('major_players', []))}
 
 Recent Developments:
 {chr(10).join([f"- {dev}" for dev in data_sources.get('developments', [])])}
@@ -369,7 +369,7 @@ Provide comprehensive trend analysis as JSON:
   "technology_disruption": {{
     "disruptive_technologies": ["List of technologies"],
     "adoption_timeline": "How quickly being adopted",
-    "barriers_to_adoption": ["What's slowing adoption"],
+    "barriers_to_adoption": ["What\'s slowing adoption"],
     "incumbent_response": "How incumbents are responding"
   }},
   "regulatory_landscape": {{
@@ -427,13 +427,13 @@ Provide comprehensive trend analysis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        analysis = self._parse_json(response.content[0].text)
+        analysis = self._parse_json (response.content[0].text)
         analysis['industry'] = industry
         analysis['analysis_date'] = datetime.now().isoformat()
         
         return analysis
     
-    def track_trend_evolution(self, industry: str,
+    def track_trend_evolution (self, industry: str,
                              historical_analyses: List[Dict]) -> Dict:
         """
         Track how trends evolve over time
@@ -473,9 +473,9 @@ Return evolution analysis highlighting changes and lessons learned."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -485,12 +485,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-trend_analyzer = IndustryTrendAnalyzer(api_key = "your-key")
+trend_analyzer = IndustryTrendAnalyzer (api_key = "your-key")
 
 data_sources = {
     'market_size': 5600,
@@ -511,7 +511,7 @@ data_sources = {
 
 trends = trend_analyzer.analyze_industry_trends('Cloud Computing', data_sources)
 print("Industry Trend Analysis:")
-print(json.dumps(trends, indent = 2))
+print(json.dumps (trends, indent = 2))
 \`\`\`
 
 ---
@@ -531,10 +531,10 @@ class CompanyResearcher:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_research_report(self, company_data: Dict) -> str:
+    def generate_research_report (self, company_data: Dict) -> str:
         """
         Generate comprehensive research report
         
@@ -553,16 +553,16 @@ Company Overview:
 - Description: {company_data.get('description')}
 
 Financial Performance:
-{json.dumps(company_data.get('financials', {}), indent=2)}
+{json.dumps (company_data.get('financials', {}), indent=2)}
 
 Business Segments:
-{json.dumps(company_data.get('segments', []), indent=2)}
+{json.dumps (company_data.get('segments', []), indent=2)}
 
 Competitive Position:
 {company_data.get('competitive_position', 'Not available')}
 
 Management:
-{json.dumps(company_data.get('management', {}), indent=2)}
+{json.dumps (company_data.get('management', {}), indent=2)}
 
 Recent Developments:
 {chr(10).join([f"- {dev}" for dev in company_data.get('recent_developments', [])])}
@@ -633,7 +633,7 @@ Format as professional sell-side research report in Markdown."""
         
         return response.content[0].text
     
-    def generate_investment_thesis(self, company: str,
+    def generate_investment_thesis (self, company: str,
                                   analysis_data: Dict) -> Dict:
         """
         Generate concise investment thesis
@@ -648,7 +648,7 @@ Format as professional sell-side research report in Markdown."""
         prompt = f"""Generate investment thesis for {company}.
 
 Analysis:
-{json.dumps(analysis_data, indent=2)}
+{json.dumps (analysis_data, indent=2)}
 
 Create structured investment thesis as JSON:
 {{
@@ -688,9 +688,9 @@ Create structured investment thesis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -700,12 +700,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-researcher = CompanyResearcher(api_key = "your-key")
+researcher = CompanyResearcher (api_key = "your-key")
 
 company_data = {
     'name': 'NVIDIA Corporation',
@@ -739,7 +739,7 @@ company_data = {
 }
 
 # Generate full report
-report = researcher.generate_research_report(company_data)
+report = researcher.generate_research_report (company_data)
 print(report)
 \`\`\`
 
@@ -760,10 +760,10 @@ class DueDiligenceAutomator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def conduct_due_diligence(self, company: str,
+    def conduct_due_diligence (self, company: str,
                              documents: Dict,
                              interviews: List[str] = None) -> Dict:
         """
@@ -801,7 +801,7 @@ Technology Assessment:
 {documents.get('tech_assessment', 'Not available')}
 
 Management Interview Notes:
-{chr(10).join(interviews) if interviews else 'No interviews yet'}
+{chr(10).join (interviews) if interviews else 'No interviews yet'}
 
 Conduct due diligence covering:
 
@@ -856,15 +856,15 @@ Return comprehensive due diligence report as JSON with findings, risks, and reco
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def identify_due_diligence_gaps(self, completed_items: List[str],
+    def identify_due_diligence_gaps (self, completed_items: List[str],
                                    standard_checklist: List[str]) -> Dict:
         """
         Identify gaps in due diligence process
         
         Args:
-            completed_items: What's been completed
+            completed_items: What\'s been completed
             standard_checklist: Standard DD checklist
             
         Returns:
@@ -893,9 +893,9 @@ Return gap analysis with action plan."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -905,12 +905,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-dd_automator = DueDiligenceAutomator(api_key = "your-key")
+dd_automator = DueDiligenceAutomator (api_key = "your-key")
 
 documents = {
     'financials_summary': 'Strong revenue growth, improving margins',
@@ -926,7 +926,7 @@ interviews = [
 
 dd_report = dd_automator.conduct_due_diligence('Target Company', documents, interviews)
 print("Due Diligence Report:")
-print(json.dumps(dd_report, indent = 2))
+print(json.dumps (dd_report, indent = 2))
 \`\`\`
 
 ---
@@ -950,16 +950,16 @@ class ResearchPipeline:
     """
     
     def __init__(self, api_key: str, db_path: str = "research.db"):
-        self.competitor_analyzer = CompetitorAnalyzer(api_key)
-        self.trend_analyzer = IndustryTrendAnalyzer(api_key)
-        self.researcher = CompanyResearcher(api_key)
+        self.competitor_analyzer = CompetitorAnalyzer (api_key)
+        self.trend_analyzer = IndustryTrendAnalyzer (api_key)
+        self.researcher = CompanyResearcher (api_key)
         
         self.db_path = db_path
         self._init_database()
     
-    def _init_database(self):
+    def _init_database (self):
         """Initialize research database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -986,9 +986,9 @@ class ResearchPipeline:
         conn.commit()
         conn.close()
     
-    def add_to_research_queue(self, ticker: str, priority: int = 5):
+    def add_to_research_queue (self, ticker: str, priority: int = 5):
         """Add company to research queue"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1001,9 +1001,9 @@ class ResearchPipeline:
         
         print(f"Added {ticker} to research queue (priority: {priority})")
     
-    def process_research_queue(self):
+    def process_research_queue (self):
         """Process pending research requests"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Get highest priority pending item
@@ -1034,10 +1034,10 @@ class ResearchPipeline:
         try:
             # Generate research
             print(f"Generating research for {ticker}...")
-            report = self._generate_complete_research(ticker)
+            report = self._generate_complete_research (ticker)
             
             # Store report
-            self._store_report(ticker, 'COMPREHENSIVE', report)
+            self._store_report (ticker, 'COMPREHENSIVE', report)
             
             # Update queue status
             cursor.execute("""
@@ -1060,17 +1060,17 @@ class ResearchPipeline:
         
         conn.close()
     
-    def _generate_complete_research(self, ticker: str) -> str:
+    def _generate_complete_research (self, ticker: str) -> str:
         """Generate complete research report"""
         # Fetch company data
-        company_data = self._fetch_company_data(ticker)
+        company_data = self._fetch_company_data (ticker)
         
         # Generate report
-        report = self.researcher.generate_research_report(company_data)
+        report = self.researcher.generate_research_report (company_data)
         
         return report
     
-    def _fetch_company_data(self, ticker: str) -> Dict:
+    def _fetch_company_data (self, ticker: str) -> Dict:
         """Fetch company data from various sources"""
         # In production: fetch from APIs, databases, etc.
         return {
@@ -1079,9 +1079,9 @@ class ResearchPipeline:
             # ... more data
         }
     
-    def _store_report(self, ticker: str, report_type: str, content: str):
+    def _store_report (self, ticker: str, report_type: str, content: str):
         """Store research report"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -1099,13 +1099,13 @@ class ResearchPipeline:
         conn.commit()
         conn.close()
     
-    def run_scheduled(self):
+    def run_scheduled (self):
         """Run research pipeline on schedule"""
         # Process queue every hour
-        schedule.every().hour.do(self.process_research_queue)
+        schedule.every().hour.do (self.process_research_queue)
         
         # Update industry trends weekly
-        schedule.every().monday.at("09:00").do(self._update_industry_trends)
+        schedule.every().monday.at("09:00").do (self._update_industry_trends)
         
         print("Research pipeline started")
         
@@ -1113,13 +1113,13 @@ class ResearchPipeline:
             schedule.run_pending()
             time.sleep(60)
     
-    def _update_industry_trends(self):
+    def _update_industry_trends (self):
         """Update industry trend analyses"""
         print("Updating industry trends...")
         # Implementation here
 
 # Initialize pipeline
-# pipeline = ResearchPipeline(api_key="your-key")
+# pipeline = ResearchPipeline (api_key="your-key")
 
 # Add companies to research queue
 # pipeline.add_to_research_queue('NVDA', priority=10)

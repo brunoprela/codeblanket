@@ -27,7 +27,7 @@ Step 3: Compare with parent (1): 2 > 1, stop
 
 **Code:**
 \`\`\`python
-def bubble_up(heap, index):
+def bubble_up (heap, index):
     while index > 0:
         parent = (index - 1) // 2
         if heap[index] < heap[parent]:
@@ -60,8 +60,8 @@ Step 4: Compare with child (7): 9 > 7, swap
 
 **Code:**
 \`\`\`python
-def bubble_down(heap, index):
-    size = len(heap)
+def bubble_down (heap, index):
+    size = len (heap)
     while True:
         left = 2 * index + 1
         right = 2 * index + 2
@@ -92,11 +92,11 @@ Build heap from unsorted array efficiently.
 Start from last non-leaf node, bubble down each.
 
 \`\`\`python
-def heapify(arr):
-    n = len(arr)
+def heapify (arr):
+    n = len (arr)
     # Start from last non-leaf node
-    for i in range(n // 2 - 1, -1, -1):
-        bubble_down(arr, i)
+    for i in range (n // 2 - 1, -1, -1):
+        bubble_down (arr, i)
 \`\`\`
 
 **Why O(N)?**
@@ -108,7 +108,7 @@ def heapify(arr):
 
 **Operation 4: Peek**
 \`\`\`python
-def peek(heap):
+def peek (heap):
     return heap[0] if heap else None
 \`\`\`
 
@@ -121,8 +121,8 @@ Python's heapq is min heap. For max heap, negate values:
 \`\`\`python
 # Max heap pattern
 max_heap = []
-heapq.heappush(max_heap, -value)  # Negate on insert
-max_val = -heapq.heappop(max_heap)  # Negate on extract
+heapq.heappush (max_heap, -value)  # Negate on insert
+max_val = -heapq.heappop (max_heap)  # Negate on extract
 
 # Or use custom comparator (less common)
 import heapq
@@ -130,10 +130,10 @@ class MaxHeap:
     def __init__(self):
         self.heap = []
     
-    def push(self, val):
-        heapq.heappush(self.heap, -val)
+    def push (self, val):
+        heapq.heappush (self.heap, -val)
     
-    def pop(self):
-        return -heapq.heappop(self.heap)
+    def pop (self):
+        return -heapq.heappop (self.heap)
 \`\`\``,
 };

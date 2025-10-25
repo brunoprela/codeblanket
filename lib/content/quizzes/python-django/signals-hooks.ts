@@ -23,25 +23,25 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 
 # 1. Create related objects automatically
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+@receiver (post_save, sender=User)
+def create_user_profile (sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create (user=instance)
 
 # 2. Clear cache when model changes
-@receiver(post_save, sender=Article)
-def invalidate_article_cache(sender, instance, **kwargs):
-    cache.delete(f'article_{instance.id}')
+@receiver (post_save, sender=Article)
+def invalidate_article_cache (sender, instance, **kwargs):
+    cache.delete (f'article_{instance.id}')
 
 # 3. Send notifications
-@receiver(post_save, sender=Comment)
-def notify_author(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Comment)
+def notify_author (sender, instance, created, **kwargs):
     if created:
-        send_email_notification(instance.article.author, instance)
+        send_email_notification (instance.article.author, instance)
 
 # 4. Log changes
-@receiver(pre_delete, sender=Article)
-def log_deletion(sender, instance, **kwargs):
+@receiver (pre_delete, sender=Article)
+def log_deletion (sender, instance, **kwargs):
     AuditLog.objects.create(
         action='DELETE',
         model='Article',
@@ -53,22 +53,22 @@ def log_deletion(sender, instance, **kwargs):
 
 \`\`\`python
 # Option 1: Override save()
-class Article(models.Model):
-    def save(self, *args, **kwargs):
+class Article (models.Model):
+    def save (self, *args, **kwargs):
         # Tight coupling - logic in model
         super().save(*args, **kwargs)
-        cache.delete(f'article_{self.id}')
-        send_notification(self.author)
+        cache.delete (f'article_{self.id}')
+        send_notification (self.author)
 
 # Option 2: Signals
-class Article(models.Model):
+class Article (models.Model):
     pass  # Clean model
 
-@receiver(post_save, sender=Article)
-def handle_article_save(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def handle_article_save (sender, instance, **kwargs):
     # Loose coupling - logic separated
-    cache.delete(f'article_{instance.id}')
-    send_notification(instance.author)
+    cache.delete (f'article_{instance.id}')
+    send_notification (instance.author)
 \`\`\`
 
 **When to Use Signals:**
@@ -91,34 +91,34 @@ def handle_article_save(sender, instance, **kwargs):
 **1. Transaction Issues:**
 \`\`\`python
 # ❌ Problem: Signal fires before transaction commits
-@receiver(post_save, sender=Order)
-def send_confirmation_email(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def send_confirmation_email (sender, instance, created, **kwargs):
     if created:
         # Email sent even if transaction rolls back!
-        send_email(instance.user, 'Order confirmed')
+        send_email (instance.user, 'Order confirmed')
 
 # ✅ Solution: Use transaction.on_commit()
 from django.db import transaction
 
-@receiver(post_save, sender=Order)
-def send_confirmation_email(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def send_confirmation_email (sender, instance, created, **kwargs):
     if created:
-        transaction.on_commit(lambda: send_email(instance.user, 'Order confirmed'))
+        transaction.on_commit (lambda: send_email (instance.user, 'Order confirmed'))
 \`\`\`
 
 **2. Infinite Loops:**
 \`\`\`python
 # ❌ Problem: Signal triggers itself
-@receiver(post_save, sender=Article)
-def update_view_count(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def update_view_count (sender, instance, **kwargs):
     instance.view_count += 1
     instance.save()  # Triggers post_save again!
 
 # ✅ Solution: Use update() or flag
-@receiver(post_save, sender=Article)
-def update_view_count(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Article)
+def update_view_count (sender, instance, created, **kwargs):
     if not created:
-        Article.objects.filter(id=instance.id).update(
+        Article.objects.filter (id=instance.id).update(
             view_count=F('view_count') + 1
         )  # update() doesn't trigger signals
 \`\`\`
@@ -126,17 +126,17 @@ def update_view_count(sender, instance, created, **kwargs):
 **3. Performance Impact:**
 \`\`\`python
 # ❌ Problem: Slow signals block save
-@receiver(post_save, sender=Article)
-def expensive_processing(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def expensive_processing (sender, instance, **kwargs):
     # Expensive operation blocks save
-    generate_thumbnails(instance)
-    update_search_index(instance)
+    generate_thumbnails (instance)
+    update_search_index (instance)
 
 # ✅ Solution: Use async tasks
-@receiver(post_save, sender=Article)
-def queue_processing(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Article)
+def queue_processing (sender, instance, created, **kwargs):
     if created:
-        process_article.delay(instance.id)  # Celery task
+        process_article.delay (instance.id)  # Celery task
 \`\`\`
 
 **4. Testing Difficulty:**
@@ -148,7 +148,7 @@ from django.test import TestCase, override_settings
 
 class ArticleTest(TestCase):
     @override_settings(DISABLE_SIGNALS=True)
-    def test_without_signals(self):
+    def test_without_signals (self):
         # Test without side effects
         article = Article.objects.create(...)
 \`\`\`
@@ -205,7 +205,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 import json
 
-class AuditLog(models.Model):
+class AuditLog (models.Model):
     ACTION_CHOICES = [
         ('CREATE', 'Create'),
         ('UPDATE', 'Update'),
@@ -218,27 +218,27 @@ class AuditLog(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     
     # What
-    action = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    action = models.CharField (max_length=20, choices=ACTION_CHOICES)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     
     # Details
-    object_repr = models.CharField(max_length=200)
-    changes = models.JSONField(null=True, blank=True)
+    object_repr = models.CharField (max_length=200)
+    changes = models.JSONField (null=True, blank=True)
     
     # When
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField (auto_now_add=True)
     
     # Context
-    ip_address = models.GenericIPAddressField(null=True)
-    user_agent = models.TextField(null=True)
+    ip_address = models.GenericIPAddressField (null=True)
+    user_agent = models.TextField (null=True)
     
     class Meta:
         ordering = ['-timestamp']
         indexes = [
-            models.Index(fields=['content_type', 'object_id']),
-            models.Index(fields=['-timestamp']),
+            models.Index (fields=['content_type', 'object_id']),
+            models.Index (fields=['-timestamp']),
         ]
 \`\`\`
 
@@ -255,7 +255,7 @@ _thread_locals = local()
 def get_current_user():
     return getattr(_thread_locals, 'user', None)
 
-def set_current_user(user):
+def set_current_user (user):
     _thread_locals.user = user
 
 # Middleware to capture user
@@ -264,20 +264,20 @@ class AuditMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        set_current_user(request.user if request.user.is_authenticated else None)
-        response = self.get_response(request)
+        set_current_user (request.user if request.user.is_authenticated else None)
+        response = self.get_response (request)
         set_current_user(None)
         return response
 
 # Signal handlers
-@receiver(pre_save)
-def capture_pre_save_state(sender, instance, **kwargs):
+@receiver (pre_save)
+def capture_pre_save_state (sender, instance, **kwargs):
     """Store original state before save"""
     if instance.pk:
         try:
-            original = sender.objects.get(pk=instance.pk)
+            original = sender.objects.get (pk=instance.pk)
             instance._original_state = {
-                field.name: getattr(original, field.name)
+                field.name: getattr (original, field.name)
                 for field in instance._meta.fields
             }
         except sender.DoesNotExist:
@@ -285,8 +285,8 @@ def capture_pre_save_state(sender, instance, **kwargs):
     else:
         instance._original_state = None
 
-@receiver(post_save)
-def log_model_change(sender, instance, created, **kwargs):
+@receiver (post_save)
+def log_model_change (sender, instance, created, **kwargs):
     """Log create/update"""
     # Skip audit log model itself
     if sender == AuditLog:
@@ -300,33 +300,33 @@ def log_model_change(sender, instance, created, **kwargs):
     
     # Calculate changes for updates
     changes = None
-    if not created and hasattr(instance, '_original_state') and instance._original_state:
+    if not created and hasattr (instance, '_original_state') and instance._original_state:
         changes = {}
         for field in instance._meta.fields:
             if field.name in ['id', 'created_at', 'updated_at']:
                 continue
             
-            old_value = instance._original_state.get(field.name)
-            new_value = getattr(instance, field.name)
+            old_value = instance._original_state.get (field.name)
+            new_value = getattr (instance, field.name)
             
             if old_value != new_value:
                 changes[field.name] = {
-                    'old': str(old_value),
-                    'new': str(new_value),
+                    'old': str (old_value),
+                    'new': str (new_value),
                 }
     
     # Create audit log
     AuditLog.objects.create(
         user=get_current_user(),
         action=action,
-        content_type=ContentType.objects.get_for_model(sender),
+        content_type=ContentType.objects.get_for_model (sender),
         object_id=instance.pk,
-        object_repr=str(instance),
+        object_repr=str (instance),
         changes=changes,
     )
 
-@receiver(post_delete)
-def log_model_deletion(sender, instance, **kwargs):
+@receiver (post_delete)
+def log_model_deletion (sender, instance, **kwargs):
     """Log deletion"""
     if sender == AuditLog:
         return
@@ -334,17 +334,17 @@ def log_model_deletion(sender, instance, **kwargs):
     AuditLog.objects.create(
         user=get_current_user(),
         action='DELETE',
-        content_type=ContentType.objects.get_for_model(sender),
+        content_type=ContentType.objects.get_for_model (sender),
         object_id=instance.pk,
-        object_repr=str(instance),
+        object_repr=str (instance),
     )
 \`\`\`
 
 **3. Handle ManyToMany Fields:**
 
 \`\`\`python
-@receiver(m2m_changed)
-def log_m2m_changes(sender, instance, action, pk_set, **kwargs):
+@receiver (m2m_changed)
+def log_m2m_changes (sender, instance, action, pk_set, **kwargs):
     """Log M2M field changes"""
     if action in ['post_add', 'post_remove', 'post_clear']:
         audit_action = {
@@ -356,15 +356,15 @@ def log_m2m_changes(sender, instance, action, pk_set, **kwargs):
         changes = {
             'field': sender._meta.label,
             'action': action,
-            'pks': list(pk_set) if pk_set else [],
+            'pks': list (pk_set) if pk_set else [],
         }
         
         AuditLog.objects.create(
             user=get_current_user(),
             action=audit_action,
-            content_type=ContentType.objects.get_for_model(instance),
+            content_type=ContentType.objects.get_for_model (instance),
             object_id=instance.pk,
-            object_repr=str(instance),
+            object_repr=str (instance),
             changes=changes,
         )
 \`\`\`
@@ -373,7 +373,7 @@ def log_m2m_changes(sender, instance, action, pk_set, **kwargs):
 
 \`\`\`python
 # Selective auditing with decorator
-def audited(func):
+def audited (func):
     """Decorator to enable auditing for specific operations"""
     def wrapper(*args, **kwargs):
         _thread_locals.enable_audit = True
@@ -382,8 +382,8 @@ def audited(func):
         return result
     return wrapper
 
-@receiver(post_save)
-def conditional_audit_log(sender, instance, created, **kwargs):
+@receiver (post_save)
+def conditional_audit_log (sender, instance, created, **kwargs):
     """Only audit if enabled"""
     if not getattr(_thread_locals, 'enable_audit', True):
         return
@@ -394,12 +394,12 @@ def conditional_audit_log(sender, instance, created, **kwargs):
 @transaction.atomic
 def bulk_update_without_audit():
     _thread_locals.enable_audit = False
-    Article.objects.filter(status='draft').update(status='archived')
+    Article.objects.filter (status='draft').update (status='archived')
     _thread_locals.enable_audit = True
 
 # Async audit logging
-@receiver(post_save)
-def async_audit_log(sender, instance, created, **kwargs):
+@receiver (post_save)
+def async_audit_log (sender, instance, created, **kwargs):
     """Queue audit logging as background task"""
     from .tasks import create_audit_log
     
@@ -414,38 +414,38 @@ def async_audit_log(sender, instance, created, **kwargs):
 **5. Querying Audit Logs:**
 
 \`\`\`python
-class AuditLogQuerySet(models.QuerySet):
-    def for_object(self, obj):
+class AuditLogQuerySet (models.QuerySet):
+    def for_object (self, obj):
         """Get all logs for an object"""
-        content_type = ContentType.objects.get_for_model(obj)
-        return self.filter(content_type=content_type, object_id=obj.pk)
+        content_type = ContentType.objects.get_for_model (obj)
+        return self.filter (content_type=content_type, object_id=obj.pk)
     
-    def for_user(self, user):
+    def for_user (self, user):
         """Get all logs by a user"""
-        return self.filter(user=user)
+        return self.filter (user=user)
     
-    def for_model(self, model):
+    def for_model (self, model):
         """Get all logs for a model"""
-        content_type = ContentType.objects.get_for_model(model)
-        return self.filter(content_type=content_type)
+        content_type = ContentType.objects.get_for_model (model)
+        return self.filter (content_type=content_type)
     
-    def creates(self):
-        return self.filter(action='CREATE')
+    def creates (self):
+        return self.filter (action='CREATE')
     
-    def updates(self):
-        return self.filter(action='UPDATE')
+    def updates (self):
+        return self.filter (action='UPDATE')
     
-    def deletes(self):
-        return self.filter(action='DELETE')
+    def deletes (self):
+        return self.filter (action='DELETE')
 
-class AuditLog(models.Model):
+class AuditLog (models.Model):
     # ... fields ...
     
     objects = AuditLogQuerySet.as_manager()
 
 # Usage:
-article_history = AuditLog.objects.for_object(article)
-user_actions = AuditLog.objects.for_user(user).creates()
+article_history = AuditLog.objects.for_object (article)
+user_actions = AuditLog.objects.for_user (user).creates()
 \`\`\`
 
 **6. Production Considerations:**
@@ -496,10 +496,10 @@ class PluginRegistry:
     _plugins: Dict[str, Dict] = {}
     
     @classmethod
-    def register(cls, name: str, plugin_class):
+    def register (cls, name: str, plugin_class):
         """Register a plugin"""
         if name in cls._plugins:
-            raise ValueError(f'Plugin {name} already registered')
+            raise ValueError (f'Plugin {name} already registered')
         
         plugin_instance = plugin_class()
         cls._plugins[name] = {
@@ -509,25 +509,25 @@ class PluginRegistry:
         }
         
         # Auto-connect signals if plugin has handlers
-        if hasattr(plugin_instance, 'connect_signals'):
+        if hasattr (plugin_instance, 'connect_signals'):
             plugin_instance.connect_signals()
     
     @classmethod
-    def unregister(cls, name: str):
+    def unregister (cls, name: str):
         """Unregister a plugin"""
         if name in cls._plugins:
             plugin = cls._plugins[name]['instance']
-            if hasattr(plugin, 'disconnect_signals'):
+            if hasattr (plugin, 'disconnect_signals'):
                 plugin.disconnect_signals()
             del cls._plugins[name]
     
     @classmethod
-    def get_plugin(cls, name: str):
+    def get_plugin (cls, name: str):
         """Get a plugin by name"""
-        return cls._plugins.get(name, {}).get('instance')
+        return cls._plugins.get (name, {}).get('instance')
     
     @classmethod
-    def list_plugins(cls) -> List[Dict]:
+    def list_plugins (cls) -> List[Dict]:
         """List all registered plugins"""
         return [
             {
@@ -557,21 +557,21 @@ class BasePlugin(ABC):
         self.receivers = []
     
     @abstractmethod
-    def connect_signals(self):
+    def connect_signals (self):
         """Connect plugin to signals - implemented by subclasses"""
         pass
     
-    def disconnect_signals(self):
+    def disconnect_signals (self):
         """Disconnect all signal receivers"""
         for receiver_func in self.receivers:
             # Disconnect from all signals
             for signal in [plugin_pre_article_publish, plugin_post_article_publish]:
-                signal.disconnect(receiver_func)
+                signal.disconnect (receiver_func)
     
-    def register_receiver(self, signal, handler):
+    def register_receiver (self, signal, handler):
         """Helper to register and track signal receivers"""
-        signal.connect(handler, weak=False)
-        self.receivers.append(handler)
+        signal.connect (handler, weak=False)
+        self.receivers.append (handler)
 \`\`\`
 
 **3. Example Plugins:**
@@ -584,20 +584,20 @@ class SpamCheckerPlugin(BasePlugin):
     name = 'spam_checker'
     description = 'Check articles for spam before publishing'
     
-    def connect_signals(self):
+    def connect_signals (self):
         self.register_receiver(
             plugin_pre_article_publish,
             self.check_spam
         )
     
-    def check_spam(self, sender, article, request, **kwargs):
+    def check_spam (self, sender, article, request, **kwargs):
         """Check if article contains spam"""
         spam_keywords = ['spam', 'click here', 'buy now']
         content_lower = article.content.lower()
         
         for keyword in spam_keywords:
             if keyword in content_lower:
-                raise ValidationError(f'Spam detected: contains "{keyword}"')
+                raise ValidationError (f'Spam detected: contains "{keyword}"')
 
 # Register plugin
 PluginRegistry.register('spam_checker', SpamCheckerPlugin)
@@ -607,21 +607,21 @@ class AutoTaggerPlugin(BasePlugin):
     name = 'auto_tagger'
     description = 'Automatically add tags to articles'
     
-    def connect_signals(self):
+    def connect_signals (self):
         self.register_receiver(
             plugin_post_article_publish,
             self.add_auto_tags
         )
     
-    def add_auto_tags(self, sender, article, request, result, **kwargs):
+    def add_auto_tags (self, sender, article, request, result, **kwargs):
         """Add tags based on content"""
-        keywords = self.extract_keywords(article.content)
+        keywords = self.extract_keywords (article.content)
         
         for keyword in keywords:
-            tag, created = Tag.objects.get_or_create(name=keyword)
-            article.tags.add(tag)
+            tag, created = Tag.objects.get_or_create (name=keyword)
+            article.tags.add (tag)
     
-    def extract_keywords(self, text):
+    def extract_keywords (self, text):
         # Simple keyword extraction
         return ['django', 'python']  # Placeholder
 
@@ -632,13 +632,13 @@ class AnalyticsWidgetPlugin(BasePlugin):
     name = 'analytics_widget'
     description = 'Add analytics widget to dashboard'
     
-    def connect_signals(self):
+    def connect_signals (self):
         self.register_receiver(
             plugin_dashboard_widget,
             self.render_widget
         )
     
-    def render_widget(self, sender, request, **kwargs):
+    def render_widget (self, sender, request, **kwargs):
         """Return widget HTML"""
         return {
             'html': '<div class="analytics-widget">Analytics Data</div>',
@@ -654,7 +654,7 @@ PluginRegistry.register('analytics_widget', AnalyticsWidgetPlugin)
 # articles/views.py
 from core.plugins import plugin_pre_article_publish, plugin_post_article_publish
 
-def publish_article(request, article_id):
+def publish_article (request, article_id):
     article = get_object_or_404(Article, id=article_id)
     
     # Send pre-publish signal (plugins can modify or reject)
@@ -666,8 +666,8 @@ def publish_article(request, article_id):
     
     # Check if any plugin rejected publication
     for receiver, response in responses:
-        if isinstance(response, Exception):
-            return JsonResponse({'error': str(response)}, status=400)
+        if isinstance (response, Exception):
+            return JsonResponse({'error': str (response)}, status=400)
     
     # Publish article
     article.status = 'published'
@@ -685,16 +685,16 @@ def publish_article(request, article_id):
     return JsonResponse({'status': 'published'})
 
 # Dashboard view
-def dashboard(request):
+def dashboard (request):
     # Collect widgets from plugins
     widgets = []
-    responses = plugin_dashboard_widget.send(sender=dashboard, request=request)
+    responses = plugin_dashboard_widget.send (sender=dashboard, request=request)
     
     for receiver, response in responses:
-        if isinstance(response, dict) and 'html' in response:
-            widgets.append(response)
+        if isinstance (response, dict) and 'html' in response:
+            widgets.append (response)
     
-    return render(request, 'dashboard.html', {'widgets': widgets})
+    return render (request, 'dashboard.html', {'widgets': widgets})
 \`\`\`
 
 **5. Plugin Configuration:**
@@ -713,11 +713,11 @@ from core.plugins import PluginRegistry
 
 for plugin_path in settings.INSTALLED_PLUGINS:
     try:
-        plugin_class = import_string(plugin_path)
+        plugin_class = import_string (plugin_path)
         plugin_name = plugin_class.name or plugin_path.split('.')[-1]
-        PluginRegistry.register(plugin_name, plugin_class)
+        PluginRegistry.register (plugin_name, plugin_class)
     except Exception as e:
-        logger.error(f'Failed to load plugin {plugin_path}: {e}')
+        logger.error (f'Failed to load plugin {plugin_path}: {e}')
 \`\`\`
 
 **6. Plugin Management API:**
@@ -728,7 +728,7 @@ from rest_framework.decorators import api_view
 from core.plugins import PluginRegistry
 
 @api_view(['GET'])
-def list_plugins(request):
+def list_plugins (request):
     """List all registered plugins"""
     plugins = PluginRegistry.list_plugins()
     return Response([
@@ -742,9 +742,9 @@ def list_plugins(request):
     ])
 
 @api_view(['POST'])
-def toggle_plugin(request, plugin_name):
+def toggle_plugin (request, plugin_name):
     """Enable/disable a plugin"""
-    plugin = PluginRegistry.get_plugin(plugin_name)
+    plugin = PluginRegistry.get_plugin (plugin_name)
     
     if not plugin:
         return Response({'error': 'Plugin not found'}, status=404)
@@ -774,23 +774,23 @@ class SEOOptimizerPlugin(BasePlugin):
     author = 'Third Party Dev'
     description = 'Optimize articles for SEO'
     
-    def connect_signals(self):
+    def connect_signals (self):
         self.register_receiver(
             plugin_post_article_publish,
             self.optimize_seo
         )
     
-    def optimize_seo(self, sender, article, **kwargs):
+    def optimize_seo (self, sender, article, **kwargs):
         # SEO optimization logic
-        article.meta_description = self.generate_meta_description(article)
-        article.meta_keywords = self.extract_keywords(article)
-        article.save(update_fields=['meta_description', 'meta_keywords'])
+        article.meta_description = self.generate_meta_description (article)
+        article.meta_keywords = self.extract_keywords (article)
+        article.save (update_fields=['meta_description', 'meta_keywords'])
     
-    def generate_meta_description(self, article):
+    def generate_meta_description (self, article):
         # Generate optimized meta description
         return article.content[:160]
     
-    def extract_keywords(self, article):
+    def extract_keywords (self, article):
         # Extract SEO keywords
         return 'keyword1, keyword2'
 

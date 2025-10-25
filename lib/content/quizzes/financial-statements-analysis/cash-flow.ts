@@ -1,8 +1,9 @@
 export const cashFlowDiscussionQuestions = [
   {
-            id: 1,
-            question: "A rapidly growing e-commerce company reports the following for three consecutive years: Year 1: CFO = $50M, Net Income = $60M; Year 2: CFO = $30M, Net Income = $80M; Year 3: CFO = $10M, Net Income = $100M. Revenue is growing 40% annually. The CEO claims 'Our profitability is improving dramatically!' Analyze this situation comprehensively, explaining what's actually happening, the underlying causes, potential red flags, and how you would investigate further. What questions would you ask management?",
-            answer: `This is a classic example of **deteriorating earnings quality despite rising reported profits**. While net income is increasing ($60M → $100M), operating cash flow is declining ($50M → $10M), which is a serious red flag for a growing company.
+    id: 1,
+    question:
+      "A rapidly growing e-commerce company reports the following for three consecutive years: Year 1: CFO = $50M, Net Income = $60M; Year 2: CFO = $30M, Net Income = $80M; Year 3: CFO = $10M, Net Income = $100M. Revenue is growing 40% annually. The CEO claims 'Our profitability is improving dramatically!' Analyze this situation comprehensively, explaining what's actually happening, the underlying causes, potential red flags, and how you would investigate further. What questions would you ask management?",
+    answer: `This is a classic example of **deteriorating earnings quality despite rising reported profits**. While net income is increasing (\$60M → $100M), operating cash flow is declining (\$50M → $10M), which is a serious red flag for a growing company.
 
 ## The Problem: CFO Falling While Net Income Rises
 
@@ -20,7 +21,7 @@ data = {
     'Revenue_Growth': [40, 40, 40]  # %
 }
 
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 
 # Calculate key metrics
 df['CFO_NI_Ratio'] = df['CFO'] / df['Net_Income']
@@ -31,7 +32,7 @@ df['Accruals_Ratio'] = df['Accruals'] / df['Net_Income']
 
 print("Earnings Quality Deterioration Analysis")
 print("=" * 80)
-print(df.to_string(index=False))
+print(df.to_string (index=False))
 print()
 
 # Red flags
@@ -51,7 +52,7 @@ print("   → Profits are accounting fictions, not real cash")
 print()
 
 print("3. EXPLODING ACCRUALS")
-print(f"   Year 1 Accruals: \${df['Accruals'].iloc[0]:, .0f}({ df['Accruals_Ratio'].iloc[0]: .1%})")
+print(f"   Year 1 Accruals: \${df['Accruals'].iloc[0]:,.0f}({ df['Accruals_Ratio'].iloc[0]: .1%})")
 print(f"   Year 2 Accruals: \${df['Accruals'].iloc[1]:,.0f} ({df['Accruals_Ratio'].iloc[1]:.1%})")
 print(f"   Year 3 Accruals: \${df['Accruals'].iloc[2]:,.0f} ({df['Accruals_Ratio'].iloc[2]:.1%})")
 print("   → 90% of 'earnings' are accruals, not cash!")
@@ -70,7 +71,7 @@ RED FLAGS:
 3. EXPLODING ACCRUALS - $10M → $90M (90% of earnings)
 \`\`\`
 
-## What's Actually Happening: The Likely Causes
+## What\'s Actually Happening: The Likely Causes
 
 **1. Channel Stuffing / Aggressive Revenue Recognition**
 
@@ -194,7 +195,7 @@ def generate_management_questions():
             },
             {
                 'question': "Why is inventory growing 60-80% when revenue grows 40%?",
-                'follow_up': "What's your inventory turnover ratio? Any obsolete inventory?",
+                'follow_up': "What\'s your inventory turnover ratio? Any obsolete inventory?",
                 'red_flag_answer': "Preparing for strong demand (but never materializes)"
             },
             {
@@ -251,7 +252,7 @@ def generate_management_questions():
     
     for category, qs in questions.items():
         print(f"\\n{category.upper()}:")
-        for i, q in enumerate(qs, 1):
+        for i, q in enumerate (qs, 1):
             print(f"\\n  {i}. {q['question']}")
             print(f"     Follow-up: {q['follow_up']}")
             print(f"     🚩 Red flag answer: {q['red_flag_answer']}")
@@ -382,13 +383,14 @@ generate_investment_recommendation()
 
 7. **Historical precedent is clear** - Companies with this pattern often end badly (fraud, bankruptcy, or both)
 
-**Bottom line**: This is a **textbook example of accounting-driven "profits" that aren't real**. The cash flow statement reveals what the income statement hides. An astute analyst would have flagged this in Year 2 and recommended selling. By Year 3, it's a screaming sell signal.`
-    },
+**Bottom line**: This is a **textbook example of accounting-driven "profits" that aren't real**. The cash flow statement reveals what the income statement hides. An astute analyst would have flagged this in Year 2 and recommended selling. By Year 3, it's a screaming sell signal.`,
+  },
 
-{
+  {
     id: 2,
-        question: "Compare two SaaS companies: Company A has CFO of $100M and CapEx of $20M (FCF = $80M). Company B has CFO of $100M and CapEx of $5M (FCF = $95M). At first glance, Company B appears more efficient with lower CapEx. However, Company A is growing revenue 50% YoY while Company B grows 10%. Analyze the capital efficiency and growth dynamics. Which company is actually more attractive and why? How would you adjust FCF for the growth context? What additional metrics would you examine?",
-            answer: `This question highlights a critical nuance in cash flow analysis: **absolute FCF numbers can be misleading without considering growth investment and capital efficiency**. Company B's higher FCF ($95M vs $80M) initially looks better, but Company A is likely more attractive due to its superior growth and disciplined reinvestment.
+    question:
+      'Compare two SaaS companies: Company A has CFO of $100M and CapEx of $20M (FCF = $80M). Company B has CFO of $100M and CapEx of $5M (FCF = $95M). At first glance, Company B appears more efficient with lower CapEx. However, Company A is growing revenue 50% YoY while Company B grows 10%. Analyze the capital efficiency and growth dynamics. Which company is actually more attractive and why? How would you adjust FCF for the growth context? What additional metrics would you examine?',
+    answer: `This question highlights a critical nuance in cash flow analysis: **absolute FCF numbers can be misleading without considering growth investment and capital efficiency**. Company B's higher FCF (\$95M vs $80M) initially looks better, but Company A is likely more attractive due to its superior growth and disciplined reinvestment.
 
 ## Initial Analysis: The Numbers
 
@@ -416,7 +418,7 @@ companies = {
     }
 }
 
-def analyze_surface_metrics(companies):
+def analyze_surface_metrics (companies):
     """Initial metrics comparison."""
     
     print("SURFACE-LEVEL COMPARISON")
@@ -429,9 +431,7 @@ def analyze_surface_metrics(companies):
         cfo_margin = data['cfo'] / data['revenue']
         
         print(f"{name}:")
-        print(f"  CFO:              \${data['cfo']:> 15, .0f
-} ")
-print(f"  CapEx:            \${data['capex']:>15,.0f}")
+        print(f"  CFO:              \${data['cfo']:> 15, .0f} ")print(f"  CapEx:            \${data['capex']:>15,.0f}")
 print(f"  FCF:              \${data['fcf']:>15,.0f}")
 print(f"  Revenue:          \${data['revenue']:>15,.0f}")
 print(f"  Revenue Growth:   {data['revenue_growth']:>15.0%}")
@@ -442,12 +442,12 @@ print(f"  CFO Margin:       {cfo_margin:>15.1%}")
 print()
 
 print("INITIAL IMPRESSION:")
-print("  Company B: Higher FCF ($95M vs $80M), lower CapEx")
+print("  Company B: Higher FCF (\$95M vs $80M), lower CapEx")
 print("  → Looks more 'efficient' on surface")
 print()
 print("  But this ignores GROWTH context...")
 
-analyze_surface_metrics(companies)
+analyze_surface_metrics (companies)
 \`\`\`
 
 ## Deeper Analysis: Growth-Adjusted Metrics
@@ -455,7 +455,7 @@ analyze_surface_metrics(companies)
 **The key insight**: Company A is **investing for growth** while Company B is **harvesting**
 
 \`\`\`python
-def analyze_growth_adjusted_metrics(companies):
+def analyze_growth_adjusted_metrics (companies):
     """Adjust FCF for growth investment."""
     
     print("\\nGROWTH-ADJUSTED ANALYSIS")
@@ -496,10 +496,10 @@ print("KEY INSIGHT:")
 print("  Company A: $66.7M revenue growth / $20M CapEx = $3.33 per $1 invested")
 print("  Company B: $20M revenue growth / $5M CapEx = $4.00 per $1 invested")
 print()
-print("  But Company A is investing MORE ($20M vs $5M) for HIGHER growth (50% vs 10%)")
+print("  But Company A is investing MORE (\$20M vs $5M) for HIGHER growth (50% vs 10%)")
 print("  → Company A is building a much larger business")
 
-analyze_growth_adjusted_metrics(companies)
+analyze_growth_adjusted_metrics (companies)
 \`\`\`
 
 ## Unit Economics & CAC Payback
@@ -790,15 +790,16 @@ additional_metrics_checklist()
 
 8. **Underinvestment kills long-term value** - Company B's harvest strategy is short-sighted
 
-**Bottom line**: **Company A is significantly more attractive**. It's generating strong cash flow WHILE investing for explosive growth. Company B's "higher FCF" is achieved through underinvestment, which will likely lead to declining growth and value destruction over time.
+**Bottom line**: **Company A is significantly more attractive**. It\'s generating strong cash flow WHILE investing for explosive growth. Company B's "higher FCF" is achieved through underinvestment, which will likely lead to declining growth and value destruction over time.
 
-For growth companies, especially SaaS, the **quality of growth and unit economics matter more than current FCF levels**.`
-    },
+For growth companies, especially SaaS, the **quality of growth and unit economics matter more than current FCF levels**.`,
+  },
 
-{
+  {
     id: 3,
-        question: "You discover that a manufacturing company consistently reports positive operating cash flow ($200M annually) but negative free cash flow (-$50M annually) due to very high CapEx ($250M annually). This has continued for 5 straight years. Management claims 'We're investing for the future and building state-of-the-art facilities.' The company's revenue has grown only 15% over these 5 years. Analyze whether this CapEx spend is justified or a red flag. What financial metrics would you calculate? How would you determine if the CapEx is creating value or destroying it? Design a complete analytical framework.",
-            answer: `This scenario presents a **critical red flag**: **high, sustained CapEx with minimal revenue growth suggests capital is being deployed inefficiently or destroyed**. While management frames it as "investing for the future," the numbers tell a different story. Let's build a comprehensive analytical framework to evaluate this situation.
+    question:
+      "You discover that a manufacturing company consistently reports positive operating cash flow (\$200M annually) but negative free cash flow (-$50M annually) due to very high CapEx (\$250M annually). This has continued for 5 straight years. Management claims 'We're investing for the future and building state-of-the-art facilities.' The company's revenue has grown only 15% over these 5 years. Analyze whether this CapEx spend is justified or a red flag. What financial metrics would you calculate? How would you determine if the CapEx is creating value or destroying it? Design a complete analytical framework.",
+    answer: `This scenario presents a **critical red flag**: **high, sustained CapEx with minimal revenue growth suggests capital is being deployed inefficiently or destroyed**. While management frames it as "investing for the future," the numbers tell a different story. Let\'s build a comprehensive analytical framework to evaluate this situation.
 
 ## The Problem: High CapEx, Low Returns
 
@@ -809,7 +810,7 @@ import pandas as pd
 import numpy as np
 
 # 5-year data
-years = list(range(1, 6))
+years = list (range(1, 6))
 cfo = [200_000_000] * 5  # Consistent CFO
 capex = [250_000_000] * 5  # Consistent high CapEx
 fcf = [-50_000_000] * 5  # Negative FCF
@@ -828,7 +829,7 @@ data = {
     'FCF_M': [-50, -50, -50, -50, -50],
 }
 
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 
 # Calculate key metrics
 df['Revenue_Growth_%'] = df['Revenue_M'].pct_change() * 100
@@ -837,14 +838,13 @@ df['CapEx_Intensity_%'] = (df['CapEx_M'] / df['Revenue_M']) * 100
 
 print("5-YEAR CAPITAL EXPENDITURE ANALYSIS")
 print("=" * 80)
-print(df.to_string(index=False))
+print(df.to_string (index=False))
 print()
 
 print(f"SUMMARY:")
-print(f"  Total CapEx over 5 years: \${df['Cumulative_CapEx_M'].iloc[-1]: .0f
-} M($1.25B)")
+print(f"  Total CapEx over 5 years: \${df['Cumulative_CapEx_M'].iloc[-1]:.0f} M(\$1.25B)")
 print(f"  Total revenue growth: {revenue_growth_total:.1%} (only $150M)")
-print(f"  Cumulative FCF: \${sum(fcf)/1_000_000:.0f}M (-$250M)")
+print(f"  Cumulative FCF: \${sum (fcf)/1_000_000:.0f}M (-$250M)")
 print()
 
 print(f"THE PROBLEM:")
@@ -862,7 +862,7 @@ print(f"RED FLAG: Spending $8.33 in CapEx for every $1 of revenue growth!")
 **Most critical metric for evaluating CapEx effectiveness**:
 
 \`\`\`python
-def calculate_roic_metrics(financial_data):
+def calculate_roic_metrics (financial_data):
     """Calculate ROIC and related capital efficiency metrics."""
     
     # Assumptions
@@ -895,7 +895,7 @@ print(f"ROIC:                             {roic:>15.1%}")
 print()
     
     # Benchmark
-wacc = 0.08  # Weighted Average Cost of Capital(assumed 8 %)
+wacc = 0.08  # Weighted Average Cost of Capital (assumed 8 %)
 roic_spread = roic - wacc
 
 print(f"WACC (Cost of Capital):           {wacc:>15.1%}")
@@ -956,7 +956,7 @@ def analyze_capex_productivity():
     revenue_per_capex_dollar = revenue_increase / total_capex
     
     print(f"1. REVENUE GROWTH PER CAPEX DOLLAR")
-    print(f"   Revenue Growth: \${revenue_increase:, .0f}")
+    print(f"   Revenue Growth: \${revenue_increase:,.0f}")
 print(f"   CapEx Spent: \${total_capex:,.0f}")
 print(f"   Revenue per $1 CapEx: \${revenue_per_capex_dollar:.2f}")
 print()
@@ -1047,8 +1047,8 @@ def analyze_asset_efficiency():
     total_asset_turnover_y5 = year_5['revenue'] / year_5['total_assets']
     
     print(f"PP&E TURNOVER (Revenue / PP&E):")
-    print(f"  Year 1: {ppe_turnover_y1:.2f}x (\${year_1['revenue']:, .0f} / ${year_1['pp&e']:,.0f}) ")
-print(f"  Year 5: {ppe_turnover_y5:.2f}x (\${year_5['revenue']:,.0f} / ${year_5['pp&e']:,.0f})")
+    print(f"  Year 1: {ppe_turnover_y1:.2f}x (\${year_1['revenue']:,.0f} / \${year_1['pp&e']:,.0f}) ")
+print(f"  Year 5: {ppe_turnover_y5:.2f}x (\${year_5['revenue']:,.0f} / \${year_5['pp&e']:,.0f})")
 print(f"  Change: {((ppe_turnover_y5/ppe_turnover_y1) - 1)*100:.1f}%")
 print()
 
@@ -1094,7 +1094,7 @@ def analyze_cash_flow_liquidity_impact():
     # 5-year cumulative
     cumulative_fcf = -250_000_000  # -$50M × 5 years
     
-    print(f"CUMULATIVE FREE CASH FLOW: \${cumulative_fcf:, .0f}")
+    print(f"CUMULATIVE FREE CASH FLOW: \${cumulative_fcf:,.0f}")
 print()
 print(f"How did company fund this $250M shortfall?")
 print(f"  Option 1: Drew down cash reserves")
@@ -1183,7 +1183,7 @@ def compare_to_industry_peers():
         }
     }
     
-    df = pd.DataFrame(companies).T
+    df = pd.DataFrame (companies).T
     df['capex_intensity'] = (df['capex_intensity'] * 100).map('{:.1f}%'.format)
     df['revenue_growth_5yr'] = (df['revenue_growth_5yr'] * 100).map('{:.1f}%'.format)
     df['roic'] = (df['roic'] * 100).map('{:.1f}%'.format)
@@ -1258,7 +1258,7 @@ def assess_management_quality():
         }
     ]
     
-    for i, flag in enumerate(red_flags, 1):
+    for i, flag in enumerate (red_flags, 1):
         print(f"{i}. {flag['category'].upper()}")
         print(f"   Flag: {flag['flag']}")
         print(f"   Key Question: {flag['question']}")
@@ -1314,7 +1314,7 @@ def generate_complete_framework_summary():
     print("FRAMEWORK COMPONENTS:")
     for component, details in framework.items():
         print(f"\\n{component}")
-        print(f"  Metrics: {', '.join(details['metrics'])}")
+        print(f"  Metrics: {', '.join (details['metrics'])}")
         print(f"  Threshold: {details['threshold']}")
         print(f"  This Company: {details['this_company']}")
     
@@ -1371,6 +1371,6 @@ generate_complete_framework_summary()
 
 8. **Watch management behavior** - Poor track record + vague disclosure = red flag
 
-**Bottom line**: This is a **textbook example of capital destruction**. Management is spending heavily with minimal returns, destroying shareholder value. The analytical framework reveals this clearly across multiple dimensions. An investor should EXIT this position immediately unless management radically changes course.`
-    }
+**Bottom line**: This is a **textbook example of capital destruction**. Management is spending heavily with minimal returns, destroying shareholder value. The analytical framework reveals this clearly across multiple dimensions. An investor should EXIT this position immediately unless management radically changes course.`,
+  },
 ];

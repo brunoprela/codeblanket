@@ -5,7 +5,7 @@
 export const airbnbarchitectureSection = {
   id: 'airbnb-architecture',
   title: 'Airbnb Architecture',
-  content: `Airbnb is a global online marketplace connecting travelers with hosts offering accommodations and experiences. With 7+ million listings in 100,000+ cities and 150+ million users, Airbnb's architecture must handle complex challenges including geospatial search, dynamic pricing, payments, trust & safety, and global scale. This section explores the technical systems powering Airbnb.
+  content: `Airbnb is a global online marketplace connecting travelers with hosts offering accommodations and experiences. With 7+ million listings in 100,000+ cities and 150+ million users, Airbnb\'s architecture must handle complex challenges including geospatial search, dynamic pricing, payments, trust & safety, and global scale. This section explores the technical systems powering Airbnb.
 
 ## Overview
 
@@ -329,7 +329,7 @@ Airbnb uses ML to rank search results by predicted booking probability.
 
 ### 2. Dynamic Pricing (Smart Pricing)
 
-Airbnb's Smart Pricing suggests optimal prices to hosts.
+Airbnb\'s Smart Pricing suggests optimal prices to hosts.
 
 **Goals**:
 - **Maximize bookings**: Price too high → No bookings
@@ -363,7 +363,7 @@ Airbnb's Smart Pricing suggests optimal prices to hosts.
 **Approach**: Predict optimal price that maximizes expected revenue.
 
 \`\`\`
-expected_revenue(price) = price × P(booked | price)
+expected_revenue (price) = price × P(booked | price)
 
 where P(booked | price) = ML model prediction
 \`\`\`
@@ -408,7 +408,7 @@ Airbnb's booking flow handles complex payment logic.
 2. Client calculates total:
    - Nightly rate × nights
    - Cleaning fee (one-time)
-   - Service fee (Airbnb's commission, ~14% of subtotal)
+   - Service fee (Airbnb\'s commission, ~14% of subtotal)
    - Occupancy taxes (varies by location)
 3. Guest clicks "Request to Book" or "Reserve"
 \`\`\`
@@ -512,7 +512,7 @@ Table: payouts
    - Currency: USD (or guest's currency)
    - Metadata: booking_id, guest_id, listing_id
 3. Stripe returns payment_intent_id
-4. Guest confirms payment in Stripe's UI (3D Secure if required)
+4. Guest confirms payment in Stripe\'s UI (3D Secure if required)
 5. Stripe calls webhook: payment_intent.succeeded
 6. Airbnb updates booking status to confirmed
 7. Airbnb updates payment status to captured
@@ -534,7 +534,7 @@ Table: payouts
 
 ### 4. Availability Calendar and Double-Booking Prevention
 
-Preventing double bookings is critical for Airbnb's reputation.
+Preventing double bookings is critical for Airbnb\'s reputation.
 
 **Challenge**: Two guests attempt booking same dates simultaneously.
 
@@ -543,18 +543,18 @@ Preventing double bookings is critical for Airbnb's reputation.
 **Approach 1: Pessimistic Locking (Used for Critical Path)**
 
 \`\`\`python
-def create_booking(listing_id, check_in, check_out, guest_id):
+def create_booking (listing_id, check_in, check_out, guest_id):
     # Acquire distributed lock on listing
-    lock = redis.lock(f"listing:{listing_id}:booking", timeout=10)
+    lock = redis.lock (f"listing:{listing_id}:booking", timeout=10)
     
-    if not lock.acquire(blocking=True, timeout=5):
+    if not lock.acquire (blocking=True, timeout=5):
         raise BookingError("Could not acquire lock, try again")
     
     try:
         # Start database transaction
         with db.transaction():
             # Check availability
-            dates = get_dates_between(check_in, check_out)
+            dates = get_dates_between (check_in, check_out)
             unavailable = db.query(
                 "SELECT date FROM availability_calendar "
                 "WHERE listing_id = ? AND date IN ? AND status != 'available'",
@@ -692,7 +692,7 @@ Table: review_responses
 **Aggregate Ratings**:
 
 \`\`\`python
-def calculate_listing_rating(listing_id):
+def calculate_listing_rating (listing_id):
     reviews = db.query(
         "SELECT overall_rating, category_ratings FROM reviews "
         "WHERE reviewee_id = ? AND reviewer_type = 'guest' AND is_visible = true",
@@ -705,7 +705,7 @@ def calculate_listing_rating(listing_id):
     
     db.update("listings", listing_id, {
         "average_rating": overall_avg,
-        "review_count": len(reviews),
+        "review_count": len (reviews),
         "category_ratings": {
             "cleanliness": cleanliness_avg,
             # ...
@@ -713,7 +713,7 @@ def calculate_listing_rating(listing_id):
     })
     
     # Update Elasticsearch index
-    elasticsearch.update(listing_id, {"rating": overall_avg, "review_count": len(reviews)})
+    elasticsearch.update (listing_id, {"rating": overall_avg, "review_count": len (reviews)})
 \`\`\`
 
 **Review Moderation**:
@@ -951,7 +951,7 @@ Distributed locking (Redis) + database transactions ensure atomicity and prevent
 
 ### 3. Two-Way Reviews Build Trust
 
-Airbnb's innovation: Reviews revealed simultaneously prevents retaliation, encourages honesty.
+Airbnb\'s innovation: Reviews revealed simultaneously prevents retaliation, encourages honesty.
 
 ### 4. ML Drives User Experience
 
@@ -979,13 +979,13 @@ A: Use distributed locking with database transactions. When guest attempts booki
 
 **Q: How does Airbnb implement dynamic pricing?**
 
-A: Use ML model to predict optimal price maximizing expected revenue. Features: Demand (seasonality, local events, lead time), supply (competing listings' prices), listing quality (rating, amenities, photos), historical data (past booking rates at different prices). Model predicts P(booked | price) for various prices. Calculate expected_revenue(price) = price × P(booked | price). Find price maximizing expected revenue. Train gradient boosted trees (XGBoost) on historical bookings. Retrain weekly with new data. Serve as pricing recommendation to hosts (Smart Pricing). Host sets min/max price bounds, can override. Update prices daily based on latest demand/supply. Handle events: Scrape event calendars (Eventbrite, Ticketmaster), increase prices for event dates. Monitor booking velocity: If listing not booked 2 weeks before → Reduce price.
+A: Use ML model to predict optimal price maximizing expected revenue. Features: Demand (seasonality, local events, lead time), supply (competing listings' prices), listing quality (rating, amenities, photos), historical data (past booking rates at different prices). Model predicts P(booked | price) for various prices. Calculate expected_revenue (price) = price × P(booked | price). Find price maximizing expected revenue. Train gradient boosted trees (XGBoost) on historical bookings. Retrain weekly with new data. Serve as pricing recommendation to hosts (Smart Pricing). Host sets min/max price bounds, can override. Update prices daily based on latest demand/supply. Handle events: Scrape event calendars (Eventbrite, Ticketmaster), increase prices for event dates. Monitor booking velocity: If listing not booked 2 weeks before → Reduce price.
 
 ---
 
 ## Summary
 
-Airbnb's architecture demonstrates building a global marketplace at scale:
+Airbnb\'s architecture demonstrates building a global marketplace at scale:
 
 **Key Takeaways**:
 

@@ -13,7 +13,7 @@ export const parametrizedTestsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Parametrized tests eliminate code duplication: Write one test function that runs multiple times with different parameters instead of writing N nearly-identical test functions. Example: @pytest.mark.parametrize("a,b,expected", [(1,2,3), (2,3,5)]) def test_add(a,b,expected): assert add(a,b)==expected → 1 test runs 2× instead of 2 separate tests. Benefit: 65% less code, easier to maintain, easier to add new cases (1 line vs new function). Not faster: Same execution time. Doesn\'t auto-generate data: Must provide parameters. Works with or without fixtures.',
+      'Parametrized tests eliminate code duplication: Write one test function that runs multiple times with different parameters instead of writing N nearly-identical test functions. Example: @pytest.mark.parametrize("a,b,expected", [(1,2,3), (2,3,5)]) def test_add (a,b,expected): assert add (a,b)==expected → 1 test runs 2× instead of 2 separate tests. Benefit: 65% less code, easier to maintain, easier to add new cases (1 line vs new function). Not faster: Same execution time. Doesn\'t auto-generate data: Must provide parameters. Works with or without fixtures.',
   },
   {
     id: 'pt-mc-2',
@@ -40,7 +40,7 @@ export const parametrizedTestsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'indirect=True passes parameter through fixture: @pytest.fixture def user(request): name=request.param; return User(name); @pytest.mark.parametrize("user", ["Alice","Bob"], indirect=True) def test_user(user): ... → Parameter goes to fixture first (creates User object), test receives User object (not string). Without indirect: test receives raw parameter ("Alice" string). Use case: Complex setup needed for each parameter (create database, authenticate user, etc.). Partial indirect: indirect=["param1"] → only param1 goes through fixture. Not for skipping/async: Different features.',
+      'indirect=True passes parameter through fixture: @pytest.fixture def user (request): name=request.param; return User (name); @pytest.mark.parametrize("user", ["Alice","Bob"], indirect=True) def test_user (user): ... → Parameter goes to fixture first (creates User object), test receives User object (not string). Without indirect: test receives raw parameter ("Alice" string). Use case: Complex setup needed for each parameter (create database, authenticate user, etc.). Partial indirect: indirect=["param1"] → only param1 goes through fixture. Not for skipping/async: Different features.',
   },
   {
     id: 'pt-mc-4',
@@ -67,6 +67,6 @@ export const parametrizedTestsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Use pytest.param with marks=pytest.mark.skip: @pytest.mark.parametrize("value", [1, 2, pytest.param(3, marks=pytest.mark.skip(reason="Known bug")), 4]) → Tests run for 1,2,4 but skip 3. Also: marks=pytest.mark.xfail (expected to fail), marks=pytest.mark.skipif (conditional). Alternative: Can remove from list, but marks are better (documents why skipped, shows in test output). Not if statement: Runs test (wastes time), doesn\'t show as skipped in report. Parametrized tests CAN skip individual sets with pytest.param. Output: test[3] SKIPPED (Known bug).',
+      'Use pytest.param with marks=pytest.mark.skip: @pytest.mark.parametrize("value", [1, 2, pytest.param(3, marks=pytest.mark.skip (reason="Known bug")), 4]) → Tests run for 1,2,4 but skip 3. Also: marks=pytest.mark.xfail (expected to fail), marks=pytest.mark.skipif (conditional). Alternative: Can remove from list, but marks are better (documents why skipped, shows in test output). Not if statement: Runs test (wastes time), doesn\'t show as skipped in report. Parametrized tests CAN skip individual sets with pytest.param. Output: test[3] SKIPPED (Known bug).',
   },
 ];

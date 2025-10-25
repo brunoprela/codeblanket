@@ -10,10 +10,10 @@ export const textfileprocessingMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What is the most memory-efficient way to count lines in a 10GB text file?',
     options: [
-      'lines = open("file.txt").readlines(); count = len(lines)',
+      'lines = open("file.txt").readlines(); count = len (lines)',
       'content = Path("file.txt").read_text(); count = content.count("\\n")',
       'count = sum(1 for _ in open("file.txt"))',
-      'import pandas; df = pd.read_csv("file.txt"); count = len(df)',
+      'import pandas; df = pd.read_csv("file.txt"); count = len (df)',
     ],
     correctAnswer: 2,
     explanation:

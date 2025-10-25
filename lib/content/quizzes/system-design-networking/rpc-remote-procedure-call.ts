@@ -182,14 +182,14 @@ const RETRY_POLICY = {
   [grpc.status.FAILED_PRECONDITION]: { maxRetries: 0 }
 };
 
-async function callWithRetry(client, method, request, config) {
+async function callWithRetry (client, method, request, config) {
   const policy = RETRY_POLICY[config.statusCode] || { maxRetries: 0 };
   let attempts = 0;
   
   while (attempts <= policy.maxRetries) {
     try {
       const deadline = Date.now() + config.deadline;
-      const result = await promisify(client[method])(request, { deadline });
+      const result = await promisify (client[method])(request, { deadline });
       return result;
     } catch (error) {
       attempts++;
@@ -211,7 +211,7 @@ async function callWithRetry(client, method, request, config) {
         message: error.message
       });
       
-      await sleep(delay);
+      await sleep (delay);
     }
   }
 }
@@ -221,7 +221,7 @@ async function callWithRetry(client, method, request, config) {
 
 \`\`\`javascript
 class CircuitBreaker {
-  constructor(options = {}) {
+  constructor (options = {}) {
     this.failureThreshold = options.failureThreshold || 5;
     this.resetTimeout = options.resetTimeout || 60000; // 60s
     this.monitoringWindow = options.monitoringWindow || 10000; // 10s
@@ -231,7 +231,7 @@ class CircuitBreaker {
     this.nextAttempt = null;
   }
   
-  async execute(fn) {
+  async execute (fn) {
     if (this.state === 'OPEN') {
       if (Date.now() < this.nextAttempt) {
         throw new Error('Circuit breaker is OPEN');
@@ -259,7 +259,7 @@ class CircuitBreaker {
   
   onFailure() {
     const now = Date.now();
-    this.failures.push(now);
+    this.failures.push (now);
     
     // Remove old failures outside monitoring window
     this.failures = this.failures.filter(
@@ -269,7 +269,7 @@ class CircuitBreaker {
     if (this.failures.length >= this.failureThreshold) {
       this.state = 'OPEN';
       this.nextAttempt = now + this.resetTimeout;
-      logger.error(\`Circuit breaker opened. Next attempt at \${new Date(this.nextAttempt)}\`);
+      logger.error(\`Circuit breaker opened. Next attempt at \${new Date (this.nextAttempt)}\`);
     }
   }
 }
@@ -285,7 +285,7 @@ const circuitBreakers = {
 **5. Handling Partial Failures in Order Service**:
 
 \`\`\`javascript
-async function createOrder(call, callback) {
+async function createOrder (call, callback) {
   const { user_id, items, payment_info, shipping_address } = call.request;
   const orderId = generateOrderId();
   
@@ -295,7 +295,7 @@ async function createOrder(call, callback) {
   try {
     // Step 1: Check inventory (critical)
     const inventoryResult = await circuitBreakers.inventory.execute(() =>
-      callWithRetry(inventoryClient, 'checkAvailability', { items }, {
+      callWithRetry (inventoryClient, 'checkAvailability', { items }, {
         deadline: TIMEOUTS.inventory.deadline,
         statusCode: grpc.status.UNAVAILABLE
       })
@@ -310,7 +310,7 @@ async function createOrder(call, callback) {
     
     // Step 2: Reserve inventory (critical, must rollback)
     await circuitBreakers.inventory.execute(() =>
-      callWithRetry(inventoryClient, 'reserveItems', { items, orderId }, {
+      callWithRetry (inventoryClient, 'reserveItems', { items, orderId }, {
         deadline: TIMEOUTS.inventory.deadline
       })
     );
@@ -322,7 +322,7 @@ async function createOrder(call, callback) {
     let paymentResult;
     try {
       paymentResult = await circuitBreakers.payment.execute(() =>
-        callWithRetry(paymentClient, 'processPayment', {
+        callWithRetry (paymentClient, 'processPayment', {
           amount: inventoryResult.total,
           payment_info,
           idempotency_key: orderId
@@ -332,7 +332,7 @@ async function createOrder(call, callback) {
       );
     } catch (error) {
       // Payment failed, rollback inventory
-      await executeRollback(rollbackActions);
+      await executeRollback (rollbackActions);
       
       return callback({
         code: grpc.status.FAILED_PRECONDITION,
@@ -349,7 +349,7 @@ async function createOrder(call, callback) {
     let shippingResult;
     try {
       shippingResult = await circuitBreakers.shipping.execute(() =>
-        callWithRetry(shippingClient, 'createLabel', {
+        callWithRetry (shippingClient, 'createLabel', {
           orderId,
           address: shipping_address,
           items
@@ -364,7 +364,7 @@ async function createOrder(call, callback) {
         orderId,
         error: error.message
       });
-      await queueShippingRetry(orderId, shipping_address, items);
+      await queueShippingRetry (orderId, shipping_address, items);
       shippingResult = { status: 'pending' };
     }
     
@@ -379,10 +379,10 @@ async function createOrder(call, callback) {
       shipping_status: shippingResult.status
     };
     
-    await saveOrder(order);
+    await saveOrder (order);
     
     // Success!
-    callback(null, order);
+    callback (null, order);
     
   } catch (error) {
     // Unexpected error, rollback everything
@@ -392,7 +392,7 @@ async function createOrder(call, callback) {
       stack: error.stack
     });
     
-    await executeRollback(rollbackActions);
+    await executeRollback (rollbackActions);
     
     // Determine appropriate error code
     if (error.code === grpc.status.UNAVAILABLE) {
@@ -415,7 +415,7 @@ async function createOrder(call, callback) {
   }
 }
 
-async function executeRollback(actions) {
+async function executeRollback (actions) {
   for (const action of actions.reverse()) {
     try {
       await action();
@@ -459,13 +459,13 @@ await paymentClient.processPayment({
 });
 
 // Server deduplicates by idempotency key
-async function processPayment(call, callback) {
+async function processPayment (call, callback) {
   const { idempotency_key } = call.request;
   
   // Check if already processed
-  const existing = await getTransactionByIdempotencyKey(idempotency_key);
+  const existing = await getTransactionByIdempotencyKey (idempotency_key);
   if (existing) {
-    return callback(null, existing); // Return cached result
+    return callback (null, existing); // Return cached result
   }
   
   // Process payment...
@@ -634,11 +634,11 @@ const redis = require('redis');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-app.use(express.json());
+app.use (express.json());
 
 // Load gRPC clients
 const packageDefinition = protoLoader.loadSync('user.proto');
-const userProto = grpc.loadPackageDefinition(packageDefinition).user;
+const userProto = grpc.loadPackageDefinition (packageDefinition).user;
 const userClient = new userProto.UserService(
   'user-service:50051',
   grpc.credentials.createInsecure()
@@ -648,7 +648,7 @@ const redisClient = redis.createClient({ url: 'redis://redis:6379' });
 await redisClient.connect();
 
 // Middleware: Authentication
-async function authenticate(req, res, next) {
+async function authenticate (req, res, next) {
   const authHeader = req.headers.authorization;
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -658,7 +658,7 @@ async function authenticate(req, res, next) {
   const token = authHeader.substring(7);
   
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify (token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
@@ -667,21 +667,21 @@ async function authenticate(req, res, next) {
 }
 
 // Middleware: Rate Limiting (Token Bucket)
-async function rateLimit(req, res, next) {
+async function rateLimit (req, res, next) {
   const key = \`rate_limit:\${req.user.id}\`;
   const limit = 100; // requests per minute
   const window = 60; // seconds
   
-  const current = await redisClient.incr(key);
+  const current = await redisClient.incr (key);
   
   if (current === 1) {
-    await redisClient.expire(key, window);
+    await redisClient.expire (key, window);
   }
   
   if (current > limit) {
     return res.status(429).json({
       error: 'Rate limit exceeded',
-      retryAfter: await redisClient.ttl(key)
+      retryAfter: await redisClient.ttl (key)
     });
   }
   
@@ -715,7 +715,7 @@ app.get('/api/users/:id', authenticate, rateLimit, (req, res) => {
         }
       }
       
-      res.json(user);
+      res.json (user);
     }
   );
 });
@@ -748,7 +748,7 @@ app.post('/api/users', authenticate, rateLimit, (req, res) => {
         }
       }
       
-      res.status(201).json(user);
+      res.status(201).json (user);
     }
   );
 });
@@ -765,7 +765,7 @@ app.get('/api/users', authenticate, rateLimit, (req, res) => {
   const users = [];
   
   call.on('data', (user) => {
-    users.push(user);
+    users.push (user);
   });
   
   call.on('end', () => {
@@ -800,12 +800,12 @@ const typeDefs = gql\`
   }
   
   type Query {
-    user(id: ID!): User
-    users(limit: Int = 20): [User!]!
+    user (id: ID!): User
+    users (limit: Int = 20): [User!]!
   }
   
   type Mutation {
-    createUser(name: String!, email: String!, age: Int): User!
+    createUser (name: String!, email: String!, age: Int): User!
   }
 \`;
 
@@ -818,8 +818,8 @@ const resolvers = {
         metadata.add('authorization', \`Bearer \${context.user.token}\`);
         
         userClient.getUser({ id }, metadata, (error, user) => {
-          if (error) reject(error);
-          else resolve(user);
+          if (error) reject (error);
+          else resolve (user);
         });
       });
     },
@@ -832,9 +832,9 @@ const resolvers = {
         const call = userClient.listUsers({ page_size: limit }, metadata);
         const users = [];
         
-        call.on('data', (user) => users.push(user));
-        call.on('end', () => resolve(users));
-        call.on('error', (error) => reject(error));
+        call.on('data', (user) => users.push (user));
+        call.on('end', () => resolve (users));
+        call.on('error', (error) => reject (error));
       });
     }
   },
@@ -849,8 +849,8 @@ const resolvers = {
           { name, email, age },
           metadata,
           (error, user) => {
-            if (error) reject(error);
-            else resolve(user);
+            if (error) reject (error);
+            else resolve (user);
           }
         );
       });
@@ -867,7 +867,7 @@ const server = new ApolloServer({
     const token = req.headers.authorization?.substring(7);
     if (!token) throw new Error('Unauthorized');
     
-    const user = jwt.verify(token, process.env.JWT_SECRET);
+    const user = jwt.verify (token, process.env.JWT_SECRET);
     return { user: { ...user, token } };
   }
 });

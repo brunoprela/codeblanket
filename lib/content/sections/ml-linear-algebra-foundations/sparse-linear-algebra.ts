@@ -35,13 +35,13 @@ dense = np.array([
 
 print("Dense matrix:")
 print(dense)
-print(f"Non-zero elements: {np.count_nonzero(dense)} / {dense.size}")
-print(f"Sparsity: {1 - np.count_nonzero(dense)/dense.size:.1%}")
+print(f"Non-zero elements: {np.count_nonzero (dense)} / {dense.size}")
+print(f"Sparsity: {1 - np.count_nonzero (dense)/dense.size:.1%}")
 print(f"Memory: {dense.nbytes} bytes")
 print()
 
 # Sparse matrix (efficient)
-sparse_csr = sparse.csr_matrix(dense)
+sparse_csr = sparse.csr_matrix (dense)
 
 print(f"Sparse (CSR) memory: {sparse_csr.data.nbytes + sparse_csr.indices.nbytes + sparse_csr.indptr.nbytes} bytes")
 print(f"Compression ratio: {dense.nbytes / (sparse_csr.data.nbytes + sparse_csr.indices.nbytes + sparse_csr.indptr.nbytes):.1f}x")
@@ -85,7 +85,7 @@ Store row pointers, column indices, and values.
 \`\`\`python
 print("\\n=== CSR Format ===")
 
-csr = sparse.csr_matrix(dense)
+csr = sparse.csr_matrix (dense)
 
 print("CSR representation:")
 print(f"Data: {csr.data}")        # Non-zero values
@@ -110,7 +110,7 @@ Like CSR but column-oriented.
 \`\`\`python
 print("\\n=== CSC Format ===")
 
-csc = sparse.csc_matrix(dense)
+csc = sparse.csc_matrix (dense)
 
 print("CSC representation:")
 print(f"Data: {csc.data}")
@@ -200,7 +200,7 @@ docs = [
 
 # Create TF-IDF matrix (sparse)
 vectorizer = TfidfVectorizer()
-X_tfidf = vectorizer.fit_transform(docs)
+X_tfidf = vectorizer.fit_transform (docs)
 
 print(f"Shape: {X_tfidf.shape}")  # (4 docs, vocab_size)
 print(f"Type: {type(X_tfidf)}")
@@ -209,7 +209,7 @@ print(f"Sparsity: {(1 - X_tfidf.nnz / (X_tfidf.shape[0] * X_tfidf.shape[1])):.1%
 print()
 
 print("Vocabulary:")
-print(list(vectorizer.vocabulary_.keys()))
+print(list (vectorizer.vocabulary_.keys()))
 print()
 
 # Cosine similarity (using sparse operations)
@@ -229,7 +229,7 @@ print("\\n=== Application: Recommender Systems ===")
 n_users, n_items = 1000, 5000
 density = 0.001  # Each user rates 0.1% of items
 
-ratings = sparse.random(n_users, n_items, density=density, format='csr')
+ratings = sparse.random (n_users, n_items, density=density, format='csr')
 ratings.data = np.random.randint(1, 6, size=ratings.nnz)  # Ratings 1-5
 
 print(f"Users: {n_users}")
@@ -241,7 +241,7 @@ print()
 
 # Collaborative filtering: item-item similarity
 # Compute item vectors (each column of ratings)
-item_similarity = cosine_similarity(ratings.T, dense_output=False)
+item_similarity = cosine_similarity (ratings.T, dense_output=False)
 
 print(f"Item similarity matrix shape: {item_similarity.shape}")
 print(f"Item similarity nnz: {item_similarity.nnz}")
@@ -259,7 +259,7 @@ n_edges = 300
 # Random edges
 edges = np.random.randint(0, n_nodes, size=(2, n_edges))
 row, col = edges[0], edges[1]
-data = np.ones(n_edges)
+data = np.ones (n_edges)
 
 # Adjacency matrix
 A_graph = sparse.coo_matrix((data, (row, col)), shape=(n_nodes, n_nodes))
@@ -271,7 +271,7 @@ print(f"Sparsity: {(1 - A_graph.nnz / (n_nodes**2)):.2%}")
 print()
 
 # Compute degree (sum of each row)
-degrees = np.array(A_graph.sum(axis=1)).flatten()
+degrees = np.array(A_graph.sum (axis=1)).flatten()
 
 print(f"Average degree: {degrees.mean():.2f}")
 print(f"Max degree: {degrees.max()}")
@@ -288,7 +288,7 @@ output_dim = 500
 sparsity = 0.9  # 90% zeros
 
 # Create sparse weights
-W_sparse = sparse.random(input_dim, output_dim, density=1-sparsity, format='csr')
+W_sparse = sparse.random (input_dim, output_dim, density=1-sparsity, format='csr')
 
 print(f"Weight matrix: {input_dim} → {output_dim}")
 print(f"Dense parameters: {input_dim * output_dim:,}")
@@ -297,7 +297,7 @@ print(f"Compression: {(input_dim * output_dim) / W_sparse.nnz:.1f}x")
 print()
 
 # Forward pass
-x = np.random.randn(input_dim)
+x = np.random.randn (input_dim)
 y = W_sparse.T @ x  # Sparse matvec
 
 print(f"Input: {x.shape}")
@@ -316,10 +316,10 @@ from scipy.sparse.linalg import cg, spsolve
 
 # Create sparse SPD system
 n = 1000
-A_sparse = sparse.random(n, n, density=0.01, format='csr')
-A_sparse = A_sparse @ A_sparse.T + sparse.eye(n) * 0.1  # Make SPD
+A_sparse = sparse.random (n, n, density=0.01, format='csr')
+A_sparse = A_sparse @ A_sparse.T + sparse.eye (n) * 0.1  # Make SPD
 
-b = np.random.randn(n)
+b = np.random.randn (n)
 
 print(f"System size: {n}×{n}")
 print(f"Non-zeros: {A_sparse.nnz}")
@@ -330,13 +330,13 @@ x_cg, info = cg(A_sparse, b, tol=1e-6)
 
 if info == 0:
     print("Conjugate Gradient converged")
-    print(f"Solution norm: {np.linalg.norm(x_cg):.4f}")
+    print(f"Solution norm: {np.linalg.norm (x_cg):.4f}")
     print(f"Residual: {np.linalg.norm(A_sparse @ x_cg - b):.2e}")
 
 # Direct solve (LU factorization)
 x_direct = spsolve(A_sparse, b)
 
-print(f"\\nDirect solve solution norm: {np.linalg.norm(x_direct):.4f}")
+print(f"\\nDirect solve solution norm: {np.linalg.norm (x_direct):.4f}")
 print("Iterative solvers scale better for very large systems!")
 \`\`\`
 

@@ -6,7 +6,7 @@ export const dropboxQuiz = [
   {
     id: 'q1',
     question:
-      "Explain Dropbox's delta sync and chunking strategy. A user edits 1 MB of a 100 MB file. Walk through how Dropbox detects and uploads only the changed portion.",
+      "Explain Dropbox\'s delta sync and chunking strategy. A user edits 1 MB of a 100 MB file. Walk through how Dropbox detects and uploads only the changed portion.",
     sampleAnswer:
       'DELTA SYNC WITH CHUNKING: (1) INITIAL STATE: File stored as 25 blocks (100 MB / 4 MB per block). Each block has SHA-256 hash stored in metadata. (2) USER EDITS FILE: User modifies 1 MB in middle of file (blocks 10-11 affected). (3) RE-CHUNKING: Dropbox client re-chunks entire file into 4 MB blocks. Calculates SHA-256 for each block. (4) CHANGE DETECTION: Compare new hashes with previous hashes: Blocks 1-9: Same hash (unchanged). Block 10: Different hash (modified). Block 11: Different hash (modified). Blocks 12-25: Same hash (unchanged). (5) DELTA UPLOAD: Upload only blocks 10-11 (8 MB) instead of full 100 MB. Server stores new blocks with new hashes. Update file metadata: file_id → [hash1, hash2, ..., hash10_new, hash11_new, ..., hash25]. (6) OTHER DEVICES: Push notification: "File changed". Download only blocks 10-11. Reconstruct file locally. BANDWIDTH SAVINGS: 8 MB uploaded vs 100 MB (92% savings). TRADE-OFF: Fixed 4 MB blocks vs variable-size blocks (rsync). Fixed simpler but less optimal if edit crosses block boundary. KEY INSIGHT: Content-based hashing enables delta sync without comparing files byte-by-byte.',
     keyPoints: [

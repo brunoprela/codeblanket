@@ -44,17 +44,17 @@ class WorkflowState:
         self.data = {}
         self.history = []
         
-    def set(self, key, value):
+    def set (self, key, value):
         self.data[key] = value
         self.history.append({"key": key, "value": value, "timestamp": now()})
     
-    def get(self, key, default=None):
-        return self.data.get(key, default)
+    def get (self, key, default=None):
+        return self.data.get (key, default)
     
-    def checkpoint(self):
-        return deepcopy(self.data)
+    def checkpoint (self):
+        return deepcopy (self.data)
     
-    def rollback(self, checkpoint):
+    def rollback (self, checkpoint):
         self.data = checkpoint
 \`\`\`
 
@@ -62,25 +62,25 @@ class WorkflowState:
 
 \`\`\`python
 class WorkflowExecutor:
-    async def execute(self, workflow: Workflow) -> Dict:
+    async def execute (self, workflow: Workflow) -> Dict:
         state = WorkflowState()
         results = []
         
         try:
-            result = await self._execute_node(workflow.start_node, state)
+            result = await self._execute_node (workflow.start_node, state)
             return {"status": "success", "result": result, "state": state.data}
         except Exception as e:
-            return {"status": "error", "error": str(e), "state": state.data}
+            return {"status": "error", "error": str (e), "state": state.data}
     
-    async def _execute_node(self, node: WorkflowNode, state: WorkflowState):
+    async def _execute_node (self, node: WorkflowNode, state: WorkflowState):
         if node.type == "tool":
-            return await self._execute_tool(node, state)
+            return await self._execute_tool (node, state)
         elif node.type == "condition":
-            return await self._execute_conditional(node, state)
+            return await self._execute_conditional (node, state)
         elif node.type == "parallel":
-            return await self._execute_parallel(node, state)
+            return await self._execute_parallel (node, state)
         elif node.type == "loop":
-            return await self._execute_loop(node, state)
+            return await self._execute_loop (node, state)
 \`\`\`
 
 **Error Handling:**
@@ -93,11 +93,11 @@ class ErrorHandler:
         self.max_retries = 3
         self.fallback_strategies = {}
     
-    async def handle_tool_error(self, node, state, error):
+    async def handle_tool_error (self, node, state, error):
         # Retry with exponential backoff
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             try:
-                return await execute_with_retry(node, state)
+                return await execute_with_retry (node, state)
             except Exception as e:
                 if attempt == self.max_retries - 1:
                     # Try fallback
@@ -109,33 +109,33 @@ class ErrorHandler:
 **Parallel Execution:**
 
 \`\`\`python
-async def _execute_parallel(self, node: WorkflowNode, state: WorkflowState):
-    tasks = [self._execute_node(child, state) for child in node.children]
+async def _execute_parallel (self, node: WorkflowNode, state: WorkflowState):
+    tasks = [self._execute_node (child, state) for child in node.children]
     results = await asyncio.gather(*tasks, return_exceptions=True)
     
     # Handle partial failures
-    successful = [r for r in results if not isinstance(r, Exception)]
-    failed = [r for r in results if isinstance(r, Exception)]
+    successful = [r for r in results if not isinstance (r, Exception)]
+    failed = [r for r in results if isinstance (r, Exception)]
     
     if failed and not successful:
         raise Exception("All parallel tasks failed")
     
-    return {"successful": successful, "failed": len(failed)}
+    return {"successful": successful, "failed": len (failed)}
 \`\`\`
 
 **Loop Implementation:**
 
 \`\`\`python
-async def _execute_loop(self, node: WorkflowNode, state: WorkflowState):
+async def _execute_loop (self, node: WorkflowNode, state: WorkflowState):
     max_iterations = node.max_iterations or 10
     results = []
     
-    for i in range(max_iterations):
-        if node.condition(state):
+    for i in range (max_iterations):
+        if node.condition (state):
             break
         
-        result = await self._execute_node(node.body, state)
-        results.append(result)
+        result = await self._execute_node (node.body, state)
+        results.append (result)
     
     return results
 \`\`\`
@@ -170,20 +170,20 @@ class ReActAgent:
         self.thoughts = []
         self.actions = []
     
-    async def solve(self, problem: str):
-        for step in range(self.max_steps):
+    async def solve (self, problem: str):
+        for step in range (self.max_steps):
             # THINK: Reason about next action
-            thought = await self._think(problem, self.history())
-            self.thoughts.append(thought)
+            thought = await self._think (problem, self.history())
+            self.thoughts.append (thought)
             
             # Check if done
-            if self._is_complete(thought):
-                return self._final_answer(thought)
+            if self._is_complete (thought):
+                return self._final_answer (thought)
             
             # ACT: Execute chosen action
-            action = self._parse_action(thought)
+            action = self._parse_action (thought)
             if action:
-                observation = await self._execute_action(action)
+                observation = await self._execute_action (action)
                 self.actions.append({"action": action, "observation": observation})
             
             # Detect loops
@@ -192,7 +192,7 @@ class ReActAgent:
         
         return "Could not solve within step limit"
     
-    async def _think(self, problem: str, history: str):
+    async def _think (self, problem: str, history: str):
         prompt = f"""Problem: {problem}
 
 History:
@@ -206,17 +206,17 @@ Think step by step:
 
 Thought:"""
         
-        response = await llm_call(prompt)
+        response = await llm_call (prompt)
         return response
     
-    def history(self):
+    def history (self):
         history_parts = []
-        for i, (thought, action) in enumerate(zip(self.thoughts, self.actions)):
-            history_parts.append(f"Step {i+1}:")
-            history_parts.append(f"Thought: {thought}")
-            history_parts.append(f"Action: {action['action',]}")
-            history_parts.append(f"Observation: {action['observation',]}")
-        return "\\n\\n".join(history_parts)
+        for i, (thought, action) in enumerate (zip (self.thoughts, self.actions)):
+            history_parts.append (f"Step {i+1}:")
+            history_parts.append (f"Thought: {thought}")
+            history_parts.append (f"Action: {action['action',]}")
+            history_parts.append (f"Observation: {action['observation',]}")
+        return "\\n\\n".join (history_parts)
 \`\`\`
 
 **Advantages over Sequential:**
@@ -230,37 +230,37 @@ Thought:"""
 **Loop Detection and Prevention:**
 
 \`\`\`python
-def _detect_loop(self):
-    if len(self.actions) < 3:
+def _detect_loop (self):
+    if len (self.actions) < 3:
         return False
     
     # Check for repeated actions
     recent_actions = self.actions[-3:]
-    action_signatures = [self._action_signature(a) for a in recent_actions]
+    action_signatures = [self._action_signature (a) for a in recent_actions]
     
-    if len(set(action_signatures)) == 1:
+    if len (set (action_signatures)) == 1:
         # Same action repeated 3 times
         return True
     
     # Check for oscillation (A -> B -> A -> B)
-    if len(self.actions) >= 4:
+    if len (self.actions) >= 4:
         if action_signatures[-4] == action_signatures[-2] and \
            action_signatures[-3] == action_signatures[-1]:
             return True
     
     return False
 
-def _action_signature(self, action):
+def _action_signature (self, action):
     return f"{action['action',]['name',]}:{action['action',]['args',]}"
 
-async def _break_loop(self):
+async def _break_loop (self):
     # Force different approach
     prompt = f"""You seem to be in a loop. Your last actions were:
 {self.recent_actions_summary()}
 
 Think of a DIFFERENT approach. What else could you try?"""
     
-    new_thought = await llm_call(prompt)
+    new_thought = await llm_call (prompt)
     return new_thought
 \`\`\`
 
@@ -272,7 +272,7 @@ class ReActMemory:
         self.items = []
         self.max_items = max_items
     
-    def add(self, thought, action, observation):
+    def add (self, thought, action, observation):
         self.items.append({
             "thought": thought,
             "action": action,
@@ -281,16 +281,16 @@ class ReActMemory:
         })
         
         # Keep only recent items to stay within context window
-        if len(self.items) > self.max_items:
+        if len (self.items) > self.max_items:
             # Summarize old items
-            summary = self._summarize(self.items[:-10])
+            summary = self._summarize (self.items[:-10])
             self.items = [{"summary": summary}] + self.items[-10:]
 \`\`\`
 
 **Stopping Conditions:**
 
 \`\`\`python
-def _is_complete(self, thought: str) -> bool:
+def _is_complete (self, thought: str) -> bool:
     # Look for completion signals
     completion_phrases = [
         "final answer",
@@ -300,13 +300,13 @@ def _is_complete(self, thought: str) -> bool:
     ]
     
     thought_lower = thought.lower()
-    return any(phrase in thought_lower for phrase in completion_phrases)
+    return any (phrase in thought_lower for phrase in completion_phrases)
 \`\`\`
 
 **Example Execution:**
 
 \`\`\`
-Problem: "What's the population of the capital of France?"
+Problem: "What\'s the population of the capital of France?"
 
 Step 1:
 Thought: I need to first identify the capital of France, which I know is Paris. Then I need to find its population.
@@ -436,13 +436,13 @@ Unique requirements → Custom
 # Don't do this (framework-coupled):
 from langchain import Chain
 class MyApp(Chain):
-    def _call(self, inputs):
-        return self.llm(inputs)
+    def _call (self, inputs):
+        return self.llm (inputs)
 
 # Do this (framework-agnostic):
 class MyAppLogic:
-    def process(self, inputs):
-        return call_llm(inputs)
+    def process (self, inputs):
+        return call_llm (inputs)
 
 # Framework adapter
 class LangChainAdapter:
@@ -454,7 +454,7 @@ class LangChainAdapter:
 \`\`\`python
 # Universal tool interface
 class Tool:
-    def execute(self, **kwargs):
+    def execute (self, **kwargs):
         pass
 
 # Framework-specific wrappers
@@ -462,25 +462,25 @@ class LangChainTool(BaseTool):
     def __init__(self, universal_tool):
         self.tool = universal_tool
     
-    def _run(self, **kwargs):
+    def _run (self, **kwargs):
         return self.tool.execute(**kwargs)
 \`\`\`
 
 3. **Migration Path:**
 \`\`\`python
 # Phase 1: Wrapper pattern
-langgraph_executor = LangGraphWrapper(langchain_app)
+langgraph_executor = LangGraphWrapper (langchain_app)
 
 # Phase 2: Parallel execution
-results_old = langchain_app.run(input)
-results_new = langgraph_app.run(input)
-assert_equivalent(results_old, results_new)
+results_old = langchain_app.run (input)
+results_new = langgraph_app.run (input)
+assert_equivalent (results_old, results_new)
 
 # Phase 3: Gradual cutover
 if feature_flag("use_langgraph"):
-    return langgraph_app.run(input)
+    return langgraph_app.run (input)
 else:
-    return langchain_app.run(input)
+    return langchain_app.run (input)
 \`\`\`
 
 **Practical Example:**
@@ -491,7 +491,7 @@ class ResearchAgent:
     def __init__(self, tools):
         self.tools = tools
     
-    async def research(self, topic):
+    async def research (self, topic):
         # Your logic here
         pass
 
@@ -501,14 +501,14 @@ class LangChainResearchAgent(Agent):
     def __init__(self, core_agent):
         self.agent = core_agent
     
-    def _call(self, inputs):
-        return await self.agent.research(inputs["topic",])
+    def _call (self, inputs):
+        return await self.agent.research (inputs["topic",])
 
 # LangGraph adapter  
 from langgraph.graph import StateGraph
-def create_langgraph_agent(core_agent):
+def create_langgraph_agent (core_agent):
     workflow = StateGraph(AgentState)
-    workflow.add_node("research", lambda state: core_agent.research(state["topic",]))
+    workflow.add_node("research", lambda state: core_agent.research (state["topic",]))
     return workflow.compile()
 
 # CrewAI adapter

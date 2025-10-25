@@ -192,65 +192,64 @@ class RiskMetrics:
         - returns: pd.Series or np.array of portfolio returns
         - portfolio_value: Current portfolio value in dollars
         """
-        self.returns = np.array(returns)
+        self.returns = np.array (returns)
         self.portfolio_value = portfolio_value
     
-    def var_parametric(self, confidence=0.95):
+    def var_parametric (self, confidence=0.95):
         """Calculate VaR using parametric method (assumes normal distribution)."""
-        mu = np.mean(self.returns)
-        sigma = np.std(self.returns)
+        mu = np.mean (self.returns)
+        sigma = np.std (self.returns)
         z_score = norm.ppf(1 - confidence)
         var_pct = mu + z_score * sigma
         var_dollar = -var_pct * self.portfolio_value
         return var_pct, var_dollar
     
-    def var_historical(self, confidence=0.95):
+    def var_historical (self, confidence=0.95):
         """Calculate VaR using historical simulation."""
-        sorted_returns = np.sort(self.returns)
-        index = int((1 - confidence) * len(sorted_returns))
+        sorted_returns = np.sort (self.returns)
+        index = int((1 - confidence) * len (sorted_returns))
         var_pct = sorted_returns[index]
         var_dollar = -var_pct * self.portfolio_value
         return var_pct, var_dollar
     
-    def cvar_historical(self, confidence=0.95):
+    def cvar_historical (self, confidence=0.95):
         """Calculate CVaR (Expected Shortfall) using historical simulation."""
-        sorted_returns = np.sort(self.returns)
-        index = int((1 - confidence) * len(sorted_returns))
+        sorted_returns = np.sort (self.returns)
+        index = int((1 - confidence) * len (sorted_returns))
         tail_returns = sorted_returns[:index] if index > 0 else sorted_returns[:1]
-        cvar_pct = np.mean(tail_returns)
+        cvar_pct = np.mean (tail_returns)
         cvar_dollar = -cvar_pct * self.portfolio_value
         return cvar_pct, cvar_dollar
     
-    def var_monte_carlo(self, confidence=0.95, num_simulations=10000, time_horizon=1):
+    def var_monte_carlo (self, confidence=0.95, num_simulations=10000, time_horizon=1):
         """Calculate VaR using Monte Carlo simulation."""
-        mu = np.mean(self.returns)
-        sigma = np.std(self.returns)
+        mu = np.mean (self.returns)
+        sigma = np.std (self.returns)
         
         # Simulate returns
         np.random.seed(42)
-        simulated_returns = np.random.normal(mu, sigma, num_simulations) * np.sqrt(time_horizon)
+        simulated_returns = np.random.normal (mu, sigma, num_simulations) * np.sqrt (time_horizon)
         
         # Calculate VaR
-        sorted_returns = np.sort(simulated_returns)
-        index = int((1 - confidence) * len(sorted_returns))
+        sorted_returns = np.sort (simulated_returns)
+        index = int((1 - confidence) * len (sorted_returns))
         var_pct = sorted_returns[index]
         var_dollar = -var_pct * self.portfolio_value
         return var_pct, var_dollar, simulated_returns
     
-    def summary(self, confidence=0.95):
+    def summary (self, confidence=0.95):
         """Print comprehensive risk metrics summary."""
-        var_param_pct, var_param_dollar = self.var_parametric(confidence)
-        var_hist_pct, var_hist_dollar = self.var_historical(confidence)
-        cvar_hist_pct, cvar_hist_dollar = self.cvar_historical(confidence)
+        var_param_pct, var_param_dollar = self.var_parametric (confidence)
+        var_hist_pct, var_hist_dollar = self.var_historical (confidence)
+        cvar_hist_pct, cvar_hist_dollar = self.cvar_historical (confidence)
         
         print("="*60)
         print(f"RISK METRICS SUMMARY ({confidence*100:.0f}% Confidence)")
         print("="*60)
-        print(f"Portfolio Value: \${self.portfolio_value:, .0f
-}")
-print(f"Returns: {len(self.returns)} observations")
-print(f"Mean Return: {np.mean(self.returns)*100:.4f}%")
-print(f"Volatility: {np.std(self.returns)*100:.4f}%")
+        print(f"Portfolio Value: \${self.portfolio_value:,.0f}")
+print(f"Returns: {len (self.returns)} observations")
+print(f"Mean Return: {np.mean (self.returns)*100:.4f}%")
+print(f"Volatility: {np.std (self.returns)*100:.4f}%")
 print()
 print("PARAMETRIC VAR (Normal Distribution):")
 print(f"  VaR: \${var_param_dollar:,.0f} ({var_param_pct*100:.2f}%)")
@@ -267,43 +266,43 @@ print(f"  Tail risk: CVaR / VaR = {cvar_hist_dollar / var_hist_dollar:.2f}x")
 # Example: Calculate VaR for portfolio
 np.random.seed(42)
 dates = pd.date_range('2020-01-01', '2023-12-31', freq = 'D')
-# Simulate returns with fat tails(student - t distribution)
-returns = t.rvs(df = 5, loc = 0.0005, scale = 0.015, size = len(dates))  # Fat tails
+# Simulate returns with fat tails (student - t distribution)
+returns = t.rvs (df = 5, loc = 0.0005, scale = 0.015, size = len (dates))  # Fat tails
 portfolio_value = 10_000_000
 
-risk = RiskMetrics(returns, portfolio_value)
-risk.summary(confidence = 0.95)
+risk = RiskMetrics (returns, portfolio_value)
+risk.summary (confidence = 0.95)
 print()
-risk.summary(confidence = 0.99)
+risk.summary (confidence = 0.99)
 \`\`\`
 
 ### Visualization
 
 \`\`\`python
-def plot_var_distribution(returns, portfolio_value, confidence=0.95):
+def plot_var_distribution (returns, portfolio_value, confidence=0.95):
     """Visualize VaR and CVaR on return distribution."""
-    sorted_returns = np.sort(returns)
-    var_index = int((1 - confidence) * len(sorted_returns))
+    sorted_returns = np.sort (returns)
+    var_index = int((1 - confidence) * len (sorted_returns))
     var_threshold = sorted_returns[var_index]
-    cvar = np.mean(sorted_returns[:var_index]) if var_index > 0 else sorted_returns[0]
+    cvar = np.mean (sorted_returns[:var_index]) if var_index > 0 else sorted_returns[0]
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     
     # Histogram with VaR and CVaR
-    ax1.hist(returns * 100, bins=50, alpha=0.7, color='steelblue', edgecolor='black')
-    ax1.axvline(var_threshold * 100, color='red', linestyle='--', linewidth=2, 
+    ax1.hist (returns * 100, bins=50, alpha=0.7, color='steelblue', edgecolor='black')
+    ax1.axvline (var_threshold * 100, color='red', linestyle='--', linewidth=2, 
                 label=f'VaR ({confidence*100:.0f}%): {var_threshold*100:.2f}%')
-    ax1.axvline(cvar * 100, color='darkred', linestyle='-', linewidth=2, 
+    ax1.axvline (cvar * 100, color='darkred', linestyle='-', linewidth=2, 
                 label=f'CVaR: {cvar*100:.2f}%')
     ax1.set_xlabel('Daily Return (%)', fontsize=12)
     ax1.set_ylabel('Frequency', fontsize=12)
     ax1.set_title('Return Distribution with VaR and CVaR', fontsize=14, fontweight='bold')
-    ax1.legend(fontsize=10)
+    ax1.legend (fontsize=10)
     ax1.grid(True, alpha=0.3)
     
     # Q-Q plot (normality check)
     from scipy.stats import probplot
-    probplot(returns, dist="norm", plot=ax2)
+    probplot (returns, dist="norm", plot=ax2)
     ax2.set_title('Q-Q Plot (Normality Check)', fontsize=14, fontweight='bold')
     ax2.grid(True, alpha=0.3)
     
@@ -311,13 +310,13 @@ def plot_var_distribution(returns, portfolio_value, confidence=0.95):
     plt.savefig('var_cvar_analysis.png', dpi=300, bbox_inches='tight')
     plt.show()
 
-plot_var_distribution(returns, portfolio_value, confidence=0.95)
+plot_var_distribution (returns, portfolio_value, confidence=0.95)
 \`\`\`
 
 ### Stress Testing
 
 \`\`\`python
-def stress_test(portfolio_value, positions, scenarios):
+def stress_test (portfolio_value, positions, scenarios):
     """
     Stress test portfolio under multiple scenarios.
     
@@ -332,8 +331,8 @@ def stress_test(portfolio_value, positions, scenarios):
     results = []
     
     for scenario_name, shocks in scenarios.items():
-        portfolio_shock = sum(positions.get(asset, 0) * shocks.get(asset, 0) 
-                            for asset in set(positions.keys()) | set(shocks.keys()))
+        portfolio_shock = sum (positions.get (asset, 0) * shocks.get (asset, 0) 
+                            for asset in set (positions.keys()) | set (shocks.keys()))
         loss = portfolio_value * portfolio_shock
         
         results.append({
@@ -343,7 +342,7 @@ def stress_test(portfolio_value, positions, scenarios):
             'Loss (%)': -portfolio_shock * 100
         })
     
-    return pd.DataFrame(results)
+    return pd.DataFrame (results)
 
 # Example: Multi-asset portfolio
 portfolio_value = 10_000_000
@@ -390,10 +389,10 @@ scenarios = {
 print("\\n" + "="*60)
 print("STRESS TEST RESULTS")
 print("="*60)
-stress_results = stress_test(portfolio_value, positions, scenarios)
-print(stress_results.to_string(index=False))
+stress_results = stress_test (portfolio_value, positions, scenarios)
+print(stress_results.to_string (index=False))
 print(f"\\nWorst scenario: {stress_results.loc[stress_results['Loss ($)'].idxmax(), 'Scenario']}")
-print(f"Maximum loss: \${stress_results['Loss ($)'].max():, .0f} ({ stress_results['Loss (%)'].max(): .2f } %)")
+print(f"Maximum loss: \${stress_results['Loss ($)'].max():,.0f} ({ stress_results['Loss (%)'].max(): .2f } %)")
 \`\`\`
 
 ---

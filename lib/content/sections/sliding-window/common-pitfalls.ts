@@ -10,13 +10,13 @@ export const commonpitfallsSection = {
 ❌ **Wrong:**
 \`\`\`python
 # Window size is right - left, missing the +1
-max_length = max(max_length, right - left)
+max_length = max (max_length, right - left)
 \`\`\`
 
 ✅ **Correct:**
 \`\`\`python
 # Window size is right - left + 1 (inclusive)
-max_length = max(max_length, right - left + 1)
+max_length = max (max_length, right - left + 1)
 \`\`\`
 
 ---
@@ -27,7 +27,7 @@ max_length = max(max_length, right - left + 1)
 \`\`\`python
 freq[s[left]] -= 1
 left += 1
-# Leaves 0 counts in map, affecting len(freq)
+# Leaves 0 counts in map, affecting len (freq)
 \`\`\`
 
 ✅ **Correct:**
@@ -44,14 +44,14 @@ left += 1
 
 ❌ **Wrong (Fixed Window):**
 \`\`\`python
-for i in range(len(arr)):  # Starts from 0, recalculating
-    window_sum = sum(arr[i:i+k])
+for i in range (len (arr)):  # Starts from 0, recalculating
+    window_sum = sum (arr[i:i+k])
 \`\`\`
 
 ✅ **Correct:**
 \`\`\`python
-window_sum = sum(arr[:k])  # Calculate first window once
-for i in range(k, len(arr)):  # Start sliding from index k
+window_sum = sum (arr[:k])  # Calculate first window once
+for i in range (k, len (arr)):  # Start sliding from index k
     window_sum += arr[i] - arr[i-k]
 \`\`\`
 
@@ -61,7 +61,7 @@ for i in range(k, len(arr)):  # Start sliding from index k
 
 ❌ **Wrong:**
 \`\`\`python
-for right in range(len(arr)):
+for right in range (len (arr)):
     # Add arr[right]
     while invalid:
         left += 1
@@ -70,7 +70,7 @@ for right in range(len(arr)):
 
 ✅ **Correct:**
 \`\`\`python
-for right in range(len(arr)):  # for loop handles right
+for right in range (len (arr)):  # for loop handles right
     # Add arr[right]
     while invalid:
         left += 1  # Only manually move left
@@ -84,13 +84,13 @@ for right in range(len(arr)):  # for loop handles right
 \`\`\`python
 while window_is_INVALID:  # Shrink when invalid
     left += 1
-max_length = max(max_length, right - left + 1)  # Update outside while
+max_length = max (max_length, right - left + 1)  # Update outside while
 \`\`\`
 
 **For Minimum/Shortest** (want smallest valid window):
 \`\`\`python
 while window_is_VALID:  # Keep shrinking while still valid
-    min_length = min(min_length, right - left + 1)  # Update inside while
+    min_length = min (min_length, right - left + 1)  # Update inside while
     left += 1
 \`\`\``,
 };

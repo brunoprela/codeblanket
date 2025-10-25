@@ -1,7 +1,7 @@
 export const regulatoryLandscapeEngineers = {
-    title: 'Regulatory Landscape for Engineers',
-    id: 'regulatory-landscape-engineers',
-    content: `
+  title: 'Regulatory Landscape for Engineers',
+  id: 'regulatory-landscape-engineers',
+  content: `
 # Regulatory Landscape for Engineers
 
 ## Introduction
@@ -58,7 +58,7 @@ class ShareLocate:
     locate_time: datetime
     expiration: datetime
     
-    def is_valid(self) -> bool:
+    def is_valid (self) -> bool:
         """Check if locate is still valid"""
         return datetime.now() < self.expiration
 
@@ -71,7 +71,7 @@ class ShortSaleManager:
         self.short_positions = {}  # {ticker: quantity}
         self.failed_to_deliver = {}  # {ticker: {date: quantity}}
     
-    def request_locate(self, ticker: str, quantity: int) -> ShareLocate:
+    def request_locate (self, ticker: str, quantity: int) -> ShareLocate:
         """
         Request share locate before allowing short sale
         
@@ -79,10 +79,10 @@ class ShortSaleManager:
         can be borrowed before executing short sale
         """
         # Check if shares available
-        available_shares = self._check_availability(ticker)
+        available_shares = self._check_availability (ticker)
         
         if available_shares < quantity:
-            raise ValueError(f"Insufficient shares available for {ticker}. "
+            raise ValueError (f"Insufficient shares available for {ticker}. "
                            f"Requested: {quantity}, Available: {available_shares}")
         
         # Create locate (valid for 1 day)
@@ -91,25 +91,25 @@ class ShortSaleManager:
             quantity=quantity,
             locate_source='broker inventory',
             locate_time=datetime.now(),
-            expiration=datetime.now() + timedelta(days=1)
+            expiration=datetime.now() + timedelta (days=1)
         )
         
         if ticker not in self.locates:
             self.locates[ticker] = []
-        self.locates[ticker].append(locate)
+        self.locates[ticker].append (locate)
         
         print(f"✓ Locate approved: {quantity} shares of {ticker}")
         print(f"  Valid until: {locate.expiration}")
         
         return locate
     
-    def execute_short_sale(self, ticker: str, quantity: int, locate: ShareLocate):
+    def execute_short_sale (self, ticker: str, quantity: int, locate: ShareLocate):
         """Execute short sale (must have valid locate)"""
         if not locate.is_valid():
             raise ValueError("Locate expired. Must request new locate.")
         
         if locate.quantity < quantity:
-            raise ValueError(f"Locate insufficient. Have: {locate.quantity}, Need: {quantity}")
+            raise ValueError (f"Locate insufficient. Have: {locate.quantity}, Need: {quantity}")
         
         # Execute short
         if ticker not in self.short_positions:
@@ -119,7 +119,7 @@ class ShortSaleManager:
         print(f"✓ Short sale executed: {quantity} shares of {ticker}")
         print(f"  Total short position: {self.short_positions[ticker]}")
     
-    def track_fail_to_deliver(self, ticker: str, quantity: int, trade_date: datetime):
+    def track_fail_to_deliver (self, ticker: str, quantity: int, trade_date: datetime):
         """
         Track FTDs (when shares not delivered by T+2)
         
@@ -132,7 +132,7 @@ class ShortSaleManager:
         self.failed_to_deliver[ticker][trade_date] = quantity
         
         # Calculate close-out deadline
-        close_out_deadline = trade_date + timedelta(days=5)  # T+5
+        close_out_deadline = trade_date + timedelta (days=5)  # T+5
         
         print(f"⚠ Fail to deliver recorded:")
         print(f"  Ticker: {ticker}")
@@ -142,7 +142,7 @@ class ShortSaleManager:
         
         return close_out_deadline
     
-    def _check_availability(self, ticker: str) -> int:
+    def _check_availability (self, ticker: str) -> int:
         """Check how many shares available to borrow"""
         # In reality, query prime broker or stock loan department
         # For simulation, return large number for "easy-to-borrow" stocks
@@ -199,12 +199,12 @@ class CustomerProfile:
 class SuitabilityChecker:
     """Check if investment is suitable for customer (Reg BI compliance)"""
     
-    def check_suitability(self, customer: CustomerProfile, product: dict) -> dict:
+    def check_suitability (self, customer: CustomerProfile, product: dict) -> dict:
         """
         Determine if product is suitable for customer
         
         Reg BI requires considering:
-        1. Customer's investment profile
+        1. Customer\'s investment profile
         2. Product characteristics (risk, complexity, costs)
         3. Reasonable basis suitability (product appropriate for some investors)
         4. Customer-specific suitability (appropriate for THIS investor)
@@ -216,13 +216,13 @@ class SuitabilityChecker:
         product_risk = product['risk_level']  # 'low', 'medium', 'high', 'very_high'
         
         if product_risk == 'very_high' and customer.risk_tolerance != 'aggressive':
-            warnings.append(f"Product risk ({product_risk}) exceeds customer tolerance ({customer.risk_tolerance})")
+            warnings.append (f"Product risk ({product_risk}) exceeds customer tolerance ({customer.risk_tolerance})")
         
         # Check complexity vs experience
         product_complexity = product['complexity']  # 'simple', 'moderate', 'complex'
         
         if product_complexity == 'complex' and customer.investment_experience in ['none', 'limited']:
-            warnings.append(f"Complex product not suitable for customer with {customer.investment_experience} experience")
+            warnings.append (f"Complex product not suitable for customer with {customer.investment_experience} experience")
         
         # Check investment objectives
         if 'preservation' in customer.investment_objectives and product_risk in ['high', 'very_high']:
@@ -237,10 +237,10 @@ class SuitabilityChecker:
         concentration = position_size / customer.net_worth if customer.net_worth > 0 else 0
         
         if concentration > 0.10:  # >10% of net worth
-            warnings.append(f"Position size ({concentration:.1%} of net worth) may be excessive")
+            warnings.append (f"Position size ({concentration:.1%} of net worth) may be excessive")
         
         # Determine suitability
-        is_suitable = len(warnings) == 0
+        is_suitable = len (warnings) == 0
         
         return {
             'suitable': is_suitable,
@@ -248,7 +248,7 @@ class SuitabilityChecker:
             'recommendation': 'approved' if is_suitable else 'not_recommended'
         }
     
-    def log_recommendation(self, customer_id: str, product: dict, 
+    def log_recommendation (self, customer_id: str, product: dict, 
                           suitability: dict, rationale: str):
         """
         Log recommendation for regulatory record-keeping
@@ -297,7 +297,7 @@ product = {
 }
 
 checker = SuitabilityChecker()
-suitability = checker.check_suitability(customer, product)
+suitability = checker.check_suitability (customer, product)
 
 if not suitability['suitable']:
     print("\\n⚠ UNSUITABLE INVESTMENT")
@@ -344,7 +344,7 @@ class PatternDayTraderChecker:
         self.trades = []  # List of trades
         self.day_trades = []  # Subset that are day trades
     
-    def add_trade(self, ticker: str, buy_or_sell: str, quantity: int, 
+    def add_trade (self, ticker: str, buy_or_sell: str, quantity: int, 
                   trade_date: datetime):
         """Add trade and check for day trade"""
         trade = {
@@ -359,20 +359,20 @@ class PatternDayTraderChecker:
         # Day trade = buy and sell same stock same day
         if buy_or_sell == 'sell':
             # Look for buy same day
-            for t in reversed(self.trades):
+            for t in reversed (self.trades):
                 if (t['ticker'] == ticker and 
                     t['side'] == 'buy' and 
                     t['date'].date() == trade_date.date()):
                     trade['is_day_trade'] = True
                     t['is_day_trade'] = True
-                    self.day_trades.append(trade)
+                    self.day_trades.append (trade)
                     break
         
-        self.trades.append(trade)
+        self.trades.append (trade)
         
         return trade
     
-    def check_pdt_status(self, lookback_days: int = 5) -> dict:
+    def check_pdt_status (self, lookback_days: int = 5) -> dict:
         """
         Check if account is pattern day trader
         
@@ -380,13 +380,13 @@ class PatternDayTraderChecker:
         1. Made 4+ day trades in 5 business days
         2. Day trades > 6% of total trades
         """
-        cutoff = datetime.now() - timedelta(days=lookback_days)
+        cutoff = datetime.now() - timedelta (days=lookback_days)
         
         recent_trades = [t for t in self.trades if t['date'] > cutoff]
         recent_day_trades = [t for t in self.day_trades if t['date'] > cutoff]
         
-        day_trade_count = len(recent_day_trades)
-        total_trades = len(recent_trades)
+        day_trade_count = len (recent_day_trades)
+        total_trades = len (recent_trades)
         day_trade_pct = day_trade_count / total_trades if total_trades > 0 else 0
         
         is_pattern_day_trader = (day_trade_count >= 4 and day_trade_pct > 0.06)
@@ -408,7 +408,7 @@ class PatternDayTraderChecker:
 
 
 # Example: Track day trades
-checker = PatternDayTraderChecker(account_value=20_000)
+checker = PatternDayTraderChecker (account_value=20_000)
 
 # Simulate trades
 today = datetime.now()
@@ -423,13 +423,13 @@ checker.add_trade('TSLA', 'sell', 50, today)
 
 # Not a day trade (different days)
 checker.add_trade('GOOGL', 'buy', 25, today)
-checker.add_trade('GOOGL', 'sell', 25, today + timedelta(days=1))
+checker.add_trade('GOOGL', 'sell', 25, today + timedelta (days=1))
 
 # Day trades 3 & 4
-checker.add_trade('MSFT', 'buy', 30, today + timedelta(days=2))
-checker.add_trade('MSFT', 'sell', 30, today + timedelta(days=2))
-checker.add_trade('AMZN', 'buy', 10, today + timedelta(days=3))
-checker.add_trade('AMZN', 'sell', 10, today + timedelta(days=3))
+checker.add_trade('MSFT', 'buy', 30, today + timedelta (days=2))
+checker.add_trade('MSFT', 'sell', 30, today + timedelta (days=2))
+checker.add_trade('AMZN', 'buy', 10, today + timedelta (days=3))
+checker.add_trade('AMZN', 'sell', 10, today + timedelta (days=3))
 
 # Check PDT status
 status = checker.check_pdt_status()
@@ -439,7 +439,7 @@ print(f"Day trades (5 days): {status['day_trades_in_period']}")
 print(f"Total trades: {status['total_trades']}")
 print(f"Day trade %: {status['day_trade_percentage']:.1%}")
 print(f"Is PDT: {status['is_pdt']}")
-print(f"Account value: ${status['account_value']:,.0f}")
+print(f"Account value: \${status['account_value']:,.0f}")
 print(f"Meets $25K min: {status['meets_minimum']}")
 
 if status['warning']:
@@ -472,7 +472,7 @@ class KYCVerification:
     def __init__(self):
         self.verified_customers = {}
     
-    def collect_information(self, customer_data: dict) -> dict:
+    def collect_information (self, customer_data: dict) -> dict:
         """
         Collect required KYC information
         
@@ -501,7 +501,7 @@ class KYCVerification:
             'data': customer_data
         }
     
-    def verify_identity(self, customer_data: dict) -> dict:
+    def verify_identity (self, customer_data: dict) -> dict:
         """
         Verify customer identity against databases
         
@@ -512,14 +512,14 @@ class KYCVerification:
         """
         # Simulate verification checks
         checks = {
-            'ssn_valid': self._verify_ssn(customer_data['ssn']),
-            'address_valid': self._verify_address(customer_data['address']),
-            'id_authentic': self._verify_id(customer_data['id_photo']),
-            'not_on_sanctions_list': self._check_sanctions(customer_data['full_name']),
-            'age_requirement': self._verify_age(customer_data['date_of_birth'])
+            'ssn_valid': self._verify_ssn (customer_data['ssn']),
+            'address_valid': self._verify_address (customer_data['address']),
+            'id_authentic': self._verify_id (customer_data['id_photo']),
+            'not_on_sanctions_list': self._check_sanctions (customer_data['full_name']),
+            'age_requirement': self._verify_age (customer_data['date_of_birth'])
         }
         
-        all_passed = all(checks.values())
+        all_passed = all (checks.values())
         
         if all_passed:
             self.verified_customers[customer_data['ssn']] = {
@@ -533,31 +533,31 @@ class KYCVerification:
             'result': 'approved' if all_passed else 'denied'
         }
     
-    def _verify_ssn(self, ssn: str) -> bool:
+    def _verify_ssn (self, ssn: str) -> bool:
         """Verify SSN format and validity"""
         # Real: Check with Social Security Administration
-        return len(ssn) == 9 and ssn.isdigit()
+        return len (ssn) == 9 and ssn.isdigit()
     
-    def _verify_address(self, address: str) -> bool:
+    def _verify_address (self, address: str) -> bool:
         """Verify address is real"""
         # Real: Use USPS address validation API
-        return len(address) > 10
+        return len (address) > 10
     
-    def _verify_id(self, id_photo: str) -> bool:
+    def _verify_id (self, id_photo: str) -> bool:
         """Verify ID is authentic"""
         # Real: Use ML to detect fake IDs (Jumio, Onfido)
         return True
     
-    def _check_sanctions(self, name: str) -> bool:
+    def _check_sanctions (self, name: str) -> bool:
         """Check against OFAC sanctions list"""
         # Real: Query OFAC SDN (Specially Designated Nationals) list
         sanctioned_names = ['John Doe Terrorist']  # Example
         return name not in sanctioned_names
     
-    def _verify_age(self, dob: str) -> bool:
+    def _verify_age (self, dob: str) -> bool:
         """Verify customer is 18+"""
         from dateutil.parser import parse
-        birth_date = parse(dob)
+        birth_date = parse (dob)
         age = (datetime.now() - birth_date).days / 365.25
         return age >= 18
 
@@ -576,12 +576,12 @@ customer_data = {
 }
 
 # Collect information
-collection = kyc.collect_information(customer_data)
+collection = kyc.collect_information (customer_data)
 print(f"Collection status: {collection['status']}")
 
 if collection['status'] == 'collected':
     # Verify identity
-    verification = kyc.verify_identity(customer_data)
+    verification = kyc.verify_identity (customer_data)
     
     print(f"\\n=== KYC Verification ===")
     print(f"Result: {verification['result']}")
@@ -611,4 +611,3 @@ if collection['status'] == 'collected':
 **Next section**: Finance Terminology for Developers - glossary of terms you'll encounter.
 `,
 };
-

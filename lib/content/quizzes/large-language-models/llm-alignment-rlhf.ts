@@ -15,7 +15,7 @@ export const llmAlignmentRLHFQuiz = {
       question:
         'Discuss the alignment problem in AI: ensuring that powerful AI systems behave in accordance with human values and intentions. Why is alignment particularly challenging for language models? How do techniques like RLHF, constitutional AI, and red teaming address alignment? What are the unsolved problems?',
       expectedAnswer:
-        "Should discuss: specification problem (defining human values formally), reward gaming and Goodhart's law, mesa- optimization and deceptive alignment risks, value extrapolation and edge cases, capability vs alignment progress mismatch, interpretability challenges, measuring alignment reliably, scaling oversight to superhuman systems, debate over alignment difficulty, near - term risks(misinformation, harmful content) vs long - term existential risks, and open research directions.",
+        "Should discuss: specification problem (defining human values formally), reward gaming and Goodhart\'s law, mesa- optimization and deceptive alignment risks, value extrapolation and edge cases, capability vs alignment progress mismatch, interpretability challenges, measuring alignment reliably, scaling oversight to superhuman systems, debate over alignment difficulty, near - term risks (misinformation, harmful content) vs long - term existential risks, and open research directions.",
     },
     {
       id: 3,

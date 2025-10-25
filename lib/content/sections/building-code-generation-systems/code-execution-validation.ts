@@ -82,10 +82,10 @@ class DockerSandbox:
         
         # Ensure image exists
         try:
-            self.client.images.get(image)
+            self.client.images.get (image)
         except docker.errors.ImageNotFound:
             print(f"Pulling image {image}...")
-            self.client.images.pull(image)
+            self.client.images.pull (image)
     
     def execute(
         self,
@@ -110,13 +110,13 @@ class DockerSandbox:
         
         with tempfile.TemporaryDirectory() as tmpdir:
             # Write code to file
-            code_path = Path(tmpdir) / "script.py"
-            code_path.write_text(code)
+            code_path = Path (tmpdir) / "script.py"
+            code_path.write_text (code)
             
             # Write stdin if provided
             if stdin:
-                stdin_path = Path(tmpdir) / "input.txt"
-                stdin_path.write_text(stdin)
+                stdin_path = Path (tmpdir) / "input.txt"
+                stdin_path.write_text (stdin)
                 stdin_redirect = " < /sandbox/input.txt"
             else:
                 stdin_redirect = ""
@@ -139,12 +139,12 @@ class DockerSandbox:
                 
                 # Wait for completion with timeout
                 try:
-                    result = container.wait(timeout=timeout)
+                    result = container.wait (timeout=timeout)
                     exit_code = result['StatusCode']
                     
                     # Get output
-                    stdout = container.logs(stdout=True, stderr=False).decode('utf-8', errors='replace')
-                    stderr = container.logs(stdout=False, stderr=True).decode('utf-8', errors='replace')
+                    stdout = container.logs (stdout=True, stderr=False).decode('utf-8', errors='replace')
+                    stderr = container.logs (stdout=False, stderr=True).decode('utf-8', errors='replace')
                     
                     execution_time = time.time() - start_time
                     
@@ -160,7 +160,7 @@ class DockerSandbox:
                     return ExecutionResult(
                         success=False,
                         stdout="",
-                        stderr=str(e),
+                        stderr=str (e),
                         exit_code=1,
                         execution_time=time.time() - start_time
                     )
@@ -169,7 +169,7 @@ class DockerSandbox:
                 return ExecutionResult(
                     success=False,
                     stdout="",
-                    stderr=f"Sandbox error: {str(e)}",
+                    stderr=f"Sandbox error: {str (e)}",
                     exit_code=1,
                     execution_time=time.time() - start_time
                 )
@@ -182,16 +182,16 @@ sandbox = DockerSandbox(
 )
 
 code = """
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 
 print(factorial(5))
 print(factorial(10))
 """
 
-result = sandbox.execute(code, timeout=3)
+result = sandbox.execute (code, timeout=3)
 
 if result:
     print("✓ Execution successful")
@@ -243,7 +243,7 @@ class TestExecutor:
 if __name__ == "__main__":
     import pytest
     import sys
-    sys.exit(pytest.main([__file__, "-v"]))
+    sys.exit (pytest.main([__file__, "-v"]))
 """
         elif framework == "unittest":
             full_code += """
@@ -253,7 +253,7 @@ if __name__ == "__main__":
 """
         
         # Execute
-        result = self.sandbox.execute(full_code, timeout=10)
+        result = self.sandbox.execute (full_code, timeout=10)
         
         return result.success, result.stdout + result.stderr
     
@@ -283,10 +283,10 @@ print("\\n=== Coverage Report ===")
 cov.report()
 """
         
-        result = self.sandbox.execute(full_code, timeout=10)
+        result = self.sandbox.execute (full_code, timeout=10)
         
         # Parse coverage from output
-        coverage_percent = self._parse_coverage(result.stdout)
+        coverage_percent = self._parse_coverage (result.stdout)
         
         return {
             "success": result.success,
@@ -294,28 +294,28 @@ cov.report()
             "coverage": coverage_percent
         }
     
-    def _parse_coverage(self, output: str) -> float:
+    def _parse_coverage (self, output: str) -> float:
         """Parse coverage percentage from output."""
         # Look for "TOTAL" line in coverage report
         for line in output.split("\\n"):
             if "TOTAL" in line:
                 parts = line.split()
-                if len(parts) >= 4:
+                if len (parts) >= 4:
                     try:
-                        return float(parts[-1].rstrip("%"))
+                        return float (parts[-1].rstrip("%"))
                     except ValueError:
                         pass
         return 0.0
 
 # Usage
 sandbox = DockerSandbox()
-executor = TestExecutor(sandbox)
+executor = TestExecutor (sandbox)
 
 code = """
-def add(a, b):
+def add (a, b):
     return a + b
 
-def subtract(a, b):
+def subtract (a, b):
     return a - b
 """
 
@@ -329,7 +329,7 @@ def test_subtract():
     assert subtract(0, 1) == -1
 """
 
-all_passed, output = executor.execute_tests(code, tests)
+all_passed, output = executor.execute_tests (code, tests)
 
 if all_passed:
     print("✓ All tests passed")
@@ -371,7 +371,7 @@ class RuntimeValidator:
 # Test cases
 test_cases = {examples}
 
-for i, (inputs, expected) in enumerate(test_cases):
+for i, (inputs, expected) in enumerate (test_cases):
     try:
         result = {function_name}(*inputs)
         if result != expected:
@@ -382,14 +382,14 @@ for i, (inputs, expected) in enumerate(test_cases):
         print(f"ERROR {{i}}: {{e}}")
 """
         
-        result = self.sandbox.execute(validation_code, timeout=5)
+        result = self.sandbox.execute (validation_code, timeout=5)
         
         # Parse results
         for line in result.stdout.split("\\n"):
             if line.startswith("FAIL") or line.startswith("ERROR"):
-                errors.append(line)
+                errors.append (line)
         
-        return len(errors) == 0, errors
+        return len (errors) == 0, errors
     
     def validate_no_errors(
         self,
@@ -407,17 +407,17 @@ for i, (inputs, expected) in enumerate(test_cases):
 
 test_inputs = {test_inputs}
 
-for i, inputs in enumerate(test_inputs):
+for i, inputs in enumerate (test_inputs):
     try:
         result = process(*inputs)  # Assumes function named 'process'
         print(f"OK {{i}}: {{result}}")
     except Exception as e:
-        print(f"ERROR {{i}}: {{type(e).__name__}}: {{e}}")
+        print(f"ERROR {{i}}: {{type (e).__name__}}: {{e}}")
         import traceback
         traceback.print_exc()
 """
         
-        result = self.sandbox.execute(validation_code, timeout=5)
+        result = self.sandbox.execute (validation_code, timeout=5)
         
         # Check for errors
         has_errors = "ERROR" in result.stdout or result.stderr
@@ -426,13 +426,13 @@ for i, inputs in enumerate(test_inputs):
 
 # Usage
 sandbox = DockerSandbox()
-validator = RuntimeValidator(sandbox)
+validator = RuntimeValidator (sandbox)
 
 code = """
-def factorial(n):
+def factorial (n):
     if n <= 1:
         return 1
-    return n * factorial(n - 1)
+    return n * factorial (n - 1)
 """
 
 examples = [
@@ -491,29 +491,29 @@ for _ in range({iterations}):
     start = time.perf_counter()
     {function_name}{test_input}
     end = time.perf_counter()
-    times.append(end - start)
+    times.append (end - start)
 
 # Statistics
-avg_time = sum(times) / len(times)
-min_time = min(times)
-max_time = max(times)
+avg_time = sum (times) / len (times)
+min_time = min (times)
+max_time = max (times)
 
 print(f"Average: {{avg_time*1000:.4f}}ms")
 print(f"Min: {{min_time*1000:.4f}}ms")
 print(f"Max: {{max_time*1000:.4f}}ms")
 """
         
-        result = self.sandbox.execute(measurement_code, timeout=30)
+        result = self.sandbox.execute (measurement_code, timeout=30)
         
         # Parse results
         stats = {}
         for line in result.stdout.split("\\n"):
             if "Average:" in line:
-                stats["avg_ms"] = float(line.split(":")[1].replace("ms", ""))
+                stats["avg_ms"] = float (line.split(":")[1].replace("ms", ""))
             elif "Min:" in line:
-                stats["min_ms"] = float(line.split(":")[1].replace("ms", ""))
+                stats["min_ms"] = float (line.split(":")[1].replace("ms", ""))
             elif "Max:" in line:
-                stats["max_ms"] = float(line.split(":")[1].replace("ms", ""))
+                stats["max_ms"] = float (line.split(":")[1].replace("ms", ""))
         
         return stats
     
@@ -542,27 +542,27 @@ print(f"Current: {{current / 1024 / 1024:.2f}} MB")
 print(f"Peak: {{peak / 1024 / 1024:.2f}} MB")
 """
         
-        result = self.sandbox.execute(measurement_code, timeout=10)
+        result = self.sandbox.execute (measurement_code, timeout=10)
         
         # Parse results
         stats = {}
         for line in result.stdout.split("\\n"):
             if "Current:" in line:
-                stats["current_mb"] = float(line.split(":")[1].replace("MB", ""))
+                stats["current_mb"] = float (line.split(":")[1].replace("MB", ""))
             elif "Peak:" in line:
-                stats["peak_mb"] = float(line.split(":")[1].replace("MB", ""))
+                stats["peak_mb"] = float (line.split(":")[1].replace("MB", ""))
         
         return stats
 
 # Usage
 sandbox = DockerSandbox()
-measurer = PerformanceMeasurer(sandbox)
+measurer = PerformanceMeasurer (sandbox)
 
 code = """
-def fibonacci(n):
+def fibonacci (n):
     if n <= 1:
         return n
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    return fibonacci (n - 1) + fibonacci (n - 2)
 """
 
 # Measure time
@@ -595,9 +595,9 @@ class CodeValidator:
     
     def __init__(self):
         self.sandbox = DockerSandbox()
-        self.test_executor = TestExecutor(self.sandbox)
-        self.runtime_validator = RuntimeValidator(self.sandbox)
-        self.perf_measurer = PerformanceMeasurer(self.sandbox)
+        self.test_executor = TestExecutor (self.sandbox)
+        self.runtime_validator = RuntimeValidator (self.sandbox)
+        self.perf_measurer = PerformanceMeasurer (self.sandbox)
     
     def validate_generated_code(
         self,
@@ -623,15 +623,15 @@ class CodeValidator:
         # 1. Syntax validation
         try:
             import ast
-            ast.parse(code)
+            ast.parse (code)
             report["syntax_valid"] = True
         except SyntaxError as e:
-            report["errors"].append(f"Syntax error: {e}")
+            report["errors"].append (f"Syntax error: {e}")
             return report  # Can't continue if syntax is invalid
         
         # 2. Execute tests if provided
         if tests:
-            tests_passed, output = self.test_executor.execute_tests(code, tests)
+            tests_passed, output = self.test_executor.execute_tests (code, tests)
             report["tests_passed"] = tests_passed
             report["test_output"] = output
             
@@ -641,10 +641,10 @@ class CodeValidator:
         # 3. Validate with examples if provided
         if examples:
             # Extract function name from code
-            tree = ast.parse(code)
+            tree = ast.parse (code)
             func_name = None
-            for node in ast.walk(tree):
-                if isinstance(node, ast.FunctionDef):
+            for node in ast.walk (tree):
+                if isinstance (node, ast.FunctionDef):
                     func_name = node.name
                     break
             
@@ -655,16 +655,16 @@ class CodeValidator:
                 report["examples_valid"] = examples_valid
                 
                 if not examples_valid:
-                    report["errors"].extend(errors)
+                    report["errors"].extend (errors)
         
         # 4. Performance check if threshold provided
         if performance_threshold:
             # Measure on first example if available
             if examples and examples[0]:
                 func_name = None
-                tree = ast.parse(code)
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.FunctionDef):
+                tree = ast.parse (code)
+                for node in ast.walk (tree):
+                    if isinstance (node, ast.FunctionDef):
                         func_name = node.name
                         break
                 
@@ -696,17 +696,17 @@ class CodeValidator:
 validator = CodeValidator()
 
 code = """
-def calculate_primes(n):
+def calculate_primes (n):
     ''Return list of prime numbers up to n.''
     primes = []
     for num in range(2, n + 1):
         is_prime = True
-        for i in range(2, int(num ** 0.5) + 1):
+        for i in range(2, int (num ** 0.5) + 1):
             if num % i == 0:
                 is_prime = False
                 break
         if is_prime:
-            primes.append(num)
+            primes.append (num)
     return primes
 """
 

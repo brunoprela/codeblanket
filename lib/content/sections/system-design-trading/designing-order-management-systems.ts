@@ -117,22 +117,22 @@ class Order:
     stop_price: Optional[float] = None
     
     # System fields
-    order_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    order_id: str = field (default_factory=lambda: str (uuid.uuid4()))
     account_id: str = "DEFAULT"
     status: OrderStatus = OrderStatus.NEW
     filled_quantity: float = 0.0
     average_fill_price: float = 0.0
     
     # Timestamps (microsecond precision for HFT)
-    created_at: int = field(default_factory=lambda: int(datetime.now().timestamp() * 1_000_000))
-    updated_at: int = field(default_factory=lambda: int(datetime.now().timestamp() * 1_000_000))
+    created_at: int = field (default_factory=lambda: int (datetime.now().timestamp() * 1_000_000))
+    updated_at: int = field (default_factory=lambda: int (datetime.now().timestamp() * 1_000_000))
     
     # Audit trail
-    state_history: List[tuple] = field(default_factory=list)
+    state_history: List[tuple] = field (default_factory=list)
     
-    def update_status(self, new_status: OrderStatus, reason: str = ""):
+    def update_status (self, new_status: OrderStatus, reason: str = ""):
         """Update order status with audit trail"""
-        timestamp = int(datetime.now().timestamp() * 1_000_000)
+        timestamp = int (datetime.now().timestamp() * 1_000_000)
         self.state_history.append((timestamp, self.status, new_status, reason))
         self.status = new_status
         self.updated_at = timestamp
@@ -157,7 +157,7 @@ class RiskManager:
         self.positions: Dict[str, float] = {}  # symbol -> quantity
         self.lock = threading.Lock()
     
-    def check_order(self, order: Order, current_price: float) -> tuple[bool, str]:
+    def check_order (self, order: Order, current_price: float) -> tuple[bool, str]:
         """
         Pre-trade risk checks
         Returns: (approved, rejection_reason)
@@ -169,12 +169,12 @@ class RiskManager:
                 return False, f"Order value {order_value} exceeds limit {self.max_order_value}"
             
             # Check 2: Position limits
-            current_position = self.positions.get(order.symbol, 0.0)
+            current_position = self.positions.get (order.symbol, 0.0)
             projected_position = current_position + (
                 order.quantity if order.side == OrderSide.BUY else -order.quantity
             )
             
-            if abs(projected_position) > self.max_position_size:
+            if abs (projected_position) > self.max_position_size:
                 return False, f"Position would be {projected_position}, exceeds {self.max_position_size}"
             
             # Check 3: Price reasonableness (prevent fat finger)
@@ -186,10 +186,10 @@ class RiskManager:
             
             return True, ""
     
-    def update_position(self, symbol: str, fill: Fill, side: OrderSide):
+    def update_position (self, symbol: str, fill: Fill, side: OrderSide):
         """Update position after fill"""
         with self.lock:
-            current = self.positions.get(symbol, 0.0)
+            current = self.positions.get (symbol, 0.0)
             change = fill.quantity if side == OrderSide.BUY else -fill.quantity
             self.positions[symbol] = current + change
 
@@ -201,20 +201,20 @@ class OrderBook:
         self.orders_by_symbol: Dict[str, List[str]] = {}
         self.lock = threading.Lock()
     
-    def add_order(self, order: Order):
+    def add_order (self, order: Order):
         """Add order to book"""
         with self.lock:
             self.orders[order.order_id] = order
             if order.symbol not in self.orders_by_symbol:
                 self.orders_by_symbol[order.symbol] = []
-            self.orders_by_symbol[order.symbol].append(order.order_id)
+            self.orders_by_symbol[order.symbol].append (order.order_id)
     
-    def get_order(self, order_id: str) -> Optional[Order]:
+    def get_order (self, order_id: str) -> Optional[Order]:
         """Retrieve order by ID"""
         with self.lock:
-            return self.orders.get(order_id)
+            return self.orders.get (order_id)
     
-    def get_active_orders(self, symbol: Optional[str] = None) -> List[Order]:
+    def get_active_orders (self, symbol: Optional[str] = None) -> List[Order]:
         """Get all active orders"""
         with self.lock:
             active_statuses = {
@@ -224,7 +224,7 @@ class OrderBook:
             }
             
             if symbol:
-                order_ids = self.orders_by_symbol.get(symbol, [])
+                order_ids = self.orders_by_symbol.get (symbol, [])
                 return [
                     self.orders[oid] 
                     for oid in order_ids 
@@ -258,23 +258,23 @@ class MonolithicOMS:
         self.order_thread = None
         self.fill_thread = None
     
-    def start(self):
+    def start (self):
         """Start OMS threads"""
         self.running = True
-        self.order_thread = threading.Thread(target=self._process_orders, daemon=True)
-        self.fill_thread = threading.Thread(target=self._process_fills, daemon=True)
+        self.order_thread = threading.Thread (target=self._process_orders, daemon=True)
+        self.fill_thread = threading.Thread (target=self._process_fills, daemon=True)
         self.order_thread.start()
         self.fill_thread.start()
     
-    def stop(self):
+    def stop (self):
         """Stop OMS"""
         self.running = False
         if self.order_thread:
-            self.order_thread.join(timeout=5)
+            self.order_thread.join (timeout=5)
         if self.fill_thread:
-            self.fill_thread.join(timeout=5)
+            self.fill_thread.join (timeout=5)
     
-    def submit_order(self, order: Order, current_price: float) -> tuple[bool, str]:
+    def submit_order (self, order: Order, current_price: float) -> tuple[bool, str]:
         """
         Submit new order
         Returns: (success, message)
@@ -283,24 +283,24 @@ class MonolithicOMS:
         order.update_status(OrderStatus.PENDING_VALIDATION)
         
         # Risk check
-        approved, reason = self.risk_manager.check_order(order, current_price)
+        approved, reason = self.risk_manager.check_order (order, current_price)
         if not approved:
             order.update_status(OrderStatus.REJECTED, reason)
-            self.order_book.add_order(order)
+            self.order_book.add_order (order)
             return False, reason
         
         # Validated
         order.update_status(OrderStatus.VALIDATED)
-        self.order_book.add_order(order)
+        self.order_book.add_order (order)
         
         # Queue for routing
-        self.order_queue.put(order)
+        self.order_queue.put (order)
         
         return True, f"Order {order.order_id} accepted"
     
-    def cancel_order(self, order_id: str) -> tuple[bool, str]:
+    def cancel_order (self, order_id: str) -> tuple[bool, str]:
         """Cancel an order"""
-        order = self.order_book.get_order(order_id)
+        order = self.order_book.get_order (order_id)
         if not order:
             return False, "Order not found"
         
@@ -312,15 +312,15 @@ class MonolithicOMS:
         order.update_status(OrderStatus.CANCELED, "User requested")
         return True, f"Order {order_id} canceled"
     
-    def report_fill(self, fill: Fill):
+    def report_fill (self, fill: Fill):
         """Report a fill from exchange"""
-        self.fill_queue.put(fill)
+        self.fill_queue.put (fill)
     
-    def _process_orders(self):
+    def _process_orders (self):
         """Worker thread to route orders"""
         while self.running:
             try:
-                order = self.order_queue.get(timeout=0.1)
+                order = self.order_queue.get (timeout=0.1)
                 
                 # Mark as submitted
                 order.update_status(OrderStatus.SUBMITTED)
@@ -331,19 +331,19 @@ class MonolithicOMS:
                 
                 # Callback
                 if self.on_order_update:
-                    self.on_order_update(order)
+                    self.on_order_update (order)
                 
             except:
                 continue
     
-    def _process_fills(self):
+    def _process_fills (self):
         """Worker thread to process fills"""
         while self.running:
             try:
-                fill = self.fill_queue.get(timeout=0.1)
+                fill = self.fill_queue.get (timeout=0.1)
                 
                 # Find order
-                order = self.order_book.get_order(fill.order_id)
+                order = self.order_book.get_order (fill.order_id)
                 if not order:
                     continue
                 
@@ -361,11 +361,11 @@ class MonolithicOMS:
                     order.update_status(OrderStatus.PARTIALLY_FILLED)
                 
                 # Update position
-                self.risk_manager.update_position(order.symbol, fill, order.side)
+                self.risk_manager.update_position (order.symbol, fill, order.side)
                 
                 # Callback
                 if self.on_fill:
-                    self.on_fill(order, fill)
+                    self.on_fill (order, fill)
                 
             except:
                 continue
@@ -381,10 +381,10 @@ if __name__ == "__main__":
     oms = MonolithicOMS(risk_mgr)
     
     # Callbacks
-    def on_order_update(order: Order):
+    def on_order_update (order: Order):
         print(f"Order {order.order_id}: {order.status}")
     
-    def on_fill(order: Order, fill: Fill):
+    def on_fill (order: Order, fill: Fill):
         print(f"Fill: {fill.quantity} @ {fill.price}")
     
     oms.on_order_update = on_order_update
@@ -402,19 +402,19 @@ if __name__ == "__main__":
         limit_price=150.0
     )
     
-    success, msg = oms.submit_order(order, current_price=150.5)
+    success, msg = oms.submit_order (order, current_price=150.5)
     print(msg)
     
     # Simulate fill
     fill = Fill(
         order_id=order.order_id,
-        fill_id=str(uuid.uuid4()),
+        fill_id=str (uuid.uuid4()),
         quantity=100,
         price=150.0,
-        timestamp=int(datetime.now().timestamp() * 1_000_000),
+        timestamp=int (datetime.now().timestamp() * 1_000_000),
         exchange="NASDAQ"
     )
-    oms.report_fill(fill)
+    oms.report_fill (fill)
     
     import time
     time.sleep(1)
@@ -454,12 +454,12 @@ class MessageBus(ABC):
     """Abstract message bus for inter-service communication"""
     
     @abstractmethod
-    def publish(self, topic: str, message: dict):
+    def publish (self, topic: str, message: dict):
         """Publish message to topic"""
         pass
     
     @abstractmethod
-    def subscribe(self, topic: str, callback: Callable):
+    def subscribe (self, topic: str, callback: Callable):
         """Subscribe to topic"""
         pass
 
@@ -479,7 +479,7 @@ class RiskService:
         # Subscribe to risk check requests
         self.bus.subscribe("risk.check", self.handle_risk_check)
     
-    def handle_risk_check(self, message: dict):
+    def handle_risk_check (self, message: dict):
         """Handle risk check request"""
         order_data = message['order']
         current_price = message['price']
@@ -488,7 +488,7 @@ class RiskService:
         order = Order(**order_data)
         
         # Check risk
-        approved, reason = self.risk_manager.check_order(order, current_price)
+        approved, reason = self.risk_manager.check_order (order, current_price)
         
         # Publish result
         result = {
@@ -511,17 +511,17 @@ class OrderGateway:
         # Subscribe to risk results
         self.bus.subscribe("risk.result", self.handle_risk_result)
     
-    def submit_order(self, order: Order, current_price: float, api_key: str) -> dict:
+    def submit_order (self, order: Order, current_price: float, api_key: str) -> dict:
         """
         Submit order via API
         Returns: {"success": bool, "order_id": str, "message": str}
         """
         # Authenticate
-        if not self.authenticate(api_key):
+        if not self.authenticate (api_key):
             return {"success": False, "message": "Invalid API key"}
         
         # Rate limiting
-        if not self.check_rate_limit(api_key):
+        if not self.check_rate_limit (api_key):
             return {"success": False, "message": "Rate limit exceeded"}
         
         # Store order
@@ -547,12 +547,12 @@ class OrderGateway:
             "message": "Order submitted for validation"
         }
     
-    def handle_risk_result(self, message: dict):
+    def handle_risk_result (self, message: dict):
         """Handle risk check result"""
         order_id = message['order_id']
         approved = message['approved']
         
-        order = self.pending_orders.get(order_id)
+        order = self.pending_orders.get (order_id)
         if not order:
             return
         
@@ -563,12 +563,12 @@ class OrderGateway:
             # Reject
             order.update_status(OrderStatus.REJECTED, message['reason'])
     
-    def authenticate(self, api_key: str) -> bool:
+    def authenticate (self, api_key: str) -> bool:
         """Authenticate API key"""
         # In production: Check against database
         return True
     
-    def check_rate_limit(self, api_key: str) -> bool:
+    def check_rate_limit (self, api_key: str) -> bool:
         """Check rate limit"""
         # In production: Use Redis for rate limiting
         return True
@@ -581,15 +581,15 @@ class InMemoryMessageBus(MessageBus):
     def __init__(self):
         self.subscribers = {}
     
-    def publish(self, topic: str, message: dict):
+    def publish (self, topic: str, message: dict):
         if topic in self.subscribers:
             for callback in self.subscribers[topic]:
-                callback(message)
+                callback (message)
     
-    def subscribe(self, topic: str, callback: Callable):
+    def subscribe (self, topic: str, callback: Callable):
         if topic not in self.subscribers:
             self.subscribers[topic] = []
-        self.subscribers[topic].append(callback)
+        self.subscribers[topic].append (callback)
 \`\`\`
 
 ---
@@ -632,24 +632,24 @@ class OrderPool:
             side=OrderSide.BUY,
             quantity=0,
             order_type=OrderType.MARKET
-        ) for _ in range(pool_size)]
-        self.available = list(range(pool_size))
+        ) for _ in range (pool_size)]
+        self.available = list (range (pool_size))
     
-    def acquire(self) -> Optional[Order]:
+    def acquire (self) -> Optional[Order]:
         """Get order from pool"""
         if not self.available:
             return None
         idx = self.available.pop()
         return self.pool[idx]
     
-    def release(self, order: Order):
+    def release (self, order: Order):
         """Return order to pool"""
         # Reset order
         order.status = OrderStatus.NEW
         order.filled_quantity = 0.0
         # Find index and return to available
-        idx = self.pool.index(order)
-        self.available.append(idx)
+        idx = self.pool.index (order)
+        self.available.append (idx)
 
 # 2. Lock-free data structures
 from queue import Queue
@@ -665,14 +665,14 @@ class LockFreeCounter:
         self._value = 0
         self._lock = threading.Lock()  # Python doesn't have true CAS, using lock
     
-    def increment(self) -> int:
+    def increment (self) -> int:
         """Atomically increment and return new value"""
         with self._lock:
             self._value += 1
             return self._value
     
     @property
-    def value(self) -> int:
+    def value (self) -> int:
         return self._value
 
 # 3. Shared memory for IPC
@@ -691,26 +691,26 @@ class SharedMemoryOrderBook:
         # Create shared memory
         self.shm = mmap.mmap(-1, self.size)
     
-    def write_order(self, index: int, order: Order):
+    def write_order (self, index: int, order: Order):
         """Write order to shared memory"""
         offset = index * self.ORDER_SIZE
         
         # Pack order data (simplified)
         data = struct.pack(
             'Q Q d d',  # order_id_hash, timestamp, quantity, price
-            hash(order.order_id) % (2**64),
+            hash (order.order_id) % (2**64),
             order.created_at,
             order.quantity,
             order.limit_price or 0.0
         )
         
-        self.shm.seek(offset)
-        self.shm.write(data)
+        self.shm.seek (offset)
+        self.shm.write (data)
     
-    def read_order(self, index: int) -> tuple:
+    def read_order (self, index: int) -> tuple:
         """Read order from shared memory"""
         offset = index * self.ORDER_SIZE
-        self.shm.seek(offset)
+        self.shm.seek (offset)
         data = self.shm.read(32)  # 4 * 8 bytes
         return struct.unpack('Q Q d d', data)
 
@@ -727,15 +727,15 @@ class BatchOrderProcessor:
         self.batch = []
         self.last_flush = time.time()
     
-    def add_order(self, order: Order) -> Optional[List[Order]]:
+    def add_order (self, order: Order) -> Optional[List[Order]]:
         """
         Add order to batch
         Returns: Batch if ready to process, None otherwise
         """
-        self.batch.append(order)
+        self.batch.append (order)
         
         # Check if should flush
-        if len(self.batch) >= self.batch_size:
+        if len (self.batch) >= self.batch_size:
             return self.flush()
         
         if (time.time() - self.last_flush) * 1000 > self.timeout_ms:
@@ -743,7 +743,7 @@ class BatchOrderProcessor:
         
         return None
     
-    def flush(self) -> List[Order]:
+    def flush (self) -> List[Order]:
         """Flush current batch"""
         batch = self.batch
         self.batch = []
@@ -769,7 +769,7 @@ cdef class FastRiskChecker:
         self.max_order_value = max_order_value
         self.positions = {}
     
-    cpdef (bint, str) check_order(self, str symbol, double quantity, double price):
+    cpdef (bint, str) check_order (self, str symbol, double quantity, double price):
         cdef double order_value = quantity * price
         cdef double current_position
         cdef double projected_position
@@ -777,10 +777,10 @@ cdef class FastRiskChecker:
         if order_value > self.max_order_value:
             return False, "Order value exceeds limit"
         
-        current_position = self.positions.get(symbol, 0.0)
+        current_position = self.positions.get (symbol, 0.0)
         projected_position = current_position + quantity
         
-        if abs(projected_position) > self.max_position:
+        if abs (projected_position) > self.max_position:
             return False, "Position limit exceeded"
         
         return True, ""
@@ -802,7 +802,7 @@ Using QuickFIX library
 import quickfix as fix
 import quickfix44 as fix44
 
-class FIXApplication(fix.Application):
+class FIXApplication (fix.Application):
     """
     FIX Application for OMS
     Handles FIX messages to/from broker
@@ -813,41 +813,41 @@ class FIXApplication(fix.Application):
         self.oms = oms
         self.session_id = None
     
-    def onCreate(self, sessionID):
+    def onCreate (self, sessionID):
         """Called when session created"""
         self.session_id = sessionID
         print(f"FIX session created: {sessionID}")
     
-    def onLogon(self, sessionID):
+    def onLogon (self, sessionID):
         """Called when logged on"""
         print(f"FIX session logged on: {sessionID}")
     
-    def onLogout(self, sessionID):
+    def onLogout (self, sessionID):
         """Called when logged out"""
         print(f"FIX session logged out: {sessionID}")
     
-    def toAdmin(self, message, sessionID):
+    def toAdmin (self, message, sessionID):
         """Outgoing admin message"""
         pass
     
-    def fromAdmin(self, message, sessionID):
+    def fromAdmin (self, message, sessionID):
         """Incoming admin message"""
         pass
     
-    def toApp(self, message, sessionID):
+    def toApp (self, message, sessionID):
         """Outgoing application message"""
         print(f"Sending: {message}")
     
-    def fromApp(self, message, sessionID):
+    def fromApp (self, message, sessionID):
         """Incoming application message"""
         # Parse message type
         msg_type = fix.MsgType()
-        message.getHeader().getField(msg_type)
+        message.getHeader().getField (msg_type)
         
         if msg_type.getValue() == fix.MsgType_ExecutionReport:
-            self.on_execution_report(message)
+            self.on_execution_report (message)
     
-    def on_execution_report(self, message: fix.Message):
+    def on_execution_report (self, message: fix.Message):
         """Handle execution report (fill)"""
         # Extract fields
         order_id = fix.ClOrdID()
@@ -856,47 +856,47 @@ class FIXApplication(fix.Application):
         last_qty = fix.LastQty()
         last_px = fix.LastPx()
         
-        message.getField(order_id)
-        message.getField(exec_type)
-        message.getField(last_qty)
-        message.getField(last_px)
+        message.getField (order_id)
+        message.getField (exec_type)
+        message.getField (last_qty)
+        message.getField (last_px)
         
         # Report fill to OMS
         if exec_type.getValue() == fix.ExecType_FILL or exec_type.getValue() == fix.ExecType_PARTIAL_FILL:
             fill = Fill(
                 order_id=order_id.getValue(),
-                fill_id=str(uuid.uuid4()),
+                fill_id=str (uuid.uuid4()),
                 quantity=last_qty.getValue(),
                 price=last_px.getValue(),
-                timestamp=int(datetime.now().timestamp() * 1_000_000),
+                timestamp=int (datetime.now().timestamp() * 1_000_000),
                 exchange="BROKER"
             )
-            self.oms.report_fill(fill)
+            self.oms.report_fill (fill)
     
-    def send_new_order(self, order: Order):
+    def send_new_order (self, order: Order):
         """Send new order via FIX"""
         # Create FIX message
         msg = fix44.NewOrderSingle()
         
         # Header
-        msg.getHeader().setField(fix.MsgType(fix.MsgType_NewOrderSingle))
+        msg.getHeader().setField (fix.MsgType (fix.MsgType_NewOrderSingle))
         
         # Required fields
-        msg.setField(fix.ClOrdID(order.order_id))
-        msg.setField(fix.Symbol(order.symbol))
-        msg.setField(fix.Side(
+        msg.setField (fix.ClOrdID(order.order_id))
+        msg.setField (fix.Symbol (order.symbol))
+        msg.setField (fix.Side(
             fix.Side_BUY if order.side == OrderSide.BUY else fix.Side_SELL
         ))
-        msg.setField(fix.OrderQty(order.quantity))
-        msg.setField(fix.OrdType(
+        msg.setField (fix.OrderQty (order.quantity))
+        msg.setField (fix.OrdType(
             fix.OrdType_MARKET if order.order_type == OrderType.MARKET else fix.OrdType_LIMIT
         ))
         
         if order.order_type == OrderType.LIMIT:
-            msg.setField(fix.Price(order.limit_price))
+            msg.setField (fix.Price (order.limit_price))
         
         # Send
-        fix.Session.sendToTarget(msg, self.session_id)
+        fix.Session.sendToTarget (msg, self.session_id)
 
 # FIX Configuration
 config = """
@@ -914,10 +914,10 @@ SocketConnectPort=5001
 
 # Save config and run
 # settings = fix.SessionSettings("fix.cfg")
-# application = FIXApplication(oms)
-# store_factory = fix.FileStoreFactory(settings)
-# log_factory = fix.FileLogFactory(settings)
-# initiator = fix.SocketInitiator(application, store_factory, settings, log_factory)
+# application = FIXApplication (oms)
+# store_factory = fix.FileStoreFactory (settings)
+# log_factory = fix.FileLogFactory (settings)
+# initiator = fix.SocketInitiator (application, store_factory, settings, log_factory)
 # initiator.start()
 \`\`\`
 
@@ -963,7 +963,7 @@ class HAOrderManagementSystem:
     def __init__(self, node_id: str, is_primary: bool, redis_host: str = 'localhost'):
         self.node_id = node_id
         self.is_primary = is_primary
-        self.redis = redis.Redis(host=redis_host, decode_responses=False)
+        self.redis = redis.Redis (host=redis_host, decode_responses=False)
         
         # Heartbeat
         self.heartbeat_key = "oms:primary:heartbeat"
@@ -971,9 +971,9 @@ class HAOrderManagementSystem:
         
         # Start monitoring
         if not is_primary:
-            threading.Thread(target=self._monitor_primary, daemon=True).start()
+            threading.Thread (target=self._monitor_primary, daemon=True).start()
     
-    def _send_heartbeat(self):
+    def _send_heartbeat (self):
         """Primary sends heartbeat"""
         while self.is_primary:
             self.redis.setex(
@@ -981,21 +981,21 @@ class HAOrderManagementSystem:
                 self.heartbeat_interval * 3,  # TTL
                 self.node_id
             )
-            time.sleep(self.heartbeat_interval)
+            time.sleep (self.heartbeat_interval)
     
-    def _monitor_primary(self):
+    def _monitor_primary (self):
         """Secondary monitors primary heartbeat"""
         while not self.is_primary:
-            heartbeat = self.redis.get(self.heartbeat_key)
+            heartbeat = self.redis.get (self.heartbeat_key)
             
             if heartbeat is None:
                 print("Primary failed! Promoting to primary...")
                 self._promote_to_primary()
                 break
             
-            time.sleep(self.heartbeat_interval)
+            time.sleep (self.heartbeat_interval)
     
-    def _promote_to_primary(self):
+    def _promote_to_primary (self):
         """Promote secondary to primary"""
         # Try to acquire lock
         lock = self.redis.set(
@@ -1013,21 +1013,21 @@ class HAOrderManagementSystem:
             self._recover_state()
             
             # Start heartbeat
-            threading.Thread(target=self._send_heartbeat, daemon=True).start()
+            threading.Thread (target=self._send_heartbeat, daemon=True).start()
     
-    def _recover_state(self):
+    def _recover_state (self):
         """Recover order state from Redis"""
         # Get all orders
         keys = self.redis.keys("order:*")
         for key in keys:
-            order_data = self.redis.get(key)
-            order = pickle.loads(order_data)
+            order_data = self.redis.get (key)
+            order = pickle.loads (order_data)
             print(f"Recovered order: {order.order_id}")
     
-    def persist_order(self, order: Order):
+    def persist_order (self, order: Order):
         """Persist order to Redis for HA"""
         key = f"order:{order.order_id}"
-        self.redis.set(key, pickle.dumps(order))
+        self.redis.set (key, pickle.dumps (order))
 \`\`\`
 
 ### Monitoring and Alerting
@@ -1071,28 +1071,28 @@ class OMSMonitor:
         self.latencies = []
         self.start_time = time.time()
     
-    def record_order_submitted(self):
+    def record_order_submitted (self):
         self.metrics.orders_submitted += 1
     
-    def record_order_filled(self, fill_value: float):
+    def record_order_filled (self, fill_value: float):
         self.metrics.orders_filled += 1
         self.metrics.total_fill_value += fill_value
     
-    def record_latency(self, latency_us: float):
+    def record_latency (self, latency_us: float):
         """Record order latency in microseconds"""
-        self.latencies.append(latency_us)
+        self.latencies.append (latency_us)
         
         # Keep only recent latencies (last 10k)
-        if len(self.latencies) > 10000:
+        if len (self.latencies) > 10000:
             self.latencies = self.latencies[-10000:]
         
         # Update metrics
-        self.metrics.avg_order_latency = sum(self.latencies) / len(self.latencies)
-        sorted_latencies = sorted(self.latencies)
-        self.metrics.p95_order_latency = sorted_latencies[int(len(sorted_latencies) * 0.95)]
-        self.metrics.p99_order_latency = sorted_latencies[int(len(sorted_latencies) * 0.99)]
+        self.metrics.avg_order_latency = sum (self.latencies) / len (self.latencies)
+        sorted_latencies = sorted (self.latencies)
+        self.metrics.p95_order_latency = sorted_latencies[int (len (sorted_latencies) * 0.95)]
+        self.metrics.p99_order_latency = sorted_latencies[int (len (sorted_latencies) * 0.99)]
     
-    def get_metrics(self) -> OMSMetrics:
+    def get_metrics (self) -> OMSMetrics:
         """Get current metrics"""
         # Calculate throughput
         elapsed = time.time() - self.start_time
@@ -1100,20 +1100,20 @@ class OMSMonitor:
         
         return self.metrics
     
-    def check_alerts(self) -> List[str]:
+    def check_alerts (self) -> List[str]:
         """Check for alert conditions"""
         alerts = []
         
         # High latency
         if self.metrics.p99_order_latency > 1000:  # > 1ms
-            alerts.append(f"High latency: P99 = {self.metrics.p99_order_latency:.0f}μs")
+            alerts.append (f"High latency: P99 = {self.metrics.p99_order_latency:.0f}μs")
         
         # High reject rate
         total_orders = self.metrics.orders_submitted
         if total_orders > 100:
             reject_rate = self.metrics.orders_rejected / total_orders
             if reject_rate > 0.05:  # > 5%
-                alerts.append(f"High reject rate: {reject_rate:.1%}")
+                alerts.append (f"High reject rate: {reject_rate:.1%}")
         
         return alerts
 
@@ -1138,8 +1138,8 @@ VALID_TRANSITIONS = {
     OrderStatus.PARTIALLY_FILLED: [OrderStatus.FILLED, OrderStatus.CANCELED],
 }
 
-def is_valid_transition(current: OrderStatus, new: OrderStatus) -> bool:
-    return new in VALID_TRANSITIONS.get(current, [])
+def is_valid_transition (current: OrderStatus, new: OrderStatus) -> bool:
+    return new in VALID_TRANSITIONS.get (current, [])
 \`\`\`
 
 ### 2. Idempotency
@@ -1147,17 +1147,17 @@ def is_valid_transition(current: OrderStatus, new: OrderStatus) -> bool:
 Handle duplicate messages gracefully:
 
 \`\`\`python
-def process_fill(self, fill: Fill):
+def process_fill (self, fill: Fill):
     """Process fill idempotently"""
     # Check if already processed
     if fill.fill_id in self.processed_fills:
         return  # Already handled
     
     # Process
-    self._update_order(fill)
+    self._update_order (fill)
     
     # Mark as processed
-    self.processed_fills.add(fill.fill_id)
+    self.processed_fills.add (fill.fill_id)
 \`\`\`
 
 ### 3. Circuit Breakers
@@ -1175,7 +1175,7 @@ class CircuitBreaker:
         self.last_failure_time = 0
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
     
-    def call(self, func):
+    def call (self, func):
         """Execute function with circuit breaker"""
         if self.state == "OPEN":
             if time.time() - self.last_failure_time > self.timeout:

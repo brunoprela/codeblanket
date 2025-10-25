@@ -5,7 +5,7 @@
 export const dropboxarchitectureSection = {
   id: 'dropbox-architecture',
   title: 'Dropbox Architecture',
-  content: `Dropbox is a file hosting service that offers cloud storage, file synchronization, and collaboration. With over 700 million users and 2.5 billion files synced daily, Dropbox's architecture must handle massive scale file storage, efficient synchronization across devices, and conflict resolution. This section explores the technical systems that power Dropbox.
+  content: `Dropbox is a file hosting service that offers cloud storage, file synchronization, and collaboration. With over 700 million users and 2.5 billion files synced daily, Dropbox\'s architecture must handle massive scale file storage, efficient synchronization across devices, and conflict resolution. This section explores the technical systems that power Dropbox.
 
 ## Overview
 
@@ -159,7 +159,7 @@ In 2016, Dropbox migrated from AWS S3 to **Magic Pocket**, their custom storage 
 
 **Why Build Custom Storage?**
 
-- **Cost**: Cheaper than S3 at Dropbox's scale
+- **Cost**: Cheaper than S3 at Dropbox\'s scale
 - **Control**: Optimize for Dropbox's access patterns
 - **Performance**: Lower latency, higher throughput
 
@@ -284,7 +284,7 @@ Both sync at 10:10 AM
 Conflict detected!
 \`\`\`
 
-**Dropbox's Resolution Strategy**:
+**Dropbox\'s Resolution Strategy**:
 
 **1. Last-Writer-Wins** (for metadata like rename, delete)
 \`\`\`
@@ -301,7 +301,7 @@ Phone wins (later timestamp) → file named document.txt
 Laptop edits file.txt at 10:00 AM
 Phone edits file.txt at 10:00 AM
 Server receives both:
-- Keep Phone's version as file.txt (arbitrary choice)
+- Keep Phone\'s version as file.txt (arbitrary choice)
 - Create file (conflicted copy, Laptop, 2024-10-24).txt
 User resolves manually (merge or delete conflicted copy)
 \`\`\`
@@ -444,7 +444,7 @@ Both users converge to "World" (consistency!)
 
 ### Infrastructure
 
-- **Custom datacenters**: Magic Pocket runs in Dropbox's datacenters
+- **Custom datacenters**: Magic Pocket runs in Dropbox\'s datacenters
 - **Kubernetes**: Container orchestration
 - **gRPC**: Inter-service communication
 
@@ -537,7 +537,7 @@ Migrating 600 PB requires dual-write phase, background migration, extensive vali
 
 ## Interview Tips
 
-**Q: How would you design Dropbox's sync engine?**
+**Q: How would you design Dropbox\'s sync engine?**
 
 A: Use block-level deduplication. Divide files into 4 MB blocks, hash each block (SHA-256). On file change: (1) Client detects via file watcher. (2) Divide file into blocks, compute hashes. (3) Send metadata to server (filename, block hashes). (4) Server checks which blocks exist. (5) Client uploads only new blocks. (6) Server stores blocks in content-addressed storage (hash → data). (7) Server updates metadata (file → list of block hashes). (8) Server notifies other devices via push notification. (9) Devices download new blocks, reconstruct file. Benefits: Bandwidth savings (only changed blocks uploaded), instant uploads (if file already exists), storage savings (blocks deduplicated across users).
 
@@ -547,7 +547,7 @@ A: Detect conflicts using timestamps and version IDs. When two devices upload di
 
 **Q: Why did Dropbox migrate from AWS to custom infrastructure?**
 
-A: At Dropbox's scale (600+ PB), building custom storage is cost-effective. Savings: $75M/year compared to AWS S3. Benefits: (1) Cost: Commodity hardware + custom software cheaper than cloud. (2) Control: Optimize for Dropbox's access patterns (large files, high read/write ratio). (3) Performance: Lower latency (direct hardware control), higher throughput. (4) Innovation: Can experiment with new storage tech (SMR drives, erasure coding). Trade-offs: (1) Operational complexity (manage hardware, failures, upgrades). (2) Upfront cost (datacenter build-out). (3) Vendor lock-in (to own infrastructure). Migration strategy: Dual-write phase (write to both S3 and Magic Pocket), background migration, extensive validation, gradual cutover.
+A: At Dropbox's scale (600+ PB), building custom storage is cost-effective. Savings: $75M/year compared to AWS S3. Benefits: (1) Cost: Commodity hardware + custom software cheaper than cloud. (2) Control: Optimize for Dropbox\'s access patterns (large files, high read/write ratio). (3) Performance: Lower latency (direct hardware control), higher throughput. (4) Innovation: Can experiment with new storage tech (SMR drives, erasure coding). Trade-offs: (1) Operational complexity (manage hardware, failures, upgrades). (2) Upfront cost (datacenter build-out). (3) Vendor lock-in (to own infrastructure). Migration strategy: Dual-write phase (write to both S3 and Magic Pocket), background migration, extensive validation, gradual cutover.
 
 ---
 

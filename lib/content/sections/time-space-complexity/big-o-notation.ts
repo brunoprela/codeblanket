@@ -12,7 +12,7 @@ From fastest growing (best) to slowest growing (worst):
 1. **O(1) - Constant Time**
    - Operations: Same regardless of input size
    - Examples: Array access, hash table lookup, simple math
-   - \`arr[5]\`, \`hash_map.get(key)\`
+   - \`arr[5]\`, \`hash_map.get (key)\`
 
 2. **O(log n) - Logarithmic Time**
    - Operations: Grows logarithmically
@@ -61,27 +61,27 @@ From fastest growing (best) to slowest growing (worst):
 
 \`\`\`python
 # O(1) - Constant
-def get_first(arr):
+def get_first (arr):
     return arr[0]  # Always one operation
 
 # O(n) - Linear
-def sum_array(arr):
+def sum_array (arr):
     total = 0
     for num in arr:  # n iterations
         total += num
     return total
 
 # O(n²) - Quadratic
-def has_duplicate(arr):
-    for i in range(len(arr)):      # n iterations
-        for j in range(len(arr)):  # n iterations each
+def has_duplicate (arr):
+    for i in range (len (arr)):      # n iterations
+        for j in range (len (arr)):  # n iterations each
             if i != j and arr[i] == arr[j]:
                 return True
     return False
 
 # O(log n) - Logarithmic
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
+def binary_search (arr, target):
+    left, right = 0, len (arr) - 1
     while left <= right:  # Halves each time
         mid = (left + right) // 2
         if arr[mid] == target:

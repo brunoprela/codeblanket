@@ -15,7 +15,7 @@ export const llmDeploymentProductionQuiz = {
       question:
         'Token streaming provides better user experience by showing incremental output, but introduces complexity: partial responses, error handling mid-stream, token accounting, and caching. Discuss the engineering challenges of implementing streaming in production. When should you use streaming vs waiting for complete responses?',
       expectedAnswer:
-        "Should discuss: streaming via Server-Sent Events or WebSockets, handling network interruptions mid-stream, resumption strategies, error recovery when generation fails partway, token counting for incomplete responses, caching challenges with streaming (can't cache until complete), user experience benefits(perceived latency reduction), when streaming matters(long responses, real - time feel), when batch better(aggregation, post - processing), client complexity for handling streams, and testing streaming systems.",
+        "Should discuss: streaming via Server-Sent Events or WebSockets, handling network interruptions mid-stream, resumption strategies, error recovery when generation fails partway, token counting for incomplete responses, caching challenges with streaming (can't cache until complete), user experience benefits (perceived latency reduction), when streaming matters (long responses, real - time feel), when batch better (aggregation, post - processing), client complexity for handling streams, and testing streaming systems.",
     },
     {
       id: 3,

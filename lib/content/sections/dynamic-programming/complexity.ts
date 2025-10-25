@@ -9,8 +9,8 @@ export const complexitySection = {
 
 **1D DP (single loop):**
 \`\`\`python
-for i in range(n):
-    dp[i] = some_function(dp[i-1], dp[i-2])
+for i in range (n):
+    dp[i] = some_function (dp[i-1], dp[i-2])
 \`\`\`
 **Time**: O(n)
 
@@ -18,9 +18,9 @@ for i in range(n):
 
 **2D DP (nested loops):**
 \`\`\`python
-for i in range(m):
-    for j in range(n):
-        dp[i][j] = some_function(dp[i-1][j], dp[i][j-1])
+for i in range (m):
+    for j in range (n):
+        dp[i][j] = some_function (dp[i-1][j], dp[i][j-1])
 \`\`\`
 **Time**: O(m * n)
 
@@ -28,9 +28,9 @@ for i in range(m):
 
 **DP with Inner Loop:**
 \`\`\`python
-for i in range(n):
-    for j in range(i):  # Inner depends on outer
-        dp[i] = max(dp[i], dp[j] + something)
+for i in range (n):
+    for j in range (i):  # Inner depends on outer
+        dp[i] = max (dp[i], dp[j] + something)
 \`\`\`
 **Time**: O(n²)
 
@@ -40,11 +40,11 @@ Examples: Longest Increasing Subsequence (naive), Word Break
 
 **DP with Coin/Item Loop:**
 \`\`\`python
-for amount in range(target + 1):
+for amount in range (target + 1):
     for coin in coins:
-        dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+        dp[amount] = min (dp[amount], dp[amount - coin] + 1)
 \`\`\`
-**Time**: O(amount * len(coins))
+**Time**: O(amount * len (coins))
 
 Examples: Coin Change, Combination Sum
 

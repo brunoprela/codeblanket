@@ -21,9 +21,9 @@ Imagine you need to answer:
 unique_visitors = set()
 
 for visitor in visitors:
-    unique_visitors.add(visitor)
+    unique_visitors.add (visitor)
 
-count = len(unique_visitors)
+count = len (unique_visitors)
 \`\`\`
 
 **Problem**: For 1 billion unique visitors:
@@ -93,10 +93,10 @@ Estimated cardinality: 2^7 = 128 elements
 \`\`\`python
 import hashlib
 
-def hash_element(element):
+def hash_element (element):
     """Hash to 64-bit integer"""
-    h = hashlib.sha256(str(element).encode())
-    return int(h.hexdigest()[:16], 16)
+    h = hashlib.sha256(str (element).encode())
+    return int (h.hexdigest()[:16], 16)
 
 hash_value = hash_element("user123")
 # Example: 0x1A2B3C4D5E6F7890
@@ -114,7 +114,7 @@ With 14 bits: 2^14 = 16,384 buckets (registers)
 ### Step 3: Count Leading Zeros in Remainder
 
 \`\`\`python
-def count_leading_zeros(value):
+def count_leading_zeros (value):
     """Count leading zeros in binary representation"""
     if value == 0:
         return 64  # Max
@@ -130,32 +130,32 @@ def count_leading_zeros(value):
 \`\`\`python
 registers = [0] * 16384  # 16K buckets
 
-def add(element):
-    hash_value = hash_element(element)
+def add (element):
+    hash_value = hash_element (element)
     
     # Split hash
     bucket = hash_value & 0x3FFF  # Last 14 bits
     remainder = hash_value >> 14  # Remaining bits
     
     # Count leading zeros
-    leading_zeros = count_leading_zeros(remainder)
+    leading_zeros = count_leading_zeros (remainder)
     
     # Keep maximum per bucket
-    registers[bucket] = max(registers[bucket], leading_zeros)
+    registers[bucket] = max (registers[bucket], leading_zeros)
 \`\`\`
 
 ### Step 5: Estimate Cardinality
 
 \`\`\`python
 def estimate_cardinality():
-    m = len(registers)  # Number of buckets
+    m = len (registers)  # Number of buckets
     alpha = 0.7213 / (1 + 1.079 / m)  # Bias correction
     
     # Harmonic mean of 2^register_values
     raw_estimate = alpha * m * m / sum(2**(-reg) for reg in registers)
     
     # Small/large range corrections (omitted for simplicity)
-    return int(raw_estimate)
+    return int (raw_estimate)
 \`\`\`
 
 **Why harmonic mean?** Resists outliers (one bucket with large value doesn't skew estimate).
@@ -189,22 +189,22 @@ class HyperLogLog:
         else:
             self.alpha = 0.673
     
-    def _hash(self, element):
+    def _hash (self, element):
         """64-bit hash"""
-        h = hashlib.sha256(str(element).encode())
-        return int(h.hexdigest()[:16], 16)
+        h = hashlib.sha256(str (element).encode())
+        return int (h.hexdigest()[:16], 16)
     
-    def _leading_zeros(self, value, max_width=50):
+    def _leading_zeros (self, value, max_width=50):
         """Count leading zeros in binary representation"""
         if value == 0:
             return max_width + 1
         
         return max_width - value.bit_length() + 1
     
-    def add(self, element):
+    def add (self, element):
         """Add element to HyperLogLog"""
         # Hash element
-        hash_value = self._hash(element)
+        hash_value = self._hash (element)
         
         # Extract bucket index (first \`precision\` bits)
         bucket = hash_value & ((1 << self.precision) - 1)
@@ -213,12 +213,12 @@ class HyperLogLog:
         remainder = hash_value >> self.precision
         
         # Count leading zeros in remainder
-        leading_zeros = self._leading_zeros(remainder)
+        leading_zeros = self._leading_zeros (remainder)
         
         # Update register (keep maximum)
-        self.registers[bucket] = max(self.registers[bucket], leading_zeros)
+        self.registers[bucket] = max (self.registers[bucket], leading_zeros)
     
-    def count(self):
+    def count (self):
         """Estimate cardinality"""
         # Calculate raw estimate (harmonic mean)
         raw_estimate = self.alpha * self.m * self.m / sum(
@@ -230,32 +230,32 @@ class HyperLogLog:
             # Count zero registers
             zeros = self.registers.count(0)
             if zeros != 0:
-                return self.m * math.log(self.m / float(zeros))
+                return self.m * math.log (self.m / float (zeros))
         
         # Large range correction
         if raw_estimate > (1/30) * (2**32):
             return -2**32 * math.log(1 - raw_estimate / 2**32)
         
-        return int(raw_estimate)
+        return int (raw_estimate)
     
-    def merge(self, other):
+    def merge (self, other):
         """Merge another HyperLogLog (for distributed counting)"""
         if self.m != other.m:
             raise ValueError("Cannot merge HLLs with different precision")
         
-        for i in range(self.m):
-            self.registers[i] = max(self.registers[i], other.registers[i])
+        for i in range (self.m):
+            self.registers[i] = max (self.registers[i], other.registers[i])
 
 # Usage
-hll = HyperLogLog(precision=14)
+hll = HyperLogLog (precision=14)
 
 # Add elements
 for i in range(10000):
-    hll.add(f"user_{i}")
+    hll.add (f"user_{i}")
 
 estimated_count = hll.count()
 actual_count = 10000
-error = abs(estimated_count - actual_count) / actual_count * 100
+error = abs (estimated_count - actual_count) / actual_count * 100
 
 print(f"Actual: {actual_count}")
 print(f"Estimated: {estimated_count}")
@@ -355,7 +355,7 @@ WHERE date = '2024-01-01'
 
 **Fast approximate queries**:
 \`\`\`sql
-SELECT approx_distinct(user_id) FROM events
+SELECT approx_distinct (user_id) FROM events
 -- Returns in milliseconds vs minutes for exact count
 \`\`\`
 
@@ -369,26 +369,26 @@ SELECT approx_distinct(user_id) FROM events
 # Server 1: Counts unique visitors in US
 hll_us = HyperLogLog()
 for visitor in us_visitors:
-    hll_us.add(visitor)
+    hll_us.add (visitor)
 
 # Server 2: Counts unique visitors in EU  
 hll_eu = HyperLogLog()
 for visitor in eu_visitors:
-    hll_eu.add(visitor)
+    hll_eu.add (visitor)
 
 # Merge (take maximum of each register)
 hll_global = HyperLogLog()
-hll_global.merge(hll_us)
-hll_global.merge(hll_eu)
+hll_global.merge (hll_us)
+hll_global.merge (hll_eu)
 
 global_unique_visitors = hll_global.count()
 \`\`\`
 
 **Merge operation**:
 \`\`\`python
-def merge(hll1, hll2):
-    for i in range(len(hll1.registers)):
-        hll1.registers[i] = max(hll1.registers[i], hll2.registers[i])
+def merge (hll1, hll2):
+    for i in range (len (hll1.registers)):
+        hll1.registers[i] = max (hll1.registers[i], hll2.registers[i])
 \`\`\`
 
 **Benefits**:
@@ -483,13 +483,13 @@ Do NOT use when:
 
 \`\`\`python
 # Conservative (0.41% error, 64 KB)
-hll = HyperLogLog(precision=16)
+hll = HyperLogLog (precision=16)
 
 # Balanced (0.81% error, 16 KB)
-hll = HyperLogLog(precision=14)  # Most common
+hll = HyperLogLog (precision=14)  # Most common
 
 # Memory-constrained (1.63% error, 4 KB)
-hll = HyperLogLog(precision=12)
+hll = HyperLogLog (precision=12)
 \`\`\`
 
 ### Serialization (for storage/transfer)
@@ -498,11 +498,11 @@ hll = HyperLogLog(precision=12)
 import pickle
 
 # Serialize
-serialized = pickle.dumps(hll.registers)
+serialized = pickle.dumps (hll.registers)
 
 # Deserialize
-registers = pickle.loads(serialized)
-hll_restored = HyperLogLog(precision=14)
+registers = pickle.loads (serialized)
+hll_restored = HyperLogLog (precision=14)
 hll_restored.registers = registers
 \`\`\`
 
@@ -543,7 +543,7 @@ hll_restored.registers = registers
 
 **"How do you merge HyperLogLogs?"**
 - Take maximum of each register across HLLs
-- registers_merged[i] = max(hll1.registers[i], hll2.registers[i])
+- registers_merged[i] = max (hll1.registers[i], hll2.registers[i])
 - Enables distributed counting with minimal data transfer
 
 ### Design Exercise

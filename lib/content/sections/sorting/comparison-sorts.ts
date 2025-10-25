@@ -5,18 +5,18 @@
 export const comparisonsortsSection = {
   id: 'comparison-sorts',
   title: 'Comparison-Based Sorting Algorithms',
-  content: `**Comparison sorts** work by comparing pairs of elements. There's a theoretical lower bound: any comparison-based sort must be at least **O(n log n)** in the average case.
+  content: `**Comparison sorts** work by comparing pairs of elements. There\'s a theoretical lower bound: any comparison-based sort must be at least **O(n log n)** in the average case.
 
 **1. Bubble Sort - O(n²)**
 
 The simplest (and slowest) sort. Repeatedly steps through the list, compares adjacent elements, and swaps them if they're in the wrong order.
 
 \`\`\`python
-def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n):
+def bubble_sort (arr):
+    n = len (arr)
+    for i in range (n):
         swapped = False
-        for j in range(n - i - 1):
+        for j in range (n - i - 1):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
                 swapped = True
@@ -35,11 +35,11 @@ def bubble_sort(arr):
 Finds the minimum element and places it at the beginning. Repeat for the rest of the array.
 
 \`\`\`python
-def selection_sort(arr):
-    n = len(arr)
-    for i in range(n):
+def selection_sort (arr):
+    n = len (arr)
+    for i in range (n):
         min_idx = i
-        for j in range(i + 1, n):
+        for j in range (i + 1, n):
             if arr[j] < arr[min_idx]:
                 min_idx = j
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
@@ -56,8 +56,8 @@ def selection_sort(arr):
 Builds the final sorted array one item at a time by inserting each element into its correct position.
 
 \`\`\`python
-def insertion_sort(arr):
-    for i in range(1, len(arr)):
+def insertion_sort (arr):
+    for i in range(1, len (arr)):
         key = arr[i]
         j = i - 1
         while j >= 0 and arr[j] > key:
@@ -77,28 +77,28 @@ def insertion_sort(arr):
 Divide-and-conquer: split array in half, recursively sort each half, then merge.
 
 \`\`\`python
-def merge_sort(arr):
-    if len(arr) <= 1:
+def merge_sort (arr):
+    if len (arr) <= 1:
         return arr
     
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
+    mid = len (arr) // 2
+    left = merge_sort (arr[:mid])
+    right = merge_sort (arr[mid:])
     
-    return merge(left, right)
+    return merge (left, right)
 
-def merge(left, right):
+def merge (left, right):
     result = []
     i = j = 0
-    while i < len(left) and j < len(right):
+    while i < len (left) and j < len (right):
         if left[i] <= right[j]:
-            result.append(left[i])
+            result.append (left[i])
             i += 1
         else:
-            result.append(right[j])
+            result.append (right[j])
             j += 1
-    result.extend(left[i:])
-    result.extend(right[j:])
+    result.extend (left[i:])
+    result.extend (right[j:])
     return result
 \`\`\`
 
@@ -112,16 +112,16 @@ def merge(left, right):
 Pick a pivot, partition array so smaller elements are left, larger are right, recursively sort partitions.
 
 \`\`\`python
-def quick_sort(arr):
-    if len(arr) <= 1:
+def quick_sort (arr):
+    if len (arr) <= 1:
         return arr
     
-    pivot = arr[len(arr) // 2]
+    pivot = arr[len (arr) // 2]
     left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
     
-    return quick_sort(left) + middle + quick_sort(right)
+    return quick_sort (left) + middle + quick_sort (right)
 \`\`\`
 
 - **Time:** O(n log n) average, O(n²) worst (bad pivots)
@@ -134,11 +134,11 @@ def quick_sort(arr):
 Build a max heap, then repeatedly extract the maximum.
 
 \`\`\`python
-def heap_sort(arr):
+def heap_sort (arr):
     import heapq
     # Use min heap to get sorted order
-    heapq.heapify(arr)
-    return [heapq.heappop(arr) for _ in range(len(arr))]
+    heapq.heapify (arr)
+    return [heapq.heappop (arr) for _ in range (len (arr))]
 \`\`\`
 
 - **Time:** O(n log n) always - consistent

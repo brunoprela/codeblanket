@@ -115,7 +115,7 @@ class SECFilingRetriever:
             'User-Agent': user_agent
         }
         
-    def get_company_cik(self, ticker: str) -> str:
+    def get_company_cik (self, ticker: str) -> str:
         """
         Get CIK (Central Index Key) from ticker symbol
         
@@ -133,7 +133,7 @@ class SECFilingRetriever:
             'output': 'json'
         }
         
-        response = requests.get(url, params=params, headers=self.headers)
+        response = requests.get (url, params=params, headers=self.headers)
         time.sleep(0.1)  # Respect rate limits
         
         data = response.json()
@@ -142,7 +142,7 @@ class SECFilingRetriever:
         # Pad to 10 digits
         return cik.zfill(10)
     
-    def get_filings(self, cik: str, filing_type: str = '10-K', 
+    def get_filings (self, cik: str, filing_type: str = '10-K', 
                     count: int = 10) -> list:
         """
         Get recent filings for a company
@@ -166,7 +166,7 @@ class SECFilingRetriever:
             'output': 'json'
         }
         
-        response = requests.get(url, params=params, headers=self.headers)
+        response = requests.get (url, params=params, headers=self.headers)
         time.sleep(0.1)
         
         filings = response.json()['filings']['recent']
@@ -176,9 +176,9 @@ class SECFilingRetriever:
             'filing_date': date,
             'accession_number': acc_num,
             'url': f"{self.BASE_URL}/Archives/edgar/data/{cik}/{acc_num.replace('-', '')}/{acc_num}-index.htm"
-        } for date, acc_num in zip(filings['filingDate'], filings['accessionNumber'])]
+        } for date, acc_num in zip (filings['filingDate'], filings['accessionNumber'])]
     
-    def download_filing_text(self, accession_number: str, cik: str) -> str:
+    def download_filing_text (self, accession_number: str, cik: str) -> str:
         """
         Download the full text of a filing
         
@@ -195,32 +195,32 @@ class SECFilingRetriever:
         # Primary document is usually the .txt file
         url = f"{self.BASE_URL}/Archives/edgar/data/{cik}/{acc_num_no_dash}/{accession_number}.txt"
         
-        response = requests.get(url, headers=self.headers)
+        response = requests.get (url, headers=self.headers)
         time.sleep(0.1)
         
         if response.status_code == 200:
             return response.text
         else:
-            raise ValueError(f"Failed to download filing: {response.status_code}")
+            raise ValueError (f"Failed to download filing: {response.status_code}")
 
 # Example usage
 if __name__ == "__main__":
-    retriever = SECFilingRetriever(user_agent="YourName your@email.com")
+    retriever = SECFilingRetriever (user_agent="YourName your@email.com")
     
-    # Get Apple's CIK
+    # Get Apple\'s CIK
     cik = retriever.get_company_cik('AAPL')
     print(f"Apple CIK: {cik}")
     
     # Get recent 10-K filings
-    filings = retriever.get_filings(cik, filing_type='10-K', count=3)
-    print(f"\\nFound {len(filings)} recent 10-K filings")
+    filings = retriever.get_filings (cik, filing_type='10-K', count=3)
+    print(f"\\nFound {len (filings)} recent 10-K filings")
     
     # Download most recent filing
     if filings:
         filing = filings[0]
         print(f"\\nDownloading filing from {filing['filing_date']}...")
-        text = retriever.download_filing_text(filing['accession_number'], cik)
-        print(f"Downloaded {len(text)} characters")
+        text = retriever.download_filing_text (filing['accession_number'], cik)
+        print(f"Downloaded {len (text)} characters")
 \`\`\`
 
 ---
@@ -248,17 +248,17 @@ class SECFilingParser:
         'risk_factors': r'ITEM\\s+1A[.:\\s]+RISK\\s+FACTORS',
         'properties': r'ITEM\\s+2[.:\\s]+PROPERTIES',
         'legal': r'ITEM\\s+3[.:\\s]+LEGAL\\s+PROCEEDINGS',
-        'mda': r'ITEM\\s+7[.:\\s]+MANAGEMENT.?S\\s+DISCUSSION',
+        'mda': r'ITEM\\s+7[.:\\s]+MANAGEMENT.? S\\s+DISCUSSION',
         'financials': r'ITEM\\s+8[.:\\s]+FINANCIAL\\s+STATEMENTS',
         'controls': r'ITEM\\s+9A[.:\\s]+CONTROLS\\s+AND\\s+PROCEDURES',
     }
     
-    def clean_text(self, text: str) -> str:
+    def clean_text (self, text: str) -> str:
         """
         Clean HTML and formatting from filing text
         """
         # Parse HTML
-        soup = BeautifulSoup(text, 'html.parser')
+        soup = BeautifulSoup (text, 'html.parser')
         
         # Remove script and style elements
         for script in soup(["script", "style"]):
@@ -270,11 +270,11 @@ class SECFilingParser:
         # Clean up whitespace
         lines = (line.strip() for line in text.splitlines())
         chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        text = '\\n'.join(chunk for chunk in chunks if chunk)
+        text = '\\n'.join (chunk for chunk in chunks if chunk)
         
         return text
     
-    def extract_section(self, text: str, section_name: str) -> str:
+    def extract_section (self, text: str, section_name: str) -> str:
         """
         Extract a specific section from the filing
         
@@ -285,19 +285,19 @@ class SECFilingParser:
         Returns:
             Extracted section text
         """
-        pattern = self.SECTION_PATTERNS.get(section_name)
+        pattern = self.SECTION_PATTERNS.get (section_name)
         if not pattern:
-            raise ValueError(f"Unknown section: {section_name}")
+            raise ValueError (f"Unknown section: {section_name}")
         
         # Find start of section
-        start_match = re.search(pattern, text, re.IGNORECASE)
+        start_match = re.search (pattern, text, re.IGNORECASE)
         if not start_match:
             return ""
         
         start_pos = start_match.end()
         
         # Find start of next section (any ITEM)
-        next_section = re.search(r'ITEM\\s+\\d+[A-Z]?[.:\\s]+', 
+        next_section = re.search (r'ITEM\\s+\\d+[A-Z]?[.:\\s]+', 
                                 text[start_pos:], re.IGNORECASE)
         
         if next_section:
@@ -307,7 +307,7 @@ class SECFilingParser:
             # If no next section found, take rest of document (unlikely)
             return text[start_pos:].strip()
     
-    def extract_all_sections(self, text: str) -> dict:
+    def extract_all_sections (self, text: str) -> dict:
         """
         Extract all major sections from filing
         
@@ -315,19 +315,19 @@ class SECFilingParser:
             Dictionary mapping section names to content
         """
         # Clean text first
-        cleaned = self.clean_text(text)
+        cleaned = self.clean_text (text)
         
         sections = {}
         for section_name in self.SECTION_PATTERNS.keys():
             try:
-                sections[section_name] = self.extract_section(cleaned, section_name)
+                sections[section_name] = self.extract_section (cleaned, section_name)
             except Exception as e:
                 print(f"Warning: Could not extract {section_name}: {e}")
                 sections[section_name] = ""
         
         return sections
     
-    def extract_tables(self, text: str) -> list:
+    def extract_tables (self, text: str) -> list:
         """
         Extract financial tables from HTML filing
         
@@ -336,16 +336,16 @@ class SECFilingParser:
         """
         import pandas as pd
         
-        soup = BeautifulSoup(text, 'html.parser')
+        soup = BeautifulSoup (text, 'html.parser')
         tables = soup.find_all('table')
         
         dfs = []
         for table in tables:
             try:
-                df = pd.read_html(str(table))[0]
+                df = pd.read_html (str (table))[0]
                 # Only keep tables with reasonable size
-                if len(df) > 2 and len(df.columns) > 1:
-                    dfs.append(df)
+                if len (df) > 2 and len (df.columns) > 1:
+                    dfs.append (df)
             except Exception:
                 continue
         
@@ -358,11 +358,11 @@ parser = SECFilingParser()
 # text = retriever.download_filing_text(...)
 
 # Extract all sections
-sections = parser.extract_all_sections(text)
+sections = parser.extract_all_sections (text)
 
 # Display section lengths
 for section_name, content in sections.items():
-    print(f"{section_name}: {len(content)} characters")
+    print(f"{section_name}: {len (content)} characters")
 
 # Extract risk factors section specifically
 risk_factors = sections['risk_factors']
@@ -390,10 +390,10 @@ class FinancialDocumentAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_risk_factors(self, risk_factors_text: str) -> Dict:
+    def analyze_risk_factors (self, risk_factors_text: str) -> Dict:
         """
         Analyze risk factors section and categorize risks
         
@@ -425,7 +425,7 @@ Provide your analysis in JSON format."""
         
         return response.content[0].text
     
-    def extract_key_metrics(self, mda_text: str) -> Dict:
+    def extract_key_metrics (self, mda_text: str) -> Dict:
         """
         Extract key financial metrics mentioned in MD&A
         
@@ -460,7 +460,7 @@ Provide your analysis as structured JSON."""
         
         return response.content[0].text
     
-    def compare_filings(self, current_text: str, previous_text: str, 
+    def compare_filings (self, current_text: str, previous_text: str, 
                        section: str = 'risk_factors') -> str:
         """
         Compare two filings to identify changes
@@ -498,7 +498,7 @@ Provide a detailed comparison analysis."""
         
         return response.content[0].text
     
-    def summarize_filing(self, sections: Dict[str, str]) -> str:
+    def summarize_filing (self, sections: Dict[str, str]) -> str:
         """
         Create executive summary of entire filing
         
@@ -526,7 +526,7 @@ Include:
 1. Company business overview (2-3 sentences)
 2. Financial performance highlights
 3. Top 3 risks
-4. Management's outlook
+4. Management\'s outlook
 5. Key takeaways for investors
 6. Notable changes from previous filings (if evident)
 
@@ -544,20 +544,20 @@ Filing Sections:
         return response.content[0].text
 
 # Example usage
-analyzer = FinancialDocumentAnalyzer(api_key="your-key")
+analyzer = FinancialDocumentAnalyzer (api_key="your-key")
 
 # Analyze risk factors
-risk_analysis = analyzer.analyze_risk_factors(sections['risk_factors'])
+risk_analysis = analyzer.analyze_risk_factors (sections['risk_factors'])
 print("Risk Analysis:")
 print(risk_analysis)
 
 # Extract metrics from MD&A
-metrics = analyzer.extract_key_metrics(sections['mda'])
+metrics = analyzer.extract_key_metrics (sections['mda'])
 print("\\nExtracted Metrics:")
 print(metrics)
 
 # Generate executive summary
-summary = analyzer.summarize_filing(sections)
+summary = analyzer.summarize_filing (sections)
 print("\\nExecutive Summary:")
 print(summary)
 \`\`\`
@@ -587,15 +587,15 @@ class LongDocumentProcessor:
         # Claude has 200k token context, but we'll be conservative
         self.max_chunk_tokens = 8000
         
-    def count_tokens(self, text: str) -> int:
+    def count_tokens (self, text: str) -> int:
         """
         Estimate token count for text
         """
         # Use GPT tokenizer as approximation
         encoding = tiktoken.get_encoding("cl100k_base")
-        return len(encoding.encode(text))
+        return len (encoding.encode (text))
     
-    def chunk_text(self, text: str, overlap: int = 200) -> List[str]:
+    def chunk_text (self, text: str, overlap: int = 200) -> List[str]:
         """
         Split text into overlapping chunks
         
@@ -607,23 +607,23 @@ class LongDocumentProcessor:
             List of text chunks
         """
         encoding = tiktoken.get_encoding("cl100k_base")
-        tokens = encoding.encode(text)
+        tokens = encoding.encode (text)
         
         chunks = []
         start = 0
         
-        while start < len(tokens):
+        while start < len (tokens):
             end = start + self.max_chunk_tokens
             chunk_tokens = tokens[start:end]
-            chunk_text = encoding.decode(chunk_tokens)
-            chunks.append(chunk_text)
+            chunk_text = encoding.decode (chunk_tokens)
+            chunks.append (chunk_text)
             
             # Move forward, accounting for overlap
             start = end - overlap
         
         return chunks
     
-    def map_reduce_analysis(self, text: str, analysis_type: str) -> str:
+    def map_reduce_analysis (self, text: str, analysis_type: str) -> str:
         """
         Analyze long document using map-reduce pattern
         
@@ -635,12 +635,12 @@ class LongDocumentProcessor:
             Final aggregated analysis
         """
         # Step 1: MAP - Analyze each chunk
-        chunks = self.chunk_text(text)
-        print(f"Processing {len(chunks)} chunks...")
+        chunks = self.chunk_text (text)
+        print(f"Processing {len (chunks)} chunks...")
         
         chunk_analyses = []
-        for i, chunk in enumerate(chunks):
-            print(f"Analyzing chunk {i+1}/{len(chunks)}...")
+        for i, chunk in enumerate (chunks):
+            print(f"Analyzing chunk {i+1}/{len (chunks)}...")
             
             prompt = f"""Analyze this section of a financial document.
 Focus on: {analysis_type}
@@ -656,14 +656,14 @@ Text:
                 messages=[{"role": "user", "content": prompt}]
             )
             
-            chunk_analyses.append(response.content[0].text)
+            chunk_analyses.append (response.content[0].text)
         
         # Step 2: REDUCE - Synthesize all analyses
         print("Synthesizing results...")
         
         combined_analyses = "\\n\\n---\\n\\n".join([
             f"Chunk {i+1} Analysis:\\n{analysis}"
-            for i, analysis in enumerate(chunk_analyses)
+            for i, analysis in enumerate (chunk_analyses)
         ])
         
         synthesis_prompt = f"""Synthesize these analyses of different sections of a financial document.
@@ -688,7 +688,7 @@ Section Analyses:
         return response.content[0].text
 
 # Example usage
-processor = LongDocumentProcessor(analyzer.client)
+processor = LongDocumentProcessor (analyzer.client)
 
 # Analyze very long MD&A section
 long_mda = sections['mda']  # Could be 50+ pages
@@ -719,28 +719,28 @@ from pydantic import BaseModel, Field
 
 class RiskFactor(BaseModel):
     """Structured risk factor"""
-    category: str = Field(description="Risk category (market, operational, regulatory, etc.)")
-    description: str = Field(description="Brief description of the risk")
-    severity: str = Field(description="Severity level (Low/Medium/High)")
-    likelihood: str = Field(description="Likelihood of occurrence (Low/Medium/High)")
+    category: str = Field (description="Risk category (market, operational, regulatory, etc.)")
+    description: str = Field (description="Brief description of the risk")
+    severity: str = Field (description="Severity level (Low/Medium/High)")
+    likelihood: str = Field (description="Likelihood of occurrence (Low/Medium/High)")
 
 class FinancialMetrics(BaseModel):
     """Structured financial metrics"""
-    revenue: Optional[float] = Field(description="Revenue in millions")
-    revenue_growth: Optional[float] = Field(description="Revenue growth rate as percentage")
-    net_income: Optional[float] = Field(description="Net income in millions")
-    profit_margin: Optional[float] = Field(description="Profit margin as percentage")
-    eps: Optional[float] = Field(description="Earnings per share")
-    free_cash_flow: Optional[float] = Field(description="Free cash flow in millions")
+    revenue: Optional[float] = Field (description="Revenue in millions")
+    revenue_growth: Optional[float] = Field (description="Revenue growth rate as percentage")
+    net_income: Optional[float] = Field (description="Net income in millions")
+    profit_margin: Optional[float] = Field (description="Profit margin as percentage")
+    eps: Optional[float] = Field (description="Earnings per share")
+    free_cash_flow: Optional[float] = Field (description="Free cash flow in millions")
 
 class FilingAnalysis(BaseModel):
     """Complete filing analysis"""
-    summary: str = Field(description="Executive summary of the filing")
-    key_risks: List[RiskFactor] = Field(description="Top 5 key risks")
-    financial_metrics: FinancialMetrics = Field(description="Key financial metrics")
-    outlook: str = Field(description="Management's outlook and guidance")
-    sentiment: str = Field(description="Overall sentiment (Positive/Neutral/Negative)")
-    red_flags: List[str] = Field(description="Any concerning signals or red flags")
+    summary: str = Field (description="Executive summary of the filing")
+    key_risks: List[RiskFactor] = Field (description="Top 5 key risks")
+    financial_metrics: FinancialMetrics = Field (description="Key financial metrics")
+    outlook: str = Field (description="Management\'s outlook and guidance")
+    sentiment: str = Field (description="Overall sentiment (Positive/Neutral/Negative)")
+    red_flags: List[str] = Field (description="Any concerning signals or red flags")
 
 class StructuredDocumentAnalyzer:
     """
@@ -751,7 +751,7 @@ class StructuredDocumentAnalyzer:
         self.client = client
         self.model = "claude-3-5-sonnet-20241022"
     
-    def extract_structured_analysis(self, sections: Dict[str, str]) -> FilingAnalysis:
+    def extract_structured_analysis (self, sections: Dict[str, str]) -> FilingAnalysis:
         """
         Extract structured analysis from filing sections
         
@@ -777,7 +777,7 @@ Provide a comprehensive analysis including:
 - Executive summary
 - Top 5 key risks with categories, severity, and likelihood
 - Financial metrics (extract actual numbers mentioned)
-- Management's outlook
+- Management\'s outlook
 - Overall sentiment
 - Any red flags or concerns
 
@@ -802,14 +802,14 @@ Return your analysis as a JSON object matching this structure:
             json_str = response_text
         
         # Parse into structured object
-        data = json.loads(json_str)
+        data = json.loads (json_str)
         return FilingAnalysis(**data)
 
 # Example usage
-structured_analyzer = StructuredDocumentAnalyzer(analyzer.client)
+structured_analyzer = StructuredDocumentAnalyzer (analyzer.client)
 
 # Extract structured analysis
-analysis = structured_analyzer.extract_structured_analysis(sections)
+analysis = structured_analyzer.extract_structured_analysis (sections)
 
 print("Structured Analysis:")
 print(f"Summary: {analysis.summary}")
@@ -852,18 +852,18 @@ class FilingAnalysisPipeline:
     
     def __init__(self, sec_user_agent: str, anthropic_api_key: str, 
                  db_path: str = "filings.db"):
-        self.retriever = SECFilingRetriever(sec_user_agent)
+        self.retriever = SECFilingRetriever (sec_user_agent)
         self.parser = SECFilingParser()
-        self.analyzer = FinancialDocumentAnalyzer(anthropic_api_key)
-        self.structured_analyzer = StructuredDocumentAnalyzer(self.analyzer.client)
+        self.analyzer = FinancialDocumentAnalyzer (anthropic_api_key)
+        self.structured_analyzer = StructuredDocumentAnalyzer (self.analyzer.client)
         
         # Initialize database
         self.db_path = db_path
         self._init_database()
     
-    def _init_database(self):
+    def _init_database (self):
         """Create database tables for storing analyses"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -889,7 +889,7 @@ class FilingAnalysisPipeline:
                 description TEXT,
                 severity TEXT,
                 likelihood TEXT,
-                FOREIGN KEY (filing_id) REFERENCES filings(id)
+                FOREIGN KEY (filing_id) REFERENCES filings (id)
             )
         """)
         
@@ -903,14 +903,14 @@ class FilingAnalysisPipeline:
                 profit_margin REAL,
                 eps REAL,
                 free_cash_flow REAL,
-                FOREIGN KEY (filing_id) REFERENCES filings(id)
+                FOREIGN KEY (filing_id) REFERENCES filings (id)
             )
         """)
         
         conn.commit()
         conn.close()
     
-    def process_company(self, ticker: str, filing_type: str = '10-K', 
+    def process_company (self, ticker: str, filing_type: str = '10-K', 
                        count: int = 1) -> pd.DataFrame:
         """
         Process recent filings for a company
@@ -926,10 +926,10 @@ class FilingAnalysisPipeline:
         print(f"Processing {ticker} {filing_type} filings...")
         
         # Get company CIK
-        cik = self.retriever.get_company_cik(ticker)
+        cik = self.retriever.get_company_cik (ticker)
         
         # Get recent filings
-        filings = self.retriever.get_filings(cik, filing_type, count)
+        filings = self.retriever.get_filings (cik, filing_type, count)
         
         results = []
         
@@ -937,7 +937,7 @@ class FilingAnalysisPipeline:
             print(f"\\nProcessing {filing['filing_date']}...")
             
             # Check if already processed
-            if self._is_processed(filing['accession_number']):
+            if self._is_processed (filing['accession_number']):
                 print(f"Already processed, skipping...")
                 continue
             
@@ -948,10 +948,10 @@ class FilingAnalysisPipeline:
                 )
                 
                 # Parse sections
-                sections = self.parser.extract_all_sections(text)
+                sections = self.parser.extract_all_sections (text)
                 
                 # Analyze with LLM
-                analysis = self.structured_analyzer.extract_structured_analysis(sections)
+                analysis = self.structured_analyzer.extract_structured_analysis (sections)
                 
                 # Store in database
                 filing_id = self._store_analysis(
@@ -978,11 +978,11 @@ class FilingAnalysisPipeline:
                 print(f"Error processing filing: {e}")
                 continue
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def _is_processed(self, accession_number: str) -> bool:
+    def _is_processed (self, accession_number: str) -> bool:
         """Check if filing already processed"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute(
@@ -995,10 +995,10 @@ class FilingAnalysisPipeline:
         
         return count > 0
     
-    def _store_analysis(self, ticker: str, cik: str, filing: Dict, 
+    def _store_analysis (self, ticker: str, cik: str, filing: Dict, 
                        analysis: FilingAnalysis) -> int:
         """Store analysis in database"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Store filing
@@ -1043,9 +1043,9 @@ class FilingAnalysisPipeline:
         
         return filing_id
     
-    def get_company_history(self, ticker: str) -> pd.DataFrame:
+    def get_company_history (self, ticker: str) -> pd.DataFrame:
         """Get historical analysis for a company"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         query = """
             SELECT 
@@ -1061,7 +1061,7 @@ class FilingAnalysisPipeline:
             ORDER BY f.filing_date DESC
         """
         
-        df = pd.read_sql_query(query, conn, params=(ticker,))
+        df = pd.read_sql_query (query, conn, params=(ticker,))
         conn.close()
         
         return df
@@ -1078,7 +1078,7 @@ if __name__ == "__main__":
     
     for ticker in tickers:
         try:
-            results = pipeline.process_company(ticker, filing_type='10-K', count=3)
+            results = pipeline.process_company (ticker, filing_type='10-K', count=3)
             print(f"\\n{ticker} Analysis Summary:")
             print(results)
         except Exception as e:

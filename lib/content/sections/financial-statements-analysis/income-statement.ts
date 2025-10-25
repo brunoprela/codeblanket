@@ -1,7 +1,8 @@
 export const incomeStatement = {
-  title: "Income Statement Analysis",
-  slug: "income-statement",
-  description: "Master financial statement analysis and build production systems",
+  title: 'Income Statement Analysis',
+  slug: 'income-statement',
+  description:
+    'Master financial statement analysis and build production systems',
   content: `
 # Income Statement Analysis
 
@@ -132,7 +133,7 @@ class RevenueAnalyzer:
         """
         self.data = financial_data.sort_values('period_end')
     
-    def calculate_revenue_quality_score(self) -> pd.DataFrame:
+    def calculate_revenue_quality_score (self) -> pd.DataFrame:
         """Calculate comprehensive revenue quality metrics."""
         
         df = self.data.copy()
@@ -152,11 +153,11 @@ class RevenueAnalyzer:
         df['rev_quality_flag'] = df['receivables_growth'] > df['revenue_growth'] * 1.3
         
         # 5. Quality score (0-100)
-        df['quality_score'] = self._calculate_quality_score(df)
+        df['quality_score'] = self._calculate_quality_score (df)
         
         return df
     
-    def _calculate_quality_score(self, df: pd.DataFrame) -> pd.Series:
+    def _calculate_quality_score (self, df: pd.DataFrame) -> pd.Series:
         """Calculate composite quality score."""
         
         score = pd.Series(100, index=df.index)
@@ -165,7 +166,7 @@ class RevenueAnalyzer:
         score -= np.clip((df['dso'] - 45) / 2, 0, 20)  # -20 if DSO > 85 days
         
         # Penalize increasing DSO
-        score -= np.clip(df['dso_change'] * 2, 0, 15)
+        score -= np.clip (df['dso_change'] * 2, 0, 15)
         
         # Penalize low cash realization
         score -= np.clip((0.8 - df['cash_realization']) * 50, 0, 20)
@@ -175,11 +176,11 @@ class RevenueAnalyzer:
         
         # Reward consistent growth
         growth_volatility = df['revenue_growth'].rolling(4).std()
-        score -= np.clip(growth_volatility * 100, 0, 10)
+        score -= np.clip (growth_volatility * 100, 0, 10)
         
-        return np.clip(score, 0, 100)
+        return np.clip (score, 0, 100)
     
-    def detect_channel_stuffing(self, threshold: float = 0.3) -> Dict:
+    def detect_channel_stuffing (self, threshold: float = 0.3) -> Dict:
         """Detect potential channel stuffing (aggressive sales to distributors)."""
         
         df = self.data.copy()
@@ -196,22 +197,22 @@ class RevenueAnalyzer:
         alerts = df[df['stuffing_indicator'] > threshold]
         
         return {
-            'detected': len(alerts) > 0,
+            'detected': len (alerts) > 0,
             'periods': alerts['period_end'].tolist(),
-            'severity': alerts['stuffing_indicator'].mean() if len(alerts) > 0 else 0
+            'severity': alerts['stuffing_indicator'].mean() if len (alerts) > 0 else 0
         }
     
-    def analyze_revenue_composition(self, revenue_by_segment: Dict[str, List[float]]) -> pd.DataFrame:
+    def analyze_revenue_composition (self, revenue_by_segment: Dict[str, List[float]]) -> pd.DataFrame:
         """Analyze revenue diversification and trends by segment."""
         
-        df = pd.DataFrame(revenue_by_segment)
+        df = pd.DataFrame (revenue_by_segment)
         
         # Calculate segment percentages
-        total = df.sum(axis=1)
-        pct_df = df.div(total, axis=0) * 100
+        total = df.sum (axis=1)
+        pct_df = df.div (total, axis=0) * 100
         
         # Calculate concentration (Herfindahl-Hirschman Index)
-        hhi = (pct_df ** 2).sum(axis=1)
+        hhi = (pct_df ** 2).sum (axis=1)
         
         # Growth rates by segment
         growth_df = df.pct_change()
@@ -219,13 +220,13 @@ class RevenueAnalyzer:
         return pd.DataFrame({
             'total_revenue': total,
             'hhi_concentration': hhi,  # Higher = more concentrated
-            'dominant_segment': pct_df.idxmax(axis=1),
-            'dominant_segment_pct': pct_df.max(axis=1),
+            'dominant_segment': pct_df.idxmax (axis=1),
+            'dominant_segment_pct': pct_df.max (axis=1),
             **{f'{col}_growth': growth_df[col] for col in df.columns}
         })
 
 # Usage Example
-# Analyzing Apple's revenue quality
+# Analyzing Apple\'s revenue quality
 apple_data = pd.DataFrame({
     'period_end': pd.date_range('2020-01-01', periods=12, freq='Q'),
     'revenue': [91_800, 58_300, 64_700, 111_400] * 3,  # Quarterly, in millions
@@ -233,7 +234,7 @@ apple_data = pd.DataFrame({
     'cash_from_operations': [80_700, 50_200, 58_000, 95_000] * 3
 })
 
-analyzer = RevenueAnalyzer(apple_data)
+analyzer = RevenueAnalyzer (apple_data)
 quality_metrics = analyzer.calculate_revenue_quality_score()
 
 print("Revenue Quality Analysis:")
@@ -242,7 +243,7 @@ print(quality_metrics[['period_end', 'revenue_growth', 'dso', 'quality_score']].
 # Check for channel stuffing
 stuffing = analyzer.detect_channel_stuffing()
 if stuffing['detected']:
-    print(f"⚠️ Potential channel stuffing detected in {len(stuffing['periods'])} periods")
+    print(f"⚠️ Potential channel stuffing detected in {len (stuffing['periods'])} periods")
 \`\`\`
 
 ---
@@ -297,9 +298,9 @@ cogs_total = sum([amt for _, amt in expenses['COGS']])
 sga_total = sum([amt for _, amt in expenses['SG&A']])
 rd_total = sum([amt for _, amt in expenses['R&D']])
 
-print(f"COGS: ${cogs_total:,}")  # $900,000
-print(f"SG&A: ${sga_total:,}")   # $2, 300,000
-print(f"R&D: ${rd_total:,}")     # $2, 600,000
+print(f"COGS: \${cogs_total:,}")  # $900,000
+print(f"SG&A: \${sga_total:,}")   # $2, 300,000
+print(f"R&D: \${rd_total:,}")     # $2, 600,000
 \`\`\`
 
 ### Gross Margin Analysis
@@ -309,7 +310,7 @@ print(f"R&D: ${rd_total:,}")     # $2, 600,000
 This is the **single most important metric** for understanding business model quality.
 
 \`\`\`python
-def analyze_gross_margin(company_data: pd.DataFrame) -> Dict:
+def analyze_gross_margin (company_data: pd.DataFrame) -> Dict:
     """Analyze gross margin trends and compare to industry."""
     
     company_data['gross_profit'] = company_data['revenue'] - company_data['cogs']
@@ -384,7 +385,7 @@ for name, data in companies.items():
 - IT infrastructure (non-product)
 
 \`\`\`python
-def analyze_sga_efficiency(financials: pd.DataFrame) -> pd.DataFrame:
+def analyze_sga_efficiency (financials: pd.DataFrame) -> pd.DataFrame:
     """Analyze SG&A as percentage of revenue (operating leverage)."""
     
     financials['sga_ratio'] = financials['sga'] / financials['revenue']
@@ -410,7 +411,7 @@ data = pd.DataFrame({
     'sga': [50, 55, 58, 61]           # Growing only 6% per quarter
 })
 
-result = analyze_sga_efficiency(data)
+result = analyze_sga_efficiency (data)
 print("Operating Leverage Analysis:")
 print(result[['quarter', 'revenue', 'sga', 'sga_ratio', 'operating_leverage']])
 
@@ -437,7 +438,7 @@ rd_intensity = {
     'Retail': 0.00,          # <1% (not R&D intensive)
 }
 
-def evaluate_rd_investment(company: str, revenue: float, rd_spend: float) -> Dict:
+def evaluate_rd_investment (company: str, revenue: float, rd_spend: float) -> Dict:
     """Evaluate if company is investing appropriately in R&D."""
     
     rd_ratio = rd_spend / revenue
@@ -540,7 +541,7 @@ class EarningsMetrics:
         """
 
 # Practical comparison
-def compare_earnings_metrics(company_data: Dict) -> pd.DataFrame:
+def compare_earnings_metrics (company_data: Dict) -> pd.DataFrame:
     """Compare different earnings measures."""
     
     data = {
@@ -554,7 +555,7 @@ def compare_earnings_metrics(company_data: Dict) -> pd.DataFrame:
         ]
     }
     
-    df = pd.DataFrame(data)
+    df = pd.DataFrame (data)
     df['% of Revenue'] = (df['Amount'] / company_data['revenue'] * 100).round(1)
     
     return df
@@ -577,9 +578,9 @@ software = {
 }
 
 print("Manufacturing Company:")
-print(compare_earnings_metrics(manufacturing))
+print(compare_earnings_metrics (manufacturing))
 print("\\nSoftware Company:")
-print(compare_earnings_metrics(software))
+print(compare_earnings_metrics (software))
 
 # Key insight: Software business has better margins at EVERY level
 \`\`\`
@@ -591,7 +592,7 @@ print(compare_earnings_metrics(software))
 ### Basic vs Diluted EPS
 
 \`\`\`python
-def calculate_eps(financial_data: Dict) -> Dict:
+def calculate_eps (financial_data: Dict) -> Dict:
     """Calculate both basic and diluted EPS."""
     
     net_income = financial_data['net_income']
@@ -644,9 +645,9 @@ apple_example = {
     'stock_price': 180
 }
 
-eps_data = calculate_eps(apple_example)
-print(f"Basic EPS: ${eps_data['basic_eps']: .2f}")
-print(f"Diluted EPS: ${eps_data['diluted_eps']:.2f}")
+eps_data = calculate_eps (apple_example)
+print(f"Basic EPS: \${eps_data['basic_eps']:.2f}")
+print(f"Diluted EPS: \${eps_data['diluted_eps']:.2f}")
 print(f"Dilution: {eps_data['dilution_pct']:.1f}%")
 
 # Output:
@@ -762,7 +763,7 @@ print(analyzer.analyze_eps_growth_sources(
 
 ## Real-World Example: Tech vs Retail Income Statement
 
-Let's compare Microsoft (software) vs Walmart (retail):
+Let\'s compare Microsoft (software) vs Walmart (retail):
 
 \`\`\`python
 def compare_income_statements():
@@ -796,7 +797,7 @@ def compare_income_statements():
         'shares': 2_660,
     }
     
-    def analyze(company_name: str, data: Dict):
+    def analyze (company_name: str, data: Dict):
         print(f"\\n{company_name} Analysis:")
         print("=" * 50)
         
@@ -809,12 +810,12 @@ def compare_income_statements():
         eps = data['net_income'] / data['shares']
         revenue_per_share = data['revenue'] / data['shares']
         
-        print(f"Revenue: ${data['revenue']:, .0f}M")
+        print(f"Revenue: \${data['revenue']:,.0f}M")
 print(f"Gross Margin: {gross_margin:.1%}")
 print(f"Operating Margin: {operating_margin:.1%}")
 print(f"Net Margin: {net_margin:.1%}")
-print(f"EPS: ${eps:.2f}")
-print(f"Revenue/Share: ${revenue_per_share:.2f}")
+print(f"EPS: \${eps:.2f}")
+print(f"Revenue/Share: \${revenue_per_share:.2f}")
         
         # Efficiency metrics
 print(f"\\nExpense Structure:")
@@ -877,27 +878,27 @@ class RevenueQualityDetector:
         severity_score = 0
         
         # Check 1: DSO trending
-        dso_issue = self._check_dso_trend(current_period, prior_period)
+        dso_issue = self._check_dso_trend (current_period, prior_period)
         if dso_issue:
-            issues.append(dso_issue)
+            issues.append (dso_issue)
             severity_score += dso_issue['severity']
         
         # Check 2: Receivables growth
-        ar_issue = self._check_receivables_growth(current_period, prior_period)
+        ar_issue = self._check_receivables_growth (current_period, prior_period)
         if ar_issue:
-            issues.append(ar_issue)
+            issues.append (ar_issue)
             severity_score += ar_issue['severity']
         
         # Check 3: Deferred revenue (for subscription businesses)
-        dr_issue = self._check_deferred_revenue(current_period, prior_period)
+        dr_issue = self._check_deferred_revenue (current_period, prior_period)
         if dr_issue:
-            issues.append(dr_issue)
+            issues.append (dr_issue)
             severity_score += dr_issue['severity']
         
         # Check 4: One-time revenue spikes
-        spike_issue = self._check_revenue_spike(current_period, prior_period)
+        spike_issue = self._check_revenue_spike (current_period, prior_period)
         if spike_issue:
-            issues.append(spike_issue)
+            issues.append (spike_issue)
             severity_score += spike_issue['severity']
         
         # Overall assessment
@@ -911,12 +912,12 @@ class RevenueQualityDetector:
         return {
             'overall_rating': rating,
             'severity_score': severity_score,
-            'issues_found': len(issues),
+            'issues_found': len (issues),
             'issues': issues,
-            'recommendation': self._generate_recommendation(rating, issues)
+            'recommendation': self._generate_recommendation (rating, issues)
         }
     
-    def _check_dso_trend(self, current: Dict, prior: Dict) -> Dict:
+    def _check_dso_trend (self, current: Dict, prior: Dict) -> Dict:
         """Check if Days Sales Outstanding is increasing."""
         
         current_dso = (current['accounts_receivable'] / current['revenue']) * 90
@@ -941,7 +942,7 @@ class RevenueQualityDetector:
             }
         return None
     
-    def _check_receivables_growth(self, current: Dict, prior: Dict) -> Dict:
+    def _check_receivables_growth (self, current: Dict, prior: Dict) -> Dict:
         """Check if receivables growing faster than revenue."""
         
         rev_growth = (current['revenue'] - prior['revenue']) / prior['revenue']
@@ -959,7 +960,7 @@ class RevenueQualityDetector:
             }
         return None
     
-    def _check_deferred_revenue(self, current: Dict, prior: Dict) -> Dict:
+    def _check_deferred_revenue (self, current: Dict, prior: Dict) -> Dict:
         """Check deferred revenue trends (key for SaaS)."""
         
         if 'deferred_revenue' not in current or 'deferred_revenue' not in prior:
@@ -981,7 +982,7 @@ class RevenueQualityDetector:
             }
         return None
     
-    def _check_revenue_spike(self, current: Dict, prior: Dict) -> Dict:
+    def _check_revenue_spike (self, current: Dict, prior: Dict) -> Dict:
         """Detect unusual revenue spikes (especially Q4)."""
         
         rev_growth = (current['revenue'] - prior['revenue']) / prior['revenue']
@@ -1006,7 +1007,7 @@ class RevenueQualityDetector:
                 }
         return None
     
-    def _generate_recommendation(self, rating: str, issues: List[Dict]) -> str:
+    def _generate_recommendation (self, rating: str, issues: List[Dict]) -> str:
         """Generate actionable recommendation."""
         
         if rating == 'HIGH RISK':
@@ -1054,7 +1055,7 @@ prior_q = {
     'deferred_revenue': 120_000
 }
 
-analysis = detector.run_full_analysis(current_q, prior_q)
+analysis = detector.run_full_analysis (current_q, prior_q)
 
 print("Revenue Quality Analysis")
 print("=" * 60)
@@ -1095,5 +1096,5 @@ print(f"\\nRecommendation:{analysis['recommendation']}")
 - ❌ Gross margins declining over multiple quarters
 
 **Next Section**: Balance Sheet Analysis—understanding what companies own and owe.
-`
+`,
 };

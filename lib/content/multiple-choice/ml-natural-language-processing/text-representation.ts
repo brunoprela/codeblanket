@@ -13,7 +13,7 @@ export const textRepresentationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'IDF = log(total_documents / documents_containing_term) = log(1000 / 500) = log(2) ≈ 0.30. This relatively low IDF indicates "machine" is common (appears in 50% of documents), so it will be down-weighted in TF-IDF. Rare words that appear in fewer documents would have higher IDF values.',
+      'IDF = log (total_documents / documents_containing_term) = log(1000 / 500) = log(2) ≈ 0.30. This relatively low IDF indicates "machine" is common (appears in 50% of documents), so it will be down-weighted in TF-IDF. Rare words that appear in fewer documents would have higher IDF values.',
   },
   {
     id: 'text-representation-mc-2',

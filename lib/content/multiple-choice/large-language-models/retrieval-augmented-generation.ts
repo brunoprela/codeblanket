@@ -42,7 +42,7 @@ export const retrievalAugmentedGenerationMC = {
       ],
       correctAnswer: 1,
       explanation:
-        "Irrelevant retrieved documents can pollute the context, confusing the LLM and leading to worse answers than using no retrieval. It's critical to set relevance thresholds and use reranking to ensure only truly relevant information is included.",
+        "Irrelevant retrieved documents can pollute the context, confusing the LLM and leading to worse answers than using no retrieval. It\'s critical to set relevance thresholds and use reranking to ensure only truly relevant information is included.",
     },
     {
       id: 4,

@@ -35,10 +35,10 @@ export const combinatoricscountingQuiz = [
   {
     id: 'q3',
     question:
-      "Pascal's Triangle shows binomial coefficients. Explain the property that the sum of row n equals 2^n and what this means for subset counting.",
+      "Pascal\'s Triangle shows binomial coefficients. Explain the property that the sum of row n equals 2^n and what this means for subset counting.",
     hint: 'Think about all possible subsets of a set with n elements.',
     sampleAnswer:
-      "Row n of Pascal's Triangle contains all binomial coefficients C(n,0), C(n,1), ..., C(n,n). Their sum equals 2^n, which represents the total number of subsets of an n-element set. Here's why: C(n,k) counts subsets of size exactly k. When we sum over all k from 0 to n, we're counting ALL possible subsets (empty set, size 1, size 2, ..., full set). For each of the n elements, we have 2 choices (include it or don't), giving 2^n total subsets. In ML: This is the size of the feature subset search space. With 20 features, there are 2^20 ≈ 1 million possible feature subsets! This is why we can't exhaustively try all subsets. The formula also appears in: (1) Neural network dropout (each neuron on/off), (2) Ensemble methods (subsets of models), (3) Data augmentation (combinations of transformations).",
+      "Row n of Pascal\'s Triangle contains all binomial coefficients C(n,0), C(n,1), ..., C(n,n). Their sum equals 2^n, which represents the total number of subsets of an n-element set. Here's why: C(n,k) counts subsets of size exactly k. When we sum over all k from 0 to n, we're counting ALL possible subsets (empty set, size 1, size 2, ..., full set). For each of the n elements, we have 2 choices (include it or don't), giving 2^n total subsets. In ML: This is the size of the feature subset search space. With 20 features, there are 2^20 ≈ 1 million possible feature subsets! This is why we can't exhaustively try all subsets. The formula also appears in: (1) Neural network dropout (each neuron on/off), (2) Ensemble methods (subsets of models), (3) Data augmentation (combinations of transformations).",
     keyPoints: [
       'Sum of row n: C(n,0) + C(n,1) + ... + C(n,n) = 2^n',
       '2^n = total number of subsets of n-element set',

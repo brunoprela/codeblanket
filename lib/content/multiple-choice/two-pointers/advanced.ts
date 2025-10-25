@@ -31,7 +31,7 @@ export const advancedMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "In Floyd's cycle detection, what is the speed ratio between fast and slow pointers?",
+      "In Floyd\'s cycle detection, what is the speed ratio between fast and slow pointers?",
     options: [
       'Fast is 3x slow',
       'Fast is 2x slow',
@@ -40,7 +40,7 @@ export const advancedMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "In Floyd's cycle detection algorithm, the slow pointer moves 1 step at a time while the fast pointer moves 2 steps at a time - a 2:1 speed ratio.",
+      "In Floyd\'s cycle detection algorithm, the slow pointer moves 1 step at a time while the fast pointer moves 2 steps at a time - a 2:1 speed ratio.",
   },
   {
     id: 'mc4',

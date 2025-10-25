@@ -39,7 +39,7 @@ Implement monitoring in production to track tool selection accuracy, argument va
       'Compare different prompting strategies for tool use: zero-shot, few-shot, and chain-of-thought. When would you use each approach, and how do they affect reliability and cost?',
     sampleAnswer: `Each prompting strategy has distinct trade-offs:
 
-Zero-shot relies solely on tool descriptions and system instructions. It's token-efficient and works well with clear tool schemas, but may struggle with ambiguous cases or complex decision-making.
+Zero-shot relies solely on tool descriptions and system instructions. It\'s token-efficient and works well with clear tool schemas, but may struggle with ambiguous cases or complex decision-making.
 
 Few-shot includes concrete examples of correct tool usage, dramatically improving accuracy for similar queries. However, it increases token usage and requires careful example selection.
 

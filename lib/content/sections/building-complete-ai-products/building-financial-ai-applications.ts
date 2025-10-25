@@ -39,7 +39,7 @@ class MarketDataProvider:
     
     def __init__(self):
         self.yf = yf
-        self.alpha = alpha_vantage.AlphaVantage(api_key=os.getenv("ALPHA_VANTAGE_KEY"))
+        self.alpha = alpha_vantage.AlphaVantage (api_key=os.getenv("ALPHA_VANTAGE_KEY"))
     
     def get_stock_data(
         self,
@@ -54,15 +54,15 @@ class MarketDataProvider:
         interval: 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
         """
         
-        ticker = self.yf.Ticker(symbol)
-        df = ticker.history(period=period, interval=interval)
+        ticker = self.yf.Ticker (symbol)
+        df = ticker.history (period=period, interval=interval)
         
         return df
     
-    def get_company_info(self, symbol: str) -> dict:
+    def get_company_info (self, symbol: str) -> dict:
         """Get company fundamentals"""
         
-        ticker = self.yf.Ticker(symbol)
+        ticker = self.yf.Ticker (symbol)
         
         return {
             "name": ticker.info.get("longName"),
@@ -75,10 +75,10 @@ class MarketDataProvider:
             "52_week_low": ticker.info.get("fiftyTwoWeekLow"),
         }
     
-    def get_financial_statements(self, symbol: str) -> dict:
+    def get_financial_statements (self, symbol: str) -> dict:
         """Get income statement, balance sheet, cash flow"""
         
-        ticker = self.yf.Ticker(symbol)
+        ticker = self.yf.Ticker (symbol)
         
         return {
             "income_statement": ticker.financials,
@@ -86,10 +86,10 @@ class MarketDataProvider:
             "cash_flow": ticker.cashflow
         }
     
-    def get_news(self, symbol: str, limit: int = 10) -> list:
+    def get_news (self, symbol: str, limit: int = 10) -> list:
         """Get recent news for symbol"""
         
-        ticker = self.yf.Ticker(symbol)
+        ticker = self.yf.Ticker (symbol)
         news = ticker.news[:limit]
         
         return [
@@ -97,7 +97,7 @@ class MarketDataProvider:
                 "title": item.get("title"),
                 "publisher": item.get("publisher"),
                 "link": item.get("link"),
-                "published": datetime.fromtimestamp(item.get("providerPublishTime"))
+                "published": datetime.fromtimestamp (item.get("providerPublishTime"))
             }
             for item in news
         ]
@@ -134,19 +134,19 @@ class FinancialAnalyst:
         self.data_provider = data_provider
         self.client = anthropic.Anthropic()
     
-    async def analyze_stock(self, symbol: str) -> dict:
+    async def analyze_stock (self, symbol: str) -> dict:
         """
         Comprehensive stock analysis
         """
         
         # Gather data
-        price_data = self.data_provider.get_stock_data(symbol, period="1y")
-        company_info = self.data_provider.get_company_info(symbol)
-        financials = self.data_provider.get_financial_statements(symbol)
-        news = self.data_provider.get_news(symbol, limit=5)
+        price_data = self.data_provider.get_stock_data (symbol, period="1y")
+        company_info = self.data_provider.get_company_info (symbol)
+        financials = self.data_provider.get_financial_statements (symbol)
+        news = self.data_provider.get_news (symbol, limit=5)
         
         # Calculate technical indicators
-        technical = self.calculate_technical_indicators(price_data)
+        technical = self.calculate_technical_indicators (price_data)
         
         # Build analysis prompt
         prompt = f"""
@@ -154,8 +154,7 @@ Analyze this stock as a financial analyst:
 
 Company: {company_info['name']} ({symbol})
 Sector: {company_info['sector']}
-Market Cap: \${company_info['market_cap']:, .0f
-}
+Market Cap: \${company_info['market_cap']:,.0f}
 
 Price Performance(1 year):
 - Current: \${ price_data['Close'].iloc[-1]: .2f }
@@ -174,12 +173,12 @@ Price Performance(1 year):
 - 200 - day MA: \${ technical['ma_200']: .2f }
 
 Recent News:
-{ self._format_news(news) }
+{ self._format_news (news) }
 
 Provide a comprehensive analysis:
 1. Executive Summary(2 - 3 sentences)
-2. Valuation Assessment(undervalued / fairly valued / overvalued)
-3. Technical Analysis(bullish / neutral / bearish)
+2. Valuation Assessment (undervalued / fairly valued / overvalued)
+3. Technical Analysis (bullish / neutral / bearish)
 4. Key Risks(3 - 5 points)
 5. Key Opportunities(3 - 5 points)
 6. Rating(Strong Buy / Buy / Hold / Sell / Strong Sell)
@@ -193,7 +192,7 @@ response = self.client.messages.create(
   messages = [{ "role": "user", "content": prompt }]
 )
 
-analysis = json.loads(response.content[0].text)
+analysis = json.loads (response.content[0].text)
 
 return {
             ** analysis,
@@ -205,23 +204,23 @@ return {
 }
         }
     
-    def calculate_technical_indicators(self, df: pd.DataFrame) -> dict:
+    def calculate_technical_indicators (self, df: pd.DataFrame) -> dict:
 """Calculate common technical indicators"""
         
         # RSI
 delta = df['Close'].diff()
-gain = (delta.where(delta > 0, 0)).rolling(window = 14).mean()
-loss = (-delta.where(delta < 0, 0)).rolling(window = 14).mean()
+gain = (delta.where (delta > 0, 0)).rolling (window = 14).mean()
+loss = (-delta.where (delta < 0, 0)).rolling (window = 14).mean()
 rs = gain / loss
 rsi = 100 - (100 / (1 + rs))
         
         # Moving averages
-ma_50 = df['Close'].rolling(window = 50).mean()
-ma_200 = df['Close'].rolling(window = 200).mean()
+ma_50 = df['Close'].rolling (window = 50).mean()
+ma_200 = df['Close'].rolling (window = 200).mean()
         
         # MACD
-ema_12 = df['Close'].ewm(span = 12).mean()
-ema_26 = df['Close'].ewm(span = 26).mean()
+ema_12 = df['Close'].ewm (span = 12).mean()
+ema_26 = df['Close'].ewm (span = 26).mean()
 macd = ema_12 - ema_26
 
 return {
@@ -231,7 +230,7 @@ return {
   "macd": macd.iloc[-1]
 }
     
-    def _format_news(self, news: list) -> str:
+    def _format_news (self, news: list) -> str:
 return "\\n".join([
   f"- {item['title']} ({item['publisher']})"
             for item in news
@@ -239,12 +238,12 @@ return "\\n".join([
 
 # API endpoint
 @app.post("/api/analyze")
-async def analyze_stock(symbol: str):
+async def analyze_stock (symbol: str):
 """
     Analyze stock
 """
-analyst = FinancialAnalyst(data_provider)
-analysis = await analyst.analyze_stock(symbol)
+analyst = FinancialAnalyst (data_provider)
+analysis = await analyst.analyze_stock (symbol)
 
 return analysis
 \`\`\`
@@ -269,7 +268,7 @@ class PortfolioManager:
         self.data_provider = data_provider
         self.client = anthropic.Anthropic()
     
-    def analyze_portfolio(self, holdings: list[dict]) -> dict:
+    def analyze_portfolio (self, holdings: list[dict]) -> dict:
         """
         Analyze portfolio composition and risk
         
@@ -293,14 +292,14 @@ class PortfolioManager:
             })
         
         # Calculate portfolio metrics
-        total_value = sum(h['market_value'] for h in portfolio_data)
-        total_gain_loss = sum(h['gain_loss'] for h in portfolio_data)
+        total_value = sum (h['market_value'] for h in portfolio_data)
+        total_gain_loss = sum (h['gain_loss'] for h in portfolio_data)
         
         # Calculate diversification
-        sector_allocation = self._calculate_sector_allocation(portfolio_data)
+        sector_allocation = self._calculate_sector_allocation (portfolio_data)
         
         # Calculate risk metrics
-        risk_metrics = self._calculate_risk_metrics(portfolio_data)
+        risk_metrics = self._calculate_risk_metrics (portfolio_data)
         
         return {
             "total_value": total_value,
@@ -311,14 +310,14 @@ class PortfolioManager:
             "risk_metrics": risk_metrics
         }
     
-    def _calculate_sector_allocation(self, holdings: list) -> dict:
+    def _calculate_sector_allocation (self, holdings: list) -> dict:
         """Calculate portfolio allocation by sector"""
         
         sector_values = {}
-        total_value = sum(h['market_value'] for h in holdings)
+        total_value = sum (h['market_value'] for h in holdings)
         
         for holding in holdings:
-            info = self.data_provider.get_company_info(holding['symbol'])
+            info = self.data_provider.get_company_info (holding['symbol'])
             sector = info.get('sector', 'Unknown')
             
             if sector not in sector_values:
@@ -332,7 +331,7 @@ class PortfolioManager:
             for sector, value in sector_values.items()
         }
     
-    def _calculate_risk_metrics(self, holdings: list) -> dict:
+    def _calculate_risk_metrics (self, holdings: list) -> dict:
         """Calculate portfolio risk metrics"""
         
         # Get historical returns for all holdings
@@ -348,11 +347,11 @@ class PortfolioManager:
         # Portfolio volatility (simplified)
         portfolio_returns = []
         for symbol, returns in returns_data.items():
-            holding = next(h for h in holdings if h['symbol'] == symbol)
-            weight = holding['market_value'] / sum(h['market_value'] for h in holdings)
-            portfolio_returns.append(returns * weight)
+            holding = next (h for h in holdings if h['symbol'] == symbol)
+            weight = holding['market_value'] / sum (h['market_value'] for h in holdings)
+            portfolio_returns.append (returns * weight)
         
-        combined_returns = sum(portfolio_returns)
+        combined_returns = sum (portfolio_returns)
         
         return {
             "volatility_annual": combined_returns.std() * (252 ** 0.5),  # Annualized
@@ -360,7 +359,7 @@ class PortfolioManager:
             "max_drawdown": (combined_returns.cumsum().max() - combined_returns.cumsum().min())
         }
     
-    async def get_recommendations(self, portfolio: dict) -> list:
+    async def get_recommendations (self, portfolio: dict) -> list:
         """
         Get AI recommendations for portfolio improvements
         """
@@ -369,14 +368,14 @@ class PortfolioManager:
 Analyze this investment portfolio and provide recommendations:
 
 Portfolio Summary:
-- Total Value: \${portfolio['total_value']:, .2f}
+- Total Value: \${portfolio['total_value']:,.2f}
 - Total Gain / Loss: \${ portfolio['total_gain_loss']:, .2f } ({ portfolio['total_gain_loss_pct']: .1f } %)
 
 Holdings:
-{ self._format_holdings(portfolio['holdings']) }
+{ self._format_holdings (portfolio['holdings']) }
 
 Sector Allocation:
-{ self._format_sector_allocation(portfolio['sector_allocation']) }
+{ self._format_sector_allocation (portfolio['sector_allocation']) }
 
 Risk Metrics:
 - Annual Volatility: { portfolio['risk_metrics']['volatility_annual']: .1 %}
@@ -384,10 +383,10 @@ Risk Metrics:
 - Max Drawdown: { portfolio['risk_metrics']['max_drawdown']: .1 %}
 
 Provide:
-1. Diversification assessment(well - diversified / concentrated / over - diversified)
-2. Risk assessment(conservative / moderate / aggressive)
+1. Diversification assessment (well - diversified / concentrated / over - diversified)
+2. Risk assessment (conservative / moderate / aggressive)
 3. Top 3 recommendations for improvement
-4. Suggested actions(buy, sell, rebalance)
+4. Suggested actions (buy, sell, rebalance)
 
 Format as JSON.
 """
@@ -398,7 +397,7 @@ response = self.client.messages.create(
   messages = [{ "role": "user", "content": prompt }]
 )
 
-recommendations = json.loads(response.content[0].text)
+recommendations = json.loads (response.content[0].text)
 
 return recommendations
 \`\`\`
@@ -422,7 +421,7 @@ class ComplianceMonitor:
     def __init__(self):
         self.client = anthropic.Anthropic()
     
-    async def check_transaction(self, transaction: dict) -> dict:
+    async def check_transaction (self, transaction: dict) -> dict:
         """
         Check transaction for compliance issues
         
@@ -445,7 +444,7 @@ class ComplianceMonitor:
             })
         
         # Check for wash sale (same security within 30 days)
-        if self._is_wash_sale(transaction):
+        if self._is_wash_sale (transaction):
             flags.append({
                 "type": "wash_sale",
                 "severity": "medium",
@@ -455,29 +454,29 @@ class ComplianceMonitor:
         
         # Use AI to detect unusual patterns
         if transaction['amount'] > 1000:
-            pattern_analysis = await self._analyze_pattern(transaction)
+            pattern_analysis = await self._analyze_pattern (transaction)
             if pattern_analysis['suspicious']:
-                flags.append(pattern_analysis)
+                flags.append (pattern_analysis)
         
         return {
-            "compliant": len(flags) == 0,
+            "compliant": len (flags) == 0,
             "flags": flags,
-            "risk_score": self._calculate_risk_score(flags)
+            "risk_score": self._calculate_risk_score (flags)
         }
     
-    def _is_wash_sale(self, transaction: dict) -> bool:
+    def _is_wash_sale (self, transaction: dict) -> bool:
         # Check transaction history for same security within 30 days
         # Implementation depends on database structure
         return False
     
-    async def _analyze_pattern(self, transaction: dict) -> dict:
+    async def _analyze_pattern (self, transaction: dict) -> dict:
         """Use AI to detect unusual trading patterns"""
         
         prompt = f"""
 Analyze this financial transaction for suspicious patterns:
 
 Transaction:
-- Amount: \${transaction['amount']:, .2f}
+- Amount: \${transaction['amount']:,.2f}
 - Security: { transaction.get('symbol') }
 - Type: { transaction['type'] }
 - Time: { transaction['timestamp'] }
@@ -488,9 +487,9 @@ Recent activity:
 
 Is this suspicious ? Consider :
   1. Unusual size relative to account history
-2. Timing(end of quarter, before earnings)
-3. Pattern(rapid buy / sell, structuring)
-4. Context(news, market events)
+2. Timing (end of quarter, before earnings)
+3. Pattern (rapid buy / sell, structuring)
+4. Context (news, market events)
 
 Respond with JSON:
 {
@@ -507,7 +506,7 @@ response = self.client.messages.create(
   messages = [{ "role": "user", "content": prompt }]
 )
 
-analysis = json.loads(response.content[0].text)
+analysis = json.loads (response.content[0].text)
 
 return {
   "type": "unusual_pattern",
@@ -516,7 +515,7 @@ return {
   "confidence": analysis['confidence']
 }
     
-    def _calculate_risk_score(self, flags: list) -> int:
+    def _calculate_risk_score (self, flags: list) -> int:
 """Calculate overall risk score (0-100)"""
 
 severity_weights = {
@@ -525,9 +524,9 @@ severity_weights = {
   "high": 60
 }
 
-score = sum(severity_weights.get(flag['severity'], 0) for flag in flags)
+score = sum (severity_weights.get (flag['severity'], 0) for flag in flags)
 
-  return min(score, 100)
+  return min (score, 100)
 \`\`\`
 
 ---

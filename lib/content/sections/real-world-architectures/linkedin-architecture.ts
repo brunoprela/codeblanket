@@ -5,7 +5,7 @@
 export const linkedinarchitectureSection = {
   id: 'linkedin-architecture',
   title: 'LinkedIn Architecture',
-  content: `LinkedIn is the world's largest professional networking platform with over 900 million members across 200+ countries. LinkedIn's architecture powers complex social graph operations, feed generation, job matching, and one of the largest data infrastructures in the world. This section explores the technical systems behind LinkedIn, including many innovations that have become industry standards.
+  content: `LinkedIn is the world's largest professional networking platform with over 900 million members across 200+ countries. LinkedIn\'s architecture powers complex social graph operations, feed generation, job matching, and one of the largest data infrastructures in the world. This section explores the technical systems behind LinkedIn, including many innovations that have become industry standards.
 
 ## Overview
 
@@ -225,7 +225,7 @@ When member requests feed:
 
 **Feed Storage** (Venice):
 
-**Venice** is LinkedIn's derived data platform:
+**Venice** is LinkedIn\'s derived data platform:
 - Stores pre-computed data (feeds, recommendations)
 - Built on top of Kafka (change data capture)
 - Read-optimized (SSD storage, aggressive caching)
@@ -453,7 +453,7 @@ Ranking:
 
 LinkedIn search covers members, jobs, companies, posts, groups.
 
-**Search Infrastructure**: **Galene** (LinkedIn's custom search engine)
+**Search Infrastructure**: **Galene** (LinkedIn\'s custom search engine)
 
 **Galene Architecture**:
 - Built on Apache Lucene (like Elasticsearch)
@@ -591,7 +591,7 @@ Conversation Document:
 
 **Sharding**:
 - Conversations sharded by conversation_id
-- Hash(conversation_id) → Shard
+- Hash (conversation_id) → Shard
 - All messages for conversation on same shard (data locality)
 
 **Scalability**:
@@ -765,7 +765,7 @@ A: Use hybrid fanout with ML ranking. Fanout-on-write for regular members: when 
 
 A: Multi-stage approach. Candidate generation: (1) 2nd-degree connections (friends of friends), pre-computed nightly via Spark, top 1000 by mutual connections. (2) Same company (current/past coworkers). (3) Same school (alumni). (4) Same location, industry, skills. (5) Profile views (asymmetric signal). Deduplicate and filter (already connected, pending invitations). Ranking: Train XGBoost model on historical connection requests. Features: mutual_connection_count, same_company, same_school, skill_overlap, network_distance, member_activity. Predict P(connection | member, candidate). Rank candidates by score. Store top 10-20 in Venice (user_id → [recommended_member_ids]). Refresh daily. Serve via API, fetch candidate profiles from Espresso in batch. Diversity: Mix different signal types (work, school, location).
 
-**Q: How does LinkedIn's search system work?**
+**Q: How does LinkedIn\'s search system work?**
 
 A: Use Galene (LinkedIn's search engine, Lucene-based). Index member profiles: name, headline, title, company, skills, experience, education. Shard by entity type and geography. Search query: parse keywords, apply filters (location, industry, connections). Elasticsearch query with full-text search on indexed fields. Ranking: Learning-to-rank model (LambdaMART) trained on search clicks and connection requests. Features: keyword relevance, social graph distance (1st/2nd-degree), popularity (profile views, connections), activity (recent posts), completeness (profile score), personalization (match user's network). Return top 20 results. Typeahead: Prefix matching on names using trie, prioritize 1st-degree connections. Faceted search: Aggregations for filters (location, company, industry). Cache popular queries in Redis.
 
@@ -773,7 +773,7 @@ A: Use Galene (LinkedIn's search engine, Lucene-based). Index member profiles: n
 
 ## Summary
 
-LinkedIn's architecture demonstrates building a professional networking platform at massive scale:
+LinkedIn\'s architecture demonstrates building a professional networking platform at massive scale:
 
 **Key Takeaways**:
 

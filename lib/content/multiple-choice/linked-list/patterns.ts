@@ -41,7 +41,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
       'To make it faster',
       'So the second pointer stops at the node before the target',
       'To handle lists of length n',
-      "It's not necessary",
+      "It\'s not necessary",
     ],
     correctAnswer: 1,
     explanation:
@@ -49,7 +49,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc4',
-    question: "What is Floyd's cycle detection algorithm also known as?",
+    question: "What is Floyd\'s cycle detection algorithm also known as?",
     options: [
       'Binary search method',
       'Tortoise and hare algorithm',

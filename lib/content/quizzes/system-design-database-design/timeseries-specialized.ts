@@ -228,7 +228,7 @@ log_record = {
     }
 }
 
-logger.error(json.dumps(log_record))
+logger.error (json.dumps (log_record))
 \`\`\`
 
 **Elasticsearch Index Strategy:**
@@ -317,7 +317,7 @@ jaeger_exporter = JaegerExporter(
     agent_port=6831,
 )
 trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(jaeger_exporter)
+    BatchSpanProcessor (jaeger_exporter)
 )
 
 tracer = trace.get_tracer(__name__)
@@ -330,11 +330,11 @@ def create_order():
         
         # Call payment service
         with tracer.start_as_current_span("payment_service.process"):
-            payment_result = payment_service.process(amount)
+            payment_result = payment_service.process (amount)
         
         # Call inventory service
         with tracer.start_as_current_span("inventory_service.reserve"):
-            inventory_service.reserve(items)
+            inventory_service.reserve (items)
         
         return {"order_id": order_id}
 \`\`\`
@@ -352,8 +352,8 @@ groups:
       # High error rate
       - alert: HighErrorRate
         expr: |
-          sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
-          / sum(rate(http_requests_total[5m])) by (service) > 0.05
+          sum (rate (http_requests_total{status=~"5.."}[5m])) by (service)
+          / sum (rate (http_requests_total[5m])) by (service) > 0.05
         for: 5m
         labels:
           severity: critical
@@ -365,7 +365,7 @@ groups:
       - alert: HighLatency
         expr: |
           histogram_quantile(0.95, 
-            sum(rate(http_request_duration_seconds_bucket[5m])) by (service, le)
+            sum (rate (http_request_duration_seconds_bucket[5m])) by (service, le)
           ) > 1.0
         for: 5m
         labels:
@@ -431,7 +431,7 @@ receivers:
         "title": "Request Rate",
         "targets": [
           {
-            "expr": "sum(rate(http_requests_total[5m])) by (service)"
+            "expr": "sum (rate (http_requests_total[5m])) by (service)"
           }
         ]
       },
@@ -439,7 +439,7 @@ receivers:
         "title": "Error Rate",
         "targets": [
           {
-            "expr": 'sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))'
+            "expr": 'sum (rate (http_requests_total{status=~"5.."}[5m])) / sum (rate (http_requests_total[5m]))'
           }
         ]
       },
@@ -447,15 +447,15 @@ receivers:
         "title": "Latency (P50, P95, P99)",
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+            "expr": "histogram_quantile(0.50, sum (rate (http_request_duration_seconds_bucket[5m])) by (le))",
             "legendFormat": "P50"
           },
           {
-            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+            "expr": "histogram_quantile(0.95, sum (rate (http_request_duration_seconds_bucket[5m])) by (le))",
             "legendFormat": "P95"
           },
           {
-            "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+            "expr": "histogram_quantile(0.99, sum (rate (http_request_duration_seconds_bucket[5m])) by (le))",
             "legendFormat": "P99"
           }
         ]
@@ -578,23 +578,23 @@ CREATE RETENTION POLICY "hot" ON "iot_data"
 # Write raw data
 from influxdb_client import InfluxDBClient, Point
 
-def write_sensor_data(device_id, temperature, humidity, motion):
+def write_sensor_data (device_id, temperature, humidity, motion):
     point = Point("sensors") \\
         .tag("device_id", device_id) \\
-        .tag("room_type", get_room_type(device_id)) \\
+        .tag("room_type", get_room_type (device_id)) \\
         .field("temperature", temperature) \\
         .field("humidity", humidity) \\
         .field("motion", motion) \\
-        .time(datetime.utcnow(), WritePrecision.NS)
+        .time (datetime.utcnow(), WritePrecision.NS)
     
-    write_api.write(bucket="hot", record=point)
+    write_api.write (bucket="hot", record=point)
 
 # Query hot data (fast)
 query = ''
 FROM(bucket: "hot")
-  |> range(start: -7d)
-  |> filter(fn: (r) => r._measurement == "sensors")
-  |> filter(fn: (r) => r.device_id == "device_123")
+  |> range (start: -7d)
+  |> filter (fn: (r) => r._measurement == "sensors")
+  |> filter (fn: (r) => r.device_id == "device_123")
 ''
 \`\`\`
 
@@ -605,11 +605,11 @@ FROM(bucket: "hot")
 CREATE CONTINUOUS QUERY "downsample_5m" ON "iot_data"
 BEGIN
   SELECT 
-    mean(temperature) AS temperature_avg,
-    max(temperature) AS temperature_max,
-    min(temperature) AS temperature_min,
-    mean(humidity) AS humidity_avg,
-    sum(motion) AS motion_count
+    mean (temperature) AS temperature_avg,
+    max (temperature) AS temperature_max,
+    min (temperature) AS temperature_min,
+    mean (humidity) AS humidity_avg,
+    sum (motion) AS motion_count
   INTO "warm"."sensors_5m"
   FROM "hot"."sensors"
   GROUP BY time(5m), device_id
@@ -631,11 +631,11 @@ CREATE RETENTION POLICY "warm" ON "iot_data"
 CREATE CONTINUOUS QUERY "downsample_1h" ON "iot_data"
 BEGIN
   SELECT 
-    mean(temperature_avg) AS temperature_avg,
-    max(temperature_max) AS temperature_max,
-    min(temperature_min) AS temperature_min,
-    mean(humidity_avg) AS humidity_avg,
-    sum(motion_count) AS motion_count
+    mean (temperature_avg) AS temperature_avg,
+    max (temperature_max) AS temperature_max,
+    min (temperature_min) AS temperature_min,
+    mean (humidity_avg) AS humidity_avg,
+    sum (motion_count) AS motion_count
   INTO "cold"."sensors_1h"
   FROM "warm"."sensors_5m"
   GROUP BY time(1h), device_id
@@ -656,11 +656,11 @@ END
 CREATE CONTINUOUS QUERY "downsample_daily" ON "iot_data"
 BEGIN
   SELECT 
-    mean(temperature_avg) AS temperature_avg,
-    max(temperature_max) AS temperature_max,
-    min(temperature_min) AS temperature_min,
-    mean(humidity_avg) AS humidity_avg,
-    sum(motion_count) AS motion_count
+    mean (temperature_avg) AS temperature_avg,
+    max (temperature_max) AS temperature_max,
+    min (temperature_min) AS temperature_min,
+    mean (humidity_avg) AS humidity_avg,
+    sum (motion_count) AS motion_count
   INTO "archive"."sensors_daily"
   FROM "cold"."sensors_1h"
   GROUP BY time(1d), device_id
@@ -682,11 +682,11 @@ from datetime import datetime, timedelta
 
 def migrate_hot_to_warm():
     """Run daily: migrate 7-day-old data to warm tier"""
-    cutoff = datetime.utcnow() - timedelta(days=7)
+    cutoff = datetime.utcnow() - timedelta (days=7)
     
     # Downsample and write to warm tier
-    result = client.query(f''
-        SELECT mean(temperature), mean(humidity), sum(motion)
+    result = client.query (f''
+        SELECT mean (temperature), mean (humidity), sum (motion)
         FROM sensors
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(5m), device_id
@@ -694,44 +694,44 @@ def migrate_hot_to_warm():
     '')
     
     # Delete from hot tier (automatically handled by retention policy)
-    logger.info(f"Migrated {result.count} points to warm tier")
+    logger.info (f"Migrated {result.count} points to warm tier")
 
 def migrate_warm_to_cold():
     """Run weekly: migrate 30-day-old data to cold tier"""
-    cutoff = datetime.utcnow() - timedelta(days=30)
+    cutoff = datetime.utcnow() - timedelta (days=30)
     
-    result = client.query(f''
-        SELECT mean(temperature_avg), mean(humidity_avg), sum(motion_count)
+    result = client.query (f''
+        SELECT mean (temperature_avg), mean (humidity_avg), sum (motion_count)
         FROM warm.sensors_5m
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(1h), device_id
         INTO cold.sensors_1h
     '')
     
-    logger.info(f"Migrated {result.count} points to cold tier")
+    logger.info (f"Migrated {result.count} points to cold tier")
 
 def migrate_cold_to_archive():
     """Run monthly: migrate 90-day-old data to archive"""
-    cutoff = datetime.utcnow() - timedelta(days=90)
+    cutoff = datetime.utcnow() - timedelta (days=90)
     
     # Export to S3
-    result = client.query(f''
-        SELECT mean(temperature_avg), max(temperature_max), min(temperature_min)
+    result = client.query (f''
+        SELECT mean (temperature_avg), max (temperature_max), min (temperature_min)
         FROM cold.sensors_1h
         WHERE time < '{cutoff.isoformat()}'
         GROUP BY time(1d), device_id
     '')
     
     # Write to S3 in Parquet format
-    df = result_to_dataframe(result)
-    df.to_parquet(f"s3://iot-archive/{cutoff.year}/{cutoff.month}/sensors.parquet")
+    df = result_to_dataframe (result)
+    df.to_parquet (f"s3://iot-archive/{cutoff.year}/{cutoff.month}/sensors.parquet")
     
-    logger.info(f"Archived {len(df)} points to S3")
+    logger.info (f"Archived {len (df)} points to S3")
 
 # Schedule jobs
-schedule.every().day.at("02:00").do(migrate_hot_to_warm)
-schedule.every().week.at("03:00").do(migrate_warm_to_cold)
-schedule.every().month.at("04:00").do(migrate_cold_to_archive)
+schedule.every().day.at("02:00").do (migrate_hot_to_warm)
+schedule.every().week.at("03:00").do (migrate_warm_to_cold)
+schedule.every().month.at("04:00").do (migrate_cold_to_archive)
 \`\`\`
 
 ---
@@ -739,7 +739,7 @@ schedule.every().month.at("04:00").do(migrate_cold_to_archive)
 **6. Query Optimization Strategy**
 
 \`\`\`python
-def query_sensor_data(device_id, start_time, end_time):
+def query_sensor_data (device_id, start_time, end_time):
     """
     Smart query router: automatically choose appropriate tier
     """
@@ -769,13 +769,13 @@ def query_sensor_data(device_id, start_time, end_time):
     
     query = f''
         FROM(bucket: "{bucket}")
-          |> range(start: {start_time}, stop: {end_time})
-          |> filter(fn: (r) => r._measurement == "{measurement}")
-          |> filter(fn: (r) => r.device_id == "{device_id}")
-          |> aggregateWindow(every: {granularity}, fn: mean)
+          |> range (start: {start_time}, stop: {end_time})
+          |> filter (fn: (r) => r._measurement == "{measurement}")
+          |> filter (fn: (r) => r.device_id == "{device_id}")
+          |> aggregateWindow (every: {granularity}, fn: mean)
     ''
     
-    return client.query_api().query(query)
+    return client.query_api().query (query)
 \`\`\`
 
 ---
@@ -887,23 +887,23 @@ point = Point("temperature") \\
     .tag("location", "warehouse_A") \\
     .tag("floor", "3") \\
     .field("value", 22.5) \\
-    .time(datetime.utcnow())
+    .time (datetime.utcnow())
 
-write_api.write(bucket="sensors", record=point)
+write_api.write (bucket="sensors", record=point)
 
 # Query: Get average temperature per floor last 24h
 query = ''
-from(bucket: "sensors")
-  |> range(start: -24h)
-  |> filter(fn: (r) => r._measurement == "temperature")
-  |> group(columns: ["floor",])
-  |> aggregateWindow(every: 1h, fn: mean)
+from (bucket: "sensors")
+  |> range (start: -24h)
+  |> filter (fn: (r) => r._measurement == "temperature")
+  |> group (columns: ["floor",])
+  |> aggregateWindow (every: 1h, fn: mean)
 ''
 
 # Downsampling (automatic)
 CREATE CONTINUOUS QUERY "hourly_avg" ON "iot_data"
 BEGIN
-  SELECT mean(value) AS value_mean
+  SELECT mean (value) AS value_mean
   INTO "downsampled"."temperature_hourly"
   FROM "temperature"
   GROUP BY time(1h), *
@@ -959,7 +959,7 @@ CREATE TABLE page_views (
     user_id INTEGER NOT NULL,
     page_url TEXT,
     duration_ms INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)  -- Can use FK!
+    FOREIGN KEY (user_id) REFERENCES users (id)  -- Can use FK!
 );
 
 SELECT create_hypertable('page_views', 'time');
@@ -1067,9 +1067,9 @@ request_count = Counter('http_requests_total', 'Total HTTP requests', ['method',
 request_duration = Histogram('http_request_duration_seconds', 'HTTP request duration', ['method', 'endpoint',])
 
 @app.route('/api/users')
-@request_duration.labels(method='GET', endpoint='/api/users').time()
+@request_duration.labels (method='GET', endpoint='/api/users').time()
 def get_users():
-    request_count.labels(method='GET', endpoint='/api/users', status=200).inc()
+    request_count.labels (method='GET', endpoint='/api/users', status=200).inc()
     return users
 
 # Start metrics server on :8000
@@ -1077,13 +1077,13 @@ start_http_server(8000)
 
 # PromQL queries
 # Query: Error rate by service
-sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+sum (rate (http_requests_total{status=~"5.."}[5m])) by (service)
 / 
-sum(rate(http_requests_total[5m])) by (service)
+sum (rate (http_requests_total[5m])) by (service)
 
 # Query: P95 latency
 histogram_quantile(0.95, 
-  sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)
+  sum (rate (http_request_duration_seconds_bucket[5m])) by (le, service)
 )
 
 # Alert rule
@@ -1091,7 +1091,7 @@ groups:
   - name: example
     rules:
       - alert: HighErrorRate
-        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        expr: rate (http_requests_total{status=~"5.."}[5m]) > 0.05
         for: 5m
         labels:
           severity: critical

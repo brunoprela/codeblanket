@@ -24,7 +24,7 @@ company_b = {
     'total_debt': 70_000_000
 }
 
-def dupont_analysis(company):
+def dupont_analysis (company):
     net_margin = company['net_income'] / company['revenue']
     asset_turnover = company['revenue'] / company['total_assets']
     equity_multiplier = company['total_assets'] / company['shareholders_equity']
@@ -39,8 +39,8 @@ def dupont_analysis(company):
         'roa': roa
     }
 
-a_metrics = dupont_analysis(company_a)
-b_metrics = dupont_analysis(company_b)
+a_metrics = dupont_analysis (company_a)
+b_metrics = dupont_analysis (company_b)
 
 print("DuPont Analysis Comparison:")
 print(f"\\nCompany A (High Leverage):")
@@ -80,7 +80,7 @@ inventory = current_assets - quick_assets  # $140M (70% of current assets!)
 receivables = quick_assets - cash_and_securities  # $30M
 
 print("Balance Sheet Analysis:")
-print(f"Current Assets:        \${current_assets:, .0f}")
+print(f"Current Assets:        \${current_assets:,.0f}")
 print(f"  Cash & Securities:   \${cash_and_securities:,.0f} (15%)")
 print(f"  Receivables:         \${receivables:,.0f} (15%)")
 print(f"  Inventory:           \${inventory:,.0f} (70%) ← PROBLEM!")
@@ -106,7 +106,7 @@ print("If inventory doesn't sell quickly → LIQUIDITY CRISIS")
   {
     id: 3,
     question:
-      "You're comparing two SaaS companies with identical revenue ($200M) and growth (40% YoY). Company A has LTV/CAC of 5.0x, magic number of 1.2, and net dollar retention of 130%. Company B has LTV/CAC of 2.5x, magic number of 0.6, and NDR of 105%. Both are valued at $2B. Which is more attractive and why? Calculate which should command a premium valuation.",
+      "You're comparing two SaaS companies with identical revenue (\$200M) and growth (40% YoY). Company A has LTV/CAC of 5.0x, magic number of 1.2, and net dollar retention of 130%. Company B has LTV/CAC of 2.5x, magic number of 0.6, and NDR of 105%. Both are valued at $2B. Which is more attractive and why? Calculate which should command a premium valuation.",
     answer: `**Company A is significantly more attractive and deserves a much higher valuation.**
 
 \`\`\`python
@@ -119,8 +119,8 @@ companies = {
     'Benchmark': ['>3.0x', '>0.75', '>110%', '-', '-']
 }
 
-df = pd.DataFrame(companies)
-print(df.to_string(index=False))
+df = pd.DataFrame (companies)
+print(df.to_string (index=False))
 
 print("\\n=== Unit Economics Analysis ===")
 print("\\nCompany A:")

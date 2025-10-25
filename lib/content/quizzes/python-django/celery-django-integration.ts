@@ -43,8 +43,8 @@ from celery import shared_task
 from django.core.mail import send_mail
 
 @shared_task
-def send_email_task(user_id, subject, message):
-    user = User.objects.get(id=user_id)
+def send_email_task (user_id, subject, message):
+    user = User.objects.get (id=user_id)
     send_mail(
         subject,
         message,
@@ -53,22 +53,22 @@ def send_email_task(user_id, subject, message):
     )
     return f'Email sent to {user.email}'
 
-@shared_task(bind=True, max_retries=3)
-def process_article(self, article_id):
+@shared_task (bind=True, max_retries=3)
+def process_article (self, article_id):
     try:
-        article = Article.objects.get(id=article_id)
+        article = Article.objects.get (id=article_id)
         # Process article
         article.status = 'processed'
         article.save()
     except Exception as exc:
-        raise self.retry(exc=exc, countdown=60)
+        raise self.retry (exc=exc, countdown=60)
 \`\`\`
 
 **Using Tasks:**
 
 \`\`\`python
 # Async execution
-send_email_task.delay(user_id=1, subject='Hello', message='World')
+send_email_task.delay (user_id=1, subject='Hello', message='World')
 
 # With countdown
 send_email_task.apply_async(
@@ -78,7 +78,7 @@ send_email_task.apply_async(
 
 # Schedule at specific time
 from datetime import datetime, timedelta
-eta = datetime.now() + timedelta(hours=1)
+eta = datetime.now() + timedelta (hours=1)
 send_email_task.apply_async(
     args=[user_id, subject, message],
     eta=eta
@@ -97,7 +97,7 @@ CELERY_TASK_ROUTES = {
 
 2. **Task Rate Limiting:**
 \`\`\`python
-@shared_task(rate_limit='10/m')  # 10 per minute
+@shared_task (rate_limit='10/m')  # 10 per minute
 def api_call_task():
     pass
 \`\`\`
@@ -113,8 +113,8 @@ celery -A myproject flower
 
 4. **Graceful Handling:**
 \`\`\`python
-@shared_task(bind=True, autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 5})
-def robust_task(self, data):
+@shared_task (bind=True, autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 5})
+def robust_task (self, data):
     # Process with automatic retry
     pass
 \`\`\`
@@ -133,11 +133,11 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'send-daily-report': {
         'task': 'myapp.tasks.send_daily_report',
-        'schedule': crontab(hour=8, minute=0),  # 8 AM daily
+        'schedule': crontab (hour=8, minute=0),  # 8 AM daily
     },
     'cleanup-old-data': {
         'task': 'myapp.tasks.cleanup_old_data',
-        'schedule': crontab(hour=2, minute=0, day_of_week=0),  # Sunday 2 AM
+        'schedule': crontab (hour=2, minute=0, day_of_week=0),  # Sunday 2 AM
     },
     'check-status-every-5min': {
         'task': 'myapp.tasks.check_status',
@@ -187,19 +187,19 @@ from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
-def resilient_task(self, data):
+@shared_task (bind=True, max_retries=3, default_retry_delay=60)
+def resilient_task (self, data):
     try:
         # Process data
-        result = process_data(data)
+        result = process_data (data)
         return result
     except TemporaryError as exc:
         # Retry on temporary errors
-        logger.warning(f'Task failed, retrying: {exc}')
-        raise self.retry(exc=exc, countdown=60 * (self.request.retries + 1))
+        logger.warning (f'Task failed, retrying: {exc}')
+        raise self.retry (exc=exc, countdown=60 * (self.request.retries + 1))
     except PermanentError as exc:
         # Don't retry on permanent errors
-        logger.error(f'Task failed permanently: {exc}')
+        logger.error (f'Task failed permanently: {exc}')
         raise
     finally:
         # Always cleanup
@@ -207,20 +207,20 @@ def resilient_task(self, data):
 
 # Callbacks
 @shared_task
-def on_success(result):
-    logger.info(f'Task succeeded: {result}')
+def on_success (result):
+    logger.info (f'Task succeeded: {result}')
 
 @shared_task
-def on_failure(exc):
-    logger.error(f'Task failed: {exc}')
-    send_alert_email(exc)
+def on_failure (exc):
+    logger.error (f'Task failed: {exc}')
+    send_alert_email (exc)
 
 # Chain tasks
 from celery import chain
 chain(
-    process_task.s(data),
+    process_task.s (data),
     on_success.s()
-).apply_async(link_error=on_failure.s())
+).apply_async (link_error=on_failure.s())
 \`\`\`
 
 **Monitoring & Management:**
@@ -229,8 +229,8 @@ chain(
 # Check task status
 from celery.result import AsyncResult
 
-result = send_email_task.delay(user_id)
-task = AsyncResult(result.id)
+result = send_email_task.delay (user_id)
+task = AsyncResult (result.id)
 
 if task.ready():
     print(task.result)
@@ -298,33 +298,33 @@ CELERY_TASK_QUEUES = (
 )
 
 # Send high priority task
-urgent_task.apply_async(priority=10, queue='high_priority')
+urgent_task.apply_async (priority=10, queue='high_priority')
 \`\`\`
 
 **Workload Optimization:**
 
 \`\`\`python
 # 1. I/O Bound Tasks (emails, API calls)
-@shared_task(bind=True, rate_limit='100/m')
-def io_bound_task(self):
+@shared_task (bind=True, rate_limit='100/m')
+def io_bound_task (self):
     # Many concurrent workers
     pass
 
 # 2. CPU Bound Tasks (video processing, ML)
-@shared_task(bind=True, rate_limit='10/h')
-def cpu_bound_task(self):
+@shared_task (bind=True, rate_limit='10/h')
+def cpu_bound_task (self):
     # Few concurrent workers, more CPU
     pass
 
 # 3. Memory Intensive Tasks
-@shared_task(bind=True, soft_time_limit=300, time_limit=600)
-def memory_intensive_task(self):
+@shared_task (bind=True, soft_time_limit=300, time_limit=600)
+def memory_intensive_task (self):
     # Separate worker with more RAM
     pass
 
 # 4. Long Running Tasks
-@shared_task(bind=True, acks_late=True, reject_on_worker_lost=True)
-def long_running_task(self):
+@shared_task (bind=True, acks_late=True, reject_on_worker_lost=True)
+def long_running_task (self):
     # Acknowledge after completion
     pass
 \`\`\`
@@ -335,17 +335,17 @@ def long_running_task(self):
 from celery.app.task import Task
 
 class PriorityTask(Task):
-    def apply_async(self, *args, **kwargs):
+    def apply_async (self, *args, **kwargs):
         if kwargs.get('priority') == 'high':
             kwargs['queue'] = 'high_priority'
         return super().apply_async(*args, **kwargs)
 
-@shared_task(base=PriorityTask)
+@shared_task (base=PriorityTask)
 def flexible_task():
     pass
 
 # Use
-flexible_task.apply_async(priority='high')
+flexible_task.apply_async (priority='high')
 \`\`\`
 
 **Production Configuration:**

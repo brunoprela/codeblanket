@@ -38,40 +38,40 @@ When you use Cursor to edit code, it doesn't just send your request. It builds a
 Showing the project structure helps LLMs understand organization:
 
 \`\`\`python
-def get_file_tree(root_path: str, max_depth: int = 3) -> str:
+def get_file_tree (root_path: str, max_depth: int = 3) -> str:
     """Generate a file tree representation for LLM context."""
     import os
     from pathlib import Path
     
     tree_lines = []
     
-    def walk_dir(path: Path, prefix: str = "", depth: int = 0):
+    def walk_dir (path: Path, prefix: str = "", depth: int = 0):
         if depth > max_depth:
             return
         
         try:
-            entries = sorted(path.iterdir(), key=lambda x: (not x.is_dir(), x.name))
+            entries = sorted (path.iterdir(), key=lambda x: (not x.is_dir(), x.name))
         except PermissionError:
             return
         
-        for i, entry in enumerate(entries):
-            is_last = i == len(entries) - 1
+        for i, entry in enumerate (entries):
+            is_last = i == len (entries) - 1
             current_prefix = "└── " if is_last else "├── "
             
             # Skip common ignore patterns
             if entry.name in {'.git', '__pycache__', 'node_modules', '.venv'}:
                 continue
             
-            tree_lines.append(f"{prefix}{current_prefix}{entry.name}")
+            tree_lines.append (f"{prefix}{current_prefix}{entry.name}")
             
             if entry.is_dir():
                 extension = "    " if is_last else "│   "
-                walk_dir(entry, prefix + extension, depth + 1)
+                walk_dir (entry, prefix + extension, depth + 1)
     
-    tree_lines.append(root_path)
-    walk_dir(Path(root_path))
+    tree_lines.append (root_path)
+    walk_dir(Path (root_path))
     
-    return "\\n".join(tree_lines)
+    return "\\n".join (tree_lines)
 
 # Usage in prompt
 project_tree = get_file_tree("/path/to/project")
@@ -99,13 +99,13 @@ def format_file_context(
     
     # Add line numbers
     numbered_lines = []
-    for i, line in enumerate(lines, 1):
+    for i, line in enumerate (lines, 1):
         marker = " <-- CURSOR HERE" if i == cursor_line else ""
-        numbered_lines.append(f"{i:4d} | {line}{marker}")
+        numbered_lines.append (f"{i:4d} | {line}{marker}")
     
     return f"""File: {file_path}
 {'='*60}
-{"".join(numbered_lines)}
+{"".join (numbered_lines)}
 {'='*60}
 """
 
@@ -131,21 +131,21 @@ import ast
 from pathlib import Path
 from typing import List, Set
 
-def extract_imports(code: str) -> Set[str]:
+def extract_imports (code: str) -> Set[str]:
     """Extract all import statements from Python code."""
     try:
-        tree = ast.parse(code)
+        tree = ast.parse (code)
     except SyntaxError:
         return set()
     
     imports = set()
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
+    for node in ast.walk (tree):
+        if isinstance (node, ast.Import):
             for name in node.names:
-                imports.add(name.name)
-        elif isinstance(node, ast.ImportFrom):
+                imports.add (name.name)
+        elif isinstance (node, ast.ImportFrom):
             if node.module:
-                imports.add(node.module)
+                imports.add (node.module)
     
     return imports
 
@@ -155,26 +155,26 @@ def find_related_files(
     max_files: int = 3
 ) -> List[tuple[str, str]]:
     """Find and return content of related files."""
-    with open(current_file) as f:
+    with open (current_file) as f:
         code = f.read()
     
-    imports = extract_imports(code)
+    imports = extract_imports (code)
     related_files = []
     
     for imp in imports:
         # Convert import to file path
         # e.g., "myapp.utils" -> "myapp/utils.py"
-        file_path = Path(project_root) / imp.replace(".", "/")
+        file_path = Path (project_root) / imp.replace(".", "/")
         
         for suffix in [".py", "/__init__.py"]:
-            full_path = str(file_path) + suffix
-            if Path(full_path).exists():
-                with open(full_path) as f:
+            full_path = str (file_path) + suffix
+            if Path (full_path).exists():
+                with open (full_path) as f:
                     content = f.read()
                 related_files.append((full_path, content))
                 break
         
-        if len(related_files) >= max_files:
+        if len (related_files) >= max_files:
             break
     
     return related_files
@@ -206,44 +206,44 @@ Task: Refactor to use the utilities from the related files
 For editing functions, provide signatures of related functions:
 
 \`\`\`python
-def extract_function_signatures(code: str) -> List[str]:
+def extract_function_signatures (code: str) -> List[str]:
     """Extract function signatures from code."""
     try:
-        tree = ast.parse(code)
+        tree = ast.parse (code)
     except SyntaxError:
         return []
     
     signatures = []
     
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
+    for node in ast.walk (tree):
+        if isinstance (node, ast.FunctionDef):
             # Get arguments
             args = []
             for arg in node.args.args:
                 arg_str = arg.arg
                 if arg.annotation:
-                    arg_str += f": {ast.unparse(arg.annotation)}"
-                args.append(arg_str)
+                    arg_str += f": {ast.unparse (arg.annotation)}"
+                args.append (arg_str)
             
             # Get return type
             return_type = ""
             if node.returns:
-                return_type = f" -> {ast.unparse(node.returns)}"
+                return_type = f" -> {ast.unparse (node.returns)}"
             
-            signature = f"def {node.name}({', '.join(args)}){return_type}"
+            signature = f"def {node.name}({', '.join (args)}){return_type}"
             
             # Add docstring if present
-            docstring = ast.get_docstring(node)
+            docstring = ast.get_docstring (node)
             if docstring:
                 signature += f"\\n    ''{docstring}''"
             
-            signatures.append(signature)
+            signatures.append (signature)
     
     return signatures
 
 # Usage
-signatures = extract_function_signatures(current_file_content)
-sig_context = "\\n\\n".join(signatures)
+signatures = extract_function_signatures (current_file_content)
+sig_context = "\\n\\n".join (signatures)
 
 prompt = f"""Available functions in this file:
 {sig_context}
@@ -257,44 +257,44 @@ Task: Write a new function that uses these existing functions
 For typed languages, provide type information:
 
 \`\`\`python
-def extract_type_definitions(code: str) -> str:
+def extract_type_definitions (code: str) -> str:
     """Extract class and type definitions."""
     try:
-        tree = ast.parse(code)
+        tree = ast.parse (code)
     except SyntaxError:
         return ""
     
     definitions = []
     
-    for node in ast.walk(tree):
-        if isinstance(node, ast.ClassDef):
+    for node in ast.walk (tree):
+        if isinstance (node, ast.ClassDef):
             # Class definition
             class_def = f"class {node.name}"
             
             # Base classes
             if node.bases:
-                bases = [ast.unparse(b) for b in node.bases]
-                class_def += f"({', '.join(bases)})"
+                bases = [ast.unparse (b) for b in node.bases]
+                class_def += f"({', '.join (bases)})"
             
             class_def += ":"
             
             # Get docstring
-            docstring = ast.get_docstring(node)
+            docstring = ast.get_docstring (node)
             if docstring:
                 class_def += f"\\n    ''{docstring}''"
             
             # Get methods (just signatures)
             for item in node.body:
-                if isinstance(item, ast.FunctionDef):
+                if isinstance (item, ast.FunctionDef):
                     args = [arg.arg for arg in item.args.args]
-                    class_def += f"\\n    def {item.name}({', '.join(args)}): ..."
+                    class_def += f"\\n    def {item.name}({', '.join (args)}): ..."
             
-            definitions.append(class_def)
+            definitions.append (class_def)
     
-    return "\\n\\n".join(definitions)
+    return "\\n\\n".join (definitions)
 
 # Usage
-types = extract_type_definitions(current_file_content)
+types = extract_type_definitions (current_file_content)
 
 prompt = f"""Type definitions in this file:
 {types}
@@ -316,7 +316,7 @@ def create_context_sandwich_prompt(
     constraints: List[str]
 ) -> str:
     """Create a well-structured prompt."""
-    constraints_str = "\\n".join(f"- {c}" for c in constraints)
+    constraints_str = "\\n".join (f"- {c}" for c in constraints)
     
     return f"""# Context
 {context}
@@ -355,7 +355,7 @@ def create_example_driven_prompt(
 ) -> str:
     """Create prompt with before/after examples."""
     examples_str = ""
-    for i, (before, after) in enumerate(examples, 1):
+    for i, (before, after) in enumerate (examples, 1):
         examples_str += f"""
 Example {i}:
 
@@ -382,17 +382,17 @@ AFTER:
 # Usage
 examples = [
     (
-        "def get_user(id):",
-        "def get_user(user_id: int) -> User:"
+        "def get_user (id):",
+        "def get_user (user_id: int) -> User:"
     ),
     (
-        "def save(data):",
-        "def save(data: dict) -> bool:"
+        "def save (data):",
+        "def save (data: dict) -> bool:"
     )
 ]
 
 prompt = create_example_driven_prompt(
-    "def process(items):",
+    "def process (items):",
     examples
 )
 \`\`\`
@@ -408,27 +408,27 @@ class PromptBuilder:
     def __init__(self):
         self.sections = {}
     
-    def add_context(self, name: str, content: str):
+    def add_context (self, name: str, content: str):
         """Add a context section."""
         self.sections[f"context_{name}"] = content
         return self
     
-    def add_examples(self, examples: List[str]):
+    def add_examples (self, examples: List[str]):
         """Add code examples."""
-        self.sections['examples'] = "\\n\\n".join(examples)
+        self.sections['examples'] = "\\n\\n".join (examples)
         return self
     
-    def add_constraints(self, constraints: List[str]):
+    def add_constraints (self, constraints: List[str]):
         """Add constraints."""
-        self.sections['constraints'] = "\\n".join(f"- {c}" for c in constraints)
+        self.sections['constraints'] = "\\n".join (f"- {c}" for c in constraints)
         return self
     
-    def set_task(self, task: str):
+    def set_task (self, task: str):
         """Set the main task."""
         self.sections['task'] = task
         return self
     
-    def build(self) -> str:
+    def build (self) -> str:
         """Build the final prompt."""
         sections_order = [
             'context_file',
@@ -443,11 +443,11 @@ class PromptBuilder:
         for key in sections_order:
             if key in self.sections:
                 title = key.replace('_', ' ').title()
-                parts.append(f"# {title}")
-                parts.append(self.sections[key])
+                parts.append (f"# {title}")
+                parts.append (self.sections[key])
                 parts.append("")
         
-        return "\\n".join(parts)
+        return "\\n".join (parts)
 
 # Usage
 prompt = (PromptBuilder()
@@ -479,29 +479,29 @@ def smart_truncate_code(
     """Truncate code while keeping relevant context."""
     lines = code.split("\\n")
     
-    if len(lines) <= max_lines:
+    if len (lines) <= max_lines:
         return code
     
     if focus_line is None:
         # Just take first max_lines
-        return "\\n".join(lines[:max_lines]) + "\\n... (truncated)"
+        return "\\n".join (lines[:max_lines]) + "\\n... (truncated)"
     
     # Keep context around focus line
     context_size = max_lines // 2
     start = max(0, focus_line - context_size)
-    end = min(len(lines), focus_line + context_size)
+    end = min (len (lines), focus_line + context_size)
     
     truncated_lines = []
     
     if start > 0:
         truncated_lines.append("... (lines 1-{start} omitted)")
     
-    truncated_lines.extend(lines[start:end])
+    truncated_lines.extend (lines[start:end])
     
-    if end < len(lines):
-        truncated_lines.append(f"... (lines {end+1}-{len(lines)} omitted)")
+    if end < len (lines):
+        truncated_lines.append (f"... (lines {end+1}-{len (lines)} omitted)")
     
-    return "\\n".join(truncated_lines)
+    return "\\n".join (truncated_lines)
 
 # Usage
 optimized = smart_truncate_code(
@@ -514,30 +514,30 @@ optimized = smart_truncate_code(
 ### 2. Summarize Irrelevant Parts
 
 \`\`\`python
-def summarize_functions(code: str) -> str:
+def summarize_functions (code: str) -> str:
     """Replace function bodies with summaries."""
     try:
-        tree = ast.parse(code)
+        tree = ast.parse (code)
     except SyntaxError:
         return code
     
     # Extract function info
     functions = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            docstring = ast.get_docstring(node) or "No description"
+    for node in ast.walk (tree):
+        if isinstance (node, ast.FunctionDef):
+            docstring = ast.get_docstring (node) or "No description"
             
             # Get signature
             args = [arg.arg for arg in node.args.args]
-            sig = f"def {node.name}({', '.join(args)})"
+            sig = f"def {node.name}({', '.join (args)})"
             
-            functions.append(f"{sig}:\\n    ''{docstring}''\\n    ...")
+            functions.append (f"{sig}:\\n    ''{docstring}''\\n    ...")
     
-    return "\\n\\n".join(functions)
+    return "\\n\\n".join (functions)
 
 # Usage
 # Instead of including full function bodies (expensive)
-summarized = summarize_functions(utils_file)
+summarized = summarize_functions (utils_file)
 prompt = f"""Available utility functions:
 {summarized}
 
@@ -558,9 +558,9 @@ class ContextManager:
         self.max_tokens = max_tokens
         self.encoding = tiktoken.get_encoding("cl100k_base")
     
-    def count_tokens(self, text: str) -> int:
+    def count_tokens (self, text: str) -> int:
         """Count tokens in text."""
-        return len(self.encoding.encode(text))
+        return len (self.encoding.encode (text))
     
     def build_optimized_context(
         self,
@@ -573,38 +573,38 @@ class ContextManager:
         
         # Add required context first
         for name, content in required.items():
-            tokens = self.count_tokens(content)
+            tokens = self.count_tokens (content)
             if tokens_used + tokens > self.max_tokens:
                 # Truncate this part
                 target_tokens = self.max_tokens - tokens_used - 100
-                content = self._truncate_to_tokens(content, target_tokens)
-                tokens = self.count_tokens(content)
+                content = self._truncate_to_tokens (content, target_tokens)
+                tokens = self.count_tokens (content)
             
-            context_parts.append(f"# {name}\\n{content}")
+            context_parts.append (f"# {name}\\n{content}")
             tokens_used += tokens
         
         # Add optional context if room
         for name, content in optional.items():
-            tokens = self.count_tokens(content)
+            tokens = self.count_tokens (content)
             if tokens_used + tokens <= self.max_tokens:
-                context_parts.append(f"# {name}\\n{content}")
+                context_parts.append (f"# {name}\\n{content}")
                 tokens_used += tokens
             else:
                 break  # No more room
         
-        return "\\n\\n".join(context_parts)
+        return "\\n\\n".join (context_parts)
     
-    def _truncate_to_tokens(self, text: str, max_tokens: int) -> str:
+    def _truncate_to_tokens (self, text: str, max_tokens: int) -> str:
         """Truncate text to approximate token count."""
-        tokens = self.encoding.encode(text)
-        if len(tokens) <= max_tokens:
+        tokens = self.encoding.encode (text)
+        if len (tokens) <= max_tokens:
             return text
         
-        truncated = self.encoding.decode(tokens[:max_tokens])
+        truncated = self.encoding.decode (tokens[:max_tokens])
         return truncated + "\\n... (truncated)"
 
 # Usage
-manager = ContextManager(max_tokens=4000)
+manager = ContextManager (max_tokens=4000)
 
 context = manager.build_optimized_context(
     required={
@@ -664,7 +664,7 @@ Output as JSON with this structure:
 """
     }
     
-    format_instruction = formats.get(output_format, formats["code_only"])
+    format_instruction = formats.get (output_format, formats["code_only"])
     
     return f"""{context}
 
@@ -675,13 +675,13 @@ Task: {task}
 
 # Usage for different scenarios
 # 1. Simple generation - just want code
-prompt = create_formatted_prompt(context, task, "code_only")
+prompt = create_formatted_prompt (context, task, "code_only")
 
 # 2. Need diff for editing
-prompt = create_formatted_prompt(context, task, "diff")
+prompt = create_formatted_prompt (context, task, "diff")
 
 # 3. Need structured response
-prompt = create_formatted_prompt(context, task, "json")
+prompt = create_formatted_prompt (context, task, "json")
 \`\`\`
 
 ## Language-Specific Prompting
@@ -702,7 +702,7 @@ Follow these Python conventions:
 - Prefer list comprehensions for simple iterations
 """
 
-def create_python_prompt(task: str, context: str) -> str:
+def create_python_prompt (task: str, context: str) -> str:
     return f"""{PYTHON_STYLE_GUIDE}
 
 {context}
@@ -728,7 +728,7 @@ Follow these TypeScript conventions:
 
 ## How Cursor Does It
 
-Cursor's prompt construction (reverse-engineered):
+Cursor\'s prompt construction (reverse-engineered):
 
 \`\`\`python
 class CursorStylePromptBuilder:
@@ -745,7 +745,7 @@ class CursorStylePromptBuilder:
         """Build a Cursor-style prompt."""
         
         # 1. Project context
-        file_tree = self._get_file_tree(project_root)
+        file_tree = self._get_file_tree (project_root)
         
         # 2. Current file with line numbers
         file_context = self._format_file_with_cursor(
@@ -761,8 +761,8 @@ class CursorStylePromptBuilder:
         )
         
         # 4. Language-specific context
-        language = self._detect_language(current_file)
-        language_context = self._get_language_context(language)
+        language = self._detect_language (current_file)
+        language_context = self._get_language_context (language)
         
         # 5. Build the prompt
         prompt = f"""You are an expert programmer. You are editing this file:
@@ -805,11 +805,11 @@ Provide the changes as:
         lines = content.split("\\n")
         formatted = []
         
-        for i, line in enumerate(lines):
+        for i, line in enumerate (lines):
             indicator = " <-- CURSOR" if i == cursor_pos else ""
-            formatted.append(f"{i+1:4d} | {line}{indicator}")
+            formatted.append (f"{i+1:4d} | {line}{indicator}")
         
-        return "\\n".join(formatted)
+        return "\\n".join (formatted)
     
     # ... other helper methods
 
@@ -841,21 +841,21 @@ class PromptTester:
         """Test multiple prompt variants."""
         results = {}
         
-        for i, prompt_template in enumerate(variants):
+        for i, prompt_template in enumerate (variants):
             scores = []
             
             for test_case in test_cases:
-                prompt = prompt_template.format(task=test_case)
-                generated = self._generate_code(prompt)
-                score = evaluate_fn(generated, test_case)
-                scores.append(score)
+                prompt = prompt_template.format (task=test_case)
+                generated = self._generate_code (prompt)
+                score = evaluate_fn (generated, test_case)
+                scores.append (score)
             
-            avg_score = sum(scores) / len(scores)
+            avg_score = sum (scores) / len (scores)
             results[f"Variant {i+1}"] = avg_score
         
         return results
     
-    def _generate_code(self, prompt: str) -> str:
+    def _generate_code (self, prompt: str) -> str:
         """Generate code from prompt."""
         # Call your LLM here
         pass
@@ -873,13 +873,13 @@ test_cases = [
     "find the maximum value in a list"
 ]
 
-def evaluate(code: str, task: str) -> float:
+def evaluate (code: str, task: str) -> float:
     """Evaluate generated code quality (0-1)."""
     # Your evaluation logic
     pass
 
 tester = PromptTester()
-results = tester.test_prompt_variants(variants, test_cases, evaluate)
+results = tester.test_prompt_variants (variants, test_cases, evaluate)
 
 print("Prompt variant scores:")
 for variant, score in results.items():

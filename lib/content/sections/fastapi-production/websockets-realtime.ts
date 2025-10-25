@@ -47,7 +47,7 @@ from fastapi import FastAPI, WebSocket
 app = FastAPI()
 
 @app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint (websocket: WebSocket):
     """
     Basic WebSocket echo server
     """
@@ -60,7 +60,7 @@ async def websocket_endpoint(websocket: WebSocket):
             data = await websocket.receive_text()
             
             # Send message back to client
-            await websocket.send_text(f"Echo: {data}")
+            await websocket.send_text (f"Echo: {data}")
             
     except Exception as e:
         print(f"Connection closed: {e}")
@@ -97,7 +97,7 @@ WebSocket with JSON messages
 import json
 
 @app.websocket("/ws/chat/{room_id}")
-async def chat_room(websocket: WebSocket, room_id: str):
+async def chat_room (websocket: WebSocket, room_id: str):
     """
     Chat room WebSocket
     """
@@ -149,7 +149,7 @@ class ConnectionManager:
         # Store active connections by room
         self.active_connections: Dict[str, List[WebSocket]] = {}
     
-    async def connect(self, websocket: WebSocket, room_id: str):
+    async def connect (self, websocket: WebSocket, room_id: str):
         """
         Accept and store connection
         """
@@ -158,16 +158,16 @@ class ConnectionManager:
         if room_id not in self.active_connections:
             self.active_connections[room_id] = []
         
-        self.active_connections[room_id].append(websocket)
+        self.active_connections[room_id].append (websocket)
         
-        print(f"Client connected to room {room_id}. Total: {len(self.active_connections[room_id])}")
+        print(f"Client connected to room {room_id}. Total: {len (self.active_connections[room_id])}")
     
-    def disconnect(self, websocket: WebSocket, room_id: str):
+    def disconnect (self, websocket: WebSocket, room_id: str):
         """
         Remove connection
         """
         if room_id in self.active_connections:
-            self.active_connections[room_id].remove(websocket)
+            self.active_connections[room_id].remove (websocket)
             
             # Clean up empty rooms
             if not self.active_connections[room_id]:
@@ -175,38 +175,38 @@ class ConnectionManager:
         
         print(f"Client disconnected from room {room_id}")
     
-    async def send_personal_message(self, message: dict, websocket: WebSocket):
+    async def send_personal_message (self, message: dict, websocket: WebSocket):
         """
         Send message to specific client
         """
-        await websocket.send_json(message)
+        await websocket.send_json (message)
     
-    async def broadcast(self, message: dict, room_id: str):
+    async def broadcast (self, message: dict, room_id: str):
         """
         Send message to all clients in room
         """
         if room_id in self.active_connections:
             for connection in self.active_connections[room_id]:
-                await connection.send_json(message)
+                await connection.send_json (message)
     
-    async def broadcast_except(self, message: dict, room_id: str, exclude: WebSocket):
+    async def broadcast_except (self, message: dict, room_id: str, exclude: WebSocket):
         """
         Broadcast to all except one client
         """
         if room_id in self.active_connections:
             for connection in self.active_connections[room_id]:
                 if connection != exclude:
-                    await connection.send_json(message)
+                    await connection.send_json (message)
 
 # Global connection manager
 manager = ConnectionManager()
 
 @app.websocket("/ws/chat/{room_id}")
-async def chat_room(websocket: WebSocket, room_id: str):
+async def chat_room (websocket: WebSocket, room_id: str):
     """
     Chat room with broadcasting
     """
-    await manager.connect(websocket, room_id)
+    await manager.connect (websocket, room_id)
     
     try:
         while True:
@@ -220,7 +220,7 @@ async def chat_room(websocket: WebSocket, room_id: str):
             }, room_id)
             
     except WebSocketDisconnect:
-        manager.disconnect(websocket, room_id)
+        manager.disconnect (websocket, room_id)
         
         # Notify others
         await manager.broadcast({
@@ -243,28 +243,28 @@ WebSocket authentication with JWT
 from fastapi import WebSocket, HTTPException, status
 from jose import JWTError, jwt
 
-async def get_current_user_ws(websocket: WebSocket, token: str) -> User:
+async def get_current_user_ws (websocket: WebSocket, token: str) -> User:
     """
     Authenticate WebSocket connection with JWT
     """
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode (token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         
         if username is None:
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-            raise HTTPException(status_code=403, detail="Invalid token")
+            await websocket.close (code=status.WS_1008_POLICY_VIOLATION)
+            raise HTTPException (status_code=403, detail="Invalid token")
         
-        user = get_user(username)
+        user = get_user (username)
         if user is None:
-            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-            raise HTTPException(status_code=403, detail="User not found")
+            await websocket.close (code=status.WS_1008_POLICY_VIOLATION)
+            raise HTTPException (status_code=403, detail="User not found")
         
         return user
         
     except JWTError:
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        raise HTTPException(status_code=403, detail="Invalid token")
+        await websocket.close (code=status.WS_1008_POLICY_VIOLATION)
+        raise HTTPException (status_code=403, detail="Invalid token")
 
 @app.websocket("/ws/chat/{room_id}")
 async def authenticated_chat(
@@ -277,12 +277,12 @@ async def authenticated_chat(
     """
     # Authenticate before accepting connection
     try:
-        user = await get_current_user_ws(websocket, token)
+        user = await get_current_user_ws (websocket, token)
     except HTTPException:
         return  # Connection already closed
     
     # Now accept connection
-    await manager.connect(websocket, room_id)
+    await manager.connect (websocket, room_id)
     
     try:
         while True:
@@ -297,7 +297,7 @@ async def authenticated_chat(
             }, room_id)
             
     except WebSocketDisconnect:
-        manager.disconnect(websocket, room_id)
+        manager.disconnect (websocket, room_id)
 \`\`\`
 
 ---
@@ -317,14 +317,14 @@ class ConnectionManagerWithHeartbeat(ConnectionManager):
     """
     Connection manager with automatic heartbeat
     """
-    async def connect(self, websocket: WebSocket, room_id: str):
+    async def connect (self, websocket: WebSocket, room_id: str):
         """Connect and start heartbeat"""
-        await super().connect(websocket, room_id)
+        await super().connect (websocket, room_id)
         
         # Start heartbeat task
-        asyncio.create_task(self._heartbeat(websocket, room_id))
+        asyncio.create_task (self._heartbeat (websocket, room_id))
     
-    async def _heartbeat(self, websocket: WebSocket, room_id: str):
+    async def _heartbeat (self, websocket: WebSocket, room_id: str):
         """
         Send periodic ping to keep connection alive
         """
@@ -336,7 +336,7 @@ class ConnectionManagerWithHeartbeat(ConnectionManager):
                 
         except:
             # Connection lost, clean up
-            self.disconnect(websocket, room_id)
+            self.disconnect (websocket, room_id)
 \`\`\`
 
 ### Graceful Shutdown
@@ -355,7 +355,7 @@ async def shutdown_event():
     """
     for room_id, connections in manager.active_connections.items():
         for websocket in connections:
-            await websocket.close(code=1001, reason="Server shutting down")
+            await websocket.close (code=1001, reason="Server shutting down")
 \`\`\`
 
 ---

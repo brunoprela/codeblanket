@@ -42,13 +42,13 @@ Extreme ($2000+):
 \`\`\`python
 # Backtesting 500 stocks sequentially
 for ticker in tickers:  # 500 iterations
-    backtest(ticker)  # 30 seconds each
+    backtest (ticker)  # 30 seconds each
 # Total time: 15,000 seconds (4.2 hours)
 
 # Parallel backtesting with 16 cores
 from joblib import Parallel, delayed
-results = Parallel(n_jobs=16)(
-    delayed(backtest)(ticker) for ticker in tickers
+results = Parallel (n_jobs=16)(
+    delayed (backtest)(ticker) for ticker in tickers
 )
 # Total time: 938 seconds (15.6 minutes) - 16x faster!
 \`\`\`
@@ -627,17 +627,17 @@ from numba import jit
 import numpy as np
 
 # Slow Python
-def slow_backtest(prices):
+def slow_backtest (prices):
     returns = []
-    for i in range(1, len(prices)):
+    for i in range(1, len (prices)):
         returns.append((prices[i] - prices[i-1]) / prices[i-1])
     return returns
 
 # Fast with Numba
-@jit(nopython=True)
-def fast_backtest(prices):
-    returns = np.empty(len(prices) - 1)
-    for i in range(1, len(prices)):
+@jit (nopython=True)
+def fast_backtest (prices):
+    returns = np.empty (len (prices) - 1)
+    for i in range(1, len (prices)):
         returns[i-1] = (prices[i] - prices[i-1]) / prices[i-1]
     return returns
 
@@ -646,11 +646,11 @@ import time
 prices = np.random.randn(1000000).cumsum() + 100
 
 start = time.time()
-slow_backtest(prices)
+slow_backtest (prices)
 print(f"Slow: {time.time() - start:.3f}s")  # 2.5s
 
 start = time.time()
-fast_backtest(prices)
+fast_backtest (prices)
 print(f"Fast: {time.time() - start:.3f}s")  # 0.015s
 
 # 166x faster!
@@ -666,16 +666,16 @@ n_cores = multiprocessing.cpu_count()
 print(f"Available cores: {n_cores}")
 
 # Parallel backtest
-def backtest_ticker(ticker):
+def backtest_ticker (ticker):
     # Heavy computation here
     return result
 
 # Sequential
-results = [backtest_ticker(t) for t in tickers]  # Slow
+results = [backtest_ticker (t) for t in tickers]  # Slow
 
 # Parallel
-results = Parallel(n_jobs=n_cores)(
-    delayed(backtest_ticker)(t) for t in tickers
+results = Parallel (n_jobs=n_cores)(
+    delayed (backtest_ticker)(t) for t in tickers
 )  # n_cores times faster!
 \`\`\`
 
@@ -735,7 +735,7 @@ SELECT
     idx_tup_fetch
 FROM pg_stat_user_indexes
 WHERE idx_scan = 0  -- Unused indexes
-ORDER BY pg_relation_size(indexrelid) DESC;
+ORDER BY pg_relation_size (indexrelid) DESC;
 
 -- Remove unused indexes to improve write performance
 \`\`\`
@@ -821,9 +821,9 @@ import time
 import csv
 from datetime import datetime
 
-def log_system_stats(output_file='system_stats.csv'):
-    with open(output_file, 'a', newline='') as f:
-        writer = csv.writer(f)
+def log_system_stats (output_file='system_stats.csv'):
+    with open (output_file, 'a', newline='') as f:
+        writer = csv.writer (f)
         
         # Header
         if f.tell() == 0:
@@ -835,7 +835,7 @@ def log_system_stats(output_file='system_stats.csv'):
         
         while True:
             # Collect metrics
-            cpu_percent = psutil.cpu_percent(interval=1)
+            cpu_percent = psutil.cpu_percent (interval=1)
             memory = psutil.virtual_memory()
             disk_io = psutil.disk_io_counters()
             net_io = psutil.net_io_counters()

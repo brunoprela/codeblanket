@@ -22,7 +22,7 @@ Logging is better than \`print()\` for production code because:
 import logging
 
 # Basic configuration (do this once at start)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig (level=logging.DEBUG)
 
 # Log at different levels
 logging.debug("Detailed information for debugging")
@@ -67,7 +67,7 @@ logging.info("This goes to the file")
 logging.error("So does this error")
 
 # Append mode (default) vs write mode
-logging.basicConfig(filename='app.log', filemode='w')  # Overwrites
+logging.basicConfig (filename='app.log', filemode='w')  # Overwrites
 \`\`\`
 
 ## Multiple Handlers
@@ -77,23 +77,23 @@ import logging
 
 # Create logger
 logger = logging.getLogger('my_app')
-logger.setLevel(logging.DEBUG)
+logger.setLevel (logging.DEBUG)
 
 # Console handler (INFO and above)
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
+console_handler.setLevel (logging.INFO)
 console_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(console_format)
+console_handler.setFormatter (console_format)
 
 # File handler (DEBUG and above)
 file_handler = logging.FileHandler('debug.log')
-file_handler.setLevel(logging.DEBUG)
+file_handler.setLevel (logging.DEBUG)
 file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(file_format)
+file_handler.setFormatter (file_format)
 
 # Add handlers to logger
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
+logger.addHandler (console_handler)
+logger.addHandler (file_handler)
 
 # Log messages
 logger.debug("Detailed debug info")  # Only in file
@@ -109,13 +109,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Old way (string formatting happens even if not logged)
-logging.debug("User: " + username + ", Age: " + str(age))
+logging.debug("User: " + username + ", Age: " + str (age))
 
 # Better way (lazy evaluation)
 logging.debug("User: %s, Age: %d", username, age)
 
 # f-strings work but aren't lazy
-logging.debug(f"User: {username}, Age: {age}")
+logging.debug (f"User: {username}, Age: {age}")
 
 # Extra context with exc_info
 try:
@@ -135,11 +135,11 @@ import logging
 # Use __name__ so log shows which module logged it
 logger = logging.getLogger(__name__)
 
-def process_data(data):
-    logger.info("Processing %d items", len(data))
+def process_data (data):
+    logger.info("Processing %d items", len (data))
     try:
         # Process data
-        result = do_something(data)
+        result = do_something (data)
         logger.debug("Result: %s", result)
         return result
     except Exception:
@@ -150,7 +150,7 @@ def process_data(data):
 import logging
 import my_module
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 my_module.process_data([1, 2, 3])
 # Output: my_module - INFO - Processing 3 items
 \`\`\`
@@ -163,7 +163,7 @@ from logging.handlers import RotatingFileHandler
 
 # Create logger
 logger = logging.getLogger('my_app')
-logger.setLevel(logging.DEBUG)
+logger.setLevel (logging.DEBUG)
 
 # Rotating file handler (5 MB per file, keep 3 backups)
 handler = RotatingFileHandler(
@@ -172,8 +172,8 @@ handler = RotatingFileHandler(
     backupCount=3
 )
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+handler.setFormatter (formatter)
+logger.addHandler (handler)
 
 # Files: app.log, app.log.1, app.log.2, app.log.3
 \`\`\`
@@ -207,10 +207,10 @@ handler = TimedRotatingFileHandler(
 import logging
 import json
 
-class JSONFormatter(logging.Formatter):
-    def format(self, record):
+class JSONFormatter (logging.Formatter):
+    def format (self, record):
         log_obj = {
-            'timestamp': self.formatTime(record),
+            'timestamp': self.formatTime (record),
             'level': record.levelname,
             'logger': record.name,
             'message': record.getMessage(),
@@ -219,15 +219,15 @@ class JSONFormatter(logging.Formatter):
             'line': record.lineno
         }
         if record.exc_info:
-            log_obj['exception'] = self.formatException(record.exc_info)
-        return json.dumps(log_obj)
+            log_obj['exception'] = self.formatException (record.exc_info)
+        return json.dumps (log_obj)
 
 # Use JSON formatter
 handler = logging.StreamHandler()
 handler.setFormatter(JSONFormatter())
 logger = logging.getLogger('app')
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
+logger.addHandler (handler)
+logger.setLevel (logging.INFO)
 
 logger.info("User login", extra={'user_id': 123, 'ip': '192.168.1.1'})
 # Output: {"timestamp": "2024-01-15 10:30:00", "level": "INFO", ...}
@@ -245,10 +245,10 @@ logger.info("User login", extra={'user_id': 123, 'ip': '192.168.1.1'})
 **2. Use Lazy Evaluation:**
 \`\`\`python
 # Good - string only built if logged
-logging.debug("Processing %s with %d items", name, len(items))
+logging.debug("Processing %s with %d items", name, len (items))
 
 # Bad - string always built
-logging.debug(f"Processing {name} with {len(items)} items")
+logging.debug (f"Processing {name} with {len (items)} items")
 \`\`\`
 
 **3. Log Exceptions Properly:**
@@ -262,10 +262,10 @@ except Exception:
 **4. Don't Log Sensitive Data:**
 \`\`\`python
 # Bad
-logging.info(f"User logged in: {username}, password: {password}")
+logging.info (f"User logged in: {username}, password: {password}")
 
 # Good
-logging.info(f"User logged in: {username}")
+logging.info (f"User logged in: {username}")
 \`\`\`
 
 **5. Use Module-Level Loggers:**

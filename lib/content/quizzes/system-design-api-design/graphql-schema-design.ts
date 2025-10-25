@@ -24,9 +24,9 @@ type User {
   stats: UserStats!
   
   # Relationships (paginated)
-  posts(first: Int = 20, after: String): PostConnection!
-  followers(first: Int = 20): UserConnection!
-  following(first: Int = 20): UserConnection!
+  posts (first: Int = 20, after: String): PostConnection!
+  followers (first: Int = 20): UserConnection!
+  following (first: Int = 20): UserConnection!
   
   # Computed fields
   isFollowing: Boolean!  # Does current user follow this user?
@@ -53,8 +53,8 @@ type Post {
   commentCount: Int!
   
   # Relationships
-  comments(first: Int = 10, after: String): CommentConnection!
-  likes(first: Int = 10): [User!]!
+  comments (first: Int = 10, after: String): CommentConnection!
+  likes (first: Int = 10): [User!]!
   
   # Computed
   isLikedByMe: Boolean!
@@ -68,7 +68,7 @@ type Comment {
   createdAt: DateTime!
   
   # Nested comments
-  replies(first: Int = 5): [Comment!]!
+  replies (first: Int = 5): [Comment!]!
   replyCount: Int!
 }
 
@@ -138,43 +138,43 @@ type Query {
   me: User
   
   # Single resources
-  user(id: ID, username: String): UserResult!
-  post(id: ID!): PostResult!
+  user (id: ID, username: String): UserResult!
+  post (id: ID!): PostResult!
   
   # Feeds
-  feed(first: Int = 20, after: String): PostConnection!
-  explorePosts(first: Int = 20): PostConnection!
+  feed (first: Int = 20, after: String): PostConnection!
+  explorePosts (first: Int = 20): PostConnection!
   
   # Search
-  searchUsers(query: String!, first: Int = 20): [User!]!
-  searchPosts(query: String!, first: Int = 20): [Post!]!
+  searchUsers (query: String!, first: Int = 20): [User!]!
+  searchPosts (query: String!, first: Int = 20): [Post!]!
 }
 
 # ========== Mutations ==========
 
 type Mutation {
   # Posts
-  createPost(input: CreatePostInput!): PostResult!
-  updatePost(id: ID!, input: UpdatePostInput!): PostResult!
-  deletePost(id: ID!): DeleteResult!
+  createPost (input: CreatePostInput!): PostResult!
+  updatePost (id: ID!, input: UpdatePostInput!): PostResult!
+  deletePost (id: ID!): DeleteResult!
   
   # Comments
-  addComment(input: CreateCommentInput!): CommentResult!
-  deleteComment(id: ID!): DeleteResult!
+  addComment (input: CreateCommentInput!): CommentResult!
+  deleteComment (id: ID!): DeleteResult!
   
   # Social actions
-  likePost(postId: ID!): Post!
-  unlikePost(postId: ID!): Post!
-  followUser(userId: ID!): User!
-  unfollowUser(userId: ID!): User!
+  likePost (postId: ID!): Post!
+  unlikePost (postId: ID!): Post!
+  followUser (userId: ID!): User!
+  unfollowUser (userId: ID!): User!
 }
 
 # ========== Subscriptions ==========
 
 type Subscription {
-  postAdded(authorId: ID): Post!
-  commentAdded(postId: ID!): Comment!
-  postLiked(postId: ID!): Post!
+  postAdded (authorId: ID): Post!
+  commentAdded (postId: ID!): Comment!
+  postLiked (postId: ID!): Post!
 }
 
 # ========== Error Handling (Union Types) ==========
@@ -237,8 +237,8 @@ enum PostSortOrder {
 **DataLoader Implementation** (solving N+1):
 \`\`\`javascript
 const loaders = {
-  user: new DataLoader(ids => batchGetUsers(ids)),
-  postLikes: new DataLoader(postIds => batchGetLikes(postIds))
+  user: new DataLoader (ids => batchGetUsers (ids)),
+  postLikes: new DataLoader (postIds => batchGetLikes (postIds))
 };
 \`\`\`
 
@@ -261,11 +261,11 @@ This schema balances client flexibility, performance (batching), and type safety
 
 \`\`\`graphql
 query Attack {
-  users(first: 1000) {
-    posts(first: 1000) {
-      comments(first: 1000) {
+  users (first: 1000) {
+    posts (first: 1000) {
+      comments (first: 1000) {
         author {
-          posts(first: 1000) {
+          posts (first: 1000) {
             # Could request billions of records
           }
         }
@@ -300,11 +300,11 @@ import { createComplexityLimitRule } from 'graphql-query-complexity';
 
 const schema = buildSchema(\`
   type Query {
-    users(first: Int = 20): [User!]!  # Complexity: first * 1
+    users (first: Int = 20): [User!]!  # Complexity: first * 1
   }
   
   type User {
-    posts(first: Int = 20): [Post!]!  # Complexity: first * 2
+    posts (first: Int = 20): [Post!]!  # Complexity: first * 2
   }
 \`);
 
@@ -328,9 +328,9 @@ if (complexity > 1000) {
 
 \`\`\`graphql
 query {
-  users(first: 10) {        # 10 * 1 = 10
-    posts(first: 5) {       # 10 * 5 * 2 = 100
-      comments(first: 3) {  # 10 * 5 * 3 * 1 = 150
+  users (first: 10) {        # 10 * 1 = 10
+    posts (first: 5) {       # 10 * 5 * 2 = 100
+      comments (first: 3) {  # 10 * 5 * 3 * 1 = 150
         text
       }
     }
@@ -348,7 +348,7 @@ const resolvers = {
       if (first > 100) {
         throw new Error('Cannot request more than 100 users');
       }
-      return getUsers(first);
+      return getUsers (first);
     }
   }
 };
@@ -370,7 +370,7 @@ const apolloServer = new ApolloServer({
             
             return {
               executionDidEnd() {
-                clearTimeout(timeout);
+                clearTimeout (timeout);
               }
             };
           }
@@ -387,8 +387,8 @@ Only allow pre-approved queries:
 
 \`\`\`javascript
 const allowedQueries = {
-  'GetUser': \`query GetUser($id: ID!) { user(id: $id) { name } }\`,
-  'GetFeed': \`query GetFeed { feed(first: 20) { ... } }\`
+  'GetUser': \`query GetUser($id: ID!) { user (id: $id) { name } }\`,
+  'GetFeed': \`query GetFeed { feed (first: 20) { ... } }\`
 };
 
 app.use('/graphql', (req, res) => {
@@ -411,14 +411,14 @@ const complexityBudget = new Map();  // user -> remaining complexity
 
 const MAX_COMPLEXITY_PER_HOUR = 10000;
 
-function checkComplexityBudget(userId, queryComplexity) {
-  const remaining = complexityBudget.get(userId) || MAX_COMPLEXITY_PER_HOUR;
+function checkComplexityBudget (userId, queryComplexity) {
+  const remaining = complexityBudget.get (userId) || MAX_COMPLEXITY_PER_HOUR;
   
   if (queryComplexity > remaining) {
     throw new Error('Complexity budget exceeded');
   }
   
-  complexityBudget.set(userId, remaining - queryComplexity);
+  complexityBudget.set (userId, remaining - queryComplexity);
 }
 \`\`\`
 
@@ -461,13 +461,13 @@ GET /users/123  → Returns everything (web needs 20 fields)
 GraphQL solution:
 \`\`\`graphql
 # Mobile
-query { user(id: "123") { id name avatar }}
+query { user (id: "123") { id name avatar }}
 
 # Web
-query { user(id: "123") { id name avatar bio stats posts {...}}}
+query { user (id: "123") { id name avatar bio stats posts {...}}}
 
 # Admin
-query { user(id: "123") { id name email role permissions }}
+query { user (id: "123") { id name email role permissions }}
 \`\`\`
 
 **2. Complex, Nested Data Requirements**
@@ -531,13 +531,13 @@ GET /repos/facebook/react
 
 # GraphQL for complex data
 query {
-  repository(owner: "facebook", name: "react") {
-    issues(first: 10) {
+  repository (owner: "facebook", name: "react") {
+    issues (first: 10) {
       edges {
         node {
           title
           author { login }
-          comments(first: 5) { totalCount }
+          comments (first: 5) { totalCount }
         }
       }
     }

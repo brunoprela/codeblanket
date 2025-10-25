@@ -237,7 +237,7 @@ Poll network card directly from userspace
 class DPDKReceiver:
     def __init__(self, port_id):
         # Initialize DPDK
-        self.port = dpdk_init_port(port_id)
+        self.port = dpdk_init_port (port_id)
         
         # Allocate memory pools
         self.mbuf_pool = dpdk_pktmbuf_pool_create(
@@ -247,9 +247,9 @@ class DPDKReceiver:
         )
         
         # Configure port
-        dpdk_eth_dev_configure(port_id, rx_queues=1, tx_queues=1)
+        dpdk_eth_dev_configure (port_id, rx_queues=1, tx_queues=1)
         
-    def poll_packets(self):
+    def poll_packets (self):
         """Poll for packets (no interrupts)"""
         while True:
             # Receive batch of packets
@@ -262,33 +262,33 @@ class DPDKReceiver:
             
             # Process each packet
             for pkt in packets[:packets_received]:
-                self.process_packet(pkt)
+                self.process_packet (pkt)
     
-    def process_packet(self, pkt):
+    def process_packet (self, pkt):
         """Process packet with zero-copy"""
         # Parse directly from packet memory
         # No memcpy required
-        eth_hdr = parse_eth_header(pkt.data)
-        ip_hdr = parse_ip_header(pkt.data + 14)
-        udp_hdr = parse_udp_header(pkt.data + 34)
+        eth_hdr = parse_eth_header (pkt.data)
+        ip_hdr = parse_ip_header (pkt.data + 14)
+        udp_hdr = parse_udp_header (pkt.data + 34)
         
         # Extract market data
-        market_data = parse_market_data(pkt.data + 42)
+        market_data = parse_market_data (pkt.data + 42)
         
         # Generate order if strategy triggers
-        if self.strategy.should_trade(market_data):
-            self.send_order(market_data)
+        if self.strategy.should_trade (market_data):
+            self.send_order (market_data)
     
-    def send_order(self, market_data):
+    def send_order (self, market_data):
         """Send order with zero-copy"""
         # Allocate packet from memory pool
-        pkt = dpdk_pktmbuf_alloc(self.mbuf_pool)
+        pkt = dpdk_pktmbuf_alloc (self.mbuf_pool)
         
         # Write order directly to packet memory
-        write_fix_message(pkt.data, market_data)
+        write_fix_message (pkt.data, market_data)
         
         # Transmit packet
-        dpdk_eth_tx_burst(port_id=self.port, queue_id=0, tx_pkts=[pkt])
+        dpdk_eth_tx_burst (port_id=self.port, queue_id=0, tx_pkts=[pkt])
 
 # Latency: ~2-5μs vs ~50-100μs with kernel stack
 \`\`\`
@@ -313,16 +313,16 @@ int main() {
     onload_set_stackname(ONLOAD_ALL_THREADS, "hft_stack");
     
     // Connect to exchange
-    connect(sock, ...);
+    connect (sock, ...);
     
     // Receive with low latency
     while (1) {
         // Poll mode (no blocking system calls)
-        int len = recv(sock, buffer, sizeof(buffer), MSG_DONTWAIT);
+        int len = recv (sock, buffer, sizeof (buffer), MSG_DONTWAIT);
         
         if (len > 0) {
             // Process market data
-            process_market_data(buffer, len);
+            process_market_data (buffer, len);
         }
     }
 }
@@ -388,7 +388,7 @@ public:
             
             // Try to claim
             bool expected = true;
-            if (available[idx].compare_exchange_strong(expected, false)) {
+            if (available[idx].compare_exchange_strong (expected, false)) {
                 // Reset object state
                 new (&pool[idx]) T();  // Placement new
                 return &pool[idx];
@@ -421,7 +421,7 @@ void on_market_data() {
     // Send to exchange...
     
     // Release back to pool
-    order_pool.release(order);
+    order_pool.release (order);
 }
 \`\`\`
 
@@ -455,13 +455,13 @@ void* mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
 #include <pthread.h>
 #include <sched.h>
 
-void pin_thread_to_core(int core_id) {
+void pin_thread_to_core (int core_id) {
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(core_id, &cpuset);
     
     pthread_t thread = pthread_self();
-    pthread_setaffinity_np(thread, sizeof(cpu_set_t), &cpuset);
+    pthread_setaffinity_np (thread, sizeof (cpu_set_t), &cpuset);
 }
 
 int main() {
@@ -601,10 +601,10 @@ public:
                 
                 // Parse market data (zero-copy)
                 MarketData* md = market_data_pool.acquire();
-                parse_market_data(pkt.data, md);
+                parse_market_data (pkt.data, md);
                 
                 // Push to strategy (lock-free)
-                market_data_queue.push(md);
+                market_data_queue.push (md);
                 
                 uint64_t t1 = rdtsc();
                 // Latency: ~200ns
@@ -616,17 +616,17 @@ public:
         while (running) {
             // Poll for market data (no blocking)
             MarketData* md;
-            if (market_data_queue.pop(md)) {
+            if (market_data_queue.pop (md)) {
                 uint64_t t0 = rdtsc();
                 
                 // Run strategy
-                if (should_trade(md)) {
+                if (should_trade (md)) {
                     Order* order = order_pool.acquire();
-                    generate_order(md, order);
-                    order_queue.push(order);
+                    generate_order (md, order);
+                    order_queue.push (order);
                 }
                 
-                market_data_pool.release(md);
+                market_data_pool.release (md);
                 
                 uint64_t t1 = rdtsc();
                 // Latency: ~500ns
@@ -637,18 +637,18 @@ public:
     void order_loop() {
         while (running) {
             Order* order;
-            if (order_queue.pop(order)) {
+            if (order_queue.pop (order)) {
                 uint64_t t0 = rdtsc();
                 
                 // Send order with DPDK
-                dpdk_send_order(order);
+                dpdk_send_order (order);
                 
                 orders_sent++;
                 
                 uint64_t t1 = rdtsc();
                 latency_sum_ns += (t1 - t0) * cycles_to_ns;
                 
-                order_pool.release(order);
+                order_pool.release (order);
                 
                 // Latency: ~1-2μs
             }

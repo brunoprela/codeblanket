@@ -88,7 +88,7 @@ class AuditEntry:
     previous_hash: str  # Hash of previous entry (blockchain-style)
     entry_hash: str  # Hash of this entry
     
-    def calculate_hash(self) -> str:
+    def calculate_hash (self) -> str:
         """Calculate hash of this entry"""
         data = {
             'timestamp': self.timestamp,
@@ -105,7 +105,7 @@ class AuditEntry:
             'previous_hash': self.previous_hash
         }
         
-        json_data = json.dumps(data, sort_keys=True)
+        json_data = json.dumps (data, sort_keys=True)
         return hashlib.sha256(json_data.encode()).hexdigest()
 
 class AuditTrail:
@@ -139,7 +139,7 @@ class AuditTrail:
         
         # Create entry
         entry = AuditEntry(
-            timestamp=int(datetime.now().timestamp() * 1_000_000),
+            timestamp=int (datetime.now().timestamp() * 1_000_000),
             event_type=event_type,
             order_id=order_id,
             user_id=user_id,
@@ -160,14 +160,14 @@ class AuditTrail:
         entry.entry_hash = entry.calculate_hash()
         
         # Write to database (append-only)
-        self.write_to_db(entry)
+        self.write_to_db (entry)
         
         # Update previous hash for next entry
         self.previous_hash = entry.entry_hash
         
         return entry
     
-    def write_to_db(self, entry: AuditEntry):
+    def write_to_db (self, entry: AuditEntry):
         """Write entry to database"""
         query = """
             INSERT INTO audit_trail (
@@ -177,7 +177,7 @@ class AuditTrail:
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         
-        self.db.execute(query, (
+        self.db.execute (query, (
             entry.timestamp, entry.event_type, entry.order_id,
             entry.user_id, entry.account_id, entry.symbol,
             entry.quantity, entry.price, entry.side, entry.exchange,
@@ -186,7 +186,7 @@ class AuditTrail:
         
         self.db.commit()
     
-    def verify_integrity(self, start_seq: int, end_seq: int) -> bool:
+    def verify_integrity (self, start_seq: int, end_seq: int) -> bool:
         """
         Verify audit trail integrity
         Ensures no tampering
@@ -197,9 +197,9 @@ class AuditTrail:
             ORDER BY sequence_number
         """
         
-        entries = self.db.execute(query, (start_seq, end_seq)).fetchall()
+        entries = self.db.execute (query, (start_seq, end_seq)).fetchall()
         
-        for i in range(1, len(entries)):
+        for i in range(1, len (entries)):
             prev_entry = entries[i-1]
             curr_entry = entries[i]
             
@@ -217,7 +217,7 @@ class AuditTrail:
         return True
 
 # Usage
-audit = AuditTrail(db)
+audit = AuditTrail (db)
 
 # Log order submission
 audit.log_event(
@@ -270,20 +270,20 @@ class TradeSurveillance:
         self.audit = audit_trail
         self.alerts = []
     
-    def detect_wash_trading(self, user_id: str, lookback_seconds: int = 60):
+    def detect_wash_trading (self, user_id: str, lookback_seconds: int = 60):
         """
         Wash trading: Buy and sell same security to create artificial volume
         Pattern: User buys from themselves (different accounts)
         """
         # Get user's orders in last 60 seconds
-        orders = self.get_user_orders(user_id, lookback_seconds)
+        orders = self.get_user_orders (user_id, lookback_seconds)
         
         # Group by symbol
         by_symbol = {}
         for order in orders:
             if order.symbol not in by_symbol:
                 by_symbol[order.symbol] = []
-            by_symbol[order.symbol].append(order)
+            by_symbol[order.symbol].append (order)
         
         # Check for buy and sell at similar times
         for symbol, symbol_orders in by_symbol.items():
@@ -294,7 +294,7 @@ class TradeSurveillance:
             if buys and sells:
                 for buy in buys:
                     for sell in sells:
-                        time_diff = abs(buy.timestamp - sell.timestamp) / 1_000_000  # seconds
+                        time_diff = abs (buy.timestamp - sell.timestamp) / 1_000_000  # seconds
                         
                         if time_diff < 10:  # Within 10 seconds
                             self.generate_alert(
@@ -304,27 +304,27 @@ class TradeSurveillance:
                                 details=f"Buy and sell within {time_diff:.1f}s"
                             )
     
-    def detect_layering(self, user_id: str):
+    def detect_layering (self, user_id: str):
         """
         Layering: Place large orders on one side, small order on opposite side
         Intent: Move market, cancel large orders after small order fills
         """
         # Get active orders
-        orders = self.get_active_orders(user_id)
+        orders = self.get_active_orders (user_id)
         
         by_symbol = {}
         for order in orders:
             if order.symbol not in by_symbol:
                 by_symbol[order.symbol] = {'BUY': [], 'SELL': []}
-            by_symbol[order.symbol][order.side].append(order)
+            by_symbol[order.symbol][order.side].append (order)
         
         for symbol, sides in by_symbol.items():
             buys = sides['BUY']
             sells = sides['SELL']
             
             # Check for imbalance
-            total_buy_qty = sum(o.quantity for o in buys)
-            total_sell_qty = sum(o.quantity for o in sells)
+            total_buy_qty = sum (o.quantity for o in buys)
+            total_sell_qty = sum (o.quantity for o in sells)
             
             # If 10x imbalance (e.g., 1000 shares buy, 100 shares sell)
             if total_buy_qty > 10 * total_sell_qty or total_sell_qty > 10 * total_buy_qty:
@@ -335,16 +335,16 @@ class TradeSurveillance:
                     details=f"Order imbalance: {total_buy_qty} buy vs {total_sell_qty} sell"
                 )
     
-    def detect_spoofing(self, user_id: str):
+    def detect_spoofing (self, user_id: str):
         """
         Spoofing: Place large orders, cancel before execution
         Intent: Create false impression of demand/supply
         """
         # Get orders in last 5 minutes
-        recent_orders = self.get_user_orders(user_id, lookback_seconds=300)
+        recent_orders = self.get_user_orders (user_id, lookback_seconds=300)
         
         # Check for pattern: Large order → cancel → opposite small order
-        for i, order in enumerate(recent_orders[:-1]):
+        for i, order in enumerate (recent_orders[:-1]):
             if order.event_type == 'ORDER_CANCEL' and order.quantity > 1000:
                 # Check if followed by opposite-side order
                 next_orders = recent_orders[i+1:i+10]  # Next 10 events
@@ -364,13 +364,13 @@ class TradeSurveillance:
                                 details=f"Large {order.side} order canceled, followed by small {next_order.side} order"
                             )
     
-    def detect_insider_trading(self, user_id: str):
+    def detect_insider_trading (self, user_id: str):
         """
         Insider trading: Trading before material non-public information
         Pattern: Large trades before earnings announcements, M&A
         """
         # Get user's large trades
-        large_trades = self.get_large_trades(user_id, min_value=100_000)
+        large_trades = self.get_large_trades (user_id, min_value=100_000)
         
         for trade in large_trades:
             # Check if followed by significant price movement
@@ -388,7 +388,7 @@ class TradeSurveillance:
                     details=f"Trade value: \${trade.quantity * trade.price:,.0f}"
                 )
     
-    def generate_alert(self, alert_type: str, user_id: str, symbol: str, details: str):
+    def generate_alert (self, alert_type: str, user_id: str, symbol: str, details: str):
 """Generate compliance alert"""
 alert = {
     'timestamp': datetime.now(),
@@ -399,21 +399,21 @@ alert = {
     'status': 'PENDING_REVIEW'
 }
 
-self.alerts.append(alert)
+self.alerts.append (alert)
         
         # In production: Send to compliance team
 print(f"ALERT: {alert_type} - {details}")
 
 # Run surveillance daily
-surveillance = TradeSurveillance(audit)
+surveillance = TradeSurveillance (audit)
 for user in all_users:
-    surveillance.detect_wash_trading(user.id)
-surveillance.detect_layering(user.id)
-surveillance.detect_spoofing(user.id)
-surveillance.detect_insider_trading(user.id)
+    surveillance.detect_wash_trading (user.id)
+surveillance.detect_layering (user.id)
+surveillance.detect_spoofing (user.id)
+surveillance.detect_insider_trading (user.id)
 
 # Review alerts
-print(f"Generated {len(surveillance.alerts)} alerts for review")
+print(f"Generated {len (surveillance.alerts)} alerts for review")
 \`\`\`
 
 ---
@@ -434,13 +434,13 @@ class CATReporter:
     Required for all US brokers
     """
     
-    def generate_daily_report(self, date: str):
+    def generate_daily_report (self, date: str):
         """
         Generate daily CAT report
         Submit by 8am EST next day
         """
         # Query all orders for date
-        orders = self.get_orders_for_date(date)
+        orders = self.get_orders_for_date (date)
         
         # Format CAT records
         cat_records = []
@@ -451,7 +451,7 @@ class CATReporter:
                 'eventTimestamp': order.timestamp,
                 'symbol': order.symbol,
                 'orderKeyDate': date,
-                'eventType': self.map_event_type(order.event_type),
+                'eventType': self.map_event_type (order.event_type),
                 'orderType': order.order_type,
                 'side': order.side,
                 'price': order.price,
@@ -465,22 +465,22 @@ class CATReporter:
                 'handlingInstructions': 'AUTO',
                 
                 # Customer info (encoded)
-                'customerAccountID': self.encode_customer_id(order.account_id),
+                'customerAccountID': self.encode_customer_id (order.account_id),
             }
             
-            cat_records.append(record)
+            cat_records.append (record)
         
         # Write to CAT format (JSON)
         output_file = f"CAT_{date}.json"
-        with open(output_file, 'w') as f:
-            json.dump(cat_records, f, indent=2)
+        with open (output_file, 'w') as f:
+            json.dump (cat_records, f, indent=2)
         
         # Submit to FINRA CAT system
-        self.submit_to_cat(output_file)
+        self.submit_to_cat (output_file)
         
         return output_file
     
-    def map_event_type(self, event_type: str) -> str:
+    def map_event_type (self, event_type: str) -> str:
         """Map internal event types to CAT event types"""
         mapping = {
             'ORDER_NEW': 'MENO',  # New order
@@ -488,7 +488,7 @@ class CATReporter:
             'ORDER_CANCEL': 'MEOC',  # Order canceled
             'FILL': 'MEOE',  # Order executed
         }
-        return mapping.get(event_type, 'MENO')
+        return mapping.get (event_type, 'MENO')
 \`\`\`
 
 ---
@@ -513,27 +513,27 @@ class DataRetentionSystem:
         self.cold_storage = "S3 Standard"  # 2-7 years
         self.archival = "S3 Glacier"  # 7-10 years
     
-    def tier_data(self):
+    def tier_data (self):
         """
         Move data between tiers based on age
         """
         # Move hot → warm (after 90 days)
         old_hot = self.get_data_older_than(90, 'days', self.hot_storage)
-        self.move_to_warm(old_hot)
+        self.move_to_warm (old_hot)
         
         # Move warm → cold (after 2 years)
         old_warm = self.get_data_older_than(2, 'years', self.warm_storage)
-        self.move_to_cold(old_warm)
+        self.move_to_cold (old_warm)
         
         # Move cold → archival (after 7 years)
         old_cold = self.get_data_older_than(7, 'years', self.cold_storage)
-        self.move_to_archival(old_cold)
+        self.move_to_archival (old_cold)
         
         # Delete archival data (after 10 years)
         # Only if regulatory period expired
         very_old = self.get_data_older_than(10, 'years', self.archival)
-        if self.regulatory_retention_expired(very_old):
-            self.delete_data(very_old)
+        if self.regulatory_retention_expired (very_old):
+            self.delete_data (very_old)
 \`\`\`
 
 ---

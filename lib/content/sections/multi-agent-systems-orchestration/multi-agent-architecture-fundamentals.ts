@@ -60,14 +60,14 @@ class SequentialAgentChain:
         self.agents = agents
         self.execution_history: List[AgentResult] = []
     
-    async def execute(self, initial_input: str) -> str:
+    async def execute (self, initial_input: str) -> str:
         """Execute agents sequentially."""
         current_input = initial_input
         
         for agent in self.agents:
             print(f"Executing {agent.name}...")
             
-            result = await agent.execute(current_input)
+            result = await agent.execute (current_input)
             
             # Store result
             self.execution_history.append(AgentResult(
@@ -81,7 +81,7 @@ class SequentialAgentChain:
         
         return current_input
     
-    def get_history(self) -> List[AgentResult]:
+    def get_history (self) -> List[AgentResult]:
         """Get execution history."""
         return self.execution_history
 
@@ -90,7 +90,7 @@ class ResearchAgent:
     """Researches a topic."""
     name = "Researcher"
     
-    async def execute(self, topic: str) -> str:
+    async def execute (self, topic: str) -> str:
         """Research the topic."""
         prompt = f"""Research this topic and provide key facts:
 Topic: {topic}
@@ -109,7 +109,7 @@ class WriterAgent:
     """Writes based on research."""
     name = "Writer"
     
-    async def execute(self, research: str) -> str:
+    async def execute (self, research: str) -> str:
         """Write article from research."""
         prompt = f"""Using this research, write a clear article:
 
@@ -126,7 +126,7 @@ class ReviewerAgent:
     """Reviews and improves writing."""
     name = "Reviewer"
     
-    async def execute(self, article: str) -> str:
+    async def execute (self, article: str) -> str:
         """Review and improve article."""
         prompt = f"""Review this article and provide improved version:
 
@@ -176,7 +176,7 @@ class ParallelAgentExecutor:
         """Execute all agents in parallel."""
         # Create tasks for all agents
         tasks = [
-            self._execute_agent(agent, task)
+            self._execute_agent (agent, task)
             for agent in self.agents
         ]
         
@@ -185,18 +185,18 @@ class ParallelAgentExecutor:
         
         # Combine results
         combined = {}
-        for agent, result in zip(self.agents, results):
-            if isinstance(result, Exception):
-                combined[agent.name] = {"error": str(result)}
+        for agent, result in zip (self.agents, results):
+            if isinstance (result, Exception):
+                combined[agent.name] = {"error": str (result)}
             else:
                 combined[agent.name] = result
         
         return combined
     
-    async def _execute_agent(self, agent: 'Agent', task: str):
+    async def _execute_agent (self, agent: 'Agent', task: str):
         """Execute single agent with error handling."""
         try:
-            return await agent.execute(task)
+            return await agent.execute (task)
         except Exception as e:
             print(f"Error in {agent.name}: {e}")
             raise
@@ -206,7 +206,7 @@ class SentimentAnalyzer:
     """Analyzes sentiment."""
     name = "Sentiment"
     
-    async def execute(self, text: str) -> Dict[str, Any]:
+    async def execute (self, text: str) -> Dict[str, Any]:
         prompt = f"Analyze sentiment: {text}"
         # ... LLM call
         return {"sentiment": "positive", "confidence": 0.85}
@@ -215,7 +215,7 @@ class TopicExtractor:
     """Extracts main topics."""
     name = "Topics"
     
-    async def execute(self, text: str) -> Dict[str, Any]:
+    async def execute (self, text: str) -> Dict[str, Any]:
         prompt = f"Extract main topics: {text}"
         # ... LLM call
         return {"topics": ["AI", "technology"]}
@@ -224,7 +224,7 @@ class LanguageDetector:
     """Detects language."""
     name = "Language"
     
-    async def execute(self, text: str) -> Dict[str, Any]:
+    async def execute (self, text: str) -> Dict[str, Any]:
         prompt = f"Detect language: {text}"
         # ... LLM call
         return {"language": "en", "confidence": 0.99}
@@ -280,24 +280,24 @@ class ManagerAgent:
         self.workers = workers  # {"coder": CoderAgent(), ...}
         self.tasks: List[Task] = []
     
-    async def execute(self, goal: str) -> Dict[str, Any]:
+    async def execute (self, goal: str) -> Dict[str, Any]:
         """Break down goal and coordinate workers."""
         # 1. Decompose goal into tasks
-        tasks = await self._decompose_goal(goal)
+        tasks = await self._decompose_goal (goal)
         self.tasks = tasks
         
         # 2. Assign tasks to workers
-        assignments = await self._assign_tasks(tasks)
+        assignments = await self._assign_tasks (tasks)
         
         # 3. Execute tasks
-        results = await self._execute_tasks(assignments)
+        results = await self._execute_tasks (assignments)
         
         # 4. Aggregate results
-        final_result = await self._aggregate_results(results)
+        final_result = await self._aggregate_results (results)
         
         return final_result
     
-    async def _decompose_goal(self, goal: str) -> List[Task]:
+    async def _decompose_goal (self, goal: str) -> List[Task]:
         """Use LLM to break goal into tasks."""
         prompt = f"""Break this goal into specific tasks:
 Goal: {goal}
@@ -315,7 +315,7 @@ Output format:
         # Parse response into Task objects
         task_lines = response.choices[0].message.content.strip().split("\\n")
         tasks = []
-        for i, line in enumerate(task_lines):
+        for i, line in enumerate (task_lines):
             if line.strip():
                 tasks.append(Task(
                     id=f"task_{i}",
@@ -335,7 +335,7 @@ Output format:
             # Use LLM to determine which worker
             prompt = f"""Which worker should handle this task?
 Task: {task.description}
-Available workers: {list(self.workers.keys())}
+Available workers: {list (self.workers.keys())}
 
 Answer with just the worker name."""
             
@@ -351,8 +351,8 @@ Answer with just the worker name."""
                 assignments[task] = self.workers[worker_name]
             else:
                 # Default to first worker if unclear
-                task.assigned_to = list(self.workers.keys())[0]
-                assignments[task] = list(self.workers.values())[0]
+                task.assigned_to = list (self.workers.keys())[0]
+                assignments[task] = list (self.workers.values())[0]
         
         return assignments
     
@@ -368,14 +368,14 @@ Answer with just the worker name."""
             print(f"Executing {task.description} with {worker.name}")
             
             try:
-                result = await worker.execute(task.description)
+                result = await worker.execute (task.description)
                 task.status = TaskStatus.COMPLETED
                 task.result = result
                 results[task] = result
             except Exception as e:
                 task.status = TaskStatus.FAILED
                 print(f"Task {task.id} failed: {e}")
-                results[task] = {"error": str(e)}
+                results[task] = {"error": str (e)}
         
         return results
     
@@ -386,7 +386,7 @@ Answer with just the worker name."""
         """Combine task results into final output."""
         # Simple aggregation - could use LLM for synthesis
         return {
-            "total_tasks": len(results),
+            "total_tasks": len (results),
             "successful": sum(1 for t in self.tasks if t.status == TaskStatus.COMPLETED),
             "failed": sum(1 for t in self.tasks if t.status == TaskStatus.FAILED),
             "results": [
@@ -404,7 +404,7 @@ class CoderAgent:
     """Writes code."""
     name = "Coder"
     
-    async def execute(self, task: str) -> str:
+    async def execute (self, task: str) -> str:
         # Generate code for task
         return "def solution(): ..."
 
@@ -412,7 +412,7 @@ class TesterAgent:
     """Writes tests."""
     name = "Tester"
     
-    async def execute(self, task: str) -> str:
+    async def execute (self, task: str) -> str:
         # Generate tests for task
         return "def test_solution(): ..."
 
@@ -449,23 +449,23 @@ class MessageBus:
     """Central message bus for agent communication."""
     
     def __init__(self):
-        self.mailboxes: Dict[str, List[Message]] = defaultdict(list)
+        self.mailboxes: Dict[str, List[Message]] = defaultdict (list)
     
-    def send(self, message: Message):
+    def send (self, message: Message):
         """Send message to agent."""
-        self.mailboxes[message.to_agent].append(message)
+        self.mailboxes[message.to_agent].append (message)
     
-    def receive(self, agent_name: str) -> List[Message]:
+    def receive (self, agent_name: str) -> List[Message]:
         """Get all messages for agent."""
         messages = self.mailboxes[agent_name]
         self.mailboxes[agent_name] = []  # Clear mailbox
         return messages
     
-    def broadcast(self, from_agent: str, content: str):
+    def broadcast (self, from_agent: str, content: str):
         """Broadcast to all agents."""
         for agent_name in self.mailboxes.keys():
             if agent_name != from_agent:
-                self.send(Message(from_agent, agent_name, content))
+                self.send(Message (from_agent, agent_name, content))
 
 class PeerAgent:
     """Agent that can communicate with peers."""
@@ -475,23 +475,23 @@ class PeerAgent:
         self.message_bus = message_bus
         self.state = {}
     
-    async def send_message(self, to_agent: str, content: str):
+    async def send_message (self, to_agent: str, content: str):
         """Send message to another agent."""
-        message = Message(self.name, to_agent, content)
-        self.message_bus.send(message)
+        message = Message (self.name, to_agent, content)
+        self.message_bus.send (message)
     
-    async def check_messages(self) -> List[Message]:
+    async def check_messages (self) -> List[Message]:
         """Check for new messages."""
-        return self.message_bus.receive(self.name)
+        return self.message_bus.receive (self.name)
     
-    async def process_messages(self):
+    async def process_messages (self):
         """Process all pending messages."""
         messages = await self.check_messages()
         
         for message in messages:
-            await self.handle_message(message)
+            await self.handle_message (message)
     
-    async def handle_message(self, message: Message):
+    async def handle_message (self, message: Message):
         """Override to handle messages."""
         pass
 
@@ -499,7 +499,7 @@ class PeerAgent:
 class ResearcherPeer(PeerAgent):
     """Researcher that shares findings."""
     
-    async def research(self, topic: str):
+    async def research (self, topic: str):
         """Research and share findings."""
         # Do research
         findings = f"Research findings on {topic}: ..."
@@ -511,11 +511,11 @@ class ResearcherPeer(PeerAgent):
 class WriterPeer(PeerAgent):
     """Writer that asks for help."""
     
-    async def handle_message(self, message: Message):
+    async def handle_message (self, message: Message):
         """Handle incoming research."""
         if message.from_agent == "researcher":
             # Use research to write
-            article = await self.write_article(message.content)
+            article = await self.write_article (message.content)
             
             # Send to reviewer
             await self.send_message("reviewer", article)
@@ -540,7 +540,7 @@ Each agent should have ONE clear purpose:
 \`\`\`python
 # ❌ BAD: Agent does everything
 class SuperAgent:
-    async def execute(self, task: str):
+    async def execute (self, task: str):
         # Research
         # Write
         # Review
@@ -551,12 +551,12 @@ class SuperAgent:
 # ✅ GOOD: Specialized agents
 class ResearchAgent:
     """ONLY researches topics."""
-    async def execute(self, topic: str) -> str:
+    async def execute (self, topic: str) -> str:
         pass
 
 class WriterAgent:
     """ONLY writes content."""
-    async def execute(self, research: str) -> str:
+    async def execute (self, research: str) -> str:
         pass
 \`\`\`
 
@@ -571,7 +571,7 @@ class Agent(Protocol):
     """Agent interface."""
     name: str
     
-    async def execute(self, input: str) -> str:
+    async def execute (self, input: str) -> str:
         """Execute agent task."""
         ...
 
@@ -579,7 +579,7 @@ class Agent(Protocol):
 class AnyAgent:
     name = "MyAgent"
     
-    async def execute(self, input: str) -> str:
+    async def execute (self, input: str) -> str:
         # Implementation
         return "result"
 \`\`\`
@@ -594,7 +594,7 @@ class AgentA:
     def __init__(self):
         self.agent_b = AgentB()  # Direct dependency
     
-    async def execute(self):
+    async def execute (self):
         result = await self.agent_b.some_specific_method()
 
 # ✅ GOOD: Loose coupling via interface
@@ -602,8 +602,8 @@ class AgentA:
     def __init__(self, next_agent: Agent):
         self.next_agent = next_agent  # Any agent
     
-    async def execute(self):
-        result = await self.next_agent.execute(data)  # Standard interface
+    async def execute (self):
+        result = await self.next_agent.execute (data)  # Standard interface
 \`\`\`
 
 ### 4. Observable Execution
@@ -626,16 +626,16 @@ class ObservableAgent:
         self.on_start = on_start
         self.on_complete = on_complete
     
-    async def execute(self, input: str) -> str:
+    async def execute (self, input: str) -> str:
         """Execute with tracking."""
         # Notify start
         if self.on_start:
-            self.on_start(self.name, input)
+            self.on_start (self.name, input)
         
         start_time = time.time()
         
         try:
-            result = await self._do_work(input)
+            result = await self._do_work (input)
             
             # Notify completion
             if self.on_complete:
@@ -650,18 +650,18 @@ class ObservableAgent:
         except Exception as e:
             # Track errors too
             if self.on_complete:
-                self.on_complete(self.name, input, None, 0, error=str(e))
+                self.on_complete (self.name, input, None, 0, error=str (e))
             raise
     
-    async def _do_work(self, input: str) -> str:
+    async def _do_work (self, input: str) -> str:
         """Override with actual work."""
         pass
 
 # Usage with tracking
-def log_start(agent_name: str, input: str):
+def log_start (agent_name: str, input: str):
     print(f"[START] {agent_name}: {input[:50]}")
 
-def log_complete(agent_name: str, input: str, result: str, duration: float, error=None):
+def log_complete (agent_name: str, input: str, result: str, duration: float, error=None):
     if error:
         print(f"[ERROR] {agent_name}: {error}")
     else:
@@ -708,7 +708,7 @@ await agent.execute("task")
 Decision tree:
 
 \`\`\`python
-def choose_architecture(requirements: Dict[str, bool]) -> str:
+def choose_architecture (requirements: Dict[str, bool]) -> str:
     """Choose appropriate multi-agent architecture."""
     
     if requirements.get("simple_sequential_tasks"):
@@ -737,7 +737,7 @@ requirements = {
     "complex_workflow": False
 }
 
-architecture = choose_architecture(requirements)
+architecture = choose_architecture (requirements)
 print(f"Recommended: {architecture}")
 \`\`\`
 
@@ -754,24 +754,24 @@ class AgentRegistry:
     def __init__(self):
         self._agents: Dict[str, Agent] = {}
     
-    def register(self, agent: Agent):
+    def register (self, agent: Agent):
         """Register an agent."""
         self._agents[agent.name] = agent
     
-    def get(self, name: str) -> Optional[Agent]:
+    def get (self, name: str) -> Optional[Agent]:
         """Get agent by name."""
-        return self._agents.get(name)
+        return self._agents.get (name)
     
-    def list_agents(self) -> List[str]:
+    def list_agents (self) -> List[str]:
         """List all agent names."""
-        return list(self._agents.keys())
+        return list (self._agents.keys())
     
-    def get_by_capability(self, capability: str) -> List[Agent]:
+    def get_by_capability (self, capability: str) -> List[Agent]:
         """Find agents with specific capability."""
         # Could extend Agent interface with capabilities
         return [
             agent for agent in self._agents.values()
-            if hasattr(agent, 'capabilities') and capability in agent.capabilities
+            if hasattr (agent, 'capabilities') and capability in agent.capabilities
         ]
 
 # Global registry
@@ -801,9 +801,9 @@ class ResilientAgentExecutor:
         max_retries: int = 3
     ) -> str:
         """Execute with retries."""
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
-                return await agent.execute(input)
+                return await agent.execute (input)
             except Exception as e:
                 if attempt == max_retries - 1:
                     raise
@@ -818,10 +818,10 @@ class ResilientAgentExecutor:
     ) -> str:
         """Try primary, fallback to secondary."""
         try:
-            return await primary_agent.execute(input)
+            return await primary_agent.execute (input)
         except Exception as e:
             print(f"Primary agent failed: {e}. Using fallback.")
-            return await fallback_agent.execute(input)
+            return await fallback_agent.execute (input)
 \`\`\`
 
 ## Next Steps

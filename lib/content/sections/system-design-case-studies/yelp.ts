@@ -107,14 +107,14 @@ LIMIT 20;
 \`\`\`python
 import math
 
-def haversine_distance(lat1, lon1, lat2, lon2):
+def haversine_distance (lat1, lon1, lat2, lon2):
     R = 6371  # Earth radius in kilometers
     
-    dlat = math.radians(lat2 - lat1)
-    dlon = math.radians(lon2 - lon1)
+    dlat = math.radians (lat2 - lat1)
+    dlon = math.radians (lon2 - lon1)
     
-    a = math.sin(dlat/2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon/2)**2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    a = math.sin (dlat/2)**2 + math.cos (math.radians (lat1)) * math.cos (math.radians (lat2)) * math.sin (dlon/2)**2
+    c = 2 * math.atan2(math.sqrt (a), math.sqrt(1-a))
     
     distance = R * c  # Distance in km
     return distance
@@ -176,7 +176,7 @@ CREATE TABLE businesses (
 **Query with Geohash**:
 
 \`\`\`python
-def search_nearby(lat, lon, radius_km, category):
+def search_nearby (lat, lon, radius_km, category):
     # Calculate geohash precision based on radius
     if radius_km <= 1:
         precision = 7  # 76m
@@ -188,10 +188,10 @@ def search_nearby(lat, lon, radius_km, category):
         precision = 4  # 20 km
     
     # Encode user location
-    user_geohash = encode_geohash(lat, lon, precision)  # e.g., "9q8yy9"
+    user_geohash = encode_geohash (lat, lon, precision)  # e.g., "9q8yy9"
     
     # Get neighboring geohash cells (to cover entire radius)
-    neighbors = get_neighbors(user_geohash)  # Returns ["9q8yy9", "9q8yy8", "9q8yyd", ...]
+    neighbors = get_neighbors (user_geohash)  # Returns ["9q8yy9", "9q8yy8", "9q8yyd", ...]
     
     # Query database
     results = db.query("""
@@ -200,18 +200,18 @@ def search_nearby(lat, lon, radius_km, category):
           AND category = '{category}'
         ORDER BY rating DESC, review_count DESC
         LIMIT 100
-    """.format(precision=precision, neighbors=','.join(neighbors), category=category))
+    """.format (precision=precision, neighbors=','.join (neighbors), category=category))
     
     # Filter by exact distance (some results outside radius due to geohash approximation)
     filtered = []
     for business in results:
-        distance = haversine_distance(lat, lon, business.latitude, business.longitude)
+        distance = haversine_distance (lat, lon, business.latitude, business.longitude)
         if distance <= radius_km:
             business.distance = distance
-            filtered.append(business)
+            filtered.append (business)
     
     # Sort by distance (or ranking score)
-    filtered.sort(key=lambda b: b.distance)
+    filtered.sort (key=lambda b: b.distance)
     return filtered[:20]
 
 # Example: Find pizza within 5 km of San Francisco
@@ -276,7 +276,7 @@ CREATE INDEX idx_location ON businesses USING GIST(location);
 SELECT
     business_id,
     name,
-    ST_Distance(location, ST_MakePoint(-122.4194, 37.7749)::geography) AS distance
+    ST_Distance (location, ST_MakePoint(-122.4194, 37.7749)::geography) AS distance
 FROM businesses
 WHERE category = 'restaurant'
   AND ST_DWithin(
@@ -310,10 +310,10 @@ LIMIT 20;
 \`\`\`python
 import redis
 
-redis_client = redis.Redis(host='localhost', port=6379)
+redis_client = redis.Redis (host='localhost', port=6379)
 
 # Add businesses to Redis Geo index
-def add_business(category, business_id, lat, lon):
+def add_business (category, business_id, lat, lon):
     redis_client.geoadd(
         f"businesses:{category}",
         lon, lat, business_id  # Note: Redis uses (lon, lat) order
@@ -325,7 +325,7 @@ add_business('restaurant', 456, 37.7849, -122.4094)
 # ... 998 more
 
 # Search nearby
-def search_nearby_redis(lat, lon, radius_km, category):
+def search_nearby_redis (lat, lon, radius_km, category):
     results = redis_client.georadius(
         f"businesses:{category}",
         lon, lat,
@@ -450,9 +450,9 @@ POST /businesses/_search
 **Ranking Formula**:
 
 \`\`\`python
-def calculate_ranking_score(business, user_location, query):
+def calculate_ranking_score (business, user_location, query):
     # 1. Text Relevance (0-1)
-    relevance = elasticsearch_score(business, query)  # BM25 score
+    relevance = elasticsearch_score (business, query)  # BM25 score
     
     # 2. Rating Score (0-1)
     rating_score = business.rating / 5.0  # 4.5 stars → 0.9
@@ -460,10 +460,10 @@ def calculate_ranking_score(business, user_location, query):
     # 3. Popularity Score (0-1)
     # Log scale: 10 reviews = 0.5, 100 reviews = 0.67, 1000 reviews = 0.75
     popularity_score = math.log10(business.review_count + 1) / 4.0
-    popularity_score = min(popularity_score, 1.0)
+    popularity_score = min (popularity_score, 1.0)
     
     # 4. Distance Score (0-1)
-    distance_km = haversine_distance(user_location, business.location)
+    distance_km = haversine_distance (user_location, business.location)
     if distance_km < 1:
         distance_score = 1.0
     elif distance_km < 5:
@@ -476,7 +476,7 @@ def calculate_ranking_score(business, user_location, query):
     freshness_score = math.exp(-days_since_update / 30)  # 30-day half-life
     
     # 6. User Preference (ML Model)
-    user_preference = predict_user_affinity(user, business)  # Collaborative filtering: 0-1
+    user_preference = predict_user_affinity (user, business)  # Collaborative filtering: 0-1
     
     # Weighted combination
     score = (
@@ -491,8 +491,8 @@ def calculate_ranking_score(business, user_location, query):
     return score
 
 # Sort businesses by score
-businesses = search_nearby(user_location, query)
-ranked = sorted(businesses, key=lambda b: calculate_ranking_score(b, user_location, query), reverse=True)
+businesses = search_nearby (user_location, query)
+ranked = sorted (businesses, key=lambda b: calculate_ranking_score (b, user_location, query), reverse=True)
 return ranked[:20]
 \`\`\`
 
@@ -548,7 +548,7 @@ CREATE TABLE review_votes (
 
 \`\`\`python
 # On new review submission
-def add_review(business_id, user_id, rating, text):
+def add_review (business_id, user_id, rating, text):
     # Store review in database
     review_id = db.insert("reviews", {
         business_id: business_id,
@@ -559,25 +559,25 @@ def add_review(business_id, user_id, rating, text):
     })
     
     # Update Redis aggregation
-    redis_client.zadd(f"ratings:{business_id}", {review_id: rating})
-    redis_client.incr(f"review_count:{business_id}")
+    redis_client.zadd (f"ratings:{business_id}", {review_id: rating})
+    redis_client.incr (f"review_count:{business_id}")
     
     # Calculate new average (async)
-    update_business_rating_async(business_id)
+    update_business_rating_async (business_id)
     
     return review_id
 
 # Async worker (Celery task)
-def update_business_rating_async(business_id):
+def update_business_rating_async (business_id):
     # Get all ratings from Redis
-    ratings = redis_client.zrange(f"ratings:{business_id}", 0, -1, withscores=True)
+    ratings = redis_client.zrange (f"ratings:{business_id}", 0, -1, withscores=True)
     
     if not ratings:
         return
     
     # Calculate average
-    total = sum(rating for _, rating in ratings)
-    count = len(ratings)
+    total = sum (rating for _, rating in ratings)
+    count = len (ratings)
     avg_rating = total / count
     
     # Update database
@@ -622,7 +622,7 @@ INSERT INTO business_hours VALUES
 **Query Logic**:
 
 \`\`\`python
-def is_open_now(business_id):
+def is_open_now (business_id):
     now = datetime.now()
     day_of_week = now.weekday()  # 0=Monday, 6=Sunday
     current_time = now.time()
@@ -645,9 +645,9 @@ def is_open_now(business_id):
         return open_time <= current_time <= close_time
 
 # Filter search results
-businesses = search_nearby(location, query)
+businesses = search_nearby (location, query)
 if filter_open_now:
-    businesses = [b for b in businesses if is_open_now(b.business_id)]
+    businesses = [b for b in businesses if is_open_now (b.business_id)]
 \`\`\`
 
 **Optimization**: Pre-compute "is_open_now" boolean flag (updated every 15 minutes).
@@ -755,7 +755,7 @@ Scenario: User traveling, searches "pizza near airport" while in flight.
 
 \`\`\`sql
 -- Map business to shard using geohash prefix
-shard_id = hash(geohash_2) % num_shards
+shard_id = hash (geohash_2) % num_shards
 
 Example:
 - San Francisco: geohash_2 = "9q" → shard_id = hash("9q") % 10 = 3
@@ -786,17 +786,17 @@ Example:
 
 \`\`\`python
 # When business updates hours
-def update_business_hours(business_id, new_hours):
+def update_business_hours (business_id, new_hours):
     db.update("business_hours", business_id, new_hours)
     
     # Invalidate caches
-    redis_client.delete(f"business:{business_id}")
+    redis_client.delete (f"business:{business_id}")
     
     # Invalidate search results containing this business (expensive, skip)
     # Instead: Accept stale cache for 5 minutes (TTL)
     
     # Update Elasticsearch
-    es.update('businesses', business_id, {'is_open_now': calculate_open_now(new_hours)})
+    es.update('businesses', business_id, {'is_open_now': calculate_open_now (new_hours)})
 \`\`\`
 
 ---
@@ -850,7 +850,7 @@ Next page: WHERE distance > 2.3 OR (distance = 2.3 AND id > 123)
 \`\`\`python
 # Pre-build Trie of business names
 trie = Trie()
-trie.insert("Tony's Pizza", business_id=123, score=4.5)
+trie.insert("Tony\'s Pizza", business_id=123, score=4.5)
 trie.insert("Pizza Hut", business_id=456, score=3.8)
 
 # User types "piz"
@@ -930,7 +930,7 @@ CREATE TABLE businesses (
 **Prevention**:
 
 \`\`\`python
-def validate_review(user_id, business_id, text):
+def validate_review (user_id, business_id, text):
     # 1. Check-in required
     has_checkin = db.query("""
         SELECT 1 FROM checkins
@@ -951,9 +951,9 @@ def validate_review(user_id, business_id, text):
         return {"error": "Already reviewed this business"}
     
     # 3. ML fraud detection
-    fraud_score = ml_model.predict_fraud(user_id, business_id, text)
+    fraud_score = ml_model.predict_fraud (user_id, business_id, text)
     if fraud_score > 0.8:
-        flag_for_manual_review(user_id, business_id)
+        flag_for_manual_review (user_id, business_id)
     
     return {"valid": True}
 \`\`\`
@@ -987,7 +987,7 @@ CREATE TABLE review_responses (
     business_id BIGINT,
     response_text TEXT,
     responded_at TIMESTAMP,
-    FOREIGN KEY (review_id) REFERENCES reviews(review_id)
+    FOREIGN KEY (review_id) REFERENCES reviews (review_id)
 );
 \`\`\`
 

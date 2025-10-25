@@ -59,11 +59,11 @@ app = FastAPI(title="LLM API", version="1.0.0")
 class Message(BaseModel):
     role: str = Field(..., description="Role: 'user' or 'assistant'")
     content: str = Field(..., description="Message content")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field (default_factory=datetime.utcnow)
 
 class ConversationCreate(BaseModel):
     system_prompt: Optional[str] = Field(None, description="System prompt")
-    metadata: Optional[dict] = Field(default_factory=dict)
+    metadata: Optional[dict] = Field (default_factory=dict)
 
 class ConversationResponse(BaseModel):
     id: str
@@ -73,10 +73,10 @@ class ConversationResponse(BaseModel):
 
 class GenerateRequest(BaseModel):
     message: str = Field(..., description="User message")
-    model: str = Field(default="gpt-3.5-turbo", description="LLM model to use")
-    temperature: float = Field(default=0.7, ge=0.0, le=2.0)
+    model: str = Field (default="gpt-3.5-turbo", description="LLM model to use")
+    temperature: float = Field (default=0.7, ge=0.0, le=2.0)
     max_tokens: Optional[int] = Field(None, description="Maximum tokens to generate")
-    stream: bool = Field(default=False, description="Enable streaming")
+    stream: bool = Field (default=False, description="Enable streaming")
 
 class GenerateResponse(BaseModel):
     message: str
@@ -87,13 +87,13 @@ class GenerateResponse(BaseModel):
 
 # Conversations Resource
 @app.post("/v1/conversations", response_model=ConversationResponse, status_code=201)
-async def create_conversation(conversation: ConversationCreate):
+async def create_conversation (conversation: ConversationCreate):
     """
     Create a new conversation.
     
     A conversation maintains context across multiple messages.
     """
-    conversation_id = str(uuid.uuid4())
+    conversation_id = str (uuid.uuid4())
     
     # Store in database
     db_conversation = {
@@ -104,7 +104,7 @@ async def create_conversation(conversation: ConversationCreate):
         'metadata': conversation.metadata
     }
     
-    save_conversation(db_conversation)
+    save_conversation (db_conversation)
     
     return ConversationResponse(
         id=conversation_id,
@@ -115,44 +115,44 @@ async def create_conversation(conversation: ConversationCreate):
 
 
 @app.get("/v1/conversations/{conversation_id}", response_model=ConversationResponse)
-async def get_conversation(conversation_id: str):
+async def get_conversation (conversation_id: str):
     """Get conversation details."""
-    conversation = get_conversation_from_db(conversation_id)
+    conversation = get_conversation_from_db (conversation_id)
     
     if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
+        raise HTTPException (status_code=404, detail="Conversation not found")
     
     return ConversationResponse(
         id=conversation['id'],
         created_at=conversation['created_at'],
         system_prompt=conversation.get('system_prompt'),
-        message_count=len(conversation['messages'])
+        message_count=len (conversation['messages'])
     )
 
 
 @app.delete("/v1/conversations/{conversation_id}", status_code=204)
-async def delete_conversation(conversation_id: str):
+async def delete_conversation (conversation_id: str):
     """Delete a conversation and all its messages."""
-    deleted = delete_conversation_from_db(conversation_id)
+    deleted = delete_conversation_from_db (conversation_id)
     
     if not deleted:
-        raise HTTPException(status_code=404, detail="Conversation not found")
+        raise HTTPException (status_code=404, detail="Conversation not found")
     
     return None
 
 
 # Messages Resource
 @app.get("/v1/conversations/{conversation_id}/messages", response_model=List[Message])
-async def get_messages(conversation_id: str, limit: int = 50, offset: int = 0):
+async def get_messages (conversation_id: str, limit: int = 50, offset: int = 0):
     """
     Get messages from a conversation.
     
     Supports pagination via limit and offset parameters.
     """
-    conversation = get_conversation_from_db(conversation_id)
+    conversation = get_conversation_from_db (conversation_id)
     
     if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
+        raise HTTPException (status_code=404, detail="Conversation not found")
     
     messages = conversation['messages'][offset:offset + limit]
     
@@ -171,10 +171,10 @@ async def generate_response(
     Adds the user message to the conversation, generates a response,
     and adds the assistant message to the conversation.
     """
-    conversation = get_conversation_from_db(conversation_id)
+    conversation = get_conversation_from_db (conversation_id)
     
     if not conversation:
-        raise HTTPException(status_code=404, detail="Conversation not found")
+        raise HTTPException (status_code=404, detail="Conversation not found")
     
     # Add user message
     user_message = {
@@ -182,7 +182,7 @@ async def generate_response(
         'content': request.message,
         'timestamp': datetime.utcnow()
     }
-    conversation['messages'].append(user_message)
+    conversation['messages'].append (user_message)
     
     # Build messages for LLM
     llm_messages = []
@@ -216,7 +216,7 @@ async def generate_response(
         })
         
         # Save updated conversation
-        update_conversation(conversation)
+        update_conversation (conversation)
         
         return GenerateResponse(
             message=assistant_message,
@@ -227,7 +227,7 @@ async def generate_response(
         
     except openai.error.InvalidRequestError as e:
         # Token limit exceeded or other validation error
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException (status_code=400, detail=str (e))
     
     except openai.error.RateLimitError:
         raise HTTPException(
@@ -236,8 +236,8 @@ async def generate_response(
         )
     
     except Exception as e:
-        logging.error(f"Error generating response: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        logging.error (f"Error generating response: {str (e)}")
+        raise HTTPException (status_code=500, detail="Internal server error")
 
 
 # Models Resource
@@ -322,7 +322,7 @@ async def generate_stream(
                     'type': 'content',
                     'content': content
                 }
-                yield f"data: {json.dumps(data)}\\n\\n"
+                yield f"data: {json.dumps (data)}\\n\\n"
             
             # Handle finish reason
             if chunk.choices[0].finish_reason:
@@ -331,26 +331,26 @@ async def generate_stream(
                     'finish_reason': chunk.choices[0].finish_reason,
                     'full_content': full_content
                 }
-                yield f"data: {json.dumps(data)}\\n\\n"
+                yield f"data: {json.dumps (data)}\\n\\n"
         
     except openai.error.OpenAIError as e:
         # Send error to client
         error_data = {
             'type': 'error',
-            'error': str(e)
+            'error': str (e)
         }
-        yield f"data: {json.dumps(error_data)}\\n\\n"
+        yield f"data: {json.dumps (error_data)}\\n\\n"
     
     except Exception as e:
         error_data = {
             'type': 'error',
             'error': 'Internal server error'
         }
-        yield f"data: {json.dumps(error_data)}\\n\\n"
+        yield f"data: {json.dumps (error_data)}\\n\\n"
 
 
 @app.post("/v1/chat/stream")
-async def stream_chat(message: str, conversation_id: Optional[str] = None):
+async def stream_chat (message: str, conversation_id: Optional[str] = None):
     """
     Stream a chat response.
     
@@ -363,13 +363,13 @@ async def stream_chat(message: str, conversation_id: Optional[str] = None):
     ]
     
     if conversation_id:
-        conversation = get_conversation(conversation_id)
+        conversation = get_conversation (conversation_id)
         if conversation:
-            messages = build_messages_from_conversation(conversation)
+            messages = build_messages_from_conversation (conversation)
             messages.append({"role": "user", "content": message})
     
     return StreamingResponse(
-        generate_stream(messages),
+        generate_stream (messages),
         media_type="text/event-stream",
         headers={
             'Cache-Control': 'no-cache',
@@ -384,18 +384,18 @@ async def stream_chat(message: str, conversation_id: Optional[str] = None):
 const eventSource = new EventSource('/v1/chat/stream?message=Hello');
 
 eventSource.onmessage = (event) => {
-  const data = JSON.parse(event.data);
+  const data = JSON.parse (event.data);
   
   if (data.type === 'content') {
     // Append content to UI
-    appendToChat(data.content);
+    appendToChat (data.content);
   } else if (data.type === 'done') {
     // Generation complete
     console.log('Finish reason:', data.finish_reason);
     eventSource.close();
   } else if (data.type === 'error') {
     // Handle error
-    showError(data.error);
+    showError (data.error);
     eventSource.close();
   }
 };
@@ -426,23 +426,23 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: Dict[str, WebSocket] = {}
     
-    async def connect(self, websocket: WebSocket, client_id: str):
+    async def connect (self, websocket: WebSocket, client_id: str):
         await websocket.accept()
         self.active_connections[client_id] = websocket
     
-    def disconnect(self, client_id: str):
-        self.active_connections.pop(client_id, None)
+    def disconnect (self, client_id: str):
+        self.active_connections.pop (client_id, None)
     
-    async def send_message(self, client_id: str, message: dict):
+    async def send_message (self, client_id: str, message: dict):
         if client_id in self.active_connections:
-            await self.active_connections[client_id].send_json(message)
+            await self.active_connections[client_id].send_json (message)
 
 
 manager = ConnectionManager()
 
 
 @app.websocket("/ws/chat/{client_id}")
-async def websocket_chat(websocket: WebSocket, client_id: str):
+async def websocket_chat (websocket: WebSocket, client_id: str):
     """
     WebSocket endpoint for real-time chat.
     
@@ -451,7 +451,7 @@ async def websocket_chat(websocket: WebSocket, client_id: str):
     - Message cancellation
     - Real-time status updates
     """
-    await manager.connect(websocket, client_id)
+    await manager.connect (websocket, client_id)
     
     conversation_history = []
     generation_task = None
@@ -475,7 +475,7 @@ async def websocket_chat(websocket: WebSocket, client_id: str):
                 
                 # Start generation
                 generation_task = asyncio.create_task(
-                    generate_and_stream(websocket, conversation_history)
+                    generate_and_stream (websocket, conversation_history)
                 )
                 
             elif message_type == 'cancel':
@@ -496,12 +496,12 @@ async def websocket_chat(websocket: WebSocket, client_id: str):
                 })
     
     except WebSocketDisconnect:
-        manager.disconnect(client_id)
+        manager.disconnect (client_id)
         if generation_task:
             generation_task.cancel()
 
 
-async def generate_and_stream(websocket: WebSocket, messages: list):
+async def generate_and_stream (websocket: WebSocket, messages: list):
     """Generate response and stream to WebSocket."""
     try:
         # Notify client that generation started
@@ -549,7 +549,7 @@ async def generate_and_stream(websocket: WebSocket, messages: list):
     except Exception as e:
         await websocket.send_json({
             'type': 'error',
-            'error': str(e)
+            'error': str (e)
         })
 \`\`\`
 
@@ -565,7 +565,7 @@ The most common and explicit approach:
 # Version 1
 @app.post("/v1/generate")
 async def generate_v1(prompt: str):
-    return {"result": generate(prompt)}
+    return {"result": generate (prompt)}
 
 # Version 2 with additional parameters
 @app.post("/v2/generate")
@@ -575,7 +575,7 @@ async def generate_v2(
     temperature: float = 0.7
 ):
     return {
-        "result": generate(prompt, model, temperature),
+        "result": generate (prompt, model, temperature),
         "model": model,
         "temperature": temperature
     }
@@ -594,14 +594,14 @@ from fastapi import Header, HTTPException
 @app.post("/generate")
 async def generate(
     prompt: str,
-    api_version: str = Header(default="v1", alias="X-API-Version")
+    api_version: str = Header (default="v1", alias="X-API-Version")
 ):
     if api_version == "v1":
-        return generate_v1_logic(prompt)
+        return generate_v1_logic (prompt)
     elif api_version == "v2":
-        return generate_v2_logic(prompt)
+        return generate_v2_logic (prompt)
     else:
-        raise HTTPException(status_code=400, detail="Unsupported API version")
+        raise HTTPException (status_code=400, detail="Unsupported API version")
 \`\`\`
 
 **Pros**: Clean URLs, version not in path
@@ -629,7 +629,7 @@ async def generate_v1(prompt: str, response: Response):
     # Log usage of deprecated endpoint
     log_deprecated_usage("v1/generate", request.client.host)
     
-    return {"result": generate(prompt)}
+    return {"result": generate (prompt)}
 \`\`\`
 
 ## OpenAPI Documentation
@@ -741,7 +741,7 @@ class GenerateRequest(BaseModel):
     },
     tags=["Generation"]
 )
-async def generate(request: GenerateRequest):
+async def generate (request: GenerateRequest):
     """Generate text from prompt."""
     # Implementation
     pass
@@ -766,14 +766,14 @@ class ErrorResponse(BaseModel):
 
 
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
+async def global_exception_handler (request: Request, exc: Exception):
     """Global exception handler with detailed error responses."""
     
     # Generate request ID for tracking
-    request_id = str(uuid.uuid4())
+    request_id = str (uuid.uuid4())
     
     # Log error with request ID
-    logging.error(f"Request {request_id} failed: {str(exc)}", exc_info=True)
+    logging.error (f"Request {request_id} failed: {str (exc)}", exc_info=True)
     
     # Return detailed error response
     return JSONResponse(
@@ -783,21 +783,21 @@ async def global_exception_handler(request: Request, exc: Exception):
             "message": "An unexpected error occurred",
             "request_id": request_id,
             "details": {
-                "type": type(exc).__name__
+                "type": type (exc).__name__
             }
         }
     )
 
 
 # Specific error handlers for LLM-related errors
-@app.exception_handler(openai.error.InvalidRequestError)
-async def openai_invalid_request_handler(request: Request, exc):
+@app.exception_handler (openai.error.InvalidRequestError)
+async def openai_invalid_request_handler (request: Request, exc):
     """Handle OpenAI invalid request errors."""
     
-    request_id = str(uuid.uuid4())
+    request_id = str (uuid.uuid4())
     
     # Parse OpenAI error to provide helpful message
-    error_message = str(exc)
+    error_message = str (exc)
     
     if "maximum context length" in error_message:
         return JSONResponse(
@@ -823,8 +823,8 @@ async def openai_invalid_request_handler(request: Request, exc):
     )
 
 
-@app.exception_handler(openai.error.RateLimitError)
-async def openai_rate_limit_handler(request: Request, exc):
+@app.exception_handler (openai.error.RateLimitError)
+async def openai_rate_limit_handler (request: Request, exc):
     """Handle OpenAI rate limit errors."""
     
     return JSONResponse(
@@ -861,7 +861,7 @@ class RateLimiter:
     
     def __init__(self):
         # Store buckets per API key
-        self.buckets = defaultdict(lambda: {
+        self.buckets = defaultdict (lambda: {
             'tokens': 100,
             'last_update': time.time()
         })
@@ -873,7 +873,7 @@ class RateLimiter:
             'enterprise': {'rate': 10000, 'period': 3600}  # 10000/hour
         }
     
-    def check_rate_limit(self, api_key: str, tier: str = 'free') -> dict:
+    def check_rate_limit (self, api_key: str, tier: str = 'free') -> dict:
         """
         Check if request is within rate limit.
         
@@ -890,13 +890,13 @@ class RateLimiter:
         
         # Refill tokens based on time passed
         tokens_to_add = (time_passed / config['period']) * config['rate']
-        bucket['tokens'] = min(config['rate'], bucket['tokens'] + tokens_to_add)
+        bucket['tokens'] = min (config['rate'], bucket['tokens'] + tokens_to_add)
         bucket['last_update'] = now
         
         # Check if request allowed
         if bucket['tokens'] >= 1:
             bucket['tokens'] -= 1
-            remaining = int(bucket['tokens'])
+            remaining = int (bucket['tokens'])
             reset_at = datetime.utcnow() + timedelta(
                 seconds=(config['rate'] - bucket['tokens']) / config['rate'] * config['period']
             )
@@ -922,12 +922,12 @@ rate_limiter = RateLimiter()
 
 
 @app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
+async def rate_limit_middleware (request: Request, call_next):
     """Apply rate limiting to all requests."""
     
     # Skip rate limiting for docs endpoints
     if request.url.path in ['/docs', '/openapi.json']:
-        return await call_next(request)
+        return await call_next (request)
     
     # Get API key and user tier
     api_key = request.headers.get('X-API-Key')
@@ -939,11 +939,11 @@ async def rate_limit_middleware(request: Request, call_next):
         )
     
     # Get user tier from database
-    user = get_user_by_api_key(api_key)
+    user = get_user_by_api_key (api_key)
     tier = user.get('tier', 'free') if user else 'free'
     
     # Check rate limit
-    limit_result = rate_limiter.check_rate_limit(api_key, tier)
+    limit_result = rate_limiter.check_rate_limit (api_key, tier)
     
     if not limit_result['allowed']:
         return JSONResponse(
@@ -955,17 +955,17 @@ async def rate_limit_middleware(request: Request, call_next):
             },
             headers={
                 "X-RateLimit-Remaining": "0",
-                "X-RateLimit-Reset": str(int(limit_result['reset_at'].timestamp())),
+                "X-RateLimit-Reset": str (int (limit_result['reset_at'].timestamp())),
                 "Retry-After": str((limit_result['reset_at'] - datetime.utcnow()).seconds)
             }
         )
     
     # Process request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add rate limit headers
-    response.headers["X-RateLimit-Remaining"] = str(limit_result['remaining'])
-    response.headers["X-RateLimit-Reset"] = str(int(limit_result['reset_at'].timestamp()))
+    response.headers["X-RateLimit-Remaining"] = str (limit_result['remaining'])
+    response.headers["X-RateLimit-Reset"] = str (int (limit_result['reset_at'].timestamp()))
     
     return response
 \`\`\`
@@ -992,8 +992,8 @@ class Conversation:
     created_at: str
     
     @strawberry.field
-    def message_count(self) -> int:
-        return len(self.messages)
+    def message_count (self) -> int:
+        return len (self.messages)
 
 @strawberry.type
 class GenerationResult:
@@ -1004,21 +1004,21 @@ class GenerationResult:
 @strawberry.type
 class Query:
     @strawberry.field
-    def conversation(self, id: str) -> Optional[Conversation]:
+    def conversation (self, id: str) -> Optional[Conversation]:
         """Get a conversation by ID."""
-        return get_conversation_from_db(id)
+        return get_conversation_from_db (id)
     
     @strawberry.field
-    def conversations(self, limit: int = 10) -> List[Conversation]:
+    def conversations (self, limit: int = 10) -> List[Conversation]:
         """List conversations."""
-        return get_conversations_from_db(limit=limit)
+        return get_conversations_from_db (limit=limit)
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def create_conversation(self, system_prompt: Optional[str] = None) -> Conversation:
+    def create_conversation (self, system_prompt: Optional[str] = None) -> Conversation:
         """Create a new conversation."""
-        return create_conversation_in_db(system_prompt)
+        return create_conversation_in_db (system_prompt)
     
     @strawberry.mutation
     def generate_response(
@@ -1033,11 +1033,11 @@ class Mutation:
         # Return result
         pass
 
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+schema = strawberry.Schema (query=Query, mutation=Mutation)
 
 # Add to FastAPI app
-graphql_app = GraphQLRouter(schema)
-app.include_router(graphql_app, prefix="/graphql")
+graphql_app = GraphQLRouter (schema)
+app.include_router (graphql_app, prefix="/graphql")
 \`\`\`
 
 ## Best Practices Summary

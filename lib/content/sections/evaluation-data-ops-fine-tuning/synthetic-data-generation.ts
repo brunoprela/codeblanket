@@ -52,7 +52,7 @@ class SyntheticDataGenerator:
             difficulty_levels = ["easy", "medium", "hard"]
         
         examples = []
-        examples_per_level = num_examples // len(difficulty_levels)
+        examples_per_level = num_examples // len (difficulty_levels)
         
         for difficulty in difficulty_levels:
             prompt = f"""Generate {examples_per_level} {difficulty} difficulty examples for this task:
@@ -78,13 +78,13 @@ Make examples diverse and realistic."""
                 temperature=0.8  # Higher for diversity
             )
             
-            generated = json.loads(response.choices[0].message.content)
+            generated = json.loads (response.choices[0].message.content)
             
             # Add metadata
             for ex in generated:
                 ex['difficulty'] = difficulty
                 ex['source'] = 'synthetic'
-                examples.append(ex)
+                examples.append (ex)
         
         return examples
 
@@ -96,7 +96,7 @@ examples = await generator.generate_examples(
     num_examples=300
 )
 
-print(f"Generated {len(examples)} synthetic examples")
+print(f"Generated {len (examples)} synthetic examples")
 # Can now use for training or evaluation!
 \`\`\`
 
@@ -118,14 +118,14 @@ class FewShotBootstrapper:
         
         synthetic = []
         
-        while len(synthetic) < target_count:
+        while len (synthetic) < target_count:
             # Sample seed examples
             import random
-            seeds = random.sample(self.seed_examples, min(3, len(self.seed_examples)))
+            seeds = random.sample (self.seed_examples, min(3, len (self.seed_examples)))
             
             prompt = f"""Here are some examples of our task:
 
-{self._format_seeds(seeds)}
+{self._format_seeds (seeds)}
 
 Generate 10 NEW examples following the same pattern but with different content.
 Make them diverse and realistic.
@@ -138,32 +138,32 @@ Format as JSON array."""
                 temperature=0.9
             )
             
-            new_examples = json.loads(response.choices[0].message.content)
-            synthetic.extend(new_examples)
+            new_examples = json.loads (response.choices[0].message.content)
+            synthetic.extend (new_examples)
             
-            print(f"Generated {len(synthetic)}/{target_count}...")
+            print(f"Generated {len (synthetic)}/{target_count}...")
         
         return synthetic[:target_count]
     
-    def _format_seeds(self, seeds: List[Dict]) -> str:
+    def _format_seeds (self, seeds: List[Dict]) -> str:
         """Format seed examples for prompt."""
         formatted = []
-        for i, seed in enumerate(seeds):
-            formatted.append(f"Example {i+1}:")
-            formatted.append(f"Input: {seed['input']}")
-            formatted.append(f"Output: {seed['output']}")
+        for i, seed in enumerate (seeds):
+            formatted.append (f"Example {i+1}:")
+            formatted.append (f"Input: {seed['input']}")
+            formatted.append (f"Output: {seed['output']}")
             formatted.append("")
-        return "\\n".join(formatted)
+        return "\\n".join (formatted)
 
 # Usage
-bootstrapper = FewShotBootstrapper(seed_examples=[
+bootstrapper = FewShotBootstrapper (seed_examples=[
     {"input": "What is AI?", "output": "Artificial Intelligence is..."},
     {"input": "Explain ML", "output": "Machine Learning is..."},
     # Just 5-10 seed examples!
 ])
 
-synthetic_data = await bootstrapper.bootstrap(target_count=1000)
-print(f"Bootstrapped to {len(synthetic_data)} examples from {len(bootstrapper.seed_examples)} seeds!")
+synthetic_data = await bootstrapper.bootstrap (target_count=1000)
+print(f"Bootstrapped to {len (synthetic_data)} examples from {len (bootstrapper.seed_examples)} seeds!")
 \`\`\`
 
 ### 3. Data Augmentation
@@ -172,7 +172,7 @@ print(f"Bootstrapped to {len(synthetic_data)} examples from {len(bootstrapper.se
 class DataAugmentor:
     """Augment existing data with variations."""
     
-    async def paraphrase(self, text: str) -> List[str]:
+    async def paraphrase (self, text: str) -> List[str]:
         """Generate paraphrases of text."""
         prompt = f"""Generate 5 different paraphrases of this text:
 
@@ -191,22 +191,22 @@ Return as JSON array of strings."""
             temperature=0.8
         )
         
-        paraphrases = json.loads(response.choices[0].message.content)
+        paraphrases = json.loads (response.choices[0].message.content)
         return paraphrases
     
-    async def add_noise(self, example: Dict) -> List[Dict]:
+    async def add_noise (self, example: Dict) -> List[Dict]:
         """Add realistic noise/errors to example."""
         variations = []
         
         # Typos
         variations.append({
             **example,
-            'input': self._add_typos(example['input']),
+            'input': self._add_typos (example['input']),
             'augmentation': 'typos'
         })
         
         # Informal language
-        informal = await self._make_informal(example['input'])
+        informal = await self._make_informal (example['input'])
         variations.append({
             **example,
             'input': informal,
@@ -215,31 +215,31 @@ Return as JSON array of strings."""
         
         return variations
     
-    def _add_typos(self, text: str) -> str:
+    def _add_typos (self, text: str) -> str:
         """Add realistic typos."""
         import random
         words = text.split()
         if random.random() < 0.3:  # 30% chance
-            idx = random.randint(0, len(words) - 1)
-            words[idx] = self._typo(words[idx])
-        return " ".join(words)
+            idx = random.randint(0, len (words) - 1)
+            words[idx] = self._typo (words[idx])
+        return " ".join (words)
     
-    def _typo(self, word: str) -> str:
+    def _typo (self, word: str) -> str:
         """Make typo in word."""
-        if len(word) < 4:
+        if len (word) < 4:
             return word
         import random
         ops = ['swap', 'double', 'delete']
-        op = random.choice(ops)
+        op = random.choice (ops)
         
-        if op == 'swap' and len(word) > 1:
-            i = random.randint(0, len(word) - 2)
+        if op == 'swap' and len (word) > 1:
+            i = random.randint(0, len (word) - 2)
             word = word[:i] + word[i+1] + word[i] + word[i+2:]
         elif op == 'double':
-            i = random.randint(0, len(word) - 1)
+            i = random.randint(0, len (word) - 1)
             word = word[:i] + word[i] + word[i:]
-        elif op == 'delete' and len(word) > 3:
-            i = random.randint(1, len(word) - 2)
+        elif op == 'delete' and len (word) > 3:
+            i = random.randint(1, len (word) - 2)
             word = word[:i] + word[i+1:]
         
         return word
@@ -249,11 +249,11 @@ augmentor = DataAugmentor()
 
 # Paraphrase
 original = "The weather is nice today"
-paraphrases = await augmentor.paraphrase(original)
-# ["Today's weather is pleasant", "It's a lovely day", ...]
+paraphrases = await augmentor.paraphrase (original)
+# ["Today\'s weather is pleasant", "It's a lovely day", ...]
 
 # Add noise
-noisy_variations = await augmentor.add_noise(example)
+noisy_variations = await augmentor.add_noise (example)
 # Now have robust data with realistic user errors!
 \`\`\`
 
@@ -272,19 +272,19 @@ class SyntheticDataValidator:
         
         issues = []
         
-        for i, example in enumerate(synthetic_data):
-            example_issues = await self._validate_example(example, validation_criteria)
+        for i, example in enumerate (synthetic_data):
+            example_issues = await self._validate_example (example, validation_criteria)
             if example_issues:
                 issues.append({
                     'example_index': i,
                     'issues': example_issues
                 })
         
-        quality_score = 1 - (len(issues) / len(synthetic_data))
+        quality_score = 1 - (len (issues) / len (synthetic_data))
         
         return {
-            'total_examples': len(synthetic_data),
-            'issues_found': len(issues),
+            'total_examples': len (synthetic_data),
+            'issues_found': len (issues),
             'quality_score': quality_score,
             'issues': issues
         }
@@ -306,18 +306,18 @@ class SyntheticDataValidator:
             issues.append("input_equals_output")
         
         # Check length
-        if len(example['input'].split()) < 3:
+        if len (example['input'].split()) < 3:
             issues.append("input_too_short")
         
         # Use LLM to check quality
         if "realistic" in criteria:
-            is_realistic = await self._check_realistic(example)
+            is_realistic = await self._check_realistic (example)
             if not is_realistic:
                 issues.append("unrealistic")
         
         return issues
     
-    async def _check_realistic(self, example: Dict) -> bool:
+    async def _check_realistic (self, example: Dict) -> bool:
         """Use LLM to check if example is realistic."""
         prompt = f"""Is this example realistic and natural?
 
@@ -342,7 +342,7 @@ Answer with just "yes" or "no"."""
         """Keep only high-quality examples."""
         # In practice, validate each and filter
         # Placeholder:
-        return synthetic_data[:int(len(synthetic_data) * min_quality_score)]
+        return synthetic_data[:int (len (synthetic_data) * min_quality_score)]
 
 # Usage
 validator = SyntheticDataValidator()
@@ -357,7 +357,7 @@ if validation['issues_found'] > 0:
     print(f"Found {validation['issues_found']} issues")
 
 # Filter to high quality
-high_quality = validator.filter_high_quality(synthetic_data, min_quality_score=0.9)
+high_quality = validator.filter_high_quality (synthetic_data, min_quality_score=0.9)
 \`\`\`
 
 ## Hybrid Approach: Synthetic + Real
@@ -381,26 +381,26 @@ class HybridDatasetBuilder:
     ) -> List[Dict]:
         """Build dataset combining real and synthetic."""
         
-        n_real = int(target_size * real_ratio)
+        n_real = int (target_size * real_ratio)
         n_synthetic = target_size - n_real
         
         # Sample real data
         import random
-        sampled_real = random.sample(self.real_data, min(n_real, len(self.real_data)))
+        sampled_real = random.sample (self.real_data, min (n_real, len (self.real_data)))
         
         # Generate synthetic to fill gap
         synthetic = await self.synthetic_generator.generate_examples(
-            task_description=self._infer_task_description(sampled_real),
+            task_description=self._infer_task_description (sampled_real),
             num_examples=n_synthetic
         )
         
         # Combine
         hybrid = sampled_real + synthetic
-        random.shuffle(hybrid)
+        random.shuffle (hybrid)
         
         return hybrid
     
-    def _infer_task_description(self, examples: List[Dict]) -> str:
+    def _infer_task_description (self, examples: List[Dict]) -> str:
         """Infer task from examples."""
         # Use LLM to infer what the task is
         sample = examples[0]
@@ -417,7 +417,7 @@ dataset = await hybrid_builder.build_hybrid_dataset(
     real_ratio=0.1  # 10% real (1000), 90% synthetic (9000)
 )
 
-print(f"Built hybrid dataset: {len(dataset)} examples")
+print(f"Built hybrid dataset: {len (dataset)} examples")
 print("  Real: 10% (ground truth)")
 print("  Synthetic: 90% (scale)")
 \`\`\`

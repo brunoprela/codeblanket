@@ -143,10 +143,10 @@ def train_model_with_mlflow(X, y, params):
     )
     
     # Start MLflow run
-    with mlflow.start_run(run_name=f"rf_depth_{params['max_depth']}"):
+    with mlflow.start_run (run_name=f"rf_depth_{params['max_depth']}"):
         
         # 1. Log parameters
-        mlflow.log_params(params)
+        mlflow.log_params (params)
         
         # 2. Log dataset info
         mlflow.log_param("train_samples", len(X_train))
@@ -162,10 +162,10 @@ def train_model_with_mlflow(X, y, params):
         val_preds = model.predict(X_val)
         
         # 5. Log metrics
-        train_rmse = np.sqrt(mean_squared_error(y_train, train_preds))
-        val_rmse = np.sqrt(mean_squared_error(y_val, val_preds))
-        train_r2 = r2_score(y_train, train_preds)
-        val_r2 = r2_score(y_val, val_preds)
+        train_rmse = np.sqrt (mean_squared_error (y_train, train_preds))
+        val_rmse = np.sqrt (mean_squared_error (y_val, val_preds))
+        train_r2 = r2_score (y_train, train_preds)
+        val_r2 = r2_score (y_val, val_preds)
         
         mlflow.log_metric("train_rmse", train_rmse)
         mlflow.log_metric("val_rmse", val_rmse)
@@ -173,17 +173,17 @@ def train_model_with_mlflow(X, y, params):
         mlflow.log_metric("val_r2", val_r2)
         
         # 6. Log model
-        mlflow.sklearn.log_model(model, "model")
+        mlflow.sklearn.log_model (model, "model")
         
         # 7. Log artifacts (plots, feature importance)
         import matplotlib.pyplot as plt
         
         # Feature importance
         importances = model.feature_importances_
-        indices = np.argsort(importances)[::-1][:10]
+        indices = np.argsort (importances)[::-1][:10]
         
-        plt.figure(figsize=(10, 6))
-        plt.bar(range(10), importances[indices])
+        plt.figure (figsize=(10, 6))
+        plt.bar (range(10), importances[indices])
         plt.title('Top 10 Feature Importances')
         plt.savefig('feature_importance.png')
         plt.close()
@@ -208,8 +208,8 @@ np.random.seed(42)
 n_samples = 10000
 n_features = 20
 
-X = np.random.randn(n_samples, n_features)
-y = X[:, 0] * 0.5 + X[:, 1] * 0.3 + np.random.randn(n_samples) * 0.1
+X = np.random.randn (n_samples, n_features)
+y = X[:, 0] * 0.5 + X[:, 1] * 0.3 + np.random.randn (n_samples) * 0.1
 
 # Experiment with different hyperparameters
 param_grid = [
@@ -219,8 +219,8 @@ param_grid = [
 ]
 
 results = []
-for i, params in enumerate(param_grid):
-    print(f"\\n=== Experiment {i+1}/{len(param_grid)} ===")
+for i, params in enumerate (param_grid):
+    print(f"\\n=== Experiment {i+1}/{len (param_grid)} ===")
     model, val_rmse, val_r2 = train_model_with_mlflow(X, y, params)
     results.append({
         "params": params,
@@ -229,7 +229,7 @@ for i, params in enumerate(param_grid):
     })
 
 # Find best model
-best = min(results, key=lambda x: x['val_rmse'])
+best = min (results, key=lambda x: x['val_rmse'])
 print(f"\\n🏆 Best model: {best['params']}")
 print(f"   Val RMSE: {best['val_rmse']:.6f}")
 print(f"   Val R2: {best['val_r2']:.4f}")
@@ -247,12 +247,12 @@ from mlflow.tracking import MlflowClient
 
 client = MlflowClient()
 
-def register_best_model(experiment_name, metric="val_rmse"):
+def register_best_model (experiment_name, metric="val_rmse"):
     """
     Find best run and register to Model Registry
     """
     # Get experiment
-    experiment = client.get_experiment_by_name(experiment_name)
+    experiment = client.get_experiment_by_name (experiment_name)
     
     if experiment is None:
         print(f"Experiment '{experiment_name}' not found")
@@ -289,7 +289,7 @@ def register_best_model(experiment_name, metric="val_rmse"):
     return model_version
 
 
-def promote_model_to_production(model_name, version):
+def promote_model_to_production (model_name, version):
     """
     Promote model from Staging to Production
     """
@@ -306,12 +306,12 @@ def promote_model_to_production(model_name, version):
     print(f"✓ Model {model_name} v{version} promoted to Production")
 
 
-def load_production_model(model_name):
+def load_production_model (model_name):
     """
     Load latest production model
     """
     model_uri = f"models:/{model_name}/Production"
-    model = mlflow.sklearn.load_model(model_uri)
+    model = mlflow.sklearn.load_model (model_uri)
     
     print(f"✓ Loaded production model: {model_name}")
     
@@ -382,10 +382,10 @@ def train_with_wandb(X, y, config):
     train_preds = model.predict(X_train)
     val_preds = model.predict(X_val)
     
-    train_rmse = np.sqrt(mean_squared_error(y_train, train_preds))
-    val_rmse = np.sqrt(mean_squared_error(y_val, val_preds))
-    train_r2 = r2_score(y_train, train_preds)
-    val_r2 = r2_score(y_val, val_preds)
+    train_rmse = np.sqrt (mean_squared_error (y_train, train_preds))
+    val_rmse = np.sqrt (mean_squared_error (y_val, val_preds))
+    train_r2 = r2_score (y_train, train_preds)
+    val_r2 = r2_score (y_val, val_preds)
     
     # Log metrics
     wandb.log({
@@ -402,7 +402,7 @@ def train_with_wandb(X, y, config):
     }).sort_values('importance', ascending=False)
     
     # Create W&B Table
-    table = wandb.Table(dataframe=feature_importance.head(10))
+    table = wandb.Table (dataframe=feature_importance.head(10))
     wandb.log({"feature_importance": table})
     
     # Log plots
@@ -411,7 +411,7 @@ def train_with_wandb(X, y, config):
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
     
     # Predictions vs Actual
-    axes[0].scatter(y_val, val_preds, alpha=0.5)
+    axes[0].scatter (y_val, val_preds, alpha=0.5)
     axes[0].plot([y_val.min(), y_val.max()], [y_val.min(), y_val.max()], 'r--')
     axes[0].set_xlabel('Actual')
     axes[0].set_ylabel('Predicted')
@@ -419,7 +419,7 @@ def train_with_wandb(X, y, config):
     
     # Residuals
     residuals = y_val - val_preds
-    axes[1].hist(residuals, bins=50, edgecolor='black')
+    axes[1].hist (residuals, bins=50, edgecolor='black')
     axes[1].set_xlabel('Residual')
     axes[1].set_ylabel('Frequency')
     axes[1].set_title('Residuals Distribution')
@@ -427,11 +427,11 @@ def train_with_wandb(X, y, config):
     plt.tight_layout()
     
     # Log figure
-    wandb.log({"predictions_plot": wandb.Image(fig)})
+    wandb.log({"predictions_plot": wandb.Image (fig)})
     plt.close()
     
     # Log model
-    wandb.log_artifact(model, name="trading_model", type="model")
+    wandb.log_artifact (model, name="trading_model", type="model")
     
     # Finish run
     run.finish()
@@ -514,10 +514,10 @@ def train_sweep():
 
 
 # Initialize sweep
-# sweep_id = wandb.sweep(sweep_config, project="trading-strategy")
+# sweep_id = wandb.sweep (sweep_config, project="trading-strategy")
 
 # Run sweep agent
-# wandb.agent(sweep_id, function=train_sweep, count=20)  # 20 runs
+# wandb.agent (sweep_id, function=train_sweep, count=20)  # 20 runs
 
 print("Sweep configuration defined")
 print("To run: wandb agent <sweep_id>")
@@ -549,12 +549,12 @@ class ExperimentComparer:
         self.client = mlflow.tracking.MlflowClient()
         
         # Get experiment
-        self.experiment = self.client.get_experiment_by_name(experiment_name)
+        self.experiment = self.client.get_experiment_by_name (experiment_name)
         
         if self.experiment is None:
-            raise ValueError(f"Experiment '{experiment_name}' not found")
+            raise ValueError (f"Experiment '{experiment_name}' not found")
     
-    def get_all_runs(self, max_results=100):
+    def get_all_runs (self, max_results=100):
         """
         Get all runs from experiment
         """
@@ -565,7 +565,7 @@ class ExperimentComparer:
         
         return runs
     
-    def runs_to_dataframe(self):
+    def runs_to_dataframe (self):
         """
         Convert runs to DataFrame for analysis
         """
@@ -576,7 +576,7 @@ class ExperimentComparer:
             run_data = {
                 'run_id': run.info.run_id,
                 'run_name': run.data.tags.get('mlflow.runName', 'unnamed'),
-                'start_time': pd.to_datetime(run.info.start_time, unit='ms'),
+                'start_time': pd.to_datetime (run.info.start_time, unit='ms'),
                 'duration_seconds': (run.info.end_time - run.info.start_time) / 1000
                 if run.info.end_time else None
             }
@@ -587,13 +587,13 @@ class ExperimentComparer:
             # Add metrics
             run_data.update({f"metric_{k}": v for k, v in run.data.metrics.items()})
             
-            data.append(run_data)
+            data.append (run_data)
         
-        df = pd.DataFrame(data)
+        df = pd.DataFrame (data)
         
         return df
     
-    def plot_metrics_comparison(self, metric_name='val_rmse'):
+    def plot_metrics_comparison (self, metric_name='val_rmse'):
         """
         Plot metric across runs
         """
@@ -606,19 +606,19 @@ class ExperimentComparer:
             return
         
         # Sort by metric
-        df = df.sort_values(metric_col)
+        df = df.sort_values (metric_col)
         
         # Plot
-        fig, ax = plt.subplots(figsize=(12, 6))
+        fig, ax = plt.subplots (figsize=(12, 6))
         
-        ax.bar(range(len(df)), df[metric_col])
+        ax.bar (range (len (df)), df[metric_col])
         ax.set_xlabel('Run (sorted by performance)')
-        ax.set_ylabel(metric_name)
-        ax.set_title(f'{metric_name} Across All Runs')
+        ax.set_ylabel (metric_name)
+        ax.set_title (f'{metric_name} Across All Runs')
         
         # Highlight best
         best_idx = df[metric_col].idxmin()
-        ax.bar(best_idx, df.loc[best_idx, metric_col], color='green', label='Best')
+        ax.bar (best_idx, df.loc[best_idx, metric_col], color='green', label='Best')
         
         ax.legend()
         plt.tight_layout()
@@ -628,7 +628,7 @@ class ExperimentComparer:
         print(f"\\nTop 5 runs by {metric_name}:")
         print(df[['run_name', metric_col]].head(5))
     
-    def plot_param_vs_metric(self, param_name, metric_name='val_rmse'):
+    def plot_param_vs_metric (self, param_name, metric_name='val_rmse'):
         """
         Plot relationship between parameter and metric
         """
@@ -643,29 +643,29 @@ class ExperimentComparer:
         
         # Convert param to numeric if possible
         try:
-            df[param_col] = pd.to_numeric(df[param_col])
+            df[param_col] = pd.to_numeric (df[param_col])
         except:
             pass
         
         # Plot
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax = plt.subplots (figsize=(10, 6))
         
-        ax.scatter(df[param_col], df[metric_col], alpha=0.6, s=100)
-        ax.set_xlabel(param_name)
-        ax.set_ylabel(metric_name)
-        ax.set_title(f'{param_name} vs {metric_name}')
+        ax.scatter (df[param_col], df[metric_col], alpha=0.6, s=100)
+        ax.set_xlabel (param_name)
+        ax.set_ylabel (metric_name)
+        ax.set_title (f'{param_name} vs {metric_name}')
         
         # Trend line if numeric
-        if pd.api.types.is_numeric_dtype(df[param_col]):
-            z = np.polyfit(df[param_col], df[metric_col], 1)
-            p = np.poly1d(z)
-            ax.plot(df[param_col], p(df[param_col]), "r--", alpha=0.8, label='Trend')
+        if pd.api.types.is_numeric_dtype (df[param_col]):
+            z = np.polyfit (df[param_col], df[metric_col], 1)
+            p = np.poly1d (z)
+            ax.plot (df[param_col], p (df[param_col]), "r--", alpha=0.8, label='Trend')
             ax.legend()
         
         plt.tight_layout()
         plt.show()
     
-    def get_best_run(self, metric='val_rmse', mode='min'):
+    def get_best_run (self, metric='val_rmse', mode='min'):
         """
         Get best run by metric
         """
@@ -701,7 +701,7 @@ class ExperimentComparer:
 # Example usage (uncomment if you have MLflow runs)
 # comparer = ExperimentComparer("trading_strategy_development")
 # df = comparer.runs_to_dataframe()
-# print(f"\\nTotal runs: {len(df)}")
+# print(f"\\nTotal runs: {len (df)}")
 # comparer.plot_metrics_comparison('val_rmse')
 # comparer.plot_param_vs_metric('max_depth', 'val_rmse')
 # best = comparer.get_best_run('val_rmse', 'min')
@@ -735,55 +735,55 @@ class SimpleDataVersionControl:
     """
     
     def __init__(self, storage_dir=".dvc_storage"):
-        self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(exist_ok=True)
+        self.storage_dir = Path (storage_dir)
+        self.storage_dir.mkdir (exist_ok=True)
         
         self.metadata_file = self.storage_dir / "versions.json"
         self.versions = self._load_versions()
     
-    def _load_versions(self):
+    def _load_versions (self):
         """Load version metadata"""
         if self.metadata_file.exists():
-            with open(self.metadata_file, 'r') as f:
-                return json.load(f)
+            with open (self.metadata_file, 'r') as f:
+                return json.load (f)
         return {}
     
-    def _save_versions(self):
+    def _save_versions (self):
         """Save version metadata"""
-        with open(self.metadata_file, 'w') as f:
-            json.dump(self.versions, f, indent=2)
+        with open (self.metadata_file, 'w') as f:
+            json.dump (self.versions, f, indent=2)
     
-    def _compute_hash(self, file_path):
+    def _compute_hash (self, file_path):
         """Compute file hash"""
         import hashlib
         
         hash_md5 = hashlib.md5()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(4096), b""):
-                hash_md5.update(chunk)
+        with open (file_path, "rb") as f:
+            for chunk in iter (lambda: f.read(4096), b""):
+                hash_md5.update (chunk)
         
         return hash_md5.hexdigest()
     
-    def add(self, file_path, tag=None):
+    def add (self, file_path, tag=None):
         """
         Add file to version control
         """
-        file_path = Path(file_path)
+        file_path = Path (file_path)
         
         if not file_path.exists():
-            raise FileNotFoundError(f"File not found: {file_path}")
+            raise FileNotFoundError (f"File not found: {file_path}")
         
         # Compute hash
-        file_hash = self._compute_hash(file_path)
+        file_hash = self._compute_hash (file_path)
         
         # Store file
         storage_path = self.storage_dir / file_hash
-        shutil.copy(file_path, storage_path)
+        shutil.copy (file_path, storage_path)
         
         # Save metadata
         version_info = {
             "hash": file_hash,
-            "original_path": str(file_path),
+            "original_path": str (file_path),
             "tag": tag,
             "timestamp": pd.Timestamp.now().isoformat(),
             "size_bytes": file_path.stat().st_size
@@ -803,7 +803,7 @@ class SimpleDataVersionControl:
         
         return file_hash
     
-    def get(self, identifier):
+    def get (self, identifier):
         """
         Get file by hash or tag
         """
@@ -812,14 +812,14 @@ class SimpleDataVersionControl:
             identifier = self.versions[f"tag:{identifier}"]
         
         if identifier not in self.versions:
-            raise ValueError(f"Version not found: {identifier}")
+            raise ValueError (f"Version not found: {identifier}")
         
         version_info = self.versions[identifier]
         storage_path = self.storage_dir / version_info['hash']
         
         return storage_path, version_info
     
-    def list_versions(self):
+    def list_versions (self):
         """List all versions"""
         print("\\n=== Data Versions ===")
         
@@ -827,7 +827,7 @@ class SimpleDataVersionControl:
             if key.startswith("tag:"):
                 continue
             
-            if isinstance(value, dict):
+            if isinstance (value, dict):
                 print(f"\\nHash: {value['hash'][:8]}...")
                 print(f"  Path: {value['original_path']}")
                 print(f"  Tag: {value.get('tag', 'none')}")
@@ -884,7 +884,7 @@ class ReproducibleExperiment:
         self.experiment_name = experiment_name
         self.config = {}
     
-    def setup_environment(self):
+    def setup_environment (self):
         """
         1. Environment and dependencies
         """
@@ -903,7 +903,7 @@ class ReproducibleExperiment:
         
         return env_info
     
-    def _get_dependencies(self):
+    def _get_dependencies (self):
         """Get installed packages"""
         import pkg_resources
         
@@ -914,22 +914,22 @@ class ReproducibleExperiment:
         
         return installed_packages
     
-    def set_random_seeds(self, seed=42):
+    def set_random_seeds (self, seed=42):
         """
         2. Random seeds for reproducibility
         """
         import random
         import numpy as np
         
-        random.seed(seed)
-        np.random.seed(seed)
+        random.seed (seed)
+        np.random.seed (seed)
         
         # PyTorch
         try:
             import torch
-            torch.manual_seed(seed)
+            torch.manual_seed (seed)
             if torch.cuda.is_available():
-                torch.cuda.manual_seed_all(seed)
+                torch.cuda.manual_seed_all (seed)
                 torch.backends.cudnn.deterministic = True
                 torch.backends.cudnn.benchmark = False
         except ImportError:
@@ -938,7 +938,7 @@ class ReproducibleExperiment:
         # TensorFlow
         try:
             import tensorflow as tf
-            tf.random.set_seed(seed)
+            tf.random.set_seed (seed)
         except ImportError:
             pass
         
@@ -946,14 +946,14 @@ class ReproducibleExperiment:
         
         print(f"✓ Random seeds set: {seed}")
     
-    def version_data(self, data_path):
+    def version_data (self, data_path):
         """
         3. Data versioning
         """
         import hashlib
         
         # Compute data hash
-        with open(data_path, 'rb') as f:
+        with open (data_path, 'rb') as f:
             data_hash = hashlib.md5(f.read()).hexdigest()
         
         self.config['data'] = {
@@ -966,7 +966,7 @@ class ReproducibleExperiment:
         
         return data_hash
     
-    def version_code(self):
+    def version_code (self):
         """
         4. Code versioning (Git commit)
         """
@@ -996,16 +996,16 @@ class ReproducibleExperiment:
             print(f"⚠️  Could not version code: {e}")
             return None
     
-    def save_config(self, path='experiment_config.json'):
+    def save_config (self, path='experiment_config.json'):
         """
         Save complete configuration
         """
-        with open(path, 'w') as f:
-            json.dump(self.config, f, indent=2, default=str)
+        with open (path, 'w') as f:
+            json.dump (self.config, f, indent=2, default=str)
         
         print(f"✓ Config saved: {path}")
     
-    def run_reproducible_experiment(self, train_fn, **kwargs):
+    def run_reproducible_experiment (self, train_fn, **kwargs):
         """
         Run fully reproducible experiment
         """
@@ -1040,11 +1040,11 @@ def my_train_function(X, y):
         X, y, test_size=0.2, random_state=42
     )
     
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model = RandomForestRegressor (n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     
     val_preds = model.predict(X_val)
-    rmse = np.sqrt(mean_squared_error(y_val, val_preds))
+    rmse = np.sqrt (mean_squared_error (y_val, val_preds))
     
     print(f"  Val RMSE: {rmse:.6f}")
     

@@ -32,7 +32,7 @@ R_i - R_f = \\alpha_i + \\beta_{i,M}(R_M - R_f) + \\beta_{i,SMB} \\cdot SMB + \\
 
 **Variables:**
 - \(R_i - R_f\): Excess return of asset \(i\) over risk-free rate
-- \(\\alpha_i\): Jensen's alpha (risk-adjusted excess return)
+- \(\\alpha_i\): Jensen\'s alpha (risk-adjusted excess return)
 - \(\\beta_{i,M}\): Market factor loading (systematic risk)
 - \(R_M - R_f\): Market risk premium (equity market excess return)
 - \(\\beta_{i,SMB}\): Size factor loading (small-cap exposure)
@@ -196,7 +196,7 @@ R_p - R_f = \\sum_{k=1}^{K} \\beta_{p,k} \\cdot F_k + \\alpha_p + \\epsilon_p
 
 Where:
 - \(R_p - R_f\): Portfolio excess return
-- \(\\beta_{p,k}\): Portfolio's exposure to factor \(k\)
+- \(\\beta_{p,k}\): Portfolio\'s exposure to factor \(k\)
 - \(F_k\): Return of factor \(k\) (e.g., market, size, value, momentum)
 - \(\\alpha_p\): True skill-based alpha (after adjusting for all factor exposures)
 - \(\\epsilon_p\): Residual (unexplained return)
@@ -305,7 +305,7 @@ from scipy.optimize import minimize
 import warnings
 warnings.filterwarnings('ignore')
 
-# Load Fama-French factors from Ken French's data library
+# Load Fama-French factors from Ken French\'s data library
 # For this example, we'll simulate factor data
 # In practice: download from https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
 
@@ -314,13 +314,13 @@ dates = pd.date_range('2015-01-01', '2023-12-31', freq='M')
 
 # Simulate factor returns (monthly %)
 ff_factors = pd.DataFrame({
-    'Mkt-RF': np.random.normal(0.8, 4.5, len(dates)),  # Market excess return
-    'SMB': np.random.normal(0.2, 3.0, len(dates)),      # Size factor
-    'HML': np.random.normal(0.3, 3.5, len(dates)),      # Value factor
-    'RMW': np.random.normal(0.25, 2.5, len(dates)),     # Profitability factor
-    'CMA': np.random.normal(0.2, 2.0, len(dates)),      # Investment factor
-    'MOM': np.random.normal(0.5, 4.0, len(dates)),      # Momentum factor
-    'RF': np.random.normal(0.15, 0.3, len(dates))       # Risk-free rate
+    'Mkt-RF': np.random.normal(0.8, 4.5, len (dates)),  # Market excess return
+    'SMB': np.random.normal(0.2, 3.0, len (dates)),      # Size factor
+    'HML': np.random.normal(0.3, 3.5, len (dates)),      # Value factor
+    'RMW': np.random.normal(0.25, 2.5, len (dates)),     # Profitability factor
+    'CMA': np.random.normal(0.2, 2.0, len (dates)),      # Investment factor
+    'MOM': np.random.normal(0.5, 4.0, len (dates)),      # Momentum factor
+    'RF': np.random.normal(0.15, 0.3, len (dates))       # Risk-free rate
 }, index=dates)
 
 # Simulate portfolio returns
@@ -330,10 +330,10 @@ portfolio_returns = (
     0.3 * ff_factors['SMB'] +
     -0.2 * ff_factors['HML'] +
     0.4 * ff_factors['MOM'] +
-    np.random.normal(0, 2, len(dates))  # Idiosyncratic risk
+    np.random.normal(0, 2, len (dates))  # Idiosyncratic risk
 )
 
-portfolio_returns = pd.Series(portfolio_returns, index=dates, name='Portfolio')
+portfolio_returns = pd.Series (portfolio_returns, index=dates, name='Portfolio')
 
 print("Factor Statistics (Monthly %):")
 print(ff_factors.describe())
@@ -363,7 +363,7 @@ class FactorModel:
         # Align data
         self.data = pd.concat([returns, factors], axis=1).dropna()
     
-    def select_factors(self):
+    def select_factors (self):
         """Select factors based on model type."""
         factor_sets = {
             'CAPM': ['Mkt-RF'],
@@ -372,9 +372,9 @@ class FactorModel:
             'FF5': ['Mkt-RF', 'SMB', 'HML', 'RMW', 'CMA'],
             'FF6': ['Mkt-RF', 'SMB', 'HML', 'RMW', 'CMA', 'MOM']
         }
-        return factor_sets.get(self.model_type, factor_sets['FF5'])
+        return factor_sets.get (self.model_type, factor_sets['FF5'])
     
-    def run_regression(self):
+    def run_regression (self):
         """Run OLS regression of returns on factors."""
         factor_names = self.select_factors()
         
@@ -389,7 +389,7 @@ class FactorModel:
         
         return self.results
     
-    def print_summary(self):
+    def print_summary (self):
         """Print regression summary."""
         if self.results is None:
             self.run_regression()
@@ -411,14 +411,14 @@ class FactorModel:
         
         print(f"Alpha (monthly): {self.results.params['const']:.4f}% (t={alpha_tstat:.2f})")
         print(f"Alpha (annualized): {alpha_annual:.2f}%")
-        print(f"Significant at 5%: {'YES' if abs(alpha_tstat) > 1.96 else 'NO'}")
+        print(f"Significant at 5%: {'YES' if abs (alpha_tstat) > 1.96 else 'NO'}")
         print(f"R-squared: {r_squared:.4f} ({r_squared*100:.2f}% variance explained)")
         print(f"Adjusted R-squared: {adj_r_squared:.4f}")
-        print(f"Residual Std Dev: {np.sqrt(self.results.mse_resid):.4f}%")
+        print(f"Residual Std Dev: {np.sqrt (self.results.mse_resid):.4f}%")
         
         return self.results
     
-    def attribution(self):
+    def attribution (self):
         """Calculate factor attribution."""
         if self.results is None:
             self.run_regression()
@@ -466,7 +466,7 @@ class FactorModel:
         
         return attribution_df, summary
     
-    def rolling_beta(self, window=36):
+    def rolling_beta (self, window=36):
         """Calculate rolling factor betas."""
         if self.results is None:
             self.run_regression()
@@ -486,24 +486,24 @@ class FactorModel:
         
         return rolling_betas
     
-    def plot_rolling_betas(self, window=36):
+    def plot_rolling_betas (self, window=36):
         """Plot rolling factor betas over time."""
-        rolling_betas = self.rolling_beta(window)
+        rolling_betas = self.rolling_beta (window)
         
-        fig, axes = plt.subplots(len(rolling_betas.columns), 1, 
-                                 figsize=(12, 3*len(rolling_betas.columns)))
+        fig, axes = plt.subplots (len (rolling_betas.columns), 1, 
+                                 figsize=(12, 3*len (rolling_betas.columns)))
         
-        if len(rolling_betas.columns) == 1:
+        if len (rolling_betas.columns) == 1:
             axes = [axes]
         
-        for i, factor in enumerate(rolling_betas.columns):
-            axes[i].plot(rolling_betas.index, rolling_betas[factor], 
+        for i, factor in enumerate (rolling_betas.columns):
+            axes[i].plot (rolling_betas.index, rolling_betas[factor], 
                         linewidth=2, color='steelblue')
-            axes[i].axhline(y=0, color='red', linestyle='--', alpha=0.7)
-            axes[i].axhline(y=rolling_betas[factor].mean(), 
+            axes[i].axhline (y=0, color='red', linestyle='--', alpha=0.7)
+            axes[i].axhline (y=rolling_betas[factor].mean(), 
                           color='green', linestyle='--', alpha=0.7, 
                           label=f'Mean: {rolling_betas[factor].mean():.2f}')
-            axes[i].set_title(f'Rolling {factor} Beta ({window}-month window)', 
+            axes[i].set_title (f'Rolling {factor} Beta ({window}-month window)', 
                             fontsize=12, fontweight='bold')
             axes[i].set_ylabel('Beta', fontsize=10)
             axes[i].legend()
@@ -528,7 +528,7 @@ for model_type in models:
     print(f"Model: {model_type}")
     print(f"{'#'*60}")
     
-    model = FactorModel(portfolio_returns, ff_factors, model_type=model_type)
+    model = FactorModel (portfolio_returns, ff_factors, model_type=model_type)
     results = model.run_regression()
     
     results_summary.append({
@@ -546,11 +546,11 @@ for model_type in models:
     print(f"R²: {results.rsquared:.4f}, Adj R²: {results.rsquared_adj:.4f}")
 
 # Compare models
-comparison_df = pd.DataFrame(results_summary)
+comparison_df = pd.DataFrame (results_summary)
 print(f"\\n{'='*60}")
 print("MODEL COMPARISON")
 print(f"{'='*60}")
-print(comparison_df.to_string(index=False))
+print(comparison_df.to_string (index=False))
 print(f"\\nBest by Adj R²: {comparison_df.loc[comparison_df['Adj R²'].idxmax(), 'Model']}")
 print(f"Best by AIC: {comparison_df.loc[comparison_df['AIC'].idxmin(), 'Model']}")
 \`\`\`
@@ -558,7 +558,7 @@ print(f"Best by AIC: {comparison_df.loc[comparison_df['AIC'].idxmin(), 'Model']}
 ### Factor Portfolio Construction
 
 \`\`\`python
-def construct_factor_portfolio(target_factors, factor_cov, max_weight=0.4):
+def construct_factor_portfolio (target_factors, factor_cov, max_weight=0.4):
     """
     Construct portfolio with target factor exposures.
     
@@ -570,30 +570,30 @@ def construct_factor_portfolio(target_factors, factor_cov, max_weight=0.4):
     Returns:
     - Optimal factor weights
     """
-    n_factors = len(target_factors)
-    target_vector = np.array(list(target_factors.values()))
+    n_factors = len (target_factors)
+    target_vector = np.array (list (target_factors.values()))
     
     # Objective: minimize tracking error variance
-    def objective(weights):
+    def objective (weights):
         return weights @ factor_cov @ weights
     
     # Constraint: match target factor exposures
-    def factor_constraint(weights):
+    def factor_constraint (weights):
         return weights - target_vector
     
     # Bounds: 0 to max_weight
-    bounds = [(0, max_weight) for _ in range(n_factors)]
+    bounds = [(0, max_weight) for _ in range (n_factors)]
     
     # Initial guess
     x0 = target_vector / target_vector.sum()
     
     # Optimize
     constraints = {'type': 'eq', 'fun': factor_constraint}
-    result = minimize(objective, x0, method='SLSQP', 
+    result = minimize (objective, x0, method='SLSQP', 
                      bounds=bounds, constraints=constraints)
     
     if result.success:
-        weights = pd.Series(result.x, index=list(target_factors.keys()))
+        weights = pd.Series (result.x, index=list (target_factors.keys()))
         return weights
     else:
         raise ValueError("Optimization failed")
@@ -612,7 +612,7 @@ target_factors = {
 }
 
 # Calculate factor covariance (from historical data)
-factor_list = list(target_factors.keys())
+factor_list = list (target_factors.keys())
 factor_cov = ff_factors[factor_list].cov()
 
 print("\\nTarget Factor Exposures:")
@@ -623,7 +623,7 @@ print("\\nFactor Covariance Matrix:")
 print(factor_cov)
 
 # Construct portfolio
-weights = construct_factor_portfolio(target_factors, factor_cov)
+weights = construct_factor_portfolio (target_factors, factor_cov)
 
 print("\\nOptimal Factor Weights:")
 print(weights)
@@ -632,7 +632,7 @@ print(weights)
 factor_means = ff_factors[factor_list].mean()
 expected_return = weights @ factor_means
 portfolio_variance = weights @ factor_cov @ weights
-portfolio_std = np.sqrt(portfolio_variance)
+portfolio_std = np.sqrt (portfolio_variance)
 
 print(f"\\nExpected Monthly Return: {expected_return:.4f}%")
 print(f"Expected Annual Return: {expected_return * 12:.2f}%")
@@ -644,7 +644,7 @@ print(f"Sharpe Ratio (ann.): {(expected_return * 12) / (portfolio_std * np.sqrt(
 ### Factor Risk Decomposition
 
 \`\`\`python
-def factor_risk_decomposition(portfolio_betas, factor_cov, idio_var):
+def factor_risk_decomposition (portfolio_betas, factor_cov, idio_var):
     """
     Decompose portfolio variance into factor and idiosyncratic components.
     
@@ -658,7 +658,7 @@ def factor_risk_decomposition(portfolio_betas, factor_cov, idio_var):
     
     # Individual factor contributions (marginal contribution to variance)
     factor_contrib = {}
-    for i, factor in enumerate(portfolio_betas.index):
+    for i, factor in enumerate (portfolio_betas.index):
         # MCTR = ∂σ²/∂β_i = 2 * (Σ * β)_i
         marginal_contrib = 2 * (factor_cov @ portfolio_betas)[i] * portfolio_betas[i]
         factor_contrib[factor] = marginal_contrib
@@ -693,14 +693,14 @@ def factor_risk_decomposition(portfolio_betas, factor_cov, idio_var):
     labels = ['Factor Risk', 'Idiosyncratic Risk']
     sizes = [factor_variance/total_variance*100, idio_var/total_variance*100]
     colors = ['#FF6B6B', '#4ECDC4']
-    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+    ax1.pie (sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
     ax1.set_title('Risk Decomposition: Factor vs Idiosyncratic', fontweight='bold')
     
     # Bar chart: Individual factor contributions
     factor_pct = risk_decomp.loc[risk_decomp.index != 'Idiosyncratic', '% of Total Var']
-    ax2.bar(range(len(factor_pct)), factor_pct, color='steelblue', alpha=0.7)
-    ax2.set_xticks(range(len(factor_pct)))
-    ax2.set_xticklabels(factor_pct.index, rotation=45, ha='right')
+    ax2.bar (range (len (factor_pct)), factor_pct, color='steelblue', alpha=0.7)
+    ax2.set_xticks (range (len (factor_pct)))
+    ax2.set_xticklabels (factor_pct.index, rotation=45, ha='right')
     ax2.set_ylabel('% of Total Variance', fontsize=10)
     ax2.set_title('Individual Factor Risk Contributions', fontweight='bold')
     ax2.grid(True, alpha=0.3, axis='y')
@@ -713,7 +713,7 @@ def factor_risk_decomposition(portfolio_betas, factor_cov, idio_var):
 
 # Example: Decompose portfolio risk
 print("\\nAnalyzing portfolio from FF6 model...")
-model = FactorModel(portfolio_returns, ff_factors, model_type='FF6')
+model = FactorModel (portfolio_returns, ff_factors, model_type='FF6')
 results = model.run_regression()
 
 # Extract betas (excluding alpha)
@@ -727,7 +727,7 @@ factor_cov_matrix = ff_factors[factor_names].cov()
 idio_var = results.mse_resid
 
 # Decompose risk
-risk_decomp = factor_risk_decomposition(portfolio_betas, factor_cov_matrix, idio_var)
+risk_decomp = factor_risk_decomposition (portfolio_betas, factor_cov_matrix, idio_var)
 \`\`\`
 
 ---

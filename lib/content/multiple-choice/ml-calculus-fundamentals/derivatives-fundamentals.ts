@@ -20,7 +20,7 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'deriv-2',
-    question: "If f(x) = 3x⁴ - 2x² + 5, what is f'(x)?",
+    question: "If f (x) = 3x⁴ - 2x² + 5, what is f'(x)?",
     options: ['12x³ - 4x', '3x³ - 2x', '12x³ - 2x + 5', '12x⁴ - 4x²'],
     correctAnswer: 0,
     explanation:
@@ -57,7 +57,7 @@ export const derivativesfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'deriv-5',
     question:
-      'When using numerical differentiation with h = (f(x+h) - f(x))/h, what happens if h is too small?',
+      'When using numerical differentiation with h = (f (x+h) - f (x))/h, what happens if h is too small?',
     options: [
       'The result becomes more accurate indefinitely',
       'Floating-point round-off errors dominate',

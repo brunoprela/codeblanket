@@ -31,7 +31,7 @@ export const randomforestsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Random Forest uses sqrt(p) features for classification by default, where p is total features. For 100 features, this is sqrt(100)=10. This random feature selection decorrelates trees. For regression, default is p/3.',
+      'Random Forest uses sqrt (p) features for classification by default, where p is total features. For 100 features, this is sqrt(100)=10. This random feature selection decorrelates trees. For regression, default is p/3.',
   },
   {
     id: 'random-forests-mc-3',

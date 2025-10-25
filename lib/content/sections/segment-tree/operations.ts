@@ -14,7 +14,7 @@ Find value for range [L, R].
 3. **Partial overlap**: Range partially overlaps [L, R]
 
 \`\`python
-def query(tree, node, start, end, L, R):
+def query (tree, node, start, end, L, R):
     """Query sum in range [L, R]"""
     # No overlap
     if R < start or L > end:
@@ -26,8 +26,8 @@ def query(tree, node, start, end, L, R):
     
     # Partial overlap - query both children
     mid = (start + end) // 2
-    left_sum = query(tree, 2*node+1, start, mid, L, R)
-    right_sum = query(tree, 2*node+2, mid+1, end, L, R)
+    left_sum = query (tree, 2*node+1, start, mid, L, R)
+    right_sum = query (tree, 2*node+2, mid+1, end, L, R)
     return left_sum + right_sum
 \`\`\`
 
@@ -35,7 +35,7 @@ def query(tree, node, start, end, L, R):
 Update single element at index.
 
 \`\`\`python
-def update(tree, node, start, end, idx, value):
+def update (tree, node, start, end, idx, value):
     """Update element at index idx to value"""
     if start == end:
         # Leaf node
@@ -45,9 +45,9 @@ def update(tree, node, start, end, idx, value):
     mid = (start + end) // 2
     
     if idx <= mid:
-        update(tree, 2*node+1, start, mid, idx, value)
+        update (tree, 2*node+1, start, mid, idx, value)
     else:
-        update(tree, 2*node+2, mid+1, end, idx, value)
+        update (tree, 2*node+2, mid+1, end, idx, value)
     
     # Update current node
     tree[node] = tree[2*node+1] + tree[2*node+2]

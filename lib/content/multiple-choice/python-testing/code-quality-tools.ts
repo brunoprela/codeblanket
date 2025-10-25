@@ -3,7 +3,7 @@ import { MultipleChoiceQuestion } from '@/lib/types';
 export const codeQualityToolsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cqt-mc-1',
-    question: "What is Black's main philosophy?",
+    question: "What is Black\'s main philosophy?",
     options: [
       'Highly configurable formatting with many options',
       'Uncompromising auto-formatting with minimal configuration',
@@ -39,7 +39,7 @@ export const codeQualityToolsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'mypy checks type hints match actual usage: def add(a: int, b: int) -> int: return a + b; add("5", 10) → mypy error: Expected int, got str. Catches: Type mismatches, missing arguments, wrong return types, None errors. Example: def get_user(id: int) -> User: ... ; user: str = get_user(1) → mypy error: Incompatible types. Not formatting (Black), not security (bandit), not coverage (pytest-cov). Critical for catching bugs before runtime.',
+      'mypy checks type hints match actual usage: def add (a: int, b: int) -> int: return a + b; add("5", 10) → mypy error: Expected int, got str. Catches: Type mismatches, missing arguments, wrong return types, None errors. Example: def get_user (id: int) -> User: ... ; user: str = get_user(1) → mypy error: Incompatible types. Not formatting (Black), not security (bandit), not coverage (pytest-cov). Critical for catching bugs before runtime.',
   },
   {
     id: 'cqt-mc-4',
@@ -52,7 +52,7 @@ export const codeQualityToolsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'bandit finds security issues: SQL injection (f"SELECT * FROM users WHERE id={user_id}"), shell injection (subprocess.call(shell=True)), insecure deserialization (pickle.loads), hardcoded passwords, debug=True in production, MD5/weak crypto. Severity: HIGH (critical), MEDIUM, LOW. Example: query = f"SELECT * FROM users WHERE id={id}" → bandit: HIGH - SQL injection. Not style (Black/Ruff), not types (mypy), not coverage (pytest-cov). Essential CI check: Fail on HIGH severity.',
+      'bandit finds security issues: SQL injection (f"SELECT * FROM users WHERE id={user_id}"), shell injection (subprocess.call (shell=True)), insecure deserialization (pickle.loads), hardcoded passwords, debug=True in production, MD5/weak crypto. Severity: HIGH (critical), MEDIUM, LOW. Example: query = f"SELECT * FROM users WHERE id={id}" → bandit: HIGH - SQL injection. Not style (Black/Ruff), not types (mypy), not coverage (pytest-cov). Essential CI check: Fail on HIGH severity.',
   },
   {
     id: 'cqt-mc-5',
@@ -65,6 +65,6 @@ export const codeQualityToolsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Cyclomatic complexity = number of paths through code: def simple(x): return x * 2 → complexity 1 (one path). def with_if(x): if x > 0: return x else: return 0 → complexity 2 (two paths). Each if/elif/else/and/or adds path. Thresholds: 1-5 (A, simple), 6-10 (B, OK), 11-20 (C, complex), 21+ (D-F, refactor). Not LOC (that's raw metrics), not calls (separate metric), not duplication (similarity). Use radon cc: radon cc myapp/ -a. High complexity → hard to test, maintain.",
+      "Cyclomatic complexity = number of paths through code: def simple (x): return x * 2 → complexity 1 (one path). def with_if (x): if x > 0: return x else: return 0 → complexity 2 (two paths). Each if/elif/else/and/or adds path. Thresholds: 1-5 (A, simple), 6-10 (B, OK), 11-20 (C, complex), 21+ (D-F, refactor). Not LOC (that's raw metrics), not calls (separate metric), not duplication (similarity). Use radon cc: radon cc myapp/ -a. High complexity → hard to test, maintain.",
   },
 ];

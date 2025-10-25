@@ -26,22 +26,22 @@ trie.starts_with("app") # True
 Find all words with given prefix.
 
 \`\`\`python
-def autocomplete(trie, prefix):
+def autocomplete (trie, prefix):
     # Find node at end of prefix
-    node = trie._search_prefix(prefix)
+    node = trie._search_prefix (prefix)
     if not node:
         return []
     
     # DFS to collect all words from here
     words = []
     
-    def dfs(node, path):
+    def dfs (node, path):
         if node.is_end_of_word:
-            words.append(prefix + path)
+            words.append (prefix + path)
         for char, child in node.children.items():
-            dfs(child, path + char)
+            dfs (child, path + char)
     
-    dfs(node, "")
+    dfs (node, "")
     return words
 \`\`\`
 
@@ -52,9 +52,9 @@ def autocomplete(trie, prefix):
 Support '.' as wildcard (matches any character).
 
 \`\`\`python
-def search_with_wildcard(self, word: str) -> bool:
-    def dfs(node, i):
-        if i == len(word):
+def search_with_wildcard (self, word: str) -> bool:
+    def dfs (node, i):
+        if i == len (word):
             return node.is_end_of_word
         
         char = word[i]
@@ -62,15 +62,15 @@ def search_with_wildcard(self, word: str) -> bool:
         if char == '.':
             # Try all possible children
             for child in node.children.values():
-                if dfs(child, i + 1):
+                if dfs (child, i + 1):
                     return True
             return False
         else:
             if char not in node.children:
                 return False
-            return dfs(node.children[char], i + 1)
+            return dfs (node.children[char], i + 1)
     
-    return dfs(self.root, 0)
+    return dfs (self.root, 0)
 \`\`\`
 
 ---
@@ -80,20 +80,20 @@ def search_with_wildcard(self, word: str) -> bool:
 Check if string can be segmented into dictionary words.
 
 \`\`\`python
-def word_break(s: str, wordDict: list) -> bool:
+def word_break (s: str, wordDict: list) -> bool:
     # Build trie from dictionary
     trie = Trie()
     for word in wordDict:
-        trie.insert(word)
+        trie.insert (word)
     
     # DP with trie
-    n = len(s)
+    n = len (s)
     dp = [False] * (n + 1)
     dp[0] = True
     
     for i in range(1, n + 1):
         node = trie.root
-        for j in range(i - 1, -1, -1):
+        for j in range (i - 1, -1, -1):
             if not dp[j]:
                 continue
             
@@ -116,24 +116,24 @@ def word_break(s: str, wordDict: list) -> bool:
 Find longest prefix shared by all strings.
 
 \`\`\`python
-def longest_common_prefix(strs: list) -> str:
+def longest_common_prefix (strs: list) -> str:
     if not strs:
         return ""
     
     trie = Trie()
     for s in strs:
-        trie.insert(s)
+        trie.insert (s)
     
     # Traverse until branch or end
     prefix = []
     node = trie.root
     
-    while len(node.children) == 1 and not node.is_end_of_word:
-        char = list(node.children.keys())[0]
-        prefix.append(char)
+    while len (node.children) == 1 and not node.is_end_of_word:
+        char = list (node.children.keys())[0]
+        prefix.append (char)
         node = node.children[char]
     
-    return "".join(prefix)
+    return "".join (prefix)
 \`\`\`
 
 ---
@@ -149,7 +149,7 @@ class TrieNodeWithCount:
         self.count = 0  # Number of words passing through
         self.is_end = False
 
-def count_prefixes(words: list, prefixes: list) -> list:
+def count_prefixes (words: list, prefixes: list) -> list:
     trie = Trie()
     
     # Insert with counts
@@ -165,8 +165,8 @@ def count_prefixes(words: list, prefixes: list) -> list:
     # Query counts
     result = []
     for prefix in prefixes:
-        node = trie._search_prefix(prefix)
-        result.append(node.count if node else 0)
+        node = trie._search_prefix (prefix)
+        result.append (node.count if node else 0)
     
     return result
 \`\`\``,

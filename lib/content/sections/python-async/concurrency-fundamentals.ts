@@ -16,12 +16,12 @@ Consider a web scraper that fetches 100 web pages. With synchronous code, you fe
 # Synchronous approach - SLOW
 import requests
 
-urls = ['https://api.example.com/data/' + str(i) for i in range(100)]
+urls = ['https://api.example.com/data/' + str (i) for i in range(100)]
 responses = []
 
 for url in urls:
-    response = requests.get(url)  # Waits for each request to complete
-    responses.append(response.json())
+    response = requests.get (url)  # Waits for each request to complete
+    responses.append (response.json())
 
 # Takes 100 × 0.5s = 50 seconds if each request takes 0.5s
 \`\`\`
@@ -33,9 +33,9 @@ With asynchronous code, you can start all 100 requests and wait for them concurr
 import asyncio
 import aiohttp
 
-async def fetch_all(urls):
+async def fetch_all (urls):
     async with aiohttp.ClientSession() as session:
-        tasks = [session.get(url) for url in urls]
+        tasks = [session.get (url) for url in urls]
         responses = await asyncio.gather(*tasks)
         return [await r.json() for r in responses]
 
@@ -100,7 +100,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # I/O-bound task: Benefits from CONCURRENCY
-def io_bound_task(n):
+def io_bound_task (n):
     """Simulates API call or file I/O"""
     print(f"Task {n}: Starting I/O operation")
     time.sleep(1)  # Simulates waiting for I/O
@@ -108,7 +108,7 @@ def io_bound_task(n):
     return n * 2
 
 # CPU-bound task: Benefits from PARALLELISM  
-def cpu_bound_task(n):
+def cpu_bound_task (n):
     """Simulates heavy computation"""
     print(f"Task {n}: Starting computation")
     total = 0
@@ -120,25 +120,25 @@ def cpu_bound_task(n):
 # Test 1: Sequential (SLOW for both)
 print("\\n=== Sequential Execution ===")
 start = time.time()
-results = [io_bound_task(i) for i in range(3)]
+results = [io_bound_task (i) for i in range(3)]
 print(f"Time: {time.time() - start:.2f}s")  # ~3 seconds
 
 # Test 2: Threading for I/O (FAST - concurrency)
 print("\\n=== Threading for I/O ===")
 start = time.time()
-with ThreadPoolExecutor(max_workers=3) as executor:
-    results = list(executor.map(io_bound_task, range(3)))
+with ThreadPoolExecutor (max_workers=3) as executor:
+    results = list (executor.map (io_bound_task, range(3)))
 print(f"Time: {time.time() - start:.2f}s")  # ~1 second (all wait together)
 
 # Test 3: Multiprocessing for CPU (FAST - parallelism)
 print("\\n=== Multiprocessing for CPU ===")
 start = time.time()
-with ProcessPoolExecutor(max_workers=3) as executor:
-    results = list(executor.map(cpu_bound_task, range(3)))
+with ProcessPoolExecutor (max_workers=3) as executor:
+    results = list (executor.map (cpu_bound_task, range(3)))
 print(f"Time: {time.time() - start:.2f}s")  # ~1/3 sequential time
 
 # Test 4: Async for I/O (FASTEST - true async concurrency)
-async def async_io_task(n):
+async def async_io_task (n):
     """Async version of I/O task"""
     print(f"Task {n}: Starting async I/O")
     await asyncio.sleep(1)  # Non-blocking wait
@@ -155,7 +155,7 @@ async def run_async():
 
 print("\\n=== Async for I/O ===")
 start = time.time()
-results = asyncio.run(run_async())
+results = asyncio.run (run_async())
 print(f"Time: {time.time() - start:.2f}s")  # ~1 second
 \`\`\`
 
@@ -190,11 +190,11 @@ import asyncio
 import aiohttp
 import time
 
-async def fetch_user(session, user_id):
+async def fetch_user (session, user_id):
     """Fetch user data from API (I/O-bound)"""
     url = f"https://jsonplaceholder.typicode.com/users/{user_id}"
     
-    async with session.get(url) as response:
+    async with session.get (url) as response:
         # 90% of time spent here waiting for network response
         # CPU is idle during this wait
         data = await response.json()
@@ -205,14 +205,14 @@ async def main():
     start = time.time()
     
     async with aiohttp.ClientSession() as session:
-        tasks = [fetch_user(session, i) for i in range(1, 11)]
+        tasks = [fetch_user (session, i) for i in range(1, 11)]
         users = await asyncio.gather(*tasks)
     
     elapsed = time.time() - start
-    print(f"Fetched {len(users)} users in {elapsed:.2f}s")
+    print(f"Fetched {len (users)} users in {elapsed:.2f}s")
     print(f"CPU was idle {(elapsed * 0.95):.2f}s waiting for network")
 
-# asyncio.run(main())
+# asyncio.run (main())
 # Output: ~0.5s for all 10 requests (concurrent)
 # vs ~5s if done sequentially
 \`\`\`
@@ -239,7 +239,7 @@ CPU-Bound Example: Image Processing
 from concurrent.futures import ProcessPoolExecutor
 import time
 
-def process_image(image_id):
+def process_image (image_id):
     """Simulate CPU-intensive image processing"""
     # Pure computation - CPU at 100% during this
     total = 0
@@ -250,18 +250,18 @@ def process_image(image_id):
 
 def main():
     """Process images using multiple CPU cores"""
-    images = list(range(8))  # 8 images to process
+    images = list (range(8))  # 8 images to process
     
     # Sequential processing
     start = time.time()
-    results = [process_image(i) for i in images]
+    results = [process_image (i) for i in images]
     sequential_time = time.time() - start
     print(f"Sequential: {sequential_time:.2f}s")
     
     # Parallel processing (multiprocessing)
     start = time.time()
-    with ProcessPoolExecutor(max_workers=4) as executor:
-        results = list(executor.map(process_image, images))
+    with ProcessPoolExecutor (max_workers=4) as executor:
+        results = list (executor.map (process_image, images))
     parallel_time = time.time() - start
     print(f"Parallel (4 cores): {parallel_time:.2f}s")
     print(f"Speedup: {sequential_time / parallel_time:.2f}x")
@@ -292,15 +292,15 @@ Decision Framework: Choose the Right Approach
 import psutil
 import time
 
-def profile_task(task_func, *args):
+def profile_task (task_func, *args):
     """Profile a task to determine if CPU or I/O bound"""
-    cpu_before = psutil.cpu_percent(interval=0.1)
+    cpu_before = psutil.cpu_percent (interval=0.1)
     
     start = time.time()
     task_func(*args)
     elapsed = time.time() - start
     
-    cpu_during = psutil.cpu_percent(interval=0.1)
+    cpu_during = psutil.cpu_percent (interval=0.1)
     
     if cpu_during > 80:
         print(f"✓ CPU-Bound: {cpu_during}% CPU usage")
@@ -314,12 +314,12 @@ def io_task():
     time.sleep(1)  # Simulate I/O
 
 def cpu_task():
-    sum(i ** 2 for i in range(10_000_000))
+    sum (i ** 2 for i in range(10_000_000))
 
-profile_task(io_task)
+profile_task (io_task)
 # Output: ✓ I/O-Bound: 5% CPU usage, 1.00s elapsed → Use async
 
-profile_task(cpu_task)  
+profile_task (cpu_task)  
 # Output: ✓ CPU-Bound: 100% CPU usage → Use multiprocessing
 \`\`\`
 
@@ -327,7 +327,7 @@ profile_task(cpu_task)
 
 ## Why Async Matters for I/O
 
-Asynchronous programming is a game-changer for I/O-bound applications. Let's understand why.
+Asynchronous programming is a game-changer for I/O-bound applications. Let\'s understand why.
 
 ### The Problem with Blocking I/O
 
@@ -339,9 +339,9 @@ Blocking I/O: The CPU Waits Idle
 import requests
 import time
 
-def fetch_sync(url):
+def fetch_sync (url):
     """Blocking HTTP request"""
-    response = requests.get(url)
+    response = requests.get (url)
     return response.text
 
 def main():
@@ -356,9 +356,9 @@ def main():
     
     for url in urls:
         print(f"Fetching {url}...")
-        result = fetch_sync(url)  # BLOCKS HERE - CPU idle
-        results.append(result)
-        print(f"  Received {len(result)} bytes")
+        result = fetch_sync (url)  # BLOCKS HERE - CPU idle
+        results.append (result)
+        print(f"  Received {len (result)} bytes")
     
     elapsed = time.time() - start
     print(f"\\nTotal time: {elapsed:.2f}s")  # ~3 seconds
@@ -382,9 +382,9 @@ import asyncio
 import aiohttp
 import time
 
-async def fetch_async(session, url):
+async def fetch_async (session, url):
     """Non-blocking HTTP request"""
-    async with session.get(url) as response:
+    async with session.get (url) as response:
         return await response.text()
 
 async def main():
@@ -398,12 +398,12 @@ async def main():
     
     async with aiohttp.ClientSession() as session:
         # Start ALL requests at once
-        tasks = [fetch_async(session, url) for url in urls]
+        tasks = [fetch_async (session, url) for url in urls]
         
         print("Starting all requests concurrently...")
         results = await asyncio.gather(*tasks)
         
-        print(f"Received {len(results)} responses")
+        print(f"Received {len (results)} responses")
     
     elapsed = time.time() - start
     print(f"Total time: {elapsed:.2f}s")  # ~1 second!
@@ -427,31 +427,31 @@ import asyncio
 import aiohttp
 import time
 
-async def get_user(session, user_id):
+async def get_user (session, user_id):
     """Fetch user from user service"""
-    async with session.get(f'http://user-service/users/{user_id}') as r:
+    async with session.get (f'http://user-service/users/{user_id}') as r:
         return await r.json()
 
-async def get_orders(session, user_id):
+async def get_orders (session, user_id):
     """Fetch orders from order service"""
-    async with session.get(f'http://order-service/orders?user={user_id}') as r:
+    async with session.get (f'http://order-service/orders?user={user_id}') as r:
         return await r.json()
 
-async def get_recommendations(session, user_id):
+async def get_recommendations (session, user_id):
     """Fetch recommendations from ML service"""
-    async with session.get(f'http://ml-service/recommend/{user_id}') as r:
+    async with session.get (f'http://ml-service/recommend/{user_id}') as r:
         return await r.json()
 
-async def build_dashboard(user_id):
+async def build_dashboard (user_id):
     """Build user dashboard by calling multiple services"""
     async with aiohttp.ClientSession() as session:
         # Without async: 150ms + 200ms + 300ms = 650ms total
         # With async: max(150ms, 200ms, 300ms) = 300ms total
         
         user, orders, recommendations = await asyncio.gather(
-            get_user(session, user_id),          # 150ms
-            get_orders(session, user_id),         # 200ms
-            get_recommendations(session, user_id) # 300ms
+            get_user (session, user_id),          # 150ms
+            get_orders (session, user_id),         # 200ms
+            get_recommendations (session, user_id) # 300ms
         )
         
         return {
@@ -531,7 +531,7 @@ async def main():
     print("Before non-blocking call")
     
     # Start operation but don't wait yet
-    task = asyncio.create_task(non_blocking_operation())
+    task = asyncio.create_task (non_blocking_operation())
     
     # Do other work while operation runs
     await do_other_work()
@@ -601,9 +601,9 @@ import asyncio
 app = FastAPI()
 
 @app.get("/users/{user_id}")
-async def get_user(user_id: int):
+async def get_user (user_id: int):
     # While waiting for database, server can handle other requests
-    user = await db.fetch_user(user_id)
+    user = await db.fetch_user (user_id)
     return user
 
 # Can handle 10,000+ concurrent connections on single process
@@ -612,9 +612,9 @@ async def get_user(user_id: int):
 2. **Web Scraping**
 \`\`\`python
 # Fetch thousands of pages concurrently
-async def scrape_websites(urls):
+async def scrape_websites (urls):
     async with aiohttp.ClientSession() as session:
-        tasks = [fetch_page(session, url) for url in urls]
+        tasks = [fetch_page (session, url) for url in urls]
         pages = await asyncio.gather(*tasks)
     return pages
 
@@ -624,22 +624,22 @@ async def scrape_websites(urls):
 3. **Microservices Communication**
 \`\`\`python
 # Make multiple service calls in parallel
-async def get_user_data(user_id):
+async def get_user_data (user_id):
     profile, orders, reviews = await asyncio.gather(
-        profile_service.get(user_id),
-        order_service.get(user_id),
-        review_service.get(user_id)
+        profile_service.get (user_id),
+        order_service.get (user_id),
+        review_service.get (user_id)
     )
-    return combine(profile, orders, reviews)
+    return combine (profile, orders, reviews)
 \`\`\`
 
 4. **Real-Time Applications**
 \`\`\`python
 # WebSocket server handling many concurrent connections
-async def websocket_handler(websocket):
+async def websocket_handler (websocket):
     async for message in websocket:
         # Handle message while managing thousands of other connections
-        await process_message(message)
+        await process_message (message)
 \`\`\`
 
 5. **Database Operations**
@@ -659,7 +659,7 @@ async def get_dashboard_data():
 1. **CPU-Intensive Operations**
 \`\`\`python
 # ❌ Async doesn't help with pure computation
-async def process_data(data):
+async def process_data (data):
     result = 0
     for i in range(10_000_000):
         result += i ** 2  # CPU-bound loop
@@ -719,7 +719,7 @@ Is your application I/O-bound?
 
 ## Common Async Use Cases
 
-Let's explore real-world scenarios where async shines.
+Let\'s explore real-world scenarios where async shines.
 
 ### Use Case 1: Building a Fast Web API
 
@@ -734,26 +734,26 @@ import asyncio
 
 app = FastAPI()
 
-async def query_database(user_id: int):
+async def query_database (user_id: int):
     """Simulate database query"""
     await asyncio.sleep(0.1)  # DB query takes 100ms
     return {'id': user_id, 'name': f'User {user_id}'}
 
-async def fetch_external_api(user_id: int):
+async def fetch_external_api (user_id: int):
     """Simulate external API call"""
     await asyncio.sleep(0.2)  # API call takes 200ms
     return {'recommendations': ['item1', 'item2']}
 
 @app.get("/users/{user_id}/dashboard")
-async def get_dashboard(user_id: int):
+async def get_dashboard (user_id: int):
     """
     Build user dashboard from multiple sources
     Sequential: 100ms + 200ms = 300ms
     Async: max(100ms, 200ms) = 200ms
     """
     user, recommendations = await asyncio.gather(
-        query_database(user_id),
-        fetch_external_api(user_id)
+        query_database (user_id),
+        fetch_external_api (user_id)
     )
     
     return {
@@ -784,7 +784,7 @@ async def init_db():
         password='password'
     )
 
-async def get_user_stats(conn, user_id):
+async def get_user_stats (conn, user_id):
     """Get user statistics with multiple queries"""
     
     # Execute queries concurrently
@@ -796,10 +796,10 @@ async def get_user_stats(conn, user_id):
     )
     
     return {
-        'user': dict(user),
-        'total_orders': len(orders),
-        'total_reviews': len(reviews),
-        'activities': [dict(a) for a in activity]
+        'user': dict (user),
+        'total_orders': len (orders),
+        'total_reviews': len (reviews),
+        'activities': [dict (a) for a in activity]
     }
 
 async def main():
@@ -808,7 +808,7 @@ async def main():
     # Get stats for multiple users concurrently
     user_ids = range(1, 101)
     stats = await asyncio.gather(
-        *[get_user_stats(conn, uid) for uid in user_ids]
+        *[get_user_stats (conn, uid) for uid in user_ids]
     )
     
     await conn.close()
@@ -829,49 +829,49 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 
-async def fetch_page(session, url):
+async def fetch_page (session, url):
     """Fetch a single page"""
     try:
-        async with session.get(url, timeout=10) as response:
+        async with session.get (url, timeout=10) as response:
             return await response.text()
     except Exception as e:
         print(f"Error fetching {url}: {e}")
         return None
 
-async def parse_page(html):
+async def parse_page (html):
     """Parse HTML (CPU-bound, but fast)"""
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup (html, 'html.parser')
     return {
         'title': soup.find('title').text if soup.find('title') else '',
         'links': [a['href'] for a in soup.find_all('a', href=True)]
     }
 
-async def scrape_website(start_url, max_pages=100):
+async def scrape_website (start_url, max_pages=100):
     """Scrape website starting from URL"""
     visited = set()
     to_visit = {start_url}
     results = []
     
     async with aiohttp.ClientSession() as session:
-        while to_visit and len(visited) < max_pages:
+        while to_visit and len (visited) < max_pages:
             # Process up to 10 pages concurrently
-            batch = [to_visit.pop() for _ in range(min(10, len(to_visit)))]
+            batch = [to_visit.pop() for _ in range (min(10, len (to_visit)))]
             
             # Fetch batch concurrently
             pages = await asyncio.gather(
-                *[fetch_page(session, url) for url in batch]
+                *[fetch_page (session, url) for url in batch]
             )
             
-            for url, html in zip(batch, pages):
+            for url, html in zip (batch, pages):
                 if html:
-                    visited.add(url)
-                    data = await parse_page(html)
+                    visited.add (url)
+                    data = await parse_page (html)
                     results.append({'url': url, 'data': data})
                     
                     # Add new URLs to visit
                     for link in data['links']:
                         if link not in visited:
-                            to_visit.add(link)
+                            to_visit.add (link)
     
     return results
 
@@ -898,18 +898,18 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: dict[str, WebSocket] = {}
     
-    async def connect(self, user_id: str, websocket: WebSocket):
+    async def connect (self, user_id: str, websocket: WebSocket):
         await websocket.accept()
         self.active_connections[user_id] = websocket
     
-    def disconnect(self, user_id: str):
-        self.active_connections.pop(user_id, None)
+    def disconnect (self, user_id: str):
+        self.active_connections.pop (user_id, None)
     
-    async def broadcast(self, message: dict):
+    async def broadcast (self, message: dict):
         """Send message to all connected users"""
         # Send to all clients concurrently
         await asyncio.gather(
-            *[conn.send_json(message) 
+            *[conn.send_json (message) 
               for conn in self.active_connections.values()],
             return_exceptions=True
         )
@@ -917,9 +917,9 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 @app.websocket("/chat/{user_id}")
-async def chat_endpoint(websocket: WebSocket, user_id: str):
+async def chat_endpoint (websocket: WebSocket, user_id: str):
     """Handle chat connection"""
-    await manager.connect(user_id, websocket)
+    await manager.connect (user_id, websocket)
     
     try:
         while True:
@@ -933,7 +933,7 @@ async def chat_endpoint(websocket: WebSocket, user_id: str):
             })
     
     except WebSocketDisconnect:
-        manager.disconnect(user_id)
+        manager.disconnect (user_id)
         await manager.broadcast({
             'system': f'{user_id} left the chat'
         })

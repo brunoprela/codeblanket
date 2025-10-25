@@ -225,7 +225,7 @@ function generatePasteID(id: number): string {
     
     while (id > 0) {
         encoded = chars[id % 62] + encoded;
-        id = Math.floor(id / 62);
+        id = Math.floor (id / 62);
     }
     
     return encoded.padStart(6, '0');  // Minimum 6 characters
@@ -351,11 +351,11 @@ Many users paste identical content (common error messages, code snippets).
 ### Cache-Aside Pattern
 
 \`\`\`typescript
-async function getPaste(pasteId: string): Paste {
+async function getPaste (pasteId: string): Paste {
     // 1. Check cache
     const cached = await redis.get(\`paste:\${pasteId}\`);
     if (cached) {
-        return JSON.parse(cached);
+        return JSON.parse (cached);
     }
     
     // 2. Query database
@@ -372,11 +372,11 @@ async function getPaste(pasteId: string): Paste {
     
     // 3. If large paste, fetch from S3
     if (paste.s3_key) {
-        paste.content = await s3.getObject(paste.s3_key);
+        paste.content = await s3.getObject (paste.s3_key);
     }
     
     // 4. Store in cache
-    await redis.set(\`paste:\${pasteId}\`, JSON.stringify(paste), 'EX', 86400);  // 24 hours
+    await redis.set(\`paste:\${pasteId}\`, JSON.stringify (paste), 'EX', 86400);  // 24 hours
     
     return paste;
 }
@@ -415,11 +415,11 @@ ALTER TABLE pastes ADD COLUMN s3_key VARCHAR(255) NULL;
 Store content compressed in database:
 \`\`\`typescript
 // Before insert
-const compressed = gzip(content);
+const compressed = gzip (content);
 paste.content = compressed;
 
 // Before return
-const decompressed = gunzip(paste.content);
+const decompressed = gunzip (paste.content);
 return decompressed;
 \`\`\`
 
@@ -502,12 +502,12 @@ async function syncViewCounts() {
     const keys = await redis.keys('views:*');
     for (const key of keys) {
         const pasteId = key.split(':')[1];
-        const count = await redis.get(key);
+        const count = await redis.get (key);
         await db.query(
             'UPDATE pastes SET view_count = view_count + ? WHERE paste_id = ?',
             [count, pasteId]
         );
-        await redis.del(key);
+        await redis.del (key);
     }
 }
 \`\`\`
@@ -540,7 +540,7 @@ For Pastebin (12 writes/sec, 120 reads/sec), **single DB + replicas is sufficien
 
 **Hash-based sharding by paste_id**:
 \`\`\`
-Shard = hash(paste_id) % NUM_SHARDS
+Shard = hash (paste_id) % NUM_SHARDS
 
 Example (4 shards):
 - "a3Bk9x" → hash % 4 = Shard 2

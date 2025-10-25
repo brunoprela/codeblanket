@@ -263,7 +263,7 @@ Background job settling 10 million payments overnight
 
 ---
 
-## Little's Law
+## Little\'s Law
 
 **Little's Law** connects latency, throughput, and concurrency:
 
@@ -397,7 +397,7 @@ Concurrency = 1,000 req/s × 0.1s = 100 concurrent requests
 
 **Fix**: Always measure P95, P99, P99.9 latency.
 
-### ❌ Mistake 4: Ignoring Little's Law
+### ❌ Mistake 4: Ignoring Little\'s Law
 
 **Problem**: Want 10,000 req/s but only have 10 concurrent threads and 100ms latency.
 

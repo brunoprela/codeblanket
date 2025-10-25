@@ -66,7 +66,7 @@ export const regularizationMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What is the primary advantage of ElasticNet over pure Lasso or pure Ridge?',
     options: [
-      "It's faster to compute",
+      "It\'s faster to compute",
       'It combines feature selection (L1) with handling of correlated features (L2)',
       "It doesn't require hyperparameter tuning",
       'It always produces better predictions',

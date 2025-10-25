@@ -1,7 +1,7 @@
 export const learningEnvironment = {
-    title: 'Your Finance Learning Environment',
-    id: 'learning-environment',
-    content: `
+  title: 'Your Finance Learning Environment',
+  id: 'learning-environment',
+  content: `
 # Your Finance Learning Environment
 
 ## Introduction
@@ -208,7 +208,7 @@ aapl = yf.download('AAPL', start='2020-01-01', end='2024-01-01')
 
 # Multiple tickers
 tickers = ['AAPL', 'MSFT', 'GOOGL']
-data = yf.download(tickers, start='2023-01-01')
+data = yf.download (tickers, start='2023-01-01')
 
 # Save to CSV
 aapl.to_csv('aapl_prices.csv')
@@ -218,7 +218,7 @@ aapl.to_csv('aapl_prices.csv')
 \`\`\`python
 from alpha_vantage.timeseries import TimeSeries
 
-ts = TimeSeries(key='YOUR_API_KEY', output_format='pandas')
+ts = TimeSeries (key='YOUR_API_KEY', output_format='pandas')
 
 # Daily prices
 data, meta = ts.get_daily('AAPL', outputsize='full')
@@ -231,7 +231,7 @@ data, meta = ts.get_intraday('AAPL', interval='5min', outputsize='full')
 \`\`\`python
 from fredapi import Fred
 
-fred = Fred(api_key='YOUR_FRED_API_KEY')
+fred = Fred (api_key='YOUR_FRED_API_KEY')
 
 # Get data
 gdp = fred.get_series('GDP')
@@ -275,7 +275,7 @@ api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 
 # Get account info
 account = api.get_account()
-print(f"Buying power: ${float(account.buying_power):,.2f}")
+print(f"Buying power: \${float (account.buying_power):,.2f}")
 
 # Place order
 api.submit_order(
@@ -289,7 +289,7 @@ api.submit_order(
 # Get positions
 positions = api.list_positions()
 for position in positions:
-    print(f"{position.symbol}: {position.qty} shares @ ${float(position.avg_entry_price):.2f}")
+    print(f"{position.symbol}: {position.qty} shares @ \${float (position.avg_entry_price):.2f}")
 \`\`\`
 
 ### Interactive Brokers (IBKR)
@@ -297,7 +297,7 @@ for position in positions:
 **Best for global markets** (stocks, options, futures, forex):
 - Paper account: Free at interactivebrokers.com
 - API: TWS API (Java/Python)
-- Python wrapper: `ib_insync` library
+- Python wrapper: \`ib_insync\` library
 
 \`\`\`python
 from ib_insync import *
@@ -314,7 +314,7 @@ for value in account_values:
 # Place order
 contract = Stock('AAPL', 'SMART', 'USD')
 order = MarketOrder('BUY', 100)
-trade = ib.placeOrder(contract, order)
+trade = ib.placeOrder (contract, order)
 
 # Wait for fill
 while not trade.isDone():
@@ -344,7 +344,7 @@ print(f"USDT: {balance['USDT']['free']}")
 
 # Place order
 order = exchange.create_market_buy_order('BTC/USDT', 0.001)  # 0.001 BTC
-print(f"Bought at ${order['average']}")
+print(f"Bought at \${order['average']}")
 \`\`\`
 
 ---
@@ -413,4 +413,3 @@ my-trading-system/
 **Next section**: Module Project - build a complete personal finance dashboard!
 `,
 };
-

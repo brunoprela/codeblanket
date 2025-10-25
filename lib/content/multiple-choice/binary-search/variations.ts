@@ -58,7 +58,7 @@ export const variationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'Binary search on the range [0, 25]. The function f(x) = x² is monotonic increasing, so you can check if mid² is too small (search right), too big (search left), or equal (found).',
+      'Binary search on the range [0, 25]. The function f (x) = x² is monotonic increasing, so you can check if mid² is too small (search right), too big (search left), or equal (found).',
   },
   {
     id: 'mc5',

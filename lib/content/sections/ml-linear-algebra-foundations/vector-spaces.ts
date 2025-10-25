@@ -29,7 +29,7 @@ A set **V** is a **vector space** over a field **F** (usually ℝ) if it satisfi
 ### Scalar Multiplication Axioms
 7. **Distributive** (vector): a(**u** + **v**) = a**u** + a**v**
 8. **Distributive** (scalar): (a + b)**v** = a**v** + b**v**
-9. **Associative**: (ab)**v** = a(b**v**)
+9. **Associative**: (ab)**v** = a (b**v**)
 10. **Identity**: 1**v** = **v**
 
 \`\`\`python
@@ -178,8 +178,8 @@ c1, c2 = target[0], target[1]
 combination = c1 * e1 + c2 * e2
 print(f"Target: {target}")
 print(f"As combination: {c1}*e1 + {c2}*e2 = {combination}")
-print(f"Equal: {np.allclose(target, combination)}")
-print("\\nspan(e1, e2) = ℝ²")
+print(f"Equal: {np.allclose (target, combination)}")
+print("\\nspan (e1, e2) = ℝ²")
 
 # Span of single vector (line)
 v = np.array([1, 2])
@@ -286,7 +286,7 @@ if null_A.shape[1] > 0:
     null_vector = null_A[:, 0]
     result = A @ null_vector
     print(f"A * null_vector = {result}")
-    print(f"Approximately zero: {np.allclose(result, 0)}")
+    print(f"Approximately zero: {np.allclose (result, 0)}")
 \`\`\`
 
 ## Applications in Machine Learning

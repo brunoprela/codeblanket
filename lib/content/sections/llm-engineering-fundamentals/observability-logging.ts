@@ -87,7 +87,7 @@ def log_llm_request(
         'cost_usd': cost
     }
     
-    logger.info(f"LLM Request: {json.dumps(log_data)}")
+    logger.info (f"LLM Request: {json.dumps (log_data)}")
 
 # Usage
 import time
@@ -129,9 +129,9 @@ class StructuredLogger:
     """
     
     def __init__(self, name: str):
-        self.logger = logging.getLogger(name)
+        self.logger = logging.getLogger (name)
     
-    def _add_context(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _add_context (self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Add context to log data."""
         request_id = request_id_var.get()
         if request_id:
@@ -148,10 +148,10 @@ class StructuredLogger:
         data = self._add_context({
             'event': 'llm_request',
             'model': model,
-            'message_count': len(messages),
+            'message_count': len (messages),
             **kwargs
         })
-        self.logger.info(json.dumps(data))
+        self.logger.info (json.dumps (data))
     
     def log_response(
         self,
@@ -164,13 +164,13 @@ class StructuredLogger:
         """Log LLM response."""
         data = self._add_context({
             'event': 'llm_response',
-            'response_length': len(response_text),
+            'response_length': len (response_text),
             'tokens': tokens,
             'latency_ms': latency * 1000,
             'cost': cost,
             **kwargs
         })
-        self.logger.info(json.dumps(data))
+        self.logger.info (json.dumps (data))
     
     def log_error(
         self,
@@ -180,11 +180,11 @@ class StructuredLogger:
         """Log error."""
         data = self._add_context({
             'event': 'llm_error',
-            'error_type': type(error).__name__,
-            'error_message': str(error),
+            'error_type': type (error).__name__,
+            'error_message': str (error),
             **kwargs
         })
-        self.logger.error(json.dumps(data))
+        self.logger.error (json.dumps (data))
 
 # Usage
 import uuid
@@ -192,7 +192,7 @@ import uuid
 logger = StructuredLogger(__name__)
 
 # Set request ID for this request
-request_id_var.set(str(uuid.uuid4()))
+request_id_var.set (str (uuid.uuid4()))
 
 # Log request
 logger.log_request(
@@ -242,10 +242,10 @@ prompt = PromptTemplate(
     template="Explain {topic} in simple terms"
 )
 
-chain = LLMChain(llm=llm, prompt=prompt)
+chain = LLMChain (llm=llm, prompt=prompt)
 
 # Run and it logs automatically!
-result = chain.run(topic="quantum computing")
+result = chain.run (topic="quantum computing")
 print(result)
 
 # View traces at: https://smith.langchain.com
@@ -262,7 +262,7 @@ import time
 client = OpenAI()
 ls_client = Client()
 
-def call_with_langsmith(prompt: str, run_name: str = "llm_call"):
+def call_with_langsmith (prompt: str, run_name: str = "llm_call"):
     """
     Call LLM with manual LangSmith logging.
     """
@@ -301,7 +301,7 @@ def call_with_langsmith(prompt: str, run_name: str = "llm_call"):
     
     except Exception as e:
         # Log error
-        run.end(error=str(e))
+        run.end (error=str (e))
         run.post()
         raise
 
@@ -347,21 +347,21 @@ class RequestTracker:
     """
     
     def __init__(self, storage_path: str = "llm_requests.jsonl"):
-        self.storage_path = Path(storage_path)
+        self.storage_path = Path (storage_path)
         self.requests: List[LLMRequest] = []
     
-    def track(self, request: LLMRequest):
+    def track (self, request: LLMRequest):
         """Track a request."""
-        self.requests.append(request)
+        self.requests.append (request)
         
         # Append to file
-        with open(self.storage_path, 'a') as f:
+        with open (self.storage_path, 'a') as f:
             # Convert datetime to ISO format
-            data = asdict(request)
+            data = asdict (request)
             data['timestamp'] = request.timestamp.isoformat()
-            f.write(json.dumps(data) + '\\n')
+            f.write (json.dumps (data) + '\\n')
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get aggregate statistics."""
         if not self.requests:
             return {}
@@ -370,32 +370,32 @@ class RequestTracker:
         failed = [r for r in self.requests if not r.success]
         
         return {
-            'total_requests': len(self.requests),
-            'successful': len(successful),
-            'failed': len(failed),
-            'success_rate': len(successful) / len(self.requests) * 100,
+            'total_requests': len (self.requests),
+            'successful': len (successful),
+            'failed': len (failed),
+            'success_rate': len (successful) / len (self.requests) * 100,
             
-            'total_tokens': sum(r.tokens_total for r in self.requests),
-            'total_cost': sum(r.cost_usd for r in self.requests),
+            'total_tokens': sum (r.tokens_total for r in self.requests),
+            'total_cost': sum (r.cost_usd for r in self.requests),
             
-            'avg_latency_ms': sum(r.latency_ms for r in self.requests) / len(self.requests),
-            'avg_tokens': sum(r.tokens_total for r in self.requests) / len(self.requests),
-            'avg_cost': sum(r.cost_usd for r in self.requests) / len(self.requests),
+            'avg_latency_ms': sum (r.latency_ms for r in self.requests) / len (self.requests),
+            'avg_tokens': sum (r.tokens_total for r in self.requests) / len (self.requests),
+            'avg_cost': sum (r.cost_usd for r in self.requests) / len (self.requests),
             
-            'models_used': list(set(r.model for r in self.requests)),
+            'models_used': list (set (r.model for r in self.requests)),
         }
     
-    def get_recent(self, n: int = 10) -> List[LLMRequest]:
+    def get_recent (self, n: int = 10) -> List[LLMRequest]:
         """Get N most recent requests."""
-        return sorted(self.requests, key=lambda r: r.timestamp, reverse=True)[:n]
+        return sorted (self.requests, key=lambda r: r.timestamp, reverse=True)[:n]
     
-    def get_failed(self) -> List[LLMRequest]:
+    def get_failed (self) -> List[LLMRequest]:
         """Get failed requests."""
         return [r for r in self.requests if not r.success]
     
-    def get_expensive(self, n: int = 10) -> List[LLMRequest]:
+    def get_expensive (self, n: int = 10) -> List[LLMRequest]:
         """Get most expensive requests."""
-        return sorted(self.requests, key=lambda r: r.cost_usd, reverse=True)[:n]
+        return sorted (self.requests, key=lambda r: r.cost_usd, reverse=True)[:n]
 
 # Usage
 import uuid
@@ -404,7 +404,7 @@ tracker = RequestTracker()
 
 # Track a request
 request = LLMRequest(
-    id=str(uuid.uuid4()),
+    id=str (uuid.uuid4()),
     timestamp=datetime.now(),
     model='gpt-3.5-turbo',
     prompt='What is Python?',
@@ -417,11 +417,11 @@ request = LLMRequest(
     success=True
 )
 
-tracker.track(request)
+tracker.track (request)
 
 # Get stats
 stats = tracker.get_stats()
-print(json.dumps(stats, indent=2))
+print(json.dumps (stats, indent=2))
 \`\`\`
 
 ### Real-time Dashboard
@@ -440,21 +440,21 @@ class RealtimeDashboard:
         self.window_minutes = window_minutes
         self.requests: Deque[LLMRequest] = deque()
     
-    def add_request(self, request: LLMRequest):
+    def add_request (self, request: LLMRequest):
         """Add request to dashboard."""
-        self.requests.append(request)
+        self.requests.append (request)
         
         # Remove old requests outside window
-        cutoff = datetime.now() - timedelta(minutes=self.window_minutes)
+        cutoff = datetime.now() - timedelta (minutes=self.window_minutes)
         while self.requests and self.requests[0].timestamp < cutoff:
             self.requests.popleft()
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get real-time metrics."""
         if not self.requests:
             return {'requests_in_window': 0}
         
-        requests_list = list(self.requests)
+        requests_list = list (self.requests)
         
         total_time = (
             requests_list[-1].timestamp - requests_list[0].timestamp
@@ -462,19 +462,19 @@ class RealtimeDashboard:
         
         return {
             'window_minutes': self.window_minutes,
-            'requests_in_window': len(requests_list),
-            'requests_per_minute': len(requests_list) / self.window_minutes if total_time > 0 else 0,
+            'requests_in_window': len (requests_list),
+            'requests_per_minute': len (requests_list) / self.window_minutes if total_time > 0 else 0,
             
-            'success_rate': sum(1 for r in requests_list if r.success) / len(requests_list) * 100,
+            'success_rate': sum(1 for r in requests_list if r.success) / len (requests_list) * 100,
             
-            'avg_latency_ms': sum(r.latency_ms for r in requests_list) / len(requests_list),
-            'p95_latency_ms': sorted([r.latency_ms for r in requests_list])[int(len(requests_list) * 0.95)],
+            'avg_latency_ms': sum (r.latency_ms for r in requests_list) / len (requests_list),
+            'p95_latency_ms': sorted([r.latency_ms for r in requests_list])[int (len (requests_list) * 0.95)],
             
-            'tokens_per_minute': sum(r.tokens_total for r in requests_list) / self.window_minutes,
-            'cost_per_minute': sum(r.cost_usd for r in requests_list) / self.window_minutes,
+            'tokens_per_minute': sum (r.tokens_total for r in requests_list) / self.window_minutes,
+            'cost_per_minute': sum (r.cost_usd for r in requests_list) / self.window_minutes,
         }
     
-    def print_dashboard(self):
+    def print_dashboard (self):
         """Print formatted dashboard."""
         metrics = self.get_metrics()
         
@@ -499,20 +499,19 @@ class RealtimeDashboard:
         
         print(f"\\nUSAGE:")
         print(f"  Tokens/min: {metrics['tokens_per_minute']:.0f}")
-        print(f"  Cost/min: \${metrics['cost_per_minute']: .6f
-}")
+        print(f"  Cost/min: \${metrics['cost_per_minute']:.6f}")
 
 print("=" * 60 + "\\n")
 
 # Usage
-dashboard = RealtimeDashboard(window_minutes = 5)
+dashboard = RealtimeDashboard (window_minutes = 5)
 
 # Simulate requests
 import random
 for i in range(20):
     request = LLMRequest(
-        id = str(uuid.uuid4()),
-        timestamp = datetime.now() - timedelta(minutes = random.randint(0, 4)),
+        id = str (uuid.uuid4()),
+        timestamp = datetime.now() - timedelta (minutes = random.randint(0, 4)),
         model = 'gpt-3.5-turbo',
         prompt = f'Query {i}',
         response = f'Response {i}',
@@ -523,7 +522,7 @@ for i in range(20):
         cost_usd = random.uniform(0.0001, 0.01),
         success = random.random() > 0.1  # 90 % success rate
     )
-dashboard.add_request(request)
+dashboard.add_request (request)
 
 # View dashboard
 dashboard.print_dashboard()
@@ -602,19 +601,19 @@ class LLMDebugger:
     
     def __init__(self, log_file: str = "llm_debug.log"):
         self.logger = logging.getLogger("llm_debugger")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel (logging.DEBUG)
         
         # File handler
-        fh = logging.FileHandler(log_file)
-        fh.setLevel(logging.DEBUG)
+        fh = logging.FileHandler (log_file)
+        fh.setLevel (logging.DEBUG)
         
         # Formatter
         formatter = logging.Formatter(
             '%(asctime)s - %(levelname)s\\n%(message)s\\n'
         )
-        fh.setFormatter(formatter)
+        fh.setFormatter (formatter)
         
-        self.logger.addHandler(fh)
+        self.logger.addHandler (fh)
     
     def log_request(
         self,
@@ -626,8 +625,8 @@ class LLMDebugger:
         self.logger.debug(
             f"REQUEST:\\n"
             f"Model: {model}\\n"
-            f"Messages:\\n{json.dumps(messages, indent=2)}\\n"
-            f"Parameters:\\n{json.dumps(kwargs, indent=2)}"
+            f"Messages:\\n{json.dumps (messages, indent=2)}\\n"
+            f"Parameters:\\n{json.dumps (kwargs, indent=2)}"
         )
     
     def log_response(
@@ -648,16 +647,16 @@ class LLMDebugger:
         }
         
         self.logger.debug(
-            f"RESPONSE:\\n{json.dumps(response_dict, indent=2)}"
+            f"RESPONSE:\\n{json.dumps (response_dict, indent=2)}"
         )
     
-    def log_error(self, error: Exception):
+    def log_error (self, error: Exception):
         """Log error with full traceback."""
         import traceback
         self.logger.error(
             f"ERROR:\\n"
-            f"Type: {type(error).__name__}\\n"
-            f"Message: {str(error)}\\n"
+            f"Type: {type (error).__name__}\\n"
+            f"Message: {str (error)}\\n"
             f"Traceback:\\n{traceback.format_exc()}"
         )
 
@@ -680,10 +679,10 @@ try:
     )
     
     # Log response
-    debugger.log_response(response)
+    debugger.log_response (response)
     
 except Exception as e:
-    debugger.log_error(e)
+    debugger.log_error (e)
 
 # Check llm_debug.log for detailed logs
 \`\`\`
@@ -719,24 +718,24 @@ class ObservabilitySystem:
         self.observations: List[Observation] = []
         
         # Setup logging
-        self.logger = logging.getLogger(service_name)
-        self.logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger (service_name)
+        self.logger.setLevel (logging.INFO)
         
         # File handler
-        fh = logging.FileHandler(log_file)
+        fh = logging.FileHandler (log_file)
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
-        fh.setFormatter(formatter)
-        self.logger.addHandler(fh)
+        fh.setFormatter (formatter)
+        self.logger.addHandler (fh)
         
         # Console handler
         if enable_console:
             ch = logging.StreamHandler()
-            ch.setFormatter(formatter)
-            self.logger.addHandler(ch)
+            ch.setFormatter (formatter)
+            self.logger.addHandler (ch)
     
-    def observe(self, event_type: str, data: Dict):
+    def observe (self, event_type: str, data: Dict):
         """Record an observation."""
         obs = Observation(
             timestamp=datetime.now(),
@@ -744,7 +743,7 @@ class ObservabilitySystem:
             data=data
         )
         
-        self.observations.append(obs)
+        self.observations.append (obs)
         
         # Log it
         log_data = {
@@ -752,9 +751,9 @@ class ObservabilitySystem:
             'event': event_type,
             **data
         }
-        self.logger.info(json.dumps(log_data))
+        self.logger.info (json.dumps (log_data))
     
-    def get_metrics(self, event_type: Optional[str] = None) -> Dict:
+    def get_metrics (self, event_type: Optional[str] = None) -> Dict:
         """Get metrics for event type."""
         if event_type:
             events = [o for o in self.observations if o.event_type == event_type]
@@ -762,11 +761,11 @@ class ObservabilitySystem:
             events = self.observations
         
         return {
-            'total_events': len(events),
-            'event_types': list(set(o.event_type for o in self.observations)),
+            'total_events': len (events),
+            'event_types': list (set (o.event_type for o in self.observations)),
             'time_range': {
-                'start': min(o.timestamp for o in events).isoformat() if events else None,
-                'end': max(o.timestamp for o in events).isoformat() if events else None
+                'start': min (o.timestamp for o in events).isoformat() if events else None,
+                'end': max (o.timestamp for o in events).isoformat() if events else None
             }
         }
 
@@ -794,7 +793,7 @@ obs.observe('request_failed', {
 
 # Get metrics
 metrics = obs.get_metrics()
-print(json.dumps(metrics, indent=2))
+print(json.dumps (metrics, indent=2))
 \`\`\`
 
 ## Key Takeaways

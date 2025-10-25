@@ -52,17 +52,17 @@ Converts text into numerical representation:
 
 \`\`\`python
 # Conceptual example of how text encoding works
-def encode_text_prompt(prompt: str) -> np.ndarray:
+def encode_text_prompt (prompt: str) -> np.ndarray:
     """
     Convert text prompt to embedding vector.
     Real implementations use CLIP or similar models.
     """
     # Tokenize the text
-    tokens = tokenizer.encode(prompt)  # "a cat wearing a hat"
+    tokens = tokenizer.encode (prompt)  # "a cat wearing a hat"
     
     # Pass through transformer to get embeddings
     # This captures semantic meaning
-    text_embedding = text_transformer(tokens)  # Shape: (77, 768)
+    text_embedding = text_transformer (tokens)  # Shape: (77, 768)
     
     # The embedding captures concepts like:
     # - "cat" (animal features)
@@ -120,7 +120,7 @@ def forward_diffusion(
     noise = np.random.randn(*image.shape)
     noisy_image = (
         np.sqrt(1 - noise_level) * image +
-        np.sqrt(noise_level) * noise
+        np.sqrt (noise_level) * noise
     )
     
     return noisy_image
@@ -137,7 +137,7 @@ def reverse_diffusion(
     """
     latent = noisy_latent  # Start with pure noise
     
-    for t in reversed(range(timesteps)):
+    for t in reversed (range (timesteps)):
         # Predict noise to remove
         predicted_noise = unet_model(
             latent, 
@@ -146,7 +146,7 @@ def reverse_diffusion(
         )
         
         # Remove some noise
-        latent = remove_noise(latent, predicted_noise, t)
+        latent = remove_noise (latent, predicted_noise, t)
         
         # Optionally show progress
         if t % 10 == 0:
@@ -182,7 +182,7 @@ def generate_image_basic(
             guidance_scale=guidance_scale,
         ).images[0]
     
-    return np.array(image)
+    return np.array (image)
 
 # Usage
 image = generate_image_basic(
@@ -209,21 +209,21 @@ image = generate_image_basic(
 
 \`\`\`python
 # GAN training (conceptual)
-def train_gan(generator, discriminator, real_images):
-    for epoch in range(num_epochs):
+def train_gan (generator, discriminator, real_images):
+    for epoch in range (num_epochs):
         # Generate fake images
         noise = random_noise()
-        fake_images = generator(noise)
+        fake_images = generator (noise)
         
         # Train discriminator
-        real_scores = discriminator(real_images)  # Should be 1
-        fake_scores = discriminator(fake_images)  # Should be 0
-        d_loss = loss(real_scores, fake_scores)
+        real_scores = discriminator (real_images)  # Should be 1
+        fake_scores = discriminator (fake_images)  # Should be 0
+        d_loss = loss (real_scores, fake_scores)
         
         # Train generator
-        fake_images = generator(noise)
-        fake_scores = discriminator(fake_images)
-        g_loss = loss(fake_scores, target=1)  # Want discriminator fooled
+        fake_images = generator (noise)
+        fake_scores = discriminator (fake_images)
+        g_loss = loss (fake_scores, target=1)  # Want discriminator fooled
 \`\`\`
 
 **Problems with GANs**:
@@ -254,23 +254,23 @@ def generate_with_control(
     if init_image is not None:
         # Start from real image, add some noise
         start_step = int((1 - strength) * num_steps)
-        latent = encode_image(init_image)
-        latent = add_noise(latent, level=start_step)
+        latent = encode_image (init_image)
+        latent = add_noise (latent, level=start_step)
     else:
         # Start from pure noise
         latent = random_noise()
         start_step = 0
     
     # Denoise with guidance
-    for t in range(start_step, num_steps):
-        predicted_noise = model(latent, t, prompt)
-        latent = remove_noise(latent, predicted_noise)
+    for t in range (start_step, num_steps):
+        predicted_noise = model (latent, t, prompt)
+        latent = remove_noise (latent, predicted_noise)
         
         # Can inject additional control at each step!
         if has_controlnet:
-            latent = apply_control_signal(latent, control_image)
+            latent = apply_control_signal (latent, control_image)
     
-    return decode_latent(latent)
+    return decode_latent (latent)
 \`\`\`
 
 ## Model Architectures
@@ -386,7 +386,7 @@ class ImageGenerator:
             torch_dtype=torch.float16,
             safety_checker=None,  # For production, keep enabled
         )
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         
         # Enable memory optimizations
         self.pipe.enable_attention_slicing()
@@ -437,7 +437,7 @@ class ImageGenerator:
         
         # Set seed for reproducibility
         if seed is not None:
-            generator = torch.Generator(device=self.device).manual_seed(seed)
+            generator = torch.Generator (device=self.device).manual_seed (seed)
         else:
             generator = None
         
@@ -466,8 +466,8 @@ class ImageGenerator:
         """
         results = []
         for prompt in prompts:
-            images = self.generate(prompt, **kwargs)
-            results.append(images)
+            images = self.generate (prompt, **kwargs)
+            results.append (images)
         return results
 
 # Usage
@@ -492,8 +492,8 @@ images = generator.generate(
     guidance_scale=8.0,
 )
 
-for i, img in enumerate(images):
-    img.save(f"robot_{i}.png")
+for i, img in enumerate (images):
+    img.save (f"robot_{i}.png")
 \`\`\`
 
 ### Understanding Parameters
@@ -588,7 +588,7 @@ class ImageQualityMetrics:
     """
     
     def __init__(self):
-        self.fid = FrechetInceptionDistance(feature=2048)
+        self.fid = FrechetInceptionDistance (feature=2048)
         self.inception = InceptionScore()
     
     def calculate_fid(
@@ -604,18 +604,18 @@ class ImageQualityMetrics:
         > 50: Poor
         """
         # Convert to tensors
-        real_tensors = self._images_to_tensors(real_images)
-        gen_tensors = self._images_to_tensors(generated_images)
+        real_tensors = self._images_to_tensors (real_images)
+        gen_tensors = self._images_to_tensors (generated_images)
         
         # Update FID with real images
-        self.fid.update(real_tensors, real=True)
+        self.fid.update (real_tensors, real=True)
         
         # Update FID with generated images
-        self.fid.update(gen_tensors, real=False)
+        self.fid.update (gen_tensors, real=False)
         
         # Compute score
         score = self.fid.compute()
-        return float(score)
+        return float (score)
     
     def calculate_inception_score(
         self,
@@ -629,18 +629,18 @@ class ImageQualityMetrics:
         
         Returns (mean, std)
         """
-        tensors = self._images_to_tensors(images)
-        self.inception.update(tensors)
+        tensors = self._images_to_tensors (images)
+        self.inception.update (tensors)
         mean, std = self.inception.compute()
-        return float(mean), float(std)
+        return float (mean), float (std)
     
     def _images_to_tensors(
         self,
         images: List[Image.Image]
     ) -> torch.Tensor:
         """Convert PIL images to torch tensors."""
-        arrays = [np.array(img) for img in images]
-        tensors = torch.tensor(np.stack(arrays)).permute(0, 3, 1, 2)
+        arrays = [np.array (img) for img in images]
+        tensors = torch.tensor (np.stack (arrays)).permute(0, 3, 1, 2)
         return tensors.float() / 255.0
 \`\`\`
 
@@ -809,7 +809,7 @@ models = {
     )
 }
 
-def choose_model(requirements: dict) -> str:
+def choose_model (requirements: dict) -> str:
     """
     Help choose the right model based on requirements.
     """

@@ -28,7 +28,7 @@ export const attentionmechanismMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Softmax converts raw scores into **normalized probability distribution**: α_i = exp(e_i) / Σ_j exp(e_j). Properties: (1) All α_i ∈ [0, 1], (2) Σ α_i = 1 (valid distribution), (3) Differentiable (trainable end-to-end), (4) Amplifies differences (high scores → much higher probabilities). Example: Scores [2.0, 0.5, 0.1] → Softmax [0.73, 0.20, 0.07]. This creates interpretable weights we can visualize. Without softmax, couldn't combine encoder states meaningfully (raw scores unbounded). Softmax doesn't remove negatives (exp handles that), doesn't equalize (preserves relative magnitudes), and doesn't select single position (weighted sum of all). The '1-sum' property is crucial for weighted averaging.",
+      "Softmax converts raw scores into **normalized probability distribution**: α_i = exp (e_i) / Σ_j exp (e_j). Properties: (1) All α_i ∈ [0, 1], (2) Σ α_i = 1 (valid distribution), (3) Differentiable (trainable end-to-end), (4) Amplifies differences (high scores → much higher probabilities). Example: Scores [2.0, 0.5, 0.1] → Softmax [0.73, 0.20, 0.07]. This creates interpretable weights we can visualize. Without softmax, couldn't combine encoder states meaningfully (raw scores unbounded). Softmax doesn't remove negatives (exp handles that), doesn't equalize (preserves relative magnitudes), and doesn't select single position (weighted sum of all). The '1-sum' property is crucial for weighted averaging.",
   },
   {
     id: 'cnn-mc-3',

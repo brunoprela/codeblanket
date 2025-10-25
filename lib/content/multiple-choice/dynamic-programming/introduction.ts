@@ -37,13 +37,13 @@ export const introductionMultipleChoice: MultipleChoiceQuestion[] = [
       'Why does DP improve time complexity for Fibonacci from O(2^N) to O(N)?',
     options: [
       'Different algorithm',
-      'Caches subproblem results - each fib(i) computed once instead of exponentially many times',
+      'Caches subproblem results - each fib (i) computed once instead of exponentially many times',
       'Uses more space',
       'Random',
     ],
     correctAnswer: 1,
     explanation:
-      'Naive recursion recomputes fib(2) many times = O(2^N). DP caches each fib(i) result. Each of N subproblems computed once = O(N). Trades space for time.',
+      'Naive recursion recomputes fib(2) many times = O(2^N). DP caches each fib (i) result. Each of N subproblems computed once = O(N). Trades space for time.',
   },
   {
     id: 'mc4',

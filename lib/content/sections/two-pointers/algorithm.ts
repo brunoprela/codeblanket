@@ -11,8 +11,8 @@ export const algorithmSection = {
 
 **Brute Force Approach: O(n²)**
 \`\`\`python
-for i in range(len(nums)):
-    for j in range(i + 1, len(nums)):
+for i in range (len (nums)):
+    for j in range (i + 1, len (nums)):
         if nums[i] + nums[j] == target:
             return [i, j]
 # Checks every pair - slow!

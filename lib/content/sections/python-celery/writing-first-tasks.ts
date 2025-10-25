@@ -35,13 +35,13 @@ app = Celery(
 
 # Define a simple task
 @app.task
-def add(x: int, y: int) -> int:
+def add (x: int, y: int) -> int:
     """Add two numbers"""
     return x + y
 
 # Define a task that takes longer
 @app.task
-def send_email(email: str, subject: str, body: str) -> str:
+def send_email (email: str, subject: str, body: str) -> str:
     """Send an email (simulated)"""
     import time
     import smtplib
@@ -50,18 +50,18 @@ def send_email(email: str, subject: str, body: str) -> str:
     time.sleep(2)  # Simulate email sending
     
     # In production: actual SMTP sending
-    # msg = MIMEText(body)
+    # msg = MIMEText (body)
     # msg['Subject'] = subject
     # msg['To'] = email
     # smtp = smtplib.SMTP('localhost')
-    # smtp.send_message(msg)
+    # smtp.send_message (msg)
     # smtp.quit()
     
     return f"Email sent to {email}"
 
 # Define a task with more complex logic
 @app.task
-def process_user_data(user_id: int) -> dict:
+def process_user_data (user_id: int) -> dict:
     """Process user data"""
     import time
     
@@ -114,19 +114,19 @@ def cleanup_temp_files():
     
     temp_files = glob.glob('/tmp/myapp_*')
     for file in temp_files:
-        os.remove(file)
+        os.remove (file)
     
-    print(f"Deleted {len(temp_files)} temp files")
+    print(f"Deleted {len (temp_files)} temp files")
 
 # Pattern 2: Positional arguments
 @app.task
-def multiply(x: int, y: int) -> int:
+def multiply (x: int, y: int) -> int:
     """Positional arguments"""
     return x * y
 
 # Pattern 3: Keyword arguments
 @app.task
-def create_user(username: str, email: str, age: Optional[int] = None) -> dict:
+def create_user (username: str, email: str, age: Optional[int] = None) -> dict:
     """Keyword arguments with defaults"""
     user = {
         'username': username,
@@ -141,11 +141,11 @@ def create_user(username: str, email: str, age: Optional[int] = None) -> dict:
 @app.task
 def sum_numbers(*args: int) -> int:
     """Variable positional arguments"""
-    return sum(args)
+    return sum (args)
 
 # Pattern 5: Complex return types
 @app.task
-def fetch_user_stats(user_id: int) -> Dict[str, any]:
+def fetch_user_stats (user_id: int) -> Dict[str, any]:
     """Complex return type (dict)"""
     return {
         'user_id': user_id,
@@ -157,20 +157,20 @@ def fetch_user_stats(user_id: int) -> Dict[str, any]:
 
 # Pattern 6: No return value (side effects only)
 @app.task
-def log_event(event_type: str, data: dict) -> None:
+def log_event (event_type: str, data: dict) -> None:
     """Side effect task (logging)"""
     logger = logging.getLogger(__name__)
-    logger.info(f"Event: {event_type}", extra=data)
+    logger.info (f"Event: {event_type}", extra=data)
     # No return value needed
 
 # Pattern 7: Lists/iterables
 @app.task
-def process_batch(items: List[dict]) -> List[dict]:
+def process_batch (items: List[dict]) -> List[dict]:
     """Process list of items"""
     results = []
     for item in items:
-        result = process_item(item)
-        results.append(result)
+        result = process_item (item)
+        results.append (result)
     return results
 \`\`\`
 
@@ -199,7 +199,7 @@ print(f"Task ID: {result.id}")
 print(f"Task state: {result.state}")  # PENDING
 
 # Wait for result (blocking)
-output = result.get(timeout=10)
+output = result.get (timeout=10)
 print(f"Result: {output}")  # 10
 
 # Example 2: Task with multiple arguments
@@ -212,7 +212,7 @@ result = send_email.delay(
 print(f"Email task queued: {result.id}")
 
 # Example 3: Task with keyword arguments
-result = process_user_data.delay(user_id=12345)
+result = process_user_data.delay (user_id=12345)
 
 # Check if task completed (non-blocking)
 import time
@@ -231,7 +231,7 @@ for i in range(10):
 
 # These are equivalent:
 result1 = add.delay(4, 6)
-result2 = add.apply_async(args=(4, 6))
+result2 = add.apply_async (args=(4, 6))
 
 # .delay() is cleaner and more Pythonic
 # Use .delay() for simple cases
@@ -267,7 +267,7 @@ from datetime import datetime, timedelta
 # ========================================
 
 # Equivalent to .delay()
-result = add.apply_async(args=(4, 6))
+result = add.apply_async (args=(4, 6))
 
 # ========================================
 # Advanced Option 1: Countdown (Delay Execution)
@@ -290,7 +290,7 @@ print(f"Email will be sent in 60 seconds. Task ID: {result.id}")
 # ========================================
 
 # Execute at specific datetime
-eta_time = datetime.utcnow() + timedelta(hours=2)
+eta_time = datetime.utcnow() + timedelta (hours=2)
 
 result = process_user_data.apply_async(
     kwargs={'user_id': 12345},
@@ -310,7 +310,7 @@ result = process_user_data.apply_async(
 )
 
 # Or use datetime
-expires_at = datetime.utcnow() + timedelta(hours=1)
+expires_at = datetime.utcnow() + timedelta (hours=1)
 result = process_user_data.apply_async(
     kwargs={'user_id': 12345},
     expires=expires_at
@@ -469,8 +469,8 @@ def process_collections(
     coordinates: Tuple[float, float]
 ) -> dict:
     """Lists, dicts, tuples are serializable"""
-    total = sum(items)
-    keys = list(mapping.keys())
+    total = sum (items)
+    keys = list (mapping.keys())
     distance = (coordinates[0] ** 2 + coordinates[1] ** 2) ** 0.5
     
     return {
@@ -506,7 +506,7 @@ def problematic_types(
     }
 
 # ❌ This will fail with JSON serializer!
-# result = problematic_types.delay(datetime.datetime.now(), decimal.Decimal('19.99'))
+# result = problematic_types.delay (datetime.datetime.now(), decimal.Decimal('19.99'))
 # Error: Object of type datetime is not JSON serializable
 
 # ✅ Solution: Convert to serializable types
@@ -517,8 +517,8 @@ def fixed_types(
 ) -> dict:
     """Convert to serializable types"""
     # Convert back in task
-    dt = datetime.datetime.fromisoformat(timestamp)
-    decimal_price = decimal.Decimal(str(price))
+    dt = datetime.datetime.fromisoformat (timestamp)
+    decimal_price = decimal.Decimal (str (price))
     
     return {
         'timestamp': timestamp,
@@ -536,27 +536,27 @@ result = fixed_types.delay(
 # ========================================
 
 @app.task
-def process_large_data(data: List[dict]):  # ❌ Bad practice!
+def process_large_data (data: List[dict]):  # ❌ Bad practice!
     """Passing large data as argument"""
     # Process 100,000 records...
-    return len(data)
+    return len (data)
 
 # ❌ Don't do this! (passes 100MB through queue)
 # large_dataset = [{...}, {...}, ...]  # 100,000 items
-# result = process_large_data.delay(large_dataset)
+# result = process_large_data.delay (large_dataset)
 
 # ✅ Better: Pass reference (ID, URL, S3 key)
 @app.task
-def process_large_data_better(data_url: str):
+def process_large_data_better (data_url: str):
     """Pass reference to data"""
     import requests
     
     # Download data in worker
-    response = requests.get(data_url)
+    response = requests.get (data_url)
     data = response.json()
     
     # Process data
-    return len(data)
+    return len (data)
 
 # ✅ This is better!
 result = process_large_data_better.delay(
@@ -605,7 +605,7 @@ def return_large_result_better() -> str:
     s3.put_object(
         Bucket='mybucket',
         Key='results/task-12345.json',
-        Body=json.dumps(result_data)
+        Body=json.dumps (result_data)
     )
     
     # ✅ Return URL instead
@@ -638,7 +638,7 @@ app = Celery('myapp', broker='redis://localhost:6379/0')
 # ========================================
 
 @app.task
-def send_email(email: str):
+def send_email (email: str):
     """Default name: 'tasks.send_email' (module.function)"""
     pass
 
@@ -648,8 +648,8 @@ print(send_email.name)  # 'tasks.send_email'
 # Custom Task Names
 # ========================================
 
-@app.task(name='my_custom_email_task')
-def send_email_custom(email: str):
+@app.task (name='my_custom_email_task')
+def send_email_custom (email: str):
     """Custom task name"""
     pass
 
@@ -659,21 +659,21 @@ print(send_email_custom.name)  # 'my_custom_email_task'
 # Namespaced Task Names
 # ========================================
 
-@app.task(name='emails.send')
-def send_email_namespaced(email: str):
+@app.task (name='emails.send')
+def send_email_namespaced (email: str):
     """Namespaced task name (organizational)"""
     pass
 
-@app.task(name='emails.send_bulk')
-def send_bulk_email(emails: List[str]):
+@app.task (name='emails.send_bulk')
+def send_bulk_email (emails: List[str]):
     pass
 
-@app.task(name='users.create')
-def create_user(username: str):
+@app.task (name='users.create')
+def create_user (username: str):
     pass
 
-@app.task(name='users.delete')
-def delete_user(user_id: int):
+@app.task (name='users.delete')
+def delete_user (user_id: int):
     pass
 
 # Benefits:
@@ -725,18 +725,18 @@ result = send_email.apply_async(
 print(f"Task ID: {result.id}")  # 'email-user-12345'
 
 # Use custom ID to prevent duplicates
-def send_welcome_email(user_id: int):
+def send_welcome_email (user_id: int):
     """Send welcome email (idempotent)"""
     task_id = f'welcome-email-{user_id}'
     
     # Check if already queued
     from celery.result import AsyncResult
-    result = AsyncResult(task_id, app=app)
+    result = AsyncResult (task_id, app=app)
     
     if result.state == 'PENDING':
         # Not queued yet, queue it
         send_email.apply_async(
-            kwargs={'email': get_user_email(user_id)},
+            kwargs={'email': get_user_email (user_id)},
             task_id=task_id
         )
     else:
@@ -764,22 +764,22 @@ logger = logging.getLogger(__name__)
 # ========================================
 
 @app.task
-def send_welcome_email_idempotent(user_id: int):
+def send_welcome_email_idempotent (user_id: int):
     """
     Idempotent: Can be called multiple times safely
     
     Result is same whether called once or 10 times
     """
     # Check if already sent
-    if email_already_sent(user_id, 'welcome'):
-        logger.info(f"Welcome email already sent to user {user_id}")
+    if email_already_sent (user_id, 'welcome'):
+        logger.info (f"Welcome email already sent to user {user_id}")
         return
     
     # Send email
-    send_email(get_user_email(user_id), 'Welcome!', 'Thanks for joining!')
+    send_email (get_user_email (user_id), 'Welcome!', 'Thanks for joining!')
     
     # Mark as sent
-    mark_email_sent(user_id, 'welcome')
+    mark_email_sent (user_id, 'welcome')
 
 # ========================================
 # Best Practice 2: Keep Tasks Small and Focused
@@ -787,32 +787,32 @@ def send_welcome_email_idempotent(user_id: int):
 
 # ❌ Bad: One giant task
 @app.task
-def process_order_bad(order_id: int):
+def process_order_bad (order_id: int):
     """Giant task doing everything"""
-    validate_order(order_id)
-    charge_payment(order_id)
-    update_inventory(order_id)
-    send_confirmation_email(order_id)
-    notify_warehouse(order_id)
-    generate_invoice(order_id)
-    update_analytics(order_id)
+    validate_order (order_id)
+    charge_payment (order_id)
+    update_inventory (order_id)
+    send_confirmation_email (order_id)
+    notify_warehouse (order_id)
+    generate_invoice (order_id)
+    update_analytics (order_id)
     # 7 responsibilities in one task!
 
 # ✅ Good: Break into smaller tasks
 @app.task
-def validate_order(order_id: int):
+def validate_order (order_id: int):
     """Single responsibility: Validate"""
     # Just validation logic
     pass
 
 @app.task
-def charge_payment(order_id: int):
+def charge_payment (order_id: int):
     """Single responsibility: Payment"""
     # Just payment logic
     pass
 
 @app.task
-def send_confirmation_email(order_id: int):
+def send_confirmation_email (order_id: int):
     """Single responsibility: Email"""
     # Just email logic
     pass
@@ -820,10 +820,10 @@ def send_confirmation_email(order_id: int):
 # Chain them together
 from celery import chain
 
-def process_order_good(order_id: int):
+def process_order_good (order_id: int):
     """Orchestrate smaller tasks"""
     workflow = chain(
-        validate_order.s(order_id),
+        validate_order.s (order_id),
         charge_payment.s(),
         send_confirmation_email.s()
     )
@@ -833,17 +833,17 @@ def process_order_good(order_id: int):
 # Best Practice 3: Handle Failures Gracefully
 # ========================================
 
-@app.task(bind=True, max_retries=3)
-def send_email_with_retry(self, email: str, subject: str, body: str):
+@app.task (bind=True, max_retries=3)
+def send_email_with_retry (self, email: str, subject: str, body: str):
     """Task with proper error handling"""
     try:
         # Attempt to send
-        send_email_via_smtp(email, subject, body)
-        logger.info(f"Email sent successfully to {email}")
+        send_email_via_smtp (email, subject, body)
+        logger.info (f"Email sent successfully to {email}")
         
     except SMTPException as exc:
         # Log error
-        logger.error(f"SMTP error sending to {email}: {exc}")
+        logger.error (f"SMTP error sending to {email}: {exc}")
         
         # Retry with exponential backoff
         raise self.retry(
@@ -853,8 +853,8 @@ def send_email_with_retry(self, email: str, subject: str, body: str):
         
     except Exception as exc:
         # Unexpected error - don't retry, log and alert
-        logger.exception(f"Unexpected error sending email to {email}")
-        alert_ops_team(f"Email task failed: {exc}")
+        logger.exception (f"Unexpected error sending email to {email}")
+        alert_ops_team (f"Email task failed: {exc}")
         raise
 
 # ========================================
@@ -862,28 +862,28 @@ def send_email_with_retry(self, email: str, subject: str, body: str):
 # ========================================
 
 @app.task
-def process_user_data_with_logging(user_id: int):
+def process_user_data_with_logging (user_id: int):
     """Task with comprehensive logging"""
-    logger.info(f"Starting processing for user {user_id}")
+    logger.info (f"Starting processing for user {user_id}")
     
     try:
         # Step 1
-        logger.debug(f"Fetching user {user_id} from database")
-        user = fetch_user(user_id)
+        logger.debug (f"Fetching user {user_id} from database")
+        user = fetch_user (user_id)
         
         # Step 2
-        logger.debug(f"Processing data for user {user_id}")
-        result = process_data(user)
+        logger.debug (f"Processing data for user {user_id}")
+        result = process_data (user)
         
         # Step 3
-        logger.debug(f"Saving results for user {user_id}")
-        save_results(result)
+        logger.debug (f"Saving results for user {user_id}")
+        save_results (result)
         
-        logger.info(f"Successfully processed user {user_id}")
+        logger.info (f"Successfully processed user {user_id}")
         return {'status': 'success', 'user_id': user_id}
         
     except Exception as exc:
-        logger.exception(f"Failed to process user {user_id}: {exc}")
+        logger.exception (f"Failed to process user {user_id}: {exc}")
         raise
 
 # ========================================
@@ -939,22 +939,22 @@ def well_typed_task(
 
 # ❌ Bad: Blocking operation in task
 @app.task
-def bad_blocking_task(url: str):
+def bad_blocking_task (url: str):
     """Blocks worker for 10 seconds"""
     import time
     time.sleep(10)  # ❌ Wastes worker resources
 
 # ✅ Good: Use appropriate timeouts
 @app.task
-def good_non_blocking_task(url: str):
+def good_non_blocking_task (url: str):
     """Proper timeout handling"""
     import requests
     
     try:
-        response = requests.get(url, timeout=5)  # ✅ 5-second timeout
+        response = requests.get (url, timeout=5)  # ✅ 5-second timeout
         return response.json()
     except requests.Timeout:
-        logger.warning(f"Timeout fetching {url}")
+        logger.warning (f"Timeout fetching {url}")
         raise
 
 # ========================================
@@ -962,19 +962,19 @@ def good_non_blocking_task(url: str):
 # ========================================
 
 @app.task
-def task_with_validation(user_id: int, email: str):
+def task_with_validation (user_id: int, email: str):
     """Validate inputs before processing"""
     # Validate user_id
-    if not isinstance(user_id, int) or user_id <= 0:
-        raise ValueError(f"Invalid user_id: {user_id}")
+    if not isinstance (user_id, int) or user_id <= 0:
+        raise ValueError (f"Invalid user_id: {user_id}")
     
     # Validate email
     import re
-    if not re.match(r'^[^@]+@[^@]+\\.[^@]+$', email):
-        raise ValueError(f"Invalid email: {email}")
+    if not re.match (r'^[^@]+@[^@]+\\.[^@]+$', email):
+        raise ValueError (f"Invalid email: {email}")
     
     # Process (inputs validated)
-    send_email(email, 'Hello', f'User {user_id}')
+    send_email (email, 'Hello', f'User {user_id}')
 \`\`\`
 
 ---
@@ -1038,37 +1038,37 @@ def process_image(
             'large': (1200, 1200)
         }
     
-    logger.info(f"Processing image for user {user_id}: {image_url}")
+    logger.info (f"Processing image for user {user_id}: {image_url}")
     
     try:
         # Step 1: Download image
         logger.debug("Downloading image...")
-        response = requests.get(image_url, timeout=30, stream=True)
+        response = requests.get (image_url, timeout=30, stream=True)
         response.raise_for_status()
         
         # Step 2: Load image
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as tmp:
-            for chunk in response.iter_content(chunk_size=8192):
-                tmp.write(chunk)
+        with tempfile.NamedTemporaryFile (delete=False, suffix='.jpg') as tmp:
+            for chunk in response.iter_content (chunk_size=8192):
+                tmp.write (chunk)
             tmp.flush()
             
             logger.debug("Loading image...")
-            img = Image.open(tmp.name)
+            img = Image.open (tmp.name)
             
             # Step 3: Generate sizes
             results = {}
             s3 = boto3.client('s3')
             
             for size_name, dimensions in sizes.items():
-                logger.debug(f"Generating {size_name} ({dimensions[0]}x{dimensions[1]})")
+                logger.debug (f"Generating {size_name} ({dimensions[0]}x{dimensions[1]})")
                 
                 # Resize
                 img_resized = img.copy()
-                img_resized.thumbnail(dimensions, Image.LANCZOS)
+                img_resized.thumbnail (dimensions, Image.LANCZOS)
                 
                 # Save to temp file
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as size_tmp:
-                    img_resized.save(size_tmp.name, 'JPEG', quality=85)
+                with tempfile.NamedTemporaryFile (delete=False, suffix='.jpg') as size_tmp:
+                    img_resized.save (size_tmp.name, 'JPEG', quality=85)
                     
                     # Upload to S3
                     s3_key = f'images/{user_id}/{size_name}/{tmp.name.split("/")[-1]}'
@@ -1082,9 +1082,9 @@ def process_image(
                     s3_url = f'https://s3.amazonaws.com/my-bucket/{s3_key}'
                     results[size_name] = s3_url
                     
-                    logger.debug(f"{size_name} uploaded to {s3_url}")
+                    logger.debug (f"{size_name} uploaded to {s3_url}")
         
-        logger.info(f"Successfully processed image for user {user_id}")
+        logger.info (f"Successfully processed image for user {user_id}")
         
         return {
             'status': 'success',
@@ -1094,18 +1094,18 @@ def process_image(
         }
         
     except SoftTimeLimitExceeded:
-        logger.warning(f"Task approaching time limit for user {user_id}")
+        logger.warning (f"Task approaching time limit for user {user_id}")
         # Clean up
         raise
         
     except requests.RequestException as exc:
         # Network error - retry
-        logger.error(f"Network error downloading image: {exc}")
-        raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
+        logger.error (f"Network error downloading image: {exc}")
+        raise self.retry (exc=exc, countdown=60 * (2 ** self.request.retries))
         
     except Exception as exc:
         # Unexpected error - log and fail
-        logger.exception(f"Failed to process image for user {user_id}: {exc}")
+        logger.exception (f"Failed to process image for user {user_id}: {exc}")
         raise
 
 # Queue task

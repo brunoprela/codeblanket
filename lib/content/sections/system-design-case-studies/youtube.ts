@@ -571,7 +571,7 @@ Returns: "machine learning", "machine learning tutorial", "machine shop", ...
 
 ## Step 9: Recommendation System
 
-**YouTube's Recommendation Algorithm** (Simplified):
+**YouTube\'s Recommendation Algorithm** (Simplified):
 
 ### 1. Candidate Generation
 
@@ -793,7 +793,7 @@ Player Events → Kafka → Streaming Job (Dataflow) → BigQuery
 **Shard by** \`video_id\` (hash-based):
 
 \`\`\`
-Shard = hash(video_id) % NUM_SHARDS
+Shard = hash (video_id) % NUM_SHARDS
 
 video_id "dQw4w9WgXcQ" → hash → shard 42
 \`\`\`
@@ -994,7 +994,7 @@ During playback of video X:
   - Serve only to compatible devices (detect capability)
   - Higher storage cost (offset by better video quality for premium users)
 
-- **"What if Google's CDN goes down?"**
+- **"What if Google\'s CDN goes down?"**
   - Multi-CDN strategy: YouTube CDN (primary) + CloudFront (backup)
   - DNS failover: Switch to backup CDN in 60 seconds
   - Graceful degradation: Serve lower bitrates if capacity limited

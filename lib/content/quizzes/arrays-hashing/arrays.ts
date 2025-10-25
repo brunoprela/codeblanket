@@ -8,7 +8,7 @@ export const arraysQuiz = [
     question:
       'Explain the prefix sum technique and walk through how it helps solve range query problems efficiently.',
     sampleAnswer:
-      'Prefix sum is where I precompute cumulative sums at each position - prefix[i] equals the sum of all elements from 0 to i. This takes O(n) time to build. Then, to find the sum of any range from i to j, I can do prefix[j] minus prefix[i-1] in O(1) time. Without prefix sum, each range query would be O(n) to add up elements. With it, I pay O(n) once to build, then answer unlimited range queries in O(1) each. It is perfect when you have multiple range sum queries on the same array. The insight is that sum(i to j) equals sum(0 to j) minus sum(0 to i-1).',
+      'Prefix sum is where I precompute cumulative sums at each position - prefix[i] equals the sum of all elements from 0 to i. This takes O(n) time to build. Then, to find the sum of any range from i to j, I can do prefix[j] minus prefix[i-1] in O(1) time. Without prefix sum, each range query would be O(n) to add up elements. With it, I pay O(n) once to build, then answer unlimited range queries in O(1) each. It is perfect when you have multiple range sum queries on the same array. The insight is that sum (i to j) equals sum(0 to j) minus sum(0 to i-1).',
     keyPoints: [
       'Precompute cumulative sums: O(n) build',
       'Range sum = prefix[j] - prefix[i-1]',

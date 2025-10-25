@@ -23,7 +23,7 @@ export const stepsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What is the recurrence relation in DP?',
     options: [
       'Random formula',
-      'Equation expressing current state in terms of previous states: dp[i] = f(dp[i-1], dp[i-2], ...)',
+      'Equation expressing current state in terms of previous states: dp[i] = f (dp[i-1], dp[i-2], ...)',
       'Base case',
       'Loop',
     ],

@@ -50,7 +50,7 @@ export const astfundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-astfundamentals-mc-4',
     question:
-      'What does this Python ast.NodeVisitor pattern enable?\n\nclass MyVisitor(ast.NodeVisitor):\n    def visit_FunctionDef(self, node):\n        # custom logic\n        self.generic_visit(node)',
+      'What does this Python ast.NodeVisitor pattern enable?\n\nclass MyVisitor (ast.NodeVisitor):\n    def visit_FunctionDef (self, node):\n        # custom logic\n        self.generic_visit (node)',
     options: [
       'Modifying AST nodes in place',
       'Selective handling of specific node types',

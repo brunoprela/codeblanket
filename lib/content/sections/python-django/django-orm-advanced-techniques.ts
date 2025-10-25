@@ -6,7 +6,7 @@ export const djangoOrmAdvancedTechniques = {
 
 ## Introduction
 
-Django's **Object-Relational Mapper (ORM)** is one of its most powerful features. It allows you to interact with databases using Python code instead of writing SQL. However, to build high-performance applications, you need to master advanced ORM techniques.
+Django\'s **Object-Relational Mapper (ORM)** is one of its most powerful features. It allows you to interact with databases using Python code instead of writing SQL. However, to build high-performance applications, you need to master advanced ORM techniques.
 
 ### The N+1 Query Problem
 
@@ -48,13 +48,13 @@ By the end of this section, you'll understand:
 
 \`\`\`python
 # models.py
-class Author(models.Model):
-    name = models.CharField(max_length=200)
+class Author (models.Model):
+    name = models.CharField (max_length=200)
     email = models.EmailField()
     bio = models.TextField()
 
-class Article(models.Model):
-    title = models.CharField(max_length=200)
+class Article (models.Model):
+    title = models.CharField (max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     content = models.TextField()
     published_at = models.DateTimeField()
@@ -84,8 +84,8 @@ for article in articles:
 
 \`\`\`python
 # Multiple foreign keys
-class Article(models.Model):
-    title = models.CharField(max_length=200)
+class Article (models.Model):
+    title = models.CharField (max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
@@ -93,8 +93,8 @@ class Article(models.Model):
 articles = Article.objects.select_related('author', 'category').all()
 
 # Nested relations (author -> company)
-class Author(models.Model):
-    name = models.CharField(max_length=200)
+class Author (models.Model):
+    name = models.CharField (max_length=200)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 # Follow nested relationships with double underscore
@@ -130,24 +130,24 @@ for article in articles:
 
 \`\`\`python
 # models.py
-class Article(models.Model):
-    title = models.CharField(max_length=200)
+class Article (models.Model):
+    title = models.CharField (max_length=200)
     tags = models.ManyToManyField('Tag', related_name='articles')
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50)
+class Tag (models.Model):
+    name = models.CharField (max_length=50)
 
 # ❌ BAD: N+1 queries
 articles = Article.objects.all()
 for article in articles:
     tags = article.tags.all()  # N queries!
-    print(f"{article.title}: {', '.join(tag.name for tag in tags)}")
+    print(f"{article.title}: {', '.join (tag.name for tag in tags)}")
 
 # ✅ GOOD: 2 queries total
 articles = Article.objects.prefetch_related('tags').all()
 for article in articles:
     tags = article.tags.all()  # No query! Already fetched
-    print(f"{article.title}: {', '.join(tag.name for tag in tags)}")
+    print(f"{article.title}: {', '.join (tag.name for tag in tags)}")
 
 # Queries executed:
 # 1. SELECT * FROM article;
@@ -180,7 +180,7 @@ authors = Author.objects.prefetch_related('articles__tags').all()
 
 for author in authors:
     for article in author.articles.all():
-        print(f"{article.title}: {', '.join(tag.name for tag in article.tags.all())}")
+        print(f"{article.title}: {', '.join (tag.name for tag in article.tags.all())}")
 
 # Queries:
 # 1. SELECT * FROM author;
@@ -197,7 +197,7 @@ from django.db.models import Prefetch
 authors = Author.objects.prefetch_related(
     Prefetch(
         'articles',
-        queryset=Article.objects.filter(status='published').order_by('-published_at')
+        queryset=Article.objects.filter (status='published').order_by('-published_at')
     )
 ).all()
 
@@ -213,7 +213,7 @@ authors = Author.objects.prefetch_related(
 authors = Author.objects.prefetch_related(
     Prefetch(
         'articles',
-        queryset=Article.objects.filter(featured=True),
+        queryset=Article.objects.filter (featured=True),
         to_attr='featured_articles'  # Store in this attribute
     )
 ).all()
@@ -254,7 +254,7 @@ for article in articles:
     print(f"{article.title}")
     print(f"  Author: {article.author.name} at {article.author.company.name}")
     print(f"  Category: {article.category.name}")
-    print(f"  Tags: {', '.join(tag.name for tag in article.tags.all())}")
+    print(f"  Tags: {', '.join (tag.name for tag in article.tags.all())}")
 # No additional queries!
 \`\`\`
 
@@ -268,12 +268,12 @@ for article in articles:
 from django.db.models import Count, Sum, Avg, Min, Max, F, Q
 
 # Count articles per author
-authors = Author.objects.annotate(article_count=Count('articles'))
+authors = Author.objects.annotate (article_count=Count('articles'))
 for author in authors:
     print(f"{author.name}: {author.article_count} articles")
 
 # Average views per article
-Article.objects.aggregate(avg_views=Avg('view_count'))
+Article.objects.aggregate (avg_views=Avg('view_count'))
 # Returns: {'avg_views': 1250.5}
 
 # Multiple aggregations
@@ -333,7 +333,7 @@ latest_comment = Comment.objects.filter(
 ).order_by('-created_at')
 
 articles = Article.objects.annotate(
-    latest_comment_text=Subquery(latest_comment.values('text')[:1])
+    latest_comment_text=Subquery (latest_comment.values('text')[:1])
 )
 
 # Get author's most viewed article
@@ -342,8 +342,8 @@ most_viewed_article = Article.objects.filter(
 ).order_by('-view_count')
 
 authors = Author.objects.annotate(
-    most_viewed_article_title=Subquery(most_viewed_article.values('title')[:1]),
-    most_viewed_article_views=Subquery(most_viewed_article.values('view_count')[:1])
+    most_viewed_article_title=Subquery (most_viewed_article.values('title')[:1]),
+    most_viewed_article_views=Subquery (most_viewed_article.values('view_count')[:1])
 )
 \`\`\`
 
@@ -357,19 +357,19 @@ authors = Author.objects.annotate(
 from django.db.models import F
 
 # Increment view count (atomic operation)
-Article.objects.filter(pk=1).update(view_count=F('view_count') + 1)
+Article.objects.filter (pk=1).update (view_count=F('view_count') + 1)
 
 # Compare two fields
-articles = Article.objects.filter(like_count__gt=F('view_count') / 10)
+articles = Article.objects.filter (like_count__gt=F('view_count') / 10)
 # Get articles where likes > 10% of views
 
 # Use in ordering
-articles = Article.objects.order_by(F('published_at').desc(nulls_last=True))
+articles = Article.objects.order_by(F('published_at').desc (nulls_last=True))
 
 # Mathematical operations
 articles = Article.objects.annotate(
     engagement_rate=(F('comment_count') + F('like_count')) * 100.0 / F('view_count')
-).filter(engagement_rate__gt=5.0)
+).filter (engagement_rate__gt=5.0)
 \`\`\`
 
 ### Q Objects: Complex Queries
@@ -411,7 +411,7 @@ if min_views:
 if search_term:
     filters &= Q(title__icontains=search_term) | Q(content__icontains=search_term)
 
-articles = Article.objects.filter(filters)
+articles = Article.objects.filter (filters)
 \`\`\`
 
 ---
@@ -466,7 +466,7 @@ article_titles = Article.objects.values_list('title', flat=True)
 
 # named=True for named tuples
 articles = Article.objects.values_list('id', 'title', named=True)
-# [Row(id=1, title='Django Guide'), Row(id=2, title='Python Tips')]
+# [Row (id=1, title='Django Guide'), Row (id=2, title='Python Tips')]
 for article in articles:
     print(article.id, article.title)
 
@@ -512,7 +512,7 @@ def complex_analytics():
         
         columns = [col[0] for col in cursor.description]
         results = [
-            dict(zip(columns, row))
+            dict (zip (columns, row))
             for row in cursor.fetchall()
         ]
     
@@ -526,7 +526,7 @@ from django.db import transaction
 
 # Atomic decorator: All or nothing
 @transaction.atomic
-def create_article_with_tags(title, content, tag_names):
+def create_article_with_tags (title, content, tag_names):
     """Create article and tags atomically"""
     article = Article.objects.create(
         title=title,
@@ -535,17 +535,17 @@ def create_article_with_tags(title, content, tag_names):
     )
     
     for tag_name in tag_names:
-        tag, created = Tag.objects.get_or_create(name=tag_name)
-        article.tags.add(tag)
+        tag, created = Tag.objects.get_or_create (name=tag_name)
+        article.tags.add (tag)
     
     # If any error occurs, everything rolls back
     return article
 
 # Atomic context manager
-def transfer_authorship(article_id, new_author_id):
+def transfer_authorship (article_id, new_author_id):
     try:
         with transaction.atomic():
-            article = Article.objects.select_for_update().get(pk=article_id)
+            article = Article.objects.select_for_update().get (pk=article_id)
             old_author = article.author
             
             # Update article author
@@ -556,7 +556,7 @@ def transfer_authorship(article_id, new_author_id):
             old_author.article_count = F('article_count') - 1
             old_author.save()
             
-            new_author = Author.objects.get(pk=new_author_id)
+            new_author = Author.objects.get (pk=new_author_id)
             new_author.article_count = F('article_count') + 1
             new_author.save()
             
@@ -565,7 +565,7 @@ def transfer_authorship(article_id, new_author_id):
 
 # select_for_update(): Lock rows for update (prevent race conditions)
 with transaction.atomic():
-    article = Article.objects.select_for_update().get(pk=1)
+    article = Article.objects.select_for_update().get (pk=1)
     article.view_count += 1
     article.save()
 # Row is locked until transaction commits
@@ -577,20 +577,20 @@ with transaction.atomic():
 # Nested transactions with savepoints
 def create_article_with_rollback():
     with transaction.atomic():
-        article = Article.objects.create(title="Main Article")
+        article = Article.objects.create (title="Main Article")
         
         # Create savepoint
         sid = transaction.savepoint()
         
         try:
             # This might fail
-            article.tags.add(invalid_tag)
+            article.tags.add (invalid_tag)
         except Exception:
             # Rollback to savepoint (article still created)
-            transaction.savepoint_rollback(sid)
+            transaction.savepoint_rollback (sid)
         else:
             # Commit savepoint
-            transaction.savepoint_commit(sid)
+            transaction.savepoint_commit (sid)
         
         return article
 \`\`\`
@@ -603,11 +603,11 @@ def create_article_with_rollback():
 
 \`\`\`python
 # ❌ BAD: Counts all rows
-if Article.objects.filter(author=user).count() > 0:
+if Article.objects.filter (author=user).count() > 0:
     print("User has articles")
 
 # ✅ GOOD: Stops at first match
-if Article.objects.filter(author=user).exists():
+if Article.objects.filter (author=user).exists():
     print("User has articles")
 \`\`\`
 
@@ -617,15 +617,15 @@ if Article.objects.filter(author=user).exists():
 # ❌ BAD: Loads all 1 million articles into memory
 articles = Article.objects.all()
 for article in articles:
-    process(article)
+    process (article)
 
 # ✅ GOOD: Fetches in chunks (default 2000)
 for article in Article.objects.all().iterator():
-    process(article)
+    process (article)
 
 # Custom chunk size
-for article in Article.objects.all().iterator(chunk_size=1000):
-    process(article)
+for article in Article.objects.all().iterator (chunk_size=1000):
+    process (article)
 \`\`\`
 
 ### 3. Use bulk_create() for Bulk Inserts
@@ -633,39 +633,39 @@ for article in Article.objects.all().iterator(chunk_size=1000):
 \`\`\`python
 # ❌ BAD: N queries
 for i in range(1000):
-    Article.objects.create(title=f"Article {i}")
+    Article.objects.create (title=f"Article {i}")
 
 # ✅ GOOD: Single query
 articles = [
-    Article(title=f"Article {i}")
+    Article (title=f"Article {i}")
     for i in range(1000)
 ]
-Article.objects.bulk_create(articles, batch_size=1000)
+Article.objects.bulk_create (articles, batch_size=1000)
 \`\`\`
 
 ### 4. Use bulk_update() for Bulk Updates
 
 \`\`\`python
 # Update multiple articles efficiently
-articles = Article.objects.filter(status='draft')[:100]
+articles = Article.objects.filter (status='draft')[:100]
 for article in articles:
     article.status = 'published'
 
 # Bulk update (single query)
-Article.objects.bulk_update(articles, ['status'], batch_size=100)
+Article.objects.bulk_update (articles, ['status'], batch_size=100)
 \`\`\`
 
 ### 5. Use update() Instead of save() for Bulk Updates
 
 \`\`\`python
 # ❌ BAD: Loads objects, updates one by one
-articles = Article.objects.filter(category__name='Tech')
+articles = Article.objects.filter (category__name='Tech')
 for article in articles:
     article.featured = True
     article.save()
 
 # ✅ GOOD: Single UPDATE query
-Article.objects.filter(category__name='Tech').update(featured=True)
+Article.objects.filter (category__name='Tech').update (featured=True)
 \`\`\`
 
 ---
@@ -718,7 +718,7 @@ import debug_toolbar
 
 urlpatterns = [
     ...
-    path('__debug__/', include(debug_toolbar.urls)),
+    path('__debug__/', include (debug_toolbar.urls)),
 ]
 
 # Shows SQL queries, execution time, and more in sidebar
@@ -742,11 +742,11 @@ reset_queries()
 # Context manager to track queries
 from django.test.utils import CaptureQueriesContext
 
-with CaptureQueriesContext(connection) as queries:
+with CaptureQueriesContext (connection) as queries:
     articles = Article.objects.select_related('author').all()
-    list(articles)  # Force evaluation
+    list (articles)  # Force evaluation
 
-print(f"Number of queries: {len(queries)}")
+print(f"Number of queries: {len (queries)}")
 for query in queries:
     print(query['sql'])
 \`\`\`

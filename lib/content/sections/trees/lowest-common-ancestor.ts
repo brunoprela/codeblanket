@@ -56,7 +56,7 @@ export const lowestcommonancestorSection = {
 
 **Implementation:**
 \`\`\`python
-def lca_bst(root, p, q):
+def lca_bst (root, p, q):
     """LCA for Binary Search Tree - O(H) time, O(1) space."""
     while root:
         # Both in left subtree
@@ -92,7 +92,7 @@ def lca_bst(root, p, q):
 
 **Implementation:**
 \`\`\`python
-def lca_binary_tree(root, p, q):
+def lca_binary_tree (root, p, q):
     """
     LCA for general Binary Tree - O(N) time, O(H) space.
     
@@ -103,8 +103,8 @@ def lca_binary_tree(root, p, q):
         return root
     
     # Recursively search left and right subtrees
-    left = lca_binary_tree(root.left, p, q)
-    right = lca_binary_tree(root.right, p, q)
+    left = lca_binary_tree (root.left, p, q)
+    right = lca_binary_tree (root.right, p, q)
     
     # Case 1: Found both nodes in different subtrees
     # → Current root is the split point (LCA)
@@ -154,12 +154,12 @@ left=2, right=null → return 2
 
 **Implementation:**
 \`\`\`python
-def lca_with_parent(p, q):
+def lca_with_parent (p, q):
     """LCA when nodes have parent pointers - O(H) time, O(H) space."""
     # Store all ancestors of p
     ancestors = set()
     while p:
-        ancestors.add(p)
+        ancestors.add (p)
         p = p.parent
     
     # Find first ancestor of q that's also ancestor of p
@@ -173,18 +173,18 @@ def lca_with_parent(p, q):
 
 **Optimized (Two Pointers):**
 \`\`\`python
-def lca_with_parent_optimized(p, q):
+def lca_with_parent_optimized (p, q):
     """Space-optimized version - O(H) time, O(1) space."""
     # Get depths
-    def get_depth(node):
+    def get_depth (node):
         depth = 0
         while node:
             depth += 1
             node = node.parent
         return depth
     
-    depth_p = get_depth(p)
-    depth_q = get_depth(q)
+    depth_p = get_depth (p)
+    depth_q = get_depth (q)
     
     # Move deeper node up to same level
     while depth_p > depth_q:
@@ -254,14 +254,14 @@ Preprocess tree for O(1) LCA queries (using binary lifting).
 
 **Code Structure:**
 \`\`\`python
-def lowest_common_ancestor(root, p, q):
+def lowest_common_ancestor (root, p, q):
     # 1. Base case
     if not root or root == p or root == q:
         return root
     
     # 2. Recursive case
-    left = lowest_common_ancestor(root.left, p, q)
-    right = lowest_common_ancestor(root.right, p, q)
+    left = lowest_common_ancestor (root.left, p, q)
+    right = lowest_common_ancestor (root.right, p, q)
     
     # 3. Combine results
     if left and right:

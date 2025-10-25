@@ -8,9 +8,9 @@ export const templatesSection = {
   content: `**Template 1: Opposite Direction - Pair with Target Sum**
 
 \`\`\`python
-def pair_with_sum(nums: List[int], target: int) -> List[int]:
+def pair_with_sum (nums: List[int], target: int) -> List[int]:
     """Find pair that sums to target in sorted array."""
-    left, right = 0, len(nums) - 1
+    left, right = 0, len (nums) - 1
     
     while left < right:
         current = nums[left] + nums[right]
@@ -28,11 +28,11 @@ def pair_with_sum(nums: List[int], target: int) -> List[int]:
 **Template 2: Same Direction - Remove Elements**
 
 \`\`\`python
-def remove_element(nums: List[int], val: int) -> int:
+def remove_element (nums: List[int], val: int) -> int:
     """Remove all instances of val in-place."""
     slow = 0  # Position for next kept element
     
-    for fast in range(len(nums)):
+    for fast in range (len (nums)):
         if nums[fast] != val:
             nums[slow] = nums[fast]
             slow += 1
@@ -43,17 +43,17 @@ def remove_element(nums: List[int], val: int) -> int:
 **Template 3: Sliding Window - Fixed Size**
 
 \`\`\`python
-def max_sum_subarray(nums: List[int], k: int) -> int:
+def max_sum_subarray (nums: List[int], k: int) -> int:
     """Find maximum sum of subarray of size k."""
     # Initialize first window
-    window_sum = sum(nums[:k])
+    window_sum = sum (nums[:k])
     max_sum = window_sum
     
     # Slide window
-    for right in range(k, len(nums)):
+    for right in range (k, len (nums)):
         window_sum += nums[right]  # Add new element
         window_sum -= nums[right - k]  # Remove old element
-        max_sum = max(max_sum, window_sum)
+        max_sum = max (max_sum, window_sum)
     
     return max_sum
 \`\`\`
@@ -61,25 +61,25 @@ def max_sum_subarray(nums: List[int], k: int) -> int:
 **Template 4: Sliding Window - Variable Size**
 
 \`\`\`python
-def longest_substring_k_distinct(s: str, k: int) -> int:
+def longest_substring_k_distinct (s: str, k: int) -> int:
     """Longest substring with at most k distinct characters."""
     left = 0
     max_len = 0
     char_count = {}
     
-    for right in range(len(s)):
+    for right in range (len (s)):
         # Expand window
-        char_count[s[right]] = char_count.get(s[right], 0) + 1
+        char_count[s[right]] = char_count.get (s[right], 0) + 1
         
         # Shrink window if constraint violated
-        while len(char_count) > k:
+        while len (char_count) > k:
             char_count[s[left]] -= 1
             if char_count[s[left]] == 0:
                 del char_count[s[left]]
             left += 1
         
         # Update max length
-        max_len = max(max_len, right - left + 1)
+        max_len = max (max_len, right - left + 1)
     
     return max_len
 \`\`\`
@@ -87,11 +87,11 @@ def longest_substring_k_distinct(s: str, k: int) -> int:
 **Template 5: Partition Array**
 
 \`\`\`python
-def partition(nums: List[int], pivot: int) -> int:
+def partition (nums: List[int], pivot: int) -> int:
     """Partition array around pivot value."""
     left = 0  # Next position for elements < pivot
     
-    for right in range(len(nums)):
+    for right in range (len (nums)):
         if nums[right] < pivot:
             nums[left], nums[right] = nums[right], nums[left]
             left += 1

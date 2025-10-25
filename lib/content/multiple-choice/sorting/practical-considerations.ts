@@ -16,7 +16,7 @@ export const practicalconsiderationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Timsort combines merge sort (stable, O(N log N)) with insertion sort (fast on small/sorted data). It's adaptive: O(N) on sorted data, O(N log N) worst case. Used in Python and Java for stability and real-world performance.",
+      "Timsort combines merge sort (stable, O(N log N)) with insertion sort (fast on small/sorted data). It\'s adaptive: O(N) on sorted data, O(N log N) worst case. Used in Python and Java for stability and real-world performance.",
   },
   {
     id: 'mc2',

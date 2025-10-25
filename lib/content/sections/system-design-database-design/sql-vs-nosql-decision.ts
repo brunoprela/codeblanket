@@ -14,7 +14,7 @@ export const sqlvsnosqldecisionSection = {
 ### **Popular SQL Databases**
 
 1. **PostgreSQL**: Advanced open-source RDBMS with strong ACID compliance
-2. **MySQL**: World's most popular open-source database
+2. **MySQL**: World\'s most popular open-source database
 3. **Oracle Database**: Enterprise-grade commercial database
 4. **Microsoft SQL Server**: Windows-centric enterprise database
 5. **SQLite**: Embedded database for local storage
@@ -171,7 +171,7 @@ redis.get("session:abc123")
 #### **5. Geographic Distribution**
 **Example**: Global application with users worldwide
 - DynamoDB Global Tables replicate data across regions
-- Cassandra's multi-datacenter replication
+- Cassandra\'s multi-datacenter replication
 
 **Why NoSQL**: Built-in multi-region support.
 
@@ -247,9 +247,9 @@ redis.get("session:abc123")
 #### **3. HR Management System**
 **Scenario**: Employees, departments, salaries, attendance - structured data.
 \`\`\`
-        - Clear relationships(employees belong to departments)
+        - Clear relationships (employees belong to departments)
         - Stable schema
-        - Complex reports(average salary by department)
+        - Complex reports (average salary by department)
 \`\`\`
 **Why SQL**: Stable schema, complex queries, data integrity.
 
@@ -262,7 +262,7 @@ redis.get("session:abc123")
 \`\`\`
         - Billions of users generating content
         - Need to scale horizontally
-        - Each post is independent(no JOINs needed)
+        - Each post is independent (no JOINs needed)
         - Simple access: "Get user's posts" or "Get post by ID"
 \`\`\`
 **Why NoSQL**: Scale, flexible content types, simple access patterns.
@@ -331,19 +331,19 @@ redis.get("session:abc123")
 │                                                 │
 │  PostgreSQL                                     │
 │  ├─ Users, Orders, Payments(ACID required)    │
-│  └─ Inventory(strong consistency)             │
+│  └─ Inventory (strong consistency)             │
 │                                                 │
 │  MongoDB                                        │
-│  ├─ Product Catalog(flexible attributes)      │
-│  └─ User Reviews(varying structure)           │
+│  ├─ Product Catalog (flexible attributes)      │
+│  └─ User Reviews (varying structure)           │
 │                                                 │
 │  Redis                                          │
-│  ├─ Session Store(fast access)                │
-│  ├─ Shopping Cart(temporary data)             │
-│  └─ Cache(frequently accessed data)           │
+│  ├─ Session Store (fast access)                │
+│  ├─ Shopping Cart (temporary data)             │
+│  └─ Cache (frequently accessed data)           │
 │                                                 │
 │  Elasticsearch                                  │
-│  └─ Product Search(full - text search)          │
+│  └─ Product Search (full - text search)          │
 │                                                 │
 └─────────────────────────────────────────────────┘
 \`\`\`
@@ -415,7 +415,7 @@ redis.get("session:abc123")
 - **Yes** (payments, reservations) → **SQL**
 - **No** (logs, events, metrics) → **NoSQL**
 
-#### **6. What's my budget and expertise?**
+#### **6. What\'s my budget and expertise?**
 - **Limited budget, mature tools** → **SQL** (PostgreSQL, MySQL)
 - **Cloud-native, managed services** → **NoSQL** (DynamoDB, MongoDB Atlas)
 
@@ -490,7 +490,7 @@ redis.get("session:abc123")
 
 #### **3. Ask Clarifying Questions**
 - "What are the consistency requirements?"
-- "What's the expected scale? (users, QPS, data size)"
+- "What\'s the expected scale? (users, QPS, data size)"
 - "What are the main query patterns?"
 - "Are there any ACID transaction requirements?"
 

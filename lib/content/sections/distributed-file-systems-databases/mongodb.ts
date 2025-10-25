@@ -684,7 +684,7 @@ Design indexes to cover queries
 ### 6. Use Connection Pooling
 
 \`\`\`javascript
-const client = new MongoClient(uri, {
+const client = new MongoClient (uri, {
   maxPoolSize: 50,
   minPoolSize: 10
 });

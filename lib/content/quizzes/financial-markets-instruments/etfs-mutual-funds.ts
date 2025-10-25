@@ -32,7 +32,7 @@ export const etfsMutualFundsQuiz = [
 **Fees and Incentives:**
 - Financial advisors earn higher commissions on active funds (0.75%+ expense ratio)
 - Passive funds (0.03%) don't generate enough fees
-- Conflict of interest: What's best for advisor ≠ what's best for client
+- Conflict of interest: What\'s best for advisor ≠ what's best for client
 
 **Marketing and Distribution:**
 - Active funds spend millions on marketing
@@ -71,7 +71,7 @@ class ActiveManagerEvaluationSystem:
     Spoiler: Very few pass these tests
     """
     
-    def evaluate_manager(self, 
+    def evaluate_manager (self, 
                         manager_returns: np.array,
                         benchmark_returns: np.array,
                         expense_ratio: float,
@@ -80,23 +80,23 @@ class ActiveManagerEvaluationSystem:
         Rigorous evaluation framework
         """
         # 1. Alpha (risk-adjusted outperformance)
-        alpha = self.calculate_alpha(manager_returns, benchmark_returns)
+        alpha = self.calculate_alpha (manager_returns, benchmark_returns)
         
         # 2. Information Ratio (alpha per unit of tracking error)
-        ir = self.calculate_information_ratio(manager_returns, benchmark_returns)
+        ir = self.calculate_information_ratio (manager_returns, benchmark_returns)
         
         # 3. Statistical Significance (is alpha due to skill or luck?)
-        t_stat = self.t_statistic(alpha, tracking_error, years)
-        p_value = self.p_value(t_stat)
+        t_stat = self.t_statistic (alpha, tracking_error, years)
+        p_value = self.p_value (t_stat)
         
         # 4. Consistency (outperform in multiple periods)
-        consistency = self.rolling_outperformance_pct(manager_returns, benchmark_returns)
+        consistency = self.rolling_outperformance_pct (manager_returns, benchmark_returns)
         
         # 5. Downside Protection (outperform in bad markets)
-        downside_ratio = self.downside_performance(manager_returns, benchmark_returns)
+        downside_ratio = self.downside_performance (manager_returns, benchmark_returns)
         
         # 6. Style Drift (does strategy stay consistent)
-        style_drift = self.style_consistency(manager_returns)
+        style_drift = self.style_consistency (manager_returns)
         
         # 7. Fees (after fees, still outperform?)
         net_alpha = alpha - expense_ratio
@@ -112,7 +112,7 @@ class ActiveManagerEvaluationSystem:
             'positive_net_alpha': net_alpha > 0  # After fees
         }
         
-        all_pass = all(passes.values())
+        all_pass = all (passes.values())
         
         return {
             'alpha': alpha * 100,
@@ -128,7 +128,7 @@ class ActiveManagerEvaluationSystem:
             'failures': [k for k, v in passes.items() if not v]
         }
     
-    def survival_bias_adjustment(self, fund_universe: List) -> List:
+    def survival_bias_adjustment (self, fund_universe: List) -> List:
         """
         Include dead/merged funds (don't just look at survivors)
         """
@@ -143,7 +143,7 @@ class ActiveManagerEvaluationSystem:
         
         return alive_funds + dead_funds
     
-    def monte_carlo_luck_test(self,
+    def monte_carlo_luck_test (self,
                               observed_alpha: float,
                               num_simulations: int = 10000) -> float:
         """
@@ -154,11 +154,11 @@ class ActiveManagerEvaluationSystem:
         """
         # Simulate random managers
         lucky_alphas = []
-        for _ in range(num_simulations):
+        for _ in range (num_simulations):
             # Random returns (no skill)
             random_returns = np.random.normal(0, 0.10, 120)  # 10 years
-            random_alpha = np.mean(random_returns)
-            lucky_alphas.append(random_alpha)
+            random_alpha = np.mean (random_returns)
+            lucky_alphas.append (random_alpha)
         
         # How many random managers beat observed alpha?
         better_by_luck = sum(1 for a in lucky_alphas if a >= observed_alpha)
@@ -190,7 +190,7 @@ print(f"Consistency: {evaluation['consistency']:.0f}% of periods outperform")
 print(f"Net Alpha (after fees): {evaluation['net_alpha']:.2f}%")
 print(f"\\nRecommendation: {evaluation['recommendation']}")
 if not evaluation['passes_all_criteria']:
-    print(f"Failed criteria: {', '.join(evaluation['failures'])}")
+    print(f"Failed criteria: {', '.join (evaluation['failures'])}")
 \`\`\`
 
 **Key Metrics for Identifying Skill:**

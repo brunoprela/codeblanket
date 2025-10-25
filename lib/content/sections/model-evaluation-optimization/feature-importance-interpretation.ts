@@ -40,21 +40,21 @@ print(f"Features: {feature_names}")
 
 \`\`\`python
 # Train Random Forest
-rf = RandomForestRegressor(n_estimators=100, random_state=42)
+rf = RandomForestRegressor (n_estimators=100, random_state=42)
 rf.fit(X_train, y_train)
 
 # Get feature importances
 importances_rf = rf.feature_importances_
-indices = np.argsort(importances_rf)[::-1]
+indices = np.argsort (importances_rf)[::-1]
 
 print("\\nRandom Forest Feature Importances:")
-for i in range(len(feature_names)):
+for i in range (len (feature_names)):
     print(f"  {i+1}. {feature_names[indices[i]]}: {importances_rf[indices[i]]:.4f}")
 
 # Visualize
-plt.figure(figsize=(12, 6))
-plt.bar(range(len(importances_rf)), importances_rf[indices])
-plt.xticks(range(len(importances_rf)), [feature_names[i] for i in indices], rotation=45)
+plt.figure (figsize=(12, 6))
+plt.bar (range (len (importances_rf)), importances_rf[indices])
+plt.xticks (range (len (importances_rf)), [feature_names[i] for i in indices], rotation=45)
 plt.xlabel('Feature')
 plt.ylabel('Importance')
 plt.title('Random Forest Feature Importances', fontweight='bold')
@@ -67,11 +67,11 @@ print("\\nSaved to 'feature_importances.png'")
 
 \`\`\`python
 # Permutation importance works for any model
-perm_importance = permutation_importance(rf, X_test, y_test, n_repeats=30, random_state=42)
+perm_importance = permutation_importance (rf, X_test, y_test, n_repeats=30, random_state=42)
 
 print("\\nPermutation Importance:")
-perm_indices = np.argsort(perm_importance.importances_mean)[::-1]
-for i in range(len(feature_names)):
+perm_indices = np.argsort (perm_importance.importances_mean)[::-1]
+for i in range (len (feature_names)):
     idx = perm_indices[i]
     print(f"  {i+1}. {feature_names[idx]}: "
           f"{perm_importance.importances_mean[idx]:.4f} "
@@ -85,11 +85,11 @@ try:
     import shap
     
     # Create explainer
-    explainer = shap.TreeExplainer(rf)
+    explainer = shap.TreeExplainer (rf)
     shap_values = explainer.shap_values(X_test)
     
     # Summary plot
-    shap.summary_plot(shap_values, X_test, feature_names=feature_names, show=False)
+    shap.summary_plot (shap_values, X_test, feature_names=feature_names, show=False)
     plt.tight_layout()
     plt.savefig('shap_summary.png', dpi=150, bbox_inches='tight')
     print("\\nSHAP summary plot saved")
@@ -106,8 +106,8 @@ lr = LinearRegression()
 lr.fit(X_train, y_train)
 
 print("\\nLinear Regression Coefficients:")
-coef_indices = np.argsort(np.abs(lr.coef_))[::-1]
-for i in range(len(feature_names)):
+coef_indices = np.argsort (np.abs (lr.coef_))[::-1]
+for i in range (len (feature_names)):
     idx = coef_indices[i]
     print(f"  {feature_names[idx]}: {lr.coef_[idx]:+.4f}")
 \`\`\`
@@ -186,7 +186,7 @@ print("="*70)
 ## Debugging Workflow
 
 \`\`\`python
-def debug_model(model, X_train, X_test, y_train, y_test):
+def debug_model (model, X_train, X_test, y_train, y_test):
     """Comprehensive model debugging."""
     
     # 1. Check data
@@ -202,8 +202,8 @@ def debug_model(model, X_train, X_test, y_train, y_test):
     train_pred = model.predict(X_train)
     test_pred = model.predict(X_test)
     
-    train_mse = mean_squared_error(y_train, train_pred)
-    test_mse = mean_squared_error(y_test, test_pred)
+    train_mse = mean_squared_error (y_train, train_pred)
+    test_mse = mean_squared_error (y_test, test_pred)
     
     print(f"  Train MSE: {train_mse:.2f}")
     print(f"  Test MSE: {test_mse:.2f}")
@@ -228,30 +228,30 @@ def debug_model(model, X_train, X_test, y_train, y_test):
     # 4. Residual analysis
     residuals = y_test - test_pred
     
-    plt.figure(figsize=(12, 5))
+    plt.figure (figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
-    plt.scatter(test_pred, residuals, alpha=0.6)
-    plt.axhline(y=0, color='r', linestyle='--')
+    plt.scatter (test_pred, residuals, alpha=0.6)
+    plt.axhline (y=0, color='r', linestyle='--')
     plt.xlabel('Predicted')
     plt.ylabel('Residuals')
     plt.title('Residual Plot')
-    plt.grid(alpha=0.3)
+    plt.grid (alpha=0.3)
     
     plt.subplot(1, 2, 2)
-    plt.hist(residuals, bins=30, edgecolor='black')
+    plt.hist (residuals, bins=30, edgecolor='black')
     plt.xlabel('Residuals')
     plt.ylabel('Frequency')
     plt.title('Residual Distribution')
-    plt.grid(alpha=0.3)
+    plt.grid (alpha=0.3)
     
     plt.tight_layout()
     plt.savefig('model_debugging.png', dpi=150)
     print("\\n  Diagnostic plots saved to 'model_debugging.png'")
 
 # Run debugging
-model = RandomForestRegressor(n_estimators=100, random_state=42)
-debug_model(model, X_train, X_test, y_train, y_test)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
+debug_model (model, X_train, X_test, y_train, y_test)
 \`\`\`
 
 ## Key Takeaways

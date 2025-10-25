@@ -29,21 +29,21 @@ A contiguous block of memory storing elements of the same type, with O(1) access
 Build cumulative sum array for range queries:
 \`\`\`python
 prefix[i] = prefix[i-1] + arr[i]
-range_sum(l, r) = prefix[r] - prefix[l-1]
+range_sum (l, r) = prefix[r] - prefix[l-1]
 \`\`\`
 
 **4. Kadane's Algorithm**
 Maximum subarray sum in O(n):
 \`\`\`python
 max_current = max_global = arr[0]
-for i in range(1, len(arr)):
-    max_current = max(arr[i], max_current + arr[i])
-    max_global = max(max_global, max_current)
+for i in range(1, len (arr)):
+    max_current = max (arr[i], max_current + arr[i])
+    max_global = max (max_global, max_current)
 \`\`\`
 
 **5. In-Place Reversal**
 \`\`\`python
-left, right = 0, len(arr) - 1
+left, right = 0, len (arr) - 1
 while left < right:
     arr[left], arr[right] = arr[right], arr[left]
     left += 1

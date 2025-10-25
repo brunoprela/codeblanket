@@ -35,7 +35,7 @@ export const introductionQuiz = [
     question:
       'Why would you ever use a simple O(n²) sorting algorithm like insertion sort when O(n log n) algorithms exist?',
     sampleAnswer:
-      "There are actually several good reasons. First, for small arrays (say under 20 elements), insertion sort can be faster than quicksort or mergesort because it has very low overhead - no recursive calls, no complex partitioning. Second, insertion sort is adaptive - it runs in O(n) time on already-sorted or nearly-sorted data. If you know your data is mostly sorted, insertion sort is excellent. Third, it is stable and in-place, which matters for certain use cases. Fourth, it is extremely simple to implement correctly. In fact, many production implementations of quicksort switch to insertion sort for small subarrays. Python's Timsort uses insertion sort as one of its building blocks.",
+      "There are actually several good reasons. First, for small arrays (say under 20 elements), insertion sort can be faster than quicksort or mergesort because it has very low overhead - no recursive calls, no complex partitioning. Second, insertion sort is adaptive - it runs in O(n) time on already-sorted or nearly-sorted data. If you know your data is mostly sorted, insertion sort is excellent. Third, it is stable and in-place, which matters for certain use cases. Fourth, it is extremely simple to implement correctly. In fact, many production implementations of quicksort switch to insertion sort for small subarrays. Python\'s Timsort uses insertion sort as one of its building blocks.",
     keyPoints: [
       'Faster for small arrays due to low overhead',
       'Adaptive: O(n) on nearly-sorted data',

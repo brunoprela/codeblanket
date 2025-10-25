@@ -62,7 +62,7 @@ SPY US EQUITY GP <GO>   // SPY price graph
 
 ### Security Identification
 
-Bloomberg's yellow key system:
+Bloomberg\'s yellow key system:
 \`\`\`
 EQUITY        // Stocks
 CORP          // Corporate bonds
@@ -487,7 +487,7 @@ from blpapi import Session, SessionOptions
 options = SessionOptions()
 options.setServerHost('localhost')
 options.setServerPort(8194)
-session = Session(options)
+session = Session (options)
 
 # Start session
 if not session.start():
@@ -510,7 +510,7 @@ request.append("fields", "PX_LAST")
 request.append("fields", "CUR_MKT_CAP")
 
 # Send request
-session.sendRequest(request)
+session.sendRequest (request)
 
 # Process response
 while True:
@@ -519,8 +519,8 @@ while True:
     for msg in event:
         if msg.messageType() == "ReferenceDataResponse":
             securityDataArray = msg.getElement("securityData")
-            for i in range(securityDataArray.numValues()):
-                securityData = securityDataArray.getValueAsElement(i)
+            for i in range (securityDataArray.numValues()):
+                securityData = securityDataArray.getValueAsElement (i)
                 print(securityData.getElementAsString("security"))
                 fieldData = securityData.getElement("fieldData")
                 print(f"Last Price: {fieldData.getElementAsFloat('PX_LAST')}")
@@ -539,7 +539,7 @@ import pdblp
 import pandas as pd
 
 # Connect to Bloomberg
-con = pdblp.BCon(debug=False, port=8194, timeout=5000)
+con = pdblp.BCon (debug=False, port=8194, timeout=5000)
 con.start()
 
 # Get reference data (current data points)
@@ -718,29 +718,28 @@ For those without Bloomberg access, here's how to replicate key functions:
 import yfinance as yf
 import pandas as pd
 
-def get_company_info(ticker):
+def get_company_info (ticker):
     """Replicate DES function"""
-    stock = yf.Ticker(ticker)
+    stock = yf.Ticker (ticker)
     info = stock.info
     
     print(f"Company: {info.get('longName')}")
     print(f"Industry: {info.get('industry')}")
     print(f"Sector: {info.get('sector')}")
-    print(f"Market Cap: \${info.get('marketCap'):, .0f
-}")
+    print(f"Market Cap: \${info.get('marketCap'):,.0f}")
 print(f"Description: {info.get('longBusinessSummary')}")
 
 return info
 
-def get_historical_data(ticker, start = '2023-01-01', end = '2024-01-01'):
+def get_historical_data (ticker, start = '2023-01-01', end = '2024-01-01'):
 """Replicate HDS function"""
-stock = yf.Ticker(ticker)
-df = stock.history(start = start, end = end)
+stock = yf.Ticker (ticker)
+df = stock.history (start = start, end = end)
 return df
 
-def get_financials(ticker):
+def get_financials (ticker):
 """Replicate FA function"""
-stock = yf.Ticker(ticker)
+stock = yf.Ticker (ticker)
     
     # Income statement
 income_stmt = stock.financials
@@ -757,9 +756,9 @@ return {
     'cash_flow': cash_flow
 }
 
-def get_key_metrics(ticker):
+def get_key_metrics (ticker):
 """Replicate key statistics"""
-stock = yf.Ticker(ticker)
+stock = yf.Ticker (ticker)
 info = stock.info
 
 metrics = {
@@ -773,7 +772,7 @@ metrics = {
     '52W Low': info.get('fiftyTwoWeekLow'),
 }
 
-return pd.Series(metrics)
+return pd.Series (metrics)
 
 # Usage
 print(get_company_info('AAPL'))
@@ -788,13 +787,13 @@ metrics = get_key_metrics('AAPL')
 from newsapi import NewsApiClient
 from datetime import datetime, timedelta
 
-def get_company_news(ticker, days=7):
+def get_company_news (ticker, days=7):
     """Replicate CN function"""
-    newsapi = NewsApiClient(api_key='your_api_key')
+    newsapi = NewsApiClient (api_key='your_api_key')
     
     # Get news from past week
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=days)
+    start_date = end_date - timedelta (days=days)
     
     articles = newsapi.get_everything(
         q=ticker,
@@ -820,7 +819,7 @@ get_company_news('Apple')
 import yfinance as yf
 import pandas as pd
 
-def screen_stocks(universe, criteria):
+def screen_stocks (universe, criteria):
     """
     Replicate EQS function
     
@@ -835,7 +834,7 @@ def screen_stocks(universe, criteria):
     
     for ticker in universe:
         try:
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             info = stock.info
             
             # Check criteria
@@ -865,7 +864,7 @@ def screen_stocks(universe, criteria):
         except:
             continue
     
-    return pd.DataFrame(results)
+    return pd.DataFrame (results)
 
 # Usage
 sp500 = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META']  # ... add more
@@ -874,7 +873,7 @@ criteria = {
     'max_pe': 20,
     'min_dividend_yield': 0.02  # 2%
 }
-results = screen_stocks(sp500, criteria)
+results = screen_stocks (sp500, criteria)
 print(results)
 \`\`\`
 
@@ -953,7 +952,7 @@ print(results)
 
 The Bloomberg Terminal is the gold standard in finance, but it's expensive and has a learning curve. Key takeaways:
 
-1. **It's about integration**: Data + News + Communication in one place
+1. **It\'s about integration**: Data + News + Communication in one place
 2. **Function-based interface**: Learn the key functions for your role
 3. **Excel integration**: Most powerful feature for analysts
 4. **Network effects**: Everyone uses it, so you should too

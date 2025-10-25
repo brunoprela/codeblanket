@@ -27,7 +27,7 @@ export const analyticsDataPipelineMCQ: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "The hybrid approach (option C) provides the best balance for this scenario. Pure ETL (option A) reduces storage costs but sacrifices flexibility—if requirements change, you've already thrown away raw data. Pure ELT (option B) maximizes flexibility but at extreme cost: storing all raw data long-term when you have 50+ sources could cost $50k-100k/month. The hybrid approach stores raw data temporarily (7-30 days) for exploration and debugging while keeping transformed data long-term. This provides 80% of ELT's flexibility at 20% of the cost. With Snowflake's compute-storage separation, you can still reprocess the staging layer if needed. Option D (Kafka + ksqlDB) doesn't address the storage question and adds unnecessary complexity.",
+      "The hybrid approach (option C) provides the best balance for this scenario. Pure ETL (option A) reduces storage costs but sacrifices flexibility—if requirements change, you've already thrown away raw data. Pure ELT (option B) maximizes flexibility but at extreme cost: storing all raw data long-term when you have 50+ sources could cost $50k-100k/month. The hybrid approach stores raw data temporarily (7-30 days) for exploration and debugging while keeping transformed data long-term. This provides 80% of ELT's flexibility at 20% of the cost. With Snowflake\'s compute-storage separation, you can still reprocess the staging layer if needed. Option D (Kafka + ksqlDB) doesn't address the storage question and adds unnecessary complexity.",
   },
   {
     id: 'adp-mcq-3',
@@ -46,7 +46,7 @@ export const analyticsDataPipelineMCQ: MultipleChoiceQuestion[] = [
   {
     id: 'adp-mcq-4',
     question:
-      "Your Airflow DAG loads data from S3 to Redshift. Yesterday's run failed halfway through due to a timeout, leaving partial data. Today's run would duplicate some records. What is the best solution to ensure idempotency?",
+      "Your Airflow DAG loads data from S3 to Redshift. Yesterday\'s run failed halfway through due to a timeout, leaving partial data. Today's run would duplicate some records. What is the best solution to ensure idempotency?",
     options: [
       'Delete all data for the date partition before loading to ensure clean state',
       'Use MERGE/UPSERT statements instead of INSERT to handle duplicates gracefully',

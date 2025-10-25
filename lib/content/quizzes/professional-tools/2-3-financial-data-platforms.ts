@@ -5,7 +5,7 @@ export const financialDataPlatformsQuiz = [
       'FactSet costs $12-18K/year vs Bloomberg at $24K/year. Both claim to be the "industry standard" for institutional finance. Analyze the true cost-benefit trade-offs between these platforms for three different use cases: (1) quantitative equity long-short hedge fund, (2) investment banking M&A group, and (3) family office managing $500M across public equities and alternatives. For each use case, justify which platform provides better ROI and why.',
     sampleAnswer: `**Comprehensive Cost-Benefit Analysis: FactSet vs Bloomberg**
 
-**Use Case 1: Quantitative Equity Long-Short Hedge Fund ($2B AUM)**
+**Use Case 1: Quantitative Equity Long-Short Hedge Fund (\$2B AUM)**
 
 **FactSet: WINNER for this use case**
 
@@ -47,7 +47,7 @@ Cost: $18,000/year (full package with API)
 **Bloomberg Limitations for Quant:**
 - Terminal interface optimized for discretionary trading, not systematic
 - Excel add-in less flexible for complex factor models
-- SOAP API more difficult than FactSet's REST
+- SOAP API more difficult than FactSet\'s REST
 - Point-in-time data requires manual adjustment
 - Quantitative tools less sophisticated
 
@@ -58,13 +58,13 @@ Cost: $18,000/year (full package with API)
 
 **Optimal Solution for Quant Fund:**
 \`\`\`
-PRIMARY: FactSet ($18K/analyst)
+PRIMARY: FactSet (\$18K/analyst)
 - All research and modeling
 - Factor analysis
 - Portfolio construction
 - Risk management
 
-SUPPLEMENTAL: 1-2 Bloomberg Terminals for desk ($24K each)
+SUPPLEMENTAL: 1-2 Bloomberg Terminals for desk (\$24K each)
 - Real-time trading
 - Broker communication  
 - Prime broker coordination
@@ -172,7 +172,7 @@ Could they use ONLY Capital IQ + PitchBook?
 ROI Analysis:
 The $24K Bloomberg cost per analyst is effectively a "table stakes"
 cost in investment banking. The real question is whether to ADD
-Capital IQ ($15K) or rely on Bloomberg alone.
+Capital IQ (\$15K) or rely on Bloomberg alone.
 
 One pitch book typically involves:
 - 20-30 hours analyst time ($75/hour loaded = $1,500-2,250)
@@ -183,7 +183,7 @@ One pitch book typically involves:
 Capital IQ ROI: Positive even at 2 hours saved per deal
 
 Verdict: Bloomberg is required (network effects), but Capital IQ 
-supplement ($15K) pays for itself in efficiency gains.
+supplement (\$15K) pays for itself in efficiency gains.
 \`\`\`
 
 ---
@@ -220,14 +220,14 @@ Key Differences from Institutions:
 
 **Platform Analysis:**
 
-**Bloomberg ($24K/year per person)**
+**Bloomberg (\$24K/year per person)**
 - Overkill for family office needs
 - Real-time trading features unnecessary
 - Communication network less important (not coordinating deals)
 - High cost for small team
 - For 4-person team: $96K/year
 
-**FactSet ($15K/year per person)**
+**FactSet (\$15K/year per person)**
 - Better than Bloomberg for this use case
 - Portfolio analytics useful
 - Still expensive
@@ -292,7 +292,7 @@ ycharts_only_cost = 19_200
 \`\`\`
 Investment Team (4 people):
 ├── Senior Portfolio Manager
-│   └── Bloomberg Terminal ($24K)
+│   └── Bloomberg Terminal (\$24K)
 │       - When need instant market access
 │       - Communication with brokers/analysts
 │       - Prestige (LP interactions)
@@ -372,7 +372,7 @@ Key Insight: The "best" platform depends on:
 **ROI Framework:**
 
 \`\`\`python
-def calculate_platform_roi(use_case, aum, team_size, trading_frequency):
+def calculate_platform_roi (use_case, aum, team_size, trading_frequency):
     \"\"\"
     Calculate true ROI of platform choice
     \"\"\"
@@ -390,7 +390,7 @@ def calculate_platform_roi(use_case, aum, team_size, trading_frequency):
         # Better research tools → better alpha
         factset_alpha_boost = 0.0010  # 10bps
         value_of_better_tools = aum * factset_alpha_boost
-        # FactSet's 10bps alpha improvement on $2B = $2M/year
+        # FactSet\'s 10bps alpha improvement on $2B = $2M/year
         # Cost difference vs Bloomberg: saves $6K/person
         # Net benefit: $2M alpha + $30K savings (5 people)
         return value_of_better_tools
@@ -516,7 +516,7 @@ ADDITIONAL TOOLS:
 
 8. Trading/Execution Platform:
    - Alpaca Trading API ($0 - Free for paper trading)
-   - Later: Interactive Brokers ($10K/year for institutional)
+   - Later: Interactive Brokers (\$10K/year for institutional)
    - Year 1: Use Alpaca, budget $0
 
 9. Development Tools:
@@ -581,25 +581,25 @@ class QuantFundDataPlatform:
     
     def __init__(self, config):
         # Initialize data sources
-        self.polygon = RESTClient(config['polygon_api_key'])
-        self.fred = Fred(api_key=config['fred_api_key'])
+        self.polygon = RESTClient (config['polygon_api_key'])
+        self.fred = Fred (api_key=config['fred_api_key'])
         
         # Database connection
-        self.db_engine = create_engine(config['database_url'])
-        self.db_conn = psycopg2.connect(config['database_url'])
+        self.db_engine = create_engine (config['database_url'])
+        self.db_conn = psycopg2.connect (config['database_url'])
         
         # AWS S3 for storage
         self.s3 = boto3.client('s3')
         self.bucket_name = config['s3_bucket']
         
         # Setup logging
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig (level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         
         # Initialize database schema
         self.setup_database()
     
-    def setup_database(self):
+    def setup_database (self):
         \"\"\"
         Create database schema for all data types
         \"\"\"
@@ -616,8 +616,8 @@ class QuantFundDataPlatform:
             vwap DECIMAL(10, 2),
             PRIMARY KEY (ticker, date)
         );
-        CREATE INDEX idx_market_data_date ON market_data(date);
-        CREATE INDEX idx_market_data_ticker ON market_data(ticker);
+        CREATE INDEX idx_market_data_date ON market_data (date);
+        CREATE INDEX idx_market_data_ticker ON market_data (ticker);
         
         -- Fundamental data table
         CREATE TABLE IF NOT EXISTS fundamentals (
@@ -679,17 +679,17 @@ class QuantFundDataPlatform:
         \"\"\"
         
         with self.db_conn.cursor() as cursor:
-            cursor.execute(schema)
+            cursor.execute (schema)
         self.db_conn.commit()
         
         self.logger.info("Database schema initialized")
     
-    def update_market_data(self, tickers, start_date=None):
+    def update_market_data (self, tickers, start_date=None):
         \"\"\"
         Update market data from Polygon.io
         \"\"\"
         if start_date is None:
-            start_date = datetime.now() - timedelta(days=1)
+            start_date = datetime.now() - timedelta (days=1)
         
         end_date = datetime.now()
         
@@ -707,7 +707,7 @@ class QuantFundDataPlatform:
                 # Convert to DataFrame
                 df = pd.DataFrame([{
                     'ticker': ticker,
-                    'date': pd.to_datetime(agg.timestamp, unit='ms'),
+                    'date': pd.to_datetime (agg.timestamp, unit='ms'),
                     'open': agg.open,
                     'high': agg.high,
                     'low': agg.low,
@@ -721,19 +721,19 @@ class QuantFundDataPlatform:
                          if_exists='append', index=False,
                          method='multi')
                 
-                self.logger.info(f"Updated market data for {ticker}")
+                self.logger.info (f"Updated market data for {ticker}")
                 
             except Exception as e:
-                self.logger.error(f"Error updating {ticker}: {e}")
+                self.logger.error (f"Error updating {ticker}: {e}")
     
-    def update_fundamentals_from_ycharts(self, csv_path):
+    def update_fundamentals_from_ycharts (self, csv_path):
         \"\"\"
         Import fundamental data exported from YCharts
         
         YCharts doesn't have direct API, so process CSV exports
         \"\"\"
         # Read YCharts export
-        df = pd.read_csv(csv_path)
+        df = pd.read_csv (csv_path)
         
         # Transform to standard format
         # (YCharts export format depends on what you exported)
@@ -741,20 +741,20 @@ class QuantFundDataPlatform:
         for _, row in df.iterrows():
             transformed.append({
                 'ticker': row['Ticker'],
-                'date': pd.to_datetime(row['Date']),
+                'date': pd.to_datetime (row['Date']),
                 'metric': 'pe_ratio',
                 'value': row['P/E Ratio'],
                 'period': 'TTM'
             })
             # Add more metrics...
         
-        df_transformed = pd.DataFrame(transformed)
+        df_transformed = pd.DataFrame (transformed)
         df_transformed.to_sql('fundamentals', self.db_engine,
                              if_exists='append', index=False)
         
-        self.logger.info(f"Imported {len(df_transformed)} fundamental records")
+        self.logger.info (f"Imported {len (df_transformed)} fundamental records")
     
-    def update_economic_indicators(self):
+    def update_economic_indicators (self):
         \"\"\"
         Update economic indicators from FRED
         \"\"\"
@@ -768,7 +768,7 @@ class QuantFundDataPlatform:
         
         for name, series_id in indicators.items():
             try:
-                data = self.fred.get_series(series_id)
+                data = self.fred.get_series (series_id)
                 
                 df = pd.DataFrame({
                     'indicator': name,
@@ -779,12 +779,12 @@ class QuantFundDataPlatform:
                 df.to_sql('economic_indicators', self.db_engine,
                          if_exists='append', index=False)
                 
-                self.logger.info(f"Updated indicator: {name}")
+                self.logger.info (f"Updated indicator: {name}")
                 
             except Exception as e:
-                self.logger.error(f"Error updating {name}: {e}")
+                self.logger.error (f"Error updating {name}: {e}")
     
-    def update_factor_returns(self):
+    def update_factor_returns (self):
         \"\"\"
         Update factor returns from Nasdaq Data Link
         \"\"\"
@@ -807,7 +807,7 @@ class QuantFundDataPlatform:
         
         self.logger.info("Updated factor returns")
     
-    def run_daily_update(self):
+    def run_daily_update (self):
         \"\"\"
         Run complete daily data update
         
@@ -819,7 +819,7 @@ class QuantFundDataPlatform:
         universe = self.get_universe()
         
         # Update market data
-        self.update_market_data(universe)
+        self.update_market_data (universe)
         
         # Update economic indicators (daily)
         self.update_economic_indicators()
@@ -832,7 +832,7 @@ class QuantFundDataPlatform:
         
         self.logger.info("Daily data update complete")
     
-    def get_universe(self):
+    def get_universe (self):
         \"\"\"
         Get list of stocks in our investment universe
         \"\"\"
@@ -844,10 +844,10 @@ class QuantFundDataPlatform:
         WHERE date >= NOW() - INTERVAL '30 days'
         \"\"\"
         
-        df = pd.read_sql(query, self.db_engine)
+        df = pd.read_sql (query, self.db_engine)
         return df['ticker'].tolist()
     
-    def backup_database(self):
+    def backup_database (self):
         \"\"\"
         Backup database to S3
         \"\"\"
@@ -871,7 +871,7 @@ class QuantFundDataPlatform:
             f"backups/{backup_file}"
         )
         
-        self.logger.info(f"Database backed up to S3: {backup_file}")
+        self.logger.info (f"Database backed up to S3: {backup_file}")
 
 
 # factor_models.py
@@ -887,7 +887,7 @@ class FactorModel:
     def __init__(self, data_platform):
         self.data = data_platform
     
-    def calculate_momentum_score(self, lookback_period=252):
+    def calculate_momentum_score (self, lookback_period=252):
         \"\"\"
         Calculate momentum score for all stocks
         12-month return excluding last month
@@ -916,9 +916,9 @@ class FactorModel:
             AND price_1y_ago IS NOT NULL
         \"\"\"
         
-        return pd.read_sql(query, self.data.db_engine)
+        return pd.read_sql (query, self.data.db_engine)
     
-    def calculate_value_score(self):
+    def calculate_value_score (self):
         \"\"\"
         Calculate value score (low P/E, P/B, high dividend yield)
         \"\"\"
@@ -938,11 +938,11 @@ class FactorModel:
         GROUP BY ticker, date
         \"\"\"
         
-        df = pd.read_sql(query, self.data.db_engine)
+        df = pd.read_sql (query, self.data.db_engine)
         df['value_score'] = (df['value_pe'] + df['value_pb'] + df['value_yield']) / 3
         return df[['ticker', 'date', 'value_score']]
     
-    def calculate_quality_score(self):
+    def calculate_quality_score (self):
         \"\"\"
         Calculate quality score (high ROE, low debt, stable earnings)
         \"\"\"
@@ -961,11 +961,11 @@ class FactorModel:
         GROUP BY ticker, date
         \"\"\"
         
-        df = pd.read_sql(query, self.data.db_engine)
+        df = pd.read_sql (query, self.data.db_engine)
         df['quality_score'] = (df['roe'] + df['debt_score'] + df['stability']) / 3
         return df[['ticker', 'date', 'quality_score']]
     
-    def generate_combined_signal(self):
+    def generate_combined_signal (self):
         \"\"\"
         Combine all factors into single signal
         \"\"\"
@@ -975,14 +975,14 @@ class FactorModel:
         quality = self.calculate_quality_score()
         
         # Merge
-        combined = momentum.merge(value, on='ticker')
-        combined = combined.merge(quality, on='ticker')
+        combined = momentum.merge (value, on='ticker')
+        combined = combined.merge (quality, on='ticker')
         
         # Z-score normalization
         from scipy.stats import zscore
-        combined['momentum_z'] = zscore(combined['momentum_score'])
-        combined['value_z'] = zscore(combined['value_score'])
-        combined['quality_z'] = zscore(combined['quality_score'])
+        combined['momentum_z'] = zscore (combined['momentum_score'])
+        combined['value_z'] = zscore (combined['value_score'])
+        combined['quality_z'] = zscore (combined['quality_score'])
         
         # Combined score (equal weight)
         combined['signal'] = (
@@ -992,7 +992,7 @@ class FactorModel:
         ) / 3
         
         # Rank and select top/bottom quintiles
-        combined['rank'] = combined['signal'].rank(pct=True)
+        combined['rank'] = combined['signal'].rank (pct=True)
         
         combined['position'] = 'none'
         combined.loc[combined['rank'] >= 0.8, 'position'] = 'long'
@@ -1015,7 +1015,7 @@ class PortfolioManager:
         self.data = data_platform
         self.target_aum = target_aum
     
-    def construct_portfolio(self, signals, max_positions=100):
+    def construct_portfolio (self, signals, max_positions=100):
         \"\"\"
         Construct portfolio from signals
         
@@ -1034,8 +1034,8 @@ class PortfolioManager:
         )
         
         # Equal weight
-        long_weight = 1.0 / len(long_stocks)
-        short_weight = -1.0 / len(short_stocks)
+        long_weight = 1.0 / len (long_stocks)
+        short_weight = -1.0 / len (short_stocks)
         
         long_stocks['weight'] = long_weight
         short_stocks['weight'] = short_weight
@@ -1047,38 +1047,38 @@ class PortfolioManager:
         
         return portfolio
     
-    def calculate_risk(self, portfolio):
+    def calculate_risk (self, portfolio):
         \"\"\"
         Calculate portfolio risk metrics
         \"\"\"
         # Get covariance matrix
-        returns = self.get_returns_matrix(portfolio['ticker'].tolist())
+        returns = self.get_returns_matrix (portfolio['ticker'].tolist())
         cov_matrix = returns.cov() * 252  # Annualized
         
         # Portfolio weights
         weights = portfolio.set_index('ticker')['weight']
         
         # Portfolio variance
-        port_variance = np.dot(weights.T, np.dot(cov_matrix, weights))
-        port_volatility = np.sqrt(port_variance)
+        port_variance = np.dot (weights.T, np.dot (cov_matrix, weights))
+        port_volatility = np.sqrt (port_variance)
         
         # Factor exposures
-        factor_exposures = self.calculate_factor_exposures(portfolio)
+        factor_exposures = self.calculate_factor_exposures (portfolio)
         
         return {
             'volatility': port_volatility,
             'factor_exposures': factor_exposures,
-            'concentration': self.calculate_concentration(portfolio)
+            'concentration': self.calculate_concentration (portfolio)
         }
     
-    def rebalance(self, current_portfolio, target_portfolio):
+    def rebalance (self, current_portfolio, target_portfolio):
         \"\"\"
         Generate trades to rebalance portfolio
         \"\"\"
         # Compare current vs target
         trades = []
         
-        for ticker in set(current_portfolio['ticker']) | set(target_portfolio['ticker']):
+        for ticker in set (current_portfolio['ticker']) | set (target_portfolio['ticker']):
             current_shares = current_portfolio[
                 current_portfolio['ticker'] == ticker
             ]['shares'].sum() if ticker in current_portfolio['ticker'].values else 0
@@ -1089,14 +1089,14 @@ class PortfolioManager:
             
             trade_shares = target_shares - current_shares
             
-            if abs(trade_shares) > 0:
+            if abs (trade_shares) > 0:
                 trades.append({
                     'ticker': ticker,
                     'shares': trade_shares,
                     'direction': 'buy' if trade_shares > 0 else 'sell'
                 })
         
-        return pd.DataFrame(trades)
+        return pd.DataFrame (trades)
 
 
 # scheduler.py
@@ -1107,13 +1107,13 @@ Automated scheduling for data updates and trading
 import schedule
 import time
 
-def setup_schedules(data_platform, factor_model, portfolio_manager):
+def setup_schedules (data_platform, factor_model, portfolio_manager):
     \"\"\"
     Setup all automated tasks
     \"\"\"
     
     # Daily data update (6 PM ET after market close)
-    schedule.every().day.at("18:00").do(data_platform.run_daily_update)
+    schedule.every().day.at("18:00").do (data_platform.run_daily_update)
     
     # Generate signals (6:30 PM ET)
     def generate_signals():
@@ -1122,7 +1122,7 @@ def setup_schedules(data_platform, factor_model, portfolio_manager):
         signals.to_sql('signals', data_platform.db_engine,
                       if_exists='append', index=False)
     
-    schedule.every().day.at("18:30").do(generate_signals)
+    schedule.every().day.at("18:30").do (generate_signals)
     
     # Construct portfolio (7 PM ET)
     def construct_portfolio():
@@ -1132,7 +1132,7 @@ def setup_schedules(data_platform, factor_model, portfolio_manager):
             data_platform.db_engine
         )
         
-        portfolio = portfolio_manager.construct_portfolio(signals)
+        portfolio = portfolio_manager.construct_portfolio (signals)
         
         # Generate trades
         current = pd.read_sql(
@@ -1140,12 +1140,12 @@ def setup_schedules(data_platform, factor_model, portfolio_manager):
             data_platform.db_engine
         )
         
-        trades = portfolio_manager.rebalance(current, portfolio)
+        trades = portfolio_manager.rebalance (current, portfolio)
         
         # Send to execution system
         # (Implementation depends on broker)
         
-    schedule.every().day.at("19:00").do(construct_portfolio)
+    schedule.every().day.at("19:00").do (construct_portfolio)
     
     # Run scheduler
     while True:
@@ -1160,7 +1160,7 @@ Deploy scheduled tasks to AWS Lambda
 \"\"\"
 
 # Lambda function for daily data update
-def lambda_daily_update(event, context):
+def lambda_daily_update (event, context):
     from data_platform import QuantFundDataPlatform
     
     config = {
@@ -1170,7 +1170,7 @@ def lambda_daily_update(event, context):
         's3_bucket': os.environ['S3_BUCKET']
     }
     
-    platform = QuantFundDataPlatform(config)
+    platform = QuantFundDataPlatform (config)
     platform.run_daily_update()
     
     return {
@@ -1184,13 +1184,13 @@ def lambda_daily_update(event, context):
 **Scaling Plan (Year 1 → Year 3):**
 
 \`\`\`
-YEAR 1 ($50M AUM, 3 people):
+YEAR 1 (\$50M AUM, 3 people):
 ├── Data Costs: $25K
 ├── Team can handle all data management
 ├── Infrastructure: Single RDS instance, basic EC2
 └── Manual oversight sufficient
 
-YEAR 2 ($150M AUM, 5 people - add 2 traders):
+YEAR 2 (\$150M AUM, 5 people - add 2 traders):
 ├── Data Costs: $45K
 │   ├── Keep YCharts: $24K (5 people)
 │   ├── Add FactSet for 1-2 researchers: $30K
@@ -1203,7 +1203,7 @@ YEAR 2 ($150M AUM, 5 people - add 2 traders):
 │   └── 2 Traders (YCharts + real-time feeds)
 └── Add real-time risk monitoring
 
-YEAR 3 ($500M AUM, 8 people - add 1 PM, 2 analysts):
+YEAR 3 (\$500M AUM, 8 people - add 1 PM, 2 analysts):
 ├── Data Costs: $120K
 │   ├── Bloomberg Terminals: 2 × $24K = $48K (PMs/traders)
 │   ├── FactSet: 4 × $18K = $72K (research team)
@@ -1282,7 +1282,7 @@ scale as you prove the strategy works and raise capital.`,
   {
     id: '2-3-d3',
     question:
-      "You're consulting for a mid-sized investment bank ($50B in assets) that currently spends $2.4M/year on Bloomberg Terminals (100 seats × $24K). The CFO wants to know if they could save money by switching some users to cheaper alternatives (FactSet, Capital IQ, or YCharts) without impacting productivity. Analyze which roles truly need Bloomberg vs alternatives, estimate potential savings, identify risks of platform switching, and design a pilot program to test the migration.",
+      "You're consulting for a mid-sized investment bank (\$50B in assets) that currently spends $2.4M/year on Bloomberg Terminals (100 seats × $24K). The CFO wants to know if they could save money by switching some users to cheaper alternatives (FactSet, Capital IQ, or YCharts) without impacting productivity. Analyze which roles truly need Bloomberg vs alternatives, estimate potential savings, identify risks of platform switching, and design a pilot program to test the migration.",
     sampleAnswer: `**Investment Bank Platform Optimization: Bloomberg Reduction Strategy**
 
 **Current State Analysis:**
@@ -1295,23 +1295,23 @@ BANK PROFILE:
 - Divisions: Investment Banking, Sales & Trading, Research, Corporate Banking
 
 CURRENT BLOOMBERG DISTRIBUTION:
-├── Investment Banking: 40 seats ($960K)
+├── Investment Banking: 40 seats (\$960K)
 │   ├── M&A: 20 seats
 │   ├── ECM/DCM: 15 seats
 │   └── Coverage: 5 seats
 │
-├── Sales & Trading: 35 seats ($840K)
+├── Sales & Trading: 35 seats (\$840K)
 │   ├── Equity Trading: 15 seats
 │   ├── Fixed Income: 12 seats
 │   ├── Derivatives: 5 seats
 │   └── Sales: 3 seats
 │
-├── Equity Research: 15 seats ($360K)
+├── Equity Research: 15 seats (\$360K)
 │   ├── Senior Analysts: 8 seats
 │   └── Associates: 7 seats
 │
-├── Corporate Banking: 5 seats ($120K)
-└── Risk/Treasury: 5 seats ($120K)
+├── Corporate Banking: 5 seats (\$120K)
+└── Risk/Treasury: 5 seats (\$120K)
 
 QUESTION: Can we reduce Bloomberg spend while maintaining productivity?
 \`\`\`
@@ -1321,7 +1321,7 @@ QUESTION: Can we reduce Bloomberg spend while maintaining productivity?
 \`\`\`python
 # platform_needs_analysis.py
 
-def analyze_bloomberg_usage(role, tasks, communication_needs):
+def analyze_bloomberg_usage (role, tasks, communication_needs):
     \"\"\"
     Determine if Bloomberg is truly necessary for each role
     \"\"\"
@@ -1430,7 +1430,7 @@ def analyze_bloomberg_usage(role, tasks, communication_needs):
         'corporate_banker': {
             'bloomberg_necessary': False,
             'reason': 'Client financials, credit analysis, no trading',
-            'alternative': 'Capital IQ + Moody's Analytics',
+            'alternative': 'Capital IQ + Moody\'s Analytics',
             'cost': 24000,
             'alternative_cost': 18000,
             'savings_potential': 6000,
@@ -1451,7 +1451,7 @@ def analyze_bloomberg_usage(role, tasks, communication_needs):
     return roles_analysis
 
 
-def calculate_potential_savings(current_distribution):
+def calculate_potential_savings (current_distribution):
     \"\"\"
     Calculate savings from platform optimization
     \"\"\"
@@ -1546,7 +1546,7 @@ def calculate_potential_savings(current_distribution):
 
 # Run analysis
 result = calculate_potential_savings({})
-print(f"Annual Savings: \${result['savings']:, .0f} ({ result['savings_pct']: .1f } %)")
+print(f"Annual Savings: \${result['savings']:,.0f} ({ result['savings_pct']: .1f } %)")
 print(f"Bloomberg seats: 100 → {100 - result['bloomberg_seats_removed']}")
 \`\`\`
 
@@ -1749,7 +1749,7 @@ Net Cost Year 1: $44K additional (expected for pilot)
 
 IF successful and expanded:
 Year 2 Savings: $303K (full rollout)
-ROI: ($303K - $44K) / $44K = 589% Year 1-2 ROI
+ROI: (\$303K - $44K) / $44K = 589% Year 1-2 ROI
 
 Payback Period: 2 months into Year 2
 \`\`\`

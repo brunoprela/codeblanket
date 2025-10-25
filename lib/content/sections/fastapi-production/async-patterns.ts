@@ -17,7 +17,7 @@ FastAPI is built on Starlette, an async web framework. Understanding async/await
 **Common misconceptions:**
 - ❌ "Async makes everything faster" - Not for CPU-bound tasks
 - ❌ "Always use async" - Sync is simpler when appropriate
-- ❌ "Async is parallel" - It's concurrent, not parallel
+- ❌ "Async is parallel" - It\'s concurrent, not parallel
 
 In this section, you'll master:
 - Async vs sync: when to use each
@@ -68,7 +68,7 @@ async def get_users():
     Multiple users can query concurrently
     """
     async with db.session() as session:
-        users = await session.execute(select(User))
+        users = await session.execute (select(User))
         return users.scalars().all()
 
 @app.get("/external-api")
@@ -83,7 +83,7 @@ async def call_external_api():
 
 # ✅ Use SYNC for CPU-bound operations
 @app.post("/process-data")
-def process_data(data: list):
+def process_data (data: list):
     """
     Data processing - CPU bound
     Runs in thread pool, doesn't block event loop
@@ -91,8 +91,8 @@ def process_data(data: list):
     result = []
     for item in data:
         # CPU-intensive calculation
-        processed = complex_calculation(item)
-        result.append(processed)
+        processed = complex_calculation (item)
+        result.append (processed)
     return result
 
 # ❌ DON'T mix blocking code in async functions
@@ -118,7 +118,7 @@ async def good_async():
         return {"done": True}
     
     # Run in thread pool
-    result = await asyncio.to_thread(blocking_operation)
+    result = await asyncio.to_thread (blocking_operation)
     return result
 \`\`\`
 
@@ -155,7 +155,7 @@ async def task2():
 
 # Run concurrently
 async def main():
-    await asyncio.gather(task1(), task2())
+    await asyncio.gather (task1(), task2())
     # Output:
     # Task 1 start
     # Task 2 start
@@ -203,7 +203,7 @@ async def get_db_connection():
     try:
         yield conn
     finally:
-        await db_pool.release(conn)
+        await db_pool.release (conn)
 
 @app.get("/users")
 async def get_users():
@@ -248,7 +248,7 @@ async def get_db():
 
 # Async CRUD operations
 @app.get("/users/{user_id}")
-async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
+async def get_user (user_id: int, db: AsyncSession = Depends (get_db)):
     """Async database query"""
     result = await db.execute(
         select(User).where(User.id == user_id)
@@ -256,21 +256,21 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     user = result.scalar_one_or_none()
     
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
     return user
 
 @app.post("/users")
 async def create_user(
     user: UserCreate,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends (get_db)
 ):
     """Async database insert"""
     new_user = User(**user.dict())
     
-    db.add(new_user)
+    db.add (new_user)
     await db.commit()
-    await db.refresh(new_user)
+    await db.refresh (new_user)
     
     return new_user
 
@@ -278,7 +278,7 @@ async def create_user(
 async def update_user(
     user_id: int,
     user_update: UserUpdate,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends (get_db)
 ):
     """Async database update"""
     result = await db.execute(
@@ -287,13 +287,13 @@ async def update_user(
     user = result.scalar_one_or_none()
     
     if not user:
-        raise HTTPException(status_code=404)
+        raise HTTPException (status_code=404)
     
-    for key, value in user_update.dict(exclude_unset=True).items():
-        setattr(user, key, value)
+    for key, value in user_update.dict (exclude_unset=True).items():
+        setattr (user, key, value)
     
     await db.commit()
-    await db.refresh(user)
+    await db.refresh (user)
     
     return user
 \`\`\`
@@ -310,7 +310,7 @@ async def transfer_money(
     from_account: int,
     to_account: int,
     amount: float,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends (get_db)
 ):
     """
     Transfer money between accounts (atomic)
@@ -357,21 +357,21 @@ import httpx
 @app.get("/user-dashboard/{user_id}")
 async def get_user_dashboard(
     user_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends (get_db)
 ):
     """
     Fetch user data, posts, and comments concurrently
     """
     # Sequential (slow): 3 seconds
-    # user = await fetch_user(user_id)           # 1s
-    # posts = await fetch_user_posts(user_id)    # 1s
-    # comments = await fetch_user_comments(user_id)  # 1s
+    # user = await fetch_user (user_id)           # 1s
+    # posts = await fetch_user_posts (user_id)    # 1s
+    # comments = await fetch_user_comments (user_id)  # 1s
     
     # Concurrent (fast): 1 second
     user, posts, comments = await asyncio.gather(
-        fetch_user(user_id, db),
-        fetch_user_posts(user_id, db),
-        fetch_user_comments(user_id, db)
+        fetch_user (user_id, db),
+        fetch_user_posts (user_id, db),
+        fetch_user_comments (user_id, db)
     )
     
     return {
@@ -380,16 +380,16 @@ async def get_user_dashboard(
         "comments": comments
     }
 
-async def fetch_user(user_id: int, db: AsyncSession):
-    result = await db.execute(select(User).where(User.id == user_id))
+async def fetch_user (user_id: int, db: AsyncSession):
+    result = await db.execute (select(User).where(User.id == user_id))
     return result.scalar_one()
 
-async def fetch_user_posts(user_id: int, db: AsyncSession):
-    result = await db.execute(select(Post).where(Post.user_id == user_id))
+async def fetch_user_posts (user_id: int, db: AsyncSession):
+    result = await db.execute (select(Post).where(Post.user_id == user_id))
     return result.scalars().all()
 
-async def fetch_user_comments(user_id: int, db: AsyncSession):
-    result = await db.execute(select(Comment).where(Comment.user_id == user_id))
+async def fetch_user_comments (user_id: int, db: AsyncSession):
+    result = await db.execute (select(Comment).where(Comment.user_id == user_id))
     return result.scalars().all()
 \`\`\`
 
@@ -435,12 +435,12 @@ async def aggregate_data():
     
     data = []
     for result in results:
-        if isinstance(result, Exception):
+        if isinstance (result, Exception):
             # Handle error
-            logger.error(f"Source failed: {result}")
+            logger.error (f"Source failed: {result}")
             data.append(None)
         else:
-            data.append(result)
+            data.append (result)
     
     return {"sources": data}
 \`\`\`
@@ -459,7 +459,7 @@ Make async HTTP requests with httpx
 import httpx
 
 @app.get("/weather/{city}")
-async def get_weather(city: str):
+async def get_weather (city: str):
     """
     Fetch weather from external API
     """
@@ -474,14 +474,14 @@ async def get_weather(city: str):
 # Reusable client (connection pooling)
 http_client = httpx.AsyncClient(
     timeout=10.0,
-    limits=httpx.Limits(max_keepalive_connections=20, max_connections=100)
+    limits=httpx.Limits (max_keepalive_connections=20, max_connections=100)
 )
 
 @app.on_event("startup")
 async def startup():
     """Initialize HTTP client on startup"""
     global http_client
-    http_client = httpx.AsyncClient(timeout=10.0)
+    http_client = httpx.AsyncClient (timeout=10.0)
 
 @app.on_event("shutdown")
 async def shutdown():
@@ -521,7 +521,7 @@ async def non_blocking_async():
 # ✅ GOOD: Move blocking to thread
 @app.get("/better")
 async def blocking_in_thread():
-    result = await asyncio.to_thread(blocking_operation)
+    result = await asyncio.to_thread (blocking_operation)
     return result
 \`\`\`
 
@@ -541,8 +541,8 @@ async def bad_database():
 
 # ✅ GOOD: Async DB call
 @app.get("/good-db")
-async def good_database(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User))
+async def good_database (db: AsyncSession = Depends (get_db)):
+    result = await db.execute (select(User))
     return result.scalars().all()
 \`\`\`
 
@@ -614,18 +614,18 @@ import aioredis
 
 redis = aioredis.from_url("redis://localhost")
 
-async def get_cached_data(key: str):
+async def get_cached_data (key: str):
     """Get from cache or compute"""
     # Try cache
-    cached = await redis.get(key)
+    cached = await redis.get (key)
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Compute
     data = await expensive_operation()
     
     # Cache result
-    await redis.setex(key, 3600, json.dumps(data))
+    await redis.setex (key, 3600, json.dumps (data))
     
     return data
 \`\`\`

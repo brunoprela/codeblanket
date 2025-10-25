@@ -19,7 +19,7 @@ This section covers measuring coverage, understanding metrics, enforcing standar
 **Line coverage** measures which lines of code execute during tests.
 
 \`\`\`python
-def calculate_discount(price, discount_percent):
+def calculate_discount (price, discount_percent):
     if discount_percent > 100:        # Line 1
         raise ValueError("Invalid")    # Line 2
     discount = price * (discount_percent / 100)  # Line 3
@@ -49,7 +49,7 @@ def test_calculate_discount_invalid():
 **Branch coverage** measures which decision paths are taken.
 
 \`\`\`python
-def process_payment(amount):
+def process_payment (amount):
     if amount > 0:        # Branch point
         return "success"  # Branch 1: True path
     else:
@@ -61,7 +61,7 @@ def process_payment(amount):
 
 **Why it matters**:
 \`\`\`python
-def withdraw(account, amount):
+def withdraw (account, amount):
     if account.balance >= amount:    # Branch point
         account.balance -= amount
         return True
@@ -69,8 +69,8 @@ def withdraw(account, amount):
     
 # Test with sufficient balance
 def test_withdraw_success():
-    account = Account(balance=100)
-    assert withdraw(account, 50)
+    account = Account (balance=100)
+    assert withdraw (account, 50)
     assert account.balance == 50
 
 # Line coverage: 100% (all lines execute)
@@ -80,8 +80,8 @@ def test_withdraw_success():
 **Missing test** for False branch:
 \`\`\`python
 def test_withdraw_insufficient():
-    account = Account(balance=100)
-    result = withdraw(account, 150)
+    account = Account (balance=100)
+    result = withdraw (account, 150)
     assert result is False  # This will fail! No return value for False branch
     assert account.balance == 100
 \`\`\`
@@ -160,7 +160,7 @@ pytest --cov=myapp --cov-branch --cov-report=term-missing tests/
 ### Example: Branch Coverage Analysis
 
 \`\`\`python
-def categorize_age(age):
+def categorize_age (age):
     if age < 18:
         return "minor"
     elif age < 65:
@@ -352,24 +352,24 @@ jobs:
 ✅ **Coverage identifies untested code**
 
 \`\`\`python
-def process_user(user):
+def process_user (user):
     if user.is_active:
-        send_welcome_email(user)
+        send_welcome_email (user)
     else:
-        log_inactive_user(user)  # 0% coverage—never tested!
+        log_inactive_user (user)  # 0% coverage—never tested!
 
 # Only test active users
 def test_process_active_user():
-    user = User(is_active=True)
-    process_user(user)
+    user = User (is_active=True)
+    process_user (user)
 \`\`\`
 
 **Coverage report**: Shows line 5 (log_inactive_user) has 0% coverage, prompting you to add test:
 
 \`\`\`python
 def test_process_inactive_user():
-    user = User(is_active=False)
-    process_user(user)
+    user = User (is_active=False)
+    process_user (user)
     # Should verify logging occurred
 \`\`\`
 
@@ -378,7 +378,7 @@ def test_process_inactive_user():
 ❌ **100% coverage ≠ correct code**
 
 \`\`\`python
-def add(a, b):
+def add (a, b):
     return a + b
 
 def test_add_bad():
@@ -389,15 +389,15 @@ def test_add_bad():
 ❌ **High coverage can give false confidence**
 
 \`\`\`python
-def withdraw(account, amount):
+def withdraw (account, amount):
     if account.balance >= amount:
         account.balance -= amount
         return True
     return False
 
 def test_withdraw_weak():
-    account = Account(balance=100)
-    withdraw(account, 50)
+    account = Account (balance=100)
+    withdraw (account, 50)
     # 100% coverage but no assertions!
     # Doesn't verify balance changed or return value
 \`\`\`
@@ -405,8 +405,8 @@ def test_withdraw_weak():
 ✅ **Proper test**:
 \`\`\`python
 def test_withdraw_proper():
-    account = Account(balance=100)
-    result = withdraw(account, 50)
+    account = Account (balance=100)
+    result = withdraw (account, 50)
     
     assert result is True
     assert account.balance == 50  # Verify side effect
@@ -426,7 +426,7 @@ def test_withdraw_proper():
 
 **Example where 100% matters**:
 \`\`\`python
-def divide(a, b):
+def divide (a, b):
     if b == 0:
         raise ValueError("Division by zero")
     return a / b
@@ -453,8 +453,8 @@ class User:
 
 # Testing these is low value:
 def test_repr():  # Trivial, unlikely to break
-    user = User(username="alice")
-    assert "alice" in repr(user)
+    user = User (username="alice")
+    assert "alice" in repr (user)
 \`\`\`
 
 ### Professional Recommendation: 80-90%

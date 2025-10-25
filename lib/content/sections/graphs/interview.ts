@@ -31,7 +31,7 @@ export const interviewSection = {
 - **Any path?** → DFS or BFS
 - **Cycle detection?** → DFS
 - **All components?** → DFS/BFS from each unvisited
-- **Topological order?** → Kahn's or DFS
+- **Topological order?** → Kahn\'s or DFS
 - **Connectivity?** → Union-Find
 
 **Step 3: Consider Representation**

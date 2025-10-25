@@ -174,31 +174,31 @@ class AdaptivePreprocessor:
             # ... more expansions
         }
     
-    def preprocess(self, text, source='news'):
+    def preprocess (self, text, source='news'):
         if source == 'social':
             # Handle emojis
             for emoji, sentiment in self.emoji_sentiments.items():
-                text = text.replace(emoji, sentiment)
+                text = text.replace (emoji, sentiment)
             
             # Expand hashtags
-            text = re.sub(r'#(\\w+)', r'hashtag_\\1', text)
+            text = re.sub (r'#(\\w+)', r'hashtag_\\1', text)
             
             # Replace mentions
-            text = re.sub(r'@\\w+', '<USER>', text)
+            text = re.sub (r'@\\w+', '<USER>', text)
             
             # Expand abbreviations
             words = text.split()
             expanded = []
             for word in words:
                 expanded.append(
-                    self.social_expansions.get(word.lower(), word)
+                    self.social_expansions.get (word.lower(), word)
                 )
-            text = ' '.join(expanded)
+            text = ' '.join (expanded)
         
         # Common preprocessing for both
         text = text.lower()
-        text = self.clean_urls(text)
-        text = self.normalize_whitespace(text)
+        text = self.clean_urls (text)
+        text = self.normalize_whitespace (text)
         
         return text
 \`\`\`
@@ -335,19 +335,19 @@ class VersionedPreprocessor:
         # Load models/resources
         if config.get('use_spacy', False):
             import spacy
-            self.nlp = spacy.load(config['spacy_model',])
+            self.nlp = spacy.load (config['spacy_model',])
     
-    def _compute_config_hash(self) -> str:
+    def _compute_config_hash (self) -> str:
         """Compute hash of configuration for versioning"""
-        config_str = json.dumps(self.config, sort_keys=True)
+        config_str = json.dumps (self.config, sort_keys=True)
         return hashlib.md5(config_str.encode()).hexdigest()[:8]
     
-    def preprocess(self, text: str) -> str:
+    def preprocess (self, text: str) -> str:
         """Apply preprocessing pipeline"""
         # Implementation...
         return processed_text
     
-    def save(self, path: str):
+    def save (self, path: str):
         """Save preprocessor with metadata"""
         metadata = {
             'version': self.VERSION,
@@ -359,23 +359,23 @@ class VersionedPreprocessor:
             }
         }
         
-        with open(f"{path}/preprocessor_v{self.VERSION}.pkl", 'wb') as f:
-            pickle.dump(self, f)
+        with open (f"{path}/preprocessor_v{self.VERSION}.pkl", 'wb') as f:
+            pickle.dump (self, f)
         
-        with open(f"{path}/metadata.json", 'w') as f:
-            json.dump(metadata, f, indent=2)
+        with open (f"{path}/metadata.json", 'w') as f:
+            json.dump (metadata, f, indent=2)
     
     @staticmethod
-    def load(path: str):
+    def load (path: str):
         """Load preprocessor with version verification"""
-        with open(f"{path}/metadata.json", 'r') as f:
-            metadata = json.load(f)
+        with open (f"{path}/metadata.json", 'r') as f:
+            metadata = json.load (f)
         
         print(f"Loading preprocessor version {metadata['version',]}")
         print(f"Config hash: {metadata['config_hash',]}")
         
-        with open(f"{path}/preprocessor_v{metadata['version',]}.pkl", 'rb') as f:
-            return pickle.load(f)
+        with open (f"{path}/preprocessor_v{metadata['version',]}.pkl", 'rb') as f:
+            return pickle.load (f)
 
 # Usage at training time
 config = {
@@ -385,7 +385,7 @@ config = {
     'spacy_model': 'en_core_web_sm'
 }
 
-preprocessor = VersionedPreprocessor(config)
+preprocessor = VersionedPreprocessor (config)
 preprocessor.save('models/preprocessor_v1')
 
 # Usage at inference time (months later)
@@ -426,31 +426,31 @@ changelog:
 \`\`\`python
 import unittest
 
-class TestPreprocessorConsistency(unittest.TestCase):
+class TestPreprocessorConsistency (unittest.TestCase):
     """Test preprocessing consistency"""
     
-    def setUp(self):
+    def setUp (self):
         # Load training preprocessor
         self.train_preprocessor = VersionedPreprocessor.load('training_artifacts/')
         
         # Load inference preprocessor
         self.inference_preprocessor = VersionedPreprocessor.load('production/')
     
-    def test_version_match(self):
+    def test_version_match (self):
         """Ensure versions match"""
         self.assertEqual(
             self.train_preprocessor.VERSION,
             self.inference_preprocessor.VERSION
         )
     
-    def test_config_hash_match(self):
+    def test_config_hash_match (self):
         """Ensure configurations are identical"""
         self.assertEqual(
             self.train_preprocessor.config_hash,
             self.inference_preprocessor.config_hash
         )
     
-    def test_preprocessing_deterministic(self):
+    def test_preprocessing_deterministic (self):
         """Ensure same input always produces same output"""
         test_texts = [
             "The quick brown fox",
@@ -459,11 +459,11 @@ class TestPreprocessorConsistency(unittest.TestCase):
         ]
         
         for text in test_texts:
-            result1 = self.train_preprocessor.preprocess(text)
-            result2 = self.train_preprocessor.preprocess(text)
-            self.assertEqual(result1, result2)
+            result1 = self.train_preprocessor.preprocess (text)
+            result2 = self.train_preprocessor.preprocess (text)
+            self.assertEqual (result1, result2)
     
-    def test_train_inference_match(self):
+    def test_train_inference_match (self):
         """Ensure training and inference preprocessing match"""
         test_cases = [
             "The U.S. economy grew 3% last quarter.",
@@ -472,8 +472,8 @@ class TestPreprocessorConsistency(unittest.TestCase):
         ]
         
         for text in test_cases:
-            train_result = self.train_preprocessor.preprocess(text)
-            inference_result = self.inference_preprocessor.preprocess(text)
+            train_result = self.train_preprocessor.preprocess (text)
+            inference_result = self.inference_preprocessor.preprocess (text)
             
             self.assertEqual(
                 train_result, 
@@ -481,7 +481,7 @@ class TestPreprocessorConsistency(unittest.TestCase):
                 f"Mismatch for: {text}"
             )
     
-    def test_edge_cases(self):
+    def test_edge_cases (self):
         """Test edge cases that might break"""
         edge_cases = [
             "",  # Empty string
@@ -493,11 +493,11 @@ class TestPreprocessorConsistency(unittest.TestCase):
         
         for text in edge_cases:
             try:
-                result = self.inference_preprocessor.preprocess(text)
+                result = self.inference_preprocessor.preprocess (text)
                 # Should not crash
-                self.assertIsInstance(result, str)
+                self.assertIsInstance (result, str)
             except Exception as e:
-                self.fail(f"Failed on edge case '{text[:50]}': {e}")
+                self.fail (f"Failed on edge case '{text[:50]}': {e}")
 
 # Run tests in CI/CD pipeline
 if __name__ == '__main__':
@@ -516,27 +516,27 @@ class MonitoredPreprocessor:
         self.oov_counter = Counter()
         self.input_stats = []
     
-    def preprocess(self, text: str) -> str:
+    def preprocess (self, text: str) -> str:
         # Track input characteristics
         self.input_stats.append({
-            'length': len(text),
-            'tokens': len(text.split()),
+            'length': len (text),
+            'tokens': len (text.split()),
         })
         
         # Preprocess
-        result = self.preprocessor.preprocess(text)
+        result = self.preprocessor.preprocess (text)
         
         # Track OOV if using vocabulary
-        if hasattr(self, 'vocabulary'):
+        if hasattr (self, 'vocabulary'):
             tokens = result.split()
             for token in tokens:
                 if token not in self.vocabulary:
                     self.oov_counter[token] += 1
         
         # Alert if too many OOV
-        if len(self.oov_counter) > 100:
-            logging.warning(f"High OOV rate: {len(self.oov_counter)} unique OOV tokens")
-            logging.warning(f"Top OOV: {self.oov_counter.most_common(10)}")
+        if len (self.oov_counter) > 100:
+            logging.warning (f"High OOV rate: {len (self.oov_counter)} unique OOV tokens")
+            logging.warning (f"Top OOV: {self.oov_counter.most_common(10)}")
         
         return result
 \`\`\`

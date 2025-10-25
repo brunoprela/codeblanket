@@ -67,7 +67,7 @@ labels = [1, 0, 1, 0, 1, 0]  # 1 = spam, 0 = not spam
 
 # Convert text to numbers
 vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(emails)
+X = vectorizer.fit_transform (emails)
 
 # Train model
 model = MultinomialNB()
@@ -75,7 +75,7 @@ model.fit(X, labels)
 
 # Test on new email
 new_email = ["Free cash waiting for you!"]
-X_new = vectorizer.transform(new_email)
+X_new = vectorizer.transform (new_email)
 prediction = model.predict(X_new)
 
 print(f"Prediction: {'Spam' if prediction[0] == 1 else 'Not Spam'}")
@@ -107,7 +107,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.datasets import make_regression
 
 # Generate sample data
-X, y = make_regression(n_samples=100, n_features=1, noise=10, random_state=42)
+X, y = make_regression (n_samples=100, n_features=1, noise=10, random_state=42)
 
 # Train supervised learning model
 model = LinearRegression()
@@ -148,10 +148,10 @@ X[:100] += [2, 2]
 X[100:200] += [-2, -2]
 
 # Clustering (unsupervised)
-kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans = KMeans (n_clusters=3, random_state=42)
 clusters = kmeans.fit_predict(X)
 
-print(f"Found {len(set(clusters))} clusters")
+print(f"Found {len (set (clusters))} clusters")
 # Output: Found 3 clusters
 \`\`\`
 
@@ -179,7 +179,7 @@ print(f"Found {len(set(clusters))} clusters")
 - What are we trying to predict?
 - What data do we have?
 - How will success be measured?
-- What's the baseline performance?
+- What\'s the baseline performance?
 
 **Example**: Predict house prices
 - Target: Price (regression problem)
@@ -216,7 +216,7 @@ data = pd.DataFrame({
 
 print(data.head())
 print(f"\\nDataset shape: {data.shape}")
-print(f"Features: {list(data.columns[:-1])}")
+print(f"Features: {list (data.columns[:-1])}")
 print(f"Target: {data.columns[-1]}")
 \`\`\`
 
@@ -277,7 +277,7 @@ print(f"Test samples: {len(X_test)}")
 from sklearn.ensemble import RandomForestRegressor
 
 # Train model
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
 model.fit(X_train_scaled, y_train)
 
 # Model is now trained and ready for predictions
@@ -305,11 +305,10 @@ from sklearn.metrics import mean_absolute_error, r2_score
 y_pred = model.predict(X_test_scaled)
 
 # Evaluate
-mae = mean_absolute_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+mae = mean_absolute_error (y_test, y_pred)
+r2 = r2_score (y_test, y_pred)
 
-print(f"Mean Absolute Error: \${mae:, .0f
-}")
+print(f"Mean Absolute Error: \${mae:,.0f}")
 print(f"R² Score: {r2:.3f}")
 \`\`\`
 
@@ -457,7 +456,7 @@ print(f"Underfitting model training MSE: {train_error:.2f}")
 
 \`\`\`python
 # Overfitting: Polynomial degree too high
-poly_features = PolynomialFeatures(degree=15)
+poly_features = PolynomialFeatures (degree=15)
 X_poly = poly_features.fit_transform(X)
 
 model_complex = LinearRegression()
@@ -532,11 +531,11 @@ depths = [1, 3, 5, 10, 20]
 results = []
 
 for depth in depths:
-    model = DecisionTreeRegressor(max_depth=depth, random_state=42)
+    model = DecisionTreeRegressor (max_depth=depth, random_state=42)
     model.fit(X_train, y_train)
     
-    train_error = mean_squared_error(y_train, model.predict(X_train))
-    test_error = mean_squared_error(y_test, model.predict(X_test))
+    train_error = mean_squared_error (y_train, model.predict(X_train))
+    test_error = mean_squared_error (y_test, model.predict(X_test))
     
     results.append({
         'depth': depth,
@@ -589,10 +588,10 @@ X = np.random.randn(500, 10)
 y = X[:, 0] + 2 * X[:, 1] + np.random.randn(500) * 0.5
 
 # Evaluate generalization using cross-validation
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
 
 # 5-fold cross-validation
-scores = cross_val_score(model, X, y, cv=5, scoring='r2')
+scores = cross_val_score (model, X, y, cv=5, scoring='r2')
 
 print(f"Cross-validation R² scores: {scores}")
 print(f"Mean R²: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
@@ -602,7 +601,7 @@ print(f"Mean R²: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
 
 ## Real-World ML Example: Customer Churn Prediction
 
-Let's put it all together with a complete example:
+Let\'s put it all together with a complete example:
 
 \`\`\`python
 import pandas as pd
@@ -629,7 +628,7 @@ churn_probability = (
     0.2 * (data['num_support_calls'] / 5) +
     0.2 * (data['contract_type'] == 0)
 )
-data['churned'] = (np.random.random(n_customers) < churn_probability).astype(int)
+data['churned'] = (np.random.random (n_customers) < churn_probability).astype (int)
 
 print("="*50)
 print("CUSTOMER CHURN PREDICTION")
@@ -638,7 +637,7 @@ print("="*50)
 # Step 1: Understand the data
 print(f"\\nDataset shape: {data.shape}")
 print(f"Churn rate: {data['churned'].mean():.1%}")
-print(f"\\nFeatures: {list(data.columns[:-1])}")
+print(f"\\nFeatures: {list (data.columns[:-1])}")
 
 # Step 2: Split data
 X = data.drop('churned', axis=1)
@@ -654,21 +653,21 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # Step 4: Train model
-model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+model = RandomForestClassifier (n_estimators=100, max_depth=10, random_state=42)
 model.fit(X_train_scaled, y_train)
 
 # Step 5: Evaluate
 train_pred = model.predict(X_train_scaled)
 test_pred = model.predict(X_test_scaled)
 
-print(f"\\nTraining Accuracy: {accuracy_score(y_train, train_pred):.3f}")
-print(f"Test Accuracy: {accuracy_score(y_test, test_pred):.3f}")
+print(f"\\nTraining Accuracy: {accuracy_score (y_train, train_pred):.3f}")
+print(f"Test Accuracy: {accuracy_score (y_test, test_pred):.3f}")
 
 # Good generalization: similar train and test accuracy
 
 # Step 6: Analyze results
 print("\\nClassification Report:")
-print(classification_report(y_test, test_pred, target_names=['Retained', 'Churned']))
+print(classification_report (y_test, test_pred, target_names=['Retained', 'Churned']))
 
 # Step 7: Feature importance
 feature_importance = pd.DataFrame({
@@ -721,20 +720,20 @@ n_samples = 1000
 
 # Features
 X = pd.DataFrame({
-    'feature1': np.random.randn(n_samples),
-    'feature2': np.random.randn(n_samples),
-    'feature3': np.random.randn(n_samples),
-    'feature4': np.random.randn(n_samples),
+    'feature1': np.random.randn (n_samples),
+    'feature2': np.random.randn (n_samples),
+    'feature3': np.random.randn (n_samples),
+    'feature4': np.random.randn (n_samples),
 })
 
 # Target (classification)
-y = (X['feature1'] + 2*X['feature2'] - X['feature3'] + np.random.randn(n_samples)*0.5 > 0).astype(int)
+y = (X['feature1'] + 2*X['feature2'] - X['feature3'] + np.random.randn (n_samples)*0.5 > 0).astype (int)
 
 print("Dataset Overview:")
 print(f"Samples: {n_samples}")
 print(f"Features: {X.shape[1]}")
-print(f"Classes: {len(np.unique(y))}")
-print(f"Class distribution: {np.bincount(y)}")
+print(f"Classes: {len (np.unique (y))}")
+print(f"Class distribution: {np.bincount (y)}")
 
 # 2. Split data (60% train, 20% validation, 20% test)
 X_temp, X_test, y_temp, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
@@ -752,13 +751,13 @@ X_val_scaled = scaler.transform(X_val)
 X_test_scaled = scaler.transform(X_test)
 
 # 4. Train model
-model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+model = RandomForestClassifier (n_estimators=100, max_depth=10, random_state=42)
 model.fit(X_train_scaled, y_train)
 
 # 5. Evaluate on all sets
-train_acc = accuracy_score(y_train, model.predict(X_train_scaled))
-val_acc = accuracy_score(y_val, model.predict(X_val_scaled))
-test_acc = accuracy_score(y_test, model.predict(X_test_scaled))
+train_acc = accuracy_score (y_train, model.predict(X_train_scaled))
+val_acc = accuracy_score (y_val, model.predict(X_val_scaled))
+test_acc = accuracy_score (y_test, model.predict(X_test_scaled))
 
 print(f"\\nModel Performance:")
 print(f"Training Accuracy: {train_acc:.3f}")
@@ -774,14 +773,14 @@ else:
     print("✓ Good generalization")
 
 # 6. Cross-validation for robust estimate
-cv_scores = cross_val_score(model, X_train_scaled, y_train, cv=5)
+cv_scores = cross_val_score (model, X_train_scaled, y_train, cv=5)
 print(f"\\nCross-Validation Scores: {cv_scores}")
 print(f"Mean CV Score: {cv_scores.mean():.3f} (+/- {cv_scores.std()*2:.3f})")
 
 # 7. Detailed test set evaluation
 y_pred = model.predict(X_test_scaled)
 print("\\nTest Set Classification Report:")
-print(classification_report(y_test, y_pred, target_names=['Class 0', 'Class 1']))
+print(classification_report (y_test, y_pred, target_names=['Class 0', 'Class 1']))
 
 # 8. Feature importance
 feature_importance = pd.DataFrame({
@@ -793,7 +792,7 @@ print("\\nFeature Importance:")
 print(feature_importance)
 
 # 9. Confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 print("\\nConfusion Matrix:")
 print(cm)
 print(f"True Negatives: {cm[0,0]}, False Positives: {cm[0,1]}")

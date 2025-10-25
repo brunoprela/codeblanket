@@ -50,7 +50,7 @@ from pydantic import BaseModel
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Market Data Dashboard API")
@@ -75,7 +75,7 @@ class Quote(BaseModel):
     last: float
     last_size: int
     
-    def spread_bps(self) -> float:
+    def spread_bps (self) -> float:
         mid = (self.bid + self.ask) / 2
         return ((self.ask - self.bid) / mid) * 10000
 
@@ -90,10 +90,10 @@ class OrderBook(BaseModel):
     bids: List[OrderBookLevel]
     asks: List[OrderBookLevel]
     
-    def imbalance(self, levels: int = 5) -> float:
+    def imbalance (self, levels: int = 5) -> float:
         """Calculate order book imbalance"""
-        bid_vol = sum(level.size for level in self.bids[:levels])
-        ask_vol = sum(level.size for level in self.asks[:levels])
+        bid_vol = sum (level.size for level in self.bids[:levels])
+        ask_vol = sum (level.size for level in self.asks[:levels])
         total = bid_vol + ask_vol
         return (bid_vol - ask_vol) / total if total > 0 else 0
 
@@ -124,7 +124,7 @@ class MarketDataProvider:
         if self.session:
             await self.session.close()
     
-    async def get_quote(self, symbol: str) -> Quote:
+    async def get_quote (self, symbol: str) -> Quote:
         """
         Fetch real-time quote
         
@@ -135,11 +135,11 @@ class MarketDataProvider:
         url = f"https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers/{symbol}"
         params = {"apiKey": self.api_key}
         
-        async with self.session.get(url, params=params) as response:
+        async with self.session.get (url, params=params) as response:
             data = await response.json()
             
             if response.status != 200:
-                raise Exception(f"API error: {data}")
+                raise Exception (f"API error: {data}")
             
             ticker = data['ticker']
             
@@ -154,23 +154,23 @@ class MarketDataProvider:
                 last_size=ticker['day']['v']
             )
     
-    async def get_order_book(self, symbol: str) -> OrderBook:
+    async def get_order_book (self, symbol: str) -> OrderBook:
         """
         Fetch Level 2 order book
         
         Note: Full order book requires premium API access
         This simulates order book for demonstration
         """
-        quote = await self.get_quote(symbol)
+        quote = await self.get_quote (symbol)
         
         # Simulate order book levels
         bids = [
-            OrderBookLevel(price=quote.bid - i * 0.01, size=np.random.randint(100, 1000), num_orders=np.random.randint(1, 10))
+            OrderBookLevel (price=quote.bid - i * 0.01, size=np.random.randint(100, 1000), num_orders=np.random.randint(1, 10))
             for i in range(10)
         ]
         
         asks = [
-            OrderBookLevel(price=quote.ask + i * 0.01, size=np.random.randint(100, 1000), num_orders=np.random.randint(1, 10))
+            OrderBookLevel (price=quote.ask + i * 0.01, size=np.random.randint(100, 1000), num_orders=np.random.randint(1, 10))
             for i in range(10)
         ]
         
@@ -181,7 +181,7 @@ class MarketDataProvider:
             asks=asks
         )
     
-    async def stream_trades(self, symbol: str, callback):
+    async def stream_trades (self, symbol: str, callback):
         """
         Stream real-time trades
         
@@ -190,7 +190,7 @@ class MarketDataProvider:
         """
         while True:
             try:
-                quote = await self.get_quote(symbol)
+                quote = await self.get_quote (symbol)
                 
                 # Simulate trade
                 trade = Trade(
@@ -201,13 +201,13 @@ class MarketDataProvider:
                     side='BUY' if np.random.random() > 0.5 else 'SELL'
                 )
                 
-                await callback(trade)
+                await callback (trade)
                 
                 # Wait before next update
                 await asyncio.sleep(1)
                 
             except Exception as e:
-                logger.error(f"Error streaming trades: {e}")
+                logger.error (f"Error streaming trades: {e}")
                 await asyncio.sleep(5)
 
 # Market Impact Calculator
@@ -227,7 +227,7 @@ class MarketImpactCalculator:
         gamma = 0.8  # Market impact coefficient
         
         # Temporary impact
-        temp_impact_bps = gamma * volatility * np.sqrt(participation) * 10000
+        temp_impact_bps = gamma * volatility * np.sqrt (participation) * 10000
         
         # Permanent impact (40% of temporary)
         perm_impact_bps = 0.4 * temp_impact_bps
@@ -256,22 +256,22 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: List[WebSocket] = []
     
-    async def connect(self, websocket: WebSocket):
+    async def connect (self, websocket: WebSocket):
         await websocket.accept()
-        self.active_connections.append(websocket)
-        logger.info(f"Client connected. Total: {len(self.active_connections)}")
+        self.active_connections.append (websocket)
+        logger.info (f"Client connected. Total: {len (self.active_connections)}")
     
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-        logger.info(f"Client disconnected. Total: {len(self.active_connections)}")
+    def disconnect (self, websocket: WebSocket):
+        self.active_connections.remove (websocket)
+        logger.info (f"Client disconnected. Total: {len (self.active_connections)}")
     
-    async def broadcast(self, message: dict):
+    async def broadcast (self, message: dict):
         """Send to all connected clients"""
         for connection in self.active_connections:
             try:
-                await connection.send_json(message)
+                await connection.send_json (message)
             except Exception as e:
-                logger.error(f"Error broadcasting: {e}")
+                logger.error (f"Error broadcasting: {e}")
 
 manager = ConnectionManager()
 
@@ -282,24 +282,24 @@ async def root():
     return {"message": "Market Data Dashboard API", "version": "1.0"}
 
 @app.get("/api/quote/{symbol}")
-async def get_quote(symbol: str):
+async def get_quote (symbol: str):
     """Get current quote for symbol"""
     try:
-        async with MarketDataProvider(api_key="YOUR_API_KEY") as provider:
-            quote = await provider.get_quote(symbol.upper())
+        async with MarketDataProvider (api_key="YOUR_API_KEY") as provider:
+            quote = await provider.get_quote (symbol.upper())
             return quote.dict()
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str (e)}, 500
 
 @app.get("/api/orderbook/{symbol}")
-async def get_order_book(symbol: str):
+async def get_order_book (symbol: str):
     """Get Level 2 order book"""
     try:
-        async with MarketDataProvider(api_key="YOUR_API_KEY") as provider:
-            book = await provider.get_order_book(symbol.upper())
+        async with MarketDataProvider (api_key="YOUR_API_KEY") as provider:
+            book = await provider.get_order_book (symbol.upper())
             return book.dict()
     except Exception as e:
-        return {"error": str(e)}, 500
+        return {"error": str (e)}, 500
 
 @app.post("/api/impact")
 async def calculate_impact(
@@ -309,23 +309,23 @@ async def calculate_impact(
 ):
     """Calculate market impact for order"""
     calculator = MarketImpactCalculator()
-    impact = calculator.estimate_impact(order_size, adv, volatility)
+    impact = calculator.estimate_impact (order_size, adv, volatility)
     return impact
 
 @app.websocket("/ws/quotes/{symbol}")
-async def websocket_quotes(websocket: WebSocket, symbol: str):
+async def websocket_quotes (websocket: WebSocket, symbol: str):
     """
     WebSocket endpoint for real-time quotes
     
     Streams quotes every second
     """
-    await manager.connect(websocket)
+    await manager.connect (websocket)
     
     try:
-        async with MarketDataProvider(api_key="YOUR_API_KEY") as provider:
+        async with MarketDataProvider (api_key="YOUR_API_KEY") as provider:
             while True:
                 # Fetch latest quote
-                quote = await provider.get_quote(symbol.upper())
+                quote = await provider.get_quote (symbol.upper())
                 
                 # Send to client
                 await websocket.send_json({
@@ -337,38 +337,38 @@ async def websocket_quotes(websocket: WebSocket, symbol: str):
                 await asyncio.sleep(1)
                 
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        manager.disconnect (websocket)
     except Exception as e:
-        logger.error(f"WebSocket error: {e}")
-        manager.disconnect(websocket)
+        logger.error (f"WebSocket error: {e}")
+        manager.disconnect (websocket)
 
 @app.websocket("/ws/trades/{symbol}")
-async def websocket_trades(websocket: WebSocket, symbol: str):
+async def websocket_trades (websocket: WebSocket, symbol: str):
     """Stream real-time trades"""
-    await manager.connect(websocket)
+    await manager.connect (websocket)
     
     try:
-        async with MarketDataProvider(api_key="YOUR_API_KEY") as provider:
+        async with MarketDataProvider (api_key="YOUR_API_KEY") as provider:
             
-            async def send_trade(trade: Trade):
+            async def send_trade (trade: Trade):
                 await websocket.send_json({
                     "type": "trade",
                     "data": trade.dict()
                 })
             
             # Start streaming
-            await provider.stream_trades(symbol.upper(), send_trade)
+            await provider.stream_trades (symbol.upper(), send_trade)
             
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        manager.disconnect (websocket)
     except Exception as e:
-        logger.error(f"WebSocket error: {e}")
-        manager.disconnect(websocket)
+        logger.error (f"WebSocket error: {e}")
+        manager.disconnect (websocket)
 
 # Run server
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ---
@@ -425,15 +425,15 @@ export const MarketDataDashboard: React.FC<{ symbol: string }> = ({ symbol }) =>
     const ws = new WebSocket(\`ws://localhost:8000/ws/quotes/\${symbol}\`);
     
     ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
+      const message = JSON.parse (event.data);
       
       if (message.type === 'quote') {
-        setQuote(message.data);
+        setQuote (message.data);
         
         // Update price history
-        setPriceHistory(prev => {
+        setPriceHistory (prev => {
           const newPoint = {
-            time: new Date(message.data.timestamp).toLocaleTimeString(),
+            time: new Date (message.data.timestamp).toLocaleTimeString(),
             price: message.data.last
           };
           return [...prev.slice(-50), newPoint];  // Keep last 50 points
@@ -455,10 +455,10 @@ export const MarketDataDashboard: React.FC<{ symbol: string }> = ({ symbol }) =>
     const ws = new WebSocket(\`ws://localhost:8000/ws/trades/\${symbol}\`);
     
     ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
+      const message = JSON.parse (event.data);
       
       if (message.type === 'trade') {
-        setTrades(prev => [message.data, ...prev.slice(0, 19)]);  // Keep last 20
+        setTrades (prev => [message.data, ...prev.slice(0, 19)]);  // Keep last 20
       }
     };
     
@@ -468,11 +468,11 @@ export const MarketDataDashboard: React.FC<{ symbol: string }> = ({ symbol }) =>
   }, [symbol]);
   
   // Fetch order book
-  const fetchOrderBook = useCallback(async () => {
+  const fetchOrderBook = useCallback (async () => {
     try {
       const response = await fetch(\`http://localhost:8000/api/orderbook/\${symbol}\`);
       const data = await response.json();
-      setOrderBook(data);
+      setOrderBook (data);
     } catch (error) {
       console.error('Error fetching order book:', error);
     }
@@ -480,8 +480,8 @@ export const MarketDataDashboard: React.FC<{ symbol: string }> = ({ symbol }) =>
   
   useEffect(() => {
     fetchOrderBook();
-    const interval = setInterval(fetchOrderBook, 1000);  // Update every second
-    return () => clearInterval(interval);
+    const interval = setInterval (fetchOrderBook, 1000);  // Update every second
+    return () => clearInterval (interval);
   }, [fetchOrderBook]);
   
   return (
@@ -620,7 +620,7 @@ export const MarketDataDashboard: React.FC<{ symbol: string }> = ({ symbol }) =>
             <tbody>
               {trades.map((trade, i) => (
                 <tr key={i} className="border-t">
-                  <td>{new Date(trade.timestamp).toLocaleTimeString()}</td>
+                  <td>{new Date (trade.timestamp).toLocaleTimeString()}</td>
                   <td>
                     <span className={trade.side === 'BUY' ? 'text-green-600' : 'text-red-600'}>
                       {trade.side}
@@ -650,7 +650,7 @@ import pytest
 from fastapi.testclient import TestClient
 from backend.market_data_server import app, MarketImpactCalculator
 
-client = TestClient(app)
+client = TestClient (app)
 
 def test_root():
     """Test API root endpoint"""

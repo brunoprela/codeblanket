@@ -63,14 +63,14 @@ class InstitutionalInvestor:
     rebalancing_frequency: str
     regulatory_constraints: List[str]
     
-    def get_trading_patterns(self) -> Dict:
+    def get_trading_patterns (self) -> Dict:
         """Different institutions have predictable patterns"""
         
         patterns = {
             InstitutionType.PENSION_FUND: {
                 'style': 'Buy-and-hold, passive indexing',
                 'rebalancing': 'Quarterly (predictable)',
-                'size': 'Large orders ($10M-$100M)',
+                'size': 'Large orders (\$10M-$100M)',
                 'time_horizon': '10-30 years',
                 'flow_pattern': 'Month-end/quarter-end rebalancing',
                 'exploitable': 'Yes - front-run rebalancing',
@@ -79,7 +79,7 @@ class InstitutionalInvestor:
             InstitutionType.ENDOWMENT: {
                 'style': 'Yale Model - heavy alternatives',
                 'rebalancing': 'Annual',
-                'size': 'Medium to large ($1M-$50M)',
+                'size': 'Medium to large (\$1M-$50M)',
                 'time_horizon': 'Perpetual (forever)',
                 'flow_pattern': 'Less predictable, sophisticated',
                 'exploitable': 'No - smart money',
@@ -88,7 +88,7 @@ class InstitutionalInvestor:
             InstitutionType.MUTUAL_FUND: {
                 'style': 'Active management, benchmark-aware',
                 'rebalancing': 'Continuous',
-                'size': 'Variable ($100K-$10M)',
+                'size': 'Variable (\$100K-$10M)',
                 'time_horizon': '1-5 years',
                 'flow_pattern': 'Window dressing (month/quarter end)',
                 'exploitable': 'Yes - window dressing, closet indexing',
@@ -97,7 +97,7 @@ class InstitutionalInvestor:
             InstitutionType.SOVEREIGN_WEALTH: {
                 'style': 'Strategic, long-term',
                 'rebalancing': 'Infrequent',
-                'size': 'Massive ($100M-$1B+)',
+                'size': 'Massive (\$100M-$1B+)',
                 'time_horizon': 'Generational',
                 'flow_pattern': 'Unpredictable, non-economic motives',
                 'exploitable': 'No - patient capital',
@@ -105,7 +105,7 @@ class InstitutionalInvestor:
             }
         }
         
-        return patterns.get(self.institution_type, {})
+        return patterns.get (self.institution_type, {})
     
     @staticmethod
     def calendar_effects() -> Dict:
@@ -177,7 +177,7 @@ for inst in institutions:
 print("\\n=== Predictable Calendar Effects ===\\n")
 calendar = InstitutionalInvestor.calendar_effects()
 
-for event, details in list(calendar.items())[:2]:
+for event, details in list (calendar.items())[:2]:
     print(f"{event}:")
     print(f"  Who: {details['participants']}")
     print(f"  What: {details['behavior']}")
@@ -245,7 +245,7 @@ class HighFrequencyTrader:
             }
         }
     
-    def calculate_market_maker_profit(self,
+    def calculate_market_maker_profit (self,
                                      bid_ask_spread: float,
                                      daily_volume: float,
                                      fill_rate: float = 0.50,
@@ -324,7 +324,7 @@ print(f"Annual Profit: \${mm_profit['annual_profit']/1e6:.1f}M")
 print("\\n\\n=== HFT Strategies ===\\n")
 strategies = hft.hft_strategies()
 
-for strategy, details in list(strategies.items())[:2]:
+for strategy, details in list (strategies.items())[:2]:
     print(f"{strategy}:")
     print(f"  Description: {details['description']}")
     print(f"  Volume: {details['volume']}")
@@ -421,7 +421,7 @@ class ParticipantFlowDetection:
     Build systems to detect who's trading
     """
     
-    def detect_institution_type(self,
+    def detect_institution_type (self,
                                trade_size: float,
                                trade_time: str,
                                order_type: str) -> str:
@@ -451,7 +451,7 @@ class ParticipantFlowDetection:
         else:
             return "UNKNOWN"
     
-    def exploit_index_rebalancing(self,
+    def exploit_index_rebalancing (self,
                                  additions: List[str],
                                  deletions: List[str],
                                  announcement_date: str,
@@ -495,7 +495,7 @@ trades = [
 ]
 
 print("\\n\\n=== Participant Detection ===\\n")
-for i, trade in enumerate(trades, 1):
+for i, trade in enumerate (trades, 1):
     participant = detector.detect_institution_type(
         trade['size'],
         trade['time'],

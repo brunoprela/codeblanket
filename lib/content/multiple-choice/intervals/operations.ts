@@ -30,7 +30,7 @@ export const operationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "After sorting by start time, if new interval's start <= current end, they overlap. Extend current to max(current.end, new.end).",
+      "After sorting by start time, if new interval's start <= current end, they overlap. Extend current to max (current.end, new.end).",
   },
   {
     id: 'mc3',
@@ -51,7 +51,7 @@ export const operationsMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['[1,5]', '[2,4]', '[1,2]', 'No intersection'],
     correctAnswer: 1,
     explanation:
-      'Intersection is [max(start1, start2), min(end1, end2)] = [max(1,2), min(4,5)] = [2,4].',
+      'Intersection is [max (start1, start2), min (end1, end2)] = [max(1,2), min(4,5)] = [2,4].',
   },
   {
     id: 'mc5',

@@ -5,7 +5,7 @@
 export const doordasharchitectureSection = {
   id: 'doordash-architecture',
   title: 'DoorDash Architecture',
-  content: `DoorDash is the largest food delivery platform in the United States with 30+ million customers and 500,000+ merchants. DoorDash's architecture must handle real-time logistics, dynamic dispatch, location tracking, and marketplace optimization at massive scale. This section explores the technical systems powering DoorDash's three-sided marketplace.
+  content: `DoorDash is the largest food delivery platform in the United States with 30+ million customers and 500,000+ merchants. DoorDash\'s architecture must handle real-time logistics, dynamic dispatch, location tracking, and marketplace optimization at massive scale. This section explores the technical systems powering DoorDash's three-sided marketplace.
 
 ## Overview
 
@@ -183,28 +183,28 @@ Value: Set of dasher_ids in this hex
 
 **Query**:
 \`\`\`python
-def find_nearby_dashers(restaurant_lat, restaurant_lon, radius_km=2):
+def find_nearby_dashers (restaurant_lat, restaurant_lon, radius_km=2):
     # Convert to H3 hex at resolution 9 (~500m per hex)
     restaurant_hex = h3.geo_to_h3(restaurant_lat, restaurant_lon, 9)
     
     # Get k-ring (neighboring hexes)
     # k=4 covers approximately 2km radius
-    hex_ring = h3.k_ring(restaurant_hex, 4)
+    hex_ring = h3.k_ring (restaurant_hex, 4)
     
     # Query Redis for Dashers in these hexes
     dasher_ids = set()
     for hex_id in hex_ring:
-        dashers = redis.smembers(f"hex:{hex_id}")
-        dasher_ids.update(dashers)
+        dashers = redis.smembers (f"hex:{hex_id}")
+        dasher_ids.update (dashers)
     
     # Get current locations for these Dashers
     locations = redis.mget([f"dasher:location:{d}" for d in dasher_ids])
     
     # Filter by exact distance
     nearby_dashers = []
-    for dasher_id, location in zip(dasher_ids, locations):
+    for dasher_id, location in zip (dasher_ids, locations):
         if location:
-            distance = haversine(restaurant_lat, restaurant_lon, location['lat'], location['lon'])
+            distance = haversine (restaurant_lat, restaurant_lon, location['lat'], location['lon'])
             if distance <= radius_km:
                 nearby_dashers.append({
                     'dasher_id': dasher_id,
@@ -233,7 +233,7 @@ Query: "Get Dasher X's location at time T"
 
 ### 3. Dispatch and Matching
 
-Dispatch is DoorDash's core algorithm: assign orders to optimal Dasher.
+Dispatch is DoorDash\'s core algorithm: assign orders to optimal Dasher.
 
 **Dispatch Challenges**:
 - **Multiple objectives**: Minimize delivery time, maximize Dasher earnings, ensure merchant satisfaction
@@ -250,7 +250,7 @@ Find nearest available Dasher to restaurant → Assign order
 
 **Problems**:
 - Suboptimal globally (Dasher might be better for different order)
-- Doesn't consider: Prep time, Dasher's current location trajectory, batching opportunities
+- Doesn't consider: Prep time, Dasher\'s current location trajectory, batching opportunities
 
 **DoorDash's Approach (Optimization)**:
 
@@ -348,7 +348,7 @@ Option 3: Stack both (if R1 and R2 close, C1 and C2 same direction)
 
 \`\`\`python
 class DispatchService:
-    def dispatch_batch(self):
+    def dispatch_batch (self):
         # Run every 30 seconds
         orders = self.get_pending_orders()
         dashers = self.get_available_dashers()
@@ -361,26 +361,26 @@ class DispatchService:
                 radius_km=5
             )
             for dasher in nearby_dashers:
-                score = self.calculate_score(order, dasher)
+                score = self.calculate_score (order, dasher)
                 if score > threshold:
                     candidates.append((order, dasher, score))
         
         # Solve optimization (greedy or LP solver)
-        assignments = self.optimize(candidates)
+        assignments = self.optimize (candidates)
         
         # Send dispatch notifications
         for order, dasher in assignments:
-            self.send_dispatch(dasher, order)
-            self.update_order_status(order, 'dispatched')
+            self.send_dispatch (dasher, order)
+            self.update_order_status (order, 'dispatched')
     
-    def calculate_score(self, order, dasher):
+    def calculate_score (self, order, dasher):
         # Predict delivery time
-        pickup_time = self.estimate_pickup_time(dasher.location, order.restaurant, order.prep_time)
-        delivery_time = self.estimate_delivery_time(order.restaurant, order.customer_location)
+        pickup_time = self.estimate_pickup_time (dasher.location, order.restaurant, order.prep_time)
+        delivery_time = self.estimate_delivery_time (order.restaurant, order.customer_location)
         total_time = pickup_time + delivery_time
         
         # Predict acceptance probability
-        acceptance_prob = self.predict_acceptance(dasher, order)
+        acceptance_prob = self.predict_acceptance (dasher, order)
         
         # Calculate score (higher = better)
         # Penalize long delivery times, reward high acceptance prob
@@ -408,7 +408,7 @@ Accurate ETA (Estimated Time of Arrival) is critical for customer experience.
 Features:
 - Restaurant ID, time of day, day of week
 - Order size (item count, subtotal)
-- Restaurant's recent prep times (last hour average)
+- Restaurant\'s recent prep times (last hour average)
 - Special events (local events, weather)
 
 Model: Gradient Boosted Trees (XGBoost)
@@ -452,7 +452,7 @@ Dasher en route to customer → Continuously update delivery_time (GPS tracking)
 
 **Communication**:
 - Push notifications to customer: "Your order is arriving in 10 minutes"
-- Live map showing Dasher's location
+- Live map showing Dasher\'s location
 - Update ETA every minute (recalculate based on current location)
 
 ---
@@ -489,12 +489,12 @@ When demand > supply (more orders than Dashers):
 **Surge Algorithm**:
 
 \`\`\`python
-def calculate_surge(zone_id, time):
+def calculate_surge (zone_id, time):
     # Count pending orders in zone
-    pending_orders = count_pending_orders(zone_id)
+    pending_orders = count_pending_orders (zone_id)
     
     # Count available Dashers in zone
-    available_dashers = count_available_dashers(zone_id)
+    available_dashers = count_available_dashers (zone_id)
     
     # Calculate demand/supply ratio
     ratio = pending_orders / (available_dashers + 1)
@@ -510,7 +510,7 @@ def calculate_surge(zone_id, time):
         surge = 0  # No surge
     
     # Adjust for time of day (dinner rush higher surge)
-    if is_dinner_rush(time):
+    if is_dinner_rush (time):
         surge *= 1.5
     
     return surge
@@ -745,7 +745,7 @@ Balancing customer, merchant, and Dasher needs requires careful optimization. Ea
 
 ## Interview Tips
 
-**Q: How would you design DoorDash's dispatch system?**
+**Q: How would you design DoorDash\'s dispatch system?**
 
 A: Use batch matching with optimization. Every 30 seconds: (1) Collect pending orders and available Dashers. (2) For each order, find nearby Dashers (H3 geospatial index, radius 5km). (3) Calculate score for each (order, Dasher) pair: predicted delivery time, acceptance probability, Dasher quality. (4) Formulate as optimization: minimize total delivery time subject to constraints (Dasher capacity ≤2 orders, on-time delivery, acceptance probability >threshold). (5) Solve with Linear Programming or greedy algorithm (balance optimality vs speed). (6) Assign orders, send dispatch notifications. (7) Dashers accept/decline within 60 seconds. Handle declines: reassign to next-best Dasher. Consider stacked deliveries: Can Dasher handle 2 orders from nearby restaurants delivering same direction?
 

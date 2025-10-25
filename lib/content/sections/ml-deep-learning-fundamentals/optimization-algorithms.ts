@@ -30,9 +30,9 @@ Backpropagation computes gradients, but **optimization algorithms** determine ho
 
 Given loss function L(θ), we want to find θ* that minimizes L:
 
-\\\`\\\`\\\`
+\`\`\`
 θ_{t+1} = θ_t - η ∇_θ L(θ_t)
-\\\`\\\`\\\`
+\`\`\`
 
 Where:
 - θ = parameters (weights and biases)
@@ -42,25 +42,25 @@ Where:
 ### Three Variants
 
 **1. Batch Gradient Descent:**
-\\\`\\\`\\\`
+\`\`\`
 θ_{t+1} = θ_t - η ∇_θ (1/N) Σᵢ L(θ_t, xᵢ, yᵢ)
-\\\`\\\`\\\`
+\`\`\`
 - Uses entire dataset per update
 - Accurate gradient but slow
 - Deterministic
 
 **2. Stochastic Gradient Descent (SGD):**
-\\\`\\\`\\\`
+\`\`\`
 θ_{t+1} = θ_t - η ∇_θ L(θ_t, xᵢ, yᵢ)
-\\\`\\\`\\\`
+\`\`\`
 - Uses single sample per update
 - Fast but noisy gradient
 - Stochastic, can escape local minima
 
 **3. Mini-batch Gradient Descent:**
-\\\`\\\`\\\`
+\`\`\`
 θ_{t+1} = θ_t - η ∇_θ (1/B) Σᵢ∈batch L(θ_t, xᵢ, yᵢ)
-\\\`\\\`\\\`
+\`\`\`
 - Uses batch of B samples per update
 - Balance between accuracy and speed
 - Standard in practice (B=32, 64, 128)
@@ -76,7 +76,7 @@ class GradientDescent:
     def __init__(self, learning_rate=0.01):
         self.learning_rate = learning_rate
     
-    def update(self, params, gradients):
+    def update (self, params, gradients):
         """
         Update parameters using gradients
         
@@ -90,11 +90,11 @@ class GradientDescent:
         return params
 
 # Example: Optimize simple function
-def rosenbrock(x, y):
+def rosenbrock (x, y):
     """Rosenbrock function (hard to optimize)"""
     return (1 - x)**2 + 100 * (y - x**2)**2
 
-def rosenbrock_gradient(x, y):
+def rosenbrock_gradient (x, y):
     """Gradient of Rosenbrock function"""
     dx = -2 * (1 - x) - 400 * x * (y - x**2)
     dy = 200 * (y - x**2)
@@ -103,16 +103,16 @@ def rosenbrock_gradient(x, y):
 # Optimization
 np.random.seed(42)
 params = {'xy': np.array([-1.0, -1.0])}  # Starting point
-optimizer = GradientDescent(learning_rate=0.001)
+optimizer = GradientDescent (learning_rate=0.001)
 
 history = [params['xy'].copy()]
 for i in range(1000):
     x, y = params['xy']
-    grad = rosenbrock_gradient(x, y)
-    params = optimizer.update(params, {'xy': grad})
-    history.append(params['xy'].copy())
+    grad = rosenbrock_gradient (x, y)
+    params = optimizer.update (params, {'xy': grad})
+    history.append (params['xy'].copy())
 
-history = np.array(history)
+history = np.array (history)
 
 print(f"Final position: {params['xy']}")
 print(f"Optimal: [1.0, 1.0]")
@@ -131,10 +131,10 @@ SGD oscillates in ravines (steep in one direction, shallow in another):
 
 Adds "velocity" term to accumulate gradients:
 
-\\\`\\\`\\\`
+\`\`\`
 v_t = β v_{t-1} + ∇_θ L(θ_t)
 θ_{t+1} = θ_t - η v_t
-\\\`\\\`\\\`
+\`\`\`
 
 Where β ∈ [0, 1] is momentum coefficient (typically 0.9).
 
@@ -151,11 +151,11 @@ class MomentumOptimizer:
         self.momentum = momentum
         self.velocity = {}
     
-    def update(self, params, gradients):
+    def update (self, params, gradients):
         # Initialize velocity on first call
         if not self.velocity:
             for key in params:
-                self.velocity[key] = np.zeros_like(params[key])
+                self.velocity[key] = np.zeros_like (params[key])
         
         # Update velocity and parameters
         for key in params:
@@ -166,17 +166,17 @@ class MomentumOptimizer:
         return params
 
 # Compare with vanilla GD
-momentum_opt = MomentumOptimizer(learning_rate=0.001, momentum=0.9)
+momentum_opt = MomentumOptimizer (learning_rate=0.001, momentum=0.9)
 params_momentum = {'xy': np.array([-1.0, -1.0])}
 
 history_momentum = [params_momentum['xy'].copy()]
 for i in range(500):  # Fewer iterations needed!
     x, y = params_momentum['xy']
-    grad = rosenbrock_gradient(x, y)
-    params_momentum = momentum_opt.update(params_momentum, {'xy': grad})
-    history_momentum.append(params_momentum['xy'].copy())
+    grad = rosenbrock_gradient (x, y)
+    params_momentum = momentum_opt.update (params_momentum, {'xy': grad})
+    history_momentum.append (params_momentum['xy'].copy())
 
-history_momentum = np.array(history_momentum)
+history_momentum = np.array (history_momentum)
 
 print("\\nMomentum vs Vanilla GD:")
 print(f"  Vanilla (1000 iters): loss = {rosenbrock(*history[-1]):.6f}")
@@ -188,11 +188,11 @@ print("  → Momentum converges faster!")
 
 "Look ahead" variant of momentum:
 
-\\\`\\\`\\\`
+\`\`\`
 θ_lookahead = θ_t - β v_{t-1}
 v_t = β v_{t-1} + ∇_θ L(θ_lookahead)
 θ_{t+1} = θ_t - η v_t
-\\\`\\\`\\\`
+\`\`\`
 
 Evaluates gradient at the "lookahead" position, often converges faster.
 
@@ -208,11 +208,11 @@ Evaluates gradient at the "lookahead" position, often converges faster.
 
 Adapts learning rate per parameter based on historical gradients:
 
-\\\`\\\`\\\`
+\`\`\`
 g_t = ∇_θ L(θ_t)
 G_t = G_{t-1} + g_t ⊙ g_t  (accumulate squared gradients)
 θ_{t+1} = θ_t - (η / √(G_t + ε)) ⊙ g_t
-\\\`\\\`\\\`
+\`\`\`
 
 **Benefit**: Parameters with large gradients get smaller learning rates
 **Problem**: Learning rate decays too aggressively (√G_t grows unbounded)
@@ -221,11 +221,11 @@ G_t = G_{t-1} + g_t ⊙ g_t  (accumulate squared gradients)
 
 Fixes AdaGrad by using exponential moving average:
 
-\\\`\\\`\\\`
+\`\`\`
 g_t = ∇_θ L(θ_t)
 E[g²]_t = β E[g²]_{t-1} + (1 - β) g_t²
 θ_{t+1} = θ_t - (η / √(E[g²]_t + ε)) ⊙ g_t
-\\\`\\\`\\\`
+\`\`\`
 
 **Benefit**: Doesn't accumulate indefinitely, maintains adaptive learning rates
 
@@ -238,10 +238,10 @@ class RMSpropOptimizer:
         self.epsilon = epsilon
         self.squared_gradient = {}
     
-    def update(self, params, gradients):
+    def update (self, params, gradients):
         if not self.squared_gradient:
             for key in params:
-                self.squared_gradient[key] = np.zeros_like(params[key])
+                self.squared_gradient[key] = np.zeros_like (params[key])
         
         for key in params:
             # Update squared gradient moving average
@@ -252,7 +252,7 @@ class RMSpropOptimizer:
             
             # Adaptive learning rate update
             params[key] -= (self.learning_rate * gradients[key] / 
-                           (np.sqrt(self.squared_gradient[key]) + self.epsilon))
+                           (np.sqrt (self.squared_gradient[key]) + self.epsilon))
         
         return params
 \`\`\`
@@ -263,7 +263,7 @@ class RMSpropOptimizer:
 
 Adam (Adaptive Moment Estimation) combines momentum and RMSprop:
 
-\\\`\\\`\\\`
+\`\`\`
 g_t = ∇_θ L(θ_t)
 m_t = β₁ m_{t-1} + (1 - β₁) g_t          (momentum)
 v_t = β₂ v_{t-1} + (1 - β₂) g_t²         (RMSprop)
@@ -273,7 +273,7 @@ m̂_t = m_t / (1 - β₁^t)
 v̂_t = v_t / (1 - β₂^t)
 
 θ_{t+1} = θ_t - η m̂_t / (√v̂_t + ε)
-\\\`\\\`\\\`
+\`\`\`
 
 **Default hyperparameters:**
 - β₁ = 0.9 (momentum)
@@ -293,11 +293,11 @@ class AdamOptimizer:
         self.v = {}  # Second moment (RMSprop)
         self.t = 0   # Time step
     
-    def update(self, params, gradients):
+    def update (self, params, gradients):
         if not self.m:
             for key in params:
-                self.m[key] = np.zeros_like(params[key])
-                self.v[key] = np.zeros_like(params[key])
+                self.m[key] = np.zeros_like (params[key])
+                self.v[key] = np.zeros_like (params[key])
         
         self.t += 1
         
@@ -313,22 +313,22 @@ class AdamOptimizer:
             v_hat = self.v[key] / (1 - self.beta2**self.t)
             
             # Update parameters
-            params[key] -= self.learning_rate * m_hat / (np.sqrt(v_hat) + self.epsilon)
+            params[key] -= self.learning_rate * m_hat / (np.sqrt (v_hat) + self.epsilon)
         
         return params
 
 # Test Adam
-adam_opt = AdamOptimizer(learning_rate=0.01)
+adam_opt = AdamOptimizer (learning_rate=0.01)
 params_adam = {'xy': np.array([-1.0, -1.0])}
 
 history_adam = [params_adam['xy'].copy()]
 for i in range(200):  # Even fewer iterations!
     x, y = params_adam['xy']
-    grad = rosenbrock_gradient(x, y)
-    params_adam = adam_opt.update(params_adam, {'xy': grad})
-    history_adam.append(params_adam['xy'].copy())
+    grad = rosenbrock_gradient (x, y)
+    params_adam = adam_opt.update (params_adam, {'xy': grad})
+    history_adam.append (params_adam['xy'].copy())
 
-history_adam = np.array(history_adam)
+history_adam = np.array (history_adam)
 
 print("\\nOptimizer Comparison:")
 print(f"  Vanilla GD (1000 iters):  {rosenbrock(*history[-1]):.6f}")
@@ -341,7 +341,7 @@ print("  → Adam converges fastest!")
 
 Proper implementation of L2 regularization with Adam:
 
-\\\`\\\`\\\`
+\`\`\`
 # Standard Adam with L2: INCORRECT
 g_t = ∇_θ L(θ_t) + λθ_t  # Add L2 to gradient
 # Then apply Adam...
@@ -350,9 +350,9 @@ g_t = ∇_θ L(θ_t) + λθ_t  # Add L2 to gradient
 # Apply Adam update as usual
 # Then apply weight decay separately
 θ_{t+1} = θ_{t+1} - η λ θ_t
-\\\`\\\`\\\`
+\`\`\`
 
-**Why separate?** Adam's adaptive learning rates interfere with L2 when added to gradients. AdamW decouples them.
+**Why separate?** Adam\'s adaptive learning rates interfere with L2 when added to gradients. AdamW decouples them.
 
 \`\`\`python
 class AdamWOptimizer(AdamOptimizer):
@@ -362,9 +362,9 @@ class AdamWOptimizer(AdamOptimizer):
         super().__init__(learning_rate, beta1, beta2, epsilon)
         self.weight_decay = weight_decay
     
-    def update(self, params, gradients):
+    def update (self, params, gradients):
         # Apply Adam update
-        params = super().update(params, gradients)
+        params = super().update (params, gradients)
         
         # Apply weight decay separately
         for key in params:
@@ -384,21 +384,21 @@ class AdamWOptimizer(AdamOptimizer):
 ### Common Schedules
 
 **1. Step Decay:**
-\\\`\\\`\\\`
+\`\`\`
 η_t = η_0 × γ^⌊t/k⌋
 
 E.g., multiply by 0.1 every 30 epochs
-\\\`\\\`\\\`
+\`\`\`
 
 **2. Exponential Decay:**
-\\\`\\\`\\\`
+\`\`\`
 η_t = η_0 × e^(-kt)
-\\\`\\\`\\\`
+\`\`\`
 
 **3. Cosine Annealing:**
-\\\`\\\`\\\`
+\`\`\`
 η_t = η_min + (η_max - η_min) × (1 + cos(πt/T)) / 2
-\\\`\\\`\\\`
+\`\`\`
 
 **4. Warm Restart (SGDR):**
 - Periodically reset to high LR
@@ -409,24 +409,24 @@ class LearningRateScheduler:
     """Various LR scheduling strategies"""
     
     @staticmethod
-    def step_decay(initial_lr, epoch, step_size=30, gamma=0.1):
+    def step_decay (initial_lr, epoch, step_size=30, gamma=0.1):
         """Multiply LR by gamma every step_size epochs"""
         return initial_lr * (gamma ** (epoch // step_size))
     
     @staticmethod
-    def exponential_decay(initial_lr, epoch, decay_rate=0.95):
+    def exponential_decay (initial_lr, epoch, decay_rate=0.95):
         """Exponential decay"""
         return initial_lr * (decay_rate ** epoch)
     
     @staticmethod
-    def cosine_annealing(initial_lr, epoch, T_max, eta_min=0):
+    def cosine_annealing (initial_lr, epoch, T_max, eta_min=0):
         """Cosine annealing"""
         return eta_min + (initial_lr - eta_min) * (
-            1 + np.cos(np.pi * epoch / T_max)
+            1 + np.cos (np.pi * epoch / T_max)
         ) / 2
     
     @staticmethod
-    def linear_warmup(initial_lr, epoch, warmup_epochs):
+    def linear_warmup (initial_lr, epoch, warmup_epochs):
         """Linear warmup (0 to initial_lr)"""
         if epoch < warmup_epochs:
             return initial_lr * (epoch / warmup_epochs)
@@ -436,27 +436,27 @@ class LearningRateScheduler:
 epochs = np.arange(0, 100)
 initial_lr = 0.1
 
-plt.figure(figsize=(14, 4))
+plt.figure (figsize=(14, 4))
 
 plt.subplot(1, 3, 1)
-lrs_step = [LearningRateScheduler.step_decay(initial_lr, e, step_size=20) for e in epochs]
-plt.plot(epochs, lrs_step, linewidth=2)
+lrs_step = [LearningRateScheduler.step_decay (initial_lr, e, step_size=20) for e in epochs]
+plt.plot (epochs, lrs_step, linewidth=2)
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate')
 plt.title('Step Decay')
 plt.grid(True, alpha=0.3)
 
 plt.subplot(1, 3, 2)
-lrs_exp = [LearningRateScheduler.exponential_decay(initial_lr, e, decay_rate=0.95) for e in epochs]
-plt.plot(epochs, lrs_exp, linewidth=2, color='orange')
+lrs_exp = [LearningRateScheduler.exponential_decay (initial_lr, e, decay_rate=0.95) for e in epochs]
+plt.plot (epochs, lrs_exp, linewidth=2, color='orange')
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate')
 plt.title('Exponential Decay')
 plt.grid(True, alpha=0.3)
 
 plt.subplot(1, 3, 3)
-lrs_cos = [LearningRateScheduler.cosine_annealing(initial_lr, e, T_max=100) for e in epochs]
-plt.plot(epochs, lrs_cos, linewidth=2, color='green')
+lrs_cos = [LearningRateScheduler.cosine_annealing (initial_lr, e, T_max=100) for e in epochs]
+plt.plot (epochs, lrs_cos, linewidth=2, color='green')
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate')
 plt.title('Cosine Annealing')
@@ -522,7 +522,7 @@ optimizer = AdamWOptimizer(
 **For Intraday/HFT Models:**
 \`\`\`python
 # Need fast adaptation: Higher LR + warmup
-optimizer = AdamOptimizer(learning_rate=0.01)
+optimizer = AdamOptimizer (learning_rate=0.01)
 # With warmup for stability
 \`\`\`
 

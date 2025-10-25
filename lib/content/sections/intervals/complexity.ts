@@ -24,7 +24,7 @@ export const complexitySection = {
 **Result Storage:**
 - Merging: O(n) worst case (no merges)
 - Insertion: O(n)
-- Intersection: O(min(n, m))
+- Intersection: O(min (n, m))
 
 **Auxiliary Space:**
 - Sorting: O(log n) for quicksort
@@ -48,7 +48,7 @@ export const complexitySection = {
 
 **Interval Intersection:**
 - Time: **O(n + m)** with two pointers
-- Space: O(min(n, m)) for result
+- Space: O(min (n, m)) for result
 
 ---
 
@@ -57,10 +57,10 @@ export const complexitySection = {
 **1. In-place Modification**
 If allowed to modify input, can save space:
 \`\`\`python
-def merge_inplace(intervals):
+def merge_inplace (intervals):
     intervals.sort()
     write = 0
-    for read in range(1, len(intervals)):
+    for read in range(1, len (intervals)):
         if intervals[read][0] <= intervals[write][1]:
             intervals[write][1] = max(
                 intervals[write][1],

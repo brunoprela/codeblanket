@@ -51,39 +51,39 @@ def comprehensive_diagnostics(X, y):
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
     
     # 1. Residuals vs Fitted
-    axes[0, 0].scatter(fitted, residuals, alpha=0.6)
+    axes[0, 0].scatter (fitted, residuals, alpha=0.6)
     axes[0, 0].axhline(0, color='r', linestyle='--', linewidth=2)
     axes[0, 0].set_xlabel('Fitted Values')
     axes[0, 0].set_ylabel('Residuals')
     axes[0, 0].set_title('Residuals vs Fitted\\n(Check linearity, homoscedasticity)')
     
     # 2. Q-Q Plot
-    stats.probplot(residuals, dist="norm", plot=axes[0, 1])
+    stats.probplot (residuals, dist="norm", plot=axes[0, 1])
     axes[0, 1].set_title('Normal Q-Q Plot\\n(Check normality)')
     
     # 3. Scale-Location
-    axes[0, 2].scatter(fitted, np.sqrt(np.abs(standardized_residuals)), alpha=0.6)
+    axes[0, 2].scatter (fitted, np.sqrt (np.abs (standardized_residuals)), alpha=0.6)
     axes[0, 2].set_xlabel('Fitted Values')
     axes[0, 2].set_ylabel('√|Standardized Residuals|')
     axes[0, 2].set_title('Scale-Location\\n(Check homoscedasticity)')
     
     # 4. Residuals vs Leverage
-    axes[1, 0].scatter(leverage, standardized_residuals, alpha=0.6)
+    axes[1, 0].scatter (leverage, standardized_residuals, alpha=0.6)
     axes[1, 0].axhline(0, color='r', linestyle='--')
     axes[1, 0].set_xlabel('Leverage')
     axes[1, 0].set_ylabel('Standardized Residuals')
     axes[1, 0].set_title('Residuals vs Leverage\\n(Check influential points)')
     
-    # 5. Cook's Distance
-    axes[1, 1].stem(range(len(cooks_d)), cooks_d, markerfmt=',')
-    axes[1, 1].axhline(4/len(y), color='r', linestyle='--', label='Threshold')
+    # 5. Cook\'s Distance
+    axes[1, 1].stem (range (len (cooks_d)), cooks_d, markerfmt=',')
+    axes[1, 1].axhline(4/len (y), color='r', linestyle='--', label='Threshold')
     axes[1, 1].set_xlabel('Observation')
-    axes[1, 1].set_ylabel("Cook's Distance")
+    axes[1, 1].set_ylabel("Cook\'s Distance")
     axes[1, 1].set_title("Cook's Distance\\n(Identify influential points)")
     axes[1, 1].legend()
     
     # 6. Histogram of Residuals
-    axes[1, 2].hist(residuals, bins=30, edgecolor='black', alpha=0.7)
+    axes[1, 2].hist (residuals, bins=30, edgecolor='black', alpha=0.7)
     axes[1, 2].axvline(0, color='r', linestyle='--', linewidth=2)
     axes[1, 2].set_xlabel('Residuals')
     axes[1, 2].set_ylabel('Frequency')
@@ -100,18 +100,18 @@ def comprehensive_diagnostics(X, y):
     print()
     
     # Normality test
-    _, p_shapiro = stats.shapiro(residuals)
+    _, p_shapiro = stats.shapiro (residuals)
     print(f"Shapiro-Wilk (normality): p = {p_shapiro:.4f}")
     print(f"  {'✓ Normal' if p_shapiro > 0.05 else '✗ Not normal'}")
     
     # Homoscedasticity test
-    _, p_het, _, _ = het_breuschpagan(residuals, X_with_const)
+    _, p_het, _, _ = het_breuschpagan (residuals, X_with_const)
     print(f"Breusch-Pagan (homoscedasticity): p = {p_het:.4f}")
     print(f"  {'✓ Homoscedastic' if p_het > 0.05 else '✗ Heteroscedastic'}")
     
     # Influential points
-    n_influential = np.sum(cooks_d > 4/len(y))
-    print(f"\\nInfluential points (Cook's D > 4/n): {n_influential}")
+    n_influential = np.sum (cooks_d > 4/len (y))
+    print(f"\\nInfluential points (Cook\'s D > 4/n): {n_influential}")
     
     return model
 
@@ -135,17 +135,17 @@ def check_linearity():
     # Fit linear model (wrong!)
     model = sm.OLS(y, sm.add_constant(X)).fit()
     
-    plt.figure(figsize=(12, 5))
+    plt.figure (figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
     plt.scatter(X, y, alpha=0.6)
-    plt.plot(X, model.predict(sm.add_constant(X)), 'r-', linewidth=2)
+    plt.plot(X, model.predict (sm.add_constant(X)), 'r-', linewidth=2)
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('Data with Linear Fit (Wrong!)')
     
     plt.subplot(1, 2, 2)
-    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.scatter (model.fittedvalues, model.resid, alpha=0.6)
     plt.axhline(0, color='r', linestyle='--')
     plt.xlabel('Fitted Values')
     plt.ylabel('Residuals')
@@ -176,18 +176,18 @@ def check_independence():
     
     # Time series with autocorrelation
     n = 100
-    errors = np.zeros(n)
+    errors = np.zeros (n)
     errors[0] = np.random.randn()
     for i in range(1, n):
         errors[i] = 0.7*errors[i-1] + np.random.randn()  # AR(1)
     
-    X = np.arange(n)
+    X = np.arange (n)
     y = 2 + 0.5*X + errors
     
     model = sm.OLS(y, sm.add_constant(X)).fit()
     
     # Durbin-Watson test
-    dw = durbin_watson(model.resid)
+    dw = durbin_watson (model.resid)
     
     print("=== Independence Check ===")
     print(f"Durbin-Watson statistic: {dw:.4f}")
@@ -199,16 +199,16 @@ def check_independence():
     print(f"Result: {'Positive autocorrelation detected!' if dw < 1.5 else 'OK'}")
     
     # Plot
-    plt.figure(figsize=(12, 5))
+    plt.figure (figsize=(12, 5))
     plt.subplot(1, 2, 1)
-    plt.plot(model.resid, marker='o', linestyle='-', alpha=0.6)
+    plt.plot (model.resid, marker='o', linestyle='-', alpha=0.6)
     plt.axhline(0, color='r', linestyle='--')
     plt.xlabel('Time')
     plt.ylabel('Residuals')
     plt.title('Residuals Over Time (Shows Pattern!)')
     
     plt.subplot(1, 2, 2)
-    plt.scatter(model.resid[:-1], model.resid[1:], alpha=0.6)
+    plt.scatter (model.resid[:-1], model.resid[1:], alpha=0.6)
     plt.xlabel('Residual at t')
     plt.ylabel('Residual at t+1')
     plt.title('Lag Plot (Shows Correlation!)')
@@ -235,17 +235,17 @@ def check_normality():
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     
     # Normal
-    stats.probplot(normal_resid, dist="norm", plot=axes[0, 0])
+    stats.probplot (normal_resid, dist="norm", plot=axes[0, 0])
     axes[0, 0].set_title('Q-Q: Normal Residuals')
     
-    axes[0, 1].hist(normal_resid, bins=20, edgecolor='black')
+    axes[0, 1].hist (normal_resid, bins=20, edgecolor='black')
     axes[0, 1].set_title('Histogram: Normal')
     
     # Non-normal
-    stats.probplot(heavy_tail, dist="norm", plot=axes[1, 0])
+    stats.probplot (heavy_tail, dist="norm", plot=axes[1, 0])
     axes[1, 0].set_title('Q-Q: Heavy-Tailed Residuals')
     
-    axes[1, 1].hist(heavy_tail, bins=20, edgecolor='black')
+    axes[1, 1].hist (heavy_tail, bins=20, edgecolor='black')
     axes[1, 1].set_title('Histogram: Heavy-Tailed')
     
     plt.tight_layout()
@@ -253,8 +253,8 @@ def check_normality():
     plt.show()
     
     # Statistical tests
-    _, p_normal = stats.shapiro(normal_resid)
-    _, p_heavy = stats.shapiro(heavy_tail)
+    _, p_normal = stats.shapiro (normal_resid)
+    _, p_heavy = stats.shapiro (heavy_tail)
     
     print("=== Normality Tests ===")
     print(f"Normal residuals: p = {p_normal:.4f} ✓")
@@ -270,14 +270,14 @@ def check_homoscedasticity():
     """Detect heteroscedasticity"""
     
     n = 100
-    X = np.random.rand(n) * 10
+    X = np.random.rand (n) * 10
     errors = np.random.normal(0, 0.5 + 0.5*X, n)  # Variance increases with X!
     y = 2 + 3*X + errors
     
     model = sm.OLS(y, sm.add_constant(X)).fit()
     
-    plt.figure(figsize=(10, 5))
-    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.figure (figsize=(10, 5))
+    plt.scatter (model.fittedvalues, model.resid, alpha=0.6)
     plt.axhline(0, color='r', linestyle='--')
     plt.xlabel('Fitted Values')
     plt.ylabel('Residuals')
@@ -287,7 +287,7 @@ def check_homoscedasticity():
     
     # Breusch-Pagan test
     from statsmodels.stats.diagnostic import het_breuschpagan
-    _, p_value, _, _ = het_breuschpagan(model.resid, sm.add_constant(X))
+    _, p_value, _, _ = het_breuschpagan (model.resid, sm.add_constant(X))
     
     print("=== Heteroscedasticity Test ===")
     print(f"Breusch-Pagan p-value: {p_value:.4f}")
@@ -307,12 +307,12 @@ def identify_influential_points():
     """Find and handle influential observations"""
     
     n = 50
-    X = np.random.randn(n)
+    X = np.random.randn (n)
     y = 2 + 3*X + np.random.normal(0, 1, n)
     
     # Add influential outlier
     X = np.append(X, 3)
-    y = np.append(y, 20)  # Way off the line!
+    y = np.append (y, 20)  # Way off the line!
     
     model = sm.OLS(y, sm.add_constant(X)).fit()
     influence = model.get_influence()
@@ -327,11 +327,11 @@ def identify_influential_points():
     high_cooks = cooks_d > 4 / len(X)
     
     print("=== Influential Points ===")
-    print(f"High leverage points: {np.sum(high_leverage)}")
-    print(f"High Cook's D points: {np.sum(high_cooks)}")
+    print(f"High leverage points: {np.sum (high_leverage)}")
+    print(f"High Cook\'s D points: {np.sum (high_cooks)}")
     print()
     print("Most influential points:")
-    top_5 = np.argsort(cooks_d)[-5:]
+    top_5 = np.argsort (cooks_d)[-5:]
     for idx in top_5:
         print(f"  Obs {idx}: Cook's D = {cooks_d[idx]:.4f}, Leverage = {leverage[idx]:.4f}")
     
@@ -340,17 +340,17 @@ def identify_influential_points():
     
     # Data with outlier
     axes[0].scatter(X, y, c=cooks_d, s=100, cmap='Reds', alpha=0.6)
-    axes[0].plot(X, model.predict(sm.add_constant(X)), 'b-', linewidth=2, label='With outlier')
+    axes[0].plot(X, model.predict (sm.add_constant(X)), 'b-', linewidth=2, label='With outlier')
     axes[0].set_xlabel('X')
     axes[0].set_ylabel('y')
     axes[0].set_title('Regression with Influential Point')
     axes[0].legend()
     
-    # Cook's distance plot
-    axes[1].stem(range(len(cooks_d)), cooks_d, markerfmt=',')
+    # Cook\'s distance plot
+    axes[1].stem (range (len (cooks_d)), cooks_d, markerfmt=',')
     axes[1].axhline(4/len(X), color='r', linestyle='--', label='Threshold')
     axes[1].set_xlabel('Observation')
-    axes[1].set_ylabel("Cook's Distance")
+    axes[1].set_ylabel("Cook\'s Distance")
     axes[1].set_title("Influential Points Detection")
     axes[1].legend()
     
@@ -409,7 +409,7 @@ def ml_model_validation():
     from sklearn.model_selection import train_test_split
     
     # Generate data
-    X, y = make_regression(n_samples=200, n_features=5, noise=10, random_state=42)
+    X, y = make_regression (n_samples=200, n_features=5, noise=10, random_state=42)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Fit model
@@ -426,13 +426,13 @@ def ml_model_validation():
     
     print()
     print("✓ 3. Check normality (if n<100)")
-    _, p_norm = stats.shapiro(model.resid)
+    _, p_norm = stats.shapiro (model.resid)
     print(f"   Shapiro-Wilk p = {p_norm:.4f}")
     
     print()
     print("✓ 4. Check homoscedasticity")
     from statsmodels.stats.diagnostic import het_breuschpagan
-    _, p_het, _, _ = het_breuschpagan(model.resid, sm.add_constant(X_train))
+    _, p_het, _, _ = het_breuschpagan (model.resid, sm.add_constant(X_train))
     print(f"   Breusch-Pagan p = {p_het:.4f}")
     
     print()
@@ -442,17 +442,17 @@ def ml_model_validation():
     print()
     print("✓ 6. Check influential points")
     influence = model.get_influence()
-    n_influential = np.sum(influence.cooks_distance[0] > 4/len(y_train))
+    n_influential = np.sum (influence.cooks_distance[0] > 4/len (y_train))
     print(f"   Influential points: {n_influential}")
     
     print()
     print("✓ 7. Validate on test set")
-    y_pred = model.predict(sm.add_constant(X_test))
+    y_pred = model.predict (sm.add_constant(X_test))
     test_r2 = 1 - np.sum((y_test - y_pred)**2) / np.sum((y_test - y_test.mean())**2)
     print(f"   Test R² = {test_r2:.4f}")
     
     print()
-    if test_r2 > 0.7 and abs(test_r2 - model.rsquared) < 0.1:
+    if test_r2 > 0.7 and abs (test_r2 - model.rsquared) < 0.1:
         print("✓ MODEL READY FOR DEPLOYMENT")
     else:
         print("⚠ MODEL NEEDS IMPROVEMENT")
@@ -466,7 +466,7 @@ ml_model_validation()
 2. **Residual plots** reveal most problems visually
 3. **Q-Q plot**: Check normality of residuals
 4. **Scale-Location**: Check homoscedasticity
-5. **Cook's Distance**: Identify influential points
+5. **Cook\'s Distance**: Identify influential points
 6. **Statistical tests**: Confirm visual checks
 7. **Remedial measures**: Transformations, robust methods
 8. **Validate on test set**: Final check of generalization

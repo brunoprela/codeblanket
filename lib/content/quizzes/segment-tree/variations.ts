@@ -23,7 +23,7 @@ export const variationsQuiz = [
       'What is the difference between a Range Sum Tree and a Range Min Tree?',
     hint: 'Consider the merge operation and the identity element.',
     sampleAnswer:
-      'The difference is only in the merge operation. Range Sum Tree uses addition to combine children (left + right), with identity 0. Range Min Tree uses minimum (min(left, right)), with identity infinity. The tree structure and algorithms remain identical - only the combine function changes.',
+      'The difference is only in the merge operation. Range Sum Tree uses addition to combine children (left + right), with identity 0. Range Min Tree uses minimum (min (left, right)), with identity infinity. The tree structure and algorithms remain identical - only the combine function changes.',
     keyPoints: [
       'Sum Tree: merge = addition, identity = 0',
       'Min Tree: merge = minimum, identity = ∞',

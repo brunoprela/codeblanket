@@ -411,11 +411,11 @@ Start with async (better scalability), use sync only when user needs immediate f
 
 Messages may be delivered multiple times. Make processing idempotent:
 \`\`\`
-if (already_processed(message.id)) {
+if (already_processed (message.id)) {
   return; // Skip duplicate
 }
-process(message);
-mark_processed(message.id);
+process (message);
+mark_processed (message.id);
 \`\`\`
 
 ### ✅ 3. Use Dead Letter Queues

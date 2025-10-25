@@ -18,7 +18,7 @@ export const normalizationdenormalizationMultipleChoice: MultipleChoiceQuestion[
       ],
       correctAnswer: 2,
       explanation:
-        "Option C is correct. This table violates 3NF due to transitive dependency: department_name and department_location depend on department_id, not directly on the primary key (employee_id). The dependency chain is: employee_id → department_id → department_name/location. To fix, create a separate departments table. It's not 1NF violation (all values are atomic). Not 2NF violation (there's no composite primary key). Not BCNF issue (no overlapping candidate keys).",
+        "Option C is correct. This table violates 3NF due to transitive dependency: department_name and department_location depend on department_id, not directly on the primary key (employee_id). The dependency chain is: employee_id → department_id → department_name/location. To fix, create a separate departments table. It\'s not 1NF violation (all values are atomic). Not 2NF violation (there's no composite primary key). Not BCNF issue (no overlapping candidate keys).",
     },
     {
       id: 'norm-2',

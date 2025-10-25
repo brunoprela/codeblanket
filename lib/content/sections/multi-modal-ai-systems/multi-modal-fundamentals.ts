@@ -480,7 +480,7 @@ Multi-modal processing is slow:
 
 ### Example: Image Description API
 
-Let's build a production-ready API that accepts an image and returns a detailed description.
+Let\'s build a production-ready API that accepts an image and returns a detailed description.
 
 \`\`\`python
 import os
@@ -504,35 +504,35 @@ class ImageDescription(BaseModel):
     scene_type: str
     confidence: str
 
-def encode_image(image_bytes: bytes) -> str:
+def encode_image (image_bytes: bytes) -> str:
     """Encode image bytes to base64."""
-    return base64.b64encode(image_bytes).decode('utf-8')
+    return base64.b64encode (image_bytes).decode('utf-8')
 
-def optimize_image(image_bytes: bytes, max_size: int = 2048) -> bytes:
+def optimize_image (image_bytes: bytes, max_size: int = 2048) -> bytes:
     """
     Optimize image for API: resize if too large, convert to JPEG.
     Reduces cost and latency.
     """
-    img = Image.open(io.BytesIO(image_bytes))
+    img = Image.open (io.BytesIO(image_bytes))
     
     # Convert to RGB if necessary (handles PNG with alpha)
     if img.mode in ('RGBA', 'LA', 'P'):
         background = Image.new('RGB', img.size, (255, 255, 255))
         if img.mode == 'P':
             img = img.convert('RGBA')
-        background.paste(img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
+        background.paste (img, mask=img.split()[-1] if img.mode in ('RGBA', 'LA') else None)
         img = background
     
     # Resize if too large
-    if max(img.size) > max_size:
+    if max (img.size) > max_size:
         img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
     
     # Convert to JPEG
     buffer = io.BytesIO()
-    img.save(buffer, format="JPEG", quality=85, optimize=True)
+    img.save (buffer, format="JPEG", quality=85, optimize=True)
     return buffer.getvalue()
 
-async def analyze_image(image_bytes: bytes, detail_level: str = "detailed") -> ImageDescription:
+async def analyze_image (image_bytes: bytes, detail_level: str = "detailed") -> ImageDescription:
     """
     Analyze image using GPT-4 Vision.
     
@@ -544,8 +544,8 @@ async def analyze_image(image_bytes: bytes, detail_level: str = "detailed") -> I
         ImageDescription with structured analysis
     """
     # Optimize image to reduce cost
-    optimized_image = optimize_image(image_bytes)
-    base64_image = encode_image(optimized_image)
+    optimized_image = optimize_image (image_bytes)
+    base64_image = encode_image (optimized_image)
     
     # Construct prompt for structured output
     prompt = """Analyze this image and provide:
@@ -592,7 +592,7 @@ Format your response as JSON:
         # Try to parse as JSON (GPT-4 should follow format)
         import json
         try:
-            result = json.loads(content)
+            result = json.loads (content)
             return ImageDescription(**result)
         except json.JSONDecodeError:
             # Fallback: return raw content in description field
@@ -605,7 +605,7 @@ Format your response as JSON:
             )
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Image analysis failed: {str(e)}")
+        raise HTTPException (status_code=500, detail=f"Image analysis failed: {str (e)}")
 
 @app.post("/analyze", response_model=ImageDescription)
 async def analyze_image_endpoint(
@@ -621,17 +621,17 @@ async def analyze_image_endpoint(
     """
     # Validate file type
     if not file.content_type.startswith('image/'):
-        raise HTTPException(status_code=400, detail="File must be an image")
+        raise HTTPException (status_code=400, detail="File must be an image")
     
     # Read image bytes
     image_bytes = await file.read()
     
     # Validate file size (max 20MB)
-    if len(image_bytes) > 20 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Image too large (max 20MB)")
+    if len (image_bytes) > 20 * 1024 * 1024:
+        raise HTTPException (status_code=400, detail="Image too large (max 20MB)")
     
     # Analyze image
-    result = await analyze_image(image_bytes, detail_level)
+    result = await analyze_image (image_bytes, detail_level)
     
     return result
 
@@ -642,7 +642,7 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ### Key Implementation Details
@@ -677,7 +677,7 @@ url = "http://localhost:8000/analyze"
 
 with open("test_image.jpg", "rb") as f:
     files = {"file": f}
-    response = requests.post(url, files=files, params={"detail_level": "detailed"})
+    response = requests.post (url, files=files, params={"detail_level": "detailed"})
 
 print(response.json())
 \`\`\`
@@ -764,7 +764,7 @@ print(response.json())
 ✅ "Describe this product image, focusing on color, style, and key features for an e-commerce catalog"
 
 **Request Structure:**
-❌ "What's in this image?"
+❌ "What\'s in this image?"
 ✅ "List all items in this image as a JSON array with format: [{name, quantity, location}]"
 
 **Provide Context:**
@@ -774,9 +774,9 @@ print(response.json())
 ### 2. Error Handling
 
 \`\`\`python
-def safe_vision_call(image_url: str, prompt: str, max_retries: int = 3):
+def safe_vision_call (image_url: str, prompt: str, max_retries: int = 3):
     """Safe vision API call with retries and error handling."""
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-4-vision-preview",
@@ -798,7 +798,7 @@ def safe_vision_call(image_url: str, prompt: str, max_retries: int = 3):
         
         except openai.BadRequestError as e:
             # Image might be too large or invalid format
-            if "image" in str(e).lower():
+            if "image" in str (e).lower():
                 raise ValueError("Invalid image or image too large")
             raise
         
@@ -820,29 +820,29 @@ import hashlib
 import redis
 import json
 
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
+redis_client = redis.Redis (host='localhost', port=6379, db=0)
 
-def get_image_hash(image_bytes: bytes) -> str:
+def get_image_hash (image_bytes: bytes) -> str:
     """Generate hash for image to use as cache key."""
     return hashlib.sha256(image_bytes).hexdigest()
 
-def cached_vision_analysis(image_bytes: bytes, prompt: str) -> dict:
+def cached_vision_analysis (image_bytes: bytes, prompt: str) -> dict:
     """Analyze image with caching."""
     # Generate cache key
-    image_hash = get_image_hash(image_bytes)
+    image_hash = get_image_hash (image_bytes)
     prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()
     cache_key = f"vision:{image_hash}:{prompt_hash}"
     
     # Check cache
-    cached = redis_client.get(cache_key)
+    cached = redis_client.get (cache_key)
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Call API
-    result = analyze_image(image_bytes, prompt)
+    result = analyze_image (image_bytes, prompt)
     
     # Cache for 24 hours
-    redis_client.setex(cache_key, 86400, json.dumps(result))
+    redis_client.setex (cache_key, 86400, json.dumps (result))
     
     return result
 \`\`\`
@@ -868,7 +868,7 @@ class VisionMetrics:
     success: bool
     error: Optional[str] = None
 
-def log_vision_call(metrics: VisionMetrics):
+def log_vision_call (metrics: VisionMetrics):
     """Log vision API call metrics."""
     logging.info(
         f"Vision API Call: model={metrics.model}, "
@@ -878,7 +878,7 @@ def log_vision_call(metrics: VisionMetrics):
     )
     
     # Send to monitoring service
-    # monitoring_service.track(metrics)
+    # monitoring_service.track (metrics)
 \`\`\`
 
 ## Common Pitfalls

@@ -45,17 +45,17 @@ class TextEmbeddings:
         - all-mpnet-base-v2: Best quality, 768 dims, slower
         - multi-qa-mpnet-base-dot-v1: Optimized for QA
         """
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer (model_name)
         self.dimension = self.model.get_sentence_embedding_dimension()
     
-    def embed_text(self, text):
+    def embed_text (self, text):
         """
         Convert text to embedding vector
         """
-        embedding = self.model.encode(text, convert_to_numpy=True)
+        embedding = self.model.encode (text, convert_to_numpy=True)
         return embedding
     
-    def embed_batch(self, texts):
+    def embed_batch (self, texts):
         """
         Efficiently embed multiple texts
         """
@@ -67,30 +67,30 @@ class TextEmbeddings:
         )
         return embeddings
     
-    def compute_similarity(self, text1, text2):
+    def compute_similarity (self, text1, text2):
         """
         Measure semantic similarity
         """
-        emb1 = self.embed_text(text1)
-        emb2 = self.embed_text(text2)
+        emb1 = self.embed_text (text1)
+        emb2 = self.embed_text (text2)
         
         # Cosine similarity
         similarity = cosine_similarity([emb1], [emb2])[0][0]
         
         return similarity
     
-    def find_most_similar(self, query, candidates):
+    def find_most_similar (self, query, candidates):
         """
         Find most similar texts to query
         """
-        query_emb = self.embed_text(query)
-        candidate_embs = self.embed_batch(candidates)
+        query_emb = self.embed_text (query)
+        candidate_embs = self.embed_batch (candidates)
         
         # Compute similarities
         similarities = cosine_similarity([query_emb], candidate_embs)[0]
         
         # Sort by similarity
-        ranked_indices = np.argsort(similarities)[::-1]
+        ranked_indices = np.argsort (similarities)[::-1]
         
         results = [
             {
@@ -110,13 +110,13 @@ text1 = "Machine learning is a subset of artificial intelligence"
 text2 = "AI includes machine learning and deep learning"
 text3 = "The weather is nice today"
 
-emb1 = embedder.embed_text(text1)
+emb1 = embedder.embed_text (text1)
 print(f"Embedding shape: {emb1.shape}")  # (384,)
 print(f"First 5 values: {emb1[:5]}")
 
 # Similarity
-sim_12 = embedder.compute_similarity(text1, text2)
-sim_13 = embedder.compute_similarity(text1, text3)
+sim_12 = embedder.compute_similarity (text1, text2)
+sim_13 = embedder.compute_similarity (text1, text3)
 
 print(f"Similarity (text1, text2): {sim_12:.3f}")  # ~0.75 (high)
 print(f"Similarity (text1, text3): {sim_13:.3f}")  # ~0.15 (low)
@@ -130,7 +130,7 @@ documents = [
     "I like pizza"
 ]
 
-results = embedder.find_most_similar(query, documents)
+results = embedder.find_most_similar (query, documents)
 print("\\nTop results:")
 for r in results[:2]:
     print(f"  {r['similarity']:.3f}: {r['text']}")
@@ -221,7 +221,7 @@ class EmbeddingModels:
             }
         }
     
-    def recommend_model(self, requirements):
+    def recommend_model (self, requirements):
         """
         Recommend model based on requirements
         """
@@ -243,7 +243,7 @@ class EmbeddingModels:
 # Using OpenAI embeddings
 import openai
 
-def openai_embeddings(texts):
+def openai_embeddings (texts):
     """
     OpenAI ada-002 embeddings
     """
@@ -255,11 +255,11 @@ def openai_embeddings(texts):
     )
     
     embeddings = [item.embedding for item in response.data]
-    return np.array(embeddings)
+    return np.array (embeddings)
 
 # Example
 texts = ["Hello world", "Machine learning"]
-embeddings = openai_embeddings(texts)
+embeddings = openai_embeddings (texts)
 print(f"Shape: {embeddings.shape}")  # (2, 1536)
 
 # Cost: 2 texts * ~2 tokens each * $0.0001/1k = $0.0004
@@ -297,15 +297,15 @@ class FAISSIndex:
         self.index = None
         self.texts = []  # Store original texts
     
-    def build_flat_index(self, embeddings):
+    def build_flat_index (self, embeddings):
         """
         Flat index: Exact search, best quality
         """
         self.index = faiss.IndexFlatL2(self.dimension)
-        self.index.add(embeddings.astype('float32'))
+        self.index.add (embeddings.astype('float32'))
         print(f"Added {self.index.ntotal} vectors")
     
-    def build_ivf_index(self, embeddings, nlist=100):
+    def build_ivf_index (self, embeddings, nlist=100):
         """
         IVF index: Faster search for large datasets
         
@@ -318,17 +318,17 @@ class FAISSIndex:
         quantizer = faiss.IndexFlatL2(self.dimension)
         
         # IVF index
-        self.index = faiss.IndexIVFFlat(quantizer, self.dimension, nlist)
+        self.index = faiss.IndexIVFFlat (quantizer, self.dimension, nlist)
         
         # Train on data
-        self.index.train(embeddings.astype('float32'))
+        self.index.train (embeddings.astype('float32'))
         
         # Add vectors
-        self.index.add(embeddings.astype('float32'))
+        self.index.add (embeddings.astype('float32'))
         
         print(f"Trained and added {self.index.ntotal} vectors")
     
-    def build_hnsw_index(self, embeddings, M=32):
+    def build_hnsw_index (self, embeddings, M=32):
         """
         HNSW: Hierarchical Navigable Small World
         
@@ -336,36 +336,36 @@ class FAISSIndex:
         M: Number of connections (16-64)
         - Higher M = better recall, more memory
         """
-        self.index = faiss.IndexHNSWFlat(self.dimension, M)
-        self.index.add(embeddings.astype('float32'))
+        self.index = faiss.IndexHNSWFlat (self.dimension, M)
+        self.index.add (embeddings.astype('float32'))
         print(f"Built HNSW index with {self.index.ntotal} vectors")
     
-    def search(self, query_embedding, k=5, nprobe=10):
+    def search (self, query_embedding, k=5, nprobe=10):
         """
         Search for k nearest neighbors
         
         nprobe: Number of clusters to search (IVF only)
         - Higher = more accurate, slower
         """
-        if isinstance(self.index, faiss.IndexIVFFlat):
+        if isinstance (self.index, faiss.IndexIVFFlat):
             self.index.nprobe = nprobe
         
         query = query_embedding.astype('float32').reshape(1, -1)
-        distances, indices = self.index.search(query, k)
+        distances, indices = self.index.search (query, k)
         
         return distances[0], indices[0]
     
-    def save(self, path):
+    def save (self, path):
         """
         Save index to disk
         """
-        faiss.write_index(self.index, path)
+        faiss.write_index (self.index, path)
     
-    def load(self, path):
+    def load (self, path):
         """
         Load index from disk
         """
-        self.index = faiss.read_index(path)
+        self.index = faiss.read_index (path)
 
 # Example usage
 from sentence_transformers import SentenceTransformer
@@ -380,20 +380,20 @@ documents = [
     "Natural language processing analyzes text"
 ]
 
-embeddings = model.encode(documents)
+embeddings = model.encode (documents)
 
 # Build index
-index = FAISSIndex(dimension=384)
-index.build_hnsw_index(embeddings)  # Fast + accurate
+index = FAISSIndex (dimension=384)
+index.build_hnsw_index (embeddings)  # Fast + accurate
 
 # Search
 query = "What is artificial intelligence?"
-query_emb = model.encode(query)
+query_emb = model.encode (query)
 
-distances, indices = index.search(query_emb, k=3)
+distances, indices = index.search (query_emb, k=3)
 
 print("Top 3 results:")
-for i, (dist, idx) in enumerate(zip(distances, indices)):
+for i, (dist, idx) in enumerate (zip (distances, indices)):
     print(f"{i+1}. Distance: {dist:.3f} - {documents[idx]}")
 
 # Performance comparison
@@ -441,10 +441,10 @@ class PineconeVectorDB:
     """
     
     def __init__(self, api_key, environment="us-west1-gcp"):
-        pinecone.init(api_key=api_key, environment=environment)
+        pinecone.init (api_key=api_key, environment=environment)
         self.index = None
     
-    def create_index(self, index_name, dimension=384, metric="cosine"):
+    def create_index (self, index_name, dimension=384, metric="cosine"):
         """
         Create Pinecone index
         
@@ -462,9 +462,9 @@ class PineconeVectorDB:
                 pod_type="p1.x1"  # Different tiers available
             )
         
-        self.index = pinecone.Index(index_name)
+        self.index = pinecone.Index (index_name)
     
-    def upsert_vectors(self, vectors, metadata=None, ids=None):
+    def upsert_vectors (self, vectors, metadata=None, ids=None):
         """
         Insert or update vectors
         
@@ -473,7 +473,7 @@ class PineconeVectorDB:
         ids: List of unique IDs
         """
         if ids is None:
-            ids = [str(i) for i in range(len(vectors))]
+            ids = [str (i) for i in range (len (vectors))]
         
         if metadata is None:
             metadata = [{} for _ in vectors]
@@ -481,16 +481,16 @@ class PineconeVectorDB:
         # Prepare data
         to_upsert = [
             (id, vector.tolist(), meta)
-            for id, vector, meta in zip(ids, vectors, metadata)
+            for id, vector, meta in zip (ids, vectors, metadata)
         ]
         
         # Upsert in batches
         batch_size = 100
-        for i in range(0, len(to_upsert), batch_size):
+        for i in range(0, len (to_upsert), batch_size):
             batch = to_upsert[i:i+batch_size]
-            self.index.upsert(vectors=batch)
+            self.index.upsert (vectors=batch)
     
-    def query(self, query_vector, top_k=5, filter=None, include_metadata=True):
+    def query (self, query_vector, top_k=5, filter=None, include_metadata=True):
         """
         Query for similar vectors
         
@@ -505,17 +505,17 @@ class PineconeVectorDB:
         
         return results
     
-    def delete(self, ids):
+    def delete (self, ids):
         """
         Delete vectors by ID
         """
-        self.index.delete(ids=ids)
+        self.index.delete (ids=ids)
     
-    def update_metadata(self, id, metadata):
+    def update_metadata (self, id, metadata):
         """
         Update vector metadata
         """
-        self.index.update(id=id, set_metadata=metadata)
+        self.index.update (id=id, set_metadata=metadata)
 
 # Example usage
 from sentence_transformers import SentenceTransformer
@@ -542,18 +542,18 @@ metadata = [
 ]
 
 # Embed and insert
-embeddings = model.encode(documents)
+embeddings = model.encode (documents)
 db.upsert_vectors(
     vectors=embeddings,
     metadata=metadata,
-    ids=[f"doc_{i}" for i in range(len(documents))]
+    ids=[f"doc_{i}" for i in range (len (documents))]
 )
 
 # Query
 query = "machine learning basics"
-query_emb = model.encode(query)
+query_emb = model.encode (query)
 
-results = db.query(query_emb, top_k=3)
+results = db.query (query_emb, top_k=3)
 
 print("Results:")
 for match in results['matches']:
@@ -600,10 +600,10 @@ class ChromaVectorDB:
         """
         Initialize ChromaDB
         """
-        self.client = chromadb.PersistentClient(path=persist_directory)
+        self.client = chromadb.PersistentClient (path=persist_directory)
         self.collection = None
     
-    def create_collection(self, name, embedding_function=None):
+    def create_collection (self, name, embedding_function=None):
         """
         Create or get collection
         """
@@ -618,12 +618,12 @@ class ChromaVectorDB:
             embedding_function=embedding_function
         )
     
-    def add_documents(self, documents, metadata=None, ids=None):
+    def add_documents (self, documents, metadata=None, ids=None):
         """
         Add documents (auto-embeds them)
         """
         if ids is None:
-            ids = [f"doc_{i}" for i in range(len(documents))]
+            ids = [f"doc_{i}" for i in range (len (documents))]
         
         self.collection.add(
             documents=documents,
@@ -631,7 +631,7 @@ class ChromaVectorDB:
             ids=ids
         )
     
-    def query(self, query_text, n_results=5, where=None):
+    def query (self, query_text, n_results=5, where=None):
         """
         Query with natural language
         
@@ -645,17 +645,17 @@ class ChromaVectorDB:
         
         return results
     
-    def get_by_id(self, ids):
+    def get_by_id (self, ids):
         """
         Get documents by ID
         """
-        return self.collection.get(ids=ids)
+        return self.collection.get (ids=ids)
     
-    def delete(self, ids):
+    def delete (self, ids):
         """
         Delete documents
         """
-        self.collection.delete(ids=ids)
+        self.collection.delete (ids=ids)
 
 # Example usage
 db = ChromaVectorDB()
@@ -676,13 +676,13 @@ metadata = [
     {"category": "AI"}
 ]
 
-db.add_documents(documents, metadata=metadata)
+db.add_documents (documents, metadata=metadata)
 
 # Query
 results = db.query("artificial intelligence", n_results=2)
 
 print("Results:")
-for doc, meta, dist in zip(results['documents'][0], 
+for doc, meta, dist in zip (results['documents'][0], 
                             results['metadatas'][0],
                             results['distances'][0]):
     print(f"  Distance: {dist:.3f}")
@@ -727,14 +727,14 @@ class HybridSearch:
         
         # BM25 for keyword search
         tokenized_docs = [doc.lower().split() for doc in documents]
-        self.bm25 = BM25Okapi(tokenized_docs)
+        self.bm25 = BM25Okapi (tokenized_docs)
     
-    def semantic_search(self, query_embedding, k=10):
+    def semantic_search (self, query_embedding, k=10):
         """
         Dense vector search
         """
         similarities = cosine_similarity([query_embedding], self.embeddings)[0]
-        top_indices = np.argsort(similarities)[::-1][:k]
+        top_indices = np.argsort (similarities)[::-1][:k]
         
         results = [
             {
@@ -747,13 +747,13 @@ class HybridSearch:
         
         return results
     
-    def keyword_search(self, query, k=10):
+    def keyword_search (self, query, k=10):
         """
         Sparse BM25 search
         """
         tokenized_query = query.lower().split()
-        scores = self.bm25.get_scores(tokenized_query)
-        top_indices = np.argsort(scores)[::-1][:k]
+        scores = self.bm25.get_scores (tokenized_query)
+        top_indices = np.argsort (scores)[::-1][:k]
         
         results = [
             {
@@ -766,7 +766,7 @@ class HybridSearch:
         
         return results
     
-    def hybrid_search(self, query, query_embedding, k=10, alpha=0.5):
+    def hybrid_search (self, query, query_embedding, k=10, alpha=0.5):
         """
         Combine semantic and keyword search
         
@@ -776,8 +776,8 @@ class HybridSearch:
         - 0.5: Equal weight
         """
         # Get results from both
-        semantic_results = self.semantic_search(query_embedding, k=k*2)
-        keyword_results = self.keyword_search(query, k=k*2)
+        semantic_results = self.semantic_search (query_embedding, k=k*2)
+        keyword_results = self.keyword_search (query, k=k*2)
         
         # Normalize scores to [0, 1]
         semantic_scores = self._normalize_scores([r['score'] for r in semantic_results])
@@ -786,11 +786,11 @@ class HybridSearch:
         # Combine scores
         combined_scores = {}
         
-        for i, result in enumerate(semantic_results):
+        for i, result in enumerate (semantic_results):
             idx = result['index']
             combined_scores[idx] = alpha * semantic_scores[i]
         
-        for i, result in enumerate(keyword_results):
+        for i, result in enumerate (keyword_results):
             idx = result['index']
             if idx in combined_scores:
                 combined_scores[idx] += (1 - alpha) * keyword_scores[i]
@@ -798,7 +798,7 @@ class HybridSearch:
                 combined_scores[idx] = (1 - alpha) * keyword_scores[i]
         
         # Sort by combined score
-        sorted_indices = sorted(combined_scores.items(), key=lambda x: x[1], reverse=True)
+        sorted_indices = sorted (combined_scores.items(), key=lambda x: x[1], reverse=True)
         
         results = [
             {
@@ -811,11 +811,11 @@ class HybridSearch:
         
         return results
     
-    def _normalize_scores(self, scores):
+    def _normalize_scores (self, scores):
         """
         Min-max normalization
         """
-        scores = np.array(scores)
+        scores = np.array (scores)
         min_score = scores.min()
         max_score = scores.max()
         
@@ -833,24 +833,24 @@ documents = [
 ]
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
-embeddings = model.encode(documents)
+embeddings = model.encode (documents)
 
-search = HybridSearch(documents, embeddings)
+search = HybridSearch (documents, embeddings)
 
 query = "Python language"
-query_emb = model.encode(query)
+query_emb = model.encode (query)
 
 # Compare search methods
 print("Semantic search:")
-for r in search.semantic_search(query_emb, k=2):
+for r in search.semantic_search (query_emb, k=2):
     print(f"  {r['score']:.3f}: {r['text']}")
 
 print("\\nKeyword search:")
-for r in search.keyword_search(query, k=2):
+for r in search.keyword_search (query, k=2):
     print(f"  {r['score']:.3f}: {r['text']}")
 
 print("\\nHybrid search:")
-for r in search.hybrid_search(query, query_emb, k=2):
+for r in search.hybrid_search (query, query_emb, k=2):
     print(f"  {r['score']:.3f}: {r['text']}")
 \`\`\`
 
@@ -879,7 +879,7 @@ class Reranker:
         # Reranking model (cross-encoder)
         self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
     
-    def rerank(self, query, documents, top_k=10):
+    def rerank (self, query, documents, top_k=10):
         """
         Rerank documents for query
         """
@@ -887,10 +887,10 @@ class Reranker:
         pairs = [[query, doc] for doc in documents]
         
         # Score pairs
-        scores = self.reranker.predict(pairs)
+        scores = self.reranker.predict (pairs)
         
         # Sort by score
-        ranked_indices = np.argsort(scores)[::-1][:top_k]
+        ranked_indices = np.argsort (scores)[::-1][:top_k]
         
         results = [
             {
@@ -912,14 +912,14 @@ class TwoStageRetrieval:
         self.vector_db = vector_db
         self.reranker = reranker
     
-    def retrieve(self, query, initial_k=100, final_k=10):
+    def retrieve (self, query, initial_k=100, final_k=10):
         """
         1. Vector search: Get top 100 (fast)
         2. Rerank: Get top 10 (accurate)
         """
         # Stage 1: Fast vector search
-        query_emb = model.encode(query)
-        candidates = self.vector_db.search(query_emb, k=initial_k)
+        query_emb = model.encode (query)
+        candidates = self.vector_db.search (query_emb, k=initial_k)
         
         # Stage 2: Rerank
         final_results = self.reranker.rerank(
@@ -935,10 +935,10 @@ documents = [...]  # Large dataset
 vector_db = FAISSIndex(...)
 reranker = Reranker()
 
-pipeline = TwoStageRetrieval(vector_db, reranker)
+pipeline = TwoStageRetrieval (vector_db, reranker)
 
 query = "How does machine learning work?"
-results = pipeline.retrieve(query, initial_k=100, final_k=10)
+results = pipeline.retrieve (query, initial_k=100, final_k=10)
 
 # Performance
 performance = {
@@ -964,7 +964,7 @@ class ProductionVectorSearch:
     Production best practices
     """
     
-    def chunking_strategy(self, documents):
+    def chunking_strategy (self, documents):
         """
         Break documents into chunks for embedding
         
@@ -981,26 +981,26 @@ class ProductionVectorSearch:
             
             for para in paragraphs:
                 # Further split if too long
-                if len(para.split()) > 512:
+                if len (para.split()) > 512:
                     sentences = para.split('. ')
                     current_chunk = ""
                     
                     for sent in sentences:
-                        if len(current_chunk.split()) + len(sent.split()) < 512:
+                        if len (current_chunk.split()) + len (sent.split()) < 512:
                             current_chunk += sent + ". "
                         else:
                             if current_chunk:
-                                chunks.append(current_chunk)
+                                chunks.append (current_chunk)
                             current_chunk = sent + ". "
                     
                     if current_chunk:
-                        chunks.append(current_chunk)
+                        chunks.append (current_chunk)
                 else:
-                    chunks.append(para)
+                    chunks.append (para)
         
         return chunks
     
-    def embedding_cache(self):
+    def embedding_cache (self):
         """
         Cache embeddings to avoid recomputation
         """
@@ -1009,7 +1009,7 @@ class ProductionVectorSearch:
         
         cache = {}
         
-        def get_embedding(text):
+        def get_embedding (text):
             # Hash text
             text_hash = hashlib.md5(text.encode()).hexdigest()
             
@@ -1018,7 +1018,7 @@ class ProductionVectorSearch:
                 return cache[text_hash]
             
             # Compute embedding
-            embedding = model.encode(text)
+            embedding = model.encode (text)
             
             # Cache
             cache[text_hash] = embedding
@@ -1027,20 +1027,20 @@ class ProductionVectorSearch:
         
         return get_embedding
     
-    def batch_processing(self, texts, batch_size=32):
+    def batch_processing (self, texts, batch_size=32):
         """
         Process in batches for efficiency
         """
         embeddings = []
         
-        for i in range(0, len(texts), batch_size):
+        for i in range(0, len (texts), batch_size):
             batch = texts[i:i+batch_size]
-            batch_embs = model.encode(batch)
-            embeddings.extend(batch_embs)
+            batch_embs = model.encode (batch)
+            embeddings.extend (batch_embs)
         
-        return np.array(embeddings)
+        return np.array (embeddings)
     
-    def monitoring(self):
+    def monitoring (self):
         """
         Monitor vector search performance
         """

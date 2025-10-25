@@ -200,7 +200,7 @@ When phone lines are down (partition), you **MUST choose**:
 
 They don't escape CAP theorem - they make **smart trade-offs** based on what data needs what guarantees:
 
-**Amazon's Approach (Polyglot Persistence):**
+**Amazon\'s Approach (Polyglot Persistence):**
 
 \`\`\`
 Payments & Inventory (CP):
@@ -402,7 +402,7 @@ For eventual consistency:
 **1. Cassandra defaults to AP (ONE/LOCAL_ONE)**
 \`\`\`
 // Default behavior
-session.execute(query); // Uses consistency level ONE
+session.execute (query); // Uses consistency level ONE
 → High availability, eventual consistency
 → AP classification
 \`\`\`
@@ -410,14 +410,14 @@ session.execute(query); // Uses consistency level ONE
 **2. But can be configured for CP (QUORUM/ALL)**
 \`\`\`
 // Strong consistency
-session.execute(query, ConsistencyLevel.QUORUM);
+session.execute (query, ConsistencyLevel.QUORUM);
 → Requires majority, unavailable if quorum lost
 → CP classification
 \`\`\`
 
 **Real-World Example:**
 
-**Instagram's Cassandra Usage:**
+**Instagram\'s Cassandra Usage:**
 
 \`\`\`
 User Posts (AP - Consistency Level ONE):

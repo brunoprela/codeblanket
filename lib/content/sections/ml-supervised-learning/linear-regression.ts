@@ -58,7 +58,7 @@ y = y_true + np.random.randn(50) * 2  # Add noise
 
 # Fit linear regression manually
 X_mean = np.mean(X)
-y_mean = np.mean(y)
+y_mean = np.mean (y)
 
 # Calculate slope (beta_1) and intercept (beta_0)
 numerator = np.sum((X - X_mean) * (y - y_mean))
@@ -74,7 +74,7 @@ print(f"\\nTrue values: β₀ = 2, β₁ = 3")
 y_pred = beta_0 + beta_1 * X
 
 # Visualize
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X, y, alpha=0.5, label='Data points')
 plt.plot(X, y_pred, 'r-', linewidth=2, label=f'Fitted line: y = {beta_0:.2f} + {beta_1:.2f}x')
 plt.plot(X, y_true, 'g--', linewidth=2, label='True relationship', alpha=0.7)
@@ -87,8 +87,8 @@ plt.show()
 
 # Calculate residuals
 residuals = y - y_pred
-print(f"\\nMean residual: {np.mean(residuals):.6f} (should be ~0)")
-print(f"Standard deviation of residuals: {np.std(residuals):.3f}")
+print(f"\\nMean residual: {np.mean (residuals):.6f} (should be ~0)")
+print(f"Standard deviation of residuals: {np.std (residuals):.3f}")
 \`\`\`
 
 ## Ordinary Least Squares (OLS)
@@ -113,19 +113,19 @@ Where:
 
 For simple linear regression, we can derive the optimal parameters analytically:
 
-\\[ \\beta_1 = \\frac{\\sum_{i=1}^{n}(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_{i=1}^{n}(x_i - \\bar{x})^2} = \\frac{Cov(x, y)}{Var(x)} \\]
+\\[ \\beta_1 = \\frac{\\sum_{i=1}^{n}(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_{i=1}^{n}(x_i - \\bar{x})^2} = \\frac{Cov (x, y)}{Var (x)} \\]
 
 \\[ \\beta_0 = \\bar{y} - \\beta_1 \\bar{x} \\]
 
 \`\`\`python
-def calculate_mse(y_true, y_pred):
+def calculate_mse (y_true, y_pred):
     """Calculate Mean Squared Error"""
     return np.mean((y_true - y_pred)**2)
 
 def fit_simple_linear_regression(X, y):
     """Fit simple linear regression using OLS formulas"""
     X_mean = np.mean(X)
-    y_mean = np.mean(y)
+    y_mean = np.mean (y)
     
     # Calculate covariance and variance
     cov_xy = np.mean((X - X_mean) * (y - y_mean))
@@ -147,7 +147,7 @@ y = np.array([2, 4, 5, 4, 5])
 
 beta_0, beta_1 = fit_simple_linear_regression(X, y)
 y_pred = predict(X, beta_0, beta_1)
-mse = calculate_mse(y, y_pred)
+mse = calculate_mse (y, y_pred)
 
 print(f"β₀ = {beta_0:.3f}, β₁ = {beta_1:.3f}")
 print(f"MSE = {mse:.3f}")
@@ -199,7 +199,7 @@ def fit_multiple_linear_regression(X, y):
     beta: array of coefficients including intercept
     """
     # Add column of ones for intercept
-    X_with_intercept = np.column_stack([np.ones(len(X)), X])
+    X_with_intercept = np.column_stack([np.ones (len(X)), X])
     
     # Normal equation: β = (X^T X)^(-1) X^T y
     XtX = X_with_intercept.T @ X_with_intercept
@@ -218,7 +218,7 @@ bedrooms = np.random.randint(1, 6, n_samples)
 age = np.random.uniform(0, 50, n_samples)
 
 # Generate target: price (with some relationship to features)
-price = 50000 + 100 * size + 20000 * bedrooms - 500 * age + np.random.randn(n_samples) * 10000
+price = 50000 + 100 * size + 20000 * bedrooms - 500 * age + np.random.randn (n_samples) * 10000
 
 # Prepare data
 X = np.column_stack([size, bedrooms, age])
@@ -228,19 +228,18 @@ y = price
 beta = fit_multiple_linear_regression(X, y)
 
 print("Fitted coefficients:")
-print(f"Intercept: \${beta[0]:, .0f
-}")
+print(f"Intercept: \${beta[0]:,.0f}")
 print(f"Size coefficient: \${beta[1]:.2f} per sq ft")
 print(f"Bedrooms coefficient: \${beta[2]:,.0f} per bedroom")
 print(f"Age coefficient: \${beta[3]:.2f} per year")
 
 # Make predictions
-X_with_intercept = np.column_stack([np.ones(len(X)), X])
+X_with_intercept = np.column_stack([np.ones (len(X)), X])
 y_pred = X_with_intercept @beta
 
 # Evaluate
 mse = np.mean((y - y_pred) ** 2)
-rmse = np.sqrt(mse)
+rmse = np.sqrt (mse)
 print(f"\\nRMSE: \${rmse:,.0f}")
 \`\`\`
 
@@ -277,7 +276,7 @@ model.fit(X_train, y_train)
 
 # Model parameters
 print("Model Parameters:")
-print(f"Intercept: \${model.intercept_:, .0f}")
+print(f"Intercept: \${model.intercept_:,.0f}")
 print("\\nCoefficients:")
 for feature, coef in zip(X.columns, model.coef_):
     print(f"  {feature}: {coef:,.2f}")
@@ -288,11 +287,11 @@ y_test_pred = model.predict(X_test)
 
 # Evaluate
 print("\\nModel Performance:")
-print(f"Training R²: {r2_score(y_train, y_train_pred):.4f}")
-print(f"Test R²: {r2_score(y_test, y_test_pred):.4f}")
-print(f"\\nTraining RMSE: \${np.sqrt(mean_squared_error(y_train, y_train_pred)):,.0f}")
-print(f"Test RMSE: \${np.sqrt(mean_squared_error(y_test, y_test_pred)):,.0f}")
-print(f"\\nTest MAE: \${mean_absolute_error(y_test, y_test_pred):,.0f}")
+print(f"Training R²: {r2_score (y_train, y_train_pred):.4f}")
+print(f"Test R²: {r2_score (y_test, y_test_pred):.4f}")
+print(f"\\nTraining RMSE: \${np.sqrt (mean_squared_error (y_train, y_train_pred)):,.0f}")
+print(f"Test RMSE: \${np.sqrt (mean_squared_error (y_test, y_test_pred)):,.0f}")
+print(f"\\nTest MAE: \${mean_absolute_error (y_test, y_test_pred):,.0f}")
 \`\`\`
 
 ## Assumptions of Linear Regression
@@ -310,10 +309,10 @@ The relationship between features and target is linear. Check using:
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
 for idx, feature in enumerate(['size', 'bedrooms', 'age']):
-    axes[idx].scatter(data[feature], data['price'], alpha=0.5)
-    axes[idx].set_xlabel(feature)
+    axes[idx].scatter (data[feature], data['price'], alpha=0.5)
+    axes[idx].set_xlabel (feature)
     axes[idx].set_ylabel('price')
-    axes[idx].set_title(f'{feature} vs price')
+    axes[idx].set_title (f'{feature} vs price')
     
 plt.tight_layout()
 plt.show()
@@ -336,9 +335,9 @@ Check using residual plot: residuals should have constant spread.
 # Check homoscedasticity
 residuals = y_test - y_test_pred
 
-plt.figure(figsize=(10, 6))
-plt.scatter(y_test_pred, residuals, alpha=0.5)
-plt.axhline(y=0, color='r', linestyle='--')
+plt.figure (figsize=(10, 6))
+plt.scatter (y_test_pred, residuals, alpha=0.5)
+plt.axhline (y=0, color='r', linestyle='--')
 plt.xlabel('Predicted Values')
 plt.ylabel('Residuals')
 plt.title('Residual Plot')
@@ -359,13 +358,13 @@ from scipy import stats
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
 # Histogram
-axes[0].hist(residuals, bins=30, edgecolor='black', alpha=0.7)
+axes[0].hist (residuals, bins=30, edgecolor='black', alpha=0.7)
 axes[0].set_xlabel('Residuals')
 axes[0].set_ylabel('Frequency')
 axes[0].set_title('Distribution of Residuals')
 
 # Q-Q plot
-stats.probplot(residuals, dist="norm", plot=axes[1])
+stats.probplot (residuals, dist="norm", plot=axes[1])
 axes[1].set_title('Q-Q Plot')
 
 plt.tight_layout()
@@ -388,7 +387,7 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 vif_data = pd.DataFrame()
 vif_data["Feature"] = X.columns
-vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(len(X.columns))]
+vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range (len(X.columns))]
 
 print("\\nVariance Inflation Factors:")
 print(vif_data)
@@ -433,12 +432,12 @@ Where p is the number of features.
 \`\`\`python
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-def evaluate_regression(y_true, y_pred, model_name="Model"):
+def evaluate_regression (y_true, y_pred, model_name="Model"):
     """Comprehensive regression evaluation"""
-    mae = mean_absolute_error(y_true, y_pred)
-    mse = mean_squared_error(y_true, y_pred)
-    rmse = np.sqrt(mse)
-    r2 = r2_score(y_true, y_pred)
+    mae = mean_absolute_error (y_true, y_pred)
+    mse = mean_squared_error (y_true, y_pred)
+    rmse = np.sqrt (mse)
+    r2 = r2_score (y_true, y_pred)
     
     print(f"\\n{model_name} Performance:")
     print(f"  MAE:  {mae:,.2f}")
@@ -449,8 +448,8 @@ def evaluate_regression(y_true, y_pred, model_name="Model"):
     return {'mae': mae, 'mse': mse, 'rmse': rmse, 'r2': r2}
 
 # Evaluate on train and test sets
-train_metrics = evaluate_regression(y_train, y_train_pred, "Training Set")
-test_metrics = evaluate_regression(y_test, y_test_pred, "Test Set")
+train_metrics = evaluate_regression (y_train, y_train_pred, "Training Set")
+test_metrics = evaluate_regression (y_test, y_test_pred, "Test Set")
 \`\`\`
 
 ## Real-World Example: Stock Return Prediction
@@ -461,8 +460,8 @@ np.random.seed(42)
 n_days = 252  # Trading days in a year
 
 # Generate features
-market_return = np.random.randn(n_days) * 0.01  # Daily market return
-sector_return = np.random.randn(n_days) * 0.015  # Sector return
+market_return = np.random.randn (n_days) * 0.01  # Daily market return
+sector_return = np.random.randn (n_days) * 0.015  # Sector return
 volume_ratio = np.random.uniform(0.5, 1.5, n_days)  # Volume relative to average
 volatility = np.random.uniform(0.01, 0.03, n_days)  # Daily volatility
 
@@ -472,7 +471,7 @@ stock_return = (
     1.2 * market_return +  # Beta > 1 (more volatile than market)
     0.3 * sector_return +  # Sector exposure
     0.005 * volume_ratio +  # Volume effect
-    np.random.randn(n_days) * 0.015  # Idiosyncratic noise
+    np.random.randn (n_days) * 0.015  # Idiosyncratic noise
 )
 
 # Create DataFrame
@@ -510,21 +509,21 @@ y_pred_train = model.predict(X_train)
 y_pred_test = model.predict(X_test)
 
 # Evaluate
-print(f"\\nIn-sample R²: {r2_score(y_train, y_pred_train):.4f}")
-print(f"Out-of-sample R²: {r2_score(y_test, y_pred_test):.4f}")
+print(f"\\nIn-sample R²: {r2_score (y_train, y_pred_train):.4f}")
+print(f"Out-of-sample R²: {r2_score (y_test, y_pred_test):.4f}")
 
 # Trading strategy simulation
 print("\\n--- Trading Strategy Performance ---")
 # Simple strategy: go long when predicted return > 0, short otherwise
-predicted_direction = np.sign(y_pred_test)
-actual_direction = np.sign(y_test)
-accuracy = np.mean(predicted_direction == actual_direction)
+predicted_direction = np.sign (y_pred_test)
+actual_direction = np.sign (y_test)
+accuracy = np.mean (predicted_direction == actual_direction)
 print(f"Direction prediction accuracy: {accuracy:.2%}")
 
 # Calculate strategy returns
 strategy_returns = predicted_direction * y_test.values
 cumulative_return = np.cumprod(1 + strategy_returns) - 1
-sharpe_ratio = np.mean(strategy_returns) / np.std(strategy_returns) * np.sqrt(252)
+sharpe_ratio = np.mean (strategy_returns) / np.std (strategy_returns) * np.sqrt(252)
 
 print(f"Cumulative return: {cumulative_return[-1]:.2%}")
 print(f"Sharpe ratio: {sharpe_ratio:.2f}")
@@ -540,16 +539,16 @@ def gradient_descent_linear_regression(X, y, learning_rate=0.01, iterations=1000
     Fit linear regression using gradient descent
     """
     # Add intercept term
-    X_with_intercept = np.column_stack([np.ones(len(X)), X])
+    X_with_intercept = np.column_stack([np.ones (len(X)), X])
     n_samples, n_features = X_with_intercept.shape
     
     # Initialize parameters
-    beta = np.zeros(n_features)
+    beta = np.zeros (n_features)
     
     # Store history
     cost_history = []
     
-    for i in range(iterations):
+    for i in range (iterations):
         # Predictions
         y_pred = X_with_intercept @ beta
         
@@ -561,8 +560,8 @@ def gradient_descent_linear_regression(X, y, learning_rate=0.01, iterations=1000
         beta = beta - learning_rate * gradients
         
         # Calculate cost
-        cost = (1/(2*n_samples)) * np.sum(errors**2)
-        cost_history.append(cost)
+        cost = (1/(2*n_samples)) * np.sum (errors**2)
+        cost_history.append (cost)
         
         if i % 100 == 0:
             print(f"Iteration {i}: Cost = {cost:.4f}")
@@ -579,8 +578,8 @@ print(f"\\nFinal parameters: {beta_gd}")
 print(f"True parameters: [2, 3, 1, -2]")
 
 # Plot cost convergence
-plt.figure(figsize=(10, 6))
-plt.plot(cost_history)
+plt.figure (figsize=(10, 6))
+plt.plot (cost_history)
 plt.xlabel('Iteration')
 plt.ylabel('Cost (MSE)')
 plt.title('Gradient Descent Convergence')
@@ -634,7 +633,7 @@ n_samples = 500
 size = np.random.uniform(800, 3500, n_samples)  # Square feet
 bedrooms = np.random.randint(1, 6, n_samples)
 bathrooms = bedrooms + np.random.choice([-1, 0, 1], n_samples, p=[0.2, 0.5, 0.3])
-bathrooms = np.clip(bathrooms, 1, 5)
+bathrooms = np.clip (bathrooms, 1, 5)
 age = np.random.uniform(0, 50, n_samples)
 lot_size = np.random.uniform(2000, 10000, n_samples)
 distance_city = np.random.uniform(1, 30, n_samples)  # Miles from city center
@@ -649,7 +648,7 @@ price = (
     -1000 * age +                   # Older houses worth less
     10 * lot_size +                 # Lot size adds value
     -2000 * distance_city +         # Closer to city is better
-    np.random.randn(n_samples) * 50000  # Noise
+    np.random.randn (n_samples) * 50000  # Noise
 )
 
 # Create DataFrame
@@ -668,11 +667,11 @@ print("LINEAR REGRESSION: HOUSE PRICE PREDICTION")
 print("="*60)
 
 print(f"\\nDataset shape: {df.shape}")
-print(f"\\nFeatures: {list(df.columns[:-1])}")
+print(f"\\nFeatures: {list (df.columns[:-1])}")
 print(f"Target: {df.columns[-1]}")
 
 print(f"\\nPrice statistics:")
-print(f"  Mean: \${df['price'].mean():, .0f}")
+print(f"  Mean: \${df['price'].mean():,.0f}")
 print(f"  Median: \${df['price'].median():,.0f}")
 print(f"  Std: \${df['price'].std():,.0f}")
 print(f"  Min: \${df['price'].min():,.0f}")
@@ -690,7 +689,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 print(f"\\nTrain set: {len(X_train)} samples")
 print(f"Test set: {len(X_test)} samples")
 
-# Feature scaling(important for gradient descent and regularization)
+# Feature scaling (important for gradient descent and regularization)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
@@ -712,7 +711,7 @@ print("\\nCoefficients:")
 coef_df = pd.DataFrame({
     'Feature': X.columns,
     'Coefficient': model.coef_,
-    'Abs_Coefficient': np.abs(model.coef_)
+    'Abs_Coefficient': np.abs (model.coef_)
 }).sort_values('Abs_Coefficient', ascending = False)
 
 for _, row in coef_df.iterrows():
@@ -727,12 +726,12 @@ print("\\n" + "=" * 60)
 print("MODEL EVALUATION")
 print("=" * 60)
 
-def print_metrics(y_true, y_pred, dataset_name):
-mae = mean_absolute_error(y_true, y_pred)
-mse = mean_squared_error(y_true, y_pred)
-rmse = np.sqrt(mse)
-r2 = r2_score(y_true, y_pred)
-mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+def print_metrics (y_true, y_pred, dataset_name):
+mae = mean_absolute_error (y_true, y_pred)
+mse = mean_squared_error (y_true, y_pred)
+rmse = np.sqrt (mse)
+r2 = r2_score (y_true, y_pred)
+mape = np.mean (np.abs((y_true - y_pred) / y_true)) * 100
 
 print(f"\\n{dataset_name}:")
 print(f"  MAE:  \${mae:,.2f}")
@@ -740,12 +739,12 @@ print(f"  RMSE: \${rmse:,.2f}")
 print(f"  R²:   {r2:.4f}")
 print(f"  MAPE: {mape:.2f}%")
 
-print_metrics(y_train, y_train_pred, "Training Set")
-print_metrics(y_test, y_test_pred, "Test Set")
+print_metrics (y_train, y_train_pred, "Training Set")
+print_metrics (y_test, y_test_pred, "Test Set")
 
 # Check for overfitting / underfitting
-train_r2 = r2_score(y_train, y_train_pred)
-test_r2 = r2_score(y_test, y_test_pred)
+train_r2 = r2_score (y_train, y_train_pred)
+test_r2 = r2_score (y_test, y_test_pred)
 
 print("\\n" + "=" * 60)
 print("MODEL DIAGNOSIS")
@@ -764,7 +763,7 @@ print("EXAMPLE PREDICTIONS")
 print("=" * 60)
 
 # Select a few test samples
-sample_indices = np.random.choice(len(X_test), 5, replace = False)
+sample_indices = np.random.choice (len(X_test), 5, replace = False)
 
 print("\\nComparison of Actual vs Predicted Prices:")
 print(f"{'Actual':>15s} {'Predicted':>15s} {'Difference':>15s} {'% Error':>10s}")
@@ -785,7 +784,7 @@ print("=" * 60)
 
 print("\\nFeatures ranked by absolute coefficient value:")
 print("(Note: Features are scaled, so coefficients are directly comparable)")
-print(coef_df[['Feature', 'Coefficient']].to_string(index = False))
+print(coef_df[['Feature', 'Coefficient']].to_string (index = False))
 
 # Residual analysis
 residuals = y_test - y_test_pred
@@ -795,10 +794,10 @@ print("RESIDUAL ANALYSIS")
 print("=" * 60)
 
 print(f"\\nResidual statistics:")
-print(f"  Mean: \${np.mean(residuals):,.2f} (should be close to 0)")
-print(f"  Std:  \${np.std(residuals):,.2f}")
-print(f"  Min:  \${np.min(residuals):,.2f}")
-print(f"  Max:  \${np.max(residuals):,.2f}")
+print(f"  Mean: \${np.mean (residuals):,.2f} (should be close to 0)")
+print(f"  Std:  \${np.std (residuals):,.2f}")
+print(f"  Min:  \${np.min (residuals):,.2f}")
+print(f"  Max:  \${np.max (residuals):,.2f}")
 
 # Summary
 print("\\n" + "=" * 60)
@@ -807,9 +806,9 @@ print("=" * 60)
 
 print(f"""
 The linear regression model explains { test_r2: .1 %} of the variance in house prices.
-On average, predictions are off by \${ mean_absolute_error(y_test, y_test_pred):, .0f }(MAE).
+On average, predictions are off by \${ mean_absolute_error (y_test, y_test_pred):, .0f }(MAE).
 
-Key drivers of house price(by coefficient magnitude):
+Key drivers of house price (by coefficient magnitude):
     1. { coef_df.iloc[0]['Feature'] }: \${ coef_df.iloc[0]['Coefficient']:, .2f }
 2. { coef_df.iloc[1]['Feature'] }: \${ coef_df.iloc[1]['Coefficient']:, .2f }
 3. { coef_df.iloc[2]['Feature'] }: \${ coef_df.iloc[2]['Coefficient']:, .2f }

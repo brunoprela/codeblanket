@@ -64,7 +64,7 @@ export const yelpMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc5',
     question:
-      'Yelp shards businesses by geographic region (SF, NYC, LA on separate shards). A user in SF searches for "pizza". Which shard(s) are queried?',
+      'Yelp shards businesses by geographic region (SF, NYC, LA on separate shards). A user in SF searches for "pizza". Which shard (s) are queried?',
     options: [
       'All shards (need global results)',
       'SF shard only (user location in SF)',

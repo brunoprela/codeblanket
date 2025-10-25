@@ -51,16 +51,16 @@ class KFoldCV:
         self.shuffle = shuffle
         self.random_state = random_state
     
-    def split(self, X, y=None):
+    def split (self, X, y=None):
         """Generate train/test indices for K-fold CV."""
         n_samples = len(X)
-        indices = np.arange(n_samples)
+        indices = np.arange (n_samples)
         
         if self.shuffle:
-            rng = np.random.RandomState(self.random_state)
-            rng.shuffle(indices)
+            rng = np.random.RandomState (self.random_state)
+            rng.shuffle (indices)
         
-        fold_sizes = np.full(self.n_splits, n_samples // self.n_splits, dtype=int)
+        fold_sizes = np.full (self.n_splits, n_samples // self.n_splits, dtype=int)
         fold_sizes[:n_samples % self.n_splits] += 1
         
         current = 0
@@ -71,18 +71,18 @@ class KFoldCV:
             yield train_indices, test_indices
             current = stop
     
-    def cross_val_score(self, model, X, y, scoring='r2'):
+    def cross_val_score (self, model, X, y, scoring='r2'):
         """Perform cross-validation and return scores."""
         scores = []
         
-        for fold, (train_idx, test_idx) in enumerate(self.split(X, y), 1):
+        for fold, (train_idx, test_idx) in enumerate (self.split(X, y), 1):
             # Split data
             X_train, X_test = X[train_idx], X[test_idx]
             y_train, y_test = y[train_idx], y[test_idx]
             
             # Clone and train model
             from sklearn.base import clone
-            model_clone = clone(model)
+            model_clone = clone (model)
             model_clone.fit(X_train, y_train)
             
             # Evaluate
@@ -90,15 +90,15 @@ class KFoldCV:
                 score = model_clone.score(X_test, y_test)
             elif scoring == 'neg_mse':
                 y_pred = model_clone.predict(X_test)
-                score = -mean_squared_error(y_test, y_pred)
+                score = -mean_squared_error (y_test, y_pred)
             elif scoring == 'neg_rmse':
                 y_pred = model_clone.predict(X_test)
-                score = -np.sqrt(mean_squared_error(y_test, y_pred))
+                score = -np.sqrt (mean_squared_error (y_test, y_pred))
             
-            scores.append(score)
+            scores.append (score)
             print(f"Fold {fold}: {score:.4f}")
         
-        return np.array(scores)
+        return np.array (scores)
 
 # Load data
 diabetes = load_diabetes()
@@ -109,10 +109,10 @@ print("=" * 70)
 
 # Custom implementation
 cv = KFoldCV(n_splits=5, shuffle=True, random_state=42)
-model = Ridge(alpha=1.0)
+model = Ridge (alpha=1.0)
 
 print("\\nCustom K-Fold CV:")
-scores = cv.cross_val_score(model, X, y, scoring='r2')
+scores = cv.cross_val_score (model, X, y, scoring='r2')
 print(f"\\nMean R²: {scores.mean():.4f} (+/- {scores.std():.4f})")
 print(f"95% CI: [{scores.mean() - 1.96*scores.std():.4f}, "
       f"{scores.mean() + 1.96*scores.std():.4f}]")
@@ -124,8 +124,8 @@ print(f"95% CI: [{scores.mean() - 1.96*scores.std():.4f}, "
 from sklearn.model_selection import KFold, cross_val_score, cross_validate
 
 # Simple cross-validation score
-cv = KFold(n_splits=5, shuffle=True, random_state=42)
-scores = cross_val_score(model, X, y, cv=cv, scoring='r2')
+cv = KFold (n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score (model, X, y, cv=cv, scoring='r2')
 
 print("\\nScikit-learn K-Fold CV:")
 print(f"Scores: {scores}")
@@ -133,7 +133,7 @@ print(f"Mean R²: {scores.mean():.4f} (+/- {scores.std():.4f})")
 
 # More detailed cross-validation with multiple metrics
 scoring = ['r2', 'neg_mean_squared_error', 'neg_mean_absolute_error']
-cv_results = cross_validate(model, X, y, cv=cv, scoring=scoring, 
+cv_results = cross_validate (model, X, y, cv=cv, scoring=scoring, 
                             return_train_score=True)
 
 print("\\nDetailed Cross-Validation Results:")
@@ -149,29 +149,29 @@ for metric in scoring:
 ### Visualizing K-Fold Splits
 
 \`\`\`python
-def visualize_cv_splits(cv, X, y, n_samples_to_plot=100):
+def visualize_cv_splits (cv, X, y, n_samples_to_plot=100):
     """Visualize how cross-validation splits the data."""
-    fig, axes = plt.subplots(cv.get_n_splits(), 1, figsize=(12, 8))
+    fig, axes = plt.subplots (cv.get_n_splits(), 1, figsize=(12, 8))
     
     # Use subset for visualization
-    indices = np.arange(min(n_samples_to_plot, len(X)))
+    indices = np.arange (min (n_samples_to_plot, len(X)))
     
-    for fold, (train_idx, test_idx) in enumerate(cv.split(X[:n_samples_to_plot])):
+    for fold, (train_idx, test_idx) in enumerate (cv.split(X[:n_samples_to_plot])):
         # Create array for visualization
-        split_array = np.full(len(indices), 0)
+        split_array = np.full (len (indices), 0)
         split_array[train_idx] = 1  # Training
         split_array[test_idx] = 2   # Testing
         
-        axes[fold].barh(0, len(indices), color='white', edgecolor='black')
+        axes[fold].barh(0, len (indices), color='white', edgecolor='black')
         
         # Color code: training (blue), testing (red)
-        for idx, val in enumerate(split_array):
+        for idx, val in enumerate (split_array):
             color = 'steelblue' if val == 1 else 'coral'
             axes[fold].barh(0, 1, left=idx, color=color)
         
-        axes[fold].set_xlim(0, len(indices))
+        axes[fold].set_xlim(0, len (indices))
         axes[fold].set_ylim(-0.5, 0.5)
-        axes[fold].set_ylabel(f'Fold {fold+1}', rotation=0, labelpad=30)
+        axes[fold].set_ylabel (f'Fold {fold+1}', rotation=0, labelpad=30)
         axes[fold].set_yticks([])
         axes[fold].set_xticks([])
     
@@ -182,8 +182,8 @@ def visualize_cv_splits(cv, X, y, n_samples_to_plot=100):
     plt.savefig('kfold_visualization.png', dpi=150, bbox_inches='tight')
     print("Visualization saved to 'kfold_visualization.png'")
 
-cv = KFold(n_splits=5, shuffle=True, random_state=42)
-visualize_cv_splits(cv, X, y)
+cv = KFold (n_splits=5, shuffle=True, random_state=42)
+visualize_cv_splits (cv, X, y)
 \`\`\`
 
 ## Stratified K-Fold Cross-Validation
@@ -204,52 +204,52 @@ cancer = load_breast_cancer()
 X, y = cancer.data, cancer.target
 
 print("Dataset class distribution:")
-print(Counter(y))
-print(f"Class 0: {(y==0).sum()/len(y)*100:.1f}%")
-print(f"Class 1: {(y==1).sum()/len(y)*100:.1f}%")
+print(Counter (y))
+print(f"Class 0: {(y==0).sum()/len (y)*100:.1f}%")
+print(f"Class 1: {(y==1).sum()/len (y)*100:.1f}%")
 
 # Compare regular K-Fold vs Stratified K-Fold
 print("\\n" + "="*70)
 print("Regular K-Fold (not stratified):")
 print("="*70)
 
-cv_regular = KFold(n_splits=5, shuffle=True, random_state=42)
-for fold, (train_idx, test_idx) in enumerate(cv_regular.split(X, y), 1):
+cv_regular = KFold (n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, test_idx) in enumerate (cv_regular.split(X, y), 1):
     y_train_fold = y[train_idx]
     y_test_fold = y[test_idx]
     
-    train_dist = Counter(y_train_fold)
-    test_dist = Counter(y_test_fold)
+    train_dist = Counter (y_train_fold)
+    test_dist = Counter (y_test_fold)
     
     print(f"Fold {fold}:")
-    print(f"  Train - Class 0: {train_dist[0]/len(y_train_fold)*100:5.1f}%, "
-          f"Class 1: {train_dist[1]/len(y_train_fold)*100:5.1f}%")
-    print(f"  Test  - Class 0: {test_dist[0]/len(y_test_fold)*100:5.1f}%, "
-          f"Class 1: {test_dist[1]/len(y_test_fold)*100:5.1f}%")
+    print(f"  Train - Class 0: {train_dist[0]/len (y_train_fold)*100:5.1f}%, "
+          f"Class 1: {train_dist[1]/len (y_train_fold)*100:5.1f}%")
+    print(f"  Test  - Class 0: {test_dist[0]/len (y_test_fold)*100:5.1f}%, "
+          f"Class 1: {test_dist[1]/len (y_test_fold)*100:5.1f}%")
 
 print("\\n" + "="*70)
 print("Stratified K-Fold:")
 print("="*70)
 
-cv_stratified = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-for fold, (train_idx, test_idx) in enumerate(cv_stratified.split(X, y), 1):
+cv_stratified = StratifiedKFold (n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, test_idx) in enumerate (cv_stratified.split(X, y), 1):
     y_train_fold = y[train_idx]
     y_test_fold = y[test_idx]
     
-    train_dist = Counter(y_train_fold)
-    test_dist = Counter(y_test_fold)
+    train_dist = Counter (y_train_fold)
+    test_dist = Counter (y_test_fold)
     
     print(f"Fold {fold}:")
-    print(f"  Train - Class 0: {train_dist[0]/len(y_train_fold)*100:5.1f}%, "
-          f"Class 1: {train_dist[1]/len(y_train_fold)*100:5.1f}%")
-    print(f"  Test  - Class 0: {test_dist[0]/len(y_test_fold)*100:5.1f}%, "
-          f"Class 1: {test_dist[1]/len(y_test_fold)*100:5.1f}%")
+    print(f"  Train - Class 0: {train_dist[0]/len (y_train_fold)*100:5.1f}%, "
+          f"Class 1: {train_dist[1]/len (y_train_fold)*100:5.1f}%")
+    print(f"  Test  - Class 0: {test_dist[0]/len (y_test_fold)*100:5.1f}%, "
+          f"Class 1: {test_dist[1]/len (y_test_fold)*100:5.1f}%")
 
 # Compare model performance
-model = LogisticRegression(max_iter=10000, random_state=42)
+model = LogisticRegression (max_iter=10000, random_state=42)
 
-scores_regular = cross_val_score(model, X, y, cv=cv_regular, scoring='f1')
-scores_stratified = cross_val_score(model, X, y, cv=cv_stratified, scoring='f1')
+scores_regular = cross_val_score (model, X, y, cv=cv_regular, scoring='f1')
+scores_stratified = cross_val_score (model, X, y, cv=cv_stratified, scoring='f1')
 
 print("\\n" + "="*70)
 print("Model Performance Comparison:")
@@ -293,15 +293,15 @@ n_splits = loo.get_n_splits(X_small)
 print(f"Number of splits (folds): {n_splits}")
 print(f"Each fold: {n_splits-1} train, 1 test sample")
 
-model = LogisticRegression(max_iter=10000)
+model = LogisticRegression (max_iter=10000)
 
 # Time comparison: LOOCV vs 5-Fold
 start_time = time.time()
-scores_loo = cross_val_score(model, X_small, y_small, cv=loo)
+scores_loo = cross_val_score (model, X_small, y_small, cv=loo)
 loo_time = time.time() - start_time
 
 start_time = time.time()
-scores_5fold = cross_val_score(model, X_small, y_small, cv=5)
+scores_5fold = cross_val_score (model, X_small, y_small, cv=5)
 fold5_time = time.time() - start_time
 
 print(f"\\nResults:")
@@ -316,23 +316,23 @@ print("="*70)
 
 dataset_sizes = [50, 100, 200, 500]
 for size in dataset_sizes:
-    X_subset = X_small[:min(size, len(X_small))]
-    y_subset = y_small[:min(size, len(X_small))]
+    X_subset = X_small[:min (size, len(X_small))]
+    y_subset = y_small[:min (size, len(X_small))]
     
     # Repeat to fill if needed
     if size > len(X_small):
         reps = size // len(X_small) + 1
         X_subset = np.tile(X_small, (reps, 1))[:size]
-        y_subset = np.tile(y_small, reps)[:size]
+        y_subset = np.tile (y_small, reps)[:size]
     
     loo = LeaveOneOut()
     
     start = time.time()
     # Just split, don't train (to show split overhead)
-    splits = list(loo.split(X_subset))
+    splits = list (loo.split(X_subset))
     elapsed = time.time() - start
     
-    print(f"N={size:4d}: {len(splits):4d} folds, estimated training time ≈ {elapsed*100:.2f}s")
+    print(f"N={size:4d}: {len (splits):4d} folds, estimated training time ≈ {elapsed*100:.2f}s")
 
 print("\\n⚠️  LOOCV not recommended for N > 1000")
 \`\`\`
@@ -353,7 +353,7 @@ n_samples = 200
 dates = pd.date_range('2020-01-01', periods=n_samples, freq='D')
 
 # Simulate stock price with trend
-price = 100 + np.cumsum(np.random.randn(n_samples) * 2)
+price = 100 + np.cumsum (np.random.randn (n_samples) * 2)
 X_ts = price[:-1].reshape(-1, 1)
 y_ts = price[1:]  # Predict next day
 
@@ -361,37 +361,37 @@ print("Time Series Cross-Validation")
 print("="*70)
 
 # Time series split
-tscv = TimeSeriesSplit(n_splits=5)
+tscv = TimeSeriesSplit (n_splits=5)
 
 print(f"\\nTimeSeriesSplit with {tscv.n_splits} splits:")
 print("-"*70)
 
-for fold, (train_idx, test_idx) in enumerate(tscv.split(X_ts), 1):
+for fold, (train_idx, test_idx) in enumerate (tscv.split(X_ts), 1):
     train_dates = dates[train_idx]
     test_dates = dates[test_idx]
     
     print(f"Fold {fold}:")
     print(f"  Train: {train_dates.min().date()} to {train_dates.max().date()} "
-          f"({len(train_idx):3d} samples)")
+          f"({len (train_idx):3d} samples)")
     print(f"  Test:  {test_dates.min().date()} to {test_dates.max().date()} "
-          f"({len(test_idx):3d} samples)")
+          f"({len (test_idx):3d} samples)")
     
     # Verify no overlap and correct order
     assert train_dates.max() < test_dates.min(), "Training must precede testing!"
 
 # Visualize time series splits
-def visualize_ts_splits(tscv, X):
+def visualize_ts_splits (tscv, X):
     """Visualize time series CV splits."""
-    fig, axes = plt.subplots(tscv.n_splits, 1, figsize=(12, 8))
+    fig, axes = plt.subplots (tscv.n_splits, 1, figsize=(12, 8))
     
-    for fold, (train_idx, test_idx) in enumerate(tscv.split(X)):
-        split_array = np.full(len(X), 0)
+    for fold, (train_idx, test_idx) in enumerate (tscv.split(X)):
+        split_array = np.full (len(X), 0)
         split_array[train_idx] = 1
         split_array[test_idx] = 2
         
         axes[fold].barh(0, len(X), color='white', edgecolor='black')
         
-        for idx, val in enumerate(split_array):
+        for idx, val in enumerate (split_array):
             if val == 1:
                 color = 'steelblue'
             elif val == 2:
@@ -402,7 +402,7 @@ def visualize_ts_splits(tscv, X):
         
         axes[fold].set_xlim(0, len(X))
         axes[fold].set_ylim(-0.5, 0.5)
-        axes[fold].set_ylabel(f'Fold {fold+1}', rotation=0, labelpad=30)
+        axes[fold].set_ylabel (f'Fold {fold+1}', rotation=0, labelpad=30)
         axes[fold].set_yticks([])
     
     axes[0].set_title('Time Series Cross-Validation\\n(Blue=Train, Red=Test, Gray=Not Used)', 
@@ -412,13 +412,13 @@ def visualize_ts_splits(tscv, X):
     plt.savefig('timeseries_cv.png', dpi=150, bbox_inches='tight')
     print("\\nVisualization saved to 'timeseries_cv.png'")
 
-visualize_ts_splits(tscv, X_ts)
+visualize_ts_splits (tscv, X_ts)
 
 # Evaluate model with time series CV
 from sklearn.linear_model import Ridge
 
-model = Ridge(alpha=1.0)
-scores = cross_val_score(model, X_ts, y_ts, cv=tscv, scoring='neg_mean_squared_error')
+model = Ridge (alpha=1.0)
+scores = cross_val_score (model, X_ts, y_ts, cv=tscv, scoring='neg_mean_squared_error')
 
 print(f"\\nTime Series CV Results:")
 print(f"Neg MSE: {scores.mean():.2f} (+/- {scores.std():.2f})")
@@ -454,14 +454,14 @@ def blocked_time_series_split(X, y, n_splits=5, test_size=20, gap=5):
     n_samples = len(X)
     
     # Calculate split points
-    test_starts = np.linspace(n_samples // 2, n_samples - test_size, n_splits, dtype=int)
+    test_starts = np.linspace (n_samples // 2, n_samples - test_size, n_splits, dtype=int)
     
     for test_start in test_starts:
         train_end = test_start - gap  # Gap between train and test
-        test_end = min(test_start + test_size, n_samples)
+        test_end = min (test_start + test_size, n_samples)
         
         train_idx = np.arange(0, train_end)
-        test_idx = np.arange(test_start, test_end)
+        test_idx = np.arange (test_start, test_end)
         
         yield train_idx, test_idx
 
@@ -473,9 +473,9 @@ for fold, (train_idx, test_idx) in enumerate(
     blocked_time_series_split(X_ts, y_ts, n_splits=5, test_size=20, gap=5), 1
 ):
     print(f"Fold {fold}:")
-    print(f"  Train: indices 0 to {train_idx[-1]} ({len(train_idx)} samples)")
+    print(f"  Train: indices 0 to {train_idx[-1]} ({len (train_idx)} samples)")
     print(f"  Gap:   indices {train_idx[-1]+1} to {test_idx[0]-1} (not used)")
-    print(f"  Test:  indices {test_idx[0]} to {test_idx[-1]} ({len(test_idx)} samples)")
+    print(f"  Test:  indices {test_idx[0]} to {test_idx[-1]} ({len (test_idx)} samples)")
 
 print("\\n✓ Gap prevents leakage from auto-correlated features")
 \`\`\`
@@ -502,7 +502,7 @@ print("="*70)
 print("\\n❌ Non-Nested CV (biased estimate):")
 param_grid = {'C': [0.1, 1, 10, 100], 'gamma': [0.001, 0.01, 0.1, 1]}
 grid_search = GridSearchCV(SVC(), param_grid, cv=5)
-scores_non_nested = cross_val_score(grid_search, X, y, cv=5)
+scores_non_nested = cross_val_score (grid_search, X, y, cv=5)
 print(f"Accuracy: {scores_non_nested.mean():.4f} (+/- {scores_non_nested.std():.4f})")
 print("⚠️  This estimate is optimistically biased!")
 
@@ -513,14 +513,14 @@ def nested_cv_score(X, y, outer_cv=5, inner_cv=5):
     """Perform nested cross-validation."""
     outer_scores = []
     
-    outer_cv_splitter = StratifiedKFold(n_splits=outer_cv, shuffle=True, random_state=42)
+    outer_cv_splitter = StratifiedKFold (n_splits=outer_cv, shuffle=True, random_state=42)
     
-    for fold, (train_idx, test_idx) in enumerate(outer_cv_splitter.split(X, y), 1):
+    for fold, (train_idx, test_idx) in enumerate (outer_cv_splitter.split(X, y), 1):
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
         
         # Inner CV: Hyperparameter tuning
-        inner_cv_splitter = StratifiedKFold(n_splits=inner_cv, shuffle=True, random_state=42)
+        inner_cv_splitter = StratifiedKFold (n_splits=inner_cv, shuffle=True, random_state=42)
         grid_search = GridSearchCV(
             SVC(), param_grid, cv=inner_cv_splitter, n_jobs=-1
         )
@@ -528,11 +528,11 @@ def nested_cv_score(X, y, outer_cv=5, inner_cv=5):
         
         # Evaluate best model on outer test fold
         score = grid_search.score(X_test, y_test)
-        outer_scores.append(score)
+        outer_scores.append (score)
         
         print(f"Outer Fold {fold}: Accuracy = {score:.4f}, Best params = {grid_search.best_params_}")
     
-    return np.array(outer_scores)
+    return np.array (outer_scores)
 
 nested_scores = nested_cv_score(X, y, outer_cv=5, inner_cv=3)
 print(f"\\nNested CV Accuracy: {nested_scores.mean():.4f} (+/- {nested_scores.std():.4f})")
@@ -544,7 +544,7 @@ print(f"\\nBias difference: {(scores_non_nested.mean() - nested_scores.mean())*1
 ## Choosing the Right CV Strategy
 
 \`\`\`python
-def recommend_cv_strategy(n_samples, task_type, has_time_component, is_balanced=True):
+def recommend_cv_strategy (n_samples, task_type, has_time_component, is_balanced=True):
     """
     Recommend appropriate cross-validation strategy.
     
@@ -615,7 +615,7 @@ print("\\nCV Strategy Recommendations:")
 print("="*70)
 
 for n, task, time_dep, balanced in scenarios:
-    rec = recommend_cv_strategy(n, task, time_dep, balanced)
+    rec = recommend_cv_strategy (n, task, time_dep, balanced)
     print(f"\\nScenario: N={n}, {task}, time={'Yes' if time_dep else 'No'}, "
           f"balanced={'Yes' if balanced else 'No'}")
     print(f"→ Use: {rec['method']} (k={rec['n_splits']})")
@@ -645,7 +645,7 @@ pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('model', Ridge())
 ])
-scores_correct = cross_val_score(pipeline, X, y, cv=5)
+scores_correct = cross_val_score (pipeline, X, y, cv=5)
 print(f"✓ Correct (no leakage): R² = {scores_correct.mean():.4f}")
 
 print(f"\\nOptimistic bias from leakage: {(scores_wrong.mean() - scores_correct.mean()):.4f}")
@@ -666,15 +666,15 @@ for k in k_values:
     # Run CV multiple times with different random states
     score_distributions = []
     for seed in range(10):
-        cv = KFold(n_splits=k, shuffle=True, random_state=seed)
+        cv = KFold (n_splits=k, shuffle=True, random_state=seed)
         scores = cross_val_score(Ridge(), X, y, cv=cv)
-        score_distributions.append(scores.mean())
+        score_distributions.append (scores.mean())
     
     results.append({
         'k': k,
-        'mean_cv_score': np.mean(score_distributions),
-        'variance_across_runs': np.var(score_distributions),
-        'mean_fold_std': np.std(score_distributions)
+        'mean_cv_score': np.mean (score_distributions),
+        'variance_across_runs': np.var (score_distributions),
+        'mean_fold_std': np.std (score_distributions)
     })
 
 print(f"{'K':>3s} {'Mean Score':>12s} {'Variance':>12s} {'Stability':>12s}")
@@ -692,7 +692,7 @@ print("\\nRecommendation: Use k=5 or k=10 for good bias-variance tradeoff")
 # Example: Validating a trading strategy with proper CV
 import pandas as pd
 
-def create_trading_features(prices):
+def create_trading_features (prices):
     """Create technical indicators."""
     df = pd.DataFrame({'price': prices})
     df['returns'] = df['price'].pct_change()
@@ -703,16 +703,16 @@ def create_trading_features(prices):
     
     # Target: next period return
     df['target'] = df['price'].shift(-1) / df['price'] - 1
-    df['target_binary'] = (df['target'] > 0).astype(int)
+    df['target_binary'] = (df['target'] > 0).astype (int)
     
     return df.dropna()
 
 # Generate synthetic price data
 np.random.seed(42)
 n_days = 500
-price_data = 100 * np.exp(np.cumsum(np.random.randn(n_days) * 0.02))
+price_data = 100 * np.exp (np.cumsum (np.random.randn (n_days) * 0.02))
 
-trading_df = create_trading_features(price_data)
+trading_df = create_trading_features (price_data)
 X_trading = trading_df[['returns', 'sma_5', 'sma_20', 'volatility', 'momentum']].values
 y_trading = trading_df['target_binary'].values
 
@@ -720,12 +720,12 @@ print("\\nTrading Strategy Cross-Validation:")
 print("="*70)
 
 # Must use TimeSeriesSplit for trading!
-tscv = TimeSeriesSplit(n_splits=5)
+tscv = TimeSeriesSplit (n_splits=5)
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 
 cv_results = cross_validate(
     model, X_trading, y_trading, 
@@ -787,7 +787,7 @@ class StratifiedTimeSeriesSplit:
         self.test_size = test_size
         self.gap = gap
     
-    def split(self, X, y):
+    def split (self, X, y):
         """
         Generate stratified time series splits.
         
@@ -797,12 +797,12 @@ class StratifiedTimeSeriesSplit:
         3. Use all previous data for training
         """
         n_samples = len(X)
-        test_samples = int(n_samples * self.test_size)
+        test_samples = int (n_samples * self.test_size)
         
         # Calculate split points
-        min_train_size = int(n_samples * 0.3)
+        min_train_size = int (n_samples * 0.3)
         
-        for i in range(self.n_splits):
+        for i in range (self.n_splits):
             # Expanding window
             split_point = min_train_size + int((n_samples - test_samples - min_train_size) * (i + 1) / self.n_splits)
             
@@ -811,35 +811,35 @@ class StratifiedTimeSeriesSplit:
             train_indices = np.arange(0, train_end)
             
             # Test: stratified sample from remaining data
-            remaining_indices = np.arange(split_point, min(split_point + test_samples * 2, n_samples))
+            remaining_indices = np.arange (split_point, min (split_point + test_samples * 2, n_samples))
             
-            if len(remaining_indices) == 0:
+            if len (remaining_indices) == 0:
                 continue
             
             y_remaining = y[remaining_indices]
             
             # Stratified sampling
-            test_size_fold = min(test_samples, len(remaining_indices))
+            test_size_fold = min (test_samples, len (remaining_indices))
             
             # Group by class
             class_indices = {}
-            for cls in np.unique(y_remaining):
+            for cls in np.unique (y_remaining):
                 class_indices[cls] = remaining_indices[y_remaining == cls]
             
             # Sample proportionally from each class
             test_indices = []
             for cls, indices in class_indices.items():
-                n_samples_cls = int(test_size_fold * len(indices) / len(remaining_indices))
-                n_samples_cls = min(n_samples_cls, len(indices))
+                n_samples_cls = int (test_size_fold * len (indices) / len (remaining_indices))
+                n_samples_cls = min (n_samples_cls, len (indices))
                 if n_samples_cls > 0:
-                    selected = np.random.choice(indices, n_samples_cls, replace=False)
-                    test_indices.extend(selected)
+                    selected = np.random.choice (indices, n_samples_cls, replace=False)
+                    test_indices.extend (selected)
             
-            test_indices = np.array(test_indices)
+            test_indices = np.array (test_indices)
             
             yield train_indices, test_indices
     
-    def get_n_splits(self):
+    def get_n_splits (self):
         return self.n_splits
 
 # Generate synthetic financial data
@@ -851,22 +851,22 @@ regime_changes = [0, 150, 300, 450, 500]
 regimes = ['bull', 'bear', 'bull', 'bear']
 prices = []
 
-for i in range(len(regimes)):
+for i in range (len (regimes)):
     start = regime_changes[i]
     end = regime_changes[i + 1]
     n_samples = end - start
     
     if regimes[i] == 'bull':
-        returns = np.random.randn(n_samples) * 0.015 + 0.001
+        returns = np.random.randn (n_samples) * 0.015 + 0.001
     else:
-        returns = np.random.randn(n_samples) * 0.02 - 0.001
+        returns = np.random.randn (n_samples) * 0.02 - 0.001
     
     if i == 0:
         prices.extend([100])
     
-    prices.extend(prices[-1] * np.exp(np.cumsum(returns)))
+    prices.extend (prices[-1] * np.exp (np.cumsum (returns)))
 
-prices = np.array(prices)[:n_days]
+prices = np.array (prices)[:n_days]
 
 # Create features and target
 df = pd.DataFrame({'price': prices})
@@ -877,7 +877,7 @@ df['volatility'] = df['returns'].rolling(20).std()
 df['momentum'] = df['price'].pct_change(10)
 
 # Binary classification: will price go up?
-df['target'] = (df['price'].shift(-1) > df['price']).astype(int)
+df['target'] = (df['price'].shift(-1) > df['price']).astype (int)
 df = df.dropna()
 
 X = df[['returns', 'sma_10', 'sma_30', 'volatility', 'momentum']].values
@@ -886,11 +886,11 @@ y = df['target'].values
 print("Stratified Time Series Split Demo")
 print("="*70)
 print(f"Dataset: {len(X)} samples")
-print(f"Class distribution: {Counter(y)}")
-print(f"Class 0: {(y==0).sum()/len(y)*100:.1f}%, Class 1: {(y==1).sum()/len(y)*100:.1f}%")
+print(f"Class distribution: {Counter (y)}")
+print(f"Class 0: {(y==0).sum()/len (y)*100:.1f}%, Class 1: {(y==1).sum()/len (y)*100:.1f}%")
 
 # Test our custom splitter
-cv = StratifiedTimeSeriesSplit(n_splits=5, test_size=0.2, gap=5)
+cv = StratifiedTimeSeriesSplit (n_splits=5, test_size=0.2, gap=5)
 
 print("\\n" + "="*70)
 print("Cross-Validation Folds:")
@@ -901,29 +901,29 @@ from sklearn.metrics import accuracy_score, f1_score
 
 overall_scores = []
 
-for fold, (train_idx, test_idx) in enumerate(cv.split(X, y), 1):
+for fold, (train_idx, test_idx) in enumerate (cv.split(X, y), 1):
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
     
     # Check stratification
-    train_dist = Counter(y_train)
-    test_dist = Counter(y_test)
+    train_dist = Counter (y_train)
+    test_dist = Counter (y_test)
     
     print(f"\\nFold {fold}:")
-    print(f"  Train: indices 0-{train_idx[-1]} ({len(train_idx)} samples)")
-    print(f"    Class 0: {train_dist[0]} ({train_dist[0]/len(y_train)*100:.1f}%)")
-    print(f"    Class 1: {train_dist[1]} ({train_dist[1]/len(y_train)*100:.1f}%)")
-    print(f"  Test: {len(test_idx)} samples from indices {test_idx.min()}-{test_idx.max()}")
-    print(f"    Class 0: {test_dist[0]} ({test_dist[0]/len(y_test)*100:.1f}%)")
-    print(f"    Class 1: {test_dist[1]} ({test_dist[1]/len(y_test)*100:.1f}%)")
+    print(f"  Train: indices 0-{train_idx[-1]} ({len (train_idx)} samples)")
+    print(f"    Class 0: {train_dist[0]} ({train_dist[0]/len (y_train)*100:.1f}%)")
+    print(f"    Class 1: {train_dist[1]} ({train_dist[1]/len (y_train)*100:.1f}%)")
+    print(f"  Test: {len (test_idx)} samples from indices {test_idx.min()}-{test_idx.max()}")
+    print(f"    Class 0: {test_dist[0]} ({test_dist[0]/len (y_test)*100:.1f}%)")
+    print(f"    Class 1: {test_dist[1]} ({test_dist[1]/len (y_test)*100:.1f}%)")
     
     # Train and evaluate
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model = RandomForestClassifier (n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     
     y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
+    acc = accuracy_score (y_test, y_pred)
+    f1 = f1_score (y_test, y_pred)
     
     print(f"  Accuracy: {acc:.4f}, F1: {f1:.4f}")
     overall_scores.append({'accuracy': acc, 'f1': f1})
@@ -933,8 +933,8 @@ print("Overall Performance:")
 print("="*70)
 acc_scores = [s['accuracy'] for s in overall_scores]
 f1_scores = [s['f1'] for s in overall_scores]
-print(f"Accuracy: {np.mean(acc_scores):.4f} (+/- {np.std(acc_scores):.4f})")
-print(f"F1 Score: {np.mean(f1_scores):.4f} (+/- {np.std(f1_scores):.4f})")
+print(f"Accuracy: {np.mean (acc_scores):.4f} (+/- {np.std (acc_scores):.4f})")
+print(f"F1 Score: {np.mean (f1_scores):.4f} (+/- {np.std (f1_scores):.4f})")
 
 print("\\n✓ Time series ordering maintained (no future data in training)")
 print("✓ Class balance preserved in test sets (stratification)")

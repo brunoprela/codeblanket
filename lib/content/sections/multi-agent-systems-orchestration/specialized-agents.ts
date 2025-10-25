@@ -45,16 +45,16 @@ class ResearcherAgent:
         self.model = model
         self.search_engine = DDGS()
     
-    async def research(self, topic: str, depth: str = "normal") -> Dict[str, Any]:
+    async def research (self, topic: str, depth: str = "normal") -> Dict[str, Any]:
         """Research a topic comprehensively."""
         if depth == "quick":
-            return await self._quick_research(topic)
+            return await self._quick_research (topic)
         elif depth == "deep":
-            return await self._deep_research(topic)
+            return await self._deep_research (topic)
         else:
-            return await self._normal_research(topic)
+            return await self._normal_research (topic)
     
-    async def _quick_research(self, topic: str) -> Dict[str, Any]:
+    async def _quick_research (self, topic: str) -> Dict[str, Any]:
         """Quick research using LLM knowledge."""
         prompt = f"""Provide a concise research summary on: {topic}
 
@@ -81,10 +81,10 @@ Be factual and cite year of information when relevant."""
             "sources": ["LLM knowledge base"]
         }
     
-    async def _normal_research(self, topic: str) -> Dict[str, Any]:
+    async def _normal_research (self, topic: str) -> Dict[str, Any]:
         """Normal research with web search."""
         # 1. Web search
-        search_results = self.search_engine.text(topic, max_results=5)
+        search_results = self.search_engine.text (topic, max_results=5)
         
         # 2. Synthesize findings
         sources = []
@@ -128,16 +128,16 @@ Create comprehensive research summary with:
             "sources": sources
         }
     
-    async def _deep_research(self, topic: str) -> Dict[str, Any]:
+    async def _deep_research (self, topic: str) -> Dict[str, Any]:
         """Deep research with multiple queries."""
         # Generate sub-queries
-        sub_queries = await self._generate_research_questions(topic)
+        sub_queries = await self._generate_research_questions (topic)
         
         # Research each sub-query
         sub_results = []
         for query in sub_queries:
-            result = await self._normal_research(query)
-            sub_results.append(result)
+            result = await self._normal_research (query)
+            sub_results.append (result)
         
         # Synthesize all findings
         all_findings = "\\n\\n".join([
@@ -167,7 +167,7 @@ Provide:
         
         all_sources = []
         for result in sub_results:
-            all_sources.extend(result["sources"])
+            all_sources.extend (result["sources"])
         
         return {
             "topic": topic,
@@ -177,7 +177,7 @@ Provide:
             "sources": all_sources
         }
     
-    async def _generate_research_questions(self, topic: str) -> List[str]:
+    async def _generate_research_questions (self, topic: str) -> List[str]:
         """Generate sub-questions for deep research."""
         prompt = f"""Generate 3-5 specific research questions for: {topic}
 
@@ -240,17 +240,17 @@ class PlannerAgent:
     ) -> List[Step]:
         """Create execution plan for goal."""
         # 1. Generate steps
-        steps_text = await self._generate_steps(goal)
+        steps_text = await self._generate_steps (goal)
         
         # 2. Parse into Step objects
-        steps = self._parse_steps(steps_text)
+        steps = self._parse_steps (steps_text)
         
         # 3. Assign to agents
-        steps = await self._assign_steps(steps, available_agents)
+        steps = await self._assign_steps (steps, available_agents)
         
         return steps
     
-    async def _generate_steps(self, goal: str) -> str:
+    async def _generate_steps (self, goal: str) -> str:
         """Generate step-by-step plan."""
         prompt = f"""Break down this goal into specific, actionable steps:
 
@@ -277,7 +277,7 @@ Time: [Estimate like "5 min", "1 hour"]"""
         
         return response.choices[0].message.content
     
-    def _parse_steps(self, steps_text: str) -> List[Step]:
+    def _parse_steps (self, steps_text: str) -> List[Step]:
         """Parse plan text into Step objects."""
         steps = []
         current_step = None
@@ -288,8 +288,8 @@ Time: [Estimate like "5 min", "1 hour"]"""
             if line.startswith("Step"):
                 # Extract step number and description
                 parts = line.split(":", 1)
-                step_num = len(steps) + 1
-                description = parts[1].strip() if len(parts) > 1 else ""
+                step_num = len (steps) + 1
+                description = parts[1].strip() if len (parts) > 1 else ""
                 
                 current_step = {
                     "id": step_num,
@@ -303,7 +303,7 @@ Time: [Estimate like "5 min", "1 hour"]"""
                 if deps_text.lower() != "none":
                     # Extract numbers
                     import re
-                    deps = [int(d) for d in re.findall(r'\\d+', deps_text)]
+                    deps = [int (d) for d in re.findall (r'\\d+', deps_text)]
                     current_step["dependencies"] = deps
             elif current_step and line.startswith("Time:"):
                 # Parse time estimate
@@ -331,7 +331,7 @@ Time: [Estimate like "5 min", "1 hour"]"""
             prompt = f"""Which agent should handle this step?
 
 Step: {step.description}
-Available agents: {', '.join(available_agents)}
+Available agents: {', '.join (available_agents)}
 
 Reply with just the agent name."""
             
@@ -352,19 +352,19 @@ Reply with just the agent name."""
         
         return steps
     
-    def visualize_plan(self, steps: List[Step]) -> str:
+    def visualize_plan (self, steps: List[Step]) -> str:
         """Create text visualization of plan."""
         output = ["=== EXECUTION PLAN ===" ""]
         
         for step in steps:
-            deps = ", ".join(str(d) for d in step.dependencies) if step.dependencies else "None"
-            output.append(f"Step {step.id}: {step.description}")
-            output.append(f"  Dependencies: {deps}")
-            output.append(f"  Time: {step.estimated_time}")
-            output.append(f"  Assigned to: {step.assigned_to or 'Unassigned'}")
+            deps = ", ".join (str (d) for d in step.dependencies) if step.dependencies else "None"
+            output.append (f"Step {step.id}: {step.description}")
+            output.append (f"  Dependencies: {deps}")
+            output.append (f"  Time: {step.estimated_time}")
+            output.append (f"  Assigned to: {step.assigned_to or 'Unassigned'}")
             output.append("")
         
-        return "\\n".join(output)
+        return "\\n".join (output)
 
 # Usage
 planner = PlannerAgent()
@@ -374,7 +374,7 @@ plan = await planner.create_plan(
     available_agents=["researcher", "coder", "tester", "reviewer"]
 )
 
-print(planner.visualize_plan(plan))
+print(planner.visualize_plan (plan))
 \`\`\`
 
 ## Coder Agent
@@ -396,7 +396,7 @@ class CoderAgent:
         context: Optional[str] = None
     ) -> Dict[str, Any]:
         """Write code for task."""
-        prompt = self._build_coding_prompt(task, language, context)
+        prompt = self._build_coding_prompt (task, language, context)
         
         response = await openai.ChatCompletion.acreate(
             model=self.model,
@@ -411,13 +411,13 @@ class CoderAgent:
         
         # Extract just code if wrapped in markdown
         if "\`\`\`" in code:
-            code = self._extract_code_from_markdown(code)
+            code = self._extract_code_from_markdown (code)
         
         return {
         "task": task,
         "language": language,
         "code": code,
-        "explanation": self._extract_explanation(response.choices[0].message.content)
+        "explanation": self._extract_explanation (response.choices[0].message.content)
     }
     
     def _build_coding_prompt(
@@ -448,17 +448,17 @@ Requirements:
 
 return prompt
     
-    def _extract_code_from_markdown(self, text: str) -> str:
+    def _extract_code_from_markdown (self, text: str) -> str:
         """Extract code from markdown blocks."""
         import re
         # Find content between backtick markers
         pattern = r'\`\`\`(?:\\w+)?\\n(.*?)\`\`\`'
-        matches = re.findall(pattern, text, re.DOTALL)
+        matches = re.findall (pattern, text, re.DOTALL)
         if matches:
             return matches[0].strip()
         return text
     
-    def _extract_explanation(self, text: str) -> str:
+    def _extract_explanation (self, text: str) -> str:
         """Extract explanation text."""
         # Text before first code block
         if "\`\`\`" in text:
@@ -489,7 +489,7 @@ response = await openai.ChatCompletion.acreate(
     temperature = 0.2
 )
 
-return self._extract_code_from_markdown(response.choices[0].message.content)
+return self._extract_code_from_markdown (response.choices[0].message.content)
 
 # Usage
 coder = CoderAgent()
@@ -516,7 +516,7 @@ class ReviewerAgent:
         self.name = "Reviewer"
         self.model = model
     
-    async def review_code(self, code: str) -> Dict[str, Any]:
+    async def review_code (self, code: str) -> Dict[str, Any]:
         """Review code comprehensively."""
         prompt = f"""Review this code thoroughly:
 
@@ -549,13 +549,13 @@ Provide:
         
         return {
             "code": code,
-            "assessment": self._extract_assessment(review_text),
-            "issues": self._extract_issues(review_text),
-            "suggestions": self._extract_suggestions(review_text),
+            "assessment": self._extract_assessment (review_text),
+            "issues": self._extract_issues (review_text),
+            "suggestions": self._extract_suggestions (review_text),
             "full_review": review_text
         }
     
-    async def review_content(self, content: str, type: str = "article") -> Dict[str, Any]:
+    async def review_content (self, content: str, type: str = "article") -> Dict[str, Any]:
         """Review written content."""
         prompt = f"""Review this {type}:
 
@@ -583,14 +583,14 @@ Provide specific feedback and suggestions."""
             "review": response.choices[0].message.content
         }
     
-    def _extract_assessment(self, review: str) -> str:
+    def _extract_assessment (self, review: str) -> str:
         """Extract overall assessment."""
         for line in review.split("\\n"):
             if "assessment:" in line.lower():
                 return line.split(":", 1)[1].strip()
         return "Unknown"
     
-    def _extract_issues(self, review: str) -> List[str]:
+    def _extract_issues (self, review: str) -> List[str]:
         """Extract list of issues."""
         issues = []
         in_issues = False
@@ -599,13 +599,13 @@ Provide specific feedback and suggestions."""
             if "issues" in line.lower():
                 in_issues = True
             elif in_issues and line.strip().startswith("-"):
-                issues.append(line.strip()[1:].strip())
+                issues.append (line.strip()[1:].strip())
             elif in_issues and not line.strip():
                 break
         
         return issues
     
-    def _extract_suggestions(self, review: str) -> List[str]:
+    def _extract_suggestions (self, review: str) -> List[str]:
         """Extract suggestions."""
         suggestions = []
         in_suggestions = False
@@ -614,7 +614,7 @@ Provide specific feedback and suggestions."""
             if "suggestion" in line.lower():
                 in_suggestions = True
             elif in_suggestions and line.strip().startswith("-"):
-                suggestions.append(line.strip()[1:].strip())
+                suggestions.append (line.strip()[1:].strip())
         
         return suggestions
 
@@ -622,7 +622,7 @@ Provide specific feedback and suggestions."""
 reviewer = ReviewerAgent()
 
 code_review = await reviewer.review_code("""
-def calculate(x, y):
+def calculate (x, y):
     return x / y
 """)
 
@@ -676,7 +676,7 @@ Include:
         if "\`\`\`" in test_code:
 import re
             pattern = r'\`\`\`(?:\\w+)?\\n(.*?)\`\`\`'
-matches = re.findall(pattern, test_code, re.DOTALL)
+matches = re.findall (pattern, test_code, re.DOTALL)
 if matches:
     test_code = matches[0].strip()
 
@@ -725,7 +725,7 @@ return {
 tester = TesterAgent()
 
 tests = await tester.generate_tests("""
-def add(a, b):
+def add (a, b):
     return a + b
 """)
 
@@ -751,14 +751,14 @@ class ManagerAgent:
     ) -> Dict[str, Any]:
         """Delegate task to appropriate agent."""
         # Determine which agent to use
-        agent_name = await self._choose_agent(task)
-        agent = self.workers.get(agent_name)
+        agent_name = await self._choose_agent (task)
+        agent = self.workers.get (agent_name)
         
         if not agent:
-            raise ValueError(f"No agent named {agent_name}")
+            raise ValueError (f"No agent named {agent_name}")
         
         # Execute with that agent
-        result = await agent.execute(task)
+        result = await agent.execute (task)
         
         return {
             "task": task,
@@ -766,7 +766,7 @@ class ManagerAgent:
             "result": result
         }
     
-    async def _choose_agent(self, task: str) -> str:
+    async def _choose_agent (self, task: str) -> str:
         """Choose appropriate agent for task."""
         # Use heuristics or LLM
         if "research" in task.lower():
@@ -805,7 +805,7 @@ class CustomAgent:
         self.model = model
         self.system_prompt = self._build_system_prompt()
     
-    def _build_system_prompt(self) -> str:
+    def _build_system_prompt (self) -> str:
         """Define agent's expertise and behavior."""
         return """You are a [specialist type].
 
@@ -819,7 +819,7 @@ Your approach:
 Your output format:
 - [How you format responses]"""
     
-    async def execute(self, task: str) -> Any:
+    async def execute (self, task: str) -> Any:
         """Execute specialized task."""
         response = await openai.ChatCompletion.acreate(
             model=self.model,
@@ -830,9 +830,9 @@ Your output format:
             temperature=0.3
         )
         
-        return self._parse_response(response.choices[0].message.content)
+        return self._parse_response (response.choices[0].message.content)
     
-    def _parse_response(self, response: str) -> Any:
+    def _parse_response (self, response: str) -> Any:
         """Parse and structure response."""
         # Custom parsing logic
         return response

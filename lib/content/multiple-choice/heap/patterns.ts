@@ -61,7 +61,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc5',
     question: 'Why use a min heap of size K for Kth largest in a stream?',
     options: [
-      "It's the fastest data structure",
+      "It\'s the fastest data structure",
       'Maintains K largest elements, root is Kth largest, O(log K) per add',
       'Uses least memory',
       'Random choice',

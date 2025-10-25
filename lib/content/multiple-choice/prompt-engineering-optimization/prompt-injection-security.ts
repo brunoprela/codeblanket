@@ -16,7 +16,7 @@ export const promptinjectionsecurityMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Prompt injection is when users craft inputs to manipulate the AI into bypassing instructions, revealing system prompts, or performing unintended actions. It's the SQL injection equivalent for AI systems.",
+      "Prompt injection is when users craft inputs to manipulate the AI into bypassing instructions, revealing system prompts, or performing unintended actions. It\'s the SQL injection equivalent for AI systems.",
   },
   {
     id: 'peo-security-mc-2',

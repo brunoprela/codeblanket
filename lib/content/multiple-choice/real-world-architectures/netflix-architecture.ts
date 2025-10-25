@@ -21,7 +21,7 @@ export const netflixarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What is the purpose of Netflix's Chaos Monkey tool?",
+    question: "What is the purpose of Netflix\'s Chaos Monkey tool?",
     options: [
       'To test load balancer failover during peak traffic',
       'To randomly terminate EC2 instances to ensure service resilience',
@@ -30,12 +30,12 @@ export const netflixarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Chaos Monkey randomly terminates EC2 instances during business hours to force engineers to build resilient services. If a service crashes when Chaos Monkey kills an instance, it reveals a reliability gap. This proactive approach ensures Netflix's systems can handle instance failures gracefully with circuit breakers, retries, fallbacks, and auto-recovery mechanisms.",
+      "Chaos Monkey randomly terminates EC2 instances during business hours to force engineers to build resilient services. If a service crashes when Chaos Monkey kills an instance, it reveals a reliability gap. This proactive approach ensures Netflix\'s systems can handle instance failures gracefully with circuit breakers, retries, fallbacks, and auto-recovery mechanisms.",
   },
   {
     id: 'mc3',
     question:
-      "How does Netflix's Zuul API Gateway contribute to the architecture?",
+      "How does Netflix\'s Zuul API Gateway contribute to the architecture?",
     options: [
       'It serves video chunks directly from S3 to reduce latency',
       'It routes client requests to appropriate microservices and handles cross-cutting concerns',
@@ -44,11 +44,11 @@ export const netflixarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Zuul is Netflix's API Gateway that routes client requests to the appropriate microservices. It handles cross-cutting concerns like authentication, rate limiting, dynamic routing, monitoring, and resiliency patterns. Zuul acts as a single entry point for client requests and can route to 700+ backend microservices based on request paths and configurations.",
+      "Zuul is Netflix\'s API Gateway that routes client requests to the appropriate microservices. It handles cross-cutting concerns like authentication, rate limiting, dynamic routing, monitoring, and resiliency patterns. Zuul acts as a single entry point for client requests and can route to 700+ backend microservices based on request paths and configurations.",
   },
   {
     id: 'mc4',
-    question: "What is Netflix's EVCache and why is it important?",
+    question: "What is Netflix\'s EVCache and why is it important?",
     options: [
       'A video encoding cache that stores transcoded segments',
       'A distributed in-memory cache based on Memcached for sub-millisecond latency',
@@ -57,7 +57,7 @@ export const netflixarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "EVCache is Netflix's distributed in-memory caching solution built on top of Memcached. It provides sub-millisecond read latency and is crucial for serving user profiles, recommendations, and frequently accessed data. EVCache is deployed across multiple AWS availability zones for high availability and handles millions of requests per second, significantly reducing load on backend databases.",
+      "EVCache is Netflix\'s distributed in-memory caching solution built on top of Memcached. It provides sub-millisecond read latency and is crucial for serving user profiles, recommendations, and frequently accessed data. EVCache is deployed across multiple AWS availability zones for high availability and handles millions of requests per second, significantly reducing load on backend databases.",
   },
   {
     id: 'mc5',

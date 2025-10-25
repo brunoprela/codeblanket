@@ -20,11 +20,11 @@ LLMs have maximum context windows (4K, 8K, 32K, 128K tokens). Even with large co
 \`\`\`python
 # Problem: Can't embed a 50,000-word document at once
 large_doc = load_document("enterprise_report.pdf")  # 50K words
-# embedding = get_embedding(large_doc)  # ERROR: Token limit exceeded!
+# embedding = get_embedding (large_doc)  # ERROR: Token limit exceeded!
 
 # Solution: Chunk into manageable pieces
-chunks = chunk_document(large_doc, chunk_size=500)
-chunk_embeddings = [get_embedding(chunk) for chunk in chunks]
+chunks = chunk_document (large_doc, chunk_size=500)
+chunk_embeddings = [get_embedding (chunk) for chunk in chunks]
 \`\`\`
 
 ### 2. **Retrieval Precision**
@@ -45,11 +45,11 @@ Smaller, relevant chunks maximize the use of limited context windows:
 
 \`\`\`python
 # With good chunking
-context = retrieve_top_chunks(query, k=5)  # 5 relevant paragraphs
+context = retrieve_top_chunks (query, k=5)  # 5 relevant paragraphs
 # Efficient use of context window with highly relevant info
 
 # Without chunking
-context = retrieve_documents(query, k=2)  # 2 entire documents
+context = retrieve_documents (query, k=2)  # 2 entire documents
 # Context window filled with mostly irrelevant information
 \`\`\`
 
@@ -85,13 +85,13 @@ def fixed_size_chunking(
     chunks = []
     start = 0
     
-    while start < len(text):
+    while start < len (text):
         # Define end of chunk
         end = start + chunk_size
         
         # Extract chunk
         chunk = text[start:end]
-        chunks.append(chunk)
+        chunks.append (chunk)
         
         # Move start position (with overlap)
         start = end - overlap
@@ -114,9 +114,9 @@ those documents as context for an LLM to generate a response. This approach redu
 hallucinations and enables the model to reference specific, up-to-date information.
 """ * 10  # Repeat for demonstration
 
-chunks = fixed_size_chunking(document, chunk_size=200, overlap=50)
+chunks = fixed_size_chunking (document, chunk_size=200, overlap=50)
 
-print(f"Created {len(chunks)} chunks")
+print(f"Created {len (chunks)} chunks")
 print(f"\\nFirst chunk:\\n{chunks[0]}")
 print(f"\\nSecond chunk:\\n{chunks[1]}")
 print(f"\\nOverlap: '{chunks[0][-50:]}' == '{chunks[1][:50]}'")
@@ -159,22 +159,22 @@ def token_based_chunking(
         List of text chunks
     """
     # Get tokenizer for model
-    encoding = tiktoken.encoding_for_model(model)
+    encoding = tiktoken.encoding_for_model (model)
     
     # Encode entire text
-    tokens = encoding.encode(text)
+    tokens = encoding.encode (text)
     
     chunks = []
     start = 0
     
-    while start < len(tokens):
+    while start < len (tokens):
         # Get chunk tokens
         end = start + chunk_size
         chunk_tokens = tokens[start:end]
         
         # Decode back to text
-        chunk_text = encoding.decode(chunk_tokens)
-        chunks.append(chunk_text)
+        chunk_text = encoding.decode (chunk_tokens)
+        chunks.append (chunk_text)
         
         # Move with overlap
         start = end - overlap
@@ -186,11 +186,11 @@ def token_based_chunking(
 encoding = tiktoken.encoding_for_model("gpt-4")
 
 doc = "Your document text here..." * 100
-chunks = token_based_chunking(doc, chunk_size=500, overlap=50)
+chunks = token_based_chunking (doc, chunk_size=500, overlap=50)
 
-for i, chunk in enumerate(chunks[:3]):
-    tokens = encoding.encode(chunk)
-    print(f"Chunk {i+1}: {len(tokens)} tokens")
+for i, chunk in enumerate (chunks[:3]):
+    tokens = encoding.encode (chunk)
+    print(f"Chunk {i+1}: {len (tokens)} tokens")
 \`\`\`
 
 ## Sentence-Based Chunking
@@ -219,35 +219,35 @@ def sentence_chunking(
     """
     # Split into sentences using regex
     # Handles common sentence endings: . ! ? followed by space/newline
-    sentences = re.split(r'(?<=[.!?])\\s+', text)
+    sentences = re.split (r'(?<=[.!?])\\s+', text)
     
     chunks = []
     current_chunk = []
     current_size = 0
     
     for sentence in sentences:
-        sentence_size = len(sentence)
+        sentence_size = len (sentence)
         
         # If adding this sentence exceeds max, save current chunk
         if current_size + sentence_size > max_chunk_size and current_chunk:
-            chunks.append(' '.join(current_chunk))
+            chunks.append(' '.join (current_chunk))
             current_chunk = [sentence]
             current_size = sentence_size
         
         # If at or above target and have content, save chunk
         elif current_size >= target_chunk_size and current_chunk:
-            chunks.append(' '.join(current_chunk))
+            chunks.append(' '.join (current_chunk))
             current_chunk = [sentence]
             current_size = sentence_size
         
         # Otherwise, add to current chunk
         else:
-            current_chunk.append(sentence)
+            current_chunk.append (sentence)
             current_size += sentence_size
     
     # Add final chunk
     if current_chunk:
-        chunks.append(' '.join(current_chunk))
+        chunks.append(' '.join (current_chunk))
     
     return chunks
 
@@ -263,10 +263,10 @@ Popular options include Pinecone and Weaviate. Each has different trade-offs.
 The choice depends on your specific requirements.
 """
 
-chunks = sentence_chunking(document, target_chunk_size=100, max_chunk_size=150)
+chunks = sentence_chunking (document, target_chunk_size=100, max_chunk_size=150)
 
-for i, chunk in enumerate(chunks):
-    print(f"\\nChunk {i+1} ({len(chunk)} chars):\\n{chunk}")
+for i, chunk in enumerate (chunks):
+    print(f"\\nChunk {i+1} ({len (chunk)} chars):\\n{chunk}")
 \`\`\`
 
 **Advantages:**
@@ -288,7 +288,7 @@ from typing import List, Optional
 class RecursiveTextSplitter:
     """
     Recursively split text using hierarchy of separators.
-    Inspired by LangChain's implementation.
+    Inspired by LangChain\'s implementation.
     """
     
     def __init__(
@@ -320,9 +320,9 @@ class RecursiveTextSplitter:
             ""        # Characters
         ]
     
-    def split_text(self, text: str) -> List[str]:
+    def split_text (self, text: str) -> List[str]:
         """Split text recursively."""
-        return self._split_text(text, self.separators)
+        return self._split_text (text, self.separators)
     
     def _split_text(
         self, 
@@ -352,32 +352,32 @@ class RecursiveTextSplitter:
                 break
         
         # Split by the chosen separator
-        splits = text.split(separator) if separator else [text]
+        splits = text.split (separator) if separator else [text]
         
         # Process each split
         good_splits = []
         for split in splits:
-            if len(split) < self.chunk_size:
-                good_splits.append(split)
+            if len (split) < self.chunk_size:
+                good_splits.append (split)
             else:
                 # Split is too large, go to next separator
                 if good_splits:
-                    merged = self._merge_splits(good_splits, separator)
-                    final_chunks.extend(merged)
+                    merged = self._merge_splits (good_splits, separator)
+                    final_chunks.extend (merged)
                     good_splits = []
                 
                 # Recursively split this piece with finer separators
-                if len(separators) > 1:
-                    other_chunks = self._split_text(split, separators[1:])
-                    final_chunks.extend(other_chunks)
+                if len (separators) > 1:
+                    other_chunks = self._split_text (split, separators[1:])
+                    final_chunks.extend (other_chunks)
                 else:
                     # Last resort: force split by character
-                    final_chunks.append(split[:self.chunk_size])
+                    final_chunks.append (split[:self.chunk_size])
         
         # Merge remaining splits
         if good_splits:
-            merged = self._merge_splits(good_splits, separator)
-            final_chunks.extend(merged)
+            merged = self._merge_splits (good_splits, separator)
+            final_chunks.extend (merged)
         
         return final_chunks
     
@@ -394,33 +394,33 @@ class RecursiveTextSplitter:
         current_length = 0
         
         for split in splits:
-            split_len = len(split)
+            split_len = len (split)
             
             if current_length + split_len > self.chunk_size and current_chunk:
                 # Save current chunk
-                chunk_text = separator.join(current_chunk)
-                chunks.append(chunk_text)
+                chunk_text = separator.join (current_chunk)
+                chunks.append (chunk_text)
                 
                 # Start new chunk with overlap
                 # Keep last few items for overlap
                 overlap_items = []
                 overlap_length = 0
-                for item in reversed(current_chunk):
-                    if overlap_length + len(item) <= self.chunk_overlap:
+                for item in reversed (current_chunk):
+                    if overlap_length + len (item) <= self.chunk_overlap:
                         overlap_items.insert(0, item)
-                        overlap_length += len(item)
+                        overlap_length += len (item)
                     else:
                         break
                 
                 current_chunk = overlap_items + [split]
                 current_length = overlap_length + split_len
             else:
-                current_chunk.append(split)
+                current_chunk.append (split)
                 current_length += split_len
         
         # Add final chunk
         if current_chunk:
-            chunks.append(separator.join(current_chunk))
+            chunks.append (separator.join (current_chunk))
         
         return chunks
 
@@ -446,11 +446,11 @@ Retrieved documents are added as context to the prompt. This provides grounding.
 The LLM generates a response using the provided context. This reduces hallucinations.
 """
 
-chunks = splitter.split_text(document)
+chunks = splitter.split_text (document)
 
-print(f"Created {len(chunks)} chunks\\n")
-for i, chunk in enumerate(chunks):
-    print(f"Chunk {i+1} ({len(chunk)} chars):")
+print(f"Created {len (chunks)} chunks\\n")
+for i, chunk in enumerate (chunks):
+    print(f"Chunk {i+1} ({len (chunk)} chars):")
     print(chunk)
     print("-" * 50)
 \`\`\`
@@ -494,11 +494,11 @@ class SemanticChunker:
             similarity_threshold: Min similarity to stay in same chunk
             max_chunk_size: Maximum characters per chunk
         """
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer (model_name)
         self.similarity_threshold = similarity_threshold
         self.max_chunk_size = max_chunk_size
     
-    def chunk_text(self, text: str) -> List[str]:
+    def chunk_text (self, text: str) -> List[str]:
         """
         Chunk text semantically.
         
@@ -510,22 +510,22 @@ class SemanticChunker:
         """
         # Split into sentences
         import re
-        sentences = re.split(r'(?<=[.!?])\\s+', text)
+        sentences = re.split (r'(?<=[.!?])\\s+', text)
         
         if not sentences:
             return []
         
         # Embed all sentences
-        embeddings = self.model.encode(sentences)
+        embeddings = self.model.encode (sentences)
         
         # Group similar sentences
         chunks = []
         current_chunk = [sentences[0]]
-        current_size = len(sentences[0])
+        current_size = len (sentences[0])
         
-        for i in range(1, len(sentences)):
+        for i in range(1, len (sentences)):
             sentence = sentences[i]
-            sentence_size = len(sentence)
+            sentence_size = len (sentence)
             
             # Calculate similarity with previous sentence
             similarity = self._cosine_similarity(
@@ -541,17 +541,17 @@ class SemanticChunker:
             
             if should_split and current_chunk:
                 # Save current chunk
-                chunks.append(' '.join(current_chunk))
+                chunks.append(' '.join (current_chunk))
                 current_chunk = [sentence]
                 current_size = sentence_size
             else:
                 # Add to current chunk
-                current_chunk.append(sentence)
+                current_chunk.append (sentence)
                 current_size += sentence_size
         
         # Add final chunk
         if current_chunk:
-            chunks.append(' '.join(current_chunk))
+            chunks.append(' '.join (current_chunk))
         
         return chunks
     
@@ -562,7 +562,7 @@ class SemanticChunker:
     ) -> float:
         """Calculate cosine similarity between vectors."""
         return float(
-            np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+            np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
         )
 
 
@@ -584,10 +584,10 @@ Regular exercise is important for health. Walking helps cardiovascular fitness.
 Exercise reduces stress and improves mood.
 """
 
-chunks = chunker.chunk_text(document)
+chunks = chunker.chunk_text (document)
 
-print(f"Created {len(chunks)} semantic chunks\\n")
-for i, chunk in enumerate(chunks):
+print(f"Created {len (chunks)} semantic chunks\\n")
+for i, chunk in enumerate (chunks):
     print(f"Semantic Chunk {i+1}:")
     print(chunk)
     print("-" * 60)
@@ -624,7 +624,7 @@ class MarkdownChunker:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
     
-    def chunk_markdown(self, markdown: str) -> List[dict]:
+    def chunk_markdown (self, markdown: str) -> List[dict]:
         """
         Chunk markdown document.
         
@@ -635,7 +635,7 @@ class MarkdownChunker:
             List of chunks with metadata
         """
         # Parse markdown into sections
-        sections = self._parse_sections(markdown)
+        sections = self._parse_sections (markdown)
         
         # Create chunks respecting section boundaries
         chunks = []
@@ -644,10 +644,10 @@ class MarkdownChunker:
         
         for section in sections:
             section_text = section["text"]
-            section_size = len(section_text)
+            section_size = len (section_text)
             
             # If section fits in current chunk
-            if len(current_chunk) + section_size <= self.chunk_size:
+            if len (current_chunk) + section_size <= self.chunk_size:
                 current_chunk += section_text
                 current_metadata = section["metadata"]
             else:
@@ -671,7 +671,7 @@ class MarkdownChunker:
         
         return chunks
     
-    def _parse_sections(self, markdown: str) -> List[dict]:
+    def _parse_sections (self, markdown: str) -> List[dict]:
         """
         Parse markdown into sections by headers.
         
@@ -684,34 +684,34 @@ class MarkdownChunker:
         
         for line in lines:
             # Check for header
-            header_match = re.match(r'^(#{1,6})\\s+(.+)$', line)
+            header_match = re.match (r'^(#{1,6})\\s+(.+)$', line)
             
             if header_match:
                 # Save previous section
                 if current_section:
                     sections.append({
-                        "text": '\\n'.join(current_section),
+                        "text": '\\n'.join (current_section),
                         "metadata": current_headers.copy()
                     })
                     current_section = []
                 
                 # Update headers
-                level = len(header_match.group(1))
+                level = len (header_match.group(1))
                 title = header_match.group(2)
                 current_headers[f"h{level}"] = title
                 
                 # Clear lower-level headers
-                for i in range(level + 1, 7):
-                    current_headers.pop(f"h{i}", None)
+                for i in range (level + 1, 7):
+                    current_headers.pop (f"h{i}", None)
                 
-                current_section.append(line)
+                current_section.append (line)
             else:
-                current_section.append(line)
+                current_section.append (line)
         
         # Add final section
         if current_section:
             sections.append({
-                "text": '\\n'.join(current_section),
+                "text": '\\n'.join (current_section),
                 "metadata": current_headers
             })
         
@@ -738,13 +738,13 @@ Converts text to vectors.
 Install required libraries.
 
 ### Code Example
-Here's a basic implementation.
+Here\'s a basic implementation.
 """
 
-chunker = MarkdownChunker(chunk_size=150)
-chunks = chunker.chunk_markdown(markdown_doc)
+chunker = MarkdownChunker (chunk_size=150)
+chunks = chunker.chunk_markdown (markdown_doc)
 
-for i, chunk in enumerate(chunks):
+for i, chunk in enumerate (chunks):
     print(f"\\nChunk {i+1}:")
     print(f"Headers: {chunk['metadata']}")
     print(f"Text: {chunk['text'][:100]}...")
@@ -769,8 +769,8 @@ def chunking_with_smart_overlap(
     start = 0
     chunk_id = 0
     
-    while start < len(text):
-        end = min(start + chunk_size, len(text))
+    while start < len (text):
+        end = min (start + chunk_size, len (text))
         
         chunk = {
             "id": chunk_id,
@@ -778,10 +778,10 @@ def chunking_with_smart_overlap(
             "start_pos": start,
             "end_pos": end,
             "prev_overlap": text[max(0, start-overlap_size):start] if start > 0 else None,
-            "next_overlap": text[end:min(end+overlap_size, len(text))] if end < len(text) else None
+            "next_overlap": text[end:min (end+overlap_size, len (text))] if end < len (text) else None
         }
         
-        chunks.append(chunk)
+        chunks.append (chunk)
         
         # Move start with overlap
         start = end - overlap_size
@@ -814,14 +814,14 @@ def evaluate_chunk_sizes(
         # Chunk documents
         all_chunks = []
         for doc in documents:
-            chunks = fixed_size_chunking(doc, chunk_size=size)
-            all_chunks.extend(chunks)
+            chunks = fixed_size_chunking (doc, chunk_size=size)
+            all_chunks.extend (chunks)
         
         # Embed chunks (simplified)
-        # chunk_embeddings = embed_all(all_chunks)
+        # chunk_embeddings = embed_all (all_chunks)
         
         # Test retrieval for each query
-        # scores = test_retrieval(queries, chunk_embeddings)
+        # scores = test_retrieval (queries, chunk_embeddings)
         
         # For demonstration, using random scores
         avg_score = np.random.random()
@@ -832,7 +832,7 @@ def evaluate_chunk_sizes(
     return results
 
 # Find optimal size
-# optimal_size = max(results, key=results.get)
+# optimal_size = max (results, key=results.get)
 # print(f"\\nOptimal chunk size: {optimal_size}")
 \`\`\`
 
@@ -884,27 +884,27 @@ class ProductionChunker:
             List of chunks with metadata
         """
         if metadata is None:
-            metadata = [{}] * len(documents)
+            metadata = [{}] * len (documents)
         
         all_chunks = []
         
-        for doc_id, (doc, meta) in enumerate(zip(documents, metadata)):
+        for doc_id, (doc, meta) in enumerate (zip (documents, metadata)):
             # Chunk document
-            chunks = self._chunk_single(doc)
+            chunks = self._chunk_single (doc)
             
             # Add metadata
-            for chunk_id, chunk in enumerate(chunks):
+            for chunk_id, chunk in enumerate (chunks):
                 chunk_data = {
                     "text": chunk,
                     "doc_id": doc_id,
                     "chunk_id": chunk_id,
                     "metadata": meta
                 }
-                all_chunks.append(chunk_data)
+                all_chunks.append (chunk_data)
         
         return all_chunks
     
-    def _chunk_single(self, text: str) -> List[str]:
+    def _chunk_single (self, text: str) -> List[str]:
         """Chunk single document using selected strategy."""
         if self.strategy == ChunkingStrategy.FIXED:
             return fixed_size_chunking(
@@ -922,7 +922,7 @@ class ProductionChunker:
                 self.chunk_size,
                 self.chunk_overlap
             )
-            return splitter.split_text(text)
+            return splitter.split_text (text)
         else:
             # Default to fixed
             return fixed_size_chunking(

@@ -13,7 +13,7 @@ export const associationRuleLearning = {
 
 ## Introduction
 
-Association Rule Learning is an unsupervised technique for discovering interesting relationships, patterns, and associations among items in large datasets. It's most famous for **Market Basket Analysis** but has applications across many domains.
+Association Rule Learning is an unsupervised technique for discovering interesting relationships, patterns, and associations among items in large datasets. It\'s most famous for **Market Basket Analysis** but has applications across many domains.
 
 **Classic Example**: "Customers who buy diapers also tend to buy beer"
 
@@ -43,9 +43,9 @@ transactions = [
     ['milk', 'bread', 'butter']
 ]
 
-print(f"Total transactions: {len(transactions)}")
+print(f"Total transactions: {len (transactions)}")
 print("\\nSample transactions:")
-for i, t in enumerate(transactions[:5], 1):
+for i, t in enumerate (transactions[:5], 1):
     print(f"{i}. {t}")
 
 # Question: What items are frequently bought together?
@@ -72,11 +72,11 @@ from collections import Counter
 
 # Flatten all transactions
 all_items = [item for transaction in transactions for item in transaction]
-item_counts = Counter(all_items)
+item_counts = Counter (all_items)
 
 print("Item Support:")
-for item, count in sorted(item_counts.items(), key=lambda x: x[1], reverse=True):
-    support = count / len(transactions)
+for item, count in sorted (item_counts.items(), key=lambda x: x[1], reverse=True):
+    support = count / len (transactions)
     print(f"{item:10s}: {count:2d} transactions ({support:5.1%} support)")
 
 # milk appears in 7/10 = 70% of transactions
@@ -104,8 +104,8 @@ milk_and_bread_count = sum(1 for t in transactions if 'milk' in t and 'bread' in
 
 confidence = milk_and_bread_count / milk_count
 print(f"Rule: {{milk}} → {{bread}}")
-print(f"Support(milk): {milk_count}/{len(transactions)} = {milk_count/len(transactions):.1%}")
-print(f"Support(milk, bread): {milk_and_bread_count}/{len(transactions)} = {milk_and_bread_count/len(transactions):.1%}")
+print(f"Support (milk): {milk_count}/{len (transactions)} = {milk_count/len (transactions):.1%}")
+print(f"Support (milk, bread): {milk_and_bread_count}/{len (transactions)} = {milk_and_bread_count/len (transactions):.1%}")
 print(f"Confidence: {milk_and_bread_count}/{milk_count} = {confidence:.1%}")
 print(f"\\nInterpretation: {confidence:.0%} of customers who buy milk also buy bread")
 \`\`\`
@@ -123,11 +123,11 @@ $$\\text{Lift}(X \\rightarrow Y) = \\frac{\\text{Confidence}(X \\rightarrow Y)}{
 
 \`\`\`python
 # Calculate lift for {milk} → {bread}
-bread_support = sum(1 for t in transactions if 'bread' in t) / len(transactions)
+bread_support = sum(1 for t in transactions if 'bread' in t) / len (transactions)
 lift = confidence / bread_support
 
 print(f"\\nLift calculation:")
-print(f"Support(bread): {bread_support:.1%}")
+print(f"Support (bread): {bread_support:.1%}")
 print(f"Lift: {confidence:.1%} / {bread_support:.1%} = {lift:.2f}")
 
 if lift > 1:
@@ -156,17 +156,17 @@ The most famous algorithm for association rule mining
 \`\`\`python
 # Manual Apriori implementation (simplified)
 
-def get_support(itemset, transactions):
+def get_support (itemset, transactions):
     ''Calculate support for an itemset''
-    count = sum(1 for t in transactions if set(itemset).issubset(set(t)))
-    return count / len(transactions)
+    count = sum(1 for t in transactions if set (itemset).issubset (set (t)))
+    return count / len (transactions)
 
-def find_frequent_itemsets(transactions, min_support):
+def find_frequent_itemsets (transactions, min_support):
     ''Find all frequent itemsets using Apriori''
     from itertools import combinations
     
     # Get all unique items
-    unique_items = set(item for transaction in transactions for item in transaction)
+    unique_items = set (item for transaction in transactions for item in transaction)
     
     # Level 1: frequent 1-itemsets
     frequent_itemsets = []
@@ -184,22 +184,22 @@ def find_frequent_itemsets(transactions, min_support):
     while current_frequent:
         # Generate candidates
         candidates = []
-        for i in range(len(current_frequent)):
-            for j in range(i+1, len(current_frequent)):
+        for i in range (len (current_frequent)):
+            for j in range (i+1, len (current_frequent)):
                 # Combine two itemsets
-                union = sorted(set(current_frequent[i]) | set(current_frequent[j]))
-                if len(union) == k and union not in candidates:
-                    candidates.append(union)
+                union = sorted (set (current_frequent[i]) | set (current_frequent[j]))
+                if len (union) == k and union not in candidates:
+                    candidates.append (union)
         
         # Check support
         new_frequent = []
         for candidate in candidates:
-            support = get_support(candidate, transactions)
+            support = get_support (candidate, transactions)
             if support >= min_support:
                 frequent_itemsets.append((candidate, support))
-                new_frequent.append(candidate)
+                new_frequent.append (candidate)
         
-        print(f"Frequent {k}-itemsets: {len(new_frequent)}")
+        print(f"Frequent {k}-itemsets: {len (new_frequent)}")
         
         current_frequent = new_frequent
         k += 1
@@ -211,11 +211,11 @@ def find_frequent_itemsets(transactions, min_support):
 
 # Find frequent itemsets
 min_support = 0.3  # 30%
-frequent_itemsets = find_frequent_itemsets(transactions, min_support)
+frequent_itemsets = find_frequent_itemsets (transactions, min_support)
 
 print(f"\\nFrequent Itemsets (support >= {min_support:.0%}):")
-for itemset, support in sorted(frequent_itemsets, key=lambda x: x[1], reverse=True):
-    print(f"{str(itemset):30s} support: {support:.1%}")
+for itemset, support in sorted (frequent_itemsets, key=lambda x: x[1], reverse=True):
+    print(f"{str (itemset):30s} support: {support:.1%}")
 \`\`\`
 
 ## Using mlxtend Library
@@ -230,41 +230,41 @@ try:
     
     # Convert transactions to one-hot encoded format
     te = TransactionEncoder()
-    te_array = te.fit(transactions).transform(transactions)
-    df_encoded = pd.DataFrame(te_array, columns=te.columns_)
+    te_array = te.fit (transactions).transform (transactions)
+    df_encoded = pd.DataFrame (te_array, columns=te.columns_)
     
     print("One-hot encoded transactions:")
     print(df_encoded.head())
     
     # Apply Apriori algorithm
-    frequent_itemsets = apriori(df_encoded, min_support=0.3, use_colnames=True)
+    frequent_itemsets = apriori (df_encoded, min_support=0.3, use_colnames=True)
     
     print(f"\\nFrequent Itemsets (using mlxtend):")
     print(frequent_itemsets.sort_values('support', ascending=False))
     
     # Generate association rules
-    rules = association_rules(frequent_itemsets, metric='confidence', min_threshold=0.6)
+    rules = association_rules (frequent_itemsets, metric='confidence', min_threshold=0.6)
     
     print(f"\\nAssociation Rules (confidence >= 60%):")
-    print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].to_string(index=False))
+    print(rules[['antecedents', 'consequents', 'support', 'confidence', 'lift']].to_string (index=False))
     
     # Visualize rules
-    plt.figure(figsize=(10, 8))
-    scatter = plt.scatter(rules['support'], rules['confidence'], 
+    plt.figure (figsize=(10, 8))
+    scatter = plt.scatter (rules['support'], rules['confidence'], 
                          s=rules['lift']*100, c=rules['lift'], 
                          cmap='viridis', alpha=0.6, edgecolors='black', linewidths=1)
     plt.xlabel('Support', fontsize=12)
     plt.ylabel('Confidence', fontsize=12)
-    plt.title('Association Rules\\n(bubble size = lift)', fontsize=14)
-    plt.colorbar(scatter, label='Lift')
+    plt.title('Association Rules\\n (bubble size = lift)', fontsize=14)
+    plt.colorbar (scatter, label='Lift')
     plt.grid(True, alpha=0.3)
     
     # Annotate some rules
     for idx, row in rules.iterrows():
         if row['lift'] > 1.2:  # Only annotate interesting rules
-            antecedents = ', '.join(list(row['antecedents']))
-            consequents = ', '.join(list(row['consequents']))
-            plt.annotate(f"{antecedents} → {consequents}", 
+            antecedents = ', '.join (list (row['antecedents']))
+            consequents = ', '.join (list (row['consequents']))
+            plt.annotate (f"{antecedents} → {consequents}", 
                         (row['support'], row['confidence']),
                         fontsize=8, alpha=0.7)
     
@@ -299,13 +299,13 @@ products = {
 
 # Generate transactions with some correlations
 transactions_large = []
-for _ in range(n_transactions):
+for _ in range (n_transactions):
     transaction = []
     
     # Add items based on probabilities
     for product, prob in products.items():
         if np.random.rand() < prob:
-            transaction.append(product)
+            transaction.append (product)
     
     # Add correlations
     if 'coffee' in transaction and np.random.rand() < 0.6:
@@ -316,10 +316,10 @@ for _ in range(n_transactions):
         transaction.append('eggs')
     
     if transaction:  # Only add non-empty transactions
-        transactions_large.append(transaction)
+        transactions_large.append (transaction)
 
-print(f"Generated {len(transactions_large)} transactions")
-print(f"Average items per transaction: {np.mean([len(t) for t in transactions_large]):.1f}")
+print(f"Generated {len (transactions_large)} transactions")
+print(f"Average items per transaction: {np.mean([len (t) for t in transactions_large]):.1f}")
 
 # Sample transactions
 print("\\nSample transactions:")
@@ -333,23 +333,23 @@ for i in range(5):
 try:
     # Encode transactions
     te_large = TransactionEncoder()
-    te_array_large = te_large.fit(transactions_large).transform(transactions_large)
-    df_large = pd.DataFrame(te_array_large, columns=te_large.columns_)
+    te_array_large = te_large.fit (transactions_large).transform (transactions_large)
+    df_large = pd.DataFrame (te_array_large, columns=te_large.columns_)
     
     # Apply Apriori
-    frequent_large = apriori(df_large, min_support=0.05, use_colnames=True)
-    print(f"Found {len(frequent_large)} frequent itemsets")
+    frequent_large = apriori (df_large, min_support=0.05, use_colnames=True)
+    print(f"Found {len (frequent_large)} frequent itemsets")
     
     # Generate rules
-    rules_large = association_rules(frequent_large, metric='confidence', min_threshold=0.3)
-    print(f"Found {len(rules_large)} association rules")
+    rules_large = association_rules (frequent_large, metric='confidence', min_threshold=0.3)
+    print(f"Found {len (rules_large)} association rules")
     
     # Top rules by lift
     print("\\nTop 10 Rules by Lift:")
     top_rules = rules_large.nlargest(10, 'lift')
     for idx, row in top_rules.iterrows():
-        ant = ', '.join(list(row['antecedents']))
-        con = ', '.join(list(row['consequents']))
+        ant = ', '.join (list (row['antecedents']))
+        con = ', '.join (list (row['consequents']))
         print(f"{ant:20s} → {con:15s}  "
               f"(support: {row['support']:.2%}, "
               f"confidence: {row['confidence']:.1%}, "
@@ -359,7 +359,7 @@ try:
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     
     # Support vs Confidence
-    axes[0].scatter(rules_large['support'], rules_large['confidence'], 
+    axes[0].scatter (rules_large['support'], rules_large['confidence'], 
                    alpha=0.5, s=30)
     axes[0].set_xlabel('Support')
     axes[0].set_ylabel('Confidence')
@@ -367,22 +367,22 @@ try:
     axes[0].grid(True, alpha=0.3)
     
     # Support vs Lift
-    axes[1].scatter(rules_large['support'], rules_large['lift'], 
+    axes[1].scatter (rules_large['support'], rules_large['lift'], 
                    alpha=0.5, s=30)
     axes[1].set_xlabel('Support')
     axes[1].set_ylabel('Lift')
     axes[1].set_title('Support vs Lift')
-    axes[1].axhline(y=1, color='r', linestyle='--', label='Lift=1 (independence)')
+    axes[1].axhline (y=1, color='r', linestyle='--', label='Lift=1 (independence)')
     axes[1].legend()
     axes[1].grid(True, alpha=0.3)
     
     # Confidence vs Lift
-    axes[2].scatter(rules_large['confidence'], rules_large['lift'], 
+    axes[2].scatter (rules_large['confidence'], rules_large['lift'], 
                    alpha=0.5, s=30)
     axes[2].set_xlabel('Confidence')
     axes[2].set_ylabel('Lift')
     axes[2].set_title('Confidence vs Lift')
-    axes[2].axhline(y=1, color='r', linestyle='--', label='Lift=1 (independence)')
+    axes[2].axhline (y=1, color='r', linestyle='--', label='Lift=1 (independence)')
     axes[2].legend()
     axes[2].grid(True, alpha=0.3)
     
@@ -401,11 +401,11 @@ except NameError:
 try:
     # High confidence rules
     high_confidence = rules_large[rules_large['confidence'] >= 0.7]
-    print(f"Rules with confidence >= 70%: {len(high_confidence)}")
+    print(f"Rules with confidence >= 70%: {len (high_confidence)}")
     
     # High lift rules (strong associations)
     high_lift = rules_large[rules_large['lift'] >= 1.5]
-    print(f"Rules with lift >= 1.5: {len(high_lift)}")
+    print(f"Rules with lift >= 1.5: {len (high_lift)}")
     
     # Balanced rules (good support, confidence, and lift)
     balanced = rules_large[
@@ -416,8 +416,8 @@ try:
     
     print(f"\\nBalanced Rules (support>=10%, confidence>=60%, lift>=1.2):")
     for idx, row in balanced.iterrows():
-        ant = ', '.join(list(row['antecedents']))
-        con = ', '.join(list(row['consequents']))
+        ant = ', '.join (list (row['antecedents']))
+        con = ', '.join (list (row['consequents']))
         print(f"{ant} → {con}")
         print(f"  Support: {row['support']:.1%}, "
               f"Confidence: {row['confidence']:.1%}, "
@@ -433,15 +433,15 @@ except NameError:
 try:
     # Rules involving 'coffee'
     coffee_rules = rules_large[
-        rules_large['antecedents'].apply(lambda x: 'coffee' in x) |
-        rules_large['consequents'].apply(lambda x: 'coffee' in x)
+        rules_large['antecedents'].apply (lambda x: 'coffee' in x) |
+        rules_large['consequents'].apply (lambda x: 'coffee' in x)
     ]
     
-    print(f"Rules involving 'coffee': {len(coffee_rules)}")
+    print(f"Rules involving 'coffee': {len (coffee_rules)}")
     print("\\nTop coffee rules by lift:")
     for idx, row in coffee_rules.nlargest(5, 'lift').iterrows():
-        ant = ', '.join(list(row['antecedents']))
-        con = ', '.join(list(row['consequents']))
+        ant = ', '.join (list (row['antecedents']))
+        con = ', '.join (list (row['consequents']))
         print(f"{ant} → {con} (lift: {row['lift']:.2f})")
 
 except NameError:
@@ -477,7 +477,7 @@ try:
     
     print("Sample rules with all metrics:")
     cols = ['antecedents', 'consequents', 'support', 'confidence', 'lift', 'conviction', 'leverage']
-    print(rules_metrics[cols].head(10).to_string(index=False))
+    print(rules_metrics[cols].head(10).to_string (index=False))
 
 except NameError:
     pass
@@ -499,28 +499,28 @@ try:
     
     for min_sup in support_values:
         start_time = time.time()
-        freq = apriori(df_large, min_support=min_sup, use_colnames=True)
+        freq = apriori (df_large, min_support=min_sup, use_colnames=True)
         elapsed_time = time.time() - start_time
         
         results.append({
             'min_support': min_sup,
-            'n_itemsets': len(freq),
+            'n_itemsets': len (freq),
             'time': elapsed_time
         })
-        print(f"min_support={min_sup:.0%}: {len(freq)} itemsets in {elapsed_time:.2f}s")
+        print(f"min_support={min_sup:.0%}: {len (freq)} itemsets in {elapsed_time:.2f}s")
     
-    results_df = pd.DataFrame(results)
+    results_df = pd.DataFrame (results)
     
     # Plot
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
-    axes[0].plot(results_df['min_support']*100, results_df['n_itemsets'], 'go-', linewidth=2, markersize=8)
+    axes[0].plot (results_df['min_support']*100, results_df['n_itemsets'], 'go-', linewidth=2, markersize=8)
     axes[0].set_xlabel('Min Support (%)')
     axes[0].set_ylabel('Number of Frequent Itemsets')
     axes[0].set_title('Frequent Itemsets vs Min Support')
     axes[0].grid(True, alpha=0.3)
     
-    axes[1].plot(results_df['min_support']*100, results_df['time'], 'ro-', linewidth=2, markersize=8)
+    axes[1].plot (results_df['min_support']*100, results_df['time'], 'ro-', linewidth=2, markersize=8)
     axes[1].set_xlabel('Min Support (%)')
     axes[1].set_ylabel('Time (seconds)')
     axes[1].set_title('Computation Time vs Min Support')
@@ -548,15 +548,15 @@ try:
     
     # Compare Apriori vs FP-Growth
     start_time = time.time()
-    freq_apriori = apriori(df_large, min_support=0.05, use_colnames=True)
+    freq_apriori = apriori (df_large, min_support=0.05, use_colnames=True)
     apriori_time = time.time() - start_time
     
     start_time = time.time()
-    freq_fpgrowth = fpgrowth(df_large, min_support=0.05, use_colnames=True)
+    freq_fpgrowth = fpgrowth (df_large, min_support=0.05, use_colnames=True)
     fpgrowth_time = time.time() - start_time
     
-    print(f"Apriori:    {len(freq_apriori)} itemsets in {apriori_time:.3f}s")
-    print(f"FP-Growth:  {len(freq_fpgrowth)} itemsets in {fpgrowth_time:.3f}s")
+    print(f"Apriori:    {len (freq_apriori)} itemsets in {apriori_time:.3f}s")
+    print(f"FP-Growth:  {len (freq_fpgrowth)} itemsets in {fpgrowth_time:.3f}s")
     print(f"FP-Growth is {apriori_time/fpgrowth_time:.1f}x faster")
 
 except (ImportError, NameError):
@@ -568,13 +568,13 @@ except (ImportError, NameError):
 ### Application 1: Product Recommendations
 
 \`\`\`python
-def recommend_products(cart_items, rules_df, n_recommendations=3):
+def recommend_products (cart_items, rules_df, n_recommendations=3):
     ''Recommend products based on current cart''
     # Find rules where antecedents match cart items
     recommendations = []
     
     for idx, row in rules_df.iterrows():
-        if set(row['antecedents']).issubset(set(cart_items)):
+        if set (row['antecedents']).issubset (set (cart_items)):
             for item in row['consequents']:
                 if item not in cart_items:
                     recommendations.append({
@@ -584,18 +584,18 @@ def recommend_products(cart_items, rules_df, n_recommendations=3):
                     })
     
     # Sort by confidence * lift
-    recommendations_df = pd.DataFrame(recommendations)
-    if len(recommendations_df) > 0:
+    recommendations_df = pd.DataFrame (recommendations)
+    if len (recommendations_df) > 0:
         recommendations_df['score'] = recommendations_df['confidence'] * recommendations_df['lift']
         recommendations_df = recommendations_df.drop_duplicates('item')
-        recommendations_df = recommendations_df.nlargest(n_recommendations, 'score')
+        recommendations_df = recommendations_df.nlargest (n_recommendations, 'score')
         return recommendations_df['item'].tolist()
     return []
 
 try:
     # Example: Customer has milk and bread in cart
     cart = ['milk', 'bread']
-    recommended = recommend_products(cart, rules_large, n_recommendations=5)
+    recommended = recommend_products (cart, rules_large, n_recommendations=5)
     
     print(f"Items in cart: {cart}")
     print(f"Recommended products: {recommended}")
@@ -616,8 +616,8 @@ try:
     
     print("Products to place APART (frequently bought together):")
     for idx, row in strong_associations.iterrows():
-        ant = ', '.join(list(row['antecedents']))
-        con = ', '.join(list(row['consequents']))
+        ant = ', '.join (list (row['antecedents']))
+        con = ', '.join (list (row['consequents']))
         print(f"  {ant} <---> {con} (lift: {row['lift']:.2f})")
 
 except NameError:
@@ -644,17 +644,17 @@ medical_records = [
 try:
     # Encode
     te_medical = TransactionEncoder()
-    te_array_medical = te_medical.fit(medical_records).transform(medical_records)
-    df_medical = pd.DataFrame(te_array_medical, columns=te_medical.columns_)
+    te_array_medical = te_medical.fit (medical_records).transform (medical_records)
+    df_medical = pd.DataFrame (te_array_medical, columns=te_medical.columns_)
     
     # Find associations
-    freq_medical = apriori(df_medical, min_support=0.3, use_colnames=True)
-    rules_medical = association_rules(freq_medical, metric='confidence', min_threshold=0.5)
+    freq_medical = apriori (df_medical, min_support=0.3, use_colnames=True)
+    rules_medical = association_rules (freq_medical, metric='confidence', min_threshold=0.5)
     
     print("Medical Comorbidity Patterns:")
     for idx, row in rules_medical.nlargest(5, 'lift').iterrows():
-        ant = ', '.join(list(row['antecedents']))
-        con = ', '.join(list(row['consequents']))
+        ant = ', '.join (list (row['antecedents']))
+        con = ', '.join (list (row['consequents']))
         print(f"{ant:25s} → {con:20s} "
               f"(confidence: {row['confidence']:.1%}, lift: {row['lift']:.2f})")
     

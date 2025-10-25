@@ -94,7 +94,7 @@ export const functionalvsnonfunctionalSection = {
 
 **Non-functional**:
 - "How many daily active users? How many tweets per day?"
-- "What's acceptable latency for timeline? 100ms? 1 second?"
+- "What\'s acceptable latency for timeline? 100ms? 1 second?"
 - "Strong consistency or eventual consistency?"
 - "What's the required availability? 99.9%? 99.99%?"
 

@@ -38,7 +38,7 @@ export const sequencesseriesMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['5,050', '338,350', '250,000', '1,000,000'],
     correctAnswer: 1,
     explanation:
-      'Formula for sum of squares: Σi² = n(n+1)(2n+1)/6. For n=100: 100×101×201/6 = 2,030,100/6 = 338,350.',
+      'Formula for sum of squares: Σi² = n (n+1)(2n+1)/6. For n=100: 100×101×201/6 = 2,030,100/6 = 338,350.',
   },
   {
     id: 'mc5-convergence',

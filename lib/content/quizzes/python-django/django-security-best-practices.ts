@@ -29,7 +29,7 @@ REST_FRAMEWORK = {
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
-def webhook_view(request):
+def webhook_view (request):
     # External webhooks that can't send CSRF token
     pass
 \`\`\`
@@ -38,11 +38,11 @@ def webhook_view(request):
 
 \`\`\`python
 # SAFE - Django ORM parameterizes queries
-Article.objects.filter(author=user_input)
+Article.objects.filter (author=user_input)
 Article.objects.raw('SELECT * FROM articles WHERE id = %s', [user_id])
 
 # UNSAFE - Don't do this!
-Article.objects.raw(f'SELECT * FROM articles WHERE id = {user_id}')
+Article.objects.raw (f'SELECT * FROM articles WHERE id = {user_id}')
 
 # Safe raw SQL with params
 from django.db import connection
@@ -62,10 +62,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Mark safe only when necessary
 from django.utils.safestring import mark_safe
-safe_html = mark_safe(trusted_html)
+safe_html = mark_safe (trusted_html)
 
 # DRF escapes by default
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # All text fields escaped in JSON responses
     pass
 \`\`\`
@@ -84,7 +84,7 @@ X_FRAME_OPTIONS = 'DENY'  # or 'SAMEORIGIN'
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 @xframe_options_exempt
-def embeddable_view(request):
+def embeddable_view (request):
     pass
 \`\`\`
 
@@ -141,8 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
 from django.core.exceptions import ValidationError
 
 class SpecialCharacterValidator:
-    def validate(self, password, user=None):
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+    def validate (self, password, user=None):
+        if not re.search (r'[!@#$%^&*(),.?":{}|<>]', password):
             raise ValidationError('Password must contain special character')
 \`\`\`
 
@@ -160,10 +160,10 @@ SESSION_SAVE_EVERY_REQUEST = True  # Refresh on activity
 # Rotate session on login
 from django.contrib.auth import login
 
-def login_view(request):
-    user = authenticate(username=username, password=password)
+def login_view (request):
+    user = authenticate (username=username, password=password)
     if user:
-        login(request, user)  # Creates new session ID
+        login (request, user)  # Creates new session ID
 \`\`\`
 
 **Brute Force Protection (django-ratelimit):**
@@ -173,8 +173,8 @@ pip install django-ratelimit
 
 from django_ratelimit.decorators import ratelimit
 
-@ratelimit(key='ip', rate='5/m', method='POST', block=True)
-def login_view(request):
+@ratelimit (key='ip', rate='5/m', method='POST', block=True)
+def login_view (request):
     # Max 5 login attempts per minute per IP
     if request.method == 'POST':
         # Handle login
@@ -185,8 +185,8 @@ from rest_framework.decorators import api_view
 from django_ratelimit.decorators import ratelimit
 
 @api_view(['POST'])
-@ratelimit(key='user_or_ip', rate='10/h', method='POST')
-def api_endpoint(request):
+@ratelimit (key='user_or_ip', rate='10/h', method='POST')
+def api_endpoint (request):
     pass
 \`\`\`
 
@@ -220,23 +220,23 @@ class LoginView(APIView):
 \`\`\`python
 from django.core.cache import cache
 
-def check_failed_attempts(username):
+def check_failed_attempts (username):
     key = f'failed_login:{username}'
-    attempts = cache.get(key, 0)
+    attempts = cache.get (key, 0)
     
     if attempts >= 5:
         raise ValidationError('Account locked. Try again in 30 minutes.')
     
     return attempts
 
-def record_failed_attempt(username):
+def record_failed_attempt (username):
     key = f'failed_login:{username}'
-    attempts = cache.get(key, 0) + 1
-    cache.set(key, attempts, timeout=1800)  # 30 min
+    attempts = cache.get (key, 0) + 1
+    cache.set (key, attempts, timeout=1800)  # 30 min
 
-def clear_failed_attempts(username):
+def clear_failed_attempts (username):
     key = f'failed_login:{username}'
-    cache.delete(key)
+    cache.delete (key)
 \`\`\`
 
 **Two-Factor Authentication:**
@@ -250,7 +250,7 @@ MIDDLEWARE += ['django_otp.middleware.OTPMiddleware']
 from django_otp.decorators import otp_required
 
 @otp_required
-def sensitive_view(request):
+def sensitive_view (request):
     # Requires 2FA
     pass
 \`\`\`
@@ -266,8 +266,8 @@ def sensitive_view(request):
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta (minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta (days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
@@ -282,8 +282,8 @@ INSTALLED_APPS += ['rest_framework_simplejwt.token_blacklist']
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
-def logout_view(request):
-    token = RefreshToken(request.data['refresh'])
+def logout_view (request):
+    token = RefreshToken (request.data['refresh'])
     token.blacklist()
 \`\`\`
 
@@ -326,18 +326,18 @@ CORS_ALLOW_ALL_ORIGINS = False  # NEVER True in production!
 \`\`\`python
 import secrets
 
-class APIKey(models.Model):
+class APIKey (models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=64, unique=True)
-    name = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_used = models.DateTimeField(null=True)
+    key = models.CharField (max_length=64, unique=True)
+    name = models.CharField (max_length=100)
+    created_at = models.DateTimeField (auto_now_add=True)
+    last_used = models.DateTimeField (null=True)
     
     @classmethod
-    def generate_key(cls):
+    def generate_key (cls):
         return secrets.token_urlsafe(48)
     
-    def save(self, *args, **kwargs):
+    def save (self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()
         super().save(*args, **kwargs)
@@ -346,15 +346,15 @@ class APIKey(models.Model):
 from rest_framework.authentication import BaseAuthentication
 
 class APIKeyAuthentication(BaseAuthentication):
-    def authenticate(self, request):
+    def authenticate (self, request):
         api_key = request.META.get('HTTP_X_API_KEY')
         if not api_key:
             return None
         
         try:
-            key_obj = APIKey.objects.select_related('user').get(key=api_key)
+            key_obj = APIKey.objects.select_related('user').get (key=api_key)
             key_obj.last_used = timezone.now()
-            key_obj.save(update_fields=['last_used'])
+            key_obj.save (update_fields=['last_used'])
             return (key_obj.user, None)
         except APIKey.DoesNotExist:
             raise AuthenticationFailed('Invalid API key')
@@ -365,19 +365,19 @@ class APIKeyAuthentication(BaseAuthentication):
 \`\`\`python
 from rest_framework import serializers
 
-class ArticleSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=200)
-    content = serializers.CharField(max_length=50000)
+class ArticleSerializer (serializers.ModelSerializer):
+    title = serializers.CharField (max_length=200)
+    content = serializers.CharField (max_length=50000)
     
-    def validate_title(self, value):
+    def validate_title (self, value):
         # Sanitize input
         if '<script>' in value.lower():
             raise serializers.ValidationError('Invalid content')
         return value
     
-    def validate(self, data):
+    def validate (self, data):
         # Cross-field validation
-        if len(data['content']) < 100:
+        if len (data['content']) < 100:
             raise serializers.ValidationError('Content too short')
         return data
 \`\`\`
@@ -385,7 +385,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 **Mass Assignment Protection:**
 
 \`\`\`python
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer (serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email']  # Whitelist only safe fields
@@ -411,7 +411,7 @@ urlpatterns = [
 **Rate Limiting Per Endpoint:**
 
 \`\`\`python
-class SensitiveViewSet(viewsets.ModelViewSet):
+class SensitiveViewSet (viewsets.ModelViewSet):
     throttle_classes = [UserRateThrottle]
     throttle_scope = 'sensitive'
     

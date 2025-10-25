@@ -107,7 +107,7 @@ def black_scholes_call(S, K, T, r, sigma):
     """Exact Black-Scholes formula."""
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
-    call = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+    call = S * norm.cdf (d1) - K * np.exp(-r * T) * norm.cdf (d2)
     return call
 
 def atm_approximation(S, sigma, T):
@@ -125,7 +125,7 @@ print("=" * 60)
 for T in [1/52, 1/12, 0.25, 0.5, 1.0]:
     exact = black_scholes_call(S, S, T, r, sigma)
     approx = atm_approximation(S, sigma, T)
-    error = abs(exact - approx) / exact * 100
+    error = abs (exact - approx) / exact * 100
     
     print(f"T = {T:5.3f} years: Exact = \${exact:6.2f}, "
           f"Approx = \${approx:6.2f}, Error = {error:4.1f}%")
@@ -178,7 +178,7 @@ def moneyness_adjustment(S, K, sigma, T, r=0):
     
     moneyness = S / K
     
-    if abs(moneyness - 1) < 0.01:  # ATM
+    if abs (moneyness - 1) < 0.01:  # ATM
         return atm_price
     elif moneyness > 1:  # ITM call
         intrinsic = S - K
@@ -201,7 +201,7 @@ strikes = [80, 90, 95, 100, 105, 110, 120]
 for K in strikes:
     exact = black_scholes_call(S, K, T, r, sigma)
     approx = moneyness_adjustment(S, K, sigma, T, r)
-    error = abs(exact - approx) / exact * 100 if exact > 0.5 else 0
+    error = abs (exact - approx) / exact * 100 if exact > 0.5 else 0
     
     moneyness_pct = (S / K - 1) * 100
     print(f"K = {K:3d} ({moneyness_pct:+5.1f}%): "
@@ -269,7 +269,7 @@ Expected: S - K = 100 - 100 = 0
 Put-Call Parity and Arbitrage Detection
 """
 
-def put_call_parity_check(call_price, put_price, S, K, r=0, T=1):
+def put_call_parity_check (call_price, put_price, S, K, r=0, T=1):
     """
     Check put-call parity and detect arbitrage.
     
@@ -341,7 +341,7 @@ for scenario in scenarios:
 
 **Interview scenario:**
 
-*Interviewer:* "Stock is at $50. 3-month call with K=$50 is trading at $3. What's the fair value of the put?"
+*Interviewer:* "Stock is at $50. 3-month call with K=$50 is trading at $3. What\'s the fair value of the put?"
 
 **Mental calculation:**
 - C - P = S - K (ignoring interest for 3 months)
@@ -360,7 +360,7 @@ Delta measures option price change per $1 stock move. Mental shortcuts:
 
 **General approximation:**
 \`\`\`
-Δ_call ≈ N(d₁) ≈ Probability(option expires ITM)
+Δ_call ≈ N(d₁) ≈ Probability (option expires ITM)
 \`\`\`
 
 For quick estimates:
@@ -379,14 +379,14 @@ Delta Estimation
 def black_scholes_delta(S, K, T, r, sigma):
     """Calculate exact delta."""
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
-    delta = norm.cdf(d1)
+    delta = norm.cdf (d1)
     return delta
 
 def delta_approximation(S, K):
     """Mental math delta approximation."""
     moneyness_pct = (S / K - 1) * 100
     
-    if abs(moneyness_pct) < 2:  # ATM
+    if abs (moneyness_pct) < 2:  # ATM
         return 0.50
     elif moneyness_pct > 20:  # Deep ITM
         return 0.95
@@ -415,7 +415,7 @@ strikes = [80, 90, 95, 100, 105, 110, 120]
 for K in strikes:
     exact = black_scholes_delta(S, K, T, r, sigma)
     approx = delta_approximation(S, K)
-    error = abs(exact - approx)
+    error = abs (exact - approx)
     
     moneyness_pct = (S / K - 1) * 100
     print(f"K = {K:3d} ({moneyness_pct:+5.1f}%): "
@@ -509,7 +509,7 @@ Vega Estimation
 def black_scholes_vega(S, K, T, r, sigma):
     """Calculate exact vega (for 1% vol change)."""
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
-    vega = S * norm.pdf(d1) * np.sqrt(T) / 100  # Divide by 100 for 1%
+    vega = S * norm.pdf (d1) * np.sqrt(T) / 100  # Divide by 100 for 1%
     return vega
 
 def vega_approximation(S, T):
@@ -536,7 +536,7 @@ time_periods = [
 for T, label in time_periods:
     exact = black_scholes_vega(S, K, T, r, sigma)
     approx = vega_approximation(S, T)
-    error = abs(exact - approx) / exact * 100
+    error = abs (exact - approx) / exact * 100
     
     print(f"{label:10s}: Exact ν = \${exact:5.2f}, "
           f"Approx ν = \${approx:5.2f}, Error = {error:4.1f}%")
@@ -623,7 +623,7 @@ Rearranging:
 
 **Interview scenario:**
 
-*"Stock at $80, 6-month ATM call trading at $8. What's the implied vol?"*
+*"Stock at $80, 6-month ATM call trading at $8. What\'s the implied vol?"*
 
 **Mental calculation:**
 - T = 0.5, √T ≈ 0.71
@@ -657,7 +657,7 @@ Rearranging:
 - S - K = 200 - 200 = 0
 - Difference: -2 (put is expensive by $2!)
 
-**Response:** "Put's expensive by about $2. I'd sell the put, buy the call, for a $2 credit on a position that's worth $0 at expiration. Easy arb."
+**Response:** "Put\'s expensive by about $2. I'd sell the put, buy the call, for a $2 credit on a position that's worth $0 at expiration. Easy arb."
 
 ### Scenario 3: Hedging on the Fly
 
@@ -668,7 +668,7 @@ Rearranging:
 2. Short 50 calls → delta = -25
 3. Hedge: buy 25 shares of SPY
 
-**Response:** "Buy 25 SPY shares to delta-hedge. That's your initial hedge—gamma will require rehedging as the stock moves."
+**Response:** "Buy 25 SPY shares to delta-hedge. That\'s your initial hedge—gamma will require rehedging as the stock moves."
 
 ---
 

@@ -28,16 +28,16 @@ Saves space by storing "ar" instead of "a" -> "r"
 Build trie of all suffixes for pattern matching.
 
 \`\`\`python
-def build_suffix_trie(text: str):
+def build_suffix_trie (text: str):
     trie = Trie()
-    for i in range(len(text)):
-        trie.insert(text[i:])
+    for i in range (len (text)):
+        trie.insert (text[i:])
     return trie
 
 # Check if pattern exists in text
-def contains_pattern(text, pattern):
-    suffix_trie = build_suffix_trie(text)
-    return suffix_trie.starts_with(pattern)
+def contains_pattern (text, pattern):
+    suffix_trie = build_suffix_trie (text)
+    return suffix_trie.starts_with (pattern)
 \`\`\`
 
 ---
@@ -82,7 +82,7 @@ class XORTrie:
     def __init__(self):
         self.root = {}
     
-    def insert(self, num):
+    def insert (self, num):
         node = self.root
         for i in range(31, -1, -1):
             bit = (num >> i) & 1
@@ -90,7 +90,7 @@ class XORTrie:
                 node[bit] = {}
             node = node[bit]
     
-    def max_xor(self, num):
+    def max_xor (self, num):
         node = self.root
         xor = 0
         for i in range(31, -1, -1):

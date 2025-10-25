@@ -44,7 +44,7 @@ export function useStreamingLLM() {
     error: null
   });
 
-  const streamMessage = useCallback(async (prompt: string) => {
+  const streamMessage = useCallback (async (prompt: string) => {
     setResponse({ content: ', isStreaming: true, error: null });
 
     try {
@@ -65,7 +65,7 @@ export function useStreamingLLM() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value);
+        const chunk = decoder.decode (value);
         const lines = chunk.split('\\n');
 
         for (const line of lines) {
@@ -74,8 +74,8 @@ export function useStreamingLLM() {
             if (data === '[DONE]') continue;
 
             try {
-              const parsed = JSON.parse(data);
-              setResponse(prev => ({
+              const parsed = JSON.parse (data);
+              setResponse (prev => ({
                 ...prev,
                 content: prev.content + parsed.token
               }));
@@ -86,10 +86,10 @@ export function useStreamingLLM() {
         }
       }
 
-      setResponse(prev => ({ ...prev, isStreaming: false }));
+      setResponse (prev => ({ ...prev, isStreaming: false }));
 
     } catch (error: any) {
-      setResponse(prev => ({
+      setResponse (prev => ({
         ...prev,
         isStreaming: false,
         error: error.message
@@ -99,7 +99,7 @@ export function useStreamingLLM() {
 
   const cancel = useCallback(() => {
     // Implementation for canceling stream
-    setResponse(prev => ({ ...prev, isStreaming: false }));
+    setResponse (prev => ({ ...prev, isStreaming: false }));
   }, []);
 
   return { ...response, streamMessage, cancel };
@@ -113,7 +113,7 @@ export function ChatInterface() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    await streamMessage(input);
+    await streamMessage (input);
     setInput(');
   };
 
@@ -129,7 +129,7 @@ export function ChatInterface() {
       <form onSubmit={handleSubmit}>
         <input
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={e => setInput (e.target.value)}
           disabled={isStreaming}
           placeholder="Ask anything..."
         />
@@ -168,29 +168,29 @@ interface Job {
   estimatedTime?: number;
 }
 
-export function useJobStatus(jobId: string | null) {
+export function useJobStatus (jobId: string | null) {
   const [job, setJob] = useState<Job | null>(null);
 
   useEffect(() => {
     if (!jobId) return;
 
-    const pollInterval = setInterval(async () => {
+    const pollInterval = setInterval (async () => {
       try {
         const res = await fetch(\`/api/jobs/\${jobId}\`);
         const data = await res.json();
         
-        setJob(data);
+        setJob (data);
 
         // Stop polling when done
         if (data.status === 'completed' || data.status === 'failed') {
-          clearInterval(pollInterval);
+          clearInterval (pollInterval);
         }
       } catch (error) {
         console.error('Polling error:', error);
       }
     }, 2000); // Poll every 2 seconds
 
-    return () => clearInterval(pollInterval);
+    return () => clearInterval (pollInterval);
   }, [jobId]);
 
   return job;
@@ -205,7 +205,7 @@ export function JobProgress({ job }: { job: Job }) {
       case 'queued':
         return \`Queued... Position: \${job.progress}\`;
       case 'processing':
-        return \`Processing... \${Math.round(job.progress)}% complete\`;
+        return \`Processing... \${Math.round (job.progress)}% complete\`;
       case 'completed':
         return 'Done!';
       case 'failed':
@@ -216,7 +216,7 @@ export function JobProgress({ job }: { job: Job }) {
   const getTimeRemaining = () => {
     if (job.status !== 'processing' || !job.estimatedTime) return ';
     const remaining = Math.max(0, job.estimatedTime - (job.progress / 100) * job.estimatedTime);
-    return \`~\${Math.round(remaining)}s remaining\`;
+    return \`~\${Math.round (remaining)}s remaining\`;
   };
 
   return (
@@ -249,7 +249,7 @@ export function JobProgress({ job }: { job: Job }) {
 export function ImageGenerator() {
   const [prompt, setPrompt] = useState(');
   const [jobId, setJobId] = useState<string | null>(null);
-  const job = useJobStatus(jobId);
+  const job = useJobStatus (jobId);
   const [results, setResults] = useState<string[]>([]);
 
   const generate = async () => {
@@ -260,13 +260,13 @@ export function ImageGenerator() {
     });
 
     const data = await res.json();
-    setJobId(data.job_id);
+    setJobId (data.job_id);
   };
 
   useEffect(() => {
     if (job?.status === 'completed' && job.result?.url) {
-      setResults(prev => [job.result.url, ...prev]);
-      setJobId(null);
+      setResults (prev => [job.result.url, ...prev]);
+      setJobId (null);
     }
   }, [job]);
 
@@ -275,7 +275,7 @@ export function ImageGenerator() {
       <div className="input-section">
         <textarea
           value={prompt}
-          onChange={e => setPrompt(e.target.value)}
+          onChange={e => setPrompt (e.target.value)}
           placeholder="Describe the image..."
           rows={3}
         />
@@ -337,7 +337,7 @@ export function useOptimisticChat() {
       isOptimistic: true
     };
 
-    setMessages(prev => [...prev, userMessage, assistantMessage]);
+    setMessages (prev => [...prev, userMessage, assistantMessage]);
 
     try {
       const response = await fetch('/api/chat', {
@@ -349,8 +349,8 @@ export function useOptimisticChat() {
       const data = await response.json();
 
       // Replace optimistic message with real one
-      setMessages(prev => 
-        prev.map(msg => 
+      setMessages (prev => 
+        prev.map (msg => 
           msg.id === assistantMessage.id
             ? { ...msg, content: data.response, isOptimistic: false }
             : msg
@@ -359,8 +359,8 @@ export function useOptimisticChat() {
 
     } catch (error: any) {
       // Mark optimistic message as failed
-      setMessages(prev =>
-        prev.map(msg =>
+      setMessages (prev =>
+        prev.map (msg =>
           msg.id === assistantMessage.id
             ? { ...msg, error: error.message, isOptimistic: false }
             : msg
@@ -371,18 +371,18 @@ export function useOptimisticChat() {
 
   const retry = async (messageId: string) => {
     // Find message and retry
-    const message = messages.find(m => m.id === messageId);
+    const message = messages.find (m => m.id === messageId);
     if (!message) return;
 
     // Find previous user message
-    const idx = messages.findIndex(m => m.id === messageId);
+    const idx = messages.findIndex (m => m.id === messageId);
     const userMessage = messages[idx - 1];
 
     if (userMessage?.role === 'user') {
       // Remove failed message
-      setMessages(prev => prev.filter(m => m.id !== messageId));
+      setMessages (prev => prev.filter (m => m.id !== messageId));
       // Retry
-      await sendMessage(userMessage.content);
+      await sendMessage (userMessage.content);
     }
   };
 
@@ -411,7 +411,7 @@ export function MessageBubble({ message, onRetry }: {
       {message.error && (
         <div className="error">
           <span>{message.error}</span>
-          <button onClick={() => onRetry(message.id)}>
+          <button onClick={() => onRetry (message.id)}>
             Retry
           </button>
         </div>
@@ -446,11 +446,11 @@ interface UploadProgress {
 export function useFileUpload() {
   const [uploads, setUploads] = useState<Map<string, UploadProgress>>(new Map());
 
-  const uploadFile = useCallback(async (file: File) => {
+  const uploadFile = useCallback (async (file: File) => {
     const fileId = \`\${file.name}-\${Date.now()}\`;
 
     // Initialize progress
-    setUploads(prev => new Map(prev).set(fileId, {
+    setUploads (prev => new Map (prev).set (fileId, {
       file,
       progress: 0,
       status: 'uploading'
@@ -465,11 +465,11 @@ export function useFileUpload() {
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
           const progress = (e.loaded / e.total) * 100;
-          setUploads(prev => {
-            const newMap = new Map(prev);
-            const current = newMap.get(fileId);
+          setUploads (prev => {
+            const newMap = new Map (prev);
+            const current = newMap.get (fileId);
             if (current) {
-              newMap.set(fileId, { ...current, progress });
+              newMap.set (fileId, { ...current, progress });
             }
             return newMap;
           });
@@ -478,11 +478,11 @@ export function useFileUpload() {
 
       xhr.addEventListener('load', () => {
         if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
+          const response = JSON.parse (xhr.responseText);
           
-          setUploads(prev => {
-            const newMap = new Map(prev);
-            newMap.set(fileId, {
+          setUploads (prev => {
+            const newMap = new Map (prev);
+            newMap.set (fileId, {
               file,
               progress: 100,
               status: 'processing',
@@ -492,16 +492,16 @@ export function useFileUpload() {
           });
 
           // Poll for processing completion
-          pollProcessing(fileId, response.job_id);
+          pollProcessing (fileId, response.job_id);
         } else {
           throw new Error('Upload failed');
         }
       });
 
       xhr.addEventListener('error', () => {
-        setUploads(prev => {
-          const newMap = new Map(prev);
-          newMap.set(fileId, {
+        setUploads (prev => {
+          const newMap = new Map (prev);
+          newMap.set (fileId, {
             file,
             progress: 0,
             status: 'error',
@@ -512,12 +512,12 @@ export function useFileUpload() {
       });
 
       xhr.open('POST', '/api/upload');
-      xhr.send(formData);
+      xhr.send (formData);
 
     } catch (error: any) {
-      setUploads(prev => {
-        const newMap = new Map(prev);
-        newMap.set(fileId, {
+      setUploads (prev => {
+        const newMap = new Map (prev);
+        newMap.set (fileId, {
           file,
           progress: 0,
           status: 'error',
@@ -529,17 +529,17 @@ export function useFileUpload() {
   }, []);
 
   const pollProcessing = async (fileId: string, jobId: string) => {
-    const interval = setInterval(async () => {
+    const interval = setInterval (async () => {
       const res = await fetch(\`/api/jobs/\${jobId}\`);
       const data = await res.json();
 
       if (data.status === 'completed') {
-        clearInterval(interval);
-        setUploads(prev => {
-          const newMap = new Map(prev);
-          const current = newMap.get(fileId);
+        clearInterval (interval);
+        setUploads (prev => {
+          const newMap = new Map (prev);
+          const current = newMap.get (fileId);
           if (current) {
-            newMap.set(fileId, {
+            newMap.set (fileId, {
               ...current,
               status: 'completed',
               result: data.result
@@ -548,12 +548,12 @@ export function useFileUpload() {
           return newMap;
         });
       } else if (data.status === 'failed') {
-        clearInterval(interval);
-        setUploads(prev => {
-          const newMap = new Map(prev);
-          const current = newMap.get(fileId);
+        clearInterval (interval);
+        setUploads (prev => {
+          const newMap = new Map (prev);
+          const current = newMap.get (fileId);
           if (current) {
-            newMap.set(fileId, {
+            newMap.set (fileId, {
               ...current,
               status: 'error',
               error: data.error
@@ -565,7 +565,7 @@ export function useFileUpload() {
     }, 2000);
   };
 
-  return { uploads: Array.from(uploads.values()), uploadFile };
+  return { uploads: Array.from (uploads.values()), uploadFile };
 }
 
 // Upload Component
@@ -573,7 +573,7 @@ export function FileUploader() {
   const { uploads, uploadFile } = useFileUpload();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach(uploadFile);
+    acceptedFiles.forEach (uploadFile);
   }, [uploadFile]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -623,7 +623,7 @@ export function FileUploader() {
               </div>
               
               <span className="status">
-                {upload.status === 'uploading' && \`Uploading... \${Math.round(upload.progress)}%\`}
+                {upload.status === 'uploading' && \`Uploading... \${Math.round (upload.progress)}%\`}
                 {upload.status === 'processing' && 'Processing...'}
                 {upload.status === 'completed' && '✓ Completed'}
                 {upload.status === 'error' && \`✗ \${upload.error}\`}
@@ -658,7 +658,7 @@ interface User {
   isTyping?: boolean;
 }
 
-export function usePresence(roomId: string) {
+export function usePresence (roomId: string) {
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [ws, setWs] = useState<WebSocket | null>(null);
 
@@ -678,38 +678,38 @@ export function usePresence(roomId: string) {
     };
 
     websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      const data = JSON.parse (event.data);
 
       switch (data.type) {
         case 'user_joined':
-          setUsers(prev => new Map(prev).set(data.user.id, data.user));
+          setUsers (prev => new Map (prev).set (data.user.id, data.user));
           break;
         
         case 'user_left':
-          setUsers(prev => {
-            const newMap = new Map(prev);
-            newMap.delete(data.userId);
+          setUsers (prev => {
+            const newMap = new Map (prev);
+            newMap.delete (data.userId);
             return newMap;
           });
           break;
         
         case 'cursor_move':
-          setUsers(prev => {
-            const newMap = new Map(prev);
-            const user = newMap.get(data.userId);
+          setUsers (prev => {
+            const newMap = new Map (prev);
+            const user = newMap.get (data.userId);
             if (user) {
-              newMap.set(data.userId, { ...user, cursor: data.cursor });
+              newMap.set (data.userId, { ...user, cursor: data.cursor });
             }
             return newMap;
           });
           break;
         
         case 'typing':
-          setUsers(prev => {
-            const newMap = new Map(prev);
-            const user = newMap.get(data.userId);
+          setUsers (prev => {
+            const newMap = new Map (prev);
+            const user = newMap.get (data.userId);
             if (user) {
-              newMap.set(data.userId, { ...user, isTyping: data.isTyping });
+              newMap.set (data.userId, { ...user, isTyping: data.isTyping });
             }
             return newMap;
           });
@@ -717,7 +717,7 @@ export function usePresence(roomId: string) {
       }
     };
 
-    setWs(websocket);
+    setWs (websocket);
 
     return () => websocket.close();
   }, [roomId]);
@@ -737,7 +737,7 @@ export function usePresence(roomId: string) {
   };
 
   return { 
-    users: Array.from(users.values()),
+    users: Array.from (users.values()),
     updateCursor,
     setTyping
   };
@@ -747,7 +747,7 @@ export function usePresence(roomId: string) {
 export function RemoteCursors({ users }: { users: User[] }) {
   return (
     <>
-      {users.map(user => 
+      {users.map (user => 
         user.cursor && (
           <div
             key={user.id}
@@ -844,18 +844,18 @@ export const useAppStore = create<AppState>()(
 
       createConversation: () => {
         const id = \`conv-\${Date.now()}\`;
-        set(state => ({
-          conversations: new Map(state.conversations).set(id, []),
+        set (state => ({
+          conversations: new Map (state.conversations).set (id, []),
           currentConversationId: id
         }));
         return id;
       },
 
       addMessage: (conversationId, message) => {
-        set(state => {
-          const newConversations = new Map(state.conversations);
-          const messages = newConversations.get(conversationId) || [];
-          newConversations.set(conversationId, [...messages, message]);
+        set (state => {
+          const newConversations = new Map (state.conversations);
+          const messages = newConversations.get (conversationId) || [];
+          newConversations.set (conversationId, [...messages, message]);
           return { conversations: newConversations };
         });
       },
@@ -864,14 +864,14 @@ export const useAppStore = create<AppState>()(
       generations: [],
 
       addGeneration: (generation) => {
-        set(state => ({
+        set (state => ({
           generations: [generation, ...state.generations]
         }));
       },
 
       updateGeneration: (id, updates) => {
-        set(state => ({
-          generations: state.generations.map(gen =>
+        set (state => ({
+          generations: state.generations.map (gen =>
             gen.id === id ? { ...gen, ...updates } : gen
           )
         }));
@@ -881,7 +881,7 @@ export const useAppStore = create<AppState>()(
       credits: 100,
 
       deductCredits: (amount) => {
-        set(state => ({
+        set (state => ({
           credits: Math.max(0, state.credits - amount)
         }));
       }
@@ -889,7 +889,7 @@ export const useAppStore = create<AppState>()(
     {
       name: 'app-storage',
       partialize: (state) => ({
-        conversations: Array.from(state.conversations.entries()),
+        conversations: Array.from (state.conversations.entries()),
         credits: state.credits
       })
     }

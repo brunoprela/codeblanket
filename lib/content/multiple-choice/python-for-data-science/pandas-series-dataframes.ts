@@ -17,7 +17,7 @@ export const pandasseriesdataframesMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'pandas-series-dataframes-mc-2',
-    question: "Given df = pd.DataFrame(data), what does df['column',] return?",
+    question: "Given df = pd.DataFrame (data), what does df['column',] return?",
     options: [
       'A DataFrame with one column',
       'A Series',
@@ -61,7 +61,7 @@ export const pandasseriesdataframesMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       "df[df['Age',] > 30 and df['Department',] == 'IT',]",
       "df[(df['Age',] > 30) & (df['Department',] == 'IT')]",
-      "df[df['Age',] > 30].filter(df['Department',] == 'IT')",
+      "df[df['Age',] > 30].filter (df['Department',] == 'IT')",
       "df.filter(('Age' > 30) and ('Department' == 'IT'))",
     ],
     correctAnswer: 1,

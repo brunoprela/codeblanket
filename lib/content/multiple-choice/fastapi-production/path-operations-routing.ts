@@ -39,7 +39,7 @@ export const pathOperationsRoutingMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'APIRouter groups related endpoints with shared configuration: prefix (e.g., "/users"), tags (for OpenAPI docs grouping), dependencies (auth, rate limiting applied to all routes), responses (common error responses). Example: users_router = APIRouter(prefix="/users", tags=["users"], dependencies=[Depends(verify_auth)]). Benefits: organize large APIs into modules, apply shared logic (auth, logging) at router level, separate concerns (users router, products router), include in main app: app.include_router(users_router). Routes become: GET /users/, GET /users/{id}, etc.',
+      'APIRouter groups related endpoints with shared configuration: prefix (e.g., "/users"), tags (for OpenAPI docs grouping), dependencies (auth, rate limiting applied to all routes), responses (common error responses). Example: users_router = APIRouter (prefix="/users", tags=["users"], dependencies=[Depends (verify_auth)]). Benefits: organize large APIs into modules, apply shared logic (auth, logging) at router level, separate concerns (users router, products router), include in main app: app.include_router (users_router). Routes become: GET /users/, GET /users/{id}, etc.',
   },
   {
     id: 'fastapi-routing-mc-4',

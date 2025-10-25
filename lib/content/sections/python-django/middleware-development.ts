@@ -6,7 +6,7 @@ export const middlewareDevelopment = {
 
 ## Introduction
 
-Django **middleware** is a framework of hooks into Django's request/response processing. It's a light, low-level plugin system for globally altering Django's input or output. Each middleware component is responsible for doing some specific function.
+Django **middleware** is a framework of hooks into Django\'s request/response processing. It's a light, low-level plugin system for globally altering Django's input or output. Each middleware component is responsible for doing some specific function.
 
 ### What is Middleware?
 
@@ -62,9 +62,9 @@ Each middleware can implement these methods:
 
 1. **\`__init__(get_response)\`**: Called once when server starts
 2. **\`__call__(request)\`**: Called on every request
-3. **\`process_view(request, view_func, view_args, view_kwargs)\`**: Called before view
-4. **\`process_exception(request, exception)\`**: Called if view raises exception
-5. **\`process_template_response(request, response)\`**: Called if response has \`render()\` method
+3. **\`process_view (request, view_func, view_args, view_kwargs)\`**: Called before view
+4. **\`process_exception (request, exception)\`**: Called if view raises exception
+5. **\`process_template_response (request, response)\`**: Called if response has \`render()\` method
 
 ---
 
@@ -97,7 +97,7 @@ class SimpleMiddleware:
         print(f"Processing request: {request.path}")
         
         # Get response from next middleware or view
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Code that runs AFTER the view
         response['X-Custom-Header'] = 'My Custom Value'
@@ -148,7 +148,7 @@ class RequestTimingMiddleware:
         request.start_time = start_time
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Calculate duration
         duration = time.time() - start_time
@@ -187,7 +187,7 @@ class LastActivityMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Update last activity for authenticated users
         if request.user.is_authenticated:
@@ -205,14 +205,14 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    last_activity = models.DateTimeField(null=True, blank=True)
+    last_activity = models.DateTimeField (null=True, blank=True)
     
     @property
-    def is_online(self):
+    def is_online (self):
         """User is online if active in last 5 minutes"""
         if not self.last_activity:
             return False
-        return timezone.now() - self.last_activity < timezone.timedelta(minutes=5)
+        return timezone.now() - self.last_activity < timezone.timedelta (minutes=5)
 \`\`\`
 
 ### 3. Rate Limiting Middleware
@@ -231,17 +231,17 @@ class RateLimitMiddleware:
     
     def __init__(self, get_response):
         self.get_response = get_response
-        self.rate_limit = getattr(settings, 'RATE_LIMIT_PER_MINUTE', 60)
+        self.rate_limit = getattr (settings, 'RATE_LIMIT_PER_MINUTE', 60)
     
     def __call__(self, request):
         # Get client IP
-        ip_address = self.get_client_ip(request)
+        ip_address = self.get_client_ip (request)
         
         # Create cache key
         cache_key = f'rate_limit:{ip_address}'
         
         # Get current request count
-        request_count = cache.get(cache_key, 0)
+        request_count = cache.get (cache_key, 0)
         
         # Check if rate limit exceeded
         if request_count >= self.rate_limit:
@@ -250,26 +250,26 @@ class RateLimitMiddleware:
                 status=429,
                 headers={
                     'Retry-After': '60',
-                    'X-RateLimit-Limit': str(self.rate_limit),
+                    'X-RateLimit-Limit': str (self.rate_limit),
                     'X-RateLimit-Remaining': '0',
                 }
             )
         
         # Increment counter
-        cache.set(cache_key, request_count + 1, 60)  # Expire after 60 seconds
+        cache.set (cache_key, request_count + 1, 60)  # Expire after 60 seconds
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Add rate limit headers
         remaining = max(0, self.rate_limit - request_count - 1)
-        response['X-RateLimit-Limit'] = str(self.rate_limit)
-        response['X-RateLimit-Remaining'] = str(remaining)
+        response['X-RateLimit-Limit'] = str (self.rate_limit)
+        response['X-RateLimit-Remaining'] = str (remaining)
         response['X-RateLimit-Reset'] = '60'
         
         return response
     
-    def get_client_ip(self, request):
+    def get_client_ip (self, request):
         """Get client IP address from request"""
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -297,7 +297,7 @@ class CORSMiddleware:
             'CORS_ALLOWED_ORIGINS', 
             ['http://localhost:3000']
         )
-        self.allow_credentials = getattr(settings, 'CORS_ALLOW_CREDENTIALS', True)
+        self.allow_credentials = getattr (settings, 'CORS_ALLOW_CREDENTIALS', True)
         self.allowed_methods = getattr(
             settings,
             'CORS_ALLOWED_METHODS',
@@ -318,13 +318,13 @@ class CORSMiddleware:
             response = HttpResponse()
             response.status_code = 200
         else:
-            response = self.get_response(request)
+            response = self.get_response (request)
         
         # Add CORS headers if origin is allowed
         if origin in self.allowed_origins or '*' in self.allowed_origins:
             response['Access-Control-Allow-Origin'] = origin
-            response['Access-Control-Allow-Methods'] = ', '.join(self.allowed_methods)
-            response['Access-Control-Allow-Headers'] = ', '.join(self.allowed_headers)
+            response['Access-Control-Allow-Methods'] = ', '.join (self.allowed_methods)
+            response['Access-Control-Allow-Headers'] = ', '.join (self.allowed_headers)
             response['Access-Control-Max-Age'] = '86400'  # 24 hours
             
             if self.allow_credentials:
@@ -354,29 +354,29 @@ class RequestResponseLoggingMiddleware:
     
     def __call__(self, request):
         # Skip logging for certain paths
-        if any(request.path.startswith(path) for path in self.excluded_paths):
-            return self.get_response(request)
+        if any (request.path.startswith (path) for path in self.excluded_paths):
+            return self.get_response (request)
         
         # Log request
-        request_log = self.log_request(request)
+        request_log = self.log_request (request)
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Log response
-        self.log_response(request, response, request_log)
+        self.log_response (request, response, request_log)
         
         return response
     
-    def log_request(self, request):
+    def log_request (self, request):
         """Log incoming request"""
         request_data = {
             'timestamp': timezone.now().isoformat(),
             'method': request.method,
             'path': request.path,
-            'query_params': dict(request.GET),
+            'query_params': dict (request.GET),
             'user': request.user.username if request.user.is_authenticated else 'anonymous',
-            'ip': self.get_client_ip(request),
+            'ip': self.get_client_ip (request),
             'user_agent': request.META.get('HTTP_USER_AGENT', ''),
         }
         
@@ -384,19 +384,19 @@ class RequestResponseLoggingMiddleware:
         if request.method in ['POST', 'PUT', 'PATCH']:
             try:
                 if request.content_type == 'application/json':
-                    request_data['body'] = json.loads(request.body)
+                    request_data['body'] = json.loads (request.body)
                 else:
-                    request_data['body'] = dict(request.POST)
+                    request_data['body'] = dict (request.POST)
             except:
                 request_data['body'] = 'Unable to parse'
         
-        logger.info(f"REQUEST: {json.dumps(request_data)}")
+        logger.info (f"REQUEST: {json.dumps (request_data)}")
         return request_data
     
-    def log_response(self, request, response, request_log):
+    def log_response (self, request, response, request_log):
         """Log outgoing response"""
         duration = (timezone.now() - 
-                   timezone.datetime.fromisoformat(request_log['timestamp'])).total_seconds()
+                   timezone.datetime.fromisoformat (request_log['timestamp'])).total_seconds()
         
         response_data = {
             'timestamp': timezone.now().isoformat(),
@@ -406,9 +406,9 @@ class RequestResponseLoggingMiddleware:
             'path': request.path,
         }
         
-        logger.info(f"RESPONSE: {json.dumps(response_data)}")
+        logger.info (f"RESPONSE: {json.dumps (response_data)}")
     
-    def get_client_ip(self, request):
+    def get_client_ip (self, request):
         """Get client IP address"""
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -424,14 +424,14 @@ class RequestResponseLoggingMiddleware:
 class SecurityHeadersMiddleware:
     """
     Add security headers to all responses
-    Complements Django's SecurityMiddleware
+    Complements Django\'s SecurityMiddleware
     """
     
     def __init__(self, get_response):
         self.get_response = get_response
     
     def __call__(self, request):
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Content Security Policy
         response['Content-Security-Policy'] = (
@@ -491,11 +491,11 @@ class DatabaseConnectionMiddleware:
         connection.queries_log.clear()
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Analyze queries
-        total_queries = len(connection.queries)
-        total_time = sum(float(q['time']) for q in connection.queries)
+        total_queries = len (connection.queries)
+        total_time = sum (float (q['time']) for q in connection.queries)
         
         # Log query statistics
         if total_queries > 10:
@@ -506,7 +506,7 @@ class DatabaseConnectionMiddleware:
         
         # Log slow queries
         for query in connection.queries:
-            query_time = float(query['time'])
+            query_time = float (query['time'])
             if query_time > self.slow_query_threshold:
                 logger.warning(
                     f'Slow query ({query_time:.3f}s): {query["sql"][:200]}'
@@ -514,7 +514,7 @@ class DatabaseConnectionMiddleware:
         
         # Add query stats to response headers (dev only)
         if settings.DEBUG:
-            response['X-DB-Query-Count'] = str(total_queries)
+            response['X-DB-Query-Count'] = str (total_queries)
             response['X-DB-Query-Time'] = f'{total_time:.3f}s'
         
         return response
@@ -535,37 +535,37 @@ class MaintenanceModeMiddleware:
     
     def __init__(self, get_response):
         self.get_response = get_response
-        self.maintenance_mode = getattr(settings, 'MAINTENANCE_MODE', False)
-        self.allowed_ips = getattr(settings, 'MAINTENANCE_ALLOWED_IPS', [])
+        self.maintenance_mode = getattr (settings, 'MAINTENANCE_MODE', False)
+        self.allowed_ips = getattr (settings, 'MAINTENANCE_ALLOWED_IPS', [])
         self.excluded_paths = ['/admin/', '/health/']
     
     def __call__(self, request):
         # Check if maintenance mode is enabled
         if not self.maintenance_mode:
-            return self.get_response(request)
+            return self.get_response (request)
         
         # Allow staff users
         if request.user.is_authenticated and request.user.is_staff:
-            return self.get_response(request)
+            return self.get_response (request)
         
         # Allow certain paths
-        if any(request.path.startswith(path) for path in self.excluded_paths):
-            return self.get_response(request)
+        if any (request.path.startswith (path) for path in self.excluded_paths):
+            return self.get_response (request)
         
         # Allow certain IPs
-        client_ip = self.get_client_ip(request)
+        client_ip = self.get_client_ip (request)
         if client_ip in self.allowed_ips:
-            return self.get_response(request)
+            return self.get_response (request)
         
         # Return maintenance page
         return HttpResponse(
-            render(request, 'maintenance.html', {
+            render (request, 'maintenance.html', {
                 'message': 'Site is currently under maintenance. Please check back soon.'
             }),
             status=503
         )
     
-    def get_client_ip(self, request):
+    def get_client_ip (self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
@@ -589,9 +589,9 @@ class ViewLoggingMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        return self.get_response(request)
+        return self.get_response (request)
     
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_view (self, request, view_func, view_args, view_kwargs):
         """
         Called just before Django calls the view
         """
@@ -624,30 +624,30 @@ class ExceptionHandlingMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        return self.get_response(request)
+        return self.get_response (request)
     
-    def process_exception(self, request, exception):
+    def process_exception (self, request, exception):
         """
         Called when a view raises an exception
         """
         # Log the exception
         logger.error(
-            f'Exception in {request.path}: {str(exception)}',
+            f'Exception in {request.path}: {str (exception)}',
             exc_info=True
         )
         
         # Return JSON response for API requests
         if request.path.startswith('/api/'):
             error_data = {
-                'error': type(exception).__name__,
-                'message': str(exception),
+                'error': type (exception).__name__,
+                'message': str (exception),
             }
             
             # Include traceback in debug mode
             if settings.DEBUG:
                 error_data['traceback'] = traceback.format_exc()
             
-            return JsonResponse(error_data, status=500)
+            return JsonResponse (error_data, status=500)
         
         # Return None to let Django handle it normally
         return None
@@ -706,38 +706,38 @@ from django.contrib.auth.models import User
 from myapp.middleware import RequestTimingMiddleware
 
 class RequestTimingMiddlewareTest(TestCase):
-    def setUp(self):
+    def setUp (self):
         self.factory = RequestFactory()
-        self.middleware = RequestTimingMiddleware(self.get_response)
+        self.middleware = RequestTimingMiddleware (self.get_response)
     
-    def get_response(self, request):
+    def get_response (self, request):
         """Mock view function"""
         from django.http import HttpResponse
         return HttpResponse('OK')
     
-    def test_adds_timing_header(self):
+    def test_adds_timing_header (self):
         """Test that middleware adds timing header"""
         request = self.factory.get('/test/')
-        response = self.middleware(request)
+        response = self.middleware (request)
         
         self.assertIn('X-Request-Duration', response)
-        self.assertTrue(response['X-Request-Duration'].endswith('s'))
+        self.assertTrue (response['X-Request-Duration'].endswith('s'))
     
-    def test_timing_accuracy(self):
+    def test_timing_accuracy (self):
         """Test that timing is accurate"""
         import time
         
-        def slow_response(request):
+        def slow_response (request):
             time.sleep(0.1)  # Simulate slow view
             return HttpResponse('OK')
         
-        middleware = RequestTimingMiddleware(slow_response)
+        middleware = RequestTimingMiddleware (slow_response)
         request = self.factory.get('/test/')
-        response = middleware(request)
+        response = middleware (request)
         
-        duration = float(response['X-Request-Duration'].rstrip('s'))
-        self.assertGreater(duration, 0.1)
-        self.assertLess(duration, 0.2)
+        duration = float (response['X-Request-Duration'].rstrip('s'))
+        self.assertGreater (duration, 0.1)
+        self.assertLess (duration, 0.2)
 \`\`\`
 
 ---
@@ -752,14 +752,14 @@ class BadMiddleware:
     def __call__(self, request):
         # This blocks EVERY request for 1 second!
         time.sleep(1)
-        return self.get_response(request)
+        return self.get_response (request)
 
 # ✅ GOOD: Use async operations or move to Celery
 class GoodMiddleware:
     def __call__(self, request):
         # Queue slow operation
-        slow_task.delay(request.user.id)
-        return self.get_response(request)
+        slow_task.delay (request.user.id)
+        return self.get_response (request)
 \`\`\`
 
 ### ❌ Anti-Pattern 2: Modifying Request/Response Incorrectly
@@ -769,13 +769,13 @@ class GoodMiddleware:
 class BadMiddleware:
     def __call__(self, request):
         request.method = 'POST'  # Don't do this!
-        return self.get_response(request)
+        return self.get_response (request)
 
 # ✅ GOOD: Add custom attributes safely
 class GoodMiddleware:
     def __call__(self, request):
         request.custom_data = {'key': 'value'}
-        return self.get_response(request)
+        return self.get_response (request)
 \`\`\`
 
 ### ❌ Anti-Pattern 3: Not Handling Exceptions
@@ -785,7 +785,7 @@ class GoodMiddleware:
 class BadMiddleware:
     def __call__(self, request):
         data = risky_operation()  # May raise exception
-        return self.get_response(request)
+        return self.get_response (request)
 
 # ✅ GOOD: Handle exceptions gracefully
 class GoodMiddleware:
@@ -793,9 +793,9 @@ class GoodMiddleware:
         try:
             data = risky_operation()
         except Exception as e:
-            logger.error(f'Error in middleware: {e}')
+            logger.error (f'Error in middleware: {e}')
             data = None
-        return self.get_response(request)
+        return self.get_response (request)
 \`\`\`
 
 ---

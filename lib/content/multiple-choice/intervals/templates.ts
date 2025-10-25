@@ -63,13 +63,13 @@ export const templatesMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'In interval intersection template, how do you find the intersection of two intervals?',
     options: [
-      'min(start1, start2), max(end1, end2)',
-      '[max(start1, start2), min(end1, end2)]',
+      'min (start1, start2), max (end1, end2)',
+      '[max (start1, start2), min (end1, end2)]',
       'Average of all values',
       'Random selection',
     ],
     correctAnswer: 1,
     explanation:
-      'Intersection is [max(start1, start2), min(end1, end2)]. The intersection starts at the later start and ends at the earlier end. Valid only if start <= end.',
+      'Intersection is [max (start1, start2), min (end1, end2)]. The intersection starts at the later start and ends at the earlier end. Valid only if start <= end.',
   },
 ];

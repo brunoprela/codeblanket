@@ -86,8 +86,7 @@ recommendation = LabelingStrategy.recommend_strategy(
 )
 
 print(f"Recommended: {recommendation['recommended_strategy']}")
-print(f"Est. cost: \${recommendation['estimated_cost']:, .2f
-}")
+print(f"Est. cost: \${recommendation['estimated_cost']:,.2f}")
 print(f"Est. time: {recommendation['estimated_days']:.0f} days")
 \`\`\`
 
@@ -134,12 +133,12 @@ class QualityController:
         labeling_tasks = []
         
         # Insert test questions
-        n_tests = int(len(tasks) * self.test_question_ratio)
-        test_indices = random.sample(range(len(tasks)), n_tests)
+        n_tests = int (len (tasks) * self.test_question_ratio)
+        test_indices = random.sample (range (len (tasks)), n_tests)
         
-        for i, task_data in enumerate(tasks):
+        for i, task_data in enumerate (tasks):
             # Assign to multiple annotators
-            assigned = random.sample(annotators, min(self.redundancy, len(annotators)))
+            assigned = random.sample (annotators, min (self.redundancy, len (annotators)))
             
             is_test = i in test_indices
             gold = task_data.get('gold_label') if is_test else None
@@ -153,10 +152,10 @@ class QualityController:
                 is_test_question=is_test
             )
             
-            labeling_tasks.append(labeling_task)
+            labeling_tasks.append (labeling_task)
             
             if is_test:
-                self.gold_questions.append(labeling_task)
+                self.gold_questions.append (labeling_task)
         
         return labeling_tasks
     
@@ -192,21 +191,21 @@ class QualityController:
                 stats['test_questions_correct'] / stats['test_questions_total']
             )
     
-    def get_consensus_label(self, task: LabelingTask) -> Dict[str, Any]:
+    def get_consensus_label (self, task: LabelingTask) -> Dict[str, Any]:
         """Get consensus from multiple annotations."""
-        if len(task.labels) < 2:
+        if len (task.labels) < 2:
             # Not enough labels yet
             return {'status': 'pending', 'label': None, 'confidence': 0}
         
         # Majority vote
         from collections import Counter
-        label_counts = Counter(task.labels.values())
+        label_counts = Counter (task.labels.values())
         most_common = label_counts.most_common(1)[0]
         majority_label = most_common[0]
         majority_count = most_common[1]
         
         # Confidence = % agreement
-        confidence = majority_count / len(task.labels)
+        confidence = majority_count / len (task.labels)
         
         # Require minimum agreement
         if confidence >= 0.67:  # 2/3 agreement
@@ -218,24 +217,24 @@ class QualityController:
             'status': status,
             'label': majority_label,
             'confidence': confidence,
-            'vote_distribution': dict(label_counts)
+            'vote_distribution': dict (label_counts)
         }
     
-    def flag_poor_annotators(self) -> List[str]:
+    def flag_poor_annotators (self) -> List[str]:
         """Identify annotators below quality threshold."""
         poor_annotators = []
         
         for annotator_id, stats in self.annotator_stats.items():
             if stats['accuracy'] is not None:
                 if stats['accuracy'] < self.min_accuracy_threshold:
-                    poor_annotators.append(annotator_id)
+                    poor_annotators.append (annotator_id)
         
         return poor_annotators
     
-    def generate_quality_report(self) -> Dict[str, Any]:
+    def generate_quality_report (self) -> Dict[str, Any]:
         """Generate quality control report."""
         report = {
-            'total_annotators': len(self.annotator_stats),
+            'total_annotators': len (self.annotator_stats),
             'annotators': []
         }
         
@@ -250,12 +249,12 @@ class QualityController:
         # Overall statistics
         if report['annotators']:
             accuracies = [a['accuracy'] for a in report['annotators'] if a['accuracy'] is not None]
-            report['average_accuracy'] = sum(accuracies) / len(accuracies) if accuracies else None
+            report['average_accuracy'] = sum (accuracies) / len (accuracies) if accuracies else None
         
         return report
 
 # Usage
-qc = QualityController(redundancy=3, test_question_ratio=0.1)
+qc = QualityController (redundancy=3, test_question_ratio=0.1)
 
 # Create batch
 tasks = qc.create_labeling_batch(
@@ -267,12 +266,12 @@ tasks = qc.create_labeling_batch(
 for task in tasks:
     for annotator in task.assigned_to:
         # In production: annotator provides label via UI
-        label = get_label_from_annotator(annotator, task.data)
-        qc.record_label(task, annotator, label)
+        label = get_label_from_annotator (annotator, task.data)
+        qc.record_label (task, annotator, label)
 
 # Get consensus
 for task in tasks:
-    consensus = qc.get_consensus_label(task)
+    consensus = qc.get_consensus_label (task)
     if consensus['status'] == 'consensus':
         final_label = consensus['label']
     else:
@@ -300,7 +299,7 @@ class ActiveLearningSelector:
     """Select most informative examples to label."""
     
     def __init__(self, model_name: str = 'all-MiniLM-L6-v2'):
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer (model_name)
     
     def select_uncertain_samples(
         self,
@@ -314,14 +313,14 @@ class ActiveLearningSelector:
         """
         uncertainties = []
         
-        for i, prediction in enumerate(model_predictions):
+        for i, prediction in enumerate (model_predictions):
             # Entropy as uncertainty measure
-            probs = list(prediction.values())
-            entropy = -sum(p * np.log(p + 1e-10) for p in probs)
+            probs = list (prediction.values())
+            entropy = -sum (p * np.log (p + 1e-10) for p in probs)
             uncertainties.append((i, entropy))
         
         # Sort by uncertainty (descending)
-        uncertainties.sort(key=lambda x: x[1], reverse=True)
+        uncertainties.sort (key=lambda x: x[1], reverse=True)
         
         # Return indices of top n
         return [idx for idx, _ in uncertainties[:n_samples]]
@@ -336,21 +335,21 @@ class ActiveLearningSelector:
         Ensures labels cover different types of inputs.
         """
         # Embed all data
-        embeddings = self.model.encode(unlabeled_data)
+        embeddings = self.model.encode (unlabeled_data)
         
         # Use k-means clustering
         from sklearn.cluster import KMeans
         
-        kmeans = KMeans(n_clusters=n_samples, random_state=42)
-        kmeans.fit(embeddings)
+        kmeans = KMeans (n_clusters=n_samples, random_state=42)
+        kmeans.fit (embeddings)
         
         # Select one example closest to each cluster center
         selected = []
         for center in kmeans.cluster_centers_:
             # Find closest point to this center
-            distances = np.linalg.norm(embeddings - center, axis=1)
-            closest_idx = np.argmin(distances)
-            selected.append(closest_idx)
+            distances = np.linalg.norm (embeddings - center, axis=1)
+            closest_idx = np.argmin (distances)
+            selected.append (closest_idx)
         
         return selected
     
@@ -365,7 +364,7 @@ class ActiveLearningSelector:
         Hybrid: combine uncertainty and diversity.
         Best of both worlds.
         """
-        n_uncertain = int(n_samples * uncertainty_weight)
+        n_uncertain = int (n_samples * uncertainty_weight)
         n_diverse = n_samples - n_uncertain
         
         # Select uncertain samples
@@ -377,12 +376,12 @@ class ActiveLearningSelector:
         
         # Remove uncertain samples from pool
         remaining_data = [
-            text for i, text in enumerate(unlabeled_data)
+            text for i, text in enumerate (unlabeled_data)
             if i not in uncertain_indices
         ]
         
         # Select diverse from remaining
-        diverse_indices = self.select_diverse_samples(remaining_data, n_diverse)
+        diverse_indices = self.select_diverse_samples (remaining_data, n_diverse)
         
         # Combine
         selected = uncertain_indices + diverse_indices
@@ -394,7 +393,7 @@ active_learner = ActiveLearningSelector()
 
 # You have 100K unlabeled examples
 unlabeled_data = load_unlabeled_data()
-model_predictions = get_model_predictions(unlabeled_data)
+model_predictions = get_model_predictions (unlabeled_data)
 
 # Select 1000 most informative to label
 selected_indices = active_learner.select_hybrid(
@@ -406,7 +405,7 @@ selected_indices = active_learner.select_hybrid(
 
 # Label only these selected examples
 to_label = [unlabeled_data[i] for i in selected_indices]
-print(f"Selected {len(to_label)} examples for labeling")
+print(f"Selected {len (to_label)} examples for labeling")
 print("This should give 80% of the benefit at 1% of the cost!")
 \`\`\`
 
@@ -430,10 +429,10 @@ class LabelingFunction:
         self.function = function
         self.accuracy = accuracy
     
-    def apply(self, data: Any) -> Optional[int]:
+    def apply (self, data: Any) -> Optional[int]:
         """Apply function, return label or None if abstains."""
         try:
-            return self.function(data)
+            return self.function (data)
         except:
             return None  # Abstain
 
@@ -443,9 +442,9 @@ class WeakSupervisionPipeline:
     def __init__(self, labeling_functions: List[LabelingFunction]):
         self.labeling_functions = labeling_functions
     
-    def apply_all(self, data: Any) -> List[Optional[int]]:
+    def apply_all (self, data: Any) -> List[Optional[int]]:
         """Apply all labeling functions."""
-        return [lf.apply(data) for lf in self.labeling_functions]
+        return [lf.apply (data) for lf in self.labeling_functions]
     
     def aggregate_labels(
         self,
@@ -459,7 +458,7 @@ class WeakSupervisionPipeline:
         
         # Filter out abstentions (None)
         valid_votes = [(vote, self.labeling_functions[i].accuracy)
-                       for i, vote in enumerate(votes) if vote is not None]
+                       for i, vote in enumerate (votes) if vote is not None]
         
         if not valid_votes:
             return None  # All abstained
@@ -480,56 +479,56 @@ class WeakSupervisionPipeline:
         
         labeled = []
         
-        for i, data in enumerate(dataset):
-            votes = self.apply_all(data)
-            label = self.aggregate_labels(votes)
+        for i, data in enumerate (dataset):
+            votes = self.apply_all (data)
+            label = self.aggregate_labels (votes)
             
             if label is not None:
                 labeled.append({
                     'data': data,
                     'label': label,
-                    'confidence': self._estimate_confidence(votes),
+                    'confidence': self._estimate_confidence (votes),
                     'source': 'weak_supervision'
                 })
         
-        coverage = len(labeled) / len(dataset)
+        coverage = len (labeled) / len (dataset)
         print(f"Weak supervision coverage: {coverage:.1%}")
         
         return labeled
     
-    def _estimate_confidence(self, votes: List[Optional[int]]) -> float:
+    def _estimate_confidence (self, votes: List[Optional[int]]) -> float:
         """Estimate confidence in aggregated label."""
         valid_votes = [v for v in votes if v is not None]
         if not valid_votes:
             return 0.0
         
         from collections import Counter
-        vote_counts = Counter(valid_votes)
+        vote_counts = Counter (valid_votes)
         most_common_count = vote_counts.most_common(1)[0][1]
         
         # Confidence = % agreement among non-abstaining functions
-        return most_common_count / len(valid_votes)
+        return most_common_count / len (valid_votes)
 
 # Example: Spam classification with weak supervision
-def lf_contains_spam_words(email: str) -> Optional[int]:
+def lf_contains_spam_words (email: str) -> Optional[int]:
     """Check for spam keywords."""
     spam_words = ['free', 'win', 'prize', 'click here', 'urgent']
-    if any(word in email.lower() for word in spam_words):
+    if any (word in email.lower() for word in spam_words):
         return 1  # Spam
     return None  # Abstain
 
-def lf_has_suspicious_links(email: str) -> Optional[int]:
+def lf_has_suspicious_links (email: str) -> Optional[int]:
     """Check for suspicious patterns."""
     import re
-    urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', email)
-    if len(urls) > 5:
+    urls = re.findall (r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', email)
+    if len (urls) > 5:
         return 1  # Spam
     return None
 
-def lf_personal_greeting(email: str) -> Optional[int]:
+def lf_personal_greeting (email: str) -> Optional[int]:
     """Personal emails usually not spam."""
     personal = ['hi [name]', 'hey', 'hello [name]']
-    if any(greeting in email.lower() for greeting in personal):
+    if any (greeting in email.lower() for greeting in personal):
         return 0  # Not spam
     return None
 
@@ -540,10 +539,10 @@ lfs = [
     LabelingFunction("personal_greeting", lf_personal_greeting, accuracy=0.70)
 ]
 
-weak_sup = WeakSupervisionPipeline(lfs)
+weak_sup = WeakSupervisionPipeline (lfs)
 
 # Label dataset
-labeled_data = weak_sup.label_dataset(unlabeled_emails)
+labeled_data = weak_sup.label_dataset (unlabeled_emails)
 
 # Now train model on these noisy labels
 # (Snorkel library provides advanced probabilistic aggregation)
@@ -568,13 +567,13 @@ class ProductionLabelingPlatform:
     ) -> str:
         """Create new labeling campaign."""
         
-        campaign_id = f"campaign_{int(time.time())}"
+        campaign_id = f"campaign_{int (time.time())}"
         
         # Select subset with active learning
-        if use_active_learning and len(data) > 1000:
+        if use_active_learning and len (data) > 1000:
             # Get model predictions for uncertainty
             texts = [d['text'] for d in data]
-            predictions = self._get_model_predictions(texts)
+            predictions = self._get_model_predictions (texts)
             
             selected_indices = self.active_learner.select_hybrid(
                 texts, predictions, n_samples=1000
@@ -583,14 +582,14 @@ class ProductionLabelingPlatform:
             data = [data[i] for i in selected_indices]
         
         # Create tasks with quality controls
-        tasks = self.quality_controller.create_labeling_batch(data, annotators)
+        tasks = self.quality_controller.create_labeling_batch (data, annotators)
         
         for task in tasks:
             self.tasks[task.task_id] = task
         
         return campaign_id
     
-    async def assign_next_task(self, annotator_id: str) -> Optional[LabelingTask]:
+    async def assign_next_task (self, annotator_id: str) -> Optional[LabelingTask]:
         """Get next task for annotator."""
         for task in self.tasks.values():
             if annotator_id in task.assigned_to and annotator_id not in task.labels:
@@ -606,25 +605,25 @@ class ProductionLabelingPlatform:
         """Submit label and check quality."""
         
         task = self.tasks[task_id]
-        self.quality_controller.record_label(task, annotator_id, label)
+        self.quality_controller.record_label (task, annotator_id, label)
         
         # Check if task is complete
-        consensus = self.quality_controller.get_consensus_label(task)
+        consensus = self.quality_controller.get_consensus_label (task)
         
         response = {
             'task_id': task_id,
             'status': consensus['status'],
-            'annotator_stats': self.quality_controller.annotator_stats.get(annotator_id)
+            'annotator_stats': self.quality_controller.annotator_stats.get (annotator_id)
         }
         
         return response
     
-    def get_completed_labels(self) -> List[Dict]:
+    def get_completed_labels (self) -> List[Dict]:
         """Get all completed, high-quality labels."""
         completed = []
         
         for task in self.tasks.values():
-            consensus = self.quality_controller.get_consensus_label(task)
+            consensus = self.quality_controller.get_consensus_label (task)
             
             if consensus['status'] == 'consensus':
                 completed.append({
@@ -635,7 +634,7 @@ class ProductionLabelingPlatform:
         
         return completed
     
-    def _get_model_predictions(self, texts: List[str]) -> List[Dict]:
+    def _get_model_predictions (self, texts: List[str]) -> List[Dict]:
         """Get model predictions for active learning."""
         # Placeholder
         return [{'spam': 0.5, 'not_spam': 0.5} for _ in texts]
@@ -653,19 +652,19 @@ campaign_id = platform.create_labeling_campaign(
 # Annotators label
 for annotator in ["alice", "bob", "charlie"]:
     while True:
-        task = await platform.assign_next_task(annotator)
+        task = await platform.assign_next_task (annotator)
         if not task:
             break
         
-        label = get_label_from_ui(annotator, task)
-        result = await platform.submit_label(task.task_id, annotator, label)
+        label = get_label_from_ui (annotator, task)
+        result = await platform.submit_label (task.task_id, annotator, label)
         
         if result['annotator_stats']['accuracy'] and result['annotator_stats']['accuracy'] < 0.85:
             print(f"⚠️  {annotator} accuracy dropping: {result['annotator_stats']['accuracy']:.2%}")
 
 # Export
 labeled_dataset = platform.get_completed_labels()
-print(f"✅ Labeled {len(labeled_dataset)} examples")
+print(f"✅ Labeled {len (labeled_dataset)} examples")
 \`\`\`
 
 ## Production Checklist

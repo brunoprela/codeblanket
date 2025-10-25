@@ -12,11 +12,11 @@ export const calculusIntegrationPuzzlesMultipleChoice: MultipleChoiceQuestion[] 
     },
     {
       id: 'cip-mc-2',
-      question: 'Find the critical points of f(x) = x³ - 3x² + 2',
+      question: 'Find the critical points of f (x) = x³ - 3x² + 2',
       options: ['x = 0, 2', 'x = 0, 3', 'x = 1, 2', 'x = 2 only'],
       correctAnswer: 0,
       explanation:
-        "f'(x) = 3x² - 6x = 3x(x - 2). Critical points where f'(x) = 0: x = 0 or x = 2. Check second derivative: f''(x) = 6x - 6. At x=0: f''(0) = -6 < 0 (local max). At x=2: f''(2) = 6 > 0 (local min).",
+        "f'(x) = 3x² - 6x = 3x (x - 2). Critical points where f'(x) = 0: x = 0 or x = 2. Check second derivative: f''(x) = 6x - 6. At x=0: f''(0) = -6 < 0 (local max). At x=2: f''(2) = 6 > 0 (local min).",
     },
     {
       id: 'cip-mc-3',
@@ -37,7 +37,7 @@ export const calculusIntegrationPuzzlesMultipleChoice: MultipleChoiceQuestion[] 
     },
     {
       id: 'cip-mc-5',
-      question: 'If f(x,y) = x²y + y³, find ∂f/∂x at (2,1)',
+      question: 'If f (x,y) = x²y + y³, find ∂f/∂x at (2,1)',
       options: ['2', '4', '5', '7'],
       correctAnswer: 1,
       explanation:

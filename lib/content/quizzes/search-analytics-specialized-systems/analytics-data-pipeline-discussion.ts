@@ -34,9 +34,9 @@ Snowflake        Redis/Druid
 DataStream<Transaction> transactions = kafka.source("transactions");
 
 transactions
-  .keyBy(t -> t.userId)
-  .process(new FraudDetectionFunction())  // Stateful processing
-  .sinkTo(redis);  // <100ms end-to-end
+  .keyBy (t -> t.userId)
+  .process (new FraudDetectionFunction())  // Stateful processing
+  .sinkTo (redis);  // <100ms end-to-end
 
 class FraudDetectionFunction extends KeyedProcessFunction<String, Transaction, Alert> {
     // Check velocity, location, amount patterns
@@ -48,43 +48,43 @@ class FraudDetectionFunction extends KeyedProcessFunction<String, Transaction, A
 **Batch Layer** (Historical analytics + ML training):
 \`\`\`python
 # Airflow DAG: Daily batch processing
-@dag(schedule_interval='0 2 * * *')
+@dag (schedule_interval='0 2 * * *')
 def daily_analytics():
     # Extract from Kafka → S3 (raw data lake)
     extract = extract_kafka_to_s3(lookback_days=1)
     
     # Transform with Spark
-    transform = spark_transform_sales(extract)
+    transform = spark_transform_sales (extract)
     
     # Load to Snowflake (data warehouse)
-    load = load_to_snowflake(transform, table='sales_daily')
+    load = load_to_snowflake (transform, table='sales_daily')
     
     # ML feature engineering
-    features = compute_ml_features(lookback_days=180)
+    features = compute_ml_features (lookback_days=180)
     
     extract >> transform >> load >> features
 
 # Weekly ML training
-@dag(schedule_interval='0 3 * * 0')  # Sunday 3 AM
+@dag (schedule_interval='0 3 * * 0')  # Sunday 3 AM
 def weekly_ml_training():
-    train_fraud_model(data_days=180)  # 6 months
+    train_fraud_model (data_days=180)  # 6 months
 \`\`\`
 
 **Serving Layer**:
 \`\`\`python
-def get_user_transaction_summary(user_id, days=30):
+def get_user_transaction_summary (user_id, days=30):
     # Recent data from speed layer (Redis/Druid)
-    recent = redis.get(f"user:{user_id}:last_24h")
+    recent = redis.get (f"user:{user_id}:last_24h")
     
     # Historical data from batch layer (Snowflake)
-    historical = snowflake.query(f"""
+    historical = snowflake.query (f"""
         SELECT * FROM sales_daily 
         WHERE user_id = {user_id} 
         AND date BETWEEN CURRENT_DATE - {days} AND CURRENT_DATE - 1
     """)
     
     # Merge results
-    return merge(recent, historical)
+    return merge (recent, historical)
 \`\`\`
 
 **Pros:**
@@ -121,23 +121,23 @@ public class UnifiedTransactionProcessor extends KeyedProcessFunction<String, Tr
     @Override
     public void processElement(Transaction txn, Context ctx, Collector<Output> out) {
         // Fraud detection (real-time)
-        if (isFraudulent(txn)) {
-            out.collect(new Alert(txn));
+        if (isFraudulent (txn)) {
+            out.collect (new Alert (txn));
         }
         
         // Analytics aggregation (batch)
-        updateAggregates(txn);
+        updateAggregates (txn);
         
         // ML features (batch)
-        updateFeatures(txn);
+        updateFeatures (txn);
     }
 }
 
 // Deployment 1: Real-time (tail of Kafka)
-FlinkJob realtime = new FlinkJob(source=kafka.tail(), sink=druid);
+FlinkJob realtime = new FlinkJob (source=kafka.tail(), sink=druid);
 
 // Deployment 2: Batch (replay from beginning)
-FlinkJob batch = new FlinkJob(source=kafka.replay(days=180), sink=snowflake);
+FlinkJob batch = new FlinkJob (source=kafka.replay (days=180), sink=snowflake);
 \`\`\`
 
 **Pros:**
@@ -213,10 +213,10 @@ kafka_connect.s3_sink(
 **2. Real-time Layer:**
 \`\`\`java
 // Flink: Real-time fraud detection + live metrics
-env.addSource(kafka)
-  .keyBy(t -> t.userId)
-  .process(new FraudDetector())  // Stateful processing
-  .addSink(druid);  // Query in <100ms
+env.addSource (kafka)
+  .keyBy (t -> t.userId)
+  .process (new FraudDetector())  // Stateful processing
+  .addSink (druid);  // Query in <100ms
 
 // Druid: Real-time analytics (last 7 days)
 // Automatically archives to deep storage after 7 days
@@ -225,7 +225,7 @@ env.addSource(kafka)
 **3. Batch Layer:**
 \`\`\`python
 # Airflow: Daily batch job
-@dag(schedule_interval='0 2 * * *')
+@dag (schedule_interval='0 2 * * *')
 def daily_batch():
     # Spark reads from S3 (not Kafka)
     df = spark.read.parquet('s3://data-lake/transactions/2024/01/15/')
@@ -240,25 +240,25 @@ def daily_batch():
     sales.write.format('snowflake').save('sales_daily')
 
 # Weekly ML training
-@dag(schedule_interval='0 3 * * 0')
+@dag (schedule_interval='0 3 * * 0')
 def weekly_ml():
     # Load 6 months from Snowflake (fast!)
     df = snowflake.query("SELECT * FROM transactions WHERE date >= DATEADD(month, -6, CURRENT_DATE)")
     
     # Train model
-    model = train_fraud_model(df)
+    model = train_fraud_model (df)
     model.save('s3://models/fraud_v2024_01_15')
 \`\`\`
 
 **4. Serving Layer:**
 \`\`\`python
 # API: Smart query routing
-def get_transaction_analytics(user_id, start_date, end_date):
+def get_transaction_analytics (user_id, start_date, end_date):
     days_ago = (today - end_date).days
     
     if days_ago <= 7:
         # Recent: Query Druid (fast!)
-        return druid.query(f"""
+        return druid.query (f"""
             SELECT SUM(amount) as total
             FROM transactions
             WHERE user_id = {user_id}
@@ -266,7 +266,7 @@ def get_transaction_analytics(user_id, start_date, end_date):
         """)
     else:
         # Historical: Query Snowflake
-        return snowflake.query(f"""
+        return snowflake.query (f"""
             SELECT SUM(amount) as total
             FROM transactions
             WHERE user_id = {user_id}
@@ -367,35 +367,35 @@ Sources → Extract → Transform (Spark/Airflow) → Load → Warehouse (clean)
 **ETL Implementation:**
 \`\`\`python
 # Airflow DAG: ETL Pipeline
-@dag(schedule_interval='0 2 * * *')
+@dag (schedule_interval='0 2 * * *')
 def etl_user_data():
     # Extract from PostgreSQL
     raw_users = extract_postgres("SELECT * FROM users WHERE updated_at >= CURRENT_DATE")
     
     # Transform: Clean, validate, enrich
-    cleaned = transform_users(raw_users)
+    cleaned = transform_users (raw_users)
     # - PII masking (email → hashed)
     # - Data validation (age 18-100)
     # - Denormalization (join with accounts table)
     # - Aggregation (user lifetime value)
     
     # Load only transformed data
-    load_to_redshift(cleaned, table='analytics.users')
+    load_to_redshift (cleaned, table='analytics.users')
     
-def transform_users(raw):
-    df = pd.DataFrame(raw)
+def transform_users (raw):
+    df = pd.DataFrame (raw)
     
     # Data quality
     df = df[df['age'].between(18, 100)]
     df = df[df['email'].str.contains('@')]
     
     # PII handling
-    df['email_hash'] = df['email'].apply(hash_email)
+    df['email_hash'] = df['email'].apply (hash_email)
     df = df.drop('email', axis=1)
     
     # Enrichment
-    df['country'] = df['ip'].apply(geolocate)
-    df['lifetime_value'] = df['user_id'].apply(calculate_ltv)
+    df['country'] = df['ip'].apply (geolocate)
+    df['lifetime_value'] = df['user_id'].apply (calculate_ltv)
     
     return df[['user_id', 'email_hash', 'age', 'country', 'lifetime_value']]  # Only needed columns
 \`\`\`
@@ -433,7 +433,7 @@ def transform_users(raw):
 \`\`\`python
 # Problem: New analysis needs different transformation
 # Original: Aggregated daily sales per user
-load_to_warehouse(df.groupby(['user_id', 'date']).agg({'amount': 'sum'}))
+load_to_warehouse (df.groupby(['user_id', 'date']).agg({'amount': 'sum'}))
 
 # New need: Hourly sales per user per product
 # IMPOSSIBLE: Raw transaction data was thrown away!
@@ -455,7 +455,7 @@ load_to_warehouse(df.groupby(['user_id', 'date']).agg({'amount': 'sum'}))
    - Hard to trace issues back to source
    - No audit trail
 
-**ELT (Extract, Load, Transform) - Data Science Lead's Argument**
+**ELT (Extract, Load, Transform) - Data Science Lead\'s Argument**
 
 \`\`\`
 Sources → Extract → Load (raw) → Warehouse → Transform (SQL/dbt)
@@ -511,7 +511,7 @@ LEFT JOIN {{ ref('stg_orders') }} o ON u.user_id = o.user_id
 GROUP BY u.user_id, u.email_hash, u.country
 \`\`\`
 
-**Data Science Lead's Arguments (ELT Pros):**
+**Data Science Lead\'s Arguments (ELT Pros):**
 
 1. **Flexibility:**
 \`\`\`sql
@@ -738,7 +738,7 @@ models:
 4. PII handling (masked in staging, restricted raw access)
 5. Industry best practice (dbt + modern warehouse)
 
-This approach gives data scientists the flexibility they need while addressing the CTO's concerns about cost and data quality. It's become the de facto standard at data-driven companies.`,
+This approach gives data scientists the flexibility they need while addressing the CTO's concerns about cost and data quality. It\'s become the de facto standard at data-driven companies.`,
     keyPoints: [
       'ETL optimizes for storage cost and data quality but sacrifices flexibility and reprocessing',
       'ELT enables exploration and flexibility but dramatically increases storage costs',
@@ -773,9 +773,9 @@ Likely causes:
 from great_expectations import DataContext
 
 @task
-def validate_raw_data(date_partition):
+def validate_raw_data (date_partition):
     # Load raw data
-    df = load_from_source(f"sales_{date_partition}")
+    df = load_from_source (f"sales_{date_partition}")
     
     # Great Expectations suite
     context = DataContext()
@@ -788,7 +788,7 @@ def validate_raw_data(date_partition):
     )
     
     if not results['success']:
-        raise DataQualityException(f"Validation failed: {results}")
+        raise DataQualityException (f"Validation failed: {results}")
     
     return df
 
@@ -889,7 +889,7 @@ models:
 
 -- Custom test: Check for duplicates
 -- tests/generic/test_no_duplicates_by_date.sql
-{% test no_duplicates_by_date(model, column_name, date_column) %}
+{% test no_duplicates_by_date (model, column_name, date_column) %}
 
 WITH duplicates AS (
   SELECT
@@ -914,10 +914,10 @@ from scipy import stats
 import numpy as np
 
 @task
-def detect_anomalies(date_partition):
+def detect_anomalies (date_partition):
     # Get historical baseline (30 days)
-    historical = get_metrics(days=30, end_date=date_partition - 1)
-    current = get_metrics(days=1, date=date_partition)
+    historical = get_metrics (days=30, end_date=date_partition - 1)
+    current = get_metrics (days=1, date=date_partition)
     
     anomalies = []
     
@@ -951,8 +951,8 @@ def detect_anomalies(date_partition):
         })
     
     if anomalies:
-        send_alert(anomalies)
-        raise AnomalyDetectedException(anomalies)
+        send_alert (anomalies)
+        raise AnomalyDetectedException (anomalies)
     
     return current
 \`\`\`
@@ -1030,24 +1030,24 @@ CROSS JOIN avg_30d a;
 \`\`\`python
 # Reconciliation test: Source vs Destination
 @task
-def reconcile_data(date_partition):
+def reconcile_data (date_partition):
     # Count in source
-    source_count = count_in_source_db(f"WHERE DATE(created_at) = '{date_partition}'")
+    source_count = count_in_source_db (f"WHERE DATE(created_at) = '{date_partition}'")
     
     # Count in warehouse
-    warehouse_count = count_in_warehouse(f"WHERE DATE(timestamp) = '{date_partition}'")
+    warehouse_count = count_in_warehouse (f"WHERE DATE(timestamp) = '{date_partition}'")
     
     # Amounts match
-    source_sum = sum_in_source_db(f"WHERE DATE(created_at) = '{date_partition}'")
-    warehouse_sum = sum_in_warehouse(f"WHERE DATE(timestamp) = '{date_partition}'")
+    source_sum = sum_in_source_db (f"WHERE DATE(created_at) = '{date_partition}'")
+    warehouse_sum = sum_in_warehouse (f"WHERE DATE(timestamp) = '{date_partition}'")
     
     # Tolerance: 0.1% difference allowed
-    if abs(source_count - warehouse_count) > source_count * 0.001:
+    if abs (source_count - warehouse_count) > source_count * 0.001:
         raise ReconciliationError(
             f"Count mismatch: source={source_count}, warehouse={warehouse_count}"
         )
     
-    if abs(source_sum - warehouse_sum) > source_sum * 0.001:
+    if abs (source_sum - warehouse_sum) > source_sum * 0.001:
         raise ReconciliationError(
             f"Sum mismatch: source={source_sum}, warehouse={warehouse_sum}"
         )
@@ -1070,25 +1070,25 @@ statsd.gauge('pipeline.total_sales', total_sales, tags=['pipeline:sales'])
 alerts = [
     {
         'name': 'Sales Pipeline - Row Count Drop',
-        'query': 'avg(last_1h):avg:pipeline.row_count{pipeline:sales} < 10000',
+        'query': 'avg (last_1h):avg:pipeline.row_count{pipeline:sales} < 10000',
         'message': '@slack-data-eng @pagerduty Row count dropped below threshold',
         'priority': 'P1'
     },
     {
         'name': 'Sales Pipeline - High Null Rate',
-        'query': 'avg(last_1h):avg:pipeline.null_percentage{pipeline:sales} > 0.01',
+        'query': 'avg (last_1h):avg:pipeline.null_percentage{pipeline:sales} > 0.01',
         'message': '@slack-data-eng >1% null values detected',
         'priority': 'P2'
     },
     {
         'name': 'Sales Pipeline - Duplicates Detected',
-        'query': 'avg(last_1h):avg:pipeline.duplicate_count{pipeline:sales} > 0',
+        'query': 'avg (last_1h):avg:pipeline.duplicate_count{pipeline:sales} > 0',
         'message': '@slack-data-eng @oncall Duplicates in sales data!',
         'priority': 'P1'
     },
     {
         'name': 'Sales Pipeline - Total Sales Anomaly',
-        'query': 'anomalies(avg:pipeline.total_sales{pipeline:sales}, "agile", 3)',
+        'query': 'anomalies (avg:pipeline.total_sales{pipeline:sales}, "agile", 3)',
         'message': '@slack-executives @data-eng Sales anomaly detected!',
         'priority': 'P0'
     }
@@ -1115,7 +1115,7 @@ Panels:
   
   4. "Sales Trend"
      - Total sales with anomaly detection bands
-     - Yesterday's 40% drop would be BRIGHT RED
+     - Yesterday\'s 40% drop would be BRIGHT RED
   
   5. "Data Freshness"
      - Time since last successful load

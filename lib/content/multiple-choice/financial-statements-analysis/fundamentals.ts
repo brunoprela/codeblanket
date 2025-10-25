@@ -17,7 +17,7 @@ export const fundamentalsMultipleChoiceQuestions = [
 \`\`\`
 Beginning Retained Earnings
 + Net Income                   $100M
-- Dividends Paid              ($40M)
+- Dividends Paid              (\$40M)
 = Ending Retained Earnings     
 \`\`\`
 
@@ -48,9 +48,9 @@ E) **Depreciation** is already included in Net Income calculation. Depreciation 
 
 **Python validation**:
 \`\`\`python
-def validate_retained_earnings(beginning_re, net_income, dividends, ending_re):
+def validate_retained_earnings (beginning_re, net_income, dividends, ending_re):
     expected_re = beginning_re + net_income - dividends
-    assert abs(expected_re - ending_re) < 1000, "RE reconciliation failed"
+    assert abs (expected_re - ending_re) < 1000, "RE reconciliation failed"
     return True
 
 # This case:
@@ -65,13 +65,13 @@ def validate_retained_earnings(beginning_re, net_income, dividends, ending_re):
       "You're parsing SEC filings using the XBRL API and encounter a company that reported Revenue of $500M in their 10-K but later filed an 10-K/A (amendment) showing Revenue of $480M for the same period. How should your automated system handle this?",
     options: [
       'Always use the first filing (10-K) as amendments often contain errors',
-      'Use the average of both figures ($490M) to be conservative',
-      'Use the amended figure ($480M) and flag the 4% restatement as significant',
+      'Use the average of both figures (\$490M) to be conservative',
+      'Use the amended figure (\$480M) and flag the 4% restatement as significant',
       'Reject both filings and wait for a third confirmation',
       'Use the lower figure to be conservative',
     ],
     correctAnswer: 2,
-    explanation: `The correct answer is C: Use the amended figure ($480M) and flag the 4% restatement as significant.
+    explanation: `The correct answer is C: Use the amended figure (\$480M) and flag the 4% restatement as significant.
 
 **Regulatory Framework**:
 
@@ -92,18 +92,18 @@ Under SEC rules, when a company files an amendment (10-K/A), it supersedes the o
 class FilingTracker:
     """Track and handle amended filings."""
     
-    def process_filing(self, filing):
+    def process_filing (self, filing):
         key = (filing['cik'], filing['form_type'].replace('/A', ''), filing['period_end'])
         
         if '/A' in filing['form_type']:
             # This is an amendment
-            original = self.get_original_filing(key)
+            original = self.get_original_filing (key)
             
             if original:
-                changes = self.calculate_changes(original, filing)
+                changes = self.calculate_changes (original, filing)
                 
                 # Flag material restatements (>2% for revenue)
-                if abs(changes['revenue_pct']) > 0.02:
+                if abs (changes['revenue_pct']) > 0.02:
                     self.alert_material_restatement({
                         'cik': filing['cik'],
                         'ticker': filing['ticker'],
@@ -111,17 +111,17 @@ class FilingTracker:
                         'original': original['revenue'],
                         'amended': filing['revenue'],
                         'change_pct': changes['revenue_pct'],
-                        'severity': 'HIGH' if abs(changes['revenue_pct']) > 0.05 else 'MEDIUM'
+                        'severity': 'HIGH' if abs (changes['revenue_pct']) > 0.05 else 'MEDIUM'
                     })
                 
                 # Replace original with amended version
-                self.database.replace_filing(key, filing)
+                self.database.replace_filing (key, filing)
             
             return filing  # Use amended version
         
         return filing  # Use original version
     
-    def calculate_changes(self, original, amended):
+    def calculate_changes (self, original, amended):
         """Calculate changes between filings."""
         return {
             'revenue_pct': (amended['revenue'] - original['revenue']) / original['revenue'],
@@ -155,13 +155,13 @@ A 4% revenue miss typically causes:
 **Best Practice**:
 \`\`\`python
 # Always check for amendments before using data
-def get_latest_filing(cik, form_type, period_end):
+def get_latest_filing (cik, form_type, period_end):
     """Get most recent version (original or amended)."""
     
-    filings = query_filings(cik, form_type, period_end)
+    filings = query_filings (cik, form_type, period_end)
     
     # Sort by filed_date (latest first)
-    filings.sort(key=lambda x: x['filed_date'], reverse=True)
+    filings.sort (key=lambda x: x['filed_date'], reverse=True)
     
     # Return most recent (could be 10-K/A)
     return filings[0]
@@ -225,7 +225,7 @@ increase_in_receivables = 30_000  # Cash not yet collected
 operating_cf = net_income + depreciation - increase_in_receivables
 # = 100,000 + 20,000 - 30,000 = 90,000
 
-# OCF ($90K) ≠ Net Income ($100K)
+# OCF (\$90K) ≠ Net Income (\$100K)
 \`\`\`
 
 **B) CapEx increases PP&E by the same amount - FALSE**
@@ -290,7 +290,7 @@ retained_earnings = (
 
 \`\`\`python
 class IntegratedFinancialModel:
-    def link_statements(self):
+    def link_statements (self):
         # Income Statement
         self.net_income = self.revenue - self.total_expenses
         
@@ -337,7 +337,7 @@ class IntegratedFinancialModel:
         )
 \`\`\`
 
-**Key Takeaway**: Depreciation's add-back in the Cash Flow Statement is one of the most fundamental linkages in financial modeling and is essential for understanding the difference between accounting earnings and actual cash generation.`,
+**Key Takeaway**: Depreciation\'s add-back in the Cash Flow Statement is one of the most fundamental linkages in financial modeling and is essential for understanding the difference between accounting earnings and actual cash generation.`,
   },
 
   {
@@ -363,7 +363,7 @@ class IntegratedFinancialModel:
 **Why Historical Cost Normalization is Correct**:
 
 \`\`\`python
-def normalize_ppe_for_comparison(company_a_ifrs, company_b_gaap):
+def normalize_ppe_for_comparison (company_a_ifrs, company_b_gaap):
     """Normalize PP&E to historical cost for fair comparison."""
     
     # European company (IFRS)
@@ -471,7 +471,7 @@ ppe_sales_ratio_b = 800_000_000 / 1_500_000_000  # 0.53
 class IFRStoGAAPNormalizer:
     """Normalize IFRS statements to GAAP basis for comparison."""
     
-    def normalize_ppe(self, statements: dict) -> dict:
+    def normalize_ppe (self, statements: dict) -> dict:
         """Remove revaluation effects."""
         
         if statements['accounting_standard'] != 'IFRS':
@@ -495,11 +495,11 @@ class IFRStoGAAPNormalizer:
         statements['_metadata']['revaluation_removed'] = revaluation_surplus
         
         # Recalculate affected ratios
-        statements['ratios'] = self.recalculate_ratios(statements)
+        statements['ratios'] = self.recalculate_ratios (statements)
         
         return statements
     
-    def recalculate_ratios(self, statements: dict) -> dict:
+    def recalculate_ratios (self, statements: dict) -> dict:
         """Recalculate ratios with normalized figures."""
         bs = statements['balance_sheet']
         inc = statements['income_statement']
@@ -539,7 +539,7 @@ roe = 300_000_000 / 3_000_000_000  # 10%
   {
     id: 5,
     question:
-      "Your automated 10-K parser successfully extracts Apple's Revenue as $394.3B from their FY2022 filing. However, your validation system flags an error because the Balance Sheet totals don't match (Assets = $352.8B vs Liabilities + Equity = $352.5B, a $300M difference). What is the MOST likely cause and best approach?",
+      "Your automated 10-K parser successfully extracts Apple\'s Revenue as $394.3B from their FY2022 filing. However, your validation system flags an error because the Balance Sheet totals don't match (Assets = $352.8B vs Liabilities + Equity = $352.5B, a $300M difference). What is the MOST likely cause and best approach?",
     options: [
       'Apple made a material accounting error and you should short the stock immediately',
       'Your parser has a bug and is missing some line items from the Balance Sheet',
@@ -553,7 +553,7 @@ roe = 300_000_000 / 3_000_000_000  # 10%
 **Why This Is The Right Answer**:
 
 \`\`\`python
-# Apple's actual figures (FY2022):
+# Apple\'s actual figures (FY2022):
 assets = 352_755_000_000  # $352.8B (rounded to millions)
 liabilities = 302_083_000_000  # $302.1B
 equity = 50_672_000_000  # $50.7B
@@ -576,10 +576,10 @@ percentage = discrepancy / assets
 **Understanding Materiality**:
 
 \`\`\`python
-def assess_materiality(discrepancy: float, total: float) -> dict:
+def assess_materiality (discrepancy: float, total: float) -> dict:
     """Determine if a discrepancy is material."""
     
-    percentage = abs(discrepancy / total)
+    percentage = abs (discrepancy / total)
     
     if percentage < 0.001:  # 0.1%
         severity = 'IGNORE'
@@ -628,11 +628,11 @@ line_items_millions = [
 ]
 
 # Sum of rounded:
-sum_rounded = sum(line_items_millions) * 1_000_000
+sum_rounded = sum (line_items_millions) * 1_000_000
 # = 16,790,000,000
 
 # Actual sum:
-sum_actual = sum(line_items)
+sum_actual = sum (line_items)
 # = 16,789,234,556
 
 # Difference: $765,444 from just 3 line items!
@@ -669,7 +669,7 @@ If you were missing entire line items, you'd see:
 - Consistent patterns across companies
 
 \`\`\`python
-def validate_parser_completeness(statements: dict) -> bool:
+def validate_parser_completeness (statements: dict) -> bool:
     """Check if major line items are present."""
     
     required_items = [
@@ -707,7 +707,7 @@ Not a precisely calculated $300M difference (0.08%).
 **E) SEC's XBRL data is incorrect - EXTREMELY UNLIKELY**
 
 The SEC's XBRL data is the official record, validated by:
-- Company's CFO/CEO certification
+- Company\'s CFO/CEO certification
 - External auditors
 - SEC staff review
 
@@ -723,7 +723,7 @@ class BalanceSheetValidator:
     INVESTIGATION_THRESHOLD = 0.01  # 1% - investigate
     ERROR_THRESHOLD = 0.05  # 5% - likely error
     
-    def validate(self, balance_sheet: dict) -> dict:
+    def validate (self, balance_sheet: dict) -> dict:
         """Validate balance sheet equation with materiality analysis."""
         
         assets = balance_sheet['total_assets']
@@ -732,7 +732,7 @@ class BalanceSheetValidator:
         
         expected = liabilities + equity
         difference = assets - expected
-        percentage = abs(difference / assets)
+        percentage = abs (difference / assets)
         
         result = {
             'balanced': False,
@@ -776,7 +776,7 @@ print(result)
 
 **Real-World Example**:
 
-Even Warren Buffett's Berkshire Hathaway has tiny rounding differences in their filings. It's universal and expected.
+Even Warren Buffett\'s Berkshire Hathaway has tiny rounding differences in their filings. It's universal and expected.
 
 \`\`\`python
 # Typical tolerances used by institutional investors:

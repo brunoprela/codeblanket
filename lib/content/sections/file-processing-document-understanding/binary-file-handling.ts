@@ -20,16 +20,16 @@ Binary files require special handling. Understanding binary formats enables proc
 from pathlib import Path
 
 # Read binary file
-def read_binary(filepath: str) -> bytes:
-    return Path(filepath).read_bytes()
+def read_binary (filepath: str) -> bytes:
+    return Path (filepath).read_bytes()
 
 # Write binary file
-def write_binary(filepath: str, data: bytes):
-    Path(filepath).write_bytes(data)
+def write_binary (filepath: str, data: bytes):
+    Path (filepath).write_bytes (data)
 
 # Hex inspection
-def inspect_binary(filepath: str, num_bytes: int = 16):
-    data = Path(filepath).read_bytes()[:num_bytes]
+def inspect_binary (filepath: str, num_bytes: int = 16):
+    data = Path (filepath).read_bytes()[:num_bytes]
     hex_str = data.hex()
     print(f"Hex: {hex_str}")
     print(f"ASCII: {data}")
@@ -40,10 +40,10 @@ def inspect_binary(filepath: str, num_bytes: int = 16):
 \`\`\`python
 import magic  # pip install python-magic
 
-def detect_file_type(filepath: str):
+def detect_file_type (filepath: str):
     """Detect file type from magic numbers."""
-    mime = magic.Magic(mime=True)
-    file_type = mime.from_file(filepath)
+    mime = magic.Magic (mime=True)
+    file_type = mime.from_file (filepath)
     return file_type
 
 # Common magic numbers
@@ -61,16 +61,16 @@ MAGIC_NUMBERS = {
 import sqlite3
 import pandas as pd
 
-def read_sqlite_table(db_path: str, table_name: str):
+def read_sqlite_table (db_path: str, table_name: str):
     """Read SQLite table to DataFrame."""
-    conn = sqlite3.connect(db_path)
-    df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
+    conn = sqlite3.connect (db_path)
+    df = pd.read_sql (f"SELECT * FROM {table_name}", conn)
     conn.close()
     return df
 
-def list_sqlite_tables(db_path: str):
+def list_sqlite_tables (db_path: str):
     """List all tables in SQLite database."""
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect (db_path)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tables = [row[0] for row in cursor.fetchall()]
@@ -85,18 +85,18 @@ import zipfile
 import tarfile
 
 # ZIP files
-def extract_zip(zip_path: str, extract_to: str):
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_to)
+def extract_zip (zip_path: str, extract_to: str):
+    with zipfile.ZipFile (zip_path, 'r') as zip_ref:
+        zip_ref.extractall (extract_to)
 
-def list_zip_contents(zip_path: str):
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+def list_zip_contents (zip_path: str):
+    with zipfile.ZipFile (zip_path, 'r') as zip_ref:
         return zip_ref.namelist()
 
 # TAR files
-def extract_tar(tar_path: str, extract_to: str):
-    with tarfile.open(tar_path, 'r:*') as tar_ref:
-        tar_ref.extractall(extract_to)
+def extract_tar (tar_path: str, extract_to: str):
+    with tarfile.open (tar_path, 'r:*') as tar_ref:
+        tar_ref.extractall (extract_to)
 \`\`\`
 
 ## Key Takeaways

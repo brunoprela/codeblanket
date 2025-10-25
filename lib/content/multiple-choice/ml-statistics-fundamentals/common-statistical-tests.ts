@@ -45,7 +45,7 @@ export const commonstatisticaltestsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc4',
     question:
-      "What does the Levene's test check for before performing a t-test?",
+      "What does the Levene\'s test check for before performing a t-test?",
     options: [
       'Normality of distributions',
       'Equality of variances',
@@ -54,7 +54,7 @@ export const commonstatisticaltestsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Levene's test checks for equality of variances (homoscedasticity) between groups. If variances are significantly different (p < 0.05 in Levene's), you should use Welch's t-test which doesn't assume equal variances.",
+      "Levene\'s test checks for equality of variances (homoscedasticity) between groups. If variances are significantly different (p < 0.05 in Levene's), you should use Welch's t-test which doesn't assume equal variances.",
   },
   {
     id: 'mc5',

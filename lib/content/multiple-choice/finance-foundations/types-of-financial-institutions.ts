@@ -23,7 +23,7 @@ export const typesOfFinancialInstitutionsMultipleChoice: MultipleChoiceQuestion[
       ],
       correctAnswer: 2,
       explanation:
-        'Management fee: $10B × 2% = $200M. Gross profit: $10B × 20% = $2B. Performance fee: $2B × 20% = $400M. Total fees: $200M + $400M = $600M. The fund takes 30% of the $2B profit ($600M), investors keep $1.4B (14% net return). This is why hedge funds need to outperform: After fees, 20% gross → 14% net. Note: Modern funds often charge less (1.5 and 15 or 1 and 10) due to competition and underperformance. Renaissance Medallion famously charges 5% + 44%!',
+        'Management fee: $10B × 2% = $200M. Gross profit: $10B × 20% = $2B. Performance fee: $2B × 20% = $400M. Total fees: $200M + $400M = $600M. The fund takes 30% of the $2B profit (\$600M), investors keep $1.4B (14% net return). This is why hedge funds need to outperform: After fees, 20% gross → 14% net. Note: Modern funds often charge less (1.5 and 15 or 1 and 10) due to competition and underperformance. Renaissance Medallion famously charges 5% + 44%!',
     },
     {
       id: 'tfi-mc-3',
@@ -56,7 +56,7 @@ export const typesOfFinancialInstitutionsMultipleChoice: MultipleChoiceQuestion[
     {
       id: 'tfi-mc-5',
       question:
-        "Stripe processes $300 billion in payment volume annually and charges 2.9% + $0.30 per transaction. If the average transaction is $50, what is Stripe's approximate annual revenue?",
+        "Stripe processes $300 billion in payment volume annually and charges 2.9% + $0.30 per transaction. If the average transaction is $50, what is Stripe\'s approximate annual revenue?",
       options: [
         '$3 billion (300B × 1%)',
         '$6.9 billion (300B × 2.3%)',

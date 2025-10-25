@@ -48,14 +48,14 @@ class BasicRAG:
         self.index = None
         self.documents = []
     
-    def index_documents(self, documents):
+    def index_documents (self, documents):
         """
         Step 1: Create searchable index
         """
         self.documents = documents
         
         # Embed documents
-        print(f"Embedding {len(documents)} documents...")
+        print(f"Embedding {len (documents)} documents...")
         embeddings = self.embedding_model.encode(
             documents,
             show_progress_bar=True
@@ -64,11 +64,11 @@ class BasicRAG:
         # Build FAISS index
         dimension = embeddings.shape[1]
         self.index = faiss.IndexFlatL2(dimension)
-        self.index.add(embeddings.astype('float32'))
+        self.index.add (embeddings.astype('float32'))
         
         print(f"Indexed {self.index.ntotal} documents")
     
-    def retrieve(self, query, k=3):
+    def retrieve (self, query, k=3):
         """
         Step 2: Retrieve relevant documents
         """
@@ -86,14 +86,14 @@ class BasicRAG:
         
         return retrieved_docs
     
-    def generate(self, query, context_docs):
+    def generate (self, query, context_docs):
         """
         Step 3: Generate answer with context
         """
         # Build context
         context = "\\n\\n".join([
             f"Document {i+1}:\\n{doc}"
-            for i, doc in enumerate(context_docs)
+            for i, doc in enumerate (context_docs)
         ])
         
         # Create prompt
@@ -117,15 +117,15 @@ Answer:"""
         
         return response.content[0].text
     
-    def query(self, question, k=3):
+    def query (self, question, k=3):
         """
         Complete RAG pipeline
         """
         # Retrieve
-        relevant_docs = self.retrieve(question, k=k)
+        relevant_docs = self.retrieve (question, k=k)
         
         # Generate
-        answer = self.generate(question, relevant_docs)
+        answer = self.generate (question, relevant_docs)
         
         return {
             'answer': answer,
@@ -138,21 +138,21 @@ rag = BasicRAG()
 # Index knowledge base
 documents = [
     "Paris is the capital of France. It is known for the Eiffel Tower.",
-    "The Eiffel Tower was built in 1889 for the World's Fair.",
+    "The Eiffel Tower was built in 1889 for the World\'s Fair.",
     "France is a country in Western Europe.",
     "The population of Paris is about 2.2 million people."
 ]
 
-rag.index_documents(documents)
+rag.index_documents (documents)
 
 # Query
 question = "When was the Eiffel Tower built?"
-result = rag.query(question)
+result = rag.query (question)
 
 print(f"Question: {question}")
 print(f"Answer: {result['answer']}")
 print(f"\\nSources:")
-for i, source in enumerate(result['sources']):
+for i, source in enumerate (result['sources']):
     print(f"{i+1}. {source}")
 \`\`\`
 
@@ -177,23 +177,23 @@ class DocumentChunker:
     - Better context window utilization
     """
     
-    def fixed_size_chunks(self, text, chunk_size=512, overlap=50):
+    def fixed_size_chunks (self, text, chunk_size=512, overlap=50):
         """
         Fixed-size chunks with overlap
         """
         words = text.split()
         chunks = []
         
-        for i in range(0, len(words), chunk_size - overlap):
-            chunk = ' '.join(words[i:i + chunk_size])
-            chunks.append(chunk)
+        for i in range(0, len (words), chunk_size - overlap):
+            chunk = ' '.join (words[i:i + chunk_size])
+            chunks.append (chunk)
             
-            if i + chunk_size >= len(words):
+            if i + chunk_size >= len (words):
                 break
         
         return chunks
     
-    def semantic_chunks(self, text):
+    def semantic_chunks (self, text):
         """
         Chunk by semantic boundaries (paragraphs, sections)
         """
@@ -208,19 +208,19 @@ class DocumentChunker:
         current = ""
         
         for chunk in chunks:
-            if len(current.split()) + len(chunk.split()) < 512:
+            if len (current.split()) + len (chunk.split()) < 512:
                 current += "\\n\\n" + chunk if current else chunk
             else:
                 if current:
-                    merged.append(current)
+                    merged.append (current)
                 current = chunk
         
         if current:
-            merged.append(current)
+            merged.append (current)
         
         return merged
     
-    def sentence_window(self, text, window_size=3):
+    def sentence_window (self, text, window_size=3):
         """
         Chunks with sentence-level windows
         
@@ -230,16 +230,16 @@ class DocumentChunker:
         import nltk
         nltk.download('punkt', quiet=True)
         
-        sentences = nltk.sent_tokenize(text)
+        sentences = nltk.sent_tokenize (text)
         chunks = []
         
-        for i in range(0, len(sentences), window_size - 1):
-            chunk = ' '.join(sentences[i:i + window_size])
-            chunks.append(chunk)
+        for i in range(0, len (sentences), window_size - 1):
+            chunk = ' '.join (sentences[i:i + window_size])
+            chunks.append (chunk)
         
         return chunks
     
-    def hierarchical_chunks(self, text):
+    def hierarchical_chunks (self, text):
         """
         Multiple granularities (sections, paragraphs, sentences)
         
@@ -248,7 +248,7 @@ class DocumentChunker:
         - Fine retrieval: Get specific passage
         """
         # Split by headers (##, ###, etc.)
-        sections = self._split_by_headers(text)
+        sections = self._split_by_headers (text)
         
         hierarchical = []
         for section in sections:
@@ -268,10 +268,10 @@ class DocumentChunker:
         
         return hierarchical
     
-    def _split_by_headers(self, text):
+    def _split_by_headers (self, text):
         """Helper to split markdown by headers"""
         import re
-        sections = re.split(r'\\n#{1,6} ', text)
+        sections = re.split (r'\\n#{1,6} ', text)
         return [s.strip() for s in sections if s.strip()]
 
 # Chunking comparison
@@ -315,13 +315,13 @@ Final thoughts here.
 chunker = DocumentChunker()
 
 # Different strategies
-fixed = chunker.fixed_size_chunks(text)
-semantic = chunker.semantic_chunks(text)
-sentences = chunker.sentence_window(text)
+fixed = chunker.fixed_size_chunks (text)
+semantic = chunker.semantic_chunks (text)
+sentences = chunker.sentence_window (text)
 
-print(f"Fixed: {len(fixed)} chunks")
-print(f"Semantic: {len(semantic)} chunks")
-print(f"Sentences: {len(sentences)} chunks")
+print(f"Fixed: {len (fixed)} chunks")
+print(f"Semantic: {len (semantic)} chunks")
+print(f"Sentences: {len (sentences)} chunks")
 \`\`\`
 
 ---
@@ -343,7 +343,7 @@ class QueryTransformer:
     def __init__(self, llm):
         self.llm = llm
     
-    def expand_query(self, query):
+    def expand_query (self, query):
         """
         Generate multiple query variations
         
@@ -365,7 +365,7 @@ Variations:
         variations = [query] + response.content[0].text.strip().split('\\n')
         return variations
     
-    def decompose_query(self, query):
+    def decompose_query (self, query):
         """
         Break complex query into sub-queries
         
@@ -391,11 +391,11 @@ Sub-questions:
         sub_queries = response.content[0].text.strip().split('\\n')
         return [q.strip() for q in sub_queries if q.strip()]
     
-    def hypothetical_document(self, query):
+    def hypothetical_document (self, query):
         """
         HyDE: Generate hypothetical answer, embed that
         
-        Idea: Model's answer may be closer to real docs than query
+        Idea: Model\'s answer may be closer to real docs than query
         """
         prompt = f"""Write a detailed answer to this question:
 
@@ -420,9 +420,9 @@ class MultiQueryRAG(BasicRAG):
     
     def __init__(self):
         super().__init__()
-        self.query_transformer = QueryTransformer(self.llm)
+        self.query_transformer = QueryTransformer (self.llm)
     
-    def query(self, question, k=3):
+    def query (self, question, k=3):
         """
         1. Generate query variations
         2. Retrieve for each
@@ -430,21 +430,21 @@ class MultiQueryRAG(BasicRAG):
         4. Generate answer
         """
         # Generate variations
-        queries = self.query_transformer.expand_query(question)
+        queries = self.query_transformer.expand_query (question)
         
         # Retrieve for each
         all_docs = []
         seen = set()
         
         for q in queries:
-            docs = self.retrieve(q, k=k)
+            docs = self.retrieve (q, k=k)
             for doc in docs:
                 if doc not in seen:
-                    all_docs.append(doc)
-                    seen.add(doc)
+                    all_docs.append (doc)
+                    seen.add (doc)
         
         # Generate answer
-        answer = self.generate(question, all_docs[:k])  # Top k unique
+        answer = self.generate (question, all_docs[:k])  # Top k unique
         
         return {
             'answer': answer,
@@ -476,24 +476,24 @@ class RerankedRAG(BasicRAG):
         super().__init__()
         self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
     
-    def retrieve_and_rerank(self, query, retrieve_k=20, final_k=3):
+    def retrieve_and_rerank (self, query, retrieve_k=20, final_k=3):
         """
         Two-stage retrieval
         """
         # Stage 1: Fast vector search
-        candidates = self.retrieve(query, k=retrieve_k)
+        candidates = self.retrieve (query, k=retrieve_k)
         
         # Stage 2: Rerank with cross-encoder
         pairs = [[query, doc] for doc in candidates]
-        scores = self.reranker.predict(pairs)
+        scores = self.reranker.predict (pairs)
         
         # Sort by reranked scores
-        ranked_indices = np.argsort(scores)[::-1]
+        ranked_indices = np.argsort (scores)[::-1]
         ranked_docs = [candidates[i] for i in ranked_indices[:final_k]]
         
         return ranked_docs
     
-    def query(self, question, retrieve_k=20, final_k=3):
+    def query (self, question, retrieve_k=20, final_k=3):
         """
         RAG with reranking
         """
@@ -505,7 +505,7 @@ class RerankedRAG(BasicRAG):
         )
         
         # Generate
-        answer = self.generate(question, relevant_docs)
+        answer = self.generate (question, relevant_docs)
         
         return {
             'answer': answer,
@@ -537,7 +537,7 @@ class RAGEvaluator:
     Comprehensive RAG evaluation
     """
     
-    def retrieval_metrics(self, retrieved_docs, relevant_docs):
+    def retrieval_metrics (self, retrieved_docs, relevant_docs):
         """
         Measure retrieval quality
         
@@ -547,21 +547,21 @@ class RAGEvaluator:
         - MRR: Mean Reciprocal Rank
         - NDCG: Normalized Discounted Cumulative Gain
         """
-        retrieved_set = set(retrieved_docs)
-        relevant_set = set(relevant_docs)
+        retrieved_set = set (retrieved_docs)
+        relevant_set = set (relevant_docs)
         
         # Precision
-        precision = len(retrieved_set & relevant_set) / len(retrieved_set)
+        precision = len (retrieved_set & relevant_set) / len (retrieved_set)
         
         # Recall
-        recall = len(retrieved_set & relevant_set) / len(relevant_set)
+        recall = len (retrieved_set & relevant_set) / len (relevant_set)
         
         # F1
         f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
         
         # MRR (Mean Reciprocal Rank)
         mrr = 0
-        for i, doc in enumerate(retrieved_docs):
+        for i, doc in enumerate (retrieved_docs):
             if doc in relevant_set:
                 mrr = 1 / (i + 1)
                 break
@@ -573,7 +573,7 @@ class RAGEvaluator:
             'mrr': mrr
         }
     
-    def generation_metrics(self, generated_answer, reference_answer, context):
+    def generation_metrics (self, generated_answer, reference_answer, context):
         """
         Measure generation quality
         
@@ -583,15 +583,15 @@ class RAGEvaluator:
         - Context relevance: Is retrieved context relevant?
         """
         # Use LLM as judge
-        faithfulness = self.check_faithfulness(generated_answer, context)
-        relevance = self.check_relevance(generated_answer, reference_answer)
+        faithfulness = self.check_faithfulness (generated_answer, context)
+        relevance = self.check_relevance (generated_answer, reference_answer)
         
         return {
             'faithfulness': faithfulness,
             'relevance': relevance
         }
     
-    def check_faithfulness(self, answer, context):
+    def check_faithfulness (self, answer, context):
         """
         Verify answer is grounded in context
         """
@@ -617,7 +617,7 @@ Evaluation:"""
         
         return is_faithful
     
-    def end_to_end_evaluation(self, test_cases):
+    def end_to_end_evaluation (self, test_cases):
         """
         Evaluate complete RAG pipeline
         
@@ -632,29 +632,29 @@ Evaluation:"""
         
         for test in test_cases:
             # Run RAG
-            rag_result = self.rag.query(test['question'])
+            rag_result = self.rag.query (test['question'])
             
             # Retrieval metrics
             ret_metrics = self.retrieval_metrics(
                 rag_result['sources'],
                 test['relevant_docs']
             )
-            results['retrieval_precision'].append(ret_metrics['precision'])
-            results['retrieval_recall'].append(ret_metrics['recall'])
+            results['retrieval_precision'].append (ret_metrics['precision'])
+            results['retrieval_recall'].append (ret_metrics['recall'])
             
             # Generation metrics
             gen_metrics = self.generation_metrics(
                 rag_result['answer'],
                 test['expected_answer'],
-                '\\n'.join(rag_result['sources'])
+                '\\n'.join (rag_result['sources'])
             )
-            results['faithfulness'].append(gen_metrics['faithfulness'])
+            results['faithfulness'].append (gen_metrics['faithfulness'])
         
         # Aggregate
         summary = {
-            'avg_precision': np.mean(results['retrieval_precision']),
-            'avg_recall': np.mean(results['retrieval_recall']),
-            'faithfulness_rate': np.mean(results['faithfulness'])
+            'avg_precision': np.mean (results['retrieval_precision']),
+            'avg_recall': np.mean (results['retrieval_recall']),
+            'faithfulness_rate': np.mean (results['faithfulness'])
         }
         
         return summary
@@ -669,8 +669,8 @@ test_cases = [
     # More test cases...
 ]
 
-evaluator = RAGEvaluator(rag_system)
-results = evaluator.end_to_end_evaluation(test_cases)
+evaluator = RAGEvaluator (rag_system)
+results = evaluator.end_to_end_evaluation (test_cases)
 
 print(f"Precision: {results['avg_precision']:.2%}")
 print(f"Recall: {results['avg_recall']:.2%}")
@@ -704,14 +704,14 @@ class ProductionRAG:
         self.setup_logging()
         self.setup_components()
     
-    def setup_logging(self):
+    def setup_logging (self):
         """
         Logging for debugging and monitoring
         """
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig (level=logging.INFO)
         self.logger = logging.getLogger(__name__)
     
-    def setup_components(self):
+    def setup_components (self):
         """
         Initialize all components
         """
@@ -738,7 +738,7 @@ class ProductionRAG:
             api_key=self.config['anthropic_key']
         )
     
-    def ingest_documents(self, documents: List[str], metadata: List[Dict] = None):
+    def ingest_documents (self, documents: List[str], metadata: List[Dict] = None):
         """
         Ingest and index documents
         
@@ -748,23 +748,23 @@ class ProductionRAG:
         - Metadata tracking
         - Progress monitoring
         """
-        self.logger.info(f"Ingesting {len(documents)} documents...")
+        self.logger.info (f"Ingesting {len (documents)} documents...")
         
         # Chunk documents
         chunker = DocumentChunker()
         all_chunks = []
         all_metadata = []
         
-        for i, doc in enumerate(documents):
-            chunks = chunker.semantic_chunks(doc)
-            all_chunks.extend(chunks)
+        for i, doc in enumerate (documents):
+            chunks = chunker.semantic_chunks (doc)
+            all_chunks.extend (chunks)
             
             # Add metadata
             for chunk in chunks:
                 meta = metadata[i] if metadata else {}
                 meta['doc_id'] = i
-                meta['chunk_index'] = len(all_chunks) - 1
-                all_metadata.append(meta)
+                meta['chunk_index'] = len (all_chunks) - 1
+                all_metadata.append (meta)
         
         # Deduplicate
         unique_chunks, unique_metadata = self._deduplicate(
@@ -776,12 +776,12 @@ class ProductionRAG:
         self.collection.add(
             documents=unique_chunks,
             metadatas=unique_metadata,
-            ids=[f"chunk_{i}" for i in range(len(unique_chunks))]
+            ids=[f"chunk_{i}" for i in range (len (unique_chunks))]
         )
         
-        self.logger.info(f"Indexed {len(unique_chunks)} unique chunks")
+        self.logger.info (f"Indexed {len (unique_chunks)} unique chunks")
     
-    def _deduplicate(self, chunks, metadata):
+    def _deduplicate (self, chunks, metadata):
         """
         Remove duplicate chunks
         """
@@ -789,13 +789,13 @@ class ProductionRAG:
         unique_chunks = []
         unique_metadata = []
         
-        for chunk, meta in zip(chunks, metadata):
+        for chunk, meta in zip (chunks, metadata):
             # Simple hash-based dedup
-            chunk_hash = hash(chunk)
+            chunk_hash = hash (chunk)
             if chunk_hash not in seen:
-                seen.add(chunk_hash)
-                unique_chunks.append(chunk)
-                unique_metadata.append(meta)
+                seen.add (chunk_hash)
+                unique_chunks.append (chunk)
+                unique_metadata.append (meta)
         
         return unique_chunks, unique_metadata
     
@@ -809,7 +809,7 @@ class ProductionRAG:
         """
         Complete RAG query
         """
-        self.logger.info(f"Query: {question}")
+        self.logger.info (f"Query: {question}")
         
         # Step 1: Retrieve candidates
         candidates = self.collection.query(
@@ -821,24 +821,24 @@ class ProductionRAG:
         retrieved_docs = candidates['documents'][0]
         retrieved_metadata = candidates['metadatas'][0]
         
-        self.logger.info(f"Retrieved {len(retrieved_docs)} candidates")
+        self.logger.info (f"Retrieved {len (retrieved_docs)} candidates")
         
         # Step 2: Rerank
         pairs = [[question, doc] for doc in retrieved_docs]
-        scores = self.reranker.predict(pairs)
+        scores = self.reranker.predict (pairs)
         
         # Sort by score
-        ranked_indices = np.argsort(scores)[::-1]
+        ranked_indices = np.argsort (scores)[::-1]
         final_docs = [retrieved_docs[i] for i in ranked_indices[:final_k]]
         final_metadata = [retrieved_metadata[i] for i in ranked_indices[:final_k]]
         
-        self.logger.info(f"Reranked to top {final_k}")
+        self.logger.info (f"Reranked to top {final_k}")
         
         # Step 3: Generate answer
-        answer = self._generate_answer(question, final_docs)
+        answer = self._generate_answer (question, final_docs)
         
         # Step 4: Verify faithfulness
-        is_faithful = self._check_faithfulness(answer, final_docs)
+        is_faithful = self._check_faithfulness (answer, final_docs)
         
         if not is_faithful:
             self.logger.warning("Answer may not be fully faithful to sources")
@@ -850,13 +850,13 @@ class ProductionRAG:
             'faithful': is_faithful
         }
     
-    def _generate_answer(self, question, context_docs):
+    def _generate_answer (self, question, context_docs):
         """
         Generate answer with citations
         """
         context = "\\n\\n".join([
             f"[{i+1}] {doc}"
-            for i, doc in enumerate(context_docs)
+            for i, doc in enumerate (context_docs)
         ])
         
         prompt = f"""Answer the question based on the provided sources. Include citations [1], [2], etc.
@@ -882,11 +882,11 @@ Answer:"""
         
         return response.content[0].text
     
-    def _check_faithfulness(self, answer, sources):
+    def _check_faithfulness (self, answer, sources):
         """
         Verify answer is grounded in sources
         """
-        context = "\\n\\n".join(sources)
+        context = "\\n\\n".join (sources)
         
         prompt = f"""Verify if this answer is fully supported by the sources.
 
@@ -923,7 +923,7 @@ rag = ProductionRAG(config)
 
 # Ingest documents
 documents = [...]  # Your documents
-rag.ingest_documents(documents)
+rag.ingest_documents (documents)
 
 # Query
 result = rag.query("What is machine learning?")

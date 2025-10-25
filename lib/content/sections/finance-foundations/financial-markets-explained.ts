@@ -1,7 +1,7 @@
 export const financialMarketsExplained = {
-    title: 'Financial Markets Explained',
-    id: 'financial-markets-explained',
-    content: `
+  title: 'Financial Markets Explained',
+  id: 'financial-markets-explained',
+  content: `
 # Financial Markets Explained
 
 ## Introduction
@@ -45,7 +45,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def analyze_stock(ticker: str, period: str = '1y'):
+def analyze_stock (ticker: str, period: str = '1y'):
     """
     Comprehensive stock analysis
     
@@ -57,8 +57,8 @@ def analyze_stock(ticker: str, period: str = '1y'):
         Time period ('1d', '5d', '1mo', '1y', '5y', 'max')
     """
     # Fetch data
-    stock = yf.Ticker(ticker)
-    df = stock.history(period=period)
+    stock = yf.Ticker (ticker)
+    df = stock.history (period=period)
     
     # Calculate metrics
     df['Returns'] = df['Close'].pct_change()
@@ -87,20 +87,20 @@ def analyze_stock(ticker: str, period: str = '1y'):
     print(f"{'='*60}")
     print(f"\\nCompany: {info.get('longName', 'N/A')}")
     print(f"Sector: {info.get('sector', 'N/A')}")
-    print(f"Market Cap: ${info.get('marketCap', 0) / 1e9:.1f}B")
+    print(f"Market Cap: \${info.get('marketCap', 0) / 1e9:.1f}B")
 print(f"\\nPrice Information:")
-print(f"  Current: ${df['Close'].iloc[-1]:.2f}")
-print(f"  52-Week High: ${df['Close'].max():.2f}")
-print(f"  52-Week Low: ${df['Close'].min():.2f}")
+print(f"  Current: \${df['Close'].iloc[-1]:.2f}")
+print(f"  52-Week High: \${df['Close'].max():.2f}")
+print(f"  52-Week Low: \${df['Close'].min():.2f}")
 print(f"\\nPerformance:")
 print(f"  Total Return: {total_return:.2%}")
 print(f"  Annualized Volatility: {annual_vol:.2%}")
 print(f"  Max Drawdown: {max_drawdown:.2%}")
 print(f"\\nTrading:")
 print(f"  Avg Daily Volume: {avg_volume:,.0f} shares")
-print(f"  Avg Dollar Volume: ${avg_volume * df['Close'].mean()/1e6:.1f}M")
+print(f"  Avg Dollar Volume: \${avg_volume * df['Close'].mean()/1e6:.1f}M")
     
-    # Valuation(if available)
+    # Valuation (if available)
     if 'forwardPE' in info:
         print(f"\\nValuation:")
 print(f"  P/E Ratio: {info.get('forwardPE', 'N/A'):.1f}")
@@ -110,31 +110,31 @@ print(f"  Dividend Yield: {info.get('dividendYield', 0)*100:.2f}%")
 fig, axes = plt.subplots(2, 2, figsize = (15, 10))
     
     # Price chart
-axes[0, 0].plot(df.index, df['Close'], linewidth = 2)
-axes[0, 0].set_title(f'{ticker} Price Chart', fontsize = 14, fontweight = 'bold')
+axes[0, 0].plot (df.index, df['Close'], linewidth = 2)
+axes[0, 0].set_title (f'{ticker} Price Chart', fontsize = 14, fontweight = 'bold')
 axes[0, 0].set_ylabel('Price ($)')
-axes[0, 0].grid(alpha = 0.3)
+axes[0, 0].grid (alpha = 0.3)
     
     # Returns distribution
-axes[0, 1].hist(df['Returns'].dropna() * 100, bins = 50, edgecolor = 'black', alpha = 0.7)
+axes[0, 1].hist (df['Returns'].dropna() * 100, bins = 50, edgecolor = 'black', alpha = 0.7)
 axes[0, 1].axvline(0, color = 'red', linestyle = '--', linewidth = 2)
 axes[0, 1].set_title('Daily Returns Distribution', fontsize = 14, fontweight = 'bold')
 axes[0, 1].set_xlabel('Daily Return (%)')
 axes[0, 1].set_ylabel('Frequency')
-axes[0, 1].grid(alpha = 0.3)
+axes[0, 1].grid (alpha = 0.3)
     
     # Cumulative returns
-axes[1, 0].plot(df.index, df['Cumulative_Returns'] * 100, linewidth = 2, color = 'green')
+axes[1, 0].plot (df.index, df['Cumulative_Returns'] * 100, linewidth = 2, color = 'green')
 axes[1, 0].axhline(0, color = 'black', linestyle = '--', alpha = 0.5)
 axes[1, 0].set_title('Cumulative Returns', fontsize = 14, fontweight = 'bold')
 axes[1, 0].set_ylabel('Return (%)')
-axes[1, 0].grid(alpha = 0.3)
+axes[1, 0].grid (alpha = 0.3)
     
     # Volume
-axes[1, 1].bar(df.index, df['Volume'], alpha = 0.7, edgecolor = 'black')
+axes[1, 1].bar (df.index, df['Volume'], alpha = 0.7, edgecolor = 'black')
 axes[1, 1].set_title('Trading Volume', fontsize = 14, fontweight = 'bold')
 axes[1, 1].set_ylabel('Volume')
-axes[1, 1].grid(alpha = 0.3)
+axes[1, 1].grid (alpha = 0.3)
 
 plt.tight_layout()
 plt.show()
@@ -152,22 +152,22 @@ tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']
 comparison = pd.DataFrame()
 
 for ticker in tickers:
-    stock = yf.Ticker(ticker)
-df = stock.history(period = '1y')
+    stock = yf.Ticker (ticker)
+df = stock.history (period = '1y')
 df['Returns'] = df['Close'].pct_change()
 df['Cumulative'] = (1 + df['Returns']).cumprod() - 1
 comparison[ticker] = df['Cumulative']
     
     # Plot comparison
-plt.figure(figsize = (14, 7))
+plt.figure (figsize = (14, 7))
 for ticker in tickers:
-    plt.plot(comparison.index, comparison[ticker] * 100, label = ticker, linewidth = 2)
+    plt.plot (comparison.index, comparison[ticker] * 100, label = ticker, linewidth = 2)
 
 plt.title('Stock Performance Comparison (1 Year)', fontsize = 16, fontweight = 'bold')
 plt.xlabel('Date')
 plt.ylabel('Cumulative Return (%)')
 plt.legend()
-plt.grid(alpha = 0.3)
+plt.grid (alpha = 0.3)
 plt.tight_layout()
 plt.show()
 \`\`\`
@@ -207,7 +207,7 @@ plt.show()
 Bond Pricing and Yield Calculations
 """
 
-def bond_price(face_value: float, coupon_rate: float, years_to_maturity: int,
+def bond_price (face_value: float, coupon_rate: float, years_to_maturity: int,
                ytm: float, frequency: int = 2) -> float:
     """
     Calculate bond price using present value of cash flows
@@ -249,7 +249,7 @@ def bond_price(face_value: float, coupon_rate: float, years_to_maturity: int,
     return price
 
 
-def bond_yield_to_maturity(price: float, face_value: float, coupon_rate: float,
+def bond_yield_to_maturity (price: float, face_value: float, coupon_rate: float,
                            years_to_maturity: int, frequency: int = 2) -> float:
     """
     Calculate YTM using iterative approach (Newton-Raphson)
@@ -258,14 +258,14 @@ def bond_yield_to_maturity(price: float, face_value: float, coupon_rate: float,
     """
     from scipy.optimize import newton
     
-    def price_difference(ytm):
-        return bond_price(face_value, coupon_rate, years_to_maturity, ytm, frequency) - price
+    def price_difference (ytm):
+        return bond_price (face_value, coupon_rate, years_to_maturity, ytm, frequency) - price
     
     # Initial guess: current yield
     initial_guess = (coupon_rate * face_value) / price
     
     try:
-        ytm = newton(price_difference, initial_guess)
+        ytm = newton (price_difference, initial_guess)
         return ytm
     except:
         return None
@@ -278,14 +278,14 @@ coupon_rate = 0.05  # 5% annual coupon
 years = 10
 ytm = 0.04  # 4% market yield
 
-price = bond_price(face_value, coupon_rate, years, ytm)
+price = bond_price (face_value, coupon_rate, years, ytm)
 print(f"\\nBond Characteristics:")
-print(f"  Face Value: ${face_value}")
+print(f"  Face Value: \${face_value}")
 print(f"  Coupon Rate: {coupon_rate:.1%}")
 print(f"  Years to Maturity: {years}")
 print(f"  Yield to Maturity: {ytm:.1%}")
-print(f"\\nBond Price: ${price: .2f}")
-print(f"Premium/Discount: ${price - face_value:.2f}")
+print(f"\\nBond Price: \${price:.2f}")
+print(f"Premium/Discount: \${price - face_value:.2f}")
 
 if price > face_value:
     print("  → Trading at PREMIUM (coupon > yield)")
@@ -297,23 +297,23 @@ print("  → Trading at PAR (coupon = yield)")
 # Demonstrate price sensitivity to yield changes
 print("\\n=== Interest Rate Sensitivity ===")
 yields = [0.02, 0.03, 0.04, 0.05, 0.06, 0.07]
-prices = [bond_price(face_value, coupon_rate, years, y) for y in yields]
+prices = [bond_price (face_value, coupon_rate, years, y) for y in yields]
 
-plt.figure(figsize = (10, 6))
+plt.figure (figsize = (10, 6))
 plt.plot([y * 100 for y in yields], prices, marker = 'o', linewidth = 2, markersize = 8)
-plt.axhline(face_value, color = 'red', linestyle = '--', label = 'Par Value')
+plt.axhline (face_value, color = 'red', linestyle = '--', label = 'Par Value')
 plt.xlabel('Yield to Maturity (%)', fontsize = 12)
 plt.ylabel('Bond Price ($)', fontsize = 12)
 plt.title('Bond Price vs Interest Rate (Inverse Relationship)',
     fontsize = 14, fontweight = 'bold')
-plt.grid(alpha = 0.3)
+plt.grid (alpha = 0.3)
 plt.legend()
 plt.tight_layout()
 plt.show()
 
-for y, p in zip(yields, prices):
+for y, p in zip (yields, prices):
     change = (p - face_value) / face_value * 100
-print(f"  YTM {y:.1%}: Price ${p:.2f} ({change:+.1f}%)")
+print(f"  YTM {y:.1%}: Price \${p:.2f} ({change:+.1f}%)")
 \`\`\`
 
 **Key Insight**: Bond prices and yields move **inversely**. When interest rates rise, bond prices fall.
@@ -337,7 +337,7 @@ Foreign Exchange Analysis
 """
 import yfinance as yf
 
-def analyze_currency_pair(pair: str, period: str = '1y'):
+def analyze_currency_pair (pair: str, period: str = '1y'):
     """
     Analyze FX pair (Yahoo Finance uses format like EURUSD=X)
     
@@ -346,8 +346,8 @@ def analyze_currency_pair(pair: str, period: str = '1y'):
     pair : str
         Currency pair (e.g., 'EURUSD=X', 'GBPUSD=X')
     """
-    fx = yf.Ticker(pair)
-    df = fx.history(period=period)
+    fx = yf.Ticker (pair)
+    df = fx.history (period=period)
     
     # Calculate metrics
     df['Returns'] = df['Close'].pct_change()
@@ -368,17 +368,17 @@ def analyze_currency_pair(pair: str, period: str = '1y'):
     fig, axes = plt.subplots(2, 1, figsize=(14, 8))
     
     # Exchange rate
-    axes[0].plot(df.index, df['Close'], linewidth=2)
-    axes[0].set_title(f'{pair} Exchange Rate', fontsize=14, fontweight='bold')
+    axes[0].plot (df.index, df['Close'], linewidth=2)
+    axes[0].set_title (f'{pair} Exchange Rate', fontsize=14, fontweight='bold')
     axes[0].set_ylabel('Exchange Rate')
-    axes[0].grid(alpha=0.3)
+    axes[0].grid (alpha=0.3)
     
     # Returns
-    axes[1].plot(df.index, df['Returns'] * 100, linewidth=1, alpha=0.7)
+    axes[1].plot (df.index, df['Returns'] * 100, linewidth=1, alpha=0.7)
     axes[1].axhline(0, color='red', linestyle='--')
     axes[1].set_title('Daily Returns (%)', fontsize=14, fontweight='bold')
     axes[1].set_ylabel('Return (%)')
-    axes[1].grid(alpha=0.3)
+    axes[1].grid (alpha=0.3)
     
     plt.tight_layout()
     plt.show()
@@ -390,7 +390,7 @@ def analyze_currency_pair(pair: str, period: str = '1y'):
 pairs = ['EURUSD=X', 'GBPUSD=X', 'USDJPY=X', 'AUDUSD=X']
 
 for pair in pairs:
-    analyze_currency_pair(pair, period='6mo')
+    analyze_currency_pair (pair, period='6mo')
 \`\`\`
 
 ---
@@ -411,7 +411,7 @@ for pair in pairs:
 Commodity Price Analysis
 """
 
-def analyze_commodity(ticker: str, name: str, period: str = '5y'):
+def analyze_commodity (ticker: str, name: str, period: str = '5y'):
     """
     Analyze commodity prices
     
@@ -421,8 +421,8 @@ def analyze_commodity(ticker: str, name: str, period: str = '5y'):
     - Silver: SI=F
     - Natural Gas: NG=F
     """
-    commodity = yf.Ticker(ticker)
-    df = commodity.history(period=period)
+    commodity = yf.Ticker (ticker)
+    df = commodity.history (period=period)
     
     df['Returns'] = df['Close'].pct_change()
     
@@ -439,17 +439,17 @@ def analyze_commodity(ticker: str, name: str, period: str = '5y'):
     print(f"\\n{'='*60}")
     print(f"{name} Analysis ({ticker})")
     print(f"{'='*60}")
-    print(f"\\nCurrent Price: ${current_price: .2f}")
+    print(f"\\nCurrent Price: \${current_price:.2f}")
 print(f"Annualized Return: {annual_return:+.2f}%")
 print(f"Volatility: {volatility:.2f}%")
 print(f"Max Drawdown: {max_dd:.2f}%")
     
     # Visualization
-plt.figure(figsize = (14, 7))
-plt.plot(df.index, df['Close'], linewidth = 2)
-plt.title(f'{name} Price History (5 Years)', fontsize = 16, fontweight = 'bold')
+plt.figure (figsize = (14, 7))
+plt.plot (df.index, df['Close'], linewidth = 2)
+plt.title (f'{name} Price History (5 Years)', fontsize = 16, fontweight = 'bold')
 plt.ylabel('Price ($)')
-plt.grid(alpha = 0.3)
+plt.grid (alpha = 0.3)
 plt.tight_layout()
 plt.show()
 
@@ -464,7 +464,7 @@ commodities = [
 ]
 
 for ticker, name in commodities:
-    analyze_commodity(ticker, name)
+    analyze_commodity (ticker, name)
 \`\`\`
 
 ---
@@ -489,7 +489,7 @@ for ticker, name in commodities:
 Cryptocurrency Analysis
 """
 
-def analyze_crypto(ticker: str, name: str, period: str = '1y'):
+def analyze_crypto (ticker: str, name: str, period: str = '1y'):
     """
     Analyze cryptocurrency
     
@@ -498,8 +498,8 @@ def analyze_crypto(ticker: str, name: str, period: str = '1y'):
     - Ethereum: ETH-USD
     - Others: {SYMBOL}-USD
     """
-    crypto = yf.Ticker(ticker)
-    df = crypto.history(period=period)
+    crypto = yf.Ticker (ticker)
+    df = crypto.history (period=period)
     
     df['Returns'] = df['Close'].pct_change()
     df['Cumulative'] = (1 + df['Returns']).cumprod() - 1
@@ -518,7 +518,7 @@ def analyze_crypto(ticker: str, name: str, period: str = '1y'):
     print(f"\\n{'='*60}")
     print(f"{name} Analysis ({ticker})")
     print(f"{'='*60}")
-    print(f"\\nCurrent Price: ${current_price:, .2f}")
+    print(f"\\nCurrent Price: \${current_price:,.2f}")
 print(f"Total Return: {total_return:+.2f}%")
 print(f"Volatility: {volatility:.2f}%")
 print(f"Sharpe Ratio: {sharpe:.2f}")
@@ -537,14 +537,14 @@ comparison = pd.DataFrame({
     'Ethereum': (1 + eth['Returns']).cumprod() - 1
 })
 
-plt.figure(figsize = (14, 7))
-plt.plot(comparison.index, comparison['Bitcoin'] * 100, label = 'Bitcoin', linewidth = 2)
-plt.plot(comparison.index, comparison['Ethereum'] * 100, label = 'Ethereum', linewidth = 2)
+plt.figure (figsize = (14, 7))
+plt.plot (comparison.index, comparison['Bitcoin'] * 100, label = 'Bitcoin', linewidth = 2)
+plt.plot (comparison.index, comparison['Ethereum'] * 100, label = 'Ethereum', linewidth = 2)
 plt.axhline(0, color = 'black', linestyle = '--', alpha = 0.5)
 plt.title('Bitcoin vs Ethereum Performance', fontsize = 16, fontweight = 'bold')
 plt.ylabel('Cumulative Return (%)')
 plt.legend()
-plt.grid(alpha = 0.3)
+plt.grid (alpha = 0.3)
 plt.tight_layout()
 plt.show()
 \`\`\`
@@ -576,4 +576,3 @@ plt.show()
 Ready to dive deeper! 🚀
 `,
 };
-

@@ -28,7 +28,7 @@ export const investmentVehiclesProductsMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        "NAV = (Total Assets - Liabilities) / Shares Outstanding. Assets = $100M stocks + $5M cash = $105M. Liabilities = $2M expenses. NAV = ($105M - $2M) / 10M = $103M / 10M = $10.30. This NAV is calculated once daily after market close (4pm ET). Investors buying mutual fund shares get this NAV regardless of when during day they place order (all orders executed at 4pm NAV). This is different from ETFs/stocks which trade at real-time market prices. Mutual fund NAV moves only based on underlying holdings' price changes, not supply/demand for fund shares.",
+        "NAV = (Total Assets - Liabilities) / Shares Outstanding. Assets = $100M stocks + $5M cash = $105M. Liabilities = $2M expenses. NAV = (\$105M - $2M) / 10M = $103M / 10M = $10.30. This NAV is calculated once daily after market close (4pm ET). Investors buying mutual fund shares get this NAV regardless of when during day they place order (all orders executed at 4pm NAV). This is different from ETFs/stocks which trade at real-time market prices. Mutual fund NAV moves only based on underlying holdings' price changes, not supply/demand for fund shares.",
     },
     {
       id: 'ivp-mc-3',

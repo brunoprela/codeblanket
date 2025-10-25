@@ -12,7 +12,7 @@ export const financialDataPlatformsMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "FactSet is purpose-built for quantitative research with superior factor models, better historical data consistency, point-in-time data, and the most powerful Excel integration for systematic strategies. At $12-18K/year, it fits the budget and is specifically designed for this use case. Bloomberg is more expensive ($24K) and better for trading desks. Capital IQ excels at M&A/comps but lacks quant tools. YCharts doesn't have the depth needed for professional quant research.",
+      "FactSet is purpose-built for quantitative research with superior factor models, better historical data consistency, point-in-time data, and the most powerful Excel integration for systematic strategies. At $12-18K/year, it fits the budget and is specifically designed for this use case. Bloomberg is more expensive (\$24K) and better for trading desks. Capital IQ excels at M&A/comps but lacks quant tools. YCharts doesn't have the depth needed for professional quant research.",
   },
   {
     id: '2-3-q2',
@@ -32,7 +32,7 @@ export const financialDataPlatformsMultipleChoice = [
   {
     id: '2-3-q3',
     question:
-      "A startup quant fund with $100M AUM has only $6,000/year budget for data platforms. They need equity screening, portfolio analytics, and Python integration. What's the best approach?",
+      "A startup quant fund with $100M AUM has only $6,000/year budget for data platforms. They need equity screening, portfolio analytics, and Python integration. What\'s the best approach?",
     options: [
       'Get one Bloomberg Terminal and share',
       'Subscribe to FactSet at minimum package',
@@ -57,7 +57,7 @@ export const financialDataPlatformsMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Bloomberg's primary moat is its communication network (Bloomberg Messenger). With 325,000+ professionals using it, leaving Bloomberg means losing instant access to your entire professional network. The data quality across platforms is comparable. FactSet actually has better quantitative tools. Coverage is similar across major platforms. The network effect is Bloomberg's unbreakable competitive advantage - you can get equivalent data elsewhere, but you can't message the entire finance industry without Bloomberg.",
+      "Bloomberg\'s primary moat is its communication network (Bloomberg Messenger). With 325,000+ professionals using it, leaving Bloomberg means losing instant access to your entire professional network. The data quality across platforms is comparable. FactSet actually has better quantitative tools. Coverage is similar across major platforms. The network effect is Bloomberg's unbreakable competitive advantage - you can get equivalent data elsewhere, but you can't message the entire finance industry without Bloomberg.",
   },
   {
     id: '2-3-q5',

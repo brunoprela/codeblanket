@@ -51,7 +51,7 @@ START: What are your requirements?
 │  └─ ✅ Use Insertion Sort
 │
 └─ General purpose, large dataset?
-   └─ ✅ Use Quick Sort (with random pivot) or Python's Timsort
+   └─ ✅ Use Quick Sort (with random pivot) or Python\'s Timsort
 \`\`\`
 
 ---
@@ -62,10 +62,10 @@ START: What are your requirements?
 **Problem:** O(n²) complexity makes it unusable for large datasets.
 \`\`\`python
 # ❌ DON'T: Use bubble sort for real applications
-def bubble_sort(arr):  # O(n²) - too slow!
-    n = len(arr)
-    for i in range(n):
-        for j in range(n-1):
+def bubble_sort (arr):  # O(n²) - too slow!
+    n = len (arr)
+    for i in range (n):
+        for j in range (n-1):
             if arr[j] > arr[j+1]:
                 arr[j], arr[j+1] = arr[j+1], arr[j]
     return arr
@@ -74,25 +74,25 @@ def bubble_sort(arr):  # O(n²) - too slow!
 arr.sort()  # Python's Timsort - O(n log n)
 # or
 import heapq
-heapq.heapify(arr)  # O(n) heapify
+heapq.heapify (arr)  # O(n) heapify
 \`\`\`
 
-### Mistake 2: Forgetting Quick Sort's Worst Case
+### Mistake 2: Forgetting Quick Sort\'s Worst Case
 **Problem:** Sorted input causes O(n²) with poor pivot selection.
 \`\`\`python
 # ❌ BAD: Always picking first element as pivot
-def quicksort_bad(arr):
-    if len(arr) <= 1:
+def quicksort_bad (arr):
+    if len (arr) <= 1:
         return arr
     pivot = arr[0]  # Bad on sorted data!
     # ...
 
 # ✅ GOOD: Random pivot to avoid worst case
 import random
-def quicksort_good(arr):
-    if len(arr) <= 1:
+def quicksort_good (arr):
+    if len (arr) <= 1:
         return arr
-    pivot_idx = random.randint(0, len(arr)-1)
+    pivot_idx = random.randint(0, len (arr)-1)
     pivot = arr[pivot_idx]
     # ...
 \`\`\`
@@ -106,10 +106,10 @@ students = [
 ]
 
 # ❌ BAD: Quick sort (unstable) might swap equal grades
-students.sort(key=lambda x: x[1])  # May not preserve order!
+students.sort (key=lambda x: x[1])  # May not preserve order!
 
 # ✅ GOOD: Merge sort (stable) preserves relative order
-students.sort(key=lambda x: x[1], stable=True)
+students.sort (key=lambda x: x[1], stable=True)
 # Python's sort is actually Timsort (stable by default)
 \`\`\`
 
@@ -117,41 +117,41 @@ students.sort(key=lambda x: x[1], stable=True)
 **Problem:** Creating many temporary arrays.
 \`\`\`python
 # ❌ INEFFICIENT: New arrays in recursion
-def merge_sort(arr):
-    if len(arr) <= 1:
+def merge_sort (arr):
+    if len (arr) <= 1:
         return arr
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])  # Creates new array
-    right = merge_sort(arr[mid:])  # Creates new array
-    return merge(left, right)
+    mid = len (arr) // 2
+    left = merge_sort (arr[:mid])  # Creates new array
+    right = merge_sort (arr[mid:])  # Creates new array
+    return merge (left, right)
 
 # ✅ EFFICIENT: In-place with indices
-def merge_sort(arr, left, right):
+def merge_sort (arr, left, right):
     if left < right:
         mid = (left + right) // 2
-        merge_sort(arr, left, mid)
-        merge_sort(arr, mid + 1, right)
-        merge(arr, left, mid, right)  # Merge in place
+        merge_sort (arr, left, mid)
+        merge_sort (arr, mid + 1, right)
+        merge (arr, left, mid, right)  # Merge in place
 \`\`\`
 
 ### Mistake 5: Sorting When Hash Table Would Be Better
 **Problem:** Sorting to check for duplicates or find elements.
 \`\`\`python
 # ❌ SLOW: Sorting just to find duplicates (O(n log n))
-def has_duplicates_slow(arr):
+def has_duplicates_slow (arr):
     arr.sort()  # O(n log n)
-    for i in range(len(arr)-1):
+    for i in range (len (arr)-1):
         if arr[i] == arr[i+1]:
             return True
     return False
 
 # ✅ FAST: Hash set for O(n) solution
-def has_duplicates_fast(arr):
+def has_duplicates_fast (arr):
     seen = set()
     for num in arr:
         if num in seen:
             return True
-        seen.add(num)
+        seen.add (num)
     return False
 \`\`\`
 
@@ -200,7 +200,7 @@ Don't sort if you only need:
 1. Using insertion sort for small subarrays (< 10 elements)
 2. Switching to heap sort if recursion depth exceeds 2 log n
 3. Using three-way partitioning for many duplicates
-This is what Python's Timsort and Java's DualPivotQuicksort do."
+This is what Python\'s Timsort and Java's DualPivotQuicksort do."
 \`\`\`
 
 ---
@@ -219,7 +219,7 @@ Is this actually a sorting problem, or can it be solved more efficiently?
 ### Step 2: Choose Your Algorithm
 \`\`\`
 Decision criteria:
-1. What's given?
+1. What\'s given?
    - Array, linked list, or stream of data?
    - Data type constraints? (integers, strings, objects)
    
@@ -239,22 +239,22 @@ Decision criteria:
 # Common implementation pitfalls:
 
 # 1. Off-by-one errors in merge sort
-def merge_sort(arr, left, right):
+def merge_sort (arr, left, right):
     if left < right:  # NOT <=
         mid = left + (right - left) // 2  # Avoid overflow
-        merge_sort(arr, left, mid)
-        merge_sort(arr, mid + 1, right)  # mid + 1, not mid!
-        merge(arr, left, mid, right)
+        merge_sort (arr, left, mid)
+        merge_sort (arr, mid + 1, right)  # mid + 1, not mid!
+        merge (arr, left, mid, right)
 
 # 2. Infinite loop in quicksort
-def quicksort(arr, low, high):
+def quicksort (arr, low, high):
     if low < high:
-        pi = partition(arr, low, high)
-        quicksort(arr, low, pi - 1)  # NOT pi!
-        quicksort(arr, pi + 1, high)  # NOT pi!
+        pi = partition (arr, low, high)
+        quicksort (arr, low, pi - 1)  # NOT pi!
+        quicksort (arr, pi + 1, high)  # NOT pi!
 
 # 3. Not handling edge cases
-if not arr or len(arr) <= 1:
+if not arr or len (arr) <= 1:
     return arr  # Base case!
 \`\`\`
 
@@ -287,7 +287,7 @@ test_cases = [
 
 ### When to Use Each Sort (Real-World):
 
-**Use Built-in Sort (Python's Timsort, Java's DualPivotQuicksort):**
+**Use Built-in Sort (Python's Timsort, Java\'s DualPivotQuicksort):**
 - ✅ 99% of the time in production code
 - Highly optimized, stable, adaptive
 - Handles all edge cases well

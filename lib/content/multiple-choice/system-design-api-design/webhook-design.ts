@@ -39,7 +39,7 @@ export const webhookdesignMultipleChoice: MultipleChoiceQuestion[] = [
       'To make the webhook faster',
       'To prevent timeout errors and allow the sender to retry if needed',
       'To reduce server costs',
-      "It's required by HTTP standards",
+      "It\'s required by HTTP standards",
     ],
     correctAnswer: 1,
     explanation:

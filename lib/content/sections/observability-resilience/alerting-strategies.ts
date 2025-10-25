@@ -377,7 +377,7 @@ IF database_down:
 
 ### **What to Include**
 
-**1. What's Wrong**
+**1. What\'s Wrong**
 \`\`\`
 ERROR: API latency p99 > 1s
 Current: 2.3s

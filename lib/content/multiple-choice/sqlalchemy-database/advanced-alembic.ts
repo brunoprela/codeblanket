@@ -12,7 +12,7 @@ export const advancedAlembicMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "batch_alter_table() works around SQLite's limited ALTER TABLE support. SQLite can't drop columns, add foreign keys, or modify columns directly. Batch mode creates temp table with new schema, copies data, drops old table, renames temp. Required for SQLite migrations with these operations.",
+      "batch_alter_table() works around SQLite\'s limited ALTER TABLE support. SQLite can't drop columns, add foreign keys, or modify columns directly. Batch mode creates temp table with new schema, copies data, drops old table, renames temp. Required for SQLite migrations with these operations.",
   },
   {
     id: 'sql-adv-alembic-mc-2',

@@ -86,7 +86,7 @@ class ConversationMemory:
         
         # Invalidate cache
         cache_key = f"conv:{conversation_id}:messages"
-        await self.redis.delete(cache_key)
+        await self.redis.delete (cache_key)
         
         return message
     
@@ -102,9 +102,9 @@ class ConversationMemory:
         cache_key = f"conv:{conversation_id}:messages"
         
         # Try cache first
-        cached = await self.redis.get(cache_key)
+        cached = await self.redis.get (cache_key)
         if cached:
-            messages = [Message(**m) for m in json.loads(cached)]
+            messages = [Message(**m) for m in json.loads (cached)]
         else:
             # Query database
             query = """
@@ -115,15 +115,15 @@ class ConversationMemory:
             
             if since:
                 query += " AND timestamp > $2"
-                params.append(since)
+                params.append (since)
             
             query += " ORDER BY timestamp ASC"
             
             if limit:
                 query += f" LIMIT {limit}"
             
-            rows = await self.db.fetch(query, *params)
-            messages = [Message(**dict(row)) for row in rows]
+            rows = await self.db.fetch (query, *params)
+            messages = [Message(**dict (row)) for row in rows]
             
             # Cache for 1 hour
             await self.redis.setex(
@@ -134,49 +134,49 @@ class ConversationMemory:
         
         return messages
     
-    async def get_summary(self, conversation_id: str) -> Optional[str]:
+    async def get_summary (self, conversation_id: str) -> Optional[str]:
         """
         Get conversation summary (for long conversations)
         """
         cache_key = f"conv:{conversation_id}:summary"
-        return await self.redis.get(cache_key)
+        return await self.redis.get (cache_key)
     
-    async def set_summary(self, conversation_id: str, summary: str):
+    async def set_summary (self, conversation_id: str, summary: str):
         """
         Cache conversation summary
         """
         cache_key = f"conv:{conversation_id}:summary"
-        await self.redis.setex(cache_key, 86400, summary)  # 24 hours
+        await self.redis.setex (cache_key, 86400, summary)  # 24 hours
 
 # Usage
-memory = ConversationMemory(db, redis)
+memory = ConversationMemory (db, redis)
 
 @app.post("/api/chat")
 async def chat(
     conversation_id: str,
     message: str,
-    user: User = Depends(get_current_user)
+    user: User = Depends (get_current_user)
 ):
     # Get conversation history
-    history = await memory.get_messages(conversation_id)
+    history = await memory.get_messages (conversation_id)
     
     # Add user message
     await memory.add_message(
         conversation_id,
         role="user",
         content=message,
-        tokens=count_tokens(message)
+        tokens=count_tokens (message)
     )
     
     # Generate response (see next section)
-    response = await generate_response(history, message)
+    response = await generate_response (history, message)
     
     # Save assistant message
     await memory.add_message(
         conversation_id,
         role="assistant",
         content=response,
-        tokens=count_tokens(response)
+        tokens=count_tokens (response)
     )
     
     return {"response": response}
@@ -227,7 +227,7 @@ class ContextManager:
         )
         
         if summary:
-            available_tokens -= count_tokens(summary)
+            available_tokens -= count_tokens (summary)
         
         # Start with most recent messages
         selected = []
@@ -235,7 +235,7 @@ class ContextManager:
         
         # Always include last 10 messages (recent context)
         recent_messages = messages[-10:]
-        for msg in reversed(recent_messages):
+        for msg in reversed (recent_messages):
             if total_tokens + msg.tokens > available_tokens:
                 break
             selected.insert(0, msg)
@@ -247,7 +247,7 @@ class ContextManager:
         ]
         
         # Add summary if we have it and dropped messages
-        if summary and len(selected) < len(messages):
+        if summary and len (selected) < len (messages):
             context.append({
                 "role": "system",
                 "content": f"Previous conversation summary: {summary}"
@@ -274,10 +274,10 @@ class ContextManager:
         # 1. More than 50 messages
         # 2. Or total tokens > 50k
         
-        if len(messages) > 50:
+        if len (messages) > 50:
             return True
         
-        total_tokens = sum(msg.tokens for msg in messages)
+        total_tokens = sum (msg.tokens for msg in messages)
         if total_tokens > 50000:
             return True
         
@@ -321,7 +321,7 @@ Summary:
         return response.content[0].text
 
 # Usage
-context_manager = ContextManager(max_tokens=100000)
+context_manager = ContextManager (max_tokens=100000)
 
 async def generate_response(
     conversation_id: str,
@@ -333,14 +333,14 @@ async def generate_response(
     """
     
     # Check if we need to summarize
-    if await context_manager.should_summarize(conversation_id, history):
+    if await context_manager.should_summarize (conversation_id, history):
         # Generate summary
-        summary = await context_manager.generate_summary(history)
+        summary = await context_manager.generate_summary (history)
         
         # Cache it
-        await memory.set_summary(conversation_id, summary)
+        await memory.set_summary (conversation_id, summary)
     else:
-        summary = await memory.get_summary(conversation_id)
+        summary = await memory.get_summary (conversation_id)
     
     # Prepare context
     context = context_manager.prepare_context(
@@ -394,7 +394,7 @@ class PersonalityManager:
         self.personalities: Dict[str, Personality] = {}
         self._load_default_personalities()
     
-    def _load_default_personalities(self):
+    def _load_default_personalities (self):
         """Load built-in personalities"""
         
         # Professional Assistant
@@ -410,7 +410,7 @@ You are a professional AI assistant. You:
 - Ask clarifying questions when needed
 """,
             example_messages=[
-                ("Help me write an email", "I'd be happy to help. What's the purpose of the email and who is the recipient?"),
+                ("Help me write an email", "I'd be happy to help. What\'s the purpose of the email and who is the recipient?"),
                 ("What's Python?", "Python is a high-level programming language known for readability and versatility. It's widely used in web development, data science, and automation.")
             ],
             temperature=0.5
@@ -429,7 +429,7 @@ You are a creative AI writer. You:
 - Encourage imagination
 """,
             example_messages=[
-                ("Help me brainstorm", "Ooh, I love brainstorming! Let's explore the wild frontiers of imagination. What's the project?"),
+                ("Help me brainstorm", "Ooh, I love brainstorming! Let\'s explore the wild frontiers of imagination. What's the project?"),
                 ("Write a story about...", "Once upon a time, in a realm where...")
             ],
             temperature=0.9
@@ -454,9 +454,9 @@ You are a technical AI expert. You:
             temperature=0.3
         )
     
-    def get_personality(self, name: str) -> Optional[Personality]:
+    def get_personality (self, name: str) -> Optional[Personality]:
         """Get personality by name"""
-        return self.personalities.get(name)
+        return self.personalities.get (name)
     
     def create_custom_personality(
         self,
@@ -496,19 +496,19 @@ async def chat(
     conversation_id: str,
     message: str,
     personality_name: str = "professional",
-    user: User = Depends(get_current_user)
+    user: User = Depends (get_current_user)
 ):
     # Get personality
-    personality = personality_manager.get_personality(personality_name)
+    personality = personality_manager.get_personality (personality_name)
     if not personality:
         raise HTTPException(404, "Personality not found")
     
     # Get history
-    history = await memory.get_messages(conversation_id)
+    history = await memory.get_messages (conversation_id)
     
     # Prepare context
-    summary = await memory.get_summary(conversation_id)
-    system_prompt = personality_manager.build_system_prompt(personality)
+    summary = await memory.get_summary (conversation_id)
+    system_prompt = personality_manager.build_system_prompt (personality)
     
     context = context_manager.prepare_context(
         messages=history,
@@ -554,7 +554,7 @@ class IntentClassifier:
     Classify user intent to route appropriately
     """
     
-    async def classify(self, message: str, history: List[Message]) -> Intent:
+    async def classify (self, message: str, history: List[Message]) -> Intent:
         """
         Classify message intent using Claude
         """
@@ -569,7 +569,7 @@ Classify this user message into one of these categories:
 - chitchat: Casual conversation
 
 Recent context:
-{self._format_recent_context(history[-3:])}
+{self._format_recent_context (history[-3:])}
 
 User message: "{message}"
 
@@ -586,11 +586,11 @@ Classification (one word):
         classification = response.content[0].text.strip().lower()
         
         try:
-            return Intent(classification)
+            return Intent (classification)
         except:
             return Intent.QUESTION  # Default
     
-    def _format_recent_context(self, messages: List[Message]) -> str:
+    def _format_recent_context (self, messages: List[Message]) -> str:
         return "\\n".join([
             f"{msg.role}: {msg.content[:100]}"
             for msg in messages
@@ -616,20 +616,20 @@ class DialogueManager:
         """
         
         # Classify intent
-        intent = await self.intent_classifier.classify(message, history)
+        intent = await self.intent_classifier.classify (message, history)
         
         # Route based on intent
         if intent == Intent.GREETING:
-            return await self.handle_greeting(message, history)
+            return await self.handle_greeting (message, history)
         
         elif intent == Intent.CLARIFICATION:
-            return await self.handle_clarification(message, history)
+            return await self.handle_clarification (message, history)
         
         elif intent == Intent.COMMAND:
-            return await self.handle_command(message, history)
+            return await self.handle_command (message, history)
         
         else:
-            return await self.handle_question(message, history)
+            return await self.handle_question (message, history)
     
     async def handle_greeting(
         self,
@@ -638,7 +638,7 @@ class DialogueManager:
     ) -> str:
         """Quick response for greetings"""
         
-        if len(history) == 0:
+        if len (history) == 0:
             return "Hello! I'm here to help. What can I do for you today?"
         else:
             return "Hello again! How can I assist you further?"
@@ -655,19 +655,19 @@ class DialogueManager:
         
         # Get last AI response
         last_response = next(
-            (msg for msg in reversed(history) if msg.role == "assistant"),
+            (msg for msg in reversed (history) if msg.role == "assistant"),
             None
         )
         
         if not last_response:
-            return await self.handle_question(message, history)
+            return await self.handle_question (message, history)
         
         # Build clarification prompt
         prompt = f"""
 Previous response:
 {last_response.content}
 
-User's follow-up question:
+User\'s follow-up question:
 {message}
 
 Clarify or expand on the previous response:
@@ -692,7 +692,7 @@ Clarify or expand on the previous response:
         Parse and execute commands
         """
         # Implementation depends on available tools/actions
-        return await self.handle_question(message, history)
+        return await self.handle_question (message, history)
     
     async def handle_question(
         self,
@@ -700,7 +700,7 @@ Clarify or expand on the previous response:
         history: List[Message]
     ) -> str:
         """Default question handler"""
-        return await generate_response(conversation_id, history, message)
+        return await generate_response (conversation_id, history, message)
 \`\`\`
 
 ---
@@ -730,14 +730,14 @@ class SafetyFilter:
             "credit_card": r"\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b"
         }
     
-    async def check_message(self, message: str) -> dict:
+    async def check_message (self, message: str) -> dict:
         """
         Check message for safety issues
         """
         issues = []
         
         # Check for PII
-        pii_found = self.detect_pii(message)
+        pii_found = self.detect_pii (message)
         if pii_found:
             issues.append({
                 "type": "pii",
@@ -745,7 +745,7 @@ class SafetyFilter:
             })
         
         # Check for harmful content (use external API)
-        moderation = await self.check_moderation(message)
+        moderation = await self.check_moderation (message)
         if moderation["flagged"]:
             issues.append({
                 "type": "harmful_content",
@@ -753,26 +753,26 @@ class SafetyFilter:
             })
         
         return {
-            "safe": len(issues) == 0,
+            "safe": len (issues) == 0,
             "issues": issues
         }
     
-    def detect_pii(self, text: str) -> List[str]:
+    def detect_pii (self, text: str) -> List[str]:
         """Detect personally identifiable information"""
         found = []
         
         for pii_type, pattern in self.pii_patterns.items():
-            if re.search(pattern, text):
-                found.append(pii_type)
+            if re.search (pattern, text):
+                found.append (pii_type)
         
         return found
     
-    async def check_moderation(self, text: str) -> dict:
+    async def check_moderation (self, text: str) -> dict:
         """
         Use OpenAI moderation API
         """
         client = openai.OpenAI()
-        response = client.moderations.create(input=text)
+        response = client.moderations.create (input=text)
         
         result = response.results[0]
         
@@ -784,10 +784,10 @@ class SafetyFilter:
             ]
         }
     
-    def redact_pii(self, text: str) -> str:
+    def redact_pii (self, text: str) -> str:
         """Redact PII from text"""
         for pii_type, pattern in self.pii_patterns.items():
-            text = re.sub(pattern, f"[{pii_type.upper()}_REDACTED]", text)
+            text = re.sub (pattern, f"[{pii_type.upper()}_REDACTED]", text)
         return text
 
 # Apply in chat endpoint
@@ -797,28 +797,28 @@ safety_filter = SafetyFilter()
 async def chat(
     conversation_id: str,
     message: str,
-    user: User = Depends(get_current_user)
+    user: User = Depends (get_current_user)
 ):
     # Check safety
-    safety_check = await safety_filter.check_message(message)
+    safety_check = await safety_filter.check_message (message)
     
     if not safety_check["safe"]:
         # Log incident
-        logger.warning(f"Unsafe message from {user.id}: {safety_check['issues']}")
+        logger.warning (f"Unsafe message from {user.id}: {safety_check['issues']}")
         
         # Redact PII if present
-        if any(issue["type"] == "pii" for issue in safety_check["issues"]):
-            message = safety_filter.redact_pii(message)
+        if any (issue["type"] == "pii" for issue in safety_check["issues"]):
+            message = safety_filter.redact_pii (message)
         
         # Reject harmful content
-        if any(issue["type"] == "harmful_content" for issue in safety_check["issues"]):
+        if any (issue["type"] == "harmful_content" for issue in safety_check["issues"]):
             raise HTTPException(
                 400,
                 "Message contains inappropriate content"
             )
     
     # Continue with normal flow
-    response = await generate_response(conversation_id, message)
+    response = await generate_response (conversation_id, message)
     
     return {"response": response}
 \`\`\`

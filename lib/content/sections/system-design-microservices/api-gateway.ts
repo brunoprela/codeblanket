@@ -86,12 +86,12 @@ Combine multiple backend calls into one response.
 **Example**:
 \`\`\`javascript
 // API Gateway endpoint: GET /api/home
-async function getHomeData(userId) {
+async function getHomeData (userId) {
     // Make 3 parallel calls to backend services
     const [user, orders, notifications] = await Promise.all([
-        userService.getUser(userId),
-        orderService.getRecentOrders(userId),
-        notificationService.getUnread(userId)
+        userService.getUser (userId),
+        orderService.getRecentOrders (userId),
+        notificationService.getUnread (userId)
     ]);
     
     // Return combined response
@@ -122,18 +122,18 @@ Centralize auth logic instead of duplicating in each service.
 **Example**:
 \`\`\`javascript
 // API Gateway middleware
-async function authenticate(request) {
+async function authenticate (request) {
     const token = request.headers['Authorization'].replace('Bearer ', ');
     
     // Validate JWT
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify (token, JWT_SECRET);
     
     // Add user context to request
     request.headers['X-User-Id'] = decoded.userId;
     request.headers['X-User-Roles'] = decoded.roles.join(',');
     
     // Forward to backend
-    return proxy(request);
+    return proxy (request);
 }
 \`\`\`
 
@@ -154,10 +154,10 @@ const rateLimiter = new RateLimiter({
     max: 100 // requests
 });
 
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
     const userId = req.headers['X-User-Id'];
     
-    if (await rateLimiter.isBlocked(userId)) {
+    if (await rateLimiter.isBlocked (userId)) {
         return res.status(429).json({
             error: 'Too many requests'
         });
@@ -188,10 +188,10 @@ app.post('/api/orders', async (req, res) => {
     
     // Call backend gRPC service
     const grpcClient = getGrpcClient('order-service');
-    const result = await grpcClient.createOrder(orderData);
+    const result = await grpcClient.createOrder (orderData);
     
     // Return HTTP/JSON response
-    res.json(result);
+    res.json (result);
 });
 \`\`\`
 
@@ -207,12 +207,12 @@ Modify responses before returning to client.
 **Example**: Remove internal fields, add pagination metadata
 
 \`\`\`javascript
-async function getProducts(req, res) {
+async function getProducts (req, res) {
     // Call backend service
     const products = await productService.getAll();
     
     // Transform response
-    const transformed = products.map(p => ({
+    const transformed = products.map (p => ({
         id: p.id,
         name: p.name,
         price: p.price,
@@ -242,18 +242,18 @@ app.get('/api/products/:id', async (req, res) => {
     const cacheKey = \`product:\${req.params.id}\`;
     
     // Check cache
-    const cached = await redis.get(cacheKey);
+    const cached = await redis.get (cacheKey);
     if (cached) {
-        return res.json(JSON.parse(cached));
+        return res.json(JSON.parse (cached));
     }
     
     // Cache miss - call backend
-    const product = await productService.get(req.params.id);
+    const product = await productService.get (req.params.id);
     
     // Store in cache (5 minutes)
-    await redis.setex(cacheKey, 300, JSON.stringify(product));
+    await redis.setex (cacheKey, 300, JSON.stringify (product));
     
-    res.json(product);
+    res.json (product);
 });
 \`\`\`
 
@@ -389,10 +389,10 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
             .route("products", r -> r.path("/api/products/**")
-                .filters(f -> f
+                .filters (f -> f
                     .stripPrefix(2)
                     .addRequestHeader("X-Gateway", "true")
-                    .circuitBreaker(config -> config
+                    .circuitBreaker (config -> config
                         .setName("productsCircuitBreaker")
                         .setFallbackUri("/fallback/products")))
                 .uri("lb://product-service"))
@@ -407,7 +407,7 @@ Cloud-native reverse proxy and load balancer.
 
 **Features**:
 - Automatic service discovery
-- Let's Encrypt SSL
+- Let\'s Encrypt SSL
 - Middleware (auth, rate limit, retry)
 - Kubernetes ingress controller
 
@@ -501,15 +501,15 @@ Needs:
 
 **API Gateway implementation**:
 \`\`\`javascript
-async function getOrderDetails(orderId) {
+async function getOrderDetails (orderId) {
     // Get order
-    const order = await orderService.getOrder(orderId);
+    const order = await orderService.getOrder (orderId);
     
     // Get related data in parallel
     const [products, shipping, payment] = await Promise.all([
-        productService.getByIds(order.productIds),
-        shippingService.getStatus(orderId),
-        paymentService.getStatus(order.paymentId)
+        productService.getByIds (order.productIds),
+        shippingService.getStatus (orderId),
+        paymentService.getStatus (order.paymentId)
     ]);
     
     // Compose response
@@ -518,9 +518,9 @@ async function getOrderDetails(orderId) {
             id: order.id,
             status: order.status,
             total: order.total,
-            items: order.items.map(item => ({
+            items: order.items.map (item => ({
                 ...item,
-                product: products.find(p => p.id === item.productId)
+                product: products.find (p => p.id === item.productId)
             }))
         },
         shipping: {
@@ -549,9 +549,9 @@ async function getOrderDetails(orderId) {
 // BAD: Business logic in gateway
 app.post('/api/orders', async (req, res) => {
     // Gateway calculates tax, applies discounts, validates inventory
-    const tax = calculateTax(req.body.items, req.body.shippingAddress);
-    const discount = applyPromotions(req.body.items, req.user.id);
-    const total = calculateTotal(req.body.items, tax, discount);
+    const tax = calculateTax (req.body.items, req.body.shippingAddress);
+    const discount = applyPromotions (req.body.items, req.user.id);
+    const total = calculateTotal (req.body.items, tax, discount);
     
     // Then calls service
     await orderService.create({...req.body, total});
@@ -565,8 +565,8 @@ app.post('/api/orders', async (req, res) => {
 // GOOD: Gateway just routes
 app.post('/api/orders', async (req, res) => {
     // Service handles all business logic
-    const result = await orderService.create(req.body, req.user.id);
-    res.json(result);
+    const result = await orderService.create (req.body, req.user.id);
+    res.json (result);
 });
 \`\`\`
 
@@ -578,14 +578,14 @@ app.post('/api/orders', async (req, res) => {
 \`\`\`javascript
 // BAD: 10 sequential calls
 for (const productId of order.productIds) {
-    const product = await productService.get(productId); // 1 call per product
+    const product = await productService.get (productId); // 1 call per product
 }
 \`\`\`
 
 **Better**: Batch requests
 \`\`\`javascript
 // GOOD: 1 call
-const products = await productService.getByIds(order.productIds);
+const products = await productService.getByIds (order.productIds);
 \`\`\`
 
 ### ❌ God Gateway
@@ -616,7 +616,7 @@ Client (HTTPS) → Gateway (HTTPS) → Services (HTTP)
 app.use((req, res, next) => {
     const apiKey = req.headers['X-API-Key'];
     
-    if (!isValidApiKey(apiKey)) {
+    if (!isValidApiKey (apiKey)) {
         return res.status(401).json({error: 'Invalid API key'});
     }
     
@@ -671,19 +671,19 @@ Combine duplicate requests.
 \`\`\`javascript
 const cache = new Map();
 
-async function getProduct(id) {
+async function getProduct (id) {
     // If request in flight, wait for it
-    if (cache.has(id)) {
-        return cache.get(id);
+    if (cache.has (id)) {
+        return cache.get (id);
     }
     
     // Start new request
-    const promise = productService.get(id);
-    cache.set(id, promise);
+    const promise = productService.get (id);
+    cache.set (id, promise);
     
     // Clean up when done
     const result = await promise;
-    setTimeout(() => cache.delete(id), 1000);
+    setTimeout(() => cache.delete (id), 1000);
     
     return result;
 }

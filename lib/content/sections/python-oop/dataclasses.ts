@@ -22,7 +22,7 @@ class Person:
 person = Person("Alice", 30, "alice@example.com")
 
 # Automatically generated __repr__
-print(person)  # Person(name='Alice', age=30, email='alice@example.com')
+print(person)  # Person (name='Alice', age=30, email='alice@example.com')
 
 # Automatically generated __eq__
 person2 = Person("Alice", 30, "alice@example.com")
@@ -38,15 +38,15 @@ class Product:
     name: str
     price: float
     quantity: int = 0  # Default value
-    tags: list = field(default_factory=list)  # Mutable default
+    tags: list = field (default_factory=list)  # Mutable default
 
 # Use default values
 product = Product("Widget", 19.99)
 print(product.quantity)  # 0
 
-# IMPORTANT: Use field(default_factory) for mutable defaults!
+# IMPORTANT: Use field (default_factory) for mutable defaults!
 # WRONG: tags: list = []  # Shared between instances!
-# CORRECT: tags: list = field(default_factory=list)
+# CORRECT: tags: list = field (default_factory=list)
 \`\`\`
 
 **Post-Init Processing:**
@@ -55,7 +55,7 @@ print(product.quantity)  # 0
 class Rectangle:
     width: float
     height: float
-    area: float = field(init=False)  # Not in __init__
+    area: float = field (init=False)  # Not in __init__
     
     def __post_init__(self):
         """Called after __init__"""
@@ -69,7 +69,7 @@ print(rect.area)  # 50
 
 **Immutable Dataclasses:**
 \`\`\`python
-@dataclass(frozen=True)
+@dataclass (frozen=True)
 class Point:
     x: float
     y: float
@@ -83,14 +83,14 @@ points_set = {Point(0, 0), Point(1, 1)}
 
 **Ordering:**
 \`\`\`python
-@dataclass(order=True)
+@dataclass (order=True)
 class Score:
     value: int
-    player: str = field(compare=False)  # Don't use in comparisons
+    player: str = field (compare=False)  # Don't use in comparisons
 
 scores = [Score(90, "Alice"), Score(85, "Bob"), Score(95, "Charlie")]
-print(sorted(scores))  # Sorted by value
-# [Score(value=85, player='Bob'), Score(value=90, player='Alice'), ...]
+print(sorted (scores))  # Sorted by value
+# [Score (value=85, player='Bob'), Score (value=90, player='Alice'), ...]
 \`\`\`
 
 **Field Options:**
@@ -101,13 +101,13 @@ from typing import List
 @dataclass
 class Student:
     name: str
-    id: int = field(repr=False)  # Don't show in repr
-    grades: List[int] = field(default_factory=list)
-    gpa: float = field(init=False, repr=False)  # Calculated field
+    id: int = field (repr=False)  # Don't show in repr
+    grades: List[int] = field (default_factory=list)
+    gpa: float = field (init=False, repr=False)  # Calculated field
     
     def __post_init__(self):
         if self.grades:
-            self.gpa = sum(self.grades) / len(self.grades)
+            self.gpa = sum (self.grades) / len (self.grades)
         else:
             self.gpa = 0.0
 \`\`\`
@@ -126,7 +126,7 @@ class Employee(Person):
 
 # Inherits fields from Person
 emp = Employee("Alice", 30, 12345, "Engineering")
-print(emp)  # Employee(name='Alice', age=30, employee_id=12345, ...)
+print(emp)  # Employee (name='Alice', age=30, employee_id=12345, ...)
 \`\`\`
 
 **Conversion Methods:**
@@ -142,11 +142,11 @@ class Config:
 config = Config("localhost", 8080, True)
 
 # Convert to dict
-print(asdict(config))
+print(asdict (config))
 # {'host': 'localhost', 'port': 8080, 'debug': True}
 
 # Convert to tuple
-print(astuple(config))
+print(astuple (config))
 # ('localhost', 8080, True)
 \`\`\`
 
@@ -163,21 +163,21 @@ class User:
     email: str
     created_at: datetime
     is_active: bool = True
-    roles: List[str] = field(default_factory=list)
+    roles: List[str] = field (default_factory=list)
     
     @classmethod
-    def from_json(cls, data: dict):
+    def from_json (cls, data: dict):
         """Create from JSON response"""
         return cls(
             id=data['id'],
             username=data['username'],
             email=data['email'],
-            created_at=datetime.fromisoformat(data['created_at']),
+            created_at=datetime.fromisoformat (data['created_at']),
             is_active=data.get('is_active', True),
             roles=data.get('roles', [])
         )
     
-    def has_role(self, role: str) -> bool:
+    def has_role (self, role: str) -> bool:
         return role in self.roles
 
 # Usage
@@ -188,7 +188,7 @@ user_data = {
     'created_at': '2024-01-01T00:00:00',
     'roles': ['admin', 'user']
 }
-user = User.from_json(user_data)
+user = User.from_json (user_data)
 print(user.has_role('admin'))  # True
 \`\`\`
 
@@ -212,7 +212,7 @@ print(user.has_role('admin'))  # True
 - ❌ Need dynamic attributes (use regular class or dict)
 
 **Best Practices:**
-- Always use \`field(default_factory)\` for mutable defaults
+- Always use \`field (default_factory)\` for mutable defaults
 - Use type hints for all fields
 - Use \`frozen=True\` for immutable data
 - Add \`__post_init__\` for validation or computed fields

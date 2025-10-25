@@ -32,7 +32,7 @@ User Request → API Gateway → Auth Service → User Service
 - Where is the bottleneck?
 - Which service failed?
 - How long did each operation take?
-- What's the service dependency graph?
+- What\'s the service dependency graph?
 
 ---
 
@@ -409,7 +409,7 @@ try {
   const result = await db.query('SELECT * FROM users');
   span.setStatus({ code: SpanStatusCode.OK });
 } catch (error) {
-  span.recordException(error);
+  span.recordException (error);
   span.setStatus({ code: SpanStatusCode.ERROR });
 } finally {
   span.end();
@@ -625,7 +625,7 @@ http_request_duration_seconds_bucket{le="1.0"} 100
 **Q: How would you debug a slow API request in microservices?**
 A: Look at distributed trace, identify longest span, check if operations are sequential that could be parallel, look for N+1 queries.
 
-**Q: What's the difference between logs and traces?**
+**Q: What\'s the difference between logs and traces?**
 A: Logs are discrete events in a single service. Traces show request flow across multiple services with timing.
 
 **Q: How does a downstream service know it's part of a trace?**

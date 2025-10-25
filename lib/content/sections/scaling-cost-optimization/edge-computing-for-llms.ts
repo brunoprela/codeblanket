@@ -61,10 +61,10 @@ Cloudflare Workers run on 300+ edge locations worldwide.
 \`\`\`typescript
 // worker.ts - Deploy to Cloudflare Workers
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch (request: Request, env: Env): Promise<Response> {
     // Handle CORS
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
+      return new Response (null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
@@ -77,16 +77,16 @@ export default {
 
     // Check rate limit at the edge (using Cloudflare KV)
     const rateLimitKey = \`ratelimit:\${user_id}\`;
-    const requests = await env.KV.get(rateLimitKey);
+    const requests = await env.KV.get (rateLimitKey);
     
-    if (requests && parseInt(requests) > 100) {
+    if (requests && parseInt (requests) > 100) {
       return new Response('Rate limit exceeded', { status: 429 });
     }
 
     // Increment rate limit counter
     await env.KV.put(
       rateLimitKey, 
-      (parseInt(requests || '0') + 1).toString(), 
+      (parseInt (requests || '0') + 1).toString(), 
       { expirationTtl: 3600 }
     );
 
@@ -105,7 +105,7 @@ export default {
 
     const data = await response.json();
 
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify (data), {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
@@ -124,17 +124,17 @@ export default {
 import { createHash } from 'crypto';
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch (request: Request, env: Env): Promise<Response> {
     const { prompt, model } = await request.json();
 
     // Generate cache key from prompt
-    const cacheKey = \`llm:\${createHash('sha256').update(prompt + model).digest('hex')}\`;
+    const cacheKey = \`llm:\${createHash('sha256').update (prompt + model).digest('hex')}\`;
 
     // Check cache first
-    const cached = await env.KV.get(cacheKey);
+    const cached = await env.KV.get (cacheKey);
     if (cached) {
       console.log('✅ Edge cache HIT');
-      return new Response(cached, {
+      return new Response (cached, {
         headers: {
           'Content-Type': 'application/json',
           'X-Cache': 'HIT',
@@ -161,11 +161,11 @@ export default {
     const data = await response.text();
 
     // Cache response for 1 hour
-    await env.KV.put(cacheKey, data, {
+    await env.KV.put (cacheKey, data, {
       expirationTtl: 3600,
     });
 
-    return new Response(data, {
+    return new Response (data, {
       headers: {
         'Content-Type': 'application/json',
         'X-Cache': 'MISS',
@@ -185,7 +185,7 @@ export default {
 
 ## Vercel Edge Functions
 
-Vercel Edge Functions run on Vercel's global edge network.
+Vercel Edge Functions run on Vercel\'s global edge network.
 
 ### Edge API Route
 
@@ -217,8 +217,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  await kv.incr(rateLimitKey);
-  await kv.expire(rateLimitKey, 3600);
+  await kv.incr (rateLimitKey);
+  await kv.expire (rateLimitKey, 3600);
 
   // Call OpenAI
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -257,7 +257,7 @@ export const config = {
   matcher: '/api/chat/:path*',
 };
 
-export async function middleware(req: NextRequest) {
+export async function middleware (req: NextRequest) {
   // Verify auth token at the edge
   const token = req.headers.get('authorization')?.replace('Bearer ', ');
 
@@ -300,13 +300,13 @@ exports.handler = async (event) => {
   const request = event.Records[0].cf.request;
   
   // Parse request body
-  const body = Buffer.from(request.body.data, 'base64').toString();
-  const { prompt, model } = JSON.parse(body);
+  const body = Buffer.from (request.body.data, 'base64').toString();
+  const { prompt, model } = JSON.parse (body);
 
   // Generate cache key
   const cacheKey = crypto
     .createHash('sha256')
-    .update(prompt + model)
+    .update (prompt + model)
     .digest('hex');
 
   // Check DynamoDB for cached response
@@ -360,7 +360,7 @@ interface CachedQuery {
   timestamp: number;
 }
 
-async function getEmbedding(text: string): Promise<number[]> {
+async function getEmbedding (text: string): Promise<number[]> {
   // Use a fast, edge-compatible embedding model
   // Or call OpenAI embeddings API
   const response = await fetch('https://api.openai.com/v1/embeddings', {
@@ -379,28 +379,28 @@ async function getEmbedding(text: string): Promise<number[]> {
   return data.data[0].embedding;
 }
 
-function cosineSimilarity(a: number[], b: number[]): number {
+function cosineSimilarity (a: number[], b: number[]): number {
   const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
-  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeA = Math.sqrt (a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt (b.reduce((sum, val) => sum + val * val, 0));
   return dotProduct / (magnitudeA * magnitudeB);
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch (request: Request, env: Env): Promise<Response> {
     const { prompt } = await request.json();
 
     // Get query embedding
-    const queryEmbedding = await getEmbedding(prompt);
+    const queryEmbedding = await getEmbedding (prompt);
 
     // Check recent cached queries (stored in KV with metadata)
-    const recentKeys = JSON.parse(await env.KV.get('recent_queries') || '[]');
+    const recentKeys = JSON.parse (await env.KV.get('recent_queries') || '[]');
     
     for (const key of recentKeys.slice(0, 20)) {
       const cached = await env.KV.get<CachedQuery>(key, 'json');
       
       if (cached) {
-        const similarity = cosineSimilarity(queryEmbedding, cached.embedding);
+        const similarity = cosineSimilarity (queryEmbedding, cached.embedding);
         
         if (similarity > 0.95) {
           console.log(\`✅ Semantic cache HIT (similarity: \${similarity.toFixed(2)})\`);
@@ -422,8 +422,8 @@ export default {
     const llmResponse = await callLLM(prompt);
 
     // Cache with embedding
-    const cacheKey = \`semantic:\${createHash('sha256').update(prompt).digest('hex')}\`;
-    await env.KV.put(cacheKey, JSON.stringify({
+    const cacheKey = \`semantic:\${createHash('sha256').update (prompt).digest('hex')}\`;
+    await env.KV.put (cacheKey, JSON.stringify({
       prompt,
       embedding: queryEmbedding,
       response: llmResponse,
@@ -431,8 +431,8 @@ export default {
     }), { expirationTtl: 3600 });
 
     // Update recent queries list
-    recentKeys.unshift(cacheKey);
-    await env.KV.put('recent_queries', JSON.stringify(recentKeys.slice(0, 100)));
+    recentKeys.unshift (cacheKey);
+    await env.KV.put('recent_queries', JSON.stringify (recentKeys.slice(0, 100)));
 
     return new Response(JSON.stringify({
       response: llmResponse,
@@ -466,15 +466,15 @@ const AZURE_OPENAI_ENDPOINTS = {
 };
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch (request: Request, env: Env): Promise<Response> {
     // Get user's location
     const country = request.headers.get('cf-ipcountry') || 'US';
     
     // Determine region
     let region = 'US';
-    if (['GB', 'FR', 'DE', 'IT', 'ES', 'NL'].includes(country)) {
+    if (['GB', 'FR', 'DE', 'IT', 'ES', 'NL'].includes (country)) {
       region = 'EU';
-    } else if (['JP', 'CN', 'KR', 'SG', 'IN'].includes(country)) {
+    } else if (['JP', 'CN', 'KR', 'SG', 'IN'].includes (country)) {
       region = 'ASIA';
     }
 
@@ -496,7 +496,7 @@ export default {
       }),
     });
 
-    return new Response(await response.text(), {
+    return new Response (await response.text(), {
       headers: {
         'Content-Type': 'application/json',
         'X-Region': region,
@@ -545,7 +545,7 @@ import { fetch } from '@vercel/edge'; // ✅ Built-in fetch
 
 // For long-running tasks, offload to background
 export default {
-  async fetch(request: Request) {
+  async fetch (request: Request) {
     // Handle quick response at edge
     const quickResponse = await generateQuickResponse();
 
@@ -555,7 +555,7 @@ export default {
       body: JSON.stringify({ task: 'expensive-processing' }),
     });
 
-    return new Response(quickResponse);
+    return new Response (quickResponse);
   },
 };
 \`\`\`
@@ -567,7 +567,7 @@ export default {
 \`\`\`typescript
 // edge-monitoring.ts
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch (request: Request, env: Env): Promise<Response> {
     const startTime = Date.now();
     const { prompt } = await request.json();
 
@@ -586,7 +586,7 @@ export default {
           timestamp: Date.now(),
         });
 
-        return new Response(cached, {
+        return new Response (cached, {
           headers: {
             'X-Cache': 'HIT',
             'X-Latency': latency.toString(),
@@ -611,7 +611,7 @@ export default {
         expirationTtl: 3600,
       });
 
-      return new Response(response, {
+      return new Response (response, {
         headers: {
           'X-Cache': 'MISS',
           'X-Latency': latency.toString(),
@@ -636,11 +636,11 @@ export default {
   },
 };
 
-async function logMetric(metric: any) {
+async function logMetric (metric: any) {
   // Send to analytics service
   await fetch('https://analytics.example.com/metrics', {
     method: 'POST',
-    body: JSON.stringify(metric),
+    body: JSON.stringify (metric),
   });
 }
 \`\`\`
@@ -669,7 +669,7 @@ async function logMetric(metric: any) {
 - Monitor cache hit rates
 - Alert on edge errors
 
-### 5. Use Edge for What It's Good At
+### 5. Use Edge for What It\'s Good At
 - Authentication
 - Rate limiting
 - Caching

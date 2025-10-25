@@ -5,7 +5,7 @@
 export const modulereviewSection = {
   id: 'module-review',
   title: 'Module Review & Next Steps',
-  content: `Congratulations on completing System Design Fundamentals! Let's review what you've learned and prepare for the next modules.
+  content: `Congratulations on completing System Design Fundamentals! Let\'s review what you've learned and prepare for the next modules.
 
 ## What You've Learned
 
@@ -115,7 +115,7 @@ Draw architecture for Netflix:
 
 ---
 
-## What's Next
+## What\'s Next
 
 ### **Module 2: Core Building Blocks**
 You'll learn about:
@@ -190,7 +190,7 @@ Topics include:
 - Learn from mistakes (yours and others')
 - Stay curious about how real systems work
 
-**Key principle:** There's no single "correct" answer. Interviews are about the journey (your thought process) more than the destination (the final architecture).
+**Key principle:** There\'s no single "correct" answer. Interviews are about the journey (your thought process) more than the destination (the final architecture).
 
 **Keep practicing, stay systematic, and remember: even senior engineers are continuously learning system design!**
 

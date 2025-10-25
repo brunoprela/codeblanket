@@ -21,7 +21,7 @@ export const regressiondiagnosticsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What does Cook's Distance measure?",
+    question: "What does Cook\'s Distance measure?",
     options: [
       'Correlation strength',
       'Model fit quality',
@@ -30,7 +30,7 @@ export const regressiondiagnosticsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Cook's Distance measures how much regression coefficients would change if an observation were removed. High Cook's D indicates influential points that strongly affect the model.",
+      "Cook\'s Distance measures how much regression coefficients would change if an observation were removed. High Cook's D indicates influential points that strongly affect the model.",
   },
   {
     id: 'mc3',

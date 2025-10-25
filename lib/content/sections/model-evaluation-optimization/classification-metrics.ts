@@ -11,7 +11,7 @@ Classification metrics evaluate how well a model predicts categorical outcomes. 
 
 ## The Confusion Matrix
 
-The confusion matrix is the foundation of all classification metrics. It's a table showing the counts of correct and incorrect predictions broken down by each class.
+The confusion matrix is the foundation of all classification metrics. It\'s a table showing the counts of correct and incorrect predictions broken down by each class.
 
 ### Binary Classification Confusion Matrix
 
@@ -34,7 +34,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train model
-model = LogisticRegression(max_iter=10000)
+model = LogisticRegression (max_iter=10000)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
@@ -42,7 +42,7 @@ print("Classification Metrics Deep Dive")
 print("="*70)
 
 # Generate confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 
 print("\\nConfusion Matrix:")
 print(cm)
@@ -65,29 +65,29 @@ print(f"Correct predictions: {tn + tp} ({(tn + tp)/(tn + fp + fn + tp)*100:.1f}%
 print(f"Incorrect predictions: {fp + fn} ({(fp + fn)/(tn + fp + fn + tp)*100:.1f}%)")
 
 # Visualize confusion matrix
-def plot_confusion_matrix(cm, labels=['Negative', 'Positive'], title='Confusion Matrix'):
+def plot_confusion_matrix (cm, labels=['Negative', 'Positive'], title='Confusion Matrix'):
     """Plot confusion matrix with annotations."""
-    plt.figure(figsize=(8, 6))
+    plt.figure (figsize=(8, 6))
     
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+    sns.heatmap (cm, annot=True, fmt='d', cmap='Blues', 
                 xticklabels=labels, yticklabels=labels,
                 cbar_kws={'label': 'Count'})
     
     plt.ylabel('Actual', fontsize=12)
     plt.xlabel('Predicted', fontsize=12)
-    plt.title(title, fontsize=14, fontweight='bold')
+    plt.title (title, fontsize=14, fontweight='bold')
     
     # Add percentage annotations
-    for i in range(len(labels)):
-        for j in range(len(labels)):
+    for i in range (len (labels)):
+        for j in range (len (labels)):
             percentage = cm[i, j] / cm.sum() * 100
-            plt.text(j + 0.5, i + 0.7, f'({percentage:.1f}%)', 
+            plt.text (j + 0.5, i + 0.7, f'({percentage:.1f}%)', 
                     ha='center', va='center', fontsize=9, color='gray')
     
     plt.tight_layout()
     return plt.gcf()
 
-plot_confusion_matrix(cm, labels=['Malignant', 'Benign'])
+plot_confusion_matrix (cm, labels=['Malignant', 'Benign'])
 plt.savefig('confusion_matrix_basic.png', dpi=150, bbox_inches='tight')
 print("\\nConfusion matrix plot saved to 'confusion_matrix_basic.png'")
 \`\`\`
@@ -117,8 +117,8 @@ X_imb, y_imb = make_classification(
 )
 
 print(f"\\nClass distribution:")
-print(f"Class 0: {(y_imb == 0).sum()} samples ({(y_imb == 0).sum()/len(y_imb)*100:.1f}%)")
-print(f"Class 1: {(y_imb == 1).sum()} samples ({(y_imb == 1).sum()/len(y_imb)*100:.1f}%)")
+print(f"Class 0: {(y_imb == 0).sum()} samples ({(y_imb == 0).sum()/len (y_imb)*100:.1f}%)")
+print(f"Class 1: {(y_imb == 1).sum()} samples ({(y_imb == 1).sum()/len (y_imb)*100:.1f}%)")
 
 X_train_imb, X_test_imb, y_train_imb, y_test_imb = train_test_split(
     X_imb, y_imb, test_size=0.3, random_state=42, stratify=y_imb
@@ -126,24 +126,24 @@ X_train_imb, X_test_imb, y_train_imb, y_test_imb = train_test_split(
 
 # Dummy classifier that always predicts majority class
 class AlwaysMajorityClassifier:
-    def fit(self, X, y):
-        self.majority_class_ = np.argmax(np.bincount(y))
+    def fit (self, X, y):
+        self.majority_class_ = np.argmax (np.bincount (y))
         return self
     
-    def predict(self, X):
-        return np.full(len(X), self.majority_class_)
+    def predict (self, X):
+        return np.full (len(X), self.majority_class_)
 
 # Compare real model vs dummy
 dummy = AlwaysMajorityClassifier()
 dummy.fit(X_train_imb, y_train_imb)
 y_pred_dummy = dummy.predict(X_test_imb)
 
-real_model = RandomForestClassifier(n_estimators=100, random_state=42)
+real_model = RandomForestClassifier (n_estimators=100, random_state=42)
 real_model.fit(X_train_imb, y_train_imb)
 y_pred_real = real_model.predict(X_test_imb)
 
-acc_dummy = accuracy_score(y_test_imb, y_pred_dummy)
-acc_real = accuracy_score(y_test_imb, y_pred_real)
+acc_dummy = accuracy_score (y_test_imb, y_pred_dummy)
+acc_real = accuracy_score (y_test_imb, y_pred_real)
 
 print(f"\\nAccuracy comparison:")
 print(f"Dummy (always predict majority): {acc_dummy:.4f} ({acc_dummy*100:.1f}%)")
@@ -153,8 +153,8 @@ print(f"\\n⚠️  Dummy classifier achieves {acc_dummy*100:.1f}% accuracy by do
 print("This is why accuracy alone is insufficient for imbalanced data.")
 
 # Show confusion matrices
-cm_dummy = confusion_matrix(y_test_imb, y_pred_dummy)
-cm_real = confusion_matrix(y_test_imb, y_pred_real)
+cm_dummy = confusion_matrix (y_test_imb, y_pred_dummy)
+cm_real = confusion_matrix (y_test_imb, y_pred_real)
 
 print(f"\\nDummy classifier confusion matrix:")
 print(cm_dummy)
@@ -185,9 +185,9 @@ print("Precision and Recall")
 print("="*70)
 
 # Calculate for breast cancer model
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score (y_test, y_pred)
+recall = recall_score (y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 
 print(f"\\nMetrics for breast cancer model:")
 print(f"Accuracy:  {accuracy:.4f}")
@@ -195,7 +195,7 @@ print(f"Precision: {precision:.4f}")
 print(f"Recall:    {recall:.4f}")
 
 # Manual calculation
-tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+tn, fp, fn, tp = confusion_matrix (y_test, y_pred).ravel()
 
 precision_manual = tp / (tp + fp)
 recall_manual = tp / (tp + fn)
@@ -221,10 +221,10 @@ print(f"\\n{'Threshold':<12s} {'Precision':<12s} {'Recall':<12s} {'F1':<12s} {'P
 print("-"*70)
 
 for thresh in thresholds:
-    y_pred_thresh = (y_prob >= thresh).astype(int)
+    y_pred_thresh = (y_prob >= thresh).astype (int)
     
-    prec = precision_score(y_test, y_pred_thresh, zero_division=0)
-    rec = recall_score(y_test, y_pred_thresh, zero_division=0)
+    prec = precision_score (y_test, y_pred_thresh, zero_division=0)
+    rec = recall_score (y_test, y_pred_thresh, zero_division=0)
     f1 = 2 * (prec * rec) / (prec + rec) if (prec + rec) > 0 else 0
     n_positive = y_pred_thresh.sum()
     
@@ -291,7 +291,7 @@ print("\\n" + "="*70)
 print("F1 Score")
 print("="*70)
 
-f1 = f1_score(y_test, y_pred)
+f1 = f1_score (y_test, y_pred)
 
 print(f"Precision: {precision:.4f}")
 print(f"Recall:    {recall:.4f}")
@@ -352,7 +352,7 @@ print(f"\\n{'Beta':<8s} {'F-Beta':<12s} {'Meaning':<40s}")
 print("-"*70)
 
 for beta in betas:
-    fb = fbeta_score(y_test, y_pred, beta=beta)
+    fb = fbeta_score (y_test, y_pred, beta=beta)
     
     if beta < 1:
         meaning = "Weights precision higher than recall"
@@ -376,10 +376,10 @@ print("Specificity and Sensitivity")
 print("="*70)
 
 # Sensitivity = Recall = TPR
-sensitivity = recall_score(y_test, y_pred)
+sensitivity = recall_score (y_test, y_pred)
 
 # Specificity = TNR (True Negative Rate)
-tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+tn, fp, fn, tp = confusion_matrix (y_test, y_pred).ravel()
 specificity = tn / (tn + fp)
 
 print(f"Sensitivity (Recall, TPR): {sensitivity:.4f}")
@@ -419,35 +419,35 @@ print("="*70)
 y_prob = model.predict_proba(X_test)[:, 1]
 
 # Calculate ROC curve
-fpr_list, tpr_list, thresholds = roc_curve(y_test, y_prob)
-roc_auc = roc_auc_score(y_test, y_prob)
+fpr_list, tpr_list, thresholds = roc_curve (y_test, y_prob)
+roc_auc = roc_auc_score (y_test, y_prob)
 
 print(f"ROC AUC Score: {roc_auc:.4f}")
 
 # Plot ROC curve
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 
-plt.plot(fpr_list, tpr_list, linewidth=2, label=f'Model (AUC = {roc_auc:.4f})')
+plt.plot (fpr_list, tpr_list, linewidth=2, label=f'Model (AUC = {roc_auc:.4f})')
 plt.plot([0, 1], [0, 1], 'k--', linewidth=2, label='Random Classifier (AUC = 0.50)')
 
 # Fill area under curve
-plt.fill_between(fpr_list, tpr_list, alpha=0.3)
+plt.fill_between (fpr_list, tpr_list, alpha=0.3)
 
 plt.xlim([-0.05, 1.05])
 plt.ylim([-0.05, 1.05])
 plt.xlabel('False Positive Rate', fontsize=12)
 plt.ylabel('True Positive Rate (Recall)', fontsize=12)
 plt.title('ROC Curve', fontsize=14, fontweight='bold')
-plt.legend(loc='lower right', fontsize=11)
-plt.grid(alpha=0.3)
+plt.legend (loc='lower right', fontsize=11)
+plt.grid (alpha=0.3)
 
 # Add some threshold annotations
-for i in [len(thresholds)//4, len(thresholds)//2, 3*len(thresholds)//4]:
-    plt.plot(fpr_list[i], tpr_list[i], 'ro', markersize=8)
-    plt.annotate(f'thresh={thresholds[i]:.2f}', 
+for i in [len (thresholds)//4, len (thresholds)//2, 3*len (thresholds)//4]:
+    plt.plot (fpr_list[i], tpr_list[i], 'ro', markersize=8)
+    plt.annotate (f'thresh={thresholds[i]:.2f}', 
                 xy=(fpr_list[i], tpr_list[i]),
                 xytext=(10, -10), textcoords='offset points',
-                bbox=dict(boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.7),
+                bbox=dict (boxstyle='round,pad=0.3', facecolor='yellow', alpha=0.7),
                 fontsize=9)
 
 plt.tight_layout()
@@ -484,29 +484,29 @@ print("Comparing Multiple Models with ROC")
 print("="*70)
 
 models = {
-    'Logistic Regression': LogisticRegression(max_iter=10000),
-    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
+    'Logistic Regression': LogisticRegression (max_iter=10000),
+    'Random Forest': RandomForestClassifier (n_estimators=100, random_state=42),
     'Naive Bayes': GaussianNB(),
     'SVM': SVC(probability=True, random_state=42),
-    'Decision Tree': DecisionTreeClassifier(max_depth=5, random_state=42)
+    'Decision Tree': DecisionTreeClassifier (max_depth=5, random_state=42)
 }
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 
 results = []
 
 for name, clf in models.items():
     clf.fit(X_train, y_train)
     
-    if hasattr(clf, 'predict_proba'):
+    if hasattr (clf, 'predict_proba'):
         y_prob = clf.predict_proba(X_test)[:, 1]
     else:
         y_prob = clf.decision_function(X_test)
     
-    fpr, tpr, _ = roc_curve(y_test, y_prob)
-    auc = roc_auc_score(y_test, y_prob)
+    fpr, tpr, _ = roc_curve (y_test, y_prob)
+    auc = roc_auc_score (y_test, y_prob)
     
-    plt.plot(fpr, tpr, linewidth=2, label=f'{name} (AUC={auc:.3f})')
+    plt.plot (fpr, tpr, linewidth=2, label=f'{name} (AUC={auc:.3f})')
     
     results.append({'Model': name, 'AUC': auc})
 
@@ -516,17 +516,17 @@ plt.ylim([-0.05, 1.05])
 plt.xlabel('False Positive Rate', fontsize=12)
 plt.ylabel('True Positive Rate', fontsize=12)
 plt.title('ROC Curves - Model Comparison', fontsize=14, fontweight='bold')
-plt.legend(loc='lower right', fontsize=10)
-plt.grid(alpha=0.3)
+plt.legend (loc='lower right', fontsize=10)
+plt.grid (alpha=0.3)
 plt.tight_layout()
 plt.savefig('roc_comparison.png', dpi=150, bbox_inches='tight')
 print("\\nROC comparison saved to 'roc_comparison.png'")
 
 # Print ranking
 import pandas as pd
-df_results = pd.DataFrame(results).sort_values('AUC', ascending=False)
+df_results = pd.DataFrame (results).sort_values('AUC', ascending=False)
 print("\\nModel Ranking by AUC:")
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 \`\`\`
 
 ## Precision-Recall Curve
@@ -542,8 +542,8 @@ print("="*70)
 
 # Calculate PR curve
 y_prob = model.predict_proba(X_test)[:, 1]
-precision_list, recall_list, thresholds_pr = precision_recall_curve(y_test, y_prob)
-avg_precision = average_precision_score(y_test, y_prob)
+precision_list, recall_list, thresholds_pr = precision_recall_curve (y_test, y_prob)
+avg_precision = average_precision_score (y_test, y_prob)
 
 print(f"Average Precision Score: {avg_precision:.4f}")
 
@@ -551,37 +551,37 @@ print(f"Average Precision Score: {avg_precision:.4f}")
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
 # PR Curve
-ax1.plot(recall_list, precision_list, linewidth=2, 
+ax1.plot (recall_list, precision_list, linewidth=2, 
          label=f'Model (AP={avg_precision:.3f})')
 
 # Baseline (random classifier)
-baseline = (y_test == 1).sum() / len(y_test)
+baseline = (y_test == 1).sum() / len (y_test)
 ax1.plot([0, 1], [baseline, baseline], 'k--', linewidth=2,
          label=f'Random (AP={baseline:.3f})')
 
-ax1.fill_between(recall_list, precision_list, alpha=0.3)
+ax1.fill_between (recall_list, precision_list, alpha=0.3)
 ax1.set_xlim([-0.05, 1.05])
 ax1.set_ylim([-0.05, 1.05])
 ax1.set_xlabel('Recall', fontsize=12)
 ax1.set_ylabel('Precision', fontsize=12)
 ax1.set_title('Precision-Recall Curve', fontsize=14, fontweight='bold')
-ax1.legend(loc='best', fontsize=11)
-ax1.grid(alpha=0.3)
+ax1.legend (loc='best', fontsize=11)
+ax1.grid (alpha=0.3)
 
 # Side by side comparison with ROC
-fpr_list, tpr_list, _ = roc_curve(y_test, y_prob)
-roc_auc = roc_auc_score(y_test, y_prob)
+fpr_list, tpr_list, _ = roc_curve (y_test, y_prob)
+roc_auc = roc_auc_score (y_test, y_prob)
 
-ax2.plot(fpr_list, tpr_list, linewidth=2, label=f'ROC (AUC={roc_auc:.3f})')
+ax2.plot (fpr_list, tpr_list, linewidth=2, label=f'ROC (AUC={roc_auc:.3f})')
 ax2.plot([0, 1], [0, 1], 'k--', linewidth=2, label='Random')
-ax2.fill_between(fpr_list, tpr_list, alpha=0.3)
+ax2.fill_between (fpr_list, tpr_list, alpha=0.3)
 ax2.set_xlim([-0.05, 1.05])
 ax2.set_ylim([-0.05, 1.05])
 ax2.set_xlabel('False Positive Rate', fontsize=12)
 ax2.set_ylabel('True Positive Rate', fontsize=12)
 ax2.set_title('ROC Curve (for comparison)', fontsize=14, fontweight='bold')
-ax2.legend(loc='lower right', fontsize=11)
-ax2.grid(alpha=0.3)
+ax2.legend (loc='lower right', fontsize=11)
+ax2.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('pr_vs_roc.png', dpi=150, bbox_inches='tight')
@@ -604,15 +604,15 @@ print("="*70)
 
 # Calculate log loss
 y_prob = model.predict_proba(X_test)
-logloss = log_loss(y_test, y_prob)
+logloss = log_loss (y_test, y_prob)
 
 print(f"Log Loss: {logloss:.4f}")
 
 # Manual calculation for binary classification
 epsilon = 1e-15  # To avoid log(0)
-y_prob_clipped = np.clip(y_prob[:, 1], epsilon, 1 - epsilon)
+y_prob_clipped = np.clip (y_prob[:, 1], epsilon, 1 - epsilon)
 logloss_manual = -np.mean(
-    y_test * np.log(y_prob_clipped) + (1 - y_test) * np.log(1 - y_prob_clipped)
+    y_test * np.log (y_prob_clipped) + (1 - y_test) * np.log(1 - y_prob_clipped)
 )
 
 print(f"Manual calculation: {logloss_manual:.4f} ✓")
@@ -641,7 +641,7 @@ for case in test_cases:
     pred_prob = case['pred_prob']
     
     # Calculate log loss for single prediction
-    loss = -np.log(pred_prob if true_label == 1 else 1 - pred_prob)
+    loss = -np.log (pred_prob if true_label == 1 else 1 - pred_prob)
     
     print(f"{true_label:<6d} {pred_prob:<12.1f} {loss:<12.4f} {case['desc']:<25s}")
 
@@ -657,12 +657,12 @@ print("\\n" + "="*70)
 print("Matthews Correlation Coefficient (MCC)")
 print("="*70)
 
-mcc = matthews_corrcoef(y_test, y_pred)
+mcc = matthews_corrcoef (y_test, y_pred)
 
 print(f"MCC: {mcc:.4f}")
 
 # Manual calculation
-tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+tn, fp, fn, tp = confusion_matrix (y_test, y_pred).ravel()
 
 numerator = (tp * tn) - (fp * fn)
 denominator = np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
@@ -689,16 +689,16 @@ print("\\n" + "="*70)
 print("MCC vs Other Metrics on Imbalanced Data:")
 print("="*70)
 
-real_model_imb = RandomForestClassifier(n_estimators=100, random_state=42)
+real_model_imb = RandomForestClassifier (n_estimators=100, random_state=42)
 real_model_imb.fit(X_train_imb, y_train_imb)
 y_pred_imb = real_model_imb.predict(X_test_imb)
 
 metrics_imb = {
-    'Accuracy': accuracy_score(y_test_imb, y_pred_imb),
-    'Precision': precision_score(y_test_imb, y_pred_imb, zero_division=0),
-    'Recall': recall_score(y_test_imb, y_pred_imb, zero_division=0),
-    'F1': f1_score(y_test_imb, y_pred_imb, zero_division=0),
-    'MCC': matthews_corrcoef(y_test_imb, y_pred_imb)
+    'Accuracy': accuracy_score (y_test_imb, y_pred_imb),
+    'Precision': precision_score (y_test_imb, y_pred_imb, zero_division=0),
+    'Recall': recall_score (y_test_imb, y_pred_imb, zero_division=0),
+    'F1': f1_score (y_test_imb, y_pred_imb, zero_division=0),
+    'MCC': matthews_corrcoef (y_test_imb, y_pred_imb)
 }
 
 print(f"\\nClass distribution: {(y_test_imb == 0).sum()} neg, {(y_test_imb == 1).sum()} pos")
@@ -708,7 +708,7 @@ for metric, value in metrics_imb.items():
 print("\\n✓ MCC provides balanced view even with class imbalance")
 \`\`\`
 
-## Cohen's Kappa
+## Cohen\'s Kappa
 
 \`\`\`python
 from sklearn.metrics import cohen_kappa_score
@@ -717,7 +717,7 @@ print("\\n" + "="*70)
 print("Cohen's Kappa")
 print("="*70)
 
-kappa = cohen_kappa_score(y_test, y_pred)
+kappa = cohen_kappa_score (y_test, y_pred)
 
 print(f"Cohen's Kappa: {kappa:.4f}")
 
@@ -746,43 +746,43 @@ print("\\n" + "="*70)
 print("Comprehensive Classification Report")
 print("="*70)
 
-# Sklearn's classification report
+# Sklearn\'s classification report
 print("\\nScikit-learn Classification Report:")
-print(classification_report(y_test, y_pred, 
+print(classification_report (y_test, y_pred, 
                            target_names=['Malignant', 'Benign']))
 
 # Custom comprehensive report
-def comprehensive_classification_report(y_true, y_pred, y_prob=None):
+def comprehensive_classification_report (y_true, y_pred, y_prob=None):
     """Generate detailed classification metrics report."""
     
     # Confusion matrix components
-    cm = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix (y_true, y_pred)
     tn, fp, fn, tp = cm.ravel()
     
     # Calculate all metrics
     metrics = {
-        'Accuracy': accuracy_score(y_true, y_pred),
-        'Precision': precision_score(y_true, y_pred),
-        'Recall': recall_score(y_true, y_pred),
-        'F1 Score': f1_score(y_true, y_pred),
+        'Accuracy': accuracy_score (y_true, y_pred),
+        'Precision': precision_score (y_true, y_pred),
+        'Recall': recall_score (y_true, y_pred),
+        'F1 Score': f1_score (y_true, y_pred),
         'Specificity': tn / (tn + fp),
         'NPV': tn / (tn + fn) if (tn + fn) > 0 else 0,
         'FPR': fp / (fp + tn),
         'FNR': fn / (fn + tp),
-        'MCC': matthews_corrcoef(y_true, y_pred),
-        'Cohen Kappa': cohen_kappa_score(y_true, y_pred)
+        'MCC': matthews_corrcoef (y_true, y_pred),
+        'Cohen Kappa': cohen_kappa_score (y_true, y_pred)
     }
     
     if y_prob is not None:
-        metrics['ROC AUC'] = roc_auc_score(y_true, y_prob)
-        metrics['PR AUC'] = average_precision_score(y_true, y_prob)
-        metrics['Log Loss'] = log_loss(y_true, 
+        metrics['ROC AUC'] = roc_auc_score (y_true, y_prob)
+        metrics['PR AUC'] = average_precision_score (y_true, y_prob)
+        metrics['Log Loss'] = log_loss (y_true, 
                                       np.column_stack([1-y_prob, y_prob]))
     
     return metrics, cm
 
 y_prob = model.predict_proba(X_test)[:, 1]
-metrics, cm = comprehensive_classification_report(y_test, y_pred, y_prob)
+metrics, cm = comprehensive_classification_report (y_test, y_pred, y_prob)
 
 print("\\nDetailed Metrics:")
 print("-"*70)
@@ -797,7 +797,7 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 
 # 1. Confusion Matrix
 ax1 = axes[0, 0]
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax1,
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues', ax=ax1,
            xticklabels=['Negative', 'Positive'],
            yticklabels=['Negative', 'Positive'])
 ax1.set_ylabel('Actual')
@@ -808,42 +808,42 @@ ax1.set_title('Confusion Matrix', fontweight='bold')
 ax2 = axes[0, 1]
 metric_names = ['Accuracy', 'Precision', 'Recall', 'F1 Score', 'Specificity']
 metric_values = [metrics[m] for m in metric_names]
-bars = ax2.barh(metric_names, metric_values)
+bars = ax2.barh (metric_names, metric_values)
 ax2.set_xlim([0, 1])
 ax2.set_xlabel('Score')
 ax2.set_title('Key Metrics', fontweight='bold')
-ax2.grid(axis='x', alpha=0.3)
+ax2.grid (axis='x', alpha=0.3)
 
 # Color bars
 colors = ['green' if v > 0.8 else 'orange' if v > 0.6 else 'red' 
          for v in metric_values]
-for bar, color in zip(bars, colors):
-    bar.set_color(color)
+for bar, color in zip (bars, colors):
+    bar.set_color (color)
     bar.set_alpha(0.7)
 
 # 3. ROC Curve
 ax3 = axes[1, 0]
-fpr, tpr, _ = roc_curve(y_test, y_prob)
-ax3.plot(fpr, tpr, linewidth=2, label=f"AUC = {metrics['ROC AUC']:.3f}")
+fpr, tpr, _ = roc_curve (y_test, y_prob)
+ax3.plot (fpr, tpr, linewidth=2, label=f"AUC = {metrics['ROC AUC']:.3f}")
 ax3.plot([0, 1], [0, 1], 'k--', linewidth=1)
-ax3.fill_between(fpr, tpr, alpha=0.3)
+ax3.fill_between (fpr, tpr, alpha=0.3)
 ax3.set_xlabel('False Positive Rate')
 ax3.set_ylabel('True Positive Rate')
 ax3.set_title('ROC Curve', fontweight='bold')
 ax3.legend()
-ax3.grid(alpha=0.3)
+ax3.grid (alpha=0.3)
 
 # 4. Precision-Recall Curve
 ax4 = axes[1, 1]
-precision_list, recall_list, _ = precision_recall_curve(y_test, y_prob)
-ax4.plot(recall_list, precision_list, linewidth=2, 
+precision_list, recall_list, _ = precision_recall_curve (y_test, y_prob)
+ax4.plot (recall_list, precision_list, linewidth=2, 
         label=f"AP = {metrics['PR AUC']:.3f}")
-ax4.fill_between(recall_list, precision_list, alpha=0.3)
+ax4.fill_between (recall_list, precision_list, alpha=0.3)
 ax4.set_xlabel('Recall')
 ax4.set_ylabel('Precision')
 ax4.set_title('Precision-Recall Curve', fontweight='bold')
 ax4.legend()
-ax4.grid(alpha=0.3)
+ax4.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('classification_summary.png', dpi=150, bbox_inches='tight')

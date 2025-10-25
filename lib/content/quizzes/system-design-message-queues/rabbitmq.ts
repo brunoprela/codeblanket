@@ -8,7 +8,7 @@ export const rabbitmqQuiz: QuizQuestion[] = [
   {
     id: 'rabbitmq-dq-1',
     question:
-      'Explain RabbitMQ exchange types (direct, topic, fanout, headers) with real-world examples. Design a logging system where different services send logs, and consumers subscribe to specific log levels and services. Which exchange type(s) would you use and why?',
+      'Explain RabbitMQ exchange types (direct, topic, fanout, headers) with real-world examples. Design a logging system where different services send logs, and consumers subscribe to specific log levels and services. Which exchange type (s) would you use and why?',
     hint: 'Consider routing flexibility, filtering capabilities, and performance implications of each exchange type.',
     sampleAnswer: `RabbitMQ exchanges route messages to queues based on routing rules. Each exchange type offers different routing capabilities.
 
@@ -44,7 +44,7 @@ export const rabbitmqQuiz: QuizQuestion[] = [
 
 \`\`\`python
 # Exchange
-channel.exchange_declare(exchange='logs', exchange_type='topic')
+channel.exchange_declare (exchange='logs', exchange_type='topic')
 
 # Producers (services send logs)
 # api-service
@@ -63,19 +63,19 @@ channel.basic_publish(
 
 # Consumers (subscribe to patterns)
 # Consumer 1: All ERROR logs
-channel.queue_bind(exchange='logs', queue='errors', routing_key='*.ERROR')
+channel.queue_bind (exchange='logs', queue='errors', routing_key='*.ERROR')
 # Receives: api.ERROR, db.ERROR, auth.ERROR
 
 # Consumer 2: All api-service logs
-channel.queue_bind(exchange='logs', queue='api_logs', routing_key='api.*')
+channel.queue_bind (exchange='logs', queue='api_logs', routing_key='api.*')
 # Receives: api.DEBUG, api.INFO, api.WARN, api.ERROR
 
 # Consumer 3: WARN and ERROR from all services
-channel.queue_bind(exchange='logs', queue='alerts', routing_key='*.WARN')
-channel.queue_bind(exchange='logs', queue='alerts', routing_key='*.ERROR')
+channel.queue_bind (exchange='logs', queue='alerts', routing_key='*.WARN')
+channel.queue_bind (exchange='logs', queue='alerts', routing_key='*.ERROR')
 
 # Consumer 4: Everything (monitoring)
-channel.queue_bind(exchange='logs', queue='monitoring', routing_key='#')
+channel.queue_bind (exchange='logs', queue='monitoring', routing_key='#')
 \`\`\`
 
 **Why Topic Exchange:**
@@ -121,10 +121,10 @@ Each queue:
 
 \`\`\`python
 # Declare fanout exchange
-channel.exchange_declare(exchange='orders', exchange_type='fanout', durable=True)
+channel.exchange_declare (exchange='orders', exchange_type='fanout', durable=True)
 
 # Declare DLX for failed messages
-channel.exchange_declare(exchange='orders-dlx', exchange_type='direct', durable=True)
+channel.exchange_declare (exchange='orders-dlx', exchange_type='direct', durable=True)
 
 # Declare queues with DLQ
 for queue_name in ['payment-queue', 'inventory-queue', 'email-queue']:
@@ -141,10 +141,10 @@ for queue_name in ['payment-queue', 'inventory-queue', 'email-queue']:
     )
     
     # Bind to exchange
-    channel.queue_bind(exchange='orders', queue=queue_name)
+    channel.queue_bind (exchange='orders', queue=queue_name)
     
     # DLQ
-    channel.queue_declare(queue=queue_name + '-dlq', durable=True)
+    channel.queue_declare (queue=queue_name + '-dlq', durable=True)
     channel.queue_bind(
         exchange='orders-dlx',
         queue=queue_name + '-dlq',
@@ -152,11 +152,11 @@ for queue_name in ['payment-queue', 'inventory-queue', 'email-queue']:
     )
 
 # Producer: Publish order
-def publish_order(order):
+def publish_order (order):
     channel.basic_publish(
         exchange='orders',
         routing_key='',  # Ignored by fanout
-        body=json.dumps(order),
+        body=json.dumps (order),
         properties=pika.BasicProperties(
             delivery_mode=2,  # Persistent
             content_type='application/json'
@@ -164,19 +164,19 @@ def publish_order(order):
     )
 
 # Consumer: Payment service
-def process_payment(ch, method, properties, body):
+def process_payment (ch, method, properties, body):
     try:
-        order = json.loads(body)
-        charge_card(order)
-        ch.basic_ack(delivery_tag=method.delivery_tag)  # Success
+        order = json.loads (body)
+        charge_card (order)
+        ch.basic_ack (delivery_tag=method.delivery_tag)  # Success
     except PaymentError as e:
-        logger.error(f"Payment failed: {e}")
-        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)  # → DLQ
+        logger.error (f"Payment failed: {e}")
+        ch.basic_nack (delivery_tag=method.delivery_tag, requeue=False)  # → DLQ
     except Exception as e:
-        logger.error(f"Transient error: {e}")
-        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)  # Retry
+        logger.error (f"Transient error: {e}")
+        ch.basic_nack (delivery_tag=method.delivery_tag, requeue=True)  # Retry
 
-channel.basic_consume(queue='payment-queue', on_message_callback=process_payment)
+channel.basic_consume (queue='payment-queue', on_message_callback=process_payment)
 \`\`\`
 
 **Reliability Features:**
@@ -230,7 +230,7 @@ channel.basic_consume(queue='payment-queue', on_message_callback=process_payment
 channel.basic_publish(
     exchange='',
     routing_key='jobs',
-    body=json.dumps(job),
+    body=json.dumps (job),
     properties=pika.BasicProperties(
         priority=job.priority,  # 0-10
         delivery_mode=2
@@ -238,10 +238,10 @@ channel.basic_publish(
 )
 
 # Consumers: Workers compete for jobs
-def process_job(ch, method, properties, body):
-    job = json.loads(body)
-    execute_job(job)
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+def process_job (ch, method, properties, body):
+    job = json.loads (body)
+    execute_job (job)
+    ch.basic_ack (delivery_tag=method.delivery_tag)
 \`\`\`
 
 **2. Real-Time Event Streaming with Replay:**
@@ -272,8 +272,8 @@ def process_job(ch, method, properties, body):
 
 \`\`\`python
 # RPC Client
-def call_rpc(request):
-    corr_id = str(uuid.uuid4())
+def call_rpc (request):
+    corr_id = str (uuid.uuid4())
     channel.basic_publish(
         exchange='',
         routing_key='rpc_queue',
@@ -287,12 +287,12 @@ def call_rpc(request):
     return response
 
 # RPC Server
-def on_request(ch, method, props, body):
-    response = process_request(body)
+def on_request (ch, method, props, body):
+    response = process_request (body)
     ch.basic_publish(
         exchange='',
         routing_key=props.reply_to,
-        properties=pika.BasicProperties(correlation_id=props.correlation_id),
+        properties=pika.BasicProperties (correlation_id=props.correlation_id),
         body=response
     )
 \`\`\`

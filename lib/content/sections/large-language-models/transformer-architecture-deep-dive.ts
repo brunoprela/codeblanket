@@ -37,7 +37,7 @@ import torch.nn as nn
 # Example: "The cat sat on the mat"
 # When processing "sat", attention might focus on "cat" (who sat?)
 
-def simple_attention(query, key, value):
+def simple_attention (query, key, value):
     """
     Simplified attention mechanism
     
@@ -50,19 +50,19 @@ def simple_attention(query, key, value):
         attention output [seq_len, d_model]
     """
     # 1. Compute attention scores: how relevant is each key to each query?
-    scores = np.matmul(query, key.T)  # [seq_len, seq_len]
+    scores = np.matmul (query, key.T)  # [seq_len, seq_len]
     # scores[i, j] = relevance of position j to position i
     
     # 2. Scale scores (prevent large values)
     d_k = query.shape[-1]
-    scores = scores / np.sqrt(d_k)
+    scores = scores / np.sqrt (d_k)
     
     # 3. Softmax: convert to probabilities
-    attention_weights = np.exp(scores) / np.exp(scores).sum(axis=-1, keepdims=True)
+    attention_weights = np.exp (scores) / np.exp (scores).sum (axis=-1, keepdims=True)
     # attention_weights[i] = probability distribution over all positions
     
     # 4. Weighted sum of values
-    output = np.matmul(attention_weights, value)
+    output = np.matmul (attention_weights, value)
     # output[i] = weighted average of all value vectors
     
     return output, attention_weights
@@ -73,14 +73,14 @@ tokens = sentence.split()
 d_model = 512
 
 # Create dummy embeddings
-embeddings = np.random.randn(len(tokens), d_model)
+embeddings = np.random.randn (len (tokens), d_model)
 
 # In self-attention: query = key = value = embeddings
-output, attention_weights = simple_attention(embeddings, embeddings, embeddings)
+output, attention_weights = simple_attention (embeddings, embeddings, embeddings)
 
 print("Attention weights shape:", attention_weights.shape)  # [6, 6]
 print("\\nAttention weights (token -> token):")
-for i, token in enumerate(tokens):
+for i, token in enumerate (tokens):
     print(f"{token}: {attention_weights[i]}")
     # Shows which tokens this token attends to
 
@@ -101,16 +101,16 @@ Complete scaled dot-product attention implementation
 import torch
 import torch.nn.functional as F
 
-class ScaledDotProductAttention(nn.Module):
+class ScaledDotProductAttention (nn.Module):
     """
-    Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) V
+    Attention(Q, K, V) = softmax(QK^T / sqrt (d_k)) V
     """
     
     def __init__(self, dropout=0.1):
         super().__init__()
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def forward(self, query, key, value, mask=None):
+    def forward (self, query, key, value, mask=None):
         """
         Args:
             query: [batch, n_heads, seq_len, d_k]
@@ -126,10 +126,10 @@ class ScaledDotProductAttention(nn.Module):
         
         # 1. Compute attention scores
         # QK^T: [batch, n_heads, seq_len, seq_len]
-        scores = torch.matmul(query, key.transpose(-2, -1))
+        scores = torch.matmul (query, key.transpose(-2, -1))
         
-        # 2. Scale by sqrt(d_k)
-        scores = scores / math.sqrt(d_k)
+        # 2. Scale by sqrt (d_k)
+        scores = scores / math.sqrt (d_k)
         
         # Why scale?
         # For large d_k, dot products grow large
@@ -138,17 +138,17 @@ class ScaledDotProductAttention(nn.Module):
         
         # 3. Apply mask (if provided)
         if mask is not None:
-            scores = scores.masked_fill(mask == 0, -1e9)
+            scores = scores.masked_fill (mask == 0, -1e9)
             # Masked positions get -inf → softmax = 0
         
         # 4. Softmax to get attention weights
-        attention_weights = F.softmax(scores, dim=-1)
+        attention_weights = F.softmax (scores, dim=-1)
         
         # 5. Apply dropout
-        attention_weights = self.dropout(attention_weights)
+        attention_weights = self.dropout (attention_weights)
         
         # 6. Weighted sum of values
-        output = torch.matmul(attention_weights, value)
+        output = torch.matmul (attention_weights, value)
         
         return output, attention_weights
 
@@ -160,11 +160,11 @@ d_k = 64
 
 attention = ScaledDotProductAttention()
 
-query = torch.randn(batch_size, n_heads, seq_len, d_k)
-key = torch.randn(batch_size, n_heads, seq_len, d_k)
-value = torch.randn(batch_size, n_heads, seq_len, d_k)
+query = torch.randn (batch_size, n_heads, seq_len, d_k)
+key = torch.randn (batch_size, n_heads, seq_len, d_k)
+value = torch.randn (batch_size, n_heads, seq_len, d_k)
 
-output, weights = attention(query, key, value)
+output, weights = attention (query, key, value)
 
 print(f"Output shape: {output.shape}")  # [32, 8, 50, 64]
 print(f"Attention weights: {weights.shape}")  # [32, 8, 50, 50]
@@ -181,7 +181,7 @@ print(f"Attention weights: {weights.shape}")  # [32, 8, 50, 50]
 Multi-head attention: Multiple attention mechanisms in parallel
 """
 
-class MultiHeadAttention(nn.Module):
+class MultiHeadAttention (nn.Module):
     """
     Multi-head attention allows model to attend to different aspects
     
@@ -203,17 +203,17 @@ class MultiHeadAttention(nn.Module):
         self.d_k = d_model // n_heads  # Dimension per head
         
         # Linear projections for Q, K, V
-        self.W_q = nn.Linear(d_model, d_model)
-        self.W_k = nn.Linear(d_model, d_model)
-        self.W_v = nn.Linear(d_model, d_model)
+        self.W_q = nn.Linear (d_model, d_model)
+        self.W_k = nn.Linear (d_model, d_model)
+        self.W_v = nn.Linear (d_model, d_model)
         
         # Output projection
-        self.W_o = nn.Linear(d_model, d_model)
+        self.W_o = nn.Linear (d_model, d_model)
         
-        self.attention = ScaledDotProductAttention(dropout)
-        self.dropout = nn.Dropout(dropout)
+        self.attention = ScaledDotProductAttention (dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def split_heads(self, x):
+    def split_heads (self, x):
         """
         Split last dimension into (n_heads, d_k)
         
@@ -221,9 +221,9 @@ class MultiHeadAttention(nn.Module):
         Output: [batch, n_heads, seq_len, d_k]
         """
         batch_size, seq_len, d_model = x.size()
-        return x.view(batch_size, seq_len, self.n_heads, self.d_k).transpose(1, 2)
+        return x.view (batch_size, seq_len, self.n_heads, self.d_k).transpose(1, 2)
     
-    def combine_heads(self, x):
+    def combine_heads (self, x):
         """
         Combine heads back to d_model
         
@@ -231,9 +231,9 @@ class MultiHeadAttention(nn.Module):
         Output: [batch, seq_len, d_model]
         """
         batch_size, n_heads, seq_len, d_k = x.size()
-        return x.transpose(1, 2).contiguous().view(batch_size, seq_len, self.d_model)
+        return x.transpose(1, 2).contiguous().view (batch_size, seq_len, self.d_model)
     
-    def forward(self, query, key, value, mask=None):
+    def forward (self, query, key, value, mask=None):
         """
         Args:
             query: [batch, seq_len, d_model]
@@ -248,9 +248,9 @@ class MultiHeadAttention(nn.Module):
         batch_size = query.size(0)
         
         # 1. Linear projections
-        Q = self.W_q(query)  # [batch, seq_len, d_model]
-        K = self.W_k(key)
-        V = self.W_v(value)
+        Q = self.W_q (query)  # [batch, seq_len, d_model]
+        K = self.W_k (key)
+        V = self.W_v (value)
         
         # 2. Split into multiple heads
         Q = self.split_heads(Q)  # [batch, n_heads, seq_len, d_k]
@@ -265,11 +265,11 @@ class MultiHeadAttention(nn.Module):
         # attn_output: [batch, n_heads, seq_len, d_k]
         
         # 4. Combine heads
-        output = self.combine_heads(attn_output)  # [batch, seq_len, d_model]
+        output = self.combine_heads (attn_output)  # [batch, seq_len, d_model]
         
         # 5. Final linear projection
-        output = self.W_o(output)
-        output = self.dropout(output)
+        output = self.W_o (output)
+        output = self.dropout (output)
         
         return output, attn_weights
 
@@ -279,10 +279,10 @@ n_heads = 8
 batch_size = 32
 seq_len = 50
 
-mha = MultiHeadAttention(d_model, n_heads)
+mha = MultiHeadAttention (d_model, n_heads)
 
-x = torch.randn(batch_size, seq_len, d_model)
-output, weights = mha(x, x, x)
+x = torch.randn (batch_size, seq_len, d_model)
+output, weights = mha (x, x, x)
 
 print(f"Input: {x.shape}")  # [32, 50, 512]
 print(f"Output: {output.shape}")  # [32, 50, 512]
@@ -294,8 +294,8 @@ import matplotlib.pyplot as plt
 fig, axes = plt.subplots(2, 4, figsize=(16, 8))
 for head in range(8):
     ax = axes[head // 4, head % 4]
-    ax.imshow(weights[0, head].detach().numpy(), cmap='viridis')
-    ax.set_title(f'Head {head + 1}')
+    ax.imshow (weights[0, head].detach().numpy(), cmap='viridis')
+    ax.set_title (f'Head {head + 1}')
     ax.set_xlabel('Key')
     ax.set_ylabel('Query')
 plt.tight_layout()
@@ -319,22 +319,22 @@ Positional encodings: Teaching transformers about token order
 # "cat sat mat" and "mat sat cat" produce same output!
 # Need to inject position information
 
-class PositionalEncoding(nn.Module):
+class PositionalEncoding (nn.Module):
     """
     Add position information using sine/cosine functions
     
-    PE(pos, 2i) = sin(pos / 10000^(2i/d_model))
-    PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+    PE(pos, 2i) = sin (pos / 10000^(2i/d_model))
+    PE(pos, 2i+1) = cos (pos / 10000^(2i/d_model))
     
     where pos = position, i = dimension
     """
     
     def __init__(self, d_model, max_seq_len=5000, dropout=0.1):
         super().__init__()
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
         
         # Create positional encoding matrix
-        pe = torch.zeros(max_seq_len, d_model)
+        pe = torch.zeros (max_seq_len, d_model)
         position = torch.arange(0, max_seq_len, dtype=torch.float).unsqueeze(1)
         
         # Compute div_term
@@ -343,9 +343,9 @@ class PositionalEncoding(nn.Module):
         )
         
         # Apply sin to even dimensions
-        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 0::2] = torch.sin (position * div_term)
         # Apply cos to odd dimensions
-        pe[:, 1::2] = torch.cos(position * div_term)
+        pe[:, 1::2] = torch.cos (position * div_term)
         
         # Add batch dimension
         pe = pe.unsqueeze(0)  # [1, max_seq_len, d_model]
@@ -353,7 +353,7 @@ class PositionalEncoding(nn.Module):
         # Register as buffer (not a parameter, but saved with model)
         self.register_buffer('pe', pe)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Add positional encoding to input
         
@@ -365,7 +365,7 @@ class PositionalEncoding(nn.Module):
         """
         seq_len = x.size(1)
         x = x + self.pe[:, :seq_len, :]
-        return self.dropout(x)
+        return self.dropout (x)
 
 # Visualize positional encodings
 import matplotlib.pyplot as plt
@@ -373,12 +373,12 @@ import matplotlib.pyplot as plt
 d_model = 512
 max_seq_len = 100
 
-pos_encoding = PositionalEncoding(d_model, max_seq_len)
+pos_encoding = PositionalEncoding (d_model, max_seq_len)
 pe = pos_encoding.pe[0].numpy()  # [max_seq_len, d_model]
 
 # Plot
-plt.figure(figsize=(15, 5))
-plt.imshow(pe.T, aspect='auto', cmap='RdBu')
+plt.figure (figsize=(15, 5))
+plt.imshow (pe.T, aspect='auto', cmap='RdBu')
 plt.xlabel('Position')
 plt.ylabel('Dimension')
 plt.title('Positional Encoding Pattern')
@@ -391,19 +391,19 @@ plt.show()
 # 3. Generalizes to longer sequences than seen in training
 
 # Alternative: Learned positional embeddings
-class LearnedPositionalEmbedding(nn.Module):
+class LearnedPositionalEmbedding (nn.Module):
     """
     Learn position embeddings (used in BERT, GPT)
     """
     
     def __init__(self, max_seq_len, d_model):
         super().__init__()
-        self.embedding = nn.Embedding(max_seq_len, d_model)
+        self.embedding = nn.Embedding (max_seq_len, d_model)
     
-    def forward(self, x):
+    def forward (self, x):
         batch_size, seq_len, d_model = x.size()
-        positions = torch.arange(seq_len, device=x.device).unsqueeze(0).expand(batch_size, seq_len)
-        return x + self.embedding(positions)
+        positions = torch.arange (seq_len, device=x.device).unsqueeze(0).expand (batch_size, seq_len)
+        return x + self.embedding (positions)
 
 # Modern models (GPT-3, LLaMA) use learned embeddings
 # Advantage: More flexible, can learn task-specific patterns
@@ -421,7 +421,7 @@ class LearnedPositionalEmbedding(nn.Module):
 Position-wise feed-forward network
 """
 
-class PositionwiseFeedForward(nn.Module):
+class PositionwiseFeedForward (nn.Module):
     """
     FFN(x) = max(0, xW1 + b1)W2 + b2
     
@@ -431,12 +431,12 @@ class PositionwiseFeedForward(nn.Module):
     
     def __init__(self, d_model, d_ff, dropout=0.1):
         super().__init__()
-        self.linear1 = nn.Linear(d_model, d_ff)
-        self.linear2 = nn.Linear(d_ff, d_model)
-        self.dropout = nn.Dropout(dropout)
+        self.linear1 = nn.Linear (d_model, d_ff)
+        self.linear2 = nn.Linear (d_ff, d_model)
+        self.dropout = nn.Dropout (dropout)
         self.activation = nn.GELU()  # Modern models use GELU instead of ReLU
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: [batch, seq_len, d_model]
@@ -446,12 +446,12 @@ class PositionwiseFeedForward(nn.Module):
         """
         # Expand to d_ff
         x = self.linear1(x)  # [batch, seq_len, d_ff]
-        x = self.activation(x)
-        x = self.dropout(x)
+        x = self.activation (x)
+        x = self.dropout (x)
         
         # Project back to d_model
         x = self.linear2(x)  # [batch, seq_len, d_model]
-        x = self.dropout(x)
+        x = self.dropout (x)
         
         return x
 
@@ -470,10 +470,10 @@ d_model = 512
 d_ff = 2048
 seq_len = 50
 
-ffn = PositionwiseFeedForward(d_model, d_ff)
+ffn = PositionwiseFeedForward (d_model, d_ff)
 
-x = torch.randn(batch_size, seq_len, d_model)
-output = ffn(x)
+x = torch.randn (batch_size, seq_len, d_model)
+output = ffn (x)
 
 print(f"Input: {x.shape}")  # [32, 50, 512]
 print(f"Output: {output.shape}")  # [32, 50, 512]
@@ -490,7 +490,7 @@ print(f"Output: {output.shape}")  # [32, 50, 512]
 Complete transformer encoder block
 """
 
-class EncoderBlock(nn.Module):
+class EncoderBlock (nn.Module):
     """
     Encoder block:
     1. Multi-head self-attention
@@ -503,16 +503,16 @@ class EncoderBlock(nn.Module):
         super().__init__()
         
         # Sub-layer 1: Multi-head attention
-        self.attention = MultiHeadAttention(d_model, n_heads, dropout)
-        self.norm1 = nn.LayerNorm(d_model)
+        self.attention = MultiHeadAttention (d_model, n_heads, dropout)
+        self.norm1 = nn.LayerNorm (d_model)
         
         # Sub-layer 2: Feed-forward
-        self.ffn = PositionwiseFeedForward(d_model, d_ff, dropout)
-        self.norm2 = nn.LayerNorm(d_model)
+        self.ffn = PositionwiseFeedForward (d_model, d_ff, dropout)
+        self.norm2 = nn.LayerNorm (d_model)
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def forward(self, x, mask=None):
+    def forward (self, x, mask=None):
         """
         Args:
             x: [batch, seq_len, d_model]
@@ -522,16 +522,16 @@ class EncoderBlock(nn.Module):
             output: [batch, seq_len, d_model]
         """
         # Sub-layer 1: Multi-head attention with residual connection
-        attn_output, _ = self.attention(x, x, x, mask)
-        x = self.norm1(x + self.dropout(attn_output))  # Add & Norm
+        attn_output, _ = self.attention (x, x, x, mask)
+        x = self.norm1(x + self.dropout (attn_output))  # Add & Norm
         
         # Sub-layer 2: Feed-forward with residual connection
-        ffn_output = self.ffn(x)
-        x = self.norm2(x + self.dropout(ffn_output))  # Add & Norm
+        ffn_output = self.ffn (x)
+        x = self.norm2(x + self.dropout (ffn_output))  # Add & Norm
         
         return x
 
-# Why residual connections (x + sublayer(x))?
+# Why residual connections (x + sublayer (x))?
 # 1. Gradient flow: Gradients can flow directly through addition
 # 2. Easier optimization: Model can learn identity function if needed
 # 3. Enables deeper networks: 100+ layers possible
@@ -549,7 +549,7 @@ class EncoderBlock(nn.Module):
 Transformer decoder block with masked attention
 """
 
-class DecoderBlock(nn.Module):
+class DecoderBlock (nn.Module):
     """
     Decoder block:
     1. Masked multi-head self-attention
@@ -564,20 +564,20 @@ class DecoderBlock(nn.Module):
         super().__init__()
         
         # Sub-layer 1: Masked self-attention
-        self.self_attention = MultiHeadAttention(d_model, n_heads, dropout)
-        self.norm1 = nn.LayerNorm(d_model)
+        self.self_attention = MultiHeadAttention (d_model, n_heads, dropout)
+        self.norm1 = nn.LayerNorm (d_model)
         
         # Sub-layer 2: Cross-attention (decoder -> encoder)
-        self.cross_attention = MultiHeadAttention(d_model, n_heads, dropout)
-        self.norm2 = nn.LayerNorm(d_model)
+        self.cross_attention = MultiHeadAttention (d_model, n_heads, dropout)
+        self.norm2 = nn.LayerNorm (d_model)
         
         # Sub-layer 3: Feed-forward
-        self.ffn = PositionwiseFeedForward(d_model, d_ff, dropout)
-        self.norm3 = nn.LayerNorm(d_model)
+        self.ffn = PositionwiseFeedForward (d_model, d_ff, dropout)
+        self.norm3 = nn.LayerNorm (d_model)
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def forward(self, x, encoder_output, src_mask=None, tgt_mask=None):
+    def forward (self, x, encoder_output, src_mask=None, tgt_mask=None):
         """
         Args:
             x: decoder input [batch, tgt_len, d_model]
@@ -589,8 +589,8 @@ class DecoderBlock(nn.Module):
             output: [batch, tgt_len, d_model]
         """
         # Sub-layer 1: Masked self-attention
-        self_attn_output, _ = self.self_attention(x, x, x, tgt_mask)
-        x = self.norm1(x + self.dropout(self_attn_output))
+        self_attn_output, _ = self.self_attention (x, x, x, tgt_mask)
+        x = self.norm1(x + self.dropout (self_attn_output))
         
         # Sub-layer 2: Cross-attention
         cross_attn_output, _ = self.cross_attention(
@@ -599,15 +599,15 @@ class DecoderBlock(nn.Module):
             value=encoder_output,
             mask=src_mask
         )
-        x = self.norm2(x + self.dropout(cross_attn_output))
+        x = self.norm2(x + self.dropout (cross_attn_output))
         
         # Sub-layer 3: Feed-forward
-        ffn_output = self.ffn(x)
-        x = self.norm3(x + self.dropout(ffn_output))
+        ffn_output = self.ffn (x)
+        x = self.norm3(x + self.dropout (ffn_output))
         
         return x
 
-def create_causal_mask(seq_len):
+def create_causal_mask (seq_len):
     """
     Create mask for autoregressive generation
     
@@ -620,12 +620,12 @@ def create_causal_mask(seq_len):
     
     Position i can only attend to positions <= i
     """
-    mask = torch.tril(torch.ones(seq_len, seq_len))
+    mask = torch.tril (torch.ones (seq_len, seq_len))
     return mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq_len, seq_len]
 
 # Usage
 seq_len = 10
-mask = create_causal_mask(seq_len)
+mask = create_causal_mask (seq_len)
 print(mask[0, 0])
 \`\`\`
 
@@ -640,7 +640,7 @@ print(mask[0, 0])
 Complete Transformer model for sequence-to-sequence tasks
 """
 
-class Transformer(nn.Module):
+class Transformer (nn.Module):
     """
     Full Transformer: Encoder + Decoder
     """
@@ -660,40 +660,40 @@ class Transformer(nn.Module):
         super().__init__()
         
         # Embeddings
-        self.src_embedding = nn.Embedding(src_vocab_size, d_model)
-        self.tgt_embedding = nn.Embedding(tgt_vocab_size, d_model)
+        self.src_embedding = nn.Embedding (src_vocab_size, d_model)
+        self.tgt_embedding = nn.Embedding (tgt_vocab_size, d_model)
         
         # Positional encoding
-        self.pos_encoding = PositionalEncoding(d_model, max_seq_len, dropout)
+        self.pos_encoding = PositionalEncoding (d_model, max_seq_len, dropout)
         
         # Encoder
         self.encoder_layers = nn.ModuleList([
-            EncoderBlock(d_model, n_heads, d_ff, dropout)
-            for _ in range(n_encoder_layers)
+            EncoderBlock (d_model, n_heads, d_ff, dropout)
+            for _ in range (n_encoder_layers)
         ])
         
         # Decoder
         self.decoder_layers = nn.ModuleList([
-            DecoderBlock(d_model, n_heads, d_ff, dropout)
-            for _ in range(n_decoder_layers)
+            DecoderBlock (d_model, n_heads, d_ff, dropout)
+            for _ in range (n_decoder_layers)
         ])
         
         # Output projection
-        self.output_projection = nn.Linear(d_model, tgt_vocab_size)
+        self.output_projection = nn.Linear (d_model, tgt_vocab_size)
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
         self.d_model = d_model
         
         # Initialize weights
         self._init_weights()
     
-    def _init_weights(self):
+    def _init_weights (self):
         """Initialize weights (Xavier uniform)"""
         for p in self.parameters():
             if p.dim() > 1:
                 nn.init.xavier_uniform_(p)
     
-    def encode(self, src, src_mask=None):
+    def encode (self, src, src_mask=None):
         """
         Encode source sequence
         
@@ -705,16 +705,16 @@ class Transformer(nn.Module):
             encoder_output: [batch, src_len, d_model]
         """
         # Embedding + positional encoding
-        x = self.src_embedding(src) * math.sqrt(self.d_model)
-        x = self.pos_encoding(x)
+        x = self.src_embedding (src) * math.sqrt (self.d_model)
+        x = self.pos_encoding (x)
         
         # Pass through encoder layers
         for layer in self.encoder_layers:
-            x = layer(x, src_mask)
+            x = layer (x, src_mask)
         
         return x
     
-    def decode(self, tgt, encoder_output, src_mask=None, tgt_mask=None):
+    def decode (self, tgt, encoder_output, src_mask=None, tgt_mask=None):
         """
         Decode target sequence
         
@@ -728,16 +728,16 @@ class Transformer(nn.Module):
             decoder_output: [batch, tgt_len, d_model]
         """
         # Embedding + positional encoding
-        x = self.tgt_embedding(tgt) * math.sqrt(self.d_model)
-        x = self.pos_encoding(x)
+        x = self.tgt_embedding (tgt) * math.sqrt (self.d_model)
+        x = self.pos_encoding (x)
         
         # Pass through decoder layers
         for layer in self.decoder_layers:
-            x = layer(x, encoder_output, src_mask, tgt_mask)
+            x = layer (x, encoder_output, src_mask, tgt_mask)
         
         return x
     
-    def forward(self, src, tgt, src_mask=None, tgt_mask=None):
+    def forward (self, src, tgt, src_mask=None, tgt_mask=None):
         """
         Forward pass
         
@@ -751,20 +751,20 @@ class Transformer(nn.Module):
             logits: [batch, tgt_len, tgt_vocab_size]
         """
         # Encode
-        encoder_output = self.encode(src, src_mask)
+        encoder_output = self.encode (src, src_mask)
         
         # Decode
-        decoder_output = self.decode(tgt, encoder_output, src_mask, tgt_mask)
+        decoder_output = self.decode (tgt, encoder_output, src_mask, tgt_mask)
         
         # Project to vocabulary
-        logits = self.output_projection(decoder_output)
+        logits = self.output_projection (decoder_output)
         
         return logits
 
 # Example usage
 src_vocab_size = 10000
 tgt_vocab_size = 10000
-model = Transformer(src_vocab_size, tgt_vocab_size)
+model = Transformer (src_vocab_size, tgt_vocab_size)
 
 # Example batch
 batch_size = 32
@@ -776,14 +776,14 @@ tgt = torch.randint(0, tgt_vocab_size, (batch_size, tgt_len))
 
 # Create masks
 src_mask = (src != 0).unsqueeze(1).unsqueeze(2)  # Padding mask
-tgt_mask = create_causal_mask(tgt_len).expand(batch_size, -1, -1, -1)
+tgt_mask = create_causal_mask (tgt_len).expand (batch_size, -1, -1, -1)
 
 # Forward pass
-logits = model(src, tgt, src_mask, tgt_mask)
+logits = model (src, tgt, src_mask, tgt_mask)
 print(f"Output shape: {logits.shape}")  # [32, 25, 10000]
 
 # Total parameters
-total_params = sum(p.numel() for p in model.parameters())
+total_params = sum (p.numel() for p in model.parameters())
 print(f"Total parameters: {total_params:,}")  # ~60M for this config
 \`\`\`
 
@@ -798,7 +798,7 @@ print(f"Total parameters: {total_params:,}")  # ~60M for this config
 Decoder-only transformer (GPT architecture)
 """
 
-class GPTBlock(nn.Module):
+class GPTBlock (nn.Module):
     """
     GPT block: Simplified decoder (no cross-attention)
     """
@@ -807,22 +807,22 @@ class GPTBlock(nn.Module):
         super().__init__()
         
         # Only self-attention (no cross-attention needed)
-        self.attention = MultiHeadAttention(d_model, n_heads, dropout)
-        self.norm1 = nn.LayerNorm(d_model)
+        self.attention = MultiHeadAttention (d_model, n_heads, dropout)
+        self.norm1 = nn.LayerNorm (d_model)
         
-        self.ffn = PositionwiseFeedForward(d_model, d_ff, dropout)
-        self.norm2 = nn.LayerNorm(d_model)
+        self.ffn = PositionwiseFeedForward (d_model, d_ff, dropout)
+        self.norm2 = nn.LayerNorm (d_model)
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def forward(self, x, mask=None):
+    def forward (self, x, mask=None):
         # Masked self-attention
-        attn_output, _ = self.attention(x, x, x, mask)
-        x = self.norm1(x + self.dropout(attn_output))
+        attn_output, _ = self.attention (x, x, x, mask)
+        x = self.norm1(x + self.dropout (attn_output))
         
         # Feed-forward
-        ffn_output = self.ffn(x)
-        x = self.norm2(x + self.dropout(ffn_output))
+        ffn_output = self.ffn (x)
+        x = self.norm2(x + self.dropout (ffn_output))
         
         return x
 
@@ -844,26 +844,26 @@ class GPT(nn.Module):
         super().__init__()
         
         # Token + position embeddings
-        self.token_embedding = nn.Embedding(vocab_size, d_model)
-        self.position_embedding = nn.Embedding(max_seq_len, d_model)
+        self.token_embedding = nn.Embedding (vocab_size, d_model)
+        self.position_embedding = nn.Embedding (max_seq_len, d_model)
         
         # Transformer blocks
         self.blocks = nn.ModuleList([
-            GPTBlock(d_model, n_heads, d_ff, dropout)
-            for _ in range(n_layers)
+            GPTBlock (d_model, n_heads, d_ff, dropout)
+            for _ in range (n_layers)
         ])
         
         # Layer norm + output projection
-        self.ln_f = nn.LayerNorm(d_model)
-        self.head = nn.Linear(d_model, vocab_size, bias=False)
+        self.ln_f = nn.LayerNorm (d_model)
+        self.head = nn.Linear (d_model, vocab_size, bias=False)
         
         # Weight tying: share embeddings with output projection
         self.head.weight = self.token_embedding.weight
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
         self.max_seq_len = max_seq_len
     
-    def forward(self, input_ids):
+    def forward (self, input_ids):
         """
         Args:
             input_ids: [batch, seq_len]
@@ -874,25 +874,25 @@ class GPT(nn.Module):
         batch_size, seq_len = input_ids.size()
         
         # Create position IDs
-        position_ids = torch.arange(seq_len, device=input_ids.device).unsqueeze(0)
+        position_ids = torch.arange (seq_len, device=input_ids.device).unsqueeze(0)
         
         # Embeddings
-        token_emb = self.token_embedding(input_ids)
-        position_emb = self.position_embedding(position_ids)
-        x = self.dropout(token_emb + position_emb)
+        token_emb = self.token_embedding (input_ids)
+        position_emb = self.position_embedding (position_ids)
+        x = self.dropout (token_emb + position_emb)
         
         # Causal mask
-        mask = create_causal_mask(seq_len).to(input_ids.device)
+        mask = create_causal_mask (seq_len).to (input_ids.device)
         
         # Pass through transformer blocks
         for block in self.blocks:
-            x = block(x, mask)
+            x = block (x, mask)
         
         # Final layer norm
-        x = self.ln_f(x)
+        x = self.ln_f (x)
         
         # Project to vocabulary
-        logits = self.head(x)
+        logits = self.head (x)
         
         return logits
 
@@ -906,7 +906,7 @@ configs = {
 
 # Create GPT-2 small
 model = GPT(vocab_size=50257, **configs["gpt2-small"])
-print(f"Parameters: {sum(p.numel() for p in model.parameters()):,}")  # ~124M
+print(f"Parameters: {sum (p.numel() for p in model.parameters()):,}")  # ~124M
 \`\`\`
 
 ---

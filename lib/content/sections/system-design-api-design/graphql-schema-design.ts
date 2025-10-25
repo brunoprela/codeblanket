@@ -58,8 +58,8 @@ type Comment {
 \`\`\`graphql
 type Query {
   # Single resource
-  user(id: ID!): User
-  post(id: ID!): Post
+  user (id: ID!): User
+  post (id: ID!): Post
   
   # Lists with filtering
   users(
@@ -76,7 +76,7 @@ type Query {
   ): [Post!]!
   
   # Search
-  searchUsers(query: String!): [User!]!
+  searchUsers (query: String!): [User!]!
 }
 \`\`\`
 
@@ -85,20 +85,20 @@ type Query {
 \`\`\`graphql
 type Mutation {
   # Create
-  createUser(input: CreateUserInput!): User!
-  createPost(input: CreatePostInput!): Post!
+  createUser (input: CreateUserInput!): User!
+  createPost (input: CreatePostInput!): Post!
   
   # Update
-  updateUser(id: ID!, input: UpdateUserInput!): User!
-  updatePost(id: ID!, input: UpdatePostInput!): Post!
+  updateUser (id: ID!, input: UpdateUserInput!): User!
+  updatePost (id: ID!, input: UpdatePostInput!): Post!
   
   # Delete
-  deleteUser(id: ID!): Boolean!
-  deletePost(id: ID!): Boolean!
+  deleteUser (id: ID!): Boolean!
+  deletePost (id: ID!): Boolean!
   
   # Custom operations
-  publishPost(id: ID!): Post!
-  likePost(postId: ID!): Post!
+  publishPost (id: ID!): Post!
+  likePost (postId: ID!): Post!
 }
 \`\`\`
 
@@ -107,8 +107,8 @@ type Mutation {
 \`\`\`graphql
 type Subscription {
   postAdded: Post!
-  commentAdded(postId: ID!): Comment!
-  userStatusChanged(userId: ID!): User!
+  commentAdded (postId: ID!): Comment!
+  userStatusChanged (userId: ID!): User!
 }
 \`\`\`
 
@@ -222,12 +222,12 @@ type Post implements Node {
 union SearchResult = User | Post | Comment
 
 type Query {
-  search(query: String!): [SearchResult!]!
+  search (query: String!): [SearchResult!]!
 }
 
 # Client query with inline fragments
 query {
-  search(query: "graphql") {
+  search (query: "graphql") {
     ... on User {
       name
       email
@@ -249,7 +249,7 @@ query {
 
 \`\`\`graphql
 type Query {
-  posts(limit: Int = 20, offset: Int = 0): PostConnection!
+  posts (limit: Int = 20, offset: Int = 0): PostConnection!
 }
 
 type PostConnection {
@@ -301,7 +301,7 @@ type PageInfo {
 
 \`\`\`graphql
 type Query {
-  user(id: ID!): User  # Returns null if not found
+  user (id: ID!): User  # Returns null if not found
 }
 
 # Response with error
@@ -343,7 +343,7 @@ type ValidationError {
 union UserResult = User | NotFoundError | ValidationError
 
 type Query {
-  user(id: ID!): UserResult!
+  user (id: ID!): UserResult!
 }
 \`\`\`
 
@@ -353,10 +353,10 @@ type Query {
 
 \`\`\`graphql
 query GetUser($includeEmail: Boolean!) {
-  user(id: "123") {
+  user (id: "123") {
     name
-    email @include(if: $includeEmail)
-    age @skip(if: $includeEmail)
+    email @include (if: $includeEmail)
+    age @skip (if: $includeEmail)
   }
 }
 \`\`\`
@@ -364,14 +364,14 @@ query GetUser($includeEmail: Boolean!) {
 **Custom directives**:
 
 \`\`\`graphql
-directive @auth(requires: Role = USER) on FIELD_DEFINITION
-directive @rateLimit(limit: Int!) on FIELD_DEFINITION
-directive @deprecated(reason: String) on FIELD_DEFINITION
+directive @auth (requires: Role = USER) on FIELD_DEFINITION
+directive @rateLimit (limit: Int!) on FIELD_DEFINITION
+directive @deprecated (reason: String) on FIELD_DEFINITION
 
 type Query {
-  users: [User!]! @auth(requires: ADMIN)
-  posts: [Post!]! @rateLimit(limit: 100)
-  oldField: String @deprecated(reason: "Use newField instead")
+  users: [User!]! @auth (requires: ADMIN)
+  posts: [Post!]! @rateLimit (limit: 100)
+  oldField: String @deprecated (reason: "Use newField instead")
 }
 \`\`\`
 
@@ -402,7 +402,7 @@ type User {
 \`\`\`graphql
 # Client need: User profile page
 query UserProfile {
-  user(id: "123") {
+  user (id: "123") {
     name
     avatar
     bio
@@ -410,7 +410,7 @@ query UserProfile {
       postCount
       followerCount
     }
-    recentPosts(limit: 5) {
+    recentPosts (limit: 5) {
       title
       createdAt
     }
@@ -429,7 +429,7 @@ type Post {
 const resolvers = {
   Post: {
     author: (post, args, { loaders }) => {
-      return loaders.user.load(post.authorId);
+      return loaders.user.load (post.authorId);
     }
   }
 };
@@ -441,8 +441,8 @@ Use consistent pagination pattern:
 
 \`\`\`graphql
 type Query {
-  users(first: Int, after: String): UserConnection!
-  posts(first: Int, after: String): PostConnection!
+  users (first: Int, after: String): UserConnection!
+  posts (first: Int, after: String): PostConnection!
 }
 \`\`\`
 
@@ -451,14 +451,14 @@ type Query {
 \`\`\`graphql
 ❌ Bad:
 type Query {
-  get(id: ID!): User
+  get (id: ID!): User
   list: [User!]!
 }
 
 ✅ Good:
 type Query {
-  user(id: ID!): User
-  users(limit: Int): [User!]!
+  user (id: ID!): User
+  users (limit: Int): [User!]!
 }
 \`\`\`
 
@@ -466,11 +466,11 @@ type Query {
 
 \`\`\`graphql
 query {
-  repository(owner: "facebook", name: "react") {
+  repository (owner: "facebook", name: "react") {
     name
     description
     stargazerCount
-    issues(first: 10, states: OPEN) {
+    issues (first: 10, states: OPEN) {
       edges {
         node {
           title
@@ -514,7 +514,7 @@ type User {
 **Deprecating fields**:
 \`\`\`graphql
 type User {
-  oldField: String @deprecated(reason: "Use newField")
+  oldField: String @deprecated (reason: "Use newField")
   newField: String!
 }
 \`\`\`

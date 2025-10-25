@@ -31,11 +31,11 @@ This section covers:
 ### Common Derivatives (Memorize)
 
 \`\`\`
-d/dx(xⁿ) = n·xⁿ⁻¹
-d/dx(eˣ) = eˣ
-d/dx(ln x) = 1/x
-d/dx(sin x) = cos x
-d/dx(cos x) = -sin x
+d/dx (xⁿ) = n·xⁿ⁻¹
+d/dx (eˣ) = eˣ
+d/dx (ln x) = 1/x
+d/dx (sin x) = cos x
+d/dx (cos x) = -sin x
 d/dx(1/(1-x)) = 1/(1-x)²
 \`\`\`
 
@@ -45,7 +45,7 @@ d/dx(1/(1-x)) = 1/(1-x)²
 ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C
 ∫ eˣ dx = eˣ + C
 ∫ 1/x dx = ln|x| + C
-∫ 1/(1+x²) dx = arctan(x) + C
+∫ 1/(1+x²) dx = arctan (x) + C
 \`\`\`
 
 ### Taylor Series (First Few Terms)
@@ -53,9 +53,9 @@ d/dx(1/(1-x)) = 1/(1-x)²
 \`\`\`
 eˣ ≈ 1 + x + x²/2 + x³/6
 ln(1+x) ≈ x - x²/2 + x³/3
-sin(x) ≈ x - x³/6
-cos(x) ≈ 1 - x²/2
-(1+x)ⁿ ≈ 1 + nx + n(n-1)x²/2
+sin (x) ≈ x - x³/6
+cos (x) ≈ 1 - x²/2
+(1+x)ⁿ ≈ 1 + nx + n (n-1)x²/2
 \`\`\`
 
 ---
@@ -98,7 +98,7 @@ Let base dimensions be x × y, height h.
 Volume: xyh = 1000, so h = 1000/(xy)
 
 Cost: C = 10xy + 5(2xh + 2yh)
-     = 10xy + 10h(x + y)
+     = 10xy + 10h (x + y)
      = 10xy + 10(1000/(xy))(x + y)
      = 10xy + 10000(x + y)/(xy)
 
@@ -120,7 +120,7 @@ Optimization Problem Solver
 import numpy as np
 from scipy.optimize import minimize_scalar
 
-def cost_function(x):
+def cost_function (x):
     """Cost as a function of base dimension (assuming square base)."""
     volume = 1000
     h = volume / (x ** 2)
@@ -129,7 +129,7 @@ def cost_function(x):
     return base_cost + wall_cost
 
 # Find minimum
-result = minimize_scalar(cost_function, bounds=(1, 20), method='bounded')
+result = minimize_scalar (cost_function, bounds=(1, 20), method='bounded')
 optimal_x = result.x
 min_cost = result.fun
 
@@ -174,7 +174,7 @@ print(f"Derivative at optimal point: {derivative:.6f} (should be ≈0)")
 **Solution:**
 
 \`\`\`
-E[X²] = ∫₀¹ x² · f(x) dx
+E[X²] = ∫₀¹ x² · f (x) dx
       = ∫₀¹ x² · 1 dx    (uniform density = 1)
       = [x³/3]₀¹
       = 1/3
@@ -184,12 +184,12 @@ E[X²] = ∫₀¹ x² · f(x) dx
 
 ### Problem 5: Substitution Trick
 
-**Question:** ∫₀^(π/2) sin(x) cos(x) dx
+**Question:** ∫₀^(π/2) sin (x) cos (x) dx
 
 **Quick method:**
 
 \`\`\`
-sin(x) cos(x) = (1/2) sin(2x)
+sin (x) cos (x) = (1/2) sin(2x)
 
 ∫₀^(π/2) (1/2) sin(2x) dx = -(1/4) cos(2x) |₀^(π/2)
                            = -(1/4)[cos(π) - cos(0)]
@@ -199,10 +199,10 @@ sin(x) cos(x) = (1/2) sin(2x)
 
 **Alternative (substitution):**
 
-Let u = sin(x), du = cos(x) dx
+Let u = sin (x), du = cos (x) dx
 
 \`\`\`
-∫₀^(π/2) sin(x) cos(x) dx = ∫₀¹ u du = [u²/2]₀¹ = 1/2
+∫₀^(π/2) sin (x) cos (x) dx = ∫₀¹ u du = [u²/2]₀¹ = 1/2
 \`\`\`
 
 \`\`\`python
@@ -216,19 +216,19 @@ from scipy import integrate
 def f1(x):
     return x**2
 
-result1, error1 = integrate.quad(f1, 0, 1)
+result1, error1 = integrate.quad (f1, 0, 1)
 print(f"∫₀¹ x² dx = {result1:.6f} (exact: {1/3:.6f})")
 
-# Problem 5: sin(x)cos(x) from 0 to π/2
+# Problem 5: sin (x)cos (x) from 0 to π/2
 def f2(x):
-    return np.sin(x) * np.cos(x)
+    return np.sin (x) * np.cos (x)
 
-result2, error2 = integrate.quad(f2, 0, np.pi/2)
-print(f"∫₀^(π/2) sin(x)cos(x) dx = {result2:.6f} (exact: 0.500000)")
+result2, error2 = integrate.quad (f2, 0, np.pi/2)
+print(f"∫₀^(π/2) sin (x)cos (x) dx = {result2:.6f} (exact: 0.500000)")
 
 # Output:
 # ∫₀¹ x² dx = 0.333333 (exact: 0.333333)
-# ∫₀^(π/2) sin(x)cos(x) dx = 0.500000 (exact: 0.500000)
+# ∫₀^(π/2) sin (x)cos (x) dx = 0.500000 (exact: 0.500000)
 \`\`\`
 
 ---
@@ -311,7 +311,7 @@ Let u = P - μ, then du/dt = dP/dt
 
 du/dt = -αu
 
-This is exponential decay: u(t) = u(0)e^(-αt)
+This is exponential decay: u (t) = u(0)e^(-αt)
 
 P(t) - μ = (P(0) - μ)e^(-αt)
 
@@ -328,11 +328,11 @@ Differential Equation Solutions
 import matplotlib.pyplot as plt
 
 # Exponential growth
-def portfolio_value(t, V0, r):
-    return V0 * np.exp(r * t)
+def portfolio_value (t, V0, r):
+    return V0 * np.exp (r * t)
 
 # Mean reversion
-def mean_reverting_price(t, P0, mu, alpha):
+def mean_reverting_price (t, P0, mu, alpha):
     return mu + (P0 - mu) * np.exp(-alpha * t)
 
 # Plot examples
@@ -340,22 +340,22 @@ t = np.linspace(0, 5, 100)
 
 # Growth example
 V0, r = 100, 0.1
-V = portfolio_value(t, V0, r)
+V = portfolio_value (t, V0, r)
 
 # Mean reversion example
 P0, mu, alpha = 120, 100, 0.5
-P = mean_reverting_price(t, P0, mu, alpha)
+P = mean_reverting_price (t, P0, mu, alpha)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 
-ax1.plot(t, V)
+ax1.plot (t, V)
 ax1.set_title('Exponential Growth: V(t) = V₀e^(rt)')
 ax1.set_xlabel('Time')
 ax1.set_ylabel('Portfolio Value')
 ax1.grid(True, alpha=0.3)
 
-ax2.plot(t, P)
-ax2.axhline(mu, color='r', linestyle='--', label='Mean μ')
+ax2.plot (t, P)
+ax2.axhline (mu, color='r', linestyle='--', label='Mean μ')
 ax2.set_title('Mean Reversion: dP/dt = α(μ-P)')
 ax2.set_xlabel('Time')
 ax2.set_ylabel('Price')
@@ -385,13 +385,13 @@ Second derivatives:
 
 ### Problem 11: Optimization with Constraint (Lagrange)
 
-**Question:** Maximize f(x,y) = xy subject to x + y = 10.
+**Question:** Maximize f (x,y) = xy subject to x + y = 10.
 
 **Method 1 (substitution):**
 
 \`\`\`
 y = 10 - x
-f(x) = x(10 - x) = 10x - x²
+f (x) = x(10 - x) = 10x - x²
 
 f'(x) = 10 - 2x = 0
 x = 5, y = 5
@@ -431,7 +431,7 @@ Maximum at (5, 5)
 ### Problem 13: Derivative Chain Rule
 
 \`\`\`
-If f(x) = e^(x²), find f'(x)
+If f (x) = e^(x²), find f'(x)
 \`\`\`
 
 **Solution:** f'(x) = e^(x²) · 2x = 2x·e^(x²)
@@ -444,14 +444,14 @@ x² + y² = 25. Find dy/dx.
 
 **Solution:**
 \`\`\`
-2x + 2y(dy/dx) = 0
+2x + 2y (dy/dx) = 0
 dy/dx = -x/y
 \`\`\`
 
 ### Problem 15: L'Hôpital's Rule
 
 \`\`\`
-lim(x→0) (sin x)/x = ?
+lim (x→0) (sin x)/x = ?
 \`\`\`
 
 **Solution:**
@@ -459,7 +459,7 @@ lim(x→0) (sin x)/x = ?
 Both numerator and denominator → 0 (indeterminate 0/0)
 
 Apply L'Hôpital:
-lim(x→0) (sin x)/x = lim(x→0) (cos x)/1 = 1
+lim (x→0) (sin x)/x = lim (x→0) (cos x)/1 = 1
 \`\`\`
 
 ---
@@ -511,9 +511,9 @@ Theta ≈ -$1 per day initially
 
 **Trick 1: Small angle approximations**
 \`\`\`
-sin(x) ≈ x        (x in radians, x small)
-cos(x) ≈ 1 - x²/2
-tan(x) ≈ x
+sin (x) ≈ x        (x in radians, x small)
+cos (x) ≈ 1 - x²/2
+tan (x) ≈ x
 \`\`\`
 
 **Trick 2: Compound growth**

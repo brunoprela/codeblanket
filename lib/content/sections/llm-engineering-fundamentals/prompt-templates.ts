@@ -19,17 +19,17 @@ Hard-coding prompts leads to unmaintainable code. Templates solve this.
 \`\`\`python
 # ❌ BAD: Hard-coded prompts scattered throughout code
 
-def translate_text(text: str):
+def translate_text (text: str):
     prompt = f"Translate this to Spanish: {text}"
-    return call_llm(prompt)
+    return call_llm (prompt)
 
-def summarize_text(text: str):
+def summarize_text (text: str):
     prompt = f"Summarize this: {text}"
-    return call_llm(prompt)
+    return call_llm (prompt)
 
-def extract_email(text: str):
+def extract_email (text: str):
     prompt = f"Extract the email address from: {text}"
-    return call_llm(prompt)
+    return call_llm (prompt)
 
 """
 Problems:
@@ -48,16 +48,16 @@ TEMPLATES = {
     'extract_email': "Extract the email address from this text. Return only the email.\\n\\n{text}"
 }
 
-def translate_text(text: str, language: str = "Spanish"):
-    prompt = TEMPLATES['translate'].format(language=language, text=text)
-    return call_llm(prompt)
+def translate_text (text: str, language: str = "Spanish"):
+    prompt = TEMPLATES['translate'].format (language=language, text=text)
+    return call_llm (prompt)
 
 # Now can update all prompts in one place!
 \`\`\`
 
 ## Basic String Templates
 
-Start with Python's built-in string formatting.
+Start with Python\'s built-in string formatting.
 
 ### String Format Method
 
@@ -76,7 +76,7 @@ Provide a detailed response."""
 prompt = template.format(
     role="Python",
     task="Explain this code",
-    input="def fib(n): return n if n < 2 else fib(n-1) + fib(n-2)"
+    input="def fib (n): return n if n < 2 else fib (n-1) + fib (n-2)"
 )
 
 print(prompt)
@@ -125,7 +125,7 @@ prompt = template.substitute(
 print(prompt)
 
 # Safe substitute - won't error on missing variables
-prompt = template.safe_substitute(role="engineer")
+prompt = template.safe_substitute (role="engineer")
 # $query remains as-is if not provided
 \`\`\`
 
@@ -147,37 +147,37 @@ class PromptTemplateManager:
     def __init__(self):
         self.templates: Dict[str, str] = {}
     
-    def add_template(self, name: str, template: str):
+    def add_template (self, name: str, template: str):
         """Add a template."""
         self.templates[name] = template
     
-    def get_template(self, name: str) -> str:
+    def get_template (self, name: str) -> str:
         """Get a template by name."""
         if name not in self.templates:
-            raise ValueError(f"Template '{name}' not found")
+            raise ValueError (f"Template '{name}' not found")
         return self.templates[name]
     
-    def render(self, name: str, **kwargs) -> str:
+    def render (self, name: str, **kwargs) -> str:
         """
         Render a template with variables.
         """
-        template = self.get_template(name)
+        template = self.get_template (name)
         
         try:
             return template.format(**kwargs)
         except KeyError as e:
-            raise ValueError(f"Missing variable: {e}")
+            raise ValueError (f"Missing variable: {e}")
     
-    def list_templates(self) -> list:
+    def list_templates (self) -> list:
         """List all template names."""
-        return list(self.templates.keys())
+        return list (self.templates.keys())
     
-    def load_from_file(self, filepath: str):
+    def load_from_file (self, filepath: str):
         """Load template from file."""
-        path = Path(filepath)
+        path = Path (filepath)
         template_name = path.stem
         template_content = path.read_text()
-        self.add_template(template_name, template_content)
+        self.add_template (template_name, template_content)
 
 # Usage
 manager = PromptTemplateManager()
@@ -214,7 +214,7 @@ Summary:"""
 prompt1 = manager.render(
     'code_review',
     language='python',
-    code='def add(a, b): return a + b'
+    code='def add (a, b): return a + b'
 )
 
 prompt2 = manager.render(
@@ -310,7 +310,7 @@ class Jinja2TemplateManager:
         if templates_dir:
             # Load from directory
             self.env = Environment(
-                loader=FileSystemLoader(templates_dir),
+                loader=FileSystemLoader (templates_dir),
                 trim_blocks=True,
                 lstrip_blocks=True
             )
@@ -319,20 +319,20 @@ class Jinja2TemplateManager:
             self.env = Environment()
             self.templates = {}
     
-    def add_template(self, name: str, template_string: str):
+    def add_template (self, name: str, template_string: str):
         """Add template from string."""
-        self.templates[name] = Template(template_string)
+        self.templates[name] = Template (template_string)
     
-    def render(self, name: str, **kwargs) -> str:
+    def render (self, name: str, **kwargs) -> str:
         """Render template with variables."""
-        if hasattr(self, 'env') and self.env.loader:
+        if hasattr (self, 'env') and self.env.loader:
             # Load from file
-            template = self.env.get_template(f"{name}.txt")
+            template = self.env.get_template (f"{name}.txt")
         else:
             # Load from memory
-            template = self.templates.get(name)
+            template = self.templates.get (name)
             if not template:
-                raise ValueError(f"Template '{name}' not found")
+                raise ValueError (f"Template '{name}' not found")
         
         return template.render(**kwargs)
 
@@ -398,11 +398,11 @@ Provide clear, accurate information.
 )
 
 # Use it
-prompt = template.format(topic="neural networks", detail_level="beginner")
+prompt = template.format (topic="neural networks", detail_level="beginner")
 print(prompt)
 
 # Or with format_prompt (returns PromptValue)
-prompt_value = template.format_prompt(topic="APIs", detail_level="intermediate")
+prompt_value = template.format_prompt (topic="APIs", detail_level="intermediate")
 print(prompt_value.to_string())
 \`\`\`
 
@@ -413,10 +413,10 @@ from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, H
 
 # Multi-message template
 system_template = "You are a {role} expert who {behavior}."
-system_message = SystemMessagePromptTemplate.from_template(system_template)
+system_message = SystemMessagePromptTemplate.from_template (system_template)
 
 human_template = "{task}\\n\\nInput: {input}"
-human_message = HumanMessagePromptTemplate.from_template(human_template)
+human_message = HumanMessagePromptTemplate.from_template (human_template)
 
 # Combine
 chat_prompt = ChatPromptTemplate.from_messages([
@@ -479,7 +479,7 @@ few_shot_prompt = FewShotPromptTemplate(
 )
 
 # Use it
-prompt = few_shot_prompt.format(input="Excited")
+prompt = few_shot_prompt.format (input="Excited")
 print(prompt)
 \`\`\`
 
@@ -510,7 +510,7 @@ class ProductionTemplateSystem:
     
     def __init__(self, templates_dir: Optional[str] = None):
         self.templates: Dict[str, Dict] = {}
-        self.templates_dir = Path(templates_dir) if templates_dir else None
+        self.templates_dir = Path (templates_dir) if templates_dir else None
         self.env = Environment()
     
     def register_template(
@@ -526,14 +526,14 @@ class ProductionTemplateSystem:
         Register a template with metadata.
         """
         self.templates[name] = {
-            'template': Template(template_string),
+            'template': Template (template_string),
             'required_vars': required_vars or [],
             'default_vars': default_vars or {},
             'version': version,
             'description': description
         }
     
-    def load_from_yaml(self, filepath: str):
+    def load_from_yaml (self, filepath: str):
         """
         Load templates from YAML file.
         
@@ -544,8 +544,8 @@ class ProductionTemplateSystem:
             required_vars: [...]
             default_vars: {...}
         """
-        with open(filepath) as f:
-            data = yaml.safe_load(f)
+        with open (filepath) as f:
+            data = yaml.safe_load (f)
         
         for name, config in data['templates'].items():
             self.register_template(
@@ -567,7 +567,7 @@ class ProductionTemplateSystem:
         Render template with variable validation.
         """
         if name not in self.templates:
-            raise ValueError(f"Template '{name}' not found")
+            raise ValueError (f"Template '{name}' not found")
         
         template_data = self.templates[name]
         template = template_data['template']
@@ -581,14 +581,14 @@ class ProductionTemplateSystem:
         if validate:
             missing = [var for var in required_vars if var not in variables]
             if missing:
-                raise ValueError(f"Missing required variables: {missing}")
+                raise ValueError (f"Missing required variables: {missing}")
         
         return template.render(**variables)
     
-    def get_template_info(self, name: str) -> Dict:
+    def get_template_info (self, name: str) -> Dict:
         """Get metadata about a template."""
         if name not in self.templates:
-            raise ValueError(f"Template '{name}' not found")
+            raise ValueError (f"Template '{name}' not found")
         
         template_data = self.templates[name]
         return {
@@ -599,10 +599,10 @@ class ProductionTemplateSystem:
             'default_vars': template_data['default_vars']
         }
     
-    def list_templates(self) -> List[Dict]:
+    def list_templates (self) -> List[Dict]:
         """List all templates with metadata."""
         return [
-            self.get_template_info(name)
+            self.get_template_info (name)
             for name in self.templates.keys()
         ]
 
@@ -658,7 +658,7 @@ try:
     prompt = system.render(
         'code_review',
         language='python',
-        code='def add(a, b): return a + b',
+        code='def add (a, b): return a + b',
         focus_areas=['performance', 'testing']
     )
     print("\\n" + prompt)
@@ -743,11 +743,11 @@ class ComposableTemplateSystem:
     def __init__(self):
         self.templates = {}
     
-    def register(self, name: str, template: str):
+    def register (self, name: str, template: str):
         """Register a template."""
-        self.templates[name] = Template(template)
+        self.templates[name] = Template (template)
     
-    def compose(self, *template_names, separator: str = "\\n\\n", **kwargs) -> str:
+    def compose (self, *template_names, separator: str = "\\n\\n", **kwargs) -> str:
         """
         Compose multiple templates together.
         """
@@ -755,13 +755,13 @@ class ComposableTemplateSystem:
         
         for name in template_names:
             if name not in self.templates:
-                raise ValueError(f"Template '{name}' not found")
+                raise ValueError (f"Template '{name}' not found")
             
             template = self.templates[name]
             rendered = template.render(**kwargs)
-            parts.append(rendered)
+            parts.append (rendered)
         
-        return separator.join(parts)
+        return separator.join (parts)
 
 # Usage
 system = ComposableTemplateSystem()

@@ -23,7 +23,7 @@ export const videogenerationfundamentalsMultipleChoice: MultipleChoiceQuestion[]
     {
       id: 'vag-vidgenfund-mc-2',
       question:
-        "How does Sora's spacetime patch approach differ from earlier video generation methods?",
+        "How does Sora\'s spacetime patch approach differ from earlier video generation methods?",
       options: [
         'It processes frames completely independently',
         'It treats time as another spatial dimension in the transformer',

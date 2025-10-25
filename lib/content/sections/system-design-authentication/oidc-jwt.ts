@@ -5,7 +5,7 @@
 export const oidcjwtSection = {
   id: 'oidc-jwt',
   title: 'OIDC (OpenID Connect) & JWT',
-  content: `OpenID Connect (OIDC) is the **modern standard** for authentication. It's built on top of OAuth 2.0 and uses JWT tokens.
+  content: `OpenID Connect (OIDC) is the **modern standard** for authentication. It\'s built on top of OAuth 2.0 and uses JWT tokens.
 
 ## What is OIDC?
 
@@ -138,7 +138,7 @@ Cryptographic signature proving authenticity:
 
 \`\`\`javascript
 signature = RSA-SHA256(
-  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  base64UrlEncode (header) + "." + base64UrlEncode (payload),
   private_key
 )
 \`\`\`
@@ -417,7 +417,7 @@ Always validate ID tokens!
 
 **Benefits**:
 - No password management for your app
-- Leverages Google's security (2FA, anomaly detection)
+- Leverages Google\'s security (2FA, anomaly detection)
 - Better UX (one-click login for Gmail users)
 - Google handles password resets, account recovery
 

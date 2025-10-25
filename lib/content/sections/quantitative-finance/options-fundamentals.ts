@@ -68,7 +68,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def call_payoff(spot_prices, strike, premium, position='long'):
+def call_payoff (spot_prices, strike, premium, position='long'):
     """
     Calculate call option payoff
     
@@ -88,7 +88,7 @@ def call_payoff(spot_prices, strike, premium, position='long'):
     payoff : array
         Payoff at each price point
     """
-    intrinsic = np.maximum(spot_prices - strike, 0)
+    intrinsic = np.maximum (spot_prices - strike, 0)
     
     if position == 'long':
         # Long call: pay premium, receive intrinsic value
@@ -108,42 +108,42 @@ premium = 5   # Premium paid: $5 per share
 spot_range = np.linspace(130, 180, 100)
 
 # Calculate payoffs
-long_call = call_payoff(spot_range, strike, premium, 'long')
-short_call = call_payoff(spot_range, strike, premium, 'short')
+long_call = call_payoff (spot_range, strike, premium, 'long')
+short_call = call_payoff (spot_range, strike, premium, 'short')
 
 # Visualization
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # Long Call
-axes[0].plot(spot_range, long_call, label='Long Call P/L', color='green', linewidth=2)
-axes[0].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-axes[0].axvline(x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
-axes[0].axvline(x=current_price, color='blue', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
-axes[0].fill_between(spot_range, 0, long_call, where=(long_call > 0), alpha=0.3, color='green', label='Profit zone')
-axes[0].fill_between(spot_range, 0, long_call, where=(long_call < 0), alpha=0.3, color='red', label='Loss zone')
+axes[0].plot (spot_range, long_call, label='Long Call P/L', color='green', linewidth=2)
+axes[0].axhline (y=0, color='black', linestyle='--', alpha=0.5)
+axes[0].axvline (x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
+axes[0].axvline (x=current_price, color='blue', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
+axes[0].fill_between (spot_range, 0, long_call, where=(long_call > 0), alpha=0.3, color='green', label='Profit zone')
+axes[0].fill_between (spot_range, 0, long_call, where=(long_call < 0), alpha=0.3, color='red', label='Loss zone')
 axes[0].set_xlabel('Stock Price at Expiration ($)', fontsize=12)
 axes[0].set_ylabel('Profit/Loss ($)', fontsize=12)
-axes[0].set_title(f'Long Call: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
+axes[0].set_title (f'Long Call: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 
 # Calculate breakeven
 breakeven = strike + premium
-axes[0].axvline(x=breakeven, color='orange', linestyle=':', linewidth=2, label=f'Breakeven \${breakeven}')
-axes[0].text(breakeven + 1, long_call.max()/2, f'BE: \${breakeven}', fontsize=10, fontweight='bold')
+axes[0].axvline (x=breakeven, color='orange', linestyle=':', linewidth=2, label=f'Breakeven \${breakeven}')
+axes[0].text (breakeven + 1, long_call.max()/2, f'BE: \${breakeven}', fontsize=10, fontweight='bold')
 
 # Short Call
-axes[1].plot(spot_range, short_call, label='Short Call P/L', color='red', linewidth=2)
-axes[1].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-axes[1].axvline(x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
-axes[1].axvline(x=current_price, color='blue', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
-axes[1].fill_between(spot_range, 0, short_call, where=(short_call > 0), alpha=0.3, color='green', label='Profit zone')
-axes[1].fill_between(spot_range, 0, short_call, where=(short_call < 0), alpha=0.3, color='red', label='Loss zone')
+axes[1].plot (spot_range, short_call, label='Short Call P/L', color='red', linewidth=2)
+axes[1].axhline (y=0, color='black', linestyle='--', alpha=0.5)
+axes[1].axvline (x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
+axes[1].axvline (x=current_price, color='blue', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
+axes[1].fill_between (spot_range, 0, short_call, where=(short_call > 0), alpha=0.3, color='green', label='Profit zone')
+axes[1].fill_between (spot_range, 0, short_call, where=(short_call < 0), alpha=0.3, color='red', label='Loss zone')
 axes[1].set_xlabel('Stock Price at Expiration ($)', fontsize=12)
 axes[1].set_ylabel('Profit/Loss ($)', fontsize=12)
-axes[1].set_title(f'Short Call: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
+axes[1].set_title (f'Short Call: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
 axes[1].legend()
-axes[1].grid(alpha=0.3)
+axes[1].grid (alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -195,9 +195,9 @@ Long Put Payoff = max(K - S_T, 0)
 Put Option Payoff Visualization
 """
 
-def put_payoff(spot_prices, strike, premium, position='long'):
+def put_payoff (spot_prices, strike, premium, position='long'):
     """Calculate put option payoff"""
-    intrinsic = np.maximum(strike - spot_prices, 0)
+    intrinsic = np.maximum (strike - spot_prices, 0)
     
     if position == 'long':
         payoff = intrinsic - premium
@@ -211,42 +211,42 @@ strike = 145  # Put option with strike $145
 premium = 4   # Premium paid: $4 per share
 
 # Calculate payoffs
-long_put = put_payoff(spot_range, strike, premium, 'long')
-short_put = put_payoff(spot_range, strike, premium, 'short')
+long_put = put_payoff (spot_range, strike, premium, 'long')
+short_put = put_payoff (spot_range, strike, premium, 'short')
 
 # Visualization
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # Long Put
-axes[0].plot(spot_range, long_put, label='Long Put P/L', color='blue', linewidth=2)
-axes[0].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-axes[0].axvline(x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
-axes[0].axvline(x=current_price, color='green', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
-axes[0].fill_between(spot_range, 0, long_put, where=(long_put > 0), alpha=0.3, color='green')
-axes[0].fill_between(spot_range, 0, long_put, where=(long_put < 0), alpha=0.3, color='red')
+axes[0].plot (spot_range, long_put, label='Long Put P/L', color='blue', linewidth=2)
+axes[0].axhline (y=0, color='black', linestyle='--', alpha=0.5)
+axes[0].axvline (x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
+axes[0].axvline (x=current_price, color='green', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
+axes[0].fill_between (spot_range, 0, long_put, where=(long_put > 0), alpha=0.3, color='green')
+axes[0].fill_between (spot_range, 0, long_put, where=(long_put < 0), alpha=0.3, color='red')
 axes[0].set_xlabel('Stock Price at Expiration ($)', fontsize=12)
 axes[0].set_ylabel('Profit/Loss ($)', fontsize=12)
-axes[0].set_title(f'Long Put: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
+axes[0].set_title (f'Long Put: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 
 # Breakeven for put
 breakeven_put = strike - premium
-axes[0].axvline(x=breakeven_put, color='orange', linestyle=':', linewidth=2)
-axes[0].text(breakeven_put - 8, long_put.max()/2, f'BE: \${breakeven_put}', fontsize=10, fontweight='bold')
+axes[0].axvline (x=breakeven_put, color='orange', linestyle=':', linewidth=2)
+axes[0].text (breakeven_put - 8, long_put.max()/2, f'BE: \${breakeven_put}', fontsize=10, fontweight='bold')
 
 # Short Put
-axes[1].plot(spot_range, short_put, label='Short Put P/L', color='purple', linewidth=2)
-axes[1].axhline(y=0, color='black', linestyle='--', alpha=0.5)
-axes[1].axvline(x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
-axes[1].axvline(x=current_price, color='green', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
-axes[1].fill_between(spot_range, 0, short_put, where=(short_put > 0), alpha=0.3, color='green')
-axes[1].fill_between(spot_range, 0, short_put, where=(short_put < 0), alpha=0.3, color='red')
+axes[1].plot (spot_range, short_put, label='Short Put P/L', color='purple', linewidth=2)
+axes[1].axhline (y=0, color='black', linestyle='--', alpha=0.5)
+axes[1].axvline (x=strike, color='red', linestyle='--', alpha=0.5, label=f'Strike \${strike}')
+axes[1].axvline (x=current_price, color='green', linestyle='--', alpha=0.5, label=f'Current \${current_price}')
+axes[1].fill_between (spot_range, 0, short_put, where=(short_put > 0), alpha=0.3, color='green')
+axes[1].fill_between (spot_range, 0, short_put, where=(short_put < 0), alpha=0.3, color='red')
 axes[1].set_xlabel('Stock Price at Expiration ($)', fontsize=12)
 axes[1].set_ylabel('Profit/Loss ($)', fontsize=12)
-axes[1].set_title(f'Short Put: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
+axes[1].set_title (f'Short Put: Strike \${strike}, Premium \${premium}', fontsize=14, fontweight='bold')
 axes[1].legend()
-axes[1].grid(alpha=0.3)
+axes[1].grid (alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -302,14 +302,14 @@ class Option:
         self.strike = strike
         self.option_type = option_type
     
-    def intrinsic_value(self):
+    def intrinsic_value (self):
         """Calculate intrinsic value"""
         if self.option_type == 'call':
-            return max(self.spot - self.strike, 0)
+            return max (self.spot - self.strike, 0)
         else:  # put
-            return max(self.strike - self.spot, 0)
+            return max (self.strike - self.spot, 0)
     
-    def analyze_value(self, market_premium):
+    def analyze_value (self, market_premium):
         """Analyze option value components"""
         intrinsic = self.intrinsic_value()
         time_value = market_premium - intrinsic
@@ -325,19 +325,19 @@ class Option:
             'moneyness': self.get_moneyness()
         }
     
-    def get_moneyness(self):
+    def get_moneyness (self):
         """Determine if ITM, ATM, or OTM"""
         if self.option_type == 'call':
             if self.spot > self.strike + 0.50:
                 return 'ITM'
-            elif abs(self.spot - self.strike) <= 0.50:
+            elif abs (self.spot - self.strike) <= 0.50:
                 return 'ATM'
             else:
                 return 'OTM'
         else:  # put
             if self.spot < self.strike - 0.50:
                 return 'ITM'
-            elif abs(self.spot - self.strike) <= 0.50:
+            elif abs (self.spot - self.strike) <= 0.50:
                 return 'ATM'
             else:
                 return 'OTM'
@@ -357,9 +357,9 @@ print(f"Spot Price: \${spot_price}\\n")
 
 results = []
 for opt in call_chain:
-    option = Option(spot_price, opt['strike'], 'call')
-    analysis = option.analyze_value(opt['premium'])
-    results.append(analysis)
+    option = Option (spot_price, opt['strike'], 'call')
+    analysis = option.analyze_value (opt['premium'])
+    results.append (analysis)
     
     print(f"Strike \${analysis['strike']}: {analysis['moneyness']}")
     print(f"  Market Premium: \${analysis['market_premium']:.2f}")
@@ -368,31 +368,31 @@ for opt in call_chain:
     print()
 
 # Visualize value components
-df = pd.DataFrame(results)
+df = pd.DataFrame (results)
 
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots (figsize=(10, 6))
 
-x = np.arange(len(df))
+x = np.arange (len (df))
 width = 0.35
 
-bars1 = ax.bar(x - width/2, df['intrinsic_value'], width, label='Intrinsic Value', color='skyblue')
-bars2 = ax.bar(x + width/2, df['time_value'], width, label='Time Value', color='lightcoral')
+bars1 = ax.bar (x - width/2, df['intrinsic_value'], width, label='Intrinsic Value', color='skyblue')
+bars2 = ax.bar (x + width/2, df['time_value'], width, label='Time Value', color='lightcoral')
 
 ax.set_xlabel('Option Strike', fontsize=12)
 ax.set_ylabel('Value ($)', fontsize=12)
 ax.set_title('Call Option Value Components', fontsize=14, fontweight='bold')
-ax.set_xticks(x)
-ax.set_xticklabels([f"\${s['strike']}\\n{Option(spot_price, s['strike'], 'call').get_moneyness()}" 
+ax.set_xticks (x)
+ax.set_xticklabels([f"\${s['strike']}\\n{Option (spot_price, s['strike'], 'call').get_moneyness()}" 
                      for s in call_chain])
 ax.legend()
-ax.grid(axis='y', alpha=0.3)
+ax.grid (axis='y', alpha=0.3)
 
 # Add value labels on bars
 for bars in [bars1, bars2]:
     for bar in bars:
         height = bar.get_height()
         if height > 0:
-            ax.text(bar.get_x() + bar.get_width()/2., height/2,
+            ax.text (bar.get_x() + bar.get_width()/2., height/2,
                    f'\${height:.2f}', ha='center', va='center', fontweight='bold')
 
 plt.tight_layout()
@@ -444,7 +444,7 @@ plt.show()
 Early Exercise Analysis
 """
 
-def should_exercise_early(option_type, spot, strike, time_value, dividend=0):
+def should_exercise_early (option_type, spot, strike, time_value, dividend=0):
     """
     Determine if early exercise is optimal
     
@@ -465,7 +465,7 @@ def should_exercise_early(option_type, spot, strike, time_value, dividend=0):
     --------
     dict : Analysis results
     """
-    intrinsic = max(spot - strike, 0) if option_type == 'call' else max(strike - spot, 0)
+    intrinsic = max (spot - strike, 0) if option_type == 'call' else max (strike - spot, 0)
     
     if option_type == 'call':
         # For calls: exercise if dividend > time value
@@ -535,13 +535,13 @@ print(f"  Recommendation: {analysis2['recommendation']}")
 Covered Call Strategy
 """
 
-def covered_call(spot_prices, stock_purchase, strike, premium):
+def covered_call (spot_prices, stock_purchase, strike, premium):
     """Calculate covered call payoff"""
     # Long stock payoff
     stock_pl = spot_prices - stock_purchase
     
     # Short call payoff
-    call_pl = premium - np.maximum(spot_prices - strike, 0)
+    call_pl = premium - np.maximum (spot_prices - strike, 0)
     
     # Combined
     total_pl = stock_pl + call_pl
@@ -554,22 +554,22 @@ call_strike = 160
 call_premium = 3
 
 spot_range = np.linspace(130, 180, 100)
-stock_pl, call_pl, total_pl = covered_call(spot_range, stock_cost, call_strike, call_premium)
+stock_pl, call_pl, total_pl = covered_call (spot_range, stock_cost, call_strike, call_premium)
 
-plt.figure(figsize=(12, 6))
-plt.plot(spot_range, stock_pl, label='Long Stock', linestyle='--', alpha=0.7)
-plt.plot(spot_range, call_pl, label='Short Call', linestyle='--', alpha=0.7)
-plt.plot(spot_range, total_pl, label='Covered Call (Combined)', linewidth=2, color='green')
-plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
-plt.axvline(x=stock_cost, color='blue', linestyle=':', label=f'Stock Cost \${stock_cost}')
-plt.axvline(x=call_strike, color='red', linestyle=':', label=f'Call Strike \${call_strike}')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
+plt.figure (figsize=(12, 6))
+plt.plot (spot_range, stock_pl, label='Long Stock', linestyle='--', alpha=0.7)
+plt.plot (spot_range, call_pl, label='Short Call', linestyle='--', alpha=0.7)
+plt.plot (spot_range, total_pl, label='Covered Call (Combined)', linewidth=2, color='green')
+plt.axhline (y=0, color='black', linestyle='-', alpha=0.3)
+plt.axvline (x=stock_cost, color='blue', linestyle=':', label=f'Stock Cost \${stock_cost}')
+plt.axvline (x=call_strike, color='red', linestyle=':', label=f'Call Strike \${call_strike}')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
 plt.xlabel('Stock Price at Expiration ($)')
 plt.ylabel('Profit/Loss ($)')
 plt.title('Covered Call Strategy', fontsize=14, fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 plt.show()
 
 print("=== COVERED CALL ANALYSIS ===")
@@ -593,13 +593,13 @@ print(f"Breakeven: \${stock_cost - call_premium}")
 Protective Put Strategy
 """
 
-def protective_put(spot_prices, stock_purchase, strike, premium):
+def protective_put (spot_prices, stock_purchase, strike, premium):
     """Calculate protective put payoff"""
     # Long stock
     stock_pl = spot_prices - stock_purchase
     
     # Long put
-    put_pl = np.maximum(strike - spot_prices, 0) - premium
+    put_pl = np.maximum (strike - spot_prices, 0) - premium
     
     # Combined
     total_pl = stock_pl + put_pl
@@ -610,22 +610,22 @@ def protective_put(spot_prices, stock_purchase, strike, premium):
 put_strike = 145
 put_premium = 4
 
-stock_pl, put_pl, total_pl = protective_put(spot_range, stock_cost, put_strike, put_premium)
+stock_pl, put_pl, total_pl = protective_put (spot_range, stock_cost, put_strike, put_premium)
 
-plt.figure(figsize=(12, 6))
-plt.plot(spot_range, stock_pl, label='Long Stock', linestyle='--', alpha=0.7)
-plt.plot(spot_range, put_pl, label='Long Put', linestyle='--', alpha=0.7)
-plt.plot(spot_range, total_pl, label='Protective Put (Combined)', linewidth=2, color='blue')
-plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
-plt.axvline(x=stock_cost, color='blue', linestyle=':', label=f'Stock Cost \${stock_cost}')
-plt.axvline(x=put_strike, color='red', linestyle=':', label=f'Put Strike \${put_strike}')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
+plt.figure (figsize=(12, 6))
+plt.plot (spot_range, stock_pl, label='Long Stock', linestyle='--', alpha=0.7)
+plt.plot (spot_range, put_pl, label='Long Put', linestyle='--', alpha=0.7)
+plt.plot (spot_range, total_pl, label='Protective Put (Combined)', linewidth=2, color='blue')
+plt.axhline (y=0, color='black', linestyle='-', alpha=0.3)
+plt.axvline (x=stock_cost, color='blue', linestyle=':', label=f'Stock Cost \${stock_cost}')
+plt.axvline (x=put_strike, color='red', linestyle=':', label=f'Put Strike \${put_strike}')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
 plt.xlabel('Stock Price at Expiration ($)')
 plt.ylabel('Profit/Loss ($)')
 plt.title('Protective Put Strategy', fontsize=14, fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 plt.show()
 
 print("\\n=== PROTECTIVE PUT ANALYSIS ===")
@@ -649,13 +649,13 @@ print(f"Breakeven: \${stock_cost + put_premium}")
 Bull Call Spread
 """
 
-def bull_call_spread(spot_prices, long_strike, short_strike, long_premium, short_premium):
+def bull_call_spread (spot_prices, long_strike, short_strike, long_premium, short_premium):
     """Calculate bull call spread payoff"""
     # Long call
-    long_call_pl = np.maximum(spot_prices - long_strike, 0) - long_premium
+    long_call_pl = np.maximum (spot_prices - long_strike, 0) - long_premium
     
     # Short call
-    short_call_pl = short_premium - np.maximum(spot_prices - short_strike, 0)
+    short_call_pl = short_premium - np.maximum (spot_prices - short_strike, 0)
     
     # Combined
     total_pl = long_call_pl + short_call_pl
@@ -672,20 +672,20 @@ long_call_pl, short_call_pl, total_pl = bull_call_spread(
     spot_range, long_strike, short_strike, long_premium, short_premium
 )
 
-plt.figure(figsize=(12, 6))
-plt.plot(spot_range, long_call_pl, label=f'Long \${long_strike} Call', linestyle='--', alpha=0.7)
-plt.plot(spot_range, short_call_pl, label=f'Short \${short_strike} Call', linestyle='--', alpha=0.7)
-plt.plot(spot_range, total_pl, label='Bull Call Spread', linewidth=2, color='green')
-plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
-plt.axvline(x=long_strike, color='blue', linestyle=':', alpha=0.5)
-plt.axvline(x=short_strike, color='red', linestyle=':', alpha=0.5)
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
+plt.figure (figsize=(12, 6))
+plt.plot (spot_range, long_call_pl, label=f'Long \${long_strike} Call', linestyle='--', alpha=0.7)
+plt.plot (spot_range, short_call_pl, label=f'Short \${short_strike} Call', linestyle='--', alpha=0.7)
+plt.plot (spot_range, total_pl, label='Bull Call Spread', linewidth=2, color='green')
+plt.axhline (y=0, color='black', linestyle='-', alpha=0.3)
+plt.axvline (x=long_strike, color='blue', linestyle=':', alpha=0.5)
+plt.axvline (x=short_strike, color='red', linestyle=':', alpha=0.5)
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
 plt.xlabel('Stock Price at Expiration ($)')
 plt.ylabel('Profit/Loss ($)')
 plt.title('Bull Call Spread', fontsize=14, fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 plt.show()
 
 net_debit = long_premium - short_premium
@@ -715,7 +715,7 @@ print(f"Risk/Reward Ratio: {max_loss/max_profit:.2f}:1")
 Iron Condor Strategy
 """
 
-def iron_condor(spot_prices, put_strikes, call_strikes, put_premiums, call_premiums):
+def iron_condor (spot_prices, put_strikes, call_strikes, put_premiums, call_premiums):
     """
     Calculate iron condor payoff
     
@@ -727,13 +727,13 @@ def iron_condor(spot_prices, put_strikes, call_strikes, put_premiums, call_premi
     call_premiums : tuple (short, long)
     """
     # Put spread (bull put spread)
-    long_put_pl = np.maximum(put_strikes[0] - spot_prices, 0) - put_premiums[0]
-    short_put_pl = put_premiums[1] - np.maximum(put_strikes[1] - spot_prices, 0)
+    long_put_pl = np.maximum (put_strikes[0] - spot_prices, 0) - put_premiums[0]
+    short_put_pl = put_premiums[1] - np.maximum (put_strikes[1] - spot_prices, 0)
     put_spread_pl = long_put_pl + short_put_pl
     
     # Call spread (bear call spread)
-    short_call_pl = call_premiums[0] - np.maximum(spot_prices - call_strikes[0], 0)
-    long_call_pl = np.maximum(spot_prices - call_strikes[1], 0) - call_premiums[1]
+    short_call_pl = call_premiums[0] - np.maximum (spot_prices - call_strikes[0], 0)
+    long_call_pl = np.maximum (spot_prices - call_strikes[1], 0) - call_premiums[1]
     call_spread_pl = short_call_pl + long_call_pl
     
     # Combined
@@ -752,25 +752,25 @@ put_spread_pl, call_spread_pl, total_pl = iron_condor(
     spot_range, put_strikes, call_strikes, put_premiums, call_premiums
 )
 
-plt.figure(figsize=(14, 7))
-plt.plot(spot_range, put_spread_pl, label='Bull Put Spread', linestyle='--', alpha=0.7)
-plt.plot(spot_range, call_spread_pl, label='Bear Call Spread', linestyle='--', alpha=0.7)
-plt.plot(spot_range, total_pl, label='Iron Condor', linewidth=2.5, color='darkblue')
-plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
+plt.figure (figsize=(14, 7))
+plt.plot (spot_range, put_spread_pl, label='Bull Put Spread', linestyle='--', alpha=0.7)
+plt.plot (spot_range, call_spread_pl, label='Bear Call Spread', linestyle='--', alpha=0.7)
+plt.plot (spot_range, total_pl, label='Iron Condor', linewidth=2.5, color='darkblue')
+plt.axhline (y=0, color='black', linestyle='-', alpha=0.3)
 
 # Mark strikes
 for strike in [put_strikes[0], put_strikes[1], call_strikes[0], call_strikes[1]]:
-    plt.axvline(x=strike, color='gray', linestyle=':', alpha=0.4)
+    plt.axvline (x=strike, color='gray', linestyle=':', alpha=0.4)
 
-plt.axvspan(put_strikes[1], call_strikes[0], alpha=0.1, color='green', label='Profit Zone')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
-plt.fill_between(spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
+plt.axvspan (put_strikes[1], call_strikes[0], alpha=0.1, color='green', label='Profit Zone')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl > 0), alpha=0.2, color='green')
+plt.fill_between (spot_range, 0, total_pl, where=(total_pl < 0), alpha=0.2, color='red')
 
 plt.xlabel('Stock Price at Expiration ($)')
 plt.ylabel('Profit/Loss ($)')
 plt.title('Iron Condor Strategy', fontsize=14, fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 plt.show()
 
 net_credit = (put_premiums[1] - put_premiums[0]) + (call_premiums[0] - call_premiums[1])
@@ -802,7 +802,7 @@ Fetching Real Option Data
 import yfinance as yf
 from datetime import datetime, timedelta
 
-def get_option_chain(ticker, expiration_date=None):
+def get_option_chain (ticker, expiration_date=None):
     """
     Fetch option chain for a ticker
     
@@ -817,7 +817,7 @@ def get_option_chain(ticker, expiration_date=None):
     --------
     dict : Contains calls and puts dataframes
     """
-    stock = yf.Ticker(ticker)
+    stock = yf.Ticker (ticker)
     
     # Get available expiration dates
     expirations = stock.options
@@ -827,14 +827,14 @@ def get_option_chain(ticker, expiration_date=None):
         expiration_date = expirations[0]
     
     # Get option chain
-    opt_chain = stock.option_chain(expiration_date)
+    opt_chain = stock.option_chain (expiration_date)
     
     return {
         'ticker': ticker,
         'expiration': expiration_date,
         'calls': opt_chain.calls,
         'puts': opt_chain.puts,
-        'current_price': stock.history(period='1d')['Close'].iloc[-1]
+        'current_price': stock.history (period='1d')['Close'].iloc[-1]
     }
 
 # Example: AAPL options
@@ -850,21 +850,21 @@ try:
     calls = aapl_options['calls']
     
     # Find ATM options (closest to current price)
-    calls['distance'] = abs(calls['strike'] - spot)
+    calls['distance'] = abs (calls['strike'] - spot)
     atm_calls = calls.nsmallest(5, 'distance')[['strike', 'lastPrice', 'bid', 'ask', 
                                                    'volume', 'openInterest', 'impliedVolatility']]
     
     print("ATM Call Options:")
-    print(atm_calls.to_string(index=False))
+    print(atm_calls.to_string (index=False))
     
     # Display ATM puts
     puts = aapl_options['puts']
-    puts['distance'] = abs(puts['strike'] - spot)
+    puts['distance'] = abs (puts['strike'] - spot)
     atm_puts = puts.nsmallest(5, 'distance')[['strike', 'lastPrice', 'bid', 'ask', 
                                                  'volume', 'openInterest', 'impliedVolatility']]
     
     print("\\nATM Put Options:")
-    print(atm_puts.to_string(index=False))
+    print(atm_puts.to_string (index=False))
     
 except Exception as e:
     print(f"Error fetching options: {e}")
@@ -888,12 +888,12 @@ class OptionPosition:
         self.position = position  # 'long' or 'short'
         self.quantity = quantity
     
-    def payoff(self, spot_price):
+    def payoff (self, spot_price):
         """Calculate payoff at given spot price"""
         if self.option_type == 'call':
-            intrinsic = max(spot_price - self.strike, 0)
+            intrinsic = max (spot_price - self.strike, 0)
         else:  # put
-            intrinsic = max(self.strike - spot_price, 0)
+            intrinsic = max (self.strike - spot_price, 0)
         
         if self.position == 'long':
             return (intrinsic - self.premium) * self.quantity
@@ -911,28 +911,28 @@ class OptionStrategy:
         self.positions = []
         self.stock_position = None
     
-    def add_option(self, option_type, strike, premium, position='long', quantity=1):
+    def add_option (self, option_type, strike, premium, position='long', quantity=1):
         """Add an option leg"""
-        opt = OptionPosition(option_type, strike, premium, position, quantity)
-        self.positions.append(opt)
+        opt = OptionPosition (option_type, strike, premium, position, quantity)
+        self.positions.append (opt)
         return self
     
-    def add_stock(self, quantity, cost):
+    def add_stock (self, quantity, cost):
         """Add stock position"""
         self.stock_position = {'quantity': quantity, 'cost': cost}
         return self
     
-    def calculate_payoff(self, spot_prices):
+    def calculate_payoff (self, spot_prices):
         """Calculate total strategy payoff"""
-        if not isinstance(spot_prices, np.ndarray):
+        if not isinstance (spot_prices, np.ndarray):
             spot_prices = np.array([spot_prices])
         
-        total_payoff = np.zeros_like(spot_prices, dtype=float)
+        total_payoff = np.zeros_like (spot_prices, dtype=float)
         
         # Add option payoffs
         for position in self.positions:
-            for i, spot in enumerate(spot_prices):
-                total_payoff[i] += position.payoff(spot)
+            for i, spot in enumerate (spot_prices):
+                total_payoff[i] += position.payoff (spot)
         
         # Add stock P/L if present
         if self.stock_position:
@@ -941,12 +941,12 @@ class OptionStrategy:
         
         return total_payoff
     
-    def analyze(self, current_price, price_range=None):
+    def analyze (self, current_price, price_range=None):
         """Analyze strategy"""
         if price_range is None:
-            price_range = np.linspace(current_price * 0.7, current_price * 1.3, 100)
+            price_range = np.linspace (current_price * 0.7, current_price * 1.3, 100)
         
-        payoffs = self.calculate_payoff(price_range)
+        payoffs = self.calculate_payoff (price_range)
         
         # Calculate key metrics
         max_profit = payoffs.max()
@@ -954,11 +954,11 @@ class OptionStrategy:
         
         # Find breakevens (where payoff crosses zero)
         breakevens = []
-        for i in range(len(payoffs) - 1):
+        for i in range (len (payoffs) - 1):
             if (payoffs[i] <= 0 and payoffs[i+1] > 0) or (payoffs[i] >= 0 and payoffs[i+1] < 0):
                 # Linear interpolation
                 be = price_range[i] + (price_range[i+1] - price_range[i]) * (-payoffs[i]) / (payoffs[i+1] - payoffs[i])
-                breakevens.append(be)
+                breakevens.append (be)
         
         return {
             'strategy': self.name,
@@ -970,38 +970,38 @@ class OptionStrategy:
             'payoffs': payoffs
         }
     
-    def plot(self, current_price, price_range=None):
+    def plot (self, current_price, price_range=None):
         """Plot strategy payoff"""
-        analysis = self.analyze(current_price, price_range)
+        analysis = self.analyze (current_price, price_range)
         
-        plt.figure(figsize=(12, 7))
-        plt.plot(analysis['price_range'], analysis['payoffs'], linewidth=2.5, color='darkblue')
-        plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
-        plt.axvline(x=current_price, color='green', linestyle='--', 
+        plt.figure (figsize=(12, 7))
+        plt.plot (analysis['price_range'], analysis['payoffs'], linewidth=2.5, color='darkblue')
+        plt.axhline (y=0, color='black', linestyle='-', alpha=0.3)
+        plt.axvline (x=current_price, color='green', linestyle='--', 
                    label=f'Current Price \${current_price:.2f}', alpha=0.7)
         
         # Mark breakevens
         for be in analysis['breakevens']:
-            plt.axvline(x=be, color='orange', linestyle=':', alpha=0.7)
-            plt.text(be, 0, f'  BE: \${be:.2f}', rotation=90, va='bottom', fontsize=9)
+            plt.axvline (x=be, color='orange', linestyle=':', alpha=0.7)
+            plt.text (be, 0, f'  BE: \${be:.2f}', rotation=90, va='bottom', fontsize=9)
         
-        plt.fill_between(analysis['price_range'], 0, analysis['payoffs'], 
+        plt.fill_between (analysis['price_range'], 0, analysis['payoffs'], 
                         where=(analysis['payoffs'] > 0), alpha=0.2, color='green', label='Profit')
-        plt.fill_between(analysis['price_range'], 0, analysis['payoffs'], 
+        plt.fill_between (analysis['price_range'], 0, analysis['payoffs'], 
                         where=(analysis['payoffs'] < 0), alpha=0.2, color='red', label='Loss')
         
         plt.xlabel('Stock Price at Expiration ($)', fontsize=12)
         plt.ylabel('Profit/Loss ($)', fontsize=12)
-        plt.title(f'{self.name} Payoff Diagram', fontsize=14, fontweight='bold')
+        plt.title (f'{self.name} Payoff Diagram', fontsize=14, fontweight='bold')
         plt.legend()
-        plt.grid(alpha=0.3)
+        plt.grid (alpha=0.3)
         plt.tight_layout()
         plt.show()
         
         # Print analysis
         print(f"\\n=== {self.name.upper()} ANALYSIS ===")
         print(f"\\nPositions:")
-        for i, pos in enumerate(self.positions, 1):
+        for i, pos in enumerate (self.positions, 1):
             print(f"  {i}. {pos}")
         
         if self.stock_position:
@@ -1016,9 +1016,9 @@ current = 150
 
 # 1. Covered Call
 covered_call = OptionStrategy("Covered Call")
-covered_call.add_stock(quantity=100, cost=150)
+covered_call.add_stock (quantity=100, cost=150)
 covered_call.add_option('call', strike=160, premium=3, position='short', quantity=1)
-covered_call.plot(current)
+covered_call.plot (current)
 
 # 2. Iron Condor
 iron_condor = OptionStrategy("Iron Condor")
@@ -1026,13 +1026,13 @@ iron_condor.add_option('put', strike=135, premium=1, position='long')
 iron_condor.add_option('put', strike=140, premium=2.5, position='short')
 iron_condor.add_option('call', strike=160, premium=2.5, position='short')
 iron_condor.add_option('call', strike=165, premium=1, position='long')
-iron_condor.plot(current)
+iron_condor.plot (current)
 
 # 3. Long Straddle (volatility play)
 straddle = OptionStrategy("Long Straddle")
 straddle.add_option('call', strike=150, premium=6, position='long')
 straddle.add_option('put', strike=150, premium=5, position='long')
-straddle.plot(current)
+straddle.plot (current)
 \`\`\`
 
 ---

@@ -123,7 +123,7 @@ Services communicate via events. Each service listens for events, does work, pub
 **Implementation**:
 \`\`\`javascript
 // Order Service
-async function createOrder(orderData) {
+async function createOrder (orderData) {
     // Local transaction
     const order = await db.orders.insert({
         ...orderData,
@@ -143,7 +143,7 @@ async function createOrder(orderData) {
 // Listen for failure events
 eventBus.on('PaymentFailed', async (event) => {
     // Compensating transaction
-    await db.orders.update(event.orderId, {
+    await db.orders.update (event.orderId, {
         status: 'CANCELLED'
     });
     
@@ -231,7 +231,7 @@ Orchestrator:
 \`\`\`javascript
 // Saga Orchestrator
 class OrderSagaOrchestrator {
-    async execute(orderData) {
+    async execute (orderData) {
         const sagaId = generateId();
         const sagaState = {
             id: sagaId,
@@ -241,11 +241,11 @@ class OrderSagaOrchestrator {
         
         try {
             // Step 1: Create order
-            const order = await orderService.createOrder(orderData);
+            const order = await orderService.createOrder (orderData);
             sagaState.steps.push({step: 'CreateOrder', status: 'COMPLETED', data: order});
             
             // Step 2: Reserve inventory
-            await inventoryService.reserveInventory(order.items);
+            await inventoryService.reserveInventory (order.items);
             sagaState.steps.push({step: 'ReserveInventory', status: 'COMPLETED'});
             
             // Step 3: Charge payment
@@ -256,43 +256,43 @@ class OrderSagaOrchestrator {
             sagaState.steps.push({step: 'ChargePayment', status: 'COMPLETED', data: payment});
             
             // Step 4: Ship order
-            await shippingService.ship(order.id);
+            await shippingService.ship (order.id);
             sagaState.steps.push({step: 'ShipOrder', status: 'COMPLETED'});
             
             // Success
             sagaState.status = 'COMPLETED';
-            await sagaRepository.save(sagaState);
+            await sagaRepository.save (sagaState);
             return order;
             
         } catch (error) {
             // Rollback in reverse order
             sagaState.status = 'ROLLING_BACK';
-            await this.rollback(sagaState);
+            await this.rollback (sagaState);
             throw error;
         }
     }
     
-    async rollback(sagaState) {
+    async rollback (sagaState) {
         // Execute compensating transactions in reverse order
-        const completedSteps = sagaState.steps.filter(s => s.status === 'COMPLETED').reverse();
+        const completedSteps = sagaState.steps.filter (s => s.status === 'COMPLETED').reverse();
         
         for (const step of completedSteps) {
             switch (step.step) {
                 case 'CreateOrder':
-                    await orderService.cancelOrder(step.data.id);
+                    await orderService.cancelOrder (step.data.id);
                     break;
                 case 'ReserveInventory':
-                    await inventoryService.releaseInventory(step.data.items);
+                    await inventoryService.releaseInventory (step.data.items);
                     break;
                 case 'ChargePayment':
-                    await paymentService.refund(step.data.paymentId);
+                    await paymentService.refund (step.data.paymentId);
                     break;
                 // No compensation needed for ShipOrder (we failed before this)
             }
         }
         
         sagaState.status = 'ROLLED_BACK';
-        await sagaRepository.save(sagaState);
+        await sagaRepository.save (sagaState);
     }
 }
 \`\`\`
@@ -352,7 +352,7 @@ Temporary issues that might succeed on retry:
 **Solution**: Retry with exponential backoff
 
 \`\`\`javascript
-async function withRetry(fn, maxRetries = 3) {
+async function withRetry (fn, maxRetries = 3) {
     for (let i = 0; i < maxRetries; i++) {
         try {
             return await fn();
@@ -361,13 +361,13 @@ async function withRetry(fn, maxRetries = 3) {
             
             // Exponential backoff
             const delay = Math.pow(2, i) * 1000;
-            await sleep(delay);
+            await sleep (delay);
         }
     }
 }
 
 // Usage
-await withRetry(() => paymentService.charge(payment));
+await withRetry(() => paymentService.charge (payment));
 \`\`\`
 
 ### Non-Retryable Failures (Permanent)
@@ -425,44 +425,44 @@ When using orchestration, implement a **Saga Execution Coordinator**:
 **Example (using state machine)**:
 \`\`\`javascript
 class SagaExecutionCoordinator {
-    async run(sagaDefinition, data) {
-        const saga = await this.createSaga(sagaDefinition, data);
+    async run (sagaDefinition, data) {
+        const saga = await this.createSaga (sagaDefinition, data);
         
         for (const step of sagaDefinition.steps) {
             try {
                 // Execute step
-                const result = await this.executeStep(step, saga);
+                const result = await this.executeStep (step, saga);
                 
                 // Save state
                 saga.steps.push({name: step.name, status: 'COMPLETED', result});
                 saga.currentStep = step.name;
-                await this.saveSaga(saga);
+                await this.saveSaga (saga);
                 
             } catch (error) {
                 // Trigger compensation
                 saga.status = 'FAILED';
-                await this.compensate(saga);
+                await this.compensate (saga);
                 throw error;
             }
         }
         
         saga.status = 'COMPLETED';
-        await this.saveSaga(saga);
+        await this.saveSaga (saga);
         return saga;
     }
     
-    async compensate(saga) {
-        const completedSteps = saga.steps.filter(s => s.status === 'COMPLETED').reverse();
+    async compensate (saga) {
+        const completedSteps = saga.steps.filter (s => s.status === 'COMPLETED').reverse();
         
         for (const step of completedSteps) {
             const compensation = sagaDefinition.compensations[step.name];
             if (compensation) {
-                await this.executeCompensation(compensation, step.result);
+                await this.executeCompensation (compensation, step.result);
             }
         }
         
         saga.status = 'ROLLED_BACK';
-        await this.saveSaga(saga);
+        await this.saveSaga (saga);
     }
 }
 \`\`\`

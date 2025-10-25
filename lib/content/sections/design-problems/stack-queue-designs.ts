@@ -27,20 +27,20 @@ class MinStack:
         self.stack = []
         self.min_stack = []
     
-    def push(self, val):
-        self.stack.append(val)
+    def push (self, val):
+        self.stack.append (val)
         # Push current minimum
-        min_val = min(val, self.min_stack[-1] if self.min_stack else val)
-        self.min_stack.append(min_val)
+        min_val = min (val, self.min_stack[-1] if self.min_stack else val)
+        self.min_stack.append (min_val)
     
-    def pop(self):
+    def pop (self):
         self.stack.pop()
         self.min_stack.pop()  # Keep in sync
     
-    def top(self):
+    def top (self):
         return self.stack[-1]
     
-    def getMin(self):
+    def getMin (self):
         return self.min_stack[-1]  # O(1)!
 \`\`\`
 
@@ -67,20 +67,20 @@ class MinStack:
     def __init__(self):
         self.stack = []  # Store (val, min_so_far)
     
-    def push(self, val):
+    def push (self, val):
         if not self.stack:
             self.stack.append((val, val))
         else:
-            current_min = min(val, self.stack[-1][1])
+            current_min = min (val, self.stack[-1][1])
             self.stack.append((val, current_min))
     
-    def pop(self):
+    def pop (self):
         self.stack.pop()
     
-    def top(self):
+    def top (self):
         return self.stack[-1][0]
     
-    def getMin(self):
+    def getMin (self):
         return self.stack[-1][1]  # O(1)!
 \`\`\`
 
@@ -96,14 +96,14 @@ class MinStack:
         self.stack = []
         self.min_stack = []  # Only store (value, count)
     
-    def push(self, val):
-        self.stack.append(val)
+    def push (self, val):
+        self.stack.append (val)
         if not self.min_stack or val < self.min_stack[-1][0]:
             self.min_stack.append((val, 1))
         elif val == self.min_stack[-1][0]:
             self.min_stack[-1] = (val, self.min_stack[-1][1] + 1)
     
-    def pop(self):
+    def pop (self):
         val = self.stack.pop()
         if val == self.min_stack[-1][0]:
             if self.min_stack[-1][1] == 1:
@@ -132,20 +132,20 @@ class QueueUsingStacks:
         self.stack_in = []   # For enqueue
         self.stack_out = []  # For dequeue
     
-    def enqueue(self, x):
-        self.stack_in.append(x)  # O(1)
+    def enqueue (self, x):
+        self.stack_in.append (x)  # O(1)
     
-    def dequeue(self):
+    def dequeue (self):
         if not self.stack_out:
             # Transfer all from in to out (reverses order)
             while self.stack_in:
-                self.stack_out.append(self.stack_in.pop())
+                self.stack_out.append (self.stack_in.pop())
         return self.stack_out.pop() if self.stack_out else None
     
-    def peek(self):
+    def peek (self):
         if not self.stack_out:
             while self.stack_in:
-                self.stack_out.append(self.stack_in.pop())
+                self.stack_out.append (self.stack_in.pop())
         return self.stack_out[-1] if self.stack_out else None
 \`\`\`
 
@@ -194,19 +194,19 @@ class StackUsingQueues:
         self.q1 = deque()
         self.q2 = deque()
     
-    def push(self, x):
+    def push (self, x):
         # Add to q2
-        self.q2.append(x)
+        self.q2.append (x)
         # Move all from q1 to q2 (x is now at front)
         while self.q1:
-            self.q2.append(self.q1.popleft())
+            self.q2.append (self.q1.popleft())
         # Swap names
         self.q1, self.q2 = self.q2, self.q1
     
-    def pop(self):
+    def pop (self):
         return self.q1.popleft() if self.q1 else None
     
-    def top(self):
+    def top (self):
         return self.q1[0] if self.q1 else None
 \`\`\`
 
@@ -231,13 +231,13 @@ class StackUsingQueues:
     def __init__(self):
         self.q = deque()
     
-    def push(self, x):
-        self.q.append(x)
+    def push (self, x):
+        self.q.append (x)
         # Rotate: move all elements before x to after x
-        for _ in range(len(self.q) - 1):
-            self.q.append(self.q.popleft())
+        for _ in range (len (self.q) - 1):
+            self.q.append (self.q.popleft())
     
-    def pop(self):
+    def pop (self):
         return self.q.popleft() if self.q else None
 \`\`\`
 

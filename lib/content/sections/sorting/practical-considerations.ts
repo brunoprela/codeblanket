@@ -9,7 +9,7 @@ export const practicalconsiderationsSection = {
 
 Real-world sorting implementations use **hybrid algorithms** that combine multiple techniques:
 
-**1. Timsort (Python's sorted() and .sort())**
+**1. Timsort (Python\'s sorted() and .sort())**
 
 A hybrid of merge sort and insertion sort, designed for real-world data.
 
@@ -92,10 +92,10 @@ Is data size < 20?
 \`\`\`python
 # Python - Timsort
 arr.sort()  # In-place
-sorted_arr = sorted(arr)  # Returns new list
+sorted_arr = sorted (arr)  # Returns new list
 
 # Custom comparison
-arr.sort(key=lambda x: x.name)
+arr.sort (key=lambda x: x.name)
 \`\`\`
 
 **2. Partial Sorting:**
@@ -108,10 +108,10 @@ top_10 = heapq.nlargest(10, arr)
 
 **3. Check if Already Sorted:**
 \`\`\`python
-def is_sorted(arr):
-    return all(arr[i] <= arr[i+1] for i in range(len(arr)-1))
+def is_sorted (arr):
+    return all (arr[i] <= arr[i+1] for i in range (len (arr)-1))
 
-if not is_sorted(arr):
+if not is_sorted (arr):
     arr.sort()  # Skip sorting if already sorted
 \`\`\`
 
@@ -119,7 +119,7 @@ if not is_sorted(arr):
 \`\`\`python
 # If sorting grades 0-100
 if all(0 <= x <= 100 for x in grades):
-    grades = counting_sort(grades)  # O(n) vs O(n log n)
+    grades = counting_sort (grades)  # O(n) vs O(n log n)
 \`\`\`
 
 **Interview Tips:**

@@ -23,7 +23,7 @@ Unlike discrete distributions (PMF), continuous distributions use **Probability 
 The **uniform distribution** assigns equal probability density to all values in an interval [a, b].
 
 **PDF**:
-\\[ f(x) = \\begin{cases} \\frac{1}{b-a} & \\text{if } a \\leq x \\leq b \\\\ 0 & \\text{otherwise} \\end{cases} \\]
+\\[ f (x) = \\begin{cases} \\frac{1}{b-a} & \\text{if } a \\leq x \\leq b \\\\ 0 & \\text{otherwise} \\end{cases} \\]
 
 **Properties**:
 - E[X] = (a + b) / 2
@@ -39,7 +39,7 @@ def uniform_demo():
     
     a, b = 2, 8  # Uniform on [2, 8]
     
-    uniform = stats.uniform(loc=a, scale=b-a)
+    uniform = stats.uniform (loc=a, scale=b-a)
     
     print("=== Uniform Distribution ===")
     print(f"Parameters: a={a}, b={b}")
@@ -48,30 +48,30 @@ def uniform_demo():
     
     # Sample
     np.random.seed(42)
-    samples = uniform.rvs(size=10000)
+    samples = uniform.rvs (size=10000)
     
     print(f"\\nEmpirical: E[X] = {samples.mean():.4f}, Var(X) = {samples.var():.4f}")
     
     # Plot
     x = np.linspace(0, 10, 1000)
-    pdf = uniform.pdf(x)
+    pdf = uniform.pdf (x)
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # PDF
-    ax1.plot(x, pdf, 'b-', linewidth=2, label='PDF')
-    ax1.fill_between(x, pdf, alpha=0.3)
+    ax1.plot (x, pdf, 'b-', linewidth=2, label='PDF')
+    ax1.fill_between (x, pdf, alpha=0.3)
     ax1.set_xlabel('x')
     ax1.set_ylabel('Density')
-    ax1.set_title(f'Uniform PDF (a={a}, b={b})')
-    ax1.axvline(a, color='r', linestyle='--', label=f'a={a}')
-    ax1.axvline(b, color='r', linestyle='--', label=f'b={b}')
+    ax1.set_title (f'Uniform PDF (a={a}, b={b})')
+    ax1.axvline (a, color='r', linestyle='--', label=f'a={a}')
+    ax1.axvline (b, color='r', linestyle='--', label=f'b={b}')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
     # Histogram of samples
-    ax2.hist(samples, bins=50, density=True, alpha=0.7, edgecolor='black')
-    ax2.plot(x, pdf, 'r-', linewidth=2, label='Theoretical PDF')
+    ax2.hist (samples, bins=50, density=True, alpha=0.7, edgecolor='black')
+    ax2.plot (x, pdf, 'r-', linewidth=2, label='Theoretical PDF')
     ax2.set_xlabel('x')
     ax2.set_ylabel('Density')
     ax2.set_title('Uniform Samples (n=10000)')
@@ -93,7 +93,7 @@ uniform_demo()
 Models the **time between events** in a Poisson process (time until next event).
 
 **PDF**:
-\\[ f(x) = \\lambda e^{-\\lambda x} \\text{ for } x \\geq 0 \\]
+\\[ f (x) = \\lambda e^{-\\lambda x} \\text{ for } x \\geq 0 \\]
 
 **Properties**:
 - E[X] = 1/λ
@@ -106,7 +106,7 @@ def exponential_demo():
     
     lambda_param = 2  # Rate parameter
     
-    exponential = stats.expon(scale=1/lambda_param)
+    exponential = stats.expon (scale=1/lambda_param)
     
     print("=== Exponential Distribution ===")
     print(f"Parameter λ = {lambda_param}")
@@ -115,29 +115,29 @@ def exponential_demo():
     
     # Sample
     np.random.seed(42)
-    samples = exponential.rvs(size=10000)
+    samples = exponential.rvs (size=10000)
     
     print(f"\\nEmpirical: E[X] = {samples.mean():.4f}, Var(X) = {samples.var():.4f}")
     
     # Plot
     x = np.linspace(0, 5, 1000)
-    pdf = exponential.pdf(x)
-    cdf = exponential.cdf(x)
+    pdf = exponential.pdf (x)
+    cdf = exponential.cdf (x)
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # PDF
-    ax1.plot(x, pdf, 'b-', linewidth=2, label='PDF')
-    ax1.fill_between(x, pdf, alpha=0.3)
+    ax1.plot (x, pdf, 'b-', linewidth=2, label='PDF')
+    ax1.fill_between (x, pdf, alpha=0.3)
     ax1.set_xlabel('Time')
     ax1.set_ylabel('Density')
-    ax1.set_title(f'Exponential PDF (λ={lambda_param})')
+    ax1.set_title (f'Exponential PDF (λ={lambda_param})')
     ax1.axvline(1/lambda_param, color='r', linestyle='--', label=f'Mean = 1/λ = {1/lambda_param}')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
     # CDF
-    ax2.plot(x, cdf, 'r-', linewidth=2)
+    ax2.plot (x, cdf, 'r-', linewidth=2)
     ax2.set_xlabel('Time')
     ax2.set_ylabel('Cumulative Probability')
     ax2.set_title('Exponential CDF')
@@ -164,7 +164,7 @@ exponential_demo()
 Defined on interval [0, 1], commonly used for modeling **probabilities** themselves.
 
 **PDF**:
-\\[ f(x) = \\frac{x^{\\alpha-1}(1-x)^{\\beta-1}}{B(\\alpha,\\beta)} \\text{ for } 0 \\leq x \\leq 1 \\]
+\\[ f (x) = \\frac{x^{\\alpha-1}(1-x)^{\\beta-1}}{B(\\alpha,\\beta)} \\text{ for } 0 \\leq x \\leq 1 \\]
 
 **Properties**:
 - E[X] = α / (α + β)
@@ -182,24 +182,24 @@ def beta_demo():
     axes = axes.flatten()
     
     print("=== Beta Distribution ===")
-    print("PDF: f(x) = x^(α-1) * (1-x)^(β-1) / B(α,β)")
+    print("PDF: f (x) = x^(α-1) * (1-x)^(β-1) / B(α,β)")
     print("\\nParameter effects:")
     
     x = np.linspace(0, 1, 1000)
     
-    for i, (alpha, beta_param) in enumerate(params):
-        beta_dist = stats.beta(alpha, beta_param)
-        pdf = beta_dist.pdf(x)
+    for i, (alpha, beta_param) in enumerate (params):
+        beta_dist = stats.beta (alpha, beta_param)
+        pdf = beta_dist.pdf (x)
         mean = alpha / (alpha + beta_param)
         
         # Plot
         ax = axes[i]
-        ax.plot(x, pdf, 'b-', linewidth=2)
-        ax.fill_between(x, pdf, alpha=0.3)
-        ax.axvline(mean, color='r', linestyle='--', label=f'Mean = {mean:.3f}')
+        ax.plot (x, pdf, 'b-', linewidth=2)
+        ax.fill_between (x, pdf, alpha=0.3)
+        ax.axvline (mean, color='r', linestyle='--', label=f'Mean = {mean:.3f}')
         ax.set_xlabel('x')
         ax.set_ylabel('Density')
-        ax.set_title(f'Beta(α={alpha}, β={beta_param})')
+        ax.set_title (f'Beta(α={alpha}, β={beta_param})')
         ax.legend()
         ax.grid(True, alpha=0.3)
         
@@ -227,7 +227,7 @@ beta_demo()
 Generalizes the exponential distribution, models **waiting time for k events**.
 
 **PDF**:
-\\[ f(x) = \\frac{\\beta^\\alpha x^{\\alpha-1} e^{-\\beta x}}{\\Gamma(\\alpha)} \\text{ for } x > 0 \\]
+\\[ f (x) = \\frac{\\beta^\\alpha x^{\\alpha-1} e^{-\\beta x}}{\\Gamma(\\alpha)} \\text{ for } x > 0 \\]
 
 **Properties**:
 - E[X] = α/β
@@ -251,27 +251,27 @@ def gamma_demo():
     x = np.linspace(0, 8, 1000)
     
     for alpha in shapes:
-        gamma_dist = stats.gamma(alpha, scale=1/rate)
-        pdf = gamma_dist.pdf(x)
+        gamma_dist = stats.gamma (alpha, scale=1/rate)
+        pdf = gamma_dist.pdf (x)
         mean = alpha / rate
         
         # Plot PDF
-        ax1.plot(x, pdf, linewidth=2, label=f'α={alpha}, Mean={mean}')
+        ax1.plot (x, pdf, linewidth=2, label=f'α={alpha}, Mean={mean}')
         
         print(f"  α={alpha:2d}: E[X] = {mean:.2f}, Var(X) = {alpha/rate**2:.2f}")
     
     ax1.set_xlabel('x')
     ax1.set_ylabel('Density')
-    ax1.set_title(f'Gamma PDF (β={rate})')
+    ax1.set_title (f'Gamma PDF (β={rate})')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
     # Relationship to Exponential
-    exponential = stats.expon(scale=1/rate)
+    exponential = stats.expon (scale=1/rate)
     gamma_1 = stats.gamma(1, scale=1/rate)
     
-    ax2.plot(x, exponential.pdf(x), 'b-', linewidth=2, label='Exponential(β=2)')
-    ax2.plot(x, gamma_1.pdf(x), 'r--', linewidth=2, label='Gamma(α=1, β=2)')
+    ax2.plot (x, exponential.pdf (x), 'b-', linewidth=2, label='Exponential(β=2)')
+    ax2.plot (x, gamma_1.pdf (x), 'r--', linewidth=2, label='Gamma(α=1, β=2)')
     ax2.set_xlabel('x')
     ax2.set_ylabel('Density')
     ax2.set_title('Gamma(α=1) = Exponential')
@@ -300,7 +300,7 @@ Special case of Gamma, used in **hypothesis testing** and **confidence intervals
 - Parameter: k (degrees of freedom)
 - E[X] = k
 - Var(X) = 2k
-- Chi-Squared(k) = Gamma(k/2, 1/2)
+- Chi-Squared (k) = Gamma (k/2, 1/2)
 
 \`\`\`python
 def chi_squared_demo():
@@ -319,10 +319,10 @@ def chi_squared_demo():
     
     for k in dofs:
         chi2 = stats.chi2(k)
-        pdf = chi2.pdf(x)
+        pdf = chi2.pdf (x)
         
         # Plot
-        ax1.plot(x, pdf, linewidth=2, label=f'k={k}, E[X]={k}')
+        ax1.plot (x, pdf, linewidth=2, label=f'k={k}, E[X]={k}')
         
         print(f"  k={k:2d}: E[X] = {k}, Var(X) = {2*k}")
     
@@ -338,13 +338,13 @@ def chi_squared_demo():
     n_samples = 10000
     
     # Generate k standard normals, square and sum
-    samples = np.sum(np.random.randn(n_samples, k)**2, axis=1)
+    samples = np.sum (np.random.randn (n_samples, k)**2, axis=1)
     
     # Compare with theoretical
     chi2_theoretical = stats.chi2(k)
-    ax2.hist(samples, bins=50, density=True, alpha=0.7, edgecolor='black', label='Empirical')
+    ax2.hist (samples, bins=50, density=True, alpha=0.7, edgecolor='black', label='Empirical')
     x_plot = np.linspace(0, 20, 1000)
-    ax2.plot(x_plot, chi2_theoretical.pdf(x_plot), 'r-', linewidth=2, label='Theoretical χ²(5)')
+    ax2.plot (x_plot, chi2_theoretical.pdf (x_plot), 'r-', linewidth=2, label='Theoretical χ²(5)')
     ax2.set_xlabel('x')
     ax2.set_ylabel('Density')
     ax2.set_title('Chi-Squared from Sum of Squared Normals')
@@ -361,7 +361,7 @@ def chi_squared_demo():
 chi_squared_demo()
 \`\`\`
 
-## Student's t-Distribution
+## Student\'s t-Distribution
 
 Used for **small samples** and **hypothesis testing** when population variance is unknown.
 
@@ -389,14 +389,14 @@ def t_distribution_demo():
     # Plot t-distributions
     ax = axes[0]
     for nu in dofs:
-        t_dist = stats.t(nu)
-        pdf = t_dist.pdf(x)
-        ax.plot(x, pdf, linewidth=2, label=f'ν={nu}')
+        t_dist = stats.t (nu)
+        pdf = t_dist.pdf (x)
+        ax.plot (x, pdf, linewidth=2, label=f'ν={nu}')
         
         print(f"  ν={nu:2d}: {'Heavy tails' if nu < 10 else 'Approaching normal'}")
     
     # Add standard normal for comparison
-    ax.plot(x, normal.pdf(x), 'k--', linewidth=2, label='Normal(0,1)')
+    ax.plot (x, normal.pdf (x), 'k--', linewidth=2, label='Normal(0,1)')
     ax.set_xlabel('x')
     ax.set_ylabel('Density')
     ax.set_title('t-Distribution vs Normal')
@@ -411,10 +411,10 @@ def t_distribution_demo():
     
     # Focus on tails
     x_tail = np.linspace(0, 4, 1000)
-    ax.plot(x_tail, t_1.pdf(x_tail), linewidth=2, label='t(ν=1)')
-    ax.plot(x_tail, t_5.pdf(x_tail), linewidth=2, label='t(ν=5)')
-    ax.plot(x_tail, t_30.pdf(x_tail), linewidth=2, label='t(ν=30)')
-    ax.plot(x_tail, normal.pdf(x_tail), 'k--', linewidth=2, label='Normal')
+    ax.plot (x_tail, t_1.pdf (x_tail), linewidth=2, label='t(ν=1)')
+    ax.plot (x_tail, t_5.pdf (x_tail), linewidth=2, label='t(ν=5)')
+    ax.plot (x_tail, t_30.pdf (x_tail), linewidth=2, label='t(ν=30)')
+    ax.plot (x_tail, normal.pdf (x_tail), 'k--', linewidth=2, label='Normal')
     ax.set_xlabel('x')
     ax.set_ylabel('Density')
     ax.set_title('Tail Comparison (Right Tail)')
@@ -459,7 +459,7 @@ def compare_continuous_distributions():
     
     print("\\nKey Relationships:")
     print("- Exponential = Gamma(α=1)")
-    print("- Chi-Squared = Gamma(k/2, 1/2)")
+    print("- Chi-Squared = Gamma (k/2, 1/2)")
     print("- t-distribution → Normal as ν → ∞")
     print("- Beta(1,1) = Uniform(0,1)")
 

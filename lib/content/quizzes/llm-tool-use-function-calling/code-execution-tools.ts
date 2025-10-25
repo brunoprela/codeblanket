@@ -29,7 +29,7 @@ export const codeExecutionToolsQuiz = [
 **Implementation:**
 \`\`\`python
 class SecureCodeExecutor:
-    def execute(self, code: str) -> dict:
+    def execute (self, code: str) -> dict:
         container = docker.run(
             image="python-sandbox",
             command=["python", "/code/script.py",],
@@ -85,9 +85,9 @@ class FileManager:
             "ttl": 3600  # 1 hour
         }
     
-    def store_output(self, user_id: str, execution_id: str, files: List[File]):
+    def store_output (self, user_id: str, execution_id: str, files: List[File]):
         # Check limits
-        if len(files) > self.limits["max_files",]:
+        if len (files) > self.limits["max_files",]:
             raise TooManyFilesError()
         
         for file in files:
@@ -96,25 +96,25 @@ class FileManager:
             
             # Upload to S3 with expiration
             key = f"{user_id}/{execution_id}/{file.name}"
-            self.storage.upload(key, file.content, ttl=self.limits["ttl",])
+            self.storage.upload (key, file.content, ttl=self.limits["ttl",])
             
             # Generate signed URL
-            url = self.storage.generate_url(key, expires_in=3600)
+            url = self.storage.generate_url (key, expires_in=3600)
             file.url = url
 \`\`\`
 
 **File Detection:**
 \`\`\`python
-def detect_generated_files(output_dir: str) -> List[File]:
+def detect_generated_files (output_dir: str) -> List[File]:
     files = []
-    for filepath in os.listdir(output_dir):
+    for filepath in os.listdir (output_dir):
         if filepath != "script.py":
-            with open(filepath, "rb") as f:
+            with open (filepath, "rb") as f:
                 files.append(File(
                     name=filepath,
                     content=f.read(),
-                    mime_type=guess_mime_type(filepath),
-                    size=os.path.getsize(filepath)
+                    mime_type=guess_mime_type (filepath),
+                    size=os.path.getsize (filepath)
                 ))
     return files
 \`\`\`
@@ -161,20 +161,20 @@ def detect_generated_files(output_dir: str) -> List[File]:
 
 **1. Code Validation:**
 \`\`\`python
-def validate_code(code: str) -> Tuple[bool, str]:
+def validate_code (code: str) -> Tuple[bool, str]:
     # Parse AST
     try:
-        tree = ast.parse(code)
+        tree = ast.parse (code)
     except SyntaxError as e:
         return False, f"Syntax error: {e}"
     
     # Check for dangerous patterns
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
+    for node in ast.walk (tree):
+        if isinstance (node, ast.Import):
             if node.names[0].name in BLOCKED_MODULES:
                 return False, f"Import of {node.names[0].name} not allowed"
         
-        if isinstance(node, (ast.Exec, ast.Eval)):
+        if isinstance (node, (ast.Exec, ast.Eval)):
             return False, "eval/exec not allowed"
     
     return True, ""
@@ -183,7 +183,7 @@ def validate_code(code: str) -> Tuple[bool, str]:
 **2. Runtime Monitoring:**
 \`\`\`python
 class ExecutionMonitor:
-    def monitor(self, container):
+    def monitor (self, container):
         # CPU usage
         if container.stats()["cpu_percent",] > 90:
             container.kill()
@@ -202,11 +202,11 @@ class ExecutionMonitor:
 
 **3. Audit Logging:**
 \`\`\`python
-def log_execution(user_id, code, result):
+def log_execution (user_id, code, result):
     logger.info({
         "event": "code_execution",
         "user_id": user_id,
-        "code_hash": hash(code),
+        "code_hash": hash (code),
         "success": result.success,
         "duration_ms": result.duration,
         "resources_used": result.resources

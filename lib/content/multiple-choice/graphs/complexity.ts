@@ -21,7 +21,7 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc2',
     question:
-      "What is the time complexity of Dijkstra's algorithm with min heap?",
+      "What is the time complexity of Dijkstra\'s algorithm with min heap?",
     options: [
       'O(V + E)',
       'O((V + E) log V) - heap operations for all edges',

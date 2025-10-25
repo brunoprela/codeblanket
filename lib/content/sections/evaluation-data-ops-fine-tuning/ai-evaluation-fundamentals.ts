@@ -54,16 +54,16 @@ def test_add():
 
 \`\`\`python
 def evaluate_summarization():
-    summary = model.summarize(article)
+    summary = model.summarize (article)
     
     # No single "correct" answer!
     # Multiple valid summaries exist
     
     scores = {
-        'relevance': check_relevance(summary, article),
-        'coherence': check_coherence(summary),
-        'factuality': check_factuality(summary, article),
-        'length': check_length(summary)
+        'relevance': check_relevance (summary, article),
+        'coherence': check_coherence (summary),
+        'factuality': check_factuality (summary, article),
+        'length': check_length (summary)
     }
     
     # Overall score: weighted combination
@@ -109,7 +109,7 @@ class OfflineEvaluator:
         
         for example in self.test_dataset:
             # Get model output
-            output = await model_fn(example['input'])
+            output = await model_fn (example['input'])
             
             # Store for analysis
             self.results.append({
@@ -125,23 +125,23 @@ class OfflineEvaluator:
                     example.get('expected_output'),
                     example['input']
                 )
-                scores[metric.__name__].append(score)
+                scores[metric.__name__].append (score)
         
         # Aggregate
         return {
-            name: sum(vals) / len(vals)
+            name: sum (vals) / len (vals)
             for name, vals in scores.items()
         }
     
-    def get_failures(self, threshold: float = 0.5) -> List[Dict]:
+    def get_failures (self, threshold: float = 0.5) -> List[Dict]:
         """Get examples that performed poorly."""
         # Implement based on your metrics
         pass
 
 # Usage
-evaluator = OfflineEvaluator(test_dataset)
+evaluator = OfflineEvaluator (test_dataset)
 metrics = [accuracy_metric, coherence_metric, safety_metric]
-scores = await evaluator.evaluate(my_model, metrics)
+scores = await evaluator.evaluate (my_model, metrics)
 print(f"Average Accuracy: {scores['accuracy_metric']:.2%}")
 \`\`\`
 
@@ -168,7 +168,7 @@ class OnlineEvaluator:
     """Track metrics from production usage."""
     
     def __init__(self):
-        self.metrics = defaultdict(list)
+        self.metrics = defaultdict (list)
         self.user_feedback = []
     
     async def log_inference(
@@ -192,16 +192,16 @@ class OnlineEvaluator:
         }
         
         # Store for analysis
-        await self._store_to_database(record)
+        await self._store_to_database (record)
         
         # Update rolling metrics
-        self.metrics['latency'].append(latency)
-        self.metrics['cost'].append(cost)
-        self.metrics['output_length'].append(len(output))
+        self.metrics['latency'].append (latency)
+        self.metrics['cost'].append (cost)
+        self.metrics['output_length'].append (len (output))
         
         # Keep only recent data (e.g., last 1000 requests)
         for key in self.metrics:
-            if len(self.metrics[key]) > 1000:
+            if len (self.metrics[key]) > 1000:
                 self.metrics[key] = self.metrics[key][-1000:]
     
     async def log_user_feedback(
@@ -218,41 +218,41 @@ class OnlineEvaluator:
             'timestamp': time.time()
         })
     
-    def get_recent_stats(self) -> Dict[str, float]:
+    def get_recent_stats (self) -> Dict[str, float]:
         """Get statistics from recent inferences."""
         return {
-            'avg_latency': sum(self.metrics['latency']) / len(self.metrics['latency']),
-            'p95_latency': self._percentile(self.metrics['latency'], 95),
-            'avg_cost': sum(self.metrics['cost']) / len(self.metrics['cost']),
-            'avg_output_length': sum(self.metrics['output_length']) / len(self.metrics['output_length']),
+            'avg_latency': sum (self.metrics['latency']) / len (self.metrics['latency']),
+            'p95_latency': self._percentile (self.metrics['latency'], 95),
+            'avg_cost': sum (self.metrics['cost']) / len (self.metrics['cost']),
+            'avg_output_length': sum (self.metrics['output_length']) / len (self.metrics['output_length']),
             'avg_user_rating': self._get_avg_rating()
         }
     
-    def _percentile(self, values: List[float], p: int) -> float:
+    def _percentile (self, values: List[float], p: int) -> float:
         """Calculate percentile."""
-        sorted_vals = sorted(values)
-        idx = int(len(sorted_vals) * p / 100)
+        sorted_vals = sorted (values)
+        idx = int (len (sorted_vals) * p / 100)
         return sorted_vals[idx]
     
-    def _get_avg_rating(self) -> float:
+    def _get_avg_rating (self) -> float:
         """Average user rating."""
         if not self.user_feedback:
             return 0.0
         ratings = [f['rating'] for f in self.user_feedback]
-        return sum(ratings) / len(ratings)
+        return sum (ratings) / len (ratings)
 
 # Usage in production API
 online_eval = OnlineEvaluator()
 
 @app.post("/generate")
-async def generate(request: GenerateRequest):
+async def generate (request: GenerateRequest):
     start = time.time()
     
     # Generate output
-    output = await model.generate(request.input)
+    output = await model.generate (request.input)
     
     latency = time.time() - start
-    cost = calculate_cost(request.input, output)
+    cost = calculate_cost (request.input, output)
     
     # Log for evaluation
     await online_eval.log_inference(
@@ -266,7 +266,7 @@ async def generate(request: GenerateRequest):
     return {"output": output}
 
 @app.post("/feedback")
-async def feedback(request: FeedbackRequest):
+async def feedback (request: FeedbackRequest):
     await online_eval.log_user_feedback(
         inference_id=request.inference_id,
         rating=request.rating,
@@ -293,13 +293,13 @@ class HybridEvaluator:
     """Combine offline and online evaluation."""
     
     def __init__(self):
-        self.offline = OfflineEvaluator(test_dataset)
+        self.offline = OfflineEvaluator (test_dataset)
         self.online = OnlineEvaluator()
     
-    async def pre_deployment_check(self, model_fn) -> bool:
+    async def pre_deployment_check (self, model_fn) -> bool:
         """Gate check before deploying."""
         # Offline evaluation on test set
-        scores = await self.offline.evaluate(model_fn, metrics)
+        scores = await self.offline.evaluate (model_fn, metrics)
         
         # Thresholds for deployment
         if scores['accuracy'] < 0.85:
@@ -313,7 +313,7 @@ class HybridEvaluator:
         print("✅ Passed offline evaluation")
         return True
     
-    async def continuous_monitoring(self):
+    async def continuous_monitoring (self):
         """Monitor production performance."""
         while True:
             stats = self.online.get_recent_stats()
@@ -342,20 +342,20 @@ class AutomaticMetrics:
     """Common automatic evaluation metrics."""
     
     @staticmethod
-    def exact_match(prediction: str, reference: str) -> float:
+    def exact_match (prediction: str, reference: str) -> float:
         """Exact string match."""
         return 1.0 if prediction.strip() == reference.strip() else 0.0
     
     @staticmethod
-    def substring_match(prediction: str, reference: str) -> float:
+    def substring_match (prediction: str, reference: str) -> float:
         """Check if reference is in prediction."""
         return 1.0 if reference.lower() in prediction.lower() else 0.0
     
     @staticmethod
-    def token_overlap(prediction: str, reference: str) -> float:
+    def token_overlap (prediction: str, reference: str) -> float:
         """Jaccard similarity of tokens."""
-        pred_tokens = set(prediction.lower().split())
-        ref_tokens = set(reference.lower().split())
+        pred_tokens = set (prediction.lower().split())
+        ref_tokens = set (reference.lower().split())
         
         if not pred_tokens or not ref_tokens:
             return 0.0
@@ -363,12 +363,12 @@ class AutomaticMetrics:
         intersection = pred_tokens & ref_tokens
         union = pred_tokens | ref_tokens
         
-        return len(intersection) / len(union)
+        return len (intersection) / len (union)
     
     @staticmethod
-    def length_penalty(prediction: str, min_length: int, max_length: int) -> float:
+    def length_penalty (prediction: str, min_length: int, max_length: int) -> float:
         """Penalize outputs outside length range."""
-        length = len(prediction.split())
+        length = len (prediction.split())
         
         if length < min_length:
             return length / min_length
@@ -378,18 +378,18 @@ class AutomaticMetrics:
             return 1.0
     
     @staticmethod
-    def format_validity(prediction: str, expected_format: str) -> float:
+    def format_validity (prediction: str, expected_format: str) -> float:
         """Check if output matches expected format."""
         if expected_format == 'json':
             try:
-                json.loads(prediction)
+                json.loads (prediction)
                 return 1.0
             except:
                 return 0.0
         
         elif expected_format == 'number':
             try:
-                float(prediction.strip())
+                float (prediction.strip())
                 return 1.0
             except:
                 return 0.0
@@ -397,11 +397,11 @@ class AutomaticMetrics:
         return 1.0
     
     @staticmethod
-    def contains_keywords(prediction: str, required_keywords: List[str]) -> float:
+    def contains_keywords (prediction: str, required_keywords: List[str]) -> float:
         """Check if output contains required keywords."""
         prediction_lower = prediction.lower()
         found = sum(1 for kw in required_keywords if kw.lower() in prediction_lower)
-        return found / len(required_keywords)
+        return found / len (required_keywords)
 
 # Usage
 metrics = AutomaticMetrics()
@@ -409,9 +409,9 @@ metrics = AutomaticMetrics()
 prediction = "The capital of France is Paris."
 reference = "Paris"
 
-print(f"Exact match: {metrics.exact_match(prediction, reference)}")
-print(f"Substring match: {metrics.substring_match(prediction, reference)}")
-print(f"Token overlap: {metrics.token_overlap(prediction, reference):.2f}")
+print(f"Exact match: {metrics.exact_match (prediction, reference)}")
+print(f"Substring match: {metrics.substring_match (prediction, reference)}")
+print(f"Token overlap: {metrics.token_overlap (prediction, reference):.2f}")
 \`\`\`
 
 ### LLM-as-Judge Metrics
@@ -462,7 +462,7 @@ Format your response as JSON:
             temperature=0  # Consistent judgments
         )
         
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         # Normalize score to 0-1
         result['normalized_score'] = result['score'] / 10.0
@@ -543,10 +543,10 @@ class HumanEvaluation:
         print()
         
         # Collect ratings
-        rating = int(input("Overall quality (1-5): "))
-        accuracy = int(input("Accuracy (1-5): "))
-        helpfulness = int(input("Helpfulness (1-5): "))
-        safety = int(input("Safe content (1-5): "))
+        rating = int (input("Overall quality (1-5): "))
+        accuracy = int (input("Accuracy (1-5): "))
+        helpfulness = int (input("Helpfulness (1-5): "))
+        safety = int (input("Safe content (1-5): "))
         comments = input("Comments (optional): ")
         
         judgment = {
@@ -560,26 +560,26 @@ class HumanEvaluation:
             'timestamp': time.time()
         }
         
-        self.judgments.append(judgment)
+        self.judgments.append (judgment)
         return judgment
     
-    def compute_inter_annotator_agreement(self) -> float:
+    def compute_inter_annotator_agreement (self) -> float:
         """How consistent are human evaluators?"""
         # Group judgments by example
-        by_example = defaultdict(list)
+        by_example = defaultdict (list)
         for j in self.judgments:
-            by_example[j['example_id']].append(j['overall'])
+            by_example[j['example_id']].append (j['overall'])
         
         # Compute variance for each example
         variances = []
         for example_id, ratings in by_example.items():
-            if len(ratings) > 1:
-                mean = sum(ratings) / len(ratings)
-                var = sum((r - mean) ** 2 for r in ratings) / len(ratings)
-                variances.append(var)
+            if len (ratings) > 1:
+                mean = sum (ratings) / len (ratings)
+                var = sum((r - mean) ** 2 for r in ratings) / len (ratings)
+                variances.append (var)
         
         # Low variance = high agreement
-        avg_variance = sum(variances) / len(variances)
+        avg_variance = sum (variances) / len (variances)
         
         # Convert to agreement score (0-1)
         # Perfect agreement = variance 0
@@ -645,16 +645,16 @@ class ComprehensiveEvaluator:
         dataset = self.test_dataset
         if sample_size:
             import random
-            dataset = random.sample(dataset, min(sample_size, len(dataset)))
+            dataset = random.sample (dataset, min (sample_size, len (dataset)))
         
         results = []
         
-        for i, example in enumerate(dataset):
-            print(f"Evaluating {i+1}/{len(dataset)}...")
+        for i, example in enumerate (dataset):
+            print(f"Evaluating {i+1}/{len (dataset)}...")
             
             # Generate output
             start = time.time()
-            output = await model_fn(example['input'])
+            output = await model_fn (example['input'])
             latency = time.time() - start
             
             # Automatic metrics
@@ -681,7 +681,7 @@ class ComprehensiveEvaluator:
             human_score = None
             if self.use_human_eval and i < 10:  # First 10 examples
                 judgment = await self.human_evaluator.collect_judgment(
-                    example_id=str(i),
+                    example_id=str (i),
                     input=example['input'],
                     output=output,
                     evaluator='evaluator_1'
@@ -689,10 +689,10 @@ class ComprehensiveEvaluator:
                 human_score = judgment['overall'] / 5.0  # Normalize to 0-1
             
             # Calculate cost
-            cost = self._calculate_cost(example['input'], output)
+            cost = self._calculate_cost (example['input'], output)
             
             result = EvaluationResult(
-                example_id=str(i),
+                example_id=str (i),
                 input=example['input'],
                 output=output,
                 expected=example.get('expected_output'),
@@ -704,28 +704,27 @@ class ComprehensiveEvaluator:
                 timestamp=time.time()
             )
             
-            results.append(result)
+            results.append (result)
         
         return results
     
-    def generate_report(self, results: List[EvaluationResult]) -> str:
+    def generate_report (self, results: List[EvaluationResult]) -> str:
         """Generate evaluation report."""
         
         report = "# Evaluation Report\\n\\n"
         
         # Overall statistics
         report += "## Overall Statistics\\n\\n"
-        report += f"Total examples: {len(results)}\\n"
-        report += f"Average latency: {sum(r.latency for r in results) / len(results):.2f}s\\n"
-        report += f"Total cost: \${sum(r.cost for r in results): .4f
-}\\n"
+        report += f"Total examples: {len (results)}\\n"
+        report += f"Average latency: {sum (r.latency for r in results) / len (results):.2f}s\\n"
+        report += f"Total cost: \${sum (r.cost for r in results):.4f}\\n"
 report += "\\n"
         
         # Automatic metrics
 report += "## Automatic Metrics\\n\\n"
 for metric_name in results[0].automatic_scores.keys():
     scores = [r.automatic_scores[metric_name] for r in results]
-avg = sum(scores) / len(scores)
+avg = sum (scores) / len (scores)
 report += f"- {metric_name}: {avg:.2%}\\n"
 report += "\\n"
         
@@ -734,31 +733,31 @@ if self.use_llm_judge:
     llm_scores = [r.llm_judge_score for r in results if r.llm_judge_score]
 if llm_scores:
     report += "## LLM Judge\\n\\n"
-report += f"Average score: {sum(llm_scores) / len(llm_scores):.2%}\\n\\n"
+report += f"Average score: {sum (llm_scores) / len (llm_scores):.2%}\\n\\n"
         
         # Human evaluation
 if self.use_human_eval:
     human_scores = [r.human_score for r in results if r.human_score]
 if human_scores:
     report += "## Human Evaluation\\n\\n"
-report += f"Average score: {sum(human_scores) / len(human_scores):.2%}\\n"
-report += f"(Based on {len(human_scores)} examples)\\n\\n"
+report += f"Average score: {sum (human_scores) / len (human_scores):.2%}\\n"
+report += f"(Based on {len (human_scores)} examples)\\n\\n"
         
         # Failure analysis
 report += "## Failure Analysis\\n\\n"
 failures = [
     r for r in results
-            if any(score < 0.5 for score in r.automatic_scores.values())
+            if any (score < 0.5 for score in r.automatic_scores.values())
         ]
-report += f"Examples with low scores: {len(failures)} ({len(failures)/len(results):.1%})\\n"
+report += f"Examples with low scores: {len (failures)} ({len (failures)/len (results):.1%})\\n"
 
 return report
     
-    def _calculate_cost(self, input: str, output: str) -> float:
+    def _calculate_cost (self, input: str, output: str) -> float:
 """Estimate API cost."""
         # Rough estimate: $0.01 per 1K tokens for GPT - 3.5
-        input_tokens = len(input.split()) * 1.3  # Approx
-output_tokens = len(output.split()) * 1.3
+        input_tokens = len (input.split()) * 1.3  # Approx
+output_tokens = len (output.split()) * 1.3
 total_tokens = input_tokens + output_tokens
 return (total_tokens / 1000) * 0.01
 
@@ -774,8 +773,8 @@ evaluator = ComprehensiveEvaluator(
     use_human_eval = False  # Too expensive for full dataset
 )
 
-    results = await evaluator.evaluate(my_model_fn, sample_size = 100)
-report = evaluator.generate_report(results)
+    results = await evaluator.evaluate (my_model_fn, sample_size = 100)
+report = evaluator.generate_report (results)
 print(report)
 \`\`\`
 
@@ -789,24 +788,24 @@ print(report)
 # ❌ BAD: Using test set during development
 while True:
     model = train_model()
-    test_score = evaluate(model, test_set)
+    test_score = evaluate (model, test_set)
     if test_score > 0.9:
         break
     adjust_hyperparameters()
 
 # ✅ GOOD: Separate validation and test sets
-train_set, val_set, test_set = split_data(data)
+train_set, val_set, test_set = split_data (data)
 
 # Use validation for development
 while True:
     model = train_model()
-    val_score = evaluate(model, val_set)
+    val_score = evaluate (model, val_set)
     if val_score > 0.9:
         break
     adjust_hyperparameters()
 
 # Use test set ONCE at the end
-final_score = evaluate(model, test_set)
+final_score = evaluate (model, test_set)
 \`\`\`
 
 ### 2. Not Evaluating Real Failure Modes
@@ -832,16 +831,16 @@ adversarial_tests = [
 class QualityAndEfficiency:
     """Track quality, latency, and cost together."""
     
-    def evaluate(self, model_fn):
+    def evaluate (self, model_fn):
         results = []
         
         for example in test_set:
             start = time.time()
-            output = model_fn(example['input'])
+            output = model_fn (example['input'])
             latency = time.time() - start
             
-            quality = compute_quality(output, example['expected'])
-            cost = estimate_cost(example['input'], output)
+            quality = compute_quality (output, example['expected'])
+            cost = estimate_cost (example['input'], output)
             
             # Composite score
             # Penalize slow/expensive responses

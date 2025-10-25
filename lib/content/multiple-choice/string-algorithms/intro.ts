@@ -38,7 +38,7 @@ export const introMultipleChoice: MultipleChoiceQuestion[] = [
     options: [
       's = s + part (repeated concatenation)',
       's += part (in-place concatenation)',
-      "parts = []; parts.append(part); '.join(parts)",
+      "parts = []; parts.append (part); '.join (parts)",
       'All are equally efficient',
     ],
     correctAnswer: 2,

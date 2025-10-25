@@ -10,11 +10,11 @@ export const drfViewsetsRoutersQuiz = [
 No default actions - define your own methods.
 
 \`\`\`python
-class CustomViewSet(viewsets.ViewSet):
-    def list(self, request):
+class CustomViewSet (viewsets.ViewSet):
+    def list (self, request):
         return Response([...])
     
-    def create(self, request):
+    def create (self, request):
         return Response({...})
 \`\`\`
 
@@ -24,7 +24,7 @@ Includes mixin functionality but no actions by default.
 \`\`\`python
 from rest_framework import mixins
 
-class ArticleViewSet(mixins.ListModelMixin, 
+class ArticleViewSet (mixins.ListModelMixin, 
                       mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Article.objects.all()
@@ -36,7 +36,7 @@ class ArticleViewSet(mixins.ListModelMixin,
 Full CRUD - list, create, retrieve, update, partial_update, destroy.
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     # All operations included
@@ -46,34 +46,34 @@ class ArticleViewSet(viewsets.ModelViewSet):
 Only list and retrieve - no modifications.
 
 \`\`\`python
-class PublicArticleViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Article.objects.filter(status='published')
+class PublicArticleViewSet (viewsets.ReadOnlyModelViewSet):
+    queryset = Article.objects.filter (status='published')
     serializer_class = ArticleSerializer
 \`\`\`
 
 **Custom Actions:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    @action(detail=True, methods=['post'])
-    def publish(self, request, pk=None):
+class ArticleViewSet (viewsets.ModelViewSet):
+    @action (detail=True, methods=['post'])
+    def publish (self, request, pk=None):
         article = self.get_object()
         article.status = 'published'
         article.save()
         return Response({'status': 'published'})
     
-    @action(detail=False, methods=['get'])
-    def featured(self, request):
-        articles = self.get_queryset().filter(featured=True)
-        serializer = self.get_serializer(articles, many=True)
-        return Response(serializer.data)
+    @action (detail=False, methods=['get'])
+    def featured (self, request):
+        articles = self.get_queryset().filter (featured=True)
+        serializer = self.get_serializer (articles, many=True)
+        return Response (serializer.data)
 \`\`\`
 
 **Router URL Generation:**
 
 \`\`\`python
 router = DefaultRouter()
-router.register(r'articles', ArticleViewSet)
+router.register (r'articles', ArticleViewSet)
 
 # Generates:
 # GET    /articles/              -> list
@@ -102,10 +102,10 @@ router.register(r'articles', ArticleViewSet)
 **1. Different Serializers Per Action:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.action == 'list':
             return ArticleListSerializer  # Minimal fields
         elif self.action in ['create', 'update']:
@@ -116,8 +116,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **2. Different Permissions Per Action:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_permissions(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_permissions (self):
         if self.action in ['list', 'retrieve']:
             return []  # Public read
         elif self.action == 'destroy':
@@ -128,18 +128,18 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **3. Different QuerySets Per Action:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         if self.action == 'list':
-            return Article.objects.filter(status='published')
+            return Article.objects.filter (status='published')
         return Article.objects.all()
 \`\`\`
 
 **4. Action-Specific Pagination:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_paginator(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_paginator (self):
         if self.action == 'list':
             return LargeResultsSetPagination()
         return StandardResultsSetPagination()
@@ -148,8 +148,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
 **Complete Example:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         qs = Article.objects.all()
         
         if self.action == 'list':
@@ -161,25 +161,25 @@ class ArticleViewSet(viewsets.ModelViewSet):
         
         return qs
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.action == 'list':
             return ArticleListSerializer
         elif self.action in ['create', 'update', 'partial_update']:
             return ArticleWriteSerializer
         return ArticleDetailSerializer
     
-    def get_permissions(self):
+    def get_permissions (self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         elif self.action == 'destroy':
             return [IsAdminUser()]
         return [IsAuthenticated(), IsOwnerOrReadOnly()]
     
-    @action(detail=True, methods=['post'], 
+    @action (detail=True, methods=['post'], 
             permission_classes=[IsAuthenticated])
-    def like(self, request, pk=None):
+    def like (self, request, pk=None):
         article = self.get_object()
-        article.likes.add(request.user)
+        article.likes.add (request.user)
         return Response({'status': 'liked'})
 \`\`\`
 
@@ -216,15 +216,15 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 
 \`\`\`python
 router = DefaultRouter()
-router.register(r'articles', ArticleViewSet, basename='article')
+router.register (r'articles', ArticleViewSet, basename='article')
 
 # Customize trailing slash
-router = DefaultRouter(trailing_slash=False)
+router = DefaultRouter (trailing_slash=False)
 
 # Custom actions generate URLs automatically
-class ArticleViewSet(viewsets.ModelViewSet):
-    @action(detail=True, methods=['post'], url_path='publish-now')
-    def publish(self, request, pk=None):
+class ArticleViewSet (viewsets.ModelViewSet):
+    @action (detail=True, methods=['post'], url_path='publish-now')
+    def publish (self, request, pk=None):
         # URL: /articles/{id}/publish-now/
         pass
 \`\`\`
@@ -235,7 +235,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
-router.register(r'articles', ArticleViewSet)
+router.register (r'articles', ArticleViewSet)
 
 # Nest comments under articles
 articles_router = routers.NestedDefaultRouter(

@@ -152,7 +152,7 @@ class StableDiffusionGenerator:
         self.dtype = dtype
         
         # Load model
-        model_id = self.MODELS.get(model_name, model_name)
+        model_id = self.MODELS.get (model_name, model_name)
         
         print(f"Loading {model_id}...")
         self.pipe = StableDiffusionPipeline.from_pretrained(
@@ -161,7 +161,7 @@ class StableDiffusionGenerator:
             safety_checker=None,  # Disable for speed (be responsible!)
         )
         
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         
         # Memory optimizations
         self.pipe.enable_attention_slicing()
@@ -178,7 +178,7 @@ class StableDiffusionGenerator:
         
         print("✓ Model loaded and ready")
     
-    def set_scheduler(self, scheduler: str):
+    def set_scheduler (self, scheduler: str):
         """
         Change the sampling scheduler.
         
@@ -228,10 +228,10 @@ class StableDiffusionGenerator:
         # Set seed if provided
         generator = None
         if seed is not None:
-            generator = torch.Generator(device=self.device).manual_seed(seed)
+            generator = torch.Generator (device=self.device).manual_seed (seed)
         
         # Generate
-        with torch.autocast(self.device):
+        with torch.autocast (self.device):
             result = self.pipe(
                 prompt=prompt,
                 negative_prompt=negative_prompt,
@@ -256,11 +256,11 @@ class StableDiffusionGenerator:
         all_images = []
         
         for prompt in prompts:
-            images = self.generate(prompt, num_images=1, **kwargs)
-            all_images.extend(images)
+            images = self.generate (prompt, num_images=1, **kwargs)
+            all_images.extend (images)
         
         # Create grid
-        return self._create_image_grid(all_images)
+        return self._create_image_grid (all_images)
     
     def _create_image_grid(
         self,
@@ -271,20 +271,20 @@ class StableDiffusionGenerator:
         if not images:
             return None
         
-        rows = (len(images) + cols - 1) // cols
+        rows = (len (images) + cols - 1) // cols
         w, h = images[0].size
         
         grid = Image.new('RGB', (cols * w, rows * h))
         
-        for i, img in enumerate(images):
+        for i, img in enumerate (images):
             x = (i % cols) * w
             y = (i // cols) * h
-            grid.paste(img, (x, y))
+            grid.paste (img, (x, y))
         
         return grid
 
 # Basic usage
-generator = StableDiffusionGenerator(model_name="sd_2_1")
+generator = StableDiffusionGenerator (model_name="sd_2_1")
 
 # Generate single image
 images = generator.generate(
@@ -305,8 +305,8 @@ images = generator.generate(
     seed=123
 )
 
-for i, img in enumerate(images):
-    img.save(f"robot_{i}.png")
+for i, img in enumerate (images):
+    img.save (f"robot_{i}.png")
 \`\`\`
 
 ## Sampling Algorithms (Schedulers)
@@ -386,7 +386,7 @@ def demonstrate_schedulers():
     results = {}
     
     for scheduler in schedulers:
-        generator.set_scheduler(scheduler)
+        generator.set_scheduler (scheduler)
         
         images = generator.generate(
             prompt=prompt,
@@ -395,7 +395,7 @@ def demonstrate_schedulers():
         )
         
         results[scheduler] = images[0]
-        images[0].save(f"coffee_{scheduler}.png")
+        images[0].save (f"coffee_{scheduler}.png")
     
     return results
 \`\`\`
@@ -464,7 +464,7 @@ class AdvancedSDGenerator(StableDiffusionGenerator):
                 guidance_scale=scale,
                 **kwargs
             )
-            results.append(images[0])
+            results.append (images[0])
         
         return results
     
@@ -510,8 +510,8 @@ images = generator.progressive_guidance(
 )
 
 # Save comparison
-for scale, img in zip(scales, images):
-    img.save(f"guidance_{scale}.png")
+for scale, img in zip (scales, images):
+    img.save (f"guidance_{scale}.png")
 
 # Test step counts
 step_results = generator.multi_step_comparison(
@@ -522,7 +522,7 @@ step_results = generator.multi_step_comparison(
 
 for steps, data in step_results.items():
     print(f"{steps} steps: {data['time']:.2f}s")
-    data['image'].save(f"steps_{steps}.png")
+    data['image'].save (f"steps_{steps}.png")
 \`\`\`
 
 ### Dimensions and Aspect Ratios
@@ -576,7 +576,7 @@ dimension_guide = {
     }
 }
 
-def calculate_vram_usage(width: int, height: int, batch_size: int = 1) -> dict:
+def calculate_vram_usage (width: int, height: int, batch_size: int = 1) -> dict:
     """
     Estimate VRAM requirements.
     """
@@ -591,7 +591,7 @@ def calculate_vram_usage(width: int, height: int, batch_size: int = 1) -> dict:
     
     return {
         "pixels": pixels,
-        "estimated_vram_gb": round(total, 1),
+        "estimated_vram_gb": round (total, 1),
         "recommended_gpu": "RTX 3060 6GB" if total < 6 else "RTX 3080 10GB" if total < 10 else "RTX 4090 24GB"
     }
 
@@ -602,7 +602,7 @@ for size_name, (w, h) in [
     ("1024x1024", (1024, 1024)),
     ("1024x1536", (1024, 1536))
 ]:
-    vram = calculate_vram_usage(w, h)
+    vram = calculate_vram_usage (w, h)
     print(f"{size_name}: {vram['estimated_vram_gb']}GB VRAM")
 \`\`\`
 
@@ -672,7 +672,7 @@ class SDXLGenerator:
             variant="fp16"
         )
         
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         self.pipe.enable_xformers_memory_efficient_attention()
     
     def generate(
@@ -690,7 +690,7 @@ class SDXLGenerator:
         """
         generator = None
         if seed:
-            generator = torch.Generator(self.device).manual_seed(seed)
+            generator = torch.Generator (self.device).manual_seed (seed)
         
         images = self.pipe(
             prompt=prompt,
@@ -738,7 +738,7 @@ class OptimizedSDGenerator(StableDiffusionGenerator):
         # Enable all optimizations
         self.enable_all_optimizations()
     
-    def enable_all_optimizations(self):
+    def enable_all_optimizations (self):
         """Enable every optimization available."""
         
         # 1. Attention slicing (reduces VRAM)
@@ -784,50 +784,50 @@ class OptimizedSDGenerator(StableDiffusionGenerator):
                 # Generate tile
                 tile = self.generate(
                     prompt=prompt,
-                    width=min(tile_size, final_width - x),
-                    height=min(tile_size, final_height - y),
+                    width=min (tile_size, final_width - x),
+                    height=min (tile_size, final_height - y),
                     **kwargs
                 )[0]
-                row.append(tile)
-            tiles.append(row)
+                row.append (tile)
+            tiles.append (row)
         
         # Stitch tiles together (simplified)
-        return self._stitch_tiles(tiles)
+        return self._stitch_tiles (tiles)
     
-    def _stitch_tiles(self, tiles: List[List[Image.Image]]) -> Image.Image:
+    def _stitch_tiles (self, tiles: List[List[Image.Image]]) -> Image.Image:
         """Simple tile stitching."""
         # In production, use proper seam blending
         rows = []
         for row in tiles:
-            rows.append(self._concat_horizontal(row))
-        return self._concat_vertical(rows)
+            rows.append (self._concat_horizontal (row))
+        return self._concat_vertical (rows)
     
     @staticmethod
-    def _concat_horizontal(images: List[Image.Image]) -> Image.Image:
+    def _concat_horizontal (images: List[Image.Image]) -> Image.Image:
         widths, heights = zip(*(i.size for i in images))
-        total_width = sum(widths)
-        max_height = max(heights)
+        total_width = sum (widths)
+        max_height = max (heights)
         
         result = Image.new('RGB', (total_width, max_height))
         x_offset = 0
         
         for img in images:
-            result.paste(img, (x_offset, 0))
+            result.paste (img, (x_offset, 0))
             x_offset += img.width
         
         return result
     
     @staticmethod
-    def _concat_vertical(images: List[Image.Image]) -> Image.Image:
+    def _concat_vertical (images: List[Image.Image]) -> Image.Image:
         widths, heights = zip(*(i.size for i in images))
-        max_width = max(widths)
-        total_height = sum(heights)
+        max_width = max (widths)
+        total_height = sum (heights)
         
         result = Image.new('RGB', (max_width, total_height))
         y_offset = 0
         
         for img in images:
-            result.paste(img, (0, y_offset))
+            result.paste (img, (0, y_offset))
             y_offset += img.height
         
         return result
@@ -860,17 +860,17 @@ class BatchSDGenerator:
         batch_size: int = 4,
         num_workers: int = 1
     ):
-        self.generator = OptimizedSDGenerator(model_name)
+        self.generator = OptimizedSDGenerator (model_name)
         self.batch_size = batch_size
         self.job_queue = queue.Queue()
         self.results = {}
         
         # Start workers
         self.workers = []
-        for _ in range(num_workers):
-            worker = threading.Thread(target=self._worker, daemon=True)
+        for _ in range (num_workers):
+            worker = threading.Thread (target=self._worker, daemon=True)
             worker.start()
-            self.workers.append(worker)
+            self.workers.append (worker)
     
     def submit(
         self,
@@ -886,17 +886,17 @@ class BatchSDGenerator:
             params=params,
             callback=callback
         )
-        self.job_queue.put(job)
+        self.job_queue.put (job)
     
-    def _worker(self):
+    def _worker (self):
         """Worker thread that processes jobs."""
         while True:
             # Collect batch
             batch = []
-            for _ in range(self.batch_size):
+            for _ in range (self.batch_size):
                 try:
-                    job = self.job_queue.get(timeout=1)
-                    batch.append(job)
+                    job = self.job_queue.get (timeout=1)
+                    batch.append (job)
                 except queue.Empty:
                     break
             
@@ -914,23 +914,23 @@ class BatchSDGenerator:
                     self.results[job.id] = images[0]
                     
                     if job.callback:
-                        job.callback(job.id, images[0])
+                        job.callback (job.id, images[0])
                         
                 except Exception as e:
                     print(f"Error generating {job.id}: {e}")
                 finally:
                     self.job_queue.task_done()
     
-    def wait_all(self):
+    def wait_all (self):
         """Wait for all jobs to complete."""
         self.job_queue.join()
     
-    def get_result(self, job_id: str) -> Optional[Image.Image]:
+    def get_result (self, job_id: str) -> Optional[Image.Image]:
         """Get result for a job."""
-        return self.results.get(job_id)
+        return self.results.get (job_id)
 
 # Usage
-batch_gen = BatchSDGenerator(batch_size=4)
+batch_gen = BatchSDGenerator (batch_size=4)
 
 # Submit jobs
 for i in range(10):
@@ -946,9 +946,9 @@ batch_gen.wait_all()
 
 # Get results
 for i in range(10):
-    img = batch_gen.get_result(f"image_{i}")
+    img = batch_gen.get_result (f"image_{i}")
     if img:
-        img.save(f"batch_{i}.png")
+        img.save (f"batch_{i}.png")
 \`\`\`
 
 ## Key Takeaways

@@ -9,7 +9,7 @@ export const whatsapparchitectureSection = {
 
 ## Overview
 
-WhatsApp's impressive scale and efficiency:
+WhatsApp\'s impressive scale and efficiency:
 - **2+ billion users** worldwide
 - **100 billion messages** per day
 - **2 billion voice/video calls** daily
@@ -93,7 +93,7 @@ Client → Load Balancer → Erlang Chat Server
                              ↓
                         Message Router
                              ↓
-                        Recipient's Connection Process
+                        Recipient\'s Connection Process
                              ↓
                         Recipient's Client
 \`\`\`
@@ -105,8 +105,8 @@ Client → Load Balancer → Erlang Chat Server
 
 **Example Code** (simplified):
 \`\`\`erlang
--module(connection).
--behaviour(gen_server).
+-module (connection).
+-behaviour (gen_server).
 
 %% Each user connection is a gen_server process
 
@@ -167,7 +167,7 @@ WhatsApp stores messages temporarily for delivery, then deletes.
 - **Cost**: Less storage, lower costs
 - **Regulatory**: Easier to comply with privacy laws (GDPR)
 
-**Database**: **Mnesia** (Erlang's built-in distributed database)
+**Database**: **Mnesia** (Erlang\'s built-in distributed database)
 
 **Data Model**:
 \`\`\`
@@ -232,7 +232,7 @@ User A → User B (first message):
 6. A encrypts message: encrypted_msg = AES256(message, shared_secret)
 7. A sends encrypted_msg to server
 8. Server relays to B
-9. B decrypts: message = AES256_decrypt(encrypted_msg, shared_secret)
+9. B decrypts: message = AES256_decrypt (encrypted_msg, shared_secret)
 10. Keys rotate for next message
 \`\`\`
 
@@ -261,9 +261,9 @@ Group chats support up to 256 members.
 
 \`\`\`
 User A sends message to Group (B, C, D):
-1. A encrypts message for B: enc_msg_B = encrypt(message, shared_secret_AB)
-2. A encrypts message for C: enc_msg_C = encrypt(message, shared_secret_AC)
-3. A encrypts message for D: enc_msg_D = encrypt(message, shared_secret_AD)
+1. A encrypts message for B: enc_msg_B = encrypt (message, shared_secret_AB)
+2. A encrypts message for C: enc_msg_C = encrypt (message, shared_secret_AC)
+3. A encrypts message for D: enc_msg_D = encrypt (message, shared_secret_AD)
 4. A sends [enc_msg_B, enc_msg_C, enc_msg_D] to server
 5. Server delivers enc_msg_B to B, enc_msg_C to C, enc_msg_D to D
 \`\`\`
@@ -367,7 +367,7 @@ Table: status_views
 - Custom kernel tuning for high concurrency
 
 **3. Mnesia**:
-- Erlang's distributed database
+- Erlang\'s distributed database
 - Stores temporary messages, user sessions
 
 **4. XMPP (Modified)**:
@@ -388,7 +388,7 @@ Table: status_views
 - **Minimal infrastructure**: 50 engineers managed infrastructure
 
 **After Facebook Acquisition** (2014):
-- **Facebook's infrastructure**: Leveraged Facebook's datacenters, expertise
+- **Facebook's infrastructure**: Leveraged Facebook\'s datacenters, expertise
 - **Shared services**: Storage, load balancing, monitoring
 - **Integration**: Shared user IDs, contacts with Facebook
 
@@ -470,7 +470,7 @@ By avoiding feature bloat and focusing on core messaging, WhatsApp achieved reli
 
 **Q: How does WhatsApp handle 2 billion users with a small team?**
 
-A: (1) Erlang/OTP: Lightweight processes handle millions of concurrent connections per server with built-in fault tolerance. Single server handles 2+ million connections. (2) Stateless servers: Easy to scale horizontally, no state migration. (3) Efficient protocol: Custom binary protocol (Protobuf) reduces bandwidth, lowers costs. (4) Minimalism: Focus on core messaging, avoid feature bloat, reduces complexity. (5) Persistent connections: WebSocket-like protocol with heartbeats, instant message delivery. (6) Mnesia: Erlang's distributed database for temporary message storage, routing tables. Result: Small team manages massive scale.
+A: (1) Erlang/OTP: Lightweight processes handle millions of concurrent connections per server with built-in fault tolerance. Single server handles 2+ million connections. (2) Stateless servers: Easy to scale horizontally, no state migration. (3) Efficient protocol: Custom binary protocol (Protobuf) reduces bandwidth, lowers costs. (4) Minimalism: Focus on core messaging, avoid feature bloat, reduces complexity. (5) Persistent connections: WebSocket-like protocol with heartbeats, instant message delivery. (6) Mnesia: Erlang\'s distributed database for temporary message storage, routing tables. Result: Small team manages massive scale.
 
 **Q: How does WhatsApp implement end-to-end encryption?**
 

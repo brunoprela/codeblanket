@@ -9,11 +9,11 @@ export const commondiscretedistributionsQuiz = [
       'Compare and contrast the Bernoulli and Binomial distributions. How are they related, and when would you use each in machine learning?',
     hint: 'Think about single trial vs multiple trials.',
     sampleAnswer:
-      'Bernoulli models a single binary trial (one coin flip, one prediction). Binomial models the sum of n independent Bernoulli trials (total heads in 10 flips, total correct predictions in 100 samples). Mathematically: Bernoulli(p) has outcomes {0,1}. Binomial(n,p) has outcomes {0,1,...,n} and represents n independent Bernoulli(p) trials. A Binomial(1,p) = Bernoulli(p). Properties: Bernoulli has E[X]=p, Var=p(1-p). Binomial has E[X]=np, Var=np(1-p). In ML: Use Bernoulli for single prediction (is this email spam?). Use Binomial for aggregate counts (out of 100 emails, how many are spam?). Binomial appears in model evaluation (correct predictions out of test set), A/B testing (conversions out of visitors), and batch accuracy. Bernoulli appears in classification loss functions and individual prediction modeling.',
+      'Bernoulli models a single binary trial (one coin flip, one prediction). Binomial models the sum of n independent Bernoulli trials (total heads in 10 flips, total correct predictions in 100 samples). Mathematically: Bernoulli (p) has outcomes {0,1}. Binomial (n,p) has outcomes {0,1,...,n} and represents n independent Bernoulli (p) trials. A Binomial(1,p) = Bernoulli (p). Properties: Bernoulli has E[X]=p, Var=p(1-p). Binomial has E[X]=np, Var=np(1-p). In ML: Use Bernoulli for single prediction (is this email spam?). Use Binomial for aggregate counts (out of 100 emails, how many are spam?). Binomial appears in model evaluation (correct predictions out of test set), A/B testing (conversions out of visitors), and batch accuracy. Bernoulli appears in classification loss functions and individual prediction modeling.',
     keyPoints: [
       'Bernoulli: single binary trial, outcomes {0,1}',
       'Binomial: n Bernoulli trials, outcomes {0,...,n}',
-      'Binomial(1,p) = Bernoulli(p)',
+      'Binomial(1,p) = Bernoulli (p)',
       'Bernoulli for single predictions, Binomial for counts',
       'Both fundamental to classification problems',
     ],

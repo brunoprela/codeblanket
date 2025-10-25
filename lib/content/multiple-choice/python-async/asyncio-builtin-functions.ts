@@ -26,7 +26,7 @@ export const asyncioBuiltinFunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'task_done() marks an item as processed after get() and processing. It decrements an internal counter that tracks pending items. queue.join() waits until this counter reaches zero (all items processed). Pattern: item = await queue.get(); process(item); queue.task_done(). Without task_done(), join() blocks forever (thinks items still pending). Use case: Graceful shutdown—await queue.join() waits for all items to be processed before stopping consumers. Critical: Must call task_done() exactly once per get(), no more (raises ValueError), no less (join() never completes). Common bug: Forgetting task_done() causes join() to hang.',
+      'task_done() marks an item as processed after get() and processing. It decrements an internal counter that tracks pending items. queue.join() waits until this counter reaches zero (all items processed). Pattern: item = await queue.get(); process (item); queue.task_done(). Without task_done(), join() blocks forever (thinks items still pending). Use case: Graceful shutdown—await queue.join() waits for all items to be processed before stopping consumers. Critical: Must call task_done() exactly once per get(), no more (raises ValueError), no less (join() never completes). Common bug: Forgetting task_done() causes join() to hang.',
   },
   {
     id: 'abf-mc-3',
@@ -39,7 +39,7 @@ export const asyncioBuiltinFunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'time.sleep() is a blocking call that freezes the entire event loop thread. While sleeping, NO other coroutines can run—defeats the purpose of async. Example: await gather(sleep_task(), other_task()). With time.sleep(5): other_task waits 5 seconds (sequential). With await asyncio.sleep(5): other_task runs during sleep (concurrent). Always use await asyncio.sleep() in async code. It yields control to the event loop, allowing other tasks to run. Same issue with all blocking I/O: requests.get() → use aiohttp, open().read() → use aiofiles, subprocess.run() → use create_subprocess_exec(). time.sleep() works syntactically but breaks concurrency.',
+      'time.sleep() is a blocking call that freezes the entire event loop thread. While sleeping, NO other coroutines can run—defeats the purpose of async. Example: await gather (sleep_task(), other_task()). With time.sleep(5): other_task waits 5 seconds (sequential). With await asyncio.sleep(5): other_task runs during sleep (concurrent). Always use await asyncio.sleep() in async code. It yields control to the event loop, allowing other tasks to run. Same issue with all blocking I/O: requests.get() → use aiohttp, open().read() → use aiofiles, subprocess.run() → use create_subprocess_exec(). time.sleep() works syntactically but breaks concurrency.',
   },
   {
     id: 'abf-mc-4',
@@ -53,7 +53,7 @@ export const asyncioBuiltinFunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'wait_for(coro, timeout=5) wraps a single coroutine with timeout, raises TimeoutError if exceeded, cancels the operation. Example: try: result = await wait_for(fetch(), 5); except TimeoutError: print("Timed out"). wait(tasks, timeout=5) waits for multiple tasks, returns after timeout without raising, gives you (done, pending) to decide what to do. Example: done, pending = await wait(tasks, timeout=5); partial_results = [t.result() for t in done]; for t in pending: t.cancel(). Use wait_for() for single operation with timeout. Use wait() for multiple operations where you want partial results on timeout. wait_for() is stricter (raises), wait() gives control.',
+      'wait_for (coro, timeout=5) wraps a single coroutine with timeout, raises TimeoutError if exceeded, cancels the operation. Example: try: result = await wait_for (fetch(), 5); except TimeoutError: print("Timed out"). wait (tasks, timeout=5) waits for multiple tasks, returns after timeout without raising, gives you (done, pending) to decide what to do. Example: done, pending = await wait (tasks, timeout=5); partial_results = [t.result() for t in done]; for t in pending: t.cancel(). Use wait_for() for single operation with timeout. Use wait() for multiple operations where you want partial results on timeout. wait_for() is stricter (raises), wait() gives control.',
   },
   {
     id: 'abf-mc-5',
@@ -66,6 +66,6 @@ export const asyncioBuiltinFunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "to_thread(blocking_func, *args) runs a blocking function in a thread pool, preventing it from blocking the event loop. Example: data = await asyncio.to_thread(requests.get, url) runs blocking requests in thread, event loop continues processing other tasks. Use when: (1) Library doesn't have async version (requests, PIL), (2) Legacy code you can't rewrite, (3) Blocking I/O that can't be made async. Limitation: Still limited by thread pool size (~32 threads), not true parallelism due to GIL. For CPU-bound work, use ProcessPoolExecutor instead (true parallelism). to_thread() doesn't make code faster, just prevents blocking the event loop.",
+      "to_thread (blocking_func, *args) runs a blocking function in a thread pool, preventing it from blocking the event loop. Example: data = await asyncio.to_thread (requests.get, url) runs blocking requests in thread, event loop continues processing other tasks. Use when: (1) Library doesn't have async version (requests, PIL), (2) Legacy code you can't rewrite, (3) Blocking I/O that can't be made async. Limitation: Still limited by thread pool size (~32 threads), not true parallelism due to GIL. For CPU-bound work, use ProcessPoolExecutor instead (true parallelism). to_thread() doesn't make code faster, just prevents blocking the event loop.",
   },
 ];

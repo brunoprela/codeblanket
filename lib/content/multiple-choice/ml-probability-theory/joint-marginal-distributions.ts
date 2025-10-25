@@ -39,7 +39,7 @@ export const jointmarginaldistributionsMultipleChoice: MultipleChoiceQuestion[] 
       options: ['0 to 1', '-∞ to +∞', '-1 to 1', '0 to ∞'],
       correctAnswer: 2,
       explanation:
-        "The correlation coefficient (Pearson's r) is always between -1 and 1: -1 ≤ ρ ≤ 1. ρ = -1 means perfect negative linear relationship, ρ = 0 means no linear relationship, ρ = 1 means perfect positive linear relationship.",
+        "The correlation coefficient (Pearson\'s r) is always between -1 and 1: -1 ≤ ρ ≤ 1. ρ = -1 means perfect negative linear relationship, ρ = 0 means no linear relationship, ρ = 1 means perfect positive linear relationship.",
     },
     {
       id: 'mc4',

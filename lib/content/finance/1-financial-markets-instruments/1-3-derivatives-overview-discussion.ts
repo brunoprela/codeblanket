@@ -35,14 +35,14 @@ class LeveragedETF:
         self.futures_position = self.calculate_futures_needed()
         self.history = []
     
-    def calculate_futures_needed(self) -> float:
+    def calculate_futures_needed (self) -> float:
         """
         Calculate futures contracts needed for target leverage
         """
         desired_exposure = self.nav * self.leverage
         return desired_exposure / self.index_value
     
-    def daily_rebalance(self, index_return: float) -> dict:
+    def daily_rebalance (self, index_return: float) -> dict:
         """
         Rebalance daily to maintain constant leverage
         
@@ -63,7 +63,7 @@ class LeveragedETF:
         futures_adjustment = new_futures_needed - self.futures_position
         
         # Step 5: Rebalancing cost (simplified)
-        rebalancing_cost = abs(futures_adjustment) * self.index_value * 0.0005  # 5 bps
+        rebalancing_cost = abs (futures_adjustment) * self.index_value * 0.0005  # 5 bps
         self.nav -= rebalancing_cost
         
         # Step 6: Update position
@@ -81,7 +81,7 @@ class LeveragedETF:
             'leverage_actual': (self.futures_position * self.index_value) / self.nav
         }
         
-        self.history.append(result)
+        self.history.append (result)
         return result
 
 def demonstrate_volatility_decay():
@@ -102,8 +102,7 @@ def demonstrate_volatility_decay():
         regular_value *= (1 + ret)
     
     print(f"Regular ETF:")
-    print(f"  Day 1: +10% → \${100 * 1.10: .2f
-    }")
+    print(f"  Day 1: +10% → \${100 * 1.10:.2f}")
     print(f"  Day 2: -9.09% → \${regular_value:.2f}")
     print(f"  Total Return: {(regular_value - 100) / 100 * 100:.2f}%")
     
@@ -133,17 +132,17 @@ daily_returns = np.random.normal(0, 0.02, num_days)  # 2 % daily volatility, 0 %
     # Regular index
 index_path = [100]
 for ret in daily_returns:
-    index_path.append(index_path[-1] * (1 + ret))
+    index_path.append (index_path[-1] * (1 + ret))
     
     # 2x Leveraged ETF
 lev2x_path = [100]
 for ret in daily_returns:
-    lev2x_path.append(lev2x_path[-1] * (1 + ret * 2))
+    lev2x_path.append (lev2x_path[-1] * (1 + ret * 2))
     
     # 3x Leveraged ETF
 lev3x_path = [100]
 for ret in daily_returns:
-    lev3x_path.append(lev3x_path[-1] * (1 + ret * 3))
+    lev3x_path.append (lev3x_path[-1] * (1 + ret * 3))
 
 index_final = index_path[-1]
 lev2x_final = lev2x_path[-1]
@@ -215,7 +214,7 @@ class ProductionLeveragedETF:
         self.aum = 1_000_000_000  # $1B AUM
         self.futures_contracts = []
         
-    def daily_rebalance_production(self) -> dict:
+    def daily_rebalance_production (self) -> dict:
         """
         Actual rebalancing logic with all real-world considerations
         """
@@ -223,7 +222,7 @@ class ProductionLeveragedETF:
         index_return = self.fetch_index_return()
         
         # 2. Mark futures positions to market
-        futures_pnl = self.mark_futures_to_market(index_return)
+        futures_pnl = self.mark_futures_to_market (index_return)
         
         # 3. Update NAV (includes management fees, 0.95% annually)
         daily_fee = self.nav * (0.0095 / 252)
@@ -237,12 +236,12 @@ class ProductionLeveragedETF:
         notional_difference = target_notional - current_notional
         
         # 6. Execution considerations
-        if abs(notional_difference / target_notional) > 0.05:  # >5% drift
+        if abs (notional_difference / target_notional) > 0.05:  # >5% drift
             # Need to rebalance
-            trades = self.generate_rebalancing_trades(notional_difference)
+            trades = self.generate_rebalancing_trades (notional_difference)
             
             # Execute trades (with slippage)
-            execution_cost = self.execute_trades(trades)
+            execution_cost = self.execute_trades (trades)
             
             self.nav -= execution_cost / self.aum * 100
         

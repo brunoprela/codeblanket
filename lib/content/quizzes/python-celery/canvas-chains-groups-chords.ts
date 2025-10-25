@@ -8,7 +8,7 @@ export const canvasChainsGroupsChordsQuiz = [
     question:
       'Design a workflow using canvas that: downloads 100 files in parallel, processes each, then aggregates results and sends an email.',
     sampleAnswer:
-      'CANVAS WORKFLOW: ```python from celery import chord, chain @app.task def download_file(url): return download(url) @app.task def process_file(data): return process(data) @app.task def aggregate(results): return sum(results) @app.task def send_email(total): send_mail(f"Total: {total}") # Workflow workflow = chord( [chain(download_file.s(url), process_file.s()) for url in urls], chain(aggregate.s(), send_email.s()) ) ``` FLOW: 100 parallel chains (download→process), Aggregate results, Send email with total.',
+      'CANVAS WORKFLOW: ```python from celery import chord, chain @app.task def download_file (url): return download (url) @app.task def process_file (data): return process (data) @app.task def aggregate (results): return sum (results) @app.task def send_email (total): send_mail (f"Total: {total}") # Workflow workflow = chord( [chain (download_file.s (url), process_file.s()) for url in urls], chain (aggregate.s(), send_email.s()) ) ``` FLOW: 100 parallel chains (download→process), Aggregate results, Send email with total.',
     keyPoints: [
       'Chord for parallel + callback',
       'Chain for sequential steps',
@@ -35,7 +35,7 @@ export const canvasChainsGroupsChordsQuiz = [
     question:
       'Implement error handling in a chord where some parallel tasks might fail.',
     sampleAnswer:
-      'CHORD ERROR HANDLING: ```python @app.task(bind=True, max_retries=3) def process_item(self, item): try: return process(item) except Exception as exc: raise self.retry(exc=exc) @app.task def combine_results(results): # Filter out failures valid = [r for r in results if r is not None] return sum(valid) # Chord with error handling callback = combine_results.s() header = [process_item.s(i) for i in items] result = chord(header)(callback) ``` HANDLING: Retry failed tasks, Filter None results, Aggregate valid results only.',
+      'CHORD ERROR HANDLING: ```python @app.task (bind=True, max_retries=3) def process_item (self, item): try: return process (item) except Exception as exc: raise self.retry (exc=exc) @app.task def combine_results (results): # Filter out failures valid = [r for r in results if r is not None] return sum (valid) # Chord with error handling callback = combine_results.s() header = [process_item.s (i) for i in items] result = chord (header)(callback) ``` HANDLING: Retry failed tasks, Filter None results, Aggregate valid results only.',
     keyPoints: [
       'Retry failed tasks',
       'Filter None results',

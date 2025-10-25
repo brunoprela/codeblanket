@@ -34,7 +34,7 @@ export const alternativeInvestmentsDiscussionQuiz = {
 
 \`\`\`python
 class HedgeFundAlphaEvaluation:
-    def evaluate_net_alpha(self,
+    def evaluate_net_alpha (self,
                           hf_returns: np.array,
                           benchmark_returns: np.array,
                           mgmt_fee: float = 0.02,
@@ -44,27 +44,27 @@ class HedgeFundAlphaEvaluation:
         Does hedge fund generate enough alpha to justify fees?
         """
         # Calculate gross alpha (before fees)
-        gross_alpha = np.mean(hf_returns) - np.mean(benchmark_returns)
+        gross_alpha = np.mean (hf_returns) - np.mean (benchmark_returns)
         
         # Estimate fees
-        avg_return = np.mean(hf_returns)
+        avg_return = np.mean (hf_returns)
         total_fee = mgmt_fee + (max(0, avg_return - risk_free) * perf_fee)
         
         # Net alpha (after fees)
         net_alpha = gross_alpha - total_fee
         
         # Statistical significance
-        tracking_error = np.std(hf_returns - benchmark_returns)
-        t_stat = gross_alpha / tracking_error * np.sqrt(len(hf_returns))
-        p_value = stats.t.sf(abs(t_stat), len(hf_returns)-1) * 2
+        tracking_error = np.std (hf_returns - benchmark_returns)
+        t_stat = gross_alpha / tracking_error * np.sqrt (len (hf_returns))
+        p_value = stats.t.sf (abs (t_stat), len (hf_returns)-1) * 2
         
         # Risk-adjusted metrics
-        hf_sharpe = (np.mean(hf_returns) - risk_free) / np.std(hf_returns)
-        bench_sharpe = (np.mean(benchmark_returns) - risk_free) / np.std(benchmark_returns)
+        hf_sharpe = (np.mean (hf_returns) - risk_free) / np.std (hf_returns)
+        bench_sharpe = (np.mean (benchmark_returns) - risk_free) / np.std (benchmark_returns)
         sharpe_diff = hf_sharpe - bench_sharpe
         
         # Downside protection
-        hf_down_capture = np.mean(hf_returns[benchmark_returns < 0]) / np.mean(benchmark_returns[benchmark_returns < 0])
+        hf_down_capture = np.mean (hf_returns[benchmark_returns < 0]) / np.mean (benchmark_returns[benchmark_returns < 0])
         
         # Verdict
         justified = (
@@ -103,7 +103,7 @@ class HedgeFundAlphaEvaluation:
 **PE Return Decomposition:**
 \`\`\`python
 class PEIlliquidityAnalysis:
-    def decompose_pe_returns(self) -> Dict:
+    def decompose_pe_returns (self) -> Dict:
         return {
             'Multiple Expansion': {
                 'contribution': '30-40% of returns',
@@ -127,7 +127,7 @@ class PEIlliquidityAnalysis:
             }
         }
     
-    def should_invest(self,
+    def should_invest (self,
                      pe_expected_return: float,
                      public_market_return: float,
                      lockup_years: float,
@@ -171,7 +171,7 @@ print(f"PE Return: {decision['pe_return']:.0f}%")
 print(f"Public Stocks: {decision['public_return']:.0f}%")
 print(f"Premium: {decision['premium_offered']:.0f}%")
 print(f"Required Premium: {decision['required_premium']:.0f}%")
-print(f"Decision: {'INVEST (up to {:.0f}%)'.format(decision['max_allocation']) if decision['acceptable'] else 'PASS'}")
+print(f"Decision: {'INVEST (up to {:.0f}%)'.format (decision['max_allocation']) if decision['acceptable'] else 'PASS'}")
 \`\`\`
 
 **When to Increase PE Allocation:**
@@ -195,48 +195,48 @@ print(f"Decision: {'INVEST (up to {:.0f}%)'.format(decision['max_allocation']) i
 **1. Statistical Fraud Detection:**
 \`\`\`python
 class FraudDetection:
-    def detect_return_smoothing(self, monthly_returns: np.array) -> Dict:
+    def detect_return_smoothing (self, monthly_returns: np.array) -> Dict:
         """
-        Madoff's returns were too smooth (red flag!)
+        Madoff\'s returns were too smooth (red flag!)
         """
         # Normal hedge fund: 3-8% monthly vol
         # Madoff: 0.5% monthly vol with 10%+ annual returns (impossible!)
         
-        volatility = np.std(monthly_returns) * np.sqrt(12)
-        mean_return = np.mean(monthly_returns) * 12
+        volatility = np.std (monthly_returns) * np.sqrt(12)
+        mean_return = np.mean (monthly_returns) * 12
         sharpe = mean_return / volatility
         
         # Red flags
         too_smooth = volatility < 0.03  # <3% annual vol suspicious
         too_good_sharpe = sharpe > 3.0  # Sharpe > 3 nearly impossible
-        too_consistent = np.sum(monthly_returns < 0) / len(monthly_returns) < 0.20  # <20% down months
+        too_consistent = np.sum (monthly_returns < 0) / len (monthly_returns) < 0.20  # <20% down months
         
         # Serial correlation (smoothing creates autocorrelation)
-        serial_corr = np.corrcoef(monthly_returns[:-1], monthly_returns[1:])[0,1]
-        high_autocorr = abs(serial_corr) > 0.3
+        serial_corr = np.corrcoef (monthly_returns[:-1], monthly_returns[1:])[0,1]
+        high_autocorr = abs (serial_corr) > 0.3
         
         red_flags = []
         if too_smooth:
             red_flags.append("Volatility too low (< 3%)")
         if too_good_sharpe:
-            red_flags.append(f"Sharpe ratio too high ({sharpe:.1f} > 3.0)")
+            red_flags.append (f"Sharpe ratio too high ({sharpe:.1f} > 3.0)")
         if too_consistent:
             red_flags.append("Too few down months")
         if high_autocorr:
-            red_flags.append(f"High serial correlation ({serial_corr:.2f})")
+            red_flags.append (f"High serial correlation ({serial_corr:.2f})")
         
-        fraud_risk = len(red_flags) >= 2  # 2+ flags = investigate
+        fraud_risk = len (red_flags) >= 2  # 2+ flags = investigate
         
         return {
             'volatility': volatility * 100,
             'sharpe': sharpe,
-            'down_month_pct': np.sum(monthly_returns < 0) / len(monthly_returns) * 100,
+            'down_month_pct': np.sum (monthly_returns < 0) / len (monthly_returns) * 100,
             'serial_correlation': serial_corr,
             'red_flags': red_flags,
             'fraud_risk': 'HIGH' if fraud_risk else 'NORMAL'
         }
     
-    def operational_dd_checklist(self) -> Dict:
+    def operational_dd_checklist (self) -> Dict:
         """
         Verify operational independence (catch Madoff-style fraud)
         """
@@ -276,10 +276,10 @@ class FraudDetection:
 # Example: Test Madoff-like returns
 detector = FraudDetection()
 
-# Madoff's returns: 10-12% annually, almost no down months
+# Madoff\'s returns: 10-12% annually, almost no down months
 madoff_returns = np.random.normal(0.01, 0.004, 120)  # 1% monthly, 0.4% vol
 
-fraud_check = detector.detect_return_smoothing(madoff_returns)
+fraud_check = detector.detect_return_smoothing (madoff_returns)
 
 print("=== Fraud Detection Analysis ===\\n")
 print(f"Annual Volatility: {fraud_check['volatility']:.1f}%")
@@ -302,7 +302,7 @@ print(f"\\nFraud Risk: {fraud_check['fraud_risk']}")
 7. ✅ Reference calls (other investors)
 8. ✅ On-site visit (meet team, see operations)
 
-**Bottom Line**: Trust but verify. Madoff's smoothed returns + self-administration were obvious red flags in hindsight. Always verify independently.`,
+**Bottom Line**: Trust but verify. Madoff\'s smoothed returns + self-administration were obvious red flags in hindsight. Always verify independently.`,
     },
   ],
   quiz: [
@@ -313,7 +313,7 @@ print(f"\\nFraud Risk: {fraud_check['fraud_risk']}")
       options: ['$205,000', '$240,000', '$305,000', '$405,000'],
       correctAnswer: 2,
       explanation:
-        'Management fee: 2% × $10.5M (average AUM) = $210K. Performance fee: Profit = $1.5M, above hurdle = $1.5M - ($10M × 8%) = $700K, fee = $700K × 20% = $140K. Total = $210K + $140K = $350K. Actually, simplifying: mgmt fee on avg AUM ≈ $205K, perf fee on $700K excess = $140K, total ≈ $345K. Closest is $305K. (Note: Actual calculation depends on whether mgmt fee is on beginning/average/ending AUM - typically average).',
+        'Management fee: 2% × $10.5M (average AUM) = $210K. Performance fee: Profit = $1.5M, above hurdle = $1.5M - (\$10M × 8%) = $700K, fee = $700K × 20% = $140K. Total = $210K + $140K = $350K. Actually, simplifying: mgmt fee on avg AUM ≈ $205K, perf fee on $700K excess = $140K, total ≈ $345K. Closest is $305K. (Note: Actual calculation depends on whether mgmt fee is on beginning/average/ending AUM - typically average).',
     },
     {
       id: 2,
@@ -322,7 +322,7 @@ print(f"\\nFraud Risk: {fraud_check['fraud_risk']}")
       options: ['2.1x', '2.5x', '3.2x', '4.0x'],
       correctAnswer: 2,
       explanation:
-        'Entry: Equity = $500M × 40% = $200M, Debt = $300M. Exit: Enterprise Value = $70M × 12 = $840M, Remaining Debt = $300M × 60% = $180M, Equity Value = $840M - $180M = $660M. MOIC = $660M / $200M = 3.3x. Closest is 3.2x. The returns come from: EBITDA growth ($50M → $70M), multiple expansion (10x → 12x), and debt paydown.',
+        'Entry: Equity = $500M × 40% = $200M, Debt = $300M. Exit: Enterprise Value = $70M × 12 = $840M, Remaining Debt = $300M × 60% = $180M, Equity Value = $840M - $180M = $660M. MOIC = $660M / $200M = 3.3x. Closest is 3.2x. The returns come from: EBITDA growth (\$50M → $70M), multiple expansion (10x → 12x), and debt paydown.',
     },
     {
       id: 3,
@@ -345,7 +345,7 @@ print(f"\\nFraud Risk: {fraud_check['fraud_risk']}")
       ],
       correctAnswer: 2,
       explanation:
-        "Sharpe ratio of 10 is virtually impossible (best managers achieve 2-3). 1% volatility with 10% returns is a huge red flag for return smoothing or fraud. This was exactly Madoff's pattern: consistently positive returns with impossibly low volatility. Real markets have volatility; smooth returns suggest reported returns don't reflect actual positions. Always investigate suspiciously good performance.",
+        "Sharpe ratio of 10 is virtually impossible (best managers achieve 2-3). 1% volatility with 10% returns is a huge red flag for return smoothing or fraud. This was exactly Madoff\'s pattern: consistently positive returns with impossibly low volatility. Real markets have volatility; smooth returns suggest reported returns don't reflect actual positions. Always investigate suspiciously good performance.",
     },
     {
       id: 5,

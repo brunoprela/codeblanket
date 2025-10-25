@@ -41,7 +41,7 @@ import numpy as np
 import pandas as pd
 from typing import Tuple, Dict
 
-class TradingEnvironment(gym.Env):
+class TradingEnvironment (gym.Env):
     """
     OpenAI Gym-compatible trading environment
     
@@ -65,14 +65,14 @@ class TradingEnvironment(gym.Env):
         """
         super().__init__()
         
-        self.data = data.reset_index(drop=True)
+        self.data = data.reset_index (drop=True)
         self.initial_balance = initial_balance
         self.commission = commission
         self.max_position = max_position
         
         # State space: [price features, position, cash, unrealized P&L, ...]
         # Observation: normalized market data + portfolio state
-        n_features = len(data.columns)
+        n_features = len (data.columns)
         self.observation_space = spaces.Box(
             low=-np.inf, 
             high=np.inf, 
@@ -93,7 +93,7 @@ class TradingEnvironment(gym.Env):
         
         self.reset()
     
-    def reset(self) -> np.ndarray:
+    def reset (self) -> np.ndarray:
         """Reset environment to initial state"""
         self.current_step = 0
         self.balance = self.initial_balance
@@ -105,7 +105,7 @@ class TradingEnvironment(gym.Env):
         
         return self._get_observation()
     
-    def _get_observation(self) -> np.ndarray:
+    def _get_observation (self) -> np.ndarray:
         """
         Construct state observation
         
@@ -113,8 +113,8 @@ class TradingEnvironment(gym.Env):
         - Market features (price, volume, indicators)
         - Portfolio state (position, cash, P&L)
         """
-        if self.current_step >= len(self.data):
-            return np.zeros(self.observation_space.shape)
+        if self.current_step >= len (self.data):
+            return np.zeros (self.observation_space.shape)
         
         # Market features (normalized)
         market_obs = self.data.iloc[self.current_step].values
@@ -132,11 +132,11 @@ class TradingEnvironment(gym.Env):
         ])
         
         # Combine
-        obs = np.concatenate([market_obs, portfolio_obs]).astype(np.float32)
+        obs = np.concatenate([market_obs, portfolio_obs]).astype (np.float32)
         
         return obs
     
-    def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
+    def step (self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         """
         Execute action and return (observation, reward, done, info)
         
@@ -157,28 +157,28 @@ class TradingEnvironment(gym.Env):
         
         if self.discrete_actions:
             if action == 2:  # Buy
-                self._execute_buy(current_price)
+                self._execute_buy (current_price)
             elif action == 0:  # Sell
-                reward = self._execute_sell(current_price)
+                reward = self._execute_sell (current_price)
             # action == 1: Hold (do nothing)
         else:
             # Continuous action: target position
             target_position = action * self.max_position * self.initial_balance / current_price
-            self._adjust_position(target_position, current_price)
+            self._adjust_position (target_position, current_price)
         
         # Move to next step
         self.current_step += 1
-        done = self.current_step >= len(self.data) - 1
+        done = self.current_step >= len (self.data) - 1
         
         # Calculate portfolio value
-        if self.current_step < len(self.data):
+        if self.current_step < len (self.data):
             current_price = self.data.iloc[self.current_step]['Close']
         position_value = self.position * current_price
         portfolio_value = self.balance + position_value
-        self.portfolio_values.append(portfolio_value)
+        self.portfolio_values.append (portfolio_value)
         
         # Reward: Change in portfolio value (can customize)
-        if len(self.portfolio_values) > 1:
+        if len (self.portfolio_values) > 1:
             reward = (self.portfolio_values[-1] - self.portfolio_values[-2]) / self.portfolio_values[-2]
         
         # Get next observation
@@ -190,12 +190,12 @@ class TradingEnvironment(gym.Env):
             'position': self.position,
             'portfolio_value': portfolio_value,
             'total_profit': portfolio_value - self.initial_balance,
-            'num_trades': len(self.trades)
+            'num_trades': len (self.trades)
         }
         
         return obs, reward, done, info
     
-    def _execute_buy(self, price: float):
+    def _execute_buy (self, price: float):
         """Execute buy order"""
         if self.balance <= 0 or self.position > 0:
             return  # Already in position or no cash
@@ -215,7 +215,7 @@ class TradingEnvironment(gym.Env):
                 'shares': max_shares
             })
     
-    def _execute_sell(self, price: float) -> float:
+    def _execute_sell (self, price: float) -> float:
         """Execute sell order and return profit"""
         if self.position <= 0:
             return 0  # No position to sell
@@ -241,7 +241,7 @@ class TradingEnvironment(gym.Env):
         # Return normalized profit as reward
         return profit / self.initial_balance
     
-    def _adjust_position(self, target_shares: float, price: float):
+    def _adjust_position (self, target_shares: float, price: float):
         """Adjust position to target (continuous action)"""
         delta = target_shares - self.position
         
@@ -251,11 +251,11 @@ class TradingEnvironment(gym.Env):
                 self.position += delta
                 self.balance -= cost
         elif delta < 0:  # Sell
-            proceeds = abs(delta) * price * (1 - self.commission)
+            proceeds = abs (delta) * price * (1 - self.commission)
             self.position += delta  # delta is negative
             self.balance += proceeds
     
-    def render(self, mode='human'):
+    def render (self, mode='human'):
         """Render current state"""
         current_price = self.data.iloc[self.current_step]['Close']
         portfolio_value = self.balance + self.position * current_price
@@ -281,7 +281,7 @@ data = yf.download('SPY', start='2020-01-01', end='2024-01-01')
 data['Returns'] = data['Close'].pct_change()
 data['SMA_20'] = data['Close'].rolling(20).mean()
 data['SMA_50'] = data['Close'].rolling(50).mean()
-data['RSI'] = calculate_rsi(data['Close'], 14)
+data['RSI'] = calculate_rsi (data['Close'], 14)
 data = data.dropna()
 
 # Create environment
@@ -297,7 +297,7 @@ print("\\nInitial observation shape:", obs.shape)
 
 for _ in range(5):
     action = env.action_space.sample()  # Random action
-    obs, reward, done, info = env.step(action)
+    obs, reward, done, info = env.step (action)
     print(f"Action: {action}, Reward: {reward:.4f}, Portfolio: \${info['portfolio_value']:,.2f}")
     if done:
         break
@@ -333,18 +333,18 @@ class DQN(nn.Module):
         
         for hidden_dim in hidden_dims:
             layers.extend([
-                nn.Linear(input_dim, hidden_dim),
+                nn.Linear (input_dim, hidden_dim),
                 nn.ReLU(),
                 nn.Dropout(0.2)
             ])
             input_dim = hidden_dim
         
-        layers.append(nn.Linear(input_dim, action_dim))
+        layers.append (nn.Linear (input_dim, action_dim))
         
         self.network = nn.Sequential(*layers)
     
-    def forward(self, x):
-        return self.network(x)
+    def forward (self, x):
+        return self.network (x)
 
 
 class DQNAgent:
@@ -381,21 +381,21 @@ class DQNAgent:
         self.batch_size = batch_size
         
         # Experience replay memory
-        self.memory = deque(maxlen=memory_size)
+        self.memory = deque (maxlen=memory_size)
         
         # Networks
         self.policy_net = DQN(state_dim, action_dim)
         self.target_net = DQN(state_dim, action_dim)
-        self.target_net.load_state_dict(self.policy_net.state_dict())
+        self.target_net.load_state_dict (self.policy_net.state_dict())
         self.target_net.eval()
         
         # Optimizer
-        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=learning_rate)
+        self.optimizer = optim.Adam (self.policy_net.parameters(), lr=learning_rate)
         
         # Training stats
         self.losses = []
     
-    def act(self, state: np.ndarray, training: bool = True) -> int:
+    def act (self, state: np.ndarray, training: bool = True) -> int:
         """
         Select action using epsilon-greedy policy
         
@@ -408,43 +408,43 @@ class DQNAgent:
         """
         if training and np.random.random() < self.epsilon:
             # Explore: random action
-            return random.randrange(self.action_dim)
+            return random.randrange (self.action_dim)
         
         # Exploit: best action according to Q-network
         with torch.no_grad():
-            state_tensor = torch.FloatTensor(state).unsqueeze(0)
-            q_values = self.policy_net(state_tensor)
+            state_tensor = torch.FloatTensor (state).unsqueeze(0)
+            q_values = self.policy_net (state_tensor)
             return q_values.argmax().item()
     
-    def remember(self, state, action, reward, next_state, done):
+    def remember (self, state, action, reward, next_state, done):
         """Store experience in replay memory"""
         self.memory.append((state, action, reward, next_state, done))
     
-    def replay(self):
+    def replay (self):
         """
         Train on batch from experience replay
         
         Uses Double DQN to reduce overestimation bias
         """
-        if len(self.memory) < self.batch_size:
+        if len (self.memory) < self.batch_size:
             return
         
         # Sample batch
-        batch = random.sample(self.memory, self.batch_size)
+        batch = random.sample (self.memory, self.batch_size)
         
-        states = torch.FloatTensor(np.array([e[0] for e in batch]))
+        states = torch.FloatTensor (np.array([e[0] for e in batch]))
         actions = torch.LongTensor([e[1] for e in batch])
         rewards = torch.FloatTensor([e[2] for e in batch])
-        next_states = torch.FloatTensor(np.array([e[3] for e in batch]))
+        next_states = torch.FloatTensor (np.array([e[3] for e in batch]))
         dones = torch.FloatTensor([e[4] for e in batch])
         
         # Current Q-values
-        current_q_values = self.policy_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
+        current_q_values = self.policy_net (states).gather(1, actions.unsqueeze(1)).squeeze(1)
         
         # Double DQN: Use policy net to select action, target net to evaluate
         with torch.no_grad():
-            next_actions = self.policy_net(next_states).argmax(1)
-            next_q_values = self.target_net(next_states).gather(1, next_actions.unsqueeze(1)).squeeze(1)
+            next_actions = self.policy_net (next_states).argmax(1)
+            next_q_values = self.target_net (next_states).gather(1, next_actions.unsqueeze(1)).squeeze(1)
             target_q_values = rewards + (1 - dones) * self.gamma * next_q_values
         
         # Compute loss
@@ -457,17 +457,17 @@ class DQNAgent:
         torch.nn.utils.clip_grad_norm_(self.policy_net.parameters(), 1.0)
         self.optimizer.step()
         
-        self.losses.append(loss.item())
+        self.losses.append (loss.item())
         
         # Decay epsilon
         if self.epsilon > self.epsilon_end:
             self.epsilon *= self.epsilon_decay
     
-    def update_target_network(self):
+    def update_target_network (self):
         """Copy weights from policy network to target network"""
-        self.target_net.load_state_dict(self.policy_net.state_dict())
+        self.target_net.load_state_dict (self.policy_net.state_dict())
     
-    def save(self, path: str):
+    def save (self, path: str):
         """Save model"""
         torch.save({
             'policy_net': self.policy_net.state_dict(),
@@ -476,12 +476,12 @@ class DQNAgent:
             'epsilon': self.epsilon
         }, path)
     
-    def load(self, path: str):
+    def load (self, path: str):
         """Load model"""
-        checkpoint = torch.load(path)
-        self.policy_net.load_state_dict(checkpoint['policy_net'])
-        self.target_net.load_state_dict(checkpoint['target_net'])
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
+        checkpoint = torch.load (path)
+        self.policy_net.load_state_dict (checkpoint['policy_net'])
+        self.target_net.load_state_dict (checkpoint['target_net'])
+        self.optimizer.load_state_dict (checkpoint['optimizer'])
         self.epsilon = checkpoint['epsilon']
 
 
@@ -489,7 +489,7 @@ class DQNAgent:
 # TRAINING LOOP
 # ============================================================================
 
-def train_dqn_agent(env, agent, num_episodes=500, update_target_every=10):
+def train_dqn_agent (env, agent, num_episodes=500, update_target_every=10):
     """
     Train DQN agent on trading environment
     
@@ -505,18 +505,18 @@ def train_dqn_agent(env, agent, num_episodes=500, update_target_every=10):
     episode_rewards = []
     episode_profits = []
     
-    for episode in range(num_episodes):
+    for episode in range (num_episodes):
         state = env.reset()
         total_reward = 0
         done = False
         
         while not done:
             # Select and perform action
-            action = agent.act(state, training=True)
-            next_state, reward, done, info = env.step(action)
+            action = agent.act (state, training=True)
+            next_state, reward, done, info = env.step (action)
             
             # Store experience
-            agent.remember(state, action, reward, next_state, done)
+            agent.remember (state, action, reward, next_state, done)
             
             # Train
             agent.replay()
@@ -524,8 +524,8 @@ def train_dqn_agent(env, agent, num_episodes=500, update_target_every=10):
             state = next_state
             total_reward += reward
         
-        episode_rewards.append(total_reward)
-        episode_profits.append(info['total_profit'])
+        episode_rewards.append (total_reward)
+        episode_profits.append (info['total_profit'])
         
         # Update target network
         if (episode + 1) % update_target_every == 0:
@@ -533,13 +533,13 @@ def train_dqn_agent(env, agent, num_episodes=500, update_target_every=10):
         
         # Log progress
         if (episode + 1) % 50 == 0:
-            avg_reward = np.mean(episode_rewards[-50:])
-            avg_profit = np.mean(episode_profits[-50:])
+            avg_reward = np.mean (episode_rewards[-50:])
+            avg_profit = np.mean (episode_profits[-50:])
             print(f"Episode {episode + 1}/{num_episodes}")
             print(f"  Avg Reward (50 ep): {avg_reward:.4f}")
             print(f"  Avg Profit (50 ep): \${avg_profit:,.2f}")
             print(f"  Epsilon: {agent.epsilon:.3f}")
-            print(f"  Replay Memory: {len(agent.memory)}")
+            print(f"  Replay Memory: {len (agent.memory)}")
     
     return {
         'episode_rewards': episode_rewards,
@@ -562,11 +562,11 @@ print("\\n" + "="*70)
 print("TRAINING DQN AGENT")
 print("="*70)
 
-history = train_dqn_agent(env, agent, num_episodes=200, update_target_every=10)
+history = train_dqn_agent (env, agent, num_episodes=200, update_target_every=10)
 
 print("\\nTraining complete!")
 print(f"Final epsilon: {agent.epsilon:.3f}")
-print(f"Total experiences: {len(agent.memory)}")
+print(f"Total experiences: {len (agent.memory)}")
 
 # Evaluate trained agent
 state = env.reset()
@@ -574,16 +574,16 @@ done = False
 portfolio_values = [env.initial_balance]
 
 while not done:
-    action = agent.act(state, training=False)  # Greedy policy
-    state, reward, done, info = env.step(action)
-    portfolio_values.append(info['portfolio_value'])
+    action = agent.act (state, training=False)  # Greedy policy
+    state, reward, done, info = env.step (action)
+    portfolio_values.append (info['portfolio_value'])
 
 final_return = (portfolio_values[-1] - env.initial_balance) / env.initial_balance
 
 print(f"\\nEvaluation Results:")
 print(f"  Final Portfolio Value: \${portfolio_values[-1]:,.2f}")
 print(f"  Total Return: {final_return:.2%}")
-print(f"  Number of Trades: {len(env.trades)}")
+print(f"  Number of Trades: {len (env.trades)}")
 \`\`\`
 
 ---
@@ -619,7 +619,7 @@ try:
     
     # Train
     print("\\nTraining PPO Agent...")
-    ppo_agent.learn(total_timesteps=100000)
+    ppo_agent.learn (total_timesteps=100000)
     
     # Evaluate
     obs = vec_env.reset()
@@ -627,8 +627,8 @@ try:
     total_reward = 0
     
     while not done:
-        action, _ = ppo_agent.predict(obs, deterministic=True)
-        obs, reward, done, info = vec_env.step(action)
+        action, _ = ppo_agent.predict (obs, deterministic=True)
+        obs, reward, done, info = vec_env.step (action)
         total_reward += reward[0]
     
     print(f"\\nPPO Evaluation:")

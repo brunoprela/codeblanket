@@ -73,7 +73,7 @@ from enum import Enum
 import logging
 from datetime import datetime
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class ContentType(Enum):
@@ -122,7 +122,7 @@ class MultiModalContentPlatform:
         self.document_processor = None  # Document intelligence
         
         # Storage
-        self.redis_client = redis.Redis(host=redis_host)
+        self.redis_client = redis.Redis (host=redis_host)
         self.db_connection = postgres_connection
         
         # Job queue
@@ -147,7 +147,7 @@ class MultiModalContentPlatform:
         """
         import uuid
         
-        job_id = str(uuid.uuid4())
+        job_id = str (uuid.uuid4())
         
         job = ProcessingJob(
             job_id=job_id,
@@ -158,18 +158,18 @@ class MultiModalContentPlatform:
             created_at=time.time()
         )
         
-        self.job_queue.append(job)
+        self.job_queue.append (job)
         
-        logger.info(f"Job {job_id} submitted: {content_type.value} with {len(operations)} operations")
+        logger.info (f"Job {job_id} submitted: {content_type.value} with {len (operations)} operations")
         
         # Process asynchronously (in real implementation)
-        self._process_job(job)
+        self._process_job (job)
         
         return job_id
     
-    def _process_job(self, job: ProcessingJob):
+    def _process_job (self, job: ProcessingJob):
         """Process a job."""
-        logger.info(f"Processing job {job.job_id}")
+        logger.info (f"Processing job {job.job_id}")
         
         job.status = "processing"
         results = {}
@@ -178,44 +178,44 @@ class MultiModalContentPlatform:
             for operation in job.operations:
                 if job.content_type == ContentType.IMAGE:
                     if operation == "caption":
-                        results["caption"] = self._caption_image(job.input_path)
+                        results["caption"] = self._caption_image (job.input_path)
                     elif operation == "ocr":
-                        results["text"] = self._extract_text_from_image(job.input_path)
+                        results["text"] = self._extract_text_from_image (job.input_path)
                     elif operation == "analyze":
-                        results["analysis"] = self._analyze_image(job.input_path)
+                        results["analysis"] = self._analyze_image (job.input_path)
                 
                 elif job.content_type == ContentType.VIDEO:
                     if operation == "transcribe":
-                        results["transcript"] = self._transcribe_video(job.input_path)
+                        results["transcript"] = self._transcribe_video (job.input_path)
                     elif operation == "summarize":
-                        results["summary"] = self._summarize_video(job.input_path)
+                        results["summary"] = self._summarize_video (job.input_path)
                     elif operation == "scenes":
-                        results["scenes"] = self._detect_scenes(job.input_path)
+                        results["scenes"] = self._detect_scenes (job.input_path)
                 
                 elif job.content_type == ContentType.AUDIO:
                     if operation == "transcribe":
-                        results["transcript"] = self._transcribe_audio(job.input_path)
+                        results["transcript"] = self._transcribe_audio (job.input_path)
                     elif operation == "classify":
-                        results["classification"] = self._classify_audio(job.input_path)
+                        results["classification"] = self._classify_audio (job.input_path)
                 
                 elif job.content_type == ContentType.DOCUMENT:
                     if operation == "extract":
-                        results["data"] = self._extract_document_data(job.input_path)
+                        results["data"] = self._extract_document_data (job.input_path)
                     elif operation == "summarize":
-                        results["summary"] = self._summarize_document(job.input_path)
+                        results["summary"] = self._summarize_document (job.input_path)
             
             job.status = "completed"
             job.result = results
             job.completed_at = time.time()
             
-            logger.info(f"Job {job.job_id} completed successfully")
+            logger.info (f"Job {job.job_id} completed successfully")
         
         except Exception as e:
-            logger.error(f"Job {job.job_id} failed: {e}")
+            logger.error (f"Job {job.job_id} failed: {e}")
             job.status = "failed"
-            job.result = {"error": str(e)}
+            job.result = {"error": str (e)}
     
-    def get_job_status(self, job_id: str) -> Optional[ProcessingJob]:
+    def get_job_status (self, job_id: str) -> Optional[ProcessingJob]:
         """Get status of a job."""
         for job in self.job_queue:
             if job.job_id == job_id:
@@ -253,47 +253,47 @@ class MultiModalContentPlatform:
         pass
     
     # Helper methods for processing operations
-    def _caption_image(self, image_path: str) -> str:
+    def _caption_image (self, image_path: str) -> str:
         """Generate image caption."""
         # Use techniques from image-text understanding section
         pass
     
-    def _extract_text_from_image(self, image_path: str) -> str:
+    def _extract_text_from_image (self, image_path: str) -> str:
         """Extract text from image."""
         pass
     
-    def _analyze_image(self, image_path: str) -> Dict[str, Any]:
+    def _analyze_image (self, image_path: str) -> Dict[str, Any]:
         """Comprehensive image analysis."""
         pass
     
-    def _transcribe_video(self, video_path: str) -> str:
+    def _transcribe_video (self, video_path: str) -> str:
         """Transcribe video audio."""
         # Use techniques from video-text understanding section
         pass
     
-    def _summarize_video(self, video_path: str) -> str:
+    def _summarize_video (self, video_path: str) -> str:
         """Summarize video content."""
         pass
     
-    def _detect_scenes(self, video_path: str) -> List[Dict[str, Any]]:
+    def _detect_scenes (self, video_path: str) -> List[Dict[str, Any]]:
         """Detect scenes in video."""
         pass
     
-    def _transcribe_audio(self, audio_path: str) -> str:
+    def _transcribe_audio (self, audio_path: str) -> str:
         """Transcribe audio."""
         # Use techniques from audio-text processing section
         pass
     
-    def _classify_audio(self, audio_path: str) -> Dict[str, Any]:
+    def _classify_audio (self, audio_path: str) -> Dict[str, Any]:
         """Classify audio content."""
         pass
     
-    def _extract_document_data(self, doc_path: str) -> Dict[str, Any]:
+    def _extract_document_data (self, doc_path: str) -> Dict[str, Any]:
         """Extract structured data from document."""
         # Use techniques from document intelligence section
         pass
     
-    def _summarize_document(self, doc_path: str) -> str:
+    def _summarize_document (self, doc_path: str) -> str:
         """Summarize document."""
         pass
 
@@ -316,7 +316,7 @@ video_job = platform.submit_job(
 )
 
 # Check status
-job_status = platform.get_job_status(image_job)
+job_status = platform.get_job_status (image_job)
 print(f"Job status: {job_status.status}")
 
 if job_status.status == "completed":
@@ -336,28 +336,28 @@ class ScalableProcessingQueue:
         self.workers = []
         self.max_workers = max_workers
     
-    def add_job(self, job):
+    def add_job (self, job):
         """Add job to queue."""
-        self.queue.append(job)
+        self.queue.append (job)
         self._ensure_workers()
     
-    def _ensure_workers(self):
+    def _ensure_workers (self):
         """Ensure we have enough workers."""
         active_workers = len([w for w in self.workers if w.is_alive()])
         
         if active_workers < self.max_workers and self.queue:
             # Start new worker
             import threading
-            worker = threading.Thread(target=self._process_queue)
+            worker = threading.Thread (target=self._process_queue)
             worker.start()
-            self.workers.append(worker)
+            self.workers.append (worker)
     
-    def _process_queue(self):
+    def _process_queue (self):
         """Process jobs from queue."""
         while self.queue:
             job = self.queue.pop(0)
             # Process job
-            self._process_job(job)
+            self._process_job (job)
 \`\`\`
 
 ### 2. Cost Optimization
@@ -377,7 +377,7 @@ class CostTracker:
     ) -> float:
         """Track cost of operation."""
         # Calculate cost based on pricing
-        cost = self._calculate_cost(operation, input_size, model)
+        cost = self._calculate_cost (operation, input_size, model)
         
         self.costs.append({
             "operation": operation,
@@ -387,7 +387,7 @@ class CostTracker:
         
         return cost
     
-    def _calculate_cost(self, operation: str, input_size: int, model: str) -> float:
+    def _calculate_cost (self, operation: str, input_size: int, model: str) -> float:
         """Calculate operation cost."""
         # Pricing table
         pricing = {
@@ -400,16 +400,16 @@ class CostTracker:
         # Calculate based on operation and model
         return 0.0  # Simplified
     
-    def get_total_cost(self) -> float:
+    def get_total_cost (self) -> float:
         """Get total cost."""
-        return sum(c["cost"] for c in self.costs)
+        return sum (c["cost"] for c in self.costs)
     
-    def get_cost_breakdown(self) -> Dict[str, float]:
+    def get_cost_breakdown (self) -> Dict[str, float]:
         """Get cost breakdown by operation."""
         breakdown = {}
         for cost_entry in self.costs:
             op = cost_entry["operation"]
-            breakdown[op] = breakdown.get(op, 0) + cost_entry["cost"]
+            breakdown[op] = breakdown.get (op, 0) + cost_entry["cost"]
         return breakdown
 \`\`\`
 
@@ -436,7 +436,7 @@ class PlatformMonitor:
             "timestamp": time.time()
         })
     
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data (self) -> Dict[str, Any]:
         """Get data for monitoring dashboard."""
         # Aggregate metrics
         return {
@@ -446,22 +446,22 @@ class PlatformMonitor:
             "cost_per_hour": self._calculate_cost_per_hour()
         }
     
-    def _calculate_average_latency(self) -> float:
+    def _calculate_average_latency (self) -> float:
         """Calculate average processing latency."""
         latencies = [
             m["value"]
             for m in self.metrics
             if m["name"] == "processing_latency"
         ]
-        return sum(latencies) / len(latencies) if latencies else 0.0
+        return sum (latencies) / len (latencies) if latencies else 0.0
     
-    def _calculate_error_rate(self) -> float:
+    def _calculate_error_rate (self) -> float:
         """Calculate error rate."""
         total = len([m for m in self.metrics if m["name"] in ["job_completed", "job_failed"]])
         errors = len([m for m in self.metrics if m["name"] == "job_failed"])
         return errors / total if total > 0 else 0.0
     
-    def _calculate_cost_per_hour(self) -> float:
+    def _calculate_cost_per_hour (self) -> float:
         """Calculate cost per hour."""
         # Get costs from last hour
         one_hour_ago = time.time() - 3600
@@ -470,7 +470,7 @@ class PlatformMonitor:
             for m in self.metrics
             if m["name"] == "cost" and m["timestamp"] > one_hour_ago
         ]
-        return sum(recent_costs)
+        return sum (recent_costs)
 \`\`\`
 
 ### 4. Error Handling & Recovery
@@ -491,33 +491,33 @@ class RobustProcessor:
         max_retries: int = 3
     ) -> Dict[str, Any]:
         """Process job with automatic retry."""
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
-                return self._process(job)
+                return self._process (job)
             
             except RateLimitError as e:
                 if attempt < max_retries - 1:
                     wait_time = (2 ** attempt) * self.retry_config["backoff_factor"]
-                    logger.warning(f"Rate limited, waiting {wait_time}s")
-                    time.sleep(wait_time)
+                    logger.warning (f"Rate limited, waiting {wait_time}s")
+                    time.sleep (wait_time)
                     continue
                 raise
             
             except InvalidInputError as e:
                 # Don't retry invalid input
-                logger.error(f"Invalid input: {e}")
+                logger.error (f"Invalid input: {e}")
                 raise
             
             except Exception as e:
                 if attempt < max_retries - 1:
-                    logger.warning(f"Attempt {attempt + 1} failed: {e}")
+                    logger.warning (f"Attempt {attempt + 1} failed: {e}")
                     time.sleep(1)
                     continue
                 raise
         
         raise Exception("Max retries exceeded")
     
-    def _process(self, job: ProcessingJob) -> Dict[str, Any]:
+    def _process (self, job: ProcessingJob) -> Dict[str, Any]:
         """Process job."""
         # Implementation
         pass
@@ -551,25 +551,25 @@ async def submit_job(
     """Submit a processing job."""
     # Save uploaded file
     file_path = f"uploads/{file.filename}"
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
+    with open (file_path, "wb") as f:
+        f.write (await file.read())
     
     # Submit to platform
     job_id = platform.submit_job(
         file_path,
-        ContentType(content_type),
+        ContentType (content_type),
         operations
     )
     
     return {"job_id": job_id, "status": "submitted"}
 
 @app.get("/jobs/{job_id}")
-async def get_job_status(job_id: str) -> JobStatus:
+async def get_job_status (job_id: str) -> JobStatus:
     """Get job status."""
-    job = platform.get_job_status(job_id)
+    job = platform.get_job_status (job_id)
     
     if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
+        raise HTTPException (status_code=404, detail="Job not found")
     
     return JobStatus(
         job_id=job.job_id,
@@ -584,9 +584,9 @@ async def search_content(
     limit: int = 10
 ) -> List[Dict[str, Any]]:
     """Search across content."""
-    types = [ContentType(t) for t in content_types] if content_types else None
+    types = [ContentType (t) for t in content_types] if content_types else None
     
-    results = platform.search_content(query, types, limit)
+    results = platform.search_content (query, types, limit)
     
     return results
 \`\`\`
@@ -598,7 +598,7 @@ import pytest
 
 def test_image_processing():
     """Test image processing pipeline."""
-    platform = MultiModalContentPlatform(openai_api_key="test")
+    platform = MultiModalContentPlatform (openai_api_key="test")
     
     job_id = platform.submit_job(
         "test_image.jpg",
@@ -611,7 +611,7 @@ def test_image_processing():
     # Wait for completion (in real test, would use async)
     time.sleep(5)
     
-    job = platform.get_job_status(job_id)
+    job = platform.get_job_status (job_id)
     
     assert job.status == "completed"
     assert "caption" in job.result

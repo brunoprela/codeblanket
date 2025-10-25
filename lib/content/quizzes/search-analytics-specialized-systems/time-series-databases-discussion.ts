@@ -4,7 +4,7 @@ export const timeSeriesDatabasesDiscussionQuiz: QuizQuestion[] = [
   {
     id: 'tsdb-discussion-1',
     question:
-      "Your IoT platform collects temperature readings from 100,000 sensors every 10 seconds. That's 864 million datapoints per day. A year of data in PostgreSQL is 5TB and queries are slow. How would you redesign this using TimescaleDB with compression and downsampling?",
+      "Your IoT platform collects temperature readings from 100,000 sensors every 10 seconds. That\'s 864 million datapoints per day. A year of data in PostgreSQL is 5TB and queries are slow. How would you redesign this using TimescaleDB with compression and downsampling?",
     sampleAnswer: `**TimescaleDB Architecture:**
 
 \`\`\`sql
@@ -88,7 +88,7 @@ vs keeping 1 year in Prometheus local: $50k+ in SSDs
 
 **Query:**
 \`\`\`
-rate(http_requests_total[5m])  # Works across 1 year!
+rate (http_requests_total[5m])  # Works across 1 year!
 \`\`\``,
     keyPoints: [
       'Prometheus local storage limited; Thanos extends to unlimited S3 storage',
@@ -101,7 +101,7 @@ rate(http_requests_total[5m])  # Works across 1 year!
   {
     id: 'tsdb-discussion-3',
     question:
-      "You need to store stock market data (OHLCV) for 10,000 stocks with 1-second resolution. That's 86,400 datapoints per stock per day. Design a time-series database schema optimized for common queries: (1) latest price, (2) 1-minute candles, (3) moving averages.",
+      "You need to store stock market data (OHLCV) for 10,000 stocks with 1-second resolution. That\'s 86,400 datapoints per stock per day. Design a time-series database schema optimized for common queries: (1) latest price, (2) 1-minute candles, (3) moving averages.",
     sampleAnswer: `**InfluxDB Schema:**
 
 \`\`\`

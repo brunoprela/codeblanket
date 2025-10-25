@@ -46,15 +46,15 @@ class FFmpegProcessor:
     ):
         """Convert audio format"""
         cmd = [
-            "ffmpeg", "-i", str(input_path),
-            "-ar", str(sample_rate),
-            "-ac", str(channels),
+            "ffmpeg", "-i", str (input_path),
+            "-ar", str (sample_rate),
+            "-ac", str (channels),
             "-b:a", bitrate,
             "-y",  # Overwrite
-            str(output_path)
+            str (output_path)
         ]
         
-        subprocess.run(cmd, check=True, capture_output=True)
+        subprocess.run (cmd, check=True, capture_output=True)
         print(f"✅ Converted: {output_path}")
     
     @staticmethod
@@ -65,14 +65,14 @@ class FFmpegProcessor:
     ):
         """Extract audio track from video"""
         cmd = [
-            "ffmpeg", "-i", str(video_path),
+            "ffmpeg", "-i", str (video_path),
             "-vn",  # No video
             "-acodec", "libmp3lame" if format == "mp3" else "copy",
             "-y",
-            str(output_path)
+            str (output_path)
         ]
         
-        subprocess.run(cmd, check=True, capture_output=True)
+        subprocess.run (cmd, check=True, capture_output=True)
         print(f"✅ Extracted audio: {output_path}")
     
     @staticmethod
@@ -83,38 +83,38 @@ class FFmpegProcessor:
     ):
         """Normalize audio loudness"""
         cmd = [
-            "ffmpeg", "-i", str(input_path),
+            "ffmpeg", "-i", str (input_path),
             "-af", f"loudnorm=I={target_level}:TP=-1.5:LRA=11",
             "-y",
-            str(output_path)
+            str (output_path)
         ]
         
-        subprocess.run(cmd, check=True, capture_output=True)
+        subprocess.run (cmd, check=True, capture_output=True)
         print(f"✅ Normalized: {output_path}")
     
     @staticmethod
-    def get_audio_info(audio_path: Path) -> Dict:
+    def get_audio_info (audio_path: Path) -> Dict:
         """Get audio file information"""
         cmd = [
             "ffprobe", "-v", "quiet",
             "-print_format", "json",
             "-show_format", "-show_streams",
-            str(audio_path)
+            str (audio_path)
         ]
         
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        data = json.loads(result.stdout)
+        result = subprocess.run (cmd, capture_output=True, text=True, check=True)
+        data = json.loads (result.stdout)
         
         audio_stream = next(
             s for s in data["streams"] if s["codec_type"] == "audio"
         )
         
         return {
-            "duration": float(data["format"]["duration"]),
-            "sample_rate": int(audio_stream["sample_rate"]),
-            "channels": int(audio_stream["channels"]),
+            "duration": float (data["format"]["duration"]),
+            "sample_rate": int (audio_stream["sample_rate"]),
+            "channels": int (audio_stream["channels"]),
             "codec": audio_stream["codec_name"],
-            "bitrate": int(data["format"].get("bit_rate", 0)),
+            "bitrate": int (data["format"].get("bit_rate", 0)),
         }
 
 # Example usage
@@ -134,7 +134,7 @@ def ffmpeg_examples():
     
     # Get info
     info = ff.get_audio_info("audio.mp3")
-    print(json.dumps(info, indent=2))
+    print(json.dumps (info, indent=2))
 
 if __name__ == "__main__":
     ffmpeg_examples()
@@ -172,10 +172,10 @@ class NoiseReducer:
             noise_profile_duration: Duration of noise sample (seconds)
         """
         # Load audio
-        audio, sr = librosa.load(audio_path, sr=None)
+        audio, sr = librosa.load (audio_path, sr=None)
         
         # Use first N seconds as noise profile
-        noise_sample_frames = int(noise_profile_duration * sr)
+        noise_sample_frames = int (noise_profile_duration * sr)
         noise_sample = audio[:noise_sample_frames]
         
         # Reduce noise
@@ -187,7 +187,7 @@ class NoiseReducer:
         )
         
         # Save
-        sf.write(output_path, reduced, sr)
+        sf.write (output_path, reduced, sr)
         print(f"✅ Noise reduced: {output_path}")
     
     @staticmethod
@@ -196,7 +196,7 @@ class NoiseReducer:
         output_path: Path,
     ):
         """Enhance speech by reducing non-speech frequencies"""
-        audio, sr = librosa.load(audio_path, sr=None)
+        audio, sr = librosa.load (audio_path, sr=None)
         
         # Apply bandpass filter for speech (300Hz - 3400Hz)
         from scipy.signal import butter, filtfilt
@@ -206,12 +206,12 @@ class NoiseReducer:
         high = 3400 / nyquist
         
         b, a = butter(5, [low, high], btype='band')
-        filtered = filtfilt(b, a, audio)
+        filtered = filtfilt (b, a, audio)
         
         # Normalize
-        filtered = filtered / np.max(np.abs(filtered))
+        filtered = filtered / np.max (np.abs (filtered))
         
-        sf.write(output_path, filtered, sr)
+        sf.write (output_path, filtered, sr)
         print(f"✅ Speech enhanced: {output_path}")
 \`\`\`
 
@@ -236,7 +236,7 @@ class AudioSeparator:
         Args:
             stems: 2 (vocals/accompaniment), 4 (vocals/drums/bass/other), or 5
         """
-        self.separator = Separator(f'spleeter:{stems}stems')
+        self.separator = Separator (f'spleeter:{stems}stems')
         print(f"✅ Loaded {stems}-stem separator")
     
     def separate(
@@ -251,15 +251,15 @@ class AudioSeparator:
             audio_path: Input audio
             output_dir: Output directory for stems
         """
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir = Path (output_dir)
+        output_dir.mkdir (parents=True, exist_ok=True)
         
         print(f"Separating {audio_path}...")
         
         # Separate
         self.separator.separate_to_file(
-            str(audio_path),
-            str(output_dir),
+            str (audio_path),
+            str (output_dir),
         )
         
         print(f"✅ Stems saved to {output_dir}")
@@ -268,7 +268,7 @@ class AudioSeparator:
 def separation_example():
     """Separate vocals from music"""
     
-    separator = AudioSeparator(stems=2)  # vocals + accompaniment
+    separator = AudioSeparator (stems=2)  # vocals + accompaniment
     
     separator.separate(
         audio_path="song.mp3",
@@ -299,43 +299,43 @@ class AudioAnalyzer:
     """Analyze audio characteristics"""
     
     @staticmethod
-    def extract_features(audio_path: Path) -> Dict:
+    def extract_features (audio_path: Path) -> Dict:
         """Extract comprehensive audio features"""
         
         # Load audio
-        y, sr = librosa.load(audio_path)
+        y, sr = librosa.load (audio_path)
         
         # Tempo and beats
-        tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+        tempo, beats = librosa.beat.beat_track (y=y, sr=sr)
         
         # Spectral features
-        spectral_centroids = librosa.feature.spectral_centroid(y=y, sr=sr)[0]
-        spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)[0]
+        spectral_centroids = librosa.feature.spectral_centroid (y=y, sr=sr)[0]
+        spectral_rolloff = librosa.feature.spectral_rolloff (y=y, sr=sr)[0]
         
         # MFCCs (Mel-frequency cepstral coefficients)
-        mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+        mfccs = librosa.feature.mfcc (y=y, sr=sr, n_mfcc=13)
         
         # Chroma (pitch classes)
-        chroma = librosa.feature.chroma_stft(y=y, sr=sr)
+        chroma = librosa.feature.chroma_stft (y=y, sr=sr)
         
         # Zero crossing rate
-        zcr = librosa.feature.zero_crossing_rate(y)[0]
+        zcr = librosa.feature.zero_crossing_rate (y)[0]
         
         # RMS energy
-        rms = librosa.feature.rms(y=y)[0]
+        rms = librosa.feature.rms (y=y)[0]
         
         return {
-            "duration": len(y) / sr,
+            "duration": len (y) / sr,
             "sample_rate": sr,
-            "tempo": float(tempo),
-            "beats": len(beats),
-            "spectral_centroid_mean": float(np.mean(spectral_centroids)),
-            "spectral_centroid_std": float(np.std(spectral_centroids)),
-            "spectral_rolloff_mean": float(np.mean(spectral_rolloff)),
-            "mfcc_mean": mfccs.mean(axis=1).tolist(),
-            "chroma_mean": chroma.mean(axis=1).tolist(),
-            "zcr_mean": float(np.mean(zcr)),
-            "rms_mean": float(np.mean(rms)),
+            "tempo": float (tempo),
+            "beats": len (beats),
+            "spectral_centroid_mean": float (np.mean (spectral_centroids)),
+            "spectral_centroid_std": float (np.std (spectral_centroids)),
+            "spectral_rolloff_mean": float (np.mean (spectral_rolloff)),
+            "mfcc_mean": mfccs.mean (axis=1).tolist(),
+            "chroma_mean": chroma.mean (axis=1).tolist(),
+            "zcr_mean": float (np.mean (zcr)),
+            "rms_mean": float (np.mean (rms)),
         }
     
     @staticmethod
@@ -344,10 +344,10 @@ class AudioAnalyzer:
         threshold_db: float = -40.0,
     ) -> list:
         """Detect silent segments"""
-        y, sr = librosa.load(audio_path)
+        y, sr = librosa.load (audio_path)
         
         # Convert to dB
-        db = librosa.amplitude_to_db(np.abs(y), ref=np.max)
+        db = librosa.amplitude_to_db (np.abs (y), ref=np.max)
         
         # Find silent frames
         silent_frames = db < threshold_db
@@ -357,7 +357,7 @@ class AudioAnalyzer:
         hop_length = 512
         
         times = librosa.frames_to_time(
-            np.arange(len(silent_frames)),
+            np.arange (len (silent_frames)),
             sr=sr,
             hop_length=hop_length
         )
@@ -366,7 +366,7 @@ class AudioAnalyzer:
         segments = []
         start = None
         
-        for i, (time, is_silent) in enumerate(zip(times, silent_frames)):
+        for i, (time, is_silent) in enumerate (zip (times, silent_frames)):
             if is_silent and start is None:
                 start = time
             elif not is_silent and start is not None:
@@ -376,24 +376,24 @@ class AudioAnalyzer:
         return segments
     
     @staticmethod
-    def transcribe_music(audio_path: Path) -> Dict:
+    def transcribe_music (audio_path: Path) -> Dict:
         """
         Transcribe music to notes/chords
         
         Basic implementation - production would use specialized models
         """
-        y, sr = librosa.load(audio_path)
+        y, sr = librosa.load (audio_path)
         
         # Detect pitch
-        pitches, magnitudes = librosa.piptrack(y=y, sr=sr)
+        pitches, magnitudes = librosa.piptrack (y=y, sr=sr)
         
         # Get dominant pitch per frame
         pitch_contour = []
-        for t in range(pitches.shape[1]):
+        for t in range (pitches.shape[1]):
             index = magnitudes[:, t].argmax()
             pitch = pitches[index, t]
             if pitch > 0:
-                pitch_contour.append(pitch)
+                pitch_contour.append (pitch)
         
         return {
             "pitch_contour": pitch_contour,
@@ -417,7 +417,7 @@ def analysis_pipeline():
     
     # Detect silence
     silent_segments = analyzer.detect_silence("song.mp3")
-    print(f"\\nSilent segments: {len(silent_segments)}")
+    print(f"\\nSilent segments: {len (silent_segments)}")
     for seg in silent_segments[:3]:
         print(f"  {seg['start']:.2f}s - {seg['end']:.2f}s")
     
@@ -480,8 +480,8 @@ class AudioProcessingPipeline:
         Returns:
             Results dictionary
         """
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir = Path (output_dir)
+        output_dir.mkdir (parents=True, exist_ok=True)
         
         current_file = input_path
         results = {"steps": []}
@@ -497,7 +497,7 @@ class AudioProcessingPipeline:
                     sample_rate=config.sample_rate,
                 )
                 current_file = output
-                results["steps"].append({"convert": str(output)})
+                results["steps"].append({"convert": str (output)})
             
             elif step == ProcessingStep.NORMALIZE:
                 output = output_dir / "normalized.wav"
@@ -506,30 +506,30 @@ class AudioProcessingPipeline:
                     target_level=config.normalize_level,
                 )
                 current_file = output
-                results["steps"].append({"normalize": str(output)})
+                results["steps"].append({"normalize": str (output)})
             
             elif step == ProcessingStep.DENOISE:
                 output = output_dir / "denoised.wav"
-                self.noise_reducer.reduce_noise(current_file, output)
+                self.noise_reducer.reduce_noise (current_file, output)
                 current_file = output
-                results["steps"].append({"denoise": str(output)})
+                results["steps"].append({"denoise": str (output)})
             
             elif step == ProcessingStep.ENHANCE_SPEECH:
                 output = output_dir / "enhanced.wav"
-                self.noise_reducer.enhance_speech(current_file, output)
+                self.noise_reducer.enhance_speech (current_file, output)
                 current_file = output
-                results["steps"].append({"enhance": str(output)})
+                results["steps"].append({"enhance": str (output)})
             
             elif step == ProcessingStep.SEPARATE:
-                self.separator.separate(current_file, output_dir / "stems")
-                results["steps"].append({"separate": str(output_dir / "stems")})
+                self.separator.separate (current_file, output_dir / "stems")
+                results["steps"].append({"separate": str (output_dir / "stems")})
             
             elif step == ProcessingStep.ANALYZE:
-                features = self.analyzer.extract_features(current_file)
+                features = self.analyzer.extract_features (current_file)
                 results["features"] = features
                 results["steps"].append({"analyze": features})
         
-        results["final_output"] = str(current_file)
+        results["final_output"] = str (current_file)
         
         return results
 
@@ -561,7 +561,7 @@ def podcast_processing_example():
     print("\\n✅ Processing complete!")
     print(f"Final output: {results['final_output']}")
     print(f"Duration: {results['features']['duration']:.1f}s")
-    print(f"Steps completed: {len(results['steps'])}")
+    print(f"Steps completed: {len (results['steps'])}")
 
 if __name__ == "__main__":
     podcast_processing_example()

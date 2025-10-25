@@ -1,7 +1,8 @@
 export const orderTypesExecution = {
-  title: "Order Types & Execution Algorithms",
-  slug: "order-types-execution",
-  description: "Master every order type and execution algorithm used in trading",
+  title: 'Order Types & Execution Algorithms',
+  slug: 'order-types-execution',
+  description:
+    'Master every order type and execution algorithm used in trading',
   content: `
 # Order Types & Execution Algorithms
 
@@ -64,20 +65,20 @@ class Order:
     stop_price: Optional[float] = None
     trailing_amount: Optional[float] = None
     
-    def describe(self) -> str:
+    def describe (self) -> str:
         """Human-readable order description"""
         desc = f"{self.side} {self.quantity} {self.symbol}"
         
         if self.order_type == OrderType.MARKET:
             desc += " at MARKET"
         elif self.order_type == OrderType.LIMIT:
-            desc += f" at LIMIT ${self.limit_price:.2f}"
+            desc += f" at LIMIT \${self.limit_price:.2f}"
         elif self.order_type == OrderType.STOP:
-            desc += f" at STOP ${self.stop_price:.2f}"
+            desc += f" at STOP \${self.stop_price:.2f}"
         elif self.order_type == OrderType.STOP_LIMIT:
-            desc += f" STOP ${self.stop_price:.2f} LIMIT ${self.limit_price:.2f}"
+            desc += f" STOP \${self.stop_price:.2f} LIMIT \${self.limit_price:.2f}"
         elif self.order_type == OrderType.TRAILING_STOP:
-            desc += f" TRAILING STOP ${self.trailing_amount:.2f}"
+            desc += f" TRAILING STOP \${self.trailing_amount:.2f}"
         
         desc += f" ({self.time_in_force.value})"
         
@@ -132,7 +133,7 @@ for order in orders:
 
 print("\\n\\n=== Order Type Comparison ===\\n")
 comparison = Order.compare_order_types()
-for order_type, details in list(comparison.items())[:3]:
+for order_type, details in list (comparison.items())[:3]:
     print(f"{order_type}:")
     print(f"  Execution: {details['execution']}")
     print(f"  Price Control: {details['price']}")
@@ -164,10 +165,10 @@ class TWAPAlgorithm:
         self.num_slices = duration_minutes // interval_minutes
         self.slice_size = total_quantity // self.num_slices
     
-    def generate_schedule(self) -> list:
+    def generate_schedule (self) -> list:
         """Generate execution schedule"""
         schedule = []
-        for i in range(self.num_slices):
+        for i in range (self.num_slices):
             time = i * self.interval
             quantity = self.slice_size
             
@@ -194,9 +195,9 @@ class VWAPAlgorithm:
     def __init__(self, total_quantity: int, historical_volume_profile: list):
         self.total_quantity = total_quantity
         self.volume_profile = historical_volume_profile  # [vol_per_interval]
-        self.total_volume = sum(historical_volume_profile)
+        self.total_volume = sum (historical_volume_profile)
     
-    def generate_schedule(self) -> list:
+    def generate_schedule (self) -> list:
         """
         Allocate quantity based on expected volume
         
@@ -205,12 +206,12 @@ class VWAPAlgorithm:
         schedule = []
         cumulative_qty = 0
         
-        for i, interval_volume in enumerate(self.volume_profile):
+        for i, interval_volume in enumerate (self.volume_profile):
             # Proportion of total volume in this interval
             volume_pct = interval_volume / self.total_volume
             
             # Quantity for this interval
-            interval_qty = int(self.total_quantity * volume_pct)
+            interval_qty = int (self.total_quantity * volume_pct)
             cumulative_qty += interval_qty
             
             schedule.append({
@@ -242,7 +243,7 @@ class ImplementationShortfall:
         self.volatility = volatility
         self.impact_coef = market_impact_coef
     
-    def calculate_optimal_trajectory(self, num_periods: int = 10) -> list:
+    def calculate_optimal_trajectory (self, num_periods: int = 10) -> list:
         """
         Calculate optimal trading trajectory
         
@@ -256,7 +257,7 @@ class ImplementationShortfall:
         
         risk_aversion = 0.01 / self.volatility  # Higher vol → more patient
         
-        for t in range(num_periods + 1):
+        for t in range (num_periods + 1):
             # Remaining quantity decreases non-linearly
             pct_complete = (t / num_periods)
             
@@ -266,7 +267,7 @@ class ImplementationShortfall:
             else:  # High vol: trade slower
                 remaining_pct = (1 - pct_complete) ** 0.5
             
-            remaining_qty = int(self.total_quantity * remaining_pct)
+            remaining_qty = int (self.total_quantity * remaining_pct)
             
             trajectory.append({
                 'period': t,
@@ -277,7 +278,7 @@ class ImplementationShortfall:
         return trajectory
 
 # Example: TWAP
-twap = TWAPAlgorithm(total_quantity=10000, duration_minutes=60, interval_minutes=10)
+twap = TWAPAlgorithm (total_quantity=10000, duration_minutes=60, interval_minutes=10)
 twap_schedule = twap.generate_schedule()
 
 print("\\n=== TWAP Algorithm ===\\n")
@@ -289,7 +290,7 @@ for slice_info in twap_schedule:
 # Example: VWAP
 # Typical intraday volume profile (9:30-4pm)
 volume_profile = [1500, 1200, 800, 600, 500, 400, 300, 300, 400, 600, 800, 1000, 1200]  # More volume at open/close
-vwap = VWAPAlgorithm(total_quantity=10000, historical_volume_profile=volume_profile)
+vwap = VWAPAlgorithm (total_quantity=10000, historical_volume_profile=volume_profile)
 vwap_schedule = vwap.generate_schedule()
 
 print("\\n\\n=== VWAP Algorithm ===\\n")
@@ -307,7 +308,7 @@ is_algo = ImplementationShortfall(
     volatility=0.30,  # 30% annual vol
     market_impact_coef=0.01
 )
-is_trajectory = is_algo.calculate_optimal_trajectory(num_periods=10)
+is_trajectory = is_algo.calculate_optimal_trajectory (num_periods=10)
 
 print("\\n=== Implementation Shortfall ===\\n")
 print(f"Order: 10,000 shares, volatility={is_algo.volatility*100:.0f}%\\n")
@@ -340,7 +341,7 @@ class TransactionCostAnalysis:
     def __init__(self):
         pass
     
-    def calculate_implementation_shortfall(self,
+    def calculate_implementation_shortfall (self,
                                           decision_price: float,
                                           arrival_price: float,
                                           execution_price: float,
@@ -388,10 +389,10 @@ analysis = tca.calculate_implementation_shortfall(
 
 print("\\n\\n=== Transaction Cost Analysis ===\\n")
 print(f"Target: Buy 10,000 @ decision price $100.00\\n")
-print(f"Delay Cost: ${analysis['delay_cost']:,.0f} (arrival - decision)")
-print(f"Execution Cost: ${analysis['execution_cost']:,.0f} (fill - arrival)")
-print(f"Opportunity Cost: ${analysis['opportunity_cost']:,.0f} (unfilled)")
-print(f"\\nTotal Cost: ${analysis['total_cost']:,.0f}")
+print(f"Delay Cost: \${analysis['delay_cost']:,.0f} (arrival - decision)")
+print(f"Execution Cost: \${analysis['execution_cost']:,.0f} (fill - arrival)")
+print(f"Opportunity Cost: \${analysis['opportunity_cost']:,.0f} (unfilled)")
+print(f"\\nTotal Cost: \${analysis['total_cost']:,.0f}")
 print(f"Cost in bps: {analysis['cost_bps']:.1f} bps")
 print(f"Fill Rate: {analysis['fill_rate']:.1f}%")
 \`\`\`
@@ -423,13 +424,16 @@ You now understand how to execute trades efficiently!
 `,
   exercises: [
     {
-      prompt: "Implement a TWAP algorithm that splits a 50,000 share order over 2 hours with 10-minute intervals, submits limit orders at mid-price, cancels/replaces if not filled within 2 minutes, tracks execution price vs VWAP benchmark, and generates TCA report showing slippage.",
-      solution: "// Implementation: 1) Split 50K / 12 intervals = ~4,167 per slice, 2) Every 10min: get current bid/ask, submit limit at mid, 3) After 2min: if not filled, cancel and send market order for remainder, 4) Track: time, quantity, price for each fill, 5) Calculate VWAP benchmark from market data, 6) TCA: execution VWAP - benchmark VWAP in bps, 7) Report: fill rate, avg slippage, total cost"
+      prompt:
+        'Implement a TWAP algorithm that splits a 50,000 share order over 2 hours with 10-minute intervals, submits limit orders at mid-price, cancels/replaces if not filled within 2 minutes, tracks execution price vs VWAP benchmark, and generates TCA report showing slippage.',
+      solution:
+        '// Implementation: 1) Split 50K / 12 intervals = ~4,167 per slice, 2) Every 10min: get current bid/ask, submit limit at mid, 3) After 2min: if not filled, cancel and send market order for remainder, 4) Track: time, quantity, price for each fill, 5) Calculate VWAP benchmark from market data, 6) TCA: execution VWAP - benchmark VWAP in bps, 7) Report: fill rate, avg slippage, total cost',
     },
     {
-      prompt: "Build a smart order router that compares execution costs across different algorithms (market order, TWAP, VWAP) for various order sizes and volatility regimes. Simulate market impact (price moves sqrt(quantity)), calculate expected costs, and recommend optimal algo.",
-      solution: "// Implementation: 1) Market order cost = spread/2 + impact, impact = volatility × sqrt(shares/ADV), 2) TWAP cost = spread/2 + impact/N (split reduces impact), 3) VWAP cost = spread/2 + impact × (1 - vol_correlation), 4) Simulate 1000 scenarios varying: order size (1K-100K), ADV (1M-10M), volatility (10%-50%), 5) For each: calc cost for each algo, 6) Recommend: Small + liquid = market, Large + patient = VWAP, High vol = IS aggressive"
-    }
-  ]
+      prompt:
+        'Build a smart order router that compares execution costs across different algorithms (market order, TWAP, VWAP) for various order sizes and volatility regimes. Simulate market impact (price moves sqrt (quantity)), calculate expected costs, and recommend optimal algo.',
+      solution:
+        '// Implementation: 1) Market order cost = spread/2 + impact, impact = volatility × sqrt (shares/ADV), 2) TWAP cost = spread/2 + impact/N (split reduces impact), 3) VWAP cost = spread/2 + impact × (1 - vol_correlation), 4) Simulate 1000 scenarios varying: order size (1K-100K), ADV (1M-10M), volatility (10%-50%), 5) For each: calc cost for each algo, 6) Recommend: Small + liquid = market, Large + patient = VWAP, High vol = IS aggressive',
+    },
+  ],
 };
-

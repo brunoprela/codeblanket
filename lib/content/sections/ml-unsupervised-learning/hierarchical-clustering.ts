@@ -54,14 +54,14 @@ from scipy.spatial.distance import pdist, squareform
 
 # Generate sample data
 np.random.seed(42)
-X, y_true = make_blobs(n_samples=100, centers=4, 
+X, y_true = make_blobs (n_samples=100, centers=4, 
                        cluster_std=0.8, random_state=42)
 
 print(f"Data shape: {X.shape}")
-print(f"True number of clusters: {len(np.unique(y_true))}")
+print(f"True number of clusters: {len (np.unique (y_true))}")
 
 # Visualize original data
-plt.figure(figsize=(8, 6))
+plt.figure (figsize=(8, 6))
 plt.scatter(X[:, 0], X[:, 1], alpha=0.6, s=50)
 plt.title('Data to be Clustered')
 plt.xlabel('Feature 1')
@@ -86,8 +86,8 @@ A dendrogram is a tree diagram showing the hierarchical relationship between clu
 linkage_matrix = linkage(X, method='ward')
 
 # Plot dendrogram
-plt.figure(figsize=(14, 7))
-dendrogram(linkage_matrix,
+plt.figure (figsize=(14, 7))
+dendrogram (linkage_matrix,
            truncate_mode='lastp',  # Show only last p merged clusters
            p=30,  # Show last 30 merges
            leaf_rotation=90,
@@ -97,7 +97,7 @@ dendrogram(linkage_matrix,
 plt.title('Hierarchical Clustering Dendrogram (Ward Linkage)', fontsize=14)
 plt.xlabel('Sample Index or (Cluster Size)', fontsize=12)
 plt.ylabel('Distance', fontsize=12)
-plt.axhline(y=15, color='r', linestyle='--', linewidth=2, label='Cut at distance=15')
+plt.axhline (y=15, color='r', linestyle='--', linewidth=2, label='Cut at distance=15')
 plt.legend()
 plt.tight_layout()
 plt.show()
@@ -114,7 +114,7 @@ The **linkage criterion** determines how we measure distance between clusters. D
 
 **Distance**: Minimum distance between any two points in different clusters
 
-$$d(C_i, C_j) = \\min_{x \\in C_i, y \\in C_j} d(x, y)$$
+$$d(C_i, C_j) = \\min_{x \\in C_i, y \\in C_j} d (x, y)$$
 
 **Characteristics**:
 - Tends to create long, chain-like clusters
@@ -126,13 +126,13 @@ $$d(C_i, C_j) = \\min_{x \\in C_i, y \\in C_j} d(x, y)$$
 # Single linkage
 linkage_single = linkage(X, method='single')
 
-hc_single = AgglomerativeClustering(n_clusters=4, linkage='single')
+hc_single = AgglomerativeClustering (n_clusters=4, linkage='single')
 labels_single = hc_single.fit_predict(X)
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
-dendrogram(linkage_single, truncate_mode='lastp', p=30, no_labels=True)
+dendrogram (linkage_single, truncate_mode='lastp', p=30, no_labels=True)
 plt.title('Single Linkage Dendrogram')
 plt.xlabel('Sample Index')
 plt.ylabel('Distance')
@@ -153,7 +153,7 @@ print("Single Linkage tends to create elongated, chain-like clusters")
 
 **Distance**: Maximum distance between any two points in different clusters
 
-$$d(C_i, C_j) = \\max_{x \\in C_i, y \\in C_j} d(x, y)$$
+$$d(C_i, C_j) = \\max_{x \\in C_i, y \\in C_j} d (x, y)$$
 
 **Characteristics**:
 - Tends to create compact, tight clusters
@@ -165,13 +165,13 @@ $$d(C_i, C_j) = \\max_{x \\in C_i, y \\in C_j} d(x, y)$$
 # Complete linkage
 linkage_complete = linkage(X, method='complete')
 
-hc_complete = AgglomerativeClustering(n_clusters=4, linkage='complete')
+hc_complete = AgglomerativeClustering (n_clusters=4, linkage='complete')
 labels_complete = hc_complete.fit_predict(X)
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
-dendrogram(linkage_complete, truncate_mode='lastp', p=30, no_labels=True)
+dendrogram (linkage_complete, truncate_mode='lastp', p=30, no_labels=True)
 plt.title('Complete Linkage Dendrogram')
 plt.xlabel('Sample Index')
 plt.ylabel('Distance')
@@ -192,7 +192,7 @@ print("Complete Linkage creates more compact, spherical clusters")
 
 **Distance**: Average distance between all pairs of points in different clusters
 
-$$d(C_i, C_j) = \\frac{1}{|C_i| \\cdot |C_j|} \\sum_{x \\in C_i} \\sum_{y \\in C_j} d(x, y)$$
+$$d(C_i, C_j) = \\frac{1}{|C_i| \\cdot |C_j|} \\sum_{x \\in C_i} \\sum_{y \\in C_j} d (x, y)$$
 
 **Characteristics**:
 - Compromise between single and complete
@@ -204,13 +204,13 @@ $$d(C_i, C_j) = \\frac{1}{|C_i| \\cdot |C_j|} \\sum_{x \\in C_i} \\sum_{y \\in C
 # Average linkage
 linkage_average = linkage(X, method='average')
 
-hc_average = AgglomerativeClustering(n_clusters=4, linkage='average')
+hc_average = AgglomerativeClustering (n_clusters=4, linkage='average')
 labels_average = hc_average.fit_predict(X)
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
-dendrogram(linkage_average, truncate_mode='lastp', p=30, no_labels=True)
+dendrogram (linkage_average, truncate_mode='lastp', p=30, no_labels=True)
 plt.title('Average Linkage Dendrogram')
 plt.xlabel('Sample Index')
 plt.ylabel('Distance')
@@ -243,13 +243,13 @@ $$d(C_i, C_j) = \\frac{|C_i| \\cdot |C_j|}{|C_i| + |C_j|} ||\\mu_i - \\mu_j||^2$
 # Ward linkage (most common)
 linkage_ward = linkage(X, method='ward')
 
-hc_ward = AgglomerativeClustering(n_clusters=4, linkage='ward')
+hc_ward = AgglomerativeClustering (n_clusters=4, linkage='ward')
 labels_ward = hc_ward.fit_predict(X)
 
-plt.figure(figsize=(14, 5))
+plt.figure (figsize=(14, 5))
 
 plt.subplot(1, 2, 1)
-dendrogram(linkage_ward, truncate_mode='lastp', p=30, no_labels=True)
+dendrogram (linkage_ward, truncate_mode='lastp', p=30, no_labels=True)
 plt.title('Ward Linkage Dendrogram')
 plt.xlabel('Sample Index')
 plt.ylabel('Distance')
@@ -276,12 +276,12 @@ axes = axes.ravel()
 methods = ['single', 'complete', 'average', 'ward']
 titles = ['Single Linkage', 'Complete Linkage', 'Average Linkage', 'Ward Linkage']
 
-for idx, (method, title) in enumerate(zip(methods, titles)):
-    hc = AgglomerativeClustering(n_clusters=4, linkage=method)
+for idx, (method, title) in enumerate (zip (methods, titles)):
+    hc = AgglomerativeClustering (n_clusters=4, linkage=method)
     labels = hc.fit_predict(X)
     
     axes[idx].scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', s=50, alpha=0.6)
-    axes[idx].set_title(title, fontsize=14)
+    axes[idx].set_title (title, fontsize=14)
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -298,15 +298,15 @@ plt.show()
 Look for large gaps in the dendrogram - these suggest natural cutting points.
 
 \`\`\`python
-plt.figure(figsize=(14, 7))
-dendrogram(linkage_ward)
+plt.figure (figsize=(14, 7))
+dendrogram (linkage_ward)
 plt.title('Full Dendrogram - Look for Large Vertical Gaps')
 plt.xlabel('Sample Index')
 plt.ylabel('Distance')
 
 # Add horizontal lines at different cutting heights
 for height, color in [(10, 'r'), (15, 'g'), (20, 'b')]:
-    plt.axhline(y=height, color=color, linestyle='--', 
+    plt.axhline (y=height, color=color, linestyle='--', 
                 label=f'Cut at height={height}')
 
 plt.legend()
@@ -322,21 +322,21 @@ plt.show()
 from scipy.cluster.hierarchy import fcluster
 
 # Cut at height=15
-clusters_at_15 = fcluster(linkage_ward, t=15, criterion='distance')
-print(f"Clusters at height 15: {len(np.unique(clusters_at_15))}")
+clusters_at_15 = fcluster (linkage_ward, t=15, criterion='distance')
+print(f"Clusters at height 15: {len (np.unique (clusters_at_15))}")
 
 # Cut at height=10
-clusters_at_10 = fcluster(linkage_ward, t=10, criterion='distance')
-print(f"Clusters at height 10: {len(np.unique(clusters_at_10))}")
+clusters_at_10 = fcluster (linkage_ward, t=10, criterion='distance')
+print(f"Clusters at height 10: {len (np.unique (clusters_at_10))}")
 
 # Visualize different cuts
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 axes[0].scatter(X[:, 0], X[:, 1], c=clusters_at_15, cmap='viridis', s=50, alpha=0.6)
-axes[0].set_title(f'Cut at Height=15 ({len(np.unique(clusters_at_15))} clusters)')
+axes[0].set_title (f'Cut at Height=15 ({len (np.unique (clusters_at_15))} clusters)')
 
 axes[1].scatter(X[:, 0], X[:, 1], c=clusters_at_10, cmap='viridis', s=50, alpha=0.6)
-axes[1].set_title(f'Cut at Height=10 ({len(np.unique(clusters_at_10))} clusters)')
+axes[1].set_title (f'Cut at Height=10 ({len (np.unique (clusters_at_10))} clusters)')
 
 plt.tight_layout()
 plt.show()
@@ -350,7 +350,7 @@ Measures how inconsistent a merge is compared to nearby merges.
 from scipy.cluster.hierarchy import inconsistent
 
 # Calculate inconsistency
-inconsistency = inconsistent(linkage_ward, d=2)
+inconsistency = inconsistent (linkage_ward, d=2)
 
 # High inconsistency suggests a good place to cut
 print("Inconsistency statistics (last 10 merges):")
@@ -367,14 +367,14 @@ silhouette_scores = []
 K_range = range(2, 10)
 
 for k in K_range:
-    hc = AgglomerativeClustering(n_clusters=k, linkage='ward')
+    hc = AgglomerativeClustering (n_clusters=k, linkage='ward')
     labels = hc.fit_predict(X)
     score = silhouette_score(X, labels)
-    silhouette_scores.append(score)
+    silhouette_scores.append (score)
     print(f"K={k}: Silhouette Score = {score:.3f}")
 
 # Plot
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.plot(K_range, silhouette_scores, 'go-', linewidth=2, markersize=8)
 plt.xlabel('Number of Clusters (K)', fontsize=12)
 plt.ylabel('Silhouette Score', fontsize=12)
@@ -384,7 +384,7 @@ plt.xticks(K_range)
 plt.show()
 
 # Best K is where silhouette score is highest
-best_k = K_range[np.argmax(silhouette_scores)]
+best_k = K_range[np.argmax (silhouette_scores)]
 print(f"\\nOptimal K based on silhouette score: {best_k}")
 \`\`\`
 
@@ -401,20 +401,20 @@ metrics = ['euclidean', 'manhattan', 'cosine', 'chebyshev']
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, metric in enumerate(metrics):
+for idx, metric in enumerate (metrics):
     # Compute pairwise distances
     if metric == 'cosine':
         # Cosine distance requires non-Ward linkage
         linkage_mat = linkage(X, method='average', metric='cosine')
-        hc = AgglomerativeClustering(n_clusters=4, linkage='average', metric='cosine')
+        hc = AgglomerativeClustering (n_clusters=4, linkage='average', metric='cosine')
     else:
         linkage_mat = linkage(X, method='ward', metric=metric)
-        hc = AgglomerativeClustering(n_clusters=4, linkage='ward', metric=metric)
+        hc = AgglomerativeClustering (n_clusters=4, linkage='ward', metric=metric)
     
     labels = hc.fit_predict(X)
     
     axes[idx].scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', s=50, alpha=0.6)
-    axes[idx].set_title(f'{metric.capitalize()} Distance', fontsize=14)
+    axes[idx].set_title (f'{metric.capitalize()} Distance', fontsize=14)
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -431,11 +431,11 @@ from sklearn.cluster import KMeans
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # K-Means
-kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
+kmeans = KMeans (n_clusters=4, random_state=42, n_init=10)
 labels_kmeans = kmeans.fit_predict(X)
 
 axes[0].scatter(X[:, 0], X[:, 1], c=labels_kmeans, cmap='viridis', s=50, alpha=0.6)
-axes[0].scatter(kmeans.cluster_centers_[:, 0], 
+axes[0].scatter (kmeans.cluster_centers_[:, 0], 
                kmeans.cluster_centers_[:, 1],
                c='red', marker='X', s=200, edgecolors='black', linewidths=2)
 axes[0].set_title('K-Means Clustering')
@@ -443,7 +443,7 @@ axes[0].set_xlabel('Feature 1')
 axes[0].set_ylabel('Feature 2')
 
 # Hierarchical
-hc = AgglomerativeClustering(n_clusters=4, linkage='ward')
+hc = AgglomerativeClustering (n_clusters=4, linkage='ward')
 labels_hc = hc.fit_predict(X)
 
 axes[1].scatter(X[:, 0], X[:, 1], c=labels_hc, cmap='viridis', s=50, alpha=0.6)
@@ -457,7 +457,7 @@ plt.show()
 # Compare with evaluation metrics
 from sklearn.metrics import adjusted_rand_score
 
-ari = adjusted_rand_score(labels_kmeans, labels_hc)
+ari = adjusted_rand_score (labels_kmeans, labels_hc)
 print(f"Agreement between K-Means and Hierarchical: {ari:.3f}")
 print(f"(1.0 = perfect agreement, 0 = random)")
 \`\`\`
@@ -497,14 +497,14 @@ documents = [
 
 # Convert to TF-IDF features
 vectorizer = TfidfVectorizer()
-X_tfidf = vectorizer.fit_transform(documents).toarray()
+X_tfidf = vectorizer.fit_transform (documents).toarray()
 
 # Hierarchical clustering
 linkage_docs = linkage(X_tfidf, method='ward')
 
 # Plot dendrogram
-plt.figure(figsize=(12, 6))
-dendrogram(linkage_docs, labels=documents, leaf_rotation=45, leaf_font_size=10)
+plt.figure (figsize=(12, 6))
+dendrogram (linkage_docs, labels=documents, leaf_rotation=45, leaf_font_size=10)
 plt.title('Document Clustering Dendrogram')
 plt.xlabel('Document')
 plt.ylabel('Distance')
@@ -523,14 +523,14 @@ np.random.seed(42)
 n_genes = 20
 n_conditions = 5
 
-gene_expression = np.random.randn(n_genes, n_conditions)
+gene_expression = np.random.randn (n_genes, n_conditions)
 
 # Add structure: some genes have similar expression patterns
 gene_expression[0:5] += 2  # Upregulated genes
 gene_expression[10:15] -= 2  # Downregulated genes
 
-gene_names = [f'Gene_{i}' for i in range(n_genes)]
-condition_names = [f'Condition_{i}' for i in range(n_conditions)]
+gene_names = [f'Gene_{i}' for i in range (n_genes)]
+condition_names = [f'Condition_{i}' for i in range (n_conditions)]
 
 # Hierarchical clustering of genes
 from scipy.cluster.hierarchy import dendrogram, linkage
@@ -538,20 +538,20 @@ from sklearn.preprocessing import StandardScaler
 
 # Standardize
 scaler = StandardScaler()
-gene_expression_scaled = scaler.fit_transform(gene_expression)
+gene_expression_scaled = scaler.fit_transform (gene_expression)
 
 # Cluster genes
-linkage_genes = linkage(gene_expression_scaled, method='ward')
+linkage_genes = linkage (gene_expression_scaled, method='ward')
 
 # Create heatmap with dendrogram
 from scipy.cluster.hierarchy import dendrogram
 import matplotlib.patches as mpatches
 
-fig = plt.figure(figsize=(12, 8))
+fig = plt.figure (figsize=(12, 8))
 
 # Dendrogram
 ax1 = fig.add_axes([0.05, 0.1, 0.2, 0.8])
-dend = dendrogram(linkage_genes, orientation='left', no_labels=True)
+dend = dendrogram (linkage_genes, orientation='left', no_labels=True)
 ax1.set_xticks([])
 ax1.set_yticks([])
 ax1.set_title('Genes')
@@ -561,18 +561,18 @@ ax2 = fig.add_axes([0.25, 0.1, 0.6, 0.8])
 idx = dend['leaves']
 gene_expression_ordered = gene_expression_scaled[idx, :]
 
-im = ax2.imshow(gene_expression_ordered, aspect='auto', cmap='RdBu_r', 
+im = ax2.imshow (gene_expression_ordered, aspect='auto', cmap='RdBu_r', 
                 vmin=-3, vmax=3)
-ax2.set_xticks(range(n_conditions))
-ax2.set_xticklabels(condition_names, rotation=45)
-ax2.set_yticks(range(n_genes))
+ax2.set_xticks (range (n_conditions))
+ax2.set_xticklabels (condition_names, rotation=45)
+ax2.set_yticks (range (n_genes))
 ax2.set_yticklabels([gene_names[i] for i in idx])
 ax2.set_xlabel('Experimental Conditions')
 ax2.set_title('Gene Expression Heatmap (Hierarchically Clustered)')
 
 # Colorbar
 ax3 = fig.add_axes([0.87, 0.1, 0.02, 0.8])
-plt.colorbar(im, cax=ax3)
+plt.colorbar (im, cax=ax3)
 
 plt.show()
 
@@ -598,29 +598,29 @@ customers = pd.DataFrame({
 # Standardize features
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
-X_scaled = scaler.fit_transform(customers)
+X_scaled = scaler.fit_transform (customers)
 
 # Hierarchical clustering
 linkage_customers = linkage(X_scaled, method='ward')
 
 # Plot dendrogram
-plt.figure(figsize=(14, 6))
-dendrogram(linkage_customers, truncate_mode='lastp', p=20)
+plt.figure (figsize=(14, 6))
+dendrogram (linkage_customers, truncate_mode='lastp', p=20)
 plt.title('Customer Segmentation Dendrogram')
 plt.xlabel('Customer (or Cluster Size)')
 plt.ylabel('Distance')
-plt.axhline(y=8, color='r', linestyle='--', label='Cut at distance=8 (3 segments)')
+plt.axhline (y=8, color='r', linestyle='--', label='Cut at distance=8 (3 segments)')
 plt.legend()
 plt.show()
 
 # Extract 3 customer segments
-customers['Segment'] = fcluster(linkage_customers, t=3, criterion='maxclust')
+customers['Segment'] = fcluster (linkage_customers, t=3, criterion='maxclust')
 
 # Analyze segments
 print("\\nCustomer Segments:")
 for segment in range(1, 4):
     segment_data = customers[customers['Segment'] == segment]
-    print(f"\\nSegment {segment} (n={len(segment_data)}):")
+    print(f"\\nSegment {segment} (n={len (segment_data)}):")
     print(f"  Avg Recency: {segment_data['Recency'].mean():.1f} days")
     print(f"  Avg Frequency: {segment_data['Frequency'].mean():.1f} purchases")
     print(f"  Avg Monetary: \${segment_data['Monetary'].mean():.2f}")
@@ -686,7 +686,7 @@ from sklearn.cluster import MiniBatchKMeans
 
 # Option 1: Sample data first
 sample_size = 1000
-idx = np.random.choice(len(X), sample_size, replace=False)
+idx = np.random.choice (len(X), sample_size, replace=False)
 X_sample = X[idx]
 
 # Then apply hierarchical clustering

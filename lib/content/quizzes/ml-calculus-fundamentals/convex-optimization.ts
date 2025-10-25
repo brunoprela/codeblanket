@@ -80,7 +80,7 @@ where fₗ(z; W) = ReLU(Wz) or similar.
 
 Even simple 2-layer network:
 \`\`\`
-f(x; W₁, W₂) = W₂·ReLU(W₁x)
+f (x; W₁, W₂) = W₂·ReLU(W₁x)
 \`\`\`
 
 Is NOT convex in (W₁, W₂):
@@ -90,7 +90,7 @@ Is NOT convex in (W₁, W₂):
 
 **Example:**
 \`\`\`python
-# f(w₁, w₂) = w₂·ReLU(w₁) is not convex
+# f (w₁, w₂) = w₂·ReLU(w₁) is not convex
 w1 = np.linspace(-2, 2, 100)
 w2 = 1.0
 f = w2 * np.maximum(0, w1)
@@ -141,7 +141,7 @@ L(w) = ||σ(Wx) - y||²
 \`\`\`python
 # Linear regression always converges
 for any w_init:
-    w = gradient_descent(w_init, X, y)
+    w = gradient_descent (w_init, X, y)
     # w converges to global optimum
 \`\`\`
 
@@ -157,11 +157,11 @@ for any w_init:
 **Example:**
 \`\`\`python
 # Deep network: initialization matters
-w_init_1 = random_init(seed=42)
-w_init_2 = random_init(seed=123)
+w_init_1 = random_init (seed=42)
+w_init_2 = random_init (seed=123)
 
-model_1 = train(w_init_1)  # May converge to different solution
-model_2 = train(w_init_2)  # Than this one
+model_1 = train (w_init_1)  # May converge to different solution
+model_2 = train (w_init_2)  # Than this one
 \`\`\`
 
 **Why Deep Learning Still Works:**
@@ -234,7 +234,7 @@ Convexity is a powerful property that makes optimization tractable. Linear and l
 
 For constrained optimization:
 \`\`\`
-minimize f(x)
+minimize f (x)
 subject to gᵢ(x) ≤ 0, i = 1,...,m
            hⱼ(x) = 0, j = 1,...,p
 \`\`\`
@@ -243,7 +243,7 @@ subject to gᵢ(x) ≤ 0, i = 1,...,m
 
 1. **Stationarity:**
    \`\`\`
-   ∇f(x*) + Σᵢ λᵢ∇gᵢ(x*) + Σⱼ νⱼ∇hⱼ(x*) = 0
+   ∇f (x*) + Σᵢ λᵢ∇gᵢ(x*) + Σⱼ νⱼ∇hⱼ(x*) = 0
    \`\`\`
 
 2. **Primal feasibility:**
@@ -380,14 +380,14 @@ svm.fit(X, y)
 # Extract support vectors
 support_vectors = svm.support_vectors_
 support_indices = svm.support_
-alphas = np.abs(svm.dual_coef_[0])
+alphas = np.abs (svm.dual_coef_[0])
 
 print("SVM with KKT Conditions:")
 print(f"Total points: {len(X)}")
-print(f"Support vectors: {len(support_vectors)}")
+print(f"Support vectors: {len (support_vectors)}")
 print(f"\\nSupport vector analysis:")
 
-for i, (idx, alpha) in enumerate(zip(support_indices, alphas)):
+for i, (idx, alpha) in enumerate (zip (support_indices, alphas)):
     point = X[idx]
     label = y[idx]
     # Decision function value
@@ -421,7 +421,7 @@ print(f"Bias b: {svm.intercept_[0]:.4f}")
 
 2. **Kernel trick**: Decision function
    \`\`\`
-   f(x) = Σᵢαᵢyᵢ K(xᵢ, x) + b
+   f (x) = Σᵢαᵢyᵢ K(xᵢ, x) + b
    \`\`\`
    Only need kernel evaluations with support vectors
 
@@ -528,9 +528,9 @@ For sufficiently wide networks, most local minima have similar loss values close
 # Train same architecture from different initializations
 losses = []
 for seed in range(10):
-    model = Network(seed=seed)
-    final_loss = train(model)
-    losses.append(final_loss)
+    model = Network (seed=seed)
+    final_loss = train (model)
+    losses.append (final_loss)
 
 print(f"Final losses: {losses}")
 # Output: [0.23, 0.24, 0.23, 0.24, 0.23, ...]
@@ -576,16 +576,16 @@ Sharp minimum: Loss changes rapidly
 **Evidence:**
 \`\`\`python
 # Sharpness measurement
-def sharpness(model, data):
+def sharpness (model, data):
     # Measure eigenvalues of Hessian
-    loss = compute_loss(model, data)
-    hessian = compute_hessian(loss)
-    max_eigenvalue = max_eig(hessian)
+    loss = compute_loss (model, data)
+    hessian = compute_hessian (loss)
+    max_eigenvalue = max_eig (hessian)
     return max_eigenvalue
 
 # SGD finds flatter minima than full-batch GD
-sharp_sgd = sharpness(model_sgd, data)
-sharp_gd = sharpness(model_gd, data)
+sharp_sgd = sharpness (model_sgd, data)
+sharp_gd = sharpness (model_gd, data)
 print(f"SGD sharpness: {sharp_sgd}")  # Lower
 print(f"GD sharpness: {sharp_gd}")    # Higher
 \`\`\`
@@ -651,19 +651,19 @@ Loss landscape has connected "valleys" of good solutions.
 
 \`\`\`python
 # Connect two solutions
-w1 = train(model, seed=1)
-w2 = train(model, seed=2)
+w1 = train (model, seed=1)
+w2 = train (model, seed=2)
 
 # Linear interpolation
 alphas = np.linspace(0, 1, 100)
 losses = []
 for alpha in alphas:
     w_interp = alpha * w1 + (1-alpha) * w2
-    loss = evaluate(w_interp)
-    losses.append(loss)
+    loss = evaluate (w_interp)
+    losses.append (loss)
 
 # Often see: losses remain low throughout path!
-plt.plot(alphas, losses)
+plt.plot (alphas, losses)
 \`\`\`
 
 **8. Practical Factors:**

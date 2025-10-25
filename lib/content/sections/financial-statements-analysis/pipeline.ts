@@ -34,8 +34,8 @@ class ProductionFinancialPipeline:
     
     def __init__(self, config: Dict):
         self.db_url = config['database_url']
-        self.engine = create_engine(self.db_url, pool_size=20, max_overflow=40)
-        self.redis_client = redis.Redis(host=config['redis_host'], port=6379)
+        self.engine = create_engine (self.db_url, pool_size=20, max_overflow=40)
+        self.redis_client = redis.Redis (host=config['redis_host'], port=6379)
         self.logger = self._setup_logging()
         
         # Celery for distributed task processing
@@ -43,34 +43,34 @@ class ProductionFinancialPipeline:
                                 broker=config['celery_broker'],
                                 backend=config['celery_backend'])
     
-    def _setup_logging(self) -> logging.Logger:
+    def _setup_logging (self) -> logging.Logger:
         """Configure production logging."""
         logger = logging.getLogger('FinancialPipeline')
-        logger.setLevel(logging.INFO)
+        logger.setLevel (logging.INFO)
         
         # Console handler
         ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
+        ch.setLevel (logging.INFO)
         
         # File handler with rotation
         from logging.handlers import RotatingFileHandler
         fh = RotatingFileHandler('pipeline.log', 
                                  maxBytes=10*1024*1024,  # 10MB
                                  backupCount=5)
-        fh.setLevel(logging.DEBUG)
+        fh.setLevel (logging.DEBUG)
         
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
-        ch.setFormatter(formatter)
-        fh.setFormatter(formatter)
+        ch.setFormatter (formatter)
+        fh.setFormatter (formatter)
         
-        logger.addHandler(ch)
-        logger.addHandler(fh)
+        logger.addHandler (ch)
+        logger.addHandler (fh)
         
         return logger
     
-    def extract_edgar_data(self, ticker: str, cik: str) -> Dict:
+    def extract_edgar_data (self, ticker: str, cik: str) -> Dict:
         """
         Extract financial data from SEC EDGAR.
         
@@ -84,8 +84,8 @@ class ProductionFinancialPipeline:
         
         # Rate limiting check (Redis)
         rate_limit_key = f"edgar_rate_limit:{datetime.now().second}"
-        request_count = self.redis_client.incr(rate_limit_key)
-        self.redis_client.expire(rate_limit_key, 1)
+        request_count = self.redis_client.incr (rate_limit_key)
+        self.redis_client.expire (rate_limit_key, 1)
         
         if request_count > 8:  # Stay under 10/sec limit
             time.sleep(0.2)
@@ -95,12 +95,12 @@ class ProductionFinancialPipeline:
             url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
             headers = {'User-Agent': 'MyCompany contact@company.com'}
             
-            response = requests.get(url, headers=headers, timeout=30)
+            response = requests.get (url, headers=headers, timeout=30)
             response.raise_for_status()
             
             facts = response.json()
             
-            self.logger.info(f"Successfully extracted data for {ticker}")
+            self.logger.info (f"Successfully extracted data for {ticker}")
             
             return {
                 'ticker': ticker,
@@ -110,10 +110,10 @@ class ProductionFinancialPipeline:
             }
             
         except requests.exceptions.RequestException as e:
-            self.logger.error(f"EDGAR extraction failed for {ticker}: {e}")
+            self.logger.error (f"EDGAR extraction failed for {ticker}: {e}")
             raise
     
-    def transform_financials(self, raw_data: Dict) -> pd.DataFrame:
+    def transform_financials (self, raw_data: Dict) -> pd.DataFrame:
         """
         Transform raw XBRL data into structured format.
         
@@ -159,25 +159,25 @@ class ProductionFinancialPipeline:
                             'extracted_at': raw_data['extracted_at']
                         })
         
-        df = pd.DataFrame(records)
+        df = pd.DataFrame (records)
         
         # Data validation
-        df = self._validate_data(df)
+        df = self._validate_data (df)
         
         return df
     
-    def _validate_data(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _validate_data (self, df: pd.DataFrame) -> pd.DataFrame:
         """Validate data quality and handle anomalies."""
         
         # Remove duplicates
-        df = df.drop_duplicates(subset=['ticker', 'metric', 'period_end', 'fiscal_quarter'])
+        df = df.drop_duplicates (subset=['ticker', 'metric', 'period_end', 'fiscal_quarter'])
         
         # Ensure proper data types
-        df['value'] = pd.to_numeric(df['value'], errors='coerce')
-        df['period_end'] = pd.to_datetime(df['period_end'])
+        df['value'] = pd.to_numeric (df['value'], errors='coerce')
+        df['period_end'] = pd.to_datetime (df['period_end'])
         
         # Remove nulls in critical fields
-        df = df.dropna(subset=['ticker', 'metric', 'value'])
+        df = df.dropna (subset=['ticker', 'metric', 'value'])
         
         # Flag outliers (values changing >10x quarter-over-quarter)
         df = df.sort_values(['ticker', 'metric', 'period_end'])
@@ -186,11 +186,11 @@ class ProductionFinancialPipeline:
         
         outlier_count = df['outlier'].sum()
         if outlier_count > 0:
-            self.logger.warning(f"Found {outlier_count} potential outliers")
+            self.logger.warning (f"Found {outlier_count} potential outliers")
         
         return df
     
-    def load_to_database(self, df: pd.DataFrame, table: str):
+    def load_to_database (self, df: pd.DataFrame, table: str):
         """
         Load data to PostgreSQL with conflict handling.
         
@@ -199,7 +199,7 @@ class ProductionFinancialPipeline:
         from sqlalchemy.dialects.postgresql import insert
         
         if df.empty:
-            self.logger.warning(f"Empty DataFrame, skipping load to {table}")
+            self.logger.warning (f"Empty DataFrame, skipping load to {table}")
             return
         
         try:
@@ -208,10 +208,10 @@ class ProductionFinancialPipeline:
             
             # Batch insert with conflict handling
             with self.engine.begin() as conn:
-                for i in range(0, len(records), 1000):  # Batch size 1000
+                for i in range(0, len (records), 1000):  # Batch size 1000
                     batch = records[i:i+1000]
                     
-                    stmt = insert(table).values(batch)
+                    stmt = insert (table).values (batch)
                     
                     # On conflict, update the record
                     update_dict = {c.name: c for c in stmt.excluded if c.name != 'id'}
@@ -220,15 +220,15 @@ class ProductionFinancialPipeline:
                         set_=update_dict
                     )
                     
-                    conn.execute(stmt)
+                    conn.execute (stmt)
             
-            self.logger.info(f"Loaded {len(df)} records to {table}")
+            self.logger.info (f"Loaded {len (df)} records to {table}")
             
         except Exception as e:
-            self.logger.error(f"Database load failed: {e}")
+            self.logger.error (f"Database load failed: {e}")
             raise
     
-    def calculate_financial_metrics(self, ticker: str) -> pd.DataFrame:
+    def calculate_financial_metrics (self, ticker: str) -> pd.DataFrame:
         """Calculate all financial ratios from base financials."""
         
         query = """
@@ -253,7 +253,7 @@ class ProductionFinancialPipeline:
         LIMIT 20
         """
         
-        df = pd.read_sql(query, self.engine, params=(ticker,))
+        df = pd.read_sql (query, self.engine, params=(ticker,))
         
         # Calculate ratios
         df['gross_margin'] = df['gross_profit'] / df['revenue']
@@ -271,7 +271,7 @@ class ProductionFinancialPipeline:
         
         return df
     
-    def detect_red_flags(self, ticker: str) -> List[Dict]:
+    def detect_red_flags (self, ticker: str) -> List[Dict]:
         """Run all red flag detection models."""
         
         alerts = []
@@ -284,9 +284,9 @@ class ProductionFinancialPipeline:
         LIMIT 8
         """
         
-        df = pd.read_sql(query, self.engine, params=(ticker,))
+        df = pd.read_sql (query, self.engine, params=(ticker,))
         
-        if len(df) < 2:
+        if len (df) < 2:
             return alerts
         
         latest = df.iloc[0]
@@ -332,28 +332,28 @@ class ProductionFinancialPipeline:
         
         return alerts
     
-    def send_alerts(self, alerts: List[Dict]):
+    def send_alerts (self, alerts: List[Dict]):
         """Send alerts via multiple channels."""
         
         for alert in alerts:
             # Store in database
-            self._store_alert(alert)
+            self._store_alert (alert)
             
             # Send email for HIGH severity
             if alert['severity'] == 'HIGH':
-                self._send_email_alert(alert)
+                self._send_email_alert (alert)
             
             # Post to Slack
-            self._post_to_slack(alert)
+            self._post_to_slack (alert)
             
-            self.logger.info(f"Alert sent for {alert['ticker']}: {alert['alert_type']}")
+            self.logger.info (f"Alert sent for {alert['ticker']}: {alert['alert_type']}")
     
-    def _send_email_alert(self, alert: Dict):
+    def _send_email_alert (self, alert: Dict):
         """Send email alert using SMTP."""
         import smtplib
         from email.mime.text import MIMEText
         
-        msg = MIMEText(f"""
+        msg = MIMEText (f"""
         Alert: {alert['alert_type']}
         Company: {alert['ticker']}
         Severity: {alert['severity']}
@@ -368,10 +368,10 @@ class ProductionFinancialPipeline:
         
         # Send via SMTP (configure your SMTP server)
         # smtp = smtplib.SMTP('smtp.gmail.com', 587)
-        # smtp.send_message(msg)
+        # smtp.send_message (msg)
         pass
     
-    def _post_to_slack(self, alert: Dict):
+    def _post_to_slack (self, alert: Dict):
         """Post alert to Slack channel."""
         webhook_url = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
         
@@ -389,92 +389,92 @@ class ProductionFinancialPipeline:
             }]
         }
         
-        # requests.post(webhook_url, json=payload)
+        # requests.post (webhook_url, json=payload)
         pass
     
-    def run_full_pipeline(self, ticker: str, cik: str) -> Dict:
+    def run_full_pipeline (self, ticker: str, cik: str) -> Dict:
         """Execute complete ETL pipeline for one company."""
         
         pipeline_start = datetime.utcnow()
         
         try:
-            self.logger.info(f"Starting pipeline for {ticker}")
+            self.logger.info (f"Starting pipeline for {ticker}")
             
             # Extract
-            raw_data = self.extract_edgar_data(ticker, cik)
+            raw_data = self.extract_edgar_data (ticker, cik)
             
             # Transform
-            clean_data = self.transform_financials(raw_data)
+            clean_data = self.transform_financials (raw_data)
             
             # Load
-            self.load_to_database(clean_data, 'financials')
+            self.load_to_database (clean_data, 'financials')
             
             # Calculate metrics
-            metrics = self.calculate_financial_metrics(ticker)
-            self.load_to_database(metrics, 'financial_metrics')
+            metrics = self.calculate_financial_metrics (ticker)
+            self.load_to_database (metrics, 'financial_metrics')
             
             # Red flags
-            alerts = self.detect_red_flags(ticker)
+            alerts = self.detect_red_flags (ticker)
             if alerts:
-                self.send_alerts(alerts)
+                self.send_alerts (alerts)
             
             duration = (datetime.utcnow() - pipeline_start).total_seconds()
             
             result = {
                 'ticker': ticker,
                 'status': 'SUCCESS',
-                'records_loaded': len(clean_data),
-                'alerts_generated': len(alerts),
+                'records_loaded': len (clean_data),
+                'alerts_generated': len (alerts),
                 'duration_seconds': duration,
                 'completed_at': datetime.utcnow().isoformat()
             }
             
-            self.logger.info(f"Pipeline completed for {ticker} in {duration:.1f}s")
+            self.logger.info (f"Pipeline completed for {ticker} in {duration:.1f}s")
             
             return result
             
         except Exception as e:
-            self.logger.error(f"Pipeline failed for {ticker}: {e}", exc_info=True)
+            self.logger.error (f"Pipeline failed for {ticker}: {e}", exc_info=True)
             
             return {
                 'ticker': ticker,
                 'status': 'FAILED',
-                'error': str(e),
+                'error': str (e),
                 'completed_at': datetime.utcnow().isoformat()
             }
     
-    def run_for_all_companies(self):
+    def run_for_all_companies (self):
         """Run pipeline for all monitored companies."""
         
         # Get list of companies from database
         query = "SELECT ticker, cik FROM companies WHERE active = TRUE"
-        companies = pd.read_sql(query, self.engine)
+        companies = pd.read_sql (query, self.engine)
         
-        self.logger.info(f"Processing {len(companies)} companies")
+        self.logger.info (f"Processing {len (companies)} companies")
         
         results = []
         
         # Process with Celery for parallelization
         from celery import group
         
-        job = group(self.process_company_async.s(row['ticker'], row['cik']) 
+        job = group (self.process_company_async.s (row['ticker'], row['cik']) 
                    for _, row in companies.iterrows())
         
         result = job.apply_async()
-        results = result.get(timeout=3600)  # 1 hour timeout
+        results = result.get (timeout=3600)  # 1 hour timeout
         
         # Summary
         success = sum(1 for r in results if r['status'] == 'SUCCESS')
-        failed = len(results) - success
+        failed = len (results) - success
         
-        self.logger.info(f"Pipeline complete: {success} succeeded, {failed} failed")
+        self.logger.info (f"Pipeline complete: {success} succeeded, {failed} failed")
         
         return results
     
     @celery_app.task
-    def process_company_async(self, ticker: str, cik: str) -> Dict:
+    def process_company_async (self, ticker: str, cik: str) -> Dict:
         """Celery task for async processing."""
-        return self.run_full_pipeline(ticker, cik)
+        return self.run_full_pipeline (ticker, cik)
 
 # Usage example
 config = {
@@ -484,7 +484,7 @@ config = {
     'celery_backend': 'redis://localhost:6379/1'
 }
 
-pipeline = ProductionFinancialPipeline(config)
+pipeline = ProductionFinancialPipeline (config)
 \`\`\`
 
 ## Section 2: Database Schema Design
@@ -505,9 +505,9 @@ CREATE TABLE companies (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_companies_ticker ON companies(ticker);
-CREATE INDEX idx_companies_cik ON companies(cik);
-CREATE INDEX idx_companies_sector ON companies(sector);
+CREATE INDEX idx_companies_ticker ON companies (ticker);
+CREATE INDEX idx_companies_cik ON companies (cik);
+CREATE INDEX idx_companies_sector ON companies (sector);
 
 -- Raw financials (long format)
 CREATE TABLE financials (
@@ -525,9 +525,9 @@ CREATE TABLE financials (
     UNIQUE(ticker, metric, period_end, fiscal_quarter)
 );
 
-CREATE INDEX idx_financials_ticker_period ON financials(ticker, period_end);
-CREATE INDEX idx_financials_metric ON financials(metric);
-CREATE INDEX idx_financials_fiscal ON financials(fiscal_year, fiscal_quarter);
+CREATE INDEX idx_financials_ticker_period ON financials (ticker, period_end);
+CREATE INDEX idx_financials_metric ON financials (metric);
+CREATE INDEX idx_financials_fiscal ON financials (fiscal_year, fiscal_quarter);
 
 -- Computed metrics
 CREATE TABLE financial_metrics (
@@ -570,7 +570,7 @@ CREATE TABLE financial_metrics (
     UNIQUE(ticker, period_end, fiscal_quarter)
 );
 
-CREATE INDEX idx_metrics_ticker_period ON financial_metrics(ticker, period_end);
+CREATE INDEX idx_metrics_ticker_period ON financial_metrics (ticker, period_end);
 
 -- Quality scores
 CREATE TABLE quality_scores (
@@ -607,10 +607,10 @@ CREATE TABLE alerts (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_alerts_ticker ON alerts(ticker);
-CREATE INDEX idx_alerts_detected ON alerts(detected_at);
-CREATE INDEX idx_alerts_severity ON alerts(severity);
-CREATE INDEX idx_alerts_unacknowledged ON alerts(acknowledged) WHERE NOT acknowledged;
+CREATE INDEX idx_alerts_ticker ON alerts (ticker);
+CREATE INDEX idx_alerts_detected ON alerts (detected_at);
+CREATE INDEX idx_alerts_severity ON alerts (severity);
+CREATE INDEX idx_alerts_unacknowledged ON alerts (acknowledged) WHERE NOT acknowledged;
 
 -- Pipeline execution log
 CREATE TABLE pipeline_runs (
@@ -626,9 +626,9 @@ CREATE TABLE pipeline_runs (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_runs_ticker ON pipeline_runs(ticker);
-CREATE INDEX idx_runs_status ON pipeline_runs(status);
-CREATE INDEX idx_runs_started ON pipeline_runs(started_at);
+CREATE INDEX idx_runs_ticker ON pipeline_runs (ticker);
+CREATE INDEX idx_runs_status ON pipeline_runs (status);
+CREATE INDEX idx_runs_started ON pipeline_runs (started_at);
 \`\`\`
 
 ## Section 3: Monitoring & Observability
@@ -670,9 +670,9 @@ class PipelineMonitoring:
         # Structured logging
         self.logger = structlog.get_logger()
     
-    def track_pipeline_run(self, ticker: str, duration: float, status: str):
+    def track_pipeline_run (self, ticker: str, duration: float, status: str):
         """Track pipeline execution."""
-        self.pipeline_duration.labels(ticker=ticker, status=status).observe(duration)
+        self.pipeline_duration.labels (ticker=ticker, status=status).observe (duration)
         
         statsd.histogram('pipeline.duration', duration, tags=[f'ticker:{ticker}', f'status:{status}'])
         
@@ -681,7 +681,7 @@ class PipelineMonitoring:
                         duration=duration,
                         status=status)
     
-    def track_data_quality(self, ticker: str, metrics: Dict):
+    def track_data_quality (self, ticker: str, metrics: Dict):
         """Track data quality metrics."""
         
         # Missing data percentage
@@ -697,7 +697,7 @@ class PipelineMonitoring:
                               ticker=ticker,
                               missing_pct=missing_pct)
     
-    def generate_health_dashboard(self) -> Dict:
+    def generate_health_dashboard (self) -> Dict:
         """Generate pipeline health summary."""
         
         query = """

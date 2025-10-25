@@ -67,7 +67,7 @@ class TestGenerator:
         """Generate unit tests for a function."""
         
         # Extract function information
-        func_info = self._analyze_function(function_code)
+        func_info = self._analyze_function (function_code)
         
         # Build prompt
         prompt = self._build_test_prompt(
@@ -90,14 +90,14 @@ class TestGenerator:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _analyze_function(self, function_code: str) -> dict:
+    def _analyze_function (self, function_code: str) -> dict:
         """Extract function metadata."""
-        tree = ast.parse(function_code)
+        tree = ast.parse (function_code)
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef):
                 # Get function details
                 args = [arg.arg for arg in node.args.args]
                 
@@ -105,14 +105,14 @@ class TestGenerator:
                 arg_types = {}
                 for arg in node.args.args:
                     if arg.annotation:
-                        arg_types[arg.arg] = ast.unparse(arg.annotation)
+                        arg_types[arg.arg] = ast.unparse (arg.annotation)
                 
                 return_type = None
                 if node.returns:
-                    return_type = ast.unparse(node.returns)
+                    return_type = ast.unparse (node.returns)
                 
                 # Get docstring
-                docstring = ast.get_docstring(node)
+                docstring = ast.get_docstring (node)
                 
                 return {
                     'name': node.name,
@@ -150,7 +150,7 @@ class TestGenerator:
         )
         
         args_str = ", ".join(
-            f"{arg}: {func_info['arg_types'].get(arg, 'Any')}"
+            f"{arg}: {func_info['arg_types'].get (arg, 'Any')}"
             for arg in func_info['args']
         )
         
@@ -176,15 +176,15 @@ Generate:
 Output complete, runnable test code.
 """
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 code = parts[1]
                 lines = code.split("\\n")
                 if lines and lines[0].strip() in {'python', 'py'}:
-                    code = "\\n".join(lines[1:])
+                    code = "\\n".join (lines[1:])
                 return code.strip()
         return response.strip()
 
@@ -192,11 +192,11 @@ Output complete, runnable test code.
 generator = TestGenerator()
 
 function_code = """
-def calculate_average(numbers: List[float]) -> float:
+def calculate_average (numbers: List[float]) -> float:
     ''Calculate the average of a list of numbers.''
     if not numbers:
         raise ValueError("Cannot calculate average of empty list")
-    return sum(numbers) / len(numbers)
+    return sum (numbers) / len (numbers)
 """
 
 tests = generator.generate_tests(
@@ -289,7 +289,7 @@ Output as JSON array:
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         return result.get("test_cases", [])
     
     def generate_parametrized_test(
@@ -302,25 +302,25 @@ Output as JSON array:
         # Build parametrize decorator
         param_values = []
         for case in test_cases:
-            inputs_str = ", ".join(str(v) for v in case["inputs"].values())
+            inputs_str = ", ".join (str (v) for v in case["inputs"].values())
             expected = case["expected"]
-            param_values.append(f"({inputs_str}, {expected})")
+            param_values.append (f"({inputs_str}, {expected})")
         
         # Get function name
-        tree = ast.parse(function_code)
+        tree = ast.parse (function_code)
         func_name = None
         param_names = []
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef):
                 func_name = node.name
                 param_names = [arg.arg for arg in node.args.args]
                 break
         
         # Build test
-        params = ", ".join(param_names)
+        params = ", ".join (param_names)
         decorator = f"@pytest.mark.parametrize(\\"{params}, expected\\", ["
-        decorator += ", ".join(param_values)
+        decorator += ", ".join (param_values)
         decorator += "])"
         
         test = f"""
@@ -336,13 +336,13 @@ def test_{func_name}_parametrized({params}, expected):
 case_gen = TestCaseGenerator()
 
 function_code = """
-def is_palindrome(text: str) -> bool:
+def is_palindrome (text: str) -> bool:
     ''Check if text is a palindrome.''
-    cleaned = '.join(c.lower() for c in text if c.isalnum())
+    cleaned = '.join (c.lower() for c in text if c.isalnum())
     return cleaned == cleaned[::-1]
 """
 
-test_cases = case_gen.generate_test_cases(function_code, num_cases=8)
+test_cases = case_gen.generate_test_cases (function_code, num_cases=8)
 
 for case in test_cases:
     print(f"{case['category']}: {case['description']}")
@@ -351,7 +351,7 @@ for case in test_cases:
     print()
 
 # Generate parametrized test
-parametrized = case_gen.generate_parametrized_test(function_code, test_cases)
+parametrized = case_gen.generate_parametrized_test (function_code, test_cases)
 print(parametrized)
 \`\`\`
 
@@ -374,7 +374,7 @@ class MockGenerator:
         """Generate mock objects for dependencies."""
         
         # Analyze dependencies
-        dep_info = self._analyze_dependencies(function_code, dependencies)
+        dep_info = self._analyze_dependencies (function_code, dependencies)
         
         prompt = f"""Generate pytest mocks for these dependencies:
 
@@ -384,10 +384,10 @@ Function being tested:
 \`\`\`
 
 Dependencies to mock:
-{self._format_dependencies(dep_info)}
+{self._format_dependencies (dep_info)}
 
 Generate:
-1. Fixture(s) for each dependency
+1. Fixture (s) for each dependency
 2. Mock setup with expected behavior
 3. Assertions to verify mock calls
 
@@ -406,7 +406,7 @@ Use pytest and unittest.mock.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def _analyze_dependencies(
         self,
@@ -414,32 +414,32 @@ Use pytest and unittest.mock.
         dependencies: List[str]
     ) -> dict:
         """Analyze how dependencies are used."""
-        tree = ast.parse(function_code)
+        tree = ast.parse (function_code)
         
         dep_usage = {dep: [] for dep in dependencies}
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Attribute):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Call):
+                if isinstance (node.func, ast.Attribute):
                     obj = node.func.value
-                    if isinstance(obj, ast.Name) and obj.id in dependencies:
+                    if isinstance (obj, ast.Name) and obj.id in dependencies:
                         method = node.func.attr
-                        dep_usage[obj.id].append(method)
+                        dep_usage[obj.id].append (method)
         
         return dep_usage
     
-    def _format_dependencies(self, dep_info: dict) -> str:
+    def _format_dependencies (self, dep_info: dict) -> str:
         """Format dependency information."""
         lines = []
         for dep, methods in dep_info.items():
-            lines.append(f"- {dep}: methods used = {methods}")
-        return "\\n".join(lines)
+            lines.append (f"- {dep}: methods used = {methods}")
+        return "\\n".join (lines)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -447,18 +447,18 @@ Use pytest and unittest.mock.
 mock_gen = MockGenerator()
 
 function_code = """
-def process_payment(payment_gateway, amount: float, card_token: str):
+def process_payment (payment_gateway, amount: float, card_token: str):
     ''Process a payment through gateway.''
     if amount <= 0:
         raise ValueError("Amount must be positive")
     
-    result = payment_gateway.charge(amount, card_token)
+    result = payment_gateway.charge (amount, card_token)
     
     if result.success:
-        payment_gateway.send_receipt(result.transaction_id)
+        payment_gateway.send_receipt (result.transaction_id)
         return result.transaction_id
     else:
-        raise PaymentError(result.error_message)
+        raise PaymentError (result.error_message)
 """
 
 mocks = mock_gen.generate_mocks(
@@ -484,8 +484,8 @@ print(mocks)
 #     
 #     return gateway
 #
-# def test_process_payment_success(payment_gateway):
-#     transaction_id = process_payment(payment_gateway, 100.0, "tok_123")
+# def test_process_payment_success (payment_gateway):
+#     transaction_id = process_payment (payment_gateway, 100.0, "tok_123")
 #     
 #     # Verify charge was called correctly
 #     payment_gateway.charge.assert_called_once_with(100.0, "tok_123")
@@ -547,7 +547,7 @@ Output as JSON array of objects.
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         return result.get("examples", [])
 
 # Usage
@@ -561,9 +561,9 @@ User object with:
 - roles: array of strings (admin, user, moderator)
 """
 
-test_data = data_gen.generate_test_data(spec, num_examples=10)
+test_data = data_gen.generate_test_data (spec, num_examples=10)
 
-for i, example in enumerate(test_data):
+for i, example in enumerate (test_data):
     print(f"Example {i+1}: {example}")
 \`\`\`
 
@@ -588,7 +588,7 @@ class IntegrationTestGenerator:
         prompt = f"""Generate an integration test for this workflow:
 
 Components involved:
-{self._format_components(components)}
+{self._format_components (components)}
 
 Workflow:
 {workflow_description}
@@ -614,17 +614,17 @@ Use pytest and appropriate fixtures.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _format_components(self, components: List[str]) -> str:
+    def _format_components (self, components: List[str]) -> str:
         """Format component list."""
-        return "\\n".join(f"- {comp}" for comp in components)
+        return "\\n".join (f"- {comp}" for comp in components)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -672,21 +672,21 @@ class CoverageGuidedGenerator:
         # Highlight uncovered lines
         lines = function_code.split("\\n")
         highlighted = []
-        for i, line in enumerate(lines, 1):
+        for i, line in enumerate (lines, 1):
             if i in uncovered_lines:
-                highlighted.append(f"{i:4d} | >>> {line}  # UNCOVERED")
+                highlighted.append (f"{i:4d} | >>> {line}  # UNCOVERED")
             else:
-                highlighted.append(f"{i:4d} |     {line}")
+                highlighted.append (f"{i:4d} |     {line}")
         
         prompt = f"""Generate additional tests to cover marked lines:
 
 Function:
-{chr(10).join(highlighted)}
+{chr(10).join (highlighted)}
 
 Existing tests:
 {existing_tests}
 
-Generate new test(s) that will execute the uncovered lines.
+Generate new test (s) that will execute the uncovered lines.
 Explain what input values trigger those code paths.
 """
         
@@ -708,7 +708,7 @@ Explain what input values trigger those code paths.
 coverage_gen = CoverageGuidedGenerator()
 
 function_code = """
-def process_order(order, inventory):
+def process_order (order, inventory):
     if not order:
         raise ValueError("Order cannot be empty")
     
@@ -728,9 +728,9 @@ new_tests = coverage_gen.generate_for_uncovered_lines(
     uncovered_lines=[6, 9],
     existing_tests="""
 def test_process_order_success():
-    order = Order(quantity=5, amount=100, priority="standard")
-    inventory = Inventory(stock=10)
-    result = process_order(order, inventory)
+    order = Order (quantity=5, amount=100, priority="standard")
+    inventory = Inventory (stock=10)
+    result = process_order (order, inventory)
     assert result["status"] == "success"
 """
 )

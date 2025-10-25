@@ -34,7 +34,7 @@ export const linearAlgebraProblemsMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['50', '100', '150', '5000'],
     correctAnswer: 0,
     explanation:
-      'Rank of XᵀX ≤ rank(X) ≤ min(n_samples, n_features) = min(50, 100) = 50. Since we have only 50 observations, the covariance matrix (100×100) can have at most rank 50, making it singular (non-invertible) with at least 50 zero eigenvalues.',
+      'Rank of XᵀX ≤ rank(X) ≤ min (n_samples, n_features) = min(50, 100) = 50. Since we have only 50 observations, the covariance matrix (100×100) can have at most rank 50, making it singular (non-invertible) with at least 50 zero eigenvalues.',
   },
   {
     id: 'lap-mc-5',

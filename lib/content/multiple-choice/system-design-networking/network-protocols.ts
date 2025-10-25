@@ -71,6 +71,6 @@ export const networkprotocolsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "MQTT is ideal for IoT devices because: (1) It's extremely lightweight (2-byte header vs HTTP's typical 100+ bytes), (2) Maintains a persistent connection with low overhead, (3) QoS 1 provides reliable delivery with acknowledgments, (4) Designed for unreliable networks. HTTP polling wastes battery with frequent connection overhead. WebSocket is heavier than MQTT. WebRTC is for P2P video/audio, not sensor data.",
+      "MQTT is ideal for IoT devices because: (1) It\'s extremely lightweight (2-byte header vs HTTP's typical 100+ bytes), (2) Maintains a persistent connection with low overhead, (3) QoS 1 provides reliable delivery with acknowledgments, (4) Designed for unreliable networks. HTTP polling wastes battery with frequent connection overhead. WebSocket is heavier than MQTT. WebRTC is for P2P video/audio, not sensor data.",
   },
 ];

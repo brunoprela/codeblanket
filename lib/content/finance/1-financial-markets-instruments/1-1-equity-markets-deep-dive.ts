@@ -48,7 +48,7 @@ class IPOPricing:
     price_range_high: float
     pre_money_valuation: float
     
-    def estimate_ipo_price(self, 
+    def estimate_ipo_price (self, 
                           comparable_pe_ratios: list[float],
                           estimated_earnings: float) -> dict:
         """
@@ -62,7 +62,7 @@ class IPOPricing:
             Dictionary with pricing analysis
         """
         # Method 1: Comparable P/E analysis
-        median_pe = np.median(comparable_pe_ratios)
+        median_pe = np.median (comparable_pe_ratios)
         implied_price_pe = (estimated_earnings / self.shares_offered) * median_pe
         
         # Method 2: DCF-based valuation
@@ -72,17 +72,17 @@ class IPOPricing:
         range_midpoint = (self.price_range_low + self.price_range_high) / 2
         
         return {
-            'pe_method_price': round(implied_price_pe, 2),
-            'dcf_method_price': round(dcf_price, 2),
-            'range_midpoint': round(range_midpoint, 2),
-            'median_pe': round(median_pe, 2),
+            'pe_method_price': round (implied_price_pe, 2),
+            'dcf_method_price': round (dcf_price, 2),
+            'range_midpoint': round (range_midpoint, 2),
+            'median_pe': round (median_pe, 2),
             'recommended_range': (
-                round(min(implied_price_pe, dcf_price) * 0.95, 2),
-                round(max(implied_price_pe, dcf_price) * 1.05, 2)
+                round (min (implied_price_pe, dcf_price) * 0.95, 2),
+                round (max (implied_price_pe, dcf_price) * 1.05, 2)
             )
         }
     
-    def allocate_shares(self, 
+    def allocate_shares (self, 
                        orders: dict[str, tuple[int, float]],
                        final_price: float) -> dict:
         """
@@ -102,7 +102,7 @@ class IPOPricing:
             if bid >= final_price
         }
         
-        total_demand = sum(shares for shares, _ in valid_orders.values())
+        total_demand = sum (shares for shares, _ in valid_orders.values())
         
         if total_demand <= self.shares_offered:
             # All orders filled
@@ -114,15 +114,15 @@ class IPOPricing:
             # Pro-rata allocation
             allocation_ratio = self.shares_offered / total_demand
             allocations = {
-                investor: int(shares * allocation_ratio)
+                investor: int (shares * allocation_ratio)
                 for investor, (shares, _) in valid_orders.items()
             }
         
         return {
             'allocations': allocations,
-            'total_allocated': sum(allocations.values()),
-            'oversubscription_ratio': round(total_demand / self.shares_offered, 2),
-            'capital_raised': sum(allocations.values()) * final_price
+            'total_allocated': sum (allocations.values()),
+            'oversubscription_ratio': round (total_demand / self.shares_offered, 2),
+            'capital_raised': sum (allocations.values()) * final_price
         }
 
 # Example: Airbnb IPO (December 2020)
@@ -148,7 +148,7 @@ print(f"DCF Method Price: \${pricing['dcf_method_price']}")
 print(f"Recommended Range: \${pricing['recommended_range'][0]} - \${pricing['recommended_range'][1]}")
 \`\`\`
 
-**Real-World: Airbnb's IPO Journey**
+**Real-World: Airbnb\'s IPO Journey**
 - Filed at $44-50 range
 - Demand was so high, priced at $68 (36% above range!)
 - Opened at $146 on first trade (115% pop!)
@@ -181,7 +181,7 @@ class Stock:
     market_cap: float  # in billions
     average_daily_volume: int
     
-    def get_market_cap_category(self) -> str:
+    def get_market_cap_category (self) -> str:
         """Classify by market capitalization"""
         if self.market_cap >= 200:
             return "Mega-cap"
@@ -194,7 +194,7 @@ class Stock:
         else:
             return "Micro-cap"
     
-    def estimate_liquidity_score(self) -> float:
+    def estimate_liquidity_score (self) -> float:
         """
         Estimate liquidity based on market cap and volume
         Score from 0 (illiquid) to 100 (very liquid)
@@ -268,17 +268,17 @@ class ExchangeInfo:
     }
     
     @classmethod
-    def get_trading_schedule(cls, date: datetime) -> dict:
+    def get_trading_schedule (cls, date: datetime) -> dict:
         """Get which exchanges are open at given time"""
         hour_utc = date.hour
         open_exchanges = []
         
         for exchange, info in cls.EXCHANGES.items():
-            start_hour = int(info['trading_hours_utc'][0].split(':')[0])
-            end_hour = int(info['trading_hours_utc'][1].split(':')[0])
+            start_hour = int (info['trading_hours_utc'][0].split(':')[0])
+            end_hour = int (info['trading_hours_utc'][1].split(':')[0])
             
             if start_hour <= hour_utc < end_hour:
-                open_exchanges.append(exchange)
+                open_exchanges.append (exchange)
         
         return {
             'timestamp': date.isoformat(),
@@ -291,7 +291,7 @@ class ExchangeInfo:
 
 # Check what's open now
 now = datetime.utcnow()
-schedule = ExchangeInfo.get_trading_schedule(now)
+schedule = ExchangeInfo.get_trading_schedule (now)
 print(f"Currently trading: {schedule['open_exchanges']}")
 \`\`\`
 
@@ -323,7 +323,7 @@ class OrderBook:
         self.last_trade_price: Optional[float] = None
         self.trades: List[dict] = []
     
-    def add_order(self, 
+    def add_order (self, 
                   side: str, 
                   price: float, 
                   quantity: int, 
@@ -346,9 +346,9 @@ class OrderBook:
         if side == 'buy':
             # Try to match with existing sell orders
             while remaining_quantity > 0 and self.asks and self.asks[0][0] <= price:
-                ask_price, ask_qty, ask_id = heappop(self.asks)
+                ask_price, ask_qty, ask_id = heappop (self.asks)
                 
-                trade_qty = min(remaining_quantity, ask_qty)
+                trade_qty = min (remaining_quantity, ask_qty)
                 trade_price = ask_price  # Passive order gets price priority
                 
                 trade = {
@@ -358,27 +358,27 @@ class OrderBook:
                     'seller_id': ask_id,
                     'timestamp': time.time()
                 }
-                trades_executed.append(trade)
-                self.trades.append(trade)
+                trades_executed.append (trade)
+                self.trades.append (trade)
                 self.last_trade_price = trade_price
                 
                 remaining_quantity -= trade_qty
                 
                 # If sell order not fully filled, put it back
                 if ask_qty > trade_qty:
-                    heappush(self.asks, (ask_price, ask_qty - trade_qty, ask_id))
+                    heappush (self.asks, (ask_price, ask_qty - trade_qty, ask_id))
             
             # Add remaining quantity to bid book
             if remaining_quantity > 0:
-                heappush(self.bids, (-price, remaining_quantity, order_id))
+                heappush (self.bids, (-price, remaining_quantity, order_id))
         
         else:  # sell order
             # Try to match with existing buy orders
             while remaining_quantity > 0 and self.bids and -self.bids[0][0] >= price:
-                neg_bid_price, bid_qty, bid_id = heappop(self.bids)
+                neg_bid_price, bid_qty, bid_id = heappop (self.bids)
                 bid_price = -neg_bid_price
                 
-                trade_qty = min(remaining_quantity, bid_qty)
+                trade_qty = min (remaining_quantity, bid_qty)
                 trade_price = bid_price  # Passive order gets price priority
                 
                 trade = {
@@ -388,43 +388,43 @@ class OrderBook:
                     'seller_id': order_id,
                     'timestamp': time.time()
                 }
-                trades_executed.append(trade)
-                self.trades.append(trade)
+                trades_executed.append (trade)
+                self.trades.append (trade)
                 self.last_trade_price = trade_price
                 
                 remaining_quantity -= trade_qty
                 
                 # If buy order not fully filled, put it back
                 if bid_qty > trade_qty:
-                    heappush(self.bids, (-bid_price, bid_qty - trade_qty, bid_id))
+                    heappush (self.bids, (-bid_price, bid_qty - trade_qty, bid_id))
             
             # Add remaining quantity to ask book
             if remaining_quantity > 0:
-                heappush(self.asks, (price, remaining_quantity, order_id))
+                heappush (self.asks, (price, remaining_quantity, order_id))
         
         return trades_executed
     
-    def get_best_bid_ask(self) -> tuple[Optional[float], Optional[float]]:
+    def get_best_bid_ask (self) -> tuple[Optional[float], Optional[float]]:
         """Get current best bid and ask prices (Level 1 data)"""
         best_bid = -self.bids[0][0] if self.bids else None
         best_ask = self.asks[0][0] if self.asks else None
         return (best_bid, best_ask)
     
-    def get_spread(self) -> Optional[float]:
+    def get_spread (self) -> Optional[float]:
         """Get bid-ask spread"""
         best_bid, best_ask = self.get_best_bid_ask()
         if best_bid and best_ask:
             return best_ask - best_bid
         return None
     
-    def get_mid_price(self) -> Optional[float]:
+    def get_mid_price (self) -> Optional[float]:
         """Get mid-market price"""
         best_bid, best_ask = self.get_best_bid_ask()
         if best_bid and best_ask:
             return (best_bid + best_ask) / 2
         return None
     
-    def get_market_depth(self, levels: int = 5) -> dict:
+    def get_market_depth (self, levels: int = 5) -> dict:
         """Get order book depth (Level 2 data)"""
         bid_levels = []
         ask_levels = []
@@ -461,10 +461,10 @@ book.add_order('buy', 180.10, 150, 'bid3')
 
 print("Initial Order Book:")
 depth = book.get_market_depth()
-print(f"Best Bid: \\\${depth['bids'][0]['price']:.2f}")
-print(f"Best Ask: \\\${depth['asks'][0]['price']:.2f}")
-print(f"Spread: \\\${depth['spread']:.2f}")
-print(f"Mid Price: \\\${depth['mid_price']:.2f}")
+print(f"Best Bid: \${depth['bids'][0]['price']:.2f}")
+print(f"Best Ask: \${depth['asks'][0]['price']:.2f}")
+print(f"Spread: \${depth['spread']:.2f}")
+print(f"Mid Price: \${depth['mid_price']:.2f}")
 
 # Execute a market buy order (will match with best ask)
 print("\\nExecuting market buy for 150 shares...")
@@ -492,7 +492,7 @@ class MarketCapAnalyzer:
     def __init__(self):
         self.companies = {}
     
-    def add_company(self, 
+    def add_company (self, 
                    ticker: str, 
                    price: float, 
                    shares_outstanding: int) -> dict:
@@ -520,7 +520,7 @@ class MarketCapAnalyzer:
             'ticker': ticker,
             'price': price,
             'shares_outstanding': shares_outstanding,
-            'market_cap_billions': round(market_cap, 2),
+            'market_cap_billions': round (market_cap, 2),
             'category': category,
             'characteristics': characteristics
         }
@@ -528,14 +528,14 @@ class MarketCapAnalyzer:
         self.companies[ticker] = company_info
         return company_info
     
-    def compare_valuations(self, ticker1: str, ticker2: str) -> dict:
+    def compare_valuations (self, ticker1: str, ticker2: str) -> dict:
         """Compare two companies' valuations"""
         c1 = self.companies[ticker1]
         c2 = self.companies[ticker2]
         
         return {
             'larger_company': ticker1 if c1['market_cap_billions'] > c2['market_cap_billions'] else ticker2,
-            'market_cap_ratio': round(c1['market_cap_billions'] / c2['market_cap_billions'], 2),
+            'market_cap_ratio': round (c1['market_cap_billions'] / c2['market_cap_billions'], 2),
             'price_comparison': {
                 ticker1: c1['price'],
                 ticker2: c2['price'],
@@ -558,7 +558,7 @@ for ticker, info in analyzer.companies.items():
 # Common misconception: Higher stock price = more valuable company
 comparison = analyzer.compare_valuations('MSFT', 'AAPL')
 print(f"\\nAlthough MSFT price (\${analyzer.companies['MSFT']['price']}) > "
-      f"AAPL price (${analyzer.companies['AAPL']['price']}),")
+      f"AAPL price (\${analyzer.companies['AAPL']['price']}),")
 print(f"AAPL market cap is actually larger!")
 \`\`\`
 
@@ -582,21 +582,21 @@ class StockIndex:
         self.methodology = methodology
         self.constituents: Dict[str, float] = {}
     
-    def add_constituent(self, ticker: str, weight_or_price: float):
+    def add_constituent (self, ticker: str, weight_or_price: float):
         """Add stock to index"""
         self.constituents[ticker] = weight_or_price
     
-    def calculate_price_weighted_index(self, 
+    def calculate_price_weighted_index (self, 
                                       prices: Dict[str, float], 
                                       divisor: float = 1.0) -> float:
         """
         Price-weighted index (like Dow Jones)
         Index = Sum of prices / Divisor
         """
-        total_price = sum(prices.values())
+        total_price = sum (prices.values())
         return total_price / divisor
     
-    def calculate_market_cap_weighted_index(self,
+    def calculate_market_cap_weighted_index (self,
                                            prices: Dict[str, float],
                                            shares_outstanding: Dict[str, int],
                                            base_value: float = 100.0) -> float:
@@ -616,13 +616,13 @@ class StockIndex:
         
         return (total_market_cap / base_market_cap) * base_value
     
-    def calculate_equal_weighted_index(self,
+    def calculate_equal_weighted_index (self,
                                       returns: Dict[str, float]) -> float:
         """
         Equal-weighted index
         Each stock has same impact regardless of size
         """
-        return np.mean(list(returns.values()))
+        return np.mean (list (returns.values()))
 
 # S&P 500 simulation (market-cap weighted)
 sp500 = StockIndex("S&P 500", "market-cap weighted")
@@ -642,10 +642,10 @@ base_prices = {t: d['base_price'] for t, d in constituents.items()}
 
 # Add to index with base prices
 for ticker, data in constituents.items():
-    sp500.add_constituent(ticker, data['base_price'])
+    sp500.add_constituent (ticker, data['base_price'])
 
 # Calculate index value
-index_value = sp500.calculate_market_cap_weighted_index(prices, shares, base_value=4500)
+index_value = sp500.calculate_market_cap_weighted_index (prices, shares, base_value=4500)
 print(f"S&P 500 Index Value: {index_value:.2f}")
 
 # Calculate returns
@@ -659,14 +659,14 @@ for ticker, ret in returns.items():
     print(f"{ticker}: {ret*100:+.2f}%")
 
 # Market cap weights
-total_cap = sum(prices[t] * shares[t] for t in prices.keys())
+total_cap = sum (prices[t] * shares[t] for t in prices.keys())
 weights = {
     ticker: (prices[ticker] * shares[ticker]) / total_cap
     for ticker in prices.keys()
 }
 
 print("\\nMarket Cap Weights:")
-for ticker, weight in sorted(weights.items(), key=lambda x: x[1], reverse=True):
+for ticker, weight in sorted (weights.items(), key=lambda x: x[1], reverse=True):
     print(f"{ticker}: {weight*100:.2f}%")
 \`\`\`
 
@@ -711,7 +711,7 @@ class MarketEfficiencyTester:
         self.prices = price_data
         self.returns = price_data.pct_change().dropna()
     
-    def test_weak_form(self) -> dict:
+    def test_weak_form (self) -> dict:
         """
         Test weak-form efficiency
         Prices should follow random walk (returns uncorrelated)
@@ -720,26 +720,26 @@ class MarketEfficiencyTester:
         
         # Autocorrelation test
         returns_array = self.returns.values.flatten()
-        autocorr_lag1 = np.corrcoef(returns_array[:-1], returns_array[1:])[0, 1]
+        autocorr_lag1 = np.corrcoef (returns_array[:-1], returns_array[1:])[0, 1]
         
         # Runs test (randomness)
-        median_return = np.median(returns_array)
-        runs = sum(1 for i in range(1, len(returns_array)) 
+        median_return = np.median (returns_array)
+        runs = sum(1 for i in range(1, len (returns_array)) 
                   if (returns_array[i] > median_return) != (returns_array[i-1] > median_return))
         
-        expected_runs = len(returns_array) / 2
+        expected_runs = len (returns_array) / 2
         
         return {
             'test': 'Weak-form efficiency',
-            'autocorrelation_lag1': round(autocorr_lag1, 4),
-            'is_weak_form_efficient': abs(autocorr_lag1) < 0.05,
-            'interpretation': 'Past prices do not predict future' if abs(autocorr_lag1) < 0.05 
+            'autocorrelation_lag1': round (autocorr_lag1, 4),
+            'is_weak_form_efficient': abs (autocorr_lag1) < 0.05,
+            'interpretation': 'Past prices do not predict future' if abs (autocorr_lag1) < 0.05 
                             else 'Some predictability exists',
             'number_of_runs': runs,
             'expected_runs': expected_runs
         }
     
-    def test_semi_strong_form(self, 
+    def test_semi_strong_form (self, 
                              event_dates: List[datetime],
                              window_days: int = 5) -> dict:
         """
@@ -754,26 +754,26 @@ class MarketEfficiencyTester:
         
         for event_date in event_dates:
             # Get returns around event
-            event_idx = self.prices.index.get_loc(event_date)
+            event_idx = self.prices.index.get_loc (event_date)
             
             before_return = self.returns.iloc[event_idx - window_days:event_idx].mean()
             after_return = self.returns.iloc[event_idx:event_idx + window_days].mean()
             
             # Abnormal return = actual - expected (using before as expected)
             abnormal = after_return - before_return
-            abnormal_returns.append(abnormal)
+            abnormal_returns.append (abnormal)
         
-        avg_abnormal = np.mean(abnormal_returns)
+        avg_abnormal = np.mean (abnormal_returns)
         
         return {
             'test': 'Semi-strong form efficiency',
-            'average_abnormal_return': round(avg_abnormal * 100, 4),
-            'is_semi_strong_efficient': abs(avg_abnormal) < 0.001,
-            'interpretation': 'Markets quickly incorporate public info' if abs(avg_abnormal) < 0.001
+            'average_abnormal_return': round (avg_abnormal * 100, 4),
+            'is_semi_strong_efficient': abs (avg_abnormal) < 0.001,
+            'interpretation': 'Markets quickly incorporate public info' if abs (avg_abnormal) < 0.001
                             else 'Delayed reaction to news'
         }
     
-    def calculate_sharpe_ratio(self, risk_free_rate: float = 0.02) -> float:
+    def calculate_sharpe_ratio (self, risk_free_rate: float = 0.02) -> float:
         """
         Calculate Sharpe ratio
         If market is efficient, hard to beat on risk-adjusted basis
@@ -782,7 +782,7 @@ class MarketEfficiencyTester:
         annual_vol = self.returns.std() * np.sqrt(252)
         
         sharpe = (annual_return - risk_free_rate) / annual_vol
-        return round(sharpe, 3)
+        return round (sharpe, 3)
 
 # Example: Test market efficiency
 # (In practice, you'd use real price data)
@@ -795,7 +795,7 @@ prices = pd.DataFrame(
     columns=['Close']
 )
 
-tester = MarketEfficiencyTester(prices)
+tester = MarketEfficiencyTester (prices)
 
 weak_test = tester.test_weak_form()
 print("Weak-Form Efficiency Test:")
@@ -818,7 +818,7 @@ print("(>1.0 is good, >2.0 is excellent, >3.0 is exceptional)")
 
 ---
 
-## Real-World Example: Google's Stock Price Journey
+## Real-World Example: Google\'s Stock Price Journey
 
 \`\`\`python
 def analyze_google_stock_history():
@@ -906,9 +906,9 @@ class EquityDataFetcher:
     
     def __init__(self, ticker: str):
         self.ticker = ticker.upper()
-        self.stock = yf.Ticker(self.ticker)
+        self.stock = yf.Ticker (self.ticker)
     
-    def get_current_price(self) -> dict:
+    def get_current_price (self) -> dict:
         """Get real-time quote data"""
         try:
             info = self.stock.info
@@ -925,9 +925,9 @@ class EquityDataFetcher:
                 'timestamp': datetime.now().isoformat()
             }
         except Exception as e:
-            return {'error': str(e), 'ticker': self.ticker}
+            return {'error': str (e), 'ticker': self.ticker}
     
-    def get_historical_data(self, 
+    def get_historical_data (self, 
                            period: str = '1y',
                            interval: str = '1d') -> pd.DataFrame:
         """
@@ -938,49 +938,49 @@ class EquityDataFetcher:
             interval: '1m', '5m', '15m', '1h', '1d', '1wk', '1mo'
         """
         try:
-            data = self.stock.history(period=period, interval=interval)
+            data = self.stock.history (period=period, interval=interval)
             return data
         except Exception as e:
             print(f"Error fetching data: {e}")
             return pd.DataFrame()
     
-    def calculate_technical_indicators(self, data: pd.DataFrame) -> pd.DataFrame:
+    def calculate_technical_indicators (self, data: pd.DataFrame) -> pd.DataFrame:
         """Add common technical indicators"""
         df = data.copy()
         
         # Simple Moving Averages
-        df['SMA_20'] = df['Close'].rolling(window=20).mean()
-        df['SMA_50'] = df['Close'].rolling(window=50).mean()
-        df['SMA_200'] = df['Close'].rolling(window=200).mean()
+        df['SMA_20'] = df['Close'].rolling (window=20).mean()
+        df['SMA_50'] = df['Close'].rolling (window=50).mean()
+        df['SMA_200'] = df['Close'].rolling (window=200).mean()
         
         # Exponential Moving Average
-        df['EMA_12'] = df['Close'].ewm(span=12, adjust=False).mean()
-        df['EMA_26'] = df['Close'].ewm(span=26, adjust=False).mean()
+        df['EMA_12'] = df['Close'].ewm (span=12, adjust=False).mean()
+        df['EMA_26'] = df['Close'].ewm (span=26, adjust=False).mean()
         
         # MACD
         df['MACD'] = df['EMA_12'] - df['EMA_26']
-        df['MACD_Signal'] = df['MACD'].ewm(span=9, adjust=False).mean()
+        df['MACD_Signal'] = df['MACD'].ewm (span=9, adjust=False).mean()
         
         # RSI (Relative Strength Index)
         delta = df['Close'].diff()
-        gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-        loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+        gain = (delta.where (delta > 0, 0)).rolling (window=14).mean()
+        loss = (-delta.where (delta < 0, 0)).rolling (window=14).mean()
         rs = gain / loss
         df['RSI'] = 100 - (100 / (1 + rs))
         
         # Bollinger Bands
-        df['BB_Middle'] = df['Close'].rolling(window=20).mean()
-        bb_std = df['Close'].rolling(window=20).std()
+        df['BB_Middle'] = df['Close'].rolling (window=20).mean()
+        bb_std = df['Close'].rolling (window=20).std()
         df['BB_Upper'] = df['BB_Middle'] + (bb_std * 2)
         df['BB_Lower'] = df['BB_Middle'] - (bb_std * 2)
         
         # Volume indicators
-        df['Volume_SMA_20'] = df['Volume'].rolling(window=20).mean()
+        df['Volume_SMA_20'] = df['Volume'].rolling (window=20).mean()
         df['Volume_Ratio'] = df['Volume'] / df['Volume_SMA_20']
         
         return df
     
-    def get_fundamental_metrics(self) -> dict:
+    def get_fundamental_metrics (self) -> dict:
         """Get fundamental analysis metrics"""
         try:
             info = self.stock.info
@@ -1009,21 +1009,21 @@ class EquityDataFetcher:
                 'payout_ratio': info.get('payoutRatio')
             }
         except Exception as e:
-            return {'error': str(e), 'ticker': self.ticker}
+            return {'error': str (e), 'ticker': self.ticker}
     
-    def screen_stock(self) -> dict:
+    def screen_stock (self) -> dict:
         """
         Basic stock screening logic
         Returns buy/sell/hold recommendation with reasons
         """
         try:
             fundamentals = self.get_fundamental_metrics()
-            data = self.get_historical_data(period='6mo')
+            data = self.get_historical_data (period='6mo')
             
             if data.empty:
                 return {'recommendation': 'NO DATA'}
             
-            data_with_indicators = self.calculate_technical_indicators(data)
+            data_with_indicators = self.calculate_technical_indicators (data)
             latest = data_with_indicators.iloc[-1]
             
             score = 0
@@ -1032,10 +1032,10 @@ class EquityDataFetcher:
             # Valuation checks
             if fundamentals.get('trailing_pe') and fundamentals['trailing_pe'] < 20:
                 score += 1
-                reasons.append(f"Good P/E ratio: {fundamentals['trailing_pe']:.1f}")
+                reasons.append (f"Good P/E ratio: {fundamentals['trailing_pe']:.1f}")
             elif fundamentals.get('trailing_pe') and fundamentals['trailing_pe'] > 40:
                 score -= 1
-                reasons.append(f"High P/E ratio: {fundamentals['trailing_pe']:.1f}")
+                reasons.append (f"High P/E ratio: {fundamentals['trailing_pe']:.1f}")
             
             # Technical checks
             if latest['Close'] > latest['SMA_50']:
@@ -1047,20 +1047,20 @@ class EquityDataFetcher:
             
             if latest['RSI'] < 30:
                 score += 1
-                reasons.append(f"RSI oversold: {latest['RSI']:.1f}")
+                reasons.append (f"RSI oversold: {latest['RSI']:.1f}")
             elif latest['RSI'] > 70:
                 score -= 1
-                reasons.append(f"RSI overbought: {latest['RSI']:.1f}")
+                reasons.append (f"RSI overbought: {latest['RSI']:.1f}")
             
             # Growth checks
             if fundamentals.get('revenue_growth') and fundamentals['revenue_growth'] > 0.15:
                 score += 1
-                reasons.append(f"Strong revenue growth: {fundamentals['revenue_growth']*100:.1f}%")
+                reasons.append (f"Strong revenue growth: {fundamentals['revenue_growth']*100:.1f}%")
             
             # Profitability
             if fundamentals.get('profit_margin') and fundamentals['profit_margin'] > 0.20:
                 score += 1
-                reasons.append(f"High profit margin: {fundamentals['profit_margin']*100:.1f}%")
+                reasons.append (f"High profit margin: {fundamentals['profit_margin']*100:.1f}%")
             
             # Recommendation
             if score >= 2:
@@ -1080,7 +1080,7 @@ class EquityDataFetcher:
             }
             
         except Exception as e:
-            return {'error': str(e), 'ticker': self.ticker}
+            return {'error': str (e), 'ticker': self.ticker}
 
 # Example usage
 print("Fetching Apple (AAPL) data...")
@@ -1093,8 +1093,8 @@ print(f"Change: {quote.get('change_percent'):.2f}%")
 print(f"Market Cap: \${quote.get('market_cap', 0)/1e9:.1f}B")
 
 # Historical data with indicators
-data = aapl.get_historical_data(period='3mo')
-data_with_indicators = aapl.calculate_technical_indicators(data)
+data = aapl.get_historical_data (period='3mo')
+data_with_indicators = aapl.calculate_technical_indicators (data)
 
 print(f"\\nLatest Technical Indicators:")
 latest = data_with_indicators.iloc[-1]
@@ -1134,7 +1134,7 @@ for reason in screening.get('reasons', []):
 ✅ **Right**: Understand bid-ask spread and market impact
 
 \`\`\`python
-def estimate_execution_price(ticker: str, 
+def estimate_execution_price (ticker: str, 
                             side: str, 
                             quantity: int,
                             bid: float,
@@ -1169,9 +1169,9 @@ def estimate_execution_price(ticker: str,
         'ticker': ticker,
         'side': side,
         'quantity': quantity,
-        'estimated_price': round(avg_price, 2),
-        'market_impact': round(impact, 4),
-        'total_cost': round(avg_price * quantity, 2)
+        'estimated_price': round (avg_price, 2),
+        'market_impact': round (impact, 4),
+        'total_cost': round (avg_price * quantity, 2)
     }
 
 # Example: Large order on illiquid stock
@@ -1195,7 +1195,7 @@ print(f"Total cost: \${execution['total_cost']}")
 ### 3. Not Accounting for Stock Splits
 
 \`\`\`python
-def adjust_for_splits(historical_prices: pd.DataFrame,
+def adjust_for_splits (historical_prices: pd.DataFrame,
                      split_dates: dict[str, float]) -> pd.DataFrame:
     """
     Adjust historical prices for stock splits
@@ -1206,15 +1206,15 @@ def adjust_for_splits(historical_prices: pd.DataFrame,
     """
     adjusted = historical_prices.copy()
     
-    for split_date, ratio in sorted(split_dates.items(), reverse=True):
+    for split_date, ratio in sorted (split_dates.items(), reverse=True):
         # Adjust all prices before split date
-        mask = adjusted.index < pd.to_datetime(split_date)
+        mask = adjusted.index < pd.to_datetime (split_date)
         adjusted.loc[mask, 'Close'] = adjusted.loc[mask, 'Close'] / ratio
         adjusted.loc[mask, 'Volume'] = adjusted.loc[mask, 'Volume'] * ratio
     
     return adjusted
 
-# Example: Google's 20:1 split
+# Example: Google\'s 20:1 split
 # Without adjustment, historical chart would show massive drop
 # With adjustment, shows true economic value over time
 \`\`\`
@@ -1222,12 +1222,12 @@ def adjust_for_splits(historical_prices: pd.DataFrame,
 ### 4. Ignoring After-Hours Trading
 
 \`\`\`python
-def check_after_hours_movement(ticker: str) -> dict:
+def check_after_hours_movement (ticker: str) -> dict:
     """
     Check for significant after-hours price movements
     Important for risk management!
     """
-    stock = yf.Ticker(ticker)
+    stock = yf.Ticker (ticker)
     info = stock.info
     
     regular_close = info.get('regularMarketPrice')
@@ -1240,9 +1240,9 @@ def check_after_hours_movement(ticker: str) -> dict:
             'ticker': ticker,
             'regular_close': regular_close,
             'after_hours_price': post_market,
-            'ah_change_percent': round(ah_change, 2),
-            'is_significant': abs(ah_change) > 2,
-            'warning': 'Significant after-hours move!' if abs(ah_change) > 2 else None
+            'ah_change_percent': round (ah_change, 2),
+            'is_significant': abs (ah_change) > 2,
+            'warning': 'Significant after-hours move!' if abs (ah_change) > 2 else None
         }
     
     return {'error': 'No after-hours data available'}
@@ -1314,7 +1314,7 @@ class PDTChecker:
         self.account_value = account_value
         self.trades: List[dict] = []
     
-    def add_trade(self, ticker: str, date: datetime, is_day_trade: bool):
+    def add_trade (self, ticker: str, date: datetime, is_day_trade: bool):
         """Record trade"""
         self.trades.append({
             'ticker': ticker,
@@ -1322,7 +1322,7 @@ class PDTChecker:
             'is_day_trade': is_day_trade
         })
     
-    def check_pdt_status(self) -> dict:
+    def check_pdt_status (self) -> dict:
         """Check if account is flagged as PDT"""
         if self.account_value >= 25000:
             return {
@@ -1338,25 +1338,25 @@ class PDTChecker:
             (datetime.now() - t['date']).days <= 5
         ]
         
-        if len(recent_day_trades) >= 4:
+        if len (recent_day_trades) >= 4:
             return {
                 'is_pdt': True,
-                'reason': f'{len(recent_day_trades)} day trades in 5 days',
+                'reason': f'{len (recent_day_trades)} day trades in 5 days',
                 'can_day_trade': False,
                 'warning': '90-day trading freeze if you continue!'
             }
         
         return {
             'is_pdt': False,
-            'day_trades_remaining': 3 - len(recent_day_trades),
+            'day_trades_remaining': 3 - len (recent_day_trades),
             'can_day_trade': True
         }
 
 # Example
-account = PDTChecker(account_value=15000)
-account.add_trade('AAPL', datetime.now() - timedelta(days=4), True)
-account.add_trade('GOOGL', datetime.now() - timedelta(days=3), True)
-account.add_trade('TSLA', datetime.now() - timedelta(days=2), True)
+account = PDTChecker (account_value=15000)
+account.add_trade('AAPL', datetime.now() - timedelta (days=4), True)
+account.add_trade('GOOGL', datetime.now() - timedelta (days=3), True)
+account.add_trade('TSLA', datetime.now() - timedelta (days=2), True)
 
 status = account.check_pdt_status()
 print(f"PDT Status: {status}")
@@ -1383,7 +1383,7 @@ class StockScreener:
         self.universe = universe
         self.results = []
     
-    def apply_filters(self,
+    def apply_filters (self,
                      min_market_cap: Optional[float] = None,
                      max_pe_ratio: Optional[float] = None,
                      min_dividend_yield: Optional[float] = None,
@@ -1399,7 +1399,7 @@ class StockScreener:
         
         for ticker in self.universe:
             try:
-                fetcher = EquityDataFetcher(ticker)
+                fetcher = EquityDataFetcher (ticker)
                 fundamentals = fetcher.get_fundamental_metrics()
                 
                 # Check each filter
@@ -1435,15 +1435,15 @@ class StockScreener:
         self.results = passing_stocks
         return passing_stocks
     
-    def rank_results(self, by: str = 'roe', ascending: bool = False) -> List[dict]:
+    def rank_results (self, by: str = 'roe', ascending: bool = False) -> List[dict]:
         """Rank screened stocks by metric"""
-        return sorted(self.results, 
-                     key=lambda x: x.get(by, 0) or 0, 
+        return sorted (self.results, 
+                     key=lambda x: x.get (by, 0) or 0, 
                      reverse=not ascending)
 
 # Example: Screen for value stocks
 universe = ['AAPL', 'MSFT', 'GOOGL', 'JPM', 'BAC', 'WMT', 'KO', 'PG']
-screener = StockScreener(universe)
+screener = StockScreener (universe)
 
 # Apply filters
 results = screener.apply_filters(
@@ -1454,8 +1454,8 @@ results = screener.apply_filters(
     max_debt_to_equity=1.0
 )
 
-print(f"Found {len(results)} stocks matching criteria:")
-ranked = screener.rank_results(by='roe', ascending=False)
+print(f"Found {len (results)} stocks matching criteria:")
+ranked = screener.rank_results (by='roe', ascending=False)
 for stock in ranked:
     print(f"{stock['ticker']}: ROE={stock.get('roe', 0)*100:.1f}%, "
           f"P/E={stock.get('pe_ratio', 'N/A')}, "

@@ -70,10 +70,10 @@ http_requests_total{method="POST", status="201"} → 3201
 **Queries** (Prometheus):
 \`\`\`
 # Rate of requests per second
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 
 # Total requests in last hour
-increase(http_requests_total[1h])
+increase (http_requests_total[1h])
 \`\`\`
 
 ### **2. Gauge**
@@ -101,10 +101,10 @@ active_connections{service="api"} → 47
 **Queries**:
 \`\`\`
 # Average CPU over 5 minutes
-avg_over_time(cpu_usage_percent[5m])
+avg_over_time (cpu_usage_percent[5m])
 
 # Peak memory in last hour
-max_over_time(memory_used_bytes[1h])
+max_over_time (memory_used_bytes[1h])
 \`\`\`
 
 ### **3. Histogram**
@@ -134,11 +134,11 @@ http_request_duration_seconds_count → 10000             # Total requests
 \`\`\`
 # 99th percentile latency
 histogram_quantile(0.99, 
-  rate(http_request_duration_seconds_bucket[5m]))
+  rate (http_request_duration_seconds_bucket[5m]))
 
 # Average latency
-rate(http_request_duration_seconds_sum[5m]) /
-rate(http_request_duration_seconds_count[5m])
+rate (http_request_duration_seconds_sum[5m]) /
+rate (http_request_duration_seconds_count[5m])
 \`\`\`
 
 ### **4. Summary**
@@ -166,19 +166,19 @@ http_request_duration_seconds_count → 10000
 
 **Rate**: Requests per second
 \`\`\`
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 \`\`\`
 
 **Errors**: Error rate
 \`\`\`
-rate(http_requests_total{status=~"5.."}[5m]) /
-rate(http_requests_total[5m])
+rate (http_requests_total{status=~"5.."}[5m]) /
+rate (http_requests_total[5m])
 \`\`\`
 
 **Duration**: Latency distribution
 \`\`\`
 histogram_quantile(0.99, 
-  rate(http_request_duration_seconds_bucket[5m]))
+  rate (http_request_duration_seconds_bucket[5m]))
 \`\`\`
 
 **When to Use**: Monitoring user-facing services
@@ -354,24 +354,24 @@ http_requests_total
 http_requests_total{method="GET", status="200"}
 
 # Rate (per-second average over 5 minutes)
-rate(http_requests_total[5m])
+rate (http_requests_total[5m])
 
 # Sum across all services
-sum(rate(http_requests_total[5m])) by (status)
+sum (rate (http_requests_total[5m])) by (status)
 \`\`\`
 
 **Advanced Queries**:
 \`\`\`
 # Error rate percentage
-sum(rate(http_requests_total{status=~"5.."}[5m])) /
-sum(rate(http_requests_total[5m])) * 100
+sum (rate (http_requests_total{status=~"5.."}[5m])) /
+sum (rate (http_requests_total[5m])) * 100
 
 # p99 latency
 histogram_quantile(0.99,
-  sum(rate(http_request_duration_seconds_bucket[5m])) by (le))
+  sum (rate (http_request_duration_seconds_bucket[5m])) by (le))
 
 # CPU usage across all pods
-avg(rate(container_cpu_usage_seconds_total[5m])) by (pod)
+avg (rate (container_cpu_usage_seconds_total[5m])) by (pod)
 \`\`\`
 
 ### **Service Discovery**
@@ -403,22 +403,22 @@ scrape_configs:
 
 **Sum**: Total across dimensions
 \`\`\`
-sum(http_requests_total) by (service)
+sum (http_requests_total) by (service)
 \`\`\`
 
 **Average**: Mean value
 \`\`\`
-avg(cpu_usage_percent) by (host)
+avg (cpu_usage_percent) by (host)
 \`\`\`
 
 **Min/Max**: Extremes
 \`\`\`
-max(memory_used_bytes) by (pod)
+max (memory_used_bytes) by (pod)
 \`\`\`
 
 **Count**: Number of time series
 \`\`\`
-count(up == 1)  # Number of healthy instances
+count (up == 1)  # Number of healthy instances
 \`\`\`
 
 **Quantile**: Percentiles
@@ -430,7 +430,7 @@ quantile(0.95, http_request_duration_seconds)
 
 1. **Aggregate Early**: At query time, not collection
 2. **Preserve Labels**: Use \`by (label)\` to keep useful dimensions
-3. **Without vs By**: \`without(label)\` removes specific labels, \`by(label)\` keeps only specified
+3. **Without vs By**: \`without (label)\` removes specific labels, \`by (label)\` keeps only specified
 
 ---
 

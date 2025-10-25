@@ -11,10 +11,10 @@ export const distributedtransactionssagaMultipleChoice: MultipleChoiceQuestion[]
       question:
         "Why doesn't Two-Phase Commit (2PC) work well for microservices?",
       options: [
-        "It's too simple and doesn't provide enough features",
+        "It\'s too simple and doesn't provide enough features",
         "It's blocking, reduces availability, and many modern databases don't support it",
         'It only works with SQL databases',
-        "It's faster than Saga pattern",
+        "It\'s faster than Saga pattern",
       ],
       correctAnswer: 1,
       explanation:
@@ -36,7 +36,7 @@ export const distributedtransactionssagaMultipleChoice: MultipleChoiceQuestion[]
     {
       id: 'mc-saga-3',
       question:
-        "What's the main difference between choreography-based and orchestration-based sagas?",
+        "What\'s the main difference between choreography-based and orchestration-based sagas?",
       options: [
         'Choreography is faster than orchestration',
         'Choreography is decentralized (event-driven), orchestration has a central coordinator',

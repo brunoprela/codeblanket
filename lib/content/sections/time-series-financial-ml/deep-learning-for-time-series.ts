@@ -76,10 +76,10 @@ np.random.seed(42)
 spy = yf.download('SPY', start='2015-01-01', end='2024-01-01')
 prices = spy['Close'].values
 
-print(f"Dataset size: {len(prices)} days")
+print(f"Dataset size: {len (prices)} days")
 
 # Create sequences
-def create_sequences(data, seq_length=60, pred_horizon=1):
+def create_sequences (data, seq_length=60, pred_horizon=1):
     """
     Create sequences for supervised learning
     
@@ -94,15 +94,15 @@ def create_sequences(data, seq_length=60, pred_horizon=1):
     """
     X, y = [], []
     
-    for i in range(len(data) - seq_length - pred_horizon + 1):
-        X.append(data[i:i+seq_length])
-        y.append(data[i+seq_length+pred_horizon-1])
+    for i in range (len (data) - seq_length - pred_horizon + 1):
+        X.append (data[i:i+seq_length])
+        y.append (data[i+seq_length+pred_horizon-1])
     
-    return np.array(X), np.array(y)
+    return np.array(X), np.array (y)
 
 # Create sequences
 seq_length = 60  # 60 days look-back
-X, y = create_sequences(prices, seq_length=seq_length, pred_horizon=1)
+X, y = create_sequences (prices, seq_length=seq_length, pred_horizon=1)
 
 print(f"Sequences: {X.shape}, Targets: {y.shape}")
 
@@ -118,8 +118,8 @@ scaler_y = StandardScaler()
 X_train_scaled = scaler_X.fit_transform(X_train)
 X_test_scaled = scaler_X.transform(X_test)
 
-y_train_scaled = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()
-y_test_scaled = scaler_y.transform(y_test.reshape(-1, 1)).flatten()
+y_train_scaled = scaler_y.fit_transform (y_train.reshape(-1, 1)).flatten()
+y_test_scaled = scaler_y.transform (y_test.reshape(-1, 1)).flatten()
 
 print(f"Train: {X_train_scaled.shape}, Test: {X_test_scaled.shape}")
 
@@ -127,10 +127,10 @@ print(f"Train: {X_train_scaled.shape}, Test: {X_test_scaled.shape}")
 class TimeSeriesDataset(Dataset):
     def __init__(self, X, y):
         self.X = torch.FloatTensor(X)
-        self.y = torch.FloatTensor(y)
+        self.y = torch.FloatTensor (y)
     
     def __len__(self):
-        return len(self.X)
+        return len (self.X)
     
     def __getitem__(self, idx):
         return self.X[idx], self.y[idx]
@@ -138,11 +138,11 @@ class TimeSeriesDataset(Dataset):
 train_dataset = TimeSeriesDataset(X_train_scaled, y_train_scaled)
 test_dataset = TimeSeriesDataset(X_test_scaled, y_test_scaled)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+train_loader = DataLoader (train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader (test_dataset, batch_size=32, shuffle=False)
 
 # LSTM Model
-class LSTMPredictor(nn.Module):
+class LSTMPredictor (nn.Module):
     """
     LSTM model for price prediction
     """
@@ -161,46 +161,46 @@ class LSTMPredictor(nn.Module):
             batch_first=True
         )
         
-        self.fc = nn.Linear(hidden_size, 1)
+        self.fc = nn.Linear (hidden_size, 1)
     
-    def forward(self, x):
+    def forward (self, x):
         # x shape: [batch, seq_length]
         x = x.unsqueeze(-1)  # [batch, seq_length, 1]
         
         # LSTM forward
-        lstm_out, _ = self.lstm(x)  # [batch, seq_length, hidden_size]
+        lstm_out, _ = self.lstm (x)  # [batch, seq_length, hidden_size]
         
         # Use last time step
         last_output = lstm_out[:, -1, :]  # [batch, hidden_size]
         
         # Prediction
-        pred = self.fc(last_output)  # [batch, 1]
+        pred = self.fc (last_output)  # [batch, 1]
         
         return pred.squeeze()
 
 # Initialize model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = LSTMPredictor(input_size=1, hidden_size=50, num_layers=2, dropout=0.2).to(device)
+model = LSTMPredictor (input_size=1, hidden_size=50, num_layers=2, dropout=0.2).to (device)
 
 print(f"\\nModel: {model}")
-print(f"Parameters: {sum(p.numel() for p in model.parameters()):,}")
+print(f"Parameters: {sum (p.numel() for p in model.parameters()):,}")
 print(f"Device: {device}")
 
 # Training
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
 
-def train_epoch(model, loader, criterion, optimizer):
+def train_epoch (model, loader, criterion, optimizer):
     model.train()
     total_loss = 0
     
     for X_batch, y_batch in loader:
-        X_batch = X_batch.to(device)
-        y_batch = y_batch.to(device)
+        X_batch = X_batch.to (device)
+        y_batch = y_batch.to (device)
         
         # Forward
         pred = model(X_batch)
-        loss = criterion(pred, y_batch)
+        loss = criterion (pred, y_batch)
         
         # Backward
         optimizer.zero_grad()
@@ -209,9 +209,9 @@ def train_epoch(model, loader, criterion, optimizer):
         
         total_loss += loss.item()
     
-    return total_loss / len(loader)
+    return total_loss / len (loader)
 
-def evaluate(model, loader, criterion):
+def evaluate (model, loader, criterion):
     model.eval()
     total_loss = 0
     predictions = []
@@ -219,17 +219,17 @@ def evaluate(model, loader, criterion):
     
     with torch.no_grad():
         for X_batch, y_batch in loader:
-            X_batch = X_batch.to(device)
-            y_batch = y_batch.to(device)
+            X_batch = X_batch.to (device)
+            y_batch = y_batch.to (device)
             
             pred = model(X_batch)
-            loss = criterion(pred, y_batch)
+            loss = criterion (pred, y_batch)
             
             total_loss += loss.item()
-            predictions.extend(pred.cpu().numpy())
-            actuals.extend(y_batch.cpu().numpy())
+            predictions.extend (pred.cpu().numpy())
+            actuals.extend (y_batch.cpu().numpy())
     
-    return total_loss / len(loader), np.array(predictions), np.array(actuals)
+    return total_loss / len (loader), np.array (predictions), np.array (actuals)
 
 # Training loop
 epochs = 50
@@ -241,12 +241,12 @@ train_losses = []
 val_losses = []
 
 print("\\n=== Training LSTM ===")
-for epoch in range(epochs):
-    train_loss = train_epoch(model, train_loader, criterion, optimizer)
-    val_loss, _, _ = evaluate(model, test_loader, criterion)
+for epoch in range (epochs):
+    train_loss = train_epoch (model, train_loader, criterion, optimizer)
+    val_loss, _, _ = evaluate (model, test_loader, criterion)
     
-    train_losses.append(train_loss)
-    val_losses.append(val_loss)
+    train_losses.append (train_loss)
+    val_losses.append (val_loss)
     
     if (epoch + 1) % 10 == 0:
         print(f"Epoch {epoch+1}/{epochs} - Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}")
@@ -255,7 +255,7 @@ for epoch in range(epochs):
     if val_loss < best_val_loss:
         best_val_loss = val_loss
         patience_counter = 0
-        torch.save(model.state_dict(), 'best_lstm.pth')
+        torch.save (model.state_dict(), 'best_lstm.pth')
     else:
         patience_counter += 1
         if patience_counter >= patience:
@@ -263,22 +263,22 @@ for epoch in range(epochs):
             break
 
 # Load best model
-model.load_state_dict(torch.load('best_lstm.pth'))
+model.load_state_dict (torch.load('best_lstm.pth'))
 
 # Evaluate
-_, test_preds, test_actuals = evaluate(model, test_loader, criterion)
+_, test_preds, test_actuals = evaluate (model, test_loader, criterion)
 
 # Inverse transform predictions
-test_preds_original = scaler_y.inverse_transform(test_preds.reshape(-1, 1)).flatten()
-test_actuals_original = scaler_y.inverse_transform(test_actuals.reshape(-1, 1)).flatten()
+test_preds_original = scaler_y.inverse_transform (test_preds.reshape(-1, 1)).flatten()
+test_actuals_original = scaler_y.inverse_transform (test_actuals.reshape(-1, 1)).flatten()
 
 # Metrics
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-mae = mean_absolute_error(test_actuals_original, test_preds_original)
-rmse = np.sqrt(mean_squared_error(test_actuals_original, test_preds_original))
-mape = np.mean(np.abs((test_actuals_original - test_preds_original) / test_actuals_original)) * 100
-r2 = r2_score(test_actuals_original, test_preds_original)
+mae = mean_absolute_error (test_actuals_original, test_preds_original)
+rmse = np.sqrt (mean_squared_error (test_actuals_original, test_preds_original))
+mape = np.mean (np.abs((test_actuals_original - test_preds_original) / test_actuals_original)) * 100
+r2 = r2_score (test_actuals_original, test_preds_original)
 
 print("\\n=== Test Results ===")
 print(f"MAE: \${mae:.2f}")
@@ -287,9 +287,9 @@ print(f"MAPE: {mape:.2f}%")
 print(f"R²: {r2:.4f}")
 
 # Plot predictions
-plt.figure(figsize = (14, 6))
-plt.plot(test_actuals_original, label = 'Actual', alpha = 0.7)
-plt.plot(test_preds_original, label = 'LSTM Prediction', alpha = 0.7)
+plt.figure (figsize = (14, 6))
+plt.plot (test_actuals_original, label = 'Actual', alpha = 0.7)
+plt.plot (test_preds_original, label = 'LSTM Prediction', alpha = 0.7)
 plt.xlabel('Days')
 plt.ylabel('Price ($)')
 plt.title('LSTM Price Predictions')
@@ -299,9 +299,9 @@ plt.tight_layout()
 plt.show()
 
 # Plot training curves
-plt.figure(figsize = (10, 5))
-plt.plot(train_losses, label = 'Train Loss')
-plt.plot(val_losses, label = 'Validation Loss')
+plt.figure (figsize = (10, 5))
+plt.plot (train_losses, label = 'Train Loss')
+plt.plot (val_losses, label = 'Validation Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Training Curves')
@@ -324,7 +324,7 @@ plt.show()
 1D CNN for Time Series
 """
 
-class CNN1DPredictor(nn.Module):
+class CNN1DPredictor (nn.Module):
     """
     1D CNN for time series prediction
     """
@@ -334,21 +334,21 @@ class CNN1DPredictor(nn.Module):
         
         self.conv_layers = nn.Sequential(
             # Conv layer 1
-            nn.Conv1d(in_channels=1, out_channels=32, kernel_size=5, padding=2),
+            nn.Conv1d (in_channels=1, out_channels=32, kernel_size=5, padding=2),
             nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2),
+            nn.MaxPool1d (kernel_size=2),
             nn.Dropout(0.2),
             
             # Conv layer 2
-            nn.Conv1d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
+            nn.Conv1d (in_channels=32, out_channels=64, kernel_size=5, padding=2),
             nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2),
+            nn.MaxPool1d (kernel_size=2),
             nn.Dropout(0.2),
             
             # Conv layer 3
-            nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
+            nn.Conv1d (in_channels=64, out_channels=128, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.MaxPool1d(kernel_size=2),
+            nn.MaxPool1d (kernel_size=2),
             nn.Dropout(0.2)
         )
         
@@ -362,45 +362,45 @@ class CNN1DPredictor(nn.Module):
             nn.Linear(100, 1)
         )
     
-    def forward(self, x):
+    def forward (self, x):
         # x shape: [batch, seq_length]
         x = x.unsqueeze(1)  # [batch, 1, seq_length]
         
         # Convolutional layers
-        x = self.conv_layers(x)  # [batch, 128, reduced_length]
+        x = self.conv_layers (x)  # [batch, 128, reduced_length]
         
         # Flatten
-        x = x.view(x.size(0), -1)
+        x = x.view (x.size(0), -1)
         
         # Fully connected
-        pred = self.fc_layers(x)
+        pred = self.fc_layers (x)
         
         return pred.squeeze()
 
 # Train CNN model
-cnn_model = CNN1DPredictor(seq_length=seq_length).to(device)
+cnn_model = CNN1DPredictor (seq_length=seq_length).to (device)
 
 print(f"\\nCNN Model: {cnn_model}")
-print(f"Parameters: {sum(p.numel() for p in cnn_model.parameters()):,}")
+print(f"Parameters: {sum (p.numel() for p in cnn_model.parameters()):,}")
 
 # Training (same loop as LSTM)
-optimizer_cnn = torch.optim.Adam(cnn_model.parameters(), lr=0.001)
+optimizer_cnn = torch.optim.Adam (cnn_model.parameters(), lr=0.001)
 
 print("\\n=== Training 1D CNN ===")
 for epoch in range(30):
-    train_loss = train_epoch(cnn_model, train_loader, criterion, optimizer_cnn)
-    val_loss, _, _ = evaluate(cnn_model, test_loader, criterion)
+    train_loss = train_epoch (cnn_model, train_loader, criterion, optimizer_cnn)
+    val_loss, _, _ = evaluate (cnn_model, test_loader, criterion)
     
     if (epoch + 1) % 10 == 0:
         print(f"Epoch {epoch+1}/30 - Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}")
 
 # Evaluate CNN
-_, cnn_preds, _ = evaluate(cnn_model, test_loader, criterion)
-cnn_preds_original = scaler_y.inverse_transform(cnn_preds.reshape(-1, 1)).flatten()
+_, cnn_preds, _ = evaluate (cnn_model, test_loader, criterion)
+cnn_preds_original = scaler_y.inverse_transform (cnn_preds.reshape(-1, 1)).flatten()
 
-cnn_mae = mean_absolute_error(test_actuals_original, cnn_preds_original)
-cnn_rmse = np.sqrt(mean_squared_error(test_actuals_original, cnn_preds_original))
-cnn_r2 = r2_score(test_actuals_original, cnn_preds_original)
+cnn_mae = mean_absolute_error (test_actuals_original, cnn_preds_original)
+cnn_rmse = np.sqrt (mean_squared_error (test_actuals_original, cnn_preds_original))
+cnn_r2 = r2_score (test_actuals_original, cnn_preds_original)
 
 print("\\n=== CNN Test Results ===")
 print(f"MAE: \${cnn_mae:.2f}")
@@ -421,7 +421,7 @@ TCNs use **dilated convolutions** for long-range dependencies without recurrence
 Temporal Convolutional Network
 """
 
-class TemporalBlock(nn.Module):
+class TemporalBlock (nn.Module):
     """
     TCN building block with dilated causal convolutions
     """
@@ -437,7 +437,7 @@ class TemporalBlock(nn.Module):
         )
         self.chomp1 = nn.ConstantPad1d((0, -padding), 0)  # Causal: remove future
         self.relu1 = nn.ReLU()
-        self.dropout1 = nn.Dropout(dropout)
+        self.dropout1 = nn.Dropout (dropout)
         
         self.conv2 = nn.Conv1d(
             out_channels, out_channels, kernel_size,
@@ -445,7 +445,7 @@ class TemporalBlock(nn.Module):
         )
         self.chomp2 = nn.ConstantPad1d((0, -padding), 0)
         self.relu2 = nn.ReLU()
-        self.dropout2 = nn.Dropout(dropout)
+        self.dropout2 = nn.Dropout (dropout)
         
         self.net = nn.Sequential(
             self.conv1, self.chomp1, self.relu1, self.dropout1,
@@ -453,13 +453,13 @@ class TemporalBlock(nn.Module):
         )
         
         # Residual connection
-        self.downsample = nn.Conv1d(in_channels, out_channels, 1) if in_channels != out_channels else None
+        self.downsample = nn.Conv1d (in_channels, out_channels, 1) if in_channels != out_channels else None
         self.relu = nn.ReLU()
     
-    def forward(self, x):
-        out = self.net(x)
-        res = x if self.downsample is None else self.downsample(x)
-        return self.relu(out + res)
+    def forward (self, x):
+        out = self.net (x)
+        res = x if self.downsample is None else self.downsample (x)
+        return self.relu (out + res)
 
 class TCN(nn.Module):
     """
@@ -470,9 +470,9 @@ class TCN(nn.Module):
         super(TCN, self).__init__()
         
         layers = []
-        num_levels = len(num_channels)
+        num_levels = len (num_channels)
         
-        for i in range(num_levels):
+        for i in range (num_levels):
             dilation = 2 ** i
             in_ch = 1 if i == 0 else num_channels[i-1]
             out_ch = num_channels[i]
@@ -482,34 +482,34 @@ class TCN(nn.Module):
             ))
         
         self.network = nn.Sequential(*layers)
-        self.fc = nn.Linear(num_channels[-1], 1)
+        self.fc = nn.Linear (num_channels[-1], 1)
     
-    def forward(self, x):
+    def forward (self, x):
         # x: [batch, seq_length]
         x = x.unsqueeze(1)  # [batch, 1, seq_length]
         
         # TCN forward
-        y = self.network(x)  # [batch, channels, seq_length]
+        y = self.network (x)  # [batch, channels, seq_length]
         
         # Use last time step
         y = y[:, :, -1]  # [batch, channels]
         
         # Prediction
-        pred = self.fc(y)
+        pred = self.fc (y)
         
         return pred.squeeze()
 
 # Train TCN
-tcn_model = TCN(num_channels=[32, 64, 128], kernel_size=3, dropout=0.2).to(device)
+tcn_model = TCN(num_channels=[32, 64, 128], kernel_size=3, dropout=0.2).to (device)
 
-print(f"\\nTCN Model Parameters: {sum(p.numel() for p in tcn_model.parameters()):,}")
+print(f"\\nTCN Model Parameters: {sum (p.numel() for p in tcn_model.parameters()):,}")
 
-optimizer_tcn = torch.optim.Adam(tcn_model.parameters(), lr=0.001)
+optimizer_tcn = torch.optim.Adam (tcn_model.parameters(), lr=0.001)
 
 print("\\n=== Training TCN ===")
 for epoch in range(30):
-    train_loss = train_epoch(tcn_model, train_loader, criterion, optimizer_tcn)
-    val_loss, _, _ = evaluate(tcn_model, test_loader, criterion)
+    train_loss = train_epoch (tcn_model, train_loader, criterion, optimizer_tcn)
+    val_loss, _, _ = evaluate (tcn_model, test_loader, criterion)
     
     if (epoch + 1) % 10 == 0:
         print(f"Epoch {epoch+1}/30 - Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}")
@@ -526,7 +526,7 @@ for epoch in range(30):
 Transformer for Time Series
 """
 
-class TimeSeriesTransformer(nn.Module):
+class TimeSeriesTransformer (nn.Module):
     """
     Transformer encoder for time series prediction
     """
@@ -540,7 +540,7 @@ class TimeSeriesTransformer(nn.Module):
         self.input_proj = nn.Linear(1, d_model)
         
         # Positional encoding
-        self.pos_encoder = nn.Parameter(torch.randn(1, seq_length, d_model))
+        self.pos_encoder = nn.Parameter (torch.randn(1, seq_length, d_model))
         
         # Transformer encoder
         encoder_layer = nn.TransformerEncoderLayer(
@@ -550,29 +550,29 @@ class TimeSeriesTransformer(nn.Module):
             dropout=dropout,
             batch_first=True
         )
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        self.transformer_encoder = nn.TransformerEncoder (encoder_layer, num_layers=num_layers)
         
         # Output layer
-        self.fc = nn.Linear(d_model, 1)
+        self.fc = nn.Linear (d_model, 1)
     
-    def forward(self, x):
+    def forward (self, x):
         # x: [batch, seq_length]
         x = x.unsqueeze(-1)  # [batch, seq_length, 1]
         
         # Project to d_model dimensions
-        x = self.input_proj(x)  # [batch, seq_length, d_model]
+        x = self.input_proj (x)  # [batch, seq_length, d_model]
         
         # Add positional encoding
         x = x + self.pos_encoder
         
         # Transformer encoding
-        x = self.transformer_encoder(x)  # [batch, seq_length, d_model]
+        x = self.transformer_encoder (x)  # [batch, seq_length, d_model]
         
         # Use last time step
         x = x[:, -1, :]  # [batch, d_model]
         
         # Prediction
-        pred = self.fc(x)
+        pred = self.fc (x)
         
         return pred.squeeze()
 
@@ -583,23 +583,23 @@ transformer_model = TimeSeriesTransformer(
     nhead=4,
     num_layers=2,
     dropout=0.1
-).to(device)
+).to (device)
 
-print(f"\\nTransformer Model Parameters: {sum(p.numel() for p in transformer_model.parameters()):,}")
+print(f"\\nTransformer Model Parameters: {sum (p.numel() for p in transformer_model.parameters()):,}")
 
-optimizer_transformer = torch.optim.Adam(transformer_model.parameters(), lr=0.0001)
+optimizer_transformer = torch.optim.Adam (transformer_model.parameters(), lr=0.0001)
 
 print("\\n=== Training Transformer ===")
 for epoch in range(30):
-    train_loss = train_epoch(transformer_model, train_loader, criterion, optimizer_transformer)
-    val_loss, _, _ = evaluate(transformer_model, test_loader, criterion)
+    train_loss = train_epoch (transformer_model, train_loader, criterion, optimizer_transformer)
+    val_loss, _, _ = evaluate (transformer_model, test_loader, criterion)
     
     if (epoch + 1) % 10 == 0:
         print(f"Epoch {epoch+1}/30 - Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}")
 
 # Evaluate all models
-_, transformer_preds, _ = evaluate(transformer_model, test_loader, criterion)
-transformer_preds_original = scaler_y.inverse_transform(transformer_preds.reshape(-1, 1)).flatten()
+_, transformer_preds, _ = evaluate (transformer_model, test_loader, criterion)
+transformer_preds_original = scaler_y.inverse_transform (transformer_preds.reshape(-1, 1)).flatten()
 
 print("\\n=== Model Comparison ===")
 print(f"{'Model':<15} {'MAE':>10} {'RMSE':>10} {'R²':>8}")
@@ -607,9 +607,9 @@ print("-" * 45)
 print(f"{'LSTM':<15} \${mae:>9.2f} \${rmse:>9.2f} {r2:>8.4f}")
 print(f"{'1D CNN':<15} \${cnn_mae:>9.2f} \${cnn_rmse:>9.2f} {cnn_r2:>8.4f}")
 
-trans_mae = mean_absolute_error(test_actuals_original, transformer_preds_original)
-trans_rmse = np.sqrt(mean_squared_error(test_actuals_original, transformer_preds_original))
-trans_r2 = r2_score(test_actuals_original, transformer_preds_original)
+trans_mae = mean_absolute_error (test_actuals_original, transformer_preds_original)
+trans_rmse = np.sqrt (mean_squared_error (test_actuals_original, transformer_preds_original))
+trans_r2 = r2_score (test_actuals_original, transformer_preds_original)
 
 print(f"{'Transformer':<15} \${trans_mae:>9.2f} \${trans_rmse:>9.2f} {trans_r2:>8.4f}")
 \`\`\`
@@ -643,27 +643,27 @@ class MultiHorizonLSTM(nn.Module):
             batch_first=True
         )
         
-        self.fc = nn.Linear(hidden_size, horizon)
+        self.fc = nn.Linear (hidden_size, horizon)
     
-    def forward(self, x):
+    def forward (self, x):
         x = x.unsqueeze(-1)
-        lstm_out, _ = self.lstm(x)
+        lstm_out, _ = self.lstm (x)
         last_output = lstm_out[:, -1, :]
-        pred = self.fc(last_output)  # [batch, horizon]
+        pred = self.fc (last_output)  # [batch, horizon]
         return pred
 
 # Create multi-horizon targets
-def create_multihorizon_sequences(data, seq_length=60, horizon=5):
+def create_multihorizon_sequences (data, seq_length=60, horizon=5):
     X, y = [], []
     
-    for i in range(len(data) - seq_length - horizon + 1):
-        X.append(data[i:i+seq_length])
-        y.append(data[i+seq_length:i+seq_length+horizon])
+    for i in range (len (data) - seq_length - horizon + 1):
+        X.append (data[i:i+seq_length])
+        y.append (data[i+seq_length:i+seq_length+horizon])
     
-    return np.array(X), np.array(y)
+    return np.array(X), np.array (y)
 
 # Example: Predict next 5 days
-X_mh, y_mh = create_multihorizon_sequences(prices, seq_length=60, horizon=5)
+X_mh, y_mh = create_multihorizon_sequences (prices, seq_length=60, horizon=5)
 
 print(f"Multi-horizon data: X={X_mh.shape}, y={y_mh.shape}")
 \`\`\`
@@ -686,24 +686,24 @@ class EnsemblePredictor:
     
     def __init__(self, models, weights=None):
         self.models = models
-        self.weights = weights if weights else [1/len(models)] * len(models)
+        self.weights = weights if weights else [1/len (models)] * len (models)
     
-    def predict(self, X, scaler_y):
+    def predict (self, X, scaler_y):
         """Make ensemble prediction"""
         predictions = []
         
         for model in self.models:
             model.eval()
             with torch.no_grad():
-                X_tensor = torch.FloatTensor(X).to(device)
+                X_tensor = torch.FloatTensor(X).to (device)
                 pred = model(X_tensor).cpu().numpy()
-                predictions.append(pred)
+                predictions.append (pred)
         
         # Weighted average
-        ensemble_pred = sum(w * p for w, p in zip(self.weights, predictions))
+        ensemble_pred = sum (w * p for w, p in zip (self.weights, predictions))
         
         # Inverse transform
-        ensemble_pred_original = scaler_y.inverse_transform(ensemble_pred.reshape(-1, 1)).flatten()
+        ensemble_pred_original = scaler_y.inverse_transform (ensemble_pred.reshape(-1, 1)).flatten()
         
         return ensemble_pred_original
 
@@ -716,22 +716,22 @@ ensemble = EnsemblePredictor(
 # Predict
 ensemble_preds = ensemble.predict(X_test_scaled, scaler_y)
 
-ensemble_mae = mean_absolute_error(test_actuals_original, ensemble_preds)
-ensemble_rmse = np.sqrt(mean_squared_error(test_actuals_original, ensemble_preds))
-ensemble_r2 = r2_score(test_actuals_original, ensemble_preds)
+ensemble_mae = mean_absolute_error (test_actuals_original, ensemble_preds)
+ensemble_rmse = np.sqrt (mean_squared_error (test_actuals_original, ensemble_preds))
+ensemble_r2 = r2_score (test_actuals_original, ensemble_preds)
 
 print("\\n=== Ensemble Results ===")
-print(f"MAE: \${ensemble_mae: .2f}")
+print(f"MAE: \${ensemble_mae:.2f}")
 print(f"RMSE: \${ensemble_rmse:.2f}")
 print(f"R²: {ensemble_r2:.4f}")
 
 # Plot all predictions
-plt.figure(figsize = (14, 6))
-plt.plot(test_actuals_original[: 100], label = 'Actual', color = 'black', linewidth = 2)
-plt.plot(test_preds_original[: 100], label = 'LSTM', alpha = 0.7)
-plt.plot(cnn_preds_original[: 100], label = 'CNN', alpha = 0.7)
-plt.plot(transformer_preds_original[: 100], label = 'Transformer', alpha = 0.7)
-plt.plot(ensemble_preds[: 100], label = 'Ensemble', linewidth = 2, linestyle = '--')
+plt.figure (figsize = (14, 6))
+plt.plot (test_actuals_original[: 100], label = 'Actual', color = 'black', linewidth = 2)
+plt.plot (test_preds_original[: 100], label = 'LSTM', alpha = 0.7)
+plt.plot (cnn_preds_original[: 100], label = 'CNN', alpha = 0.7)
+plt.plot (transformer_preds_original[: 100], label = 'Transformer', alpha = 0.7)
+plt.plot (ensemble_preds[: 100], label = 'Ensemble', linewidth = 2, linestyle = '--')
 plt.xlabel('Days')
 plt.ylabel('Price ($)')
 plt.title('Model Comparison (First 100 Test Days)')

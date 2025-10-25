@@ -35,9 +35,9 @@ import matplotlib.pyplot as plt
 # Get fundamental data for multiple stocks
 tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NVDA', 'TSLA']
 
-def get_fundamentals(ticker):
+def get_fundamentals (ticker):
     """Extract fundamental metrics"""
-    stock = yf.Ticker(ticker)
+    stock = yf.Ticker (ticker)
     info = stock.info
     
     fundamentals = {
@@ -67,27 +67,27 @@ def get_fundamentals(ticker):
 fundamental_data = []
 for ticker in tickers:
     try:
-        data = get_fundamentals(ticker)
-        fundamental_data.append(data)
+        data = get_fundamentals (ticker)
+        fundamental_data.append (data)
         print(f"✓ {ticker}")
     except Exception as e:
         print(f"✗ {ticker}: {e}")
 
-df_fundamentals = pd.DataFrame(fundamental_data)
+df_fundamentals = pd.DataFrame (fundamental_data)
 
 print("\\n=== Fundamental Data ===")
 print(df_fundamentals)
 
 # Calculate forward returns (target variable)
-def get_forward_returns(ticker, days=90):
+def get_forward_returns (ticker, days=90):
     """Calculate future returns"""
-    prices = yf.download(ticker, period='1y', progress=False)['Close']
+    prices = yf.download (ticker, period='1y', progress=False)['Close']
     current_price = prices.iloc[-1]
-    past_price = prices.iloc[-days-1] if len(prices) > days else prices.iloc[0]
+    past_price = prices.iloc[-days-1] if len (prices) > days else prices.iloc[0]
     return (current_price - past_price) / past_price
 
 df_fundamentals['forward_return_90d'] = df_fundamentals['ticker'].apply(
-    lambda x: get_forward_returns(x, 90)
+    lambda x: get_forward_returns (x, 90)
 )
 
 print("\\n=== With Forward Returns ===")
@@ -109,21 +109,21 @@ class FundamentalFeatures:
     """
     
     @staticmethod
-    def value_score(df):
+    def value_score (df):
         """
         Value score: Lower P/E, P/B, P/S = better value
         """
         # Normalize metrics (lower is better for value)
-        pe_score = 1 / (1 + df['pe_ratio'].fillna(df['pe_ratio'].median()))
-        pb_score = 1 / (1 + df['price_to_book'].fillna(df['price_to_book'].median()))
-        ps_score = 1 / (1 + df['price_to_sales'].fillna(df['price_to_sales'].median()))
+        pe_score = 1 / (1 + df['pe_ratio'].fillna (df['pe_ratio'].median()))
+        pb_score = 1 / (1 + df['price_to_book'].fillna (df['price_to_book'].median()))
+        ps_score = 1 / (1 + df['price_to_sales'].fillna (df['price_to_sales'].median()))
         
         # Combined value score (0-1, higher = better value)
         value_score = (pe_score + pb_score + ps_score) / 3
         return value_score
     
     @staticmethod
-    def quality_score(df):
+    def quality_score (df):
         """
         Quality score: Higher margins, ROE, ROA = better quality
         """
@@ -137,7 +137,7 @@ class FundamentalFeatures:
         return quality_score
     
     @staticmethod
-    def growth_score(df):
+    def growth_score (df):
         """
         Growth score: Higher revenue/earnings growth = better
         """
@@ -149,7 +149,7 @@ class FundamentalFeatures:
         return growth_score
     
     @staticmethod
-    def financial_health_score(df):
+    def financial_health_score (df):
         """
         Financial health: Lower debt, higher current ratio = healthier
         """
@@ -163,10 +163,10 @@ class FundamentalFeatures:
         return health_score
 
 # Calculate composite scores
-df_fundamentals['value_score'] = FundamentalFeatures.value_score(df_fundamentals)
-df_fundamentals['quality_score'] = FundamentalFeatures.quality_score(df_fundamentals)
-df_fundamentals['growth_score'] = FundamentalFeatures.growth_score(df_fundamentals)
-df_fundamentals['health_score'] = FundamentalFeatures.financial_health_score(df_fundamentals)
+df_fundamentals['value_score'] = FundamentalFeatures.value_score (df_fundamentals)
+df_fundamentals['quality_score'] = FundamentalFeatures.quality_score (df_fundamentals)
+df_fundamentals['growth_score'] = FundamentalFeatures.growth_score (df_fundamentals)
+df_fundamentals['health_score'] = FundamentalFeatures.financial_health_score (df_fundamentals)
 
 # Overall fundamental score
 df_fundamentals['fundamental_score'] = (
@@ -196,20 +196,20 @@ print(correlation)
 Earnings Surprise Analysis
 """
 
-def get_earnings_history(ticker):
+def get_earnings_history (ticker):
     """Get historical earnings data"""
-    stock = yf.Ticker(ticker)
+    stock = yf.Ticker (ticker)
     
     # Get earnings history
     earnings = stock.earnings_history
     
-    if earnings is None or len(earnings) == 0:
+    if earnings is None or len (earnings) == 0:
         return None
     
     # Calculate surprise percentage
     earnings['surprise_pct'] = (
         (earnings['epsActual'] - earnings['epsEstimate']) / 
-        abs(earnings['epsEstimate']) * 100
+        abs (earnings['epsEstimate']) * 100
     )
     
     return earnings
@@ -230,7 +230,7 @@ if aapl_earnings is not None:
     print(f"Positive surprise rate: {positive_surprise_pct:.1f}%")
 
 # Earnings surprise strategy
-def earnings_surprise_feature(ticker, lookback=4):
+def earnings_surprise_feature (ticker, lookback=4):
     """
     Create earnings surprise features
     
@@ -239,20 +239,20 @@ def earnings_surprise_feature(ticker, lookback=4):
         - surprise_consistency: % of positive surprises
         - surprise_trend: Linear trend in surprises
     """
-    earnings = get_earnings_history(ticker)
+    earnings = get_earnings_history (ticker)
     
-    if earnings is None or len(earnings) < lookback:
+    if earnings is None or len (earnings) < lookback:
         return {'avg_surprise': 0, 'consistency': 0.5, 'trend': 0}
     
-    recent = earnings.tail(lookback)
+    recent = earnings.tail (lookback)
     
     avg_surprise = recent['surprise_pct'].mean()
     consistency = (recent['surprise_pct'] > 0).mean()
     
     # Trend: Fit linear regression to surprises
-    x = np.arange(len(recent))
+    x = np.arange (len (recent))
     y = recent['surprise_pct'].values
-    trend = np.polyfit(x, y, 1)[0]  # Slope
+    trend = np.polyfit (x, y, 1)[0]  # Slope
     
     return {
         'avg_surprise': avg_surprise,
@@ -263,11 +263,11 @@ def earnings_surprise_feature(ticker, lookback=4):
 # Calculate for portfolio
 earnings_features = []
 for ticker in tickers[:3]:  # First 3 for demo
-    features = earnings_surprise_feature(ticker)
+    features = earnings_surprise_feature (ticker)
     features['ticker'] = ticker
-    earnings_features.append(features)
+    earnings_features.append (features)
 
-df_earnings = pd.DataFrame(earnings_features)
+df_earnings = pd.DataFrame (earnings_features)
 print("\\n=== Earnings Surprise Features ===")
 print(df_earnings)
 \`\`\`
@@ -285,7 +285,7 @@ import requests
 from textblob import TextBlob
 
 # 1. News Sentiment
-def get_news_sentiment(ticker, days=7):
+def get_news_sentiment (ticker, days=7):
     """
     Get news sentiment from headlines
     
@@ -306,14 +306,14 @@ def get_news_sentiment(ticker, days=7):
     
     sentiments = []
     for headline in headlines:
-        blob = TextBlob(headline)
-        sentiments.append(blob.sentiment.polarity)
+        blob = TextBlob (headline)
+        sentiments.append (blob.sentiment.polarity)
     
-    avg_sentiment = np.mean(sentiments)
+    avg_sentiment = np.mean (sentiments)
     return avg_sentiment
 
 # 2. Social Media Mentions
-def get_social_mentions(ticker):
+def get_social_mentions (ticker):
     """
     Count social media mentions
     
@@ -330,7 +330,7 @@ def get_social_mentions(ticker):
     }
 
 # 3. Options Flow (requires paid data)
-def get_options_flow(ticker):
+def get_options_flow (ticker):
     """
     Analyze unusual options activity
     
@@ -360,11 +360,11 @@ def get_options_flow(ticker):
     }
 
 # Combine all alternative data
-def get_alternative_data_score(ticker):
+def get_alternative_data_score (ticker):
     """Combine all alternative data sources"""
-    news_sent = get_news_sentiment(ticker)
-    social = get_social_mentions(ticker)
-    options = get_options_flow(ticker)
+    news_sent = get_news_sentiment (ticker)
+    social = get_social_mentions (ticker)
+    options = get_options_flow (ticker)
     
     # Normalize and combine
     # News sentiment: [-1, 1] → [0, 1]
@@ -372,7 +372,7 @@ def get_alternative_data_score(ticker):
     
     # Social sentiment: [-1, 1] → [0, 1], weighted by mentions
     social_score = (social['sentiment'] + 1) / 2
-    social_weight = min(social['mentions'] / 1000, 1.0)  # Cap at 1000 mentions
+    social_weight = min (social['mentions'] / 1000, 1.0)  # Cap at 1000 mentions
     
     # Options signal: bullish=1, neutral=0.5, bearish=0
     options_score = {'bullish': 1, 'neutral': 0.5, 'bearish': 0}[options['signal']]
@@ -395,11 +395,11 @@ def get_alternative_data_score(ticker):
 # Calculate for portfolio
 alt_data = []
 for ticker in tickers[:3]:
-    data = get_alternative_data_score(ticker)
+    data = get_alternative_data_score (ticker)
     data['ticker'] = ticker
-    alt_data.append(data)
+    alt_data.append (data)
 
-df_alt = pd.DataFrame(alt_data)
+df_alt = pd.DataFrame (alt_data)
 print("\\n=== Alternative Data Scores ===")
 print(df_alt)
 \`\`\`
@@ -420,7 +420,7 @@ from sklearn.metrics import accuracy_score, classification_report
 # Prepare larger dataset (in practice: 500+ stocks)
 # For demo, we'll simulate data
 
-def simulate_fundamental_dataset(n_stocks=200):
+def simulate_fundamental_dataset (n_stocks=200):
     """
     Simulate fundamental data for ML training
     """
@@ -437,7 +437,7 @@ def simulate_fundamental_dataset(n_stocks=200):
         'current_ratio': np.random.uniform(0.8, 3.0, n_stocks),
     }
     
-    df = pd.DataFrame(data)
+    df = pd.DataFrame (data)
     
     # Create target: outperform (1) or underperform (0)
     # Simplified logic: Good fundamentals → outperform
@@ -453,7 +453,7 @@ def simulate_fundamental_dataset(n_stocks=200):
     fundamental_score += np.random.normal(0, 0.1, n_stocks)
     
     # Binary target: top 40% = 1 (outperform)
-    df['outperform'] = (fundamental_score > fundamental_score.quantile(0.6)).astype(int)
+    df['outperform'] = (fundamental_score > fundamental_score.quantile(0.6)).astype (int)
     
     return df
 
@@ -491,11 +491,11 @@ y_pred = rf_model.predict(X_test)
 y_pred_proba = rf_model.predict_proba(X_test)[:, 1]
 
 # Evaluate
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score (y_test, y_pred)
 print(f"\\n=== Model Performance ===")
 print(f"Accuracy: {accuracy:.3f}")
 print("\\nClassification Report:")
-print(classification_report(y_test, y_pred))
+print(classification_report (y_test, y_pred))
 
 # Feature importance
 feature_importance = pd.DataFrame({
@@ -507,8 +507,8 @@ print("\\n=== Feature Importance ===")
 print(feature_importance)
 
 # Plot feature importance
-plt.figure(figsize=(10, 6))
-plt.barh(feature_importance['feature'], feature_importance['importance'])
+plt.figure (figsize=(10, 6))
+plt.barh (feature_importance['feature'], feature_importance['importance'])
 plt.xlabel('Importance')
 plt.title('Fundamental Feature Importance')
 plt.tight_layout()
@@ -516,9 +516,9 @@ plt.show()
 
 # Use model for stock selection
 # Predict on real data (our initial 7 stocks)
-df_real_features = df_fundamentals[features].fillna(df_fundamentals[features].median())
-df_fundamentals['ml_score'] = rf_model.predict_proba(df_real_features)[:, 1]
-df_fundamentals['ml_prediction'] = rf_model.predict(df_real_features)
+df_real_features = df_fundamentals[features].fillna (df_fundamentals[features].median())
+df_fundamentals['ml_score'] = rf_model.predict_proba (df_real_features)[:, 1]
+df_fundamentals['ml_prediction'] = rf_model.predict (df_real_features)
 
 print("\\n=== ML Predictions for Portfolio ===")
 print(df_fundamentals[['ticker', 'fundamental_score', 'ml_score', 

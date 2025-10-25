@@ -1,7 +1,7 @@
 export const investmentVehiclesProducts = {
-    title: 'Investment Vehicles & Products',
-    id: 'investment-vehicles-products',
-    content: `
+  title: 'Investment Vehicles & Products',
+  id: 'investment-vehicles-products',
+  content: `
 # Investment Vehicles & Products
 
 ## Introduction
@@ -47,7 +47,7 @@ class StockPortfolio:
     def __init__(self):
         self.positions = {}  # {ticker: {'shares': int, 'cost_basis': float}}
     
-    def add_position(self, ticker: str, shares: int, price: float):
+    def add_position (self, ticker: str, shares: int, price: float):
         """Add or update position"""
         if ticker in self.positions:
             # Update cost basis (weighted average)
@@ -66,13 +66,13 @@ class StockPortfolio:
                 'cost_basis': price
             }
     
-    def get_portfolio_value(self) -> pd.DataFrame:
+    def get_portfolio_value (self) -> pd.DataFrame:
         """Calculate current portfolio value"""
         portfolio_data = []
         
         for ticker, position in self.positions.items():
             # Get current price
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             current_price = stock.info['currentPrice']
             
             shares = position['shares']
@@ -85,28 +85,28 @@ class StockPortfolio:
             portfolio_data.append({
                 'Ticker': ticker,
                 'Shares': shares,
-                'Cost Basis': f'${cost_basis:.2f}',
-'Current Price': f'${current_price:.2f}',
-    'Cost': f'${cost:.2f}',
-        'Current Value': f'${current_value:.2f}',
-            'Gain/Loss': f'${gain_loss:.2f}',
+                'Cost Basis': f'\${cost_basis:.2f}',
+'Current Price': f'\${current_price:.2f}',
+    'Cost': f'\${cost:.2f}',
+        'Current Value': f'\${current_value:.2f}',
+            'Gain/Loss': f'\${gain_loss:.2f}',
                 'Return': f'{gain_loss_pct:+.2f}%'
             })
 
-df = pd.DataFrame(portfolio_data)
+df = pd.DataFrame (portfolio_data)
         
         # Calculate totals
-total_cost = sum(position['shares'] * position['cost_basis'] 
+total_cost = sum (position['shares'] * position['cost_basis'] 
                          for position in self.positions.values())
-    total_value = sum(yf.Ticker(ticker).info['currentPrice'] * position['shares']
+    total_value = sum (yf.Ticker (ticker).info['currentPrice'] * position['shares']
                           for ticker, position in self.positions.items())
     total_gain = total_value - total_cost
 
 print("\\n=== Stock Portfolio ===")
-print(df.to_string(index = False))
-print(f"\\nTotal Cost: ${total_cost:,.2f}")
-print(f"Total Value: ${total_value:,.2f}")
-print(f"Total Gain/Loss: ${total_gain:,.2f} ({(total_gain/total_cost)*100:+.2f}%)")
+print(df.to_string (index = False))
+print(f"\\nTotal Cost: \${total_cost:,.2f}")
+print(f"Total Value: \${total_value:,.2f}")
+print(f"Total Gain/Loss: \${total_gain:,.2f} ({(total_gain/total_cost)*100:+.2f}%)")
 
 return df
 
@@ -144,7 +144,7 @@ Example:
 Assets: $100M in stocks + $5M cash = $105M
 Liabilities: $2M expenses = $2M
 Shares Outstanding: 10M
-NAV = ($105M - $2M) / 10M = $10.30 per share
+NAV = (\$105M - $2M) / 10M = $10.30 per share
 \`\`\`
 
 \`\`\`python
@@ -163,13 +163,13 @@ class MutualFund:
         self.shares_outstanding = 0
         self.expenses = 0
     
-    def calculate_nav(self) -> float:
+    def calculate_nav (self) -> float:
         """Calculate Net Asset Value"""
         # Calculate total assets
         assets_value = self.cash
         
         for ticker, shares in self.holdings.items():
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             price = stock.info.get('currentPrice', 0)
             assets_value += shares * price
         
@@ -184,7 +184,7 @@ class MutualFund:
         
         return nav
     
-    def purchase_shares(self, investor: str, amount: float):
+    def purchase_shares (self, investor: str, amount: float):
         """Investor purchases fund shares"""
         nav = self.calculate_nav()
         shares_purchased = amount / nav
@@ -192,12 +192,12 @@ class MutualFund:
         self.cash += amount
         self.shares_outstanding += shares_purchased
         
-        print(f"{investor} purchased {shares_purchased:.2f} shares at ${nav: .2f} NAV")
-print(f"  Investment: ${amount:.2f}")
+        print(f"{investor} purchased {shares_purchased:.2f} shares at \${nav:.2f} NAV")
+print(f"  Investment: \${amount:.2f}")
 
 return shares_purchased
     
-    def redeem_shares(self, investor: str, shares: float):
+    def redeem_shares (self, investor: str, shares: float):
 """Investor redeems (sells) fund shares"""
 nav = self.calculate_nav()
 redemption_amount = shares * nav
@@ -209,8 +209,8 @@ print(f"  Warning: Selling holdings to meet redemption")
 self.cash -= redemption_amount
 self.shares_outstanding -= shares
 
-print(f"{investor} redeemed {shares:.2f} shares at ${nav:.2f} NAV")
-print(f"  Proceeds: ${redemption_amount:.2f}")
+print(f"{investor} redeemed {shares:.2f} shares at \${nav:.2f} NAV")
+print(f"  Proceeds: \${redemption_amount:.2f}")
 
 return redemption_amount
 
@@ -232,14 +232,14 @@ fund.cash = 100_000  # Remaining cash after buying stocks
 
 # Calculate NAV
 nav = fund.calculate_nav()
-print(f"\\nCurrent NAV: ${nav:.2f}")
+print(f"\\nCurrent NAV: \${nav:.2f}")
 
 # Investor buys into fund
 fund.purchase_shares("Alice", 50_000)
 
 # New NAV after purchase
 nav = fund.calculate_nav()
-print(f"\\nUpdated NAV: ${nav:.2f}")
+print(f"\\nUpdated NAV: \${nav:.2f}")
 \`\`\`
 
 **Pros**:
@@ -289,16 +289,16 @@ class ETF:
         self.underlying_index = underlying_index  # List of (ticker, weight)
         self.shares_outstanding = 0
     
-    def calculate_nav(self) -> float:
+    def calculate_nav (self) -> float:
         """Calculate NAV based on underlying holdings"""
         nav = 0
         for ticker, weight in self.underlying_index:
-            stock = yf.Ticker(ticker)
+            stock = yf.Ticker (ticker)
             price = stock.info.get('currentPrice', 0)
             nav += price * weight
         return nav
     
-    def get_market_price(self) -> float:
+    def get_market_price (self) -> float:
         """Simulate market price (can differ from NAV)"""
         # In reality, pulled from exchange
         # For simulation, add small random premium/discount
@@ -307,7 +307,7 @@ class ETF:
         premium = random.uniform(-0.005, 0.005)  # ±0.5%
         return nav * (1 + premium)
     
-    def create_shares(self, authorized_participant: str, basket_value: float):
+    def create_shares (self, authorized_participant: str, basket_value: float):
         """
         Creation: AP delivers basket of stocks, receives ETF shares
         
@@ -319,15 +319,15 @@ class ETF:
         
         print(f"\\n=== ETF Creation ===")
         print(f"AP: {authorized_participant}")
-        print(f"Delivers stock basket worth: ${basket_value:, .0f}")
+        print(f"Delivers stock basket worth: \${basket_value:,.0f}")
 print(f"Receives ETF shares: {shares_created:,}")
-print(f"NAV per share: ${nav:.2f}")
+print(f"NAV per share: \${nav:.2f}")
 
 self.shares_outstanding += shares_created
 
 return shares_created
     
-    def redeem_shares(self, authorized_participant: str, shares: int):
+    def redeem_shares (self, authorized_participant: str, shares: int):
 """
 Redemption: AP delivers ETF shares, receives basket of stocks
         
@@ -339,19 +339,19 @@ basket_value = shares * nav
 print(f"\\n=== ETF Redemption ===")
 print(f"AP: {authorized_participant}")
 print(f"Delivers ETF shares: {shares:,}")
-print(f"Receives stock basket worth: ${basket_value:,.0f}")
-print(f"NAV per share: ${nav:.2f}")
+print(f"Receives stock basket worth: \${basket_value:,.0f}")
+print(f"NAV per share: \${nav:.2f}")
 
 self.shares_outstanding -= shares
 
 return basket_value
     
-    def check_arbitrage_opportunity(self):
+    def check_arbitrage_opportunity (self):
 """
         Check if market price differs from NAV(arbitrage opportunity)
         
-        If ETF trades at premium: AP creates shares(profit)
-        If ETF trades at discount: AP redeems shares(profit)
+        If ETF trades at premium: AP creates shares (profit)
+        If ETF trades at discount: AP redeems shares (profit)
 """
 nav = self.calculate_nav()
 market_price = self.get_market_price()
@@ -360,9 +360,9 @@ diff = market_price - nav
 diff_pct = (diff / nav) * 100
 
 print(f"\\n=== Arbitrage Check ===")
-print(f"NAV: ${nav:.2f}")
-print(f"Market Price: ${market_price:.2f}")
-print(f"Difference: ${diff:.4f} ({diff_pct:+.3f}%)")
+print(f"NAV: \${nav:.2f}")
+print(f"Market Price: \${market_price:.2f}")
+print(f"Difference: \${diff:.4f} ({diff_pct:+.3f}%)")
 
 if diff_pct > 0.1:  # Premium > 0.1 %
     print("→ PREMIUM: AP should CREATE shares (sell ETF, profit)")
@@ -384,9 +384,9 @@ spy = ETF("SPDR S&P 500 ETF", "SPY", [
 
 # Check NAV
 nav = spy.calculate_nav()
-print(f"SPY NAV: ${nav:.2f}")
+print(f"SPY NAV: \${nav:.2f}")
 
-# Authorized Participant creates shares(when ETF at premium)
+# Authorized Participant creates shares (when ETF at premium)
 spy.create_shares("Goldman Sachs", 10_000_000)
 
 # Check arbitrage opportunity
@@ -401,10 +401,10 @@ The creation/redemption mechanism is **critical** to ETFs working. When you buil
 - **Risk systems**: ETFs track indices but can temporarily diverge
 
 **Popular ETFs**:
-- **SPY**: S&P 500 ($450B AUM, 0.09% fee)
-- **QQQ**: NASDAQ-100 ($200B AUM, 0.20% fee)
-- **VTI**: Total U.S. Stock Market ($350B AUM, 0.03% fee)
-- **AGG**: U.S. Aggregate Bonds ($90B AUM, 0.03% fee)
+- **SPY**: S&P 500 (\$450B AUM, 0.09% fee)
+- **QQQ**: NASDAQ-100 (\$200B AUM, 0.20% fee)
+- **VTI**: Total U.S. Stock Market (\$350B AUM, 0.03% fee)
+- **AGG**: U.S. Aggregate Bonds (\$90B AUM, 0.03% fee)
 
 ---
 
@@ -441,7 +441,7 @@ class TargetDateFund:
         self.target_year = target_year
         self.current_year = 2024
     
-    def calculate_allocation(self) -> dict:
+    def calculate_allocation (self) -> dict:
         """
         Calculate stock/bond allocation based on years to retirement
         
@@ -466,7 +466,7 @@ class TargetDateFund:
             stocks = 0.50
             bonds = 0.50
         else:  # In retirement
-            years_in_retirement = abs(years_to_retirement)
+            years_in_retirement = abs (years_to_retirement)
             stocks = max(0.30, 0.50 - years_in_retirement * 0.02)
             bonds = 1 - stocks
         
@@ -476,7 +476,7 @@ class TargetDateFund:
             'years_to_retirement': years_to_retirement
         }
     
-    def rebalance_portfolio(self, current_portfolio_value: float):
+    def rebalance_portfolio (self, current_portfolio_value: float):
         """Calculate rebalancing trades"""
         allocation = self.calculate_allocation()
         
@@ -486,8 +486,8 @@ class TargetDateFund:
         print(f"\\n=== Target-Date Fund {self.target_year} ===")
         print(f"Years to Retirement: {allocation['years_to_retirement']}")
         print(f"\\nTarget Allocation:")
-        print(f"  Stocks: {allocation['stocks']:.0%} (${target_stocks:, .0f}) ")
-print(f"  Bonds: {allocation['bonds']:.0%} (${target_bonds:,.0f})")
+        print(f"  Stocks: {allocation['stocks']:.0%} (\${target_stocks:,.0f}) ")
+print(f"  Bonds: {allocation['bonds']:.0%} (\${target_bonds:,.0f})")
 
 return allocation
 
@@ -544,7 +544,7 @@ class RoboAdvisor:
             'aggressive': {'stocks': 0.90, 'bonds': 0.10}
         }
     
-    def assess_risk_tolerance(self, age: int, risk_preference: str, 
+    def assess_risk_tolerance (self, age: int, risk_preference: str, 
                               time_horizon: int) -> str:
         """
         Determine risk profile based on inputs
@@ -561,7 +561,7 @@ class RoboAdvisor:
         else:
             return 'moderate'
     
-    def build_portfolio(self, risk_profile: str) -> dict:
+    def build_portfolio (self, risk_profile: str) -> dict:
         """
         Build diversified ETF portfolio
         
@@ -584,7 +584,7 @@ class RoboAdvisor:
         
         return portfolio
     
-    def rebalance_check(self, current_weights: dict, target_weights: dict,
+    def rebalance_check (self, current_weights: dict, target_weights: dict,
                         threshold: float = 0.05) -> dict:
         """
         Check if rebalancing needed
@@ -595,9 +595,9 @@ class RoboAdvisor:
         trades = {}
         
         for ticker in target_weights:
-            current = current_weights.get(ticker, 0)
+            current = current_weights.get (ticker, 0)
             target = target_weights[ticker]
-            drift = abs(current - target)
+            drift = abs (current - target)
             
             if drift > threshold:
                 needs_rebalance = True
@@ -605,7 +605,7 @@ class RoboAdvisor:
         
         return {'needs_rebalance': needs_rebalance, 'trades': trades}
     
-    def tax_loss_harvest(self, positions: dict) -> list:
+    def tax_loss_harvest (self, positions: dict) -> list:
         """
         Identify positions for tax-loss harvesting
         
@@ -626,7 +626,7 @@ class RoboAdvisor:
                 
                 harvest_opportunities.append({
                     'sell': ticker,
-                    'buy': replacement_map.get(ticker, ticker),
+                    'buy': replacement_map.get (ticker, ticker),
                     'loss': loss
                 })
         
@@ -637,19 +637,19 @@ class RoboAdvisor:
 robo = RoboAdvisor()
 
 # Client onboarding
-risk_profile = robo.assess_risk_tolerance(age=35, risk_preference='moderate', 
+risk_profile = robo.assess_risk_tolerance (age=35, risk_preference='moderate', 
                                            time_horizon=30)
 print(f"Risk Profile: {risk_profile}")
 
 # Build portfolio
-portfolio = robo.build_portfolio(risk_profile)
+portfolio = robo.build_portfolio (risk_profile)
 print(f"\\nTarget Portfolio:")
 for ticker, weight in portfolio.items():
     print(f"  {ticker}: {weight:.1%}")
 
 # Check rebalancing
 current_weights = {'VTI': 0.40, 'VXUS': 0.15, 'VNQ': 0.05, 'AGG': 0.40}
-rebalance = robo.rebalance_check(current_weights, portfolio)
+rebalance = robo.rebalance_check (current_weights, portfolio)
 
 if rebalance['needs_rebalance']:
     print("\\nRebalancing needed:")
@@ -692,4 +692,3 @@ When building a **trading platform**:
 **Next section**: How Trading Actually Works (order flow, execution, settlement)
 `,
 };
-

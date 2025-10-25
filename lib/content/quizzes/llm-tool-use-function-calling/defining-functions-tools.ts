@@ -67,9 +67,9 @@ export const definingFunctionsToolsQuiz = [
 **Approach 3: Multiple Specialized Functions**
 \`\`\`python
 # Instead of one complex function, create variants
-create_simple_event(title, start_time, location)
-create_recurring_event(title, start_time, pattern, end_date)
-create_virtual_event(title, start_time, meeting_link)
+create_simple_event (title, start_time, location)
+create_recurring_event (title, start_time, pattern, end_date)
+create_virtual_event (title, start_time, meeting_link)
 \`\`\`
 
 **Best Practices:**
@@ -124,7 +124,7 @@ def create_event(**kwargs):
 2. **Maintainability**: Schema updates automatically with code changes
 3. **Speed**: Faster development for simple cases
 4. **Consistency**: Reduces human error in schema writing
-5. **Type Safety**: Leverages Python's type system
+5. **Type Safety**: Leverages Python\'s type system
 
 **Auto-Generation Cons:**
 1. **Limited Control**: Hard to add LLM-specific guidance
@@ -171,7 +171,7 @@ class SearchParams(BaseModel):
         description="Optional filters. Example: {'language': 'en', 'date': 'recent'}"
     )
 
-def generate_enhanced_schema(model: BaseModel) -> dict:
+def generate_enhanced_schema (model: BaseModel) -> dict:
     """Generate schema with enhancements."""
     schema = model.schema()
     
@@ -200,7 +200,7 @@ location: Union[str, Tuple[float, float]]
 
 2. **Optional Parameters:**
 \`\`\`python
-def search(query: str, filters: Optional[Dict] = None):
+def search (query: str, filters: Optional[Dict] = None):
     """
     query: REQUIRED - What to search for
     filters: OPTIONAL - Additional filters like {'date': 'recent'}
@@ -212,9 +212,9 @@ def search(query: str, filters: Optional[Dict] = None):
 # Use Pydantic models for structure, manual descriptions for clarity
 class Address(BaseModel):
     """Address information. Provide as much detail as available."""
-    street: str = Field(description="Street address with number")
-    city: str = Field(description="City name")
-    country: str = Field(description="Country name or 2-letter code")
+    street: str = Field (description="Street address with number")
+    city: str = Field (description="City name")
+    country: str = Field (description="Country name or 2-letter code")
 \`\`\`
 
 **Decision Matrix:**
@@ -260,7 +260,7 @@ def test_schema_structure():
     schema = get_weather_schema()
     
     # Validate against JSON Schema spec
-    validate_schema(schema)
+    validate_schema (schema)
     
     # Check required fields
     assert "name" in schema
@@ -273,8 +273,8 @@ def test_schema_completeness():
     schema = get_weather_schema()
     
     for param in schema["parameters",]["properties",]:
-        assert len(param["description",]) > 20  # Non-trivial description
-        assert "example" in param.lower() or has_enum(param)
+        assert len (param["description",]) > 20  # Non-trivial description
+        assert "example" in param.lower() or has_enum (param)
 \`\`\`
 
 **2. LLM Understanding Tests**
@@ -283,7 +283,7 @@ def test_llm_can_call_function():
     """Test LLM generates correct function call."""
     test_cases = [
         {
-            "prompt": "What's the weather in Tokyo?",
+            "prompt": "What\'s the weather in Tokyo?",
             "expected_function": "get_weather",
             "expected_args": {"location": "Tokyo"},
         },
@@ -304,7 +304,7 @@ def test_llm_can_call_function():
         assert response.choices[0].message.function_call
         assert response.choices[0].message.function_call.name == case["expected_function",]
         
-        args = json.loads(response.choices[0].message.function_call.arguments)
+        args = json.loads (response.choices[0].message.function_call.arguments)
         for key, value in case["expected_args",].items():
             assert key in args
             assert args[key] == value
@@ -320,7 +320,7 @@ def test_ambiguous_inputs():
     ]
     
     for prompt in test_cases:
-        response = call_llm(prompt, [weather_schema])
+        response = call_llm (prompt, [weather_schema])
         
         # LLM should either ask for clarification or make reasonable assumption
         assert response is not None
@@ -340,7 +340,7 @@ def test_invalid_parameters():
 **4. Cross-Model Testing**
 \`\`\`python
 @pytest.mark.parametrize("model", ["gpt-4", "gpt-3.5-turbo", "claude-3-opus",])
-def test_schema_works_across_models(model):
+def test_schema_works_across_models (model):
     """Test schema works with different LLMs."""
     response = call_llm_with_model(
         model=model,
@@ -357,7 +357,7 @@ def test_schema_works_across_models(model):
 def test_various_phrasings():
     """Test LLM understands different ways of asking."""
     phrasings = [
-        "What's the weather in London?",
+        "What\'s the weather in London?",
         "Tell me London's weather",
         "How's the weather looking in London",
         "London weather please",
@@ -365,8 +365,8 @@ def test_various_phrasings():
     ]
     
     for prompt in phrasings:
-        response = call_llm(prompt, [weather_schema])
-        args = json.loads(response.function_call.arguments)
+        response = call_llm (prompt, [weather_schema])
+        args = json.loads (response.function_call.arguments)
         assert "London" in args.get("location", "")
 
 **6. Schema Quality Metrics**
@@ -378,14 +378,14 @@ def test_schema_quality_score():
     score = 0
     
     # Description length and quality
-    if len(schema["description",]) > 100:
+    if len (schema["description",]) > 100:
         score += 20
     if "example" in schema["description",].lower():
         score += 10
     
     # Parameter descriptions
     for param in schema["parameters",]["properties",].values():
-        if len(param.get("description", "")) > 30:
+        if len (param.get("description", "")) > 30:
             score += 5
         if param.get("enum"):
             score += 5
@@ -400,7 +400,7 @@ def test_schema_quality_score():
 \`\`\`python
 def test_end_to_end_flow():
     """Test complete flow from prompt to execution."""
-    user_message = "What's the weather in San Francisco and New York?"
+    user_message = "What\'s the weather in San Francisco and New York?"
     
     # 1. LLM generates function calls
     response = openai.chat.completions.create(
@@ -411,9 +411,9 @@ def test_end_to_end_flow():
     
     # 2. Execute function
     func_name = response.choices[0].message.function_call.name
-    func_args = json.loads(response.choices[0].message.function_call.arguments)
+    func_args = json.loads (response.choices[0].message.function_call.arguments)
     
-    result = execute_function(func_name, func_args)
+    result = execute_function (func_name, func_args)
     
     # 3. LLM synthesizes response
     final_response = openai.chat.completions.create(
@@ -421,7 +421,7 @@ def test_end_to_end_flow():
         messages=[
             {"role": "user", "content": user_message},
             response.choices[0].message,
-            {"role": "function", "name": func_name, "content": json.dumps(result)}
+            {"role": "function", "name": func_name, "content": json.dumps (result)}
         ]
     )
     
@@ -450,22 +450,22 @@ class SchemaMonitor:
     """Monitor schema usage in production."""
     
     def __init__(self):
-        self.call_counts = defaultdict(int)
+        self.call_counts = defaultdict (int)
         self.errors = []
         self.success_rate = {}
     
-    def record_call(self, function_name, success, error=None):
+    def record_call (self, function_name, success, error=None):
         self.call_counts[function_name] += 1
         if not success:
             self.errors.append({"function": function_name, "error": error})
     
-    def get_report(self):
+    def get_report (self):
         return {
-            "total_calls": sum(self.call_counts.values()),
-            "error_rate": len(self.errors) / sum(self.call_counts.values()),
+            "total_calls": sum (self.call_counts.values()),
+            "error_rate": len (self.errors) / sum (self.call_counts.values()),
             "problematic_functions": [
                 func for func, count in self.call_counts.items()
-                if error_rate(func) > 0.1
+                if error_rate (func) > 0.1
             ]
         }
 \`\`\`

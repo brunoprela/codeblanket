@@ -86,7 +86,7 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def generate_python_class(
         self,
@@ -101,8 +101,8 @@ Include:
 Generate a Python class:
 {description}
 
-Attributes: {', '.join(attributes)}
-Methods: {', '.join(methods)}
+Attributes: {', '.join (attributes)}
+Methods: {', '.join (methods)}
 
 Include:
 - __init__ method with type hints
@@ -124,9 +124,9 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def add_type_hints(self, code: str) -> str:
+    def add_type_hints (self, code: str) -> str:
         """Add comprehensive type hints to Python code."""
         
         prompt = f"""{self.PYTHON_CONVENTIONS}
@@ -156,13 +156,13 @@ Add:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -237,7 +237,7 @@ Include:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def generate_typescript_interface(
         self,
@@ -277,13 +277,13 @@ Add:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
@@ -382,11 +382,11 @@ Rust Best Practices:
             generator = self.generators[language]
             
             if code_type == "function":
-                if hasattr(generator, f"generate_{language}_function"):
-                    return getattr(generator, f"generate_{language}_function")(description)
+                if hasattr (generator, f"generate_{language}_function"):
+                    return getattr (generator, f"generate_{language}_function")(description)
         
         # Fall back to generic generation
-        return self._generic_generate(language, description, code_type)
+        return self._generic_generate (language, description, code_type)
     
     def _generic_generate(
         self,
@@ -423,13 +423,13 @@ Generate clean, idiomatic {language} code following best practices.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
     
@@ -441,8 +441,8 @@ Generate clean, idiomatic {language} code following best practices.
     ) -> str:
         """Convert code from one language to another."""
         
-        from_config = self.LANGUAGE_CONFIGS.get(from_language, {})
-        to_config = self.LANGUAGE_CONFIGS.get(to_language, {})
+        from_config = self.LANGUAGE_CONFIGS.get (from_language, {})
+        to_config = self.LANGUAGE_CONFIGS.get (to_language, {})
         
         prompt = f"""Convert this {from_language} code to {to_language}:
 
@@ -473,7 +473,7 @@ Generate equivalent {to_language} code that:
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
 
 # Usage
 multi_gen = MultiLanguageGenerator()
@@ -499,14 +499,14 @@ rust_code = multi_gen.generate(
 
 # Convert between languages
 python_func = """
-def quicksort(arr):
-    if len(arr) <= 1:
+def quicksort (arr):
+    if len (arr) <= 1:
         return arr
-    pivot = arr[len(arr) // 2]
+    pivot = arr[len (arr) // 2]
     left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
-    return quicksort(left) + middle + quicksort(right)
+    return quicksort (left) + middle + quicksort (right)
 """
 
 typescript_func = multi_gen.convert_between_languages(
@@ -548,7 +548,7 @@ class LanguageDetector:
         ]
     }
     
-    def detect(self, code: str) -> str:
+    def detect (self, code: str) -> str:
         """Detect language from code sample."""
         scores = {lang: 0 for lang in self.LANGUAGE_PATTERNS}
         
@@ -558,18 +558,18 @@ class LanguageDetector:
                     scores[lang] += 1
         
         # Return language with highest score
-        return max(scores, key=scores.get)
+        return max (scores, key=scores.get)
 
 # Usage
 detector = LanguageDetector()
 
 code = """
-function calculateSum(numbers: number[]): number {
+function calculateSum (numbers: number[]): number {
     return numbers.reduce((sum, num) => sum + num, 0);
 }
 """
 
-language = detector.detect(code)
+language = detector.detect (code)
 print(f"Detected language: {language}")  # typescript
 \`\`\`
 

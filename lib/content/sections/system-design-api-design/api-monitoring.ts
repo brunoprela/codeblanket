@@ -42,8 +42,8 @@ app.use((req, res, next) => {
   res.on('finish', () => {
     const duration = (Date.now() - start) / 1000;
     httpRequestDuration
-      .labels(req.method, req.route?.path || 'unknown', res.statusCode)
-      .observe(duration);
+      .labels (req.method, req.route?.path || 'unknown', res.statusCode)
+      .observe (duration);
   });
   
   next();
@@ -70,7 +70,7 @@ const httpRequestsTotal = new prometheus.Counter({
 app.use((req, res, next) => {
   res.on('finish', () => {
     httpRequestsTotal
-      .labels(req.method, req.route?.path || 'unknown', res.statusCode)
+      .labels (req.method, req.route?.path || 'unknown', res.statusCode)
       .inc();
   });
   
@@ -99,7 +99,7 @@ app.use((err, req, res, next) => {
     )
     .inc();
   
-  next(err);
+  next (err);
 });
 \`\`\`
 
@@ -122,14 +122,14 @@ const resourceUsage = new prometheus.Gauge({
 // CPU usage
 setInterval(() => {
   const cpuUsage = process.cpuUsage();
-  resourceUsage.labels('cpu').set(cpuUsage.user / 1000000);
+  resourceUsage.labels('cpu').set (cpuUsage.user / 1000000);
 }, 5000);
 
 // Memory usage
 setInterval(() => {
   const memUsage = process.memoryUsage();
   const memPercent = (memUsage.heapUsed / memUsage.heapTotal) * 100;
-  resourceUsage.labels('memory').set(memPercent);
+  resourceUsage.labels('memory').set (memPercent);
 }, 5000);
 \`\`\`
 
@@ -153,13 +153,13 @@ const apiCostByEndpoint = new prometheus.Counter({
 app.use((req, res, next) => {
   res.on('finish', () => {
     apiCallsByUser
-      .labels(req.user?.id, req.user?.plan, req.route?.path)
+      .labels (req.user?.id, req.user?.plan, req.route?.path)
       .inc();
     
     const cost = OPERATION_COSTS[req.route?.path] || 1;
     apiCostByEndpoint
-      .labels(req.route?.path, cost)
-      .inc(cost);
+      .labels (req.route?.path, cost)
+      .inc (cost);
   });
   
   next();
@@ -202,8 +202,8 @@ registerInstrumentations({
 // Usage automatically traces all HTTP requests
 app.get('/users/:id', async (req, res) => {
   // This is automatically traced
-  const user = await getUserFromDatabase(req.params.id);
-  res.json(user);
+  const user = await getUserFromDatabase (req.params.id);
+  res.json (user);
 });
 \`\`\`
 
@@ -228,17 +228,17 @@ app.get('/dashboard', async (req, res) => {
     const dbSpan = tracer.startSpan('database.query', {
       parent: span
     });
-    const data = await fetchDashboardData(req.user.id);
+    const data = await fetchDashboardData (req.user.id);
     dbSpan.end();
     
     // Child span for cache
     const cacheSpan = tracer.startSpan('cache.set', {
       parent: span
     });
-    await cacheData(data);
+    await cacheData (data);
     cacheSpan.end();
     
-    res.json(data);
+    res.json (data);
   } finally {
     span.end();
   }
@@ -359,8 +359,8 @@ app.post('/api/analytics/timing', (req, res) => {
   const { endpoint, method, duration, status } = req.body;
   
   rumDuration
-    .labels(endpoint, method, status)
-    .observe(duration / 1000);
+    .labels (endpoint, method, status)
+    .observe (duration / 1000);
   
   res.status(204).send();
 });
@@ -378,9 +378,9 @@ groups:
       - alert: HighErrorRate
         expr: |
           (
-            sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+            sum (rate (http_requests_total{status_code=~"5.."}[5m]))
             /
-            sum(rate(http_requests_total[5m]))
+            sum (rate (http_requests_total[5m]))
           ) > 0.05
         for: 5m
         labels:
@@ -393,7 +393,7 @@ groups:
       - alert: HighLatency
         expr: |
           histogram_quantile(0.95,
-            rate(http_request_duration_seconds_bucket[5m])
+            rate (http_request_duration_seconds_bucket[5m])
           ) > 1
         for: 10m
         labels:
@@ -415,9 +415,9 @@ groups:
 
 \`\`\`javascript
 const PagerDuty = require('node-pagerduty');
-const pd = new PagerDuty(process.env.PAGERDUTY_API_KEY);
+const pd = new PagerDuty (process.env.PAGERDUTY_API_KEY);
 
-async function triggerAlert(severity, message, details) {
+async function triggerAlert (severity, message, details) {
   await pd.incidents.createIncident({
     type: 'incident',
     title: message,
@@ -428,7 +428,7 @@ async function triggerAlert(severity, message, details) {
     urgency: severity === 'critical' ? 'high' : 'low',
     body: {
       type: 'incident_body',
-      details: JSON.stringify(details)
+      details: JSON.stringify (details)
     }
   });
 }
@@ -454,7 +454,7 @@ if (errorRate > 0.05) {
         "title": "Request Rate",
         "targets": [
           {
-            "expr": "sum(rate(http_requests_total[5m])) by (route)"
+            "expr": "sum (rate (http_requests_total[5m])) by (route)"
           }
         ]
       },
@@ -462,15 +462,15 @@ if (errorRate > 0.05) {
         "title": "Latency (p50, p95, p99)",
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.50, rate (http_request_duration_seconds_bucket[5m]))",
             "legendFormat": "p50"
           },
           {
-            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.95, rate (http_request_duration_seconds_bucket[5m]))",
             "legendFormat": "p95"
           },
           {
-            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.99, rate (http_request_duration_seconds_bucket[5m]))",
             "legendFormat": "p99"
           }
         ]
@@ -479,7 +479,7 @@ if (errorRate > 0.05) {
         "title": "Error Rate",
         "targets": [
           {
-            "expr": "sum(rate(http_requests_total{status_code=~\\"5..\\"}[5m])) / sum(rate(http_requests_total[5m]))"
+            "expr": "sum (rate (http_requests_total{status_code=~\\"5..\\"}[5m])) / sum (rate (http_requests_total[5m]))"
           }
         ]
       },
@@ -487,7 +487,7 @@ if (errorRate > 0.05) {
         "title": "Top Slowest Endpoints",
         "targets": [
           {
-            "expr": "topk(10, avg by (route) (rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])))"
+            "expr": "topk(10, avg by (route) (rate (http_request_duration_seconds_sum[5m]) / rate (http_request_duration_seconds_count[5m])))"
           }
         ]
       }
@@ -549,7 +549,7 @@ app.get('/health', async (req, res) => {
   const statusCode = health.status === 'healthy' ? 200 :
                      health.status === 'degraded' ? 200 : 503;
   
-  res.status(statusCode).json(health);
+  res.status (statusCode).json (health);
 });
 \`\`\`
 

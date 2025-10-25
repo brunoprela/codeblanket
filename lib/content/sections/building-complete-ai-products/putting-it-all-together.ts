@@ -219,14 +219,14 @@ class DocumentProcessor:
         # Ensure Qdrant collection exists
         self._init_collection()
     
-    def _init_collection(self):
+    def _init_collection (self):
         """Initialize Qdrant collection"""
         try:
-            self.qdrant.get_collection(self.collection_name)
+            self.qdrant.get_collection (self.collection_name)
         except:
             self.qdrant.create_collection(
                 collection_name=self.collection_name,
-                vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
+                vectors_config=VectorParams (size=1536, distance=Distance.COSINE)
             )
     
     async def process_document(
@@ -241,28 +241,28 @@ class DocumentProcessor:
         """
         
         # 1. Extract text from PDF
-        text_content, page_count = self.extract_text(file_path)
+        text_content, page_count = self.extract_text (file_path)
         
         # 2. Upload to S3
         s3_key = f"documents/{user_id}/{hashlib.md5(filename.encode()).hexdigest()}.pdf"
-        self.s3.upload_file(file_path, self.bucket_name, s3_key)
+        self.s3.upload_file (file_path, self.bucket_name, s3_key)
         
         # 3. Create document record
         document = Document(
             user_id=user_id,
             filename=filename,
             s3_key=s3_key,
-            file_size=os.path.getsize(file_path),
+            file_size=os.path.getsize (file_path),
             page_count=page_count
         )
-        db_session.add(document)
+        db_session.add (document)
         db_session.commit()
         
         # 4. Chunk text
-        chunks = self.chunk_text(text_content, page_count)
+        chunks = self.chunk_text (text_content, page_count)
         
         # 5. Embed and store chunks
-        await self.embed_and_store_chunks(chunks, document.id, db_session)
+        await self.embed_and_store_chunks (chunks, document.id, db_session)
         
         # 6. Mark as processed
         document.processed = True
@@ -270,15 +270,15 @@ class DocumentProcessor:
         
         return document
     
-    def extract_text(self, file_path: str) -> tuple[str, int]:
+    def extract_text (self, file_path: str) -> tuple[str, int]:
         """Extract text from PDF"""
         
-        with open(file_path, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
-            page_count = len(reader.pages)
+        with open (file_path, 'rb') as file:
+            reader = PyPDF2.PdfReader (file)
+            page_count = len (reader.pages)
             
             text_by_page = []
-            for page_num, page in enumerate(reader.pages):
+            for page_num, page in enumerate (reader.pages):
                 text = page.extract_text()
                 text_by_page.append({
                     'page': page_num + 1,
@@ -303,7 +303,7 @@ class DocumentProcessor:
         chunks = []
         start = 0
         
-        while start < len(text):
+        while start < len (text):
             end = start + chunk_size
             chunk_text = text[start:end]
             
@@ -311,7 +311,7 @@ class DocumentProcessor:
                 'text': chunk_text,
                 'start': start,
                 'end': end,
-                'index': len(chunks)
+                'index': len (chunks)
             })
             
             start += (chunk_size - overlap)
@@ -358,7 +358,7 @@ class DocumentProcessor:
                 text=chunk['text'],
                 vector_id=vector_id
             )
-            db_session.add(chunk_record)
+            db_session.add (chunk_record)
         
         # Upload to Qdrant
         self.qdrant.upsert(
@@ -405,10 +405,10 @@ class ChatEngine:
         """
         
         # 1. Retrieve relevant chunks
-        relevant_chunks = await self.retrieve_chunks(question, document_id)
+        relevant_chunks = await self.retrieve_chunks (question, document_id)
         
         # 2. Build context
-        context = self.build_context(relevant_chunks, chat_history)
+        context = self.build_context (relevant_chunks, chat_history)
         
         # 3. Generate answer
         response = self.anthropic.messages.create(
@@ -426,7 +426,7 @@ class ChatEngine:
         # 4. Track metrics
         input_tokens = response.usage.input_tokens
         output_tokens = response.usage.output_tokens
-        cost = self.calculate_cost(input_tokens, output_tokens)
+        cost = self.calculate_cost (input_tokens, output_tokens)
         
         return {
             "answer": answer,
@@ -491,7 +491,7 @@ You are a helpful AI assistant that answers questions about documents.
 
 Use the following excerpts from the document to answer questions:
 
-{self._format_chunks(chunks)}
+{self._format_chunks (chunks)}
 
 Instructions:
 1. Answer based ONLY on the provided excerpts
@@ -505,13 +505,13 @@ Instructions:
             "history": history[-5:]  # Last 5 messages
         }
     
-    def _format_chunks(self, chunks: list[dict]) -> str:
+    def _format_chunks (self, chunks: list[dict]) -> str:
         return "\\n\\n".join([
             f"Excerpt {i+1} (relevance: {chunk['score']:.2f}):\\n{chunk['text']}"
-            for i, chunk in enumerate(chunks)
+            for i, chunk in enumerate (chunks)
         ])
     
-    def calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
+    def calculate_cost (self, input_tokens: int, output_tokens: int) -> float:
         """Calculate cost in USD"""
         input_cost = (input_tokens / 1_000_000) * 3.00  # $3 per 1M tokens
         output_cost = (output_tokens / 1_000_000) * 15.00  # $15 per 1M tokens
@@ -538,14 +538,14 @@ import os
 app = FastAPI(title="DocuMind API")
 
 # Initialize services (in production, use dependency injection)
-document_processor = DocumentProcessor(s3_client, qdrant_client, anthropic_client)
-chat_engine = ChatEngine(qdrant_client, anthropic_client)
+document_processor = DocumentProcessor (s3_client, qdrant_client, anthropic_client)
+chat_engine = ChatEngine (qdrant_client, anthropic_client)
 
 @app.post("/api/upload")
 async def upload_document(
     file: UploadFile = File(...),
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Upload and process document
@@ -553,8 +553,8 @@ async def upload_document(
     
     # Save file temporarily
     temp_path = f"/tmp/{file.filename}"
-    with open(temp_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    with open (temp_path, "wb") as buffer:
+        shutil.copyfileobj (file.file, buffer)
     
     try:
         # Process document
@@ -572,14 +572,14 @@ async def upload_document(
         }
         
     finally:
-        os.remove(temp_path)
+        os.remove (temp_path)
 
 @app.post("/api/chat")
 async def chat(
     document_id: int,
     question: str,
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Ask question about document
@@ -592,8 +592,8 @@ async def chat(
     ).first()
     
     if not chat:
-        chat = Chat(user_id=user.id, document_id=document_id)
-        db.add(chat)
+        chat = Chat (user_id=user.id, document_id=document_id)
+        db.add (chat)
         db.commit()
     
     # Get chat history
@@ -603,14 +603,14 @@ async def chat(
     ]
     
     # Generate answer
-    result = await chat_engine.chat(question, document_id, history, db)
+    result = await chat_engine.chat (question, document_id, history, db)
     
     # Save messages
     user_msg = Message(
         chat_id=chat.id,
         role="user",
         content=question,
-        tokens=len(question.split())  # Rough estimate
+        tokens=len (question.split())  # Rough estimate
     )
     
     assistant_msg = Message(
@@ -635,26 +635,26 @@ async def chat(
 
 @app.get("/api/analytics")
 async def get_analytics(
-    user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Get usage analytics
     """
     
-    total_documents = db.query(Document).filter_by(user_id=user.id).count()
-    total_chats = db.query(Chat).filter_by(user_id=user.id).count()
+    total_documents = db.query(Document).filter_by (user_id=user.id).count()
+    total_chats = db.query(Chat).filter_by (user_id=user.id).count()
     
-    total_cost = db.query(func.sum(Message.cost_usd)).filter(
+    total_cost = db.query (func.sum(Message.cost_usd)).filter(
         Message.chat_id.in_(
-            db.query(Chat.id).filter_by(user_id=user.id)
+            db.query(Chat.id).filter_by (user_id=user.id)
         )
     ).scalar() or 0
     
     return {
         "total_documents": total_documents,
         "total_chats": total_chats,
-        "total_cost_usd": float(total_cost),
+        "total_cost_usd": float (total_cost),
         "credits_remaining": user.credits
     }
 \`\`\`
@@ -675,15 +675,15 @@ import { useState, useEffect } from 'react';
 export default function ChatPage({ params }: { params: { documentId: string } }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState(');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState (false);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages (prev => [...prev, userMessage]);
     setInput(');
-    setLoading(true);
+    setLoading (true);
 
     try {
       const response = await fetch('/api/chat', {
@@ -697,16 +697,16 @@ export default function ChatPage({ params }: { params: { documentId: string } })
 
       const data = await response.json();
 
-      setMessages(prev => [...prev, {
+      setMessages (prev => [...prev, {
         role: 'assistant',
         content: data.answer,
         sources: data.sources
       }]);
 
     } catch (error) {
-      console.error(error);
+      console.error (error);
     } finally {
-      setLoading(false);
+      setLoading (false);
     }
   };
 
@@ -734,7 +734,7 @@ export default function ChatPage({ params }: { params: { documentId: string } })
       <div className="input-area">
         <input
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={e => setInput (e.target.value)}
           onKeyPress={e => e.key === 'Enter' && sendMessage()}
           placeholder="Ask a question about this document..."
         />

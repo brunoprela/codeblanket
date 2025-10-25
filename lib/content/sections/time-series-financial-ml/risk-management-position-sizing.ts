@@ -59,7 +59,7 @@ class PositionSizer:
     def __init__(self, capital=100000):
         self.capital = capital
     
-    def fixed_fraction(self, risk_per_trade=0.02):
+    def fixed_fraction (self, risk_per_trade=0.02):
         """
         Fixed Fraction Method
         
@@ -74,7 +74,7 @@ class PositionSizer:
         """
         return self.capital * risk_per_trade
     
-    def calculate_shares(self, entry_price, stop_loss_price, risk_amount):
+    def calculate_shares (self, entry_price, stop_loss_price, risk_amount):
         """
         Calculate number of shares based on stop loss
         
@@ -86,14 +86,14 @@ class PositionSizer:
         Returns:
             Number of shares to buy
         """
-        risk_per_share = abs(entry_price - stop_loss_price)
+        risk_per_share = abs (entry_price - stop_loss_price)
         if risk_per_share == 0:
             return 0
         
         shares = risk_amount / risk_per_share
-        return int(shares)
+        return int (shares)
     
-    def kelly_criterion(self, win_rate, avg_win, avg_loss):
+    def kelly_criterion (self, win_rate, avg_win, avg_loss):
         """
         Kelly Criterion - Optimal Growth
         
@@ -130,11 +130,11 @@ class PositionSizer:
         # kelly_alt = (p * b - q) / b
         
         # Cap at 25% to prevent extreme positions
-        kelly = max(0, min(kelly, 0.25))
+        kelly = max(0, min (kelly, 0.25))
         
         return kelly
     
-    def fractional_kelly(self, win_rate, avg_win, avg_loss, fraction=0.5):
+    def fractional_kelly (self, win_rate, avg_win, avg_loss, fraction=0.5):
         """
         Fractional Kelly - More Conservative
         
@@ -146,10 +146,10 @@ class PositionSizer:
         Returns:
             Conservative position size
         """
-        full_kelly = self.kelly_criterion(win_rate, avg_win, avg_loss)
+        full_kelly = self.kelly_criterion (win_rate, avg_win, avg_loss)
         return full_kelly * fraction
     
-    def volatility_based_sizing(self, target_volatility=0.15, asset_volatility=0.25):
+    def volatility_based_sizing (self, target_volatility=0.15, asset_volatility=0.25):
         """
         Volatility Parity Sizing
         
@@ -157,7 +157,7 @@ class PositionSizer:
         
         Args:
             target_volatility: Desired portfolio volatility (e.g., 15%)
-            asset_volatility: Asset's historical volatility (e.g., 25%)
+            asset_volatility: Asset\'s historical volatility (e.g., 25%)
         
         Returns:
             Position size as fraction of capital
@@ -169,9 +169,9 @@ class PositionSizer:
         size = target_volatility / asset_volatility
         
         # Cap at 100%
-        return min(size, 1.0)
+        return min (size, 1.0)
     
-    def atr_based_sizing(self, atr, price, target_risk_pct=0.02, atr_multiplier=2):
+    def atr_based_sizing (self, atr, price, target_risk_pct=0.02, atr_multiplier=2):
         """
         ATR-Based Position Sizing
         
@@ -193,9 +193,9 @@ class PositionSizer:
             return 0
         
         shares = risk_amount / stop_distance
-        return int(shares)
+        return int (shares)
     
-    def compare_methods(self, entry_price=100, stop_price=95, 
+    def compare_methods (self, entry_price=100, stop_price=95, 
                        win_rate=0.55, avg_win=500, avg_loss=300,
                        asset_vol=0.25, atr=2.5):
         """
@@ -208,7 +208,7 @@ class PositionSizer:
         
         # Fixed fraction (2%)
         risk_2pct = self.fixed_fraction(0.02)
-        shares_fixed = self.calculate_shares(entry_price, stop_price, risk_2pct)
+        shares_fixed = self.calculate_shares (entry_price, stop_price, risk_2pct)
         results['fixed_2pct'] = {
             'shares': shares_fixed,
             'dollar_amount': shares_fixed * entry_price,
@@ -217,9 +217,9 @@ class PositionSizer:
         }
         
         # Kelly criterion
-        kelly = self.kelly_criterion(win_rate, avg_win, avg_loss)
+        kelly = self.kelly_criterion (win_rate, avg_win, avg_loss)
         kelly_risk = self.capital * kelly
-        shares_kelly = self.calculate_shares(entry_price, stop_price, kelly_risk)
+        shares_kelly = self.calculate_shares (entry_price, stop_price, kelly_risk)
         results['full_kelly'] = {
             'shares': shares_kelly,
             'dollar_amount': shares_kelly * entry_price,
@@ -228,9 +228,9 @@ class PositionSizer:
         }
         
         # Half Kelly (recommended)
-        half_kelly = self.fractional_kelly(win_rate, avg_win, avg_loss, 0.5)
+        half_kelly = self.fractional_kelly (win_rate, avg_win, avg_loss, 0.5)
         hk_risk = self.capital * half_kelly
-        shares_hk = self.calculate_shares(entry_price, stop_price, hk_risk)
+        shares_hk = self.calculate_shares (entry_price, stop_price, hk_risk)
         results['half_kelly'] = {
             'shares': shares_hk,
             'dollar_amount': shares_hk * entry_price,
@@ -240,16 +240,16 @@ class PositionSizer:
         
         # Volatility-based
         vol_size = self.volatility_based_sizing(0.15, asset_vol)
-        shares_vol = int(self.capital * vol_size / entry_price)
+        shares_vol = int (self.capital * vol_size / entry_price)
         results['volatility_based'] = {
             'shares': shares_vol,
             'dollar_amount': shares_vol * entry_price,
             'pct_capital': vol_size,
-            'dollar_risk': shares_vol * abs(entry_price - stop_price)
+            'dollar_risk': shares_vol * abs (entry_price - stop_price)
         }
         
         # ATR-based
-        shares_atr = self.atr_based_sizing(atr, entry_price, 0.02, 2)
+        shares_atr = self.atr_based_sizing (atr, entry_price, 0.02, 2)
         results['atr_based'] = {
             'shares': shares_atr,
             'dollar_amount': shares_atr * entry_price,
@@ -261,7 +261,7 @@ class PositionSizer:
 
 
 # Example Usage
-sizer = PositionSizer(capital=100000)
+sizer = PositionSizer (capital=100000)
 
 # Compare sizing methods
 results = sizer.compare_methods(
@@ -309,7 +309,7 @@ class StopLossManager:
     def __init__(self):
         self.stops = {}
     
-    def fixed_percentage_stop(self, entry_price, stop_pct=0.05, direction=1):
+    def fixed_percentage_stop (self, entry_price, stop_pct=0.05, direction=1):
         """
         Fixed Percentage Stop
         
@@ -328,7 +328,7 @@ class StopLossManager:
         else:  # Short
             return entry_price * (1 + stop_pct)
     
-    def atr_stop(self, entry_price, atr, multiplier=2, direction=1):
+    def atr_stop (self, entry_price, atr, multiplier=2, direction=1):
         """
         ATR-Based Stop Loss
         
@@ -353,7 +353,7 @@ class StopLossManager:
         else:  # Short
             return entry_price + stop_distance
     
-    def trailing_stop(self, current_price, highest_price, trail_pct=0.10, direction=1):
+    def trailing_stop (self, current_price, highest_price, trail_pct=0.10, direction=1):
         """
         Trailing Stop Loss
         
@@ -375,7 +375,7 @@ class StopLossManager:
             # For short, trail from lowest price
             return highest_price * (1 + trail_pct)
     
-    def chandelier_stop(self, high_prices, atr, period=22, multiplier=3):
+    def chandelier_stop (self, high_prices, atr, period=22, multiplier=3):
         """
         Chandelier Stop
         
@@ -391,11 +391,11 @@ class StopLossManager:
         Returns:
             Chandelier stop level
         """
-        highest_high = high_prices.rolling(period).max()
+        highest_high = high_prices.rolling (period).max()
         stop = highest_high - (atr * multiplier)
         return stop
     
-    def time_stop(self, entry_date, current_date, max_holding_days=30):
+    def time_stop (self, entry_date, current_date, max_holding_days=30):
         """
         Time-Based Stop
         
@@ -413,7 +413,7 @@ class StopLossManager:
         holding_period = (current_date - entry_date).days
         return holding_period >= max_holding_days
     
-    def mental_stop(self, entry_price, current_price, max_pain_pct=0.10):
+    def mental_stop (self, entry_price, current_price, max_pain_pct=0.10):
         """
         Mental Stop / Maximum Adverse Excursion
         
@@ -443,9 +443,9 @@ low = data['Low']
 close = data['Close']
 
 tr1 = high - low
-tr2 = abs(high - close.shift())
-tr3 = abs(low - close.shift())
-tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+tr2 = abs (high - close.shift())
+tr3 = abs (low - close.shift())
+tr = pd.concat([tr1, tr2, tr3], axis=1).max (axis=1)
 atr = tr.rolling(14).mean()
 
 stop_manager = StopLossManager()
@@ -459,12 +459,12 @@ print(f"Entry Price: \${entry_price:.2f}")
 print(f"Current ATR: \${current_atr:.2f}\\n")
 
 # Fixed stop
-fixed_stop = stop_manager.fixed_percentage_stop(entry_price, 0.05)
+fixed_stop = stop_manager.fixed_percentage_stop (entry_price, 0.05)
 print(f"Fixed 5% Stop: \${fixed_stop:.2f} (\${entry_price - fixed_stop:.2f} risk)")
 
 # ATR stops
-atr_2x = stop_manager.atr_stop(entry_price, current_atr, 2)
-atr_3x = stop_manager.atr_stop(entry_price, current_atr, 3)
+atr_2x = stop_manager.atr_stop (entry_price, current_atr, 2)
+atr_3x = stop_manager.atr_stop (entry_price, current_atr, 3)
 print(f"ATR 2x Stop: \${atr_2x:.2f} (\${entry_price - atr_2x:.2f} risk)")
 print(f"ATR 3x Stop: \${atr_3x:.2f} (\${entry_price - atr_3x:.2f} risk)")
 
@@ -502,7 +502,7 @@ class PortfolioRiskManager:
         self.max_positions = max_positions
         self.positions = {}
     
-    def calculate_portfolio_heat(self):
+    def calculate_portfolio_heat (self):
         """
         Calculate total portfolio risk
         
@@ -511,10 +511,10 @@ class PortfolioRiskManager:
         Returns:
             Total risk as % of capital
         """
-        total_risk = sum(pos['risk_amount'] for pos in self.positions.values())
+        total_risk = sum (pos['risk_amount'] for pos in self.positions.values())
         return total_risk / self.capital
     
-    def can_add_position(self, risk_amount):
+    def can_add_position (self, risk_amount):
         """
         Check if new position can be added
         
@@ -525,7 +525,7 @@ class PortfolioRiskManager:
             (can_add, reason)
         """
         # Check position count
-        if len(self.positions) >= self.max_positions:
+        if len (self.positions) >= self.max_positions:
             return False, f"Max positions reached ({self.max_positions})"
         
         # Check portfolio heat
@@ -537,7 +537,7 @@ class PortfolioRiskManager:
         
         return True, "OK"
     
-    def correlation_adjusted_sizing(self, base_size, correlation_matrix, existing_tickers, new_ticker):
+    def correlation_adjusted_sizing (self, base_size, correlation_matrix, existing_tickers, new_ticker):
         """
         Adjust position size based on correlation with existing positions
         
@@ -561,12 +561,12 @@ class PortfolioRiskManager:
         for ticker in existing_tickers:
             if ticker in correlation_matrix.index and new_ticker in correlation_matrix.columns:
                 corr = correlation_matrix.loc[ticker, new_ticker]
-                correlations.append(corr)
+                correlations.append (corr)
         
         if not correlations:
             return base_size
         
-        avg_correlation = np.mean(correlations)
+        avg_correlation = np.mean (correlations)
         
         # Reduce size if highly correlated
         # avg_corr = 0 → no adjustment
@@ -579,7 +579,7 @@ class PortfolioRiskManager:
         
         return adjusted_size
     
-    def sector_exposure_check(self, positions_by_sector, max_sector_exposure=0.40):
+    def sector_exposure_check (self, positions_by_sector, max_sector_exposure=0.40):
         """
         Check sector concentration
         
@@ -590,7 +590,7 @@ class PortfolioRiskManager:
         Returns:
             Dict of sectors exceeding limit
         """
-        total_value = sum(positions_by_sector.values())
+        total_value = sum (positions_by_sector.values())
         violations = {}
         
         for sector, value in positions_by_sector.items():
@@ -604,7 +604,7 @@ class PortfolioRiskManager:
         
         return violations
     
-    def calculate_var(self, returns, confidence=0.95, method='historical'):
+    def calculate_var (self, returns, confidence=0.95, method='historical'):
         """
         Value at Risk (VaR)
         
@@ -620,7 +620,7 @@ class PortfolioRiskManager:
         """
         if method == 'historical':
             # Historical VaR: percentile of historical returns
-            var = np.percentile(returns, (1 - confidence) * 100)
+            var = np.percentile (returns, (1 - confidence) * 100)
         
         elif method == 'parametric':
             # Parametric VaR: assume normal distribution
@@ -635,12 +635,12 @@ class PortfolioRiskManager:
             # Monte Carlo VaR: simulate future returns
             mean = returns.mean()
             std = returns.std()
-            simulated = np.random.normal(mean, std, 10000)
-            var = np.percentile(simulated, (1 - confidence) * 100)
+            simulated = np.random.normal (mean, std, 10000)
+            var = np.percentile (simulated, (1 - confidence) * 100)
         
         return var
     
-    def calculate_cvar(self, returns, confidence=0.95):
+    def calculate_cvar (self, returns, confidence=0.95):
         """
         Conditional VaR (Expected Shortfall)
         
@@ -654,12 +654,12 @@ class PortfolioRiskManager:
         Returns:
             CVaR value (negative number)
         """
-        var = self.calculate_var(returns, confidence, 'historical')
+        var = self.calculate_var (returns, confidence, 'historical')
         # Average of returns worse than VaR
         cvar = returns[returns <= var].mean()
         return cvar
     
-    def dynamic_leverage_adjustment(self, current_sharpe, target_leverage=1.0):
+    def dynamic_leverage_adjustment (self, current_sharpe, target_leverage=1.0):
         """
         Dynamically adjust leverage based on strategy performance
         
@@ -688,7 +688,7 @@ class PortfolioRiskManager:
 
 
 # Example: Portfolio risk management
-prm = PortfolioRiskManager(capital=100000, max_portfolio_heat=0.20, max_positions=10)
+prm = PortfolioRiskManager (capital=100000, max_portfolio_heat=0.20, max_positions=10)
 
 # Add positions
 prm.positions['AAPL'] = {'risk_amount': 2000, 'size': 10000}
@@ -696,20 +696,20 @@ prm.positions['MSFT'] = {'risk_amount': 2000, 'size': 10000}
 prm.positions['GOOGL'] = {'risk_amount': 2000, 'size': 10000}
 
 print("=== Portfolio Risk Dashboard ===")
-print(f"Current Positions: {len(prm.positions)}")
+print(f"Current Positions: {len (prm.positions)}")
 print(f"Portfolio Heat: {prm.calculate_portfolio_heat():.1%}")
 print(f"Max Portfolio Heat: {prm.max_portfolio_heat:.0%}")
 print(f"Available Heat: {(prm.max_portfolio_heat - prm.calculate_portfolio_heat()):.1%}")
 
 # Try to add new position
-can_add, reason = prm.can_add_position(risk_amount=2000)
+can_add, reason = prm.can_add_position (risk_amount=2000)
 print(f"\\nCan add new position (risk $2000): {can_add}")
 print(f"Reason: {reason}")
 
 # VaR/CVaR example
 returns = np.random.normal(0.001, 0.02, 252)  # Simulate daily returns
-var_95 = prm.calculate_var(returns, 0.95, 'historical')
-cvar_95 = prm.calculate_cvar(returns, 0.95)
+var_95 = prm.calculate_var (returns, 0.95, 'historical')
+cvar_95 = prm.calculate_cvar (returns, 0.95)
 
 print(f"\\n=== Risk Metrics ===")
 print(f"VaR (95%): {var_95:.2%} - Worst expected daily loss with 95% confidence")
@@ -741,14 +741,14 @@ class DrawdownManager:
         self.equity_curve = []
         self.peak_equity = 0
     
-    def update_equity(self, current_equity):
+    def update_equity (self, current_equity):
         """
         Update equity and calculate drawdown
         
         Returns:
             (current_drawdown, should_halt_trading)
         """
-        self.equity_curve.append(current_equity)
+        self.equity_curve.append (current_equity)
         
         # Update peak
         if current_equity > self.peak_equity:
@@ -762,7 +762,7 @@ class DrawdownManager:
         
         return drawdown, should_halt
     
-    def calculate_max_drawdown(self, equity_curve=None):
+    def calculate_max_drawdown (self, equity_curve=None):
         """
         Calculate maximum drawdown from equity curve
         
@@ -772,13 +772,13 @@ class DrawdownManager:
         if equity_curve is None:
             equity_curve = self.equity_curve
         
-        equity = pd.Series(equity_curve)
+        equity = pd.Series (equity_curve)
         running_max = equity.cummax()
         drawdown = (equity - running_max) / running_max
         
         return drawdown.min()
     
-    def drawdown_duration(self, equity_curve=None):
+    def drawdown_duration (self, equity_curve=None):
         """
         Calculate drawdown duration (days underwater)
         
@@ -788,7 +788,7 @@ class DrawdownManager:
         if equity_curve is None:
             equity_curve = self.equity_curve
         
-        equity = pd.Series(equity_curve)
+        equity = pd.Series (equity_curve)
         running_max = equity.cummax()
         is_underwater = equity < running_max
         
@@ -799,13 +799,13 @@ class DrawdownManager:
         for underwater in is_underwater:
             if underwater:
                 current_duration += 1
-                max_duration = max(max_duration, current_duration)
+                max_duration = max (max_duration, current_duration)
             else:
                 current_duration = 0
         
         return max_duration
     
-    def recovery_factor(self, equity_curve=None):
+    def recovery_factor (self, equity_curve=None):
         """
         Recovery Factor = Net Profit / Max Drawdown
         
@@ -818,14 +818,14 @@ class DrawdownManager:
             equity_curve = self.equity_curve
         
         net_profit = equity_curve[-1] - equity_curve[0]
-        max_dd = abs(self.calculate_max_drawdown(equity_curve))
+        max_dd = abs (self.calculate_max_drawdown (equity_curve))
         
         if max_dd == 0:
             return np.inf
         
         return net_profit / (equity_curve[0] * max_dd)
     
-    def reduce_position_size_on_drawdown(self, base_size, current_drawdown):
+    def reduce_position_size_on_drawdown (self, base_size, current_drawdown):
         """
         Reduce position sizes during drawdowns
         
@@ -848,14 +848,14 @@ class DrawdownManager:
         # 10% DD → 50% size
         # 15% DD → 25% size (near halt threshold)
         
-        dd_pct = abs(current_drawdown)
+        dd_pct = abs (current_drawdown)
         reduction_factor = max(0.25, 1 - (dd_pct / self.max_drawdown_threshold) * 0.75)
         
         return base_size * reduction_factor
 
 
 # Example: Drawdown management
-dd_manager = DrawdownManager(max_drawdown_threshold=0.15)
+dd_manager = DrawdownManager (max_drawdown_threshold=0.15)
 
 # Simulate equity curve
 equity_curve = [100000]
@@ -863,12 +863,12 @@ for _ in range(252):
     # Random return
     ret = np.random.normal(0.001, 0.02)
     new_equity = equity_curve[-1] * (1 + ret)
-    equity_curve.append(new_equity)
+    equity_curve.append (new_equity)
 
 # Analyze drawdown
-max_dd = dd_manager.calculate_max_drawdown(equity_curve)
-dd_duration = dd_manager.drawdown_duration(equity_curve)
-recovery = dd_manager.recovery_factor(equity_curve)
+max_dd = dd_manager.calculate_max_drawdown (equity_curve)
+dd_duration = dd_manager.drawdown_duration (equity_curve)
+recovery = dd_manager.recovery_factor (equity_curve)
 
 print("=== Drawdown Analysis ===")
 print(f"Maximum Drawdown: {max_dd:.2%}")
@@ -879,7 +879,7 @@ print(f"Final Equity: \${equity_curve[-1]:,.0f}")
 # Position size adjustment example
 current_dd = -0.08  # 8% drawdown
 base_size = 10000
-adjusted_size = dd_manager.reduce_position_size_on_drawdown(base_size, current_dd)
+adjusted_size = dd_manager.reduce_position_size_on_drawdown (base_size, current_dd)
 
 print(f"\\n=== Position Sizing in Drawdown ===")
 print(f"Current Drawdown: {current_dd:.1%}")

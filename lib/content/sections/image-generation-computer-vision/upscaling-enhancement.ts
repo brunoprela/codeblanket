@@ -133,8 +133,8 @@ class RealESRGANUpscaler:
         import cv2
         
         # Convert to numpy
-        img_np = np.array(image)
-        img_np = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        img_np = np.array (image)
+        img_np = cv2.cvtColor (img_np, cv2.COLOR_RGB2BGR)
         
         # Upscale
         output, _ = self.upsampler.enhance(
@@ -144,8 +144,8 @@ class RealESRGANUpscaler:
         )
         
         # Convert back
-        output = cv2.cvtColor(output, cv2.COLOR_BGR2RGB)
-        return Image.fromarray(output)
+        output = cv2.cvtColor (output, cv2.COLOR_BGR2RGB)
+        return Image.fromarray (output)
     
     def upscale_batch(
         self,
@@ -153,7 +153,7 @@ class RealESRGANUpscaler:
         **kwargs
     ) -> list[Image.Image]:
         """Upscale multiple images."""
-        return [self.upscale(img, **kwargs) for img in images]
+        return [self.upscale (img, **kwargs) for img in images]
     
     def upscale_with_fallback(
         self,
@@ -169,31 +169,31 @@ class RealESRGANUpscaler:
         # Calculate required scale
         scale_w = target_w / current_w
         scale_h = target_h / current_h
-        scale = max(scale_w, scale_h)
+        scale = max (scale_w, scale_h)
         
         # Upscale
         if scale <= 4:
-            upscaled = self.upscale(image, outscale=scale)
+            upscaled = self.upscale (image, outscale=scale)
         else:
             # Multiple passes for >4x
             temp = image
             while scale > 1:
-                step_scale = min(scale, 4)
-                temp = self.upscale(temp, outscale=step_scale)
+                step_scale = min (scale, 4)
+                temp = self.upscale (temp, outscale=step_scale)
                 scale /= step_scale
             upscaled = temp
         
         # Final resize to exact target
-        return upscaled.resize(target_size, Image.LANCZOS)
+        return upscaled.resize (target_size, Image.LANCZOS)
 
 # Usage
-upscaler = RealESRGANUpscaler(model_name="RealESRGAN_x4plus")
+upscaler = RealESRGANUpscaler (model_name="RealESRGAN_x4plus")
 
 # Upscale small image
 small_image = Image.open("small_photo.jpg")  # e.g., 512x512
 print(f"Original size: {small_image.size}")
 
-upscaled = upscaler.upscale(small_image, outscale=4.0)
+upscaled = upscaler.upscale (small_image, outscale=4.0)
 print(f"Upscaled size: {upscaled.size}")  # 2048x2048
 
 upscaled.save("upscaled_4x.png")
@@ -229,7 +229,7 @@ class SDUpscaler:
             "stabilityai/stable-diffusion-x4-upscaler",
             torch_dtype=torch.float16
         )
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         self.pipe.enable_attention_slicing()
         
         try:
@@ -295,7 +295,7 @@ sd_upscaler = SDUpscaler()
 
 # Basic upscale
 small = Image.open("image_512.jpg")
-upscaled = sd_upscaler.upscale(small)
+upscaled = sd_upscaler.upscale (small)
 
 # Upscale with style
 art = Image.open("artwork_512.jpg")
@@ -336,15 +336,15 @@ class UpscalingComparison:
         
         if "lanczos" in methods:
             print("Testing Lanczos...")
-            results["lanczos"] = image.resize(target_size, Image.LANCZOS)
+            results["lanczos"] = image.resize (target_size, Image.LANCZOS)
         
         if "realesrgan" in methods:
             print("Testing Real-ESRGAN...")
-            results["realesrgan"] = self.realesrgan.upscale(image, outscale=4)
+            results["realesrgan"] = self.realesrgan.upscale (image, outscale=4)
         
         if "sd" in methods:
             print("Testing SD Upscale...")
-            results["sd"] = self.sd_upscaler.upscale(image)
+            results["sd"] = self.sd_upscaler.upscale (image)
         
         return results
     
@@ -356,20 +356,20 @@ class UpscalingComparison:
         """Create side-by-side comparison."""
         from PIL import ImageDraw, ImageFont
         
-        images = list(results.values())
-        labels = list(results.keys())
+        images = list (results.values())
+        labels = list (results.keys())
         
         # Create grid
         w, h = images[0].size
-        grid_w = w * len(images)
+        grid_w = w * len (images)
         grid_h = h + 50  # Extra space for labels
         
         grid = Image.new('RGB', (grid_w, grid_h), 'white')
-        draw = ImageDraw.Draw(grid)
+        draw = ImageDraw.Draw (grid)
         
-        for i, (label, img) in enumerate(results.items()):
+        for i, (label, img) in enumerate (results.items()):
             x = i * w
-            grid.paste(img, (x, 0))
+            grid.paste (img, (x, 0))
             
             # Add label
             draw.text(
@@ -378,7 +378,7 @@ class UpscalingComparison:
                 fill='black'
             )
         
-        grid.save(output_path)
+        grid.save (output_path)
         print(f"Comparison saved to {output_path}")
 
 # Usage
@@ -387,14 +387,14 @@ comparator = UpscalingComparison()
 test_image = Image.open("test_512.jpg")
 
 # Compare all methods
-results = comparator.compare_methods(test_image)
+results = comparator.compare_methods (test_image)
 
 # Create comparison
-comparator.create_comparison_grid(results)
+comparator.create_comparison_grid (results)
 
 # Quality assessment
 for method, img in results.items():
-    file_size = len(img.tobytes())
+    file_size = len (img.tobytes())
     print(f"{method}: {img.size}, ~{file_size / 1024 / 1024:.2f} MB")
 \`\`\`
 
@@ -421,24 +421,24 @@ class AnimeUpscaler:
         """
         Upscale anime/manga artwork.
         """
-        result = self.upscaler.upscale(image, outscale=4)
+        result = self.upscaler.upscale (image, outscale=4)
         
         if preserve_lines:
             # Post-process to sharpen lines
-            result = self._sharpen_lines(result)
+            result = self._sharpen_lines (result)
         
         return result
     
-    def _sharpen_lines(self, image: Image.Image) -> Image.Image:
+    def _sharpen_lines (self, image: Image.Image) -> Image.Image:
         """Sharpen line art."""
         from PIL import ImageFilter, ImageEnhance
         
         # Enhance sharpness
-        enhancer = ImageEnhance.Sharpness(image)
+        enhancer = ImageEnhance.Sharpness (image)
         sharpened = enhancer.enhance(1.5)
         
         # Slight unsharp mask
-        unsharp = sharpened.filter(ImageFilter.UnsharpMask(radius=1, percent=150))
+        unsharp = sharpened.filter(ImageFilter.UnsharpMask (radius=1, percent=150))
         
         return unsharp
 
@@ -446,7 +446,7 @@ class AnimeUpscaler:
 anime_upscaler = AnimeUpscaler()
 
 anime_image = Image.open("anime_art.jpg")
-upscaled = anime_upscaler.upscale_anime(anime_image, preserve_lines=True)
+upscaled = anime_upscaler.upscale_anime (anime_image, preserve_lines=True)
 \`\`\`
 
 ### Progressive Upscaling
@@ -477,15 +477,15 @@ class ProgressiveUpscaler:
         
         steps = []
         while remaining_scale > 1:
-            step = min(step_size, remaining_scale)
-            steps.append(step)
+            step = min (step_size, remaining_scale)
+            steps.append (step)
             remaining_scale /= step
         
         print(f"Upscaling strategy: {' → '.join([f'{s}x' for s in steps])}")
         
-        for i, step in enumerate(steps):
-            print(f"Step {i+1}/{len(steps)}: {step}x upscale")
-            current = self.upscaler.upscale(current, outscale=step)
+        for i, step in enumerate (steps):
+            print(f"Step {i+1}/{len (steps)}: {step}x upscale")
+            current = self.upscaler.upscale (current, outscale=step)
         
         return current
     
@@ -503,12 +503,12 @@ class ProgressiveUpscaler:
         # Calculate required scale
         scale_w = target_width / current_w
         scale_h = target_height / current_h
-        scale = max(scale_w, scale_h)
+        scale = max (scale_w, scale_h)
         
         # Progressive upscale
         upscaled = self.progressive_upscale(
             image,
-            target_scale=int(np.ceil(scale))
+            target_scale=int (np.ceil (scale))
         )
         
         # Crop to exact size
@@ -519,7 +519,7 @@ progressive = ProgressiveUpscaler()
 
 # Extreme upscaling: 256x256 → 4096x4096 (16x)
 tiny = Image.open("tiny_256.jpg")
-huge = progressive.progressive_upscale(tiny, target_scale=16)
+huge = progressive.progressive_upscale (tiny, target_scale=16)
 
 print(f"Upscaled from {tiny.size} to {huge.size}")
 \`\`\`
@@ -533,27 +533,27 @@ class PostUpscaleEnhancer:
     """
     
     @staticmethod
-    def enhance_details(image: Image.Image) -> Image.Image:
+    def enhance_details (image: Image.Image) -> Image.Image:
         """Enhance fine details."""
         from PIL import ImageFilter, ImageEnhance
         
         # Sharpen
-        sharpness = ImageEnhance.Sharpness(image)
+        sharpness = ImageEnhance.Sharpness (image)
         sharpened = sharpness.enhance(1.3)
         
         # Contrast
-        contrast = ImageEnhance.Contrast(sharpened)
+        contrast = ImageEnhance.Contrast (sharpened)
         enhanced = contrast.enhance(1.1)
         
         return enhanced
     
     @staticmethod
-    def reduce_noise(image: Image.Image) -> Image.Image:
+    def reduce_noise (image: Image.Image) -> Image.Image:
         """Reduce upscaling artifacts."""
         import cv2
         import numpy as np
         
-        img_np = np.array(image)
+        img_np = np.array (image)
         
         # Non-local means denoising
         denoised = cv2.fastNlMeansDenoisingColored(
@@ -565,28 +565,28 @@ class PostUpscaleEnhancer:
             searchWindowSize=21
         )
         
-        return Image.fromarray(denoised)
+        return Image.fromarray (denoised)
     
     @staticmethod
-    def color_correction(image: Image.Image) -> Image.Image:
+    def color_correction (image: Image.Image) -> Image.Image:
         """Correct colors after upscaling."""
         from PIL import ImageEnhance
         
         # Adjust saturation
-        color = ImageEnhance.Color(image)
+        color = ImageEnhance.Color (image)
         saturated = color.enhance(1.1)
         
         # Adjust brightness
-        brightness = ImageEnhance.Brightness(saturated)
+        brightness = ImageEnhance.Brightness (saturated)
         corrected = brightness.enhance(1.05)
         
         return corrected
     
-    def full_enhancement(self, image: Image.Image) -> Image.Image:
+    def full_enhancement (self, image: Image.Image) -> Image.Image:
         """Apply all enhancements."""
-        enhanced = self.enhance_details(image)
-        enhanced = self.reduce_noise(enhanced)
-        enhanced = self.color_correction(enhanced)
+        enhanced = self.enhance_details (image)
+        enhanced = self.reduce_noise (enhanced)
+        enhanced = self.color_correction (enhanced)
         
         return enhanced
 
@@ -594,7 +594,7 @@ class PostUpscaleEnhancer:
 enhancer = PostUpscaleEnhancer()
 
 upscaled = Image.open("upscaled_rough.png")
-final = enhancer.full_enhancement(upscaled)
+final = enhancer.full_enhancement (upscaled)
 final.save("upscaled_enhanced.png")
 \`\`\`
 
@@ -625,31 +625,31 @@ class ProductionUpscalePipeline:
             print_size_inches: (width, height) in inches
         """
         # Calculate required pixel dimensions
-        target_w = int(print_size_inches[0] * target_dpi)
-        target_h = int(print_size_inches[1] * target_dpi)
+        target_w = int (print_size_inches[0] * target_dpi)
+        target_h = int (print_size_inches[1] * target_dpi)
         
         print(f"Target size for {print_size_inches}" at {target_dpi} DPI:")
         print(f"{target_w}x{target_h} pixels")
         
         # Calculate scale factor
         current_w, current_h = image.size
-        scale = max(target_w / current_w, target_h / current_h)
+        scale = max (target_w / current_w, target_h / current_h)
         
         print(f"Required scale: {scale:.2f}x")
         
         # Upscale
         if scale <= 4:
-            upscaled = self.upscaler.upscale(image, outscale=scale)
+            upscaled = self.upscaler.upscale (image, outscale=scale)
         else:
             # Progressive for large scales
             progressive = ProgressiveUpscaler()
-            upscaled = progressive.progressive_upscale(image, int(np.ceil(scale)))
+            upscaled = progressive.progressive_upscale (image, int (np.ceil (scale)))
         
         # Resize to exact dimensions
         final = upscaled.resize((target_w, target_h), Image.LANCZOS)
         
         # Enhance
-        final = self.enhancer.full_enhancement(final)
+        final = self.enhancer.full_enhancement (final)
         
         return final
     
@@ -665,31 +665,31 @@ class ProductionUpscalePipeline:
         """
         from pathlib import Path
         
-        input_path = Path(input_dir)
-        output_path = Path(output_dir)
-        output_path.mkdir(exist_ok=True)
+        input_path = Path (input_dir)
+        output_path = Path (output_dir)
+        output_path.mkdir (exist_ok=True)
         
-        images = list(input_path.glob("*.jpg")) + list(input_path.glob("*.png"))
-        total = len(images)
+        images = list (input_path.glob("*.jpg")) + list (input_path.glob("*.png"))
+        total = len (images)
         
         print(f"Upscaling {total} images...")
         
-        for i, img_file in enumerate(images, 1):
+        for i, img_file in enumerate (images, 1):
             print(f"[{i}/{total}] {img_file.name}")
             
             # Load
-            img = Image.open(img_file)
+            img = Image.open (img_file)
             
             # Upscale
-            upscaled = self.upscaler.upscale(img, outscale=scale)
+            upscaled = self.upscaler.upscale (img, outscale=scale)
             
             # Enhance
             if enhance:
-                upscaled = self.enhancer.full_enhancement(upscaled)
+                upscaled = self.enhancer.full_enhancement (upscaled)
             
             # Save
             output_file = output_path / img_file.name
-            upscaled.save(output_file, quality=95)
+            upscaled.save (output_file, quality=95)
         
         print(f"Done! Saved to {output_dir}")
 

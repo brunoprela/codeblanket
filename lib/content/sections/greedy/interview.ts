@@ -25,7 +25,7 @@ export const interviewSection = {
 - Is there clear "best" choice each step?
 
 **Step 2: Define Greedy Choice (3 min)**
-- What's the greedy criterion?
+- What\'s the greedy criterion?
   - Earliest finish?
   - Highest ratio?
   - Largest/smallest?

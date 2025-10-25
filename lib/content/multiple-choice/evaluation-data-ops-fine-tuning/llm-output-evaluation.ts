@@ -43,7 +43,7 @@ export const llmOutputEvaluationMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Option B (NLI for entailment checking) is most effective for hallucination detection. Here's why: NLI (Natural Language Inference) models are trained to determine if a hypothesis (claim) is entailed by, contradicted by, or neutral with respect to a premise (context). For each claim in the output, check if context entails it. If not entailed → potential hallucination. ROUGE (A) only measures word overlap, not factual correctness. Semantic similarity (D) measures meaning similarity, but similar doesn't mean factually grounded. Comparing to reference (C) only works if you have reference answers (often you don't in RAG). NLI-based faithfulness checking is the current best practice: extract claims from output, verify each against retrieved context, calculate % of supported claims as faithfulness score.",
+      "Option B (NLI for entailment checking) is most effective for hallucination detection. Here\'s why: NLI (Natural Language Inference) models are trained to determine if a hypothesis (claim) is entailed by, contradicted by, or neutral with respect to a premise (context). For each claim in the output, check if context entails it. If not entailed → potential hallucination. ROUGE (A) only measures word overlap, not factual correctness. Semantic similarity (D) measures meaning similarity, but similar doesn't mean factually grounded. Comparing to reference (C) only works if you have reference answers (often you don't in RAG). NLI-based faithfulness checking is the current best practice: extract claims from output, verify each against retrieved context, calculate % of supported claims as faithfulness score.",
   },
   {
     id: 'llm-eval-mc-4',

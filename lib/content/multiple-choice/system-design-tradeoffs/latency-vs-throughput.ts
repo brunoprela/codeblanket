@@ -34,7 +34,7 @@ export const latencyvsthroughputMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "According to Little's Law, if you want 1,000 req/s throughput with 200ms latency per request, how many concurrent requests must you handle?",
+      "According to Little\'s Law, if you want 1,000 req/s throughput with 200ms latency per request, how many concurrent requests must you handle?",
     options: [
       '50 concurrent requests',
       '100 concurrent requests',
@@ -43,7 +43,7 @@ export const latencyvsthroughputMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Little's Law: Concurrency = Throughput × Latency = 1,000 req/s × 0.2s = 200 concurrent requests. This means you need to handle 200 requests in flight simultaneously to achieve your throughput goal at that latency.",
+      "Little\'s Law: Concurrency = Throughput × Latency = 1,000 req/s × 0.2s = 200 concurrent requests. This means you need to handle 200 requests in flight simultaneously to achieve your throughput goal at that latency.",
   },
   {
     id: 'mc4',

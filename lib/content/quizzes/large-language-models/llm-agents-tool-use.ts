@@ -22,7 +22,7 @@ export const llmAgentsToolUseQuiz = {
       question:
         'Compare different agent frameworks: LangChain, LlamaIndex, AutoGPT, and custom implementations. What abstractions do these frameworks provide, and what are their limitations? When would you build a custom agent system versus using a framework? Discuss the tradeoffs in flexibility, complexity, and vendor lock-in.',
       expectedAnswer:
-        "Should analyze: LangChain's comprehensive tooling but heavyweight abstractions, LlamaIndex's focus on data ingestion and indexing, AutoGPT's autonomous goal- driven approach and limitations, frameworks hiding important details, debugging difficulties with abstractions, version instability in fast- moving ecosystem, custom implementations offering control and simplicity, when frameworks add value (quick prototyping, standard patterns), when custom is better(production systems, specific requirements), and maintaining agent systems over time.",
+        "Should analyze: LangChain\'s comprehensive tooling but heavyweight abstractions, LlamaIndex's focus on data ingestion and indexing, AutoGPT's autonomous goal- driven approach and limitations, frameworks hiding important details, debugging difficulties with abstractions, version instability in fast- moving ecosystem, custom implementations offering control and simplicity, when frameworks add value (quick prototyping, standard patterns), when custom is better (production systems, specific requirements), and maintaining agent systems over time.",
     },
   ],
 };

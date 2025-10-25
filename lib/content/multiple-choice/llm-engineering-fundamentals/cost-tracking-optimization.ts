@@ -39,7 +39,7 @@ export const costtrackingoptimizationMultipleChoice: MultipleChoiceQuestion[] =
         'To send users their bill',
         'To identify unprofitable users and potential abuse',
         'To improve model quality',
-        "It's not important",
+        "It\'s not important",
       ],
       correctAnswer: 1,
       explanation:

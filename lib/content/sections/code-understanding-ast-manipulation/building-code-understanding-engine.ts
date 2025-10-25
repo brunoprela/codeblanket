@@ -125,23 +125,23 @@ class CodeUnderstandingEngine:
     
     # ==================== Core Functions ====================
     
-    def add_file(self, filepath: str, content: str):
+    def add_file (self, filepath: str, content: str):
         """Add a file to the engine."""
         self.files[filepath] = content
-        self._invalidate_cache(filepath)
+        self._invalidate_cache (filepath)
     
-    def update_file(self, filepath: str, content: str):
+    def update_file (self, filepath: str, content: str):
         """Update file content (incremental)."""
         if filepath not in self.files or self.files[filepath] != content:
             self.files[filepath] = content
-            self._invalidate_cache(filepath)
+            self._invalidate_cache (filepath)
     
-    def remove_file(self, filepath: str):
+    def remove_file (self, filepath: str):
         """Remove file from engine."""
-        self.files.pop(filepath, None)
-        self._invalidate_cache(filepath)
+        self.files.pop (filepath, None)
+        self._invalidate_cache (filepath)
     
-    def analyze_file(self, filepath: str) -> Dict[str, Any]:
+    def analyze_file (self, filepath: str) -> Dict[str, Any]:
         """
         Perform complete analysis on a file.
         Returns comprehensive analysis results.
@@ -152,20 +152,20 @@ class CodeUnderstandingEngine:
         content = self.files[filepath]
         
         # Check cache
-        content_hash = self._hash_content(content)
+        content_hash = self._hash_content (content)
         if filepath in self.analysis_cache:
             if self.analysis_cache[filepath].get('hash') == content_hash:
                 return self.analysis_cache[filepath]['results']
         
         # Parse if needed
-        if filepath not in self.asts or self.ast_hashes.get(filepath) != content_hash:
+        if filepath not in self.asts or self.ast_hashes.get (filepath) != content_hash:
             try:
-                self.asts[filepath] = ast.parse(content)
+                self.asts[filepath] = ast.parse (content)
                 self.ast_hashes[filepath] = content_hash
             except SyntaxError as e:
                 return {
                     'error': 'Syntax error',
-                    'message': str(e),
+                    'message': str (e),
                     'line': e.lineno
                 }
         
@@ -173,12 +173,12 @@ class CodeUnderstandingEngine:
         
         # Run all analyses
         results = {
-            'symbols': self._analyze_symbols(filepath, tree),
-            'types': self._analyze_types(filepath, tree),
-            'complexity': self._analyze_complexity(filepath, tree),
-            'quality': self._analyze_quality(filepath, tree),
-            'documentation': self._analyze_documentation(filepath, tree),
-            'patterns': self._analyze_patterns(filepath, tree),
+            'symbols': self._analyze_symbols (filepath, tree),
+            'types': self._analyze_types (filepath, tree),
+            'complexity': self._analyze_complexity (filepath, tree),
+            'quality': self._analyze_quality (filepath, tree),
+            'documentation': self._analyze_documentation (filepath, tree),
+            'patterns': self._analyze_patterns (filepath, tree),
         }
         
         # Cache results
@@ -191,13 +191,13 @@ class CodeUnderstandingEngine:
     
     # ==================== Analysis Methods ====================
     
-    def _analyze_symbols(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_symbols (self, filepath: str, tree: ast.AST) -> Dict:
         """Build symbol table."""
         from dataclasses import asdict
         
         # Use SymbolTableBuilder from previous sections
         builder = SymbolTableBuilder()
-        builder.visit(tree)
+        builder.visit (tree)
         
         symbols = {}
         for key, symbol in builder.symbols.items():
@@ -211,24 +211,24 @@ class CodeUnderstandingEngine:
         
         return symbols
     
-    def _analyze_types(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_types (self, filepath: str, tree: ast.AST) -> Dict:
         """Infer and extract types."""
         # Use TypeAnnotationExtractor + TypeInferenceEngine
         extractor = TypeAnnotationExtractor()
-        extractor.visit(tree)
+        extractor.visit (tree)
         
         inferencer = TypeInferenceEngine()
-        inferencer.visit(tree)
+        inferencer.visit (tree)
         
         return {
             'annotated': {k: v.type_annotation for k, v in extractor.types.items()},
             'inferred': inferencer.inferred_types
         }
     
-    def _analyze_complexity(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_complexity (self, filepath: str, tree: ast.AST) -> Dict:
         """Calculate complexity metrics."""
         analyzer = ComplexityAnalyzer()
-        analyzer.visit(tree)
+        analyzer.visit (tree)
         
         metrics = {}
         for name, complexity in analyzer.functions.items():
@@ -240,24 +240,24 @@ class CodeUnderstandingEngine:
         
         return metrics
     
-    def _analyze_quality(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_quality (self, filepath: str, tree: ast.AST) -> Dict:
         """Run quality checks."""
         # Bug detection
         bug_detector = BugPatternDetector()
-        bug_detector.visit(tree)
+        bug_detector.visit (tree)
         
         # Code smells
         smell_detector = CodeSmellDetector()
-        smell_detector.visit(tree)
+        smell_detector.visit (tree)
         
         # Security
         security_scanner = SecurityScanner()
-        security_scanner.visit(tree)
+        security_scanner.visit (tree)
         
         return {
-            'bugs': len(bug_detector.issues),
-            'smells': len(smell_detector.smells),
-            'security_issues': len(security_scanner.issues),
+            'bugs': len (bug_detector.issues),
+            'smells': len (smell_detector.smells),
+            'security_issues': len (security_scanner.issues),
             'issues': [
                 {'type': 'bug', 'severity': i.severity, 'line': i.line, 'message': i.message}
                 for i in bug_detector.issues
@@ -270,10 +270,10 @@ class CodeUnderstandingEngine:
             ]
         }
     
-    def _analyze_documentation(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_documentation (self, filepath: str, tree: ast.AST) -> Dict:
         """Extract documentation."""
         extractor = DocstringExtractor()
-        extractor.visit(tree)
+        extractor.visit (tree)
         
         docs = {}
         for name, doc_info in extractor.docstrings.items():
@@ -285,10 +285,10 @@ class CodeUnderstandingEngine:
         
         return docs
     
-    def _analyze_patterns(self, filepath: str, tree: ast.AST) -> Dict:
+    def _analyze_patterns (self, filepath: str, tree: ast.AST) -> Dict:
         """Detect code patterns."""
         extractor = CodePatternExtractor()
-        extractor.visit(tree)
+        extractor.visit (tree)
         
         patterns = {}
         for pattern_type, pattern in extractor.patterns.items():
@@ -301,7 +301,7 @@ class CodeUnderstandingEngine:
     
     # ==================== Query Interface ====================
     
-    def get_symbol_at_position(self, filepath: str, line: int, character: int) -> Optional[CodeInsight]:
+    def get_symbol_at_position (self, filepath: str, line: int, character: int) -> Optional[CodeInsight]:
         """
         Get complete information about symbol at position.
         This is what IDE uses for hover, completion, etc.
@@ -310,7 +310,7 @@ class CodeUnderstandingEngine:
             return None
         
         # Ensure file is analyzed
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         
         # Find symbol at position
         symbols = analysis.get('symbols', {})
@@ -321,7 +321,7 @@ class CodeUnderstandingEngine:
         
         for symbol_key, symbol in symbols.items():
             symbol_line = symbol['line']
-            distance = abs(symbol_line - line)
+            distance = abs (symbol_line - line)
             if distance < min_distance:
                 min_distance = distance
                 closest = symbol
@@ -332,20 +332,20 @@ class CodeUnderstandingEngine:
         # Build comprehensive insight
         insight = CodeInsight(
             symbol_info=closest,
-            type_info=self._get_type_for_symbol(filepath, closest['name']),
-            documentation=self._get_doc_for_symbol(filepath, closest['name']),
+            type_info=self._get_type_for_symbol (filepath, closest['name']),
+            documentation=self._get_doc_for_symbol (filepath, closest['name']),
             references=closest.get('references', []),
-            suggestions=self._get_suggestions_for_symbol(filepath, closest),
-            diagnostics=self._get_diagnostics_for_line(filepath, line)
+            suggestions=self._get_suggestions_for_symbol (filepath, closest),
+            diagnostics=self._get_diagnostics_for_line (filepath, line)
         )
         
         return insight
     
-    def get_completions(self, filepath: str, line: int, character: int) -> List[Dict]:
+    def get_completions (self, filepath: str, line: int, character: int) -> List[Dict]:
         """
         Get completion suggestions for position.
         """
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         symbols = analysis.get('symbols', {})
         
         # Return all symbols as completions (simplified)
@@ -359,15 +359,15 @@ class CodeUnderstandingEngine:
         
         return completions
     
-    def get_diagnostics(self, filepath: str) -> List[Dict]:
+    def get_diagnostics (self, filepath: str) -> List[Dict]:
         """Get all diagnostics for file."""
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         quality = analysis.get('quality', {})
         return quality.get('issues', [])
     
-    def suggest_refactorings(self, filepath: str) -> List[Dict]:
+    def suggest_refactorings (self, filepath: str) -> List[Dict]:
         """Suggest refactoring opportunities."""
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         
         suggestions = []
         
@@ -395,12 +395,12 @@ class CodeUnderstandingEngine:
     
     # ==================== LLM Context Generation ====================
     
-    def generate_llm_context(self, filepath: str, focus_line: Optional[int] = None) -> str:
+    def generate_llm_context (self, filepath: str, focus_line: Optional[int] = None) -> str:
         """
         Generate rich context for LLM.
         This is what Cursor sends to ChatGPT/Claude.
         """
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         
         lines = [f"# Context for {filepath}\\n"]
         
@@ -414,63 +414,63 @@ class CodeUnderstandingEngine:
         classes = {k: v for k, v in symbols.items() if v['type'] == 'class'}
         if classes:
             lines.append("### Classes")
-            for name, info in list(classes.items())[:5]:
-                doc = docs.get(name, {}).get('summary', 'No documentation')
-                lines.append(f"- {name} (line {info['line']}): {doc}")
+            for name, info in list (classes.items())[:5]:
+                doc = docs.get (name, {}).get('summary', 'No documentation')
+                lines.append (f"- {name} (line {info['line']}): {doc}")
         
         # Functions
         functions = {k: v for k, v in symbols.items() if v['type'] == 'function'}
         if functions:
             lines.append("\\n### Functions")
-            for name, info in list(functions.items())[:10]:
-                doc = docs.get(name, {}).get('summary', 'No documentation')
-                lines.append(f"- {name} (line {info['line']}): {doc}")
+            for name, info in list (functions.items())[:10]:
+                doc = docs.get (name, {}).get('summary', 'No documentation')
+                lines.append (f"- {name} (line {info['line']}): {doc}")
         
         # Types (if available)
         types = analysis.get('types', {}).get('annotated', {})
         if types:
             lines.append("\\n### Type Information")
-            for name, type_str in list(types.items())[:5]:
-                lines.append(f"- {name}: {type_str}")
+            for name, type_str in list (types.items())[:5]:
+                lines.append (f"- {name}: {type_str}")
         
         # Quality issues
         quality = analysis.get('quality', {})
         issues = quality.get('issues', [])
         if issues:
-            lines.append(f"\\n### Issues ({len(issues)} total)")
+            lines.append (f"\\n### Issues ({len (issues)} total)")
             for issue in issues[:5]:
-                lines.append(f"- Line {issue['line']}: {issue['message']}")
+                lines.append (f"- Line {issue['line']}: {issue['message']}")
         
         # Focus area (if specified)
         if focus_line:
-            lines.append(f"\\n### Focus Area (Line {focus_line})")
+            lines.append (f"\\n### Focus Area (Line {focus_line})")
             # Add nearby symbols
             nearby = {
                 k: v for k, v in symbols.items()
-                if abs(v['line'] - focus_line) < 10
+                if abs (v['line'] - focus_line) < 10
             }
             if nearby:
                 lines.append("Nearby symbols:")
                 for name, info in nearby.items():
-                    lines.append(f"- {name} ({info['type']}) at line {info['line']}")
+                    lines.append (f"- {name} ({info['type']}) at line {info['line']}")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
     # ==================== Utility Methods ====================
     
-    def _hash_content(self, content: str) -> str:
+    def _hash_content (self, content: str) -> str:
         """Generate hash of content for caching."""
         return hashlib.md5(content.encode()).hexdigest()
     
-    def _invalidate_cache(self, filepath: str):
+    def _invalidate_cache (self, filepath: str):
         """Invalidate cache for file."""
-        self.analysis_cache.pop(filepath, None)
-        self.asts.pop(filepath, None)
-        self.ast_hashes.pop(filepath, None)
+        self.analysis_cache.pop (filepath, None)
+        self.asts.pop (filepath, None)
+        self.ast_hashes.pop (filepath, None)
     
-    def _get_type_for_symbol(self, filepath: str, symbol_name: str) -> Optional[str]:
+    def _get_type_for_symbol (self, filepath: str, symbol_name: str) -> Optional[str]:
         """Get type information for symbol."""
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         types = analysis.get('types', {})
         
         # Check annotated types
@@ -487,42 +487,42 @@ class CodeUnderstandingEngine:
         
         return None
     
-    def _get_doc_for_symbol(self, filepath: str, symbol_name: str) -> Optional[str]:
+    def _get_doc_for_symbol (self, filepath: str, symbol_name: str) -> Optional[str]:
         """Get documentation for symbol."""
-        analysis = self.analyze_file(filepath)
+        analysis = self.analyze_file (filepath)
         docs = analysis.get('documentation', {})
         
-        doc_info = docs.get(symbol_name)
+        doc_info = docs.get (symbol_name)
         if doc_info:
             return doc_info.get('summary')
         
         return None
     
-    def _get_suggestions_for_symbol(self, filepath: str, symbol: Dict) -> List[str]:
+    def _get_suggestions_for_symbol (self, filepath: str, symbol: Dict) -> List[str]:
         """Get suggestions related to symbol."""
         suggestions = []
         
         # No documentation
-        if not self._get_doc_for_symbol(filepath, symbol['name']):
+        if not self._get_doc_for_symbol (filepath, symbol['name']):
             suggestions.append("Add docstring")
         
         # No type hints
-        if not self._get_type_for_symbol(filepath, symbol['name']):
+        if not self._get_type_for_symbol (filepath, symbol['name']):
             suggestions.append("Add type hints")
         
         return suggestions
     
-    def _get_diagnostics_for_line(self, filepath: str, line: int) -> List[Dict]:
+    def _get_diagnostics_for_line (self, filepath: str, line: int) -> List[Dict]:
         """Get diagnostics affecting a specific line."""
-        all_diagnostics = self.get_diagnostics(filepath)
+        all_diagnostics = self.get_diagnostics (filepath)
         return [d for d in all_diagnostics if d.get('line') == line]
     
     # ==================== Statistics & Reporting ====================
     
-    def get_codebase_statistics(self) -> Dict[str, Any]:
+    def get_codebase_statistics (self) -> Dict[str, Any]:
         """Get statistics about the entire codebase."""
         stats = {
-            'total_files': len(self.files),
+            'total_files': len (self.files),
             'total_functions': 0,
             'total_classes': 0,
             'total_lines': 0,
@@ -534,26 +534,26 @@ class CodeUnderstandingEngine:
         complexities = []
         
         for filepath in self.files:
-            analysis = self.analyze_file(filepath)
+            analysis = self.analyze_file (filepath)
             
             symbols = analysis.get('symbols', {})
             stats['total_functions'] += sum(1 for s in symbols.values() if s['type'] == 'function')
             stats['total_classes'] += sum(1 for s in symbols.values() if s['type'] == 'class')
             
             docs = analysis.get('documentation', {})
-            stats['documented_functions'] += len(docs)
+            stats['documented_functions'] += len (docs)
             
             complexity = analysis.get('complexity', {})
             for metrics in complexity.values():
-                complexities.append(metrics['cyclomatic'])
+                complexities.append (metrics['cyclomatic'])
             
             quality = analysis.get('quality', {})
-            stats['total_issues'] += len(quality.get('issues', []))
+            stats['total_issues'] += len (quality.get('issues', []))
             
-            stats['total_lines'] += len(self.files[filepath].split('\\n'))
+            stats['total_lines'] += len (self.files[filepath].split('\\n'))
         
         if complexities:
-            stats['average_complexity'] = sum(complexities) / len(complexities)
+            stats['average_complexity'] = sum (complexities) / len (complexities)
         
         return stats
 
@@ -574,7 +574,7 @@ class UserService:
     def __init__(self, db):
         self.db = db
     
-    def get_user(self, user_id: int) -> Optional[dict]:
+    def get_user (self, user_id: int) -> Optional[dict]:
         ''Get user by ID.
         
         Args:
@@ -583,20 +583,20 @@ class UserService:
         Returns:
             User data or None if not found
         ''
-        return self.db.query(user_id)
+        return self.db.query (user_id)
     
-    def create_user(self, name: str, email: str):
+    def create_user (self, name: str, email: str):
         # Missing docstring!
         # TODO: Add validation
         user = {'name': name, 'email': email}
-        self.db.save(user)
+        self.db.save (user)
         return user
 """)
 
 # Analyze file
 print("=== Complete Analysis ===")
 analysis = engine.analyze_file('user_service.py')
-print(json.dumps(analysis, indent=2, default=str))
+print(json.dumps (analysis, indent=2, default=str))
 
 # Get symbol information
 print("\\n=== Symbol at Line 12 ===")
@@ -639,7 +639,7 @@ for key, value in stats.items():
 
 ## Real-World Case Study: How Cursor Uses Code Understanding
 
-Cursor's code understanding engine powers all its features:
+Cursor\'s code understanding engine powers all its features:
 
 **1. Real-Time Intelligence:**
 - As you type, engine continuously analyzes

@@ -16,7 +16,7 @@ export const streamingresponsesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Streaming's main UX benefit is perceived speed - users see the first token in ~0.5s vs waiting 5-10s for the complete response. Total generation time is the same, but progressive disclosure dramatically improves perceived performance and engagement.",
+      "Streaming\'s main UX benefit is perceived speed - users see the first token in ~0.5s vs waiting 5-10s for the complete response. Total generation time is the same, but progressive disclosure dramatically improves perceived performance and engagement.",
   },
   {
     id: 'mc2',

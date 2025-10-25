@@ -10,20 +10,20 @@ export const lossFunctionsQuiz: QuizQuestion[] = [
 **The Problem with MSE for Classification:**
 
 Setup:
-- Output: ŷ = sigmoid(z) where z = wx + b
+- Output: ŷ = sigmoid (z) where z = wx + b
 - MSE: L = (1/2)(y - ŷ)²
 - Goal: Classify y ∈ {0, 1}
 
 **Issue 1: Saturating Gradients**
 
 The gradient of MSE w.r.t. pre-activation z:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂z = ∂L/∂ŷ · ∂ŷ/∂z
       = (ŷ - y) · σ'(z)
       = (ŷ - y) · σ(z)(1 - σ(z))
               ^^^^^^^^^^^^^^^^
                  Problem here!
-\\\`\\\`\\\`
+\`\`\`
 
 When the prediction is very wrong:
 - If y = 1 and ŷ ≈ 0: z is very negative → σ(z) ≈ 0 → σ'(z) ≈ 0
@@ -32,7 +32,7 @@ When the prediction is very wrong:
 Result: **Gradient vanishes when you need it most** (when prediction is wrong)!
 
 Concrete example:
-\\\`\\\`\\\`python
+\`\`\`python
 # True label: y = 1
 # Very wrong prediction: ŷ = 0.01 (z ≈ -4.6)
 
@@ -42,7 +42,7 @@ sigmoid_deriv = 0.01 * 0.99  # ≈ 0.01 (very small)
 gradient = error * sigmoid_deriv  # ≈ -0.01 (tiny!)
 
 # Training stalls despite huge error!
-\\\`\\\`\\\`
+\`\`\`
 
 **Issue 2: Non-Convex Loss Surface**
 
@@ -62,16 +62,16 @@ MSE measures distance in probability space, but classification cares about decis
 **Why Binary Cross-Entropy Works Better:**
 
 BCE formula:
-\\\`\\\`\\\`
+\`\`\`
 BCE = -[y log(ŷ) + (1-y) log(1-ŷ)]
-\\\`\\\`\\\`
+\`\`\`
 
 Gradient w.r.t. pre-activation z:
-\\\`\\\`\\\`
+\`\`\`
 ∂BCE/∂z = ∂BCE/∂ŷ · ∂ŷ/∂z
         = [(ŷ - y)/[ŷ(1-ŷ)]] · [ŷ(1-ŷ)]
         = ŷ - y  (simple!)
-\\\`\\\`\\\`
+\`\`\`
 
 **Benefits:**
 
@@ -95,7 +95,7 @@ Gradient w.r.t. pre-activation z:
 
 **Numerical Comparison:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 import numpy as np
 
 # Scenario: True label y = 1
@@ -108,13 +108,13 @@ mse_gradients = predictions - y_true
 # With sigmoid: multiply by σ'(z) which is small for extreme predictions
 
 # BCE loss and gradient
-bce_losses = -np.log(predictions)
+bce_losses = -np.log (predictions)
 bce_gradients_preactivation = predictions - y_true  # After cancellation
 
 print("Comparison (True label = 1):")
 print("\\nPrediction | MSE Loss | MSE Grad | BCE Loss | BCE Grad (pre-z)")
 print("-" * 65)
-for p, mse_l, mse_g, bce_l, bce_g in zip(predictions, mse_losses, 
+for p, mse_l, mse_g, bce_l, bce_g in zip (predictions, mse_losses, 
                                            mse_gradients, bce_losses, 
                                            bce_gradients_preactivation):
     print(f"{p:6.2f}     | {mse_l:8.4f} | {mse_g:8.4f} | {bce_l:8.4f} | {bce_g:8.4f}")
@@ -122,11 +122,11 @@ for p, mse_l, mse_g, bce_l, bce_g in zip(predictions, mse_losses,
 # Output shows:
 # - When p = 0.01 (very wrong): MSE gradient ≈ -0.99 BUT gets multiplied by σ'(z) ≈ 0.01 → tiny!
 # - When p = 0.01 (very wrong): BCE gradient = -0.99 (large, as it should be)
-\\\`\\\`\\\`
+\`\`\`
 
 **Real Training Example:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Train with both losses
 def train_comparison():
     X = generate_binary_data()
@@ -140,7 +140,7 @@ def train_comparison():
     # BCE: 20 epochs to converge, reaches 98% accuracy
     
     return model_mse, model_bce
-\\\`\\\`\\\`
+\`\`\`
 
 **When MSE Might Be Acceptable:**
 
@@ -179,7 +179,7 @@ BCE solves all these issues:
     id: 'loss-functions-dq-2',
     question:
       'In trading applications, standard loss functions like MSE may not capture the true objective (profit). Design a custom loss function for a stock return prediction model that accounts for transaction costs, directional accuracy, and risk aversion. Explain your design choices.',
-    sampleAnswer: `Designing a trading-specific loss function requires balancing multiple objectives that standard ML losses ignore. Here's a comprehensive approach:
+    sampleAnswer: `Designing a trading-specific loss function requires balancing multiple objectives that standard ML losses ignore. Here\'s a comprehensive approach:
 
 **Standard ML vs Trading Objectives:**
 
@@ -196,8 +196,8 @@ Trading Reality:
 
 **Custom Trading Loss Function Design:**
 
-\\\`\\\`\\\`python
-def trading_loss(y_pred_returns, y_true_returns, positions, 
+\`\`\`python
+def trading_loss (y_pred_returns, y_true_returns, positions, 
                  transaction_cost=0.001, risk_aversion=0.5):
     """
     Comprehensive trading loss function
@@ -219,44 +219,44 @@ def trading_loss(y_pred_returns, y_true_returns, positions,
     Returns:
         loss: Scalar value to minimize
     """
-    n_samples = len(y_true_returns)
+    n_samples = len (y_true_returns)
     
     # Component 1: Directional Accuracy Loss
     # Penalize wrong direction, reward correct direction
-    direction_correct = np.sign(y_pred_returns) == np.sign(y_true_returns)
-    direction_loss = -np.mean(direction_correct.astype(float))
+    direction_correct = np.sign (y_pred_returns) == np.sign (y_true_returns)
+    direction_loss = -np.mean (direction_correct.astype (float))
     
     # Weight by magnitude of true move
-    magnitude_weights = np.abs(y_true_returns)
-    weighted_direction_loss = -np.mean(direction_correct * magnitude_weights)
+    magnitude_weights = np.abs (y_true_returns)
+    weighted_direction_loss = -np.mean (direction_correct * magnitude_weights)
     
     # Component 2: P&L-based Loss
     # Positions based on predictions
     predicted_pnl = positions * y_true_returns
-    pnl_loss = -np.mean(predicted_pnl)  # Minimize negative PnL = Maximize PnL
+    pnl_loss = -np.mean (predicted_pnl)  # Minimize negative PnL = Maximize PnL
     
     # Component 3: Transaction Cost Penalty
     # Cost incurred when changing positions
-    position_changes = np.abs(np.diff(positions, prepend=0))
-    total_transaction_costs = np.sum(position_changes * transaction_cost)
+    position_changes = np.abs (np.diff (positions, prepend=0))
+    total_transaction_costs = np.sum (position_changes * transaction_cost)
     transaction_loss = total_transaction_costs / n_samples
     
     # Component 4: Risk Penalty (Variance)
     # Penalize high variance (unstable returns)
-    pnl_variance = np.var(predicted_pnl)
+    pnl_variance = np.var (predicted_pnl)
     risk_loss = risk_aversion * pnl_variance
     
     # Component 5: Drawdown Penalty
     # Penalize large drawdowns
-    cumulative_pnl = np.cumsum(predicted_pnl)
-    running_max = np.maximum.accumulate(cumulative_pnl)
+    cumulative_pnl = np.cumsum (predicted_pnl)
+    running_max = np.maximum.accumulate (cumulative_pnl)
     drawdowns = running_max - cumulative_pnl
-    max_drawdown = np.max(drawdowns)
+    max_drawdown = np.max (drawdowns)
     drawdown_loss = 0.1 * max_drawdown  # Penalty for large drawdown
     
     # Component 6: Sharpe Ratio (Negative for Minimization)
-    mean_return = np.mean(predicted_pnl)
-    std_return = np.std(predicted_pnl) + 1e-6
+    mean_return = np.mean (predicted_pnl)
+    std_return = np.std (predicted_pnl) + 1e-6
     sharpe_ratio = mean_return / std_return
     sharpe_loss = -sharpe_ratio  # Minimize negative Sharpe = Maximize Sharpe
     
@@ -287,14 +287,14 @@ np.random.seed(42)
 n_days = 252  # One trading year
 
 # Simulate returns
-y_true_returns = np.random.randn(n_days) * 0.02
-y_pred_returns = y_true_returns + np.random.randn(n_days) * 0.01
+y_true_returns = np.random.randn (n_days) * 0.02
+y_pred_returns = y_true_returns + np.random.randn (n_days) * 0.01
 
 # Position sizing based on predictions (simple: sign and scale)
-positions = np.clip(y_pred_returns * 10, -1, 1)  # Scale to [-1, 1]
+positions = np.clip (y_pred_returns * 10, -1, 1)  # Scale to [-1, 1]
 
 # Calculate loss
-loss, components = trading_loss(y_pred_returns, y_true_returns, positions,
+loss, components = trading_loss (y_pred_returns, y_true_returns, positions,
                                 transaction_cost=0.001, risk_aversion=0.5)
 
 print("Trading Loss Components:")
@@ -306,7 +306,7 @@ print(f"\\nTotal Loss: {loss:.6f}")
 mse = np.mean((y_pred_returns - y_true_returns) ** 2)
 print(f"Standard MSE: {mse:.6f}")
 print("\\n→ Trading loss captures profitability, not just prediction accuracy")
-\\\`\\\`\\\`
+\`\`\`
 
 **Design Rationale:**
 
@@ -341,44 +341,44 @@ print("\\n→ Trading loss captures profitability, not just prediction accuracy"
 **Alternative Formulations:**
 
 **A. Pure Sharpe Ratio Loss:**
-\\\`\\\`\\\`python
-def sharpe_ratio_loss(predictions, returns, positions):
+\`\`\`python
+def sharpe_ratio_loss (predictions, returns, positions):
     pnl = positions * returns
-    return -np.mean(pnl) / (np.std(pnl) + 1e-6)
+    return -np.mean (pnl) / (np.std (pnl) + 1e-6)
 
 # Simplest, most direct
 # Downside: Doesn't explicitly penalize transaction costs
-\\\`\\\`\\\`
+\`\`\`
 
 **B. Risk-Parity Loss:**
-\\\`\\\`\\\`python
-def risk_parity_loss(predictions, returns, target_vol=0.15):
+\`\`\`python
+def risk_parity_loss (predictions, returns, target_vol=0.15):
     """Maintain constant volatility"""
     pnl = predictions * returns
-    current_vol = np.std(pnl)
+    current_vol = np.std (pnl)
     vol_penalty = (current_vol - target_vol) ** 2
-    return -np.mean(pnl) + vol_penalty
-\\\`\\\`\\\`
+    return -np.mean (pnl) + vol_penalty
+\`\`\`
 
 **C. Kelly Criterion Loss:**
-\\\`\\\`\\\`python
-def kelly_criterion_loss(predictions, returns):
+\`\`\`python
+def kelly_criterion_loss (predictions, returns):
     """Optimal position sizing"""
-    win_rate = np.mean(returns > 0)
-    avg_win = np.mean(returns[returns > 0])
-    avg_loss = np.mean(np.abs(returns[returns < 0]))
+    win_rate = np.mean (returns > 0)
+    avg_win = np.mean (returns[returns > 0])
+    avg_loss = np.mean (np.abs (returns[returns < 0]))
     
     kelly_fraction = win_rate - (1 - win_rate) / (avg_win / avg_loss)
     positions = predictions * kelly_fraction
     
-    return -np.mean(positions * returns)
-\\\`\\\`\\\`
+    return -np.mean (positions * returns)
+\`\`\`
 
 **Practical Implementation Considerations:**
 
 **1. Differentiability:**
 All components must be differentiable for backpropagation:
-\\\`\\\`\\\`python
+\`\`\`python
 # AVOID: Non-differentiable operations
 if prediction > 0:
     return profit
@@ -386,37 +386,37 @@ else:
     return loss
 
 # PREFER: Smooth approximations
-return torch.sigmoid(prediction * 10) * profit + (1 - torch.sigmoid(prediction * 10)) * loss
-\\\`\\\`\\\`
+return torch.sigmoid (prediction * 10) * profit + (1 - torch.sigmoid (prediction * 10)) * loss
+\`\`\`
 
 **2. Numerical Stability:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Add epsilon to prevent division by zero
 sharpe = mean / (std + 1e-6)
 
 # Clip extreme values
-positions = np.clip(positions, -1, 1)
-\\\`\\\`\\\`
+positions = np.clip (positions, -1, 1)
+\`\`\`
 
 **3. Time-Series Considerations:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Don't shuffle time series data!
 # Maintain temporal order in loss calculation
 
 # Consider look-ahead bias
 # Only use information available at time t for time t+1 prediction
-\\\`\\\`\\\`
+\`\`\`
 
 **4. Backtesting Alignment:**
-\\\`\\\`\\\`python
+\`\`\`python
 # Loss function should match backtesting metrics
 # If you backtest on Sharpe, train on Sharpe loss
 # Ensures training and evaluation are aligned
-\\\`\\\`\\\`
+\`\`\`
 
 **Hyperparameter Tuning:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Grid search over loss function weights
 weight_configs = [
     {'direction': 0.5, 'pnl': 0.3, 'cost': 0.2},
@@ -429,12 +429,12 @@ best_config = None
 best_sharpe = -np.inf
 
 for config in weight_configs:
-    model = train_with_loss(config)
-    sharpe = evaluate_sharpe(model, val_data)
+    model = train_with_loss (config)
+    sharpe = evaluate_sharpe (model, val_data)
     if sharpe > best_sharpe:
         best_sharpe = sharpe
         best_config = config
-\\\`\\\`\\\`
+\`\`\`
 
 **Challenges:**
 
@@ -479,13 +479,13 @@ The ideal loss function depends on your trading style, constraints, and objectiv
     id: 'loss-functions-dq-3',
     question:
       'Explain why the combination of softmax activation and categorical cross-entropy loss produces such a clean gradient (∂L/∂z = ŷ - y). Walk through the mathematical derivation and discuss why this property is important for training neural networks.',
-    sampleAnswer: `The clean gradient from softmax + categorical cross-entropy is one of the most elegant results in deep learning. Let's derive it step by step:
+    sampleAnswer: `The clean gradient from softmax + categorical cross-entropy is one of the most elegant results in deep learning. Let\'s derive it step by step:
 
 **Setup:**
 
 Output layer:
 - Pre-activation (logits): z = [z₁, z₂, ..., zₓ] for C classes
-- Activation (softmax): ŷᵢ = exp(zᵢ) / Σⱼ exp(zⱼ)
+- Activation (softmax): ŷᵢ = exp (zᵢ) / Σⱼ exp (zⱼ)
 - True labels (one-hot): y = [y₁, y₂, ..., yₓ] where yᵢ ∈ {0,1} and Σᵢyᵢ = 1
 
 Loss function:
@@ -495,102 +495,102 @@ Loss function:
 
 **Step 1: Gradient of Loss w.r.t. Softmax Output**
 
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂ŷₖ = ∂/∂ŷₖ [-Σᵢ yᵢ log(ŷᵢ)]
        = -yₖ/ŷₖ
-\\\`\\\`\\\`
+\`\`\`
 
 Simple application of chain rule and derivative of log.
 
 **Step 2: Gradient of Softmax w.r.t. Logits**
 
 This is the tricky part. Softmax for element i:
-\\\`\\\`\\\`
-ŷᵢ = exp(zᵢ) / Σⱼ exp(zⱼ)
-\\\`\\\`\\\`
+\`\`\`
+ŷᵢ = exp (zᵢ) / Σⱼ exp (zⱼ)
+\`\`\`
 
 We need ∂ŷᵢ/∂zₖ. Two cases:
 
 **Case 1: i = k (diagonal elements)**
-\\\`\\\`\\\`
-∂ŷᵢ/∂zᵢ = ∂/∂zᵢ [exp(zᵢ) / Σⱼ exp(zⱼ)]
+\`\`\`
+∂ŷᵢ/∂zᵢ = ∂/∂zᵢ [exp (zᵢ) / Σⱼ exp (zⱼ)]
 
 Using quotient rule: ∂(u/v)/∂x = (u'v - uv')/v²
 
-u = exp(zᵢ), u' = exp(zᵢ)
-v = Σⱼ exp(zⱼ), v' = exp(zᵢ)  (only zᵢ term in sum depends on zᵢ)
+u = exp (zᵢ), u' = exp (zᵢ)
+v = Σⱼ exp (zⱼ), v' = exp (zᵢ)  (only zᵢ term in sum depends on zᵢ)
 
-∂ŷᵢ/∂zᵢ = [exp(zᵢ)·Σⱼexp(zⱼ) - exp(zᵢ)·exp(zᵢ)] / [Σⱼexp(zⱼ)]²
-        = exp(zᵢ)/Σⱼexp(zⱼ) · [1 - exp(zᵢ)/Σⱼexp(zⱼ)]
+∂ŷᵢ/∂zᵢ = [exp (zᵢ)·Σⱼexp (zⱼ) - exp (zᵢ)·exp (zᵢ)] / [Σⱼexp (zⱼ)]²
+        = exp (zᵢ)/Σⱼexp (zⱼ) · [1 - exp (zᵢ)/Σⱼexp (zⱼ)]
         = ŷᵢ · (1 - ŷᵢ)
-\\\`\\\`\\\`
+\`\`\`
 
 **Case 2: i ≠ k (off-diagonal elements)**
-\\\`\\\`\\\`
-∂ŷᵢ/∂zₖ = ∂/∂zₖ [exp(zᵢ) / Σⱼ exp(zⱼ)]
+\`\`\`
+∂ŷᵢ/∂zₖ = ∂/∂zₖ [exp (zᵢ) / Σⱼ exp (zⱼ)]
 
-u = exp(zᵢ), u' = 0  (doesn't depend on zₖ)
-v = Σⱼ exp(zⱼ), v' = exp(zₖ)  (only zₖ term depends on zₖ)
+u = exp (zᵢ), u' = 0  (doesn't depend on zₖ)
+v = Σⱼ exp (zⱼ), v' = exp (zₖ)  (only zₖ term depends on zₖ)
 
-∂ŷᵢ/∂zₖ = [0·Σⱼexp(zⱼ) - exp(zᵢ)·exp(zₖ)] / [Σⱼexp(zⱼ)]²
-        = -exp(zᵢ)/Σⱼexp(zⱼ) · exp(zₖ)/Σⱼexp(zⱼ)
+∂ŷᵢ/∂zₖ = [0·Σⱼexp (zⱼ) - exp (zᵢ)·exp (zₖ)] / [Σⱼexp (zⱼ)]²
+        = -exp (zᵢ)/Σⱼexp (zⱼ) · exp (zₖ)/Σⱼexp (zⱼ)
         = -ŷᵢ · ŷₖ
-\\\`\\\`\\\`
+\`\`\`
 
 **Step 3: Chain Rule to Combine**
 
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂zₖ = Σᵢ (∂L/∂ŷᵢ) · (∂ŷᵢ/∂zₖ)
-\\\`\\\`\\\`
+\`\`\`
 
 Substitute our results:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂zₖ = Σᵢ (-yᵢ/ŷᵢ) · (∂ŷᵢ/∂zₖ)
-\\\`\\\`\\\`
+\`\`\`
 
 Split the sum into i=k and i≠k terms:
 
 **Term 1 (i = k):**
-\\\`\\\`\\\`
+\`\`\`
 (-yₖ/ŷₖ) · ŷₖ(1 - ŷₖ) = -yₖ(1 - ŷₖ)
                        = -yₖ + yₖŷₖ
-\\\`\\\`\\\`
+\`\`\`
 
 **Term 2 (i ≠ k):**
-\\\`\\\`\\\`
+\`\`\`
 Σᵢ≠ₖ (-yᵢ/ŷᵢ) · (-ŷᵢŷₖ) = Σᵢ≠ₖ yᵢŷₖ
                          = ŷₖ Σᵢ≠ₖ yᵢ
-\\\`\\\`\\\`
+\`\`\`
 
 **Combine:**
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂zₖ = (-yₖ + yₖŷₖ) + (ŷₖ Σᵢ≠ₖ yᵢ)
        = -yₖ + yₖŷₖ + ŷₖ Σᵢ≠ₖ yᵢ
        = -yₖ + ŷₖ(yₖ + Σᵢ≠ₖ yᵢ)
        = -yₖ + ŷₖ(Σᵢ yᵢ)
        = -yₖ + ŷₖ·1    (because y is one-hot, Σᵢ yᵢ = 1)
        = ŷₖ - yₖ
-\\\`\\\`\\\`
+\`\`\`
 
 **Result: ∂L/∂zₖ = ŷₖ - yₖ**
 
 Beautifully simple! For all classes:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂z = ŷ - y
-\\\`\\\`\\\`
+\`\`\`
 
 **Why This Is Important:**
 
 **1. Computational Efficiency:**
 No need to compute and store intermediate Jacobian matrices. Just subtract!
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Instead of complex chain rule computation:
 # dL_dz = (dL_dy @ dy_dz)  # Matrix multiplication
 
 # We get:
 dL_dz = y_pred - y_true  # Simple subtraction!
-\\\`\\\`\\\`
+\`\`\`
 
 **2. No Vanishing Gradient:**
 
@@ -610,66 +610,66 @@ Gradient = error in probability space:
 
 The derivation shows why numerical stability matters:
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Naive implementation (numerically unstable):
-def softmax_naive(z):
-    return np.exp(z) / np.sum(np.exp(z))
+def softmax_naive (z):
+    return np.exp (z) / np.sum (np.exp (z))
 
-# For large z values, exp(z) overflows!
+# For large z values, exp (z) overflows!
 z = np.array([1000, 1001, 1002])
 # exp(1000) ≈ 10^434 → overflow!
 
 # Stable implementation:
-def softmax_stable(z):
-    z_shifted = z - np.max(z)  # Shift for stability
-    exp_z = np.exp(z_shifted)
-    return exp_z / np.sum(exp_z)
+def softmax_stable (z):
+    z_shifted = z - np.max (z)  # Shift for stability
+    exp_z = np.exp (z_shifted)
+    return exp_z / np.sum (exp_z)
 
 # Now: exp(0), exp(1), exp(2) → No overflow!
-\\\`\\\`\\\`
+\`\`\`
 
 The clean gradient ŷ - y is preserved even after numerical stabilization.
 
 **5. Gradient Flow in Deep Networks:**
 
 In backpropagation:
-\\\`\\\`\\\`
+\`\`\`
 ∂L/∂wₗ = ∂L/∂zL · ∂zL/∂aL-1 · ... · ∂a1/∂z1 · ∂z1/∂w1
 
 The fact that ∂L/∂zL = ŷ - y (not involving derivative terms) means:
 - Initial gradient is clear and well-scaled
 - No vanishing gradient from output layer
 - Makes training deep networks practical
-\\\`\\\`\\\`
+\`\`\`
 
 **Comparison with Other Combinations:**
 
 **MSE + Linear:**
-\\\`\\\`\\\`
+\`\`\`
 L = (1/2)(y - ŷ)²
 ∂L/∂ŷ = ŷ - y
 ∂ŷ/∂z = 1 (linear)
 ∂L/∂z = ŷ - y  (also clean!)
-\\\`\\\`\\\`
+\`\`\`
 But: Linear output not suitable for probabilities
 
 **MSE + Sigmoid:**
-\\\`\\\`\\\`
+\`\`\`
 L = (1/2)(y - ŷ)²
 ∂L/∂ŷ = ŷ - y
 ∂ŷ/∂z = σ'(z) = σ(z)(1-σ(z))
 ∂L/∂z = (ŷ - y) · σ(z)(1-σ(z))  (vanishing gradient!)
-\\\`\\\`\\\`
+\`\`\`
 The σ'(z) term causes problems
 
 **BCE + Sigmoid:**
-\\\`\\\`\\\`
+\`\`\`
 L = -[y log(ŷ) + (1-y) log(1-ŷ)]
 ∂L/∂ŷ = (ŷ - y)/[ŷ(1-ŷ)]
 ∂ŷ/∂z = σ(z)(1-σ(z))
 ∂L/∂z = [(ŷ - y)/[ŷ(1-ŷ)]] · [ŷ(1-ŷ)]
       = ŷ - y  (clean!)
-\\\`\\\`\\\`
+\`\`\`
 Binary version also clean!
 
 **Mathematical Insight:**
@@ -683,15 +683,15 @@ This is not a coincidence—it's a consequence of maximum likelihood estimation 
 
 **Practical Implementation:**
 
-\\\`\\\`\\\`python
+\`\`\`python
 import torch
 
 # PyTorch combines softmax + cross-entropy for numerical stability
-logits = model(x)  # Raw outputs (no softmax!)
+logits = model (x)  # Raw outputs (no softmax!)
 
 # Don't do this (numerically unstable):
-# probs = torch.softmax(logits, dim=1)
-# loss = -torch.mean(torch.log(probs[range(len(y)), y]))
+# probs = torch.softmax (logits, dim=1)
+# loss = -torch.mean (torch.log (probs[range (len (y)), y]))
 
 # Do this (stable):
 loss = torch.nn.CrossEntropyLoss()(logits, y)
@@ -699,7 +699,7 @@ loss = torch.nn.CrossEntropyLoss()(logits, y)
 # Backward pass automatically computes clean gradient
 loss.backward()
 # logits.grad = probs - y_one_hot  (simple!)
-\\\`\\\`\\\`
+\`\`\`
 
 **Conclusion:**
 

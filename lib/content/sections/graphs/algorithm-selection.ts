@@ -14,7 +14,7 @@ START: What is your goal?
 │  ├─ Need level-by-level order? → BFS
 │  ├─ Need to explore deeply first? → DFS
 │  ├─ Find connected components? → DFS or BFS (both work)
-│  └─ Topological ordering (DAG)? → DFS + Stack or Kahn's Algorithm (BFS)
+│  └─ Topological ordering (DAG)? → DFS + Stack or Kahn\'s Algorithm (BFS)
 │
 ├─ SHORTEST PATH: Find minimum distance
 │  ├─ Unweighted graph? → BFS
@@ -26,8 +26,7 @@ START: What is your goal?
 ├─ CONNECTIVITY: Check if nodes are connected
 │  ├─ Static queries? → Single DFS/BFS
 │  ├─ Dynamic queries (many queries)? → Union-Find (Disjoint Set)
-│  └─ Strongly connected components (directed)? → Tarjan's or Kosaraju's
-│
+│  └─ Strongly connected components (directed)? → Tarjan's or Kosaraju\'s │
 ├─ CYCLE DETECTION: Find if cycle exists
 │  ├─ Undirected graph? → DFS with parent tracking
 │  ├─ Directed graph? → DFS with recursion stack
@@ -36,8 +35,7 @@ START: What is your goal?
 ├─ MINIMUM SPANNING TREE: Connect all nodes with minimum cost
 │  ├─ Need edge-by-edge building? → Kruskal's (with Union-Find)
 │  ├─ Growing from a vertex? → Prim's Algorithm
-│  └─ Already have Union-Find structure? → Kruskal's
-│
+│  └─ Already have Union-Find structure? → Kruskal\'s │
 ├─ NETWORK FLOW: Maximum flow from source to sink
 │  └─ Use Ford-Fulkerson or Edmonds-Karp
 │
@@ -73,7 +71,7 @@ START: What is your goal?
 ✅ **Finding shortest path in unweighted graph**
 \`\`\`python
 # BFS guarantees shortest path in unweighted graphs
-def shortestPath(graph, start, end):
+def shortestPath (graph, start, end):
     queue = deque([(start, 0)])
     visited = {start}
     
@@ -84,7 +82,7 @@ def shortestPath(graph, start, end):
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
+                visited.add (neighbor)
                 queue.append((neighbor, dist + 1))
     return -1
 \`\`\`
@@ -101,27 +99,27 @@ def shortestPath(graph, start, end):
 ✅ **Detecting cycles**
 \`\`\`python
 # DFS is natural for cycle detection
-def hasCycle(graph):
+def hasCycle (graph):
     visited = set()
     rec_stack = set()  # Recursion stack for directed graph
     
-    def dfs(node):
-        visited.add(node)
-        rec_stack.add(node)
+    def dfs (node):
+        visited.add (node)
+        rec_stack.add (node)
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                if dfs(neighbor):
+                if dfs (neighbor):
                     return True
             elif neighbor in rec_stack:  # Back edge = cycle
                 return True
         
-        rec_stack.remove(node)
+        rec_stack.remove (node)
         return False
     
     for node in graph:
         if node not in visited:
-            if dfs(node):
+            if dfs (node):
                 return True
     return False
 \`\`\`
@@ -142,7 +140,7 @@ def hasCycle(graph):
 
 ## 🚀 Dijkstra vs Bellman-Ford vs Floyd-Warshall
 
-### Dijkstra's Algorithm
+### Dijkstra\'s Algorithm
 **When to use:**
 - Single source shortest path
 - **Non-negative edge weights only**
@@ -153,13 +151,13 @@ def hasCycle(graph):
 \`\`\`python
 import heapq
 
-def dijkstra(graph, start):
+def dijkstra (graph, start):
     dist = {node: float('inf') for node in graph}
     dist[start] = 0
     pq = [(0, start)]  # (distance, node)
     
     while pq:
-        curr_dist, u = heapq.heappop(pq)
+        curr_dist, u = heapq.heappop (pq)
         
         if curr_dist > dist[u]:
             continue  # Already found better path
@@ -168,7 +166,7 @@ def dijkstra(graph, start):
             new_dist = dist[u] + weight
             if new_dist < dist[v]:
                 dist[v] = new_dist
-                heapq.heappush(pq, (new_dist, v))
+                heapq.heappush (pq, (new_dist, v))
     
     return dist
 \`\`\`
@@ -184,7 +182,7 @@ def dijkstra(graph, start):
 **Time:** O(V · E) - slower than Dijkstra
 
 \`\`\`python
-def bellmanFord(graph, V, start):
+def bellmanFord (graph, V, start):
     dist = [float('inf')] * V
     dist[start] = 0
     
@@ -211,7 +209,7 @@ def bellmanFord(graph, V, start):
 **Time:** O(V³) - only feasible for small graphs
 
 \`\`\`python
-def floydWarshall(graph, V):
+def floydWarshall (graph, V):
     # dist[i][j] = shortest distance from i to j
     dist = [[float('inf')] * V for _ in range(V)]
     
@@ -226,7 +224,7 @@ def floydWarshall(graph, V):
     for k in range(V):
         for i in range(V):
             for j in range(V):
-                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+                dist[i][j] = min (dist[i][j], dist[i][k] + dist[k][j])
     
     return dist
 \`\`\`
@@ -257,16 +255,16 @@ def floydWarshall(graph, V):
 \`\`\`python
 import heapq
 
-def astar(graph, start, goal, heuristic):
-    # heuristic(node) = estimated distance from node to goal
+def astar (graph, start, goal, heuristic):
+    # heuristic (node) = estimated distance from node to goal
     # For grid: Manhattan distance or Euclidean distance
     
     g_score = {start: 0}  # Actual distance from start
-    f_score = {start: heuristic(start)}  # g + h
+    f_score = {start: heuristic (start)}  # g + h
     pq = [(f_score[start], start)]
     
     while pq:
-        _, current = heapq.heappop(pq)
+        _, current = heapq.heappop (pq)
         
         if current == goal:
             return g_score[current]  # Found shortest path!
@@ -276,19 +274,19 @@ def astar(graph, start, goal, heuristic):
             
             if neighbor not in g_score or tentative_g < g_score[neighbor]:
                 g_score[neighbor] = tentative_g
-                f_score[neighbor] = tentative_g + heuristic(neighbor)
-                heapq.heappush(pq, (f_score[neighbor], neighbor))
+                f_score[neighbor] = tentative_g + heuristic (neighbor)
+                heapq.heappush (pq, (f_score[neighbor], neighbor))
     
     return -1  # No path
 
 # Example heuristic for grid (Manhattan distance)
-def manhattan(node, goal):
-    return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+def manhattan (node, goal):
+    return abs (node[0] - goal[0]) + abs (node[1] - goal[1])
 \`\`\`
 
 **Heuristic Requirements:**
-- **Admissible:** Never overestimate actual distance (h(n) ≤ actual)
-- **Consistent:** h(n) ≤ cost(n, n') + h(n') for all neighbors n'
+- **Admissible:** Never overestimate actual distance (h (n) ≤ actual)
+- **Consistent:** h (n) ≤ cost (n, n') + h (n') for all neighbors n'
 
 **Common heuristics:**
 - **Grid (4-directional):** Manhattan distance
@@ -298,7 +296,7 @@ def manhattan(node, goal):
 
 ---
 
-## 🌲 Prim's vs Kruskal's for MST
+## 🌲 Prim\'s vs Kruskal's for MST
 
 Both find Minimum Spanning Tree, but different approaches:
 
@@ -308,45 +306,45 @@ Both find Minimum Spanning Tree, but different approaches:
 \`\`\`python
 import heapq
 
-def prim(graph, start):
+def prim (graph, start):
     mst = []
     visited = {start}
     edges = [(weight, start, neighbor) for neighbor, weight in graph[start]]
-    heapq.heapify(edges)
+    heapq.heapify (edges)
     
     while edges:
-        weight, u, v = heapq.heappop(edges)
+        weight, u, v = heapq.heappop (edges)
         if v in visited:
             continue
         
-        visited.add(v)
+        visited.add (v)
         mst.append((u, v, weight))
         
         for neighbor, w in graph[v]:
             if neighbor not in visited:
-                heapq.heappush(edges, (w, v, neighbor))
+                heapq.heappush (edges, (w, v, neighbor))
     
     return mst
 \`\`\`
 
 **Best when:** Dense graph, starting from specific vertex
 
-### Kruskal's Algorithm
+### Kruskal\'s Algorithm
 **Sorts edges and adds smallest that don't create cycles**
 
 \`\`\`python
 class UnionFind:
     def __init__(self, n):
-        self.parent = list(range(n))
+        self.parent = list (range (n))
         self.rank = [0] * n
     
-    def find(self, x):
+    def find (self, x):
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
+            self.parent[x] = self.find (self.parent[x])
         return self.parent[x]
     
-    def union(self, x, y):
-        px, py = self.find(x), self.find(y)
+    def union (self, x, y):
+        px, py = self.find (x), self.find (y)
         if px == py:
             return False
         if self.rank[px] < self.rank[py]:
@@ -356,15 +354,15 @@ class UnionFind:
             self.rank[px] += 1
         return True
 
-def kruskal(edges, V):
+def kruskal (edges, V):
     edges.sort()  # Sort by weight
     uf = UnionFind(V)
     mst = []
     
     for weight, u, v in edges:
-        if uf.union(u, v):  # No cycle
+        if uf.union (u, v):  # No cycle
             mst.append((u, v, weight))
-            if len(mst) == V - 1:  # MST complete
+            if len (mst) == V - 1:  # MST complete
                 break
     
     return mst
@@ -374,7 +372,7 @@ def kruskal(edges, V):
 
 **Comparison:**
 
-| Aspect | Prim's | Kruskal's |
+| Aspect | Prim's | Kruskal\'s |
 |--------|--------|-----------|
 | **Approach** | Grow tree from vertex | Add edges by weight |
 | **Data Structure** | Priority queue | Union-Find |
@@ -391,17 +389,17 @@ def kruskal(edges, V):
 
 \`\`\`python
 # ❌ BAD: Infinite loop possible
-def dfs(graph, node):
+def dfs (graph, node):
     for neighbor in graph[node]:
-        dfs(graph, neighbor)  # May visit same node again!
+        dfs (graph, neighbor)  # May visit same node again!
 
 # ✅ GOOD: Track visited
-def dfs(graph, node, visited):
+def dfs (graph, node, visited):
     if node in visited:
         return
-    visited.add(node)
+    visited.add (node)
     for neighbor in graph[node]:
-        dfs(graph, neighbor, visited)
+        dfs (graph, neighbor, visited)
 \`\`\`
 
 ### Mistake 2: Wrong Dijkstra with Negative Weights
@@ -410,10 +408,10 @@ def dfs(graph, node, visited):
 \`\`\`python
 # ❌ BAD: Dijkstra with negative weights
 edges = [(A, B, -5), (B, C, 3)]  # Has negative weight
-dijkstra(graph, A)  # WRONG RESULTS!
+dijkstra (graph, A)  # WRONG RESULTS!
 
 # ✅ GOOD: Use Bellman-Ford
-bellman_ford(graph, A)  # Handles negative weights
+bellman_ford (graph, A)  # Handles negative weights
 \`\`\`
 
 ### Mistake 3: Not Handling Disconnected Graphs
@@ -421,32 +419,32 @@ bellman_ford(graph, A)  # Handles negative weights
 
 \`\`\`python
 # ❌ BAD: Only processes one component
-def countNodes(graph):
+def countNodes (graph):
     visited = set()
     count = 0
     
-    def dfs(node):
+    def dfs (node):
         if node in visited:
             return 0
-        visited.add(node)
-        return 1 + sum(dfs(n) for n in graph[node])
+        visited.add (node)
+        return 1 + sum (dfs (n) for n in graph[node])
     
     return dfs(0)  # Only counts component containing 0!
 
 # ✅ GOOD: Process all components
-def countNodes(graph):
+def countNodes (graph):
     visited = set()
     count = 0
     
-    def dfs(node):
+    def dfs (node):
         if node in visited:
             return 0
-        visited.add(node)
-        return 1 + sum(dfs(n) for n in graph[node])
+        visited.add (node)
+        return 1 + sum (dfs (n) for n in graph[node])
     
     for node in graph:
         if node not in visited:
-            count += dfs(node)
+            count += dfs (node)
     
     return count
 \`\`\`
@@ -460,17 +458,17 @@ graph = {0: [1], 1: [2]}  # Directed: 0→1→2
 # Assuming you can go 1→0 is WRONG!
 
 # ✅ GOOD: Be explicit
-def buildUndirectedGraph(edges):
-    graph = defaultdict(list)
+def buildUndirectedGraph (edges):
+    graph = defaultdict (list)
     for u, v in edges:
-        graph[u].append(v)
-        graph[v].append(u)  # Add both directions
+        graph[u].append (v)
+        graph[v].append (u)  # Add both directions
     return graph
 
-def buildDirectedGraph(edges):
-    graph = defaultdict(list)
+def buildDirectedGraph (edges):
+    graph = defaultdict (list)
     for u, v in edges:
-        graph[u].append(v)  # One direction only
+        graph[u].append (v)  # One direction only
     return graph
 \`\`\`
 
@@ -479,15 +477,15 @@ def buildDirectedGraph(edges):
 
 \`\`\`python
 # ❌ BAD: Recursive DFS on large graph
-def dfs(graph, node, visited):
+def dfs (graph, node, visited):
     if node in visited:
         return
-    visited.add(node)
+    visited.add (node)
     for neighbor in graph[node]:
-        dfs(graph, neighbor, visited)  # May overflow!
+        dfs (graph, neighbor, visited)  # May overflow!
 
 # ✅ GOOD: Iterative DFS
-def dfs(graph, start):
+def dfs (graph, start):
     stack = [start]
     visited = {start}
     
@@ -495,8 +493,8 @@ def dfs(graph, start):
         node = stack.pop()
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
-                stack.append(neighbor)
+                visited.add (neighbor)
+                stack.append (neighbor)
 \`\`\`
 
 ---
@@ -530,17 +528,17 @@ Pattern Recognition:
 # Template for building adjacency list
 from collections import defaultdict
 
-def buildGraph(edges, directed=False):
-    graph = defaultdict(list)
+def buildGraph (edges, directed=False):
+    graph = defaultdict (list)
     for u, v in edges:
-        graph[u].append(v)
+        graph[u].append (v)
         if not directed:
-            graph[v].append(u)
+            graph[v].append (u)
     return graph
 
 # For weighted graphs
-def buildWeightedGraph(edges, directed=False):
-    graph = defaultdict(list)
+def buildWeightedGraph (edges, directed=False):
+    graph = defaultdict (list)
     for u, v, weight in edges:
         graph[u].append((v, weight))
         if not directed:

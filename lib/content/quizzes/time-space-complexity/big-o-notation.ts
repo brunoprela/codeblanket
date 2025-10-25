@@ -6,7 +6,7 @@ export const bigonotationQuiz = [
   {
     id: 'q1',
     question:
-      'Look at this code: for i in range(n): for j in range(n): print(i, j). What is the time complexity and why?',
+      'Look at this code: for i in range (n): for j in range (n): print(i, j). What is the time complexity and why?',
     hint: 'Count how many times print() gets called.',
     sampleAnswer:
       'This is O(n²) - quadratic time. The outer loop runs n times, and for each iteration of the outer loop, the inner loop also runs n times. So the print statement executes n × n = n² times total. If n is 10, we print 100 times. If n is 100, we print 10,000 times. The number of operations grows with the square of the input. This is the signature pattern of nested loops where both iterate n times. Nested loops are a red flag for quadratic complexity.',

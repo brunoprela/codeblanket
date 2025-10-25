@@ -53,8 +53,8 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
 print("Step 1: Standardized data")
-print(f"Mean: {X_scaled.mean(axis=0)}")
-print(f"Std: {X_scaled.std(axis=0)}")
+print(f"Mean: {X_scaled.mean (axis=0)}")
+print(f"Std: {X_scaled.std (axis=0)}")
 print()
 
 # Step 2: Compute covariance matrix
@@ -65,7 +65,7 @@ print(cov_matrix)
 print()
 
 # Step 3: Eigendecomposition
-eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+eigenvalues, eigenvectors = np.linalg.eig (cov_matrix)
 
 # Sort by eigenvalue (descending)
 idx = eigenvalues.argsort()[::-1]
@@ -85,12 +85,12 @@ total_variance = eigenvalues.sum()
 explained_variance_ratio = eigenvalues / total_variance
 
 print("Step 4: Explained variance ratio:")
-for i, ratio in enumerate(explained_variance_ratio):
+for i, ratio in enumerate (explained_variance_ratio):
     print(f"  PC{i+1}: {ratio:.4f} ({ratio*100:.2f}%)")
 
-cumulative_variance = np.cumsum(explained_variance_ratio)
+cumulative_variance = np.cumsum (explained_variance_ratio)
 print("\\nCumulative explained variance:")
-for i, cum_var in enumerate(cumulative_variance):
+for i, cum_var in enumerate (cumulative_variance):
     print(f"  First {i+1} PCs: {cum_var:.4f} ({cum_var*100:.2f}%)")
 print()
 
@@ -122,7 +122,7 @@ For centered data **X** (n × d):
 print("\\n=== PCA via SVD ===")
 
 # Center data
-X_centered = X_scaled - X_scaled.mean(axis=0)
+X_centered = X_scaled - X_scaled.mean (axis=0)
 
 # SVD
 U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
@@ -146,7 +146,7 @@ print(eigenvalues_svd)
 print()
 
 print("Match eigenvalues from covariance:")
-print(f"Equal: {np.allclose(eigenvalues_svd, eigenvalues)}")
+print(f"Equal: {np.allclose (eigenvalues_svd, eigenvalues)}")
 print()
 
 # Transformed data
@@ -166,7 +166,7 @@ Keep components until cumulative explained variance ≥ threshold (e.g., 95%).
 print("\\n=== Method 1: Explained Variance Threshold ===")
 
 threshold = 0.95
-n_components = np.argmax(cumulative_variance >= threshold) + 1
+n_components = np.argmax (cumulative_variance >= threshold) + 1
 
 print(f"Threshold: {threshold*100:.0f}%")
 print(f"Components needed: {n_components}")
@@ -182,7 +182,7 @@ print("\\n=== Method 2: Scree Plot ===")
 
 # Would visualize in practice
 print("Eigenvalues:")
-for i, val in enumerate(eigenvalues):
+for i, val in enumerate (eigenvalues):
     print(f"  PC{i+1}: {val:.4f}")
 
 print("\\n→ Look for elbow in plot where additional components add little variance")
@@ -195,11 +195,11 @@ Keep components with eigenvalue > 1 (for standardized data).
 \`\`\`python
 print("\\n=== Method 3: Kaiser Criterion ===")
 
-n_components_kaiser = np.sum(eigenvalues > 1)
+n_components_kaiser = np.sum (eigenvalues > 1)
 
 print(f"Components with eigenvalue > 1: {n_components_kaiser}")
 print("Eigenvalues > 1:")
-for i, val in enumerate(eigenvalues):
+for i, val in enumerate (eigenvalues):
     if val > 1:
         print(f"  PC{i+1}: {val:.4f}")
 \`\`\`
@@ -231,9 +231,9 @@ print(f"Reconstruction error (MSE): {reconstruction_error:.6f}")
 print()
 
 # This equals sum of discarded eigenvalues
-expected_error = np.sum(eigenvalues[k:])
+expected_error = np.sum (eigenvalues[k:])
 print(f"Expected error (sum of discarded eigenvalues): {expected_error:.6f}")
-print(f"Match: {np.allclose(reconstruction_error, expected_error)}")
+print(f"Match: {np.allclose (reconstruction_error, expected_error)}")
 \`\`\`
 
 ## PCA with Scikit-learn
@@ -310,12 +310,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # Train on original data
 start = time.time()
-clf_original = LogisticRegression(max_iter=1000, random_state=42)
+clf_original = LogisticRegression (max_iter=1000, random_state=42)
 clf_original.fit(X_train, y_train)
 time_original = time.time() - start
 
 y_pred_original = clf_original.predict(X_test)
-acc_original = accuracy_score(y_test, y_pred_original)
+acc_original = accuracy_score (y_test, y_pred_original)
 
 print(f"Original data ({X.shape[1]} features):")
 print(f"  Training time: {time_original:.4f}s")
@@ -328,12 +328,12 @@ X_train_pca = pca_fast.fit_transform(X_train)
 X_test_pca = pca_fast.transform(X_test)
 
 start = time.time()
-clf_pca = LogisticRegression(max_iter=1000, random_state=42)
+clf_pca = LogisticRegression (max_iter=1000, random_state=42)
 clf_pca.fit(X_train_pca, y_train)
 time_pca = time.time() - start
 
 y_pred_pca = clf_pca.predict(X_test_pca)
-acc_pca = accuracy_score(y_test, y_pred_pca)
+acc_pca = accuracy_score (y_test, y_pred_pca)
 
 print(f"PCA data ({X_train_pca.shape[1]} features):")
 print(f"  Training time: {time_pca:.4f}s")
@@ -387,7 +387,7 @@ print()
 
 # Interpretation: what does PC1 represent?
 print("PC1 loadings (contribution of each original feature):")
-for i, feature in enumerate(iris.feature_names):
+for i, feature in enumerate (iris.feature_names):
     print(f"  {feature}: {pca_features.components_[0, i]:.4f}")
 \`\`\`
 
@@ -402,7 +402,7 @@ print("\\n=== Limitation: Linearity ===")
 
 # Generate nonlinear data (circle)
 theta = np.linspace(0, 2*np.pi, 100)
-X_circle = np.column_stack([np.cos(theta), np.sin(theta)])
+X_circle = np.column_stack([np.cos (theta), np.sin (theta)])
 X_circle += np.random.normal(0, 0.05, X_circle.shape)
 
 # PCA fails to capture circular structure

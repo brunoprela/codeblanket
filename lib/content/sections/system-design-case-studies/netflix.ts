@@ -103,7 +103,7 @@ Content Upload → Encoding Pipeline → S3 Storage → CDN → User
 - **Origin Load**: Without CDN, S3 serves 200 Tbps (impossible). With CDN (95% hit rate), S3 serves 10 Tbps (manageable).
 
 **Netflix CDN Strategy**:
-- **Open Connect**: Netflix's custom CDN (appliances inside ISP networks)
+- **Open Connect**: Netflix\'s custom CDN (appliances inside ISP networks)
 - **Third-party CDNs**: CloudFront, Akamai, Fastly as fallback
 - **Edge Servers**: Cache popular content at 200+ locations globally
 

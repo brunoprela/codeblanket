@@ -55,7 +55,7 @@ export const mlSystemDesignPrinciplesMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 2,
       explanation:
-        'PSI (Population Stability Index) detects distribution shifts. Formula: PSI = Σ (prod_pct - train_pct) × ln(prod_pct / train_pct). Interpretation: PSI <0.1 (no shift), 0.1-0.25 (moderate shift, monitor), >0.25 (major shift, retrain immediately). Example: Training data: mean age = 35. Production: mean age = 45. PSI = 0.32 → drift detected. Alternatives: KS test (per-feature), Evidently library (automated drift detection). Accuracy: Lagging indicator (drift causes accuracy drop later). PSI: Leading indicator (detect drift before accuracy degrades).',
+        'PSI (Population Stability Index) detects distribution shifts. Formula: PSI = Σ (prod_pct - train_pct) × ln (prod_pct / train_pct). Interpretation: PSI <0.1 (no shift), 0.1-0.25 (moderate shift, monitor), >0.25 (major shift, retrain immediately). Example: Training data: mean age = 35. Production: mean age = 45. PSI = 0.32 → drift detected. Alternatives: KS test (per-feature), Evidently library (automated drift detection). Accuracy: Lagging indicator (drift causes accuracy drop later). PSI: Leading indicator (detect drift before accuracy degrades).',
     },
     {
       id: 'mlsdp-mc-5',

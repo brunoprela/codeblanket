@@ -35,7 +35,7 @@ export const patternsQuiz = [
     question:
       'Walk me through solving "number of islands" problem with DFS. What is the pattern?',
     sampleAnswer:
-      'Number of islands: count connected components of 1s in grid. Pattern: iterate each cell, if land (1) and unvisited, increment counter and DFS to mark entire island. Algorithm: for each cell (i,j): if grid[i][j]==1, islands++, dfs(i,j). DFS marks (i,j) as visited (set to 0 or use visited set), recurses on 4 neighbors. For example, grid [[1,1,0],[0,1,0],[0,0,1]]: cell (0,0)=1, islands=1, DFS marks (0,0),(0,1),(1,1) as one island. Cell (2,2)=1, islands=2, DFS marks only (2,2). Result: 2 islands. Time O(rows×cols) visit each cell once. Space O(rows×cols) recursion worst case (entire grid is one island). This pattern works for all "count components" problems.',
+      'Number of islands: count connected components of 1s in grid. Pattern: iterate each cell, if land (1) and unvisited, increment counter and DFS to mark entire island. Algorithm: for each cell (i,j): if grid[i][j]==1, islands++, dfs (i,j). DFS marks (i,j) as visited (set to 0 or use visited set), recurses on 4 neighbors. For example, grid [[1,1,0],[0,1,0],[0,0,1]]: cell (0,0)=1, islands=1, DFS marks (0,0),(0,1),(1,1) as one island. Cell (2,2)=1, islands=2, DFS marks only (2,2). Result: 2 islands. Time O(rows×cols) visit each cell once. Space O(rows×cols) recursion worst case (entire grid is one island). This pattern works for all "count components" problems.',
     keyPoints: [
       'Count connected components in grid',
       'Iterate: if unvisited land, DFS + count++',

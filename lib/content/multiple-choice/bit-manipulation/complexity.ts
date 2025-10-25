@@ -24,7 +24,7 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Count set bits: naive O(log N) checks each bit. Brian Kernighan's algorithm O(k) where k is number of set bits (n & (n-1) repeatedly). Modern CPUs have O(1) popcount instruction.",
+      "Count set bits: naive O(log N) checks each bit. Brian Kernighan\'s algorithm O(k) where k is number of set bits (n & (n-1) repeatedly). Modern CPUs have O(1) popcount instruction.",
   },
   {
     id: 'mc3',

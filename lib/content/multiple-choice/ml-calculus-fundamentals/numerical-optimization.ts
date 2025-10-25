@@ -21,7 +21,7 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'numopt-2',
     question:
-      "Why is Newton's method not commonly used for training deep neural networks?",
+      "Why is Newton\'s method not commonly used for training deep neural networks?",
     options: [
       "It doesn't converge",
       'Computing and inverting the Hessian is O(n³), prohibitively expensive for millions of parameters',
@@ -30,14 +30,14 @@ export const numericaloptimizationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Newton's method requires computing, storing, and inverting an n×n Hessian matrix, which is computationally intractable for networks with millions of parameters.",
+      "Newton\'s method requires computing, storing, and inverting an n×n Hessian matrix, which is computationally intractable for networks with millions of parameters.",
   },
   {
     id: 'numopt-3',
     question: 'Adam optimizer combines:',
     options: [
       'Momentum and adaptive learning rates per parameter',
-      "Newton's method and gradient descent",
+      "Newton\'s method and gradient descent",
       'Random search and gradient descent',
       'Only momentum',
     ],

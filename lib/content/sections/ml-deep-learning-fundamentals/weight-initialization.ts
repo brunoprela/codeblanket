@@ -46,7 +46,7 @@ b = np.zeros((1, n_out))
 
 \`\`\`python
 # Bad: Large random weights
-W = np.random.randn(n_in, n_out) * 10  # Too large!
+W = np.random.randn (n_in, n_out) * 10  # Too large!
 \`\`\`
 
 **Issue**: Activations explode, gradients explode, training diverges.
@@ -55,7 +55,7 @@ W = np.random.randn(n_in, n_out) * 10  # Too large!
 
 \`\`\`python
 # Bad: Tiny random weights
-W = np.random.randn(n_in, n_out) * 0.0001  # Too small!
+W = np.random.randn (n_in, n_out) * 0.0001  # Too small!
 \`\`\`
 
 **Issue**: Activations vanish, gradients vanish, training stalls.
@@ -67,14 +67,14 @@ W = np.random.randn(n_in, n_out) * 0.0001  # Too small!
 **Goal**: Keep variance of activations and gradients consistent across layers.
 
 **Formula**:
-\\\`\\\`\\\`
+\`\`\`
 W ~ Uniform(-√(6/(n_in + n_out)), √(6/(n_in + n_out)))
 
 Or: W ~ Normal(0, √(2/(n_in + n_out)))
-\\\`\\\`\\\`
+\`\`\`
 
 \`\`\`python
-def xavier_init(n_in, n_out):
+def xavier_init (n_in, n_out):
     """Xavier/Glorot initialization"""
     limit = np.sqrt(6 / (n_in + n_out))
     return np.random.uniform(-limit, limit, (n_in, n_out))
@@ -93,14 +93,14 @@ print(f"Xavier init: std = {np.std(W1):.4f}")
 ReLU zeros out negative activations, effectively halving variance. Compensate by scaling up:
 
 **Formula**:
-\\\`\\\`\\\`
+\`\`\`
 W ~ Normal(0, √(2/n_in))
-\\\`\\\`\\\`
+\`\`\`
 
 \`\`\`python
-def he_init(n_in, n_out):
+def he_init (n_in, n_out):
     """He initialization for ReLU"""
-    return np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)
+    return np.random.randn (n_in, n_out) * np.sqrt(2.0 / n_in)
 
 W_relu = he_init(784, 256)
 print(f"He init: std = {np.std(W_relu):.4f}")
@@ -115,31 +115,31 @@ print(f"He init: std = {np.std(W_relu):.4f}")
 \`\`\`python
 import matplotlib.pyplot as plt
 
-def test_initialization(init_method, activation, n_layers=10, n_neurons=100):
+def test_initialization (init_method, activation, n_layers=10, n_neurons=100):
     """Test activation statistics through deep network"""
     activations = []
     x = np.random.randn(1000, n_neurons)
     
-    for layer in range(n_layers):
+    for layer in range (n_layers):
         if init_method == 'zero':
             W = np.zeros((n_neurons, n_neurons))
         elif init_method == 'too_large':
-            W = np.random.randn(n_neurons, n_neurons) * 5
+            W = np.random.randn (n_neurons, n_neurons) * 5
         elif init_method == 'too_small':
-            W = np.random.randn(n_neurons, n_neurons) * 0.01
+            W = np.random.randn (n_neurons, n_neurons) * 0.01
         elif init_method == 'xavier':
-            W = xavier_init(n_neurons, n_neurons)
+            W = xavier_init (n_neurons, n_neurons)
         elif init_method == 'he':
-            W = he_init(n_neurons, n_neurons)
+            W = he_init (n_neurons, n_neurons)
         
         z = x @ W
         
         if activation == 'relu':
             x = np.maximum(0, z)
         elif activation == 'tanh':
-            x = np.tanh(z)
+            x = np.tanh (z)
         
-        activations.append(x)
+        activations.append (x)
     
     return activations
 
@@ -147,17 +147,17 @@ def test_initialization(init_method, activation, n_layers=10, n_neurons=100):
 methods = ['too_small', 'xavier', 'he']
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-for idx, method in enumerate(methods):
-    acts = test_initialization(method, 'relu', n_layers=10)
+for idx, method in enumerate (methods):
+    acts = test_initialization (method, 'relu', n_layers=10)
     
-    means = [np.mean(a) for a in acts]
-    stds = [np.std(a) for a in acts]
+    means = [np.mean (a) for a in acts]
+    stds = [np.std (a) for a in acts]
     
-    axes[idx].plot(means, label='Mean', linewidth=2)
-    axes[idx].plot(stds, label='Std', linewidth=2)
+    axes[idx].plot (means, label='Mean', linewidth=2)
+    axes[idx].plot (stds, label='Std', linewidth=2)
     axes[idx].set_xlabel('Layer')
     axes[idx].set_ylabel('Value')
-    axes[idx].set_title(f'{method.title()} Init')
+    axes[idx].set_title (f'{method.title()} Init')
     axes[idx].legend()
     axes[idx].grid(True, alpha=0.3)
 

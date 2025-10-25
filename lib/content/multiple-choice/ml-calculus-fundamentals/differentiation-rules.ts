@@ -35,10 +35,10 @@ export const differentiationrulesMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'diff-rules-4',
-    question: 'What is d/dx[ln(x²)]?',
+    question: 'What is d/dx[ln (x²)]?',
     options: ['1/x²', '2/x', '2x', '1/(2x)'],
     correctAnswer: 1,
-    explanation: 'Chain rule: (1/x²)·2x = 2/x, or use ln(x²) = 2ln(x) → 2/x.',
+    explanation: 'Chain rule: (1/x²)·2x = 2/x, or use ln (x²) = 2ln (x) → 2/x.',
   },
   {
     id: 'diff-rules-5',

@@ -34,7 +34,7 @@ Memcached and LocMemCache are memory-only and lose data on restart.
     options: [
       'A) @cache_view(15)',
       'B) @cache_page(60 * 15)',
-      'C) @cache(minutes=15)',
+      'C) @cache (minutes=15)',
       'D) @cached(900)',
     ],
     correctAnswer: 1,
@@ -45,8 +45,8 @@ Memcached and LocMemCache are memory-only and lose data on restart.
 from django.views.decorators.cache import cache_page
 
 @cache_page(60 * 15)  # Timeout in seconds
-def my_view(request):
-    return render(request, 'template.html')
+def my_view (request):
+    return render (request, 'template.html')
 \`\`\`
 
 cache_page takes timeout in seconds (15 min = 900 sec).

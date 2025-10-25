@@ -12,7 +12,7 @@ export const asyncDesignPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Producer-Consumer pattern decouples production and consumption using a queue: Decoupling: Producer and consumer run independently. Different rates: Producer fast, consumer slow (or vice versa). Buffer: Queue absorbs rate differences. Example: Fast producer (1000 items/sec), slow consumer (100 items/sec). Without queue: Producer must wait (waste). With queue: Producer fills queue, consumer processes at own pace. Benefits: Flexibility: Change producer/consumer independently. Scalability: Add more consumers if needed. Backpressure: Bounded queue prevents memory overflow. Implementation: queue = asyncio.Queue(maxsize=1000); await queue.put(item) # Producer; item = await queue.get() # Consumer. Use when: Different processing rates, Need buffering, Want to decouple components.',
+      'Producer-Consumer pattern decouples production and consumption using a queue: Decoupling: Producer and consumer run independently. Different rates: Producer fast, consumer slow (or vice versa). Buffer: Queue absorbs rate differences. Example: Fast producer (1000 items/sec), slow consumer (100 items/sec). Without queue: Producer must wait (waste). With queue: Producer fills queue, consumer processes at own pace. Benefits: Flexibility: Change producer/consumer independently. Scalability: Add more consumers if needed. Backpressure: Bounded queue prevents memory overflow. Implementation: queue = asyncio.Queue (maxsize=1000); await queue.put (item) # Producer; item = await queue.get() # Consumer. Use when: Different processing rates, Need buffering, Want to decouple components.',
   },
   {
     id: 'adp-mc-2',
@@ -38,7 +38,7 @@ export const asyncDesignPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Exponential backoff increases delay between retries to avoid overwhelming failing service: Linear retry: 1s, 1s, 1s (keeps hammering). Exponential: 1s, 2s, 4s, 8s (gives time to recover). Why it works: Service might be overloaded (retrying immediately makes it worse). Exponential gives increasing recovery time. Prevents thundering herd (many clients retrying simultaneously). Implementation: delay = initial_delay; for attempt in range(max_attempts): try: return await func(); except: await asyncio.sleep(delay); delay *= backoff_factor. Add jitter: delay * (0.5 + random.random()) prevents synchronized retries. Benefits: Better recovery (service has time). Reduced load (fewer retries). Prevents cascading failures. Use for: Network operations, API calls, transient failures.',
+      'Exponential backoff increases delay between retries to avoid overwhelming failing service: Linear retry: 1s, 1s, 1s (keeps hammering). Exponential: 1s, 2s, 4s, 8s (gives time to recover). Why it works: Service might be overloaded (retrying immediately makes it worse). Exponential gives increasing recovery time. Prevents thundering herd (many clients retrying simultaneously). Implementation: delay = initial_delay; for attempt in range (max_attempts): try: return await func(); except: await asyncio.sleep (delay); delay *= backoff_factor. Add jitter: delay * (0.5 + random.random()) prevents synchronized retries. Benefits: Better recovery (service has time). Reduced load (fewer retries). Prevents cascading failures. Use for: Network operations, API calls, transient failures.',
   },
   {
     id: 'adp-mc-4',
@@ -52,7 +52,7 @@ export const asyncDesignPatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Worker Pool vs asyncio.gather(): Worker Pool: Fixed number of workers (e.g. 50). Tasks queued if all workers busy. Controlled concurrency. Example: WorkerPool(50); for task in 10000_tasks: await pool.submit(task). Only 50 concurrent at a time. asyncio.gather(): All tasks start immediately. Unlimited concurrency. Example: await gather(*[task() for _ in range(10000)]). All 10000 run concurrently! When to use: Worker Pool: Need concurrency limit (API rate limit, resource limit). Many tasks (1000+). Want backpressure (queue). gather(): Few tasks (<100). No concurrency limit. Want simplicity. Resource impact: gather(10000 tasks): 10000 concurrent connections (might exhaust resources). WorkerPool(50): Max 50 connections (controlled). Recommendation: Use Worker Pool for production (controlled), gather() for simple cases.',
+      'Worker Pool vs asyncio.gather(): Worker Pool: Fixed number of workers (e.g. 50). Tasks queued if all workers busy. Controlled concurrency. Example: WorkerPool(50); for task in 10000_tasks: await pool.submit (task). Only 50 concurrent at a time. asyncio.gather(): All tasks start immediately. Unlimited concurrency. Example: await gather(*[task() for _ in range(10000)]). All 10000 run concurrently! When to use: Worker Pool: Need concurrency limit (API rate limit, resource limit). Many tasks (1000+). Want backpressure (queue). gather(): Few tasks (<100). No concurrency limit. Want simplicity. Resource impact: gather(10000 tasks): 10000 concurrent connections (might exhaust resources). WorkerPool(50): Max 50 connections (controlled). Recommendation: Use Worker Pool for production (controlled), gather() for simple cases.',
   },
   {
     id: 'adp-mc-5',

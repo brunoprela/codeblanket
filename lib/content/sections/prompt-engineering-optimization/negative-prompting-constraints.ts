@@ -129,10 +129,10 @@ Stick to facts:
 - Quote sources when possible
 """
 
-def apply_constraints(base_prompt: str, constraints: list) -> str:
+def apply_constraints (base_prompt: str, constraints: list) -> str:
     """Apply multiple behavior constraints."""
     
-    constraints_text = "\\n\\n".join(constraints)
+    constraints_text = "\\n\\n".join (constraints)
     
     return f"""{base_prompt}
 
@@ -199,7 +199,7 @@ Educational content standards:
 """
 
 # Example: Educational content with filters
-def create_safe_content_prompt(topic: str, age_group: str) -> str:
+def create_safe_content_prompt (topic: str, age_group: str) -> str:
     """Create prompt with content safety filters."""
     
     return f"""Create educational content about: {topic}
@@ -258,7 +258,7 @@ HARM PREVENTION:
 - Report concerns appropriately
 """
 
-def create_safe_prompt(task: str, safety_level: str = "high") -> str:
+def create_safe_prompt (task: str, safety_level: str = "high") -> str:
     """Create prompt with appropriate safety constraints."""
     
     constraints = []
@@ -271,7 +271,7 @@ def create_safe_prompt(task: str, safety_level: str = "high") -> str:
         constraints.append(SafetyConstraints.LEGAL_COMPLIANCE)
         constraints.append(SafetyConstraints.SECURITY)
     
-    constraints_text = "\\n\\n".join(constraints)
+    constraints_text = "\\n\\n".join (constraints)
     
     return f"""{task}
 
@@ -288,7 +288,7 @@ def create_scoped_prompt(
     domain: str,
     in_scope: list,
     out_of_scope: list,
-    redirect_message: str = "That's outside my expertise."
+    redirect_message: str = "That\'s outside my expertise."
 ) -> str:
     """
     Create prompt that keeps AI focused on specific domain.
@@ -368,7 +368,7 @@ Input validation:
 """
 
 # Example: Function generation with edge case handling
-def generate_robust_function(task: str) -> str:
+def generate_robust_function (task: str) -> str:
     """Generate function with comprehensive edge case handling."""
     
     return f"""{task}
@@ -398,24 +398,24 @@ class FormatConstraints:
     """Constraints for output format."""
     
     @staticmethod
-    def length_limit(max_words: int = None, max_sentences: int = None) -> str:
+    def length_limit (max_words: int = None, max_sentences: int = None) -> str:
         """Constrain output length."""
         
         constraints = []
         if max_words:
-            constraints.append(f"- Maximum {max_words} words")
+            constraints.append (f"- Maximum {max_words} words")
         if max_sentences:
-            constraints.append(f"- Maximum {max_sentences} sentences")
+            constraints.append (f"- Maximum {max_sentences} sentences")
         
-        return "LENGTH CONSTRAINTS:\\n" + "\\n".join(constraints)
+        return "LENGTH CONSTRAINTS:\\n" + "\\n".join (constraints)
     
     @staticmethod
-    def structure_requirement(structure: dict) -> str:
+    def structure_requirement (structure: dict) -> str:
         """Require specific structure."""
         
         structure_text = "\\n".join([
             f"{i+1}. {section}" 
-            for i, section in enumerate(structure.get('sections', []))
+            for i, section in enumerate (structure.get('sections', []))
         ])
         
         return f"""REQUIRED STRUCTURE:
@@ -424,7 +424,7 @@ class FormatConstraints:
 Follow this structure exactly. Do not add or remove sections."""
     
     @staticmethod
-    def tone_requirements(tone: str, avoid: list) -> str:
+    def tone_requirements (tone: str, avoid: list) -> str:
         """Specify tone and what to avoid."""
         
         avoid_text = "\\n".join([f"- {item}" for item in avoid])
@@ -435,10 +435,10 @@ AVOID:
 {avoid_text}"""
 
 # Example: Blog post with format constraints
-def create_blog_prompt(topic: str) -> str:
+def create_blog_prompt (topic: str) -> str:
     return f"""Write a blog post about: {topic}
 
-{FormatConstraints.length_limit(max_words=500, max_sentences=20)}
+{FormatConstraints.length_limit (max_words=500, max_sentences=20)}
 
 {FormatConstraints.structure_requirement({
     'sections': [
@@ -476,32 +476,32 @@ class PromptGuardrails:
     def __init__(self):
         self.constraints = []
     
-    def add_content_filter(self, filter_type: str):
+    def add_content_filter (self, filter_type: str):
         """Add content filtering constraint."""
         if filter_type == "family_friendly":
             self.constraints.append(ContentFilters.family_friendly())
         elif filter_type == "professional":
             self.constraints.append(ContentFilters.professional())
     
-    def add_safety_constraint(self, constraint_type: str):
+    def add_safety_constraint (self, constraint_type: str):
         """Add safety constraint."""
         if constraint_type == "privacy":
             self.constraints.append(SafetyConstraints.PERSONAL_INFO)
         elif constraint_type == "security":
             self.constraints.append(SafetyConstraints.SECURITY)
     
-    def add_behavior_constraint(self, behavior: str):
+    def add_behavior_constraint (self, behavior: str):
         """Add behavior constraint."""
         if behavior == "concise":
             self.constraints.append(BehaviorConstraints.CONCISE)
         elif behavior == "no_hallucination":
             self.constraints.append(BehaviorConstraints.NO_HALLUCINATION)
     
-    def add_custom_constraint(self, constraint: str):
+    def add_custom_constraint (self, constraint: str):
         """Add custom constraint."""
-        self.constraints.append(constraint)
+        self.constraints.append (constraint)
     
-    def build_prompt(self, base_task: str) -> str:
+    def build_prompt (self, base_task: str) -> str:
         """Build final prompt with all guardrails."""
         
         if not self.constraints:
@@ -509,7 +509,7 @@ class PromptGuardrails:
         
         guardrails_text = "\\n\\n".join([
             f"CONSTRAINT {i+1}:\\n{constraint}"
-            for i, constraint in enumerate(self.constraints)
+            for i, constraint in enumerate (self.constraints)
         ])
         
         return f"""{base_task}
@@ -541,7 +541,7 @@ CUSTOM REQUIREMENT:
 
 # Build final prompt
 task = "Summarize the latest AI developments"
-final_prompt = guardrails.build_prompt(task)
+final_prompt = guardrails.build_prompt (task)
 
 print(final_prompt)
 \`\`\`

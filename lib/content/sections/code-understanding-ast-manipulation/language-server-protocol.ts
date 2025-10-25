@@ -103,28 +103,28 @@ class PythonLanguageServer(LanguageServer):
         self.documents = {}  # Store document content
         self.symbol_tables = {}  # Store symbol information
     
-    def parse_document(self, uri: str, text: str):
+    def parse_document (self, uri: str, text: str):
         """Parse document and build symbol table."""
         try:
-            tree = ast.parse(text)
+            tree = ast.parse (text)
             # Build symbol table (simplified)
-            self.symbol_tables[uri] = self._build_symbol_table(tree)
+            self.symbol_tables[uri] = self._build_symbol_table (tree)
         except SyntaxError:
             # Document has syntax errors
             pass
     
-    def _build_symbol_table(self, tree: ast.Module) -> dict:
+    def _build_symbol_table (self, tree: ast.Module) -> dict:
         """Build symbol table from AST."""
         symbols = {}
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef):
                 symbols[node.name] = {
                     'type': 'function',
                     'line': node.lineno,
                     'params': [arg.arg for arg in node.args.args]
                 }
-            elif isinstance(node, ast.ClassDef):
+            elif isinstance (node, ast.ClassDef):
                 symbols[node.name] = {
                     'type': 'class',
                     'line': node.lineno
@@ -136,7 +136,7 @@ class PythonLanguageServer(LanguageServer):
 server = PythonLanguageServer()
 
 @server.feature(TEXT_DOCUMENT_DID_OPEN)
-async def did_open(ls: PythonLanguageServer, params: DidOpenTextDocumentParams):
+async def did_open (ls: PythonLanguageServer, params: DidOpenTextDocumentParams):
     """Handle document open event."""
     uri = params.text_document.uri
     text = params.text_document.text
@@ -145,13 +145,13 @@ async def did_open(ls: PythonLanguageServer, params: DidOpenTextDocumentParams):
     ls.documents[uri] = text
     
     # Parse and analyze
-    ls.parse_document(uri, text)
+    ls.parse_document (uri, text)
     
     # Could send diagnostics here
-    # ls.publish_diagnostics(uri, diagnostics)
+    # ls.publish_diagnostics (uri, diagnostics)
 
 @server.feature(TEXT_DOCUMENT_DID_CHANGE)
-async def did_change(ls: PythonLanguageServer, params: DidChangeTextDocumentParams):
+async def did_change (ls: PythonLanguageServer, params: DidChangeTextDocumentParams):
     """Handle document change event."""
     uri = params.text_document.uri
     
@@ -159,16 +159,16 @@ async def did_change(ls: PythonLanguageServer, params: DidChangeTextDocumentPara
     for change in params.content_changes:
         text = change.text
         ls.documents[uri] = text
-        ls.parse_document(uri, text)
+        ls.parse_document (uri, text)
 
 @server.feature(COMPLETION)
-async def completions(ls: PythonLanguageServer, params: CompletionParams):
+async def completions (ls: PythonLanguageServer, params: CompletionParams):
     """Provide completion suggestions."""
     uri = params.text_document.uri
     position = params.position
     
     # Get symbol table
-    symbols = ls.symbol_tables.get(uri, {})
+    symbols = ls.symbol_tables.get (uri, {})
     
     # Create completion items
     items = []
@@ -178,12 +178,12 @@ async def completions(ls: PythonLanguageServer, params: CompletionParams):
             kind=2 if info['type'] == 'function' else 7,  # 2=Method, 7=Class
             detail=f"{info['type']} {name}"
         )
-        items.append(item)
+        items.append (item)
     
-    return CompletionList(is_incomplete=False, items=items)
+    return CompletionList (is_incomplete=False, items=items)
 
 @server.feature(HOVER)
-async def hover(ls: PythonLanguageServer, params):
+async def hover (ls: PythonLanguageServer, params):
     """Provide hover information."""
     uri = params.text_document.uri
     position = params.position
@@ -195,7 +195,7 @@ async def hover(ls: PythonLanguageServer, params):
     )
 
 @server.feature(DEFINITION)
-async def definition(ls: PythonLanguageServer, params):
+async def definition (ls: PythonLanguageServer, params):
     """Provide go-to-definition."""
     uri = params.text_document.uri
     position = params.position
@@ -205,7 +205,7 @@ async def definition(ls: PythonLanguageServer, params):
     return []
 
 @server.feature(REFERENCES)
-async def references(ls: PythonLanguageServer, params):
+async def references (ls: PythonLanguageServer, params):
     """Find all references to symbol."""
     uri = params.text_document.uri
     position = params.position
@@ -235,7 +235,7 @@ class LSPClient:
         self.message_id = 0
         self.process = None
     
-    def start(self):
+    def start (self):
         """Start language server process."""
         import subprocess
         self.process = subprocess.Popen(
@@ -245,7 +245,7 @@ class LSPClient:
             stderr=subprocess.PIPE
         )
     
-    def send_request(self, method: str, params: Dict[str, Any]) -> Dict:
+    def send_request (self, method: str, params: Dict[str, Any]) -> Dict:
         """Send request to server."""
         self.message_id += 1
         
@@ -257,8 +257,8 @@ class LSPClient:
         }
         
         # Send message
-        content = json.dumps(message)
-        header = f"Content-Length: {len(content)}\\r\\n\\r\\n"
+        content = json.dumps (message)
+        header = f"Content-Length: {len (content)}\\r\\n\\r\\n"
         
         self.process.stdin.write((header + content).encode())
         self.process.stdin.flush()
@@ -266,7 +266,7 @@ class LSPClient:
         # Read response (simplified)
         return {}
     
-    def send_notification(self, method: str, params: Dict[str, Any]):
+    def send_notification (self, method: str, params: Dict[str, Any]):
         """Send notification (no response expected)."""
         message = {
             'jsonrpc': '2.0',
@@ -274,13 +274,13 @@ class LSPClient:
             'params': params
         }
         
-        content = json.dumps(message)
-        header = f"Content-Length: {len(content)}\\r\\n\\r\\n"
+        content = json.dumps (message)
+        header = f"Content-Length: {len (content)}\\r\\n\\r\\n"
         
         self.process.stdin.write((header + content).encode())
         self.process.stdin.flush()
     
-    def initialize(self, root_uri: str):
+    def initialize (self, root_uri: str):
         """Initialize server."""
         return self.send_request('initialize', {
             'processId': None,
@@ -288,7 +288,7 @@ class LSPClient:
             'capabilities': {}
         })
     
-    def did_open(self, uri: str, text: str, language: str = 'python'):
+    def did_open (self, uri: str, text: str, language: str = 'python'):
         """Notify server of opened document."""
         self.send_notification('textDocument/didOpen', {
             'textDocument': {
@@ -299,21 +299,21 @@ class LSPClient:
             }
         })
     
-    def completion(self, uri: str, line: int, character: int):
+    def completion (self, uri: str, line: int, character: int):
         """Request completions."""
         return self.send_request('textDocument/completion', {
             'textDocument': {'uri': uri},
             'position': {'line': line, 'character': character}
         })
     
-    def hover(self, uri: str, line: int, character: int):
+    def hover (self, uri: str, line: int, character: int):
         """Request hover information."""
         return self.send_request('textDocument/hover', {
             'textDocument': {'uri': uri},
             'position': {'line': line, 'character': character}
         })
     
-    def shutdown(self):
+    def shutdown (self):
         """Shutdown server."""
         self.send_request('shutdown', {})
         self.send_notification('exit', {})
@@ -339,7 +339,7 @@ class DiagnosticProvider:
     def __init__(self):
         pass
     
-    def analyze(self, uri: str, text: str) -> list:
+    def analyze (self, uri: str, text: str) -> list:
         """
         Analyze code and return diagnostics.
         
@@ -349,36 +349,36 @@ class DiagnosticProvider:
         diagnostics = []
         
         try:
-            tree = ast.parse(text)
+            tree = ast.parse (text)
         except SyntaxError as e:
             # Syntax error diagnostic
             diagnostic = Diagnostic(
                 range=Range(
-                    start=Position(line=e.lineno - 1, character=e.offset or 0),
-                    end=Position(line=e.lineno - 1, character=(e.offset or 0) + 1)
+                    start=Position (line=e.lineno - 1, character=e.offset or 0),
+                    end=Position (line=e.lineno - 1, character=(e.offset or 0) + 1)
                 ),
                 message=e.msg,
                 severity=DiagnosticSeverity.Error,
                 source='python-lsp'
             )
-            diagnostics.append(diagnostic)
+            diagnostics.append (diagnostic)
             return diagnostics
         
         # Find other issues
-        for node in ast.walk(tree):
+        for node in ast.walk (tree):
             # Check for bare except
-            if isinstance(node, ast.ExceptHandler):
+            if isinstance (node, ast.ExceptHandler):
                 if node.type is None:
                     diagnostic = Diagnostic(
                         range=Range(
-                            start=Position(line=node.lineno - 1, character=0),
-                            end=Position(line=node.lineno - 1, character=100)
+                            start=Position (line=node.lineno - 1, character=0),
+                            end=Position (line=node.lineno - 1, character=100)
                         ),
                         message="Bare 'except:' clause catches all exceptions",
                         severity=DiagnosticSeverity.Warning,
                         source='python-lsp'
                     )
-                    diagnostics.append(diagnostic)
+                    diagnostics.append (diagnostic)
         
         return diagnostics
 
@@ -386,19 +386,19 @@ class DiagnosticProvider:
 diagnostic_provider = DiagnosticProvider()
 
 @server.feature(TEXT_DOCUMENT_DID_OPEN)
-async def did_open_with_diagnostics(ls: PythonLanguageServer, params):
+async def did_open_with_diagnostics (ls: PythonLanguageServer, params):
     uri = params.text_document.uri
     text = params.text_document.text
     
     # Store and parse
     ls.documents[uri] = text
-    ls.parse_document(uri, text)
+    ls.parse_document (uri, text)
     
     # Get diagnostics
-    diagnostics = diagnostic_provider.analyze(uri, text)
+    diagnostics = diagnostic_provider.analyze (uri, text)
     
     # Publish to client
-    ls.publish_diagnostics(uri, diagnostics)
+    ls.publish_diagnostics (uri, diagnostics)
 \`\`\`
 
 ### Implementing Code Actions
@@ -414,7 +414,7 @@ from pygls.lsp.types import (
 )
 
 @server.feature(CODE_ACTION)
-async def code_actions(ls: PythonLanguageServer, params: CodeActionParams):
+async def code_actions (ls: PythonLanguageServer, params: CodeActionParams):
     """
     Provide code actions (quick fixes, refactorings).
     """
@@ -433,8 +433,8 @@ async def code_actions(ls: PythonLanguageServer, params: CodeActionParams):
                 uri: [
                     TextEdit(
                         range=Range(
-                            start=Position(line=1, character=0),
-                            end=Position(line=1, character=0)
+                            start=Position (line=1, character=0),
+                            end=Position (line=1, character=0)
                         ),
                         new_text='    """TODO: Add docstring."""\\n'
                     )
@@ -482,7 +482,7 @@ All through standard LSP interface!
 **2. Real-Time Analysis:**
 \`\`\`python
 # As you type, LSP server:
-def calculate(x, y):
+def calculate (x, y):
     result = x + y  # ← Hover shows types
     return result   # ← Diagnostics check
 # ← Auto-complete for 'result.'
@@ -490,7 +490,7 @@ def calculate(x, y):
 
 **3. Intelligent Refactoring:**
 \`\`\`python
-def process_data(data):  # ← Right-click
+def process_data (data):  # ← Right-click
     # Shows code actions:
     # - Extract method
     # - Rename symbol
@@ -514,15 +514,15 @@ def process_data(data):  # ← Right-click
 \`\`\`python
 # ❌ Wrong: Re-parse entire file on every keystroke
 @server.feature(TEXT_DOCUMENT_DID_CHANGE)
-def did_change(params):
+def did_change (params):
     text = get_entire_document()  # Expensive!
-    parse_everything(text)
+    parse_everything (text)
 
 # ✅ Correct: Incremental updates
 @server.feature(TEXT_DOCUMENT_DID_CHANGE)
-def did_change(params):
+def did_change (params):
     for change in params.content_changes:
-        apply_incremental_change(change)
+        apply_incremental_change (change)
     reparse_only_affected_regions()
 \`\`\`
 
@@ -531,13 +531,13 @@ def did_change(params):
 \`\`\`python
 # ❌ Wrong: Slow synchronous operations
 @server.feature(COMPLETION)
-def completions(params):
+def completions (params):
     results = expensive_operation()  # Blocks!
     return results
 
 # ✅ Correct: Fast, async operations
 @server.feature(COMPLETION)
-async def completions(params):
+async def completions (params):
     results = await fast_async_operation()
     return results
 \`\`\`
@@ -547,16 +547,16 @@ async def completions(params):
 \`\`\`python
 # ❌ Wrong: Crash on invalid input
 @server.feature(HOVER)
-def hover(params):
-    return get_hover_info(params)  # May crash
+def hover (params):
+    return get_hover_info (params)  # May crash
 
 # ✅ Correct: Graceful error handling
 @server.feature(HOVER)
-def hover(params):
+def hover (params):
     try:
-        return get_hover_info(params)
+        return get_hover_info (params)
     except Exception as e:
-        logger.error(f"Hover failed: {e}")
+        logger.error (f"Hover failed: {e}")
         return None  # Return null, don't crash
 \`\`\`
 

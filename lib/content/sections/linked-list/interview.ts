@@ -22,7 +22,7 @@ export const interviewSection = {
 **Step 1: Clarify the Problem**
 - Singly or doubly linked?
 - Can we modify in-place?
-- What's the format of input/output?
+- What\'s the format of input/output?
 - Any dummy nodes or sentinel values?
 
 **Step 2: Identify the Pattern**

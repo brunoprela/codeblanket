@@ -54,9 +54,9 @@ print(f"10 classes (0-9)")
 
 # Visualize some digits
 fig, axes = plt.subplots(2, 5, figsize=(12, 5))
-for i, ax in enumerate(axes.ravel()):
+for i, ax in enumerate (axes.ravel()):
     ax.imshow(X[i].reshape(8, 8), cmap='gray')
-    ax.set_title(f'Label: {y[i]}')
+    ax.set_title (f'Label: {y[i]}')
     ax.axis('off')
 plt.suptitle('Sample Handwritten Digits')
 plt.tight_layout()
@@ -89,20 +89,20 @@ fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
 # PCA
 scatter = axes[0].scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
-axes[0].set_title(f'PCA (time: {pca_time:.2f}s)\\nVariance: {pca.explained_variance_ratio_.sum():.1%}')
+axes[0].set_title (f'PCA (time: {pca_time:.2f}s)\\nVariance: {pca.explained_variance_ratio_.sum():.1%}')
 axes[0].set_xlabel('PC1')
 axes[0].set_ylabel('PC2')
 axes[0].grid(True, alpha=0.3)
 
 # t-SNE
 axes[1].scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
-axes[1].set_title(f't-SNE (time: {tsne_time:.2f}s)\\nBetter cluster separation!')
+axes[1].set_title (f't-SNE (time: {tsne_time:.2f}s)\\nBetter cluster separation!')
 axes[1].set_xlabel('t-SNE 1')
 axes[1].set_ylabel('t-SNE 2')
 axes[1].grid(True, alpha=0.3)
 
 # Shared colorbar
-fig.colorbar(scatter, ax=axes, ticks=range(10), label='Digit')
+fig.colorbar (scatter, ax=axes, ticks=range(10), label='Digit')
 
 plt.tight_layout()
 plt.show()
@@ -120,7 +120,7 @@ print("- t-SNE reveals structure PCA misses!")
 1. **High-Dimensional Similarities**: Convert distances to probabilities
    $$p_{j|i} = \\frac{\\exp(-||x_i - x_j||^2 / 2\\sigma_i^2)}{\\sum_{k \\neq i} \\exp(-||x_i - x_k||^2 / 2\\sigma_i^2)}$$
 
-2. **Low-Dimensional Similarities**: Use Student's t-distribution
+2. **Low-Dimensional Similarities**: Use Student\'s t-distribution
    $$q_{ij} = \\frac{(1 + ||y_i - y_j||^2)^{-1}}{\\sum_{k \\neq l} (1 + ||y_k - y_l||^2)^{-1}}$$
 
 3. **Minimize KL Divergence**: Make \\(q_{ij}\\) match \\(p_{ij}\\)
@@ -141,14 +141,14 @@ perplexity_values = [5, 30, 50, 100]
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, perp in enumerate(perplexity_values):
+for idx, perp in enumerate (perplexity_values):
     tsne_temp = TSNE(n_components=2, random_state=42, 
                      perplexity=perp, n_iter=1000)
     X_tsne_temp = tsne_temp.fit_transform(X_scaled[:500])  # Use subset for speed
     
     axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
-    axes[idx].set_title(f'Perplexity = {perp}')
+    axes[idx].set_title (f'Perplexity = {perp}')
     axes[idx].grid(True, alpha=0.3)
 
 plt.suptitle('Effect of Perplexity on t-SNE', fontsize=14)
@@ -171,14 +171,14 @@ n_iter_values = [250, 500, 1000, 2000]
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, n_iter in enumerate(n_iter_values):
+for idx, n_iter in enumerate (n_iter_values):
     tsne_temp = TSNE(n_components=2, random_state=42, 
                      perplexity=30, n_iter=n_iter)
     X_tsne_temp = tsne_temp.fit_transform(X_scaled[:500])
     
     axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
-    axes[idx].set_title(f'Iterations = {n_iter}')
+    axes[idx].set_title (f'Iterations = {n_iter}')
     axes[idx].grid(True, alpha=0.3)
 
 plt.suptitle('Effect of Iterations on t-SNE', fontsize=14)
@@ -211,7 +211,7 @@ for idx, seed in enumerate([42, 123, 456, 789]):
     
     axes[idx].scatter(X_tsne_temp[:, 0], X_tsne_temp[:, 1], 
                      c=y[:500], cmap='tab10', s=30, alpha=0.7)
-    axes[idx].set_title(f'Random Seed = {seed}')
+    axes[idx].set_title (f'Random Seed = {seed}')
     axes[idx].grid(True, alpha=0.3)
 
 plt.suptitle('t-SNE with Different Random Seeds', fontsize=14)
@@ -252,9 +252,9 @@ tsne = TSNE(
 
 X_tsne = tsne.fit_transform(X_pca)
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 scatter = plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', s=30, alpha=0.7)
-plt.colorbar(scatter, label='Class')
+plt.colorbar (scatter, label='Class')
 plt.title('t-SNE Visualization (Optimized)')
 plt.xlabel('t-SNE 1')
 plt.ylabel('t-SNE 2')
@@ -293,19 +293,19 @@ try:
     
     # t-SNE
     axes[0].scatter(X_tsne[:, 0], X_tsne[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
-    axes[0].set_title(f't-SNE (time: {tsne_time:.2f}s)')
+    axes[0].set_title (f't-SNE (time: {tsne_time:.2f}s)')
     axes[0].set_xlabel('t-SNE 1')
     axes[0].set_ylabel('t-SNE 2')
     axes[0].grid(True, alpha=0.3)
     
     # UMAP
     scatter = axes[1].scatter(X_umap[:, 0], X_umap[:, 1], c=y, cmap='tab10', s=20, alpha=0.7)
-    axes[1].set_title(f'UMAP (time: {umap_time:.2f}s)\\nFaster & preserves global structure!')
+    axes[1].set_title (f'UMAP (time: {umap_time:.2f}s)\\nFaster & preserves global structure!')
     axes[1].set_xlabel('UMAP 1')
     axes[1].set_ylabel('UMAP 2')
     axes[1].grid(True, alpha=0.3)
     
-    fig.colorbar(scatter, ax=axes, ticks=range(10), label='Digit')
+    fig.colorbar (scatter, ax=axes, ticks=range(10), label='Digit')
     plt.tight_layout()
     plt.show()
     
@@ -326,14 +326,14 @@ try:
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
     axes = axes.ravel()
     
-    for idx, n_neighbors in enumerate(n_neighbors_values):
+    for idx, n_neighbors in enumerate (n_neighbors_values):
         umap_temp = umap.UMAP(n_components=2, random_state=42, 
                              n_neighbors=n_neighbors)
         X_umap_temp = umap_temp.fit_transform(X_scaled[:500])
         
         axes[idx].scatter(X_umap_temp[:, 0], X_umap_temp[:, 1], 
                          c=y[:500], cmap='tab10', s=30, alpha=0.7)
-        axes[idx].set_title(f'n_neighbors = {n_neighbors}')
+        axes[idx].set_title (f'n_neighbors = {n_neighbors}')
         axes[idx].grid(True, alpha=0.3)
     
     plt.suptitle('Effect of n_neighbors on UMAP', fontsize=14)
@@ -369,7 +369,7 @@ try:
     # Transform test data (no re-fitting!)
     X_test_umap = umap_model.transform(X_test)
     
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     
     plt.scatter(X_train_umap[:, 0], X_train_umap[:, 1], 
                c=y_train, cmap='tab10', s=30, alpha=0.5, label='Train')
@@ -405,12 +405,12 @@ from sklearn.manifold import MDS
 mds = MDS(n_components=2, random_state=42)
 X_mds = mds.fit_transform(X_scaled[:500])  # Use subset for speed
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X_mds[:, 0], X_mds[:, 1], c=y[:500], cmap='tab10', s=30, alpha=0.7)
 plt.title('MDS Visualization')
 plt.xlabel('MDS 1')
 plt.ylabel('MDS 2')
-plt.colorbar(label='Digit')
+plt.colorbar (label='Digit')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
@@ -428,15 +428,15 @@ Non-linear dimensionality reduction based on geodesic distances
 from sklearn.manifold import Isomap
 
 # Apply Isomap
-isomap = Isomap(n_components=2, n_neighbors=10)
+isomap = Isomap (n_components=2, n_neighbors=10)
 X_isomap = isomap.fit_transform(X_scaled[:500])
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X_isomap[:, 0], X_isomap[:, 1], c=y[:500], cmap='tab10', s=30, alpha=0.7)
 plt.title('Isomap Visualization')
 plt.xlabel('Isomap 1')
 plt.ylabel('Isomap 2')
-plt.colorbar(label='Digit')
+plt.colorbar (label='Digit')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
@@ -454,15 +454,15 @@ Preserves local linear structures
 from sklearn.manifold import LocallyLinearEmbedding
 
 # Apply LLE
-lle = LocallyLinearEmbedding(n_components=2, n_neighbors=10, random_state=42)
+lle = LocallyLinearEmbedding (n_components=2, n_neighbors=10, random_state=42)
 X_lle = lle.fit_transform(X_scaled[:500])
 
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 plt.scatter(X_lle[:, 0], X_lle[:, 1], c=y[:500], cmap='tab10', s=30, alpha=0.7)
 plt.title('LLE Visualization')
 plt.xlabel('LLE 1')
 plt.ylabel('LLE 2')
-plt.colorbar(label='Digit')
+plt.colorbar (label='Digit')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
@@ -487,8 +487,8 @@ methods = {
     'PCA': PCA(n_components=2),
     't-SNE': TSNE(n_components=2, random_state=42),
     'MDS': MDS(n_components=2, random_state=42),
-    'Isomap': Isomap(n_components=2, n_neighbors=10),
-    'LLE': LocallyLinearEmbedding(n_components=2, n_neighbors=10, random_state=42)
+    'Isomap': Isomap (n_components=2, n_neighbors=10),
+    'LLE': LocallyLinearEmbedding (n_components=2, n_neighbors=10, random_state=42)
 }
 
 try:
@@ -499,20 +499,20 @@ except NameError:
 fig, axes = plt.subplots(2, 3, figsize=(16, 10))
 axes = axes.ravel()
 
-for idx, (name, method) in enumerate(methods.items()):
+for idx, (name, method) in enumerate (methods.items()):
     start_time = time.time()
     X_transformed = method.fit_transform(X_iris_scaled)
     elapsed_time = time.time() - start_time
     
     axes[idx].scatter(X_transformed[:, 0], X_transformed[:, 1], 
                      c=y_iris, cmap='viridis', s=50, alpha=0.7)
-    axes[idx].set_title(f'{name}\\nTime: {elapsed_time:.3f}s')
+    axes[idx].set_title (f'{name}\\nTime: {elapsed_time:.3f}s')
     axes[idx].set_xlabel('Component 1')
     axes[idx].set_ylabel('Component 2')
     axes[idx].grid(True, alpha=0.3)
 
 # Hide extra subplot if needed
-if len(methods) < 6:
+if len (methods) < 6:
     axes[5].axis('off')
 
 plt.suptitle('Comparison of Dimensionality Reduction Methods (Iris Dataset)', fontsize=14)
@@ -579,13 +579,13 @@ X_cells_pca = pca_cells.fit_transform(X_cells_scaled)
 tsne_cells = TSNE(n_components=2, random_state=42, perplexity=30)
 X_cells_tsne = tsne_cells.fit_transform(X_cells_pca)
 
-plt.figure(figsize=(12, 8))
+plt.figure (figsize=(12, 8))
 scatter = plt.scatter(X_cells_tsne[:, 0], X_cells_tsne[:, 1], 
                      c=y_cells, cmap='viridis', s=30, alpha=0.7)
 plt.title('Single-Cell RNA-seq: Cell Type Discovery\\n2000 genes → 50D (PCA) → 2D (t-SNE)')
 plt.xlabel('t-SNE 1')
 plt.ylabel('t-SNE 2')
-plt.colorbar(scatter, ticks=[0, 1, 2], label='Cell Type')
+plt.colorbar (scatter, ticks=[0, 1, 2], label='Cell Type')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
@@ -613,9 +613,9 @@ categories = ['Animals', 'Fruits', 'Vehicles', 'Colors']
 tsne_words = TSNE(n_components=2, random_state=42, perplexity=15)
 X_words_tsne = tsne_words.fit_transform(X_words)
 
-plt.figure(figsize=(12, 8))
+plt.figure (figsize=(12, 8))
 colors_map = ['red', 'green', 'blue', 'orange']
-for i, (category, color) in enumerate(zip(categories, colors_map)):
+for i, (category, color) in enumerate (zip (categories, colors_map)):
     mask = y_words == i
     plt.scatter(X_words_tsne[mask, 0], X_words_tsne[mask, 1], 
                c=color, label=category, s=100, alpha=0.7, edgecolors='black')

@@ -36,7 +36,7 @@ Vector databases use specialized indexes (HNSW, IVF) to search efficiently:
 
 \`\`\`python
 # Vector database approach (fast!)
-results = vector_db.search(query_embedding, top_k=5)
+results = vector_db.search (query_embedding, top_k=5)
 # Uses index to search ~log(N) vectors instead of N
 # 1M vectors: ~20 comparisons instead of 1M!
 \`\`\`
@@ -54,17 +54,17 @@ Measures angle between vectors (most common for text embeddings):
 \`\`\`python
 import numpy as np
 
-def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
+def cosine_similarity (a: np.ndarray, b: np.ndarray) -> float:
     """
     Cosine similarity: dot product of normalized vectors.
     Range: -1 to 1 (higher is more similar)
     """
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+    return np.dot (a, b) / (np.linalg.norm (a) * np.linalg.norm (b))
 
 # Example
 v1 = np.array([1, 2, 3])
 v2 = np.array([2, 4, 6])  # Same direction, different magnitude
-print(f"Cosine similarity: {cosine_similarity(v1, v2):.3f}")  # 1.0
+print(f"Cosine similarity: {cosine_similarity (v1, v2):.3f}")  # 1.0
 \`\`\`
 
 #### 2. Euclidean Distance (L2)
@@ -72,12 +72,12 @@ print(f"Cosine similarity: {cosine_similarity(v1, v2):.3f}")  # 1.0
 Straight-line distance in vector space:
 
 \`\`\`python
-def euclidean_distance(a: np.ndarray, b: np.ndarray) -> float:
+def euclidean_distance (a: np.ndarray, b: np.ndarray) -> float:
     """
     Euclidean distance (L2).
     Range: 0 to infinity (lower is more similar)
     """
-    return np.linalg.norm(a - b)
+    return np.linalg.norm (a - b)
 \`\`\`
 
 #### 3. Dot Product
@@ -85,12 +85,12 @@ def euclidean_distance(a: np.ndarray, b: np.ndarray) -> float:
 Simple multiplication (fast for normalized vectors):
 
 \`\`\`python
-def dot_product(a: np.ndarray, b: np.ndarray) -> float:
+def dot_product (a: np.ndarray, b: np.ndarray) -> float:
     """
     Dot product similarity.
     For normalized vectors, equivalent to cosine similarity.
     """
-    return np.dot(a, b)
+    return np.dot (a, b)
 \`\`\`
 
 ### Indexing Algorithms
@@ -121,7 +121,7 @@ Partitions vectors into clusters:
 
 ### 1. FAISS (Local/Self-Hosted)
 
-Facebook's library for efficient similarity search (great for getting started):
+Facebook\'s library for efficient similarity search (great for getting started):
 
 \`\`\`python
 import faiss
@@ -152,7 +152,7 @@ class FAISSVectorStore:
             self.index = faiss.IndexFlatL2(dimension)
         elif index_type == "hnsw":
             # Approximate search (faster, ~99% accurate)
-            self.index = faiss.IndexHNSWFlat(dimension, 32)
+            self.index = faiss.IndexHNSWFlat (dimension, 32)
         else:
             self.index = faiss.IndexFlatL2(dimension)
     
@@ -174,13 +174,13 @@ class FAISSVectorStore:
         vectors = vectors.astype('float32')
         
         # Add to index
-        self.index.add(vectors)
+        self.index.add (vectors)
         
         # Store documents and metadata
-        self.documents.extend(documents)
-        self.metadata.extend(metadata)
+        self.documents.extend (documents)
+        self.metadata.extend (metadata)
         
-        print(f"Added {len(documents)} vectors. Total: {self.index.ntotal}")
+        print(f"Added {len (documents)} vectors. Total: {self.index.ntotal}")
     
     def search(
         self,
@@ -201,28 +201,28 @@ class FAISSVectorStore:
         query_vector = query_vector.astype('float32').reshape(1, -1)
         
         # Search
-        distances, indices = self.index.search(query_vector, k)
+        distances, indices = self.index.search (query_vector, k)
         
         # Format results
         results = []
-        for dist, idx in zip(distances[0], indices[0]):
-            if idx < len(self.documents):  # Valid index
+        for dist, idx in zip (distances[0], indices[0]):
+            if idx < len (self.documents):  # Valid index
                 results.append((
                     self.documents[idx],
-                    float(dist),
+                    float (dist),
                     self.metadata[idx]
                 ))
         
         return results
     
-    def save(self, filepath: str):
+    def save (self, filepath: str):
         """Save index to disk."""
-        faiss.write_index(self.index, filepath)
+        faiss.write_index (self.index, filepath)
         print(f"Saved index to {filepath}")
     
-    def load(self, filepath: str):
+    def load (self, filepath: str):
         """Load index from disk."""
-        self.index = faiss.read_index(filepath)
+        self.index = faiss.read_index (filepath)
         print(f"Loaded index from {filepath}")
 
 
@@ -231,16 +231,16 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def get_embedding(text: str) -> np.ndarray:
+def get_embedding (text: str) -> np.ndarray:
     """Get OpenAI embedding."""
     response = client.embeddings.create(
         model="text-embedding-3-small",
         input=text
     )
-    return np.array(response.data[0].embedding)
+    return np.array (response.data[0].embedding)
 
 # Create FAISS store
-store = FAISSVectorStore(dimension=1536, index_type="hnsw")
+store = FAISSVectorStore (dimension=1536, index_type="hnsw")
 
 # Add documents
 docs = [
@@ -251,14 +251,14 @@ docs = [
 ]
 
 # Embed and add
-vectors = np.array([get_embedding(doc) for doc in docs])
-metadata = [{"source": f"doc_{i}"} for i in range(len(docs))]
-store.add(vectors, docs, metadata)
+vectors = np.array([get_embedding (doc) for doc in docs])
+metadata = [{"source": f"doc_{i}"} for i in range (len (docs))]
+store.add (vectors, docs, metadata)
 
 # Search
 query = "What is semantic search?"
-query_vec = get_embedding(query)
-results = store.search(query_vec, k=2)
+query_vec = get_embedding (query)
+results = store.search (query_vec, k=2)
 
 for doc, dist, meta in results:
     print(f"Distance: {dist:.3f} - {doc}")
@@ -305,7 +305,7 @@ class PineconeVectorStore:
             dimension: Vector dimension
             metric: Similarity metric (cosine, euclidean, dotproduct)
         """
-        self.pc = Pinecone(api_key=api_key)
+        self.pc = Pinecone (api_key=api_key)
         self.index_name = index_name
         
         # Create index if it doesn't exist
@@ -321,7 +321,7 @@ class PineconeVectorStore:
             )
             print(f"Created index: {index_name}")
         
-        self.index = self.pc.Index(index_name)
+        self.index = self.pc.Index (index_name)
     
     def upsert(
         self,
@@ -344,16 +344,16 @@ class PineconeVectorStore:
                 "values": vector,
                 "metadata": meta
             }
-            for id_, vector, meta in zip(ids, vectors, metadata)
+            for id_, vector, meta in zip (ids, vectors, metadata)
         ]
         
         # Upsert in batches
         batch_size = 100
-        for i in range(0, len(vectors_with_metadata), batch_size):
+        for i in range(0, len (vectors_with_metadata), batch_size):
             batch = vectors_with_metadata[i:i + batch_size]
-            self.index.upsert(vectors=batch)
+            self.index.upsert (vectors=batch)
         
-        print(f"Upserted {len(vectors)} vectors")
+        print(f"Upserted {len (vectors)} vectors")
     
     def search(
         self,
@@ -381,11 +381,11 @@ class PineconeVectorStore:
         
         return results.matches
     
-    def delete(self, ids: List[str]):
+    def delete (self, ids: List[str]):
         """Delete vectors by ID."""
-        self.index.delete(ids=ids)
+        self.index.delete (ids=ids)
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """Get index statistics."""
         return self.index.describe_index_stats()
 
@@ -404,16 +404,16 @@ documents = [
     "Supports metadata filtering and hybrid search"
 ]
 
-vectors = [get_embedding(doc).tolist() for doc in documents]
-ids = [f"doc_{i}" for i in range(len(documents))]
+vectors = [get_embedding (doc).tolist() for doc in documents]
+ids = [f"doc_{i}" for i in range (len (documents))]
 metadata = [{"text": doc, "source": "demo"} for doc in documents]
 
-store.upsert(vectors, ids, metadata)
+store.upsert (vectors, ids, metadata)
 
 # Search
 query = "What is Pinecone?"
-query_vec = get_embedding(query).tolist()
-results = store.search(query_vec, top_k=2)
+query_vec = get_embedding (query).tolist()
+results = store.search (query_vec, top_k=2)
 
 for match in results:
     print(f"Score: {match.score:.3f}")
@@ -457,13 +457,13 @@ class WeaviateVectorStore:
             url: Weaviate instance URL
             class_name: Name of your data class
         """
-        self.client = weaviate.Client(url=url)
+        self.client = weaviate.Client (url=url)
         self.class_name = class_name
         
         # Create class if it doesn't exist
         self._create_class_if_needed()
     
-    def _create_class_if_needed(self):
+    def _create_class_if_needed (self):
         """Create Weaviate class schema."""
         schema = {
             "class": self.class_name,
@@ -481,7 +481,7 @@ class WeaviateVectorStore:
         }
         
         try:
-            self.client.schema.create_class(schema)
+            self.client.schema.create_class (schema)
             print(f"Created class: {self.class_name}")
         except Exception as e:
             # Class might already exist
@@ -503,7 +503,7 @@ class WeaviateVectorStore:
         """
         # Batch import
         with self.client.batch as batch:
-            for text, vector, meta in zip(texts, vectors, metadata):
+            for text, vector, meta in zip (texts, vectors, metadata):
                 properties = {
                     "text": text,
                     **meta
@@ -515,7 +515,7 @@ class WeaviateVectorStore:
                     vector=vector
                 )
         
-        print(f"Added {len(texts)} documents")
+        print(f"Added {len (texts)} documents")
     
     def search(
         self,
@@ -534,14 +534,14 @@ class WeaviateVectorStore:
         """
         result = (
             self.client.query
-            .get(self.class_name, ["text", "source"])
+            .get (self.class_name, ["text", "source"])
             .with_near_vector({"vector": query_vector})
-            .with_limit(limit)
+            .with_limit (limit)
             .with_additional(["distance"])
             .do()
         )
         
-        return result.get("data", {}).get("Get", {}).get(self.class_name, [])
+        return result.get("data", {}).get("Get", {}).get (self.class_name, [])
 
 
 # Example usage (requires Weaviate instance running)
@@ -554,14 +554,14 @@ store = WeaviateVectorStore(
 
 # Add documents
 docs = ["Weaviate is an open-source vector database"]
-vectors = [get_embedding(doc).tolist() for doc in docs]
+vectors = [get_embedding (doc).tolist() for doc in docs]
 metadata = [{"source": "demo"}]
 
-store.add(docs, vectors, metadata)
+store.add (docs, vectors, metadata)
 
 # Search
 query_vec = get_embedding("vector database").tolist()
-results = store.search(query_vec, limit=3)
+results = store.search (query_vec, limit=3)
 \`\`\`
 
 **Best For:**
@@ -596,7 +596,7 @@ class ChromaVectorStore:
             collection_name: Name of collection
             persist_directory: Where to store data
         """
-        self.client = chromadb.PersistentClient(path=persist_directory)
+        self.client = chromadb.PersistentClient (path=persist_directory)
         
         # Get or create collection
         self.collection = self.client.get_or_create_collection(
@@ -627,7 +627,7 @@ class ChromaVectorStore:
             metadatas=metadatas
         )
         
-        print(f"Added {len(documents)} documents")
+        print(f"Added {len (documents)} documents")
     
     def query(
         self,
@@ -654,9 +654,9 @@ class ChromaVectorStore:
         
         return results
     
-    def delete_collection(self):
+    def delete_collection (self):
         """Delete the collection."""
-        self.client.delete_collection(self.collection.name)
+        self.client.delete_collection (self.collection.name)
 
 
 # Example usage
@@ -672,15 +672,15 @@ docs = [
     "Perfect for prototyping"
 ]
 
-embeddings = [get_embedding(doc).tolist() for doc in docs]
-ids = [f"id_{i}" for i in range(len(docs))]
+embeddings = [get_embedding (doc).tolist() for doc in docs]
+ids = [f"id_{i}" for i in range (len (docs))]
 metadata = [{"source": "tutorial"} for _ in docs]
 
-store.add(docs, embeddings, ids, metadata)
+store.add (docs, embeddings, ids, metadata)
 
 # Query
 query_emb = get_embedding("local storage").tolist()
-results = store.query(query_emb, n_results=2)
+results = store.query (query_emb, n_results=2)
 
 print(results["documents"])
 \`\`\`
@@ -714,7 +714,7 @@ class QdrantVectorStore:
         port: int = 6333
     ):
         """Initialize Qdrant client."""
-        self.client = QdrantClient(host=host, port=port)
+        self.client = QdrantClient (host=host, port=port)
         self.collection_name = collection_name
         
         # Create collection if needed
@@ -750,7 +750,7 @@ class QdrantVectorStore:
                 vector=vector,
                 payload=payload
             )
-            for id_, vector, payload in zip(ids, vectors, payloads)
+            for id_, vector, payload in zip (ids, vectors, payloads)
         ]
         
         self.client.upsert(
@@ -808,9 +808,9 @@ class ProductionVectorDB:
         batch_size: int = 100
     ):
         """Upsert in batches to avoid timeouts."""
-        for i in range(0, len(vectors), batch_size):
+        for i in range(0, len (vectors), batch_size):
             batch = vectors[i:i+batch_size]
-            self.store.upsert(batch)
+            self.store.upsert (batch)
     
     def search_with_fallback(
         self,
@@ -823,7 +823,7 @@ class ProductionVectorDB:
             score_threshold=0.7
         )
         
-        if len(results) < min_results:
+        if len (results) < min_results:
             # Lower threshold if too few results
             results = self.store.search(
                 query_vector,

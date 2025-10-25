@@ -192,7 +192,7 @@ analyst expectations. The company's stock (AAPL) rose 5% to $180.
 """
 
 # Process text
-doc = nlp(text)
+doc = nlp (text)
 
 # Extract entities
 print("\\nEntities found:")
@@ -211,7 +211,7 @@ for ent in doc.ents:
 # $180                 | MONEY      | 176-180
 
 # Visualize entities (in Jupyter notebook)
-displacy.render(doc, style="ent", jupyter=True)
+displacy.render (doc, style="ent", jupyter=True)
 
 # Get entity statistics
 from collections import Counter
@@ -228,14 +228,14 @@ for entity_type, count in entity_counts.most_common():
 # Add custom entity patterns
 from spacy.matcher import Matcher
 
-matcher = Matcher(nlp.vocab)
+matcher = Matcher (nlp.vocab)
 
 # Pattern for stock tickers (1-5 uppercase letters)
 ticker_pattern = [{"TEXT": {"REGEX": "^[A-Z]{1,5}$"}}]
 matcher.add("TICKER", [ticker_pattern])
 
 doc = nlp("Invested in AAPL, TSLA, and MSFT")
-matches = matcher(doc)
+matches = matcher (doc)
 
 for match_id, start, end in matches:
     span = doc[start:end]
@@ -259,7 +259,7 @@ ner_pipeline = pipeline(
 text = "Apple Inc. CEO Tim Cook announced new products in Cupertino, California."
 
 # Predict entities
-entities = ner_pipeline(text)
+entities = ner_pipeline (text)
 
 print("Entities:")
 for entity in entities:
@@ -278,7 +278,7 @@ for entity in entities:
 # Different aggregation strategies
 
 # 1. No aggregation (raw subwords)
-entities_raw = ner_pipeline(text, aggregation_strategy="none")
+entities_raw = ner_pipeline (text, aggregation_strategy="none")
 for ent in entities_raw[:3]:
     print(f"{ent['word']:15} | {ent['entity']:15} | {ent['score']:.3f}")
 
@@ -288,18 +288,18 @@ for ent in entities_raw[:3]:
 # .              | I-ORG          | 0.912
 
 # 2. Simple aggregation (merge B- and I- tags)
-entities_simple = ner_pipeline(text, aggregation_strategy="simple")
+entities_simple = ner_pipeline (text, aggregation_strategy="simple")
 print(entities_simple[0])
 # {'entity_group': 'ORG', 'score': 0.997, 'word': 'Apple Inc.', 'start': 0, 'end': 10}
 
 # 3. First token score
-entities_first = ner_pipeline(text, aggregation_strategy="first")
+entities_first = ner_pipeline (text, aggregation_strategy="first")
 
 # 4. Average score
-entities_avg = ner_pipeline(text, aggregation_strategy="average")
+entities_avg = ner_pipeline (text, aggregation_strategy="average")
 
 # 5. Maximum score
-entities_max = ner_pipeline(text, aggregation_strategy="max")
+entities_max = ner_pipeline (text, aggregation_strategy="max")
 \`\`\`
 
 ## Fine-Tuning NER Models
@@ -323,23 +323,23 @@ dataset = load_dataset("conll2003")
 
 # Label list: O, B-PER, I-PER, B-ORG, I-ORG, B-LOC, I-LOC, B-MISC, I-MISC
 label_list = dataset['train'].features['ner_tags'].feature.names
-num_labels = len(label_list)
+num_labels = len (label_list)
 
 print(f"Labels: {label_list}")
 print(f"Number of labels: {num_labels}")
 
 # 2. Load model and tokenizer
 model_name = "bert-base-cased"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 model = AutoModelForTokenClassification.from_pretrained(
     model_name,
     num_labels=num_labels,
-    id2label={i: label for i, label in enumerate(label_list)},
-    label2id={label: i for i, label in enumerate(label_list)}
+    id2label={i: label for i, label in enumerate (label_list)},
+    label2id={label: i for i, label in enumerate (label_list)}
 )
 
 # 3. Tokenize and align labels
-def tokenize_and_align_labels(examples):
+def tokenize_and_align_labels (examples):
     """
     Tokenize text and align NER labels with subword tokens.
     
@@ -356,8 +356,8 @@ def tokenize_and_align_labels(examples):
     )
     
     labels = []
-    for i, label in enumerate(examples['ner_tags']):
-        word_ids = tokenized_inputs.word_ids(batch_index=i)
+    for i, label in enumerate (examples['ner_tags']):
+        word_ids = tokenized_inputs.word_ids (batch_index=i)
         label_ids = []
         previous_word_idx = None
         
@@ -367,7 +367,7 @@ def tokenize_and_align_labels(examples):
                 label_ids.append(-100)
             elif word_idx != previous_word_idx:
                 # First token of a word gets the actual label
-                label_ids.append(label[word_idx])
+                label_ids.append (label[word_idx])
             else:
                 # Subsequent subword tokens get -100 (ignored in loss)
                 # Alternative: could use I- tag
@@ -375,7 +375,7 @@ def tokenize_and_align_labels(examples):
             
             previous_word_idx = word_idx
         
-        labels.append(label_ids)
+        labels.append (label_ids)
     
     tokenized_inputs['labels'] = labels
     return tokenized_inputs
@@ -406,36 +406,36 @@ data_collator = DataCollatorForTokenClassification(
 )
 
 # 5. Evaluation metrics
-def compute_metrics(eval_preds):
+def compute_metrics (eval_preds):
     """
     Compute NER metrics using seqeval (entity-level metrics)
     """
     predictions, labels = eval_preds
     
     # Get predicted labels (argmax of logits)
-    predictions = np.argmax(predictions, axis=2)
+    predictions = np.argmax (predictions, axis=2)
     
     # Remove ignored index (-100) and convert to label names
     true_labels = []
     pred_labels = []
     
-    for prediction, label in zip(predictions, labels):
+    for prediction, label in zip (predictions, labels):
         true_label = []
         pred_label = []
         
-        for pred, lab in zip(prediction, label):
+        for pred, lab in zip (prediction, label):
             if lab != -100:  # Ignore special tokens
-                true_label.append(label_list[lab])
-                pred_label.append(label_list[pred])
+                true_label.append (label_list[lab])
+                pred_label.append (label_list[pred])
         
-        true_labels.append(true_label)
-        pred_labels.append(pred_label)
+        true_labels.append (true_label)
+        pred_labels.append (pred_label)
     
     # Compute entity-level metrics (seqeval)
     results = {
-        'precision': precision_score(true_labels, pred_labels),
-        'recall': recall_score(true_labels, pred_labels),
-        'f1': f1_score(true_labels, pred_labels),
+        'precision': precision_score (true_labels, pred_labels),
+        'recall': recall_score (true_labels, pred_labels),
+        'f1': f1_score (true_labels, pred_labels),
     }
     
     return results
@@ -477,30 +477,30 @@ trainer.train()
 
 # 9. Evaluate on test set
 print("\\nEvaluating on test set...")
-test_results = trainer.predict(tokenized_test)
+test_results = trainer.predict (tokenized_test)
 
 # Get predictions
-predictions = np.argmax(test_results.predictions, axis=2)
+predictions = np.argmax (test_results.predictions, axis=2)
 
 # Convert to labels
 true_labels = []
 pred_labels = []
 
-for prediction, label in zip(predictions, test_results.label_ids):
+for prediction, label in zip (predictions, test_results.label_ids):
     true_label = []
     pred_label = []
     
-    for pred, lab in zip(prediction, label):
+    for pred, lab in zip (prediction, label):
         if lab != -100:
-            true_label.append(label_list[lab])
-            pred_label.append(label_list[pred])
+            true_label.append (label_list[lab])
+            pred_label.append (label_list[pred])
     
-    true_labels.append(true_label)
-    pred_labels.append(pred_label)
+    true_labels.append (true_label)
+    pred_labels.append (pred_label)
 
 # Detailed classification report
 print("\\nDetailed Results:")
-print(classification_report(true_labels, pred_labels))
+print(classification_report (true_labels, pred_labels))
 
 # Save model
 trainer.save_model('./ner_model_final')
@@ -526,7 +526,7 @@ financial_data = [
         ]
     },
     {
-        "text": "Tesla stock rose 10% after Elon Musk's announcement",
+        "text": "Tesla stock rose 10% after Elon Musk\'s announcement",
         "entities": [
             (0, 5, "COMPANY"),
             (16, 19, "PERCENT"),
@@ -537,7 +537,7 @@ financial_data = [
 ]
 
 # Convert to CoNLL format
-def convert_to_conll(data):
+def convert_to_conll (data):
     """Convert entity annotations to IOB format"""
     conll_data = []
     
@@ -549,7 +549,7 @@ def convert_to_conll(data):
         tokens = text.split()  # Simple tokenization
         
         # Create IOB labels
-        labels = ['O'] * len(tokens)
+        labels = ['O'] * len (tokens)
         
         # Map entity spans to tokens
         for start, end, entity_type in entities:
@@ -557,11 +557,11 @@ def convert_to_conll(data):
             entity_tokens = entity_text.split()
             
             # Find entity position in token list
-            for i in range(len(tokens)):
+            for i in range (len (tokens)):
                 if tokens[i] == entity_tokens[0]:
                     labels[i] = f'B-{entity_type}'
-                    for j in range(1, len(entity_tokens)):
-                        if i+j < len(tokens):
+                    for j in range(1, len (entity_tokens)):
+                        if i+j < len (tokens):
                             labels[i+j] = f'I-{entity_type}'
         
         conll_data.append({
@@ -572,12 +572,12 @@ def convert_to_conll(data):
     return conll_data
 
 # Convert data
-conll_data = convert_to_conll(financial_data)
+conll_data = convert_to_conll (financial_data)
 
 # Create Hugging Face dataset
 from datasets import Dataset
 
-dataset = Dataset.from_list(conll_data)
+dataset = Dataset.from_list (conll_data)
 
 # Define label list
 financial_labels = [
@@ -626,23 +626,23 @@ class ProductionNER:
             'MISC': 'MISCELLANEOUS'
         }
     
-    def preprocess(self, text: str) -> str:
+    def preprocess (self, text: str) -> str:
         """Clean and normalize text"""
         # Remove extra whitespace
-        text = re.sub(r'\\s+', ' ', text)
+        text = re.sub (r'\\s+', ' ', text)
         
         # Fix common issues
         text = text.strip()
         
         return text
     
-    def extract_entities(self, text: str) -> List[Dict]:
+    def extract_entities (self, text: str) -> List[Dict]:
         """Extract entities with confidence filtering"""
         # Preprocess
-        text = self.preprocess(text)
+        text = self.preprocess (text)
         
         # Extract entities
-        entities = self.ner_pipeline(text)
+        entities = self.ner_pipeline (text)
         
         # Filter by confidence and standardize
         filtered_entities = []
@@ -656,18 +656,18 @@ class ProductionNER:
                     ),
                     'start': ent['start'],
                     'end': ent['end'],
-                    'confidence': round(ent['score'], 3)
+                    'confidence': round (ent['score'], 3)
                 })
         
         return filtered_entities
     
-    def deduplicate_entities(self, entities: List[Dict]) -> List[Dict]:
+    def deduplicate_entities (self, entities: List[Dict]) -> List[Dict]:
         """Remove duplicate/overlapping entities"""
         if not entities:
             return []
         
         # Sort by start position
-        sorted_entities = sorted(entities, key=lambda x: (x['start'], -x['end']))
+        sorted_entities = sorted (entities, key=lambda x: (x['start'], -x['end']))
         
         # Remove overlaps (keep longer/higher confidence)
         deduplicated = [sorted_entities[0]]
@@ -677,39 +677,39 @@ class ProductionNER:
             
             # Check if overlapping
             if ent['start'] >= last_ent['end']:
-                deduplicated.append(ent)
+                deduplicated.append (ent)
             elif ent['confidence'] > last_ent['confidence']:
                 # Replace with higher confidence
                 deduplicated[-1] = ent
         
         return deduplicated
     
-    def group_by_type(self, entities: List[Dict]) -> Dict[str, List[str]]:
+    def group_by_type (self, entities: List[Dict]) -> Dict[str, List[str]]:
         """Group entities by type"""
         grouped = {}
         for ent in entities:
             entity_type = ent['type']
             if entity_type not in grouped:
                 grouped[entity_type] = []
-            grouped[entity_type].append(ent['text'])
+            grouped[entity_type].append (ent['text'])
         
         return grouped
     
-    def process_document(self, text: str) -> Dict:
+    def process_document (self, text: str) -> Dict:
         """Complete NER processing pipeline"""
         # Extract entities
-        entities = self.extract_entities(text)
+        entities = self.extract_entities (text)
         
         # Deduplicate
-        entities = self.deduplicate_entities(entities)
+        entities = self.deduplicate_entities (entities)
         
         # Group by type
-        grouped = self.group_by_type(entities)
+        grouped = self.group_by_type (entities)
         
         return {
             'text': text,
             'entities': entities,
-            'entity_counts': {k: len(v) for k, v in grouped.items()},
+            'entity_counts': {k: len (v) for k, v in grouped.items()},
             'grouped_entities': grouped
         }
 
@@ -719,11 +719,11 @@ ner = ProductionNER()
 text = """
 Apple Inc. announced its Q1 2024 earnings yesterday. CEO Tim Cook 
 reported record revenue of $119.6 billion. The company's iPhone sales 
-in China and Europe exceeded expectations. Apple's stock (AAPL) 
+in China and Europe exceeded expectations. Apple\'s stock (AAPL) 
 rose 5% to $180 on the NASDAQ exchange.
 """
 
-result = ner.process_document(text)
+result = ner.process_document (text)
 
 print("Entities Found:")
 for ent in result['entities']:
@@ -735,7 +735,7 @@ for entity_type, count in result['entity_counts'].items():
 
 print("\\nGrouped Entities:")
 for entity_type, entities in result['grouped_entities'].items():
-    print(f"  {entity_type}: {', '.join(entities)}")
+    print(f"  {entity_type}: {', '.join (entities)}")
 \`\`\`
 
 ## Evaluation Metrics for NER
@@ -756,12 +756,12 @@ y_pred = [
 
 # Entity-level metrics (strict)
 print("Entity-level Metrics (seqeval):")
-print(classification_report(y_true, y_pred))
+print(classification_report (y_true, y_pred))
 
 # Detailed breakdown
-print(f"Precision: {precision_score(y_true, y_pred):.3f}")
-print(f"Recall: {recall_score(y_true, y_pred):.3f}")
-print(f"F1: {f1_score(y_true, y_pred):.3f}")
+print(f"Precision: {precision_score (y_true, y_pred):.3f}")
+print(f"Recall: {recall_score (y_true, y_pred):.3f}")
+print(f"F1: {f1_score (y_true, y_pred):.3f}")
 
 # Token-level metrics
 from sklearn.metrics import classification_report as sklearn_report
@@ -771,7 +771,7 @@ y_true_flat = [label for seq in y_true for label in seq]
 y_pred_flat = [label for seq in y_pred for label in seq]
 
 print("\\nToken-level Metrics (sklearn):")
-print(sklearn_report(y_true_flat, y_pred_flat))
+print(sklearn_report (y_true_flat, y_pred_flat))
 \`\`\`
 
 **Metrics Interpretation:**
@@ -862,33 +862,33 @@ $0.24 per share and authorized a $110 billion buyback program.
 """
 
 # Custom financial NER
-result = ner.process_document(financial_text)
+result = ner.process_document (financial_text)
 
 # Post-process for financial entities
 import re
 
-def extract_financial_metrics(text):
+def extract_financial_metrics (text):
     """Extract financial metrics using regex + NER"""
     metrics = {}
     
     # Extract revenue figures
     revenue_pattern = r'revenue[\\s\\w]*\\$([\\d.]+)\\s*(billion|million)'
-    revenues = re.findall(revenue_pattern, text, re.IGNORECASE)
+    revenues = re.findall (revenue_pattern, text, re.IGNORECASE)
     metrics['revenues'] = [f"\${amount} {unit}" for amount, unit in revenues]
     
     # Extract percentages
     percent_pattern = r'([\\d.]+)%'
-    percentages = re.findall(percent_pattern, text)
+    percentages = re.findall (percent_pattern, text)
     metrics['percentages'] = [f"{p}%" for p in percentages]
     
     # Extract ticker
     ticker_pattern = r'\\(([A-Z]{1,5})\\)'
-    tickers = re.findall(ticker_pattern, text)
+    tickers = re.findall (ticker_pattern, text)
     metrics['tickers'] = tickers
     
     return metrics
 
-financial_metrics = extract_financial_metrics(financial_text)
+financial_metrics = extract_financial_metrics (financial_text)
 print("\\nFinancial Metrics Extracted:")
 for key, values in financial_metrics.items():
     print(f"  {key}: {values}")

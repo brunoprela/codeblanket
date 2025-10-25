@@ -10,7 +10,7 @@ While ARIMA models handle linear dependencies, financial markets exhibit **volat
 
 - **GARCH**: Models time-varying volatility (critical for risk management)
 - **VAR**: Multi-variate time series (portfolio analysis)
-- **Prophet**: Facebook's scalable forecasting (handles holidays, seasonality)
+- **Prophet**: Facebook\'s scalable forecasting (handles holidays, seasonality)
 - **ARIMAX**: Incorporates external variables (volume, sentiment, macroeconomic)
 
 This section covers:
@@ -70,7 +70,7 @@ spy = yf.download('SPY', start='2020-01-01', end='2024-01-01')
 returns = spy['Close'].pct_change().dropna() * 100  # Convert to percentage
 
 print("=== Data Overview ===")
-print(f"Observations: {len(returns)}")
+print(f"Observations: {len (returns)}")
 print(f"Mean return: {returns.mean():.4f}%")
 print(f"Std deviation: {returns.std():.4f}%")
 
@@ -83,7 +83,7 @@ model = arch_model(
     dist='normal'
 )
 
-result = model.fit(disp='off')
+result = model.fit (disp='off')
 
 print("\\n=== GARCH(1,1) Results ===")
 print(result.summary())
@@ -102,30 +102,30 @@ print(f"Persistence (α+β): {alpha + beta:.4f}")
 # Interpretation
 if alpha + beta < 1:
     print("→ Stationary: Volatility mean-reverts")
-    half_life = -np.log(2) / np.log(alpha + beta)
+    half_life = -np.log(2) / np.log (alpha + beta)
     print(f"→ Half-life of shocks: {half_life:.1f} days")
 else:
     print("→ Non-stationary: High persistence")
 
 # Long-run volatility
 long_run_var = omega / (1 - alpha - beta)
-long_run_vol = np.sqrt(long_run_var)
+long_run_vol = np.sqrt (long_run_var)
 print(f"Long-run volatility: {long_run_vol:.4f}%")
 
 # Plot conditional volatility
 fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
 # Returns
-axes[0].plot(returns.index, returns.values, color='black', alpha=0.7)
+axes[0].plot (returns.index, returns.values, color='black', alpha=0.7)
 axes[0].set_title('SPY Returns')
 axes[0].set_ylabel('Return (%)')
-axes[0].axhline(y=0, color='red', linestyle='--', alpha=0.5)
+axes[0].axhline (y=0, color='red', linestyle='--', alpha=0.5)
 axes[0].grid(True, alpha=0.3)
 
 # Conditional volatility
 conditional_vol = result.conditional_volatility
 
-axes[1].plot(conditional_vol.index, conditional_vol.values, color='red', linewidth=2)
+axes[1].plot (conditional_vol.index, conditional_vol.values, color='red', linewidth=2)
 axes[1].set_title('GARCH(1,1) Conditional Volatility')
 axes[1].set_ylabel('Volatility (%)')
 axes[1].set_xlabel('Date')
@@ -133,7 +133,7 @@ axes[1].grid(True, alpha=0.3)
 
 # Highlight high volatility periods
 high_vol_threshold = conditional_vol.quantile(0.90)
-axes[1].axhline(y=high_vol_threshold, color='orange', linestyle='--', label='90th percentile')
+axes[1].axhline (y=high_vol_threshold, color='orange', linestyle='--', label='90th percentile')
 axes[1].legend()
 
 plt.tight_layout()
@@ -141,7 +141,7 @@ plt.show()
 
 # Identify high volatility periods
 high_vol_dates = conditional_vol[conditional_vol > high_vol_threshold]
-print(f"\\nHigh volatility periods (>90th percentile): {len(high_vol_dates)}")
+print(f"\\nHigh volatility periods (>90th percentile): {len (high_vol_dates)}")
 print(high_vol_dates.head())
 \`\`\`
 
@@ -153,18 +153,18 @@ Volatility Forecasting with GARCH
 """
 
 # Forecast volatility 10 days ahead
-forecasts = result.forecast(horizon=10)
+forecasts = result.forecast (horizon=10)
 
 # Extract variance forecasts
 variance_forecasts = forecasts.variance.values[-1, :]
-vol_forecasts = np.sqrt(variance_forecasts)
+vol_forecasts = np.sqrt (variance_forecasts)
 
 print("\\n=== 10-Day Volatility Forecast ===")
-for i, vol in enumerate(vol_forecasts, 1):
+for i, vol in enumerate (vol_forecasts, 1):
     print(f"Day {i}: {vol:.4f}%")
 
 # Plot forecast
-plt.figure(figsize=(14, 6))
+plt.figure (figsize=(14, 6))
 
 # Historical volatility (last 60 days)
 plt.plot(
@@ -177,7 +177,7 @@ plt.plot(
 
 # Forecast
 forecast_dates = pd.date_range(
-    start=conditional_vol.index[-1] + pd.Timedelta(days=1),
+    start=conditional_vol.index[-1] + pd.Timedelta (days=1),
     periods=10
 )
 
@@ -235,7 +235,7 @@ model_gjr = arch_model(
     q=1
 )
 
-result_gjr = model_gjr.fit(disp='off')
+result_gjr = model_gjr.fit (disp='off')
 
 print("=== GJR-GARCH Results ===")
 print(result_gjr.summary())
@@ -266,7 +266,7 @@ model_egarch = arch_model(
     q=1
 )
 
-result_egarch = model_egarch.fit(disp='off')
+result_egarch = model_egarch.fit (disp='off')
 
 print("=== EGARCH Results ===")
 print(result_egarch.summary())
@@ -309,7 +309,7 @@ from statsmodels.tsa.api import VAR
 
 # Load multiple assets
 tickers = ['SPY', 'TLT', 'GLD']  # Stocks, Bonds, Gold
-data = yf.download(tickers, start='2020-01-01', end='2024-01-01')['Close']
+data = yf.download (tickers, start='2020-01-01', end='2024-01-01')['Close']
 
 # Calculate returns
 returns_multi = data.pct_change().dropna() * 100
@@ -323,13 +323,13 @@ print(returns_multi.corr())
 model_var = VAR(returns_multi)
 
 # Select optimal lag order
-lag_order = model_var.select_order(maxlags=10)
+lag_order = model_var.select_order (maxlags=10)
 print("\\n=== VAR Lag Order Selection ===")
 print(lag_order.summary())
 
 # Fit VAR with optimal lags
 optimal_lag = lag_order.aic
-result_var = model_var.fit(optimal_lag)
+result_var = model_var.fit (optimal_lag)
 
 print(f"\\n=== VAR({optimal_lag}) Results ===")
 print(result_var.summary())
@@ -355,7 +355,7 @@ for lag in range(1, optimal_lag + 1):
 irf = result_var.irf(10)
 
 # Plot IRF
-fig = irf.plot(orth=False)
+fig = irf.plot (orth=False)
 plt.suptitle('Impulse Response Functions')
 plt.tight_layout()
 plt.show()
@@ -373,13 +373,13 @@ Multi-Asset Forecasting with VAR
 """
 
 # Forecast 10 days ahead
-forecast = result_var.forecast(returns_multi.values[-optimal_lag:], steps=10)
+forecast = result_var.forecast (returns_multi.values[-optimal_lag:], steps=10)
 
 forecast_df = pd.DataFrame(
     forecast,
     columns=returns_multi.columns,
     index=pd.date_range(
-        start=returns_multi.index[-1] + pd.Timedelta(days=1),
+        start=returns_multi.index[-1] + pd.Timedelta (days=1),
         periods=10
     )
 )
@@ -390,7 +390,7 @@ print(forecast_df)
 # Plot forecasts
 fig, axes = plt.subplots(3, 1, figsize=(14, 12))
 
-for i, ticker in enumerate(tickers):
+for i, ticker in enumerate (tickers):
     # Historical (last 60 days)
     axes[i].plot(
         returns_multi.iloc[-60:].index,
@@ -408,11 +408,11 @@ for i, ticker in enumerate(tickers):
         marker='o'
     )
     
-    axes[i].set_title(f'{ticker} Returns Forecast')
+    axes[i].set_title (f'{ticker} Returns Forecast')
     axes[i].set_ylabel('Return (%)')
     axes[i].legend()
     axes[i].grid(True, alpha=0.3)
-    axes[i].axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+    axes[i].axhline (y=0, color='gray', linestyle='--', alpha=0.5)
 
 axes[-1].set_xlabel('Date')
 plt.tight_layout()
@@ -421,7 +421,7 @@ plt.show()
 
 ---
 
-## Prophet (Facebook's Forecasting Model)
+## Prophet (Facebook\'s Forecasting Model)
 
 ### Scalable, Interpretable Forecasting
 
@@ -461,24 +461,24 @@ model_prophet.add_seasonality(
 )
 
 # Fit model
-model_prophet.fit(prophet_data)
+model_prophet.fit (prophet_data)
 
 # Make forecast
-future = model_prophet.make_future_dataframe(periods=30)
-forecast = model_prophet.predict(future)
+future = model_prophet.make_future_dataframe (periods=30)
+forecast = model_prophet.predict (future)
 
 print("=== Prophet Forecast (Next 30 Days) ===")
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(30))
 
 # Plot forecast
-fig1 = model_prophet.plot(forecast)
+fig1 = model_prophet.plot (forecast)
 plt.title('Prophet Price Forecast with Uncertainty')
 plt.ylabel('Price ($)')
 plt.tight_layout()
 plt.show()
 
 # Plot components
-fig2 = model_prophet.plot_components(forecast)
+fig2 = model_prophet.plot_components (forecast)
 plt.tight_layout()
 plt.show()
 
@@ -488,9 +488,9 @@ weekly = forecast['weekly'].values
 yearly = forecast['yearly'].values
 
 print("\\n=== Seasonal Components ===")
-print(f"Trend contribution: {np.std(trend):.2f}")
-print(f"Weekly contribution: {np.std(weekly):.2f}")
-print(f"Yearly contribution: {np.std(yearly):.2f}")
+print(f"Trend contribution: {np.std (trend):.2f}")
+print(f"Weekly contribution: {np.std (weekly):.2f}")
+print(f"Yearly contribution: {np.std (yearly):.2f}")
 \`\`\`
 
 ---
@@ -548,20 +548,20 @@ model_arimax = SARIMAX(
     y_train,
     exog=X_train,
     order=(1, 0, 1)
-).fit(disp=False)
+).fit (disp=False)
 
 print("\\n=== ARIMAX Results ===")
 print(model_arimax.summary())
 
 # Forecast
-forecast_arimax = model_arimax.forecast(steps=len(y_test), exog=X_test)
+forecast_arimax = model_arimax.forecast (steps=len (y_test), exog=X_test)
 
 # Evaluate
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-mae = mean_absolute_error(y_test, forecast_arimax)
-rmse = np.sqrt(mean_squared_error(y_test, forecast_arimax))
-r2 = r2_score(y_test, forecast_arimax)
+mae = mean_absolute_error (y_test, forecast_arimax)
+rmse = np.sqrt (mean_squared_error (y_test, forecast_arimax))
+r2 = r2_score (y_test, forecast_arimax)
 
 print("\\n=== Forecast Performance ===")
 print(f"MAE: {mae:.4f}%")
@@ -569,11 +569,11 @@ print(f"RMSE: {rmse:.4f}%")
 print(f"R²: {r2:.4f}")
 
 # Compare with ARIMA (no external variables)
-model_arima_only = SARIMAX(y_train, order=(1, 0, 1)).fit(disp=False)
-forecast_arima_only = model_arima_only.forecast(steps=len(y_test))
+model_arima_only = SARIMAX(y_train, order=(1, 0, 1)).fit (disp=False)
+forecast_arima_only = model_arima_only.forecast (steps=len (y_test))
 
-mae_arima = mean_absolute_error(y_test, forecast_arima_only)
-rmse_arima = np.sqrt(mean_squared_error(y_test, forecast_arima_only))
+mae_arima = mean_absolute_error (y_test, forecast_arima_only)
+rmse_arima = np.sqrt (mean_squared_error (y_test, forecast_arima_only))
 
 print("\\n=== Comparison: ARIMAX vs ARIMA ===")
 print(f"{'Model':<15} {'MAE':>10} {'RMSE':>10}")
@@ -608,12 +608,12 @@ class GARCHPositionSizer:
         self.target_vol = target_vol
         self.capital = capital
         
-    def fit_garch(self, returns):
+    def fit_garch (self, returns):
         """Fit GARCH model"""
-        self.model = arch_model(returns * 100, vol='Garch', p=1, q=1)
-        self.result = self.model.fit(disp='off')
+        self.model = arch_model (returns * 100, vol='Garch', p=1, q=1)
+        self.result = self.model.fit (disp='off')
         
-    def get_position_size(self, forecasted_vol):
+    def get_position_size (self, forecasted_vol):
         """
         Calculate position size based on volatility
         
@@ -627,33 +627,33 @@ class GARCHPositionSizer:
         position_fraction = self.target_vol / annual_vol
         
         # Cap at 100% of capital
-        position_fraction = min(position_fraction, 1.0)
+        position_fraction = min (position_fraction, 1.0)
         
         # Position size in dollars
         position_size = self.capital * position_fraction
         
         return position_size, position_fraction
     
-    def backtest(self, prices, returns):
+    def backtest (self, prices, returns):
         """Backtest dynamic sizing strategy"""
         # Fit GARCH on first 252 days
         train_returns = returns.iloc[:252]
-        self.fit_garch(train_returns)
+        self.fit_garch (train_returns)
         
         positions = []
         
-        for i in range(252, len(returns)):
+        for i in range(252, len (returns)):
             # Re-fit GARCH every 21 days
             if i % 21 == 0:
                 train = returns.iloc[i-252:i]
-                self.fit_garch(train)
+                self.fit_garch (train)
             
             # Forecast tomorrow's volatility
-            forecast = self.result.forecast(horizon=1)
-            vol_forecast = np.sqrt(forecast.variance.values[-1, 0])
+            forecast = self.result.forecast (horizon=1)
+            vol_forecast = np.sqrt (forecast.variance.values[-1, 0])
             
             # Calculate position size
-            position_size, position_frac = self.get_position_size(vol_forecast)
+            position_size, position_frac = self.get_position_size (vol_forecast)
             
             # Calculate P&L
             daily_return = returns.iloc[i]
@@ -668,11 +668,11 @@ class GARCHPositionSizer:
                 'pnl': pnl
             })
         
-        return pd.DataFrame(positions).set_index('date')
+        return pd.DataFrame (positions).set_index('date')
 
 # Run backtest
-sizer = GARCHPositionSizer(target_vol=15.0, capital=100000)
-results = sizer.backtest(spy['Close'], returns)
+sizer = GARCHPositionSizer (target_vol=15.0, capital=100000)
+results = sizer.backtest (spy['Close'], returns)
 
 print("=== GARCH Position Sizing Results ===")
 print(f"\\nPosition Statistics:")
@@ -691,20 +691,20 @@ print(f"Sharpe Ratio: {sharpe:.2f}")
 fig, axes = plt.subplots(3, 1, figsize = (14, 12))
 
 # Volatility forecast
-axes[0].plot(results.index, results['forecasted_vol'])
+axes[0].plot (results.index, results['forecasted_vol'])
 axes[0].set_title('Forecasted Volatility')
 axes[0].set_ylabel('Volatility (%)')
 axes[0].grid(True, alpha = 0.3)
 
 # Position size
-axes[1].plot(results.index, results['position_fraction'])
+axes[1].plot (results.index, results['position_fraction'])
 axes[1].set_title('Position Fraction (% of Capital)')
 axes[1].set_ylabel('Fraction')
 axes[1].grid(True, alpha = 0.3)
 
 # Cumulative P & L
 cumulative_pnl = results['pnl'].cumsum()
-axes[2].plot(results.index, cumulative_pnl)
+axes[2].plot (results.index, cumulative_pnl)
 axes[2].set_title('Cumulative P&L')
 axes[2].set_ylabel('P&L ($)')
 axes[2].set_xlabel('Date')

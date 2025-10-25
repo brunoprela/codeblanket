@@ -40,7 +40,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 class Product(Base):
     __tablename__ = 'products'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     # JSON: Stores as text, slower queries
     config_json: Mapped[dict] = mapped_column(JSON)
@@ -157,7 +157,7 @@ Querying JSON Arrays
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     data: Mapped[dict] = mapped_column(JSONB)
     # Example: {"title": "...", "tags": ["python", "sql"], "stats": {"views": 100}}
 
@@ -197,7 +197,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 class Product(Base):
     __tablename__ = 'products'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     metadata: Mapped[dict] = mapped_column(JSONB)
     
     __table_args__ = (
@@ -237,7 +237,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String))
     view_counts: Mapped[list[int]] = mapped_column(ARRAY(Integer))
     
@@ -345,7 +345,7 @@ stmt = select(
 
 # Remove duplicates
 stmt = select(
-    func.array_agg(func.distinct(any_(Post.tags))).label('unique_tags')
+    func.array_agg (func.distinct (any_(Post.tags))).label('unique_tags')
 )
 
 # Unnest array (expand to rows)
@@ -357,7 +357,7 @@ stmt = select(
 
 # Count array elements across all rows
 stmt = select(
-    func.count(func.unnest(Post.tags))
+    func.count (func.unnest(Post.tags))
 )
 \`\`\`
 
@@ -373,7 +373,7 @@ from sqlalchemy import Index
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String))
     
     __table_args__ = (
@@ -407,7 +407,7 @@ from sqlalchemy.dialects.postgresql import TSVECTOR
 class Article(Base):
     __tablename__ = 'articles'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
     content: Mapped[str] = mapped_column(Text)
     
@@ -428,8 +428,8 @@ Migration:
 CREATE FUNCTION articles_search_trigger() RETURNS trigger AS $$
 BEGIN
     NEW.search_vector :=
-        setweight(to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
-        setweight(to_tsvector('english', coalesce(NEW.content, '')), 'B');
+        setweight (to_tsvector('english', coalesce(NEW.title, '')), 'A') ||
+        setweight (to_tsvector('english', coalesce(NEW.content, '')), 'B');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -549,7 +549,7 @@ Multi-Language Full-Text Search
 class Article(Base):
     __tablename__ = 'articles'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
     content: Mapped[str] = mapped_column(Text)
     language: Mapped[str] = mapped_column(String(10))  # 'en', 'es', 'fr'
@@ -655,7 +655,7 @@ from sqlalchemy import Index
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     
     __table_args__ = (
@@ -702,18 +702,18 @@ class levenshtein(FunctionElement):
     name = 'levenshtein'
     type = Integer()
 
-@compiles(levenshtein)
-def compile_levenshtein(element, compiler, **kwargs):
-    arg1, arg2 = list(element.clauses)
+@compiles (levenshtein)
+def compile_levenshtein (element, compiler, **kwargs):
+    arg1, arg2 = list (element.clauses)
     return "levenshtein(%s, %s)" % (
-        compiler.process(arg1),
-        compiler.process(arg2)
+        compiler.process (arg1),
+        compiler.process (arg2)
     )
 
 # Usage
 stmt = select(User).where(
     levenshtein(User.username, 'john') < 3
-).order_by(levenshtein(User.username, 'john'))
+).order_by (levenshtein(User.username, 'john'))
 # Find usernames within edit distance 3 of 'john'
 \`\`\`
 
@@ -731,11 +731,11 @@ from sqlalchemy.sql.expression import BinaryExpression
 class similar_to(BinaryExpression):
     pass
 
-@compiles(similar_to)
-def compile_similar(element, compiler, **kwargs):
+@compiles (similar_to)
+def compile_similar (element, compiler, **kwargs):
     return "%s %% %s" % (
-        compiler.process(element.left),
-        compiler.process(element.right)
+        compiler.process (element.left),
+        compiler.process (element.right)
     )
 
 # Usage
@@ -760,23 +760,23 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     first_name: Mapped[str] = mapped_column(String(50))
     last_name: Mapped[str] = mapped_column(String(50))
     email: Mapped[str] = mapped_column(String(255))
     
     @hybrid_property
-    def full_name(self):
+    def full_name (self):
         """Python-level: property access"""
         return f"{self.first_name} {self.last_name}"
     
     @full_name.expression
-    def full_name(cls):
+    def full_name (cls):
         """SQL-level: used in queries"""
-        return func.concat(cls.first_name, ' ', cls.last_name)
+        return func.concat (cls.first_name, ' ', cls.last_name)
     
     @full_name.setter
-    def full_name(self, value):
+    def full_name (self, value):
         """Setter for Python-level"""
         self.first_name, self.last_name = value.split(' ', 1)
 
@@ -787,10 +787,10 @@ user.full_name = "Jane Smith"  # Sets first_name and last_name
 
 # SQL usage
 stmt = select(User).where(User.full_name == 'John Doe')
-# SQL: SELECT * FROM users WHERE concat(first_name, ' ', last_name) = 'John Doe'
+# SQL: SELECT * FROM users WHERE concat (first_name, ' ', last_name) = 'John Doe'
 
 stmt = select(User).order_by(User.full_name)
-# SQL: SELECT * FROM users ORDER BY concat(first_name, ' ', last_name)
+# SQL: SELECT * FROM users ORDER BY concat (first_name, ' ', last_name)
 \`\`\`
 
 ### Hybrid Methods
@@ -805,18 +805,18 @@ from datetime import datetime, timedelta
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime)
     
     @hybrid_method
-    def created_within(self, days):
+    def created_within (self, days):
         """Python-level: instance method"""
-        return datetime.utcnow() - self.created_at < timedelta(days=days)
+        return datetime.utcnow() - self.created_at < timedelta (days=days)
     
     @created_within.expression
-    def created_within(cls, days):
+    def created_within (cls, days):
         """SQL-level: class method"""
-        return cls.created_at > func.now() - timedelta(days=days)
+        return cls.created_at > func.now() - timedelta (days=days)
 
 # Python usage
 post = session.get(Post, 1)
@@ -838,31 +838,31 @@ Hybrid Properties with Complex Logic
 class Order(Base):
     __tablename__ = 'orders'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     subtotal: Mapped[float] = mapped_column(Numeric(10, 2))
     tax: Mapped[float] = mapped_column(Numeric(10, 2))
     shipping: Mapped[float] = mapped_column(Numeric(10, 2))
     discount_percent: Mapped[float] = mapped_column(Numeric(5, 2), default=0)
     
     @hybrid_property
-    def total(self):
+    def total (self):
         """Computed total with discount"""
         discount_amount = self.subtotal * (self.discount_percent / 100)
         return self.subtotal - discount_amount + self.tax + self.shipping
     
     @total.expression
-    def total(cls):
+    def total (cls):
         """SQL expression for total"""
         discount_amount = cls.subtotal * (cls.discount_percent / 100)
         return cls.subtotal - discount_amount + cls.tax + cls.shipping
     
     @hybrid_property
-    def is_high_value(self):
+    def is_high_value (self):
         """Boolean: order total > $1000"""
         return self.total > 1000
     
     @is_high_value.expression
-    def is_high_value(cls):
+    def is_high_value (cls):
         return cls.total > 1000
 
 # Query high-value orders
@@ -872,7 +872,7 @@ stmt = select(Order).where(Order.is_high_value)
 stmt = select(Order).order_by(Order.total.desc())
 
 # Aggregate on hybrid property
-stmt = select(func.avg(Order.total))
+stmt = select (func.avg(Order.total))
 \`\`\`
 
 ---
@@ -889,7 +889,7 @@ from sqlalchemy import cast, type_coerce, String, Integer, Date
 # CAST: Explicit type conversion at SQL level
 stmt = select(
     cast(User.created_at, Date).label('date')
-).group_by(cast(User.created_at, Date))
+).group_by (cast(User.created_at, Date))
 # SQL: SELECT CAST(created_at AS DATE) FROM users GROUP BY CAST(created_at AS DATE)
 
 # type_coerce: Type hint to SQLAlchemy (no SQL CAST)
@@ -908,7 +908,7 @@ stmt = select(User).where(
 
 # Cast for date operations
 stmt = select(
-    cast(func.extract('year', User.created_at), Integer).label('year'),
+    cast (func.extract('year', User.created_at), Integer).label('year'),
     func.count(User.id)
 ).group_by('year')
 \`\`\`
@@ -931,7 +931,7 @@ from sqlalchemy.dialects.postgresql import (
 class Connection(Base):
     __tablename__ = 'connections'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     # Network types
     ip_address: Mapped[str] = mapped_column(INET)  # IPv4/IPv6

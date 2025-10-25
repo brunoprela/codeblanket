@@ -31,30 +31,30 @@ import matplotlib.pyplot as plt
 from math import comb
 import time
 
-def count_all_subsets(n):
+def count_all_subsets (n):
     """Total non-empty subsets of n features"""
     return 2**n - 1
 
 # Demonstrate exponential growth
 n_values = range(1, 31)
-subset_counts = [count_all_subsets(n) for n in n_values]
+subset_counts = [count_all_subsets (n) for n in n_values]
 
 print("Feature subsets (exhaustive search):")
 for n in [5, 10, 15, 20, 25, 30]:
-    count = count_all_subsets(n)
+    count = count_all_subsets (n)
     print(f"  {n} features: {count:,} subsets")
 
 # Visualize
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 plt.subplot(1, 2, 1)
-plt.plot(n_values, subset_counts, 'b-', linewidth=2)
+plt.plot (n_values, subset_counts, 'b-', linewidth=2)
 plt.xlabel('Number of features (n)')
 plt.ylabel('Number of subsets (2^n - 1)')
 plt.title('Exhaustive Feature Selection: Exponential Growth')
 plt.grid(True)
 
 plt.subplot(1, 2, 2)
-plt.semilogy(n_values, subset_counts, 'r-', linewidth=2)
+plt.semilogy (n_values, subset_counts, 'r-', linewidth=2)
 plt.xlabel('Number of features (n)')
 plt.ylabel('Number of subsets (log scale)')
 plt.title('Log Scale View')
@@ -68,9 +68,9 @@ plt.show()
 
 \`\`\`python
 # Estimate time for exhaustive search
-def estimate_search_time(n_features, time_per_model_seconds):
+def estimate_search_time (n_features, time_per_model_seconds):
     """Estimate time for exhaustive feature selection"""
-    n_subsets = count_all_subsets(n_features)
+    n_subsets = count_all_subsets (n_features)
     total_seconds = n_subsets * time_per_model_seconds
     
     hours = total_seconds / 3600
@@ -82,7 +82,7 @@ def estimate_search_time(n_features, time_per_model_seconds):
 print("\\nTime estimates (assuming 10 seconds per model evaluation):\\n")
 
 for n in [10, 15, 20, 25, 30]:
-    subsets, secs, hrs, days, yrs = estimate_search_time(n, 10)
+    subsets, secs, hrs, days, yrs = estimate_search_time (n, 10)
     print(f"{n} features: {subsets:,} subsets")
     
     if yrs >= 1:
@@ -110,7 +110,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 # Generate dataset
-X, y = make_classification(n_samples=1000, n_features=20, n_informative=10, 
+X, y = make_classification (n_samples=1000, n_features=20, n_informative=10, 
                            random_state=42)
 
 def forward_selection(X, y, max_features=None):
@@ -123,11 +123,11 @@ def forward_selection(X, y, max_features=None):
         max_features = n_features
     
     selected = []
-    remaining = list(range(n_features))
+    remaining = list (range (n_features))
     scores = []
     evaluations = 0
     
-    for iteration in range(max_features):
+    for iteration in range (max_features):
         best_score = -np.inf
         best_feature = None
         
@@ -137,8 +137,8 @@ def forward_selection(X, y, max_features=None):
             X_subset = X[:, candidate]
             
             # Evaluate
-            model = LogisticRegression(max_iter=1000)
-            score = cross_val_score(model, X_subset, y, cv=3).mean()
+            model = LogisticRegression (max_iter=1000)
+            score = cross_val_score (model, X_subset, y, cv=3).mean()
             evaluations += 1
             
             if score > best_score:
@@ -150,9 +150,9 @@ def forward_selection(X, y, max_features=None):
             break
         
         # Add best feature
-        selected.append(best_feature)
-        remaining.remove(best_feature)
-        scores.append(best_score)
+        selected.append (best_feature)
+        remaining.remove (best_feature)
+        scores.append (best_score)
         
         print(f"Iteration {iteration + 1}: Added feature {best_feature}, "
               f"Score: {best_score:.4f}")
@@ -167,7 +167,7 @@ selected, scores, evals = forward_selection(X, y, max_features=5)
 
 # Compare to exhaustive
 n = X.shape[1]
-exhaustive_evals = count_all_subsets(n)
+exhaustive_evals = count_all_subsets (n)
 print(f"\\nComparison:")
 print(f"  Forward selection: {evals} evaluations")
 print(f"  Exhaustive search: {exhaustive_evals:,} evaluations")
@@ -195,55 +195,55 @@ def genetic_algorithm_feature_selection(X, y, population_size=20, generations=10
     evaluations = 0
     
     # Initialize random population
-    population = [np.random.rand(n_features) > 0.5 for _ in range(population_size)]
+    population = [np.random.rand (n_features) > 0.5 for _ in range (population_size)]
     
-    for gen in range(generations):
+    for gen in range (generations):
         # Evaluate fitness
         fitness = []
         for individual in population:
-            if not any(individual):  # At least one feature
-                individual[np.random.randint(n_features)] = True
+            if not any (individual):  # At least one feature
+                individual[np.random.randint (n_features)] = True
             
             X_subset = X[:, individual]
-            model = LogisticRegression(max_iter=1000)
-            score = cross_val_score(model, X_subset, y, cv=3).mean()
+            model = LogisticRegression (max_iter=1000)
+            score = cross_val_score (model, X_subset, y, cv=3).mean()
             evaluations += 1
-            fitness.append(score)
+            fitness.append (score)
         
         # Select best half
-        sorted_indices = np.argsort(fitness)[::-1]
+        sorted_indices = np.argsort (fitness)[::-1]
         population = [population[i] for i in sorted_indices[:population_size // 2]]
         
         # Reproduce (crossover + mutation)
         offspring = []
-        for _ in range(population_size // 2):
-            parent1, parent2 = np.random.choice(len(population), 2, replace=False)
+        for _ in range (population_size // 2):
+            parent1, parent2 = np.random.choice (len (population), 2, replace=False)
             child = np.array([population[parent1][i] if np.random.rand() > 0.5 
-                            else population[parent2][i] for i in range(n_features)])
+                            else population[parent2][i] for i in range (n_features)])
             
             # Mutation
             if np.random.rand() < 0.1:
-                flip_idx = np.random.randint(n_features)
+                flip_idx = np.random.randint (n_features)
                 child[flip_idx] = not child[flip_idx]
             
-            offspring.append(child)
+            offspring.append (child)
         
-        population.extend(offspring)
+        population.extend (offspring)
         
-        best_score = max(fitness)
+        best_score = max (fitness)
         print(f"Generation {gen + 1}: Best score = {best_score:.4f}")
     
     # Return best individual
-    final_fitness = [cross_val_score(LogisticRegression(max_iter=1000), 
+    final_fitness = [cross_val_score(LogisticRegression (max_iter=1000), 
                                      X[:, ind], y, cv=3).mean() 
                     for ind in population]
-    evaluations += len(population)
+    evaluations += len (population)
     
-    best_idx = np.argmax(final_fitness)
-    best_features = np.where(population[best_idx])[0]
+    best_idx = np.argmax (final_fitness)
+    best_features = np.where (population[best_idx])[0]
     
     print(f"\\nTotal evaluations: {evaluations}")
-    print(f"Selected features: {list(best_features)}")
+    print(f"Selected features: {list (best_features)}")
     
     return best_features, evaluations
 
@@ -272,7 +272,7 @@ comparison = pd.DataFrame({
 })
 
 print("\\nFeature Selection Methods Comparison:")
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 \`\`\`
 
 **Key Insights**:
@@ -299,7 +299,7 @@ print(comparison.to_string(index=False))
 n_stocks = 100
 portfolio_size = 10
 
-portfolios = comb(n_stocks, portfolio_size)
+portfolios = comb (n_stocks, portfolio_size)
 print(f"\\nPortfolio Selection:")
 print(f"Stocks: {n_stocks}, Portfolio size: {portfolio_size}")
 print(f"Possible portfolios: {portfolios:,}")
@@ -356,7 +356,7 @@ from math import factorial, perm
 
 # Transformations
 transformations = ['flip', 'rotate_90', 'rotate_180', 'rotate_270', 'no_op',]
-n = len(transformations)
+n = len (transformations)
 
 print("Single transformation:")
 print(f"  Options: {n}")
@@ -364,15 +364,15 @@ print(f"  Augmented versions: {n}")
 
 print("\\nSequence of 2 transformations:")
 print(f"  WITH replacement (can repeat): {n**2}")
-print(f"  WITHOUT replacement (no repeats): {perm(n, 2)}")
+print(f"  WITHOUT replacement (no repeats): {perm (n, 2)}")
 
 # Generate all 2-transformation sequences (with replacement)
 sequences = []
 for t1 in transformations:
     for t2 in transformations:
-        sequences.append(f"{t1} → {t2}")
+        sequences.append (f"{t1} → {t2}")
 
-print(f"\\nTotal sequences: {len(sequences)}")
+print(f"\\nTotal sequences: {len (sequences)}")
 print("\\nExample sequences:")
 for seq in sequences[:10]:
     print(f"  {seq}")
@@ -389,19 +389,19 @@ from PIL import Image
 
 # Define transformations
 simple_transforms = [
-    transforms.RandomHorizontalFlip(p=1.0),
+    transforms.RandomHorizontalFlip (p=1.0),
     transforms.RandomRotation(90),
     transforms.RandomRotation(180),
     transforms.RandomRotation(270),
-    transforms.Lambda(lambda x: x),  # no-op
+    transforms.Lambda (lambda x: x),  # no-op
 ]
 
-def augment_single(image, num_augmentations=5):
+def augment_single (image, num_augmentations=5):
     """Apply each transformation once"""
     augmented = []
     for transform in simple_transforms[:num_augmentations]:
-        aug_img = transform(image)
-        augmented.append(aug_img)
+        aug_img = transform (image)
+        augmented.append (aug_img)
     return augmented
 
 # With 1,000 original images and 5 transformations
@@ -420,32 +420,32 @@ print(f"  Total training samples: {total_samples:,}")
 \`\`\`python
 import itertools
 
-def augment_compositional(image, transformations, seq_length=2):
+def augment_compositional (image, transformations, seq_length=2):
     """Apply sequences of transformations"""
     augmented = []
     
     # Generate all permutations of length seq_length
-    for perm in itertools.product(transformations, repeat=seq_length):
+    for perm in itertools.product (transformations, repeat=seq_length):
         aug_img = image.copy()
         for transform in perm:
-            aug_img = transform(aug_img)
-        augmented.append(aug_img)
+            aug_img = transform (aug_img)
+        augmented.append (aug_img)
     
     return augmented
 
 # With sequences of length 2
 seq_length = 2
-augmented_per_image = len(transformations) ** seq_length
+augmented_per_image = len (transformations) ** seq_length
 
 print(f"\\nCompositional augmentation (length {seq_length}):")
-print(f"  Transformations available: {len(transformations)}")
+print(f"  Transformations available: {len (transformations)}")
 print(f"  Sequences per image: {augmented_per_image}")
 print(f"  Total training samples: {original_images * augmented_per_image:,}")
 
 # Impact on training time
 print(f"\\nTraining time impact:")
 print(f"  Simple: ~{augmented_per_image}x more epochs")
-print(f"  Compositional (len=2): ~{len(transformations)**2}x more epochs")
+print(f"  Compositional (len=2): ~{len (transformations)**2}x more epochs")
 \`\`\`
 
 **Trade-offs**:
@@ -459,7 +459,7 @@ import matplotlib.pyplot as plt
 n_transforms = 5
 seq_lengths = range(1, 6)
 with_replacement = [n_transforms**k for k in seq_lengths]
-without_replacement = [perm(n_transforms, k) if k <= n_transforms else 0 
+without_replacement = [perm (n_transforms, k) if k <= n_transforms else 0 
                        for k in seq_lengths]
 
 print("Augmentation diversity growth:\\n")
@@ -467,7 +467,7 @@ print("Seq Length | With Replacement | Without Replacement | Compute Cost")
 print("-" * 70)
 for k in seq_lengths:
     wr = n_transforms**k
-    wor = perm(n_transforms, k) if k <= n_transforms else 0
+    wor = perm (n_transforms, k) if k <= n_transforms else 0
     cost = f"{wr}x"
     print(f"    {k}      |      {wr:>6}       |       {wor:>6}        |    {cost}")
 
@@ -553,12 +553,12 @@ hyperparameters = {
 }
 
 # Generate all combinations
-all_configs = list(product(*hyperparameters.values()))
-print(f"\\nGenerated {len(all_configs)} configurations")
+all_configs = list (product(*hyperparameters.values()))
+print(f"\\nGenerated {len (all_configs)} configurations")
 print("\\nFirst 10 configurations:")
-keys = list(hyperparameters.keys())
-for i, config in enumerate(all_configs[:10]):
-    config_dict = dict(zip(keys, config))
+keys = list (hyperparameters.keys())
+for i, config in enumerate (all_configs[:10]):
+    config_dict = dict (zip (keys, config))
     print(f"  {i+1}. {config_dict}")
 \`\`\`
 
@@ -577,14 +577,14 @@ print(f"  Speedup: {total_time_hours / random_time_hours:.1f}x faster")
 print(f"  Coverage: {100 * n_random_samples / total_configs:.1f}% of grid")
 
 # Generate random configurations
-def random_config(hyperparameters):
+def random_config (hyperparameters):
     """Sample one random configuration"""
-    return {key: random.choice(values) for key, values in hyperparameters.items()}
+    return {key: random.choice (values) for key, values in hyperparameters.items()}
 
-random_configs = [random_config(hyperparameters) for _ in range(n_random_samples)]
+random_configs = [random_config (hyperparameters) for _ in range (n_random_samples)]
 
 print("\\nFirst 10 random configurations:")
-for i, config in enumerate(random_configs[:10]):
+for i, config in enumerate (random_configs[:10]):
     print(f"  {i+1}. {config}")
 \`\`\`
 
@@ -594,15 +594,15 @@ for i, config in enumerate(random_configs[:10]):
 
 \`\`\`python
 # Simulate a model where only 2 out of 4 hyperparameters matter
-def model_performance(lr, batch_size, num_layers, dropout):
+def model_performance (lr, batch_size, num_layers, dropout):
     """
     Simulated model performance
     Only learning_rate and num_layers significantly affect performance
     batch_size and dropout have minimal impact
     """
     # Important hyperparameters
-    lr_score = -abs(np.log10(lr) + 2.5)  # Optimal around 0.003
-    layers_score = -abs(num_layers - 4)   # Optimal at 4 layers
+    lr_score = -abs (np.log10(lr) + 2.5)  # Optimal around 0.003
+    layers_score = -abs (num_layers - 4)   # Optimal at 4 layers
     
     # Less important hyperparameters (noise)
     batch_score = -0.1 * np.random.rand()
@@ -621,7 +621,7 @@ random_layers = [np.random.randint(2, 7) for _ in range(100)]
 print("\\nGrid Search Samples (important hyperparameters only):")
 print(f"  Learning rates tested: {lr_values}")
 print(f"  Num layers tested: {layers_values}")
-print(f"  Total combinations: {len(lr_values) * len(layers_values)} = 25")
+print(f"  Total combinations: {len (lr_values) * len (layers_values)} = 25")
 
 print("\\nRandom Search (first 10 samples):")
 for i in range(10):
@@ -637,23 +637,23 @@ import matplotlib.pyplot as plt
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
 # Grid search: only tests 5x5=25 combinations of important parameters
-grid_lr = np.tile(lr_values, len(layers_values))
-grid_layers = np.repeat(layers_values, len(lr_values))
+grid_lr = np.tile (lr_values, len (layers_values))
+grid_layers = np.repeat (layers_values, len (lr_values))
 
-ax1.scatter(grid_lr, grid_layers, s=100, c='blue', marker='s', alpha=0.7, label='Grid Search')
+ax1.scatter (grid_lr, grid_layers, s=100, c='blue', marker='s', alpha=0.7, label='Grid Search')
 ax1.set_xscale('log')
 ax1.set_xlabel('Learning Rate (log scale)')
 ax1.set_ylabel('Number of Layers')
-ax1.set_title(f'Grid Search: {len(grid_lr)} configurations')
+ax1.set_title (f'Grid Search: {len (grid_lr)} configurations')
 ax1.grid(True, alpha=0.3)
 ax1.legend()
 
 # Random search: 100 samples with better coverage
-ax2.scatter(random_lr, random_layers, s=100, c='red', marker='o', alpha=0.7, label='Random Search')
+ax2.scatter (random_lr, random_layers, s=100, c='red', marker='o', alpha=0.7, label='Random Search')
 ax2.set_xscale('log')
 ax2.set_xlabel('Learning Rate (log scale)')
 ax2.set_ylabel('Number of Layers')
-ax2.set_title(f'Random Search: 100 configurations')
+ax2.set_title (f'Random Search: 100 configurations')
 ax2.grid(True, alpha=0.3)
 ax2.legend()
 
@@ -678,7 +678,7 @@ time_days = [(c * 30 / 60 / 24) for c in configs]
 print("\\nCombinatorial Explosion:")
 print("Hyperparameters | Configurations | Time (Grid Search)")
 print("-" * 55)
-for n, c, t in zip(hp_range, configs, time_days):
+for n, c, t in zip (hp_range, configs, time_days):
     if t < 1:
         time_str = f"{t*24:.1f} hours"
     else:

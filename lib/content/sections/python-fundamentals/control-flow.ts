@@ -72,7 +72,7 @@ for i in range(0, 10, 2):  # 0, 2, 4, 6, 8
     print(i)
 
 # Enumerate for index and value
-for index, fruit in enumerate(fruits):
+for index, fruit in enumerate (fruits):
     print(f"{index}: {fruit}")
 \`\`\`
 
@@ -118,7 +118,7 @@ else:
 ## Match-Case (Python 3.10+)
 
 \`\`\`python
-def http_status(status):
+def http_status (status):
     match status:
         case 200:
             return "OK"

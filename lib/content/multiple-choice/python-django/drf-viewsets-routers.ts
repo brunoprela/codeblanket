@@ -15,13 +15,13 @@ export const DrfViewsetsRoutersMultipleChoice = [
 **Correct Answer: B) The action requires an instance ID in the URL**
 
 \`\`\`python
-@action(detail=True, methods=['post'])
-def publish(self, request, pk=None):
+@action (detail=True, methods=['post'])
+def publish (self, request, pk=None):
     # URL: /articles/{id}/publish/
     article = self.get_object()  # Gets specific article
     
-@action(detail=False, methods=['get'])
-def recent(self, request):
+@action (detail=False, methods=['get'])
+def recent (self, request):
     # URL: /articles/recent/
     # No ID needed
 \`\`\`
@@ -44,7 +44,7 @@ detail=True creates instance-level endpoints, detail=False creates collection-le
 \`\`\`python
 from rest_framework import mixins, viewsets
 
-class ArticleViewSet(mixins.CreateModelMixin,
+class ArticleViewSet (mixins.CreateModelMixin,
                       mixins.ListModelMixin,
                       viewsets.GenericViewSet):
     queryset = Article.objects.all()
@@ -82,18 +82,18 @@ Use DefaultRouter for browsable API, SimpleRouter for minimal overhead.
   {
     question: 'How do you specify a custom URL path for an action?',
     options: [
-      'A) @action(path="custom-path")',
-      'B) @action(url_path="custom-path")',
-      'C) @action(route="custom-path")',
-      'D) @action(endpoint="custom-path")',
+      'A) @action (path="custom-path")',
+      'B) @action (url_path="custom-path")',
+      'C) @action (route="custom-path")',
+      'D) @action (endpoint="custom-path")',
     ],
     correctAnswer: 1,
     explanation: `
-**Correct Answer: B) @action(url_path="custom-path")**
+**Correct Answer: B) @action (url_path="custom-path")**
 
 \`\`\`python
-@action(detail=True, methods=['post'], url_path='mark-as-read')
-def mark_read(self, request, pk=None):
+@action (detail=True, methods=['post'], url_path='mark-as-read')
+def mark_read (self, request, pk=None):
     # URL: /articles/{id}/mark-as-read/
     # Method name can be different from URL
     pass
@@ -115,7 +115,7 @@ url_path customizes the URL segment, url_name customizes the URL name for revers
 **Correct Answer: B) Defines the URL name prefix for reverse()**
 
 \`\`\`python
-router.register(r'articles', ArticleViewSet, basename='article')
+router.register (r'articles', ArticleViewSet, basename='article')
 
 # Creates URL names:
 # article-list, article-detail, article-publish, etc.

@@ -19,7 +19,7 @@ Without Tasks: Sequential Execution
 import asyncio
 import time
 
-async def fetch_data(n):
+async def fetch_data (n):
     await asyncio.sleep(1)
     return f"Data {n}"
 
@@ -41,19 +41,19 @@ async def with_tasks():
     start = time.time()
     
     # Create tasks (starts execution immediately!)
-    task1 = asyncio.create_task(fetch_data(1))
-    task2 = asyncio.create_task(fetch_data(2))
-    task3 = asyncio.create_task(fetch_data(3))
+    task1 = asyncio.create_task (fetch_data(1))
+    task2 = asyncio.create_task (fetch_data(2))
+    task3 = asyncio.create_task (fetch_data(3))
     
     # All three are running now
     # Wait for completion
-    results = await asyncio.gather(task1, task2, task3)
+    results = await asyncio.gather (task1, task2, task3)
     
     print(f"Time: {time.time() - start:.2f}s")  # ~1.0s
     return results
 
-asyncio.run(without_tasks())  # ~3.0s
-asyncio.run(with_tasks())  # ~1.0s (3× faster!)
+asyncio.run (without_tasks())  # ~3.0s
+asyncio.run (with_tasks())  # ~1.0s (3× faster!)
 \`\`\`
 
 By the end of this section, you'll understand:
@@ -79,7 +79,7 @@ Creating and Awaiting Tasks
 """
 import asyncio
 
-async def my_coroutine(n):
+async def my_coroutine (n):
     print(f"Coroutine {n} starting")
     await asyncio.sleep(1)
     print(f"Coroutine {n} finishing")
@@ -87,7 +87,7 @@ async def my_coroutine(n):
 
 async def main():
     # Create a task (starts running immediately!)
-    task = asyncio.create_task(my_coroutine(5))
+    task = asyncio.create_task (my_coroutine(5))
     
     print("Task created, doing other work...")
     await asyncio.sleep(0.5)
@@ -97,7 +97,7 @@ async def main():
     result = await task
     print(f"Result: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Coroutine 5 starting
@@ -118,7 +118,7 @@ Creating Multiple Tasks
 import asyncio
 import time
 
-async def fetch_user(user_id):
+async def fetch_user (user_id):
     """Simulate fetching user data"""
     await asyncio.sleep(0.5)
     return {'id': user_id, 'name': f'User {user_id}'}
@@ -128,20 +128,20 @@ async def main():
     
     # Create multiple tasks
     tasks = [
-        asyncio.create_task(fetch_user(i))
+        asyncio.create_task (fetch_user (i))
         for i in range(10)
     ]
     
     # All 10 tasks are now running concurrently!
-    print(f"Created {len(tasks)} tasks")
+    print(f"Created {len (tasks)} tasks")
     
     # Wait for all to complete
     users = await asyncio.gather(*tasks)
     
     elapsed = time.time() - start
-    print(f"Fetched {len(users)} users in {elapsed:.2f}s")
+    print(f"Fetched {len (users)} users in {elapsed:.2f}s")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output: Fetched 10 users in 0.50s
 # (vs 5.0s if done sequentially!)
@@ -199,7 +199,7 @@ async def slow_operation():
 
 async def main():
     # Create task
-    task = asyncio.create_task(slow_operation())
+    task = asyncio.create_task (slow_operation())
     
     # Check if done
     print(f"Done: {task.done()}")  # False (just started)
@@ -218,7 +218,7 @@ async def main():
     print(f"Result: {task.result()}")  # "Done"
     print(f"Exception: {task.exception()}")  # None (no error)
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Getting Task Results
@@ -229,31 +229,31 @@ Multiple Ways to Get Task Results
 """
 import asyncio
 
-async def compute(n):
+async def compute (n):
     await asyncio.sleep(0.5)
     return n ** 2
 
 async def main():
-    task = asyncio.create_task(compute(5))
+    task = asyncio.create_task (compute(5))
     
     # Method 1: Await the task
     result = await task
     print(f"Method 1: {result}")  # 25
     
     # Method 2: Get result after task is done
-    task2 = asyncio.create_task(compute(10))
+    task2 = asyncio.create_task (compute(10))
     await task2  # Wait for completion
     result = task2.result()  # Get result without awaiting again
     print(f"Method 2: {result}")  # 100
     
     # ❌ Don't do this: Get result before task is done
-    task3 = asyncio.create_task(compute(15))
+    task3 = asyncio.create_task (compute(15))
     try:
         result = task3.result()  # Task not done yet!
     except asyncio.InvalidStateError as e:
         print(f"Error: {e}")  # InvalidStateError: Result is not set
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Task Exceptions
@@ -269,7 +269,7 @@ async def failing_task():
     raise ValueError("Something went wrong!")
 
 async def main():
-    task = asyncio.create_task(failing_task())
+    task = asyncio.create_task (failing_task())
     
     try:
         await task
@@ -283,7 +283,7 @@ async def main():
     print(f"Task done: {task.done()}")  # True
     print(f"Task cancelled: {task.cancelled()}")  # False
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Important: If you don't await a task that raises an exception,
 # Python will show a warning when the task is garbage collected:
@@ -315,7 +315,7 @@ async def long_running_task():
         raise  # Must re-raise!
 
 async def main():
-    task = asyncio.create_task(long_running_task())
+    task = asyncio.create_task (long_running_task())
     
     # Let it run for 1 second
     await asyncio.sleep(1)
@@ -328,7 +328,7 @@ async def main():
     except asyncio.CancelledError:
         print("Confirmed: Task cancelled")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Task starting...
@@ -348,13 +348,13 @@ class DatabaseConnection:
     def __init__(self):
         self.closed = False
     
-    async def close(self):
+    async def close (self):
         print("Closing database connection...")
         await asyncio.sleep(0.1)
         self.closed = True
         print("Connection closed")
 
-async def database_task(conn):
+async def database_task (conn):
     try:
         print("Starting database operations...")
         await asyncio.sleep(10)
@@ -366,7 +366,7 @@ async def database_task(conn):
 
 async def main():
     conn = DatabaseConnection()
-    task = asyncio.create_task(database_task(conn))
+    task = asyncio.create_task (database_task (conn))
     
     await asyncio.sleep(0.5)
     task.cancel()
@@ -378,7 +378,7 @@ async def main():
     
     print(f"Connection closed: {conn.closed}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Starting database operations...
@@ -397,7 +397,7 @@ Cancelling a Group of Tasks
 """
 import asyncio
 
-async def worker(n):
+async def worker (n):
     try:
         while True:
             print(f"Worker {n} working...")
@@ -409,7 +409,7 @@ async def worker(n):
 async def main():
     # Create multiple workers
     tasks = [
-        asyncio.create_task(worker(i))
+        asyncio.create_task (worker (i))
         for i in range(5)
     ]
     
@@ -426,7 +426,7 @@ async def main():
     
     print("All workers cancelled")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -452,11 +452,11 @@ async def slow_operation():
 async def main():
     try:
         # Timeout after 2 seconds
-        result = await asyncio.wait_for(slow_operation(), timeout=2.0)
+        result = await asyncio.wait_for (slow_operation(), timeout=2.0)
     except asyncio.TimeoutError:
         print("Operation timed out!")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Operation starting...
@@ -494,15 +494,15 @@ Get Results from Non-Timeout Tasks
 """
 import asyncio
 
-async def fetch_with_delay(n, delay):
-    await asyncio.sleep(delay)
+async def fetch_with_delay (n, delay):
+    await asyncio.sleep (delay)
     return f"Result {n}"
 
 async def main():
     tasks = [
-        asyncio.create_task(fetch_with_delay(1, 0.5)),
-        asyncio.create_task(fetch_with_delay(2, 1.5)),
-        asyncio.create_task(fetch_with_delay(3, 2.5)),
+        asyncio.create_task (fetch_with_delay(1, 0.5)),
+        asyncio.create_task (fetch_with_delay(2, 1.5)),
+        asyncio.create_task (fetch_with_delay(3, 2.5)),
     ]
     
     # Wait up to 2 seconds
@@ -519,9 +519,9 @@ async def main():
     for task in pending:
         task.cancel()
     
-    print(f"Cancelled: {len(pending)} tasks")
+    print(f"Cancelled: {len (pending)} tasks")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Completed: ['Result 1', 'Result 2']
@@ -542,8 +542,8 @@ Gather: Wait for All Tasks
 """
 import asyncio
 
-async def fetch_data(source):
-    await asyncio.sleep(source * 0.5)
+async def fetch_data (source):
+    await asyncio.sleep (source * 0.5)
     return f"Data from {source}"
 
 async def main():
@@ -558,7 +558,7 @@ async def main():
     # Results: ['Data from 1', 'Data from 2', 'Data from 3']
     
     # With error handling
-    async def might_fail(n):
+    async def might_fail (n):
         if n == 2:
             raise ValueError("Failed!")
         return n * 10
@@ -570,13 +570,13 @@ async def main():
         return_exceptions=True  # Don't stop on first error
     )
     
-    for i, result in enumerate(results):
-        if isinstance(result, Exception):
+    for i, result in enumerate (results):
+        if isinstance (result, Exception):
             print(f"Task {i} failed: {result}")
         else:
             print(f"Task {i} succeeded: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Results: ['Data from 1', 'Data from 2', 'Data from 3']
@@ -593,28 +593,28 @@ Wait: More Control Than Gather
 """
 import asyncio
 
-async def worker(n):
-    await asyncio.sleep(n)
+async def worker (n):
+    await asyncio.sleep (n)
     return n ** 2
 
 async def main():
     tasks = [
-        asyncio.create_task(worker(1)),
-        asyncio.create_task(worker(2)),
-        asyncio.create_task(worker(3)),
+        asyncio.create_task (worker(1)),
+        asyncio.create_task (worker(2)),
+        asyncio.create_task (worker(3)),
     ]
     
     # Wait for all to complete
-    done, pending = await asyncio.wait(tasks)
+    done, pending = await asyncio.wait (tasks)
     
     results = [task.result() for task in done]
-    print(f"All done: {sorted(results)}")
+    print(f"All done: {sorted (results)}")
     
     # Wait for first to complete
     tasks = [
-        asyncio.create_task(worker(1)),
-        asyncio.create_task(worker(2)),
-        asyncio.create_task(worker(3)),
+        asyncio.create_task (worker(1)),
+        asyncio.create_task (worker(2)),
+        asyncio.create_task (worker(3)),
     ]
     
     done, pending = await asyncio.wait(
@@ -622,13 +622,13 @@ async def main():
         return_when=asyncio.FIRST_COMPLETED
     )
     
-    print(f"First done: {list(done)[0].result()}")
+    print(f"First done: {list (done)[0].result()}")
     
     # Cancel remaining
     for task in pending:
         task.cancel()
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### as_completed()
@@ -640,8 +640,8 @@ Process Results as They Complete
 import asyncio
 import time
 
-async def fetch_with_delay(n, delay):
-    await asyncio.sleep(delay)
+async def fetch_with_delay (n, delay):
+    await asyncio.sleep (delay)
     return f"Result {n}"
 
 async def main():
@@ -652,11 +652,11 @@ async def main():
     ]
     
     # Process results in completion order (not submission order!)
-    for coro in asyncio.as_completed(tasks):
+    for coro in asyncio.as_completed (tasks):
         result = await coro
         print(f"{time.time():.1f}: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # 0.5: Result 2  (completed first)
@@ -678,22 +678,22 @@ Task Groups for Structured Concurrency
 """
 import asyncio
 
-async def worker(n):
-    await asyncio.sleep(n)
+async def worker (n):
+    await asyncio.sleep (n)
     return n * 10
 
 async def main():
     async with asyncio.TaskGroup() as tg:
         # All tasks added to group
-        task1 = tg.create_task(worker(1))
-        task2 = tg.create_task(worker(2))
-        task3 = tg.create_task(worker(3))
+        task1 = tg.create_task (worker(1))
+        task2 = tg.create_task (worker(2))
+        task3 = tg.create_task (worker(3))
     
     # When exiting, all tasks automatically awaited
     print(f"Results: {task1.result()}, {task2.result()}, {task3.result()}")
 
 # Python 3.11+ required
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ### Task Groups with Error Handling
@@ -704,8 +704,8 @@ Task Group Cancellation on Error
 """
 import asyncio
 
-async def worker(n):
-    await asyncio.sleep(n)
+async def worker (n):
+    await asyncio.sleep (n)
     if n == 2:
         raise ValueError("Worker 2 failed!")
     return n * 10
@@ -713,9 +713,9 @@ async def worker(n):
 async def main():
     try:
         async with asyncio.TaskGroup() as tg:
-            task1 = tg.create_task(worker(1))
-            task2 = tg.create_task(worker(2))  # Will fail
-            task3 = tg.create_task(worker(3))
+            task1 = tg.create_task (worker(1))
+            task2 = tg.create_task (worker(2))  # Will fail
+            task3 = tg.create_task (worker(3))
     except* ValueError as eg:  # Exception group
         print(f"Caught errors: {eg.exceptions}")
     
@@ -755,7 +755,7 @@ async def main():
     result = await future
     print(f"Got: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Bridging Callbacks to Async
@@ -768,28 +768,28 @@ import asyncio
 
 class LegacyAPI:
     """Old callback-based API"""
-    def fetch_data(self, callback):
+    def fetch_data (self, callback):
         """Simulate async operation with callback"""
         loop = asyncio.get_event_loop()
         loop.call_later(1.0, callback, "legacy data")
 
-async def fetch_data_async(api):
+async def fetch_data_async (api):
     """Wrap callback API for async use"""
     loop = asyncio.get_running_loop()
     future = loop.create_future()
     
-    def callback(data):
-        future.set_result(data)
+    def callback (data):
+        future.set_result (data)
     
-    api.fetch_data(callback)
+    api.fetch_data (callback)
     return await future
 
 async def main():
     api = LegacyAPI()
-    result = await fetch_data_async(api)
+    result = await fetch_data_async (api)
     print(f"Result: {result}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -802,13 +802,13 @@ asyncio.run(main())
 # ✅ Good: Start tasks early
 async def main():
     # Create all tasks immediately (they start running)
-    task1 = asyncio.create_task(operation1())
-    task2 = asyncio.create_task(operation2())
+    task1 = asyncio.create_task (operation1())
+    task2 = asyncio.create_task (operation2())
     
     # Do other work...
     
     # Then wait for results
-    result1, result2 = await asyncio.gather(task1, task2)
+    result1, result2 = await asyncio.gather (task1, task2)
 \`\`\`
 
 ### DON'T: Await Immediately
@@ -827,7 +827,7 @@ async def main():
 \`\`\`python
 # ✅ Good: Named tasks for debugging
 task = asyncio.create_task(
-    fetch_data(user_id),
+    fetch_data (user_id),
     name=f"fetch-user-{user_id}"
 )
 \`\`\`

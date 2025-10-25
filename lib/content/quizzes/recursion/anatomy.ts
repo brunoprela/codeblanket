@@ -8,7 +8,7 @@ export const anatomyQuiz = [
     question:
       'Why is it important that the recursive case makes progress toward the base case?',
     sampleAnswer:
-      "The recursive case must make progress toward the base case to ensure the recursion eventually terminates. If we don't move closer to the base case with each call, we'll have infinite recursion leading to a stack overflow. For example, calling factorial(n) instead of factorial(n-1) would never reach n <= 1. Progress typically means: decreasing a number, reducing array size, moving through a data structure, or simplifying a problem in some measurable way.",
+      "The recursive case must make progress toward the base case to ensure the recursion eventually terminates. If we don't move closer to the base case with each call, we'll have infinite recursion leading to a stack overflow. For example, calling factorial (n) instead of factorial (n-1) would never reach n <= 1. Progress typically means: decreasing a number, reducing array size, moving through a data structure, or simplifying a problem in some measurable way.",
     keyPoints: [
       'Ensures recursion terminates',
       'Prevents infinite recursion',
@@ -36,7 +36,7 @@ export const anatomyQuiz = [
     question:
       'Explain the "leap of faith" principle in recursive thinking and why it\'s important.',
     sampleAnswer:
-      "The \"leap of faith\" means trusting that your recursive call correctly solves the smaller subproblem, without mentally tracing through all the calls. For factorial(n), assume factorial(n-1) gives you the right answer, then just multiply by n. Don't try to trace factorial(n-1) down to factorial(1) in your head - that's the computer's job. This is important because: (1) It simplifies your thinking - focus on one level at a time, (2) It makes recursion tractable for complex problems like trees where tracing would be overwhelming, (3) It matches the mathematical induction principle: prove the base case works, assume the recursive case works for n-1, prove it works for n. Without this mindset, recursion feels impossible.",
+      "The \"leap of faith\" means trusting that your recursive call correctly solves the smaller subproblem, without mentally tracing through all the calls. For factorial (n), assume factorial (n-1) gives you the right answer, then just multiply by n. Don't try to trace factorial (n-1) down to factorial(1) in your head - that's the computer's job. This is important because: (1) It simplifies your thinking - focus on one level at a time, (2) It makes recursion tractable for complex problems like trees where tracing would be overwhelming, (3) It matches the mathematical induction principle: prove the base case works, assume the recursive case works for n-1, prove it works for n. Without this mindset, recursion feels impossible.",
     keyPoints: [
       'Trust recursive call solves the smaller problem',
       "Don't mentally trace all calls",

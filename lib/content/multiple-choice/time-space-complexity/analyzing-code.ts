@@ -8,11 +8,11 @@ export const analyzingcodeMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      'What is the time complexity of this code?\n\n```python\ndef func(arr):\n    for i in range(len(arr)):\n        for j in range(i):\n            print(arr[i], arr[j])\n```',
+      'What is the time complexity of this code?\n\n```python\ndef func (arr):\n    for i in range (len (arr)):\n        for j in range (i):\n            print(arr[i], arr[j])\n```',
     options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(2n)'],
     correctAnswer: 2,
     explanation:
-      'This is O(n²). The inner loop runs 0 + 1 + 2 + ... + (n-1) times total, which equals n(n-1)/2. This simplifies to O(n²) after dropping constants and lower-order terms.',
+      'This is O(n²). The inner loop runs 0 + 1 + 2 + ... + (n-1) times total, which equals n (n-1)/2. This simplifies to O(n²) after dropping constants and lower-order terms.',
   },
   {
     id: 'mc2',
@@ -21,7 +21,7 @@ export const analyzingcodeMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'],
     correctAnswer: 1,
     explanation:
-      "Python's sorted() function uses Timsort, which has O(n log n) time complexity in the average and worst case. This is an important built-in operation to remember.",
+      "Python\'s sorted() function uses Timsort, which has O(n log n) time complexity in the average and worst case. This is an important built-in operation to remember.",
   },
   {
     id: 'mc3',
@@ -35,7 +35,7 @@ export const analyzingcodeMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc4',
     question:
-      'What is the time complexity of this recursive Fibonacci?\n\n```python\ndef fib(n):\n    if n <= 1: return n\n    return fib(n-1) + fib(n-2)\n```',
+      'What is the time complexity of this recursive Fibonacci?\n\n```python\ndef fib (n):\n    if n <= 1: return n\n    return fib (n-1) + fib (n-2)\n```',
     options: ['O(n)', 'O(n²)', 'O(2ⁿ)', 'O(log n)'],
     correctAnswer: 2,
     explanation:

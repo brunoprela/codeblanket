@@ -1,8 +1,8 @@
 export const marketDataPriceDiscovery = {
-    title: "Market Data & Price Discovery",
-    slug: "market-data-price-discovery",
-    description: "Master market data infrastructure and how prices are formed",
-    content: `
+  title: 'Market Data & Price Discovery',
+  slug: 'market-data-price-discovery',
+  description: 'Master market data infrastructure and how prices are formed',
+  content: `
 # Market Data & Price Discovery
 
 ## Introduction: The Lifeblood of Trading
@@ -53,14 +53,14 @@ class Quote:
     last_size: int
     last_time: datetime
     
-    def spread(self) -> float:
+    def spread (self) -> float:
         return self.ask - self.bid
     
-    def spread_bps(self) -> float:
+    def spread_bps (self) -> float:
         mid = (self.bid + self.ask) / 2
         return (self.spread() / mid) * 10000
     
-    def mid_price(self) -> float:
+    def mid_price (self) -> float:
         return (self.bid + self.ask) / 2
 
 @dataclass
@@ -78,37 +78,37 @@ class OrderBook:
     bids: List[OrderBookLevel]  # Sorted descending
     asks: List[OrderBookLevel]  # Sorted ascending
     
-    def total_bid_size(self, num_levels: int = 5) -> int:
-        return sum(level.size for level in self.bids[:num_levels])
+    def total_bid_size (self, num_levels: int = 5) -> int:
+        return sum (level.size for level in self.bids[:num_levels])
     
-    def total_ask_size(self, num_levels: int = 5) -> int:
-        return sum(level.size for level in self.asks[:num_levels])
+    def total_ask_size (self, num_levels: int = 5) -> int:
+        return sum (level.size for level in self.asks[:num_levels])
     
-    def imbalance(self, num_levels: int = 5) -> float:
+    def imbalance (self, num_levels: int = 5) -> float:
         """
         Order book imbalance = (Bid size - Ask size) / (Bid size + Ask size)
         
         Positive = more buy pressure
         Negative = more sell pressure
         """
-        bid_size = self.total_bid_size(num_levels)
-        ask_size = self.total_ask_size(num_levels)
+        bid_size = self.total_bid_size (num_levels)
+        ask_size = self.total_ask_size (num_levels)
         
         if bid_size + ask_size == 0:
             return 0
         
         return (bid_size - ask_size) / (bid_size + ask_size)
     
-    def weighted_mid_price(self, num_levels: int = 3) -> float:
+    def weighted_mid_price (self, num_levels: int = 3) -> float:
         """
         Volume-weighted mid price
         More accurate than simple mid for thick books
         """
-        bid_value = sum(level.price * level.size for level in self.bids[:num_levels])
-        ask_value = sum(level.price * level.size for level in self.asks[:num_levels])
+        bid_value = sum (level.price * level.size for level in self.bids[:num_levels])
+        ask_value = sum (level.price * level.size for level in self.asks[:num_levels])
         
-        bid_size = self.total_bid_size(num_levels)
-        ask_size = self.total_ask_size(num_levels)
+        bid_size = self.total_bid_size (num_levels)
+        ask_size = self.total_ask_size (num_levels)
         
         if bid_size + ask_size == 0:
             return (self.bids[0].price + self.asks[0].price) / 2
@@ -181,11 +181,11 @@ quote = Quote(
 
 print("=== Level 1 Market Data ===\\n")
 print(f"{quote.symbol}")
-print(f"Bid: ${quote.bid:.2f} x {quote.bid_size}")
-print(f"Ask: ${quote.ask:.2f} x {quote.ask_size}")
-print(f"Last: ${quote.last:.2f} x {quote.last_size}")
-print(f"Spread: ${quote.spread():.2f} ({quote.spread_bps():.1f} bps)")
-print(f"Mid: ${quote.mid_price():.2f}")
+print(f"Bid: \${quote.bid:.2f} x {quote.bid_size}")
+print(f"Ask: \${quote.ask:.2f} x {quote.ask_size}")
+print(f"Last: \${quote.last:.2f} x {quote.last_size}")
+print(f"Spread: \${quote.spread():.2f} ({quote.spread_bps():.1f} bps)")
+print(f"Mid: \${quote.mid_price():.2f}")
 
 # Example: Level 2 order book
 order_book = OrderBook(
@@ -211,19 +211,19 @@ print("\\n\\n=== Level 2 Order Book ===\\n")
 print(f"{order_book.symbol} @ {order_book.timestamp.strftime('%H:%M:%S')}\\n")
 print("Bids (top 5):")
 for level in order_book.bids:
-    print(f"  ${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
+    print(f"  \${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
 
 print("\\nAsks (top 5):")
 for level in order_book.asks:
-    print(f"  ${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
+    print(f"  \${level.price:.2f} x {level.size:,} ({level.num_orders} orders)")
 
 print(f"\\nImbalance: {order_book.imbalance(5):.2%}")
-print(f"Weighted Mid: ${order_book.weighted_mid_price(3):.2f}")
+print(f"Weighted Mid: \${order_book.weighted_mid_price(3):.2f}")
 
 # Data level comparison
 comparison = MarketDataComparison.compare_levels()
 print("\\n\\n=== Market Data Level Comparison ===\\n")
-for level, details in list(comparison.items())[: 3]:
+for level, details in list (comparison.items())[: 3]:
 print(f"{level}:")
 print(f"  Data: {details['data']}")
 print(f"  Cost: {details['cost']}")
@@ -335,7 +335,7 @@ class MarketDataFeed:
             'latency_advantage': latency_diff,
             'expected_price_move_bps': expected_move_bps,
             'value_per_million_traded': value_per_million,
-            'interpretation': f'Faster feed provides ${value_per_million: .0f} edge per $1M traded'
+            'interpretation': f'Faster feed provides \${value_per_million:.0f} edge per $1M traded'
         }
 
 # Feed comparison
@@ -362,7 +362,7 @@ print(f"  SIP Latency: {latency_value['sip_latency']:.1f}ms")
 print(f"  Direct Feed Latency: {latency_value['direct_latency']:.1f}ms")
 print(f"  Advantage: {latency_value['latency_advantage']:.1f}ms faster")
 print(f"  Expected Price Move: {latency_value['expected_price_move_bps']:.2f} bps")
-print(f"  Value: ${latency_value['value_per_million_traded']:.0f} per $1M traded")
+print(f"  Value: \${latency_value['value_per_million_traded']:.0f} per $1M traded")
 print(f"\\n  {latency_value['interpretation']}")
 \`\`\`
 
@@ -414,7 +414,7 @@ class PriceDiscovery:
             }
         }
     
-    def simulate_opening_auction(self, 
+    def simulate_opening_auction (self, 
                                  buy_orders: List[tuple],  # [(price, quantity)]
                                  sell_orders: List[tuple]) -> Dict:
         """
@@ -423,24 +423,24 @@ class PriceDiscovery:
         Find price that maximizes volume
         """
         # Sort orders
-        buy_orders_sorted = sorted(buy_orders, key=lambda x: x[0], reverse=True)
-        sell_orders_sorted = sorted(sell_orders, key=lambda x: x[0])
+        buy_orders_sorted = sorted (buy_orders, key=lambda x: x[0], reverse=True)
+        sell_orders_sorted = sorted (sell_orders, key=lambda x: x[0])
         
         # Build cumulative curves
-        all_prices = sorted(set([p for p, _ in buy_orders + sell_orders]))
+        all_prices = sorted (set([p for p, _ in buy_orders + sell_orders]))
         
         max_volume = 0
         clearing_price = None
         
         for price in all_prices:
             # Buyers willing to pay >= price
-            buy_volume = sum(qty for p, qty in buy_orders if p >= price)
+            buy_volume = sum (qty for p, qty in buy_orders if p >= price)
             
             # Sellers willing to sell <= price
-            sell_volume = sum(qty for p, qty in sell_orders if p <= price)
+            sell_volume = sum (qty for p, qty in sell_orders if p <= price)
             
             # Executable volume
-            volume = min(buy_volume, sell_volume)
+            volume = min (buy_volume, sell_volume)
             
             if volume > max_volume:
                 max_volume = volume
@@ -449,8 +449,8 @@ class PriceDiscovery:
         return {
             'clearing_price': clearing_price,
             'volume': max_volume,
-            'buy_orders': len(buy_orders),
-            'sell_orders': len(sell_orders)
+            'buy_orders': len (buy_orders),
+            'sell_orders': len (sell_orders)
         }
 
 # Example: Opening auction
@@ -472,12 +472,12 @@ sell_orders = [
     (100.45, 2000)
 ]
 
-auction_result = discovery.simulate_opening_auction(buy_orders, sell_orders)
+auction_result = discovery.simulate_opening_auction (buy_orders, sell_orders)
 
 print("\\n\\n=== Opening Auction Price Discovery ===\\n")
 print(f"Buy Orders: {auction_result['buy_orders']}")
 print(f"Sell Orders: {auction_result['sell_orders']}")
-print(f"\\nClearing Price: ${auction_result['clearing_price']: .2f}")
+print(f"\\nClearing Price: \${auction_result['clearing_price']:.2f}")
 print(f"Volume: {auction_result['volume']:,} shares")
 print(f"\\nInterpretation: Price that maximizes trading volume")
 
@@ -485,7 +485,7 @@ print(f"\\nInterpretation: Price that maximizes trading volume")
 mechanisms = discovery.mechanisms()
 print("\\n\\n=== Price Discovery Mechanisms ===\\n")
 
-for mechanism, details in list(mechanisms.items())[: 3]:
+for mechanism, details in list (mechanisms.items())[: 3]:
 print(f"{mechanism}:")
 print(f"  Markets: {details['markets']}")
 print(f"  Price Formation: {details['price_formation']}")
@@ -507,7 +507,7 @@ class MarketDataSystem:
         self.symbol_data = {}
         self.subscribers = []
     
-    def connect_to_feed(self, feed_name: str):
+    def connect_to_feed (self, feed_name: str):
         """
         Connect to market data feed
         
@@ -520,7 +520,7 @@ class MarketDataSystem:
             'latency_us': 0
         }
     
-    def handle_quote_update(self, quote: Quote):
+    def handle_quote_update (self, quote: Quote):
         """
         Process incoming quote
         
@@ -534,9 +534,9 @@ class MarketDataSystem:
         
         # Notify subscribers
         for subscriber in self.subscribers:
-            subscriber.on_quote(quote)
+            subscriber.on_quote (quote)
     
-    def handle_trade(self, trade: Trade):
+    def handle_trade (self, trade: Trade):
         """
         Process trade
         
@@ -549,23 +549,23 @@ class MarketDataSystem:
         
         # Publish to subscribers
         for subscriber in self.subscribers:
-            subscriber.on_trade(trade)
+            subscriber.on_trade (trade)
     
-    def calculate_vwap(self, symbol: str, trades: List[Trade]) -> float:
+    def calculate_vwap (self, symbol: str, trades: List[Trade]) -> float:
         """
         Calculate Volume-Weighted Average Price
         
         VWAP = Σ(Price × Volume) / Σ(Volume)
         """
-        total_value = sum(trade.price * trade.size for trade in trades)
-        total_volume = sum(trade.size for trade in trades)
+        total_value = sum (trade.price * trade.size for trade in trades)
+        total_volume = sum (trade.size for trade in trades)
         
         if total_volume == 0:
             return 0
         
         return total_value / total_volume
     
-    def detect_trades_from_quotes(self,
+    def detect_trades_from_quotes (self,
                                   prev_quote: Quote,
                                   curr_quote: Quote) -> Optional[str]:
         """
@@ -576,16 +576,16 @@ class MarketDataSystem:
         """
         if curr_quote.last > prev_quote.last:
             # Price went up
-            if abs(curr_quote.last - curr_quote.ask) < abs(curr_quote.last - curr_quote.bid):
+            if abs (curr_quote.last - curr_quote.ask) < abs (curr_quote.last - curr_quote.bid):
                 return 'BUY'  # Closer to ask
         elif curr_quote.last < prev_quote.last:
             # Price went down
-            if abs(curr_quote.last - curr_quote.bid) < abs(curr_quote.last - curr_quote.ask):
+            if abs (curr_quote.last - curr_quote.bid) < abs (curr_quote.last - curr_quote.ask):
                 return 'SELL'  # Closer to bid
         
         return None
     
-    def data_quality_check(self, quote: Quote) -> Dict:
+    def data_quality_check (self, quote: Quote) -> Dict:
         """
         Validate data quality
         
@@ -595,27 +595,27 @@ class MarketDataSystem:
         
         # Check 1: Bid < Ask
         if quote.bid >= quote.ask:
-            issues.append(f"Crossed market: bid ${quote.bid} >= ask ${quote.ask}")
+            issues.append (f"Crossed market: bid \${quote.bid} >= ask \${quote.ask}")
         
         # Check 2: Reasonable spread
         spread_bps = quote.spread_bps()
         if spread_bps > 100:  # 1% spread
-            issues.append(f"Wide spread: {spread_bps:.0f} bps")
+            issues.append (f"Wide spread: {spread_bps:.0f} bps")
         
         # Check 3: Reasonable price move
         if quote.symbol in self.symbol_data:
             prev_price = self.symbol_data[quote.symbol]['quote'].mid_price()
             curr_price = quote.mid_price()
-            move = abs(curr_price - prev_price) / prev_price
+            move = abs (curr_price - prev_price) / prev_price
             
             if move > 0.10:  # 10% move
-                issues.append(f"Large price move: {move*100:.1f}%")
+                issues.append (f"Large price move: {move*100:.1f}%")
         
         # Check 4: Stale data
         # (timestamp check would go here)
         
         return {
-            'valid': len(issues) == 0,
+            'valid': len (issues) == 0,
             'issues': issues
         }
 
@@ -625,7 +625,7 @@ system.connect_to_feed("NYSE Direct Feed")
 system.connect_to_feed("Nasdaq TotalView")
 
 print("\\n\\n=== Market Data System ===\\n")
-print(f"Connected Feeds: {list(system.feed_handlers.keys())}")
+print(f"Connected Feeds: {list (system.feed_handlers.keys())}")
 
 # Process quote
 quote = Quote(
@@ -640,11 +640,11 @@ quote = Quote(
     last_time=datetime.now()
 )
 
-system.handle_quote_update(quote)
+system.handle_quote_update (quote)
 print(f"\\nProcessed quote for {quote.symbol}")
 
 # Data quality check
-quality = system.data_quality_check(quote)
+quality = system.data_quality_check (quote)
 print(f"Data Quality: {'✓ Valid' if quality['valid'] else '✗ Invalid'}")
 if not quality['valid']:
     print(f"Issues: {quality['issues']}")
@@ -657,7 +657,7 @@ trades = [
 ]
 
 vwap = system.calculate_vwap("AAPL", trades)
-print(f"\\nVWAP: ${vwap: .2f}")
+print(f"\\nVWAP: \${vwap:.2f}")
 \`\`\`
 
 ---
@@ -686,15 +686,18 @@ print(f"\\nVWAP: ${vwap: .2f}")
 
 You now understand the data that drives markets!
 `,
-    exercises: [
-        {
-            prompt: "Build a market data aggregator that connects to simulated feeds (NYSE, Nasdaq, IEX), calculates NBBO across all venues, detects quote updates within 1ms, publishes consolidated feed to subscribers, and measures latency from quote arrival to publication.",
-            solution: "// Implementation: 1) Create 3 mock feeds publishing quotes every 100-500ms with random bid/ask/sizes, 2) Timestamp each quote on arrival, 3) Calculate NBBO: max(all bids), min(all asks), 4) Publish consolidated quote to subscribers, 5) Measure latency: publish_time - earliest_quote_time, 6) Target <1ms aggregation latency, 7) Display: NBBO, contributing venues, update frequency, latency percentiles (p50, p95, p99)"
-        },
-        {
-            prompt: "Create an order book visualizer that consumes Level 2 data, displays top 10 levels of bids/asks, calculates order book imbalance, detects large orders (>5% of book), and visualizes cumulative depth chart showing total size at each price level.",
-            solution: "// Implementation: 1) Simulate Level 2 book with 20 price levels (10 bids, 10 asks), 2) Display: price, size, num_orders for each level, 3) Calculate imbalance = (bid_vol - ask_vol) / (bid_vol + ask_vol), 4) Highlight levels with >5% of total book size, 5) Cumulative depth: running sum of sizes, 6) Visualize: bar chart showing depth at each price, color-code bid (green) vs ask (red), 7) Update in real-time as book changes"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a market data aggregator that connects to simulated feeds (NYSE, Nasdaq, IEX), calculates NBBO across all venues, detects quote updates within 1ms, publishes consolidated feed to subscribers, and measures latency from quote arrival to publication.',
+      solution:
+        '// Implementation: 1) Create 3 mock feeds publishing quotes every 100-500ms with random bid/ask/sizes, 2) Timestamp each quote on arrival, 3) Calculate NBBO: max (all bids), min (all asks), 4) Publish consolidated quote to subscribers, 5) Measure latency: publish_time - earliest_quote_time, 6) Target <1ms aggregation latency, 7) Display: NBBO, contributing venues, update frequency, latency percentiles (p50, p95, p99)',
+    },
+    {
+      prompt:
+        'Create an order book visualizer that consumes Level 2 data, displays top 10 levels of bids/asks, calculates order book imbalance, detects large orders (>5% of book), and visualizes cumulative depth chart showing total size at each price level.',
+      solution:
+        '// Implementation: 1) Simulate Level 2 book with 20 price levels (10 bids, 10 asks), 2) Display: price, size, num_orders for each level, 3) Calculate imbalance = (bid_vol - ask_vol) / (bid_vol + ask_vol), 4) Highlight levels with >5% of total book size, 5) Cumulative depth: running sum of sizes, 6) Visualize: bar chart showing depth at each price, color-code bid (green) vs ask (red), 7) Update in real-time as book changes',
+    },
+  ],
 };
-

@@ -32,14 +32,14 @@ np.random.seed(42)
 # Posterior: Beta(2+7, 2+3) = Beta(9, 5)
 
 theta = np.linspace(0, 1, 100)
-prior = stats.beta(2, 2).pdf(theta)
+prior = stats.beta(2, 2).pdf (theta)
 likelihood = stats.binom(10, theta).pmf(7)
-posterior = stats.beta(9, 5).pdf(theta)
+posterior = stats.beta(9, 5).pdf (theta)
 
-plt.figure(figsize=(10, 6))
-plt.plot(theta, prior, label='Prior: Beta(2,2)', linewidth=2)
-plt.plot(theta, likelihood/likelihood.max()*prior.max(), label='Likelihood (scaled)', linewidth=2)
-plt.plot(theta, posterior, label='Posterior: Beta(9,5)', linewidth=2)
+plt.figure (figsize=(10, 6))
+plt.plot (theta, prior, label='Prior: Beta(2,2)', linewidth=2)
+plt.plot (theta, likelihood/likelihood.max()*prior.max(), label='Likelihood (scaled)', linewidth=2)
+plt.plot (theta, posterior, label='Posterior: Beta(9,5)', linewidth=2)
 plt.axvline(7/10, color='r', linestyle='--', label='MLE: 0.7')
 plt.axvline(9/14, color='g', linestyle='--', label='Posterior mean: 0.64')
 plt.xlabel('θ (coin bias)')
@@ -86,7 +86,7 @@ prior_mean = 0
 prior_var = 100
 sigma = 1
 
-X_aug = np.column_stack([np.ones(len(X)), X])
+X_aug = np.column_stack([np.ones (len(X)), X])
 posterior_cov = np.linalg.inv(X_aug.T @ X_aug / sigma**2 + np.eye(2) / prior_var)
 posterior_mean = posterior_cov @ (X_aug.T @ y / sigma**2)
 

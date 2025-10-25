@@ -38,7 +38,7 @@ revenue_last_year = q4_metrics['revenue'] / (1 + q4_metrics['revenue_growth_yoy'
 # = $40M
 
 print("Deferred Revenue Analysis:")
-print(f"  Last Year: \${dr_last_year:, .0f}")
+print(f"  Last Year: \${dr_last_year:,.0f}")
 print(f"  This Year: \${q4_metrics['deferred_revenue']:,.0f}")
 print(f"  Change: {q4_metrics['dr_growth_yoy']:.1%}")
 print()
@@ -52,7 +52,7 @@ print("  • The 25% current growth is burning through prior deferred revenue")
 **Why Deferred Revenue Matters for SaaS**:
 
 \`\`\`python
-def analyze_saas_health(current_q: dict, prior_q: dict) -> dict:
+def analyze_saas_health (current_q: dict, prior_q: dict) -> dict:
     """
     For SaaS, deferred revenue is a leading indicator.
     """
@@ -171,7 +171,7 @@ D) **"Not growing fast enough"** - WRONG
 
 E) **"Revenue too low"** - WRONG
 
-Absolute revenue level doesn't indicate health. A $50M/quarter company ($200M annual run rate) can be very healthy. What matters is growth trajectory and unit economics.
+Absolute revenue level doesn't indicate health. A $50M/quarter company (\$200M annual run rate) can be very healthy. What matters is growth trajectory and unit economics.
 
 **Key Takeaway for SaaS Analysis**:
 
@@ -210,7 +210,7 @@ This is exactly how hedge funds make money—identifying leading indicators befo
       'Gross margin is irrelevant; only net margin matters for valuation',
       'Salesforce has high SG&A expenses (sales & marketing) that offset the gross margin advantage, making operating margin a better comparison',
       'Nike and Netflix have better brand value despite lower gross margins',
-      "Walmart's lower margin is intentional (low-price strategy) and actually indicates operational excellence",
+      "Walmart\'s lower margin is intentional (low-price strategy) and actually indicates operational excellence",
       "Gross margins are calculated differently across industries so they can't be compared",
     ],
     correctAnswer: 1,
@@ -219,7 +219,7 @@ This is exactly how hedge funds make money—identifying leading indicators befo
 **Why This Is The Best Counterargument**:
 
 \`\`\`python
-def analyze_complete_income_statement(companies: dict):
+def analyze_complete_income_statement (companies: dict):
     """
     Show why gross margin alone is misleading.
     Compare full income statement economics.
@@ -285,7 +285,7 @@ companies = {
     }
 }
 
-analyze_complete_income_statement(companies)
+analyze_complete_income_statement (companies)
 
 print("\\n" + "=" * 70)
 print("KEY INSIGHT: Salesforce has highest GROSS margin (76%)")
@@ -391,7 +391,7 @@ print(BusinessModelEconomics.nike_economics()['why_low_sga'])
 **The Right Way to Compare**:
 
 \`\`\`python
-def proper_business_quality_comparison(companies: dict) -> pd.DataFrame:
+def proper_business_quality_comparison (companies: dict) -> pd.DataFrame:
     """
     Compare companies on metrics that matter for
     creating shareholder value.
@@ -426,9 +426,9 @@ def proper_business_quality_comparison(companies: dict) -> pd.DataFrame:
             )
         }
         
-        comparison.append(quality_metrics)
+        comparison.append (quality_metrics)
     
-    return pd.DataFrame(comparison).sort_values('Quality Score', ascending=False)
+    return pd.DataFrame (comparison).sort_values('Quality Score', ascending=False)
 
 # When you do this analysis, Nike often scores HIGHER than Salesforce
 # despite lower gross margin!
@@ -444,7 +444,7 @@ C) **"Nike and Netflix have better brand value"** - TRUE BUT NOT THE POINT
 
 While true, this doesn't directly explain why high gross margin doesn't automatically mean best business. The SG&A explanation is more precise.
 
-D) **"Walmart's lower margin indicates operational excellence"** - PARTIALLY TRUE
+D) **"Walmart\'s lower margin indicates operational excellence"** - PARTIALLY TRUE
 
 Walmart IS operationally excellent, but 24% gross margin reflects their business model (high volume, low margins), not that they're better than others.
 
@@ -456,7 +456,7 @@ Gross margin calculation is consistent: (Revenue - COGS) / Revenue. The COGS def
 
 \`\`\`python
 # Investment decision framework
-def which_is_better_business(company_a, company_b):
+def which_is_better_business (company_a, company_b):
     """
     Don't just compare one metric.
     Look at the complete economics.
@@ -565,7 +565,7 @@ Share Reduction:
 **Understanding the Relationship**:
 
 \`\`\`python
-def decompose_eps_growth(prior: dict, current: dict) -> dict:
+def decompose_eps_growth (prior: dict, current: dict) -> dict:
     """
     Decompose EPS growth into:
     1. Net income growth (business performance)
@@ -594,7 +594,7 @@ def decompose_eps_growth(prior: dict, current: dict) -> dict:
     }
 
 # Apply to this scenario
-analysis = decompose_eps_growth(prior_year, current_year)
+analysis = decompose_eps_growth (prior_year, current_year)
 
 print("\\nEPS Growth Decomposition:")
 print("=" * 60)
@@ -625,7 +625,7 @@ class EarningsQualityAssessor:
         Low Quality: EPS growth entirely from buybacks
         """
         
-        buyback_contribution = abs(share_change)
+        buyback_contribution = abs (share_change)
         organic_contribution = ni_growth
         
         if organic_contribution < 0:
@@ -720,7 +720,7 @@ Currency effects would impact net income (already reflected in the 10% growth). 
 
 \`\`\`python
 # Investment Analysis
-def evaluate_buyback_driven_eps(company_data: dict) -> str:
+def evaluate_buyback_driven_eps (company_data: dict) -> str:
     """Should you invest in a company with buyback-driven EPS?"""
     
     # Factors to consider:
@@ -758,12 +758,12 @@ def evaluate_buyback_driven_eps(company_data: dict) -> str:
 
 When EPS grows faster than net income, the difference is explained by share count reduction (buybacks). This creates **lower quality earnings** because:
 
-1. It's not from improving the business
+1. It\'s not from improving the business
 2. It's unsustainable (can't buy back forever)
 3. It may indicate lack of growth opportunities
 4. It can mask underlying business deterioration
 
-**Always ask**: "If share count stayed constant, what would EPS growth be?" That's the organic growth rate.
+**Always ask**: "If share count stayed constant, what would EPS growth be?" That\'s the organic growth rate.
 
 In this case: Without buybacks, EPS would only have grown 10%, not 20%. Half the "growth" is financial engineering.`,
   },
@@ -785,7 +785,7 @@ In this case: Without buybacks, EPS would only have grown 10%, not 20%. Half the
 **Understanding Capitalization vs Expensing**:
 
 \`\`\`python
-def compare_accounting_treatment(development_costs: float, revenue: float):
+def compare_accounting_treatment (development_costs: float, revenue: float):
     """
     Compare impact of expensing vs capitalizing R&D.
     """
@@ -803,8 +803,7 @@ def compare_accounting_treatment(development_costs: float, revenue: float):
     operating_income_a = revenue_a - rd_expense_a - other_expenses_a
     operating_margin_a = operating_income_a / revenue_a
     
-    print(f"Revenue:           \${revenue_a:, .0f
-} ")
+    print(f"Revenue:           \${revenue_a:,.0f} ")
 print(f"R&D Expense:       $(\${development_costs:,.0f})  ← Immediate expense")
 print(f"Other Expenses:    $(\${other_expenses_a:,.0f})")
 print(f"Operating Income:  \${operating_income_a:,.0f}")
@@ -865,7 +864,7 @@ return {
 revenue = 10_000_000_000  # $10B revenue
 dev_costs = 500_000_000   # $500M development costs
 
-result = compare_accounting_treatment(dev_costs, revenue)
+result = compare_accounting_treatment (dev_costs, revenue)
 \`\`\`
 
 **Output**:
@@ -970,7 +969,7 @@ result = adjuster.adjust_for_capitalization(
 print("Earnings Quality Adjustment")
 print("=" * 70)
 print("\\nAs Reported:")
-print(f"  Operating Income: \${result['reported']['operating_income']:, .0f}")
+print(f"  Operating Income: \${result['reported']['operating_income']:,.0f}")
 print(f"  Net Income: \${result['reported']['net_income']:,.0f}")
 print(f"  Operating Margin: {result['reported']['operating_margin']:.1%}")
 print()
@@ -992,7 +991,7 @@ A) **"Proper accounting"** - PARTIALLY TRUE, but MISLEADING
 Under IFRS, companies CAN capitalize development costs if certain criteria are met. However:
 - US GAAP generally requires expensing R&D
 - Even if allowed, it makes earnings less comparable to peers
-- It's aggressive accounting, not conservative
+- It\'s aggressive accounting, not conservative
 
 C) **"Fraud"** - WRONG
 
@@ -1067,7 +1066,7 @@ peers = {
 If comparing to peers, adjust this company's financials:
 \`\`\`python
 # Normalize for peer comparison
-def normalize_financials(company, peers_avg_rd_pct):
+def normalize_financials (company, peers_avg_rd_pct):
     """Make company comparable to peers."""
     
     # If company capitalized $500M that should have been expensed
@@ -1109,7 +1108,7 @@ def normalize_financials(company, peers_avg_rd_pct):
 import pandas as pd
 import numpy as np
 
-def analyze_dso_revenue_relationship(historical_data: pd.DataFrame):
+def analyze_dso_revenue_relationship (historical_data: pd.DataFrame):
     """
     Analyze relationship between revenue growth and DSO increase.
     Red flag when DSO increases significantly with revenue growth.
@@ -1147,8 +1146,7 @@ def analyze_dso_revenue_relationship(historical_data: pd.DataFrame):
     additional_cash_tied_up = receivables_at_75_days - receivables_at_45_days
     
     print("Cash Impact:")
-    print(f"  Receivables at 45 DSO: \${receivables_at_45_days:, .0f
-} ")
+    print(f"  Receivables at 45 DSO: \${receivables_at_45_days:,.0f} ")
 print(f"  Receivables at 75 DSO: \${receivables_at_75_days:,.0f}")
 print(f"  Additional Cash Tied Up: \${additional_cash_tied_up:,.0f}")
 print(f"    → \${additional_cash_tied_up/1_000_000:.1f}M NOT collected!")
@@ -1333,7 +1331,7 @@ A) **"Normal for growing company"** - WRONG
 While growing companies may see modest DSO increases (5-10 days), a 67% increase (30 days) is NOT normal:
 
 \`\`\`python
-# What's normal vs concerning
+# What\'s normal vs concerning
 dso_change_interpretation = {
     'Normal growth (0-10 days)': 'Acceptable - scaling challenges',
     'Concerning (10-20 days)': 'Monitor closely - possible credit loosening',
@@ -1400,7 +1398,7 @@ class RevenueQualityMonitor:
         'receivables_revenue_ratio': 1.3,  # AR growth / Revenue growth
     }
     
-    def evaluate_company(self, company_data: dict) -> dict:
+    def evaluate_company (self, company_data: dict) -> dict:
         """
         Real-time revenue quality evaluation.
         Returns: BUY, HOLD, SELL, or SHORT recommendation.
@@ -1436,7 +1434,7 @@ class RevenueQualityMonitor:
         return {
             'quality_score': quality_score,
             'recommendation': recommendation,
-            'reasoning': self._generate_reasoning(quality_score, dso_change)
+            'reasoning': self._generate_reasoning (quality_score, dso_change)
         }
 
 # Apply to this company

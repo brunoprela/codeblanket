@@ -48,7 +48,7 @@ export const middlewareCorsMultipleChoice = [
     question:
       "Why can't you use Access-Control-Allow-Origin: * with Access-Control-Allow-Credentials: true?",
     options: [
-      "It's a security risk - allowing all origins with credentials would let any malicious site access authenticated endpoints using users' cookies",
+      "It\'s a security risk - allowing all origins with credentials would let any malicious site access authenticated endpoints using users' cookies",
       'It causes performance issues with too many allowed origins',
       "The wildcard doesn't work with credentials for technical reasons",
       'This combination is allowed and commonly used',

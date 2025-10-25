@@ -109,15 +109,15 @@ CACHES = {
 from django.views.decorators.cache import cache_page
 
 @cache_page(60 * 15)  # Cache for 15 minutes
-def article_list(request):
+def article_list (request):
     articles = Article.objects.all()
-    return render(request, 'articles/list.html', {'articles': articles})
+    return render (request, 'articles/list.html', {'articles': articles})
 
 # Per-user caching
 @cache_page(60 * 15, key_prefix='user_%s' % request.user.id)
-def my_articles(request):
-    articles = Article.objects.filter(author=request.user)
-    return render(request, 'articles/my_list.html', {'articles': articles})
+def my_articles (request):
+    articles = Article.objects.filter (author=request.user)
+    return render (request, 'articles/my_list.html', {'articles': articles})
 \`\`\`
 
 ### Class-Based Views
@@ -126,7 +126,7 @@ def my_articles(request):
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator (cache_page(60 * 15), name='dispatch')
 class ArticleListView(ListView):
     model = Article
     template_name = 'articles/list.html'
@@ -137,17 +137,17 @@ class ArticleListView(ListView):
 \`\`\`python
 from django.views.decorators.cache import cache_page
 
-def article_detail(request, slug):
+def article_detail (request, slug):
     article = get_object_or_404(Article, slug=slug)
     
     # Only cache for published articles
     if article.status == 'published':
         return cache_page(60 * 60)(article_detail_cached)(request, article)
     
-    return render(request, 'articles/detail.html', {'article': article})
+    return render (request, 'articles/detail.html', {'article': article})
 
-def article_detail_cached(request, article):
-    return render(request, 'articles/detail.html', {'article': article})
+def article_detail_cached (request, article):
+    return render (request, 'articles/detail.html', {'article': article})
 \`\`\`
 
 ---
@@ -272,35 +272,35 @@ cache.clear()
 
 \`\`\`python
 # Get or set pattern
-def get_article_views(article_id):
+def get_article_views (article_id):
     cache_key = f'article_views_{article_id}'
-    views = cache.get(cache_key)
+    views = cache.get (cache_key)
     
     if views is None:
         # Not in cache, compute and cache
-        views = Article.objects.get(id=article_id).view_count
-        cache.set(cache_key, views, timeout=60)
+        views = Article.objects.get (id=article_id).view_count
+        cache.set (cache_key, views, timeout=60)
     
     return views
 
 # Try-catch pattern
-def get_cached_data(key):
+def get_cached_data (key):
     try:
-        return cache.get(key)
+        return cache.get (key)
     except Exception as e:
-        logger.error(f"Cache error: {e}")
+        logger.error (f"Cache error: {e}")
         return None
 
 # Cache expensive query
 def get_popular_articles():
     cache_key = 'popular_articles'
-    articles = cache.get(cache_key)
+    articles = cache.get (cache_key)
     
     if articles is None:
         articles = list(Article.objects.filter(
             view_count__gte=1000
         ).order_by('-view_count')[:10].values('id', 'title', 'slug'))
-        cache.set(cache_key, articles, timeout=600)
+        cache.set (cache_key, articles, timeout=600)
     
     return articles
 \`\`\`
@@ -312,19 +312,19 @@ def get_popular_articles():
 ### Cache-Aside (Lazy Loading)
 
 \`\`\`python
-def get_article(article_id):
+def get_article (article_id):
     """
     1. Check cache
     2. If miss, query database
     3. Update cache
     """
     cache_key = f'article_{article_id}'
-    article = cache.get(cache_key)
+    article = cache.get (cache_key)
     
     if article is None:
         # Cache miss
-        article = Article.objects.get(id=article_id)
-        cache.set(cache_key, article, timeout=3600)
+        article = Article.objects.get (id=article_id)
+        cache.set (cache_key, article, timeout=3600)
     
     return article
 \`\`\`
@@ -332,20 +332,20 @@ def get_article(article_id):
 ### Write-Through Cache
 
 \`\`\`python
-def update_article(article_id, data):
+def update_article (article_id, data):
     """
     1. Update database
     2. Update cache
     """
-    article = Article.objects.get(id=article_id)
+    article = Article.objects.get (id=article_id)
     
     for key, value in data.items():
-        setattr(article, key, value)
+        setattr (article, key, value)
     article.save()
     
     # Update cache
     cache_key = f'article_{article_id}'
-    cache.set(cache_key, article, timeout=3600)
+    cache.set (cache_key, article, timeout=3600)
     
     return article
 \`\`\`
@@ -353,17 +353,17 @@ def update_article(article_id, data):
 ### Write-Behind Cache
 
 \`\`\`python
-def increment_view_count(article_id):
+def increment_view_count (article_id):
     """
     1. Update cache immediately
     2. Queue database update for later
     """
     cache_key = f'article_views_{article_id}'
-    cache.incr(cache_key)
+    cache.incr (cache_key)
     
     # Queue background task to update database
     from .tasks import update_article_views
-    update_article_views.delay(article_id)
+    update_article_views.delay (article_id)
 \`\`\`
 
 ---
@@ -376,37 +376,37 @@ def increment_view_count(article_id):
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-@receiver(post_save, sender=Article)
-def invalidate_article_cache(sender, instance, **kwargs):
+@receiver (post_save, sender=Article)
+def invalidate_article_cache (sender, instance, **kwargs):
     """Invalidate cache when article is saved"""
     cache_keys = [
         f'article_{instance.id}',
         f'article_list',
         f'category_{instance.category_id}_articles',
     ]
-    cache.delete_many(cache_keys)
+    cache.delete_many (cache_keys)
 
-@receiver(post_delete, sender=Article)
-def invalidate_on_delete(sender, instance, **kwargs):
+@receiver (post_delete, sender=Article)
+def invalidate_on_delete (sender, instance, **kwargs):
     """Invalidate cache when article is deleted"""
-    cache.delete(f'article_{instance.id}')
+    cache.delete (f'article_{instance.id}')
 \`\`\`
 
 ### Cache Versioning
 
 \`\`\`python
-def get_article_with_version(article_id):
+def get_article_with_version (article_id):
     """Use version in cache key"""
-    article = Article.objects.get(id=article_id)
+    article = Article.objects.get (id=article_id)
     cache_key = f'article_{article_id}_v{article.updated_at.timestamp()}'
     
-    cached = cache.get(cache_key)
+    cached = cache.get (cache_key)
     if cached:
         return cached
     
     # Compute and cache
-    result = expensive_transformation(article)
-    cache.set(cache_key, result, timeout=None)  # Never expires
+    result = expensive_transformation (article)
+    cache.set (cache_key, result, timeout=None)  # Never expires
     return result
 \`\`\`
 
@@ -415,24 +415,24 @@ def get_article_with_version(article_id):
 \`\`\`python
 from django_redis import get_redis_connection
 
-def cache_with_tags(key, value, tags, timeout=300):
+def cache_with_tags (key, value, tags, timeout=300):
     """Cache with tags for group invalidation"""
-    cache.set(key, value, timeout)
+    cache.set (key, value, timeout)
     
     # Store key in tag sets
     redis_conn = get_redis_connection("default")
     for tag in tags:
-        redis_conn.sadd(f'tag:{tag}', key)
-        redis_conn.expire(f'tag:{tag}', timeout)
+        redis_conn.sadd (f'tag:{tag}', key)
+        redis_conn.expire (f'tag:{tag}', timeout)
 
-def invalidate_by_tag(tag):
+def invalidate_by_tag (tag):
     """Invalidate all keys with this tag"""
     redis_conn = get_redis_connection("default")
-    keys = redis_conn.smembers(f'tag:{tag}')
+    keys = redis_conn.smembers (f'tag:{tag}')
     
     if keys:
-        cache.delete_many(keys)
-        redis_conn.delete(f'tag:{tag}')
+        cache.delete_many (keys)
+        redis_conn.delete (f'tag:{tag}')
 
 # Usage
 cache_with_tags('article_1', article_data, ['articles', 'category_tech'])
@@ -453,19 +453,19 @@ from django.utils.decorators import method_decorator
 # Function-based view
 @api_view(['GET'])
 @cache_page(60 * 15)
-def article_list_api(request):
+def article_list_api (request):
     articles = Article.objects.all()
-    serializer = ArticleSerializer(articles, many=True)
-    return Response(serializer.data)
+    serializer = ArticleSerializer (articles, many=True)
+    return Response (serializer.data)
 
 # Class-based view
-class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
+class ArticleViewSet (viewsets.ReadOnlyModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    @method_decorator(cache_page(60 * 15))
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    @method_decorator (cache_page(60 * 15))
+    def list (self, request, *args, **kwargs):
+        return super().list (request, *args, **kwargs)
 \`\`\`
 
 ### Per-User API Caching
@@ -474,23 +474,23 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
 from rest_framework.decorators import action
 from django.core.cache import cache
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     
-    @action(detail=False, methods=['get'])
-    def popular(self, request):
+    @action (detail=False, methods=['get'])
+    def popular (self, request):
         # Cache per user
         cache_key = f'popular_articles_user_{request.user.id}'
-        articles = cache.get(cache_key)
+        articles = cache.get (cache_key)
         
         if articles is None:
             articles = self.get_queryset().filter(
                 view_count__gte=1000
             )[:10]
-            serializer = self.get_serializer(articles, many=True)
+            serializer = self.get_serializer (articles, many=True)
             articles = serializer.data
-            cache.set(cache_key, articles, timeout=600)
+            cache.set (cache_key, articles, timeout=600)
         
-        return Response(articles)
+        return Response (articles)
 \`\`\`
 
 ---
@@ -505,7 +505,7 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     help = 'Warm up cache with frequently accessed data'
     
-    def handle(self, *args, **options):
+    def handle (self, *args, **options):
         # Warm up popular articles
         popular = Article.objects.filter(
             view_count__gte=1000
@@ -513,7 +513,7 @@ class Command(BaseCommand):
         
         for article in popular:
             cache_key = f'article_{article.id}'
-            cache.set(cache_key, article, timeout=3600)
+            cache.set (cache_key, article, timeout=3600)
         
         self.stdout.write('Cache warmed successfully')
 
@@ -543,39 +543,39 @@ class CacheMonitor:
         }
     
     @staticmethod
-    def log_cache_access(key, hit):
+    def log_cache_access (key, hit):
         """Log cache hit/miss"""
         if hit:
-            logger.info(f'Cache HIT: {key}')
+            logger.info (f'Cache HIT: {key}')
         else:
-            logger.info(f'Cache MISS: {key}')
+            logger.info (f'Cache MISS: {key}')
 \`\`\`
 
 ### Graceful Degradation
 
 \`\`\`python
-def get_cached_data_safe(key, fallback_fn, timeout=300):
+def get_cached_data_safe (key, fallback_fn, timeout=300):
     """
     Safely get cached data with fallback
     If cache fails, call fallback function
     """
     try:
-        data = cache.get(key)
+        data = cache.get (key)
         if data is not None:
             return data
     except Exception as e:
-        logger.error(f'Cache error: {e}')
+        logger.error (f'Cache error: {e}')
     
     # Cache miss or error - call fallback
     try:
         data = fallback_fn()
         try:
-            cache.set(key, data, timeout)
+            cache.set (key, data, timeout)
         except Exception as e:
-            logger.error(f'Cache set error: {e}')
+            logger.error (f'Cache set error: {e}')
         return data
     except Exception as e:
-        logger.error(f'Fallback error: {e}')
+        logger.error (f'Fallback error: {e}')
         raise
 \`\`\`
 

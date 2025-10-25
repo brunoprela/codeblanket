@@ -17,7 +17,7 @@ export const canvasChainsGroupsChordsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "chain() executes tasks sequentially: A completes, result passed to B, B completes, result passed to C. Example: chain(download.s(url), process.s(), upload.s()) downloads → processes → uploads. Use for dependent tasks where B needs A's output.",
+        "chain() executes tasks sequentially: A completes, result passed to B, B completes, result passed to C. Example: chain (download.s (url), process.s(), upload.s()) downloads → processes → uploads. Use for dependent tasks where B needs A's output.",
     },
     {
       id: 'mc2',
@@ -30,7 +30,7 @@ export const canvasChainsGroupsChordsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        'group() executes tasks in parallel. All tasks (A, B, C) run simultaneously on different workers. Returns list of results. Example: group([process.s(i) for i in range(100)]) processes 100 items in parallel. Use for independent tasks.',
+        'group() executes tasks in parallel. All tasks (A, B, C) run simultaneously on different workers. Returns list of results. Example: group([process.s (i) for i in range(100)]) processes 100 items in parallel. Use for independent tasks.',
     },
     {
       id: 'mc3',
@@ -43,20 +43,20 @@ export const canvasChainsGroupsChordsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        'chord() executes header tasks ([A, B]) in parallel, then passes all results to callback (C). Example: chord([process.s(i) for i in range(10)], sum_results.s()) processes items in parallel, then sums. Use for parallel processing with aggregation.',
+        'chord() executes header tasks ([A, B]) in parallel, then passes all results to callback (C). Example: chord([process.s (i) for i in range(10)], sum_results.s()) processes items in parallel, then sums. Use for parallel processing with aggregation.',
     },
     {
       id: 'mc4',
       question: 'How do you combine chain and group?',
       options: [
         'Not possible',
-        'chain(group([A.s(), B.s()]), C.s()) - parallel then sequential',
+        'chain (group([A.s(), B.s()]), C.s()) - parallel then sequential',
         'Only one primitive at a time',
         'Use different Celery apps',
       ],
       correctAnswer: 1,
       explanation:
-        'Combine primitives: chain(group([A.s(), B.s()]), C.s()) executes A and B in parallel, then C. Or group([chain(A.s(), B.s()), chain(C.s(), D.s())]) executes two chains in parallel. Canvas primitives compose flexibly for complex workflows.',
+        'Combine primitives: chain (group([A.s(), B.s()]), C.s()) executes A and B in parallel, then C. Or group([chain(A.s(), B.s()), chain(C.s(), D.s())]) executes two chains in parallel. Canvas primitives compose flexibly for complex workflows.',
     },
     {
       id: 'mc5',

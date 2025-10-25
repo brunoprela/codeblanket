@@ -493,10 +493,10 @@ class Bond:
         self.current_price = current_price
         
         # Derived
-        self.n_periods = int(maturity_years * frequency)
+        self.n_periods = int (maturity_years * frequency)
         self.coupon_payment = face_value * coupon_rate / frequency
     
-    def price(self, ytm):
+    def price (self, ytm):
         """
         Calculate bond price given yield to maturity.
         
@@ -509,7 +509,7 @@ class Bond:
         y = ytm / self.frequency  # Per-period yield
         
         # Present value of coupons (annuity)
-        if abs(y) < 1e-10:  # Handle zero yield
+        if abs (y) < 1e-10:  # Handle zero yield
             pv_coupons = self.coupon_payment * self.n_periods
         else:
             pv_coupons = self.coupon_payment * (1 - (1 + y)**(-self.n_periods)) / y
@@ -519,10 +519,10 @@ class Bond:
         
         return pv_coupons + pv_principal
     
-    def ytm(self, price=None):
+    def ytm (self, price=None):
         """
         Calculate yield to maturity given bond price.
-        Uses numerical root-finding (Brent's method).
+        Uses numerical root-finding (Brent\'s method).
         """
         if price is None:
             price = self.current_price
@@ -530,27 +530,27 @@ class Bond:
         if price is None:
             raise ValueError("Must provide price")
         
-        # Objective function: price(ytm) - target_price = 0
-        def objective(y):
-            return self.price(y) - price
+        # Objective function: price (ytm) - target_price = 0
+        def objective (y):
+            return self.price (y) - price
         
         # Initial guess: coupon rate
         initial_guess = self.coupon_rate
         
         # Solve using Brent's method (robust)
         try:
-            ytm_result = brentq(objective, -0.5, 1.0)  # Search between -50% and 100%
+            ytm_result = brentq (objective, -0.5, 1.0)  # Search between -50% and 100%
             return ytm_result
         except ValueError:
             # If Brent fails, try Newton
-            return newton(objective, initial_guess)
+            return newton (objective, initial_guess)
     
-    def macaulay_duration(self, ytm):
+    def macaulay_duration (self, ytm):
         """
         Calculate Macaulay duration (weighted average time to cash flows).
         """
         y = ytm / self.frequency
-        price = self.price(ytm)
+        price = self.price (ytm)
         
         # Weighted cash flows
         weighted_cf = 0
@@ -566,19 +566,19 @@ class Bond:
         
         return weighted_cf / price
     
-    def modified_duration(self, ytm):
+    def modified_duration (self, ytm):
         """
         Calculate modified duration (price sensitivity to yield).
         """
-        mac_dur = self.macaulay_duration(ytm)
+        mac_dur = self.macaulay_duration (ytm)
         return mac_dur / (1 + ytm / self.frequency)
     
-    def convexity(self, ytm):
+    def convexity (self, ytm):
         """
         Calculate convexity (second-order price sensitivity).
         """
         y = ytm / self.frequency
-        price = self.price(ytm)
+        price = self.price (ytm)
         
         convex_sum = 0
         for t in range(1, self.n_periods + 1):
@@ -599,18 +599,18 @@ class Bond:
         """
         Calculate DV01 (dollar value of 1 basis point).
         """
-        mod_dur = self.modified_duration(ytm)
-        price = self.price(ytm)
+        mod_dur = self.modified_duration (ytm)
+        price = self.price (ytm)
         return mod_dur * price * 0.0001
     
-    def summary(self, ytm):
+    def summary (self, ytm):
         """
         Print comprehensive bond analytics.
         """
-        price = self.price(ytm)
-        mac_dur = self.macaulay_duration(ytm)
-        mod_dur = self.modified_duration(ytm)
-        convex = self.convexity(ytm)
+        price = self.price (ytm)
+        mac_dur = self.macaulay_duration (ytm)
+        mod_dur = self.modified_duration (ytm)
+        convex = self.convexity (ytm)
         dv01_val = self.dv01(ytm)
         
         print("="*60)
@@ -650,14 +650,14 @@ bond = Bond(
 
 # Calculate price at different yields
 ytm_example = 0.05  # 5%
-analytics = bond.summary(ytm_example)
+analytics = bond.summary (ytm_example)
 
 # Calculate YTM from price
 print("\\n" + "="*60)
 print("YIELD CALCULATION FROM PRICE")
 print("="*60)
 market_price = 1050
-calculated_ytm = bond.ytm(market_price)
+calculated_ytm = bond.ytm (market_price)
 print(f"Market Price: \${market_price:,.2f}")
 print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
 \`\`\`
@@ -665,42 +665,42 @@ print(f"Calculated YTM: {calculated_ytm*100:.4f}%")
 ### Duration and Convexity Visualization
 
 \`\`\`python
-def visualize_price_yield_curve(bond, ytm_range=None):
+def visualize_price_yield_curve (bond, ytm_range=None):
     """
     Visualize bond price-yield relationship showing duration and convexity.
     """
     if ytm_range is None:
         ytm_range = np.linspace(0.01, 0.15, 100)  # 1% to 15%
     
-    prices = [bond.price(y) for y in ytm_range]
+    prices = [bond.price (y) for y in ytm_range]
     
     # Reference point (e.g., current yield)
     ref_ytm = 0.06
-    ref_price = bond.price(ref_ytm)
-    mod_dur = bond.modified_duration(ref_ytm)
-    convex = bond.convexity(ref_ytm)
+    ref_price = bond.price (ref_ytm)
+    mod_dur = bond.modified_duration (ref_ytm)
+    convex = bond.convexity (ref_ytm)
     
     # Duration approximation (linear)
     duration_approx = []
     for y in ytm_range:
         delta_y = y - ref_ytm
         approx_price = ref_price * (1 - mod_dur * delta_y)
-        duration_approx.append(approx_price)
+        duration_approx.append (approx_price)
     
     # Duration + Convexity approximation
     duration_convex_approx = []
     for y in ytm_range:
         delta_y = y - ref_ytm
         approx_price = ref_price * (1 - mod_dur * delta_y + 0.5 * convex * delta_y**2)
-        duration_convex_approx.append(approx_price)
+        duration_convex_approx.append (approx_price)
     
     # Plot
-    fig, ax = plt.subplots(figsize=(12, 7))
+    fig, ax = plt.subplots (figsize=(12, 7))
     
-    ax.plot(ytm_range * 100, prices, linewidth=3, label='Actual Price', color='navy')
-    ax.plot(ytm_range * 100, duration_approx, linewidth=2, linestyle='--', 
+    ax.plot (ytm_range * 100, prices, linewidth=3, label='Actual Price', color='navy')
+    ax.plot (ytm_range * 100, duration_approx, linewidth=2, linestyle='--', 
             label='Duration Approximation', color='red', alpha=0.7)
-    ax.plot(ytm_range * 100, duration_convex_approx, linewidth=2, linestyle=':', 
+    ax.plot (ytm_range * 100, duration_convex_approx, linewidth=2, linestyle=':', 
             label='Duration + Convexity', color='green', alpha=0.7)
     
     # Mark reference point
@@ -709,25 +709,25 @@ def visualize_price_yield_curve(bond, ytm_range=None):
     
     ax.set_xlabel('Yield to Maturity (%)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Bond Price ($)', fontsize=12, fontweight='bold')
-    ax.set_title(f'Bond Price-Yield Curve: Duration & Convexity\\n' +
+    ax.set_title (f'Bond Price-Yield Curve: Duration & Convexity\\n' +
                  f'{bond.maturity_years}Y Bond, {bond.coupon_rate*100:.1f}% Coupon',
                  fontsize=14, fontweight='bold')
-    ax.legend(loc='best', fontsize=10)
+    ax.legend (loc='best', fontsize=10)
     ax.grid(True, alpha=0.3)
     
     # Annotations
     ax.text(0.05, 0.95, 
             f'Modified Duration: {mod_dur:.2f}\\nConvexity: {convex:.2f}',
             transform=ax.transAxes, fontsize=11, verticalalignment='top',
-            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+            bbox=dict (boxstyle='round', facecolor='wheat', alpha=0.5))
     
     plt.tight_layout()
     plt.savefig('bond_price_yield_curve.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 # Visualize 10-year bond
-bond_10y = Bond(face_value=1000, coupon_rate=0.06, maturity_years=10, frequency=2)
-visualize_price_yield_curve(bond_10y)
+bond_10y = Bond (face_value=1000, coupon_rate=0.06, maturity_years=10, frequency=2)
+visualize_price_yield_curve (bond_10y)
 
 print("\\nKEY INSIGHT: Convexity improves approximation, especially for large yield changes.")
 print("Duration alone (linear) underestimates price gains when yields fall,")
@@ -737,7 +737,7 @@ print("and overestimates losses when yields rise. Convexity corrects this (posit
 ### Yield Curve Bootstrapping
 
 \`\`\`python
-def bootstrap_zero_curve(bond_data):
+def bootstrap_zero_curve (bond_data):
     """
     Bootstrap zero-coupon curve from coupon bond prices.
     
@@ -748,7 +748,7 @@ def bootstrap_zero_curve(bond_data):
     - DataFrame with maturities and spot rates
     """
     # Sort by maturity
-    bond_data = sorted(bond_data, key=lambda x: x['maturity'])
+    bond_data = sorted (bond_data, key=lambda x: x['maturity'])
     
     spot_rates = {}
     
@@ -759,7 +759,7 @@ def bootstrap_zero_curve(bond_data):
         face = bond['face_value']
         freq = bond['frequency']
         
-        n_periods = int(maturity * freq)
+        n_periods = int (maturity * freq)
         coupon_pmt = face * coupon / freq
         
         # Discount all cash flows except final one using already-bootstrapped rates
@@ -780,8 +780,8 @@ def bootstrap_zero_curve(bond_data):
         spot_rates[maturity] = spot_rate
     
     # Create DataFrame
-    df = pd.DataFrame(list(spot_rates.items()), columns=['Maturity', 'Spot Rate'])
-    df = df.sort_values('Maturity').reset_index(drop=True)
+    df = pd.DataFrame (list (spot_rates.items()), columns=['Maturity', 'Spot Rate'])
+    df = df.sort_values('Maturity').reset_index (drop=True)
     
     return df
 
@@ -797,12 +797,12 @@ bond_market_data = [
     {'maturity': 3.0, 'coupon': 0.06, 'price': 1020, 'face_value': 1000, 'frequency': 2}, # 3Y, 6% coupon
 ]
 
-zero_curve = bootstrap_zero_curve(bond_market_data)
+zero_curve = bootstrap_zero_curve (bond_market_data)
 print(zero_curve)
 
 # Visualize yield curve
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(zero_curve['Maturity'], zero_curve['Spot Rate'] * 100, marker='o', 
+fig, ax = plt.subplots (figsize=(10, 6))
+ax.plot (zero_curve['Maturity'], zero_curve['Spot Rate'] * 100, marker='o', 
         linewidth=2, markersize=10, color='steelblue')
 ax.set_xlabel('Maturity (Years)', fontsize=12, fontweight='bold')
 ax.set_ylabel('Spot Rate (%)', fontsize=12, fontweight='bold')
@@ -816,29 +816,29 @@ plt.show()
 ### Credit Spread Analysis
 
 \`\`\`python
-def calculate_credit_spread(corporate_ytm, treasury_ytm):
+def calculate_credit_spread (corporate_ytm, treasury_ytm):
     """Calculate credit spread (in basis points)."""
     return (corporate_ytm - treasury_ytm) * 10000
 
-def credit_spread_analysis(rating_spreads):
+def credit_spread_analysis (rating_spreads):
     """
     Analyze credit spreads by rating.
     
     Parameters:
     - rating_spreads: dict of {'rating': spread_in_bps}
     """
-    df = pd.DataFrame(list(rating_spreads.items()), columns=['Rating', 'Spread (bps)'])
+    df = pd.DataFrame (list (rating_spreads.items()), columns=['Rating', 'Spread (bps)'])
     
     print("\\n" + "="*60)
     print("CREDIT SPREAD BY RATING")
     print("="*60)
-    print(df.to_string(index=False))
+    print(df.to_string (index=False))
     
     # Visualize
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots (figsize=(10, 6))
     colors = ['green' if 'A' in r else 'orange' if 'B' in r else 'red' 
               for r in df['Rating']]
-    ax.barh(df['Rating'], df['Spread (bps)'], color=colors, alpha=0.7, edgecolor='black')
+    ax.barh (df['Rating'], df['Spread (bps)'], color=colors, alpha=0.7, edgecolor='black')
     ax.set_xlabel('Credit Spread (basis points)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Credit Rating', fontsize=12, fontweight='bold')
     ax.set_title('Credit Spreads by Rating (10-Year Bonds)', fontsize=14, fontweight='bold')
@@ -847,11 +847,11 @@ def credit_spread_analysis(rating_spreads):
     # Add legend
     from matplotlib.patches import Patch
     legend_elements = [
-        Patch(facecolor='green', alpha=0.7, label='Investment Grade (AAA-BBB)'),
-        Patch(facecolor='orange', alpha=0.7, label='High Yield (BB-B)'),
-        Patch(facecolor='red', alpha=0.7, label='Distressed (CCC-C)')
+        Patch (facecolor='green', alpha=0.7, label='Investment Grade (AAA-BBB)'),
+        Patch (facecolor='orange', alpha=0.7, label='High Yield (BB-B)'),
+        Patch (facecolor='red', alpha=0.7, label='Distressed (CCC-C)')
     ]
-    ax.legend(handles=legend_elements, loc='lower right')
+    ax.legend (handles=legend_elements, loc='lower right')
     
     plt.tight_layout()
     plt.savefig('credit_spreads_by_rating.png', dpi=300, bbox_inches='tight')
@@ -869,7 +869,7 @@ spreads = {
     'CC': 2000
 }
 
-credit_spread_analysis(spreads)
+credit_spread_analysis (spreads)
 \`\`\`
 
 ---

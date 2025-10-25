@@ -5,7 +5,7 @@
 export const leaseSection = {
   id: 'lease',
   title: 'Lease',
-  content: `A Lease is a time-bound lock or permission that grants exclusive access to a resource for a limited duration. It's a fundamental pattern in distributed systems for managing resource ownership, preventing split-brain, and implementing distributed coordination.
+  content: `A Lease is a time-bound lock or permission that grants exclusive access to a resource for a limited duration. It\'s a fundamental pattern in distributed systems for managing resource ownership, preventing split-brain, and implementing distributed coordination.
 
 ## What is a Lease?
 
@@ -494,7 +494,7 @@ etcd provides lease primitives for coordination.
 
 ### **Cassandra**
 
-Cassandra's coordinator nodes use leases for consistent reads.
+Cassandra\'s coordinator nodes use leases for consistent reads.
 
 **Read Repair with Leases**:
 - Coordinator acquires short lease on partition
@@ -631,7 +631,7 @@ Renewal arrives at T=30.5s (too late).
 
 ### **Common Interview Questions**
 
-**Q: What's the difference between a lock and a lease?**
+**Q: What\'s the difference between a lock and a lease?**
 A: "A lock is indefinite—held until explicitly released. If a node holding a lock crashes without releasing it, the lock is stuck forever. A lease is time-bound—automatically expires after a duration. If the holder crashes, the lease expires, and another node can acquire it. Leases trade immediate availability for automatic failure recovery."
 
 **Q: How do you choose the lease duration?**

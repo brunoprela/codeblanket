@@ -15,7 +15,7 @@ A module is simply a Python file (.py) containing variables, functions, and clas
 
 \`\`\`python
 # File: my_module.py
-def greet(name):
+def greet (name):
     return f"Hello, {name}!"
 
 PI = 3.14159
@@ -139,7 +139,7 @@ from datetime import datetime, timedelta
 now = datetime.now()
 print(now)  # Current date and time
 
-tomorrow = now + timedelta(days=1)
+tomorrow = now + timedelta (days=1)
 print(tomorrow)
 \`\`\`
 
@@ -152,7 +152,7 @@ counts = Counter(['a', 'b', 'a', 'c', 'b', 'a'])
 print(counts)  # Counter({'a': 3, 'b': 2, 'c': 1})
 
 # defaultdict - no KeyError on missing keys
-d = defaultdict(list)
+d = defaultdict (list)
 d['key'].append('value')  # Works without initializing
 \`\`\`
 
@@ -251,7 +251,7 @@ from math import non_existent_function  # ImportError
 
 # Solution: Check what's available
 import math
-print(dir(math))  # List all available items
+print(dir (math))  # List all available items
 \`\`\`
 
 ### Circular Import

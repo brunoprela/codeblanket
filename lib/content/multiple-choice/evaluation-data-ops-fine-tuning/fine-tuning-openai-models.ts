@@ -66,6 +66,6 @@ export const fineTuningOpenAIModelsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      'Option A is correct. ID structure: ft: prefix means "fine-tuned", gpt-3.5-turbo: base model used for fine-tuning, org: your OpenAI organization ID, suffix: your custom name (specified during fine-tuning), abc123: unique job ID. Why this matters: You can identify which base model (important for deprecation), you can organize models by suffix (e.g., "customer-support-v2"), you can track which org owns the model. Example usage: client.chat.completions.create(model="ft:gpt-3.5-turbo:org:support-v2:abc123"). Suffix tip: Use descriptive names with versions (task-v1, task-v2) for easy tracking.',
+      'Option A is correct. ID structure: ft: prefix means "fine-tuned", gpt-3.5-turbo: base model used for fine-tuning, org: your OpenAI organization ID, suffix: your custom name (specified during fine-tuning), abc123: unique job ID. Why this matters: You can identify which base model (important for deprecation), you can organize models by suffix (e.g., "customer-support-v2"), you can track which org owns the model. Example usage: client.chat.completions.create (model="ft:gpt-3.5-turbo:org:support-v2:abc123"). Suffix tip: Use descriptive names with versions (task-v1, task-v2) for easy tracking.',
   },
 ];

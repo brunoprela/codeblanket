@@ -59,7 +59,7 @@ export const numbersystemsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc5-numerical-stability',
     question:
-      'Why do we subtract the maximum value before computing softmax: exp(x - max(x)) / sum(exp(x - max(x)))?',
+      'Why do we subtract the maximum value before computing softmax: exp (x - max (x)) / sum (exp (x - max (x)))?',
     options: [
       'To make the computation faster',
       'To prevent numerical overflow when exponentiating large values',

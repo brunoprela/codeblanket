@@ -65,7 +65,7 @@ export const featureengineeringfundamentalsMultipleChoice: MultipleChoiceQuestio
       id: 'mc5',
       question: 'Why is documentation important in feature engineering?',
       options: [
-        "It's not important; only the model performance matters",
+        "It\'s not important; only the model performance matters",
         'To enable reproducibility, debugging, and understanding of what features represent',
         'To make the code look professional',
         'Documentation is only needed for complex features',

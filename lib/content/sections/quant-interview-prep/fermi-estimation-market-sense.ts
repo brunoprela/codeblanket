@@ -43,7 +43,7 @@ This section covers 30+ Fermi problems specific to trading and finance, with det
 **Step 1: Clarify**
 - Do we mean notional value (shares × price)?
 - Do we include pre-market and after-hours?
-- Let's assume regular trading hours, NYSE/NASDAQ
+- Let\'s assume regular trading hours, NYSE/NASDAQ
 
 **Step 2: Break Down**
 
@@ -167,8 +167,8 @@ Transaction cost components:
    - Cost: $100M × 0.0005 = $50,000
 
 2. Market impact (more significant for large orders):
-   - Rule of thumb: impact ∝ sqrt(order_size / daily_volume)
-   - Impact ≈ 0.5 × volatility × sqrt(participation_rate)
+   - Rule of thumb: impact ∝ sqrt (order_size / daily_volume)
+   - Impact ≈ 0.5 × volatility × sqrt (participation_rate)
    - If volatility = 2% daily
    - Impact ≈ 0.5 × 0.02 × sqrt(0.40) ≈ 0.63%
    - Cost: $100M × 0.0063 = $630,000
@@ -269,7 +269,7 @@ Average of approaches: ~$45 billion
 
 ### Problem 3.2: Netflix Subscriber Count
 
-**Question:** Estimate Netflix's global subscriber count.
+**Question:** Estimate Netflix\'s global subscriber count.
 
 **Solution:**
 
@@ -421,7 +421,7 @@ Slippage cost: 5,000 × $0.005 = $25
 
 ### Problem 6.1: VaR for a Portfolio
 
-**Question:** You have a $50 million portfolio with 2% daily volatility. What's your 1-day 95% VaR?
+**Question:** You have a $50 million portfolio with 2% daily volatility. What\'s your 1-day 95% VaR?
 
 **Solution:**
 
@@ -444,7 +444,7 @@ Interpretation:
 **Answer:** $1.65 million 1-day 95% VaR
 
 **Follow-up questions:**
-- **"What's 99% VaR?"** Z-score = 2.33, VaR = $2.33M
+- **"What\'s 99% VaR?"** Z-score = 2.33, VaR = $2.33M
 - **"What's 10-day VaR?"** Multiply by √10: $5.22M
 - **"What assumptions are you making?"** Normal returns, constant volatility, no autocorrelation
 
@@ -557,7 +557,7 @@ Try these on your own:
 8. Expected slippage for a $1B block trade
 9. Total clearing fees paid by all US traders annually
 
-**Remember:** It's about the process, not the exact answer!
+**Remember:** It\'s about the process, not the exact answer!
 
 ---
 

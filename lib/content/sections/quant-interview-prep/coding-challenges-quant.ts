@@ -56,9 +56,9 @@ Time: 30 minutes
 import math
 from typing import Optional
 
-def norm_cdf(x: float) -> float:
+def norm_cdf (x: float) -> float:
     """Cumulative distribution function for standard normal."""
-    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+    return 0.5 * (1 + math.erf (x / math.sqrt(2)))
 
 def black_scholes_call(S: float, K: float, T: float, r: float, sigma: float) -> Optional[float]:
     """
@@ -84,15 +84,15 @@ def black_scholes_call(S: float, K: float, T: float, r: float, sigma: float) -> 
     
     # Edge case: Zero volatility
     if sigma == 0:
-        future_value = S * math.exp(r * T)
-        return max(future_value - K, 0) * math.exp(-r * T)
+        future_value = S * math.exp (r * T)
+        return max (future_value - K, 0) * math.exp(-r * T)
     
     # Calculate d1 and d2
     d1 = (math.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * math.sqrt(T))
     d2 = d1 - sigma * math.sqrt(T)
     
     # Calculate option price
-    call_price = S * norm_cdf(d1) - K * math.exp(-r * T) * norm_cdf(d2)
+    call_price = S * norm_cdf (d1) - K * math.exp(-r * T) * norm_cdf (d2)
     
     return call_price
 
@@ -107,21 +107,21 @@ def black_scholes_put(S: float, K: float, T: float, r: float, sigma: float) -> O
 def test_black_scholes():
     # ATM option
     price = black_scholes_call(100, 100, 1.0, 0.05, 0.2)
-    assert abs(price - 10.45) < 0.1
+    assert abs (price - 10.45) < 0.1
     
     # OTM option
     price = black_scholes_call(100, 110, 1.0, 0.05, 0.2)
-    assert abs(price - 5.79) < 0.1
+    assert abs (price - 5.79) < 0.1
     
     # At expiration ITM
     price = black_scholes_call(110, 100, 0, 0.05, 0.2)
-    assert abs(price - 10) < 0.01
+    assert abs (price - 10) < 0.01
     
     # Put-call parity
     call = black_scholes_call(100, 100, 1.0, 0.05, 0.2)
     put = black_scholes_put(100, 100, 1.0, 0.05, 0.2)
     parity = call - put - (100 - 100 * math.exp(-0.05))
-    assert abs(parity) < 0.01
+    assert abs (parity) < 0.01
     
     print("✓ All tests passed!")
 
@@ -158,7 +158,7 @@ def implied_volatility(
     
     sigma = 0.2  # Initial guess
     
-    for i in range(max_iter):
+    for i in range (max_iter):
         # Calculate price and vega at current sigma
         if option_type == 'call':
             price = black_scholes_call(S, K, T, r, sigma)
@@ -170,7 +170,7 @@ def implied_volatility(
         
         diff = price - market_price
         
-        if abs(diff) < tolerance:
+        if abs (diff) < tolerance:
             return sigma
         
         # Calculate vega
@@ -182,15 +182,15 @@ def implied_volatility(
         
         # Newton-Raphson update
         sigma = sigma - diff / vega
-        sigma = max(sigma, 0.001)  # Keep positive
+        sigma = max (sigma, 0.001)  # Keep positive
     
     return None
 
 # Test
 true_sigma = 0.25
 market_price = black_scholes_call(100, 100, 1.0, 0.05, true_sigma)
-implied = implied_volatility(market_price, 100, 100, 1.0, 0.05, 'call')
-assert abs(implied - true_sigma) < 1e-4
+implied = implied_volatility (market_price, 100, 100, 1.0, 0.05, 'call')
+assert abs (implied - true_sigma) < 1e-4
 print("✓ Implied volatility test passed!")
 \`\`\`
 
@@ -222,7 +222,7 @@ class OrderBook:
         self.orders = {}  # order_id -> (price, quantity, side)
         self.timestamp = 0
     
-    def add_order(self, order_id: int, side: str, price: float, quantity: int) -> bool:
+    def add_order (self, order_id: int, side: str, price: float, quantity: int) -> bool:
         """Add limit order. Time: O(log n)"""
         if order_id in self.orders or quantity <= 0:
             return False
@@ -231,35 +231,35 @@ class OrderBook:
         self.orders[order_id] = (price, quantity, side)
         
         if side == 'BUY':
-            heapq.heappush(self.bids, (-price, self.timestamp, order_id, quantity))
+            heapq.heappush (self.bids, (-price, self.timestamp, order_id, quantity))
         else:
-            heapq.heappush(self.asks, (price, self.timestamp, order_id, quantity))
+            heapq.heappush (self.asks, (price, self.timestamp, order_id, quantity))
         
         return True
     
-    def cancel_order(self, order_id: int) -> bool:
+    def cancel_order (self, order_id: int) -> bool:
         """Cancel order. Time: O(1) amortized"""
         if order_id not in self.orders:
             return False
         del self.orders[order_id]
         return True
     
-    def _clean_heap(self, heap: List):
+    def _clean_heap (self, heap: List):
         """Remove canceled orders from heap top."""
         while heap and heap[0][2] not in self.orders:
-            heapq.heappop(heap)
+            heapq.heappop (heap)
     
-    def get_best_bid(self) -> Optional[float]:
+    def get_best_bid (self) -> Optional[float]:
         """Get best bid price. Time: O(log n) worst case"""
-        self._clean_heap(self.bids)
+        self._clean_heap (self.bids)
         return -self.bids[0][0] if self.bids else None
     
-    def get_best_ask(self) -> Optional[float]:
+    def get_best_ask (self) -> Optional[float]:
         """Get best ask price."""
-        self._clean_heap(self.asks)
+        self._clean_heap (self.asks)
         return self.asks[0][0] if self.asks else None
     
-    def get_spread(self) -> Optional[float]:
+    def get_spread (self) -> Optional[float]:
         """Get bid-ask spread."""
         bid, ask = self.get_best_bid(), self.get_best_ask()
         return (ask - bid) if (bid and ask) else None
@@ -270,7 +270,7 @@ book.add_order(1, 'BUY', 100.0, 10)
 book.add_order(2, 'SELL', 101.0, 5)
 assert book.get_best_bid() == 100.0
 assert book.get_best_ask() == 101.0
-assert abs(book.get_spread() - 1.0) < 0.01
+assert abs (book.get_spread() - 1.0) < 0.01
 print("✓ Order book tests passed!")
 \`\`\`
 
@@ -307,11 +307,11 @@ def backtest_ma_crossover(
     df = pd.DataFrame({'price': prices})
     
     # Calculate MAs
-    df['fast_ma'] = df['price'].rolling(fast_period).mean()
-    df['slow_ma'] = df['price'].rolling(slow_period).mean()
+    df['fast_ma'] = df['price'].rolling (fast_period).mean()
+    df['slow_ma'] = df['price'].rolling (slow_period).mean()
     
     # Generate signals
-    df['signal'] = (df['fast_ma'] > df['slow_ma']).astype(int)
+    df['signal'] = (df['fast_ma'] > df['slow_ma']).astype (int)
     
     # Calculate returns
     df['returns'] = df['price'].pct_change()
@@ -330,13 +330,13 @@ def backtest_ma_crossover(
     return {
         'total_return': total_return,
         'sharpe_ratio': sharpe,
-        'num_trades': int(num_trades)
+        'num_trades': int (num_trades)
     }
 
 # Test
 np.random.seed(42)
 prices = 100 * (1 + np.random.randn(500) * 0.02).cumprod()
-results = backtest_ma_crossover(prices)
+results = backtest_ma_crossover (prices)
 print(f"Total return: {results['total_return']:.2%}")
 print(f"Sharpe ratio: {results['sharpe_ratio']:.2f}")
 print(f"Trades: {results['num_trades']}")
@@ -360,7 +360,7 @@ Time: 30 minutes
 import numpy as np
 from scipy.optimize import minimize
 
-def optimize_portfolio(returns: np.ndarray, cov_matrix: np.ndarray, target_return: float = None) -> dict:
+def optimize_portfolio (returns: np.ndarray, cov_matrix: np.ndarray, target_return: float = None) -> dict:
     """
     Find minimum variance portfolio.
     
@@ -372,14 +372,14 @@ def optimize_portfolio(returns: np.ndarray, cov_matrix: np.ndarray, target_retur
     Returns:
         Dictionary with optimal weights and stats
     """
-    n = len(returns)
+    n = len (returns)
     
     # Objective: minimize variance
-    def objective(weights):
+    def objective (weights):
         return weights @ cov_matrix @ weights
     
     # Constraints: weights sum to 1
-    constraints = [{'type': 'eq', 'fun': lambda w: np.sum(w) - 1}]
+    constraints = [{'type': 'eq', 'fun': lambda w: np.sum (w) - 1}]
     
     if target_return is not None:
         constraints.append({
@@ -388,17 +388,17 @@ def optimize_portfolio(returns: np.ndarray, cov_matrix: np.ndarray, target_retur
         })
     
     # Bounds: long only
-    bounds = tuple((0, 1) for _ in range(n))
+    bounds = tuple((0, 1) for _ in range (n))
     
     # Initial guess
-    w0 = np.ones(n) / n
+    w0 = np.ones (n) / n
     
     # Optimize
-    result = minimize(objective, w0, method='SLSQP', bounds=bounds, constraints=constraints)
+    result = minimize (objective, w0, method='SLSQP', bounds=bounds, constraints=constraints)
     
     weights = result.x
     port_return = weights @ returns
-    port_vol = np.sqrt(weights @ cov_matrix @ weights)
+    port_vol = np.sqrt (weights @ cov_matrix @ weights)
     
     return {
         'weights': weights,
@@ -413,7 +413,7 @@ cov = np.array([[0.04, 0.01, 0.02],
                 [0.01, 0.09, 0.03],
                 [0.02, 0.03, 0.05]])
 
-result = optimize_portfolio(returns, cov)
+result = optimize_portfolio (returns, cov)
 print(f"Optimal weights: {result['weights']}")
 print(f"Expected return: {result['return']:.2%}")
 print(f"Volatility: {result['volatility']:.2%}")
@@ -434,7 +434,7 @@ Difficulty: Hard
 Time: 30 minutes
 """
 
-def max_profit_k_transactions(prices: list, k: int) -> int:
+def max_profit_k_transactions (prices: list, k: int) -> int:
     """
     Find maximum profit with at most k buy-sell transactions.
     
@@ -448,20 +448,20 @@ def max_profit_k_transactions(prices: list, k: int) -> int:
     if not prices or k == 0:
         return 0
     
-    n = len(prices)
+    n = len (prices)
     
     # Optimization: if k >= n/2, can do unlimited transactions
     if k >= n // 2:
-        return sum(max(prices[i] - prices[i-1], 0) for i in range(1, n))
+        return sum (max (prices[i] - prices[i-1], 0) for i in range(1, n))
     
     # DP arrays
     buy = [-float('inf')] * (k + 1)
     sell = [0] * (k + 1)
     
     for price in prices:
-        for j in range(k, 0, -1):
-            sell[j] = max(sell[j], buy[j] + price)
-            buy[j] = max(buy[j], sell[j-1] - price)
+        for j in range (k, 0, -1):
+            sell[j] = max (sell[j], buy[j] + price)
+            buy[j] = max (buy[j], sell[j-1] - price)
     
     return sell[k]
 

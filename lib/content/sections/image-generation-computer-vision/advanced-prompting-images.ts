@@ -84,29 +84,29 @@ class PromptStructure:
         parts = []
         
         # 1. Subject (what)
-        parts.append(subject)
+        parts.append (subject)
         
         # 2. Action (doing what)
         if action:
-            parts.append(action)
+            parts.append (action)
         
         # 3. Context (where, when)
         if context:
-            parts.append(context)
+            parts.append (context)
         
         # 4. Style
         if style:
-            parts.append(style)
+            parts.append (style)
         
         # 5. Technical details
         if technical:
-            parts.extend(technical)
+            parts.extend (technical)
         
         # 6. Quality modifiers
         if quality:
-            parts.extend(quality)
+            parts.extend (quality)
         
-        return ", ".join(parts)
+        return ", ".join (parts)
     
     @staticmethod
     def build_photography_prompt(
@@ -124,9 +124,9 @@ class PromptStructure:
         ]
         
         if camera:
-            parts.append(f"shot on {camera}")
+            parts.append (f"shot on {camera}")
         if lens:
-            parts.append(f"{lens} lens")
+            parts.append (f"{lens} lens")
         
         parts.extend([
             style,
@@ -134,7 +134,7 @@ class PromptStructure:
             "sharp focus"
         ])
         
-        return ", ".join(parts)
+        return ", ".join (parts)
     
     @staticmethod
     def build_art_prompt(
@@ -150,11 +150,11 @@ class PromptStructure:
         ]
         
         if artist_reference:
-            parts.append(f"in the style of {artist_reference}")
+            parts.append (f"in the style of {artist_reference}")
         if medium:
-            parts.append(f"{medium} medium")
+            parts.append (f"{medium} medium")
         if mood:
-            parts.append(f"{mood} mood")
+            parts.append (f"{mood} mood")
         
         parts.extend([
             "highly detailed",
@@ -162,7 +162,7 @@ class PromptStructure:
             "trending on artstation"
         ])
         
-        return ", ".join(parts)
+        return ", ".join (parts)
 
 # Examples
 builder = PromptStructure()
@@ -246,7 +246,7 @@ specificity_examples = {
     }
 }
 
-def improve_subject_description(basic_subject: str) -> dict:
+def improve_subject_description (basic_subject: str) -> dict:
     """
     Suggest improvements for subject description.
     """
@@ -310,7 +310,7 @@ class NegativePromptBuilder:
     ]
     
     @classmethod
-    def build_for_photography(cls) -> str:
+    def build_for_photography (cls) -> str:
         """Negative prompt for realistic photography."""
         negatives = (
             cls.QUALITY_NEGATIVES +
@@ -320,10 +320,10 @@ class NegativePromptBuilder:
                 "illustration", "3d render", "cgi"
             ]
         )
-        return ", ".join(negatives)
+        return ", ".join (negatives)
     
     @classmethod
-    def build_for_portrait(cls) -> str:
+    def build_for_portrait (cls) -> str:
         """Negative prompt for portraits."""
         negatives = (
             cls.QUALITY_NEGATIVES +
@@ -334,23 +334,23 @@ class NegativePromptBuilder:
                 "bad skin", "bad teeth", "multiple heads"
             ]
         )
-        return ", ".join(negatives)
+        return ", ".join (negatives)
     
     @classmethod
-    def build_for_art(cls) -> str:
+    def build_for_art (cls) -> str:
         """Negative prompt for artistic work."""
         negatives = cls.QUALITY_NEGATIVES + [
             "photorealistic", "photo", "photograph",
             "ugly", "messy", "cluttered"
         ]
-        return ", ".join(negatives)
+        return ", ".join (negatives)
     
     @classmethod
-    def custom(cls, avoid: List[str]) -> str:
+    def custom (cls, avoid: List[str]) -> str:
         """Build custom negative prompt."""
         base = cls.QUALITY_NEGATIVES.copy()
-        base.extend(avoid)
-        return ", ".join(base)
+        base.extend (avoid)
+        return ", ".join (base)
 
 # Usage
 neg_builder = NegativePromptBuilder()
@@ -388,17 +388,17 @@ class PromptWeighting:
     """
     
     @staticmethod
-    def emphasize(text: str, weight: float = 1.3) -> str:
+    def emphasize (text: str, weight: float = 1.3) -> str:
         """Emphasize a term."""
         return f"({text}:{weight})"
     
     @staticmethod
-    def de_emphasize(text: str, weight: float = 0.7) -> str:
+    def de_emphasize (text: str, weight: float = 0.7) -> str:
         """De-emphasize a term."""
         return f"({text}:{weight})"
     
     @staticmethod
-    def build_weighted_prompt(elements: dict) -> str:
+    def build_weighted_prompt (elements: dict) -> str:
         """
         Build prompt with different weights.
         
@@ -409,11 +409,11 @@ class PromptWeighting:
         
         for text, weight in elements.items():
             if weight != 1.0:
-                weighted.append(f"({text}:{weight})")
+                weighted.append (f"({text}:{weight})")
             else:
-                weighted.append(text)
+                weighted.append (text)
         
-        return ", ".join(weighted)
+        return ", ".join (weighted)
 
 # Examples
 weighter = PromptWeighting()
@@ -526,7 +526,7 @@ def build_photography_style_prompt(
     """
     Build prompt with photography style.
     """
-    style_config = photography_styles.get(style, photography_styles["portrait"])
+    style_config = photography_styles.get (style, photography_styles["portrait"])
     
     prompt_parts = [
         f"{style_config['style_terms'][0]} of {subject}",
@@ -537,7 +537,7 @@ def build_photography_style_prompt(
         "award-winning photography"
     ]
     
-    return ", ".join(prompt_parts)
+    return ", ".join (prompt_parts)
 
 # Examples
 portrait_prompt = build_photography_style_prompt(
@@ -628,7 +628,7 @@ def build_artistic_prompt(
     include_artist: bool = True
 ) -> str:
     """Build artistic style prompt."""
-    style_config = artistic_styles.get(style, artistic_styles["digital_art"])
+    style_config = artistic_styles.get (style, artistic_styles["digital_art"])
     
     parts = [
         f"{style_config['descriptors'][0]} of {subject}",
@@ -639,7 +639,7 @@ def build_artistic_prompt(
         artist = style_config['artist_references'][0]
         parts.insert(1, f"in the style of {artist}")
     
-    return ", ".join(parts)
+    return ", ".join (parts)
 
 # Examples
 digital_art = build_artistic_prompt(
@@ -694,9 +694,9 @@ lighting_guide = {
     }
 }
 
-def add_lighting(base_prompt: str, lighting_type: str, category: str = "natural") -> str:
+def add_lighting (base_prompt: str, lighting_type: str, category: str = "natural") -> str:
     """Add lighting description to prompt."""
-    lighting = lighting_guide.get(category, {}).get(lighting_type, "")
+    lighting = lighting_guide.get (category, {}).get (lighting_type, "")
     
     if lighting:
         return f"{base_prompt}, {lighting} lighting"
@@ -756,21 +756,21 @@ class CompositionBuilder:
     """Build prompts with specific composition."""
     
     @staticmethod
-    def with_angle(subject: str, angle: str) -> str:
+    def with_angle (subject: str, angle: str) -> str:
         """Add camera angle."""
-        angle_desc = composition_guide["camera_angles"].get(angle, "")
+        angle_desc = composition_guide["camera_angles"].get (angle, "")
         return f"{angle} view of {subject}, {angle_desc}"
     
     @staticmethod
-    def with_shot_type(subject: str, shot: str) -> str:
+    def with_shot_type (subject: str, shot: str) -> str:
         """Add shot type."""
-        shot_desc = composition_guide["shot_types"].get(shot, "")
+        shot_desc = composition_guide["shot_types"].get (shot, "")
         return f"{shot} of {subject}, {shot_desc}"
     
     @staticmethod
-    def with_framing(subject: str, framing: str) -> str:
+    def with_framing (subject: str, framing: str) -> str:
         """Add framing technique."""
-        frame_desc = composition_guide["framing"].get(framing, "")
+        frame_desc = composition_guide["framing"].get (framing, "")
         return f"{subject}, {frame_desc} composition"
 
 comp = CompositionBuilder()
@@ -842,18 +842,18 @@ def add_quality_boosters(
     """
     Add quality-boosting terms to prompt.
     """
-    boosters = quality_modifiers.get(boost_type, quality_modifiers["professional"])
+    boosters = quality_modifiers.get (boost_type, quality_modifiers["professional"])
     selected = boosters[:count]
     
-    return f"{prompt}, {', '.join(selected)}"
+    return f"{prompt}, {', '.join (selected)}"
 
 # Examples
 photo = "a portrait of a businessman"
-boosted = add_quality_boosters(photo, "professional", 3)
+boosted = add_quality_boosters (photo, "professional", 3)
 # "a portrait of a businessman, professional photography, award-winning, masterpiece"
 
 art = "a fantasy landscape with castle"
-boosted_art = add_quality_boosters(art, "artistic", 2)
+boosted_art = add_quality_boosters (art, "artistic", 2)
 # "a fantasy landscape with castle, trending on artstation, behance HD"
 \`\`\`
 
@@ -1038,7 +1038,7 @@ class PromptTester:
         """Test different negative prompts."""
         results = {}
         
-        for i, negative in enumerate(negative_variations):
+        for i, negative in enumerate (negative_variations):
             images = self.generator.generate(
                 prompt=prompt,
                 negative_prompt=negative,
@@ -1053,7 +1053,7 @@ class PromptTester:
         return results
 
 # Example: Test style variations
-# tester = PromptTester(generator)
+# tester = PromptTester (generator)
 
 # style_tests = tester.test_variations(
 #     base_prompt="a portrait of a woman",

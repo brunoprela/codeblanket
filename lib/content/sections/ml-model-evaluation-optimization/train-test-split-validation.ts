@@ -42,8 +42,8 @@ np.random.seed(42)
 n_samples = 1000
 
 # Features and target
-X = np.random.randn(n_samples, 5)
-y = 2*X[:, 0] + 3*X[:, 1] - X[:, 2] + np.random.randn(n_samples)*0.5
+X = np.random.randn (n_samples, 5)
+y = 2*X[:, 0] + 3*X[:, 1] - X[:, 2] + np.random.randn (n_samples)*0.5
 
 print(f"Total samples: {n_samples}")
 print(f"Features shape: {X.shape}")
@@ -103,7 +103,7 @@ print(f"Test set: {len(X_test)} samples ({len(X_test)/len(X)*100:.1f}%)")
 print(f"Total: {len(X_train) + len(X_val) + len(X_test)} samples")
 
 # Verify no data leakage
-print(f"\\nAny overlap between train and test? {len(set(range(len(X_train))).intersection(set(range(len(X_train), len(X_train)+len(X_test))))) > 0}")
+print(f"\\nAny overlap between train and test? {len (set (range (len(X_train))).intersection (set (range (len(X_train), len(X_train)+len(X_test))))) > 0}")
 \`\`\`
 
 **Output:**
@@ -135,9 +135,9 @@ X_class, y_class = make_classification(
 )
 
 print("Original class distribution:")
-unique, counts = np.unique(y_class, return_counts=True)
-for cls, count in zip(unique, counts):
-    print(f"  Class {cls}: {count} ({count/len(y_class)*100:.1f}%)")
+unique, counts = np.unique (y_class, return_counts=True)
+for cls, count in zip (unique, counts):
+    print(f"  Class {cls}: {count} ({count/len (y_class)*100:.1f}%)")
 
 # Regular split (might not preserve class distribution)
 X_train_reg, X_test_reg, y_train_reg, y_test_reg = train_test_split(
@@ -145,9 +145,9 @@ X_train_reg, X_test_reg, y_train_reg, y_test_reg = train_test_split(
 )
 
 print("\\nRegular split - Test set distribution:")
-unique, counts = np.unique(y_test_reg, return_counts=True)
-for cls, count in zip(unique, counts):
-    print(f"  Class {cls}: {count} ({count/len(y_test_reg)*100:.1f}%)")
+unique, counts = np.unique (y_test_reg, return_counts=True)
+for cls, count in zip (unique, counts):
+    print(f"  Class {cls}: {count} ({count/len (y_test_reg)*100:.1f}%)")
 
 # Stratified split (preserves class distribution)
 X_train_strat, X_test_strat, y_train_strat, y_test_strat = train_test_split(
@@ -158,9 +158,9 @@ X_train_strat, X_test_strat, y_train_strat, y_test_strat = train_test_split(
 )
 
 print("\\nStratified split - Test set distribution:")
-unique, counts = np.unique(y_test_strat, return_counts=True)
-for cls, count in zip(unique, counts):
-    print(f"  Class {cls}: {count} ({count/len(y_test_strat)*100:.1f}%)")
+unique, counts = np.unique (y_test_strat, return_counts=True)
+for cls, count in zip (unique, counts):
+    print(f"  Class {cls}: {count} ({count/len (y_test_strat)*100:.1f}%)")
 \`\`\`
 
 **Output:**
@@ -190,32 +190,32 @@ For time series data, **random shuffling breaks temporal dependencies**. You mus
 dates = pd.date_range('2020-01-01', periods=365, freq='D')
 time_series_data = pd.DataFrame({
     'date': dates,
-    'value': np.cumsum(np.random.randn(365)) + 100,  # Random walk
+    'value': np.cumsum (np.random.randn(365)) + 100,  # Random walk
     'feature1': np.random.randn(365),
     'feature2': np.random.randn(365)
 })
 
-print(f"Time series length: {len(time_series_data)} days")
+print(f"Time series length: {len (time_series_data)} days")
 print(f"Date range: {time_series_data['date'].min()} to {time_series_data['date'].max()}")
 
 # WRONG: Random split (destroys temporal order)
 # X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True)  # DON'T DO THIS!
 
 # CORRECT: Sequential split (preserves time order)
-train_size = int(0.8 * len(time_series_data))
+train_size = int(0.8 * len (time_series_data))
 train_data = time_series_data[:train_size]
 test_data = time_series_data[train_size:]
 
 print(f"\\nTraining period: {train_data['date'].min()} to {train_data['date'].max()}")
 print(f"Test period: {test_data['date'].min()} to {test_data['date'].max()}")
-print(f"Training samples: {len(train_data)}")
-print(f"Test samples: {len(test_data)}")
+print(f"Training samples: {len (train_data)}")
+print(f"Test samples: {len (test_data)}")
 
 # Visualize the split
-plt.figure(figsize=(12, 4))
-plt.plot(train_data['date'], train_data['value'], label='Training', color='blue', alpha=0.7)
-plt.plot(test_data['date'], test_data['value'], label='Test', color='orange', alpha=0.7)
-plt.axvline(train_data['date'].iloc[-1], color='red', linestyle='--', label='Split point')
+plt.figure (figsize=(12, 4))
+plt.plot (train_data['date'], train_data['value'], label='Training', color='blue', alpha=0.7)
+plt.plot (test_data['date'], test_data['value'], label='Test', color='orange', alpha=0.7)
+plt.axvline (train_data['date'].iloc[-1], color='red', linestyle='--', label='Split point')
 plt.xlabel('Date')
 plt.ylabel('Value')
 plt.title('Time Series Train-Test Split')
@@ -251,11 +251,11 @@ data = np.arange(20)
 print(f"Original data: {data}")
 
 # With shuffle (default for non-time-series)
-_, test_shuffled = train_test_split(data, test_size=0.3, random_state=42, shuffle=True)
-print(f"Test set with shuffle: {sorted(test_shuffled)}")
+_, test_shuffled = train_test_split (data, test_size=0.3, random_state=42, shuffle=True)
+print(f"Test set with shuffle: {sorted (test_shuffled)}")
 
 # Without shuffle (for time series)
-train_no_shuffle, test_no_shuffle = train_test_split(data, test_size=0.3, random_state=42, shuffle=False)
+train_no_shuffle, test_no_shuffle = train_test_split (data, test_size=0.3, random_state=42, shuffle=False)
 print(f"Train set without shuffle: {train_no_shuffle}")
 print(f"Test set without shuffle: {test_no_shuffle}")
 \`\`\`
@@ -296,7 +296,7 @@ X_train_wrong, X_test_wrong, y_train_wrong, y_test_wrong = train_test_split(
 model_wrong = LinearRegression()
 model_wrong.fit(X_train_wrong, y_train_wrong)
 y_pred_wrong = model_wrong.predict(X_test_wrong)
-r2_wrong = r2_score(y_test_wrong, y_pred_wrong)
+r2_wrong = r2_score (y_test_wrong, y_pred_wrong)
 print(f"R² score: {r2_wrong:.4f}")
 print("Problem: Test set statistics influenced the scaling!")
 
@@ -314,7 +314,7 @@ X_test_correct = scaler_correct.transform(X_test_correct)  # Use training statis
 model_correct = LinearRegression()
 model_correct.fit(X_train_correct, y_train_correct)
 y_pred_correct = model_correct.predict(X_test_correct)
-r2_correct = r2_score(y_test_correct, y_pred_correct)
+r2_correct = r2_score (y_test_correct, y_pred_correct)
 print(f"R² score: {r2_correct:.4f}")
 print("✅ Test set was scaled using only training statistics!")
 \`\`\`
@@ -340,8 +340,8 @@ from sklearn.linear_model import Ridge
 # ✅ BEST PRACTICE: Use Pipeline to prevent leakage
 pipeline = Pipeline([
     ('scaler', StandardScaler()),
-    ('poly', PolynomialFeatures(degree=2)),
-    ('model', Ridge(alpha=1.0))
+    ('poly', PolynomialFeatures (degree=2)),
+    ('model', Ridge (alpha=1.0))
 ])
 
 # Split data FIRST
@@ -353,7 +353,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 pipeline.fit(X_train, y_train)
 y_pred = pipeline.predict(X_test)
 
-print(f"Pipeline R² score: {r2_score(y_test, y_pred):.4f}")
+print(f"Pipeline R² score: {r2_score (y_test, y_pred):.4f}")
 print("✅ Pipeline automatically prevents data leakage!")
 \`\`\`
 
@@ -396,18 +396,18 @@ print(f"  Validation: {len(X_val)} samples")
 print(f"  Test: {len(X_test)} samples")
 
 # Step 3: Train model on training set
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Step 4: Evaluate on validation set (for hyperparameter tuning)
 y_val_pred = model.predict(X_val)
-val_rmse = np.sqrt(mean_squared_error(y_val, y_val_pred))
+val_rmse = np.sqrt (mean_squared_error (y_val, y_val_pred))
 print(f"\\nValidation RMSE: \${val_rmse*100000:.2f}")
 
 # Step 5: Final evaluation on test set (only once!)
 y_test_pred = model.predict(X_test)
-test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
-test_r2 = r2_score(y_test, y_test_pred)
+test_rmse = np.sqrt (mean_squared_error (y_test, y_test_pred))
+test_r2 = r2_score (y_test, y_test_pred)
 print(f"\\nFinal Test Performance:")
 print(f"  RMSE: \${test_rmse*100000:.2f}")
 print(f"  R²: {test_r2:.4f}")
@@ -434,7 +434,7 @@ Final Test Performance:
 
 ## Best Practices Summary
 
-### Do's ✅
+### Do\'s ✅
 1. **Always split before any preprocessing** to avoid data leakage
 2. **Use stratified splitting** for classification with imbalanced classes
 3. **Use sequential splitting** for time series data (no shuffling)
@@ -466,7 +466,7 @@ print(f"Training: {len(X_train_wrong)}, Test: {len(X_test_wrong)}")  # Oops!
 
 # Pitfall 3: Forgetting to split y
 # Must split both X and y together
-X_train, X_test = train_test_split(X, test_size=0.2)  # Wrong! Where's y?
+X_train, X_test = train_test_split(X, test_size=0.2)  # Wrong! Where\'s y?
 
 # Pitfall 4: Using test set for feature engineering
 # This leaks information about test set into your model

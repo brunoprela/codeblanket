@@ -40,14 +40,14 @@ export const nlpDiscussionQuestions = [
 
 **NLP Implementation**:
 \`\`\`python
-def detect_evasiveness(current_mda, prior_mda):
+def detect_evasiveness (current_mda, prior_mda):
     hedge_words = ['approximately', 'substantially', 'potentially', 'certain']
     
-    current_hedges = count_words(current_mda, hedge_words)
-    prior_hedges = count_words(prior_mda, hedge_words)
+    current_hedges = count_words (current_mda, hedge_words)
+    prior_hedges = count_words (prior_mda, hedge_words)
     
-    fog_current = calculate_fog_index(current_mda)
-    fog_prior = calculate_fog_index(prior_mda)
+    fog_current = calculate_fog_index (current_mda)
+    fog_prior = calculate_fog_index (prior_mda)
     
     if current_hedges > prior_hedges * 1.3 and fog_current > fog_prior + 2:
         return "HIGH EVASIVENESS - Management obfuscating"

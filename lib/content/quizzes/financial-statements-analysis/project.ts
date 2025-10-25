@@ -15,11 +15,11 @@ CREATE TABLE computed_metrics (id, company_id, period_end, roe, roa, current_rat
 CREATE TABLE quality_scores (id, company_id, period_end, beneish, altman, piotroski, ...);
 
 -- Indexes for performance
-CREATE INDEX idx_company_period ON income_statements(company_id, period_end);
-CREATE INDEX idx_ticker ON companies(ticker);
+CREATE INDEX idx_company_period ON income_statements (company_id, period_end);
+CREATE INDEX idx_ticker ON companies (ticker);
 
 -- Constraints
-ALTER TABLE income_statements ADD CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE income_statements ADD CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES companies (id);
 UNIQUE(company_id, period_end, fiscal_quarter);
 \`\`\`
 
@@ -34,15 +34,15 @@ UNIQUE(company_id, period_end, fiscal_quarter);
 
 \`\`\`python
 class AlertSystem:
-    def check_interest_coverage(self, company_id, new_data):
+    def check_interest_coverage (self, company_id, new_data):
         current_coverage = new_data['ebit'] / new_data['interest_expense']
         
         if current_coverage < 3.0:
-            prior_coverage = self.get_prior_quarter_coverage(company_id)
+            prior_coverage = self.get_prior_quarter_coverage (company_id)
             
             alert = {
                 'severity': 'HIGH' if current_coverage < 2.0 else 'MEDIUM',
-                'company': self.get_company_name(company_id),
+                'company': self.get_company_name (company_id),
                 'metric': 'Interest Coverage',
                 'current': current_coverage,
                 'prior': prior_coverage,
@@ -50,9 +50,9 @@ class AlertSystem:
                 'message': f"Interest coverage dropped to {current_coverage:.1f}x from {prior_coverage:.1f}x"
             }
             
-            self.send_email(alert)
-            self.post_to_slack(alert)
-            self.log_to_database(alert)
+            self.send_email (alert)
+            self.post_to_slack (alert)
+            self.log_to_database (alert)
 \`\`\`
 
 **Trigger**: Run after each quarterly data update. **Channels**: Email, Slack, database logging. **Escalation**: Critical (<2x) alerts go to senior analysts immediately.`,
@@ -67,8 +67,8 @@ class AlertSystem:
 \`\`\`python
 # API endpoint
 @app.get("/api/companies/{ticker}/trends")
-def get_trends(ticker: str, metrics: List[str], years: int = 5):
-    company_id = get_company_id(ticker)
+def get_trends (ticker: str, metrics: List[str], years: int = 5):
+    company_id = get_company_id (ticker)
     
     data = db.query("""
         SELECT period_end, roe, debt_to_ebitda, fcf_margin

@@ -111,37 +111,37 @@ class CodebaseWatcher(FileSystemEventHandler):
             '.venv', 'venv', 'dist', 'build'
         }
         
-    def should_ignore(self, path: str) -> bool:
+    def should_ignore (self, path: str) -> bool:
         """Check if path should be ignored"""
-        path_obj = Path(path)
+        path_obj = Path (path)
         return any(
             ignored in path_obj.parts 
             for ignored in self.ignored_patterns
         )
     
-    def on_modified(self, event):
+    def on_modified (self, event):
         """Handle file modification"""
-        if event.is_directory or self.should_ignore(event.src_path):
+        if event.is_directory or self.should_ignore (event.src_path):
             return
         
-        logger.info(f"File modified: {event.src_path}")
-        asyncio.create_task(self.on_change(event.src_path, "modified"))
+        logger.info (f"File modified: {event.src_path}")
+        asyncio.create_task (self.on_change (event.src_path, "modified"))
     
-    def on_created(self, event):
+    def on_created (self, event):
         """Handle file creation"""
-        if event.is_directory or self.should_ignore(event.src_path):
+        if event.is_directory or self.should_ignore (event.src_path):
             return
         
-        logger.info(f"File created: {event.src_path}")
-        asyncio.create_task(self.on_change(event.src_path, "created"))
+        logger.info (f"File created: {event.src_path}")
+        asyncio.create_task (self.on_change (event.src_path, "created"))
     
-    def on_deleted(self, event):
+    def on_deleted (self, event):
         """Handle file deletion"""
-        if event.is_directory or self.should_ignore(event.src_path):
+        if event.is_directory or self.should_ignore (event.src_path):
             return
         
-        logger.info(f"File deleted: {event.src_path}")
-        asyncio.create_task(self.on_change(event.src_path, "deleted"))
+        logger.info (f"File deleted: {event.src_path}")
+        asyncio.create_task (self.on_change (event.src_path, "deleted"))
 
 
 class FileSystemManager:
@@ -150,25 +150,25 @@ class FileSystemManager:
     """
     
     def __init__(self, root_path: Path):
-        self.root_path = Path(root_path)
+        self.root_path = Path (root_path)
         self.observer = None
         self.file_cache = {}
         
-    async def start_watching(self, on_change: Callable):
+    async def start_watching (self, on_change: Callable):
         """Start watching for file changes"""
         self.observer = Observer()
-        handler = CodebaseWatcher(self.root_path, on_change)
-        self.observer.schedule(handler, str(self.root_path), recursive=True)
+        handler = CodebaseWatcher (self.root_path, on_change)
+        self.observer.schedule (handler, str (self.root_path), recursive=True)
         self.observer.start()
-        logger.info(f"Started watching: {self.root_path}")
+        logger.info (f"Started watching: {self.root_path}")
     
-    def stop_watching(self):
+    def stop_watching (self):
         """Stop watching for file changes"""
         if self.observer:
             self.observer.stop()
             self.observer.join()
     
-    async def read_file(self, file_path: Path) -> str:
+    async def read_file (self, file_path: Path) -> str:
         """Read file contents with caching"""
         file_path = self.root_path / file_path
         
@@ -178,73 +178,73 @@ class FileSystemManager:
         
         # Read from disk
         try:
-            content = file_path.read_text(encoding='utf-8')
+            content = file_path.read_text (encoding='utf-8')
             self.file_cache[file_path] = content
             return content
         except Exception as e:
-            logger.error(f"Error reading {file_path}: {e}")
+            logger.error (f"Error reading {file_path}: {e}")
             raise
     
-    async def write_file(self, file_path: Path, content: str):
+    async def write_file (self, file_path: Path, content: str):
         """Write file contents"""
         file_path = self.root_path / file_path
         
         # Create directories if needed
-        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.parent.mkdir (parents=True, exist_ok=True)
         
         # Write file
-        file_path.write_text(content, encoding='utf-8')
+        file_path.write_text (content, encoding='utf-8')
         
         # Update cache
         self.file_cache[file_path] = content
         
-        logger.info(f"Wrote file: {file_path}")
+        logger.info (f"Wrote file: {file_path}")
     
-    async def list_files(self, pattern: str = "**/*.py") -> list[Path]:
+    async def list_files (self, pattern: str = "**/*.py") -> list[Path]:
         """List files matching pattern"""
         files = []
-        for file_path in self.root_path.glob(pattern):
+        for file_path in self.root_path.glob (pattern):
             if file_path.is_file():
-                rel_path = file_path.relative_to(self.root_path)
-                files.append(rel_path)
+                rel_path = file_path.relative_to (self.root_path)
+                files.append (rel_path)
         return files
     
-    def get_file_tree(self) -> dict:
+    def get_file_tree (self) -> dict:
         """
         Get hierarchical file tree structure
         """
-        def build_tree(path: Path) -> dict:
+        def build_tree (path: Path) -> dict:
             tree = {
                 "name": path.name,
-                "path": str(path.relative_to(self.root_path)),
+                "path": str (path.relative_to (self.root_path)),
                 "type": "directory" if path.is_dir() else "file"
             }
             
             if path.is_dir():
                 children = []
                 try:
-                    for child in sorted(path.iterdir()):
+                    for child in sorted (path.iterdir()):
                         # Skip ignored directories
                         if child.name.startswith('.') or child.name in {'node_modules', '__pycache__'}:
                             continue
-                        children.append(build_tree(child))
+                        children.append (build_tree (child))
                     tree["children"] = children
                 except PermissionError:
                     pass
             
             return tree
         
-        return build_tree(self.root_path)
+        return build_tree (self.root_path)
 
 
 # Usage Example
-async def on_file_change(file_path: str, event_type: str):
+async def on_file_change (file_path: str, event_type: str):
     """Handle file change events"""
     print(f"File {event_type}: {file_path}")
     # Re-index file, update context, etc.
 
 fs_manager = FileSystemManager(Path("/project/root"))
-await fs_manager.start_watching(on_file_change)
+await fs_manager.start_watching (on_file_change)
 
 # Get file tree for UI
 file_tree = fs_manager.get_file_tree()
@@ -300,42 +300,42 @@ class CodeParser:
     """
     
     @staticmethod
-    def parse_file(file_path: Path) -> dict:
+    def parse_file (file_path: Path) -> dict:
         """
         Parse Python file and extract all information
         """
-        content = file_path.read_text(encoding='utf-8')
-        return CodeParser.parse_code(content)
+        content = file_path.read_text (encoding='utf-8')
+        return CodeParser.parse_code (content)
     
     @staticmethod
-    def parse_code(code: str) -> dict:
+    def parse_code (code: str) -> dict:
         """
         Parse Python code string
         """
         try:
-            tree = ast.parse(code)
+            tree = ast.parse (code)
         except SyntaxError as e:
-            return {"error": str(e), "valid": False}
+            return {"error": str (e), "valid": False}
         
-        imports = CodeParser._extract_imports(tree)
-        functions = CodeParser._extract_functions(tree)
-        classes = CodeParser._extract_classes(tree)
+        imports = CodeParser._extract_imports (tree)
+        functions = CodeParser._extract_functions (tree)
+        classes = CodeParser._extract_classes (tree)
         
         return {
             "valid": True,
             "imports": imports,
             "functions": functions,
             "classes": classes,
-            "module_docstring": ast.get_docstring(tree)
+            "module_docstring": ast.get_docstring (tree)
         }
     
     @staticmethod
-    def _extract_imports(tree: ast.AST) -> List[ImportInfo]:
+    def _extract_imports (tree: ast.AST) -> List[ImportInfo]:
         """Extract all imports"""
         imports = []
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Import):
                 for alias in node.names:
                     imports.append(ImportInfo(
                         module=alias.name,
@@ -343,7 +343,7 @@ class CodeParser:
                         is_from_import=False
                     ))
             
-            elif isinstance(node, ast.ImportFrom):
+            elif isinstance (node, ast.ImportFrom):
                 module = node.module or ""
                 names = [alias.name for alias in node.names]
                 imports.append(ImportInfo(
@@ -362,84 +362,84 @@ class CodeParser:
         """Extract function definitions"""
         functions = []
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef):
                 # Skip methods if not requested
-                if not class_methods and CodeParser._is_class_method(node, tree):
+                if not class_methods and CodeParser._is_class_method (node, tree):
                     continue
                 
                 functions.append(FunctionInfo(
                     name=node.name,
                     line_start=node.lineno,
                     line_end=node.end_lineno or node.lineno,
-                    docstring=ast.get_docstring(node),
+                    docstring=ast.get_docstring (node),
                     parameters=[arg.arg for arg in node.args.args],
-                    return_type=CodeParser._get_return_annotation(node),
-                    decorators=[CodeParser._decorator_name(d) for d in node.decorator_list]
+                    return_type=CodeParser._get_return_annotation (node),
+                    decorators=[CodeParser._decorator_name (d) for d in node.decorator_list]
                 ))
         
         return functions
     
     @staticmethod
-    def _extract_classes(tree: ast.AST) -> List[ClassInfo]:
+    def _extract_classes (tree: ast.AST) -> List[ClassInfo]:
         """Extract class definitions"""
         classes = []
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ClassDef):
                 methods = []
                 for item in node.body:
-                    if isinstance(item, ast.FunctionDef):
+                    if isinstance (item, ast.FunctionDef):
                         methods.append(FunctionInfo(
                             name=item.name,
                             line_start=item.lineno,
                             line_end=item.end_lineno or item.lineno,
-                            docstring=ast.get_docstring(item),
+                            docstring=ast.get_docstring (item),
                             parameters=[arg.arg for arg in item.args.args],
-                            return_type=CodeParser._get_return_annotation(item),
-                            decorators=[CodeParser._decorator_name(d) for d in item.decorator_list]
+                            return_type=CodeParser._get_return_annotation (item),
+                            decorators=[CodeParser._decorator_name (d) for d in item.decorator_list]
                         ))
                 
                 classes.append(ClassInfo(
                     name=node.name,
                     line_start=node.lineno,
                     line_end=node.end_lineno or node.lineno,
-                    docstring=ast.get_docstring(node),
+                    docstring=ast.get_docstring (node),
                     methods=methods,
-                    bases=[CodeParser._get_base_name(base) for base in node.bases]
+                    bases=[CodeParser._get_base_name (base) for base in node.bases]
                 ))
         
         return classes
     
     @staticmethod
-    def _is_class_method(func_node: ast.FunctionDef, tree: ast.AST) -> bool:
+    def _is_class_method (func_node: ast.FunctionDef, tree: ast.AST) -> bool:
         """Check if function is a class method"""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ClassDef):
                 if func_node in node.body:
                     return True
         return False
     
     @staticmethod
-    def _get_return_annotation(node: ast.FunctionDef) -> Optional[str]:
+    def _get_return_annotation (node: ast.FunctionDef) -> Optional[str]:
         """Get return type annotation"""
         if node.returns:
-            return ast.unparse(node.returns)
+            return ast.unparse (node.returns)
         return None
     
     @staticmethod
-    def _decorator_name(decorator: ast.expr) -> str:
+    def _decorator_name (decorator: ast.expr) -> str:
         """Get decorator name"""
-        if isinstance(decorator, ast.Name):
+        if isinstance (decorator, ast.Name):
             return decorator.id
-        elif isinstance(decorator, ast.Call):
-            return ast.unparse(decorator.func)
-        return ast.unparse(decorator)
+        elif isinstance (decorator, ast.Call):
+            return ast.unparse (decorator.func)
+        return ast.unparse (decorator)
     
     @staticmethod
-    def _get_base_name(base: ast.expr) -> str:
+    def _get_base_name (base: ast.expr) -> str:
         """Get base class name"""
-        return ast.unparse(base)
+        return ast.unparse (base)
 
 
 # Usage
@@ -452,16 +452,16 @@ class UserManager:
     def __init__(self, db):
         self.db = db
     
-    def get_user(self, user_id: int) -> Optional[dict]:
+    def get_user (self, user_id: int) -> Optional[dict]:
         """Get user by ID"""
-        return self.db.get(user_id)
+        return self.db.get (user_id)
     
-    def list_users(self) -> List[dict]:
+    def list_users (self) -> List[dict]:
         """List all users"""
         return self.db.all()
 ''
 
-parsed = CodeParser.parse_code(code)
+parsed = CodeParser.parse_code (code)
 print(f"Classes: {[c.name for c in parsed['classes']]}")
 print(f"Methods: {[m.name for m in parsed['classes'][0].methods]}")
 print(f"Imports: {[i.module for i in parsed['imports']]}")
@@ -471,7 +471,7 @@ print(f"Imports: {[i.module for i in parsed['imports']]}")
 
 ## Context Management
 
-The key to Cursor's intelligence is sending **relevant context** to the LLM, not the entire codebase.
+The key to Cursor\'s intelligence is sending **relevant context** to the LLM, not the entire codebase.
 
 ### Smart Context Selection
 
@@ -517,21 +517,21 @@ class ContextManager:
         Get relevant context for a user query
         """
         # Start with current file (highest priority)
-        contexts = await self._get_current_file_context(current_file, cursor_position)
+        contexts = await self._get_current_file_context (current_file, cursor_position)
         
         # Add imported files
-        imported_contexts = await self._get_imported_files(current_file)
-        contexts.extend(imported_contexts)
+        imported_contexts = await self._get_imported_files (current_file)
+        contexts.extend (imported_contexts)
         
         # Add related files (same directory, similar names)
-        related_contexts = await self._get_related_files(current_file)
-        contexts.extend(related_contexts)
+        related_contexts = await self._get_related_files (current_file)
+        contexts.extend (related_contexts)
         
         # Rank by relevance to query
-        ranked_contexts = self._rank_by_relevance(query, contexts)
+        ranked_contexts = self._rank_by_relevance (query, contexts)
         
         # Select contexts within token budget
-        selected = self._select_within_budget(ranked_contexts, self.max_tokens)
+        selected = self._select_within_budget (ranked_contexts, self.max_tokens)
         
         return selected
     
@@ -543,13 +543,13 @@ class ContextManager:
         """
         Get context from current file
         """
-        content = await self.fs_manager.read_file(file_path)
+        content = await self.fs_manager.read_file (file_path)
         
         # If cursor position provided, prioritize surrounding code
         if cursor_position:
-            content = self._get_surrounding_code(content, cursor_position)
+            content = self._get_surrounding_code (content, cursor_position)
         
-        tokens = len(self.encoder.encode(content))
+        tokens = len (self.encoder.encode (content))
         
         return [FileContext(
             path=file_path,
@@ -558,19 +558,19 @@ class ContextManager:
             tokens=tokens
         )]
     
-    async def _get_imported_files(self, file_path: Path) -> List[FileContext]:
+    async def _get_imported_files (self, file_path: Path) -> List[FileContext]:
         """
         Get context from imported files
         """
-        content = await self.fs_manager.read_file(file_path)
-        parsed = CodeParser.parse_code(content)
+        content = await self.fs_manager.read_file (file_path)
+        parsed = CodeParser.parse_code (content)
         
         contexts = []
         for import_info in parsed.get('imports', []):
             # Convert import to file path
-            import_path = self._import_to_path(import_info.module)
+            import_path = self._import_to_path (import_info.module)
             if import_path and import_path.exists():
-                import_content = await self.fs_manager.read_file(import_path)
+                import_content = await self.fs_manager.read_file (import_path)
                 
                 # Extract only imported functions/classes
                 relevant_content = self._extract_relevant_imports(
@@ -578,7 +578,7 @@ class ContextManager:
                     import_info.names
                 )
                 
-                tokens = len(self.encoder.encode(relevant_content))
+                tokens = len (self.encoder.encode (relevant_content))
                 contexts.append(FileContext(
                     path=import_path,
                     content=relevant_content,
@@ -588,7 +588,7 @@ class ContextManager:
         
         return contexts
     
-    async def _get_related_files(self, file_path: Path) -> List[FileContext]:
+    async def _get_related_files (self, file_path: Path) -> List[FileContext]:
         """
         Get context from related files (same directory, similar names)
         """
@@ -600,8 +600,8 @@ class ContextManager:
             if sibling == file_path:
                 continue
             
-            content = await self.fs_manager.read_file(sibling)
-            tokens = len(self.encoder.encode(content))
+            content = await self.fs_manager.read_file (sibling)
+            tokens = len (self.encoder.encode (content))
             
             contexts.append(FileContext(
                 path=sibling,
@@ -611,10 +611,10 @@ class ContextManager:
             ))
         
         # Test file
-        test_file = self._get_test_file(file_path)
+        test_file = self._get_test_file (file_path)
         if test_file and test_file.exists():
-            content = await self.fs_manager.read_file(test_file)
-            tokens = len(self.encoder.encode(content))
+            content = await self.fs_manager.read_file (test_file)
+            tokens = len (self.encoder.encode (content))
             
             contexts.append(FileContext(
                 path=test_file,
@@ -634,19 +634,19 @@ class ContextManager:
         Rank contexts by relevance to query
         """
         # Simple keyword matching (in production, use embeddings)
-        query_words = set(query.lower().split())
+        query_words = set (query.lower().split())
         
         for context in contexts:
-            content_words = set(context.content.lower().split())
+            content_words = set (context.content.lower().split())
             
             # Calculate overlap
-            overlap = len(query_words & content_words) / len(query_words) if query_words else 0
+            overlap = len (query_words & content_words) / len (query_words) if query_words else 0
             
             # Adjust relevance score
             context.relevance_score *= (1 + overlap)
         
         # Sort by relevance
-        return sorted(contexts, key=lambda x: x.relevance_score, reverse=True)
+        return sorted (contexts, key=lambda x: x.relevance_score, reverse=True)
     
     def _select_within_budget(
         self,
@@ -661,7 +661,7 @@ class ContextManager:
         
         for context in contexts:
             if total_tokens + context.tokens <= max_tokens:
-                selected.append(context)
+                selected.append (context)
                 total_tokens += context.tokens
             else:
                 # Try to include partial content
@@ -695,25 +695,25 @@ class ContextManager:
         cursor_line = content[:cursor_position].count('\\n')
         
         start = max(0, cursor_line - lines_before)
-        end = min(len(lines), cursor_line + lines_after + 1)
+        end = min (len (lines), cursor_line + lines_after + 1)
         
-        return '\\n'.join(lines[start:end])
+        return '\\n'.join (lines[start:end])
     
-    def _truncate_to_tokens(self, text: str, max_tokens: int) -> str:
+    def _truncate_to_tokens (self, text: str, max_tokens: int) -> str:
         """Truncate text to fit within token limit"""
-        tokens = self.encoder.encode(text)
-        if len(tokens) <= max_tokens:
+        tokens = self.encoder.encode (text)
+        if len (tokens) <= max_tokens:
             return text
         
         truncated_tokens = tokens[:max_tokens]
-        return self.encoder.decode(truncated_tokens)
+        return self.encoder.decode (truncated_tokens)
     
-    def _import_to_path(self, module: str) -> Optional[Path]:
+    def _import_to_path (self, module: str) -> Optional[Path]:
         """Convert import module to file path"""
         # Simple conversion: my.module -> my/module.py
         return self.fs_manager.root_path / f"{module.replace('.', '/')}.py"
     
-    def _get_test_file(self, file_path: Path) -> Optional[Path]:
+    def _get_test_file (self, file_path: Path) -> Optional[Path]:
         """Get corresponding test file"""
         # Common patterns: test_file.py, file_test.py, tests/file.py
         patterns = [
@@ -736,7 +736,7 @@ class ContextManager:
         """
         Extract only the imported functions/classes from content
         """
-        parsed = CodeParser.parse_code(content)
+        parsed = CodeParser.parse_code (content)
         relevant_lines = []
         
         lines = content.split('\\n')
@@ -744,14 +744,14 @@ class ContextManager:
         # Extract functions
         for func in parsed.get('functions', []):
             if func.name in imported_names:
-                relevant_lines.extend(lines[func.line_start-1:func.line_end])
+                relevant_lines.extend (lines[func.line_start-1:func.line_end])
         
         # Extract classes
         for cls in parsed.get('classes', []):
             if cls.name in imported_names:
-                relevant_lines.extend(lines[cls.line_start-1:cls.line_end])
+                relevant_lines.extend (lines[cls.line_start-1:cls.line_end])
         
-        return '\\n'.join(relevant_lines) if relevant_lines else content[:1000]
+        return '\\n'.join (relevant_lines) if relevant_lines else content[:1000]
 \`\`\`
 
 ---
@@ -809,37 +809,37 @@ new code here
 \`\`\`
 """
     
-    def build_edit_prompt(self, edit: CodeEdit) -> str:
+    def build_edit_prompt (self, edit: CodeEdit) -> str:
         """
         Build prompt for code editing
         """
         prompt_parts = []
         
         # System instruction
-        prompt_parts.append(self.SYSTEM_PROMPT)
+        prompt_parts.append (self.SYSTEM_PROMPT)
         
         # Current file
-        prompt_parts.append(f"\\n## Current File: {edit.file_path}\\n")
+        prompt_parts.append (f"\\n## Current File: {edit.file_path}\\n")
         prompt_parts.append("\`\`\`python")
-prompt_parts.append(edit.current_content)
+prompt_parts.append (edit.current_content)
 prompt_parts.append("\`\`\`")
         
         # Context files
 if edit.contexts:
     prompt_parts.append("\\n## Related Files (for context):\\n")
 for ctx in edit.contexts:
-    prompt_parts.append(f"### {ctx.path}")
+    prompt_parts.append (f"### {ctx.path}")
 prompt_parts.append("\`\`\`python")
-prompt_parts.append(ctx.content)
+prompt_parts.append (ctx.content)
 prompt_parts.append("\`\`\`")
         
         # User instruction
-prompt_parts.append(f"\\n## Instruction:\\n{edit.instruction}")
+prompt_parts.append (f"\\n## Instruction:\\n{edit.instruction}")
         
         # Request structured output
 prompt_parts.append("\\nProvide the edit in the format specified above.")
 
-return "\\n".join(prompt_parts)
+return "\\n".join (prompt_parts)
     
     def build_chat_prompt(
     self,
@@ -854,7 +854,7 @@ messages = [{ "role": "system", "content": self.SYSTEM_PROMPT }]
         
         # Add conversation history
 if conversation_history:
-    messages.extend(conversation_history)
+    messages.extend (conversation_history)
         
         # Build user message with context
         user_message = []
@@ -863,15 +863,15 @@ if conversation_history:
 if contexts:
     user_message.append("## Relevant Code Context:\\n")
 for ctx in contexts:
-    user_message.append(f"### {ctx.path}")
-user_message.append(f"\`\`\`python\\n{ctx.content}\\n\`\`\`\\n")
+    user_message.append (f"### {ctx.path}")
+user_message.append (f"\`\`\`python\\n{ctx.content}\\n\`\`\`\\n")
         
         # Add query
-user_message.append(f"## Question:\\n{query}")
+user_message.append (f"## Question:\\n{query}")
 
 messages.append({
     "role": "user",
-    "content": "\\n".join(user_message)
+    "content": "\\n".join (user_message)
 })
 
 return messages
@@ -895,7 +895,7 @@ Requirements:
 - Include error handling where appropriate
     - Follow PEP 8 style guidelines
 
-Context(existing code in file):
+Context (existing code in file):
 \`\`\`python
 {file_context}
 \`\`\`
@@ -911,11 +911,11 @@ prompt_builder = PromptBuilder()
 edit = CodeEdit(
     file_path = Path("app/users.py"),
     instruction = "Add error handling to get_user function",
-    current_content = "def get_user(id):\\n    return db.query(User).get(id)",
+    current_content = "def get_user (id):\\n    return db.query(User).get (id)",
     contexts = []
 )
 
-prompt = prompt_builder.build_edit_prompt(edit)
+prompt = prompt_builder.build_edit_prompt (edit)
 print(prompt)
 \`\`\`
 
@@ -923,7 +923,7 @@ print(prompt)
 
 ## Diff Generation and Application
 
-The core of Cursor's editing functionality:
+The core of Cursor\'s editing functionality:
 
 \`\`\`python
 """
@@ -943,18 +943,18 @@ class DiffHunk:
     new_start: int
     new_lines: List[str]
     
-    def to_unified_diff(self) -> str:
+    def to_unified_diff (self) -> str:
         """Convert to unified diff format"""
         lines = []
-        lines.append(f"@@ -{self.old_start},{len(self.old_lines)} +{self.new_start},{len(self.new_lines)} @@")
+        lines.append (f"@@ -{self.old_start},{len (self.old_lines)} +{self.new_start},{len (self.new_lines)} @@")
         
         for line in self.old_lines:
-            lines.append(f"-{line}")
+            lines.append (f"-{line}")
         
         for line in self.new_lines:
-            lines.append(f"+{line}")
+            lines.append (f"+{line}")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 class DiffGenerator:
     """
@@ -970,8 +970,8 @@ class DiffGenerator:
         """
         Generate unified diff
         """
-        old_lines = old_content.splitlines(keepends=True)
-        new_lines = new_content.splitlines(keepends=True)
+        old_lines = old_content.splitlines (keepends=True)
+        new_lines = new_content.splitlines (keepends=True)
         
         diff = difflib.unified_diff(
             old_lines,
@@ -981,7 +981,7 @@ class DiffGenerator:
             lineterm=""
         )
         
-        return "".join(diff)
+        return "".join (diff)
     
     @staticmethod
     def generate_minimal_diff(
@@ -1020,24 +1020,24 @@ class DiffGenerator:
         lines = original_content.splitlines()
         
         # Apply hunks in reverse order to maintain line numbers
-        for hunk in sorted(diff_hunks, key=lambda h: h.old_start, reverse=True):
+        for hunk in sorted (diff_hunks, key=lambda h: h.old_start, reverse=True):
             # Remove old lines
-            del lines[hunk.old_start-1:hunk.old_start-1+len(hunk.old_lines)]
+            del lines[hunk.old_start-1:hunk.old_start-1+len (hunk.old_lines)]
             
             # Insert new lines
-            for i, new_line in enumerate(hunk.new_lines):
-                lines.insert(hunk.old_start-1+i, new_line)
+            for i, new_line in enumerate (hunk.new_lines):
+                lines.insert (hunk.old_start-1+i, new_line)
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 
 class SearchReplaceApplicator:
     """
-    Applies search/replace style edits (Cursor's format)
+    Applies search/replace style edits (Cursor\'s format)
     """
     
     @staticmethod
-    def parse_edit_response(response: str) -> List[dict]:
+    def parse_edit_response (response: str) -> List[dict]:
         """
         Parse LLM response into structured edits
         
@@ -1057,7 +1057,7 @@ class SearchReplaceApplicator:
         for line in response.splitlines():
             if line.startswith("# FILE:"):
                 if current_edit:
-                    edits.append(current_edit)
+                    edits.append (current_edit)
                 current_edit = {"file": line.split(":", 1)[1].strip()}
                 content_lines = []
                 section = None
@@ -1067,25 +1067,25 @@ class SearchReplaceApplicator:
             
             elif line.startswith("# SEARCH:"):
                 if content_lines:
-                    current_edit[section] = "\\n".join(content_lines)
+                    current_edit[section] = "\\n".join (content_lines)
                 section = "search"
                 content_lines = []
             
             elif line.startswith("# REPLACE:"):
                 if content_lines:
-                    current_edit[section] = "\\n".join(content_lines)
+                    current_edit[section] = "\\n".join (content_lines)
                 section = "replace"
                 content_lines = []
             
             elif line.startswith("# INSERT_AFTER:"):
                 if content_lines:
-                    current_edit[section] = "\\n".join(content_lines)
+                    current_edit[section] = "\\n".join (content_lines)
                 section = "insert_after"
                 content_lines = []
             
             elif line.startswith("# INSERT_BEFORE:"):
                 if content_lines:
-                    current_edit[section] = "\\n".join(content_lines)
+                    current_edit[section] = "\\n".join (content_lines)
                 section = "insert_before"
                 content_lines = []
             
@@ -1095,18 +1095,18 @@ class SearchReplaceApplicator:
             
             elif not line.startswith("#"):
                 if section:
-                    content_lines.append(line)
+                    content_lines.append (line)
         
         # Don't forget last edit
         if content_lines and section:
-            current_edit[section] = "\\n".join(content_lines)
+            current_edit[section] = "\\n".join (content_lines)
         if current_edit:
-            edits.append(current_edit)
+            edits.append (current_edit)
         
         return edits
     
     @staticmethod
-    def apply_edit(content: str, edit: dict) -> Tuple[str, bool]:
+    def apply_edit (content: str, edit: dict) -> Tuple[str, bool]:
         """
         Apply a single edit to content
         
@@ -1119,7 +1119,7 @@ class SearchReplaceApplicator:
             replace = edit.get("replace", "")
             
             if search in content:
-                new_content = content.replace(search, replace, 1)
+                new_content = content.replace (search, replace, 1)
                 return new_content, True
             else:
                 return content, False
@@ -1156,7 +1156,7 @@ class SearchReplaceApplicator:
             search = edit.get("search", "")
             
             if search in content:
-                new_content = content.replace(search, "", 1)
+                new_content = content.replace (search, "", 1)
                 return new_content, True
             else:
                 return content, False
@@ -1176,17 +1176,17 @@ class SearchReplaceApplicator:
         results = {}
         
         for edit in edits:
-            file_path = Path(edit["file"])
+            file_path = Path (edit["file"])
             
             # Read current content
             try:
-                content = await fs_manager.read_file(file_path)
+                content = await fs_manager.read_file (file_path)
             except Exception as e:
-                results[str(file_path)] = {
+                results[str (file_path)] = {
                     "old": None,
                     "new": None,
                     "success": False,
-                    "error": str(e)
+                    "error": str (e)
                 }
                 continue
             
@@ -1196,11 +1196,11 @@ class SearchReplaceApplicator:
                 edit
             )
             
-            results[str(file_path)] = {
+            results[str (file_path)] = {
                 "old": content,
                 "new": new_content,
                 "success": success,
-                "diff": DiffGenerator.generate_diff(content, new_content, file_path) if success else None
+                "diff": DiffGenerator.generate_diff (content, new_content, file_path) if success else None
             }
         
         return results
@@ -1211,22 +1211,22 @@ llm_response = """
 # FILE: app/users.py
 # ACTION: REPLACE
 # SEARCH:
-def get_user(id):
-    return db.query(User).get(id)
+def get_user (id):
+    return db.query(User).get (id)
 # REPLACE:
-def get_user(id):
+def get_user (id):
     try:
-        user = db.query(User).get(id)
+        user = db.query(User).get (id)
         if user is None:
-            raise ValueError(f"User {id} not found")
+            raise ValueError (f"User {id} not found")
         return user
     except Exception as e:
-        logger.error(f"Error fetching user {id}: {e}")
+        logger.error (f"Error fetching user {id}: {e}")
         raise
 """
 
-edits = SearchReplaceApplicator.parse_edit_response(llm_response)
-results = await SearchReplaceApplicator.apply_all_edits(fs_manager, edits)
+edits = SearchReplaceApplicator.parse_edit_response (llm_response)
+results = await SearchReplaceApplicator.apply_all_edits (fs_manager, edits)
 
 for file_path, result in results.items():
     if result["success"]:
@@ -1261,15 +1261,15 @@ class AICodeEditor:
         root_path: Path,
         openai_api_key: str
     ):
-        self.fs_manager = FileSystemManager(root_path)
-        self.context_manager = ContextManager(self.fs_manager)
+        self.fs_manager = FileSystemManager (root_path)
+        self.context_manager = ContextManager (self.fs_manager)
         self.prompt_builder = PromptBuilder()
         self.llm_client = AsyncOpenAI(api_key=openai_api_key)
         self.conversation_history = []
     
-    async def start(self):
+    async def start (self):
         """Start the editor"""
-        await self.fs_manager.start_watching(self._on_file_change)
+        await self.fs_manager.start_watching (self._on_file_change)
         print(f"AI Code Editor started. Watching: {self.fs_manager.root_path}")
     
     async def edit_code(
@@ -1289,7 +1289,7 @@ class AICodeEditor:
         )
         
         # Read current file
-        current_content = await self.fs_manager.read_file(file_path)
+        current_content = await self.fs_manager.read_file (file_path)
         
         # Build prompt
         edit = CodeEdit(
@@ -1298,7 +1298,7 @@ class AICodeEditor:
             current_content=current_content,
             contexts=contexts
         )
-        prompt = self.prompt_builder.build_edit_prompt(edit)
+        prompt = self.prompt_builder.build_edit_prompt (edit)
         
         # Call LLM
         response = await self.llm_client.chat.completions.create(
@@ -1310,7 +1310,7 @@ class AICodeEditor:
         llm_output = response.choices[0].message.content
         
         # Parse and apply edits
-        edits = SearchReplaceApplicator.parse_edit_response(llm_output)
+        edits = SearchReplaceApplicator.parse_edit_response (llm_output)
         results = await SearchReplaceApplicator.apply_all_edits(
             self.fs_manager,
             edits
@@ -1320,7 +1320,7 @@ class AICodeEditor:
         for file_path, result in results.items():
             if result["success"]:
                 await self.fs_manager.write_file(
-                    Path(file_path),
+                    Path (file_path),
                     result["new"]
                 )
         
@@ -1361,12 +1361,12 @@ class AICodeEditor:
         async for chunk in response:
             if chunk.choices[0].delta.content:
                 content = chunk.choices[0].delta.content
-                full_response.append(content)
+                full_response.append (content)
                 print(content, end="", flush=True)
         
         print()  # New line after streaming
         
-        response_text = "".join(full_response)
+        response_text = "".join (full_response)
         
         # Update conversation history
         self.conversation_history.append({"role": "user", "content": query})
@@ -1374,11 +1374,11 @@ class AICodeEditor:
         
         return response_text
     
-    async def _on_file_change(self, file_path: str, event_type: str):
+    async def _on_file_change (self, file_path: str, event_type: str):
         """Handle file changes"""
         # Invalidate cache, re-parse, etc.
-        if Path(file_path) in self.fs_manager.file_cache:
-            del self.fs_manager.file_cache[Path(file_path)]
+        if Path (file_path) in self.fs_manager.file_cache:
+            del self.fs_manager.file_cache[Path (file_path)]
 
 
 # Example usage
@@ -1408,7 +1408,7 @@ async def main():
     )
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run (main())
 \`\`\`
 
 ---

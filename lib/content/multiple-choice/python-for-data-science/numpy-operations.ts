@@ -18,11 +18,11 @@ export const numpyoperationsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'numpy-operations-mc-2',
     question:
-      'Given arr = np.array([[1,2,3],[4,5,6],[7,8,9]]), what does arr.sum(axis=0) return?',
+      'Given arr = np.array([[1,2,3],[4,5,6],[7,8,9]]), what does arr.sum (axis=0) return?',
     options: ['[6, 15, 24]', '[12, 15, 18]', '45', '[[12, 15, 18]]'],
     correctAnswer: 1,
     explanation:
-      'arr.sum(axis=0) aggregates along axis 0 (down columns), summing across rows. Column 0: 1+4+7=12, column 1: 2+5+8=15, column 2: 3+6+9=18. Result: [12, 15, 18].',
+      'arr.sum (axis=0) aggregates along axis 0 (down columns), summing across rows. Column 0: 1+4+7=12, column 1: 2+5+8=15, column 2: 3+6+9=18. Result: [12, 15, 18].',
   },
   {
     id: 'numpy-operations-mc-3',
@@ -35,7 +35,7 @@ export const numpyoperationsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'numpy-operations-mc-4',
-    question: 'What does np.where(arr > 5, 100, -100) do?',
+    question: 'What does np.where (arr > 5, 100, -100) do?',
     options: [
       'Returns indices where arr > 5',
       'Returns 100 where arr > 5, otherwise returns -100',

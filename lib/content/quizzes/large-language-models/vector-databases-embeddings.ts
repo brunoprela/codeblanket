@@ -15,7 +15,7 @@ export const vectorDatabasesEmbeddingsQuiz = {
       question:
         'Discuss the evolution of embedding models from Word2Vec to modern transformer-based embeddings (sentence-transformers, E5, OpenAI embeddings). What makes modern embeddings superior? How do you evaluate embedding quality, and what metrics matter for different applications (search, clustering, classification)?',
       expectedAnswer:
-        "Should discuss: Word2Vec's context-free limitations, contextual embeddings from transformers, sentence - level representations vs token - level, contrastive learning(SimCSE, sentence - transformers), fine - tuning on diverse tasks improving generalization, dimensionality considerations(768 - 1536), evaluation metrics(cosine similarity correlation, retrieval benchmarks), task - specific fine - tuning benefits, multilingual embeddings, and domain adaptation strategies.",
+        "Should discuss: Word2Vec\'s context-free limitations, contextual embeddings from transformers, sentence - level representations vs token - level, contrastive learning(SimCSE, sentence - transformers), fine - tuning on diverse tasks improving generalization, dimensionality considerations(768 - 1536), evaluation metrics (cosine similarity correlation, retrieval benchmarks), task - specific fine - tuning benefits, multilingual embeddings, and domain adaptation strategies.",
     },
     {
       id: 3,

@@ -43,7 +43,7 @@ export const stochasticcalculusMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'SGLD adds carefully calibrated noise to enable exploration of the optimization landscape and asymptotically samples from the posterior distribution p(x) ∝ exp(-f(x)).',
+      'SGLD adds carefully calibrated noise to enable exploration of the optimization landscape and asymptotically samples from the posterior distribution p (x) ∝ exp(-f (x)).',
   },
   {
     id: 'stoch-4',

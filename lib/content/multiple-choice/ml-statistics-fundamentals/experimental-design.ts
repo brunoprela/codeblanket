@@ -56,7 +56,7 @@ export const experimentaldesignMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Statistical power = P(reject H₀ | H₁ is true) = 1 - β (where β is Type II error rate). It's the probability of correctly detecting a real effect when one exists. Higher power means lower chance of missing real improvements.",
+      "Statistical power = P(reject H₀ | H₁ is true) = 1 - β (where β is Type II error rate). It\'s the probability of correctly detecting a real effect when one exists. Higher power means lower chance of missing real improvements.",
   },
   {
     id: 'mc5',

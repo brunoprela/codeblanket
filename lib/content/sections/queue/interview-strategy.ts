@@ -88,7 +88,7 @@ dq = deque()  # Can use both ends
 \`\`\`python
 from collections import deque
 
-def bfs(start):
+def bfs (start):
     """Standard BFS template"""
     queue = deque([start])
     visited = {start}
@@ -100,17 +100,17 @@ def bfs(start):
         # ...
         
         # Add neighbors
-        for neighbor in get_neighbors(current):
+        for neighbor in get_neighbors (current):
             if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
+                visited.add (neighbor)
+                queue.append (neighbor)
     
     return result
 \`\`\`
 
 **Level-Order Template:**
 \`\`\`python
-def level_order(root):
+def level_order (root):
     """Process tree level by level"""
     if not root:
         return []
@@ -119,31 +119,31 @@ def level_order(root):
     result = []
     
     while queue:
-        level_size = len(queue)  # Key: capture level size
+        level_size = len (queue)  # Key: capture level size
         level = []
         
-        for _ in range(level_size):  # Process entire level
+        for _ in range (level_size):  # Process entire level
             node = queue.popleft()
-            level.append(node.val)
+            level.append (node.val)
             
             if node.left:
-                queue.append(node.left)
+                queue.append (node.left)
             if node.right:
-                queue.append(node.right)
+                queue.append (node.right)
         
-        result.append(level)
+        result.append (level)
     
     return result
 \`\`\`
 
 **Sliding Window Template:**
 \`\`\`python
-def sliding_window(nums, k):
+def sliding_window (nums, k):
     """Sliding window with deque"""
     dq = deque()
     result = []
     
-    for i in range(len(nums)):
+    for i in range (len (nums)):
         # Remove out-of-window elements
         while dq and dq[0] < i - k + 1:
             dq.popleft()
@@ -152,11 +152,11 @@ def sliding_window(nums, k):
         while dq and nums[dq[-1]] < nums[i]:
             dq.pop()
         
-        dq.append(i)
+        dq.append (i)
         
         # Add to result once window is full
         if i >= k - 1:
-            result.append(nums[dq[0]])
+            result.append (nums[dq[0]])
     
     return result
 \`\`\`
@@ -207,8 +207,8 @@ while queue:
 
 # ✅ GOOD - process level by level
 while queue:
-    level_size = len(queue)  # Capture current level
-    for _ in range(level_size):
+    level_size = len (queue)  # Capture current level
+    for _ in range (level_size):
         node = queue.popleft()
         # Process and add children
 \`\`\`
@@ -226,11 +226,11 @@ if queue:
 ❌ **Mistake 4:** Confusing queue with stack
 \`\`\`python
 # ❌ BAD - this is a stack (LIFO)
-queue.append(item)
+queue.append (item)
 queue.pop()  # Removes last item
 
 # ✅ GOOD - this is a queue (FIFO)
-queue.append(item)
+queue.append (item)
 queue.popleft()  # Removes first item
 \`\`\`
 

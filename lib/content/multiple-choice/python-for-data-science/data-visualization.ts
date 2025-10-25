@@ -25,7 +25,7 @@ export const datavisualizationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'plt.subplot(nrows, ncols, index) creates a grid with nrows rows and ncols columns, and activates the subplot at position index (1-indexed). So subplot(2, 3, 4) creates a 2x3 grid and activates the 4th position (row 2, column 1).',
+      'plt.subplot (nrows, ncols, index) creates a grid with nrows rows and ncols columns, and activates the subplot at position index (1-indexed). So subplot(2, 3, 4) creates a 2x3 grid and activates the 4th position (row 2, column 1).',
   },
   {
     id: 'data-visualization-mc-3',
@@ -51,7 +51,7 @@ export const datavisualizationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'The hue parameter in seaborn adds an additional dimension to plots by coloring data points according to a categorical variable. For example, sns.scatterplot(x="age", y="income", hue="gender") would color points by gender.',
+      'The hue parameter in seaborn adds an additional dimension to plots by coloring data points according to a categorical variable. For example, sns.scatterplot (x="age", y="income", hue="gender") would color points by gender.',
   },
   {
     id: 'data-visualization-mc-5',

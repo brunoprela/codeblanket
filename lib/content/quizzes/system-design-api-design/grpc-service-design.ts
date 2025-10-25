@@ -46,7 +46,7 @@ message User {
 
 service VideoService {
   // Client streaming: Video upload in chunks
-  rpc UploadVideo(stream VideoChunk) returns (Video);
+  rpc UploadVideo (stream VideoChunk) returns (Video);
   
   // Server streaming: Download video in chunks
   rpc DownloadVideo(VideoRequest) returns (stream VideoChunk);
@@ -92,13 +92,13 @@ message VideoChunk {
 
 service LiveStreamService {
   // Bidirectional: Real-time stream
-  rpc Stream(stream StreamPacket) returns (stream StreamPacket);
+  rpc Stream (stream StreamPacket) returns (stream StreamPacket);
   
   // Server streaming: Watch live stream
   rpc WatchStream(WatchRequest) returns (stream StreamPacket);
   
   // Bidirectional: Live chat
-  rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
   
   // Unary: Stream management
   rpc StartStream(StartStreamRequest) returns (Stream);
@@ -213,7 +213,7 @@ This design leverages gRPC's strengths: performance, streaming, and type safety.
 const grpc = require('@grpc/grpc-js');
 
 // Exponential backoff retry
-async function retryCall(callFn, maxRetries = 3) {
+async function retryCall (callFn, maxRetries = 3) {
   let lastError;
   
   for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -229,7 +229,7 @@ async function retryCall(callFn, maxRetries = 3) {
         grpc.status.RESOURCE_EXHAUSTED
       ];
       
-      if (!retryableErrors.includes(error.code)) {
+      if (!retryableErrors.includes (error.code)) {
         throw error;  // Don't retry permanent errors
       }
       
@@ -242,7 +242,7 @@ async function retryCall(callFn, maxRetries = 3) {
       );
       
       console.log(\`Retry \${attempt + 1}/\${maxRetries} after \${delay}ms\`);
-      await sleep(delay);
+      await sleep (delay);
     }
   }
   
@@ -256,8 +256,8 @@ const response = await retryCall(() =>
       { id: '123' },
       { deadline: Date.now() + 5000 },
       (err, response) => {
-        if (err) reject(err);
-        else resolve(response);
+        if (err) reject (err);
+        else resolve (response);
       }
     );
   })
@@ -269,7 +269,7 @@ const response = await retryCall(() =>
 \`\`\`javascript
 // Client sets deadline
 const deadline = new Date();
-deadline.setSeconds(deadline.getSeconds() + 5);
+deadline.setSeconds (deadline.getSeconds() + 5);
 
 client.getUser(
   { id: '123' },
@@ -278,7 +278,7 @@ client.getUser(
 );
 
 // Server propagates to downstream calls
-async function getUser(call, callback) {
+async function getUser (call, callback) {
   // Get deadline from incoming call
   const deadline = call.deadline;
   
@@ -289,7 +289,7 @@ async function getUser(call, callback) {
     callback
   );
   
-  callback(null, response);
+  callback (null, response);
 }
 \`\`\`
 
@@ -297,7 +297,7 @@ async function getUser(call, callback) {
 
 \`\`\`javascript
 class CircuitBreaker {
-  constructor(threshold = 5, timeout = 60000) {
+  constructor (threshold = 5, timeout = 60000) {
     this.failureThreshold = threshold;
     this.timeout = timeout;
     this.failureCount = 0;
@@ -305,7 +305,7 @@ class CircuitBreaker {
     this.nextAttempt = Date.now();
   }
   
-  async call(fn) {
+  async call (fn) {
     if (this.state === 'OPEN') {
       if (Date.now() < this.nextAttempt) {
         throw new Error('Circuit breaker is OPEN');
@@ -356,7 +356,7 @@ const TIMEOUTS = {
   searchService: 5000
 };
 
-function callWithTimeout(client, method, request, serviceName) {
+function callWithTimeout (client, method, request, serviceName) {
   return new Promise((resolve, reject) => {
     const deadline = Date.now() + TIMEOUTS[serviceName];
     
@@ -368,9 +368,9 @@ function callWithTimeout(client, method, request, serviceName) {
           if (err.code === grpc.status.DEADLINE_EXCEEDED) {
             console.error(\`\${serviceName} timeout after \${TIMEOUTS[serviceName]}ms\`);
           }
-          reject(err);
+          reject (err);
         } else {
-          resolve(response);
+          resolve (response);
         }
       }
     );
@@ -404,7 +404,7 @@ message HealthCheckResponse {
 // Server implementation
 const healthServer = {
   check: (call, callback) => {
-    callback(null, {
+    callback (null, {
       status: ServingStatus.SERVING
     });
   }
@@ -422,7 +422,7 @@ async function ensureHealth() {
 **6. Error Response Enrichment**
 
 \`\`\`javascript
-function enrichError(error, context) {
+function enrichError (error, context) {
   return {
     code: error.code,
     message: error.message,
@@ -437,9 +437,9 @@ function enrichError(error, context) {
 }
 
 // Server
-async function getUser(call, callback) {
+async function getUser (call, callback) {
   try {
-    const user = await db.findUser(call.request.id);
+    const user = await db.findUser (call.request.id);
     if (!user) {
       return callback({
         code: grpc.status.NOT_FOUND,
@@ -449,9 +449,9 @@ async function getUser(call, callback) {
         })
       });
     }
-    callback(null, user);
+    callback (null, user);
   } catch (error) {
-    callback(enrichError(error, {
+    callback (enrichError (error, {
       service: 'UserService',
       method: 'getUser',
       requestId: call.metadata.get('request-id')[0]
@@ -478,16 +478,16 @@ const grpcErrors = new prometheus.Counter({
 });
 
 // Interceptor
-function monitoringInterceptor(call, callback, next) {
+function monitoringInterceptor (call, callback, next) {
   const start = Date.now();
   
-  next(call, (err, response) => {
+  next (call, (err, response) => {
     const duration = (Date.now() - start) / 1000;
     
     grpcDuration.labels(
       call.getPath(),
       err ? 'error' : 'success'
-    ).observe(duration);
+    ).observe (duration);
     
     if (err) {
       grpcErrors.labels(
@@ -496,7 +496,7 @@ function monitoringInterceptor(call, callback, next) {
       ).inc();
     }
     
-    callback(err, response);
+    callback (err, response);
   });
 }
 \`\`\`
@@ -643,7 +643,7 @@ REST approach:
 Example:
 \`\`\`protobuf
 service ChatService {
-  rpc Chat(stream Message) returns (stream Message);
+  rpc Chat (stream Message) returns (stream Message);
 }
 \`\`\`
 

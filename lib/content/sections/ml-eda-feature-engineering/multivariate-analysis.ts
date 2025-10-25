@@ -22,7 +22,7 @@ Multivariate analysis examines relationships among three or more variables simul
 
 ### Complete Correlation Analysis
 
-\\\`\\\`\\\`python
+\`\`\`python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -32,7 +32,7 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import squareform
 
 # Load data
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 print("=" * 70)
@@ -49,24 +49,24 @@ print(corr_matrix.round(3))
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
 # Standard heatmap
-sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', 
+sns.heatmap (corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', 
             center=0, square=True, ax=axes[0],
             cbar_kws={'label': 'Correlation'})
 axes[0].set_title('Correlation Matrix Heatmap')
 
 # Clustered heatmap (groups similar variables)
-sns.clustermap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm',
+sns.clustermap (corr_matrix, annot=True, fmt='.2f', cmap='coolwarm',
                center=0, figsize=(10, 10))
 plt.suptitle('Hierarchically Clustered Correlation Matrix', y=1.02)
 
 plt.tight_layout()
 plt.show()
-\\\`\\\`\\\`
+\`\`\`
 
 ### Identifying Multicollinearity
 
-\\\`\\\`\\\`python
-def detect_multicollinearity(df, threshold=0.8):
+\`\`\`python
+def detect_multicollinearity (df, threshold=0.8):
     """Detect highly correlated feature pairs"""
     
     print(f"\\nMULTICOLLINEARITY DETECTION (threshold={threshold})")
@@ -76,8 +76,8 @@ def detect_multicollinearity(df, threshold=0.8):
     
     # Find pairs with high correlation
     high_corr_pairs = []
-    for i in range(len(corr_matrix.columns)):
-        for j in range(i+1, len(corr_matrix.columns)):
+    for i in range (len (corr_matrix.columns)):
+        for j in range (i+1, len (corr_matrix.columns)):
             if corr_matrix.iloc[i, j] >= threshold:
                 high_corr_pairs.append({
                     'feature_1': corr_matrix.columns[i],
@@ -86,8 +86,8 @@ def detect_multicollinearity(df, threshold=0.8):
                 })
     
     if high_corr_pairs:
-        print(f"\\nFound {len(high_corr_pairs)} highly correlated pairs:\\n")
-        for pair in sorted(high_corr_pairs, key=lambda x: x['correlation'], reverse=True):
+        print(f"\\nFound {len (high_corr_pairs)} highly correlated pairs:\\n")
+        for pair in sorted (high_corr_pairs, key=lambda x: x['correlation'], reverse=True):
             print(f"  {pair['feature_1']} <-> {pair['feature_2']}: {pair['correlation']:.3f}")
         
         print(f"\\n⚠️  Consider removing one feature from each pair to reduce multicollinearity")
@@ -97,40 +97,40 @@ def detect_multicollinearity(df, threshold=0.8):
     return high_corr_pairs
 
 # Detect multicollinearity
-multicoll = detect_multicollinearity(df, threshold=0.7)
-\\\`\\\`\\\`
+multicoll = detect_multicollinearity (df, threshold=0.7)
+\`\`\`
 
 ## Pair Plots for Multiple Variables
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Select subset of features for pair plot
 features_subset = ['MedInc', 'HouseAge', 'AveRooms', 'MedHouseVal']
 df_subset = df[features_subset].sample(1000, random_state=42)
 
 # Create pair plot
-sns.pairplot(df_subset, diag_kind='kde', plot_kws={'alpha': 0.6})
+sns.pairplot (df_subset, diag_kind='kde', plot_kws={'alpha': 0.6})
 plt.suptitle('Pair Plot: Feature Relationships', y=1.02)
 plt.show()
 
 # With target categorization for color coding
-df['PriceCategory'] = pd.cut(df['MedHouseVal'], 
+df['PriceCategory'] = pd.cut (df['MedHouseVal'], 
                                bins=[0, 2, 3.5, 10], 
                                labels=['Low', 'Medium', 'High'])
 df_subset_cat = df[features_subset + ['PriceCategory']].sample(1000, random_state=42)
 
-sns.pairplot(df_subset_cat, hue='PriceCategory', diag_kind='kde', 
+sns.pairplot (df_subset_cat, hue='PriceCategory', diag_kind='kde', 
              plot_kws={'alpha': 0.6}, palette='viridis')
 plt.suptitle('Pair Plot by Price Category', y=1.02)
 plt.show()
-\\\`\\\`\\\`
+\`\`\`
 
 ## Principal Component Analysis (PCA) for Visualization
 
-\\\`\\\`\\\`python
+\`\`\`python
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-def perform_pca_analysis(df, n_components=None):
+def perform_pca_analysis (df, n_components=None):
     """Perform PCA and visualize results"""
     
     print("\\n" + "=" * 70)
@@ -139,7 +139,7 @@ def perform_pca_analysis(df, n_components=None):
     
     # Standardize features
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(df.select_dtypes(include=[np.number]))
+    X_scaled = scaler.fit_transform (df.select_dtypes (include=[np.number]))
     
     # Perform PCA
     if n_components is None:
@@ -150,27 +150,27 @@ def perform_pca_analysis(df, n_components=None):
     
     # Explained variance
     explained_var = pca.explained_variance_ratio_
-    cumulative_var = np.cumsum(explained_var)
+    cumulative_var = np.cumsum (explained_var)
     
     print(f"\\nExplained Variance by Component:\\n")
-    for i, (ev, cv) in enumerate(zip(explained_var, cumulative_var), 1):
+    for i, (ev, cv) in enumerate (zip (explained_var, cumulative_var), 1):
         print(f"  PC{i}: {ev:.4f} ({ev*100:.2f}%) | Cumulative: {cv:.4f} ({cv*100:.2f}%)")
     
     # Visualizations
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
     
     # Scree plot
-    axes[0, 0].bar(range(1, len(explained_var)+1), explained_var)
-    axes[0, 0].plot(range(1, len(explained_var)+1), explained_var, 'ro-')
+    axes[0, 0].bar (range(1, len (explained_var)+1), explained_var)
+    axes[0, 0].plot (range(1, len (explained_var)+1), explained_var, 'ro-')
     axes[0, 0].set_xlabel('Principal Component')
     axes[0, 0].set_ylabel('Explained Variance Ratio')
     axes[0, 0].set_title('Scree Plot')
     axes[0, 0].grid(True, alpha=0.3)
     
     # Cumulative explained variance
-    axes[0, 1].plot(range(1, len(cumulative_var)+1), cumulative_var, 'bo-')
-    axes[0, 1].axhline(y=0.8, color='r', linestyle='--', label='80% threshold')
-    axes[0, 1].axhline(y=0.9, color='g', linestyle='--', label='90% threshold')
+    axes[0, 1].plot (range(1, len (cumulative_var)+1), cumulative_var, 'bo-')
+    axes[0, 1].axhline (y=0.8, color='r', linestyle='--', label='80% threshold')
+    axes[0, 1].axhline (y=0.9, color='g', linestyle='--', label='90% threshold')
     axes[0, 1].set_xlabel('Number of Components')
     axes[0, 1].set_ylabel('Cumulative Explained Variance')
     axes[0, 1].set_title('Cumulative Explained Variance')
@@ -179,22 +179,22 @@ def perform_pca_analysis(df, n_components=None):
     
     # 2D projection (PC1 vs PC2)
     axes[1, 0].scatter(X_pca[:, 0], X_pca[:, 1], alpha=0.5)
-    axes[1, 0].set_xlabel(f'PC1 ({explained_var[0]*100:.1f}%)')
-    axes[1, 0].set_ylabel(f'PC2 ({explained_var[1]*100:.1f}%)')
+    axes[1, 0].set_xlabel (f'PC1 ({explained_var[0]*100:.1f}%)')
+    axes[1, 0].set_ylabel (f'PC2 ({explained_var[1]*100:.1f}%)')
     axes[1, 0].set_title('2D PCA Projection')
     axes[1, 0].grid(True, alpha=0.3)
     
     # Feature contributions to PC1 and PC2
-    feature_names = df.select_dtypes(include=[np.number]).columns
+    feature_names = df.select_dtypes (include=[np.number]).columns
     loadings = pca.components_[:2].T
-    axes[1, 1].scatter(loadings[:, 0], loadings[:, 1])
-    for i, feature in enumerate(feature_names):
-        axes[1, 1].annotate(feature, (loadings[i, 0], loadings[i, 1]))
+    axes[1, 1].scatter (loadings[:, 0], loadings[:, 1])
+    for i, feature in enumerate (feature_names):
+        axes[1, 1].annotate (feature, (loadings[i, 0], loadings[i, 1]))
     axes[1, 1].set_xlabel('PC1 Loading')
     axes[1, 1].set_ylabel('PC2 Loading')
     axes[1, 1].set_title('Feature Contributions to PC1 and PC2')
-    axes[1, 1].axhline(y=0, color='k', linestyle='-', linewidth=0.5)
-    axes[1, 1].axvline(x=0, color='k', linestyle='-', linewidth=0.5)
+    axes[1, 1].axhline (y=0, color='k', linestyle='-', linewidth=0.5)
+    axes[1, 1].axvline (x=0, color='k', linestyle='-', linewidth=0.5)
     axes[1, 1].grid(True, alpha=0.3)
     
     plt.tight_layout()
@@ -203,8 +203,8 @@ def perform_pca_analysis(df, n_components=None):
     return pca, X_pca
 
 # Perform PCA
-pca_model, X_pca = perform_pca_analysis(df.select_dtypes(include=[np.number]))
-\\\`\\\`\\\`
+pca_model, X_pca = perform_pca_analysis (df.select_dtypes (include=[np.number]))
+\`\`\`
 
 ## Key Takeaways
 

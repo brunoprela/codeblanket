@@ -65,6 +65,6 @@ export const contextmanagersMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'You can use multiple context managers in a single with statement, separated by commas: with open(f1) as a, open(f2) as b:',
+      'You can use multiple context managers in a single with statement, separated by commas: with open (f1) as a, open (f2) as b:',
   },
 ];

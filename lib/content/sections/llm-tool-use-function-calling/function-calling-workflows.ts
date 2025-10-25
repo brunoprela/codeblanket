@@ -21,7 +21,7 @@ The simplest pattern: user request → single function call → response.
 import openai
 import json
 
-def simple_function_call(user_message: str, functions: list, function_registry: dict):
+def simple_function_call (user_message: str, functions: list, function_registry: dict):
     """
     Handle a simple single function call.
     """
@@ -37,7 +37,7 @@ def simple_function_call(user_message: str, functions: list, function_registry: 
     # Execute function if called
     if message.function_call:
         func_name = message.function_call.name
-        func_args = json.loads(message.function_call.arguments)
+        func_args = json.loads (message.function_call.arguments)
         
         # Execute
         result = function_registry[func_name](**func_args)
@@ -51,7 +51,7 @@ def simple_function_call(user_message: str, functions: list, function_registry: 
                 {
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps(result)
+                    "content": json.dumps (result)
                 }
             ]
         )
@@ -62,7 +62,7 @@ def simple_function_call(user_message: str, functions: list, function_registry: 
 
 # Example
 result = simple_function_call(
-    "What's the weather in San Francisco?",
+    "What\'s the weather in San Francisco?",
     functions=[WEATHER_FUNCTION],
     function_registry={"get_weather": get_weather}
 )
@@ -75,14 +75,14 @@ result = simple_function_call(
 Multiple function calls executed one after another, where each call may depend on previous results.
 
 \`\`\`python
-def sequential_function_calls(user_message: str, functions: list, 
+def sequential_function_calls (user_message: str, functions: list, 
                              function_registry: dict, max_iterations: int = 5):
     """
     Handle sequential function calls in a loop.
     """
     messages = [{"role": "user", "content": user_message}]
     
-    for iteration in range(max_iterations):
+    for iteration in range (max_iterations):
         print(f"\\n--- Iteration {iteration + 1} ---")
         
         # Call LLM
@@ -93,12 +93,12 @@ def sequential_function_calls(user_message: str, functions: list,
         )
         
         message = response.choices[0].message
-        messages.append(message.to_dict())
+        messages.append (message.to_dict())
         
         # Check if function call
         if message.function_call:
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             
             print(f"Calling: {func_name}({func_args})")
             
@@ -111,13 +111,13 @@ def sequential_function_calls(user_message: str, functions: list,
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps(result)
+                    "content": json.dumps (result)
                 })
             except Exception as e:
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps({"error": str(e)})
+                    "content": json.dumps({"error": str (e)})
                 })
         else:
             # No function call = final answer
@@ -146,19 +146,19 @@ result = sequential_function_calls(
 
 user: "Book a table for 2 at an Italian restaurant in SF tonight at 7pm"
   ↓
-LLM: search_restaurants(cuisine="Italian", location="SF", party_size=2)
+LLM: search_restaurants (cuisine="Italian", location="SF", party_size=2)
   ↓
 Result: [{"id": "rest_123", "name": "Pasta Place", "rating": 4.5}, ...]
   ↓
-LLM: get_restaurant_details(restaurant_id="rest_123")
+LLM: get_restaurant_details (restaurant_id="rest_123")
   ↓
 Result: {"name": "Pasta Place", "address": "...", "phone": "..."}
   ↓
-LLM: check_availability(restaurant_id="rest_123", date="2024-01-15", time="19:00", party_size=2)
+LLM: check_availability (restaurant_id="rest_123", date="2024-01-15", time="19:00", party_size=2)
   ↓
 Result: {"available": true, "available_times": ["18:30", "19:00", "19:30"]}
   ↓
-LLM: make_reservation(restaurant_id="rest_123", date="2024-01-15", time="19:00", party_size=2, name="John Doe")
+LLM: make_reservation (restaurant_id="rest_123", date="2024-01-15", time="19:00", party_size=2, name="John Doe")
   ↓
 Result: {"confirmation": "RES-12345", "status": "confirmed"}
   ↓
@@ -173,17 +173,17 @@ Execute multiple independent function calls simultaneously for efficiency.
 import asyncio
 from typing import List, Dict, Any
 
-async def execute_function_async(func, args):
+async def execute_function_async (func, args):
     """Execute a function asynchronously."""
     # If function is already async
-    if asyncio.iscoroutinefunction(func):
+    if asyncio.iscoroutinefunction (func):
         return await func(**args)
     # If function is synchronous, run in executor
     else:
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: func(**args))
 
-async def parallel_function_calls(function_calls: List[Dict[str, Any]], 
+async def parallel_function_calls (function_calls: List[Dict[str, Any]], 
                                   function_registry: dict):
     """
     Execute multiple function calls in parallel.
@@ -200,7 +200,7 @@ async def parallel_function_calls(function_calls: List[Dict[str, Any]],
         func_args = call["arguments"]
         func = function_registry[func_name]
         
-        task = execute_function_async(func, func_args)
+        task = execute_function_async (func, func_args)
         tasks.append((func_name, func_args, task))
     
     # Wait for all to complete
@@ -218,7 +218,7 @@ async def parallel_function_calls(function_calls: List[Dict[str, Any]],
             results.append({
                 "function": func_name,
                 "arguments": func_args,
-                "error": str(e),
+                "error": str (e),
                 "success": False
             })
     
@@ -232,12 +232,12 @@ async def main():
         {"name": "get_weather", "arguments": {"location": "London"}}
     ]
     
-    results = await parallel_function_calls(calls, function_registry)
+    results = await parallel_function_calls (calls, function_registry)
     
     for r in results:
         print(f"{r['function']}: {r['result']}")
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 **Use case**: Independent queries that don't depend on each other's results. Much faster than sequential.
@@ -251,7 +251,7 @@ response = openai.chat.completions.create(
     model="gpt-4-1106-preview",  # Turbo model
     messages=[{
         "role": "user",
-        "content": "What's the weather in SF, NYC, and London?"
+        "content": "What\'s the weather in SF, NYC, and London?"
     }],
     functions=[WEATHER_FUNCTION],
     function_call="auto"
@@ -261,10 +261,10 @@ response = openai.chat.completions.create(
 message = response.choices[0].message
 
 # In GPT-4 Turbo, message.function_calls (plural) contains list
-if hasattr(message, 'function_calls') and message.function_calls:
+if hasattr (message, 'function_calls') and message.function_calls:
     for function_call in message.function_calls:
         func_name = function_call.name
-        func_args = json.loads(function_call.arguments)
+        func_args = json.loads (function_call.arguments)
         print(f"Call: {func_name}({func_args})")
 \`\`\`
 
@@ -273,7 +273,7 @@ if hasattr(message, 'function_calls') and message.function_calls:
 Execute different functions based on conditions or previous results.
 
 \`\`\`python
-def conditional_workflow(user_message: str):
+def conditional_workflow (user_message: str):
     """
     Workflow with conditional logic.
     Example: Check if user exists, if yes get profile, if no create user.
@@ -294,10 +294,10 @@ def conditional_workflow(user_message: str):
     )
     
     message = response.choices[0].message
-    messages.append(message.to_dict())
+    messages.append (message.to_dict())
     
     if message.function_call and message.function_call.name == "user_exists":
-        args = json.loads(message.function_call.arguments)
+        args = json.loads (message.function_call.arguments)
         exists = user_exists(**args)
         
         messages.append({
@@ -327,14 +327,14 @@ def conditional_workflow(user_message: str):
         if message.function_call:
             # Execute the chosen function
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             result = function_registry[func_name](**func_args)
             
-            messages.append(message.to_dict())
+            messages.append (message.to_dict())
             messages.append({
                 "role": "function",
                 "name": func_name,
-                "content": json.dumps(result)
+                "content": json.dumps (result)
             })
         
         # Get final response
@@ -353,13 +353,13 @@ def conditional_workflow(user_message: str):
 Keep calling functions until a condition is met.
 
 \`\`\`python
-def iterative_search_workflow(query: str, max_attempts: int = 3):
+def iterative_search_workflow (query: str, max_attempts: int = 3):
     """
     Iteratively refine search until satisfactory results found.
     """
     messages = [{"role": "user", "content": query}]
     
-    for attempt in range(max_attempts):
+    for attempt in range (max_attempts):
         print(f"\\nAttempt {attempt + 1}")
         
         # Search
@@ -370,24 +370,24 @@ def iterative_search_workflow(query: str, max_attempts: int = 3):
         )
         
         message = response.choices[0].message
-        messages.append(message.to_dict())
+        messages.append (message.to_dict())
         
         if message.function_call:
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             
             if func_name == "search":
                 results = search(**func_args)
-                print(f"Found {len(results)} results")
+                print(f"Found {len (results)} results")
                 
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps({"results": results, "count": len(results)})
+                    "content": json.dumps({"results": results, "count": len (results)})
                 })
                 
                 # Check if results are sufficient
-                if len(results) >= 5:
+                if len (results) >= 5:
                     # Enough results, get final answer
                     final_response = openai.chat.completions.create(
                         model="gpt-4",
@@ -419,7 +419,7 @@ def iterative_search_workflow(query: str, max_attempts: int = 3):
 Alternate between reasoning and acting (function calling).
 
 \`\`\`python
-def react_agent(user_goal: str, functions: list, function_registry: dict, 
+def react_agent (user_goal: str, functions: list, function_registry: dict, 
                 max_steps: int = 10):
     """
     ReAct agent: Reason about what to do, then Act (call function).
@@ -442,7 +442,7 @@ Format your thoughts explicitly before taking action."""
         }
     ]
     
-    for step in range(max_steps):
+    for step in range (max_steps):
         print(f"\\n--- Step {step + 1} ---")
         
         # Get LLM response
@@ -458,12 +458,12 @@ Format your thoughts explicitly before taking action."""
         if message.content:
             print(f"THINK: {message.content}")
         
-        messages.append(message.to_dict())
+        messages.append (message.to_dict())
         
         # ACT: Execute function if called
         if message.function_call:
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             
             print(f"ACT: {func_name}({func_args})")
             
@@ -474,14 +474,14 @@ Format your thoughts explicitly before taking action."""
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps(result)
+                    "content": json.dumps (result)
                 })
             except Exception as e:
                 print(f"OBSERVE: Error - {e}")
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps({"error": str(e)})
+                    "content": json.dumps({"error": str (e)})
                 })
         else:
             # No function call = final answer
@@ -525,7 +525,7 @@ Handle errors gracefully and retry with different strategies.
 from typing import Optional
 import time
 
-def execute_with_retry(func_name: str, func_args: dict, 
+def execute_with_retry (func_name: str, func_args: dict, 
                       function_registry: dict,
                       max_retries: int = 3,
                       backoff_factor: float = 2.0) -> dict:
@@ -534,7 +534,7 @@ def execute_with_retry(func_name: str, func_args: dict,
     """
     last_error = None
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             result = function_registry[func_name](**func_args)
             return {
@@ -547,15 +547,15 @@ def execute_with_retry(func_name: str, func_args: dict,
             wait_time = backoff_factor ** attempt
             print(f"Attempt {attempt + 1} failed: {e}")
             print(f"Retrying in {wait_time}s...")
-            time.sleep(wait_time)
+            time.sleep (wait_time)
     
     return {
         "success": False,
-        "error": str(last_error),
+        "error": str (last_error),
         "attempts": max_retries
     }
 
-def workflow_with_fallback(user_message: str):
+def workflow_with_fallback (user_message: str):
     """
     Workflow with fallback functions.
     """
@@ -569,14 +569,14 @@ def workflow_with_fallback(user_message: str):
     )
     
     message = response.choices[0].message
-    messages.append(message.to_dict())
+    messages.append (message.to_dict())
     
     if message.function_call:
         func_name = message.function_call.name
-        func_args = json.loads(message.function_call.arguments)
+        func_args = json.loads (message.function_call.arguments)
         
         # Try primary function
-        result = execute_with_retry(func_name, func_args, function_registry)
+        result = execute_with_retry (func_name, func_args, function_registry)
         
         if not result["success"]:
             # Primary failed, try fallback
@@ -599,23 +599,23 @@ def workflow_with_fallback(user_message: str):
             )
             
             message = response.choices[0].message
-            messages.append(message.to_dict())
+            messages.append (message.to_dict())
             
             if message.function_call:
                 func_name = message.function_call.name
-                func_args = json.loads(message.function_call.arguments)
+                func_args = json.loads (message.function_call.arguments)
                 result = function_registry[func_name](**func_args)
                 
                 messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps(result)
+                    "content": json.dumps (result)
                 })
         else:
             messages.append({
                 "role": "function",
                 "name": func_name,
-                "content": json.dumps(result["data"])
+                "content": json.dumps (result["data"])
             })
     
     # Get final response
@@ -652,25 +652,25 @@ class WorkflowState:
     data: Dict[str, Any]
     messages: List[Dict[str, Any]]
     
-    def add_step(self, step_type: str, details: dict):
+    def add_step (self, step_type: str, details: dict):
         """Add a completed step."""
         self.steps.append({
-            "step_number": len(self.steps) + 1,
+            "step_number": len (self.steps) + 1,
             "type": step_type,
             "details": details,
             "timestamp": time.time()
         })
-        self.current_step = len(self.steps)
+        self.current_step = len (self.steps)
     
-    def store_data(self, key: str, value: Any):
+    def store_data (self, key: str, value: Any):
         """Store data from a step for use in later steps."""
         self.data[key] = value
     
-    def get_data(self, key: str) -> Optional[Any]:
+    def get_data (self, key: str) -> Optional[Any]:
         """Retrieve stored data."""
-        return self.data.get(key)
+        return self.data.get (key)
 
-def stateful_workflow(user_goal: str, functions: list, function_registry: dict):
+def stateful_workflow (user_goal: str, functions: list, function_registry: dict):
     """
     Workflow with explicit state management.
     """
@@ -686,7 +686,7 @@ def stateful_workflow(user_goal: str, functions: list, function_registry: dict):
     
     max_steps = 10
     
-    for step_num in range(max_steps):
+    for step_num in range (max_steps):
         # Call LLM
         response = openai.chat.completions.create(
             model="gpt-4",
@@ -695,11 +695,11 @@ def stateful_workflow(user_goal: str, functions: list, function_registry: dict):
         )
         
         message = response.choices[0].message
-        state.messages.append(message.to_dict())
+        state.messages.append (message.to_dict())
         
         if message.function_call:
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             
             # Execute function
             try:
@@ -722,13 +722,13 @@ def stateful_workflow(user_goal: str, functions: list, function_registry: dict):
                 state.messages.append({
                     "role": "function",
                     "name": func_name,
-                    "content": json.dumps(result)
+                    "content": json.dumps (result)
                 })
                 
             except Exception as e:
                 state.add_step("error", {
                     "function": func_name,
-                    "error": str(e)
+                    "error": str (e)
                 })
                 state.status = WorkflowStatus.FAILED
                 return state
@@ -783,7 +783,7 @@ tools = [
 
 # Create agent
 llm = ChatOpenAI(model="gpt-4", temperature=0)
-agent = create_openai_functions_agent(llm, tools, prompt)
+agent = create_openai_functions_agent (llm, tools, prompt)
 
 # Create executor
 agent_executor = AgentExecutor(
@@ -795,7 +795,7 @@ agent_executor = AgentExecutor(
 )
 
 # Run
-result = agent_executor.invoke({"input": "What's the weather in SF?"})
+result = agent_executor.invoke({"input": "What\'s the weather in SF?"})
 \`\`\`
 
 ### Custom Orchestrator
@@ -811,7 +811,7 @@ class WorkflowOrchestrator:
         self.function_registry = function_registry
         self.max_iterations = max_iterations
     
-    async def execute_workflow(self, user_goal: str) -> WorkflowState:
+    async def execute_workflow (self, user_goal: str) -> WorkflowState:
         """Execute a workflow asynchronously."""
         state = WorkflowState(
             user_goal=user_goal,
@@ -822,9 +822,9 @@ class WorkflowOrchestrator:
             messages=[{"role": "user", "content": user_goal}]
         )
         
-        for iteration in range(self.max_iterations):
+        for iteration in range (self.max_iterations):
             # Get next action from LLM
-            action = await self._get_next_action(state)
+            action = await self._get_next_action (state)
             
             if action["type"] == "function_call":
                 # Execute function
@@ -848,12 +848,12 @@ class WorkflowOrchestrator:
         state.status = WorkflowStatus.FAILED
         return state
     
-    async def _get_next_action(self, state: WorkflowState) -> dict:
+    async def _get_next_action (self, state: WorkflowState) -> dict:
         """Get next action from LLM."""
         # Implementation
         pass
     
-    async def _execute_function(self, func_name: str, args: dict) -> Any:
+    async def _execute_function (self, func_name: str, args: dict) -> Any:
         """Execute a function asynchronously."""
         # Implementation
         pass

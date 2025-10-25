@@ -15,14 +15,14 @@ import pandas as pd
 import numpy as np
 
 s = pd.Series([1, 2, 3, 4, 5])
-print(type(s.values))  # <class 'numpy.ndarray'>
+print(type (s.values))  # <class 'numpy.ndarray'>
 print(s.values.dtype)  # int64
 
 df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
-print(type(df['A',].values))  # <class 'numpy.ndarray'>
+print(type (df['A',].values))  # <class 'numpy.ndarray'>
 \`\`\`
 
-2. **Memory Efficiency**: Pandas inherits NumPy's contiguous memory layout and efficient operations
+2. **Memory Efficiency**: Pandas inherits NumPy\'s contiguous memory layout and efficient operations
 
 3. **Interoperability**: Easy conversion between types
 \`\`\`python
@@ -30,7 +30,7 @@ print(type(df['A',].values))  # <class 'numpy.ndarray'>
 arr = df.values  # or df.to_numpy()
 
 # NumPy to Pandas
-df = pd.DataFrame(arr, columns=['A', 'B',])
+df = pd.DataFrame (arr, columns=['A', 'B',])
 \`\`\`
 
 **Why Pandas Builds on NumPy:**
@@ -110,7 +110,7 @@ df = pd.DataFrame({
 \`\`\`python
 df = df.dropna()  # Remove missing values
 df = df.drop_duplicates()  # Remove duplicates
-df['age',] = pd.to_numeric(df['age',], errors='coerce')
+df['age',] = pd.to_numeric (df['age',], errors='coerce')
 \`\`\`
 
 3. **Exploratory analysis**: Quick statistics, grouping, aggregation
@@ -121,14 +121,14 @@ avg_salary = df.groupby('department')['salary',].mean()
 
 4. **Time series**: Date/time indexing and operations
 \`\`\`python
-df['date',] = pd.to_datetime(df['date',])
+df['date',] = pd.to_datetime (df['date',])
 df = df.set_index('date')
 monthly_avg = df.resample('M').mean()
 \`\`\`
 
 5. **Data integration**: Merging, joining multiple datasets
 \`\`\`python
-merged = pd.merge(df1, df2, on='customer_id', how='left')
+merged = pd.merge (df1, df2, on='customer_id', how='left')
 \`\`\`
 
 6. **Reading/writing files**: CSV, Excel, SQL, JSON
@@ -227,7 +227,7 @@ subset = df.loc['Alice':'Charlie', 'Age':'Salary',]  # Range
 high_earners = df.loc[df['Salary',] > 60000]
 
 # Modify values
-df.loc['Alice', 'Age',] = 26  # Change Alice's age
+df.loc['Alice', 'Age',] = 26  # Change Alice\'s age
 df.loc[df['Salary',] < 60000, 'Salary',] *= 1.1  # 10% raise
 \`\`\`
 
@@ -429,7 +429,7 @@ print(df.dtypes)
 # age            int64     # 8 bytes (overkill for age 0-120)
 # salary         int64     # 8 bytes
 
-print(f"Memory: {df.memory_usage(deep=True).sum():,} bytes")
+print(f"Memory: {df.memory_usage (deep=True).sum():,} bytes")
 # Memory: 1,389 bytes
 \`\`\`
 
@@ -457,22 +457,22 @@ print(f"Memory: {df.memory_usage(deep=True).sum():,} bytes")
 df_optimized = df.copy()
 
 # ID: values 1-5, use uint8 (0-255)
-df_optimized['id',] = df_optimized['id',].astype(np.uint8)
+df_optimized['id',] = df_optimized['id',].astype (np.uint8)
 
 # Age: values 25-35, use uint8 (0-255)
-df_optimized['age',] = df_optimized['age',].astype(np.uint8)
+df_optimized['age',] = df_optimized['age',].astype (np.uint8)
 
 # Salary: values < 2B, use uint32
-df_optimized['salary',] = df_optimized['salary',].astype(np.uint32)
+df_optimized['salary',] = df_optimized['salary',].astype (np.uint32)
 
 # Department: repeated values, use category
 df_optimized['department',] = df_optimized['department',].astype('category')
 
 # Name: keep as object (unique strings)
 
-print(f"Original: {df.memory_usage(deep=True).sum():,} bytes")
-print(f"Optimized: {df_optimized.memory_usage(deep=True).sum():,} bytes")
-print(f"Reduction: {(1 - df_optimized.memory_usage(deep=True).sum() / df.memory_usage(deep=True).sum()) * 100:.1f}%")
+print(f"Original: {df.memory_usage (deep=True).sum():,} bytes")
+print(f"Optimized: {df_optimized.memory_usage (deep=True).sum():,} bytes")
+print(f"Reduction: {(1 - df_optimized.memory_usage (deep=True).sum() / df.memory_usage (deep=True).sum()) * 100:.1f}%")
 
 # Typical results:
 # Original: 1,389 bytes
@@ -491,11 +491,11 @@ df_large = pd.DataFrame({
     'department': np.random.choice(['IT', 'HR', 'Sales', 'Marketing',], n)
 })
 
-print(f"Object dtype: {df_large.memory_usage(deep=True).sum() / 1e6:.2f} MB")
+print(f"Object dtype: {df_large.memory_usage (deep=True).sum() / 1e6:.2f} MB")
 # Object dtype: ~50-60 MB
 
 df_large['department',] = df_large['department',].astype('category')
-print(f"Category dtype: {df_large.memory_usage(deep=True).sum() / 1e6:.2f} MB")
+print(f"Category dtype: {df_large.memory_usage (deep=True).sum() / 1e6:.2f} MB")
 # Category dtype: ~1-2 MB
 
 # 95%+ memory reduction!
@@ -520,7 +520,7 @@ print(s.cat.codes)       # [1, 0, 1, 2, 1]
 **Automatic Dtype Optimization:**
 
 \`\`\`python
-def optimize_dtypes(df):
+def optimize_dtypes (df):
     """Automatically optimize DataFrame dtypes"""
     optimized_df = df.copy()
     
@@ -534,27 +534,27 @@ def optimize_dtypes(df):
             
             if c_min >= 0:  # Unsigned
                 if c_max < 255:
-                    optimized_df[col] = optimized_df[col].astype(np.uint8)
+                    optimized_df[col] = optimized_df[col].astype (np.uint8)
                 elif c_max < 65535:
-                    optimized_df[col] = optimized_df[col].astype(np.uint16)
+                    optimized_df[col] = optimized_df[col].astype (np.uint16)
                 elif c_max < 4294967295:
-                    optimized_df[col] = optimized_df[col].astype(np.uint32)
+                    optimized_df[col] = optimized_df[col].astype (np.uint32)
             else:  # Signed
                 if c_min > -128 and c_max < 127:
-                    optimized_df[col] = optimized_df[col].astype(np.int8)
+                    optimized_df[col] = optimized_df[col].astype (np.int8)
                 elif c_min > -32768 and c_max < 32767:
-                    optimized_df[col] = optimized_df[col].astype(np.int16)
+                    optimized_df[col] = optimized_df[col].astype (np.int16)
                 elif c_min > -2147483648 and c_max < 2147483647:
-                    optimized_df[col] = optimized_df[col].astype(np.int32)
+                    optimized_df[col] = optimized_df[col].astype (np.int32)
         
         # Optimize floats
         elif col_type == 'float64':
-            optimized_df[col] = optimized_df[col].astype(np.float32)
+            optimized_df[col] = optimized_df[col].astype (np.float32)
         
         # Optimize objects (potential categories)
         elif col_type == 'object':
             num_unique = optimized_df[col].nunique()
-            num_total = len(optimized_df[col])
+            num_total = len (optimized_df[col])
             
             # If less than 50% unique values, use category
             if num_unique / num_total < 0.5:
@@ -563,7 +563,7 @@ def optimize_dtypes(df):
     return optimized_df
 
 # Usage
-df_opt = optimize_dtypes(df)
+df_opt = optimize_dtypes (df)
 \`\`\`
 
 **Performance Implications:**
@@ -591,7 +591,7 @@ df['dept_cat',] = df['department',].astype('category')
 \`\`\`python
 # For ML, float32 is often sufficient
 # Neural networks typically use float32
-X = df[features].astype(np.float32).values  # 50% memory savings
+X = df[features].astype (np.float32).values  # 50% memory savings
 \`\`\`
 
 **When to Use Each Dtype:**
@@ -630,20 +630,20 @@ X = df[features].astype(np.float32).values  # 50% memory savings
 n = 10_000_000
 
 df_raw = pd.DataFrame({
-    'customer_id': np.arange(n),                    # int64: 76 MB
+    'customer_id': np.arange (n),                    # int64: 76 MB
     'age': np.random.randint(18, 80, n),            # int64: 76 MB
     'country': np.random.choice(['USA', 'UK', 'CA', 'AU',], n),  # object: ~400 MB
     'amount': np.random.uniform(0, 1000, n)         # float64: 76 MB
 })
-print(f"Raw memory: {df_raw.memory_usage(deep=True).sum() / 1e6:.0f} MB")
+print(f"Raw memory: {df_raw.memory_usage (deep=True).sum() / 1e6:.0f} MB")
 # ~628 MB
 
 df_opt = df_raw.copy()
-df_opt['customer_id',] = df_opt['customer_id',].astype(np.uint32)  # 38 MB
-df_opt['age',] = df_opt['age',].astype(np.uint8)                   # 10 MB
+df_opt['customer_id',] = df_opt['customer_id',].astype (np.uint32)  # 38 MB
+df_opt['age',] = df_opt['age',].astype (np.uint8)                   # 10 MB
 df_opt['country',] = df_opt['country',].astype('category')         # 10 MB
-df_opt['amount',] = df_opt['amount',].astype(np.float32)           # 38 MB
-print(f"Optimized memory: {df_opt.memory_usage(deep=True).sum() / 1e6:.0f} MB")
+df_opt['amount',] = df_opt['amount',].astype (np.float32)           # 38 MB
+print(f"Optimized memory: {df_opt.memory_usage (deep=True).sum() / 1e6:.0f} MB")
 # ~96 MB
 
 # 85% memory reduction! (628 MB → 96 MB)
@@ -654,8 +654,8 @@ print(f"Optimized memory: {df_opt.memory_usage(deep=True).sum() / 1e6:.0f} MB")
 
 1. **Check memory usage regularly**
 \`\`\`python
-df.memory_usage(deep=True)
-df.info(memory_usage='deep')
+df.memory_usage (deep=True)
+df.info (memory_usage='deep')
 \`\`\`
 
 2. **Optimize dtypes when loading data**

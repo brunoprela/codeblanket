@@ -118,7 +118,7 @@ PRIMARY KEY (user_id, post_id)
 
 **Partition key** determines data location:
 \`\`\`
-hash(user_id) → Token → Node(s)
+hash (user_id) → Token → Node (s)
 \`\`\`
 
 **Clustering key** sorts within partition:

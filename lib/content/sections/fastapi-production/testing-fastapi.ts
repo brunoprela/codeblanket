@@ -55,11 +55,11 @@ async def read_root():
     return {"message": "Hello World"}
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: int):
+async def read_item (item_id: int):
     return {"item_id": item_id}
 
 # Test client
-client = TestClient(app)
+client = TestClient (app)
 
 def test_read_root():
     """Test root endpoint"""
@@ -94,7 +94,7 @@ class User(BaseModel):
     age: int
 
 @app.post("/users/", status_code=201)
-async def create_user(user: User):
+async def create_user (user: User):
     return {"id": 1, **user.dict()}
 
 def test_create_user():
@@ -124,7 +124,7 @@ def test_create_user_validation_error():
     )
     assert response.status_code == 422
     errors = response.json()["detail"]
-    assert len(errors) > 0
+    assert len (errors) > 0
 \`\`\`
 
 ---
@@ -144,7 +144,7 @@ from fastapi.testclient import TestClient
 @pytest.fixture
 def client():
     """Fixture providing test client"""
-    with TestClient(app) as test_client:
+    with TestClient (app) as test_client:
         yield test_client
 
 @pytest.fixture
@@ -156,7 +156,7 @@ def sample_user():
         "age": 25
     }
 
-def test_with_fixtures(client, sample_user):
+def test_with_fixtures (client, sample_user):
     """Test using fixtures"""
     response = client.post("/users/", json=sample_user)
     assert response.status_code == 201
@@ -195,7 +195,7 @@ def db():
     Creates tables before test, drops after
     """
     # Create tables
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all (bind=engine)
     
     # Create session
     db = TestingSessionLocal()
@@ -205,10 +205,10 @@ def db():
     finally:
         db.close()
         # Drop tables
-        Base.metadata.drop_all(bind=engine)
+        Base.metadata.drop_all (bind=engine)
 
 @pytest.fixture
-def client_with_db(db):
+def client_with_db (db):
     """
     Test client with database dependency override
     """
@@ -220,20 +220,20 @@ def client_with_db(db):
     
     app.dependency_overrides[get_db] = override_get_db
     
-    with TestClient(app) as test_client:
+    with TestClient (app) as test_client:
         yield test_client
     
     # Clear overrides
     app.dependency_overrides.clear()
 
-def test_create_user_in_db(client_with_db, sample_user):
+def test_create_user_in_db (client_with_db, sample_user):
     """Test user creation with real database"""
     response = client_with_db.post("/users/", json=sample_user)
     assert response.status_code == 201
     
     # Verify user in database
     user_id = response.json()["id"]
-    response = client_with_db.get(f"/users/{user_id}")
+    response = client_with_db.get (f"/users/{user_id}")
     assert response.status_code == 200
 \`\`\`
 
@@ -251,11 +251,11 @@ Override authentication dependency for testing
 from fastapi import Depends, HTTPException
 
 # Production dependency
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user (token: str = Depends (oauth2_scheme)):
     """Validate token and return user"""
-    user = decode_token(token)
+    user = decode_token (token)
     if not user:
-        raise HTTPException(status_code=401)
+        raise HTTPException (status_code=401)
     return user
 
 # Test override
@@ -272,12 +272,12 @@ def authenticated_client():
     """Client with authentication bypassed"""
     app.dependency_overrides[get_current_user] = get_current_user_override
     
-    with TestClient(app) as client:
+    with TestClient (app) as client:
         yield client
     
     app.dependency_overrides.clear()
 
-def test_protected_endpoint(authenticated_client):
+def test_protected_endpoint (authenticated_client):
     """Test protected endpoint without real auth"""
     response = authenticated_client.get("/protected")
     assert response.status_code == 200
@@ -303,7 +303,7 @@ async def get_external_data():
 
 @pytest.mark.asyncio
 @patch("httpx.AsyncClient.get")
-async def test_external_data(mock_get):
+async def test_external_data (mock_get):
     """Test with mocked external API"""
     # Mock response
     mock_response = Mock()
@@ -339,12 +339,12 @@ Fast tests with in-memory database
 # - SQLite != PostgreSQL (different SQL dialects)
 # - Missing some PostgreSQL features
 
-@pytest.fixture(scope="function")
+@pytest.fixture (scope="function")
 def db_session():
     """Fresh database for each test"""
     engine = create_engine("sqlite:///:memory:")
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
+    Base.metadata.create_all (engine)
+    Session = sessionmaker (bind=engine)
     session = Session()
     
     yield session
@@ -373,22 +373,22 @@ from sqlalchemy import create_engine
 
 TEST_DATABASE_URL = "postgresql://test:test@localhost/test_db"
 
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def test_engine():
     """Create test database engine"""
     engine = create_engine(TEST_DATABASE_URL)
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all (engine)
     
     yield engine
     
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all (engine)
 
-@pytest.fixture(scope="function")
-def db_session(test_engine):
+@pytest.fixture (scope="function")
+def db_session (test_engine):
     """Transaction-wrapped session"""
     connection = test_engine.connect()
     transaction = connection.begin()
-    Session = sessionmaker(bind=connection)
+    Session = sessionmaker (bind=connection)
     session = Session()
     
     yield session
@@ -409,7 +409,7 @@ import pytest
 import docker
 import time
 
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def postgres_container():
     """Start PostgreSQL container for tests"""
     client = docker.from_env()
@@ -448,13 +448,13 @@ Test JWT authentication flow
 from jose import jwt
 from datetime import datetime, timedelta
 
-def create_test_token(user_id: int = 1):
+def create_test_token (user_id: int = 1):
     """Create valid JWT token for testing"""
     payload = {
-        "sub": str(user_id),
-        "exp": datetime.utcnow() + timedelta(hours=1)
+        "sub": str (user_id),
+        "exp": datetime.utcnow() + timedelta (hours=1)
     }
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode (payload, SECRET_KEY, algorithm=ALGORITHM)
 
 def test_login():
     """Test login endpoint"""
@@ -487,9 +487,9 @@ def test_protected_with_expired_token():
     # Create expired token
     payload = {
         "sub": "1",
-        "exp": datetime.utcnow() - timedelta(hours=1)  # Expired
+        "exp": datetime.utcnow() - timedelta (hours=1)  # Expired
     }
-    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    token = jwt.encode (payload, SECRET_KEY, algorithm=ALGORITHM)
     
     response = client.get(
         "/protected",
@@ -509,7 +509,7 @@ def test_protected_with_expired_token():
 Test complete user workflows
 """
 
-def test_user_registration_flow(client_with_db):
+def test_user_registration_flow (client_with_db):
     """Test complete registration → login → access flow"""
     
     # 1. Register user
@@ -537,12 +537,12 @@ def test_user_registration_flow(client_with_db):
     assert response.status_code == 200
     assert response.json()["id"] == user_id
 
-def test_order_creation_flow(authenticated_client, db):
+def test_order_creation_flow (authenticated_client, db):
     """Test order creation with inventory check"""
     
     # Setup: Create product with inventory
-    product = Product(id=1, name="Test Product", stock=10)
-    db.add(product)
+    product = Product (id=1, name="Test Product", stock=10)
+    db.add (product)
     db.commit()
     
     # 1. Create order
@@ -558,7 +558,7 @@ def test_order_creation_flow(authenticated_client, db):
     assert product.stock == 7
     
     # 3. Verify order status
-    response = authenticated_client.get(f"/orders/{order_id}")
+    response = authenticated_client.get (f"/orders/{order_id}")
     assert response.status_code == 200
     assert response.json()["status"] == "pending"
 \`\`\`
@@ -588,7 +588,7 @@ def test_websocket_authentication():
     """Test WebSocket with authentication"""
     token = create_test_token()
     
-    with client.websocket_connect(f"/ws?token={token}") as websocket:
+    with client.websocket_connect (f"/ws?token={token}") as websocket:
         websocket.send_json({"type": "ping"})
         data = websocket.receive_json()
         assert data["type"] == "pong"
@@ -650,7 +650,7 @@ import pytest
     ("", 422),
     ("test@", 422),
 ])
-def test_user_creation_validation(client, email, expected_status):
+def test_user_creation_validation (client, email, expected_status):
     """Test email validation with various inputs"""
     response = client.post(
         "/users/",
@@ -665,7 +665,7 @@ def test_user_creation_validation(client, email, expected_status):
     (151, False),  # Too old
     (-1, False),  # Negative
 ])
-def test_age_validation(client, age, valid):
+def test_age_validation (client, age, valid):
     """Test age validation"""
     response = client.post(
         "/users/",
@@ -695,21 +695,21 @@ import asyncio
 @pytest.mark.asyncio
 async def test_async_operation():
     """Test async endpoint"""
-    async with httpx.AsyncClient(app=app, base_url="http://test") as client:
+    async with httpx.AsyncClient (app=app, base_url="http://test") as client:
         response = await client.get("/async-endpoint")
         assert response.status_code == 200
 
 @pytest.mark.asyncio
 async def test_concurrent_requests():
     """Test multiple concurrent requests"""
-    async with httpx.AsyncClient(app=app, base_url="http://test") as client:
+    async with httpx.AsyncClient (app=app, base_url="http://test") as client:
         tasks = [
-            client.get(f"/items/{i}")
+            client.get (f"/items/{i}")
             for i in range(10)
         ]
         responses = await asyncio.gather(*tasks)
         
-        assert all(r.status_code == 200 for r in responses)
+        assert all (r.status_code == 200 for r in responses)
 \`\`\`
 
 ---

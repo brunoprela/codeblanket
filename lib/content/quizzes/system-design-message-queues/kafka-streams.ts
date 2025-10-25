@@ -50,13 +50,13 @@ KTable<String, ProductMetrics> productMetrics = purchases
         () -> new ProductMetrics(),  // Initializer
         (productId, purchase, metrics) -> {
             metrics.incrementCount();
-            metrics.addAmount(purchase.getAmount());
+            metrics.addAmount (purchase.getAmount());
             metrics.updateAverage();
             return metrics;
         },
         Materialized.<String, ProductMetrics, KeyValueStore<Bytes, byte[]>>as("product-metrics-store")
             .withKeySerde(Serdes.String())
-            .withValueSerde(productMetricsSerde)
+            .withValueSerde (productMetricsSerde)
     );
 
 // 3. Queryable state for dashboard
@@ -66,7 +66,7 @@ ReadOnlyKeyValueStore<String, ProductMetrics> store =
 // REST API endpoint:
 @GetMapping("/products/{productId}/metrics")
 public ProductMetrics getMetrics(@PathVariable String productId) {
-    return store.get(productId);
+    return store.get (productId);
 }
 \`\`\`
 
@@ -123,7 +123,7 @@ KStream<String, FraudAlert> highFrequencyAlerts = transactionCounts
     .filter((windowedKey, count) -> count > 5)
     .map((windowedKey, count) -> {
         String cardId = windowedKey.key();
-        return KeyValue.pair(cardId, new FraudAlert(
+        return KeyValue.pair (cardId, new FraudAlert(
             cardId, 
             "HIGH_FREQUENCY", 
             "5+ transactions in 5 minutes", 
@@ -138,7 +138,7 @@ KTable<Windowed<String>, Set<String>> countryTracker = transactions
     .aggregate(
         () -> new HashSet<String>(),
         (cardId, tx, countries) -> {
-            countries.add(tx.getCountry());
+            countries.add (tx.getCountry());
             return countries;
         },
         Materialized.with(Serdes.String(), countrySetSerde)
@@ -149,7 +149,7 @@ KStream<String, FraudAlert> multiCountryAlerts = countryTracker
     .filter((windowedKey, countries) -> countries.size() > 2)
     .map((windowedKey, countries) -> {
         String cardId = windowedKey.key();
-        return KeyValue.pair(cardId, new FraudAlert(
+        return KeyValue.pair (cardId, new FraudAlert(
             cardId,
             "MULTI_COUNTRY",
             "Transactions in " + countries.size() + " countries",
@@ -158,7 +158,7 @@ KStream<String, FraudAlert> multiCountryAlerts = countryTracker
     });
 
 // Merge alerts
-KStream<String, FraudAlert> allAlerts = highFrequencyAlerts.merge(multiCountryAlerts);
+KStream<String, FraudAlert> allAlerts = highFrequencyAlerts.merge (multiCountryAlerts);
 
 // Send to alerts topic (exactly-once)
 allAlerts.to("fraud-alerts");

@@ -18,7 +18,7 @@ export const codegenerationfundamentalsMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        "Syntax validation must be first because code that doesn't parse cannot be analyzed further. There's no point checking imports, security, or style if the code won't even parse.",
+        "Syntax validation must be first because code that doesn't parse cannot be analyzed further. There\'s no point checking imports, security, or style if the code won't even parse.",
     },
     {
       id: 'bcgs-codegenfund-mc-2',

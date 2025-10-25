@@ -6,7 +6,7 @@ export const backtestingSimulation = {
 
 ## Introduction
 
-Backtesting is the process of testing a trading strategy on historical data to estimate its future performance. It's the **most critical step** in algorithmic trading—a strategy that looks good in backtest might still fail live, but one that fails in backtest will **definitely** fail live.
+Backtesting is the process of testing a trading strategy on historical data to estimate its future performance. It\'s the **most critical step** in algorithmic trading—a strategy that looks good in backtest might still fail live, but one that fails in backtest will **definitely** fail live.
 
 **The Challenge**: 80% of strategies that pass backtesting fail in live trading. Why?
 - **Overfitting**: Curve-fitting to past data
@@ -40,22 +40,22 @@ Common Backtesting Mistakes and How to Avoid Them
 def calculate_signal_WRONG(prices):
     # This uses t+1 information at time t!
     future_return = prices.pct_change().shift(-1)
-    return (future_return > 0).astype(int)
+    return (future_return > 0).astype (int)
 
 # ✅ CORRECT: Only use past information
 def calculate_signal_CORRECT(prices):
     # Past return available at time t
     past_return = prices.pct_change(5)  # 5-day return
-    return (past_return > 0.05).astype(int).shift(1)  # Shift by 1!
+    return (past_return > 0.05).astype (int).shift(1)  # Shift by 1!
 
 
 # SIN 2: Survivorship Bias
 # ❌ WRONG: Using current index constituents
 current_sp500 = ['AAPL', 'MSFT', 'GOOGL', ...]  # Only survivors
-backtest_data = yf.download(current_sp500, start='2000-01-01')  # Missing failures!
+backtest_data = yf.download (current_sp500, start='2000-01-01')  # Missing failures!
 
 # ✅ CORRECT: Use point-in-time universe
-def get_point_in_time_universe(date):
+def get_point_in_time_universe (date):
     """Return stocks actually in S&P 500 on this date"""
     # Include delisted/bankrupt stocks that were in index
     # Use services like Sharadar, Quandl, or exchange archives
@@ -65,7 +65,7 @@ def get_point_in_time_universe(date):
 # SIN 3: Selection Bias
 # ❌ WRONG: Testing many strategies, reporting best
 for strategy in range(1000):
-    result = backtest(strategy, data)
+    result = backtest (strategy, data)
     if result.sharpe > 2.0:
         print(f"Found amazing strategy {strategy}!")  # Pure luck!
 
@@ -78,11 +78,11 @@ corrected_alpha = alpha / num_strategies  # 0.00005
 
 # SIN 4: Ignoring Transaction Costs
 # ❌ WRONG: Assume free trading
-signals = generate_signals(data)
+signals = generate_signals (data)
 returns = signals.shift(1) * data['Close'].pct_change()  # No costs!
 
 # ✅ CORRECT: Include all costs
-def apply_transaction_costs(returns, signals, commission=0.001, slippage=0.0005):
+def apply_transaction_costs (returns, signals, commission=0.001, slippage=0.0005):
     """Apply realistic costs"""
     # Commission on each trade
     trades = signals.diff().abs()
@@ -103,7 +103,7 @@ best_params = None
 for param1 in range(1, 100):
     for param2 in range(1, 100):
         for param3 in range(1, 100):  # 1 million combinations!
-            sharpe = backtest(param1, param2, param3)
+            sharpe = backtest (param1, param2, param3)
             if sharpe > best_sharpe:
                 best_sharpe = sharpe
                 best_params = (param1, param2, param3)
@@ -132,7 +132,7 @@ volatile = data['2020-03':'2020-06']  # COVID crash
 while sharpe < 1.5:
     # Keep tweaking until good result
     strategy = adjust_strategy()
-    sharpe = backtest(strategy, data)
+    sharpe = backtest (strategy, data)
 
 # ✅ CORRECT: Hold out final test set
 # Train set: 60% (develop strategy)
@@ -212,10 +212,10 @@ class AdvancedBacktester:
         self.daily_returns: List[float] = []
         
         # Logging
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig (level=logging.INFO)
         self.logger = logging.getLogger(__name__)
     
-    def run_backtest(self, data: pd.DataFrame, signals: pd.DataFrame):
+    def run_backtest (self, data: pd.DataFrame, signals: pd.DataFrame):
         """
         Run comprehensive backtest
         
@@ -227,9 +227,9 @@ class AdvancedBacktester:
         Returns:
             Dictionary with results
         """
-        self.logger.info(f"Starting backtest: {data.index[0]} to {data.index[-1]}")
+        self.logger.info (f"Starting backtest: {data.index[0]} to {data.index[-1]}")
         
-        dates = sorted(data.index.unique())
+        dates = sorted (data.index.unique())
         
         for date in dates:
             # Get today's data and signals
@@ -237,29 +237,29 @@ class AdvancedBacktester:
             today_signals = signals.loc[date] if date in signals.index else pd.DataFrame()
             
             # Update existing positions (check stops, etc.)
-            self._update_positions(today_data)
+            self._update_positions (today_data)
             
             # Exit positions based on signals or risk management
-            self._exit_positions(today_data, today_signals)
+            self._exit_positions (today_data, today_signals)
             
             # Enter new positions
-            self._enter_positions(today_data, today_signals)
+            self._enter_positions (today_data, today_signals)
             
             # Record equity
-            portfolio_value = self._calculate_portfolio_value(today_data)
-            self.equity_curve.append(portfolio_value)
+            portfolio_value = self._calculate_portfolio_value (today_data)
+            self.equity_curve.append (portfolio_value)
             
             # Daily return
-            if len(self.equity_curve) > 1:
+            if len (self.equity_curve) > 1:
                 daily_return = (portfolio_value - self.equity_curve[-2]) / self.equity_curve[-2]
-                self.daily_returns.append(daily_return)
+                self.daily_returns.append (daily_return)
         
         # Calculate final metrics
         return self._calculate_metrics()
     
-    def _update_positions(self, data: pd.DataFrame):
+    def _update_positions (self, data: pd.DataFrame):
         """Update position prices, check MAE/MFE"""
-        for symbol, position in list(self.positions.items()):
+        for symbol, position in list (self.positions.items()):
             if symbol not in data.index:
                 continue
             
@@ -274,28 +274,28 @@ class AdvancedBacktester:
                 pnl_pct = (entry_price - current_price) / entry_price
             
             # Update MAE/MFE
-            position['mae'] = min(position.get('mae', 0), pnl_pct)
-            position['mfe'] = max(position.get('mfe', 0), pnl_pct)
+            position['mae'] = min (position.get('mae', 0), pnl_pct)
+            position['mfe'] = max (position.get('mfe', 0), pnl_pct)
             
             # Check stop loss
             if pnl_pct < -self.config.stop_loss_pct:
-                self.logger.info(f"Stop loss hit for {symbol}: {pnl_pct:.2%}")
-                self._close_position(symbol, data, reason='stop_loss')
+                self.logger.info (f"Stop loss hit for {symbol}: {pnl_pct:.2%}")
+                self._close_position (symbol, data, reason='stop_loss')
             
             # Check take profit
             if pnl_pct > self.config.take_profit_pct:
-                self.logger.info(f"Take profit hit for {symbol}: {pnl_pct:.2%}")
-                self._close_position(symbol, data, reason='take_profit')
+                self.logger.info (f"Take profit hit for {symbol}: {pnl_pct:.2%}")
+                self._close_position (symbol, data, reason='take_profit')
     
-    def _enter_positions(self, data: pd.DataFrame, signals: pd.DataFrame):
+    def _enter_positions (self, data: pd.DataFrame, signals: pd.DataFrame):
         """Enter new positions based on signals"""
         # Portfolio heat check
-        current_risk = len(self.positions) * self.config.max_position_risk
+        current_risk = len (self.positions) * self.config.max_position_risk
         if current_risk >= self.config.max_portfolio_risk:
             return  # Portfolio risk limit reached
         
         # Max positions check
-        if len(self.positions) >= self.config.max_positions:
+        if len (self.positions) >= self.config.max_positions:
             return
         
         for symbol in signals.index:
@@ -321,7 +321,7 @@ class AdvancedBacktester:
                 continue
             
             # Calculate position size
-            portfolio_value = self.cash + self._calculate_positions_value(data)
+            portfolio_value = self.cash + self._calculate_positions_value (data)
             position_value = portfolio_value * self.config.position_size
             
             # Apply slippage
@@ -331,7 +331,7 @@ class AdvancedBacktester:
                 entry_price = price * (1 - self.config.slippage)
             
             # Calculate shares
-            shares = int(position_value / entry_price)
+            shares = int (position_value / entry_price)
             if shares == 0:
                 continue
             
@@ -346,7 +346,7 @@ class AdvancedBacktester:
             self.cash -= (actual_value + commission)
             
             self.positions[symbol] = {
-                'entry_date': data.index[0] if isinstance(data.index, pd.DatetimeIndex) else pd.Timestamp.now(),
+                'entry_date': data.index[0] if isinstance (data.index, pd.DatetimeIndex) else pd.Timestamp.now(),
                 'entry_price': entry_price,
                 'shares': shares,
                 'direction': signal,
@@ -356,9 +356,9 @@ class AdvancedBacktester:
                 'mfe': 0.0
             }
             
-            self.logger.info(f"Entered {symbol}: {signal} {shares} @ \${entry_price:.2f}")
+            self.logger.info (f"Entered {symbol}: {signal} {shares} @ \${entry_price:.2f}")
     
-    def _close_position(self, symbol: str, data: pd.DataFrame, reason: str = 'signal'):
+    def _close_position (self, symbol: str, data: pd.DataFrame, reason: str = 'signal'):
         """Close a position"""
         if symbol not in self.positions:
             return
@@ -388,7 +388,7 @@ class AdvancedBacktester:
         # Record trade
         trade = Trade(
             entry_date=position['entry_date'],
-            exit_date=data.index[0] if isinstance(data.index, pd.DatetimeIndex) else pd.Timestamp.now(),
+            exit_date=data.index[0] if isinstance (data.index, pd.DatetimeIndex) else pd.Timestamp.now(),
             symbol=symbol,
             direction=direction,
             entry_price=position['entry_price'],
@@ -399,13 +399,13 @@ class AdvancedBacktester:
             pnl=pnl,
             return_pct=return_pct,
             commission=position['commission_paid'] + commission,
-            slippage=abs(exit_price - current_price),
-            holding_period=(data.index[0] - position['entry_date']).days if isinstance(data.index, pd.DatetimeIndex) else 0,
+            slippage=abs (exit_price - current_price),
+            holding_period=(data.index[0] - position['entry_date']).days if isinstance (data.index, pd.DatetimeIndex) else 0,
             mae=position['mae'],
             mfe=position['mfe']
         )
         
-        self.trades.append(trade)
+        self.trades.append (trade)
         
         # Update cash
         self.cash += exit_value - commission
@@ -413,20 +413,20 @@ class AdvancedBacktester:
         # Remove position
         del self.positions[symbol]
         
-        self.logger.info(f"Closed {symbol}: PnL \${pnl:.2f} ({return_pct:.2%}), Reason: {reason}")
+        self.logger.info (f"Closed {symbol}: PnL \${pnl:.2f} ({return_pct:.2%}), Reason: {reason}")
     
-    def _exit_positions(self, data: pd.DataFrame, signals: pd.DataFrame):
+    def _exit_positions (self, data: pd.DataFrame, signals: pd.DataFrame):
         """Exit positions based on signals"""
-        for symbol in list(self.positions.keys()):
+        for symbol in list (self.positions.keys()):
             # Check if signal changed
             if symbol in signals.index:
                 current_signal = signals.loc[symbol, 'signal']
                 position_direction = self.positions[symbol]['direction']
                 
                 if current_signal != position_direction:
-                    self._close_position(symbol, data, reason='signal_change')
+                    self._close_position (symbol, data, reason='signal_change')
     
-    def _calculate_positions_value(self, data: pd.DataFrame) -> float:
+    def _calculate_positions_value (self, data: pd.DataFrame) -> float:
         """Calculate total value of open positions"""
         total = 0
         for symbol, position in self.positions.items():
@@ -443,20 +443,20 @@ class AdvancedBacktester:
         
         return total
     
-    def _calculate_portfolio_value(self, data: pd.DataFrame) -> float:
+    def _calculate_portfolio_value (self, data: pd.DataFrame) -> float:
         """Calculate total portfolio value"""
-        return self.cash + self._calculate_positions_value(data)
+        return self.cash + self._calculate_positions_value (data)
     
-    def _calculate_metrics(self) -> Dict:
+    def _calculate_metrics (self) -> Dict:
         """Calculate comprehensive performance metrics"""
         if not self.trades:
             return {'error': 'No trades executed'}
         
         # Convert trades to DataFrame
-        trades_df = pd.DataFrame([vars(t) for t in self.trades])
+        trades_df = pd.DataFrame([vars (t) for t in self.trades])
         
         # Basic metrics
-        total_trades = len(self.trades)
+        total_trades = len (self.trades)
         winning_trades = (trades_df['pnl'] > 0).sum()
         losing_trades = (trades_df['pnl'] < 0).sum()
         win_rate = winning_trades / total_trades
@@ -468,11 +468,11 @@ class AdvancedBacktester:
         profit_factor = -avg_win / avg_loss * win_rate / (1 - win_rate) if avg_loss != 0 else 0
         
         # Returns
-        equity = pd.Series(self.equity_curve)
-        returns = pd.Series(self.daily_returns)
+        equity = pd.Series (self.equity_curve)
+        returns = pd.Series (self.daily_returns)
         
         total_return = (equity.iloc[-1] - self.config.initial_capital) / self.config.initial_capital
-        annual_return = (1 + total_return) ** (252 / len(equity)) - 1
+        annual_return = (1 + total_return) ** (252 / len (equity)) - 1
         
         # Risk metrics
         volatility = returns.std() * np.sqrt(252)
@@ -485,8 +485,8 @@ class AdvancedBacktester:
         
         # Trade analysis
         avg_holding_period = trades_df['holding_period'].mean()
-        max_consecutive_wins = self._max_consecutive(trades_df['pnl'] > 0)
-        max_consecutive_losses = self._max_consecutive(trades_df['pnl'] < 0)
+        max_consecutive_wins = self._max_consecutive (trades_df['pnl'] > 0)
+        max_consecutive_losses = self._max_consecutive (trades_df['pnl'] < 0)
         
         # MAE/MFE analysis
         avg_mae = trades_df['mae'].mean()
@@ -513,14 +513,14 @@ class AdvancedBacktester:
         }
     
     @staticmethod
-    def _max_consecutive(series):
+    def _max_consecutive (series):
         """Calculate maximum consecutive True values"""
         max_count = 0
         current_count = 0
         for val in series:
             if val:
                 current_count += 1
-                max_count = max(max_count, current_count)
+                max_count = max (max_count, current_count)
             else:
                 current_count = 0
         return max_count
@@ -540,14 +540,14 @@ if __name__ == "__main__":
     )
     
     # Create backtest engine
-    backtester = AdvancedBacktester(config)
+    backtester = AdvancedBacktester (config)
     
     # Run backtest (assuming data and signals prepared)
-    # results = backtester.run_backtest(data, signals)
+    # results = backtester.run_backtest (data, signals)
     
     # Display results
     # for metric, value in results.items():
-    #     if isinstance(value, float):
+    #     if isinstance (value, float):
     #         if 'return' in metric or 'rate' in metric:
     #             print(f"{metric}: {value:.2%}")
     #         else:
@@ -575,7 +575,7 @@ class MonteCarloSimulator:
     def __init__(self, trades: List[Trade]):
         self.trades = trades
     
-    def resample_trades(self, n_simulations=1000, block_size=1):
+    def resample_trades (self, n_simulations=1000, block_size=1):
         """
         Randomly resample trades to test strategy robustness
         
@@ -588,17 +588,17 @@ class MonteCarloSimulator:
         """
         results = []
         
-        for sim in range(n_simulations):
+        for sim in range (n_simulations):
             # Resample trades with replacement
             if block_size == 1:
-                sampled_trades = np.random.choice(self.trades, size=len(self.trades), replace=True)
+                sampled_trades = np.random.choice (self.trades, size=len (self.trades), replace=True)
             else:
                 # Block bootstrap to preserve correlation
-                sampled_trades = self._block_bootstrap(self.trades, block_size)
+                sampled_trades = self._block_bootstrap (self.trades, block_size)
             
             # Calculate metrics
-            total_return = sum(t.return_pct for t in sampled_trades)
-            sharpe = self._calculate_sharpe(sampled_trades)
+            total_return = sum (t.return_pct for t in sampled_trades)
+            sharpe = self._calculate_sharpe (sampled_trades)
             max_dd = self._calculate_max_drawdown([t.return_pct for t in sampled_trades])
             
             results.append({
@@ -607,39 +607,39 @@ class MonteCarloSimulator:
                 'max_drawdown': max_dd
             })
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def _block_bootstrap(self, trades, block_size):
+    def _block_bootstrap (self, trades, block_size):
         """Block bootstrap resampling"""
-        n_blocks = len(trades) // block_size
+        n_blocks = len (trades) // block_size
         sampled_trades = []
         
-        for _ in range(n_blocks):
-            start_idx = np.random.randint(0, len(trades) - block_size + 1)
+        for _ in range (n_blocks):
+            start_idx = np.random.randint(0, len (trades) - block_size + 1)
             block = trades[start_idx:start_idx + block_size]
-            sampled_trades.extend(block)
+            sampled_trades.extend (block)
         
-        return sampled_trades[:len(trades)]
+        return sampled_trades[:len (trades)]
     
     @staticmethod
-    def _calculate_sharpe(trades):
+    def _calculate_sharpe (trades):
         """Calculate Sharpe ratio from trades"""
         returns = [t.return_pct for t in trades]
-        if len(returns) == 0:
+        if len (returns) == 0:
             return 0
-        mean_return = np.mean(returns) * 252  # Annualize
-        std_return = np.std(returns) * np.sqrt(252)
+        mean_return = np.mean (returns) * 252  # Annualize
+        std_return = np.std (returns) * np.sqrt(252)
         return mean_return / std_return if std_return > 0 else 0
     
     @staticmethod
-    def _calculate_max_drawdown(returns):
+    def _calculate_max_drawdown (returns):
         """Calculate maximum drawdown"""
-        cumulative = np.cumsum(returns)
-        running_max = np.maximum.accumulate(cumulative)
+        cumulative = np.cumsum (returns)
+        running_max = np.maximum.accumulate (cumulative)
         drawdown = (cumulative - running_max)
         return drawdown.min()
     
-    def analyze_results(self, results_df):
+    def analyze_results (self, results_df):
         """Analyze Monte Carlo results"""
         analysis = {
             'mean_return': results_df['total_return'].mean(),
@@ -658,13 +658,13 @@ class MonteCarloSimulator:
 
 
 # Example: Run Monte Carlo
-mc_simulator = MonteCarloSimulator(backtester.trades)
-mc_results = mc_simulator.resample_trades(n_simulations=1000)
-mc_analysis = mc_simulator.analyze_results(mc_results)
+mc_simulator = MonteCarloSimulator (backtester.trades)
+mc_results = mc_simulator.resample_trades (n_simulations=1000)
+mc_analysis = mc_simulator.analyze_results (mc_results)
 
 print("\\n=== Monte Carlo Analysis (1000 simulations) ===")
 for metric, value in mc_analysis.items():
-    if isinstance(value, float):
+    if isinstance (value, float):
         if 'return' in metric or 'drawdown' in metric or 'prob' in metric:
             print(f"{metric}: {value:.2%}")
         else:
@@ -673,26 +673,26 @@ for metric, value in mc_analysis.items():
 # Visualize distribution
 import matplotlib.pyplot as plt
 
-plt.figure(figsize=(12, 4))
+plt.figure (figsize=(12, 4))
 
 plt.subplot(131)
-plt.hist(mc_results['total_return'], bins=50, edgecolor='black', alpha=0.7)
-plt.axvline(mc_analysis['mean_return'], color='red', linestyle='--', label='Mean')
-plt.axvline(mc_analysis['percentile_5'], color='orange', linestyle='--', label='5th %ile')
+plt.hist (mc_results['total_return'], bins=50, edgecolor='black', alpha=0.7)
+plt.axvline (mc_analysis['mean_return'], color='red', linestyle='--', label='Mean')
+plt.axvline (mc_analysis['percentile_5'], color='orange', linestyle='--', label='5th %ile')
 plt.xlabel('Total Return')
 plt.ylabel('Frequency')
 plt.title('Return Distribution')
 plt.legend()
 
 plt.subplot(132)
-plt.hist(mc_results['sharpe'], bins=50, edgecolor='black', alpha=0.7)
+plt.hist (mc_results['sharpe'], bins=50, edgecolor='black', alpha=0.7)
 plt.axvline(1.0, color='red', linestyle='--', label='Sharpe=1.0')
 plt.xlabel('Sharpe Ratio')
 plt.title('Sharpe Distribution')
 plt.legend()
 
 plt.subplot(133)
-plt.hist(mc_results['max_drawdown'], bins=50, edgecolor='black', alpha=0.7)
+plt.hist (mc_results['max_drawdown'], bins=50, edgecolor='black', alpha=0.7)
 plt.axvline(-0.20, color='red', linestyle='--', label='-20%')
 plt.xlabel('Max Drawdown')
 plt.title('Drawdown Distribution')
@@ -722,7 +722,7 @@ class WalkForwardAnalyzer:
         self.data = data
         self.strategy_class = strategy_class
     
-    def run_walk_forward(self, train_window=252, test_window=21,
+    def run_walk_forward (self, train_window=252, test_window=21,
                          reoptimize_freq=21, param_grid=None):
         """
         Perform walk-forward analysis
@@ -743,49 +743,49 @@ class WalkForwardAnalyzer:
             'dates': []
         }
         
-        for i in range(train_window, len(self.data) - test_window, reoptimize_freq):
+        for i in range (train_window, len (self.data) - test_window, reoptimize_freq):
             # Training period
             train_data = self.data.iloc[i-train_window:i]
             
             # Optimize on training data
             if param_grid:
-                best_params = self._optimize_parameters(train_data, param_grid)
+                best_params = self._optimize_parameters (train_data, param_grid)
             else:
                 best_params = {}
             
-            results['optimal_params'].append(best_params)
+            results['optimal_params'].append (best_params)
             
             # Test period (out-of-sample)
             test_data = self.data.iloc[i:i+test_window]
             
             # Apply strategy with optimal parameters
             strategy = self.strategy_class(**best_params)
-            test_return = self._backtest_strategy(strategy, test_data)
+            test_return = self._backtest_strategy (strategy, test_data)
             
             # Also calculate in-sample performance for comparison
-            train_return = self._backtest_strategy(strategy, train_data)
+            train_return = self._backtest_strategy (strategy, train_data)
             
-            results['test_returns'].append(test_return)
-            results['train_returns'].append(train_return)
-            results['dates'].append(test_data.index[0])
+            results['test_returns'].append (test_return)
+            results['train_returns'].append (train_return)
+            results['dates'].append (test_data.index[0])
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def _optimize_parameters(self, train_data, param_grid):
+    def _optimize_parameters (self, train_data, param_grid):
         """Optimize parameters on training data"""
         best_sharpe = -np.inf
         best_params = {}
         
         # Grid search
         from itertools import product
-        param_combinations = list(product(*param_grid.values()))
-        param_names = list(param_grid.keys())
+        param_combinations = list (product(*param_grid.values()))
+        param_names = list (param_grid.keys())
         
         for combo in param_combinations:
-            params = dict(zip(param_names, combo))
+            params = dict (zip (param_names, combo))
             strategy = self.strategy_class(**params)
             
-            sharpe = self._backtest_strategy(strategy, train_data, return_sharpe=True)
+            sharpe = self._backtest_strategy (strategy, train_data, return_sharpe=True)
             
             if sharpe > best_sharpe:
                 best_sharpe = sharpe
@@ -793,9 +793,9 @@ class WalkForwardAnalyzer:
         
         return best_params
     
-    def _backtest_strategy(self, strategy, data, return_sharpe=False):
+    def _backtest_strategy (self, strategy, data, return_sharpe=False):
         """Backtest strategy on data"""
-        signals = strategy.generate_signals(data)
+        signals = strategy.generate_signals (data)
         returns = signals.shift(1) * data['Close'].pct_change()
         
         if return_sharpe:
@@ -804,14 +804,14 @@ class WalkForwardAnalyzer:
         else:
             return returns.sum()
     
-    def analyze_walk_forward(self, results):
+    def analyze_walk_forward (self, results):
         """Analyze walk-forward results"""
         analysis = {
             'avg_test_return': results['test_returns'].mean(),
             'avg_train_return': results['train_returns'].mean(),
             'overfitting_ratio': results['train_returns'].mean() / results['test_returns'].mean(),
             'test_sharpe': results['test_returns'].mean() / results['test_returns'].std() * np.sqrt(12),  # Assuming monthly
-            'stability': results['test_returns'].std() / abs(results['test_returns'].mean()),
+            'stability': results['test_returns'].std() / abs (results['test_returns'].mean()),
             'win_rate': (results['test_returns'] > 0).mean(),
             'worst_period': results['test_returns'].min(),
             'best_period': results['test_returns'].max()
@@ -821,7 +821,7 @@ class WalkForwardAnalyzer:
 
 
 # Example: Walk-forward analysis
-# wf_analyzer = WalkForwardAnalyzer(data, MomentumStrategy)
+# wf_analyzer = WalkForwardAnalyzer (data, MomentumStrategy)
 # param_grid = {
 #     'lookback': [10, 21, 63],
 #     'threshold': [0.02, 0.05, 0.10]
@@ -834,11 +834,11 @@ class WalkForwardAnalyzer:
 #     param_grid=param_grid
 # )
 # 
-# wf_analysis = wf_analyzer.analyze_walk_forward(wf_results)
+# wf_analysis = wf_analyzer.analyze_walk_forward (wf_results)
 # 
 # print("\\n=== Walk-Forward Analysis ===")
 # for metric, value in wf_analysis.items():
-#     if isinstance(value, float):
+#     if isinstance (value, float):
 #         print(f"{metric}: {value:.3f}")
 \`\`\`
 

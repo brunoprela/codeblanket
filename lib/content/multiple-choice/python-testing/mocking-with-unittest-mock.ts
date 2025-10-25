@@ -12,7 +12,7 @@ export const mockingWithUnittestMockMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'MagicMock supports magic methods (__len__, __iter__, __str__, __enter__, etc.): mock = Mock(); len(mock) → unexpected behavior. magic = MagicMock(); magic.__len__.return_value = 5; len(magic) → 5. Use MagicMock when mocking objects that use magic methods (containers, context managers, iterables). Mock is lighter/faster for simple cases. Not related to test type (unit vs integration) or module mocking. Both work the same way except for magic method support.',
+      'MagicMock supports magic methods (__len__, __iter__, __str__, __enter__, etc.): mock = Mock(); len (mock) → unexpected behavior. magic = MagicMock(); magic.__len__.return_value = 5; len (magic) → 5. Use MagicMock when mocking objects that use magic methods (containers, context managers, iterables). Mock is lighter/faster for simple cases. Not related to test type (unit vs integration) or module mocking. Both work the same way except for magic method support.',
   },
   {
     id: 'mum-mc-2',
@@ -52,7 +52,7 @@ export const mockingWithUnittestMockMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'spec provides type safety by restricting mock to specified class interface: mock = Mock(spec=PaymentGateway) → mock.charge() works (exists in PaymentGateway), mock.typo_method() raises AttributeError (not in spec). Benefits: Catches typos in tests, ensures mock matches real object interface, prevents accessing non-existent methods. spec_set even stricter (prevents adding new attributes). Not for: return values (use return_value), test selection, or file locations. Use spec to make mocks match real objects.',
+      'spec provides type safety by restricting mock to specified class interface: mock = Mock (spec=PaymentGateway) → mock.charge() works (exists in PaymentGateway), mock.typo_method() raises AttributeError (not in spec). Benefits: Catches typos in tests, ensures mock matches real object interface, prevents accessing non-existent methods. spec_set even stricter (prevents adding new attributes). Not for: return values (use return_value), test selection, or file locations. Use spec to make mocks match real objects.',
   },
   {
     id: 'mum-mc-5',

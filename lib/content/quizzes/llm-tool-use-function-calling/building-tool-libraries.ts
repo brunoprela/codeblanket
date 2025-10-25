@@ -11,43 +11,43 @@ class ScalableToolRegistry:
     def __init__(self):
         self._tools: Dict[str, Tool] = {}
         self._index = ToolIndex()  # For fast lookups
-        self._cache = LRUCache(maxsize=100)
+        self._cache = LRUCache (maxsize=100)
         self._loader = DynamicToolLoader()
     
-    def register(self, tool: Tool):
+    def register (self, tool: Tool):
         # Store tool
         self._tools[tool.name] = tool
         
         # Update indexes
-        self._index.add(tool)
+        self._index.add (tool)
         
         # Clear relevant caches
-        self._cache.invalidate(f"category:{tool.category}")
+        self._cache.invalidate (f"category:{tool.category}")
 \`\`\`
 
 **Fast Search with Indexing:**
 \`\`\`python
 class ToolIndex:
     def __init__(self):
-        self.by_category = defaultdict(set)
-        self.by_tag = defaultdict(set)
+        self.by_category = defaultdict (set)
+        self.by_tag = defaultdict (set)
         self.search_index = {}  # For full-text search
     
-    def search(self, query: str) -> List[str]:
+    def search (self, query: str) -> List[str]:
         # Combine multiple index lookups
         results = set()
         
         # Category match
         if query in self.by_category:
-            results.update(self.by_category[query])
+            results.update (self.by_category[query])
         
         # Full-text search on descriptions
         words = query.lower().split()
         for word in words:
             if word in self.search_index:
-                results.update(self.search_index[word])
+                results.update (self.search_index[word])
         
-        return list(results)
+        return list (results)
 \`\`\`
 
 **Version Management:**
@@ -63,7 +63,7 @@ class VersionedRegistry:
         self.versions: Dict[str, Dict[str, Tool]] = {}
         self.aliases: Dict[str, str] = {}  # name -> default version
     
-    def register(self, tool: Tool, version: str):
+    def register (self, tool: Tool, version: str):
         if tool.name not in self.versions:
             self.versions[tool.name] = {}
         
@@ -73,11 +73,11 @@ class VersionedRegistry:
         if version.endswith("@default"):
             self.aliases[tool.name] = version
     
-    def get(self, name: str, version: str = None) -> Tool:
+    def get (self, name: str, version: str = None) -> Tool:
         if version is None:
-            version = self.aliases.get(name, "latest")
+            version = self.aliases.get (name, "latest")
         
-        return self.versions.get(name, {}).get(version)
+        return self.versions.get (name, {}).get (version)
 \`\`\`
 
 **Dynamic Loading:**
@@ -86,17 +86,17 @@ class DynamicToolLoader:
     def __init__(self):
         self.module_cache = {}
     
-    def load_tool(self, module_path: str) -> Tool:
+    def load_tool (self, module_path: str) -> Tool:
         if module_path in self.module_cache:
             return self.module_cache[module_path]
         
         # Import module dynamically
-        module = importlib.import_module(module_path)
+        module = importlib.import_module (module_path)
         
         # Find tool in module
-        for name, obj in inspect.getmembers(module):
-            if hasattr(obj, '_tool_metadata'):
-                tool = self._create_tool_from_metadata(obj)
+        for name, obj in inspect.getmembers (module):
+            if hasattr (obj, '_tool_metadata'):
+                tool = self._create_tool_from_metadata (obj)
                 self.module_cache[module_path] = tool
                 return tool
 \`\`\`
@@ -133,14 +133,14 @@ class CompositeTool(Tool):
         self.tools = tools
         super().__init__(name, self._compose_description())
     
-    def _compose_description(self):
-        return f"Composite of: {', '.join(t.name for t in self.tools)}"
+    def _compose_description (self):
+        return f"Composite of: {', '.join (t.name for t in self.tools)}"
     
-    def execute(self, **kwargs):
+    def execute (self, **kwargs):
         results = []
         for tool in self.tools:
             result = tool.execute(**kwargs)
-            results.append(result)
+            results.append (result)
         return {"combined": results}
 
 # Usage
@@ -152,7 +152,7 @@ research_tool = CompositeTool(
 
 **Tool Factories:**
 \`\`\`python
-def create_http_tools_from_openapi(spec: Dict) -> List[Tool]:
+def create_http_tools_from_openapi (spec: Dict) -> List[Tool]:
     """Generate tools from OpenAPI specification."""
     tools = []
     
@@ -161,32 +161,32 @@ def create_http_tools_from_openapi(spec: Dict) -> List[Tool]:
             tool = Tool(
                 name=f"{method}_{path.replace('/', '_')}",
                 description=details.get("summary"),
-                function=create_http_function(method, path),
-                schema=extract_schema(details["parameters",])
+                function=create_http_function (method, path),
+                schema=extract_schema (details["parameters",])
             )
-            tools.append(tool)
+            tools.append (tool)
     
     return tools
 \`\`\`
 
 **Meta-Tools:**
 \`\`\`python
-@tool(description="Create a new tool from description")
-def create_tool_dynamically(name: str, description: str, 
+@tool (description="Create a new tool from description")
+def create_tool_dynamically (name: str, description: str, 
                            code: str) -> dict:
     # DANGER: Security implications!
     
     # 1. Validate code (syntax check, no dangerous imports)
-    if not validate_code_safety(code):
+    if not validate_code_safety (code):
         return {"error": "Unsafe code detected"}
     
     # 2. Execute in restricted environment
     namespace = create_restricted_namespace()
-    exec(code, namespace)
+    exec (code, namespace)
     
     # 3. Extract function
-    func = namespace.get(name)
-    if not callable(func):
+    func = namespace.get (name)
+    if not callable (func):
         return {"error": "No function found"}
     
     # 4. Create and register tool
@@ -194,10 +194,10 @@ def create_tool_dynamically(name: str, description: str,
         name=name,
         description=description,
         function=func,
-        schema=generate_schema_from_function(func)
+        schema=generate_schema_from_function (func)
     )
     
-    registry.register(new_tool)
+    registry.register (new_tool)
     
     return {"success": True, "tool": name}
 \`\`\`
@@ -206,9 +206,9 @@ def create_tool_dynamically(name: str, description: str,
 
 1. **Code Validation:**
 \`\`\`python
-def validate_code_safety(code: str) -> bool:
+def validate_code_safety (code: str) -> bool:
     # Parse code
-    tree = ast.parse(code)
+    tree = ast.parse (code)
     
     # Check for dangerous patterns
     dangerous = [
@@ -217,8 +217,8 @@ def validate_code_safety(code: str) -> bool:
         ast.Eval,  # Block eval
     ]
     
-    for node in ast.walk(tree):
-        if isinstance(node, tuple(dangerous)):
+    for node in ast.walk (tree):
+        if isinstance (node, tuple (dangerous)):
             return False
     
     return True
@@ -241,10 +241,10 @@ def create_restricted_namespace():
 3. **Permission System:**
 \`\`\`python
 class ToolPermissions:
-    def can_create_tools(self, user: User) -> bool:
+    def can_create_tools (self, user: User) -> bool:
         return user.has_permission("tool.create")
     
-    def can_modify_tools(self, user: User) -> bool:
+    def can_modify_tools (self, user: User) -> bool:
         return user.has_permission("tool.modify")
 \`\`\`
 
@@ -287,23 +287,23 @@ class ToolTestSuite:
     def __init__(self, tool: Tool):
         self.tool = tool
     
-    def test_schema_valid(self):
+    def test_schema_valid (self):
         """Schema is valid JSON Schema."""
-        validate_json_schema(self.tool.schema)
+        validate_json_schema (self.tool.schema)
     
-    def test_execute_basic(self):
+    def test_execute_basic (self):
         """Tool executes with valid input."""
         result = self.tool.execute(**self.get_valid_input())
         assert result is not None
     
-    def test_error_handling(self):
+    def test_error_handling (self):
         """Tool handles errors gracefully."""
         result = self.tool.execute(**self.get_invalid_input())
         assert "error" in result
     
-    def test_documentation(self):
+    def test_documentation (self):
         """Tool has good documentation."""
-        assert len(self.tool.description) > 50
+        assert len (self.tool.description) > 50
         for param in self.tool.schema["properties",]:
             assert "description" in param
 \`\`\`
@@ -311,7 +311,7 @@ class ToolTestSuite:
 **Integration Testing:**
 \`\`\`python
 class ToolIntegrationTests:
-    def test_with_llm(self):
+    def test_with_llm (self):
         """LLM can understand and use tool."""
         response = openai.chat.completions.create(
             model="gpt-4",
@@ -322,30 +322,30 @@ class ToolIntegrationTests:
         assert response.choices[0].message.function_call
         assert response.choices[0].message.function_call.name == self.tool.name
     
-    def test_with_real_data(self):
+    def test_with_real_data (self):
         """Tool works with production-like data."""
         result = self.tool.execute(**self.get_real_world_input())
-        self.validate_output(result)
+        self.validate_output (result)
 \`\`\`
 
 **Performance Benchmarks:**
 \`\`\`python
 class ToolPerformanceBenchmark:
-    def benchmark_latency(self, iterations=100):
+    def benchmark_latency (self, iterations=100):
         """Measure average latency."""
         times = []
-        for _ in range(iterations):
+        for _ in range (iterations):
             start = time.time()
             self.tool.execute(**self.get_input())
-            times.append(time.time() - start)
+            times.append (time.time() - start)
         
         return {
-            "avg_ms": statistics.mean(times) * 1000,
-            "p95_ms": statistics.quantiles(times, n=20)[18] * 1000,
-            "p99_ms": statistics.quantiles(times, n=100)[98] * 1000
+            "avg_ms": statistics.mean (times) * 1000,
+            "p95_ms": statistics.quantiles (times, n=20)[18] * 1000,
+            "p99_ms": statistics.quantiles (times, n=100)[98] * 1000
         }
     
-    def benchmark_throughput(self, duration=10):
+    def benchmark_throughput (self, duration=10):
         """Measure requests per second."""
         count = 0
         start = time.time()
@@ -360,11 +360,11 @@ class ToolPerformanceBenchmark:
 **Automated Quality Checks:**
 \`\`\`python
 class ToolQualityValidator:
-    def validate_all(self, tool: Tool) -> List[str]:
+    def validate_all (self, tool: Tool) -> List[str]:
         issues = []
         
         # Documentation
-        if len(tool.description) < 50:
+        if len (tool.description) < 50:
             issues.append("Description too short")
         
         # Schema completeness
@@ -373,14 +373,14 @@ class ToolQualityValidator:
                 issues.append("Parameter missing description")
         
         # Performance
-        latency = self.measure_latency(tool)
+        latency = self.measure_latency (tool)
         if latency > 5000:  # 5 seconds
-            issues.append(f"High latency: {latency}ms")
+            issues.append (f"High latency: {latency}ms")
         
         # Error rate
-        error_rate = self.measure_error_rate(tool)
+        error_rate = self.measure_error_rate (tool)
         if error_rate > 0.05:  # 5%
-            issues.append(f"High error rate: {error_rate:.1%}")
+            issues.append (f"High error rate: {error_rate:.1%}")
         
         return issues
 \`\`\`
@@ -388,15 +388,15 @@ class ToolQualityValidator:
 **CI/CD Integration:**
 \`\`\`python
 # pytest configuration
-@pytest.fixture(scope="module")
+@pytest.fixture (scope="module")
 def all_tools():
     return registry.get_all()
 
 @pytest.mark.parametrize("tool", all_tools())
-def test_tool_quality(tool):
+def test_tool_quality (tool):
     validator = ToolQualityValidator()
-    issues = validator.validate_all(tool)
-    assert len(issues) == 0, f"Tool {tool.name} has issues: {issues}"
+    issues = validator.validate_all (tool)
+    assert len (issues) == 0, f"Tool {tool.name} has issues: {issues}"
 \`\`\`
 
 **Best Practices:**

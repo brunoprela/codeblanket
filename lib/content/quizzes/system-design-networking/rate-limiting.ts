@@ -71,8 +71,8 @@ export const ratelimitingQuiz = [
     local cost = tonumber(ARGV[4]) or 1
     
     -- Get current state
-    local tokens = tonumber(redis.call('HGET', key, 'tokens'))
-    local last_refill = tonumber(redis.call('HGET', key, 'last_refill'))
+    local tokens = tonumber (redis.call('HGET', key, 'tokens'))
+    local last_refill = tonumber (redis.call('HGET', key, 'last_refill'))
     
     -- Initialize if not exists
     if not tokens then
@@ -83,7 +83,7 @@ export const ratelimitingQuiz = [
     -- Refill tokens
     local time_passed = (now - last_refill) / 1000  -- seconds
     local tokens_to_add = time_passed * refill_rate
-    tokens = math.min(capacity, tokens + tokens_to_add)
+    tokens = math.min (capacity, tokens + tokens_to_add)
     
     -- Try to consume
     if tokens >= cost then
@@ -91,11 +91,11 @@ export const ratelimitingQuiz = [
       redis.call('HSET', key, 'tokens', tokens, 'last_refill', now)
       redis.call('EXPIRE', key, 7200)  -- 2 hour TTL
       
-      return {1, math.floor(tokens), 0}  -- allowed, remaining, retry_after
+      return {1, math.floor (tokens), 0}  -- allowed, remaining, retry_after
     else
       -- Calculate retry after (seconds)
       local tokens_needed = cost - tokens
-      local retry_after = math.ceil(tokens_needed / refill_rate)
+      local retry_after = math.ceil (tokens_needed / refill_rate)
       
       return {0, 0, retry_after}  -- denied, remaining=0, retry_after
     end
@@ -131,13 +131,13 @@ export const ratelimitingQuiz = [
       }
     };
     
-    async function rateLimit(identifier, config) {
+    async function rateLimit (identifier, config) {
       const key = \`rate_limit:\${identifier}\`;
       
       try {
         // Use Redis TIME for consistency across servers (handles clock drift)
         const [seconds, microseconds] = await redis.time();
-        const now = seconds * 1000 + Math.floor(microseconds / 1000);
+        const now = seconds * 1000 + Math.floor (microseconds / 1000);
         
         const result = await redis.evalsha(
           scriptSha,
@@ -162,7 +162,7 @@ export const ratelimitingQuiz = [
     }
     
     // Middleware
-    app.use(async (req, res, next) => {
+    app.use (async (req, res, next) => {
       const userId = req.user?.id;
       const ip = req.ip || req.connection.remoteAddress;
       const endpoint = \`\${req.method} \${req.path}\`;
@@ -198,14 +198,14 @@ export const ratelimitingQuiz = [
       
       // Run all checks in parallel
       const results = await Promise.all(
-        checks.map(check => 
-          rateLimit(check.identifier, check.config)
-            .then(result => ({ ...result, check }))
+        checks.map (check => 
+          rateLimit (check.identifier, check.config)
+            .then (result => ({ ...result, check }))
         )
       );
       
       // Find first limit exceeded
-      const blocked = results.find(r => !r.allowed);
+      const blocked = results.find (r => !r.allowed);
       
       if (blocked) {
         const config = blocked.check.config;
@@ -222,7 +222,7 @@ export const ratelimitingQuiz = [
       }
       
       // Set headers for successful request
-      const userLimit = results.find(r => r.check.name === 'per-user');
+      const userLimit = results.find (r => r.check.name === 'per-user');
       if (userLimit) {
         res.setHeader('X-RateLimit-Limit', limits.perUser.capacity);
         res.setHeader('X-RateLimit-Remaining', userLimit.remaining);
@@ -238,17 +238,17 @@ export const ratelimitingQuiz = [
     \`\`\`javascript
     // Use Redis TIME instead of server time
     const [seconds, microseconds] = await redis.time();
-    const now = seconds * 1000 + Math.floor(microseconds / 1000);
+    const now = seconds * 1000 + Math.floor (microseconds / 1000);
     
     // Redis provides consistent time across all servers
     \`\`\`
     
     **Redis Failure**:
     \`\`\`javascript
-    async function rateLimit(identifier, config) {
+    async function rateLimit (identifier, config) {
       try {
         // Normal rate limiting
-        return await rateLimitRedis(identifier, config);
+        return await rateLimitRedis (identifier, config);
       } catch (error) {
         logger.error('Redis error, failing open', { error });
         
@@ -259,7 +259,7 @@ export const ratelimitingQuiz = [
         // return { allowed: false, remaining: 0, retryAfter: 60 };
         
         // Strategy 3: Local rate limiting (fallback)
-        return await rateLimitLocal(identifier, config);
+        return await rateLimitLocal (identifier, config);
       }
     }
     \`\`\`
@@ -330,7 +330,7 @@ export const ratelimitingQuiz = [
     \`\`\`yaml
     # Prometheus alerts
     - alert: HighRateLimitHitRate
-      expr: rate(rate_limit_hits_total[5m]) > 100
+      expr: rate (rate_limit_hits_total[5m]) > 100
       annotations:
         summary: "High rate limit hit rate: {{ $value }}/sec"
     
@@ -365,8 +365,8 @@ export const ratelimitingQuiz = [
     
     // Use pipeline (parallel)
     const pipeline = redis.pipeline();
-    pipeline.evalsha(scriptSha, 1, 'user:123', ...);
-    pipeline.evalsha(scriptSha, 1, 'ip:1.2.3.4', ...);
+    pipeline.evalsha (scriptSha, 1, 'user:123', ...);
+    pipeline.evalsha (scriptSha, 1, 'ip:1.2.3.4', ...);
     const results = await pipeline.exec();
     \`\`\`
     
@@ -386,20 +386,20 @@ export const ratelimitingQuiz = [
     describe('Rate Limiting', () => {
       it('should allow requests under limit', async () => {
         for (let i = 0; i < 100; i++) {
-          const res = await request(app).get('/api/data');
-          expect(res.status).toBe(200);
+          const res = await request (app).get('/api/data');
+          expect (res.status).toBe(200);
         }
       });
       
       it('should block requests over limit', async () => {
         // Make 101 requests
         for (let i = 0; i < 101; i++) {
-          const res = await request(app).get('/api/data');
+          const res = await request (app).get('/api/data');
           if (i < 100) {
-            expect(res.status).toBe(200);
+            expect (res.status).toBe(200);
           } else {
-            expect(res.status).toBe(429);
-            expect(res.headers['retry-after',]).toBeDefined();
+            expect (res.status).toBe(429);
+            expect (res.headers['retry-after',]).toBeDefined();
           }
         }
       });
@@ -407,15 +407,15 @@ export const ratelimitingQuiz = [
       it('should reset after window expires', async () => {
         // Hit limit
         for (let i = 0; i < 100; i++) {
-          await request(app).get('/api/data');
+          await request (app).get('/api/data');
         }
         
         // Wait for refill
         await sleep(60000); // 1 minute
         
         // Should allow again
-        const res = await request(app).get('/api/data');
-        expect(res.status).toBe(200);
+        const res = await request (app).get('/api/data');
+        expect (res.status).toBe(200);
       });
     });
     \`\`\`
@@ -507,14 +507,14 @@ interface RateLimitKey {
 class TieredRateLimiter {
   private redis: Redis;
   
-  async checkRateLimit(key: RateLimitKey): Promise<RateLimitResult> {
+  async checkRateLimit (key: RateLimitKey): Promise<RateLimitResult> {
     const tier = tiers[key.tier];
     
     // Check daily limit
-    const dailyUsage = await this.getDailyUsage(key);
+    const dailyUsage = await this.getDailyUsage (key);
     
     // Check burst limit (per minute)
-    const burstUsage = await this.getBurstUsage(key);
+    const burstUsage = await this.getBurstUsage (key);
     
     // Evaluate limits
     if (dailyUsage >= tier.dailyLimit) {
@@ -545,8 +545,8 @@ class TieredRateLimiter {
       }
       
       // Allow with overage charge
-      await this.incrementUsage(key);
-      await this.recordOverageCharge(key, tier.overage.costPerRequest);
+      await this.incrementUsage (key);
+      await this.recordOverageCharge (key, tier.overage.costPerRequest);
       
       return {
         allowed: true,
@@ -567,7 +567,7 @@ class TieredRateLimiter {
     }
     
     // Within limits
-    await this.incrementUsage(key);
+    await this.incrementUsage (key);
     
     return {
       allowed: true,
@@ -581,34 +581,34 @@ class TieredRateLimiter {
     };
   }
   
-  private async getDailyUsage(key: RateLimitKey): Promise<number> {
+  private async getDailyUsage (key: RateLimitKey): Promise<number> {
     const dailyKey = \`rate_limit:daily:\${key.userId}:\${this.getToday()}\`;
-    const count = await this.redis.get(dailyKey);
-    return parseInt(count || '0');
+    const count = await this.redis.get (dailyKey);
+    return parseInt (count || '0');
   }
   
-  private async getBurstUsage(key: RateLimitKey): Promise<number> {
+  private async getBurstUsage (key: RateLimitKey): Promise<number> {
     const burstKey = \`rate_limit:burst:\${key.userId}:\${this.getCurrentMinute()}\`;
-    const count = await this.redis.get(burstKey);
-    return parseInt(count || '0');
+    const count = await this.redis.get (burstKey);
+    return parseInt (count || '0');
   }
   
-  private async incrementUsage(key: RateLimitKey): Promise<void> {
+  private async incrementUsage (key: RateLimitKey): Promise<void> {
     const dailyKey = \`rate_limit:daily:\${key.userId}:\${this.getToday()}\`;
     const burstKey = \`rate_limit:burst:\${key.userId}:\${this.getCurrentMinute()}\`;
     
     await this.redis
       .multi()
-      .incr(dailyKey)
-      .expire(dailyKey, 86400) // 24 hours
-      .incr(burstKey)
-      .expire(burstKey, 60) // 1 minute
+      .incr (dailyKey)
+      .expire (dailyKey, 86400) // 24 hours
+      .incr (burstKey)
+      .expire (burstKey, 60) // 1 minute
       .exec();
   }
   
-  private async recordOverageCharge(key: RateLimitKey, cost: number): Promise<void> {
+  private async recordOverageCharge (key: RateLimitKey, cost: number): Promise<void> {
     const chargeKey = \`overage_charges:\${key.userId}:\${this.getMonth()}\`;
-    await this.redis.incrbyfloat(chargeKey, cost);
+    await this.redis.incrbyfloat (chargeKey, cost);
     
     // Add to billing queue
     await this.queueBillingEvent({
@@ -630,7 +630,7 @@ interface TrialConfig {
   upgradePrompt: boolean;
 }
 
-async function checkTrial(userId: string): Promise<TrialStatus> {
+async function checkTrial (userId: string): Promise<TrialStatus> {
   const trial = await db.trials.findOne({ userId });
   
   if (!trial) {
@@ -686,7 +686,7 @@ async function processMonthlyOverages() {
   
   for (const key of keys) {
     const userId = key.split(':')[1];
-    const totalOverageCharge = parseFloat(await redis.get(key) || '0');
+    const totalOverageCharge = parseFloat (await redis.get (key) || '0');
     
     if (totalOverageCharge > 0) {
       // Charge via Stripe
@@ -695,7 +695,7 @@ async function processMonthlyOverages() {
       try {
         await stripe.invoiceItems.create({
           customer: user.stripeCustomerId,
-          amount: Math.round(totalOverageCharge * 100), // cents
+          amount: Math.round (totalOverageCharge * 100), // cents
           currency: 'usd',
           description: \`API overage charges for \${month}\`
         });
@@ -708,7 +708,7 @@ async function processMonthlyOverages() {
         });
         
         // Clear overage counter
-        await redis.del(key);
+        await redis.del (key);
         
       } catch (error) {
         // Log billing failure
@@ -732,7 +732,7 @@ async function processMonthlyOverages() {
 
 \`\`\`typescript
 app.use((req, res, next) => {
-  const result = await rateLimiter.checkRateLimit(req.user);
+  const result = await rateLimiter.checkRateLimit (req.user);
   
   // Set headers
   res.setHeader('X-RateLimit-Limit', result.usage.dailyLimit);
@@ -787,7 +787,7 @@ app.get('/api/usage', async (req, res) => {
     overage: {
       allowed: limits.overage.allowed,
       current: Math.max(0, daily - limits.dailyLimit),
-      cost: parseFloat(overageCharges || '0').toFixed(2)
+      cost: parseFloat (overageCharges || '0').toFixed(2)
     },
     resetTime: getMidnightTimestamp()
   });
@@ -807,7 +807,7 @@ function getToday(): string {
 **Tier Upgrades Mid-Day**:
 \`\`\`typescript
 // When user upgrades, don't reset counter - just increase limit
-async function handleTierUpgrade(userId: string, newTier: string) {
+async function handleTierUpgrade (userId: string, newTier: string) {
   await db.users.update({ userId }, { tier: newTier });
   
   // Usage counter persists - user immediately gets higher limit
@@ -826,7 +826,7 @@ async function handleTierUpgrade(userId: string, newTier: string) {
 \`\`\`typescript
 // If billing fails, don't immediately block user
 // Grace period: 7 days
-async function checkBillingGrace(userId: string): Promise<boolean> {
+async function checkBillingGrace (userId: string): Promise<boolean> {
   const failedBillings = await db.billingFailures.find({
     userId,
     resolved: false
@@ -898,13 +898,13 @@ class TokenBucket:
         self.refill_rate = refill_rate  # tokens per second
         self.last_refill = time.now()
     
-    def allow_request(self):
+    def allow_request (self):
         # Refill tokens based on time elapsed
         now = time.now()
         elapsed = now - self.last_refill
         tokens_to_add = elapsed * self.refill_rate
         
-        self.tokens = min(self.capacity, self.tokens + tokens_to_add)
+        self.tokens = min (self.capacity, self.tokens + tokens_to_add)
         self.last_refill = now
         
         # Check if we have tokens
@@ -925,13 +925,13 @@ local now = tonumber(ARGV[4])
 
 -- Get current state
 local state = redis.call('HMGET', key, 'tokens', 'last_refill')
-local tokens = tonumber(state[1]) or capacity
-local last_refill = tonumber(state[2]) or now
+local tokens = tonumber (state[1]) or capacity
+local last_refill = tonumber (state[2]) or now
 
 -- Refill tokens
 local elapsed = now - last_refill
 local tokens_to_add = elapsed * refill_rate
-tokens = math.min(capacity, tokens + tokens_to_add)
+tokens = math.min (capacity, tokens + tokens_to_add)
 
 -- Check if we can allow request
 if tokens >= requested then
@@ -979,20 +979,20 @@ class LeakyBucket:
         self.leak_rate = leak_rate  # requests per second
         self.last_leak = time.now()
     
-    def allow_request(self):
+    def allow_request (self):
         # Leak requests
         now = time.now()
         elapsed = now - self.last_leak
-        requests_to_leak = int(elapsed * self.leak_rate)
+        requests_to_leak = int (elapsed * self.leak_rate)
         
-        for _ in range(min(requests_to_leak, len(self.queue))):
+        for _ in range (min (requests_to_leak, len (self.queue))):
             self.queue.pop(0)
         
         self.last_leak = now
         
         # Add new request
-        if len(self.queue) < self.capacity:
-            self.queue.append(now)
+        if len (self.queue) < self.capacity:
+            self.queue.append (now)
             return True
         return False
 \`\`\`
@@ -1031,11 +1031,11 @@ class FixedWindowCounter:
         self.window_size = window_size  # seconds
         self.counters = {}  # {window_id: count}
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.now()
-        window_id = int(now / self.window_size)
+        window_id = int (now / self.window_size)
         
-        count = self.counters.get(window_id, 0)
+        count = self.counters.get (window_id, 0)
         
         if count < self.limit:
             self.counters[window_id] = count + 1
@@ -1100,15 +1100,15 @@ class SlidingWindowLog:
         self.window_size = window_size
         self.log = []  # list of timestamps
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.now()
         cutoff = now - self.window_size
         
         # Remove old timestamps
         self.log = [ts for ts in self.log if ts > cutoff]
         
-        if len(self.log) < self.limit:
-            self.log.append(now)
+        if len (self.log) < self.limit:
+            self.log.append (now)
             return True
         return False
 \`\`\`
@@ -1175,16 +1175,16 @@ class SlidingWindowCounter:
         self.window_size = window_size
         self.windows = {}  # {window_id: count}
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.now()
-        window_id = int(now / self.window_size)
+        window_id = int (now / self.window_size)
         previous_window_id = window_id - 1
         
         # Calculate position in current window (0.0 to 1.0)
         position = (now % self.window_size) / self.window_size
         
-        previous_count = self.windows.get(previous_window_id, 0)
-        current_count = self.windows.get(window_id, 0)
+        previous_count = self.windows.get (previous_window_id, 0)
+        current_count = self.windows.get (window_id, 0)
         
         # Weighted count
         estimated_count = previous_count * (1 - position) + current_count

@@ -8,7 +8,7 @@ export const pythoncodeanalysisMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-pythoncodeanalysis-mc-1',
     question:
-      "What is the difference between ast.parse() and compile()?\n\nast.parse(code)\ncompile(code, '<string>', 'exec')",
+      "What is the difference between ast.parse() and compile()?\n\nast.parse (code)\ncompile (code, '<string>', 'exec')",
     options: [
       'ast.parse() executes code, compile() creates AST',
       'ast.parse() creates AST, compile() creates bytecode',
@@ -22,7 +22,7 @@ export const pythoncodeanalysisMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-pythoncodeanalysis-mc-2',
     question:
-      'What does this ast.NodeTransformer do?\\n\\nclass ConstantFolder(ast.NodeTransformer):\\n    def visit_BinOp(self, node):\\n        if isinstance(node.left, ast.Constant) and isinstance(node.right, ast.Constant):\\n            return ast.Constant(eval(compile(...)))',
+      'What does this ast.NodeTransformer do?\\n\\nclass ConstantFolder (ast.NodeTransformer):\\n    def visit_BinOp (self, node):\\n        if isinstance (node.left, ast.Constant) and isinstance (node.right, ast.Constant):\\n            return ast.Constant (eval (compile(...)))',
     options: [
       'Removes all binary operations',
       'Evaluates constant expressions at compile time',
@@ -44,7 +44,7 @@ export const pythoncodeanalysisMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'ast.get_source_segment(source, node) returns the actual source code text that corresponds to a specific AST node, useful for error messages and code extraction.',
+      'ast.get_source_segment (source, node) returns the actual source code text that corresponds to a specific AST node, useful for error messages and code extraction.',
   },
   {
     id: 'cuam-pythoncodeanalysis-mc-4',

@@ -129,7 +129,7 @@ export const loadbalancingSection = {
 
 **How it works**: Hash of client's IP address determines which server receives request. Same IP always routes to same server.
 
-**Calculation:** \`hash(client_ip) % server_count\`
+**Calculation:** \`hash (client_ip) % server_count\`
 
 **Example:**
 - Client 1.2.3.4 → hash % 3 = 1 → Server B
@@ -257,7 +257,7 @@ Monitor actual traffic. If server returns errors, mark as unhealthy.
 
 ## Session Persistence (Sticky Sessions)
 
-**Problem**: User's session data stored on specific server. If next request goes to different server, session lost.
+**Problem**: User\'s session data stored on specific server. If next request goes to different server, session lost.
 
 ### **Solution 1: Cookie-Based Stickiness**
 
@@ -439,7 +439,7 @@ upstream backend {
                 ** Q: "How do you handle load balancer failure?" **
 
 ✅ Good answer:
-- Multiple LBs(active - active or active - passive)
+- Multiple LBs (active - active or active - passive)
     - Health checks between LBs
         - Automatic failover
             - Cloud - managed LBs handle this automatically

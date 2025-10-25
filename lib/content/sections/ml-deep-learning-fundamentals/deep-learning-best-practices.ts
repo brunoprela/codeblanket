@@ -35,8 +35,8 @@ import numpy as np
 # Standardization (zero mean, unit variance)
 def standardize(X_train, X_val, X_test):
     """Standardize features to mean=0, std=1"""
-    mean = X_train.mean(axis=0)
-    std = X_train.std(axis=0) + 1e-8  # Avoid division by zero
+    mean = X_train.mean (axis=0)
+    std = X_train.std (axis=0) + 1e-8  # Avoid division by zero
     
     X_train_std = (X_train - mean) / std
     X_val_std = (X_val - mean) / std
@@ -47,8 +47,8 @@ def standardize(X_train, X_val, X_test):
 # Min-Max Normalization (scale to [0, 1])
 def normalize(X_train, X_val, X_test):
     """Normalize features to [0, 1]"""
-    min_val = X_train.min(axis=0)
-    max_val = X_train.max(axis=0)
+    min_val = X_train.min (axis=0)
+    max_val = X_train.max (axis=0)
     range_val = max_val - min_val + 1e-8
     
     X_train_norm = (X_train - min_val) / range_val
@@ -79,23 +79,23 @@ def validate_input(X, y, num_classes):
     
     # Check shapes
     if X.shape[0] != y.shape[0]:
-        issues.append(f"Shape mismatch: X has {X.shape[0]} samples, y has {y.shape[0]}")
+        issues.append (f"Shape mismatch: X has {X.shape[0]} samples, y has {y.shape[0]}")
     
     # Check for NaN/Inf
     if np.isnan(X).any():
-        issues.append(f"X contains {np.isnan(X).sum()} NaN values")
+        issues.append (f"X contains {np.isnan(X).sum()} NaN values")
     if np.isinf(X).any():
-        issues.append(f"X contains {np.isinf(X).sum()} Inf values")
+        issues.append (f"X contains {np.isinf(X).sum()} Inf values")
     
     # Check label range
     if y.min() < 0 or y.max() >= num_classes:
-        issues.append(f"Labels out of range: [{y.min()}, {y.max()}], expected [0, {num_classes-1}]")
+        issues.append (f"Labels out of range: [{y.min()}, {y.max()}], expected [0, {num_classes-1}]")
     
     # Check class balance
-    class_counts = np.bincount(y)
+    class_counts = np.bincount (y)
     imbalance_ratio = class_counts.max() / (class_counts.min() + 1e-8)
     if imbalance_ratio > 10:
-        issues.append(f"Severe class imbalance: ratio = {imbalance_ratio:.1f}:1")
+        issues.append (f"Severe class imbalance: ratio = {imbalance_ratio:.1f}:1")
     
     if issues:
         print("Data issues found:")
@@ -104,7 +104,7 @@ def validate_input(X, y, num_classes):
     else:
         print("Data validation passed!")
     
-    return len(issues) == 0
+    return len (issues) == 0
 
 # Example
 X = np.random.randn(1000, 784)
@@ -119,7 +119,7 @@ validate_input(X, y, num_classes=10)
 \`\`\`python
 import matplotlib.pyplot as plt
 
-def find_lr(model, train_loader, optimizer, init_lr=1e-7, final_lr=10, num_iter=100):
+def find_lr (model, train_loader, optimizer, init_lr=1e-7, final_lr=10, num_iter=100):
     """
     Find optimal learning rate using LR range test
     
@@ -145,8 +145,8 @@ def find_lr(model, train_loader, optimizer, init_lr=1e-7, final_lr=10, num_iter=
         
         # Forward pass
         optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output, target)
+        output = model (data)
+        loss = criterion (output, target)
         
         # Track smoothed loss
         avg_loss = 0.9 * avg_loss + 0.1 * loss.item() if avg_loss > 0 else loss.item()
@@ -159,8 +159,8 @@ def find_lr(model, train_loader, optimizer, init_lr=1e-7, final_lr=10, num_iter=
             best_loss = avg_loss
         
         # Record
-        lrs.append(lr)
-        losses.append(avg_loss)
+        lrs.append (lr)
+        losses.append (avg_loss)
         
         # Backward pass
         loss.backward()
@@ -174,11 +174,11 @@ def find_lr(model, train_loader, optimizer, init_lr=1e-7, final_lr=10, num_iter=
     return lrs, losses
 
 # Usage
-lrs, losses = find_lr(model, train_loader, optimizer)
+lrs, losses = find_lr (model, train_loader, optimizer)
 
 # Plot
-plt.figure(figsize=(10, 6))
-plt.plot(lrs, losses)
+plt.figure (figsize=(10, 6))
+plt.plot (lrs, losses)
 plt.xscale('log')
 plt.xlabel('Learning Rate (log scale)')
 plt.ylabel('Loss')
@@ -187,8 +187,8 @@ plt.grid(True, alpha=0.3)
 plt.show()
 
 # Find steepest point
-gradients = np.gradient(losses)
-best_idx = np.argmin(gradients)
+gradients = np.gradient (losses)
+best_idx = np.argmin (gradients)
 best_lr = lrs[best_idx]
 print(f"Suggested learning rate: {best_lr:.2e}")
 \`\`\`
@@ -204,29 +204,29 @@ print(f"Suggested learning rate: {best_lr:.2e}")
 **Verify backpropagation implementation** by comparing analytical gradients with numerical gradients.
 
 \`\`\`python
-def numerical_gradient(f, x, eps=1e-5):
+def numerical_gradient (f, x, eps=1e-5):
     """
     Compute numerical gradient using finite differences
     
     f: function that takes x and returns scalar loss
     x: parameter (numpy array)
     """
-    grad = np.zeros_like(x)
-    it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+    grad = np.zeros_like (x)
+    it = np.nditer (x, flags=['multi_index'], op_flags=['readwrite'])
     
     while not it.finished:
         idx = it.multi_index
         old_value = x[idx]
         
-        # f(x + eps)
+        # f (x + eps)
         x[idx] = old_value + eps
-        f_plus = f(x)
+        f_plus = f (x)
         
-        # f(x - eps)
+        # f (x - eps)
         x[idx] = old_value - eps
-        f_minus = f(x)
+        f_minus = f (x)
         
-        # Gradient: (f(x+eps) - f(x-eps)) / (2*eps)
+        # Gradient: (f (x+eps) - f (x-eps)) / (2*eps)
         grad[idx] = (f_plus - f_minus) / (2 * eps)
         
         x[idx] = old_value  # Restore
@@ -234,14 +234,14 @@ def numerical_gradient(f, x, eps=1e-5):
     
     return grad
 
-def gradient_check(model, x, y, eps=1e-5, threshold=1e-4):
+def gradient_check (model, x, y, eps=1e-5, threshold=1e-4):
     """
     Check if analytical gradients match numerical gradients
     """
     # Compute analytical gradient
     model.zero_grad()
-    output = model(x)
-    loss = criterion(output, y)
+    output = model (x)
+    loss = criterion (output, y)
     loss.backward()
     
     params = [p for p in model.parameters() if p.requires_grad]
@@ -249,19 +249,19 @@ def gradient_check(model, x, y, eps=1e-5, threshold=1e-4):
     
     # Compute numerical gradient for each parameter
     print("Gradient checking...")
-    for i, param in enumerate(params):
-        def f(p):
+    for i, param in enumerate (params):
+        def f (p):
             """Loss as function of single parameter"""
-            param.data.copy_(torch.from_numpy(p))
-            output = model(x)
-            return criterion(output, y).item()
+            param.data.copy_(torch.from_numpy (p))
+            output = model (x)
+            return criterion (output, y).item()
         
-        numerical_grad = numerical_gradient(f, param.data.cpu().numpy(), eps)
+        numerical_grad = numerical_gradient (f, param.data.cpu().numpy(), eps)
         analytical_grad = analytical_grads[i].cpu().numpy()
         
         # Compute relative difference
-        diff = np.linalg.norm(numerical_grad - analytical_grad) / \\
-               (np.linalg.norm(numerical_grad) + np.linalg.norm(analytical_grad) + 1e-8)
+        diff = np.linalg.norm (numerical_grad - analytical_grad) / \\
+               (np.linalg.norm (numerical_grad) + np.linalg.norm (analytical_grad) + 1e-8)
         
         status = "✓ PASS" if diff < threshold else "✗ FAIL"
         print(f"Parameter {i}: diff = {diff:.2e} {status}")
@@ -271,7 +271,7 @@ def gradient_check(model, x, y, eps=1e-5, threshold=1e-4):
 # Example usage
 x_sample = torch.randn(1, 784)
 y_sample = torch.randint(0, 10, (1,))
-gradient_check(model, x_sample, y_sample)
+gradient_check (model, x_sample, y_sample)
 \`\`\`
 
 ## Debugging Training Issues
@@ -279,19 +279,19 @@ gradient_check(model, x_sample, y_sample)
 ### Diagnostic Checklist
 
 \`\`\`python
-def diagnose_training(model, train_loader, val_loader):
+def diagnose_training (model, train_loader, val_loader):
     """Diagnose common training issues"""
     print("Running diagnostics...\\n")
     
     # 1. Overfit single batch
     print("1. Testing model capacity (overfitting single batch)")
-    single_batch = next(iter(train_loader))
+    single_batch = next (iter (train_loader))
     x, y = single_batch
     
     for epoch in range(100):
         optimizer.zero_grad()
-        output = model(x)
-        loss = criterion(output, y)
+        output = model (x)
+        loss = criterion (output, y)
         loss.backward()
         optimizer.step()
         
@@ -306,8 +306,8 @@ def diagnose_training(model, train_loader, val_loader):
     # 2. Check gradient flow
     print("\\n2. Checking gradient flow")
     model.zero_grad()
-    output = model(x)
-    loss = criterion(output, y)
+    output = model (x)
+    loss = criterion (output, y)
     loss.backward()
     
     for name, param in model.named_parameters():
@@ -323,7 +323,7 @@ def diagnose_training(model, train_loader, val_loader):
     for name, param in model.named_parameters():
         mean = param.data.mean().item()
         std = param.data.std().item()
-        if abs(mean) > 1 or std > 10:
+        if abs (mean) > 1 or std > 10:
             print(f"   ⚠ {name}: unusual distribution (mean={mean:.2f}, std={std:.2f})")
     
     print("\\nDiagnostics complete!")
@@ -358,10 +358,10 @@ for lr in learning_rates:
         for dropout in dropout_rates:
             print(f"\\nTrying lr={lr}, batch={batch_size}, dropout={dropout}")
             
-            model = create_model(dropout=dropout)
-            optimizer = Adam(model.parameters(), lr=lr)
+            model = create_model (dropout=dropout)
+            optimizer = Adam (model.parameters(), lr=lr)
             
-            val_acc = train_and_evaluate(model, optimizer, batch_size)
+            val_acc = train_and_evaluate (model, optimizer, batch_size)
             
             if val_acc > best_val_acc:
                 best_val_acc = val_acc
@@ -375,12 +375,12 @@ print(f"\\nBest params: {best_params}, Val Acc: {best_val_acc:.4f}")
 \`\`\`python
 import random
 
-def random_search(num_trials=20):
+def random_search (num_trials=20):
     """Random hyperparameter search"""
     best_val_acc = 0
     best_params = None
     
-    for trial in range(num_trials):
+    for trial in range (num_trials):
         # Sample hyperparameters
         lr = 10 ** random.uniform(-5, -2)  # Log-uniform
         batch_size = random.choice([32, 64, 128, 256])
@@ -396,9 +396,9 @@ def random_search(num_trials=20):
         
         print(f"\\nTrial {trial+1}/{num_trials}: {params}")
         
-        model = create_model(hidden_size=hidden_size, dropout=dropout)
-        optimizer = Adam(model.parameters(), lr=lr)
-        val_acc = train_and_evaluate(model, optimizer, batch_size, epochs=10)
+        model = create_model (hidden_size=hidden_size, dropout=dropout)
+        optimizer = Adam (model.parameters(), lr=lr)
+        val_acc = train_and_evaluate (model, optimizer, batch_size, epochs=10)
         
         if val_acc > best_val_acc:
             best_val_acc = val_acc
@@ -406,7 +406,7 @@ def random_search(num_trials=20):
     
     return best_params, best_val_acc
 
-best_params, best_acc = random_search(num_trials=20)
+best_params, best_acc = random_search (num_trials=20)
 print(f"\\nBest: {best_params}, Acc: {best_acc:.4f}")
 \`\`\`
 
@@ -418,7 +418,7 @@ print(f"\\nBest: {best_params}, Acc: {best_acc:.4f}")
 # Using Optuna library
 import optuna
 
-def objective(trial):
+def objective (trial):
     """Objective function for Optuna"""
     # Suggest hyperparameters
     lr = trial.suggest_loguniform('lr', 1e-5, 1e-2)
@@ -427,15 +427,15 @@ def objective(trial):
     hidden_size = trial.suggest_categorical('hidden_size', [128, 256, 512])
     
     # Train model
-    model = create_model(hidden_size=hidden_size, dropout=dropout)
-    optimizer = Adam(model.parameters(), lr=lr)
-    val_acc = train_and_evaluate(model, optimizer, batch_size, epochs=10)
+    model = create_model (hidden_size=hidden_size, dropout=dropout)
+    optimizer = Adam (model.parameters(), lr=lr)
+    val_acc = train_and_evaluate (model, optimizer, batch_size, epochs=10)
     
     return val_acc
 
 # Run optimization
-study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=50)
+study = optuna.create_study (direction='maximize')
+study.optimize (objective, n_trials=50)
 
 print(f"Best params: {study.best_params}")
 print(f"Best value: {study.best_value:.4f}")
@@ -449,18 +449,18 @@ print(f"Best value: {study.best_value:.4f}")
 import json
 from datetime import datetime
 
-def save_model_with_metadata(model, metadata, path):
+def save_model_with_metadata (model, metadata, path):
     """Save model with version metadata"""
     # Save model
-    torch.save(model.state_dict(), f"{path}/model.pth")
+    torch.save (model.state_dict(), f"{path}/model.pth")
     
     # Add timestamp and version
     metadata['saved_at'] = datetime.now().isoformat()
-    metadata['model_architecture'] = str(model)
+    metadata['model_architecture'] = str (model)
     
     # Save metadata
-    with open(f"{path}/metadata.json", 'w') as f:
-        json.dump(metadata, f, indent=2)
+    with open (f"{path}/metadata.json", 'w') as f:
+        json.dump (metadata, f, indent=2)
 
 # Usage
 metadata = {
@@ -477,24 +477,24 @@ metadata = {
     }
 }
 
-save_model_with_metadata(model, metadata, 'models/v1.0.0')
+save_model_with_metadata (model, metadata, 'models/v1.0.0')
 \`\`\`
 
 ### Input Validation (Production)
 
 \`\`\`python
-def validate_and_preprocess(x, scaler, expected_shape):
+def validate_and_preprocess (x, scaler, expected_shape):
     """Validate and preprocess input for production inference"""
     # Check shape
     if x.shape[-1] != expected_shape:
-        raise ValueError(f"Expected {expected_shape} features, got {x.shape[-1]}")
+        raise ValueError (f"Expected {expected_shape} features, got {x.shape[-1]}")
     
     # Check for invalid values
-    if np.isnan(x).any() or np.isinf(x).any():
+    if np.isnan (x).any() or np.isinf (x).any():
         raise ValueError("Input contains NaN or Inf values")
     
     # Apply same preprocessing as training
-    x = scaler.transform(x)
+    x = scaler.transform (x)
     
     return x
 \`\`\`

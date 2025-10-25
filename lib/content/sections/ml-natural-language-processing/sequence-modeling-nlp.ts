@@ -35,9 +35,9 @@ class SimpleRNN:
     
     def __init__(self, input_size, hidden_size, output_size):
         # Initialize weights
-        self.Wxh = np.random.randn(hidden_size, input_size) * 0.01  # Input to hidden
-        self.Whh = np.random.randn(hidden_size, hidden_size) * 0.01  # Hidden to hidden
-        self.Why = np.random.randn(output_size, hidden_size) * 0.01  # Hidden to output
+        self.Wxh = np.random.randn (hidden_size, input_size) * 0.01  # Input to hidden
+        self.Whh = np.random.randn (hidden_size, hidden_size) * 0.01  # Hidden to hidden
+        self.Why = np.random.randn (output_size, hidden_size) * 0.01  # Hidden to output
         
         # Biases
         self.bh = np.zeros((hidden_size, 1))
@@ -45,7 +45,7 @@ class SimpleRNN:
         
         self.hidden_size = hidden_size
     
-    def forward(self, inputs):
+    def forward (self, inputs):
         """
         inputs: list of input vectors (sequence)
         Returns: outputs and hidden states for each timestep
@@ -56,11 +56,11 @@ class SimpleRNN:
         
         for x in inputs:
             # RNN cell computation
-            h = np.tanh(np.dot(self.Wxh, x) + np.dot(self.Whh, h) + self.bh)
-            y = np.dot(self.Why, h) + self.by
+            h = np.tanh (np.dot (self.Wxh, x) + np.dot (self.Whh, h) + self.bh)
+            y = np.dot (self.Why, h) + self.by
             
-            hidden_states.append(h)
-            outputs.append(y)
+            hidden_states.append (h)
+            outputs.append (y)
         
         return outputs, hidden_states
 
@@ -73,13 +73,13 @@ rnn = SimpleRNN(vocab_size, hidden_size, output_size)
 
 # Sequence: "I love NLP"
 sequence = [
-    np.random.randn(vocab_size, 1),  # "I"
-    np.random.randn(vocab_size, 1),  # "love"
-    np.random.randn(vocab_size, 1),  # "NLP"
+    np.random.randn (vocab_size, 1),  # "I"
+    np.random.randn (vocab_size, 1),  # "love"
+    np.random.randn (vocab_size, 1),  # "NLP"
 ]
 
-outputs, hidden_states = rnn.forward(sequence)
-print(f"Number of outputs: {len(outputs)}")
+outputs, hidden_states = rnn.forward (sequence)
+print(f"Number of outputs: {len (outputs)}")
 print(f"Output shape: {outputs[0].shape}")
 \`\`\`
 
@@ -89,22 +89,22 @@ print(f"Output shape: {outputs[0].shape}")
 import torch
 import torch.nn as nn
 
-class RNNModel(nn.Module):
+class RNNModel (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         self.rnn = nn.RNN(embedding_dim, hidden_dim, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, output_dim)
+        self.fc = nn.Linear (hidden_dim, output_dim)
         
-    def forward(self, x):
+    def forward (self, x):
         # x shape: (batch, seq_len)
-        embedded = self.embedding(x)  # (batch, seq_len, embedding_dim)
+        embedded = self.embedding (x)  # (batch, seq_len, embedding_dim)
         
-        output, hidden = self.rnn(embedded)  # output: (batch, seq_len, hidden_dim)
+        output, hidden = self.rnn (embedded)  # output: (batch, seq_len, hidden_dim)
         
         # Use final hidden state for classification
         final_hidden = hidden[-1]  # (batch, hidden_dim)
-        logits = self.fc(final_hidden)  # (batch, output_dim)
+        logits = self.fc (final_hidden)  # (batch, output_dim)
         
         return logits
 
@@ -114,14 +114,14 @@ embedding_dim = 100
 hidden_dim = 256
 output_dim = 2  # Binary classification
 
-model = RNNModel(vocab_size, embedding_dim, hidden_dim, output_dim)
+model = RNNModel (vocab_size, embedding_dim, hidden_dim, output_dim)
 
 # Example input
 batch_size = 32
 seq_len = 20
 x = torch.randint(0, vocab_size, (batch_size, seq_len))
 
-logits = model(x)
+logits = model (x)
 print(f"Output shape: {logits.shape}")  # (32, 2)
 \`\`\`
 
@@ -162,20 +162,20 @@ class LSTMCell:
         self.hidden_size = hidden_size
         
         # Gates: forget, input, output
-        self.Wf = np.random.randn(hidden_size, input_size + hidden_size) * 0.01
-        self.Wi = np.random.randn(hidden_size, input_size + hidden_size) * 0.01
-        self.Wo = np.random.randn(hidden_size, input_size + hidden_size) * 0.01
-        self.Wc = np.random.randn(hidden_size, input_size + hidden_size) * 0.01
+        self.Wf = np.random.randn (hidden_size, input_size + hidden_size) * 0.01
+        self.Wi = np.random.randn (hidden_size, input_size + hidden_size) * 0.01
+        self.Wo = np.random.randn (hidden_size, input_size + hidden_size) * 0.01
+        self.Wc = np.random.randn (hidden_size, input_size + hidden_size) * 0.01
         
         self.bf = np.zeros((hidden_size, 1))
         self.bi = np.zeros((hidden_size, 1))
         self.bo = np.zeros((hidden_size, 1))
         self.bc = np.zeros((hidden_size, 1))
     
-    def sigmoid(self, x):
+    def sigmoid (self, x):
         return 1 / (1 + np.exp(-x))
     
-    def forward(self, x, h_prev, c_prev):
+    def forward (self, x, h_prev, c_prev):
         """
         x: input at current timestep
         h_prev: previous hidden state
@@ -185,22 +185,22 @@ class LSTMCell:
         combined = np.vstack((x, h_prev))
         
         # Forget gate: what to forget from cell state
-        f = self.sigmoid(np.dot(self.Wf, combined) + self.bf)
+        f = self.sigmoid (np.dot (self.Wf, combined) + self.bf)
         
         # Input gate: what new information to add
-        i = self.sigmoid(np.dot(self.Wi, combined) + self.bi)
+        i = self.sigmoid (np.dot (self.Wi, combined) + self.bi)
         
         # Candidate cell state
-        c_tilde = np.tanh(np.dot(self.Wc, combined) + self.bc)
+        c_tilde = np.tanh (np.dot (self.Wc, combined) + self.bc)
         
         # Update cell state
         c = f * c_prev + i * c_tilde
         
         # Output gate: what to output
-        o = self.sigmoid(np.dot(self.Wo, combined) + self.bo)
+        o = self.sigmoid (np.dot (self.Wo, combined) + self.bo)
         
         # Hidden state
-        h = o * np.tanh(c)
+        h = o * np.tanh (c)
         
         return h, c
 
@@ -217,10 +217,10 @@ class LSTMCell:
 import torch
 import torch.nn as nn
 
-class LSTMModel(nn.Module):
+class LSTMModel (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, n_layers=2):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         self.lstm = nn.LSTM(
             embedding_dim, 
             hidden_dim, 
@@ -228,28 +228,28 @@ class LSTMModel(nn.Module):
             batch_first=True,
             dropout=0.5  # Dropout between layers
         )
-        self.fc = nn.Linear(hidden_dim, output_dim)
+        self.fc = nn.Linear (hidden_dim, output_dim)
         self.dropout = nn.Dropout(0.5)
         
-    def forward(self, x):
-        embedded = self.embedding(x)  # (batch, seq_len, embedding_dim)
-        embedded = self.dropout(embedded)
+    def forward (self, x):
+        embedded = self.embedding (x)  # (batch, seq_len, embedding_dim)
+        embedded = self.dropout (embedded)
         
         # LSTM returns output and (hidden, cell) states
-        output, (hidden, cell) = self.lstm(embedded)
+        output, (hidden, cell) = self.lstm (embedded)
         
         # Use final hidden state
         final_hidden = hidden[-1]  # Last layer
-        final_hidden = self.dropout(final_hidden)
+        final_hidden = self.dropout (final_hidden)
         
-        logits = self.fc(final_hidden)
+        logits = self.fc (final_hidden)
         return logits
 
 # Training example
-model = LSTMModel(vocab_size=10000, embedding_dim=100, hidden_dim=256, output_dim=2)
+model = LSTMModel (vocab_size=10000, embedding_dim=100, hidden_dim=256, output_dim=2)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
 
 # Training loop
 for epoch in range(10):
@@ -257,8 +257,8 @@ for epoch in range(10):
         texts, labels = batch
         
         optimizer.zero_grad()
-        logits = model(texts)
-        loss = criterion(logits, labels)
+        logits = model (texts)
+        loss = criterion (logits, labels)
         loss.backward()
         optimizer.step()
 \`\`\`
@@ -268,17 +268,17 @@ for epoch in range(10):
 GRUs simplify LSTMs with fewer gates, often similar performance.
 
 \`\`\`python
-class GRUModel(nn.Module):
+class GRUModel (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         self.gru = nn.GRU(embedding_dim, hidden_dim, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, output_dim)
+        self.fc = nn.Linear (hidden_dim, output_dim)
         
-    def forward(self, x):
-        embedded = self.embedding(x)
-        output, hidden = self.gru(embedded)
-        logits = self.fc(hidden[-1])
+    def forward (self, x):
+        embedded = self.embedding (x)
+        output, hidden = self.gru (embedded)
+        logits = self.fc (hidden[-1])
         return logits
 
 # GRU has 2 gates vs LSTM's 3 gates:
@@ -290,28 +290,28 @@ class GRUModel(nn.Module):
 ## Bidirectional RNNs
 
 \`\`\`python
-class BiLSTMModel(nn.Module):
+class BiLSTMModel (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         self.bilstm = nn.LSTM(
             embedding_dim, 
             hidden_dim, 
             bidirectional=True,  # Key parameter
             batch_first=True
         )
-        self.fc = nn.Linear(hidden_dim * 2, output_dim)  # *2 for bidirectional
+        self.fc = nn.Linear (hidden_dim * 2, output_dim)  # *2 for bidirectional
         
-    def forward(self, x):
-        embedded = self.embedding(x)
-        output, (hidden, cell) = self.bilstm(embedded)
+    def forward (self, x):
+        embedded = self.embedding (x)
+        output, (hidden, cell) = self.bilstm (embedded)
         
         # Concatenate forward and backward hidden states
         forward_hidden = hidden[-2]
         backward_hidden = hidden[-1]
         combined = torch.cat([forward_hidden, backward_hidden], dim=1)
         
-        logits = self.fc(combined)
+        logits = self.fc (combined)
         return logits
 
 # Bidirectional processes sequence in both directions
@@ -321,32 +321,32 @@ class BiLSTMModel(nn.Module):
 ## Sequence-to-Sequence Models
 
 \`\`\`python
-class Seq2SeqModel(nn.Module):
+class Seq2SeqModel (nn.Module):
     """Encoder-Decoder for sequence-to-sequence tasks"""
     
     def __init__(self, input_vocab_size, output_vocab_size, embedding_dim, hidden_dim):
         super().__init__()
         
         # Encoder
-        self.encoder_embedding = nn.Embedding(input_vocab_size, embedding_dim)
+        self.encoder_embedding = nn.Embedding (input_vocab_size, embedding_dim)
         self.encoder_lstm = nn.LSTM(embedding_dim, hidden_dim, batch_first=True)
         
         # Decoder
-        self.decoder_embedding = nn.Embedding(output_vocab_size, embedding_dim)
+        self.decoder_embedding = nn.Embedding (output_vocab_size, embedding_dim)
         self.decoder_lstm = nn.LSTM(embedding_dim, hidden_dim, batch_first=True)
-        self.decoder_output = nn.Linear(hidden_dim, output_vocab_size)
+        self.decoder_output = nn.Linear (hidden_dim, output_vocab_size)
         
-    def forward(self, source, target):
+    def forward (self, source, target):
         # Encode
-        embedded_source = self.encoder_embedding(source)
-        encoder_output, (hidden, cell) = self.encoder_lstm(embedded_source)
+        embedded_source = self.encoder_embedding (source)
+        encoder_output, (hidden, cell) = self.encoder_lstm (embedded_source)
         
         # Decode (using encoder's final state as initial state)
-        embedded_target = self.decoder_embedding(target)
-        decoder_output, _ = self.decoder_lstm(embedded_target, (hidden, cell))
+        embedded_target = self.decoder_embedding (target)
+        decoder_output, _ = self.decoder_lstm (embedded_target, (hidden, cell))
         
         # Predict output vocabulary
-        logits = self.decoder_output(decoder_output)
+        logits = self.decoder_output (decoder_output)
         return logits
 
 # Applications: Machine translation, summarization
@@ -359,35 +359,35 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class TextGenerator(nn.Module):
+class TextGenerator (nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_dim):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=2, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, vocab_size)
+        self.fc = nn.Linear (hidden_dim, vocab_size)
         
-    def forward(self, x, hidden=None):
-        embedded = self.embedding(x)
-        output, hidden = self.lstm(embedded, hidden)
-        logits = self.fc(output)
+    def forward (self, x, hidden=None):
+        embedded = self.embedding (x)
+        output, hidden = self.lstm (embedded, hidden)
+        logits = self.fc (output)
         return logits, hidden
     
-    def generate(self, start_token, max_length=50, temperature=1.0):
+    def generate (self, start_token, max_length=50, temperature=1.0):
         """Generate text autoregressively"""
         self.eval()
         generated = [start_token]
         hidden = None
         
         with torch.no_grad():
-            for _ in range(max_length):
+            for _ in range (max_length):
                 x = torch.LongTensor([[generated[-1]]])
-                logits, hidden = self.forward(x, hidden)
+                logits, hidden = self.forward (x, hidden)
                 
                 # Sample from distribution (with temperature)
-                probs = F.softmax(logits[0, -1] / temperature, dim=0)
-                next_token = torch.multinomial(probs, 1).item()
+                probs = F.softmax (logits[0, -1] / temperature, dim=0)
+                next_token = torch.multinomial (probs, 1).item()
                 
-                generated.append(next_token)
+                generated.append (next_token)
                 
                 if next_token == END_TOKEN:
                     break
@@ -411,25 +411,25 @@ from torch.utils.data import Dataset, DataLoader
 class SentimentLSTM(nn.Module):
     def __init__(self, vocab_size, embedding_dim=100, hidden_dim=256, output_dim=1):
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=0)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim, padding_idx=0)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=2, 
                            batch_first=True, dropout=0.5, bidirectional=True)
-        self.fc = nn.Linear(hidden_dim * 2, output_dim)
+        self.fc = nn.Linear (hidden_dim * 2, output_dim)
         self.dropout = nn.Dropout(0.5)
         
-    def forward(self, text):
-        embedded = self.dropout(self.embedding(text))
-        output, (hidden, cell) = self.lstm(embedded)
+    def forward (self, text):
+        embedded = self.dropout (self.embedding (text))
+        output, (hidden, cell) = self.lstm (embedded)
         
         # Concatenate final forward and backward hidden states
         hidden = torch.cat((hidden[-2,:,:], hidden[-1,:,:]), dim=1)
-        hidden = self.dropout(hidden)
+        hidden = self.dropout (hidden)
         
-        return self.fc(hidden)
+        return self.fc (hidden)
 
 # Training
 model = SentimentLSTM(vocab_size=10000)
-optimizer = torch.optim.Adam(model.parameters())
+optimizer = torch.optim.Adam (model.parameters())
 criterion = nn.BCEWithLogitsLoss()
 
 model.train()
@@ -438,8 +438,8 @@ for epoch in range(10):
         texts, labels = batch
         
         optimizer.zero_grad()
-        predictions = model(texts).squeeze(1)
-        loss = criterion(predictions, labels.float())
+        predictions = model (texts).squeeze(1)
+        loss = criterion (predictions, labels.float())
         loss.backward()
         
         # Gradient clipping (important for RNNs!)

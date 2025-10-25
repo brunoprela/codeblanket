@@ -265,7 +265,7 @@ Value: Set of WebSocket connection IDs
    e. Return ACK to Alice (delivered to server)
 5. Delivery Worker consumes from Kafka
 6. Check Redis: Is Bob online?
-   → Online: Get Bob's WebSocket connection IDs
+   → Online: Get Bob\'s WebSocket connection IDs
    → Send message via WebSocket
    → Bob receives message, sends read receipt
 7. If Bob offline:
@@ -309,21 +309,21 @@ Value: Set of WebSocket connection IDs
 class WebSocketGateway {
     connections: Map<user_id, WebSocket[]> = new Map();
     
-    onConnect(userId: number, ws: WebSocket) {
+    onConnect (userId: number, ws: WebSocket) {
         // Store connection
-        if (!this.connections.has(userId)) {
-            this.connections.set(userId, []);
+        if (!this.connections.has (userId)) {
+            this.connections.set (userId, []);
         }
-        this.connections.get(userId).push(ws);
+        this.connections.get (userId).push (ws);
         
         // Register in Redis (for routing)
         redis.sadd(\`user:\${userId}:gateways\`, this.serverId);
     }
     
-    onDisconnect(userId: number, ws: WebSocket) {
+    onDisconnect (userId: number, ws: WebSocket) {
         // Remove connection
-        const userConns = this.connections.get(userId);
-        userConns.splice(userConns.indexOf(ws), 1);
+        const userConns = this.connections.get (userId);
+        userConns.splice (userConns.indexOf (ws), 1);
         
         if (userConns.length === 0) {
             redis.srem(\`user:\${userId}:gateways\`, this.serverId);
@@ -440,12 +440,12 @@ GET /messages?conversation_id=123&before=msg_xyz&limit=50
 \`\`\`typescript
 const seenMessages = new Set<string>();
 
-function onMessage(message: Message) {
-    if (seenMessages.has(message.message_id)) {
+function onMessage (message: Message) {
+    if (seenMessages.has (message.message_id)) {
         return; // Duplicate, ignore
     }
-    seenMessages.add(message.message_id);
-    displayMessage(message);
+    seenMessages.add (message.message_id);
+    displayMessage (message);
 }
 \`\`\`
 

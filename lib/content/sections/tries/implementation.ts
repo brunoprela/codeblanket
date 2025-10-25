@@ -39,7 +39,7 @@ class Trie:
     def __init__(self):
         self.root = TrieNode()
     
-    def insert(self, word: str) -> None:
+    def insert (self, word: str) -> None:
         """Insert a word into the trie."""
         node = self.root
         for char in word:
@@ -48,16 +48,16 @@ class Trie:
             node = node.children[char]
         node.is_end_of_word = True
     
-    def search(self, word: str) -> bool:
+    def search (self, word: str) -> bool:
         """Check if exact word exists."""
-        node = self._search_prefix(word)
+        node = self._search_prefix (word)
         return node is not None and node.is_end_of_word
     
-    def starts_with(self, prefix: str) -> bool:
+    def starts_with (self, prefix: str) -> bool:
         """Check if any word starts with prefix."""
-        return self._search_prefix(prefix) is not None
+        return self._search_prefix (prefix) is not None
     
-    def _search_prefix(self, prefix: str) -> TrieNode:
+    def _search_prefix (self, prefix: str) -> TrieNode:
         """Helper: traverse to end of prefix."""
         node = self.root
         for char in prefix:

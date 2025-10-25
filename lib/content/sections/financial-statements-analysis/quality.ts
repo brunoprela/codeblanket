@@ -25,15 +25,15 @@ class EarningsQualityAnalyzer:
     accounts_receivable: float
     inventory: float
     
-    def cfo_to_ni_ratio(self) -> float:
+    def cfo_to_ni_ratio (self) -> float:
         """CFO / Net Income - should be >1.0 for high quality."""
         return self.cfo / self.net_income if self.net_income != 0 else 0
     
-    def accruals_ratio(self) -> float:
+    def accruals_ratio (self) -> float:
         """Total Accruals / Net Income - lower is better."""
-        return abs(self.total_accruals) / abs(self.net_income) if self.net_income != 0 else 0
+        return abs (self.total_accruals) / abs (self.net_income) if self.net_income != 0 else 0
     
-    def quality_score(self) -> Dict:
+    def quality_score (self) -> Dict:
         """Calculate composite quality score (0-100)."""
         
         score = 100
@@ -102,7 +102,7 @@ class BeneishMScore:
     """
     
     @staticmethod
-    def calculate(current: Dict, prior: Dict) -> Dict:
+    def calculate (current: Dict, prior: Dict) -> Dict:
         """Calculate all 8 Beneish variables."""
         
         # DSRI: Days Sales in Receivables Index
@@ -186,7 +186,7 @@ prior_year = {
     'net_income': 45_000_000, 'cfo': 50_000_000
 }
 
-beneish = BeneishMScore.calculate(current_year, prior_year)
+beneish = BeneishMScore.calculate (current_year, prior_year)
 print(f"\\nBeneish M-Score: {beneish['m_score']:.2f}")
 print(f"Risk Level: {beneish['risk_level']}")
 \`\`\`
@@ -203,7 +203,7 @@ class AltmanZScore:
     """
     
     @staticmethod
-    def calculate(balance_sheet: Dict, income_statement: Dict, market_data: Dict) -> Dict:
+    def calculate (balance_sheet: Dict, income_statement: Dict, market_data: Dict) -> Dict:
         """Calculate Z-Score for public manufacturing companies."""
         
         # X1: Working Capital / Total Assets
@@ -256,7 +256,7 @@ class PiotroskiFScore:
     """
     
     @staticmethod
-    def calculate(current: Dict, prior: Dict) -> Dict:
+    def calculate (current: Dict, prior: Dict) -> Dict:
         """Calculate 9-point F-Score."""
         
         score = 0
@@ -340,7 +340,7 @@ class RedFlagDetector:
     """Detect common financial statement manipulation tactics."""
     
     @staticmethod
-    def check_channel_stuffing(ar_growth: float, revenue_growth: float, 
+    def check_channel_stuffing (ar_growth: float, revenue_growth: float, 
                                inventory_growth: float) -> Dict:
         """Detect revenue manipulation via channel stuffing."""
         
@@ -349,12 +349,12 @@ class RedFlagDetector:
         
         # Red flag 1: AR growing faster than revenue
         if ar_growth > revenue_growth * 1.2:
-            flags.append(f"AR growth ({ar_growth:.1%}) >> Revenue growth ({revenue_growth:.1%})")
+            flags.append (f"AR growth ({ar_growth:.1%}) >> Revenue growth ({revenue_growth:.1%})")
             score += 30
         
         # Red flag 2: Inventory also building
         if inventory_growth > revenue_growth * 1.2:
-            flags.append(f"Inventory growth ({inventory_growth:.1%}) >> Revenue growth")
+            flags.append (f"Inventory growth ({inventory_growth:.1%}) >> Revenue growth")
             score += 20
         
         # Red flag 3: Both AR and Inventory accelerating
@@ -376,7 +376,7 @@ class RedFlagDetector:
         }
     
     @staticmethod
-    def check_reserve_manipulation(current_reserves: Dict, 
+    def check_reserve_manipulation (current_reserves: Dict, 
                                    prior_reserves: Dict,
                                    revenue: float) -> List[str]:
         """Detect cookie jar reserve manipulation."""
@@ -396,7 +396,7 @@ class RedFlagDetector:
         return flags
     
     @staticmethod
-    def check_one_time_items(income_statement_history: List[Dict]) -> Dict:
+    def check_one_time_items (income_statement_history: List[Dict]) -> Dict:
         """Detect if 'one-time' items are actually recurring."""
         
         one_time_count = sum(1 for stmt in income_statement_history 
@@ -404,7 +404,7 @@ class RedFlagDetector:
         
         if one_time_count >= 3:
             return {
-                'alert': f"'One-time' charges in {one_time_count} of last {len(income_statement_history)} years",
+                'alert': f"'One-time' charges in {one_time_count} of last {len (income_statement_history)} years",
                 'message': "These are recurring, not one-time!"
             }
         
@@ -433,7 +433,7 @@ class ComprehensiveQualityCheck:
         self.prior = prior_data
         self.results = {}
     
-    def run_all_tests(self) -> pd.DataFrame:
+    def run_all_tests (self) -> pd.DataFrame:
         """Execute full quality assessment."""
         
         tests = [
@@ -452,12 +452,12 @@ class ComprehensiveQualityCheck:
                 'Test': test_name,
                 'Score': result.get('score', 'N/A'),
                 'Result': result.get('result', 'N/A'),
-                'Flags': len(result.get('flags', []))
+                'Flags': len (result.get('flags', []))
             })
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def test_earnings_quality(self) -> Dict:
+    def test_earnings_quality (self) -> Dict:
         analyzer = EarningsQualityAnalyzer(
             net_income=self.current['net_income'],
             cfo=self.current['cfo'],
@@ -471,7 +471,7 @@ class ComprehensiveQualityCheck:
     
     # Additional test methods...
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate summary report."""
         df = self.run_all_tests()
         
@@ -479,14 +479,14 @@ class ComprehensiveQualityCheck:
         FINANCIAL STATEMENT QUALITY REPORT
         {'='*60}
         
-        {df.to_string(index=False)}
+        {df.to_string (index=False)}
         
         OVERALL ASSESSMENT:
         """
         
         # Calculate overall score
-        passing_tests = len(df[df['Result'].str.contains('PASS|HIGH|SAFE')])
-        total_tests = len(df)
+        passing_tests = len (df[df['Result'].str.contains('PASS|HIGH|SAFE')])
+        total_tests = len (df)
         
         if passing_tests / total_tests > 0.75:
             report += "\\n✓ HIGH QUALITY - Financials appear clean"

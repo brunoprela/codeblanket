@@ -73,13 +73,13 @@ from scipy.optimize import minimize
 import yfinance as yf
 from datetime import datetime, timedelta
 
-def download_stock_data(tickers, start_date, end_date):
+def download_stock_data (tickers, start_date, end_date):
     """Download historical stock data"""
-    data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+    data = yf.download (tickers, start=start_date, end=end_date)['Adj Close']
     returns = data.pct_change().dropna()
     return returns
 
-def calculate_portfolio_stats(weights, mean_returns, cov_matrix):
+def calculate_portfolio_stats (weights, mean_returns, cov_matrix):
     """
     Calculate portfolio return and risk
     
@@ -87,18 +87,18 @@ def calculate_portfolio_stats(weights, mean_returns, cov_matrix):
     --------
     tuple: (return, volatility, sharpe_ratio)
     """
-    portfolio_return = np.sum(weights * mean_returns) * 252  # Annualized
-    portfolio_std = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+    portfolio_return = np.sum (weights * mean_returns) * 252  # Annualized
+    portfolio_std = np.sqrt (np.dot (weights.T, np.dot (cov_matrix, weights))) * np.sqrt(252)
     
     return portfolio_return, portfolio_std
 
-def portfolio_variance(weights, cov_matrix):
+def portfolio_variance (weights, cov_matrix):
     """Objective function: minimize variance"""
-    return np.dot(weights.T, np.dot(cov_matrix, weights)) * 252
+    return np.dot (weights.T, np.dot (cov_matrix, weights)) * 252
 
-def neg_sharpe_ratio(weights, mean_returns, cov_matrix, risk_free_rate=0.02):
+def neg_sharpe_ratio (weights, mean_returns, cov_matrix, risk_free_rate=0.02):
     """Negative Sharpe ratio for minimization"""
-    p_return, p_std = calculate_portfolio_stats(weights, mean_returns, cov_matrix)
+    p_return, p_std = calculate_portfolio_stats (weights, mean_returns, cov_matrix)
     return -(p_return - risk_free_rate) / p_std
 
 # Download data for portfolio
@@ -106,12 +106,12 @@ print("=== PORTFOLIO OPTIMIZATION EXAMPLE ===\\n")
 
 tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'JPM', 'JNJ', 'GLD', 'TLT']
 end_date = datetime.now()
-start_date = end_date - timedelta(days=3*365)  # 3 years
+start_date = end_date - timedelta (days=3*365)  # 3 years
 
-print(f"Downloading data for: {', '.join(tickers)}")
+print(f"Downloading data for: {', '.join (tickers)}")
 print(f"Period: {start_date.date()} to {end_date.date()}\\n")
 
-returns = download_stock_data(tickers, start_date, end_date)
+returns = download_stock_data (tickers, start_date, end_date)
 
 # Calculate statistics
 mean_returns = returns.mean()
@@ -123,10 +123,10 @@ print("\\nAnnual Volatilities:")
 print((returns.std() * np.sqrt(252)).round(4))
 
 # Equal-weight portfolio baseline
-n_assets = len(tickers)
+n_assets = len (tickers)
 equal_weights = np.array([1/n_assets] * n_assets)
 
-eq_return, eq_std = calculate_portfolio_stats(equal_weights, mean_returns, cov_matrix)
+eq_return, eq_std = calculate_portfolio_stats (equal_weights, mean_returns, cov_matrix)
 
 print(f"\\n=== EQUAL-WEIGHT PORTFOLIO ===")
 print(f"Expected Return: {eq_return*100:.2f}%")
@@ -135,9 +135,9 @@ print(f"Sharpe Ratio: {(eq_return - 0.02) / eq_std:.3f}")
 
 # Optimization: Minimum Variance Portfolio
 constraints = (
-    {'type': 'eq', 'fun': lambda w: np.sum(w) - 1},  # Weights sum to 1
+    {'type': 'eq', 'fun': lambda w: np.sum (w) - 1},  # Weights sum to 1
 )
-bounds = tuple((0, 1) for _ in range(n_assets))  # Long-only
+bounds = tuple((0, 1) for _ in range (n_assets))  # Long-only
 initial_guess = equal_weights
 
 result_minvar = minimize(
@@ -159,7 +159,7 @@ print(f"Expected Return: {min_var_return*100:.2f}%")
 print(f"Volatility: {min_var_std*100:.2f}%")
 print(f"Sharpe Ratio: {(min_var_return - 0.02) / min_var_std:.3f}")
 print("\\nWeights:")
-for ticker, weight in zip(tickers, min_var_weights):
+for ticker, weight in zip (tickers, min_var_weights):
     if weight > 0.01:  # Only show significant weights
         print(f"  {ticker}: {weight*100:.2f}%")
 
@@ -183,26 +183,26 @@ print(f"Expected Return: {max_sharpe_return*100:.2f}%")
 print(f"Volatility: {max_sharpe_std*100:.2f}%")
 print(f"Sharpe Ratio: {(max_sharpe_return - 0.02) / max_sharpe_std:.3f}")
 print("\\nWeights:")
-for ticker, weight in zip(tickers, max_sharpe_weights):
+for ticker, weight in zip (tickers, max_sharpe_weights):
     if weight > 0.01:
         print(f"  {ticker}: {weight*100:.2f}%")
 
 # Generate Efficient Frontier
-def efficient_frontier(mean_returns, cov_matrix, num_portfolios=100):
+def efficient_frontier (mean_returns, cov_matrix, num_portfolios=100):
     """Generate points on the efficient frontier"""
-    n_assets = len(mean_returns)
+    n_assets = len (mean_returns)
     results = np.zeros((3, num_portfolios))
     
     # Range of target returns
     min_ret = mean_returns.min() * 252
     max_ret = mean_returns.max() * 252
-    target_returns = np.linspace(min_ret, max_ret, num_portfolios)
+    target_returns = np.linspace (min_ret, max_ret, num_portfolios)
     
-    for i, target in enumerate(target_returns):
+    for i, target in enumerate (target_returns):
         # Constraints
         constraints = (
-            {'type': 'eq', 'fun': lambda w: np.sum(w) - 1},
-            {'type': 'eq', 'fun': lambda w: np.sum(w * mean_returns) * 252 - target}
+            {'type': 'eq', 'fun': lambda w: np.sum (w) - 1},
+            {'type': 'eq', 'fun': lambda w: np.sum (w * mean_returns) * 252 - target}
         )
         
         result = minimize(
@@ -216,7 +216,7 @@ def efficient_frontier(mean_returns, cov_matrix, num_portfolios=100):
         )
         
         if result.success:
-            ret, vol = calculate_portfolio_stats(result.x, mean_returns, cov_matrix)
+            ret, vol = calculate_portfolio_stats (result.x, mean_returns, cov_matrix)
             results[0, i] = vol
             results[1, i] = ret
             results[2, i] = (ret - 0.02) / vol  # Sharpe
@@ -224,50 +224,50 @@ def efficient_frontier(mean_returns, cov_matrix, num_portfolios=100):
     return results
 
 print("\\nGenerating efficient frontier...")
-frontier_results = efficient_frontier(mean_returns, cov_matrix, 50)
+frontier_results = efficient_frontier (mean_returns, cov_matrix, 50)
 
 # Visualization
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots (figsize=(12, 8))
 
 # Plot efficient frontier
-ax.scatter(frontier_results[0, :], frontier_results[1, :], 
+ax.scatter (frontier_results[0, :], frontier_results[1, :], 
           c=frontier_results[2, :], cmap='viridis', marker='o', s=50, alpha=0.7)
-ax.plot(frontier_results[0, :], frontier_results[1, :], 'b--', linewidth=2, alpha=0.5)
+ax.plot (frontier_results[0, :], frontier_results[1, :], 'b--', linewidth=2, alpha=0.5)
 
 # Plot individual assets
-for i, ticker in enumerate(tickers):
+for i, ticker in enumerate (tickers):
     asset_ret = mean_returns[i] * 252
     asset_vol = returns[ticker].std() * np.sqrt(252)
-    ax.scatter(asset_vol, asset_ret, marker='s', s=150, label=ticker)
-    ax.annotate(ticker, (asset_vol, asset_ret), 
+    ax.scatter (asset_vol, asset_ret, marker='s', s=150, label=ticker)
+    ax.annotate (ticker, (asset_vol, asset_ret), 
                xytext=(5, 5), textcoords='offset points', fontsize=9)
 
 # Plot special portfolios
-ax.scatter(eq_std, eq_return, color='red', marker='*', s=500, 
+ax.scatter (eq_std, eq_return, color='red', marker='*', s=500, 
           label='Equal Weight', edgecolors='black', linewidth=2)
-ax.scatter(min_var_std, min_var_return, color='green', marker='*', s=500, 
+ax.scatter (min_var_std, min_var_return, color='green', marker='*', s=500, 
           label='Min Variance', edgecolors='black', linewidth=2)
-ax.scatter(max_sharpe_std, max_sharpe_return, color='gold', marker='*', s=500, 
+ax.scatter (max_sharpe_std, max_sharpe_return, color='gold', marker='*', s=500, 
           label='Max Sharpe', edgecolors='black', linewidth=2)
 
 # Capital Market Line (from risk-free rate through max Sharpe portfolio)
 rf_rate = 0.02
 cml_x = np.linspace(0, max_sharpe_std * 1.3, 100)
 cml_y = rf_rate + (max_sharpe_return - rf_rate) / max_sharpe_std * cml_x
-ax.plot(cml_x, cml_y, 'r--', linewidth=2, label='Capital Market Line', alpha=0.7)
+ax.plot (cml_x, cml_y, 'r--', linewidth=2, label='Capital Market Line', alpha=0.7)
 
 ax.set_xlabel('Volatility (Risk)', fontsize=12)
 ax.set_ylabel('Expected Return', fontsize=12)
 ax.set_title('Efficient Frontier & Optimal Portfolios', fontsize=14, fontweight='bold')
-ax.legend(loc='upper left', fontsize=10)
-ax.grid(alpha=0.3)
+ax.legend (loc='upper left', fontsize=10)
+ax.grid (alpha=0.3)
 
 # Format axes as percentages
-ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
-ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: '{:.0%}'.format(x)))
+ax.yaxis.set_major_formatter (plt.FuncFormatter (lambda y, _: '{:.0%}'.format (y)))
+ax.xaxis.set_major_formatter (plt.FuncFormatter (lambda x, _: '{:.0%}'.format (x)))
 
 # Add colorbar for Sharpe ratio
-cbar = plt.colorbar(ax.collections[0], ax=ax)
+cbar = plt.colorbar (ax.collections[0], ax=ax)
 cbar.set_label('Sharpe Ratio', rotation=270, labelpad=20)
 
 plt.tight_layout()
@@ -328,7 +328,7 @@ where:
 CAPM Analysis & Alpha Generation
 """
 
-def calculate_beta(stock_returns, market_returns):
+def calculate_beta (stock_returns, market_returns):
     """Calculate beta using regression"""
     # Align data
     combined = pd.DataFrame({
@@ -367,7 +367,7 @@ spy_returns = spy.pct_change().dropna()
 capm_results = {}
 for ticker in tickers:
     if ticker != 'SPY':
-        results = calculate_beta(returns[ticker], spy_returns)
+        results = calculate_beta (returns[ticker], spy_returns)
         capm_results[ticker] = results
         
         # Calculate expected return using CAPM
@@ -387,7 +387,7 @@ for ticker in tickers:
         print(f"  Outperformance: {(actual_return - expected_return)*100:+.2f}%\\n")
 
 # Visualize Security Market Line
-fig, ax = plt.subplots(figsize=(12, 7))
+fig, ax = plt.subplots (figsize=(12, 7))
 
 betas = [capm_results[t]['beta'] for t in tickers if t != 'SPY']
 actual_returns = [returns[t].mean() * 252 for t in tickers if t != 'SPY']
@@ -396,12 +396,12 @@ tickers_clean = [t for t in tickers if t != 'SPY']
 # Plot SML
 beta_range = np.linspace(0, 2, 100)
 sml = rf_rate + beta_range * market_premium
-ax.plot(beta_range, sml, 'r--', linewidth=2, label='Security Market Line (CAPM)', alpha=0.7)
+ax.plot (beta_range, sml, 'r--', linewidth=2, label='Security Market Line (CAPM)', alpha=0.7)
 
 # Plot assets
-ax.scatter(betas, actual_returns, s=200, alpha=0.7, c='blue')
-for i, ticker in enumerate(tickers_clean):
-    ax.annotate(ticker, (betas[i], actual_returns[i]), 
+ax.scatter (betas, actual_returns, s=200, alpha=0.7, c='blue')
+for i, ticker in enumerate (tickers_clean):
+    ax.annotate (ticker, (betas[i], actual_returns[i]), 
                xytext=(5, 5), textcoords='offset points', fontsize=11, fontweight='bold')
     
     # Draw lines showing alpha (distance from SML)
@@ -417,9 +417,9 @@ ax.scatter([1.0], [rf_rate + market_premium], color='gold', s=300, marker='*',
 ax.set_xlabel('Beta (Systematic Risk)', fontsize=12)
 ax.set_ylabel('Expected Return', fontsize=12)
 ax.set_title('Security Market Line & Asset Positioning', fontsize=14, fontweight='bold')
-ax.legend(fontsize=11)
-ax.grid(alpha=0.3)
-ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
+ax.legend (fontsize=11)
+ax.grid (alpha=0.3)
+ax.yaxis.set_major_formatter (plt.FuncFormatter (lambda y, _: '{:.0%}'.format (y)))
 
 plt.tight_layout()
 plt.show()
@@ -460,7 +460,7 @@ Higher Sharpe = Better risk-adjusted return
 Risk-Adjusted Performance Metrics
 """
 
-def calculate_performance_metrics(returns, risk_free_rate=0.02):
+def calculate_performance_metrics (returns, risk_free_rate=0.02):
     """
     Calculate comprehensive performance metrics
     
@@ -478,7 +478,7 @@ def calculate_performance_metrics(returns, risk_free_rate=0.02):
     # Sortino Ratio (downside deviation)
     downside_returns = returns[returns < 0]
     downside_std = downside_returns.std() * np.sqrt(252)
-    sortino = (annual_return - risk_free_rate) / downside_std if len(downside_returns) > 0 else np.nan
+    sortino = (annual_return - risk_free_rate) / downside_std if len (downside_returns) > 0 else np.nan
     
     # Maximum Drawdown
     cumulative = (1 + returns).cumprod()
@@ -487,7 +487,7 @@ def calculate_performance_metrics(returns, risk_free_rate=0.02):
     max_drawdown = drawdown.min()
     
     # Calmar Ratio
-    calmar = annual_return / abs(max_drawdown) if max_drawdown != 0 else np.nan
+    calmar = annual_return / abs (max_drawdown) if max_drawdown != 0 else np.nan
     
     return {
         'annual_return': annual_return,
@@ -512,12 +512,12 @@ print("-" * 65)
 # Calculate portfolio returns
 portfolio_returns = {}
 for name, weights in portfolios.items():
-    portfolio_returns[name] = (returns * weights).sum(axis=1)
+    portfolio_returns[name] = (returns * weights).sum (axis=1)
 
 # Calculate metrics
 metrics_comparison = {}
 for name in portfolios.keys():
-    metrics = calculate_performance_metrics(portfolio_returns[name])
+    metrics = calculate_performance_metrics (portfolio_returns[name])
     metrics_comparison[name] = metrics
 
 # Display comparison
@@ -548,26 +548,26 @@ fig, axes = plt.subplots(2, 1, figsize=(12, 10))
 # Cumulative returns
 for name in portfolios.keys():
     cumulative = (1 + portfolio_returns[name]).cumprod()
-    axes[0].plot(cumulative.index, cumulative.values, label=name, linewidth=2)
+    axes[0].plot (cumulative.index, cumulative.values, label=name, linewidth=2)
 
 axes[0].set_ylabel('Cumulative Return', fontsize=12)
 axes[0].set_title('Portfolio Performance Comparison', fontsize=14, fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 
 # Drawdown
 for name in portfolios.keys():
     cumulative = (1 + portfolio_returns[name]).cumprod()
     running_max = cumulative.cummax()
     drawdown = (cumulative - running_max) / running_max
-    axes[1].fill_between(drawdown.index, 0, drawdown.values, alpha=0.3, label=name)
+    axes[1].fill_between (drawdown.index, 0, drawdown.values, alpha=0.3, label=name)
 
 axes[1].set_xlabel('Date', fontsize=12)
 axes[1].set_ylabel('Drawdown', fontsize=12)
 axes[1].set_title('Drawdown Comparison', fontsize=14, fontweight='bold')
 axes[1].legend()
-axes[1].grid(alpha=0.3)
-axes[1].yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
+axes[1].grid (alpha=0.3)
+axes[1].yaxis.set_major_formatter (plt.FuncFormatter (lambda y, _: '{:.0%}'.format (y)))
 
 plt.tight_layout()
 plt.show()

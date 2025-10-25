@@ -6,14 +6,14 @@ export const analyzingcodeQuiz = [
   {
     id: 'q1',
     question:
-      'Walk me through analyzing this code: def func(arr): for i in range(len(arr)): for j in range(i): print(arr[i], arr[j]). What is the time complexity?',
+      'Walk me through analyzing this code: def func (arr): for i in range (len (arr)): for j in range (i): print(arr[i], arr[j]). What is the time complexity?',
     hint: 'The inner loop does not run n times for each outer iteration.',
     sampleAnswer:
       'This is still O(n²), but let me explain why. The outer loop runs n times. The inner loop runs a variable number of times - it runs 0 times when i=0, 1 time when i=1, 2 times when i=2, and so on up to n-1 times. So the total number of prints is 0 + 1 + 2 + ... + (n-1), which is the sum of first n-1 numbers. That equals (n-1) × n / 2, which is roughly n² / 2. When we drop constants, n² / 2 becomes O(n²). Even though this does fewer operations than a standard nested loop, it is still quadratic growth. The key insight is that the sum of 1 to n is proportional to n².',
     keyPoints: [
       'Outer loop: n iterations',
       'Inner loop: 0, 1, 2, ..., n-1 iterations',
-      'Total operations: 0 + 1 + 2 + ... + (n-1) = n(n-1)/2',
+      'Total operations: 0 + 1 + 2 + ... + (n-1) = n (n-1)/2',
       'Simplifies to O(n²) - still quadratic',
     ],
   },

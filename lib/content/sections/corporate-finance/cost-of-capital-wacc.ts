@@ -1,7 +1,7 @@
 export const costOfCapitalWacc = {
-    title: 'Cost of Capital (WACC)',
-    id: 'cost-of-capital-wacc',
-    content: `
+  title: 'Cost of Capital (WACC)',
+  id: 'cost-of-capital-wacc',
+  content: `
 # Cost of Capital (WACC)
 
 ## Introduction
@@ -121,12 +121,12 @@ cost_equity = 0.12          # 12% cost of equity
 cost_debt = 0.06            # 6% cost of debt  
 tax_rate = 0.25             # 25% tax rate
 
-wacc = calculate_wacc(equity_value, debt_value, cost_equity, cost_debt, tax_rate)
+wacc = calculate_wacc (equity_value, debt_value, cost_equity, cost_debt, tax_rate)
 
 print("WACC Calculation:")
-print(f"Market value of equity: ${equity_value / 1e6:.0f}M")
-print(f"Market value of debt: ${debt_value/1e6:.0f}M")
-print(f"Total firm value: ${(equity_value + debt_value)/1e6:.0f}M")
+print(f"Market value of equity: \${equity_value / 1e6:.0f}M")
+print(f"Market value of debt: \${debt_value/1e6:.0f}M")
+print(f"Total firm value: \${(equity_value + debt_value)/1e6:.0f}M")
 print(f"\\nEquity weight: {equity_value/(equity_value+debt_value):.1%}")
 print(f"Debt weight: {debt_value/(equity_value+debt_value):.1%}")
 print(f"\\nCost of equity: {cost_equity:.1%}")
@@ -144,8 +144,8 @@ print(f"\\n✓ WACC: {wacc:.2%}")
 # Debt weight: 40.0 %
 #
 # Cost of equity: 12.0 %
-# Cost of debt(pre - tax): 6.0 %
-# Cost of debt(after - tax): 4.50 %
+# Cost of debt (pre - tax): 6.0 %
+# Cost of debt (after - tax): 4.50 %
 #
 # ✓ WACC: 9.00 %
 \`\`\`
@@ -171,7 +171,7 @@ Re = Rf + β × (Rm - Rf)
 
 Where:
 - Rf = Risk-free rate (typically 10-year Treasury yield)
-- β (beta) = Stock's systematic risk
+- β (beta) = Stock\'s systematic risk
 - Rm = Expected market return
 - (Rm - Rf) = Market risk premium
 \`\`\`
@@ -212,7 +212,7 @@ rf = 0.04      # 4% Treasury yield
 beta = 1.8     # Tesla's beta (high volatility)
 mrp = 0.065    # 6.5% market risk premium
 
-re_tesla = cost_of_equity_capm(rf, beta, mrp)
+re_tesla = cost_of_equity_capm (rf, beta, mrp)
 
 print("Cost of Equity (CAPM):")
 print(f"Risk-free rate: {rf:.2%}")
@@ -249,7 +249,7 @@ import yfinance as yf
 
 # Get current 10-year Treasury yield
 treasury = yf.Ticker("^TNX")
-current_yield = treasury.history(period="1d")['Close'].iloc[-1] / 100
+current_yield = treasury.history (period="1d")['Close'].iloc[-1] / 100
 
 print(f"Current 10-year Treasury yield: {current_yield:.2%}")
 \`\`\`
@@ -283,12 +283,12 @@ def calculate_beta(
     }).dropna()
     
     # Calculate beta (covariance / variance)
-    covariance = combined['stock'].cov(combined['market'])
+    covariance = combined['stock'].cov (combined['market'])
     market_variance = combined['market'].var()
     beta = covariance / market_variance
     
     # Calculate R-squared
-    correlation = combined['stock'].corr(combined['market'])
+    correlation = combined['stock'].corr (combined['market'])
     r_squared = correlation ** 2
     
     # Regression for alpha
@@ -300,7 +300,7 @@ def calculate_beta(
     
     return {
         'beta': beta,
-        'alpha': intercept,  # Jensen's alpha
+        'alpha': intercept,  # Jensen\'s alpha
         'r_squared': r_squared,
         'correlation': correlation,
         'std_error': std_err
@@ -311,7 +311,7 @@ def calculate_beta(
 # (Assume we have returns data)
 # stock_returns = pd.Series([...])
 # market_returns = pd.Series([...])
-# beta_analysis = calculate_beta(stock_returns, market_returns)
+# beta_analysis = calculate_beta (stock_returns, market_returns)
 
 # Simulate for demonstration
 np.random.seed(42)
@@ -319,8 +319,8 @@ market_ret = np.random.normal(0.001, 0.02, 252)  # 252 trading days
 stock_ret = 1.5 * market_ret + np.random.normal(0, 0.01, 252)  # Beta ≈ 1.5
 
 beta_analysis = calculate_beta(
-    pd.Series(stock_ret),
-    pd.Series(market_ret)
+    pd.Series (stock_ret),
+    pd.Series (market_ret)
 )
 
 print("Beta Analysis:")
@@ -351,7 +351,7 @@ def estimate_market_risk_premium(
     """
     # Download S&P 500 and Treasury data
     sp500 = yf.Ticker("^GSPC")
-    hist = sp500.history(period=f"{years_of_history}y")
+    hist = sp500.history (period=f"{years_of_history}y")
     
     # Calculate annualized return
     total_return = (hist['Close'].iloc[-1] / hist['Close'].iloc[0]) ** (1/years_of_history) - 1
@@ -399,11 +399,11 @@ next_div = 2.50      # $2.50 per share
 price = 50.00        # $50 stock price
 growth = 0.03        # 3% annual growth
 
-re_ddm = cost_of_equity_ddm(next_div, price, growth)
+re_ddm = cost_of_equity_ddm (next_div, price, growth)
 
 print(f"Cost of Equity (DDM):")
-print(f"Next dividend: ${next_div}")
-print(f"Current price: ${price}")
+print(f"Next dividend: \${next_div}")
+print(f"Current price: \${price}")
 print(f"Growth rate: {growth:.1%}")
 print(f"Cost of equity: {re_ddm:.2%}")
 
@@ -435,7 +435,7 @@ def cost_of_equity_bond_yield_plus(
     equity_risk_premium: float = 0.04
 ) -> float:
     """
-    Cost of equity = Company's bond yield + risk premium.
+    Cost of equity = Company\'s bond yield + risk premium.
     
     Rule of thumb: Equity holders require 3-5% more than debt holders.
     """
@@ -446,7 +446,7 @@ def cost_of_equity_bond_yield_plus(
 bond_yield = 0.06    # Company's bonds yield 6%
 risk_prem = 0.04     # 4% equity risk premium
 
-re_byp = cost_of_equity_bond_yield_plus(bond_yield, risk_prem)
+re_byp = cost_of_equity_bond_yield_plus (bond_yield, risk_prem)
 
 print(f"Cost of equity (Bond Yield Plus): {re_byp:.1%}")
 # Output: Cost of equity (Bond Yield Plus): 10.0%
@@ -486,7 +486,7 @@ def yield_to_maturity(
     coupon_payment = (coupon_rate * face_value) / payments_per_year
     periods = years_to_maturity * payments_per_year
     
-    def bond_price_func(ytm):
+    def bond_price_func (ytm):
         """Calculate bond price given YTM"""
         pv_coupons = sum([
             coupon_payment / (1 + ytm/payments_per_year)**t
@@ -495,11 +495,11 @@ def yield_to_maturity(
         pv_face = face_value / (1 + ytm/payments_per_year)**periods
         return pv_coupons + pv_face
     
-    def price_diff(ytm):
-        return bond_price_func(ytm) - bond_price
+    def price_diff (ytm):
+        return bond_price_func (ytm) - bond_price
     
     # Solve for YTM
-    ytm = newton(price_diff, x0=0.05, maxiter=100)
+    ytm = newton (price_diff, x0=0.05, maxiter=100)
     
     return ytm
 
@@ -510,11 +510,11 @@ face_value = 1000     # $1,000 face value
 coupon_rate = 0.06    # 6% annual coupon
 years = 10            # 10 years to maturity
 
-ytm = yield_to_maturity(bond_price, face_value, coupon_rate, years)
+ytm = yield_to_maturity (bond_price, face_value, coupon_rate, years)
 
 print("Cost of Debt Calculation:")
-print(f"Bond price: ${bond_price}")
-print(f"Face value: ${face_value}")
+print(f"Bond price: \${bond_price}")
+print(f"Face value: \${face_value}")
 print(f"Coupon rate: {coupon_rate:.1%}")
 print(f"Years to maturity: {years}")
 print(f"\\nYTM (Cost of debt): {ytm:.2%}")
@@ -559,7 +559,7 @@ def cost_of_debt_from_rating(
     Returns:
         Estimated cost of debt
     """
-    spread = CREDIT_SPREAD_TABLE.get(credit_rating.upper(), 0.05)
+    spread = CREDIT_SPREAD_TABLE.get (credit_rating.upper(), 0.05)
     return risk_free_rate + spread
 
 
@@ -567,7 +567,7 @@ def cost_of_debt_from_rating(
 rating = 'BBB'
 rf = 0.04
 
-cost_debt = cost_of_debt_from_rating(rating, rf)
+cost_debt = cost_of_debt_from_rating (rating, rf)
 
 print(f"Credit rating: {rating}")
 print(f"Risk-free rate: {rf:.1%}")
@@ -604,10 +604,10 @@ def cost_of_debt_from_financials(
 interest_exp = 50_000_000   # $50M interest expense
 total_debt = 800_000_000    # $800M total debt
 
-rd = cost_of_debt_from_financials(interest_exp, total_debt)
+rd = cost_of_debt_from_financials (interest_exp, total_debt)
 
-print(f"Interest expense: ${interest_exp / 1e6: .0f}M")
-print(f"Total debt: ${total_debt/1e6:.0f}M")
+print(f"Interest expense: \${interest_exp / 1e6:.0f}M")
+print(f"Total debt: \${total_debt/1e6:.0f}M")
 print(f"Cost of debt: {rd:.2%}")
 
 # Output:
@@ -643,11 +643,11 @@ def market_value_equity(
 price = 180.00               # $180 per share
 shares = 15_500_000_000      # 15.5 billion shares
 
-mv_equity = market_value_equity(price, shares)
+mv_equity = market_value_equity (price, shares)
 
-print(f"Share price: ${price: .2f}")
+print(f"Share price: \${price:.2f}")
 print(f"Shares outstanding: {shares/1e9:.1f}B")
-print(f"Market cap: ${mv_equity/1e12:.2f}T")
+print(f"Market cap: \${mv_equity/1e12:.2f}T")
 
 # Output:
 # Share price: $180.00
@@ -683,11 +683,11 @@ def market_value_debt_from_bonds(
 face = 500_000_000    # $500M face value
 price_pct = 95        # Trading at 95% of face value
 
-mv_debt = market_value_debt_from_bonds(face, price_pct)
+mv_debt = market_value_debt_from_bonds (face, price_pct)
 
-print(f"Face value: ${face / 1e6: .0f}M")
+print(f"Face value: \${face / 1e6:.0f}M")
 print(f"Market price: {price_pct}% of face")
-print(f"Market value: ${mv_debt/1e6:.0f}M")
+print(f"Market value: \${mv_debt/1e6:.0f}M")
 
 # Output:
 # Face value: $500M
@@ -722,7 +722,7 @@ def approximate_market_value_debt(
         'CCC': 0.50,
     }
     
-    factor = adjustment_factors.get(credit_rating.upper(), 0.90)
+    factor = adjustment_factors.get (credit_rating.upper(), 0.90)
     return book_value_debt * factor
 
 
@@ -730,11 +730,11 @@ def approximate_market_value_debt(
 book_debt = 1_000_000_000
 rating = 'BBB'
 
-mv_debt_approx = approximate_market_value_debt(book_debt, rating)
+mv_debt_approx = approximate_market_value_debt (book_debt, rating)
 
-print(f"Book value of debt: ${book_debt / 1e9: .2f}B")
+print(f"Book value of debt: \${book_debt / 1e9:.2f}B")
 print(f"Credit rating: {rating}")
-print(f"Approximate market value: ${mv_debt_approx/1e9:.2f}B")
+print(f"Approximate market value: \${mv_debt_approx/1e9:.2f}B")
 
 # Output:
 # Book value of debt: $1.00B
@@ -783,7 +783,7 @@ class WACCCalculator:
         # Calculate components
         self._calculate()
     
-    def _calculate(self):
+    def _calculate (self):
         """Perform all calculations."""
         # Firm value
         self.firm_value = self.market_cap + self.total_debt
@@ -807,7 +807,7 @@ class WACCCalculator:
             self.debt_weight * self.after_tax_cost_of_debt
         )
     
-    def summary(self) -> pd.DataFrame:
+    def summary (self) -> pd.DataFrame:
         """Generate summary table."""
         data = {
             'Component': [
@@ -830,9 +830,9 @@ class WACCCalculator:
                 'WACC'
             ],
             'Value': [
-                f"${self.market_cap / 1e9: .2f}B",
-                f"${self.total_debt/1e9:.2f}B",
-    f"${self.firm_value/1e9:.2f}B",
+                f"\${self.market_cap / 1e9:.2f}B",
+                f"\${self.total_debt/1e9:.2f}B",
+    f"\${self.firm_value/1e9:.2f}B",
         '',
         f"{self.equity_weight:.1%}",
             f"{self.debt_weight:.1%}",
@@ -850,7 +850,7 @@ class WACCCalculator:
             ]
         }
 
-return pd.DataFrame(data)
+return pd.DataFrame (data)
     
     def sensitivity_analysis(
     self,
@@ -864,7 +864,7 @@ return pd.DataFrame(data)
 parameter: 'beta', 'debt', 'tax_rate', etc.
     range_pct: +/- percentage to vary
 """
-base_value = getattr(self, parameter)
+base_value = getattr (self, parameter)
 values = np.linspace(
     base_value * (1 - range_pct),
     base_value * (1 + range_pct),
@@ -887,7 +887,7 @@ kwargs = {
 kwargs[parameter] = val
 
 temp_calc = WACCCalculator(** kwargs)
-waccs.append(temp_calc.wacc)
+waccs.append (temp_calc.wacc)
 
 return pd.DataFrame({
     parameter: values,
@@ -895,7 +895,7 @@ return pd.DataFrame({
 })
 
 
-# Calculate WACC for Apple(example values)
+# Calculate WACC for Apple (example values)
 apple_wacc = WACCCalculator(
     company_name = 'Apple Inc.',
     market_cap = 2_800_000_000_000,   # $2.8T
@@ -910,7 +910,7 @@ tax_rate=0.15,                   # 15 % (effective)
 print("=" * 60)
 print(f"WACC Analysis: {apple_wacc.company_name}")
 print("=" * 60)
-print(apple_wacc.summary().to_string(index = False))
+print(apple_wacc.summary().to_string (index = False))
 print("=" * 60)
 
 # Output:
@@ -930,9 +930,9 @@ print("=" * 60)
 #      Market Risk Premium       6.50 %
 #           Cost of Equity      11.80 %
 #                                       
-#  Cost of Debt(pre - tax)       3.00 %
+#  Cost of Debt (pre - tax)       3.00 %
 #                 Tax Rate      15.0 %
-# Cost of Debt(after - tax)       2.55 %
+# Cost of Debt (after - tax)       2.55 %
 #                                       
 #                     WACC      11.43 %
 # ============================================================
@@ -987,7 +987,7 @@ INDUSTRY_WACC_BENCHMARKS = {
     },
 }
 
-def get_industry_benchmark(industry: str) -> dict:
+def get_industry_benchmark (industry: str) -> dict:
     """Get WACC benchmark for industry."""
     return INDUSTRY_WACC_BENCHMARKS.get(
         industry,
@@ -1035,7 +1035,7 @@ def risk_adjusted_wacc(
     Adjust WACC for project-specific risk.
     
     Args:
-        company_wacc: Company's overall WACC
+        company_wacc: Company\'s overall WACC
         project_risk: 'low', 'average', 'high', 'very high'
     
     Returns:
@@ -1050,7 +1050,7 @@ def risk_adjusted_wacc(
         'speculative': +0.06    # +6%
     }
     
-    adjustment = risk_adjustments.get(project_risk.lower(), 0.00)
+    adjustment = risk_adjustments.get (project_risk.lower(), 0.00)
     return company_wacc + adjustment
 
 
@@ -1067,7 +1067,7 @@ projects = [
 print("Risk-Adjusted WACC by Project:")
 print("-" * 70)
 for project_name, risk_level in projects:
-    adjusted_wacc = risk_adjusted_wacc(company_wacc, risk_level)
+    adjusted_wacc = risk_adjusted_wacc (company_wacc, risk_level)
     print(f"{project_name:.<40} {risk_level:.<15} {adjusted_wacc:.1%}")
 
 # Output:
@@ -1090,7 +1090,7 @@ for project_name, risk_level in projects:
 # Using book values from balance sheet
 equity_book = 500_000_000
 debt_book = 300_000_000
-wacc = calculate_wacc(equity_book, debt_book, ...)  # WRONG!
+wacc = calculate_wacc (equity_book, debt_book, ...)  # WRONG!
 \`\`\`
 
 ✅ **Correct:**
@@ -1098,7 +1098,7 @@ wacc = calculate_wacc(equity_book, debt_book, ...)  # WRONG!
 # Using market values
 market_cap = share_price * shares_outstanding
 market_debt = ... # From bond prices or approximation
-wacc = calculate_wacc(market_cap, market_debt, ...)
+wacc = calculate_wacc (market_cap, market_debt, ...)
 \`\`\`
 
 ### Mistake 2: Forgetting Tax Shield
@@ -1157,4 +1157,3 @@ Now you know what discount rate to use! Next:
 **Next Section**: [CAPM & Beta](./capm-beta) →
 `,
 };
-

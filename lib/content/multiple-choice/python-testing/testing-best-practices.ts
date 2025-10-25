@@ -25,7 +25,7 @@ export const testingBestPracticesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'AAA pattern structures tests: (1) Arrange: Setup test data. cart = ShoppingCart(); item = Product(price=29.99). (2) Act: Perform action. cart.add(item); total = cart.calculate_total(). (3) Assert: Verify result. assert total == 29.99. Benefits: Clear test flow, easy to read, separates concerns. Similar: Given-When-Then (BDD). Example: Given user with $100, When withdraw $50, Then balance $50. Not alphabetical, not file organization, not assert everything. Essential test structure for maintainability.',
+      'AAA pattern structures tests: (1) Arrange: Setup test data. cart = ShoppingCart(); item = Product (price=29.99). (2) Act: Perform action. cart.add (item); total = cart.calculate_total(). (3) Assert: Verify result. assert total == 29.99. Benefits: Clear test flow, easy to read, separates concerns. Similar: Given-When-Then (BDD). Example: Given user with $100, When withdraw $50, Then balance $50. Not alphabetical, not file organization, not assert everything. Essential test structure for maintainability.',
   },
   {
     id: 'tbp-mc-3',
@@ -38,7 +38,7 @@ export const testingBestPracticesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Excessive mocking tests mocks, not code: Example: Mock database, validator, email, logger → test only that mocks called, not actual logic. Miss: Integration bugs, SQL errors, validation logic issues. Better: Mock external dependencies only (email, external APIs), use real internal code (database, validators). Example: def test_user_service(db_session, mocker): mock_email = mocker.patch("send_email"); user = service.create(db_session) → Real DB + mocked email. Not never mock (external APIs need mocking), not slower (mocks faster), not setup (that\'s separate). Balance: Mock external, real internal.',
+      'Excessive mocking tests mocks, not code: Example: Mock database, validator, email, logger → test only that mocks called, not actual logic. Miss: Integration bugs, SQL errors, validation logic issues. Better: Mock external dependencies only (email, external APIs), use real internal code (database, validators). Example: def test_user_service (db_session, mocker): mock_email = mocker.patch("send_email"); user = service.create (db_session) → Real DB + mocked email. Not never mock (external APIs need mocking), not slower (mocks faster), not setup (that\'s separate). Balance: Mock external, real internal.',
   },
   {
     id: 'tbp-mc-4',

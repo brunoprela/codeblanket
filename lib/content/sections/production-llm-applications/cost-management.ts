@@ -23,9 +23,9 @@ class CostRecord(Base):
     cost_dollars = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-def track_cost(user_id: str, model: str, usage: dict):
+def track_cost (user_id: str, model: str, usage: dict):
     """Track cost of LLM call."""
-    cost = calculate_cost(usage, model)
+    cost = calculate_cost (usage, model)
     
     record = CostRecord(
         user_id=user_id,
@@ -35,15 +35,15 @@ def track_cost(user_id: str, model: str, usage: dict):
         cost_dollars=cost
     )
     
-    session.add(record)
+    session.add (record)
     session.commit()
     
     return cost
 
-def get_user_cost_today(user_id: str) -> float:
+def get_user_cost_today (user_id: str) -> float:
     """Get total cost for user today."""
     today = datetime.utcnow().date()
-    return session.query(func.sum(CostRecord.cost_dollars)).filter(
+    return session.query (func.sum(CostRecord.cost_dollars)).filter(
         CostRecord.user_id == user_id,
         func.date(CostRecord.created_at) == today
     ).scalar() or 0.0
@@ -58,10 +58,10 @@ PRICING = {
     'claude-3-sonnet': {'input': 0.003, 'output': 0.015}
 }
 
-def calculate_cost(usage: dict, model: str) -> float:
+def calculate_cost (usage: dict, model: str) -> float:
     """Calculate cost of API call."""
     if model not in PRICING:
-        raise ValueError(f"Unknown model: {model}")
+        raise ValueError (f"Unknown model: {model}")
     
     pricing = PRICING[model]
     
@@ -70,13 +70,13 @@ def calculate_cost(usage: dict, model: str) -> float:
     
     return input_cost + output_cost
 
-def estimate_cost(prompt: str, max_tokens: int, model: str) -> float:
+def estimate_cost (prompt: str, max_tokens: int, model: str) -> float:
     """Estimate cost before API call."""
     # Rough estimation: 1 token ≈ 4 characters
-    input_tokens = len(prompt) // 4
+    input_tokens = len (prompt) // 4
     output_tokens = max_tokens or 500  # Estimate
     
-    pricing = PRICING.get(model, PRICING['gpt-3.5-turbo'])
+    pricing = PRICING.get (model, PRICING['gpt-3.5-turbo'])
     
     return (input_tokens / 1000) * pricing['input'] + (output_tokens / 1000) * pricing['output']
 \`\`\`
@@ -90,39 +90,39 @@ class BudgetMonitor:
     def __init__(self, redis_client):
         self.redis = redis_client
     
-    def check_budget(self, user_id: str, cost: float, tier: str):
+    def check_budget (self, user_id: str, cost: float, tier: str):
         """Check if cost exceeds budget."""
-        daily_budget = self.get_daily_budget(tier)
-        daily_spend = get_user_cost_today(user_id)
+        daily_budget = self.get_daily_budget (tier)
+        daily_spend = get_user_cost_today (user_id)
         
         if daily_spend + cost > daily_budget:
-            self.send_budget_alert(user_id, daily_spend, daily_budget)
+            self.send_budget_alert (user_id, daily_spend, daily_budget)
             raise BudgetExceeded(
                 f"Daily budget of \${daily_budget} would be exceeded"
             )
         
         # Warn at 80% of budget
         if daily_spend + cost > daily_budget * 0.8:
-            self.send_budget_warning(user_id, daily_spend, daily_budget)
+            self.send_budget_warning (user_id, daily_spend, daily_budget)
     
-    def get_daily_budget(self, tier: str) -> float:
+    def get_daily_budget (self, tier: str) -> float:
         """Get daily budget for user tier."""
         budgets = {
             'free': 1.0,
             'pro': 50.0,
             'enterprise': 1000.0
         }
-        return budgets.get(tier, 1.0)
+        return budgets.get (tier, 1.0)
 
-budget_monitor = BudgetMonitor(redis_client)
+budget_monitor = BudgetMonitor (redis_client)
 
 # Check budget before expensive call
 try:
-    estimated_cost = estimate_cost(prompt, max_tokens, model)
-    budget_monitor.check_budget(user_id, estimated_cost, user_tier)
-    result = generate(prompt, model)
+    estimated_cost = estimate_cost (prompt, max_tokens, model)
+    budget_monitor.check_budget (user_id, estimated_cost, user_tier)
+    result = generate (prompt, model)
 except BudgetExceeded as e:
-    return {"error": "budget_exceeded", "message": str(e)}
+    return {"error": "budget_exceeded", "message": str (e)}
 \`\`\`
 
 ## Cost Optimization Strategies
@@ -150,17 +150,17 @@ class CostOptimizer:
         3. Reduce max_tokens to save costs
         """
         # Check cache (free!)
-        cached = self.cache.get_semantic_match(prompt)
+        cached = self.cache.get_semantic_match (prompt)
         if cached:
             return {"result": cached, "cost": 0, "from_cache": True}
         
         # Estimate cost
-        estimated_cost = estimate_cost(prompt, 1000, preferred_model)
+        estimated_cost = estimate_cost (prompt, 1000, preferred_model)
         
         # Use cheaper model if cost sensitive
         if max_cost and estimated_cost > max_cost:
             model = self.fallback_model
-            estimated_cost = estimate_cost(prompt, 1000, model)
+            estimated_cost = estimate_cost (prompt, 1000, model)
             
             if estimated_cost > max_cost:
                 # Reduce max_tokens
@@ -180,10 +180,10 @@ class CostOptimizer:
         )
         
         result = response.choices[0].message.content
-        actual_cost = calculate_cost(response.usage, model)
+        actual_cost = calculate_cost (response.usage, model)
         
         # Cache for future
-        self.cache.set(prompt, model, result)
+        self.cache.set (prompt, model, result)
         
         return {
             "result": result,
@@ -203,13 +203,13 @@ async def cost_dashboard():
     
     return {
         'today': {
-            'total': get_cost_for_date(today),
-            'by_model': get_cost_by_model(today),
-            'by_user_tier': get_cost_by_tier(today),
-            'top_users': get_top_spending_users(today, limit=10)
+            'total': get_cost_for_date (today),
+            'by_model': get_cost_by_model (today),
+            'by_user_tier': get_cost_by_tier (today),
+            'top_users': get_top_spending_users (today, limit=10)
         },
         'month': {
-            'total': get_cost_for_month(today.year, today.month),
+            'total': get_cost_for_month (today.year, today.month),
             'daily_average': get_daily_average_cost(),
             'projected_total': get_projected_monthly_cost()
         },
@@ -223,7 +223,7 @@ def get_projected_monthly_cost() -> float:
     """Project monthly cost based on current usage."""
     today = datetime.utcnow()
     days_elapsed = today.day
-    cost_so_far = get_cost_for_month(today.year, today.month)
+    cost_so_far = get_cost_for_month (today.year, today.month)
     
     # Simple projection
     days_in_month = 30
@@ -242,31 +242,31 @@ class UserCostLimiter:
     def __init__(self, redis_client):
         self.redis = redis_client
     
-    def can_make_request(self, user_id: str, estimated_cost: float) -> bool:
+    def can_make_request (self, user_id: str, estimated_cost: float) -> bool:
         """Check if user can make request within their limit."""
-        user = get_user(user_id)
+        user = get_user (user_id)
         daily_limit = user.daily_cost_limit
         
         # Get current spend
-        current_spend = get_user_cost_today(user_id)
+        current_spend = get_user_cost_today (user_id)
         
         # Check if would exceed
         if current_spend + estimated_cost > daily_limit:
-            self.notify_user_limit_reached(user_id)
+            self.notify_user_limit_reached (user_id)
             return False
         
         return True
     
-    def increment_spend(self, user_id: str, actual_cost: float):
+    def increment_spend (self, user_id: str, actual_cost: float):
         """Track user's spending."""
         day_key = f"user_spend:{user_id}:{datetime.utcnow().date()}"
-        self.redis.incrbyfloat(day_key, actual_cost)
-        self.redis.expire(day_key, 86400)  # 24 hours
+        self.redis.incrbyfloat (day_key, actual_cost)
+        self.redis.expire (day_key, 86400)  # 24 hours
 
-limiter = UserCostLimiter(redis_client)
+limiter = UserCostLimiter (redis_client)
 
 # Before making request
-if not limiter.can_make_request(user_id, estimated_cost):
+if not limiter.can_make_request (user_id, estimated_cost):
     raise HTTPException(
         status_code=429,
         detail="Daily cost limit reached. Upgrade for higher limits."

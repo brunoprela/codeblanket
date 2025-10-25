@@ -63,6 +63,6 @@ export const systemdesignbasicsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'We need both for O(1) operations in both directions. shorten(long) checks url_to_short to avoid duplicates and returns existing short code. expand(short) looks up short_to_url to get original. Single HashMap would only support one direction efficiently.',
+      'We need both for O(1) operations in both directions. shorten (long) checks url_to_short to avoid duplicates and returns existing short code. expand (short) looks up short_to_url to get original. Single HashMap would only support one direction efficiently.',
   },
 ];

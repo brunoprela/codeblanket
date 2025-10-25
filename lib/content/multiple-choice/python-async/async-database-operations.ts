@@ -68,6 +68,6 @@ export const asyncDatabaseOperationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'pool.acquire() gets a connection from the pool (or waits if all busy). Must be released back to pool after use: async with pool.acquire() as conn: use conn (auto-releases when exiting). Without release: Connection not returned to pool. Eventually all max_size connections taken. New requests block forever (deadlock). Example: for i in range(100): conn = await pool.acquire(); await conn.fetch(...); # FORGOT to release! After max_size iterations, pool exhausted. Always use async with for automatic release. Or manual: conn = await pool.acquire(); try: use conn; finally: await pool.release(conn).',
+      'pool.acquire() gets a connection from the pool (or waits if all busy). Must be released back to pool after use: async with pool.acquire() as conn: use conn (auto-releases when exiting). Without release: Connection not returned to pool. Eventually all max_size connections taken. New requests block forever (deadlock). Example: for i in range(100): conn = await pool.acquire(); await conn.fetch(...); # FORGOT to release! After max_size iterations, pool exhausted. Always use async with for automatic release. Or manual: conn = await pool.acquire(); try: use conn; finally: await pool.release (conn).',
   },
 ];

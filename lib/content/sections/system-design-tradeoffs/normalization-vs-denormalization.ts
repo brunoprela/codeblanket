@@ -195,7 +195,7 @@ When user views timeline:
 **Benefit**: Fast timeline loads (data pre-computed)
 **Cost**: High write complexity (one tweet → millions of timeline inserts for celebrity)
 
-**Twitter's hybrid approach**:
+**Twitter\'s hybrid approach**:
 - Denormalized (push) for regular users (<1M followers)
 - Normalized (pull) for celebrities (>1M followers)
 - Merge both on timeline load

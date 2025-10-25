@@ -20,7 +20,7 @@ export const llmCostOptimizationQuiz = {
     {
       id: 3,
       question:
-        "Prompt caching (like Claude's prompt caching feature) can dramatically reduce costs by reusing common prompt prefixes.Explain how prompt caching works and what patterns benefit most.Discuss the implementation considerations: cache invalidation, stale data, and cache hit rates.How do you design prompts to maximize caching benefits?",
+        "Prompt caching (like Claude\'s prompt caching feature) can dramatically reduce costs by reusing common prompt prefixes.Explain how prompt caching works and what patterns benefit most.Discuss the implementation considerations: cache invalidation, stale data, and cache hit rates.How do you design prompts to maximize caching benefits?",
       expectedAnswer:
         'Should cover: caching long static prefixes (system prompts, few-shot examples, documentation), charged once then free/reduced on cache hits, 5-10 minute TTL typical, hit rates of 70-90% in some applications, savings calculations (90% of tokens cached → 90% cost reduction), prompt structure for caching (static prefix, variable suffix), cache invalidation on prompt changes, version control for prompts, monitoring cache hit rates, warming caches proactively, tradeoffs with dynamic content, and quantifying ROI of caching implementation.',
     },

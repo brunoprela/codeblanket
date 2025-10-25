@@ -20,7 +20,7 @@ System prompts are the foundation of AI behavior. They define:
 
 ### Real-World Impact
 
-**Cursor's system prompt** makes it act like a coding assistant that understands your codebase, suggests edits, and follows your style guidelines.
+**Cursor\'s system prompt** makes it act like a coding assistant that understands your codebase, suggests edits, and follows your style guidelines.
 
 **ChatGPT's system prompt** makes it helpful, harmless, and honest - defining its entire personality.
 
@@ -310,7 +310,7 @@ class TonePresets:
 - Quantify everything possible
 - No technical jargon without explanation"""
 
-def build_system_with_tone(role: str, tone_preset: str) -> str:
+def build_system_with_tone (role: str, tone_preset: str) -> str:
     """Combine role with tone preset."""
     return f"""{role}
 
@@ -353,7 +353,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def review_code(code: str) -> str:
+def review_code (code: str) -> str:
     """Get formatted code review."""
     response = client.chat.completions.create(
         model="gpt-4",
@@ -472,7 +472,7 @@ YOUR FOCUS AREAS (HELP WITH THESE):
 OUTSIDE YOUR SCOPE (POLITELY REDIRECT):
 {out_of_scope_str}
 
-When asked about out-of-scope topics, respond: "That's outside my area of expertise in {domain}. I recommend consulting a specialist in [relevant field]." """
+When asked about out-of-scope topics, respond: "That\'s outside my area of expertise in {domain}. I recommend consulting a specialist in [relevant field]." """
 
 # Example: SQL assistant
 sql_assistant = create_focused_system_prompt(
@@ -542,7 +542,7 @@ def cursor_style_interaction():
     
     # User request
     user_code = """
-def calculate_total(items):
+def calculate_total (items):
     total = 0
     for item in items:
         total += item['price']
@@ -551,7 +551,7 @@ def calculate_total(items):
     
     user_request = "Add error handling and type hints"
     
-    # Cursor's system prompt + context
+    # Cursor\'s system prompt + context
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[
@@ -600,7 +600,7 @@ class SystemPromptBuilder:
         self.components: Dict[str, SystemPromptComponent] = {}
         self._register_default_components()
     
-    def _register_default_components(self):
+    def _register_default_components (self):
         """Register commonly used components."""
         
         # Role components
@@ -668,7 +668,7 @@ class SystemPromptBuilder:
             category="constraint"
         ))
     
-    def register(self, component: SystemPromptComponent):
+    def register (self, component: SystemPromptComponent):
         """Register a new component."""
         self.components[component.name] = component
     
@@ -707,23 +707,23 @@ class SystemPromptBuilder:
             ]
             
             if category_components:
-                prompt_parts.append(f"\\n{category.upper()}:")
-                prompt_parts.extend(category_components)
+                prompt_parts.append (f"\\n{category.upper()}:")
+                prompt_parts.extend (category_components)
         
         # Add custom instructions
         if custom_instructions:
-            prompt_parts.append(f"\\nADDITIONAL INSTRUCTIONS:\\n{custom_instructions}")
+            prompt_parts.append (f"\\nADDITIONAL INSTRUCTIONS:\\n{custom_instructions}")
         
-        return "\\n\\n".join(prompt_parts)
+        return "\\n\\n".join (prompt_parts)
     
-    def list_components(self, category: Optional[str] = None) -> List[str]:
+    def list_components (self, category: Optional[str] = None) -> List[str]:
         """List available components, optionally filtered by category."""
         if category:
             return [
                 name for name, comp in self.components.items()
                 if comp.category == category
             ]
-        return list(self.components.keys())
+        return list (self.components.keys())
 
 # Usage example
 builder = SystemPromptBuilder()
@@ -814,7 +814,7 @@ class SystemPromptExperiment:
             token_counts = []
             
             for query in test_queries:
-                for _ in range(runs_per_variant):
+                for _ in range (runs_per_variant):
                     start = time.time()
                     
                     response = self.client.chat.completions.create(
@@ -826,18 +826,18 @@ class SystemPromptExperiment:
                     )
                     
                     latency = time.time() - start
-                    latencies.append(latency)
+                    latencies.append (latency)
                     
                     output = response.choices[0].message.content
                     tokens = response.usage.total_tokens
-                    token_counts.append(tokens)
+                    token_counts.append (tokens)
                     
                     # Evaluate
-                    score = evaluation_func(output, query)
-                    results[variant_name]['scores'].append(score)
+                    score = evaluation_func (output, query)
+                    results[variant_name]['scores'].append (score)
                     
                     # Save first response as example
-                    if len(results[variant_name]['responses']) < len(test_queries):
+                    if len (results[variant_name]['responses']) < len (test_queries):
                         results[variant_name]['responses'].append({
                             'query': query,
                             'response': output,
@@ -845,13 +845,13 @@ class SystemPromptExperiment:
                         })
             
             # Aggregate metrics
-            results[variant_name]['avg_latency'] = sum(latencies) / len(latencies)
-            results[variant_name]['total_tokens'] = sum(token_counts)
-            results[variant_name]['avg_score'] = sum(results[variant_name]['scores']) / len(results[variant_name]['scores'])
+            results[variant_name]['avg_latency'] = sum (latencies) / len (latencies)
+            results[variant_name]['total_tokens'] = sum (token_counts)
+            results[variant_name]['avg_score'] = sum (results[variant_name]['scores']) / len (results[variant_name]['scores'])
         
         return results
     
-    def print_results(self, results: Dict):
+    def print_results (self, results: Dict):
         """Print formatted experiment results."""
         
         print("\\n" + "="*70)
@@ -866,19 +866,19 @@ class SystemPromptExperiment:
             print()
         
         # Determine winner
-        winner = max(results.items(), key=lambda x: x[1]['avg_score'])
+        winner = max (results.items(), key=lambda x: x[1]['avg_score'])
         print(f"🏆 Winner: {winner[0]} (score: {winner[1]['avg_score']:.3f})")
         print("="*70 + "\\n")
         
         # Show example responses from winner
         print(f"Example responses from {winner[0]}:\\n")
-        for i, example in enumerate(winner[1]['responses'][:2], 1):
+        for i, example in enumerate (winner[1]['responses'][:2], 1):
             print(f"Query {i}: {example['query']}")
             print(f"Response: {example['response'][:150]}...")
             print(f"Score: {example['score']:.2f}\\n")
 
 # Example usage
-def evaluate_code_quality(response: str, query: str) -> float:
+def evaluate_code_quality (response: str, query: str) -> float:
     """Simple evaluation: check for key quality indicators."""
     score = 0.0
     
@@ -902,7 +902,7 @@ def evaluate_code_quality(response: str, query: str) -> float:
     if response.count("#") >= 2:
     score += 0.1
     
-    return min(score, 1.0)
+    return min (score, 1.0)
 
 # Define variants to test
 variants = {
@@ -935,7 +935,7 @@ results = experiment.run_experiment(
     runs_per_variant = 2
 )
 
-experiment.print_results(results)
+experiment.print_results (results)
 \`\`\`
 
 ## Production Checklist
@@ -978,7 +978,7 @@ experiment.print_results(results)
 4. **Control output format** - Enforce consistency through system prompt
 5. **Tone matters** - Match personality to your application
 6. **Test systematically** - A/B test different system prompts
-7. **Cursor's approach** - Context-aware, code-focused, minimal explanation
+7. **Cursor\'s approach** - Context-aware, code-focused, minimal explanation
 8. **Build component libraries** - Reuse tested prompt components
 9. **Version and track** - Treat system prompts like critical code
 10. **Iterate based on data** - Optimize using real usage metrics

@@ -42,7 +42,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-class Encoder(nn.Module):
+class Encoder (nn.Module):
     """
     Encoder: Input sequence → Context vector
     """
@@ -53,7 +53,7 @@ class Encoder(nn.Module):
         self.num_layers = num_layers
         
         # Embedding layer
-        self.embedding = nn.Embedding(input_size, embedding_dim)
+        self.embedding = nn.Embedding (input_size, embedding_dim)
         
         # LSTM encoder
         self.lstm = nn.LSTM(
@@ -63,7 +63,7 @@ class Encoder(nn.Module):
             batch_first=True
         )
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Encode input sequence.
         
@@ -75,16 +75,16 @@ class Encoder(nn.Module):
             hidden: tuple (h_n, c_n) - final states (context)
         """
         # Embed tokens
-        embedded = self.embedding(x)  # (batch, seq, embedding_dim)
+        embedded = self.embedding (x)  # (batch, seq, embedding_dim)
         
         # Encode with LSTM
-        outputs, hidden = self.lstm(embedded)
+        outputs, hidden = self.lstm (embedded)
         # outputs: (batch, seq, hidden_size)
         # hidden: ((num_layers, batch, hidden_size), (num_layers, batch, hidden_size))
         
         return outputs, hidden
 
-class Decoder(nn.Module):
+class Decoder (nn.Module):
     """
     Decoder: Context vector → Output sequence
     """
@@ -96,7 +96,7 @@ class Decoder(nn.Module):
         self.output_size = output_size
         
         # Embedding layer
-        self.embedding = nn.Embedding(output_size, embedding_dim)
+        self.embedding = nn.Embedding (output_size, embedding_dim)
         
         # LSTM decoder
         self.lstm = nn.LSTM(
@@ -107,9 +107,9 @@ class Decoder(nn.Module):
         )
         
         # Output projection
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.fc = nn.Linear (hidden_size, output_size)
     
-    def forward(self, x, hidden):
+    def forward (self, x, hidden):
         """
         Decode one step.
         
@@ -122,18 +122,18 @@ class Decoder(nn.Module):
             hidden: Updated hidden state
         """
         # Embed token
-        embedded = self.embedding(x)  # (batch, 1, embedding_dim)
+        embedded = self.embedding (x)  # (batch, 1, embedding_dim)
         
         # Decode one step
-        output, hidden = self.lstm(embedded, hidden)
+        output, hidden = self.lstm (embedded, hidden)
         # output: (batch, 1, hidden_size)
         
         # Project to vocabulary
-        output = self.fc(output.squeeze(1))  # (batch, output_size)
+        output = self.fc (output.squeeze(1))  # (batch, output_size)
         
         return output, hidden
 
-class Seq2Seq(nn.Module):
+class Seq2Seq (nn.Module):
     """
     Complete Seq2Seq model.
     """
@@ -144,7 +144,7 @@ class Seq2Seq(nn.Module):
         self.decoder = decoder
         self.device = device
     
-    def forward(self, source, target, teacher_forcing_ratio=0.5):
+    def forward (self, source, target, teacher_forcing_ratio=0.5):
         """
         Forward pass through Seq2Seq.
         
@@ -161,10 +161,10 @@ class Seq2Seq(nn.Module):
         output_size = self.decoder.output_size
         
         # Tensor to store decoder outputs
-        outputs = torch.zeros(batch_size, target_length, output_size).to(self.device)
+        outputs = torch.zeros (batch_size, target_length, output_size).to (self.device)
         
         # Encode entire input sequence
-        _, hidden = self.encoder(source)
+        _, hidden = self.encoder (source)
         
         # First input to decoder is <START> token
         decoder_input = target[:, 0].unsqueeze(1)  # (batch, 1)
@@ -172,7 +172,7 @@ class Seq2Seq(nn.Module):
         # Decode one token at a time
         for t in range(1, target_length):
             # Decode one step
-            output, hidden = self.decoder(decoder_input, hidden)
+            output, hidden = self.decoder (decoder_input, hidden)
             
             # Store output
             outputs[:, t, :] = output
@@ -200,30 +200,30 @@ num_layers = 2
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-encoder = Encoder(input_vocab_size, embedding_dim, hidden_size, num_layers)
-decoder = Decoder(output_vocab_size, embedding_dim, hidden_size, num_layers)
-model = Seq2Seq(encoder, decoder, device).to(device)
+encoder = Encoder (input_vocab_size, embedding_dim, hidden_size, num_layers)
+decoder = Decoder (output_vocab_size, embedding_dim, hidden_size, num_layers)
+model = Seq2Seq (encoder, decoder, device).to (device)
 
 print(f"Encoder: {input_vocab_size} vocab → {hidden_size} hidden")
 print(f"Decoder: {hidden_size} hidden → {output_vocab_size} vocab")
 
 # Count parameters
-def count_params(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+def count_params (model):
+    return sum (p.numel() for p in model.parameters() if p.requires_grad)
 
-print(f"\\nTotal parameters: {count_params(model):,}")
-print(f"  Encoder: {count_params(encoder):,}")
-print(f"  Decoder: {count_params(decoder):,}")
+print(f"\\nTotal parameters: {count_params (model):,}")
+print(f"  Encoder: {count_params (encoder):,}")
+print(f"  Decoder: {count_params (decoder):,}")
 
 # Test forward pass
 batch_size = 32
 source_length = 20
 target_length = 25
 
-source = torch.randint(0, input_vocab_size, (batch_size, source_length)).to(device)
-target = torch.randint(0, output_vocab_size, (batch_size, target_length)).to(device)
+source = torch.randint(0, input_vocab_size, (batch_size, source_length)).to (device)
+target = torch.randint(0, output_vocab_size, (batch_size, target_length)).to (device)
 
-outputs = model(source, target, teacher_forcing_ratio=0.5)
+outputs = model (source, target, teacher_forcing_ratio=0.5)
 
 print(f"\\nExample Forward Pass:")
 print(f"  Source shape: {source.shape}")
@@ -278,18 +278,18 @@ def visualize_bottleneck():
     ax1.barh([3], [input_lengths[0]], color='green', alpha=0.3, label='Output')
     
     ax1.set_yticks([1, 2, 3])
-    ax1.set_yticklabels(['Input\\n(variable)', 'Context\\n(fixed)', 'Output\\n(variable)'])
+    ax1.set_yticklabels(['Input\\n (variable)', 'Context\\n (fixed)', 'Output\\n (variable)'])
     ax1.set_xlabel('Dimensions/Tokens')
     ax1.set_title('The Bottleneck Problem')
     ax1.legend()
     
     # Plot 2: Information retention
-    ax2.plot(input_lengths, information_retained, 'o-', linewidth=2, markersize=8)
+    ax2.plot (input_lengths, information_retained, 'o-', linewidth=2, markersize=8)
     ax2.set_xlabel('Input Sequence Length')
     ax2.set_ylabel('Information Retained (%)')
     ax2.set_title('Information Loss in Long Sequences')
     ax2.grid(True, alpha=0.3)
-    ax2.axhline(y=50, color='r', linestyle='--', label='50% threshold')
+    ax2.axhline (y=50, color='r', linestyle='--', label='50% threshold')
     ax2.legend()
     
     plt.tight_layout()
@@ -297,7 +297,7 @@ def visualize_bottleneck():
     
     print("Bottleneck Effects:")
     print("=" * 60)
-    for length, retained in zip(input_lengths, information_retained):
+    for length, retained in zip (input_lengths, information_retained):
         print(f"  {length:3d} tokens → {retained:5.1f}% information retained")
     
     print("\\n→ Fixed-size context vector can't scale to long sequences!")
@@ -332,7 +332,7 @@ Benefit: Each step learns from correct context
 
 \`\`\`python
 # Training with teacher forcing
-def train_seq2seq(model, iterator, optimizer, criterion, clip, device):
+def train_seq2seq (model, iterator, optimizer, criterion, clip, device):
     """
     Train Seq2Seq model for one epoch.
     
@@ -349,13 +349,13 @@ def train_seq2seq(model, iterator, optimizer, criterion, clip, device):
     epoch_loss = 0
     
     for batch in iterator:
-        source = batch.source.to(device)
-        target = batch.target.to(device)
+        source = batch.source.to (device)
+        target = batch.target.to (device)
         
         optimizer.zero_grad()
         
         # Forward pass with teacher forcing
-        output = model(source, target, teacher_forcing_ratio=0.5)
+        output = model (source, target, teacher_forcing_ratio=0.5)
         
         # output: (batch, target_length, output_vocab)
         # target: (batch, target_length)
@@ -368,7 +368,7 @@ def train_seq2seq(model, iterator, optimizer, criterion, clip, device):
         target = target[:, 1:].contiguous().view(-1)
         
         # Calculate loss
-        loss = criterion(output, target)
+        loss = criterion (output, target)
         
         # Backward pass
         loss.backward()
@@ -381,10 +381,10 @@ def train_seq2seq(model, iterator, optimizer, criterion, clip, device):
         
         epoch_loss += loss.item()
     
-    return epoch_loss / len(iterator)
+    return epoch_loss / len (iterator)
 
 # Inference (no teacher forcing)
-def translate_sentence(model, sentence, src_vocab, trg_vocab, device, max_length=50):
+def translate_sentence (model, sentence, src_vocab, trg_vocab, device, max_length=50):
     """
     Translate a sentence using trained model.
     
@@ -403,20 +403,20 @@ def translate_sentence(model, sentence, src_vocab, trg_vocab, device, max_length
     indices = [src_vocab.stoi[token] for token in tokens]
     indices = [src_vocab.stoi['<sos>']] + indices + [src_vocab.stoi['<eos>']]
     
-    source_tensor = torch.LongTensor(indices).unsqueeze(0).to(device)  # (1, seq)
+    source_tensor = torch.LongTensor (indices).unsqueeze(0).to (device)  # (1, seq)
     
     with torch.no_grad():
         # Encode
-        _, hidden = model.encoder(source_tensor)
+        _, hidden = model.encoder (source_tensor)
         
         # Start decoding
-        decoder_input = torch.LongTensor([trg_vocab.stoi['<sos>']]).to(device)
+        decoder_input = torch.LongTensor([trg_vocab.stoi['<sos>']]).to (device)
         
         outputs = []
         
-        for _ in range(max_length):
+        for _ in range (max_length):
             # Decode one step
-            output, hidden = model.decoder(decoder_input.unsqueeze(0), hidden)
+            output, hidden = model.decoder (decoder_input.unsqueeze(0), hidden)
             
             # Get predicted token
             predicted_token = output.argmax(1).item()
@@ -425,15 +425,15 @@ def translate_sentence(model, sentence, src_vocab, trg_vocab, device, max_length
             if predicted_token == trg_vocab.stoi['<eos>']:
                 break
             
-            outputs.append(predicted_token)
+            outputs.append (predicted_token)
             
             # Next input is predicted token (no teacher forcing)
-            decoder_input = torch.LongTensor([predicted_token]).to(device)
+            decoder_input = torch.LongTensor([predicted_token]).to (device)
     
     # Convert indices to tokens
     translated_tokens = [trg_vocab.itos[idx] for idx in outputs]
     
-    return ' '.join(translated_tokens)
+    return ' '.join (translated_tokens)
 
 print("\\nTeacher Forcing:")
 print("=" * 60)
@@ -459,7 +459,7 @@ Real-world batches have sequences of different lengths. Solution: **padding** + 
 \`\`\`python
 # Padding and masking for variable-length sequences
 
-def pad_sequences(sequences, max_length, pad_token=0):
+def pad_sequences (sequences, max_length, pad_token=0):
     """
     Pad sequences to same length.
     
@@ -476,8 +476,8 @@ def pad_sequences(sequences, max_length, pad_token=0):
     lengths = []
     
     for seq in sequences:
-        length = len(seq)
-        lengths.append(length)
+        length = len (seq)
+        lengths.append (length)
         
         if length < max_length:
             # Pad
@@ -486,9 +486,9 @@ def pad_sequences(sequences, max_length, pad_token=0):
             # Truncate
             seq = seq[:max_length]
         
-        padded.append(seq)
+        padded.append (seq)
     
-    return torch.LongTensor(padded), lengths
+    return torch.LongTensor (padded), lengths
 
 # Example
 sequences = [
@@ -497,7 +497,7 @@ sequences = [
     [1, 2, 3, 4, 5, 6, 7, 8],  # Length 8
 ]
 
-padded, lengths = pad_sequences(sequences, max_length=10, pad_token=0)
+padded, lengths = pad_sequences (sequences, max_length=10, pad_token=0)
 
 print("Variable-Length Sequences:")
 print("=" * 60)
@@ -508,29 +508,29 @@ print(f"\\nOriginal lengths: {lengths}")
 print(f"\\nPadded tensor shape: {padded.shape}")
 
 # Create attention mask
-def create_padding_mask(lengths, max_length):
+def create_padding_mask (lengths, max_length):
     """
     Create mask for padded positions.
     
     Returns:
         mask: (batch, max_length) with 1 for real tokens, 0 for padding
     """
-    batch_size = len(lengths)
-    mask = torch.zeros(batch_size, max_length)
+    batch_size = len (lengths)
+    mask = torch.zeros (batch_size, max_length)
     
-    for i, length in enumerate(lengths):
+    for i, length in enumerate (lengths):
         mask[i, :length] = 1
     
     return mask
 
-mask = create_padding_mask(lengths, max_length=10)
+mask = create_padding_mask (lengths, max_length=10)
 print(f"\\nPadding mask:")
 print(mask)
 print("\\n→ 1 = real token, 0 = padding")
 print("→ Loss computed only on real tokens (ignore padding)")
 
 # Masked loss calculation
-def masked_cross_entropy_loss(predictions, targets, mask):
+def masked_cross_entropy_loss (predictions, targets, mask):
     """
     Cross-entropy loss ignoring padded positions.
     
@@ -545,7 +545,7 @@ def masked_cross_entropy_loss(predictions, targets, mask):
     mask = mask.view(-1)
     
     # Compute loss
-    loss = F.cross_entropy(predictions, targets, reduction='none')
+    loss = F.cross_entropy (predictions, targets, reduction='none')
     
     # Apply mask
     masked_loss = loss * mask
@@ -570,14 +570,14 @@ For encoder (non-autoregressive), can process sequence in **both directions**:
 **Concatenate**: Richer representation
 
 \`\`\`python
-class BidirectionalEncoder(nn.Module):
+class BidirectionalEncoder (nn.Module):
     """
     Bidirectional LSTM encoder.
     """
     def __init__(self, input_size, embedding_dim, hidden_size, num_layers=1):
         super(BidirectionalEncoder, self).__init__()
         
-        self.embedding = nn.Embedding(input_size, embedding_dim)
+        self.embedding = nn.Embedding (input_size, embedding_dim)
         
         # Bidirectional LSTM
         self.lstm = nn.LSTM(
@@ -589,9 +589,9 @@ class BidirectionalEncoder(nn.Module):
         )
         
         # Project concatenated hidden states to decoder hidden size
-        self.fc = nn.Linear(hidden_size * 2, hidden_size)
+        self.fc = nn.Linear (hidden_size * 2, hidden_size)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Bidirectional encoding.
         
@@ -599,17 +599,17 @@ class BidirectionalEncoder(nn.Module):
             outputs: (batch, seq, hidden_size * 2) - forward + backward
             hidden: Processed to match decoder size
         """
-        embedded = self.embedding(x)
+        embedded = self.embedding (x)
         
         # Bidirectional LSTM
-        outputs, (hidden, cell) = self.lstm(embedded)
+        outputs, (hidden, cell) = self.lstm (embedded)
         # outputs: (batch, seq, hidden_size * 2)
         # hidden: (num_layers * 2, batch, hidden_size)
         
         # Combine forward and backward hidden states
         # hidden[-2]: last forward hidden state
         # hidden[-1]: last backward hidden state
-        hidden = torch.tanh(self.fc(torch.cat((hidden[-2], hidden[-1]), dim=1)))
+        hidden = torch.tanh (self.fc (torch.cat((hidden[-2], hidden[-1]), dim=1)))
         # hidden: (batch, hidden_size)
         
         # Reshape for decoder
@@ -650,7 +650,7 @@ print("  ✗ Not suitable for decoder (autoregressive)")
 - Better quality outputs
 
 \`\`\`python
-def beam_search_decode(model, source, beam_width=5, max_length=50):
+def beam_search_decode (model, source, beam_width=5, max_length=50):
     """
     Beam search decoding.
     
@@ -667,7 +667,7 @@ def beam_search_decode(model, source, beam_width=5, max_length=50):
     
     with torch.no_grad():
         # Encode
-        _, hidden = model.encoder(source)
+        _, hidden = model.encoder (source)
         
         # Initialize beams
         # Each beam: (sequence, score, hidden_state)
@@ -675,7 +675,7 @@ def beam_search_decode(model, source, beam_width=5, max_length=50):
         
         completed = []
         
-        for _ in range(max_length):
+        for _ in range (max_length):
             candidates = []
             
             # Expand each beam
@@ -687,20 +687,20 @@ def beam_search_decode(model, source, beam_width=5, max_length=50):
                 
                 # Decode one step
                 decoder_input = torch.LongTensor([seq[-1]]).unsqueeze(0)
-                output, new_hidden = model.decoder(decoder_input, hidden)
+                output, new_hidden = model.decoder (decoder_input, hidden)
                 
                 # Get top beam_width predictions
-                log_probs = F.log_softmax(output, dim=-1)
-                top_log_probs, top_indices = log_probs.topk(beam_width)
+                log_probs = F.log_softmax (output, dim=-1)
+                top_log_probs, top_indices = log_probs.topk (beam_width)
                 
                 # Create new candidates
-                for log_prob, idx in zip(top_log_probs[0], top_indices[0]):
+                for log_prob, idx in zip (top_log_probs[0], top_indices[0]):
                     new_seq = seq + [idx.item()]
                     new_score = score + log_prob.item()
                     candidates.append((new_seq, new_score, new_hidden))
             
             # Keep top beam_width candidates
-            candidates.sort(key=lambda x: x[1], reverse=True)
+            candidates.sort (key=lambda x: x[1], reverse=True)
             beams = candidates[:beam_width]
             
             # Stop if all beams completed
@@ -708,10 +708,10 @@ def beam_search_decode(model, source, beam_width=5, max_length=50):
                 break
         
         # Add remaining beams to completed
-        completed.extend(beams)
+        completed.extend (beams)
         
         # Return best sequence
-        completed.sort(key=lambda x: x[1] / len(x[0]), reverse=True)  # Normalize by length
+        completed.sort (key=lambda x: x[1] / len (x[0]), reverse=True)  # Normalize by length
         best_seq, best_score = completed[0][:2]
         
         return best_seq, best_score

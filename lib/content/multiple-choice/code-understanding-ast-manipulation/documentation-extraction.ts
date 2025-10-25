@@ -10,7 +10,7 @@ export const documentationextractionMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'How do you extract docstrings from Python functions using AST?',
     options: [
       'Search for triple quotes with regex',
-      "Access ast.get_docstring(node) or node.body[0] if it's a string",
+      "Access ast.get_docstring (node) or node.body[0] if it's a string",
       'Parse comments',
       'Use ast.unparse()',
     ],
@@ -35,7 +35,7 @@ export const documentationextractionMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-documentationextraction-mc-3',
     question:
-      'How can you extract type information from docstrings?\\n\\ndef add(x, y):\\n    """Add two numbers.\\n    \\n    Args:\\n        x (int): First number\\n        y (int): Second number\\n    \\n    Returns:\\n        int: Sum\\n    """',
+      'How can you extract type information from docstrings?\\n\\ndef add (x, y):\\n    """Add two numbers.\\n    \\n    Args:\\n        x (int): First number\\n        y (int): Second number\\n    \\n    Returns:\\n        int: Sum\\n    """',
     options: [
       'Type information is in the AST',
       'Parse docstring text to extract structured type info',
@@ -70,6 +70,6 @@ export const documentationextractionMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'AST parsing handles complex cases: def f(a, b=5, *args, **kwargs). Regex struggles with nested parentheses, defaults, annotations. AST gives structured, reliable extraction.',
+      'AST parsing handles complex cases: def f (a, b=5, *args, **kwargs). Regex struggles with nested parentheses, defaults, annotations. AST gives structured, reliable extraction.',
   },
 ];

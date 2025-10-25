@@ -22,7 +22,7 @@ export const templatesQuiz = [
     question:
       'Explain the variable-size shrinkable window template. What goes in the outer loop vs the inner while loop?',
     sampleAnswer:
-      'The shrinkable template has right pointer in outer for loop, left pointer in inner while loop. Outer loop: for right in range(n), add arr[right] to window, update state. Inner while loop: while condition violated, remove arr[left] from window, increment left. After inner while, check and update answer using current window. The key structure: unconditionally expand right, conditionally shrink left while needed. This ensures we explore all possible windows and the inner while maintains validity. Used for maximum window problems where we want largest valid window, like longest substring without repeating characters or max consecutive ones after k flips.',
+      'The shrinkable template has right pointer in outer for loop, left pointer in inner while loop. Outer loop: for right in range (n), add arr[right] to window, update state. Inner while loop: while condition violated, remove arr[left] from window, increment left. After inner while, check and update answer using current window. The key structure: unconditionally expand right, conditionally shrink left while needed. This ensures we explore all possible windows and the inner while maintains validity. Used for maximum window problems where we want largest valid window, like longest substring without repeating characters or max consecutive ones after k flips.',
     keyPoints: [
       'Outer for: right pointer, expand',
       'Inner while: left pointer, shrink',

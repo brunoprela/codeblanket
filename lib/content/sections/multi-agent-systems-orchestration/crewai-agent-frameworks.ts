@@ -110,7 +110,7 @@ crew = Crew(
 )
 
 # 4. Execute
-result = crew.kickoff(inputs={"topic": "quantum computing"})
+result = crew.kickoff (inputs={"topic": "quantum computing"})
 print(result)
 \`\`\`
 
@@ -121,25 +121,25 @@ from crewai_tools import tool
 import requests
 
 @tool("Web Search")
-def web_search(query: str) -> str:
+def web_search (query: str) -> str:
     """Search the web for information."""
     # Simplified - use real search API
     return f"Search results for: {query}"
 
 @tool("File Reader")
-def read_file(filepath: str) -> str:
+def read_file (filepath: str) -> str:
     """Read content from a file."""
     try:
-        with open(filepath, 'r') as f:
+        with open (filepath, 'r') as f:
             return f.read()
     except Exception as e:
         return f"Error reading file: {e}"
 
 @tool("Calculator")
-def calculate(expression: str) -> float:
+def calculate (expression: str) -> float:
     """Evaluate mathematical expressions."""
     try:
-        return eval(expression)
+        return eval (expression)
     except Exception as e:
         return f"Error: {e}"
 
@@ -275,11 +275,11 @@ class AutoGPTAgent:
         self.completed_tasks = []
         self.max_iterations = 10
     
-    async def run(self) -> Dict[str, Any]:
+    async def run (self) -> Dict[str, Any]:
         """Run agent autonomously."""
         print(f"Goal: {self.goal}\\n")
         
-        for iteration in range(self.max_iterations):
+        for iteration in range (self.max_iterations):
             print(f"Iteration {iteration + 1}/{self.max_iterations}")
             
             # 1. Think: What should I do next?
@@ -293,7 +293,7 @@ class AutoGPTAgent:
                 }
             
             # 2. Act: Execute the action
-            result = await self._act(next_action)
+            result = await self._act (next_action)
             
             # 3. Observe: Record result
             self.completed_tasks.append({
@@ -309,7 +309,7 @@ class AutoGPTAgent:
             "completed_tasks": self.completed_tasks
         }
     
-    async def _think(self) -> str:
+    async def _think (self) -> str:
         """Decide next action."""
         context = self._build_context()
         
@@ -325,10 +325,10 @@ What should be the next action to achieve the goal?
 Reply with action name or "GOAL_COMPLETE" if done."""
         
         # Use LLM to decide
-        response = await self._call_llm(prompt)
+        response = await self._call_llm (prompt)
         return response.strip()
     
-    async def _act(self, action: str) -> Any:
+    async def _act (self, action: str) -> Any:
         """Execute action using tools."""
         # Find matching tool
         for tool in self.tools:
@@ -337,7 +337,7 @@ Reply with action name or "GOAL_COMPLETE" if done."""
         
         return f"Action {action} not found"
     
-    def _build_context(self) -> str:
+    def _build_context (self) -> str:
         """Build context from completed tasks."""
         if not self.completed_tasks:
             return "No tasks completed yet"
@@ -347,11 +347,11 @@ Reply with action name or "GOAL_COMPLETE" if done."""
             context += f"- {task['action']}: {task['result']}\\n"
         return context
     
-    def _list_available_actions(self) -> str:
+    def _list_available_actions (self) -> str:
         """List available tools."""
         return ", ".join([tool.__name__ for tool in self.tools])
     
-    async def _call_llm(self, prompt: str) -> str:
+    async def _call_llm (self, prompt: str) -> str:
         """Call LLM."""
         # Implement LLM call
         pass
@@ -404,7 +404,7 @@ class MetaGPTTeam:
             goal="Test and validate"
         )
     
-    async def build_product(self, idea: str) -> Dict[str, Any]:
+    async def build_product (self, idea: str) -> Dict[str, Any]:
         """Go from idea to implemented product."""
         
         # 1. PM creates requirements
@@ -445,7 +445,7 @@ result = await team.build_product("Task management app")
 import agentops
 
 # Initialize AgentOps
-agentops.init(api_key="your_key")
+agentops.init (api_key="your_key")
 
 class MonitoredAgent:
     """Agent with monitoring."""
@@ -455,10 +455,10 @@ class MonitoredAgent:
         self.session = agentops.start_session()
     
     @agentops.record_action
-    async def execute(self, task: str) -> str:
+    async def execute (self, task: str) -> str:
         """Execute task with monitoring."""
         # This call is automatically logged
-        result = await self._do_work(task)
+        result = await self._do_work (task)
         
         # Log custom events
         agentops.record_event(
@@ -466,19 +466,19 @@ class MonitoredAgent:
             properties={
                 "agent": self.name,
                 "task": task,
-                "result_length": len(result)
+                "result_length": len (result)
             }
         )
         
         return result
     
-    async def _do_work(self, task: str) -> str:
+    async def _do_work (self, task: str) -> str:
         """Actual work."""
         import asyncio
         await asyncio.sleep(1)
         return f"Completed: {task}"
     
-    def end_session(self):
+    def end_session (self):
         """End monitoring session."""
         self.session.end_session("Success")
 
@@ -493,7 +493,7 @@ agent.end_session()
 ## Framework Comparison
 
 \`\`\`python
-def choose_framework(requirements: Dict[str, bool]) -> str:
+def choose_framework (requirements: Dict[str, bool]) -> str:
     """Choose appropriate framework."""
     
     if requirements.get("role_based_teams"):
@@ -519,7 +519,7 @@ requirements = {
     "complex_workflows": False
 }
 
-framework = choose_framework(requirements)
+framework = choose_framework (requirements)
 print(f"Recommended: {framework}")
 \`\`\`
 
@@ -554,7 +554,7 @@ class SimpleFramework:
         self.roles: Dict[str, AgentRole] = {}
         self.context: Dict[str, Any] = {}
     
-    def register_role(self, role: AgentRole):
+    def register_role (self, role: AgentRole):
         """Register an agent role."""
         self.roles[role.name] = role
     
@@ -566,12 +566,12 @@ class SimpleFramework:
         completed = set()
         results = {}
         
-        while len(completed) < len(tasks):
+        while len (completed) < len (tasks):
             # Find ready tasks
             ready = [
                 t for t in tasks
                 if t.output_key not in completed
-                and all(dep in completed for dep in t.dependencies)
+                and all (dep in completed for dep in t.dependencies)
             ]
             
             if not ready:
@@ -579,18 +579,18 @@ class SimpleFramework:
             
             # Execute ready tasks
             for task in ready:
-                result = await self._execute_task(task)
+                result = await self._execute_task (task)
                 results[task.output_key] = result
-                completed.add(task.output_key)
+                completed.add (task.output_key)
                 self.context[task.output_key] = result
         
         return results
     
-    async def _execute_task(self, task: AgentTask) -> Any:
+    async def _execute_task (self, task: AgentTask) -> Any:
         """Execute single task."""
-        role = self.roles.get(task.assigned_to)
+        role = self.roles.get (task.assigned_to)
         if not role:
-            raise ValueError(f"Role {task.assigned_to} not found")
+            raise ValueError (f"Role {task.assigned_to} not found")
         
         print(f"[{role.name}] {task.description}")
         
@@ -655,7 +655,7 @@ tasks = [
 ]
 
 # Execute
-results = await framework.execute_tasks(tasks)
+results = await framework.execute_tasks (tasks)
 \`\`\`
 
 ## Best Practices

@@ -13,7 +13,7 @@ export const hdfsSection = {
 - Distributed file system for Hadoop ecosystem
 - Stores very large files (GBs to TBs) across clusters
 - Optimized for **batch processing**, not real-time access
-- Inspired by Google's GFS paper (2003)
+- Inspired by Google\'s GFS paper (2003)
 - Written in Java, part of Apache Hadoop
 
 **Scale**: Single clusters with 10,000+ nodes storing petabytes
@@ -205,7 +205,7 @@ Client              NameNode            DataNodes
 
 **1. Client opens file**:
 \`\`\`java
-FileSystem fs = FileSystem.get(conf);
+FileSystem fs = FileSystem.get (conf);
 FSDataInputStream in = fs.open("/user/data.txt");
 \`\`\`
 
@@ -656,7 +656,7 @@ hdfs dfsadmin -refreshNodes
 ## Interview Tips
 
 **Explain HDFS in 2 minutes**:
-"HDFS is Hadoop's distributed file system, inspired by Google's GFS. It has a single NameNode managing metadata and multiple DataNodes storing 128 MB blocks with 3x replication. Files are written once and read many times. HDFS optimizes for high throughput over low latency, making it perfect for batch processing. NameNode HA is achieved with Standby NameNode and ZooKeeper. The system is rack-aware for fault tolerance and network efficiency. It's not suitable for small files or low-latency access, but excels at storing and processing massive datasets."
+"HDFS is Hadoop\'s distributed file system, inspired by Google's GFS. It has a single NameNode managing metadata and multiple DataNodes storing 128 MB blocks with 3x replication. Files are written once and read many times. HDFS optimizes for high throughput over low latency, making it perfect for batch processing. NameNode HA is achieved with Standby NameNode and ZooKeeper. The system is rack-aware for fault tolerance and network efficiency. It's not suitable for small files or low-latency access, but excels at storing and processing massive datasets."
 
 **Key differences from GFS**:
 - Open source vs proprietary

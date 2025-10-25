@@ -44,14 +44,14 @@ engine = create_engine(
     pool_pre_ping=True
 )
 
-SessionLocal = sessionmaker(bind=engine)
+SessionLocal = sessionmaker (bind=engine)
 
-def get_conversation_history(conversation_id: int):
+def get_conversation_history (conversation_id: int):
     """Get conversation with messages."""
     session = SessionLocal()
     try:
-        conversation = session.query(Conversation).filter_by(id=conversation_id).first()
-        messages = session.query(Message).filter_by(conversation_id=conversation_id).all()
+        conversation = session.query(Conversation).filter_by (id=conversation_id).first()
+        messages = session.query(Message).filter_by (conversation_id=conversation_id).all()
         return conversation, messages
     finally:
         session.close()
@@ -99,11 +99,11 @@ class DocumentEmbedding(Base):
     embedding = Column(Vector(1536))  # OpenAI embedding size
     
 # Query by similarity
-def find_similar_documents(query_embedding, limit=10):
+def find_similar_documents (query_embedding, limit=10):
     session = SessionLocal()
     results = session.query(DocumentEmbedding).order_by(
-        DocumentEmbedding.embedding.cosine_distance(query_embedding)
-    ).limit(limit).all()
+        DocumentEmbedding.embedding.cosine_distance (query_embedding)
+    ).limit (limit).all()
     return results
 \`\`\`
 
@@ -115,18 +115,18 @@ import redis
 
 redis_client = redis.Redis()
 
-def cached_query(query_key: str):
+def cached_query (query_key: str):
     """Cache database query results in Redis."""
     # Check cache
-    cached = redis_client.get(f"query:{query_key}")
+    cached = redis_client.get (f"query:{query_key}")
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Query database
     result = expensive_database_query()
     
     # Cache result
-    redis_client.setex(f"query:{query_key}", 3600, json.dumps(result))
+    redis_client.setex (f"query:{query_key}", 3600, json.dumps (result))
     
     return result
 \`\`\`
@@ -151,8 +151,8 @@ def get_db_session():
 
 # Usage
 with get_db_session() as session:
-    conversation = Conversation(user_id="user_123")
-    session.add(conversation)
+    conversation = Conversation (user_id="user_123")
+    session.add (conversation)
     session.flush()
     
     message = Message(
@@ -160,7 +160,7 @@ with get_db_session() as session:
         role="user",
         content="Hello"
     )
-    session.add(message)
+    session.add (message)
 \`\`\`
 
 ## Best Practices

@@ -89,7 +89,7 @@ CREATE TABLE posts (
     user_id INTEGER NOT NULL,
     title VARCHAR(255),
     content TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 \`\`\`
 
@@ -105,16 +105,16 @@ CREATE TABLE posts (
 
 \`\`\`sql
 -- Single column index
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_email ON users (email);
 
 -- Composite index (order matters!)
-CREATE INDEX idx_posts_user_created ON posts(user_id, created_at);
+CREATE INDEX idx_posts_user_created ON posts (user_id, created_at);
 
 -- Unique index
-CREATE UNIQUE INDEX idx_users_email_unique ON users(email);
+CREATE UNIQUE INDEX idx_users_email_unique ON users (email);
 
 -- Partial index (PostgreSQL)
-CREATE INDEX idx_active_users ON users(email) WHERE is_active = TRUE;
+CREATE INDEX idx_active_users ON users (email) WHERE is_active = TRUE;
 \`\`\`
 
 **Index trade-offs**:
@@ -151,7 +151,7 @@ COMMIT;
 
 ### DB-API 2.0 Specification
 
-Python's standard interface for database access (PEP 249):
+Python\'s standard interface for database access (PEP 249):
 
 \`\`\`python
 """
@@ -326,12 +326,12 @@ user = {
 **ORM Approach** (SQLAlchemy):
 \`\`\`python
 # Clean, Pythonic, type-safe
-user = User(email=email, password_hash=password_hash)
-session.add(user)
+user = User (email=email, password_hash=password_hash)
+session.add (user)
 session.commit()
 
 # Automatic mapping to objects
-user = session.query(User).filter_by(id=user_id).first()
+user = session.query(User).filter_by (id=user_id).first()
 print(user.email, user.created_at)
 \`\`\`
 
@@ -378,7 +378,7 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False)
 
 engine = create_engine("postgresql://localhost/mydb")
-Session = sessionmaker(bind=engine)
+Session = sessionmaker (bind=engine)
 session = Session()
 
 # Query users
@@ -402,12 +402,12 @@ users = session.query(User).filter(User.email.like("%@example.com")).all()
 \`\`\`python
 from django.db import models
 
-class User(models.Model):
-    email = models.EmailField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class User (models.Model):
+    email = models.EmailField (unique=True)
+    created_at = models.DateTimeField (auto_now_add=True)
 
 # Query users
-users = User.objects.filter(email__endswith="@example.com")
+users = User.objects.filter (email__endswith="@example.com")
 \`\`\`
 
 **Strengths**:
@@ -433,7 +433,7 @@ from peewee import *
 db = PostgresqlDatabase('mydb', user='postgres')
 
 class User(Model):
-    email = CharField(unique=True)
+    email = CharField (unique=True)
     
     class Meta:
         database = db
@@ -463,11 +463,11 @@ from tortoise import fields
 from tortoise.models import Model
 
 class User(Model):
-    id = fields.IntField(pk=True)
-    email = fields.CharField(max_length=255, unique=True)
+    id = fields.IntField (pk=True)
+    email = fields.CharField (max_length=255, unique=True)
 
 # Async queries
-users = await User.filter(email__endswith="@example.com")
+users = await User.filter (email__endswith="@example.com")
 \`\`\`
 
 **Strengths**:
@@ -529,7 +529,7 @@ query = text("""
     ORDER BY month DESC
 """)
 
-result = session.execute(query).fetchall()
+result = session.execute (query).fetchall()
 \`\`\`
 
 ### 2. Performance-Critical Bulk Operations
@@ -540,17 +540,17 @@ Bulk inserts/updates with COPY
 """
 
 # SQLAlchemy way (slower)
-users = [User(email=f"user{i}@example.com") for i in range(10000)]
-session.bulk_save_objects(users)
+users = [User (email=f"user{i}@example.com") for i in range(10000)]
+session.bulk_save_objects (users)
 
 # Raw SQL with COPY (10-100x faster)
 import io
 data = io.StringIO()
 for i in range(10000):
-    data.write(f"user{i}@example.com\\n")
+    data.write (f"user{i}@example.com\\n")
 data.seek(0)
 
-cursor.copy_from(data, 'users', columns=('email',))
+cursor.copy_from (data, 'users', columns=('email',))
 \`\`\`
 
 ### 3. Database-Specific Features
@@ -570,7 +570,7 @@ query = text("""
     ) DESC
 """)
 
-results = session.execute(query, {"search_term": "python & database"}).fetchall()
+results = session.execute (query, {"search_term": "python & database"}).fetchall()
 \`\`\`
 
 ### 4. Schema Migrations
@@ -584,7 +584,7 @@ Complex schema changes best done in raw SQL
 def upgrade():
     op.execute("""
         CREATE INDEX CONCURRENTLY idx_users_email_gin 
-        ON users USING gin(email gin_trgm_ops);
+        ON users USING gin (email gin_trgm_ops);
     """)
 \`\`\`
 
@@ -596,14 +596,14 @@ Use ORM for CRUD, raw SQL for complex queries
 """
 
 class UserRepository:
-    def create_user(self, email: str) -> User:
+    def create_user (self, email: str) -> User:
         """Use ORM for simple operations"""
-        user = User(email=email)
-        session.add(user)
+        user = User (email=email)
+        session.add (user)
         session.commit()
         return user
     
-    def get_user_analytics(self) -> List[dict]:
+    def get_user_analytics (self) -> List[dict]:
         """Use raw SQL for complex analytics"""
         query = text("""
             SELECT 
@@ -615,7 +615,7 @@ class UserRepository:
             ORDER BY date DESC
             LIMIT 30
         """)
-        return session.execute(query).mappings().all()
+        return session.execute (query).mappings().all()
 \`\`\`
 
 ---
@@ -643,7 +643,7 @@ engine = create_engine(
 )
 
 # Each session gets a connection from the pool
-Session = sessionmaker(bind=engine)
+Session = sessionmaker (bind=engine)
 session = Session()
 
 # Use session...

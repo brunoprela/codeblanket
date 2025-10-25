@@ -34,13 +34,13 @@ export const sqlalchemyCoreMultipleChoice: MultipleChoiceQuestion[] = [
       'In SQLAlchemy 2.0, what is the recommended way to execute a SELECT query using the ORM?',
     options: [
       'session.query(User).filter(User.email == "test").all()',
-      'session.execute(select(User).where(User.email == "test")).scalars().all()',
+      'session.execute (select(User).where(User.email == "test")).scalars().all()',
       'session.select(User).where(User.email == "test")',
       'User.query.filter(User.email == "test").all()',
     ],
     correctAnswer: 1,
     explanation:
-      'SQLAlchemy 2.0 uses session.execute() with select() construct: session.execute(select(User).where(User.email == "test")).scalars().all(). The query() API (option 1) is legacy 1.x style, still works but not recommended. scalars() extracts the entity from Row tuples. This unified API works for both sync and async code. Options 3 and 4 are invalid—session has no select method, User has no query attribute.',
+      'SQLAlchemy 2.0 uses session.execute() with select() construct: session.execute (select(User).where(User.email == "test")).scalars().all(). The query() API (option 1) is legacy 1.x style, still works but not recommended. scalars() extracts the entity from Row tuples. This unified API works for both sync and async code. Options 3 and 4 are invalid—session has no select method, User has no query attribute.',
   },
   {
     id: 'sql-core-mc-4',
@@ -66,6 +66,6 @@ export const sqlalchemyCoreMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'sessionmaker is a factory that creates Session instances with pre-configured settings. Instead of: Session(bind=engine, autocommit=False, ...) every time, you create SessionLocal = sessionmaker(bind=engine, ...) once, then SessionLocal() to get configured sessions. This centralizes session configuration and follows the factory pattern. The engine handles connection pooling, not sessionmaker. Alembic handles migrations, not sessionmaker.',
+      'sessionmaker is a factory that creates Session instances with pre-configured settings. Instead of: Session (bind=engine, autocommit=False, ...) every time, you create SessionLocal = sessionmaker (bind=engine, ...) once, then SessionLocal() to get configured sessions. This centralizes session configuration and follows the factory pattern. The engine handles connection pooling, not sessionmaker. Alembic handles migrations, not sessionmaker.',
   },
 ];

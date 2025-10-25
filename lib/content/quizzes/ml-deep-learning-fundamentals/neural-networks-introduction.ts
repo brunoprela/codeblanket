@@ -50,7 +50,7 @@ The XOR problem teaches us that representation matters. Given the right represen
     keyPoints: [
       'XOR is not linearly separable - no single line can separate the classes',
       'Perceptrons can only learn linear decision boundaries',
-      "Minsky & Papert's proof led to the first AI winter (1970s-80s)",
+      "Minsky & Papert\'s proof led to the first AI winter (1970s-80s)",
       'MLPs with non-linear activations transform the input space to make problems linearly separable',
       'Hidden layers learn new representations where complex problems become simple',
       'Modern deep learning extends this principle to learn hierarchical abstractions',
@@ -191,7 +191,7 @@ The Universal Approximation Theorem is a theoretical guarantee, not a practical 
 **1. Rigorous Validation:**
 \`\`\`python
 # BAD: Random split
-X_train, X_test = train_test_split(data, test_size=0.2, random_state=42)
+X_train, X_test = train_test_split (data, test_size=0.2, random_state=42)
 
 # GOOD: Time-based split (respects temporal order)
 split_date = '2020-01-01'
@@ -202,8 +202,8 @@ test_data = data[data.index >= split_date]
 for train_end, test_end in rolling_windows:
     train = data[:train_end]
     test = data[train_end:test_end]
-    model.fit(train)
-    evaluate(model, test)
+    model.fit (train)
+    evaluate (model, test)
 \`\`\`
 
 **2. Regularization Techniques:**
@@ -224,7 +224,7 @@ for train_end, test_end in rolling_windows:
 from sklearn.model_selection import TimeSeriesSplit
 
 # Time series cross-validation (respects temporal order)
-tscv = TimeSeriesSplit(n_splits=5)
+tscv = TimeSeriesSplit (n_splits=5)
 for train_idx, val_idx in tscv.split(X):
     X_train, X_val = X[train_idx], X[val_idx]
     # Train and validate
@@ -274,33 +274,33 @@ class TradingNeuralNetwork:
         self.scaler = RobustScaler()  # Robust to outliers
         self.retrain_frequency = '30D'
         
-    def create_features(self, data, lookback=20):
+    def create_features (self, data, lookback=20):
         # Only use past information
         features = {
-            'returns': data['close',].pct_change(lookback),
-            'volatility': data['returns',].rolling(lookback).std(),
-            'rsi': calculate_rsi(data['close',]),
+            'returns': data['close',].pct_change (lookback),
+            'volatility': data['returns',].rolling (lookback).std(),
+            'rsi': calculate_rsi (data['close',]),
             # etc.
         }
         return features
     
-    def train_with_validation(self, data):
+    def train_with_validation (self, data):
         # Time-series split
-        tscv = TimeSeriesSplit(n_splits=5)
+        tscv = TimeSeriesSplit (n_splits=5)
         scores = []
         
-        for train_idx, val_idx in tscv.split(data):
+        for train_idx, val_idx in tscv.split (data):
             train, val = data.iloc[train_idx], data.iloc[val_idx]
-            self.model.fit(train)
-            score = self.evaluate_sharpe(self.model, val)
-            scores.append(score)
+            self.model.fit (train)
+            score = self.evaluate_sharpe (self.model, val)
+            scores.append (score)
         
-        return np.mean(scores)
+        return np.mean (scores)
     
-    def evaluate_sharpe(self, model, data):
-        predictions = model.predict(data)
+    def evaluate_sharpe (self, model, data):
+        predictions = model.predict (data)
         returns = predictions * data['forward_returns',]
-        return np.mean(returns) / np.std(returns) * np.sqrt(252)
+        return np.mean (returns) / np.std (returns) * np.sqrt(252)
 \`\`\`
 
 **Conclusion:**

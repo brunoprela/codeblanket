@@ -6,12 +6,12 @@ export const peersMultipleChoiceQuestions = [
     options: [
       'Cheap - trading below fair value',
       'Expensive - trading above fair value',
-      'Fairly valued; 10x EV/EBITDA ($5B / $500M) vs 12x median suggests target is 17% cheaper than peers',
+      'Fairly valued; 10x EV/EBITDA (\$5B / $500M) vs 12x median suggests target is 17% cheaper than peers',
       'Cannot determine',
       'Needs more information',
     ],
     correctAnswer: 2,
-    explanation: `Correct answer is C. Target trades at 10x EV/EBITDA ($5B / $500M = 10x) while peers trade at median 12x. Target is CHEAPER by 17% ((12-10)/12 = 17%). If target should trade at peer median, fair EV = $500M × 12 = $6B. Current $5B implies 17% upside to fair value. This suggests potential buying opportunity if target's fundamentals (growth, margins, leverage) are similar to peers.`,
+    explanation: `Correct answer is C. Target trades at 10x EV/EBITDA (\$5B / $500M = 10x) while peers trade at median 12x. Target is CHEAPER by 17% ((12-10)/12 = 17%). If target should trade at peer median, fair EV = $500M × 12 = $6B. Current $5B implies 17% upside to fair value. This suggests potential buying opportunity if target's fundamentals (growth, margins, leverage) are similar to peers.`,
   },
 
   {

@@ -18,8 +18,8 @@ import backoff
 
 client = OpenAI()
 
-@backoff.on_exception(backoff.expo, Exception, max_tries=3)
-def robust_generation(prompt):
+@backoff.on_exception (backoff.expo, Exception, max_tries=3)
+def robust_generation (prompt):
     """Retry on failures"""
     return client.chat.completions.create(
         model="gpt-4-turbo",
@@ -43,8 +43,8 @@ llm = LLM(model="meta-llama/Llama-2-7b-hf")
 
 # Generate
 prompts = ["Tell me about AI", "What is Python?"]
-sampling_params = SamplingParams(temperature=0.7, top_p=0.9)
-outputs = llm.generate(prompts, sampling_params)
+sampling_params = SamplingParams (temperature=0.7, top_p=0.9)
+outputs = llm.generate (prompts, sampling_params)
 
 # vLLM provides:
 # - Continuous batching
@@ -58,7 +58,7 @@ outputs = llm.generate(prompts, sampling_params)
 
 \`\`\`python
 """Stream tokens for better UX"""
-def stream_response(prompt):
+def stream_response (prompt):
     stream = client.chat.completions.create(
         model="gpt-4-turbo",
         messages=[{"role": "user", "content": prompt}],
@@ -88,12 +88,12 @@ llm_requests = Counter('llm_requests_total', 'Total LLM requests')
 llm_latency = Histogram('llm_latency_seconds', 'LLM latency')
 llm_cost = Counter('llm_cost_dollars', 'LLM costs')
 
-def monitored_generate(prompt):
+def monitored_generate (prompt):
     with llm_latency.time():
         response = client.chat.completions.create(...)
         
         llm_requests.inc()
-        llm_cost.inc(calculate_cost(response))
+        llm_cost.inc (calculate_cost (response))
         
         return response
 \`\`\`
@@ -102,17 +102,17 @@ def monitored_generate(prompt):
 
 \`\`\`python
 """Robust error handling"""
-def safe_generation(prompt):
+def safe_generation (prompt):
     try:
-        return model.generate(prompt)
+        return model.generate (prompt)
     except RateLimitError:
         time.sleep(60)
-        return model.generate(prompt)
+        return model.generate (prompt)
     except APIError as e:
-        log_error(e)
+        log_error (e)
         return fallback_response()
     except Exception as e:
-        alert_team(e)
+        alert_team (e)
         raise
 \`\`\`
 

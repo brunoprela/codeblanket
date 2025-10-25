@@ -42,30 +42,30 @@ class PerformanceAnalyzer:
             benchmark_returns: Benchmark returns (e.g., S&P 500)
             risk_free_rate: Annual risk-free rate
         """
-        self.returns = pd.Series(returns)
-        self.benchmark_returns = pd.Series(benchmark_returns) if benchmark_returns is not None else None
+        self.returns = pd.Series (returns)
+        self.benchmark_returns = pd.Series (benchmark_returns) if benchmark_returns is not None else None
         self.risk_free_rate = risk_free_rate
         self.daily_rf = risk_free_rate / 252
         
         # Calculate equity curve
         self.equity_curve = (1 + self.returns).cumprod()
     
-    def total_return(self):
+    def total_return (self):
         """Total cumulative return"""
         return self.equity_curve.iloc[-1] - 1
     
-    def annual_return(self, periods_per_year=252):
+    def annual_return (self, periods_per_year=252):
         """Annualized return (CAGR)"""
-        n_periods = len(self.returns)
+        n_periods = len (self.returns)
         total_ret = self.total_return()
         annual_ret = (1 + total_ret) ** (periods_per_year / n_periods) - 1
         return annual_ret
     
-    def annual_volatility(self, periods_per_year=252):
+    def annual_volatility (self, periods_per_year=252):
         """Annualized volatility (standard deviation)"""
-        return self.returns.std() * np.sqrt(periods_per_year)
+        return self.returns.std() * np.sqrt (periods_per_year)
     
-    def sharpe_ratio(self, periods_per_year=252):
+    def sharpe_ratio (self, periods_per_year=252):
         """
         Sharpe Ratio = (Return - Risk_free) / Volatility
         
@@ -75,10 +75,10 @@ class PerformanceAnalyzer:
         > 2.0: Exceptional (rare)
         """
         excess_returns = self.returns - self.daily_rf
-        sharpe = excess_returns.mean() / excess_returns.std() * np.sqrt(periods_per_year)
-        return sharpe if not np.isnan(sharpe) else 0
+        sharpe = excess_returns.mean() / excess_returns.std() * np.sqrt (periods_per_year)
+        return sharpe if not np.isnan (sharpe) else 0
     
-    def sortino_ratio(self, periods_per_year=252):
+    def sortino_ratio (self, periods_per_year=252):
         """
         Sortino Ratio = (Return - Risk_free) / Downside_deviation
         
@@ -89,13 +89,13 @@ class PerformanceAnalyzer:
         downside_returns = excess_returns[excess_returns < 0]
         downside_std = downside_returns.std()
         
-        if downside_std == 0 or np.isnan(downside_std):
+        if downside_std == 0 or np.isnan (downside_std):
             return 0
         
-        sortino = excess_returns.mean() / downside_std * np.sqrt(periods_per_year)
+        sortino = excess_returns.mean() / downside_std * np.sqrt (periods_per_year)
         return sortino
     
-    def calmar_ratio(self):
+    def calmar_ratio (self):
         """
         Calmar Ratio = Annual_return / |Max_drawdown|
         
@@ -104,14 +104,14 @@ class PerformanceAnalyzer:
         > 2.0: Excellent
         """
         annual_ret = self.annual_return()
-        max_dd = abs(self.max_drawdown())
+        max_dd = abs (self.max_drawdown())
         
         if max_dd == 0:
             return np.inf
         
         return annual_ret / max_dd
     
-    def max_drawdown(self):
+    def max_drawdown (self):
         """
         Maximum Drawdown
         
@@ -122,7 +122,7 @@ class PerformanceAnalyzer:
         drawdown = (self.equity_curve - running_max) / running_max
         return drawdown.min()
     
-    def drawdown_duration(self):
+    def drawdown_duration (self):
         """
         Maximum drawdown duration (days underwater)
         
@@ -137,17 +137,17 @@ class PerformanceAnalyzer:
         for underwater in is_underwater:
             if underwater:
                 current_duration += 1
-                max_duration = max(max_duration, current_duration)
+                max_duration = max (max_duration, current_duration)
             else:
                 current_duration = 0
         
         return max_duration
     
-    def win_rate(self):
+    def win_rate (self):
         """Percentage of winning periods"""
-        return (self.returns > 0).sum() / len(self.returns)
+        return (self.returns > 0).sum() / len (self.returns)
     
-    def profit_factor(self):
+    def profit_factor (self):
         """
         Profit Factor = Gross_profits / Gross_losses
         
@@ -156,24 +156,24 @@ class PerformanceAnalyzer:
         < 1.0: Losing strategy
         """
         wins = self.returns[self.returns > 0].sum()
-        losses = abs(self.returns[self.returns < 0].sum())
+        losses = abs (self.returns[self.returns < 0].sum())
         
         if losses == 0:
             return np.inf
         
         return wins / losses
     
-    def avg_win_loss_ratio(self):
+    def avg_win_loss_ratio (self):
         """Average win / Average loss"""
         avg_win = self.returns[self.returns > 0].mean()
-        avg_loss = abs(self.returns[self.returns < 0].mean())
+        avg_loss = abs (self.returns[self.returns < 0].mean())
         
-        if avg_loss == 0 or np.isnan(avg_loss):
+        if avg_loss == 0 or np.isnan (avg_loss):
             return np.inf
         
         return avg_win / avg_loss
     
-    def ulcer_index(self):
+    def ulcer_index (self):
         """
         Ulcer Index: RMS of drawdowns
         
@@ -185,31 +185,31 @@ class PerformanceAnalyzer:
         ulcer = np.sqrt((drawdown ** 2).mean())
         return ulcer
     
-    def tail_ratio(self, percentile=95):
+    def tail_ratio (self, percentile=95):
         """
         Tail Ratio = 95th_percentile / |5th_percentile|
         
         Measures upside vs downside extremes
         > 1.0: More upside than downside
         """
-        right_tail = np.percentile(self.returns, percentile)
-        left_tail = np.percentile(self.returns, 100 - percentile)
+        right_tail = np.percentile (self.returns, percentile)
+        left_tail = np.percentile (self.returns, 100 - percentile)
         
         if left_tail == 0:
             return np.inf
         
-        return abs(right_tail / left_tail)
+        return abs (right_tail / left_tail)
     
-    def var(self, confidence=0.95):
+    def var (self, confidence=0.95):
         """Value at Risk"""
-        return np.percentile(self.returns, (1 - confidence) * 100)
+        return np.percentile (self.returns, (1 - confidence) * 100)
     
-    def cvar(self, confidence=0.95):
+    def cvar (self, confidence=0.95):
         """Conditional VaR (Expected Shortfall)"""
-        var = self.var(confidence)
+        var = self.var (confidence)
         return self.returns[self.returns <= var].mean()
     
-    def skewness(self):
+    def skewness (self):
         """
         Skewness of returns
         
@@ -218,7 +218,7 @@ class PerformanceAnalyzer:
         """
         return self.returns.skew()
     
-    def kurtosis(self):
+    def kurtosis (self):
         """
         Kurtosis (excess)
         
@@ -227,21 +227,21 @@ class PerformanceAnalyzer:
         """
         return self.returns.kurt()
     
-    def recovery_factor(self):
+    def recovery_factor (self):
         """
         Recovery Factor = Net_profit / Max_drawdown
         
         How fast strategy recovers from losses
         """
         net_profit = self.total_return()
-        max_dd = abs(self.max_drawdown())
+        max_dd = abs (self.max_drawdown())
         
         if max_dd == 0:
             return np.inf
         
         return net_profit / max_dd
     
-    def stability(self):
+    def stability (self):
         """
         Stability = R² of equity curve vs time
         
@@ -249,14 +249,14 @@ class PerformanceAnalyzer:
         1.0 = Perfect linear growth
         0.0 = Random walk
         """
-        x = np.arange(len(self.equity_curve))
-        y = np.log(self.equity_curve)  # Log for geometric growth
+        x = np.arange (len (self.equity_curve))
+        y = np.log (self.equity_curve)  # Log for geometric growth
         
-        slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+        slope, intercept, r_value, p_value, std_err = stats.linregress (x, y)
         
         return r_value ** 2
     
-    def get_all_metrics(self):
+    def get_all_metrics (self):
         """Calculate all metrics"""
         metrics = {
             'Total Return': self.total_return(),
@@ -282,7 +282,7 @@ class PerformanceAnalyzer:
         
         return metrics
     
-    def print_report(self):
+    def print_report (self):
         """Print formatted performance report"""
         metrics = self.get_all_metrics()
         
@@ -328,7 +328,7 @@ class PerformanceAnalyzer:
 np.random.seed(42)
 returns = np.random.normal(0.001, 0.015, 252)  # Simulate 1 year
 
-analyzer = PerformanceAnalyzer(returns, risk_free_rate=0.02)
+analyzer = PerformanceAnalyzer (returns, risk_free_rate=0.02)
 analyzer.print_report()
 \`\`\`
 
@@ -347,14 +347,14 @@ class BenchmarkComparison:
     """
     
     def __init__(self, strategy_returns, benchmark_returns, risk_free_rate=0.02):
-        self.strategy_returns = pd.Series(strategy_returns)
-        self.benchmark_returns = pd.Series(benchmark_returns)
+        self.strategy_returns = pd.Series (strategy_returns)
+        self.benchmark_returns = pd.Series (benchmark_returns)
         self.risk_free_rate = risk_free_rate
         self.daily_rf = risk_free_rate / 252
     
-    def alpha(self):
+    def alpha (self):
         """
-        Jensen's Alpha
+        Jensen\'s Alpha
         
         Risk-adjusted excess return
         α = R_strategy - [R_f + β(R_benchmark - R_f)]
@@ -375,7 +375,7 @@ class BenchmarkComparison:
         
         return alpha
     
-    def beta(self):
+    def beta (self):
         """
         Market Beta
         
@@ -386,15 +386,15 @@ class BenchmarkComparison:
         = 1.0: Market volatility
         > 1.5: High volatility
         """
-        covariance = np.cov(self.strategy_returns, self.benchmark_returns)[0, 1]
-        variance = np.var(self.benchmark_returns)
+        covariance = np.cov (self.strategy_returns, self.benchmark_returns)[0, 1]
+        variance = np.var (self.benchmark_returns)
         
         if variance == 0:
             return 0
         
         return covariance / variance
     
-    def information_ratio(self):
+    def information_ratio (self):
         """
         Information Ratio
         
@@ -407,9 +407,9 @@ class BenchmarkComparison:
         active_returns = self.strategy_returns - self.benchmark_returns
         ir = active_returns.mean() / active_returns.std() * np.sqrt(252)
         
-        return ir if not np.isnan(ir) else 0
+        return ir if not np.isnan (ir) else 0
     
-    def tracking_error(self):
+    def tracking_error (self):
         """
         Tracking Error (annualized)
         
@@ -418,7 +418,7 @@ class BenchmarkComparison:
         active_returns = self.strategy_returns - self.benchmark_returns
         return active_returns.std() * np.sqrt(252)
     
-    def treynor_ratio(self):
+    def treynor_ratio (self):
         """
         Treynor Ratio
         
@@ -433,7 +433,7 @@ class BenchmarkComparison:
         
         return excess_return / beta
     
-    def up_capture(self):
+    def up_capture (self):
         """
         Upside Capture Ratio
         
@@ -450,7 +450,7 @@ class BenchmarkComparison:
         
         return (strategy_up / benchmark_up) * 100
     
-    def down_capture(self):
+    def down_capture (self):
         """
         Downside Capture Ratio
         
@@ -467,7 +467,7 @@ class BenchmarkComparison:
         
         return (strategy_down / benchmark_down) * 100
     
-    def capture_ratio(self):
+    def capture_ratio (self):
         """
         Capture Ratio = Up_capture / Down_capture
         
@@ -481,7 +481,7 @@ class BenchmarkComparison:
         
         return up / down
     
-    def m2_alpha(self):
+    def m2_alpha (self):
         """
         M² Alpha (Modigliani-Modigliani)
         
@@ -496,7 +496,7 @@ class BenchmarkComparison:
         
         return m2 - benchmark_return
     
-    def print_comparison(self):
+    def print_comparison (self):
         """Print benchmark comparison report"""
         print("="*60)
         print("BENCHMARK COMPARISON REPORT")
@@ -528,7 +528,7 @@ class BenchmarkComparison:
 
 # Example
 benchmark_returns = np.random.normal(0.0008, 0.012, 252)
-comparison = BenchmarkComparison(returns, benchmark_returns)
+comparison = BenchmarkComparison (returns, benchmark_returns)
 comparison.print_comparison()
 \`\`\`
 
@@ -547,50 +547,50 @@ class RollingPerformance:
     """
     
     def __init__(self, returns, window=63):  # ~3 months
-        self.returns = pd.Series(returns)
+        self.returns = pd.Series (returns)
         self.window = window
     
-    def rolling_sharpe(self):
+    def rolling_sharpe (self):
         """Calculate rolling Sharpe ratio"""
-        rolling_mean = self.returns.rolling(self.window).mean()
-        rolling_std = self.returns.rolling(self.window).std()
+        rolling_mean = self.returns.rolling (self.window).mean()
+        rolling_std = self.returns.rolling (self.window).std()
         rolling_sharpe = rolling_mean / rolling_std * np.sqrt(252)
         return rolling_sharpe
     
-    def rolling_sortino(self):
+    def rolling_sortino (self):
         """Calculate rolling Sortino ratio"""
-        def calc_sortino(x):
+        def calc_sortino (x):
             downside = x[x < 0]
-            if len(downside) == 0:
+            if len (downside) == 0:
                 return np.nan
             return x.mean() / downside.std() * np.sqrt(252)
         
-        rolling_sortino = self.returns.rolling(self.window).apply(calc_sortino)
+        rolling_sortino = self.returns.rolling (self.window).apply (calc_sortino)
         return rolling_sortino
     
-    def rolling_drawdown(self):
+    def rolling_drawdown (self):
         """Calculate rolling drawdown"""
         equity = (1 + self.returns).cumprod()
-        rolling_max = equity.rolling(self.window, min_periods=1).max()
+        rolling_max = equity.rolling (self.window, min_periods=1).max()
         rolling_dd = (equity - rolling_max) / rolling_max
         return rolling_dd
     
-    def rolling_win_rate(self):
+    def rolling_win_rate (self):
         """Calculate rolling win rate"""
-        rolling_wr = self.returns.rolling(self.window).apply(lambda x: (x > 0).sum() / len(x))
+        rolling_wr = self.returns.rolling (self.window).apply (lambda x: (x > 0).sum() / len (x))
         return rolling_wr
     
-    def consistency_score(self):
+    def consistency_score (self):
         """
         Measure of consistency
         
         What % of rolling periods have positive Sharpe
         """
         rolling_sharpe = self.rolling_sharpe()
-        consistency = (rolling_sharpe > 0).sum() / len(rolling_sharpe.dropna())
+        consistency = (rolling_sharpe > 0).sum() / len (rolling_sharpe.dropna())
         return consistency
     
-    def analyze(self):
+    def analyze (self):
         """Full rolling analysis"""
         results = {
             'rolling_sharpe': self.rolling_sharpe(),
@@ -604,7 +604,7 @@ class RollingPerformance:
 
 
 # Example
-rolling_analyzer = RollingPerformance(returns, window=63)
+rolling_analyzer = RollingPerformance (returns, window=63)
 rolling_results = rolling_analyzer.analyze()
 
 print(f"\\nConsistency Score: {rolling_results['consistency']:.1%}")

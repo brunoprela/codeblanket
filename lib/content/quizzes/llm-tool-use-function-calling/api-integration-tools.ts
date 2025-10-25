@@ -15,14 +15,14 @@ export const apiIntegrationToolsQuiz = [
 **Implementation:**
 \`\`\`python
 class RobustAPITool:
-    async def call_with_resilience(self, endpoint, **kwargs):
-        for attempt in range(self.max_retries):
+    async def call_with_resilience (self, endpoint, **kwargs):
+        for attempt in range (self.max_retries):
             try:
-                return await self._call_api(endpoint, **kwargs)
+                return await self._call_api (endpoint, **kwargs)
             
             except RateLimitError as e:
-                wait_time = parse_retry_after(e.headers)
-                await asyncio.sleep(wait_time)
+                wait_time = parse_retry_after (e.headers)
+                await asyncio.sleep (wait_time)
             
             except NetworkError:
                 await asyncio.sleep(2 ** attempt)  # Exponential backoff
@@ -61,31 +61,31 @@ class SecureTokenManager:
         self.tokens = {}  # user_id -> token_data
         self.encryption_key = load_encryption_key()
     
-    def store_token(self, user_id: str, token_data: dict):
+    def store_token (self, user_id: str, token_data: dict):
         # Encrypt sensitive data
-        encrypted = encrypt(json.dumps(token_data), self.encryption_key)
+        encrypted = encrypt (json.dumps (token_data), self.encryption_key)
         self.tokens[user_id] = encrypted
     
-    def get_token(self, user_id: str) -> dict:
-        encrypted = self.tokens.get(user_id)
+    def get_token (self, user_id: str) -> dict:
+        encrypted = self.tokens.get (user_id)
         if not encrypted:
             raise AuthenticationError("No token found")
         
-        decrypted = decrypt(encrypted, self.encryption_key)
-        return json.loads(decrypted)
+        decrypted = decrypt (encrypted, self.encryption_key)
+        return json.loads (decrypted)
 \`\`\`
 
 **Token Refresh:**
 \`\`\`python
 class OAuth2Tool:
-    async def ensure_valid_token(self, user_id: str):
-        token_data = self.token_manager.get_token(user_id)
+    async def ensure_valid_token (self, user_id: str):
+        token_data = self.token_manager.get_token (user_id)
         
         # Check if expired
         if datetime.now() >= token_data["expires_at",]:
             # Refresh token
-            new_token = await self.refresh_token(token_data["refresh_token",])
-            self.token_manager.store_token(user_id, new_token)
+            new_token = await self.refresh_token (token_data["refresh_token",])
+            self.token_manager.store_token (user_id, new_token)
             return new_token
         
         return token_data
@@ -122,17 +122,17 @@ class OAuth2Tool:
 \`\`\`python
 class APICache:
     def __init__(self):
-        self.memory_cache = LRUCache(maxsize=100)  # Fast, volatile
+        self.memory_cache = LRUCache (maxsize=100)  # Fast, volatile
         self.redis_cache = RedisCache()  # Shared, persistent
         self.cdn_cache = CDNCache()  # Edge caching
     
-    async def get_or_fetch(self, key: str, fetcher: Callable):
+    async def get_or_fetch (self, key: str, fetcher: Callable):
         # L1: Memory
         if key in self.memory_cache:
             return self.memory_cache[key]
         
         # L2: Redis
-        value = await self.redis_cache.get(key)
+        value = await self.redis_cache.get (key)
         if value:
             self.memory_cache[key] = value
             return value
@@ -141,7 +141,7 @@ class APICache:
         value = await fetcher()
         
         # Store in all layers
-        await self.store_all(key, value)
+        await self.store_all (key, value)
         return value
 \`\`\`
 
@@ -152,12 +152,12 @@ class SemanticCache:
         self.embedding_model = SentenceTransformer()
         self.index = FAISSIndex()
     
-    def get(self, query: str, similarity_threshold=0.95):
+    def get (self, query: str, similarity_threshold=0.95):
         # Get query embedding
-        embedding = self.embedding_model.encode(query)
+        embedding = self.embedding_model.encode (query)
         
         # Search similar queries
-        similar = self.index.search(embedding, k=1)
+        similar = self.index.search (embedding, k=1)
         
         if similar[0].score > similarity_threshold:
             return self.cache[similar[0].id]
@@ -168,20 +168,20 @@ class SemanticCache:
 **Cache Invalidation:**
 \`\`\`python
 class SmartInvalidation:
-    def invalidate(self, pattern: str = None, tag: str = None):
+    def invalidate (self, pattern: str = None, tag: str = None):
         if pattern:
             # Pattern-based: "weather:*"
-            self.cache.delete_pattern(pattern)
+            self.cache.delete_pattern (pattern)
         
         if tag:
             # Tag-based: all entries with tag "user:123"
-            self.cache.delete_by_tag(tag)
+            self.cache.delete_by_tag (tag)
     
-    def time_based_invalidation(self):
+    def time_based_invalidation (self):
         # TTL-based expiration
         pass
     
-    def event_based_invalidation(self):
+    def event_based_invalidation (self):
         # Invalidate on data changes
         pass
 \`\`\`

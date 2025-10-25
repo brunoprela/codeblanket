@@ -81,28 +81,28 @@ class MultiModalAgent:
         self.actions: List[Action] = []
         self.memory: List[Dict[str, Any]] = []
     
-    def perceive_text(self, text: str):
+    def perceive_text (self, text: str):
         """Add text perception."""
         perception = Perception(
             modality=ModalityType.TEXT,
             content=text,
             timestamp=time.time()
         )
-        self.perceptions.append(perception)
+        self.perceptions.append (perception)
     
-    def perceive_image(self, image_path: str):
+    def perceive_image (self, image_path: str):
         """Add image perception."""
         perception = Perception(
             modality=ModalityType.IMAGE,
             content=image_path,
             timestamp=time.time()
         )
-        self.perceptions.append(perception)
+        self.perceptions.append (perception)
     
-    def perceive_audio(self, audio_path: str):
+    def perceive_audio (self, audio_path: str):
         """Add audio perception (transcribe first)."""
         # Transcribe audio
-        with open(audio_path, "rb") as f:
+        with open (audio_path, "rb") as f:
             transcription = self.client.audio.transcriptions.create(
                 model="whisper-1",
                 file=f
@@ -114,20 +114,20 @@ class MultiModalAgent:
             timestamp=time.time(),
             metadata={"original_audio": audio_path}
         )
-        self.perceptions.append(perception)
+        self.perceptions.append (perception)
     
-    def reason(self, goal: str) -> str:
+    def reason (self, goal: str) -> str:
         """Reason about perceptions to achieve goal."""
         # Build context from all perceptions
         context_parts = []
         
         for perception in self.perceptions:
             if perception.modality == ModalityType.TEXT:
-                context_parts.append(f"Text: {perception.content}")
+                context_parts.append (f"Text: {perception.content}")
             elif perception.modality == ModalityType.AUDIO:
-                context_parts.append(f"Audio (transcribed): {perception.content}")
+                context_parts.append (f"Audio (transcribed): {perception.content}")
         
-        context = "\\n".join(context_parts)
+        context = "\\n".join (context_parts)
         
         # Build message with images
         message_content = [{
@@ -143,8 +143,8 @@ Think step-by-step and describe your reasoning."""
         # Add images
         for perception in self.perceptions:
             if perception.modality == ModalityType.IMAGE:
-                with open(perception.content, "rb") as f:
-                    img_data = base64.b64encode(f.read()).decode()
+                with open (perception.content, "rb") as f:
+                    img_data = base64.b64encode (f.read()).decode()
                 
                 message_content.append({
                     "type": "image_url",
@@ -166,14 +166,14 @@ Think step-by-step and describe your reasoning."""
         # Store in memory
         self.memory.append({
             "goal": goal,
-            "perceptions": len(self.perceptions),
+            "perceptions": len (self.perceptions),
             "reasoning": reasoning,
             "timestamp": time.time()
         })
         
         return reasoning
     
-    def act(self, action_type: str, **parameters) -> Action:
+    def act (self, action_type: str, **parameters) -> Action:
         """Perform an action."""
         action = Action(
             action_type=action_type,
@@ -203,19 +203,19 @@ Think step-by-step and describe your reasoning."""
             # Write text
             text = parameters.get("text", "")
             filename = parameters.get("filename", "output.txt")
-            with open(filename, "w") as f:
-                f.write(text)
+            with open (filename, "w") as f:
+                f.write (text)
             action.result = filename
         
-        self.actions.append(action)
+        self.actions.append (action)
         return action
     
-    def clear_perceptions(self):
+    def clear_perceptions (self):
         """Clear current perceptions."""
         self.perceptions = []
 
 # Example usage
-agent = MultiModalAgent(openai_api_key=os.getenv("OPENAI_API_KEY"))
+agent = MultiModalAgent (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 # Agent perceives environment
 agent.perceive_text("The user asked about the weather")
@@ -241,10 +241,10 @@ class VisionAgent:
         self.client = OpenAI(api_key=openai_api_key)
         self.visual_memory: List[Dict[str, Any]] = []
     
-    def observe(self, image_path: str, context: str = "") -> Dict[str, Any]:
+    def observe (self, image_path: str, context: str = "") -> Dict[str, Any]:
         """Observe environment through vision."""
-        with open(image_path, "rb") as f:
-            img_data = base64.b64encode(f.read()).decode()
+        with open (image_path, "rb") as f:
+            img_data = base64.b64encode (f.read()).decode()
         
         prompt = f"""Observe this image and describe:
 
@@ -282,7 +282,7 @@ Return as JSON:
         )
         
         import json
-        observation = json.loads(response.choices[0].message.content)
+        observation = json.loads (response.choices[0].message.content)
         
         # Store in visual memory
         self.visual_memory.append({
@@ -299,8 +299,8 @@ Return as JSON:
         question: str
     ) -> str:
         """Answer spatial reasoning questions about image."""
-        with open(image_path, "rb") as f:
-            img_data = base64.b64encode(f.read()).decode()
+        with open (image_path, "rb") as f:
+            img_data = base64.b64encode (f.read()).decode()
         
         prompt = f"""Spatial reasoning question: {question}
 
@@ -331,12 +331,12 @@ Analyze the image carefully and provide a clear answer based on spatial relation
         goal: str
     ) -> List[str]:
         """Determine navigation steps in visual scene."""
-        observation = self.observe(image_path, context=f"Goal: {goal}")
+        observation = self.observe (image_path, context=f"Goal: {goal}")
         
         # Plan navigation
         planning_prompt = f"""Given this observation of the scene:
 
-Objects: {', '.join(observation['objects'])}
+Objects: {', '.join (observation['objects'])}
 Scene: {observation['scene']}
 Goal: {goal}
 
@@ -350,12 +350,12 @@ Return as JSON array of strings: ["step 1", "step 2", ...]"""
         )
         
         import json
-        steps = json.loads(response.choices[0].message.content)
+        steps = json.loads (response.choices[0].message.content)
         
         return steps
 
 # Usage
-vision_agent = VisionAgent(openai_api_key=os.getenv("OPENAI_API_KEY"))
+vision_agent = VisionAgent (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 # Observe scene
 observation = vision_agent.observe("room.jpg", context="Finding the remote control")
@@ -405,13 +405,13 @@ class AutonomousTaskAgent:
             Task result
         """
         # Step 1: Analyze task and inputs
-        task_plan = self._plan_task(task_description, available_inputs)
+        task_plan = self._plan_task (task_description, available_inputs)
         
         # Step 2: Execute plan
-        result = self._execute_plan(task_plan, available_inputs)
+        result = self._execute_plan (task_plan, available_inputs)
         
         # Step 3: Verify result
-        verification = self._verify_result(task_description, result)
+        verification = self._verify_result (task_description, result)
         
         task_log = {
             "task": task_description,
@@ -421,7 +421,7 @@ class AutonomousTaskAgent:
             "timestamp": time.time()
         }
         
-        self.task_log.append(task_log)
+        self.task_log.append (task_log)
         
         return task_log
     
@@ -460,7 +460,7 @@ Return as JSON array:
         )
         
         import json
-        plan = json.loads(response.choices[0].message.content)
+        plan = json.loads (response.choices[0].message.content)
         
         return plan
     
@@ -481,8 +481,8 @@ Return as JSON array:
                 # Image analysis
                 image_input = inputs.get('image')
                 if image_input:
-                    with open(image_input, "rb") as f:
-                        img_data = base64.b64encode(f.read()).decode()
+                    with open (image_input, "rb") as f:
+                        img_data = base64.b64encode (f.read()).decode()
                     
                     response = self.client.chat.completions.create(
                         model="gpt-4-vision-preview",
@@ -506,7 +506,7 @@ Return as JSON array:
                 # Audio transcription
                 audio_input = inputs.get('audio')
                 if audio_input:
-                    with open(audio_input, "rb") as f:
+                    with open (audio_input, "rb") as f:
                         transcription = self.client.audio.transcriptions.create(
                             model="whisper-1",
                             file=f
@@ -569,12 +569,12 @@ Verify if the task was completed successfully. Return JSON:
         )
         
         import json
-        verification = json.loads(response.choices[0].message.content)
+        verification = json.loads (response.choices[0].message.content)
         
         return verification
 
 # Usage
-task_agent = AutonomousTaskAgent(openai_api_key=os.getenv("OPENAI_API_KEY"))
+task_agent = AutonomousTaskAgent (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 result = task_agent.complete_task(
     task_description="Create a presentation slide about the product in this image",
@@ -608,13 +608,13 @@ class CustomerServiceAgent(MultiModalAgent):
         """Handle customer query from any modality."""
         # Perceive all provided inputs
         if query_text:
-            self.perceive_text(query_text)
+            self.perceive_text (query_text)
         
         if query_image:
-            self.perceive_image(query_image)
+            self.perceive_image (query_image)
         
         if query_audio:
-            self.perceive_audio(query_audio)
+            self.perceive_audio (query_audio)
         
         # Reason about how to help
         response_text = self.reason("Help the customer with their query")
@@ -632,7 +632,7 @@ class CustomerServiceAgent(MultiModalAgent):
         }
 
 # Usage
-cs_agent = CustomerServiceAgent(openai_api_key=os.getenv("OPENAI_API_KEY"))
+cs_agent = CustomerServiceAgent (openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 response = cs_agent.handle_customer_query(
     query_text="My product looks different from the website",
@@ -657,11 +657,11 @@ class HomeAutomationAgent(VisionAgent):
         alerts = []
         
         for img_path in camera_images:
-            obs = self.observe(img_path, context="Home security monitoring")
-            observations.append(obs)
+            obs = self.observe (img_path, context="Home security monitoring")
+            observations.append (obs)
             
             # Check for alerts
-            if any(word in str(obs).lower() for word in ["person", "motion", "open", "unusual"]):
+            if any (word in str (obs).lower() for word in ["person", "motion", "open", "unusual"]):
                 alerts.append({
                     "image": img_path,
                     "reason": obs['scene'],

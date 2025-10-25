@@ -64,7 +64,7 @@ class ImageEvaluator:
         
         return score
     
-    def aesthetic_score(self, image: Image.Image) -> float:
+    def aesthetic_score (self, image: Image.Image) -> float:
         """
         Aesthetic quality score.
         Uses pre-trained aesthetic predictor.
@@ -73,7 +73,7 @@ class ImageEvaluator:
         # https://github.com/christophschuhmann/improved-aesthetic-predictor
         return 0.75  # Placeholder
     
-    def safety_check(self, image: Image.Image) -> Dict[str, Any]:
+    def safety_check (self, image: Image.Image) -> Dict[str, Any]:
         """
         Check for unsafe/NSFW content.
         """
@@ -96,24 +96,24 @@ class ImageEvaluator:
         aesthetic_scores = []
         unsafe_count = 0
         
-        for img, prompt in zip(generated_images, prompts):
+        for img, prompt in zip (generated_images, prompts):
             # CLIP score
-            clip = self.clip_score(img, prompt)
-            clip_scores.append(clip)
+            clip = self.clip_score (img, prompt)
+            clip_scores.append (clip)
             
             # Aesthetic score
-            aesthetic = self.aesthetic_score(img)
-            aesthetic_scores.append(aesthetic)
+            aesthetic = self.aesthetic_score (img)
+            aesthetic_scores.append (aesthetic)
             
             # Safety
-            safety = self.safety_check(img)
+            safety = self.safety_check (img)
             if not safety['is_safe']:
                 unsafe_count += 1
         
         return {
-            'avg_clip_score': sum(clip_scores) / len(clip_scores),
-            'avg_aesthetic_score': sum(aesthetic_scores) / len(aesthetic_scores),
-            'safety_pass_rate': 1 - (unsafe_count / len(generated_images))
+            'avg_clip_score': sum (clip_scores) / len (clip_scores),
+            'avg_aesthetic_score': sum (aesthetic_scores) / len (aesthetic_scores),
+            'safety_pass_rate': 1 - (unsafe_count / len (generated_images))
         }
 
 # Usage
@@ -123,11 +123,11 @@ evaluator = ImageEvaluator()
 image = Image.open("generated_image.png")
 prompt = "A beautiful sunset over the ocean"
 
-score = evaluator.clip_score(image, prompt)
+score = evaluator.clip_score (image, prompt)
 print(f"CLIP Score: {score:.2f}")  # 0.85 = good match
 
 # Batch evaluation
-results = evaluator.evaluate_batch(generated_images, prompts)
+results = evaluator.evaluate_batch (generated_images, prompts)
 print(f"Avg CLIP: {results['avg_clip_score']:.2f}")
 print(f"Avg Aesthetic: {results['avg_aesthetic_score']:.2f}")
 print(f"Safety: {results['safety_pass_rate']:.1%}")
@@ -157,17 +157,17 @@ class VideoEvaluator:
         
         frame_embeddings = []
         for frame in video_frames:
-            emb = model.encode(frame)
-            frame_embeddings.append(emb)
+            emb = model.encode (frame)
+            frame_embeddings.append (emb)
         
         # Calculate consecutive frame similarity
         similarities = []
-        for i in range(len(frame_embeddings) - 1):
-            sim = 1 - cosine(frame_embeddings[i], frame_embeddings[i+1])
-            similarities.append(sim)
+        for i in range (len (frame_embeddings) - 1):
+            sim = 1 - cosine (frame_embeddings[i], frame_embeddings[i+1])
+            similarities.append (sim)
         
         # Average similarity
-        consistency = sum(similarities) / len(similarities)
+        consistency = sum (similarities) / len (similarities)
         
         return consistency
     
@@ -189,9 +189,9 @@ class VideoEvaluator:
         # Calculate optical flow between frames
         motion_scores = []
         
-        for i in range(len(video_frames) - 1):
-            frame1 = np.array(video_frames[i].convert('L'))
-            frame2 = np.array(video_frames[i+1].convert('L'))
+        for i in range (len (video_frames) - 1):
+            frame1 = np.array (video_frames[i].convert('L'))
+            frame2 = np.array (video_frames[i+1].convert('L'))
             
             # Optical flow
             flow = cv2.calcOpticalFlowFarneback(
@@ -199,17 +199,17 @@ class VideoEvaluator:
             )
             
             # Motion magnitude
-            magnitude = np.sqrt(flow[..., 0]**2 + flow[..., 1]**2)
+            magnitude = np.sqrt (flow[..., 0]**2 + flow[..., 1]**2)
             avg_motion = magnitude.mean()
             
-            motion_scores.append(avg_motion)
+            motion_scores.append (avg_motion)
         
         # Ideal: moderate motion (not too static, not too chaotic)
-        avg_motion = np.mean(motion_scores)
+        avg_motion = np.mean (motion_scores)
         
         # Score based on deviation from ideal
         ideal_motion = 5.0  # Tuned empirically
-        quality = 1 - min(abs(avg_motion - ideal_motion) / ideal_motion, 1.0)
+        quality = 1 - min (abs (avg_motion - ideal_motion) / ideal_motion, 1.0)
         
         return quality
     
@@ -221,16 +221,16 @@ class VideoEvaluator:
         """Complete video evaluation."""
         
         # Temporal consistency
-        consistency = self.temporal_consistency(video_frames)
+        consistency = self.temporal_consistency (video_frames)
         
         # Motion quality
-        motion = self.motion_quality(video_frames)
+        motion = self.motion_quality (video_frames)
         
         # Text-video alignment (use first/middle/last frames)
-        key_frames = [video_frames[0], video_frames[len(video_frames)//2], video_frames[-1]]
+        key_frames = [video_frames[0], video_frames[len (video_frames)//2], video_frames[-1]]
         img_eval = ImageEvaluator()
-        alignment_scores = [img_eval.clip_score(frame, prompt) for frame in key_frames]
-        alignment = sum(alignment_scores) / len(alignment_scores)
+        alignment_scores = [img_eval.clip_score (frame, prompt) for frame in key_frames]
+        alignment = sum (alignment_scores) / len (alignment_scores)
         
         return {
             'temporal_consistency': consistency,
@@ -272,16 +272,16 @@ class AudioEvaluator:
         import librosa
         
         # Load audio
-        y, sr = librosa.load(audio_path)
+        y, sr = librosa.load (audio_path)
         
         # Signal-to-noise ratio
-        snr = self._calculate_snr(y)
+        snr = self._calculate_snr (y)
         
         # Spectral centroid (brightness)
-        spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)[0].mean()
+        spectral_centroid = librosa.feature.spectral_centroid (y=y, sr=sr)[0].mean()
         
         # Zero crossing rate (texture)
-        zcr = librosa.feature.zero_crossing_rate(y)[0].mean()
+        zcr = librosa.feature.zero_crossing_rate (y)[0].mean()
         
         return {
             'snr_db': snr,
@@ -301,13 +301,13 @@ class AudioEvaluator:
         from transformers import pipeline
         
         asr = pipeline("automatic-speech-recognition")
-        transcription = asr(audio_path)['text']
+        transcription = asr (audio_path)['text']
         
         # Compare to expected transcript
-        wer = self._word_error_rate(transcription, transcript)
+        wer = self._word_error_rate (transcription, transcript)
         
         # Naturalness (use MOS predictor)
-        naturalness = self._predict_mos(audio_path)
+        naturalness = self._predict_mos (audio_path)
         
         return {
             'word_error_rate': wer,
@@ -315,12 +315,12 @@ class AudioEvaluator:
             'intelligible': wer < 0.15  # <15% WER = intelligible
         }
     
-    def _calculate_snr(self, signal):
+    def _calculate_snr (self, signal):
         """Signal-to-noise ratio."""
         # Placeholder
         return 25.0  # dB
     
-    def _word_error_rate(self, hypothesis: str, reference: str) -> float:
+    def _word_error_rate (self, hypothesis: str, reference: str) -> float:
         """Calculate WER."""
         # Simplified WER calculation
         hyp_words = hypothesis.lower().split()
@@ -329,10 +329,10 @@ class AudioEvaluator:
         # Levenshtein distance
         from Levenshtein import distance
         
-        wer = distance(hyp_words, ref_words) / len(ref_words)
+        wer = distance (hyp_words, ref_words) / len (ref_words)
         return wer
     
-    def _predict_mos(self, audio_path: str) -> float:
+    def _predict_mos (self, audio_path: str) -> float:
         """Predict Mean Opinion Score (1-5)."""
         # Use MOS predictor model
         # Placeholder
@@ -465,9 +465,9 @@ comparisons = [
     # ... more comparisons
 ]
 
-rankings = human_eval.calculate_elo_ratings(comparisons)
+rankings = human_eval.calculate_elo_ratings (comparisons)
 print("ELO Rankings:")
-for model, rating in sorted(rankings.items(), key=lambda x: x[1], reverse=True):
+for model, rating in sorted (rankings.items(), key=lambda x: x[1], reverse=True):
     print(f"  {model}: {rating:.0f}")
 \`\`\`
 

@@ -94,7 +94,7 @@ export const networkprotocolsQuiz = [
       
       client.publish(
         \`devices/\${deviceId}/telemetry\`,
-        JSON.stringify(data),
+        JSON.stringify (data),
         { qos: 1 } // At-least-once delivery
       );
     }, 60000);
@@ -102,8 +102,8 @@ export const networkprotocolsQuiz = [
     // Handle commands
     client.on('message', (topic, message) => {
       if (topic === \`devices/\${deviceId}/commands\`) {
-        const command = JSON.parse(message.toString());
-        handleCommand(command);
+        const command = JSON.parse (message.toString());
+        handleCommand (command);
       }
     });
     \`\`\`
@@ -220,7 +220,7 @@ export const networkprotocolsQuiz = [
     app.post('/api/devices', async (req, res) => {
       const deviceId = uuidv4();
       const deviceSecret = crypto.randomBytes(32).toString('hex');
-      const secretHash = await bcrypt.hash(deviceSecret, 10);
+      const secretHash = await bcrypt.hash (deviceSecret, 10);
       
       await db.devices.create({
         device_id: deviceId,
@@ -345,7 +345,7 @@ export const networkprotocolsQuiz = [
     }));
     
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      const data = JSON.parse (event.data);
       // data: { device_id: 'device-1', temperature: 72.5, ... }
       updateUI(data);
     };
@@ -548,7 +548,7 @@ req.on('response', (headers) => {
 
 req.on('data', (chunk) => {
   // Stream video data to client
-  clientResponse.write(chunk);
+  clientResponse.write (chunk);
 });
 
 req.on('end', () => {
@@ -600,7 +600,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
 const packageDefinition = protoLoader.loadSync('cdn_control.proto');
-const cdnControl = grpc.loadPackageDefinition(packageDefinition).CDNControl;
+const cdnControl = grpc.loadPackageDefinition (packageDefinition).CDNControl;
 
 const client = new cdnControl.CDNControl(
   'control-plane.example.com:50051',
@@ -619,16 +619,16 @@ stream.on('data', async (request) => {
   for (const key of request.cache_keys) {
     if (request.type === 'PURGE') {
       // Delete from cache
-      await cache.delete(key);
+      await cache.delete (key);
       keysInvalidated++;
     } else if (request.type === 'SOFT_PURGE') {
       // Mark as stale
-      await cache.markStale(key);
+      await cache.markStale (key);
       keysInvalidated++;
     } else if (request.type === 'TAG_BASED') {
       // Find all content with tag and invalidate
-      const keys = await cache.findByTag(key);
-      await cache.deleteMany(keys);
+      const keys = await cache.findByTag (key);
+      await cache.deleteMany (keys);
       keysInvalidated += keys.length;
     }
   }
@@ -661,7 +661,7 @@ setInterval(() => {
 
 \`\`\`javascript
 // When content is updated, broadcast invalidation to all edge servers
-async function invalidateContent(cacheKeys) {
+async function invalidateContent (cacheKeys) {
   const requestId = generateUUID();
   const request = {
     request_id: requestId,
@@ -676,18 +676,18 @@ async function invalidateContent(cacheKeys) {
   
   // Send to all connected edge servers
   for (const [edgeId, stream] of connectedEdges) {
-    stream.write(request);
-    acks.set(edgeId, { sent: Date.now(), received: false });
+    stream.write (request);
+    acks.set (edgeId, { sent: Date.now(), received: false });
   }
   
   // Wait for acks (or timeout after 10 seconds)
   await Promise.race([
-    waitForAllAcks(acks),
+    waitForAllAcks (acks),
     timeout(10000)
   ]);
   
   // Log completion
-  const successCount = Array.from(acks.values()).filter(a => a.received).length;
+  const successCount = Array.from (acks.values()).filter (a => a.received).length;
   console.log(\`Invalidation completed: \${successCount}/\${targetEdgeServers.length} edge servers\`);
   
   // Alert if <95% success
@@ -748,7 +748,7 @@ app.use((req, res, next) => {
       response_time_ms: Date.now() - start,
       cache_status: res.getHeader('x-cache-status'),
       user_agent: req.headers['user-agent',],
-      geo_country: geoip.lookup(req.ip).country,
+      geo_country: geoip.lookup (req.ip).country,
       timestamp: Date.now()
     });
   });
@@ -757,11 +757,11 @@ app.use((req, res, next) => {
 });
 
 // Batch and send every 10 seconds
-setInterval(async () => {
+setInterval (async () => {
   if (logs.length === 0) return;
   
   const batch = { logs: logs.splice(0, 10000) };  // Max 10K per batch
-  const serialized = AnalyticsBatch.encode(batch).finish();
+  const serialized = AnalyticsBatch.encode (batch).finish();
   
   // Send compressed protobuf to analytics pipeline
   await fetch('https://analytics.example.com/ingest', {
@@ -770,7 +770,7 @@ setInterval(async () => {
       'Content-Type': 'application/x-protobuf',
       'Content-Encoding': 'gzip'
     },
-    body: gzip(serialized)
+    body: gzip (serialized)
   });
 }, 10000);
 \`\`\`
@@ -956,15 +956,15 @@ ws.onopen = () => {
 };
 
 ws.onmessage = (event) => {
-  const message = JSON.parse(event.data);
+  const message = JSON.parse (event.data);
   
   if (message.type === 'peers') {
     // Tracker sends list of peers
     const peers = message.peers;
     
     // Connect to 5-10 peers
-    peers.slice(0, 10).forEach(peer => {
-      connectToPeer(peer);
+    peers.slice(0, 10).forEach (peer => {
+      connectToPeer (peer);
     });
   }
 };
@@ -977,26 +977,26 @@ const streams = new Map(); // stream_id -> Set of peers
 
 wss.on('connection', (ws) => {
   ws.on('message', (data) => {
-    const message = JSON.parse(data);
+    const message = JSON.parse (data);
     
     if (message.type === 'join') {
       const { stream_id, peer_id, capabilities } = message;
       
-      if (!streams.has(stream_id)) {
-        streams.set(stream_id, new Set());
+      if (!streams.has (stream_id)) {
+        streams.set (stream_id, new Set());
       }
       
-      const peers = streams.get(stream_id);
+      const peers = streams.get (stream_id);
       peers.add({ peer_id, ws, capabilities, joined_at: Date.now() });
       
       // Send list of existing peers to new joiner
-      const peerList = Array.from(peers)
-        .filter(p => p.peer_id !== peer_id)
+      const peerList = Array.from (peers)
+        .filter (p => p.peer_id !== peer_id)
         .slice(0, 20); // Top 20 peers
       
       ws.send(JSON.stringify({
         type: 'peers',
-        peers: peerList.map(p => ({
+        peers: peerList.map (p => ({
           peer_id: p.peer_id,
           upload_bandwidth: p.capabilities.upload_bandwidth
         }))
@@ -1043,7 +1043,7 @@ interface VideoChunk {
 **P2P Connection Setup** (WebRTC):
 
 \`\`\`javascript
-async function connectToPeer(peerInfo) {
+async function connectToPeer (peerInfo) {
   const pc = new RTCPeerConnection({
     iceServers: [
       { urls: 'stun:stun.l.google.com:19302' },
@@ -1065,19 +1065,19 @@ async function connectToPeer(peerInfo) {
     console.log('Connected to peer:', peerInfo.peer_id);
     
     // Request needed chunks
-    requestChunks(dataChannel, getNeededChunks());
+    requestChunks (dataChannel, getNeededChunks());
   };
   
   dataChannel.onmessage = (event) => {
-    const chunk = decodeChunk(event.data);
+    const chunk = decodeChunk (event.data);
     
     // Verify chunk integrity
-    if (verifyChunk(chunk)) {
+    if (verifyChunk (chunk)) {
       // Add to buffer
-      chunkBuffer.set(chunk.chunk_id, chunk);
+      chunkBuffer.set (chunk.chunk_id, chunk);
       
       // Forward to other peers (become a relay)
-      relayChunkToOtherPeers(chunk);
+      relayChunkToOtherPeers (chunk);
     }
   };
   
@@ -1093,7 +1093,7 @@ async function connectToPeer(peerInfo) {
   };
   
   const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
+  await pc.setLocalDescription (offer);
   
   ws.send(JSON.stringify({
     type: 'offer',
@@ -1107,7 +1107,7 @@ async function connectToPeer(peerInfo) {
 
 \`\`\`javascript
 // Request chunks
-function requestChunks(dataChannel, chunkIds) {
+function requestChunks (dataChannel, chunkIds) {
   dataChannel.send(JSON.stringify({
     type: 'request',
     chunk_ids: chunkIds
@@ -1116,14 +1116,14 @@ function requestChunks(dataChannel, chunkIds) {
 
 // Handle chunk requests
 dataChannel.onmessage = (event) => {
-  const message = JSON.parse(event.data);
+  const message = JSON.parse (event.data);
   
   if (message.type === 'request') {
     // Send requested chunks
-    message.chunk_ids.forEach(id => {
-      const chunk = chunkBuffer.get(id);
+    message.chunk_ids.forEach (id => {
+      const chunk = chunkBuffer.get (id);
       if (chunk) {
-        dataChannel.send(encodeChunk(chunk));
+        dataChannel.send (encodeChunk (chunk));
         metrics.increment('chunks_uploaded');
       }
     });
@@ -1139,7 +1139,7 @@ dataChannel.onmessage = (event) => {
 function getNeededChunks() {
   const currentPlayhead = video.currentTime;
   const chunkDuration = 2; // 2 seconds per chunk
-  const currentChunkId = Math.floor(currentPlayhead / chunkDuration);
+  const currentChunkId = Math.floor (currentPlayhead / chunkDuration);
   
   // Priority:
   // 1. Next 3 chunks (critical for playback)
@@ -1151,7 +1151,7 @@ function getNeededChunks() {
   // Critical chunks
   for (let i = 0; i < 3; i++) {
     const id = currentChunkId + i;
-    if (!chunkBuffer.has(id)) {
+    if (!chunkBuffer.has (id)) {
       needed.push({ id, priority: 'critical', rarity: 0 });
     }
   }
@@ -1159,8 +1159,8 @@ function getNeededChunks() {
   // Buffer chunks
   for (let i = 3; i < 10; i++) {
     const id = currentChunkId + i;
-    if (!chunkBuffer.has(id)) {
-      const rarity = getChunkRarity(id);
+    if (!chunkBuffer.has (id)) {
+      const rarity = getChunkRarity (id);
       needed.push({ id, priority: 'buffer', rarity });
     }
   }
@@ -1172,15 +1172,15 @@ function getNeededChunks() {
       if (a.priority !== 'critical' && b.priority === 'critical') return 1;
       return b.rarity - a.rarity;
     })
-    .map(c => c.id);
+    .map (c => c.id);
 }
 
-function getChunkRarity(chunkId) {
+function getChunkRarity (chunkId) {
   // Query peers for chunk availability
   let peersWithChunk = 0;
   
   for (const peer of connectedPeers) {
-    if (peer.availableChunks.has(chunkId)) {
+    if (peer.availableChunks.has (chunkId)) {
       peersWithChunk++;
     }
   }
@@ -1205,17 +1205,17 @@ class PeerManager {
     this.downloadedFromPeer = new Map();
   }
   
-  recordUpload(peerId, bytes) {
+  recordUpload (peerId, bytes) {
     this.uploadedToPeer.set(
       peerId,
-      (this.uploadedToPeer.get(peerId) || 0) + bytes
+      (this.uploadedToPeer.get (peerId) || 0) + bytes
     );
   }
   
-  recordDownload(peerId, bytes) {
+  recordDownload (peerId, bytes) {
     this.downloadedFromPeer.set(
       peerId,
-      (this.downloadedFromPeer.get(peerId) || 0) + bytes
+      (this.downloadedFromPeer.get (peerId) || 0) + bytes
     );
   }
   
@@ -1224,27 +1224,27 @@ class PeerManager {
     const ratios = new Map();
     
     for (const peer of this.peers.values()) {
-      const uploaded = this.uploadedToPeer.get(peer.id) || 0;
-      const downloaded = this.downloadedFromPeer.get(peer.id) || 0;
+      const uploaded = this.uploadedToPeer.get (peer.id) || 0;
+      const downloaded = this.downloadedFromPeer.get (peer.id) || 0;
       
       // Sharing ratio
       const ratio = downloaded > 0 ? uploaded / downloaded : 0;
-      ratios.set(peer.id, ratio);
+      ratios.set (peer.id, ratio);
     }
     
     // Unchoke top 4 contributors
-    const topPeers = Array.from(ratios.entries())
+    const topPeers = Array.from (ratios.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 4)
       .map(([peerId]) => peerId);
     
     // Unchoke 1 random peer (optimistic unchoking)
-    const randomPeer = getRandomPeer(this.peers);
-    topPeers.push(randomPeer.id);
+    const randomPeer = getRandomPeer (this.peers);
+    topPeers.push (randomPeer.id);
     
     // Update peer states
     for (const peer of this.peers.values()) {
-      if (topPeers.includes(peer.id)) {
+      if (topPeers.includes (peer.id)) {
         peer.unchoke();  // Allow downloading from this peer
       } else {
         peer.choke();    // Stop sending data to this peer
@@ -1282,7 +1282,7 @@ class VideoPlayer {
     this.bufferHealth = 10; // seconds of buffer
   }
   
-  async loadChunk(chunkId) {
+  async loadChunk (chunkId) {
     // Try P2P first
     if (this.p2pEnabled && !this.cdnFallbackActive) {
       const chunk = await this.loadFromP2P(chunkId, { timeout: 2000 });
@@ -1310,8 +1310,8 @@ class VideoPlayer {
   
   async loadFromP2P(chunkId, options) {
     return Promise.race([
-      this.requestChunkFromPeers(chunkId),
-      timeout(options.timeout)
+      this.requestChunkFromPeers (chunkId),
+      timeout (options.timeout)
     ]).catch(() => null);
   }
   
@@ -1382,7 +1382,7 @@ pc.onicecandidate = (event) => {
 
 \`\`\`javascript
 // 1. Chunk verification (SHA-256 hash)
-function verifyChunk(chunk) {
+function verifyChunk (chunk) {
   const hash = sha256(chunk.data);
   return hash === chunk.hash;
 }
@@ -1393,18 +1393,18 @@ class ReputationSystem {
     this.scores = new Map();
   }
   
-  recordBadChunk(peerId) {
-    const score = this.scores.get(peerId) || 100;
-    this.scores.set(peerId, score - 10);
+  recordBadChunk (peerId) {
+    const score = this.scores.get (peerId) || 100;
+    this.scores.set (peerId, score - 10);
     
     if (score - 10 < 50) {
-      blockPeer(peerId);
+      blockPeer (peerId);
     }
   }
   
-  recordGoodChunk(peerId) {
-    const score = this.scores.get(peerId) || 100;
-    this.scores.set(peerId, Math.min(score + 1, 100));
+  recordGoodChunk (peerId) {
+    const score = this.scores.get (peerId) || 100;
+    this.scores.set (peerId, Math.min (score + 1, 100));
   }
 }
 

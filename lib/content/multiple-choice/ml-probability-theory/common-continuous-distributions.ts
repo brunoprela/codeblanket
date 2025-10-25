@@ -13,7 +13,7 @@ export const commoncontinuousdistributionsMultipleChoice: MultipleChoiceQuestion
       options: ['0.1', '0.5', '1.0', '5.0'],
       correctAnswer: 0,
       explanation:
-        'For Uniform(a,b), the PDF is f(x) = 1/(b-a) for x in [a,b]. With [0,10], f(x) = 1/(10-0) = 0.1. The PDF must integrate to 1: 0.1 × 10 = 1 ✓.',
+        'For Uniform (a,b), the PDF is f (x) = 1/(b-a) for x in [a,b]. With [0,10], f (x) = 1/(10-0) = 0.1. The PDF must integrate to 1: 0.1 × 10 = 1 ✓.',
     },
     {
       id: 'mc2',
@@ -41,10 +41,10 @@ export const commoncontinuousdistributionsMultipleChoice: MultipleChoiceQuestion
       id: 'mc4',
       question:
         'Which distribution is the sum of k squared standard normal random variables?',
-      options: ['Normal(k, 1)', 'Chi-Squared(k)', 'Gamma(k, 1)', 't(k)'],
+      options: ['Normal (k, 1)', 'Chi-Squared (k)', 'Gamma (k, 1)', 't (k)'],
       correctAnswer: 1,
       explanation:
-        'By definition, if Z₁,...,Zₖ ~ N(0,1) are independent, then Z₁² + ... + Zₖ² ~ Chi-Squared(k). This distribution has k degrees of freedom, mean k, and variance 2k.',
+        'By definition, if Z₁,...,Zₖ ~ N(0,1) are independent, then Z₁² + ... + Zₖ² ~ Chi-Squared (k). This distribution has k degrees of freedom, mean k, and variance 2k.',
     },
     {
       id: 'mc5',

@@ -6,7 +6,7 @@ export const sessionManagement = {
 
 ## Introduction
 
-The Session is SQLAlchemy's "workspace" for database operations. Understanding session lifecycle, scoping, and patterns is critical for building robust, thread-safe, production applications. Poor session management is a leading cause of bugs, memory leaks, and concurrency issues.
+The Session is SQLAlchemy\'s "workspace" for database operations. Understanding session lifecycle, scoping, and patterns is critical for building robust, thread-safe, production applications. Poor session management is a leading cause of bugs, memory leaks, and concurrency issues.
 
 In this section, you'll master:
 - Session lifecycle and states
@@ -34,11 +34,11 @@ Object States in Session Lifecycle
 """
 
 # State 1: TRANSIENT (not in session, no database identity)
-user = User(email="test@example.com")
+user = User (email="test@example.com")
 # Object exists in Python, not tracked by session
 
 # State 2: PENDING (in session, not yet in database)
-session.add(user)
+session.add (user)
 # Session tracks object, will INSERT on flush
 
 # State 3: PERSISTENT (in session, in database)
@@ -47,12 +47,12 @@ session.commit()  # or session.flush()
 
 # State 4: DETACHED (was in session, now removed)
 session.close()
-# Or: session.expunge(user)
+# Or: session.expunge (user)
 # Object still exists in Python, but session doesn't track it
 
 # Check object state
 from sqlalchemy.inspect import inspect
-state = inspect(user)
+state = inspect (user)
 print(state.transient)   # True if transient
 print(state.pending)     # True if pending
 print(state.persistent)  # True if persistent
@@ -69,16 +69,16 @@ Core Session Operations
 # Create session
 from sqlalchemy.orm import sessionmaker
 
-SessionLocal = sessionmaker(bind=engine)
+SessionLocal = sessionmaker (bind=engine)
 session = SessionLocal()
 
 # ADD: Track new object
-user = User(email="new@example.com")
-session.add(user)  # Now pending
+user = User (email="new@example.com")
+session.add (user)  # Now pending
 
 # ADD_ALL: Track multiple objects
-users = [User(email=f"user{i}@example.com") for i in range(100)]
-session.add_all(users)
+users = [User (email=f"user{i}@example.com") for i in range(100)]
+session.add_all (users)
 
 # FLUSH: Send pending changes to database (within transaction)
 session.flush()
@@ -95,11 +95,11 @@ session.rollback()  # Reverts to database state
 print(user.email)  # Original value restored
 
 # REFRESH: Reload object from database
-session.refresh(user)
+session.refresh (user)
 # Queries database, updates object with latest values
 
 # EXPUNGE: Remove object from session (becomes detached)
-session.expunge(user)
+session.expunge (user)
 # Object no longer tracked
 
 # EXPUNGE_ALL: Remove all objects
@@ -139,7 +139,7 @@ SessionLocal = sessionmaker(
 def get_users():
     session = SessionLocal()
     try:
-        users = session.execute(select(User)).scalars().all()
+        users = session.execute (select(User)).scalars().all()
         return users
     finally:
         session.close()
@@ -213,8 +213,8 @@ def get_db_session():
 
 # Usage
 with get_db_session() as session:
-    user = User(email="test@example.com")
-    session.add(user)
+    user = User (email="test@example.com")
+    session.add (user)
     # Auto-commits on success, rolls back on exception
 # Session automatically closed
 \`\`\`
@@ -248,8 +248,8 @@ def get_db() -> Generator[Session, None, None]:
     query_count = 0
     
     # Track queries
-    @event.listens_for(session, "after_cursor_execute")
-    def count_queries(conn, cursor, statement, parameters, context, executemany):
+    @event.listens_for (session, "after_cursor_execute")
+    def count_queries (conn, cursor, statement, parameters, context, executemany):
         nonlocal query_count
         query_count += 1
     
@@ -265,17 +265,17 @@ def get_db() -> Generator[Session, None, None]:
             
     except SQLAlchemyError as e:
         session.rollback()
-        logger.error(f"Database error: {e}")
+        logger.error (f"Database error: {e}")
         raise
         
     except Exception as e:
         session.rollback()
-        logger.error(f"Unexpected error: {e}")
+        logger.error (f"Unexpected error: {e}")
         raise
         
     finally:
         session.close()
-        event.remove(session, "after_cursor_execute", count_queries)
+        event.remove (session, "after_cursor_execute", count_queries)
 \`\`\`
 
 ---
@@ -293,7 +293,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Create scoped session (thread-local)
 SessionLocal = scoped_session(
-    sessionmaker(bind=engine)
+    sessionmaker (bind=engine)
 )
 
 # Each thread gets its own session
@@ -301,15 +301,15 @@ def thread_function():
     # This thread's session
     session = SessionLocal()
     
-    user = User(email="thread@example.com")
-    session.add(user)
+    user = User (email="thread@example.com")
+    session.add (user)
     session.commit()
     
     # Remove session for this thread
     SessionLocal.remove()
 
 import threading
-threads = [threading.Thread(target=thread_function) for _ in range(10)]
+threads = [threading.Thread (target=thread_function) for _ in range(10)]
 for t in threads:
     t.start()
 for t in threads:
@@ -327,32 +327,32 @@ Scoped Session Usage Patterns
 """
 
 # Pattern 1: Global session object
-Session = scoped_session(sessionmaker(bind=engine))
+Session = scoped_session (sessionmaker (bind=engine))
 
-def create_user(email):
-    user = User(email=email)
-    Session.add(user)
+def create_user (email):
+    user = User (email=email)
+    Session.add (user)
     Session.commit()
     return user
 
 # Pattern 2: Explicit removal
 def process_batch():
     for item in items:
-        process_item(item)
+        process_item (item)
     Session.remove()  # Clean up
 
 # Pattern 3: Registry pattern
 from sqlalchemy.orm import scoped_session
 
-registry = scoped_session(sessionmaker(bind=engine))
+registry = scoped_session (sessionmaker (bind=engine))
 
 class UserRepository:
     def __init__(self, session=None):
         self.session = session or registry()
     
-    def create(self, email):
-        user = User(email=email)
-        self.session.add(user)
+    def create (self, email):
+        user = User (email=email)
+        self.session.add (user)
         self.session.commit()
         return user
 
@@ -388,18 +388,18 @@ def get_db():
 
 # Endpoint with dependency
 @app.get("/users/{user_id}")
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user (user_id: int, db: Session = Depends (get_db)):
     user = db.get(User, user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 
 @app.post("/users")
-def create_user(email: str, db: Session = Depends(get_db)):
-    user = User(email=email)
-    db.add(user)
+def create_user (email: str, db: Session = Depends (get_db)):
+    user = User (email=email)
+    db.add (user)
     db.commit()
-    db.refresh(user)  # Get ID after insert
+    db.refresh (user)  # Get ID after insert
     return user
 
 # FastAPI automatically:
@@ -421,7 +421,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 app = Flask(__name__)
 
 # Scoped session (thread-local)
-Session = scoped_session(sessionmaker(bind=engine))
+Session = scoped_session (sessionmaker (bind=engine))
 
 @app.before_request
 def before_request():
@@ -429,7 +429,7 @@ def before_request():
     g.db = Session()
 
 @app.teardown_request
-def teardown_request(exception=None):
+def teardown_request (exception=None):
     """Close session after each request"""
     db = g.pop('db', None)
     if db is not None:
@@ -439,13 +439,13 @@ def teardown_request(exception=None):
 
 # Route
 @app.route('/users/<int:user_id>')
-def get_user(user_id):
+def get_user (user_id):
     user = g.db.get(User, user_id)
     return {"email": user.email}
 
 # Alternative: Flask-SQLAlchemy handles this automatically
 from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy(app)
+db = SQLAlchemy (app)
 \`\`\`
 
 ### Django Integration
@@ -460,8 +460,8 @@ Using SQLAlchemy with Django
 from django.conf import settings
 
 # Engine from Django settings
-engine = create_engine(settings.DATABASES['default']['ENGINE'])
-SessionLocal = sessionmaker(bind=engine)
+engine = create_engine (settings.DATABASES['default']['ENGINE'])
+SessionLocal = sessionmaker (bind=engine)
 
 # Middleware for session management
 class SQLAlchemyMiddleware:
@@ -471,7 +471,7 @@ class SQLAlchemyMiddleware:
     def __call__(self, request):
         request.db = SessionLocal()
         try:
-            response = self.get_response(request)
+            response = self.get_response (request)
             request.db.commit()
             return response
         except Exception:
@@ -481,7 +481,7 @@ class SQLAlchemyMiddleware:
             request.db.close()
 
 # View
-def user_detail(request, user_id):
+def user_detail (request, user_id):
     user = request.db.get(User, user_id)
     return JsonResponse({"email": user.email})
 \`\`\`
@@ -499,15 +499,15 @@ Web Application: One Session Per HTTP Request
 
 # GOOD: New session per request
 @app.get("/users")
-def get_users(db: Session = Depends(get_db)):
-    return db.execute(select(User)).scalars().all()
+def get_users (db: Session = Depends (get_db)):
+    return db.execute (select(User)).scalars().all()
 
 # BAD: Reusing session across requests
 global_session = SessionLocal()  # DON'T DO THIS
 
 @app.get("/users")
 def get_users():
-    return global_session.execute(select(User)).scalars().all()
+    return global_session.execute (select(User)).scalars().all()
 # Problems: stale data, thread safety, connection leaks
 \`\`\`
 
@@ -519,7 +519,7 @@ Keep Sessions Short-Lived
 """
 
 # GOOD: Create, use, close
-def process_user(user_id):
+def process_user (user_id):
     with get_db_session() as session:
         user = session.get(User, user_id)
         user.last_seen = datetime.utcnow()
@@ -529,15 +529,15 @@ def process_user(user_id):
 session = SessionLocal()
 for user_id in user_ids:  # Thousands of users
     user = session.get(User, user_id)
-    process(user)
+    process (user)
 # Session holds objects in memory, grows indefinitely
 session.close()
 
 # GOOD: Batch processing with session reset
 session = SessionLocal()
-for i, user_id in enumerate(user_ids):
+for i, user_id in enumerate (user_ids):
     user = session.get(User, user_id)
-    process(user)
+    process (user)
     
     if i % 1000 == 0:
         session.commit()
@@ -552,7 +552,7 @@ Explicit Transaction Boundaries
 """
 
 # GOOD: Transaction per business operation
-def transfer_money(from_id, to_id, amount):
+def transfer_money (from_id, to_id, amount):
     with get_db_session() as session:
         from_account = session.get(Account, from_id)
         to_account = session.get(Account, to_id)
@@ -583,17 +583,17 @@ Managing Object Freshness
 """
 
 # Expire: Mark object stale (reload on next access)
-session.expire(user)
+session.expire (user)
 print(user.email)  # Triggers SELECT to reload
 
 # Expire all: Clear session cache
 session.expire_all()
 
 # Refresh: Reload immediately
-session.refresh(user)
+session.refresh (user)
 
 # expire_on_commit (default=True)
-SessionLocal = sessionmaker(bind=engine, expire_on_commit=True)
+SessionLocal = sessionmaker (bind=engine, expire_on_commit=True)
 
 session = SessionLocal()
 user = session.get(User, 1)
@@ -614,7 +614,7 @@ Working with Detached Objects
 """
 
 # Scenario: Object from another session or thread
-def get_user_detached(user_id):
+def get_user_detached (user_id):
     session = SessionLocal()
     user = session.get(User, user_id)
     session.close()  # User now detached
@@ -625,7 +625,7 @@ user = get_user_detached(1)
 # user is detached
 
 session = SessionLocal()
-user = session.merge(user)  # Now attached to this session
+user = session.merge (user)  # Now attached to this session
 user.email = "new@example.com"
 session.commit()
 
@@ -650,14 +650,14 @@ Preventing Session Memory Issues
 session = SessionLocal()
 for i in range(100000):
     user = session.get(User, i)
-    process(user)
+    process (user)
 # Session holds 100,000 User objects in memory!
 
 # Solution 1: expire_all periodically
 session = SessionLocal()
 for i in range(100000):
     user = session.get(User, i)
-    process(user)
+    process (user)
     
     if i % 1000 == 0:
         session.expire_all()  # Clear identity map
@@ -667,17 +667,17 @@ for i in range(100000):
 session = SessionLocal()
 for i in range(100000):
     user = session.get(User, i)
-    process(user)
-    session.expunge(user)  # Remove from session
+    process (user)
+    session.expunge (user)  # Remove from session
 
 # Solution 3: Batch with new sessions
 for batch_start in range(0, 100000, 1000):
     with get_db_session() as session:
         users = session.execute(
-            select(User).offset(batch_start).limit(1000)
+            select(User).offset (batch_start).limit(1000)
         ).scalars().all()
         for user in users:
-            process(user)
+            process (user)
     # Session closed, memory freed
 \`\`\`
 
@@ -714,7 +714,7 @@ for batch_start in range(0, 100000, 1000):
 
 ### Production Patterns
 
-✅ **FastAPI**: Dependency injection with \`Depends(get_db)\`  
+✅ **FastAPI**: Dependency injection with \`Depends (get_db)\`  
 ✅ **Flask**: Scoped session with before/teardown request  
 ✅ **Batch jobs**: New session per batch, expire_all periodically  
 ✅ **Long-running**: expire_all to free memory  

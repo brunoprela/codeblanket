@@ -39,10 +39,10 @@ class PortfolioQueryAssistant:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def query_portfolio(self, user_question: str,
+    def query_portfolio (self, user_question: str,
                        portfolio_data: Dict) -> str:
         """
         Answer user questions about their portfolio
@@ -64,10 +64,10 @@ Portfolio Data:
 - Cash: \\$\${portfolio_data['cash']:,.2f}
 
 Holdings:
-\${self._format_holdings(portfolio_data['holdings'])}
+\${self._format_holdings (portfolio_data['holdings'])}
 
 Performance:
-\${self._format_performance(portfolio_data['performance'])}
+\${self._format_performance (portfolio_data['performance'])}
 
 Provide a clear, conversational answer.If suggesting actions, explain reasoning.
 If the question requires analysis not directly in the data, make reasonable inferences but note assumptions."""
@@ -80,7 +80,7 @@ response = self.client.messages.create(
 
 return response.content[0].text
     
-    def multi_turn_conversation(self, conversation_history: List[Dict],
+    def multi_turn_conversation (self, conversation_history: List[Dict],
     portfolio_data: Dict) -> str:
 """
         Handle multi - turn conversation with context
@@ -96,7 +96,7 @@ Returns:
 portfolio_context = f"""
 Portfolio Summary:
 - Total Value: \\$\${portfolio_data['total_value']:,.2f}
-- Holdings: \${len(portfolio_data['holdings'])} positions
+- Holdings: \${len (portfolio_data['holdings'])} positions
     - Top Positions: \${', '.join([h['ticker'] for h in portfolio_data['holdings'][:5]])}
 - Performance: \${portfolio_data['total_return']:.2f}% total return
 """
@@ -114,7 +114,7 @@ messages = [
 ]
         
         # Add conversation history
-messages.extend(conversation_history)
+messages.extend (conversation_history)
 
 response = self.client.messages.create(
     model = self.model,
@@ -124,7 +124,7 @@ response = self.client.messages.create(
 
 return response.content[0].text
     
-    def explain_holding(self, ticker: str, holding_data: Dict,
+    def explain_holding (self, ticker: str, holding_data: Dict,
     market_context: Dict) -> str:
 """
         Explain a specific holding to the user
@@ -155,7 +155,7 @@ Market Context:
 \${market_context.get('summary', 'Market conditions normal')}
 
 Explain:
-1. What the company does(if known)
+1. What the company does (if known)
     2. How the position has performed
 3. Why it might be performing this way
 4. Whether the position size is appropriate
@@ -171,7 +171,7 @@ response = self.client.messages.create(
 
 return response.content[0].text
     
-    def suggest_portfolio_actions(self, portfolio_data: Dict,
+    def suggest_portfolio_actions (self, portfolio_data: Dict,
     user_goals: Dict,
     risk_tolerance: str) -> str:
 """
@@ -179,7 +179,7 @@ return response.content[0].text
 
 Args:
 portfolio_data: Portfolio data
-user_goals: User's investment goals
+user_goals: User\'s investment goals
 risk_tolerance: Risk tolerance level
 
 Returns:
@@ -188,7 +188,7 @@ Returns:
 prompt = f"""Provide portfolio suggestions for this investor.
 
 Portfolio:
-\${self._format_holdings(portfolio_data['holdings'])}
+\${self._format_holdings (portfolio_data['holdings'])}
 
 Investor Profile:
 - Goals: \${user_goals.get('primary_goal')}
@@ -196,7 +196,7 @@ Investor Profile:
 - Risk Tolerance: \${risk_tolerance}
 
 Current Allocation:
-\${self._format_allocation(portfolio_data.get('allocation', {}))}
+\${self._format_allocation (portfolio_data.get('allocation', {}))}
 
 Provide 3 - 5 specific, actionable suggestions in conversational language:
 1. Rebalancing if needed
@@ -208,7 +208,7 @@ Provide 3 - 5 specific, actionable suggestions in conversational language:
 For each suggestion, explain:
 - What to do
     - Why it's important
-        - How to do it(specific actions)
+        - How to do it (specific actions)
 
 Be supportive and educational."""
 
@@ -220,21 +220,21 @@ response = self.client.messages.create(
 
 return response.content[0].text
     
-    def _format_holdings(self, holdings: List[Dict]) -> str:
+    def _format_holdings (self, holdings: List[Dict]) -> str:
 """Format holdings for display"""
 return "\\n".join([
     f"- \${h['ticker']} (\${h['name']}): \\$\${h['market_value']:,.2f} (\${h['return']:+.1f}%)"
             for h in holdings
         ])
     
-    def _format_performance(self, performance: Dict) -> str:
+    def _format_performance (self, performance: Dict) -> str:
 """Format performance metrics"""
 return "\\n".join([
     f"- {k.replace('_', ' ').title()}: {v}"
             for k, v in performance.items()
         ])
     
-    def _format_allocation(self, allocation: Dict) -> str:
+    def _format_allocation (self, allocation: Dict) -> str:
 """Format portfolio allocation"""
 return "\\n".join([
     f"- {category}: {pct:.1f}%"
@@ -242,7 +242,7 @@ return "\\n".join([
         ])
 
 # Example usage
-assistant = PortfolioQueryAssistant(api_key = "your-key")
+assistant = PortfolioQueryAssistant (api_key = "your-key")
 
 portfolio_data = {
     'total_value': 125000,
@@ -286,7 +286,7 @@ portfolio_data = {
 
 # Example queries
 questions = [
-    "What's my best performing stock?",
+    "What\'s my best performing stock?",
     "Am I too concentrated in tech?",
     "How much cash do I have available?",
     "Should I sell any positions?"
@@ -294,7 +294,7 @@ questions = [
 
 for question in questions:
     print(f"\\nQ: {question}")
-answer = assistant.query_portfolio(question, portfolio_data)
+answer = assistant.query_portfolio (question, portfolio_data)
 print(f"A: {answer}")
 \`\`\`
 
@@ -315,10 +315,10 @@ class VoiceTradingAssistant:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def parse_voice_command(self, voice_input: str,
+    def parse_voice_command (self, voice_input: str,
                            portfolio_context: Dict) -> Dict:
         """
         Parse voice trading command
@@ -337,7 +337,7 @@ Voice Input: "{voice_input}"
 Portfolio Context:
 - Cash Available: \\$\${portfolio_context.get('cash', 0):,.2f}
 - Buying Power: \\$\${portfolio_context.get('buying_power', 0):,.2f}
-- Current Holdings: \${', '.join(portfolio_context.get('tickers', []))}
+- Current Holdings: \${', '.join (portfolio_context.get('tickers', []))}
 
 Parse the command and return JSON:
 {
@@ -372,9 +372,9 @@ response = self.client.messages.create(
     messages = [{ "role": "user", "content": prompt }]
 )
 
-return self._parse_json(response.content[0].text)
+return self._parse_json (response.content[0].text)
     
-    def generate_confirmation(self, parsed_command: Dict,
+    def generate_confirmation (self, parsed_command: Dict,
     current_price: float) -> str:
 """
         Generate natural language confirmation
@@ -415,7 +415,7 @@ message = parsed_command.get('confirmation_message',
 
 return message
     
-    def validate_command_safety(self, parsed_command: Dict,
+    def validate_command_safety (self, parsed_command: Dict,
     portfolio_data: Dict,
     risk_limits: Dict) -> Dict:
 """
@@ -439,7 +439,7 @@ warnings = []
         
         # Check 1: Ticker validity
 if not safety_checks.get('is_valid_ticker'):
-issues.append(f"'{ticker}' is not a valid stock ticker")
+issues.append (f"'{ticker}' is not a valid stock ticker")
         
         # Check 2: Sufficient funds
 if intent == 'BUY' and not safety_checks.get('sufficient_funds'):
@@ -451,13 +451,13 @@ max_position_size = risk_limits.get('max_position_pct', 10)
 portfolio_value = portfolio_data.get('total_value', 0)
 
 if estimated_cost / portfolio_value * 100 > max_position_size:
-    warnings.append(f"This trade would exceed maximum position size ({max_position_size}%)")
+    warnings.append (f"This trade would exceed maximum position size ({max_position_size}%)")
         
         # Check 4: Selling more than owned
 if intent == 'SELL':
-    current_position = portfolio_data.get('holdings', {}).get(ticker, {}).get('shares', 0)
+    current_position = portfolio_data.get('holdings', {}).get (ticker, {}).get('shares', 0)
 if quantity > current_position:
-    issues.append(f"You only own {current_position} shares of {ticker}")
+    issues.append (f"You only own {current_position} shares of {ticker}")
         
         # Check 5: Market hours
         # In production, check if market is open
@@ -467,14 +467,14 @@ if not safety_checks.get('price_in_range'):
 warnings.append("The limit price seems unusual for this stock")
 
 return {
-    'approved': len(issues) == 0,
+    'approved': len (issues) == 0,
     'issues': issues,
     'warnings': warnings,
-    'requires_override': len(warnings) > 0 and len(issues) == 0,
-    'recommendation': 'PROCEED' if len(issues) == 0 else 'BLOCK'
+    'requires_override': len (warnings) > 0 and len (issues) == 0,
+    'recommendation': 'PROCEED' if len (issues) == 0 else 'BLOCK'
         }
     
-    def execute_confirmed_order(self, parsed_command: Dict,
+    def execute_confirmed_order (self, parsed_command: Dict,
         trading_api: any) -> Dict:
 """
         Execute confirmed order
@@ -496,7 +496,7 @@ return {
     'confirmation_number': 'ORD-12345'
 }
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
 """Parse JSON from response"""
 import json
         try:
@@ -506,18 +506,18 @@ if "\`\`\`json" in response_text:
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-voice_assistant = VoiceTradingAssistant(api_key = "your-key")
+voice_assistant = VoiceTradingAssistant (api_key = "your-key")
 
 # Example voice commands
 voice_commands = [
     "Buy 100 shares of Apple",
     "Sell half my Microsoft position",
-    "What's the price of Tesla?",
+    "What\'s the price of Tesla?",
     "Place a limit order to buy NVDA at 450 dollars"
 ]
 
@@ -537,12 +537,12 @@ print(f"Voice Input: \"{voice_input}\"")
 print(f"{'='*60}")
     
     # Parse command
-parsed = voice_assistant.parse_voice_command(voice_input, portfolio_context)
+parsed = voice_assistant.parse_voice_command (voice_input, portfolio_context)
 print(f"\\nParsed Intent: {parsed.get('intent')}")
     
     # Generate confirmation
 if parsed.get('ticker'):
-    confirmation = voice_assistant.generate_confirmation(parsed, current_price = 180.50)
+    confirmation = voice_assistant.generate_confirmation (parsed, current_price = 180.50)
 print(f"\\nConfirmation:\\n{confirmation}")
     
     # Validate safety
@@ -556,9 +556,9 @@ validation = voice_assistant.validate_command_safety(
 print(f"\\nSafety Validation:")
 print(f"Approved: {validation['approved']}")
 if validation['issues']:
-    print(f"Issues: {', '.join(validation['issues'])}")
+    print(f"Issues: {', '.join (validation['issues'])}")
 if validation['warnings']:
-    print(f"Warnings: {', '.join(validation['warnings'])}")
+    print(f"Warnings: {', '.join (validation['warnings'])}")
 \`\`\`
 
 ---
@@ -578,17 +578,17 @@ class MarketAnalysisChat:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def answer_market_question(self, question: str,
+    def answer_market_question (self, question: str,
                                market_data: Dict,
                                user_level: str = "intermediate") -> str:
         """
         Answer market-related questions conversationally
         
         Args:
-            question: User's question
+            question: User\'s question
             market_data: Current market data
             user_level: User sophistication (novice/intermediate/advanced)
             
@@ -631,7 +631,7 @@ Be conversational but accurate."""
         
         return response.content[0].text
     
-    def explain_market_movement(self, ticker: str,
+    def explain_market_movement (self, ticker: str,
                                 price_change: float,
                                 news_context: List[str]) -> str:
         """
@@ -647,7 +647,7 @@ Be conversational but accurate."""
         """
         direction = "up" if price_change > 0 else "down"
         
-        prompt = f"""Explain in simple terms why {ticker} moved {direction} {abs(price_change):.1f}% today.
+        prompt = f"""Explain in simple terms why {ticker} moved {direction} {abs (price_change):.1f}% today.
 
 Recent News:
 {chr(10).join([f"- {news}" for news in news_context])}
@@ -667,7 +667,7 @@ Keep it simple and factual."""
         
         return response.content[0].text
     
-    def recommend_learning_resources(self, topic: str,
+    def recommend_learning_resources (self, topic: str,
                                      user_level: str) -> str:
         """
         Recommend learning resources for trading topics
@@ -702,7 +702,7 @@ Tailor recommendations to the user's level."""
         return response.content[0].text
 
 # Example usage
-market_chat = MarketAnalysisChat(api_key="your-key")
+market_chat = MarketAnalysisChat (api_key="your-key")
 
 market_data = {
     'sp500': 4500,
@@ -747,10 +747,10 @@ class AlertExplainer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_alert_message(self, alert_type: str,
+    def generate_alert_message (self, alert_type: str,
                                alert_data: Dict,
                                user_context: Dict) -> str:
         """
@@ -759,7 +759,7 @@ class AlertExplainer:
         Args:
             alert_type: Type of alert
             alert_data: Alert details
-            user_context: User's portfolio and preferences
+            user_context: User\'s portfolio and preferences
             
         Returns:
             Alert message
@@ -768,10 +768,10 @@ class AlertExplainer:
 
 Alert Type: {alert_type}
 Alert Details:
-{json.dumps(alert_data, indent=2)}
+{json.dumps (alert_data, indent=2)}
 
 User Context:
-{json.dumps(user_context, indent=2)}
+{json.dumps (user_context, indent=2)}
 
 Create an alert message that:
 1. States what happened clearly
@@ -790,7 +790,7 @@ Format as a short message (2-4 sentences) that could be sent as notification."""
         
         return response.content[0].text
     
-    def explain_stop_loss_trigger(self, ticker: str,
+    def explain_stop_loss_trigger (self, ticker: str,
                                   stop_loss_price: float,
                                   current_price: float,
                                   position_data: Dict) -> str:
@@ -834,7 +834,7 @@ response = self.client.messages.create(
 return response.content[0].text
 
 # Example usage
-alert_explainer = AlertExplainer(api_key = "your-key")
+alert_explainer = AlertExplainer (api_key = "your-key")
 
 # Price alert
 alert_data = {
@@ -877,12 +877,12 @@ class TradingChatAssistant:
     """
     
     def __init__(self, api_key: str):
-        self.portfolio_assistant = PortfolioQueryAssistant(api_key)
-        self.voice_assistant = VoiceTradingAssistant(api_key)
-        self.market_chat = MarketAnalysisChat(api_key)
-        self.alert_explainer = AlertExplainer(api_key)
+        self.portfolio_assistant = PortfolioQueryAssistant (api_key)
+        self.voice_assistant = VoiceTradingAssistant (api_key)
+        self.market_chat = MarketAnalysisChat (api_key)
+        self.alert_explainer = AlertExplainer (api_key)
         
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
         
         # Conversation state
@@ -890,18 +890,18 @@ class TradingChatAssistant:
         self.user_profile = {}
         self.portfolio_data = {}
     
-    def chat(self, user_message: str) -> str:
+    def chat (self, user_message: str) -> str:
         """
         Main chat interface
         
         Args:
-            user_message: User's message
+            user_message: User\'s message
             
         Returns:
             Assistant's response
         """
         # Classify intent
-        intent = self._classify_intent(user_message)
+        intent = self._classify_intent (user_message)
         
         # Route to appropriate handler
         if intent == 'PORTFOLIO_QUERY':
@@ -922,7 +922,7 @@ class TradingChatAssistant:
                 self.user_profile.get('level', 'intermediate')
             )
         else:
-            response = self._general_response(user_message)
+            response = self._general_response (user_message)
         
         # Add to conversation history
         self.conversation_history.append({
@@ -936,21 +936,21 @@ class TradingChatAssistant:
         
         return response
     
-    def _classify_intent(self, message: str) -> str:
+    def _classify_intent (self, message: str) -> str:
         """Classify user intent"""
         # Simplified classification
         message_lower = message.lower()
         
-        if any(word in message_lower for word in ['buy', 'sell', 'order', 'trade']):
+        if any (word in message_lower for word in ['buy', 'sell', 'order', 'trade']):
             return 'TRADING_COMMAND'
-        elif any(word in message_lower for word in ['portfolio', 'position', 'holding', 'my ']):
+        elif any (word in message_lower for word in ['portfolio', 'position', 'holding', 'my ']):
             return 'PORTFOLIO_QUERY'
-        elif any(word in message_lower for word in ['market', 'why', 'what happened', 'explain']):
+        elif any (word in message_lower for word in ['market', 'why', 'what happened', 'explain']):
             return 'MARKET_QUESTION'
         else:
             return 'GENERAL'
     
-    def _general_response(self, message: str) -> str:
+    def _general_response (self, message: str) -> str:
         """Handle general queries"""
         messages = self.conversation_history + [
             {'role': 'user', 'content': message}
@@ -965,7 +965,7 @@ class TradingChatAssistant:
         
         return response.content[0].text
     
-    def _get_market_data(self) -> Dict:
+    def _get_market_data (self) -> Dict:
         """Get current market data"""
         # In production: fetch real data
         return {
@@ -975,7 +975,7 @@ class TradingChatAssistant:
         }
 
 # Example usage
-chat_assistant = TradingChatAssistant(api_key="your-key")
+chat_assistant = TradingChatAssistant (api_key="your-key")
 
 # Set up user
 chat_assistant.user_profile = {'level': 'intermediate'}
@@ -986,7 +986,7 @@ chat_assistant.portfolio_data = {
 
 # Chat examples
 messages = [
-    "What's my largest position?",
+    "What\'s my largest position?",
     "Why is the market up today?",
     "Buy 50 shares of Microsoft",
     "Tell me about Apple's performance"
@@ -994,7 +994,7 @@ messages = [
 
 for msg in messages:
     print(f"\\nUser: {msg}")
-    response = chat_assistant.chat(msg)
+    response = chat_assistant.chat (msg)
     print(f"Assistant: {response}")
 \`\`\`
 

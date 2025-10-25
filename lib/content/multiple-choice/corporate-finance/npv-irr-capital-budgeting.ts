@@ -55,7 +55,7 @@ export const npvIrrCapitalBudgetingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'If two projects have identical NPVs ($1M each), they create the same absolute value for shareholders. You should be indifferent between them from a pure financial perspective. The IRR difference (22% vs 18%) reflects different project characteristics (likely timing and scale of cash flows), but if NPVs are identical at your required return (12%), both add exactly $1M to firm value. Other factors (strategic fit, risk, implementation difficulty, resource requirements) should guide the final decision.',
+      'If two projects have identical NPVs (\$1M each), they create the same absolute value for shareholders. You should be indifferent between them from a pure financial perspective. The IRR difference (22% vs 18%) reflects different project characteristics (likely timing and scale of cash flows), but if NPVs are identical at your required return (12%), both add exactly $1M to firm value. Other factors (strategic fit, risk, implementation difficulty, resource requirements) should guide the final decision.',
   },
   {
     id: 'npv-irr-mc-5',
@@ -64,6 +64,6 @@ export const npvIrrCapitalBudgetingMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['0.048', '1.048', '1.44', '2.40'],
     correctAnswer: 1,
     explanation:
-      'PI = PV of future cash flows / Initial investment. PV of cash flows = $1.2M × [(1 - 1.1^-6) / 0.10] = $1.2M × 4.3553 = $5.226M. PI = $5.226M / $5M = 1.045 ≈ 1.048. Alternatively: PI = (NPV + Initial investment) / Initial investment. NPV = $5.226M - $5M = $0.226M. PI = ($0.226M + $5M) / $5M = 1.045. A PI > 1 means project creates value (accept). PI < 1 means value destruction (reject). PI is useful for ranking projects under capital rationing.',
+      'PI = PV of future cash flows / Initial investment. PV of cash flows = $1.2M × [(1 - 1.1^-6) / 0.10] = $1.2M × 4.3553 = $5.226M. PI = $5.226M / $5M = 1.045 ≈ 1.048. Alternatively: PI = (NPV + Initial investment) / Initial investment. NPV = $5.226M - $5M = $0.226M. PI = (\$0.226M + $5M) / $5M = 1.045. A PI > 1 means project creates value (accept). PI < 1 means value destruction (reject). PI is useful for ranking projects under capital rationing.',
   },
 ];

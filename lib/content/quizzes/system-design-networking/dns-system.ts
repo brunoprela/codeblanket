@@ -565,13 +565,13 @@ window.performance.timing;
 describe('Post-migration smoke tests', () => {
   test('User can login', async () => {
     await login('test@example.com', 'password');
-    expect(page.url()).toBe('https://example.com/dashboard');
+    expect (page.url()).toBe('https://example.com/dashboard');
   });
   
   test('User can make purchase', async () => {
     await addToCart('product-123');
     await checkout();
-    expect(await getOrderStatus()).toBe('confirmed');
+    expect (await getOrderStatus()).toBe('confirmed');
   });
 });
 \`\`\`
@@ -869,7 +869,7 @@ Bad:
 
 Good:
   Use DNS provider's hidden master
-  Provider's Anycast network fronts requests
+  Provider\'s Anycast network fronts requests
   Your servers only answer to provider
 \`\`\`
 

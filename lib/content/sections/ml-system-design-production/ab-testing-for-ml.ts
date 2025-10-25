@@ -157,17 +157,17 @@ def calculate_sample_size(
     Returns:
         Required sample size per variant
     """
-    # Effect size (Cohen's d)
+    # Effect size (Cohen\'s d)
     effect_size = (baseline_mean * minimum_detectable_effect) / baseline_std
     
     # Z-scores for alpha and power
     z_alpha = stats.norm.ppf(1 - alpha/2)  # Two-tailed
-    z_beta = stats.norm.ppf(power)
+    z_beta = stats.norm.ppf (power)
     
     # Sample size formula
     n = 2 * ((z_alpha + z_beta) / effect_size) ** 2
     
-    return int(np.ceil(n))
+    return int (np.ceil (n))
 
 
 def calculate_experiment_duration(
@@ -181,7 +181,7 @@ def calculate_experiment_duration(
     total_sample_needed = sample_size_per_variant * num_variants
     days = total_sample_needed / daily_traffic
     
-    return int(np.ceil(days))
+    return int (np.ceil (days))
 
 
 # Example: Trading model test
@@ -205,7 +205,7 @@ print(f"\\nRequired sample size per variant: {sample_size:,}")
 
 # If we have 1000 trades per day
 daily_trades = 1000
-duration = calculate_experiment_duration(sample_size, daily_trades, num_variants=2)
+duration = calculate_experiment_duration (sample_size, daily_trades, num_variants=2)
 
 print(f"\\nWith {daily_trades} trades/day:")
 print(f"Experiment duration: {duration} days")
@@ -241,11 +241,11 @@ class TrafficSplitter:
         self.salt = salt
         
         # Validate percentages sum to 1.0
-        total = sum(variants.values())
-        if abs(total - 1.0) > 0.001:
-            raise ValueError(f"Traffic percentages must sum to 1.0, got {total}")
+        total = sum (variants.values())
+        if abs (total - 1.0) > 0.001:
+            raise ValueError (f"Traffic percentages must sum to 1.0, got {total}")
     
-    def assign_variant(self, user_id: str) -> str:
+    def assign_variant (self, user_id: str) -> str:
         """
         Consistently assign user to variant
         
@@ -255,7 +255,7 @@ class TrafficSplitter:
         """
         # Hash user_id with salt
         hash_input = f"{self.salt}:{user_id}".encode()
-        hash_value = int(hashlib.md5(hash_input).hexdigest(), 16)
+        hash_value = int (hashlib.md5(hash_input).hexdigest(), 16)
         
         # Convert to 0-1 range
         bucket = (hash_value % 10000) / 10000
@@ -268,7 +268,7 @@ class TrafficSplitter:
                 return variant
         
         # Fallback (should never reach here)
-        return list(self.variants.keys())[0]
+        return list (self.variants.keys())[0]
 
 
 # Example usage
@@ -284,8 +284,8 @@ splitter = TrafficSplitter(
 assignments = {}
 for i in range(10000):
     user_id = f"user_{i}"
-    variant = splitter.assign_variant(user_id)
-    assignments[variant] = assignments.get(variant, 0) + 1
+    variant = splitter.assign_variant (user_id)
+    assignments[variant] = assignments.get (variant, 0) + 1
 
 print("\\n=== Traffic Split Results ===")
 for variant, count in assignments.items():
@@ -294,8 +294,8 @@ for variant, count in assignments.items():
 
 # Verify consistency
 user_id = "user_123"
-variant1 = splitter.assign_variant(user_id)
-variant2 = splitter.assign_variant(user_id)
+variant1 = splitter.assign_variant (user_id)
+variant2 = splitter.assign_variant (user_id)
 print(f"\\nConsistency check for {user_id}: {variant1} == {variant2}: {variant1 == variant2}")
 \`\`\`
 
@@ -324,12 +324,12 @@ class GradualRollout:
         self.duration_days = duration_days
         self.start_date = None
     
-    def start(self):
+    def start (self):
         """Start rollout"""
         self.start_date = datetime.now()
         print(f"✓ Rollout started: {self.start_pct*100}% → {self.end_pct*100}% over {self.duration_days} days")
     
-    def get_current_allocation(self) -> Dict[str, float]:
+    def get_current_allocation (self) -> Dict[str, float]:
         """
         Get current traffic allocation
         """
@@ -367,7 +367,7 @@ rollout.start()
 # Simulate rollout over 7 days
 print("\\n=== Gradual Rollout Schedule ===")
 for day in range(8):
-    rollout.start_date = datetime.now() - timedelta(days=7-day)
+    rollout.start_date = datetime.now() - timedelta (days=7-day)
     allocation = rollout.get_current_allocation()
     print(f"Day {day}: Control={allocation['control']*100:.1f}%, Treatment={allocation['treatment']*100:.1f}%")
 \`\`\`
@@ -412,24 +412,24 @@ class ExperimentLogger:
             'user_id': user_id,
             'variant': variant,
             **metrics,
-            'metadata': json.dumps(metadata or {})
+            'metadata': json.dumps (metadata or {})
         }
         
-        self.data.append(event)
+        self.data.append (event)
     
-    def get_dataframe(self) -> pd.DataFrame:
+    def get_dataframe (self) -> pd.DataFrame:
         """
         Get data as DataFrame
         """
-        return pd.DataFrame(self.data)
+        return pd.DataFrame (self.data)
     
-    def save(self, path: str):
+    def save (self, path: str):
         """
         Save to file
         """
         df = self.get_dataframe()
-        df.to_csv(path, index=False)
-        print(f"✓ Saved {len(df)} events to {path}")
+        df.to_csv (path, index=False)
+        print(f"✓ Saved {len (df)} events to {path}")
 
 
 # Example usage
@@ -461,7 +461,7 @@ for i in range(1000):
 
 # Get data
 df = logger.get_dataframe()
-print(f"\\nLogged {len(df)} events")
+print(f"\\nLogged {len (df)} events")
 print(f"\\nSample data:")
 print(df[['variant', 'sharpe_ratio', 'win_rate']].head())
 \`\`\`
@@ -498,7 +498,7 @@ class ABTestAnalyzer:
         self.metric = metric
         self.alpha = alpha
     
-    def split_variants(self) -> Tuple[np.ndarray, np.ndarray]:
+    def split_variants (self) -> Tuple[np.ndarray, np.ndarray]:
         """
         Split data into control and treatment
         """
@@ -507,36 +507,36 @@ class ABTestAnalyzer:
         
         return control, treatment
     
-    def ttest(self) -> Dict:
+    def ttest (self) -> Dict:
         """
         Two-sample t-test
         """
         control, treatment = self.split_variants()
         
         # T-test
-        statistic, pvalue = stats.ttest_ind(treatment, control)
+        statistic, pvalue = stats.ttest_ind (treatment, control)
         
-        # Effect size (Cohen's d)
+        # Effect size (Cohen\'s d)
         pooled_std = np.sqrt(
-            ((len(control) - 1) * np.var(control) + 
-             (len(treatment) - 1) * np.var(treatment)) /
-            (len(control) + len(treatment) - 2)
+            ((len (control) - 1) * np.var (control) + 
+             (len (treatment) - 1) * np.var (treatment)) /
+            (len (control) + len (treatment) - 2)
         )
-        cohens_d = (np.mean(treatment) - np.mean(control)) / pooled_std
+        cohens_d = (np.mean (treatment) - np.mean (control)) / pooled_std
         
         # Confidence interval for difference
-        se = pooled_std * np.sqrt(1/len(control) + 1/len(treatment))
-        ci_lower = (np.mean(treatment) - np.mean(control)) - 1.96 * se
-        ci_upper = (np.mean(treatment) - np.mean(control)) + 1.96 * se
+        se = pooled_std * np.sqrt(1/len (control) + 1/len (treatment))
+        ci_lower = (np.mean (treatment) - np.mean (control)) - 1.96 * se
+        ci_upper = (np.mean (treatment) - np.mean (control)) + 1.96 * se
         
         return {
             'test': 't-test',
-            'control_mean': np.mean(control),
-            'control_std': np.std(control),
-            'treatment_mean': np.mean(treatment),
-            'treatment_std': np.std(treatment),
-            'difference': np.mean(treatment) - np.mean(control),
-            'relative_difference_pct': (np.mean(treatment) - np.mean(control)) / np.mean(control) * 100,
+            'control_mean': np.mean (control),
+            'control_std': np.std (control),
+            'treatment_mean': np.mean (treatment),
+            'treatment_std': np.std (treatment),
+            'difference': np.mean (treatment) - np.mean (control),
+            'relative_difference_pct': (np.mean (treatment) - np.mean (control)) / np.mean (control) * 100,
             'statistic': statistic,
             'pvalue': pvalue,
             'significant': pvalue < self.alpha,
@@ -544,7 +544,7 @@ class ABTestAnalyzer:
             'ci_95': (ci_lower, ci_upper)
         }
     
-    def mann_whitney(self) -> Dict:
+    def mann_whitney (self) -> Dict:
         """
         Mann-Whitney U test (non-parametric)
         
@@ -559,8 +559,8 @@ class ABTestAnalyzer:
         
         return {
             'test': 'Mann-Whitney U',
-            'control_median': np.median(control),
-            'treatment_median': np.median(treatment),
+            'control_median': np.median (control),
+            'treatment_median': np.median (treatment),
             'statistic': statistic,
             'pvalue': pvalue,
             'significant': pvalue < self.alpha
@@ -578,29 +578,29 @@ class ABTestAnalyzer:
         
         # Bootstrap
         differences = []
-        for _ in range(n_bootstrap):
+        for _ in range (n_bootstrap):
             # Resample
-            control_sample = np.random.choice(control, size=len(control), replace=True)
-            treatment_sample = np.random.choice(treatment, size=len(treatment), replace=True)
+            control_sample = np.random.choice (control, size=len (control), replace=True)
+            treatment_sample = np.random.choice (treatment, size=len (treatment), replace=True)
             
             # Calculate difference
-            diff = np.mean(treatment_sample) - np.mean(control_sample)
-            differences.append(diff)
+            diff = np.mean (treatment_sample) - np.mean (control_sample)
+            differences.append (diff)
         
         # Confidence interval
         alpha = 1 - confidence
-        ci_lower = np.percentile(differences, alpha/2 * 100)
-        ci_upper = np.percentile(differences, (1 - alpha/2) * 100)
+        ci_lower = np.percentile (differences, alpha/2 * 100)
+        ci_upper = np.percentile (differences, (1 - alpha/2) * 100)
         
         return {
             'test': 'Bootstrap',
-            'mean_difference': np.mean(differences),
+            'mean_difference': np.mean (differences),
             'ci_lower': ci_lower,
             'ci_upper': ci_upper,
             'significant': not (ci_lower < 0 < ci_upper)  # CI doesn't contain 0
         }
     
-    def analyze(self) -> Dict:
+    def analyze (self) -> Dict:
         """
         Run complete analysis
         """
@@ -612,8 +612,8 @@ class ABTestAnalyzer:
         control, treatment = self.split_variants()
         
         print(f"\\nSample Sizes:")
-        print(f"  Control: {len(control):,}")
-        print(f"  Treatment: {len(treatment):,}")
+        print(f"  Control: {len (control):,}")
+        print(f"  Treatment: {len (treatment):,}")
         
         # T-test
         ttest_results = self.ttest()
@@ -626,7 +626,7 @@ class ABTestAnalyzer:
         print(f"\\nT-Test:")
         print(f"  p-value: {ttest_results['pvalue']:.4f}")
         print(f"  Significant: {ttest_results['significant']} (α={self.alpha})")
-        print(f"  Effect size (Cohen's d): {ttest_results['cohens_d']:.4f}")
+        print(f"  Effect size (Cohen\'s d): {ttest_results['cohens_d']:.4f}")
         print(f"  95% CI: [{ttest_results['ci_95'][0]:.4f}, {ttest_results['ci_95'][1]:.4f}]")
         
         # Bootstrap
@@ -662,7 +662,7 @@ class ABTestAnalyzer:
 
 
 # Example analysis
-analyzer = ABTestAnalyzer(df, metric='sharpe_ratio', alpha=0.05)
+analyzer = ABTestAnalyzer (df, metric='sharpe_ratio', alpha=0.05)
 results = analyzer.analyze()
 \`\`\`
 
@@ -675,13 +675,13 @@ Correct for Multiple Testing
 
 from statsmodels.stats.multitest import multipletests
 
-def bonferroni_correction(pvalues: list, alpha: float = 0.05) -> Dict:
+def bonferroni_correction (pvalues: list, alpha: float = 0.05) -> Dict:
     """
     Bonferroni correction for multiple testing
     
     Adjusted alpha = alpha / number_of_tests
     """
-    n_tests = len(pvalues)
+    n_tests = len (pvalues)
     adjusted_alpha = alpha / n_tests
     
     significant = [p < adjusted_alpha for p in pvalues]
@@ -691,11 +691,11 @@ def bonferroni_correction(pvalues: list, alpha: float = 0.05) -> Dict:
         'alpha': alpha,
         'adjusted_alpha': adjusted_alpha,
         'significant': significant,
-        'num_significant': sum(significant)
+        'num_significant': sum (significant)
     }
 
 
-def benjamini_hochberg(pvalues: list, alpha: float = 0.05) -> Dict:
+def benjamini_hochberg (pvalues: list, alpha: float = 0.05) -> Dict:
     """
     Benjamini-Hochberg FDR correction
     
@@ -712,7 +712,7 @@ def benjamini_hochberg(pvalues: list, alpha: float = 0.05) -> Dict:
         'alpha': alpha,
         'corrected_pvalues': pvals_corrected,
         'significant': reject,
-        'num_significant': sum(reject)
+        'num_significant': sum (reject)
     }
 
 
@@ -721,26 +721,26 @@ metrics = ['sharpe_ratio', 'win_rate', 'max_drawdown']
 pvalues = []
 
 for metric in metrics:
-    analyzer = ABTestAnalyzer(df, metric=metric)
+    analyzer = ABTestAnalyzer (df, metric=metric)
     results = analyzer.ttest()
-    pvalues.append(results['pvalue'])
+    pvalues.append (results['pvalue'])
 
 print("\\n=== Multiple Testing Correction ===")
-print(f"Metrics tested: {len(metrics)}")
+print(f"Metrics tested: {len (metrics)}")
 print(f"\\nRaw p-values:")
-for metric, pval in zip(metrics, pvalues):
+for metric, pval in zip (metrics, pvalues):
     print(f"  {metric}: {pval:.4f}")
 
 # Bonferroni
-bonf = bonferroni_correction(pvalues, alpha=0.05)
+bonf = bonferroni_correction (pvalues, alpha=0.05)
 print(f"\\nBonferroni correction:")
 print(f"  Adjusted α: {bonf['adjusted_alpha']:.4f}")
-print(f"  Significant: {bonf['num_significant']}/{len(metrics)}")
+print(f"  Significant: {bonf['num_significant']}/{len (metrics)}")
 
 # Benjamini-Hochberg
-bh = benjamini_hochberg(pvalues, alpha=0.05)
+bh = benjamini_hochberg (pvalues, alpha=0.05)
 print(f"\\nBenjamini-Hochberg:")
-print(f"  Significant: {bh['num_significant']}/{len(metrics)}")
+print(f"  Significant: {bh['num_significant']}/{len (metrics)}")
 \`\`\`
 
 ---
@@ -771,32 +771,32 @@ class EpsilonGreedyBandit:
         self.counts = {v: 0 for v in variants}
         self.rewards = {v: [] for v in variants}
     
-    def select_variant(self) -> str:
+    def select_variant (self) -> str:
         """
         Select variant using epsilon-greedy
         """
         # Explore with probability epsilon
         if np.random.random() < self.epsilon:
-            return np.random.choice(self.variants)
+            return np.random.choice (self.variants)
         
         # Exploit: choose best variant
         avg_rewards = {
-            v: np.mean(rewards) if rewards else 0.0
+            v: np.mean (rewards) if rewards else 0.0
             for v, rewards in self.rewards.items()
         }
         
-        best_variant = max(avg_rewards, key=avg_rewards.get)
+        best_variant = max (avg_rewards, key=avg_rewards.get)
         
         return best_variant
     
-    def update(self, variant: str, reward: float):
+    def update (self, variant: str, reward: float):
         """
         Update with observed reward
         """
         self.counts[variant] += 1
-        self.rewards[variant].append(reward)
+        self.rewards[variant].append (reward)
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """
         Get current statistics
         """
@@ -807,8 +807,8 @@ class EpsilonGreedyBandit:
             
             stats[variant] = {
                 'count': self.counts[variant],
-                'mean_reward': np.mean(rewards) if rewards else 0.0,
-                'total_reward': sum(rewards)
+                'mean_reward': np.mean (rewards) if rewards else 0.0,
+                'total_reward': sum (rewards)
             }
         
         return stats
@@ -830,7 +830,7 @@ true_rewards = {
 # Run simulation
 n_rounds = 1000
 
-for i in range(n_rounds):
+for i in range (n_rounds):
     # Select variant
     variant = bandit.select_variant()
     
@@ -838,7 +838,7 @@ for i in range(n_rounds):
     reward = 1 if np.random.random() < true_rewards[variant] else 0
     
     # Update bandit
-    bandit.update(variant, reward)
+    bandit.update (variant, reward)
 
 # Results
 print("\\n=== Multi-Armed Bandit Results ===")
@@ -854,7 +854,7 @@ for variant, stat in stats.items():
     print()
 
 # Best variant
-best = max(stats.items(), key=lambda x: x[1]['mean_reward'])[0]
+best = max (stats.items(), key=lambda x: x[1]['mean_reward'])[0]
 print(f"Best variant: {best}")
 \`\`\`
 
@@ -881,22 +881,22 @@ class ThompsonSamplingBandit:
         self.alpha = {v: 1 for v in variants}  # Successes + 1
         self.beta = {v: 1 for v in variants}   # Failures + 1
     
-    def select_variant(self) -> str:
+    def select_variant (self) -> str:
         """
         Select variant using Thompson Sampling
         """
         # Sample from each variant's posterior
         samples = {
-            v: np.random.beta(self.alpha[v], self.beta[v])
+            v: np.random.beta (self.alpha[v], self.beta[v])
             for v in self.variants
         }
         
         # Select variant with highest sample
-        best_variant = max(samples, key=samples.get)
+        best_variant = max (samples, key=samples.get)
         
         return best_variant
     
-    def update(self, variant: str, reward: float):
+    def update (self, variant: str, reward: float):
         """
         Update posterior with observed reward
         """
@@ -905,7 +905,7 @@ class ThompsonSamplingBandit:
         else:
             self.beta[variant] += 1
     
-    def get_stats(self) -> Dict:
+    def get_stats (self) -> Dict:
         """
         Get posterior statistics
         """
@@ -934,7 +934,7 @@ ts_bandit = ThompsonSamplingBandit(['model_v1', 'model_v2', 'model_v3'])
 for i in range(1000):
     variant = ts_bandit.select_variant()
     reward = 1 if np.random.random() < true_rewards[variant] else 0
-    ts_bandit.update(variant, reward)
+    ts_bandit.update (variant, reward)
 
 # Results
 print("\\n=== Thompson Sampling Results ===")

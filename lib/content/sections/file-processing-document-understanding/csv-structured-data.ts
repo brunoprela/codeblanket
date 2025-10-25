@@ -22,9 +22,9 @@ import pandas as pd
 from pathlib import Path
 
 # Basic CSV reading with csv module
-def read_csv_basic(filepath: str):
-    with open(filepath, 'r') as f:
-        reader = csv.DictReader(f)
+def read_csv_basic (filepath: str):
+    with open (filepath, 'r') as f:
+        reader = csv.DictReader (f)
         for row in reader:
             print(row)
 
@@ -61,41 +61,41 @@ class CSVProcessor:
         **kwargs
     ) -> Optional[pd.DataFrame]:
         """Read CSV with error handling."""
-        path = Path(filepath)
+        path = Path (filepath)
         
         if not path.exists():
-            self.logger.error(f"File not found: {filepath}")
+            self.logger.error (f"File not found: {filepath}")
             return None
         
         # Check file size
         max_size = 100 * 1024 * 1024  # 100MB
         if path.stat().st_size > max_size:
-            self.logger.warning(f"Large file: {path.stat().st_size} bytes")
+            self.logger.warning (f"Large file: {path.stat().st_size} bytes")
         
         try:
             # Try UTF-8 first
-            df = pd.read_csv(filepath, encoding='utf-8', **kwargs)
+            df = pd.read_csv (filepath, encoding='utf-8', **kwargs)
         except UnicodeDecodeError:
             # Fallback to latin-1
-            df = pd.read_csv(filepath, encoding='latin-1', **kwargs)
+            df = pd.read_csv (filepath, encoding='latin-1', **kwargs)
         except Exception as e:
-            self.logger.error(f"Failed to read CSV: {e}")
+            self.logger.error (f"Failed to read CSV: {e}")
             return None
         
         return df
     
-    def validate_csv(self, df: pd.DataFrame, required_columns: list) -> bool:
+    def validate_csv (self, df: pd.DataFrame, required_columns: list) -> bool:
         """Validate CSV has required columns."""
-        missing = set(required_columns) - set(df.columns)
+        missing = set (required_columns) - set (df.columns)
         if missing:
-            self.logger.error(f"Missing columns: {missing}")
+            self.logger.error (f"Missing columns: {missing}")
             return False
         return True
 
 # Usage
 processor = CSVProcessor()
 df = processor.read_csv_safe('data.csv')
-if df is not None and processor.validate_csv(df, ['name', 'email']):
+if df is not None and processor.validate_csv (df, ['name', 'email']):
     # Process data
     pass
 \`\`\`
@@ -108,21 +108,21 @@ import pandas as pd
 
 # Read JSON
 with open('data.json', 'r') as f:
-    data = json.load(f)
+    data = json.load (f)
 
 # Read JSONL (newline-delimited JSON)
-def read_jsonl(filepath: str):
+def read_jsonl (filepath: str):
     data = []
-    with open(filepath, 'r') as f:
+    with open (filepath, 'r') as f:
         for line in f:
-            data.append(json.loads(line))
+            data.append (json.loads (line))
     return data
 
 # pandas for JSON
 df = pd.read_json('data.json')
 
 # Convert to DataFrame
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 \`\`\`
 
 ## Key Takeaways

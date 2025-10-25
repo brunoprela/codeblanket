@@ -105,7 +105,7 @@ def test_api_call():
 **Problem**: Session-scoped fixtures run once per worker, not once globally.
 
 \`\`\`python
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 def expensive_setup():
     """Runs once per worker (not once globally)"""
     print("Setting up...")
@@ -118,8 +118,8 @@ def expensive_setup():
 import pytest
 from filelock import FileLock
 
-@pytest.fixture(scope="session")
-def global_resource(tmp_path_factory, worker_id):
+@pytest.fixture (scope="session")
+def global_resource (tmp_path_factory, worker_id):
     """True session-scoped fixture across workers"""
     if worker_id == "master":
         # Not running with xdist
@@ -129,15 +129,15 @@ def global_resource(tmp_path_factory, worker_id):
     root_tmp_dir = tmp_path_factory.getbasetemp().parent
     lock_file = root_tmp_dir / "resource.lock"
     
-    with FileLock(str(lock_file) + ".lock"):
+    with FileLock (str (lock_file) + ".lock"):
         resource_file = root_tmp_dir / "resource.json"
         if resource_file.is_file():
             # Resource already created by another worker
-            return load_resource(resource_file)
+            return load_resource (resource_file)
         else:
             # First worker creates resource
             resource = setup_resource()
-            save_resource(resource, resource_file)
+            save_resource (resource, resource_file)
             return resource
 \`\`\`
 
@@ -203,7 +203,7 @@ TOTAL                     137      7    95%
 **Line coverage** measures if code runs. **Branch coverage** measures if all decision paths execute.
 
 \`\`\`python
-def process_payment(amount):
+def process_payment (amount):
     if amount > 0:        # Branch 1: True path
         return "success"
     else:                 # Branch 2: False path
@@ -284,11 +284,11 @@ pip install pytest-benchmark
 ### Basic Benchmarking
 
 \`\`\`python
-def test_sorting_performance(benchmark):
+def test_sorting_performance (benchmark):
     """Benchmark sorting algorithm"""
-    data = list(range(1000, 0, -1))
-    result = benchmark(sorted, data)
-    assert result == list(range(1, 1001))
+    data = list (range(1000, 0, -1))
+    result = benchmark (sorted, data)
+    assert result == list (range(1, 1001))
 \`\`\`
 
 **Output**:
@@ -301,12 +301,12 @@ test_sorting_performance  45.2μs  67.3μs  48.1μs   3.2μs  47.5μs  2.1μs   
 ### Advanced Benchmarking
 
 \`\`\`python
-def test_function_with_setup(benchmark):
+def test_function_with_setup (benchmark):
     """Benchmark with setup phase (not timed)"""
     def setup():
         return [1, 2, 3, 4, 5] * 200
     
-    def process_data(data):
+    def process_data (data):
         return [x * 2 for x in data]
     
     result = benchmark.pedantic(
@@ -321,18 +321,18 @@ def test_function_with_setup(benchmark):
 ### Comparing Implementations
 
 \`\`\`python
-def test_list_comprehension(benchmark):
+def test_list_comprehension (benchmark):
     data = range(1000)
-    benchmark(lambda: [x * 2 for x in data])
+    benchmark (lambda: [x * 2 for x in data])
 
-def test_map_function(benchmark):
+def test_map_function (benchmark):
     data = range(1000)
-    benchmark(lambda: list(map(lambda x: x * 2, data)))
+    benchmark (lambda: list (map (lambda x: x * 2, data)))
 
-def test_numpy_array(benchmark):
+def test_numpy_array (benchmark):
     import numpy as np
     data = np.arange(1000)
-    benchmark(lambda: data * 2)
+    benchmark (lambda: data * 2)
 \`\`\`
 
 **Compare results**:
@@ -357,17 +357,17 @@ pytest tests/benchmarks/ \\
 ### Benchmark Groups
 
 \`\`\`python
-@pytest.mark.benchmark(group="sorting")
-def test_quicksort(benchmark):
-    benchmark(quicksort, [5, 2, 8, 1, 9])
+@pytest.mark.benchmark (group="sorting")
+def test_quicksort (benchmark):
+    benchmark (quicksort, [5, 2, 8, 1, 9])
 
-@pytest.mark.benchmark(group="sorting")
-def test_mergesort(benchmark):
-    benchmark(mergesort, [5, 2, 8, 1, 9])
+@pytest.mark.benchmark (group="sorting")
+def test_mergesort (benchmark):
+    benchmark (mergesort, [5, 2, 8, 1, 9])
 
-@pytest.mark.benchmark(group="searching")
-def test_binary_search(benchmark):
-    benchmark(binary_search, list(range(1000)), 500)
+@pytest.mark.benchmark (group="searching")
+def test_binary_search (benchmark):
+    benchmark (binary_search, list (range(1000)), 500)
 \`\`\`
 
 ---
@@ -397,7 +397,7 @@ def test_api_call():
 
 **With pytest-mock** (cleaner syntax):
 \`\`\`python
-def test_api_call(mocker):
+def test_api_call (mocker):
     mock_get = mocker.patch("requests.get")
     mock_get.return_value.json.return_value = {"status": "ok"}
     result = fetch_data()
@@ -409,7 +409,7 @@ def test_api_call(mocker):
 pytest-mock automatically undoes mocks after each test—no \`with\` blocks needed.
 
 \`\`\`python
-def test_one(mocker):
+def test_one (mocker):
     mocker.patch("os.path.exists", return_value=True)
     assert check_file_exists("test.txt")
     # Mock automatically removed after test
@@ -424,8 +424,8 @@ def test_two():
 **Spies** let real functions run while recording calls.
 
 \`\`\`python
-def test_spy_on_function(mocker):
-    spy = mocker.spy(math, "sqrt")
+def test_spy_on_function (mocker):
+    spy = mocker.spy (math, "sqrt")
     
     result = calculate_distance(3, 4)  # Uses math.sqrt internally
     
@@ -436,22 +436,22 @@ def test_spy_on_function(mocker):
 ### Stub vs Mock
 
 \`\`\`python
-def test_stub_example(mocker):
+def test_stub_example (mocker):
     """Stub: Returns predefined values"""
-    stub = mocker.stub(name="database_connection")
+    stub = mocker.stub (name="database_connection")
     stub.return_value = {"user": "alice"}
     
     result = stub()
     assert result["user"] == "alice"
 
-def test_mock_example(mocker):
+def test_mock_example (mocker):
     """Mock: Records interactions for verification"""
     mock = mocker.MagicMock()
     
-    process_data(mock)
+    process_data (mock)
     
     mock.save.assert_called_once()
-    mock.validate.assert_called_with(strict=True)
+    mock.validate.assert_called_with (strict=True)
 \`\`\`
 
 ---
@@ -566,16 +566,16 @@ from myapp import create_app
 @pytest.fixture
 def app():
     """Create Flask app for testing"""
-    app = create_app(config="testing")
+    app = create_app (config="testing")
     return app
 
-def test_homepage(client):
+def test_homepage (client):
     """client fixture from pytest-flask"""
     response = client.get("/")
     assert response.status_code == 200
     assert b"Welcome" in response.data
 
-def test_api_endpoint(client):
+def test_api_endpoint (client):
     response = client.post("/api/users", json={"name": "Alice"})
     assert response.status_code == 201
     assert response.json["name"] == "Alice"
@@ -591,7 +591,7 @@ def test_api_endpoint(client):
 # tests/conftest.py
 import pytest
 
-def pytest_configure(config):
+def pytest_configure (config):
     """Called at pytest startup"""
     config.addinivalue_line(
         "markers", "slow: marks tests as slow"
@@ -602,13 +602,13 @@ def custom_resource():
     """Custom fixture available to all tests"""
     resource = setup_expensive_resource()
     yield resource
-    teardown_resource(resource)
+    teardown_resource (resource)
 
-def pytest_collection_modifyitems(items):
+def pytest_collection_modifyitems (items):
     """Modify collected tests"""
     for item in items:
         if "integration" in item.nodeid:
-            item.add_marker(pytest.mark.slow)
+            item.add_marker (pytest.mark.slow)
 \`\`\`
 
 ### Installable Plugin
@@ -618,7 +618,7 @@ def pytest_collection_modifyitems(items):
 import pytest
 
 @pytest.hookimpl
-def pytest_addoption(parser):
+def pytest_addoption (parser):
     """Add command-line option"""
     parser.addoption(
         "--myapp-env",
@@ -628,7 +628,7 @@ def pytest_addoption(parser):
     )
 
 @pytest.fixture
-def myapp_env(request):
+def myapp_env (request):
     """Fixture providing environment from command line"""
     return request.config.getoption("--myapp-env")
 \`\`\`

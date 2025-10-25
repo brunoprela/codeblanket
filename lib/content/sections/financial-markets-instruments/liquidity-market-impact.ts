@@ -1,8 +1,8 @@
 export const liquidityMarketImpact = {
-    title: "Liquidity & Market Impact",
-    slug: "liquidity-market-impact",
-    description: "Master liquidity measurement and market impact models",
-    content: `
+  title: 'Liquidity & Market Impact',
+  slug: 'liquidity-market-impact',
+  description: 'Master liquidity measurement and market impact models',
+  content: `
 # Liquidity & Market Impact
 
 ## Introduction: The Hidden Cost of Trading
@@ -46,7 +46,7 @@ class LiquidityMetrics:
     """
     
     @staticmethod
-    def calculate_spread_metrics(bid: float, ask: float) -> Dict:
+    def calculate_spread_metrics (bid: float, ask: float) -> Dict:
         """
         Spread = most visible liquidity cost
         """
@@ -63,7 +63,7 @@ class LiquidityMetrics:
         }
     
     @staticmethod
-    def calculate_depth(order_book_levels: List[tuple],  # [(price, size)]
+    def calculate_depth (order_book_levels: List[tuple],  # [(price, size)]
                        reference_price: float) -> Dict:
         """
         Market depth = available liquidity at each price level
@@ -71,24 +71,24 @@ class LiquidityMetrics:
         Deeper market = lower impact
         """
         # Calculate size at various distance from best price
-        total_size = sum(size for _, size in order_book_levels)
+        total_size = sum (size for _, size in order_book_levels)
         
         # Size within 1%, 5%, 10% of best price
-        size_1pct = sum(size for price, size in order_book_levels 
-                       if abs(price - reference_price) / reference_price <= 0.01)
-        size_5pct = sum(size for price, size in order_book_levels
-                       if abs(price - reference_price) / reference_price <= 0.05)
+        size_1pct = sum (size for price, size in order_book_levels 
+                       if abs (price - reference_price) / reference_price <= 0.01)
+        size_5pct = sum (size for price, size in order_book_levels
+                       if abs (price - reference_price) / reference_price <= 0.05)
         
         return {
             'total_depth': total_size,
             'depth_within_1pct': size_1pct,
             'depth_within_5pct': size_5pct,
-            'avg_size_per_level': total_size / len(order_book_levels) if order_book_levels else 0,
+            'avg_size_per_level': total_size / len (order_book_levels) if order_book_levels else 0,
             'interpretation': f'{size_1pct:,} shares available within 1% of mid'
         }
     
     @staticmethod
-    def calculate_resilience(price_series: np.array,
+    def calculate_resilience (price_series: np.array,
                             volume_series: np.array,
                             window: int = 20) -> Dict:
         """
@@ -98,13 +98,13 @@ class LiquidityMetrics:
         Low resilience = permanent impact
         """
         # Calculate autocorrelation of returns
-        returns = np.diff(price_series) / price_series[:-1]
+        returns = np.diff (price_series) / price_series[:-1]
         
-        if len(returns) < 2:
+        if len (returns) < 2:
             return {'autocorrelation': 0, 'half_life': 0}
         
         # Autocorrelation at lag 1
-        autocorr = np.corrcoef(returns[:-1], returns[1:])[0, 1] if len(returns) > 1 else 0
+        autocorr = np.corrcoef (returns[:-1], returns[1:])[0, 1] if len (returns) > 1 else 0
         
         # Half-life of price impact (simplified)
         # If autocorr < 0, price mean-reverts quickly
@@ -121,7 +121,7 @@ class LiquidityMetrics:
         }
     
     @staticmethod
-    def calculate_amihud_illiquidity(returns: np.array,
+    def calculate_amihud_illiquidity (returns: np.array,
                                     volumes: np.array) -> Dict:
         """
         Amihud (2002) illiquidity ratio
@@ -131,7 +131,7 @@ class LiquidityMetrics:
         High ratio = illiquid (large price move per dollar traded)
         """
         # Absolute returns
-        abs_returns = np.abs(returns)
+        abs_returns = np.abs (returns)
         
         # Dollar volume (simplified: use shares as proxy)
         dollar_volumes = volumes
@@ -139,7 +139,7 @@ class LiquidityMetrics:
         # Illiquidity ratio
         illiq_ratios = abs_returns / (dollar_volumes + 1e-10)  # Avoid division by zero
         
-        avg_illiq = np.mean(illiq_ratios)
+        avg_illiq = np.mean (illiq_ratios)
         
         # Normalize to interpretable scale (multiply by 1e6)
         scaled_illiq = avg_illiq * 1e6
@@ -153,13 +153,13 @@ class LiquidityMetrics:
 # Example: Spread metrics
 metrics = LiquidityMetrics()
 
-spread_analysis = metrics.calculate_spread_metrics(bid=100.00, ask=100.10)
+spread_analysis = metrics.calculate_spread_metrics (bid=100.00, ask=100.10)
 
 print("=== Liquidity Metrics ===\\n")
 print("1. Spread Analysis:")
-print(f"  Absolute Spread: ${spread_analysis['absolute_spread']:.2f}")
+print(f"  Absolute Spread: \${spread_analysis['absolute_spread']:.2f}")
 print(f"  Relative Spread: {spread_analysis['relative_spread_bps']:.1f} bps")
-print(f"  Half Spread: ${spread_analysis['half_spread']:.2f}")
+print(f"  Half Spread: \${spread_analysis['half_spread']:.2f}")
 print(f"  {spread_analysis['interpretation']}")
 
 # Example: Depth
@@ -171,7 +171,7 @@ order_book = [
     (101.00, 1000)
 ]
 
-depth_analysis = metrics.calculate_depth(order_book, reference_price = 100.00)
+depth_analysis = metrics.calculate_depth (order_book, reference_price = 100.00)
 
 print("\\n2. Market Depth:")
 print(f"  Total Depth: {depth_analysis['total_depth']:,} shares")
@@ -182,7 +182,7 @@ print(f"  {depth_analysis['interpretation']}")
 price_series = np.array([100, 100.5, 100.2, 100.1, 100.0, 100.3, 100.1, 100.0])
 volume_series = np.array([1000, 1500, 1200, 1000, 900, 1100, 1000, 950])
 
-resilience_analysis = metrics.calculate_resilience(price_series, volume_series)
+resilience_analysis = metrics.calculate_resilience (price_series, volume_series)
 
 print("\\n3. Resilience:")
 print(f"  Autocorrelation: {resilience_analysis['autocorrelation']:.3f}")
@@ -194,7 +194,7 @@ print(f"  {resilience_analysis['interpretation']}")
 returns = np.random.normal(0, 0.02, 100)  # 2 % daily vol
 volumes = np.random.lognormal(10, 0.5, 100)
 
-amihud_analysis = metrics.calculate_amihud_illiquidity(returns, volumes)
+amihud_analysis = metrics.calculate_amihud_illiquidity (returns, volumes)
 
 print("\\n4. Amihud Illiquidity Ratio:")
 print(f"  Ratio: {amihud_analysis['scaled_ratio']:.3f}")
@@ -216,7 +216,7 @@ class MarketImpactModels:
     """
     
     @staticmethod
-    def square_root_law(order_size: int,
+    def square_root_law (order_size: int,
                        adv: int,  # Average Daily Volume
                        volatility: float,
                        participation_rate: Optional[float] = None) -> Dict:
@@ -239,7 +239,7 @@ class MarketImpactModels:
         gamma = 0.8
         
         # Temporary impact
-        temporary_impact_bps = gamma * volatility * np.sqrt(participation_rate) * 10000
+        temporary_impact_bps = gamma * volatility * np.sqrt (participation_rate) * 10000
         
         # Permanent impact (usually 30-50% of temporary)
         permanent_impact_bps = 0.4 * temporary_impact_bps
@@ -265,7 +265,7 @@ class MarketImpactModels:
         }
     
     @staticmethod
-    def almgren_chriss_model(order_size: int,
+    def almgren_chriss_model (order_size: int,
                             total_time_hours: float,
                             volatility_annual: float,
                             adv: int,
@@ -282,10 +282,10 @@ class MarketImpactModels:
         # Convert annual vol to per-period vol
         periods_per_day = 6.5  # Trading hours
         periods_per_year = 252 * periods_per_day
-        vol_per_period = volatility_annual / np.sqrt(periods_per_year)
+        vol_per_period = volatility_annual / np.sqrt (periods_per_year)
         
         # Number of periods
-        num_periods = int(total_time_hours * periods_per_day)
+        num_periods = int (total_time_hours * periods_per_day)
         
         # Market impact parameters (simplified)
         temp_impact_coef = 0.1  # Temporary impact per share
@@ -295,17 +295,17 @@ class MarketImpactModels:
         # Faster trading if: low volatility (low timing risk)
         # Slower trading if: high volatility (high timing risk)
         
-        kappa = np.sqrt(risk_aversion * vol_per_period**2 / temp_impact_coef)
+        kappa = np.sqrt (risk_aversion * vol_per_period**2 / temp_impact_coef)
         
         # Trade trajectory
         trajectory = []
-        for t in range(num_periods + 1):
+        for t in range (num_periods + 1):
             # Remaining shares (exponential decay)
             remaining = order_size * np.exp(-kappa * t)
             trajectory.append({
                 'period': t,
                 'time_hours': t / periods_per_day,
-                'remaining_shares': int(remaining),
+                'remaining_shares': int (remaining),
                 'pct_complete': (1 - remaining / order_size) * 100
             })
         
@@ -322,7 +322,7 @@ class MarketImpactModels:
             'execution_time_hours': total_time_hours,
             'num_periods': num_periods,
             'strategy_aggressiveness': 'Aggressive' if kappa > 0.1 else 'Patient',
-            'trajectory': trajectory[:min(5, len(trajectory))],  # Show first 5
+            'trajectory': trajectory[:min(5, len (trajectory))],  # Show first 5
             'expected_impact_cost': expected_impact_cost,
             'expected_timing_risk': expected_timing_risk,
             'total_expected_cost': total_expected_cost
@@ -344,7 +344,7 @@ print(f"  Order: {small_order['order_size']:,} shares")
 print(f"  ADV: {small_order['adv']:,}")
 print(f"  Participation: {small_order['participation_rate']:.1f}%")
 print(f"  Total Impact: {small_order['total_impact_bps']:.1f} bps")
-print(f"  Cost: ${small_order['total_cost']:, .0f}")
+print(f"  Cost: \${small_order['total_cost']:,.0f}")
 print(f"  {small_order['key_insight']}")
 
 # Large order(4x size)
@@ -357,7 +357,7 @@ large_order = impact_model.square_root_law(
 print(f"\\n2. Square-Root Law (Large Order - 4x size):")
 print(f"  Order: {large_order['order_size']:,} shares")
 print(f"  Total Impact: {large_order['total_impact_bps']:.1f} bps")
-print(f"  Cost: ${large_order['total_cost']:,.0f}")
+print(f"  Cost: \${large_order['total_cost']:,.0f}")
 print(f"  Impact ratio: {large_order['total_impact_bps']/small_order['total_impact_bps']:.2f}x (not 4x!)")
 
 # Almgren - Chriss optimal execution
@@ -377,7 +377,7 @@ for step in optimal['trajectory']:
     print(f"    T+{step['time_hours']:.2f}h: {step['remaining_shares']:,} shares remaining ({step['pct_complete']:.0f}% done)")
 \`\`\`
 
-**Key Insight**: Impact ~ sqrt(size). To trade 4x more, impact only 2x!
+**Key Insight**: Impact ~ sqrt (size). To trade 4x more, impact only 2x!
 
 ---
 
@@ -396,7 +396,7 @@ class OptimalExecution:
         self.adv = adv
         self.volatility = volatility
     
-    def aggressive_strategy(self, time_hours: float = 0.5) -> Dict:
+    def aggressive_strategy (self, time_hours: float = 0.5) -> Dict:
         """
         Aggressive: Execute quickly
         
@@ -429,7 +429,7 @@ class OptimalExecution:
             'use_when': 'Low volatility, urgent execution'
         }
     
-    def patient_strategy(self, time_hours: float = 4.0) -> Dict:
+    def patient_strategy (self, time_hours: float = 4.0) -> Dict:
         """
         Patient: Execute slowly
         
@@ -462,7 +462,7 @@ class OptimalExecution:
             'use_when': 'High volatility, patient capital'
         }
     
-    def adaptive_strategy(self) -> Dict:
+    def adaptive_strategy (self) -> Dict:
         """
         Adaptive: Adjust based on market conditions
         
@@ -536,7 +536,7 @@ class MarketImpactEstimator:
         self.historical_data = {}
         self.models = ['square_root', 'almgren_chriss', 'ml_model']
     
-    def estimate_impact(self,
+    def estimate_impact (self,
                        symbol: str,
                        order_size: int,
                        side: str,
@@ -562,7 +562,7 @@ class MarketImpactEstimator:
         spread_cost_bps = spread_bps / 2  # Half-spread
         
         # Model 3: Empirical (if have historical data)
-        empirical_cost_bps = self.get_empirical_cost(symbol, order_size, adv)
+        empirical_cost_bps = self.get_empirical_cost (symbol, order_size, adv)
         
         # Ensemble: Weighted average
         if order_size < adv * 0.01:  # <1% ADV
@@ -589,10 +589,10 @@ class MarketImpactEstimator:
                 'temporary_impact': sqrt_estimate['temporary_impact_bps'],
                 'permanent_impact': sqrt_estimate['permanent_impact_bps']
             },
-            'recommendation': self.recommend_strategy(order_size, adv, volatility)
+            'recommendation': self.recommend_strategy (order_size, adv, volatility)
         }
     
-    def get_empirical_cost(self, symbol: str, order_size: int, adv: int) -> float:
+    def get_empirical_cost (self, symbol: str, order_size: int, adv: int) -> float:
         """
         Use historical execution data
         
@@ -600,9 +600,9 @@ class MarketImpactEstimator:
         """
         # Simplified: Use square-root as proxy
         participation = order_size / adv
-        return 10 * np.sqrt(participation) * 10000  # bps
+        return 10 * np.sqrt (participation) * 10000  # bps
     
-    def recommend_strategy(self, order_size: int, adv: int, volatility: float) -> str:
+    def recommend_strategy (self, order_size: int, adv: int, volatility: float) -> str:
         """
         Recommend execution strategy
         """
@@ -619,7 +619,7 @@ class MarketImpactEstimator:
         else:
             return "SPREAD OVER MULTIPLE DAYS (size > 20% ADV)"
     
-    def backtest_model(self,
+    def backtest_model (self,
                       historical_trades: List[Dict]) -> Dict:
         """
         Validate impact model accuracy
@@ -640,19 +640,19 @@ class MarketImpactEstimator:
             
             actual = trade['realized_impact_bps']
             
-            predictions.append(predicted)
-            actuals.append(actual)
+            predictions.append (predicted)
+            actuals.append (actual)
         
         # Calculate metrics
-        predictions = np.array(predictions)
-        actuals = np.array(actuals)
+        predictions = np.array (predictions)
+        actuals = np.array (actuals)
         
         mse = np.mean((predictions - actuals) ** 2)
-        rmse = np.sqrt(mse)
-        mae = np.mean(np.abs(predictions - actuals))
+        rmse = np.sqrt (mse)
+        mae = np.mean (np.abs (predictions - actuals))
         
         return {
-            'num_trades': len(historical_trades),
+            'num_trades': len (historical_trades),
             'rmse_bps': rmse,
             'mae_bps': mae,
             'model_quality': 'Excellent' if rmse < 5 else 'Good' if rmse < 10 else 'Poor'
@@ -692,7 +692,7 @@ print(f"\\nRecommendation: {estimate['recommendation']}")
 **Key Takeaways:**
 
 1. **Liquidity Dimensions**: Spread (tightness), depth, resilience
-2. **Square-Root Law**: Impact ~ sqrt(size), not linear!
+2. **Square-Root Law**: Impact ~ sqrt (size), not linear!
 3. **Impact Components**: Temporary (recovers) + permanent (doesn't)
 4. **Optimal Execution**: Balance impact vs timing risk
 5. **Strategy**: Aggressive (low vol), patient (high vol), adaptive (best)
@@ -711,15 +711,18 @@ print(f"\\nRecommendation: {estimate['recommendation']}")
 
 You now understand liquidity - the hidden cost of trading!
 `,
-    exercises: [
-        {
-            prompt: "Build a market impact simulator that implements the square-root law, takes order size and ADV as inputs, calculates temporary and permanent impact, compares impact for orders of 1%, 5%, 10%, 20% of ADV, and visualizes impact curve showing non-linear relationship.",
-            solution: "// Implementation: 1) Input: order_size, ADV, volatility, 2) Calculate participation = order_size / ADV, 3) Square-root impact = 0.8 × vol × sqrt(participation) × 10000 bps, 4) Temporary = 60% of impact, Permanent = 40%, 5) Test sizes: [0.01, 0.05, 0.10, 0.20] of ADV, 6) Plot: x-axis = participation %, y-axis = impact bps, 7) Show: 4x size → 2x impact (square-root), 8) Calculate $cost: impact_bps/10000 × avg_price × shares"
-        },
-        {
-            prompt: "Create an optimal execution strategy selector that takes order parameters (size, ADV, volatility, urgency), calculates expected costs for market order, TWAP, VWAP, and Almgren-Chriss optimal, compares total cost (impact + timing risk), and recommends best strategy with rationale.",
-            solution: "// Implementation: 1) Market order: spread/2 + full impact immediately, no timing risk, 2) TWAP: spread/2 + impact/N slices, medium timing risk, 3) VWAP: spread/2 + impact × (1-0.3) volume-weighting, medium timing risk, 4) Optimal: minimize (impact + risk_aversion × timing_variance), depends on volatility, 5) For each: calc expected cost in bps, 6) Compare: Low vol → aggressive (market), High vol → patient (VWAP), 7) Output: recommended strategy + expected savings vs naive market order"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a market impact simulator that implements the square-root law, takes order size and ADV as inputs, calculates temporary and permanent impact, compares impact for orders of 1%, 5%, 10%, 20% of ADV, and visualizes impact curve showing non-linear relationship.',
+      solution:
+        '// Implementation: 1) Input: order_size, ADV, volatility, 2) Calculate participation = order_size / ADV, 3) Square-root impact = 0.8 × vol × sqrt (participation) × 10000 bps, 4) Temporary = 60% of impact, Permanent = 40%, 5) Test sizes: [0.01, 0.05, 0.10, 0.20] of ADV, 6) Plot: x-axis = participation %, y-axis = impact bps, 7) Show: 4x size → 2x impact (square-root), 8) Calculate $cost: impact_bps/10000 × avg_price × shares',
+    },
+    {
+      prompt:
+        'Create an optimal execution strategy selector that takes order parameters (size, ADV, volatility, urgency), calculates expected costs for market order, TWAP, VWAP, and Almgren-Chriss optimal, compares total cost (impact + timing risk), and recommends best strategy with rationale.',
+      solution:
+        '// Implementation: 1) Market order: spread/2 + full impact immediately, no timing risk, 2) TWAP: spread/2 + impact/N slices, medium timing risk, 3) VWAP: spread/2 + impact × (1-0.3) volume-weighting, medium timing risk, 4) Optimal: minimize (impact + risk_aversion × timing_variance), depends on volatility, 5) For each: calc expected cost in bps, 6) Compare: Low vol → aggressive (market), High vol → patient (VWAP), 7) Output: recommended strategy + expected savings vs naive market order',
+    },
+  ],
 };
-

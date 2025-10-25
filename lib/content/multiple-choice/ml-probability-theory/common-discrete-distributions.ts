@@ -27,7 +27,7 @@ export const commondiscretedistributionsMultipleChoice: MultipleChoiceQuestion[]
       ],
       correctAnswer: 1,
       explanation:
-        'The Binomial distribution Binomial(n, p) models the number of successes in n independent Bernoulli trials with success probability p. Here n=10 flips, p=0.5 for fair coin.',
+        'The Binomial distribution Binomial (n, p) models the number of successes in n independent Bernoulli trials with success probability p. Here n=10 flips, p=0.5 for fair coin.',
     },
     {
       id: 'mc3',

@@ -70,25 +70,25 @@ class LSTMCell:
         combined_size = hidden_size + input_size
         
         # Forget gate
-        self.W_f = np.random.randn(hidden_size, combined_size) * 0.01
+        self.W_f = np.random.randn (hidden_size, combined_size) * 0.01
         self.b_f = np.zeros((hidden_size, 1))
         
         # Input gate
-        self.W_i = np.random.randn(hidden_size, combined_size) * 0.01
+        self.W_i = np.random.randn (hidden_size, combined_size) * 0.01
         self.b_i = np.zeros((hidden_size, 1))
         
         # Candidate gate
-        self.W_c = np.random.randn(hidden_size, combined_size) * 0.01
+        self.W_c = np.random.randn (hidden_size, combined_size) * 0.01
         self.b_c = np.zeros((hidden_size, 1))
         
         # Output gate
-        self.W_o = np.random.randn(hidden_size, combined_size) * 0.01
+        self.W_o = np.random.randn (hidden_size, combined_size) * 0.01
         self.b_o = np.zeros((hidden_size, 1))
     
-    def sigmoid(self, x):
+    def sigmoid (self, x):
         return 1 / (1 + np.exp(-x))
     
-    def forward(self, x_t, h_prev, c_prev):
+    def forward (self, x_t, h_prev, c_prev):
         """
         Forward pass through LSTM cell.
         
@@ -105,22 +105,22 @@ class LSTMCell:
         combined = np.vstack([h_prev, x_t])  # (hidden_size + input_size, 1)
         
         # Forget gate: What to forget from cell state
-        f_t = self.sigmoid(np.dot(self.W_f, combined) + self.b_f)
+        f_t = self.sigmoid (np.dot (self.W_f, combined) + self.b_f)
         
         # Input gate: What new information to store
-        i_t = self.sigmoid(np.dot(self.W_i, combined) + self.b_i)
+        i_t = self.sigmoid (np.dot (self.W_i, combined) + self.b_i)
         
         # Candidate cell state: New candidate values
-        c_tilde = np.tanh(np.dot(self.W_c, combined) + self.b_c)
+        c_tilde = np.tanh (np.dot (self.W_c, combined) + self.b_c)
         
         # Update cell state
         c_t = f_t * c_prev + i_t * c_tilde
         
         # Output gate: What to output
-        o_t = self.sigmoid(np.dot(self.W_o, combined) + self.b_o)
+        o_t = self.sigmoid (np.dot (self.W_o, combined) + self.b_o)
         
         # New hidden state
-        h_t = o_t * np.tanh(c_t)
+        h_t = o_t * np.tanh (c_t)
         
         return h_t, c_t, (f_t, i_t, c_tilde, o_t)
 
@@ -130,15 +130,15 @@ print("=" * 60)
 
 input_size = 10
 hidden_size = 20
-lstm_cell = LSTMCell(input_size, hidden_size)
+lstm_cell = LSTMCell (input_size, hidden_size)
 
 # Initial states
 h_0 = np.zeros((hidden_size, 1))
 c_0 = np.zeros((hidden_size, 1))
 
 # Process sequence
-x = np.random.randn(input_size, 1)
-h_1, c_1, gates = lstm_cell.forward(x, h_0, c_0)
+x = np.random.randn (input_size, 1)
+h_1, c_1, gates = lstm_cell.forward (x, h_0, c_0)
 
 f_t, i_t, c_tilde, o_t = gates
 
@@ -228,7 +228,7 @@ h_t = o_t ⊙ tanh(C_t)
 
 \`\`\`python
 # Visualize gate behavior
-def visualize_lstm_gates(sequence_length=50):
+def visualize_lstm_gates (sequence_length=50):
     """Visualize how LSTM gates evolve over time."""
     
     # Simulate gate activations
@@ -238,7 +238,7 @@ def visualize_lstm_gates(sequence_length=50):
     output_gate = np.random.beta(3, 2, sequence_length) # Tends toward 0.6
     
     # Cell state evolution
-    cell_state = np.zeros(sequence_length)
+    cell_state = np.zeros (sequence_length)
     cell_state[0] = 0.5
     
     for t in range(1, sequence_length):
@@ -249,30 +249,30 @@ def visualize_lstm_gates(sequence_length=50):
     fig, axes = plt.subplots(4, 1, figsize=(14, 10))
     
     # Forget gate
-    axes[0].plot(forget_gate, color='red', linewidth=2)
-    axes[0].fill_between(range(sequence_length), 0, forget_gate, alpha=0.3, color='red')
+    axes[0].plot (forget_gate, color='red', linewidth=2)
+    axes[0].fill_between (range (sequence_length), 0, forget_gate, alpha=0.3, color='red')
     axes[0].set_ylabel('Forget Gate', fontsize=12)
     axes[0].set_title('LSTM Gate Activations Over Time', fontsize=14)
     axes[0].grid(True, alpha=0.3)
     axes[0].set_ylim([0, 1])
     
     # Input gate
-    axes[1].plot(input_gate, color='green', linewidth=2)
-    axes[1].fill_between(range(sequence_length), 0, input_gate, alpha=0.3, color='green')
+    axes[1].plot (input_gate, color='green', linewidth=2)
+    axes[1].fill_between (range (sequence_length), 0, input_gate, alpha=0.3, color='green')
     axes[1].set_ylabel('Input Gate', fontsize=12)
     axes[1].grid(True, alpha=0.3)
     axes[1].set_ylim([0, 1])
     
     # Output gate
-    axes[2].plot(output_gate, color='blue', linewidth=2)
-    axes[2].fill_between(range(sequence_length), 0, output_gate, alpha=0.3, color='blue')
+    axes[2].plot (output_gate, color='blue', linewidth=2)
+    axes[2].fill_between (range (sequence_length), 0, output_gate, alpha=0.3, color='blue')
     axes[2].set_ylabel('Output Gate', fontsize=12)
     axes[2].grid(True, alpha=0.3)
     axes[2].set_ylim([0, 1])
     
     # Cell state
-    axes[3].plot(cell_state, color='purple', linewidth=2)
-    axes[3].fill_between(range(sequence_length), 0, cell_state, alpha=0.3, color='purple')
+    axes[3].plot (cell_state, color='purple', linewidth=2)
+    axes[3].fill_between (range (sequence_length), 0, cell_state, alpha=0.3, color='purple')
     axes[3].set_ylabel('Cell State', fontsize=12)
     axes[3].set_xlabel('Timestep', fontsize=12)
     axes[3].grid(True, alpha=0.3)
@@ -313,9 +313,9 @@ class CharacterLSTM(nn.Module):
         self.num_layers = num_layers
         
         # Embedding layer
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         
-        # LSTM layer(s)
+        # LSTM layer (s)
         self.lstm = nn.LSTM(
             input_size=embedding_dim,
             hidden_size=hidden_size,
@@ -325,9 +325,9 @@ class CharacterLSTM(nn.Module):
         )
         
         # Output layer
-        self.fc = nn.Linear(hidden_size, vocab_size)
+        self.fc = nn.Linear (hidden_size, vocab_size)
     
-    def forward(self, x, hidden=None):
+    def forward (self, x, hidden=None):
         """
         Forward pass.
         
@@ -340,10 +340,10 @@ class CharacterLSTM(nn.Module):
             hidden: Tuple of (h_n, c_n)
         """
         # Embed characters
-        embedded = self.embedding(x)  # (batch, seq, embedding_dim)
+        embedded = self.embedding (x)  # (batch, seq, embedding_dim)
         
         # LSTM forward
-        lstm_out, hidden = self.lstm(embedded, hidden)
+        lstm_out, hidden = self.lstm (embedded, hidden)
         # lstm_out: (batch, seq, hidden_size)
         # hidden: tuple of (h_n, c_n), each (num_layers, batch, hidden_size)
         
@@ -352,17 +352,17 @@ class CharacterLSTM(nn.Module):
         lstm_out = lstm_out.contiguous().view(-1, hidden_size)
         
         # Output layer
-        output = self.fc(lstm_out)  # (batch * seq, vocab_size)
+        output = self.fc (lstm_out)  # (batch * seq, vocab_size)
         
         # Reshape back
-        output = output.view(batch_size, seq_length, -1)
+        output = output.view (batch_size, seq_length, -1)
         
         return output, hidden
     
-    def init_hidden(self, batch_size, device='cpu'):
+    def init_hidden (self, batch_size, device='cpu'):
         """Initialize hidden and cell states."""
-        h_0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(device)
-        c_0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(device)
+        h_0 = torch.zeros (self.num_layers, batch_size, self.hidden_size).to (device)
+        c_0 = torch.zeros (self.num_layers, batch_size, self.hidden_size).to (device)
         return (h_0, c_0)
 
 # Create LSTM model
@@ -377,17 +377,17 @@ print("PyTorch LSTM Model:")
 print(model)
 
 # Count parameters
-def count_params(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+def count_params (model):
+    return sum (p.numel() for p in model.parameters() if p.requires_grad)
 
-print(f"\\nTotal parameters: {count_params(model):,}")
+print(f"\\nTotal parameters: {count_params (model):,}")
 
 # Test forward pass
 batch_size = 32
 seq_length = 20
 x = torch.randint(0, vocab_size, (batch_size, seq_length))
 
-output, (h_n, c_n) = model(x)
+output, (h_n, c_n) = model (x)
 
 print(f"\\nInput shape: {x.shape}")
 print(f"Output shape: {output.shape}")
@@ -395,9 +395,9 @@ print(f"Final hidden state shape: {h_n.shape}")
 print(f"Final cell state shape: {c_n.shape}")
 
 # Parameter breakdown
-lstm_params = sum(p.numel() for p in model.lstm.parameters())
-embedding_params = sum(p.numel() for p in model.embedding.parameters())
-fc_params = sum(p.numel() for p in model.fc.parameters())
+lstm_params = sum (p.numel() for p in model.lstm.parameters())
+embedding_params = sum (p.numel() for p in model.embedding.parameters())
+fc_params = sum (p.numel() for p in model.fc.parameters())
 
 print(f"\\nParameter Breakdown:")
 print(f"  Embedding: {embedding_params:,}")
@@ -418,7 +418,7 @@ print(f"  Output FC: {fc_params:,}")
 
 Compare to vanilla RNN:
 \`\`\`
-∂h_t/∂h_{t-1} = W_hh × diag(tanh'(...))  (many matrices, <1 values)
+∂h_t/∂h_{t-1} = W_hh × diag (tanh'(...))  (many matrices, <1 values)
 \`\`\`
 
 **LSTM Advantage**:
@@ -436,22 +436,22 @@ def compare_gradient_flow():
     
     # RNN: Gradient multiplied by derivative at each step
     rnn_derivative = 0.25  # Typical tanh derivative
-    rnn_gradients = [(rnn_derivative ** t) for t in range(sequence_length)]
+    rnn_gradients = [(rnn_derivative ** t) for t in range (sequence_length)]
     
     # LSTM: Gradient mostly preserved through cell state
     lstm_forget_gate = 0.95  # Typical forget gate value
-    lstm_gradients = [(lstm_forget_gate ** t) for t in range(sequence_length)]
+    lstm_gradients = [(lstm_forget_gate ** t) for t in range (sequence_length)]
     
     # Plot
-    plt.figure(figsize=(14, 6))
+    plt.figure (figsize=(14, 6))
     
-    plt.semilogy(rnn_gradients, label='RNN (vanilla)', linewidth=2, color='red')
-    plt.semilogy(lstm_gradients, label='LSTM', linewidth=2, color='blue')
+    plt.semilogy (rnn_gradients, label='RNN (vanilla)', linewidth=2, color='red')
+    plt.semilogy (lstm_gradients, label='LSTM', linewidth=2, color='blue')
     
     plt.xlabel('Timesteps Back', fontsize=12)
     plt.ylabel('Gradient Magnitude (log scale)', fontsize=12)
     plt.title('Gradient Flow: RNN vs LSTM', fontsize=14)
-    plt.legend(fontsize=12)
+    plt.legend (fontsize=12)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
@@ -459,8 +459,8 @@ def compare_gradient_flow():
     print("Gradient Magnitudes:")
     print("=" * 60)
     for t in [10, 25, 50, 100]:
-        rnn_grad = rnn_gradients[t-1] if t <= len(rnn_gradients) else 0
-        lstm_grad = lstm_gradients[t-1] if t <= len(lstm_gradients) else 0
+        rnn_grad = rnn_gradients[t-1] if t <= len (rnn_gradients) else 0
+        lstm_grad = lstm_gradients[t-1] if t <= len (lstm_gradients) else 0
         print(f"After {t} steps:")
         print(f"  RNN:  {rnn_grad:.2e}")
         print(f"  LSTM: {lstm_grad:.4f}")
@@ -508,9 +508,9 @@ class CharacterGRU(nn.Module):
         self.num_layers = num_layers
         
         # Embedding
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.embedding = nn.Embedding (vocab_size, embedding_dim)
         
-        # GRU layer(s)
+        # GRU layer (s)
         self.gru = nn.GRU(
             input_size=embedding_dim,
             hidden_size=hidden_size,
@@ -520,9 +520,9 @@ class CharacterGRU(nn.Module):
         )
         
         # Output layer
-        self.fc = nn.Linear(hidden_size, vocab_size)
+        self.fc = nn.Linear (hidden_size, vocab_size)
     
-    def forward(self, x, hidden=None):
+    def forward (self, x, hidden=None):
         """
         Forward pass.
         
@@ -534,14 +534,14 @@ class CharacterGRU(nn.Module):
             output: (batch, seq_length, vocab_size)
             hidden: (num_layers, batch, hidden_size)
         """
-        embedded = self.embedding(x)
-        gru_out, hidden = self.gru(embedded, hidden)
+        embedded = self.embedding (x)
+        gru_out, hidden = self.gru (embedded, hidden)
         
         # Reshape and project
         batch_size, seq_length, _ = gru_out.shape
         gru_out = gru_out.contiguous().view(-1, self.hidden_size)
-        output = self.fc(gru_out)
-        output = output.view(batch_size, seq_length, -1)
+        output = self.fc (gru_out)
+        output = output.view (batch_size, seq_length, -1)
         
         return output, hidden
 
@@ -549,8 +549,8 @@ class CharacterGRU(nn.Module):
 lstm_model = CharacterLSTM(vocab_size, embedding_dim, hidden_size, num_layers)
 gru_model = CharacterGRU(vocab_size, embedding_dim, hidden_size, num_layers)
 
-lstm_params = count_params(lstm_model)
-gru_params = count_params(gru_model)
+lstm_params = count_params (lstm_model)
+gru_params = count_params (gru_model)
 
 print("LSTM vs GRU Comparison:")
 print("=" * 60)
@@ -561,8 +561,8 @@ print(f"Difference: {lstm_params - gru_params:,} ({(1 - gru_params/lstm_params)*
 # Test both
 x = torch.randint(0, vocab_size, (batch_size, seq_length))
 
-lstm_out, _ = lstm_model(x)
-gru_out, _ = gru_model(x)
+lstm_out, _ = lstm_model (x)
+gru_out, _ = gru_model (x)
 
 print(f"\\nOutput shapes (both identical):")
 print(f"  LSTM: {lstm_out.shape}")
@@ -615,7 +615,7 @@ comparison = pd.DataFrame([
 
 print("\\nLSTM vs GRU Detailed Comparison:")
 print("=" * 80)
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 
 print("\\n\\nWhen to Use LSTM:")
 print("✓ Large datasets (millions of samples)")

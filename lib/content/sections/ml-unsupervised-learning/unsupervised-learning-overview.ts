@@ -61,7 +61,7 @@ X, true_labels = make_blobs(
 )
 
 # Visualize: We have data but no labels
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X[:, 0], X[:, 1], alpha=0.6)
@@ -74,7 +74,7 @@ plt.scatter(X[:, 0], X[:, 1], c=true_labels, alpha=0.6, cmap='viridis')
 plt.title('True Structure (Unknown to Algorithm)')
 plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
-plt.colorbar(label='True Cluster')
+plt.colorbar (label='True Cluster')
 
 plt.tight_layout()
 plt.show()
@@ -112,7 +112,7 @@ X_customers = np.array([
 ])
 
 # Apply K-Means clustering
-kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans = KMeans (n_clusters=3, random_state=42)
 clusters = kmeans.fit_predict(X_customers)
 
 print("Customer Segments:", clusters)
@@ -121,7 +121,7 @@ print("Cluster Centers:", kmeans.cluster_centers_)
 # Visualize segments
 plt.scatter(X_customers[:, 0], X_customers[:, 1], 
             c=clusters, cmap='viridis', s=100, alpha=0.6)
-plt.scatter(kmeans.cluster_centers_[:, 0], 
+plt.scatter (kmeans.cluster_centers_[:, 0], 
             kmeans.cluster_centers_[:, 1],
             c='red', marker='X', s=200, label='Centroids')
 plt.xlabel('Annual Income (k$)')
@@ -165,10 +165,10 @@ print(f"Reduced dimensions: {X_reduced.shape}")
 print(f"Variance explained: {pca.explained_variance_ratio_.sum():.2%}")
 
 # Visualize reduced data
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 scatter = plt.scatter(X_reduced[:, 0], X_reduced[:, 1], 
                      c=digits.target, cmap='tab10', alpha=0.6)
-plt.colorbar(scatter, label='Digit')
+plt.colorbar (scatter, label='Digit')
 plt.xlabel('First Principal Component')
 plt.ylabel('Second Principal Component')
 plt.title('64D Digit Data Reduced to 2D with PCA')
@@ -201,11 +201,11 @@ X_outliers = np.random.randn(10, 2) * 2 + np.array([3, 3])
 X_mixed = np.vstack([X_normal, X_outliers])
 
 # Detect anomalies
-iso_forest = IsolationForest(contamination=0.1, random_state=42)
+iso_forest = IsolationForest (contamination=0.1, random_state=42)
 predictions = iso_forest.fit_predict(X_mixed)
 
 # Visualize
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X_mixed[predictions == 1, 0], 
             X_mixed[predictions == 1, 1],
             c='blue', label='Normal', alpha=0.6)
@@ -248,11 +248,11 @@ transactions = [
 milk_transactions = [t for t in transactions if 'milk' in t]
 milk_and_bread = [t for t in milk_transactions if 'bread' in t]
 
-support_milk = len(milk_transactions) / len(transactions)
-confidence_milk_bread = len(milk_and_bread) / len(milk_transactions)
+support_milk = len (milk_transactions) / len (transactions)
+confidence_milk_bread = len (milk_and_bread) / len (milk_transactions)
 
-print(f"Support(milk): {support_milk:.2%}")
-print(f"Confidence(milk → bread): {confidence_milk_bread:.2%}")
+print(f"Support (milk): {support_milk:.2%}")
+print(f"Confidence (milk → bread): {confidence_milk_bread:.2%}")
 print("If customer buys milk, they buy bread " + 
       f"{confidence_milk_bread:.0%} of the time")
 \`\`\`
@@ -272,7 +272,7 @@ customer_data = {
 }
 
 import pandas as pd
-df_customers = pd.DataFrame(customer_data)
+df_customers = pd.DataFrame (customer_data)
 
 # Clustering reveals customer segments:
 # - High-value frequent buyers
@@ -297,12 +297,12 @@ X_pixels = image.reshape(-1, 3)
 
 # K-means to find dominant colors
 n_colors = 16
-kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=42)
+kmeans = MiniBatchKMeans (n_clusters=n_colors, random_state=42)
 labels = kmeans.fit_predict(X_pixels)
 centers = kmeans.cluster_centers_
 
 # Reconstruct image with reduced colors
-compressed = centers[labels].reshape(h, w, c)
+compressed = centers[labels].reshape (h, w, c)
 
 print(f"Original: {X_pixels.shape[0]} unique colors")
 print(f"Compressed: {n_colors} colors")
@@ -356,11 +356,11 @@ print(f"Davies-Bouldin Index: {db_index:.3f}")
 from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 
 # Adjusted Rand Index: [-1, 1], 1 = perfect match
-ari = adjusted_rand_score(true_labels, clusters)
+ari = adjusted_rand_score (true_labels, clusters)
 print(f"Adjusted Rand Index: {ari:.3f}")
 
 # Normalized Mutual Information: [0, 1], 1 = perfect agreement
-nmi = normalized_mutual_info_score(true_labels, clusters)
+nmi = normalized_mutual_info_score (true_labels, clusters)
 print(f"Normalized Mutual Information: {nmi:.3f}")
 \`\`\`
 
@@ -445,7 +445,7 @@ comparison = pd.DataFrame({
                      'More complex', 'Clustering, Dimensionality reduction']
 })
 
-print(comparison.to_string(index=False))
+print(comparison.to_string (index=False))
 \`\`\`
 
 ## Python Libraries for Unsupervised Learning
@@ -472,7 +472,7 @@ from sklearn.pipeline import Pipeline
 pipeline = Pipeline([
     ('scaler', StandardScaler()),
     ('pca', PCA(n_components=0.95)),  # Keep 95% variance
-    ('clustering', KMeans(n_clusters=3))
+    ('clustering', KMeans (n_clusters=3))
 ])
 
 # Fit and predict

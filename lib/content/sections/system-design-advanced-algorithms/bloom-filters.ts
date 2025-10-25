@@ -63,7 +63,7 @@ Hash functions:
 h1(x), h2(x), h3(x)  (k = 3)
 \`\`\`
 
-### Insertion: add(element)
+### Insertion: add (element)
 
 To add element "alice":
 1. Apply each hash function: h₁("alice"), h₂("alice"), h₃("alice")
@@ -92,7 +92,7 @@ After inserting "bob":
 
 **Time complexity**: O(k) where k = number of hash functions
 
-### Lookup: contains(element)
+### Lookup: contains (element)
 
 To check if element "alice" is in the set:
 1. Apply each hash function
@@ -170,7 +170,7 @@ False positive probability ≈ (1 - e^(-kn/m))^k
 
 For desired false positive rate \`p\`:
 \`\`\`
-m = -n * ln(p) / (ln(2))²
+m = -n * ln (p) / (ln(2))²
 
 Example: For 1% false positive rate (p = 0.01):
 m ≈ 9.6 bits per element
@@ -203,20 +203,20 @@ Need k independent hash functions. Options:
 import hashlib
 
 def hash1(item):
-    return int(hashlib.md5(item).hexdigest(), 16) % m
+    return int (hashlib.md5(item).hexdigest(), 16) % m
 
 def hash2(item):
-    return int(hashlib.sha1(item).hexdigest(), 16) % m
+    return int (hashlib.sha1(item).hexdigest(), 16) % m
 \`\`\`
 
 **Option 2: Double hashing (more efficient)**
 \`\`\`python
-def get_hashes(item, k, m):
-    h1 = hash(item) % m
-    h2 = hash(item + "salt") % m
+def get_hashes (item, k, m):
+    h1 = hash (item) % m
+    h2 = hash (item + "salt") % m
     
     # Generate k hashes from 2 hash functions
-    return [(h1 + i * h2) % m for i in range(k)]
+    return [(h1 + i * h2) % m for i in range (k)]
 \`\`\`
 
 ### Python Implementation
@@ -228,28 +228,28 @@ class BloomFilter:
         self.num_hashes = num_hashes
         self.bit_array = [0] * size
     
-    def _get_hashes(self, item):
+    def _get_hashes (self, item):
         """Generate k hash values using double hashing"""
-        h1 = hash(item) % self.size
-        h2 = hash(str(item) + "salt") % self.size
+        h1 = hash (item) % self.size
+        h2 = hash (str (item) + "salt") % self.size
         
         return [(h1 + i * h2) % self.size 
-                for i in range(self.num_hashes)]
+                for i in range (self.num_hashes)]
     
-    def add(self, item):
+    def add (self, item):
         """Add item to Bloom filter"""
-        for index in self._get_hashes(item):
+        for index in self._get_hashes (item):
             self.bit_array[index] = 1
     
-    def contains(self, item):
+    def contains (self, item):
         """Check if item might be in set"""
-        for index in self._get_hashes(item):
+        for index in self._get_hashes (item):
             if self.bit_array[index] == 0:
                 return False  # Definitely not in set
         return True  # Probably in set
 
 # Usage
-bf = BloomFilter(size=1000, num_hashes=7)
+bf = BloomFilter (size=1000, num_hashes=7)
 
 bf.add("alice")
 bf.add("bob")
@@ -420,15 +420,15 @@ BF1 (full)  → BF2 (active) → BF3 (ready)
 ### 1. Sizing Your Bloom Filter
 
 \`\`\`python
-def calculate_bloom_filter_size(n, false_positive_rate):
+def calculate_bloom_filter_size (n, false_positive_rate):
     """
     n: expected number of elements
     false_positive_rate: desired FPR (e.g., 0.01 for 1%)
     """
-    m = -(n * math.log(false_positive_rate)) / (math.log(2) ** 2)
+    m = -(n * math.log (false_positive_rate)) / (math.log(2) ** 2)
     k = (m / n) * math.log(2)
     
-    return int(m), int(k)
+    return int (m), int (k)
 
 # Example: 1 million URLs, 1% FPR
 m, k = calculate_bloom_filter_size(1_000_000, 0.01)
@@ -444,15 +444,15 @@ class MonitoredBloomFilter(BloomFilter):
         super().__init__(*args, **kwargs)
         self.num_elements = 0
     
-    def add(self, item):
-        super().add(item)
+    def add (self, item):
+        super().add (item)
         self.num_elements += 1
     
-    def get_fill_ratio(self):
+    def get_fill_ratio (self):
         """Percentage of bits set to 1"""
-        return sum(self.bit_array) / len(self.bit_array)
+        return sum (self.bit_array) / len (self.bit_array)
     
-    def estimated_fpr(self):
+    def estimated_fpr (self):
         """Estimate current false positive rate"""
         ratio = self.get_fill_ratio()
         return ratio ** self.num_hashes
@@ -460,7 +460,7 @@ class MonitoredBloomFilter(BloomFilter):
 # Monitor and rebuild if needed
 if bf.estimated_fpr() > 0.05:  # 5% threshold
     # Rebuild with larger size
-    new_bf = BloomFilter(size=bf.size * 2, num_hashes=bf.num_hashes)
+    new_bf = BloomFilter (size=bf.size * 2, num_hashes=bf.num_hashes)
 \`\`\`
 
 ### 3. Distributed Bloom Filters
@@ -473,15 +473,15 @@ import redis
 
 r = redis.Redis()
 
-def add_to_redis_bloom(key, item, k, m):
+def add_to_redis_bloom (key, item, k, m):
     """Add item to Redis-backed Bloom filter"""
-    for i in get_hashes(item, k, m):
-        r.setbit(key, i, 1)
+    for i in get_hashes (item, k, m):
+        r.setbit (key, i, 1)
 
-def check_redis_bloom(key, item, k, m):
+def check_redis_bloom (key, item, k, m):
     """Check if item in Redis Bloom filter"""
-    for i in get_hashes(item, k, m):
-        if not r.getbit(key, i):
+    for i in get_hashes (item, k, m):
+        if not r.getbit (key, i):
             return False
     return True
 \`\`\`
@@ -509,7 +509,7 @@ def check_redis_bloom(key, item, k, m):
 
 **"How do you size a Bloom filter?"**
 - Depends on n (elements) and desired false positive rate
-- Formula: m = -n ln(p) / (ln 2)²
+- Formula: m = -n ln (p) / (ln 2)²
 - Common: 10 bits per element for 1% FPR
 
 **"When would you use a Bloom filter?"**

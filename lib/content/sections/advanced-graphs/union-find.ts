@@ -8,8 +8,8 @@ export const unionfindSection = {
   content: `**Union-Find** (also called Disjoint Set Union or DSU) is a data structure that tracks elements partitioned into disjoint (non-overlapping) sets.
 
 **Core Operations:**
-- \`find(x)\`: Find which set x belongs to (returns representative/root)
-- \`union(x, y)\`: Merge the sets containing x and y
+- \`find (x)\`: Find which set x belongs to (returns representative/root)
+- \`union (x, y)\`: Merge the sets containing x and y
 
 **Applications:**
 - **Kruskal's MST algorithm**
@@ -22,18 +22,18 @@ export const unionfindSection = {
 \`\`\`python
 class UnionFind:
     def __init__(self, n):
-        self.parent = list(range(n))  # Each node is its own parent
+        self.parent = list (range (n))  # Each node is its own parent
     
-    def find(self, x):
+    def find (self, x):
         """Find root of x"""
         if self.parent[x] != x:
-            return self.find(self.parent[x])
+            return self.find (self.parent[x])
         return x
     
-    def union(self, x, y):
+    def union (self, x, y):
         """Merge sets containing x and y"""
-        root_x = self.find(x)
-        root_y = self.find(y)
+        root_x = self.find (x)
+        root_y = self.find (y)
         if root_x != root_y:
             self.parent[root_x] = root_y
 \`\`\`
@@ -42,9 +42,9 @@ class UnionFind:
 Make tree flatter by pointing nodes directly to root during find.
 
 \`\`\`python
-def find(self, x):
+def find (self, x):
     if self.parent[x] != x:
-        self.parent[x] = self.find(self.parent[x])  # Path compression!
+        self.parent[x] = self.find (self.parent[x])  # Path compression!
     return self.parent[x]
 \`\`\`
 
@@ -54,17 +54,17 @@ Attach smaller tree under larger tree to keep trees balanced.
 \`\`\`python
 class UnionFind:
     def __init__(self, n):
-        self.parent = list(range(n))
+        self.parent = list (range (n))
         self.rank = [0] * n  # Tree height
     
-    def find(self, x):
+    def find (self, x):
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
+            self.parent[x] = self.find (self.parent[x])
         return self.parent[x]
     
-    def union(self, x, y):
-        root_x = self.find(x)
-        root_y = self.find(y)
+    def union (self, x, y):
+        root_x = self.find (x)
+        root_y = self.find (y)
         
         if root_x == root_y:
             return False  # Already in same set
@@ -87,12 +87,12 @@ class UnionFind:
 
 **Common Pattern - Cycle Detection:**
 \`\`\`python
-def has_cycle(edges, n):
-    uf = UnionFind(n)
+def has_cycle (edges, n):
+    uf = UnionFind (n)
     for u, v in edges:
-        if uf.find(u) == uf.find(v):
+        if uf.find (u) == uf.find (v):
             return True  # Cycle detected!
-        uf.union(u, v)
+        uf.union (u, v)
     return False
 \`\`\``,
 };

@@ -81,7 +81,7 @@ class KafkaMLPipeline:
             ]
         }
     
-    def explain_architecture(self):
+    def explain_architecture (self):
         """
         Real-time ML architecture
         """
@@ -121,7 +121,7 @@ class SimulatedKafkaConsumer:
         self.topic = topic
         self.messages = []
     
-    def consume(self, timeout=1.0):
+    def consume (self, timeout=1.0):
         """
         Consume messages
         """
@@ -132,7 +132,7 @@ class SimulatedKafkaConsumer:
         if random.random() > 0.3:  # 70% chance of message
             msg = {
                 "user_id": random.randint(1000, 9999),
-                "transaction_amount": round(random.uniform(10, 1000), 2),
+                "transaction_amount": round (random.uniform(10, 1000), 2),
                 "merchant_id": random.randint(100, 999),
                 "timestamp": time.time()
             }
@@ -150,7 +150,7 @@ class RealTimePredictionService:
         self.model = model
         self.predictions_made = 0
     
-    def compute_features(self, event):
+    def compute_features (self, event):
         """
         Compute features from event
         
@@ -171,7 +171,7 @@ class RealTimePredictionService:
         
         return features
     
-    def predict_realtime(self, consumer, producer, max_events=10):
+    def predict_realtime (self, consumer, producer, max_events=10):
         """
         Real-time prediction loop
         """
@@ -180,7 +180,7 @@ class RealTimePredictionService:
         
         import time
         
-        for i in range(max_events):
+        for i in range (max_events):
             # Consume event
             event = consumer.consume()
             
@@ -192,11 +192,11 @@ class RealTimePredictionService:
             start = time.time()
             
             # Compute features
-            features = self.compute_features(event)
+            features = self.compute_features (event)
             
             # Predict
-            prediction = self.model.predict(features)[0]
-            prediction_proba = self.model.predict_proba(features)[0]
+            prediction = self.model.predict (features)[0]
+            prediction_proba = self.model.predict_proba (features)[0]
             
             # Compute latency
             latency_ms = (time.time() - start) * 1000
@@ -204,20 +204,19 @@ class RealTimePredictionService:
             # Produce prediction
             result = {
                 "user_id": event['user_id'],
-                "prediction": int(prediction),
-                "confidence": float(prediction_proba[prediction]),
+                "prediction": int (prediction),
+                "confidence": float (prediction_proba[prediction]),
                 "latency_ms": latency_ms
             }
             
-            producer.produce(result)
+            producer.produce (result)
             
             self.predictions_made += 1
             
             # Log
             label = "FRAUD" if prediction == 1 else "LEGIT"
             print(f"Event {i+1}: User {event['user_id']}, "
-                  f"Amount \${event['transaction_amount']: .2f
-} → "
+                  f"Amount \${event['transaction_amount']:.2f} → "
                   f"{label} (confidence: {result['confidence']:.2f}, "
                   f"latency: {latency_ms:.1f}ms)")
 
@@ -232,11 +231,11 @@ class SimulatedKafkaProducer:
     def __init__(self, topic):
 self.topic = topic
     
-    def produce(self, message):
+    def produce (self, message):
 """
         Produce message to topic
 """
-        # In production: kafka.send(topic, message)
+        # In production: kafka.send (topic, message)
 pass
 
 
@@ -244,10 +243,10 @@ pass
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 
-# Train model(simplified)
+# Train model (simplified)
 X = np.random.randn(1000, 4)
-y = (X[:, 0] > 0.5).astype(int)  # Simple rule
-model = RandomForestClassifier(n_estimators = 50, random_state = 42)
+y = (X[:, 0] > 0.5).astype (int)  # Simple rule
+model = RandomForestClassifier (n_estimators = 50, random_state = 42)
 model.fit(X, y)
 
 # Setup pipeline
@@ -257,10 +256,10 @@ pipeline.explain_architecture()
 # Setup services
 consumer = SimulatedKafkaConsumer('raw_events')
 producer = SimulatedKafkaProducer('predictions')
-prediction_service = RealTimePredictionService(model)
+prediction_service = RealTimePredictionService (model)
 
 # Run real - time predictions
-prediction_service.predict_realtime(consumer, producer, max_events = 10)
+prediction_service.predict_realtime (consumer, producer, max_events = 10)
 \`\`\`
 
 ---
@@ -303,7 +302,7 @@ class LatencyOptimization:
             ]
         }
     
-    def model_quantization_example(self):
+    def model_quantization_example (self):
         """
         Quantization: FP32 → INT8
         
@@ -319,13 +318,13 @@ class LatencyOptimization:
         import time
         
         # Simple model
-        class SimpleModel(nn.Module):
+        class SimpleModel (nn.Module):
             def __init__(self):
                 super().__init__()
                 self.fc = nn.Linear(100, 10)
             
-            def forward(self, x):
-                return self.fc(x)
+            def forward (self, x):
+                return self.fc (x)
         
         # Create model
         model_fp32 = SimpleModel()
@@ -344,13 +343,13 @@ class LatencyOptimization:
         
         # Save FP32
         fp32_path = tempfile.mktemp()
-        torch.save(model_fp32.state_dict(), fp32_path)
-        fp32_size_mb = os.path.getsize(fp32_path) / 1024 / 1024
+        torch.save (model_fp32.state_dict(), fp32_path)
+        fp32_size_mb = os.path.getsize (fp32_path) / 1024 / 1024
         
         # Save INT8
         int8_path = tempfile.mktemp()
-        torch.save(model_int8.state_dict(), int8_path)
-        int8_size_mb = os.path.getsize(int8_path) / 1024 / 1024
+        torch.save (model_int8.state_dict(), int8_path)
+        int8_size_mb = os.path.getsize (int8_path) / 1024 / 1024
         
         print(f"FP32 model size: {fp32_size_mb:.3f} MB")
         print(f"INT8 model size: {int8_size_mb:.3f} MB")
@@ -376,10 +375,10 @@ class LatencyOptimization:
         print(f"Speedup: {fp32_time_ms / int8_time_ms:.1f}x")
         
         # Cleanup
-        os.remove(fp32_path)
-        os.remove(int8_path)
+        os.remove (fp32_path)
+        os.remove (int8_path)
     
-    def feature_caching_strategy(self):
+    def feature_caching_strategy (self):
         """
         Cache expensive features
         """
@@ -409,7 +408,7 @@ class LatencyOptimization:
         print("    - Total: 13ms")
         print("\\n  → 6.9x speedup!")
     
-    def batching_strategy(self):
+    def batching_strategy (self):
         """
         Batching for throughput
         """
@@ -467,7 +466,7 @@ class OnlineLearning:
         self.model = model
         self.samples_seen = 0
     
-    def incremental_learning(self, X_stream, y_stream):
+    def incremental_learning (self, X_stream, y_stream):
         """
         Update model incrementally
         
@@ -479,14 +478,14 @@ class OnlineLearning:
         import numpy as np
         
         # Initialize online model
-        online_model = SGDClassifier(loss='log_loss', random_state=42)
+        online_model = SGDClassifier (loss='log_loss', random_state=42)
         
         # Initial fit (need at least one batch with all classes)
         initial_batch_size = 100
         X_initial = X_stream[:initial_batch_size]
         y_initial = y_stream[:initial_batch_size]
         
-        online_model.partial_fit(X_initial, y_initial, classes=np.unique(y_stream))
+        online_model.partial_fit(X_initial, y_initial, classes=np.unique (y_stream))
         
         print(f"Initial training on {initial_batch_size} samples")
         
@@ -494,7 +493,7 @@ class OnlineLearning:
         batch_size = 32
         n_updates = 0
         
-        for i in range(initial_batch_size, len(X_stream), batch_size):
+        for i in range (initial_batch_size, len(X_stream), batch_size):
             X_batch = X_stream[i:i+batch_size]
             y_batch = y_stream[i:i+batch_size]
             
@@ -518,7 +517,7 @@ class OnlineLearning:
         
         return online_model
     
-    def windowed_training(self, X_stream, y_stream, window_size=1000):
+    def windowed_training (self, X_stream, y_stream, window_size=1000):
         """
         Train on sliding window (forget old data)
         
@@ -534,22 +533,22 @@ class OnlineLearning:
         import numpy as np
         
         # Buffer
-        X_buffer = deque(maxlen=window_size)
-        y_buffer = deque(maxlen=window_size)
+        X_buffer = deque (maxlen=window_size)
+        y_buffer = deque (maxlen=window_size)
         
         # Process stream
         retrain_frequency = 100  # Retrain every 100 samples
-        model = RandomForestClassifier(n_estimators=50, random_state=42)
+        model = RandomForestClassifier (n_estimators=50, random_state=42)
         
-        for i, (x, y) in enumerate(zip(X_stream, y_stream)):
+        for i, (x, y) in enumerate (zip(X_stream, y_stream)):
             # Add to buffer
-            X_buffer.append(x)
-            y_buffer.append(y)
+            X_buffer.append (x)
+            y_buffer.append (y)
             
             # Retrain periodically
             if i % retrain_frequency == 0 and len(X_buffer) >= 100:
                 X_train = np.array(X_buffer)
-                y_train = np.array(y_buffer)
+                y_train = np.array (y_buffer)
                 
                 model.fit(X_train, y_train)
                 
@@ -605,7 +604,7 @@ class ConceptDriftDetector:
         self.window_size = window_size
         self.reference_window = None
     
-    def detect_covariate_shift(self, X_reference, X_current):
+    def detect_covariate_shift (self, X_reference, X_current):
         """
         Detect shift in feature distribution
         
@@ -624,23 +623,23 @@ class ConceptDriftDetector:
             cur_feature = X_current[:, feature_idx]
             
             # KS test
-            statistic, p_value = stats.ks_2samp(ref_feature, cur_feature)
+            statistic, p_value = stats.ks_2samp (ref_feature, cur_feature)
             
             # Drift if p < 0.05
             if p_value < 0.05:
                 drifted_features.append((feature_idx, p_value, statistic))
         
         if drifted_features:
-            print(f"🚨 Drift detected in {len(drifted_features)} features:")
+            print(f"🚨 Drift detected in {len (drifted_features)} features:")
             for feat_idx, p_val, stat in drifted_features:
                 print(f"  Feature {feat_idx}: p={p_val:.4f}, KS={stat:.4f}")
             print("\\n→ Recommend: Retrain model with recent data")
         else:
             print("✓ No significant drift detected")
         
-        return len(drifted_features) > 0
+        return len (drifted_features) > 0
     
-    def detect_prediction_drift(self, y_pred_reference, y_pred_current):
+    def detect_prediction_drift (self, y_pred_reference, y_pred_current):
         """
         Detect shift in predictions
         
@@ -651,17 +650,17 @@ class ConceptDriftDetector:
         import numpy as np
         
         # Compare distributions
-        ref_mean = np.mean(y_pred_reference)
-        cur_mean = np.mean(y_pred_current)
+        ref_mean = np.mean (y_pred_reference)
+        cur_mean = np.mean (y_pred_current)
         
-        ref_std = np.std(y_pred_reference)
-        cur_std = np.std(y_pred_current)
+        ref_std = np.std (y_pred_reference)
+        cur_std = np.std (y_pred_current)
         
         print(f"Reference predictions: mean={ref_mean:.3f}, std={ref_std:.3f}")
         print(f"Current predictions: mean={cur_mean:.3f}, std={cur_std:.3f}")
         
         # Simple threshold: >20% change in mean
-        mean_change = abs(cur_mean - ref_mean) / (ref_mean + 1e-8)
+        mean_change = abs (cur_mean - ref_mean) / (ref_mean + 1e-8)
         
         if mean_change > 0.20:
             print(f"\\n🚨 Prediction drift detected: {mean_change*100:.1f}% change")
@@ -671,7 +670,7 @@ class ConceptDriftDetector:
             print(f"\\n✓ No significant drift ({mean_change*100:.1f}% change)")
             return False
     
-    def detect_performance_degradation(self, y_true_recent, y_pred_recent, baseline_accuracy):
+    def detect_performance_degradation (self, y_true_recent, y_pred_recent, baseline_accuracy):
         """
         Detect drop in model performance
         
@@ -681,7 +680,7 @@ class ConceptDriftDetector:
         
         from sklearn.metrics import accuracy_score
         
-        current_accuracy = accuracy_score(y_true_recent, y_pred_recent)
+        current_accuracy = accuracy_score (y_true_recent, y_pred_recent)
         
         print(f"Baseline accuracy: {baseline_accuracy:.3f}")
         print(f"Current accuracy: {current_accuracy:.3f}")
@@ -702,15 +701,15 @@ import numpy as np
 from sklearn.datasets import make_classification
 
 # Reference data
-X_reference, y_reference = make_classification(n_samples=1000, n_features=20, random_state=42)
+X_reference, y_reference = make_classification (n_samples=1000, n_features=20, random_state=42)
 
 # Current data with drift (shift mean of first feature)
-X_current, y_current = make_classification(n_samples=1000, n_features=20, random_state=43)
+X_current, y_current = make_classification (n_samples=1000, n_features=20, random_state=43)
 X_current[:, 0] += 2.0  # Introduce drift
 
 # Train model on reference
 from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier(random_state=42)
+model = RandomForestClassifier (random_state=42)
 model.fit(X_reference, y_reference)
 
 baseline_accuracy = model.score(X_reference, y_reference)
@@ -723,8 +722,8 @@ y_pred_current = model.predict(X_current)
 detector = ConceptDriftDetector()
 
 detector.detect_covariate_shift(X_reference[:100], X_current[:100])
-detector.detect_prediction_drift(y_pred_reference, y_pred_current)
-detector.detect_performance_degradation(y_current, y_pred_current, baseline_accuracy)
+detector.detect_prediction_drift (y_pred_reference, y_pred_current)
+detector.detect_performance_degradation (y_current, y_pred_current, baseline_accuracy)
 \`\`\`
 
 ---
@@ -754,7 +753,7 @@ class RealTimeFeatureStore:
         self.hit_count = 0
         self.miss_count = 0
     
-    def compute_and_cache_features(self, user_id, historical_data):
+    def compute_and_cache_features (self, user_id, historical_data):
         """
         Pre-compute expensive features
         """
@@ -762,10 +761,10 @@ class RealTimeFeatureStore:
         
         # Expensive aggregations
         features = {
-            "user_30d_transactions": len(historical_data),
-            "user_30d_total_spend": sum(historical_data),
-            "user_30d_avg_transaction": np.mean(historical_data),
-            "user_30d_max_transaction": max(historical_data) if historical_data else 0
+            "user_30d_transactions": len (historical_data),
+            "user_30d_total_spend": sum (historical_data),
+            "user_30d_avg_transaction": np.mean (historical_data),
+            "user_30d_max_transaction": max (historical_data) if historical_data else 0
         }
         
         # Cache with TTL
@@ -773,7 +772,7 @@ class RealTimeFeatureStore:
         
         return features
     
-    def get_features(self, user_id, current_transaction):
+    def get_features (self, user_id, current_transaction):
         """
         Get features for real-time prediction
         
@@ -805,7 +804,7 @@ class RealTimeFeatureStore:
         
         return features
     
-    def get_cache_stats(self):
+    def get_cache_stats (self):
         """
         Cache performance
         """
@@ -826,8 +825,8 @@ feature_store = RealTimeFeatureStore()
 
 # Pre-populate cache for some users
 for user_id in range(1000, 1100):
-    historical = [random.uniform(10, 500) for _ in range(random.randint(5, 50))]
-    feature_store.compute_and_cache_features(user_id, historical)
+    historical = [random.uniform(10, 500) for _ in range (random.randint(5, 50))]
+    feature_store.compute_and_cache_features (user_id, historical)
 
 print("\\n=== Real-Time Feature Store ===\\n")
 print("Pre-populated cache with 100 users\\n")
@@ -840,9 +839,9 @@ for i in range(20):
         "hour": random.randint(0, 23)
     }
     
-    features = feature_store.get_features(user_id, transaction)
+    features = feature_store.get_features (user_id, transaction)
     
-    print(f"Request {i+1}: User {user_id}, Amount \${transaction['amount']: .2f}")
+    print(f"Request {i+1}: User {user_id}, Amount \${transaction['amount']:.2f}")
 print(f"  Features: 30d_transactions={features['user_30d_transactions']}, "
           f"amount_vs_avg={features['amount_vs_avg_ratio']:.2f}")
 

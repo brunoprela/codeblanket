@@ -17,7 +17,7 @@ export const whatsappMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "100 billion messages / day ÷ 86,400 seconds/day = 1,157,407 messages/sec average. Peak (e.g., New Year's Eve globally): 3-5 million messages/sec. This scale requires: (1) Erlang for concurrency (handles millions of connections per server). (2) Cassandra for write throughput (millions of writes/sec). (3) Message batching and queuing (Kafka/Redis). (4) Global distribution (multiple data centers to spread load). For comparison: Twitter peak ~500K tweets/sec, Messenger ~500K messages/sec. WhatsApp's scale is 2-3x larger due to global penetration and reliance (primary communication for 2B users).",
+      "100 billion messages / day ÷ 86,400 seconds/day = 1,157,407 messages/sec average. Peak (e.g., New Year\'s Eve globally): 3-5 million messages/sec. This scale requires: (1) Erlang for concurrency (handles millions of connections per server). (2) Cassandra for write throughput (millions of writes/sec). (3) Message batching and queuing (Kafka/Redis). (4) Global distribution (multiple data centers to spread load). For comparison: Twitter peak ~500K tweets/sec, Messenger ~500K messages/sec. WhatsApp's scale is 2-3x larger due to global penetration and reliance (primary communication for 2B users).",
   },
   {
     id: 'mc2',
@@ -31,7 +31,7 @@ export const whatsappMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "ERLANG CONCURRENCY: Each connection = lightweight Erlang process (~1 KB overhead). 1 server with 256 GB RAM can handle 2M+ connections. Processes isolated (one crash doesn't affect others). JAVA/NODE.JS: Each connection = OS thread (~1 MB overhead). Limited to ~10K threads per server (memory exhausted). Context switching overhead. PRODUCTION IMPACT: WhatsApp: 1 server handles 2M connections. Java: Need 200 servers for same load. COST: 200x reduction in servers. This is why WhatsApp operated with minimal infrastructure (50 engineers, low costs). OTHER ERLANG BENEFITS: Hot code swapping (deploy without downtime), built-in fault tolerance (supervisor trees), designed for telecom (99.999% uptime). KEY INSIGHT: For I/O-bound workloads (networking, messaging), Erlang's concurrency model is superior to thread-based systems.",
+      "ERLANG CONCURRENCY: Each connection = lightweight Erlang process (~1 KB overhead). 1 server with 256 GB RAM can handle 2M+ connections. Processes isolated (one crash doesn't affect others). JAVA/NODE.JS: Each connection = OS thread (~1 MB overhead). Limited to ~10K threads per server (memory exhausted). Context switching overhead. PRODUCTION IMPACT: WhatsApp: 1 server handles 2M connections. Java: Need 200 servers for same load. COST: 200x reduction in servers. This is why WhatsApp operated with minimal infrastructure (50 engineers, low costs). OTHER ERLANG BENEFITS: Hot code swapping (deploy without downtime), built-in fault tolerance (supervisor trees), designed for telecom (99.999% uptime). KEY INSIGHT: For I/O-bound workloads (networking, messaging), Erlang\'s concurrency model is superior to thread-based systems.",
   },
   {
     id: 'mc3',
@@ -45,7 +45,7 @@ export const whatsappMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "END-TO-END ENCRYPTION: Message encrypted on Alice's device with Bob's public key. WhatsApp server receives encrypted blob (cannot decrypt - doesn't have Bob's private key). Server routes encrypted blob to Bob's device. Bob's device decrypts with private key. ZERO-KNOWLEDGE: WhatsApp has no access to message plaintext. Even if government subpoenas WhatsApp for messages, WhatsApp cannot provide (they don't have decryption keys). CONTRAST: Transport encryption (HTTPS): Encrypted client → server, decrypted at server, then re-encrypted server → recipient. Server sees plaintext. Most systems use transport encryption only. E2E encryption is stronger but more complex (key management, device recovery). This is why Facebook (owns WhatsApp) lobbied against E2E requirements - they can't read messages for ads/moderation.",
+      "END-TO-END ENCRYPTION: Message encrypted on Alice\'s device with Bob's public key. WhatsApp server receives encrypted blob (cannot decrypt - doesn't have Bob\'s private key). Server routes encrypted blob to Bob's device. Bob's device decrypts with private key. ZERO-KNOWLEDGE: WhatsApp has no access to message plaintext. Even if government subpoenas WhatsApp for messages, WhatsApp cannot provide (they don't have decryption keys). CONTRAST: Transport encryption (HTTPS): Encrypted client → server, decrypted at server, then re-encrypted server → recipient. Server sees plaintext. Most systems use transport encryption only. E2E encryption is stronger but more complex (key management, device recovery). This is why Facebook (owns WhatsApp) lobbied against E2E requirements - they can't read messages for ads/moderation.",
   },
   {
     id: 'mc4',

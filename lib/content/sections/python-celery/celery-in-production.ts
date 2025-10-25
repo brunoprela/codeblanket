@@ -359,16 +359,16 @@ task_retry_counter = Counter('celery_task_retry_total', 'Tasks retried', ['task_
 task_duration = Histogram('celery_task_duration_seconds', 'Task duration', ['task_name'])
 
 @task_success.connect
-def task_success_handler(sender=None, **kwargs):
-    task_success_counter.labels(task_name=sender.name).inc()
+def task_success_handler (sender=None, **kwargs):
+    task_success_counter.labels (task_name=sender.name).inc()
 
 @task_failure.connect
-def task_failure_handler(sender=None, **kwargs):
-    task_failure_counter.labels(task_name=sender.name).inc()
+def task_failure_handler (sender=None, **kwargs):
+    task_failure_counter.labels (task_name=sender.name).inc()
 
 @task_retry.connect
-def task_retry_handler(sender=None, **kwargs):
-    task_retry_counter.labels(task_name=sender.name).inc()
+def task_retry_handler (sender=None, **kwargs):
+    task_retry_counter.labels (task_name=sender.name).inc()
 
 # Start Prometheus metrics server
 start_http_server(8000)
@@ -400,8 +400,8 @@ broker_use_ssl = {
 3. **Input Validation**
 \`\`\`python
 @app.task
-def process_user(user_id: int):
-    if not isinstance(user_id, int) or user_id < 1:
+def process_user (user_id: int):
+    if not isinstance (user_id, int) or user_id < 1:
         raise ValueError("Invalid user_id")
     # Process...
 \`\`\`

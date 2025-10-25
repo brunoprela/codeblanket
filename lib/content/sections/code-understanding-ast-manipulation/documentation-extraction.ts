@@ -26,7 +26,7 @@ This section teaches you to extract and use this information effectively.
 
 **1. Docstrings:**
 \`\`\`python
-def calculate(x: int, y: int) -> int:
+def calculate (x: int, y: int) -> int:
     """Calculate sum of two numbers.
     
     Args:
@@ -60,7 +60,7 @@ x = []  # type: List[int]
 
 **Google Style:**
 \`\`\`python
-def function(arg1, arg2):
+def function (arg1, arg2):
     """Summary line.
     
     Extended description.
@@ -79,7 +79,7 @@ def function(arg1, arg2):
 
 **NumPy Style:**
 \`\`\`python
-def function(arg1, arg2):
+def function (arg1, arg2):
     """
     Summary line.
     
@@ -101,7 +101,7 @@ def function(arg1, arg2):
 
 **Sphinx Style:**
 \`\`\`python
-def function(arg1, arg2):
+def function (arg1, arg2):
     """Summary line.
     
     :param arg1: Description of arg1
@@ -133,7 +133,7 @@ class DocstringInfo:
     examples: List[str]
     raw: str
 
-class DocstringExtractor(ast.NodeVisitor):
+class DocstringExtractor (ast.NodeVisitor):
     """
     Extract and parse docstrings from code.
     Supports multiple documentation formats.
@@ -142,34 +142,34 @@ class DocstringExtractor(ast.NodeVisitor):
     def __init__(self):
         self.docstrings: Dict[str, DocstringInfo] = {}
     
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef (self, node: ast.FunctionDef):
         """Extract function docstrings."""
-        docstring = ast.get_docstring(node)
+        docstring = ast.get_docstring (node)
         if docstring:
-            parsed = self._parse_docstring(docstring)
+            parsed = self._parse_docstring (docstring)
             self.docstrings[node.name] = parsed
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_ClassDef(self, node: ast.ClassDef):
+    def visit_ClassDef (self, node: ast.ClassDef):
         """Extract class docstrings."""
-        docstring = ast.get_docstring(node)
+        docstring = ast.get_docstring (node)
         if docstring:
-            parsed = self._parse_docstring(docstring)
+            parsed = self._parse_docstring (docstring)
             self.docstrings[node.name] = parsed
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def visit_Module(self, node: ast.Module):
+    def visit_Module (self, node: ast.Module):
         """Extract module docstring."""
-        docstring = ast.get_docstring(node)
+        docstring = ast.get_docstring (node)
         if docstring:
-            parsed = self._parse_docstring(docstring)
+            parsed = self._parse_docstring (docstring)
             self.docstrings['<module>'] = parsed
         
-        self.generic_visit(node)
+        self.generic_visit (node)
     
-    def _parse_docstring(self, docstring: str) -> DocstringInfo:
+    def _parse_docstring (self, docstring: str) -> DocstringInfo:
         """
         Parse docstring into structured format.
         Attempts to detect and parse Google/NumPy/Sphinx styles.
@@ -181,11 +181,11 @@ class DocstringExtractor(ast.NodeVisitor):
         
         # Detect format and parse
         if 'Args:' in docstring or 'Returns:' in docstring:
-            return self._parse_google_style(docstring)
+            return self._parse_google_style (docstring)
         elif 'Parameters' in docstring and '----------' in docstring:
-            return self._parse_numpy_style(docstring)
+            return self._parse_numpy_style (docstring)
         elif ':param' in docstring or ':return:' in docstring:
-            return self._parse_sphinx_style(docstring)
+            return self._parse_sphinx_style (docstring)
         else:
             # Plain docstring
             return DocstringInfo(
@@ -198,7 +198,7 @@ class DocstringExtractor(ast.NodeVisitor):
                 raw=docstring
             )
     
-    def _parse_google_style(self, docstring: str) -> DocstringInfo:
+    def _parse_google_style (self, docstring: str) -> DocstringInfo:
         """Parse Google-style docstring."""
         lines = docstring.split('\\n')
         
@@ -212,7 +212,7 @@ class DocstringExtractor(ast.NodeVisitor):
         current_section = None
         current_indent = 0
         
-        for i, line in enumerate(lines[1:], 1):
+        for i, line in enumerate (lines[1:], 1):
             stripped = line.strip()
             
             if stripped == 'Args:':
@@ -230,7 +230,7 @@ class DocstringExtractor(ast.NodeVisitor):
             
             if current_section == 'args':
                 # Parse parameter: name (type): description
-                match = re.match(r'\\s*(\\w+)\\s*\\((.+?)\\):\\s*(.+)', line)
+                match = re.match (r'\\s*(\\w+)\\s*\\((.+?)\\):\\s*(.+)', line)
                 if match:
                     param_name, param_type, param_desc = match.groups()
                     parameters[param_name] = f"{param_type}: {param_desc}"
@@ -240,21 +240,21 @@ class DocstringExtractor(ast.NodeVisitor):
                     returns = stripped
             
             elif current_section == 'raises':
-                match = re.match(r'\\s*(\\w+):\\s*(.+)', line)
+                match = re.match (r'\\s*(\\w+):\\s*(.+)', line)
                 if match:
                     exc_type, exc_desc = match.groups()
                     raises[exc_type] = exc_desc
             
             elif current_section == 'examples':
                 if stripped:
-                    examples.append(stripped)
+                    examples.append (stripped)
             
             elif current_section is None and stripped:
-                description_lines.append(stripped)
+                description_lines.append (stripped)
         
         return DocstringInfo(
             summary=summary,
-            description=' '.join(description_lines),
+            description=' '.join (description_lines),
             parameters=parameters,
             returns=returns,
             raises=raises,
@@ -262,7 +262,7 @@ class DocstringExtractor(ast.NodeVisitor):
             raw=docstring
         )
     
-    def _parse_numpy_style(self, docstring: str) -> DocstringInfo:
+    def _parse_numpy_style (self, docstring: str) -> DocstringInfo:
         """Parse NumPy-style docstring."""
         # Simplified NumPy parser
         lines = docstring.split('\\n')
@@ -284,7 +284,7 @@ class DocstringExtractor(ast.NodeVisitor):
             if in_params:
                 # Check for parameter definition
                 if ':' in line and not line.strip().startswith(' '):
-                    match = re.match(r'(\\w+)\\s*:\\s*(.+)', line.strip())
+                    match = re.match (r'(\\w+)\\s*:\\s*(.+)', line.strip())
                     if match:
                         current_param, param_type = match.groups()
                         parameters[current_param] = param_type
@@ -299,7 +299,7 @@ class DocstringExtractor(ast.NodeVisitor):
             raw=docstring
         )
     
-    def _parse_sphinx_style(self, docstring: str) -> DocstringInfo:
+    def _parse_sphinx_style (self, docstring: str) -> DocstringInfo:
         """Parse Sphinx-style docstring."""
         lines = docstring.split('\\n')
         summary = lines[0].strip()
@@ -308,13 +308,13 @@ class DocstringExtractor(ast.NodeVisitor):
         
         for line in lines[1:]:
             # :param name: description
-            param_match = re.match(r':param\\s+(\\w+):\\s*(.+)', line.strip())
+            param_match = re.match (r':param\\s+(\\w+):\\s*(.+)', line.strip())
             if param_match:
                 param_name, param_desc = param_match.groups()
                 parameters[param_name] = param_desc
             
             # :return: description
-            return_match = re.match(r':return:\\s*(.+)', line.strip())
+            return_match = re.match (r':return:\\s*(.+)', line.strip())
             if return_match:
                 returns = return_match.group(1)
         
@@ -328,36 +328,36 @@ class DocstringExtractor(ast.NodeVisitor):
             raw=docstring
         )
     
-    def generate_summary(self) -> str:
+    def generate_summary (self) -> str:
         """Generate summary of all docstrings."""
         lines = ["=== Documentation Summary ===\\n"]
         
         for name, doc in self.docstrings.items():
-            lines.append(f"## {name}")
-            lines.append(f"Summary: {doc.summary}")
+            lines.append (f"## {name}")
+            lines.append (f"Summary: {doc.summary}")
             
             if doc.parameters:
                 lines.append("Parameters:")
                 for param, desc in doc.parameters.items():
-                    lines.append(f"  - {param}: {desc}")
+                    lines.append (f"  - {param}: {desc}")
             
             if doc.returns:
-                lines.append(f"Returns: {doc.returns}")
+                lines.append (f"Returns: {doc.returns}")
             
             if doc.raises:
                 lines.append("Raises:")
                 for exc, desc in doc.raises.items():
-                    lines.append(f"  - {exc}: {desc}")
+                    lines.append (f"  - {exc}: {desc}")
             
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
 """Module for data processing utilities."""
 
-def calculate_sum(numbers: list, initial: int = 0) -> int:
+def calculate_sum (numbers: list, initial: int = 0) -> int:
     """Calculate sum of numbers with initial value.
     
     This function adds all numbers in the list to an initial value.
@@ -376,9 +376,9 @@ def calculate_sum(numbers: list, initial: int = 0) -> int:
         >>> calculate_sum([1, 2, 3], 10)
         16
     """
-    if not isinstance(numbers, list):
+    if not isinstance (numbers, list):
         raise TypeError("numbers must be a list")
-    return sum(numbers) + initial
+    return sum (numbers) + initial
 
 class DataProcessor:
     """Process and transform data.
@@ -389,7 +389,7 @@ class DataProcessor:
         config (dict): Configuration settings
     """
     
-    def transform(self, data: str) -> str:
+    def transform (self, data: str) -> str:
         """Transform input data.
         
         :param data: Input data to transform
@@ -401,8 +401,8 @@ class DataProcessor:
 """
 
 extractor = DocstringExtractor()
-tree = ast.parse(code)
-extractor.visit(tree)
+tree = ast.parse (code)
+extractor.visit (tree)
 
 print(extractor.generate_summary())
 \`\`\`
@@ -433,15 +433,15 @@ class CommentExtractor:
         self.comments: List[Comment] = []
         self._extract_comments()
     
-    def _extract_comments(self):
+    def _extract_comments (self):
         """Extract all comments from code."""
         try:
-            tokens = tokenize.generate_tokens(io.StringIO(self.code).readline)
+            tokens = tokenize.generate_tokens (io.StringIO(self.code).readline)
             
             for token in tokens:
                 if token.type == tokenize.COMMENT:
                     comment_text = token.string[1:].strip()  # Remove #
-                    comment_type = self._classify_comment(comment_text)
+                    comment_type = self._classify_comment (comment_text)
                     
                     self.comments.append(Comment(
                         text=comment_text,
@@ -452,7 +452,7 @@ class CommentExtractor:
             # Handle incomplete code gracefully
             pass
     
-    def _classify_comment(self, text: str) -> str:
+    def _classify_comment (self, text: str) -> str:
         """Classify comment type."""
         text_lower = text.lower()
         
@@ -469,44 +469,44 @@ class CommentExtractor:
         else:
             return 'inline'
     
-    def get_todos(self) -> List[Comment]:
+    def get_todos (self) -> List[Comment]:
         """Get all TODO comments."""
         return [c for c in self.comments if c.type == 'todo']
     
-    def get_fixmes(self) -> List[Comment]:
+    def get_fixmes (self) -> List[Comment]:
         """Get all FIXME comments."""
         return [c for c in self.comments if c.type == 'fixme']
     
-    def generate_report(self) -> str:
+    def generate_report (self) -> str:
         """Generate comment report."""
-        lines = [f"=== Found {len(self.comments)} Comments ===\\n"]
+        lines = [f"=== Found {len (self.comments)} Comments ===\\n"]
         
         # Group by type
         by_type = {}
         for comment in self.comments:
-            by_type.setdefault(comment.type, []).append(comment)
+            by_type.setdefault (comment.type, []).append (comment)
         
-        for comment_type, comments in sorted(by_type.items()):
-            lines.append(f"{comment_type.upper()}:")
+        for comment_type, comments in sorted (by_type.items()):
+            lines.append (f"{comment_type.upper()}:")
             for comment in comments:
-                lines.append(f"  Line {comment.line}: {comment.text}")
+                lines.append (f"  Line {comment.line}: {comment.text}")
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Example usage
 code = """
 # This module handles user authentication
 # TODO: Add OAuth support
 
-def login(username, password):
+def login (username, password):
     # Validate credentials
     # FIXME: This is vulnerable to timing attacks
     if username == "admin" and password == "secret":
         return True
     
     # NOTE: Log failed attempts
-    log_failure(username)
+    log_failure (username)
     
     # HACK: Temporary workaround for bug #123
     return False
@@ -516,13 +516,13 @@ def legacy_code():
     pass
 """
 
-extractor = CommentExtractor(code)
+extractor = CommentExtractor (code)
 print(extractor.generate_report())
 
 # Get action items
 todos = extractor.get_todos()
 fixmes = extractor.get_fixmes()
-print(f"\\n⚠️  {len(todos)} TODOs and {len(fixmes)} FIXMEs need attention")
+print(f"\\n⚠️  {len (todos)} TODOs and {len (fixmes)} FIXMEs need attention")
 \`\`\`
 
 ### Documentation Generator
@@ -531,7 +531,7 @@ print(f"\\n⚠️  {len(todos)} TODOs and {len(fixmes)} FIXMEs need attention")
 import ast
 from typing import List
 
-class DocumentationGenerator(ast.NodeVisitor):
+class DocumentationGenerator (ast.NodeVisitor):
     """
     Generate missing documentation for code.
     Creates docstring templates based on function signatures.
@@ -540,13 +540,13 @@ class DocumentationGenerator(ast.NodeVisitor):
     def __init__(self):
         self.functions_without_docs: List[ast.FunctionDef] = []
     
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef (self, node: ast.FunctionDef):
         """Find functions without docstrings."""
-        if not ast.get_docstring(node):
-            self.functions_without_docs.append(node)
-        self.generic_visit(node)
+        if not ast.get_docstring (node):
+            self.functions_without_docs.append (node)
+        self.generic_visit (node)
     
-    def generate_docstring(self, func: ast.FunctionDef, style: str = 'google') -> str:
+    def generate_docstring (self, func: ast.FunctionDef, style: str = 'google') -> str:
         """
         Generate docstring template for a function.
         
@@ -558,14 +558,14 @@ class DocumentationGenerator(ast.NodeVisitor):
             Generated docstring template
         """
         if style == 'google':
-            return self._generate_google_style(func)
+            return self._generate_google_style (func)
         elif style == 'numpy':
-            return self._generate_numpy_style(func)
+            return self._generate_numpy_style (func)
         elif style == 'sphinx':
-            return self._generate_sphinx_style(func)
+            return self._generate_sphinx_style (func)
         return ""
     
-    def _generate_google_style(self, func: ast.FunctionDef) -> str:
+    def _generate_google_style (self, func: ast.FunctionDef) -> str:
         """Generate Google-style docstring."""
         lines = [f'"""Summary of {func.name}.', ', ']
         
@@ -575,21 +575,21 @@ class DocumentationGenerator(ast.NodeVisitor):
             for arg in func.args.args:
                 arg_type = "type"
                 if arg.annotation:
-                    arg_type = ast.unparse(arg.annotation)
-                lines.append(f'    {arg.arg} ({arg_type}): Description of {arg.arg}')
+                    arg_type = ast.unparse (arg.annotation)
+                lines.append (f'    {arg.arg} ({arg_type}): Description of {arg.arg}')
             lines.append(')
         
         # Returns
         if func.returns:
-            return_type = ast.unparse(func.returns)
+            return_type = ast.unparse (func.returns)
             lines.append('Returns:')
-            lines.append(f'    {return_type}: Description of return value')
+            lines.append (f'    {return_type}: Description of return value')
             lines.append(')
         
         lines.append('"""')
-        return '\\n'.join(lines)
+        return '\\n'.join (lines)
     
-    def _generate_numpy_style(self, func: ast.FunctionDef) -> str:
+    def _generate_numpy_style (self, func: ast.FunctionDef) -> str:
         """Generate NumPy-style docstring."""
         lines = [f'"""', f'Summary of {func.name}.', ', ']
         
@@ -600,24 +600,24 @@ class DocumentationGenerator(ast.NodeVisitor):
             for arg in func.args.args:
                 arg_type = "type"
                 if arg.annotation:
-                    arg_type = ast.unparse(arg.annotation)
-                lines.append(f'{arg.arg} : {arg_type}')
-                lines.append(f'    Description of {arg.arg}')
+                    arg_type = ast.unparse (arg.annotation)
+                lines.append (f'{arg.arg} : {arg_type}')
+                lines.append (f'    Description of {arg.arg}')
             lines.append(')
         
         # Returns
         if func.returns:
-            return_type = ast.unparse(func.returns)
+            return_type = ast.unparse (func.returns)
             lines.append('Returns')
             lines.append('-------')
-            lines.append(return_type)
+            lines.append (return_type)
             lines.append('    Description of return value')
             lines.append(')
         
         lines.append('"""')
-        return '\\n'.join(lines)
+        return '\\n'.join (lines)
     
-    def _generate_sphinx_style(self, func: ast.FunctionDef) -> str:
+    def _generate_sphinx_style (self, func: ast.FunctionDef) -> str:
         """Generate Sphinx-style docstring."""
         lines = [f'"""Summary of {func.name}.', ']
         
@@ -625,61 +625,61 @@ class DocumentationGenerator(ast.NodeVisitor):
         for arg in func.args.args:
             arg_type = "type"
             if arg.annotation:
-                arg_type = ast.unparse(arg.annotation)
-            lines.append(f':param {arg.arg}: Description of {arg.arg}')
-            lines.append(f':type {arg.arg}: {arg_type}')
+                arg_type = ast.unparse (arg.annotation)
+            lines.append (f':param {arg.arg}: Description of {arg.arg}')
+            lines.append (f':type {arg.arg}: {arg_type}')
         
         # Returns
         if func.returns:
-            return_type = ast.unparse(func.returns)
-            lines.append(f':return: Description of return value')
-            lines.append(f':rtype: {return_type}')
+            return_type = ast.unparse (func.returns)
+            lines.append (f':return: Description of return value')
+            lines.append (f':rtype: {return_type}')
         
         lines.append('"""')
-        return '\\n'.join(lines)
+        return '\\n'.join (lines)
     
-    def generate_all_missing(self, style: str = 'google') -> Dict[str, str]:
+    def generate_all_missing (self, style: str = 'google') -> Dict[str, str]:
         """Generate docstrings for all functions missing them."""
         docstrings = {}
         for func in self.functions_without_docs:
-            docstring = self.generate_docstring(func, style)
+            docstring = self.generate_docstring (func, style)
             docstrings[func.name] = docstring
         return docstrings
 
 # Example usage
 code = """
-def calculate(x: int, y: int) -> int:
+def calculate (x: int, y: int) -> int:
     return x + y
 
-def process_data(items: list, strict: bool = False) -> dict:
+def process_data (items: list, strict: bool = False) -> dict:
     results = {}
     for item in items:
-        results[item] = process(item)
+        results[item] = process (item)
     return results
 
-def legacy_function(arg1, arg2, arg3):
+def legacy_function (arg1, arg2, arg3):
     # No type hints, no docstring
     return arg1 + arg2 + arg3
 """
 
 generator = DocumentationGenerator()
-tree = ast.parse(code)
-generator.visit(tree)
+tree = ast.parse (code)
+generator.visit (tree)
 
-print(f"Found {len(generator.functions_without_docs)} functions without documentation\\n")
+print(f"Found {len (generator.functions_without_docs)} functions without documentation\\n")
 
 # Generate docstrings in different styles
 print("=== Google Style ===")
 for func in generator.functions_without_docs[:1]:
-    print(generator.generate_docstring(func, 'google'))
+    print(generator.generate_docstring (func, 'google'))
 
 print("\\n=== NumPy Style ===")
 for func in generator.functions_without_docs[:1]:
-    print(generator.generate_docstring(func, 'numpy'))
+    print(generator.generate_docstring (func, 'numpy'))
 
 print("\\n=== Sphinx Style ===")
 for func in generator.functions_without_docs[:1]:
-    print(generator.generate_docstring(func, 'sphinx'))
+    print(generator.generate_docstring (func, 'sphinx'))
 \`\`\`
 
 ### Complete Documentation System
@@ -693,29 +693,29 @@ class ComprehensiveDocumentationSystem:
     
     def __init__(self, code: str):
         self.code = code
-        self.tree = ast.parse(code)
+        self.tree = ast.parse (code)
         
         # Extract existing documentation
         self.docstring_extractor = DocstringExtractor()
-        self.docstring_extractor.visit(self.tree)
+        self.docstring_extractor.visit (self.tree)
         
         # Extract comments
-        self.comment_extractor = CommentExtractor(code)
+        self.comment_extractor = CommentExtractor (code)
         
         # Find missing documentation
         self.doc_generator = DocumentationGenerator()
-        self.doc_generator.visit(self.tree)
+        self.doc_generator.visit (self.tree)
     
-    def analyze_documentation_coverage(self) -> Dict[str, any]:
+    def analyze_documentation_coverage (self) -> Dict[str, any]:
         """Analyze how well code is documented."""
         # Count functions
         total_functions = 0
         documented_functions = 0
         
-        for node in ast.walk(self.tree):
-            if isinstance(node, ast.FunctionDef):
+        for node in ast.walk (self.tree):
+            if isinstance (node, ast.FunctionDef):
                 total_functions += 1
-                if ast.get_docstring(node):
+                if ast.get_docstring (node):
                     documented_functions += 1
         
         coverage = (documented_functions / total_functions * 100) if total_functions > 0 else 0
@@ -724,13 +724,13 @@ class ComprehensiveDocumentationSystem:
             'total_functions': total_functions,
             'documented_functions': documented_functions,
             'undocumented_functions': total_functions - documented_functions,
-            'coverage_percent': round(coverage, 2),
-            'total_comments': len(self.comment_extractor.comments),
-            'todos': len(self.comment_extractor.get_todos()),
-            'fixmes': len(self.comment_extractor.get_fixmes())
+            'coverage_percent': round (coverage, 2),
+            'total_comments': len (self.comment_extractor.comments),
+            'todos': len (self.comment_extractor.get_todos()),
+            'fixmes': len (self.comment_extractor.get_fixmes())
         }
     
-    def generate_documentation_report(self) -> str:
+    def generate_documentation_report (self) -> str:
         """Generate comprehensive documentation report."""
         stats = self.analyze_documentation_coverage()
         
@@ -740,10 +740,10 @@ class ComprehensiveDocumentationSystem:
         
         # Coverage stats
         lines.append("\\n## Coverage Statistics")
-        lines.append(f"  Total Functions: {stats['total_functions']}")
-        lines.append(f"  Documented: {stats['documented_functions']}")
-        lines.append(f"  Missing Docs: {stats['undocumented_functions']}")
-        lines.append(f"  Coverage: {stats['coverage_percent']}%")
+        lines.append (f"  Total Functions: {stats['total_functions']}")
+        lines.append (f"  Documented: {stats['documented_functions']}")
+        lines.append (f"  Missing Docs: {stats['undocumented_functions']}")
+        lines.append (f"  Coverage: {stats['coverage_percent']}%")
         
         # Visual indicator
         if stats['coverage_percent'] >= 80:
@@ -754,27 +754,27 @@ class ComprehensiveDocumentationSystem:
             lines.append("  🚨 Poor documentation coverage")
         
         # Comment stats
-        lines.append(f"\\n## Comments")
-        lines.append(f"  Total Comments: {stats['total_comments']}")
-        lines.append(f"  TODOs: {stats['todos']}")
-        lines.append(f"  FIXMEs: {stats['fixmes']}")
+        lines.append (f"\\n## Comments")
+        lines.append (f"  Total Comments: {stats['total_comments']}")
+        lines.append (f"  TODOs: {stats['todos']}")
+        lines.append (f"  FIXMEs: {stats['fixmes']}")
         
         # Existing documentation
         if self.docstring_extractor.docstrings:
-            lines.append(f"\\n{self.docstring_extractor.generate_summary()}")
+            lines.append (f"\\n{self.docstring_extractor.generate_summary()}")
         
         # Action items
         lines.append("\\n## Action Items")
         if stats['undocumented_functions'] > 0:
-            lines.append(f"  📝 Add docstrings to {stats['undocumented_functions']} functions")
+            lines.append (f"  📝 Add docstrings to {stats['undocumented_functions']} functions")
         if stats['todos'] > 0:
-            lines.append(f"  ✅ Complete {stats['todos']} TODO items")
+            lines.append (f"  ✅ Complete {stats['todos']} TODO items")
         if stats['fixmes'] > 0:
-            lines.append(f"  🔧 Fix {stats['fixmes']} FIXME items")
+            lines.append (f"  🔧 Fix {stats['fixmes']} FIXME items")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
-    def generate_llm_context(self) -> str:
+    def generate_llm_context (self) -> str:
         """
         Generate documentation context for LLM.
         This is what Cursor sends to provide code context.
@@ -785,11 +785,11 @@ class ComprehensiveDocumentationSystem:
         lines.append("## Documented Functions")
         for name, doc in self.docstring_extractor.docstrings.items():
             if name != '<module>':
-                lines.append(f"### {name}")
-                lines.append(doc.summary)
+                lines.append (f"### {name}")
+                lines.append (doc.summary)
                 if doc.parameters:
-                    params = ", ".join(f"{p}: {d}" for p, d in doc.parameters.items())
-                    lines.append(f"Parameters: {params}")
+                    params = ", ".join (f"{p}: {d}" for p, d in doc.parameters.items())
+                    lines.append (f"Parameters: {params}")
                 lines.append("")
         
         # Add relevant comments
@@ -797,20 +797,20 @@ class ComprehensiveDocumentationSystem:
         if todos:
             lines.append("## TODO Items")
             for todo in todos:
-                lines.append(f"- Line {todo.line}: {todo.text}")
+                lines.append (f"- Line {todo.line}: {todo.text}")
             lines.append("")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Test the comprehensive system
 code = """
 """User authentication module."""
 
-def authenticate(username: str, password: str) -> bool:
+def authenticate (username: str, password: str) -> bool:
     """Authenticate user credentials.
     
     Args:
-        username (str): User's username
+        username (str): User\'s username
         password (str): User's password
         
     Returns:
@@ -818,21 +818,21 @@ def authenticate(username: str, password: str) -> bool:
     """
     # TODO: Add rate limiting
     # FIXME: Password should be hashed
-    return validate_credentials(username, password)
+    return validate_credentials (username, password)
 
-def validate_credentials(username, password):
+def validate_credentials (username, password):
     # Missing docstring!
     return username == "admin" and password == "secret"
 
 class UserManager:
     # TODO: Add user management methods
     
-    def create_user(self, username, email):
+    def create_user (self, username, email):
         # Missing docstring!
         pass
 """
 
-system = ComprehensiveDocumentationSystem(code)
+system = ComprehensiveDocumentationSystem (code)
 print(system.generate_documentation_report())
 
 print("\\n" + "=" * 60)
@@ -847,7 +847,7 @@ Cursor leverages documentation extensively:
 
 **1. Context Building:**
 \`\`\`python
-def process_user(user_id: int) -> User:
+def process_user (user_id: int) -> User:
     """Fetch and process user data.
     
     Args:
@@ -869,7 +869,7 @@ authenticate(  # <-- Cursor shows: "username: str, password: str"
 
 **3. Documentation Generation:**
 \`\`\`python
-def new_function(x, y):
+def new_function (x, y):
     # Cursor can generate: "Add docstring"
     # Produces complete Google/NumPy/Sphinx style docstring
 \`\`\`
@@ -886,12 +886,12 @@ def new_function(x, y):
 
 \`\`\`python
 # ❌ Wrong: Loses formatting
-docstring = ast.get_docstring(node)
+docstring = ast.get_docstring (node)
 # Multi-line formatting is lost!
 
 # ✅ Correct: Use raw docstring if needed
-if node.body and isinstance(node.body[0], ast.Expr):
-    if isinstance(node.body[0].value, ast.Constant):
+if node.body and isinstance (node.body[0], ast.Expr):
+    if isinstance (node.body[0].value, ast.Constant):
         raw_docstring = node.body[0].value.value
 \`\`\`
 
@@ -904,9 +904,9 @@ lines = docstring.split('Args:')
 
 # ✅ Correct: Detect format first
 if 'Args:' in docstring:
-    parse_google_style(docstring)
+    parse_google_style (docstring)
 elif 'Parameters' in docstring:
-    parse_numpy_style(docstring)
+    parse_numpy_style (docstring)
 \`\`\`
 
 ### 3. Missing Comments

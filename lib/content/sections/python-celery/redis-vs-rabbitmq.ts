@@ -90,7 +90,7 @@ app = Celery(
 )
 
 @app.task
-def add(x, y):
+def add (x, y):
     return x + y
 
 # Usage
@@ -112,13 +112,13 @@ from celery import Celery
 app = Celery('bench', broker='redis://localhost:6379/0')
 
 @app.task
-def fast_task(x):
+def fast_task (x):
     return x * 2
 
 # Queue 100K tasks
 start = time.time()
 for i in range(100_000):
-    fast_task.delay(i)
+    fast_task.delay (i)
 duration = time.time() - start
 
 print(f"Redis: {duration:.2f}s")  # ~10 seconds
@@ -149,7 +149,7 @@ print(f"Redis: {duration:.2f}s")  # ~10 seconds
 # Example:
 # 1. Queue 10,000 tasks
 for i in range(10_000):
-    process_order.delay(order_id=i)
+    process_order.delay (order_id=i)
 
 # 2. Redis crashes before workers process them
 # 3. Restart Redis
@@ -259,7 +259,7 @@ app = Celery(
 )
 
 @app.task
-def add(x, y):
+def add (x, y):
     return x + y
 
 # Usage
@@ -278,7 +278,7 @@ result = add.delay(4, 5)
 # Example:
 # 1. Queue 10,000 tasks
 for i in range(10_000):
-    process_payment.delay(order_id=i)
+    process_payment.delay (order_id=i)
 
 # 2. RabbitMQ crashes
 # 3. Restart RabbitMQ
@@ -311,11 +311,11 @@ app.conf.task_routes = {
 }
 
 @app.task
-def send_email(to, subject):
+def send_email (to, subject):
     pass  # Goes to 'emails' queue
 
 @app.task
-def process_payment(order_id):
+def process_payment (order_id):
     pass  # Goes to 'critical' queue
 \`\`\`
 
@@ -326,11 +326,11 @@ def process_payment(order_id):
 app.conf.task_default_priority = 5
 app.conf.task_acks_late = True
 
-@app.task(priority=9)  # High priority
+@app.task (priority=9)  # High priority
 def urgent_task():
     pass
 
-@app.task(priority=1)  # Low priority
+@app.task (priority=1)  # Low priority
 def background_task():
     pass
 
@@ -418,9 +418,9 @@ app = Celery('myapp', broker='redis://localhost:6379/0')
 app = Celery('payments', broker='amqp://localhost')
 
 @app.task
-def process_payment(order_id, amount):
+def process_payment (order_id, amount):
     # This task MUST NOT be lost
-    charge_customer(order_id, amount)
+    charge_customer (order_id, amount)
 \`\`\`
 
 **3. You need advanced routing**
@@ -473,17 +473,17 @@ app_critical = Celery(
 # ========================================
 
 @app_fast.task
-def send_email(to, subject, body):
+def send_email (to, subject, body):
     """Non-critical: Can retry manually if lost"""
     pass
 
 @app_fast.task
-def update_analytics(user_id, event):
+def update_analytics (user_id, event):
     """Non-critical: Analytics can handle missing data"""
     pass
 
 @app_fast.task
-def generate_thumbnail(image_id):
+def generate_thumbnail (image_id):
     """Non-critical: Can regenerate if lost"""
     pass
 
@@ -493,17 +493,17 @@ def generate_thumbnail(image_id):
 # ========================================
 
 @app_critical.task
-def process_payment(order_id, amount):
+def process_payment (order_id, amount):
     """CRITICAL: Must not lose payment tasks!"""
     pass
 
 @app_critical.task
-def fulfill_order(order_id):
+def fulfill_order (order_id):
     """CRITICAL: Customer expects their order"""
     pass
 
 @app_critical.task
-def send_verification_code(user_id, code):
+def send_verification_code (user_id, code):
     """CRITICAL: User blocked without this"""
     pass
 
@@ -574,16 +574,16 @@ from celery import Celery
 
 # Test: Queue 100,000 tasks and measure time
 
-def benchmark_broker(broker_url, name):
+def benchmark_broker (broker_url, name):
     app = Celery('bench', broker=broker_url)
     
     @app.task
-    def dummy_task(x):
+    def dummy_task (x):
         return x * 2
     
     start = time.time()
     for i in range(100_000):
-        dummy_task.delay(i)
+        dummy_task.delay (i)
     duration = time.time() - start
     
     print(f"{name}: {duration:.2f}s ({100_000/duration:.0f} tasks/sec)")

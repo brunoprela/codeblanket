@@ -124,16 +124,16 @@ def black_scholes(S, K, T, r, sigma, option_type='call'):
     if sigma <= 0:
         # Zero volatility: deterministic outcome
         if option_type == 'call':
-            return max(S * np.exp(r * T) - K, 0) * np.exp(-r * T)
+            return max(S * np.exp (r * T) - K, 0) * np.exp(-r * T)
         else:
-            return max(K - S * np.exp(r * T), 0) * np.exp(-r * T)
+            return max(K - S * np.exp (r * T), 0) * np.exp(-r * T)
     
     # Calculate d1 and d2
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
     
     if option_type == 'call':
-        price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+        price = S * norm.cdf (d1) - K * np.exp(-r * T) * norm.cdf (d2)
     else:  # put
         price = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
     
@@ -166,7 +166,7 @@ theoretical_parity = S - K * np.exp(-r * T)
 print(f"\\nPut-Call Parity Check:")
 print(f"  C - P = \${parity_check:.4f}")
 print(f"  S - K*e^(-rT) = \${theoretical_parity:.4f}")
-print(f"  Difference: \${abs(parity_check - theoretical_parity):.6f} (should be ~0)")
+print(f"  Difference: \${abs (parity_check - theoretical_parity):.6f} (should be ~0)")
 \`\`\`
 
 **Output**:
@@ -209,12 +209,12 @@ def plot_option_surface():
     sigma = 0.25
     
     # Create meshgrid
-    S_grid, T_grid = np.meshgrid(stock_prices, times_to_exp)
+    S_grid, T_grid = np.meshgrid (stock_prices, times_to_exp)
     
     # Calculate call prices
     call_prices = np.zeros_like(S_grid)
-    for i in range(len(times_to_exp)):
-        for j in range(len(stock_prices)):
+    for i in range (len (times_to_exp)):
+        for j in range (len (stock_prices)):
             call_prices[i, j] = black_scholes(
                 S_grid[i, j], K, T_grid[i, j], r, sigma, 'call'
             )
@@ -222,7 +222,7 @@ def plot_option_surface():
     # 3D surface plot
     from mpl_toolkits.mplot3d import Axes3D
     
-    fig = plt.figure(figsize=(14, 6))
+    fig = plt.figure (figsize=(14, 6))
     
     # 3D surface
     ax1 = fig.add_subplot(121, projection='3d')
@@ -231,16 +231,16 @@ def plot_option_surface():
     ax1.set_ylabel('Days to Expiration')
     ax1.set_zlabel('Call Option Price ($)')
     ax1.set_title('Call Option Price Surface\\n(Strike=$150, σ=25%)', fontweight='bold')
-    fig.colorbar(surf, ax=ax1, shrink=0.5)
+    fig.colorbar (surf, ax=ax1, shrink=0.5)
     
     # 2D contour plot
     ax2 = fig.add_subplot(122)
     contour = ax2.contour(S_grid, T_grid * 365, call_prices, levels=20, cmap='viridis')
-    ax2.clabel(contour, inline=True, fontsize=8)
+    ax2.clabel (contour, inline=True, fontsize=8)
     ax2.set_xlabel('Stock Price ($)')
     ax2.set_ylabel('Days to Expiration')
     ax2.set_title('Call Option Price Contours', fontweight='bold')
-    ax2.axvline(x=K, color='red', linestyle='--', label=f'Strike \${K}')
+    ax2.axvline (x=K, color='red', linestyle='--', label=f'Strike \${K}')
     ax2.legend()
     
     plt.tight_layout()
@@ -253,18 +253,18 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 # 1. Stock price sensitivity
 S_range = np.linspace(100, 200, 100)
-call_prices_vs_S = [black_scholes(s, K, T, r, sigma, 'call') for s in S_range]
-put_prices_vs_S = [black_scholes(s, K, T, r, sigma, 'put') for s in S_range]
+call_prices_vs_S = [black_scholes (s, K, T, r, sigma, 'call') for s in S_range]
+put_prices_vs_S = [black_scholes (s, K, T, r, sigma, 'put') for s in S_range]
 
 axes[0, 0].plot(S_range, call_prices_vs_S, label='Call', linewidth=2)
 axes[0, 0].plot(S_range, put_prices_vs_S, label='Put', linewidth=2)
-axes[0, 0].axvline(x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
-axes[0, 0].axvline(x=S, color='green', linestyle='--', alpha=0.5, label=f'Current \${S}')
+axes[0, 0].axvline (x=K, color='red', linestyle='--', alpha=0.5, label=f'Strike \${K}')
+axes[0, 0].axvline (x=S, color='green', linestyle='--', alpha=0.5, label=f'Current \${S}')
 axes[0, 0].set_xlabel('Stock Price ($)')
 axes[0, 0].set_ylabel('Option Price ($)')
 axes[0, 0].set_title('Price vs Stock Price', fontweight='bold')
 axes[0, 0].legend()
-axes[0, 0].grid(alpha=0.3)
+axes[0, 0].grid (alpha=0.3)
 
 # 2. Time sensitivity
 T_range = np.linspace(1/365, 1, 100)  # 1 day to 1 year
@@ -277,33 +277,33 @@ axes[0, 1].set_xlabel('Days to Expiration')
 axes[0, 1].set_ylabel('Option Price ($)')
 axes[0, 1].set_title('Price vs Time to Expiration', fontweight='bold')
 axes[0, 1].legend()
-axes[0, 1].grid(alpha=0.3)
+axes[0, 1].grid (alpha=0.3)
 
 # 3. Volatility sensitivity
 sigma_range = np.linspace(0.05, 1.0, 100)  # 5% to 100% volatility
 call_prices_vs_sigma = [black_scholes(S, K, T, r, sig, 'call') for sig in sigma_range]
 put_prices_vs_sigma = [black_scholes(S, K, T, r, sig, 'put') for sig in sigma_range]
 
-axes[1, 0].plot(sigma_range * 100, call_prices_vs_sigma, label='Call', linewidth=2)
-axes[1, 0].plot(sigma_range * 100, put_prices_vs_sigma, label='Put', linewidth=2)
+axes[1, 0].plot (sigma_range * 100, call_prices_vs_sigma, label='Call', linewidth=2)
+axes[1, 0].plot (sigma_range * 100, put_prices_vs_sigma, label='Put', linewidth=2)
 axes[1, 0].set_xlabel('Volatility (%)')
 axes[1, 0].set_ylabel('Option Price ($)')
 axes[1, 0].set_title('Price vs Volatility (Vega)', fontweight='bold')
 axes[1, 0].legend()
-axes[1, 0].grid(alpha=0.3)
+axes[1, 0].grid (alpha=0.3)
 
 # 4. Interest rate sensitivity
 r_range = np.linspace(0, 0.15, 100)  # 0% to 15%
 call_prices_vs_r = [black_scholes(S, K, T, rate, sigma, 'call') for rate in r_range]
 put_prices_vs_r = [black_scholes(S, K, T, rate, sigma, 'put') for rate in r_range]
 
-axes[1, 1].plot(r_range * 100, call_prices_vs_r, label='Call', linewidth=2)
-axes[1, 1].plot(r_range * 100, put_prices_vs_r, label='Put', linewidth=2)
+axes[1, 1].plot (r_range * 100, call_prices_vs_r, label='Call', linewidth=2)
+axes[1, 1].plot (r_range * 100, put_prices_vs_r, label='Put', linewidth=2)
 axes[1, 1].set_xlabel('Risk-Free Rate (%)')
 axes[1, 1].set_ylabel('Option Price ($)')
 axes[1, 1].set_title('Price vs Interest Rate (Rho)', fontweight='bold')
 axes[1, 1].legend()
-axes[1, 1].grid(alpha=0.3)
+axes[1, 1].grid (alpha=0.3)
 
 plt.tight_layout()
 plt.show()
@@ -321,7 +321,7 @@ print("4. Calls increase with interest rate, puts decrease (present value effect
 
 ### Concept
 
-**Implied volatility (IV)** is the volatility implied by the market price of an option. It's the value of σ that makes the Black-Scholes price equal to the market price.
+**Implied volatility (IV)** is the volatility implied by the market price of an option. It\'s the value of σ that makes the Black-Scholes price equal to the market price.
 
 Given: Market price, S, K, T, r  
 Find: σ such that BS(S, K, T, r, σ) = Market Price
@@ -355,10 +355,10 @@ def vega(S, K, T, r, sigma):
         return 0
     
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
-    vega = S * norm.pdf(d1) * np.sqrt(T)
+    vega = S * norm.pdf (d1) * np.sqrt(T)
     return vega
 
-def implied_volatility(market_price, S, K, T, r, option_type='call', 
+def implied_volatility (market_price, S, K, T, r, option_type='call', 
                       max_iter=100, tol=1e-6):
     """
     Calculate implied volatility using Newton-Raphson method
@@ -383,15 +383,15 @@ def implied_volatility(market_price, S, K, T, r, option_type='call',
     # Initial guess: use approximation formula
     # Brenner-Subrahmanyam approximation
     sigma = np.sqrt(2 * np.pi / T) * market_price / S
-    sigma = max(sigma, 0.01)  # Minimum 1%
+    sigma = max (sigma, 0.01)  # Minimum 1%
     
-    for i in range(max_iter):
+    for i in range (max_iter):
         # Calculate option price with current sigma
         price = black_scholes(S, K, T, r, sigma, option_type)
         
         # Check convergence
         diff = price - market_price
-        if abs(diff) < tol:
+        if abs (diff) < tol:
             return sigma
         
         # Calculate vega
@@ -405,7 +405,7 @@ def implied_volatility(market_price, S, K, T, r, option_type='call',
         sigma = sigma - diff / v
         
         # Ensure sigma stays positive
-        sigma = max(sigma, 0.001)
+        sigma = max (sigma, 0.001)
     
     # Did not converge
     print(f"Warning: IV did not converge after {max_iter} iterations")
@@ -429,16 +429,16 @@ print(f"  Call: \${market_call_price:.2f}")
 print(f"  Put: \${market_put_price:.2f}\\n")
 
 # Calculate implied volatilities
-iv_call = implied_volatility(market_call_price, S, K, T, r, 'call')
-iv_put = implied_volatility(market_put_price, S, K, T, r, 'put')
+iv_call = implied_volatility (market_call_price, S, K, T, r, 'call')
+iv_put = implied_volatility (market_put_price, S, K, T, r, 'put')
 
 print(f"Implied Volatilities:")
 print(f"  From Call: {iv_call*100:.2f}%")
 print(f"  From Put: {iv_put*100:.2f}%")
 print(f"  True σ: {true_sigma*100:.2f}%")
 print(f"\\nRecovery Error:")
-print(f"  Call: {abs(iv_call - true_sigma)*100:.4f}%")
-print(f"  Put: {abs(iv_put - true_sigma)*100:.4f}%")
+print(f"  Call: {abs (iv_call - true_sigma)*100:.4f}%")
+print(f"  Put: {abs (iv_put - true_sigma)*100:.4f}%")
 
 # Test with various market prices
 print("\\n=== IV ACROSS STRIKES ===\\n")
@@ -451,22 +451,22 @@ for strike in strikes:
     mkt_price = black_scholes(S, strike, T, r, true_sigma, 'call')
     
     # Calculate IV
-    iv = implied_volatility(mkt_price, S, strike, T, r, 'call')
-    ivs.append(iv)
+    iv = implied_volatility (mkt_price, S, strike, T, r, 'call')
+    ivs.append (iv)
     
     moneyness = (S / strike - 1) * 100
     print(f"Strike \${strike}: IV={iv*100:.2f}%, Market=\${mkt_price:.2f}, Moneyness={moneyness:+.1f}%")
 
 # Plot IV vs strike (should be flat if Black-Scholes holds)
-plt.figure(figsize=(10, 6))
-plt.plot(strikes, np.array(ivs) * 100, marker='o', linewidth=2, markersize=8)
-plt.axhline(y=true_sigma*100, color='red', linestyle='--', label=f'True σ = {true_sigma*100:.0f}%')
-plt.axvline(x=S, color='green', linestyle='--', alpha=0.5, label=f'Current \${S}')
+plt.figure (figsize=(10, 6))
+plt.plot (strikes, np.array (ivs) * 100, marker='o', linewidth=2, markersize=8)
+plt.axhline (y=true_sigma*100, color='red', linestyle='--', label=f'True σ = {true_sigma*100:.0f}%')
+plt.axvline (x=S, color='green', linestyle='--', alpha=0.5, label=f'Current \${S}')
 plt.xlabel('Strike Price ($)', fontsize=12)
 plt.ylabel('Implied Volatility (%)', fontsize=12)
 plt.title('Implied Volatility Across Strikes\\n(Should be flat under Black-Scholes)', fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 plt.show()
 \`\`\`
 
@@ -507,9 +507,9 @@ def simulate_vol_smile(S, strikes, T, r, base_vol=0.25):
         # IV higher for far OTM and ITM
         smile = base_vol + 0.05 * moneyness**2
         
-        ivs.append(smile)
+        ivs.append (smile)
     
-    return np.array(ivs)
+    return np.array (ivs)
 
 def simulate_vol_skew(S, strikes, T, r, base_vol=0.25):
     """
@@ -525,9 +525,9 @@ def simulate_vol_skew(S, strikes, T, r, base_vol=0.25):
         # IV decreases as strike increases
         skew = base_vol + 0.15 * moneyness
         
-        ivs.append(max(skew, 0.05))  # Floor at 5%
+        ivs.append (max (skew, 0.05))  # Floor at 5%
     
-    return np.array(ivs)
+    return np.array (ivs)
 
 # Generate strikes from deep OTM to deep ITM
 S = 150
@@ -536,7 +536,7 @@ T = 30/365
 r = 0.05
 
 # Calculate different IV patterns
-flat_iv = np.full(len(strikes), 0.25)  # Black-Scholes assumption
+flat_iv = np.full (len (strikes), 0.25)  # Black-Scholes assumption
 smile_iv = simulate_vol_smile(S, strikes, T, r)
 skew_iv = simulate_vol_skew(S, strikes, T, r)
 
@@ -544,36 +544,36 @@ skew_iv = simulate_vol_skew(S, strikes, T, r)
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
 # 1. Flat IV (Black-Scholes)
-axes[0].plot(strikes, flat_iv * 100, linewidth=2, color='blue')
-axes[0].axvline(x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
-axes[0].fill_between(strikes, 0, flat_iv * 100, alpha=0.2)
+axes[0].plot (strikes, flat_iv * 100, linewidth=2, color='blue')
+axes[0].axvline (x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
+axes[0].fill_between (strikes, 0, flat_iv * 100, alpha=0.2)
 axes[0].set_xlabel('Strike Price ($)')
 axes[0].set_ylabel('Implied Volatility (%)')
 axes[0].set_title('Flat IV (Black-Scholes Assumption)', fontweight='bold')
 axes[0].legend()
-axes[0].grid(alpha=0.3)
+axes[0].grid (alpha=0.3)
 axes[0].set_ylim([0, 50])
 
 # 2. Volatility Smile
-axes[1].plot(strikes, smile_iv * 100, linewidth=2, color='green', marker='o', markersize=4)
-axes[1].axvline(x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
-axes[1].fill_between(strikes, 0, smile_iv * 100, alpha=0.2, color='green')
+axes[1].plot (strikes, smile_iv * 100, linewidth=2, color='green', marker='o', markersize=4)
+axes[1].axvline (x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
+axes[1].fill_between (strikes, 0, smile_iv * 100, alpha=0.2, color='green')
 axes[1].set_xlabel('Strike Price ($)')
 axes[1].set_ylabel('Implied Volatility (%)')
 axes[1].set_title('Volatility Smile (Currencies/Commodities)', fontweight='bold')
 axes[1].legend()
-axes[1].grid(alpha=0.3)
+axes[1].grid (alpha=0.3)
 axes[1].set_ylim([0, 50])
 
 # 3. Volatility Skew
-axes[2].plot(strikes, skew_iv * 100, linewidth=2, color='purple', marker='s', markersize=4)
-axes[2].axvline(x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
-axes[2].fill_between(strikes, 0, skew_iv * 100, alpha=0.2, color='purple')
+axes[2].plot (strikes, skew_iv * 100, linewidth=2, color='purple', marker='s', markersize=4)
+axes[2].axvline (x=S, color='red', linestyle='--', alpha=0.5, label=f'ATM \${S}')
+axes[2].fill_between (strikes, 0, skew_iv * 100, alpha=0.2, color='purple')
 axes[2].set_xlabel('Strike Price ($)')
 axes[2].set_ylabel('Implied Volatility (%)')
 axes[2].set_title('Volatility Skew (Equity Markets)', fontweight='bold')
 axes[2].legend()
-axes[2].grid(alpha=0.3)
+axes[2].grid (alpha=0.3)
 axes[2].set_ylim([0, 50])
 
 plt.tight_layout()
@@ -605,7 +605,7 @@ for K in [130, 140, 150, 160, 170]:
     flat_price = black_scholes(S, K, T, r, 0.25, 'put')
     
     # With skew
-    idx = np.argmin(np.abs(strikes - K))
+    idx = np.argmin (np.abs (strikes - K))
     skew_vol = skew_iv[idx]
     skew_price = black_scholes(S, K, T, r, skew_vol, 'put')
     
@@ -727,20 +727,20 @@ def calculate_greeks(S, K, T, r, sigma, option_type='call'):
     
     # Price
     if option_type == 'call':
-        price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
-        delta = norm.cdf(d1)
-        rho = K * T * np.exp(-r * T) * norm.cdf(d2) / 100  # Per 1% change
+        price = S * norm.cdf (d1) - K * np.exp(-r * T) * norm.cdf (d2)
+        delta = norm.cdf (d1)
+        rho = K * T * np.exp(-r * T) * norm.cdf (d2) / 100  # Per 1% change
     else:  # put
         price = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
-        delta = norm.cdf(d1) - 1
+        delta = norm.cdf (d1) - 1
         rho = -K * T * np.exp(-r * T) * norm.cdf(-d2) / 100
     
     # Greeks (same for call and put)
-    gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
-    vega = S * norm.pdf(d1) * np.sqrt(T) / 100  # Per 1% change in volatility
+    gamma = norm.pdf (d1) / (S * sigma * np.sqrt(T))
+    vega = S * norm.pdf (d1) * np.sqrt(T) / 100  # Per 1% change in volatility
     theta = (
-        -S * norm.pdf(d1) * sigma / (2 * np.sqrt(T)) -
-        r * K * np.exp(-r * T) * (norm.cdf(d2) if option_type == 'call' else norm.cdf(-d2))
+        -S * norm.pdf (d1) * sigma / (2 * np.sqrt(T)) -
+        r * K * np.exp(-r * T) * (norm.cdf (d2) if option_type == 'call' else norm.cdf(-d2))
     ) / 365  # Per day
     
     return {
@@ -779,7 +779,7 @@ print(f"  If stock increases by \${1}, call price increases by \${call_greeks['d
 print(f"\\nGamma ({call_greeks['gamma']:.4f}):")
 print(f"  If stock increases by $1, delta increases by {call_greeks['gamma']:.4f}")
 print(f"\\nTheta ({call_greeks['theta']:.4f}):")
-print(f"  Call loses \${abs(call_greeks['theta']):.2f} per day from time decay")
+print(f"  Call loses \${abs (call_greeks['theta']):.2f} per day from time decay")
 print(f"\\nVega ({call_greeks['vega']:.4f}):")
 print(f"  If volatility increases 1%, call price increases \${call_greeks['vega']:.2f}")
 print(f"\\nRho ({call_greeks['rho']:.4f}):")
@@ -794,7 +794,7 @@ print(f"  If interest rate increases 1%, call price increases \${call_greeks['rh
 
 1. **Black-Scholes formula**: Closed-form solution for European options
 2. **Assumptions**: Many simplifications (constant vol, no dividends, etc.)
-3. **Implied volatility**: Market's expectation of future volatility
+3. **Implied volatility**: Market\'s expectation of future volatility
 4. **Vol smile/skew**: Real markets violate constant volatility assumption
 5. **Greeks**: Risk measures derived from Black-Scholes
 6. **Limitations**: Works best for liquid, near-ATM European options

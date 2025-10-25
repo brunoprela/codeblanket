@@ -40,7 +40,7 @@ export const asyncPatternsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "asyncio.gather() runs multiple coroutines concurrently. Example: results = await asyncio.gather(fetch_user(), fetch_posts(), fetch_comments()) executes all three simultaneously, total time = slowest operation (not sum). Benefits: 3x speedup if each takes 1 second. Use when: operations are independent (don't depend on each other), all are I/O-bound, want to wait for all results. Options: return_exceptions=True to handle individual failures. It doesn't run sequentially (option 2), works with any async operations (option 4), and does more than collect data (option 3) - it enables concurrency.",
+      "asyncio.gather() runs multiple coroutines concurrently. Example: results = await asyncio.gather (fetch_user(), fetch_posts(), fetch_comments()) executes all three simultaneously, total time = slowest operation (not sum). Benefits: 3x speedup if each takes 1 second. Use when: operations are independent (don't depend on each other), all are I/O-bound, want to wait for all results. Options: return_exceptions=True to handle individual failures. It doesn't run sequentially (option 2), works with any async operations (option 4), and does more than collect data (option 3) - it enables concurrency.",
   },
   {
     id: 4,
@@ -67,6 +67,6 @@ export const asyncPatternsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "Common mistake: async def endpoint(): result = sync_db_query() (blocks event loop!). Sync operations in async functions don't automatically become async (option 4). Mixing is allowed (option 3) but requires care. Pattern for fixing: Use asyncio.to_thread() to run blocking code: result = await asyncio.to_thread(sync_function). Or use async alternatives: async with httpx.AsyncClient(), async SQLAlchemy. The danger: One blocking call in an async endpoint blocks all other requests. Not a syntax error (option 2) but a performance killer. Always use async versions of libraries in async endpoints.",
+      "Common mistake: async def endpoint(): result = sync_db_query() (blocks event loop!). Sync operations in async functions don't automatically become async (option 4). Mixing is allowed (option 3) but requires care. Pattern for fixing: Use asyncio.to_thread() to run blocking code: result = await asyncio.to_thread (sync_function). Or use async alternatives: async with httpx.AsyncClient(), async SQLAlchemy. The danger: One blocking call in an async endpoint blocks all other requests. Not a syntax error (option 2) but a performance killer. Always use async versions of libraries in async endpoints.",
   },
 ].map(({ id, ...q }, idx) => ({ id: `fastapi-mc-${idx + 1}`, ...q }));

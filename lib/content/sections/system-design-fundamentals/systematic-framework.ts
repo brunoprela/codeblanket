@@ -49,7 +49,7 @@ Total: 45-60 minutes
 - Read vs write ratio?
 
 **Ask about performance:**
-- What's acceptable latency for timeline loading?
+- What\'s acceptable latency for timeline loading?
 - Real-time updates or eventual consistency acceptable?
 
 **Ask about availability:**
@@ -213,7 +213,7 @@ What you WON'T cover:
 **Cons:** Slow writes (write to 1M inboxes if user has 1M followers)
 **Use case:** When user has few followers
 
-**Hybrid Approach (Twitter's actual solution):**
+**Hybrid Approach (Twitter\'s actual solution):**
 - **Regular users:** Push model (fanout on write)
 - **Celebrities:** Pull model (query at read time)
 - Threshold: 1M followers
@@ -356,8 +356,8 @@ If we had more time:
 **Database schema:**
 \`\`\`
     url_mappings:
-    - id(auto - increment)
-        - short_code(unique index)
+    - id (auto - increment)
+        - short_code (unique index)
         - long_url
         - created_at
             \`\`\`

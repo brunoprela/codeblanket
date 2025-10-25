@@ -37,7 +37,7 @@ class ToolResponse:
     error: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
     
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict (self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         result = {"status": self.status.value}
         
@@ -53,11 +53,11 @@ class ToolResponse:
         return result
 
 # Example usage
-def get_weather(location: str) -> Dict[str, Any]:
+def get_weather (location: str) -> Dict[str, Any]:
     """Get weather with structured response."""
     try:
         # Fetch weather data
-        weather_data = fetch_weather_api(location)
+        weather_data = fetch_weather_api (location)
         
         response = ToolResponse(
             status=ResponseStatus.SUCCESS,
@@ -159,9 +159,9 @@ def get_user_count() -> Dict[str, Any]:
 For queries returning multiple items:
 
 \`\`\`python
-def search_products(query: str, limit: int = 10) -> Dict[str, Any]:
+def search_products (query: str, limit: int = 10) -> Dict[str, Any]:
     """Search products."""
-    results = product_search.search(query, limit=limit)
+    results = product_search.search (query, limit=limit)
     
     return {
         "status": "success",
@@ -180,13 +180,13 @@ def search_products(query: str, limit: int = 10) -> Dict[str, Any]:
                 }
                 for product in results
             ],
-            "count": len(results),
-            "total_matches": product_search.total_count(query)
+            "count": len (results),
+            "total_matches": product_search.total_count (query)
         },
         "metadata": {
             "search_time_ms": 45,
             "limit": limit,
-            "truncated": len(results) == limit
+            "truncated": len (results) == limit
         }
     }
 \`\`\`
@@ -196,10 +196,10 @@ def search_products(query: str, limit: int = 10) -> Dict[str, Any]:
 For tools that perform actions:
 
 \`\`\`python
-def send_email(to: str, subject: str, body: str) -> Dict[str, Any]:
+def send_email (to: str, subject: str, body: str) -> Dict[str, Any]:
     """Send email with confirmation."""
     try:
-        message_id = email_service.send(to, subject, body)
+        message_id = email_service.send (to, subject, body)
         
         return {
             "status": "success",
@@ -216,7 +216,7 @@ def send_email(to: str, subject: str, body: str) -> Dict[str, Any]:
     except Exception as e:
         return {
             "status": "error",
-            "error": f"Failed to send email: {str(e)}",
+            "error": f"Failed to send email: {str (e)}",
             "data": {
                 "action": "email_send_failed",
                 "recipient": to
@@ -231,7 +231,7 @@ def send_email(to: str, subject: str, body: str) -> Dict[str, Any]:
 Make errors understandable and actionable:
 
 \`\`\`python
-def query_database(query: str) -> Dict[str, Any]:
+def query_database (query: str) -> Dict[str, Any]:
     """Execute database query with clear error handling."""
     
     # Validate query
@@ -248,13 +248,13 @@ def query_database(query: str) -> Dict[str, Any]:
         }
     
     try:
-        results = database.execute(query).fetchall()
+        results = database.execute (query).fetchall()
         
         return {
             "status": "success",
             "data": {
-                "rows": [dict(row) for row in results],
-                "count": len(results)
+                "rows": [dict (row) for row in results],
+                "count": len (results)
             }
         }
     
@@ -265,8 +265,8 @@ def query_database(query: str) -> Dict[str, Any]:
             "error_code": "SYNTAX_ERROR",
             "data": {
                 "query": query,
-                "error_detail": str(e),
-                "position": e.position if hasattr(e, 'position') else None
+                "error_detail": str (e),
+                "position": e.position if hasattr (e, 'position') else None
             },
             "suggestion": "Check your SQL syntax and try again"
         }
@@ -328,14 +328,14 @@ return create_error_response(
 Handle cases where operation partially succeeds:
 
 \`\`\`python
-def send_bulk_email(recipients: List[str], subject: str, body: str) -> Dict[str, Any]:
+def send_bulk_email (recipients: List[str], subject: str, body: str) -> Dict[str, Any]:
     """Send email to multiple recipients."""
     successful = []
     failed = []
     
     for recipient in recipients:
         try:
-            message_id = email_service.send(recipient, subject, body)
+            message_id = email_service.send (recipient, subject, body)
             successful.append({
                 "recipient": recipient,
                 "message_id": message_id,
@@ -344,7 +344,7 @@ def send_bulk_email(recipients: List[str], subject: str, body: str) -> Dict[str,
         except Exception as e:
             failed.append({
                 "recipient": recipient,
-                "error": str(e),
+                "error": str (e),
                 "status": "failed"
             })
     
@@ -359,13 +359,13 @@ def send_bulk_email(recipients: List[str], subject: str, body: str) -> Dict[str,
     return {
         "status": status,
         "data": {
-            "total_recipients": len(recipients),
-            "successful_count": len(successful),
-            "failed_count": len(failed),
+            "total_recipients": len (recipients),
+            "successful_count": len (successful),
+            "failed_count": len (failed),
             "successful": successful,
             "failed": failed
         },
-        "message": f"Sent {len(successful)}/{len(recipients)} emails successfully"
+        "message": f"Sent {len (successful)}/{len (recipients)} emails successfully"
     }
 \`\`\`
 
@@ -374,9 +374,9 @@ def send_bulk_email(recipients: List[str], subject: str, body: str) -> Dict[str,
 ### Including Relevant Context
 
 \`\`\`python
-def get_stock_price(symbol: str) -> Dict[str, Any]:
+def get_stock_price (symbol: str) -> Dict[str, Any]:
     """Get stock price with rich context."""
-    data = stock_api.get_quote(symbol)
+    data = stock_api.get_quote (symbol)
     
     return {
         "status": "success",
@@ -410,7 +410,7 @@ def get_stock_price(symbol: str) -> Dict[str, Any]:
 For data analysis tools:
 
 \`\`\`python
-def analyze_data(data: List[float]) -> Dict[str, Any]:
+def analyze_data (data: List[float]) -> Dict[str, Any]:
     """Analyze numerical data with visualization."""
     import numpy as np
     import matplotlib.pyplot as plt
@@ -418,35 +418,35 @@ def analyze_data(data: List[float]) -> Dict[str, Any]:
     import base64
     
     # Calculate statistics
-    mean = np.mean(data)
-    median = np.median(data)
-    std = np.std(data)
+    mean = np.mean (data)
+    median = np.median (data)
+    std = np.std (data)
     
     # Create visualization
-    plt.figure(figsize=(10, 6))
-    plt.hist(data, bins=20, edgecolor='black')
-    plt.axvline(mean, color='red', linestyle='--', label=f'Mean: {mean:.2f}')
-    plt.axvline(median, color='green', linestyle='--', label=f'Median: {median:.2f}')
+    plt.figure (figsize=(10, 6))
+    plt.hist (data, bins=20, edgecolor='black')
+    plt.axvline (mean, color='red', linestyle='--', label=f'Mean: {mean:.2f}')
+    plt.axvline (median, color='green', linestyle='--', label=f'Median: {median:.2f}')
     plt.legend()
     plt.title('Data Distribution')
     
     # Save to bytes
     buf = io.BytesIO()
-    plt.savefig(buf, format='png')
+    plt.savefig (buf, format='png')
     buf.seek(0)
-    plot_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    plot_base64 = base64.b64encode (buf.read()).decode('utf-8')
     plt.close()
     
     return {
         "status": "success",
         "data": {
             "statistics": {
-                "count": len(data),
+                "count": len (data),
                 "mean": mean,
                 "median": median,
                 "std_dev": std,
-                "min": min(data),
-                "max": max(data)
+                "min": min (data),
+                "max": max (data)
             },
             "visualization": {
                 "type": "histogram",
@@ -455,7 +455,7 @@ def analyze_data(data: List[float]) -> Dict[str, Any]:
                 "description": "Histogram showing data distribution with mean and median"
             }
         },
-        "message": f"Analyzed {len(data)} data points. Mean: {mean:.2f}, Median: {median:.2f}"
+        "message": f"Analyzed {len (data)} data points. Mean: {mean:.2f}, Median: {median:.2f}"
     }
 \`\`\`
 
@@ -464,11 +464,11 @@ def analyze_data(data: List[float]) -> Dict[str, Any]:
 Include metadata to help with caching, debugging, and optimization:
 
 \`\`\`python
-def search_web(query: str) -> Dict[str, Any]:
+def search_web (query: str) -> Dict[str, Any]:
     """Search with comprehensive metadata."""
     start_time = time.time()
     
-    results = search_api.search(query)
+    results = search_api.search (query)
     
     elapsed_ms = (time.time() - start_time) * 1000
     
@@ -513,13 +513,13 @@ def search_web(query: str) -> Dict[str, Any]:
 Include human-readable summaries:
 
 \`\`\`python
-def get_user_stats(user_id: str) -> Dict[str, Any]:
+def get_user_stats (user_id: str) -> Dict[str, Any]:
     """Get user statistics with LLM-friendly summary."""
-    stats = fetch_user_stats(user_id)
+    stats = fetch_user_stats (user_id)
     
     # Generate natural language summary
     summary = f"""User {stats['name']} has been a member since {stats['joined_date']}.
-They have made {stats['order_count']} orders with a total value of \${stats['total_spent']: .2f}.
+They have made {stats['order_count']} orders with a total value of \${stats['total_spent']:.2f}.
 Their average order value is \${ stats['avg_order_value']: .2f }.
 Last activity was { stats['days_since_last_activity'] } days ago."""
 
@@ -573,10 +573,10 @@ Use clear markers for important data:
 Handle large result sets:
 
 \`\`\`python
-def list_users(page: int = 1, per_page: int = 20) -> Dict[str, Any]:
+def list_users (page: int = 1, per_page: int = 20) -> Dict[str, Any]:
     """List users with pagination."""
     offset = (page - 1) * per_page
-    users = database.query(User).offset(offset).limit(per_page).all()
+    users = database.query(User).offset (offset).limit (per_page).all()
     total_count = database.query(User).count()
     total_pages = (total_count + per_page - 1) // per_page
     
@@ -595,7 +595,7 @@ def list_users(page: int = 1, per_page: int = 20) -> Dict[str, Any]:
                 "next_page": page + 1 if page < total_pages else None
             }
         },
-        "message": f"Showing page {page} of {total_pages} ({len(users)} users)"
+        "message": f"Showing page {page} of {total_pages} ({len (users)} users)"
     }
 \`\`\`
 
@@ -615,33 +615,33 @@ class StandardResponse(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
     
     @validator('status')
-    def status_must_be_valid(cls, v):
+    def status_must_be_valid (cls, v):
         if v not in ['success', 'error', 'partial']:
             raise ValueError('status must be success, error, or partial')
         return v
     
     @validator('error')
-    def error_required_if_status_error(cls, v, values):
+    def error_required_if_status_error (cls, v, values):
         if values.get('status') == 'error' and not v:
             raise ValueError('error message required when status is error')
         return v
     
     @validator('data')
-    def data_required_if_success(cls, v, values):
+    def data_required_if_success (cls, v, values):
         if values.get('status') == 'success' and v is None:
             raise ValueError('data required when status is success')
         return v
 
-def validated_tool_response(response: Dict) -> Dict:
+def validated_tool_response (response: Dict) -> Dict:
     """Validate and return response."""
     try:
         validated = StandardResponse(**response)
-        return validated.dict(exclude_none=True)
+        return validated.dict (exclude_none=True)
     except Exception as e:
         # Return error response if validation fails
         return {
             "status": "error",
-            "error": f"Response validation failed: {str(e)}"
+            "error": f"Response validation failed: {str (e)}"
         }
 \`\`\`
 
@@ -664,8 +664,8 @@ def test_error_response_format():
     
     assert response["status"] == "error"
     assert "error" in response
-    assert isinstance(response["error"], str)
-    assert len(response["error"]) > 0
+    assert isinstance (response["error"], str)
+    assert len (response["error"]) > 0
 
 def test_response_has_metadata():
     """Test response includes metadata."""
@@ -680,7 +680,7 @@ def test_llm_can_parse_response():
     response = get_weather("London")
     
     # Create a prompt asking LLM to extract temperature
-    prompt = f"""Given this tool response: {json.dumps(response)}
+    prompt = f"""Given this tool response: {json.dumps (response)}
     
 Extract the temperature and location."""
     
@@ -710,8 +710,8 @@ Extract the temperature and location."""
 ## Complete Example
 
 \`\`\`python
-@tool(description="Get weather forecast")
-def get_weather_forecast(location: str, days: int = 3) -> Dict[str, Any]:
+@tool (description="Get weather forecast")
+def get_weather_forecast (location: str, days: int = 3) -> Dict[str, Any]:
     """
     Get weather forecast with perfectly structured response.
     """
@@ -727,7 +727,7 @@ def get_weather_forecast(location: str, days: int = 3) -> Dict[str, Any]:
         
         # Fetch data
         start_time = time.time()
-        forecast_data = weather_api.get_forecast(location, days)
+        forecast_data = weather_api.get_forecast (location, days)
         elapsed_ms = (time.time() - start_time) * 1000
         
         # Build response
@@ -754,8 +754,8 @@ def get_weather_forecast(location: str, days: int = 3) -> Dict[str, Any]:
                     for day in forecast_data["days"]
                 ],
                 "summary": f"{days}-day forecast for {forecast_data['location']['name']}: "
-                          f"Temperatures ranging from {min(d['temp_low'] for d in forecast_data['days'])}°F "
-                          f"to {max(d['temp_high'] for d in forecast_data['days'])}°F"
+                          f"Temperatures ranging from {min (d['temp_low'] for d in forecast_data['days'])}°F "
+                          f"to {max (d['temp_high'] for d in forecast_data['days'])}°F"
             },
             "metadata": {
                 "source": "OpenWeatherMap",
@@ -775,11 +775,11 @@ def get_weather_forecast(location: str, days: int = 3) -> Dict[str, Any]:
         )
     
     except Exception as e:
-        logger.exception(f"Weather forecast error: {e}")
+        logger.exception (f"Weather forecast error: {e}")
         return create_error_response(
             ErrorCode.INTERNAL_ERROR,
             "An error occurred while fetching weather data",
-            {"error_type": type(e).__name__},
+            {"error_type": type (e).__name__},
             "Please try again in a moment"
         )
 \`\`\`

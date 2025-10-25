@@ -71,31 +71,31 @@ public class OrderAggregate {
             orderId: generateId(),
             customerId: cmd.getCustomerId(),
             items: cmd.getItems(),
-            totalAmount: calculateTotal(cmd.getItems()),
+            totalAmount: calculateTotal (cmd.getItems()),
             timestamp: Instant.now()
         );
         
         // Apply event (change state)
-        apply(event);
+        apply (event);
         
         // Store event
-        eventStore.save(event);
+        eventStore.save (event);
         
         // Publish event
-        eventBus.publish(event);
+        eventBus.publish (event);
     }
     
     private void apply(OrderPlacedEvent event) {
         this.orderId = event.getOrderId();
         this.status = OrderStatus.PENDING;
-        this.events.add(event);
+        this.events.add (event);
     }
     
     // Reconstruct from events
     public static OrderAggregate load(String orderId) {
-        List<Event> events = eventStore.getEvents(orderId);
+        List<Event> events = eventStore.getEvents (orderId);
         OrderAggregate order = new OrderAggregate();
-        events.forEach(order::apply);
+        events.forEach (order::apply);
         return order;
     }
 }
@@ -110,18 +110,18 @@ OrderShippedEvent → orders_events table
 // 2. Payment (Event Sourcing)
 public void processPayment(ProcessPaymentCommand cmd) {
     // Check previous events
-    List<Event> events = eventStore.getEvents(cmd.getOrderId());
+    List<Event> events = eventStore.getEvents (cmd.getOrderId());
     
     // Validate (no duplicate payments)
     boolean alreadyPaid = events.stream()
-        .anyMatch(e -> e instanceof PaymentProcessedEvent);
+        .anyMatch (e -> e instanceof PaymentProcessedEvent);
     
     if (alreadyPaid) {
         throw new DuplicatePaymentException();
     }
     
     // Process payment
-    PaymentResult result = paymentGateway.charge(cmd);
+    PaymentResult result = paymentGateway.charge (cmd);
     
     // Create event
     PaymentProcessedEvent event = new PaymentProcessedEvent(
@@ -132,8 +132,8 @@ public void processPayment(ProcessPaymentCommand cmd) {
     );
     
     // Store and publish
-    eventStore.save(event);
-    eventBus.publish(event);
+    eventStore.save (event);
+    eventBus.publish (event);
 }
 
 // Benefit: Audit trail for financial transactions
@@ -145,7 +145,7 @@ public class InventoryService {
     public void onOrderPlaced(OrderPlacedEvent event) {
         // Event has all data needed (no extra query)
         for (Item item : event.getItems()) {
-            inventory.reserve(item.getProductId(), item.getQuantity());
+            inventory.reserve (item.getProductId(), item.getQuantity());
         }
         
         // Publish inventory event (also state transfer)
@@ -155,7 +155,7 @@ public class InventoryService {
             reservedAt: Instant.now()
         );
         
-        eventBus.publish(reserved);
+        eventBus.publish (reserved);
     }
 }
 
@@ -167,9 +167,9 @@ public class EmailService {
     public void onOrderPlaced(OrderPlacedEvent event) {
         // Event has customer, items, amount
         sendEmail(
-            to: getCustomerEmail(event.getCustomerId()),
+            to: getCustomerEmail (event.getCustomerId()),
             subject: "Order Confirmation",
-            body: formatOrderEmail(event)
+            body: formatOrderEmail (event)
         );
     }
     
@@ -177,9 +177,9 @@ public class EmailService {
     public void onPaymentProcessed(PaymentProcessedEvent event) {
         // Event has transaction details
         sendEmail(
-            to: getCustomerEmail(event.getCustomerId()),
+            to: getCustomerEmail (event.getCustomerId()),
             subject: "Payment Confirmed",
-            body: formatPaymentEmail(event)
+            body: formatPaymentEmail (event)
         );
     }
 }
@@ -291,7 +291,7 @@ Events:
 
 Reconstruct current state:
 Order order = new Order();
-events.forEach(order::apply);
+events.forEach (order::apply);
 
 order.status == SHIPPED ✅
 \`\`\`
@@ -359,36 +359,36 @@ public class PostCommandHandler {
         }
         
         // Create aggregate
-        Post post = new Post(cmd.getPostId());
-        post.create(cmd.getUserId(), cmd.getContent(), cmd.getImageUrls());
+        Post post = new Post (cmd.getPostId());
+        post.create (cmd.getUserId(), cmd.getContent(), cmd.getImageUrls());
         
         // Get uncommitted events
         List<Event> events = post.getUncommittedEvents();
         
         // Store events
-        eventStore.save(cmd.getPostId(), events);
+        eventStore.save (cmd.getPostId(), events);
         
         // Publish events
-        events.forEach(eventBus::publish);
+        events.forEach (eventBus::publish);
     }
     
     public void handle(LikePostCommand cmd) {
         // Load aggregate from events
-        Post post = loadPost(cmd.getPostId());
+        Post post = loadPost (cmd.getPostId());
         
         // Execute command
-        post.like(cmd.getUserId());
+        post.like (cmd.getUserId());
         
         // Save new events
         List<Event> events = post.getUncommittedEvents();
-        eventStore.save(cmd.getPostId(), events);
-        events.forEach(eventBus::publish);
+        eventStore.save (cmd.getPostId(), events);
+        events.forEach (eventBus::publish);
     }
     
     private Post loadPost(String postId) {
-        List<Event> events = eventStore.getEvents(postId);
-        Post post = new Post(postId);
-        events.forEach(post::apply);
+        List<Event> events = eventStore.getEvents (postId);
+        Post post = new Post (postId);
+        events.forEach (post::apply);
         return post;
     }
 }
@@ -405,20 +405,20 @@ public class Post {
         PostCreatedEvent event = new PostCreatedEvent(
             postId, userId, content, imageUrls, Instant.now()
         );
-        apply(event);
-        uncommittedEvents.add(event);
+        apply (event);
+        uncommittedEvents.add (event);
     }
     
     public void like(String userId) {
-        if (likes.contains(userId)) {
+        if (likes.contains (userId)) {
             throw new AlreadyLikedException();
         }
         
         PostLikedEvent event = new PostLikedEvent(
             postId, userId, Instant.now()
         );
-        apply(event);
-        uncommittedEvents.add(event);
+        apply (event);
+        uncommittedEvents.add (event);
     }
     
     private void apply(PostCreatedEvent event) {
@@ -428,7 +428,7 @@ public class Post {
     }
     
     private void apply(PostLikedEvent event) {
-        this.likes.add(event.getUserId());
+        this.likes.add (event.getUserId());
     }
 }
 
@@ -482,7 +482,7 @@ public class PostFeedProjection {
             "VALUES (?, ?, ?, ?, ?, 0, 0, ?)",
             event.getPostId(),
             event.getUserId(),
-            getUserName(event.getUserId()),  // Lookup username
+            getUserName (event.getUserId()),  // Lookup username
             event.getContent(),
             event.getImageUrls(),
             event.getTimestamp()
@@ -593,12 +593,12 @@ After 1 second (projection complete):
 
 4. Client-side handling:
 // Optimistic update
-posts.add(newPost);
-displayPost(newPost);
+posts.add (newPost);
+displayPost (newPost);
 
 // Eventually consistent
 setTimeout(() => {
-    refreshPost(newPost.id);  // Fetch from read model
+    refreshPost (newPost.id);  // Fetch from read model
 }, 1000);
 \`\`\`
 
@@ -731,7 +731,7 @@ public class EventUpcaster {
         }
         
         // Deserialize to current version
-        return objectMapper.readValue(data.toString(), OrderPlacedEvent.class);
+        return objectMapper.readValue (data.toString(), OrderPlacedEvent.class);
     }
     
     private JsonNode upcastV1ToV2(JsonNode v1) {
@@ -739,7 +739,7 @@ public class EventUpcaster {
         
         // V1 didn't have items, infer from total
         ArrayNode items = objectMapper.createArrayNode();
-        items.add(createDefaultItem(v1.get("total").asDouble()));
+        items.add (createDefaultItem (v1.get("total").asDouble()));
         v2.set("items", items);
         
         return v2;
@@ -756,9 +756,9 @@ public class EventUpcaster {
 }
 
 // Usage:
-List<RawEvent> rawEvents = eventStore.getEvents(orderId);
+List<RawEvent> rawEvents = eventStore.getEvents (orderId);
 List<OrderPlacedEvent> events = rawEvents.stream()
-    .map(upcaster::upcast)
+    .map (upcaster::upcast)
     .collect(Collectors.toList());
 \`\`\`
 
@@ -809,13 +809,13 @@ List<OrderPlacedEvent> events = rawEvents.stream()
 
 // Producer
 SchemaRegistryClient schemaRegistry = new CachedSchemaRegistryClient("http://schema-registry:8081", 100);
-KafkaAvroSerializer serializer = new KafkaAvroSerializer(schemaRegistry);
+KafkaAvroSerializer serializer = new KafkaAvroSerializer (schemaRegistry);
 
 OrderPlacedEvent event = new OrderPlacedEvent("123", "456", items, 99.99, "USD");
 byte[] serialized = serializer.serialize("events", event);
 
 // Consumer
-KafkaAvroDeserializer deserializer = new KafkaAvroDeserializer(schemaRegistry);
+KafkaAvroDeserializer deserializer = new KafkaAvroDeserializer (schemaRegistry);
 OrderPlacedEvent event = (OrderPlacedEvent) deserializer.deserialize("events", serialized);
 
 // Schema validation automatic ✅
@@ -880,7 +880,7 @@ public class OrderPlacedEvent_V1 implements OrderPlacedEvent {
     private double total;
     
     public Money getTotal() {
-        return new Money(total, "USD");  // Default currency
+        return new Money (total, "USD");  // Default currency
     }
 }
 
@@ -893,11 +893,11 @@ public class OrderPlacedEvent_V2 implements OrderPlacedEvent {
 }
 
 // Deserialize based on version
-public OrderPlacedEvent deserialize(byte[] data, int version) {
+public OrderPlacedEvent deserialize (byte[] data, int version) {
     if (version == 1) {
-        return objectMapper.readValue(data, OrderPlacedEvent_V1.class);
+        return objectMapper.readValue (data, OrderPlacedEvent_V1.class);
     } else {
-        return objectMapper.readValue(data, OrderPlacedEvent_V2.class);
+        return objectMapper.readValue (data, OrderPlacedEvent_V2.class);
     }
 }
 
@@ -909,10 +909,10 @@ public class OrderPlacedEvent {
     public Money getTotal() {
         if (totalNode.isNumber()) {
             // V1: double
-            return new Money(totalNode.asDouble(), "USD");
+            return new Money (totalNode.asDouble(), "USD");
         } else {
             // V2: object
-            return objectMapper.convertValue(totalNode, Money.class);
+            return objectMapper.convertValue (totalNode, Money.class);
         }
     }
 }

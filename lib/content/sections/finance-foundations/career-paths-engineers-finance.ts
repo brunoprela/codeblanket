@@ -128,7 +128,7 @@ Quant Interview Sample Questions
 """
 
 # 1. PROBABILITY
-# You flip a fair coin until you get heads. What's the expected number of flips?
+# You flip a fair coin until you get heads. What\'s the expected number of flips?
 def expected_flips_until_heads():
     """
     Answer: 2
@@ -136,7 +136,7 @@ def expected_flips_until_heads():
     Explanation:
     E[X] = 1 × P(H on flip 1) + 2 × P(H on flip 2) + 3 × P(H on flip 3) + ...
          = 1 × 0.5 + 2 × 0.25 + 3 × 0.125 + ...
-         = sum(n × (0.5)^n for n=1 to infinity)
+         = sum (n × (0.5)^n for n=1 to infinity)
          = 2
     """
     return 2
@@ -145,19 +145,19 @@ def expected_flips_until_heads():
 # You have returns: [0.10, -0.05, 0.08, -0.03, 0.12]. Calculate Sharpe ratio.
 import numpy as np
 
-def calculate_sharpe(returns, rf_rate=0.02):
+def calculate_sharpe (returns, rf_rate=0.02):
     """
     Sharpe = (mean_return - rf_rate) / std_return
     
     Answer: (0.044 - 0.02) / 0.073 = 0.33 (assuming annual returns)
     """
-    mean_return = np.mean(returns)
-    std_return = np.std(returns, ddof=1)  # Sample std
+    mean_return = np.mean (returns)
+    std_return = np.std (returns, ddof=1)  # Sample std
     sharpe = (mean_return - rf_rate) / std_return
     return sharpe
 
 returns = [0.10, -0.05, 0.08, -0.03, 0.12]
-print(f"Sharpe Ratio: {calculate_sharpe(returns):.2f}")
+print(f"Sharpe Ratio: {calculate_sharpe (returns):.2f}")
 
 # 3. ML / OVERFITTING
 # Explain: Why does adding more features sometimes hurt model performance?
@@ -178,7 +178,7 @@ def explain_overfitting():
 
 # 4. CODING
 # Implement backtesting framework calculating Sharpe ratio
-def backtest_strategy(signals, prices, transaction_cost=0.001):
+def backtest_strategy (signals, prices, transaction_cost=0.001):
     """
     Given buy/sell signals (-1, 0, 1) and prices, calculate returns
     
@@ -198,7 +198,7 @@ def backtest_strategy(signals, prices, transaction_cost=0.001):
     returns = []
     position = 0
     
-    for i in range(1, len(signals)):
+    for i in range(1, len (signals)):
         # Calculate return if we have position
         if position != 0:
             price_return = (prices[i] / prices[i-1]) - 1
@@ -208,14 +208,14 @@ def backtest_strategy(signals, prices, transaction_cost=0.001):
         
         # Apply transaction cost if position changes
         if signals[i] != signals[i-1]:
-            strategy_return -= abs(transaction_cost)
+            strategy_return -= abs (transaction_cost)
         
-        returns.append(strategy_return)
+        returns.append (strategy_return)
         position = signals[i]
     
     # Calculate Sharpe
-    mean_return = np.mean(returns)
-    std_return = np.std(returns, ddof=1)
+    mean_return = np.mean (returns)
+    std_return = np.std (returns, ddof=1)
     sharpe = mean_return / std_return * np.sqrt(252)  # Annualized
     
     return sharpe
@@ -223,7 +223,7 @@ def backtest_strategy(signals, prices, transaction_cost=0.001):
 # Test
 signals = np.array([1, 1, -1, -1, 1, 1, 0, 0, 1])
 prices = np.array([100, 102, 101, 99, 98, 100, 101, 102, 104])
-print(f"Strategy Sharpe: {backtest_strategy(signals, prices):.2f}")
+print(f"Strategy Sharpe: {backtest_strategy (signals, prices):.2f}")
 \`\`\`
 
 ### Career Progression
@@ -271,7 +271,7 @@ Principal Quant (10+ yrs) → Portfolio Manager or Research Director
 4. Apply to smaller funds or Tier 2 funds
 5. Build up to Tier 1 funds
 
-**Path 3: Quant Master's Programs**
+**Path 3: Quant Master\'s Programs**
 - Baruch MFE, CMU MSCF, Berkeley MFE, Columbia MFE
 - Good for networking, less prestigious than PhD
 - Can work for mid-tier funds
@@ -497,7 +497,7 @@ Build **low-latency systems** for exchanges, market data vendors, trading firms.
 
 ## Key Takeaways
 
-1. **Compensation is excellent** across all paths ($200K-$900K mid-career)
+1. **Compensation is excellent** across all paths (\$200K-$900K mid-career)
 2. **PhD opens doors** but isn't required (except top quant funds)
 3. **Trade-offs exist**: Comp vs balance, equity vs cash, pure research vs applied
 4. **Multiple entry points**: PhD, bootcamp → FAANG → finance, direct from undergrad

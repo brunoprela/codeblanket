@@ -12,7 +12,7 @@ export const fixturesDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 3,
     explanation:
-      'Default fixture scope is function—fixture created and destroyed for EACH test function: Ensures test isolation (clean state per test). No shared state between tests. Can be parallelized safely. Example: @pytest.fixture or @pytest.fixture(scope="function") are equivalent. Override with scope parameter: scope="class", scope="module", scope="session". Why function default? Favors correctness (isolation) over performance. Most tests need isolated data. Explicit opt-in for shared fixtures (module/session scope).',
+      'Default fixture scope is function—fixture created and destroyed for EACH test function: Ensures test isolation (clean state per test). No shared state between tests. Can be parallelized safely. Example: @pytest.fixture or @pytest.fixture (scope="function") are equivalent. Override with scope parameter: scope="class", scope="module", scope="session". Why function default? Favors correctness (isolation) over performance. Most tests need isolated data. Explicit opt-in for shared fixtures (module/session scope).',
   },
   {
     id: 'fdd-mc-2',
@@ -40,7 +40,7 @@ export const fixturesDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Lower scope can depend on higher scope—function-scoped fixture CAN depend on session-scoped: Works fine: Each test gets new function fixture, which uses same session fixture. Example: @pytest.fixture(scope="session") def app(): return App(); @pytest.fixture def client(app): return app.test_client() → client recreated per test, app created once. ScopeMismatch occurs in REVERSE: Session fixture depending on function fixture fails (session created once, but function fixture created per-test—conflict). Rule: Higher/equal scope can depend on higher/equal scope. Lower scope can depend on ANY scope. Benefit: Reuse expensive setup (session) while maintaining test isolation (function).',
+      'Lower scope can depend on higher scope—function-scoped fixture CAN depend on session-scoped: Works fine: Each test gets new function fixture, which uses same session fixture. Example: @pytest.fixture (scope="session") def app(): return App(); @pytest.fixture def client (app): return app.test_client() → client recreated per test, app created once. ScopeMismatch occurs in REVERSE: Session fixture depending on function fixture fails (session created once, but function fixture created per-test—conflict). Rule: Higher/equal scope can depend on higher/equal scope. Lower scope can depend on ANY scope. Benefit: Reuse expensive setup (session) while maintaining test isolation (function).',
   },
   {
     id: 'fdd-mc-4',
@@ -53,7 +53,7 @@ export const fixturesDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      "autouse=True makes fixture run automatically for EVERY test without explicit request: No parameter needed: Tests don't need to add fixture as parameter. Runs for all tests: In scope (function-scoped autouse runs for all tests in file, session-scoped for all tests in session). Use cases: Database cleanup before each test, logging setup, environment variable configuration. Example: @pytest.fixture(autouse=True) def clean_db(): truncate_all_tables() → runs before every test. Warning: Use sparingly—makes it less clear what fixtures each test uses. Not for detection/parallelization/retries.",
+      "autouse=True makes fixture run automatically for EVERY test without explicit request: No parameter needed: Tests don't need to add fixture as parameter. Runs for all tests: In scope (function-scoped autouse runs for all tests in file, session-scoped for all tests in session). Use cases: Database cleanup before each test, logging setup, environment variable configuration. Example: @pytest.fixture (autouse=True) def clean_db(): truncate_all_tables() → runs before every test. Warning: Use sparingly—makes it less clear what fixtures each test uses. Not for detection/parallelization/retries.",
   },
   {
     id: 'fdd-mc-5',
@@ -67,6 +67,6 @@ export const fixturesDeepDiveMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Fixture factories allow creating MULTIPLE INSTANCES with different parameters in one test: Multiple objects: Factory can be called multiple times with different args. Flexibility: Default parameters with override capability. Example: @pytest.fixture def user_factory(db): def make_user(name="User", age=30): return User(name, age); return make_user → test_multiple_users(user_factory): alice = user_factory("Alice", 25); bob = user_factory("Bob", 35) → create 2 users with different data. Compare to regular fixture: Only returns one instance per test. Factory factories don\'t inherently run faster or clean up automatically (though you can implement cleanup tracking). Still need conftest.py for sharing across files.',
+      'Fixture factories allow creating MULTIPLE INSTANCES with different parameters in one test: Multiple objects: Factory can be called multiple times with different args. Flexibility: Default parameters with override capability. Example: @pytest.fixture def user_factory (db): def make_user (name="User", age=30): return User (name, age); return make_user → test_multiple_users (user_factory): alice = user_factory("Alice", 25); bob = user_factory("Bob", 35) → create 2 users with different data. Compare to regular fixture: Only returns one instance per test. Factory factories don\'t inherently run faster or clean up automatically (though you can implement cleanup tracking). Still need conftest.py for sharing across files.',
   },
 ];

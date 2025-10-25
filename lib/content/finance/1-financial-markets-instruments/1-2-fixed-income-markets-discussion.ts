@@ -158,7 +158,7 @@ class BondPortfolioDisplay:
     def __init__(self, portfolio: dict):
         self.portfolio = portfolio
     
-    def calculate_display_metrics(self) -> dict:
+    def calculate_display_metrics (self) -> dict:
         """
         Calculate all metrics users need to understand
         """
@@ -205,13 +205,13 @@ class BondPortfolioDisplay:
                 'scenario': f'If rates rise 1%, expect ~{rate_risk_1pct*100:.1f}% loss'
             },
             'risk_assessment': {
-                'interest_rate_risk': self.categorize_duration(duration),
-                'credit_risk': self.categorize_credit_quality(investment_grade_pct),
-                'overall': self.overall_risk_rating(duration, investment_grade_pct)
+                'interest_rate_risk': self.categorize_duration (duration),
+                'credit_risk': self.categorize_credit_quality (investment_grade_pct),
+                'overall': self.overall_risk_rating (duration, investment_grade_pct)
             }
         }
     
-    def explain_total_return(self, income_return: float, price_return: float) -> str:
+    def explain_total_return (self, income_return: float, price_return: float) -> str:
         """Generate plain English explanation"""
         if price_return >= 0:
             return (
@@ -222,11 +222,11 @@ class BondPortfolioDisplay:
         else:
             return (
                 f"You earned {income_return*100:.1f}% from interest payments, "
-                f"but lost {abs(price_return)*100:.1f}% from bond prices falling "
+                f"but lost {abs (price_return)*100:.1f}% from bond prices falling "
                 f"(interest rates rose). Net: {(income_return+price_return)*100:.1f}%"
             )
     
-    def categorize_duration(self, duration: float) -> str:
+    def categorize_duration (self, duration: float) -> str:
         """Categorize interest rate risk"""
         if duration < 3:
             return "Low"
@@ -235,7 +235,7 @@ class BondPortfolioDisplay:
         else:
             return "High"
     
-    def categorize_credit_quality(self, ig_pct: float) -> str:
+    def categorize_credit_quality (self, ig_pct: float) -> str:
         """Categorize credit risk"""
         if ig_pct >= 0.95:
             return "Low"
@@ -244,7 +244,7 @@ class BondPortfolioDisplay:
         else:
             return "High"
     
-    def overall_risk_rating(self, duration: float, ig_pct: float) -> str:
+    def overall_risk_rating (self, duration: float, ig_pct: float) -> str:
         """Overall portfolio risk"""
         rate_risk_score = 1 if duration < 3 else (2 if duration < 7 else 3)
         credit_risk_score = 1 if ig_pct >= 0.95 else (2 if ig_pct >= 0.80 else 3)
@@ -258,7 +258,7 @@ class BondPortfolioDisplay:
         else:
             return "Aggressive"
     
-    def generate_scenarios(self) -> List[dict]:
+    def generate_scenarios (self) -> List[dict]:
         """
         Show what happens in different rate scenarios
         Critical for user understanding!
@@ -284,12 +284,12 @@ class BondPortfolioDisplay:
                 'new_yield': new_yield,
                 'price_impact': price_impact,
                 'expected_1yr_return': forward_return,
-                'scenario_name': self.name_scenario(rate_change)
+                'scenario_name': self.name_scenario (rate_change)
             })
         
         return scenarios
     
-    def name_scenario(self, rate_change: float) -> str:
+    def name_scenario (self, rate_change: float) -> str:
         """Name scenarios for users"""
         if rate_change <= -0.015:
             return "🚀 Rates Fall Sharply (Fed Cuts)"
@@ -312,7 +312,7 @@ portfolio_data = {
     'investment_grade_weight': 0.95
 }
 
-display = BondPortfolioDisplay(portfolio_data)
+display = BondPortfolioDisplay (portfolio_data)
 metrics = display.calculate_display_metrics()
 
 print("=== Bond Portfolio Display ===\\n")
@@ -409,7 +409,7 @@ class ConstantDurationChallenge:
         self.target_duration = target_duration
         self.tolerance = 0.1  # Allow 5 ±0.1 years
     
-    def simulate_duration_drift(self, 
+    def simulate_duration_drift (self, 
                                initial_duration: float,
                                days: int = 365) -> pd.DataFrame:
         """
@@ -418,7 +418,7 @@ class ConstantDurationChallenge:
         results = []
         current_duration = initial_duration
         
-        for day in range(days):
+        for day in range (days):
             # Natural time decay
             time_decay = -1.0 / 365  # Duration decreases ~1 year per year
             
@@ -433,26 +433,26 @@ class ConstantDurationChallenge:
             results.append({
                 'day': day,
                 'duration': current_duration,
-                'needs_rebalance': abs(current_duration - self.target_duration) > self.tolerance
+                'needs_rebalance': abs (current_duration - self.target_duration) > self.tolerance
             })
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
     
-    def calculate_rebalance_frequency(self, simulation: pd.DataFrame) -> dict:
+    def calculate_rebalance_frequency (self, simulation: pd.DataFrame) -> dict:
         """How often do we need to rebalance?"""
         total_rebalances = simulation['needs_rebalance'].sum()
-        days = len(simulation)
+        days = len (simulation)
         
         return {
-            'total_rebalances_per_year': int(total_rebalances),
-            'days_between_rebalances': days / max(total_rebalances, 1),
+            'total_rebalances_per_year': int (total_rebalances),
+            'days_between_rebalances': days / max (total_rebalances, 1),
             'percentage_of_days_need_rebalance': total_rebalances / days
         }
 
 # Simulate
-challenge = ConstantDurationChallenge(target_duration=5.0)
-sim = challenge.simulate_duration_drift(initial_duration=5.0, days=365)
-freq = challenge.calculate_rebalance_frequency(sim)
+challenge = ConstantDurationChallenge (target_duration=5.0)
+sim = challenge.simulate_duration_drift (initial_duration=5.0, days=365)
+freq = challenge.calculate_rebalance_frequency (sim)
 
 print("Maintaining 5-Year Duration:")
 print(f"Rebalances needed per year: {freq['total_rebalances_per_year']}")
@@ -480,7 +480,7 @@ class ConstantDurationRebalancer:
         self.tolerance = tolerance
         self.transaction_cost_bps = transaction_cost_bps / 10000
     
-    def calculate_portfolio_duration(self, 
+    def calculate_portfolio_duration (self, 
                                     holdings: List[dict]) -> float:
         """
         Calculate weighted average duration of portfolio
@@ -494,11 +494,11 @@ class ConstantDurationRebalancer:
         )
         return total_duration
     
-    def needs_rebalance(self, current_duration: float) -> bool:
+    def needs_rebalance (self, current_duration: float) -> bool:
         """Check if rebalance is needed"""
-        return abs(current_duration - self.target_duration) > self.tolerance
+        return abs (current_duration - self.target_duration) > self.tolerance
     
-    def generate_rebalance_trades(self,
+    def generate_rebalance_trades (self,
                                  current_holdings: List[dict],
                                  available_bonds: List[dict]) -> dict:
         """
@@ -509,9 +509,9 @@ class ConstantDurationRebalancer:
         2. If duration too high → buy shorter bonds, sell longer
         3. Minimize transaction costs
         """
-        current_duration = self.calculate_portfolio_duration(current_holdings)
+        current_duration = self.calculate_portfolio_duration (current_holdings)
         
-        if not self.needs_rebalance(current_duration):
+        if not self.needs_rebalance (current_duration):
             return {'trades': [], 'reason': 'Within tolerance'}
         
         duration_gap = self.target_duration - current_duration
@@ -544,8 +544,8 @@ class ConstantDurationRebalancer:
         
         if buy_candidates and sell_candidates:
             # Buy highest/lowest duration bond (depending on direction)
-            buy_bond = max(buy_candidates, key=lambda x: abs(x['duration'] - self.target_duration))
-            sell_bond = max(sell_candidates, key=lambda x: abs(x['duration'] - self.target_duration))
+            buy_bond = max (buy_candidates, key=lambda x: abs (x['duration'] - self.target_duration))
+            sell_bond = max (sell_candidates, key=lambda x: abs (x['duration'] - self.target_duration))
             
             trades = [
                 {
@@ -568,7 +568,7 @@ class ConstantDurationRebalancer:
                 new_duration += trade['duration_impact']
             
             # Transaction costs
-            total_traded = sum(abs(t['amount']) for t in trades)
+            total_traded = sum (abs (t['amount']) for t in trades)
             cost = total_traded * self.transaction_cost_bps
             
             return {
@@ -577,12 +577,12 @@ class ConstantDurationRebalancer:
                 'target_duration': self.target_duration,
                 'new_duration': new_duration,
                 'transaction_cost': cost,
-                'duration_improvement': abs(new_duration - self.target_duration) < abs(current_duration - self.target_duration)
+                'duration_improvement': abs (new_duration - self.target_duration) < abs (current_duration - self.target_duration)
             }
         
         return {'trades': [], 'reason': 'No suitable candidates'}
     
-    def optimize_rebalance_timing(self,
+    def optimize_rebalance_timing (self,
                                  current_duration: float,
                                  transaction_cost: float,
                                  expected_duration_drift: float) -> dict:
@@ -591,7 +591,7 @@ class ConstantDurationRebalancer:
         
         Trade-off: Cost of rebalancing vs benefit of staying on target
         """
-        duration_deviation = abs(current_duration - self.target_duration)
+        duration_deviation = abs (current_duration - self.target_duration)
         
         # Cost of being off-target (simplified)
         # Risk: Duration deviation × Potential rate moves
@@ -628,10 +628,10 @@ current_holdings = [
     {'bond_id': 'UST-10Y', 'weight': 0.3, 'duration': 8.5}
 ]
 
-current_dur = rebalancer.calculate_portfolio_duration(current_holdings)
+current_dur = rebalancer.calculate_portfolio_duration (current_holdings)
 print(f"Current Duration: {current_dur:.2f} years")
 print(f"Target: {rebalancer.target_duration} years")
-print(f"Needs Rebalance: {rebalancer.needs_rebalance(current_dur)}")
+print(f"Needs Rebalance: {rebalancer.needs_rebalance (current_dur)}")
 
 # Available bonds to trade
 available = [
@@ -641,7 +641,7 @@ available = [
     {'bond_id': 'UST-20Y', 'duration': 14.5}
 ]
 
-trades = rebalancer.generate_rebalance_trades(current_holdings, available)
+trades = rebalancer.generate_rebalance_trades (current_holdings, available)
 print(f"\\nRebalance Decision: {trades.get('trades', [])}")
 if trades['trades']:
     print(f"New Duration: {trades['new_duration']:.2f}")
@@ -725,7 +725,7 @@ def simulate_tracking_error(
     static_returns = []
     constant_returns = []
     
-    for day in range(periods):
+    for day in range (periods):
         # Random interest rate change
         rate_change = np.random.normal(0, rate_volatility / np.sqrt(252))
         
@@ -733,8 +733,8 @@ def simulate_tracking_error(
         static_return = -static_duration * rate_change
         constant_return = -constant_duration * rate_change
         
-        static_returns.append(static_return)
-        constant_returns.append(constant_return)
+        static_returns.append (static_return)
+        constant_returns.append (constant_return)
         
         # Static portfolio duration decreases over time
         static_duration -= 5.0 / 252  # Decays to ~0 over year
@@ -744,10 +744,10 @@ def simulate_tracking_error(
             # Transaction cost drag
             constant_returns[-1] -= 0.0005  # 5 bps cost
     
-    static_cumulative = (1 + np.array(static_returns)).prod() - 1
-    constant_cumulative = (1 + np.array(constant_returns)).prod() - 1
+    static_cumulative = (1 + np.array (static_returns)).prod() - 1
+    constant_cumulative = (1 + np.array (constant_returns)).prod() - 1
     
-    tracking_error = np.std(np.array(constant_returns) - np.array(static_returns)) * np.sqrt(252)
+    tracking_error = np.std (np.array (constant_returns) - np.array (static_returns)) * np.sqrt(252)
     
     return {
         'static_return': static_cumulative,
@@ -939,18 +939,18 @@ class DefaultCrisisHandler:
     Priority 0 (P0) event
     """
     
-    def handle_default_event(self, issuer: str):
+    def handle_default_event (self, issuer: str):
         # 1. Immediate: Wake up PM and traders
-        self.escalate_to_humans(priority='P0')
+        self.escalate_to_humans (priority='P0')
         
         # 2. Auto-scan portfolio exposure
-        exposure = self.calculate_portfolio_exposure(issuer)
+        exposure = self.calculate_portfolio_exposure (issuer)
         
         # 3. Identify hedging opportunities
-        hedges = self.find_immediate_hedges(issuer)
+        hedges = self.find_immediate_hedges (issuer)
         
         # 4. Mark positions (accounting)
-        self.mark_to_market_distressed(issuer)
+        self.mark_to_market_distressed (issuer)
         
         # 5. Regulatory notifications
         self.prep_regulatory_filings()

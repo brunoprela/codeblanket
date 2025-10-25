@@ -55,7 +55,7 @@ export const codereviewbugdetectionMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Good comments: 1) Specific issue location/description, 2) Why it\'s problematic, 3) Suggested fix with code example. "Line 42: SQL injection risk. User input unsanitized. Use: cursor.execute(query, (user_input,))".',
+      'Good comments: 1) Specific issue location/description, 2) Why it\'s problematic, 3) Suggested fix with code example. "Line 42: SQL injection risk. User input unsanitized. Use: cursor.execute (query, (user_input,))".',
   },
   {
     id: 'bcgs-review-mc-5',

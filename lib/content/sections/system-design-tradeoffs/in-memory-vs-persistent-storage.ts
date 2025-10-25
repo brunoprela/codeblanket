@@ -175,7 +175,7 @@ Application → Disk (Database) → Response (milliseconds)
 - Distributed, durable
 
 **In-memory cache (Redis)**:
-- User's home feed (last 100 posts)
+- User\'s home feed (last 100 posts)
 - Recently viewed posts
 - Reduces latency from 50ms to 5ms
 
@@ -192,9 +192,9 @@ Application → Disk (Database) → Response (milliseconds)
 Application manages cache explicitly.
 
 \`\`\`python
-def get_user(user_id):
+def get_user (user_id):
     # Check cache
-    user = redis.get(f"user:{user_id}")
+    user = redis.get (f"user:{user_id}")
     if user:
         return user  # Cache hit
     
@@ -202,7 +202,7 @@ def get_user(user_id):
     user = db.query("SELECT * FROM users WHERE id = ?", user_id)
     
     # Cache for future
-    redis.set(f"user:{user_id}", user, ttl=3600)  # 1 hour
+    redis.set (f"user:{user_id}", user, ttl=3600)  # 1 hour
     return user
 \`\`\`
 
@@ -217,12 +217,12 @@ def get_user(user_id):
 Write to cache and database simultaneously.
 
 \`\`\`python
-def update_user(user_id, data):
+def update_user (user_id, data):
     # Update database
     db.update("UPDATE users SET ... WHERE id = ?", user_id, data)
     
     # Update cache
-    redis.set(f"user:{user_id}", data, ttl=3600)
+    redis.set (f"user:{user_id}", data, ttl=3600)
 \`\`\`
 
 **Advantages**: Cache always up-to-date
@@ -236,9 +236,9 @@ def update_user(user_id, data):
 Write to cache immediately, asynchronously write to database.
 
 \`\`\`python
-def update_user(user_id, data):
+def update_user (user_id, data):
     # Write to cache (fast)
-    redis.set(f"user:{user_id}", data, ttl=3600)
+    redis.set (f"user:{user_id}", data, ttl=3600)
     
     # Queue database write (async)
     queue.publish("db_writes", {"user_id": user_id, "data": data})

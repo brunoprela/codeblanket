@@ -180,7 +180,7 @@ Services communicate via HTTP/gRPC/Message Queue
 - Can scale globally
 - High availability (service failures isolated)
 
-**Cost**: High operational complexity, but worth it at Amazon's scale
+**Cost**: High operational complexity, but worth it at Amazon\'s scale
 
 ---
 

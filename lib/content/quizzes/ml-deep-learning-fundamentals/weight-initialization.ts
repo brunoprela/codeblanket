@@ -87,7 +87,7 @@ Formula: W ~ Normal(0, √(2/n_in))
 - ReLU(x) = max(0, x) → About 50% of activations become zero
 - This halves the variance of activations
 - To compensate, we need larger initial weights
-- √(2/n_in) is larger than Xavier's √(2/(n_in + n_out))
+- √(2/n_in) is larger than Xavier\'s √(2/(n_in + n_out))
 - Only depends on n_in because ReLU gradient is simple (0 or 1)
 
 **The Problem They Solve:**
@@ -106,7 +106,7 @@ Both address **vanishing and exploding gradients** in deep networks:
 
 3. **Proper Initialization**:
    - Maintains variance ≈ 1 through all layers
-   - Forward pass: var(a_L) ≈ var(a_0) for all layers L
+   - Forward pass: var (a_L) ≈ var (a_0) for all layers L
    - Backward pass: var(∂L/∂a_L) ≈ var(∂L/∂a_0)
    - Enables training of very deep networks (50-200 layers)
 

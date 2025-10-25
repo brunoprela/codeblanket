@@ -31,7 +31,7 @@ export const databasesFinancialDataMultipleChoice: Quiz = {
       ],
       correctAnswer: 2,
       explanation:
-        "Creating a new database connection is expensive (network handshake, authentication, resource allocation) - typically 50-200ms. For a trading application making hundreds of queries per second, this overhead is devastating. Connection pooling maintains a pool of active connections that are reused across queries. SQLAlchemy's QueuePool maintains 10-30 connections ready to use, reducing query latency from 150ms to 5ms. Critical for real-time trading where milliseconds matter. Configuration: `pool_size=10` (core connections), `max_overflow=20` (additional when busy), `pool_recycle=3600` (refresh hourly), `pool_pre_ping=True` (verify health).",
+        "Creating a new database connection is expensive (network handshake, authentication, resource allocation) - typically 50-200ms. For a trading application making hundreds of queries per second, this overhead is devastating. Connection pooling maintains a pool of active connections that are reused across queries. SQLAlchemy\'s QueuePool maintains 10-30 connections ready to use, reducing query latency from 150ms to 5ms. Critical for real-time trading where milliseconds matter. Configuration: `pool_size=10` (core connections), `max_overflow=20` (additional when busy), `pool_recycle=3600` (refresh hourly), `pool_pre_ping=True` (verify health).",
     },
     {
       id: 'db-3',
@@ -41,7 +41,7 @@ export const databasesFinancialDataMultipleChoice: Quiz = {
         'PRIMARY KEY (date, ticker)',
         'UNIQUE (date, ticker)',
         'CHECK (high >= low AND high >= open AND high >= close AND low <= open AND low <= close)',
-        'FOREIGN KEY (ticker) REFERENCES tickers(ticker_id)',
+        'FOREIGN KEY (ticker) REFERENCES tickers (ticker_id)',
       ],
       correctAnswer: 2,
       explanation:

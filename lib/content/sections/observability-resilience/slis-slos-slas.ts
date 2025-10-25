@@ -154,7 +154,7 @@ SLO: 99.9% of API requests succeed over 30-day window
 
 2. **Talk to Users**
    - What level of reliability do they need?
-   - What's acceptable downtime?
+   - What\'s acceptable downtime?
 
 3. **Consider Costs**
    - 99% → 99.9% = moderate cost
@@ -387,7 +387,7 @@ Measurement:
 
 **Example**:
 \`\`\`
-User's browser → measures page load time
+User\'s browser → measures page load time
 Real user monitoring (RUM)
 \`\`\`
 
@@ -564,7 +564,7 @@ Alert 3 (Slow burn, low urgency):
 
 ### **Common Questions**
 
-**Q: What's the difference between SLO and SLA?**
+**Q: What\'s the difference between SLO and SLA?**
 A: SLO is internal target (99.95%), SLA is customer promise with financial penalties (99.9%). SLO should be stricter to provide buffer.
 
 **Q: How do you use error budgets?**

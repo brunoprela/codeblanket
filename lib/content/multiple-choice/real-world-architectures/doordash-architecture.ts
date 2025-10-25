@@ -8,7 +8,7 @@ export const doordasharchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      "How often does DoorDash's dispatch optimization (DISCO) perform batch matching?",
+      "How often does DoorDash\'s dispatch optimization (DISCO) perform batch matching?",
     options: [
       'Every 5 seconds for real-time assignment',
       'Every 30 seconds for batch optimization',
@@ -22,7 +22,7 @@ export const doordasharchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc2',
     question:
-      "What percentage of DoorDash's ETA predictions are accurate within 5 minutes?",
+      "What percentage of DoorDash\'s ETA predictions are accurate within 5 minutes?",
     options: [
       'Approximately 50%',
       'Approximately 65%',

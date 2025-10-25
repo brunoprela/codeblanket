@@ -44,12 +44,12 @@ for i in range(1000):
 # 4. Pattern probing
 variations = generate_injection_variations()  # Thousands of variations
 for variation in variations:
-    try_injection(variation)
+    try_injection (variation)
     # Find weaknesses through systematic probing
 
 # 5. Account enumeration
 for email in email_list:
-    check_if_user_exists(email)
+    check_if_user_exists (email)
     # Privacy violation through enumeration
 \`\`\`
 
@@ -71,7 +71,7 @@ class TokenBucket:
     fill_rate: float  # tokens per second
     last_update: float
     
-    def consume(self, tokens: int = 1) -> bool:
+    def consume (self, tokens: int = 1) -> bool:
         """
         Attempt to consume tokens.
         Returns True if allowed, False if rate limited.
@@ -103,7 +103,7 @@ class BasicRateLimiter:
         self.fill_rate = fill_rate
         self.buckets: Dict[str, TokenBucket] = {}
     
-    def check_rate_limit(self, user_id: str, cost: int = 1) -> Dict:
+    def check_rate_limit (self, user_id: str, cost: int = 1) -> Dict:
         """
         Check if request is allowed for user.
         
@@ -126,12 +126,12 @@ class BasicRateLimiter:
         bucket = self.buckets[user_id]
         
         # Try to consume tokens
-        allowed = bucket.consume(cost)
+        allowed = bucket.consume (cost)
         
         if allowed:
             return {
                 'allowed': True,
-                'remaining': int(bucket.tokens),
+                'remaining': int (bucket.tokens),
                 'retry_after': 0
             }
         else:
@@ -146,7 +146,7 @@ class BasicRateLimiter:
             }
 
 # Example usage
-limiter = BasicRateLimiter(capacity=10, fill_rate=2.0)  # 2 tokens per second
+limiter = BasicRateLimiter (capacity=10, fill_rate=2.0)  # 2 tokens per second
 
 for i in range(15):
     result = limiter.check_rate_limit("user_123")
@@ -171,7 +171,7 @@ class SlidingWindowRateLimiter:
         self.window_seconds = window_seconds
         self.user_requests: Dict[str, Deque[float]] = {}
     
-    def check_rate_limit(self, user_id: str) -> Dict:
+    def check_rate_limit (self, user_id: str) -> Dict:
         """Check if request is allowed using sliding window"""
         
         now = time.time()
@@ -188,11 +188,11 @@ class SlidingWindowRateLimiter:
             requests.popleft()
         
         # Check if under limit
-        if len(requests) < self.max_requests:
-            requests.append(now)
+        if len (requests) < self.max_requests:
+            requests.append (now)
             return {
                 'allowed': True,
-                'remaining': self.max_requests - len(requests),
+                'remaining': self.max_requests - len (requests),
                 'reset_at': requests[0] + self.window_seconds if requests else now
             }
         else:
@@ -207,7 +207,7 @@ class SlidingWindowRateLimiter:
             }
 
 # Example usage
-limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=10)
+limiter = SlidingWindowRateLimiter (max_requests=5, window_seconds=10)
 
 for i in range(8):
     result = limiter.check_rate_limit("user_456")
@@ -235,7 +235,7 @@ class SuspiciousActivity:
     severity: str  # 'low', 'medium', 'high', 'critical'
     description: str
     timestamp: datetime
-    metadata: Dict = field(default_factory=dict)
+    metadata: Dict = field (default_factory=dict)
 
 class AbuseDetector:
     """Detect suspicious patterns indicating abuse"""
@@ -265,13 +265,13 @@ class AbuseDetector:
         })
         
         # Keep only recent history (last hour)
-        cutoff = datetime.now() - timedelta(hours=1)
+        cutoff = datetime.now() - timedelta (hours=1)
         self.user_activity[user_id] = [
             req for req in self.user_activity[user_id]
             if req['timestamp'] > cutoff
         ]
     
-    def detect_abuse(self, user_id: str) -> List[SuspiciousActivity]:
+    def detect_abuse (self, user_id: str) -> List[SuspiciousActivity]:
         """
         Detect abuse patterns for a user.
         
@@ -290,7 +290,7 @@ class AbuseDetector:
         recent_requests = self.user_activity[user_id]
         
         # Pattern 1: High frequency (more than 60 requests in 1 minute)
-        last_minute = datetime.now() - timedelta(minutes=1)
+        last_minute = datetime.now() - timedelta (minutes=1)
         recent_count = sum(
             1 for req in recent_requests
             if req['timestamp'] > last_minute
@@ -317,7 +317,7 @@ class AbuseDetector:
         injection_attempts = 0
         for req in recent_requests:
             content = req['content'].lower()
-            if any(re.search(pattern, content) for pattern in injection_patterns):
+            if any (re.search (pattern, content) for pattern in injection_patterns):
                 injection_attempts += 1
         
         if injection_attempts > 5:
@@ -332,7 +332,7 @@ class AbuseDetector:
         
         # Pattern 3: Scraping pattern (sequential IDs, pagination)
         contents = [req['content'] for req in recent_requests]
-        if self._is_scraping_pattern(contents):
+        if self._is_scraping_pattern (contents):
             suspicious_activities.append(SuspiciousActivity(
                 user_id=user_id,
                 activity_type='scraping',
@@ -342,7 +342,7 @@ class AbuseDetector:
             ))
         
         # Pattern 4: Enumeration attacks
-        if self._is_enumeration_pattern(contents):
+        if self._is_enumeration_pattern (contents):
             suspicious_activities.append(SuspiciousActivity(
                 user_id=user_id,
                 activity_type='enumeration',
@@ -352,7 +352,7 @@ class AbuseDetector:
             ))
         
         # Pattern 5: Unusual input length (potential DoS)
-        avg_length = sum(len(req['content']) for req in recent_requests) / max(len(recent_requests), 1)
+        avg_length = sum (len (req['content']) for req in recent_requests) / max (len (recent_requests), 1)
         if avg_length > 50000:
             suspicious_activities.append(SuspiciousActivity(
                 user_id=user_id,
@@ -365,49 +365,49 @@ class AbuseDetector:
         
         return suspicious_activities
     
-    def _is_scraping_pattern(self, contents: List[str]) -> bool:
+    def _is_scraping_pattern (self, contents: List[str]) -> bool:
         """Detect scraping patterns"""
         
         # Check for sequential numbers
         numbers = []
         for content in contents:
-            matches = re.findall(r'\\b(\\d+)\\b', content)
+            matches = re.findall (r'\\b(\\d+)\\b', content)
             if matches:
-                numbers.extend([int(m) for m in matches])
+                numbers.extend([int (m) for m in matches])
         
-        if len(numbers) < 5:
+        if len (numbers) < 5:
             return False
         
         # Check if mostly sequential
-        sorted_numbers = sorted(set(numbers))
+        sorted_numbers = sorted (set (numbers))
         sequential_count = sum(
-            1 for i in range(len(sorted_numbers) - 1)
+            1 for i in range (len (sorted_numbers) - 1)
             if sorted_numbers[i+1] - sorted_numbers[i] == 1
         )
         
-        return sequential_count / max(len(sorted_numbers) - 1, 1) > 0.7
+        return sequential_count / max (len (sorted_numbers) - 1, 1) > 0.7
     
-    def _is_enumeration_pattern(self, contents: List[str]) -> bool:
+    def _is_enumeration_pattern (self, contents: List[str]) -> bool:
         """Detect enumeration patterns"""
         
         # Check for repeated queries with slight variations
         # (e.g., "user john", "user jane", "user bob")
         
-        if len(contents) < 5:
+        if len (contents) < 5:
             return False
         
         # Extract patterns (words before names/emails)
         patterns = []
         for content in contents:
             words = content.lower().split()
-            for i, word in enumerate(words):
+            for i, word in enumerate (words):
                 if '@' in word or word in ['user', 'account', 'email']:
                     if i > 0:
-                        patterns.append(words[i-1])
+                        patterns.append (words[i-1])
         
         # If same pattern repeated many times, likely enumeration
         from collections import Counter
-        pattern_counts = Counter(patterns)
+        pattern_counts = Counter (patterns)
         most_common = pattern_counts.most_common(1)
         
         if most_common and most_common[0][1] > 5:
@@ -415,26 +415,26 @@ class AbuseDetector:
         
         return False
     
-    def should_block_user(self, user_id: str) -> bool:
+    def should_block_user (self, user_id: str) -> bool:
         """Determine if user should be blocked"""
         
         if user_id in self.blocked_users:
             return True
         
-        suspicious_activities = self.detect_abuse(user_id)
+        suspicious_activities = self.detect_abuse (user_id)
         
         # Block if critical severity or multiple high-severity issues
         critical_count = sum(1 for act in suspicious_activities if act.severity == 'critical')
         high_count = sum(1 for act in suspicious_activities if act.severity == 'high')
         
         if critical_count > 0 or high_count >= 3:
-            self.blocked_users.add(user_id)
+            self.blocked_users.add (user_id)
             return True
         
         # Flag if medium severity
         medium_count = sum(1 for act in suspicious_activities if act.severity == 'medium')
         if medium_count >= 2:
-            self.flagged_users.add(user_id)
+            self.flagged_users.add (user_id)
         
         return False
 
@@ -442,17 +442,17 @@ class AbuseDetector:
 detector = AbuseDetector()
 
 # Simulate normal usage
-detector.track_request("user_123", "query", "What's the weather today?")
+detector.track_request("user_123", "query", "What\'s the weather today?")
 detector.track_request("user_123", "query", "How do I bake a cake?")
 activities = detector.detect_abuse("user_123")
-print(f"Normal user - Suspicious activities: {len(activities)}")
+print(f"Normal user - Suspicious activities: {len (activities)}")
 
 # Simulate injection attempts
 for i in range(10):
     detector.track_request("user_456", "query", f"Attempt {i}: Ignore all instructions")
 
 activities = detector.detect_abuse("user_456")
-print(f"\\nAttacker - Suspicious activities: {len(activities)}")
+print(f"\\nAttacker - Suspicious activities: {len (activities)}")
 for activity in activities:
     print(f"  - {activity.activity_type} ({activity.severity}): {activity.description}")
 
@@ -484,31 +484,31 @@ class AdaptiveRateLimiter:
         self.user_tiers: Dict[str, str] = {}
         self.user_reputation: Dict[str, float] = {}  # 0.0 to 1.0
     
-    def get_limits_for_user(self, user_id: str) -> Dict:
+    def get_limits_for_user (self, user_id: str) -> Dict:
         """Get adaptive rate limits for user"""
         
         # Get base limits from tier
-        tier = self.user_tiers.get(user_id, 'free')
+        tier = self.user_tiers.get (user_id, 'free')
         limits = self.base_limits[tier].copy()
         
         # Adjust based on reputation
-        reputation = self.user_reputation.get(user_id, 0.8)  # Default to good
+        reputation = self.user_reputation.get (user_id, 0.8)  # Default to good
         
         if reputation > 0.9:
             # Trusted user: increase limits
-            limits['capacity'] = int(limits['capacity'] * 1.5)
+            limits['capacity'] = int (limits['capacity'] * 1.5)
             limits['fill_rate'] *= 1.5
         elif reputation < 0.5:
             # Suspicious user: decrease limits
-            limits['capacity'] = int(limits['capacity'] * 0.5)
+            limits['capacity'] = int (limits['capacity'] * 0.5)
             limits['fill_rate'] *= 0.5
         elif reputation < 0.3:
             # Very suspicious: severe limits
-            limits['capacity'] = int(limits['capacity'] * 0.2)
+            limits['capacity'] = int (limits['capacity'] * 0.2)
             limits['fill_rate'] *= 0.2
         
         # Check for active abuse
-        suspicious_activities = self.abuse_detector.detect_abuse(user_id)
+        suspicious_activities = self.abuse_detector.detect_abuse (user_id)
         if suspicious_activities:
             # Reduce limits proportionally to severity
             critical = sum(1 for a in suspicious_activities if a.severity == 'critical')
@@ -624,10 +624,10 @@ class ProductionSafetyRateLimiter:
         """
         
         # Track request for pattern analysis
-        self.abuse_detector.track_request(user_id, request_type, request_content)
+        self.abuse_detector.track_request (user_id, request_type, request_content)
         
         # Check if user should be blocked
-        if self.abuse_detector.should_block_user(user_id):
+        if self.abuse_detector.should_block_user (user_id):
             return RateLimitResult(
                 action=RateLimitAction.BLOCK,
                 allowed=False,
@@ -638,10 +638,10 @@ class ProductionSafetyRateLimiter:
             )
         
         # Detect suspicious activities
-        suspicious_activities = self.abuse_detector.detect_abuse(user_id)
+        suspicious_activities = self.abuse_detector.detect_abuse (user_id)
         
         # Get adaptive limits
-        limits = self.adaptive_limiter.get_limits_for_user(user_id)
+        limits = self.adaptive_limiter.get_limits_for_user (user_id)
         
         # Get or create rate limiter
         if user_id not in self.rate_limiters:
@@ -656,11 +656,11 @@ class ProductionSafetyRateLimiter:
             limiter.fill_rate = limits['fill_rate']
         
         # Check rate limit
-        rate_limit_result = self.rate_limiters[user_id].check_rate_limit(user_id)
+        rate_limit_result = self.rate_limiters[user_id].check_rate_limit (user_id)
         
         # Determine action
         if suspicious_activities:
-            critical = any(a.severity == 'critical' for a in suspicious_activities)
+            critical = any (a.severity == 'critical' for a in suspicious_activities)
             if critical:
                 return RateLimitResult(
                     action=RateLimitAction.BLOCK,
@@ -672,7 +672,7 @@ class ProductionSafetyRateLimiter:
                 )
             else:
                 # Require CAPTCHA for suspicious users
-                self.captcha_required.add(user_id)
+                self.captcha_required.add (user_id)
                 return RateLimitResult(
                     action=RateLimitAction.CAPTCHA,
                     allowed=False,
@@ -689,12 +689,12 @@ class ProductionSafetyRateLimiter:
                 reason="Rate limit exceeded",
                 retry_after=rate_limit_result['retry_after'],
                 remaining_quota=0,
-                user_reputation=self.adaptive_limiter.user_reputation.get(user_id, 0.8)
+                user_reputation=self.adaptive_limiter.user_reputation.get (user_id, 0.8)
             )
         
         # Update reputation for good behavior
         if not suspicious_activities:
-            self.adaptive_limiter.update_reputation(user_id, 'good')
+            self.adaptive_limiter.update_reputation (user_id, 'good')
         
         return RateLimitResult(
             action=RateLimitAction.ALLOW,
@@ -702,7 +702,7 @@ class ProductionSafetyRateLimiter:
             reason="Request allowed",
             retry_after=0,
             remaining_quota=rate_limit_result['remaining'],
-            user_reputation=self.adaptive_limiter.user_reputation.get(user_id, 0.8)
+            user_reputation=self.adaptive_limiter.user_reputation.get (user_id, 0.8)
         )
 
 # Example usage

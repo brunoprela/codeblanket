@@ -11,10 +11,10 @@ export const codeeditingdiffgenerationMultipleChoice: MultipleChoiceQuestion[] =
       question:
         'Why is the SEARCH/REPLACE format preferred over regenerating entire files?',
       options: [
-        "It's faster to generate",
+        "It\'s faster to generate",
         'It preserves unchanged code and has smaller error surface',
         'It uses fewer tokens',
-        "It's easier to understand",
+        "It\'s easier to understand",
       ],
       correctAnswer: 1,
       explanation:

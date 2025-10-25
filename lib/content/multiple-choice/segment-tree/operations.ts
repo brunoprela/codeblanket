@@ -62,12 +62,12 @@ export const operationsMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'What does "combine" function do in Segment Tree?',
     options: [
       'Sorts nodes',
-      'Merges two child values: sum (a+b), min (min(a,b)), max (max(a,b)), etc.',
+      'Merges two child values: sum (a+b), min (min (a,b)), max (max (a,b)), etc.',
       'Random',
       'Deletes nodes',
     ],
     correctAnswer: 1,
     explanation:
-      'Combine function merges children based on operation: sum→a+b, min→min(a,b), max→max(a,b), GCD→gcd(a,b). Must be associative. Determines what aggregate the tree maintains.',
+      'Combine function merges children based on operation: sum→a+b, min→min (a,b), max→max (a,b), GCD→gcd (a,b). Must be associative. Determines what aggregate the tree maintains.',
   },
 ];

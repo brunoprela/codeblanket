@@ -50,7 +50,7 @@ export const classicalTimeSeriesModelsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        'BIC penalizes complexity more than AIC: BIC = -2*log(L) + k*log(n), AIC = -2*log(L) + 2*k. BIC penalty grows with sample size n. Use BIC to avoid overfitting (prefers simpler models), use AIC for better fit (allows complexity). For time series with 1000+ observations, BIC strongly prefers simpler models.',
+        'BIC penalizes complexity more than AIC: BIC = -2*log(L) + k*log (n), AIC = -2*log(L) + 2*k. BIC penalty grows with sample size n. Use BIC to avoid overfitting (prefers simpler models), use AIC for better fit (allows complexity). For time series with 1000+ observations, BIC strongly prefers simpler models.',
     },
     {
       id: 'ctsm-mc-5',

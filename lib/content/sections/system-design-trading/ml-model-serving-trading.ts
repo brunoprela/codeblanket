@@ -82,7 +82,7 @@ class FastModelServer:
     
     def __init__(self, model_path: str):
         # Load model into memory
-        self.model = self.load_model(model_path)
+        self.model = self.load_model (model_path)
         
         # Pre-allocate arrays (avoid allocation during inference)
         self.feature_buffer = np.zeros(100, dtype=np.float32)
@@ -91,25 +91,25 @@ class FastModelServer:
         # Warm up (first inference slower due to cache misses)
         self.warmup()
     
-    def load_model(self, path: str):
+    def load_model (self, path: str):
         """Load model optimized for inference"""
         # Option 1: LightGBM (very fast)
         import lightgbm as lgb
-        model = lgb.Booster(model_file=path)
+        model = lgb.Booster (model_file=path)
         return model
         
         # Option 2: ONNX Runtime (optimized)
         # import onnxruntime as ort
-        # model = ort.InferenceSession(path)
+        # model = ort.InferenceSession (path)
         # return model
     
-    def warmup(self, n_iterations: int = 100):
+    def warmup (self, n_iterations: int = 100):
         """Warm up model (load into CPU cache)"""
-        dummy_features = np.random.randn(100).astype(np.float32)
-        for _ in range(n_iterations):
-            _ = self.predict(dummy_features)
+        dummy_features = np.random.randn(100).astype (np.float32)
+        for _ in range (n_iterations):
+            _ = self.predict (dummy_features)
     
-    def predict(self, features: np.ndarray) -> float:
+    def predict (self, features: np.ndarray) -> float:
         """
         Make prediction
         Target: <100μs
@@ -127,17 +127,17 @@ model_server = FastModelServer("model.txt")
 
 latencies = []
 for _ in range(10000):
-    features = np.random.randn(100).astype(np.float32)
+    features = np.random.randn(100).astype (np.float32)
     
     start = time.perf_counter()
-    pred = model_server.predict(features)
+    pred = model_server.predict (features)
     end = time.perf_counter()
     
     latencies.append((end - start) * 1_000_000)  # microseconds
 
-print(f"Median latency: {np.median(latencies):.1f}μs")
-print(f"P95 latency: {np.percentile(latencies, 95):.1f}μs")
-print(f"P99 latency: {np.percentile(latencies, 99):.1f}μs")
+print(f"Median latency: {np.median (latencies):.1f}μs")
+print(f"P95 latency: {np.percentile (latencies, 95):.1f}μs")
+print(f"P99 latency: {np.percentile (latencies, 99):.1f}μs")
 
 # Typical results:
 # LightGBM (100 trees, depth 6): 20-50μs
@@ -179,7 +179,7 @@ class ONNXModelServer:
         self.input_name = self.session.get_inputs()[0].name
         self.output_name = self.session.get_outputs()[0].name
     
-    def predict(self, features: np.ndarray) -> np.ndarray:
+    def predict (self, features: np.ndarray) -> np.ndarray:
         """Fast prediction"""
         # Ensure correct shape [batch_size, features]
         if features.ndim == 1:
@@ -188,7 +188,7 @@ class ONNXModelServer:
         # Run inference
         pred = self.session.run(
             [self.output_name],
-            {self.input_name: features.astype(np.float32)}
+            {self.input_name: features.astype (np.float32)}
         )[0]
         
         return pred[0]
@@ -199,16 +199,16 @@ from skl2onnx.common.data_types import FloatTensorType
 
 # Train model
 from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier(n_estimators=100, max_depth=6)
+model = RandomForestClassifier (n_estimators=100, max_depth=6)
 model.fit(X_train, y_train)
 
 # Convert to ONNX
 initial_type = [('float_input', FloatTensorType([None, X_train.shape[1]]))]
-onx = convert_sklearn(model, initial_types=initial_type)
+onx = convert_sklearn (model, initial_types=initial_type)
 
 # Save
 with open("model.onnx", "wb") as f:
-    f.write(onx.SerializeToString())
+    f.write (onx.SerializeToString())
 
 # Serve with ONNX Runtime
 server = ONNXModelServer("model.onnx")
@@ -250,29 +250,29 @@ class FeatureStore:
         # Feature TTL (time-to-live)
         self.feature_ttl = 60  # 60 seconds
     
-    def compute_features(self, symbol: str, market_data: Dict) -> np.ndarray:
+    def compute_features (self, symbol: str, market_data: Dict) -> np.ndarray:
         """
         Compute features from market data
         """
         features = []
         
         # Price-based features
-        features.append(market_data['close'] / market_data['open'] - 1)  # Intrabar return
-        features.append(market_data['high'] / market_data['low'] - 1)  # Range
-        features.append(market_data['close'])  # Price level
+        features.append (market_data['close'] / market_data['open'] - 1)  # Intrabar return
+        features.append (market_data['high'] / market_data['low'] - 1)  # Range
+        features.append (market_data['close'])  # Price level
         
         # Volume
-        features.append(market_data['volume'])
-        features.append(np.log(market_data['volume'] + 1))  # Log volume
+        features.append (market_data['volume'])
+        features.append (np.log (market_data['volume'] + 1))  # Log volume
         
         # Technical indicators (pre-computed)
-        historical_features = self.get_historical_features(symbol)
+        historical_features = self.get_historical_features (symbol)
         if historical_features:
-            features.extend(historical_features)
+            features.extend (historical_features)
         
-        return np.array(features, dtype=np.float32)
+        return np.array (features, dtype=np.float32)
     
-    def store_features(self, symbol: str, features: np.ndarray):
+    def store_features (self, symbol: str, features: np.ndarray):
         """Store features in Redis"""
         key = f"features:{symbol}"
         
@@ -280,33 +280,33 @@ class FeatureStore:
         features_bytes = features.tobytes()
         
         # Store with TTL
-        self.redis.setex(key, self.feature_ttl, features_bytes)
+        self.redis.setex (key, self.feature_ttl, features_bytes)
     
-    def get_features(self, symbol: str) -> Optional[np.ndarray]:
+    def get_features (self, symbol: str) -> Optional[np.ndarray]:
         """Retrieve features from Redis"""
         key = f"features:{symbol}"
         
-        features_bytes = self.redis.get(key)
+        features_bytes = self.redis.get (key)
         if not features_bytes:
             return None
         
         # Deserialize
-        features = np.frombuffer(features_bytes, dtype=np.float32)
+        features = np.frombuffer (features_bytes, dtype=np.float32)
         
         return features
     
-    def get_historical_features(self, symbol: str) -> List[float]:
+    def get_historical_features (self, symbol: str) -> List[float]:
         """
         Get pre-computed historical features
         (SMA, RSI, etc computed by batch pipeline)
         """
         key = f"historical:{symbol}"
-        data = self.redis.get(key)
+        data = self.redis.get (key)
         
         if not data:
             return []
         
-        return json.loads(data)
+        return json.loads (data)
 
 # Feature pipeline (runs continuously)
 class FeaturePipeline:
@@ -317,20 +317,20 @@ class FeaturePipeline:
     def __init__(self, feature_store: FeatureStore):
         self.store = feature_store
     
-    def on_market_data(self, symbol: str, market_data: Dict):
+    def on_market_data (self, symbol: str, market_data: Dict):
         """
         Process market data tick
         Compute and store features
         """
         # Compute features
-        features = self.store.compute_features(symbol, market_data)
+        features = self.store.compute_features (symbol, market_data)
         
         # Store in Redis
-        self.store.store_features(symbol, features)
+        self.store.store_features (symbol, features)
 
 # Usage
 store = FeatureStore()
-pipeline = FeaturePipeline(store)
+pipeline = FeaturePipeline (store)
 
 # On market data tick
 pipeline.on_market_data('AAPL', {
@@ -344,7 +344,7 @@ pipeline.on_market_data('AAPL', {
 # Model serving retrieves features
 features = store.get_features('AAPL')
 if features is not None:
-    prediction = model.predict(features)
+    prediction = model.predict (features)
 \`\`\`
 
 ---
@@ -369,13 +369,13 @@ class BlueGreenModelServer:
         self.green_model = None  # New model (being tested)
         self.active_model = 'blue'  # Which model is serving traffic
     
-    def deploy_green(self, model_path: str):
+    def deploy_green (self, model_path: str):
         """Deploy new model to green"""
         print("Loading new model to green...")
-        self.green_model = FastModelServer(model_path)
+        self.green_model = FastModelServer (model_path)
         print("Green model ready")
     
-    def switch_to_green(self):
+    def switch_to_green (self):
         """Switch traffic from blue to green"""
         if self.green_model is None:
             raise Exception("Green model not loaded")
@@ -385,17 +385,17 @@ class BlueGreenModelServer:
         
         # Old blue model can be unloaded after monitoring period
     
-    def switch_to_blue(self):
+    def switch_to_blue (self):
         """Rollback to blue if green has issues"""
         print("Rolling back to blue...")
         self.active_model = 'blue'
     
-    def predict(self, features: np.ndarray) -> float:
+    def predict (self, features: np.ndarray) -> float:
         """Route prediction to active model"""
         if self.active_model == 'blue':
-            return self.blue_model.predict(features)
+            return self.blue_model.predict (features)
         else:
-            return self.green_model.predict(features)
+            return self.green_model.predict (features)
 
 # Deployment process
 server = BlueGreenModelServer()
@@ -439,23 +439,23 @@ class CanaryModelServer:
         self.new_model = None
         self.canary_percentage = 0  # Start with 0% on new model
     
-    def set_canary_percentage(self, percentage: int):
+    def set_canary_percentage (self, percentage: int):
         """Set percentage of traffic to new model"""
         self.canary_percentage = percentage
         print(f"Canary set to {percentage}%")
     
-    def predict(self, features: np.ndarray) -> tuple[float, str]:
+    def predict (self, features: np.ndarray) -> tuple[float, str]:
         """
         Route to old or new model based on canary percentage
         Returns: (prediction, model_used)
         """
         if random.random() * 100 < self.canary_percentage:
             # Route to new model
-            pred = self.new_model.predict(features)
+            pred = self.new_model.predict (features)
             return pred, 'new'
         else:
             # Route to old model
-            pred = self.old_model.predict(features)
+            pred = self.old_model.predict (features)
             return pred, 'old'
 
 # Canary rollout
@@ -498,7 +498,7 @@ class ABTestFramework:
         self.models = {}
         self.metrics = {}
     
-    def add_model(self, model_id: str, model, traffic_percentage: int):
+    def add_model (self, model_id: str, model, traffic_percentage: int):
         """Add model variant"""
         self.models[model_id] = {
             'model': model,
@@ -510,7 +510,7 @@ class ABTestFramework:
             'accuracy': [],  # If we can measure
         }
     
-    def route_request(self, features: np.ndarray) -> tuple[float, str]:
+    def route_request (self, features: np.ndarray) -> tuple[float, str]:
         """Route to model based on traffic allocation"""
         # Weighted random selection
         rand = random.random() * 100
@@ -521,28 +521,28 @@ class ABTestFramework:
             if rand < cumulative:
                 # Selected this model
                 start = time.perf_counter()
-                pred = config['model'].predict(features)
+                pred = config['model'].predict (features)
                 latency = (time.perf_counter() - start) * 1_000_000  # μs
                 
                 # Record metrics
                 self.metrics[model_id]['predictions'] += 1
-                self.metrics[model_id]['latency'].append(latency)
+                self.metrics[model_id]['latency'].append (latency)
                 
                 return pred, model_id
         
         # Fallback to first model
-        model_id = list(self.models.keys())[0]
-        pred = self.models[model_id]['model'].predict(features)
+        model_id = list (self.models.keys())[0]
+        pred = self.models[model_id]['model'].predict (features)
         return pred, model_id
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get A/B test metrics"""
         summary = {}
         for model_id, metrics in self.metrics.items():
             summary[model_id] = {
                 'predictions': metrics['predictions'],
-                'median_latency_us': np.median(metrics['latency']),
-                'p95_latency_us': np.percentile(metrics['latency'], 95),
+                'median_latency_us': np.median (metrics['latency']),
+                'p95_latency_us': np.percentile (metrics['latency'], 95),
             }
         return summary
 
@@ -557,12 +557,12 @@ ab_test.add_model('model_b', FastModelServer("model_b.txt"), 30)
 
 # Run for 1 week
 for _ in range(100000):
-    features = np.random.randn(100).astype(np.float32)
-    pred, model_used = ab_test.route_request(features)
+    features = np.random.randn(100).astype (np.float32)
+    pred, model_used = ab_test.route_request (features)
 
 # Analyze results
 metrics = ab_test.get_metrics()
-print(json.dumps(metrics, indent=2))
+print(json.dumps (metrics, indent=2))
 
 # Decision: If model_b has better Sharpe ratio and acceptable latency → full rollout
 \`\`\`
@@ -586,37 +586,37 @@ class ModelMonitor:
         self.features = []
         self.actuals = []  # If we can observe outcomes
     
-    def log_prediction(self, features: np.ndarray, prediction: float):
+    def log_prediction (self, features: np.ndarray, prediction: float):
         """Log prediction for monitoring"""
-        self.features.append(features)
-        self.predictions.append(prediction)
+        self.features.append (features)
+        self.predictions.append (prediction)
     
-    def log_actual(self, actual: float):
+    def log_actual (self, actual: float):
         """Log actual outcome (if observable)"""
-        self.actuals.append(actual)
+        self.actuals.append (actual)
     
-    def detect_feature_drift(self) -> Dict:
+    def detect_feature_drift (self) -> Dict:
         """
         Detect if feature distribution has changed
         Compare recent features to training distribution
         """
-        recent_features = np.array(self.features[-1000:])  # Last 1000 predictions
+        recent_features = np.array (self.features[-1000:])  # Last 1000 predictions
         
         drift_scores = {}
-        for i in range(recent_features.shape[1]):
+        for i in range (recent_features.shape[1]):
             # Compare mean (simple drift detection)
             recent_mean = recent_features[:, i].mean()
             training_mean = self.training_stats['means'][i]
             
             # Deviation in standard deviations
-            drift = abs(recent_mean - training_mean) / self.training_stats['stds'][i]
+            drift = abs (recent_mean - training_mean) / self.training_stats['stds'][i]
             
             if drift > 3:  # 3 standard deviations
                 drift_scores[f'feature_{i}'] = drift
         
         return drift_scores
     
-    def calculate_prediction_drift(self) -> float:
+    def calculate_prediction_drift (self) -> float:
         """
         Detect if prediction distribution has changed
         """
@@ -624,14 +624,14 @@ class ModelMonitor:
         old_preds = self.predictions[-10000:-1000]
         
         # KL divergence or simpler: mean/std comparison
-        recent_mean = np.mean(recent_preds)
-        old_mean = np.mean(old_preds)
+        recent_mean = np.mean (recent_preds)
+        old_mean = np.mean (old_preds)
         
-        drift = abs(recent_mean - old_mean)
+        drift = abs (recent_mean - old_mean)
         
         return drift
     
-    def alert_if_drift(self):
+    def alert_if_drift (self):
         """Check for drift and alert"""
         feature_drift = self.detect_feature_drift()
         prediction_drift = self.calculate_prediction_drift()
@@ -648,8 +648,8 @@ monitor = ModelMonitor()
 # Log every prediction
 for _ in range(10000):
     features = generate_features()
-    pred = model.predict(features)
-    monitor.log_prediction(features, pred)
+    pred = model.predict (features)
+    monitor.log_prediction (features, pred)
 
 # Check for drift hourly
 monitor.alert_if_drift()

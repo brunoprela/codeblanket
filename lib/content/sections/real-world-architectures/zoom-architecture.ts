@@ -5,7 +5,7 @@
 export const zoomarchitectureSection = {
   id: 'zoom-architecture',
   title: 'Zoom Architecture',
-  content: `Zoom is a video conferencing platform that became essential during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom's architecture must handle massive-scale video/audio streaming with minimal latency while ensuring quality and reliability even under poor network conditions. This section explores the technical systems behind Zoom.
+  content: `Zoom is a video conferencing platform that became essential during the COVID-19 pandemic. With 300+ million daily meeting participants at peak, Zoom\'s architecture must handle massive-scale video/audio streaming with minimal latency while ensuring quality and reliability even under poor network conditions. This section explores the technical systems behind Zoom.
 
 ## Overview
 
@@ -48,7 +48,7 @@ MCU (Multipoint Control Unit):
 - High CPU for server (encoding/decoding)
 - Latency introduced by mixing
 
-SFU (Selective Forwarding Unit) - Zoom's approach:
+SFU (Selective Forwarding Unit) - Zoom\'s approach:
 - Server forwards video streams without transcoding
 - Each participant uploads 1 stream, downloads N streams
 - Low CPU for server (no encoding/decoding)
@@ -169,7 +169,7 @@ class AdaptiveBitrateController:
         self.packet_loss = 0
         self.available_bandwidth = 0
         
-    def update(self, network_stats):
+    def update (self, network_stats):
         self.packet_loss = network_stats.packet_loss_rate
         self.available_bandwidth = network_stats.bandwidth
         
@@ -180,7 +180,7 @@ class AdaptiveBitrateController:
             self.target_bitrate *= 1.1  # Increase 10%
         
         # Clamp bitrate
-        self.target_bitrate = clamp(self.target_bitrate, 150, 3000)  # 150 Kbps to 3 Mbps
+        self.target_bitrate = clamp (self.target_bitrate, 150, 3000)  # 150 Kbps to 3 Mbps
         
         # Select resolution based on bitrate
         if self.target_bitrate >= 1200:
@@ -359,7 +359,7 @@ Participants are behind corporate firewalls, NATs, restrictive networks. Zoom mu
    - If direct connection fails (symmetric NAT, firewall)
    - Route traffic through TURN relay server
    - Higher latency but works reliably
-   - Zoom's MMR acts as TURN server
+   - Zoom\'s MMR acts as TURN server
 
 Connection preference:
 1. Direct (P2P) - lowest latency
@@ -544,7 +544,7 @@ Trade-offs:
 - Con: No cloud recording, no transcription, no phone dial-in
 - Con: Slightly higher CPU usage (encryption overhead)
 
-Zoom's default (not E2EE):
+Zoom\'s default (not E2EE):
 - TLS encrypted in transit (client ↔ MMR)
 - Encrypted at rest (stored recordings)
 - MMR can decrypt (needed for recording, transcription)

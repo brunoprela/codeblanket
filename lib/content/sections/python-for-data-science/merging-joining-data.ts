@@ -154,7 +154,7 @@ departments = pd.DataFrame({
 })
 
 # Inner join (only matching keys)
-result = pd.merge(employees, departments, on='dept_id')
+result = pd.merge (employees, departments, on='dept_id')
 print(result)
 #    employee_id     name  dept_id dept_name
 # 0            1    Alice       10        IT
@@ -168,7 +168,7 @@ print(result)
 
 \`\`\`python
 # Left join (keep all left records)
-result = pd.merge(employees, departments, on='dept_id', how='left')
+result = pd.merge (employees, departments, on='dept_id', how='left')
 print(result)
 #    employee_id     name  dept_id dept_name
 # 0            1    Alice       10        IT
@@ -182,7 +182,7 @@ print(result)
 
 \`\`\`python
 # Right join (keep all right records)
-result = pd.merge(employees, departments, on='dept_id', how='right')
+result = pd.merge (employees, departments, on='dept_id', how='right')
 print(result)
 #    employee_id     name  dept_id   dept_name
 # 0          1.0    Alice       10          IT
@@ -197,7 +197,7 @@ print(result)
 
 \`\`\`python
 # Outer join (keep all records from both)
-result = pd.merge(employees, departments, on='dept_id', how='outer')
+result = pd.merge (employees, departments, on='dept_id', how='outer')
 print(result)
 #    employee_id     name  dept_id   dept_name
 # 0          1.0    Alice       10          IT
@@ -225,7 +225,7 @@ targets = pd.DataFrame({
 })
 
 # Merge on multiple columns
-result = pd.merge(sales, targets, on=['region', 'product'], how='left')
+result = pd.merge (sales, targets, on=['region', 'product'], how='left')
 print(result)
 #   region product  sales  target
 # 0   East       A    100   120.0
@@ -279,7 +279,7 @@ right = pd.DataFrame({
 }, index=['K0', 'K2', 'K3'])
 
 # Join on index
-result = left.join(right)
+result = left.join (right)
 print(result)
 #      A   B    C    D
 # K0  A0  B0   C0   D0
@@ -288,7 +288,7 @@ print(result)
 # Default is left join
 
 # Inner join
-result = left.join(right, how='inner')
+result = left.join (right, how='inner')
 print(result)
 #      A   B   C   D
 # K0  A0  B0  C0  D0
@@ -305,7 +305,7 @@ right = pd.DataFrame({
     'D': ['D0', 'D2', 'D3']
 }, index=['K0', 'K2', 'K3'])
 
-result = left.join(right, on='key')
+result = left.join (right, on='key')
 print(result)
 #   key   A    C    D
 # 0  K0  A0   C0   D0
@@ -330,7 +330,7 @@ employees = pd.DataFrame({
     'dept_id': [10, 10, 20, 10, 30]
 })
 
-result = pd.merge(employees, departments, on='dept_id')
+result = pd.merge (employees, departments, on='dept_id')
 print(result)
 #    employee_id     name  dept_id dept_name
 # 0            1    Alice       10        IT
@@ -357,7 +357,7 @@ courses = pd.DataFrame({
 })
 
 # Many-to-many creates all combinations
-result = pd.merge(students, courses, on='course_id')
+result = pd.merge (students, courses, on='course_id')
 print(result)
 # Creates row for each student-instructor pair
 \`\`\`
@@ -366,7 +366,7 @@ print(result)
 
 \`\`\`python
 # Track which DataFrame each row came from
-result = pd.merge(employees, departments, on='dept_id', how='outer', indicator=True)
+result = pd.merge (employees, departments, on='dept_id', how='outer', indicator=True)
 print(result)
 #    employee_id     name  dept_id   dept_name      _merge
 # 0          1.0    Alice       10          IT        both
@@ -377,7 +377,7 @@ print(result)
 
 # Identify unmatched records
 unmatched = result[result['_merge'] != 'both']
-print(f"Unmatched records: {len(unmatched)}")
+print(f"Unmatched records: {len (unmatched)}")
 \`\`\`
 
 ## Practical Examples
@@ -412,7 +412,7 @@ order_items = pd.DataFrame({
 })
 
 # 1. Merge customers with orders
-customer_orders = pd.merge(orders, customers, on='customer_id', how='left')
+customer_orders = pd.merge (orders, customers, on='customer_id', how='left')
 print("Customer Orders:")
 print(customer_orders.head())
 
@@ -425,7 +425,7 @@ customer_stats.columns = ['order_count', 'total_spent', 'avg_order']
 customer_stats = customer_stats.reset_index()
 
 # Merge back with customer info
-customer_summary = pd.merge(customers, customer_stats, on='customer_id', how='left')
+customer_summary = pd.merge (customers, customer_stats, on='customer_id', how='left')
 customer_summary['total_spent'].fillna(0, inplace=True)
 customer_summary['order_count'].fillna(0, inplace=True)
 print("\\nCustomer Summary:")
@@ -433,7 +433,7 @@ print(customer_summary)
 
 # 3. Product analysis - which products in which orders
 order_details = pd.merge(
-    pd.merge(orders, order_items, on='order_id'),
+    pd.merge (orders, order_items, on='order_id'),
     customers[['customer_id', 'name', 'city']],
     on='customer_id'
 )
@@ -441,7 +441,7 @@ print("\\nOrder Details:")
 print(order_details.head())
 
 # 4. Product popularity by city
-product_by_city = order_details.groupby(['city', 'product_id'])['quantity'].sum().unstack(fill_value=0)
+product_by_city = order_details.groupby(['city', 'product_id'])['quantity'].sum().unstack (fill_value=0)
 print("\\nProduct Popularity by City:")
 print(product_by_city)
 \`\`\`
@@ -517,14 +517,14 @@ print(result[['product_id', 'sales_growth', 'units_growth']])
 
 \`\`\`python
 # Check merge results
-def validate_merge(left, right, result, merge_keys):
+def validate_merge (left, right, result, merge_keys):
     """Validate merge operation results"""
-    print(f"Left DataFrame: {len(left)} rows")
-    print(f"Right DataFrame: {len(right)} rows")
-    print(f"Merged DataFrame: {len(result)} rows")
+    print(f"Left DataFrame: {len (left)} rows")
+    print(f"Right DataFrame: {len (right)} rows")
+    print(f"Merged DataFrame: {len (result)} rows")
     
     # Check for unexpected duplicates
-    if len(result) > len(left) and len(result) > len(right):
+    if len (result) > len (left) and len (result) > len (right):
         print("⚠️  Warning: Result has more rows than both inputs (possible many-to-many)")
     
     # Check for missing values in merge keys
@@ -539,8 +539,8 @@ def validate_merge(left, right, result, merge_keys):
         print(merge_counts)
 
 # Example usage
-result = pd.merge(employees, departments, on='dept_id', how='outer', indicator=True)
-validate_merge(employees, departments, result, ['dept_id'])
+result = pd.merge (employees, departments, on='dept_id', how='outer', indicator=True)
+validate_merge (employees, departments, result, ['dept_id'])
 \`\`\`
 
 ## Performance Considerations
@@ -551,25 +551,25 @@ validate_merge(employees, departments, result, ['dept_id'])
 # 1. Ensure merge keys are indexed
 df1 = df1.set_index('key')
 df2 = df2.set_index('key')
-result = df1.join(df2)  # Faster than merge on unindexed columns
+result = df1.join (df2)  # Faster than merge on unindexed columns
 
 # 2. Use categorical for repeated values
 df['category'] = df['category'].astype('category')
 
 # 3. Filter before merging
 df1_filtered = df1[df1['date'] > '2024-01-01']
-result = pd.merge(df1_filtered, df2, on='key')
+result = pd.merge (df1_filtered, df2, on='key')
 
 # 4. Use merge_asof for sorted time series
 # Much faster than merge for time-based joins
-result = pd.merge_asof(df1.sort_values('time'), df2.sort_values('time'), on='time')
+result = pd.merge_asof (df1.sort_values('time'), df2.sort_values('time'), on='time')
 
 # 5. Consider chunking for very large datasets
 chunks = []
 for chunk in pd.read_csv('large_file.csv', chunksize=10000):
-    merged_chunk = pd.merge(chunk, reference_df, on='key')
-    chunks.append(merged_chunk)
-result = pd.concat(chunks, ignore_index=True)
+    merged_chunk = pd.merge (chunk, reference_df, on='key')
+    chunks.append (merged_chunk)
+result = pd.concat (chunks, ignore_index=True)
 \`\`\`
 
 ## Common Pitfalls
@@ -582,22 +582,22 @@ print(df2['key'].duplicated().sum())
 
 # Pitfall 2: Wrong join type
 # Left join when you need inner join
-result_left = pd.merge(df1, df2, on='key', how='left')  # Keeps all df1
-result_inner = pd.merge(df1, df2, on='key', how='inner')  # Only matching
+result_left = pd.merge (df1, df2, on='key', how='left')  # Keeps all df1
+result_inner = pd.merge (df1, df2, on='key', how='inner')  # Only matching
 
 # Pitfall 3: Not using indicator
 # Always use indicator for outer joins to track sources
-result = pd.merge(df1, df2, on='key', how='outer', indicator=True)
+result = pd.merge (df1, df2, on='key', how='outer', indicator=True)
 
 # Pitfall 4: Ignoring suffixes with conflicting names
 # Specify meaningful suffixes
-result = pd.merge(df1, df2, on='key', suffixes=('_current', '_target'))
+result = pd.merge (df1, df2, on='key', suffixes=('_current', '_target'))
 
 # Pitfall 5: Merging unsorted data with merge_asof
 # merge_asof requires sorted data
 df1 = df1.sort_values('timestamp')
 df2 = df2.sort_values('timestamp')
-result = pd.merge_asof(df1, df2, on='timestamp')
+result = pd.merge_asof (df1, df2, on='timestamp')
 \`\`\`
 
 ## Key Takeaways

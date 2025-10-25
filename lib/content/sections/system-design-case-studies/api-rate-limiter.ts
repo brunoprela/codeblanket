@@ -36,12 +36,12 @@ class TokenBucket:
         self.refill_rate = refill_rate  # Tokens per second
         self.last_refill = time.time()
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         
         # Refill tokens based on elapsed time
         elapsed = now - self.last_refill
-        self.tokens = min(self.capacity, self.tokens + elapsed * self.refill_rate)
+        self.tokens = min (self.capacity, self.tokens + elapsed * self.refill_rate)
         self.last_refill = now
         
         # Try to consume 1 token
@@ -52,7 +52,7 @@ class TokenBucket:
             return False  # Reject (rate limited)
 
 # Example: 100 requests/minute = 1.67 tokens/second
-bucket = TokenBucket(capacity=100, refill_rate=1.67)
+bucket = TokenBucket (capacity=100, refill_rate=1.67)
 \`\`\`
 
 **Pros**:
@@ -77,17 +77,17 @@ import queue
 
 class LeakyBucket:
     def __init__(self, capacity, leak_rate):
-        self.queue = queue.Queue(maxsize=capacity)
+        self.queue = queue.Queue (maxsize=capacity)
         self.leak_rate = leak_rate  # Requests per second
         self.last_leak = time.time()
     
-    def allow_request(self):
+    def allow_request (self):
         now = time.time()
         
         # Leak tokens
         elapsed = now - self.last_leak
-        num_leaks = int(elapsed * self.leak_rate)
-        for _ in range(num_leaks):
+        num_leaks = int (elapsed * self.leak_rate)
+        for _ in range (num_leaks):
             if not self.queue.empty():
                 self.queue.get()
         self.last_leak = now
@@ -100,7 +100,7 @@ class LeakyBucket:
             return False  # Rejected
 
 # Example: 100 requests/minute
-bucket = LeakyBucket(capacity=100, leak_rate=1.67)
+bucket = LeakyBucket (capacity=100, leak_rate=1.67)
 \`\`\`
 
 **Pros**:
@@ -126,12 +126,12 @@ class FixedWindow:
         self.window_size = window_size  # Seconds
         self.counter = {}  # window_start → count
     
-    def allow_request(self, user_id):
+    def allow_request (self, user_id):
         now = time.time()
-        window_start = int(now // self.window_size) * self.window_size
+        window_start = int (now // self.window_size) * self.window_size
         
         key = f"{user_id}:{window_start}"
-        count = self.counter.get(key, 0)
+        count = self.counter.get (key, 0)
         
         if count < self.max_requests:
             self.counter[key] = count + 1
@@ -140,7 +140,7 @@ class FixedWindow:
             return False  # Rate limited
 
 # Example: 100 requests/minute (60-second window)
-limiter = FixedWindow(max_requests=100, window_size=60)
+limiter = FixedWindow (max_requests=100, window_size=60)
 \`\`\`
 
 **Pros**:
@@ -168,7 +168,7 @@ class SlidingWindowLog:
         self.window_size = window_size  # Seconds
         self.logs = {}  # user_id → deque of timestamps
     
-    def allow_request(self, user_id):
+    def allow_request (self, user_id):
         now = time.time()
         
         if user_id not in self.logs:
@@ -179,14 +179,14 @@ class SlidingWindowLog:
             self.logs[user_id].popleft()
         
         # Check limit
-        if len(self.logs[user_id]) < self.max_requests:
-            self.logs[user_id].append(now)
+        if len (self.logs[user_id]) < self.max_requests:
+            self.logs[user_id].append (now)
             return True  # Allowed
         else:
             return False  # Rate limited
 
 # Example: 100 requests/minute
-limiter = SlidingWindowLog(max_requests=100, window_size=60)
+limiter = SlidingWindowLog (max_requests=100, window_size=60)
 \`\`\`
 
 **Pros**:
@@ -212,9 +212,9 @@ class SlidingWindowCounter:
         self.window_size = window_size
         self.counters = {}  # user_id → {window_start → count}
     
-    def allow_request(self, user_id):
+    def allow_request (self, user_id):
         now = time.time()
-        current_window = int(now // self.window_size) * self.window_size
+        current_window = int (now // self.window_size) * self.window_size
         previous_window = current_window - self.window_size
         
         # Weight: how far into current window are we?
@@ -222,8 +222,8 @@ class SlidingWindowCounter:
         weight = elapsed_in_current / self.window_size
         
         # Estimate: (prev_window_count * (1 - weight)) + current_window_count
-        prev_count = self.counters.get(f"{user_id}:{previous_window}", 0)
-        curr_count = self.counters.get(f"{user_id}:{current_window}", 0)
+        prev_count = self.counters.get (f"{user_id}:{previous_window}", 0)
+        curr_count = self.counters.get (f"{user_id}:{current_window}", 0)
         estimated_count = (prev_count * (1 - weight)) + curr_count
         
         if estimated_count < self.max_requests:
@@ -233,7 +233,7 @@ class SlidingWindowCounter:
             return False  # Rate limited
 
 # Example: 100 requests/minute
-limiter = SlidingWindowCounter(max_requests=100, window_size=60)
+limiter = SlidingWindowCounter (max_requests=100, window_size=60)
 \`\`\`
 
 **Calculation Example**:
@@ -284,19 +284,19 @@ limiter = SlidingWindowCounter(max_requests=100, window_size=60)
 import redis
 import time
 
-redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+redis_client = redis.Redis (host='localhost', port=6379, decode_responses=True)
 
-def rate_limit(user_id, max_requests=100, window_size=60):
+def rate_limit (user_id, max_requests=100, window_size=60):
     now = time.time()
-    current_window = int(now // window_size) * window_size
+    current_window = int (now // window_size) * window_size
     previous_window = current_window - window_size
     
     current_key = f"rate_limit:user:{user_id}:{current_window}"
     previous_key = f"rate_limit:user:{user_id}:{previous_window}"
     
     # Get counts
-    prev_count = int(redis_client.get(previous_key) or 0)
-    curr_count = int(redis_client.get(current_key) or 0)
+    prev_count = int (redis_client.get (previous_key) or 0)
+    curr_count = int (redis_client.get (current_key) or 0)
     
     # Calculate estimated count (sliding window)
     elapsed_in_current = now - current_window
@@ -313,19 +313,19 @@ def rate_limit(user_id, max_requests=100, window_size=60):
     
     # Increment current window counter
     pipe = redis_client.pipeline()
-    pipe.incr(current_key)
-    pipe.expire(current_key, window_size * 2)  # Keep 2 windows
+    pipe.incr (current_key)
+    pipe.expire (current_key, window_size * 2)  # Keep 2 windows
     pipe.execute()
     
     return {
         "allowed": True,
         "limit": max_requests,
-        "remaining": int(max_requests - estimated_count - 1),
+        "remaining": int (max_requests - estimated_count - 1),
         "reset": current_window + window_size
     }
 
 # Usage
-result = rate_limit(user_id=123, max_requests=100, window_size=60)
+result = rate_limit (user_id=123, max_requests=100, window_size=60)
 if not result["allowed"]:
     return Response("Rate limit exceeded", status=429, headers={
         "X-RateLimit-Limit": result["limit"],
@@ -356,8 +356,8 @@ local max_requests = tonumber(ARGV[1])
 local window_size = tonumber(ARGV[2])
 local weight = tonumber(ARGV[3])
 
-local prev_count = tonumber(redis.call('GET', previous_key) or 0)
-local curr_count = tonumber(redis.call('GET', current_key) or 0)
+local prev_count = tonumber (redis.call('GET', previous_key) or 0)
+local curr_count = tonumber (redis.call('GET', current_key) or 0)
 
 local estimated_count = (prev_count * (1 - weight)) + curr_count
 
@@ -376,11 +376,11 @@ return {1, max_requests, remaining}  -- Allowed
 
 \`\`\`python
 with open('rate_limit.lua') as f:
-    lua_script = redis_client.register_script(f.read())
+    lua_script = redis_client.register_script (f.read())
 
-def rate_limit_atomic(user_id, max_requests=100, window_size=60):
+def rate_limit_atomic (user_id, max_requests=100, window_size=60):
     now = time.time()
-    current_window = int(now // window_size) * window_size
+    current_window = int (now // window_size) * window_size
     previous_window = current_window - window_size
     
     current_key = f"rate_limit:user:{user_id}:{current_window}"
@@ -396,7 +396,7 @@ def rate_limit_atomic(user_id, max_requests=100, window_size=60):
     )
     
     return {
-        "allowed": bool(allowed),
+        "allowed": bool (allowed),
         "limit": limit,
         "remaining": remaining
     }
@@ -422,13 +422,13 @@ Enterprise:   10000 requests/minute
 **Implementation**:
 
 \`\`\`python
-def get_user_tier(user_id):
+def get_user_tier (user_id):
     # Look up in database
     user = db.query("SELECT tier FROM users WHERE user_id = ?", user_id)
     return user.tier  # "free", "premium", "enterprise"
 
-def rate_limit_with_tier(user_id):
-    tier = get_user_tier(user_id)
+def rate_limit_with_tier (user_id):
+    tier = get_user_tier (user_id)
     
     limits = {
         "free": 100,
@@ -436,8 +436,8 @@ def rate_limit_with_tier(user_id):
         "enterprise": 10000
     }
     
-    max_requests = limits.get(tier, 100)  # Default: free
-    return rate_limit(user_id, max_requests=max_requests, window_size=60)
+    max_requests = limits.get (tier, 100)  # Default: free
+    return rate_limit (user_id, max_requests=max_requests, window_size=60)
 \`\`\`
 
 ---
@@ -455,18 +455,18 @@ GET  /api/health:  10000 requests/minute  (lightweight)
 **Implementation**:
 
 \`\`\`python
-def rate_limit_endpoint(user_id, endpoint):
+def rate_limit_endpoint (user_id, endpoint):
     endpoint_limits = {
         "/api/upload": 10,
         "/api/users": 100,
         "/api/health": 10000
     }
     
-    max_requests = endpoint_limits.get(endpoint, 100)
+    max_requests = endpoint_limits.get (endpoint, 100)
     
     # Use endpoint-specific key
     key = f"rate_limit:user:{user_id}:endpoint:{endpoint}"
-    return rate_limit(user_id, max_requests=max_requests, window_size=60)
+    return rate_limit (user_id, max_requests=max_requests, window_size=60)
 \`\`\`
 
 ---
@@ -478,12 +478,12 @@ def rate_limit_endpoint(user_id, endpoint):
 **Solution**: Global rate limit (total requests across all users).
 
 \`\`\`python
-def global_rate_limit(max_requests_per_second=100000):
-    now = int(time.time())
+def global_rate_limit (max_requests_per_second=100000):
+    now = int (time.time())
     key = f"rate_limit:global:{now}"
     
-    count = redis_client.incr(key)
-    redis_client.expire(key, 2)  # Keep for 2 seconds
+    count = redis_client.incr (key)
+    redis_client.expire (key, 2)  # Keep for 2 seconds
     
     if count > max_requests_per_second:
         return False  # System overloaded
@@ -494,7 +494,7 @@ if not global_rate_limit():
     return Response("System overloaded", status=503)
 
 # Then check user limit
-if not rate_limit(user_id):
+if not rate_limit (user_id):
     return Response("Rate limit exceeded", status=429)
 \`\`\`
 
@@ -513,7 +513,7 @@ def rate_limiter_middleware():
     endpoint = request.path
     
     # Check rate limit
-    result = rate_limit_endpoint(user_id, endpoint)
+    result = rate_limit_endpoint (user_id, endpoint)
     
     if not result["allowed"]:
         return jsonify({
@@ -565,15 +565,15 @@ Retry-After: 45
 import requests
 import time
 
-def api_call_with_retry(url):
-    response = requests.get(url)
+def api_call_with_retry (url):
+    response = requests.get (url)
     
     if response.status_code == 429:
         # Respect Retry-After header
-        retry_after = int(response.headers.get("Retry-After", 60))
+        retry_after = int (response.headers.get("Retry-After", 60))
         print(f"Rate limited. Waiting {retry_after} seconds...")
-        time.sleep(retry_after)
-        return api_call_with_retry(url)  # Retry
+        time.sleep (retry_after)
+        return api_call_with_retry (url)  # Retry
     
     return response
 \`\`\`
@@ -600,12 +600,12 @@ def api_call_with_retry(url):
 - Or: Use local rate limiting (per-server limits) as fallback
 
 \`\`\`python
-def rate_limit_with_fallback(user_id):
+def rate_limit_with_fallback (user_id):
     try:
-        return rate_limit(user_id)  # Redis-based
+        return rate_limit (user_id)  # Redis-based
     except redis.ConnectionError:
         # Fallback: local rate limiting (less accurate, but API stays up)
-        return local_rate_limit(user_id)
+        return local_rate_limit (user_id)
 \`\`\`
 
 **Challenge 3: Clock Skew**
@@ -625,7 +625,7 @@ def rate_limit_with_fallback(user_id):
 **Scenario**: Adjust limits based on system load.
 
 \`\`\`python
-def dynamic_rate_limit(user_id):
+def dynamic_rate_limit (user_id):
     # Check system load
     cpu_usage = get_cpu_usage()
     
@@ -634,7 +634,7 @@ def dynamic_rate_limit(user_id):
     else:
         max_requests = 100
     
-    return rate_limit(user_id, max_requests=max_requests)
+    return rate_limit (user_id, max_requests=max_requests)
 \`\`\`
 
 ### Whitelisting/Blacklisting
@@ -643,28 +643,28 @@ def dynamic_rate_limit(user_id):
 WHITELIST = [999, 1000, 1001]  # VIP users, no limits
 BLACKLIST = [666, 667]  # Banned users
 
-def rate_limit_with_rules(user_id):
+def rate_limit_with_rules (user_id):
     if user_id in WHITELIST:
         return {"allowed": True}  # Bypass
     
     if user_id in BLACKLIST:
         return {"allowed": False}  # Always block
     
-    return rate_limit(user_id)
+    return rate_limit (user_id)
 \`\`\`
 
 ### Burst Handling (Token Bucket)
 
 \`\`\`python
 # Allow short bursts (10 requests/sec) but limit average (100 requests/minute)
-def rate_limit_with_burst(user_id):
+def rate_limit_with_burst (user_id):
     # Short-term limit (10 req/sec)
-    short_term = rate_limit(user_id, max_requests=10, window_size=1)
+    short_term = rate_limit (user_id, max_requests=10, window_size=1)
     if not short_term["allowed"]:
         return short_term
     
     # Long-term limit (100 req/min)
-    long_term = rate_limit(user_id, max_requests=100, window_size=60)
+    long_term = rate_limit (user_id, max_requests=100, window_size=60)
     return long_term
 \`\`\`
 

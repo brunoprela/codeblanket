@@ -40,10 +40,10 @@ def law_of_large_numbers_demo():
     
     # Generate samples
     max_n = 10000
-    samples = np.random.normal(true_mean, true_std, size=max_n)
+    samples = np.random.normal (true_mean, true_std, size=max_n)
     
     # Compute running mean
-    running_means = np.cumsum(samples) / np.arange(1, max_n + 1)
+    running_means = np.cumsum (samples) / np.arange(1, max_n + 1)
     
     print("=== Law of Large Numbers ===")
     print(f"True mean: {true_mean}")
@@ -53,15 +53,15 @@ def law_of_large_numbers_demo():
     
     for n in [10, 100, 1000, 5000, 10000]:
         sample_mean = running_means[n-1]
-        error = abs(sample_mean - true_mean)
+        error = abs (sample_mean - true_mean)
         print(f"{n:11d} | {sample_mean:11.6f} | {error:.6f}")
     
     # Plot
-    plt.figure(figsize=(12, 6))
-    plt.plot(running_means, linewidth=1, label='Sample Mean')
-    plt.axhline(true_mean, color='r', linestyle='--', linewidth=2, label=f'True Mean = {true_mean}')
-    plt.axhline(true_mean + 0.1, color='g', linestyle=':', alpha=0.5, label='±0.1 band')
-    plt.axhline(true_mean - 0.1, color='g', linestyle=':', alpha=0.5)
+    plt.figure (figsize=(12, 6))
+    plt.plot (running_means, linewidth=1, label='Sample Mean')
+    plt.axhline (true_mean, color='r', linestyle='--', linewidth=2, label=f'True Mean = {true_mean}')
+    plt.axhline (true_mean + 0.1, color='g', linestyle=':', alpha=0.5, label='±0.1 band')
+    plt.axhline (true_mean - 0.1, color='g', linestyle=':', alpha=0.5)
     plt.xlabel('Sample Size')
     plt.ylabel('Sample Mean')
     plt.title('Law of Large Numbers: Sample Mean → Population Mean')
@@ -119,17 +119,17 @@ def central_limit_theorem_demo():
     print("Sampling distribution of means:")
     print()
     
-    for idx, n in enumerate(sample_sizes):
+    for idx, n in enumerate (sample_sizes):
         # Generate many sample means
-        sample_means = [pop_dist(n).mean() for _ in range(n_experiments)]
+        sample_means = [pop_dist (n).mean() for _ in range (n_experiments)]
         
         # Theoretical CLT prediction
         theoretical_mean = true_mean
-        theoretical_std = true_std / np.sqrt(n)
+        theoretical_std = true_std / np.sqrt (n)
         
         # Empirical
-        empirical_mean = np.mean(sample_means)
-        empirical_std = np.std(sample_means)
+        empirical_mean = np.mean (sample_means)
+        empirical_std = np.std (sample_means)
         
         print(f"n = {n}:")
         print(f"  Theory: μ = {theoretical_mean:.3f}, σ = {theoretical_std:.3f}")
@@ -137,17 +137,17 @@ def central_limit_theorem_demo():
         
         # Plot
         ax = axes[idx]
-        ax.hist(sample_means, bins=50, density=True, alpha=0.7, edgecolor='black')
+        ax.hist (sample_means, bins=50, density=True, alpha=0.7, edgecolor='black')
         
         # Overlay theoretical normal
-        x = np.linspace(min(sample_means), max(sample_means), 100)
+        x = np.linspace (min (sample_means), max (sample_means), 100)
         from scipy import stats
-        ax.plot(x, stats.norm(theoretical_mean, theoretical_std).pdf(x), 
+        ax.plot (x, stats.norm (theoretical_mean, theoretical_std).pdf (x), 
                 'r-', linewidth=2, label='CLT Prediction')
         
         ax.set_xlabel('Sample Mean')
         ax.set_ylabel('Density')
-        ax.set_title(f'n = {n} ({"Not yet normal" if n < 10 else "Approaching normal"})')
+        ax.set_title (f'n = {n} ({"Not yet normal" if n < 10 else "Approaching normal"})')
         ax.legend()
         ax.grid(True, alpha=0.3)
     
@@ -183,27 +183,27 @@ def clt_different_distributions():
     print(f"Sample size n = {n}, experiments = {n_experiments}")
     print()
     
-    for idx, (name, dist_func) in enumerate(distributions):
+    for idx, (name, dist_func) in enumerate (distributions):
         # Generate sample means
-        sample_means = [dist_func(n).mean() for _ in range(n_experiments)]
+        sample_means = [dist_func (n).mean() for _ in range (n_experiments)]
         
         # Standardize
-        mean = np.mean(sample_means)
-        std = np.std(sample_means)
-        standardized = (np.array(sample_means) - mean) / std
+        mean = np.mean (sample_means)
+        std = np.std (sample_means)
+        standardized = (np.array (sample_means) - mean) / std
         
         # Plot
         ax = axes[idx]
-        ax.hist(standardized, bins=50, density=True, alpha=0.7, edgecolor='black')
+        ax.hist (standardized, bins=50, density=True, alpha=0.7, edgecolor='black')
         
         # Overlay standard normal
         x = np.linspace(-4, 4, 100)
         from scipy import stats
-        ax.plot(x, stats.norm(0, 1).pdf(x), 'r-', linewidth=2, label='N(0,1)')
+        ax.plot (x, stats.norm(0, 1).pdf (x), 'r-', linewidth=2, label='N(0,1)')
         
         ax.set_xlabel('Standardized Sample Mean')
         ax.set_ylabel('Density')
-        ax.set_title(f'Source: {name}')
+        ax.set_title (f'Source: {name}')
         ax.legend()
         ax.grid(True, alpha=0.3)
         
@@ -255,14 +255,14 @@ def performance_estimation():
     true_accuracy = 0.85
     
     # Simulate predictions (Bernoulli trials)
-    correct = np.random.rand(n_test) < true_accuracy
+    correct = np.random.rand (n_test) < true_accuracy
     
     # Estimate accuracy
     accuracy = correct.mean()
     
     # CLT-based confidence interval
     # Sample mean ~ N(μ, σ²/n) where σ² = p(1-p) for Bernoulli
-    std_error = np.sqrt(accuracy * (1 - accuracy) / n_test)
+    std_error = np.sqrt (accuracy * (1 - accuracy) / n_test)
     
     # 95% confidence interval
     z_score = 1.96  # For 95%
@@ -271,7 +271,7 @@ def performance_estimation():
     
     print("=== Model Performance Estimation (CLT) ===")
     print(f"Test samples: {n_test}")
-    print(f"Correct predictions: {np.sum(correct)}")
+    print(f"Correct predictions: {np.sum (correct)}")
     print(f"Estimated accuracy: {accuracy:.4f}")
     print(f"Standard error: {std_error:.4f}")
     print()

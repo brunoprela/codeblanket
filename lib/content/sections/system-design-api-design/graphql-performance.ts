@@ -32,15 +32,15 @@ query {
 const DataLoader = require('dataloader');
 
 // Create DataLoader
-const userLoader = new DataLoader(async (userIds) => {
+const userLoader = new DataLoader (async (userIds) => {
   // Batch load all users at once
   const users = await db.users.findAll({
     where: { id: userIds }
   });
   
   // Return in same order as requested IDs
-  return userIds.map(id => 
-    users.find(user => user.id === id)
+  return userIds.map (id => 
+    users.find (user => user.id === id)
   );
 });
 
@@ -48,7 +48,7 @@ const userLoader = new DataLoader(async (userIds) => {
 const resolvers = {
   Post: {
     author: (post, args, context) => {
-      return context.loaders.user.load(post.authorId);
+      return context.loaders.user.load (post.authorId);
     }
   }
 };
@@ -77,16 +77,16 @@ const resolvers = {
     user: async (_, { id }, context) => {
       // Check cache first
       const cached = await client.get(\`user:\${id}\`);
-      if (cached) return JSON.parse(cached);
+      if (cached) return JSON.parse (cached);
       
       // Query database
-      const user = await db.users.findById(id);
+      const user = await db.users.findById (id);
       
       // Cache for 5 minutes
       await client.setex(
         \`user:\${id}\`,
         300,
-        JSON.stringify(user)
+        JSON.stringify (user)
       );
       
       return user;
@@ -139,8 +139,8 @@ const server = new ApolloServer({
 
 // Schema-level cache hints
 type Query {
-  user(id: ID!): User @cacheControl(maxAge: 300)
-  posts: [Post!]! @cacheControl(maxAge: 60)
+  user (id: ID!): User @cacheControl (maxAge: 300)
+  posts: [Post!]! @cacheControl (maxAge: 60)
 }
 \`\`\`
 
@@ -194,7 +194,7 @@ const resolvers = {
   Query: {
     posts: async (_, { first = 20, after }) => {
       // Decode cursor
-      const cursor = after ? decodeCursor(after) : null;
+      const cursor = after ? decodeCursor (after) : null;
       
       // Efficient query using WHERE clause
       const posts = await db.posts.findAll({
@@ -207,7 +207,7 @@ const resolvers = {
       const edges = posts.slice(0, first);
       
       return {
-        edges: edges.map(post => ({
+        edges: edges.map (post => ({
           cursor: encodeCursor({ id: post.id }),
           node: post
         })),
@@ -238,8 +238,8 @@ const link = new BatchHttpLink({
 });
 
 // Multiple queries sent together
-query1: { user(id: 1) { name }}
-query2: { user(id: 2) { name }}
+query1: { user (id: 1) { name }}
+query2: { user (id: 2) { name }}
 query3: { posts { title }}
 
 // Server receives and processes as batch
@@ -280,14 +280,14 @@ const server = new ApolloServer({
 const server = new ApolloServer({
   schema,
   plugins: [{
-    requestDidStart(requestContext) {
+    requestDidStart (requestContext) {
       const start = Date.now();
       
       return {
-        didEncounterErrors(ctx) {
+        didEncounterErrors (ctx) {
           console.error('Query errors:', ctx.errors);
         },
-        willSendResponse(ctx) {
+        willSendResponse (ctx) {
           const duration = Date.now() - start;
           console.log({
             query: ctx.request.query,
@@ -315,7 +315,7 @@ const resolvers = {
       // Check if field was requested
       if (!info) return null;
       
-      return context.loaders.userPosts.load(user.id);
+      return context.loaders.userPosts.load (user.id);
     }
   }
 };
@@ -329,9 +329,9 @@ const resolvers = {
     dashboard: async () => {
       // Run queries in parallel
       const [user, posts, stats] = await Promise.all([
-        db.users.findById(userId),
+        db.users.findById (userId),
         db.posts.findAll({ userId }),
-        db.stats.get(userId)
+        db.stats.get (userId)
       ]);
       
       return { user, posts, stats };
@@ -346,7 +346,7 @@ const resolvers = {
 // Bad: Lazy loading (N+1)
 const posts = await Post.findAll();
 for (const post of posts) {
-  post.author = await User.findById(post.authorId);  // N queries
+  post.author = await User.findById (post.authorId);  // N queries
 }
 
 // Good: Eager loading
@@ -366,10 +366,10 @@ Shopify's GraphQL API uses:
 **Query Cost Example**:
 \`\`\`graphql
 query {
-  products(first: 10) {  # Cost: 10
+  products (first: 10) {  # Cost: 10
     edges {
       node {
-        variants(first: 5) {  # Cost per product: 5
+        variants (first: 5) {  # Cost per product: 5
           edges {
             node {
               price

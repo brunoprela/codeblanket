@@ -23,10 +23,10 @@ export const expectationvarianceQuiz = [
     question:
       'When you scale a random variable by constant a: Y = aX, how do the mean and variance change? Why does variance scale by a² instead of a?',
     sampleAnswer:
-      'Mean scales linearly: E[aX] = aE[X]. Variance scales quadratically: Var(aX) = a²Var(X), thus SD scales linearly: SD(aX) = |a|SD(X). Why a² for variance? Variance is E[(X-μ)²], measuring squared deviations. When we scale by a: Var(aX) = E[(aX-aμ)²] = E[a²(X-μ)²] = a²E[(X-μ)²] = a²Var(X). The squaring in variance definition causes a to be squared. Intuition: If you double all values (a=2), deviations double, but squared deviations quadruple. Practical implications: (1) When standardizing features (dividing by σ), variance becomes 1 (since 1/σ² × σ² = 1). (2) When changing units (meters to centimeters, ×100), variance multiplies by 10,000 but SD by 100. (3) In neural networks, weight scaling affects activation variance quadratically - crucial for initialization. This is why He initialization uses √(2/n) not 2/n - we want Var = 2/n, requiring std = √(2/n).',
+      'Mean scales linearly: E[aX] = aE[X]. Variance scales quadratically: Var (aX) = a²Var(X), thus SD scales linearly: SD(aX) = |a|SD(X). Why a² for variance? Variance is E[(X-μ)²], measuring squared deviations. When we scale by a: Var (aX) = E[(aX-aμ)²] = E[a²(X-μ)²] = a²E[(X-μ)²] = a²Var(X). The squaring in variance definition causes a to be squared. Intuition: If you double all values (a=2), deviations double, but squared deviations quadruple. Practical implications: (1) When standardizing features (dividing by σ), variance becomes 1 (since 1/σ² × σ² = 1). (2) When changing units (meters to centimeters, ×100), variance multiplies by 10,000 but SD by 100. (3) In neural networks, weight scaling affects activation variance quadratically - crucial for initialization. This is why He initialization uses √(2/n) not 2/n - we want Var = 2/n, requiring std = √(2/n).',
     keyPoints: [
       'E[aX] = aE[X]: mean scales linearly',
-      'Var(aX) = a²Var(X): variance scales quadratically',
+      'Var (aX) = a²Var(X): variance scales quadratically',
       'Due to squaring in variance definition',
       'Standard deviation scales linearly: |a|σ',
       'Critical for feature scaling and weight initialization',

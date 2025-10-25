@@ -59,7 +59,7 @@ export const facebookMessengerMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc5',
     question:
-      "Messenger stores 100 billion messages per day in Cassandra. Why is Cassandra's LSM-tree architecture better than MySQL's B-tree for this workload?",
+      "Messenger stores 100 billion messages per day in Cassandra. Why is Cassandra\'s LSM-tree architecture better than MySQL's B-tree for this workload?",
     options: [
       'LSM-tree uses less storage than B-tree',
       'LSM-tree has faster reads than B-tree',

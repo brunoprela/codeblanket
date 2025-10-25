@@ -29,7 +29,7 @@ This simple but powerful pattern enables LLMs to:
 User Query → Retrieval System → Relevant Documents → LLM + Context → Response
 \`\`\`
 
-Here's a concrete example:
+Here\'s a concrete example:
 
 **Without RAG:**
 - User: "What were our Q3 2024 sales figures?"
@@ -98,7 +98,7 @@ Documents must be broken into smaller chunks for effective retrieval. The chunki
 
 \`\`\`python
 # Simple chunking example
-def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list[str]:
+def chunk_text (text: str, chunk_size: int = 1000, overlap: int = 200) -> list[str]:
     """
     Split text into overlapping chunks.
     
@@ -113,18 +113,18 @@ def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list[st
     chunks = []
     start = 0
     
-    while start < len(text):
+    while start < len (text):
         end = start + chunk_size
         chunk = text[start:end]
-        chunks.append(chunk)
+        chunks.append (chunk)
         start = end - overlap  # Create overlap
     
     return chunks
 
 # Example usage
 document = "Large document text here..."
-chunks = chunk_text(document, chunk_size=500, overlap=100)
-print(f"Created {len(chunks)} chunks from document")
+chunks = chunk_text (document, chunk_size=500, overlap=100)
+print(f"Created {len (chunks)} chunks from document")
 \`\`\`
 
 ### 3. **Embedding Model**
@@ -136,7 +136,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def create_embedding(text: str) -> list[float]:
+def create_embedding (text: str) -> list[float]:
     """
     Create embedding vector for text using OpenAI's model.
     
@@ -154,8 +154,8 @@ def create_embedding(text: str) -> list[float]:
 
 # Example usage
 chunk = "RAG combines retrieval with generation..."
-embedding = create_embedding(chunk)
-print(f"Embedding dimension: {len(embedding)}")  # 1536
+embedding = create_embedding (chunk)
+print(f"Embedding dimension: {len (embedding)}")  # 1536
 \`\`\`
 
 ### 4. **Vector Database**
@@ -177,13 +177,13 @@ class SimpleVectorStore:
         self.documents = []
         self.metadata = []
     
-    def add(self, vector: List[float], document: str, metadata: dict = None):
+    def add (self, vector: List[float], document: str, metadata: dict = None):
         """Add a vector to the store."""
-        self.vectors.append(np.array(vector))
-        self.documents.append(document)
-        self.metadata.append(metadata or {})
+        self.vectors.append (np.array (vector))
+        self.documents.append (document)
+        self.metadata.append (metadata or {})
     
-    def search(self, query_vector: List[float], top_k: int = 5) -> List[Tuple[str, float, dict]]:
+    def search (self, query_vector: List[float], top_k: int = 5) -> List[Tuple[str, float, dict]]:
         """
         Search for similar vectors using cosine similarity.
         
@@ -194,16 +194,16 @@ class SimpleVectorStore:
         Returns:
             List of (document, similarity_score, metadata) tuples
         """
-        query_np = np.array(query_vector)
+        query_np = np.array (query_vector)
         
         # Calculate cosine similarity with all vectors
         similarities = []
-        for i, vec in enumerate(self.vectors):
-            similarity = np.dot(query_np, vec) / (np.linalg.norm(query_np) * np.linalg.norm(vec))
-            similarities.append((self.documents[i], float(similarity), self.metadata[i]))
+        for i, vec in enumerate (self.vectors):
+            similarity = np.dot (query_np, vec) / (np.linalg.norm (query_np) * np.linalg.norm (vec))
+            similarities.append((self.documents[i], float (similarity), self.metadata[i]))
         
         # Sort by similarity and return top k
-        similarities.sort(key=lambda x: x[1], reverse=True)
+        similarities.sort (key=lambda x: x[1], reverse=True)
         return similarities[:top_k]
 
 # Example usage
@@ -217,13 +217,13 @@ docs = [
 ]
 
 for doc in docs:
-    embedding = create_embedding(doc)
-    vector_store.add(embedding, doc, {"source": "tutorial"})
+    embedding = create_embedding (doc)
+    vector_store.add (embedding, doc, {"source": "tutorial"})
 
 # Search
 query = "What is semantic search?"
-query_embedding = create_embedding(query)
-results = vector_store.search(query_embedding, top_k=2)
+query_embedding = create_embedding (query)
+results = vector_store.search (query_embedding, top_k=2)
 
 for doc, score, metadata in results:
     print(f"Score: {score:.3f} - {doc}")
@@ -245,7 +245,7 @@ class Retriever:
         self.vector_store = vector_store
         self.embedding_model = embedding_model
     
-    def retrieve(self, query: str, top_k: int = 5) -> List[str]:
+    def retrieve (self, query: str, top_k: int = 5) -> List[str]:
         """
         Retrieve relevant documents for a query.
         
@@ -257,10 +257,10 @@ class Retriever:
             List of relevant document chunks
         """
         # Embed the query
-        query_embedding = self.embedding_model(query)
+        query_embedding = self.embedding_model (query)
         
         # Search vector store
-        results = self.vector_store.search(query_embedding, top_k=top_k)
+        results = self.vector_store.search (query_embedding, top_k=top_k)
         
         # Extract documents
         documents = [doc for doc, score, metadata in results]
@@ -285,7 +285,7 @@ class Generator:
     def __init__(self, model: str = "gpt-4"):
         self.model = model
     
-    def generate(self, query: str, context_docs: List[str]) -> str:
+    def generate (self, query: str, context_docs: List[str]) -> str:
         """
         Generate response using query and retrieved context.
         
@@ -299,7 +299,7 @@ class Generator:
         # Format context
         context = "\\n\\n".join([
             f"[Document {i+1}]\\n{doc}" 
-            for i, doc in enumerate(context_docs)
+            for i, doc in enumerate (context_docs)
         ])
         
         # Create prompt with context
@@ -327,7 +327,7 @@ Answer:"""
 
 ## Building a Complete RAG System
 
-Let's put it all together into a complete RAG system:
+Let\'s put it all together into a complete RAG system:
 
 \`\`\`python
 from typing import List
@@ -344,7 +344,7 @@ class RAGSystem:
         self.vector_store = SimpleVectorStore()
         self.client = OpenAI()
     
-    def index_documents(self, documents: List[str], metadata: List[dict] = None):
+    def index_documents (self, documents: List[str], metadata: List[dict] = None):
         """
         Index documents into the RAG system.
         
@@ -353,28 +353,28 @@ class RAGSystem:
             metadata: Optional list of metadata dicts for each document
         """
         if metadata is None:
-            metadata = [{}] * len(documents)
+            metadata = [{}] * len (documents)
         
-        print(f"Indexing {len(documents)} documents...")
+        print(f"Indexing {len (documents)} documents...")
         
-        for i, (doc, meta) in enumerate(zip(documents, metadata)):
+        for i, (doc, meta) in enumerate (zip (documents, metadata)):
             # Create chunks
-            chunks = chunk_text(doc, chunk_size=500, overlap=100)
+            chunks = chunk_text (doc, chunk_size=500, overlap=100)
             
             # Embed and store each chunk
-            for j, chunk in enumerate(chunks):
-                embedding = self._create_embedding(chunk)
+            for j, chunk in enumerate (chunks):
+                embedding = self._create_embedding (chunk)
                 chunk_meta = {
                     **meta,
                     "doc_id": i,
                     "chunk_id": j,
                     "chunk_text": chunk
                 }
-                self.vector_store.add(embedding, chunk, chunk_meta)
+                self.vector_store.add (embedding, chunk, chunk_meta)
         
-        print(f"Indexed {len(self.vector_store.documents)} chunks")
+        print(f"Indexed {len (self.vector_store.documents)} chunks")
     
-    def _create_embedding(self, text: str) -> List[float]:
+    def _create_embedding (self, text: str) -> List[float]:
         """Create embedding for text."""
         response = self.client.embeddings.create(
             model="text-embedding-3-small",
@@ -382,7 +382,7 @@ class RAGSystem:
         )
         return response.data[0].embedding
     
-    def query(self, question: str, top_k: int = 5) -> dict:
+    def query (self, question: str, top_k: int = 5) -> dict:
         """
         Query the RAG system.
         
@@ -394,15 +394,15 @@ class RAGSystem:
             Dict with answer and sources
         """
         # Retrieve relevant documents
-        query_embedding = self._create_embedding(question)
-        results = self.vector_store.search(query_embedding, top_k=top_k)
+        query_embedding = self._create_embedding (question)
+        results = self.vector_store.search (query_embedding, top_k=top_k)
         
         # Extract documents and sources
         context_docs = [doc for doc, score, meta in results]
         sources = [meta for doc, score, meta in results]
         
         # Generate answer
-        answer = self._generate_answer(question, context_docs)
+        answer = self._generate_answer (question, context_docs)
         
         return {
             "answer": answer,
@@ -410,11 +410,11 @@ class RAGSystem:
             "context": context_docs
         }
     
-    def _generate_answer(self, question: str, context_docs: List[str]) -> str:
+    def _generate_answer (self, question: str, context_docs: List[str]) -> str:
         """Generate answer using retrieved context."""
         context = "\\n\\n".join([
             f"[Document {i+1}]\\n{doc}" 
-            for i, doc in enumerate(context_docs)
+            for i, doc in enumerate (context_docs)
         ])
         
         prompt = f"""Answer the question based on the provided context. If the context doesn't contain enough information, say so.
@@ -456,7 +456,7 @@ metadata = [
     {"source": "embeddings.md", "date": "2024-01-25"}
 ]
 
-rag.index_documents(documents, metadata)
+rag.index_documents (documents, metadata)
 
 # Query the system
 result = rag.query("What is RAG and how does it work?")
@@ -468,21 +468,21 @@ for source in result["sources"]:
 
 ## Chunking Strategies
 
-The way you chunk documents significantly impacts RAG performance. Let's explore common strategies:
+The way you chunk documents significantly impacts RAG performance. Let\'s explore common strategies:
 
 ### Fixed-Size Chunking
 
 Simple and predictable, but may split semantic units:
 
 \`\`\`python
-def fixed_size_chunking(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[str]:
+def fixed_size_chunking (text: str, chunk_size: int = 1000, overlap: int = 200) -> List[str]:
     """Split text into fixed-size chunks with overlap."""
     chunks = []
     start = 0
     
-    while start < len(text):
-        end = min(start + chunk_size, len(text))
-        chunks.append(text[start:end])
+    while start < len (text):
+        end = min (start + chunk_size, len (text))
+        chunks.append (text[start:end])
         start = end - overlap
     
     return chunks
@@ -495,32 +495,32 @@ Respects sentence boundaries for better coherence:
 \`\`\`python
 import re
 
-def sentence_chunking(text: str, target_size: int = 1000) -> List[str]:
+def sentence_chunking (text: str, target_size: int = 1000) -> List[str]:
     """
     Chunk text by sentences, targeting a specific size.
     """
     # Split into sentences
-    sentences = re.split(r'(?<=[.!?])\\s+', text)
+    sentences = re.split (r'(?<=[.!?])\\s+', text)
     
     chunks = []
     current_chunk = []
     current_size = 0
     
     for sentence in sentences:
-        sentence_size = len(sentence)
+        sentence_size = len (sentence)
         
         if current_size + sentence_size > target_size and current_chunk:
             # Save current chunk and start new one
-            chunks.append(' '.join(current_chunk))
+            chunks.append(' '.join (current_chunk))
             current_chunk = [sentence]
             current_size = sentence_size
         else:
-            current_chunk.append(sentence)
+            current_chunk.append (sentence)
             current_size += sentence_size
     
     # Add final chunk
     if current_chunk:
-        chunks.append(' '.join(current_chunk))
+        chunks.append(' '.join (current_chunk))
     
     return chunks
 \`\`\`
@@ -534,9 +534,9 @@ Different retrieval strategies suit different use cases:
 Simplest approach - retrieve the top K most similar documents:
 
 \`\`\`python
-def top_k_retrieval(query_embedding: List[float], vector_store, k: int = 5) -> List[str]:
+def top_k_retrieval (query_embedding: List[float], vector_store, k: int = 5) -> List[str]:
     """Retrieve top K most similar documents."""
-    results = vector_store.search(query_embedding, top_k=k)
+    results = vector_store.search (query_embedding, top_k=k)
     return [doc for doc, score, meta in results]
 \`\`\`
 
@@ -552,7 +552,7 @@ def threshold_retrieval(
     max_results: int = 10
 ) -> List[str]:
     """Retrieve documents above similarity threshold."""
-    results = vector_store.search(query_embedding, top_k=max_results)
+    results = vector_store.search (query_embedding, top_k=max_results)
     
     # Filter by threshold
     filtered = [
@@ -613,9 +613,9 @@ Multi-turn conversation with context retrieval:
 \`\`\`python
 conversation_history = []
 
-def conversational_query(question: str) -> str:
+def conversational_query (question: str) -> str:
     # Retrieve relevant docs
-    docs = retrieve(question)
+    docs = retrieve (question)
     
     # Include conversation history in prompt
     messages = conversation_history + [
@@ -623,7 +623,7 @@ def conversational_query(question: str) -> str:
     ]
     
     # Generate with context
-    answer = generate(messages, docs)
+    answer = generate (messages, docs)
     
     # Update history
     conversation_history.append({"role": "user", "content": question})
@@ -637,15 +637,15 @@ def conversational_query(question: str) -> str:
 Search across multiple document collections:
 
 \`\`\`python
-def multi_index_query(question: str) -> str:
+def multi_index_query (question: str) -> str:
     # Retrieve from multiple indexes
-    docs_code = code_index.search(question)
-    docs_wiki = wiki_index.search(question)
-    docs_support = support_index.search(question)
+    docs_code = code_index.search (question)
+    docs_wiki = wiki_index.search (question)
+    docs_support = support_index.search (question)
     
     # Combine and generate
     all_docs = docs_code + docs_wiki + docs_support
-    answer = generate(question, all_docs)
+    answer = generate (question, all_docs)
     
     return answer
 \`\`\`
@@ -659,12 +659,12 @@ Be mindful of context window limits:
 \`\`\`python
 import tiktoken
 
-def count_tokens(text: str, model: str = "gpt-4") -> int:
+def count_tokens (text: str, model: str = "gpt-4") -> int:
     """Count tokens in text."""
-    encoding = tiktoken.encoding_for_model(model)
-    return len(encoding.encode(text))
+    encoding = tiktoken.encoding_for_model (model)
+    return len (encoding.encode (text))
 
-def fit_context_window(docs: List[str], max_tokens: int = 8000) -> List[str]:
+def fit_context_window (docs: List[str], max_tokens: int = 8000) -> List[str]:
     """
     Select documents that fit in context window.
     """
@@ -672,9 +672,9 @@ def fit_context_window(docs: List[str], max_tokens: int = 8000) -> List[str]:
     total_tokens = 0
     
     for doc in docs:
-        doc_tokens = count_tokens(doc)
+        doc_tokens = count_tokens (doc)
         if total_tokens + doc_tokens <= max_tokens:
-            selected.append(doc)
+            selected.append (doc)
             total_tokens += doc_tokens
         else:
             break
@@ -689,11 +689,11 @@ Cache embeddings and results to reduce costs:
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=1000)
-def cached_embedding(text: str) -> tuple:
+@lru_cache (maxsize=1000)
+def cached_embedding (text: str) -> tuple:
     """Cache embeddings for repeated queries."""
-    embedding = create_embedding(text)
-    return tuple(embedding)  # Lists aren't hashable, use tuple
+    embedding = create_embedding (text)
+    return tuple (embedding)  # Lists aren't hashable, use tuple
 \`\`\`
 
 ## Production Best Practices

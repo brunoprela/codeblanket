@@ -8,7 +8,7 @@ const elasticsearchArchitectureSection: ModuleSection = {
 
 ## Introduction
 
-Elasticsearch is the most popular open-source search and analytics engine, built on Apache Lucene. It powers search for companies like GitHub, Stack Overflow, Netflix, and Uber. Understanding Elasticsearch's distributed architecture is crucial for designing scalable search systems and performing well in system design interviews.
+Elasticsearch is the most popular open-source search and analytics engine, built on Apache Lucene. It powers search for companies like GitHub, Stack Overflow, Netflix, and Uber. Understanding Elasticsearch\'s distributed architecture is crucial for designing scalable search systems and performing well in system design interviews.
 
 While we covered full-text search fundamentals in the previous section, this section focuses on how Elasticsearch distributes data and queries across multiple nodes, handles failures, and scales to petabytes of data with subsecond response times.
 

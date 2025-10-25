@@ -7,7 +7,7 @@ export const algebraicexpressionsQuiz = [
     id: 'dq1-normal-equation',
     question:
       'Explain why the normal equation in linear regression θ = (X^T X)^(-1) X^T y involves solving a system of equations. What does each component represent, and when might this approach fail?',
-    sampleAnswer: `The normal equation is the closed-form solution to linear regression that minimizes the mean squared error. Let's break down why it involves systems of equations:
+    sampleAnswer: `The normal equation is the closed-form solution to linear regression that minimizes the mean squared error. Let\'s break down why it involves systems of equations:
 
 **Derivation Context**:
 When we have m training examples with n features, we're trying to find parameters θ = [θ₀, θ₁, ..., θₙ] that minimize:
@@ -99,7 +99,7 @@ The convergence rate of gradient descent is:
 This is a geometric series (related to sequences), but analyzing when (1 - αμ) < 1 involves:
 αμ < 2 (quadratic inequality)
 
-**3. Newton's Method**:
+**3. Newton\'s Method**:
 
 Newton's method uses quadratic approximation explicitly:
 θ_{t+1} = θ_t - H^(-1)∇L(θ_t)
@@ -132,7 +132,7 @@ This assumes the loss is locally quadratic, which is why it converges faster nea
 
 def analyze_loss_curvature(X, y, theta):
     """Compute second derivative (curvature) of loss"""
-    n = len(y)
+    n = len (y)
     # For MSE: L = (1/2n)||Xθ - y||²
     # Hessian: H = (1/n)X^T X
     H = (X.T @ X) / n
@@ -212,7 +212,7 @@ Quadratic equations in ML represent local curvature, enable learning rate theory
 from sympy import symbols, diff
 x, y, theta = symbols('x y theta')
 loss = (y - theta*x)**2
-gradient = diff(loss, theta)  # Exact: 2*x*(theta*x - y)
+gradient = diff (loss, theta)  # Exact: 2*x*(theta*x - y)
 \`\`\`
 
 2. **Theoretical Analysis**:
@@ -229,7 +229,7 @@ gradient = diff(loss, theta)  # Exact: 2*x*(theta*x - y)
 \`\`\`python
 # Simplify complex regularization terms
 expr = (theta**2 + 2*theta + 1) / (theta + 1)
-simplified = simplify(expr)  # theta + 1
+simplified = simplify (expr)  # theta + 1
 \`\`\`
 
 **Use NumPy**:
@@ -238,7 +238,7 @@ simplified = simplify(expr)  # theta + 1
 \`\`\`python
 # Millions of parameters - symbolic impossible
 weights = np.random.randn(1000, 1000)
-gradients = compute_numerical_gradient(weights)  # Fast
+gradients = compute_numerical_gradient (weights)  # Fast
 \`\`\`
 
 2. **Real-Time Predictions**:
@@ -268,8 +268,8 @@ from sympy import symbols, integrate, exp
 p, mu, sigma = symbols('p mu sigma', real=True, positive=True)
 
 # Option payoff with probability distribution
-payoff = max(p - K, 0)  # Call option
-expected = integrate(payoff * normal_pdf(p, mu, sigma), (p, -oo, oo))
+payoff = max (p - K, 0)  # Call option
+expected = integrate (payoff * normal_pdf (p, mu, sigma), (p, -oo, oo))
 # Get exact formula for pricing
 \`\`\`
 
@@ -277,7 +277,7 @@ expected = integrate(payoff * normal_pdf(p, mu, sigma), (p, -oo, oo))
 \`\`\`python
 # Process millions of price ticks
 prices = load_market_data()  # Shape: (1000000, 100)
-returns = np.log(prices[1:] / prices[:-1])
+returns = np.log (prices[1:] / prices[:-1])
 sharpe_ratio = returns.mean() / returns.std() * np.sqrt(252)
 # Fast numerical computation
 \`\`\`
@@ -286,11 +286,11 @@ sharpe_ratio = returns.mean() / returns.std() * np.sqrt(252)
 \`\`\`python
 # Symbolic: Derive VaR formula
 from sympy import quantile
-var_formula = quantile(returns_distribution, alpha)
+var_formula = quantile (returns_distribution, alpha)
 
 # Numeric: Compute actual VaR
-returns_array = np.random.normal(mu, sigma, 10000)
-var_numeric = np.percentile(returns_array, 5)  # 5% VaR
+returns_array = np.random.normal (mu, sigma, 10000)
+var_numeric = np.percentile (returns_array, 5)  # 5% VaR
 \`\`\`
 
 **Scenario 4: Order Execution (Use NumPy)**
@@ -308,8 +308,8 @@ optimal_order_size = compute_vwap_slice(
 \`\`\`python
 # Show exact theoretical optimal bid-ask spread
 s, lambda_b, lambda_a, sigma = symbols('s lambda_b lambda_a sigma')
-expected_profit = derive_market_maker_profit(s, lambda_b, lambda_a, sigma)
-optimal_spread = solve(diff(expected_profit, s), s)
+expected_profit = derive_market_maker_profit (s, lambda_b, lambda_a, sigma)
+optimal_spread = solve (diff (expected_profit, s), s)
 # Include in paper as formula
 \`\`\`
 
@@ -323,11 +323,11 @@ Best practice: Use both!
 gradient_formula = derive_gradient_symbolically()
 
 # Step 2: Convert to numeric function
-gradient_func = lambdify(theta, gradient_formula)
+gradient_func = lambdify (theta, gradient_formula)
 
 # Step 3: Use in training
-for epoch in range(epochs):
-    theta -= learning_rate * gradient_func(theta)  # Fast numeric
+for epoch in range (epochs):
+    theta -= learning_rate * gradient_func (theta)  # Fast numeric
 \`\`\`
 
 2. **Validate Numeric with Symbolic**:
@@ -336,8 +336,8 @@ for epoch in range(epochs):
 numeric_result = solve_with_numpy()
 
 # Verify with symbolic (on small subset)
-symbolic_result = solve_with_sympy(small_sample)
-assert np.isclose(numeric_result, symbolic_result)
+symbolic_result = solve_with_sympy (small_sample)
+assert np.isclose (numeric_result, symbolic_result)
 \`\`\`
 
 **Summary**:

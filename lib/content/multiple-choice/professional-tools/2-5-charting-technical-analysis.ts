@@ -8,21 +8,21 @@ export const chartingTechnicalAnalysisMultipleChoice: Quiz = {
     {
       id: 'charting-1',
       question:
-        "In TradingView's Pine Script v5, which function would you use to detect when a fast moving average crosses above a slow moving average?",
+        "In TradingView\'s Pine Script v5, which function would you use to detect when a fast moving average crosses above a slow moving average?",
       options: [
-        'crossover(fast_ma, slow_ma)',
-        'cross(fast_ma, slow_ma)',
-        'ta.crossover(fast_ma, slow_ma)',
-        'ma.cross(fast_ma, slow_ma)',
+        'crossover (fast_ma, slow_ma)',
+        'cross (fast_ma, slow_ma)',
+        'ta.crossover (fast_ma, slow_ma)',
+        'ma.cross (fast_ma, slow_ma)',
       ],
       correctAnswer: 2,
       explanation:
-        'In Pine Script v5, the correct syntax is `ta.crossover(source1, source2)` which returns true when source1 crosses above source2. The `ta.` prefix is required in v5 as all technical analysis functions are namespaced. This function is essential for detecting bullish crossover signals in moving average strategies.',
+        'In Pine Script v5, the correct syntax is `ta.crossover (source1, source2)` which returns true when source1 crosses above source2. The `ta.` prefix is required in v5 as all technical analysis functions are namespaced. This function is essential for detecting bullish crossover signals in moving average strategies.',
     },
     {
       id: 'charting-2',
       question:
-        "When using Bloomberg Terminal's BTEC (Bloomberg Technical Analysis) function, what does a 'confidence score' associated with a detected pattern represent?",
+        "When using Bloomberg Terminal\'s BTEC (Bloomberg Technical Analysis) function, what does a 'confidence score' associated with a detected pattern represent?",
       options: [
         'The historical profitability of trading that pattern',
         'The probability that the pattern will complete successfully',
@@ -59,7 +59,7 @@ export const chartingTechnicalAnalysisMultipleChoice: Quiz = {
       ],
       correctAnswer: 0,
       explanation:
-        "`init()` (or `OnInit()` in newer versions) executes once when the EA is first attached to a chart or when the chart timeframe changes. It's used for initialization tasks like creating indicators or validating parameters. `start()` (or `OnTick()`) executes every time a new price tick arrives, which could be multiple times per second in active markets. This is where your main trading logic resides. Efficient code structure is critical: initialize once in `init()`, check conditions and trade in `start()`.",
+        "`init()` (or `OnInit()` in newer versions) executes once when the EA is first attached to a chart or when the chart timeframe changes. It\'s used for initialization tasks like creating indicators or validating parameters. `start()` (or `OnTick()`) executes every time a new price tick arrives, which could be multiple times per second in active markets. This is where your main trading logic resides. Efficient code structure is critical: initialize once in `init()`, check conditions and trade in `start()`.",
     },
     {
       id: 'charting-5',

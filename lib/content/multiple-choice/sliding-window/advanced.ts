@@ -54,7 +54,7 @@ export const advancedMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Python's Counter objects can be directly compared for equality, checking if all character frequencies match. This is cleaner and more efficient than manual iteration.",
+      "Python\'s Counter objects can be directly compared for equality, checking if all character frequencies match. This is cleaner and more efficient than manual iteration.",
   },
   {
     id: 'mc5',

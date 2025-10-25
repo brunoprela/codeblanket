@@ -12,14 +12,14 @@ Select maximum non-overlapping activities.
 **Strategy**: Choose activity that finishes earliest.
 
 \`\`\`python
-def max_activities(activities):
+def max_activities (activities):
     # Sort by end time
-    activities.sort(key=lambda x: x[1])
+    activities.sort (key=lambda x: x[1])
     
     count = 1
     last_end = activities[0][1]
     
-    for i in range(1, len(activities)):
+    for i in range(1, len (activities)):
         if activities[i][0] >= last_end:
             count += 1
             last_end = activities[i][1]
@@ -38,9 +38,9 @@ Maximize value with weight limit (can take fractions).
 **Strategy**: Take items with highest value/weight ratio.
 
 \`\`\`python
-def fractional_knapsack(items, capacity):
+def fractional_knapsack (items, capacity):
     # Sort by value/weight ratio (descending)
-    items.sort(key=lambda x: x[1]/x[0], reverse=True)
+    items.sort (key=lambda x: x[1]/x[0], reverse=True)
     
     total_value = 0
     for weight, value in items:
@@ -67,18 +67,18 @@ Build optimal prefix-free code or minimize total cost.
 \`\`\`python
 import heapq
 
-def huffman_cost(frequencies):
-    heap = list(frequencies)
-    heapq.heapify(heap)
+def huffman_cost (frequencies):
+    heap = list (frequencies)
+    heapq.heapify (heap)
     
     total_cost = 0
-    while len(heap) > 1:
-        freq1 = heapq.heappop(heap)
-        freq2 = heapq.heappop(heap)
+    while len (heap) > 1:
+        freq1 = heapq.heappop (heap)
+        freq2 = heapq.heappop (heap)
         
         combined = freq1 + freq2
         total_cost += combined
-        heapq.heappush(heap, combined)
+        heapq.heappush (heap, combined)
     
     return total_cost
 \`\`\`
@@ -92,12 +92,12 @@ Find minimum resources needed or maximum reach.
 **Strategy**: Track current capacity and extend when needed.
 
 \`\`\`python
-def jump_game(nums):
+def jump_game (nums):
     max_reach = 0
-    for i in range(len(nums)):
+    for i in range (len (nums)):
         if i > max_reach:
             return False  # Can't reach i
-        max_reach = max(max_reach, i + nums[i])
+        max_reach = max (max_reach, i + nums[i])
     return True
 \`\`\`
 
@@ -110,14 +110,14 @@ Partition array to maximize/minimize some property.
 **Strategy**: Process from both ends, move based on condition.
 
 \`\`\`python
-def container_with_most_water(height):
-    left, right = 0, len(height) - 1
+def container_with_most_water (height):
+    left, right = 0, len (height) - 1
     max_area = 0
     
     while left < right:
         width = right - left
-        h = min(height[left], height[right])
-        max_area = max(max_area, width * h)
+        h = min (height[left], height[right])
+        max_area = max (max_area, width * h)
         
         # Move pointer with smaller height
         if height[left] < height[right]:

@@ -5,7 +5,7 @@
 export const uberarchitectureSection = {
   id: 'uber-architecture',
   title: 'Uber Architecture',
-  content: `Uber is a global ride-hailing platform connecting riders with drivers in real-time across 10,000+ cities worldwide. With millions of rides per day, Uber's architecture must handle complex challenges including real-time location tracking, dynamic pricing, efficient matching, and high availability. This section explores the technical systems that power Uber's platform.
+  content: `Uber is a global ride-hailing platform connecting riders with drivers in real-time across 10,000+ cities worldwide. With millions of rides per day, Uber\'s architecture must handle complex challenges including real-time location tracking, dynamic pricing, efficient matching, and high availability. This section explores the technical systems that power Uber's platform.
 
 ## Overview
 
@@ -163,7 +163,7 @@ Finding nearby drivers is critical for ride matching. Uber uses **H3**, a hexago
 2. **Quadtree**: Hierarchical tree structure, recursively divide space
 3. **Geohashing**: Encode location as hash, similar hashes = nearby
 
-**Uber's Solution: H3 (Hexagonal Hierarchical Index)**
+**Uber\'s Solution: H3 (Hexagonal Hierarchical Index)**
 
 **Why Hexagons?**:
 - Equal distance from center to all edges (unlike squares)
@@ -265,7 +265,7 @@ But if R4 arrives needing D3 urgently:
 Optimal considering R4: R1→D1, R2→D2, R3→D3, R4→? (no driver!)
 Better: Hold D3 for R4
 
-Uber's algorithm considers future demand probabilities!
+Uber\'s algorithm considers future demand probabilities!
 \`\`\`
 
 **Advanced Features**:
@@ -380,7 +380,7 @@ Accurate ETA (Estimated Time of Arrival) is critical for user experience.
 - Incorporate real-time traffic data
 
 **Traffic Data Sources**:
-1. **Uber's own data**: Historical trips, current driver speeds
+1. **Uber\'s own data**: Historical trips, current driver speeds
 2. **Third-party**: Google Maps API, HERE, TomTom
 3. **Live events**: Accidents reported by drivers or news
 
@@ -586,7 +586,7 @@ Columns: event_type, data
 
 ### 4. Kafka (Event Streaming)
 
-Kafka is Uber's central nervous system for event-driven architecture.
+Kafka is Uber\'s central nervous system for event-driven architecture.
 
 **Use Cases**:
 
@@ -751,7 +751,7 @@ A: Use geospatial indexing. Convert rider location to H3 hexagon ID at resolutio
 
 A: Surge pricing dynamically adjusts prices based on supply/demand ratio. Every 1-5 minutes: (1) Predict demand in each zone (H3 hexagons) for next 15-30 minutes using historical data, events, weather. (2) Count available drivers in each zone. (3) Calculate demand_ratio = predicted_demand / available_supply. (4) If demand_ratio >1.5, apply surge multiplier: surge = min(1 + (demand_ratio - 1) * 0.5, 5.0). (5) Display to riders before request, show to drivers as heat map (encourages repositioning). Store in database (zone_id, timestamp, surge_multiplier). Recalculate frequently to adapt to changing conditions.
 
-**Q: How would you design Uber's matching system?**
+**Q: How would you design Uber\'s matching system?**
 
 A: Use batch matching with optimization. Every 5 seconds: (1) Collect pending ride requests and available drivers. (2) Formulate as optimization problem: minimize total pickup time + wait time, subject to driver availability constraints. (3) Consider future demand probabilities (don't assign driver if better match likely soon). (4) Solve using integer linear programming or greedy heuristics (balance 5-second deadline vs optimality). (5) Assign rides to drivers. (6) Send dispatch via push notification. Handle edge cases: driver rejects (reassign), rider cancels (release driver), pooling (route optimization). Monitor metrics: average wait time, pickup time, driver utilization.
 

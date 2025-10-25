@@ -12,7 +12,7 @@ Master generating and coordinating changes across multiple files - essential for
 
 ## Overview: Why Multi-File Generation is Hard
 
-Real software isn't single files. It's interconnected systems where:
+Real software isn't single files. It\'s interconnected systems where:
 - Files import from each other
 - Changes propagate across boundaries
 - Consistency must be maintained
@@ -66,49 +66,49 @@ class ProjectAnalyzer:
     """Analyze project structure and dependencies."""
     
     def __init__(self, project_root: str):
-        self.project_root = Path(project_root)
+        self.project_root = Path (project_root)
         self.file_tree = self._build_file_tree()
         self.import_graph = self._build_import_graph()
     
-    def _build_file_tree(self) -> Dict[str, List[str]]:
+    def _build_file_tree (self) -> Dict[str, List[str]]:
         """Build project file tree."""
         tree = {}
         
         for py_file in self.project_root.rglob("*.py"):
-            if "__pycache__" in str(py_file):
+            if "__pycache__" in str (py_file):
                 continue
             
-            relative = py_file.relative_to(self.project_root)
-            dir_path = str(relative.parent)
+            relative = py_file.relative_to (self.project_root)
+            dir_path = str (relative.parent)
             
             if dir_path not in tree:
                 tree[dir_path] = []
-            tree[dir_path].append(py_file.name)
+            tree[dir_path].append (py_file.name)
         
         return tree
     
-    def _build_import_graph(self) -> Dict[str, Set[str]]:
+    def _build_import_graph (self) -> Dict[str, Set[str]]:
         """Build import dependency graph."""
         graph = {}
         
         for py_file in self.project_root.rglob("*.py"):
-            if "__pycache__" in str(py_file):
+            if "__pycache__" in str (py_file):
                 continue
             
             try:
-                with open(py_file) as f:
-                    tree = ast.parse(f.read())
+                with open (py_file) as f:
+                    tree = ast.parse (f.read())
                 
                 imports = set()
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Import):
+                for node in ast.walk (tree):
+                    if isinstance (node, ast.Import):
                         for name in node.names:
-                            imports.add(name.name)
-                    elif isinstance(node, ast.ImportFrom):
+                            imports.add (name.name)
+                    elif isinstance (node, ast.ImportFrom):
                         if node.module:
-                            imports.add(node.module)
+                            imports.add (node.module)
                 
-                relative = str(py_file.relative_to(self.project_root))
+                relative = str (py_file.relative_to (self.project_root))
                 graph[relative] = imports
             
             except (SyntaxError, IOError):
@@ -116,7 +116,7 @@ class ProjectAnalyzer:
         
         return graph
     
-    def get_dependent_files(self, file_path: str) -> List[str]:
+    def get_dependent_files (self, file_path: str) -> List[str]:
         """Get files that depend on the given file."""
         dependents = []
         
@@ -125,13 +125,13 @@ class ProjectAnalyzer:
         
         for file, imports in self.import_graph.items():
             if module_path in imports:
-                dependents.append(file)
+                dependents.append (file)
         
         return dependents
     
-    def get_required_imports(self, file_path: str) -> Set[str]:
+    def get_required_imports (self, file_path: str) -> Set[str]:
         """Get imports required by a file."""
-        return self.import_graph.get(file_path, set())
+        return self.import_graph.get (file_path, set())
     
     def find_related_files(
         self,
@@ -149,21 +149,21 @@ class ProjectAnalyzer:
             if current in visited or depth > max_depth:
                 continue
             
-            visited.add(current)
+            visited.add (current)
             
             # Add files this imports
-            imports = self.get_required_imports(current)
+            imports = self.get_required_imports (current)
             for imp in imports:
                 imp_file = imp.replace(".", "/") + ".py"
-                if self.project_root.joinpath(imp_file).exists():
-                    related.add(imp_file)
+                if self.project_root.joinpath (imp_file).exists():
+                    related.add (imp_file)
                     to_visit.append((imp_file, depth + 1))
             
             # Add files that import this
-            dependents = self.get_dependent_files(current)
-            related.update(dependents)
+            dependents = self.get_dependent_files (current)
+            related.update (dependents)
         
-        return list(related)
+        return list (related)
 
 # Usage
 analyzer = ProjectAnalyzer("/path/to/project")
@@ -198,88 +198,88 @@ class MultiFileContextBuilder:
         
         # Project structure
         context_parts.append("# Project Structure")
-        context_parts.append(self._format_file_tree())
+        context_parts.append (self._format_file_tree())
         context_parts.append("")
         
         # Target files
         context_parts.append("# Target Files")
         for file_path in target_files:
-            content = self._read_file(file_path)
-            context_parts.append(f"## {file_path}")
-            context_parts.append(content)
+            content = self._read_file (file_path)
+            context_parts.append (f"## {file_path}")
+            context_parts.append (content)
             context_parts.append("")
         
         # Related files (if requested)
         if include_related:
             related_files = set()
             for file_path in target_files:
-                related = self.analyzer.find_related_files(file_path, max_depth=1)
-                related_files.update(related)
+                related = self.analyzer.find_related_files (file_path, max_depth=1)
+                related_files.update (related)
             
             # Remove target files from related
-            related_files -= set(target_files)
+            related_files -= set (target_files)
             
             if related_files:
                 context_parts.append("# Related Files (for context)")
                 for file_path in related_files:
                     # Include just signatures, not full content
-                    signatures = self._extract_signatures(file_path)
-                    context_parts.append(f"## {file_path}")
-                    context_parts.append(signatures)
+                    signatures = self._extract_signatures (file_path)
+                    context_parts.append (f"## {file_path}")
+                    context_parts.append (signatures)
                     context_parts.append("")
         
-        return "\\n".join(context_parts)
+        return "\\n".join (context_parts)
     
-    def _format_file_tree(self) -> str:
+    def _format_file_tree (self) -> str:
         """Format project file tree."""
         tree_lines = []
-        for dir_path, files in sorted(self.analyzer.file_tree.items()):
-            tree_lines.append(f"{dir_path}/")
-            for file in sorted(files):
-                tree_lines.append(f"  {file}")
-        return "\\n".join(tree_lines)
+        for dir_path, files in sorted (self.analyzer.file_tree.items()):
+            tree_lines.append (f"{dir_path}/")
+            for file in sorted (files):
+                tree_lines.append (f"  {file}")
+        return "\\n".join (tree_lines)
     
-    def _read_file(self, file_path: str) -> str:
+    def _read_file (self, file_path: str) -> str:
         """Read file content with line numbers."""
         full_path = self.analyzer.project_root / file_path
         try:
-            with open(full_path) as f:
+            with open (full_path) as f:
                 lines = f.readlines()
             
             numbered = [
                 f"{i+1:4d} | {line.rstrip()}"
-                for i, line in enumerate(lines)
+                for i, line in enumerate (lines)
             ]
-            return "\\n".join(numbered)
+            return "\\n".join (numbered)
         except IOError:
             return "[File not found]"
     
-    def _extract_signatures(self, file_path: str) -> str:
+    def _extract_signatures (self, file_path: str) -> str:
         """Extract function and class signatures."""
         full_path = self.analyzer.project_root / file_path
         try:
-            with open(full_path) as f:
-                tree = ast.parse(f.read())
+            with open (full_path) as f:
+                tree = ast.parse (f.read())
             
             signatures = []
-            for node in ast.walk(tree):
-                if isinstance(node, ast.FunctionDef):
+            for node in ast.walk (tree):
+                if isinstance (node, ast.FunctionDef):
                     args = [arg.arg for arg in node.args.args]
-                    sig = f"def {node.name}({', '.join(args)})"
+                    sig = f"def {node.name}({', '.join (args)})"
                     if node.returns:
-                        sig += f" -> {ast.unparse(node.returns)}"
-                    signatures.append(sig)
+                        sig += f" -> {ast.unparse (node.returns)}"
+                    signatures.append (sig)
                 
-                elif isinstance(node, ast.ClassDef):
-                    signatures.append(f"class {node.name}")
+                elif isinstance (node, ast.ClassDef):
+                    signatures.append (f"class {node.name}")
             
-            return "\\n".join(signatures)
+            return "\\n".join (signatures)
         except (IOError, SyntaxError):
             return "[Could not extract signatures]"
 
 # Usage
 analyzer = ProjectAnalyzer("/path/to/project")
-builder = MultiFileContextBuilder(analyzer)
+builder = MultiFileContextBuilder (analyzer)
 
 context = builder.build_context(
     target_files=["app/models/user.py", "app/routes/auth.py"],
@@ -302,7 +302,7 @@ class MultiFileGenerator:
     
     def __init__(self, analyzer: ProjectAnalyzer):
         self.analyzer = analyzer
-        self.context_builder = MultiFileContextBuilder(analyzer)
+        self.context_builder = MultiFileContextBuilder (analyzer)
         self.client = OpenAI()
     
     def generate_multi_file_changes(
@@ -319,7 +319,7 @@ class MultiFileGenerator:
         )
         
         # Step 2: Generate change plan
-        plan = self._generate_plan(description, context, target_files)
+        plan = self._generate_plan (description, context, target_files)
         
         # Step 3: Generate changes for each file
         changes = []
@@ -364,7 +364,7 @@ class MultiFileGenerator:
 
 Task: {description}
 
-Target files: {', '.join(target_files)}
+Target files: {', '.join (target_files)}
 
 Generate a plan listing:
 1. Files to create (if any)
@@ -394,7 +394,7 @@ Format as JSON:
         )
         
         import json
-        plan_data = json.loads(response.choices[0].message.content)
+        plan_data = json.loads (response.choices[0].message.content)
         
         changes = []
         for change in plan_data.get("changes", []):
@@ -435,7 +435,7 @@ Include all necessary imports.
             temperature=0.2
         )
         
-        return self._extract_code(response.choices[0].message.content)
+        return self._extract_code (response.choices[0].message.content)
     
     def _generate_edits(
         self,
@@ -472,19 +472,19 @@ Format:
         )
         
         parser = SearchReplaceParser()
-        return parser.parse(response.choices[0].message.content)
+        return parser.parse (response.choices[0].message.content)
     
-    def _extract_code(self, response: str) -> str:
+    def _extract_code (self, response: str) -> str:
         """Extract code from response."""
         if "\`\`\`" in response:
             parts = response.split("\`\`\`")
-            if len(parts) >= 3:
+            if len (parts) >= 3:
                 return parts[1].strip()
         return response.strip()
 
 # Usage
 analyzer = ProjectAnalyzer("/path/to/project")
-generator = MultiFileGenerator(analyzer)
+generator = MultiFileGenerator (analyzer)
 
 changes = generator.generate_multi_file_changes(
     description="Add user authentication with JWT tokens",
@@ -508,7 +508,7 @@ class MultiFileApplicator:
     """Apply changes across multiple files transactionally."""
     
     def __init__(self, project_root: str):
-        self.project_root = Path(project_root)
+        self.project_root = Path (project_root)
         self.applicator = SafeEditApplicator()
     
     def apply_changes(
@@ -534,19 +534,19 @@ class MultiFileApplicator:
                 
                 if change.operation == "create":
                     if file_path.exists():
-                        errors.append(f"File already exists: {change.path}")
+                        errors.append (f"File already exists: {change.path}")
                         raise Exception("Create failed")
                     
                     if not dry_run:
-                        file_path.parent.mkdir(parents=True, exist_ok=True)
-                        file_path.write_text(change.content)
+                        file_path.parent.mkdir (parents=True, exist_ok=True)
+                        file_path.write_text (change.content)
                     
-                    applied_files.append(change.path)
+                    applied_files.append (change.path)
                     print(f"✓ Created: {change.path}")
                 
                 elif change.operation == "modify":
                     if not file_path.exists():
-                        errors.append(f"File not found: {change.path}")
+                        errors.append (f"File not found: {change.path}")
                         raise Exception("Modify failed")
                     
                     # Backup original
@@ -562,18 +562,18 @@ class MultiFileApplicator:
                         )
                     
                     if not success:
-                        errors.extend(edit_errors)
+                        errors.extend (edit_errors)
                         raise Exception("Edit failed")
                     
                     if not dry_run:
-                        file_path.write_text(new_content)
+                        file_path.write_text (new_content)
                     
-                    applied_files.append(change.path)
+                    applied_files.append (change.path)
                     print(f"✓ Modified: {change.path}")
                 
                 elif change.operation == "delete":
                     if not file_path.exists():
-                        errors.append(f"File not found: {change.path}")
+                        errors.append (f"File not found: {change.path}")
                         raise Exception("Delete failed")
                     
                     # Backup before delete
@@ -582,7 +582,7 @@ class MultiFileApplicator:
                     if not dry_run:
                         file_path.unlink()
                     
-                    applied_files.append(change.path)
+                    applied_files.append (change.path)
                     print(f"✓ Deleted: {change.path}")
             
             # All changes successful
@@ -597,7 +597,7 @@ class MultiFileApplicator:
             print("Rolling back changes...")
             
             if not dry_run:
-                self._rollback(backups, applied_files)
+                self._rollback (backups, applied_files)
             
             return False, errors
     
@@ -612,7 +612,7 @@ class MultiFileApplicator:
             
             if file_path in backups:
                 # Restore backup
-                full_path.write_text(backups[file_path])
+                full_path.write_text (backups[file_path])
                 print(f"  Restored: {file_path}")
             else:
                 # Was created, delete it
@@ -624,13 +624,13 @@ class MultiFileApplicator:
 applicator = MultiFileApplicator("/path/to/project")
 
 # Apply changes with dry run first
-success, errors = applicator.apply_changes(changes, dry_run=True)
+success, errors = applicator.apply_changes (changes, dry_run=True)
 
 if success:
     # Looks good, apply for real
     user_input = input("Apply changes? (yes/no): ")
     if user_input.lower() == "yes":
-        success, errors = applicator.apply_changes(changes, dry_run=False)
+        success, errors = applicator.apply_changes (changes, dry_run=False)
         
         if success:
             print("\\n✓ All changes applied successfully!")
@@ -649,7 +649,7 @@ class ImportManager:
     """Manage imports across multiple files."""
     
     def __init__(self, project_root: str):
-        self.project_root = Path(project_root)
+        self.project_root = Path (project_root)
     
     def add_import(
         self,
@@ -661,26 +661,26 @@ class ImportManager:
         full_path = self.project_root / file_path
         content = full_path.read_text()
         
-        tree = ast.parse(content)
+        tree = ast.parse (content)
         
         # Check if import already exists
-        if self._import_exists(tree, module, names):
+        if self._import_exists (tree, module, names):
             return content  # Already imported
         
         # Find where to insert import
-        insert_line = self._find_import_position(tree)
+        insert_line = self._find_import_position (tree)
         
         # Create import statement
         if names:
-            import_stmt = f"from {module} import {', '.join(names)}"
+            import_stmt = f"from {module} import {', '.join (names)}"
         else:
             import_stmt = f"import {module}"
         
         # Insert import
         lines = content.split("\\n")
-        lines.insert(insert_line, import_stmt)
+        lines.insert (insert_line, import_stmt)
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
     def _import_exists(
         self,
@@ -689,31 +689,31 @@ class ImportManager:
         names: Optional[List[str]]
     ) -> bool:
         """Check if import already exists."""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom):
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ImportFrom):
                 if node.module == module:
                     if names is None:
                         return True
                     imported_names = {n.name for n in node.names}
-                    if all(name in imported_names for name in names):
+                    if all (name in imported_names for name in names):
                         return True
             
-            elif isinstance(node, ast.Import) and names is None:
+            elif isinstance (node, ast.Import) and names is None:
                 imported = {n.name for n in node.names}
                 if module in imported:
                     return True
         
         return False
     
-    def _find_import_position(self, tree: ast.AST) -> int:
+    def _find_import_position (self, tree: ast.AST) -> int:
         """Find appropriate line to insert import."""
         # Find last import statement
         last_import_line = 0
         
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.Import, ast.ImportFrom)):
-                if hasattr(node, 'lineno'):
-                    last_import_line = max(last_import_line, node.lineno)
+        for node in ast.walk (tree):
+            if isinstance (node, (ast.Import, ast.ImportFrom)):
+                if hasattr (node, 'lineno'):
+                    last_import_line = max (last_import_line, node.lineno)
         
         # Insert after last import, or at top if no imports
         return last_import_line if last_import_line > 0 else 0

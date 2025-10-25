@@ -1,6 +1,6 @@
 export const section5 = {
-    title: "Financial Ratios & Metrics Deep Dive",
-    content: `
+  title: 'Financial Ratios & Metrics Deep Dive',
+  content: `
 # Financial Ratios & Metrics Deep Dive
 
 Financial ratios transform raw financial statement data into actionable insights. Master these categories:
@@ -32,31 +32,31 @@ class ProfitabilityMetrics:
     total_assets: float
     shareholders_equity: float
     
-    def gross_margin(self) -> float:
+    def gross_margin (self) -> float:
         """Gross Profit / Revenue"""
         return self.gross_profit / self.revenue
     
-    def operating_margin(self) -> float:
+    def operating_margin (self) -> float:
         """Operating Income / Revenue"""
         return self.operating_income / self.revenue
     
-    def ebitda_margin(self) -> float:
+    def ebitda_margin (self) -> float:
         """EBITDA / Revenue"""
         return self.ebitda / self.revenue
     
-    def net_margin(self) -> float:
+    def net_margin (self) -> float:
         """Net Income / Revenue"""
         return self.net_income / self.revenue
     
-    def roa(self) -> float:
+    def roa (self) -> float:
         """Return on Assets = Net Income / Total Assets"""
         return self.net_income / self.total_assets
     
-    def roe(self) -> float:
+    def roe (self) -> float:
         """Return on Equity = Net Income / Shareholders' Equity"""
         return self.net_income / self.shareholders_equity
     
-    def analyze(self) -> pd.DataFrame:
+    def analyze (self) -> pd.DataFrame:
         """Generate complete profitability analysis."""
         
         metrics = {
@@ -80,7 +80,7 @@ class ProfitabilityMetrics:
             ]
         }
         
-        return pd.DataFrame(metrics)
+        return pd.DataFrame (metrics)
 
 # Example: Apple-like tech company
 apple = ProfitabilityMetrics(
@@ -95,7 +95,7 @@ apple = ProfitabilityMetrics(
 )
 
 print("Profitability Analysis:")
-print(apple.analyze().to_string(index=False))
+print(apple.analyze().to_string (index=False))
 \`\`\`
 
 ## Section 2: Liquidity Ratios
@@ -107,26 +107,26 @@ class LiquidityAnalyzer:
     def __init__(self, balance_sheet: Dict):
         self.bs = balance_sheet
     
-    def current_ratio(self) -> float:
+    def current_ratio (self) -> float:
         """Current Assets / Current Liabilities"""
         return self.bs['current_assets'] / self.bs['current_liabilities']
     
-    def quick_ratio(self) -> float:
+    def quick_ratio (self) -> float:
         """(Current Assets - Inventory - Prepaid) / Current Liabilities"""
         quick_assets = (self.bs['current_assets'] - 
                        self.bs['inventory'] - 
                        self.bs['prepaid_expenses'])
         return quick_assets / self.bs['current_liabilities']
     
-    def cash_ratio(self) -> float:
+    def cash_ratio (self) -> float:
         """(Cash + Marketable Securities) / Current Liabilities"""
         return (self.bs['cash'] + self.bs['marketable_securities']) / self.bs['current_liabilities']
     
-    def working_capital(self) -> float:
+    def working_capital (self) -> float:
         """Current Assets - Current Liabilities"""
         return self.bs['current_assets'] - self.bs['current_liabilities']
     
-    def assess_liquidity(self) -> Dict:
+    def assess_liquidity (self) -> Dict:
         """Complete liquidity assessment."""
         
         cr = self.current_ratio()
@@ -162,15 +162,14 @@ balance_sheet = {
     'current_liabilities': 100_000_000
 }
 
-analyzer = LiquidityAnalyzer(balance_sheet)
+analyzer = LiquidityAnalyzer (balance_sheet)
 results = analyzer.assess_liquidity()
 
 print("\\nLiquidity Analysis:")
 print(f"Current Ratio: {results['current_ratio']:.2f}")
 print(f"Quick Ratio: {results['quick_ratio']:.2f}")
 print(f"Cash Ratio: {results['cash_ratio']:.2f}")
-print(f"Working Capital: ${results['working_capital']:, .0f
-}")
+print(f"Working Capital: \${results['working_capital']:,.0f}")
 print(f"Assessment: {results['assessment']}")
 \`\`\`
 
@@ -181,27 +180,27 @@ class LeverageAnalyzer:
     """Analyze company's debt levels and solvency."""
     
     @staticmethod
-    def debt_to_equity(total_debt: float, shareholders_equity: float) -> float:
+    def debt_to_equity (total_debt: float, shareholders_equity: float) -> float:
         """Total Debt / Shareholders' Equity"""
         return total_debt / shareholders_equity
     
     @staticmethod
-    def debt_to_assets(total_debt: float, total_assets: float) -> float:
+    def debt_to_assets (total_debt: float, total_assets: float) -> float:
         """Total Debt / Total Assets"""
         return total_debt / total_assets
     
     @staticmethod
-    def equity_multiplier(total_assets: float, shareholders_equity: float) -> float:
+    def equity_multiplier (total_assets: float, shareholders_equity: float) -> float:
         """Total Assets / Shareholders' Equity"""
         return total_assets / shareholders_equity
     
     @staticmethod
-    def interest_coverage(ebit: float, interest_expense: float) -> float:
+    def interest_coverage (ebit: float, interest_expense: float) -> float:
         """EBIT / Interest Expense"""
         return ebit / interest_expense if interest_expense > 0 else float('inf')
     
     @staticmethod
-    def debt_service_coverage(ebitda: float, debt_service: float) -> float:
+    def debt_service_coverage (ebitda: float, debt_service: float) -> float:
         """EBITDA / (Interest + Principal Payments)"""
         return ebitda / debt_service if debt_service > 0 else float('inf')
     
@@ -255,7 +254,7 @@ leverage = LeverageAnalyzer.analyze_leverage(
 
 print("\\nLeverage Analysis:")
 for key, value in leverage.items():
-    if isinstance(value, float) and value != float('inf'):
+    if isinstance (value, float) and value != float('inf'):
         print(f"{key}: {value:.2f}")
     else:
         print(f"{key}: {value}")
@@ -268,42 +267,42 @@ class EfficiencyAnalyzer:
     """Measure how efficiently company uses assets."""
     
     @staticmethod
-    def asset_turnover(revenue: float, total_assets: float) -> float:
+    def asset_turnover (revenue: float, total_assets: float) -> float:
         """Revenue / Total Assets"""
         return revenue / total_assets
     
     @staticmethod
-    def inventory_turnover(cogs: float, avg_inventory: float) -> float:
+    def inventory_turnover (cogs: float, avg_inventory: float) -> float:
         """COGS / Average Inventory"""
         return cogs / avg_inventory
     
     @staticmethod
-    def days_inventory_outstanding(inventory_turnover: float) -> float:
+    def days_inventory_outstanding (inventory_turnover: float) -> float:
         """365 / Inventory Turnover"""
         return 365 / inventory_turnover
     
     @staticmethod
-    def receivables_turnover(revenue: float, avg_ar: float) -> float:
+    def receivables_turnover (revenue: float, avg_ar: float) -> float:
         """Revenue / Average Accounts Receivable"""
         return revenue / avg_ar
     
     @staticmethod
-    def days_sales_outstanding(receivables_turnover: float) -> float:
+    def days_sales_outstanding (receivables_turnover: float) -> float:
         """365 / Receivables Turnover"""
         return 365 / receivables_turnover
     
     @staticmethod
-    def payables_turnover(cogs: float, avg_ap: float) -> float:
+    def payables_turnover (cogs: float, avg_ap: float) -> float:
         """COGS / Average Accounts Payable"""
         return cogs / avg_ap
     
     @staticmethod
-    def days_payable_outstanding(payables_turnover: float) -> float:
+    def days_payable_outstanding (payables_turnover: float) -> float:
         """365 / Payables Turnover"""
         return 365 / payables_turnover
     
     @staticmethod
-    def cash_conversion_cycle(dso: float, dio: float, dpo: float) -> float:
+    def cash_conversion_cycle (dso: float, dio: float, dpo: float) -> float:
         """DSO + DIO - DPO"""
         return dso + dio - dpo
     
@@ -364,37 +363,37 @@ class ValuationAnalyzer:
     """Calculate and interpret valuation multiples."""
     
     @staticmethod
-    def pe_ratio(price: float, eps: float) -> float:
+    def pe_ratio (price: float, eps: float) -> float:
         """Price / Earnings Per Share"""
         return price / eps if eps > 0 else float('inf')
     
     @staticmethod
-    def pb_ratio(price: float, book_value_per_share: float) -> float:
+    def pb_ratio (price: float, book_value_per_share: float) -> float:
         """Price / Book Value Per Share"""
         return price / book_value_per_share
     
     @staticmethod
-    def ps_ratio(market_cap: float, revenue: float) -> float:
+    def ps_ratio (market_cap: float, revenue: float) -> float:
         """Market Cap / Revenue"""
         return market_cap / revenue
     
     @staticmethod
-    def ev_ebitda(enterprise_value: float, ebitda: float) -> float:
+    def ev_ebitda (enterprise_value: float, ebitda: float) -> float:
         """Enterprise Value / EBITDA"""
         return enterprise_value / ebitda if ebitda > 0 else float('inf')
     
     @staticmethod
-    def peg_ratio(pe: float, earnings_growth_rate: float) -> float:
+    def peg_ratio (pe: float, earnings_growth_rate: float) -> float:
         """PE Ratio / Earnings Growth Rate"""
         return pe / (earnings_growth_rate * 100)
     
     @staticmethod
-    def dividend_yield(annual_dividend: float, price: float) -> float:
+    def dividend_yield (annual_dividend: float, price: float) -> float:
         """Annual Dividend / Price"""
         return annual_dividend / price
     
     @staticmethod
-    def fcf_yield(fcf_per_share: float, price: float) -> float:
+    def fcf_yield (fcf_per_share: float, price: float) -> float:
         """FCF Per Share / Price"""
         return fcf_per_share / price
     
@@ -551,17 +550,17 @@ class SaaSMetrics:
     """SaaS-specific financial metrics."""
     
     @staticmethod
-    def arr_growth(current_arr: float, prior_arr: float) -> float:
+    def arr_growth (current_arr: float, prior_arr: float) -> float:
         """Annual Recurring Revenue growth"""
         return (current_arr - prior_arr) / prior_arr
     
     @staticmethod
-    def magic_number(new_arr: float, sales_marketing_spend: float) -> float:
+    def magic_number (new_arr: float, sales_marketing_spend: float) -> float:
         """New ARR / Sales & Marketing Spend"""
         return new_arr / sales_marketing_spend
     
     @staticmethod
-    def ltv_cac_ratio(lifetime_value: float, customer_acquisition_cost: float) -> float:
+    def ltv_cac_ratio (lifetime_value: float, customer_acquisition_cost: float) -> float:
         """Lifetime Value / Customer Acquisition Cost"""
         return lifetime_value / customer_acquisition_cost
     
@@ -584,17 +583,17 @@ class BankingMetrics:
     """Bank-specific financial metrics."""
     
     @staticmethod
-    def net_interest_margin(net_interest_income: float, earning_assets: float) -> float:
+    def net_interest_margin (net_interest_income: float, earning_assets: float) -> float:
         """Net Interest Income / Average Earning Assets"""
         return net_interest_income / earning_assets
     
     @staticmethod
-    def efficiency_ratio(noninterest_expense: float, total_revenue: float) -> float:
+    def efficiency_ratio (noninterest_expense: float, total_revenue: float) -> float:
         """Noninterest Expense / Total Revenue (lower is better)"""
         return noninterest_expense / total_revenue
     
     @staticmethod
-    def tier_1_capital_ratio(tier_1_capital: float, risk_weighted_assets: float) -> float:
+    def tier_1_capital_ratio (tier_1_capital: float, risk_weighted_assets: float) -> float:
         """Tier 1 Capital / Risk-Weighted Assets"""
         return tier_1_capital / risk_weighted_assets
 \`\`\`
@@ -611,7 +610,6 @@ class BankingMetrics:
 
 Master these ratios and you can analyze any company's financial health in minutes!
 `,
-    discussionQuestions: [],
-        multipleChoiceQuestions: []
+  discussionQuestions: [],
+  multipleChoiceQuestions: [],
 };
-

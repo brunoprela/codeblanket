@@ -85,12 +85,12 @@ Media: S3 (photos, videos)
 **Send Message Flow**:
 \`\`\`
 1. Alice sends message to Bob
-2. Client encrypts message with Bob's public key (E2E encryption)
+2. Client encrypts message with Bob\'s public key (E2E encryption)
 3. Send to WhatsApp server via persistent TCP connection
 4. Server validates sender, checks Bob's status
 5. If Bob online:
    - Push message directly to Bob's device
-   - Bob's device decrypts with private key
+   - Bob\'s device decrypts with private key
    - Send delivery acknowledgment
 6. If Bob offline:
    - Store encrypted message in Bob's inbox (Redis/Cassandra)
@@ -114,9 +114,9 @@ Media: S3 (photos, videos)
    - One-time pre-keys (ephemeral, 100 generated)
 
 2. Alice wants to message Bob (first time):
-   - Alice's device requests Bob's public keys from server
+   - Alice\'s device requests Bob's public keys from server
    - Server sends: Bob's identity key, signed pre-key, one-time pre-key
-   - Alice's device performs Diffie-Hellman key exchange
+   - Alice\'s device performs Diffie-Hellman key exchange
    - Generates shared secret (symmetric key)
 
 3. Alice encrypts message with shared secret
@@ -172,7 +172,7 @@ CREATE TABLE messages (
 **Group Structure**:
 \`\`\`
 - Group ID
-- Admin(s): Can add/remove members, change settings
+- Admin (s): Can add/remove members, change settings
 - Members: Up to 256 participants
 - Group metadata: Name, icon, created date
 \`\`\`
@@ -206,7 +206,7 @@ CREATE TABLE messages (
 4. Generate thumbnail (50 KB, encrypted)
 5. Upload to S3 via pre-signed URL
 6. Send message with media_url: s3://whatsapp-media/abc123.enc
-7. Bob's device downloads encrypted file
+7. Bob\'s device downloads encrypted file
 8. Decrypt with shared key
 9. Display photo
 \`\`\`
@@ -381,7 +381,7 @@ CREATE TABLE messages (
 1. **E2E Encryption**: Signal Protocol overview
 2. **Message Queue**: Per-user inbox for offline delivery
 3. **Erlang**: Explain why (concurrency, fault tolerance)
-4. **Simple Architecture**: WhatsApp's famous efficiency
+4. **Simple Architecture**: WhatsApp\'s famous efficiency
 
 **Common Mistakes**:
 - Over-engineering with microservices (WhatsApp uses monolithic approach)

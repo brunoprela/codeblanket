@@ -8,10 +8,10 @@ export const complexitySection = {
   content: `**Common Complexities:**
 
 **Number Theory:**
-- GCD (Euclidean): O(log(min(a,b)))
-- Prime check: O(sqrt(n))
+- GCD (Euclidean): O(log (min (a,b)))
+- Prime check: O(sqrt (n))
 - Sieve of Eratosthenes: O(n log log n)
-- Factorization: O(sqrt(n))
+- Factorization: O(sqrt (n))
 - Fast exponentiation: O(log n)
 
 **Matrix Operations:**
@@ -28,7 +28,7 @@ export const complexitySection = {
 
 **Combinatorics:**
 - Factorial: O(n)
-- Combinations (iterative): O(min(r, n-r))
+- Combinations (iterative): O(min (r, n-r))
 - Fibonacci (iterative): O(n), O(1) space
 - Fibonacci (matrix): O(log n)
 - Catalan number: O(n²) with DP

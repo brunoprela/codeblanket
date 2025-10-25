@@ -16,7 +16,7 @@ export const chaosEngineeringMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Chaos Engineering is the discipline of deliberately introducing failures into systems to build confidence in their ability to withstand turbulent conditions. It's NOT about randomly breaking things - it's scientific experiments with hypotheses, controlled blast radius, and learning goals. Purpose: Find weaknesses before they cause outages, validate resilience mechanisms (circuit breakers, retries), practice incident response, build confidence. Example: Netflix Chaos Monkey randomly terminates instances to ensure services handle failures gracefully.",
+      "Chaos Engineering is the discipline of deliberately introducing failures into systems to build confidence in their ability to withstand turbulent conditions. It\'s NOT about randomly breaking things - it's scientific experiments with hypotheses, controlled blast radius, and learning goals. Purpose: Find weaknesses before they cause outages, validate resilience mechanisms (circuit breakers, retries), practice incident response, build confidence. Example: Netflix Chaos Monkey randomly terminates instances to ensure services handle failures gracefully.",
   },
   {
     id: 'mc2',

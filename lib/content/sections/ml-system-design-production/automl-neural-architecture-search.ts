@@ -72,12 +72,12 @@ class AutoSklearnExample:
         self.time_budget = time_left_for_this_task
         self.per_run_time = per_run_time_limit
     
-    def example_usage(self):
+    def example_usage (self):
         """
         Example of how Auto-sklearn works
         """
         # Load data
-        X, y = load_digits(return_X_y=True)
+        X, y = load_digits (return_X_y=True)
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42
         )
@@ -142,7 +142,7 @@ class H2OAutoMLExample:
         self.max_runtime = max_runtime_secs
         self.max_models = max_models
     
-    def example_workflow(self):
+    def example_workflow (self):
         """
         H2O AutoML workflow
         """
@@ -154,7 +154,7 @@ class H2OAutoMLExample:
         
         print("2. Load and prepare data")
         # data = h2o.import_file("data.csv")
-        # train, test = data.split_frame(ratios=[0.8])
+        # train, test = data.split_frame (ratios=[0.8])
         
         print("3. Run AutoML")
         """
@@ -183,7 +183,7 @@ class H2OAutoMLExample:
         # best_model = aml.leader
         
         print("6. Make predictions")
-        # predictions = best_model.predict(test)
+        # predictions = best_model.predict (test)
         
         print("\\nH2O AutoML trains:")
         print("  - Random Forests")
@@ -223,7 +223,7 @@ class TPOTExample:
         self.generations = generations
         self.population_size = population_size
     
-    def explain_genetic_programming(self):
+    def explain_genetic_programming (self):
         """
         How TPOT works
         """
@@ -254,7 +254,7 @@ class TPOTExample:
         
         print("\\n6. Repeat for N generations")
     
-    def example_usage(self):
+    def example_usage (self):
         """
         TPOT usage example
         """
@@ -327,7 +327,7 @@ class FeaturetoolsExample:
     Uses Deep Feature Synthesis (DFS)
     """
     
-    def create_sample_data(self):
+    def create_sample_data (self):
         """
         Create sample trading data
         """
@@ -352,7 +352,7 @@ class FeaturetoolsExample:
         
         return customers, trades
     
-    def explain_deep_feature_synthesis(self):
+    def explain_deep_feature_synthesis (self):
         """
         Explain how DFS works
         """
@@ -381,7 +381,7 @@ class FeaturetoolsExample:
         
         print("\\nResult: 50+ features automatically!")
     
-    def example_usage(self):
+    def example_usage (self):
         """
         Featuretools usage example
         """
@@ -394,7 +394,7 @@ class FeaturetoolsExample:
         import featuretools as ft
         
         # Create EntitySet
-        es = ft.EntitySet(id='trading_data')
+        es = ft.EntitySet (id='trading_data')
         
         # Add entities (tables)
         es = es.add_dataframe(
@@ -423,7 +423,7 @@ class FeaturetoolsExample:
             trans_primitives=['day', 'month', 'year', 'weekday']
         )
         
-        print(f"Created {len(feature_defs)} features automatically!")
+        print(f"Created {len (feature_defs)} features automatically!")
         print(feature_matrix.head())
         """
         
@@ -458,7 +458,7 @@ class NASExplainer:
     Explain Neural Architecture Search
     """
     
-    def search_space(self):
+    def search_space (self):
         """
         Define what NAS searches over
         """
@@ -491,7 +491,7 @@ class NASExplainer:
         print("\\nTotal possible architectures: 10^20+ !")
         print("Need efficient search strategy")
     
-    def search_strategies(self):
+    def search_strategies (self):
         """
         Explain NAS search strategies
         """
@@ -560,27 +560,27 @@ class SimpleNAS:
         self.num_trials = num_trials
         self.results = []
     
-    def sample_architecture(self) -> Dict:
+    def sample_architecture (self) -> Dict:
         """
         Sample random architecture from search space
         """
         architecture = {
-            'num_layers': random.choice(self.search_space['num_layers']),
+            'num_layers': random.choice (self.search_space['num_layers']),
             'layer_sizes': [],
             'activations': []
         }
         
-        for _ in range(architecture['num_layers']):
+        for _ in range (architecture['num_layers']):
             architecture['layer_sizes'].append(
-                random.choice(self.search_space['layer_sizes'])
+                random.choice (self.search_space['layer_sizes'])
             )
             architecture['activations'].append(
-                random.choice(self.search_space['activations'])
+                random.choice (self.search_space['activations'])
             )
         
         return architecture
     
-    def build_model(self, architecture: Dict, input_dim: int, output_dim: int):
+    def build_model (self, architecture: Dict, input_dim: int, output_dim: int):
         """
         Build model from architecture
         """
@@ -588,43 +588,43 @@ class SimpleNAS:
         
         prev_dim = input_dim
         
-        for i in range(architecture['num_layers']):
+        for i in range (architecture['num_layers']):
             # Linear layer
-            layers.append(nn.Linear(prev_dim, architecture['layer_sizes'][i]))
+            layers.append (nn.Linear (prev_dim, architecture['layer_sizes'][i]))
             
             # Activation
             if architecture['activations'][i] == 'relu':
-                layers.append(nn.ReLU())
+                layers.append (nn.ReLU())
             elif architecture['activations'][i] == 'tanh':
-                layers.append(nn.Tanh())
+                layers.append (nn.Tanh())
             elif architecture['activations'][i] == 'sigmoid':
-                layers.append(nn.Sigmoid())
+                layers.append (nn.Sigmoid())
             
             prev_dim = architecture['layer_sizes'][i]
         
         # Output layer
-        layers.append(nn.Linear(prev_dim, output_dim))
+        layers.append (nn.Linear (prev_dim, output_dim))
         
         model = nn.Sequential(*layers)
         
         return model
     
-    def evaluate_architecture(self, architecture: Dict, X_train, y_train, X_val, y_val):
+    def evaluate_architecture (self, architecture: Dict, X_train, y_train, X_val, y_val):
         """
         Train and evaluate architecture
         """
         # Build model
-        model = self.build_model(architecture, input_dim=X_train.shape[1], output_dim=1)
+        model = self.build_model (architecture, input_dim=X_train.shape[1], output_dim=1)
         
         # Quick training (simplified)
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+        optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
         criterion = nn.MSELoss()
         
         # Convert to tensors
         X_train_t = torch.FloatTensor(X_train)
-        y_train_t = torch.FloatTensor(y_train).reshape(-1, 1)
+        y_train_t = torch.FloatTensor (y_train).reshape(-1, 1)
         X_val_t = torch.FloatTensor(X_val)
-        y_val_t = torch.FloatTensor(y_val).reshape(-1, 1)
+        y_val_t = torch.FloatTensor (y_val).reshape(-1, 1)
         
         # Train for 50 epochs (quick evaluation)
         for epoch in range(50):
@@ -632,7 +632,7 @@ class SimpleNAS:
             optimizer.zero_grad()
             
             outputs = model(X_train_t)
-            loss = criterion(outputs, y_train_t)
+            loss = criterion (outputs, y_train_t)
             
             loss.backward()
             optimizer.step()
@@ -641,17 +641,17 @@ class SimpleNAS:
         model.eval()
         with torch.no_grad():
             val_outputs = model(X_val_t)
-            val_loss = criterion(val_outputs, y_val_t).item()
+            val_loss = criterion (val_outputs, y_val_t).item()
         
         return val_loss
     
-    def search(self, X_train, y_train, X_val, y_val):
+    def search (self, X_train, y_train, X_val, y_val):
         """
         Run NAS
         """
         print(f"\\n=== Running NAS ({self.num_trials} trials) ===\\n")
         
-        for trial in range(self.num_trials):
+        for trial in range (self.num_trials):
             # Sample architecture
             architecture = self.sample_architecture()
             
@@ -669,7 +669,7 @@ class SimpleNAS:
             print(f"Trial {trial+1}/{self.num_trials}: val_loss={val_loss:.4f}")
         
         # Find best architecture
-        best_result = min(self.results, key=lambda x: x['val_loss'])
+        best_result = min (self.results, key=lambda x: x['val_loss'])
         
         print(f"\\n✓ Best Architecture:")
         print(f"  Layers: {best_result['architecture']['num_layers']}")
@@ -720,7 +720,7 @@ class MetaLearner:
         self.meta_features_db = []
         self.performance_db = []
     
-    def extract_meta_features(self, X: np.ndarray, y: np.ndarray) -> Dict:
+    def extract_meta_features (self, X: np.ndarray, y: np.ndarray) -> Dict:
         """
         Extract dataset characteristics (meta-features)
         """
@@ -729,30 +729,30 @@ class MetaLearner:
         meta_features = {
             'n_samples': n_samples,
             'n_features': n_features,
-            'n_classes': len(np.unique(y)) if len(y.shape) == 1 else 1,
+            'n_classes': len (np.unique (y)) if len (y.shape) == 1 else 1,
             'feature_mean': np.mean(X),
             'feature_std': np.std(X),
             'feature_skew': np.mean([
                 np.abs((X[:, i] - X[:, i].mean()) / X[:, i].std()).mean()
-                for i in range(min(n_features, 10))
+                for i in range (min (n_features, 10))
             ]),
-            'class_imbalance': self._compute_imbalance(y)
+            'class_imbalance': self._compute_imbalance (y)
         }
         
         return meta_features
     
-    def _compute_imbalance(self, y):
+    def _compute_imbalance (self, y):
         """Compute class imbalance"""
-        if len(y.shape) > 1:
+        if len (y.shape) > 1:
             return 0.0
         
-        unique, counts = np.unique(y, return_counts=True)
-        if len(unique) == 1:
+        unique, counts = np.unique (y, return_counts=True)
+        if len (unique) == 1:
             return 0.0
         
-        return max(counts) / min(counts)
+        return max (counts) / min (counts)
     
-    def recommend_models(self, X: np.ndarray, y: np.ndarray) -> List[str]:
+    def recommend_models (self, X: np.ndarray, y: np.ndarray) -> List[str]:
         """
         Recommend models based on dataset characteristics
         """

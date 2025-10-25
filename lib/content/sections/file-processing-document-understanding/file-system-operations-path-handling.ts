@@ -24,7 +24,7 @@ When building AI applications that process documents, generate code, or manipula
 
 ## The pathlib Module: Modern Path Handling
 
-Python's \`pathlib\` module provides an object-oriented interface for file paths that works consistently across platforms.
+Python\'s \`pathlib\` module provides an object-oriented interface for file paths that works consistently across platforms.
 
 ### Why pathlib Over os.path?
 
@@ -32,9 +32,9 @@ Python's \`pathlib\` module provides an object-oriented interface for file paths
 # ❌ Old way: os.path (string manipulation)
 import os
 path = os.path.join("/", "Users", "data", "file.txt")
-dirname = os.path.dirname(path)
-basename = os.path.basename(path)
-exists = os.path.exists(path)
+dirname = os.path.dirname (path)
+basename = os.path.basename (path)
+exists = os.path.exists (path)
 
 # ✅ New way: pathlib (object-oriented)
 from pathlib import Path
@@ -68,7 +68,7 @@ print(config_file.parent)     # /Users/username/Documents/data
 print(config_file.parts)      # ('/', 'Users', 'username', 'Documents', 'data', 'config.json')
 
 # Convert to string when needed
-path_str = str(config_file)
+path_str = str (config_file)
 
 # Resolve to absolute path
 absolute = config_file.resolve()
@@ -101,9 +101,9 @@ rel_path = path.relative_to("documents")  # reports/2024/report.pdf
 \`\`\`python
 from pathlib import Path
 
-def read_file_simple(filepath: str) -> str:
+def read_file_simple (filepath: str) -> str:
     """Simple file reading with automatic cleanup."""
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Context manager ensures file is closed
     with path.open("r", encoding="utf-8") as f:
@@ -112,14 +112,14 @@ def read_file_simple(filepath: str) -> str:
     return content
 
 # Even simpler with pathlib
-def read_file_pathlib(filepath: str) -> str:
+def read_file_pathlib (filepath: str) -> str:
     """One-liner file reading."""
-    return Path(filepath).read_text(encoding="utf-8")
+    return Path (filepath).read_text (encoding="utf-8")
 
 # For binary files
-def read_binary(filepath: str) -> bytes:
+def read_binary (filepath: str) -> bytes:
     """Read binary files."""
-    return Path(filepath).read_bytes()
+    return Path (filepath).read_bytes()
 \`\`\`
 
 ### Production-Grade File Reading with Error Handling
@@ -147,39 +147,39 @@ def read_file_safe(
     Returns:
         File content or None if reading fails
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Check if file exists
     if not path.exists():
-        logger.error(f"File not found: {filepath}")
+        logger.error (f"File not found: {filepath}")
         return None
     
     # Check if it's a file (not directory)
     if not path.is_file():
-        logger.error(f"Path is not a file: {filepath}")
+        logger.error (f"Path is not a file: {filepath}")
         return None
     
     # Check file size (avoid loading huge files into memory)
     max_size = 100 * 1024 * 1024  # 100MB
     if path.stat().st_size > max_size:
-        logger.error(f"File too large: {filepath} ({path.stat().st_size} bytes)")
+        logger.error (f"File too large: {filepath} ({path.stat().st_size} bytes)")
         return None
     
     # Try reading with primary encoding
     try:
-        return path.read_text(encoding=encoding)
+        return path.read_text (encoding=encoding)
     except UnicodeDecodeError:
-        logger.warning(f"Failed to decode with {encoding}, trying {fallback_encoding}")
+        logger.warning (f"Failed to decode with {encoding}, trying {fallback_encoding}")
         try:
-            return path.read_text(encoding=fallback_encoding)
+            return path.read_text (encoding=fallback_encoding)
         except UnicodeDecodeError:
-            logger.error(f"Failed to decode file with both encodings: {filepath}")
+            logger.error (f"Failed to decode file with both encodings: {filepath}")
             return None
     except PermissionError:
-        logger.error(f"Permission denied: {filepath}")
+        logger.error (f"Permission denied: {filepath}")
         return None
     except Exception as e:
-        logger.error(f"Unexpected error reading {filepath}: {e}")
+        logger.error (f"Unexpected error reading {filepath}: {e}")
         return None
 \`\`\`
 
@@ -189,44 +189,44 @@ def read_file_safe(
 from pathlib import Path
 from typing import Iterator
 
-def read_file_lines(filepath: str, chunk_size: int = 8192) -> Iterator[str]:
+def read_file_lines (filepath: str, chunk_size: int = 8192) -> Iterator[str]:
     """
     Read large files line by line without loading into memory.
     
     Perfect for processing large log files or datasets.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     with path.open("r", encoding="utf-8") as f:
         for line in f:
             yield line.rstrip("\\n")
 
-def read_file_chunks(filepath: str, chunk_size: int = 8192) -> Iterator[str]:
+def read_file_chunks (filepath: str, chunk_size: int = 8192) -> Iterator[str]:
     """
     Read file in chunks for processing large files.
     
     Useful when you need to process file content but can't load it all.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     with path.open("r", encoding="utf-8") as f:
         while True:
-            chunk = f.read(chunk_size)
+            chunk = f.read (chunk_size)
             if not chunk:
                 break
             yield chunk
 
 # Usage example
-def count_lines_efficiently(filepath: str) -> int:
+def count_lines_efficiently (filepath: str) -> int:
     """Count lines in a large file without loading into memory."""
-    return sum(1 for _ in read_file_lines(filepath))
+    return sum(1 for _ in read_file_lines (filepath))
 
-def search_in_large_file(filepath: str, search_term: str) -> list[str]:
+def search_in_large_file (filepath: str, search_term: str) -> list[str]:
     """Search for a term in a large file."""
     matches = []
-    for line_num, line in enumerate(read_file_lines(filepath), 1):
+    for line_num, line in enumerate (read_file_lines (filepath), 1):
         if search_term in line:
-            matches.append(f"Line {line_num}: {line}")
+            matches.append (f"Line {line_num}: {line}")
     return matches
 \`\`\`
 
@@ -237,21 +237,21 @@ def search_in_large_file(filepath: str, search_term: str) -> list[str]:
 \`\`\`python
 from pathlib import Path
 
-def write_file_simple(filepath: str, content: str) -> None:
+def write_file_simple (filepath: str, content: str) -> None:
     """Simple file writing."""
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Create parent directories if they don't exist
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir (parents=True, exist_ok=True)
     
     # Write file
-    path.write_text(content, encoding="utf-8")
+    path.write_text (content, encoding="utf-8")
 
-def write_binary(filepath: str, content: bytes) -> None:
+def write_binary (filepath: str, content: bytes) -> None:
     """Write binary files."""
-    path = Path(filepath)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(content)
+    path = Path (filepath)
+    path.parent.mkdir (parents=True, exist_ok=True)
+    path.write_bytes (content)
 \`\`\`
 
 ### Atomic File Writing (Production Pattern)
@@ -262,7 +262,7 @@ import tempfile
 import shutil
 import os
 
-def write_file_atomic(filepath: str, content: str) -> bool:
+def write_file_atomic (filepath: str, content: str) -> bool:
     """
     Write file atomically to prevent corruption if process is interrupted.
     
@@ -273,8 +273,8 @@ def write_file_atomic(filepath: str, content: str) -> bool:
     
     This ensures you never have a partially-written file.
     """
-    path = Path(filepath)
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path = Path (filepath)
+    path.parent.mkdir (parents=True, exist_ok=True)
     
     # Create temporary file in same directory (ensures same filesystem)
     fd, temp_path = tempfile.mkstemp(
@@ -285,38 +285,38 @@ def write_file_atomic(filepath: str, content: str) -> bool:
     
     try:
         # Write to temporary file
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            f.write(content)
+        with os.fdopen (fd, "w", encoding="utf-8") as f:
+            f.write (content)
             f.flush()
-            os.fsync(f.fileno())  # Ensure data is written to disk
+            os.fsync (f.fileno())  # Ensure data is written to disk
         
         # Atomic rename (or as atomic as possible)
-        shutil.move(temp_path, path)
+        shutil.move (temp_path, path)
         return True
         
     except Exception as e:
         # Clean up temporary file if something went wrong
         try:
-            os.unlink(temp_path)
+            os.unlink (temp_path)
         except:
             pass
         raise e
 
 # Usage in a code editor like Cursor
-def save_code_file_safe(filepath: str, code: str) -> bool:
+def save_code_file_safe (filepath: str, code: str) -> bool:
     """
     Save code file atomically with backup.
     Critical for code editors to prevent data loss.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Create backup if file exists
     if path.exists():
-        backup_path = path.with_suffix(path.suffix + ".bak")
+        backup_path = path.with_suffix (path.suffix + ".bak")
         shutil.copy2(path, backup_path)
     
     try:
-        write_file_atomic(filepath, code)
+        write_file_atomic (filepath, code)
         return True
     except Exception as e:
         print(f"Failed to save file: {e}")
@@ -335,11 +335,11 @@ from pathlib import Path
 
 # Create single directory
 path = Path("output/results")
-path.mkdir(exist_ok=True)  # Don't error if exists
+path.mkdir (exist_ok=True)  # Don't error if exists
 
 # Create nested directories
 path = Path("output/data/processed/2024")
-path.mkdir(parents=True, exist_ok=True)  # Create all parent dirs
+path.mkdir (parents=True, exist_ok=True)  # Create all parent dirs
 
 # Check if directory was created
 assert path.is_dir()
@@ -350,9 +350,9 @@ assert path.is_dir()
 \`\`\`python
 from pathlib import Path
 
-def list_directory(dir_path: str) -> dict:
+def list_directory (dir_path: str) -> dict:
     """List all files and directories with metadata."""
-    path = Path(dir_path)
+    path = Path (dir_path)
     
     contents = {
         "files": [],
@@ -365,7 +365,7 @@ def list_directory(dir_path: str) -> dict:
             stat = item.stat()
             contents["files"].append({
                 "name": item.name,
-                "path": str(item),
+                "path": str (item),
                 "size": stat.st_size,
                 "modified": stat.st_mtime
             })
@@ -373,33 +373,33 @@ def list_directory(dir_path: str) -> dict:
         elif item.is_dir():
             contents["directories"].append({
                 "name": item.name,
-                "path": str(item)
+                "path": str (item)
             })
     
     return contents
 
-def find_files_by_extension(dir_path: str, extension: str) -> list[Path]:
+def find_files_by_extension (dir_path: str, extension: str) -> list[Path]:
     """Find all files with given extension in directory tree."""
-    path = Path(dir_path)
+    path = Path (dir_path)
     
     # Use glob for pattern matching
-    return list(path.rglob(f"*.{extension}"))
+    return list (path.rglob (f"*.{extension}"))
 
 # Examples
 python_files = find_files_by_extension("src", "py")
 json_files = find_files_by_extension("config", "json")
 
 # More complex patterns
-def find_code_files(dir_path: str) -> dict[str, list[Path]]:
+def find_code_files (dir_path: str) -> dict[str, list[Path]]:
     """Find all code files by language."""
-    path = Path(dir_path)
+    path = Path (dir_path)
     
     return {
-        "python": list(path.rglob("*.py")),
-        "javascript": list(path.rglob("*.js")) + list(path.rglob("*.jsx")),
-        "typescript": list(path.rglob("*.ts")) + list(path.rglob("*.tsx")),
-        "java": list(path.rglob("*.java")),
-        "cpp": list(path.rglob("*.cpp")) + list(path.rglob("*.hpp"))
+        "python": list (path.rglob("*.py")),
+        "javascript": list (path.rglob("*.js")) + list (path.rglob("*.jsx")),
+        "typescript": list (path.rglob("*.ts")) + list (path.rglob("*.tsx")),
+        "java": list (path.rglob("*.java")),
+        "cpp": list (path.rglob("*.cpp")) + list (path.rglob("*.hpp"))
     }
 \`\`\`
 
@@ -420,22 +420,22 @@ def walk_directory(
     
     Similar to os.walk but with pathlib and callbacks.
     """
-    def _walk(path: Path, depth: int = 0):
+    def _walk (path: Path, depth: int = 0):
         if max_depth is not None and depth > max_depth:
             return
         
         for item in path.iterdir():
             if item.is_file():
-                file_callback(item)
+                file_callback (item)
             elif item.is_dir():
                 if dir_callback:
-                    dir_callback(item)
-                _walk(item, depth + 1)
+                    dir_callback (item)
+                _walk (item, depth + 1)
     
-    _walk(Path(dir_path))
+    _walk(Path (dir_path))
 
 # Usage: Build file tree for LLM context (like Cursor does)
-def build_file_tree(dir_path: str, ignore_patterns: list[str] = None) -> dict:
+def build_file_tree (dir_path: str, ignore_patterns: list[str] = None) -> dict:
     """
     Build a file tree structure for providing context to LLMs.
     """
@@ -443,20 +443,20 @@ def build_file_tree(dir_path: str, ignore_patterns: list[str] = None) -> dict:
         ".git", "__pycache__", "node_modules", ".venv", "venv"
     ]
     
-    def should_ignore(path: Path) -> bool:
-        return any(pattern in str(path) for pattern in ignore_patterns)
+    def should_ignore (path: Path) -> bool:
+        return any (pattern in str (path) for pattern in ignore_patterns)
     
-    tree = {"name": Path(dir_path).name, "type": "directory", "children": []}
+    tree = {"name": Path (dir_path).name, "type": "directory", "children": []}
     
-    def add_file(file_path: Path):
-        if not should_ignore(file_path):
+    def add_file (file_path: Path):
+        if not should_ignore (file_path):
             tree["children"].append({
                 "name": file_path.name,
                 "type": "file",
-                "path": str(file_path.relative_to(dir_path))
+                "path": str (file_path.relative_to (dir_path))
             })
     
-    walk_directory(dir_path, add_file, max_depth=3)
+    walk_directory (dir_path, add_file, max_depth=3)
     return tree
 \`\`\`
 
@@ -469,26 +469,26 @@ from pathlib import Path
 import os
 import stat
 
-def check_file_permissions(filepath: str) -> dict:
+def check_file_permissions (filepath: str) -> dict:
     """Check what operations are allowed on a file."""
-    path = Path(filepath)
+    path = Path (filepath)
     
     if not path.exists():
         return {"exists": False}
     
     return {
         "exists": True,
-        "readable": os.access(path, os.R_OK),
-        "writable": os.access(path, os.W_OK),
-        "executable": os.access(path, os.X_OK),
+        "readable": os.access (path, os.R_OK),
+        "writable": os.access (path, os.W_OK),
+        "executable": os.access (path, os.X_OK),
         "is_file": path.is_file(),
         "is_dir": path.is_dir(),
         "is_symlink": path.is_symlink()
     }
 
-def get_file_metadata(filepath: str) -> dict:
+def get_file_metadata (filepath: str) -> dict:
     """Get comprehensive file metadata."""
-    path = Path(filepath)
+    path = Path (filepath)
     stat_info = path.stat()
     
     return {
@@ -498,8 +498,8 @@ def get_file_metadata(filepath: str) -> dict:
         "accessed": stat_info.st_atime,
         "owner": stat_info.st_uid,
         "group": stat_info.st_gid,
-        "permissions": oct(stat_info.st_mode)[-3:],
-        "is_readonly": not os.access(path, os.W_OK)
+        "permissions": oct (stat_info.st_mode)[-3:],
+        "is_readonly": not os.access (path, os.W_OK)
     }
 \`\`\`
 
@@ -509,22 +509,22 @@ def get_file_metadata(filepath: str) -> dict:
 from pathlib import Path
 import stat
 
-def make_executable(filepath: str) -> None:
+def make_executable (filepath: str) -> None:
     """Make a file executable (useful for scripts)."""
-    path = Path(filepath)
+    path = Path (filepath)
     current = path.stat().st_mode
-    path.chmod(current | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    path.chmod (current | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
-def make_readonly(filepath: str) -> None:
+def make_readonly (filepath: str) -> None:
     """Make a file read-only."""
-    path = Path(filepath)
-    path.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+    path = Path (filepath)
+    path.chmod (stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
 
-def make_writable(filepath: str) -> None:
+def make_writable (filepath: str) -> None:
     """Make a file writable."""
-    path = Path(filepath)
+    path = Path (filepath)
     current = path.stat().st_mode
-    path.chmod(current | stat.S_IWUSR)
+    path.chmod (current | stat.S_IWUSR)
 \`\`\`
 
 ## Temporary Files and Directories
@@ -537,19 +537,19 @@ from pathlib import Path
 
 # Temporary file that's automatically deleted
 def process_with_temp_file():
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=True) as f:
+    with tempfile.NamedTemporaryFile (mode="w", suffix=".txt", delete=True) as f:
         f.write("Temporary content")
         f.flush()
         
         # Use the file
-        temp_path = Path(f.name)
+        temp_path = Path (f.name)
         print(f"Temp file: {temp_path}")
         # File is automatically deleted when context exits
 
 # Temporary directory
 def process_with_temp_dir():
     with tempfile.TemporaryDirectory() as temp_dir:
-        temp_path = Path(temp_dir)
+        temp_path = Path (temp_dir)
         
         # Create files in temp directory
         (temp_path / "data.txt").write_text("Some data")
@@ -562,10 +562,10 @@ def process_with_temp_dir():
 # Manual temporary file management
 def create_temp_file_manual() -> str:
     """Create temp file that persists after function returns."""
-    fd, path = tempfile.mkstemp(suffix=".txt", prefix="llm_output_")
+    fd, path = tempfile.mkstemp (suffix=".txt", prefix="llm_output_")
     
     # Write to file
-    with os.fdopen(fd, "w") as f:
+    with os.fdopen (fd, "w") as f:
         f.write("Content")
     
     return path  # Caller is responsible for cleanup
@@ -588,11 +588,11 @@ class FileWatcher:
     """
     
     def __init__(self, filepath: str, callback: Callable[[Path], None]):
-        self.path = Path(filepath)
+        self.path = Path (filepath)
         self.callback = callback
         self.last_modified = self.path.stat().st_mtime if self.path.exists() else 0
     
-    def check_for_changes(self) -> bool:
+    def check_for_changes (self) -> bool:
         """Check if file has been modified."""
         if not self.path.exists():
             return False
@@ -601,22 +601,22 @@ class FileWatcher:
         
         if current_mtime > self.last_modified:
             self.last_modified = current_mtime
-            self.callback(self.path)
+            self.callback (self.path)
             return True
         
         return False
     
-    def watch(self, interval: float = 1.0):
+    def watch (self, interval: float = 1.0):
         """Watch file continuously."""
         try:
             while True:
                 self.check_for_changes()
-                time.sleep(interval)
+                time.sleep (interval)
         except KeyboardInterrupt:
             print("Stopped watching")
 
 # Usage
-def on_file_change(path: Path):
+def on_file_change (path: Path):
     print(f"File changed: {path}")
     content = path.read_text()
     # Process the updated content...
@@ -643,19 +643,19 @@ class CodeFileHandler(FileSystemEventHandler):
         self.on_change = on_change
         self.code_extensions = {".py", ".js", ".ts", ".java", ".cpp"}
     
-    def on_modified(self, event):
+    def on_modified (self, event):
         if event.is_directory:
             return
         
-        path = Path(event.src_path)
+        path = Path (event.src_path)
         if path.suffix in self.code_extensions:
-            self.on_change(str(path))
+            self.on_change (str (path))
 
-def watch_directory(dir_path: str, callback: Callable[[str], None]):
+def watch_directory (dir_path: str, callback: Callable[[str], None]):
     """Watch directory for code changes."""
-    event_handler = CodeFileHandler(callback)
+    event_handler = CodeFileHandler (callback)
     observer = Observer()
-    observer.schedule(event_handler, dir_path, recursive=True)
+    observer.schedule (event_handler, dir_path, recursive=True)
     observer.start()
     
     try:
@@ -665,7 +665,7 @@ def watch_directory(dir_path: str, callback: Callable[[str], None]):
         observer.join()
 
 # Usage
-def on_code_change(filepath: str):
+def on_code_change (filepath: str):
     print(f"Code file changed: {filepath}")
     # Re-analyze file, update embeddings, etc.
 
@@ -703,13 +703,13 @@ import os
 home = Path.home()  # Works on all platforms
 
 # Get environment variables
-data_dir = Path(os.getenv("DATA_DIR", str(Path.home() / "data")))
+data_dir = Path (os.getenv("DATA_DIR", str(Path.home() / "data")))
 
 # Cross-platform config directory
 def get_config_dir() -> Path:
     """Get appropriate config directory for platform."""
     if os.name == "nt":  # Windows
-        return Path(os.getenv("APPDATA")) / "MyApp"
+        return Path (os.getenv("APPDATA")) / "MyApp"
     else:  # Unix-like
         return Path.home() / ".config" / "myapp"
 \`\`\`
@@ -738,7 +738,7 @@ from pathlib import Path
 
 # ✅ Create parent directories first
 path = Path("output/results/data.txt")
-path.parent.mkdir(parents=True, exist_ok=True)
+path.parent.mkdir (parents=True, exist_ok=True)
 path.write_text("data")
 \`\`\`
 
@@ -804,64 +804,64 @@ class CodeFileManager:
     """
     
     def __init__(self, workspace_dir: str):
-        self.workspace = Path(workspace_dir)
+        self.workspace = Path (workspace_dir)
         self.backup_dir = self.workspace / ".backups"
-        self.backup_dir.mkdir(exist_ok=True)
+        self.backup_dir.mkdir (exist_ok=True)
         
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig (level=logging.INFO)
         self.logger = logging.getLogger(__name__)
     
-    def read_file(self, filepath: str) -> Optional[str]:
+    def read_file (self, filepath: str) -> Optional[str]:
         """Read file safely with error handling."""
         try:
             path = self.workspace / filepath
-            return path.read_text(encoding="utf-8")
+            return path.read_text (encoding="utf-8")
         except Exception as e:
-            self.logger.error(f"Failed to read {filepath}: {e}")
+            self.logger.error (f"Failed to read {filepath}: {e}")
             return None
     
-    def write_file(self, filepath: str, content: str, create_backup: bool = True) -> bool:
+    def write_file (self, filepath: str, content: str, create_backup: bool = True) -> bool:
         """Write file atomically with optional backup."""
         try:
             path = self.workspace / filepath
             
             # Create backup if file exists
             if create_backup and path.exists():
-                self._create_backup(path)
+                self._create_backup (path)
             
             # Create parent directories
-            path.parent.mkdir(parents=True, exist_ok=True)
+            path.parent.mkdir (parents=True, exist_ok=True)
             
             # Atomic write
-            temp_path = path.with_suffix(path.suffix + ".tmp")
-            temp_path.write_text(content, encoding="utf-8")
-            shutil.move(str(temp_path), str(path))
+            temp_path = path.with_suffix (path.suffix + ".tmp")
+            temp_path.write_text (content, encoding="utf-8")
+            shutil.move (str (temp_path), str (path))
             
-            self.logger.info(f"Successfully wrote {filepath}")
+            self.logger.info (f"Successfully wrote {filepath}")
             return True
             
         except Exception as e:
-            self.logger.error(f"Failed to write {filepath}: {e}")
+            self.logger.error (f"Failed to write {filepath}: {e}")
             return False
     
-    def _create_backup(self, path: Path) -> None:
+    def _create_backup (self, path: Path) -> None:
         """Create timestamped backup of file."""
         import time
-        timestamp = int(time.time())
+        timestamp = int (time.time())
         backup_name = f"{path.stem}_{timestamp}{path.suffix}"
         backup_path = self.backup_dir / backup_name
         shutil.copy2(path, backup_path)
-        self.logger.info(f"Created backup: {backup_name}")
+        self.logger.info (f"Created backup: {backup_name}")
     
-    def list_files(self, pattern: str = "*.py") -> List[Path]:
+    def list_files (self, pattern: str = "*.py") -> List[Path]:
         """List all files matching pattern."""
-        return list(self.workspace.rglob(pattern))
+        return list (self.workspace.rglob (pattern))
     
-    def get_file_tree(self) -> dict:
+    def get_file_tree (self) -> dict:
         """Get file tree for LLM context."""
-        return self._build_tree(self.workspace)
+        return self._build_tree (self.workspace)
     
-    def _build_tree(self, path: Path, max_depth: int = 3, depth: int = 0) -> dict:
+    def _build_tree (self, path: Path, max_depth: int = 3, depth: int = 0) -> dict:
         """Recursively build file tree."""
         if depth > max_depth:
             return None
@@ -869,7 +869,7 @@ class CodeFileManager:
         tree = {"name": path.name, "type": "directory", "children": []}
         
         try:
-            for item in sorted(path.iterdir()):
+            for item in sorted (path.iterdir()):
                 if item.name.startswith('.'):
                     continue
                 
@@ -879,9 +879,9 @@ class CodeFileManager:
                         "type": "file"
                     })
                 elif item.is_dir():
-                    subtree = self._build_tree(item, max_depth, depth + 1)
+                    subtree = self._build_tree (item, max_depth, depth + 1)
                     if subtree:
-                        tree["children"].append(subtree)
+                        tree["children"].append (subtree)
         except PermissionError:
             pass
         

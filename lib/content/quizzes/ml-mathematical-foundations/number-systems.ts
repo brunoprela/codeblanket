@@ -36,7 +36,7 @@ export const numbersystemsQuiz = [
 
 **1. Fourier Transforms**:
 The Discrete Fourier Transform (DFT) converts time-domain signals to frequency domain:
-X(k) = Σ x(n) × e^(-i2πkn/N)
+X(k) = Σ x (n) × e^(-i2πkn/N)
 
 This is essential for:
 - Audio processing (speech recognition, music analysis)
@@ -125,8 +125,8 @@ Compounding interest with daily rates:
 cumulative_return = (1 + r1) * (1 + r2) * ... * (1 + rn)
 
 # Better
-log_cumulative = sum(log(1 + r) for r in returns)
-cumulative_return = exp(log_cumulative)
+log_cumulative = sum (log(1 + r) for r in returns)
+cumulative_return = exp (log_cumulative)
 \`\`\`
 
 **6. Risk Metrics (VaR, CVaR)**:

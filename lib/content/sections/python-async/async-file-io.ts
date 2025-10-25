@@ -6,7 +6,7 @@ export const asyncFileIO = {
 
 ## Introduction
 
-While Python's built-in \`open()\` is blocking, **aiofiles** provides async file operations that don't freeze the event loop. This is critical for applications that handle many files concurrently or mix file I/O with network operations.
+While Python\'s built-in \`open()\` is blocking, **aiofiles** provides async file operations that don't freeze the event loop. This is critical for applications that handle many files concurrently or mix file I/O with network operations.
 
 ### Why Async File I/O
 
@@ -20,24 +20,24 @@ import aiofiles
 import time
 
 # Blocking: Sequential file reads
-def read_files_blocking(files):
+def read_files_blocking (files):
     start = time.time()
     contents = []
     for file in files:
-        with open(file) as f:
-            contents.append(f.read())
+        with open (file) as f:
+            contents.append (f.read())
     elapsed = time.time() - start
     print(f"Blocking: {elapsed:.2f}s")
     return contents
 
 # Async: Concurrent file reads
-async def read_files_async(files):
+async def read_files_async (files):
     start = time.time()
-    async def read_file(file):
-        async with aiofiles.open(file) as f:
+    async def read_file (file):
+        async with aiofiles.open (file) as f:
             return await f.read()
     
-    contents = await asyncio.gather(*[read_file(f) for f in files])
+    contents = await asyncio.gather(*[read_file (f) for f in files])
     elapsed = time.time() - start
     print(f"Async: {elapsed:.2f}s")
     return contents
@@ -73,7 +73,7 @@ async def read_examples():
     # Read entire file
     async with aiofiles.open('data.txt', 'r') as f:
         content = await f.read()
-        print(f"Content: {len(content)} characters")
+        print(f"Content: {len (content)} characters")
     
     # Read line by line
     async with aiofiles.open('data.txt', 'r') as f:
@@ -83,14 +83,14 @@ async def read_examples():
     # Read specific number of bytes
     async with aiofiles.open('data.txt', 'r') as f:
         chunk = await f.read(1024)  # Read 1KB
-        print(f"Chunk: {len(chunk)} bytes")
+        print(f"Chunk: {len (chunk)} bytes")
     
     # Read all lines into list
     async with aiofiles.open('data.txt', 'r') as f:
         lines = await f.readlines()
-        print(f"Total lines: {len(lines)}")
+        print(f"Total lines: {len (lines)}")
 
-asyncio.run(read_examples())
+asyncio.run (read_examples())
 \`\`\`
 
 ### Writing Files
@@ -115,14 +115,14 @@ async def write_examples():
     # Write multiple lines
     lines = ['Line 1\\n', 'Line 2\\n', 'Line 3\\n']
     async with aiofiles.open('output.txt', 'w') as f:
-        await f.writelines(lines)
+        await f.writelines (lines)
     
     # Write binary data
     data = b'\\x00\\x01\\x02\\x03'
     async with aiofiles.open('binary.dat', 'wb') as f:
-        await f.write(data)
+        await f.write (data)
 
-asyncio.run(write_examples())
+asyncio.run (write_examples())
 \`\`\`
 
 ---
@@ -139,25 +139,25 @@ Read Multiple Files Concurrently
 import asyncio
 import aiofiles
 
-async def read_file(filename):
+async def read_file (filename):
     """Read a single file"""
-    async with aiofiles.open(filename, 'r') as f:
+    async with aiofiles.open (filename, 'r') as f:
         content = await f.read()
-        return {'file': filename, 'size': len(content), 'content': content}
+        return {'file': filename, 'size': len (content), 'content': content}
 
-async def read_many_files(filenames):
+async def read_many_files (filenames):
     """Read all files concurrently"""
-    results = await asyncio.gather(*[read_file(f) for f in filenames])
+    results = await asyncio.gather(*[read_file (f) for f in filenames])
     return results
 
 async def main():
     files = ['file1.txt', 'file2.txt', 'file3.txt']
-    results = await read_many_files(files)
+    results = await read_many_files (files)
     
     for result in results:
         print(f"{result['file']}: {result['size']} bytes")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # All files read concurrently!
 \`\`\`
@@ -172,25 +172,25 @@ Read, Process, Write Pipeline
 import asyncio
 import aiofiles
 
-async def process_file(input_file, output_file):
+async def process_file (input_file, output_file):
     """Read, process, and write file"""
     # Read
-    async with aiofiles.open(input_file, 'r') as f:
+    async with aiofiles.open (input_file, 'r') as f:
         content = await f.read()
     
     # Process (e.g., uppercase)
     processed = content.upper()
     
     # Write
-    async with aiofiles.open(output_file, 'w') as f:
-        await f.write(processed)
+    async with aiofiles.open (output_file, 'w') as f:
+        await f.write (processed)
     
     print(f"Processed {input_file} -> {output_file}")
 
-async def process_many_files(file_pairs):
+async def process_many_files (file_pairs):
     """Process multiple files concurrently"""
     await asyncio.gather(*[
-        process_file(input_f, output_f)
+        process_file (input_f, output_f)
         for input_f, output_f in file_pairs
     ])
 
@@ -200,9 +200,9 @@ async def main():
         ('input2.txt', 'output2.txt'),
         ('input3.txt', 'output3.txt'),
     ]
-    await process_many_files(pairs)
+    await process_many_files (pairs)
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -220,16 +220,16 @@ Memory Efficient for Huge Files
 import asyncio
 import aiofiles
 
-async def process_large_file(filename):
+async def process_large_file (filename):
     """Process file line by line (streaming)"""
     line_count = 0
     total_size = 0
     
-    async with aiofiles.open(filename, 'r') as f:
+    async with aiofiles.open (filename, 'r') as f:
         async for line in f:
             # Process each line
             line_count += 1
-            total_size += len(line)
+            total_size += len (line)
             
             # Example: Filter lines
             if 'ERROR' in line:
@@ -240,7 +240,7 @@ async def process_large_file(filename):
 # Memory usage: Only current line in memory
 # Can process multi-GB files efficiently!
 
-asyncio.run(process_large_file('huge_log.txt'))
+asyncio.run (process_large_file('huge_log.txt'))
 \`\`\`
 
 ### Chunked Reading
@@ -253,28 +253,28 @@ Read Large File in Chunks
 import asyncio
 import aiofiles
 
-async def read_in_chunks(filename, chunk_size=8192):
+async def read_in_chunks (filename, chunk_size=8192):
     """Read file in fixed-size chunks"""
-    async with aiofiles.open(filename, 'rb') as f:
+    async with aiofiles.open (filename, 'rb') as f:
         while True:
-            chunk = await f.read(chunk_size)
+            chunk = await f.read (chunk_size)
             if not chunk:
                 break
             
             # Process chunk
             yield chunk
 
-async def process_large_binary_file(filename):
+async def process_large_binary_file (filename):
     """Process large binary file"""
     total_bytes = 0
     
-    async for chunk in read_in_chunks(filename):
-        total_bytes += len(chunk)
+    async for chunk in read_in_chunks (filename):
+        total_bytes += len (chunk)
         # Process chunk (e.g., hash, compress, transmit)
     
     print(f"Processed {total_bytes:,} bytes")
 
-asyncio.run(process_large_binary_file('large_file.bin'))
+asyncio.run (process_large_binary_file('large_file.bin'))
 \`\`\`
 
 ---
@@ -291,26 +291,26 @@ Async Directory Operations with aiofiles.os
 import asyncio
 import aiofiles.os
 
-async def list_directory(path):
+async def list_directory (path):
     """List directory contents"""
-    entries = await aiofiles.os.listdir(path)
-    print(f"Found {len(entries)} entries in {path}")
+    entries = await aiofiles.os.listdir (path)
+    print(f"Found {len (entries)} entries in {path}")
     
     for entry in entries:
         full_path = f"{path}/{entry}"
         
         # Check if file or directory
-        is_file = await aiofiles.os.path.isfile(full_path)
-        is_dir = await aiofiles.os.path.isdir(full_path)
+        is_file = await aiofiles.os.path.isfile (full_path)
+        is_dir = await aiofiles.os.path.isdir (full_path)
         
         # Get file size
         if is_file:
-            size = await aiofiles.os.path.getsize(full_path)
+            size = await aiofiles.os.path.getsize (full_path)
             print(f"  File: {entry} ({size:,} bytes)")
         elif is_dir:
             print(f"  Dir:  {entry}/")
 
-asyncio.run(list_directory('.'))
+asyncio.run (list_directory('.'))
 \`\`\`
 
 ### File Metadata
@@ -323,23 +323,23 @@ Get File Metadata Asynchronously
 import asyncio
 import aiofiles.os
 
-async def get_file_info(filename):
+async def get_file_info (filename):
     """Get file metadata"""
     # Check if exists
-    exists = await aiofiles.os.path.exists(filename)
+    exists = await aiofiles.os.path.exists (filename)
     if not exists:
         print(f"{filename} does not exist")
         return
     
     # Get stats
-    stat = await aiofiles.os.stat(filename)
+    stat = await aiofiles.os.stat (filename)
     
     print(f"File: {filename}")
     print(f"  Size: {stat.st_size:,} bytes")
     print(f"  Modified: {stat.st_mtime}")
-    print(f"  Permissions: {oct(stat.st_mode)}")
+    print(f"  Permissions: {oct (stat.st_mode)}")
 
-asyncio.run(get_file_info('data.txt'))
+asyncio.run (get_file_info('data.txt'))
 \`\`\`
 
 ---
@@ -359,13 +359,13 @@ from typing import List
 
 class FileProcessor:
     def __init__(self, max_concurrent=10):
-        self.semaphore = asyncio.Semaphore(max_concurrent)
+        self.semaphore = asyncio.Semaphore (max_concurrent)
     
-    async def process_file(self, filename: str) -> dict:
+    async def process_file (self, filename: str) -> dict:
         """Process single file"""
         async with self.semaphore:  # Limit concurrency
             try:
-                async with aiofiles.open(filename, 'r') as f:
+                async with aiofiles.open (filename, 'r') as f:
                     content = await f.read()
                 
                 # Process content
@@ -373,30 +373,30 @@ class FileProcessor:
                 
                 return {
                     'filename': filename,
-                    'lines': len(lines),
-                    'size': len(content),
+                    'lines': len (lines),
+                    'size': len (content),
                     'status': 'success'
                 }
             
             except Exception as e:
                 return {
                     'filename': filename,
-                    'error': str(e),
+                    'error': str (e),
                     'status': 'failed'
                 }
     
-    async def process_batch(self, filenames: List[str]):
+    async def process_batch (self, filenames: List[str]):
         """Process batch of files"""
         results = await asyncio.gather(*[
-            self.process_file(f) for f in filenames
+            self.process_file (f) for f in filenames
         ])
         
         # Summary
         success = sum(1 for r in results if r['status'] == 'success')
-        failed = len(results) - success
-        total_lines = sum(r.get('lines', 0) for r in results)
+        failed = len (results) - success
+        total_lines = sum (r.get('lines', 0) for r in results)
         
-        print(f"Processed {len(results)} files:")
+        print(f"Processed {len (results)} files:")
         print(f"  Success: {success}")
         print(f"  Failed: {failed}")
         print(f"  Total lines: {total_lines:,}")
@@ -404,11 +404,11 @@ class FileProcessor:
         return results
 
 async def main():
-    processor = FileProcessor(max_concurrent=10)
+    processor = FileProcessor (max_concurrent=10)
     files = [f'file{i}.txt' for i in range(100)]
-    results = await processor.process_batch(files)
+    results = await processor.process_batch (files)
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### Log File Monitor
@@ -426,20 +426,20 @@ class LogMonitor:
         self.logfile = logfile
         self.position = 0
     
-    async def tail(self, callback):
+    async def tail (self, callback):
         """Monitor log file for new lines"""
         # Seek to end initially
-        async with aiofiles.open(self.logfile, 'r') as f:
+        async with aiofiles.open (self.logfile, 'r') as f:
             await f.seek(0, 2)  # Seek to end
             self.position = await f.tell()
         
         while True:
-            async with aiofiles.open(self.logfile, 'r') as f:
-                await f.seek(self.position)
+            async with aiofiles.open (self.logfile, 'r') as f:
+                await f.seek (self.position)
                 
                 # Read new lines
                 async for line in f:
-                    await callback(line.strip())
+                    await callback (line.strip())
                 
                 # Update position
                 self.position = await f.tell()
@@ -447,7 +447,7 @@ class LogMonitor:
             # Wait before checking again
             await asyncio.sleep(1)
 
-async def process_log_line(line: str):
+async def process_log_line (line: str):
     """Process new log line"""
     if 'ERROR' in line:
         print(f"🔴 Error: {line}")
@@ -456,9 +456,9 @@ async def process_log_line(line: str):
 
 async def main():
     monitor = LogMonitor('app.log')
-    await monitor.tail(process_log_line)
+    await monitor.tail (process_log_line)
 
-# asyncio.run(main())  # Runs forever, monitoring log
+# asyncio.run (main())  # Runs forever, monitoring log
 \`\`\`
 
 ---
@@ -485,14 +485,14 @@ await f.close()  # Forgotten if exception!
 # ✅ Good: Streaming (constant memory)
 async with aiofiles.open('huge.txt', 'r') as f:
     async for line in f:
-        process(line)
+        process (line)
 # Memory: One line at a time
 
 # ❌ Bad: Load everything (high memory)
 async with aiofiles.open('huge.txt', 'r') as f:
     content = await f.read()  # Loads entire file!
     for line in content.split('\\n'):
-        process(line)
+        process (line)
 # Memory: Entire file
 \`\`\`
 
@@ -501,14 +501,14 @@ async with aiofiles.open('huge.txt', 'r') as f:
 \`\`\`python
 # ✅ Good: Limited concurrency
 semaphore = asyncio.Semaphore(10)
-async def process_file(f):
+async def process_file (f):
     async with semaphore:
-        async with aiofiles.open(f) as file:
+        async with aiofiles.open (f) as file:
             return await file.read()
 
 # ❌ Bad: Unlimited concurrency
 # Can open 1000s of file handles simultaneously
-await asyncio.gather(*[read_file(f) for f in files])
+await asyncio.gather(*[read_file (f) for f in files])
 \`\`\`
 
 ---

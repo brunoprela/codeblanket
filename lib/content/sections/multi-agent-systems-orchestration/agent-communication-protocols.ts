@@ -62,7 +62,7 @@ class AgentMessage:
     timestamp: float
     reply_to: Optional[str] = None
     
-    def to_json(self) -> str:
+    def to_json (self) -> str:
         """Serialize to JSON."""
         return json.dumps({
             "id": self.id,
@@ -76,10 +76,10 @@ class AgentMessage:
         })
     
     @classmethod
-    def from_json(cls, json_str: str) -> 'AgentMessage':
+    def from_json (cls, json_str: str) -> 'AgentMessage':
         """Deserialize from JSON."""
-        data = json.loads(json_str)
-        data['type'] = MessageType(data['type'])
+        data = json.loads (json_str)
+        data['type'] = MessageType (data['type'])
         return cls(**data)
 
 # Create messages easily
@@ -130,21 +130,21 @@ class MessageQueue:
     
     def __init__(self):
         # Each agent has a queue
-        self.queues: Dict[str, deque[AgentMessage]] = defaultdict(deque)
+        self.queues: Dict[str, deque[AgentMessage]] = defaultdict (deque)
         self.message_history: List[AgentMessage] = []
-        self.subscribers: Dict[str, List[str]] = defaultdict(list)
+        self.subscribers: Dict[str, List[str]] = defaultdict (list)
     
-    def send(self, message: AgentMessage):
+    def send (self, message: AgentMessage):
         """Send message to agent."""
         # Add to recipient's queue
-        self.queues[message.to_agent].append(message)
+        self.queues[message.to_agent].append (message)
         
         # Store in history
-        self.message_history.append(message)
+        self.message_history.append (message)
         
         # Notify subscribers if broadcast
         if message.type == MessageType.BROADCAST:
-            self._notify_subscribers(message)
+            self._notify_subscribers (message)
     
     def receive(
         self,
@@ -167,27 +167,27 @@ class MessageQueue:
                 time.sleep(0.1)
             return queue.popleft()
     
-    def receive_all(self, agent_name: str) -> List[AgentMessage]:
+    def receive_all (self, agent_name: str) -> List[AgentMessage]:
         """Receive all pending messages."""
         queue = self.queues[agent_name]
-        messages = list(queue)
+        messages = list (queue)
         queue.clear()
         return messages
     
-    def peek(self, agent_name: str) -> Optional[AgentMessage]:
+    def peek (self, agent_name: str) -> Optional[AgentMessage]:
         """Peek at next message without removing."""
         queue = self.queues[agent_name]
         return queue[0] if queue else None
     
-    def has_messages(self, agent_name: str) -> bool:
+    def has_messages (self, agent_name: str) -> bool:
         """Check if agent has pending messages."""
-        return len(self.queues[agent_name]) > 0
+        return len (self.queues[agent_name]) > 0
     
-    def subscribe(self, agent_name: str, channel: str):
+    def subscribe (self, agent_name: str, channel: str):
         """Subscribe agent to broadcast channel."""
-        self.subscribers[channel].append(agent_name)
+        self.subscribers[channel].append (agent_name)
     
-    def _notify_subscribers(self, message: AgentMessage):
+    def _notify_subscribers (self, message: AgentMessage):
         """Notify all subscribers of broadcast."""
         channel = message.metadata.get("channel", "default")
         for subscriber in self.subscribers[channel]:
@@ -202,7 +202,7 @@ class MessageQueue:
                     metadata=message.metadata,
                     timestamp=message.timestamp
                 )
-                self.queues[subscriber].append(subscriber_msg)
+                self.queues[subscriber].append (subscriber_msg)
     
     def get_history(
         self,
@@ -223,7 +223,7 @@ queue = MessageQueue()
 
 # Agent A sends task to Agent B
 msg = create_task_message("AgentA", "AgentB", "Research quantum computing")
-queue.send(msg)
+queue.send (msg)
 
 # Agent B receives it
 received = queue.receive("AgentB")
@@ -236,7 +236,7 @@ result_msg = create_result_message(
     "Research complete: ...",
     reply_to=received.id
 )
-queue.send(result_msg)
+queue.send (result_msg)
 \`\`\`
 
 ### Async Message Handling
@@ -246,13 +246,13 @@ class AsyncMessageQueue:
     """Async message queue with awaitable receive."""
     
     def __init__(self):
-        self.queues: Dict[str, asyncio.Queue] = defaultdict(asyncio.Queue)
+        self.queues: Dict[str, asyncio.Queue] = defaultdict (asyncio.Queue)
         self.message_history: List[AgentMessage] = []
     
-    async def send(self, message: AgentMessage):
+    async def send (self, message: AgentMessage):
         """Send message asynchronously."""
-        await self.queues[message.to_agent].put(message)
-        self.message_history.append(message)
+        await self.queues[message.to_agent].put (message)
+        self.message_history.append (message)
     
     async def receive(
         self,
@@ -277,12 +277,12 @@ class AsyncMessageQueue:
         timeout: float = 30.0
     ) -> Optional[AgentMessage]:
         """Send message and wait for reply."""
-        await self.send(message)
+        await self.send (message)
         
         # Wait for reply with matching reply_to
         start_time = time.time()
         while (time.time() - start_time) < timeout:
-            reply = await self.receive(message.from_agent, timeout=1.0)
+            reply = await self.receive (message.from_agent, timeout=1.0)
             if reply and reply.reply_to == message.id:
                 return reply
         
@@ -296,7 +296,7 @@ async def agent_a():
     msg = create_task_message("AgentA", "AgentB", "Analyze data")
     
     print("AgentA: Sending request...")
-    reply = await queue.send_and_wait_for_reply(msg, timeout=10.0)
+    reply = await queue.send_and_wait_for_reply (msg, timeout=10.0)
     
     if reply:
         print(f"AgentA: Got reply: {reply.content}")
@@ -318,10 +318,10 @@ async def agent_b():
         "Analysis complete",
         reply_to=msg.id
     )
-    await queue.send(result)
+    await queue.send (result)
 
 # Run both agents
-await asyncio.gather(agent_a(), agent_b())
+await asyncio.gather (agent_a(), agent_b())
 \`\`\`
 
 ## Shared Memory Protocol
@@ -338,46 +338,46 @@ class SharedMemory:
     def __init__(self):
         self._data: Dict[str, Any] = {}
         self._lock = threading.Lock()
-        self._subscribers: Dict[str, List[Callable]] = defaultdict(list)
+        self._subscribers: Dict[str, List[Callable]] = defaultdict (list)
     
-    def write(self, key: str, value: Any):
+    def write (self, key: str, value: Any):
         """Write value to shared memory."""
         with self._lock:
             self._data[key] = value
-            self._notify_subscribers(key, value)
+            self._notify_subscribers (key, value)
     
-    def read(self, key: str, default: Any = None) -> Any:
+    def read (self, key: str, default: Any = None) -> Any:
         """Read value from shared memory."""
         with self._lock:
-            return self._data.get(key, default)
+            return self._data.get (key, default)
     
-    def update(self, key: str, update_fn: Callable):
+    def update (self, key: str, update_fn: Callable):
         """Update value atomically."""
         with self._lock:
-            current = self._data.get(key)
-            new_value = update_fn(current)
+            current = self._data.get (key)
+            new_value = update_fn (current)
             self._data[key] = new_value
-            self._notify_subscribers(key, new_value)
+            self._notify_subscribers (key, new_value)
     
-    def delete(self, key: str):
+    def delete (self, key: str):
         """Delete key from memory."""
         with self._lock:
             if key in self._data:
                 del self._data[key]
     
-    def keys(self) -> List[str]:
+    def keys (self) -> List[str]:
         """Get all keys."""
         with self._lock:
-            return list(self._data.keys())
+            return list (self._data.keys())
     
-    def subscribe(self, key: str, callback: Callable):
+    def subscribe (self, key: str, callback: Callable):
         """Subscribe to changes on key."""
-        self._subscribers[key].append(callback)
+        self._subscribers[key].append (callback)
     
-    def _notify_subscribers(self, key: str, value: Any):
+    def _notify_subscribers (self, key: str, value: Any):
         """Notify subscribers of change."""
         for callback in self._subscribers[key]:
-            callback(key, value)
+            callback (key, value)
 
 # Usage
 memory = SharedMemory()
@@ -393,7 +393,7 @@ results = memory.read("research_results")
 print("Agent B read:", results)
 
 # Agent C updates findings
-def add_fact(current):
+def add_fact (current):
     """Add fact to existing results."""
     if current:
         current["facts"].append("Fact 3")
@@ -403,7 +403,7 @@ def add_fact(current):
 memory.update("research_results", add_fact)
 
 # Subscribe to changes
-def on_research_updated(key, value):
+def on_research_updated (key, value):
     print(f"Research updated: {value}")
 
 memory.subscribe("research_results", on_research_updated)
@@ -429,40 +429,40 @@ class EventBus:
     """Event bus for agent communication."""
     
     def __init__(self):
-        self.handlers: Dict[str, List[Callable]] = defaultdict(list)
+        self.handlers: Dict[str, List[Callable]] = defaultdict (list)
         self.event_history: List[Event] = []
     
-    def emit(self, event: Event):
+    def emit (self, event: Event):
         """Emit event to all handlers."""
-        self.event_history.append(event)
+        self.event_history.append (event)
         
         # Call all handlers for this event type
         for handler in self.handlers[event.type]:
             try:
-                handler(event)
+                handler (event)
             except Exception as e:
                 print(f"Handler error for {event.type}: {e}")
     
-    def on(self, event_type: str, handler: Callable):
+    def on (self, event_type: str, handler: Callable):
         """Register handler for event type."""
-        self.handlers[event_type].append(handler)
+        self.handlers[event_type].append (handler)
     
-    def off(self, event_type: str, handler: Callable):
+    def off (self, event_type: str, handler: Callable):
         """Unregister handler."""
         if handler in self.handlers[event_type]:
-            self.handlers[event_type].remove(handler)
+            self.handlers[event_type].remove (handler)
     
-    async def emit_async(self, event: Event):
+    async def emit_async (self, event: Event):
         """Emit event and await handlers."""
-        self.event_history.append(event)
+        self.event_history.append (event)
         
         tasks = []
         for handler in self.handlers[event.type]:
-            if asyncio.iscoroutinefunction(handler):
-                tasks.append(handler(event))
+            if asyncio.iscoroutinefunction (handler):
+                tasks.append (handler (event))
             else:
                 # Wrap sync handlers
-                tasks.append(asyncio.to_thread(handler, event))
+                tasks.append (asyncio.to_thread (handler, event))
         
         await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -475,7 +475,7 @@ class ResearchAgent:
     def __init__(self, event_bus: EventBus):
         self.event_bus = event_bus
     
-    async def research(self, topic: str):
+    async def research (self, topic: str):
         """Research topic and emit completion event."""
         # Do research
         findings = f"Research on {topic}: ..."
@@ -487,7 +487,7 @@ class ResearchAgent:
             data={"topic": topic, "findings": findings},
             timestamp=time.time()
         )
-        await self.event_bus.emit_async(event)
+        await self.event_bus.emit_async (event)
 
 class WriterAgent:
     """Agent that listens for research events."""
@@ -497,7 +497,7 @@ class WriterAgent:
         # Register handler
         self.event_bus.on("research_complete", self.handle_research)
     
-    async def handle_research(self, event: Event):
+    async def handle_research (self, event: Event):
         """Handle research completion."""
         findings = event.data["findings"]
         print(f"Writer: Received research, writing article...")
@@ -505,8 +505,8 @@ class WriterAgent:
 
 # Usage
 event_bus = EventBus()
-researcher = ResearchAgent(event_bus)
-writer = WriterAgent(event_bus)
+researcher = ResearchAgent (event_bus)
+writer = WriterAgent (event_bus)
 
 await researcher.research("quantum computing")
 # Writer automatically reacts to event
@@ -527,7 +527,7 @@ class RequestResponseBroker:
         self.pending_requests: Dict[str, asyncio.Future] = {}
         self.handlers: Dict[str, Callable] = {}
     
-    def register_handler(self, request_type: str, handler: Callable):
+    def register_handler (self, request_type: str, handler: Callable):
         """Register handler for request type."""
         self.handlers[request_type] = handler
     
@@ -538,7 +538,7 @@ class RequestResponseBroker:
         timeout: float = 30.0
     ) -> Any:
         """Send request and wait for response."""
-        request_id = str(uuid.uuid4())
+        request_id = str (uuid.uuid4())
         
         # Create future for response
         future = asyncio.Future()
@@ -550,17 +550,17 @@ class RequestResponseBroker:
             
             # Execute handler in background
             asyncio.create_task(
-                self._execute_handler(request_id, handler, data)
+                self._execute_handler (request_id, handler, data)
             )
         else:
-            future.set_exception(ValueError(f"No handler for {request_type}"))
+            future.set_exception(ValueError (f"No handler for {request_type}"))
         
         # Wait for response
         try:
-            return await asyncio.wait_for(future, timeout=timeout)
+            return await asyncio.wait_for (future, timeout=timeout)
         except asyncio.TimeoutError:
             del self.pending_requests[request_id]
-            raise TimeoutError(f"Request {request_type} timed out")
+            raise TimeoutError (f"Request {request_type} timed out")
     
     async def _execute_handler(
         self,
@@ -570,17 +570,17 @@ class RequestResponseBroker:
     ):
         """Execute handler and store response."""
         try:
-            if asyncio.iscoroutinefunction(handler):
-                result = await handler(data)
+            if asyncio.iscoroutinefunction (handler):
+                result = await handler (data)
             else:
-                result = handler(data)
+                result = handler (data)
             
             # Resolve future with result
             if request_id in self.pending_requests:
-                self.pending_requests[request_id].set_result(result)
+                self.pending_requests[request_id].set_result (result)
         except Exception as e:
             if request_id in self.pending_requests:
-                self.pending_requests[request_id].set_exception(e)
+                self.pending_requests[request_id].set_exception (e)
         finally:
             if request_id in self.pending_requests:
                 del self.pending_requests[request_id]
@@ -589,7 +589,7 @@ class RequestResponseBroker:
 broker = RequestResponseBroker()
 
 # Register request handler
-async def handle_analyze_request(data):
+async def handle_analyze_request (data):
     """Handle analysis request."""
     text = data["text"]
     # Analyze text
@@ -616,35 +616,35 @@ class PubSubBroker:
     """Publish-Subscribe message broker."""
     
     def __init__(self):
-        self.subscribers: Dict[str, List[Callable]] = defaultdict(list)
-        self.message_history: Dict[str, List[Any]] = defaultdict(list)
+        self.subscribers: Dict[str, List[Callable]] = defaultdict (list)
+        self.message_history: Dict[str, List[Any]] = defaultdict (list)
     
-    def subscribe(self, channel: str, handler: Callable):
+    def subscribe (self, channel: str, handler: Callable):
         """Subscribe to channel."""
-        self.subscribers[channel].append(handler)
+        self.subscribers[channel].append (handler)
     
-    def unsubscribe(self, channel: str, handler: Callable):
+    def unsubscribe (self, channel: str, handler: Callable):
         """Unsubscribe from channel."""
         if handler in self.subscribers[channel]:
-            self.subscribers[channel].remove(handler)
+            self.subscribers[channel].remove (handler)
     
-    async def publish(self, channel: str, message: Any):
+    async def publish (self, channel: str, message: Any):
         """Publish message to channel."""
         # Store in history
-        self.message_history[channel].append(message)
+        self.message_history[channel].append (message)
         
         # Notify all subscribers
         tasks = []
         for handler in self.subscribers[channel]:
-            if asyncio.iscoroutinefunction(handler):
-                tasks.append(handler(message))
+            if asyncio.iscoroutinefunction (handler):
+                tasks.append (handler (message))
             else:
-                tasks.append(asyncio.to_thread(handler, message))
+                tasks.append (asyncio.to_thread (handler, message))
         
         # Wait for all handlers
         await asyncio.gather(*tasks, return_exceptions=True)
     
-    def get_history(self, channel: str, limit: int = 10) -> List[Any]:
+    def get_history (self, channel: str, limit: int = 10) -> List[Any]:
         """Get message history for channel."""
         return self.message_history[channel][-limit:]
 
@@ -658,10 +658,10 @@ class MonitorAgent:
         broker.subscribe("task_updates", self.on_update)
         broker.subscribe("errors", self.on_error)
     
-    async def on_update(self, message):
+    async def on_update (self, message):
         print(f"Monitor: Task update: {message}")
     
-    async def on_error(self, message):
+    async def on_error (self, message):
         print(f"Monitor: ERROR: {message}")
 
 class LoggerAgent:
@@ -670,13 +670,13 @@ class LoggerAgent:
     def __init__(self, broker: PubSubBroker):
         broker.subscribe("task_updates", self.on_update)
     
-    async def on_update(self, message):
+    async def on_update (self, message):
         # Write to log file
         print(f"Logger: {message}")
 
 # Setup
-monitor = MonitorAgent(broker)
-logger = LoggerAgent(broker)
+monitor = MonitorAgent (broker)
+logger = LoggerAgent (broker)
 
 # Any agent can publish
 await broker.publish("task_updates", {
@@ -689,7 +689,7 @@ await broker.publish("task_updates", {
 ## Protocol Selection Guide
 
 \`\`\`python
-def choose_protocol(scenario: str) -> str:
+def choose_protocol (scenario: str) -> str:
     """Choose appropriate communication protocol."""
     
     protocols = {
@@ -701,7 +701,7 @@ def choose_protocol(scenario: str) -> str:
         "broadcast_updates": "Publish-Subscribe"
     }
     
-    return protocols.get(scenario, "Message Passing (default)")
+    return protocols.get (scenario, "Message Passing (default)")
 
 # Examples
 print(choose_protocol("simple_sequential"))  # Message Passing
@@ -733,11 +733,11 @@ message = AgentMessage(
 ### 2. Handle Message Failures
 
 \`\`\`python
-async def send_with_retry(queue, message, max_retries=3):
+async def send_with_retry (queue, message, max_retries=3):
     """Send message with retry."""
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
-            await queue.send(message)
+            await queue.send (message)
             return True
         except Exception as e:
             if attempt == max_retries - 1:
@@ -755,7 +755,7 @@ class VersionedMessage:
     version: str  # "1.0", "2.0"
     # ... other fields
     
-    def upgrade(self) -> 'VersionedMessage':
+    def upgrade (self) -> 'VersionedMessage':
         """Upgrade to latest version."""
         if self.version == "1.0":
             # Upgrade logic

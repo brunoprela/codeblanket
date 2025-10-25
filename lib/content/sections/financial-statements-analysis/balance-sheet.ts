@@ -1,7 +1,8 @@
 export const balanceSheet = {
-  title: "Balance Sheet Analysis",
-  slug: "balance-sheet",
-  description: "Master financial statement analysis and build production systems",
+  title: 'Balance Sheet Analysis',
+  slug: 'balance-sheet',
+  description:
+    'Master financial statement analysis and build production systems',
   content: `
 # Balance Sheet Analysis
 
@@ -27,13 +28,13 @@ For engineers building financial systems, the balance sheet is crucial for:
 \`\`\`
 ASSETS = LIABILITIES + SHAREHOLDERS' EQUITY
 
-What company OWNS = What company OWES + What's left for OWNERS
+What company OWNS = What company OWES + What\'s left for OWNERS
 \`\`\`
 
 **This MUST always balance** - it's called a balance sheet for a reason!
 
 \`\`\`python
-def validate_balance_sheet(assets: float, liabilities: float, equity: float, tolerance: float = 1000) -> bool:
+def validate_balance_sheet (assets: float, liabilities: float, equity: float, tolerance: float = 1000) -> bool:
     """
     Validate that balance sheet balances.
     
@@ -46,19 +47,19 @@ def validate_balance_sheet(assets: float, liabilities: float, equity: float, tol
     Returns:
         True if balanced, raises error if not
     """
-    difference = abs(assets - (liabilities + equity))
+    difference = abs (assets - (liabilities + equity))
     
     if difference > tolerance:
         raise ValueError(
             f"Balance sheet doesn't balance!\\n"
-            f"Assets: ${assets:,.0f}\\n"
-            f"Liabilities + Equity: ${liabilities + equity:,.0f}\\n"
-            f"Difference: ${difference:,.0f}"
+            f"Assets: \${assets:,.0f}\\n"
+            f"Liabilities + Equity: \${liabilities + equity:,.0f}\\n"
+            f"Difference: \${difference:,.0f}"
         )
 
 return True
 
-# Example: Apple's balance sheet (FY2022, in millions)
+# Example: Apple\'s balance sheet (FY2022, in millions)
 apple_balance_sheet = {
     'total_assets': 352_755,
     'total_liabilities': 302_083,
@@ -89,7 +90,7 @@ class CurrentAssets:
     def __init__(self, balance_sheet: dict):
         self.bs = balance_sheet
     
-    def breakdown(self) -> dict:
+    def breakdown (self) -> dict:
         """Break down current assets."""
         
         return {
@@ -120,7 +121,7 @@ class CurrentAssets:
             }
         }
     
-    def calculate_quality_score(self) -> float:
+    def calculate_quality_score (self) -> float:
         """
         Calculate quality of current assets.
         Higher score = more liquid/higher quality.
@@ -162,8 +163,8 @@ retail_company = {
     'prepaid_expenses': 5_000_000          # 5%
 }
 
-tech_analyzer = CurrentAssets(tech_company)
-retail_analyzer = CurrentAssets(retail_company)
+tech_analyzer = CurrentAssets (tech_company)
+retail_analyzer = CurrentAssets (retail_company)
 
 print(f"Tech Company Current Asset Quality: {tech_analyzer.calculate_quality_score():.1f}/100")
 print(f"Retail Company Current Asset Quality: {retail_analyzer.calculate_quality_score():.1f}/100")
@@ -182,7 +183,7 @@ class LongTermAssets:
     """Analyze long-term assets."""
     
     @staticmethod
-    def analyze_ppe(balance_sheet: dict) -> dict:
+    def analyze_ppe (balance_sheet: dict) -> dict:
         """
         Analyze Property, Plant & Equipment (PP&E).
         
@@ -215,7 +216,7 @@ class LongTermAssets:
         return analysis
     
     @staticmethod
-    def analyze_intangibles(balance_sheet: dict) -> dict:
+    def analyze_intangibles (balance_sheet: dict) -> dict:
         """
         Analyze intangible assets (goodwill, patents, trademarks).
         """
@@ -260,11 +261,11 @@ manufacturing_company = {
     'total_assets': 800_000_000
 }
 
-ppe_analysis = LongTermAssets.analyze_ppe(manufacturing_company)
-intangible_analysis = LongTermAssets.analyze_intangibles(manufacturing_company)
+ppe_analysis = LongTermAssets.analyze_ppe (manufacturing_company)
+intangible_analysis = LongTermAssets.analyze_intangibles (manufacturing_company)
 
 print("PP&E Analysis:")
-print(f"  Net PP&E: ${ppe_analysis['ppe_net']:, .0f}")
+print(f"  Net PP&E: \${ppe_analysis['ppe_net']:,.0f}")
 print(f"  Asset Age: {ppe_analysis['asset_age_indicator']}")
 print(f"  Implication: {ppe_analysis['implication']}")
 print()
@@ -288,7 +289,7 @@ class CurrentLiabilities:
     def __init__(self, balance_sheet: dict):
         self.bs = balance_sheet
     
-    def breakdown(self) -> dict:
+    def breakdown (self) -> dict:
         """Break down current liabilities by urgency."""
         
         return {
@@ -324,7 +325,7 @@ class CurrentLiabilities:
             }
         }
     
-    def assess_liquidity_risk(self) -> dict:
+    def assess_liquidity_risk (self) -> dict:
         """
         Assess if company can pay current liabilities.
         """
@@ -359,9 +360,9 @@ class CurrentLiabilities:
             'cash_ratio': cash_ratio,
             'risk_level': risk,
             'interpretation': {
-                'current_ratio': f'${current_ratio: .2f} of current assets per $1 of current liabilities',
-'quick_ratio': f'${quick_ratio:.2f} of liquid assets per $1 of current liabilities',
-    'cash_ratio': f'${cash_ratio:.2f} of cash per $1 of current liabilities'
+                'current_ratio': f'\${current_ratio:.2f} of current assets per $1 of current liabilities',
+'quick_ratio': f'\${quick_ratio:.2f} of liquid assets per $1 of current liabilities',
+    'cash_ratio': f'\${cash_ratio:.2f} of cash per $1 of current liabilities'
             }
         }
 
@@ -390,8 +391,8 @@ distressed_company = {
     'deferred_revenue': 0
 }
 
-healthy_analyzer = CurrentLiabilities(healthy_company)
-distressed_analyzer = CurrentLiabilities(distressed_company)
+healthy_analyzer = CurrentLiabilities (healthy_company)
+distressed_analyzer = CurrentLiabilities (distressed_company)
 
 print("Healthy Company Liquidity:")
 healthy_liquidity = healthy_analyzer.assess_liquidity_risk()
@@ -418,7 +419,7 @@ class LongTermDebt:
         self.bs = balance_sheet
         self.inc = income_statement
     
-    def analyze_debt_burden(self) -> dict:
+    def analyze_debt_burden (self) -> dict:
         """Assess if company can handle its debt."""
         
         total_debt = (
@@ -470,7 +471,7 @@ class LongTermDebt:
             }
         }
     
-    def calculate_debt_service(self, cash_flow_statement: dict) -> dict:
+    def calculate_debt_service (self, cash_flow_statement: dict) -> dict:
         """
         Calculate if operating cash flow covers debt payments.
         """
@@ -527,8 +528,8 @@ aggressive_income = {
     'interest_expense': 45_000_000
 }
 
-conservative_analyzer = LongTermDebt(conservative_company, conservative_income)
-aggressive_analyzer = LongTermDebt(aggressive_company, aggressive_income)
+conservative_analyzer = LongTermDebt (conservative_company, conservative_income)
+aggressive_analyzer = LongTermDebt (aggressive_company, aggressive_income)
 
 print("Conservative Company Debt Analysis:")
 cons_debt = conservative_analyzer.analyze_debt_burden()
@@ -545,7 +546,7 @@ print(f"  Risk: {agg_debt['risk_assessment']}")
 
 ---
 
-## Shareholders' Equity: What's Left for Owners
+## Shareholders' Equity: What\'s Left for Owners
 
 \`\`\`
 SHAREHOLDERS' EQUITY = ASSETS - LIABILITIES
@@ -560,7 +561,7 @@ class ShareholdersEquity:
     """Analyze equity section."""
     
     @staticmethod
-    def breakdown_equity(balance_sheet: dict) -> dict:
+    def breakdown_equity (balance_sheet: dict) -> dict:
         """Break down components of equity."""
         
         return {
@@ -664,7 +665,7 @@ class ShareholdersEquity:
                 'equity_multiplier': equity_multiplier
             },
             'dupont_roe': roe_dupont,
-            'verification': abs(roe - roe_dupont) < 0.001,
+            'verification': abs (roe - roe_dupont) < 0.001,
             'interpretation': {
                 'net_margin': 'Profitability (how much profit per dollar of sales)',
                 'asset_turnover': 'Efficiency (how much sales per dollar of assets)',
@@ -745,7 +746,7 @@ class WorkingCapitalAnalyzer:
         self.bs = balance_sheet
         self.inc = income_statement
     
-    def calculate_working_capital_metrics(self) -> dict:
+    def calculate_working_capital_metrics (self) -> dict:
         """Calculate all working capital metrics."""
         
         # Working capital
@@ -777,11 +778,11 @@ class WorkingCapitalAnalyzer:
                 'dio': dio,
                 'dpo': dpo,
                 'ccc': ccc,
-                'interpretation': self._interpret_ccc(ccc)
+                'interpretation': self._interpret_ccc (ccc)
             }
         }
     
-    def _interpret_ccc(self, ccc: float) -> str:
+    def _interpret_ccc (self, ccc: float) -> str:
         """Interpret cash conversion cycle."""
         
         if ccc < 0:
@@ -793,7 +794,7 @@ class WorkingCapitalAnalyzer:
         else:
             return f"POOR: Long CCC ({ccc:.0f} days) - Cash tied up too long"
     
-    def benchmark_working_capital(self, industry_avg: dict) -> dict:
+    def benchmark_working_capital (self, industry_avg: dict) -> dict:
         """Compare to industry benchmarks."""
         
         company_metrics = self.calculate_working_capital_metrics()
@@ -821,7 +822,7 @@ class WorkingCapitalAnalyzer:
         
         return comparison
 
-# Example: Amazon's negative cash conversion cycle
+# Example: Amazon\'s negative cash conversion cycle
 amazon = {
     # Balance Sheet
     'current_assets': 161_580_000_000,
@@ -836,11 +837,11 @@ amazon_income = {
     'cogs': 288_831_000_000
 }
 
-amazon_analyzer = WorkingCapitalAnalyzer(amazon, amazon_income)
+amazon_analyzer = WorkingCapitalAnalyzer (amazon, amazon_income)
 amazon_wc = amazon_analyzer.calculate_working_capital_metrics()
 
 print("Amazon Working Capital Analysis:")
-print(f"  Working Capital: ${amazon_wc['working_capital']:, .0f}")
+print(f"  Working Capital: \${amazon_wc['working_capital']:,.0f}")
 print(f"  Working Capital Ratio: {amazon_wc['working_capital_ratio']:.2f}")
 print()
 print("Cash Conversion Cycle:")
@@ -850,8 +851,8 @@ print(f"  DPO: {amazon_wc['cash_conversion_cycle']['dpo']:.0f} days")
 print(f"  CCC: {amazon_wc['cash_conversion_cycle']['ccc']:.0f} days")
 print(f"  {amazon_wc['cash_conversion_cycle']['interpretation']}")
 
-# Amazon's CCC is negative - they collect from customers before
-# paying suppliers.This generates float(free working capital).
+# Amazon\'s CCC is negative - they collect from customers before
+# paying suppliers.This generates float (free working capital).
 \`\`\`
 
 ---
@@ -865,7 +866,7 @@ class OffBalanceSheetAnalyzer:
     """Identify and quantify off-balance-sheet obligations."""
     
     @staticmethod
-    def analyze_operating_leases(footnotes: dict) -> dict:
+    def analyze_operating_leases (footnotes: dict) -> dict:
         """
         Operating leases (pre-ASC 842) were off-balance-sheet.
         Now must be capitalized, but older data needs adjustment.
@@ -882,14 +883,14 @@ class OffBalanceSheetAnalyzer:
             total_pv += pv
         
         return {
-            'total_lease_commitments': sum(future_lease_payments.values()),
+            'total_lease_commitments': sum (future_lease_payments.values()),
             'present_value': total_pv,
-            'impact': f'Would add ${total_pv:, .0f} to both assets and liabilities',
+            'impact': f'Would add \${total_pv:,.0f} to both assets and liabilities',
 'debt_equivalent': total_pv  # Treat as debt
         }
 
 @staticmethod
-    def analyze_pension_obligations(footnotes: dict) -> dict:
+    def analyze_pension_obligations (footnotes: dict) -> dict:
 """
         Pension liabilities can be massive and partially off - balance - sheet.
         """
@@ -900,7 +901,7 @@ pension_obligations = footnotes['pension_benefit_obligations']
 funded_status = pension_assets - pension_obligations
 
 if funded_status < 0:
-    underfunding = abs(funded_status)
+    underfunding = abs (funded_status)
 concern = 'UNDERFUNDED - Company owes more than plan has'
         else:
 concern = 'OVERFUNDED - Plan has more than obligations'
@@ -914,18 +915,18 @@ return {
 }
 
 @staticmethod
-    def analyze_contingent_liabilities(footnotes: dict) -> dict:
+    def analyze_contingent_liabilities (footnotes: dict) -> dict:
 """
 Lawsuits, warranties, guarantees - potential but not certain.
         """
 
 contingencies = footnotes.get('contingent_liabilities', [])
 
-total_max_exposure = sum(c['max_exposure'] for c in contingencies)
-    total_probable = sum(c['probable_amount'] for c in contingencies if c['probable'])
+total_max_exposure = sum (c['max_exposure'] for c in contingencies)
+    total_probable = sum (c['probable_amount'] for c in contingencies if c['probable'])
 
         return {
-            'number_of_contingencies': len(contingencies),
+            'number_of_contingencies': len (contingencies),
             'total_maximum_exposure': total_max_exposure,
             'probable_losses': total_probable,
             'note': 'Only "probable" losses are accrued on balance sheet',
@@ -949,23 +950,23 @@ footnote_data = {
     ]
 }
 
-lease_analysis = OffBalanceSheetAnalyzer.analyze_operating_leases(footnote_data)
-pension_analysis = OffBalanceSheetAnalyzer.analyze_pension_obligations(footnote_data)
-contingent_analysis = OffBalanceSheetAnalyzer.analyze_contingent_liabilities(footnote_data)
+lease_analysis = OffBalanceSheetAnalyzer.analyze_operating_leases (footnote_data)
+pension_analysis = OffBalanceSheetAnalyzer.analyze_pension_obligations (footnote_data)
+contingent_analysis = OffBalanceSheetAnalyzer.analyze_contingent_liabilities (footnote_data)
 
 print("Off-Balance-Sheet Analysis:")
 print()
 print("Operating Leases:")
-print(f"  PV of Commitments: ${lease_analysis['present_value']:,.0f}")
+print(f"  PV of Commitments: \${lease_analysis['present_value']:,.0f}")
 print(f"  {lease_analysis['impact']}")
 print()
 print("Pension Obligations:")
-print(f"  Funded Status: ${pension_analysis['funded_status']:,.0f}")
+print(f"  Funded Status: \${pension_analysis['funded_status']:,.0f}")
 print(f"  {pension_analysis['concern']}")
 print()
 print("Contingent Liabilities:")
-print(f"  Max Exposure: ${contingent_analysis['total_maximum_exposure']:,.0f}")
-print(f"  Probable Losses: ${contingent_analysis['probable_losses']:,.0f}")
+print(f"  Max Exposure: \${contingent_analysis['total_maximum_exposure']:,.0f}")
+print(f"  Probable Losses: \${contingent_analysis['probable_losses']:,.0f}")
 print(f"  Risk Level: {contingent_analysis['risk']}")
 \`\`\`
 
@@ -982,7 +983,7 @@ class ComprehensiveBalanceSheetAnalyzer:
         self.inc = income_statement
         self.cf = cash_flow
     
-    def full_analysis(self) -> dict:
+    def full_analysis (self) -> dict:
         """Run complete balance sheet analysis."""
         
         return {
@@ -996,7 +997,7 @@ class ComprehensiveBalanceSheetAnalyzer:
             'overall_score': self._calculate_overall_score()
         }
     
-    def _analyze_asset_quality(self) -> dict:
+    def _analyze_asset_quality (self) -> dict:
         """Asset quality score."""
         
         total_assets = self.bs['total_assets']
@@ -1015,13 +1016,13 @@ class ComprehensiveBalanceSheetAnalyzer:
         )
         
         return {
-            'score': min(score * 100, 100),
+            'score': min (score * 100, 100),
             'cash_pct': cash / total_assets,
             'intangible_pct': intangibles / total_assets,
             'grade': 'A' if score > 0.8 else 'B' if score > 0.6 else 'C' if score > 0.4 else 'D'
         }
     
-    def _analyze_liability_structure(self) -> dict:
+    def _analyze_liability_structure (self) -> dict:
         """Analyze debt maturity and structure."""
         
         current_liabilities = self.bs['current_liabilities']
@@ -1040,7 +1041,7 @@ class ComprehensiveBalanceSheetAnalyzer:
             'assessment': 'GOOD' if current_ratio < 0.4 else 'MODERATE' if current_ratio < 0.6 else 'CONCERNING'
         }
     
-    def _calculate_overall_score(self) -> dict:
+    def _calculate_overall_score (self) -> dict:
         """Composite balance sheet health score."""
         
         # Get all component scores
@@ -1107,5 +1108,5 @@ class ComprehensiveBalanceSheetAnalyzer:
 - ❌ Large undisclosed off-balance-sheet obligations
 
 **Next Section**: Cash Flow Statement Mastery—tracking actual cash movements.
-`
+`,
 };

@@ -33,7 +33,7 @@ VQA involves answering natural language questions about images. This is one of t
 **Attribute Recognition:**
 - "What color is the car?"
 - "What is the person wearing?"
-- "What's the weather like in this image?"
+- "What\'s the weather like in this image?"
 
 **Spatial Reasoning:**
 - "What's to the left of the building?"
@@ -43,7 +43,7 @@ VQA involves answering natural language questions about images. This is one of t
 **Activity Recognition:**
 - "What is the person doing?"
 - "What sport is being played?"
-- "What's happening in this scene?"
+- "What\'s happening in this scene?"
 
 **Complex Reasoning:**
 - "Why might the person be smiling?"
@@ -99,10 +99,10 @@ import io
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def encode_image_file(image_path: str) -> str:
+def encode_image_file (image_path: str) -> str:
     """Encode image file to base64."""
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode('utf-8')
+    with open (image_path, "rb") as f:
+        return base64.b64encode (f.read()).decode('utf-8')
 
 def answer_image_question(
     image_path: str,
@@ -123,7 +123,7 @@ def answer_image_question(
         Answer to the question
     """
     # Encode image
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     # Create message with image and question
     response = client.chat.completions.create(
@@ -177,7 +177,7 @@ import io
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -210,12 +210,12 @@ class ProductionVQASystem:
         self.cache_ttl = cache_ttl
         self.model = model
     
-    def _get_cache_key(self, image_hash: str, question: str) -> str:
+    def _get_cache_key (self, image_hash: str, question: str) -> str:
         """Generate cache key for image + question pair."""
         question_hash = hashlib.sha256(question.encode()).hexdigest()
         return f"vqa:{image_hash}:{question_hash}"
     
-    def _get_image_hash(self, image_bytes: bytes) -> str:
+    def _get_image_hash (self, image_bytes: bytes) -> str:
         """Generate hash of image bytes."""
         return hashlib.sha256(image_bytes).hexdigest()
     
@@ -226,7 +226,7 @@ class ProductionVQASystem:
         quality: int = 85
     ) -> bytes:
         """Optimize image to reduce cost and latency."""
-        img = Image.open(io.BytesIO(image_bytes))
+        img = Image.open (io.BytesIO(image_bytes))
         
         # Convert to RGB if needed
         if img.mode in ('RGBA', 'LA', 'P'):
@@ -234,21 +234,21 @@ class ProductionVQASystem:
             if img.mode == 'P':
                 img = img.convert('RGBA')
             if img.mode in ('RGBA', 'LA'):
-                background.paste(img, mask=img.split()[-1])
+                background.paste (img, mask=img.split()[-1])
             img = background
         
         # Resize if too large
-        if max(img.size) > max_size:
+        if max (img.size) > max_size:
             img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
         
         # Convert to JPEG
         buffer = io.BytesIO()
-        img.save(buffer, format="JPEG", quality=quality, optimize=True)
+        img.save (buffer, format="JPEG", quality=quality, optimize=True)
         return buffer.getvalue()
     
-    def _encode_image(self, image_bytes: bytes) -> str:
+    def _encode_image (self, image_bytes: bytes) -> str:
         """Encode image bytes to base64."""
-        return base64.b64encode(image_bytes).decode('utf-8')
+        return base64.b64encode (image_bytes).decode('utf-8')
     
     def _build_prompt(
         self,
@@ -269,7 +269,7 @@ class ProductionVQASystem:
                 "\\n\\nAlso list any relevant objects you detect in the image."
             )
         
-        return " ".join(prompt_parts)
+        return " ".join (prompt_parts)
     
     def answer_question(
         self,
@@ -297,23 +297,23 @@ class ProductionVQASystem:
         start_time = datetime.now()
         
         # Get image hash for caching
-        image_hash = self._get_image_hash(image_bytes)
+        image_hash = self._get_image_hash (image_bytes)
         
         # Check cache
         if use_cache:
-            cache_key = self._get_cache_key(image_hash, question)
-            cached_response = self.redis_client.get(cache_key)
+            cache_key = self._get_cache_key (image_hash, question)
+            cached_response = self.redis_client.get (cache_key)
             if cached_response:
-                logger.info(f"Cache hit for question: {question[:50]}...")
-                response_dict = json.loads(cached_response)
+                logger.info (f"Cache hit for question: {question[:50]}...")
+                response_dict = json.loads (cached_response)
                 return VQAResponse(**response_dict, cached=True)
         
         # Optimize image
-        optimized_image = self._optimize_image(image_bytes)
-        base64_image = self._encode_image(optimized_image)
+        optimized_image = self._optimize_image (image_bytes)
+        base64_image = self._encode_image (optimized_image)
         
         # Build prompt
-        prompt = self._build_prompt(question, require_reasoning, detect_objects)
+        prompt = self._build_prompt (question, require_reasoning, detect_objects)
         
         try:
             # Call OpenAI API
@@ -365,7 +365,7 @@ class ProductionVQASystem:
                 self.redis_client.setex(
                     cache_key,
                     self.cache_ttl,
-                    json.dumps(cache_data)
+                    json.dumps (cache_data)
                 )
             
             logger.info(
@@ -375,7 +375,7 @@ class ProductionVQASystem:
             return vqa_response
         
         except Exception as e:
-            logger.error(f"VQA failed: {str(e)}")
+            logger.error (f"VQA failed: {str (e)}")
             raise
 
 # Example usage
@@ -433,7 +433,7 @@ def generate_caption(
         "dense": "Provide a comprehensive description of this image, describing all visible objects, their attributes, relationships, and the overall scene in detail."
     }
     
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -441,7 +441,7 @@ def generate_caption(
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": prompts.get(caption_style, prompts["detailed"])},
+                    {"type": "text", "text": prompts.get (caption_style, prompts["detailed"])},
                     {
                         "type": "image_url",
                         "image_url": {
@@ -465,22 +465,22 @@ from pydantic import BaseModel, Field
 
 class ImageObject(BaseModel):
     """Represents an object in the image."""
-    name: str = Field(description="Name of the object")
-    attributes: List[str] = Field(description="Attributes like color, size, etc.")
-    location: str = Field(description="Location in image (e.g., 'left side', 'center', 'background')")
-    confidence: str = Field(description="Confidence level: high, medium, or low")
+    name: str = Field (description="Name of the object")
+    attributes: List[str] = Field (description="Attributes like color, size, etc.")
+    location: str = Field (description="Location in image (e.g., 'left side', 'center', 'background')")
+    confidence: str = Field (description="Confidence level: high, medium, or low")
 
 class StructuredCaption(BaseModel):
     """Structured image caption with detailed information."""
-    brief_caption: str = Field(description="One sentence summary")
-    detailed_caption: str = Field(description="Detailed paragraph description")
-    scene_type: str = Field(description="Type of scene: indoor, outdoor, portrait, landscape, etc.")
-    dominant_colors: List[str] = Field(description="Main colors in the image")
-    objects: List[ImageObject] = Field(description="Main objects in the image")
-    mood: str = Field(description="Overall mood or atmosphere")
-    activities: List[str] = Field(description="Activities or actions visible")
+    brief_caption: str = Field (description="One sentence summary")
+    detailed_caption: str = Field (description="Detailed paragraph description")
+    scene_type: str = Field (description="Type of scene: indoor, outdoor, portrait, landscape, etc.")
+    dominant_colors: List[str] = Field (description="Main colors in the image")
+    objects: List[ImageObject] = Field (description="Main objects in the image")
+    mood: str = Field (description="Overall mood or atmosphere")
+    activities: List[str] = Field (description="Activities or actions visible")
 
-def generate_structured_caption(image_path: str) -> StructuredCaption:
+def generate_structured_caption (image_path: str) -> StructuredCaption:
     """Generate structured caption with detailed breakdown."""
     prompt = """Analyze this image and provide a structured description in the following JSON format:
 
@@ -503,7 +503,7 @@ def generate_structured_caption(image_path: str) -> StructuredCaption:
 
 Be thorough and specific in your analysis."""
 
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -527,7 +527,7 @@ Be thorough and specific in your analysis."""
     
     # Parse JSON response
     import json
-    caption_data = json.loads(response.choices[0].message.content)
+    caption_data = json.loads (response.choices[0].message.content)
     return StructuredCaption(**caption_data)
 
 # Example usage
@@ -535,10 +535,10 @@ caption = generate_structured_caption("photo.jpg")
 print(f"Brief: {caption.brief_caption}")
 print(f"\\nDetailed: {caption.detailed_caption}")
 print(f"\\nScene: {caption.scene_type}")
-print(f"Colors: {', '.join(caption.dominant_colors)}")
-print(f"\\nObjects detected: {len(caption.objects)}")
+print(f"Colors: {', '.join (caption.dominant_colors)}")
+print(f"\\nObjects detected: {len (caption.objects)}")
 for obj in caption.objects:
-    print(f"  - {obj.name} ({obj.location}): {', '.join(obj.attributes)}")
+    print(f"  - {obj.name} ({obj.location}): {', '.join (obj.attributes)}")
 \`\`\`
 
 ## Document Understanding
@@ -548,7 +548,7 @@ Visual question answering excels at understanding documents, charts, and diagram
 ### Chart Analysis
 
 \`\`\`python
-def analyze_chart(image_path: str) -> Dict[str, Any]:
+def analyze_chart (image_path: str) -> Dict[str, Any]:
     """
     Analyze a chart or graph image.
     
@@ -576,7 +576,7 @@ Provide the information in JSON format:
   "insights": ["insight1", "insight2"]
 }"""
 
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -600,7 +600,7 @@ Provide the information in JSON format:
     )
     
     import json
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Example
 chart_data = analyze_chart("revenue_chart.png")
@@ -638,7 +638,7 @@ Use spaces and line breaks to maintain the relative positions of text elements."
     else:
         prompt = "Extract all text from this image in reading order."
     
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -671,7 +671,7 @@ print(text)
 ### Table Extraction
 
 \`\`\`python
-def extract_table_from_image(image_path: str) -> List[Dict[str, Any]]:
+def extract_table_from_image (image_path: str) -> List[Dict[str, Any]]:
     """
     Extract table data from image.
     
@@ -687,7 +687,7 @@ Return the data as a JSON array where each element represents a row:
 
 Use the first row as column headers if present."""
 
-    base64_image = encode_image_file(image_path)
+    base64_image = encode_image_file (image_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -711,12 +711,12 @@ Use the first row as column headers if present."""
     )
     
     import json
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Example
 table_data = extract_table_from_image("table_screenshot.png")
-print(f"Extracted {len(table_data)} rows")
-for i, row in enumerate(table_data[:3]):  # Show first 3 rows
+print(f"Extracted {len (table_data)} rows")
+for i, row in enumerate (table_data[:3]):  # Show first 3 rows
     print(f"Row {i+1}: {row}")
 \`\`\`
 
@@ -747,8 +747,8 @@ def compare_images(
         "both": "Compare these two images, describing both their similarities and differences."
     }
     
-    base64_image1 = encode_image_file(image1_path)
-    base64_image2 = encode_image_file(image2_path)
+    base64_image1 = encode_image_file (image1_path)
+    base64_image2 = encode_image_file (image2_path)
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -809,7 +809,7 @@ def analyze_image_sequence(
     content = [{"type": "text", "text": prompts[analysis_type]}]
     
     for image_path in image_paths:
-        base64_image = encode_image_file(image_path)
+        base64_image = encode_image_file (image_path)
         content.append({
             "type": "image_url",
             "image_url": {
@@ -827,7 +827,7 @@ def analyze_image_sequence(
 
 # Analyze a sequence
 sequence = ["step1.jpg", "step2.jpg", "step3.jpg", "step4.jpg"]
-process_description = analyze_image_sequence(sequence, "process")
+process_description = analyze_image_sequence (sequence, "process")
 print(process_description)
 \`\`\`
 
@@ -854,15 +854,15 @@ async def batch_vqa(
     Returns:
         List of answers in same order as input
     """
-    semaphore = asyncio.Semaphore(max_concurrent)
+    semaphore = asyncio.Semaphore (max_concurrent)
     
-    async def process_one(image_path: str, question: str) -> str:
+    async def process_one (image_path: str, question: str) -> str:
         async with semaphore:
             # In production, use async OpenAI client
-            return answer_image_question(image_path, question)
+            return answer_image_question (image_path, question)
     
     tasks = [
-        process_one(img, q)
+        process_one (img, q)
         for img, q in image_question_pairs
     ]
     
@@ -875,7 +875,7 @@ pairs = [
     # ... 98 more
 ]
 
-answers = asyncio.run(batch_vqa(pairs))
+answers = asyncio.run (batch_vqa (pairs))
 \`\`\`
 
 ### Cost Optimization
@@ -933,7 +933,7 @@ print(f"Estimated cost for 1000 images: \${total_cost:.2f}")
 **Be Specific:**
 \`\`\`python
 # Bad
-"What's in this image?"
+"What\'s in this image?"
 
 # Good
 "List all visible products in this retail shelf image, including brand names and approximate quantities."
@@ -954,25 +954,25 @@ print(f"Estimated cost for 1000 images: \${total_cost:.2f}")
 ### 2. Error Handling
 
 \`\`\`python
-def safe_vqa(image_path: str, question: str, max_retries: int = 3) -> Optional[str]:
+def safe_vqa (image_path: str, question: str, max_retries: int = 3) -> Optional[str]:
     """VQA with comprehensive error handling."""
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
-            return answer_image_question(image_path, question)
+            return answer_image_question (image_path, question)
         except openai.BadRequestError as e:
-            if "image" in str(e).lower():
-                logger.error(f"Invalid image: {image_path}")
+            if "image" in str (e).lower():
+                logger.error (f"Invalid image: {image_path}")
                 return None
             raise
         except openai.RateLimitError:
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt
-                logger.warning(f"Rate limited, waiting {wait_time}s")
-                time.sleep(wait_time)
+                logger.warning (f"Rate limited, waiting {wait_time}s")
+                time.sleep (wait_time)
                 continue
             raise
         except Exception as e:
-            logger.error(f"VQA failed: {e}")
+            logger.error (f"VQA failed: {e}")
             if attempt < max_retries - 1:
                 time.sleep(1)
                 continue
@@ -996,7 +996,7 @@ def validate_vqa_response(
     Returns True if response seems valid.
     """
     # Check length
-    if len(answer) < min_length or len(answer) > max_length:
+    if len (answer) < min_length or len (answer) > max_length:
         return False
     
     # Check for common failure patterns
@@ -1016,7 +1016,7 @@ def validate_vqa_response(
     # For counting questions, check if answer contains a number
     if "how many" in question.lower():
         import re
-        if not re.search(r'\\d+', answer):
+        if not re.search (r'\\d+', answer):
             return False
     
     return True
@@ -1027,7 +1027,7 @@ def validate_vqa_response(
 ### 1. E-Commerce Product Analysis
 
 \`\`\`python
-def analyze_product_image(image_path: str) -> Dict[str, Any]:
+def analyze_product_image (image_path: str) -> Dict[str, Any]:
     """Comprehensive product analysis for e-commerce."""
     questions = {
         "category": "What category of product is this? (e.g., clothing, electronics, furniture)",
@@ -1040,7 +1040,7 @@ def analyze_product_image(image_path: str) -> Dict[str, Any]:
     
     results = {}
     for key, question in questions.items():
-        results[key] = answer_image_question(image_path, question)
+        results[key] = answer_image_question (image_path, question)
     
     return results
 \`\`\`
@@ -1048,7 +1048,7 @@ def analyze_product_image(image_path: str) -> Dict[str, Any]:
 ### 2. Content Moderation
 
 \`\`\`python
-def moderate_image_content(image_path: str) -> Dict[str, Any]:
+def moderate_image_content (image_path: str) -> Dict[str, Any]:
     """Check image for inappropriate content."""
     checks = {
         "inappropriate": "Does this image contain any inappropriate, offensive, or unsafe content? Answer with Yes or No, and explain if Yes.",
@@ -1059,7 +1059,7 @@ def moderate_image_content(image_path: str) -> Dict[str, Any]:
     
     results = {}
     for check_name, question in checks.items():
-        answer = answer_image_question(image_path, question)
+        answer = answer_image_question (image_path, question)
         results[check_name] = {
             "answer": answer,
             "flagged": answer.lower().startswith("yes")
@@ -1098,7 +1098,7 @@ Provide only the alt-text, nothing else."""
     else:
         prompt = "Generate concise, descriptive alt-text for this image suitable for screen readers."
     
-    return answer_image_question(image_path, prompt)
+    return answer_image_question (image_path, prompt)
 
 # Usage
 alt_text = generate_alt_text(

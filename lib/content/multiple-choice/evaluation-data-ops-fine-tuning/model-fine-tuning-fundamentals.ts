@@ -34,7 +34,7 @@ export const modelFineTuningFundamentalsMultipleChoice = [
   {
     id: 'fine-tune-fundamentals-mc-3',
     question:
-      "You fine-tune on 10,000 customer support conversations from 2022. It's now 2024, and production performance has degraded from 91% to 78%. What is the problem and solution?",
+      "You fine-tune on 10,000 customer support conversations from 2022. It\'s now 2024, and production performance has degraded from 91% to 78%. What is the problem and solution?",
     options: [
       'Model has forgotten its training—retrain with same 2022 data',
       'Distribution drift—collect 2024 data and fine-tune on recent examples',

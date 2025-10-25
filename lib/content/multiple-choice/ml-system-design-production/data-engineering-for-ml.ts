@@ -25,7 +25,7 @@ export const dataEngineeringForMlMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Point-in-time correctness: Training uses features available at prediction time, not future data. Example: Predict conversion at 10:00. Use features computed before 10:00. BAD: Join by user_id (gets latest features, including after 10:00 → data leakage). GOOD: Temporal join—match user_id AND timestamp <= 10:00. Feast handles automatically: get_historical_features(entity_df, features) performs temporal joins. Prevents overfitting to future. Critical for valid training. Real-time serving: Use latest features (no future concern). Timestamped storage: Required but not sufficient (need temporal joins).',
+      'Point-in-time correctness: Training uses features available at prediction time, not future data. Example: Predict conversion at 10:00. Use features computed before 10:00. BAD: Join by user_id (gets latest features, including after 10:00 → data leakage). GOOD: Temporal join—match user_id AND timestamp <= 10:00. Feast handles automatically: get_historical_features (entity_df, features) performs temporal joins. Prevents overfitting to future. Critical for valid training. Real-time serving: Use latest features (no future concern). Timestamped storage: Required but not sufficient (need temporal joins).',
   },
   {
     id: 'deml-mc-3',
@@ -61,6 +61,6 @@ export const dataEngineeringForMlMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Great Expectations: Data validation framework. Define expectations (tests) on data: expect_column_to_exist("age"), expect_column_values_to_be_between("age", 0, 120), expect_column_values_to_not_be_null("user_id"), expect_column_values_to_be_in_set("status", ["active", "inactive",]). Run on data ingestion: df_ge = ge.from_pandas(df); results = df_ge.validate(). If tests fail → block pipeline, alert team, use previous day\'s data. Benefits: (1) Catch data issues early (before training on bad data), (2) Automated checks (no manual inspection), (3) Documentation (expectations document data schema). Example: Fraud data usually 0.5% fraud rate. If 15% → expectation fails → investigate. Not for: Training speed, feature engineering (use Featuretools), deployment (use MLflow).',
+      'Great Expectations: Data validation framework. Define expectations (tests) on data: expect_column_to_exist("age"), expect_column_values_to_be_between("age", 0, 120), expect_column_values_to_not_be_null("user_id"), expect_column_values_to_be_in_set("status", ["active", "inactive",]). Run on data ingestion: df_ge = ge.from_pandas (df); results = df_ge.validate(). If tests fail → block pipeline, alert team, use previous day\'s data. Benefits: (1) Catch data issues early (before training on bad data), (2) Automated checks (no manual inspection), (3) Documentation (expectations document data schema). Example: Fraud data usually 0.5% fraud rate. If 15% → expectation fails → investigate. Not for: Training speed, feature engineering (use Featuretools), deployment (use MLflow).',
   },
 ];

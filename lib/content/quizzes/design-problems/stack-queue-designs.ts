@@ -8,10 +8,10 @@ export const stackqueuedesignsQuiz = [
     question:
       'Explain how the Min Stack maintains O(1) getMin() while supporting push and pop.',
     sampleAnswer:
-      'Min Stack maintains O(1) getMin by storing the minimum value at each level in a parallel min_stack. When we push(val), we compare val with current min and push the smaller one to min_stack. When we pop(), we pop from both stacks to keep them synchronized. The key insight: at any point, min_stack.top() tells us "what is the minimum among all elements currently in the stack?" When we pop an element, the min_stack also pops, revealing the min of the remaining elements. For example, after push(3), push(1), push(5): main=[3,1,5], min=[3,1,1]. getMin() returns min[-1]=1 in O(1). After pop(): main=[3,1], min=[3,1], getMin() still works correctly returning 1.',
+      'Min Stack maintains O(1) getMin by storing the minimum value at each level in a parallel min_stack. When we push (val), we compare val with current min and push the smaller one to min_stack. When we pop(), we pop from both stacks to keep them synchronized. The key insight: at any point, min_stack.top() tells us "what is the minimum among all elements currently in the stack?" When we pop an element, the min_stack also pops, revealing the min of the remaining elements. For example, after push(3), push(1), push(5): main=[3,1,5], min=[3,1,1]. getMin() returns min[-1]=1 in O(1). After pop(): main=[3,1], min=[3,1], getMin() still works correctly returning 1.',
     keyPoints: [
       'Parallel min_stack tracks min at each level',
-      'Push: store min(new_val, current_min)',
+      'Push: store min (new_val, current_min)',
       'Pop: remove from both stacks (stay synchronized)',
       'min_stack.top() = min of current elements',
       'Always O(1) - just array access',

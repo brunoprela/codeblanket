@@ -52,7 +52,7 @@ REST_FRAMEWORK = {
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [DjangoFilterBackend]
@@ -70,26 +70,26 @@ class ArticleList(generics.ListAPIView):
 import django_filters
 from .models import Article
 
-class ArticleFilter(django_filters.FilterSet):
+class ArticleFilter (django_filters.FilterSet):
     # Exact match
-    status = django_filters.CharFilter(field_name='status', lookup_expr='exact')
+    status = django_filters.CharFilter (field_name='status', lookup_expr='exact')
     
     # Case-insensitive contains
-    title = django_filters.CharFilter(field_name='title', lookup_expr='icontains')
+    title = django_filters.CharFilter (field_name='title', lookup_expr='icontains')
     
     # Greater than / less than
-    min_views = django_filters.NumberFilter(field_name='view_count', lookup_expr='gte')
-    max_views = django_filters.NumberFilter(field_name='view_count', lookup_expr='lte')
+    min_views = django_filters.NumberFilter (field_name='view_count', lookup_expr='gte')
+    max_views = django_filters.NumberFilter (field_name='view_count', lookup_expr='lte')
     
     # Date range
-    published_after = django_filters.DateFilter(field_name='published_at', lookup_expr='gte')
-    published_before = django_filters.DateFilter(field_name='published_at', lookup_expr='lte')
+    published_after = django_filters.DateFilter (field_name='published_at', lookup_expr='gte')
+    published_before = django_filters.DateFilter (field_name='published_at', lookup_expr='lte')
     
     # Boolean
-    featured = django_filters.BooleanFilter(field_name='featured')
+    featured = django_filters.BooleanFilter (field_name='featured')
     
     # Choice filter
-    status = django_filters.ChoiceFilter(choices=Article.STATUS_CHOICES)
+    status = django_filters.ChoiceFilter (choices=Article.STATUS_CHOICES)
     
     # Multiple choice (CSV)
     category = django_filters.ModelMultipleChoiceFilter(
@@ -99,13 +99,13 @@ class ArticleFilter(django_filters.FilterSet):
     )
     
     # Range filter
-    view_count_range = django_filters.RangeFilter(field_name='view_count')
+    view_count_range = django_filters.RangeFilter (field_name='view_count')
     
     class Meta:
         model = Article
         fields = ['status', 'title', 'featured']
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filterset_class = ArticleFilter
@@ -121,12 +121,12 @@ class ArticleList(generics.ListAPIView):
 ### Custom Filter Methods
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
-    author_name = django_filters.CharFilter(method='filter_by_author_name')
-    has_comments = django_filters.BooleanFilter(method='filter_has_comments')
-    published_year = django_filters.NumberFilter(method='filter_by_year')
+class ArticleFilter (django_filters.FilterSet):
+    author_name = django_filters.CharFilter (method='filter_by_author_name')
+    has_comments = django_filters.BooleanFilter (method='filter_has_comments')
+    published_year = django_filters.NumberFilter (method='filter_by_year')
     
-    def filter_by_author_name(self, queryset, name, value):
+    def filter_by_author_name (self, queryset, name, value):
         """Filter by author's name (case-insensitive)"""
         return queryset.filter(
             author__username__icontains=value
@@ -136,15 +136,15 @@ class ArticleFilter(django_filters.FilterSet):
             author__last_name__icontains=value
         )
     
-    def filter_has_comments(self, queryset, name, value):
+    def filter_has_comments (self, queryset, name, value):
         """Filter articles with/without comments"""
         if value:
-            return queryset.filter(comments__isnull=False).distinct()
-        return queryset.filter(comments__isnull=True)
+            return queryset.filter (comments__isnull=False).distinct()
+        return queryset.filter (comments__isnull=True)
     
-    def filter_by_year(self, queryset, name, value):
+    def filter_by_year (self, queryset, name, value):
         """Filter by publication year"""
-        return queryset.filter(published_at__year=value)
+        return queryset.filter (published_at__year=value)
     
     class Meta:
         model = Article
@@ -165,7 +165,7 @@ class ArticleFilter(django_filters.FilterSet):
 \`\`\`python
 from rest_framework import filters
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.SearchFilter]
@@ -179,7 +179,7 @@ class ArticleList(generics.ListAPIView):
 ### Search with Different Lookup Types
 
 \`\`\`python
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     search_fields = [
         'title',              # icontains (default)
         '=email',             # exact match
@@ -200,10 +200,10 @@ class ArticleList(generics.ListAPIView):
 \`\`\`python
 from rest_framework import filters
 
-class CustomSearchFilter(filters.SearchFilter):
+class CustomSearchFilter (filters.SearchFilter):
     """Custom search with additional logic"""
     
-    def filter_queryset(self, request, queryset, view):
+    def filter_queryset (self, request, queryset, view):
         search_term = request.query_params.get('search', '')
         
         if not search_term:
@@ -216,7 +216,7 @@ class CustomSearchFilter(filters.SearchFilter):
             Q(tags__name__icontains=search_term)
         ).distinct()
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     filter_backends = [CustomSearchFilter]
 \`\`\`
 
@@ -229,7 +229,7 @@ class ArticleList(generics.ListAPIView):
 \`\`\`python
 from rest_framework import filters
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [filters.OrderingFilter]
@@ -245,7 +245,7 @@ class ArticleList(generics.ListAPIView):
 ### Restrict Ordering Fields
 
 \`\`\`python
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     ordering_fields = ['published_at', 'view_count']  # Only these allowed
     ordering = ['-published_at']
 \`\`\`
@@ -258,7 +258,7 @@ class ArticleList(generics.ListAPIView):
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     filter_backends = [
@@ -311,7 +311,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'  # Allow client to set page size
     max_page_size = 100  # Maximum page size
     
-    def get_paginated_response(self, data):
+    def get_paginated_response (self, data):
         """Custom response format"""
         return Response({
             'links': {
@@ -324,7 +324,7 @@ class StandardResultsSetPagination(PageNumberPagination):
             'results': data
         })
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 # Usage:
@@ -368,7 +368,7 @@ class ArticleCursorPagination(CursorPagination):
     ordering = '-created_at'  # Must have consistent ordering
     cursor_query_param = 'cursor'
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     pagination_class = ArticleCursorPagination
 
 # Response:
@@ -391,7 +391,7 @@ class ArticleList(generics.ListAPIView):
 ### Disable Pagination for Specific View
 
 \`\`\`python
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     pagination_class = None  # No pagination
 \`\`\`
 
@@ -405,7 +405,7 @@ class ArticleList(generics.ListAPIView):
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     """
     Production-ready ViewSet with filtering, search, ordering, and pagination
     """
@@ -426,14 +426,14 @@ class ArticleViewSet(viewsets.ModelViewSet):
     # Pagination
     pagination_class = StandardResultsSetPagination
     
-    def get_queryset(self):
+    def get_queryset (self):
         """Optimize queries"""
         queryset = Article.objects.select_related('author', 'category')
         queryset = queryset.prefetch_related('tags')
         
         # Additional filtering based on user
         if not self.request.user.is_staff:
-            queryset = queryset.filter(status='published')
+            queryset = queryset.filter (status='published')
         
         return queryset
 
@@ -444,7 +444,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 ### Query Optimization
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
+class ArticleFilter (django_filters.FilterSet):
     """Optimized filter with select_related"""
     
     def __init__(self, *args, **kwargs):
@@ -461,26 +461,26 @@ class ArticleFilter(django_filters.FilterSet):
 from django.core.cache import cache
 import hashlib
 
-class ArticleList(generics.ListAPIView):
+class ArticleList (generics.ListAPIView):
     
-    def list(self, request, *args, **kwargs):
+    def list (self, request, *args, **kwargs):
         # Create cache key from query params
         cache_key = self.get_cache_key()
         
         # Try cache first
-        cached_response = cache.get(cache_key)
+        cached_response = cache.get (cache_key)
         if cached_response:
-            return Response(cached_response)
+            return Response (cached_response)
         
         # Get from database
-        response = super().list(request, *args, **kwargs)
+        response = super().list (request, *args, **kwargs)
         
         # Cache for 5 minutes
-        cache.set(cache_key, response.data, 300)
+        cache.set (cache_key, response.data, 300)
         
         return response
     
-    def get_cache_key(self):
+    def get_cache_key (self):
         """Generate cache key from query params"""
         query_string = self.request.META.get('QUERY_STRING', '')
         return f'article_list_{hashlib.md5(query_string.encode()).hexdigest()}'
@@ -493,7 +493,7 @@ class ArticleList(generics.ListAPIView):
 ### Related Object Filtering
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
+class ArticleFilter (django_filters.FilterSet):
     # Filter by related object fields
     category_name = django_filters.CharFilter(
         field_name='category__name',
@@ -505,12 +505,12 @@ class ArticleFilter(django_filters.FilterSet):
         lookup_expr='exact'
     )
     
-    tag_names = django_filters.CharFilter(method='filter_by_tags')
+    tag_names = django_filters.CharFilter (method='filter_by_tags')
     
-    def filter_by_tags(self, queryset, name, value):
+    def filter_by_tags (self, queryset, name, value):
         """Filter by multiple tags (comma-separated)"""
         tag_list = [tag.strip() for tag in value.split(',')]
-        return queryset.filter(tags__name__in=tag_list).distinct()
+        return queryset.filter (tags__name__in=tag_list).distinct()
 
 # Usage:
 # GET /api/articles/?category_name=technology
@@ -520,7 +520,7 @@ class ArticleFilter(django_filters.FilterSet):
 ### Date Range Filters
 
 \`\`\`python
-class ArticleFilter(django_filters.FilterSet):
+class ArticleFilter (django_filters.FilterSet):
     published_date_range = django_filters.DateFromToRangeFilter(
         field_name='published_at'
     )

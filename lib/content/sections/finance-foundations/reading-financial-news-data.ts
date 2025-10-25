@@ -1,7 +1,7 @@
 export const readingFinancialNewsData = {
-    title: 'Reading Financial News & Data',
-    id: 'reading-financial-news-data',
-    content: `
+  title: 'Reading Financial News & Data',
+  id: 'reading-financial-news-data',
+  content: `
 # Reading Financial News & Data
 
 ## Introduction
@@ -74,7 +74,7 @@ NI TECH <Go>                    # Technology news
 - Fed policy
 - Personal finance
 
-**Similar**: Reuters, MarketWatch (free), Barron's (investing)
+**Similar**: Reuters, MarketWatch (free), Barron\'s (investing)
 
 ### Specialized Sources
 
@@ -92,7 +92,7 @@ NI TECH <Go>                    # Technology news
 
 **Best free data source** for historical prices.
 
-**Python library**: `yfinance`
+**Python library**: \`yfinance\`
 
 \`\`\`python
 """
@@ -106,23 +106,23 @@ import matplotlib.pyplot as plt
 ticker = yf.Ticker("AAPL")
 
 # Get historical prices
-hist = ticker.history(period="1y")  # Last year
+hist = ticker.history (period="1y")  # Last year
 print(hist.head())
 
 # Get info
 info = ticker.info
 print(f"\\n{info['longName']}")
-print(f"Market Cap: ${info['marketCap']:,.0f}")
+print(f"Market Cap: \${info['marketCap']:,.0f}")
 print(f"P/E Ratio: {info.get('trailingPE', 'N/A')}")
 print(f"Dividend Yield: {info.get('dividendYield', 0)*100:.2f}%")
 
 # Plot closing prices
-hist['Close'].plot(title = f"{ticker.ticker} - Last Year", ylabel = "Price ($)")
+hist['Close'].plot (title = f"{ticker.ticker} - Last Year", ylabel = "Price ($)")
 plt.show()
 
 # Download multiple tickers
 tickers = ["AAPL", "MSFT", "GOOGL"]
-data = yf.download(tickers, start = "2023-01-01", end = "2024-01-01")
+data = yf.download (tickers, start = "2023-01-01", end = "2024-01-01")
 print(data['Close'].head())
 \`\`\`
 
@@ -147,7 +147,7 @@ import pandas as pd
 
 API_KEY = "your_api_key_here"  # Get free at alphavantage.co
 
-def get_stock_data(symbol: str):
+def get_stock_data (symbol: str):
     """Fetch daily stock data"""
     url = f"https://www.alphavantage.co/query"
     params = {
@@ -157,14 +157,14 @@ def get_stock_data(symbol: str):
         'outputsize': 'full'  # 'compact' = last 100 days, 'full' = 20 years
     }
     
-    response = requests.get(url, params=params)
+    response = requests.get (url, params=params)
     data = response.json()
     
     if 'Time Series (Daily)' in data:
-        df = pd.DataFrame.from_dict(data['Time Series (Daily)'], orient='index')
+        df = pd.DataFrame.from_dict (data['Time Series (Daily)'], orient='index')
         df.columns = ['open', 'high', 'low', 'close', 'volume']
-        df.index = pd.to_datetime(df.index)
-        df = df.astype(float)
+        df.index = pd.to_datetime (df.index)
+        df = df.astype (float)
         df = df.sort_index()
         return df
     else:
@@ -175,7 +175,7 @@ def get_stock_data(symbol: str):
 df = get_stock_data('AAPL')
 if df is not None:
     print(df.tail())
-    print(f"\\nLatest close: ${df['close'].iloc[-1]: .2f}")
+    print(f"\\nLatest close: \${df['close'].iloc[-1]:.2f}")
 \`\`\`
 
 **Other endpoints**:
@@ -189,7 +189,7 @@ if df is not None:
 
 **Best source for economic data** (GDP, unemployment, interest rates).
 
-**Python library**: `fredapi`
+**Python library**: \`fredapi\`
 
 \`\`\`python
 """
@@ -197,7 +197,7 @@ FRED Economic Data
 """
 from fredapi import Fred
 
-fred = Fred(api_key='your_fred_api_key')  # Get free at fred.stlouisfed.org
+fred = Fred (api_key='your_fred_api_key')  # Get free at fred.stlouisfed.org
 
 # Get unemployment rate
 unemployment = fred.get_series('UNRATE')  # Monthly unemployment %
@@ -205,9 +205,9 @@ print(f"Latest unemployment: {unemployment.iloc[-1]:.1f}%")
 
 # Get GDP
 gdp = fred.get_series('GDP')  # Quarterly GDP (billions)
-print(f"Latest GDP: ${gdp.iloc[-1]: .1f}B")
+print(f"Latest GDP: \${gdp.iloc[-1]:.1f}B")
 
-# Get Federal Funds Rate(interest rate)
+# Get Federal Funds Rate (interest rate)
 fed_funds = fred.get_series('DFF')  # Daily Fed Funds Rate
 print(f"Current Fed Funds Rate: {fed_funds.iloc[-1]:.2f}%")
 
@@ -220,23 +220,23 @@ import matplotlib.pyplot as plt
 
 fig, axes = plt.subplots(2, 2, figsize = (14, 10))
 
-unemployment.plot(ax = axes[0, 0], title = 'Unemployment Rate (%)')
-gdp.plot(ax = axes[0, 1], title = 'GDP (Billions $)')
-fed_funds.plot(ax = axes[1, 0], title = 'Fed Funds Rate (%)')
-treasury_10y.plot(ax = axes[1, 1], title = '10-Year Treasury Yield (%)')
+unemployment.plot (ax = axes[0, 0], title = 'Unemployment Rate (%)')
+gdp.plot (ax = axes[0, 1], title = 'GDP (Billions $)')
+fed_funds.plot (ax = axes[1, 0], title = 'Fed Funds Rate (%)')
+treasury_10y.plot (ax = axes[1, 1], title = '10-Year Treasury Yield (%)')
 
 plt.tight_layout()
 plt.show()
 \`\`\`
 
 **Key FRED series**:
-- `UNRATE`: Unemployment rate
-- `GDP`: Gross domestic product
-- `DFF`: Fed funds rate
-- `DGS10`: 10-year Treasury yield
-- `CPIAUCSL`: Consumer price index (inflation)
-- `FEDFUNDS`: Effective federal funds rate
-- `MORTGAGE30US`: 30-year mortgage rate
+- \`UNRATE\`: Unemployment rate
+- \`GDP\`: Gross domestic product
+- \`DFF\`: Fed funds rate
+- \`DGS10\`: 10-year Treasury yield
+- \`CPIAUCSL\`: Consumer price index (inflation)
+- \`FEDFUNDS\`: Effective federal funds rate
+- \`MORTGAGE30US\`: 30-year mortgage rate
 
 ### SEC EDGAR
 
@@ -244,7 +244,7 @@ plt.show()
 
 **Website**: sec.gov/edgar
 
-**Python access**: `sec - edgar - downloader`
+**Python access**: \`sec - edgar - downloader\`
 
 \`\`\`python
 """
@@ -255,7 +255,7 @@ from sec_edgar_downloader import Downloader
 # Initialize downloader
 dl = Downloader("MyCompany", "my.email@company.com")
 
-# Download Apple's 10-K filings
+# Download Apple\'s 10-K filings
 dl.get("10-K", "AAPL", limit=5)  # Last 5 years
 
 # Download 10-Q (quarterly reports)
@@ -341,31 +341,31 @@ class FinancialRatios:
     def __init__(self, ticker_data):
         self.data = ticker_data.info
     
-    def pe_ratio(self):
+    def pe_ratio (self):
         """Price-to-Earnings Ratio"""
         return self.data.get('trailingPE', None)
     
-    def pb_ratio(self):
+    def pb_ratio (self):
         """Price-to-Book Ratio"""
         return self.data.get('priceToBook', None)
     
-    def roe(self):
+    def roe (self):
         """Return on Equity"""
         return self.data.get('returnOnEquity', None) * 100 if self.data.get('returnOnEquity') else None
     
-    def debt_to_equity(self):
+    def debt_to_equity (self):
         """Debt-to-Equity Ratio"""
         return self.data.get('debtToEquity', None)
     
-    def current_ratio(self):
+    def current_ratio (self):
         """Current Ratio (Current Assets / Current Liabilities)"""
         return self.data.get('currentRatio', None)
     
-    def dividend_yield(self):
+    def dividend_yield (self):
         """Dividend Yield"""
         return self.data.get('dividendYield', 0) * 100
     
-    def print_summary(self):
+    def print_summary (self):
         """Print all ratios"""
         print(f"\\n=== Financial Ratios: {self.data.get('symbol', 'N/A')} ===")
         print(f"P/E Ratio: {self.pe_ratio():.2f}" if self.pe_ratio() else "P/E: N/A")
@@ -380,7 +380,7 @@ class FinancialRatios:
 import yfinance as yf
 
 aapl = yf.Ticker("AAPL")
-ratios = FinancialRatios(aapl)
+ratios = FinancialRatios (aapl)
 ratios.print_summary()
 \`\`\`
 
@@ -404,29 +404,29 @@ from alpaca_trade_api.stream import Stream
 API_KEY = "your_alpaca_key"
 SECRET_KEY = "your_alpaca_secret"
 
-async def on_trade(trade):
+async def on_trade (trade):
     """Handle trade updates"""
-    print(f"{trade.symbol}: ${trade.price: .2f} ({ trade.size } shares) ")
+    print(f"{trade.symbol}: \${trade.price:.2f} ({ trade.size } shares) ")
 
-async def on_quote(quote):
+async def on_quote (quote):
 """Handle quote updates"""
-print(f"{quote.symbol}: ${quote.bid_price:.2f} / ${quote.ask_price:.2f}")
+print(f"{quote.symbol}: \${quote.bid_price:.2f} / \${quote.ask_price:.2f}")
 
 async def stream_data():
 """Stream real-time data"""
 stream = Stream(API_KEY, SECRET_KEY, paper = True)
     
     # Subscribe to trades
-stream.subscribe_trades(on_trade, 'AAPL', 'MSFT', 'GOOGL')
+stream.subscribe_trades (on_trade, 'AAPL', 'MSFT', 'GOOGL')
     
     # Subscribe to quotes
-stream.subscribe_quotes(on_quote, 'AAPL', 'MSFT', 'GOOGL')
+stream.subscribe_quotes (on_quote, 'AAPL', 'MSFT', 'GOOGL')
     
     # Start streaming
 await stream._run_forever()
 
 # Run
-# asyncio.run(stream_data())
+# asyncio.run (stream_data())
 \`\`\`
 
 ---
@@ -442,4 +442,3 @@ await stream._run_forever()
 **Next section**: Your Finance Learning Environment - setting up hardware, software, and data sources for development.
 `,
 };
-

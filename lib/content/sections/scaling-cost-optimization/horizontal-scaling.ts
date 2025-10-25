@@ -59,7 +59,7 @@ class ChatServer:
         # Conversation history stored on this server
         self.conversations = {}
     
-    def chat(self, user_id: str, message: str):
+    def chat (self, user_id: str, message: str):
         # If this user hits a different server, history is lost!
         if user_id not in self.conversations:
             self.conversations[user_id] = []
@@ -88,24 +88,24 @@ from typing import List, Dict
 
 class StatelessChatServer:
     def __init__(self, redis_url: str):
-        self.redis = redis.from_url(redis_url)
+        self.redis = redis.from_url (redis_url)
     
-    def get_conversation_history(self, user_id: str) -> List[Dict]:
+    def get_conversation_history (self, user_id: str) -> List[Dict]:
         """Fetch conversation from Redis (shared across all servers)"""
-        history = self.redis.get(f"conversation:{user_id}")
-        return json.loads(history) if history else []
+        history = self.redis.get (f"conversation:{user_id}")
+        return json.loads (history) if history else []
     
-    def save_conversation_history(self, user_id: str, messages: List[Dict]):
+    def save_conversation_history (self, user_id: str, messages: List[Dict]):
         """Save conversation to Redis with expiration"""
         self.redis.setex(
             f"conversation:{user_id}",
             3600,  # 1 hour TTL
-            json.dumps(messages)
+            json.dumps (messages)
         )
     
-    async def chat(self, user_id: str, message: str):
+    async def chat (self, user_id: str, message: str):
         # Fetch history from shared storage
-        messages = self.get_conversation_history(user_id)
+        messages = self.get_conversation_history (user_id)
         messages.append({"role": "user", "content": message})
         
         # Make LLM call (stateless)
@@ -119,7 +119,7 @@ class StatelessChatServer:
             "role": "assistant",
             "content": response.choices[0].message.content
         })
-        self.save_conversation_history(user_id, messages)
+        self.save_conversation_history (user_id, messages)
         
         return response
 \`\`\`
@@ -150,9 +150,9 @@ class RoundRobinBalancer:
         self.servers = servers
         self.current = 0
     
-    def get_next_server(self) -> str:
+    def get_next_server (self) -> str:
         server = self.servers[self.current]
-        self.current = (self.current + 1) % len(self.servers)
+        self.current = (self.current + 1) % len (self.servers)
         return server
 
 # Usage
@@ -181,20 +181,20 @@ import asyncio
 class LeastConnectionsBalancer:
     def __init__(self, servers: List[str]):
         self.servers = servers
-        self.active_connections = defaultdict(int)
+        self.active_connections = defaultdict (int)
     
-    def get_next_server(self) -> str:
+    def get_next_server (self) -> str:
         # Choose server with least connections
-        return min(self.servers, key=lambda s: self.active_connections[s])
+        return min (self.servers, key=lambda s: self.active_connections[s])
     
-    async def make_request(self, endpoint: str, **kwargs):
+    async def make_request (self, endpoint: str, **kwargs):
         server = self.get_next_server()
         self.active_connections[server] += 1
         
         try:
             # Make actual request
             async with httpx.AsyncClient() as client:
-                response = await client.post(f"{server}{endpoint}", **kwargs)
+                response = await client.post (f"{server}{endpoint}", **kwargs)
             return response
         finally:
             self.active_connections[server] -= 1
@@ -216,9 +216,9 @@ class WeightedRoundRobinBalancer:
             self.weighted_servers.extend([server] * weight)
         self.current = 0
     
-    def get_next_server(self) -> str:
+    def get_next_server (self) -> str:
         server = self.weighted_servers[self.current]
-        self.current = (self.current + 1) % len(self.weighted_servers)
+        self.current = (self.current + 1) % len (self.weighted_servers)
         return server
 
 # Usage
@@ -245,22 +245,22 @@ class ConsistentHashBalancer:
         self.ring = {}
         self._build_ring()
     
-    def _build_ring(self):
+    def _build_ring (self):
         """Build hash ring with virtual nodes"""
         for server in self.servers:
-            for i in range(self.replicas):
+            for i in range (self.replicas):
                 key = f"{server}:{i}"
-                hash_value = int(hashlib.md5(key.encode()).hexdigest(), 16)
+                hash_value = int (hashlib.md5(key.encode()).hexdigest(), 16)
                 self.ring[hash_value] = server
         
-        self.sorted_keys = sorted(self.ring.keys())
+        self.sorted_keys = sorted (self.ring.keys())
     
-    def get_server_for_key(self, key: str) -> str:
+    def get_server_for_key (self, key: str) -> str:
         """Get consistent server for a given key (e.g., user_id)"""
         if not self.ring:
             return None
         
-        hash_value = int(hashlib.md5(key.encode()).hexdigest(), 16)
+        hash_value = int (hashlib.md5(key.encode()).hexdigest(), 16)
         
         # Find first server with hash >= key hash
         for ring_key in self.sorted_keys:
@@ -300,53 +300,53 @@ app = FastAPI()
 class HealthChecker:
     def __init__(self, servers: List[str], check_interval: int = 30):
         self.servers = servers
-        self.healthy_servers = set(servers)
+        self.healthy_servers = set (servers)
         self.check_interval = check_interval
         self.last_check = {}
     
-    async def check_health(self, server: str) -> bool:
+    async def check_health (self, server: str) -> bool:
         """Check if server is healthy"""
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{server}/health")
+            async with httpx.AsyncClient (timeout=5.0) as client:
+                response = await client.get (f"{server}/health")
                 return response.status_code == 200
         except Exception:
             return False
     
-    async def run_health_checks(self):
+    async def run_health_checks (self):
         """Continuously monitor server health"""
         while True:
             for server in self.servers:
-                is_healthy = await self.check_health(server)
+                is_healthy = await self.check_health (server)
                 
                 if is_healthy:
                     if server not in self.healthy_servers:
                         print(f"✅ Server {server} is now healthy")
-                    self.healthy_servers.add(server)
+                    self.healthy_servers.add (server)
                 else:
                     if server in self.healthy_servers:
                         print(f"❌ Server {server} is unhealthy")
-                    self.healthy_servers.discard(server)
+                    self.healthy_servers.discard (server)
                 
                 self.last_check[server] = time.time()
             
-            await asyncio.sleep(self.check_interval)
+            await asyncio.sleep (self.check_interval)
     
-    def get_healthy_servers(self) -> List[str]:
-        return list(self.healthy_servers)
+    def get_healthy_servers (self) -> List[str]:
+        return list (self.healthy_servers)
 
 # Production-ready load balancer
 class ProductionLoadBalancer:
     def __init__(self, servers: List[str]):
         self.servers = servers
-        self.health_checker = HealthChecker(servers)
-        self.balancer = LeastConnectionsBalancer(servers)
+        self.health_checker = HealthChecker (servers)
+        self.balancer = LeastConnectionsBalancer (servers)
     
-    async def start(self):
+    async def start (self):
         """Start health checking in background"""
-        asyncio.create_task(self.health_checker.run_health_checks())
+        asyncio.create_task (self.health_checker.run_health_checks())
     
-    async def forward_request(self, endpoint: str, **kwargs):
+    async def forward_request (self, endpoint: str, **kwargs):
         """Forward request to healthy server"""
         healthy_servers = self.health_checker.get_healthy_servers()
         
@@ -357,7 +357,7 @@ class ProductionLoadBalancer:
         self.balancer.servers = healthy_servers
         
         # Forward request
-        return await self.balancer.make_request(endpoint, **kwargs)
+        return await self.balancer.make_request (endpoint, **kwargs)
 
 # Initialize load balancer
 load_balancer = ProductionLoadBalancer([
@@ -371,7 +371,7 @@ async def startup():
     await load_balancer.start()
 
 @app.post("/api/chat")
-async def chat_proxy(request: Request):
+async def chat_proxy (request: Request):
     """Proxy chat requests to backend servers"""
     body = await request.json()
     response = await load_balancer.forward_request("/api/chat", json=body)
@@ -420,7 +420,7 @@ class AutoScaler:
         self.cooldown_period = cooldown_period
         self.last_scaling_action = None
     
-    def should_scale_up(self, metrics: ScalingMetrics) -> bool:
+    def should_scale_up (self, metrics: ScalingMetrics) -> bool:
         """Determine if we should add more instances"""
         return (
             metrics.cpu_percent > self.scale_up_threshold or
@@ -428,7 +428,7 @@ class AutoScaler:
             metrics.queue_depth > 100
         )
     
-    def should_scale_down(self, metrics: ScalingMetrics) -> bool:
+    def should_scale_down (self, metrics: ScalingMetrics) -> bool:
         """Determine if we can remove instances"""
         return (
             metrics.cpu_percent < self.scale_down_threshold and
@@ -436,7 +436,7 @@ class AutoScaler:
             metrics.queue_depth < 10
         )
     
-    def in_cooldown(self) -> bool:
+    def in_cooldown (self) -> bool:
         """Check if we're in cooldown period"""
         if not self.last_scaling_action:
             return False
@@ -453,13 +453,13 @@ class AutoScaler:
         if self.in_cooldown():
             return current_instances
         
-        if self.should_scale_up(metrics):
+        if self.should_scale_up (metrics):
             # Scale up by 50% or add at least 1
             desired = max(
                 current_instances + 1,
-                int(current_instances * 1.5)
+                int (current_instances * 1.5)
             )
-            desired = min(desired, self.max_instances)
+            desired = min (desired, self.max_instances)
             
             if desired > current_instances:
                 self.last_scaling_action = datetime.now()
@@ -467,13 +467,13 @@ class AutoScaler:
             
             return desired
         
-        elif self.should_scale_down(metrics):
+        elif self.should_scale_down (metrics):
             # Scale down by 25%
             desired = max(
                 current_instances - 1,
-                int(current_instances * 0.75)
+                int (current_instances * 0.75)
             )
-            desired = max(desired, self.min_instances)
+            desired = max (desired, self.min_instances)
             
             if desired < current_instances:
                 self.last_scaling_action = datetime.now()
@@ -492,7 +492,7 @@ class ECSAutoScaler:
         self.service_name = service_name
         self.autoscaler = AutoScaler()
     
-    def get_current_metrics(self) -> ScalingMetrics:
+    def get_current_metrics (self) -> ScalingMetrics:
         """Fetch current metrics from CloudWatch"""
         # Get CPU utilization
         cpu_response = self.cloudwatch.get_metric_statistics(
@@ -502,7 +502,7 @@ class ECSAutoScaler:
                 {'Name': 'ServiceName', 'Value': self.service_name},
                 {'Name': 'ClusterName', 'Value': self.cluster_name}
             ],
-            StartTime=datetime.now() - timedelta(minutes=5),
+            StartTime=datetime.now() - timedelta (minutes=5),
             EndTime=datetime.now(),
             Period=300,
             Statistics=['Average']
@@ -518,7 +518,7 @@ class ECSAutoScaler:
                 {'Name': 'ServiceName', 'Value': self.service_name},
                 {'Name': 'ClusterName', 'Value': self.cluster_name}
             ],
-            StartTime=datetime.now() - timedelta(minutes=5),
+            StartTime=datetime.now() - timedelta (minutes=5),
             EndTime=datetime.now(),
             Period=300,
             Statistics=['Average']
@@ -534,7 +534,7 @@ class ECSAutoScaler:
             queue_depth=0  # Would need custom metric
         )
     
-    def get_current_instance_count(self) -> int:
+    def get_current_instance_count (self) -> int:
         """Get current number of running tasks"""
         response = self.ecs.describe_services(
             cluster=self.cluster_name,
@@ -542,7 +542,7 @@ class ECSAutoScaler:
         )
         return response['services'][0]['desiredCount']
     
-    def scale_to(self, desired_count: int):
+    def scale_to (self, desired_count: int):
         """Scale ECS service to desired count"""
         self.ecs.update_service(
             cluster=self.cluster_name,
@@ -551,7 +551,7 @@ class ECSAutoScaler:
         )
         print(f"✅ Scaled to {desired_count} instances")
     
-    async def run_autoscaling_loop(self):
+    async def run_autoscaling_loop (self):
         """Continuously monitor and scale"""
         while True:
             try:
@@ -563,7 +563,7 @@ class ECSAutoScaler:
                 )
                 
                 if desired_count != current_count:
-                    self.scale_to(desired_count)
+                    self.scale_to (desired_count)
                 
             except Exception as e:
                 print(f"❌ Autoscaling error: {e}")
@@ -584,7 +584,7 @@ class PredictiveAutoScaler:
         self.model = LinearRegression()
         self.history = []
     
-    def record_traffic(self, timestamp: datetime, request_count: int):
+    def record_traffic (self, timestamp: datetime, request_count: int):
         """Record traffic for learning"""
         self.history.append({
             'timestamp': timestamp,
@@ -593,12 +593,12 @@ class PredictiveAutoScaler:
             'request_count': request_count
         })
     
-    def train_model(self):
+    def train_model (self):
         """Train model on historical data"""
-        if len(self.history) < 168:  # Need at least 1 week of data
+        if len (self.history) < 168:  # Need at least 1 week of data
             return False
         
-        df = pd.DataFrame(self.history)
+        df = pd.DataFrame (self.history)
         
         X = df[['hour', 'day_of_week']]
         y = df['request_count']
@@ -606,7 +606,7 @@ class PredictiveAutoScaler:
         self.model.fit(X, y)
         return True
     
-    def predict_traffic(self, future_timestamp: datetime) -> float:
+    def predict_traffic (self, future_timestamp: datetime) -> float:
         """Predict traffic at a future time"""
         X = np.array([[
             future_timestamp.hour,
@@ -615,17 +615,17 @@ class PredictiveAutoScaler:
         
         return self.model.predict(X)[0]
     
-    def get_proactive_scaling_plan(self) -> List[Dict]:
+    def get_proactive_scaling_plan (self) -> List[Dict]:
         """Generate scaling plan for next 4 hours"""
         plan = []
         current_time = datetime.now()
         
         for i in range(4):
-            future_time = current_time + timedelta(hours=i+1)
-            predicted_traffic = self.predict_traffic(future_time)
+            future_time = current_time + timedelta (hours=i+1)
+            predicted_traffic = self.predict_traffic (future_time)
             
             # Estimate required instances (1 instance per 100 req/min)
-            required_instances = max(2, int(predicted_traffic / 100) + 1)
+            required_instances = max(2, int (predicted_traffic / 100) + 1)
             
             plan.append({
                 'time': future_time,
@@ -659,9 +659,9 @@ class RollingDeployment:
         self.batch_size = batch_size
         self.health_check_retries = health_check_retries
     
-    async def check_server_health(self, server: str) -> bool:
+    async def check_server_health (self, server: str) -> bool:
         """Check if server is healthy"""
-        for attempt in range(self.health_check_retries):
+        for attempt in range (self.health_check_retries):
             try:
                 async with httpx.AsyncClient() as client:
                     response = await client.get(
@@ -677,12 +677,12 @@ class RollingDeployment:
         
         return False
     
-    async def deploy_to_server(self, server: str, new_version: str):
+    async def deploy_to_server (self, server: str, new_version: str):
         """Deploy new version to a single server"""
         print(f"🔄 Deploying version {new_version} to {server}")
         
         # 1. Remove server from load balancer
-        await self.remove_from_load_balancer(server)
+        await self.remove_from_load_balancer (server)
         print(f"  ⏸️  Removed from load balancer")
         
         # 2. Wait for existing connections to drain
@@ -690,42 +690,42 @@ class RollingDeployment:
         print(f"  ⏳ Drained connections")
         
         # 3. Deploy new code (example: Docker container)
-        await self.deploy_new_container(server, new_version)
+        await self.deploy_new_container (server, new_version)
         print(f"  📦 Deployed new container")
         
         # 4. Health check the new deployment
-        is_healthy = await self.check_server_health(server)
+        is_healthy = await self.check_server_health (server)
         if not is_healthy:
             print(f"  ❌ Health check failed! Rolling back...")
-            await self.rollback_server(server)
-            raise Exception(f"Deployment to {server} failed")
+            await self.rollback_server (server)
+            raise Exception (f"Deployment to {server} failed")
         
         print(f"  ✅ Health check passed")
         
         # 5. Add server back to load balancer
-        await self.add_to_load_balancer(server)
+        await self.add_to_load_balancer (server)
         print(f"  ▶️  Added back to load balancer")
         
         return True
     
-    async def rolling_deploy(self, new_version: str):
+    async def rolling_deploy (self, new_version: str):
         """Deploy to all servers in rolling fashion"""
         print(f"🚀 Starting rolling deployment of version {new_version}")
         print(f"   Batch size: {self.batch_size}")
-        print(f"   Total servers: {len(self.servers)}")
+        print(f"   Total servers: {len (self.servers)}")
         
         # Deploy in batches
-        for i in range(0, len(self.servers), self.batch_size):
+        for i in range(0, len (self.servers), self.batch_size):
             batch = self.servers[i:i + self.batch_size]
             print(f"\n📦 Deploying batch {i // self.batch_size + 1}")
             
             # Deploy to all servers in batch concurrently
-            tasks = [self.deploy_to_server(server, new_version) for server in batch]
+            tasks = [self.deploy_to_server (server, new_version) for server in batch]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             
             # Check if any deployments failed
-            for server, result in zip(batch, results):
-                if isinstance(result, Exception):
+            for server, result in zip (batch, results):
+                if isinstance (result, Exception):
                     print(f"❌ Deployment failed on {server}: {result}")
                     print("🛑 Stopping deployment")
                     return False
@@ -733,7 +733,7 @@ class RollingDeployment:
             print(f"✅ Batch deployed successfully")
             
             # Wait before next batch
-            if i + self.batch_size < len(self.servers):
+            if i + self.batch_size < len (self.servers):
                 print("⏳ Waiting before next batch...")
                 await asyncio.sleep(60)
         
@@ -766,19 +766,19 @@ class BlueGreenDeployment:
         self.green_servers = []
         self.active_environment = "blue"
     
-    async def deploy_to_green(self, new_version: str):
+    async def deploy_to_green (self, new_version: str):
         """Deploy new version to green environment (inactive)"""
         print(f"🟢 Deploying version {new_version} to GREEN environment")
         
         # Deploy to all green servers
         for server in self.green_servers:
-            await self.deploy_server(server, new_version)
+            await self.deploy_server (server, new_version)
             print(f"  ✅ Deployed to {server}")
         
         # Health check all green servers
         all_healthy = True
         for server in self.green_servers:
-            if not await self.check_health(server):
+            if not await self.check_health (server):
                 print(f"  ❌ Health check failed: {server}")
                 all_healthy = False
         
@@ -788,34 +788,34 @@ class BlueGreenDeployment:
         print("✅ GREEN environment is healthy and ready")
         return True
     
-    async def switch_to_green(self):
+    async def switch_to_green (self):
         """Switch traffic from blue to green"""
         print("🔄 Switching traffic: BLUE → GREEN")
         
         # Update load balancer to point to green
-        await self.update_load_balancer_target(self.green_servers)
+        await self.update_load_balancer_target (self.green_servers)
         
         self.active_environment = "green"
         print("✅ Traffic switched to GREEN")
     
-    async def rollback_to_blue(self):
+    async def rollback_to_blue (self):
         """Rollback to blue if green has issues"""
         print("⚠️  Rolling back: GREEN → BLUE")
         
-        await self.update_load_balancer_target(self.blue_servers)
+        await self.update_load_balancer_target (self.blue_servers)
         
         self.active_environment = "blue"
         print("✅ Rolled back to BLUE")
     
-    async def full_deployment(self, new_version: str):
+    async def full_deployment (self, new_version: str):
         """Complete blue-green deployment with rollback capability"""
         try:
             # 1. Deploy to inactive environment (green)
-            await self.deploy_to_green(new_version)
+            await self.deploy_to_green (new_version)
             
             # 2. Run smoke tests on green
             print("🧪 Running smoke tests on GREEN...")
-            smoke_test_passed = await self.run_smoke_tests(self.green_servers)
+            smoke_test_passed = await self.run_smoke_tests (self.green_servers)
             
             if not smoke_test_passed:
                 raise Exception("Smoke tests failed on green")
@@ -862,11 +862,11 @@ class SessionAffinityBalancer:
         self.servers = servers
         self.server_weights = {server: 1.0 for server in servers}
     
-    def get_server_for_session(self, session_id: str) -> str:
+    def get_server_for_session (self, session_id: str) -> str:
         """Route session to consistent server"""
         # Hash session ID to choose server
-        hash_value = int(hashlib.md5(session_id.encode()).hexdigest(), 16)
-        index = hash_value % len(self.servers)
+        hash_value = int (hashlib.md5(session_id.encode()).hexdigest(), 16)
+        index = hash_value % len (self.servers)
         return self.servers[index]
     
     async def handle_request_with_affinity(
@@ -876,7 +876,7 @@ class SessionAffinityBalancer:
         **kwargs
     ):
         """Route request based on session"""
-        server = self.get_server_for_session(session_id)
+        server = self.get_server_for_session (session_id)
         
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -905,7 +905,7 @@ async def chat(
 ):
     if not session_id:
         # Create new session
-        session_id = str(uuid.uuid4())
+        session_id = str (uuid.uuid4())
     
     # Route to appropriate server based on session
     response = await balancer.handle_request_with_affinity(
@@ -964,24 +964,24 @@ class HorizontallyScaledChatService:
         self.total_requests = 0
         self.response_times = []
     
-    async def connect(self):
+    async def connect (self):
         """Initialize Redis connection"""
-        self.redis = await redis.from_url(self.redis_url)
+        self.redis = await redis.from_url (self.redis_url)
     
-    async def get_conversation(self, conversation_id: str) -> List[Dict]:
+    async def get_conversation (self, conversation_id: str) -> List[Dict]:
         """Fetch conversation from shared Redis"""
-        data = await self.redis.get(f"conversation:{conversation_id}")
-        return json.loads(data) if data else []
+        data = await self.redis.get (f"conversation:{conversation_id}")
+        return json.loads (data) if data else []
     
-    async def save_conversation(self, conversation_id: str, messages: List[Dict]):
+    async def save_conversation (self, conversation_id: str, messages: List[Dict]):
         """Save conversation to shared Redis with 1 hour TTL"""
         await self.redis.setex(
             f"conversation:{conversation_id}",
             3600,
-            json.dumps(messages)
+            json.dumps (messages)
         )
     
-    async def chat(self, request: ChatRequest) -> ChatResponse:
+    async def chat (self, request: ChatRequest) -> ChatResponse:
         """Handle chat request (stateless, can run on any server)"""
         start_time = time.time()
         self.active_requests += 1
@@ -989,10 +989,10 @@ class HorizontallyScaledChatService:
         
         try:
             # Generate conversation ID if new
-            conversation_id = request.conversation_id or f"conv_{int(time.time())}_{request.user_id}"
+            conversation_id = request.conversation_id or f"conv_{int (time.time())}_{request.user_id}"
             
             # Fetch conversation history from shared storage
-            messages = await self.get_conversation(conversation_id)
+            messages = await self.get_conversation (conversation_id)
             messages.append({"role": "user", "content": request.message})
             
             # Call OpenAI API
@@ -1015,13 +1015,13 @@ class HorizontallyScaledChatService:
             messages.append({"role": "assistant", "content": assistant_message})
             
             # Save updated conversation
-            await self.save_conversation(conversation_id, messages)
+            await self.save_conversation (conversation_id, messages)
             
             response_time = time.time() - start_time
-            self.response_times.append(response_time)
+            self.response_times.append (response_time)
             
             # Keep only last 100 response times
-            if len(self.response_times) > 100:
+            if len (self.response_times) > 100:
                 self.response_times = self.response_times[-100:]
             
             return ChatResponse(
@@ -1034,13 +1034,13 @@ class HorizontallyScaledChatService:
         finally:
             self.active_requests -= 1
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get metrics for auto-scaling decisions"""
         return {
             "server_id": self.server_id,
             "active_requests": self.active_requests,
             "total_requests": self.total_requests,
-            "avg_response_time": sum(self.response_times) / len(self.response_times) if self.response_times else 0,
+            "avg_response_time": sum (self.response_times) / len (self.response_times) if self.response_times else 0,
             "timestamp": time.time()
         }
 
@@ -1060,9 +1060,9 @@ async def startup():
     await chat_service.connect()
 
 @app.post("/api/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+async def chat (request: ChatRequest):
     """Chat endpoint - stateless, works on any server"""
-    return await chat_service.chat(request)
+    return await chat_service.chat (request)
 
 @app.get("/health")
 async def health():

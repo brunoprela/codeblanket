@@ -5,7 +5,7 @@
 export const microservicesvsmonolithSection = {
   id: 'microservices-vs-monolith',
   title: 'Microservices vs Monolith',
-  content: `Choosing between microservices and monolithic architectures is one of the most consequential decisions in system design. Let's explore both approaches, their trade-offs, and when to use each.
+  content: `Choosing between microservices and monolithic architectures is one of the most consequential decisions in system design. Let\'s explore both approaches, their trade-offs, and when to use each.
 
 ## What is a Monolith?
 
@@ -174,7 +174,7 @@ Microservices E-commerce
 - Smaller change sets = lower risk
 
 ### 5. Team Autonomy
-**Conway's Law**: "Organizations design systems that mirror their communication structure."
+**Conway\'s Law**: "Organizations design systems that mirror their communication structure."
 
 **Microservices alignment**:
 - Team owns service end-to-end (full-stack ownership)
@@ -447,7 +447,7 @@ User Service → (calls) → Order Service → (calls) → Inventory Service
 
 ## Real-World Examples
 
-### Example 1: Amazon's Journey
+### Example 1: Amazon\'s Journey
 
 **1990s**: Monolithic application
 **Problem**: Teams blocked each other, slow deployment

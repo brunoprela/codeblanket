@@ -116,7 +116,7 @@ export const datapartitioningshardingSection = {
 
 **How it works**: Apply hash function to partition key, use result to determine shard.
 
-**Formula**: \`shard_id = hash(key) % num_shards\`
+**Formula**: \`shard_id = hash (key) % num_shards\`
 
 **Example: Shard by User ID**
 - User ID 123 → \`hash(123) % 4\` = 3 → Shard 3
@@ -131,7 +131,7 @@ export const datapartitioningshardingSection = {
 **Cons:**
 - **Range queries hard**: Finding users 1-1000 requires querying ALL shards
 - **Rebalancing**: Adding/removing shards requires rehashing all data
-  - Example: 4 shards → 5 shards changes all \`hash(key) % 4\` to \`hash(key) % 5\`
+  - Example: 4 shards → 5 shards changes all \`hash (key) % 4\` to \`hash (key) % 5\`
   - Requires massive data migration
 
 **When to use**: When uniform distribution more important than range queries.
@@ -254,7 +254,7 @@ User ID Range → Shard
 - Recent data all goes to one shard (hotspot)
 - Old shards idle
 
-**Better for logs**: \`hash(log_id)\` or combine \`created_at\` + \`hash(source_id)\`
+**Better for logs**: \`hash (log_id)\` or combine \`created_at\` + \`hash (source_id)\`
 
 ---
 
@@ -333,8 +333,8 @@ Query: "Get all posts by user 123 with >100 likes"
 
 ### **Problem with Simple Hash**
 
-Old: \`shard_id = hash(key) % 4\`  
-New: \`shard_id = hash(key) % 5\`
+Old: \`shard_id = hash (key) % 4\`  
+New: \`shard_id = hash (key) % 5\`
 
 **Result**: Almost ALL data needs to move (hash values change).
 
@@ -374,7 +374,7 @@ New: \`shard_id = hash(key) % 5\`
 
 **2. Replicate hot data**: Cache celebrity user's data in Redis (read-heavy workload)
 
-**3. Composite partition key**: Instead of just \`user_id\`, use \`hash(user_id + timestamp)\` to distribute
+**3. Composite partition key**: Instead of just \`user_id\`, use \`hash (user_id + timestamp)\` to distribute
 
 **4. Dedicated shard for hot entities**: Move celebrity users to separate, more powerful shard
 
@@ -400,7 +400,7 @@ New: \`shard_id = hash(key) % 5\`
 **Challenge**: Billions of tweets, high write throughput.
 
 **Solution**: Shard by \`user_id\`
-- User's tweets stored together on same shard (good for "get user timeline" query)
+- User\'s tweets stored together on same shard (good for "get user timeline" query)
 - Snowflake ID generation (distributed, k-sorted IDs)
 
 **Trade-off**: Cross-user queries (follower timelines) require fan-out to multiple shards.
@@ -434,7 +434,7 @@ New: \`shard_id = hash(key) % 5\`
 4. **Rebalancing**: As data grows, add shards incrementally
 5. **Trade-off**: Cross-user queries (e.g., 'find all users in city X') become harder, would need to query all shards or maintain separate index"
 
-**Q: "What's the difference between sharding and replication?"**
+**Q: "What\'s the difference between sharding and replication?"**
 
 ✅ Good answer:
 "**Sharding (horizontal partitioning)**: Splits data across machines. Each machine holds DIFFERENT data. Goal: Scale capacity and throughput.

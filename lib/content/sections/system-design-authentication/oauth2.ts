@@ -412,7 +412,7 @@ scope=read:data
 **Benefits**:
 - Netlify never knows your GitHub password
 - Netlify can only read repos (can't delete, can't access other resources)
-- You can revoke Netlify's access anytime in GitHub settings
+- You can revoke Netlify\'s access anytime in GitHub settings
 - If Netlify is compromised, attacker only gets limited repo access
 
 ### Example: Google Calendar on Mobile App

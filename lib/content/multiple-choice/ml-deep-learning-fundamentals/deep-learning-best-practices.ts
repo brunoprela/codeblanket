@@ -27,7 +27,7 @@ export const deepLearningBestPracticesMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "The LR Finder runs a short test with exponentially increasing learning rates, plotting loss vs LR. You then manually select the LR at the steepest descent point before training. It's a pre-training diagnostic, not an automatic or dynamic adjustment. This avoids hours of trial-and-error and provides a principled way to choose learning rate.",
+        "The LR Finder runs a short test with exponentially increasing learning rates, plotting loss vs LR. You then manually select the LR at the steepest descent point before training. It\'s a pre-training diagnostic, not an automatic or dynamic adjustment. This avoids hours of trial-and-error and provides a principled way to choose learning rate.",
     },
     {
       id: 'best-practices-mc3',

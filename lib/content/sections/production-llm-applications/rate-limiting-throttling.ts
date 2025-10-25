@@ -74,7 +74,7 @@ class TokenBucket:
         if self.lock is None:
             self.lock = Lock()
     
-    def consume(self, tokens: int = 1) -> bool:
+    def consume (self, tokens: int = 1) -> bool:
         """
         Try to consume tokens from bucket.
         
@@ -99,7 +99,7 @@ class TokenBucket:
             
             return False
     
-    def wait_time(self, tokens: int = 1) -> float:
+    def wait_time (self, tokens: int = 1) -> float:
         """
         Calculate how long to wait until tokens available.
         """
@@ -112,7 +112,7 @@ class TokenBucket:
 
 
 # Usage example
-limiter = TokenBucket(rate=10.0, capacity=100.0)  # 10 requests/sec, burst of 100
+limiter = TokenBucket (rate=10.0, capacity=100.0)  # 10 requests/sec, burst of 100
 
 # Fast requests work (burst)
 for i in range(100):
@@ -137,7 +137,7 @@ import time
 import json
 
 app = FastAPI()
-redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+redis_client = redis.Redis (host='localhost', port=6379, decode_responses=True)
 
 class DistributedTokenBucket:
     """
@@ -150,7 +150,7 @@ class DistributedTokenBucket:
         self.rate = rate
         self.capacity = capacity
     
-    def consume(self, key: str, tokens: int = 1) -> tuple[bool, dict]:
+    def consume (self, key: str, tokens: int = 1) -> tuple[bool, dict]:
         """
         Try to consume tokens for a given key.
         
@@ -169,12 +169,12 @@ class DistributedTokenBucket:
         
         -- Get current bucket state
         local bucket = redis.call('HMGET', key, 'tokens', 'last_update')
-        local tokens = tonumber(bucket[1]) or capacity
-        local last_update = tonumber(bucket[2]) or now
+        local tokens = tonumber (bucket[1]) or capacity
+        local last_update = tonumber (bucket[2]) or now
         
         -- Calculate token refill
         local elapsed = now - last_update
-        tokens = math.min(capacity, tokens + elapsed * rate)
+        tokens = math.min (capacity, tokens + elapsed * rate)
         
         -- Try to consume
         if tokens >= tokens_to_consume then
@@ -200,12 +200,12 @@ class DistributedTokenBucket:
             now
         )
         
-        success = bool(result[0])
-        remaining_tokens = float(result[1])
+        success = bool (result[0])
+        remaining_tokens = float (result[1])
         
         return success, {
-            'remaining': int(remaining_tokens),
-            'limit': int(self.capacity),
+            'remaining': int (remaining_tokens),
+            'limit': int (self.capacity),
             'reset_in': int((self.capacity - remaining_tokens) / self.rate) if not success else 0
         }
 
@@ -219,12 +219,12 @@ limiter = DistributedTokenBucket(
 
 
 @app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
+async def rate_limit_middleware (request: Request, call_next):
     """Apply rate limiting to all requests."""
     
     # Skip docs
     if request.url.path in ['/docs', '/openapi.json']:
-        return await call_next(request)
+        return await call_next (request)
     
     # Get API key
     api_key = request.headers.get('X-API-Key')
@@ -235,7 +235,7 @@ async def rate_limit_middleware(request: Request, call_next):
         )
     
     # Check rate limit
-    success, info = limiter.consume(f"ratelimit:{api_key}", tokens=1)
+    success, info = limiter.consume (f"ratelimit:{api_key}", tokens=1)
     
     if not success:
         return JSONResponse(
@@ -246,19 +246,19 @@ async def rate_limit_middleware(request: Request, call_next):
                 "retry_after": info['reset_in']
             },
             headers={
-                "X-RateLimit-Limit": str(info['limit']),
+                "X-RateLimit-Limit": str (info['limit']),
                 "X-RateLimit-Remaining": "0",
-                "X-RateLimit-Reset": str(int(time.time()) + info['reset_in']),
-                "Retry-After": str(info['reset_in'])
+                "X-RateLimit-Reset": str (int (time.time()) + info['reset_in']),
+                "Retry-After": str (info['reset_in'])
             }
         )
     
     # Process request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add rate limit headers
-    response.headers["X-RateLimit-Limit"] = str(info['limit'])
-    response.headers["X-RateLimit-Remaining"] = str(info['remaining'])
+    response.headers["X-RateLimit-Limit"] = str (info['limit'])
+    response.headers["X-RateLimit-Remaining"] = str (info['remaining'])
     
     return response
 \`\`\`
@@ -281,10 +281,10 @@ class SlidingWindowRateLimiter:
     
     def __init__(self, max_requests: int, window_seconds: int):
         self.max_requests = max_requests
-        self.window = timedelta(seconds=window_seconds)
+        self.window = timedelta (seconds=window_seconds)
         self.requests = {}  # key -> deque of timestamps
     
-    def is_allowed(self, key: str) -> tuple[bool, dict]:
+    def is_allowed (self, key: str) -> tuple[bool, dict]:
         """
         Check if request is allowed.
         
@@ -305,11 +305,11 @@ class SlidingWindowRateLimiter:
             request_queue.popleft()
         
         # Check if under limit
-        current_count = len(request_queue)
+        current_count = len (request_queue)
         
         if current_count < self.max_requests:
             # Allow request
-            request_queue.append(now)
+            request_queue.append (now)
             return True, {
                 'remaining': self.max_requests - current_count - 1,
                 'limit': self.max_requests,
@@ -330,7 +330,7 @@ class SlidingWindowRateLimiter:
 
 
 # Usage
-limiter = SlidingWindowRateLimiter(max_requests=100, window_seconds=3600)  # 100/hour
+limiter = SlidingWindowRateLimiter (max_requests=100, window_seconds=3600)  # 100/hour
 
 allowed, info = limiter.is_allowed("user:123")
 if allowed:
@@ -377,22 +377,22 @@ class TieredRateLimiter:
     def __init__(self, redis_client):
         self.redis = redis_client
     
-    def get_user_tier(self, api_key: str) -> UserTier:
+    def get_user_tier (self, api_key: str) -> UserTier:
         """Get user tier from database."""
-        user = get_user_by_api_key(api_key)
-        return UserTier(user.get('tier', 'free'))
+        user = get_user_by_api_key (api_key)
+        return UserTier (user.get('tier', 'free'))
     
-    def check_limit(self, api_key: str) -> tuple[bool, dict]:
+    def check_limit (self, api_key: str) -> tuple[bool, dict]:
         """
         Check all rate limits for user.
         """
-        tier = self.get_user_tier(api_key)
+        tier = self.get_user_tier (api_key)
         limits = self.TIER_LIMITS[tier]
         
         # Check per-minute limit
-        minute_key = f"rl:minute:{api_key}:{int(time.time() // 60)}"
-        minute_count = self.redis.incr(minute_key)
-        self.redis.expire(minute_key, 60)
+        minute_key = f"rl:minute:{api_key}:{int (time.time() // 60)}"
+        minute_count = self.redis.incr (minute_key)
+        self.redis.expire (minute_key, 60)
         
         if minute_count > limits['requests_per_minute']:
             return False, {
@@ -403,8 +403,8 @@ class TieredRateLimiter:
         
         # Check per-day limit
         day_key = f"rl:day:{api_key}:{datetime.utcnow().date()}"
-        day_count = self.redis.incr(day_key)
-        self.redis.expire(day_key, 86400)
+        day_count = self.redis.incr (day_key)
+        self.redis.expire (day_key, 86400)
         
         if day_count > limits['requests_per_day']:
             return False, {
@@ -420,7 +420,7 @@ class TieredRateLimiter:
             capacity=limits['burst_capacity']
         )
         
-        success, info = bucket.consume(f"burst:{api_key}")
+        success, info = bucket.consume (f"burst:{api_key}")
         
         if not success:
             return False, {
@@ -438,17 +438,17 @@ class TieredRateLimiter:
 
 
 # FastAPI integration
-limiter = TieredRateLimiter(redis_client)
+limiter = TieredRateLimiter (redis_client)
 
 @app.middleware("http")
-async def tiered_rate_limit(request: Request, call_next):
+async def tiered_rate_limit (request: Request, call_next):
     """Apply tiered rate limiting."""
     api_key = request.headers.get('X-API-Key')
     
     if not api_key:
-        return JSONResponse(status_code=401, content={"error": "API key required"})
+        return JSONResponse (status_code=401, content={"error": "API key required"})
     
-    allowed, info = limiter.check_limit(api_key)
+    allowed, info = limiter.check_limit (api_key)
     
     if not allowed:
         return JSONResponse(
@@ -459,12 +459,12 @@ async def tiered_rate_limit(request: Request, call_next):
             }
         )
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add tier info to response headers
     response.headers["X-RateLimit-Tier"] = info['tier']
-    response.headers["X-RateLimit-Remaining-Minute"] = str(info['minute_remaining'])
-    response.headers["X-RateLimit-Remaining-Day"] = str(info['day_remaining'])
+    response.headers["X-RateLimit-Remaining-Minute"] = str (info['minute_remaining'])
+    response.headers["X-RateLimit-Remaining-Day"] = str (info['day_remaining'])
     
     return response
 \`\`\`
@@ -485,12 +485,12 @@ class CostBasedRateLimiter:
         self.redis = redis_client
         self.max_cost_per_hour = max_cost_per_hour
     
-    def estimate_cost(self, prompt: str, model: str) -> float:
+    def estimate_cost (self, prompt: str, model: str) -> float:
         """
         Estimate cost of a request.
         """
         # Estimate tokens (rough: 1 token ≈ 4 characters)
-        input_tokens = len(prompt) // 4
+        input_tokens = len (prompt) // 4
         output_tokens = 500  # Estimate average output
         
         # Cost per 1K tokens
@@ -499,7 +499,7 @@ class CostBasedRateLimiter:
             'gpt-3.5-turbo': {'input': 0.001, 'output': 0.002}
         }
         
-        model_cost = costs.get(model, costs['gpt-3.5-turbo'])
+        model_cost = costs.get (model, costs['gpt-3.5-turbo'])
         
         cost = (
             (input_tokens / 1000) * model_cost['input'] +
@@ -508,14 +508,14 @@ class CostBasedRateLimiter:
         
         return cost
     
-    def check_limit(self, api_key: str, estimated_cost: float) -> tuple[bool, dict]:
+    def check_limit (self, api_key: str, estimated_cost: float) -> tuple[bool, dict]:
         """
         Check if request is within cost budget.
         """
-        hour_key = f"cost:hour:{api_key}:{int(time.time() // 3600)}"
+        hour_key = f"cost:hour:{api_key}:{int (time.time() // 3600)}"
         
         # Get current spend this hour
-        current_spend = float(self.redis.get(hour_key) or 0.0)
+        current_spend = float (self.redis.get (hour_key) or 0.0)
         
         # Check if this request would exceed budget
         if current_spend + estimated_cost > self.max_cost_per_hour:
@@ -528,8 +528,8 @@ class CostBasedRateLimiter:
         
         # Track estimated spend
         pipe = self.redis.pipeline()
-        pipe.incrbyfloat(hour_key, estimated_cost)
-        pipe.expire(hour_key, 3600)
+        pipe.incrbyfloat (hour_key, estimated_cost)
+        pipe.expire (hour_key, 3600)
         pipe.execute()
         
         return True, {
@@ -539,28 +539,28 @@ class CostBasedRateLimiter:
             'remaining': self.max_cost_per_hour - (current_spend + estimated_cost)
         }
     
-    def record_actual_cost(self, api_key: str, actual_cost: float):
+    def record_actual_cost (self, api_key: str, actual_cost: float):
         """
         Record actual cost after request completes.
         Adjusts the hourly tracking.
         """
-        hour_key = f"cost:hour:{api_key}:{int(time.time() // 3600)}"
-        self.redis.incrbyfloat(hour_key, actual_cost)
-        self.redis.expire(hour_key, 3600)
+        hour_key = f"cost:hour:{api_key}:{int (time.time() // 3600)}"
+        self.redis.incrbyfloat (hour_key, actual_cost)
+        self.redis.expire (hour_key, 3600)
 
 
 # Usage in endpoint
-cost_limiter = CostBasedRateLimiter(redis_client, max_cost_per_hour=10.0)
+cost_limiter = CostBasedRateLimiter (redis_client, max_cost_per_hour=10.0)
 
 @app.post("/generate")
-async def generate(prompt: str, model: str, api_key: str):
+async def generate (prompt: str, model: str, api_key: str):
     """Generate with cost-based rate limiting."""
     
     # Estimate cost
-    estimated_cost = cost_limiter.estimate_cost(prompt, model)
+    estimated_cost = cost_limiter.estimate_cost (prompt, model)
     
     # Check limit
-    allowed, info = cost_limiter.check_limit(api_key, estimated_cost)
+    allowed, info = cost_limiter.check_limit (api_key, estimated_cost)
     
     if not allowed:
         raise HTTPException(
@@ -579,10 +579,10 @@ response = openai.ChatCompletion.create(
 )
     
     # Calculate actual cost
-actual_cost = calculate_actual_cost(response.usage, model)
+actual_cost = calculate_actual_cost (response.usage, model)
     
     # Record actual cost
-cost_limiter.record_actual_cost(api_key, actual_cost)
+cost_limiter.record_actual_cost (api_key, actual_cost)
 
 return {
     "result": response.choices[0].message.content,
@@ -630,11 +630,11 @@ class GracefulRateLimiter:
         Handle request with graceful degradation.
         """
         # Try primary rate limit
-        success, info = self.primary_limiter.consume(f"primary:{api_key}")
+        success, info = self.primary_limiter.consume (f"primary:{api_key}")
         
         if success:
             # Within limits, proceed normally
-            return await self._call_llm(prompt, model)
+            return await self._call_llm (prompt, model)
         
         # Rate limited, apply fallback strategy
         if fallback_strategy == FallbackStrategy.QUEUE:
@@ -653,7 +653,7 @@ class GracefulRateLimiter:
         
         elif fallback_strategy == FallbackStrategy.CACHE:
             # Try to return cached response
-            cached = self.cache.get_semantic_match(prompt, threshold=0.85)
+            cached = self.cache.get_semantic_match (prompt, threshold=0.85)
             if cached:
                 return {
                     "result": cached,
@@ -678,16 +678,16 @@ class GracefulRateLimiter:
                     capacity=500.0
                 )
                 
-                success, _ = secondary_limiter.consume(f"secondary:{api_key}")
+                success, _ = secondary_limiter.consume (f"secondary:{api_key}")
                 
                 if success:
-                    result = await self._call_llm(prompt, cheaper_model)
+                    result = await self._call_llm (prompt, cheaper_model)
                     result['model_downgraded'] = True
                     result['message'] = "Used cheaper model due to rate limit"
                     return result
             
             # Fall through to reject
-            raise HTTPException(status_code=429, detail="Rate limit exceeded")
+            raise HTTPException (status_code=429, detail="Rate limit exceeded")
         
         else:  # REJECT
             raise HTTPException(
@@ -698,7 +698,7 @@ class GracefulRateLimiter:
                 }
             )
     
-    async def _call_llm(self, prompt: str, model: str):
+    async def _call_llm (self, prompt: str, model: str):
         """Make LLM API call."""
         response = await openai.ChatCompletion.acreate(
             model=model,
@@ -711,13 +711,13 @@ class GracefulRateLimiter:
 
 
 # Usage
-limiter = GracefulRateLimiter(redis_client, cache, queue)
+limiter = GracefulRateLimiter (redis_client, cache, queue)
 
 @app.post("/generate")
 async def generate(
     prompt: str,
     model: str = "gpt-4",
-    api_key: str = Depends(get_api_key)
+    api_key: str = Depends (get_api_key)
 ):
     """Generate with graceful degradation."""
     return await limiter.handle_request(
@@ -759,12 +759,12 @@ class MonitoredRateLimiter:
     
     def __init__(self, redis_client):
         self.redis = redis_client
-        self.limiter = TieredRateLimiter(redis_client)
+        self.limiter = TieredRateLimiter (redis_client)
     
-    def check_with_monitoring(self, api_key: str) -> tuple[bool, dict]:
+    def check_with_monitoring (self, api_key: str) -> tuple[bool, dict]:
         """Check rate limit and record metrics."""
-        tier = self.limiter.get_user_tier(api_key)
-        allowed, info = self.limiter.check_limit(api_key)
+        tier = self.limiter.get_user_tier (api_key)
+        allowed, info = self.limiter.check_limit (api_key)
         
         if not allowed:
             # Record rate limit hit
@@ -778,14 +778,14 @@ class MonitoredRateLimiter:
             rate_limit_remaining.labels(
                 api_key=api_key,
                 tier=tier.value
-            ).set(info['minute_remaining'])
+            ).set (info['minute_remaining'])
         
         return allowed, info
 
 
 # Dashboard queries:
 # rate_limit_hits_total - Total violations
-# rate(rate_limit_hits_total[5m]) - Violations per second
+# rate (rate_limit_hits_total[5m]) - Violations per second
 # rate_limit_remaining - Current capacity per user
 \`\`\`
 

@@ -9,7 +9,7 @@ export const randomvariablesSection = {
 
 ## Introduction
 
-A **random variable** is a function that maps outcomes from a sample space to real numbers. It's one of the most important concepts in probability and statistics, providing a bridge between abstract probability spaces and concrete numerical analysis.
+A **random variable** is a function that maps outcomes from a sample space to real numbers. It\'s one of the most important concepts in probability and statistics, providing a bridge between abstract probability spaces and concrete numerical analysis.
 
 **Why Random Variables Matter in ML**:
 - Model outputs are random variables
@@ -46,7 +46,7 @@ def die_roll_rv():
     # Random variable X: the outcome itself
     # Simulate 1000 rolls
     np.random.seed(42)
-    rolls = np.random.choice(sample_space, size=1000)
+    rolls = np.random.choice (sample_space, size=1000)
     
     print("=== Random Variable: Die Roll ===")
     print(f"Sample space Ω: {sample_space}")
@@ -54,11 +54,11 @@ def die_roll_rv():
     print(f"\\nFirst 10 rolls: {rolls[:10]}")
     
     # Probability distribution
-    unique, counts = np.unique(rolls, return_counts=True)
-    probabilities = counts / len(rolls)
+    unique, counts = np.unique (rolls, return_counts=True)
+    probabilities = counts / len (rolls)
     
     print(f"\\nEmpirical Probability Distribution:")
-    for outcome, prob in zip(unique, probabilities):
+    for outcome, prob in zip (unique, probabilities):
         print(f"P(X = {outcome}) = {prob:.3f}")
     
     return rolls
@@ -111,9 +111,9 @@ def discrete_vs_continuous():
     print("=== Discrete Random Variable ===")
     print("X = number of heads in 10 coin flips")
     n_experiments = 1000
-    discrete_rv = [np.sum(np.random.rand(10) < 0.5) for _ in range(n_experiments)]
+    discrete_rv = [np.sum (np.random.rand(10) < 0.5) for _ in range (n_experiments)]
     
-    print(f"Possible values: {sorted(set(discrete_rv))}")
+    print(f"Possible values: {sorted (set (discrete_rv))}")
     print(f"Sample: {discrete_rv[:10]}")
     
     # Continuous RV: height (simulated)
@@ -129,14 +129,14 @@ def discrete_vs_continuous():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # Discrete
-    ax1.hist(discrete_rv, bins=11, edgecolor='black', alpha=0.7)
+    ax1.hist (discrete_rv, bins=11, edgecolor='black', alpha=0.7)
     ax1.set_xlabel('Number of Heads')
     ax1.set_ylabel('Frequency')
     ax1.set_title('Discrete RV: Coin Flips')
     ax1.grid(True, alpha=0.3)
     
     # Continuous
-    ax2.hist(continuous_rv, bins=30, edgecolor='black', alpha=0.7)
+    ax2.hist (continuous_rv, bins=30, edgecolor='black', alpha=0.7)
     ax2.set_xlabel('Height (cm)')
     ax2.set_ylabel('Frequency')
     ax2.set_title('Continuous RV: Height')
@@ -170,7 +170,7 @@ def pmf_example():
     sum_dice = die1 + die2
     
     # Calculate PMF
-    values, counts = np.unique(sum_dice, return_counts=True)
+    values, counts = np.unique (sum_dice, return_counts=True)
     pmf = counts / n_rolls
     
     print("=== PMF: Sum of Two Dice ===")
@@ -183,16 +183,16 @@ def pmf_example():
         7: 6/36, 8: 5/36, 9: 4/36, 10: 3/36, 11: 2/36, 12: 1/36
     }
     
-    for val, prob in zip(values, pmf):
+    for val, prob in zip (values, pmf):
         theory = theoretical[val]
         print(f"{val}\\t{prob:.4f}\\t{theory:.4f}")
     
     print(f"\\nSum of probabilities: {pmf.sum():.4f} (should be 1.0)")
     
     # Plot PMF
-    plt.figure(figsize=(10, 6))
-    plt.bar(values, pmf, alpha=0.7, label='Empirical')
-    plt.plot(values, [theoretical[v] for v in values], 'ro-', label='Theoretical')
+    plt.figure (figsize=(10, 6))
+    plt.bar (values, pmf, alpha=0.7, label='Empirical')
+    plt.plot (values, [theoretical[v] for v in values], 'ro-', label='Theoretical')
     plt.xlabel('Sum of Two Dice')
     plt.ylabel('Probability')
     plt.title('PMF: Sum of Two Dice')
@@ -239,15 +239,15 @@ def pdf_example():
     
     # Standard normal distribution
     x = np.linspace(-4, 4, 1000)
-    pdf = stats.norm.pdf(x, loc=0, scale=1)
+    pdf = stats.norm.pdf (x, loc=0, scale=1)
     
     print("=== PDF: Standard Normal Distribution ===")
-    print("f(x) = (1/√(2π)) * exp(-x²/2)")
+    print("f (x) = (1/√(2π)) * exp(-x²/2)")
     print()
     
     # Important: P(X = exact value) = 0
     print("Key property: P(X = 0) = 0 (any exact value)")
-    print("Instead, we compute P(a ≤ X ≤ b) = ∫ f(x)dx")
+    print("Instead, we compute P(a ≤ X ≤ b) = ∫ f (x)dx")
     print()
     
     # Compute some probabilities
@@ -258,19 +258,19 @@ def pdf_example():
     print(f"P(-2 ≤ X ≤ 2) = {prob_interval2:.4f} (about 95%)")
     
     # Plot PDF
-    plt.figure(figsize=(10, 6))
-    plt.plot(x, pdf, 'b-', linewidth=2, label='PDF: f(x)')
+    plt.figure (figsize=(10, 6))
+    plt.plot (x, pdf, 'b-', linewidth=2, label='PDF: f (x)')
     
     # Shade area for P(-1 ≤ X ≤ 1)
     mask = (x >= -1) & (x <= 1)
-    plt.fill_between(x[mask], pdf[mask], alpha=0.3, label='P(-1 ≤ X ≤ 1) ≈ 0.68')
+    plt.fill_between (x[mask], pdf[mask], alpha=0.3, label='P(-1 ≤ X ≤ 1) ≈ 0.68')
     
     plt.xlabel('x')
     plt.ylabel('Probability Density')
     plt.title('PDF: Standard Normal Distribution')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.axhline(y=0, color='k', linewidth=0.5)
+    plt.axhline (y=0, color='k', linewidth=0.5)
     
     print("\\nNote: PDF value at x=0 is ~0.40, which is > 0 but NOT a probability!")
     print("Probability is the AREA under the curve, not the height")
@@ -279,10 +279,10 @@ pdf_example()
 
 # Output:
 # === PDF: Standard Normal Distribution ===
-# f(x) = (1/√(2π)) * exp(-x²/2)
+# f (x) = (1/√(2π)) * exp(-x²/2)
 #
 # Key property: P(X = 0) = 0 (any exact value)
-# Instead, we compute P(a ≤ X ≤ b) = ∫ f(x)dx
+# Instead, we compute P(a ≤ X ≤ b) = ∫ f (x)dx
 #
 # P(-1 ≤ X ≤ 1) = 0.6827 (about 68%)
 # P(-2 ≤ X ≤ 2) = 0.9545 (about 95%)
@@ -312,8 +312,8 @@ def cdf_example():
     
     # Standard normal
     x = np.linspace(-4, 4, 1000)
-    pdf = stats.norm.pdf(x)
-    cdf = stats.norm.cdf(x)
+    pdf = stats.norm.pdf (x)
+    cdf = stats.norm.cdf (x)
     
     print("=== CDF: Cumulative Distribution Function ===")
     print("F(x) = P(X ≤ x)")
@@ -335,19 +335,19 @@ def cdf_example():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # PDF
-    ax1.plot(x, pdf, 'b-', linewidth=2)
-    ax1.fill_between(x[x<=1], pdf[x<=1], alpha=0.3)
+    ax1.plot (x, pdf, 'b-', linewidth=2)
+    ax1.fill_between (x[x<=1], pdf[x<=1], alpha=0.3)
     ax1.set_xlabel('x')
-    ax1.set_ylabel('f(x)')
+    ax1.set_ylabel('f (x)')
     ax1.set_title('PDF: Probability Density Function')
     ax1.grid(True, alpha=0.3)
-    ax1.axvline(x=1, color='r', linestyle='--', label='x=1')
+    ax1.axvline (x=1, color='r', linestyle='--', label='x=1')
     ax1.legend()
     
     # CDF
-    ax2.plot(x, cdf, 'r-', linewidth=2)
-    ax2.axhline(y=stats.norm.cdf(1), color='b', linestyle='--', alpha=0.5)
-    ax2.axvline(x=1, color='b', linestyle='--', alpha=0.5, label=f'F(1) = {stats.norm.cdf(1):.3f}')
+    ax2.plot (x, cdf, 'r-', linewidth=2)
+    ax2.axhline (y=stats.norm.cdf(1), color='b', linestyle='--', alpha=0.5)
+    ax2.axvline (x=1, color='b', linestyle='--', alpha=0.5, label=f'F(1) = {stats.norm.cdf(1):.3f}')
     ax2.set_xlabel('x')
     ax2.set_ylabel('F(x)')
     ax2.set_title('CDF: Cumulative Distribution Function')
@@ -368,10 +368,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 
 # Generate data
-X, y = make_classification(n_samples=1000, n_features=10, random_state=42)
+X, y = make_classification (n_samples=1000, n_features=10, random_state=42)
 
 # Train model
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf = RandomForestClassifier (n_estimators=100, random_state=42)
 rf.fit(X[:800], y[:800])
 
 # Predictions are random variables!
@@ -383,16 +383,16 @@ print("Random Forest: Each tree is a random variable")
 print()
 
 # Get prediction from each tree
-tree_predictions = [tree.predict(test_sample)[0] for tree in rf.estimators_]
-unique, counts = np.unique(tree_predictions, return_counts=True)
+tree_predictions = [tree.predict (test_sample)[0] for tree in rf.estimators_]
+unique, counts = np.unique (tree_predictions, return_counts=True)
 
 print("Tree predictions (PMF):")
-for val, count in zip(unique, counts):
-    prob = count / len(tree_predictions)
+for val, count in zip (unique, counts):
+    prob = count / len (tree_predictions)
     print(f"P(prediction = {val}) = {prob:.3f}")
 
 # Final prediction
-proba = rf.predict_proba(test_sample)[0]
+proba = rf.predict_proba (test_sample)[0]
 print(f"\\nFinal probability: {proba}")
 print("Model aggregates random variables from individual trees!")
 
@@ -426,7 +426,7 @@ def loss_as_random_variable():
     n_batches = 100
     
     # Simulate losses with some variance
-    batch_losses = np.random.normal(true_loss, 0.1, size=n_batches)
+    batch_losses = np.random.normal (true_loss, 0.1, size=n_batches)
     
     print("=== Loss as Random Variable (SGD) ===")
     print(f"True loss: {true_loss}")
@@ -438,10 +438,10 @@ def loss_as_random_variable():
     print("This randomness is why we need multiple epochs!")
     
     # Plot distribution
-    plt.figure(figsize=(10, 6))
-    plt.hist(batch_losses, bins=30, density=True, alpha=0.7, edgecolor='black')
-    plt.axvline(true_loss, color='r', linestyle='--', linewidth=2, label='True Loss')
-    plt.axvline(batch_losses.mean(), color='g', linestyle='--', linewidth=2, label='Mean Batch Loss')
+    plt.figure (figsize=(10, 6))
+    plt.hist (batch_losses, bins=30, density=True, alpha=0.7, edgecolor='black')
+    plt.axvline (true_loss, color='r', linestyle='--', linewidth=2, label='True Loss')
+    plt.axvline (batch_losses.mean(), color='g', linestyle='--', linewidth=2, label='Mean Batch Loss')
     plt.xlabel('Loss Value')
     plt.ylabel('Density')
     plt.title('Distribution of Mini-Batch Loss (Random Variable)')
@@ -464,7 +464,7 @@ def feature_distributions():
     print("=== Features as Random Variables ===")
     print("Iris dataset features:\\n")
     
-    for i, name in enumerate(data.feature_names):
+    for i, name in enumerate (data.feature_names):
         feature = X[:, i]
         print(f"{name}:")
         print(f"  Type: Continuous random variable")

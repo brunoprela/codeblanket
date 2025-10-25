@@ -58,7 +58,7 @@ export const graphqlMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "GraphQL typically uses POST requests to a single `/graphql` endpoint with the query in the request body. HTTP caching (like CDN caching, browser caching) works primarily with GET requests to different URLs. This makes standard HTTP caching ineffective. Solutions include: persisted queries (converting to GET requests with query hashes), response caching at the GraphQL server level, or client-side caching (like Apollo Client's normalized cache).",
+      "GraphQL typically uses POST requests to a single `/graphql` endpoint with the query in the request body. HTTP caching (like CDN caching, browser caching) works primarily with GET requests to different URLs. This makes standard HTTP caching ineffective. Solutions include: persisted queries (converting to GET requests with query hashes), response caching at the GraphQL server level, or client-side caching (like Apollo Client\'s normalized cache).",
   },
   {
     id: 'graphql-use-case',

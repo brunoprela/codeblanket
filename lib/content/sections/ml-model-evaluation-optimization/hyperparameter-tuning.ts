@@ -63,8 +63,8 @@ configs = [
 results = []
 for config in configs:
     start = time.time()
-    model = RandomForestRegressor(random_state=42, **config)
-    scores = cross_val_score(model, X_train, y_train, cv=5, scoring='r2')
+    model = RandomForestRegressor (random_state=42, **config)
+    scores = cross_val_score (model, X_train, y_train, cv=5, scoring='r2')
     duration = time.time() - start
     
     results.append({
@@ -99,7 +99,7 @@ param_grid = {
 }
 
 # Calculate total combinations
-total_combinations = np.prod([len(v) for v in param_grid.values()])
+total_combinations = np.prod([len (v) for v in param_grid.values()])
 print(f"\\nSearching {total_combinations} combinations:")
 for param, values in param_grid.items():
     print(f"  {param}: {values}")
@@ -107,7 +107,7 @@ for param, values in param_grid.items():
 # Perform grid search
 start_time = time.time()
 grid_search = GridSearchCV(
-    RandomForestRegressor(random_state=42),
+    RandomForestRegressor (random_state=42),
     param_grid,
     cv=5,
     scoring='r2',
@@ -129,13 +129,13 @@ test_score = grid_search.score(X_test, y_test)
 print(f"  Test R²: {test_score:.4f}")
 
 # Analyze results
-results_df = pd.DataFrame(grid_search.cv_results_)
+results_df = pd.DataFrame (grid_search.cv_results_)
 print(f"\\nTop 5 configurations:")
 top_5 = results_df.nsmallest(5, 'rank_test_score')[
     ['params', 'mean_test_score', 'std_test_score', 'rank_test_score']
 ]
 for idx, row in top_5.iterrows():
-    print(f"  Rank {int(row['rank_test_score'])}: {row['mean_test_score']:.4f} - {row['params']}")
+    print(f"  Rank {int (row['rank_test_score'])}: {row['mean_test_score']:.4f} - {row['params']}")
 
 # Visualize importance of each hyperparameter
 print("\\n✅ Grid search complete")
@@ -172,7 +172,7 @@ param_distributions = {
 n_iter = 50  # Number of random samples
 print(f"\\nSampling {n_iter} random configurations from:")
 for param, dist in param_distributions.items():
-    if hasattr(dist, 'a') and hasattr(dist, 'b'):
+    if hasattr (dist, 'a') and hasattr (dist, 'b'):
         print(f"  {param}: Uniform({dist.a:.2f}, {dist.a + dist.b:.2f})")
     else:
         print(f"  {param}: Randint({dist.a}, {dist.b})")
@@ -180,7 +180,7 @@ for param, dist in param_distributions.items():
 # Perform random search
 start_time = time.time()
 random_search = RandomizedSearchCV(
-    RandomForestRegressor(random_state=42),
+    RandomForestRegressor (random_state=42),
     param_distributions,
     n_iter=n_iter,
     cv=5,
@@ -226,7 +226,7 @@ print("Analyzing Hyperparameter Importance")
 print("="*60)
 
 # Extract results
-results_df = pd.DataFrame(random_search.cv_results_)
+results_df = pd.DataFrame (random_search.cv_results_)
 
 # Analyze each hyperparameter
 for param in ['n_estimators', 'max_depth', 'min_samples_split']:
@@ -234,7 +234,7 @@ for param in ['n_estimators', 'max_depth', 'min_samples_split']:
     scores = results_df['mean_test_score']
     
     # Calculate correlation
-    correlation = np.corrcoef(values, scores)[0, 1]
+    correlation = np.corrcoef (values, scores)[0, 1]
     
     print(f"\\n{param}:")
     print(f"  Correlation with score: {correlation:.3f}")
@@ -249,7 +249,7 @@ for param in ['n_estimators', 'max_depth', 'min_samples_split']:
     else:
         continue
     
-    values_binned = pd.cut(values, bins=bins, labels=labels)
+    values_binned = pd.cut (values, bins=bins, labels=labels)
     df_binned = pd.DataFrame({'bin': values_binned, 'score': scores})
     avg_scores = df_binned.groupby('bin')['score'].mean()
     
@@ -325,8 +325,8 @@ print("="*60)
 
 # Step 1: Baseline
 print("\\nStep 1: Baseline (default hyperparameters)")
-baseline_model = RandomForestRegressor(random_state=42)
-baseline_score = cross_val_score(baseline_model, X_train, y_train, cv=5, scoring='r2').mean()
+baseline_model = RandomForestRegressor (random_state=42)
+baseline_score = cross_val_score (baseline_model, X_train, y_train, cv=5, scoring='r2').mean()
 print(f"  Baseline CV R²: {baseline_score:.4f}")
 
 # Step 2: Quick random search (coarse)
@@ -336,7 +336,7 @@ param_dist_coarse = {
     'max_depth': randint(5, 30),
 }
 random_coarse = RandomizedSearchCV(
-    RandomForestRegressor(random_state=42),
+    RandomForestRegressor (random_state=42),
     param_dist_coarse,
     n_iter=20,
     cv=3,
@@ -358,7 +358,7 @@ param_grid_fine = {
     'min_samples_split': [2, 5],
 }
 grid_fine = GridSearchCV(
-    RandomForestRegressor(random_state=42),
+    RandomForestRegressor (random_state=42),
     param_grid_fine,
     cv=5,
     n_jobs=-1

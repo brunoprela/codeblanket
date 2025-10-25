@@ -13,7 +13,7 @@ from django.contrib import admin
 from .models import Article
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     # List display
     list_display = ['title', 'author', 'status', 'published_at', 'view_count']
     list_display_links = ['title']
@@ -62,28 +62,28 @@ class ArticleAdmin(admin.ModelAdmin):
 
 \`\`\`python
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     actions = ['make_published', 'make_draft', 'export_to_csv']
     
-    @admin.action(description='Mark selected articles as published')
-    def make_published(self, request, queryset):
-        updated = queryset.update(status='published', published_at=timezone.now())
-        self.message_user(request, f'{updated} articles marked as published.', messages.SUCCESS)
+    @admin.action (description='Mark selected articles as published')
+    def make_published (self, request, queryset):
+        updated = queryset.update (status='published', published_at=timezone.now())
+        self.message_user (request, f'{updated} articles marked as published.', messages.SUCCESS)
     
-    @admin.action(description='Mark selected articles as draft')
-    def make_draft(self, request, queryset):
-        updated = queryset.update(status='draft')
-        self.message_user(request, f'{updated} articles marked as draft.', messages.INFO)
+    @admin.action (description='Mark selected articles as draft')
+    def make_draft (self, request, queryset):
+        updated = queryset.update (status='draft')
+        self.message_user (request, f'{updated} articles marked as draft.', messages.INFO)
     
-    @admin.action(description='Export selected articles to CSV')
-    def export_to_csv(self, request, queryset):
+    @admin.action (description='Export selected articles to CSV')
+    def export_to_csv (self, request, queryset):
         import csv
         from django.http import HttpResponse
         
-        response = HttpResponse(content_type='text/csv')
+        response = HttpResponse (content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="articles.csv"'
         
-        writer = csv.writer(response)
+        writer = csv.writer (response)
         writer.writerow(['Title', 'Author', 'Status', 'Published Date'])
         
         for article in queryset:
@@ -106,7 +106,7 @@ class PublishedDateFilter(SimpleListFilter):
     title = 'published date'
     parameter_name = 'published'
     
-    def lookups(self, request, model_admin):
+    def lookups (self, request, model_admin):
         return (
             ('today', 'Today'),
             ('week', 'This week'),
@@ -114,67 +114,67 @@ class PublishedDateFilter(SimpleListFilter):
             ('year', 'This year'),
         )
     
-    def queryset(self, request, queryset):
+    def queryset (self, request, queryset):
         from datetime import timedelta
         from django.utils import timezone
         
         now = timezone.now()
         
         if self.value() == 'today':
-            return queryset.filter(published_at__date=now.date())
+            return queryset.filter (published_at__date=now.date())
         elif self.value() == 'week':
-            week_ago = now - timedelta(days=7)
-            return queryset.filter(published_at__gte=week_ago)
+            week_ago = now - timedelta (days=7)
+            return queryset.filter (published_at__gte=week_ago)
         elif self.value() == 'month':
-            month_ago = now - timedelta(days=30)
-            return queryset.filter(published_at__gte=month_ago)
+            month_ago = now - timedelta (days=30)
+            return queryset.filter (published_at__gte=month_ago)
         elif self.value() == 'year':
-            year_ago = now - timedelta(days=365)
-            return queryset.filter(published_at__gte=year_ago)
+            year_ago = now - timedelta (days=365)
+            return queryset.filter (published_at__gte=year_ago)
 
 class ViewCountFilter(SimpleListFilter):
     title = 'view count'
     parameter_name = 'views'
     
-    def lookups(self, request, model_admin):
+    def lookups (self, request, model_admin):
         return (
             ('low', 'Low (< 100)'),
             ('medium', 'Medium (100-1000)'),
             ('high', 'High (> 1000)'),
         )
     
-    def queryset(self, request, queryset):
+    def queryset (self, request, queryset):
         if self.value() == 'low':
-            return queryset.filter(view_count__lt=100)
+            return queryset.filter (view_count__lt=100)
         elif self.value() == 'medium':
-            return queryset.filter(view_count__gte=100, view_count__lte=1000)
+            return queryset.filter (view_count__gte=100, view_count__lte=1000)
         elif self.value() == 'high':
-            return queryset.filter(view_count__gt=1000)
+            return queryset.filter (view_count__gt=1000)
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     list_filter = [PublishedDateFilter, ViewCountFilter, 'status', 'category']
 \`\`\`
 
 **4. Inline Editing:**
 
 \`\`\`python
-class CommentInline(admin.TabularInline):
+class CommentInline (admin.TabularInline):
     model = Comment
     extra = 1
     fields = ['user', 'text', 'approved']
     readonly_fields = ['user', 'created_at']
     
-    def get_queryset(self, request):
+    def get_queryset (self, request):
         # Show only recent comments by default
-        qs = super().get_queryset(request)
+        qs = super().get_queryset (request)
         return qs.order_by('-created_at')[:10]
 
-class TagInline(admin.TabularInline):
+class TagInline (admin.TabularInline):
     model = Article.tags.through
     extra = 1
 
-class ImageInline(admin.StackedInline):
+class ImageInline (admin.StackedInline):
     model = ArticleImage
     extra = 0
     fields = ['image', 'caption', 'order']
@@ -182,14 +182,14 @@ class ImageInline(admin.StackedInline):
     # Custom widget for image preview
     readonly_fields = ['image_preview']
     
-    def image_preview(self, obj):
+    def image_preview (self, obj):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 200px;" />', obj.image.url)
         return "No image"
     image_preview.short_description = 'Preview'
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     inlines = [ImageInline, TagInline, CommentInline]
 \`\`\`
 
@@ -197,36 +197,36 @@ class ArticleAdmin(admin.ModelAdmin):
 
 \`\`\`python
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     list_display = ['title', 'author_link', 'status_badge', 'preview_button', 'view_stats']
     
-    @admin.display(description='Author', ordering='author__username')
-    def author_link(self, obj):
+    @admin.display (description='Author', ordering='author__username')
+    def author_link (self, obj):
         url = reverse('admin:auth_user_change', args=[obj.author.id])
         return format_html('<a href="{}">{}</a>', url, obj.author.username)
     
-    @admin.display(description='Status')
-    def status_badge(self, obj):
+    @admin.display (description='Status')
+    def status_badge (self, obj):
         colors = {
             'published': 'green',
             'draft': 'orange',
             'archived': 'gray',
         }
-        color = colors.get(obj.status, 'gray')
+        color = colors.get (obj.status, 'gray')
         return format_html(
             '<span style="background: {}; color: white; padding: 3px 10px; border-radius: 3px;">{}</span>',
             color, obj.get_status_display()
         )
     
-    @admin.display(description='Preview')
-    def preview_button(self, obj):
+    @admin.display (description='Preview')
+    def preview_button (self, obj):
         if obj.status == 'published':
             url = obj.get_absolute_url()
             return format_html('<a href="{}" target="_blank">View</a>', url)
         return '-'
     
-    @admin.display(description='Views')
-    def view_stats(self, obj):
+    @admin.display (description='Views')
+    def view_stats (self, obj):
         return format_html(
             '<strong>{}</strong> views<br><small>{} today</small>',
             obj.view_count,
@@ -242,27 +242,27 @@ from django.shortcuts import render
 from django.db.models import Count, Sum
 from django.utils import timezone
 
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     
-    def get_urls(self):
+    def get_urls (self):
         urls = super().get_urls()
         custom_urls = [
-            path('analytics/', self.admin_site.admin_view(self.analytics_view), name='article_analytics'),
-            path('bulk-import/', self.admin_site.admin_view(self.bulk_import_view), name='article_bulk_import'),
+            path('analytics/', self.admin_site.admin_view (self.analytics_view), name='article_analytics'),
+            path('bulk-import/', self.admin_site.admin_view (self.bulk_import_view), name='article_bulk_import'),
         ]
         return custom_urls + urls
     
-    def analytics_view(self, request):
+    def analytics_view (self, request):
         \"\"\"Custom analytics dashboard\"\"\"
         # Gather statistics
         today = timezone.now().date()
         
         stats = {
             'total_articles': Article.objects.count(),
-            'published': Article.objects.filter(status='published').count(),
-            'drafts': Article.objects.filter(status='draft').count(),
+            'published': Article.objects.filter (status='published').count(),
+            'drafts': Article.objects.filter (status='draft').count(),
             'total_views': Article.objects.aggregate(Sum('view_count'))['view_count__sum'] or 0,
-            'today_published': Article.objects.filter(published_at__date=today).count(),
+            'today_published': Article.objects.filter (published_at__date=today).count(),
         }
         
         # Top authors
@@ -277,16 +277,16 @@ class ArticleAdmin(admin.ModelAdmin):
             'top_authors': top_authors,
         }
         
-        return render(request, 'admin/article_analytics.html', context)
+        return render (request, 'admin/article_analytics.html', context)
     
-    def bulk_import_view(self, request):
+    def bulk_import_view (self, request):
         \"\"\"Bulk import articles from CSV\"\"\"
         if request.method == 'POST' and request.FILES.get('csv_file'):
             import csv
             csv_file = request.FILES['csv_file']
             
             decoded_file = csv_file.read().decode('utf-8').splitlines()
-            reader = csv.DictReader(decoded_file)
+            reader = csv.DictReader (decoded_file)
             
             imported = 0
             for row in reader:
@@ -298,10 +298,10 @@ class ArticleAdmin(admin.ModelAdmin):
                 )
                 imported += 1
             
-            self.message_user(request, f'Imported {imported} articles.', messages.SUCCESS)
+            self.message_user (request, f'Imported {imported} articles.', messages.SUCCESS)
             return redirect('admin:articles_article_changelist')
         
-        return render(request, 'admin/article_bulk_import.html', {
+        return render (request, 'admin/article_bulk_import.html', {
             'title': 'Bulk Import Articles'
         })
 \`\`\`
@@ -310,19 +310,19 @@ class ArticleAdmin(admin.ModelAdmin):
 
 \`\`\`python
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     
-    def get_queryset(self, request):
+    def get_queryset (self, request):
         \"\"\"Filter queryset based on user permissions\"\"\"
-        qs = super().get_queryset(request)
+        qs = super().get_queryset (request)
         
         if request.user.is_superuser:
             return qs
         
         # Regular staff only see their own articles
-        return qs.filter(author=request.user)
+        return qs.filter (author=request.user)
     
-    def has_delete_permission(self, request, obj=None):
+    def has_delete_permission (self, request, obj=None):
         \"\"\"Only superusers can delete\"\"\"
         if request.user.is_superuser:
             return True
@@ -333,7 +333,7 @@ class ArticleAdmin(admin.ModelAdmin):
         
         return False
     
-    def get_readonly_fields(self, request, obj=None):
+    def get_readonly_fields (self, request, obj=None):
         \"\"\"Different read-only fields based on user\"\"\"
         if request.user.is_superuser:
             return ['created_at', 'updated_at']
@@ -341,21 +341,21 @@ class ArticleAdmin(admin.ModelAdmin):
         # Regular staff can't change status
         return ['status', 'featured', 'created_at', 'updated_at']
     
-    def get_list_display(self, request):
+    def get_list_display (self, request):
         \"\"\"Different columns for different users\"\"\"
         if request.user.is_superuser:
             return ['title', 'author', 'status', 'view_count', 'published_at']
         
         return ['title', 'status', 'published_at']
     
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def formfield_for_foreignkey (self, db_field, request, **kwargs):
         \"\"\"Auto-set author to current user for new articles\"\"\"
         if db_field.name == 'author':
             if not request.user.is_superuser:
                 kwargs['initial'] = request.user.id
                 kwargs['disabled'] = True
         
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        return super().formfield_for_foreignkey (db_field, request, **kwargs)
 \`\`\`
 
 **8. Custom Dashboard Widget:**
@@ -378,12 +378,12 @@ class ArticleAdmin(admin.ModelAdmin):
 {% endblock %}
 
 # admin.py
-class MyAdminSite(admin.AdminSite):
+class MyAdminSite (admin.AdminSite):
     site_header = 'My CMS Administration'
     site_title = 'My CMS Admin'
     index_title = 'Welcome to My CMS'
     
-    def index(self, request, extra_context=None):
+    def index (self, request, extra_context=None):
         extra_context = extra_context or {}
         
         # Add custom dashboard data
@@ -395,10 +395,10 @@ class MyAdminSite(admin.AdminSite):
             Sum('view_count')
         )['view_count__sum'] or 0
         
-        return super().index(request, extra_context)
+        return super().index (request, extra_context)
 
 # Use custom admin site
-admin_site = MyAdminSite(name='myadmin')
+admin_site = MyAdminSite (name='myadmin')
 admin_site.register(Article, ArticleAdmin)
 \`\`\`
 
@@ -440,45 +440,45 @@ class DashboardAdminSite(AdminSite):
     site_title = 'Dashboard Admin'
     index_title = 'Analytics Dashboard'
     
-    def get_urls(self):
+    def get_urls (self):
         urls = super().get_urls()
         custom_urls = [
-            path('dashboard/', self.admin_view(self.dashboard_view), name='dashboard'),
-            path('api/stats/', self.admin_view(self.stats_api), name='stats_api'),
+            path('dashboard/', self.admin_view (self.dashboard_view), name='dashboard'),
+            path('api/stats/', self.admin_view (self.stats_api), name='stats_api'),
         ]
         return custom_urls + urls
     
-    def dashboard_view(self, request):
+    def dashboard_view (self, request):
         \"\"\"Render custom dashboard\"\"\"
         context = {
-            **self.each_context(request),
+            **self.each_context (request),
             'title': 'Dashboard',
             'stats': self.get_dashboard_stats(),
         }
-        return render(request, 'admin/dashboard.html', context)
+        return render (request, 'admin/dashboard.html', context)
     
-    def stats_api(self, request):
+    def stats_api (self, request):
         \"\"\"API endpoint for real-time stats\"\"\"
         from django.http import JsonResponse
-        return JsonResponse(self.get_dashboard_stats())
+        return JsonResponse (self.get_dashboard_stats())
     
-    def get_dashboard_stats(self):
+    def get_dashboard_stats (self):
         \"\"\"Gather dashboard statistics\"\"\"
         now = timezone.now()
         today = now.date()
-        week_ago = now - timedelta(days=7)
-        month_ago = now - timedelta(days=30)
+        week_ago = now - timedelta (days=7)
+        month_ago = now - timedelta (days=30)
         
         # Basic counts
         stats = {
             'total_articles': Article.objects.count(),
-            'published_articles': Article.objects.filter(status='published').count(),
+            'published_articles': Article.objects.filter (status='published').count(),
             'total_users': User.objects.count(),
-            'active_users': User.objects.filter(last_login__gte=week_ago).count(),
+            'active_users': User.objects.filter (last_login__gte=week_ago).count(),
             
-            # Today's activity
-            'articles_today': Article.objects.filter(created_at__date=today).count(),
-            'comments_today': Comment.objects.filter(created_at__date=today).count(),
+            # Today\'s activity
+            'articles_today': Article.objects.filter (created_at__date=today).count(),
+            'comments_today': Comment.objects.filter (created_at__date=today).count(),
             
             # View statistics
             'total_views': Article.objects.aggregate(Sum('view_count'))['view_count__sum'] or 0,
@@ -488,13 +488,13 @@ class DashboardAdminSite(AdminSite):
         # Articles per day (last 30 days)
         articles_per_day = []
         for i in range(30):
-            date = today - timedelta(days=i)
-            count = Article.objects.filter(created_at__date=date).count()
+            date = today - timedelta (days=i)
+            count = Article.objects.filter (created_at__date=date).count()
             articles_per_day.append({
                 'date': date.isoformat(),
                 'count': count
             })
-        stats['articles_per_day'] = list(reversed(articles_per_day))
+        stats['articles_per_day'] = list (reversed (articles_per_day))
         
         # Top authors
         stats['top_authors'] = list(
@@ -514,7 +514,7 @@ class DashboardAdminSite(AdminSite):
         return stats
 
 # Use custom admin site
-dashboard_admin = DashboardAdminSite(name='dashboard_admin')
+dashboard_admin = DashboardAdminSite (name='dashboard_admin')
 \`\`\`
 
 **2. Dashboard Template with Chart.js:**
@@ -612,7 +612,7 @@ dashboard_admin = DashboardAdminSite(name='dashboard_admin')
 <script>
     // Initialize with server data
     const dashboardData = {{ stats|safe }};
-    initializeDashboard(dashboardData);
+    initializeDashboard (dashboardData);
 </script>
 {% endblock %}
 \`\`\`
@@ -625,16 +625,16 @@ dashboard_admin = DashboardAdminSite(name='dashboard_admin')
 let articlesChart = null;
 let categoryChart = null;
 
-function initializeDashboard(data) {
+function initializeDashboard (data) {
     // Create articles timeline chart
     const articlesCtx = document.getElementById('articles-chart').getContext('2d');
-    articlesChart = new Chart(articlesCtx, {
+    articlesChart = new Chart (articlesCtx, {
         type: 'line',
         data: {
-            labels: data.articles_per_day.map(d => d.date),
+            labels: data.articles_per_day.map (d => d.date),
             datasets: [{
                 label: 'Articles Published',
-                data: data.articles_per_day.map(d => d.count),
+                data: data.articles_per_day.map (d => d.count),
                 borderColor: '#4CAF50',
                 backgroundColor: 'rgba(76, 175, 80, 0.1)',
                 tension: 0.4,
@@ -662,12 +662,12 @@ function initializeDashboard(data) {
     
     // Create category distribution chart
     const categoryCtx = document.getElementById('category-chart').getContext('2d');
-    categoryChart = new Chart(categoryCtx, {
+    categoryChart = new Chart (categoryCtx, {
         type: 'doughnut',
         data: {
-            labels: data.category_distribution.map(c => c.category__name),
+            labels: data.category_distribution.map (c => c.category__name),
             datasets: [{
-                data: data.category_distribution.map(c => c.count),
+                data: data.category_distribution.map (c => c.count),
                 backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
@@ -695,7 +695,7 @@ function initializeDashboard(data) {
 
 function startRealTimeUpdates() {
     // Poll for updates every 30 seconds
-    setInterval(updateDashboard, 30000);
+    setInterval (updateDashboard, 30000);
     
     // Or use WebSocket for real-time updates
     if (window.WebSocket) {
@@ -705,41 +705,41 @@ function startRealTimeUpdates() {
 
 function updateDashboard() {
     fetch('/admin/api/stats/')
-        .then(response => response.json())
-        .then(data => {
+        .then (response => response.json())
+        .then (data => {
             // Update stat cards
             document.getElementById('total-articles').textContent = data.total_articles;
             document.getElementById('active-users').textContent = data.active_users;
-            document.getElementById('total-views').textContent = Math.round(data.total_views);
+            document.getElementById('total-views').textContent = Math.round (data.total_views);
             document.getElementById('comments-today').textContent = data.comments_today;
             
             // Update charts
-            updateCharts(data);
+            updateCharts (data);
         })
-        .catch(error => console.error('Error updating dashboard:', error));
+        .catch (error => console.error('Error updating dashboard:', error));
 }
 
-function updateCharts(data) {
+function updateCharts (data) {
     // Update articles chart
-    articlesChart.data.labels = data.articles_per_day.map(d => d.date);
-    articlesChart.data.datasets[0].data = data.articles_per_day.map(d => d.count);
+    articlesChart.data.labels = data.articles_per_day.map (d => d.date);
+    articlesChart.data.datasets[0].data = data.articles_per_day.map (d => d.count);
     articlesChart.update('none');  // No animation for updates
     
     // Update category chart
-    categoryChart.data.labels = data.category_distribution.map(c => c.category__name);
-    categoryChart.data.datasets[0].data = data.category_distribution.map(c => c.count);
+    categoryChart.data.labels = data.category_distribution.map (c => c.category__name);
+    categoryChart.data.datasets[0].data = data.category_distribution.map (c => c.count);
     categoryChart.update('none');
 }
 
 function connectWebSocket() {
     const ws = new WebSocket('ws://localhost:8000/ws/dashboard/');
     
-    ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
+    ws.onmessage = function (event) {
+        const data = JSON.parse (event.data);
         
         // Update specific stat
         if (data.type === 'stat_update') {
-            document.getElementById(data.stat_id).textContent = data.value;
+            document.getElementById (data.stat_id).textContent = data.value;
         }
         
         // Full dashboard update
@@ -750,7 +750,7 @@ function connectWebSocket() {
     
     ws.onclose = function() {
         // Reconnect after 5 seconds
-        setTimeout(connectWebSocket, 5000);
+        setTimeout (connectWebSocket, 5000);
     };
 }
 \`\`\`
@@ -764,16 +764,16 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 class DashboardConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
+    async def connect (self):
         await self.channel_layer.group_add('dashboard', self.channel_name)
         await self.accept()
     
-    async def disconnect(self, close_code):
+    async def disconnect (self, close_code):
         await self.channel_layer.group_discard('dashboard', self.channel_name)
     
-    async def dashboard_update(self, event):
+    async def dashboard_update (self, event):
         # Send update to WebSocket
-        await self.send(text_data=json.dumps({
+        await self.send (text_data=json.dumps({
             'type': 'stat_update',
             'stat_id': event['stat_id'],
             'value': event['value']
@@ -784,11 +784,11 @@ from django.db.models.signals import post_save
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-@receiver(post_save, sender=Article)
-def notify_dashboard(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Article)
+def notify_dashboard (sender, instance, created, **kwargs):
     if created:
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
+        async_to_sync (channel_layer.group_send)(
             'dashboard',
             {
                 'type': 'dashboard_update',
@@ -808,7 +808,7 @@ def notify_dashboard(sender, instance, created, **kwargs):
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat (auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -848,7 +848,7 @@ def notify_dashboard(sender, instance, created, **kwargs):
 
 .charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat (auto-fit, minmax(400px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -912,11 +912,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     actions = ['bulk_edit_selected']
     
-    @admin.action(description='Bulk edit selected articles')
-    def bulk_edit_selected(self, request, queryset):
+    @admin.action (description='Bulk edit selected articles')
+    def bulk_edit_selected (self, request, queryset):
         # Create formset for selected articles
         ArticleFormSet = modelformset_factory(
             Article,
@@ -934,12 +934,12 @@ class ArticleAdmin(admin.ModelAdmin):
                 instances = formset.save()
                 self.message_user(
                     request,
-                    f'Successfully updated {len(instances)} articles.',
+                    f'Successfully updated {len (instances)} articles.',
                     messages.SUCCESS
                 )
                 return redirect('admin:articles_article_changelist')
         else:
-            formset = ArticleFormSet(queryset=queryset)
+            formset = ArticleFormSet (queryset=queryset)
         
         context = {
             'formset': formset,
@@ -948,7 +948,7 @@ class ArticleAdmin(admin.ModelAdmin):
             'title': 'Bulk Edit Articles',
         }
         
-        return render(request, 'admin/bulk_edit.html', context)
+        return render (request, 'admin/bulk_edit.html', context)
 \`\`\`
 
 **Bulk Edit Template:**
@@ -998,11 +998,11 @@ class ArticleAdmin(admin.ModelAdmin):
 
 \`\`\`python
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     
     change_form_template = 'admin/article_change_form.html'
     
-    def get_fieldsets(self, request, obj=None):
+    def get_fieldsets (self, request, obj=None):
         \"\"\"Organize fields into tabs\"\"\"
         return [
             ('Basic Info', {
@@ -1075,12 +1075,12 @@ class ArticleAdmin(admin.ModelAdmin):
 \`\`\`javascript
 // static/admin/js/tabs.js
 (function($) {
-    $(document).ready(function() {
+    $(document).ready (function() {
         // Hide all tabs except first
         $('.tab-content:not(.tab-basic)').hide();
         
         // Tab click handler
-        $('.tabs .tab').click(function(e) {
+        $('.tabs .tab').click (function (e) {
             e.preventDefault();
             
             // Update active tab
@@ -1101,7 +1101,7 @@ class ArticleAdmin(admin.ModelAdmin):
 \`\`\`python
 from django import forms
 
-class BulkStatusChangeForm(forms.Form):
+class BulkStatusChangeForm (forms.Form):
     \"\"\"Form for bulk status change action\"\"\"
     status = forms.ChoiceField(
         choices=Article.STATUS_CHOICES,
@@ -1120,16 +1120,16 @@ class BulkStatusChangeForm(forms.Form):
     )
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     actions = ['change_status_with_confirmation']
     
-    @admin.action(description='Change status with confirmation')
-    def change_status_with_confirmation(self, request, queryset):
+    @admin.action (description='Change status with confirmation')
+    def change_status_with_confirmation (self, request, queryset):
         form = None
         
         if 'apply' in request.POST:
             # Form was submitted
-            form = BulkStatusChangeForm(request.POST)
+            form = BulkStatusChangeForm (request.POST)
             
             if form.is_valid():
                 status = form.cleaned_data['status']
@@ -1137,7 +1137,7 @@ class ArticleAdmin(admin.ModelAdmin):
                 message = form.cleaned_data['notification_message']
                 
                 # Update articles
-                count = queryset.update(status=status)
+                count = queryset.update (status=status)
                 
                 # Send notifications if requested
                 if send_notification:
@@ -1167,7 +1167,7 @@ class ArticleAdmin(admin.ModelAdmin):
             'title': 'Change Status with Confirmation',
         }
         
-        return render(request, 'admin/bulk_status_change.html', context)
+        return render (request, 'admin/bulk_status_change.html', context)
 \`\`\`
 
 **Action Confirmation Template:**
@@ -1212,7 +1212,7 @@ class ArticleAdmin(admin.ModelAdmin):
 from django import forms
 from django.contrib.admin import widgets
 
-class RichTextWidget(forms.Textarea):
+class RichTextWidget (forms.Textarea):
     \"\"\"CKEditor widget for rich text editing\"\"\"
     class Media:
         js = (
@@ -1220,11 +1220,11 @@ class RichTextWidget(forms.Textarea):
             'admin/js/ckeditor-init.js',
         )
 
-class ArticleAdminForm(forms.ModelForm):
+class ArticleAdminForm (forms.ModelForm):
     \"\"\"Custom form with rich widgets\"\"\"
     
     content = forms.CharField(
-        widget=RichTextWidget(attrs={'rows': 20})
+        widget=RichTextWidget (attrs={'rows': 20})
     )
     
     tags = forms.ModelMultipleChoiceField(
@@ -1238,7 +1238,7 @@ class ArticleAdminForm(forms.ModelForm):
         fields = '__all__'
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin (admin.ModelAdmin):
     form = ArticleAdminForm
 \`\`\`
 

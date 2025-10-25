@@ -40,7 +40,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
 # 2. Prepare data
-def tokenize_function(examples):
+def tokenize_function (examples):
     return tokenizer(
         examples['text'],
         padding='max_length',
@@ -48,7 +48,7 @@ def tokenize_function(examples):
         max_length=512
     )
 
-tokenized_datasets = dataset.map(tokenize_function, batched=True)
+tokenized_datasets = dataset.map (tokenize_function, batched=True)
 
 # 3. Set training arguments
 training_args = TrainingArguments(
@@ -122,17 +122,17 @@ model = AutoModelForSequenceClassification.from_pretrained('bert-base-uncased')
 # Phase 1: Train only classifier (1 epoch)
 for param in model.bert.parameters():
     param.requires_grad = False
-train(model, epochs=1)
+train (model, epochs=1)
 
 # Phase 2: Unfreeze last encoder layer (1 epoch)
 for param in model.bert.encoder.layer[-1].parameters():
     param.requires_grad = True
-train(model, epochs=1)
+train (model, epochs=1)
 
 # Phase 3: Unfreeze all (1 epoch)
 for param in model.parameters():
     param.requires_grad = True
-train(model, epochs=1)
+train (model, epochs=1)
 \`\`\`
 
 ### Discriminative Fine-tuning (Different LRs per Layer)
@@ -167,7 +167,7 @@ config = LoraConfig(
 )
 
 model = AutoModelForSequenceClassification.from_pretrained('bert-base-uncased')
-model = get_peft_model(model, config)
+model = get_peft_model (model, config)
 
 # Trainable parameters: ~0.1% of total!
 model.print_trainable_parameters()
@@ -178,15 +178,15 @@ model.print_trainable_parameters()
 
 \`\`\`python
 # Add small adapter modules between transformer layers
-class AdapterLayer(nn.Module):
+class AdapterLayer (nn.Module):
     def __init__(self, d_model, adapter_size=64):
         super().__init__()
-        self.down = nn.Linear(d_model, adapter_size)
-        self.up = nn.Linear(adapter_size, d_model)
+        self.down = nn.Linear (d_model, adapter_size)
+        self.up = nn.Linear (adapter_size, d_model)
         self.activation = nn.ReLU()
         
-    def forward(self, x):
-        return x + self.up(self.activation(self.down(x)))
+    def forward (self, x):
+        return x + self.up (self.activation (self.down (x)))
 
 # Freeze base model, train only adapters
 \`\`\`
@@ -202,7 +202,7 @@ config = PrefixTuningConfig(
     num_virtual_tokens=20
 )
 
-model = get_peft_model(model, config)
+model = get_peft_model (model, config)
 \`\`\`
 
 ## Best Practices
@@ -255,7 +255,7 @@ from transformers import EarlyStoppingCallback
 trainer = Trainer(
     model=model,
     args=training_args,
-    callbacks=[EarlyStoppingCallback(early_stopping_patience=3)]
+    callbacks=[EarlyStoppingCallback (early_stopping_patience=3)]
 )
 \`\`\`
 
@@ -263,16 +263,16 @@ trainer = Trainer(
 
 \`\`\`python
 # Back-translation
-def augment_text(text, model='en-de-en'):
+def augment_text (text, model='en-de-en'):
     # Translate to German and back to English
-    de_text = translate(text, 'en', 'de')
-    back_text = translate(de_text, 'de', 'en')
+    de_text = translate (text, 'en', 'de')
+    back_text = translate (de_text, 'de', 'en')
     return back_text
 
 # Synonym replacement
 import nlpaug.augmenter.word as naw
-aug = naw.SynonymAug(aug_src='wordnet')
-augmented = aug.augment(text)
+aug = naw.SynonymAug (aug_src='wordnet')
+augmented = aug.augment (text)
 
 # Random deletion/swap
 # Increase effective training data
@@ -324,7 +324,7 @@ question = "What is the capital of France?"
 \`\`\`python
 # Track metrics with Weights & Biases
 import wandb
-wandb.init(project="fine-tuning")
+wandb.init (project="fine-tuning")
 
 training_args = TrainingArguments(
     report_to="wandb",
@@ -332,14 +332,14 @@ training_args = TrainingArguments(
 )
 
 # Log custom metrics
-def compute_metrics(eval_pred):
+def compute_metrics (eval_pred):
     predictions, labels = eval_pred
-    predictions = np.argmax(predictions, axis=1)
+    predictions = np.argmax (predictions, axis=1)
     
     from sklearn.metrics import accuracy_score, f1_score
     return {
-        'accuracy': accuracy_score(labels, predictions),
-        'f1': f1_score(labels, predictions, average='weighted')
+        'accuracy': accuracy_score (labels, predictions),
+        'f1': f1_score (labels, predictions, average='weighted')
     }
 
 trainer = Trainer(

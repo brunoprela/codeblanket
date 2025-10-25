@@ -10,7 +10,7 @@ export const advancedSection = {
 After detecting cycle, find where it starts:
 
 \`\`\`python
-def detect_cycle_start(head: ListNode) -> ListNode:
+def detect_cycle_start (head: ListNode) -> ListNode:
     """
     Find the node where cycle begins.
     """
@@ -49,7 +49,7 @@ def detect_cycle_start(head: ListNode) -> ListNode:
 Reverse K nodes at a time:
 
 \`\`\`python
-def reverse_k_group(head: ListNode, k: int) -> ListNode:
+def reverse_k_group (head: ListNode, k: int) -> ListNode:
     """
     Reverse every k nodes.
     """
@@ -66,14 +66,14 @@ def reverse_k_group(head: ListNode, k: int) -> ListNode:
     # Reverse first k nodes
     prev = None
     curr = head
-    for _ in range(k):
+    for _ in range (k):
         next_temp = curr.next
         curr.next = prev
         prev = curr
         curr = next_temp
     
     # Recursively reverse remaining
-    head.next = reverse_k_group(curr, k)
+    head.next = reverse_k_group (curr, k)
     
     return prev
 \`\`\`
@@ -85,7 +85,7 @@ def reverse_k_group(head: ListNode, k: int) -> ListNode:
 Check if linked list is a palindrome:
 
 \`\`\`python
-def is_palindrome(head: ListNode) -> bool:
+def is_palindrome (head: ListNode) -> bool:
     """
     Check if linked list is palindrome.
     Time: O(N), Space: O(1)
@@ -134,7 +134,7 @@ class Node:
         self.next = next
         self.random = random
 
-def copy_random_list(head: Node) -> Node:
+def copy_random_list (head: Node) -> Node:
     """
     Deep copy linked list with random pointers.
     Time: O(N), Space: O(N)
@@ -145,7 +145,7 @@ def copy_random_list(head: Node) -> Node:
     # Step 1: Create copy nodes interleaved
     curr = head
     while curr:
-        copy = Node(curr.val)
+        copy = Node (curr.val)
         copy.next = curr.next
         curr.next = copy
         curr = copy.next

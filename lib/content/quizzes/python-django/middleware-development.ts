@@ -6,7 +6,7 @@ export const middlewareDevelopmentQuiz = [
     answer: `
 **Django Middleware Architecture:**
 
-Middleware is a framework of hooks into Django's request/response processing. Each middleware component processes requests going in and responses going out.
+Middleware is a framework of hooks into Django\'s request/response processing. Each middleware component processes requests going in and responses going out.
 
 **Execution Order:**
 
@@ -33,7 +33,7 @@ class RequestTimingMiddleware:
         request.start_time = time.time()
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # After view
         duration = time.time() - request.start_time
@@ -41,22 +41,22 @@ class RequestTimingMiddleware:
         
         return response
     
-    def process_exception(self, request, exception):
+    def process_exception (self, request, exception):
         \"\"\"Handle exceptions\"\"\"
         duration = time.time() - request.start_time
-        logger.error(f'Request failed after {duration:.3f}s: {exception}')
+        logger.error (f'Request failed after {duration:.3f}s: {exception}')
         return None  # Let other middleware handle it
 \`\`\`
 
 **Function-Based Middleware (Legacy):**
 
 \`\`\`python
-def request_timing_middleware(get_response):
+def request_timing_middleware (get_response):
     \"\"\"Function-based middleware\"\"\"
     
-    def middleware(request):
+    def middleware (request):
         start_time = time.time()
-        response = get_response(request)
+        response = get_response (request)
         duration = time.time() - start_time
         response['X-Request-Duration'] = f'{duration:.3f}s'
         return response
@@ -81,57 +81,57 @@ class RequestLoggingMiddleware:
     
     def __call__(self, request):
         # Log request
-        self.log_request(request)
+        self.log_request (request)
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Log response
-        self.log_response(request, response)
+        self.log_response (request, response)
         
         return response
     
-    def log_request(self, request):
+    def log_request (self, request):
         \"\"\"Log incoming request details\"\"\"
         log_data = {
             'method': request.method,
             'path': request.path,
-            'user': str(request.user) if request.user.is_authenticated else 'Anonymous',
-            'ip': self.get_client_ip(request),
+            'user': str (request.user) if request.user.is_authenticated else 'Anonymous',
+            'ip': self.get_client_ip (request),
             'user_agent': request.META.get('HTTP_USER_AGENT', ''),
-            'query_params': dict(request.GET),
+            'query_params': dict (request.GET),
         }
         
         if request.method in ['POST', 'PUT', 'PATCH']:
-            log_data['body_size'] = len(request.body)
+            log_data['body_size'] = len (request.body)
         
-        logger.info(f'Request: {json.dumps(log_data)}')
+        logger.info (f'Request: {json.dumps (log_data)}')
     
-    def log_response(self, request, response):
+    def log_response (self, request, response):
         \"\"\"Log response details\"\"\"
-        duration = getattr(request, 'start_time', 0)
+        duration = getattr (request, 'start_time', 0)
         
         log_data = {
             'method': request.method,
             'path': request.path,
             'status': response.status_code,
             'duration': duration,
-            'response_size': len(response.content) if hasattr(response, 'content') else 0,
+            'response_size': len (response.content) if hasattr (response, 'content') else 0,
         }
         
         if response.status_code >= 400:
-            logger.warning(f'Response: {json.dumps(log_data)}')
+            logger.warning (f'Response: {json.dumps (log_data)}')
         else:
-            logger.info(f'Response: {json.dumps(log_data)}')
+            logger.info (f'Response: {json.dumps (log_data)}')
     
-    def get_client_ip(self, request):
+    def get_client_ip (self, request):
         \"\"\"Extract client IP address\"\"\"
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
     
-    def process_exception(self, request, exception):
+    def process_exception (self, request, exception):
         \"\"\"Log exceptions\"\"\"
         logger.error(
             f'Exception in {request.method} {request.path}: {exception}',
@@ -155,42 +155,42 @@ class ErrorHandlingMiddleware:
         self.get_response = get_response
     
     def __call__(self, request):
-        return self.get_response(request)
+        return self.get_response (request)
     
-    def process_exception(self, request, exception):
+    def process_exception (self, request, exception):
         \"\"\"Handle different exception types\"\"\"
         
         # Log exception
         logger.error(
-            f'Exception: {type(exception).__name__}: {exception}',
+            f'Exception: {type (exception).__name__}: {exception}',
             exc_info=True,
             extra={'request': request}
         )
         
         # Return appropriate response based on exception type
-        if isinstance(exception, ValidationError):
+        if isinstance (exception, ValidationError):
             return JsonResponse({
                 'error': 'Validation Error',
                 'details': exception.messages
             }, status=400)
         
-        elif isinstance(exception, PermissionDenied):
+        elif isinstance (exception, PermissionDenied):
             return JsonResponse({
                 'error': 'Permission Denied',
-                'message': str(exception)
+                'message': str (exception)
             }, status=403)
         
-        elif isinstance(exception, Http404):
+        elif isinstance (exception, Http404):
             return JsonResponse({
                 'error': 'Not Found',
-                'message': str(exception)
+                'message': str (exception)
             }, status=404)
         
         # Generic error handling
         if settings.DEBUG:
             return JsonResponse({
                 'error': 'Internal Server Error',
-                'message': str(exception),
+                'message': str (exception),
                 'traceback': traceback.format_exc()
             }, status=500)
         else:
@@ -204,9 +204,9 @@ class ErrorHandlingMiddleware:
 
 1. **__init__(get_response)**: One-time configuration
 2. **__call__(request)**: Process request and response
-3. **process_view(request, view_func, view_args, view_kwargs)**: Before view is called
-4. **process_exception(request, exception)**: When view raises exception
-5. **process_template_response(request, response)**: After view returns TemplateResponse
+3. **process_view (request, view_func, view_args, view_kwargs)**: Before view is called
+4. **process_exception (request, exception)**: When view raises exception
+5. **process_template_response (request, response)**: After view returns TemplateResponse
 
 **Complete Example with All Hooks:**
 
@@ -221,22 +221,22 @@ class ComprehensiveMiddleware:
         # Before view
         request.middleware_timestamp = time.time()
         
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # After view
         return response
     
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_view (self, request, view_func, view_args, view_kwargs):
         \"\"\"Called before view executes\"\"\"
-        logger.debug(f'View: {view_func.__name__}')
+        logger.debug (f'View: {view_func.__name__}')
         return None  # Continue processing
     
-    def process_exception(self, request, exception):
+    def process_exception (self, request, exception):
         \"\"\"Handle exceptions\"\"\"
-        logger.error(f'Exception: {exception}')
+        logger.error (f'Exception: {exception}')
         return None  # Let other middleware handle
     
-    def process_template_response(self, request, response):
+    def process_template_response (self, request, response):
         \"\"\"Modify template responses\"\"\"
         response.context_data['middleware_processed'] = True
         return response
@@ -297,24 +297,24 @@ class RateLimitMiddleware:
     
     def __call__(self, request):
         # Get client identifier
-        client_id = self.get_client_id(request)
+        client_id = self.get_client_id (request)
         
         # Check rate limit
-        if self.is_rate_limited(client_id):
+        if self.is_rate_limited (client_id):
             return JsonResponse({
                 'error': 'Rate limit exceeded',
-                'retry_after': self.get_retry_after(client_id)
+                'retry_after': self.get_retry_after (client_id)
             }, status=429)
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Add rate limit headers
-        self.add_rate_limit_headers(response, client_id)
+        self.add_rate_limit_headers (response, client_id)
         
         return response
     
-    def get_client_id(self, request):
+    def get_client_id (self, request):
         \"\"\"Get unique client identifier\"\"\"
         # Prefer user ID for authenticated users
         if request.user.is_authenticated:
@@ -329,12 +329,12 @@ class RateLimitMiddleware:
         
         return f'ip:{ip}'
     
-    def is_rate_limited(self, client_id):
+    def is_rate_limited (self, client_id):
         \"\"\"Check if client has exceeded rate limit\"\"\"
         cache_key = f'rate_limit:{client_id}'
         
         # Get current count
-        current_count = cache.get(cache_key, 0)
+        current_count = cache.get (cache_key, 0)
         
         if current_count >= self.rate_limit:
             return True
@@ -342,27 +342,27 @@ class RateLimitMiddleware:
         # Increment count
         if current_count == 0:
             # First request in window
-            cache.set(cache_key, 1, self.time_window)
+            cache.set (cache_key, 1, self.time_window)
         else:
             # Increment existing count
-            cache.incr(cache_key)
+            cache.incr (cache_key)
         
         return False
     
-    def get_retry_after(self, client_id):
+    def get_retry_after (self, client_id):
         \"\"\"Get seconds until rate limit resets\"\"\"
         cache_key = f'rate_limit:{client_id}'
-        ttl = cache.ttl(cache_key)
-        return max(ttl, 0)
+        ttl = cache.ttl (cache_key)
+        return max (ttl, 0)
     
-    def add_rate_limit_headers(self, response, client_id):
+    def add_rate_limit_headers (self, response, client_id):
         \"\"\"Add rate limit information to response headers\"\"\"
         cache_key = f'rate_limit:{client_id}'
-        current_count = cache.get(cache_key, 0)
+        current_count = cache.get (cache_key, 0)
         
-        response['X-RateLimit-Limit'] = str(self.rate_limit)
-        response['X-RateLimit-Remaining'] = str(max(self.rate_limit - current_count, 0))
-        response['X-RateLimit-Reset'] = str(int(time.time()) + self.get_retry_after(client_id))
+        response['X-RateLimit-Limit'] = str (self.rate_limit)
+        response['X-RateLimit-Remaining'] = str (max (self.rate_limit - current_count, 0))
+        response['X-RateLimit-Reset'] = str (int (time.time()) + self.get_retry_after (client_id))
 \`\`\`
 
 **2. Multi-Tier Rate Limiting:**
@@ -391,12 +391,12 @@ class TieredRateLimitMiddleware:
     
     def __call__(self, request):
         # Get user tier
-        tier = self.get_user_tier(request)
+        tier = self.get_user_tier (request)
         limits = self.RATE_LIMITS[tier]
         
         # Check rate limit
-        client_id = self.get_client_id(request)
-        if self.check_rate_limit(client_id, tier, limits):
+        client_id = self.get_client_id (request)
+        if self.check_rate_limit (client_id, tier, limits):
             return JsonResponse({
                 'error': 'Rate limit exceeded',
                 'tier': tier.value,
@@ -404,34 +404,34 @@ class TieredRateLimitMiddleware:
                 'window': limits['window'],
             }, status=429)
         
-        response = self.get_response(request)
+        response = self.get_response (request)
         return response
     
-    def get_user_tier(self, request):
+    def get_user_tier (self, request):
         \"\"\"Determine user's tier\"\"\"
         if not request.user.is_authenticated:
             return UserTier.FREE
         
         # Assuming User model has subscription relationship
-        if hasattr(request.user, 'subscription'):
+        if hasattr (request.user, 'subscription'):
             tier_name = request.user.subscription.tier
-            return UserTier(tier_name)
+            return UserTier (tier_name)
         
         return UserTier.FREE
     
-    def check_rate_limit(self, client_id, tier, limits):
+    def check_rate_limit (self, client_id, tier, limits):
         \"\"\"Check rate limit with tier-specific limits\"\"\"
         cache_key = f'rate_limit:{tier.value}:{client_id}'
         
-        current_count = cache.get(cache_key, 0)
+        current_count = cache.get (cache_key, 0)
         
         if current_count >= limits['requests']:
             return True
         
         if current_count == 0:
-            cache.set(cache_key, 1, limits['window'])
+            cache.set (cache_key, 1, limits['window'])
         else:
-            cache.incr(cache_key)
+            cache.incr (cache_key)
         
         return False
 \`\`\`
@@ -455,22 +455,22 @@ class EndpointRateLimitMiddleware:
     
     def __call__(self, request):
         # Get endpoint-specific limits
-        limits = self.get_endpoint_limits(request.path)
+        limits = self.get_endpoint_limits (request.path)
         
         # Check rate limit
-        client_id = self.get_client_id(request)
+        client_id = self.get_client_id (request)
         cache_key = f'rate_limit:{request.path}:{client_id}'
         
-        if self.is_rate_limited(cache_key, limits):
+        if self.is_rate_limited (cache_key, limits):
             return JsonResponse({
                 'error': 'Rate limit exceeded for this endpoint',
                 'endpoint': request.path,
                 'limit': limits['requests'],
             }, status=429)
         
-        return self.get_response(request)
+        return self.get_response (request)
     
-    def get_endpoint_limits(self, path):
+    def get_endpoint_limits (self, path):
         \"\"\"Get rate limits for specific endpoint\"\"\"
         # Try exact match
         if path in self.ENDPOINT_LIMITS:
@@ -478,7 +478,7 @@ class EndpointRateLimitMiddleware:
         
         # Try prefix match
         for endpoint_pattern, limits in self.ENDPOINT_LIMITS.items():
-            if path.startswith(endpoint_pattern):
+            if path.startswith (endpoint_pattern):
                 return limits
         
         return self.DEFAULT_LIMIT
@@ -502,17 +502,17 @@ class RedisRateLimitMiddleware:
         )
     
     def __call__(self, request):
-        client_id = self.get_client_id(request)
+        client_id = self.get_client_id (request)
         
         # Check rate limit using sliding window
-        if self.is_rate_limited_sliding_window(client_id, 100, 60):
+        if self.is_rate_limited_sliding_window (client_id, 100, 60):
             return JsonResponse({
                 'error': 'Rate limit exceeded'
             }, status=429)
         
-        return self.get_response(request)
+        return self.get_response (request)
     
-    def is_rate_limited_sliding_window(self, client_id, max_requests, window_seconds):
+    def is_rate_limited_sliding_window (self, client_id, max_requests, window_seconds):
         \"\"\"
         Sliding window rate limiting using Redis sorted sets
         More accurate than fixed window approach
@@ -525,23 +525,23 @@ class RedisRateLimitMiddleware:
         pipe = self.redis_client.pipeline()
         
         # Remove old entries
-        pipe.zremrangebyscore(key, 0, window_start)
+        pipe.zremrangebyscore (key, 0, window_start)
         
         # Count entries in current window
-        pipe.zcard(key)
+        pipe.zcard (key)
         
         # Add current request
-        pipe.zadd(key, {str(now): now})
+        pipe.zadd (key, {str (now): now})
         
         # Set expiry
-        pipe.expire(key, window_seconds + 1)
+        pipe.expire (key, window_seconds + 1)
         
         results = pipe.execute()
         request_count = results[1]
         
         return request_count >= max_requests
     
-    def is_rate_limited_token_bucket(self, client_id, capacity, refill_rate):
+    def is_rate_limited_token_bucket (self, client_id, capacity, refill_rate):
         \"\"\"
         Token bucket algorithm - allows bursts
         capacity: maximum tokens
@@ -551,16 +551,16 @@ class RedisRateLimitMiddleware:
         now = time.time()
         
         # Get current bucket state
-        bucket_data = self.redis_client.get(key)
+        bucket_data = self.redis_client.get (key)
         
         if bucket_data:
-            bucket = json.loads(bucket_data)
+            bucket = json.loads (bucket_data)
             tokens = bucket['tokens']
             last_update = bucket['last_update']
             
             # Refill tokens based on time passed
             time_passed = now - last_update
-            tokens = min(capacity, tokens + time_passed * refill_rate)
+            tokens = min (capacity, tokens + time_passed * refill_rate)
         else:
             tokens = capacity
         
@@ -586,21 +586,21 @@ class RedisRateLimitMiddleware:
 \`\`\`python
 from functools import wraps
 
-def rate_limit(requests=60, window=60, key_func=None):
+def rate_limit (requests=60, window=60, key_func=None):
     \"\"\"Decorator for rate limiting specific views\"\"\"
     
-    def decorator(view_func):
-        @wraps(view_func)
-        def wrapped_view(request, *args, **kwargs):
+    def decorator (view_func):
+        @wraps (view_func)
+        def wrapped_view (request, *args, **kwargs):
             # Get client identifier
             if key_func:
-                client_id = key_func(request)
+                client_id = key_func (request)
             else:
                 client_id = request.user.id if request.user.is_authenticated else request.META.get('REMOTE_ADDR')
             
             cache_key = f'rate_limit:view:{view_func.__name__}:{client_id}'
             
-            current_count = cache.get(cache_key, 0)
+            current_count = cache.get (cache_key, 0)
             
             if current_count >= requests:
                 return JsonResponse({
@@ -608,18 +608,18 @@ def rate_limit(requests=60, window=60, key_func=None):
                 }, status=429)
             
             if current_count == 0:
-                cache.set(cache_key, 1, window)
+                cache.set (cache_key, 1, window)
             else:
-                cache.incr(cache_key)
+                cache.incr (cache_key)
             
-            return view_func(request, *args, **kwargs)
+            return view_func (request, *args, **kwargs)
         
         return wrapped_view
     return decorator
 
 # Usage:
-@rate_limit(requests=10, window=60)
-def expensive_api_view(request):
+@rate_limit (requests=10, window=60)
+def expensive_api_view (request):
     # API logic
     pass
 \`\`\`
@@ -663,7 +663,7 @@ class TenantContext:
     \"\"\"Global tenant context\"\"\"
     
     @staticmethod
-    def set_tenant(tenant):
+    def set_tenant (tenant):
         _thread_local.tenant = tenant
     
     @staticmethod
@@ -682,24 +682,24 @@ class TenantMiddleware:
     
     def __call__(self, request):
         # Identify tenant from request
-        tenant = self.identify_tenant(request)
+        tenant = self.identify_tenant (request)
         
         if not tenant:
             return JsonResponse({'error': 'Tenant not found'}, status=404)
         
         # Set tenant in thread-local context
-        TenantContext.set_tenant(tenant)
+        TenantContext.set_tenant (tenant)
         request.tenant = tenant
         
         # Process request
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         # Clear tenant context
         TenantContext.clear()
         
         return response
     
-    def identify_tenant(self, request):
+    def identify_tenant (self, request):
         \"\"\"Identify tenant from subdomain or header\"\"\"
         # Method 1: Subdomain (tenant.example.com)
         host = request.get_host()
@@ -707,15 +707,15 @@ class TenantMiddleware:
         
         # Try cache first
         cache_key = f'tenant:subdomain:{subdomain}'
-        tenant = cache.get(cache_key)
+        tenant = cache.get (cache_key)
         
         if tenant:
             return tenant
         
         # Query database
         try:
-            tenant = Tenant.objects.get(subdomain=subdomain)
-            cache.set(cache_key, tenant, 3600)  # Cache for 1 hour
+            tenant = Tenant.objects.get (subdomain=subdomain)
+            cache.set (cache_key, tenant, 3600)  # Cache for 1 hour
             return tenant
         except Tenant.DoesNotExist:
             pass
@@ -724,7 +724,7 @@ class TenantMiddleware:
         tenant_id = request.headers.get('X-Tenant-ID')
         if tenant_id:
             try:
-                tenant = Tenant.objects.get(id=tenant_id)
+                tenant = Tenant.objects.get (id=tenant_id)
                 return tenant
             except Tenant.DoesNotExist:
                 pass
@@ -733,7 +733,7 @@ class TenantMiddleware:
         api_key = request.headers.get('Authorization', '').replace('Bearer ', '')
         if api_key:
             try:
-                api_key_obj = APIKey.objects.select_related('tenant').get(key=api_key)
+                api_key_obj = APIKey.objects.select_related('tenant').get (key=api_key)
                 return api_key_obj.tenant
             except APIKey.DoesNotExist:
                 pass
@@ -747,30 +747,30 @@ class TenantMiddleware:
 from django.db import models
 from django.contrib.auth.models import User
 
-class Tenant(models.Model):
+class Tenant (models.Model):
     \"\"\"Represents a tenant in the system\"\"\"
-    name = models.CharField(max_length=200)
-    subdomain = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
+    name = models.CharField (max_length=200)
+    subdomain = models.CharField (max_length=100, unique=True)
+    created_at = models.DateTimeField (auto_now_add=True)
+    is_active = models.BooleanField (default=True)
     
     # Subscription info
-    plan = models.CharField(max_length=50, default='free')
-    max_users = models.IntegerField(default=10)
+    plan = models.CharField (max_length=50, default='free')
+    max_users = models.IntegerField (default=10)
     
     class Meta:
         indexes = [
-            models.Index(fields=['subdomain']),
+            models.Index (fields=['subdomain']),
         ]
 
-class TenantAwareModel(models.Model):
+class TenantAwareModel (models.Model):
     \"\"\"Base model for all tenant-specific data\"\"\"
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     
     class Meta:
         abstract = True
         
-    def save(self, *args, **kwargs):
+    def save (self, *args, **kwargs):
         # Auto-assign tenant if not set
         if not self.tenant_id:
             self.tenant = TenantContext.get_tenant()
@@ -783,13 +783,13 @@ class TenantAwareModel(models.Model):
 
 class Article(TenantAwareModel):
     \"\"\"Example tenant-specific model\"\"\"
-    title = models.CharField(max_length=200)
+    title = models.CharField (max_length=200)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     
     class Meta:
         indexes = [
-            models.Index(fields=['tenant', 'created_at']),
+            models.Index (fields=['tenant', 'created_at']),
         ]
 \`\`\`
 
@@ -798,20 +798,20 @@ class Article(TenantAwareModel):
 \`\`\`python
 from django.db import models
 
-class TenantManager(models.Manager):
+class TenantManager (models.Manager):
     \"\"\"Manager that automatically filters by current tenant\"\"\"
     
-    def get_queryset(self):
+    def get_queryset (self):
         qs = super().get_queryset()
         tenant = TenantContext.get_tenant()
         
         if tenant:
-            return qs.filter(tenant=tenant)
+            return qs.filter (tenant=tenant)
         
         # In admin or management commands, return all
         return qs
     
-    def all_tenants(self):
+    def all_tenants (self):
         \"\"\"Explicitly get all tenants' data\"\"\"
         return super().get_queryset()
 
@@ -832,45 +832,45 @@ Article.all_objects.all()  # All tenants' articles
 class TenantDatabaseRouter:
     \"\"\"Route database operations based on current tenant\"\"\"
     
-    def db_for_read(self, model, **hints):
+    def db_for_read (self, model, **hints):
         \"\"\"Route reads to tenant database\"\"\"
         tenant = TenantContext.get_tenant()
         
-        if tenant and self.is_tenant_model(model):
+        if tenant and self.is_tenant_model (model):
             return f'tenant_{tenant.id}'
         
         return 'default'
     
-    def db_for_write(self, model, **hints):
+    def db_for_write (self, model, **hints):
         \"\"\"Route writes to tenant database\"\"\"
         tenant = TenantContext.get_tenant()
         
-        if tenant and self.is_tenant_model(model):
+        if tenant and self.is_tenant_model (model):
             return f'tenant_{tenant.id}'
         
         return 'default'
     
-    def allow_relation(self, obj1, obj2, **hints):
+    def allow_relation (self, obj1, obj2, **hints):
         \"\"\"Allow relations only within same tenant\"\"\"
-        if self.is_tenant_model(obj1.__class__) and self.is_tenant_model(obj2.__class__):
+        if self.is_tenant_model (obj1.__class__) and self.is_tenant_model (obj2.__class__):
             return obj1.tenant_id == obj2.tenant_id
         return None
     
-    def allow_migrate(self, db, app_label, model_name=None, **hints):
+    def allow_migrate (self, db, app_label, model_name=None, **hints):
         \"\"\"Determine which databases get migrations\"\"\"
         if db == 'default':
             # Global models only
-            return not self.is_tenant_app(app_label)
+            return not self.is_tenant_app (app_label)
         elif db.startswith('tenant_'):
             # Tenant-specific models
-            return self.is_tenant_app(app_label)
+            return self.is_tenant_app (app_label)
         return None
     
-    def is_tenant_model(self, model):
+    def is_tenant_model (self, model):
         \"\"\"Check if model is tenant-specific\"\"\"
-        return issubclass(model, TenantAwareModel)
+        return issubclass (model, TenantAwareModel)
     
-    def is_tenant_app(self, app_label):
+    def is_tenant_app (self, app_label):
         \"\"\"Check if app is tenant-specific\"\"\"
         return app_label in ['articles', 'products']  # Your tenant apps
 
@@ -890,25 +890,25 @@ class TenantSecurityMiddleware:
     def __call__(self, request):
         # Ensure user belongs to tenant
         if request.user.is_authenticated:
-            if not self.user_belongs_to_tenant(request.user, request.tenant):
+            if not self.user_belongs_to_tenant (request.user, request.tenant):
                 return JsonResponse({
                     'error': 'Access denied: User does not belong to this tenant'
                 }, status=403)
         
-        response = self.get_response(request)
+        response = self.get_response (request)
         
         return response
     
-    def user_belongs_to_tenant(self, user, tenant):
+    def user_belongs_to_tenant (self, user, tenant):
         \"\"\"Verify user belongs to tenant\"\"\"
-        return user.tenant_memberships.filter(tenant=tenant).exists()
+        return user.tenant_memberships.filter (tenant=tenant).exists()
 
-class TenantUserMembership(models.Model):
+class TenantUserMembership (models.Model):
     \"\"\"Link users to tenants\"\"\"
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tenant_memberships')
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50)
-    is_active = models.BooleanField(default=True)
+    role = models.CharField (max_length=50)
+    is_active = models.BooleanField (default=True)
     
     class Meta:
         unique_together = ['user', 'tenant']
@@ -920,18 +920,18 @@ class TenantUserMembership(models.Model):
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-class TenantModelViewSet(viewsets.ModelViewSet):
+class TenantModelViewSet (viewsets.ModelViewSet):
     \"\"\"Base viewset that enforces tenant isolation\"\"\"
     permission_classes = [IsAuthenticated]
     
-    def get_queryset(self):
+    def get_queryset (self):
         \"\"\"Filter queryset by current tenant\"\"\"
         qs = super().get_queryset()
-        return qs.filter(tenant=self.request.tenant)
+        return qs.filter (tenant=self.request.tenant)
     
-    def perform_create(self, serializer):
+    def perform_create (self, serializer):
         \"\"\"Auto-assign tenant on create\"\"\"
-        serializer.save(tenant=self.request.tenant)
+        serializer.save (tenant=self.request.tenant)
 
 class ArticleViewSet(TenantModelViewSet):
     queryset = Article.objects.all()
@@ -943,23 +943,23 @@ class ArticleViewSet(TenantModelViewSet):
 \`\`\`python
 from django.contrib import admin
 
-class TenantAdmin(admin.ModelAdmin):
+class TenantAdmin (admin.ModelAdmin):
     \"\"\"Admin that shows only current tenant's data\"\"\"
     
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
+    def get_queryset (self, request):
+        qs = super().get_queryset (request)
         
         if request.user.is_superuser:
             return qs  # Superuser sees all
         
         # Filter by user's tenants
         tenant_ids = request.user.tenant_memberships.values_list('tenant_id', flat=True)
-        return qs.filter(tenant_id__in=tenant_ids)
+        return qs.filter (tenant_id__in=tenant_ids)
     
-    def save_model(self, request, obj, form, change):
+    def save_model (self, request, obj, form, change):
         if not change:  # New object
             obj.tenant = TenantContext.get_tenant()
-        super().save_model(request, obj, form, change)
+        super().save_model (request, obj, form, change)
 \`\`\`
 
 **Security Checklist:**

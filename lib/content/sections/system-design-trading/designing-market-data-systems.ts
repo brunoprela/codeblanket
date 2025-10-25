@@ -133,20 +133,20 @@ class ExchangeFeedHandler:
         self.exchange_name = exchange_name
         self.callbacks = []
     
-    def subscribe(self, callback: Callable[[Tick], None]):
+    def subscribe (self, callback: Callable[[Tick], None]):
         """Subscribe to tick updates"""
-        self.callbacks.append(callback)
+        self.callbacks.append (callback)
     
-    def publish(self, tick: Tick):
+    def publish (self, tick: Tick):
         """Publish tick to subscribers"""
         for callback in self.callbacks:
-            callback(tick)
+            callback (tick)
     
-    async def connect(self):
+    async def connect (self):
         """Connect to exchange feed"""
         raise NotImplementedError
     
-    def parse_message(self, raw_message: dict) -> Optional[Tick]:
+    def parse_message (self, raw_message: dict) -> Optional[Tick]:
         """Parse exchange-specific message to Tick"""
         raise NotImplementedError
 
@@ -161,28 +161,28 @@ class BinanceFeedHandler(ExchangeFeedHandler):
         self.symbols = [s.lower() for s in symbols]  # Binance uses lowercase
         self.ws = None
     
-    async def connect(self):
+    async def connect (self):
         """Connect to Binance WebSocket"""
         # Create stream path
         streams = [f"{symbol}@trade" for symbol in self.symbols]
         streams += [f"{symbol}@bookTicker" for symbol in self.symbols]
-        stream_path = "/".join(streams)
+        stream_path = "/".join (streams)
         
         url = f"wss://stream.binance.com:9443/stream?streams={stream_path}"
         
         print(f"Connecting to Binance: {url}")
-        async with websockets.connect(url) as ws:
+        async with websockets.connect (url) as ws:
             self.ws = ws
             async for message in ws:
                 try:
-                    data = json.loads(message)
-                    tick = self.parse_message(data)
+                    data = json.loads (message)
+                    tick = self.parse_message (data)
                     if tick:
-                        self.publish(tick)
+                        self.publish (tick)
                 except Exception as e:
                     print(f"Error parsing Binance message: {e}")
     
-    def parse_message(self, data: dict) -> Optional[Tick]:
+    def parse_message (self, data: dict) -> Optional[Tick]:
         """Parse Binance message"""
         if 'data' not in data:
             return None
@@ -194,10 +194,10 @@ class BinanceFeedHandler(ExchangeFeedHandler):
         if '@trade' in stream:
             return Tick(
                 symbol=msg['s'],  # BTCUSDT
-                timestamp=int(msg['T'] * 1000),  # Convert ms to μs
+                timestamp=int (msg['T'] * 1000),  # Convert ms to μs
                 message_type=MessageType.TRADE,
-                trade_price=float(msg['p']),
-                trade_size=float(msg['q']),
+                trade_price=float (msg['p']),
+                trade_size=float (msg['q']),
                 trade_side="BUY" if msg['m'] else "SELL",  # m=true means buyer is maker
                 exchange=self.exchange_name,
                 sequence_number=msg['t']
@@ -207,12 +207,12 @@ class BinanceFeedHandler(ExchangeFeedHandler):
         elif '@bookTicker' in stream:
             return Tick(
                 symbol=msg['s'],
-                timestamp=int(msg['E'] * 1000),  # Event time in μs
+                timestamp=int (msg['E'] * 1000),  # Event time in μs
                 message_type=MessageType.QUOTE,
-                bid_price=float(msg['b']),
-                bid_size=float(msg['B']),
-                ask_price=float(msg['a']),
-                ask_size=float(msg['A']),
+                bid_price=float (msg['b']),
+                bid_size=float (msg['B']),
+                ask_price=float (msg['a']),
+                ask_size=float (msg['A']),
                 exchange=self.exchange_name
             )
         
@@ -231,11 +231,11 @@ class AlpacaFeedHandler(ExchangeFeedHandler):
         self.api_secret = api_secret
         self.ws = None
     
-    async def connect(self):
+    async def connect (self):
         """Connect to Alpaca WebSocket"""
         url = "wss://stream.data.alpaca.markets/v2/iex"
         
-        async with websockets.connect(url) as ws:
+        async with websockets.connect (url) as ws:
             self.ws = ws
             
             # Authenticate
@@ -244,7 +244,7 @@ class AlpacaFeedHandler(ExchangeFeedHandler):
                 "key": self.api_key,
                 "secret": self.api_secret
             }
-            await ws.send(json.dumps(auth_msg))
+            await ws.send (json.dumps (auth_msg))
             auth_response = await ws.recv()
             print(f"Alpaca auth: {auth_response}")
             
@@ -254,27 +254,27 @@ class AlpacaFeedHandler(ExchangeFeedHandler):
                 "trades": self.symbols,
                 "quotes": self.symbols
             }
-            await ws.send(json.dumps(subscribe_msg))
+            await ws.send (json.dumps (subscribe_msg))
             
             # Process messages
             async for message in ws:
                 try:
-                    data = json.loads(message)
+                    data = json.loads (message)
                     for item in data:
-                        tick = self.parse_message(item)
+                        tick = self.parse_message (item)
                         if tick:
-                            self.publish(tick)
+                            self.publish (tick)
                 except Exception as e:
                     print(f"Error parsing Alpaca message: {e}")
     
-    def parse_message(self, msg: dict) -> Optional[Tick]:
+    def parse_message (self, msg: dict) -> Optional[Tick]:
         """Parse Alpaca message"""
         msg_type = msg.get('T')
         
         if msg_type == 't':  # Trade
             return Tick(
                 symbol=msg['S'],
-                timestamp=int(datetime.fromisoformat(msg['t'].replace('Z', '+00:00')).timestamp() * 1_000_000),
+                timestamp=int (datetime.fromisoformat (msg['t'].replace('Z', '+00:00')).timestamp() * 1_000_000),
                 message_type=MessageType.TRADE,
                 trade_price=msg['p'],
                 trade_size=msg['s'],
@@ -284,7 +284,7 @@ class AlpacaFeedHandler(ExchangeFeedHandler):
         elif msg_type == 'q':  # Quote
             return Tick(
                 symbol=msg['S'],
-                timestamp=int(datetime.fromisoformat(msg['t'].replace('Z', '+00:00')).timestamp() * 1_000_000),
+                timestamp=int (datetime.fromisoformat (msg['t'].replace('Z', '+00:00')).timestamp() * 1_000_000),
                 message_type=MessageType.QUOTE,
                 bid_price=msg['bp'],
                 bid_size=msg['bs'],
@@ -307,12 +307,12 @@ class MarketDataAggregator:
         self.tick_count = 0
         self.last_report_time = datetime.now()
     
-    def add_handler(self, handler: ExchangeFeedHandler):
+    def add_handler (self, handler: ExchangeFeedHandler):
         """Add exchange handler"""
-        handler.subscribe(self.on_tick)
-        self.handlers.append(handler)
+        handler.subscribe (self.on_tick)
+        self.handlers.append (handler)
     
-    def on_tick(self, tick: Tick):
+    def on_tick (self, tick: Tick):
         """Handle incoming tick"""
         self.tick_count += 1
         
@@ -327,7 +327,7 @@ class MarketDataAggregator:
             self.tick_count = 0
             self.last_report_time = now
     
-    async def start(self):
+    async def start (self):
         """Start all handlers"""
         tasks = [handler.connect() for handler in self.handlers]
         await asyncio.gather(*tasks)
@@ -338,16 +338,16 @@ async def main():
     
     # Add Binance (crypto)
     binance = BinanceFeedHandler(['BTCUSDT', 'ETHUSDT'])
-    aggregator.add_handler(binance)
+    aggregator.add_handler (binance)
     
     # Add Alpaca (stocks) - requires credentials
     # alpaca = AlpacaFeedHandler(['AAPL', 'TSLA'], 'key', 'secret')
-    # aggregator.add_handler(alpaca)
+    # aggregator.add_handler (alpaca)
     
     await aggregator.start()
 
 # Run
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ---
@@ -391,11 +391,11 @@ class TickDatabase:
     """
     
     def __init__(self, conn_string: str):
-        self.conn = psycopg2.connect(conn_string)
+        self.conn = psycopg2.connect (conn_string)
         self.cursor = self.conn.cursor()
         self._create_schema()
     
-    def _create_schema(self):
+    def _create_schema (self):
         """Create tables and hypertables"""
         # Create trades table
         self.cursor.execute("""
@@ -450,11 +450,11 @@ class TickDatabase:
         
         self.conn.commit()
     
-    def insert_trades(self, ticks: list[Tick]):
+    def insert_trades (self, ticks: list[Tick]):
         """Batch insert trades"""
         data = [
             (
-                datetime.fromtimestamp(tick.timestamp / 1_000_000),
+                datetime.fromtimestamp (tick.timestamp / 1_000_000),
                 tick.symbol,
                 tick.exchange,
                 tick.trade_price,
@@ -478,7 +478,7 @@ class TickDatabase:
             )
             self.conn.commit()
     
-    def query_trades(self, symbol: str, start_time: datetime, end_time: datetime):
+    def query_trades (self, symbol: str, start_time: datetime, end_time: datetime):
         """Query trades for symbol in time range"""
         self.cursor.execute("""
             SELECT timestamp, price, size, side
@@ -491,12 +491,12 @@ class TickDatabase:
         
         return self.cursor.fetchall()
     
-    def create_bars(self, symbol: str, interval: str = '1 minute'):
+    def create_bars (self, symbol: str, interval: str = '1 minute'):
         """
         Create OHLCV bars using time_bucket
         TimescaleDB feature for fast aggregation
         """
-        self.cursor.execute(f"""
+        self.cursor.execute (f"""
             SELECT
                 time_bucket('{interval}', timestamp) AS bar_time,
                 symbol,
@@ -531,10 +531,10 @@ class ClickHouseMarketData:
     """
     
     def __init__(self, host: str = 'localhost'):
-        self.client = Client(host)
+        self.client = Client (host)
         self._create_tables()
     
-    def _create_tables(self):
+    def _create_tables (self):
         """Create tables with optimized schema"""
         # Trades table with compression
         self.client.execute("""
@@ -559,19 +559,19 @@ class ClickHouseMarketData:
             PARTITION BY toYYYYMM(bar_time)
             ORDER BY (symbol, bar_time)
             AS SELECT
-                toStartOfMinute(timestamp) AS bar_time,
+                toStartOfMinute (timestamp) AS bar_time,
                 symbol,
-                argMin(price, timestamp) AS open,
-                max(price) AS high,
-                min(price) AS low,
-                argMax(price, timestamp) AS close,
-                sum(size) AS volume,
+                argMin (price, timestamp) AS open,
+                max (price) AS high,
+                min (price) AS low,
+                argMax (price, timestamp) AS close,
+                sum (size) AS volume,
                 count() AS trades
             FROM trades
             GROUP BY symbol, bar_time
         """)
     
-    def insert_trades(self, ticks: list[Tick]):
+    def insert_trades (self, ticks: list[Tick]):
         """Bulk insert trades"""
         data = [
             (
@@ -592,7 +592,7 @@ class ClickHouseMarketData:
                 data
             )
     
-    def get_bars(self, symbol: str, start: str, end: str, interval: str = '1m'):
+    def get_bars (self, symbol: str, start: str, end: str, interval: str = '1m'):
         """Get OHLCV bars"""
         query = """
             SELECT
@@ -610,7 +610,7 @@ class ClickHouseMarketData:
             ORDER BY bar_time
         """
         
-        return self.client.execute(query, {
+        return self.client.execute (query, {
             'symbol': symbol,
             'start': start,
             'end': end
@@ -652,13 +652,13 @@ class BarAggregator:
     def __init__(self, intervals_seconds: list[int] = [60, 300, 3600]):
         self.intervals = intervals_seconds
         self.current_bars: Dict[tuple, Bar] = {}  # (symbol, interval) -> Bar
-        self.callbacks = defaultdict(list)  # interval -> [callbacks]
+        self.callbacks = defaultdict (list)  # interval -> [callbacks]
     
-    def subscribe(self, interval_seconds: int, callback: Callable[[Bar], None]):
+    def subscribe (self, interval_seconds: int, callback: Callable[[Bar], None]):
         """Subscribe to bar updates"""
-        self.callbacks[interval_seconds].append(callback)
+        self.callbacks[interval_seconds].append (callback)
     
-    def on_tick(self, tick: Tick):
+    def on_tick (self, tick: Tick):
         """Process tick and update bars"""
         if tick.message_type != MessageType.TRADE:
             return
@@ -686,7 +686,7 @@ class BarAggregator:
                 if tick.timestamp >= bar.timestamp + (interval * 1_000_000):
                     # Publish completed bar
                     for callback in self.callbacks[interval]:
-                        callback(bar)
+                        callback (bar)
                     
                     # Start new bar
                     self.current_bars[key] = Bar(
@@ -701,16 +701,16 @@ class BarAggregator:
                     )
                 else:
                     # Update current bar
-                    bar.high = max(bar.high, tick.trade_price)
-                    bar.low = min(bar.low, tick.trade_price)
+                    bar.high = max (bar.high, tick.trade_price)
+                    bar.low = min (bar.low, tick.trade_price)
                     bar.close = tick.trade_price
                     bar.volume += tick.trade_size
                     bar.trades += 1
 
 # Usage
-aggregator = BarAggregator(intervals_seconds=[60, 300])  # 1m, 5m
+aggregator = BarAggregator (intervals_seconds=[60, 300])  # 1m, 5m
 
-def on_1m_bar(bar: Bar):
+def on_1m_bar (bar: Bar):
     print(f"{bar.symbol} 1m: O={bar.open} H={bar.high} L={bar.low} C={bar.close} V={bar.volume}")
 
 aggregator.subscribe(60, on_1m_bar)
@@ -735,10 +735,10 @@ class DataQualityMonitor:
     
     def __init__(self):
         self.last_tick_time = {}  # symbol -> timestamp
-        self.tick_counts = defaultdict(int)  # symbol -> count
-        self.price_history = defaultdict(list)  # symbol -> recent prices
+        self.tick_counts = defaultdict (int)  # symbol -> count
+        self.price_history = defaultdict (list)  # symbol -> recent prices
     
-    def check_tick(self, tick: Tick) -> list[str]:
+    def check_tick (self, tick: Tick) -> list[str]:
         """
         Check tick quality
         Returns: list of warnings
@@ -750,7 +750,7 @@ class DataQualityMonitor:
         if symbol in self.last_tick_time:
             gap = tick.timestamp - self.last_tick_time[symbol]
             if gap > 5_000_000:  # > 5 seconds
-                warnings.append(f"Gap detected: {gap / 1_000_000:.1f}s since last tick")
+                warnings.append (f"Gap detected: {gap / 1_000_000:.1f}s since last tick")
         
         self.last_tick_time[symbol] = tick.timestamp
         
@@ -758,15 +758,15 @@ class DataQualityMonitor:
         if tick.message_type == MessageType.TRADE and tick.trade_price:
             history = self.price_history[symbol]
             
-            if len(history) >= 10:
-                avg_price = sum(history[-10:]) / 10
+            if len (history) >= 10:
+                avg_price = sum (history[-10:]) / 10
                 std_price = (sum((p - avg_price)**2 for p in history[-10:]) / 10) ** 0.5
                 
-                if abs(tick.trade_price - avg_price) > 5 * std_price:
-                    warnings.append(f"Price spike: {tick.trade_price} vs avg {avg_price:.2f}")
+                if abs (tick.trade_price - avg_price) > 5 * std_price:
+                    warnings.append (f"Price spike: {tick.trade_price} vs avg {avg_price:.2f}")
             
-            history.append(tick.trade_price)
-            if len(history) > 100:
+            history.append (tick.trade_price)
+            if len (history) > 100:
                 history.pop(0)
         
         # Check 3: Tick rate monitoring
@@ -774,12 +774,12 @@ class DataQualityMonitor:
         
         return warnings
     
-    def get_stats(self) -> dict:
+    def get_stats (self) -> dict:
         """Get monitoring statistics"""
         return {
-            'symbols': len(self.last_tick_time),
-            'total_ticks': sum(self.tick_counts.values()),
-            'ticks_per_symbol': dict(self.tick_counts)
+            'symbols': len (self.last_tick_time),
+            'total_ticks': sum (self.tick_counts.values()),
+            'ticks_per_symbol': dict (self.tick_counts)
         }
 \`\`\`
 
@@ -819,11 +819,11 @@ class HistoricalReplay:
         # Fetch all ticks
         all_ticks = []
         for symbol in symbols:
-            ticks = self.db.query_trades(symbol, start_time, end_time)
+            ticks = self.db.query_trades (symbol, start_time, end_time)
             for timestamp, price, size, side in ticks:
                 all_ticks.append(Tick(
                     symbol=symbol,
-                    timestamp=int(timestamp.timestamp() * 1_000_000),
+                    timestamp=int (timestamp.timestamp() * 1_000_000),
                     message_type=MessageType.TRADE,
                     trade_price=price,
                     trade_size=size,
@@ -832,7 +832,7 @@ class HistoricalReplay:
                 ))
         
         # Sort by timestamp
-        all_ticks.sort(key=lambda t: t.timestamp)
+        all_ticks.sort (key=lambda t: t.timestamp)
         
         # Replay with timing
         start_replay_time = datetime.now().timestamp() * 1_000_000
@@ -846,14 +846,14 @@ class HistoricalReplay:
             sleep_time = (data_elapsed - replay_elapsed) / speed
             if sleep_time > 0:
                 import time
-                time.sleep(sleep_time / 1_000_000)  # Convert to seconds
+                time.sleep (sleep_time / 1_000_000)  # Convert to seconds
             
             yield tick
 
 # Usage in backtest
 def backtest_with_replay():
     db = TickDatabase("postgresql://localhost/marketdata")
-    replay = HistoricalReplay(db)
+    replay = HistoricalReplay (db)
     
     strategy = MyTradingStrategy()
     
@@ -863,7 +863,7 @@ def backtest_with_replay():
         end_time=datetime(2024, 1, 31),
         speed=1000.0  # 1000x faster
     ):
-        strategy.on_tick(tick)
+        strategy.on_tick (tick)
 \`\`\`
 
 ---

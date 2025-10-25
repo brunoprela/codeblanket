@@ -101,7 +101,7 @@ Most common flow: User starts at Service Provider.
 
 3. **SP redirects to IdP**: Browser redirected to Okta with AuthnRequest
    \`\`\`
-   https://idp.okta.com/sso?SAMLRequest=<base64_encoded_request>
+   https://idp.okta.com/sso? SAMLRequest=<base64_encoded_request>
    \`\`\`
 
 4. **User authenticates at IdP**: User enters username/password, completes MFA

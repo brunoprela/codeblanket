@@ -28,7 +28,7 @@ export const testingFundamentalsPytestBasicsMultipleChoice: MultipleChoiceQuesti
       ],
       correctAnswer: 1,
       explanation:
-        'pytest uses plain Python assert statements with introspection: assert result == 5 gives detailed output showing actual vs expected values. unittest requires verbose methods: self.assertEqual(result, 5). pytest output example: "assert 3 == 5" shows "where 3 = calc.add(1, 2)". This introspection makes debugging much easier. No performance difference. Both can test same conditions. Neither is deprecated—pytest is just more Pythonic and readable. Example: pytest assertion "assert user.name == \'Alice\'" vs unittest "self.assertEqual(user.name, \'Alice\')"—pytest is 40% less code and more natural Python.',
+        'pytest uses plain Python assert statements with introspection: assert result == 5 gives detailed output showing actual vs expected values. unittest requires verbose methods: self.assertEqual (result, 5). pytest output example: "assert 3 == 5" shows "where 3 = calc.add(1, 2)". This introspection makes debugging much easier. No performance difference. Both can test same conditions. Neither is deprecated—pytest is just more Pythonic and readable. Example: pytest assertion "assert user.name == \'Alice\'" vs unittest "self.assertEqual (user.name, \'Alice\')"—pytest is 40% less code and more natural Python.',
     },
     {
       id: 'tfpb-mc-3',
@@ -41,7 +41,7 @@ export const testingFundamentalsPytestBasicsMultipleChoice: MultipleChoiceQuesti
       ],
       correctAnswer: 2,
       explanation:
-        'AAA = Arrange, Act, Assert (in that order): (1) Arrange: Set up test data and preconditions (create objects, mock dependencies). (2) Act: Execute the code being tested (call the function/method). (3) Assert: Verify the results match expectations (check return values, side effects, exceptions). Example: def test_payment(): # Arrange payment = Payment(amount=100.0) # Act result = process_payment(payment) # Assert assert result is True. This pattern makes tests readable and maintainable by separating concerns. Also called Given-When-Then in BDD. Following AAA makes tests self-documenting.',
+        'AAA = Arrange, Act, Assert (in that order): (1) Arrange: Set up test data and preconditions (create objects, mock dependencies). (2) Act: Execute the code being tested (call the function/method). (3) Assert: Verify the results match expectations (check return values, side effects, exceptions). Example: def test_payment(): # Arrange payment = Payment (amount=100.0) # Act result = process_payment (payment) # Assert assert result is True. This pattern makes tests readable and maintainable by separating concerns. Also called Given-When-Then in BDD. Following AAA makes tests self-documenting.',
     },
     {
       id: 'tfpb-mc-4',

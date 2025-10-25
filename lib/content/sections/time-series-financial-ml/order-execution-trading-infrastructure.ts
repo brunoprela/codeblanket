@@ -58,7 +58,7 @@ class AlpacaTrader:
             account = self.api.get_account()
             print(f"✓ Connected to Alpaca ({'paper' if paper else 'LIVE'})")
             print(f"  Account: {account.account_number}")
-            print(f"  Equity: \${float(account.equity):,.2f}")
+            print(f"  Equity: \${float (account.equity):,.2f}")
         except Exception as e:
             print(f"✗ Connection failed: {e}")
             raise
@@ -67,47 +67,47 @@ class AlpacaTrader:
     # ACCOUNT & POSITIONS
     # ========================================================================
     
-    def get_account(self) -> Dict:
+    def get_account (self) -> Dict:
         """Get account information"""
         account = self.api.get_account()
         return {
-            'equity': float(account.equity),
-            'cash': float(account.cash),
-            'buying_power': float(account.buying_power),
-            'portfolio_value': float(account.portfolio_value),
+            'equity': float (account.equity),
+            'cash': float (account.cash),
+            'buying_power': float (account.buying_power),
+            'portfolio_value': float (account.portfolio_value),
             'pattern_day_trader': account.pattern_day_trader,
             'trading_blocked': account.trading_blocked,
             'account_blocked': account.account_blocked,
             'transfers_blocked': account.transfers_blocked
         }
     
-    def get_positions(self) -> List[Dict]:
+    def get_positions (self) -> List[Dict]:
         """Get all open positions"""
         positions = self.api.list_positions()
         return [{
             'symbol': pos.symbol,
-            'qty': int(pos.qty),
-            'side': 'long' if int(pos.qty) > 0 else 'short',
-            'avg_entry_price': float(pos.avg_entry_price),
-            'current_price': float(pos.current_price),
-            'market_value': float(pos.market_value),
-            'cost_basis': float(pos.cost_basis),
-            'unrealized_pl': float(pos.unrealized_pl),
-            'unrealized_plpc': float(pos.unrealized_plpc),
-            'unrealized_intraday_pl': float(pos.unrealized_intraday_pl),
-            'unrealized_intraday_plpc': float(pos.unrealized_intraday_plpc)
+            'qty': int (pos.qty),
+            'side': 'long' if int (pos.qty) > 0 else 'short',
+            'avg_entry_price': float (pos.avg_entry_price),
+            'current_price': float (pos.current_price),
+            'market_value': float (pos.market_value),
+            'cost_basis': float (pos.cost_basis),
+            'unrealized_pl': float (pos.unrealized_pl),
+            'unrealized_plpc': float (pos.unrealized_plpc),
+            'unrealized_intraday_pl': float (pos.unrealized_intraday_pl),
+            'unrealized_intraday_plpc': float (pos.unrealized_intraday_plpc)
         } for pos in positions]
     
-    def get_position(self, symbol: str) -> Optional[Dict]:
+    def get_position (self, symbol: str) -> Optional[Dict]:
         """Get specific position"""
         try:
-            pos = self.api.get_position(symbol)
+            pos = self.api.get_position (symbol)
             return {
                 'symbol': pos.symbol,
-                'qty': int(pos.qty),
-                'avg_entry_price': float(pos.avg_entry_price),
-                'current_price': float(pos.current_price),
-                'unrealized_pl': float(pos.unrealized_pl)
+                'qty': int (pos.qty),
+                'avg_entry_price': float (pos.avg_entry_price),
+                'current_price': float (pos.current_price),
+                'unrealized_pl': float (pos.unrealized_pl)
             }
         except:
             return None
@@ -116,7 +116,7 @@ class AlpacaTrader:
     # ORDER PLACEMENT
     # ========================================================================
     
-    def place_market_order(self, symbol: str, qty: int, side: str = 'buy',
+    def place_market_order (self, symbol: str, qty: int, side: str = 'buy',
                           time_in_force: str = 'day') -> Dict:
         """
         Place market order
@@ -135,12 +135,12 @@ class AlpacaTrader:
                 type='market',
                 time_in_force=time_in_force
             )
-            return self._parse_order(order)
+            return self._parse_order (order)
         except Exception as e:
             print(f"✗ Market order failed: {e}")
             return None
     
-    def place_limit_order(self, symbol: str, qty: int, limit_price: float,
+    def place_limit_order (self, symbol: str, qty: int, limit_price: float,
                          side: str = 'buy', time_in_force: str = 'day') -> Dict:
         """
         Place limit order
@@ -156,12 +156,12 @@ class AlpacaTrader:
                 time_in_force=time_in_force,
                 limit_price=limit_price
             )
-            return self._parse_order(order)
+            return self._parse_order (order)
         except Exception as e:
             print(f"✗ Limit order failed: {e}")
             return None
     
-    def place_stop_loss(self, symbol: str, qty: int, stop_price: float,
+    def place_stop_loss (self, symbol: str, qty: int, stop_price: float,
                        side: str = 'sell', time_in_force: str = 'gtc') -> Dict:
         """
         Place stop-loss order
@@ -177,12 +177,12 @@ class AlpacaTrader:
                 time_in_force=time_in_force,
                 stop_price=stop_price
             )
-            return self._parse_order(order)
+            return self._parse_order (order)
         except Exception as e:
             print(f"✗ Stop-loss order failed: {e}")
             return None
     
-    def place_bracket_order(self, symbol: str, qty: int, side: str,
+    def place_bracket_order (self, symbol: str, qty: int, side: str,
                            take_profit_price: float, stop_loss_price: float) -> Dict:
         """
         Bracket order: Entry + Take Profit + Stop Loss
@@ -200,7 +200,7 @@ class AlpacaTrader:
                 take_profit={'limit_price': take_profit_price},
                 stop_loss={'stop_price': stop_loss_price}
             )
-            return self._parse_order(order)
+            return self._parse_order (order)
         except Exception as e:
             print(f"✗ Bracket order failed: {e}")
             return None
@@ -209,30 +209,30 @@ class AlpacaTrader:
     # ORDER MANAGEMENT
     # ========================================================================
     
-    def get_orders(self, status: str = 'open') -> List[Dict]:
+    def get_orders (self, status: str = 'open') -> List[Dict]:
         """
         Get orders by status
         
         Args:
             status: 'open', 'closed', 'all'
         """
-        orders = self.api.list_orders(status=status, limit=100)
-        return [self._parse_order(order) for order in orders]
+        orders = self.api.list_orders (status=status, limit=100)
+        return [self._parse_order (order) for order in orders]
     
-    def get_order(self, order_id: str) -> Dict:
+    def get_order (self, order_id: str) -> Dict:
         """Get specific order by ID"""
-        order = self.api.get_order(order_id)
-        return self._parse_order(order)
+        order = self.api.get_order (order_id)
+        return self._parse_order (order)
     
-    def cancel_order(self, order_id: str) -> bool:
+    def cancel_order (self, order_id: str) -> bool:
         """Cancel specific order"""
         try:
-            self.api.cancel_order(order_id)
+            self.api.cancel_order (order_id)
             return True
         except:
             return False
     
-    def cancel_all_orders(self) -> bool:
+    def cancel_all_orders (self) -> bool:
         """Cancel all open orders"""
         try:
             self.api.cancel_all_orders()
@@ -240,20 +240,20 @@ class AlpacaTrader:
         except:
             return False
     
-    def _parse_order(self, order) -> Dict:
+    def _parse_order (self, order) -> Dict:
         """Parse order object to dict"""
         return {
             'id': order.id,
             'client_order_id': order.client_order_id,
             'symbol': order.symbol,
-            'qty': int(order.qty),
-            'filled_qty': int(order.filled_qty),
+            'qty': int (order.qty),
+            'filled_qty': int (order.filled_qty),
             'side': order.side,
             'type': order.type,
             'time_in_force': order.time_in_force,
-            'limit_price': float(order.limit_price) if order.limit_price else None,
-            'stop_price': float(order.stop_price) if order.stop_price else None,
-            'filled_avg_price': float(order.filled_avg_price) if order.filled_avg_price else None,
+            'limit_price': float (order.limit_price) if order.limit_price else None,
+            'stop_price': float (order.stop_price) if order.stop_price else None,
+            'filled_avg_price': float (order.filled_avg_price) if order.filled_avg_price else None,
             'status': order.status,
             'created_at': order.created_at,
             'updated_at': order.updated_at,
@@ -265,7 +265,7 @@ class AlpacaTrader:
     # MARKET DATA
     # ========================================================================
     
-    def get_bars(self, symbol: str, timeframe: str = '1Day',
+    def get_bars (self, symbol: str, timeframe: str = '1Day',
                 start: str = None, end: str = None, limit: int = 100) -> pd.DataFrame:
         """
         Get historical bars
@@ -287,23 +287,23 @@ class AlpacaTrader:
         
         return bars
     
-    def get_latest_trade(self, symbol: str) -> Dict:
+    def get_latest_trade (self, symbol: str) -> Dict:
         """Get latest trade for symbol"""
-        trade = self.api.get_latest_trade(symbol)
+        trade = self.api.get_latest_trade (symbol)
         return {
-            'price': float(trade.price),
-            'size': int(trade.size),
+            'price': float (trade.price),
+            'size': int (trade.size),
             'timestamp': trade.timestamp
         }
     
-    def get_latest_quote(self, symbol: str) -> Dict:
+    def get_latest_quote (self, symbol: str) -> Dict:
         """Get latest quote (bid/ask)"""
-        quote = self.api.get_latest_quote(symbol)
+        quote = self.api.get_latest_quote (symbol)
         return {
-            'bid_price': float(quote.bid_price),
-            'bid_size': int(quote.bid_size),
-            'ask_price': float(quote.ask_price),
-            'ask_size': int(quote.ask_size),
+            'bid_price': float (quote.bid_price),
+            'bid_size': int (quote.bid_size),
+            'ask_price': float (quote.ask_price),
+            'ask_size': int (quote.ask_size),
             'timestamp': quote.timestamp
         }
     
@@ -311,26 +311,26 @@ class AlpacaTrader:
     # RISK CHECKS
     # ========================================================================
     
-    def check_buying_power(self, symbol: str, qty: int, price: float) -> bool:
+    def check_buying_power (self, symbol: str, qty: int, price: float) -> bool:
         """Check if sufficient buying power"""
         account = self.get_account()
         required = qty * price
         return required <= account['buying_power']
     
-    def check_position_limit(self, symbol: str, qty: int, max_position_size: int) -> bool:
+    def check_position_limit (self, symbol: str, qty: int, max_position_size: int) -> bool:
         """Check if order exceeds position limit"""
-        current_pos = self.get_position(symbol)
+        current_pos = self.get_position (symbol)
         current_qty = current_pos['qty'] if current_pos else 0
-        new_qty = abs(current_qty + qty)
+        new_qty = abs (current_qty + qty)
         return new_qty <= max_position_size
     
-    def check_daily_loss_limit(self, max_daily_loss: float) -> bool:
+    def check_daily_loss_limit (self, max_daily_loss: float) -> bool:
         """Check if daily loss limit exceeded"""
         account = self.get_account()
         equity = account['equity']
         
         # Get starting equity (you'd cache this at market open)
-        daily_pnl = equity - getattr(self, 'start_of_day_equity', equity)
+        daily_pnl = equity - getattr (self, 'start_of_day_equity', equity)
         
         return daily_pnl >= -max_daily_loss
 
@@ -358,23 +358,23 @@ class InteractiveBrokersTrader:
         try:
             from ib_insync import IB, Stock, MarketOrder, LimitOrder
             self.ib = IB()
-            self.ib.connect(host, port, clientId=client_id)
+            self.ib.connect (host, port, clientId=client_id)
             print(f"✓ Connected to Interactive Brokers")
         except Exception as e:
             print(f"✗ IB connection failed: {e}")
             raise
     
-    def place_market_order(self, symbol: str, qty: int, action: str = 'BUY'):
+    def place_market_order (self, symbol: str, qty: int, action: str = 'BUY'):
         """Place market order"""
         from ib_insync import Stock, MarketOrder
         
-        contract = Stock(symbol, 'SMART', 'USD')
-        order = MarketOrder(action, qty)
+        contract = Stock (symbol, 'SMART', 'USD')
+        order = MarketOrder (action, qty)
         
-        trade = self.ib.placeOrder(contract, order)
+        trade = self.ib.placeOrder (contract, order)
         return trade
     
-    def get_positions(self):
+    def get_positions (self):
         """Get all positions"""
         positions = self.ib.positions()
         return [{
@@ -399,11 +399,11 @@ class OrderManagementSystem:
         self.canceled_orders = []
         self.positions = {}
     
-    def submit_order(self, symbol: str, qty: int, order_type: str,
+    def submit_order (self, symbol: str, qty: int, order_type: str,
                     price: float = None, stop_price: float = None):
         """Submit order to OMS"""
         order = {
-            'order_id': f"ORD_{len(self.orders)}",
+            'order_id': f"ORD_{len (self.orders)}",
             'symbol': symbol,
             'qty': qty,
             'order_type': order_type,
@@ -415,10 +415,10 @@ class OrderManagementSystem:
             'avg_fill_price': 0.0
         }
         
-        self.orders.append(order)
+        self.orders.append (order)
         return order['order_id']
     
-    def update_order_status(self, order_id: str, status: str,
+    def update_order_status (self, order_id: str, status: str,
                            filled_qty: int = 0, fill_price: float = 0):
         """Update order status"""
         for order in self.orders:
@@ -434,14 +434,14 @@ class OrderManagementSystem:
                     order['avg_fill_price'] = (prev_value + new_value) / (prev_filled + filled_qty)
                 
                 if status == 'filled':
-                    self.filled_orders.append(order)
-                    self._update_position(order)
+                    self.filled_orders.append (order)
+                    self._update_position (order)
                 elif status == 'canceled':
-                    self.canceled_orders.append(order)
+                    self.canceled_orders.append (order)
                 
                 break
     
-    def _update_position(self, order):
+    def _update_position (self, order):
         """Update position after fill"""
         symbol = order['symbol']
         qty = order['qty']
@@ -467,22 +467,22 @@ class OrderManagementSystem:
             pos['avg_price'] = total_value / pos['qty'] if pos['qty'] != 0 else 0
         else:  # Opposite direction (closing or flipping)
             # Realize P&L
-            close_qty = min(abs(old_qty), abs(qty))
-            pnl = close_qty * (price - old_avg) * np.sign(old_qty)
+            close_qty = min (abs (old_qty), abs (qty))
+            pnl = close_qty * (price - old_avg) * np.sign (old_qty)
             pos['realized_pnl'] += pnl
             pos['qty'] = old_qty + qty
     
-    def get_open_orders(self):
+    def get_open_orders (self):
         """Get all open orders"""
         return [o for o in self.orders if o['status'] in ['pending', 'partial']]
     
-    def get_filled_orders(self):
+    def get_filled_orders (self):
         """Get all filled orders"""
         return self.filled_orders
     
-    def get_position(self, symbol: str):
+    def get_position (self, symbol: str):
         """Get current position"""
-        return self.positions.get(symbol, {'qty': 0, 'avg_price': 0, 'realized_pnl': 0})
+        return self.positions.get (symbol, {'qty': 0, 'avg_price': 0, 'realized_pnl': 0})
 
 
 # ============================================================================
@@ -504,13 +504,13 @@ class RealtimeDataStream:
         self.on_quote = None
         self.on_bar = None
     
-    def stream_trades(self, symbols: List[str]):
+    def stream_trades (self, symbols: List[str]):
         """Stream real-time trades"""
         # Implementation depends on broker
         # Alpaca uses websocket-client
         pass
     
-    def stream_quotes(self, symbols: List[str]):
+    def stream_quotes (self, symbols: List[str]):
         """Stream real-time quotes (bid/ask)"""
         pass
 
@@ -534,7 +534,7 @@ print(f"  Buying Power: \${account['buying_power']:,.2f}")
 
 # Get current positions
 positions = trader.get_positions()
-print(f"\\nOpen Positions: {len(positions)}")
+print(f"\\nOpen Positions: {len (positions)}")
 for pos in positions:
     print(f"  {pos['symbol']}: {pos['qty']} shares @ \${pos['avg_entry_price']:.2f}")
     print(f"    P&L: \${pos['unrealized_pl']:.2f} ({pos['unrealized_plpc']:.2%})")
@@ -544,15 +544,15 @@ symbol = "AAPL"
 qty = 10
 price = 150.00
 
-if trader.check_buying_power(symbol, qty, price):
-    order = trader.place_market_order(symbol, qty, 'buy')
+if trader.check_buying_power (symbol, qty, price):
+    order = trader.place_market_order (symbol, qty, 'buy')
     print(f"\\n✓ Order placed: {order['id']}")
 else:
     print(f"\\n✗ Insufficient buying power")
 
 # Monitor order
 time.sleep(2)
-order_status = trader.get_order(order['id'])
+order_status = trader.get_order (order['id'])
 print(f"Order status: {order_status['status']}")
 
 # Place bracket order with profit/loss targets
@@ -591,14 +591,14 @@ class LowLatencyTrader:
     
     async def __aenter__(self):
         # Connection pooling
-        connector = aiohttp.TCPConnector(limit=100, limit_per_host=30)
-        self.session = aiohttp.ClientSession(connector=connector)
+        connector = aiohttp.TCPConnector (limit=100, limit_per_host=30)
+        self.session = aiohttp.ClientSession (connector=connector)
         return self
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.session.close()
     
-    async def place_order_async(self, symbol, qty, side):
+    async def place_order_async (self, symbol, qty, side):
         """Non-blocking order placement"""
         async with self.session.post('/orders', json={
             'symbol': symbol,
@@ -607,7 +607,7 @@ class LowLatencyTrader:
         }) as response:
             return await response.json()
     
-    async def place_multiple_orders(self, orders):
+    async def place_multiple_orders (self, orders):
         """Place many orders concurrently"""
         tasks = [self.place_order_async(**order) for order in orders]
         results = await asyncio.gather(*tasks)
@@ -623,10 +623,10 @@ async def main():
         ]
         
         # Place all orders concurrently
-        results = await trader.place_multiple_orders(orders)
-        print(f"Placed {len(results)} orders")
+        results = await trader.place_multiple_orders (orders)
+        print(f"Placed {len (results)} orders")
 
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ---

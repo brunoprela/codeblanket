@@ -35,7 +35,7 @@ export const treesitterparsingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-treesitterparsing-mc-3',
     question:
-      'How do you query tree-sitter trees?\n\nquery = language.query("(function_definition name: (identifier) @func-name)")\nmatches = query.matches(tree.root_node)',
+      'How do you query tree-sitter trees?\n\nquery = language.query("(function_definition name: (identifier) @func-name)")\nmatches = query.matches (tree.root_node)',
     options: [
       'Using Python decorators',
       'Using S-expression patterns with captures',

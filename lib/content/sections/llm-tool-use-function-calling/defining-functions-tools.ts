@@ -44,7 +44,7 @@ JSON Schema supports these primitive types:
         # String
         "name": {
             "type": "string",
-            "description": "User's full name"
+            "description": "User\'s full name"
         },
         
         # Number (integer or float)
@@ -231,7 +231,7 @@ Mark parameters as required when they're essential:
 Your Python function should handle optional parameters with defaults:
 
 \`\`\`python
-def get_user(user_id: str, include_deleted: bool = False, limit: int = 20):
+def get_user (user_id: str, include_deleted: bool = False, limit: int = 20):
     """Get user by ID."""
     # Implementation
     pass
@@ -322,12 +322,12 @@ class FunctionSchema(BaseModel):
     """Pydantic model for function parameters."""
     pass
 
-def generate_schema(func):
+def generate_schema (func):
     """
     Generate JSON Schema from Python function signature and docstring.
     """
-    sig = inspect.signature(func)
-    doc = inspect.getdoc(func)
+    sig = inspect.signature (func)
+    doc = inspect.getdoc (func)
     
     # Parse docstring for description (simple example)
     description = doc.split('\\n')[0] if doc else ""
@@ -352,7 +352,7 @@ def generate_schema(func):
             properties[param_name] = {"type": "number"}
         elif param_type == bool:
             properties[param_name] = {"type": "boolean"}
-        elif hasattr(param_type, '__origin__') and param_type.__origin__ == list:
+        elif hasattr (param_type, '__origin__') and param_type.__origin__ == list:
             properties[param_name] = {
                 "type": "array",
                 "items": {"type": "string"}  # Simplified
@@ -362,7 +362,7 @@ def generate_schema(func):
         
         # Check if required (no default value)
         if param_default == inspect.Parameter.empty:
-            required.append(param_name)
+            required.append (param_name)
     
     return {
         "name": func.__name__,
@@ -375,12 +375,12 @@ def generate_schema(func):
     }
 
 # Use it
-def get_weather(location: str, unit: str = "celsius", include_forecast: bool = False):
+def get_weather (location: str, unit: str = "celsius", include_forecast: bool = False):
     """Get current weather for a location."""
     pass
 
-schema = generate_schema(get_weather)
-print(json.dumps(schema, indent=2))
+schema = generate_schema (get_weather)
+print(json.dumps (schema, indent=2))
 \`\`\`
 
 Output:
@@ -409,7 +409,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Literal
 from enum import Enum
 
-class TemperatureUnit(str, Enum):
+class TemperatureUnit (str, Enum):
     CELSIUS = "celsius"
     FAHRENHEIT = "fahrenheit"
     KELVIN = "kelvin"
@@ -435,7 +435,7 @@ schema = {
     "parameters": GetWeatherParams.schema()
 }
 
-print(json.dumps(schema, indent=2))
+print(json.dumps (schema, indent=2))
 \`\`\`
 
 Output:
@@ -501,13 +501,13 @@ class SendEmailParams(BaseModel):
     )
     
     @validator('to', 'cc')
-    def validate_emails(cls, v):
+    def validate_emails (cls, v):
         """Validate email addresses."""
         if v is None:
             return v
         for email in v:
             if '@' not in email or '.' not in email:
-                raise ValueError(f"Invalid email address: {email}")
+                raise ValueError (f"Invalid email address: {email}")
         return v
 
 def send_email(**kwargs):
@@ -524,7 +524,7 @@ def send_email(**kwargs):
         return {"success": True, "message_id": "msg_12345"}
         
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        return {"success": False, "error": str (e)}
 
 # Test with LLM-generated arguments
 llm_args = {
@@ -783,13 +783,13 @@ EMAIL_TOOL = {
 import openai
 import json
 
-def test_function_schema(function_schema, test_prompts):
+def test_function_schema (function_schema, test_prompts):
     """
     Test if LLM can correctly use your function definition.
     """
     print(f"Testing function: {function_schema['name']}\\n")
     
-    for i, prompt in enumerate(test_prompts, 1):
+    for i, prompt in enumerate (test_prompts, 1):
         print(f"Test {i}: {prompt}")
         
         response = openai.chat.completions.create(
@@ -800,8 +800,8 @@ def test_function_schema(function_schema, test_prompts):
         )
         
         if response.choices[0].message.function_call:
-            args = json.loads(response.choices[0].message.function_call.arguments)
-            print(f"✅ Generated args: {json.dumps(args, indent=2)}")
+            args = json.loads (response.choices[0].message.function_call.arguments)
+            print(f"✅ Generated args: {json.dumps (args, indent=2)}")
         else:
             print(f"❌ No function call generated")
         
@@ -809,7 +809,7 @@ def test_function_schema(function_schema, test_prompts):
 
 # Test the weather tool
 test_prompts = [
-    "What's the weather in London?",
+    "What\'s the weather in London?",
     "Show me the forecast for Tokyo in Celsius",
     "Weather in New York with 7-day forecast please"
 ]

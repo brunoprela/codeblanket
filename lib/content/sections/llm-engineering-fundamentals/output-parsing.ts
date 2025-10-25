@@ -49,7 +49,7 @@ import json
 
 client = OpenAI()
 
-def extract_person_json(text: str) -> dict:
+def extract_person_json (text: str) -> dict:
     """
     Extract person info using JSON mode.
     """
@@ -70,13 +70,13 @@ def extract_person_json(text: str) -> dict:
     
     # Parse JSON
     json_text = response.choices[0].message.content
-    return json.loads(json_text)
+    return json.loads (json_text)
 
 # Usage
 text = "Hi, I'm Alice (alice@email.com) and I'm 25 years old"
 
-result = extract_person_json(text)
-print(type(result))  # <class 'dict'>
+result = extract_person_json (text)
+print(type (result))  # <class 'dict'>
 print(result)  # {'name': 'Alice', 'email': 'alice@email.com', 'age': 25}
 
 # Can use directly in code!
@@ -92,12 +92,12 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def extract_with_schema(text: str, schema: dict) -> dict:
+def extract_with_schema (text: str, schema: dict) -> dict:
     """
     Extract data with specific JSON schema.
     """
     
-    schema_str = json.dumps(schema, indent=2)
+    schema_str = json.dumps (schema, indent=2)
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
@@ -118,7 +118,7 @@ Return ONLY valid JSON matching this schema."""
         response_format={"type": "json_object"}
     )
     
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Define schema
 person_schema = {
@@ -131,8 +131,8 @@ person_schema = {
 # Extract
 text = "John Smith, john.smith@example.com, age 30, loves Python and AI"
 
-result = extract_with_schema(text, person_schema)
-print(json.dumps(result, indent=2))
+result = extract_with_schema (text, person_schema)
+print(json.dumps (result, indent=2))
 \`\`\`
 
 ## Strategy 2: Pydantic Models
@@ -154,9 +154,9 @@ class Person(BaseModel):
     name: str
     email: EmailStr  # Validates email format!
     age: Optional[int] = None
-    interests: List[str] = Field(default_factory=list)
+    interests: List[str] = Field (default_factory=list)
 
-def extract_person_typed(text: str) -> Person:
+def extract_person_typed (text: str) -> Person:
     """
     Extract person with Pydantic validation.
     """
@@ -172,7 +172,7 @@ def extract_person_typed(text: str) -> Person:
                 "role": "system",
                 "content": f"""Extract person information as JSON matching this schema:
 
-{json.dumps(schema, indent=2)}
+{json.dumps (schema, indent=2)}
 
 Return ONLY valid JSON."""
             },
@@ -185,7 +185,7 @@ Return ONLY valid JSON."""
     )
     
     # Parse and validate
-    json_data = json.loads(response.choices[0].message.content)
+    json_data = json.loads (response.choices[0].message.content)
     
     # Pydantic validates automatically!
     return Person(**json_data)
@@ -193,16 +193,16 @@ Return ONLY valid JSON."""
 # Usage
 text = "Alice Johnson (alice.j@company.com), 28 years old, interested in ML and NLP"
 
-person = extract_person_typed(text)
-print(person)  # Person(name='Alice Johnson', email='alice.j@company.com', ...)
-print(type(person))  # <class 'Person'>
+person = extract_person_typed (text)
+print(person)  # Person (name='Alice Johnson', email='alice.j@company.com', ...)
+print(type (person))  # <class 'Person'>
 
 # Type-safe access
 print(f"Email domain: {person.email.split('@')[1]}")
 
 # Validation works!
 try:
-    bad_person = Person(name="Bob", email="invalid-email")  # Will fail!
+    bad_person = Person (name="Bob", email="invalid-email")  # Will fail!
 except Exception as e:
     print(f"Validation error: {e}")
 \`\`\`
@@ -232,14 +232,14 @@ class Employee(BaseModel):
     skills: List[str]
     
     @validator('employee_id')
-    def validate_employee_id(cls, v):
+    def validate_employee_id (cls, v):
         """Custom validation for employee ID."""
         if not v.startswith('EMP'):
             raise ValueError('Employee ID must start with EMP')
         return v
 
 # Extract function
-def extract_employee(text: str) -> Employee:
+def extract_employee (text: str) -> Employee:
     """Extract employee with nested models and validation."""
     client = OpenAI()
     
@@ -263,7 +263,7 @@ Return ONLY valid JSON."""
         response_format={"type": "json_object"}
     )
     
-    json_data = json.loads(response.choices[0].message.content)
+    json_data = json.loads (response.choices[0].message.content)
     return Employee(**json_data)
 
 # Test
@@ -277,11 +277,11 @@ Address: 123 Main St, San Francisco, CA 94102
 Skills: Python, Machine Learning, System Design
 """
 
-employee = extract_employee(text)
+employee = extract_employee (text)
 print(f"Name: {employee.name}")
 print(f"Department: {employee.department}")
 print(f"City: {employee.address.city}")
-print(f"Skills: {', '.join(employee.skills)}")
+print(f"Skills: {', '.join (employee.skills)}")
 \`\`\`
 
 ## Strategy 3: The Instructor Library
@@ -314,8 +314,8 @@ user = client.chat.completions.create(
     ]
 )
 
-print(user)  # User(name='John Doe', age=30, email='john@email.com')
-print(type(user))  # <class 'User'>
+print(user)  # User (name='John Doe', age=30, email='john@email.com')
+print(type (user))  # <class 'User'>
 \`\`\`
 
 ### Instructor with Validation
@@ -330,14 +330,14 @@ client = instructor.from_openai(OpenAI())
 
 class Recipe(BaseModel):
     """Recipe with validation."""
-    name: str = Field(description="Name of the dish")
-    ingredients: List[str] = Field(description="List of ingredients")
-    instructions: List[str] = Field(description="Step-by-step instructions")
-    prep_time_minutes: int = Field(ge=0, description="Prep time in minutes")
+    name: str = Field (description="Name of the dish")
+    ingredients: List[str] = Field (description="List of ingredients")
+    instructions: List[str] = Field (description="Step-by-step instructions")
+    prep_time_minutes: int = Field (ge=0, description="Prep time in minutes")
     
     @validator('ingredients')
-    def validate_ingredients(cls, v):
-        if len(v) < 2:
+    def validate_ingredients (cls, v):
+        if len (v) < 2:
             raise ValueError("Recipe must have at least 2 ingredients")
         return v
 
@@ -352,7 +352,7 @@ recipe = client.chat.completions.create(
 
 print(f"Recipe: {recipe.name}")
 print(f"Prep time: {recipe.prep_time_minutes} minutes")
-print(f"Ingredients ({len(recipe.ingredients)}): {recipe.ingredients}")
+print(f"Ingredients ({len (recipe.ingredients)}): {recipe.ingredients}")
 \`\`\`
 
 ### Instructor with Lists
@@ -388,7 +388,7 @@ result = client.chat.completions.create(
     ]
 )
 
-print(f"Found {len(result.people)} people:")
+print(f"Found {len (result.people)} people:")
 for person in result.people:
     print(f"  - {person.name}: {person.occupation}")
 \`\`\`
@@ -403,24 +403,24 @@ When JSON mode isn't available, use regex.
 import re
 from typing import Optional
 
-def extract_email_regex(text: str) -> Optional[str]:
+def extract_email_regex (text: str) -> Optional[str]:
     """Extract email using regex."""
     pattern = r'\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b'
-    match = re.search(pattern, text)
+    match = re.search (pattern, text)
     return match.group(0) if match else None
 
-def extract_phone_regex(text: str) -> Optional[str]:
+def extract_phone_regex (text: str) -> Optional[str]:
     """Extract phone number using regex."""
     # Matches formats: (123) 456-7890, 123-456-7890, 1234567890
     pattern = r'\\(?(\\d{3})\\)?[-. ]?(\\d{3})[-. ]?(\\d{4})'
-    match = re.search(pattern, text)
+    match = re.search (pattern, text)
     return match.group(0) if match else None
 
 # Usage
 text = "Contact John at john@email.com or (555) 123-4567"
 
-email = extract_email_regex(text)
-phone = extract_phone_regex(text)
+email = extract_email_regex (text)
+phone = extract_phone_regex (text)
 
 print(f"Email: {email}")
 print(f"Phone: {phone}")
@@ -439,14 +439,14 @@ class Contact:
     email: Optional[str] = None
     phone: Optional[str] = None
 
-def parse_contact_regex(llm_output: str) -> Contact:
+def parse_contact_regex (llm_output: str) -> Contact:
     """
     Parse contact from LLM output using regex.
     Handles various output formats.
     """
     
     # Try to extract name
-    name_match = re.search(r'Name:?\\s*([^\\n,]+)', llm_output, re.IGNORECASE)
+    name_match = re.search (r'Name:?\\s*([^\\n,]+)', llm_output, re.IGNORECASE)
     name = name_match.group(1).strip() if name_match else None
     
     # Extract email
@@ -463,7 +463,7 @@ def parse_contact_regex(llm_output: str) -> Contact:
     )
     phone = phone_match.group(0) if phone_match else None
     
-    return Contact(name=name, email=email, phone=phone)
+    return Contact (name=name, email=email, phone=phone)
 
 # Test with different LLM output formats
 outputs = [
@@ -473,7 +473,7 @@ outputs = [
 ]
 
 for output in outputs:
-    contact = parse_contact_regex(output)
+    contact = parse_contact_regex (output)
     print(f"Parsed: {contact}")
 \`\`\`
 
@@ -504,7 +504,7 @@ def parse_with_retry(
     
     # Try 1: Direct JSON parsing
     try:
-        data = json.loads(llm_output)
+        data = json.loads (llm_output)
         return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
@@ -512,18 +512,18 @@ def parse_with_retry(
     # Try 2: Extract JSON from markdown
     try:
         # Look for \`\`\`json ... \`\`\` blocks
-        json_match = re.search(r'\`\`\`json\\s*({.*?}) \\s* \`\`\`', llm_output, re.DOTALL)
+        json_match = re.search (r'\`\`\`json\\s*({.*?}) \\s* \`\`\`', llm_output, re.DOTALL)
         if json_match:
-            data = json.loads(json_match.group(1))
+            data = json.loads (json_match.group(1))
             return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
     
     # Try 3: Extract any {...} block
     try:
-        json_match = re.search(r'{.*}', llm_output, re.DOTALL)
+        json_match = re.search (r'{.*}', llm_output, re.DOTALL)
         if json_match:
-            data = json.loads(json_match.group(0))
+            data = json.loads (json_match.group(0))
             return model_class(**data)
     except (json.JSONDecodeError, ValidationError):
         pass
@@ -540,7 +540,7 @@ outputs = [
 ]
 
 for output in outputs:
-    result = parse_with_retry(output, Person)
+    result = parse_with_retry (output, Person)
     print(f"Input: {output[:50]}...")
     print(f"Result: {result}")
     print()
@@ -569,7 +569,7 @@ def extract_with_retry(
         {
             "role": "system",
             "content": f"""Extract data as valid JSON matching this schema:
-{json.dumps(schema, indent=2)}
+{json.dumps (schema, indent=2)}
 
 Return ONLY valid JSON, no extra text."""
         },
@@ -579,7 +579,7 @@ Return ONLY valid JSON, no extra text."""
         }
     ]
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             messages=messages,
@@ -590,10 +590,10 @@ Return ONLY valid JSON, no extra text."""
         
         # Try to parse
         try:
-            data = json.loads(output)
+            data = json.loads (output)
             
             # Validate against schema (simple check)
-            if all(key in data for key in schema.keys()):
+            if all (key in data for key in schema.keys()):
                 return data
             else:
                 # Missing fields - ask for correction
@@ -618,14 +618,14 @@ Return ONLY valid JSON, no extra text."""
                 "content": f"Invalid JSON: {e}. Please provide valid JSON."
             })
     
-    raise ValueError(f"Failed to parse after {max_retries} attempts")
+    raise ValueError (f"Failed to parse after {max_retries} attempts")
 
 # Usage
 schema = {"name": "string", "email": "string", "age": "number"}
 text = "Alice Johnson, alice@email.com, 25 years old"
 
-result = extract_with_retry(text, schema)
-print(json.dumps(result, indent=2))
+result = extract_with_retry (text, schema)
+print(json.dumps (result, indent=2))
 \`\`\`
 
 ## Production Parsing System
@@ -663,9 +663,9 @@ class ProductionParser:
         """
         
         if self.use_instructor:
-            return self._extract_with_instructor(text, model_class, system_prompt)
+            return self._extract_with_instructor (text, model_class, system_prompt)
         else:
-            return self._extract_with_json_mode(text, model_class, system_prompt, max_retries)
+            return self._extract_with_json_mode (text, model_class, system_prompt, max_retries)
     
     def _extract_with_instructor(
         self,
@@ -700,7 +700,7 @@ class ProductionParser:
         messages = [
             {
                 "role": "system",
-                "content": system_prompt or f"Extract as JSON: {json.dumps(schema)}"
+                "content": system_prompt or f"Extract as JSON: {json.dumps (schema)}"
             },
             {
                 "role": "user",
@@ -708,7 +708,7 @@ class ProductionParser:
             }
         ]
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
                 response = self.client.chat.completions.create(
                     model="gpt-3.5-turbo-1106",
@@ -716,7 +716,7 @@ class ProductionParser:
                     response_format={"type": "json_object"}
                 )
                 
-                json_data = json.loads(response.choices[0].message.content)
+                json_data = json.loads (response.choices[0].message.content)
                 return model_class(**json_data)
             
             except (json.JSONDecodeError, ValidationError) as e:
@@ -743,7 +743,7 @@ class Contact(BaseModel):
     email: EmailStr
     age: int
 
-parser = ProductionParser(use_instructor=True)
+parser = ProductionParser (use_instructor=True)
 
 text = "John Doe, 30 years old, contact at john.doe@email.com"
 

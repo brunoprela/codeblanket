@@ -34,10 +34,10 @@ export const variablestypesQuiz = [
   {
     id: 'pf-variables-q-3',
     question:
-      "Explain Python's dynamic typing. What are the advantages and disadvantages compared to statically-typed languages?",
+      "Explain Python\'s dynamic typing. What are the advantages and disadvantages compared to statically-typed languages?",
     hint: 'Think about flexibility, runtime behavior, debugging, and development speed.',
     sampleAnswer:
-      "Python's dynamic typing means variables don't have fixed types - the same variable can hold different types at different times. This offers flexibility and faster prototyping since you don't declare types. However, it can lead to runtime type errors that statically-typed languages catch at compile time. Tools like type hints (PEP 484) and mypy can add static type checking while maintaining dynamic runtime behavior, giving you the best of both worlds.",
+      "Python\'s dynamic typing means variables don't have fixed types - the same variable can hold different types at different times. This offers flexibility and faster prototyping since you don't declare types. However, it can lead to runtime type errors that statically-typed languages catch at compile time. Tools like type hints (PEP 484) and mypy can add static type checking while maintaining dynamic runtime behavior, giving you the best of both worlds.",
     keyPoints: [
       'Variables can change types freely',
       'No compile-time type checking',

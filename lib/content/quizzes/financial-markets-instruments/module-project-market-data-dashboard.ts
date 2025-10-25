@@ -1,9 +1,9 @@
 export const moduleProjectMarketDataDashboardQuiz = [
-    {
-        id: 'fm-1-14-q-1',
-        question:
-            'Build a complete end-to-end market data dashboard that: (1) Ingests real-time websocket feeds from multiple exchanges, (2) Stores tick data in TimescaleDB, (3) Calculates real-time analytics (VWAP, order book imbalance, spread), (4) Visualizes with React/Next.js, (5) Alerts on unusual patterns. Provide full architecture and code.',
-        sampleAnswer: `**Complete Market Data Dashboard Architecture:**
+  {
+    id: 'fm-1-14-q-1',
+    question:
+      'Build a complete end-to-end market data dashboard that: (1) Ingests real-time websocket feeds from multiple exchanges, (2) Stores tick data in TimescaleDB, (3) Calculates real-time analytics (VWAP, order book imbalance, spread), (4) Visualizes with React/Next.js, (5) Alerts on unusual patterns. Provide full architecture and code.',
+    sampleAnswer: `**Complete Market Data Dashboard Architecture:**
 
 **Tech Stack:**
 - **Data Ingestion:** Python with websockets (Polygon.io, Alpaca, IEX)
@@ -31,22 +31,22 @@ class MarketDataIngestion:
         self.conn = psycopg2.connect(**db_config)
         self.cursor = self.conn.cursor()
         
-    async def connect_to_feed(self, ws_url: str, symbols: List[str]):
+    async def connect_to_feed (self, ws_url: str, symbols: List[str]):
         """Connect to websocket feed"""
-        async with websockets.connect(ws_url) as ws:
+        async with websockets.connect (ws_url) as ws:
             # Subscribe to symbols
             subscribe_msg = {
                 "action": "subscribe",
                 "symbols": symbols
             }
-            await ws.send(json.dumps(subscribe_msg))
+            await ws.send (json.dumps (subscribe_msg))
             
             # Process incoming ticks
             async for message in ws:
-                tick = json.loads(message)
-                self.process_tick(tick)
+                tick = json.loads (message)
+                self.process_tick (tick)
     
-    def process_tick(self, tick: Dict):
+    def process_tick (self, tick: Dict):
         """Store tick and calculate analytics"""
         # Insert tick data
         self.cursor.execute("""
@@ -63,12 +63,12 @@ class MarketDataIngestion:
         self.conn.commit()
         
         # Calculate real-time analytics
-        analytics = self.calculate_analytics(tick['symbol'])
+        analytics = self.calculate_analytics (tick['symbol'])
         
         # Check for alerts
-        self.check_alerts(tick['symbol'], analytics)
+        self.check_alerts (tick['symbol'], analytics)
     
-    def calculate_analytics(self, symbol: str):
+    def calculate_analytics (self, symbol: str):
         """Calculate VWAP, spread, imbalance"""
         # VWAP (last 5 minutes)
         self.cursor.execute("""
@@ -89,22 +89,22 @@ class MarketDataIngestion:
             'imbalance': result[2]
         }
     
-    def check_alerts(self, symbol: str, analytics: Dict):
+    def check_alerts (self, symbol: str, analytics: Dict):
         """Alert on unusual patterns"""
         # Alert 1: Spread widening >2x normal
-        if analytics['avg_spread'] > self.get_normal_spread(symbol) * 2:
-            self.send_alert(f"{symbol}: Spread widened to {analytics['avg_spread']:.4f}")
+        if analytics['avg_spread'] > self.get_normal_spread (symbol) * 2:
+            self.send_alert (f"{symbol}: Spread widened to {analytics['avg_spread']:.4f}")
         
         # Alert 2: Extreme imbalance
-        if abs(analytics['imbalance']) > 0.5:
+        if abs (analytics['imbalance']) > 0.5:
             direction = "BUY" if analytics['imbalance'] > 0 else "SELL"
-            self.send_alert(f"{symbol}: {direction} pressure (imbalance={analytics['imbalance']:.2f})")
+            self.send_alert (f"{symbol}: {direction} pressure (imbalance={analytics['imbalance']:.2f})")
 
 class RealTimeAnalytics:
     """
     Calculate rolling analytics
     """
-    def calculate_vwap(self, symbol: str, window_minutes: int = 5):
+    def calculate_vwap (self, symbol: str, window_minutes: int = 5):
         """Volume-Weighted Average Price"""
         # Query from TimescaleDB
         query = f"""
@@ -117,9 +117,9 @@ class RealTimeAnalytics:
             ORDER BY bucket
         """
         # Execute and return
-        return self.execute_query(query)
+        return self.execute_query (query)
     
-    def calculate_order_book_imbalance(self, symbol: str):
+    def calculate_order_book_imbalance (self, symbol: str):
         """
         Order book imbalance = (Bid Size - Ask Size) / (Bid Size + Ask Size)
         >0 = buying pressure, <0 = selling pressure
@@ -132,9 +132,9 @@ class RealTimeAnalytics:
                 AND timestamp > NOW() - INTERVAL '1 hour'
             ORDER BY timestamp
         """
-        return self.execute_query(query)
+        return self.execute_query (query)
     
-    def detect_large_trades(self, symbol: str, threshold_pct: float = 0.05):
+    def detect_large_trades (self, symbol: str, threshold_pct: float = 0.05):
         """
         Detect trades >5% of minute volume
         """
@@ -154,31 +154,31 @@ class RealTimeAnalytics:
             ORDER BY t.timestamp DESC
             LIMIT 100
         """
-        return self.execute_query(query)
+        return self.execute_query (query)
 
 # FastAPI for serving data
 from fastapi import FastAPI, WebSocket
 app = FastAPI()
 
 @app.websocket("/ws/ticks/{symbol}")
-async def websocket_ticks(websocket: WebSocket, symbol: str):
+async def websocket_ticks (websocket: WebSocket, symbol: str):
     """Stream real-time ticks to frontend"""
     await websocket.accept()
     
     # Stream from database
     while True:
-        tick = get_latest_tick(symbol)
-        await websocket.send_json(tick)
+        tick = get_latest_tick (symbol)
+        await websocket.send_json (tick)
         await asyncio.sleep(0.1)  # 10 ticks/second
 
 @app.get("/api/analytics/{symbol}")
-def get_analytics(symbol: str):
+def get_analytics (symbol: str):
     """Get current analytics"""
     analytics = RealTimeAnalytics()
     return {
-        'vwap': analytics.calculate_vwap(symbol),
-        'imbalance': analytics.calculate_order_book_imbalance(symbol),
-        'large_trades': analytics.detect_large_trades(symbol)
+        'vwap': analytics.calculate_vwap (symbol),
+        'imbalance': analytics.calculate_order_book_imbalance (symbol),
+        'large_trades': analytics.detect_large_trades (symbol)
     }
 \`\`\`
 
@@ -191,27 +191,27 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 export default function MarketDataDashboard({ symbol }: { symbol: string }) {
   const [ticks, setTicks] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
+  const [analytics, setAnalytics] = useState (null);
   
   useEffect(() => {
     // WebSocket connection for real-time ticks
     const ws = new WebSocket(\`ws://localhost:8000/ws/ticks/\${symbol}\`);
     
     ws.onmessage = (event) => {
-      const tick = JSON.parse(event.data);
-      setTicks(prev => [...prev.slice(-100), tick]);  // Keep last 100
+      const tick = JSON.parse (event.data);
+      setTicks (prev => [...prev.slice(-100), tick]);  // Keep last 100
     };
     
     // Poll analytics
-    const interval = setInterval(async () => {
+    const interval = setInterval (async () => {
       const response = await fetch(\`/api/analytics/\${symbol}\`);
       const data = await response.json();
-      setAnalytics(data);
+      setAnalytics (data);
     }, 1000);
     
     return () => {
       ws.close();
-      clearInterval(interval);
+      clearInterval (interval);
     };
   }, [symbol]);
   
@@ -231,7 +231,7 @@ export default function MarketDataDashboard({ symbol }: { symbol: string }) {
       <div className="analytics-grid">
         <div className="card">
           <h3>VWAP (5min)</h3>
-          <p className="value">${analytics?.vwap?.toFixed(2)}</p>
+          <p className="value">\${analytics?.vwap?.toFixed(2)}</p>
         </div>
         
         <div className="card">
@@ -263,8 +263,8 @@ export default function MarketDataDashboard({ symbol }: { symbol: string }) {
           <tbody>
             {analytics?.large_trades?.map((trade, i) => (
               <tr key={i}>
-                <td>{new Date(trade.timestamp).toLocaleTimeString()}</td>
-                <td>${trade.price}</td>
+                <td>{new Date (trade.timestamp).toLocaleTimeString()}</td>
+                <td>\${trade.price}</td>
                 <td>{trade.size.toLocaleString()}</td>
                 <td>{((trade.size / trade.minute_volume) * 100).toFixed(1)}%</td>
               </tr>
@@ -323,38 +323,38 @@ GROUP BY bucket, symbol;
 - Add authentication/authorization
 - Monitoring with Prometheus/Grafana
 - Load balancing for multiple concurrent users`,
-        keyPoints: [
-            'Architecture: Websockets (ingest) → TimescaleDB (store) → FastAPI (serve) → React (visualize)',
-            'Analytics: Real-time VWAP, order book imbalance, spread monitoring, large trade detection',
-            'Alerts: Spread widening >2× normal, extreme imbalance >0.5, large trades >5% volume',
-            'Performance: TimescaleDB handles 100K+ ticks/second, continuous aggregates for speed',
-            'Production: Add Redis cache, monitoring, auth, circuit breakers, load balancing',
-        ],
-    },
-    {
-        id: 'fm-1-14-q-2',
-        question:
-            'Extend the dashboard to include: (1) Multi-symbol watchlist with real-time P&L tracking, (2) Backtesting engine for simple strategies, (3) Paper trading simulation, (4) Risk management with position limits and stop-losses. Show how to integrate all Module 1 concepts.',
-        sampleAnswer: `[Comprehensive extension showing portfolio tracking, strategy backtesting framework, simulated order execution, risk management system, and integration of all module concepts]`,
-        keyPoints: [
-            'Watchlist: Real-time P&L for 10-20 symbols, aggregate portfolio metrics',
-            'Backtesting: Historical data replay, strategy signal generation, execution simulation',
-            'Paper trading: Simulate orders against real-time market, track fills, calculate slippage',
-            'Risk management: Position limits (max 10% per symbol), portfolio VaR, stop-losses',
-            'Integration: Uses order types, market data, liquidity analysis, execution algos from module',
-        ],
-    },
-    {
-        id: 'fm-1-14-q-3',
-        question:
-            'Document best practices for production deployment: database optimization, API rate limiting, websocket scaling, error handling, monitoring, and disaster recovery. How would you handle exchange downtime or data feed failures?',
-        sampleAnswer: `[Production deployment guide covering database indexing, connection pooling, rate limit middleware, websocket heartbeats, comprehensive error handling, Prometheus monitoring, backup strategies, and failover procedures]`,
-        keyPoints: [
-            'Database: TimescaleDB hypertables, compression, retention policies, continuous aggregates',
-            'Scaling: Redis for caching, multiple websocket instances, load balancer',
-            'Monitoring: Prometheus metrics, Grafana dashboards, PagerDuty alerts',
-            'Error handling: Circuit breakers for feeds, retry logic with exponential backoff',
-            'Disaster recovery: Hot standby database, automated failover, data replication',
-        ],
-    },
+    keyPoints: [
+      'Architecture: Websockets (ingest) → TimescaleDB (store) → FastAPI (serve) → React (visualize)',
+      'Analytics: Real-time VWAP, order book imbalance, spread monitoring, large trade detection',
+      'Alerts: Spread widening >2× normal, extreme imbalance >0.5, large trades >5% volume',
+      'Performance: TimescaleDB handles 100K+ ticks/second, continuous aggregates for speed',
+      'Production: Add Redis cache, monitoring, auth, circuit breakers, load balancing',
+    ],
+  },
+  {
+    id: 'fm-1-14-q-2',
+    question:
+      'Extend the dashboard to include: (1) Multi-symbol watchlist with real-time P&L tracking, (2) Backtesting engine for simple strategies, (3) Paper trading simulation, (4) Risk management with position limits and stop-losses. Show how to integrate all Module 1 concepts.',
+    sampleAnswer: `[Comprehensive extension showing portfolio tracking, strategy backtesting framework, simulated order execution, risk management system, and integration of all module concepts]`,
+    keyPoints: [
+      'Watchlist: Real-time P&L for 10-20 symbols, aggregate portfolio metrics',
+      'Backtesting: Historical data replay, strategy signal generation, execution simulation',
+      'Paper trading: Simulate orders against real-time market, track fills, calculate slippage',
+      'Risk management: Position limits (max 10% per symbol), portfolio VaR, stop-losses',
+      'Integration: Uses order types, market data, liquidity analysis, execution algos from module',
+    ],
+  },
+  {
+    id: 'fm-1-14-q-3',
+    question:
+      'Document best practices for production deployment: database optimization, API rate limiting, websocket scaling, error handling, monitoring, and disaster recovery. How would you handle exchange downtime or data feed failures?',
+    sampleAnswer: `[Production deployment guide covering database indexing, connection pooling, rate limit middleware, websocket heartbeats, comprehensive error handling, Prometheus monitoring, backup strategies, and failover procedures]`,
+    keyPoints: [
+      'Database: TimescaleDB hypertables, compression, retention policies, continuous aggregates',
+      'Scaling: Redis for caching, multiple websocket instances, load balancer',
+      'Monitoring: Prometheus metrics, Grafana dashboards, PagerDuty alerts',
+      'Error handling: Circuit breakers for feeds, retry logic with exponential backoff',
+      'Disaster recovery: Hot standby database, automated failover, data replication',
+    ],
+  },
 ];

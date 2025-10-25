@@ -233,8 +233,8 @@ ws.addEventListener('message', (event) => {
   console.log('Message from server:', event.data);
   
   // Parse JSON if needed
-  const data = JSON.parse(event.data);
-  console.log(data);
+  const data = JSON.parse (event.data);
+  console.log (data);
 });
 
 // Handle errors
@@ -274,7 +274,7 @@ const clients = new Set();
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  clients.add(ws);
+  clients.add (ws);
   
   // Send welcome message
   ws.send(JSON.stringify({ type: 'welcome', message: 'Connected!' }));
@@ -286,7 +286,7 @@ wss.on('connection', (ws) => {
     // Broadcast to all clients
     clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
+        client.send (message);
       }
     });
   });
@@ -294,7 +294,7 @@ wss.on('connection', (ws) => {
   // Client disconnected
   ws.on('close', () => {
     console.log('Client disconnected');
-    clients.delete(ws);
+    clients.delete (ws);
   });
   
   // Handle errors
@@ -389,12 +389,12 @@ sub.subscribe('chat');
 
 // Receive from Redis, send to local clients
 sub.on('message', (channel, message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   // Send to all local WebSocket clients
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
+      client.send (message);
     }
   });
 });
@@ -467,7 +467,7 @@ ws.on('pong', () => {
 
 \`\`\`javascript
 class ReconnectingWebSocket {
-  constructor(url) {
+  constructor (url) {
     this.url = url;
     this.reconnectDelay = 1000;
     this.maxReconnectDelay = 30000;
@@ -475,7 +475,7 @@ class ReconnectingWebSocket {
   }
   
   connect() {
-    this.ws = new WebSocket(this.url);
+    this.ws = new WebSocket (this.url);
     
     this.ws.onopen = () => {
       console.log('Connected');
@@ -502,9 +502,9 @@ class ReconnectingWebSocket {
     };
   }
   
-  send(data) {
+  send (data) {
     if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(data);
+      this.ws.send (data);
     } else {
       console.warn('WebSocket not connected');
     }
@@ -518,24 +518,24 @@ Queue messages if connection drops:
 
 \`\`\`javascript
 class QueuedWebSocket {
-  constructor(url) {
+  constructor (url) {
     this.queue = [];
-    this.ws = new WebSocket(url);
+    this.ws = new WebSocket (url);
     
     this.ws.onopen = () => {
       // Flush queue
       while (this.queue.length > 0) {
-        this.ws.send(this.queue.shift());
+        this.ws.send (this.queue.shift());
       }
     };
   }
   
-  send(data) {
+  send (data) {
     if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(data);
+      this.ws.send (data);
     } else {
       // Queue for later
-      this.queue.push(data);
+      this.queue.push (data);
     }
   }
 }
@@ -573,7 +573,7 @@ Always validate messages:
 \`\`\`javascript
 ws.on('message', (message) => {
   try {
-    const data = JSON.parse(message);
+    const data = JSON.parse (message);
     
     // Validate structure
     if (!data.type || !data.payload) {
@@ -582,12 +582,12 @@ ws.on('message', (message) => {
     
     // Validate type
     const allowedTypes = ['chat', 'typing', 'presence'];
-    if (!allowedTypes.includes(data.type)) {
+    if (!allowedTypes.includes (data.type)) {
       throw new Error('Invalid message type');
     }
     
     // Process message
-    handleMessage(data);
+    handleMessage (data);
   } catch (error) {
     console.error('Invalid message:', error);
     ws.close(1008, 'Invalid message');
@@ -605,14 +605,14 @@ ws.on('message', (message) => {
   const userId = ws.userId;
   const now = Date.now();
   
-  if (!rateLimits.has(userId)) {
-    rateLimits.set(userId, []);
+  if (!rateLimits.has (userId)) {
+    rateLimits.set (userId, []);
   }
   
-  const timestamps = rateLimits.get(userId);
+  const timestamps = rateLimits.get (userId);
   
   // Remove old timestamps (older than 1 minute)
-  timestamps = timestamps.filter(t => now - t < 60000);
+  timestamps = timestamps.filter (t => now - t < 60000);
   
   // Check limit (max 100 messages per minute)
   if (timestamps.length >= 100) {
@@ -620,11 +620,11 @@ ws.on('message', (message) => {
     return;
   }
   
-  timestamps.push(now);
-  rateLimits.set(userId, timestamps);
+  timestamps.push (now);
+  rateLimits.set (userId, timestamps);
   
   // Process message
-  handleMessage(message);
+  handleMessage (message);
 });
 \`\`\`
 
@@ -762,7 +762,7 @@ Client should auto-reconnect with exponential backoff.
 
 Limit connections per user (prevent abuse):
 \`\`\`javascript
-if (connectionsPerUser.get(userId) >= 5) {
+if (connectionsPerUser.get (userId) >= 5) {
   ws.close(1008, 'Too many connections');
 }
 \`\`\`
@@ -784,7 +784,7 @@ Track:
 
 \`\`\`javascript
 // Bad: No reconnection logic
-const ws = new WebSocket(url);
+const ws = new WebSocket (url);
 \`\`\`
 
 Always implement auto-reconnect with exponential backoff.

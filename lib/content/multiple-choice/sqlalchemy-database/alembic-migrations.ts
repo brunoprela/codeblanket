@@ -26,7 +26,7 @@ export const alembicMigrationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Always review auto-generated migrations! Alembic autogenerate has limitations: (1) Detects drop+create instead of rename (loses data!), (2) May miss enum/type changes, (3) Doesn't detect table renames, (4) Server defaults may not be detected, (5) Custom SQL or complex constraints missed. Example: renaming column generates op.drop_column() + op.add_column() (DATA LOSS) instead of op.alter_column(new_column_name=...). Always verify the generated migration makes sense before committing.",
+      "Always review auto-generated migrations! Alembic autogenerate has limitations: (1) Detects drop+create instead of rename (loses data!), (2) May miss enum/type changes, (3) Doesn't detect table renames, (4) Server defaults may not be detected, (5) Custom SQL or complex constraints missed. Example: renaming column generates op.drop_column() + op.add_column() (DATA LOSS) instead of op.alter_column (new_column_name=...). Always verify the generated migration makes sense before committing.",
   },
   {
     id: 'sql-alembic-mc-3',

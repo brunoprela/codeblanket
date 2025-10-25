@@ -20,18 +20,18 @@ MyClass = type('MyClass', (), {})
 # Everything is an object
 isinstance(MyClass, type)  # True
 isinstance(5, int)  # True
-isinstance(int, type)  # True
+isinstance (int, type)  # True
 \`\`\`
 
 **Custom Metaclass:**
 \`\`\`python
-class Meta(type):
+class Meta (type):
     def __new__(mcs, name, bases, attrs):
         # Modify class before creation
         attrs['created_by'] = 'Meta'
         return super().__new__(mcs, name, bases, attrs)
 
-class MyClass(metaclass=Meta):
+class MyClass (metaclass=Meta):
     pass
 
 print(MyClass.created_by)  # 'Meta'
@@ -41,17 +41,17 @@ print(MyClass.created_by)  # 'Meta'
 
 1. **ORM (like Django):**
 \`\`\`python
-class ModelMeta(type):
+class ModelMeta (type):
     def __new__(mcs, name, bases, attrs):
         # Auto-create database fields
         fields = {}
         for key, value in attrs.items():
-            if isinstance(value, Field):
+            if isinstance (value, Field):
                 fields[key] = value
         attrs['_fields'] = fields
         return super().__new__(mcs, name, bases, attrs)
 
-class Model(metaclass=ModelMeta):
+class Model (metaclass=ModelMeta):
     pass
 
 class User(Model):
@@ -61,7 +61,7 @@ class User(Model):
 
 2. **Singleton Pattern:**
 \`\`\`python
-class Singleton(type):
+class Singleton (type):
     _instances = {}
     
     def __call__(cls, *args, **kwargs):
@@ -69,7 +69,7 @@ class Singleton(type):
             cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
-class Database(metaclass=Singleton):
+class Database (metaclass=Singleton):
     pass
 
 db1 = Database()
@@ -79,7 +79,7 @@ assert db1 is db2  # Same instance
 
 3. **API Client Registration:**
 \`\`\`python
-class APIRegistry(type):
+class APIRegistry (type):
     _apis = {}
     
     def __new__(mcs, name, bases, attrs):
@@ -97,7 +97,7 @@ class UsersAPI(API):
 
 **__init__ vs __new__:**
 \`\`\`python
-class Meta(type):
+class Meta (type):
     def __new__(mcs, name, bases, attrs):
         # Called before class is created
         # Can modify class definition

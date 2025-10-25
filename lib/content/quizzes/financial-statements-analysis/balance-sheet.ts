@@ -59,13 +59,13 @@ class ZombieCompanyDetector:
         latest = financials.iloc[-1]
         
         # Core zombie metric: Interest Coverage
-        interest_coverage = self._calculate_interest_coverage(latest)
+        interest_coverage = self._calculate_interest_coverage (latest)
         
         # Supporting metrics
-        debt_to_ebitda = self._calculate_debt_to_ebitda(latest)
-        current_ratio = self._calculate_current_ratio(latest)
-        cash_burn_months = self._calculate_cash_runway(latest, financials)
-        debt_service_coverage = self._calculate_debt_service_coverage(latest)
+        debt_to_ebitda = self._calculate_debt_to_ebitda (latest)
+        current_ratio = self._calculate_current_ratio (latest)
+        cash_burn_months = self._calculate_cash_runway (latest, financials)
+        debt_service_coverage = self._calculate_debt_service_coverage (latest)
         
         # Zombie score (0-100, higher = more zombie-like)
         zombie_score = self._calculate_zombie_score(
@@ -95,7 +95,7 @@ class ZombieCompanyDetector:
             classification=classification
         )
     
-    def _calculate_interest_coverage(self, period_data: pd.Series) -> float:
+    def _calculate_interest_coverage (self, period_data: pd.Series) -> float:
         """
         Interest Coverage = Operating Income / Interest Expense
         
@@ -112,7 +112,7 @@ class ZombieCompanyDetector:
         
         return operating_income / interest_expense
     
-    def _calculate_debt_to_ebitda(self, period_data: pd.Series) -> float:
+    def _calculate_debt_to_ebitda (self, period_data: pd.Series) -> float:
         """
         Debt / EBITDA ratio.
         
@@ -128,7 +128,7 @@ class ZombieCompanyDetector:
         
         return total_debt / ebitda
     
-    def _calculate_current_ratio(self, period_data: pd.Series) -> float:
+    def _calculate_current_ratio (self, period_data: pd.Series) -> float:
         """Current Assets / Current Liabilities."""
         return period_data['current_assets'] / period_data['current_liabilities']
     
@@ -157,7 +157,7 @@ class ZombieCompanyDetector:
         monthly_burn = cash_burn_per_quarter / 3
         return cash / monthly_burn
     
-    def _calculate_debt_service_coverage(self, period_data: pd.Series) -> float:
+    def _calculate_debt_service_coverage (self, period_data: pd.Series) -> float:
         """
         Operating Cash Flow / (Interest + Principal Payments)
         
@@ -217,7 +217,7 @@ class ZombieCompanyDetector:
         elif cash_burn_months < 12:
             score += 8
         
-        return min(score, 100)
+        return min (score, 100)
     
     def _classify_company(
         self,
@@ -235,7 +235,7 @@ class ZombieCompanyDetector:
         """
         
         # Check for improving trends
-        improving = self._is_improving(historical)
+        improving = self._is_improving (historical)
         
         # Classification logic
         if zombie_score > 60:
@@ -255,7 +255,7 @@ class ZombieCompanyDetector:
         else:
             return "HEALTHY"
     
-    def _is_improving(self, historical: pd.DataFrame) -> bool:
+    def _is_improving (self, historical: pd.DataFrame) -> bool:
         """
         Detect if company is improving or deteriorating.
         
@@ -264,7 +264,7 @@ class ZombieCompanyDetector:
         - Debt reduction
         - Improving EBITDA
         """
-        if len(historical) < 4:
+        if len (historical) < 4:
             return False
         
         recent = historical.tail(4)
@@ -344,7 +344,7 @@ class TurnaroundAnalyzer:
             factors['score'] += 20
         
         # 2. Improving trends
-        if self._check_improving_trends(financials):
+        if self._check_improving_trends (financials):
             factors['positive'].append('Metrics improving')
             factors['score'] += 25
         
@@ -410,10 +410,10 @@ class TurnaroundAnalyzer:
             'score': factors['score'],
             'positive_factors': factors['positive'],
             'negative_factors': factors['negative'],
-            'recommendation': self._generate_recommendation(verdict, factors['score'])
+            'recommendation': self._generate_recommendation (verdict, factors['score'])
         }
     
-    def _check_improving_trends(self, financials: pd.DataFrame) -> bool:
+    def _check_improving_trends (self, financials: pd.DataFrame) -> bool:
         """Check if key metrics are improving."""
         recent_4 = financials.tail(4)
         
@@ -433,7 +433,7 @@ class TurnaroundAnalyzer:
         
         return metrics_improving >= 2
     
-    def _generate_recommendation(self, verdict: str, score: int) -> str:
+    def _generate_recommendation (self, verdict: str, score: int) -> str:
         """Generate actionable recommendation."""
         
         if verdict == 'VIABLE_TURNAROUND':
@@ -505,7 +505,7 @@ def adjust_for_sector_and_macro(
         'energy': +10,     # Commodity exposure, volatile
     }
     
-    adjusted_score += sector_adjustments.get(company_sector, 0)
+    adjusted_score += sector_adjustments.get (company_sector, 0)
     
     # Macro adjustments
     if macro_environment['interest_rate_trend'] == 'rising':
@@ -517,7 +517,7 @@ def adjust_for_sector_and_macro(
     if macro_environment['recession']:
         adjusted_score += 5  # But only slight adjustment (fundamentals matter more)
     
-    return np.clip(adjusted_score, 0, 100)
+    return np.clip (adjusted_score, 0, 100)
 \`\`\`
 
 **4. Production Alerting System**
@@ -547,11 +547,11 @@ class ZombieAlertingSystem:
         
         for company_id, financials in companies.items():
             # Analyze current state
-            current_analysis = self.detector.analyze_company(company_id, financials)
+            current_analysis = self.detector.analyze_company (company_id, financials)
             current_score = current_analysis.zombie_score
             
             # Compare to previous
-            previous_score = previous_scores.get(company_id, 0)
+            previous_score = previous_scores.get (company_id, 0)
             score_change = current_score - previous_score
             
             # Generate alerts
@@ -668,13 +668,13 @@ class LiquidationValueCalculator:
         """
         
         # Step 1: Calculate gross asset recovery
-        asset_recovery = self._calculate_asset_recovery(balance_sheet, detailed_assets)
+        asset_recovery = self._calculate_asset_recovery (balance_sheet, detailed_assets)
         
         # Step 2: Subtract liabilities (must be paid)
         liabilities = balance_sheet['total_liabilities']
         
         # Step 3: Calculate liquidation costs
-        liquidation_costs = asset_recovery['gross_recovery'] * sum(self.LIQUIDATION_COSTS.values())
+        liquidation_costs = asset_recovery['gross_recovery'] * sum (self.LIQUIDATION_COSTS.values())
         
         # Step 4: Net liquidation value
         net_liquidation_value = (
@@ -844,7 +844,7 @@ liquidation_result = calculator.calculate_liquidation_value(
 
 print("Liquidation Value Analysis")
 print("=" * 70)
-print(f"Gross Asset Recovery: \${liquidation_result['gross_asset_recovery']:, .0f}")
+print(f"Gross Asset Recovery: \${liquidation_result['gross_asset_recovery']:,.0f}")
 print(f"Total Liabilities: \${liquidation_result['total_liabilities']:,.0f}")
 print(f"Liquidation Costs: \${liquidation_result['liquidation_costs']:,.0f}")
 print(f"Net Liquidation Value: \${liquidation_result['net_liquidation_value']:,.0f}")
@@ -875,13 +875,13 @@ class GoingConcernValueCalculator:
         """
         
         # Method 1: DCF (Discounted Cash Flow)
-        dcf_value = self._dcf_valuation(cash_flow, market_data)
+        dcf_value = self._dcf_valuation (cash_flow, market_data)
         
         # Method 2: Comparable multiples
-        multiples_value = self._multiples_valuation(income_statement, market_data)
+        multiples_value = self._multiples_valuation (income_statement, market_data)
         
         # Method 3: Book value adjusted for earning power
-        adjusted_book_value = self._adjusted_book_value(balance_sheet, income_statement)
+        adjusted_book_value = self._adjusted_book_value (balance_sheet, income_statement)
         
         # Weighted average (DCF gets highest weight)
         going_concern_value = (
@@ -902,7 +902,7 @@ class GoingConcernValueCalculator:
             }
         }
     
-    def _dcf_valuation(self, cash_flow: Dict, market_data: Dict) -> float:
+    def _dcf_valuation (self, cash_flow: Dict, market_data: Dict) -> float:
         """Simple DCF valuation."""
         
         fcf = cash_flow['free_cash_flow']
@@ -918,7 +918,7 @@ class GoingConcernValueCalculator:
         
         return enterprise_value
     
-    def _multiples_valuation(self, income_statement: Dict, market_data: Dict) -> float:
+    def _multiples_valuation (self, income_statement: Dict, market_data: Dict) -> float:
         """Valuation using peer multiples."""
         
         ebitda = income_statement['ebitda']
@@ -928,7 +928,7 @@ class GoingConcernValueCalculator:
         
         return enterprise_value
     
-    def _adjusted_book_value(self, balance_sheet: Dict, income_statement: Dict) -> float:
+    def _adjusted_book_value (self, balance_sheet: Dict, income_statement: Dict) -> float:
         """Book value adjusted for earning power."""
         
         book_value = balance_sheet['shareholders_equity']
@@ -1100,7 +1100,7 @@ result = framework.comprehensive_valuation(
 
 print("\\nDual Valuation Analysis")
 print("=" * 70)
-print(f"Liquidation Value: \${result['liquidation_value']:, .0f}")
+print(f"Liquidation Value: \${result['liquidation_value']:,.0f}")
 print(f"  Per Share: \${result['liquidation_per_share']:.2f}")
 print()
 print(f"Going-Concern Value: \${result['going_concern_value']:,.0f}")
@@ -1125,7 +1125,7 @@ Liquidation value becomes the primary valuation method when:
 5. **Conglomerate discount** (sum-of-parts worth more)
 6. **Distressed debt investment** (recovery analysis)
 
-**Key Insight**: Warren Buffett's early career focused on "cigar butt" stocks trading below liquidation value - buying $1 for 50¢ even if the business was mediocre.`,
+**Key Insight**: Warren Buffett\'s early career focused on "cigar butt" stocks trading below liquidation value - buying $1 for 50¢ even if the business was mediocre.`,
   },
 
   {
@@ -1149,7 +1149,7 @@ class DeferredTaxAssetAnalyzer:
     Problem: Only valuable if company generates future taxable income!
     """
     
-    def explain_dta_concept(self) -> str:
+    def explain_dta_concept (self) -> str:
         return """
         DEFERRED TAX ASSETS (DTAs): What Are They?
         
@@ -1190,7 +1190,7 @@ class DeferredTaxAssetAnalyzer:
         dta_net = dta_gross - valuation_allowance
         
         # Break down DTA composition
-        dta_composition = self._analyze_dta_composition(footnotes)
+        dta_composition = self._analyze_dta_composition (footnotes)
         
         # Assess realizability
         realizability = self._assess_realizability(
@@ -1218,10 +1218,10 @@ class DeferredTaxAssetAnalyzer:
             'haircut_pct': adjustment_to_equity / dta_net if dta_net > 0 else 0,
             'composition': dta_composition,
             'realizability_assessment': realizability,
-            'recommendation': self._generate_recommendation(realizability)
+            'recommendation': self._generate_recommendation (realizability)
         }
     
-    def _analyze_dta_composition(self, footnotes: Dict) -> Dict:
+    def _analyze_dta_composition (self, footnotes: Dict) -> Dict:
         """
         Break down DTA by source.
         Different sources have different realizability.
@@ -1251,9 +1251,9 @@ class DeferredTaxAssetAnalyzer:
         return {
             'detail': composition,
             'categorized': categorized,
-            'total_high_quality': sum(categorized['high_quality'].values()),
-            'total_medium_quality': sum(categorized['medium_quality'].values()),
-            'total_low_quality': sum(categorized['low_quality'].values())
+            'total_high_quality': sum (categorized['high_quality'].values()),
+            'total_medium_quality': sum (categorized['medium_quality'].values()),
+            'total_low_quality': sum (categorized['low_quality'].values())
         }
     
     def _assess_realizability(
@@ -1274,7 +1274,7 @@ class DeferredTaxAssetAnalyzer:
         
         # Calculate historical profitability
         profitable_years = (income_history['pre_tax_income'] > 0).sum()
-        total_years = len(income_history)
+        total_years = len (income_history)
         profitability_rate = profitable_years / total_years if total_years > 0 else 0
         
         # Recent trend (last 3 years)
@@ -1310,7 +1310,7 @@ class DeferredTaxAssetAnalyzer:
             probability *= 0.7  # Marginal time to use
         
         return {
-            'probability': min(probability, 1.0),
+            'probability': min (probability, 1.0),
             'profitability_rate': profitability_rate,
             'recent_income': recent_income,
             'years_to_realize': years_to_realize,
@@ -1340,9 +1340,9 @@ class DeferredTaxAssetAnalyzer:
         else:
             adjusted_value = base_value * 0.1  # Heavy discount if timeline uncertain
         
-        return max(adjusted_value, 0)
+        return max (adjusted_value, 0)
     
-    def _generate_recommendation(self, realizability: Dict) -> str:
+    def _generate_recommendation (self, realizability: Dict) -> str:
         """Generate recommendation for investors."""
         
         prob = realizability['probability']
@@ -1411,8 +1411,7 @@ result = analyzer.analyze_dta_quality(
 
 print("Deferred Tax Asset Quality Analysis")
 print("=" * 70)
-print(f"DTA Reported (Net): \${result['dta_net_book']:, .0f
-} ")
+print(f"DTA Reported (Net): \${result['dta_net_book']:,.0f} ")
 print(f"DTA Adjusted (Fair): \${result['dta_adjusted']:,.0f}")
 print(f"Haircut: \${result['haircut_amount']:,.0f} ({result['haircut_pct']:.1%})")
 print()
@@ -1491,9 +1490,9 @@ def detect_worthless_dtas(
         })
     
     # Overall assessment
-    if len(worthless_indicators) > 0:
+    if len (worthless_indicators) > 0:
         # Use most severe multiplier
-        min_multiplier = min(ind['value_multiplier'] for ind in worthless_indicators)
+        min_multiplier = min (ind['value_multiplier'] for ind in worthless_indicators)
         
         return {
             'worthless': min_multiplier < 0.2,
@@ -1562,8 +1561,8 @@ class BookValueAdjuster:
             'adjusted_equity': adjusted_equity,
             'adjusted_bvps': adjusted_bvps,
             'adjustments': adjustments,
-            'total_adjustment': sum(adjustments.values()),
-            'adjustment_pct': sum(adjustments.values()) / reported_equity if reported_equity > 0 else 0
+            'total_adjustment': sum (adjustments.values()),
+            'adjustment_pct': sum (adjustments.values()) / reported_equity if reported_equity > 0 else 0
         }
 
 # Example usage
@@ -1590,7 +1589,7 @@ adjusted_bv = adjuster.calculate_adjusted_book_value(
 
 print("\\nBook Value Adjustment")
 print("=" * 70)
-print(f"Reported Equity: \${adjusted_bv['reported_equity']:, .0f}")
+print(f"Reported Equity: \${adjusted_bv['reported_equity']:,.0f}")
 print(f"  Per Share: \${adjusted_bv['reported_bvps']:.2f}")
 print()
 print("Adjustments:")

@@ -104,15 +104,15 @@ class Order:
             self.created_at = datetime.now()
         self.updated_at = self.created_at
     
-    def remaining_quantity(self) -> int:
+    def remaining_quantity (self) -> int:
         """Quantity not yet filled"""
         return self.quantity - self.filled_quantity
     
-    def is_complete(self) -> bool:
+    def is_complete (self) -> bool:
         """Is order fully filled?"""
         return self.filled_quantity >= self.quantity
     
-    def update_fill(self, fill_quantity: int, fill_price: float):
+    def update_fill (self, fill_quantity: int, fill_price: float):
         """Update order with partial/full fill"""
         self.filled_quantity += fill_quantity
         
@@ -235,7 +235,7 @@ class OrderBook:
         self.last_trade_price = None
         self.last_trade_size = None
     
-    def add_order(self, order: Order):
+    def add_order (self, order: Order):
         """Add limit order to book"""
         if order.order_type != OrderType.LIMIT:
             raise ValueError("Only limit orders can be added to book")
@@ -246,17 +246,17 @@ class OrderBook:
             # Add to bids
             if order.price not in self.bids:
                 self.bids[order.price] = 0
-                heapq.heappush(self._bid_prices, -order.price)  # Negative for max heap
+                heapq.heappush (self._bid_prices, -order.price)  # Negative for max heap
             self.bids[order.price] += order.quantity
         
         else:  # SELL
             # Add to asks
             if order.price not in self.asks:
                 self.asks[order.price] = 0
-                heapq.heappush(self._ask_prices, order.price)  # Min heap
+                heapq.heappush (self._ask_prices, order.price)  # Min heap
             self.asks[order.price] += order.quantity
     
-    def remove_order(self, order_id: str):
+    def remove_order (self, order_id: str):
         """Cancel order"""
         if order_id not in self.orders:
             return
@@ -274,21 +274,21 @@ class OrderBook:
         
         del self.orders[order_id]
     
-    def best_bid(self) -> Optional[float]:
+    def best_bid (self) -> Optional[float]:
         """Highest buy price"""
         while self._bid_prices and -self._bid_prices[0] not in self.bids:
-            heapq.heappop(self._bid_prices)
+            heapq.heappop (self._bid_prices)
         
         return -self._bid_prices[0] if self._bid_prices else None
     
-    def best_ask(self) -> Optional[float]:
+    def best_ask (self) -> Optional[float]:
         """Lowest sell price"""
         while self._ask_prices and self._ask_prices[0] not in self.asks:
-            heapq.heappop(self._ask_prices)
+            heapq.heappop (self._ask_prices)
         
         return self._ask_prices[0] if self._ask_prices else None
     
-    def spread(self) -> Optional[float]:
+    def spread (self) -> Optional[float]:
         """Bid-ask spread"""
         bid = self.best_bid()
         ask = self.best_ask()
@@ -297,7 +297,7 @@ class OrderBook:
             return ask - bid
         return None
     
-    def spread_bps(self) -> Optional[float]:
+    def spread_bps (self) -> Optional[float]:
         """Spread in basis points"""
         spread = self.spread()
         mid = self.mid_price()
@@ -306,7 +306,7 @@ class OrderBook:
             return (spread / mid) * 10000
         return None
     
-    def mid_price(self) -> Optional[float]:
+    def mid_price (self) -> Optional[float]:
         """Midpoint of bid-ask"""
         bid = self.best_bid()
         ask = self.best_ask()
@@ -315,7 +315,7 @@ class OrderBook:
             return (bid + ask) / 2
         return None
     
-    def microprice(self) -> Optional[float]:
+    def microprice (self) -> Optional[float]:
         """
         Volume-weighted mid price
         More accurate than simple mid
@@ -326,35 +326,35 @@ class OrderBook:
         if bid is None or ask is None:
             return None
         
-        bid_size = self.bids.get(bid, 0)
-        ask_size = self.asks.get(ask, 0)
+        bid_size = self.bids.get (bid, 0)
+        ask_size = self.asks.get (ask, 0)
         
         if bid_size + ask_size == 0:
             return self.mid_price()
         
         return (bid * ask_size + ask * bid_size) / (bid_size + ask_size)
     
-    def depth(self, levels: int = 5) -> dict:
+    def depth (self, levels: int = 5) -> dict:
         """
         Order book depth at top N levels
         
         Returns bid/ask prices and sizes
         """
-        bid_levels = sorted(self.bids.keys(), reverse=True)[:levels]
-        ask_levels = sorted(self.asks.keys())[:levels]
+        bid_levels = sorted (self.bids.keys(), reverse=True)[:levels]
+        ask_levels = sorted (self.asks.keys())[:levels]
         
         return {
             'bids': [(price, self.bids[price]) for price in bid_levels],
             'asks': [(price, self.asks[price]) for price in ask_levels]
         }
     
-    def liquidity(self, levels: int = 5) -> dict:
+    def liquidity (self, levels: int = 5) -> dict:
         """Total available size at top levels"""
-        bid_levels = sorted(self.bids.keys(), reverse=True)[:levels]
-        ask_levels = sorted(self.asks.keys())[:levels]
+        bid_levels = sorted (self.bids.keys(), reverse=True)[:levels]
+        ask_levels = sorted (self.asks.keys())[:levels]
         
-        bid_liquidity = sum(self.bids[price] for price in bid_levels)
-        ask_liquidity = sum(self.asks[price] for price in ask_levels)
+        bid_liquidity = sum (self.bids[price] for price in bid_levels)
+        ask_liquidity = sum (self.asks[price] for price in ask_levels)
         
         return {
             'bid_liquidity': bid_liquidity,
@@ -362,7 +362,7 @@ class OrderBook:
             'total_liquidity': bid_liquidity + ask_liquidity
         }
     
-    def imbalance(self, levels: int = 5) -> float:
+    def imbalance (self, levels: int = 5) -> float:
         """
         Order book imbalance
         
@@ -370,7 +370,7 @@ class OrderBook:
         > 0: More buy pressure
         < 0: More sell pressure
         """
-        liq = self.liquidity(levels)
+        liq = self.liquidity (levels)
         bid_liq = liq['bid_liquidity']
         ask_liq = liq['ask_liquidity']
         
@@ -379,7 +379,7 @@ class OrderBook:
         
         return (bid_liq - ask_liq) / (bid_liq + ask_liq)
     
-    def execute_market_order(self, side: OrderSide, quantity: int) -> dict:
+    def execute_market_order (self, side: OrderSide, quantity: int) -> dict:
         """
         Simulate market order execution
         
@@ -390,14 +390,14 @@ class OrderBook:
         
         if side == OrderSide.BUY:
             # Walk up the ask ladder
-            ask_levels = sorted(self.asks.keys())
+            ask_levels = sorted (self.asks.keys())
             
             for price in ask_levels:
                 if remaining <= 0:
                     break
                 
                 available = self.asks[price]
-                fill_size = min(remaining, available)
+                fill_size = min (remaining, available)
                 
                 fills.append({'price': price, 'size': fill_size})
                 self.asks[price] -= fill_size
@@ -409,14 +409,14 @@ class OrderBook:
         
         else:  # SELL
             # Walk down the bid ladder
-            bid_levels = sorted(self.bids.keys(), reverse=True)
+            bid_levels = sorted (self.bids.keys(), reverse=True)
             
             for price in bid_levels:
                 if remaining <= 0:
                     break
                 
                 available = self.bids[price]
-                fill_size = min(remaining, available)
+                fill_size = min (remaining, available)
                 
                 fills.append({'price': price, 'size': fill_size})
                 self.bids[price] -= fill_size
@@ -428,8 +428,8 @@ class OrderBook:
         
         # Calculate average fill price
         if fills:
-            total_value = sum(f['price'] * f['size'] for f in fills)
-            total_size = sum(f['size'] for f in fills)
+            total_value = sum (f['price'] * f['size'] for f in fills)
+            total_size = sum (f['size'] for f in fills)
             avg_price = total_value / total_size
         else:
             avg_price = None
@@ -439,10 +439,10 @@ class OrderBook:
             'filled_quantity': quantity - remaining,
             'remaining_quantity': remaining,
             'avg_fill_price': avg_price,
-            'slippage': self.calculate_slippage(fills, side)
+            'slippage': self.calculate_slippage (fills, side)
         }
     
-    def calculate_slippage(self, fills: list, side: OrderSide) -> Optional[float]:
+    def calculate_slippage (self, fills: list, side: OrderSide) -> Optional[float]:
         """Calculate slippage from mid price"""
         if not fills:
             return None
@@ -451,8 +451,8 @@ class OrderBook:
         if mid is None:
             return None
         
-        total_value = sum(f['price'] * f['size'] for f in fills)
-        total_size = sum(f['size'] for f in fills)
+        total_value = sum (f['price'] * f['size'] for f in fills)
+        total_size = sum (f['size'] for f in fills)
         avg_price = total_value / total_size
         
         if side == OrderSide.BUY:
@@ -462,19 +462,19 @@ class OrderBook:
         
         return slippage
     
-    def print_book(self, levels: int = 5):
+    def print_book (self, levels: int = 5):
         """Pretty print order book"""
         print(f"\\n{'='*60}")
         print(f"ORDER BOOK: {self.symbol}")
         print(f"{'='*60}")
         
-        depth = self.depth(levels)
+        depth = self.depth (levels)
         
         print(f"\\n{'Price':>10}  {'Size':>10}  {'Side':>6}")
         print("-" * 32)
         
         # Asks (reverse order for display)
-        for price, size in reversed(depth['asks']):
+        for price, size in reversed (depth['asks']):
             print(f"{price:>10.2f}  {size:>10}  {'ASK':>6}")
         
         print("-" * 32)
@@ -489,8 +489,8 @@ class OrderBook:
         print()
         
         # Metrics
-        liq = self.liquidity(levels)
-        imb = self.imbalance(levels)
+        liq = self.liquidity (levels)
+        imb = self.imbalance (levels)
         
         print(f"Bid Liquidity: {liq['bid_liquidity']:,}")
         print(f"Ask Liquidity: {liq['ask_liquidity']:,}")
@@ -506,31 +506,31 @@ class OrderBook:
 book = OrderBook("AAPL")
 
 # Add bid orders
-book.add_order(Order(symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
                     quantity=500, price=150.00, order_id="bid1"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
                     quantity=300, price=149.99, order_id="bid2"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
                     quantity=200, price=149.98, order_id="bid3"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
                     quantity=150, price=149.97, order_id="bid4"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.BUY, order_type=OrderType.LIMIT,
                     quantity=100, price=149.96, order_id="bid5"))
 
 # Add ask orders
-book.add_order(Order(symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
                     quantity=400, price=150.01, order_id="ask1"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
                     quantity=600, price=150.02, order_id="ask2"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
                     quantity=250, price=150.03, order_id="ask3"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
                     quantity=180, price=150.04, order_id="ask4"))
-book.add_order(Order(symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
+book.add_order(Order (symbol="AAPL", side=OrderSide.SELL, order_type=OrderType.LIMIT,
                     quantity=120, price=150.05, order_id="ask5"))
 
 # Display book
-book.print_book(levels=5)
+book.print_book (levels=5)
 
 # Execute market order
 print("\\nExecuting BUY market order for 800 shares...")
@@ -540,10 +540,10 @@ print(f"\\nExecution Report:")
 print(f"  Filled: {execution['filled_quantity']} shares")
 print(f"  Avg Price: \${execution['avg_fill_price']:.2f}")
 print(f"  Slippage: \${execution['slippage']:.4f}")
-print(f"  Fills: {len(execution['fills'])} levels")
+print(f"  Fills: {len (execution['fills'])} levels")
 
 # Show updated book
-book.print_book(levels=5)
+book.print_book (levels=5)
 \`\`\`
 
 ---
@@ -563,29 +563,29 @@ class MarketImpactModel:
     """
     
     @staticmethod
-    def kyle_lambda(daily_volume: float, volatility: float) -> float:
+    def kyle_lambda (daily_volume: float, volatility: float) -> float:
         """
-        Kyle's Lambda: permanent price impact coefficient
+        Kyle\'s Lambda: permanent price impact coefficient
         
         λ ≈ σ / √V
         where σ = volatility, V = daily volume
         """
-        return volatility / np.sqrt(daily_volume)
+        return volatility / np.sqrt (daily_volume)
     
     @staticmethod
-    def permanent_impact(order_size: float, daily_volume: float,
+    def permanent_impact (order_size: float, daily_volume: float,
                         volatility: float) -> float:
         """
         Permanent price impact
         
         Impact = λ * (Order Size / Daily Volume)
         """
-        lambda_coef = MarketImpactModel.kyle_lambda(daily_volume, volatility)
+        lambda_coef = MarketImpactModel.kyle_lambda (daily_volume, volatility)
         participation_rate = order_size / daily_volume
         return lambda_coef * participation_rate
     
     @staticmethod
-    def temporary_impact(order_size: float, spread: float) -> float:
+    def temporary_impact (order_size: float, spread: float) -> float:
         """
         Temporary impact (half spread + more for large orders)
         """
@@ -594,7 +594,7 @@ class MarketImpactModel:
         return base_impact + size_impact
     
     @staticmethod
-    def total_execution_cost(order_size: float, price: float,
+    def total_execution_cost (order_size: float, price: float,
                             daily_volume: float, volatility: float,
                             spread: float, is_buy: bool = True) -> dict:
         """
@@ -606,7 +606,7 @@ class MarketImpactModel:
         )
         
         # Temporary impact
-        temp_impact = MarketImpactModel.temporary_impact(order_size, spread)
+        temp_impact = MarketImpactModel.temporary_impact (order_size, spread)
         
         # Total impact in dollars
         sign = 1 if is_buy else -1
@@ -673,7 +673,7 @@ class OrderFlowAnalyzer:
     """
     
     @staticmethod
-    def calculate_ofi(book_updates: pd.DataFrame) -> pd.Series:
+    def calculate_ofi (book_updates: pd.DataFrame) -> pd.Series:
         """
         Order Flow Imbalance (OFI)
         
@@ -694,7 +694,7 @@ class OrderFlowAnalyzer:
         return ofi
     
     @staticmethod
-    def voi(trades: pd.DataFrame) -> pd.Series:
+    def voi (trades: pd.DataFrame) -> pd.Series:
         """
         Volume Order Imbalance
         
@@ -707,21 +707,21 @@ class OrderFlowAnalyzer:
         return voi
     
     @staticmethod
-    def trade_intensity(trades: pd.DataFrame, window: str = '1min') -> pd.Series:
+    def trade_intensity (trades: pd.DataFrame, window: str = '1min') -> pd.Series:
         """Number of trades per time window"""
-        trades['timestamp'] = pd.to_datetime(trades['timestamp'])
+        trades['timestamp'] = pd.to_datetime (trades['timestamp'])
         trades = trades.set_index('timestamp')
-        return trades.resample(window).size()
+        return trades.resample (window).size()
     
     @staticmethod
-    def effective_spread(trades: pd.DataFrame, mid_prices: pd.Series) -> pd.Series:
+    def effective_spread (trades: pd.DataFrame, mid_prices: pd.Series) -> pd.Series:
         """
         Effective Spread = 2 * |Trade Price - Mid Price|
         
         Measures actual execution cost
         """
-        trades['mid'] = mid_prices.reindex(trades.index, method='ffill')
-        effective_spread = 2 * abs(trades['price'] - trades['mid'])
+        trades['mid'] = mid_prices.reindex (trades.index, method='ffill')
+        effective_spread = 2 * abs (trades['price'] - trades['mid'])
         return effective_spread
 
 
@@ -731,14 +731,14 @@ n_updates = 1000
 
 book_updates = pd.DataFrame({
     'timestamp': pd.date_range('2024-01-01 09:30', periods=n_updates, freq='100ms'),
-    'best_bid': 100 + np.cumsum(np.random.randn(n_updates) * 0.01),
-    'best_ask': 100 + np.cumsum(np.random.randn(n_updates) * 0.01) + 0.02,
+    'best_bid': 100 + np.cumsum (np.random.randn (n_updates) * 0.01),
+    'best_ask': 100 + np.cumsum (np.random.randn (n_updates) * 0.01) + 0.02,
     'bid_size': np.random.randint(100, 1000, n_updates),
     'ask_size': np.random.randint(100, 1000, n_updates)
 })
 
 analyzer = OrderFlowAnalyzer()
-ofi = analyzer.calculate_ofi(book_updates)
+ofi = analyzer.calculate_ofi (book_updates)
 
 print("\\nOrder Flow Imbalance Statistics:")
 print(f"  Mean OFI: {ofi.mean():.2f}")
@@ -747,7 +747,7 @@ print(f"  Current OFI: {ofi.iloc[-1]:.2f}")
 
 # OFI predicts short-term returns
 returns = book_updates['best_bid'].pct_change()
-correlation = ofi.corr(returns.shift(-1))  # Next period return
+correlation = ofi.corr (returns.shift(-1))  # Next period return
 print(f"\\nOFI vs Next-Period Return Correlation: {correlation:.3f}")
 \`\`\`
 
@@ -766,7 +766,7 @@ class HFTDetector:
     """
     
     @staticmethod
-    def detect_quote_stuffing(book_updates: pd.DataFrame,
+    def detect_quote_stuffing (book_updates: pd.DataFrame,
                              threshold: int = 100) -> pd.Series:
         """
         Quote Stuffing: Rapid order submissions/cancellations
@@ -778,7 +778,7 @@ class HFTDetector:
         return stuffing
     
     @staticmethod
-    def detect_layering(book_updates: pd.DataFrame) -> pd.Series:
+    def detect_layering (book_updates: pd.DataFrame) -> pd.Series:
         """
         Layering: Large orders on one side, trade on other
         
@@ -788,12 +788,12 @@ class HFTDetector:
                     (book_updates['bid_size'] + book_updates['ask_size'])
         
         # Large imbalance
-        large_imbalance = abs(imbalance) > 0.5
+        large_imbalance = abs (imbalance) > 0.5
         
         return large_imbalance
     
     @staticmethod
-    def detect_spoofing(orders: pd.DataFrame) -> pd.DataFrame:
+    def detect_spoofing (orders: pd.DataFrame) -> pd.DataFrame:
         """
         Spoofing: Place orders with intent to cancel
         

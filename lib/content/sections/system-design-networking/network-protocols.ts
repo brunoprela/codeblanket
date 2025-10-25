@@ -115,7 +115,7 @@ export const networkprotocolsSection = {
     
     // List directory
     const list = await sftp.list('/remote/path');
-    console.log(list);
+    console.log (list);
     
     await sftp.end();
     \`\`\`
@@ -332,7 +332,7 @@ export const networkprotocolsSection = {
     
     setInterval(() => {
       const msg = \`Log message \${Date.now()}\`;
-      channel.publish('logs', ', Buffer.from(msg));
+      channel.publish('logs', ', Buffer.from (msg));
       console.log(\`Sent: \${msg}\`);
     }, 1000);
     
@@ -343,9 +343,9 @@ export const networkprotocolsSection = {
     await channel2.assertExchange('logs', 'fanout', { durable: false });
     
     const q = await channel2.assertQueue(', { exclusive: true });
-    await channel2.bindQueue(q.queue, 'logs', ');
+    await channel2.bindQueue (q.queue, 'logs', ');
     
-    channel2.consume(q.queue, (msg) => {
+    channel2.consume (q.queue, (msg) => {
       console.log(\`Received: \${msg.content.toString()}\`);
     }, { noAck: true });
     \`\`\`
@@ -363,7 +363,7 @@ export const networkprotocolsSection = {
       
       // Simulate work
       setTimeout(() => {
-        channel.ack(msg); // Acknowledge completion
+        channel.ack (msg); // Acknowledge completion
       }, 1000);
     });
     
@@ -428,11 +428,11 @@ export const networkprotocolsSection = {
       video: true,
       audio: true
     });
-    stream.getTracks().forEach(track => peerA.addTrack(track, stream));
+    stream.getTracks().forEach (track => peerA.addTrack (track, stream));
     
     // Create offer
     const offer = await peerA.createOffer();
-    await peerA.setLocalDescription(offer);
+    await peerA.setLocalDescription (offer);
     
     // Send offer to Peer B via signaling server
     signalingServer.send({ type: 'offer', sdp: offer });
@@ -446,7 +446,7 @@ export const networkprotocolsSection = {
     
     // Receive answer from Peer B
     signalingServer.on('answer', async (answer) => {
-      await peerA.setRemoteDescription(answer);
+      await peerA.setRemoteDescription (answer);
     });
     
     // Peer B (answerer)
@@ -454,18 +454,18 @@ export const networkprotocolsSection = {
     
     // Receive offer from Peer A
     signalingServer.on('offer', async (offer) => {
-      await peerB.setRemoteDescription(offer);
+      await peerB.setRemoteDescription (offer);
       
       // Add local stream
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
       });
-      stream.getTracks().forEach(track => peerB.addTrack(track, stream));
+      stream.getTracks().forEach (track => peerB.addTrack (track, stream));
       
       // Create answer
       const answer = await peerB.createAnswer();
-      await peerB.setLocalDescription(answer);
+      await peerB.setLocalDescription (answer);
       
       // Send answer back
       signalingServer.send({ type: 'answer', sdp: answer });

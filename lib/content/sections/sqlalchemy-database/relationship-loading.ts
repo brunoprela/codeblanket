@@ -33,11 +33,11 @@ The N+1 Problem Demonstration
 """
 
 # BAD: N+1 queries
-users = session.execute(select(User).limit(10)).scalars().all()
+users = session.execute (select(User).limit(10)).scalars().all()
 # Query 1: SELECT * FROM users LIMIT 10
 
 for user in users:
-    print(f"{user.email}: {len(user.posts)} posts")
+    print(f"{user.email}: {len (user.posts)} posts")
     # Query 2-11: SELECT * FROM posts WHERE user_id = ?
     # Executes 10 more queries (one per user)
     
@@ -45,13 +45,13 @@ for user in users:
 # With 1000 users: 1 + 1000 = 1001 queries! 🔥
 
 # GOOD: 2 queries with eager loading
-stmt = select(User).options(selectinload(User.posts)).limit(10)
-users = session.execute(stmt).scalars().all()
+stmt = select(User).options (selectinload(User.posts)).limit(10)
+users = session.execute (stmt).scalars().all()
 # Query 1: SELECT * FROM users LIMIT 10
 # Query 2: SELECT * FROM posts WHERE user_id IN (1,2,3,4,5,6,7,8,9,10)
 
 for user in users:
-    print(f"{user.email}: {len(user.posts)} posts")
+    print(f"{user.email}: {len (user.posts)} posts")
     # No additional queries!
     
 # Total: 2 queries regardless of user count ✅
@@ -74,7 +74,7 @@ from sqlalchemy import event
 query_count = 0
 
 @event.listens_for(Engine, "before_cursor_execute")
-def receive_before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+def receive_before_cursor_execute (conn, cursor, statement, parameters, context, executemany):
     global query_count
     query_count += 1
     print(f"Query #{query_count}: {statement[:100]}...")
@@ -88,7 +88,7 @@ class QueryCounter:
         self.count = 0
         
         @event.listens_for(Engine, "before_cursor_execute")
-        def increment(conn, cursor, statement, parameters, context, executemany):
+        def increment (conn, cursor, statement, parameters, context, executemany):
             self.count += 1
         
         self.listener = increment
@@ -99,7 +99,7 @@ class QueryCounter:
 
 # Usage
 with QueryCounter() as counter:
-    users = session.execute(select(User).limit(10)).scalars().all()
+    users = session.execute (select(User).limit(10)).scalars().all()
     for user in users:
         _ = user.posts
     print(f"Executed {counter.count} queries")  # Should be 2, not 11
@@ -124,15 +124,15 @@ Lazy Loading Behavior
 
 class User(Base):
     __tablename__ = 'users'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    posts: Mapped[list["Post"]] = relationship(back_populates="user")
+    id: Mapped[int] = mapped_column (primary_key=True)
+    posts: Mapped[list["Post"]] = relationship (back_populates="user")
     # Default: lazy="select"
 
 class Post(Base):
     __tablename__ = 'posts'
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    user: Mapped["User"] = relationship(back_populates="posts")
+    user: Mapped["User"] = relationship (back_populates="posts")
 
 # Lazy loading behavior
 user = session.get(User, 1)
@@ -160,35 +160,35 @@ Different Lazy Loading Options
 """
 
 # lazy='select' (default)
-posts: Mapped[list["Post"]] = relationship(lazy='select')
+posts: Mapped[list["Post"]] = relationship (lazy='select')
 # Loads related objects with separate SELECT when accessed
 
 # lazy='immediate'
-posts: Mapped[list["Post"]] = relationship(lazy='immediate')
+posts: Mapped[list["Post"]] = relationship (lazy='immediate')
 # Loads related objects immediately after parent loaded (separate query)
 
 # lazy='joined'
-posts: Mapped[list["Post"]] = relationship(lazy='joined')
+posts: Mapped[list["Post"]] = relationship (lazy='joined')
 # Loads with JOIN in same query as parent
 
 # lazy='subquery'
-posts: Mapped[list["Post"]] = relationship(lazy='subquery')
+posts: Mapped[list["Post"]] = relationship (lazy='subquery')
 # Loads with subquery after parent query
 
 # lazy='selectin'
-posts: Mapped[list["Post"]] = relationship(lazy='selectin')
+posts: Mapped[list["Post"]] = relationship (lazy='selectin')
 # Loads with SELECT IN after parent query (recommended)
 
 # lazy='noload'
-posts: Mapped[list["Post"]] = relationship(lazy='noload')
+posts: Mapped[list["Post"]] = relationship (lazy='noload')
 # Never loads, always returns empty list
 
 # lazy='raise'
-posts: Mapped[list["Post"]] = relationship(lazy='raise')
+posts: Mapped[list["Post"]] = relationship (lazy='raise')
 # Raises error if accessed (prevents lazy loading bugs)
 
 # lazy='raise_on_sql'
-posts: Mapped[list["Post"]] = relationship(lazy='raise_on_sql')
+posts: Mapped[list["Post"]] = relationship (lazy='raise_on_sql')
 # Raises error if would execute SQL (allows already-loaded data)
 \`\`\`
 
@@ -206,8 +206,8 @@ joinedload: Single Query with LEFT OUTER JOIN
 from sqlalchemy.orm import joinedload
 
 # Load users with posts in single query
-stmt = select(User).options(joinedload(User.posts))
-users = session.execute(stmt).scalars().unique().all()
+stmt = select(User).options (joinedload(User.posts))
+users = session.execute (stmt).scalars().unique().all()
 
 # SQL Generated:
 # SELECT users.*, posts.*
@@ -248,8 +248,8 @@ selectinload: Separate Query with IN Clause (RECOMMENDED)
 from sqlalchemy.orm import selectinload
 
 # Load users, then posts in single query
-stmt = select(User).options(selectinload(User.posts))
-users = session.execute(stmt).scalars().all()
+stmt = select(User).options (selectinload(User.posts))
+users = session.execute (stmt).scalars().all()
 
 # SQL Generated:
 # Query 1: SELECT * FROM users
@@ -290,8 +290,8 @@ subqueryload: Separate Query with Subquery JOIN
 from sqlalchemy.orm import subqueryload
 
 # Load users, then posts with subquery
-stmt = select(User).options(subqueryload(User.posts))
-users = session.execute(stmt).scalars().all()
+stmt = select(User).options (subqueryload(User.posts))
+users = session.execute (stmt).scalars().all()
 
 # SQL Generated:
 # Query 1: SELECT * FROM users
@@ -345,7 +345,7 @@ import time
 
 # N+1
 start = time.time()
-users = session.execute(select(User).limit(100)).scalars().all()
+users = session.execute (select(User).limit(100)).scalars().all()
 for user in users:
     _ = user.posts
 print(f"N+1: {time.time() - start:.2f}s")  # ~2.0s
@@ -353,14 +353,14 @@ print(f"N+1: {time.time() - start:.2f}s")  # ~2.0s
 # joinedload
 start = time.time()
 users = session.execute(
-    select(User).options(joinedload(User.posts)).limit(100)
+    select(User).options (joinedload(User.posts)).limit(100)
 ).scalars().unique().all()
 print(f"joinedload: {time.time() - start:.2f}s")  # ~0.3s
 
 # selectinload
 start = time.time()
 users = session.execute(
-    select(User).options(selectinload(User.posts)).limit(100)
+    select(User).options (selectinload(User.posts)).limit(100)
 ).scalars().all()
 print(f"selectinload: {time.time() - start:.2f}s")  # ~0.2s
 \`\`\`
@@ -383,7 +383,7 @@ stmt = (
     select(User)
     .join(User.posts)
     .where(Post.published == True)
-    .options(contains_eager(User.posts))
+    .options (contains_eager(User.posts))
 )
 
 # SQL: Single query with your explicit JOIN
@@ -412,7 +412,7 @@ stmt = select(User).options(
     selectinload(User.comments)  # Load comments eagerly
 )
 
-users = session.execute(stmt).scalars().all()
+users = session.execute (stmt).scalars().all()
 
 for user in users:
     print(user.comments)  # OK: eagerly loaded
@@ -455,7 +455,7 @@ stmt = select(Post).options(
     defer(Post.rendered_html)
 )
 
-posts = session.execute(stmt).scalars().all()
+posts = session.execute (stmt).scalars().all()
 
 for post in posts:
     print(post.title)  # OK: loaded
@@ -481,10 +481,10 @@ class User(Base):
     posts: Mapped[list["Post"]] = relationship()  # lazy='select'
 
 # Query 1: Eager load posts
-stmt = select(User).options(selectinload(User.posts))
+stmt = select(User).options (selectinload(User.posts))
 
 # Query 2: Don't load posts at all
-stmt = select(User).options(noload(User.posts))
+stmt = select(User).options (noload(User.posts))
 
 # Query 3: Use default (lazy='select')
 stmt = select(User)  # No options
@@ -501,16 +501,16 @@ class User(Base):
     __tablename__ = 'users'
     
     # Always eager load (not recommended)
-    profile: Mapped["UserProfile"] = relationship(lazy='joined')
+    profile: Mapped["UserProfile"] = relationship (lazy='joined')
     
     # Recommended: Keep lazy='select', use options() per query
-    posts: Mapped[list["Post"]] = relationship(lazy='select')
+    posts: Mapped[list["Post"]] = relationship (lazy='select')
     
     # Prevent lazy loading (development)
-    comments: Mapped[list["Comment"]] = relationship(lazy='raise')
+    comments: Mapped[list["Comment"]] = relationship (lazy='raise')
 
 # Per-query override still works
-stmt = select(User).options(lazyload(User.profile))  # Override joined
+stmt = select(User).options (lazyload(User.profile))  # Override joined
 \`\`\`
 
 ### Loading Strategies by Use Case
@@ -547,12 +547,12 @@ stmt = select(
 for offset in range(0, total_users, 1000):
     stmt = (
         select(User)
-        .options(selectinload(User.posts))
-        .offset(offset)
+        .options (selectinload(User.posts))
+        .offset (offset)
         .limit(1000)
     )
-    users = session.execute(stmt).scalars().all()
-    process_users(users)
+    users = session.execute (stmt).scalars().all()
+    process_users (users)
     session.expire_all()  # Free memory
 \`\`\`
 
@@ -568,7 +568,7 @@ joinedload + LIMIT Issues
 """
 
 # PROBLEM: LIMIT applies AFTER JOIN
-stmt = select(User).options(joinedload(User.posts)).limit(10)
+stmt = select(User).options (joinedload(User.posts)).limit(10)
 
 # If users have many posts:
 # - Joins all posts first
@@ -576,7 +576,7 @@ stmt = select(User).options(joinedload(User.posts)).limit(10)
 # - Might get 1 user with 10 posts instead of 10 users
 
 # SOLUTION: Use selectinload
-stmt = select(User).options(selectinload(User.posts)).limit(10)
+stmt = select(User).options (selectinload(User.posts)).limit(10)
 # Limits users first, then loads posts for those 10 users
 \`\`\`
 
@@ -609,15 +609,15 @@ joinedload Requires unique()
 """
 
 # With joinedload, duplicate User objects without unique()
-stmt = select(User).options(joinedload(User.posts))
-users = session.execute(stmt).scalars().all()  # Duplicates!
+stmt = select(User).options (joinedload(User.posts))
+users = session.execute (stmt).scalars().all()  # Duplicates!
 
 # CORRECT: Use unique()
-users = session.execute(stmt).scalars().unique().all()
+users = session.execute (stmt).scalars().unique().all()
 
 # selectinload doesn't need unique()
-stmt = select(User).options(selectinload(User.posts))
-users = session.execute(stmt).scalars().all()  # No duplicates
+stmt = select(User).options (selectinload(User.posts))
+users = session.execute (stmt).scalars().all()  # No duplicates
 \`\`\`
 
 ### Pitfall 4: Detached Instance Access
@@ -636,8 +636,8 @@ print(user.posts)  # ERROR: DetachedInstanceError
 
 # SOLUTION 1: Eager load before closing
 session = SessionLocal()
-stmt = select(User).where(User.id == 1).options(selectinload(User.posts))
-user = session.execute(stmt).scalar_one()
+stmt = select(User).where(User.id == 1).options (selectinload(User.posts))
+user = session.execute (stmt).scalar_one()
 session.close()
 print(user.posts)  # OK: already loaded
 
@@ -650,7 +650,7 @@ session.close()
 # SOLUTION 3: expunge and merge (advanced)
 session = SessionLocal()
 user = session.get(User, 1)
-session.expunge(user)  # Detach from session
+session.expunge (user)  # Detach from session
 # user is now detached, can pass across threads
 \`\`\`
 
@@ -690,7 +690,7 @@ import time
 from contextlib import contextmanager
 
 @contextmanager
-def query_timer(operation: str):
+def query_timer (operation: str):
     """Time database operations"""
     start = time.time()
     query_count_start = session.info.get('query_count', 0)
@@ -708,8 +708,8 @@ def query_timer(operation: str):
 
 # Usage
 with query_timer("Load users with posts"):
-    stmt = select(User).options(selectinload(User.posts)).limit(100)
-    users = session.execute(stmt).scalars().all()
+    stmt = select(User).options (selectinload(User.posts)).limit(100)
+    users = session.execute (stmt).scalars().all()
 \`\`\`
 
 ---
@@ -729,7 +729,7 @@ with query_timer("Load users with posts"):
 ### Performance Rules
 
 ✅ Default: lazy='select' on relationships  
-✅ Per-query: Use .options(selectinload(...)) for eager loading  
+✅ Per-query: Use .options (selectinload(...)) for eager loading  
 ✅ One-to-many: selectinload (not joinedload)  
 ✅ LIMIT queries: Always use selectinload (not joinedload)  
 ✅ Multiple relationships: selectinload (not multiple joinedloads)  

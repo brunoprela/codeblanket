@@ -67,7 +67,7 @@ class HMMRegimeDetector:
         )
         self.fitted = False
     
-    def prepare_features(self, data: pd.DataFrame) -> np.ndarray:
+    def prepare_features (self, data: pd.DataFrame) -> np.ndarray:
         """
         Prepare multi-dimensional features for HMM
         
@@ -76,7 +76,7 @@ class HMMRegimeDetector:
         - Volatility
         - Volume
         """
-        features = pd.DataFrame(index=data.index)
+        features = pd.DataFrame (index=data.index)
         
         # Returns
         features['returns'] = data['Close'].pct_change()
@@ -91,16 +91,16 @@ class HMMRegimeDetector:
         
         return features.values
     
-    def fit(self, data: pd.DataFrame):
+    def fit (self, data: pd.DataFrame):
         """Fit HMM to historical data"""
-        X = self.prepare_features(data)
+        X = self.prepare_features (data)
         
         self.model.fit(X)
         self.fitted = True
         
         return self
     
-    def predict_regime(self, data: pd.DataFrame) -> pd.Series:
+    def predict_regime (self, data: pd.DataFrame) -> pd.Series:
         """
         Predict regime for each time period
         
@@ -110,38 +110,38 @@ class HMMRegimeDetector:
         if not self.fitted:
             raise ValueError("Model not fitted. Call fit() first.")
         
-        X = self.prepare_features(data)
+        X = self.prepare_features (data)
         regimes = self.model.predict(X)
         
         # Create series with original index (minus NaNs)
-        features_df = pd.DataFrame(X, index=data.index[len(data) - len(X):])
-        regime_series = pd.Series(regimes, index=features_df.index)
+        features_df = pd.DataFrame(X, index=data.index[len (data) - len(X):])
+        regime_series = pd.Series (regimes, index=features_df.index)
         
         return regime_series
     
-    def regime_probabilities(self, data: pd.DataFrame) -> pd.DataFrame:
+    def regime_probabilities (self, data: pd.DataFrame) -> pd.DataFrame:
         """Get probability of each regime over time"""
-        X = self.prepare_features(data)
+        X = self.prepare_features (data)
         probs = self.model.predict_proba(X)
         
         prob_df = pd.DataFrame(
             probs,
-            columns=[f'Regime_{i}_prob' for i in range(self.n_regimes)],
-            index=data.index[len(data) - len(X):]
+            columns=[f'Regime_{i}_prob' for i in range (self.n_regimes)],
+            index=data.index[len (data) - len(X):]
         )
         
         return prob_df
     
-    def regime_statistics(self, data: pd.DataFrame, regimes: pd.Series) -> dict:
+    def regime_statistics (self, data: pd.DataFrame, regimes: pd.Series) -> dict:
         """Calculate statistics for each regime"""
         returns = data['Close'].pct_change()
         
         stats = {}
-        for regime_id in range(self.n_regimes):
+        for regime_id in range (self.n_regimes):
             regime_mask = regimes == regime_id
             regime_returns = returns[regime_mask]
             
-            if len(regime_returns) > 0:
+            if len (regime_returns) > 0:
                 stats[regime_id] = {
                     'mean_return': regime_returns.mean(),
                     'volatility': regime_returns.std(),
@@ -149,13 +149,13 @@ class HMMRegimeDetector:
                     'skewness': regime_returns.skew(),
                     'kurtosis': regime_returns.kurt(),
                     'max_drawdown': (regime_returns.cumsum() - regime_returns.cumsum().cummax()).min(),
-                    'count': len(regime_returns),
-                    'duration_pct': len(regime_returns) / len(returns)
+                    'count': len (regime_returns),
+                    'duration_pct': len (regime_returns) / len (returns)
                 }
         
         return stats
     
-    def label_regimes(self, stats: dict) -> dict:
+    def label_regimes (self, stats: dict) -> dict:
         """
         Assign human-readable labels based on statistics
         
@@ -168,7 +168,7 @@ class HMMRegimeDetector:
         labeled = {}
         
         # Sort by mean return
-        sorted_regimes = sorted(stats.items(), key=lambda x: x[1]['mean_return'], reverse=True)
+        sorted_regimes = sorted (stats.items(), key=lambda x: x[1]['mean_return'], reverse=True)
         
         if self.n_regimes == 2:
             labeled[sorted_regimes[0][0]] = 'Bull'
@@ -181,7 +181,7 @@ class HMMRegimeDetector:
         
         elif self.n_regimes == 4:
             # Check for crisis regime (high vol, negative return)
-            crisis_regime = max(stats.items(), key=lambda x: x[1]['volatility'])
+            crisis_regime = max (stats.items(), key=lambda x: x[1]['volatility'])
             if crisis_regime[1]['mean_return'] < 0:
                 labeled[crisis_regime[0]] = 'Crisis'
                 remaining = [r for r in sorted_regimes if r[0] != crisis_regime[0]]
@@ -196,12 +196,12 @@ class HMMRegimeDetector:
         
         return labeled
     
-    def plot_regimes(self, data: pd.DataFrame, regimes: pd.Series, labels: dict = None):
+    def plot_regimes (self, data: pd.DataFrame, regimes: pd.Series, labels: dict = None):
         """Visualize regimes over time"""
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True)
         
         # Plot price with regime colors
-        for regime_id in range(self.n_regimes):
+        for regime_id in range (self.n_regimes):
             regime_mask = regimes == regime_id
             label = labels[regime_id] if labels else f'Regime {regime_id}'
             
@@ -216,19 +216,19 @@ class HMMRegimeDetector:
         ax1.set_ylabel('Price')
         ax1.set_title('Price with Market Regimes')
         ax1.legend()
-        ax1.grid(alpha=0.3)
+        ax1.grid (alpha=0.3)
         
         # Plot regime over time
-        ax2.plot(regimes.index, regimes, drawstyle='steps-post', linewidth=2)
+        ax2.plot (regimes.index, regimes, drawstyle='steps-post', linewidth=2)
         ax2.set_ylabel('Regime')
         ax2.set_xlabel('Date')
         ax2.set_title('Regime Sequence')
-        ax2.grid(alpha=0.3)
+        ax2.grid (alpha=0.3)
         
         if labels:
             # Set y-axis labels
-            ax2.set_yticks(list(labels.keys()))
-            ax2.set_yticklabels(list(labels.values()))
+            ax2.set_yticks (list (labels.keys()))
+            ax2.set_yticklabels (list (labels.values()))
         
         plt.tight_layout()
         plt.show()
@@ -242,12 +242,12 @@ class HMMRegimeDetector:
 data = yf.download('SPY', start='2015-01-01', end='2024-01-01')
 
 # Detect regimes
-detector = HMMRegimeDetector(n_regimes=3)
-detector.fit(data)
+detector = HMMRegimeDetector (n_regimes=3)
+detector.fit (data)
 
-regimes = detector.predict_regime(data)
-stats = detector.regime_statistics(data, regimes)
-labels = detector.label_regimes(stats)
+regimes = detector.predict_regime (data)
+stats = detector.regime_statistics (data, regimes)
+labels = detector.label_regimes (stats)
 
 print("="*70)
 print("HMM REGIME DETECTION RESULTS")
@@ -263,7 +263,7 @@ for regime_id, label in labels.items():
     print(f"  Max Drawdown: {stat['max_drawdown']:.2%}")
 
 # Plot
-detector.plot_regimes(data, regimes, labels)
+detector.plot_regimes (data, regimes, labels)
 \`\`\`
 
 ---
@@ -281,7 +281,7 @@ class SimpleRegimeDetector:
     """
     
     @staticmethod
-    def volatility_regime(returns: pd.Series, window: int = 21,
+    def volatility_regime (returns: pd.Series, window: int = 21,
                          low_threshold: float = 0.33,
                          high_threshold: float = 0.67) -> pd.Series:
         """
@@ -291,16 +291,16 @@ class SimpleRegimeDetector:
         Medium Vol: Normal markets
         High Vol: Stressed markets, reduce risk
         """
-        vol = returns.rolling(window).std() * np.sqrt(252)
+        vol = returns.rolling (window).std() * np.sqrt(252)
         
         regimes = pd.Series('medium', index=returns.index)
-        regimes[vol < vol.quantile(low_threshold)] = 'low_vol'
-        regimes[vol > vol.quantile(high_threshold)] = 'high_vol'
+        regimes[vol < vol.quantile (low_threshold)] = 'low_vol'
+        regimes[vol > vol.quantile (high_threshold)] = 'high_vol'
         
         return regimes
     
     @staticmethod
-    def trend_regime(prices: pd.Series, short_window: int = 50,
+    def trend_regime (prices: pd.Series, short_window: int = 50,
                     long_window: int = 200) -> pd.Series:
         """
         Trending vs ranging using moving averages
@@ -308,8 +308,8 @@ class SimpleRegimeDetector:
         Trending: Price above/below MA with clear direction
         Ranging: Price oscillating around MA
         """
-        sma_short = prices.rolling(short_window).mean()
-        sma_long = prices.rolling(long_window).mean()
+        sma_short = prices.rolling (short_window).mean()
+        sma_long = prices.rolling (long_window).mean()
         
         regimes = pd.Series('ranging', index=prices.index)
         
@@ -324,7 +324,7 @@ class SimpleRegimeDetector:
         return regimes
     
     @staticmethod
-    def adx_regime(data: pd.DataFrame, adx_threshold: int = 25) -> pd.Series:
+    def adx_regime (data: pd.DataFrame, adx_threshold: int = 25) -> pd.Series:
         """
         Use ADX (Average Directional Index) for trend strength
         
@@ -342,15 +342,15 @@ class SimpleRegimeDetector:
         minus_dm[minus_dm < 0] = 0
         
         tr1 = high - low
-        tr2 = abs(high - close.shift(1))
-        tr3 = abs(low - close.shift(1))
-        tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+        tr2 = abs (high - close.shift(1))
+        tr3 = abs (low - close.shift(1))
+        tr = pd.concat([tr1, tr2, tr3], axis=1).max (axis=1)
         
         atr = tr.rolling(14).mean()
         plus_di = 100 * (plus_dm.rolling(14).mean() / atr)
         minus_di = 100 * (minus_dm.rolling(14).mean() / atr)
         
-        dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di)
+        dx = 100 * abs (plus_di - minus_di) / (plus_di + minus_di)
         adx = dx.rolling(14).mean()
         
         regimes = pd.Series('ranging', index=data.index)
@@ -359,7 +359,7 @@ class SimpleRegimeDetector:
         return regimes
     
     @staticmethod
-    def correlation_regime(returns_matrix: pd.DataFrame,
+    def correlation_regime (returns_matrix: pd.DataFrame,
                           window: int = 60) -> pd.Series:
         """
         Detect correlation regimes
@@ -368,11 +368,11 @@ class SimpleRegimeDetector:
         Low correlation: Normal, diversification works
         """
         # Calculate rolling average correlation
-        rolling_corr = returns_matrix.rolling(window).corr()
+        rolling_corr = returns_matrix.rolling (window).corr()
         
         # Average pairwise correlation for each date
-        avg_corr = rolling_corr.groupby(level=0).apply(
-            lambda x: x.values[np.triu_indices_from(x.values, k=1)].mean()
+        avg_corr = rolling_corr.groupby (level=0).apply(
+            lambda x: x.values[np.triu_indices_from (x.values, k=1)].mean()
         )
         
         regimes = pd.Series('normal', index=avg_corr.index)
@@ -389,26 +389,26 @@ class SimpleRegimeDetector:
 returns = data['Close'].pct_change().dropna()
 
 # Volatility regime
-vol_regime = SimpleRegimeDetector.volatility_regime(returns)
+vol_regime = SimpleRegimeDetector.volatility_regime (returns)
 
 # Trend regime
-trend_regime = SimpleRegimeDetector.trend_regime(data['Close'])
+trend_regime = SimpleRegimeDetector.trend_regime (data['Close'])
 
 # ADX regime
-adx_regime = SimpleRegimeDetector.adx_regime(data)
+adx_regime = SimpleRegimeDetector.adx_regime (data)
 
 print("\\n" + "="*70)
 print("SIMPLE REGIME DETECTION")
 print("="*70)
 
 print("\\nVolatility Regime Distribution:")
-print(vol_regime.value_counts(normalize=True))
+print(vol_regime.value_counts (normalize=True))
 
 print("\\nTrend Regime Distribution:")
-print(trend_regime.value_counts(normalize=True))
+print(trend_regime.value_counts (normalize=True))
 
 print("\\nADX Regime Distribution:")
-print(adx_regime.value_counts(normalize=True))
+print(adx_regime.value_counts (normalize=True))
 \`\`\`
 
 ---
@@ -441,21 +441,21 @@ class AdaptiveStrategy:
             'ranging': self.range_trading,
         }
     
-    def momentum_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def momentum_strategy (self, data: pd.DataFrame) -> pd.Series:
         """
         Bull market strategy: Momentum
         
         Buy winners, ride trends
         """
         lookback = 21
-        returns = data['Close'].pct_change(lookback)
+        returns = data['Close'].pct_change (lookback)
         
         signals = pd.Series(0, index=data.index)
         signals[returns > returns.quantile(0.7)] = 1  # Buy top 30%
         
         return signals
     
-    def defensive_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def defensive_strategy (self, data: pd.DataFrame) -> pd.Series:
         """
         Bear market strategy: Defensive / Short
         
@@ -464,15 +464,15 @@ class AdaptiveStrategy:
         signals = pd.Series(-0.5, index=data.index)  # 50% short or hedge
         return signals
     
-    def mean_reversion_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def mean_reversion_strategy (self, data: pd.DataFrame) -> pd.Series:
         """
         Neutral / Ranging market: Mean reversion
         
         Buy oversold, sell overbought
         """
         window = 20
-        sma = data['Close'].rolling(window).mean()
-        std = data['Close'].rolling(window).std()
+        sma = data['Close'].rolling (window).mean()
+        std = data['Close'].rolling (window).std()
         z_score = (data['Close'] - sma) / std
         
         signals = pd.Series(0, index=data.index)
@@ -481,7 +481,7 @@ class AdaptiveStrategy:
         
         return signals
     
-    def carry_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def carry_strategy (self, data: pd.DataFrame) -> pd.Series:
         """
         Low volatility: Carry / leveraged
         
@@ -490,7 +490,7 @@ class AdaptiveStrategy:
         signals = pd.Series(1.5, index=data.index)  # 150% exposure
         return signals
     
-    def risk_off_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def risk_off_strategy (self, data: pd.DataFrame) -> pd.Series:
         """
         High volatility: Risk-off
         
@@ -499,21 +499,21 @@ class AdaptiveStrategy:
         signals = pd.Series(0.3, index=data.index)  # Only 30% exposure
         return signals
     
-    def trend_following(self, data: pd.DataFrame) -> pd.Series:
+    def trend_following (self, data: pd.DataFrame) -> pd.Series:
         """Uptrend: Follow the trend"""
         signals = pd.Series(1, index=data.index)
         return signals
     
-    def short_strategy(self, data: pd.DataFrame) -> pd.Series:
+    def short_strategy (self, data: pd.DataFrame) -> pd.Series:
         """Downtrend: Short"""
         signals = pd.Series(-1, index=data.index)
         return signals
     
-    def range_trading(self, data: pd.DataFrame) -> pd.Series:
+    def range_trading (self, data: pd.DataFrame) -> pd.Series:
         """Range-bound: Buy support, sell resistance"""
         window = 20
-        high = data['High'].rolling(window).max()
-        low = data['Low'].rolling(window).min()
+        high = data['High'].rolling (window).max()
+        low = data['Low'].rolling (window).min()
         
         signals = pd.Series(0, index=data.index)
         signals[data['Close'] <= low * 1.01] = 1  # Near support - buy
@@ -521,7 +521,7 @@ class AdaptiveStrategy:
         
         return signals
     
-    def generate_adaptive_signals(self, data: pd.DataFrame,
+    def generate_adaptive_signals (self, data: pd.DataFrame,
                                   regimes: pd.Series) -> pd.Series:
         """
         Generate signals by adapting to detected regime
@@ -547,14 +547,14 @@ class AdaptiveStrategy:
                 
                 # Generate signal for current data point
                 current_data = data.loc[:date]
-                regime_signal = strategy_func(current_data)
+                regime_signal = strategy_func (current_data)
                 
                 if date in regime_signal.index:
                     signals.loc[date] = regime_signal.loc[date]
         
         return signals
     
-    def backtest(self, data: pd.DataFrame, signals: pd.Series) -> dict:
+    def backtest (self, data: pd.DataFrame, signals: pd.Series) -> dict:
         """
         Simple backtest of adaptive strategy
         """
@@ -585,20 +585,20 @@ class AdaptiveStrategy:
 # ============================================================================
 
 # Detect regimes (using HMM from earlier)
-detector = HMMRegimeDetector(n_regimes=3)
-detector.fit(data)
-regimes = detector.predict_regime(data)
-labels_dict = detector.label_regimes(detector.regime_statistics(data, regimes))
+detector = HMMRegimeDetector (n_regimes=3)
+detector.fit (data)
+regimes = detector.predict_regime (data)
+labels_dict = detector.label_regimes (detector.regime_statistics (data, regimes))
 
 # Map regime IDs to labels
-regime_labels = regimes.map(labels_dict)
+regime_labels = regimes.map (labels_dict)
 
 # Create adaptive strategy
-adaptive = AdaptiveStrategy(initial_capital=100000)
-adaptive_signals = adaptive.generate_adaptive_signals(data, regime_labels)
+adaptive = AdaptiveStrategy (initial_capital=100000)
+adaptive_signals = adaptive.generate_adaptive_signals (data, regime_labels)
 
 # Backtest
-adaptive_performance = adaptive.backtest(data, adaptive_signals)
+adaptive_performance = adaptive.backtest (data, adaptive_signals)
 
 # Compare to buy-and-hold
 returns = data['Close'].pct_change()

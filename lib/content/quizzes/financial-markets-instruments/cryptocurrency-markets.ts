@@ -13,15 +13,15 @@ export const cryptocurrencyMarketsQuiz = [
 
 **2. Interconnectedness Without Transparency:**
 \`\`\`
-Luna Collapse ($60B) 
+Luna Collapse (\$60B) 
     ↓ (3AC held $200M Luna)
-3AC Bankruptcy ($10B)
+3AC Bankruptcy (\$10B)
     ↓ (3AC owed money to...)
 Celsius, Voyager, BlockFi (lent to 3AC)
     ↓ (can't repay depositors)
 FTX "bails out" some firms
     ↓ (but FTX itself was insolvent)
-FTX Collapse ($8B customer funds missing)
+FTX Collapse (\$8B customer funds missing)
 \`\`\`
 
 **3. Lack of Transparency:**
@@ -70,13 +70,13 @@ FTX Collapse ($8B customer funds missing)
 **Lessons for Engineering Trading Systems:**
 \`\`\`python
 class RiskManagement:
-    def check_counterparty_risk(self, entity):
+    def check_counterparty_risk (self, entity):
         # Don't trust, verify
         assert entity.leverage < 3  # Low leverage only
         assert entity.collateral_ratio > 1.5  # Overcollateralized
         assert entity.diversification_score > 0.8  # Not concentrated
         
-    def stress_test(self, portfolio):
+    def stress_test (self, portfolio):
         # Model extreme scenarios
         scenarios = [
             'BTC drops 80%',
@@ -84,13 +84,13 @@ class RiskManagement:
             'Main exchange goes bankrupt'
         ]
         for scenario in scenarios:
-            loss = self.calculate_loss(portfolio, scenario)
+            loss = self.calculate_loss (portfolio, scenario)
             assert loss < portfolio.total_value * 0.2  # Max 20% loss
 \`\`\`
 
-**Bottom Line**: Crypto's "move fast and break things" culture broke $100B+ in 2022. Traditional finance's boring risk management (capital requirements, stress tests, segregated accounts) exists for a reason.`,
+**Bottom Line**: Crypto\'s "move fast and break things" culture broke $100B+ in 2022. Traditional finance's boring risk management (capital requirements, stress tests, segregated accounts) exists for a reason.`,
     keyPoints: [
-      '2022 cascade: Luna → 3AC → Celsius/BlockFi → FTX ($100B+ losses)',
+      '2022 cascade: Luna → 3AC → Celsius/BlockFi → FTX (\$100B+ losses)',
       'Root causes: 10x leverage, hidden interconnections, no transparency',
       'Prevention: Segregate funds, stress test, overcollateralize, diversify counterparties',
       'Similar to 2008: Leverage, contagion, opacity. Different: No bailout, faster collapse',
@@ -168,26 +168,26 @@ class HybridCryptoTradingSystem:
             'cold_storage': 0.50   # 50% in cold storage (custody)
         }
     
-    def execute_trade(self, pair, size, urgency):
+    def execute_trade (self, pair, size, urgency):
         """
         Route order to best venue
         """
         if urgency == 'high' or size < 100_000:
             # CEX for speed and liquidity
-            return self.cex_trade(pair, size)
+            return self.cex_trade (pair, size)
         else:
             # DEX for large orders (split over time)
-            return self.dex_trade_twap(pair, size, duration_hours=24)
+            return self.dex_trade_twap (pair, size, duration_hours=24)
     
-    def cex_trade(self, pair, size):
+    def cex_trade (self, pair, size):
         """Trade on centralized exchange"""
         # 1. Check liquidity across CEXs
-        best_exchange = self.find_best_liquidity(pair)
+        best_exchange = self.find_best_liquidity (pair)
         
         # 2. Execute with smart order routing
-        return best_exchange.market_order(pair, size)
+        return best_exchange.market_order (pair, size)
     
-    def dex_trade_twap(self, pair, size, duration_hours):
+    def dex_trade_twap (self, pair, size, duration_hours):
         """
         TWAP on DEX to minimize slippage
         
@@ -195,14 +195,14 @@ class HybridCryptoTradingSystem:
         """
         chunk_size = size / (duration_hours * 4)  # 4 trades per hour
         
-        for i in range(int(duration_hours * 4)):
+        for i in range (int (duration_hours * 4)):
             # Execute small trade
-            self.dex_protocols['Uniswap'].swap(pair, chunk_size)
+            self.dex_protocols['Uniswap'].swap (pair, chunk_size)
             
             # Wait 15 minutes
             time.sleep(900)
     
-    def rebalance_allocation(self):
+    def rebalance_allocation (self):
         """
         Maintain target allocation
         
@@ -213,8 +213,8 @@ class HybridCryptoTradingSystem:
         total_value = self.calculate_total_value()
         
         # Current allocation
-        cex_value = sum(cex.get_balance() for cex in self.cex_accounts.values())
-        dex_value = sum(dex.get_balance() for dex in self.dex_protocols.values())
+        cex_value = sum (cex.get_balance() for cex in self.cex_accounts.values())
+        dex_value = sum (dex.get_balance() for dex in self.dex_protocols.values())
         cold_value = self.cold_storage.get_balance()
         
         # Target allocation
@@ -225,14 +225,14 @@ class HybridCryptoTradingSystem:
         if cex_value > target_cex * 1.1:  # 10% buffer
             # Withdraw excess to cold storage
             excess = cex_value - target_cex
-            self.withdraw_to_cold_storage(excess)
+            self.withdraw_to_cold_storage (excess)
         
         if cex_value < target_cex * 0.9:
             # Transfer from hot wallet to CEX
             shortfall = target_cex - cex_value
-            self.transfer_to_cex(shortfall)
+            self.transfer_to_cex (shortfall)
     
-    def arbitrage_cex_dex(self):
+    def arbitrage_cex_dex (self):
         """
         Arbitrage price differences between CEX and DEX
         
@@ -240,22 +240,22 @@ class HybridCryptoTradingSystem:
         → Buy on Coinbase, sell on Uniswap, profit $200
         """
         for pair in ['BTC-USD', 'ETH-USD']:
-            cex_price = self.get_cex_price(pair)
-            dex_price = self.get_dex_price(pair)
+            cex_price = self.get_cex_price (pair)
+            dex_price = self.get_dex_price (pair)
             
-            spread = abs(dex_price - cex_price) / cex_price
+            spread = abs (dex_price - cex_price) / cex_price
             
             if spread > 0.002:  # 0.2% spread (covers fees)
                 if cex_price < dex_price:
                     # Buy CEX, sell DEX
-                    self.cex_trade(pair, size=10000)
-                    self.dex_protocols['Uniswap'].swap(pair, -10000)
+                    self.cex_trade (pair, size=10000)
+                    self.dex_protocols['Uniswap'].swap (pair, -10000)
                 else:
                     # Buy DEX, sell CEX
-                    self.dex_protocols['Uniswap'].swap(pair, 10000)
-                    self.cex_trade(pair, size=-10000)
+                    self.dex_protocols['Uniswap'].swap (pair, 10000)
+                    self.cex_trade (pair, size=-10000)
     
-    def provide_liquidity_dex(self, pool, amount):
+    def provide_liquidity_dex (self, pool, amount):
         """
         Earn fees by providing liquidity on DEX
         
@@ -277,10 +277,10 @@ system = HybridCryptoTradingSystem()
 system.execute_trade('BTC-USD', size=50000, urgency='high')
 
 # Long-term hold in cold storage
-system.cold_storage.deposit(amount=1000000)
+system.cold_storage.deposit (amount=1000000)
 
 # Earn yield on DEX
-system.provide_liquidity_dex(pool='ETH-USDC', amount=100000)
+system.provide_liquidity_dex (pool='ETH-USDC', amount=100000)
 
 # Daily rebalancing
 system.rebalance_allocation()
@@ -325,7 +325,7 @@ class CryptoPositionSizing:
     Kelly Criterion for crypto (use fractional Kelly due to volatility)
     """
     
-    def kelly_position_size(self, 
+    def kelly_position_size (self, 
                            win_rate: float,
                            avg_win: float, 
                            avg_loss: float,
@@ -346,9 +346,9 @@ class CryptoPositionSizing:
         # Fractional Kelly for crypto
         safe_kelly = kelly * kelly_fraction
         
-        return max(0, min(safe_kelly, 0.10))  # Cap at 10% per position
+        return max(0, min (safe_kelly, 0.10))  # Cap at 10% per position
     
-    def volatility_adjusted_sizing(self,
+    def volatility_adjusted_sizing (self,
                                    symbol: str,
                                    account_size: float,
                                    target_volatility: float = 0.15) -> float:
@@ -357,7 +357,7 @@ class CryptoPositionSizing:
         
         Higher vol → smaller position
         """
-        symbol_volatility = self.get_volatility(symbol)
+        symbol_volatility = self.get_volatility (symbol)
         
         # Scale factor
         scale = target_volatility / symbol_volatility
@@ -368,7 +368,7 @@ class CryptoPositionSizing:
         # Adjusted size
         adjusted_size = base_size * scale
         
-        return min(adjusted_size, account_size * 0.15)  # Max 15%
+        return min (adjusted_size, account_size * 0.15)  # Max 15%
 
 # Example
 sizing = CryptoPositionSizing()
@@ -388,7 +388,7 @@ btc_position = sizing.volatility_adjusted_sizing(
     account_size=100000,
     target_volatility=0.15
 )
-print(f"BTC Position Size: \${btc_position:, .0f}")
+print(f"BTC Position Size: \${btc_position:,.0f}")
 \`\`\`
 
 **2. Dynamic Stop Losses (Volatility-Adjusted)**
@@ -399,7 +399,7 @@ class CryptoStopLoss:
     Volatility-adjusted stop losses
     """
     
-    def calculate_atr_stop(self, 
+    def calculate_atr_stop (self, 
                           symbol: str,
                           entry_price: float,
                           atr_multiplier: float = 2.0) -> float:
@@ -411,14 +411,14 @@ class CryptoStopLoss:
         
         Higher volatility → wider stops
         """
-        atr = self.get_atr(symbol, period=14)
+        atr = self.get_atr (symbol, period=14)
         
         stop_distance = atr * atr_multiplier
         stop_price = entry_price - stop_distance
         
         return stop_price
     
-    def trailing_stop(self,
+    def trailing_stop (self,
                      entry_price: float,
                      current_price: float,
                      atr: float,
@@ -432,7 +432,7 @@ class CryptoStopLoss:
         # Trailing stop (moves up, never down)
         trailing_stop = current_price - (atr * multiplier)
         
-        return max(initial_stop, trailing_stop)
+        return max (initial_stop, trailing_stop)
 
 # Example
 stop_loss = CryptoStopLoss()
@@ -447,7 +447,7 @@ stop = stop_loss.trailing_stop(
     atr=btc_atr,
     multiplier=3.0
 )
-print(f"BTC Trailing Stop: \${stop:, .0f}")
+print(f"BTC Trailing Stop: \${stop:,.0f}")
 print(f"Protects \${btc_current - stop:,.0f} profit")
 \`\`\`
 
@@ -459,7 +459,7 @@ class CryptoCorrelationRisk:
     Monitor correlations (they go to 1 in crashes)
     """
     
-    def calculate_rolling_correlation(self,
+    def calculate_rolling_correlation (self,
                                      asset1_returns: np.array,
                                      asset2_returns: np.array,
                                      window: int = 30) -> np.array:
@@ -469,30 +469,30 @@ class CryptoCorrelationRisk:
         WARNING: In crypto crashes, all correlations → 1
         (Everything drops together)
         """
-        rolling_corr = pd.Series(asset1_returns).rolling(window).corr(
-            pd.Series(asset2_returns)
+        rolling_corr = pd.Series (asset1_returns).rolling (window).corr(
+            pd.Series (asset2_returns)
         )
         
         return rolling_corr
     
-    def diversification_score(self, portfolio: Dict) -> float:
+    def diversification_score (self, portfolio: Dict) -> float:
         """
         True diversification accounting for correlations
         
         Score = Σ(weight_i) / sqrt(Σ(weight_i * weight_j * corr_ij))
         """
-        n = len(portfolio)
+        n = len (portfolio)
         weights = np.array([portfolio[asset]['weight'] for asset in portfolio])
         
         # Correlation matrix
-        corr_matrix = self.get_correlation_matrix(list(portfolio.keys()))
+        corr_matrix = self.get_correlation_matrix (list (portfolio.keys()))
         
         # Portfolio variance
         portfolio_var = weights.T @ corr_matrix @ weights
         
         # Diversification ratio
-        weighted_avg_vol = np.sum(weights)
-        portfolio_vol = np.sqrt(portfolio_var)
+        weighted_avg_vol = np.sum (weights)
+        portfolio_vol = np.sqrt (portfolio_var)
         
         return weighted_avg_vol / portfolio_vol  # >1 means diversification
 
@@ -518,7 +518,7 @@ class CryptoTailRiskHedging:
     Protect against 50%+ crashes (common in crypto)
     """
     
-    def buy_put_options(self,
+    def buy_put_options (self,
                        symbol: str,
                        portfolio_value: float,
                        hedge_ratio: float = 0.50) -> Dict:
@@ -529,7 +529,7 @@ class CryptoTailRiskHedging:
         Cost: ~2-5% annually
         Protection: If BTC drops 50%, puts offset losses
         """
-        current_price = self.get_price(symbol)
+        current_price = self.get_price (symbol)
         
         # 30% OTM puts
         strike = current_price * 0.70
@@ -538,7 +538,7 @@ class CryptoTailRiskHedging:
         hedge_amount = portfolio_value * hedge_ratio
         
         # Buy puts
-        premium = self.get_option_premium(symbol, strike, expiry='30d')
+        premium = self.get_option_premium (symbol, strike, expiry='30d')
         contracts = hedge_amount / (current_price * 100)  # 100 coins per contract
         
         total_cost = premium * contracts * 100
@@ -553,7 +553,7 @@ class CryptoTailRiskHedging:
             'protection': 'Limits downside below strike'
         }
     
-    def stablecoin_allocation(self,
+    def stablecoin_allocation (self,
                              portfolio_value: float,
                              vol_target: float = 0.40) -> float:
         """
@@ -610,7 +610,7 @@ class CryptoRiskFramework:
         self.stablecoin_floor = 0.25  # Always keep 25% in stables
         self.correlation_threshold = 0.80  # Reduce size if corr > 0.8
         
-    def check_risk_limits(self, proposed_trade):
+    def check_risk_limits (self, proposed_trade):
         # 1. Position size OK?
         assert proposed_trade.size <= self.max_position_size
         
@@ -629,7 +629,7 @@ class CryptoRiskFramework:
         return "Trade approved"
 \`\`\`
 
-**Key Insight**: Crypto's volatility means traditional risk rules (2% stops, 10% positions) will get you killed. Scale everything by 3-5x: wider stops, smaller positions, more hedging.`,
+**Key Insight**: Crypto\'s volatility means traditional risk rules (2% stops, 10% positions) will get you killed. Scale everything by 3-5x: wider stops, smaller positions, more hedging.`,
     keyPoints: [
       'Crypto vol 3-5x stocks: Adapt position sizing (2-5% vs 5-10%), stops (10-15% vs 2-3%)',
       'Kelly sizing: Use 1/4 Kelly for crypto (too volatile for full Kelly)',

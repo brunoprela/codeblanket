@@ -42,14 +42,14 @@ def count_architectures():
     num_layers = 3  # We'll design 3 hidden layers
     
     # Each layer: choose size AND activation
-    choices_per_layer = len(layer_sizes) * len(activations)
+    choices_per_layer = len (layer_sizes) * len (activations)
     
     # Total architectures using fundamental counting principle
     total = choices_per_layer ** num_layers
     
     print("=== Neural Network Architecture Search Space ===")
-    print(f"Layer size options: {len(layer_sizes)}")
-    print(f"Activation options: {len(activations)}")
+    print(f"Layer size options: {len (layer_sizes)}")
+    print(f"Activation options: {len (activations)}")
     print(f"Choices per layer: {choices_per_layer}")
     print(f"Number of layers: {num_layers}")
     print(f"Total architectures: {total:,}")
@@ -95,18 +95,18 @@ def permutations_demo():
     
     # Example 1: Arranging all items
     n = 5
-    all_perms = factorial(n)
+    all_perms = factorial (n)
     print(f"Ways to arrange {n} distinct items: {all_perms}")
     
     # Example 2: Arranging r items from n
     n, r = 10, 3
-    perms = factorial(n) // factorial(n - r)
+    perms = factorial (n) // factorial (n - r)
     print(f"\\nWays to arrange {r} items from {n}: {perms}")
     
     # ML Example: Feature ordering for sequential models
     n_features = 8
     select_top_k = 3
-    feature_orderings = factorial(n_features) // factorial(n_features - select_top_k)
+    feature_orderings = factorial (n_features) // factorial (n_features - select_top_k)
     
     print(f"\\n=== ML Application: Feature Selection ===")
     print(f"Total features: {n_features}")
@@ -116,11 +116,11 @@ def permutations_demo():
     # Generate actual permutations for small example
     from itertools import permutations
     items = ['A', 'B', 'C']
-    perms_list = list(permutations(items, 2))
+    perms_list = list (permutations (items, 2))
     print(f"\\n2-permutations of {items}:")
     for p in perms_list:
         print(f"  {p}")
-    print(f"Count: {len(perms_list)} = P(3,2) = 3!/(3-2)! = 6")
+    print(f"Count: {len (perms_list)} = P(3,2) = 3!/(3-2)! = 6")
 
 permutations_demo()
 
@@ -171,18 +171,18 @@ def combinations_demo():
     
     # Example 1: Committee selection
     n, r = 10, 3
-    combs = comb(n, r)
+    combs = comb (n, r)
     print(f"Ways to select {r} people from {n} (order doesn't matter): {combs}")
     
     # Compare with permutations
-    perms = factorial(n) // factorial(n - r)
+    perms = factorial (n) // factorial (n - r)
     print(f"If order mattered (permutations): {perms}")
     print(f"Ratio: {perms / combs} = {r}!")
     
     # ML Example: Feature subset selection
     n_features = 20
     select_k = 5
-    feature_subsets = comb(n_features, select_k)
+    feature_subsets = comb (n_features, select_k)
     
     print(f"\\n=== ML Application: Feature Subset Selection ===")
     print(f"Total features: {n_features}")
@@ -193,11 +193,11 @@ def combinations_demo():
     # Generate actual combinations for small example
     from itertools import combinations
     items = ['A', 'B', 'C', 'D']
-    combs_list = list(combinations(items, 2))
+    combs_list = list (combinations (items, 2))
     print(f"\\n2-combinations of {items}:")
     for c in combs_list:
-        print(f"  {set(c)}")
-    print(f"Count: {len(combs_list)} = C(4,2) = 6")
+        print(f"  {set (c)}")
+    print(f"Count: {len (combs_list)} = C(4,2) = 6")
 
 combinations_demo()
 
@@ -233,7 +233,7 @@ The binomial coefficient \\( \\binom{n}{k} \\) appears in many contexts:
 
 2. **Sum**: \\( \\sum_{k=0}^{n} \\binom{n}{k} = 2^n \\) (total number of subsets)
 
-3. **Pascal's Identity**: \\( \\binom{n}{k} = \\binom{n-1}{k-1} + \\binom{n-1}{k} \\)
+3. **Pascal\'s Identity**: \\( \\binom{n}{k} = \\binom{n-1}{k-1} + \\binom{n-1}{k} \\)
 
 ### Pascal's Triangle
 
@@ -249,22 +249,22 @@ The binomial coefficient \\( \\binom{n}{k} \\) appears in many contexts:
 Each entry is the sum of the two entries above it.
 
 \`\`\`python
-def pascals_triangle(n_rows):
+def pascals_triangle (n_rows):
     """Generate Pascal's Triangle"""
     
     triangle = []
-    for n in range(n_rows):
-        row = [comb(n, k) for k in range(n + 1)]
-        triangle.append(row)
+    for n in range (n_rows):
+        row = [comb (n, k) for k in range (n + 1)]
+        triangle.append (row)
     
     # Print triangle
-    print("Pascal's Triangle:")
-    for i, row in enumerate(triangle):
+    print("Pascal\'s Triangle:")
+    for i, row in enumerate (triangle):
         spaces = ' ' * (n_rows - i) * 2
-        print(spaces + ' '.join(f'{x:3d}' for x in row))
+        print(spaces + ' '.join (f'{x:3d}' for x in row))
     
     # Verify property: sum of row n = 2^n
-    print(f"\\nVerifying: Sum of row {n_rows-1} = {sum(triangle[-1])} = 2^{n_rows-1} = {2**(n_rows-1)}")
+    print(f"\\nVerifying: Sum of row {n_rows-1} = {sum (triangle[-1])} = 2^{n_rows-1} = {2**(n_rows-1)}")
     
     return triangle
 
@@ -276,18 +276,18 @@ print("(a + b)^n = Σ C(n,k) * a^(n-k) * b^k")
 print("\\nExample: (x + y)^3 =")
 n = 3
 terms = []
-for k in range(n + 1):
-    coeff = comb(n, k)
+for k in range (n + 1):
+    coeff = comb (n, k)
     power_x = n - k
     power_y = k
     term = f"{coeff}x^{power_x}y^{power_y}" if power_x > 0 and power_y > 0 else \
            f"{coeff}x^{power_x}" if power_y == 0 else \
            f"{coeff}y^{power_y}" if power_x == 0 else f"{coeff}"
-    terms.append(term.replace('^1', ').replace('^0', '))
-print(' + '.join(terms))
+    terms.append (term.replace('^1', ').replace('^0', '))
+print(' + '.join (terms))
 
 # Output:
-# Pascal's Triangle:
+# Pascal\'s Triangle:
 #              1
 #            1   1
 #          1   2   1
@@ -347,7 +347,7 @@ def repetition_examples():
     print("\\n=== Combinations with Repetition ===")
     n_flavors = 5
     n_scoops = 3
-    combinations_rep = comb(n_flavors + n_scoops - 1, n_scoops)
+    combinations_rep = comb (n_flavors + n_scoops - 1, n_scoops)
     print(f"Choosing {n_scoops} scoops from {n_flavors} flavors (with repetition):")
     print(f"C({n_flavors}+{n_scoops}-1, {n_scoops}) = C({n_flavors+n_scoops-1}, {n_scoops}) = {combinations_rep}")
 
@@ -378,13 +378,13 @@ n_features = 10
 print(f"Original features: {n_features}")
 
 # Add all pairwise interactions (degree 2)
-pairwise_interactions = comb(n_features, 2)
+pairwise_interactions = comb (n_features, 2)
 print(f"Pairwise interactions (choose 2 from {n_features}): {pairwise_interactions}")
 print(f"Total features with interactions: {n_features + pairwise_interactions}")
 
 # Using sklearn
 X = np.random.randn(5, n_features)
-poly = PolynomialFeatures(degree=2, interaction_only=True, include_bias=False)
+poly = PolynomialFeatures (degree=2, interaction_only=True, include_bias=False)
 X_interactions = poly.fit_transform(X)
 print(f"\\nActual sklearn output shape: {X_interactions.shape[1]} features")
 
@@ -401,7 +401,7 @@ print(f"\\nActual sklearn output shape: {X_interactions.shape[1]} features")
 k-fold cross-validation:
 
 \`\`\`python
-def analyze_cv_splits(n_samples, k_folds):
+def analyze_cv_splits (n_samples, k_folds):
     """Analyze combinations in k-fold cross-validation"""
     
     fold_size = n_samples // k_folds
@@ -446,7 +446,7 @@ def architecture_search_space():
     # For each possible number of layers
     for n_layers in range(1, max_layers + 1):
         # Choose layer size AND activation for each layer
-        configs_this_depth = (len(layer_sizes) * len(activations)) ** n_layers
+        configs_this_depth = (len (layer_sizes) * len (activations)) ** n_layers
         total += configs_this_depth
         print(f"{n_layers} layers: {configs_this_depth:,} architectures")
     

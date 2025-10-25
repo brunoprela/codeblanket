@@ -42,10 +42,10 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 # Generate data with non-spherical shapes
-X_moons, _ = make_moons(n_samples=300, noise=0.05, random_state=42)
+X_moons, _ = make_moons (n_samples=300, noise=0.05, random_state=42)
 
 # Visualize data
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.scatter(X_moons[:, 0], X_moons[:, 1], alpha=0.6, s=50)
 plt.title('Data with Non-Spherical Clusters (Moons)')
 plt.xlabel('Feature 1')
@@ -73,15 +73,15 @@ dbscan = DBSCAN(eps=0.3, min_samples=5)
 labels = dbscan.fit_predict(X_moons)
 
 # -1 indicates noise points
-n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-n_noise = list(labels).count(-1)
+n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
+n_noise = list (labels).count(-1)
 
 print(f"Number of clusters: {n_clusters}")
 print(f"Number of noise points: {n_noise}")
-print(f"Cluster labels: {set(labels)}")
+print(f"Cluster labels: {set (labels)}")
 
 # Visualize results
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_moons[:, 0], X_moons[:, 1], alpha=0.6, s=50)
@@ -89,7 +89,7 @@ plt.title('Original Data')
 
 plt.subplot(1, 2, 2)
 # Plot clusters
-for label in set(labels):
+for label in set (labels):
     if label == -1:
         # Noise points in black
         mask = labels == label
@@ -100,7 +100,7 @@ for label in set(labels):
         plt.scatter(X_moons[mask, 0], X_moons[mask, 1], 
                    s=50, alpha=0.6, label=f'Cluster {label}')
 
-plt.title(f'DBSCAN Results ({n_clusters} clusters, {n_noise} noise)')
+plt.title (f'DBSCAN Results ({n_clusters} clusters, {n_noise} noise)')
 plt.legend()
 plt.tight_layout()
 plt.show()
@@ -121,15 +121,15 @@ eps_values = [0.1, 0.2, 0.3, 0.5]
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, eps in enumerate(eps_values):
+for idx, eps in enumerate (eps_values):
     dbscan = DBSCAN(eps=eps, min_samples=5)
     labels = dbscan.fit_predict(X_moons)
     
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    n_noise = list(labels).count(-1)
+    n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
+    n_noise = list (labels).count(-1)
     
     # Plot
-    for label in set(labels):
+    for label in set (labels):
         mask = labels == label
         if label == -1:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], 
@@ -137,7 +137,7 @@ for idx, eps in enumerate(eps_values):
         else:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], s=30, alpha=0.6)
     
-    axes[idx].set_title(f'eps={eps}\\nClusters: {n_clusters}, Noise: {n_noise}')
+    axes[idx].set_title (f'eps={eps}\\nClusters: {n_clusters}, Noise: {n_noise}')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -159,15 +159,15 @@ min_samples_values = [3, 5, 10, 20]
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 axes = axes.ravel()
 
-for idx, min_samples in enumerate(min_samples_values):
+for idx, min_samples in enumerate (min_samples_values):
     dbscan = DBSCAN(eps=0.3, min_samples=min_samples)
     labels = dbscan.fit_predict(X_moons)
     
-    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-    n_noise = list(labels).count(-1)
+    n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
+    n_noise = list (labels).count(-1)
     
     # Plot
-    for label in set(labels):
+    for label in set (labels):
         mask = labels == label
         if label == -1:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], 
@@ -175,7 +175,7 @@ for idx, min_samples in enumerate(min_samples_values):
         else:
             axes[idx].scatter(X_moons[mask, 0], X_moons[mask, 1], s=30, alpha=0.6)
     
-    axes[idx].set_title(f'min_samples={min_samples}\\nClusters: {n_clusters}, Noise: {n_noise}')
+    axes[idx].set_title (f'min_samples={min_samples}\\nClusters: {n_clusters}, Noise: {n_noise}')
     axes[idx].set_xlabel('Feature 1')
     axes[idx].set_ylabel('Feature 2')
 
@@ -209,24 +209,24 @@ from sklearn.neighbors import NearestNeighbors
 
 # Calculate k-distances (k = min_samples)
 min_samples = 5
-neighbors = NearestNeighbors(n_neighbors=min_samples)
+neighbors = NearestNeighbors (n_neighbors=min_samples)
 neighbors.fit(X_moons)
 distances, indices = neighbors.kneighbors(X_moons)
 
 # Sort distances to k-th nearest neighbor
 k_distances = distances[:, -1]
-k_distances_sorted = np.sort(k_distances)
+k_distances_sorted = np.sort (k_distances)
 
 # Plot k-distance graph
-plt.figure(figsize=(10, 6))
-plt.plot(k_distances_sorted, linewidth=2)
+plt.figure (figsize=(10, 6))
+plt.plot (k_distances_sorted, linewidth=2)
 plt.xlabel('Points sorted by distance', fontsize=12)
-plt.ylabel(f'{min_samples}-th Nearest Neighbor Distance', fontsize=12)
-plt.title(f'K-Distance Graph (k={min_samples})', fontsize=14)
+plt.ylabel (f'{min_samples}-th Nearest Neighbor Distance', fontsize=12)
+plt.title (f'K-Distance Graph (k={min_samples})', fontsize=14)
 plt.grid(True, alpha=0.3)
 
 # Look for the "elbow" - suggests good epsilon
-plt.axhline(y=0.25, color='r', linestyle='--', linewidth=2, 
+plt.axhline (y=0.25, color='r', linestyle='--', linewidth=2, 
            label='Suggested eps ≈ 0.25 (elbow point)')
 plt.legend()
 plt.tight_layout()
@@ -254,13 +254,13 @@ for eps in eps_range:
         labels = dbscan.fit_predict(X_moons)
         
         # Skip if only one cluster or all noise
-        n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+        n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
         if n_clusters < 2:
             continue
         
         # Calculate silhouette score (only for non-noise points)
         mask = labels != -1
-        if sum(mask) > min_samples:
+        if sum (mask) > min_samples:
             score = silhouette_score(X_moons[mask], labels[mask])
             
             if score > best_score:
@@ -274,8 +274,8 @@ print(f"Best silhouette score: {best_score:.3f}")
 dbscan_best = DBSCAN(**best_params)
 labels_best = dbscan_best.fit_predict(X_moons)
 
-plt.figure(figsize=(10, 6))
-for label in set(labels_best):
+plt.figure (figsize=(10, 6))
+for label in set (labels_best):
     mask = labels_best == label
     if label == -1:
         plt.scatter(X_moons[mask, 0], X_moons[mask, 1], 
@@ -283,41 +283,41 @@ for label in set(labels_best):
     else:
         plt.scatter(X_moons[mask, 0], X_moons[mask, 1], s=50, label=f'Cluster {label}')
 
-plt.title(f"DBSCAN with Optimized Parameters\\neps={best_params['eps']:.2f}, min_samples={best_params['min_samples']}")
+plt.title (f"DBSCAN with Optimized Parameters\\neps={best_params['eps']:.2f}, min_samples={best_params['min_samples']}")
 plt.legend()
 plt.show()
 \`\`\`
 
 ## DBSCAN vs K-Means
 
-Let's see why DBSCAN excels at non-spherical clusters:
+Let\'s see why DBSCAN excels at non-spherical clusters:
 
 \`\`\`python
 from sklearn.cluster import KMeans
 
 # Generate challenging datasets
 datasets = [
-    make_moons(n_samples=300, noise=0.05, random_state=42)[0],
-    make_blobs(n_samples=300, centers=3, random_state=42)[0],
+    make_moons (n_samples=300, noise=0.05, random_state=42)[0],
+    make_blobs (n_samples=300, centers=3, random_state=42)[0],
 ]
 
 dataset_names = ['Moons (Non-spherical)', 'Blobs (Spherical)']
 
 fig, axes = plt.subplots(2, 3, figsize=(16, 10))
 
-for row, (X, name) in enumerate(zip(datasets, dataset_names)):
+for row, (X, name) in enumerate (zip (datasets, dataset_names)):
     # Standardize
     X_scaled = StandardScaler().fit_transform(X)
     
     # Original data
     axes[row, 0].scatter(X_scaled[:, 0], X_scaled[:, 1], alpha=0.6, s=30)
-    axes[row, 0].set_title(f'{name}\\n(Original Data)')
+    axes[row, 0].set_title (f'{name}\\n(Original Data)')
     
     # K-Means
-    kmeans = KMeans(n_clusters=2 if row == 0 else 3, random_state=42)
+    kmeans = KMeans (n_clusters=2 if row == 0 else 3, random_state=42)
     labels_km = kmeans.fit_predict(X_scaled)
     axes[row, 1].scatter(X_scaled[:, 0], X_scaled[:, 1], c=labels_km, cmap='viridis', alpha=0.6, s=30)
-    axes[row, 1].scatter(kmeans.cluster_centers_[:, 0], 
+    axes[row, 1].scatter (kmeans.cluster_centers_[:, 0], 
                         kmeans.cluster_centers_[:, 1],
                         c='red', marker='X', s=200, edgecolors='black', linewidths=2)
     axes[row, 1].set_title('K-Means Clustering')
@@ -325,7 +325,7 @@ for row, (X, name) in enumerate(zip(datasets, dataset_names)):
     # DBSCAN
     dbscan = DBSCAN(eps=0.3, min_samples=5)
     labels_db = dbscan.fit_predict(X_scaled)
-    for label in set(labels_db):
+    for label in set (labels_db):
         mask = labels_db == label
         if label == -1:
             axes[row, 2].scatter(X_scaled[mask, 0], X_scaled[mask, 1], 
@@ -372,14 +372,14 @@ X_varying = np.vstack([X_dense, X_sparse])
 dbscan = DBSCAN(eps=0.5, min_samples=5)
 labels = dbscan.fit_predict(X_varying)
 
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
 plt.scatter(X_varying[:, 0], X_varying[:, 1], alpha=0.6)
 plt.title('Data with Varying Density')
 
 plt.subplot(1, 2, 2)
-for label in set(labels):
+for label in set (labels):
     mask = labels == label
     if label == -1:
         plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
@@ -421,11 +421,11 @@ X_geo = np.vstack([hotspot1, hotspot2, hotspot3, noise])
 dbscan = DBSCAN(eps=0.008, min_samples=5)
 labels = dbscan.fit_predict(X_geo)
 
-n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-n_noise = list(labels).count(-1)
+n_clusters = len (set (labels)) - (1 if -1 in labels else 0)
+n_noise = list (labels).count(-1)
 
-plt.figure(figsize=(10, 8))
-for label in set(labels):
+plt.figure (figsize=(10, 8))
+for label in set (labels):
     mask = labels == label
     if label == -1:
         plt.scatter(X_geo[mask, 1], X_geo[mask, 0], 
@@ -436,7 +436,7 @@ for label in set(labels):
 
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
-plt.title(f'Crime Hotspot Detection\\n{n_clusters} hotspots, {n_noise} isolated incidents')
+plt.title (f'Crime Hotspot Detection\\n{n_clusters} hotspots, {n_noise} isolated incidents')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
@@ -465,12 +465,12 @@ dbscan = DBSCAN(eps=0.5, min_samples=10)
 labels = dbscan.fit_predict(X_traffic)
 
 # Noise points are potential anomalies
-n_anomalies = list(labels).count(-1)
+n_anomalies = list (labels).count(-1)
 
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 
 # Plot normal vs anomalous
-for label in set(labels):
+for label in set (labels):
     mask = labels == label
     if label == -1:
         plt.scatter(X_traffic[mask, 0], X_traffic[mask, 1], 
@@ -502,10 +502,10 @@ china_small = china[::8, ::8]  # Downsample for speed
 
 # Convert to 2D array of pixels (features = RGB + position)
 h, w, c = china_small.shape
-X_pixels = china_small.reshape(-1, 3).astype(float)
+X_pixels = china_small.reshape(-1, 3).astype (float)
 
 # Add spatial information (position matters!)
-positions = np.array([[i, j] for i in range(h) for j in range(w)])
+positions = np.array([[i, j] for i in range (h) for j in range (w)])
 X_features = np.hstack([X_pixels / 255.0, positions / np.array([h, w]) * 2])
 
 # Standardize
@@ -517,20 +517,20 @@ dbscan = DBSCAN(eps=0.5, min_samples=5)
 labels = dbscan.fit_predict(X_scaled)
 
 # Visualize segmentation
-segmented = np.zeros_like(china_small)
-for label in set(labels):
+segmented = np.zeros_like (china_small)
+for label in set (labels):
     if label != -1:  # Ignore noise
-        mask = (labels == label).reshape(h, w)
+        mask = (labels == label).reshape (h, w)
         color = np.random.randint(0, 255, 3)
         segmented[mask] = color
 
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
-axes[0].imshow(china_small)
+axes[0].imshow (china_small)
 axes[0].set_title('Original Image')
 axes[0].axis('off')
 
-axes[1].imshow(segmented)
-axes[1].set_title(f'DBSCAN Segmentation ({len(set(labels))-1} segments)')
+axes[1].imshow (segmented)
+axes[1].set_title (f'DBSCAN Segmentation ({len (set (labels))-1} segments)')
 axes[1].axis('off')
 
 plt.tight_layout()
@@ -550,11 +550,11 @@ try:
     hdb = hdbscan.HDBSCAN(min_cluster_size=5, min_samples=3)
     labels_hdb = hdb.fit_predict(X_varying)
     
-    plt.figure(figsize=(12, 5))
+    plt.figure (figsize=(12, 5))
     
     plt.subplot(1, 2, 1)
     # DBSCAN result
-    for label in set(labels):
+    for label in set (labels):
         mask = labels == label
         if label == -1:
             plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 
@@ -565,7 +565,7 @@ try:
     
     plt.subplot(1, 2, 2)
     # HDBSCAN result
-    for label in set(labels_hdb):
+    for label in set (labels_hdb):
         mask = labels_hdb == label
         if label == -1:
             plt.scatter(X_varying[mask, 0], X_varying[mask, 1], 

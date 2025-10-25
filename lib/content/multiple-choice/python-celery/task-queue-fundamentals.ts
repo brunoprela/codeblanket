@@ -31,7 +31,7 @@ export const taskQueueFundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "The message broker (Redis or RabbitMQ) acts as the middleman: it stores tasks in a queue (persistent), routes tasks to available workers, handles acknowledgments, and requeues failed tasks. The broker does NOT execute tasks (workers do that) or replace databases. It's the reliable queue that decouples producers (web servers) from consumers (workers).",
+      "The message broker (Redis or RabbitMQ) acts as the middleman: it stores tasks in a queue (persistent), routes tasks to available workers, handles acknowledgments, and requeues failed tasks. The broker does NOT execute tasks (workers do that) or replace databases. It\'s the reliable queue that decouples producers (web servers) from consumers (workers).",
   },
   {
     id: 'mc3',

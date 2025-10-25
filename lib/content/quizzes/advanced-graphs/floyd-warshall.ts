@@ -8,12 +8,12 @@ export const floydwarshallQuiz = [
     question:
       'Explain Floyd-Warshall algorithm. How does it compute all-pairs shortest paths?',
     sampleAnswer:
-      'Floyd-Warshall uses dynamic programming with 3 nested loops. DP state: dist[i][j][k] = shortest path from i to j using only vertices 0..k as intermediates. Recurrence: dist[i][j][k] = min(dist[i][j][k-1], dist[i][k][k-1] + dist[k][j][k-1]). Either use k as intermediate or not. Base case: dist[i][j][0] = weight(i,j) if edge exists, infinity otherwise. Can optimize to 2D by updating in-place: for each k, for each i, for each j: dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]). After considering all vertices as intermediates, dist[i][j] is shortest path from i to j. Works for negative weights (detects negative cycles if dist[i][i] < 0). Simple nested loops, no heap needed.',
+      'Floyd-Warshall uses dynamic programming with 3 nested loops. DP state: dist[i][j][k] = shortest path from i to j using only vertices 0..k as intermediates. Recurrence: dist[i][j][k] = min (dist[i][j][k-1], dist[i][k][k-1] + dist[k][j][k-1]). Either use k as intermediate or not. Base case: dist[i][j][0] = weight (i,j) if edge exists, infinity otherwise. Can optimize to 2D by updating in-place: for each k, for each i, for each j: dist[i][j] = min (dist[i][j], dist[i][k] + dist[k][j]). After considering all vertices as intermediates, dist[i][j] is shortest path from i to j. Works for negative weights (detects negative cycles if dist[i][i] < 0). Simple nested loops, no heap needed.',
     keyPoints: [
       'DP: shortest i→j using vertices 0..k',
       'Three nested loops: k, i, j',
       'Consider using k as intermediate or not',
-      'Updates in-place: dist[i][j] = min(current, via k)',
+      'Updates in-place: dist[i][j] = min (current, via k)',
       'O(V³) time, handles negative weights',
     ],
   },

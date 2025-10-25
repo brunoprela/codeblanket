@@ -26,7 +26,7 @@ export const asyncConcurrencyMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'asyncio.Semaphore(n) limits concurrent operations to n. Use it to ensure you dont exceed API rate limits: async with semaphore: await api_call()',
+      'asyncio.Semaphore (n) limits concurrent operations to n. Use it to ensure you dont exceed API rate limits: async with semaphore: await api_call()',
   },
   {
     id: 'pllm-async-mc-3',

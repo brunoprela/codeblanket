@@ -11,7 +11,7 @@ export const operationsQuiz = [
       'Merge combines overlapping intervals into one. After sorting, iterate through intervals. Track current merged interval. For each interval: if it overlaps with current (start <= current.end), extend current by taking max of end times. If no overlap (start > current.end), current is complete, add to result, start new current. At end, add final current. The key: merged interval start is min of all starts (first interval start after sorting), end is max of all ends (keep extending). For example, [1,3], [2,6], [8,10]: merge [1,3] and [2,6] into [1,6] (max of 3,6 is 6), then [8,10] separate. The operation squashes overlapping intervals into minimal set of non-overlapping intervals.',
     keyPoints: [
       'After sort, iterate tracking current merged',
-      'Overlap: extend current.end to max(current.end, interval.end)',
+      'Overlap: extend current.end to max (current.end, interval.end)',
       'No overlap: add current, start new',
       'Merged start: first start, end: max of all ends',
       'Output: minimal non-overlapping set',

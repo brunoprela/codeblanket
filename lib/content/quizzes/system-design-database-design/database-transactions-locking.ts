@@ -32,7 +32,7 @@ CREATE TABLE transfer_limits (
     daily_limit DECIMAL(15,2) NOT NULL,
     current_date DATE NOT NULL,
     amount_transferred_today DECIMAL(15,2) DEFAULT 0,
-    FOREIGN KEY (account_id) REFERENCES accounts(account_id)
+    FOREIGN KEY (account_id) REFERENCES accounts (account_id)
 );
 
 CREATE TABLE transfers (
@@ -60,7 +60,7 @@ CREATE TABLE audit_log (
 **Transaction Strategy:**
 
 \`\`\`python
-def transfer_money(from_account_id, to_account_id, amount):
+def transfer_money (from_account_id, to_account_id, amount):
     # Validation outside transaction
     if amount <= 0:
         raise ValueError("Amount must be positive")
@@ -73,9 +73,9 @@ def transfer_money(from_account_id, to_account_id, amount):
     connection.isolation_level = 'READ COMMITTED'
     
     max_retries = 3
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
-            return _execute_transfer(from_account_id, to_account_id, amount)
+            return _execute_transfer (from_account_id, to_account_id, amount)
         except DeadlockDetected as e:
             if attempt == max_retries - 1:
                 raise TransferError("Transfer failed after retries due to deadlock")
@@ -84,7 +84,7 @@ def transfer_money(from_account_id, to_account_id, amount):
             # Don't retry insufficient funds
             raise
     
-def _execute_transfer(from_account_id, to_account_id, amount):
+def _execute_transfer (from_account_id, to_account_id, amount):
     with db.transaction() as tx:
         # Step 1: Create transfer record
         transfer_id = tx.execute("""
@@ -140,7 +140,7 @@ def _execute_transfer(from_account_id, to_account_id, amount):
                 WHERE transfer_id = %s
             """, (transfer_id,))
             tx.commit()
-            raise DailyLimitExceededError(f"Daily limit exceeded for account {from_account_id}")
+            raise DailyLimitExceededError (f"Daily limit exceeded for account {from_account_id}")
         
         # Step 4: Check sufficient funds
         if from_account['balance',] < amount:
@@ -150,7 +150,7 @@ def _execute_transfer(from_account_id, to_account_id, amount):
                 WHERE transfer_id = %s
             """, (transfer_id,))
             tx.commit()
-            raise InsufficientFundsError(f"Insufficient funds in account {from_account_id}")
+            raise InsufficientFundsError (f"Insufficient funds in account {from_account_id}")
         
         # Step 5: Perform transfer (atomic updates)
         tx.execute("""
@@ -262,10 +262,10 @@ accounts_to_lock = sorted([from_account_id, to_account_id])
 
 \`\`\`python
 # 1. Keep transaction short
-def transfer_money_optimized(from_account, to_account, amount):
+def transfer_money_optimized (from_account, to_account, amount):
     # Heavy computation OUTSIDE transaction
-    validate_accounts(from_account, to_account)
-    verify_fraud_rules(from_account, amount)
+    validate_accounts (from_account, to_account)
+    verify_fraud_rules (from_account, amount)
     
     # Quick transaction INSIDE
     with db.transaction():
@@ -273,12 +273,12 @@ def transfer_money_optimized(from_account, to_account, amount):
         pass
 
 # 2. Read replicas for read-only queries
-def get_account_balance(account_id):
+def get_account_balance (account_id):
     # Read from replica (no locks)
     return read_replica.query("SELECT balance FROM accounts WHERE account_id = %s", account_id)
 
 # 3. Batch transfers (if applicable)
-def batch_transfer(transfers):
+def batch_transfer (transfers):
     with db.transaction():
         # Lock all accounts once
         # Process all transfers
@@ -367,7 +367,7 @@ CREATE TABLE edit_locks (
 **Implementation:**
 
 \`\`\`python
-def acquire_section_lock(section_id, user_id, timeout_seconds=30):
+def acquire_section_lock (section_id, user_id, timeout_seconds=30):
     with db.transaction():
         # Try to acquire lock
         result = db.execute("""
@@ -398,11 +398,11 @@ def acquire_section_lock(section_id, user_id, timeout_seconds=30):
                     FROM edit_locks 
                     WHERE section_id = %s
                 """, (section_id,))[0]
-                raise SectionLockedError(f"Section locked by user {current_lock['user_id',]}")
+                raise SectionLockedError (f"Section locked by user {current_lock['user_id',]}")
         
         return result[0]['lock_id',]
 
-def update_section_with_lock(section_id, user_id, new_content):
+def update_section_with_lock (section_id, user_id, new_content):
     with db.transaction():
         # Verify user holds lock
         lock = db.query("""
@@ -427,7 +427,7 @@ def update_section_with_lock(section_id, user_id, new_content):
             WHERE section_id = %s AND user_id = %s
         """, (section_id, user_id))
 
-def release_section_lock(section_id, user_id):
+def release_section_lock (section_id, user_id):
     db.execute("""
         DELETE FROM edit_locks 
         WHERE section_id = %s AND user_id = %s
@@ -471,14 +471,14 @@ CREATE TABLE document_revisions (
 **Implementation:**
 
 \`\`\`python
-def get_document(document_id):
+def get_document (document_id):
     return db.query("""
         SELECT document_id, content, version 
         FROM documents 
         WHERE document_id = %s
     """, (document_id,))[0]
 
-def save_document(document_id, new_content, expected_version, user_id):
+def save_document (document_id, new_content, expected_version, user_id):
     with db.transaction():
         # Atomic update with version check
         result = db.execute("""
@@ -515,14 +515,14 @@ def save_document(document_id, new_content, expected_version, user_id):
 
 \`\`\`javascript
 // Client periodically saves changes
-async function saveDocumentWithRetry(documentId, content, currentVersion) {
+async function saveDocumentWithRetry (documentId, content, currentVersion) {
     try {
-        const newVersion = await api.saveDocument(documentId, content, currentVersion);
+        const newVersion = await api.saveDocument (documentId, content, currentVersion);
         return { success: true, version: newVersion };
     } catch (error) {
         if (error instanceof ConcurrentModificationError) {
             // Merge conflicts
-            const merged = mergeChanges(content, error.current_content);
+            const merged = mergeChanges (content, error.current_content);
             
             // Show diff to user
             showConflictDialog({
@@ -532,21 +532,21 @@ async function saveDocumentWithRetry(documentId, content, currentVersion) {
             });
             
             // Retry with merged content
-            return saveDocumentWithRetry(documentId, merged, error.current_version);
+            return saveDocumentWithRetry (documentId, merged, error.current_version);
         }
         throw error;
     }
 }
 
-function mergeChanges(localContent, serverContent) {
+function mergeChanges (localContent, serverContent) {
     // Simple three-way merge (diff-match-patch library)
     const baseContent = lastSavedContent;  // Stored from last successful save
     
     const dmp = new DiffMatchPatch();
     
     // Create patches
-    const patches1 = dmp.patch_make(baseContent, localContent);
-    const patches2 = dmp.patch_make(baseContent, serverContent);
+    const patches1 = dmp.patch_make (baseContent, localContent);
+    const patches2 = dmp.patch_make (baseContent, serverContent);
     
     // Apply both patches
     const [merged, results] = dmp.patch_apply([...patches1, ...patches2], baseContent);
@@ -600,7 +600,7 @@ CREATE TABLE operations (
 
 \`\`\`python
 # Server: Receive and broadcast operations
-def apply_operation(document_id, user_id, operation):
+def apply_operation (document_id, user_id, operation):
     with db.transaction():
         # Store operation
         op_id = db.execute("""
@@ -624,7 +624,7 @@ def apply_operation(document_id, user_id, operation):
         """, (new_content, document_id))
         
         # Broadcast to all connected clients (WebSocket)
-        broadcast_operation(document_id, {
+        broadcast_operation (document_id, {
             'operation_id': op_id,
             'user_id': user_id,
             'operation': operation
@@ -636,7 +636,7 @@ def apply_operation(document_id, user_id, operation):
 \`\`\`javascript
 // Each client maintains local state
 class DocumentEditor {
-    constructor(documentId) {
+    constructor (documentId) {
         this.documentId = documentId;
         this.content = "";
         this.pendingOps = [];
@@ -644,32 +644,32 @@ class DocumentEditor {
     }
     
     // User makes local edit
-    onLocalEdit(operation) {
+    onLocalEdit (operation) {
         // Apply immediately to local content
-        this.content = applyOperation(this.content, operation);
+        this.content = applyOperation (this.content, operation);
         
         // Queue for server
-        this.pendingOps.push(operation);
+        this.pendingOps.push (operation);
         
         // Send to server
-        this.sendOperation(operation);
+        this.sendOperation (operation);
     }
     
     // Receive operation from server
-    onRemoteOperation(serverOp) {
+    onRemoteOperation (serverOp) {
         // Transform pending operations against server operation
-        this.pendingOps = this.pendingOps.map(localOp => 
-            transform(localOp, serverOp)
+        this.pendingOps = this.pendingOps.map (localOp => 
+            transform (localOp, serverOp)
         );
         
         // Apply transformed server operation to local content
-        this.content = applyOperation(this.content, serverOp);
+        this.content = applyOperation (this.content, serverOp);
         
         this.lastServerOp = serverOp.operation_id;
     }
     
     // Operational Transformation
-    function transform(op1, op2) {
+    function transform (op1, op2) {
         // If both operations are at same position
         if (op1.position === op2.position) {
             // Tie-break by user_id or timestamp
@@ -722,26 +722,26 @@ class DocumentEditor {
 
 \`\`\`python
 # Document metadata: pessimistic lock
-def rename_document(document_id, new_title, user_id):
+def rename_document (document_id, new_title, user_id):
     with db.transaction():
         db.execute("SELECT * FROM documents WHERE document_id = %s FOR UPDATE", (document_id,))
         db.execute("UPDATE documents SET title = %s WHERE document_id = %s", (new_title, document_id))
 
 # Real-time content: OT via WebSocket
 websocket.on('operation', (op) => {
-    applyOperationalTransformation(op);
-    broadcastToClients(op);
+    applyOperationalTransformation (op);
+    broadcastToClients (op);
 });
 
 # Fallback: periodic save with optimistic locking
-def auto_save(document_id, content, version):
+def auto_save (document_id, content, version):
     try:
-        new_version = save_with_version_check(document_id, content, version);
+        new_version = save_with_version_check (document_id, content, version);
         return new_version;
     except ConcurrentModificationError:
         # Reload and retry
-        fresh_doc = get_document(document_id);
-        return auto_save(document_id, merge(content, fresh_doc.content), fresh_doc.version);
+        fresh_doc = get_document (document_id);
+        return auto_save (document_id, merge (content, fresh_doc.content), fresh_doc.version);
 \`\`\`
 
 **Conclusion:**
@@ -794,11 +794,11 @@ CREATE TABLE seats (
     booked_by_user INT,
     booked_at TIMESTAMP,
     UNIQUE (event_id, section, row, seat_number),
-    FOREIGN KEY (event_id) REFERENCES events(event_id)
+    FOREIGN KEY (event_id) REFERENCES events (event_id)
 );
 
-CREATE INDEX idx_seats_available ON seats(event_id, status) WHERE status = 'available';
-CREATE INDEX idx_seats_expired ON seats(hold_expires_at) WHERE status = 'held';
+CREATE INDEX idx_seats_available ON seats (event_id, status) WHERE status = 'available';
+CREATE INDEX idx_seats_expired ON seats (hold_expires_at) WHERE status = 'held';
 
 CREATE TABLE bookings (
     booking_id SERIAL PRIMARY KEY,
@@ -814,15 +814,15 @@ CREATE TABLE booking_seats (
     booking_id INT,
     seat_id INT,
     PRIMARY KEY (booking_id, seat_id),
-    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id),
-    FOREIGN KEY (seat_id) REFERENCES seats(seat_id)
+    FOREIGN KEY (booking_id) REFERENCES bookings (booking_id),
+    FOREIGN KEY (seat_id) REFERENCES seats (seat_id)
 );
 \`\`\`
 
 **Step 1: Search Available Seats (No Locks)**
 
 \`\`\`python
-def search_available_seats(event_id, section=None, num_seats=1):
+def search_available_seats (event_id, section=None, num_seats=1):
     # Read-only query, no locks needed
     # Use Read Committed isolation (default)
     
@@ -836,18 +836,18 @@ def search_available_seats(event_id, section=None, num_seats=1):
     
     if section:
         query += " AND section = %s"
-        params.append(section)
+        params.append (section)
     
     query += " ORDER BY section, row, seat_number LIMIT %s"
-    params.append(num_seats * 2)  # Return more options
+    params.append (num_seats * 2)  # Return more options
     
-    return db.query(query, params)
+    return db.query (query, params)
 \`\`\`
 
 **Step 2: Hold Seats (Optimistic Locking with NOWAIT)**
 
 \`\`\`python
-def hold_seats(user_id, seat_ids, hold_duration_minutes=10):
+def hold_seats (user_id, seat_ids, hold_duration_minutes=10):
     """
     Attempt to hold seats for user.
     Uses optimistic approach with immediate failure for better UX.
@@ -856,7 +856,7 @@ def hold_seats(user_id, seat_ids, hold_duration_minutes=10):
     # Clean up expired holds first (background job does this too)
     release_expired_holds()
     
-    with db.transaction(isolation_level='READ COMMITTED'):
+    with db.transaction (isolation_level='READ COMMITTED'):
         held_seats = []
         
         for seat_id in seat_ids:
@@ -871,7 +871,7 @@ def hold_seats(user_id, seat_ids, hold_duration_minutes=10):
                 
                 # Check if seat is available
                 if seat['status',] != 'available':
-                    raise SeatUnavailableError(f"Seat {seat_id} is no longer available")
+                    raise SeatUnavailableError (f"Seat {seat_id} is no longer available")
                 
                 # Hold the seat
                 db.execute("""
@@ -883,22 +883,22 @@ def hold_seats(user_id, seat_ids, hold_duration_minutes=10):
                     WHERE seat_id = %s
                 """, (user_id, hold_duration_minutes, seat_id))
                 
-                held_seats.append(seat_id)
+                held_seats.append (seat_id)
                 
             except LockNotAvailable:
                 # Seat is being held/booked by another user right now
                 # Release already held seats and fail fast
-                rollback_holds(held_seats)
-                raise SeatUnavailableError(f"Seat {seat_id} is being selected by another user")
+                rollback_holds (held_seats)
+                raise SeatUnavailableError (f"Seat {seat_id} is being selected by another user")
         
         # All seats successfully held
         return {
             'held_seats': held_seats,
-            'expires_at': datetime.now() + timedelta(minutes=hold_duration_minutes),
+            'expires_at': datetime.now() + timedelta (minutes=hold_duration_minutes),
             'hold_duration_seconds': hold_duration_minutes * 60
         }
 
-def rollback_holds(seat_ids):
+def rollback_holds (seat_ids):
     """Release seats if partial hold fails"""
     db.execute("""
         UPDATE seats
@@ -913,13 +913,13 @@ def rollback_holds(seat_ids):
 **Step 3: Complete Purchase (Pessimistic Locking)**
 
 \`\`\`python
-def complete_purchase(user_id, seat_ids, payment_token):
+def complete_purchase (user_id, seat_ids, payment_token):
     """
     Convert held seats to confirmed booking.
     Uses FOR UPDATE to ensure seats are still held by this user.
     """
     
-    with db.transaction(isolation_level='SERIALIZABLE'):
+    with db.transaction (isolation_level='SERIALIZABLE'):
         # Verify seats are held by this user and not expired
         seats = db.query("""
             SELECT seat_id, status, held_by_user, hold_expires_at, price
@@ -930,20 +930,20 @@ def complete_purchase(user_id, seat_ids, payment_token):
         
         for seat in seats:
             if seat['status',] != 'held':
-                raise BookingError(f"Seat {seat['seat_id',]} is not held")
+                raise BookingError (f"Seat {seat['seat_id',]} is not held")
             
             if seat['held_by_user',] != user_id:
-                raise UnauthorizedError(f"Seat {seat['seat_id',]} is held by another user")
+                raise UnauthorizedError (f"Seat {seat['seat_id',]} is held by another user")
             
             if seat['hold_expires_at',] < datetime.now():
-                raise BookingError(f"Hold expired for seat {seat['seat_id',]}")
+                raise BookingError (f"Hold expired for seat {seat['seat_id',]}")
         
         # Calculate total
-        total_amount = sum(seat['price',] for seat in seats)
+        total_amount = sum (seat['price',] for seat in seats)
         
         # Process payment (idempotent, outside DB transaction)
         # In practice, call payment service here
-        payment_result = process_payment(user_id, total_amount, payment_token)
+        payment_result = process_payment (user_id, total_amount, payment_token)
         
         if not payment_result['success',]:
             raise PaymentError("Payment failed")
@@ -1007,22 +1007,22 @@ def release_expired_holds():
         
         if result.rowcount > 0:
             released_seats = [row['seat_id',] for row in result]
-            logger.info(f"Released {len(released_seats)} expired holds")
+            logger.info (f"Released {len (released_seats)} expired holds")
             
             # Notify clients via WebSocket
             for seat_id in released_seats:
-                websocket_broadcast(f"seat_{seat_id}_available")
+                websocket_broadcast (f"seat_{seat_id}_available")
         
         return result.rowcount
 
 # Run in background
-schedule.every(10).seconds.do(release_expired_holds)
+schedule.every(10).seconds.do (release_expired_holds)
 \`\`\`
 
 **Step 5: Extend Hold (During Checkout)**
 
 \`\`\`python
-def extend_hold(user_id, seat_ids, additional_minutes=5):
+def extend_hold (user_id, seat_ids, additional_minutes=5):
     """
     Allow user to extend hold if they need more time.
     Maximum total hold time: 15 minutes.
@@ -1042,7 +1042,7 @@ def extend_hold(user_id, seat_ids, additional_minutes=5):
             RETURNING seat_id, hold_expires_at
         """, (additional_minutes, seat_ids, user_id))
         
-        if result.rowcount != len(seat_ids):
+        if result.rowcount != len (seat_ids):
             raise BookingError("Some seats could not be extended (expired or not held by you)")
         
         return {
@@ -1054,7 +1054,7 @@ def extend_hold(user_id, seat_ids, additional_minutes=5):
 **Step 6: Cancel Hold (Manual Release)**
 
 \`\`\`python
-def cancel_hold(user_id, seat_ids):
+def cancel_hold (user_id, seat_ids):
     """
     User manually releases held seats.
     """
@@ -1077,7 +1077,7 @@ def cancel_hold(user_id, seat_ids):
 **1. Read Replicas for Search:**
 \`\`\`python
 # Search queries go to read replicas (no locks)
-def search_available_seats(event_id):
+def search_available_seats (event_id):
     return read_replica.query("""
         SELECT seat_id, section, row, seat_number, price
         FROM seats
@@ -1099,8 +1099,8 @@ db_pool = ConnectionPool(
 
 **3. Rate Limiting:**
 \`\`\`python
-@rate_limit(max_requests=10, window_seconds=60, key=lambda: f"user:{current_user.id}")
-def hold_seats(user_id, seat_ids):
+@rate_limit (max_requests=10, window_seconds=60, key=lambda: f"user:{current_user.id}")
+def hold_seats (user_id, seat_ids):
     # Prevent user from spamming hold requests
     pass
 \`\`\`
@@ -1108,9 +1108,9 @@ def hold_seats(user_id, seat_ids):
 **4. Caching (Redis):**
 \`\`\`python
 # Cache available seat count
-def get_available_seats_count(event_id):
+def get_available_seats_count (event_id):
     cache_key = f"event:{event_id}:available_count"
-    cached = redis.get(cache_key)
+    cached = redis.get (cache_key)
     
     if cached is None:
         count = db.query("""
@@ -1118,10 +1118,10 @@ def get_available_seats_count(event_id):
             WHERE event_id = %s AND status = 'available'
         """, (event_id,))[0]['count',]
         
-        redis.setex(cache_key, 10, count)  # Cache for 10 seconds
+        redis.setex (cache_key, 10, count)  # Cache for 10 seconds
         return count
     
-    return int(cached)
+    return int (cached)
 \`\`\`
 
 **5. Queue System for Peak Load:**
@@ -1129,7 +1129,7 @@ def get_available_seats_count(event_id):
 # On high demand events (Taylor Swift tickets)
 if event.is_high_demand():
     # Put user in queue
-    queue_position = add_to_queue(user_id, event_id)
+    queue_position = add_to_queue (user_id, event_id)
     
     # Process queue in order
     process_queue_when_capacity_available()

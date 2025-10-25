@@ -14,7 +14,7 @@ export const tensorflowKerasFundamentalsSection = {
 
 ## Introduction
 
-**TensorFlow** is Google's deep learning framework, powering production systems at massive scale. **Keras** is its high-level API, making deep learning accessible with minimal code.
+**TensorFlow** is Google\'s deep learning framework, powering production systems at massive scale. **Keras** is its high-level API, making deep learning accessible with minimal code.
 
 **Why TensorFlow/Keras?**
 - Production-ready (TensorFlow Serving, TensorFlow Lite)
@@ -58,7 +58,7 @@ print(x)  # tf.Tensor([1 2 3 4 5], shape=(5,), dtype=int32)
 
 # From NumPy
 arr = np.array([1.0, 2.0, 3.0])
-x = tf.constant(arr)
+x = tf.constant (arr)
 
 # Common creation functions
 zeros = tf.zeros((3, 4))
@@ -72,7 +72,7 @@ y = tf.constant([4.0, 5.0, 6.0])
 
 print(x + y)        # Element-wise addition
 print(x * y)        # Element-wise multiplication
-print(tf.tensordot(x, y, axes=1))  # Dot product
+print(tf.tensordot (x, y, axes=1))  # Dot product
 
 # Matrix operations
 A = tf.random.normal((3, 4))
@@ -91,7 +91,7 @@ x = tf.Variable(2.0)
 with tf.GradientTape() as tape:
     y = x ** 2
 
-dy_dx = tape.gradient(y, x)
+dy_dx = tape.gradient (y, x)
 print(dy_dx)  # 4.0 (since dy/dx = 2x = 2*2)
 
 # Multi-variable
@@ -104,7 +104,7 @@ with tf.GradientTape() as tape:
     loss = (y - 10.0) ** 2
 
 # Compute gradients
-gradients = tape.gradient(loss, [x, w, b])
+gradients = tape.gradient (loss, [x, w, b])
 print(f"dL/dx = {gradients[0]}")
 print(f"dL/dw = {gradients[1]}")
 print(f"dL/db = {gradients[2]}")
@@ -165,8 +165,8 @@ model.compile(
 
 # Or with more control
 model.compile(
-    optimizer=keras.optimizers.Adam(learning_rate=0.001),
-    loss=keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+    optimizer=keras.optimizers.Adam (learning_rate=0.001),
+    loss=keras.losses.SparseCategoricalCrossentropy (from_logits=False),
     metrics=[keras.metrics.SparseCategoricalAccuracy()]
 )
 
@@ -201,7 +201,7 @@ print(predictions.shape)  # (200, 10) - probabilities for each class
 
 \`\`\`python
 # Input layer
-inputs = keras.Input(shape=(784,))
+inputs = keras.Input (shape=(784,))
 
 # Hidden layers
 x = layers.Dense(512, activation='relu')(inputs)
@@ -216,7 +216,7 @@ x = layers.Dropout(0.5)(x)
 outputs = layers.Dense(10, activation='softmax')(x)
 
 # Create model
-model = keras.Model(inputs=inputs, outputs=outputs, name='functional_model')
+model = keras.Model (inputs=inputs, outputs=outputs, name='functional_model')
 
 model.summary()
 \`\`\`
@@ -227,12 +227,12 @@ model.summary()
 # Example: Combine text and numerical features
 
 # Text input
-text_input = keras.Input(shape=(100,), name='text')
+text_input = keras.Input (shape=(100,), name='text')
 text_features = layers.Embedding(10000, 128)(text_input)
 text_features = layers.LSTM(64)(text_features)
 
 # Numerical input
-num_input = keras.Input(shape=(10,), name='numerical')
+num_input = keras.Input (shape=(10,), name='numerical')
 num_features = layers.Dense(64, activation='relu')(num_input)
 
 # Combine
@@ -274,14 +274,14 @@ model.fit(
 ### Residual Connections (ResNet-style)
 
 \`\`\`python
-def residual_block(x, filters):
+def residual_block (x, filters):
     """Residual block with skip connection"""
     shortcut = x
     
     # Main path
-    x = layers.Dense(filters, activation='relu')(x)
+    x = layers.Dense (filters, activation='relu')(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Dense(filters)(x)
+    x = layers.Dense (filters)(x)
     x = layers.BatchNormalization()(x)
     
     # Add shortcut
@@ -291,16 +291,16 @@ def residual_block(x, filters):
     return x
 
 # Build model with residual blocks
-inputs = keras.Input(shape=(512,))
+inputs = keras.Input (shape=(512,))
 x = layers.Dense(512, activation='relu')(inputs)
 
-x = residual_block(x, 512)
-x = residual_block(x, 512)
-x = residual_block(x, 512)
+x = residual_block (x, 512)
+x = residual_block (x, 512)
+x = residual_block (x, 512)
 
 outputs = layers.Dense(10, activation='softmax')(x)
 
-model = keras.Model(inputs, outputs)
+model = keras.Model (inputs, outputs)
 \`\`\`
 
 ## Custom Layers and Models
@@ -308,13 +308,13 @@ model = keras.Model(inputs, outputs)
 ### Custom Layer
 
 \`\`\`python
-class CustomDense(layers.Layer):
+class CustomDense (layers.Layer):
     def __init__(self, units, activation=None):
         super(CustomDense, self).__init__()
         self.units = units
-        self.activation = keras.activations.get(activation)
+        self.activation = keras.activations.get (activation)
     
-    def build(self, input_shape):
+    def build (self, input_shape):
         # Initialize weights
         self.w = self.add_weight(
             shape=(input_shape[-1], self.units),
@@ -329,11 +329,11 @@ class CustomDense(layers.Layer):
             name='bias'
         )
     
-    def call(self, inputs):
+    def call (self, inputs):
         # Forward pass
-        output = tf.matmul(inputs, self.w) + self.b
+        output = tf.matmul (inputs, self.w) + self.b
         if self.activation:
-            output = self.activation(output)
+            output = self.activation (output)
         return output
 
 # Use custom layer
@@ -347,7 +347,7 @@ model = keras.Sequential([
 ### Custom Model
 
 \`\`\`python
-class CustomModel(keras.Model):
+class CustomModel (keras.Model):
     def __init__(self, num_classes=10):
         super(CustomModel, self).__init__()
         self.dense1 = layers.Dense(512, activation='relu')
@@ -358,9 +358,9 @@ class CustomModel(keras.Model):
         self.bn2 = layers.BatchNormalization()
         self.dropout2 = layers.Dropout(0.5)
         
-        self.output_layer = layers.Dense(num_classes, activation='softmax')
+        self.output_layer = layers.Dense (num_classes, activation='softmax')
     
-    def call(self, inputs, training=False):
+    def call (self, inputs, training=False):
         x = self.dense1(inputs)
         x = self.bn1(x, training=training)
         x = self.dropout1(x, training=training)
@@ -369,11 +369,11 @@ class CustomModel(keras.Model):
         x = self.bn2(x, training=training)
         x = self.dropout2(x, training=training)
         
-        return self.output_layer(x)
+        return self.output_layer (x)
 
 # Create and train
-model = CustomModel(num_classes=10)
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model = CustomModel (num_classes=10)
+model.compile (optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 model.fit(X_train, y_train, epochs=10, validation_data=(X_val, y_val))
 \`\`\`
 
@@ -414,12 +414,12 @@ tensorboard = keras.callbacks.TensorBoard(
 )
 
 # Learning rate schedule
-def lr_schedule(epoch, lr):
+def lr_schedule (epoch, lr):
     if epoch > 10:
         lr = lr * 0.9
     return lr
 
-lr_scheduler = keras.callbacks.LearningRateScheduler(lr_schedule, verbose=1)
+lr_scheduler = keras.callbacks.LearningRateScheduler (lr_schedule, verbose=1)
 
 # Train with callbacks
 history = model.fit(
@@ -433,8 +433,8 @@ history = model.fit(
 ### Custom Callback
 
 \`\`\`python
-class CustomCallback(keras.callbacks.Callback):
-    def on_epoch_end(self, epoch, logs=None):
+class CustomCallback (keras.callbacks.Callback):
+    def on_epoch_end (self, epoch, logs=None):
         # Called at end of each epoch
         print(f"\\nEpoch {epoch+1}: loss={logs['loss']:.4f}, val_loss={logs['val_loss']:.4f}")
         
@@ -484,11 +484,11 @@ model.export('saved_model/')
 loaded = tf.saved_model.load('saved_model/')
 
 # Convert to TensorFlow Lite (mobile/edge)
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
+converter = tf.lite.TFLiteConverter.from_keras_model (model)
 tflite_model = converter.convert()
 
 with open('model.tflite', 'wb') as f:
-    f.write(tflite_model)
+    f.write (tflite_model)
 \`\`\`
 
 ## Key Differences: PyTorch vs TensorFlow/Keras
@@ -514,7 +514,7 @@ with open('model.tflite', 'wb') as f:
 6. **TensorBoard** - excellent visualization tool
 7. **Production** - TensorFlow has mature deployment ecosystem
 
-## What's Next
+## What\'s Next
 
 You've learned two major frameworks. Next: **Deep Learning Best Practices** - how to debug, find good hyperparameters, and build production-ready models!
 `,

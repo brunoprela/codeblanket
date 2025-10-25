@@ -13,7 +13,7 @@ export const textClassificationSection = {
 
 ## Introduction
 
-Text classification is the task of assigning predefined categories or labels to text documents. It's one of the most fundamental and widely-used NLP tasks with applications spanning sentiment analysis, spam detection, topic categorization, intent classification, and content moderation.
+Text classification is the task of assigning predefined categories or labels to text documents. It\'s one of the most fundamental and widely-used NLP tasks with applications spanning sentiment analysis, spam detection, topic categorization, intent classification, and content moderation.
 
 **Why Text Classification Matters:**
 
@@ -68,9 +68,9 @@ texts = [
     "It's okay, nothing special but not bad either.",
 ]
 
-results = sentiment_pipeline(texts)
+results = sentiment_pipeline (texts)
 
-for text, result in zip(texts, results):
+for text, result in zip (texts, results):
     print(f"Text: {text}")
     print(f"Sentiment: {result['label']} (confidence: {result['score']:.3f})")
     print("-" * 60)
@@ -82,15 +82,15 @@ for text, result in zip(texts, results):
 # Text: Terrible experience. Would not recommend.
 # Sentiment: NEGATIVE (confidence: 0.998)
 # ------------------------------------------------------------
-# Text: It's okay, nothing special but not bad either.
+# Text: It\'s okay, nothing special but not bad either.
 # Sentiment: POSITIVE (confidence: 0.682)  # Less confident (neutral text)
 
 # Method 2: Manual approach (more control)
 model_name = "distilbert-base-uncased-finetuned-sst-2-english"
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained (model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 
-def predict_sentiment(text, threshold=0.9):
+def predict_sentiment (text, threshold=0.9):
     """
     Predict sentiment with confidence thresholding
     """
@@ -108,7 +108,7 @@ def predict_sentiment(text, threshold=0.9):
         outputs = model(**inputs)
     
     # Get probabilities
-    probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+    probs = torch.nn.functional.softmax (outputs.logits, dim=-1)
     confidence = probs.max().item()
     predicted_class = probs.argmax().item()
     
@@ -130,7 +130,7 @@ def predict_sentiment(text, threshold=0.9):
 
 # Test
 text = "This product is okay, not great but not terrible."
-result = predict_sentiment(text, threshold=0.8)
+result = predict_sentiment (text, threshold=0.8)
 print(f"\\nText: {text}")
 print(f"Prediction: {result}")
 \`\`\`
@@ -154,14 +154,14 @@ data = {
     'text': [
         "This is absolutely amazing! Best thing ever!",
         "Pretty good, I like it",
-        "It's okay, nothing special",
+        "It\'s okay, nothing special",
         "Not great, disappointed",
         "Terrible! Complete waste of money!",
     ],
     'label': [4, 3, 2, 1, 0]  # 0: Very Negative, 4: Very Positive
 }
 
-dataset = Dataset.from_dict(data)
+dataset = Dataset.from_dict (data)
 
 # Load model
 model = AutoModelForSequenceClassification.from_pretrained(
@@ -174,7 +174,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
 # Tokenize
-def tokenize_function(examples):
+def tokenize_function (examples):
     return tokenizer(
         examples['text'],
         padding='max_length',
@@ -182,18 +182,18 @@ def tokenize_function(examples):
         max_length=128
     )
 
-tokenized_dataset = dataset.map(tokenize_function, batched=True)
+tokenized_dataset = dataset.map (tokenize_function, batched=True)
 
 # For full training, you would split into train/val/test and train the model
 # Here we'll just show prediction
 
 # Predict
-def predict_multi_sentiment(text):
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+def predict_multi_sentiment (text):
+    inputs = tokenizer (text, return_tensors='pt', truncation=True, padding=True)
     with torch.no_grad():
         outputs = model(**inputs)
     
-    probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+    probs = torch.nn.functional.softmax (outputs.logits, dim=-1)
     predicted_class = probs.argmax().item()
     
     labels = ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive']
@@ -201,12 +201,12 @@ def predict_multi_sentiment(text):
     return {
         'label': labels[predicted_class],
         'confidence': probs.max().item(),
-        'all_probabilities': {label: prob.item() for label, prob in zip(labels, probs[0])}
+        'all_probabilities': {label: prob.item() for label, prob in zip (labels, probs[0])}
     }
 
 # Test
 text = "The product works but could be better"
-result = predict_multi_sentiment(text)
+result = predict_multi_sentiment (text)
 print(f"\\nText: {text}")
 print(f"Predicted sentiment: {result['label']} ({result['confidence']:.3f})")
 print("\\nAll probabilities:")
@@ -237,7 +237,7 @@ aspects = {
     'Price': ['price', 'high', 'reasonable']
 }
 
-def aspect_sentiment(text, aspects):
+def aspect_sentiment (text, aspects):
     """Simple aspect-based sentiment analysis"""
     results = {}
     
@@ -250,13 +250,13 @@ def aspect_sentiment(text, aspects):
         # Find sentences mentioning the aspect
         for sentence in sentences:
             sentence_lower = sentence.lower()
-            if any(keyword in sentence_lower for keyword in keywords):
-                aspect_sentences.append(sentence.strip())
+            if any (keyword in sentence_lower for keyword in keywords):
+                aspect_sentences.append (sentence.strip())
         
         # Analyze sentiment of aspect sentences
         if aspect_sentences:
-            aspect_text = '. '.join(aspect_sentences)
-            sentiment_result = sentiment_pipeline(aspect_text)[0]
+            aspect_text = '. '.join (aspect_sentences)
+            sentiment_result = sentiment_pipeline (aspect_text)[0]
             results[aspect] = {
                 'sentiment': sentiment_result['label'],
                 'confidence': sentiment_result['score'],
@@ -265,7 +265,7 @@ def aspect_sentiment(text, aspects):
     
     return results
 
-aspect_results = aspect_sentiment(review, aspects)
+aspect_results = aspect_sentiment (review, aspects)
 
 print("Aspect-Based Sentiment Analysis:")
 print("=" * 60)
@@ -302,10 +302,10 @@ from sklearn.metrics import accuracy_score, f1_score, classification_report
 import numpy as np
 
 model_name = 'distilbert-base-uncased'
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 
 # Tokenize dataset
-def tokenize_function(examples):
+def tokenize_function (examples):
     return tokenizer(
         examples['text'],
         padding='max_length',
@@ -313,8 +313,8 @@ def tokenize_function(examples):
         max_length=256
     )
 
-tokenized_train = dataset['train'].map(tokenize_function, batched=True)
-tokenized_test = dataset['test'].map(tokenize_function, batched=True)
+tokenized_train = dataset['train'].map (tokenize_function, batched=True)
+tokenized_test = dataset['test'].map (tokenize_function, batched=True)
 
 # Load model
 num_labels = 4
@@ -338,13 +338,13 @@ training_args = TrainingArguments(
 )
 
 # Metrics
-def compute_metrics(eval_pred):
+def compute_metrics (eval_pred):
     predictions, labels = eval_pred
-    predictions = np.argmax(predictions, axis=1)
+    predictions = np.argmax (predictions, axis=1)
     
     return {
-        'accuracy': accuracy_score(labels, predictions),
-        'f1': f1_score(labels, predictions, average='weighted'),
+        'accuracy': accuracy_score (labels, predictions),
+        'f1': f1_score (labels, predictions, average='weighted'),
     }
 
 # Trainer
@@ -363,12 +363,12 @@ trainer = Trainer(
 # trainer.save_model('./topic_classifier_final')
 
 # Predict on new text
-def predict_topic(text):
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+def predict_topic (text):
+    inputs = tokenizer (text, return_tensors='pt', truncation=True, padding=True)
     with torch.no_grad():
         outputs = model(**inputs)
     
-    probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+    probs = torch.nn.functional.softmax (outputs.logits, dim=-1)
     predicted_class = probs.argmax().item()
     
     topics = ['World', 'Sports', 'Business', 'Sci/Tech']
@@ -376,12 +376,12 @@ def predict_topic(text):
     return {
         'topic': topics[predicted_class],
         'confidence': probs.max().item(),
-        'all_probabilities': {topic: prob.item() for topic, prob in zip(topics, probs[0])}
+        'all_probabilities': {topic: prob.item() for topic, prob in zip (topics, probs[0])}
     }
 
 # Test
 text = "Apple Inc. announced record quarterly earnings with revenue exceeding $100 billion."
-result = predict_topic(text)
+result = predict_topic (text)
 print(f"\\nText: {text}")
 print(f"Topic: {result['topic']} ({result['confidence']:.3f})")
 \`\`\`
@@ -413,24 +413,24 @@ data = {
 genres = ['Action', 'Adventure', 'Comedy', 'Romance', 'Drama']
 
 # Multi-label classifier
-class MultiLabelClassifier(nn.Module):
+class MultiLabelClassifier (nn.Module):
     def __init__(self, model_name, num_labels):
         super().__init__()
-        self.bert = AutoModel.from_pretrained(model_name)
+        self.bert = AutoModel.from_pretrained (model_name)
         self.dropout = nn.Dropout(0.3)
-        self.classifier = nn.Linear(self.bert.config.hidden_size, num_labels)
+        self.classifier = nn.Linear (self.bert.config.hidden_size, num_labels)
         
-    def forward(self, input_ids, attention_mask):
-        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
+    def forward (self, input_ids, attention_mask):
+        outputs = self.bert (input_ids=input_ids, attention_mask=attention_mask)
         pooled_output = outputs.pooler_output
-        pooled_output = self.dropout(pooled_output)
-        logits = self.classifier(pooled_output)
+        pooled_output = self.dropout (pooled_output)
+        logits = self.classifier (pooled_output)
         
         # Sigmoid for multi-label (independent probabilities)
-        return torch.sigmoid(logits)
+        return torch.sigmoid (logits)
 
 # Initialize model
-model = MultiLabelClassifier('bert-base-uncased', num_labels=len(genres))
+model = MultiLabelClassifier('bert-base-uncased', num_labels=len (genres))
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 
 # Training loop (simplified)
@@ -439,7 +439,7 @@ criterion = nn.BCELoss()  # Binary cross-entropy for multi-label
 
 # Prepare data
 texts = data['text']
-labels = torch.tensor(data['labels'], dtype=torch.float32)
+labels = torch.tensor (data['labels'], dtype=torch.float32)
 
 # Training step (one batch example)
 model.train()
@@ -455,8 +455,8 @@ encoded = tokenizer(
 
 # Forward pass
 optimizer.zero_grad()
-outputs = model(encoded['input_ids'], encoded['attention_mask'])
-loss = criterion(outputs, labels)
+outputs = model (encoded['input_ids'], encoded['attention_mask'])
+loss = criterion (outputs, labels)
 
 # Backward pass
 loss.backward()
@@ -467,7 +467,7 @@ print(f"Loss: {loss.item():.4f}")
 # Prediction
 model.eval()
 
-def predict_genres(text, threshold=0.5):
+def predict_genres (text, threshold=0.5):
     """Predict multiple genres"""
     encoded = tokenizer(
         text,
@@ -478,16 +478,16 @@ def predict_genres(text, threshold=0.5):
     )
     
     with torch.no_grad():
-        probs = model(encoded['input_ids'], encoded['attention_mask'])
+        probs = model (encoded['input_ids'], encoded['attention_mask'])
     
     # Apply threshold
     predictions = (probs[0] > threshold).int().tolist()
     
     # Get predicted genres
-    predicted_genres = [genre for genre, pred in zip(genres, predictions) if pred == 1]
+    predicted_genres = [genre for genre, pred in zip (genres, predictions) if pred == 1]
     
     # Get all probabilities
-    all_probs = {genre: prob.item() for genre, prob in zip(genres, probs[0])}
+    all_probs = {genre: prob.item() for genre, prob in zip (genres, probs[0])}
     
     return {
         'genres': predicted_genres,
@@ -496,12 +496,12 @@ def predict_genres(text, threshold=0.5):
 
 # Test
 text = "A thrilling action movie with amazing special effects and a touching love story"
-result = predict_genres(text, threshold=0.4)
+result = predict_genres (text, threshold=0.4)
 
 print(f"\\nText: {text}")
-print(f"\\nPredicted Genres: {', '.join(result['genres'])}")
+print(f"\\nPredicted Genres: {', '.join (result['genres'])}")
 print("\\nAll Probabilities:")
-for genre, prob in sorted(result['probabilities'].items(), key=lambda x: x[1], reverse=True):
+for genre, prob in sorted (result['probabilities'].items(), key=lambda x: x[1], reverse=True):
     print(f"  {genre}: {prob:.3f}")
 \`\`\`
 
@@ -545,10 +545,10 @@ tickets = pd.DataFrame({
 from sklearn.preprocessing import LabelEncoder
 
 label_encoder = LabelEncoder()
-tickets['label'] = label_encoder.fit_transform(tickets['category'])
+tickets['label'] = label_encoder.fit_transform (tickets['category'])
 
 print("Label Mapping:")
-for i, category in enumerate(label_encoder.classes_):
+for i, category in enumerate (label_encoder.classes_):
     print(f"  {i}: {category}")
 
 # Split data
@@ -578,18 +578,18 @@ dataset = DatasetDict({
 
 # Load model and tokenizer
 model_name = 'distilbert-base-uncased'
-num_labels = len(label_encoder.classes_)
+num_labels = len (label_encoder.classes_)
 
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained (model_name)
 model = AutoModelForSequenceClassification.from_pretrained(
     model_name,
     num_labels=num_labels,
-    id2label={i: label for i, label in enumerate(label_encoder.classes_)},
-    label2id={label: i for i, label in enumerate(label_encoder.classes_)}
+    id2label={i: label for i, label in enumerate (label_encoder.classes_)},
+    label2id={label: i for i, label in enumerate (label_encoder.classes_)}
 )
 
 # Tokenize
-def tokenize_function(examples):
+def tokenize_function (examples):
     return tokenizer(
         examples['text'],
         truncation=True,
@@ -597,20 +597,20 @@ def tokenize_function(examples):
         max_length=128
     )
 
-tokenized_datasets = dataset.map(tokenize_function, batched=True)
+tokenized_datasets = dataset.map (tokenize_function, batched=True)
 
 # Data collator
-data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+data_collator = DataCollatorWithPadding (tokenizer=tokenizer)
 
 # Metrics
-def compute_metrics(eval_pred):
+def compute_metrics (eval_pred):
     predictions, labels = eval_pred
-    predictions = np.argmax(predictions, axis=1)
+    predictions = np.argmax (predictions, axis=1)
     
     precision, recall, f1, _ = precision_recall_fscore_support(
         labels, predictions, average='weighted'
     )
-    accuracy = accuracy_score(labels, predictions)
+    accuracy = accuracy_score (labels, predictions)
     
     return {
         'accuracy': accuracy,
@@ -665,14 +665,14 @@ tokenizer.save_pretrained('./ticket_classifier_final')
 print("\\nModel saved!")
 
 # Inference function
-def classify_ticket(text):
+def classify_ticket (text):
     """Classify customer support ticket"""
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+    inputs = tokenizer (text, return_tensors='pt', truncation=True, padding=True)
     
     with torch.no_grad():
         outputs = model(**inputs)
     
-    probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+    probs = torch.nn.functional.softmax (outputs.logits, dim=-1)
     predicted_class = probs.argmax().item()
     
     return {
@@ -680,18 +680,18 @@ def classify_ticket(text):
         'confidence': probs.max().item(),
         'all_probabilities': {
             label_encoder.classes_[i]: prob.item()
-            for i, prob in enumerate(probs[0])
+            for i, prob in enumerate (probs[0])
         }
     }
 
 # Test on new ticket
 new_ticket = "I need help setting up automatic payments"
-result = classify_ticket(new_ticket)
+result = classify_ticket (new_ticket)
 
 print(f"\\nNew Ticket: {new_ticket}")
 print(f"Category: {result['category']} (confidence: {result['confidence']:.3f})")
 print("\\nAll probabilities:")
-for category, prob in sorted(result['all_probabilities'].items(), key=lambda x: x[1], reverse=True):
+for category, prob in sorted (result['all_probabilities'].items(), key=lambda x: x[1], reverse=True):
     print(f"  {category}: {prob:.3f}")
 \`\`\`
 
@@ -718,10 +718,10 @@ y_pred = [0, 2, 2, 0, 1, 2, 1, 1, 2, 0]
 categories = ['Sports', 'Politics', 'Technology']
 
 # Basic metrics
-accuracy = accuracy_score(y_true, y_pred)
-precision = precision_score(y_true, y_pred, average='weighted')
-recall = recall_score(y_true, y_pred, average='weighted')
-f1 = f1_score(y_true, y_pred, average='weighted')
+accuracy = accuracy_score (y_true, y_pred)
+precision = precision_score (y_true, y_pred, average='weighted')
+recall = recall_score (y_true, y_pred, average='weighted')
+f1 = f1_score (y_true, y_pred, average='weighted')
 
 print("Overall Metrics:")
 print(f"  Accuracy:  {accuracy:.3f}")
@@ -731,12 +731,12 @@ print(f"  F1 Score:  {f1:.3f}")
 
 # Per-class metrics
 print("\\nDetailed Classification Report:")
-print(classification_report(y_true, y_pred, target_names=categories))
+print(classification_report (y_true, y_pred, target_names=categories))
 
 # Confusion matrix
-cm = confusion_matrix(y_true, y_pred)
+cm = confusion_matrix (y_true, y_pred)
 
-plt.figure(figsize=(8, 6))
+plt.figure (figsize=(8, 6))
 sns.heatmap(
     cm,
     annot=True,
@@ -757,11 +757,11 @@ plt.show()
 y_true_binary = [0, 1, 1, 0, 1, 0, 1, 0, 1, 1]
 y_probs = [0.1, 0.9, 0.8, 0.2, 0.85, 0.3, 0.75, 0.15, 0.9, 0.7]
 
-fpr, tpr, thresholds = roc_curve(y_true_binary, y_probs)
-roc_auc = roc_auc_score(y_true_binary, y_probs)
+fpr, tpr, thresholds = roc_curve (y_true_binary, y_probs)
+roc_auc = roc_auc_score (y_true_binary, y_probs)
 
-plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, label=f'ROC curve (AUC = {roc_auc:.3f})')
+plt.figure (figsize=(8, 6))
+plt.plot (fpr, tpr, label=f'ROC curve (AUC = {roc_auc:.3f})')
 plt.plot([0, 1], [0, 1], 'k--', label='Random classifier')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
@@ -785,15 +785,15 @@ y_train = [0]*100 + [1]*20 + [2]*5  # Severely imbalanced
 # Compute class weights
 class_weights = compute_class_weight(
     'balanced',
-    classes=np.unique(y_train),
+    classes=np.unique (y_train),
     y=y_train
 )
 
 print("Class weights:", class_weights)
 
 # Method 1: Weighted loss
-class_weights_tensor = torch.tensor(class_weights, dtype=torch.float32)
-criterion = nn.CrossEntropyLoss(weight=class_weights_tensor)
+class_weights_tensor = torch.tensor (class_weights, dtype=torch.float32)
+criterion = nn.CrossEntropyLoss (weight=class_weights_tensor)
 
 # Method 2: Oversampling (imblearn)
 from imblearn.over_sampling import SMOTE
@@ -808,15 +808,15 @@ texts_imbalanced = ["text"] * 100 + ["text"] * 20 + ["text"] * 5
 labels_imbalanced = [0]*100 + [1]*20 + [2]*5
 
 # Vectorize
-vectorizer = TfidfVectorizer(max_features=100)
-X = vectorizer.fit_transform(texts_imbalanced)
+vectorizer = TfidfVectorizer (max_features=100)
+X = vectorizer.fit_transform (texts_imbalanced)
 
 # SMOTE for oversampling minority class
 smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X, labels_imbalanced)
 
-print(f"\\nOriginal distribution: {np.bincount(labels_imbalanced)}")
-print(f"Resampled distribution: {np.bincount(y_resampled)}")
+print(f"\\nOriginal distribution: {np.bincount (labels_imbalanced)}")
+print(f"Resampled distribution: {np.bincount (y_resampled)}")
 
 # Method 3: Stratified sampling
 # Ensure balanced splits during train/test split
@@ -838,36 +838,36 @@ X_train, X_test, y_train, y_test = train_test_split(
 \`\`\`python
 # Check for data quality issues
 
-def analyze_dataset(texts, labels):
+def analyze_dataset (texts, labels):
     """Analyze text classification dataset"""
     # Label distribution
     from collections import Counter
-    label_dist = Counter(labels)
+    label_dist = Counter (labels)
     
     print("Label Distribution:")
     for label, count in label_dist.items():
-        print(f"  {label}: {count} ({count/len(labels)*100:.1f}%)")
+        print(f"  {label}: {count} ({count/len (labels)*100:.1f}%)")
     
     # Text length statistics
-    text_lengths = [len(text.split()) for text in texts]
+    text_lengths = [len (text.split()) for text in texts]
     
     print(f"\\nText Length Statistics:")
-    print(f"  Mean: {np.mean(text_lengths):.1f} words")
-    print(f"  Median: {np.median(text_lengths):.1f} words")
-    print(f"  Min: {min(text_lengths)} words")
-    print(f"  Max: {max(text_lengths)} words")
+    print(f"  Mean: {np.mean (text_lengths):.1f} words")
+    print(f"  Median: {np.median (text_lengths):.1f} words")
+    print(f"  Min: {min (text_lengths)} words")
+    print(f"  Max: {max (text_lengths)} words")
     
     # Check for duplicates
-    unique_texts = len(set(texts))
-    duplicates = len(texts) - unique_texts
+    unique_texts = len (set (texts))
+    duplicates = len (texts) - unique_texts
     
     print(f"\\nDuplicate texts: {duplicates}")
     
     # Check for empty/very short texts
-    short_texts = sum(1 for text in texts if len(text.split()) < 3)
+    short_texts = sum(1 for text in texts if len (text.split()) < 3)
     print(f"Very short texts (<3 words): {short_texts}")
 
-analyze_dataset(tickets['text'].tolist(), tickets['category'].tolist())
+analyze_dataset (tickets['text'].tolist(), tickets['category'].tolist())
 \`\`\`
 
 ### 2. Model Selection
@@ -968,11 +968,11 @@ financial_sentiment = pipeline(
     model="ProsusAI/finbert"  # FinBERT: financial sentiment model
 )
 
-results = financial_sentiment(financial_texts)
+results = financial_sentiment (financial_texts)
 
 print("Financial News Sentiment Analysis:")
 print("=" * 60)
-for text, result in zip(financial_texts, results):
+for text, result in zip (financial_texts, results):
     print(f"\\nNews: {text}")
     print(f"Sentiment: {result['label']} (confidence: {result['score']:.3f})")
     

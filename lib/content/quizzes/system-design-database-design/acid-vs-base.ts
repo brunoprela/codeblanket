@@ -183,7 +183,7 @@ Redis (Cache):
 "You're right that payments require ACID. We'll use PostgreSQL for all financial transactions, active rides, and driver availability. This ensures atomicity (charges + receipts succeed together), consistency (balances can't go negative), and durability (no lost payments). This is non-negotiable for financial data."
 
 **To Engineering Team:**
-"You're right that scale is important. We'll use Cassandra/DynamoDB for high-volume, real-time data like driver locations (millions of updates/sec) and ride history (billions of records). This gives us the scalability we need without compromising financial accuracy. It's not all-or-nothing; we use the right tool for each job."
+"You're right that scale is important. We'll use Cassandra/DynamoDB for high-volume, real-time data like driver locations (millions of updates/sec) and ride history (billions of records). This gives us the scalability we need without compromising financial accuracy. It\'s not all-or-nothing; we use the right tool for each job."
 
 **Trade-Offs Accepted:**
 
@@ -205,7 +205,7 @@ Redis (Cache):
 
 **All ACID (PostgreSQL):**
 - Driver locations: Can't handle write throughput
-- Would need massive vertical scaling ($10K+/month)
+- Would need massive vertical scaling (\$10K+/month)
 - Still might not meet latency requirements
 
 **All BASE (Cassandra):**
@@ -545,7 +545,7 @@ For the other 90% (single-row updates, profile changes, logging), READ COMMITTED
   {
     id: 'acid-base-disc-q3',
     question:
-      "Amazon's shopping cart famously uses eventual consistency (BASE). Sometimes users see different cart contents on different devices until sync completes. Why is this acceptable for carts but not for checkout/payment? Explain the trade-offs.",
+      "Amazon\'s shopping cart famously uses eventual consistency (BASE). Sometimes users see different cart contents on different devices until sync completes. Why is this acceptable for carts but not for checkout/payment? Explain the trade-offs.",
     sampleAnswer: `Great question! Amazon's choice to use eventual consistency for shopping carts but strong consistency for checkout demonstrates perfect understanding of when each model is appropriate. Let me explain the trade-offs.
 
 **Why Eventual Consistency is OK for Shopping Carts:**

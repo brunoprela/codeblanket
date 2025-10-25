@@ -12,7 +12,7 @@ export const testDrivenDevelopmentMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "TDD cycle: Red-Green-Refactor. (1) RED: Write failing test first. Example: def test_add(): assert Calculator().add(2, 3) == 5 → FAILS (no code). (2) GREEN: Write minimal code to pass. class Calculator: def add(self, a, b): return a + b → PASSES. (3) REFACTOR: Improve code while keeping tests green. Add type hints, docstrings, optimize. Repeat for next feature. Not code-first (that's test-after), not design phase (tests ARE design), not debug/deploy (that's later).",
+      "TDD cycle: Red-Green-Refactor. (1) RED: Write failing test first. Example: def test_add(): assert Calculator().add(2, 3) == 5 → FAILS (no code). (2) GREEN: Write minimal code to pass. class Calculator: def add (self, a, b): return a + b → PASSES. (3) REFACTOR: Improve code while keeping tests green. Add type hints, docstrings, optimize. Repeat for next feature. Not code-first (that's test-after), not design phase (tests ARE design), not debug/deploy (that's later).",
   },
   {
     id: 'tdd-mc-2',
@@ -64,6 +64,6 @@ export const testDrivenDevelopmentMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'TDD forces testable design: Writing tests first makes you think "How do I test this?" → simple interfaces. Example: TDD: add(a, b) → easy to test. Test-after: calc = Calculator(db, cache, logger); calc.add(a, b) → hard to test (many dependencies). TDD prevents over-complicated designs (if hard to test, redesign). Test-after often produces untestable code → skip tests. Not fewer tests (same coverage), not faster (same tests), doesn\'t eliminate integration tests (still needed).',
+      'TDD forces testable design: Writing tests first makes you think "How do I test this?" → simple interfaces. Example: TDD: add (a, b) → easy to test. Test-after: calc = Calculator (db, cache, logger); calc.add (a, b) → hard to test (many dependencies). TDD prevents over-complicated designs (if hard to test, redesign). Test-after often produces untestable code → skip tests. Not fewer tests (same coverage), not faster (same tests), doesn\'t eliminate integration tests (still needed).',
   },
 ];

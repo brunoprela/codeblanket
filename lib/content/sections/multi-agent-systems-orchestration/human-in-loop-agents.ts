@@ -76,7 +76,7 @@ class ApprovalGate:
         import uuid
         
         # Create approval request
-        request_id = str(uuid.uuid4())
+        request_id = str (uuid.uuid4())
         request = ApprovalRequest(
             id=request_id,
             agent_name=agent_name,
@@ -93,11 +93,11 @@ class ApprovalGate:
         self.approval_callbacks[request_id] = future
         
         # Show to human
-        self._display_request(request)
+        self._display_request (request)
         
         # Wait for response with timeout
         try:
-            status, feedback = await asyncio.wait_for(future, timeout=timeout)
+            status, feedback = await asyncio.wait_for (future, timeout=timeout)
             request.status = status
             request.feedback = feedback
             return status, feedback
@@ -119,14 +119,14 @@ class ApprovalGate:
     ):
         """Human provides approval."""
         if request_id not in self.approval_callbacks:
-            raise ValueError(f"Request {request_id} not found")
+            raise ValueError (f"Request {request_id} not found")
         
         future = self.approval_callbacks[request_id]
         status = ApprovalStatus.APPROVED if approved else ApprovalStatus.REJECTED
         
         future.set_result((status, feedback))
     
-    def _display_request(self, request: ApprovalRequest):
+    def _display_request (self, request: ApprovalRequest):
         """Display request to human."""
         print("\\n" + "="*60)
         print("APPROVAL REQUIRED")
@@ -152,7 +152,7 @@ class ApprovalAgent:
         self.name = name
         self.gate = gate
     
-    async def execute_with_approval(self, task: str) -> Any:
+    async def execute_with_approval (self, task: str) -> Any:
         """Execute task with human approval."""
         # Generate output
         output = f"Proposed solution for: {task}"
@@ -185,8 +185,8 @@ async def human_approver():
     
     # Get pending request
     if gate.pending_requests:
-        request_id = list(gate.pending_requests.keys())[0]
-        gate.provide_approval(request_id, approved=True, feedback="Looks good!")
+        request_id = list (gate.pending_requests.keys())[0]
+        gate.provide_approval (request_id, approved=True, feedback="Looks good!")
 
 # Execute both
 agent = ApprovalAgent("WorkerAgent", gate)
@@ -247,7 +247,7 @@ class ConfidenceGate:
             )
 
 # Usage
-conf_gate = ConfidenceGate(auto_approve_threshold=0.85)
+conf_gate = ConfidenceGate (auto_approve_threshold=0.85)
 
 # High confidence - auto approved
 status, _ = await conf_gate.smart_approval(
@@ -279,12 +279,12 @@ class ReviewLoop:
         iterations = []
         current_output = None
         
-        for i in range(self.max_iterations):
+        for i in range (self.max_iterations):
             print(f"\\nIteration {i+1}/{self.max_iterations}")
             
             # Generate or revise
             if i == 0:
-                current_output = await generator(initial_input)
+                current_output = await generator (initial_input)
             else:
                 # Revise based on feedback
                 current_output = await generator({
@@ -296,7 +296,7 @@ class ReviewLoop:
             print(f"Generated output: {current_output[:100]}...")
             
             # Human review
-            approved, feedback = await human_reviewer(current_output)
+            approved, feedback = await human_reviewer (current_output)
             
             iterations.append({
                 "iteration": i + 1,
@@ -324,16 +324,16 @@ class ReviewLoop:
         }
 
 # Example
-async def generate_article(input: Any) -> str:
+async def generate_article (input: Any) -> str:
     """Generate or revise article."""
-    if isinstance(input, dict):
+    if isinstance (input, dict):
         # Revision
         return f"Revised article incorporating: {input['feedback']}"
     else:
         # Initial generation
         return f"Initial article about {input}"
 
-async def human_review(output: str) -> tuple[bool, str]:
+async def human_review (output: str) -> tuple[bool, str]:
     """Human reviews output."""
     # Simulate human review
     import random
@@ -341,7 +341,7 @@ async def human_review(output: str) -> tuple[bool, str]:
     feedback = "" if approved else "Add more examples"
     return approved, feedback
 
-loop = ReviewLoop(max_iterations=3)
+loop = ReviewLoop (max_iterations=3)
 result = await loop.execute_with_review(
     generator=generate_article,
     human_reviewer=human_review,
@@ -349,7 +349,7 @@ result = await loop.execute_with_review(
 )
 
 print(f"\\nSuccess: {result['success']}")
-print(f"Iterations: {len(result['iterations'])}")
+print(f"Iterations: {len (result['iterations'])}")
 \`\`\`
 
 ## Exception Escalation
@@ -371,7 +371,7 @@ class EscalationSystem:
         try:
             # Try agent
             print("[Agent] Attempting task...")
-            result = await agent_task(task)
+            result = await agent_task (task)
             print("[Agent] ✅ Completed successfully")
             return result
         
@@ -383,25 +383,25 @@ class EscalationSystem:
             # Record escalation
             escalation = {
                 "task": task,
-                "error": str(e),
+                "error": str (e),
                 "timestamp": time.time()
             }
-            self.escalated_cases.append(escalation)
+            self.escalated_cases.append (escalation)
             
             # Human handles
-            result = await human_handler(task, error=e)
+            result = await human_handler (task, error=e)
             return result
 
 # Usage
 escalation = EscalationSystem()
 
-async def agent_task(task: str) -> str:
+async def agent_task (task: str) -> str:
     """Agent attempts task."""
     if "complex" in task.lower():
         raise ValueError("Task too complex for agent")
     return f"Agent handled: {task}"
 
-async def human_handler(task: str, error: Exception) -> str:
+async def human_handler (task: str, error: Exception) -> str:
     """Human handles escalated case."""
     print(f"[Human] Handling: {task}")
     print(f"[Human] Original error: {error}")
@@ -421,7 +421,7 @@ result = await escalation.handle_with_escalation(
     human_handler
 )
 
-print(f"\\nEscalated cases: {len(escalation.escalated_cases)}")
+print(f"\\nEscalated cases: {len (escalation.escalated_cases)}")
 \`\`\`
 
 ## Progressive Automation
@@ -438,17 +438,17 @@ class ProgressiveAutomation:
             "high": 0.9      # Full automation
         }
     
-    def get_automation_level(self, task_type: str) -> str:
+    def get_automation_level (self, task_type: str) -> str:
         """Determine automation level for task type."""
         if task_type not in self.task_history:
             return "low"  # New task type - require approval
         
         history = self.task_history[task_type]
-        if len(history) < 5:
+        if len (history) < 5:
             return "low"  # Not enough data
         
         # Calculate success rate
-        success_rate = sum(history) / len(history)
+        success_rate = sum (history) / len (history)
         
         if success_rate >= self.automation_thresholds["high"]:
             return "high"
@@ -457,9 +457,9 @@ class ProgressiveAutomation:
         else:
             return "low"
     
-    def should_request_approval(self, task_type: str) -> bool:
+    def should_request_approval (self, task_type: str) -> bool:
         """Determine if approval needed."""
-        level = self.get_automation_level(task_type)
+        level = self.get_automation_level (task_type)
         
         if level == "high":
             return False  # Full automation
@@ -470,12 +470,12 @@ class ProgressiveAutomation:
         else:
             return True  # Always need approval
     
-    def record_outcome(self, task_type: str, success: bool):
+    def record_outcome (self, task_type: str, success: bool):
         """Record task outcome."""
         if task_type not in self.task_history:
             self.task_history[task_type] = []
         
-        self.task_history[task_type].append(success)
+        self.task_history[task_type].append (success)
         
         # Keep only recent history (last 20)
         self.task_history[task_type] = self.task_history[task_type][-20:]
@@ -483,9 +483,9 @@ class ProgressiveAutomation:
 # Usage
 progressive = ProgressiveAutomation()
 
-async def execute_with_progressive_automation(task_type: str, task: str):
+async def execute_with_progressive_automation (task_type: str, task: str):
     """Execute with progressive automation."""
-    if progressive.should_request_approval(task_type):
+    if progressive.should_request_approval (task_type):
         print(f"[{task_type}] Requesting approval...")
         # Request approval
         approved = True  # Simulate
@@ -496,7 +496,7 @@ async def execute_with_progressive_automation(task_type: str, task: str):
     if approved:
         # Execute
         success = True  # Simulate
-        progressive.record_outcome(task_type, success)
+        progressive.record_outcome (task_type, success)
         return "Success"
     else:
         return "Rejected"
@@ -525,11 +525,11 @@ class FeedbackCollector:
         chunks = []
         
         # Start feedback listener
-        feedback_task = asyncio.create_task(self._listen_for_feedback())
+        feedback_task = asyncio.create_task (self._listen_for_feedback())
         
         try:
             async for chunk in generator:
-                chunks.append(chunk)
+                chunks.append (chunk)
                 print(chunk, end=', flush=True)
                 
                 # Check for feedback
@@ -548,14 +548,14 @@ class FeedbackCollector:
         
         return chunks
     
-    async def _listen_for_feedback(self):
+    async def _listen_for_feedback (self):
         """Listen for human feedback."""
         # In real system, this would listen to UI events
         pass
     
-    def provide_feedback(self, feedback: str):
+    def provide_feedback (self, feedback: str):
         """Human provides feedback."""
-        self.feedback_queue.put_nowait(feedback)
+        self.feedback_queue.put_nowait (feedback)
 
 # Usage
 collector = FeedbackCollector()
@@ -633,7 +633,7 @@ class AuditTrail:
         
         return filtered
     
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics (self) -> Dict[str, Any]:
         """Get decision statistics."""
         if not self.decisions:
             return {}
@@ -642,10 +642,10 @@ class AuditTrail:
         rejections = len([d for d in self.decisions if d.decision == "rejected"])
         
         return {
-            "total_decisions": len(self.decisions),
+            "total_decisions": len (self.decisions),
             "approvals": approvals,
             "rejections": rejections,
-            "approval_rate": approvals / len(self.decisions) if self.decisions else 0
+            "approval_rate": approvals / len (self.decisions) if self.decisions else 0
         }
 
 # Usage

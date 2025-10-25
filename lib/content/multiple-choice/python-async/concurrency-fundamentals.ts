@@ -31,7 +31,7 @@ export const concurrencyFundamentalsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cf-mc-3',
     question:
-      "In the context of Python's Global Interpreter Lock (GIL), which concurrency approach is NOT limited by it?",
+      "In the context of Python\'s Global Interpreter Lock (GIL), which concurrency approach is NOT limited by it?",
     options: [
       'Threading for CPU-bound operations',
       'Asyncio for I/O-bound operations',

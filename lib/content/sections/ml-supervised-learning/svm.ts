@@ -41,14 +41,14 @@ from sklearn.svm import SVC
 from sklearn.datasets import make_blobs
 
 # Generate linearly separable data
-X, y = make_blobs(n_samples=100, centers=2, random_state=42, cluster_std=1.5)
+X, y = make_blobs (n_samples=100, centers=2, random_state=42, cluster_std=1.5)
 
 # Train SVM
 svm = SVC(kernel='linear', C=1000)  # Large C for hard margin
 svm.fit(X, y)
 
 # Visualize
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 # Plot 1: Data and decision boundary
 plt.subplot(1, 2, 1)
@@ -60,18 +60,18 @@ ax = plt.gca()
 xlim = ax.get_xlim()
 ylim = ax.get_ylim()
 
-xx = np.linspace(xlim[0], xlim[1], 30)
-yy = np.linspace(ylim[0], ylim[1], 30)
-YY, XX = np.meshgrid(yy, xx)
+xx = np.linspace (xlim[0], xlim[1], 30)
+yy = np.linspace (ylim[0], ylim[1], 30)
+YY, XX = np.meshgrid (yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
-Z = svm.decision_function(xy).reshape(XX.shape)
+Z = svm.decision_function (xy).reshape(XX.shape)
 
 # Plot decision boundary and margins
 ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5,
            linestyles=['--', '-', '--'])
 
 # Highlight support vectors
-plt.scatter(svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
+plt.scatter (svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
            s=200, linewidth=2, facecolors='none', edgecolors='black',
            label='Support Vectors')
 
@@ -85,7 +85,7 @@ plt.grid(True, alpha=0.3)
 plt.subplot(1, 2, 2)
 plt.scatter(X[y==0, 0], X[y==0, 1], c='blue', s=50, alpha=0.7)
 plt.scatter(X[y==1, 0], X[y==1, 1], c='red', s=50, alpha=0.7)
-plt.scatter(svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
+plt.scatter (svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
            s=200, linewidth=2, facecolors='none', edgecolors='black')
 
 # Fill margin
@@ -101,7 +101,7 @@ plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 
-print(f"Number of support vectors: {len(svm.support_vectors_)}")
+print(f"Number of support vectors: {len (svm.support_vectors_)}")
 print(f"Support vector indices: {svm.support_}")
 \`\`\`
 
@@ -120,8 +120,8 @@ For non-linearly separable data, SVMs use kernels to map data to higher dimensio
 from sklearn.datasets import make_circles, make_moons
 
 # Generate non-linear data
-X_circles, y_circles = make_circles(n_samples=200, noise=0.1, factor=0.5, random_state=42)
-X_moons, y_moons = make_moons(n_samples=200, noise=0.1, random_state=42)
+X_circles, y_circles = make_circles (n_samples=200, noise=0.1, factor=0.5, random_state=42)
+X_moons, y_moons = make_moons (n_samples=200, noise=0.1, random_state=42)
 
 # Compare kernels
 fig, axes = plt.subplots(2, 3, figsize=(15, 10))
@@ -129,8 +129,8 @@ fig, axes = plt.subplots(2, 3, figsize=(15, 10))
 kernels = ['linear', 'poly', 'rbf']
 datasets = [('Circles', X_circles, y_circles), ('Moons', X_moons, y_moons)]
 
-for row, (name, X, y) in enumerate(datasets):
-    for col, kernel in enumerate(kernels):
+for row, (name, X, y) in enumerate (datasets):
+    for col, kernel in enumerate (kernels):
         ax = axes[row, col]
         
         # Train SVM
@@ -144,21 +144,21 @@ for row, (name, X, y) in enumerate(datasets):
         h = 0.02
         x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
         y_min, y_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
-        xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                             np.arange(y_min, y_max, h))
+        xx, yy = np.meshgrid (np.arange (x_min, x_max, h),
+                             np.arange (y_min, y_max, h))
         
-        Z = svm.predict(np.c_[xx.ravel(), yy.ravel()])
-        Z = Z.reshape(xx.shape)
+        Z = svm.predict (np.c_[xx.ravel(), yy.ravel()])
+        Z = Z.reshape (xx.shape)
         
         # Plot
-        ax.contourf(xx, yy, Z, alpha=0.3, cmap='RdBu')
+        ax.contourf (xx, yy, Z, alpha=0.3, cmap='RdBu')
         ax.scatter(X[y==0, 0], X[y==0, 1], c='blue', s=30, edgecolors='k')
         ax.scatter(X[y==1, 0], X[y==1, 1], c='red', s=30, edgecolors='k')
-        ax.scatter(svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
+        ax.scatter (svm.support_vectors_[:, 0], svm.support_vectors_[:, 1],
                   s=100, facecolors='none', edgecolors='black', linewidths=2)
         
         accuracy = svm.score(X, y)
-        ax.set_title(f'{name} - {kernel.upper()}\\nAcc: {accuracy:.3f}')
+        ax.set_title (f'{name} - {kernel.upper()}\\nAcc: {accuracy:.3f}')
         ax.set_xlabel('Feature 1')
         ax.set_ylabel('Feature 2')
 
@@ -179,7 +179,7 @@ The C parameter controls the trade-off between:
 from sklearn.model_selection import train_test_split
 
 # Generate data with some overlap
-X, y = make_blobs(n_samples=200, centers=2, random_state=42, cluster_std=2.0)
+X, y = make_blobs (n_samples=200, centers=2, random_state=42, cluster_std=2.0)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Try different C values
@@ -198,14 +198,14 @@ for idx, C in enumerate(C_values):
     h = 0.1
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
+    xx, yy = np.meshgrid (np.arange (x_min, x_max, h),
+                         np.arange (y_min, y_max, h))
     
-    Z = svm.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
+    Z = svm.predict (np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape (xx.shape)
     
     # Plot
-    ax.contourf(xx, yy, Z, alpha=0.3, cmap='RdBu')
+    ax.contourf (xx, yy, Z, alpha=0.3, cmap='RdBu')
     ax.scatter(X_train[y_train==0, 0], X_train[y_train==0, 1], 
               c='blue', s=30, edgecolors='k', alpha=0.7)
     ax.scatter(X_train[y_train==1, 0], X_train[y_train==1, 1], 
@@ -213,9 +213,9 @@ for idx, C in enumerate(C_values):
     
     train_acc = svm.score(X_train, y_train)
     test_acc = svm.score(X_test, y_test)
-    n_sv = len(svm.support_vectors_)
+    n_sv = len (svm.support_vectors_)
     
-    ax.set_title(f'C={C}\\nTrain:{train_acc:.2f} Test:{test_acc:.2f}\\nSV:{n_sv}')
+    ax.set_title (f'C={C}\\nTrain:{train_acc:.2f} Test:{test_acc:.2f}\\nSV:{n_sv}')
     ax.set_xlabel('Feature 1')
     ax.set_ylabel('Feature 2')
 
@@ -287,7 +287,7 @@ from sklearn.metrics import classification_report
 y_pred = svm_multi.predict(X_test)
 
 print("Multi-class SVM Results:")
-print(classification_report(y_test, y_pred, target_names=iris.target_names))
+print(classification_report (y_test, y_pred, target_names=iris.target_names))
 \`\`\`
 
 ## Advantages and Limitations
@@ -326,7 +326,7 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.datasets import load_breast_cancer
 
 cancer = load_breast_cancer()
-X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split (cancer.data, cancer.target, test_size=0.2, random_state=42)
 
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)

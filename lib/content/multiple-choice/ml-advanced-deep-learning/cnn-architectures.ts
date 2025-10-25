@@ -14,12 +14,12 @@ export const cnnArchitecturesMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "AlexNet's use of **ReLU (Rectified Linear Unit) activation functions** instead of tanh/sigmoid was revolutionary. ReLU trains approximately 6× faster than tanh because: (1) Gradient is either 0 or 1 (simple), (2) No expensive exponential calculations, (3) Helps mitigate vanishing gradients. Before AlexNet, most networks used tanh or sigmoid, which have gradients that approach zero for large inputs, slowing training dramatically. ReLU's simplicity (max(0, x)) and gradient properties made training deep networks on GPUs practical.",
+      "AlexNet\'s use of **ReLU (Rectified Linear Unit) activation functions** instead of tanh/sigmoid was revolutionary. ReLU trains approximately 6× faster than tanh because: (1) Gradient is either 0 or 1 (simple), (2) No expensive exponential calculations, (3) Helps mitigate vanishing gradients. Before AlexNet, most networks used tanh or sigmoid, which have gradients that approach zero for large inputs, slowing training dramatically. ReLU's simplicity (max(0, x)) and gradient properties made training deep networks on GPUs practical.",
   },
   {
     id: 'cnn-mc-2',
     question:
-      "In ResNet's residual block, what does the skip/shortcut connection actually add to the output?",
+      "In ResNet\'s residual block, what does the skip/shortcut connection actually add to the output?",
     options: [
       'The gradient from the next layer',
       'A learned transformation of the input',

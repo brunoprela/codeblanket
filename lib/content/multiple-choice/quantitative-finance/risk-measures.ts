@@ -18,7 +18,7 @@ export const riskMeasuresMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'rm-mc-2',
     question:
-      'Historical VaR ($320K) is 2x higher than parametric VaR ($160K) for same portfolio. What explains this?',
+      'Historical VaR (\$320K) is 2x higher than parametric VaR (\$160K) for same portfolio. What explains this?',
     options: [
       'Calculation error; both methods should give same result',
       'Historical method double-counts volatility',
@@ -41,7 +41,7 @@ export const riskMeasuresMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Square-root-of-time rule assumes i.i.d. returns: Independent: Today's return doesn't affect tomorrow's (no autocorrelation). Identically distributed: Same distribution each day (constant volatility, no regime changes). Under i.i.d., variance scales linearly: Var(10-day) = 10 × Var(1-day). Std dev scales as square root: σ(10-day) = √10 × σ(1-day). REALITY violates i.i.d.: Volatility clustering: After -3% day, volatility often doubles (GARCH effects). √10 rule underestimates risk. Mean reversion: Extreme losses partially revert, reducing multi-day loss. Liquidity: Selling $500K over 10 days vs 1 day → different market impact. Better approach: Multi-day Monte Carlo with GARCH volatility, or overlapping historical windows. Actual 10-day VaR often 1.5-2.5x (not 3.16x) 1-day VaR.",
+      "Square-root-of-time rule assumes i.i.d. returns: Independent: Today\'s return doesn't affect tomorrow's (no autocorrelation). Identically distributed: Same distribution each day (constant volatility, no regime changes). Under i.i.d., variance scales linearly: Var(10-day) = 10 × Var(1-day). Std dev scales as square root: σ(10-day) = √10 × σ(1-day). REALITY violates i.i.d.: Volatility clustering: After -3% day, volatility often doubles (GARCH effects). √10 rule underestimates risk. Mean reversion: Extreme losses partially revert, reducing multi-day loss. Liquidity: Selling $500K over 10 days vs 1 day → different market impact. Better approach: Multi-day Monte Carlo with GARCH volatility, or overlapping historical windows. Actual 10-day VaR often 1.5-2.5x (not 3.16x) 1-day VaR.",
   },
   {
     id: 'rm-mc-4',
@@ -54,7 +54,7 @@ export const riskMeasuresMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'CVaR (Expected Shortfall) = E[Loss | Loss > VaR]. CVaR always ≥ VaR because: VaR = threshold at confidence level (e.g., 95th percentile). CVaR = AVERAGE of losses beyond VaR (average of worst 5%). Example: VaR_95 = $200K (95th percentile loss). Worst 5% days: -$200K, -$220K, -$240K, -$280K, -$350K (average = -$258K). CVaR_95 = $258K > VaR ($200K). CVaR captures tail risk that VaR ignores. KEY ADVANTAGE: CVaR is subadditive (satisfies diversification), VaR is NOT. Basel IV switched from VaR to Expected Shortfall for bank capital. CVaR used in portfolio optimization (minimize tail risk).',
+      'CVaR (Expected Shortfall) = E[Loss | Loss > VaR]. CVaR always ≥ VaR because: VaR = threshold at confidence level (e.g., 95th percentile). CVaR = AVERAGE of losses beyond VaR (average of worst 5%). Example: VaR_95 = $200K (95th percentile loss). Worst 5% days: -$200K, -$220K, -$240K, -$280K, -$350K (average = -$258K). CVaR_95 = $258K > VaR (\$200K). CVaR captures tail risk that VaR ignores. KEY ADVANTAGE: CVaR is subadditive (satisfies diversification), VaR is NOT. Basel IV switched from VaR to Expected Shortfall for bank capital. CVaR used in portfolio optimization (minimize tail risk).',
   },
   {
     id: 'rm-mc-5',

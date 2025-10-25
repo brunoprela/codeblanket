@@ -70,7 +70,7 @@ CREATE TABLE orders (
   id INT PRIMARY KEY,
   user_id INT NOT NULL,
   total DECIMAL CHECK (total >= 0),  -- Must be non-negative
-  FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 -- This transaction will FAIL and ROLLBACK:

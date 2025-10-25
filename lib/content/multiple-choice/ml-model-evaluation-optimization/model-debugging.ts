@@ -36,7 +36,7 @@ export const modelDebuggingMultipleChoice = {
     {
       id: 3,
       question:
-        "In a trading backtest, your strategy shows Sharpe ratio of 2.0 but loses money in live trading. What's the most likely issue?",
+        "In a trading backtest, your strategy shows Sharpe ratio of 2.0 but loses money in live trading. What\'s the most likely issue?",
       options: [
         'Bad luck in live trading',
         'Lookahead bias, transaction costs not modeled, or survivorship bias',

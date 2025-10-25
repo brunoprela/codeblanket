@@ -1,7 +1,7 @@
 export const mergersAcquisitions = {
-    title: 'Mergers & Acquisitions',
-    id: 'mergers-acquisitions',
-    content: `
+  title: 'Mergers & Acquisitions',
+  id: 'mergers-acquisitions',
+  content: `
 # Mergers & Acquisitions (M&A)
 
 Mergers and acquisitions reshape industries, create (or destroy) billions in value, and are among the most complex transactions in corporate finance. This section covers M&A strategy, valuation, deal structures, synergies, and pitfalls—essential knowledge for investment bankers, corporate development professionals, and investors.
@@ -29,7 +29,7 @@ Mergers and acquisitions reshape industries, create (or destroy) billions in val
    - Goal: Control supply chain, reduce costs, capture margins
 
 3. **Conglomerate**: Unrelated businesses
-   - Example: Berkshire Hathaway acquires See's Candies, GEICO, etc.
+   - Example: Berkshire Hathaway acquires See\'s Candies, GEICO, etc.
    - Goal: Diversification, financial engineering
 
 **By Transaction Type**:
@@ -122,7 +122,7 @@ class MandAValuation:
         self.integration_costs = integration_costs
         self.control_premium = control_premium
     
-    def calculate_deal_value(self):
+    def calculate_deal_value (self):
         """Calculate total deal value and value creation."""
         # Offer price (target value + premium)
         offer_price = self.target_value * (1 + self.control_premium)
@@ -226,12 +226,12 @@ class MandAValuation:
             'New Debt': new_debt
         }
     
-    def calculate_breakup_fee(self, deal_value: float, breakup_pct: float = 0.03):
+    def calculate_breakup_fee (self, deal_value: float, breakup_pct: float = 0.03):
         """Calculate breakup fee (typically 2-4% of deal value)."""
         breakup_fee = deal_value * breakup_pct
         return breakup_fee
     
-    def print_deal_summary(self):
+    def print_deal_summary (self):
         """Print formatted deal summary."""
         deal = self.calculate_deal_value()
         
@@ -240,27 +240,27 @@ class MandAValuation:
         print(f"{'=' * 70}\\n")
         
         print("Valuation:")
-        print(f"  {self.target_name} Standalone Value: ${deal['Target Standalone Value']:,.0f}M")
+        print(f"  {self.target_name} Standalone Value: \${deal['Target Standalone Value']:,.0f}M")
 print(f"  Control Premium: {deal['Control Premium']:.1f}%")
-print(f"  Offer Price: ${deal['Offer Price']:,.0f}M")
-print(f"\\n  {self.acquirer_name} Value: ${deal['Acquirer Value']:,.0f}M")
-print(f"  Combined Value (pre-synergies): ${deal['Combined Value (pre-synergies)']:,.0f}M")
-print(f"\\n  Expected Synergies: ${deal['Synergies']:,.0f}M")
-print(f"  Less: Integration Costs: ${deal['Integration Costs']:,.0f}M")
-print(f"  Net Synergies: ${deal['Synergies'] - deal['Integration Costs']:,.0f}M")
+print(f"  Offer Price: \${deal['Offer Price']:,.0f}M")
+print(f"\\n  {self.acquirer_name} Value: \${deal['Acquirer Value']:,.0f}M")
+print(f"  Combined Value (pre-synergies): \${deal['Combined Value (pre-synergies)']:,.0f}M")
+print(f"\\n  Expected Synergies: \${deal['Synergies']:,.0f}M")
+print(f"  Less: Integration Costs: \${deal['Integration Costs']:,.0f}M")
+print(f"  Net Synergies: \${deal['Synergies'] - deal['Integration Costs']:,.0f}M")
 print(f"  {'─' * 68}")
-print(f"  Combined Value (post-synergies): ${deal['Combined Value (post-synergies)']:,.0f}M")
+print(f"  Combined Value (post-synergies): \${deal['Combined Value (post-synergies)']:,.0f}M")
 
 print(f"\\nValue Distribution:")
-print(f"  Value to {self.target_name} Shareholders: ${deal['Value to Target']:,.0f}M")
-print(f"  Value to {self.acquirer_name} Shareholders: ${deal['Value to Acquirer']:,.0f}M")
-print(f"  Total Value Created: ${deal['Total Value Created']:,.0f}M")
+print(f"  Value to {self.target_name} Shareholders: \${deal['Value to Target']:,.0f}M")
+print(f"  Value to {self.acquirer_name} Shareholders: \${deal['Value to Acquirer']:,.0f}M")
+print(f"  Total Value Created: \${deal['Total Value Created']:,.0f}M")
 
 print(f"\\nRecommendation: {deal['Recommendation']}")
 if deal['NPV to Acquirer'] > 0:
-    print(f"  Deal creates ${deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
+    print(f"  Deal creates \${deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
 else:
-print(f"  Deal destroys ${-deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
+print(f"  Deal destroys \${-deal['NPV to Acquirer']:,.0f}M for {self.acquirer_name} shareholders.")
 
 print(f"{'=' * 70}\\n")
 
@@ -292,7 +292,7 @@ stock_deal = deal.accretion_dilution_analysis(
 
 print("Scenario 1: All-Stock Deal (0.6× exchange ratio)")
 for key, value in stock_deal.items():
-    if isinstance(value, (int, float)):
+    if isinstance (value, (int, float)):
         print(f"  {key}: {value:,.2f}")
     else:
     print(f"  {key}: {value}")
@@ -312,7 +312,7 @@ tax_rate=0.25
 
 print("\\nScenario 2: All-Cash Deal ($27/share, debt-financed)")
 for key, value in cash_deal.items():
-    if isinstance(value, (int, float)):
+    if isinstance (value, (int, float)):
         print(f"  {key}: {value:,.2f}")
     else:
     print(f"  {key}: {value}")
@@ -492,7 +492,7 @@ If > 1.0: Overpaying (premium > synergies).
 
 ## Common M&A Pitfalls
 
-1. **Overpaying**: Winner's curse in competitive auctions
+1. **Overpaying**: Winner\'s curse in competitive auctions
 2. **Overestimating Synergies**: 70% of deals fail to realize projected synergies
 3. **Integration Failures**: Culture clashes, talent attrition, IT nightmares
 4. **Regulatory Risk**: Deal blocked or conditions imposed
@@ -529,21 +529,21 @@ If > 1.0: Overpaying (premium > synergies).
 
 ## Real-World M&A Examples
 
-### Success: Disney + Pixar ($7.4B, 2006)
+### Success: Disney + Pixar (\$7.4B, 2006)
 
 - **Rationale**: Acquire animation talent and IP
 - **Synergies**: Distribution (Disney), Content (Pixar)
 - **Result**: Massive success—Marvel, Lucasfilm followed same playbook
 - **Key**: Disney gave Pixar creative freedom (no integration disaster)
 
-### Failure: AOL + Time Warner ($164B, 2000)
+### Failure: AOL + Time Warner (\$164B, 2000)
 
 - **Rationale**: "Convergence" of internet + media
 - **Reality**: Cultures incompatible, business models divergent
 - **Result**: Written down $99B in 2002 (largest ever)
 - **Lesson**: Don't overpay in a bubble, culture matters
 
-### Mixed: Microsoft + Nokia ($7.2B, 2013)
+### Mixed: Microsoft + Nokia (\$7.2B, 2013)
 
 - **Rationale**: Compete with iPhone/Android
 - **Result**: Failure—wrote off $7.6B in 2015, exited phones
@@ -562,4 +562,3 @@ If > 1.0: Overpaying (premium > synergies).
 M&A is high-stakes corporate finance. Successful dealmakers combine rigorous valuation, realistic synergy estimates, disciplined pricing, and flawless integration execution.
 `,
 };
-

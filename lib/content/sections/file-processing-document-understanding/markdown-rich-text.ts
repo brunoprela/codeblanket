@@ -17,21 +17,21 @@ Master markdown and rich text processing for documentation and content managemen
 import markdown
 from pathlib import Path
 
-def markdown_to_html(md_text: str) -> str:
+def markdown_to_html (md_text: str) -> str:
     """Convert markdown to HTML."""
-    return markdown.markdown(md_text)
+    return markdown.markdown (md_text)
 
 # Read markdown file
-def read_markdown(filepath: str) -> str:
-    return Path(filepath).read_text(encoding='utf-8')
+def read_markdown (filepath: str) -> str:
+    return Path (filepath).read_text (encoding='utf-8')
 
 # Parse markdown with metadata
 # pip install python-frontmatter
 import frontmatter
 
-def parse_markdown_with_metadata(filepath: str):
+def parse_markdown_with_metadata (filepath: str):
     """Parse markdown with YAML frontmatter."""
-    post = frontmatter.load(filepath)
+    post = frontmatter.load (filepath)
     return {
         'metadata': post.metadata,
         'content': post.content
@@ -41,23 +41,23 @@ def parse_markdown_with_metadata(filepath: str):
 ## Markdown Generation
 
 \`\`\`python
-def generate_markdown_table(data: list) -> str:
+def generate_markdown_table (data: list) -> str:
     """Generate markdown table from data."""
-    if not data or len(data) < 2:
+    if not data or len (data) < 2:
         return ""
     
     # Header
     headers = data[0]
-    md = "| " + " | ".join(str(h) for h in headers) + " |\\n"
+    md = "| " + " | ".join (str (h) for h in headers) + " |\\n"
     md += "| " + " | ".join("---" for _ in headers) + " |\\n"
     
     # Rows
     for row in data[1:]:
-        md += "| " + " | ".join(str(cell) for cell in row) + " |\\n"
+        md += "| " + " | ".join (str (cell) for cell in row) + " |\\n"
     
     return md
 
-def create_markdown_doc(title: str, sections: list) -> str:
+def create_markdown_doc (title: str, sections: list) -> str:
     """Create structured markdown document."""
     md = f"# {title}\\n\\n"
     
@@ -85,21 +85,21 @@ def create_markdown_doc(title: str, sections: list) -> str:
 # pip install html2text
 import html2text
 
-def html_to_markdown(html: str) -> str:
+def html_to_markdown (html: str) -> str:
     """Convert HTML to markdown."""
     h = html2text.HTML2Text()
     h.ignore_links = False
-    return h.handle(html)
+    return h.handle (html)
 
 # RTF processing
 # pip install striprtf
 from striprtf.striprtf import rtf_to_text
 
-def read_rtf(filepath: str) -> str:
+def read_rtf (filepath: str) -> str:
     """Extract text from RTF file."""
-    with open(filepath, 'r') as f:
+    with open (filepath, 'r') as f:
         rtf_content = f.read()
-    return rtf_to_text(rtf_content)
+    return rtf_to_text (rtf_content)
 \`\`\`
 
 ## Key Takeaways

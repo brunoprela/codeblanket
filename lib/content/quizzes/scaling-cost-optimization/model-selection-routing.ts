@@ -11,25 +11,25 @@ export const model_selection_routingQuiz = {
 
 **1. Complexity Classification**:
 \`\`\`python
-def classify_query(query: str) -> Complexity:
+def classify_query (query: str) -> Complexity:
     # Simple indicators
     simple_patterns = [
         r'hours|open|close|location|phone|email',
         r'\?$',  # Single question
-        len(query) < 50
+        len (query) < 50
     ]
     
     # Complex indicators
     complex_patterns = [
         r'refund|complaint|issue|problem|wrong',
         'multiple questions',
-        len(query) > 200,
+        len (query) > 200,
         previous_escalation_in_session
     ]
     
-    if any(pattern in query.lower() for pattern in complex_patterns):
+    if any (pattern in query.lower() for pattern in complex_patterns):
         return Complexity.COMPLEX
-    elif all(pattern in query.lower() for pattern in simple_patterns):
+    elif all (pattern in query.lower() for pattern in simple_patterns):
         return Complexity.SIMPLE
     else:
         return Complexity.MODERATE
@@ -50,13 +50,13 @@ Total: $37/day (82% savings!)
 
 **4. Cascade Fallback**:
 \`\`\`python
-async def handle_query_with_cascade(query, complexity):
+async def handle_query_with_cascade (query, complexity):
     model = MODEL_MAP[complexity]
     
-    response = await call_llm(model, query)
+    response = await call_llm (model, query)
     
     # Quality check
-    if not is_adequate(response, query):
+    if not is_adequate (response, query):
         # Escalate to next tier
         if model == 'gemini-flash':
             response = await call_llm('gpt-3.5-turbo', query)
@@ -141,14 +141,14 @@ This approach uses the cheapest capable model for each task type, with automatic
 **Hybrid Approach** (Recommended):
 \`\`\`python
 # Classify with confidence score
-complexity, confidence = classify(query)
+complexity, confidence = classify (query)
 
 if confidence > 0.9:
     # High confidence → direct route
-    return await route_directly(complexity)
+    return await route_directly (complexity)
 else:
     # Low confidence → cascade
-    return await cascade_route(query)
+    return await cascade_route (query)
 \`\`\`
 
 **Real Numbers Example** (10K queries/day):
@@ -216,7 +216,7 @@ class MultiProviderRouter:
             } for provider in ['openai', 'anthropic', 'google',]
         }
     
-    async def route_request(self, task_type: str, prompt: str):
+    async def route_request (self, task_type: str, prompt: str):
         # Get ranked providers for this task
         providers = PROVIDER_STRENGTHS[task_type]
         
@@ -231,7 +231,7 @@ class MultiProviderRouter:
             # All providers down - use any available
             viable_providers = [
                 (p, model, score) for p, model, score in providers
-                if self._can_try_provider(p)
+                if self._can_try_provider (p)
             ]
         
         # Try providers in order
@@ -240,16 +240,16 @@ class MultiProviderRouter:
                 result = await self._call_provider(
                     provider, model, prompt
                 )
-                self._record_success(provider, result)
+                self._record_success (provider, result)
                 return result
                 
             except Exception as e:
-                self._record_failure(provider, e)
+                self._record_failure (provider, e)
                 continue
         
         raise Exception("All providers failed")
     
-    def _can_try_provider(self, provider: str) -> bool:
+    def _can_try_provider (self, provider: str) -> bool:
         """Check if provider can be tried (exponential backoff)"""
         metrics = self.provider_metrics[provider]
         
@@ -262,7 +262,7 @@ class MultiProviderRouter:
         
         return time_since_failure > required_wait
     
-    async def _call_provider(self, provider, model, prompt):
+    async def _call_provider (self, provider, model, prompt):
         """Call specific provider"""
         start_time = time.time()
         
@@ -294,8 +294,8 @@ class MultiProviderRouter:
 
 **3. Cost Tracking Per Provider**:
 \`\`\`python
-def track_provider_costs(self, provider, model, usage):
-    cost = calculate_cost(model, usage['input_tokens',], usage['output_tokens',])
+def track_provider_costs (self, provider, model, usage):
+    cost = calculate_cost (model, usage['input_tokens',], usage['output_tokens',])
     
     self.provider_metrics[provider]['total_cost',] += cost
     self.provider_metrics[provider]['total_requests',] += 1
@@ -310,7 +310,7 @@ def track_provider_costs(self, provider, model, usage):
 
 **4. Adaptive Provider Selection**:
 \`\`\`python
-def adjust_provider_preferences(self):
+def adjust_provider_preferences (self):
     """Periodically re-rank providers based on performance"""
     
     for task_type, providers in PROVIDER_STRENGTHS.items():
@@ -322,7 +322,7 @@ def adjust_provider_preferences(self):
             
             # Adjust score based on recent performance
             error_penalty = metrics['error_rate',] * 0.2
-            latency_penalty = min(metrics['avg_latency',] / 5000, 0.1)
+            latency_penalty = min (metrics['avg_latency',] / 5000, 0.1)
             
             adjusted_score = base_score - error_penalty - latency_penalty
             
@@ -338,7 +338,7 @@ def adjust_provider_preferences(self):
 
 **5. Cost Optimization Strategy**:
 \`\`\`python
-def optimize_provider_mix(self):
+def optimize_provider_mix (self):
     """Optimize provider usage for cost"""
     
     # Analyze last 7 days

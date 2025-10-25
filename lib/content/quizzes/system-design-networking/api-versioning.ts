@@ -33,7 +33,7 @@ export const apiversioningQuiz = [
     \`\`\`javascript
     // models/user.js
     class User {
-      constructor(data) {
+      constructor (data) {
         this.id = data.id;
         this.firstName = data.first_name;
         this.lastName = data.last_name;
@@ -101,12 +101,12 @@ export const apiversioningQuiz = [
     
     router.get('/users/:id', async (req, res) => {
       try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById (req.params.id);
         if (!user) {
           return res.status(404).json({ error: 'User not found' });
         }
         
-        res.json(user.toV1());
+        res.json (user.toV1());
       } catch (error) {
         logger.error('V1 API error', { error, userId: req.params.id });
         res.status(500).json({ error: 'Internal server error' });
@@ -130,12 +130,12 @@ export const apiversioningQuiz = [
     
     router.get('/users/:id', async (req, res) => {
       try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById (req.params.id);
         if (!user) {
           return res.status(404).json({ error: 'User not found' });
         }
         
-        res.json(user.toV2());
+        res.json (user.toV2());
       } catch (error) {
         logger.error('V2 API error', { error, userId: req.params.id });
         res.status(500).json({ error: 'Internal server error' });
@@ -208,35 +208,35 @@ export const apiversioningQuiz = [
     \`\`\`yaml
     panels:
       - title: "API Version Usage"
-        query: sum by (version) (rate(api_version_usage[5m]))
+        query: sum by (version) (rate (api_version_usage[5m]))
         type: time-series
         
       - title: "Top V1 Clients"
-        query: topk(10, sum by (client) (rate(api_version_usage{version="v1"}[24h])))
+        query: topk(10, sum by (client) (rate (api_version_usage{version="v1"}[24h])))
         type: table
         
       - title: "V1 Usage by Endpoint"
-        query: sum by (endpoint) (rate(api_version_usage{version="v1"}[1h]))
+        query: sum by (endpoint) (rate (api_version_usage{version="v1"}[1h]))
         type: bar-chart
         
       - title: "Migration Progress"
         query: |
-          (sum(rate(api_version_usage{version="v2"}[1h])) / 
-           (sum(rate(api_version_usage{version="v1"}[1h])) + 
-            sum(rate(api_version_usage{version="v2"}[1h])))) * 100
+          (sum (rate (api_version_usage{version="v2"}[1h])) / 
+           (sum (rate (api_version_usage{version="v1"}[1h])) + 
+            sum (rate (api_version_usage{version="v2"}[1h])))) * 100
         type: gauge
     \`\`\`
     
     **Alerts**:
     \`\`\`yaml
     - alert: V1UsageStillHigh
-      expr: sum(rate(api_version_usage{version="v1"}[1h])) > 100
+      expr: sum (rate (api_version_usage{version="v1"}[1h])) > 100
       for: 1h
       annotations:
         summary: "V1 API still receiving >100 req/sec after Month 4"
     
     - alert: NewV1Client
-      expr: increase(api_version_usage{version="v1"}[5m]) > 0 and Month > 5
+      expr: increase (api_version_usage{version="v1"}[5m]) > 0 and Month > 5
       annotations:
         summary: "New client using deprecated V1 API"
     \`\`\`
@@ -246,13 +246,13 @@ export const apiversioningQuiz = [
     **Rate Limiting for V1**:
     \`\`\`javascript
     // V1 rate limit: 500 requests/day
-    router.use(async (req, res, next) => {
+    router.use (async (req, res, next) => {
       const clientId = req.headers['x-client-id',] || req.ip;
       const key = \`v1_rate_limit:\${clientId}\`;
       
-      const requests = await redis.incr(key);
+      const requests = await redis.incr (key);
       if (requests === 1) {
-        await redis.expire(key, 86400); // 24 hours
+        await redis.expire (key, 86400); // 24 hours
       }
       
       if (requests > 500) {
@@ -282,7 +282,7 @@ export const apiversioningQuiz = [
     router.use((req, res, next) => {
       const clientId = req.headers['x-client-id',];
       
-      if (v1Whitelist.has(clientId)) {
+      if (v1Whitelist.has (clientId)) {
         // Skip rate limiting
         return next();
       }
@@ -321,29 +321,29 @@ export const apiversioningQuiz = [
     describe('API Versioning', () => {
       describe('V1 (deprecated)', () => {
         it('should return v1 format', async () => {
-          const res = await request(app).get('/api/v1/users/123');
+          const res = await request (app).get('/api/v1/users/123');
           
-          expect(res.body).toEqual({
+          expect (res.body).toEqual({
             id: 123,
             name: 'John Doe'
           });
           
-          expect(res.headers['deprecation',]).toBe('true');
-          expect(res.headers['sunset',]).toBeDefined();
+          expect (res.headers['deprecation',]).toBe('true');
+          expect (res.headers['sunset',]).toBeDefined();
         });
       });
       
       describe('V2', () => {
         it('should return v2 format', async () => {
-          const res = await request(app).get('/api/v2/users/123');
+          const res = await request (app).get('/api/v2/users/123');
           
-          expect(res.body).toEqual({
+          expect (res.body).toEqual({
             id: 123,
             firstName: 'John',
             lastName: 'Doe'
           });
           
-          expect(res.headers['x-api-version',]).toBe('2.0.0');
+          expect (res.headers['x-api-version',]).toBe('2.0.0');
         });
       });
     });
@@ -398,7 +398,7 @@ app.use('/api/v2', v2Router);
 // v1Router
 const v1Router = express.Router();
 v1Router.get('/users/:id', (req, res) => {
-  const user = await db.users.findById(req.params.id);
+  const user = await db.users.findById (req.params.id);
   
   // V1 format: single "name" field
   res.json({
@@ -411,7 +411,7 @@ v1Router.get('/users/:id', (req, res) => {
 // v2Router
 const v2Router = express.Router();
 v2Router.get('/users/:id', (req, res) => {
-  const user = await db.users.findById(req.params.id);
+  const user = await db.users.findById (req.params.id);
   
   // V2 format: separate firstName/lastName
   res.json({
@@ -479,9 +479,9 @@ Accept: application/vnd.myapi.v2+json
 app.get('/api/users/:id', (req, res) => {
   const acceptHeader = req.get('Accept') || 'application/vnd.myapi.v1+json';
   const versionMatch = acceptHeader.match(/v(\\d+)/);
-  const version = versionMatch ? parseInt(versionMatch[1]) : 1;
+  const version = versionMatch ? parseInt (versionMatch[1]) : 1;
   
-  const user = await db.users.findById(req.params.id);
+  const user = await db.users.findById (req.params.id);
   
   let response;
   switch (version) {
@@ -507,7 +507,7 @@ app.get('/api/users/:id', (req, res) => {
   }
   
   res.setHeader('Content-Type', \`application/vnd.myapi.v\${version}+json\`);
-  res.json(response);
+  res.json (response);
 });
 \`\`\`
 
@@ -572,8 +572,8 @@ GET /api/users/123?version=2
 
 \`\`\`typescript
 app.get('/api/users/:id', (req, res) => {
-  const version = parseInt(req.query.version || '1');
-  const user = await db.users.findById(req.params.id);
+  const version = parseInt (req.query.version || '1');
+  const user = await db.users.findById (req.params.id);
   
   let response;
   if (version === 1) {
@@ -593,7 +593,7 @@ app.get('/api/users/:id', (req, res) => {
     return res.status(400).json({ error: 'Unsupported version' });
   }
   
-  res.json(response);
+  res.json (response);
 });
 \`\`\`
 
@@ -826,14 +826,14 @@ Version format: /api/v{major}/
 \`\`\`typescript
 // Shared data layer
 class UserRepository {
-  async getUser(id: number): Promise<User> {
-    return db.users.findById(id);
+  async getUser (id: number): Promise<User> {
+    return db.users.findById (id);
   }
 }
 
 // V1 Controller
 app.get('/api/v1/users/:id', async (req, res) => {
-  const user = await userRepo.getUser(req.params.id);
+  const user = await userRepo.getUser (req.params.id);
   
   // Transform to V1 format
   res.json({
@@ -847,7 +847,7 @@ app.get('/api/v1/users/:id', async (req, res) => {
 
 // V2 Controller
 app.get('/api/v2/users/:id', async (req, res) => {
-  const user = await userRepo.getUser(req.params.id);
+  const user = await userRepo.getUser (req.params.id);
   
   // Native V2 format
   res.json({
@@ -886,8 +886,8 @@ app.use((req, res, next) => {
   
   // Track in Redis
   const key = \`api_usage:\${apiKey}:\${version}:\${getToday()}\`;
-  redis.incr(key);
-  redis.expire(key, 90 * 86400); // 90 days
+  redis.incr (key);
+  redis.expire (key, 90 * 86400); // 90 days
   
   // Update last seen
   redis.hset(\`client:\${apiKey}\`, {
@@ -902,25 +902,25 @@ app.use((req, res, next) => {
 // Dashboard query
 async function getV1Clients(): Promise<ClientInfo[]> {
   const pattern = 'api_usage:*:v1:*';
-  const keys = await redis.keys(pattern);
+  const keys = await redis.keys (pattern);
   
   const clients = await Promise.all(
-    keys.map(async (key) => {
+    keys.map (async (key) => {
       const [_, apiKey, version, date] = key.split(':');
-      const count = await redis.get(key);
+      const count = await redis.get (key);
       const info = await redis.hgetall(\`client:\${apiKey}\`);
       
       return {
         apiKey,
-        requestsToday: parseInt(count || '0'),
-        lastSeen: new Date(parseInt(info.lastSeen)),
+        requestsToday: parseInt (count || '0'),
+        lastSeen: new Date (parseInt (info.lastSeen)),
         email: info.email,
         company: info.company
       };
     })
   );
   
-  return clients.filter(c => c.requestsToday > 0);
+  return clients.filter (c => c.requestsToday > 0);
 }
 \`\`\`
 
@@ -996,7 +996,7 @@ Hi {{name}},
 
 We're deprecating API v1 on {{sunset_date}} (10 months from now).
 
-## What's Changing
+## What\'s Changing
 - Response format modernized (see docs)
 - New features only in v2
 - V1 will stop working on {{sunset_date}}
@@ -1042,8 +1042,8 @@ async function getMigrationProgress() {
   const v2Count = await redis.get('active_clients:v2');
   
   return {
-    v1: parseInt(v1Count || '0'),
-    v2: parseInt(v2Count || '0'),
+    v1: parseInt (v1Count || '0'),
+    v2: parseInt (v2Count || '0'),
     percentMigrated: (v2Count / (v1Count + v2Count)) * 100
   };
 }
@@ -1125,7 +1125,7 @@ const WHITELISTED_CLIENTS = [
 app.use('/api/v1/*', (req, res, next) => {
   const apiKey = req.headers['x-api-key',];
   
-  if (WHITELISTED_CLIENTS.includes(apiKey)) {
+  if (WHITELISTED_CLIENTS.includes (apiKey)) {
     // Allow but log
     logger.warn(\`Whitelisted v1 access: \${apiKey}\`);
     return next();
@@ -1145,7 +1145,7 @@ app.use('/api/v1/*', (req, res) => {
   const apiKey = req.headers['x-api-key',];
   
   // Check whitelist
-  if (WHITELISTED_CLIENTS.includes(apiKey)) {
+  if (WHITELISTED_CLIENTS.includes (apiKey)) {
     // Allow for 30 more days
     if (Date.now() < WHITELIST_EXPIRY) {
       return next();
@@ -1235,7 +1235,7 @@ If critical clients can't migrate, build adapter:
 \`\`\`typescript
 // Adapter transforms v2 responses to v1 format
 class V1toV2Adapter {
-  transformResponse(v2Response: V2User): V1User {
+  transformResponse (v2Response: V2User): V1User {
     return {
       user: {
         id: v2Response.id,
@@ -1254,9 +1254,9 @@ app.get('/api/v1/users/:id', async (req, res) => {
   
   // Transform to v1
   const adapter = new V1toV2Adapter();
-  const v1Data = adapter.transformResponse(v2Data);
+  const v1Data = adapter.transformResponse (v2Data);
   
-  res.json(v1Data);
+  res.json (v1Data);
 });
 \`\`\`
 

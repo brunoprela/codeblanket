@@ -124,9 +124,9 @@ class ReplicateClient:
         # Download images
         images = []
         for url in output:
-            response = requests.get(url)
+            response = requests.get (url)
             img = Image.open(BytesIO(response.content))
-            images.append(img)
+            images.append (img)
         
         return images
     
@@ -141,7 +141,7 @@ class ReplicateClient:
         Image-to-image with SDXL.
         """
         # Convert image to URL (upload to Replicate or use existing URL)
-        if isinstance(image, Image.Image):
+        if isinstance (image, Image.Image):
             # Would need to upload - simplified here
             image_url = "https://example.com/image.png"
         else:
@@ -159,9 +159,9 @@ class ReplicateClient:
         
         images = []
         for url in output:
-            response = requests.get(url)
+            response = requests.get (url)
             img = Image.open(BytesIO(response.content))
-            images.append(img)
+            images.append (img)
         
         return images
     
@@ -181,7 +181,7 @@ class ReplicateClient:
             }
         )
         
-        response = requests.get(output)
+        response = requests.get (output)
         return Image.open(BytesIO(response.content))
     
     def run_custom_model(
@@ -196,7 +196,7 @@ class ReplicateClient:
             model_version: "owner/model:version_id"
             inputs: Model-specific inputs
         """
-        return replicate.run(model_version, input=inputs)
+        return replicate.run (model_version, input=inputs)
 
 # Usage
 client = ReplicateClient()
@@ -210,12 +210,12 @@ images = client.generate_sdxl(
     num_outputs=2
 )
 
-for i, img in enumerate(images):
-    img.save(f"sdxl_output_{i}.png")
+for i, img in enumerate (images):
+    img.save (f"sdxl_output_{i}.png")
 
 # Upscale
 small_image_url = "https://example.com/small.jpg"
-upscaled = client.upscale(small_image_url, scale=4)
+upscaled = client.upscale (small_image_url, scale=4)
 upscaled.save("upscaled.png")
 \`\`\`
 
@@ -267,7 +267,7 @@ replicate_models = {
 }
 
 # Example: Chain multiple models
-def process_portrait_pipeline(image_url: str):
+def process_portrait_pipeline (image_url: str):
     """
     Complete portrait processing pipeline.
     """
@@ -286,7 +286,7 @@ def process_portrait_pipeline(image_url: str):
     )
     
     # 3. Upscale
-    final = client.upscale(enhanced, scale=2)
+    final = client.upscale (enhanced, scale=2)
     
     return final
 \`\`\`
@@ -323,7 +323,7 @@ class AsyncReplicateClient:
         
         return prediction.id
     
-    def get_prediction(self, prediction_id: str) -> dict:
+    def get_prediction (self, prediction_id: str) -> dict:
         """
         Check prediction status.
         
@@ -336,7 +336,7 @@ class AsyncReplicateClient:
         """
         import replicate
         
-        prediction = replicate.predictions.get(prediction_id)
+        prediction = replicate.predictions.get (prediction_id)
         
         return {
             "status": prediction.status,
@@ -355,14 +355,14 @@ class AsyncReplicateClient:
         import time
         
         while True:
-            result = self.get_prediction(prediction_id)
+            result = self.get_prediction (prediction_id)
             
             if result["status"] == "succeeded":
                 return result["output"]
             elif result["status"] == "failed":
-                raise Exception(f"Prediction failed: {result['error']}")
+                raise Exception (f"Prediction failed: {result['error']}")
             
-            time.sleep(check_interval)
+            time.sleep (check_interval)
     
     def batch_generate(
         self,
@@ -375,14 +375,14 @@ class AsyncReplicateClient:
         # Start all predictions
         prediction_ids = []
         for inputs in inputs_list:
-            pred_id = self.create_prediction(model_version, inputs)
-            prediction_ids.append(pred_id)
+            pred_id = self.create_prediction (model_version, inputs)
+            prediction_ids.append (pred_id)
         
         # Wait for all
         results = []
         for pred_id in prediction_ids:
-            output = self.wait_for_prediction(pred_id)
-            results.append(output)
+            output = self.wait_for_prediction (pred_id)
+            results.append (output)
         
         return results
 
@@ -431,7 +431,7 @@ class CostTracker:
             "face_enhance": {"any": 0.005}
         }
         
-        base_cost = cost_per_image.get(model_type, {}).get(resolution, 0.01)
+        base_cost = cost_per_image.get (model_type, {}).get (resolution, 0.01)
         total = base_cost * num_images
         
         return {
@@ -455,19 +455,19 @@ self.costs.append({
     "timestamp": datetime.now()
 })
     
-    def get_total_cost(self) -> float:
+    def get_total_cost (self) -> float:
 """Get total estimated costs."""
-return sum(c["estimated_cost"] for c in self.costs)
+return sum (c["estimated_cost"] for c in self.costs)
     
-    def cost_report(self) -> dict:
+    def cost_report (self) -> dict:
 """Generate cost report."""
 return {
-    "total_generations": len(self.costs),
+    "total_generations": len (self.costs),
     "total_cost": self.get_total_cost(),
     "by_model": self._costs_by_model()
 }
     
-    def _costs_by_model(self) -> dict:
+    def _costs_by_model (self) -> dict:
 """Break down costs by model."""
 by_model = {}
 for cost in self.costs:
@@ -533,7 +533,7 @@ class HuggingFaceInference:
         return Image.open(BytesIO(response.content))
 
 # Usage
-hf = HuggingFaceInference(api_token="hf_...")
+hf = HuggingFaceInference (api_token="hf_...")
 
 image = hf.generate(
     model_id="stabilityai/stable-diffusion-xl-base-1.0",
@@ -564,7 +564,7 @@ stub = modal.Stub("sdxl-generator")
     gpu="A10G",
     timeout=300
 )
-def generate_sdxl(prompt: str):
+def generate_sdxl (prompt: str):
     from diffusers import StableDiffusionXLPipeline
     import torch
     
@@ -574,7 +574,7 @@ def generate_sdxl(prompt: str):
     )
     pipe = pipe.to("cuda")
     
-    image = pipe(prompt).images[0]
+    image = pipe (prompt).images[0]
     return image
 
 # Deploy
@@ -626,7 +626,7 @@ class ProductionReplicateClient:
     """
     
     def __init__(self, api_token: str):
-        self.client = ReplicateClient(api_token)
+        self.client = ReplicateClient (api_token)
         self.tracker = CostTracker()
         self.max_retries = 3
     
@@ -640,24 +640,24 @@ class ProductionReplicateClient:
         import time
         
         # Track cost
-        self.tracker.log_generation(model_version, inputs, estimate_cost)
+        self.tracker.log_generation (model_version, inputs, estimate_cost)
         
         # Retry logic
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             try:
-                return self.client.run_custom_model(model_version, inputs)
+                return self.client.run_custom_model (model_version, inputs)
             except Exception as e:
                 if attempt < self.max_retries - 1:
                     wait = 2 ** attempt
-                    time.sleep(wait)
+                    time.sleep (wait)
                 else:
                     raise
     
-    def check_budget(self, limit: float) -> bool:
+    def check_budget (self, limit: float) -> bool:
         """Check if within budget."""
         total = self.tracker.get_total_cost()
         if total >= limit:
-            raise Exception(f"Budget limit reached: \${total: .2f} >= \${ limit: .2f } ")
+            raise Exception (f"Budget limit reached: \${total:.2f} >= \${ limit: .2f } ")
 return True
 \`\`\`
 

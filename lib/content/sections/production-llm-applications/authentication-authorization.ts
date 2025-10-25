@@ -13,23 +13,23 @@ from fastapi.security import APIKeyHeader
 import secrets
 
 app = FastAPI()
-api_key_header = APIKeyHeader(name="X-API-Key")
+api_key_header = APIKeyHeader (name="X-API-Key")
 
 def generate_api_key() -> str:
     """Generate secure API key."""
     return f"sk-{secrets.token_urlsafe(32)}"
 
-async def verify_api_key(api_key: str = Security(api_key_header)):
+async def verify_api_key (api_key: str = Security (api_key_header)):
     """Verify API key and return user."""
-    user = get_user_by_api_key(api_key)
+    user = get_user_by_api_key (api_key)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid API key")
+        raise HTTPException (status_code=401, detail="Invalid API key")
     return user
 
 @app.post("/generate")
-async def generate(prompt: str, user=Depends(verify_api_key)):
+async def generate (prompt: str, user=Depends (verify_api_key)):
     """Protected endpoint requiring API key."""
-    return await generate_completion(prompt, user)
+    return await generate_completion (prompt, user)
 \`\`\`
 
 ## OAuth2 with JWT
@@ -44,37 +44,37 @@ SECRET_KEY = "your-secret-key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+pwd_context = CryptContext (schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer (tokenUrl="token")
 
-def create_access_token(data: dict, expires_delta: timedelta = None):
+def create_access_token (data: dict, expires_delta: timedelta = None):
     """Create JWT access token."""
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+    expire = datetime.utcnow() + (expires_delta or timedelta (minutes=15))
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode (to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user (token: str = Depends (oauth2_scheme)):
     """Get current user from JWT token."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode (token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
-            raise HTTPException(status_code=401)
-        return get_user(user_id)
+            raise HTTPException (status_code=401)
+        return get_user (user_id)
     except JWTError:
-        raise HTTPException(status_code=401)
+        raise HTTPException (status_code=401)
 
 @app.post("/token")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login (form_data: OAuth2PasswordRequestForm = Depends()):
     """Login endpoint."""
-    user = authenticate_user(form_data.username, form_data.password)
+    user = authenticate_user (form_data.username, form_data.password)
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException (status_code=401, detail="Invalid credentials")
     
     access_token = create_access_token(
         data={"sub": user.id},
-        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expires_delta=timedelta (minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     return {"access_token": access_token, "token_type": "bearer"}
 \`\`\`
@@ -85,7 +85,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 from enum import Enum
 from fastapi import Depends
 
-class UserRole(str, Enum):
+class UserRole (str, Enum):
     FREE = "free"
     PRO = "pro"
     ENTERPRISE = "enterprise"
@@ -113,26 +113,26 @@ class Permissions:
     }
     
     @staticmethod
-    def can_use_model(user_role: UserRole, model: str) -> bool:
+    def can_use_model (user_role: UserRole, model: str) -> bool:
         """Check if user can use model."""
         return model in Permissions.ROLE_PERMISSIONS[user_role]['models']
     
     @staticmethod
-    def can_use_feature(user_role: UserRole, feature: str) -> bool:
+    def can_use_feature (user_role: UserRole, feature: str) -> bool:
         """Check if user can use feature."""
         features = Permissions.ROLE_PERMISSIONS[user_role]['features']
         return feature in features or 'all' in features
 
-def require_role(required_role: UserRole):
+def require_role (required_role: UserRole):
     """Dependency to require specific role."""
-    async def role_checker(user=Depends(get_current_user)):
+    async def role_checker (user=Depends (get_current_user)):
         if user.role.value < required_role.value:
-            raise HTTPException(status_code=403, detail="Insufficient permissions")
+            raise HTTPException (status_code=403, detail="Insufficient permissions")
         return user
     return role_checker
 
 @app.post("/admin/users")
-async def create_user(user=Depends(require_role(UserRole.ADMIN))):
+async def create_user (user=Depends (require_role(UserRole.ADMIN))):
     """Admin-only endpoint."""
     pass
 \`\`\`
@@ -153,7 +153,7 @@ class SessionManager:
         self.redis = redis_client
         self.session_ttl = 86400  # 24 hours
     
-    def create_session(self, user_id: str) -> str:
+    def create_session (self, user_id: str) -> str:
         """Create new session."""
         session_id = secrets.token_urlsafe(32)
         session_data = {
@@ -165,43 +165,43 @@ class SessionManager:
         self.redis.setex(
             f"session:{session_id}",
             self.session_ttl,
-            json.dumps(session_data)
+            json.dumps (session_data)
         )
         
         return session_id
     
-    def get_session(self, session_id: str) -> dict:
+    def get_session (self, session_id: str) -> dict:
         """Get session data."""
-        data = self.redis.get(f"session:{session_id}")
+        data = self.redis.get (f"session:{session_id}")
         if not data:
             return None
         
-        session = json.loads(data)
+        session = json.loads (data)
         
         # Update last activity
         session['last_activity'] = datetime.utcnow().isoformat()
         self.redis.setex(
             f"session:{session_id}",
             self.session_ttl,
-            json.dumps(session)
+            json.dumps (session)
         )
         
         return session
     
-    def delete_session(self, session_id: str):
+    def delete_session (self, session_id: str):
         """Delete session (logout)."""
-        self.redis.delete(f"session:{session_id}")
+        self.redis.delete (f"session:{session_id}")
 
-session_manager = SessionManager(redis_client)
+session_manager = SessionManager (redis_client)
 
 @app.post("/login")
-async def login(credentials: LoginRequest, response: Response):
+async def login (credentials: LoginRequest, response: Response):
     """Login and create session."""
-    user = authenticate(credentials.username, credentials.password)
+    user = authenticate (credentials.username, credentials.password)
     if not user:
-        raise HTTPException(status_code=401)
+        raise HTTPException (status_code=401)
     
-    session_id = session_manager.create_session(user.id)
+    session_id = session_manager.create_session (user.id)
     
     # Set cookie
     response.set_cookie(
@@ -215,16 +215,16 @@ async def login(credentials: LoginRequest, response: Response):
     
     return {"user": user}
 
-async def get_session_user(session_id: str = Cookie(None)):
+async def get_session_user (session_id: str = Cookie(None)):
     """Get user from session cookie."""
     if not session_id:
-        raise HTTPException(status_code=401)
+        raise HTTPException (status_code=401)
     
-    session = session_manager.get_session(session_id)
+    session = session_manager.get_session (session_id)
     if not session:
-        raise HTTPException(status_code=401, detail="Invalid session")
+        raise HTTPException (status_code=401, detail="Invalid session")
     
-    return get_user(session['user_id'])
+    return get_user (session['user_id'])
 \`\`\`
 
 ## Best Practices

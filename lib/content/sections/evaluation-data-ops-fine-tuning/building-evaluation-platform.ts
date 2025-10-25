@@ -52,9 +52,9 @@ class EvaluationPlatform:
         
         # Initialize storage
         import os
-        os.makedirs(storage_path, exist_ok=True)
-        os.makedirs(f"{storage_path}/datasets", exist_ok=True)
-        os.makedirs(f"{storage_path}/runs", exist_ok=True)
+        os.makedirs (storage_path, exist_ok=True)
+        os.makedirs (f"{storage_path}/datasets", exist_ok=True)
+        os.makedirs (f"{storage_path}/runs", exist_ok=True)
     
     # === Dataset Management ===
     
@@ -73,19 +73,19 @@ class EvaluationPlatform:
             'description': description,
             'examples': examples,
             'created_at': datetime.now().isoformat(),
-            'num_examples': len(examples)
+            'num_examples': len (examples)
         }
         
         # Save to disk
         path = f"{self.storage_path}/datasets/{name}_v{version}.json"
-        with open(path, 'w') as f:
-            json.dump(dataset, f, indent=2)
+        with open (path, 'w') as f:
+            json.dump (dataset, f, indent=2)
         
         self.datasets[f"{name}_v{version}"] = examples
         
-        print(f"✅ Registered dataset: {name} v{version} ({len(examples)} examples)")
+        print(f"✅ Registered dataset: {name} v{version} ({len (examples)} examples)")
     
-    def get_dataset(self, name: str, version: str = "1.0") -> List[Dict]:
+    def get_dataset (self, name: str, version: str = "1.0") -> List[Dict]:
         """Load dataset."""
         key = f"{name}_v{version}"
         
@@ -94,23 +94,23 @@ class EvaluationPlatform:
         
         # Load from disk
         path = f"{self.storage_path}/datasets/{key}.json"
-        with open(path, 'r') as f:
-            dataset = json.load(f)
+        with open (path, 'r') as f:
+            dataset = json.load (f)
         
         self.datasets[key] = dataset['examples']
         return dataset['examples']
     
     # === Metrics Library ===
     
-    def register_metric(self, name: str, metric_fn: callable):
+    def register_metric (self, name: str, metric_fn: callable):
         """Register evaluation metric."""
         self.metrics_library[name] = metric_fn
         print(f"✅ Registered metric: {name}")
     
-    def get_metric(self, name: str) -> callable:
+    def get_metric (self, name: str) -> callable:
         """Get metric function."""
         if name not in self.metrics_library:
-            raise ValueError(f"Metric {name} not found")
+            raise ValueError (f"Metric {name} not found")
         return self.metrics_library[name]
     
     # === Experiment Tracking ===
@@ -127,7 +127,7 @@ class EvaluationPlatform:
         import uuid
         
         # Create run
-        run_id = str(uuid.uuid4())[:8]
+        run_id = str (uuid.uuid4())[:8]
         run = EvaluationRun(
             run_id=run_id,
             model_name=config.get('model_name', 'unknown') if config else 'unknown',
@@ -144,30 +144,30 @@ class EvaluationPlatform:
         
         try:
             # Load dataset
-            dataset = self.get_dataset(dataset_name)
+            dataset = self.get_dataset (dataset_name)
             
             # Run evaluation
             results = []
-            for i, example in enumerate(dataset):
+            for i, example in enumerate (dataset):
                 if i % 10 == 0:
-                    print(f"   Progress: {i}/{len(dataset)}")
+                    print(f"   Progress: {i}/{len (dataset)}")
                 
                 # Get model output
-                output = await model_fn(example['input'])
+                output = await model_fn (example['input'])
                 
                 # Calculate metrics
                 scores = {}
                 for metric_name in metrics:
-                    metric_fn = self.get_metric(metric_name)
-                    score = metric_fn(output, example.get('expected_output'))
+                    metric_fn = self.get_metric (metric_name)
+                    score = metric_fn (output, example.get('expected_output'))
                     scores[metric_name] = score
                 
-                results.append(scores)
+                results.append (scores)
             
             # Aggregate metrics
             for metric_name in metrics:
                 values = [r[metric_name] for r in results]
-                run.metrics[metric_name] = sum(values) / len(values)
+                run.metrics[metric_name] = sum (values) / len (values)
             
             run.status = "completed"
             
@@ -177,16 +177,16 @@ class EvaluationPlatform:
         
         except Exception as e:
             run.status = "failed"
-            run.metrics['error'] = str(e)
+            run.metrics['error'] = str (e)
             print(f"\\n❌ Evaluation failed: {e}")
         
         # Save run
-        self.runs.append(run)
-        self._save_run(run)
+        self.runs.append (run)
+        self._save_run (run)
         
         return run
     
-    def _save_run(self, run: EvaluationRun):
+    def _save_run (self, run: EvaluationRun):
         """Save run to disk."""
         path = f"{self.storage_path}/runs/{run.run_id}.json"
         
@@ -200,8 +200,8 @@ class EvaluationPlatform:
             'status': run.status
         }
         
-        with open(path, 'w') as f:
-            json.dump(run_data, f, indent=2)
+        with open (path, 'w') as f:
+            json.dump (run_data, f, indent=2)
     
     # === Comparison & Analysis ===
     
@@ -219,7 +219,7 @@ class EvaluationPlatform:
         # Get all metrics
         all_metrics = set()
         for run in runs:
-            all_metrics.update(run.metrics.keys())
+            all_metrics.update (run.metrics.keys())
         
         # Build comparison table
         comparison = {
@@ -237,8 +237,8 @@ class EvaluationPlatform:
         
         # Find best run for each metric
         for metric in all_metrics:
-            values = [(run.run_id, run.metrics.get(metric, 0)) for run in runs]
-            best = max(values, key=lambda x: x[1])
+            values = [(run.run_id, run.metrics.get (metric, 0)) for run in runs]
+            best = max (values, key=lambda x: x[1])
             comparison['best_per_metric'][metric] = {
                 'run_id': best[0],
                 'value': best[1]
@@ -263,7 +263,7 @@ class EvaluationPlatform:
         # Sort by metric
         sorted_runs = sorted(
             relevant_runs,
-            key=lambda r: r.metrics.get(metric, 0),
+            key=lambda r: r.metrics.get (metric, 0),
             reverse=True
         )
         
@@ -271,11 +271,11 @@ class EvaluationPlatform:
             {
                 'rank': i + 1,
                 'model': run.model_name,
-                'score': run.metrics.get(metric, 0),
+                'score': run.metrics.get (metric, 0),
                 'run_id': run.run_id,
                 'timestamp': run.timestamp.isoformat()
             }
-            for i, run in enumerate(sorted_runs[:top_k])
+            for i, run in enumerate (sorted_runs[:top_k])
         ]
         
         return leaderboard
@@ -301,17 +301,17 @@ class EvaluationPlatform:
         
         # Run evaluation with same config
         import asyncio
-        new_run = asyncio.run(self.run_evaluation(
+        new_run = asyncio.run (self.run_evaluation(
             model_fn=model_fn,
             dataset_name=baseline.dataset_name,
-            metrics=list(baseline.metrics.keys()),
+            metrics=list (baseline.metrics.keys()),
             config=baseline.config
         ))
         
         # Compare
         regressions = []
         for metric, baseline_value in baseline.metrics.items():
-            new_value = new_run.metrics.get(metric, 0)
+            new_value = new_run.metrics.get (metric, 0)
             
             if baseline_value > 0:
                 change = (new_value - baseline_value) / baseline_value
@@ -324,7 +324,7 @@ class EvaluationPlatform:
                         'change_pct': change * 100
                     })
         
-        passed = len(regressions) == 0
+        passed = len (regressions) == 0
         
         return {
             'pass': passed,
@@ -335,12 +335,12 @@ class EvaluationPlatform:
     
     # === Dashboard Data ===
     
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data (self) -> Dict[str, Any]:
         """Generate data for dashboard."""
         
         return {
-            'total_runs': len(self.runs),
-            'total_datasets': len(self.datasets),
+            'total_runs': len (self.runs),
+            'total_datasets': len (self.datasets),
             'recent_runs': [
                 {
                     'run_id': r.run_id,
@@ -349,15 +349,15 @@ class EvaluationPlatform:
                     'status': r.status,
                     'timestamp': r.timestamp.isoformat()
                 }
-                for r in sorted(self.runs, key=lambda x: x.timestamp, reverse=True)[:10]
+                for r in sorted (self.runs, key=lambda x: x.timestamp, reverse=True)[:10]
             ],
-            'metrics_tracked': list(self.metrics_library.keys())
+            'metrics_tracked': list (self.metrics_library.keys())
         }
 
 # === Usage Example ===
 
 # Initialize platform
-platform = EvaluationPlatform(storage_path="./my_eval_platform")
+platform = EvaluationPlatform (storage_path="./my_eval_platform")
 
 # Register datasets
 platform.register_dataset(
@@ -368,7 +368,7 @@ platform.register_dataset(
 )
 
 # Register metrics
-def accuracy_metric(output: str, expected: str) -> float:
+def accuracy_metric (output: str, expected: str) -> float:
     return 1.0 if output.strip() == expected.strip() else 0.0
 
 platform.register_metric("accuracy", accuracy_metric)
@@ -410,7 +410,7 @@ if not ci_result['pass']:
 import streamlit as st
 import plotly.express as px
 
-def render_dashboard(platform: EvaluationPlatform):
+def render_dashboard (platform: EvaluationPlatform):
     """Render evaluation dashboard."""
     
     st.title("AI Evaluation Platform")
@@ -421,19 +421,19 @@ def render_dashboard(platform: EvaluationPlatform):
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Runs", data['total_runs'])
     col2.metric("Datasets", data['total_datasets'])
-    col3.metric("Metrics", len(data['metrics_tracked']))
+    col3.metric("Metrics", len (data['metrics_tracked']))
     
     # Recent runs
     st.subheader("Recent Evaluations")
-    st.table(data['recent_runs'])
+    st.table (data['recent_runs'])
     
     # Leaderboard
     st.subheader("Leaderboard")
-    dataset = st.selectbox("Dataset", list(platform.datasets.keys()))
+    dataset = st.selectbox("Dataset", list (platform.datasets.keys()))
     metric = st.selectbox("Metric", data['metrics_tracked'])
     
-    leaderboard = platform.get_leaderboard(dataset, metric, top_k=10)
-    st.table(leaderboard)
+    leaderboard = platform.get_leaderboard (dataset, metric, top_k=10)
+    st.table (leaderboard)
     
     # Trends over time
     st.subheader("Performance Trends")
@@ -442,7 +442,7 @@ def render_dashboard(platform: EvaluationPlatform):
     runs_data = [
         {
             'timestamp': r.timestamp,
-            'metric_value': r.metrics.get(metric, 0),
+            'metric_value': r.metrics.get (metric, 0),
             'model': r.model_name
         }
         for r in platform.runs
@@ -457,11 +457,11 @@ def render_dashboard(platform: EvaluationPlatform):
             color='model',
             title=f'{metric} over time'
         )
-        st.plotly_chart(fig)
+        st.plotly_chart (fig)
 
 # Run dashboard
 # streamlit run dashboard.py
-render_dashboard(platform)
+render_dashboard (platform)
 \`\`\`
 
 ## Integration with CI/CD
@@ -504,7 +504,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const results = JSON.parse(fs.readFileSync('eval_results.json'));
+            const results = JSON.parse (fs.readFileSync('eval_results.json'));
             
             let comment = '## Evaluation Results\\n\\n';
             

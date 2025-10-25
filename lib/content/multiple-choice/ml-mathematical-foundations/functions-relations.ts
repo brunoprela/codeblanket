@@ -20,11 +20,11 @@ export const functionsrelationsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2-composition',
-    question: 'If f(x) = x + 3 and g(x) = 2x, what is (f ∘ g)(4)?',
+    question: 'If f (x) = x + 3 and g (x) = 2x, what is (f ∘ g)(4)?',
     options: ['11', '14', '8', '10'],
     correctAnswer: 0,
     explanation:
-      '(f ∘ g)(4) = f(g(4)). First apply g: g(4) = 2(4) = 8. Then apply f: f(8) = 8 + 3 = 11. Note: This is different from (g ∘ f)(4) = g(f(4)) = g(7) = 14.',
+      '(f ∘ g)(4) = f (g(4)). First apply g: g(4) = 2(4) = 8. Then apply f: f(8) = 8 + 3 = 11. Note: This is different from (g ∘ f)(4) = g (f(4)) = g(7) = 14.',
   },
   {
     id: 'mc3-sigmoid',
@@ -36,7 +36,7 @@ export const functionsrelationsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc4-inverse',
-    question: 'If f(x) = 3x - 6, what is the inverse function f⁻¹(x)?',
+    question: 'If f (x) = 3x - 6, what is the inverse function f⁻¹(x)?',
     options: [
       'f⁻¹(x) = (x + 6)/3',
       'f⁻¹(x) = (x - 6)/3',
@@ -45,7 +45,7 @@ export const functionsrelationsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'To find inverse: Start with y = 3x - 6, solve for x: y + 6 = 3x, x = (y + 6)/3. Replace y with x: f⁻¹(x) = (x + 6)/3. Verify: f(f⁻¹(x)) = 3((x+6)/3) - 6 = x + 6 - 6 = x ✓',
+      'To find inverse: Start with y = 3x - 6, solve for x: y + 6 = 3x, x = (y + 6)/3. Replace y with x: f⁻¹(x) = (x + 6)/3. Verify: f (f⁻¹(x)) = 3((x+6)/3) - 6 = x + 6 - 6 = x ✓',
   },
   {
     id: 'mc5-neural-network',

@@ -41,21 +41,21 @@ class InsufficientFundsError(BusinessLogicError):
 
 # Request ID middleware
 @app.middleware("http")
-async def add_request_id(request: Request, call_next):
-    request_id = str(uuid4())
+async def add_request_id (request: Request, call_next):
+    request_id = str (uuid4())
     request.state.request_id = request_id
     
-    response = await call_next(request)
+    response = await call_next (request)
     response.headers["X-Request-ID"] = request_id
     
     return response
 
 # Validation error handler
 @app.exception_handler(RequestValidationError)
-async def validation_error_handler(request: Request, exc: RequestValidationError):
+async def validation_error_handler (request: Request, exc: RequestValidationError):
     errors = []
     for error in exc.errors():
-        field = ".".join(str(loc) for loc in error["loc"][1:])
+        field = ".".join (str (loc) for loc in error["loc"][1:])
         errors.append({
             "field": field,
             "message": error["msg"],
@@ -84,7 +84,7 @@ async def validation_error_handler(request: Request, exc: RequestValidationError
 
 # Business logic error handler
 @app.exception_handler(BusinessLogicError)
-async def business_error_handler(request: Request, exc: BusinessLogicError):
+async def business_error_handler (request: Request, exc: BusinessLogicError):
     logger.info(
         f"Business logic error: {exc.code}",
         extra={
@@ -105,7 +105,7 @@ async def business_error_handler(request: Request, exc: BusinessLogicError):
 
 # Database error handler
 @app.exception_handler(SQLAlchemyError)
-async def database_error_handler(request: Request, exc: SQLAlchemyError):
+async def database_error_handler (request: Request, exc: SQLAlchemyError):
     # Log full error server-side
     logger.error(
         "Database error",
@@ -117,7 +117,7 @@ async def database_error_handler(request: Request, exc: SQLAlchemyError):
     )
     
     # Send to Sentry
-    sentry_sdk.capture_exception(exc)
+    sentry_sdk.capture_exception (exc)
     
     # Return generic error to client (don't leak DB details)
     return JSONResponse(
@@ -131,7 +131,7 @@ async def database_error_handler(request: Request, exc: SQLAlchemyError):
 
 # Global exception handler
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
+async def global_exception_handler (request: Request, exc: Exception):
     # Log with full context
     logger.error(
         "Unhandled exception",
@@ -140,18 +140,18 @@ async def global_exception_handler(request: Request, exc: Exception):
             "request_id": request.state.request_id,
             "path": request.url.path,
             "method": request.method,
-            "user_id": getattr(request.state, "user_id", None)
+            "user_id": getattr (request.state, "user_id", None)
         }
     )
     
     # Send to Sentry with context
     with sentry_sdk.push_scope() as scope:
         scope.set_context("request", {
-            "url": str(request.url),
+            "url": str (request.url),
             "method": request.method,
-            "headers": dict(request.headers)
+            "headers": dict (request.headers)
         })
-        sentry_sdk.capture_exception(exc)
+        sentry_sdk.capture_exception (exc)
     
     # Return generic error
     return JSONResponse(
@@ -203,10 +203,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def register_user(
     user: UserRegister,
     request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     # 429: Rate limit exceeded
-    if await is_rate_limited(request.client.host):
+    if await is_rate_limited (request.client.host):
         raise HTTPException(
             status_code=429,
             detail="Too many registration attempts. Try again in 1 hour."
@@ -226,18 +226,18 @@ async def register_user(
     
     # Create user
     new_user = User(**user.dict())
-    db.add(new_user)
+    db.add (new_user)
     db.commit()
     
     return {"user_id": new_user.id, "message": "Registration successful"}
 
 # 401: Unauthorized - no token provided
 @app.get("/profile")
-async def get_profile(token: str = Depends(oauth2_scheme)):
+async def get_profile (token: str = Depends (oauth2_scheme)):
     if not token:
         raise HTTPException(401, "Authentication required")
     
-    user = decode_token(token)
+    user = decode_token (token)
     if not user:
         raise HTTPException(401, "Invalid token")
     
@@ -247,7 +247,7 @@ async def get_profile(token: str = Depends(oauth2_scheme)):
 @app.delete("/users/{user_id}")
 async def delete_user(
     user_id: int,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends (get_current_user)
 ):
     if not current_user.is_admin:
         raise HTTPException(
@@ -260,7 +260,7 @@ async def delete_user(
     if not user:
         raise HTTPException(404, "User not found")
     
-    db.delete(user)
+    db.delete (user)
     db.commit()
     
     return {"message": "User deleted"}
@@ -279,7 +279,7 @@ from pydantic import BaseModel
 from typing import Optional, List, Any
 from enum import Enum
 
-class ErrorCode(str, Enum):
+class ErrorCode (str, Enum):
     VALIDATION_ERROR = "validation_error"
     AUTHENTICATION_ERROR = "authentication_error"
     AUTHORIZATION_ERROR = "authorization_error"
@@ -326,10 +326,10 @@ def build_error_response(
 
 # Usage examples
 @app.exception_handler(RequestValidationError)
-async def validation_handler(request: Request, exc: RequestValidationError):
+async def validation_handler (request: Request, exc: RequestValidationError):
     field_errors = [
         FieldError(
-            field=".".join(str(loc) for loc in err["loc"][1:]),
+            field=".".join (str (loc) for loc in err["loc"][1:]),
             message=err["msg"],
             code=err["type"],
             value=err.get("input") if settings.DEBUG else None
@@ -347,7 +347,7 @@ async def validation_handler(request: Request, exc: RequestValidationError):
     
     return JSONResponse(
         status_code=422,
-        content=error_response.dict(exclude_none=True)
+        content=error_response.dict (exclude_none=True)
     )
 
 # Frontend integration
@@ -367,17 +367,17 @@ interface FieldError {
     code: string;
 }
 
-async function handleApiError(error: Response) {
+async function handleApiError (error: Response) {
     const errorData: ErrorResponse = await error.json();
     
     // Show user-friendly message
-    toast.error(errorData.message);
+    toast.error (errorData.message);
     
     // Handle field-level errors
     if (errorData.details) {
-        errorData.details.forEach(fieldError => {
+        errorData.details.forEach (fieldError => {
             // Highlight field in form
-            setFieldError(fieldError.field, fieldError.message);
+            setFieldError (fieldError.field, fieldError.message);
         });
     }
     

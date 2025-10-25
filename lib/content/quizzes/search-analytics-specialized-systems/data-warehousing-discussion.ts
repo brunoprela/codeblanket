@@ -31,16 +31,16 @@ CREATE TABLE dim_customer (
 );
 
 -- Index for current records
-CREATE INDEX idx_customer_current ON dim_customer(customer_id, is_current);
+CREATE INDEX idx_customer_current ON dim_customer (customer_id, is_current);
 
 -- Index for historical lookups
-CREATE INDEX idx_customer_effective ON dim_customer(customer_id, effective_date, expiration_date);
+CREATE INDEX idx_customer_effective ON dim_customer (customer_id, effective_date, expiration_date);
 \`\`\`
 
 **Implementation Logic:**
 
 \`\`\`python
-def update_customer_address(customer_id, new_address, effective_date):
+def update_customer_address (customer_id, new_address, effective_date):
     # Step 1: Expire current record
     conn.execute("""
         UPDATE dim_customer
@@ -89,7 +89,7 @@ WHERE is_current = TRUE;
 -- Performance: Index on (customer_id, is_current) makes this O(1)
 \`\`\`
 
-**Pattern 2: Historical Sales by Customer's Address at Time of Sale**
+**Pattern 2: Historical Sales by Customer\'s Address at Time of Sale**
 \`\`\`sql
 SELECT 
     f.sale_date,
@@ -287,11 +287,11 @@ CREATE TABLE dim_date (
 );
 
 -- Indexes for common queries
-CREATE INDEX idx_date_year_month ON dim_date(year, month);
-CREATE INDEX idx_date_quarter ON dim_date(year, quarter);
-CREATE INDEX idx_date_week ON dim_date(week_of_year, year);
-CREATE INDEX idx_date_is_weekend ON dim_date(is_weekend);
-CREATE INDEX idx_date_is_business_day ON dim_date(is_business_day);
+CREATE INDEX idx_date_year_month ON dim_date (year, month);
+CREATE INDEX idx_date_quarter ON dim_date (year, quarter);
+CREATE INDEX idx_date_week ON dim_date (week_of_year, year);
+CREATE INDEX idx_date_is_weekend ON dim_date (is_weekend);
+CREATE INDEX idx_date_is_business_day ON dim_date (is_business_day);
 \`\`\`
 
 **Why Pre-compute Date Attributes:**

@@ -36,9 +36,9 @@ export const templatesQuiz = [
     question:
       'Describe the Trie delete template. Why is it more complex than insert?',
     sampleAnswer:
-      'Delete is complex because we must avoid breaking other words. Use recursive approach: delete(node, word, index). Base case: index equals word length, unmark is_end_of_word. Recursive: get child for current char, recursively delete from child. After recursion, check if child should be removed: child has no children and is not end of other word. Return whether current node should be deleted (no children, not end of word). The complexity: cannot just remove nodes blindly. If deleting "car" but "carpet" exists, cannot remove R node (has children). If deleting "carpet" but "car" exists, cannot remove R node (is end of word). Must carefully check each node bottom-up. This is why delete is rarely asked in interviews - too complex for 45 minutes.',
+      'Delete is complex because we must avoid breaking other words. Use recursive approach: delete (node, word, index). Base case: index equals word length, unmark is_end_of_word. Recursive: get child for current char, recursively delete from child. After recursion, check if child should be removed: child has no children and is not end of other word. Return whether current node should be deleted (no children, not end of word). The complexity: cannot just remove nodes blindly. If deleting "car" but "carpet" exists, cannot remove R node (has children). If deleting "carpet" but "car" exists, cannot remove R node (is end of word). Must carefully check each node bottom-up. This is why delete is rarely asked in interviews - too complex for 45 minutes.',
     keyPoints: [
-      'Recursive: delete(node, word, index)',
+      'Recursive: delete (node, word, index)',
       'Base: unmark is_end_of_word',
       'Recursive: delete from child, check if remove child',
       'Cannot blindly remove: might break other words',

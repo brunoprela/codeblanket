@@ -29,7 +29,7 @@ export const complexityMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "What is Trie's advantage over Hash Tables?",
+    question: "What is Trie\'s advantage over Hash Tables?",
     options: [
       'Always uses less memory',
       'Efficient prefix search O(m) vs Hash Table O(n×m)',

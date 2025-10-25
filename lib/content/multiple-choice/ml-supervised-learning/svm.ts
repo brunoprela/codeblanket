@@ -30,7 +30,7 @@ export const svmMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "For linearly separable data, use the linear kernel. It's faster, has fewer hyperparameters to tune, and avoids overfitting. More complex kernels (RBF, polynomial) are unnecessary and can actually hurt performance by creating overly complex boundaries.",
+      "For linearly separable data, use the linear kernel. It\'s faster, has fewer hyperparameters to tune, and avoids overfitting. More complex kernels (RBF, polynomial) are unnecessary and can actually hurt performance by creating overly complex boundaries.",
   },
   {
     id: 'svm-mc-3',

@@ -15,7 +15,7 @@ export const forwardPropagationSection = {
 ## Introduction
 
 Forward propagation is the process of computing predictions by passing input data through the neural network, layer by layer. Understanding forward propagation is essential because:
-- It's how neural networks make predictions
+- It\'s how neural networks make predictions
 - It forms the foundation for backpropagation (training)
 - Efficient implementation is critical for performance
 - It introduces computational graphs used throughout deep learning
@@ -34,7 +34,7 @@ Forward propagation is the process of computing predictions by passing input dat
 
 Let's start with the computation for a single neuron:
 
-\\\`\\\`\\\`
+\`\`\`
 Input: x = [x₁, x₂, ..., xₙ]
 Weights: w = [w₁, w₂, ..., wₙ]
 Bias: b
@@ -46,20 +46,20 @@ Step 2: Apply activation function (post-activation)
 a = σ(z)
 
 Output: a
-\\\`\\\`\\\`
+\`\`\`
 
 ### Multi-Layer Network
 
 For a network with L layers, forward propagation proceeds sequentially:
 
-\\\`\\\`\\\`
+\`\`\`
 Layer 1: z₁ = W₁x + b₁,    a₁ = σ(z₁)
 Layer 2: z₂ = W₂a₁ + b₂,   a₂ = σ(z₂)
 ...
 Layer L: zₗ = Wₗaₗ₋₁ + bₗ, aₗ = σ(zₗ)
 
 Final output: ŷ = aₗ
-\\\`\\\`\\\`
+\`\`\`
 
 **Key Insight**: Each layer's output becomes the next layer's input.
 
@@ -82,12 +82,12 @@ class NeuralNetwork:
             activation: 'relu', 'sigmoid', or 'tanh'
         """
         self.layer_sizes = layer_sizes
-        self.num_layers = len(layer_sizes) - 1
+        self.num_layers = len (layer_sizes) - 1
         self.activation_name = activation
         
         # Initialize weights and biases
         self.parameters = {}
-        for l in range(1, len(layer_sizes)):
+        for l in range(1, len (layer_sizes)):
             # He initialization for ReLU
             self.parameters[f'W{l}'] = np.random.randn(
                 layer_sizes[l-1], layer_sizes[l]
@@ -95,10 +95,10 @@ class NeuralNetwork:
             
             self.parameters[f'b{l}'] = np.zeros((1, layer_sizes[l]))
         
-        print(f"Network Architecture: {' → '.join(map(str, layer_sizes))}")
+        print(f"Network Architecture: {' → '.join (map (str, layer_sizes))}")
         print(f"Total parameters: {self.count_parameters():,}")
     
-    def count_parameters(self):
+    def count_parameters (self):
         """Count total trainable parameters"""
         total = 0
         for l in range(1, self.num_layers + 1):
@@ -107,41 +107,41 @@ class NeuralNetwork:
             total += W_params + b_params
         return total
     
-    def relu(self, z):
+    def relu (self, z):
         """ReLU activation"""
         return np.maximum(0, z)
     
-    def sigmoid(self, z):
+    def sigmoid (self, z):
         """Sigmoid activation"""
-        return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+        return 1 / (1 + np.exp(-np.clip (z, -500, 500)))
     
-    def tanh(self, z):
+    def tanh (self, z):
         """Tanh activation"""
-        return np.tanh(z)
+        return np.tanh (z)
     
-    def softmax(self, z):
+    def softmax (self, z):
         """Softmax activation (for output layer)"""
-        z_shifted = z - np.max(z, axis=1, keepdims=True)
-        exp_z = np.exp(z_shifted)
-        return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+        z_shifted = z - np.max (z, axis=1, keepdims=True)
+        exp_z = np.exp (z_shifted)
+        return exp_z / np.sum (exp_z, axis=1, keepdims=True)
     
-    def activation(self, z, layer_idx=None):
+    def activation (self, z, layer_idx=None):
         """Apply activation function"""
         # Use softmax for last layer if multi-class
         if layer_idx == self.num_layers and self.layer_sizes[-1] > 1:
-            return self.softmax(z)
+            return self.softmax (z)
         
         # Otherwise use specified activation
         if self.activation_name == 'relu':
-            return self.relu(z)
+            return self.relu (z)
         elif self.activation_name == 'sigmoid':
-            return self.sigmoid(z)
+            return self.sigmoid (z)
         elif self.activation_name == 'tanh':
-            return self.tanh(z)
+            return self.tanh (z)
         else:
             return z  # Linear activation
     
-    def forward_propagation(self, X, return_cache=False):
+    def forward_propagation (self, X, return_cache=False):
         """
         Perform forward propagation through the network
         
@@ -178,16 +178,16 @@ class NeuralNetwork:
             return output, cache
         return output
     
-    def predict(self, X):
+    def predict (self, X):
         """Make predictions"""
         output = self.forward_propagation(X)
         
         # For binary classification
         if self.layer_sizes[-1] == 1:
-            return (output > 0.5).astype(int)
+            return (output > 0.5).astype (int)
         
         # For multi-class classification
-        return np.argmax(output, axis=1)
+        return np.argmax (output, axis=1)
 
 
 # Example 1: Binary Classification Network
@@ -249,7 +249,7 @@ output_multi, cache_multi = multiclass_net.forward_propagation(
 print("\\nFinal Layer Output (probabilities for each class):")
 print(output_multi)
 print("\\nSum of probabilities (should be 1.0 for each sample):")
-print(np.sum(output_multi, axis=1))
+print(np.sum (output_multi, axis=1))
 print("\\nPredicted classes:")
 print(multiclass_net.predict(X_multi))
 \`\`\`
@@ -318,9 +318,9 @@ def forward_slow(X, W, b):
     Z = np.zeros((m, n))
     
     # Loop over samples
-    for i in range(m):
+    for i in range (m):
         # Loop over neurons
-        for j in range(n):
+        for j in range (n):
             # Loop over features
             for k in range(X.shape[1]):
                 Z[i, j] += X[i, k] * W[k, j]
@@ -409,7 +409,7 @@ print("\\n→ Same operation handles both single and batch!")
 
 ### Broadcasting in Neural Networks
 
-NumPy's broadcasting allows efficient operations with different shapes:
+NumPy\'s broadcasting allows efficient operations with different shapes:
 
 \`\`\`python
 # Example: Adding bias to batch
@@ -435,7 +435,7 @@ axes[0].set_ylabel('Sample')
 axes[0].set_xlabel('Neuron')
 
 # Bias
-axes[1].imshow(b, cmap='plasma', aspect='auto')
+axes[1].imshow (b, cmap='plasma', aspect='auto')
 axes[1].set_title('Bias b\\n(1, 5)')
 axes[1].set_xlabel('Neuron')
 
@@ -502,13 +502,13 @@ class ComputationalGraphNetwork:
         self.graph = []  # Track operations
         
         # Initialize parameters
-        for l in range(1, len(layer_sizes)):
+        for l in range(1, len (layer_sizes)):
             self.parameters[f'W{l}'] = np.random.randn(
                 layer_sizes[l-1], layer_sizes[l]
             ) * 0.01
             self.parameters[f'b{l}'] = np.zeros((1, layer_sizes[l]))
     
-    def forward_with_graph(self, X):
+    def forward_with_graph (self, X):
         """Forward pass that records computational graph"""
         self.graph = []  # Reset graph
         cache = {}
@@ -517,7 +517,7 @@ class ComputationalGraphNetwork:
         cache['A0'] = A
         self.graph.append(('input', 'A0', X.shape))
         
-        for l in range(1, len(self.layer_sizes)):
+        for l in range(1, len (self.layer_sizes)):
             W = self.parameters[f'W{l}']
             b = self.parameters[f'b{l}']
             
@@ -538,14 +538,14 @@ class ComputationalGraphNetwork:
         
         return A, cache
     
-    def print_graph(self):
+    def print_graph (self):
         """Display the computational graph"""
         print("\\nComputational Graph:")
         print("-" * 70)
         print(f"{'Operation':<15} {'Output':<15} {'Shape':<15}")
         print("-" * 70)
         for op, output, shape in self.graph:
-            print(f"{op:<15} {output:<15} {str(shape):<15}")
+            print(f"{op:<15} {output:<15} {str (shape):<15}")
         print("-" * 70)
 
 
@@ -604,7 +604,7 @@ Total memory:
 \`\`\`python
 import sys
 
-def get_size_mb(obj):
+def get_size_mb (obj):
     """Get size of numpy array in MB"""
     return obj.nbytes / (1024 * 1024)
 
@@ -625,7 +625,7 @@ total_activation_memory = 0
 print("\\nActivation Memory:")
 for key in cache:
     if key.startswith('A') or key.startswith('Z'):
-        mem_mb = get_size_mb(cache[key])
+        mem_mb = get_size_mb (cache[key])
         total_activation_memory += mem_mb
         print(f"  {key}: {mem_mb:.2f} MB")
 
@@ -635,7 +635,7 @@ print(f"\\nTotal Activation Memory: {total_activation_memory:.2f} MB")
 total_param_memory = 0
 print("\\nParameter Memory:")
 for key in large_net.parameters:
-    mem_mb = get_size_mb(large_net.parameters[key])
+    mem_mb = get_size_mb (large_net.parameters[key])
     total_param_memory += mem_mb
     print(f"  {key}: {mem_mb:.2f} MB")
 
@@ -648,10 +648,10 @@ print("Memory Scaling with Batch Size:")
 print("-" * 60)
 batch_sizes = [1, 32, 64, 128, 256, 512, 1024]
 for bs in batch_sizes:
-    X_batch = np.random.randn(bs, 1000)
+    X_batch = np.random.randn (bs, 1000)
     out, cache_batch = large_net.forward_propagation(X_batch, return_cache=True)
     
-    act_mem = sum(get_size_mb(v) for k, v in cache_batch.items() 
+    act_mem = sum (get_size_mb (v) for k, v in cache_batch.items() 
                    if k.startswith('A') or k.startswith('Z'))
     
     print(f"Batch size {bs:4d}: {act_mem:8.2f} MB (activation memory)")
@@ -721,29 +721,29 @@ check_shapes(X_test, test_net)
 **2. Numerical Issues**
 
 \`\`\`python
-def check_numerical_health(cache):
+def check_numerical_health (cache):
     """Check for numerical issues (NaN, Inf, extreme values)"""
     print("\\nNumerical Health Check:")
     print("-" * 60)
     
     issues = []
     for key, value in cache.items():
-        has_nan = np.isnan(value).any()
-        has_inf = np.isinf(value).any()
-        min_val = np.min(value)
-        max_val = np.max(value)
-        mean_val = np.mean(value)
+        has_nan = np.isnan (value).any()
+        has_inf = np.isinf (value).any()
+        min_val = np.min (value)
+        max_val = np.max (value)
+        mean_val = np.mean (value)
         
         status = "✓"
         if has_nan:
             status = "❌ NaN detected"
-            issues.append(f"{key}: NaN values")
+            issues.append (f"{key}: NaN values")
         elif has_inf:
             status = "❌ Inf detected"
-            issues.append(f"{key}: Inf values")
-        elif abs(max_val) > 1e6:
+            issues.append (f"{key}: Inf values")
+        elif abs (max_val) > 1e6:
             status = "⚠ Very large values"
-            issues.append(f"{key}: Values > 1e6")
+            issues.append (f"{key}: Values > 1e6")
         
         print(f"{key}: min={min_val:.3f}, max={max_val:.3f}, "
               f"mean={mean_val:.3f} {status}")
@@ -755,24 +755,24 @@ def check_numerical_health(cache):
         for issue in issues:
             print(f"  - {issue}")
     
-    return len(issues) == 0
+    return len (issues) == 0
 
 # Test
 X_healthy = np.random.randn(5, 4)
 healthy_net = NeuralNetwork([4, 6, 2], activation='relu')
 out, cache_healthy = healthy_net.forward_propagation(X_healthy, return_cache=True)
-check_numerical_health(cache_healthy)
+check_numerical_health (cache_healthy)
 \`\`\`
 
 **3. Vanishing/Exploding Activations**
 
 \`\`\`python
-def analyze_activation_distribution(cache):
+def analyze_activation_distribution (cache):
     """Analyze distribution of activations across layers"""
     print("\\nActivation Distribution Analysis:")
     print("-" * 60)
     
-    plt.figure(figsize=(14, 4))
+    plt.figure (figsize=(14, 4))
     
     # Plot activation statistics
     layer_nums = []
@@ -780,22 +780,22 @@ def analyze_activation_distribution(cache):
     stds = []
     zeros_pct = []
     
-    for key in sorted(cache.keys()):
+    for key in sorted (cache.keys()):
         if key.startswith('A') and key != 'A0':
-            layer_num = int(key[1:])
+            layer_num = int (key[1:])
             activations = cache[key]
             
-            layer_nums.append(layer_num)
-            means.append(np.mean(activations))
-            stds.append(np.std(activations))
-            zeros_pct.append(100 * np.mean(activations == 0))
+            layer_nums.append (layer_num)
+            means.append (np.mean (activations))
+            stds.append (np.std (activations))
+            zeros_pct.append(100 * np.mean (activations == 0))
     
     # Plot 1: Mean and Std
     plt.subplot(1, 3, 1)
-    plt.plot(layer_nums, means, 'o-', label='Mean', linewidth=2)
-    plt.fill_between(layer_nums, 
-                      np.array(means) - np.array(stds),
-                      np.array(means) + np.array(stds),
+    plt.plot (layer_nums, means, 'o-', label='Mean', linewidth=2)
+    plt.fill_between (layer_nums, 
+                      np.array (means) - np.array (stds),
+                      np.array (means) + np.array (stds),
                       alpha=0.3, label='±1 Std')
     plt.xlabel('Layer')
     plt.ylabel('Activation Value')
@@ -805,12 +805,12 @@ def analyze_activation_distribution(cache):
     
     # Plot 2: Percentage of zeros (ReLU)
     plt.subplot(1, 3, 2)
-    plt.bar(layer_nums, zeros_pct, alpha=0.6, color='purple')
+    plt.bar (layer_nums, zeros_pct, alpha=0.6, color='purple')
     plt.xlabel('Layer')
     plt.ylabel('Percentage (%)')
     plt.title('Zero Activations (Dead Neurons)')
-    plt.axhline(y=50, color='green', linestyle='--', alpha=0.5, label='Expected ~50%')
-    plt.axhline(y=90, color='red', linestyle='--', alpha=0.5, label='Problematic >90%')
+    plt.axhline (y=50, color='green', linestyle='--', alpha=0.5, label='Expected ~50%')
+    plt.axhline (y=90, color='red', linestyle='--', alpha=0.5, label='Problematic >90%')
     plt.legend()
     plt.grid(True, alpha=0.3, axis='y')
     
@@ -818,7 +818,7 @@ def analyze_activation_distribution(cache):
     plt.subplot(1, 3, 3)
     for i, key in enumerate(['A1', 'A2', 'A3']):
         if key in cache:
-            plt.hist(cache[key].flatten(), bins=50, alpha=0.5, 
+            plt.hist (cache[key].flatten(), bins=50, alpha=0.5, 
                     label=f'Layer {key[1:]}', density=True)
     plt.xlabel('Activation Value')
     plt.ylabel('Density')
@@ -831,10 +831,10 @@ def analyze_activation_distribution(cache):
     
     # Warnings
     print("\\nWarnings:")
-    for i, (layer, mean, zeros) in enumerate(zip(layer_nums, means, zeros_pct)):
-        if abs(mean) < 0.01:
+    for i, (layer, mean, zeros) in enumerate (zip (layer_nums, means, zeros_pct)):
+        if abs (mean) < 0.01:
             print(f"  ⚠ Layer {layer}: Very low mean activation ({mean:.4f})")
-        if abs(mean) > 10:
+        if abs (mean) > 10:
             print(f"  ⚠ Layer {layer}: Very high mean activation ({mean:.2f})")
         if zeros > 90:
             print(f"  ⚠ Layer {layer}: >90% dead neurons ({zeros:.1f}%)")
@@ -843,7 +843,7 @@ def analyze_activation_distribution(cache):
 deep_net = NeuralNetwork([10, 20, 20, 20, 5], activation='relu')
 X_deep = np.random.randn(100, 10)
 out_deep, cache_deep = deep_net.forward_propagation(X_deep, return_cache=True)
-analyze_activation_distribution(cache_deep)
+analyze_activation_distribution (cache_deep)
 \`\`\`
 
 ## Trading Example: Forward Propagation for Price Prediction
@@ -857,7 +857,7 @@ class TradingNeuralNetwork:
         # Architecture: 20 features → 32 → 16 → 8 → 1 (return prediction)
         self.net = NeuralNetwork([20, 32, 16, 8, 1], activation='relu')
     
-    def prepare_features(self, prices, volumes):
+    def prepare_features (self, prices, volumes):
         """
         Create technical indicators as features
         
@@ -871,40 +871,40 @@ class TradingNeuralNetwork:
         features = []
         
         # Price-based features
-        features.append(prices[-1] / prices[-5] - 1)  # 5-day return
-        features.append(prices[-1] / prices[-20] - 1)  # 20-day return
-        features.append(np.std(prices[-20:]) / np.mean(prices[-20:]))  # CV
+        features.append (prices[-1] / prices[-5] - 1)  # 5-day return
+        features.append (prices[-1] / prices[-20] - 1)  # 20-day return
+        features.append (np.std (prices[-20:]) / np.mean (prices[-20:]))  # CV
         
         # Moving averages
-        sma_5 = np.mean(prices[-5:])
-        sma_20 = np.mean(prices[-20:])
-        features.append(prices[-1] / sma_5 - 1)
-        features.append(prices[-1] / sma_20 - 1)
-        features.append(sma_5 / sma_20 - 1)
+        sma_5 = np.mean (prices[-5:])
+        sma_20 = np.mean (prices[-20:])
+        features.append (prices[-1] / sma_5 - 1)
+        features.append (prices[-1] / sma_20 - 1)
+        features.append (sma_5 / sma_20 - 1)
         
         # RSI (simplified)
-        returns = np.diff(prices[-15:])
+        returns = np.diff (prices[-15:])
         gains = returns[returns > 0].sum()
         losses = -returns[returns < 0].sum()
         rsi = gains / (gains + losses + 1e-10)
-        features.append(rsi)
+        features.append (rsi)
         
         # Volume features
-        features.append(volumes[-1] / np.mean(volumes[-20:]))
-        features.append(np.std(volumes[-20:]) / np.mean(volumes[-20:]))
+        features.append (volumes[-1] / np.mean (volumes[-20:]))
+        features.append (np.std (volumes[-20:]) / np.mean (volumes[-20:]))
         
         # Momentum indicators
-        features.append(prices[-1] - prices[-3])
-        features.append(prices[-1] - prices[-7])
+        features.append (prices[-1] - prices[-3])
+        features.append (prices[-1] - prices[-7])
         
         # Additional features to reach 20
         for lag in [1, 2, 3, 5, 10, 15, 20, 25, 30]:
-            if len(prices) > lag:
-                features.append(prices[-1] / prices[-lag] - 1)
+            if len (prices) > lag:
+                features.append (prices[-1] / prices[-lag] - 1)
         
-        return np.array(features[:20]).reshape(1, -1)
+        return np.array (features[:20]).reshape(1, -1)
     
-    def predict_return(self, prices, volumes):
+    def predict_return (self, prices, volumes):
         """
         Predict next-day return
         
@@ -917,10 +917,10 @@ class TradingNeuralNetwork:
             confidence: Model confidence
         """
         # Prepare features
-        features = self.prepare_features(prices, volumes)
+        features = self.prepare_features (prices, volumes)
         
         # Forward propagation
-        prediction, cache = self.net.forward_propagation(features, return_cache=True)
+        prediction, cache = self.net.forward_propagation (features, return_cache=True)
         
         # Return prediction and internal activations for analysis
         return prediction[0, 0], cache
@@ -931,19 +931,18 @@ np.random.seed(42)
 
 # Simulate price/volume data
 days = 100
-prices = 100 * np.exp(np.cumsum(np.random.randn(days) * 0.02))
+prices = 100 * np.exp (np.cumsum (np.random.randn (days) * 0.02))
 volumes = np.random.lognormal(10, 0.5, days)
 
 # Create trading network
 trading_net = TradingNeuralNetwork()
 
 # Predict next-day return
-predicted_return, cache = trading_net.predict_return(prices, volumes)
+predicted_return, cache = trading_net.predict_return (prices, volumes)
 
 print("Trading Neural Network Prediction:")
 print("-" * 60)
-print(f"Current Price: \${prices[-1]: .2f
-}")
+print(f"Current Price: \${prices[-1]:.2f}")
 print(f"Predicted Next-Day Return: {predicted_return:.2%}")
 print(f"Predicted Next-Day Price: \${prices[-1] * (1 + predicted_return):.2f}")
 
@@ -951,9 +950,9 @@ print(f"Predicted Next-Day Price: \${prices[-1] * (1 + predicted_return):.2f}")
 print("\\nInternal Activations:")
 for l in range(1, trading_net.net.num_layers + 1):
     activations = cache[f'A{l}']
-print(f"  Layer {l}: mean={np.mean(activations):.3f}, "
-          f"std={np.std(activations):.3f}, "
-          f"zeros={100*np.mean(activations==0):.0f}%")
+print(f"  Layer {l}: mean={np.mean (activations):.3f}, "
+          f"std={np.std (activations):.3f}, "
+          f"zeros={100*np.mean (activations==0):.0f}%")
 \`\`\`
 
 ## Key Takeaways
@@ -967,7 +966,7 @@ print(f"  Layer {l}: mean={np.mean(activations):.3f}, "
 7. **Numerical health checks** catch NaN/Inf early
 8. **Monitor activations** for vanishing/exploding gradients
 
-## What's Next
+## What\'s Next
 
 Forward propagation produces predictions, but how do we measure if they're good? In the next section, we'll cover:
 - **Loss Functions**: Quantifying prediction quality

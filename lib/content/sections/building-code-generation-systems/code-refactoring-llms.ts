@@ -37,8 +37,8 @@ class RenameRefactorer:
     """Rename variables, functions, or classes across codebase."""
     
     def __init__(self, project_root: str):
-        self.project_root = Path(project_root)
-        self.analyzer = ProjectAnalyzer(project_root)
+        self.project_root = Path (project_root)
+        self.analyzer = ProjectAnalyzer (project_root)
     
     def rename_symbol(
         self,
@@ -70,9 +70,9 @@ class RenameRefactorer:
             # Create search/replace edit
             edit = SearchReplace(
                 search=occurrence['context'],
-                replace=occurrence['context'].replace(symbol_name, new_name)
+                replace=occurrence['context'].replace (symbol_name, new_name)
             )
-            edits_by_file[file].append(edit)
+            edits_by_file[file].append (edit)
         
         return edits_by_file
     
@@ -91,9 +91,9 @@ class RenameRefactorer:
         elif scope == "project":
             # Search all Python files
             files_to_search = [
-                str(p.relative_to(self.project_root))
+                str (p.relative_to (self.project_root))
                 for p in self.project_root.rglob("*.py")
-                if "__pycache__" not in str(p)
+                if "__pycache__" not in str (p)
             ]
         else:
             files_to_search = []
@@ -101,17 +101,17 @@ class RenameRefactorer:
         for file in files_to_search:
             full_path = self.project_root / file
             try:
-                with open(full_path) as f:
+                with open (full_path) as f:
                     content = f.read()
                 
-                tree = ast.parse(content)
+                tree = ast.parse (content)
                 
                 # Find all Name nodes with this identifier
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Name) and node.id == symbol_name:
+                for node in ast.walk (tree):
+                    if isinstance (node, ast.Name) and node.id == symbol_name:
                         # Get context (the line it's on)
                         lines = content.split("\\n")
-                        if hasattr(node, 'lineno'):
+                        if hasattr (node, 'lineno'):
                             line = lines[node.lineno - 1]
                             
                             occurrences.append({
@@ -170,11 +170,11 @@ class FunctionExtractor:
         lines = file_content.split("\\n")
         
         # Get code to extract
-        code_to_extract = "\\n".join(lines[start_line-1:end_line])
+        code_to_extract = "\\n".join (lines[start_line-1:end_line])
         
         # Get surrounding context
-        context_before = "\\n".join(lines[max(0, start_line-10):start_line-1])
-        context_after = "\\n".join(lines[end_line:min(len(lines), end_line+10)])
+        context_before = "\\n".join (lines[max(0, start_line-10):start_line-1])
+        context_after = "\\n".join (lines[end_line:min (len (lines), end_line+10)])
         
         # Generate function
         prompt = self._build_extraction_prompt(
@@ -253,19 +253,19 @@ Output as JSON:
 }}
 """
     
-    def _parse_extraction_result(self, response: str) -> Dict:
+    def _parse_extraction_result (self, response: str) -> Dict:
         """Parse LLM response."""
         import json
         
         # Extract JSON from response
         if "\`\`\`json" in response:
             parts = response.split("\`\`\`json")
-            if len(parts) > 1:
+            if len (parts) > 1:
                 json_str = parts[1].split("\`\`\`")[0]
-                return json.loads(json_str.strip())
+                return json.loads (json_str.strip())
         
         # Try to parse as JSON directly
-        return json.loads(response)
+        return json.loads (response)
     
     def _replace_with_function_call(
         self,
@@ -281,7 +281,7 @@ Output as JSON:
         after = lines[end_line:]
         
         # Add function call
-        indent = self._get_indentation(lines[start_line-1])
+        indent = self._get_indentation (lines[start_line-1])
         indented_call = "\\n".join(
             indent + line for line in function_call.split("\\n")
         )
@@ -290,28 +290,28 @@ Output as JSON:
         
         # Add function definition at appropriate location
         # (Usually before the function containing the extracted code)
-        insertion_point = self._find_function_insertion_point(before)
+        insertion_point = self._find_function_insertion_point (before)
         
-        before.insert(insertion_point, "")
-        before.insert(insertion_point + 1, function_definition)
-        before.insert(insertion_point + 2, "")
+        before.insert (insertion_point, "")
+        before.insert (insertion_point + 1, function_definition)
+        before.insert (insertion_point + 2, "")
         
-        return "\\n".join(before + middle + after)
+        return "\\n".join (before + middle + after)
     
-    def _get_indentation(self, line: str) -> str:
+    def _get_indentation (self, line: str) -> str:
         """Get indentation of a line."""
-        return line[:len(line) - len(line.lstrip())]
+        return line[:len (line) - len (line.lstrip())]
     
-    def _find_function_insertion_point(self, lines: List[str]) -> int:
+    def _find_function_insertion_point (self, lines: List[str]) -> int:
         """Find where to insert new function definition."""
         # Find last function definition
-        for i in range(len(lines) - 1, -1, -1):
+        for i in range (len (lines) - 1, -1, -1):
             if lines[i].strip().startswith("def "):
                 # Find end of that function
-                for j in range(i + 1, len(lines)):
+                for j in range (i + 1, len (lines)):
                     if lines[j].strip() and not lines[j][0].isspace():
                         return j
-                return len(lines)
+                return len (lines)
         
         return 0  # Insert at top if no functions found
 
@@ -319,14 +319,14 @@ Output as JSON:
 extractor = FunctionExtractor()
 
 file_content = """
-def process_data(items):
+def process_data (items):
     results = []
     for item in items:
         # Complex processing logic (lines to extract)
         cleaned = item.strip().lower()
         parts = cleaned.split(',')
-        validated = [p for p in parts if len(p) > 3]
-        results.extend(validated)
+        validated = [p for p in parts if len (p) > 3]
+        results.extend (validated)
     return results
 """
 
@@ -361,31 +361,31 @@ class FunctionInliner:
     ) -> str:
         """Inline all calls to a function."""
         # Parse to find function definition
-        tree = ast.parse(file_content)
+        tree = ast.parse (file_content)
         
         func_def = None
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef) and node.name == function_name:
                 func_def = node
                 break
         
         if not func_def:
-            raise ValueError(f"Function {function_name} not found")
+            raise ValueError (f"Function {function_name} not found")
         
         # Get function body
-        func_body = ast.unparse(func_def)
+        func_body = ast.unparse (func_def)
         
         # Find all calls to this function
-        calls = self._find_function_calls(tree, function_name)
+        calls = self._find_function_calls (tree, function_name)
         
         # For each call, inline it
         new_content = file_content
         for call in calls:
-            inlined = self._inline_call(func_body, call)
-            new_content = new_content.replace(call['original'], inlined)
+            inlined = self._inline_call (func_body, call)
+            new_content = new_content.replace (call['original'], inlined)
         
         # Remove function definition
-        new_content = self._remove_function_definition(new_content, function_name)
+        new_content = self._remove_function_definition (new_content, function_name)
         
         return new_content
     
@@ -397,18 +397,18 @@ class FunctionInliner:
         """Find all calls to function."""
         calls = []
         
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call):
-                if isinstance(node.func, ast.Name) and node.func.id == function_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.Call):
+                if isinstance (node.func, ast.Name) and node.func.id == function_name:
                     calls.append({
                         'node': node,
-                        'original': ast.unparse(node),
-                        'args': [ast.unparse(arg) for arg in node.args]
+                        'original': ast.unparse (node),
+                        'args': [ast.unparse (arg) for arg in node.args]
                     })
         
         return calls
     
-    def _inline_call(self, func_body: str, call: Dict) -> str:
+    def _inline_call (self, func_body: str, call: Dict) -> str:
         """Inline a specific function call."""
         # Use LLM to intelligently inline
         prompt = f"""Inline this function call:
@@ -444,11 +444,11 @@ Output only the inlined code.
     ) -> str:
         """Remove function definition from code."""
         lines = content.split("\\n")
-        tree = ast.parse(content)
+        tree = ast.parse (content)
         
         # Find function line range
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef) and node.name == function_name:
                 start_line = node.lineno - 1
                 end_line = node.end_lineno
                 
@@ -456,22 +456,22 @@ Output only the inlined code.
                 del lines[start_line:end_line]
                 break
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Usage
 inliner = FunctionInliner()
 
 file_content = """
-def add_one(x):
+def add_one (x):
     return x + 1
 
 def process():
     value = add_one(5)
-    result = add_one(value)
+    result = add_one (value)
     return result
 """
 
-inlined = inliner.inline_function(file_content, "add_one")
+inlined = inliner.inline_function (file_content, "add_one")
 print(inlined)
 \`\`\`
 
@@ -494,31 +494,31 @@ class MethodMover:
         to_class: str
     ) -> str:
         """Move a method from one class to another."""
-        tree = ast.parse(file_content)
+        tree = ast.parse (file_content)
         
         # Find source method
-        source_method = self._find_method(tree, from_class, method_name)
+        source_method = self._find_method (tree, from_class, method_name)
         if not source_method:
-            raise ValueError(f"Method {method_name} not found in {from_class}")
+            raise ValueError (f"Method {method_name} not found in {from_class}")
         
         # Find target class
-        target_class = self._find_class(tree, to_class)
+        target_class = self._find_class (tree, to_class)
         if not target_class:
-            raise ValueError(f"Class {to_class} not found")
+            raise ValueError (f"Class {to_class} not found")
         
         # Adapt method for new class
         adapted_method = self._adapt_method(
-            ast.unparse(source_method),
+            ast.unparse (source_method),
             from_class,
             to_class,
             file_content
         )
         
         # Remove from source class
-        content = self._remove_method(file_content, from_class, method_name)
+        content = self._remove_method (file_content, from_class, method_name)
         
         # Add to target class
-        content = self._add_method(content, to_class, adapted_method)
+        content = self._add_method (content, to_class, adapted_method)
         
         return content
     
@@ -529,10 +529,10 @@ class MethodMover:
         method_name: str
     ) -> Optional[ast.FunctionDef]:
         """Find method in class."""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == class_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ClassDef) and node.name == class_name:
                 for item in node.body:
-                    if isinstance(item, ast.FunctionDef) and item.name == method_name:
+                    if isinstance (item, ast.FunctionDef) and item.name == method_name:
                         return item
         return None
     
@@ -542,8 +542,8 @@ class MethodMover:
         class_name: str
     ) -> Optional[ast.ClassDef]:
         """Find class definition."""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ClassDef) and node.name == class_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.ClassDef) and node.name == class_name:
                 return node
         return None
     
@@ -593,15 +593,15 @@ Output the adapted method code.
         method_name: str
     ) -> str:
         """Remove method from class."""
-        tree = ast.parse(content)
-        method = self._find_method(tree, class_name, method_name)
+        tree = ast.parse (content)
+        method = self._find_method (tree, class_name, method_name)
         
         if method:
             lines = content.split("\\n")
             start = method.lineno - 1
             end = method.end_lineno
             del lines[start:end]
-            return "\\n".join(lines)
+            return "\\n".join (lines)
         
         return content
     
@@ -613,9 +613,9 @@ Output the adapted method code.
     ) -> str:
         """Add method to class."""
         lines = content.split("\\n")
-        tree = ast.parse(content)
+        tree = ast.parse (content)
         
-        target_class = self._find_class(tree, class_name)
+        target_class = self._find_class (tree, class_name)
         if target_class:
             # Find insertion point (end of class)
             insert_line = target_class.end_lineno - 1
@@ -626,7 +626,7 @@ Output the adapted method code.
             
             lines = lines[:insert_line] + [""] + indented + lines[insert_line:]
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
 
 # Usage
 mover = MethodMover()
@@ -665,17 +665,17 @@ class SignatureChanger:
             Dict mapping files to edits
         """
         # Find function definition
-        with open(self.analyzer.project_root / file_path) as f:
+        with open (self.analyzer.project_root / file_path) as f:
             content = f.read()
         
-        tree = ast.parse(content)
-        func_def = self._find_function(tree, function_name)
+        tree = ast.parse (content)
+        func_def = self._find_function (tree, function_name)
         
         if not func_def:
-            raise ValueError(f"Function {function_name} not found")
+            raise ValueError (f"Function {function_name} not found")
         
         # Generate new signature
-        old_signature = ast.unparse(func_def)
+        old_signature = ast.unparse (func_def)
         new_signature = self._generate_new_signature(
             function_name,
             new_parameters,
@@ -699,7 +699,7 @@ class SignatureChanger:
         
         for file, file_edits in call_updates.items():
             if file in edits:
-                edits[file].extend(file_edits)
+                edits[file].extend (file_edits)
             else:
                 edits[file] = file_edits
         
@@ -711,8 +711,8 @@ class SignatureChanger:
         function_name: str
     ) -> Optional[ast.FunctionDef]:
         """Find function definition."""
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+        for node in ast.walk (tree):
+            if isinstance (node, ast.FunctionDef) and node.name == function_name:
                 return node
         return None
     
@@ -723,7 +723,7 @@ class SignatureChanger:
         return_type: Optional[str]
     ) -> str:
         """Generate new function signature."""
-        params = ", ".join(f"{name}: {type_}" for name, type_ in parameters)
+        params = ", ".join (f"{name}: {type_}" for name, type_ in parameters)
         sig = f"def {name}({params})"
         
         if return_type:
@@ -742,29 +742,29 @@ class SignatureChanger:
         
         # Find all files that might call this function
         for py_file in self.analyzer.project_root.rglob("*.py"):
-            if "__pycache__" in str(py_file):
+            if "__pycache__" in str (py_file):
                 continue
             
             try:
-                with open(py_file) as f:
+                with open (py_file) as f:
                     content = f.read()
                 
-                tree = ast.parse(content)
+                tree = ast.parse (content)
                 
                 # Find calls
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Call):
-                        if isinstance(node.func, ast.Name) and \
+                for node in ast.walk (tree):
+                    if isinstance (node, ast.Call):
+                        if isinstance (node.func, ast.Name) and \
                            node.func.id == function_name:
                             # Found a call - update it
-                            old_call = ast.unparse(node)
+                            old_call = ast.unparse (node)
                             new_call = self._adapt_call(
                                 old_call,
                                 old_func_def,
                                 new_parameters
                             )
                             
-                            relative_path = str(py_file.relative_to(
+                            relative_path = str (py_file.relative_to(
                                 self.analyzer.project_root
                             ))
                             
@@ -819,7 +819,7 @@ Generate the updated call.
 
 # Usage
 analyzer = ProjectAnalyzer("/path/to/project")
-changer = SignatureChanger(analyzer)
+changer = SignatureChanger (analyzer)
 
 edits = changer.change_signature(
     function_name="process_user",

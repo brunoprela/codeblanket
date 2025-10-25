@@ -135,9 +135,9 @@ Show data flow with numbered sequence
 \`\`\`
     Client → LB → App → Cache(90 % hits)
                 ↓
-            DB Replicas(reads)
+            DB Replicas (reads)
                 ↓
-            DB Primary(writes)
+            DB Primary (writes)
         \`\`\`
 
 ### **Pattern 3: Microservices**

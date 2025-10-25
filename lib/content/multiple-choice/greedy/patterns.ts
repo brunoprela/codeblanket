@@ -10,7 +10,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'In activity selection, why sort by end time instead of start time?',
     options: [
-      "It's faster",
+      "It\'s faster",
       'Activities finishing earliest leave maximum time for remaining activities',
       'Random choice',
       'Easier to implement',
@@ -63,7 +63,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc5',
     question: 'Why does greedy work for Huffman coding?',
     options: [
-      "It's simple",
+      "It\'s simple",
       'Merging two lowest-frequency nodes minimizes total encoding length (greedy choice property)',
       'Random',
       'Always works',

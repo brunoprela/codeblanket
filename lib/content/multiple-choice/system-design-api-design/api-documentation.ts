@@ -16,7 +16,7 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "OpenAPI (formerly Swagger) is a standard specification format for describing REST APIs. It's language-agnostic, machine-readable, and enables auto-generation of documentation, client libraries, and test cases. Industry standard for API documentation.",
+      "OpenAPI (formerly Swagger) is a standard specification format for describing REST APIs. It\'s language-agnostic, machine-readable, and enables auto-generation of documentation, client libraries, and test cases. Industry standard for API documentation.",
   },
   {
     id: 'docs-q2',
@@ -26,7 +26,7 @@ export const apidocumentationMultipleChoice: MultipleChoiceQuestion[] = [
       'To make the documentation look longer',
       'To help developers in different ecosystems quickly integrate',
       'To test the API in all languages',
-      "It's required by OpenAPI specification",
+      "It\'s required by OpenAPI specification",
     ],
     correctAnswer: 1,
     explanation:

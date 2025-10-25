@@ -15,25 +15,25 @@ Every visualization should answer a specific question.
 
 \`\`\`python
 # BAD: Cluttered and unclear
-plt.figure(figsize=(15, 10))
+plt.figure (figsize=(15, 10))
 for i in range(50):
-    plt.plot(np.random.randn(100).cumsum(), alpha=0.3)
+    plt.plot (np.random.randn(100).cumsum(), alpha=0.3)
 plt.title('Data')  # What data? What question?
 plt.show()
 
 # GOOD: Clear purpose and clean design
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 stock_prices = pd.DataFrame({
     'AAPL': apple_prices,
     'GOOGL': google_prices,
     'MSFT': microsoft_prices
 }, index=dates)
 
-stock_prices.plot(linewidth=2)
+stock_prices.plot (linewidth=2)
 plt.title('Tech Stock Prices 2023-2024', fontsize=14, fontweight='bold')
 plt.xlabel('Date')
 plt.ylabel('Price ($)')
-plt.legend(title='Stock')
+plt.legend (title='Stock')
 plt.grid(True, alpha=0.3)
 plt.show()
 \`\`\`
@@ -50,15 +50,15 @@ sales_by_region = pd.Series({
     'South': 38000,
     'East': 52000,
     'West': 41000
-}).sort_values(ascending=False)
+}).sort_values (ascending=False)
 
-plt.figure(figsize=(10, 6))
-bars = plt.bar(sales_by_region.index, sales_by_region.values, 
+plt.figure (figsize=(10, 6))
+bars = plt.bar (sales_by_region.index, sales_by_region.values, 
                color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',])
 plt.ylabel('Sales ($)')
 plt.title('Sales by Region')
-for i, (region, value) in enumerate(sales_by_region.items()):
-    plt.text(i, value, f'\${value:,}', ha='center', va='bottom')
+for i, (region, value) in enumerate (sales_by_region.items()):
+    plt.text (i, value, f'\${value:,}', ha='center', va='bottom')
 plt.show()
             \`\`\`
 
@@ -70,8 +70,8 @@ df = pd.DataFrame({
     'sales': np.random.randn(365).cumsum() + 1000
 }, index=dates)
 
-plt.figure(figsize=(12, 6))
-plt.plot(df.index, df['sales',], linewidth=2)
+plt.figure (figsize=(12, 6))
+plt.plot (df.index, df['sales',], linewidth=2)
 plt.title('Daily Sales Trend 2024')
 plt.xlabel('Date')
 plt.ylabel('Sales ($)')
@@ -86,7 +86,7 @@ data = np.random.normal(100, 15, 1000)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-ax1.hist(data, bins=30, edgecolor='black')
+ax1.hist (data, bins=30, edgecolor='black')
 ax1.set_title('Distribution (Histogram)')
 ax1.set_xlabel('Value')
 ax1.set_ylabel('Frequency')
@@ -105,11 +105,11 @@ plt.show()
 x = np.random.randn(100)
 y = x * 2 + np.random.randn(100) * 0.5
 
-plt.figure(figsize=(8, 8))
-plt.scatter(x, y, alpha=0.6)
+plt.figure (figsize=(8, 8))
+plt.scatter (x, y, alpha=0.6)
 plt.xlabel('Variable X')
 plt.ylabel('Variable Y')
-plt.title(f'Correlation: {np.corrcoef(x, y)[0,1]:.3f}')
+plt.title (f'Correlation: {np.corrcoef (x, y)[0,1]:.3f}')
 plt.grid(True, alpha=0.3)
 plt.show()
 \`\`\`
@@ -126,14 +126,14 @@ plt.show()
 values = [30, 25, 20, 15, 10]
 labels = ['A', 'B', 'C', 'D', 'E',]
 
-plt.figure(figsize=(10, 5))
+plt.figure (figsize=(10, 5))
 
 plt.subplot(1, 2, 1)
-plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+plt.pie (values, labels=labels, autopct='%1.1f%%', startangle=90)
 plt.title('Clear 2D Pie Chart')
 
 plt.subplot(1, 2, 2)
-plt.bar(labels, values)
+plt.bar (labels, values)
 plt.title('Even Better: Bar Chart')
 plt.ylabel('Value')
 
@@ -148,12 +148,12 @@ data = [98, 99, 100, 101, 102]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-ax1.bar(range(len(data)), data)
+ax1.bar (range (len (data)), data)
 ax1.set_ylim(95, 105)  # BAD: Doesn't include zero
 ax1.set_title('Misleading: Exaggerated Differences')
 
-ax2.bar(range(len(data)), data)
-ax2.set_ylim(0, max(data) * 1.1)  # GOOD: Starts at zero
+ax2.bar (range (len (data)), data)
+ax2.set_ylim(0, max (data) * 1.1)  # GOOD: Starts at zero
 ax2.set_title('Honest: Shows True Scale')
 
 plt.tight_layout()
@@ -169,11 +169,11 @@ plt.show()
 values = [23, 45, 67, 89, 34, 56, 78, 90, 12]
 highlight_idx = 3  # 4th bar is important
 
-colors = ['#CCCCCC',] * len(values)
+colors = ['#CCCCCC',] * len (values)
 colors[highlight_idx] = '#FF6B6B'  # Highlight one
 
-plt.figure(figsize=(10, 6))
-plt.bar(range(len(values)), values, color=colors)
+plt.figure (figsize=(10, 6))
+plt.bar (range (len (values)), values, color=colors)
 plt.title('Using Color to Highlight')
 plt.ylabel('Value')
 plt.show()
@@ -182,13 +182,13 @@ plt.show()
 **Mistake 4: Unclear labels**
 \`\`\`python
 # BAD
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.plot([1, 2, 3, 4], [10, 20, 15, 25])
 plt.title('Data')  # What data?
 plt.show()
 
 # GOOD
-plt.figure(figsize=(10, 6))
+plt.figure (figsize=(10, 6))
 plt.plot([1, 2, 3, 4], [10, 20, 15, 25], marker='o', linewidth=2)
 plt.title('Quarterly Revenue Growth 2024', fontsize=14, fontweight='bold')
 plt.xlabel('Quarter', fontsize=12)
@@ -212,17 +212,17 @@ from scipy import stats
 x = np.linspace(0, 10, 50)
 y = 2 * x + np.random.randn(50) * 2
 
-plt.figure(figsize=(10, 6))
-plt.scatter(x, y, alpha=0.6, label='Data')
+plt.figure (figsize=(10, 6))
+plt.scatter (x, y, alpha=0.6, label='Data')
 
 # Regression line
-slope, intercept = np.polyfit(x, y, 1)
-plt.plot(x, slope * x + intercept, 'r-', linewidth=2, label='Fit')
+slope, intercept = np.polyfit (x, y, 1)
+plt.plot (x, slope * x + intercept, 'r-', linewidth=2, label='Fit')
 
 # Confidence interval
 predict_y = slope * x + intercept
-ci = 1.96 * np.std(y - predict_y)
-plt.fill_between(x, predict_y - ci, predict_y + ci, alpha=0.2, label='95% CI')
+ci = 1.96 * np.std (y - predict_y)
+plt.fill_between (x, predict_y - ci, predict_y + ci, alpha=0.2, label='95% CI')
 
 plt.xlabel('X Variable')
 plt.ylabel('Y Variable')
@@ -241,24 +241,24 @@ plt.show()
 # Executive: Clear story
 monthly_revenue = pd.Series([10, 12, 11, 15, 18, 20, 19, 22, 25, 28, 30, 35])
 
-plt.figure(figsize=(12, 6))
-plt.plot(range(1, 13), monthly_revenue, marker='o', linewidth=3, markersize=8, color='#4ECDC4')
+plt.figure (figsize=(12, 6))
+plt.plot (range(1, 13), monthly_revenue, marker='o', linewidth=3, markersize=8, color='#4ECDC4')
 
 # Highlight key points
 plt.annotate('Growth acceleration', 
              xy=(4, 15), xytext=(6, 12),
-             arrowprops=dict(arrowstyle='->', color='red', lw=2),
+             arrowprops=dict (arrowstyle='->', color='red', lw=2),
              fontsize=12, color='red', fontweight='bold')
 
-plt.axhline(monthly_revenue.mean(), color='gray', linestyle='--', 
-            label=f'Average: \${monthly_revenue.mean(): .0f}M', linewidth=2)
+plt.axhline (monthly_revenue.mean(), color='gray', linestyle='--', 
+            label=f'Average: \${monthly_revenue.mean():.0f}M', linewidth=2)
 
 plt.xlabel('Month', fontsize = 12)
 plt.ylabel('Revenue ($ millions)', fontsize = 12)
 plt.title('Revenue Growth - 200% Increase YoY', fontsize = 16, fontweight = 'bold')
-plt.xticks(range(1, 13), ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+plt.xticks (range(1, 13), ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',])
-plt.legend(fontsize = 12)
+plt.legend (fontsize = 12)
 plt.grid(True, alpha = 0.3)
 plt.tight_layout()
 plt.show()
@@ -274,9 +274,9 @@ plt.show()
 # Colorblind-friendly colors
 colorblind_safe = ['#0173B2', '#DE8F05', '#029E73', '#CC78BC', '#CA9161',]
 
-plt.figure(figsize=(10, 6))
-for i, color in enumerate(colorblind_safe):
-    plt.plot(np.random.randn(100).cumsum(), color=color, linewidth=2, label=f'Series {i+1}')
+plt.figure (figsize=(10, 6))
+for i, color in enumerate (colorblind_safe):
+    plt.plot (np.random.randn(100).cumsum(), color=color, linewidth=2, label=f'Series {i+1}')
 plt.title('Colorblind-Friendly Visualization')
 plt.legend()
 plt.grid(True, alpha=0.3)
@@ -341,14 +341,14 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 # High-resolution figure
-plt.figure(figsize=(8, 6), dpi=300)  # 2400x1800 pixels at 300 DPI
+plt.figure (figsize=(8, 6), dpi=300)  # 2400x1800 pixels at 300 DPI
 plt.plot([1, 2, 3], [1, 4, 9])
 plt.title('High Resolution Plot')
 plt.savefig('publication_fig.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Vector graphics (infinitely scalable)
-plt.figure(figsize=(8, 6))
+plt.figure (figsize=(8, 6))
 plt.plot([1, 2, 3], [1, 4, 9])
 plt.title('Vector Graphics')
 plt.savefig('publication_fig.pdf', bbox_inches='tight')  # PDF is vector
@@ -370,13 +370,13 @@ presentation = (10, 5.625)
 poster = (24, 18)
 
 # Example: Single column figure
-plt.figure(figsize=single_column, dpi=300)
+plt.figure (figsize=single_column, dpi=300)
 x = np.linspace(0, 10, 100)
-plt.plot(x, np.sin(x), linewidth=1.5)
+plt.plot (x, np.sin (x), linewidth=1.5)
 plt.xlabel('X', fontsize=9)
 plt.ylabel('sin(X)', fontsize=9)
 plt.title('Single Column Figure', fontsize=10)
-plt.tick_params(labelsize=8)
+plt.tick_params (labelsize=8)
 plt.tight_layout()
 plt.savefig('single_column.pdf', dpi=300, bbox_inches='tight')
 plt.show()
@@ -405,13 +405,13 @@ plt.rcParams.update({
     "font.serif": ["Computer Modern Roman",],
 })
 
-fig, ax = plt.subplots(figsize=(6, 4))
+fig, ax = plt.subplots (figsize=(6, 4))
 x = np.linspace(0, 2*np.pi, 100)
-ax.plot(x, np.sin(x), label=r'$y = \\sin(x)$')
-ax.plot(x, np.cos(x), label=r'$y = \\cos(x)$')
-ax.set_xlabel(r'$x$ (radians)')
-ax.set_ylabel(r'$y$')
-ax.set_title(r'Trigonometric Functions')
+ax.plot (x, np.sin (x), label=r'$y = \\sin (x)$')
+ax.plot (x, np.cos (x), label=r'$y = \\cos (x)$')
+ax.set_xlabel (r'$x$ (radians)')
+ax.set_ylabel (r'$y$')
+ax.set_title (r'Trigonometric Functions')
 ax.legend()
 plt.tight_layout()
 plt.savefig('latex_fonts.pdf', dpi=300, bbox_inches='tight')
@@ -429,10 +429,10 @@ grayscale_friendly = {
     'linestyles': ['-', '--', '-.', ':', (0, (3, 1, 1, 1))]
 }
 
-fig, ax = plt.subplots(figsize=(8, 5))
-for i, (color, linestyle) in enumerate(zip(grayscale_friendly['colors',], 
+fig, ax = plt.subplots (figsize=(8, 5))
+for i, (color, linestyle) in enumerate (zip (grayscale_friendly['colors',], 
                                             grayscale_friendly['linestyles',])):
-    ax.plot(np.random.randn(100).cumsum(), 
+    ax.plot (np.random.randn(100).cumsum(), 
             color=color, linestyle=linestyle, linewidth=2,
             label=f'Series {i+1}')
 ax.legend()
@@ -445,11 +445,11 @@ plt.show()
 okabe_ito = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', 
              '#0072B2', '#D55E00', '#CC79A7', '#000000',]
 
-fig, ax = plt.subplots(figsize=(8, 5))
-for i, color in enumerate(okabe_ito):
-    ax.plot(np.random.randn(100).cumsum(), color=color, 
+fig, ax = plt.subplots (figsize=(8, 5))
+for i, color in enumerate (okabe_ito):
+    ax.plot (np.random.randn(100).cumsum(), color=color, 
             linewidth=2, label=f'Series {i+1}')
-ax.legend(ncol=2)
+ax.legend (ncol=2)
 ax.set_title('Colorblind-Friendly (Okabe-Ito)')
 plt.tight_layout()
 plt.savefig('colorblind_friendly.pdf', dpi=300, bbox_inches='tight')
@@ -459,7 +459,7 @@ plt.show()
 **4. Complete Publication Template**
 
 \`\`\`python
-def create_publication_figure(figsize=(7, 5), dpi=300):
+def create_publication_figure (figsize=(7, 5), dpi=300):
     """
     Create a figure with publication-quality settings
     """
@@ -467,7 +467,7 @@ def create_publication_figure(figsize=(7, 5), dpi=300):
     plt.style.use('seaborn-v0_8-paper')
     
     # Create figure
-    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+    fig, ax = plt.subplots (figsize=figsize, dpi=dpi)
     
     # Configure fonts
     plt.rcParams.update({
@@ -486,18 +486,18 @@ def create_publication_figure(figsize=(7, 5), dpi=300):
     return fig, ax
 
 # Example usage
-fig, ax = create_publication_figure(figsize=(7, 5))
+fig, ax = create_publication_figure (figsize=(7, 5))
 
 # Plot data
 x = np.linspace(0, 10, 100)
-ax.plot(x, np.sin(x), label='sin(x)', linewidth=2)
-ax.plot(x, np.cos(x), label='cos(x)', linewidth=2)
+ax.plot (x, np.sin (x), label='sin (x)', linewidth=2)
+ax.plot (x, np.cos (x), label='cos (x)', linewidth=2)
 
 # Customize
 ax.set_xlabel('X (units)', fontsize=11)
 ax.set_ylabel('Y (units)', fontsize=11)
 ax.set_title('Publication Quality Figure', fontsize=12, fontweight='bold')
-ax.legend(frameon=True, fancybox=False, shadow=False)
+ax.legend (frameon=True, fancybox=False, shadow=False)
 ax.grid(True, alpha=0.3, linestyle='--')
 
 # Tight layout
@@ -515,34 +515,34 @@ plt.show()
 \`\`\`python
 def create_multipanel_figure():
     """Create publication-quality multi-panel figure"""
-    fig = plt.figure(figsize=(10, 8), dpi=300)
+    fig = plt.figure (figsize=(10, 8), dpi=300)
     
     # Define grid
     gs = fig.add_gridspec(2, 2, hspace=0.3, wspace=0.3)
     
     # Panel A
-    ax1 = fig.add_subplot(gs[0, 0])
+    ax1 = fig.add_subplot (gs[0, 0])
     x = np.linspace(0, 10, 100)
-    ax1.plot(x, np.sin(x), linewidth=2)
+    ax1.plot (x, np.sin (x), linewidth=2)
     ax1.set_xlabel('X')
     ax1.set_ylabel('sin(X)')
     ax1.set_title('(A) Time Series', loc='left', fontweight='bold')
     ax1.grid(True, alpha=0.3)
     
     # Panel B
-    ax2 = fig.add_subplot(gs[0, 1])
+    ax2 = fig.add_subplot (gs[0, 1])
     data = np.random.randn(1000)
-    ax2.hist(data, bins=30, edgecolor='black')
+    ax2.hist (data, bins=30, edgecolor='black')
     ax2.set_xlabel('Value')
     ax2.set_ylabel('Frequency')
     ax2.set_title('(B) Distribution', loc='left', fontweight='bold')
     ax2.grid(True, alpha=0.3, axis='y')
     
     # Panel C (spans bottom)
-    ax3 = fig.add_subplot(gs[1, :])
+    ax3 = fig.add_subplot (gs[1, :])
     categories = ['A', 'B', 'C', 'D', 'E',]
     values = [23, 45, 56, 78, 32]
-    ax3.bar(categories, values, edgecolor='black')
+    ax3.bar (categories, values, edgecolor='black')
     ax3.set_xlabel('Category')
     ax3.set_ylabel('Value')
     ax3.set_title('(C) Comparison', loc='left', fontweight='bold')
@@ -571,7 +571,7 @@ nature_style = {
     'axes.linewidth': 0.5,
 }
 
-plt.rcParams.update(nature_style)
+plt.rcParams.update (nature_style)
 
 # Save as TIFF (some journals require)
 plt.figure()
@@ -595,7 +595,7 @@ presentation_style = {
     'axes.linewidth': 2,
 }
 
-plt.rcParams.update(presentation_style)
+plt.rcParams.update (presentation_style)
 
 fig, ax = plt.subplots()
 ax.plot([1, 2, 3], [1, 4, 9], linewidth=4, color='#FF6B6B')
@@ -617,7 +617,7 @@ web_style = {
     'svg.fonttype': 'none',  # Don't convert text to paths
 }
 
-plt.rcParams.update(web_style)
+plt.rcParams.update (web_style)
 
 plt.figure()
 plt.plot([1, 2, 3], [1, 4, 9])
@@ -629,7 +629,7 @@ plt.savefig('web_figure.png', dpi=96, bbox_inches='tight')  # Screen resolution
 
 \`\`\`python
 # Comprehensive export function
-def save_figure(fig, basename, formats=['pdf', 'png', 'svg',], **kwargs):
+def save_figure (fig, basename, formats=['pdf', 'png', 'svg',], **kwargs):
     """
     Save figure in multiple formats
     
@@ -645,17 +645,17 @@ def save_figure(fig, basename, formats=['pdf', 'png', 'svg',], **kwargs):
         'dpi': 300,
         'transparent': False
     }
-    default_kwargs.update(kwargs)
+    default_kwargs.update (kwargs)
     
     for fmt in formats:
         filename = f"{basename}.{fmt}"
-        fig.savefig(filename, **default_kwargs)
+        fig.savefig (filename, **default_kwargs)
         print(f"Saved: {filename}")
 
 # Usage
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots (figsize=(8, 6))
 ax.plot([1, 2, 3], [1, 4, 9])
-save_figure(fig, 'my_figure', formats=['pdf', 'png', 'svg',])
+save_figure (fig, 'my_figure', formats=['pdf', 'png', 'svg',])
 \`\`\`
 
 **Checklist for Publication:**
@@ -738,9 +738,9 @@ stocks = pd.DataFrame({
     'GOOGL': 100 * (1 + np.random.randn(365) * 0.02).cumprod(),
 }, index=dates)
 
-plt.figure(figsize=(12, 6))
-plt.plot(stocks.index, stocks['AAPL',], label='AAPL', linewidth=2)
-plt.plot(stocks.index, stocks['GOOGL',], label='GOOGL', linewidth=2)
+plt.figure (figsize=(12, 6))
+plt.plot (stocks.index, stocks['AAPL',], label='AAPL', linewidth=2)
+plt.plot (stocks.index, stocks['GOOGL',], label='GOOGL', linewidth=2)
 plt.xlabel('Date')
 plt.ylabel('Price ($)')
 plt.title('Stock Prices Over Time')
@@ -771,22 +771,22 @@ plt.show()
 regions = ['North', 'South', 'East', 'West',]
 sales = [45000, 38000, 52000, 41000]
 
-plt.figure(figsize=(10, 6))
-bars = plt.bar(regions, sales, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',])
+plt.figure (figsize=(10, 6))
+bars = plt.bar (regions, sales, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',])
 plt.ylabel('Sales ($)')
 plt.title('Sales by Region')
 
 # Add values on bars
-for i, (region, value) in enumerate(zip(regions, sales)):
-    plt.text(i, value, f'\${value:,}', ha='center', va='bottom')
+for i, (region, value) in enumerate (zip (regions, sales)):
+    plt.text (i, value, f'\${value:,}', ha='center', va='bottom')
 plt.show()
 
 # Horizontal for long labels
 categories = ['Category A', 'Category B with Long Name', 'Category C',]
 values = [23, 45, 67]
 
-plt.figure(figsize = (10, 6))
-plt.barh(categories, values)
+plt.figure (figsize = (10, 6))
+plt.barh (categories, values)
 plt.xlabel('Value')
 plt.title('Horizontal Bar Plot')
 plt.show()
@@ -796,17 +796,17 @@ quarters = ['Q1', 'Q2', 'Q3', 'Q4',]
 product_a = [20, 25, 30, 35]
 product_b = [15, 20, 28, 32]
 
-x = np.arange(len(quarters))
+x = np.arange (len (quarters))
 width = 0.35
 
-fig, ax = plt.subplots(figsize = (10, 6))
-ax.bar(x - width / 2, product_a, width, label = 'Product A')
-ax.bar(x + width / 2, product_b, width, label = 'Product B')
+fig, ax = plt.subplots (figsize = (10, 6))
+ax.bar (x - width / 2, product_a, width, label = 'Product A')
+ax.bar (x + width / 2, product_b, width, label = 'Product B')
 ax.set_xlabel('Quarter')
 ax.set_ylabel('Sales')
 ax.set_title('Sales by Product and Quarter')
-ax.set_xticks(x)
-ax.set_xticklabels(quarters)
+ax.set_xticks (x)
+ax.set_xticklabels (quarters)
 ax.legend()
 plt.show()
 \`\`\`
@@ -834,26 +834,26 @@ n = 200
 height = np.random.normal(170, 10, n)
 weight = height * 0.8 + np.random.normal(0, 5, n)
 
-plt.figure(figsize=(10, 8))
-plt.scatter(height, weight, alpha=0.5, s=50)
+plt.figure (figsize=(10, 8))
+plt.scatter (height, weight, alpha=0.5, s=50)
 plt.xlabel('Height (cm)')
 plt.ylabel('Weight (kg)')
-plt.title(f'Height vs Weight (r = {np.corrcoef(height, weight)[0,1]:.3f})')
+plt.title (f'Height vs Weight (r = {np.corrcoef (height, weight)[0,1]:.3f})')
 
 # Add regression line
-z = np.polyfit(height, weight, 1)
-p = np.poly1d(z)
-plt.plot(height, p(height), "r--", linewidth=2, label='Trend')
+z = np.polyfit (height, weight, 1)
+p = np.poly1d (z)
+plt.plot (height, p (height), "r--", linewidth=2, label='Trend')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
 
 # With categorical color
 categories = np.random.choice(['A', 'B', 'C',], n)
-plt.figure(figsize=(10, 8))
+plt.figure (figsize=(10, 8))
 for category in ['A', 'B', 'C',]:
     mask = categories == category
-    plt.scatter(height[mask], weight[mask], label=category, alpha=0.6, s=50)
+    plt.scatter (height[mask], weight[mask], label=category, alpha=0.6, s=50)
 plt.xlabel('Height (cm)')
 plt.ylabel('Weight (kg)')
 plt.title('Height vs Weight by Category')
@@ -889,16 +889,16 @@ salaries = [
     np.random.normal(60000, 8000, 100)
 ]
 
-plt.figure(figsize=(10, 6))
-box = plt.boxplot(salaries, labels=departments, patch_artist=True)
+plt.figure (figsize=(10, 6))
+box = plt.boxplot (salaries, labels=departments, patch_artist=True)
 plt.ylabel('Salary ($)')
 plt.title('Salary Distribution by Department')
 plt.grid(True, alpha=0.3, axis='y')
 
 # Color boxes
 colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',]
-for patch, color in zip(box['boxes',], colors):
-    patch.set_facecolor(color)
+for patch, color in zip (box['boxes',], colors):
+    patch.set_facecolor (color)
     patch.set_alpha(0.6)
 
 plt.show()
@@ -932,19 +932,19 @@ scores = [
 ]
 
 df = pd.DataFrame({
-    'Class': np.repeat(classes, 100),
-    'Score': np.concatenate(scores)
+    'Class': np.repeat (classes, 100),
+    'Score': np.concatenate (scores)
 })
 
-plt.figure(figsize=(10, 6))
-sns.violinplot(data=df, x='Class', y='Score')
+plt.figure (figsize=(10, 6))
+sns.violinplot (data=df, x='Class', y='Score')
 plt.title('Test Score Distributions by Class')
 plt.ylabel('Score')
 plt.show()
 
 # With inner box plot
-plt.figure(figsize=(10, 6))
-sns.violinplot(data=df, x='Class', y='Score', inner='box')
+plt.figure (figsize=(10, 6))
+sns.violinplot (data=df, x='Class', y='Score', inner='box')
 plt.title('Violin Plot with Inner Box Plot')
 plt.show()
 \`\`\`
@@ -973,10 +973,10 @@ ages = np.concatenate([
     np.random.normal(55, 8, 200)
 ])
 
-plt.figure(figsize=(10, 6))
-plt.hist(ages, bins=30, edgecolor='black', alpha=0.7)
-plt.axvline(ages.mean(), color='red', linestyle='--', linewidth=2, label=f'Mean: {ages.mean():.1f}')
-plt.axvline(np.median(ages), color='green', linestyle='--', linewidth=2, label=f'Median: {np.median(ages):.1f}')
+plt.figure (figsize=(10, 6))
+plt.hist (ages, bins=30, edgecolor='black', alpha=0.7)
+plt.axvline (ages.mean(), color='red', linestyle='--', linewidth=2, label=f'Mean: {ages.mean():.1f}')
+plt.axvline (np.median (ages), color='green', linestyle='--', linewidth=2, label=f'Median: {np.median (ages):.1f}')
 plt.xlabel('Age')
 plt.ylabel('Frequency')
 plt.title('Age Distribution')
@@ -1003,13 +1003,13 @@ plt.show()
 
 \`\`\`python
 # Example: Correlation matrix
-df = pd.DataFrame(np.random.randn(100, 5), columns=['A', 'B', 'C', 'D', 'E',])
+df = pd.DataFrame (np.random.randn(100, 5), columns=['A', 'B', 'C', 'D', 'E',])
 df['B',] = df['A',] * 0.8 + df['B',] * 0.4
 df['C',] = df['A',] * -0.6 + df['C',] * 0.5
 corr = df.corr()
 
-plt.figure(figsize=(10, 8))
-sns.heatmap(corr, annot=True, cmap='coolwarm', center=0,
+plt.figure (figsize=(10, 8))
+sns.heatmap (corr, annot=True, cmap='coolwarm', center=0,
             square=True, linewidths=1, cbar_kws={"shrink": 0.8},
             vmin=-1, vmax=1)
 plt.title('Correlation Heatmap')
@@ -1023,8 +1023,8 @@ pivot_data = pd.DataFrame({
 })
 pivot = pivot_data.pivot('Region', 'Month', 'Sales')
 
-plt.figure(figsize=(8, 6))
-sns.heatmap(pivot, annot=True, fmt='d', cmap='YlGnBu')
+plt.figure (figsize=(8, 6))
+sns.heatmap (pivot, annot=True, fmt='d', cmap='YlGnBu')
 plt.title('Sales by Region and Month')
 plt.show()
 \`\`\`

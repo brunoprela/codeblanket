@@ -29,7 +29,7 @@ export const slisMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Error budget = 100% - SLO%. It's the amount of unreliability allowed by your SLO. Example: SLO 99.9% → Error budget 0.1% → 43.2 minutes downtime/month allowed. Decision framework: Budget remaining → ship features. Budget near 0 → slow releases, focus reliability. Budget exhausted → feature freeze, only reliability work. This quantifies the trade-off between innovation and stability.",
+      "Error budget = 100% - SLO%. It\'s the amount of unreliability allowed by your SLO. Example: SLO 99.9% → Error budget 0.1% → 43.2 minutes downtime/month allowed. Decision framework: Budget remaining → ship features. Budget near 0 → slow releases, focus reliability. Budget exhausted → feature freeze, only reliability work. This quantifies the trade-off between innovation and stability.",
   },
   {
     id: 'mc3',

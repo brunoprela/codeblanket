@@ -215,12 +215,12 @@ print()
 x_lstsq, _, _, _ = np.linalg.lstsq(A_over, b_over, rcond=None)
 
 print(f"np.linalg.lstsq solution: {x_lstsq}")
-print(f"Equal: {np.allclose(x_qr, x_lstsq)}")
+print(f"Equal: {np.allclose (x_qr, x_lstsq)}")
 print()
 
 # Compute residual
 residual = b_over - A_over @ x_qr
-print(f"Residual norm: {np.linalg.norm(residual):.6f}")
+print(f"Residual norm: {np.linalg.norm (residual):.6f}")
 \`\`\`
 
 ## Cholesky Decomposition
@@ -251,7 +251,7 @@ print()
 # Check positive definiteness
 eigenvalues = np.linalg.eigvals(A_spd)
 print(f"Eigenvalues: {eigenvalues}")
-print(f"All positive: {np.all(eigenvalues > 0)}")
+print(f"All positive: {np.all (eigenvalues > 0)}")
 print()
 
 # Compute Cholesky decomposition
@@ -386,7 +386,7 @@ print()
 error = np.linalg.norm(A_large - A_rank2, 'fro')
 print(f"Frobenius norm error: {error:.6f}")
 print(f"Error is σ₃² + σ₄² + σ₅²")
-print(f"Computed: {np.sqrt(np.sum(S_l[k:]**2)):.6f}")
+print(f"Computed: {np.sqrt (np.sum(S_l[k:]**2)):.6f}")
 \`\`\`
 
 ### SVD for Pseudoinverse
@@ -474,7 +474,7 @@ print("\\n=== Application: Linear Regression ===")
 
 from sklearn.datasets import make_regression
 
-X_reg, y_reg = make_regression(n_samples=100, n_features=5, noise=10, random_state=42)
+X_reg, y_reg = make_regression (n_samples=100, n_features=5, noise=10, random_state=42)
 
 print(f"X shape: {X_reg.shape}")
 print(f"y shape: {y_reg.shape}")
@@ -494,7 +494,7 @@ print()
 coeffs_normal = np.linalg.inv(X_reg_intercept.T @ X_reg_intercept) @ X_reg_intercept.T @ y_reg
 
 print(f"Normal equations: {coeffs_normal}")
-print(f"QR more stable than normal equations: {np.allclose(coeffs_qr, coeffs_normal)}")
+print(f"QR more stable than normal equations: {np.allclose (coeffs_qr, coeffs_normal)}")
 \`\`\`
 
 ### 2. Data Compression via SVD
@@ -511,14 +511,14 @@ print(f"Original size: {image.size} values")
 print()
 
 # SVD
-U_img, S_img, Vt_img = np.linalg.svd(image, full_matrices=False)
+U_img, S_img, Vt_img = np.linalg.svd (image, full_matrices=False)
 
 # Compress: keep only top k singular values
 k_vals = [5, 10, 20]
 
 for k in k_vals:
     compressed = U_img[:, :k] @ np.diag(S_img[:k]) @ Vt_img[:k, :]
-    error = np.linalg.norm(image - compressed, 'fro') / np.linalg.norm(image, 'fro')
+    error = np.linalg.norm (image - compressed, 'fro') / np.linalg.norm (image, 'fro')
     
     # Storage: U[:, :k] + S[:k] + Vt[:k, :]
     storage = 50*k + k + k*50

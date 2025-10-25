@@ -12,9 +12,9 @@ export const numbertheorySection = {
 - Sieve of Eratosthenes for finding all primes up to n
 
 **2. GCD (Greatest Common Divisor)**
-- Euclidean Algorithm: O(log(min(a,b)))
+- Euclidean Algorithm: O(log (min (a,b)))
 \`\`\`python
-def gcd(a, b):
+def gcd (a, b):
     while b:
         a, b = b, a % b
     return a
@@ -25,7 +25,7 @@ def gcd(a, b):
 
 **4. Factorization**
 - Break number into prime factors
-- Check divisors up to sqrt(n)
+- Check divisors up to sqrt (n)
 
 **5. Power and Exponentiation**
 - Fast exponentiation: O(log n)

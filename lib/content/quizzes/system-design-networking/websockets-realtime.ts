@@ -42,7 +42,7 @@ Clients (10M)
 *Scaling*:
 - Each server handles 10,000 concurrent connections
 - 10M users ÷ 10k per server = 1,000 servers needed
-- Optimize: Use Erlang/Elixir (Discord's approach) or Go for high concurrency
+- Optimize: Use Erlang/Elixir (Discord\'s approach) or Go for high concurrency
 
 *Implementation*:
 \`\`\`javascript
@@ -53,9 +53,9 @@ class WebSocketGateway {
     this.redis = new Redis();
   }
   
-  async handleConnection(ws, userId) {
+  async handleConnection (ws, userId) {
     // Store connection
-    this.connections.set(userId, ws);
+    this.connections.set (userId, ws);
     
     // Update presence in Redis
     await this.redis.sadd('online_users', userId);
@@ -67,11 +67,11 @@ class WebSocketGateway {
     });
     
     ws.on('message', async (msg) => {
-      await this.handleMessage(userId, msg);
+      await this.handleMessage (userId, msg);
     });
     
     ws.on('close', async () => {
-      this.connections.delete(userId);
+      this.connections.delete (userId);
       await this.redis.srem('online_users', userId);
       
       this.kafka.publish('presence', {
@@ -81,9 +81,9 @@ class WebSocketGateway {
     });
   }
   
-  async handleMessage(userId, message) {
+  async handleMessage (userId, message) {
     // Parse message
-    const data = JSON.parse(message);
+    const data = JSON.parse (message);
     
     // Add metadata
     data.senderId = userId;
@@ -94,10 +94,10 @@ class WebSocketGateway {
     await this.kafka.publish('messages', data);
   }
   
-  async sendToUser(userId, message) {
-    const ws = this.connections.get(userId);
+  async sendToUser (userId, message) {
+    const ws = this.connections.get (userId);
     if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(JSON.stringify(message));
+      ws.send(JSON.stringify (message));
       return true;
     }
     return false;
@@ -130,9 +130,9 @@ class WebSocketGateway {
 
 \`\`\`javascript
 class MessageProcessor {
-  async processMessage(msg) {
+  async processMessage (msg) {
     // 1. Validate and sanitize
-    if (!this.isValid(msg)) {
+    if (!this.isValid (msg)) {
       return;
     }
     
@@ -146,24 +146,24 @@ class MessageProcessor {
     });
     
     // 3. Get channel members
-    const members = await this.getChannelMembers(msg.channelId);
+    const members = await this.getChannelMembers (msg.channelId);
     
     // 4. Fan out to online members
     const deliveryStatus = await Promise.all(
-      members.map(userId => this.deliverToUser(userId, msg))
+      members.map (userId => this.deliverToUser (userId, msg))
     );
     
     // 5. Store for offline members
     const offlineUsers = members.filter((_, i) => !deliveryStatus[i]);
     if (offlineUsers.length > 0) {
-      await this.storeOfflineMessages(offlineUsers, msg);
+      await this.storeOfflineMessages (offlineUsers, msg);
     }
     
     // 6. Send acknowledgment to sender
-    await this.sendAck(msg.senderId, msg.messageId);
+    await this.sendAck (msg.senderId, msg.messageId);
   }
   
-  async deliverToUser(userId, msg) {
+  async deliverToUser (userId, msg) {
     // Check if user is online
     const isOnline = await this.redis.sismember('online_users', userId);
     if (!isOnline) {
@@ -194,7 +194,7 @@ class MessageProcessor {
 *Strategy 2: Message inbox*
 \`\`\`javascript
 // When user comes online
-async function onUserConnect(userId) {
+async function onUserConnect (userId) {
   // Fetch undelivered messages
   const messages = await db.query(
     'SELECT * FROM offline_messages WHERE userId = ? ORDER BY timestamp',
@@ -203,7 +203,7 @@ async function onUserConnect(userId) {
   
   // Deliver all messages
   for (const msg of messages) {
-    await sendToUser(userId, msg);
+    await sendToUser (userId, msg);
   }
   
   // Clear offline queue
@@ -223,35 +223,35 @@ async function onUserConnect(userId) {
 \`\`\`javascript
 // Client-side
 class ReliableWebSocket {
-  constructor(url) {
-    this.ws = new WebSocket(url);
+  constructor (url) {
+    this.ws = new WebSocket (url);
     this.pendingMessages = new Map(); // messageId → message
     this.ackTimeout = 5000; // 5 seconds
   }
   
-  send(message) {
+  send (message) {
     const messageId = uuid();
     message.id = messageId;
     
-    this.ws.send(JSON.stringify(message));
+    this.ws.send(JSON.stringify (message));
     
     // Set timeout for acknowledgment
     const timer = setTimeout(() => {
       console.log('No ack received, resending');
-      this.send(message);
+      this.send (message);
     }, this.ackTimeout);
     
-    this.pendingMessages.set(messageId, {
+    this.pendingMessages.set (messageId, {
       message,
       timer
     });
   }
   
-  handleAck(ack) {
-    const pending = this.pendingMessages.get(ack.messageId);
+  handleAck (ack) {
+    const pending = this.pendingMessages.get (ack.messageId);
     if (pending) {
-      clearTimeout(pending.timer);
-      this.pendingMessages.delete(ack.messageId);
+      clearTimeout (pending.timer);
+      this.pendingMessages.delete (ack.messageId);
     }
   }
 }
@@ -262,22 +262,22 @@ class ReliableWebSocket {
 // Server-side: Deduplicate messages
 const processedMessages = new Set();
 
-async function handleMessage(msg) {
-  if (processedMessages.has(msg.messageId)) {
+async function handleMessage (msg) {
+  if (processedMessages.has (msg.messageId)) {
     // Already processed, send ack again
-    sendAck(msg.senderId, msg.messageId);
+    sendAck (msg.senderId, msg.messageId);
     return;
   }
   
   // Process message
-  await storeMessage(msg);
-  await deliverMessage(msg);
+  await storeMessage (msg);
+  await deliverMessage (msg);
   
   // Mark as processed
-  processedMessages.add(msg.messageId);
+  processedMessages.add (msg.messageId);
   
   // Send ack
-  sendAck(msg.senderId, msg.messageId);
+  sendAck (msg.senderId, msg.messageId);
 }
 \`\`\`
 
@@ -473,7 +473,7 @@ Corporate firewalls often block WebSocket because:
 
 \`\`\`javascript
 class AdaptiveTransport {
-  constructor(url) {
+  constructor (url) {
     this.url = url;
     this.transport = null;
     this.connect();
@@ -505,21 +505,21 @@ class AdaptiveTransport {
   
   tryWebSocket() {
     return new Promise((resolve, reject) => {
-      const ws = new WebSocket(this.url);
+      const ws = new WebSocket (this.url);
       
       const timeout = setTimeout(() => {
         ws.close();
-        reject(new Error('WebSocket connection timeout'));
+        reject (new Error('WebSocket connection timeout'));
       }, 5000);
       
       ws.onopen = () => {
-        clearTimeout(timeout);
-        resolve(new WebSocketTransport(ws));
+        clearTimeout (timeout);
+        resolve (new WebSocketTransport (ws));
       };
       
       ws.onerror = (error) => {
-        clearTimeout(timeout);
-        reject(error);
+        clearTimeout (timeout);
+        reject (error);
       };
     });
   }
@@ -530,32 +530,32 @@ class AdaptiveTransport {
       
       const timeout = setTimeout(() => {
         sse.close();
-        reject(new Error('SSE connection timeout'));
+        reject (new Error('SSE connection timeout'));
       }, 5000);
       
       sse.onopen = () => {
-        clearTimeout(timeout);
-        resolve(new SSETransport(sse, this.url));
+        clearTimeout (timeout);
+        resolve (new SSETransport (sse, this.url));
       };
       
       sse.onerror = (error) => {
-        clearTimeout(timeout);
+        clearTimeout (timeout);
         sse.close();
-        reject(error);
+        reject (error);
       };
     });
   }
   
   useLongPolling() {
-    return new LongPollingTransport(this.url);
+    return new LongPollingTransport (this.url);
   }
   
-  send(data) {
-    this.transport.send(data);
+  send (data) {
+    this.transport.send (data);
   }
   
-  onMessage(callback) {
-    this.transport.onMessage(callback);
+  onMessage (callback) {
+    this.transport.onMessage (callback);
   }
 }
 \`\`\`
@@ -564,22 +564,22 @@ class AdaptiveTransport {
 
 \`\`\`javascript
 class WebSocketTransport {
-  constructor(ws) {
+  constructor (ws) {
     this.ws = ws;
     this.messageHandlers = [];
     
     this.ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      this.messageHandlers.forEach(handler => handler(data));
+      const data = JSON.parse (event.data);
+      this.messageHandlers.forEach (handler => handler (data));
     };
   }
   
-  send(data) {
-    this.ws.send(JSON.stringify(data));
+  send (data) {
+    this.ws.send(JSON.stringify (data));
   }
   
-  onMessage(callback) {
-    this.messageHandlers.push(callback);
+  onMessage (callback) {
+    this.messageHandlers.push (callback);
   }
   
   close() {
@@ -592,28 +592,28 @@ class WebSocketTransport {
 
 \`\`\`javascript
 class SSETransport {
-  constructor(sse, baseUrl) {
+  constructor (sse, baseUrl) {
     this.sse = sse;
     this.baseUrl = baseUrl;
     this.messageHandlers = [];
     
     this.sse.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      this.messageHandlers.forEach(handler => handler(data));
+      const data = JSON.parse (event.data);
+      this.messageHandlers.forEach (handler => handler (data));
     };
   }
   
-  async send(data) {
+  async send (data) {
     // Use regular HTTP POST for client → server
     await fetch(\`\${this.baseUrl}/message\`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify (data)
     });
   }
   
-  onMessage(callback) {
-    this.messageHandlers.push(callback);
+  onMessage (callback) {
+    this.messageHandlers.push (callback);
   }
   
   close() {
@@ -638,7 +638,7 @@ app.get('/sse', (req, res) => {
   
   // Register client for push updates
   const clientId = uuid();
-  clients.set(clientId, res);
+  clients.set (clientId, res);
   
   // Heartbeat (keep connection alive)
   const heartbeat = setInterval(() => {
@@ -647,16 +647,16 @@ app.get('/sse', (req, res) => {
   
   // Cleanup on disconnect
   req.on('close', () => {
-    clearInterval(heartbeat);
-    clients.delete(clientId);
+    clearInterval (heartbeat);
+    clients.delete (clientId);
   });
 });
 
 // Send message to all SSE clients
 function broadcastSSE(message) {
-  const data = \`data: \${JSON.stringify(message)}\\n\\n\`;
-  clients.forEach(client => {
-    client.write(data);
+  const data = \`data: \${JSON.stringify (message)}\\n\\n\`;
+  clients.forEach (client => {
+    client.write (data);
   });
 }
 \`\`\`
@@ -665,7 +665,7 @@ function broadcastSSE(message) {
 
 \`\`\`javascript
 class LongPollingTransport {
-  constructor(baseUrl) {
+  constructor (baseUrl) {
     this.baseUrl = baseUrl;
     this.messageHandlers = [];
     this.polling = true;
@@ -682,28 +682,28 @@ class LongPollingTransport {
         
         if (response.ok) {
           const messages = await response.json();
-          messages.forEach(msg => {
-            this.messageHandlers.forEach(handler => handler(msg));
+          messages.forEach (msg => {
+            this.messageHandlers.forEach (handler => handler (msg));
           });
         }
       } catch (error) {
         console.error('Polling error:', error);
         // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise (resolve => setTimeout (resolve, 5000));
       }
     }
   }
   
-  async send(data) {
+  async send (data) {
     await fetch(\`\${this.baseUrl}/message\`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify (data)
     });
   }
   
-  onMessage(callback) {
-    this.messageHandlers.push(callback);
+  onMessage (callback) {
+    this.messageHandlers.push (callback);
   }
   
   close() {
@@ -720,12 +720,12 @@ app.get('/poll', async (req, res) => {
   const userId = req.user.id;
   
   // Check if messages available
-  const queue = messageQueues.get(userId) || [];
+  const queue = messageQueues.get (userId) || [];
   
   if (queue.length > 0) {
     // Send immediately
-    res.json(queue);
-    messageQueues.set(userId, []);
+    res.json (queue);
+    messageQueues.set (userId, []);
   } else {
     // Hold connection until message arrives (max 30 seconds)
     const timeout = setTimeout(() => {
@@ -733,7 +733,7 @@ app.get('/poll', async (req, res) => {
     }, 30000);
     
     // Register callback for when message arrives
-    pendingRequests.set(userId, {
+    pendingRequests.set (userId, {
       res,
       timeout
     });
@@ -741,20 +741,20 @@ app.get('/poll', async (req, res) => {
 });
 
 // When message arrives
-function deliverMessage(userId, message) {
+function deliverMessage (userId, message) {
   // Check if user has pending long poll request
-  const pending = pendingRequests.get(userId);
+  const pending = pendingRequests.get (userId);
   
   if (pending) {
     // Deliver immediately
-    clearTimeout(pending.timeout);
+    clearTimeout (pending.timeout);
     pending.res.json([message]);
-    pendingRequests.delete(userId);
+    pendingRequests.delete (userId);
   } else {
     // Queue for next poll
-    const queue = messageQueues.get(userId) || [];
-    queue.push(message);
-    messageQueues.set(userId, queue);
+    const queue = messageQueues.get (userId) || [];
+    queue.push (message);
+    messageQueues.set (userId, queue);
   }
 }
 \`\`\`
@@ -846,7 +846,7 @@ For long polling, don't poll constantly:
 
 \`\`\`javascript
 class AdaptiveLongPolling {
-  constructor(baseUrl) {
+  constructor (baseUrl) {
     this.baseUrl = baseUrl;
     this.pollInterval = 30000; // Start with 30 seconds
     this.active = false;
@@ -858,10 +858,10 @@ class AdaptiveLongPolling {
     if (messages.length > 0) {
       // Activity detected, poll faster
       this.pollInterval = 1000; // 1 second
-      this.deliverMessages(messages);
+      this.deliverMessages (messages);
     } else {
       // No activity, slow down (exponential backoff)
-      this.pollInterval = Math.min(this.pollInterval * 1.5, 30000);
+      this.pollInterval = Math.min (this.pollInterval * 1.5, 30000);
     }
     
     setTimeout(() => this.poll(), this.pollInterval);
@@ -982,7 +982,7 @@ ws.onopen = () => {
 
 // Server
 ws.on('message', async (message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   if (!ws.authenticated) {
     if (data.type !== 'auth') {
@@ -992,7 +992,7 @@ ws.on('message', async (message) => {
     
     // Validate token
     try {
-      const user = await validateToken(data.token);
+      const user = await validateToken (data.token);
       ws.authenticated = true;
       ws.userId = user.id;
       ws.send(JSON.stringify({ type: 'auth_success' }));
@@ -1003,7 +1003,7 @@ ws.on('message', async (message) => {
   }
   
   // Handle other messages
-  handleMessage(ws, data);
+  handleMessage (ws, data);
 });
 \`\`\`
 
@@ -1019,8 +1019,8 @@ ws.on('auth_success', () => {
   ws.sessionId = generateNewSessionId();
   
   // Invalidate old session
-  sessions.delete(oldSessionId);
-  sessions.set(ws.sessionId, { userId: ws.userId });
+  sessions.delete (oldSessionId);
+  sessions.set (ws.sessionId, { userId: ws.userId });
 });
 \`\`\`
 
@@ -1031,7 +1031,7 @@ Long-lived WebSocket connections can outlive token expiration.
 **Solution: Periodic re-authentication**
 \`\`\`javascript
 // Client: Periodically refresh token
-setInterval(async () => {
+setInterval (async () => {
   const newToken = await refreshAuthToken();
   ws.send(JSON.stringify({
     type: 'refresh_auth',
@@ -1041,7 +1041,7 @@ setInterval(async () => {
 
 // Server: Check token expiry
 setInterval(() => {
-  if (tokenExpired(ws.token)) {
+  if (tokenExpired (ws.token)) {
     ws.close(4001, 'Token expired');
   }
 }, 60 * 1000); // Check every minute
@@ -1054,12 +1054,12 @@ setInterval(() => {
 \`\`\`javascript
 // VULNERABLE
 ws.on('message', (message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   // No authorization check!
   if (data.type === 'read_chat') {
-    const messages = getMessages(data.channelId);
-    ws.send(JSON.stringify(messages));
+    const messages = getMessages (data.channelId);
+    ws.send(JSON.stringify (messages));
   }
 });
 \`\`\`
@@ -1067,12 +1067,12 @@ ws.on('message', (message) => {
 **Solution: Authorize every action**
 \`\`\`javascript
 ws.on('message', async (message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   // Always check authorization
   if (data.type === 'read_chat') {
     // Verify user has access to this channel
-    const hasAccess = await checkChannelAccess(ws.userId, data.channelId);
+    const hasAccess = await checkChannelAccess (ws.userId, data.channelId);
     if (!hasAccess) {
       ws.send(JSON.stringify({
         type: 'error',
@@ -1081,16 +1081,16 @@ ws.on('message', async (message) => {
       return;
     }
     
-    const messages = getMessages(data.channelId);
-    ws.send(JSON.stringify(messages));
+    const messages = getMessages (data.channelId);
+    ws.send(JSON.stringify (messages));
   }
 });
 \`\`\`
 
 **Best Practice: Authorization middleware**
 \`\`\`javascript
-async function requireChannelAccess(ws, channelId) {
-  const hasAccess = await checkChannelAccess(ws.userId, channelId);
+async function requireChannelAccess (ws, channelId) {
+  const hasAccess = await checkChannelAccess (ws.userId, channelId);
   if (!hasAccess) {
     throw new Error('Access denied');
   }
@@ -1099,12 +1099,12 @@ async function requireChannelAccess(ws, channelId) {
 // Use in handlers
 ws.on('message', async (message) => {
   try {
-    const data = JSON.parse(message);
+    const data = JSON.parse (message);
     
     if (data.type === 'read_chat') {
-      await requireChannelAccess(ws, data.channelId);
-      const messages = getMessages(data.channelId);
-      ws.send(JSON.stringify(messages));
+      await requireChannelAccess (ws, data.channelId);
+      const messages = getMessages (data.channelId);
+      ws.send(JSON.stringify (messages));
     }
   } catch (error) {
     ws.send(JSON.stringify({ type: 'error', message: error.message }));
@@ -1126,30 +1126,30 @@ for (let i = 0; i < 10000; i++) {
 **Solution 1: Per-connection rate limiting**
 \`\`\`javascript
 class RateLimiter {
-  constructor(maxMessages, windowMs) {
+  constructor (maxMessages, windowMs) {
     this.maxMessages = maxMessages; // e.g., 100
     this.windowMs = windowMs; // e.g., 1000ms
     this.counters = new Map(); // connectionId → [timestamps]
   }
   
-  check(connectionId) {
+  check (connectionId) {
     const now = Date.now();
     
-    if (!this.counters.has(connectionId)) {
-      this.counters.set(connectionId, []);
+    if (!this.counters.has (connectionId)) {
+      this.counters.set (connectionId, []);
     }
     
-    const timestamps = this.counters.get(connectionId);
+    const timestamps = this.counters.get (connectionId);
     
     // Remove old timestamps
-    const recent = timestamps.filter(t => now - t < this.windowMs);
+    const recent = timestamps.filter (t => now - t < this.windowMs);
     
     if (recent.length >= this.maxMessages) {
       return false; // Rate limit exceeded
     }
     
-    recent.push(now);
-    this.counters.set(connectionId, recent);
+    recent.push (now);
+    this.counters.set (connectionId, recent);
     
     return true;
   }
@@ -1158,7 +1158,7 @@ class RateLimiter {
 const rateLimiter = new RateLimiter(100, 1000); // 100 messages per second
 
 ws.on('message', (message) => {
-  if (!rateLimiter.check(ws.id)) {
+  if (!rateLimiter.check (ws.id)) {
     ws.send(JSON.stringify({ type: 'error', message: 'Rate limit exceeded' }));
     // Optionally close connection after repeated violations
     ws.violationCount = (ws.violationCount || 0) + 1;
@@ -1168,33 +1168,33 @@ ws.on('message', (message) => {
     return;
   }
   
-  handleMessage(message);
+  handleMessage (message);
 });
 \`\`\`
 
 **Solution 2: Per-user rate limiting (across all connections)**
 \`\`\`javascript
 // Use Redis for distributed rate limiting
-async function checkRateLimit(userId) {
+async function checkRateLimit (userId) {
   const key = \`ratelimit:\${userId}\`;
-  const count = await redis.incr(key);
+  const count = await redis.incr (key);
   
   if (count === 1) {
     // Set expiry on first request
-    await redis.expire(key, 1); // 1 second window
+    await redis.expire (key, 1); // 1 second window
   }
   
   return count <= 100; // Max 100 messages per second
 }
 
 ws.on('message', async (message) => {
-  const allowed = await checkRateLimit(ws.userId);
+  const allowed = await checkRateLimit (ws.userId);
   if (!allowed) {
     ws.send(JSON.stringify({ type: 'error', message: 'Rate limit exceeded' }));
     return;
   }
   
-  handleMessage(message);
+  handleMessage (message);
 });
 \`\`\`
 
@@ -1210,7 +1210,7 @@ ws.on('message', async (message) => {
   const ws = new WebSocket('wss://victim.com/socket');
   ws.onmessage = (e) => {
     // Steal victim's messages
-    sendToAttacker(e.data);
+    sendToAttacker (e.data);
   };
 </script>
 \`\`\`
@@ -1226,7 +1226,7 @@ wss.on('connection', (ws, req) => {
     'https://app.example.com'
   ];
   
-  if (!allowedOrigins.includes(origin)) {
+  if (!allowedOrigins.includes (origin)) {
     ws.close(4003, 'Origin not allowed');
     return;
   }
@@ -1261,7 +1261,7 @@ wss.on('connection', (ws, req) => {
 \`\`\`javascript
 // VULNERABLE
 ws.on('message', (message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   // Send to all users without sanitization
   broadcast({
@@ -1277,7 +1277,7 @@ ws.on('message', (message) => {
 const sanitizeHtml = require('sanitize-html');
 
 ws.on('message', (message) => {
-  const data = JSON.parse(message);
+  const data = JSON.parse (message);
   
   // Validate structure
   if (!data.type || !data.message) {
@@ -1287,13 +1287,13 @@ ws.on('message', (message) => {
   
   // Validate message type
   const allowedTypes = ['chat', 'typing', 'read',];
-  if (!allowedTypes.includes(data.type)) {
+  if (!allowedTypes.includes (data.type)) {
     ws.send(JSON.stringify({ type: 'error', message: 'Invalid message type' }));
     return;
   }
   
   // Sanitize HTML
-  const cleanMessage = sanitizeHtml(data.message, {
+  const cleanMessage = sanitizeHtml (data.message, {
     allowedTags: ['b', 'i', 'em', 'strong',],
     allowedAttributes: {}
   });
@@ -1331,8 +1331,8 @@ const ws = new WebSocket('wss://example.com/socket');
 **Mitigation 2: Message signatures**
 \`\`\`javascript
 // Client: Sign each message
-function sendSecure(ws, data) {
-  const message = JSON.stringify(data);
+function sendSecure (ws, data) {
+  const message = JSON.stringify (data);
   const signature = hmacSHA256(message, userSecret);
   
   ws.send(JSON.stringify({
@@ -1343,9 +1343,9 @@ function sendSecure(ws, data) {
 
 // Server: Verify signature
 ws.on('message', (payload) => {
-  const { message, signature } = JSON.parse(payload);
+  const { message, signature } = JSON.parse (payload);
   
-  const userSecret = getUserSecret(ws.userId);
+  const userSecret = getUserSecret (ws.userId);
   const expectedSignature = hmacSHA256(message, userSecret);
   
   if (signature !== expectedSignature) {
@@ -1353,7 +1353,7 @@ ws.on('message', (payload) => {
     return;
   }
   
-  handleMessage(JSON.parse(message));
+  handleMessage(JSON.parse (message));
 });
 \`\`\`
 
@@ -1398,7 +1398,7 @@ const connectionsPerIP = new Map();
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress;
   
-  const count = connectionsPerIP.get(ip) || 0;
+  const count = connectionsPerIP.get (ip) || 0;
   
   // Max 10 connections per IP
   if (count >= 10) {
@@ -1406,10 +1406,10 @@ wss.on('connection', (ws, req) => {
     return;
   }
   
-  connectionsPerIP.set(ip, count + 1);
+  connectionsPerIP.set (ip, count + 1);
   
   ws.on('close', () => {
-    connectionsPerIP.set(ip, connectionsPerIP.get(ip) - 1);
+    connectionsPerIP.set (ip, connectionsPerIP.get (ip) - 1);
   });
 });
 \`\`\`
@@ -1430,7 +1430,7 @@ wss.on('connection', (ws) => {
       return;
     }
     
-    handleMessage(message);
+    handleMessage (message);
   });
 });
 \`\`\`
@@ -1444,10 +1444,10 @@ class SecurityMonitor {
     this.violations = new Map(); // userId → violation count
   }
   
-  recordViolation(userId, type) {
+  recordViolation (userId, type) {
     const key = \`\${userId}:\${type}\`;
-    const count = this.violations.get(key) || 0;
-    this.violations.set(key, count + 1);
+    const count = this.violations.get (key) || 0;
+    this.violations.set (key, count + 1);
     
     // Alert if threshold exceeded
     if (count > 10) {
@@ -1455,7 +1455,7 @@ class SecurityMonitor {
       
       // Optionally ban user
       if (count > 50) {
-        banUser(userId);
+        banUser (userId);
       }
     }
   }
@@ -1465,16 +1465,16 @@ const monitor = new SecurityMonitor();
 
 // Use in handlers
 ws.on('message', (message) => {
-  if (!rateLimiter.check(ws.id)) {
-    monitor.recordViolation(ws.userId, 'rate_limit');
+  if (!rateLimiter.check (ws.id)) {
+    monitor.recordViolation (ws.userId, 'rate_limit');
     return;
   }
   
   try {
-    const data = JSON.parse(message);
-    handleMessage(data);
+    const data = JSON.parse (message);
+    handleMessage (data);
   } catch (error) {
-    monitor.recordViolation(ws.userId, 'invalid_message');
+    monitor.recordViolation (ws.userId, 'invalid_message');
   }
 });
 \`\`\`

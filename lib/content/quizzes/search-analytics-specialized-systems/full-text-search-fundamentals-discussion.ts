@@ -86,7 +86,7 @@ For Document B (scattered, many occurrences):
 
 1. **Phrase matching**: The exact phrase appearing together is much more relevant than individual terms scattered throughout
 2. **Document length normalization (BM25)**: Document B is longer, so BM25 will penalize it. The "b" parameter (typically 0.75) adjusts for document length
-3. **Intent matching**: User's query is a specific phrase; Document A matches intent better
+3. **Intent matching**: User\'s query is a specific phrase; Document A matches intent better
 4. **Semantic coherence**: Adjacent terms in Document A suggest focused content about the topic
 
 **Potential scoring issues with basic TF-IDF:**
@@ -174,7 +174,7 @@ Modern search engines like Elasticsearch (using BM25 + phrase boosting) would co
     id: 'fts-discussion-3',
     question:
       'Your search application is experiencing slow query performance for wildcard queries like "elast*" and especially "e*rch". Users need this functionality for partial word matching. At the same time, you\'re seeing your index size has grown to 3x your original document size due to various optimizations. Discuss the engineering trade-offs between query flexibility, performance, and storage costs. What specific technical solutions would you propose to address both issues, and what would be the implementation considerations?',
-    sampleAnswer: `This scenario involves a classic **three-way trade-off** between **query flexibility**, **performance**, and **storage costs**. Let's analyze the problem and solutions:
+    sampleAnswer: `This scenario involves a classic **three-way trade-off** between **query flexibility**, **performance**, and **storage costs**. Let\'s analyze the problem and solutions:
 
 **Problem Analysis:**
 

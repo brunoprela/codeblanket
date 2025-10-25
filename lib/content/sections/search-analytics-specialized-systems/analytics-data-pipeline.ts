@@ -182,10 +182,10 @@ Serving Layer: Query combines both for complete view
 **Example:**
 \`\`\`python
 # Same code processes both historical and real-time
-def process_event(event):
-    user = extract_user(event)
-    update_metrics(user)
-    save_to_store(user)
+def process_event (event):
+    user = extract_user (event)
+    update_metrics (user)
+    save_to_store (user)
 
 # Historical: Replay Kafka from offset 0
 # Real-time: Process Kafka tail
@@ -235,12 +235,12 @@ def etl_daily_sales():
     raw_products = extract_from_db("SELECT * FROM products")
     
     # Transform
-    cleaned = clean_data(raw_sales)
-    enriched = join_with_products(cleaned, raw_products)
-    aggregated = aggregate_by_category(enriched)
+    cleaned = clean_data (raw_sales)
+    enriched = join_with_products (cleaned, raw_products)
+    aggregated = aggregate_by_category (enriched)
     
     # Load
-    load_to_warehouse(aggregated, table="sales_daily_summary")
+    load_to_warehouse (aggregated, table="sales_daily_summary")
 \`\`\`
 
 **Pros:**
@@ -501,10 +501,10 @@ def validate():
     pass
 
 # Define task dependencies
-extract_task = PythonOperator(task_id='extract', python_callable=extract, dag=dag)
-transform_task = PythonOperator(task_id='transform', python_callable=transform, dag=dag)
-load_task = PythonOperator(task_id='load', python_callable=load, dag=dag)
-validate_task = PythonOperator(task_id='validate', python_callable=validate, dag=dag)
+extract_task = PythonOperator (task_id='extract', python_callable=extract, dag=dag)
+transform_task = PythonOperator (task_id='transform', python_callable=transform, dag=dag)
+load_task = PythonOperator (task_id='load', python_callable=load, dag=dag)
+validate_task = PythonOperator (task_id='validate', python_callable=validate, dag=dag)
 
 extract_task >> transform_task >> load_task >> validate_task
 \`\`\`
@@ -523,9 +523,9 @@ extract_task >> transform_task >> load_task >> validate_task
 Always validate data at ingestion:
 
 \`\`\`python
-def validate_data(df):
+def validate_data (df):
     checks = {
-        'row_count': len(df) > 0,
+        'row_count': len (df) > 0,
         'no_nulls_in_id': df['id'].isnull().sum() == 0,
         'email_format': df['email'].str.contains('@').all(),
         'date_range': (df['date'] >= '2024-01-01').all()
@@ -533,7 +533,7 @@ def validate_data(df):
     
     failures = [k for k, v in checks.items() if not v]
     if failures:
-        raise ValueError(f"Data quality checks failed: {failures}")
+        raise ValueError (f"Data quality checks failed: {failures}")
 \`\`\`
 
 ### 2. Idempotency

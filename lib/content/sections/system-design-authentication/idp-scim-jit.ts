@@ -5,7 +5,7 @@
 export const idpscimjitSection = {
   id: 'idp-scim-jit',
   title: 'Identity Providers, SCIM & JIT Provisioning',
-  content: `Modern authentication relies on **Identity Providers (IdPs)** to manage user identities. Let's explore the major players and how user provisioning works.
+  content: `Modern authentication relies on **Identity Providers (IdPs)** to manage user identities. Let\'s explore the major players and how user provisioning works.
 
 ## Identity Providers (IdPs)
 
@@ -334,12 +334,12 @@ Flow:
 
 **Application logic**:
 \`\`\`python
-def handle_saml_login(assertion):
+def handle_saml_login (assertion):
     # Validate assertion (signature, timestamps, etc.)
-    attributes = extract_attributes(assertion)
+    attributes = extract_attributes (assertion)
     email = attributes['email']
     
-    user = User.find_by_email(email)
+    user = User.find_by_email (email)
     
     if not user:
         # JIT: Create user on first login
@@ -447,7 +447,7 @@ Test provisioning scenarios:
 1. HR adds John to Okta Universal Directory
 2. Okta assigns Salesforce app to John
 3. Okta calls Salesforce SCIM API: POST /services/scim/v2/Users
-4. Salesforce creates John's account
+4. Salesforce creates John\'s account
 5. John logs into Salesforce via Okta SSO
 6. John is already provisioned, immediate access
 

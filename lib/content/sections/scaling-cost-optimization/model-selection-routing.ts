@@ -111,7 +111,7 @@ AVAILABLE_MODELS = {
     )
 }
 
-def estimate_cost(model: ModelProfile, input_tokens: int, output_tokens: int) -> float:
+def estimate_cost (model: ModelProfile, input_tokens: int, output_tokens: int) -> float:
     """Calculate cost for a request"""
     input_cost = (input_tokens / 1_000_000) * model.input_cost_per_1m
     output_cost = (output_tokens / 1_000_000) * model.output_cost_per_1m
@@ -122,9 +122,8 @@ input_tokens = 1000
 output_tokens = 500
 
 for model_name, model in AVAILABLE_MODELS.items():
-    cost = estimate_cost(model, input_tokens, output_tokens)
-    print(f"{model_name}: \${cost: .4f
-}")
+    cost = estimate_cost (model, input_tokens, output_tokens)
+    print(f"{model_name}: \${cost:.4f}")
 
 # Output:
 # gpt - 4 - turbo: $0.0250
@@ -173,28 +172,28 @@ class ComplexityClassifier:
             "advanced", "detailed analysis", "multiple steps"
         }
     
-    def classify(self, prompt: str, context_length: int = 0) -> TaskComplexity:
+    def classify (self, prompt: str, context_length: int = 0) -> TaskComplexity:
         """Classify task complexity based on prompt and context"""
         prompt_lower = prompt.lower()
         
         # Check for expert-level indicators
-        if any(keyword in prompt_lower for keyword in self.expert_keywords):
+        if any (keyword in prompt_lower for keyword in self.expert_keywords):
             return TaskComplexity.EXPERT
         
         # Check length (longer prompts often indicate complexity)
-        if len(prompt) > 1000 or context_length > 10000:
+        if len (prompt) > 1000 or context_length > 10000:
             return TaskComplexity.COMPLEX
         
         # Check for complex keywords
-        if any(keyword in prompt_lower for keyword in self.complex_keywords):
+        if any (keyword in prompt_lower for keyword in self.complex_keywords):
             return TaskComplexity.COMPLEX
         
         # Check for simple keywords
-        if any(keyword in prompt_lower for keyword in self.simple_keywords):
+        if any (keyword in prompt_lower for keyword in self.simple_keywords):
             return TaskComplexity.SIMPLE
         
         # Check for code patterns
-        if re.search(r'\`\`\` | function| class| def |import ', prompt):
+        if re.search (r'\`\`\` | function| class| def |import ', prompt):
 return TaskComplexity.COMPLEX
         
         # Check for multiple questions
@@ -205,29 +204,29 @@ return TaskComplexity.COMPLEX
         # Default to moderate
 return TaskComplexity.MODERATE
     
-    def explain_classification(self, prompt: str) -> dict:
+    def explain_classification (self, prompt: str) -> dict:
 """Explain why a prompt was classified a certain way"""
-complexity = self.classify(prompt)
+complexity = self.classify (prompt)
 
 reasons = []
 prompt_lower = prompt.lower()
 
-if len(prompt) > 1000:
-    reasons.append(f"Long prompt ({len(prompt)} characters)")
+if len (prompt) > 1000:
+    reasons.append (f"Long prompt ({len (prompt)} characters)")
 
 for keyword in self.expert_keywords:
     if keyword in prompt_lower:
-        reasons.append(f"Expert keyword: '{keyword}'")
+        reasons.append (f"Expert keyword: '{keyword}'")
 
 for keyword in self.complex_keywords:
     if keyword in prompt_lower:
-        reasons.append(f"Complex keyword: '{keyword}'")
+        reasons.append (f"Complex keyword: '{keyword}'")
 
 for keyword in self.simple_keywords:
     if keyword in prompt_lower:
-        reasons.append(f"Simple keyword: '{keyword}'")
+        reasons.append (f"Simple keyword: '{keyword}'")
 
-if re.search(r'\`\`\`|function|class|def |import ', prompt):
+if re.search (r'\`\`\`|function|class|def |import ', prompt):
     reasons.append("Contains code")
 
 return {
@@ -274,18 +273,18 @@ class DirectModelRouter:
             TaskComplexity.EXPERT: "gpt-4-turbo"
         }
     
-    def route(self, prompt: str, context_length: int = 0) -> str:
+    def route (self, prompt: str, context_length: int = 0) -> str:
         """Select model based on task complexity"""
-        complexity = self.classifier.classify(prompt, context_length)
+        complexity = self.classifier.classify (prompt, context_length)
         model = self.complexity_to_model[complexity]
         
         print(f"Complexity: {complexity.name} → Model: {model}")
         
         return model
     
-    async def execute(self, prompt: str, **kwargs):
+    async def execute (self, prompt: str, **kwargs):
         """Route and execute request"""
-        model = self.route(prompt)
+        model = self.route (prompt)
         
         # Call appropriate API
         response = await openai.ChatCompletion.acreate(
@@ -331,12 +330,12 @@ class CascadeRouter:
             "gpt-4-turbo"
         ]
     
-    def is_response_adequate(self, response: str, prompt: str) -> bool:
+    def is_response_adequate (self, response: str, prompt: str) -> bool:
         """Check if response quality is adequate"""
         # Heuristics for quality
         
         # Too short might indicate poor response
-        if len(response) < 20:
+        if len (response) < 20:
             return False
         
         # Check for refusal patterns
@@ -347,7 +346,7 @@ class CascadeRouter:
         ]
         
         response_lower = response.lower()
-        if any(pattern in response_lower for pattern in refusal_patterns):
+        if any (pattern in response_lower for pattern in refusal_patterns):
             return False
         
         # Check if response actually addresses the prompt
@@ -377,7 +376,7 @@ class CascadeRouter:
             # Check if we'd exceed max cost
             if max_cost:
                 # Estimate cost (assume 1000 input, 500 output tokens)
-                estimated_cost = estimate_cost(model, 1000, 500)
+                estimated_cost = estimate_cost (model, 1000, 500)
                 if total_cost + estimated_cost > max_cost:
                     print(f"⚠️  Would exceed max cost (\${max_cost}), skipping")
                     continue
@@ -394,19 +393,19 @@ class CascadeRouter:
                 
                 # Calculate actual cost
                 usage = response.usage
-                cost = estimate_cost(model, usage.prompt_tokens, usage.completion_tokens)
+                cost = estimate_cost (model, usage.prompt_tokens, usage.completion_tokens)
                 total_cost += cost
                 
-                print(f"  Cost: \${cost: .4f}")
+                print(f"  Cost: \${cost:.4f}")
                 
                 # Check quality
-if quality_checker(content, prompt):
+if quality_checker (content, prompt):
     print(f"✅ Response adequate from {model_name}")
 return {
     "model": model_name,
     "response": content,
     "cost": total_cost,
-    "attempts": self.cascade.index(model_name) + 1
+    "attempts": self.cascade.index (model_name) + 1
 }
                 else:
 print(f"⚠️  Response inadequate, trying next model...")
@@ -422,7 +421,7 @@ return {
     "model": self.cascade[-1],
     "response": last_response,
     "cost": total_cost,
-    "attempts": len(self.cascade),
+    "attempts": len (self.cascade),
     "success": False
 }
 
@@ -475,9 +474,9 @@ class ConfidenceBasedRouter:
         content = response.choices[0].message.content
         
         # Calculate average log probability (confidence proxy)
-        if hasattr(response.choices[0], 'logprobs'):
+        if hasattr (response.choices[0], 'logprobs'):
             logprobs = response.choices[0].logprobs.content
-            avg_logprob = sum(token.logprob for token in logprobs) / len(logprobs)
+            avg_logprob = sum (token.logprob for token in logprobs) / len (logprobs)
             confidence = min(1.0, max(0.0, (avg_logprob + 5) / 5))  # Normalize to 0-1
         else:
             confidence = 0.5  # Default if logprobs not available
@@ -562,9 +561,9 @@ class TierBasedRouter:
         
         self.classifier = ComplexityClassifier()
     
-    def select_model(self, prompt: str, user_tier: UserTier) -> str:
+    def select_model (self, prompt: str, user_tier: UserTier) -> str:
         """Select best available model for user tier"""
-        complexity = self.classifier.classify(prompt)
+        complexity = self.classifier.classify (prompt)
         allowed_models = self.tier_models[user_tier]
         
         # Prefer models that match complexity
@@ -585,9 +584,9 @@ class TierBasedRouter:
         # Fallback to cheapest allowed model
         return allowed_models[0]
     
-    async def execute(self, prompt: str, user_tier: UserTier, **kwargs):
+    async def execute (self, prompt: str, user_tier: UserTier, **kwargs):
         """Execute with tier-appropriate model"""
-        model = self.select_model(prompt, user_tier)
+        model = self.select_model (prompt, user_tier)
         
         print(f"User tier: {user_tier.value} → Model: {model}")
         
@@ -664,7 +663,7 @@ class MultiProviderRouter:
             "google": 0.0
         }
     
-    async def call_openai(self, model: str, prompt: str) -> Dict:
+    async def call_openai (self, model: str, prompt: str) -> Dict:
         """Call OpenAI API"""
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -678,7 +677,7 @@ class MultiProviderRouter:
             )
             return response.json()
     
-    async def call_anthropic(self, model: str, prompt: str) -> Dict:
+    async def call_anthropic (self, model: str, prompt: str) -> Dict:
         """Call Anthropic API"""
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -696,7 +695,7 @@ class MultiProviderRouter:
             )
             return response.json()
     
-    async def call_google(self, model: str, prompt: str) -> Dict:
+    async def call_google (self, model: str, prompt: str) -> Dict:
         """Call Google Gemini API"""
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -708,7 +707,7 @@ class MultiProviderRouter:
             )
             return response.json()
     
-    def select_provider(self, task_type: str) -> tuple[str, str]:
+    def select_provider (self, task_type: str) -> tuple[str, str]:
         """Select best provider for task type"""
         
         # Provider strengths
@@ -745,20 +744,20 @@ class MultiProviderRouter:
         
         raise Exception("No healthy providers available")
     
-    async def execute_with_fallback(self, prompt: str, task_type: str = "general"):
+    async def execute_with_fallback (self, prompt: str, task_type: str = "general"):
         """Execute with automatic provider fallback"""
         
-        provider, model = self.select_provider(task_type)
+        provider, model = self.select_provider (task_type)
         
         try:
             print(f"🔄 Trying {provider} ({model})...")
             
             if provider == "openai":
-                result = await self.call_openai(model, prompt)
+                result = await self.call_openai (model, prompt)
             elif provider == "anthropic":
-                result = await self.call_anthropic(model, prompt)
+                result = await self.call_anthropic (model, prompt)
             elif provider == "google":
-                result = await self.call_google(model, prompt)
+                result = await self.call_google (model, prompt)
             
             print(f"✅ Success with {provider}")
             return result
@@ -778,14 +777,14 @@ class MultiProviderRouter:
                     try:
                         print(f"🔄 Falling back to {backup_provider}...")
                         
-                        backup_provider_obj, backup_model = self.select_provider(task_type)
+                        backup_provider_obj, backup_model = self.select_provider (task_type)
                         
                         if backup_provider == "openai":
-                            result = await self.call_openai(backup_model, prompt)
+                            result = await self.call_openai (backup_model, prompt)
                         elif backup_provider == "anthropic":
-                            result = await self.call_anthropic(backup_model, prompt)
+                            result = await self.call_anthropic (backup_model, prompt)
                         elif backup_provider == "google":
-                            result = await self.call_google(backup_model, prompt)
+                            result = await self.call_google (backup_model, prompt)
                         
                         print(f"✅ Success with backup {backup_provider}")
                         return result
@@ -838,13 +837,13 @@ class RoutingDecision:
     provider: str
     estimated_cost: float
     reasoning: str
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field (default_factory=datetime.now)
 
 @dataclass
 class RoutingMetrics:
     total_requests: int = 0
     total_cost: float = 0.0
-    model_usage: Dict[str, int] = field(default_factory=dict)
+    model_usage: Dict[str, int] = field (default_factory=dict)
     cascade_rate: float = 0.0
     avg_response_time: float = 0.0
 
@@ -882,11 +881,11 @@ class ProductionModelRouter:
         """Decide which model to use"""
         
         # 1. Classify complexity
-        complexity = self.complexity_classifier.classify(prompt, context_length)
+        complexity = self.complexity_classifier.classify (prompt, context_length)
         
         # 2. Apply tier restrictions if enabled
         if self.enable_tier_routing and user_tier:
-            model = self.tier_router.select_model(prompt, user_tier)
+            model = self.tier_router.select_model (prompt, user_tier)
             reasoning = f"Tier-based: {user_tier.value} allows {model}"
         else:
             # Use direct routing based on complexity
@@ -895,7 +894,7 @@ class ProductionModelRouter:
         
         # 3. Check cost constraints
         model_profile = AVAILABLE_MODELS[model]
-        estimated_cost = estimate_cost(model_profile, 1000, 500)
+        estimated_cost = estimate_cost (model_profile, 1000, 500)
         
         if self.max_cost_per_request and estimated_cost > self.max_cost_per_request:
             # Downgrade to cheaper model
@@ -925,11 +924,11 @@ class ProductionModelRouter:
         start_time = datetime.now()
         
         # Make routing decision
-        decision = self.make_routing_decision(prompt, user_tier, task_type)
+        decision = self.make_routing_decision (prompt, user_tier, task_type)
         
         print(f"🎯 Routing Decision: {decision.model}")
         print(f"   Reasoning: {decision.reasoning}")
-        print(f"   Estimated cost: \${decision.estimated_cost: .4f}")
+        print(f"   Estimated cost: \${decision.estimated_cost:.4f}")
         
         # Execute with cascade if enabled
         if self.enable_cascade:
@@ -967,7 +966,7 @@ self.metrics.avg_response_time = (
 
 return result
     
-    def get_metrics_report(self) -> str:
+    def get_metrics_report (self) -> str:
 """Generate metrics report"""
 return f"""
 Model Router Metrics:
@@ -978,8 +977,8 @@ Avg Cost/Request: \${self.metrics.total_cost / max(1, self.metrics.total_request
 Avg Response Time: {self.metrics.avg_response_time:.2f}s
 
 Model Usage:
-{chr(10).join(f"  {model}: {count} ({count/self.metrics.total_requests*100:.1f}%)"
-              for model, count in sorted(self.metrics.model_usage.items(), key=lambda x: -x[1]))}
+{chr(10).join (f"  {model}: {count} ({count/self.metrics.total_requests*100:.1f}%)"
+              for model, count in sorted (self.metrics.model_usage.items(), key=lambda x: -x[1]))}
 """
 
 # Usage

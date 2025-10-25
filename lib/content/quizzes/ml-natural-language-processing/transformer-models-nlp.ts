@@ -97,8 +97,8 @@ Without positional information:
 
 Sinusoidal positional encoding:
 \`\`\`python
-PE(pos, 2i) = sin(pos / 10000^(2i/d_model))
-PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+PE(pos, 2i) = sin (pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos (pos / 10000^(2i/d_model))
 \`\`\`
 
 Properties:
@@ -109,7 +109,7 @@ Properties:
 
 **Alternative: Learned Positional Embeddings:**
 \`\`\`python
-self.pos_embedding = nn.Embedding(max_len, d_model)
+self.pos_embedding = nn.Embedding (max_len, d_model)
 \`\`\`
 
 Trade-offs:
@@ -200,7 +200,7 @@ model = torch.quantization.quantize_dynamic(
 # Cache key-value pairs for generation
 past_key_values = None
 for token in tokens:
-    output = model(token, past_key_values=past_key_values)
+    output = model (token, past_key_values=past_key_values)
     past_key_values = output.past_key_values
 # Speeds up generation significantly
 \`\`\`
@@ -229,9 +229,9 @@ task_to_model = {
 # 3. Cache common queries
 from functools import lru_cache
 
-@lru_cache(maxsize=1000)
-def predict(text):
-    return model(text)
+@lru_cache (maxsize=1000)
+def predict (text):
+    return model (text)
 
 # 4. Monitor latency/cost
 # - Set timeout limits

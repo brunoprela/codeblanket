@@ -185,7 +185,7 @@ class ControlNetGenerator:
             self.pipe.scheduler.config
         )
         
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         self.pipe.enable_model_cpu_offload()
         self.pipe.enable_xformers_memory_efficient_attention()
     
@@ -215,7 +215,7 @@ class ControlNetGenerator:
         """
         generator = None
         if seed is not None:
-            generator = torch.Generator(device=self.device).manual_seed(seed)
+            generator = torch.Generator (device=self.device).manual_seed (seed)
         
         output = self.pipe(
             prompt=prompt,
@@ -231,7 +231,7 @@ class ControlNetGenerator:
         return output.images
 
 # Basic usage
-controlnet = ControlNetGenerator(controlnet_type="canny")
+controlnet = ControlNetGenerator (controlnet_type="canny")
 
 # Load and prepare control image
 input_image = Image.open("photo.jpg")
@@ -270,17 +270,17 @@ class ControlImagePreprocessor:
         Extract edges using Canny edge detection.
         """
         # Convert to numpy
-        image_np = np.array(image)
+        image_np = np.array (image)
         
         # Convert to grayscale
-        gray = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
+        gray = cv2.cvtColor (image_np, cv2.COLOR_RGB2GRAY)
         
         # Apply Canny edge detection
-        edges = cv2.Canny(gray, low_threshold, high_threshold)
+        edges = cv2.Canny (gray, low_threshold, high_threshold)
         
         # Convert back to PIL
-        edges_rgb = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
-        return Image.fromarray(edges_rgb)
+        edges_rgb = cv2.cvtColor (edges, cv2.COLOR_GRAY2RGB)
+        return Image.fromarray (edges_rgb)
     
     def depth_map(
         self,
@@ -295,14 +295,14 @@ class ControlImagePreprocessor:
         # Use MiDaS depth estimation
         depth_estimator = pipeline("depth-estimation")
         
-        depth = depth_estimator(image)["depth"]
+        depth = depth_estimator (image)["depth"]
         
         # Normalize to 0-255
-        depth_np = np.array(depth)
+        depth_np = np.array (depth)
         depth_np = (depth_np - depth_np.min()) / (depth_np.max() - depth_np.min())
-        depth_np = (depth_np * 255).astype(np.uint8)
+        depth_np = (depth_np * 255).astype (np.uint8)
         
-        return Image.fromarray(depth_np)
+        return Image.fromarray (depth_np)
     
     def openpose_skeleton(
         self,
@@ -314,7 +314,7 @@ class ControlImagePreprocessor:
         from controlnet_aux import OpenposeDetector
         
         openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
-        pose = openpose(image)
+        pose = openpose (image)
         
         return pose
     
@@ -331,7 +331,7 @@ class ControlImagePreprocessor:
         if detect:
             # Use HED boundary detection
             hed = HEDdetector.from_pretrained("lllyasviel/ControlNet")
-            scribble = hed(image, scribble=True)
+            scribble = hed (image, scribble=True)
         else:
             # If already a scribble, just return
             scribble = image
@@ -348,7 +348,7 @@ class ControlImagePreprocessor:
         from controlnet_aux import MLSDdetector
         
         mlsd = MLSDdetector.from_pretrained("lllyasviel/ControlNet")
-        lines = mlsd(image)
+        lines = mlsd (image)
         
         return lines
 
@@ -358,15 +358,15 @@ preprocessor = ControlImagePreprocessor()
 input_photo = Image.open("person.jpg")
 
 # Canny edges
-canny = preprocessor.canny_edges(input_photo)
+canny = preprocessor.canny_edges (input_photo)
 canny.save("control_canny.png")
 
 # Depth map
-depth = preprocessor.depth_map(input_photo)
+depth = preprocessor.depth_map (input_photo)
 depth.save("control_depth.png")
 
 # OpenPose skeleton
-pose = preprocessor.openpose_skeleton(input_photo)
+pose = preprocessor.openpose_skeleton (input_photo)
 pose.save("control_pose.png")
 \`\`\`
 
@@ -381,7 +381,7 @@ class PoseControlledGeneration:
     """
     
     def __init__(self):
-        self.pose_cn = ControlNetGenerator(controlnet_type="openpose")
+        self.pose_cn = ControlNetGenerator (controlnet_type="openpose")
         self.preprocessor = ControlImagePreprocessor()
     
     def generate_from_pose_reference(
@@ -394,7 +394,7 @@ class PoseControlledGeneration:
         Generate new character matching pose from reference.
         """
         # Extract pose from reference
-        pose_skeleton = self.preprocessor.openpose_skeleton(reference_image)
+        pose_skeleton = self.preprocessor.openpose_skeleton (reference_image)
         
         # Generate with pose control
         result = self.pose_cn.generate(
@@ -414,7 +414,7 @@ class PoseControlledGeneration:
         Generate multiple characters in same pose.
         """
         # Extract pose once
-        pose_skeleton = self.preprocessor.openpose_skeleton(pose_image)
+        pose_skeleton = self.preprocessor.openpose_skeleton (pose_image)
         
         results = []
         for desc in character_descriptions:
@@ -424,7 +424,7 @@ class PoseControlledGeneration:
                 steps=20,
                 seed=None  # Different seed for variety
             )[0]
-            results.append(result)
+            results.append (result)
         
         return results
 
@@ -445,8 +445,8 @@ characters = pose_gen.generate_multiple_characters_same_pose(
     ]
 )
 
-for i, char in enumerate(characters):
-    char.save(f"character_{i}.png")
+for i, char in enumerate (characters):
+    char.save (f"character_{i}.png")
 \`\`\`
 
 ### 2. Architectural Design with Line Control
@@ -458,7 +458,7 @@ class ArchitecturalGenerator:
     """
     
     def __init__(self):
-        self.mlsd_cn = ControlNetGenerator(controlnet_type="mlsd")
+        self.mlsd_cn = ControlNetGenerator (controlnet_type="mlsd")
         self.preprocessor = ControlImagePreprocessor()
     
     def redesign_building(
@@ -470,7 +470,7 @@ class ArchitecturalGenerator:
         Keep structure, change style.
         """
         # Extract straight lines
-        lines = self.preprocessor.mlsd_lines(building_photo)
+        lines = self.preprocessor.mlsd_lines (building_photo)
         
         # Generate with new style
         result = self.mlsd_cn.generate(
@@ -511,7 +511,7 @@ victorian = arch_gen.redesign_building(
 
 # From sketch
 sketch = Image.open("building_sketch.png")
-realistic = arch_gen.sketch_to_building(sketch, "modern minimalist")
+realistic = arch_gen.sketch_to_building (sketch, "modern minimalist")
 \`\`\`
 
 ### 3. Depth-Controlled Scene Generation
@@ -523,7 +523,7 @@ class DepthControlledGeneration:
     """
     
     def __init__(self):
-        self.depth_cn = ControlNetGenerator(controlnet_type="depth")
+        self.depth_cn = ControlNetGenerator (controlnet_type="depth")
         self.preprocessor = ControlImagePreprocessor()
     
     def transform_scene(
@@ -535,7 +535,7 @@ class DepthControlledGeneration:
         Transform scene while preserving spatial structure.
         """
         # Extract depth
-        depth_map = self.preprocessor.depth_map(source_image)
+        depth_map = self.preprocessor.depth_map (source_image)
         
         # Generate with same depth structure
         result = self.depth_cn.generate(
@@ -557,7 +557,7 @@ class DepthControlledGeneration:
         Keeps spatial structure consistent.
         """
         # Extract depth once
-        depth_map = self.preprocessor.depth_map(base_image)
+        depth_map = self.preprocessor.depth_map (base_image)
         
         results = []
         for prompt in time_of_day_prompts:
@@ -566,7 +566,7 @@ class DepthControlledGeneration:
                 control_image=depth_map,
                 steps=25
             )[0]
-            results.append(result)
+            results.append (result)
         
         return results
 
@@ -629,7 +629,7 @@ class MultiControlNetGenerator:
             torch_dtype=torch.float16
         )
         
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
     
     def generate(
         self,
@@ -664,8 +664,8 @@ preprocessor = ControlImagePreprocessor()
 source = Image.open("photo.jpg")
 
 # Prepare both controls
-canny = preprocessor.canny_edges(source)
-depth = preprocessor.depth_map(source)
+canny = preprocessor.canny_edges (source)
+depth = preprocessor.depth_map (source)
 
 # Generate with both
 result = multi_cn.generate(

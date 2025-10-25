@@ -29,24 +29,24 @@ class AdvancedFinancialSentimentAnalyzer:
         self.tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
         self.model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
+        self.model.to (self.device)
     
-    def analyze_sentence(self, text: str) -> Dict:
+    def analyze_sentence (self, text: str) -> Dict:
         """Analyze sentiment of single sentence/paragraph."""
         
-        inputs = self.tokenizer(text, 
+        inputs = self.tokenizer (text, 
                                return_tensors="pt", 
                                truncation=True, 
                                max_length=512,
                                padding=True)
         
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        inputs = {k: v.to (self.device) for k, v in inputs.items()}
         
         with torch.no_grad():
             outputs = self.model(**inputs)
         
-        probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)
-        sentiment_idx = torch.argmax(probabilities).item()
+        probabilities = torch.nn.functional.softmax (outputs.logits, dim=-1)
+        sentiment_idx = torch.argmax (probabilities).item()
         
         labels = ["negative", "neutral", "positive"]
         
@@ -61,7 +61,7 @@ class AdvancedFinancialSentimentAnalyzer:
             'sentiment_score': probabilities[0][2].item() - probabilities[0][0].item()  # -1 to +1
         }
     
-    def analyze_document(self, text: str) -> Dict:
+    def analyze_document (self, text: str) -> Dict:
         """
         Analyze entire document by aggregating sentence-level sentiment.
         
@@ -72,15 +72,15 @@ class AdvancedFinancialSentimentAnalyzer:
         from nltk.tokenize import sent_tokenize
         
         # Split into sentences
-        sentences = sent_tokenize(text)
+        sentences = sent_tokenize (text)
         
         # Analyze each sentence
         sentence_results = []
         for sentence in sentences:
-            if len(sentence.split()) < 3:  # Skip very short sentences
+            if len (sentence.split()) < 3:  # Skip very short sentences
                 continue
             
-            result = self.analyze_sentence(sentence)
+            result = self.analyze_sentence (sentence)
             sentence_results.append({
                 'text': sentence[:100],  # First 100 chars for reference
                 'sentiment': result['sentiment'],
@@ -92,8 +92,8 @@ class AdvancedFinancialSentimentAnalyzer:
             return {'error': 'No valid sentences found'}
         
         # Aggregate with confidence weighting
-        total_weight = sum(r['confidence'] for r in sentence_results)
-        weighted_score = sum(r['sentiment_score'] * r['confidence'] 
+        total_weight = sum (r['confidence'] for r in sentence_results)
+        weighted_score = sum (r['sentiment_score'] * r['confidence'] 
                            for r in sentence_results) / total_weight
         
         # Count sentiment distribution
@@ -114,13 +114,13 @@ class AdvancedFinancialSentimentAnalyzer:
         return {
             'overall_sentiment': overall,
             'sentiment_score': weighted_score,
-            'sentence_count': len(sentence_results),
+            'sentence_count': len (sentence_results),
             'sentiment_distribution': sentiment_counts,
-            'average_confidence': sum(r['confidence'] for r in sentence_results) / len(sentence_results),
+            'average_confidence': sum (r['confidence'] for r in sentence_results) / len (sentence_results),
             'sentence_details': sentence_results[:10]  # Top 10 for inspection
         }
     
-    def analyze_earnings_call_transcript(self, transcript: str) -> Dict:
+    def analyze_earnings_call_transcript (self, transcript: str) -> Dict:
         """
         Analyze earnings call transcript with section separation.
         
@@ -137,23 +137,23 @@ class AdvancedFinancialSentimentAnalyzer:
             r'(?i)^q:'
         ]
         
-        qa_start = len(transcript)
+        qa_start = len (transcript)
         for pattern in qa_start_patterns:
-            match = re.search(pattern, transcript)
+            match = re.search (pattern, transcript)
             if match:
-                qa_start = min(qa_start, match.start())
+                qa_start = min (qa_start, match.start())
         
         prepared_remarks = transcript[:qa_start]
         qa_section = transcript[qa_start:]
         
         # Analyze each section
-        prepared_sentiment = self.analyze_document(prepared_remarks)
-        qa_sentiment = self.analyze_document(qa_section)
+        prepared_sentiment = self.analyze_document (prepared_remarks)
+        qa_sentiment = self.analyze_document (qa_section)
         
         return {
             'prepared_remarks': prepared_sentiment,
             'qa_section': qa_sentiment,
-            'divergence': abs(prepared_sentiment['sentiment_score'] - 
+            'divergence': abs (prepared_sentiment['sentiment_score'] - 
                             qa_sentiment['sentiment_score']),
             'red_flag': prepared_sentiment['sentiment_score'] > 0.3 and 
                        qa_sentiment['sentiment_score'] < -0.1  # Positive prepared, negative Q&A
@@ -168,7 +168,7 @@ Our margin expansion reflects operational excellence and pricing power.
 However, we're monitoring supply chain headwinds that may impact Q4.
 """
 
-result = analyzer.analyze_document(text)
+result = analyzer.analyze_document (text)
 print(f"Overall Sentiment: {result['overall_sentiment']}")
 print(f"Sentiment Score: {result['sentiment_score']:.2f}")
 print(f"Distribution: {result['sentiment_distribution']}")
@@ -221,7 +221,7 @@ class FinancialInformationExtractor:
             ]
         }
     
-    def extract_all_metrics(self, text: str) -> Dict[str, List[Dict]]:
+    def extract_all_metrics (self, text: str) -> Dict[str, List[Dict]]:
         """Extract all financial metrics from text."""
         
         results = {}
@@ -230,15 +230,15 @@ class FinancialInformationExtractor:
             matches = []
             
             for pattern in pattern_list:
-                for match in re.finditer(pattern, text, re.IGNORECASE):
+                for match in re.finditer (pattern, text, re.IGNORECASE):
                     # Extract value and convert to float
                     value_str = match.group(1).replace(',', '')
                     
                     try:
-                        value = float(value_str)
+                        value = float (value_str)
                         
                         # Handle units (million/billion)
-                        if len(match.groups()) > 1 and match.group(2):
+                        if len (match.groups()) > 1 and match.group(2):
                             unit = match.group(2).upper()
                             if unit in ['BILLION', 'B']:
                                 value *= 1_000_000_000
@@ -247,7 +247,7 @@ class FinancialInformationExtractor:
                         
                         # Extract context (50 chars before and after)
                         context_start = max(0, match.start() - 50)
-                        context_end = min(len(text), match.end() + 50)
+                        context_end = min (len (text), match.end() + 50)
                         context = text[context_start:context_end].strip()
                         
                         matches.append({
@@ -264,22 +264,22 @@ class FinancialInformationExtractor:
         
         return results
     
-    def extract_companies(self, text: str) -> List[str]:
+    def extract_companies (self, text: str) -> List[str]:
         """Extract company names using NER."""
         
-        doc = self.nlp(text)
+        doc = self.nlp (text)
         
         companies = []
         for ent in doc.ents:
             if ent.label_ == "ORG":
-                companies.append(ent.text)
+                companies.append (ent.text)
         
-        return list(set(companies))  # Remove duplicates
+        return list (set (companies))  # Remove duplicates
     
-    def extract_dates(self, text: str) -> List[Dict]:
+    def extract_dates (self, text: str) -> List[Dict]:
         """Extract dates and time references."""
         
-        doc = self.nlp(text)
+        doc = self.nlp (text)
         
         dates = []
         for ent in doc.ents:
@@ -291,7 +291,7 @@ class FinancialInformationExtractor:
         
         return dates
     
-    def identify_forward_looking_statements(self, text: str) -> List[Dict]:
+    def identify_forward_looking_statements (self, text: str) -> List[Dict]:
         """
         Identify forward-looking statements.
         
@@ -308,14 +308,14 @@ class FinancialInformationExtractor:
         sentences = text.split('.')
         fls = []
         
-        for i, sentence in enumerate(sentences):
+        for i, sentence in enumerate (sentences):
             sentence_lower = sentence.lower()
             
             # Check if sentence contains forward-looking keywords
-            contains_fls = any(keyword in sentence_lower for keyword in fls_keywords)
+            contains_fls = any (keyword in sentence_lower for keyword in fls_keywords)
             
             # Check for future tense
-            has_future_tense = re.search(r'\bwill\b|\bshall\b', sentence_lower)
+            has_future_tense = re.search (r'\bwill\b|\bshall\b', sentence_lower)
             
             if contains_fls or has_future_tense:
                 fls.append({
@@ -326,7 +326,7 @@ class FinancialInformationExtractor:
         
         return fls
     
-    def extract_comparative_statements(self, text: str) -> List[Dict]:
+    def extract_comparative_statements (self, text: str) -> List[Dict]:
         """Extract year-over-year or quarter-over-quarter comparisons."""
         
         comparison_patterns = [
@@ -337,26 +337,26 @@ class FinancialInformationExtractor:
         
         comparisons = []
         for pattern in comparison_patterns:
-            for match in re.finditer(pattern, text, re.IGNORECASE):
+            for match in re.finditer (pattern, text, re.IGNORECASE):
                 comparisons.append({
-                    'change_pct': float(match.group(1)),
+                    'change_pct': float (match.group(1)),
                     'text': match.group(0),
-                    'context': text[max(0, match.start()-50):min(len(text), match.end()+50)]
+                    'context': text[max(0, match.start()-50):min (len (text), match.end()+50)]
                 })
         
         return comparisons
     
-    def create_structured_summary(self, text: str) -> Dict:
+    def create_structured_summary (self, text: str) -> Dict:
         """Create comprehensive structured summary of financial document."""
         
         return {
-            'metrics': self.extract_all_metrics(text),
-            'companies_mentioned': self.extract_companies(text),
-            'dates': self.extract_dates(text),
-            'forward_looking': self.identify_forward_looking_statements(text),
-            'comparisons': self.extract_comparative_statements(text),
-            'document_length': len(text),
-            'sentence_count': len(text.split('.'))
+            'metrics': self.extract_all_metrics (text),
+            'companies_mentioned': self.extract_companies (text),
+            'dates': self.extract_dates (text),
+            'forward_looking': self.identify_forward_looking_statements (text),
+            'comparisons': self.extract_comparative_statements (text),
+            'document_length': len (text),
+            'sentence_count': len (text.split('.'))
         }
 
 # Example
@@ -368,9 +368,9 @@ Gross margin expanded to 44.1%, driven by favorable mix.
 We expect revenue to grow 10-12% in Q1 2024, with EPS of $1.85 to $1.95.
 """
 
-summary = extractor.create_structured_summary(text)
+summary = extractor.create_structured_summary (text)
 print("Extracted Metrics:", summary['metrics'])
-print("Forward-Looking:", len(summary['forward_looking']), "statements")
+print("Forward-Looking:", len (summary['forward_looking']), "statements")
 \`\`\`
 
 ## Section 3: Topic Modeling for MD&A Analysis
@@ -407,38 +407,38 @@ class FinancialTopicModeler:
             random_state=42
         )
     
-    def fit(self, documents: List[str]) -> 'FinancialTopicModeler':
+    def fit (self, documents: List[str]) -> 'FinancialTopicModeler':
         """Fit LDA model on document corpus."""
         
         # Create document-term matrix
-        doc_term_matrix = self.vectorizer.fit_transform(documents)
+        doc_term_matrix = self.vectorizer.fit_transform (documents)
         
         # Fit LDA
-        self.lda_model.fit(doc_term_matrix)
+        self.lda_model.fit (doc_term_matrix)
         
         return self
     
-    def get_topic_keywords(self, n_words: int = 10) -> Dict[int, List[str]]:
+    def get_topic_keywords (self, n_words: int = 10) -> Dict[int, List[str]]:
         """Get top keywords for each topic."""
         
         feature_names = self.vectorizer.get_feature_names_out()
         topics = {}
         
-        for topic_idx, topic in enumerate(self.lda_model.components_):
+        for topic_idx, topic in enumerate (self.lda_model.components_):
             top_indices = topic.argsort()[-n_words:][::-1]
             topics[topic_idx] = [feature_names[i] for i in top_indices]
         
         return topics
     
-    def get_document_topics(self, document: str) -> np.ndarray:
+    def get_document_topics (self, document: str) -> np.ndarray:
         """Get topic distribution for a document."""
         
         doc_term_matrix = self.vectorizer.transform([document])
-        topic_dist = self.lda_model.transform(doc_term_matrix)
+        topic_dist = self.lda_model.transform (doc_term_matrix)
         
         return topic_dist[0]
     
-    def analyze_topic_evolution(self, documents_by_year: Dict[int, str]) -> pd.DataFrame:
+    def analyze_topic_evolution (self, documents_by_year: Dict[int, str]) -> pd.DataFrame:
         """
         Analyze how topics evolve over time.
         
@@ -451,20 +451,20 @@ class FinancialTopicModeler:
         # Get topic distribution for each year
         results = []
         
-        for year, document in sorted(documents_by_year.items()):
-            topic_dist = self.get_document_topics(document)
+        for year, document in sorted (documents_by_year.items()):
+            topic_dist = self.get_document_topics (document)
             
             result = {'year': year}
-            for i, weight in enumerate(topic_dist):
+            for i, weight in enumerate (topic_dist):
                 result[f'topic_{i}'] = weight
             
-            results.append(result)
+            results.append (result)
         
-        df = pd.DataFrame(results)
+        df = pd.DataFrame (results)
         
         return df
     
-    def detect_topic_shifts(self, 
+    def detect_topic_shifts (self, 
                            documents_by_year: Dict[int, str],
                            threshold: float = 0.10) -> List[Dict]:
         """
@@ -476,24 +476,24 @@ class FinancialTopicModeler:
         - Strategic pivots (new product categories)
         """
         
-        df = self.analyze_topic_evolution(documents_by_year)
+        df = self.analyze_topic_evolution (documents_by_year)
         shifts = []
         
         years = df['year'].values
-        if len(years) < 2:
+        if len (years) < 2:
             return shifts
         
         first_year = df.iloc[0]
         latest_year = df.iloc[-1]
         
-        topic_keywords = self.get_topic_keywords(n_words=5)
+        topic_keywords = self.get_topic_keywords (n_words=5)
         
         for col in df.columns:
             if col.startswith('topic_'):
-                topic_idx = int(col.split('_')[1])
+                topic_idx = int (col.split('_')[1])
                 change = latest_year[col] - first_year[col]
                 
-                if abs(change) > threshold:
+                if abs (change) > threshold:
                     shifts.append({
                         'topic_id': topic_idx,
                         'keywords': topic_keywords[topic_idx],
@@ -503,10 +503,10 @@ class FinancialTopicModeler:
                         'direction': 'increasing' if change > 0 else 'decreasing'
                     })
         
-        return sorted(shifts, key=lambda x: abs(x['weight_change']), reverse=True)
+        return sorted (shifts, key=lambda x: abs (x['weight_change']), reverse=True)
 
 # Example usage
-modeler = FinancialTopicModeler(n_topics=5)
+modeler = FinancialTopicModeler (n_topics=5)
 
 # Simulate 5 years of MD&A sections
 mda_documents = {
@@ -518,16 +518,16 @@ mda_documents = {
 }
 
 # Fit model on all documents
-modeler.fit(list(mda_documents.values()))
+modeler.fit (list (mda_documents.values()))
 
 # Analyze topic evolution
-topic_evolution = modeler.analyze_topic_evolution(mda_documents)
+topic_evolution = modeler.analyze_topic_evolution (mda_documents)
 print("Topic Evolution:")
 print(topic_evolution)
 
 # Detect major shifts
-shifts = modeler.detect_topic_shifts(mda_documents, threshold=0.15)
-print(f"\\nDetected {len(shifts)} major topic shifts")
+shifts = modeler.detect_topic_shifts (mda_documents, threshold=0.15)
+print(f"\\nDetected {len (shifts)} major topic shifts")
 for shift in shifts:
     print(f"  Topic {shift['topic_id']}: {shift['keywords'][:3]}")
     print(f"  Changed {shift['weight_change']:.1%} ({shift['direction']})")
@@ -551,7 +551,7 @@ class DocumentComplexityAnalyzer:
     """
     
     @staticmethod
-    def calculate_fog_index(text: str) -> float:
+    def calculate_fog_index (text: str) -> float:
         """
         Gunning Fog Index: measures readability.
         
@@ -560,10 +560,10 @@ class DocumentComplexityAnalyzer:
         > 16: Graduate level (complex)
         > 18: Very difficult to read
         """
-        return textstat.gunning_fog(text)
+        return textstat.gunning_fog (text)
     
     @staticmethod
-    def calculate_flesch_reading_ease(text: str) -> float:
+    def calculate_flesch_reading_ease (text: str) -> float:
         """
         Flesch Reading Ease: 0-100 scale.
         
@@ -572,10 +572,10 @@ class DocumentComplexityAnalyzer:
         30-50: Difficult (college)
         0-30: Very difficult (graduate)
         """
-        return textstat.flesch_reading_ease(text)
+        return textstat.flesch_reading_ease (text)
     
     @staticmethod
-    def count_passive_voice(text: str) -> Dict:
+    def count_passive_voice (text: str) -> Dict:
         """
         Count passive voice usage.
         
@@ -586,16 +586,16 @@ class DocumentComplexityAnalyzer:
         
         # Simple heuristic: "was/were/been" + past participle
         passive_patterns = [
-            r'\b(was|were|been)\s+\w+ed\b',
-            r'\b(was|were|been)\s+\w+en\b'
+            r'\b (was|were|been)\s+\w+ed\b',
+            r'\b (was|were|been)\s+\w+en\b'
         ]
         
         total_matches = 0
         for pattern in passive_patterns:
-            matches = re.findall(pattern, text, re.IGNORECASE)
-            total_matches += len(matches)
+            matches = re.findall (pattern, text, re.IGNORECASE)
+            total_matches += len (matches)
         
-        sentence_count = len(text.split('.'))
+        sentence_count = len (text.split('.'))
         passive_per_sentence = total_matches / sentence_count if sentence_count > 0 else 0
         
         return {
@@ -605,7 +605,7 @@ class DocumentComplexityAnalyzer:
         }
     
     @staticmethod
-    def count_hedge_words(text: str) -> Dict:
+    def count_hedge_words (text: str) -> Dict:
         """
         Count hedging/qualifying words.
         
@@ -621,9 +621,9 @@ class DocumentComplexityAnalyzer:
         ]
         
         text_lower = text.lower()
-        word_count = len(text.split())
+        word_count = len (text.split())
         
-        hedge_count = sum(text_lower.count(word) for word in hedge_words)
+        hedge_count = sum (text_lower.count (word) for word in hedge_words)
         hedge_ratio = hedge_count / word_count if word_count > 0 else 0
         
         return {
@@ -633,21 +633,21 @@ class DocumentComplexityAnalyzer:
         }
     
     @staticmethod
-    def analyze_complexity_changes(current_text: str, prior_text: str) -> Dict:
+    def analyze_complexity_changes (current_text: str, prior_text: str) -> Dict:
         """
         Compare complexity between periods.
         
         Increasing complexity is red flag for obfuscation.
         """
         
-        current_fog = DocumentComplexityAnalyzer.calculate_fog_index(current_text)
-        prior_fog = DocumentComplexityAnalyzer.calculate_fog_index(prior_text)
+        current_fog = DocumentComplexityAnalyzer.calculate_fog_index (current_text)
+        prior_fog = DocumentComplexityAnalyzer.calculate_fog_index (prior_text)
         
-        current_passive = DocumentComplexityAnalyzer.count_passive_voice(current_text)
-        prior_passive = DocumentComplexityAnalyzer.count_passive_voice(prior_text)
+        current_passive = DocumentComplexityAnalyzer.count_passive_voice (current_text)
+        prior_passive = DocumentComplexityAnalyzer.count_passive_voice (prior_text)
         
-        current_hedge = DocumentComplexityAnalyzer.count_hedge_words(current_text)
-        prior_hedge = DocumentComplexityAnalyzer.count_hedge_words(prior_text)
+        current_hedge = DocumentComplexityAnalyzer.count_hedge_words (current_text)
+        prior_hedge = DocumentComplexityAnalyzer.count_hedge_words (prior_text)
         
         # Calculate changes
         fog_change = current_fog - prior_fog
@@ -658,13 +658,13 @@ class DocumentComplexityAnalyzer:
         red_flags = []
         
         if fog_change > 2.0:
-            red_flags.append(f"Fog Index increased {fog_change:.1f} points - document became more complex")
+            red_flags.append (f"Fog Index increased {fog_change:.1f} points - document became more complex")
         
         if passive_change > 0.15:
-            red_flags.append(f"Passive voice increased {passive_change:.0%} - potential evasiveness")
+            red_flags.append (f"Passive voice increased {passive_change:.0%} - potential evasiveness")
         
         if hedge_change > 0.01:
-            red_flags.append(f"Hedge words increased {hedge_change:.0%} - increased uncertainty language")
+            red_flags.append (f"Hedge words increased {hedge_change:.0%} - increased uncertainty language")
         
         return {
             'fog_index': {'current': current_fog, 'prior': prior_fog, 'change': fog_change},
@@ -675,7 +675,7 @@ class DocumentComplexityAnalyzer:
                           'prior': prior_hedge['hedge_ratio'],
                           'change': hedge_change},
             'red_flags': red_flags,
-            'overall_assessment': 'OBFUSCATION DETECTED' if len(red_flags) >= 2 else 'NORMAL'
+            'overall_assessment': 'OBFUSCATION DETECTED' if len (red_flags) >= 2 else 'NORMAL'
         }
 
 # Example
@@ -691,11 +691,11 @@ diversified business portfolio, notwithstanding certain challenges that may have
 been encountered in specific market conditions.
 """
 
-analysis = analyzer.analyze_complexity_changes(current_mda, prior_mda)
+analysis = analyzer.analyze_complexity_changes (current_mda, prior_mda)
 
 print(f"Fog Index Change: {analysis['fog_index']['change']:.1f}")
 print(f"Assessment: {analysis['overall_assessment']}")
-print(f"Red Flags: {len(analysis['red_flags'])}")
+print(f"Red Flags: {len (analysis['red_flags'])}")
 for flag in analysis['red_flags']:
     print(f"  - {flag}")
 \`\`\`
@@ -716,13 +716,13 @@ class SentimentReturnCorrelation:
     """
     
     @staticmethod
-    def calculate_returns(prices: pd.Series, periods: List[int] = [1, 5, 30]) -> pd.DataFrame:
+    def calculate_returns (prices: pd.Series, periods: List[int] = [1, 5, 30]) -> pd.DataFrame:
         """Calculate forward returns for multiple periods."""
         
-        returns = pd.DataFrame(index=prices.index)
+        returns = pd.DataFrame (index=prices.index)
         
         for period in periods:
-            returns[f't+{period}'] = prices.pct_change(period).shift(-period)
+            returns[f't+{period}'] = prices.pct_change (period).shift(-period)
         
         return returns
     
@@ -784,15 +784,15 @@ class SentimentReturnCorrelation:
         
         # Win rate
         trades = strategy_returns[strategy_returns != 0]
-        win_rate = (trades > 0).sum() / len(trades) if len(trades) > 0 else 0
+        win_rate = (trades > 0).sum() / len (trades) if len (trades) > 0 else 0
         
         return {
             'total_return': total_return,
             'sharpe_ratio': sharpe,
             'max_drawdown': max_drawdown,
             'win_rate': win_rate,
-            'num_trades': len(trades),
-            'avg_return_per_trade': trades.mean() if len(trades) > 0 else 0
+            'num_trades': len (trades),
+            'avg_return_per_trade': trades.mean() if len (trades) > 0 else 0
         }
 
 # Example
@@ -800,10 +800,10 @@ class SentimentReturnCorrelation:
 
 # Simulate data
 # dates = pd.date_range('2020-01-01', periods=100, freq='Q')
-# sentiment = pd.Series(np.random.randn(100) * 0.5, index=dates)
-# returns = pd.Series(np.random.randn(100) * 0.03 + sentiment * 0.02, index=dates)
+# sentiment = pd.Series (np.random.randn(100) * 0.5, index=dates)
+# returns = pd.Series (np.random.randn(100) * 0.03 + sentiment * 0.02, index=dates)
 
-# results = correlator.backtest_sentiment_strategy(sentiment, returns)
+# results = correlator.backtest_sentiment_strategy (sentiment, returns)
 # print(f"Total Return: {results['total_return']:.1%}")
 # print(f"Sharpe Ratio: {results['sharpe_ratio']:.2f}")
 # print(f"Win Rate: {results['win_rate']:.1%}")

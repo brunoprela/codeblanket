@@ -74,9 +74,9 @@ try:
             messages=[{"role": "user", "content": "Hi"}]
         )
 except OpenAIError as e:
-    print(f"Error type: {type(e).__name__}")
+    print(f"Error type: {type (e).__name__}")
     print(f"Error message: {e}")
-    print(f"Status code: {e.status_code if hasattr(e, 'status_code') else 'N/A'}")
+    print(f"Status code: {e.status_code if hasattr (e, 'status_code') else 'N/A'}")
 
 # Example 2: Invalid Request
 try:
@@ -109,7 +109,7 @@ from openai import OpenAI, OpenAIError
 
 client = OpenAI()
 
-def call_llm_with_basic_handling(prompt: str) -> str:
+def call_llm_with_basic_handling (prompt: str) -> str:
     """
     Call LLM with basic error handling.
     """
@@ -152,7 +152,7 @@ from openai import (
 
 client = OpenAI()
 
-def call_with_specific_handling(prompt: str) -> str:
+def call_with_specific_handling (prompt: str) -> str:
     """
     Handle specific error types differently.
     """
@@ -217,7 +217,7 @@ def call_with_retry(
     Retry failed requests up to max_retries times.
     """
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -267,7 +267,7 @@ def call_with_exponential_backoff(
     This prevents hammering the API and respects rate limits.
     """
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -281,7 +281,7 @@ def call_with_exponential_backoff(
                 # Calculate wait time: 1s, 2s, 4s, 8s, 16s
                 wait_time = base_delay * (2 ** attempt)
                 print(f"Rate limited. Waiting {wait_time}s before retry {attempt + 2}...")
-                time.sleep(wait_time)
+                time.sleep (wait_time)
             else:
                 print("Max retries exceeded")
                 raise
@@ -290,7 +290,7 @@ def call_with_exponential_backoff(
             if attempt < max_retries - 1:
                 wait_time = base_delay * (2 ** attempt)
                 print(f"API error. Waiting {wait_time}s...")
-                time.sleep(wait_time)
+                time.sleep (wait_time)
             else:
                 raise
     
@@ -324,7 +324,7 @@ def call_with_backoff_and_jitter(
     Jitter prevents many clients from retrying simultaneously.
     """
     
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -339,15 +339,15 @@ def call_with_backoff_and_jitter(
                 exponential_delay = base_delay * (2 ** attempt)
                 
                 # Cap at max_delay
-                exponential_delay = min(exponential_delay, max_delay)
+                exponential_delay = min (exponential_delay, max_delay)
                 
                 # Add jitter: random value between 0 and exponential_delay
                 jitter = random.uniform(0, exponential_delay)
                 wait_time = exponential_delay + jitter
                 
-                print(f"Error on attempt {attempt + 1}: {type(e).__name__}")
+                print(f"Error on attempt {attempt + 1}: {type (e).__name__}")
                 print(f"Waiting {wait_time:.2f}s before retry...")
-                time.sleep(wait_time)
+                time.sleep (wait_time)
             else:
                 print(f"Failed after {max_retries} attempts")
                 raise
@@ -384,11 +384,11 @@ client = OpenAI()
 
 @retry(
     stop=stop_after_attempt(5),
-    wait=wait_exponential(multiplier=1, min=1, max=60),
+    wait=wait_exponential (multiplier=1, min=1, max=60),
     retry=retry_if_exception_type((RateLimitError, APIError)),
     reraise=True
 )
-def call_with_tenacity(prompt: str) -> str:
+def call_with_tenacity (prompt: str) -> str:
     """
     Automatically retry with tenacity decorator.
     
@@ -427,7 +427,7 @@ from tenacity import (
 import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @retry(
@@ -435,7 +435,7 @@ logger = logging.getLogger(__name__)
     stop=stop_after_attempt(5),
     
     # Wait strategy with jitter
-    wait=wait_exponential_jitter(initial=1, max=60),
+    wait=wait_exponential_jitter (initial=1, max=60),
     
     # Only retry specific errors
     retry=retry_if_exception_type((
@@ -445,13 +445,13 @@ logger = logging.getLogger(__name__)
     )),
     
     # Logging
-    before_sleep=before_sleep_log(logger, logging.WARNING),
-    after=after_log(logger, logging.INFO),
+    before_sleep=before_sleep_log (logger, logging.WARNING),
+    after=after_log (logger, logging.INFO),
     
     # Reraise final exception
     reraise=True
 )
-def call_with_advanced_retry(prompt: str) -> str:
+def call_with_advanced_retry (prompt: str) -> str:
     """
     Production-ready retry with logging.
     """
@@ -510,7 +510,7 @@ class CircuitBreaker:
         self.last_failure_time = None
         self.state = CircuitState.CLOSED
     
-    def call(self, func: Callable, *args, **kwargs) -> Any:
+    def call (self, func: Callable, *args, **kwargs) -> Any:
         """
         Call function through circuit breaker.
         """
@@ -520,7 +520,7 @@ class CircuitBreaker:
                 print("Circuit breaker: Trying to recover (HALF_OPEN)...")
                 self.state = CircuitState.HALF_OPEN
             else:
-                raise Exception(f"Circuit breaker is OPEN. Blocked for {self.timeout}s after failures.")
+                raise Exception (f"Circuit breaker is OPEN. Blocked for {self.timeout}s after failures.")
         
         try:
             result = func(*args, **kwargs)
@@ -555,7 +555,7 @@ breaker = CircuitBreaker(
     expected_exception=OpenAIError
 )
 
-def make_api_call(prompt: str):
+def make_api_call (prompt: str):
     """Wrapped API call."""
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -566,7 +566,7 @@ def make_api_call(prompt: str):
 # Test circuit breaker
 for i in range(10):
     try:
-        result = breaker.call(make_api_call, "Hello")
+        result = breaker.call (make_api_call, "Hello")
         print(f"Request {i+1}: Success")
     except Exception as e:
         print(f"Request {i+1}: {e}")
@@ -636,7 +636,7 @@ class ProductionLLMClient:
         """
         self.total_requests += 1
         
-        for attempt in range(self.retry_config.max_retries):
+        for attempt in range (self.retry_config.max_retries):
             try:
                 response = self.client.chat.completions.create(
                     model=self.model,
@@ -648,23 +648,23 @@ class ProductionLLMClient:
             
             except AuthenticationError as e:
                 # Don't retry auth errors
-                logger.error(f"Authentication error: {e}")
+                logger.error (f"Authentication error: {e}")
                 self.failed_requests += 1
                 raise
             
             except BadRequestError as e:
                 # Don't retry bad requests
-                logger.error(f"Bad request: {e}")
+                logger.error (f"Bad request: {e}")
                 self.failed_requests += 1
                 raise
             
             except RateLimitError as e:
                 # Retry with backoff
                 if attempt < self.retry_config.max_retries - 1:
-                    wait_time = self._calculate_wait_time(attempt)
-                    logger.warning(f"Rate limit hit. Retrying in {wait_time:.2f}s...")
+                    wait_time = self._calculate_wait_time (attempt)
+                    logger.warning (f"Rate limit hit. Retrying in {wait_time:.2f}s...")
                     self.retried_requests += 1
-                    time.sleep(wait_time)
+                    time.sleep (wait_time)
                 else:
                     logger.error("Max retries exceeded for rate limit")
                     self.failed_requests += 1
@@ -673,7 +673,7 @@ class ProductionLLMClient:
             except APITimeoutError as e:
                 # Retry immediately
                 if attempt < self.retry_config.max_retries - 1:
-                    logger.warning(f"Timeout on attempt {attempt + 1}. Retrying...")
+                    logger.warning (f"Timeout on attempt {attempt + 1}. Retrying...")
                     self.retried_requests += 1
                     time.sleep(0.5)  # Brief pause
                 else:
@@ -684,10 +684,10 @@ class ProductionLLMClient:
             except APIError as e:
                 # Server error - retry with backoff
                 if attempt < self.retry_config.max_retries - 1:
-                    wait_time = self._calculate_wait_time(attempt)
-                    logger.warning(f"API error. Retrying in {wait_time:.2f}s...")
+                    wait_time = self._calculate_wait_time (attempt)
+                    logger.warning (f"API error. Retrying in {wait_time:.2f}s...")
                     self.retried_requests += 1
-                    time.sleep(wait_time)
+                    time.sleep (wait_time)
                 else:
                     logger.error("Max retries exceeded for API error")
                     self.failed_requests += 1
@@ -695,19 +695,19 @@ class ProductionLLMClient:
             
             except OpenAIError as e:
                 # Generic OpenAI error
-                logger.error(f"OpenAI error: {e}")
+                logger.error (f"OpenAI error: {e}")
                 self.failed_requests += 1
                 raise
             
             except Exception as e:
                 # Unexpected error
-                logger.error(f"Unexpected error: {e}")
+                logger.error (f"Unexpected error: {e}")
                 self.failed_requests += 1
                 raise
         
         return None
     
-    def _calculate_wait_time(self, attempt: int) -> float:
+    def _calculate_wait_time (self, attempt: int) -> float:
         """
         Calculate wait time with exponential backoff and jitter.
         """
@@ -717,7 +717,7 @@ class ProductionLLMClient:
         )
         
         # Cap at max
-        exponential = min(exponential, self.retry_config.max_delay)
+        exponential = min (exponential, self.retry_config.max_delay)
         
         # Add jitter if enabled
         if self.retry_config.jitter:
@@ -726,7 +726,7 @@ class ProductionLLMClient:
         
         return exponential
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get client metrics."""
         success_rate = (
             (self.total_requests - self.failed_requests) / self.total_requests * 100
@@ -756,7 +756,7 @@ client = ProductionLLMClient(
 messages = [{"role": "user", "content": "What is Python?"}]
 
 try:
-    response = client.chat(messages)
+    response = client.chat (messages)
     print(response)
 except Exception as e:
     print(f"Failed: {e}")

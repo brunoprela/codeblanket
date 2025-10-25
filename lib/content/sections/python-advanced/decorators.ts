@@ -10,7 +10,7 @@ Decorators are a powerful way to modify or enhance functions and classes without
 
 **Basic Decorator Pattern:**
 \`\`\`python
-def my_decorator(func):
+def my_decorator (func):
     def wrapper(*args, **kwargs):
         # Do something before
         result = func(*args, **kwargs)
@@ -28,7 +28,7 @@ def my_function():
 1. **Timing/Profiling:**
 \`\`\`python
 import time
-def timer(func):
+def timer (func):
     def wrapper(*args, **kwargs):
         start = time.time()
         result = func(*args, **kwargs)
@@ -42,29 +42,29 @@ def timer(func):
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=128)
-def fibonacci(n):
+@lru_cache (maxsize=128)
+def fibonacci (n):
     if n < 2:
         return n
-    return fibonacci(n-1) + fibonacci(n-2)
+    return fibonacci (n-1) + fibonacci (n-2)
 \`\`\`
 
 3. **Authentication/Authorization:**
 \`\`\`python
-def require_auth(func):
-    def wrapper(user, *args, **kwargs):
+def require_auth (func):
+    def wrapper (user, *args, **kwargs):
         if not user.is_authenticated:
             raise PermissionError("Not authenticated")
-        return func(user, *args, **kwargs)
+        return func (user, *args, **kwargs)
     return wrapper
 \`\`\`
 
 **Decorators with Arguments:**
 \`\`\`python
-def repeat(times):
-    def decorator(func):
+def repeat (times):
+    def decorator (func):
         def wrapper(*args, **kwargs):
-            for _ in range(times):
+            for _ in range (times):
                 result = func(*args, **kwargs)
             return result
         return wrapper
@@ -77,7 +77,7 @@ def greet():
 
 **Class Decorators:**
 \`\`\`python
-def singleton(cls):
+def singleton (cls):
     instances = {}
     def get_instance(*args, **kwargs):
         if cls not in instances:

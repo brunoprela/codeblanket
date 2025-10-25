@@ -41,17 +41,17 @@ If allowed to modify input:
 
 **Before: O(m*n) space**
 \`\`\`python
-dp = [[0] * n for _ in range(m)]
-for i in range(m):
-    for j in range(n):
-        dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+dp = [[0] * n for _ in range (m)]
+for i in range (m):
+    for j in range (n):
+        dp[i][j] = grid[i][j] + min (dp[i-1][j], dp[i][j-1])
 \`\`\`
 
 **After: O(1) space**
 \`\`\`python
 # Modify grid in-place
-for i in range(m):
-    for j in range(n):
+for i in range (m):
+    for j in range (n):
         if i == 0 and j == 0:
             continue
         grid[i][j] += min(
@@ -69,7 +69,7 @@ If \`dp[i][j]\` only depends on row i-1:
 
 **Before: O(m*n) space**
 \`\`\`python
-dp = [[0] * n for _ in range(m)]
+dp = [[0] * n for _ in range (m)]
 \`\`\`
 
 **After: O(n) space**
@@ -77,9 +77,9 @@ dp = [[0] * n for _ in range(m)]
 prev_row = [0] * n
 curr_row = [0] * n
 
-for i in range(m):
-    for j in range(n):
-        curr_row[j] = compute(prev_row, curr_row, i, j)
+for i in range (m):
+    for j in range (n):
+        curr_row[j] = compute (prev_row, curr_row, i, j)
     prev_row, curr_row = curr_row, prev_row
 \`\`\`
 

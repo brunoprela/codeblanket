@@ -17,7 +17,7 @@ Top-K similarity can return very similar documents:
 
 \`\`\`python
 query = "What is machine learning?"
-results = search(query, top_k=5)
+results = search (query, top_k=5)
 
 # Problem: All 5 results might be nearly identical!
 # 1. "Machine learning is..."
@@ -74,15 +74,15 @@ class MMRRetriever:
         """
         # Calculate relevance scores (similarity to query)
         relevance_scores = [
-            self._cosine_sim(query_embedding, doc_emb)
+            self._cosine_sim (query_embedding, doc_emb)
             for doc_emb in doc_embeddings
         ]
         
         selected_indices = []
         selected_docs = []
-        remaining_indices = list(range(len(documents)))
+        remaining_indices = list (range (len (documents)))
         
-        for _ in range(min(k, len(documents))):
+        for _ in range (min (k, len (documents))):
             if not remaining_indices:
                 break
             
@@ -112,28 +112,28 @@ class MMRRetriever:
                 mmr_scores.append((idx, mmr_score))
             
             # Select document with highest MMR score
-            best_idx, best_score = max(mmr_scores, key=lambda x: x[1])
-            selected_indices.append(best_idx)
+            best_idx, best_score = max (mmr_scores, key=lambda x: x[1])
+            selected_indices.append (best_idx)
             selected_docs.append((documents[best_idx], best_score))
-            remaining_indices.remove(best_idx)
+            remaining_indices.remove (best_idx)
         
         return selected_docs
     
-    def _cosine_sim(self, v1: np.ndarray, v2: np.ndarray) -> float:
+    def _cosine_sim (self, v1: np.ndarray, v2: np.ndarray) -> float:
         """Calculate cosine similarity."""
         return float(
-            np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+            np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
         )
 
 
 # Example usage
-retriever = MMRRetriever(lambda_param=0.7)  # Favor relevance
+retriever = MMRRetriever (lambda_param=0.7)  # Favor relevance
 
 query_emb = np.random.randn(384)
 doc_embs = [np.random.randn(384) for _ in range(10)]
 docs = [f"Document {i}" for i in range(10)]
 
-results = retriever.retrieve(query_emb, doc_embs, docs, k=5)
+results = retriever.retrieve (query_emb, doc_embs, docs, k=5)
 
 for doc, score in results:
     print(f"{score:.3f}: {doc}")
@@ -188,24 +188,24 @@ class HyDERetriever:
             Retrieved documents with scores
         """
         # Step 1: Generate hypothetical answer
-        hypothetical_answer = self._generate_hypothetical_answer(query)
+        hypothetical_answer = self._generate_hypothetical_answer (query)
         
         print(f"Hypothetical answer: {hypothetical_answer[:100]}...")
         
         # Step 2: Embed hypothetical answer
-        hyp_embedding = self._embed(hypothetical_answer)
+        hyp_embedding = self._embed (hypothetical_answer)
         
         # Step 3: Search using hypothetical embedding
         similarities = [
-            (doc, self._cosine_sim(hyp_embedding, doc_emb))
-            for doc, doc_emb in zip(documents, doc_embeddings)
+            (doc, self._cosine_sim (hyp_embedding, doc_emb))
+            for doc, doc_emb in zip (documents, doc_embeddings)
         ]
         
         # Sort and return top K
-        similarities.sort(key=lambda x: x[1], reverse=True)
+        similarities.sort (key=lambda x: x[1], reverse=True)
         return similarities[:k]
     
-    def _generate_hypothetical_answer(self, query: str) -> str:
+    def _generate_hypothetical_answer (self, query: str) -> str:
         """
         Generate hypothetical answer using LLM.
         """
@@ -226,18 +226,18 @@ class HyDERetriever:
         )
         return response.choices[0].message.content
     
-    def _embed(self, text: str) -> np.ndarray:
+    def _embed (self, text: str) -> np.ndarray:
         """Create embedding."""
         response = client.embeddings.create(
             model=self.embedding_model,
             input=text
         )
-        return np.array(response.data[0].embedding)
+        return np.array (response.data[0].embedding)
     
-    def _cosine_sim(self, v1: np.ndarray, v2: np.ndarray) -> float:
+    def _cosine_sim (self, v1: np.ndarray, v2: np.ndarray) -> float:
         """Cosine similarity."""
         return float(
-            np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+            np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
         )
 
 
@@ -292,25 +292,25 @@ class ParentChildRetriever:
             chunk_size: Size of child chunks (for retrieval)
             parent_chunk_size: Size of parent chunks (for context)
         """
-        for doc_id, doc in enumerate(documents):
+        for doc_id, doc in enumerate (documents):
             # Create parent chunks (larger)
-            parent_chunks = self._chunk(doc, parent_chunk_size)
+            parent_chunks = self._chunk (doc, parent_chunk_size)
             
-            for parent_idx, parent_chunk in enumerate(parent_chunks):
+            for parent_idx, parent_chunk in enumerate (parent_chunks):
                 parent_id = f"doc_{doc_id}_parent_{parent_idx}"
                 self.parent_docs[parent_id] = parent_chunk
                 
                 # Create child chunks (smaller) within each parent
-                child_chunks = self._chunk(parent_chunk, chunk_size)
+                child_chunks = self._chunk (parent_chunk, chunk_size)
                 
-                for child_idx, child_chunk in enumerate(child_chunks):
+                for child_idx, child_chunk in enumerate (child_chunks):
                     child_id = f"{parent_id}_child_{child_idx}"
-                    self.child_chunks.append(child_chunk)
+                    self.child_chunks.append (child_chunk)
                     self.child_to_parent[child_id] = parent_id
                     
                     # Embed child chunk
-                    embedding = self._embed(child_chunk)
-                    self.child_embeddings.append(embedding)
+                    embedding = self._embed (child_chunk)
+                    self.child_embeddings.append (embedding)
     
     def retrieve(
         self,
@@ -328,7 +328,7 @@ class ParentChildRetriever:
             List of (parent_doc, child_chunk, score)
         """
         # Embed query
-        query_emb = self._embed(query)
+        query_emb = self._embed (query)
         
         # Search child chunks for precision
         child_results = []
@@ -336,11 +336,11 @@ class ParentChildRetriever:
             self.child_chunks,
             self.child_embeddings
         ):
-            similarity = self._cosine_sim(query_emb, child_emb)
+            similarity = self._cosine_sim (query_emb, child_emb)
             child_results.append((child_chunk, similarity))
         
         # Sort by similarity
-        child_results.sort(key=lambda x: x[1], reverse=True)
+        child_results.sort (key=lambda x: x[1], reverse=True)
         
         # Get parent documents
         results = []
@@ -349,30 +349,30 @@ class ParentChildRetriever:
         for child_chunk, score in child_results:
             # Find parent for this child
             child_id = f"{child_chunk}"  # Simplified
-            parent_id = self.child_to_parent.get(child_id)
+            parent_id = self.child_to_parent.get (child_id)
             
             if parent_id and parent_id not in seen_parents:
                 parent_doc = self.parent_docs[parent_id]
                 results.append((parent_doc, child_chunk, score))
-                seen_parents.add(parent_id)
+                seen_parents.add (parent_id)
                 
-                if len(results) >= k:
+                if len (results) >= k:
                     break
         
         return results
     
-    def _chunk(self, text: str, size: int) -> List[str]:
+    def _chunk (self, text: str, size: int) -> List[str]:
         """Simple chunking."""
-        return [text[i:i+size] for i in range(0, len(text), size)]
+        return [text[i:i+size] for i in range(0, len (text), size)]
     
-    def _embed(self, text: str) -> np.ndarray:
+    def _embed (self, text: str) -> np.ndarray:
         """Embed text (placeholder)."""
         return np.random.randn(384)
     
-    def _cosine_sim(self, v1: np.ndarray, v2: np.ndarray) -> float:
+    def _cosine_sim (self, v1: np.ndarray, v2: np.ndarray) -> float:
         """Cosine similarity."""
         return float(
-            np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+            np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
         )
 \`\`\`
 
@@ -429,10 +429,10 @@ class MultiQueryRetriever:
         all_results = {}  # doc -> max score
         
         for query_var in query_variations:
-            query_emb = self._embed(query_var)
+            query_emb = self._embed (query_var)
             
-            for doc, doc_emb in zip(documents, doc_embeddings):
-                similarity = self._cosine_sim(query_emb, doc_emb)
+            for doc, doc_emb in zip (documents, doc_embeddings):
+                similarity = self._cosine_sim (query_emb, doc_emb)
                 
                 # Keep maximum score across all queries
                 if doc not in all_results or similarity > all_results[doc]:
@@ -474,22 +474,22 @@ class MultiQueryRetriever:
         variations = [query]  # Include original
         content = response.choices[0].message.content
         lines = [line.strip() for line in content.split('\\n') if line.strip()]
-        variations.extend(lines[:num_variations])
+        variations.extend (lines[:num_variations])
         
         return variations[:num_variations + 1]
     
-    def _embed(self, text: str) -> np.ndarray:
+    def _embed (self, text: str) -> np.ndarray:
         """Embed text."""
         response = self.client.embeddings.create(
             model="text-embedding-3-small",
             input=text
         )
-        return np.array(response.data[0].embedding)
+        return np.array (response.data[0].embedding)
     
-    def _cosine_sim(self, v1: np.ndarray, v2: np.ndarray) -> float:
+    def _cosine_sim (self, v1: np.ndarray, v2: np.ndarray) -> float:
         """Cosine similarity."""
         return float(
-            np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+            np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
         )
 \`\`\`
 
@@ -539,9 +539,9 @@ class EnsembleRetriever:
             Merged and ranked results
         """
         # Get results from each retriever
-        semantic_results = self._semantic_retrieve(query, documents)
-        keyword_results = self._keyword_retrieve(query, documents)
-        mmr_results = self._mmr_retrieve(query, documents)
+        semantic_results = self._semantic_retrieve (query, documents)
+        keyword_results = self._keyword_retrieve (query, documents)
+        mmr_results = self._mmr_retrieve (query, documents)
         
         # Combine scores
         combined_scores = {}
@@ -551,13 +551,13 @@ class EnsembleRetriever:
         
         for doc, score in keyword_results:
             combined_scores[doc] = (
-                combined_scores.get(doc, 0) +
+                combined_scores.get (doc, 0) +
                 score * self.weights["keyword"]
             )
         
         for doc, score in mmr_results:
             combined_scores[doc] = (
-                combined_scores.get(doc, 0) +
+                combined_scores.get (doc, 0) +
                 score * self.weights["mmr"]
             )
         

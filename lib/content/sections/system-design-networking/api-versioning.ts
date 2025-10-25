@@ -52,14 +52,14 @@ export const apiversioningSection = {
     // V1 routes
     v1Router.get('/users', (req, res) => {
       res.json({
-        users: users.map(u => ({ name: u.fullName }))
+        users: users.map (u => ({ name: u.fullName }))
       });
     });
     
     // V2 routes
     v2Router.get('/users', (req, res) => {
       res.json({
-        users: users.map(u => ({
+        users: users.map (u => ({
           firstName: u.firstName,
           lastName: u.lastName
         }))
@@ -100,20 +100,20 @@ export const apiversioningSection = {
     \`\`\`javascript
     app.use((req, res, next) => {
       const version = req.headers['api-version'] || '1';
-      req.apiVersion = parseInt(version);
+      req.apiVersion = parseInt (version);
       next();
     });
     
     app.get('/api/users', (req, res) => {
       if (req.apiVersion === 1) {
         return res.json({
-          users: users.map(u => ({ name: u.fullName }))
+          users: users.map (u => ({ name: u.fullName }))
         });
       }
       
       if (req.apiVersion === 2) {
         return res.json({
-          users: users.map(u => ({
+          users: users.map (u => ({
             firstName: u.firstName,
             lastName: u.lastName
           }))
@@ -158,14 +158,14 @@ export const apiversioningSection = {
       if (accept.includes('vnd.myapi.v1+json')) {
         return res
           .type('application/vnd.myapi.v1+json')
-          .json({ users: users.map(u => ({ name: u.fullName })) });
+          .json({ users: users.map (u => ({ name: u.fullName })) });
       }
       
       if (accept.includes('vnd.myapi.v2+json')) {
         return res
           .type('application/vnd.myapi.v2+json')
           .json({
-            users: users.map(u => ({
+            users: users.map (u => ({
               firstName: u.firstName,
               lastName: u.lastName
             }))
@@ -174,7 +174,7 @@ export const apiversioningSection = {
       
       // Default to latest version
       return res.json({
-        users: users.map(u => ({
+        users: users.map (u => ({
           firstName: u.firstName,
           lastName: u.lastName
         }))
@@ -207,17 +207,17 @@ export const apiversioningSection = {
     **Implementation**:
     \`\`\`javascript
     app.get('/api/users', (req, res) => {
-      const version = parseInt(req.query.version) || 1;
+      const version = parseInt (req.query.version) || 1;
       
       if (version === 1) {
         return res.json({
-          users: users.map(u => ({ name: u.fullName }))
+          users: users.map (u => ({ name: u.fullName }))
         });
       }
       
       if (version === 2) {
         return res.json({
-          users: users.map(u => ({
+          users: users.map (u => ({
             firstName: u.firstName,
             lastName: u.lastName
           }))
@@ -315,7 +315,7 @@ export const apiversioningSection = {
     app.use('/api/v1', (req, res, next) => {
       const clientId = req.headers['x-client-id'];
       
-      if (!allowedClients.has(clientId)) {
+      if (!allowedClients.has (clientId)) {
         return res.status(410).json({
           error: 'API version 1 is no longer supported',
           message: 'Please upgrade to v2: https://api.example.com/docs/migration'
@@ -368,7 +368,7 @@ export const apiversioningSection = {
     **Solution: Maintain both versions**:
     \`\`\`javascript
     // Shared data layer
-    function getUser(id) {
+    function getUser (id) {
       return {
         id: id,
         firstName: 'John',
@@ -380,7 +380,7 @@ export const apiversioningSection = {
     
     // V1 endpoint
     app.get('/api/v1/users/:id', (req, res) => {
-      const user = getUser(req.params.id);
+      const user = getUser (req.params.id);
       res.json({
         id: user.id,
         name: user.fullName // V1 format
@@ -389,7 +389,7 @@ export const apiversioningSection = {
     
     // V2 endpoint
     app.get('/api/v2/users/:id', (req, res) => {
-      const user = getUser(req.params.id);
+      const user = getUser (req.params.id);
       res.json({
         id: user.id,
         firstName: user.firstName, // V2 format
@@ -403,7 +403,7 @@ export const apiversioningSection = {
     \`\`\`javascript
     // Data model (internal)
     class User {
-      constructor(id, firstName, lastName) {
+      constructor (id, firstName, lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -412,22 +412,22 @@ export const apiversioningSection = {
     
     // V1 Adapter
     class UserV1Adapter {
-      static toResponse(user) {
+      static toResponse (user) {
         return {
           id: user.id,
           name: \`\${user.firstName} \${user.lastName}\`
         };
       }
       
-      static fromRequest(data) {
+      static fromRequest (data) {
         const [firstName, ...lastNameParts] = data.name.split(' ');
-        return new User(data.id, firstName, lastNameParts.join(' '));
+        return new User (data.id, firstName, lastNameParts.join(' '));
       }
     }
     
     // V2 Adapter
     class UserV2Adapter {
-      static toResponse(user) {
+      static toResponse (user) {
         return {
           id: user.id,
           firstName: user.firstName,
@@ -435,20 +435,20 @@ export const apiversioningSection = {
         };
       }
       
-      static fromRequest(data) {
-        return new User(data.id, data.firstName, data.lastName);
+      static fromRequest (data) {
+        return new User (data.id, data.firstName, data.lastName);
       }
     }
     
     // Use in routes
     app.get('/api/v1/users/:id', async (req, res) => {
-      const user = await userService.getUser(req.params.id);
-      res.json(UserV1Adapter.toResponse(user));
+      const user = await userService.getUser (req.params.id);
+      res.json(UserV1Adapter.toResponse (user));
     });
     
     app.get('/api/v2/users/:id', async (req, res) => {
-      const user = await userService.getUser(req.params.id);
-      res.json(UserV2Adapter.toResponse(user));
+      const user = await userService.getUser (req.params.id);
+      res.json(UserV2Adapter.toResponse (user));
     });
     \`\`\`
     
@@ -463,7 +463,7 @@ export const apiversioningSection = {
     \`\`\`graphql
     type User {
       id: ID!
-      name: String! @deprecated(reason: "Use firstName and lastName instead")
+      name: String! @deprecated (reason: "Use firstName and lastName instead")
       firstName: String!
       lastName: String!
     }
@@ -473,14 +473,14 @@ export const apiversioningSection = {
     \`\`\`graphql
     # Old clients
     query {
-      user(id: "123") {
+      user (id: "123") {
         name  # Still works
       }
     }
     
     # New clients
     query {
-      user(id: "123") {
+      user (id: "123") {
         firstName
         lastName
       }

@@ -23,7 +23,7 @@ This section covers how to build multiplayer AI experiences where:
 
 **Network Effects**: Collaborative features drive viral growth. Users invite team members, expanding your user base.
 
-**Market Differentiation**: Adding multiplayer to your AI product creates competitive moats. It's technically challenging, so few competitors do it well.
+**Market Differentiation**: Adding multiplayer to your AI product creates competitive moats. It\'s technically challenging, so few competitors do it well.
 
 ### The Challenge
 
@@ -175,7 +175,7 @@ const provider = new WebsocketProvider(
 );
 
 // Bind to Monaco editor
-const editor = monaco.editor.create(document.getElementById('editor'), {
+const editor = monaco.editor.create (document.getElementById('editor'), {
   value: ',
   language: 'javascript'
 });
@@ -222,12 +222,12 @@ ytext.delete(6, 5);  // Delete 5 characters starting at position 6
 ydoc.on('update', (update: Uint8Array, origin: any) => {
   // Update is a compact binary representation
   // Can be sent over WebSocket efficiently
-  websocket.send(update);
+  websocket.send (update);
 });
 
 // Apply remote updates
 websocket.on('message', (update: Uint8Array) => {
-  Y.applyUpdate(ydoc, update);
+  Y.applyUpdate (ydoc, update);
   // Document automatically converges to correct state
 });
 \`\`\`
@@ -262,12 +262,12 @@ setPersistence({
     // Load document from database
     const persisted = await loadDocumentFromDB(docName);
     if (persisted) {
-      Y.applyUpdate(ydoc, persisted);
+      Y.applyUpdate (ydoc, persisted);
     }
   },
   writeState: async (docName: string, ydoc: Y.Doc) => {
     // Save document to database
-    const state = Y.encodeStateAsUpdate(ydoc);
+    const state = Y.encodeStateAsUpdate (ydoc);
     await saveDocumentToDB(docName, state);
   }
 });
@@ -283,13 +283,13 @@ wss.on('connection', (ws: WebSocket, req: any) => {
   console.log(\`Client connected to document: \${docName}\`);
 
   // Setup Yjs WebSocket connection
-  setupWSConnection(ws, req, { docName });
+  setupWSConnection (ws, req, { docName });
 
   // Get or create document
-  let ydoc = documents.get(docName);
+  let ydoc = documents.get (docName);
   if (!ydoc) {
     ydoc = new Y.Doc();
-    documents.set(docName, ydoc);
+    documents.set (docName, ydoc);
   }
 
   // Track active users for presence
@@ -300,7 +300,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
     
     // Clean up if no more clients
     if (wss.clients.size === 0) {
-      documents.delete(docName);
+      documents.delete (docName);
     }
   });
 });
@@ -334,7 +334,7 @@ export const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 }) => {
   const [doc] = useState(() => new Y.Doc());
   const [provider, setProvider] = useState<WebsocketProvider | null>(null);
-  const [synced, setSynced] = useState(false);
+  const [synced, setSynced] = useState (false);
   const [activeUsers, setActiveUsers] = useState<Map<number, any>>(new Map());
 
   useEffect(() => {
@@ -354,15 +354,15 @@ export const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
     // Track sync status
     wsProvider.on('sync', (isSynced: boolean) => {
-      setSynced(isSynced);
+      setSynced (isSynced);
     });
 
     // Track active users
     wsProvider.awareness.on('change', () => {
-      setActiveUsers(new Map(wsProvider.awareness.getStates()));
+      setActiveUsers (new Map (wsProvider.awareness.getStates()));
     });
 
-    setProvider(wsProvider);
+    setProvider (wsProvider);
 
     return () => {
       wsProvider.destroy();
@@ -378,9 +378,9 @@ export const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
           {synced ? '✓ Synced' : '⟳ Syncing...'}
         </div>
         <div className="active-users">
-          {Array.from(activeUsers.values())
-            .filter(state => state.user)
-            .map(state => (
+          {Array.from (activeUsers.values())
+            .filter (state => state.user)
+            .map (state => (
               <div key={state.user.id} className="user-badge">
                 <span 
                   className="user-indicator"
@@ -395,7 +395,7 @@ export const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
       <CodeMirror
         value={ytext.toString()}
         extensions={[
-          yCollab(ytext, provider?.awareness)
+          yCollab (ytext, provider?.awareness)
         ]}
         onChange={() => {
           // Changes automatically synced via Yjs
@@ -433,39 +433,39 @@ class CursorManager {
   private awareness: Awareness;
   private cursors: Map<number, HTMLElement> = new Map();
 
-  constructor(awareness: Awareness, editorElement: HTMLElement) {
+  constructor (awareness: Awareness, editorElement: HTMLElement) {
     this.awareness = awareness;
 
     // Listen to awareness changes
     awareness.on('change', (changes: any) => {
-      this.updateCursors(changes, editorElement);
+      this.updateCursors (changes, editorElement);
     });
   }
 
-  updateCursors(changes: any, editorElement: HTMLElement) {
+  updateCursors (changes: any, editorElement: HTMLElement) {
     // Added users
     changes.added.forEach((clientId: number) => {
-      const state = this.awareness.getStates().get(clientId);
+      const state = this.awareness.getStates().get (clientId);
       if (state?.cursor) {
-        this.createCursor(clientId, state, editorElement);
+        this.createCursor (clientId, state, editorElement);
       }
     });
 
     // Updated users
     changes.updated.forEach((clientId: number) => {
-      const state = this.awareness.getStates().get(clientId);
+      const state = this.awareness.getStates().get (clientId);
       if (state?.cursor) {
-        this.updateCursor(clientId, state);
+        this.updateCursor (clientId, state);
       }
     });
 
     // Removed users
     changes.removed.forEach((clientId: number) => {
-      this.removeCursor(clientId);
+      this.removeCursor (clientId);
     });
   }
 
-  createCursor(clientId: number, state: any, editorElement: HTMLElement) {
+  createCursor (clientId: number, state: any, editorElement: HTMLElement) {
     const cursor = document.createElement('div');
     cursor.className = 'remote-cursor';
     cursor.style.backgroundColor = state.user.color;
@@ -473,7 +473,7 @@ class CursorManager {
     
     // Position cursor
     const { line, ch } = state.cursor;
-    const coords = this.getCoordinates(line, ch, editorElement);
+    const coords = this.getCoordinates (line, ch, editorElement);
     cursor.style.left = \`\${coords.x}px\`;
     cursor.style.top = \`\${coords.y}px\`;
 
@@ -482,48 +482,48 @@ class CursorManager {
     label.className = 'cursor-label';
     label.textContent = state.user.name;
     label.style.backgroundColor = state.user.color;
-    cursor.appendChild(label);
+    cursor.appendChild (label);
 
-    editorElement.appendChild(cursor);
-    this.cursors.set(clientId, cursor);
+    editorElement.appendChild (cursor);
+    this.cursors.set (clientId, cursor);
   }
 
-  updateCursor(clientId: number, state: any) {
-    const cursor = this.cursors.get(clientId);
+  updateCursor (clientId: number, state: any) {
+    const cursor = this.cursors.get (clientId);
     if (!cursor) return;
 
     const { line, ch } = state.cursor;
-    const coords = this.getCoordinates(line, ch, cursor.parentElement!);
+    const coords = this.getCoordinates (line, ch, cursor.parentElement!);
     cursor.style.left = \`\${coords.x}px\`;
     cursor.style.top = \`\${coords.y}px\`;
   }
 
-  removeCursor(clientId: number) {
-    const cursor = this.cursors.get(clientId);
+  removeCursor (clientId: number) {
+    const cursor = this.cursors.get (clientId);
     if (cursor) {
       cursor.remove();
-      this.cursors.delete(clientId);
+      this.cursors.delete (clientId);
     }
   }
 
-  getCoordinates(line: number, ch: number, element: HTMLElement) {
+  getCoordinates (line: number, ch: number, element: HTMLElement) {
     // Calculate pixel coordinates from line/character position
     // Implementation depends on editor library
     return { x: ch * 8, y: line * 20 };  // Simplified
   }
 
   // Update local cursor position
-  updateLocalCursor(line: number, ch: number) {
+  updateLocalCursor (line: number, ch: number) {
     this.awareness.setLocalStateField('cursor', { line, ch });
   }
 }
 
 // Usage
-const cursorManager = new CursorManager(provider.awareness, editorElement);
+const cursorManager = new CursorManager (provider.awareness, editorElement);
 
 editor.on('cursorActivity', () => {
   const cursor = editor.getCursor();
-  cursorManager.updateLocalCursor(cursor.line, cursor.ch);
+  cursorManager.updateLocalCursor (cursor.line, cursor.ch);
 });
 \`\`\`
 
@@ -546,25 +546,25 @@ class CollaborativeAIAssistant {
   private provider: WebsocketProvider;
   private aiClient: OpenAI;
 
-  constructor(ydoc: Y.Doc, provider: WebsocketProvider) {
+  constructor (ydoc: Y.Doc, provider: WebsocketProvider) {
     this.ydoc = ydoc;
     this.ytext = ydoc.getText('codemirror');
     this.provider = provider;
     this.aiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     // Listen to document changes
-    this.ytext.observe(this.onDocumentChange.bind(this));
+    this.ytext.observe (this.onDocumentChange.bind (this));
   }
 
   private debounceTimer: NodeJS.Timeout | null = null;
 
-  private async onDocumentChange(event: Y.YTextEvent) {
+  private async onDocumentChange (event: Y.YTextEvent) {
     // Debounce AI calls (wait for user to stop typing)
     if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
+      clearTimeout (this.debounceTimer);
     }
 
-    this.debounceTimer = setTimeout(async () => {
+    this.debounceTimer = setTimeout (async () => {
       await this.generateSuggestion();
     }, 2000);  // 2 second delay
   }
@@ -573,8 +573,8 @@ class CollaborativeAIAssistant {
     const content = this.ytext.toString();
     
     // Don't generate if someone else is actively editing
-    const activeUsers = Array.from(this.provider.awareness.getStates().values())
-      .filter(state => state.user && state.cursor);
+    const activeUsers = Array.from (this.provider.awareness.getStates().values())
+      .filter (state => state.user && state.cursor);
     
     if (activeUsers.length > 1) {
       console.log('Multiple users active, skipping AI suggestion');
@@ -601,14 +601,14 @@ class CollaborativeAIAssistant {
       const suggestion = response.choices[0].message.content;
 
       // Broadcast suggestion to all users
-      this.broadcastAISuggestion(suggestion);
+      this.broadcastAISuggestion (suggestion);
 
     } catch (error) {
       console.error('AI suggestion error:', error);
     }
   }
 
-  private broadcastAISuggestion(suggestion: string) {
+  private broadcastAISuggestion (suggestion: string) {
     // Add suggestion as awareness state (doesn't modify document)
     this.provider.awareness.setLocalStateField('aiSuggestion', {
       content: suggestion,
@@ -621,7 +621,7 @@ class CollaborativeAIAssistant {
   }
 
   // User accepts AI suggestion
-  async acceptSuggestion(suggestionId: string) {
+  async acceptSuggestion (suggestionId: string) {
     const states = this.provider.awareness.getStates();
     let suggestion: any = null;
 
@@ -638,7 +638,7 @@ class CollaborativeAIAssistant {
     // Apply suggestion as CRDT operation
     // This ensures it syncs correctly with other users
     this.ydoc.transact(() => {
-      this.ytext.insert(this.ytext.length, \`\\n\\n\${suggestion.content}\`);
+      this.ytext.insert (this.ytext.length, \`\\n\\n\${suggestion.content}\`);
     });
 
     // Clear suggestion from awareness
@@ -647,7 +647,7 @@ class CollaborativeAIAssistant {
 }
 
 // Usage
-const aiAssistant = new CollaborativeAIAssistant(doc, provider);
+const aiAssistant = new CollaborativeAIAssistant (doc, provider);
 
 // UI: Show AI suggestions to all users
 provider.awareness.on('change', () => {
@@ -655,8 +655,8 @@ provider.awareness.on('change', () => {
   
   states.forEach((state, clientId) => {
     if (state.aiSuggestion) {
-      showAISuggestion(state.aiSuggestion, () => {
-        aiAssistant.acceptSuggestion(state.aiSuggestion.id);
+      showAISuggestion (state.aiSuggestion, () => {
+        aiAssistant.acceptSuggestion (state.aiSuggestion.id);
       });
     }
   });
@@ -692,12 +692,12 @@ class ScalableCollaborationServer {
 
     // Subscribe to Redis channels
     this.redisSub.psubscribe('document:*');
-    this.redisSub.on('pmessage', this.onRedisMessage.bind(this));
+    this.redisSub.on('pmessage', this.onRedisMessage.bind (this));
 
-    this.wss.on('connection', this.onConnection.bind(this));
+    this.wss.on('connection', this.onConnection.bind (this));
   }
 
-  private onConnection(ws: WebSocket, req: any) {
+  private onConnection (ws: WebSocket, req: any) {
     const docId = new URL(req.url, 'http://localhost').searchParams.get('doc');
     
     if (!docId) {
@@ -706,12 +706,12 @@ class ScalableCollaborationServer {
     }
 
     // Add client to document's connection set
-    if (!this.documents.has(docId)) {
-      this.documents.set(docId, new Set());
+    if (!this.documents.has (docId)) {
+      this.documents.set (docId, new Set());
     }
-    this.documents.get(docId)!.add(ws);
+    this.documents.get (docId)!.add (ws);
 
-    console.log(\`Client connected. Doc: \${docId}, Total: \${this.documents.get(docId)!.size}\`);
+    console.log(\`Client connected. Doc: \${docId}, Total: \${this.documents.get (docId)!.size}\`);
 
     // Handle messages from client
     ws.on('message', async (data: Buffer) => {
@@ -721,55 +721,55 @@ class ScalableCollaborationServer {
         JSON.stringify({
           type: 'update',
           data: data.toString('base64'),
-          sender: getClientId(ws)
+          sender: getClientId (ws)
         })
       );
 
       // Broadcast to local clients (except sender)
-      this.broadcastToLocalClients(docId, data, ws);
+      this.broadcastToLocalClients (docId, data, ws);
     });
 
     ws.on('close', () => {
-      this.documents.get(docId)?.delete(ws);
+      this.documents.get (docId)?.delete (ws);
       
       // Cleanup empty document sets
-      if (this.documents.get(docId)?.size === 0) {
-        this.documents.delete(docId);
+      if (this.documents.get (docId)?.size === 0) {
+        this.documents.delete (docId);
       }
     });
   }
 
-  private onRedisMessage(pattern: string, channel: string, message: string) {
+  private onRedisMessage (pattern: string, channel: string, message: string) {
     const docId = channel.replace('document:', ');
-    const payload = JSON.parse(message);
+    const payload = JSON.parse (message);
 
     // Broadcast to local clients
-    const clients = this.documents.get(docId);
+    const clients = this.documents.get (docId);
     if (!clients) return;
 
-    const data = Buffer.from(payload.data, 'base64');
+    const data = Buffer.from (payload.data, 'base64');
     
-    clients.forEach(client => {
+    clients.forEach (client => {
       // Don't send back to original sender
-      if (getClientId(client) !== payload.sender) {
-        client.send(data);
+      if (getClientId (client) !== payload.sender) {
+        client.send (data);
       }
     });
   }
 
-  private broadcastToLocalClients(docId: string, data: Buffer, sender: WebSocket) {
-    const clients = this.documents.get(docId);
+  private broadcastToLocalClients (docId: string, data: Buffer, sender: WebSocket) {
+    const clients = this.documents.get (docId);
     if (!clients) return;
 
-    clients.forEach(client => {
+    clients.forEach (client => {
       if (client !== sender && client.readyState === WebSocket.OPEN) {
-        client.send(data);
+        client.send (data);
       }
     });
   }
 }
 
-function getClientId(ws: WebSocket): string {
+function getClientId (ws: WebSocket): string {
   // Store client ID on WebSocket object
   return (ws as any).clientId || ';
 }
@@ -799,22 +799,22 @@ class OTDocument {
   private content: string = ';
   private version: number = 0;
 
-  apply(op: Operation): void {
+  apply (op: Operation): void {
     if (op.type === 'insert') {
       this.content = 
         this.content.slice(0, op.position) +
         op.char +
-        this.content.slice(op.position);
+        this.content.slice (op.position);
     } else {
       this.content =
         this.content.slice(0, op.position) +
-        this.content.slice(op.position + 1);
+        this.content.slice (op.position + 1);
     }
     this.version++;
   }
 
   // Transform operation against another operation
-  transform(op1: Operation, op2: Operation): Operation {
+  transform (op1: Operation, op2: Operation): Operation {
     if (op1.type === 'insert' && op2.type === 'insert') {
       if (op1.position < op2.position) {
         return { ...op2, position: op2.position + 1 };
@@ -862,12 +862,12 @@ const opA: Operation = { type: 'insert', position: 2, char: '!' };
 const opB: Operation = { type: 'insert', position: 2, char: '?' };
 
 // Transform opB against opA
-const transformedB = doc.transform(opA, opB);
+const transformedB = doc.transform (opA, opB);
 // transformedB: { type: 'insert', position: 3, char: '?' }
 
 // Apply both operations
-doc.apply(opA);      // "Hi!"
-doc.apply(transformedB);  // "Hi!?"
+doc.apply (opA);      // "Hi!"
+doc.apply (transformedB);  // "Hi!?"
 // Both users see same result
 \`\`\`
 
@@ -894,9 +894,9 @@ class DocumentPersistence {
     });
   }
 
-  async saveDocument(docId: string, ydoc: Y.Doc): Promise<void> {
+  async saveDocument (docId: string, ydoc: Y.Doc): Promise<void> {
     // Save full state
-    const state = Y.encodeStateAsUpdate(ydoc);
+    const state = Y.encodeStateAsUpdate (ydoc);
     
     await this.pool.query(
       \`INSERT INTO documents (id, state, updated_at)
@@ -906,11 +906,11 @@ class DocumentPersistence {
     );
 
     // Save operation log for debugging
-    const operations = this.extractOperations(ydoc);
-    await this.saveOperationLog(docId, operations);
+    const operations = this.extractOperations (ydoc);
+    await this.saveOperationLog (docId, operations);
   }
 
-  async loadDocument(docId: string): Promise<Uint8Array | null> {
+  async loadDocument (docId: string): Promise<Uint8Array | null> {
     const result = await this.pool.query(
       'SELECT state FROM documents WHERE id = $1',
       [docId]
@@ -922,28 +922,28 @@ class DocumentPersistence {
   // Periodic snapshots (every 100 operations)
   private operationCount = 0;
 
-  async maybeSnapshot(docId: string, ydoc: Y.Doc): Promise<void> {
+  async maybeSnapshot (docId: string, ydoc: Y.Doc): Promise<void> {
     this.operationCount++;
     
     if (this.operationCount >= 100) {
-      await this.saveDocument(docId, ydoc);
+      await this.saveDocument (docId, ydoc);
       this.operationCount = 0;
       console.log(\`Saved snapshot for \${docId}\`);
     }
   }
 
-  private extractOperations(ydoc: Y.Doc): any[] {
+  private extractOperations (ydoc: Y.Doc): any[] {
     // Extract recent operations for debugging
     // Implementation depends on your needs
     return [];
   }
 
-  private async saveOperationLog(docId: string, operations: any[]): Promise<void> {
+  private async saveOperationLog (docId: string, operations: any[]): Promise<void> {
     // Store operations for debugging and audit trail
     for (const op of operations) {
       await this.pool.query(
         'INSERT INTO operation_log (doc_id, operation, created_at) VALUES ($1, $2, NOW())',
-        [docId, JSON.stringify(op)]
+        [docId, JSON.stringify (op)]
       );
     }
   }
@@ -960,38 +960,38 @@ class DocumentPersistence {
 class CollaborationMetrics {
   private metrics: Map<string, number> = new Map();
 
-  trackConnection(docId: string) {
+  trackConnection (docId: string) {
     this.increment(\`connections.\${docId}\`);
     this.increment('connections.total');
   }
 
-  trackDisconnection(docId: string) {
+  trackDisconnection (docId: string) {
     this.decrement(\`connections.\${docId}\`);
     this.decrement('connections.total');
   }
 
-  trackOperation(docId: string, opType: string) {
+  trackOperation (docId: string, opType: string) {
     this.increment(\`operations.\${docId}.\${opType}\`);
     this.increment(\`operations.total.\${opType}\`);
   }
 
-  trackLatency(docId: string, latencyMs: number) {
+  trackLatency (docId: string, latencyMs: number) {
     // Track average latency
     const key = \`latency.\${docId}\`;
-    const current = this.metrics.get(key) || 0;
-    this.metrics.set(key, (current + latencyMs) / 2);
+    const current = this.metrics.get (key) || 0;
+    this.metrics.set (key, (current + latencyMs) / 2);
   }
 
-  private increment(key: string) {
-    this.metrics.set(key, (this.metrics.get(key) || 0) + 1);
+  private increment (key: string) {
+    this.metrics.set (key, (this.metrics.get (key) || 0) + 1);
   }
 
-  private decrement(key: string) {
-    this.metrics.set(key, Math.max(0, (this.metrics.get(key) || 0) - 1));
+  private decrement (key: string) {
+    this.metrics.set (key, Math.max(0, (this.metrics.get (key) || 0) - 1));
   }
 
   getMetrics() {
-    return Object.fromEntries(this.metrics);
+    return Object.fromEntries (this.metrics);
   }
 
   // Export to Prometheus/DataDog

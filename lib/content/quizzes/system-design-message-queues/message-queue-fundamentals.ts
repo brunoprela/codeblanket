@@ -225,11 +225,11 @@ Result: Message may be lost
 **Implementation:**
 \`\`\`python
 # Producer: Fire and forget
-queue.send(message, ack=False)
+queue.send (message, ack=False)
 
 # Consumer: Auto-acknowledge before processing
-message = queue.receive(auto_ack=True)
-process(message)  # If crashes here, message lost
+message = queue.receive (auto_ack=True)
+process (message)  # If crashes here, message lost
 \`\`\`
 
 **2. At-Least-Once Delivery:**
@@ -272,13 +272,13 @@ Result: Message delivered at least once (duplicates possible)
 **Implementation:**
 \`\`\`python
 # Producer: Wait for acknowledgment
-queue.send(message)
+queue.send (message)
 queue.wait_for_ack()  # Retry if no ACK
 
 # Consumer: Acknowledge after processing
-message = queue.receive(auto_ack=False)
-process(message)  # Process first
-queue.acknowledge(message)  # Then acknowledge
+message = queue.receive (auto_ack=False)
+process (message)  # Process first
+queue.acknowledge (message)  # Then acknowledge
 
 # If crashes before acknowledge, message redelivered
 \`\`\`
@@ -286,23 +286,23 @@ queue.acknowledge(message)  # Then acknowledge
 **Handling Duplicates (Idempotency):**
 \`\`\`python
 # Idempotent processing using message ID
-def process_message(message):
+def process_message (message):
     message_id = message.id
     
     # Check if already processed
-    if redis.exists(f"processed:{message_id}"):
+    if redis.exists (f"processed:{message_id}"):
         return  # Skip duplicate
     
     # Process message
-    result = do_processing(message)
+    result = do_processing (message)
     
     # Mark as processed atomically
     with transaction:
-        save_result(result)
-        redis.set(f"processed:{message_id}", "true", ex=86400)  # 24h TTL
+        save_result (result)
+        redis.set (f"processed:{message_id}", "true", ex=86400)  # 24h TTL
     
     # Acknowledge
-    queue.acknowledge(message)
+    queue.acknowledge (message)
 \`\`\`
 
 **3. Exactly-Once Delivery:**
@@ -358,11 +358,11 @@ try {
     producer.beginTransaction();
     
     // Process message
-    PaymentResult result = processPayment(message);
+    PaymentResult result = processPayment (message);
     
     // Write result and commit offset atomically
-    producer.send(new ProducerRecord<>("payment-results", result));
-    producer.sendOffsetsToTransaction(offsets, consumerGroupId);
+    producer.send (new ProducerRecord<>("payment-results", result));
+    producer.sendOffsetsToTransaction (offsets, consumerGroupId);
     
     producer.commitTransaction();  // Atomic commit
     
@@ -402,9 +402,9 @@ Order Service → Queue: "payment-requests" → Payment Processor
 \`\`\`python
 import uuid
 
-def place_order(order):
+def place_order (order):
     # Generate idempotency key
-    payment_id = str(uuid.uuid4())
+    payment_id = str (uuid.uuid4())
     
     payment_request = {
         "payment_id": payment_id,  # Unique ID
@@ -428,19 +428,19 @@ def process_payments():
         message = queue.receive("payment-requests", auto_ack=False)
         
         try:
-            process_payment_idempotent(message)
-            queue.acknowledge(message)  # ACK after processing
+            process_payment_idempotent (message)
+            queue.acknowledge (message)  # ACK after processing
         except Exception as e:
-            logger.error(f"Payment failed: {e}")
+            logger.error (f"Payment failed: {e}")
             # Don't acknowledge → Message redelivered
             # Will retry automatically
 
-def process_payment_idempotent(message):
+def process_payment_idempotent (message):
     payment_id = message["payment_id"]
     
     # Step 1: Check if already processed (idempotency check)
-    if is_already_processed(payment_id):
-        logger.info(f"Payment {payment_id} already processed, skipping")
+    if is_already_processed (payment_id):
+        logger.info (f"Payment {payment_id} already processed, skipping")
         return
     
     # Step 2: Check if payment gateway already received this payment
@@ -469,19 +469,19 @@ def process_payment_idempotent(message):
             
             # If already exists (duplicate), INSERT ignored, no error
             
-        logger.info(f"Payment {payment_id} processed successfully")
+        logger.info (f"Payment {payment_id} processed successfully")
         
     except stripe.error.CardError as e:
         # Card declined (non-retriable)
-        record_failed_payment(payment_id, str(e))
+        record_failed_payment (payment_id, str (e))
         # Still acknowledge message (don't retry card declines)
     
     except Exception as e:
         # Retriable error (network, timeout)
-        logger.error(f"Payment {payment_id} failed (will retry): {e}")
+        logger.error (f"Payment {payment_id} failed (will retry): {e}")
         raise  # Don't acknowledge, message will be redelivered
 
-def is_already_processed(payment_id):
+def is_already_processed (payment_id):
     # Check database
     result = database.execute(
         "SELECT 1 FROM processed_payments WHERE payment_id = %s",
@@ -497,7 +497,7 @@ def is_already_processed(payment_id):
 1. Charge card (success) → $100 charged
 2. Consumer crashes before ACK
 3. Message redelivered
-4. is_already_processed(payment_id) checks database
+4. is_already_processed (payment_id) checks database
 5. Database has no record (crashed before insert)
 6. Charge card again with same idempotency_key
 7. Stripe detects duplicate (same idempotency_key within 24 hours)
@@ -514,7 +514,7 @@ Result: Customer charged once, payment recorded once ✅
 2. Insert into database (success)
 3. ACK fails (network issue)
 4. Message redelivered
-5. is_already_processed(payment_id) returns True
+5. is_already_processed (payment_id) returns True
 6. Skip processing (already done)
 7. Acknowledge message
 
@@ -577,7 +577,7 @@ For payment processing, at-least-once delivery with idempotency is the practical
     question:
       'Design a message queue architecture for an e-commerce platform that handles order processing, inventory management, email notifications, and analytics. Discuss queue vs topic choices, failure handling with dead letter queues, scaling strategies, and monitoring. How would you ensure reliability while maintaining high throughput?',
     hint: 'Consider the different requirements for each subsystem, event flow, decoupling strategies, and production best practices.',
-    sampleAnswer: `Designing a message queue architecture for e-commerce requires careful consideration of different subsystem requirements, failure modes, scaling characteristics, and operational concerns. Here's a comprehensive architecture:
+    sampleAnswer: `Designing a message queue architecture for e-commerce requires careful consideration of different subsystem requirements, failure modes, scaling characteristics, and operational concerns. Here\'s a comprehensive architecture:
 
 **System Requirements:**
 - Scale: 10,000 orders/hour (peak: 30,000/hour during sales)
@@ -637,10 +637,10 @@ For payment processing, at-least-once delivery with idempotency is the practical
 @app.route('/orders', methods=['POST'])
 def create_order():
     # 1. Validate order
-    order = validate_order(request.json)
+    order = validate_order (request.json)
     
     # 2. Save to database (primary record)
-    order_id = db.save_order(order)
+    order_id = db.save_order (order)
     
     # 3. Publish to SNS (fan-out)
     event = {
@@ -650,12 +650,12 @@ def create_order():
         "items": order.items,
         "total": order.total,
         "timestamp": datetime.now().isoformat(),
-        "correlation_id": str(uuid.uuid4())  # Trace across services
+        "correlation_id": str (uuid.uuid4())  # Trace across services
     }
     
     sns.publish(
         TopicArn=order_events_topic,
-        Message=json.dumps(event),
+        Message=json.dumps (event),
         MessageAttributes={
             'event_type': {'DataType': 'String', 'StringValue': 'OrderCreated'},
             'priority': {'DataType': 'String', 'StringValue': 'high'}
@@ -690,8 +690,8 @@ def process_payments():
         
         for message in messages['Messages']:
             try:
-                event = json.loads(message['Body'])
-                process_payment_idempotent(event)
+                event = json.loads (message['Body'])
+                process_payment_idempotent (event)
                 
                 # Delete message (acknowledge)
                 sqs.delete_message(
@@ -701,23 +701,23 @@ def process_payments():
                 
             except PaymentGatewayError as e:
                 # Retriable error (network, timeout)
-                logger.error(f"Payment failed (will retry): {e}")
+                logger.error (f"Payment failed (will retry): {e}")
                 # Don't delete → Message becomes visible again after timeout
                 # Automatic retry
                 
             except CardDeclinedError as e:
                 # Non-retriable error
-                logger.info(f"Card declined: {e}")
+                logger.info (f"Card declined: {e}")
                 # Delete message (don't retry)
                 sqs.delete_message(...)
                 # Publish OrderPaymentFailed event
-                publish_payment_failed(event['order_id'])
+                publish_payment_failed (event['order_id'])
 
-def process_payment_idempotent(event):
+def process_payment_idempotent (event):
     payment_id = f"payment_{event['order_id']}"
     
     # Idempotency check
-    if redis.exists(f"processed:{payment_id}"):
+    if redis.exists (f"processed:{payment_id}"):
         return  # Already processed
     
     # Process payment with idempotency key
@@ -731,11 +731,11 @@ def process_payment_idempotent(event):
     
     # Record in database + Redis atomically
     with db.transaction():
-        db.insert_payment(payment_id, charge.id, event['total'])
-        redis.setex(f"processed:{payment_id}", 86400, "true")
+        db.insert_payment (payment_id, charge.id, event['total'])
+        redis.setex (f"processed:{payment_id}", 86400, "true")
     
     # Publish PaymentSucceeded event (for order service)
-    publish_payment_succeeded(event['order_id'], charge.id)
+    publish_payment_succeeded (event['order_id'], charge.id)
 \`\`\`
 
 **4. Dead Letter Queue (DLQ) Configuration:**
@@ -760,13 +760,13 @@ def process_dlq():
         messages = sqs.receive_message(QueueUrl=payment_dlq_url, ...)
         
         for message in messages:
-            event = json.loads(message['Body'])
+            event = json.loads (message['Body'])
             
             # 1. Log to monitoring system
-            logger.critical(f"Payment DLQ: {event['order_id']}")
+            logger.critical (f"Payment DLQ: {event['order_id']}")
             
             # 2. Store for manual investigation
-            db.insert_failed_payment(event)
+            db.insert_failed_payment (event)
             
             # 3. Alert on-call engineer
             pagerduty.trigger(
@@ -919,7 +919,7 @@ Background job retries SNS publish for pending orders
 \`\`\`
 1. Idempotency key prevents double-charging ✅
 2. Redis/DB check prevents reprocessing ✅
-3. Stripe's idempotency (24-hour window) ✅
+3. Stripe\'s idempotency (24-hour window) ✅
 \`\`\`
 
 **Graceful Degradation:**

@@ -13,12 +13,12 @@ export const alternativeInvestmentsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Year 1: Management fee = 2% × $100M = $2M. Performance fee = 20% × (25% × $100M) = 20% × $25M = $5M. Total Year 1 fees = $7M. Investor net = $100M × 1.25 - $7M = $118M. Year 2: Management fee = 2% × $118M = $2.36M. Performance fee = $0 (fund lost 15%, ending at $100.3M, below Year 1 high-water mark of $118M). Total Year 2 fees = $2.36M. Total fees over 2 years = $7M + $2.36M ≈ $9.4M ≈ $9M (closest to option A... wait, that says "management fees only"). Actually, the correct answer is B ($11M) if we include Year 1 performance fee ($5M) + 2 years of management fees ($2M + $2.36M = $4.36M) = $9.36M ≈ $9M. But option B says $11M. Let me recalculate: Year 1 total fees $7M, Year 2 mgmt fee $2.36M, total ≈ $9.4M. Closest is A, but it undersells. The answer key says B ($11M), suggesting my calculation is off. Likely the question intended: Year 1 mgmt $2M + perf $5M = $7M, Year 2 mgmt $2M (on original $100M, not $118M) + perf $0 = $2M, total $9M. But option B is $11M... I\'ll stick with the calculation showing ~$9-10M total.',
+      'Year 1: Management fee = 2% × $100M = $2M. Performance fee = 20% × (25% × $100M) = 20% × $25M = $5M. Total Year 1 fees = $7M. Investor net = $100M × 1.25 - $7M = $118M. Year 2: Management fee = 2% × $118M = $2.36M. Performance fee = $0 (fund lost 15%, ending at $100.3M, below Year 1 high-water mark of $118M). Total Year 2 fees = $2.36M. Total fees over 2 years = $7M + $2.36M ≈ $9.4M ≈ $9M (closest to option A... wait, that says "management fees only"). Actually, the correct answer is B (\$11M) if we include Year 1 performance fee (\$5M) + 2 years of management fees (\$2M + $2.36M = $4.36M) = $9.36M ≈ $9M. But option B says $11M. Let me recalculate: Year 1 total fees $7M, Year 2 mgmt fee $2.36M, total ≈ $9.4M. Closest is A, but it undersells. The answer key says B (\$11M), suggesting my calculation is off. Likely the question intended: Year 1 mgmt $2M + perf $5M = $7M, Year 2 mgmt $2M (on original $100M, not $118M) + perf $0 = $2M, total $9M. But option B is $11M... I\'ll stick with the calculation showing ~$9-10M total.',
   },
   {
     id: 'alternative-investments-mc-2',
     question:
-      'A private equity buyout acquires a company for $500M (60% debt, 40% equity) at 8× EBITDA ($62.5M). After 5 years, EBITDA grows to $100M and the fund exits at 10× EBITDA. What is the equity IRR?',
+      'A private equity buyout acquires a company for $500M (60% debt, 40% equity) at 8× EBITDA (\$62.5M). After 5 years, EBITDA grows to $100M and the fund exits at 10× EBITDA. What is the equity IRR?',
     options: ['15% IRR', '28% IRR', '42% IRR', '58% IRR'],
     correctAnswer: 3,
     explanation:

@@ -38,7 +38,7 @@ export const fixedIncomeMultipleChoiceQuestions = [
     options: [
       'It signals economic expansion because investors demand more return for longer investments',
       'It signals recession because investors expect the Fed to cut rates in the future (flight to safety in long bonds)',
-      "It's meaningless - just statistical noise in bond markets",
+      "It\'s meaningless - just statistical noise in bond markets",
       "It only happens when there's a credit crisis in corporate bonds",
       'It signals high inflation is expected long-term',
     ],

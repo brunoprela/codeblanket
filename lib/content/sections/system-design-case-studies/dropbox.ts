@@ -93,32 +93,32 @@ Design Dropbox with:
 
 **Implementation**:
 \`\`\`python
-def chunk_file(file_path, chunk_size=4*1024*1024):
+def chunk_file (file_path, chunk_size=4*1024*1024):
     chunks = []
-    with open(file_path, 'rb') as f:
+    with open (file_path, 'rb') as f:
         while True:
-            data = f.read(chunk_size)
+            data = f.read (chunk_size)
             if not data:
                 break
             chunk_hash = hashlib.sha256(data).hexdigest()
             chunks.append({
                 'hash': chunk_hash,
                 'data': data,
-                'offset': f.tell() - len(data)
+                'offset': f.tell() - len (data)
             })
     return chunks
 
-def upload_file(file_id, chunks):
+def upload_file (file_id, chunks):
     # Query server for existing chunks
-    existing_hashes = get_existing_chunks(file_id)
+    existing_hashes = get_existing_chunks (file_id)
     
     # Upload only new/modified chunks
     for chunk in chunks:
         if chunk['hash'] not in existing_hashes:
-            upload_chunk(chunk['hash'], chunk['data'])
+            upload_chunk (chunk['hash'], chunk['data'])
     
     # Update file metadata with new chunk list
-    update_file_metadata(file_id, [c['hash'] for c in chunks])
+    update_file_metadata (file_id, [c['hash'] for c in chunks])
 \`\`\`
 
 ---
@@ -163,7 +163,7 @@ CREATE TABLE file_blocks (
     block_hash VARCHAR(64),
     block_size INT,
     PRIMARY KEY (file_id, block_index),
-    FOREIGN KEY (block_hash) REFERENCES blocks(block_hash)
+    FOREIGN KEY (block_hash) REFERENCES blocks (block_hash)
 );
 
 CREATE TABLE blocks (
@@ -279,7 +279,7 @@ CREATE TABLE file_versions (
 
 **Schema Design**:
 \`\`\`sql
--- User's file tree
+-- User\'s file tree
 CREATE TABLE user_files (
     user_id BIGINT,
     file_path VARCHAR(500),
@@ -411,14 +411,14 @@ CREATE TABLE file_shares (
 ## Step 12: Database Sharding
 
 **Shard by \`user_id\`**:
-\\\`\\\`\\\`
+\`\`\`
 user_id % NUM_SHARDS = shard_number
 
 Benefits:
 - All user's files on same shard (query locality)
-- User's sync queries hit single shard (fast)
+- User\'s sync queries hit single shard (fast)
 - Easy to add users (distribute across shards)
-\\\`\\\`\\\`
+\`\`\`
 
 **Cross-Shard Queries** (rare):
 - Shared folder with users on different shards

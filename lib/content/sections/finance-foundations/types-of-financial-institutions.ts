@@ -1,7 +1,7 @@
 export const typesOfFinancialInstitutions = {
-    title: 'Types of Financial Institutions',
-    id: 'types-of-financial-institutions',
-    content: `
+  title: 'Types of Financial Institutions',
+  id: 'types-of-financial-institutions',
+  content: `
 # Types of Financial Institutions
 
 ## Introduction
@@ -46,7 +46,7 @@ Investment Bank Revenue Model
 class InvestmentBankRevenue:
     """Model different revenue streams"""
     
-    def m_and_a_fees(self, deal_size: float, fee_rate: float = 0.01) -> float:
+    def m_and_a_fees (self, deal_size: float, fee_rate: float = 0.01) -> float:
         """
         M&A advisory fees
         Typical: 0.5-3% of deal size (1% average)
@@ -55,7 +55,7 @@ class InvestmentBankRevenue:
         """
         return deal_size * fee_rate
     
-    def ipo_underwriting(self, amount_raised: float, 
+    def ipo_underwriting (self, amount_raised: float, 
                          underwriting_spread: float = 0.07) -> float:
         """
         IPO underwriting fees  
@@ -65,7 +65,7 @@ class InvestmentBankRevenue:
         """
         return amount_raised * underwriting_spread
     
-    def trading_revenue(self, trading_volume: float, 
+    def trading_revenue (self, trading_volume: float, 
                         profit_margin: float = 0.0002) -> float:
         """
         Trading revenue (bid-ask spread + prop trading)
@@ -75,7 +75,7 @@ class InvestmentBankRevenue:
         """
         return trading_volume * profit_margin
     
-    def wealth_management(self, aum: float, management_fee: float = 0.01) -> float:
+    def wealth_management (self, aum: float, management_fee: float = 0.01) -> float:
         """
         Wealth management fees (AUM-based)
         Typical: 0.5-2% of assets under management
@@ -89,13 +89,13 @@ class InvestmentBankRevenue:
 gs = InvestmentBankRevenue()
 
 print("Goldman Sachs Annual Revenue (est.):")
-print(f"  M&A Advisory: ${gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9:.1f}B")
-print(f"  IPO Underwriting: ${gs.ipo_underwriting(50_000_000_000, 0.06) / 1e9:.1f}B")
-print(f"  Trading (250 days): ${gs.trading_revenue(5_000_000_000_000, 0.0003) * 250 / 1e9:.1f}B")
-print(f"  Wealth Mgmt: ${gs.wealth_management(500_000_000_000, 0.015) / 1e9:.1f}B")
+print(f"  M&A Advisory: \${gs.m_and_a_fees(500_000_000_000, 0.01) / 1e9:.1f}B")
+print(f"  IPO Underwriting: \${gs.ipo_underwriting(50_000_000_000, 0.06) / 1e9:.1f}B")
+print(f"  Trading (250 days): \${gs.trading_revenue(5_000_000_000_000, 0.0003) * 250 / 1e9:.1f}B")
+print(f"  Wealth Mgmt: \${gs.wealth_management(500_000_000_000, 0.015) / 1e9:.1f}B")
 
 # Output:
-# Goldman Sachs Annual Revenue(est.):
+# Goldman Sachs Annual Revenue (est.):
 #   M & A Advisory: $5.0B
 #   IPO Underwriting: $3.0B
 #   Trading(250 days): $375.0B
@@ -196,7 +196,7 @@ Protocols:
 Hedge Fund Fee Calculator
 """
 
-def calculate_hedge_fund_fees(aum: float, annual_return: float,
+def calculate_hedge_fund_fees (aum: float, annual_return: float,
                                mgmt_fee: float = 0.02,
                                perf_fee: float = 0.20,
                                high_water_mark: float = None) -> dict:
@@ -237,7 +237,7 @@ def calculate_hedge_fund_fees(aum: float, annual_return: float,
     # Total fees
     total_fees = management_fee + performance_fee
     
-    # Investor's net profit
+    # Investor\'s net profit
     investor_profit = gross_profit - total_fees
     
     return {
@@ -262,15 +262,15 @@ fees = calculate_hedge_fund_fees(
 )
 
 print("Hedge Fund Fee Example:")
-print(f"  Investment: ${fees['aum']:, .0f}")
+print(f"  Investment: \${fees['aum']:,.0f}")
 print(f"  Gross Return: {fees['gross_return']:.1%}")
-print(f"  Gross Profit: ${fees['gross_profit']:,.0f}")
+print(f"  Gross Profit: \${fees['gross_profit']:,.0f}")
 print(f"")
-print(f"  Management Fee (2%): ${fees['management_fee']:,.0f}")
-print(f"  Performance Fee (20% of profit): ${fees['performance_fee']:,.0f}")
-print(f"  Total Fees: ${fees['total_fees']:,.0f}")
+print(f"  Management Fee (2%): \${fees['management_fee']:,.0f}")
+print(f"  Performance Fee (20% of profit): \${fees['performance_fee']:,.0f}")
+print(f"  Total Fees: \${fees['total_fees']:,.0f}")
 print(f"")
-print(f"  Your Net Profit: ${fees['net_profit']:,.0f}")
+print(f"  Your Net Profit: \${fees['net_profit']:,.0f}")
 print(f"  Your Net Return: {fees['net_return']:.1%}")
 print(f"  Fund takes {fees['fund_share']:.1%} of profit")
 
@@ -387,7 +387,7 @@ Asset Manager Revenue Scaling
 Shows why scale matters (economies of scale)
 """
 
-def asset_manager_economics(aum: float, expense_ratio: float, 
+def asset_manager_economics (aum: float, expense_ratio: float, 
                              fixed_costs: float = 100_000_000) -> dict:
     """
     Calculate asset manager profitability
@@ -416,17 +416,17 @@ def asset_manager_economics(aum: float, expense_ratio: float,
 
 # Example: Compare S&P 500 ETFs
 print("\\nVanguard S&P 500 ETF (VOO) - 0.03% expense ratio:")
-voo = asset_manager_economics(aum=300_000_000_000, expense_ratio=0.0003)
-print(f"  AUM: ${voo['aum'] / 1e9: .0f}B")
-print(f"  Revenue: ${voo['revenue']/1e6:.0f}M")
-print(f"  Profit: ${voo['profit']/1e6:.0f}M")
+voo = asset_manager_economics (aum=300_000_000_000, expense_ratio=0.0003)
+print(f"  AUM: \${voo['aum'] / 1e9:.0f}B")
+print(f"  Revenue: \${voo['revenue']/1e6:.0f}M")
+print(f"  Profit: \${voo['profit']/1e6:.0f}M")
 print(f"  Profit Margin: {voo['profit_margin']:.1%}")
 
 print("\\nActive Mutual Fund - 0.75% expense ratio:")
-active = asset_manager_economics(aum = 10_000_000_000, expense_ratio = 0.0075)
-print(f"  AUM: ${active['aum']/1e9:.0f}B")
-print(f"  Revenue: ${active['revenue']/1e6:.0f}M")
-print(f"  Profit: ${active['profit']/1e6:.0f}M")
+active = asset_manager_economics (aum = 10_000_000_000, expense_ratio = 0.0075)
+print(f"  AUM: \${active['aum']/1e9:.0f}B")
+print(f"  Revenue: \${active['revenue']/1e6:.0f}M")
+print(f"  Profit: \${active['profit']/1e6:.0f}M")
 print(f"  Profit Margin: {active['profit_margin']:.1%}")
 
 # Output:
@@ -469,7 +469,7 @@ print(f"  Profit Margin: {active['profit_margin']:.1%}")
 
 \`\`\`
 Portfolio Management:
-- Aladdin (BlackRock's proprietary system - industry standard)
+- Aladdin (BlackRock\'s proprietary system - industry standard)
 - Charles River IMS
 - Bloomberg PORT
 
@@ -526,7 +526,7 @@ Front End:
 - **Intercontinental Exchange (ICE)**: Owns NYSE
 - **Nasdaq**: Tech-heavy stock exchange + market data
 - **Cboe**: Options exchange
-- **Binance**: Largest crypto exchange ($76B daily volume)
+- **Binance**: Largest crypto exchange (\$76B daily volume)
 
 ### How They Make Money
 
@@ -538,7 +538,7 @@ Exchange Revenue Model
 class ExchangeRevenue:
     """Model exchange revenue streams"""
     
-    def transaction_fees(self, daily_volume: float, 
+    def transaction_fees (self, daily_volume: float, 
                          fee_per_trade: float = 0.0003) -> float:
         """
         Transaction fees (main revenue)
@@ -548,7 +548,7 @@ class ExchangeRevenue:
         """
         return daily_volume * fee_per_trade * 252  # Annualize
     
-    def market_data_fees(self, subscribers: int,
+    def market_data_fees (self, subscribers: int,
                          price_per_subscriber: float = 100) -> float:
         """
         Market data subscriptions
@@ -558,7 +558,7 @@ class ExchangeRevenue:
         """
         return subscribers * price_per_subscriber * 12  # Annualize
     
-    def listing_fees(self, listed_companies: int,
+    def listing_fees (self, listed_companies: int,
                      annual_fee: float = 50_000) -> float:
         """
         Company listing fees
@@ -568,7 +568,7 @@ class ExchangeRevenue:
         """
         return listed_companies * annual_fee
     
-    def co_location_fees(self, racks: int, fee_per_rack: float = 50_000) -> float:
+    def co_location_fees (self, racks: int, fee_per_rack: float = 50_000) -> float:
         """
         Co-location (firms pay to place servers near exchange)
         Typical: $50K-$100K+ per rack monthly
@@ -582,13 +582,13 @@ class ExchangeRevenue:
 nasdaq = ExchangeRevenue()
 
 print("NASDAQ Annual Revenue (est.):")
-print(f"  Transaction Fees: ${nasdaq.transaction_fees(500_000_000_000, 0.0002) / 1e9: .1f}B")
-print(f"  Market Data: ${nasdaq.market_data_fees(200_000, 75)/1e9:.1f}B")
-print(f"  Listing Fees: ${nasdaq.listing_fees(3_000, 75_000)/1e9:.1f}B")
-print(f"  Co-location: ${nasdaq.co_location_fees(150, 60_000)/1e9:.1f}B")
+print(f"  Transaction Fees: \${nasdaq.transaction_fees(500_000_000_000, 0.0002) / 1e9:.1f}B")
+print(f"  Market Data: \${nasdaq.market_data_fees(200_000, 75)/1e9:.1f}B")
+print(f"  Listing Fees: \${nasdaq.listing_fees(3_000, 75_000)/1e9:.1f}B")
+print(f"  Co-location: \${nasdaq.co_location_fees(150, 60_000)/1e9:.1f}B")
 
 # Output:
-# NASDAQ Annual Revenue(est.):
+# NASDAQ Annual Revenue (est.):
 #   Transaction Fees: $25.2B
 #   Market Data: $1.8B
 #   Listing Fees: $0.2B
@@ -682,7 +682,7 @@ Fintech Revenue Models
 class FintechRevenue:
     """Different fintech business models"""
     
-    def payment_processing(self, transaction_volume: float,
+    def payment_processing (self, transaction_volume: float,
                            rate: float = 0.029,
                            fixed_fee: float = 0.30,
                            transactions: int = None) -> float:
@@ -700,7 +700,7 @@ class FintechRevenue:
         fixed_fees = transactions * fixed_fee
         return percent_fee + fixed_fees
     
-    def interchange_revenue(self, card_volume: float,
+    def interchange_revenue (self, card_volume: float,
                             interchange_rate: float = 0.015) -> float:
         """
         Card interchange (Chime, Cash App model)
@@ -710,7 +710,7 @@ class FintechRevenue:
         """
         return card_volume * interchange_rate
     
-    def subscription_revenue(self, subscribers: int,
+    def subscription_revenue (self, subscribers: int,
                              monthly_fee: float = 9.99) -> float:
         """
         Subscription (premium features)
@@ -720,7 +720,7 @@ class FintechRevenue:
         """
         return subscribers * monthly_fee * 12
     
-    def interest_margin(self, loan_volume: float,
+    def interest_margin (self, loan_volume: float,
                         interest_spread: float = 0.05) -> float:
         """
         Lending (SoFi, Affirm model)
@@ -730,7 +730,7 @@ class FintechRevenue:
         """
         return loan_volume * interest_spread
     
-    def crypto_trading_fees(self, trading_volume: float,
+    def crypto_trading_fees (self, trading_volume: float,
                             fee_rate: float = 0.005) -> float:
         """
         Crypto trading fees (Coinbase model)
@@ -745,24 +745,24 @@ class FintechRevenue:
 stripe = FintechRevenue()
 
 print("Stripe Annual Revenue (est. $10B):")
-print(f"  Payment Processing: ${stripe.payment_processing(300_000_000_000, 0.029, 0.30) / 1e9: .1f}B")
+print(f"  Payment Processing: \${stripe.payment_processing(300_000_000_000, 0.029, 0.30) / 1e9:.1f}B")
 print(f"  (300B volume, 6B transactions)")
 
 print("\\nChime Annual Revenue (est. $2B):")
-print(f"  Interchange: ${stripe.interchange_revenue(100_000_000_000, 0.02)/1e9:.1f}B")
+print(f"  Interchange: \${stripe.interchange_revenue(100_000_000_000, 0.02)/1e9:.1f}B")
 
 print("\\nCoinbase Annual Revenue (est. $3B):")
-print(f"  Trading Fees: ${stripe.crypto_trading_fees(200_000_000_000, 0.015)/1e9:.1f}B")
+print(f"  Trading Fees: \${stripe.crypto_trading_fees(200_000_000_000, 0.015)/1e9:.1f}B")
 
 # Output:
-# Stripe Annual Revenue(est.$10B):
+# Stripe Annual Revenue (est.$10B):
 #   Payment Processing: $10.5B
 #(300B volume, 6B transactions)
 #
-# Chime Annual Revenue(est.$2B):
+# Chime Annual Revenue (est.$2B):
 #   Interchange: $2.0B
 #
-# Coinbase Annual Revenue(est.$3B):
+# Coinbase Annual Revenue (est.$3B):
 #   Trading Fees: $3.0B
 \`\`\`
 
@@ -831,7 +831,7 @@ APIs:
 - Solve hard problems (fraud, compliance, money movement)
 - Modern stack (Python, Go, React, k8s)
 - Great eng culture (written communication, high autonomy)
-- Competitive comp ($200K-$500K+ for senior, + equity)
+- Competitive comp (\$200K-$500K+ for senior, + equity)
 
 ---
 
@@ -850,7 +850,7 @@ APIs:
 #### **Major Players**
 - **Citadel Securities**: $2.8B net trading income (2021)
 - **Jane Street**: $1.6B profit (2020)
-- **Virtu Financial**: Public HFT firm ($1.5B revenue)
+- **Virtu Financial**: Public HFT firm (\$1.5B revenue)
 - **Tower Research**: Proprietary HFT
 - **Jump Trading**: HFT + crypto market making
 
@@ -863,7 +863,7 @@ APIs:
 Market Maker Profit Model
 """
 
-def market_maker_profit(quotes_per_day: int,
+def market_maker_profit (quotes_per_day: int,
                         capture_rate: float,
                         spread_bps: float,
                         avg_trade_size: float) -> dict:
@@ -908,12 +908,12 @@ citadel_mm = market_maker_profit(
 print("Citadel Securities Market Making (est.):")
 print(f"  Quotes per day: {citadel_mm['quotes_per_day']:,}")
 print(f"  Trades per day: {citadel_mm['trades_per_day']:,.0f}")
-print(f"  Profit per trade: ${citadel_mm['profit_per_trade']: .2f}")
-print(f"  Daily profit: ${citadel_mm['daily_profit']:,.0f}")
-print(f"  Annual profit: ${citadel_mm['annual_profit']/1e9:.1f}B")
+print(f"  Profit per trade: \${citadel_mm['profit_per_trade']:.2f}")
+print(f"  Daily profit: \${citadel_mm['daily_profit']:,.0f}")
+print(f"  Annual profit: \${citadel_mm['annual_profit']/1e9:.1f}B")
 
 # Output:
-# Citadel Securities Market Making(est.):
+# Citadel Securities Market Making (est.):
 #   Quotes per day: 100,000,000
 #   Trades per day: 5,000,000
 #   Daily profit: $2, 500,000
@@ -985,7 +985,7 @@ Risk:
 - **Petabytes** of market data analyzed daily
 - **$1B+** annual technology spend
 
-**Career Note**: Citadel and Jane Street are among the highest-paying employers for engineers ($300K-$500K+ for experienced, + significant bonuses tied to P&L).
+**Career Note**: Citadel and Jane Street are among the highest-paying employers for engineers (\$300K-$500K+ for experienced, + significant bonuses tied to P&L).
 
 ---
 
@@ -1057,4 +1057,3 @@ Then we'll explore **Financial Markets Explained** to understand where these ins
 Welcome to the world of financial institutions! 🏦
 `,
 };
-

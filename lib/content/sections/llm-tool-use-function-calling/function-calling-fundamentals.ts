@@ -26,14 +26,14 @@ Instead of the LLM trying to answer everything from its training data, it can de
 
 ### The Problem Function Calling Solves
 
-Before function calling, if you asked an LLM "What's the weather in San Francisco?", it could only:
+Before function calling, if you asked an LLM "What\'s the weather in San Francisco?", it could only:
 - Make up a plausible-sounding answer (hallucination)
 - Admit it doesn't have real-time data
 - Try to extract weather information from its training data (outdated)
 
 With function calling, the LLM can:
 1. Recognize it needs real-time weather data
-2. Call a \`get_weather(location="San Francisco")\` function
+2. Call a \`get_weather (location="San Francisco")\` function
 3. Receive actual current weather data
 4. Incorporate that data into a natural response
 
@@ -44,7 +44,7 @@ This transforms LLMs from static knowledge bases into dynamic assistants that ca
 Here's the typical flow:
 
 \`\`\`
-User: "What's the weather in San Francisco and New York?"
+User: "What\'s the weather in San Francisco and New York?"
   ↓
 LLM: Analyzes request, determines it needs weather data
   ↓
@@ -75,7 +75,7 @@ The key insight: **The LLM doesn't actually execute the functions**. It generate
 
 ## OpenAI Function Calling API
 
-Let's see a concrete example using OpenAI's API:
+Let\'s see a concrete example using OpenAI's API:
 
 \`\`\`python
 import openai
@@ -119,7 +119,7 @@ message = response.choices[0].message
 # Check if the model wants to call a function
 if message.function_call:
     function_name = message.function_call.name
-    function_args = json.loads(message.function_call.arguments)
+    function_args = json.loads (message.function_call.arguments)
     
     print(f"Function to call: {function_name}")
     print(f"Arguments: {function_args}")
@@ -168,7 +168,7 @@ response = client.messages.create(
     max_tokens=1024,
     tools=tools,
     messages=[
-        {"role": "user", "content": "What's the weather in San Francisco?"}
+        {"role": "user", "content": "What\'s the weather in San Francisco?"}
     ]
 )
 
@@ -188,7 +188,7 @@ import openai
 import json
 from typing import Dict, Any
 
-def get_weather(location: str, unit: str = "fahrenheit") -> Dict[str, Any]:
+def get_weather (location: str, unit: str = "fahrenheit") -> Dict[str, Any]:
     """
     Simulated weather API call.
     In production, this would call a real weather API.
@@ -200,7 +200,7 @@ def get_weather(location: str, unit: str = "fahrenheit") -> Dict[str, Any]:
         "Seattle, WA": {"temp": 58, "conditions": "rainy"}
     }
     
-    data = weather_data.get(location, {"temp": 70, "conditions": "unknown"})
+    data = weather_data.get (location, {"temp": 70, "conditions": "unknown"})
     
     return {
         "location": location,
@@ -237,13 +237,13 @@ FUNCTION_SCHEMAS = [
     }
 ]
 
-def chat_with_functions(user_message: str, max_iterations: int = 5):
+def chat_with_functions (user_message: str, max_iterations: int = 5):
     """
     Main chat loop that handles function calling.
     """
     messages = [{"role": "user", "content": user_message}]
     
-    for iteration in range(max_iterations):
+    for iteration in range (max_iterations):
         # Call the LLM
         response = openai.chat.completions.create(
             model="gpt-4",
@@ -253,12 +253,12 @@ def chat_with_functions(user_message: str, max_iterations: int = 5):
         )
         
         message = response.choices[0].message
-        messages.append(message.to_dict())
+        messages.append (message.to_dict())
         
         # Check if the model wants to call a function
         if message.function_call:
             function_name = message.function_call.name
-            function_args = json.loads(message.function_call.arguments)
+            function_args = json.loads (message.function_call.arguments)
             
             print(f"🔧 Calling function: {function_name}")
             print(f"📥 Arguments: {function_args}")
@@ -272,7 +272,7 @@ def chat_with_functions(user_message: str, max_iterations: int = 5):
                 messages.append({
                     "role": "function",
                     "name": function_name,
-                    "content": json.dumps(function_result)
+                    "content": json.dumps (function_result)
                 })
             else:
                 # Function not found
@@ -353,7 +353,7 @@ response = openai.chat.completions.create(
     model="gpt-4",
     messages=[{
         "role": "user",
-        "content": "Extract the city from: "What's the weather in San Francisco?""
+        "content": "Extract the city from: "What\'s the weather in San Francisco?""
     }]
 )
 
@@ -394,7 +394,7 @@ response = openai.chat.completions.create(
 
 # Get structured function call
 if response.choices[0].message.function_call:
-    args = json.loads(response.choices[0].message.function_call.arguments)
+    args = json.loads (response.choices[0].message.function_call.arguments)
     city = args["location"]  # Guaranteed to be a string
 \`\`\`
 
@@ -403,17 +403,17 @@ if response.choices[0].message.function_call:
 ### ChatGPT Examples
 
 **1. Web Browsing**
-- Function: \`bing_search(query)\`
+- Function: \`bing_search (query)\`
 - Allows ChatGPT to search the web for current information
 - Returns search results that ChatGPT can read and synthesize
 
 **2. Code Interpreter**
-- Function: \`execute_python(code)\`
+- Function: \`execute_python (code)\`
 - Runs Python code in a sandboxed environment
 - Returns execution results, plots, and files
 
 **3. DALL-E Image Generation**
-- Function: \`generate_image(prompt, size, quality)\`
+- Function: \`generate_image (prompt, size, quality)\`
 - Generates images based on text descriptions
 - Returns image URLs
 
@@ -424,17 +424,17 @@ if response.choices[0].message.function_call:
 ### Cursor Examples
 
 **1. File Reading**
-- Function: \`read_file(path)\`
+- Function: \`read_file (path)\`
 - Reads file contents for context
 - Returns file text
 
 **2. Code Search**
-- Function: \`search_codebase(query)\`
+- Function: \`search_codebase (query)\`
 - Semantic search across project
 - Returns relevant code snippets
 
 **3. Terminal Execution**
-- Function: \`run_command(command)\`
+- Function: \`run_command (command)\`
 - Executes terminal commands
 - Returns stdout/stderr
 
@@ -522,7 +522,7 @@ function_call={"name": "get_weather"}
 Function calling can fail in various ways:
 
 \`\`\`python
-def safe_function_call(function_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+def safe_function_call (function_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
     """
     Execute a function with comprehensive error handling.
     """
@@ -539,7 +539,7 @@ def safe_function_call(function_name: str, arguments: Dict[str, Any]) -> Dict[st
         
         # Validate arguments (basic check)
         import inspect
-        sig = inspect.signature(func)
+        sig = inspect.signature (func)
         
         # Execute function
         result = func(**arguments)
@@ -552,7 +552,7 @@ def safe_function_call(function_name: str, arguments: Dict[str, Any]) -> Dict[st
     except TypeError as e:
         # Wrong arguments
         return {
-            "error": f"Invalid arguments: {str(e)}",
+            "error": f"Invalid arguments: {str (e)}",
             "function": function_name,
             "provided_args": arguments
         }
@@ -560,9 +560,9 @@ def safe_function_call(function_name: str, arguments: Dict[str, Any]) -> Dict[st
     except Exception as e:
         # Any other error
         return {
-            "error": f"Function execution failed: {str(e)}",
+            "error": f"Function execution failed: {str (e)}",
             "function": function_name,
-            "type": type(e).__name__
+            "type": type (e).__name__
         }
 \`\`\`
 
@@ -648,17 +648,17 @@ import asyncio
 from functools import wraps
 import signal
 
-def timeout(seconds):
+def timeout (seconds):
     """Decorator to add timeout to functions."""
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
             # Set timeout
-            def handler(signum, frame):
-                raise TimeoutError(f"Function timed out after {seconds} seconds")
+            def handler (signum, frame):
+                raise TimeoutError (f"Function timed out after {seconds} seconds")
             
-            signal.signal(signal.SIGALRM, handler)
-            signal.alarm(seconds)
+            signal.signal (signal.SIGALRM, handler)
+            signal.alarm (seconds)
             
             try:
                 result = func(*args, **kwargs)
@@ -680,15 +680,15 @@ Never execute arbitrary code from function arguments:
 
 ❌ Dangerous:
 \`\`\`python
-def execute_python(code: str):
-    exec(code)  # NEVER DO THIS
+def execute_python (code: str):
+    exec (code)  # NEVER DO THIS
 \`\`\`
 
 ✅ Safe:
 \`\`\`python
-def execute_python(code: str):
+def execute_python (code: str):
     # Use sandbox, validate code, restrict imports, etc.
-    result = safe_sandbox_executor.run(code, timeout=5, memory_limit=128)
+    result = safe_sandbox_executor.run (code, timeout=5, memory_limit=128)
     return result
 \`\`\`
 

@@ -47,8 +47,8 @@ n_flips = 1000
 flips = np.random.choice(['H', 'T'], size=n_flips)
 
 # Count outcomes
-heads_count = np.sum(flips == 'H')
-tails_count = np.sum(flips == 'T')
+heads_count = np.sum (flips == 'H')
+tails_count = np.sum (flips == 'T')
 
 print(f"Heads: {heads_count}, Tails: {tails_count}")
 print(f"Probability of Heads: {heads_count / n_flips:.3f}")
@@ -91,10 +91,10 @@ def check_probability_axioms():
     outcomes = np.random.randint(1, 7, size=10000)
     
     # Event A: rolling 1, 2, or 3
-    event_a = np.sum(outcomes <= 3) / len(outcomes)
+    event_a = np.sum (outcomes <= 3) / len (outcomes)
     
     # Event B: rolling 4, 5, or 6
-    event_b = np.sum(outcomes > 3) / len(outcomes)
+    event_b = np.sum (outcomes > 3) / len (outcomes)
     
     # Axiom 1: Non-negativity
     print(f"P(A) = {event_a:.3f} >= 0: {event_a >= 0}")
@@ -147,7 +147,7 @@ Based on personal belief or prior information:
 
 \`\`\`python
 # Comparing classical vs empirical probability
-def compare_probabilities(n_trials):
+def compare_probabilities (n_trials):
     """Compare theoretical and empirical probability of rolling a 6"""
     
     # Classical (theoretical) probability
@@ -155,10 +155,10 @@ def compare_probabilities(n_trials):
     
     # Empirical probability from simulation
     rolls = np.random.randint(1, 7, size=n_trials)
-    empirical_prob = np.sum(rolls == 6) / n_trials
+    empirical_prob = np.sum (rolls == 6) / n_trials
     
     # Law of Large Numbers: empirical approaches theoretical
-    error = abs(empirical_prob - classical_prob)
+    error = abs (empirical_prob - classical_prob)
     
     print(f"Trials: {n_trials}")
     print(f"Classical P(6) = {classical_prob:.4f}")
@@ -172,8 +172,8 @@ probs = []
 sample_sizes = [10, 100, 1000, 10000, 100000]
 
 for n in sample_sizes:
-    prob = compare_probabilities(n)
-    probs.append(prob)
+    prob = compare_probabilities (n)
+    probs.append (prob)
 
 # Output shows convergence (Law of Large Numbers)
 # As n increases, empirical → classical
@@ -220,19 +220,19 @@ def demonstrate_rules():
     
     # Event A: rolling even (2, 4, 6)
     event_a = rolls % 2 == 0
-    p_a = np.mean(event_a)
+    p_a = np.mean (event_a)
     
     # Event B: rolling > 3 (4, 5, 6)
     event_b = rolls > 3
-    p_b = np.mean(event_b)
+    p_b = np.mean (event_b)
     
     # Event A ∩ B: rolling even AND > 3 (4, 6)
     event_a_and_b = event_a & event_b
-    p_a_and_b = np.mean(event_a_and_b)
+    p_a_and_b = np.mean (event_a_and_b)
     
     # Event A ∪ B: rolling even OR > 3 (2, 4, 5, 6)
     event_a_or_b = event_a | event_b
-    p_a_or_b = np.mean(event_a_or_b)
+    p_a_or_b = np.mean (event_a_or_b)
     
     # Complement rule: P(A^c) = 1 - P(A)
     print("=== Complement Rule ===")
@@ -249,7 +249,7 @@ def demonstrate_rules():
     print("=== Independence Test ===")
     print(f"P(A ∩ B) = {p_a_and_b:.3f}")
     print(f"P(A) × P(B) = {p_a * p_b:.3f}")
-    print(f"Independent? {abs(p_a_and_b - p_a * p_b) < 0.01}")
+    print(f"Independent? {abs (p_a_and_b - p_a * p_b) < 0.01}")
 
 demonstrate_rules()
 
@@ -291,19 +291,19 @@ def spam_classifier_simulation():
     
     # Generate synthetic email data
     # 30% are spam
-    is_spam = np.random.rand(n_emails) < 0.3
+    is_spam = np.random.rand (n_emails) < 0.3
     
     # "free" appears in 80% of spam, 10% of legitimate emails
     contains_free = np.where(
         is_spam,
-        np.random.rand(n_emails) < 0.8,  # P("free"|spam) = 0.8
-        np.random.rand(n_emails) < 0.1   # P("free"|legit) = 0.1
+        np.random.rand (n_emails) < 0.8,  # P("free"|spam) = 0.8
+        np.random.rand (n_emails) < 0.1   # P("free"|legit) = 0.1
     )
     
     # Calculate probabilities
-    p_spam = np.mean(is_spam)
-    p_free = np.mean(contains_free)
-    p_free_and_spam = np.mean(contains_free & is_spam)
+    p_spam = np.mean (is_spam)
+    p_free = np.mean (contains_free)
+    p_free_and_spam = np.mean (contains_free & is_spam)
     p_free_given_spam = p_free_and_spam / p_spam if p_spam > 0 else 0
     
     print("=== Email Spam Detection ===")
@@ -369,8 +369,8 @@ for i in range(5):
     pred = 1 if proba[i, 1] > 0.5 else 0
     print(f"{proba[i, 0]:.3f}      {proba[i, 1]:.3f}      Class {pred}")
 
-print(f"\\nHigh confidence predictions (>90%): {np.sum(np.max(proba, axis=1) > 0.9)}")
-print(f"Uncertain predictions (50-60%): {np.sum((np.max(proba, axis=1) > 0.5) & (np.max(proba, axis=1) < 0.6))}")
+print(f"\\nHigh confidence predictions (>90%): {np.sum (np.max (proba, axis=1) > 0.9)}")
+print(f"Uncertain predictions (50-60%): {np.sum((np.max (proba, axis=1) > 0.5) & (np.max (proba, axis=1) < 0.6))}")
 
 # Output:
 # === ML Prediction Uncertainty ===

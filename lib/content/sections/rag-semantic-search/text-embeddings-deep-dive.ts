@@ -31,7 +31,7 @@ import numpy as np
 
 client = OpenAI()
 
-def get_embedding(text: str, model: str = "text-embedding-3-small") -> list[float]:
+def get_embedding (text: str, model: str = "text-embedding-3-small") -> list[float]:
     """Get embedding vector for text."""
     response = client.embeddings.create(
         model=model,
@@ -39,11 +39,11 @@ def get_embedding(text: str, model: str = "text-embedding-3-small") -> list[floa
     )
     return response.data[0].embedding
 
-def cosine_similarity(v1: list[float], v2: list[float]) -> float:
+def cosine_similarity (v1: list[float], v2: list[float]) -> float:
     """Calculate cosine similarity between two vectors."""
-    v1_np = np.array(v1)
-    v2_np = np.array(v2)
-    return float(np.dot(v1_np, v2_np) / (np.linalg.norm(v1_np) * np.linalg.norm(v2_np)))
+    v1_np = np.array (v1)
+    v2_np = np.array (v2)
+    return float (np.dot (v1_np, v2_np) / (np.linalg.norm (v1_np) * np.linalg.norm (v2_np)))
 
 # Get embeddings for similar and dissimilar texts
 cat_emb = get_embedding("A small domestic feline animal")
@@ -51,8 +51,8 @@ kitten_emb = get_embedding("A baby cat")
 car_emb = get_embedding("A motorized vehicle for transportation")
 
 # Compare similarities
-print(f"cat <-> kitten: {cosine_similarity(cat_emb, kitten_emb):.3f}")  # High ~0.85
-print(f"cat <-> car: {cosine_similarity(cat_emb, car_emb):.3f}")        # Low ~0.65
+print(f"cat <-> kitten: {cosine_similarity (cat_emb, kitten_emb):.3f}")  # High ~0.85
+print(f"cat <-> car: {cosine_similarity (cat_emb, car_emb):.3f}")        # Low ~0.65
 \`\`\`
 
 **Output:**
@@ -81,7 +81,7 @@ text = "RAG systems use embeddings"
 ↓
 tokens = ["RAG", "systems", "use", "embeddings"]
 ↓
-neural_network_processing(tokens)
+neural_network_processing (tokens)
 ↓
 embedding_vector = [0.123, -0.456, 0.789, ..., 0.234]  # 1536 dims
 \`\`\`
@@ -96,7 +96,7 @@ embedding_vector = [0.123, -0.456, 0.789, ..., 0.234]  # 1536 dims
 
 ## Popular Embedding Models
 
-Let's explore the major embedding models available for production use:
+Let\'s explore the major embedding models available for production use:
 
 ### 1. OpenAI Embeddings
 
@@ -109,7 +109,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def create_embedding_small(text: str) -> list[float]:
+def create_embedding_small (text: str) -> list[float]:
     """
     Create embedding using text-embedding-3-small.
     
@@ -127,8 +127,8 @@ def create_embedding_small(text: str) -> list[float]:
 
 # Example usage
 text = "RAG combines retrieval with generation"
-embedding = create_embedding_small(text)
-print(f"Dimensions: {len(embedding)}")  # 1536
+embedding = create_embedding_small (text)
+print(f"Dimensions: {len (embedding)}")  # 1536
 print(f"First 5 values: {embedding[:5]}")
 \`\`\`
 
@@ -140,7 +140,7 @@ print(f"First 5 values: {embedding[:5]}")
 #### text-embedding-3-large
 
 \`\`\`python
-def create_embedding_large(text: str) -> list[float]:
+def create_embedding_large (text: str) -> list[float]:
     """
     Create embedding using text-embedding-3-large.
     
@@ -185,10 +185,10 @@ class LocalEmbeddings:
         - all-mpnet-base-v2: Slower, 768 dims, better quality
         - multi-qa-mpnet-base-dot-v1: Optimized for Q&A
         """
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer (model_name)
         self.model_name = model_name
     
-    def encode(self, texts: list[str]) -> np.ndarray:
+    def encode (self, texts: list[str]) -> np.ndarray:
         """
         Encode texts to embeddings.
         
@@ -205,7 +205,7 @@ class LocalEmbeddings:
         )
         return embeddings
     
-    def encode_single(self, text: str) -> np.ndarray:
+    def encode_single (self, text: str) -> np.ndarray:
         """Encode single text."""
         return self.encode([text])[0]
 
@@ -218,12 +218,12 @@ texts = [
     "Python is a programming language"
 ]
 
-embeddings = local_model.encode(texts)
+embeddings = local_model.encode (texts)
 print(f"Shape: {embeddings.shape}")  # (3, 384)
 
 # Calculate similarities
 from sklearn.metrics.pairwise import cosine_similarity
-similarities = cosine_similarity(embeddings)
+similarities = cosine_similarity (embeddings)
 print("Similarity matrix:")
 print(similarities)
 \`\`\`
@@ -247,7 +247,7 @@ class CohereEmbeddings:
     """
     
     def __init__(self, api_key: str):
-        self.client = cohere.Client(api_key)
+        self.client = cohere.Client (api_key)
     
     def embed_documents(
         self, 
@@ -294,15 +294,15 @@ class CohereEmbeddings:
         return response.embeddings[0]
 
 # Example usage
-cohere_emb = CohereEmbeddings(api_key="your-api-key")
+cohere_emb = CohereEmbeddings (api_key="your-api-key")
 
 # Embed documents
 docs = ["Document 1 text", "Document 2 text"]
-doc_embeddings = cohere_emb.embed_documents(docs)
+doc_embeddings = cohere_emb.embed_documents (docs)
 
 # Embed query
 query = "Search query"
-query_embedding = cohere_emb.embed_query(query)
+query_embedding = cohere_emb.embed_query (query)
 \`\`\`
 
 **Best For:**
@@ -334,14 +334,14 @@ class E5Embeddings:
             "base": "intfloat/e5-base-v2",    # 768 dims
             "large": "intfloat/e5-large-v2"   # 1024 dims
         }
-        self.model = SentenceTransformer(model_map[model_size])
+        self.model = SentenceTransformer (model_map[model_size])
     
-    def encode_documents(self, texts: list[str]) -> list[list[float]]:
+    def encode_documents (self, texts: list[str]) -> list[list[float]]:
         """Encode documents with 'passage:' prefix."""
         prefixed = [f"passage: {text}" for text in texts]
-        return self.model.encode(prefixed).tolist()
+        return self.model.encode (prefixed).tolist()
     
-    def encode_query(self, query: str) -> list[float]:
+    def encode_query (self, query: str) -> list[float]:
         """Encode query with 'query:' prefix."""
         prefixed = f"query: {query}"
         return self.model.encode([prefixed])[0].tolist()
@@ -350,10 +350,10 @@ class E5Embeddings:
 e5 = E5Embeddings("base")
 
 docs = ["RAG systems use embeddings", "Vector search is fast"]
-doc_embs = e5.encode_documents(docs)
+doc_embs = e5.encode_documents (docs)
 
 query = "What is RAG?"
-query_emb = e5.encode_query(query)
+query_emb = e5.encode_query (query)
 \`\`\`
 
 **Best For:**
@@ -433,17 +433,17 @@ def reduce_dimensions(
         Reduced embeddings
     """
     pca = PCA(n_components=target_dims)
-    reduced = pca.fit_transform(embeddings)
+    reduced = pca.fit_transform (embeddings)
     
     # Show variance retained
-    variance_retained = sum(pca.explained_variance_ratio_)
+    variance_retained = sum (pca.explained_variance_ratio_)
     print(f"Variance retained: {variance_retained:.2%}")
     
     return reduced
 
 # Example: Reduce 1536D to 512D
 original = np.random.randn(1000, 1536)  # 1000 embeddings
-reduced = reduce_dimensions(original, target_dims=512)
+reduced = reduce_dimensions (original, target_dims=512)
 
 print(f"Original shape: {original.shape}")
 print(f"Reduced shape: {reduced.shape}")
@@ -461,7 +461,7 @@ Most common metric for embeddings:
 \`\`\`python
 import numpy as np
 
-def cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
+def cosine_similarity (v1: np.ndarray, v2: np.ndarray) -> float:
     """
     Calculate cosine similarity between two vectors.
     
@@ -470,15 +470,15 @@ def cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
     - 0.0: Orthogonal (unrelated)
     - -1.0: Opposite direction
     """
-    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+    return np.dot (v1, v2) / (np.linalg.norm (v1) * np.linalg.norm (v2))
 
 # Example
 v1 = np.array([1, 2, 3])
 v2 = np.array([2, 4, 6])  # Same direction, scaled
 v3 = np.array([1, 0, 0])  # Different direction
 
-print(f"v1 <-> v2: {cosine_similarity(v1, v2):.3f}")  # 1.0 (identical)
-print(f"v1 <-> v3: {cosine_similarity(v1, v3):.3f}")  # Different
+print(f"v1 <-> v2: {cosine_similarity (v1, v2):.3f}")  # 1.0 (identical)
+print(f"v1 <-> v3: {cosine_similarity (v1, v3):.3f}")  # Different
 \`\`\`
 
 ### Dot Product
@@ -486,23 +486,23 @@ print(f"v1 <-> v3: {cosine_similarity(v1, v3):.3f}")  # Different
 Faster than cosine similarity for normalized vectors:
 
 \`\`\`python
-def dot_product_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
+def dot_product_similarity (v1: np.ndarray, v2: np.ndarray) -> float:
     """
     Dot product similarity.
     Works well when vectors are normalized.
     """
-    return np.dot(v1, v2)
+    return np.dot (v1, v2)
 
-def normalize_vector(v: np.ndarray) -> np.ndarray:
+def normalize_vector (v: np.ndarray) -> np.ndarray:
     """Normalize vector to unit length."""
-    return v / np.linalg.norm(v)
+    return v / np.linalg.norm (v)
 
 # With normalized vectors, dot product ≈ cosine similarity
-v1_norm = normalize_vector(v1)
-v2_norm = normalize_vector(v2)
+v1_norm = normalize_vector (v1)
+v2_norm = normalize_vector (v2)
 
-print(f"Dot product: {dot_product_similarity(v1_norm, v2_norm):.3f}")
-print(f"Cosine sim: {cosine_similarity(v1, v2):.3f}")
+print(f"Dot product: {dot_product_similarity (v1_norm, v2_norm):.3f}")
+print(f"Cosine sim: {cosine_similarity (v1, v2):.3f}")
 \`\`\`
 
 ### Euclidean Distance
@@ -510,16 +510,16 @@ print(f"Cosine sim: {cosine_similarity(v1, v2):.3f}")
 Measures straight-line distance in vector space:
 
 \`\`\`python
-def euclidean_distance(v1: np.ndarray, v2: np.ndarray) -> float:
+def euclidean_distance (v1: np.ndarray, v2: np.ndarray) -> float:
     """
     Calculate Euclidean distance.
     
     Lower values = more similar
     """
-    return np.linalg.norm(v1 - v2)
+    return np.linalg.norm (v1 - v2)
 
 # Example
-distance = euclidean_distance(v1, v2)
+distance = euclidean_distance (v1, v2)
 print(f"Distance: {distance:.3f}")
 \`\`\`
 
@@ -553,7 +553,7 @@ def create_embeddings_batch(
     all_embeddings = []
     
     # Process in batches
-    for i in range(0, len(texts), batch_size):
+    for i in range(0, len (texts), batch_size):
         batch = texts[i:i + batch_size]
         
         try:
@@ -564,9 +564,9 @@ def create_embeddings_batch(
             
             # Extract embeddings in order
             batch_embeddings = [item.embedding for item in response.data]
-            all_embeddings.extend(batch_embeddings)
+            all_embeddings.extend (batch_embeddings)
             
-            print(f"Processed {len(all_embeddings)}/{len(texts)} texts")
+            print(f"Processed {len (all_embeddings)}/{len (texts)} texts")
             
             # Rate limiting
             time.sleep(0.1)
@@ -580,8 +580,8 @@ def create_embeddings_batch(
 
 # Example usage
 texts = [f"Document {i}" for i in range(250)]
-embeddings = create_embeddings_batch(texts, batch_size=100)
-print(f"Created {len(embeddings)} embeddings")
+embeddings = create_embeddings_batch (texts, batch_size=100)
+print(f"Created {len (embeddings)} embeddings")
 \`\`\`
 
 ## Caching Embeddings
@@ -600,31 +600,31 @@ class EmbeddingCache:
     """
     
     def __init__(self, cache_dir: str = "./embedding_cache"):
-        self.cache_dir = Path(cache_dir)
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_dir = Path (cache_dir)
+        self.cache_dir.mkdir (exist_ok=True)
     
-    def _get_cache_key(self, text: str, model: str) -> str:
+    def _get_cache_key (self, text: str, model: str) -> str:
         """Generate cache key from text and model."""
         content = f"{model}:{text}"
         return hashlib.md5(content.encode()).hexdigest()
     
-    def get(self, text: str, model: str) -> Optional[List[float]]:
+    def get (self, text: str, model: str) -> Optional[List[float]]:
         """Get embedding from cache."""
-        cache_key = self._get_cache_key(text, model)
+        cache_key = self._get_cache_key (text, model)
         cache_file = self.cache_dir / f"{cache_key}.json"
         
         if cache_file.exists():
-            with open(cache_file) as f:
-                data = json.load(f)
+            with open (cache_file) as f:
+                data = json.load (f)
                 return data["embedding"]
         return None
     
-    def set(self, text: str, model: str, embedding: List[float]):
+    def set (self, text: str, model: str, embedding: List[float]):
         """Store embedding in cache."""
-        cache_key = self._get_cache_key(text, model)
+        cache_key = self._get_cache_key (text, model)
         cache_file = self.cache_dir / f"{cache_key}.json"
         
-        with open(cache_file, 'w') as f:
+        with open (cache_file, 'w') as f:
             json.dump({
                 "text": text,
                 "model": model,
@@ -639,25 +639,25 @@ class EmbeddingCache:
     ) -> List[float]:
         """Get from cache or create new embedding."""
         # Try cache first
-        cached = self.get(text, model)
+        cached = self.get (text, model)
         if cached is not None:
             return cached
         
         # Create new embedding
-        embedding = embedding_fn(text)
-        self.set(text, model, embedding)
+        embedding = embedding_fn (text)
+        self.set (text, model, embedding)
         
         return embedding
 
 # Example usage
 cache = EmbeddingCache()
 
-def embed_with_cache(text: str) -> List[float]:
+def embed_with_cache (text: str) -> List[float]:
     """Embed text with caching."""
     return cache.get_or_create(
         text=text,
         model="text-embedding-3-small",
-        embedding_fn=lambda t: get_embedding(t)
+        embedding_fn=lambda t: get_embedding (t)
     )
 
 # First call: creates embedding
@@ -686,16 +686,16 @@ def evaluate_embedding_model(
     
     # Test encoding speed
     start = time.time()
-    query_embs = [get_embedding(q, model_name) for q in test_queries]
-    doc_embs = [get_embedding(d, model_name) for d in test_docs]
+    query_embs = [get_embedding (q, model_name) for q in test_queries]
+    doc_embs = [get_embedding (d, model_name) for d in test_docs]
     elapsed = time.time() - start
     
     # Calculate metrics
     return {
         "model": model_name,
-        "dimensions": len(query_embs[0]),
-        "speed": f"{elapsed:.2f}s for {len(test_queries + test_docs)} embeddings",
-        "throughput": f"{len(test_queries + test_docs) / elapsed:.1f} emb/sec"
+        "dimensions": len (query_embs[0]),
+        "speed": f"{elapsed:.2f}s for {len (test_queries + test_docs)} embeddings",
+        "throughput": f"{len (test_queries + test_docs) / elapsed:.1f} emb/sec"
     }
 \`\`\`
 
@@ -715,31 +715,31 @@ def evaluate_embedding_model(
 ### 1. Normalize Before Storing
 
 \`\`\`python
-def normalize_embedding(embedding: List[float]) -> List[float]:
+def normalize_embedding (embedding: List[float]) -> List[float]:
     """Normalize embedding to unit length."""
-    emb_array = np.array(embedding)
-    norm = np.linalg.norm(emb_array)
+    emb_array = np.array (embedding)
+    norm = np.linalg.norm (emb_array)
     return (emb_array / norm).tolist()
 \`\`\`
 
 ### 2. Handle Long Texts
 
 \`\`\`python
-def embed_long_text(text: str, max_tokens: int = 8000) -> List[float]:
+def embed_long_text (text: str, max_tokens: int = 8000) -> List[float]:
     """Handle texts longer than model limit."""
     import tiktoken
     
     encoding = tiktoken.encoding_for_model("gpt-4")
-    tokens = encoding.encode(text)
+    tokens = encoding.encode (text)
     
-    if len(tokens) <= max_tokens:
-        return get_embedding(text)
+    if len (tokens) <= max_tokens:
+        return get_embedding (text)
     
     # Truncate to max_tokens
     truncated_tokens = tokens[:max_tokens]
-    truncated_text = encoding.decode(truncated_tokens)
+    truncated_text = encoding.decode (truncated_tokens)
     
-    return get_embedding(truncated_text)
+    return get_embedding (truncated_text)
 \`\`\`
 
 ### 3. Monitor Quality
@@ -751,18 +751,18 @@ def monitor_embedding_quality(
     threshold: float = 0.3
 ) -> dict:
     """Monitor if retrieved docs are relevant."""
-    query_emb = get_embedding(query)
-    doc_embs = [get_embedding(doc) for doc in retrieved_docs]
+    query_emb = get_embedding (query)
+    doc_embs = [get_embedding (doc) for doc in retrieved_docs]
     
     similarities = [
-        cosine_similarity(query_emb, doc_emb) 
+        cosine_similarity (query_emb, doc_emb) 
         for doc_emb in doc_embs
     ]
     
     return {
-        "avg_similarity": np.mean(similarities),
-        "min_similarity": np.min(similarities),
-        "below_threshold": sum(s < threshold for s in similarities)
+        "avg_similarity": np.mean (similarities),
+        "min_similarity": np.min (similarities),
+        "below_threshold": sum (s < threshold for s in similarities)
     }
 \`\`\`
 

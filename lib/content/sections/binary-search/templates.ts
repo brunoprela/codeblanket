@@ -12,8 +12,8 @@ Find exact match or return -1
 When duplicates exist, find leftmost occurrence
 
 \`\`\`python
-def find_first(nums: List[int], target: int) -> int:
-    left, right = 0, len(nums) - 1
+def find_first (nums: List[int], target: int) -> int:
+    left, right = 0, len (nums) - 1
     result = -1
     
     while left <= right:
@@ -34,8 +34,8 @@ def find_first(nums: List[int], target: int) -> int:
 Find rightmost occurrence when duplicates exist
 
 \`\`\`python
-def find_last(nums: List[int], target: int) -> int:
-    left, right = 0, len(nums) - 1
+def find_last (nums: List[int], target: int) -> int:
+    left, right = 0, len (nums) - 1
     result = -1
     
     while left <= right:
@@ -56,8 +56,8 @@ def find_last(nums: List[int], target: int) -> int:
 Where to insert target to maintain sorted order
 
 \`\`\`python
-def search_insert(nums: List[int], target: int) -> int:
-    left, right = 0, len(nums) - 1
+def search_insert (nums: List[int], target: int) -> int:
+    left, right = 0, len (nums) - 1
     
     while left <= right:
         mid = left + (right - left) // 2

@@ -18,11 +18,11 @@ Add counter to an iterable.
 \`\`\`python
 # Without enumerate
 fruits = ['apple', 'banana', 'cherry']
-for i in range(len(fruits)):
+for i in range (len (fruits)):
     print(f"{i}: {fruits[i]}")
 
 # With enumerate (better!)
-for i, fruit in enumerate(fruits):
+for i, fruit in enumerate (fruits):
     print(f"{i}: {fruit}")
 # Output:
 # 0: apple
@@ -30,7 +30,7 @@ for i, fruit in enumerate(fruits):
 # 2: cherry
 
 # Start counting from 1
-for i, fruit in enumerate(fruits, start=1):
+for i, fruit in enumerate (fruits, start=1):
     print(f"{i}. {fruit}")
 # Output:
 # 1. apple
@@ -48,11 +48,11 @@ ages = [25, 30, 35]
 cities = ['NYC', 'LA', 'Chicago']
 
 # Zip together
-for name, age, city in zip(names, ages, cities):
+for name, age, city in zip (names, ages, cities):
     print(f"{name} is {age} and lives in {city}")
 
 # Create dictionary
-person_dict = dict(zip(names, ages))
+person_dict = dict (zip (names, ages))
 print(person_dict)  # {'Alice': 25, 'Bob': 30, 'Charlie': 35}
 
 # Unzip (transpose)
@@ -67,7 +67,7 @@ print(letters)  # ('a', 'b', 'c')
 \`\`\`python
 names = ['Alice', 'Bob']
 ages = [25, 30, 35]
-result = list(zip(names, ages))
+result = list (zip (names, ages))
 print(result)  # [('Alice', 25), ('Bob', 30)] - only 2 pairs
 \`\`\`
 
@@ -76,17 +76,17 @@ print(result)  # [('Alice', 25), ('Bob', 30)] - only 2 pairs
 Generate sequence of numbers.
 
 \`\`\`python
-# range(stop)
-list(range(5))  # [0, 1, 2, 3, 4]
+# range (stop)
+list (range(5))  # [0, 1, 2, 3, 4]
 
-# range(start, stop)
-list(range(2, 7))  # [2, 3, 4, 5, 6]
+# range (start, stop)
+list (range(2, 7))  # [2, 3, 4, 5, 6]
 
-# range(start, stop, step)
-list(range(0, 10, 2))  # [0, 2, 4, 6, 8]
+# range (start, stop, step)
+list (range(0, 10, 2))  # [0, 2, 4, 6, 8]
 
 # Reverse
-list(range(10, 0, -1))  # [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+list (range(10, 0, -1))  # [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 \`\`\`
 
 ## Aggregation Functions
@@ -95,13 +95,13 @@ list(range(10, 0, -1))  # [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 \`\`\`python
 numbers = [1, 2, 3, 4, 5]
-print(sum(numbers))  # 15
+print(sum (numbers))  # 15
 
 # With start value
-print(sum(numbers, 10))  # 25 (sum + 10)
+print(sum (numbers, 10))  # 25 (sum + 10)
 
 # Sum of squares
-print(sum(x ** 2 for x in numbers))  # 55
+print(sum (x ** 2 for x in numbers))  # 55
 \`\`\`
 
 ### min() and max()
@@ -109,13 +109,13 @@ print(sum(x ** 2 for x in numbers))  # 55
 \`\`\`python
 numbers = [3, 1, 4, 1, 5, 9, 2]
 
-print(min(numbers))  # 1
-print(max(numbers))  # 9
+print(min (numbers))  # 1
+print(max (numbers))  # 9
 
 # With strings (lexicographic)
 words = ['apple', 'banana', 'cherry']
-print(min(words))  # 'apple'
-print(max(words))  # 'cherry'
+print(min (words))  # 'apple'
+print(max (words))  # 'cherry'
 
 # With key function
 people = [
@@ -123,10 +123,10 @@ people = [
     {'name': 'Bob', 'age': 30},
     {'name': 'Charlie', 'age': 20}
 ]
-youngest = min(people, key=lambda x: x['age'])
+youngest = min (people, key=lambda x: x['age'])
 print(youngest)  # {'name': 'Charlie', 'age': 20}
 
-oldest = max(people, key=lambda x: x['age'])
+oldest = max (people, key=lambda x: x['age'])
 print(oldest)  # {'name': 'Bob', 'age': 30}
 \`\`\`
 
@@ -142,7 +142,7 @@ print(any([]))  # False (empty)
 
 # Check if any number is even
 numbers = [1, 3, 5, 8, 9]
-has_even = any(n % 2 == 0 for n in numbers)
+has_even = any (n % 2 == 0 for n in numbers)
 print(has_even)  # True
 
 # all() - True if all elements are True
@@ -152,7 +152,7 @@ print(all([]))  # True (empty!)
 
 # Check if all numbers are positive
 numbers = [1, 2, 3, 4, 5]
-all_positive = all(n > 0 for n in numbers)
+all_positive = all (n > 0 for n in numbers)
 print(all_positive)  # True
 \`\`\`
 
@@ -165,18 +165,18 @@ Apply function to every item.
 \`\`\`python
 # Square all numbers
 numbers = [1, 2, 3, 4, 5]
-squared = list(map(lambda x: x ** 2, numbers))
+squared = list (map (lambda x: x ** 2, numbers))
 print(squared)  # [1, 4, 9, 16, 25]
 
 # Convert to integers
 strings = ['1', '2', '3']
-integers = list(map(int, strings))
+integers = list (map (int, strings))
 print(integers)  # [1, 2, 3]
 
 # Multiple iterables
 a = [1, 2, 3]
 b = [10, 20, 30]
-sums = list(map(lambda x, y: x + y, a, b))
+sums = list (map (lambda x, y: x + y, a, b))
 print(sums)  # [11, 22, 33]
 \`\`\`
 
@@ -187,17 +187,17 @@ Filter items by condition.
 \`\`\`python
 # Get even numbers
 numbers = [1, 2, 3, 4, 5, 6, 7, 8]
-evens = list(filter(lambda x: x % 2 == 0, numbers))
+evens = list (filter (lambda x: x % 2 == 0, numbers))
 print(evens)  # [2, 4, 6, 8]
 
 # Filter None values
 values = [1, None, 3, None, 5]
-filtered = list(filter(None, values))
+filtered = list (filter(None, values))
 print(filtered)  # [1, 3, 5]
 
 # Filter empty strings
 strings = ['hello', ', 'world', ', 'python']
-non_empty = list(filter(len, strings))
+non_empty = list (filter (len, strings))
 print(non_empty)  # ['hello', 'world', 'python']
 \`\`\`
 
@@ -208,21 +208,21 @@ Return sorted list (original unchanged).
 \`\`\`python
 # Basic sorting
 numbers = [3, 1, 4, 1, 5, 9]
-sorted_nums = sorted(numbers)
+sorted_nums = sorted (numbers)
 print(sorted_nums)  # [1, 1, 3, 4, 5, 9]
 
 # Reverse
-sorted_desc = sorted(numbers, reverse=True)
+sorted_desc = sorted (numbers, reverse=True)
 print(sorted_desc)  # [9, 5, 4, 3, 1, 1]
 
 # Custom key
 words = ['apple', 'pie', 'a', 'glance']
-by_length = sorted(words, key=len)
+by_length = sorted (words, key=len)
 print(by_length)  # ['a', 'pie', 'apple', 'glance']
 
 # Complex sorting
 people = [('Alice', 25), ('Bob', 30), ('Charlie', 20)]
-by_age = sorted(people, key=lambda x: x[1])
+by_age = sorted (people, key=lambda x: x[1])
 print(by_age)  # [('Charlie', 20), ('Alice', 25), ('Bob', 30)]
 \`\`\`
 
@@ -234,18 +234,18 @@ Check if object is instance of class.
 
 \`\`\`python
 x = 5
-print(isinstance(x, int))  # True
-print(isinstance(x, str))  # False
+print(isinstance (x, int))  # True
+print(isinstance (x, str))  # False
 
 # Multiple types
-print(isinstance(x, (int, float)))  # True
+print(isinstance (x, (int, float)))  # True
 
 # Custom classes
 class Dog:
     pass
 
 my_dog = Dog()
-print(isinstance(my_dog, Dog))  # True
+print(isinstance (my_dog, Dog))  # True
 \`\`\`
 
 ### type()
@@ -260,11 +260,11 @@ print(type([1, 2, 3]))  # <class 'list'>
 
 # Comparison (use isinstance instead)
 x = 5
-if type(x) == int:  # Works but not recommended
+if type (x) == int:  # Works but not recommended
     print("x is an integer")
 
 # Better:
-if isinstance(x, int):
+if isinstance (x, int):
     print("x is an integer")
 \`\`\`
 
@@ -306,12 +306,12 @@ Reverse an iterable (returns iterator).
 
 \`\`\`python
 numbers = [1, 2, 3, 4, 5]
-reversed_nums = list(reversed(numbers))
+reversed_nums = list (reversed (numbers))
 print(reversed_nums)  # [5, 4, 3, 2, 1]
 
 # With strings
 word = 'hello'
-backwards = '.join(reversed(word))
+backwards = '.join (reversed (word))
 print(backwards)  # 'olleh'
 \`\`\`
 
@@ -360,7 +360,7 @@ print(pow(2, 10, 100))  # 24 (2^10 % 100)
 | \`sum()\` | Sum numbers | \`sum([1,2,3])\` → \`6\` |
 | \`min()/max()\` | Find min/max | \`min([3,1,2])\` → \`1\` |
 | \`any()/all()\` | Boolean checks | \`any([False, True])\` → \`True\` |
-| \`map()\` | Apply function | \`map(str, [1,2,3])\` → \`'1','2','3'\` |
+| \`map()\` | Apply function | \`map (str, [1,2,3])\` → \`'1','2','3'\` |
 | \`filter()\` | Filter items | \`filter(None, [0,1,2])\` → \`1,2\` |
 | \`sorted()\` | Sort items | \`sorted([3,1,2])\` → \`[1,2,3]\` |
 | \`len()\` | Get length | \`len([1,2,3])\` → \`3\` |

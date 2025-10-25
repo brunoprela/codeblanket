@@ -67,7 +67,7 @@ Subdomain Servers (api.example.com)
 
 ### **Recursive Query** (most common)
 
-User's perspective: One request, one response.
+User\'s perspective: One request, one response.
 
 \`\`\`
 User
@@ -338,7 +338,7 @@ If primary fails health check → route to secondary
 
 \`\`\`
 User → Resolver: "What is bank.com?"
-Attacker → Resolver: "It's 6.6.6.6" (fake)
+Attacker → Resolver: "It\'s 6.6.6.6" (fake)
 Resolver caches fake response
 User connects to attacker's server
 \`\`\`

@@ -40,10 +40,10 @@ class PortfolioReportGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_performance_report(self, portfolio_data: Dict,
+    def generate_performance_report (self, portfolio_data: Dict,
                                    period: str = "Q4 2023") -> str:
         """
         Generate comprehensive portfolio performance report
@@ -56,8 +56,8 @@ class PortfolioReportGenerator:
             Full report text in Markdown
         """
         # Format portfolio data for LLM
-        holdings_summary = self._format_holdings(portfolio_data['holdings'])
-        performance_metrics = self._format_metrics(portfolio_data['performance'])
+        holdings_summary = self._format_holdings (portfolio_data['holdings'])
+        performance_metrics = self._format_metrics (portfolio_data['performance'])
         
         prompt = f"""Generate a comprehensive portfolio performance report for {period}.
 
@@ -111,23 +111,23 @@ Format as a polished Markdown document suitable for client presentation."""
         
         return response.content[0].text
     
-    def _format_holdings(self, holdings: List[Dict]) -> str:
+    def _format_holdings (self, holdings: List[Dict]) -> str:
         """Format holdings data for prompt"""
-        df = pd.DataFrame(holdings)
+        df = pd.DataFrame (holdings)
         
         summary = f"""
-Total Portfolio Value: \\\${df['market_value'].sum():,.2f}
-Number of Holdings: {len(holdings)}
+Total Portfolio Value: \${df['market_value'].sum():,.2f}
+Number of Holdings: {len (holdings)}
 
 Top 10 Holdings:
-{df.nlargest(10, 'market_value')[['ticker', 'name', 'weight', 'return', 'market_value']].to_string(index=False)}
+{df.nlargest(10, 'market_value')[['ticker', 'name', 'weight', 'return', 'market_value']].to_string (index=False)}
 
 Sector Allocation:
 {df.groupby('sector')['weight'].sum().to_string()}
 """
         return summary
     
-    def _format_metrics(self, metrics: Dict) -> str:
+    def _format_metrics (self, metrics: Dict) -> str:
         """Format performance metrics"""
         return f"""
 Period Return: {metrics.get('return', 0):.2f}%
@@ -141,11 +141,11 @@ Risk Metrics:
 - Beta: {metrics.get('beta', 1.0):.2f}
 
 Income Generated:
-- Dividend Income: \\\${metrics.get('dividend_income', 0):,.2f}
+- Dividend Income: \${metrics.get('dividend_income', 0):,.2f}
 - Dividend Yield: {metrics.get('dividend_yield', 0):.2f}%
 """
     
-    def generate_personalized_report(self, client_data: Dict,
+    def generate_personalized_report (self, client_data: Dict,
                                     portfolio_data: Dict) -> str:
         """
         Generate personalized report for individual client
@@ -168,10 +168,10 @@ Client Profile:
 - Special Considerations: {client_data.get('special_notes', 'None')}
 
 Portfolio Performance:
-{self._format_metrics(portfolio_data['performance'])}
+{self._format_metrics (portfolio_data['performance'])}
 
 Key Holdings:
-{self._format_holdings(portfolio_data['holdings'])}
+{self._format_holdings (portfolio_data['holdings'])}
 
 Create a personalized report that:
 1. Speaks directly to the client's goals and concerns
@@ -191,7 +191,7 @@ Format as a professional client letter."""
         return response.content[0].text
 
 # Example usage
-generator = PortfolioReportGenerator(api_key="your-key")
+generator = PortfolioReportGenerator (api_key="your-key")
 
 # Sample portfolio data
 portfolio_data = {
@@ -228,7 +228,7 @@ portfolio_data = {
 }
 
 # Generate report
-report = generator.generate_performance_report(portfolio_data, period="Q4 2023")
+report = generator.generate_performance_report (portfolio_data, period="Q4 2023")
 print(report)
 
 # Generate personalized report
@@ -240,7 +240,7 @@ client_data = {
     'age': 50
 }
 
-personalized = generator.generate_personalized_report(client_data, portfolio_data)
+personalized = generator.generate_personalized_report (client_data, portfolio_data)
 print("\\n\\n" + "="*60)
 print("PERSONALIZED REPORT")
 print("="*60)
@@ -264,10 +264,10 @@ class RiskReportGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_risk_report(self, portfolio_data: Dict,
+    def generate_risk_report (self, portfolio_data: Dict,
                             market_data: Dict,
                             risk_metrics: Dict) -> str:
         """
@@ -289,10 +289,10 @@ Portfolio Composition:
 - Largest Position: \${portfolio_data.get('largest_position')} (\${portfolio_data.get('largest_weight')}%)
 
 Sector Exposures:
-\${self._format_dict(portfolio_data.get('sector_exposure', {}))}
+\${self._format_dict (portfolio_data.get('sector_exposure', {}))}
 
 Geographic Exposures:
-\${self._format_dict(portfolio_data.get('geo_exposure', {}))}
+\${self._format_dict (portfolio_data.get('geo_exposure', {}))}
 
 Risk Metrics:
 - Value at Risk (95% confidence, 1-day): \\$\${risk_metrics.get('var_95'):,.2f}
@@ -346,7 +346,7 @@ Format as Markdown suitable for risk committee presentation."""
         
         return response.content[0].text
     
-    def generate_var_explanation(self, var_metrics: Dict,
+    def generate_var_explanation (self, var_metrics: Dict,
                                  client_level: str = "sophisticated") -> str:
         """
         Generate explanation of VaR for clients
@@ -391,12 +391,12 @@ Write 2-3 paragraphs."""
         
         return response.content[0].text
     
-    def _format_dict(self, data: Dict) -> str:
+    def _format_dict (self, data: Dict) -> str:
         """Format dictionary for prompt"""
         return "\\n".join([f"- {k}: {v}" for k, v in data.items()])
 
 # Example usage
-risk_generator = RiskReportGenerator(api_key="your-key")
+risk_generator = RiskReportGenerator (api_key="your-key")
 
 portfolio_data = {
     'total_value': 1000000,
@@ -456,10 +456,10 @@ class MarketCommentaryGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_daily_commentary(self, market_data: Dict,
+    def generate_daily_commentary (self, market_data: Dict,
                                   news_highlights: List[str],
                                   economic_calendar: List[str]) -> str:
         """
@@ -481,7 +481,7 @@ Market Performance:
 - Russell 2000: {market_data.get('russell_change', 0):+.2f}%
 
 Sector Performance (Best to Worst):
-{self._format_sectors(market_data.get('sector_performance', {}))}
+{self._format_sectors (market_data.get('sector_performance', {}))}
 
 Volume: {market_data.get('volume_vs_avg', 0):+.1f}% vs average
 VIX: {market_data.get('vix', 0):.2f} ({market_data.get('vix_change', 0):+.2f})
@@ -518,14 +518,14 @@ Be objective but insightful."""
         
         return response.content[0].text
     
-    def generate_weekly_outlook(self, weekly_data: Dict,
+    def generate_weekly_outlook (self, weekly_data: Dict,
                                technical_levels: Dict,
                                sentiment_data: Dict) -> str:
         """
         Generate weekly market outlook
         
         Args:
-            weekly_data: Week's performance summary
+            weekly_data: Week\'s performance summary
             technical_levels: Key technical levels
             sentiment_data: Market sentiment indicators
             
@@ -535,13 +535,13 @@ Be objective but insightful."""
         prompt = f"""Generate a weekly market outlook report.
 
 Week's Performance:
-{self._format_dict(weekly_data)}
+{self._format_dict (weekly_data)}
 
 Technical Levels to Watch:
-{self._format_dict(technical_levels)}
+{self._format_dict (technical_levels)}
 
 Sentiment Indicators:
-{self._format_dict(sentiment_data)}
+{self._format_dict (sentiment_data)}
 
 Write a comprehensive weekly outlook (600-800 words) covering:
 
@@ -579,7 +579,7 @@ Professional investment publication style."""
         
         return response.content[0].text
     
-    def generate_thematic_research(self, theme: str,
+    def generate_thematic_research (self, theme: str,
                                   supporting_data: Dict) -> str:
         """
         Generate thematic investment research report
@@ -594,7 +594,7 @@ Professional investment publication style."""
         prompt = f"""Write an investment research report on the theme: "{theme}"
 
 Supporting Data and Analysis:
-{json.dumps(supporting_data, indent=2)}
+{json.dumps (supporting_data, indent=2)}
 
 Create a comprehensive research report (1000-1500 words) with:
 
@@ -638,18 +638,18 @@ Include specific actionable insights."""
         
         return response.content[0].text
     
-    def _format_sectors(self, sectors: Dict) -> str:
+    def _format_sectors (self, sectors: Dict) -> str:
         """Format sector performance"""
-        sorted_sectors = sorted(sectors.items(), key=lambda x: x[1], reverse=True)
+        sorted_sectors = sorted (sectors.items(), key=lambda x: x[1], reverse=True)
         return "\\n".join([f"  {sector}: {perf:+.2f}%" 
                           for sector, perf in sorted_sectors])
     
-    def _format_dict(self, data: Dict) -> str:
+    def _format_dict (self, data: Dict) -> str:
         """Format dictionary"""
         return "\\n".join([f"- {k}: {v}" for k, v in data.items()])
 
 # Example usage
-commentary_gen = MarketCommentaryGenerator(api_key="your-key")
+commentary_gen = MarketCommentaryGenerator (api_key="your-key")
 
 market_data = {
     'sp500_change': 1.25,
@@ -708,10 +708,10 @@ class AttributionReportGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_attribution_report(self, attribution_data: Dict) -> str:
+    def generate_attribution_report (self, attribution_data: Dict) -> str:
         """
         Generate performance attribution report
         
@@ -738,13 +738,13 @@ Security Selection Effect: \${attribution_data.get('selection_effect', 0):.2f}%
 Interaction Effect: \${attribution_data.get('interaction_effect', 0):.2f}%
 
 Sector Attribution:
-\${self._format_sector_attribution(attribution_data.get('sector_attribution', {}))}
+\${self._format_sector_attribution (attribution_data.get('sector_attribution', {}))}
 
 Top Contributors to Performance:
-\${self._format_contributors(attribution_data.get('top_contributors', []))}
+\${self._format_contributors (attribution_data.get('top_contributors', []))}
 
 Top Detractors from Performance:
-\${self._format_contributors(attribution_data.get('top_detractors', []))}
+\${self._format_contributors (attribution_data.get('top_detractors', []))}
 
 Generate a report (800-1000 words) explaining:
 
@@ -782,17 +782,17 @@ Use clear explanations suitable for client communication."""
         
         return response.content[0].text
     
-    def _format_sector_attribution(self, sectors: Dict) -> str:
+    def _format_sector_attribution (self, sectors: Dict) -> str:
         """Format sector attribution"""
         output = []
         for sector, data in sectors.items():
-            output.append(f"{sector}:")
-            output.append(f"  Total Effect: {data.get('total', 0):+.2f}%")
-            output.append(f"  Allocation: {data.get('allocation', 0):+.2f}%")
-            output.append(f"  Selection: {data.get('selection', 0):+.2f}%")
-        return "\\n".join(output)
+            output.append (f"{sector}:")
+            output.append (f"  Total Effect: {data.get('total', 0):+.2f}%")
+            output.append (f"  Allocation: {data.get('allocation', 0):+.2f}%")
+            output.append (f"  Selection: {data.get('selection', 0):+.2f}%")
+        return "\\n".join (output)
     
-    def _format_contributors(self, contributors: List[Dict]) -> str:
+    def _format_contributors (self, contributors: List[Dict]) -> str:
         """Format top contributors/detractors"""
         return "\\n".join([
             f"- {c['ticker']} ({c['name']}): {c['contribution']:+.2f}%"
@@ -800,7 +800,7 @@ Use clear explanations suitable for client communication."""
         ])
 
 # Example usage
-attribution_gen = AttributionReportGenerator(api_key="your-key")
+attribution_gen = AttributionReportGenerator (api_key="your-key")
 
 attribution_data = {
     'total_return': 24.5,
@@ -837,7 +837,7 @@ attribution_data = {
     ]
 }
 
-attribution_report = attribution_gen.generate_attribution_report(attribution_data)
+attribution_report = attribution_gen.generate_attribution_report (attribution_data)
 print(attribution_report)
 \`\`\`
 
@@ -863,15 +863,15 @@ class ReportGenerationPipeline:
     """
     
     def __init__(self, api_key: str, output_dir: str = "./reports"):
-        self.portfolio_gen = PortfolioReportGenerator(api_key)
-        self.risk_gen = RiskReportGenerator(api_key)
-        self.commentary_gen = MarketCommentaryGenerator(api_key)
-        self.attribution_gen = AttributionReportGenerator(api_key)
+        self.portfolio_gen = PortfolioReportGenerator (api_key)
+        self.risk_gen = RiskReportGenerator (api_key)
+        self.commentary_gen = MarketCommentaryGenerator (api_key)
+        self.attribution_gen = AttributionReportGenerator (api_key)
         
         self.output_dir = output_dir
-        os.makedirs(output_dir, exist_ok=True)
+        os.makedirs (output_dir, exist_ok=True)
     
-    def generate_daily_reports(self, clients: List[Dict]):
+    def generate_daily_reports (self, clients: List[Dict]):
         """
         Generate all daily reports
         
@@ -882,11 +882,11 @@ class ReportGenerationPipeline:
         
         # Generate market commentary
         market_commentary = self._generate_market_commentary()
-        self._save_report(market_commentary, "market_commentary_daily.md")
+        self._save_report (market_commentary, "market_commentary_daily.md")
         
-        print(f"Generated reports for {len(clients)} clients")
+        print(f"Generated reports for {len (clients)} clients")
     
-    def generate_monthly_reports(self, clients: List[Dict]):
+    def generate_monthly_reports (self, clients: List[Dict]):
         """
         Generate all monthly reports
         
@@ -910,8 +910,8 @@ class ReportGenerationPipeline:
             )
             
             # Save reports
-            client_dir = os.path.join(self.output_dir, client['id'])
-            os.makedirs(client_dir, exist_ok=True)
+            client_dir = os.path.join (self.output_dir, client['id'])
+            os.makedirs (client_dir, exist_ok=True)
             
             self._save_report(
                 portfolio_report,
@@ -924,7 +924,7 @@ class ReportGenerationPipeline:
             
             print(f"Generated reports for client {client['name']}")
     
-    def generate_quarterly_reports(self, clients: List[Dict]):
+    def generate_quarterly_reports (self, clients: List[Dict]):
         """
         Generate comprehensive quarterly reports
         
@@ -935,17 +935,17 @@ class ReportGenerationPipeline:
         
         for client in clients:
             # Comprehensive quarterly report
-            quarterly_report = self._generate_quarterly_report(client)
+            quarterly_report = self._generate_quarterly_report (client)
             
-            client_dir = os.path.join(self.output_dir, client['id'])
+            client_dir = os.path.join (self.output_dir, client['id'])
             self._save_report(
                 quarterly_report,
                 f"{client_dir}/quarterly_report_Q{self._get_quarter()}.md"
             )
         
-        print(f"Generated quarterly reports for {len(clients)} clients")
+        print(f"Generated quarterly reports for {len (clients)} clients")
     
-    def _generate_market_commentary(self) -> str:
+    def _generate_market_commentary (self) -> str:
         """Generate daily market commentary"""
         market_data = self._get_market_data()
         news = self._get_news_highlights()
@@ -955,57 +955,57 @@ class ReportGenerationPipeline:
             market_data, news, calendar
         )
     
-    def _generate_quarterly_report(self, client: Dict) -> str:
+    def _generate_quarterly_report (self, client: Dict) -> str:
         """Generate comprehensive quarterly report"""
         # Combine multiple report types
         sections = []
         
         # Performance section
         sections.append("# Quarterly Portfolio Review\\n")
-        sections.append(self.portfolio_gen.generate_performance_report(
+        sections.append (self.portfolio_gen.generate_performance_report(
             client['portfolio'], period=f"Q{self._get_quarter()} 2023"
         ))
         
         # Attribution section
         sections.append("\\n\\n# Performance Attribution\\n")
-        sections.append(self.attribution_gen.generate_attribution_report(
+        sections.append (self.attribution_gen.generate_attribution_report(
             client.get('attribution_data', {})
         ))
         
         # Risk section
         sections.append("\\n\\n# Risk Analysis\\n")
-        sections.append(self.risk_gen.generate_risk_report(
+        sections.append (self.risk_gen.generate_risk_report(
             client['portfolio'],
             self._get_market_data(),
             client['risk_metrics']
         ))
         
-        return "\\n".join(sections)
+        return "\\n".join (sections)
     
-    def _save_report(self, content: str, filepath: str):
+    def _save_report (self, content: str, filepath: str):
         """Save report to file"""
-        with open(filepath, 'w') as f:
-            f.write(content)
+        with open (filepath, 'w') as f:
+            f.write (content)
         print(f"Saved: {filepath}")
     
-    def _get_market_data(self) -> Dict:
+    def _get_market_data (self) -> Dict:
         """Get current market data"""
         # In production, fetch from data provider
         return {}
     
-    def _get_news_highlights(self) -> List[str]:
+    def _get_news_highlights (self) -> List[str]:
         """Get news highlights"""
         return []
     
-    def _get_economic_calendar(self) -> List[str]:
+    def _get_economic_calendar (self) -> List[str]:
         """Get upcoming economic events"""
         return []
     
-    def _get_quarter(self) -> int:
+    def _get_quarter (self) -> int:
         """Get current quarter"""
         return (datetime.now().month - 1) // 3 + 1
     
-    def run_scheduled(self):
+    def run_scheduled (self):
         """
         Run report generation on schedule
         """
@@ -1030,19 +1030,19 @@ class ReportGenerationPipeline:
             schedule.run_pending()
             time.sleep(60)
     
-    def _check_monthly_reports(self):
+    def _check_monthly_reports (self):
         """Check if it's time for monthly reports"""
         if datetime.now().day == 1:
-            self.generate_monthly_reports(clients=[])
+            self.generate_monthly_reports (clients=[])
     
-    def _check_quarterly_reports(self):
+    def _check_quarterly_reports (self):
         """Check if it's time for quarterly reports"""
         # First day of quarter
         if datetime.now().day == 1 and datetime.now().month in [1, 4, 7, 10]:
-            self.generate_quarterly_reports(clients=[])
+            self.generate_quarterly_reports (clients=[])
 
 # Initialize pipeline
-# pipeline = ReportGenerationPipeline(api_key="your-key")
+# pipeline = ReportGenerationPipeline (api_key="your-key")
 # pipeline.run_scheduled()
 \`\`\`
 

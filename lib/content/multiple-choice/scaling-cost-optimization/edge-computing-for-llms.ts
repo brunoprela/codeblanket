@@ -51,7 +51,7 @@ export const edge_computing_for_llmsMC = {
       ],
       correctAnswer: 1,
       explanation:
-        "Over-optimizing prematurely without measuring is a common mistake. It's important to establish baseline metrics first, identify actual bottlenecks through measurement, then optimize based on data rather than assumptions.",
+        "Over-optimizing prematurely without measuring is a common mistake. It\'s important to establish baseline metrics first, identify actual bottlenecks through measurement, then optimize based on data rather than assumptions.",
     },
     {
       question:

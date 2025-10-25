@@ -9,7 +9,7 @@ export const bigtableSection = {
 
 ## Overview
 
-**BigTable** (2006) = Google's distributed wide-column database
+**BigTable** (2006) = Google\'s distributed wide-column database
 
 **What it powers**:
 - Google Search (web index)

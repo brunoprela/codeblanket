@@ -29,7 +29,7 @@ export const shortestpathMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'During BFS, store parent[neighbor] = current for each discovered node. After BFS, backtrack from target: path = []; while node: path.append(node); node = parent[node]. Reverse path.',
+      'During BFS, store parent[neighbor] = current for each discovered node. After BFS, backtrack from target: path = []; while node: path.append (node); node = parent[node]. Reverse path.',
   },
   {
     id: 'mc3',

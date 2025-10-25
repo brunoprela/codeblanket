@@ -53,8 +53,8 @@ Select maximum non-overlapping intervals.
 2. Select if doesn't overlap with last selected
 
 \`\`\`python
-def max_non_overlapping(intervals):
-    intervals.sort(key=lambda x: x[1])
+def max_non_overlapping (intervals):
+    intervals.sort (key=lambda x: x[1])
     
     count = 0
     last_end = float('-inf')
@@ -84,7 +84,7 @@ Find point covered by most intervals.
 **Approach**: Sweep line algorithm
 
 \`\`\`python
-def most_covered_point(intervals):
+def most_covered_point (intervals):
     events = []
     for start, end in intervals:
         events.append((start, 1))

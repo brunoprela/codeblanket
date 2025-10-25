@@ -60,7 +60,7 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # Calculate MAE
-mae = mean_absolute_error(y_test, y_pred)
+mae = mean_absolute_error (y_test, y_pred)
 
 print("Mean Absolute Error (MAE)")
 print("="*70)
@@ -70,17 +70,17 @@ print(f"Target range: [{y_test.min():.1f}, {y_test.max():.1f}]")
 print(f"Relative error: {mae / (y_test.max() - y_test.min()) * 100:.1f}% of range")
 
 # Manual calculation
-mae_manual = np.mean(np.abs(y_test - y_pred))
+mae_manual = np.mean (np.abs (y_test - y_pred))
 print(f"\\nManual calculation: {mae_manual:.2f}")
-print(f"✓ Matches sklearn: {np.isclose(mae, mae_manual)}")
+print(f"✓ Matches sklearn: {np.isclose (mae, mae_manual)}")
 
 # Error distribution
-errors = np.abs(y_test - y_pred)
+errors = np.abs (y_test - y_pred)
 print(f"\\nError Distribution:")
 print(f"  Min error:    {errors.min():.2f}")
-print(f"  25th percentile: {np.percentile(errors, 25):.2f}")
-print(f"  Median error: {np.median(errors):.2f}")
-print(f"  75th percentile: {np.percentile(errors, 75):.2f}")
+print(f"  25th percentile: {np.percentile (errors, 25):.2f}")
+print(f"  Median error: {np.median (errors):.2f}")
+print(f"  75th percentile: {np.percentile (errors, 75):.2f}")
 print(f"  Max error:    {errors.max():.2f}")
 \`\`\`
 
@@ -115,8 +115,8 @@ $$\\text{RMSE} = \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2}$$
 
 \`\`\`python
 # Calculate MSE and RMSE
-mse = mean_squared_error(y_test, y_pred)
-rmse = np.sqrt(mse)
+mse = mean_squared_error (y_test, y_pred)
+rmse = np.sqrt (mse)
 
 print("\\n" + "="*70)
 print("Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)")
@@ -126,7 +126,7 @@ print(f"RMSE: {rmse:.2f}")
 
 # Manual calculations
 mse_manual = np.mean((y_test - y_pred)**2)
-rmse_manual = np.sqrt(mse_manual)
+rmse_manual = np.sqrt (mse_manual)
 
 print(f"\\nManual calculations:")
 print(f"MSE:  {mse_manual:.2f} ✓")
@@ -156,19 +156,19 @@ np.random.seed(42)
 n_samples = 100
 
 y_true = np.linspace(0, 100, n_samples)
-y_pred_good = y_true + np.random.randn(n_samples) * 5
+y_pred_good = y_true + np.random.randn (n_samples) * 5
 
 # Version with outliers
 y_pred_outliers = y_pred_good.copy()
 outlier_indices = [10, 25, 50, 75, 90]
-y_pred_outliers[outlier_indices] += np.random.choice([-50, 50], len(outlier_indices))
+y_pred_outliers[outlier_indices] += np.random.choice([-50, 50], len (outlier_indices))
 
 # Calculate metrics
-mae_good = mean_absolute_error(y_true, y_pred_good)
-rmse_good = np.sqrt(mean_squared_error(y_true, y_pred_good))
+mae_good = mean_absolute_error (y_true, y_pred_good)
+rmse_good = np.sqrt (mean_squared_error (y_true, y_pred_good))
 
-mae_outliers = mean_absolute_error(y_true, y_pred_outliers)
-rmse_outliers = np.sqrt(mean_squared_error(y_true, y_pred_outliers))
+mae_outliers = mean_absolute_error (y_true, y_pred_outliers)
+rmse_outliers = np.sqrt (mean_squared_error (y_true, y_pred_outliers))
 
 print("\\nWithout outliers:")
 print(f"  MAE:  {mae_good:.2f}")
@@ -213,12 +213,12 @@ print("\\n" + "="*70)
 print("R-squared (R²)")
 print("="*70)
 
-r2 = r2_score(y_test, y_pred)
+r2 = r2_score (y_test, y_pred)
 print(f"R²: {r2:.4f}")
 
 # Manual calculation
 ss_res = np.sum((y_test - y_pred)**2)
-ss_tot = np.sum((y_test - np.mean(y_test))**2)
+ss_tot = np.sum((y_test - np.mean (y_test))**2)
 r2_manual = 1 - (ss_res / ss_tot)
 
 print(f"\\nManual calculation:")
@@ -232,9 +232,9 @@ print(f"  Model explains {r2*100:.1f}% of variance in target")
 print(f"  {(1-r2)*100:.1f}% of variance remains unexplained")
 
 # Baseline comparison
-baseline_pred = np.full_like(y_test, np.mean(y_train))
-baseline_mse = mean_squared_error(y_test, baseline_pred)
-model_mse = mean_squared_error(y_test, y_pred)
+baseline_pred = np.full_like (y_test, np.mean (y_train))
+baseline_mse = mean_squared_error (y_test, baseline_pred)
+model_mse = mean_squared_error (y_test, y_pred)
 
 print(f"\\nComparison to baseline (predicting mean):")
 print(f"  Baseline MSE: {baseline_mse:.2f}")
@@ -264,16 +264,16 @@ def adjusted_r2(r2, n_samples, n_features):
 results = []
 
 for degree in [1, 2, 3, 5, 10]:
-    poly = PolynomialFeatures(degree=degree, include_bias=False)
+    poly = PolynomialFeatures (degree=degree, include_bias=False)
     X_train_poly = poly.fit_transform(X_train)
     X_test_poly = poly.transform(X_test)
     
-    model_poly = Ridge(alpha=1.0)
+    model_poly = Ridge (alpha=1.0)
     model_poly.fit(X_train_poly, y_train)
     y_pred_poly = model_poly.predict(X_test_poly)
     
-    r2 = r2_score(y_test, y_pred_poly)
-    adj_r2 = adjusted_r2(r2, len(y_test), X_test_poly.shape[1])
+    r2 = r2_score (y_test, y_pred_poly)
+    adj_r2 = adjusted_r2(r2, len (y_test), X_test_poly.shape[1])
     
     results.append({
         'degree': degree,
@@ -321,13 +321,13 @@ print("Mean Absolute Percentage Error (MAPE)")
 print("="*70)
 
 # MAPE calculation (avoid division by zero)
-def safe_mape(y_true, y_pred, epsilon=1e-10):
+def safe_mape (y_true, y_pred, epsilon=1e-10):
     """Calculate MAPE with protection against division by zero."""
-    mask = np.abs(y_true) > epsilon
-    return np.mean(np.abs((y_true[mask] - y_pred[mask]) / y_true[mask])) * 100
+    mask = np.abs (y_true) > epsilon
+    return np.mean (np.abs((y_true[mask] - y_pred[mask]) / y_true[mask])) * 100
 
-mape = safe_mape(y_test, y_pred)
-mape_sklearn = mean_absolute_percentage_error(y_test, y_pred) * 100
+mape = safe_mape (y_test, y_pred)
+mape_sklearn = mean_absolute_percentage_error (y_test, y_pred) * 100
 
 print(f"MAPE: {mape:.2f}%")
 print(f"MAPE (sklearn): {mape_sklearn:.2f}%")
@@ -339,11 +339,11 @@ print(f"  On average, predictions are off by {mape:.1f}% of actual value")
 print(f"\\nSample Predictions:")
 print(f"{'Actual':<10s} {'Predicted':<10s} {'Error':<10s} {'% Error':<10s}")
 print("-"*50)
-for i in range(min(10, len(y_test))):
+for i in range (min(10, len (y_test))):
     actual = y_test[i]
     predicted = y_pred[i]
     error = actual - predicted
-    pct_error = abs(error / actual * 100)
+    pct_error = abs (error / actual * 100)
     print(f"{actual:<10.1f} {predicted:<10.1f} {error:<10.1f} {pct_error:<10.1f}%")
 
 # MAPE asymmetry demonstration
@@ -367,13 +367,13 @@ print("\\n⚠️  MAPE treats over/under predictions differently!")
 ## Symmetric MAPE and Other Percentage Metrics
 
 \`\`\`python
-def smape(y_true, y_pred):
+def smape (y_true, y_pred):
     """Symmetric Mean Absolute Percentage Error."""
-    numerator = np.abs(y_true - y_pred)
-    denominator = (np.abs(y_true) + np.abs(y_pred)) / 2
-    return np.mean(numerator / denominator) * 100
+    numerator = np.abs (y_true - y_pred)
+    denominator = (np.abs (y_true) + np.abs (y_pred)) / 2
+    return np.mean (numerator / denominator) * 100
 
-def mpe(y_true, y_pred):
+def mpe (y_true, y_pred):
     """Mean Percentage Error (shows bias)."""
     return np.mean((y_true - y_pred) / y_true) * 100
 
@@ -381,20 +381,20 @@ print("\\n" + "="*70)
 print("Alternative Percentage Metrics")
 print("="*70)
 
-smape_score = smape(y_test, y_pred)
-mpe_score = mpe(y_test, y_pred)
+smape_score = smape (y_test, y_pred)
+mpe_score = mpe (y_test, y_pred)
 
 print(f"MAPE:  {mape:.2f}%")
 print(f"SMAPE: {smape_score:.2f}%")
 print(f"MPE:   {mpe_score:.2f}%")
 
 print(f"\\nMPE Interpretation:")
-if abs(mpe_score) < 1:
+if abs (mpe_score) < 1:
     print("  ✓ Model is unbiased (no systematic over/under-prediction)")
 elif mpe_score > 0:
     print(f"  ⚠️  Model under-predicts by {mpe_score:.1f}% on average")
 else:
-    print(f"  ⚠️  Model over-predicts by {abs(mpe_score):.1f}% on average")
+    print(f"  ⚠️  Model over-predicts by {abs (mpe_score):.1f}% on average")
 \`\`\`
 
 ## Median Absolute Error (MedAE)
@@ -422,7 +422,7 @@ print("\\n" + "="*70)
 print("Median Absolute Error (MedAE)")
 print("="*70)
 
-medae = median_absolute_error(y_test, y_pred)
+medae = median_absolute_error (y_test, y_pred)
 
 print(f"MAE:    {mae:.2f}")
 print(f"MedAE:  {medae:.2f}")
@@ -435,28 +435,28 @@ else:
     print("\\n✓ Similar MAE and MedAE suggest symmetric, outlier-free errors")
 
 # Visualize error distribution
-errors = np.abs(y_test - y_pred)
-plt.figure(figsize=(12, 5))
+errors = np.abs (y_test - y_pred)
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.hist(errors, bins=30, edgecolor='black', alpha=0.7)
-plt.axvline(mae, color='red', linestyle='--', linewidth=2, label=f'MAE = {mae:.2f}')
-plt.axvline(medae, color='blue', linestyle='--', linewidth=2, label=f'MedAE = {medae:.2f}')
+plt.hist (errors, bins=30, edgecolor='black', alpha=0.7)
+plt.axvline (mae, color='red', linestyle='--', linewidth=2, label=f'MAE = {mae:.2f}')
+plt.axvline (medae, color='blue', linestyle='--', linewidth=2, label=f'MedAE = {medae:.2f}')
 plt.xlabel('Absolute Error')
 plt.ylabel('Frequency')
 plt.title('Error Distribution')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.subplot(1, 2, 2)
-plt.scatter(y_test, y_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
+plt.scatter (y_test, y_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
 plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 
          'r--', linewidth=2, label='Perfect Prediction')
 plt.xlabel('Actual Value')
 plt.ylabel('Predicted Value')
 plt.title('Predictions vs Actual')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('regression_metrics_visualization.png', dpi=150, bbox_inches='tight')
@@ -473,10 +473,10 @@ print("="*70)
 # Train multiple models
 models = {
     'Linear Regression': LinearRegression(),
-    'Ridge (α=1)': Ridge(alpha=1.0),
-    'Ridge (α=10)': Ridge(alpha=10.0),
-    'Lasso (α=1)': Lasso(alpha=1.0, max_iter=10000),
-    'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42, max_depth=5)
+    'Ridge (α=1)': Ridge (alpha=1.0),
+    'Ridge (α=10)': Ridge (alpha=10.0),
+    'Lasso (α=1)': Lasso (alpha=1.0, max_iter=10000),
+    'Random Forest': RandomForestRegressor (n_estimators=100, random_state=42, max_depth=5)
 }
 
 results = []
@@ -492,24 +492,24 @@ for name, model in models.items():
     # Calculate all metrics
     metrics = {
         'Model': name,
-        'Train MAE': mean_absolute_error(y_train, y_pred_train),
-        'Test MAE': mean_absolute_error(y_test, y_pred_test),
-        'Train RMSE': np.sqrt(mean_squared_error(y_train, y_pred_train)),
-        'Test RMSE': np.sqrt(mean_squared_error(y_test, y_pred_test)),
-        'Train R²': r2_score(y_train, y_pred_train),
-        'Test R²': r2_score(y_test, y_pred_test),
-        'Test MAPE': safe_mape(y_test, y_pred_test),
-        'Test MedAE': median_absolute_error(y_test, y_pred_test)
+        'Train MAE': mean_absolute_error (y_train, y_pred_train),
+        'Test MAE': mean_absolute_error (y_test, y_pred_test),
+        'Train RMSE': np.sqrt (mean_squared_error (y_train, y_pred_train)),
+        'Test RMSE': np.sqrt (mean_squared_error (y_test, y_pred_test)),
+        'Train R²': r2_score (y_train, y_pred_train),
+        'Test R²': r2_score (y_test, y_pred_test),
+        'Test MAPE': safe_mape (y_test, y_pred_test),
+        'Test MedAE': median_absolute_error (y_test, y_pred_test)
     }
     
-    results.append(metrics)
+    results.append (metrics)
 
 # Display results
 import pandas as pd
-df_results = pd.DataFrame(results)
+df_results = pd.DataFrame (results)
 
 print("\\nAll Metrics:")
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 
 # Find best model for each metric
 print("\\n" + "="*70)
@@ -556,18 +556,18 @@ residuals = y_test - y_pred
 
 # Statistics
 print("Residual Statistics:")
-print(f"  Mean:     {np.mean(residuals):7.2f} (should be ≈ 0)")
-print(f"  Std Dev:  {np.std(residuals):7.2f}")
-print(f"  Min:      {np.min(residuals):7.2f}")
-print(f"  Max:      {np.max(residuals):7.2f}")
-print(f"  Skewness: {pd.Series(residuals).skew():7.2f} (should be ≈ 0)")
-print(f"  Kurtosis: {pd.Series(residuals).kurtosis():7.2f} (should be ≈ 0)")
+print(f"  Mean:     {np.mean (residuals):7.2f} (should be ≈ 0)")
+print(f"  Std Dev:  {np.std (residuals):7.2f}")
+print(f"  Min:      {np.min (residuals):7.2f}")
+print(f"  Max:      {np.max (residuals):7.2f}")
+print(f"  Skewness: {pd.Series (residuals).skew():7.2f} (should be ≈ 0)")
+print(f"  Kurtosis: {pd.Series (residuals).kurtosis():7.2f} (should be ≈ 0)")
 
 # Tests
 from scipy import stats
 
 # Normality test
-_, p_value_normality = stats.normaltest(residuals)
+_, p_value_normality = stats.normaltest (residuals)
 print(f"\\nNormality test p-value: {p_value_normality:.4f}")
 if p_value_normality > 0.05:
     print("  ✓ Residuals appear normally distributed")
@@ -575,15 +575,15 @@ else:
     print("  ⚠️  Residuals may not be normally distributed")
 
 # Check for patterns
-residuals_sorted_indices = np.argsort(y_test)
+residuals_sorted_indices = np.argsort (y_test)
 residuals_sorted = residuals[residuals_sorted_indices]
 
 # Simple trend check
 from scipy.stats import spearmanr
-corr, p_value_trend = spearmanr(y_test, np.abs(residuals))
+corr, p_value_trend = spearmanr (y_test, np.abs (residuals))
 
 print(f"\\nCorrelation between |residuals| and actual values: {corr:.4f} (p={p_value_trend:.4f})")
-if abs(corr) > 0.3 and p_value_trend < 0.05:
+if abs (corr) > 0.3 and p_value_trend < 0.05:
     print("  ⚠️  Heteroscedasticity detected (error variance depends on y)")
 else:
     print("  ✓ Homoscedasticity (constant error variance)")
@@ -592,7 +592,7 @@ else:
 ## Choosing the Right Metric
 
 \`\`\`python
-def recommend_metric(characteristics):
+def recommend_metric (characteristics):
     """
     Recommend appropriate regression metric based on problem characteristics.
     
@@ -695,8 +695,8 @@ print("="*70)
 
 for scenario in scenarios:
     print(f"\\n{scenario['name']}:")
-    recommendations = recommend_metric(scenario['characteristics'])
-    for i, rec in enumerate(recommendations[:2], 1):  # Top 2
+    recommendations = recommend_metric (scenario['characteristics'])
+    for i, rec in enumerate (recommendations[:2], 1):  # Top 2
         print(f"  {i}. {rec['metric']}: {rec['reason']}")
         print(f"     Note: {rec['caveat']}")
 \`\`\`
@@ -712,40 +712,39 @@ print("="*70)
 np.random.seed(42)
 n_days = 100
 
-true_prices = 100 + np.cumsum(np.random.randn(n_days) * 2)
-predicted_prices = true_prices + np.random.randn(n_days) * 5
+true_prices = 100 + np.cumsum (np.random.randn (n_days) * 2)
+predicted_prices = true_prices + np.random.randn (n_days) * 5
 
 # Standard metrics
-mae_price = mean_absolute_error(true_prices, predicted_prices)
-rmse_price = np.sqrt(mean_squared_error(true_prices, predicted_prices))
-mape_price = safe_mape(true_prices, predicted_prices)
+mae_price = mean_absolute_error (true_prices, predicted_prices)
+rmse_price = np.sqrt (mean_squared_error (true_prices, predicted_prices))
+mape_price = safe_mape (true_prices, predicted_prices)
 
 print("Standard Metrics:")
-print(f"  MAE:  \${mae_price: .2f
-}")
+print(f"  MAE:  \${mae_price:.2f}")
 print(f"  RMSE: \${rmse_price:.2f}")
 print(f"  MAPE: {mape_price:.2f}%")
 
 # Trading - specific metrics
-def directional_accuracy(y_true, y_pred):
+def directional_accuracy (y_true, y_pred):
 """Percentage of times direction is predicted correctly."""
-true_direction = np.diff(y_true) > 0
-pred_direction = np.diff(y_pred) > 0
-return np.mean(true_direction == pred_direction) * 100
+true_direction = np.diff (y_true) > 0
+pred_direction = np.diff (y_pred) > 0
+return np.mean (true_direction == pred_direction) * 100
 
-def trading_profit(y_true, y_pred, transaction_cost = 0.001):
+def trading_profit (y_true, y_pred, transaction_cost = 0.001):
 """Simulate trading profit based on predictions."""
-positions = np.zeros(len(y_pred))
-positions[1:] = np.where(np.diff(y_pred) > 0, 1, -1)  # Long if predicting up, short if down
+positions = np.zeros (len (y_pred))
+positions[1:] = np.where (np.diff (y_pred) > 0, 1, -1)  # Long if predicting up, short if down
     
-    returns = np.diff(y_true) / y_true[: -1]
+    returns = np.diff (y_true) / y_true[: -1]
 position_returns = positions[1:] * returns
     
     # Subtract transaction costs
-position_changes = np.abs(np.diff(positions))
-n_trades = np.sum(position_changes > 0)
+position_changes = np.abs (np.diff (positions))
+n_trades = np.sum (position_changes > 0)
 
-gross_return = np.sum(position_returns)
+gross_return = np.sum (position_returns)
 net_return = gross_return - (n_trades * transaction_cost)
 
 return {
@@ -754,8 +753,8 @@ return {
     'n_trades': n_trades
 }
 
-dir_acc = directional_accuracy(true_prices, predicted_prices)
-profit_metrics = trading_profit(true_prices, predicted_prices)
+dir_acc = directional_accuracy (true_prices, predicted_prices)
+profit_metrics = trading_profit (true_prices, predicted_prices)
 
 print("\\nTrading-Specific Metrics:")
 print(f"  Directional Accuracy: {dir_acc:.1f}%")
@@ -810,72 +809,72 @@ class RegressionEvaluator:
     """Comprehensive regression model evaluation framework."""
     
     def __init__(self, y_true, y_pred, model_name="Model"):
-        self.y_true = np.array(y_true)
-        self.y_pred = np.array(y_pred)
+        self.y_true = np.array (y_true)
+        self.y_pred = np.array (y_pred)
         self.model_name = model_name
         self.residuals = y_true - y_pred
         
-    def calculate_all_metrics(self):
+    def calculate_all_metrics (self):
         """Calculate all common regression metrics."""
         metrics = {}
         
         # Basic metrics
-        metrics['MAE'] = mean_absolute_error(self.y_true, self.y_pred)
-        metrics['MSE'] = mean_squared_error(self.y_true, self.y_pred)
-        metrics['RMSE'] = np.sqrt(metrics['MSE'])
-        metrics['R²'] = r2_score(self.y_true, self.y_pred)
-        metrics['MedAE'] = median_absolute_error(self.y_true, self.y_pred)
+        metrics['MAE'] = mean_absolute_error (self.y_true, self.y_pred)
+        metrics['MSE'] = mean_squared_error (self.y_true, self.y_pred)
+        metrics['RMSE'] = np.sqrt (metrics['MSE'])
+        metrics['R²'] = r2_score (self.y_true, self.y_pred)
+        metrics['MedAE'] = median_absolute_error (self.y_true, self.y_pred)
         
         # Percentage metrics (with safety)
         try:
-            metrics['MAPE'] = mean_absolute_percentage_error(self.y_true, self.y_pred) * 100
+            metrics['MAPE'] = mean_absolute_percentage_error (self.y_true, self.y_pred) * 100
         except:
             metrics['MAPE'] = np.nan
         
         # Additional metrics
-        metrics['Max Error'] = max_error(self.y_true, self.y_pred)
-        metrics['Explained Variance'] = explained_variance_score(self.y_true, self.y_pred)
+        metrics['Max Error'] = max_error (self.y_true, self.y_pred)
+        metrics['Explained Variance'] = explained_variance_score (self.y_true, self.y_pred)
         
         # Custom metrics
         metrics['RMSE/MAE Ratio'] = metrics['RMSE'] / metrics['MAE']
-        metrics['Mean Residual'] = np.mean(self.residuals)
-        metrics['Std Residual'] = np.std(self.residuals)
+        metrics['Mean Residual'] = np.mean (self.residuals)
+        metrics['Std Residual'] = np.std (self.residuals)
         
         return metrics
     
-    def residual_analysis(self):
+    def residual_analysis (self):
         """Perform comprehensive residual analysis."""
         analysis = {}
         
         # Basic statistics
-        analysis['Mean'] = np.mean(self.residuals)
-        analysis['Median'] = np.median(self.residuals)
-        analysis['Std'] = np.std(self.residuals)
-        analysis['Min'] = np.min(self.residuals)
-        analysis['Max'] = np.max(self.residuals)
-        analysis['Skewness'] = pd.Series(self.residuals).skew()
-        analysis['Kurtosis'] = pd.Series(self.residuals).kurtosis()
+        analysis['Mean'] = np.mean (self.residuals)
+        analysis['Median'] = np.median (self.residuals)
+        analysis['Std'] = np.std (self.residuals)
+        analysis['Min'] = np.min (self.residuals)
+        analysis['Max'] = np.max (self.residuals)
+        analysis['Skewness'] = pd.Series (self.residuals).skew()
+        analysis['Kurtosis'] = pd.Series (self.residuals).kurtosis()
         
         # Normality test
-        _, p_normal = stats.normaltest(self.residuals)
+        _, p_normal = stats.normaltest (self.residuals)
         analysis['Normality p-value'] = p_normal
         analysis['Normal?'] = p_normal > 0.05
         
         # Heteroscedasticity check (correlation between |residuals| and y)
-        corr, p_hetero = stats.spearmanr(self.y_true, np.abs(self.residuals))
+        corr, p_hetero = stats.spearmanr (self.y_true, np.abs (self.residuals))
         analysis['Heteroscedasticity correlation'] = corr
         analysis['Heteroscedasticity p-value'] = p_hetero
-        analysis['Homoscedastic?'] = abs(corr) < 0.3 or p_hetero > 0.05
+        analysis['Homoscedastic?'] = abs (corr) < 0.3 or p_hetero > 0.05
         
         # Autocorrelation (for time series)
-        if len(self.residuals) > 1:
+        if len (self.residuals) > 1:
             analysis['Residual Autocorrelation'] = np.corrcoef(
                 self.residuals[:-1], self.residuals[1:]
             )[0, 1]
         
         return analysis
     
-    def generate_report(self):
+    def generate_report (self):
         """Generate comprehensive text report."""
         print("="*80)
         print(f"REGRESSION EVALUATION REPORT: {self.model_name}")
@@ -886,7 +885,7 @@ class RegressionEvaluator:
         print("\\nPERFORMANCE METRICS:")
         print("-"*80)
         for metric, value in metrics.items():
-            if not np.isnan(value):
+            if not np.isnan (value):
                 print(f"  {metric:<25s}: {value:>12.4f}")
         
         # Residual analysis
@@ -920,7 +919,7 @@ class RegressionEvaluator:
             print("  ⚠️  Large errors present (RMSE >> MAE)")
         
         # Bias
-        if abs(residual_stats['Mean']) > metrics['MAE'] * 0.1:
+        if abs (residual_stats['Mean']) > metrics['MAE'] * 0.1:
             if residual_stats['Mean'] > 0:
                 print("  ⚠️  Systematic under-prediction detected")
             else:
@@ -936,13 +935,13 @@ class RegressionEvaluator:
         
         return metrics, residual_stats
     
-    def plot_diagnostics(self, save_path=None):
+    def plot_diagnostics (self, save_path=None):
         """Create comprehensive diagnostic plots."""
-        fig = plt.figure(figsize=(16, 12))
+        fig = plt.figure (figsize=(16, 12))
         
         # 1. Predicted vs Actual
         ax1 = plt.subplot(2, 3, 1)
-        ax1.scatter(self.y_true, self.y_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
+        ax1.scatter (self.y_true, self.y_pred, alpha=0.6, edgecolors='black', linewidth=0.5)
         ax1.plot([self.y_true.min(), self.y_true.max()], 
                  [self.y_true.min(), self.y_true.max()],
                  'r--', linewidth=2, label='Perfect Prediction')
@@ -950,81 +949,81 @@ class RegressionEvaluator:
         ax1.set_ylabel('Predicted Values', fontsize=11)
         ax1.set_title('Predicted vs Actual', fontsize=12, fontweight='bold')
         ax1.legend()
-        ax1.grid(alpha=0.3)
+        ax1.grid (alpha=0.3)
         
         # Calculate R²
-        r2 = r2_score(self.y_true, self.y_pred)
+        r2 = r2_score (self.y_true, self.y_pred)
         ax1.text(0.05, 0.95, f'R² = {r2:.4f}', transform=ax1.transAxes,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+                verticalalignment='top', bbox=dict (boxstyle='round', facecolor='wheat', alpha=0.5))
         
         # 2. Residuals vs Predicted
         ax2 = plt.subplot(2, 3, 2)
-        ax2.scatter(self.y_pred, self.residuals, alpha=0.6, edgecolors='black', linewidth=0.5)
-        ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
+        ax2.scatter (self.y_pred, self.residuals, alpha=0.6, edgecolors='black', linewidth=0.5)
+        ax2.axhline (y=0, color='r', linestyle='--', linewidth=2)
         ax2.set_xlabel('Predicted Values', fontsize=11)
         ax2.set_ylabel('Residuals', fontsize=11)
         ax2.set_title('Residual Plot', fontsize=12, fontweight='bold')
-        ax2.grid(alpha=0.3)
+        ax2.grid (alpha=0.3)
         
         # 3. Residual Distribution
         ax3 = plt.subplot(2, 3, 3)
-        ax3.hist(self.residuals, bins=30, edgecolor='black', alpha=0.7)
-        ax3.axvline(x=0, color='r', linestyle='--', linewidth=2)
+        ax3.hist (self.residuals, bins=30, edgecolor='black', alpha=0.7)
+        ax3.axvline (x=0, color='r', linestyle='--', linewidth=2)
         ax3.set_xlabel('Residuals', fontsize=11)
         ax3.set_ylabel('Frequency', fontsize=11)
         ax3.set_title('Residual Distribution', fontsize=12, fontweight='bold')
-        ax3.grid(alpha=0.3)
+        ax3.grid (alpha=0.3)
         
         # Add normal curve
-        mu, sigma = np.mean(self.residuals), np.std(self.residuals)
-        x = np.linspace(self.residuals.min(), self.residuals.max(), 100)
+        mu, sigma = np.mean (self.residuals), np.std (self.residuals)
+        x = np.linspace (self.residuals.min(), self.residuals.max(), 100)
         ax3_twin = ax3.twinx()
-        ax3_twin.plot(x, stats.norm.pdf(x, mu, sigma), 'r-', linewidth=2, label='Normal')
+        ax3_twin.plot (x, stats.norm.pdf (x, mu, sigma), 'r-', linewidth=2, label='Normal')
         ax3_twin.set_ylabel('Probability Density', fontsize=11)
         ax3_twin.legend()
         
         # 4. Q-Q Plot
         ax4 = plt.subplot(2, 3, 4)
-        stats.probplot(self.residuals, dist="norm", plot=ax4)
+        stats.probplot (self.residuals, dist="norm", plot=ax4)
         ax4.set_title('Q-Q Plot', fontsize=12, fontweight='bold')
-        ax4.grid(alpha=0.3)
+        ax4.grid (alpha=0.3)
         
         # 5. Scale-Location Plot
         ax5 = plt.subplot(2, 3, 5)
-        standardized_residuals = self.residuals / np.std(self.residuals)
-        ax5.scatter(self.y_pred, np.sqrt(np.abs(standardized_residuals)), 
+        standardized_residuals = self.residuals / np.std (self.residuals)
+        ax5.scatter (self.y_pred, np.sqrt (np.abs (standardized_residuals)), 
                    alpha=0.6, edgecolors='black', linewidth=0.5)
         ax5.set_xlabel('Predicted Values', fontsize=11)
         ax5.set_ylabel('√|Standardized Residuals|', fontsize=11)
         ax5.set_title('Scale-Location Plot', fontsize=12, fontweight='bold')
-        ax5.grid(alpha=0.3)
+        ax5.grid (alpha=0.3)
         
         # Add smoothed line
         from scipy.interpolate import make_interp_spline
-        sorted_indices = np.argsort(self.y_pred)
+        sorted_indices = np.argsort (self.y_pred)
         x_smooth = self.y_pred[sorted_indices]
-        y_smooth = np.sqrt(np.abs(standardized_residuals))[sorted_indices]
+        y_smooth = np.sqrt (np.abs (standardized_residuals))[sorted_indices]
         
         # Smooth with rolling average
-        window = max(len(x_smooth) // 10, 5)
-        y_rolling = pd.Series(y_smooth).rolling(window, center=True).mean()
-        ax5.plot(x_smooth, y_rolling, 'r-', linewidth=2)
+        window = max (len (x_smooth) // 10, 5)
+        y_rolling = pd.Series (y_smooth).rolling (window, center=True).mean()
+        ax5.plot (x_smooth, y_rolling, 'r-', linewidth=2)
         
         # 6. Error Distribution by Magnitude
         ax6 = plt.subplot(2, 3, 6)
-        errors = np.abs(self.residuals)
-        ax6.scatter(self.y_true, errors, alpha=0.6, edgecolors='black', linewidth=0.5)
+        errors = np.abs (self.residuals)
+        ax6.scatter (self.y_true, errors, alpha=0.6, edgecolors='black', linewidth=0.5)
         ax6.set_xlabel('Actual Values', fontsize=11)
         ax6.set_ylabel('Absolute Error', fontsize=11)
         ax6.set_title('Error by Actual Value', fontsize=12, fontweight='bold')
-        ax6.grid(alpha=0.3)
+        ax6.grid (alpha=0.3)
         
-        plt.suptitle(f'Diagnostic Plots: {self.model_name}', 
+        plt.suptitle (f'Diagnostic Plots: {self.model_name}', 
                     fontsize=14, fontweight='bold', y=0.995)
         plt.tight_layout()
         
         if save_path:
-            plt.savefig(save_path, dpi=150, bbox_inches='tight')
+            plt.savefig (save_path, dpi=150, bbox_inches='tight')
             print(f"\\nDiagnostic plots saved to '{save_path}'")
         
         return fig
@@ -1043,8 +1042,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Train multiple models
 models = {
     'Linear Regression': LinearRegression(),
-    'Ridge': Ridge(alpha=1.0),
-    'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42)
+    'Ridge': Ridge (alpha=1.0),
+    'Random Forest': RandomForestRegressor (n_estimators=100, random_state=42)
 }
 
 print("\\n" + "="*80)
@@ -1058,15 +1057,15 @@ for name, model in models.items():
     y_pred = model.predict(X_test)
     
     # Evaluate
-    evaluator = RegressionEvaluator(y_test, y_pred, model_name=name)
+    evaluator = RegressionEvaluator (y_test, y_pred, model_name=name)
     metrics, residual_stats = evaluator.generate_report()
     
     # Store metrics
     metrics['Model'] = name
-    all_metrics.append(metrics)
+    all_metrics.append (metrics)
     
     # Generate plots
-    evaluator.plot_diagnostics(save_path=f'diagnostics_{name.replace(" ", "_").lower()}.png')
+    evaluator.plot_diagnostics (save_path=f'diagnostics_{name.replace(" ", "_").lower()}.png')
     
     print("\\n")
 
@@ -1075,8 +1074,8 @@ print("="*80)
 print("MODEL COMPARISON SUMMARY")
 print("="*80)
 
-df_metrics = pd.DataFrame(all_metrics)
-print(df_metrics[['Model', 'MAE', 'RMSE', 'R²', 'MAPE']].to_string(index=False))
+df_metrics = pd.DataFrame (all_metrics)
+print(df_metrics[['Model', 'MAE', 'RMSE', 'R²', 'MAPE']].to_string (index=False))
 
 print("\\nBest model by metric:")
 for metric in ['MAE', 'RMSE', 'R²']:

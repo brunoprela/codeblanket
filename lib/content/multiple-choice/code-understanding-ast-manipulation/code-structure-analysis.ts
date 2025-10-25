@@ -21,7 +21,7 @@ export const codestructureanalysisMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'cuam-codestructureanalysis-mc-2',
     question:
-      'How do you calculate cyclomatic complexity from an AST?\n\ndef example(x):\n    if x > 5:\n        for i in range(x):\n            print(i)\n    else:\n        return 0',
+      'How do you calculate cyclomatic complexity from an AST?\n\ndef example (x):\n    if x > 5:\n        for i in range (x):\n            print(i)\n    else:\n        return 0',
     options: [
       'Count all AST nodes',
       'Count decision nodes (if, for, while, and, or) + 1',

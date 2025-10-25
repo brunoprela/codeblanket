@@ -55,7 +55,7 @@ export const weightInitializationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Xavier initialization uses √(2/(n_in + n_out)), which is smaller than He's √(2/n_in). Combined with ReLU zeroing negative values, this causes variance to shrink by ~50% at each layer. In deep networks, activations gradually vanish, leading to very small gradients and slow/stalled training. This is why He initialization is crucial for ReLU networks.",
+      "Xavier initialization uses √(2/(n_in + n_out)), which is smaller than He\'s √(2/n_in). Combined with ReLU zeroing negative values, this causes variance to shrink by ~50% at each layer. In deep networks, activations gradually vanish, leading to very small gradients and slow/stalled training. This is why He initialization is crucial for ReLU networks.",
   },
   {
     id: 'weight-init-mc5',

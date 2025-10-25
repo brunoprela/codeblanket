@@ -75,7 +75,7 @@ Total = 26 × 36^6 × 10
 Password Counting with Constraints
 """
 
-def count_passwords(length: int, char_sets: list) -> int:
+def count_passwords (length: int, char_sets: list) -> int:
     """
     Count passwords given character set sizes for each position.
     
@@ -168,7 +168,7 @@ Permutations Calculator
 import math
 from typing import Optional
 
-def permutations(n: int, r: Optional[int] = None, repetition: bool = False) -> int:
+def permutations (n: int, r: Optional[int] = None, repetition: bool = False) -> int:
     """
     Calculate permutations.
     
@@ -186,7 +186,7 @@ def permutations(n: int, r: Optional[int] = None, repetition: bool = False) -> i
     if repetition:
         return n ** r
     else:
-        return math.factorial(n) // math.factorial(n - r)
+        return math.factorial (n) // math.factorial (n - r)
 
 # Examples
 print("Permutations Examples:")
@@ -234,7 +234,7 @@ C(n,r) = n!/(r!(n-r)!) = "n choose r"
 C(52,5) = 52!/(5!×47!) = 2,598,960
 \`\`\`
 
-### Pascal's Triangle
+### Pascal\'s Triangle
 
 \`\`\`
 Row 0:              1
@@ -278,9 +278,9 @@ Combinations and Portfolio Selection
 
 from math import comb
 
-def combinations(n: int, r: int) -> int:
+def combinations (n: int, r: int) -> int:
     """Calculate n choose r."""
-    return comb(n, r)
+    return comb (n, r)
 
 # Problem: 5 stocks from 100
 total_portfolios = combinations(100, 5)
@@ -356,7 +356,7 @@ Use stars and bars with adjustment:
 Stars and Bars Method
 """
 
-def stars_and_bars(n: int, k: int, min_per_bin: int = 0) -> int:
+def stars_and_bars (n: int, k: int, min_per_bin: int = 0) -> int:
     """
     Distribute n identical objects into k distinguishable bins.
     
@@ -374,7 +374,7 @@ def stars_and_bars(n: int, k: int, min_per_bin: int = 0) -> int:
     
     # Distribute minimums, then freely allocate remainder
     remaining = n - k * min_per_bin
-    return comb(remaining + k - 1, k - 1)
+    return comb (remaining + k - 1, k - 1)
 
 # Example: 100 shares to 4 exchanges, min 1 each
 ways = stars_and_bars(100, 4, min_per_bin=1)
@@ -426,26 +426,26 @@ D(5) = 5! × (1/0! - 1/1! + 1/2! - 1/3! + 1/4! - 1/5!)
 Inclusion-Exclusion and Derangements
 """
 
-def derangements(n: int) -> int:
+def derangements (n: int) -> int:
     """
     Count derangements (permutations with no fixed points).
     
     Uses inclusion-exclusion principle.
     """
     total = 0
-    factorial_n = math.factorial(n)
+    factorial_n = math.factorial (n)
     
-    for k in range(n + 1):
-        total += ((-1) ** k) / math.factorial(k)
+    for k in range (n + 1):
+        total += ((-1) ** k) / math.factorial (k)
     
-    return round(factorial_n * total)
+    return round (factorial_n * total)
 
 # Test derangements
 print("Derangements D(n):")
 print("=" * 40)
 for n in range(1, 11):
-    d_n = derangements(n)
-    total = math.factorial(n)
+    d_n = derangements (n)
+    total = math.factorial (n)
     prob = d_n / total
     
     print(f"n={n}: D(n)={d_n:6,}, Total={total:8,}, P={prob:.4f}")
@@ -509,7 +509,7 @@ This is Catalan number C(5) = 42.
 Catalan Numbers
 """
 
-def catalan(n: int) -> int:
+def catalan (n: int) -> int:
     """Calculate the nth Catalan number."""
     if n <= 1:
         return 1
@@ -517,7 +517,7 @@ def catalan(n: int) -> int:
     # Using combination formula: C(n) = C(2n,n)/(n+1)
     return comb(2 * n, n) // (n + 1)
 
-def catalan_recursive(n: int, memo: dict = None) -> int:
+def catalan_recursive (n: int, memo: dict = None) -> int:
     """Calculate Catalan number using recurrence."""
     if memo is None:
         memo = {}
@@ -529,8 +529,8 @@ def catalan_recursive(n: int, memo: dict = None) -> int:
         return memo[n]
     
     result = sum(
-        catalan_recursive(i, memo) * catalan_recursive(n - 1 - i, memo)
-        for i in range(n)
+        catalan_recursive (i, memo) * catalan_recursive (n - 1 - i, memo)
+        for i in range (n)
     )
     
     memo[n] = result
@@ -540,7 +540,7 @@ def catalan_recursive(n: int, memo: dict = None) -> int:
 print("Catalan Numbers:")
 print("=" * 40)
 for n in range(11):
-    c_n = catalan(n)
+    c_n = catalan (n)
     print(f"C({n:2d}) = {c_n:8,}")
 
 # Output:
@@ -560,8 +560,8 @@ for n in range(11):
 
 # Application: Valid order book sequences
 n = 5
-valid_sequences = catalan(n)
-total_sequences = math.factorial(2 * n) // (math.factorial(n) ** 2)
+valid_sequences = catalan (n)
+total_sequences = math.factorial(2 * n) // (math.factorial (n) ** 2)
 
 print(f"\\nOrder Book Sequences (n={n}):")
 print(f"Valid sequences: {valid_sequences}")
@@ -581,7 +581,7 @@ print(f"Probability valid: {valid_sequences/total_sequences:.4f}")
 
 **Recurrence:**
 \`\`\`
-f(n) = f(n-1) + f(n-2)
+f (n) = f (n-1) + f (n-2)
 f(1) = 1, f(2) = 2
 \`\`\`
 
@@ -595,7 +595,7 @@ f(10) = 89 ways
 **Follow-up:** If you can take 1, 2, or 3 steps?
 
 \`\`\`
-f(n) = f(n-1) + f(n-2) + f(n-3)
+f (n) = f (n-1) + f (n-2) + f (n-3)
 f(1)=1, f(2)=2, f(3)=4
 \`\`\`
 
@@ -604,7 +604,7 @@ f(1)=1, f(2)=2, f(3)=4
 Recursive Counting - Staircase Problem
 """
 
-def staircase_ways(n: int, steps: list = [1, 2], memo: dict = None) -> int:
+def staircase_ways (n: int, steps: list = [1, 2], memo: dict = None) -> int:
     """
     Count ways to climb n stairs with given step sizes.
     
@@ -627,7 +627,7 @@ def staircase_ways(n: int, steps: list = [1, 2], memo: dict = None) -> int:
     if n in memo:
         return memo[n]
     
-    total = sum(staircase_ways(n - step, steps, memo) for step in steps)
+    total = sum (staircase_ways (n - step, steps, memo) for step in steps)
     memo[n] = total
     return total
 
@@ -636,8 +636,8 @@ print("Staircase Climbing Ways:")
 print("=" * 50)
 
 for n in range(1, 11):
-    ways_2 = staircase_ways(n, [1, 2])
-    ways_3 = staircase_ways(n, [1, 2, 3])
+    ways_2 = staircase_ways (n, [1, 2])
+    ways_3 = staircase_ways (n, [1, 2, 3])
     
     print(f"n={n:2d}: Steps[1,2]={ways_2:4d}, Steps[1,2,3]={ways_3:5d}")
 
@@ -658,7 +658,7 @@ For counting distinct objects under symmetry (rotations, reflections).
 
 **Interview Problem 8:** How many distinct necklaces can you make with n beads of k colors, considering rotations?
 
-Using Burnside's lemma, the count involves summing over symmetries. This is advanced and rarely appears in interviews, but good to know exists.
+Using Burnside\'s lemma, the count involves summing over symmetries. This is advanced and rarely appears in interviews, but good to know exists.
 
 ---
 
@@ -687,7 +687,7 @@ Using Burnside's lemma, the count involves summing over symmetries. This is adva
 Options Spread Combinations
 """
 
-def count_option_spreads(n_strikes: int) -> dict:
+def count_option_spreads (n_strikes: int) -> dict:
     """
     Count various option spread combinations.
     
@@ -698,9 +698,9 @@ def count_option_spreads(n_strikes: int) -> dict:
         Dictionary with counts for each spread type
     """
     return {
-        'vertical_spreads': comb(n_strikes, 2),
-        'butterfly_spreads': comb(n_strikes, 3),
-        'iron_condors': comb(n_strikes, 4),
+        'vertical_spreads': comb (n_strikes, 2),
+        'butterfly_spreads': comb (n_strikes, 3),
+        'iron_condors': comb (n_strikes, 4),
         'calendar_spreads': n_strikes * (n_strikes - 1),  # Different expiries
     }
 

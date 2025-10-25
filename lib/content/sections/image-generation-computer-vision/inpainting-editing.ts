@@ -12,7 +12,7 @@ Master inpainting for precise image editing - removing, replacing, and adding el
 
 ## Overview: Surgical Image Editing
 
-Inpainting allows you to edit specific parts of an image while keeping the rest unchanged. It's like Photoshop's content-aware fill but powered by AI and text prompts.
+Inpainting allows you to edit specific parts of an image while keeping the rest unchanged. It\'s like Photoshop's content-aware fill but powered by AI and text prompts.
 
 ### What Inpainting Does
 
@@ -102,7 +102,7 @@ class Inpainter:
             torch_dtype=torch.float16
         )
         
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         self.pipe.enable_attention_slicing()
         
         try:
@@ -137,15 +137,15 @@ class Inpainter:
         """
         # Ensure sizes match
         if image.size != mask.size:
-            mask = mask.resize(image.size, Image.LANCZOS)
+            mask = mask.resize (image.size, Image.LANCZOS)
         
         # Resize to appropriate size
-        image, mask = self._prepare_inputs(image, mask)
+        image, mask = self._prepare_inputs (image, mask)
         
         # Set seed
         generator = None
         if seed is not None:
-            generator = torch.Generator(device=self.device).manual_seed(seed)
+            generator = torch.Generator (device=self.device).manual_seed (seed)
         
         # Inpaint
         result = self.pipe(
@@ -170,10 +170,10 @@ class Inpainter:
         w, h = image.size
         
         # Scale down if too large
-        if max(w, h) > max_size:
-            scale = max_size / max(w, h)
-            w = int(w * scale)
-            h = int(h * scale)
+        if max (w, h) > max_size:
+            scale = max_size / max (w, h)
+            w = int (w * scale)
+            h = int (h * scale)
         
         # Round to multiples of 64
         w = (w // 64) * 64
@@ -201,14 +201,14 @@ class Inpainter:
         """
         # Create black image
         mask = Image.new('RGB', image_size, 'black')
-        draw = ImageDraw.Draw(mask)
+        draw = ImageDraw.Draw (mask)
         
         # Draw white rectangle
-        draw.rectangle(bbox, fill='white')
+        draw.rectangle (bbox, fill='white')
         
         # Apply Gaussian blur for feathering
         from PIL import ImageFilter
-        mask = mask.filter(ImageFilter.GaussianBlur(radius=feather))
+        mask = mask.filter(ImageFilter.GaussianBlur (radius=feather))
         
         return mask
 
@@ -297,13 +297,13 @@ class ObjectRemover:
         )
 
 # Usage
-remover = ObjectRemover(inpainter)
+remover = ObjectRemover (inpainter)
 
 photo = Image.open("photo_with_person.jpg")
 person_mask = Image.open("person_mask.png")
 
 # Remove person
-clean_photo = remover.remove_person(photo, person_mask)
+clean_photo = remover.remove_person (photo, person_mask)
 clean_photo.save("no_person.png")
 \`\`\`
 
@@ -374,7 +374,7 @@ class ObjectReplacer:
         )
 
 # Usage
-replacer = ObjectReplacer(inpainter)
+replacer = ObjectReplacer (inpainter)
 
 # Change furniture
 room = Image.open("room.jpg")
@@ -428,7 +428,7 @@ class ObjectAdder:
                 "seamless composition"
             ])
         
-        prompt = ", ".join(prompt_parts)
+        prompt = ", ".join (prompt_parts)
         
         result = self.inpainter.inpaint(
             image=image,
@@ -468,7 +468,7 @@ class ObjectAdder:
         )
 
 # Usage
-adder = ObjectAdder(inpainter)
+adder = ObjectAdder (inpainter)
 
 # Add lamp to room
 room = Image.open("room.jpg")
@@ -525,14 +525,14 @@ class Outpainter:
         canvas = Image.new('RGB', (new_w, new_h), 'black')
         
         # Paste original image
-        canvas.paste(image, (extend_left, extend_top))
+        canvas.paste (image, (extend_left, extend_top))
         
         # Create mask (white = extend)
         mask = Image.new('RGB', (new_w, new_h), 'white')
         
         # Black out original image area in mask
         black_box = Image.new('RGB', (orig_w, orig_h), 'black')
-        mask.paste(black_box, (extend_left, extend_top))
+        mask.paste (black_box, (extend_left, extend_top))
         
         # Inpaint extensions
         result = self.inpainter.inpaint(
@@ -587,18 +587,18 @@ class Outpainter:
         (Simplified version)
         """
         # Concatenate images
-        total_width = sum(img.width for img in images) - (len(images) - 1) * overlap
-        max_height = max(img.height for img in images)
+        total_width = sum (img.width for img in images) - (len (images) - 1) * overlap
+        max_height = max (img.height for img in images)
         
         canvas = Image.new('RGB', (total_width, max_height))
         
         x_offset = 0
         for img in images:
-            canvas.paste(img, (x_offset, 0))
+            canvas.paste (img, (x_offset, 0))
             x_offset += img.width - overlap
         
         # Create mask for seams
-        mask = self._create_seam_mask(images, overlap, canvas.size)
+        mask = self._create_seam_mask (images, overlap, canvas.size)
         
         # Blend seams
         result = self.inpainter.inpaint(
@@ -610,13 +610,13 @@ class Outpainter:
         
         return result
     
-    def _create_seam_mask(self, images, overlap, canvas_size):
+    def _create_seam_mask (self, images, overlap, canvas_size):
         """Create mask for seam areas."""
         mask = Image.new('RGB', canvas_size, 'black')
-        draw = ImageDraw.Draw(mask)
+        draw = ImageDraw.Draw (mask)
         
         x_offset = 0
-        for i, img in enumerate(images[:-1]):
+        for i, img in enumerate (images[:-1]):
             seam_x = x_offset + img.width - overlap
             draw.rectangle(
                 [seam_x - 20, 0, seam_x + 20, canvas_size[1]],
@@ -627,7 +627,7 @@ class Outpainter:
         return mask
 
 # Usage
-outpainter = Outpainter(inpainter)
+outpainter = Outpainter (inpainter)
 
 # Extend image
 portrait = Image.open("portrait.jpg")
@@ -669,14 +669,14 @@ class InteractiveMaskCreator:
             brush_size: Brush diameter
         """
         mask = Image.new('RGB', image_size, 'black')
-        draw = ImageDraw.Draw(mask)
+        draw = ImageDraw.Draw (mask)
         
         for stroke in brush_strokes:
-            if len(stroke) < 2:
+            if len (stroke) < 2:
                 continue
             
             # Draw lines between points
-            for i in range(len(stroke) - 1):
+            for i in range (len (stroke) - 1):
                 draw.line(
                     [stroke[i], stroke[i + 1]],
                     fill='white',
@@ -707,40 +707,40 @@ class InteractiveMaskCreator:
         Create mask from polygon selection.
         """
         mask = Image.new('RGB', image_size, 'black')
-        draw = ImageDraw.Draw(mask)
+        draw = ImageDraw.Draw (mask)
         
-        draw.polygon(polygon_points, fill='white')
+        draw.polygon (polygon_points, fill='white')
         
         # Feather edges
         from PIL import ImageFilter
-        mask = mask.filter(ImageFilter.GaussianBlur(radius=feather))
+        mask = mask.filter(ImageFilter.GaussianBlur (radius=feather))
         
         return mask
     
     @staticmethod
-    def invert_mask(mask: Image.Image) -> Image.Image:
+    def invert_mask (mask: Image.Image) -> Image.Image:
         """Invert mask (swap black and white)."""
         from PIL import ImageOps
-        return ImageOps.invert(mask.convert('L')).convert('RGB')
+        return ImageOps.invert (mask.convert('L')).convert('RGB')
     
     @staticmethod
-    def dilate_mask(mask: Image.Image, iterations: int = 5) -> Image.Image:
+    def dilate_mask (mask: Image.Image, iterations: int = 5) -> Image.Image:
         """Expand mask area."""
         from PIL import ImageFilter
         
         result = mask
-        for _ in range(iterations):
+        for _ in range (iterations):
             result = result.filter(ImageFilter.MaxFilter(3))
         
         return result
     
     @staticmethod
-    def erode_mask(mask: Image.Image, iterations: int = 5) -> Image.Image:
+    def erode_mask (mask: Image.Image, iterations: int = 5) -> Image.Image:
         """Shrink mask area."""
         from PIL import ImageFilter
         
         result = mask
-        for _ in range(iterations):
+        for _ in range (iterations):
             result = result.filter(ImageFilter.MinFilter(3))
         
         return result

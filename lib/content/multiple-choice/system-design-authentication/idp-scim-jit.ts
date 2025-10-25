@@ -56,7 +56,7 @@ export const idpscimjitMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Auth0 is developer-focused with excellent SDKs, documentation, and API-first design. It's perfect for SaaS apps needing authentication (social login, email/password, SSO). Microsoft Entra ID is best for Microsoft ecosystems. Ping is for large enterprises. Keycloak is open-source but requires more setup.",
+      "Auth0 is developer-focused with excellent SDKs, documentation, and API-first design. It\'s perfect for SaaS apps needing authentication (social login, email/password, SSO). Microsoft Entra ID is best for Microsoft ecosystems. Ping is for large enterprises. Keycloak is open-source but requires more setup.",
   },
   {
     id: 'mc5',

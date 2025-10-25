@@ -36,10 +36,10 @@ export const patternsQuiz = [
     question:
       'Walk me through the jump game greedy pattern. Why does tracking farthest reachable work?',
     sampleAnswer:
-      'Jump game: reach end of array, each element is max jump length. Greedy: iterate, track farthest reachable from current position. At each index i, farthest = max(farthest, i + nums[i]). If current position exceeds farthest, cannot proceed. If farthest >= end, can reach. For minimum jumps: track current range end, when reach end of range, increment jumps and update range to farthest. Works because if we can reach index i, we can reach all indices before i. So tracking farthest from all reachable positions guarantees we find if end is reachable. For minimum jumps, greedily extending range as far as possible minimizes jump count. This is provably optimal.',
+      'Jump game: reach end of array, each element is max jump length. Greedy: iterate, track farthest reachable from current position. At each index i, farthest = max (farthest, i + nums[i]). If current position exceeds farthest, cannot proceed. If farthest >= end, can reach. For minimum jumps: track current range end, when reach end of range, increment jumps and update range to farthest. Works because if we can reach index i, we can reach all indices before i. So tracking farthest from all reachable positions guarantees we find if end is reachable. For minimum jumps, greedily extending range as far as possible minimizes jump count. This is provably optimal.',
     keyPoints: [
       'Track farthest reachable position',
-      'At i: farthest = max(farthest, i + nums[i])',
+      'At i: farthest = max (farthest, i + nums[i])',
       'Can reach end if farthest >= end',
       'Min jumps: greedily extend range',
       'Provably optimal: can reach implies can reach all before',

@@ -10,11 +10,11 @@ export const operationsSection = {
 Two intervals \`[a_start, a_end]\` and \`[b_start, b_end]\` overlap if:
 
 \`\`\`python
-def overlaps(a, b):
+def overlaps (a, b):
     return a[0] <= b[1] and b[0] <= a[1]
 
 # Or equivalently:
-def overlaps(a, b):
+def overlaps (a, b):
     return not (a[1] < b[0] or b[1] < a[0])
 \`\`\`
 
@@ -28,10 +28,10 @@ def overlaps(a, b):
 If intervals overlap, merge them:
 
 \`\`\`python
-def merge_two(a, b):
-    if not overlaps(a, b):
+def merge_two (a, b):
+    if not overlaps (a, b):
         return [a, b]  # Cannot merge
-    return [[min(a[0], b[0]), max(a[1], b[1])]]
+    return [[min (a[0], b[0]), max (a[1], b[1])]]
 \`\`\`
 
 **Example:**
@@ -45,10 +45,10 @@ def merge_two(a, b):
 The overlapping part of two intervals:
 
 \`\`\`python
-def intersection(a, b):
-    if not overlaps(a, b):
+def intersection (a, b):
+    if not overlaps (a, b):
         return None
-    return [max(a[0], b[0]), min(a[1], b[1])]
+    return [max (a[0], b[0]), min (a[1], b[1])]
 \`\`\`
 
 **Example:**
@@ -61,12 +61,12 @@ def intersection(a, b):
 Merge all overlapping intervals in a list:
 
 \`\`\`python
-def merge_intervals(intervals):
+def merge_intervals (intervals):
     if not intervals:
         return []
     
     # Sort by start time
-    intervals.sort(key=lambda x: x[0])
+    intervals.sort (key=lambda x: x[0])
     
     merged = [intervals[0]]
     
@@ -75,10 +75,10 @@ def merge_intervals(intervals):
         
         # If overlaps, merge
         if current[0] <= last[1]:
-            last[1] = max(last[1], current[1])
+            last[1] = max (last[1], current[1])
         else:
             # No overlap, add as new interval
-            merged.append(current)
+            merged.append (current)
     
     return merged
 \`\`\`
@@ -93,26 +93,26 @@ def merge_intervals(intervals):
 Insert new interval and merge overlaps:
 
 \`\`\`python
-def insert_interval(intervals, new):
+def insert_interval (intervals, new):
     result = []
     i = 0
-    n = len(intervals)
+    n = len (intervals)
     
     # Add all intervals before new
     while i < n and intervals[i][1] < new[0]:
-        result.append(intervals[i])
+        result.append (intervals[i])
         i += 1
     
     # Merge overlapping intervals
     while i < n and intervals[i][0] <= new[1]:
-        new[0] = min(new[0], intervals[i][0])
-        new[1] = max(new[1], intervals[i][1])
+        new[0] = min (new[0], intervals[i][0])
+        new[1] = max (new[1], intervals[i][1])
         i += 1
-    result.append(new)
+    result.append (new)
     
     # Add remaining intervals
     while i < n:
-        result.append(intervals[i])
+        result.append (intervals[i])
         i += 1
     
     return result
@@ -125,7 +125,7 @@ def insert_interval(intervals, new):
 Given busy intervals, find free slots:
 
 \`\`\`python
-def find_free_time(intervals, start, end):
+def find_free_time (intervals, start, end):
     intervals.sort()
     free = []
     
@@ -133,7 +133,7 @@ def find_free_time(intervals, start, end):
     for interval in intervals:
         if interval[0] > prev_end:
             free.append([prev_end, interval[0]])
-        prev_end = max(prev_end, interval[1])
+        prev_end = max (prev_end, interval[1])
     
     # Last free slot
     if prev_end < end:

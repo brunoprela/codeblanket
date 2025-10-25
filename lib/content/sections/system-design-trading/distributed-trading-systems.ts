@@ -128,7 +128,7 @@ class NTPClient:
     NTP_SERVER = "pool.ntp.org"
     NTP_PORT = 123
     
-    def get_ntp_time(self) -> float:
+    def get_ntp_time (self) -> float:
         """
         Query NTP server and calculate offset
         Returns: time offset in seconds
@@ -141,9 +141,9 @@ class NTPClient:
         t1 = time.time()
         
         # Send request
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock = socket.socket (socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(5)
-        sock.sendto(packet, (self.NTP_SERVER, self.NTP_PORT))
+        sock.sendto (packet, (self.NTP_SERVER, self.NTP_PORT))
         
         # Receive response
         data, _ = sock.recvfrom(1024)
@@ -161,7 +161,7 @@ class NTPClient:
         
         return offset
     
-    def sync_clock(self):
+    def sync_clock (self):
         """Continuously sync clock"""
         while True:
             offset = self.get_ntp_time()
@@ -169,7 +169,7 @@ class NTPClient:
             print(f"Clock offset: {offset*1000:.2f}ms")
             
             # Adjust system clock (requires root)
-            # os.system(f"date -s '@{time.time() + offset}'")
+            # os.system (f"date -s '@{time.time() + offset}'")
             
             time.sleep(60)  # Sync every minute
 
@@ -208,7 +208,7 @@ PTP synchronization monitoring
 class PTPMonitor:
     """Monitor PTP synchronization"""
     
-    def check_sync_status(self) -> dict:
+    def check_sync_status (self) -> dict:
         """
         Check PTP sync status
         Uses ptp4l daemon
@@ -225,12 +225,12 @@ class PTPMonitor:
         # Parse offset
         lines = result.stdout.split('\\n')
         offset_line = [l for l in lines if 'offsetFromMaster' in l][0]
-        offset_ns = int(offset_line.split()[-1])
+        offset_ns = int (offset_line.split()[-1])
         
         return {
             'offset_ns': offset_ns,
             'offset_us': offset_ns / 1000,
-            'synchronized': abs(offset_ns) < 1000  # <1μs is good
+            'synchronized': abs (offset_ns) < 1000  # <1μs is good
         }
 
 # Alert if offset > 10μs (indicates sync issue)
@@ -299,7 +299,7 @@ class RaftNode:
         self.last_heartbeat = time.time()
         self.election_timeout = random.uniform(150, 300) / 1000  # 150-300ms
     
-    def append_entry(self, command: dict) -> bool:
+    def append_entry (self, command: dict) -> bool:
         """
         Append command to log
         Only leader can append
@@ -308,15 +308,15 @@ class RaftNode:
             return False
         
         # Create log entry
-        entry = LogEntry(self.current_term, command)
-        self.log.append(entry)
+        entry = LogEntry (self.current_term, command)
+        self.log.append (entry)
         
         # Replicate to followers
         self.replicate_to_followers()
         
         return True
     
-    def replicate_to_followers(self):
+    def replicate_to_followers (self):
         """
         Replicate log entries to followers
         """
@@ -326,14 +326,14 @@ class RaftNode:
             entries = self.log[next_idx:]
             
             # In production: Send over network
-            # response = send_append_entries(peer, entries)
+            # response = send_append_entries (peer, entries)
             
             # if response.success:
-            #     self.next_index[peer] += len(entries)
+            #     self.next_index[peer] += len (entries)
             #     self.match_index[peer] = self.next_index[peer] - 1
             pass
     
-    def start_election(self):
+    def start_election (self):
         """
         Start leader election
         Called when leader heartbeat times out
@@ -347,17 +347,17 @@ class RaftNode:
         # Request votes from peers
         for peer in self.peers:
             # Send RequestVote RPC
-            # response = send_request_vote(peer)
+            # response = send_request_vote (peer)
             # if response.vote_granted:
             #     votes_received += 1
             pass
         
         # If majority votes, become leader
-        if votes_received > len(self.peers) / 2:
+        if votes_received > len (self.peers) / 2:
             self.state = NodeState.LEADER
             print(f"Node {self.node_id} elected leader for term {self.current_term}")
     
-    def apply_committed_entries(self):
+    def apply_committed_entries (self):
         """
         Apply committed log entries to state machine
         """
@@ -366,9 +366,9 @@ class RaftNode:
             entry = self.log[self.last_applied - 1]
             
             # Apply to state machine (e.g., execute order)
-            self.apply_command(entry.command)
+            self.apply_command (entry.command)
     
-    def apply_command(self, command: dict):
+    def apply_command (self, command: dict):
         """Apply command to trading system"""
         if command['type'] == 'order':
             print(f"Executing order: {command}")
@@ -420,19 +420,19 @@ class QuorumSystem:
     
     def __init__(self, nodes: List[str]):
         self.nodes = nodes
-        self.quorum_size = len(nodes) // 2 + 1
+        self.quorum_size = len (nodes) // 2 + 1
     
-    def can_make_progress(self, reachable_nodes: List[str]) -> bool:
+    def can_make_progress (self, reachable_nodes: List[str]) -> bool:
         """
         Check if we have quorum
         """
-        return len(reachable_nodes) >= self.quorum_size
+        return len (reachable_nodes) >= self.quorum_size
     
-    def submit_order(self, order: dict, reachable_nodes: List[str]) -> bool:
+    def submit_order (self, order: dict, reachable_nodes: List[str]) -> bool:
         """
         Submit order only if quorum available
         """
-        if not self.can_make_progress(reachable_nodes):
+        if not self.can_make_progress (reachable_nodes):
             print("No quorum available, rejecting order")
             return False
         
@@ -440,7 +440,7 @@ class QuorumSystem:
         acks = 0
         for node in reachable_nodes:
             # Send order to node
-            # if send_order(node, order):
+            # if send_order (node, order):
             #     acks += 1
             acks += 1  # Simulate
             
@@ -483,12 +483,12 @@ class GlobalOrderRouter:
         
         self.current_region = 'US'  # Assume we're in US
     
-    def route_order(self, symbol: str, quantity: int) -> str:
+    def route_order (self, symbol: str, quantity: int) -> str:
         """
         Determine best exchange for order
         """
         # Get exchanges that trade this symbol
-        candidates = self.get_exchanges_for_symbol(symbol)
+        candidates = self.get_exchanges_for_symbol (symbol)
         
         # Score each exchange
         scores = {}
@@ -507,13 +507,13 @@ class GlobalOrderRouter:
             scores[exchange] = 0.6 * latency_score + 0.4 * fee_score
         
         # Select best
-        best_exchange = max(scores, key=scores.get)
+        best_exchange = max (scores, key=scores.get)
         
         print(f"Routing {symbol} order to {best_exchange} (score: {scores[best_exchange]:.2f})")
         
         return best_exchange
     
-    def get_exchanges_for_symbol(self, symbol: str) -> List[str]:
+    def get_exchanges_for_symbol (self, symbol: str) -> List[str]:
         """Get exchanges that trade symbol"""
         # In production: Query from database
         if symbol in ['AAPL', 'TSLA']:
@@ -547,7 +547,7 @@ class SynchronousReplicator:
     Guarantees consistency
     """
     
-    def write(self, key: str, value: any, replicas: List[str]) -> bool:
+    def write (self, key: str, value: any, replicas: List[str]) -> bool:
         """
         Write to all replicas before returning
         """
@@ -558,12 +558,12 @@ class SynchronousReplicator:
         acks = 0
         for replica in replicas:
             # Send write request
-            success = self.send_write(replica, key, value)
+            success = self.send_write (replica, key, value)
             if success:
                 acks += 1
         
         # Wait for all acks
-        if acks == len(replicas):
+        if acks == len (replicas):
             return True  # All replicas updated
         else:
             # Rollback
@@ -591,10 +591,10 @@ class AsynchronousReplicator:
     
     def __init__(self):
         self.replication_queue = Queue()
-        self.replication_thread = Thread(target=self.replicate_worker)
+        self.replication_thread = Thread (target=self.replicate_worker)
         self.replication_thread.start()
     
-    def write(self, key: str, value: any, replicas: List[str]) -> bool:
+    def write (self, key: str, value: any, replicas: List[str]) -> bool:
         """
         Write locally and queue replication
         """
@@ -607,13 +607,13 @@ class AsynchronousReplicator:
         # Return immediately
         return True
     
-    def replicate_worker(self):
+    def replicate_worker (self):
         """Background worker for replication"""
         while True:
             key, value, replicas = self.replication_queue.get()
             
             for replica in replicas:
-                self.send_write(replica, key, value)
+                self.send_write (replica, key, value)
 
 # Pros: Low latency (no waiting)
 # Cons: Eventual consistency (replicas lag)
@@ -670,17 +670,17 @@ class RegionCircuitBreaker:
         self.failures = {}  # region -> failure count
         self.states = {}    # region -> CLOSED/OPEN/HALF_OPEN
     
-    def call_region(self, region: str, func):
+    def call_region (self, region: str, func):
         """Call region with circuit breaker"""
-        if self.states.get(region) == 'OPEN':
-            raise Exception(f"Region {region} circuit open")
+        if self.states.get (region) == 'OPEN':
+            raise Exception (f"Region {region} circuit open")
         
         try:
             result = func()
             self.failures[region] = 0  # Reset on success
             return result
         except Exception as e:
-            self.failures[region] = self.failures.get(region, 0) + 1
+            self.failures[region] = self.failures.get (region, 0) + 1
             
             if self.failures[region] >= self.failure_threshold:
                 self.states[region] = 'OPEN'
@@ -697,16 +697,16 @@ Monitor region health:
 class RegionHealthCheck:
     """Monitor region health"""
     
-    def check_health(self, region: str) -> dict:
+    def check_health (self, region: str) -> dict:
         """Check if region is healthy"""
         checks = {
-            'api_responsive': self.check_api(region),
-            'database_connected': self.check_database(region),
-            'latency_acceptable': self.check_latency(region) < 100,  # <100ms
-            'error_rate_low': self.check_error_rate(region) < 0.01,  # <1%
+            'api_responsive': self.check_api (region),
+            'database_connected': self.check_database (region),
+            'latency_acceptable': self.check_latency (region) < 100,  # <100ms
+            'error_rate_low': self.check_error_rate (region) < 0.01,  # <1%
         }
         
-        healthy = all(checks.values())
+        healthy = all (checks.values())
         
         return {
             'region': region,

@@ -17,13 +17,13 @@ This powers:
 
 \`\`\`python
 # Naive: Check distance to every location
-def find_nearby(target_lat, target_lon, radius, all_locations):
+def find_nearby (target_lat, target_lon, radius, all_locations):
     nearby = []
     for loc in all_locations:
-        distance = calculate_distance(target_lat, target_lon, 
+        distance = calculate_distance (target_lat, target_lon, 
                                      loc.lat, loc.lon)
         if distance <= radius:
-            nearby.append(loc)
+            nearby.append (loc)
     return nearby
 
 # For 1 million locations: 1 million distance calculations!
@@ -177,14 +177,14 @@ Interleaved: 01 10 01 10 01...
 \`\`\`python
 BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz"
 
-def encode_geohash(lat, lon, precision=9):
+def encode_geohash (lat, lon, precision=9):
     lat_range, lon_range = [-90, 90], [-180, 180]
     geohash = []
     bits = []
     bit = 0
     ch = 0
     
-    while len(geohash) < precision:
+    while len (geohash) < precision:
         if bit % 2 == 0:  # Even bits: longitude
             mid = (lon_range[0] + lon_range[1]) / 2
             if lon > mid:
@@ -205,7 +205,7 @@ def encode_geohash(lat, lon, precision=9):
             geohash.append(BASE32[ch])
             ch = 0
     
-    return ''.join(geohash)
+    return ''.join (geohash)
 
 # Usage
 geohash = encode_geohash(37.7749, -122.4194, precision=7)
@@ -216,7 +216,7 @@ print(geohash)  # "9q8yyk8"
 
 \`\`\`sql
 -- PostgreSQL with B-tree index on geohash column
-CREATE INDEX idx_geohash ON locations(geohash);
+CREATE INDEX idx_geohash ON locations (geohash);
 
 -- Find locations within 2km of San Francisco
 -- SF geohash (5 chars): "9q8yy"
@@ -251,34 +251,34 @@ Leaf node:
 ### Insertion Algorithm
 
 \`\`\`python
-def insert(root, location):
+def insert (root, location):
     # 1. Find leaf node with minimal bbox expansion
-    node = choose_leaf(root, location)
+    node = choose_leaf (root, location)
     
     # 2. Add location to leaf
-    node.entries.append(location)
+    node.entries.append (location)
     
     # 3. If overflow, split node
-    if len(node.entries) > MAX_ENTRIES:
-        split_node(node)
+    if len (node.entries) > MAX_ENTRIES:
+        split_node (node)
 \`\`\`
 
 ### Range Query
 
 \`\`\`python
-def range_query(node, search_bbox):
+def range_query (node, search_bbox):
     results = []
     
-    if is_leaf(node):
+    if is_leaf (node):
         # Check each location
         for loc in node.entries:
-            if bbox_contains(search_bbox, loc):
-                results.append(loc)
+            if bbox_contains (search_bbox, loc):
+                results.append (loc)
     else:
         # Recursively search children
         for child in node.children:
-            if bbox_intersects(search_bbox, child.bbox):
-                results.extend(range_query(child, search_bbox))
+            if bbox_intersects (search_bbox, child.bbox):
+                results.extend (range_query (child, search_bbox))
     
     return results
 \`\`\`
@@ -304,14 +304,14 @@ class QuadTreeNode:
 ### Insertion
 
 \`\`\`python
-def insert(self, point):
+def insert (self, point):
     # Outside boundary
-    if not self.bbox.contains(point):
+    if not self.bbox.contains (point):
         return False
     
     # Space available
-    if len(self.points) < self.capacity and not self.divided:
-        self.points.append(point)
+    if len (self.points) < self.capacity and not self.divided:
+        self.points.append (point)
         return True
     
     # Need to subdivide
@@ -319,15 +319,15 @@ def insert(self, point):
         self.subdivide()
     
     # Recursively insert into quadrants
-    return (self.nw.insert(point) or self.ne.insert(point) or
-            self.sw.insert(point) or self.se.insert(point))
+    return (self.nw.insert (point) or self.ne.insert (point) or
+            self.sw.insert (point) or self.se.insert (point))
 
-def subdivide(self):
+def subdivide (self):
     # Create 4 children (NW, NE, SW, SE quadrants)
     mid_lat = (self.bbox.min_lat + self.bbox.max_lat) / 2
     mid_lon = (self.bbox.min_lon + self.bbox.max_lon) / 2
     
-    self.nw = QuadTreeNode(BBox(mid_lat, self.bbox.max_lat,
+    self.nw = QuadTreeNode(BBox (mid_lat, self.bbox.max_lat,
                                  self.bbox.min_lon, mid_lon))
     # ... create NE, SW, SE similarly
     
@@ -337,24 +337,24 @@ def subdivide(self):
 ### Range Query
 
 \`\`\`python
-def query_range(self, search_bbox):
+def query_range (self, search_bbox):
     results = []
     
     # No intersection
-    if not self.bbox.intersects(search_bbox):
+    if not self.bbox.intersects (search_bbox):
         return results
     
     # Check points in this node
     for point in self.points:
-        if search_bbox.contains(point):
-            results.append(point)
+        if search_bbox.contains (point):
+            results.append (point)
     
     # Recursively check children
     if self.divided:
-        results.extend(self.nw.query_range(search_bbox))
-        results.extend(self.ne.query_range(search_bbox))
-        results.extend(self.sw.query_range(search_bbox))
-        results.extend(self.se.query_range(search_bbox))
+        results.extend (self.nw.query_range (search_bbox))
+        results.extend (self.ne.query_range (search_bbox))
+        results.extend (self.sw.query_range (search_bbox))
+        results.extend (self.se.query_range (search_bbox))
     
     return results
 \`\`\`
@@ -482,9 +482,9 @@ Requirement: Find restaurants within 2 miles of user location
 
 Solution:
 1. Database: PostgreSQL with PostGIS
-2. Schema: restaurants(id, name, location GEOGRAPHY)
+2. Schema: restaurants (id, name, location GEOGRAPHY)
 3. Index: CREATE INDEX USING GIST(location)
-4. Query: ST_DWithin(location, user_point, 2 miles)
+4. Query: ST_DWithin (location, user_point, 2 miles)
 
 Scale: 1M restaurants
 - R-tree depth: log(1M) ≈ 20
@@ -492,7 +492,7 @@ Scale: 1M restaurants
 
 Alternative (Geohash):
 1. Add geohash column (precision=7, ~70m)
-2. Index: CREATE INDEX ON restaurants(geohash)
+2. Index: CREATE INDEX ON restaurants (geohash)
 3. Query: geohash LIKE 'prefix%'
 4. Check adjacent geohashes at boundaries
 \`\`\`

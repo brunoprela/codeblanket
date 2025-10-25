@@ -12,7 +12,7 @@ Real-world ML systems face challenges that textbooks don't cover. This section e
 
 **Case Studies Covered**:
 1. Netflix Recommendation System
-2. Uber's ML Platform (Michelangelo)
+2. Uber\'s ML Platform (Michelangelo)
 3. Algorithmic Trading System
 4. Fraud Detection at Scale
 5. Real-Time Bidding System
@@ -112,7 +112,7 @@ class NetflixRecommendationArchitecture:
             }
         }
     
-    def explain_algorithm_stack(self):
+    def explain_algorithm_stack (self):
         """
         Netflix uses ensemble of algorithms
         """
@@ -136,7 +136,7 @@ class NetflixRecommendationArchitecture:
         print("   - Personalizes artwork")
         print("   → Final personalized homepage")
     
-    def key_learnings(self):
+    def key_learnings (self):
         """
         Key lessons from Netflix
         """
@@ -163,7 +163,7 @@ netflix.key_learnings()
 
 ---
 
-## Case Study 2: Uber's Michelangelo
+## Case Study 2: Uber\'s Michelangelo
 
 ### ML Platform Architecture
 
@@ -215,7 +215,7 @@ class UberMichelangelo:
             }
         }
     
-    def explain_feature_store(self):
+    def explain_feature_store (self):
         """
         Centralized feature store is key innovation
         """
@@ -239,7 +239,7 @@ class UberMichelangelo:
         print("  - Location features: traffic, weather, events")
         print("  - Time features: hour, day, seasonality")
     
-    def eta_prediction_model(self):
+    def eta_prediction_model (self):
         """
         ETA prediction: Critical for UX
         """
@@ -272,7 +272,7 @@ class UberMichelangelo:
         print("     - Features pre-computed")
         print("     - P99 latency: 8ms")
     
-    def key_takeaways(self):
+    def key_takeaways (self):
         """
         Lessons from Uber
         """
@@ -287,7 +287,7 @@ class UberMichelangelo:
             "Canary Deployments: Gradual rollout with automatic rollback"
         ]
         
-        for i, takeaway in enumerate(takeaways, 1):
+        for i, takeaway in enumerate (takeaways, 1):
             print(f"{i}. {takeaway}")
 
 
@@ -345,7 +345,7 @@ class AlgoTradingSystem:
             }
         }
     
-    def architecture(self):
+    def architecture (self):
         """
         Trading system architecture
         """
@@ -381,7 +381,7 @@ class AlgoTradingSystem:
         print("   - Automatic position reduction")
         print("   - Daily VaR calculation")
     
-    def latency_optimization(self):
+    def latency_optimization (self):
         """
         How to achieve <10ms latency
         """
@@ -423,7 +423,7 @@ class AlgoTradingSystem:
                 print(f"  ✓ {item}")
             print()
     
-    def risk_framework(self):
+    def risk_framework (self):
         """
         Risk management system
         """
@@ -447,7 +447,7 @@ class AlgoTradingSystem:
         print("  3. Kill switch on data quality issues")
         print("  4. Circuit breaker on rapid losses")
     
-    def lessons_learned(self):
+    def lessons_learned (self):
         """
         Hard-learned lessons
         """
@@ -507,7 +507,7 @@ class FraudDetectionSystem:
             "false_negative_cost": "$500-5000 per fraud"
         }
     
-    def ml_approach(self):
+    def ml_approach (self):
         """
         ML approach to fraud detection
         """
@@ -547,7 +547,7 @@ class FraudDetectionSystem:
         print("   - P95 latency: 50ms")
         print("   - Fallback to rules if model fails")
     
-    def handling_adversaries(self):
+    def handling_adversaries (self):
         """
         Dealing with adaptive adversaries
         """
@@ -579,7 +579,7 @@ class FraudDetectionSystem:
         print("   - Shared devices, IPs, addresses")
         print("   - One fraud → check network")
     
-    def cost_optimization(self):
+    def cost_optimization (self):
         """
         Optimizing for business metrics
         """
@@ -651,7 +651,7 @@ class RTBSystem:
             }
         }
     
-    def ctr_prediction(self):
+    def ctr_prediction (self):
         """
         Click-through-rate prediction
         """
@@ -689,7 +689,7 @@ class RTBSystem:
         print("  - Feature caching (Redis)")
         print("  - P99 latency: 15ms")
     
-    def bidding_strategy(self):
+    def bidding_strategy (self):
         """
         Optimal bidding
         """
@@ -714,7 +714,7 @@ class RTBSystem:
         print("  - Remaining: $600 / 8 hours")
         print("  → Adjust bids to pace evenly")
     
-    def lessons(self):
+    def lessons (self):
         """
         RTB lessons
         """

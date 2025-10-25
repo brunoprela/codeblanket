@@ -1,8 +1,9 @@
 export const foreignExchangeMarkets = {
-    title: "Foreign Exchange Markets",
-    slug: "foreign-exchange-markets",
-    description: "Master the world's largest financial market - $7.5 trillion daily trading volume",
-    content: `
+  title: 'Foreign Exchange Markets',
+  slug: 'foreign-exchange-markets',
+  description:
+    "Master the world's largest financial market - $7.5 trillion daily trading volume",
+  content: `
 # Foreign Exchange Markets
 
 ## Introduction: The Biggest Market You've Never Seen
@@ -52,7 +53,7 @@ class CurrencyPair:
     def __post_init__(self):
         self.pair = f"{self.base_currency}/{self.quote_currency}"
     
-    def invert(self) -> 'CurrencyPair':
+    def invert (self) -> 'CurrencyPair':
         """Invert the currency pair"""
         return CurrencyPair(
             base_currency=self.quote_currency,
@@ -60,7 +61,7 @@ class CurrencyPair:
             exchange_rate=1 / self.exchange_rate
         )
     
-    def convert_amount(self, 
+    def convert_amount (self, 
                       amount: float,
                       direction: Literal['base_to_quote', 'quote_to_base']) -> float:
         """
@@ -77,7 +78,7 @@ class CurrencyPair:
             # Converting quote currency to base currency
             return amount / self.exchange_rate
     
-    def calculate_pip_value(self, 
+    def calculate_pip_value (self, 
                            position_size: float,
                            pip_decimal: int = 4) -> float:
         """
@@ -104,7 +105,7 @@ print(f"Meaning: 1 {eur_usd.base_currency} = {eur_usd.exchange_rate} {eur_usd.qu
 
 # Convert 1,000 EUR to USD
 usd_amount = eur_usd.convert_amount(1000, 'base_to_quote')
-print(f"\\n€1,000 = ${usd_amount:,.2f}")
+print(f"\\n€1,000 = \${usd_amount:,.2f}")
 
 # Convert 10,000 USD to EUR
 eur_amount = eur_usd.convert_amount(10000, 'quote_to_base')
@@ -119,9 +120,9 @@ print(f"Meaning: 1 {usd_eur.base_currency} = {usd_eur.exchange_rate:.4f} {usd_eu
 # Calculate pip value for standard lot(100,000 EUR)
 pip_value = eur_usd.calculate_pip_value(100000, pip_decimal = 4)
 print(f"\\nFor 100,000 EUR position:")
-print(f"1 pip (0.0001) move = ${pip_value:.2f}")
+print(f"1 pip (0.0001) move = \${pip_value:.2f}")
 print(f"If EUR/USD moves from 1.0850 to 1.0950 (+100 pips)")
-print(f"Profit = 100 pips × ${pip_value:.2f} = ${pip_value * 100:,.2f}")
+print(f"Profit = 100 pips × \${pip_value:.2f} = \${pip_value * 100:,.2f}")
 \`\`\`
 
 **Key Terminology:**
@@ -209,7 +210,7 @@ class ForexMarketClassification:
     }
     
     @classmethod
-    def get_pair_info(cls, pair: str) -> dict:
+    def get_pair_info (cls, pair: str) -> dict:
         """Get information about a currency pair"""
         if pair in cls.MAJORS:
             return {**cls.MAJORS[pair], 'category': 'Major', 'liquidity': 'VERY HIGH'}
@@ -220,9 +221,9 @@ class ForexMarketClassification:
         return {'category': 'Unknown'}
     
     @classmethod
-    def calculate_daily_turnover(cls) -> dict:
+    def calculate_daily_turnover (cls) -> dict:
         """Calculate total daily FX turnover by category"""
-        major_volume = sum(p['daily_volume'] for p in cls.MAJORS.values())
+        major_volume = sum (p['daily_volume'] for p in cls.MAJORS.values())
         
         return {
             'majors': major_volume,
@@ -237,7 +238,7 @@ print("\\n=== Forex Market Structure ===\\n")
 print("MAJOR PAIRS (Most Liquid):")
 for pair, info in ForexMarketClassification.MAJORS.items():
     print(f"  {pair} ({info['name']})")
-    print(f"    Volume: ${info['daily_volume'] / 1e9: .0f}B daily")
+    print(f"    Volume: \${info['daily_volume'] / 1e9:.0f}B daily")
 print(f"    Spread: {info['typical_spread_pips']} pips")
 print(f"    {info['characteristics']}\\n")
 
@@ -250,7 +251,7 @@ for pair, info in ForexMarketClassification.EXOTICS.items():
     print(f"  {pair}: {info['risk']}")
 
 turnover = ForexMarketClassification.calculate_daily_turnover()
-print(f"\\nTotal Daily Turnover: ${turnover['total_market']/1e12:.1f} Trillion")
+print(f"\\nTotal Daily Turnover: \${turnover['total_market']/1e12:.1f} Trillion")
 print(f"{turnover['interpretation']}")
 \`\`\`
 
@@ -274,10 +275,10 @@ class FXSpotContract:
     def __init__(self, pair: CurrencyPair, trade_date: datetime):
         self.pair = pair
         self.trade_date = trade_date
-        self.settlement_date = trade_date + timedelta(days=2)  # T+2
+        self.settlement_date = trade_date + timedelta (days=2)  # T+2
         self.spot_rate = pair.exchange_rate
     
-    def execute_trade(self,
+    def execute_trade (self,
                      notional: float,
                      side: Literal['buy', 'sell']) -> dict:
         """
@@ -330,7 +331,7 @@ class FXForwardContract:
         self.quote_rate = quote_interest_rate
         self.forward_rate = self.calculate_forward_rate()
     
-    def calculate_forward_rate(self) -> float:
+    def calculate_forward_rate (self) -> float:
         """
         Calculate forward FX rate using interest rate parity
         
@@ -348,14 +349,14 @@ class FXForwardContract:
         
         return forward
     
-    def calculate_forward_points(self) -> float:
+    def calculate_forward_points (self) -> float:
         """
         Forward points = (Forward - Spot) × 10,000
         Market convention: quote in points
         """
         return (self.forward_rate - self.spot_rate) * 10000
     
-    def is_premium_or_discount(self) -> str:
+    def is_premium_or_discount (self) -> str:
         """Determine if forward is at premium or discount to spot"""
         if self.forward_rate > self.spot_rate:
             return f"Premium ({self.pair.base_currency} forward > spot)"
@@ -368,8 +369,8 @@ class FXForwardContract:
 eur_usd_pair = CurrencyPair("EUR", "USD", 1.0850)
 
 # Spot trade
-spot_trade = FXSpotContract(eur_usd_pair, datetime.now())
-spot_result = spot_trade.execute_trade(notional=1_000_000, side='buy')
+spot_trade = FXSpotContract (eur_usd_pair, datetime.now())
+spot_result = spot_trade.execute_trade (notional=1_000_000, side='buy')
 
 print("\\n=== Spot FX Trade ===\\n")
 print(f"Pair: {spot_result['pair']}")
@@ -382,7 +383,7 @@ print(f"Settlement: {spot_result['settlement_date'].strftime('%Y-%m-%d')} (T+2)"
 forward = FXForwardContract(
     pair=eur_usd_pair,
     trade_date=datetime.now(),
-    maturity_date=datetime.now() + timedelta(days=180),
+    maturity_date=datetime.now() + timedelta (days=180),
     spot_rate=1.0850,
     base_interest_rate=0.035,  # EUR interest rate 3.5%
     quote_interest_rate=0.050  # USD interest rate 5.0%
@@ -464,7 +465,7 @@ class ExchangeRateModel:
             'rate_differential': rate_differential,
             'current_rate': current_exchange_rate,
             'expected_future_rate': future_exchange_rate,
-            'interpretation': f'Domestic currency expected to {"appreciate" if expected_appreciation > 0 else "depreciate"} by {abs(expected_appreciation)*100:.1f}%'
+            'interpretation': f'Domestic currency expected to {"appreciate" if expected_appreciation > 0 else "depreciate"} by {abs (expected_appreciation)*100:.1f}%'
         }
     
     @staticmethod
@@ -497,7 +498,7 @@ class ExchangeRateModel:
             'capital_account': capital_account_balance,
             'total_balance': total_balance,
             'effect': effect,
-            'interpretation': f'{"Surplus" if total_balance > 0 else "Deficit"} of ${abs(total_balance)}B'
+            'interpretation': f'{"Surplus" if total_balance > 0 else "Deficit"} of \${abs (total_balance)}B'
         }
 
 # Example: EUR/USD analysis
@@ -510,7 +511,7 @@ ppp = ExchangeRateModel.purchasing_power_parity(
     base_exchange_rate=1.0
 )
 print("1. Purchasing Power Parity:")
-print(f"   US Big Mac: ${ppp['domestic_price']}")
+print(f"   US Big Mac: \${ppp['domestic_price']}")
 print(f"   EU Big Mac: €{ppp['foreign_price']}")
 print(f"   Implied EUR/USD: {ppp['implied_exchange_rate']:.4f}")
 print(f"   {ppp['interpretation']}")
@@ -533,8 +534,8 @@ bop = ExchangeRateModel.balance_of_payments_effect(
     capital_account_balance=80    # Capital inflows to US
 )
 print(f"\\n3. Balance of Payments:")
-print(f"   Current Account: ${bop['current_account']}B (trade deficit)")
-print(f"   Capital Account: +${bop['capital_account']}B (inflows)")
+print(f"   Current Account: \${bop['current_account']}B (trade deficit)")
+print(f"   Capital Account: +\${bop['capital_account']}B (inflows)")
 print(f"   Effect: {bop['effect']}")
 \`\`\`
 
@@ -574,7 +575,7 @@ class CarryTrade:
         self.exchange_rate = exchange_rate
         self.position_size = position_size
     
-    def calculate_carry(self, holding_period_days: int = 365) -> dict:
+    def calculate_carry (self, holding_period_days: int = 365) -> dict:
         """
         Calculate carry trade returns
         
@@ -608,7 +609,7 @@ class CarryTrade:
             'annualized_carry': (net_carry / self.position_size) * (365 / holding_period_days) * 100
         }
     
-    def simulate_scenarios(self,
+    def simulate_scenarios (self,
                           fx_changes: list[float]) -> pd.DataFrame:
         """
         Simulate carry trade under different FX scenarios
@@ -635,7 +636,7 @@ class CarryTrade:
                 'outcome': 'Profit' if total_pnl > 0 else 'Loss'
             })
         
-        return pd.DataFrame(scenarios)
+        return pd.DataFrame (scenarios)
 
 # Example: Classic carry trade (borrow JPY, buy AUD)
 carry = CarryTrade(
@@ -654,17 +655,17 @@ print(f"         Rate Differential: {(carry.target_rate - carry.funding_rate)*10
 
 result = carry.calculate_carry(365)
 print(f"Annual Returns (if FX unchanged):")
-print(f"  Interest Earned ({carry.target_currency}): ${result['target_interest_earned']:, .0f}")
-print(f"  Interest Paid ({carry.funding_currency}): ${result['funding_cost_paid']:,.0f}")
-print(f"  Net Carry: ${result['net_carry']:,.0f}")
+print(f"  Interest Earned ({carry.target_currency}): \${result['target_interest_earned']:,.0f}")
+print(f"  Interest Paid ({carry.funding_currency}): \${result['funding_cost_paid']:,.0f}")
+print(f"  Net Carry: \${result['net_carry']:,.0f}")
 print(f"  Carry Return: {result['carry_return_pct']:.2f}%")
 
 # Simulate scenarios
 print("\\n=== Scenario Analysis ===\\n")
 fx_scenarios = [-0.10, -0.05, 0, 0.05, 0.10]  # - 10 % to + 10 %
-    scenarios_df = carry.simulate_scenarios(fx_scenarios)
+    scenarios_df = carry.simulate_scenarios (fx_scenarios)
 
-print(scenarios_df.to_string(index = False))
+print(scenarios_df.to_string (index = False))
 
 print("\\n💡 KEY INSIGHT:")
 print("   Carry trade works great... until it doesn't")
@@ -691,7 +692,7 @@ class CentralBankIntervention:
     """
     
     @staticmethod
-    def verbal_intervention(target_currency: str, desired_direction: str) -> dict:
+    def verbal_intervention (target_currency: str, desired_direction: str) -> dict:
         """
         Verbal intervention: Talk the currency up or down
         
@@ -778,7 +779,7 @@ verbal = CentralBankIntervention.verbal_intervention("EUR", "too strong")
 print(f"1. {verbal['type']}")
 print(f"   Currency: {verbal['currency']}")
 print(f"   Statement: {verbal['statement']}")
-print(f"   Cost: ${verbal['cost']}")
+print(f"   Cost: \${verbal['cost']}")
 print(f"   Effectiveness: {verbal['effectiveness']}")
 
 # Direct intervention
@@ -786,11 +787,11 @@ direct = CentralBankIntervention.direct_intervention(
     currency="JPY",
     action="buy",
     amount=50_000_000_000,  # $50B
-    reserves_available=1_300_000_000_000  # $1.3T (Japan's reserves)
+    reserves_available=1_300_000_000_000  # $1.3T (Japan\'s reserves)
 )
 print(f"\\n2. {direct['type']}")
 print(f"   Action: {direct['action'].title()} JPY")
-print(f"   Amount: ${direct['amount'] / 1e9: .0f}B")
+print(f"   Amount: \${direct['amount'] / 1e9:.0f}B")
 print(f"   Impact: {direct['expected_impact']}")
 print(f"   Duration: {direct['duration']}")
 
@@ -823,16 +824,16 @@ class FXTradingSystem:
         self.positions = {}
         self.account_balance = 100_000  # $100K
         self.trade_history = []
-        self.price_feed = deque(maxlen=1000)
+        self.price_feed = deque (maxlen=1000)
     
-    def get_live_price(self, pair: str) -> dict:
+    def get_live_price (self, pair: str) -> dict:
         """
         Get live FX price from broker/exchange
         In reality: WebSocket feed from provider
         """
         # Simulated bid/ask spread
-        mid_price = self._fetch_mid_price(pair)
-        spread = self._get_typical_spread(pair)
+        mid_price = self._fetch_mid_price (pair)
+        spread = self._get_typical_spread (pair)
         
         return {
             'pair': pair,
@@ -842,7 +843,7 @@ class FXTradingSystem:
             'timestamp': datetime.now()
         }
     
-    def _fetch_mid_price(self, pair: str) -> float:
+    def _fetch_mid_price (self, pair: str) -> float:
         """Fetch current mid price (simulated)"""
         # In production: API call to price provider
         base_prices = {
@@ -851,9 +852,9 @@ class FXTradingSystem:
             'USD/JPY': 150.50,
             'AUD/USD': 0.6550
         }
-        return base_prices.get(pair, 1.0)
+        return base_prices.get (pair, 1.0)
     
-    def _get_typical_spread(self, pair: str) -> float:
+    def _get_typical_spread (self, pair: str) -> float:
         """Get typical spread for pair"""
         spreads = {
             'EUR/USD': 0.0001,  # 1 pip
@@ -861,9 +862,9 @@ class FXTradingSystem:
             'USD/JPY': 0.01,    # 1 pip (JPY pairs different)
             'AUD/USD': 0.0002   # 2 pips
         }
-        return spreads.get(pair, 0.0003)
+        return spreads.get (pair, 0.0003)
     
-    def execute_market_order(self,
+    def execute_market_order (self,
                             pair: str,
                             side: Literal['buy', 'sell'],
                             lot_size: float) -> dict:
@@ -876,7 +877,7 @@ class FXTradingSystem:
             lot_size: Position size (1.0 = 100,000 units, 0.1 = 10,000 units)
         """
         # Get current price
-        quote = self.get_live_price(pair)
+        quote = self.get_live_price (pair)
         
         # Buy at ask, sell at bid
         execution_price = quote['ask'] if side == 'buy' else quote['bid']
@@ -896,7 +897,7 @@ class FXTradingSystem:
             }
         
         # Execute trade
-        position_id = f"{pair}_{side}_{int(time.time())}"
+        position_id = f"{pair}_{side}_{int (time.time())}"
         
         position = {
             'position_id': position_id,
@@ -919,7 +920,7 @@ class FXTradingSystem:
             **position
         }
     
-    def close_position(self, position_id: str) -> dict:
+    def close_position (self, position_id: str) -> dict:
         """Close existing position"""
         if position_id not in self.positions:
             return {'status': 'ERROR', 'reason': 'Position not found'}
@@ -927,7 +928,7 @@ class FXTradingSystem:
         position = self.positions[position_id]
         
         # Get current price
-        quote = self.get_live_price(position['pair'])
+        quote = self.get_live_price (position['pair'])
         
         # Exit at opposite side
         exit_price = quote['bid'] if position['side'] == 'buy' else quote['ask']
@@ -954,17 +955,17 @@ class FXTradingSystem:
             'new_balance': self.account_balance
         }
     
-    def calculate_portfolio_metrics(self) -> dict:
+    def calculate_portfolio_metrics (self) -> dict:
         """Calculate current portfolio state"""
-        total_exposure = sum(p['notional'] for p in self.positions.values())
-        total_margin_used = sum(p['margin_used'] for p in self.positions.values())
+        total_exposure = sum (p['notional'] for p in self.positions.values())
+        total_margin_used = sum (p['margin_used'] for p in self.positions.values())
         free_margin = self.account_balance
         total_equity = self.account_balance + total_margin_used
         
         # Calculate unrealized P&L
         unrealized_pnl = 0
         for position in self.positions.values():
-            quote = self.get_live_price(position['pair'])
+            quote = self.get_live_price (position['pair'])
             current_price = quote['bid'] if position['side'] == 'buy' else quote['ask']
             
             if position['side'] == 'buy':
@@ -981,15 +982,15 @@ class FXTradingSystem:
             'total_exposure': total_exposure,
             'leverage': total_exposure / total_equity if total_equity > 0 else 0,
             'unrealized_pnl': unrealized_pnl,
-            'num_positions': len(self.positions),
+            'num_positions': len (self.positions),
             'margin_level': (total_equity / total_margin_used * 100) if total_margin_used > 0 else float('inf')
         }
 
 # Example usage
-system = FXTradingSystem(account_currency="USD")
+system = FXTradingSystem (account_currency="USD")
 
 print("\\n=== FX Trading System ===\\n")
-print(f"Initial Balance: ${system.account_balance:, .0f}")
+print(f"Initial Balance: \${system.account_balance:,.0f}")
 
 # Open long EUR / USD position
 trade1 = system.execute_market_order(
@@ -1004,7 +1005,7 @@ if trade1['status'] == 'FILLED':
 print(f"  Side: {trade1['side'].upper()}")
 print(f"  Size: {trade1['lot_size']} lot ({trade1['notional']:,.0f} {trade1['pair'][:3]})")
 print(f"  Entry: {trade1['entry_price']:.4f}")
-print(f"  Margin Used: ${trade1['margin_used']:,.0f}")
+print(f"  Margin Used: \${trade1['margin_used']:,.0f}")
 
 # Open short GBP / USD position
 trade2 = system.execute_market_order(
@@ -1023,21 +1024,21 @@ print(f"  Entry: {trade2['entry_price']:.4f}")
 # Check portfolio
 metrics = system.calculate_portfolio_metrics()
 print(f"\\nPortfolio Metrics:")
-print(f"  Total Equity: ${metrics['total_equity']:,.0f}")
-print(f"  Margin Used: ${metrics['margin_used']:,.0f}")
-print(f"  Free Margin: ${metrics['account_balance']:,.0f}")
+print(f"  Total Equity: \${metrics['total_equity']:,.0f}")
+print(f"  Margin Used: \${metrics['margin_used']:,.0f}")
+print(f"  Free Margin: \${metrics['account_balance']:,.0f}")
 print(f"  Leverage: {metrics['leverage']:.1f}x")
-print(f"  Unrealized P&L: ${metrics['unrealized_pnl']:,.2f}")
+print(f"  Unrealized P&L: \${metrics['unrealized_pnl']:,.2f}")
 print(f"  Margin Level: {metrics['margin_level']:.0f}%")
 
 # Close first position
-close_result = system.close_position(trade1['position_id'])
+close_result = system.close_position (trade1['position_id'])
 print(f"\\nClosed Position: {close_result['position_id']}")
 print(f"  Entry: {close_result['entry_price']:.4f}")
 print(f"  Exit: {close_result['exit_price']:.4f}")
-print(f"  P&L: ${close_result['pnl']:,.2f}")
+print(f"  P&L: \${close_result['pnl']:,.2f}")
 print(f"  Return: {close_result['pnl_pct']:.2f}%")
-print(f"  New Balance: ${close_result['new_balance']:,.0f}")
+print(f"  New Balance: \${close_result['new_balance']:,.0f}")
 \`\`\`
 
 ---
@@ -1069,15 +1070,18 @@ print(f"  New Balance: ${close_result['new_balance']:,.0f}")
 
 You now understand the world's largest market - ready to build FX systems!
 `,
-    exercises: [
-        {
-            prompt: "Build an FX arbitrage detector that monitors triangular arbitrage opportunities across three currency pairs (e.g., EUR/USD, USD/JPY, EUR/JPY). Account for bid-ask spreads and transaction costs. Alert when net profit > threshold.",
-            solution: "// Implementation: 1) Real-time feeds for all 3 pairs, 2) Calculate implied cross rate from two legs, 3) Compare to actual cross rate, 4) Account for bid-ask spreads (buy at ask, sell at bid), 5) Calculate round-trip cost including commission, 6) Alert if arbitrage profit > 0.05% after costs, 7) Execute trades atomically if profitable"
-        },
-        {
-            prompt: "Create a carry trade simulator that backtests the JPY carry trade strategy over 2000-2023. Include interest rate data, FX prices, calculate returns, identify unwind events, and compute risk-adjusted returns (Sharpe ratio).",
-            solution: "// Implementation: 1) Fetch historical interest rates (Fed, BoJ, RBA, etc.), 2) Fetch historical FX prices, 3) For each day: calculate carry income, mark-to-market FX, compute total return, 4) Detect 'unwind' events (VIX spikes, JPY rapid appreciation), 5) Calculate drawdowns, Sharpe ratios, max loss periods, 6) Compare to buy-and-hold equity returns"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build an FX arbitrage detector that monitors triangular arbitrage opportunities across three currency pairs (e.g., EUR/USD, USD/JPY, EUR/JPY). Account for bid-ask spreads and transaction costs. Alert when net profit > threshold.',
+      solution:
+        '// Implementation: 1) Real-time feeds for all 3 pairs, 2) Calculate implied cross rate from two legs, 3) Compare to actual cross rate, 4) Account for bid-ask spreads (buy at ask, sell at bid), 5) Calculate round-trip cost including commission, 6) Alert if arbitrage profit > 0.05% after costs, 7) Execute trades atomically if profitable',
+    },
+    {
+      prompt:
+        'Create a carry trade simulator that backtests the JPY carry trade strategy over 2000-2023. Include interest rate data, FX prices, calculate returns, identify unwind events, and compute risk-adjusted returns (Sharpe ratio).',
+      solution:
+        "// Implementation: 1) Fetch historical interest rates (Fed, BoJ, RBA, etc.), 2) Fetch historical FX prices, 3) For each day: calculate carry income, mark-to-market FX, compute total return, 4) Detect 'unwind' events (VIX spikes, JPY rapid appreciation), 5) Calculate drawdowns, Sharpe ratios, max loss periods, 6) Compare to buy-and-hold equity returns",
+    },
+  ],
 };
-

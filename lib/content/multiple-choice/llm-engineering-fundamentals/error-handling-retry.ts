@@ -42,7 +42,7 @@ export const errorhandlingretryMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Exponential backoff doubles the wait time between retries: 1s, 2s, 4s, 8s, 16s. This gives the API progressively more time to recover from overload and prevents hammering a failing service. It's the industry-standard retry strategy.",
+      "Exponential backoff doubles the wait time between retries: 1s, 2s, 4s, 8s, 16s. This gives the API progressively more time to recover from overload and prevents hammering a failing service. It\'s the industry-standard retry strategy.",
   },
   {
     id: 'mc4',

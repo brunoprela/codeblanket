@@ -59,7 +59,7 @@ export const kafkaProducersMC: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Hash-based partitioning on key ensures messages with the same key always go to the same partition, preserving order for that key. Kafka computes hash(key) % num_partitions to determine the partition. For example, all orders for customer "user_123" will go to the same partition, ensuring they are processed in order. This is critical for use cases like order processing, user activity tracking, and maintaining state per entity.',
+      'Hash-based partitioning on key ensures messages with the same key always go to the same partition, preserving order for that key. Kafka computes hash (key) % num_partitions to determine the partition. For example, all orders for customer "user_123" will go to the same partition, ensuring they are processed in order. This is critical for use cases like order processing, user activity tracking, and maintaining state per entity.',
   },
   {
     id: 'kafka-producers-mc-5',

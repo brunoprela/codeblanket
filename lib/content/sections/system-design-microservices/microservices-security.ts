@@ -56,7 +56,7 @@ export const microservicessecuritySection = {
 
 \`\`\`javascript
 // API Gateway
-async function authenticate(req, res, next) {
+async function authenticate (req, res, next) {
     const token = req.headers['authorization']?.replace('Bearer ', ');
     
     if (!token) {
@@ -65,12 +65,12 @@ async function authenticate(req, res, next) {
     
     try {
         // Verify JWT
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify (token, JWT_SECRET);
         
         // Add user context to headers for downstream services
         req.headers['X-User-Id'] = decoded.userId;
         req.headers['X-User-Email'] = decoded.email;
-        req.headers['X-User-Roles'] = JSON.stringify(decoded.roles);
+        req.headers['X-User-Roles'] = JSON.stringify (decoded.roles);
         
         next();
     } catch (error) {
@@ -78,7 +78,7 @@ async function authenticate(req, res, next) {
     }
 }
 
-app.use(authenticate);
+app.use (authenticate);
 \`\`\`
 
 **Downstream service** trusts headers:
@@ -86,7 +86,7 @@ app.use(authenticate);
 // Order Service
 app.post('/orders', async (req, res) => {
     const userId = req.headers['X-User-Id']; // Trusts gateway
-    const roles = JSON.parse(req.headers['X-User-Roles'] || '[]');
+    const roles = JSON.parse (req.headers['X-User-Roles'] || '[]');
     
     // Authorization
     if (!roles.includes('customer')) {
@@ -94,7 +94,7 @@ app.post('/orders', async (req, res) => {
     }
     
     const order = await createOrder({ ...req.body, userId });
-    res.json(order);
+    res.json (order);
 });
 \`\`\`
 
@@ -168,7 +168,7 @@ app.get('/auth/google', (req, res) => {
         &redirect_uri=\${REDIRECT_URI}
         &response_type=code
         &scope=openid email profile\`;
-    res.redirect(authUrl);
+    res.redirect (authUrl);
 });
 
 app.get('/auth/google/callback', async (req, res) => {
@@ -186,7 +186,7 @@ app.get('/auth/google/callback', async (req, res) => {
     const { access_token, id_token } = response.data;
     
     // Verify ID token and create session
-    const userInfo = jwt.decode(id_token);
+    const userInfo = jwt.decode (id_token);
     const sessionToken = createJWT({ userId: userInfo.sub, email: userInfo.email });
     
     res.cookie('session', sessionToken);
@@ -207,12 +207,12 @@ const roles = {
     support: ['read:products', 'read:all-orders', 'update:order-status']
 };
 
-function authorize(requiredPermission) {
+function authorize (requiredPermission) {
     return (req, res, next) => {
-        const userRoles = JSON.parse(req.headers['X-User-Roles'] || '[]');
-        const userPermissions = userRoles.flatMap(role => roles[role] || []);
+        const userRoles = JSON.parse (req.headers['X-User-Roles'] || '[]');
+        const userPermissions = userRoles.flatMap (role => roles[role] || []);
         
-        if (!userPermissions.includes(requiredPermission)) {
+        if (!userPermissions.includes (requiredPermission)) {
             return res.status(403).json({ error: 'Forbidden' });
         }
         
@@ -224,7 +224,7 @@ function authorize(requiredPermission) {
 app.get('/orders', authorize('read:all-orders'), async (req, res) => {
     // Only admin and support can access
     const orders = await getAllOrders();
-    res.json(orders);
+    res.json (orders);
 });
 \`\`\`
 
@@ -233,7 +233,7 @@ app.get('/orders', authorize('read:all-orders'), async (req, res) => {
 **More flexible** - considers attributes (user, resource, environment).
 
 \`\`\`javascript
-function canAccessOrder(user, order, environment) {
+function canAccessOrder (user, order, environment) {
     // User is order owner
     if (order.userId === user.id) return true;
     
@@ -250,14 +250,14 @@ function canAccessOrder(user, order, environment) {
 }
 
 app.get('/orders/:id', async (req, res) => {
-    const order = await getOrder(req.params.id);
-    const user = { id: req.headers['X-User-Id'], roles: JSON.parse(req.headers['X-User-Roles']) };
+    const order = await getOrder (req.params.id);
+    const user = { id: req.headers['X-User-Id'], roles: JSON.parse (req.headers['X-User-Roles']) };
     
-    if (!canAccessOrder(user, order, {})) {
+    if (!canAccessOrder (user, order, {})) {
         return res.status(403).json({ error: 'Forbidden' });
     }
     
-    res.json(order);
+    res.json (order);
 });
 \`\`\`
 
@@ -353,9 +353,9 @@ const limits = {
     enterprise: { windowMs: 60000, max: 1000 } // 1000 req/min
 };
 
-function getRateLimiter(req) {
+function getRateLimiter (req) {
     const tier = req.user?.tier || 'free';
-    return rateLimit(limits[tier]);
+    return rateLimit (limits[tier]);
 }
 \`\`\`
 
@@ -380,7 +380,7 @@ const options = {
     cert: fs.readFileSync('server-cert.pem')
 };
 
-https.createServer(options, app).listen(443);
+https.createServer (options, app).listen(443);
 \`\`\`
 
 ### 2. Encryption at Rest
@@ -391,11 +391,11 @@ https.createServer(options, app).listen(443);
 const crypto = require('crypto');
 
 // Encryption
-function encrypt(text, key) {
+function encrypt (text, key) {
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(key, 'hex'), iv);
+    const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from (key, 'hex'), iv);
     
-    let encrypted = cipher.update(text, 'utf8', 'hex');
+    let encrypted = cipher.update (text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     
     const authTag = cipher.getAuthTag();
@@ -408,24 +408,24 @@ function encrypt(text, key) {
 }
 
 // Decryption
-function decrypt(encrypted, iv, authTag, key) {
+function decrypt (encrypted, iv, authTag, key) {
     const decipher = crypto.createDecipheriv(
         'aes-256-gcm',
-        Buffer.from(key, 'hex'),
-        Buffer.from(iv, 'hex')
+        Buffer.from (key, 'hex'),
+        Buffer.from (iv, 'hex')
     );
     
-    decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+    decipher.setAuthTag(Buffer.from (authTag, 'hex'));
     
-    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    let decrypted = decipher.update (encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     
     return decrypted;
 }
 
 // Store credit card
-async function saveCreditCard(userId, cardNumber) {
-    const encrypted = encrypt(cardNumber, ENCRYPTION_KEY);
+async function saveCreditCard (userId, cardNumber) {
+    const encrypted = encrypt (cardNumber, ENCRYPTION_KEY);
     
     await db.creditCards.insert({
         userId,
@@ -485,7 +485,7 @@ const query = \`SELECT * FROM users WHERE email = '\${req.body.email}'\`;
 ✅ **Safe** (Parameterized queries):
 \`\`\`javascript
 const query = 'SELECT * FROM users WHERE email = $1';
-const result = await db.query(query, [req.body.email]);
+const result = await db.query (query, [req.body.email]);
 \`\`\`
 
 ### NoSQL Injection
@@ -505,7 +505,7 @@ const schema = Joi.object({
     email: Joi.string().email().required()
 });
 
-const { error, value } = schema.validate(req.body);
+const { error, value } = schema.validate (req.body);
 if (error) {
     return res.status(400).json({ error: error.details[0].message });
 }
@@ -520,10 +520,10 @@ const user = await db.users.findOne({ email: value.email });
 const escapeHtml = require('escape-html');
 
 app.get('/user/:id', async (req, res) => {
-    const user = await getUser(req.params.id);
+    const user = await getUser (req.params.id);
     
     res.send(\`
-        <h1>Welcome, \${escapeHtml(user.name)}</h1>
+        <h1>Welcome, \${escapeHtml (user.name)}</h1>
     \`);
 });
 \`\`\`
@@ -535,7 +535,7 @@ app.get('/user/:id', async (req, res) => {
 **Log all security-relevant events**.
 
 \`\`\`javascript
-function auditLog(event) {
+function auditLog (event) {
     logger.info({
         event: event.type,
         userId: event.userId,
@@ -550,7 +550,7 @@ function auditLog(event) {
 
 app.post('/orders', async (req, res) => {
     try {
-        const order = await createOrder(req.body);
+        const order = await createOrder (req.body);
         
         auditLog({
             type: 'ORDER_CREATED',
@@ -562,7 +562,7 @@ app.post('/orders', async (req, res) => {
             userAgent: req.headers['user-agent']
         });
         
-        res.json(order);
+        res.json (order);
     } catch (error) {
         auditLog({
             type: 'ORDER_CREATE_FAILED',

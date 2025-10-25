@@ -1,8 +1,9 @@
 export const fundamentals = {
-    title: "Financial Statements Fundamentals",
-    slug: "fundamentals",
-    description: "Master reading and analyzing the three core financial statements programmatically",
-    content: `
+  title: 'Financial Statements Fundamentals',
+  slug: 'fundamentals',
+  description:
+    'Master reading and analyzing the three core financial statements programmatically',
+  content: `
 # Financial Statements Fundamentals
 
 ## Overview
@@ -154,7 +155,7 @@ class FinancialStatements:
         self.balance_sheet = {}
         self.cash_flow = {}
     
-    def link_statements(self):
+    def link_statements (self):
         """Ensure statements are properly linked."""
         # Net income flows to retained earnings
         net_income = self.income_statement['net_income']
@@ -239,13 +240,13 @@ Two major accounting standards:
 ### Key Differences for Engineers
 
 \`\`\`python
-def adjust_for_accounting_standard(statement: dict, standard: str):
+def adjust_for_accounting_standard (statement: dict, standard: str):
     """Adjust financials for different accounting standards."""
     
     if standard == 'IFRS':
         # IFRS: LIFO inventory not allowed
         if statement.get('inventory_method') == 'LIFO':
-            statement['inventory'] = convert_lifo_to_fifo(statement)
+            statement['inventory'] = convert_lifo_to_fifo (statement)
     
     elif standard == 'GAAP':
         # GAAP: Development costs usually expensed
@@ -333,7 +334,7 @@ class SECFilingParser:
     def __init__(self, user_agent: str):
         self.headers = {'User-Agent': user_agent}
     
-    def get_company_cik(self, ticker: str) -> str:
+    def get_company_cik (self, ticker: str) -> str:
         """Get CIK number from ticker."""
         url = f"https://www.sec.gov/cgi-bin/browse-edgar"
         params = {
@@ -344,34 +345,34 @@ class SECFilingParser:
             'output': 'xml'
         }
         
-        response = requests.get(url, params=params, headers=self.headers)
-        soup = BeautifulSoup(response.content, 'xml')
+        response = requests.get (url, params=params, headers=self.headers)
+        soup = BeautifulSoup (response.content, 'xml')
         
         return soup.find('CIK').text.zfill(10)
     
-    def get_latest_10k(self, ticker: str) -> dict:
+    def get_latest_10k (self, ticker: str) -> dict:
         """Download and parse latest 10-K."""
-        cik = self.get_company_cik(ticker)
+        cik = self.get_company_cik (ticker)
         
         # Get filing list
         url = f"https://data.sec.gov/submissions/CIK{cik}.json"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get (url, headers=self.headers)
         data = response.json()
         
         # Find most recent 10-K
         filings = data['filings']['recent']
-        for i, form in enumerate(filings['form']):
+        for i, form in enumerate (filings['form']):
             if form == '10-K':
                 filing_url = f"https://www.sec.gov/Archives/edgar/data/{cik}/{filings['accessionNumber'][i].replace('-', '')}/{filings['primaryDocument'][i]}"
                 break
         
         # Parse filing
-        return self.parse_10k(filing_url)
+        return self.parse_10k (filing_url)
     
-    def parse_10k(self, url: str) -> dict:
+    def parse_10k (self, url: str) -> dict:
         """Extract financial data from 10-K HTML."""
-        response = requests.get(url, headers=self.headers)
-        soup = BeautifulSoup(response.content, 'html.parser')
+        response = requests.get (url, headers=self.headers)
+        soup = BeautifulSoup (response.content, 'html.parser')
         
         # Find financial statement tables
         tables = soup.find_all('table')
@@ -388,25 +389,25 @@ class SECFilingParser:
             text = table.get_text().lower()
             
             if 'income' in text or 'operations' in text:
-                financials['income_statement'] = self._parse_table(table)
+                financials['income_statement'] = self._parse_table (table)
             elif 'balance sheet' in text or 'financial position' in text:
-                financials['balance_sheet'] = self._parse_table(table)
+                financials['balance_sheet'] = self._parse_table (table)
             elif 'cash flow' in text:
-                financials['cash_flow'] = self._parse_table(table)
+                financials['cash_flow'] = self._parse_table (table)
         
         return financials
     
-    def _parse_table(self, table) -> pd.DataFrame:
+    def _parse_table (self, table) -> pd.DataFrame:
         """Convert HTML table to pandas DataFrame."""
         rows = []
         for tr in table.find_all('tr'):
-            cells = [cell.get_text(strip=True) for cell in tr.find_all(['td', 'th'])]
+            cells = [cell.get_text (strip=True) for cell in tr.find_all(['td', 'th'])]
             if cells:
-                rows.append(cells)
+                rows.append (cells)
         
         # Create DataFrame
-        if len(rows) > 1:
-            df = pd.DataFrame(rows[1:], columns=rows[0])
+        if len (rows) > 1:
+            df = pd.DataFrame (rows[1:], columns=rows[0])
             return df
         return None
 
@@ -422,7 +423,7 @@ print(apple_financials['income_statement'].head())
 import json
 import requests
 
-def get_xbrl_facts(cik: str, user_agent: str) -> dict:
+def get_xbrl_facts (cik: str, user_agent: str) -> dict:
     """
     Get structured financial data via SEC's XBRL API.
     Much more reliable than HTML parsing!
@@ -430,10 +431,10 @@ def get_xbrl_facts(cik: str, user_agent: str) -> dict:
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik.zfill(10)}.json"
     headers = {'User-Agent': user_agent}
     
-    response = requests.get(url, headers=headers)
+    response = requests.get (url, headers=headers)
     return response.json()
 
-def extract_financial_metrics(facts: dict) -> dict:
+def extract_financial_metrics (facts: dict) -> dict:
     """Extract key metrics from XBRL data."""
     
     us_gaap = facts['facts'].get('us-gaap', {})
@@ -462,8 +463,8 @@ def extract_financial_metrics(facts: dict) -> dict:
 
 # Usage
 cik = "0000320193"  # Apple
-facts = get_xbrl_facts(cik, "myemail@company.com")
-metrics = extract_financial_metrics(facts)
+facts = get_xbrl_facts (cik, "myemail@company.com")
+metrics = extract_financial_metrics (facts)
 
 # Get latest annual figures
 for metric, values in metrics.items():
@@ -471,8 +472,7 @@ for metric, values in metrics.items():
     annual = [v for v in values if v.get('form') == '10-K']
     if annual:
         latest = annual[-1]
-        print(f"{metric}: ${latest['val']:, .0f
-}(as of { latest['end'] }) ")
+        print(f"{metric}: \${latest['val']:,.0f}(as of { latest['end'] }) ")
 \`\`\`
 
 **Output example**:
@@ -485,7 +485,7 @@ equity: $50,672,000,000 (as of 2022-09-24)
 
 ---
 
-## Real-World Example: Apple's 10-K Walkthrough
+## Real-World Example: Apple\'s 10-K Walkthrough
 
 Let's analyze Apple's actual 10-K (fiscal 2022):
 
@@ -502,7 +502,7 @@ dl.get("10-K", "AAPL", amount=1)  # Most recent only
 
 \`\`\`python
 def analyze_apple_10k():
-    """Extract and analyze Apple's key financials."""
+    """Extract and analyze Apple\'s key financials."""
     
     # Actual numbers from Apple's FY2022 10-K
     apple_financials = {
@@ -561,8 +561,8 @@ def analyze_apple_10k():
     
     print("Apple Inc. Financial Analysis (FY2022)")
     print("=" * 50)
-    print(f"Revenue: ${apple_financials['income_statement']['revenue']:, .0f}")
-print(f"Net Income: ${apple_financials['income_statement']['net_income']:,.0f}")
+    print(f"Revenue: \${apple_financials['income_statement']['revenue']:,.0f}")
+print(f"Net Income: \${apple_financials['income_statement']['net_income']:,.0f}")
 print(f"\\nMargins:")
 print(f"  Gross Margin: {analysis['gross_margin']:.1%}")
 print(f"  Operating Margin: {analysis['operating_margin']:.1%}")
@@ -603,7 +603,7 @@ Debt-to-Equity: 5.96x
 
 ## Building Your First Parser
 
-Let's build a production-ready financial statement parser:
+Let\'s build a production-ready financial statement parser:
 
 \`\`\`python
 from dataclasses import dataclass
@@ -669,9 +669,9 @@ class FinancialStatementParser:
             'cash_flow': []
         }
     
-    def parse_from_sec(self, cik: str, user_agent: str):
+    def parse_from_sec (self, cik: str, user_agent: str):
         """Parse statements from SEC XBRL data."""
-        facts = get_xbrl_facts(cik, user_agent)
+        facts = get_xbrl_facts (cik, user_agent)
         
         # Extract all periods
         us_gaap = facts['facts'].get('us-gaap', {})
@@ -681,11 +681,11 @@ class FinancialStatementParser:
         
         for item in revenue_data:
             if item.get('form') == '10-K':  # Annual only
-                period = datetime.fromisoformat(item['end'])
+                period = datetime.fromisoformat (item['end'])
                 
-                income_stmt = self._extract_income_statement(us_gaap, period)
+                income_stmt = self._extract_income_statement (us_gaap, period)
                 if income_stmt:
-                    self.statements['income_statement'].append(income_stmt)
+                    self.statements['income_statement'].append (income_stmt)
         
         # Similarly for balance sheet and cash flow...
         
@@ -698,14 +698,14 @@ class FinancialStatementParser:
     ) -> Optional[IncomeStatement]:
         """Extract income statement for specific period."""
         
-        def get_value(tag: str) -> Optional[float]:
+        def get_value (tag: str) -> Optional[float]:
             """Helper to extract value for specific period."""
             if tag not in us_gaap:
                 return None
             
             values = us_gaap[tag]['units']['USD']
             for v in values:
-                if datetime.fromisoformat(v['end']) == period:
+                if datetime.fromisoformat (v['end']) == period:
                     return v['val']
             return None
         
@@ -728,17 +728,17 @@ class FinancialStatementParser:
             shares_outstanding=get_value('WeightedAverageNumberOfSharesOutstandingBasic') or 0,
         )
     
-    def to_dataframe(self) -> dict:
+    def to_dataframe (self) -> dict:
         """Convert to pandas DataFrames for analysis."""
         return {
             'income_statement': pd.DataFrame([
-                vars(stmt) for stmt in self.statements['income_statement']
+                vars (stmt) for stmt in self.statements['income_statement']
             ]),
             'balance_sheet': pd.DataFrame([
-                vars(stmt) for stmt in self.statements['balance_sheet']
+                vars (stmt) for stmt in self.statements['balance_sheet']
             ]),
             'cash_flow': pd.DataFrame([
-                vars(stmt) for stmt in self.statements['cash_flow']
+                vars (stmt) for stmt in self.statements['cash_flow']
             ]),
         }
 
@@ -760,7 +760,7 @@ print(dfs['income_statement'][['period_end', 'revenue', 'net_income']])
 Companies sometimes restate prior periods:
 
 \`\`\`python
-def handle_restatements(statements: pd.DataFrame) -> pd.DataFrame:
+def handle_restatements (statements: pd.DataFrame) -> pd.DataFrame:
     """Keep only most recent version of each period."""
     
     # Group by period, keep last filed
@@ -772,7 +772,7 @@ def handle_restatements(statements: pd.DataFrame) -> pd.DataFrame:
 Always specify which you're using:
 
 \`\`\`python
-def filter_annual_only(statements: list) -> list:
+def filter_annual_only (statements: list) -> list:
     """Keep only 10-K (annual) filings."""
     return [s for s in statements if s.form == '10-K']
 \`\`\`
@@ -782,13 +782,13 @@ def filter_annual_only(statements: list) -> list:
 International companies may report in different currencies:
 
 \`\`\`python
-def normalize_currency(value: float, from_currency: str, to_currency: str = 'USD') -> float:
+def normalize_currency (value: float, from_currency: str, to_currency: str = 'USD') -> float:
     """Convert financial values to consistent currency."""
     if from_currency == to_currency:
         return value
     
     # Use exchange rate API
-    rate = get_exchange_rate(from_currency, to_currency)
+    rate = get_exchange_rate (from_currency, to_currency)
     return value * rate
 \`\`\`
 
@@ -797,7 +797,7 @@ def normalize_currency(value: float, from_currency: str, to_currency: str = 'USD
 Not all companies use calendar year:
 
 \`\`\`python
-# Apple's fiscal year ends in September
+# Apple\'s fiscal year ends in September
 apple_fy2022 = "2022-09-24"  # Fiscal 2022 ≠ calendar 2022
 
 # Microsoft's fiscal year ends in June
@@ -853,6 +853,5 @@ Now that you understand financial statement fundamentals:
 - Think at scale (thousands of companies, not one)
 
 **Next Module**: We'll analyze each statement in depth, calculate key ratios, and build fraud detection systems.
-`
+`,
 };
-

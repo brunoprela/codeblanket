@@ -36,7 +36,7 @@ export const interviewstrategyQuiz = [
       'What common mistake do candidates make when implementing Fenwick Tree updates?',
     hint: 'Think about what update does versus what people expect it to do.',
     sampleAnswer:
-      'A common mistake is treating update as "set value" when it actually "adds delta". To set arr[i] to new_val, you must calculate delta = new_val - old_val, then call update(i, delta). Candidates who forget this will get wrong answers. Always track the original array separately if you need to set values.',
+      'A common mistake is treating update as "set value" when it actually "adds delta". To set arr[i] to new_val, you must calculate delta = new_val - old_val, then call update (i, delta). Candidates who forget this will get wrong answers. Always track the original array separately if you need to set values.',
     keyPoints: [
       'Update adds delta, does not set value',
       'To set: compute delta = new - old',

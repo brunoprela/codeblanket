@@ -63,6 +63,6 @@ export const fastapiArchitecturePhilosophyMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'Dependency injection in FastAPI manages reusable dependencies using the Depends() function. Common uses: (1) Database sessions: db: Session = Depends(get_db), (2) Authentication: user: User = Depends(get_current_user), (3) Shared logic: pagination, rate limiting, permissions. Benefits: Reusable code, testable (inject mocks), automatic resolution, type-safe. Dependencies can depend on other dependencies (dependency trees). This is FastAPI\'s "secret weapon" for clean, maintainable code.',
+      'Dependency injection in FastAPI manages reusable dependencies using the Depends() function. Common uses: (1) Database sessions: db: Session = Depends (get_db), (2) Authentication: user: User = Depends (get_current_user), (3) Shared logic: pagination, rate limiting, permissions. Benefits: Reusable code, testable (inject mocks), automatic resolution, type-safe. Dependencies can depend on other dependencies (dependency trees). This is FastAPI\'s "secret weapon" for clean, maintainable code.',
   },
 ];

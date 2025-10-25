@@ -8,7 +8,7 @@ export const readrepairMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
     question:
-      "In Cassandra's probabilistic read repair with read_repair_chance=0.1, what percentage of reads check ALL replicas for inconsistencies?",
+      "In Cassandra\'s probabilistic read repair with read_repair_chance=0.1, what percentage of reads check ALL replicas for inconsistencies?",
     options: ['1%', '10%', '50%', '100%'],
     correctAnswer: 1,
     explanation:

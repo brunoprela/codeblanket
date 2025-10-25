@@ -45,24 +45,24 @@ export const worddocumentprocessingMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'fpdu-word-proc-mc-4',
     question: 'What is the correct way to add a table to a Word document?',
     options: [
-      'doc.add_table(rows=3, cols=4)',
+      'doc.add_table (rows=3, cols=4)',
       'doc.insert_table([[1,2,3], [4,5,6]])',
       'doc.create_table(3, 4)',
-      'doc.new_table(rows=3, columns=4)',
+      'doc.new_table (rows=3, columns=4)',
     ],
     correctAnswer: 0,
     explanation:
-      'doc.add_table(rows=N, cols=M) is the python-docx method for adding tables. You then access cells to populate data.',
+      'doc.add_table (rows=N, cols=M) is the python-docx method for adding tables. You then access cells to populate data.',
   },
   {
     id: 'fpdu-word-proc-mc-5',
     question:
       'How do you extract all tables from a Word document as pandas DataFrames?',
     options: [
-      'pd.read_docx(filepath, tables=True)',
+      'pd.read_docx (filepath, tables=True)',
       'doc.tables.to_dataframe()',
       'Iterate through doc.tables and convert each to DataFrame manually',
-      'doc.extract_tables(format="dataframe")',
+      'doc.extract_tables (format="dataframe")',
     ],
     correctAnswer: 2,
     explanation:

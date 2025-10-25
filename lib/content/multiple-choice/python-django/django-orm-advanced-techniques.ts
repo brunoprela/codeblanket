@@ -22,17 +22,17 @@ F() expressions reference model fields directly in database queries, allowing op
 from django.db.models import F
 
 # ✅ Thread-safe: Atomic database-level increment
-Article.objects.filter(id=1).update(view_count=F('view_count') + 1)
+Article.objects.filter (id=1).update (view_count=F('view_count') + 1)
 
 # ❌ Race condition: Read-modify-write in Python
-article = Article.objects.get(id=1)  # Thread A reads view_count=100
+article = Article.objects.get (id=1)  # Thread A reads view_count=100
 # Thread B might also read view_count=100 here
 article.view_count += 1  # Thread A sets view_count=101
 article.save()  # Thread B also sets view_count=101 (should be 102!)
 \`\`\`
 
 **Why A is incorrect:**
-While F() expressions can be used with related field lookups, this isn't their primary advantage. Standard query lookups already support related fields (e.g., \`filter(author__name='John')\`).
+While F() expressions can be used with related field lookups, this isn't their primary advantage. Standard query lookups already support related fields (e.g., \`filter (author__name='John')\`).
 
 **Why C is incorrect:**
 Complex aggregations are typically done with aggregation functions like Sum(), Avg(), Count(), not F() expressions. F() is for field references and comparisons.
@@ -49,12 +49,12 @@ F() expressions don't automatically optimize query performance. select_related()
 **Example:**
 \`\`\`python
 # Find products where discount > markup
-products = Product.objects.filter(discount__gt=F('markup'))
+products = Product.objects.filter (discount__gt=F('markup'))
 
 # Calculate profit margin in database
 Product.objects.annotate(
     profit_margin=F('price') - F('cost')
-).filter(profit_margin__gt=10)
+).filter (profit_margin__gt=10)
 \`\`\`
 
 This database-level operation is much safer and more efficient than fetching data to Python for manipulation.
@@ -62,7 +62,7 @@ This database-level operation is much safer and more efficient than fetching dat
   },
   {
     question:
-      "In Django's transaction management, what happens if an exception is raised inside an atomic() block?",
+      "In Django\'s transaction management, what happens if an exception is raised inside an atomic() block?",
     options: [
       'A) The transaction commits and the exception is logged',
       'B) The transaction is automatically rolled back and the exception propagates',
@@ -81,8 +81,8 @@ from django.db import transaction
 
 try:
     with transaction.atomic():
-        article = Article.objects.create(title='Test')
-        tag = Tag.objects.create(name='test')
+        article = Article.objects.create (title='Test')
+        tag = Tag.objects.create (name='test')
         
         # This will cause rollback
         raise ValueError('Something went wrong')
@@ -94,19 +94,19 @@ except ValueError:
 \`\`\`
 
 **Why A is incorrect:**
-The transaction never commits when an exception occurs. Django's atomic() ensures all-or-nothing behavior - either all operations succeed and commit, or all are rolled back.
+The transaction never commits when an exception occurs. Django\'s atomic() ensures all-or-nothing behavior - either all operations succeed and commit, or all are rolled back.
 
 **Why C is incorrect:**
 Django doesn't support partial transactions within an atomic block. It's all-or-nothing. All changes are rolled back, not just those after the exception.
 
 **Why D is incorrect:**
-The exception isn't converted or caught - it propagates normally. Django's transaction management doesn't interfere with exception handling beyond the rollback.
+The exception isn't converted or caught - it propagates normally. Django\'s transaction management doesn't interfere with exception handling beyond the rollback.
 
 **Production Pattern:**
 \`\`\`python
 from django.db import transaction
 
-def transfer_money(from_account, to_account, amount):
+def transfer_money (from_account, to_account, amount):
     try:
         with transaction.atomic():
             # These operations are atomic
@@ -124,18 +124,18 @@ def transfer_money(from_account, to_account, amount):
             )
     except Exception as e:
         # All database changes rolled back
-        logger.error(f'Transfer failed: {e}')
+        logger.error (f'Transfer failed: {e}')
         raise
 \`\`\`
 
 **Savepoints (Nested Transactions):**
 \`\`\`python
 with transaction.atomic():  # Outer transaction
-    article = Article.objects.create(title='Main')
+    article = Article.objects.create (title='Main')
     
     try:
         with transaction.atomic():  # Savepoint
-            Tag.objects.create(name='invalid//tag')
+            Tag.objects.create (name='invalid//tag')
     except ValidationError:
         pass  # Only savepoint rolled back
     
@@ -159,7 +159,7 @@ Understanding transaction behavior is critical for data integrity in production 
       'A) Article.objects.all().prefetch_related("comments", "comments__user")',
       'B) Article.objects.select_related("comments").prefetch_related("user")',
       'C) Article.objects.prefetch_related(Prefetch("comments", queryset=Comment.objects.select_related("user")))',
-      'D) Article.objects.all().annotate(comment_count=Count("comments"))',
+      'D) Article.objects.all().annotate (comment_count=Count("comments"))',
     ],
     correctAnswer: 2,
     explanation: `
@@ -206,7 +206,7 @@ Article.objects.prefetch_related("comments", "comments__user")
 \`select_related("comments")\` is invalid because comments is a reverse ForeignKey (one-to-many), not a forward ForeignKey. select_related() only works for "to-one" relationships. This would raise an error or fail to optimize properly.
 
 **Why D is incorrect:**
-This only counts comments but doesn't actually retrieve them or their users. It's useful for displaying counts but doesn't solve the nested relationship optimization problem.
+This only counts comments but doesn't actually retrieve them or their users. It\'s useful for displaying counts but doesn't solve the nested relationship optimization problem.
 
 **Performance Comparison (100 articles, 500 comments):**
 - No optimization: 1 + 500 + 500 = 1001 queries
@@ -216,8 +216,8 @@ This only counts comments but doesn't actually retrieve them or their users. It'
 
 **Production Pattern:**
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         if self.action == 'retrieve':
             # Detail view: optimize nested relationships
             return Article.objects.prefetch_related(
@@ -263,11 +263,11 @@ The \`db_for_write()\` method in a database router determines which database sho
 
 \`\`\`python
 class PrimaryReplicaRouter:
-    def db_for_write(self, model, **hints):
+    def db_for_write (self, model, **hints):
         """All writes go to primary database"""
         return 'default'  # Primary database
     
-    def db_for_read(self, model, **hints):
+    def db_for_read (self, model, **hints):
         """Reads can go to replicas"""
         import random
         return random.choice(['replica1', 'replica2'])
@@ -276,7 +276,7 @@ class PrimaryReplicaRouter:
 DATABASE_ROUTERS = ['myapp.routers.PrimaryReplicaRouter']
 
 # Usage:
-article = Article.objects.create(title='Test')  # Uses 'default' (primary)
+article = Article.objects.create (title='Test')  # Uses 'default' (primary)
 articles = Article.objects.all()  # Uses random replica
 \`\`\`
 
@@ -284,10 +284,10 @@ articles = Article.objects.all()  # Uses random replica
 \`db_for_read()\` determines where READ operations (SELECT queries) are sent, not writes. This is used to route queries to read replicas for load distribution.
 
 **Why C is incorrect:**
-\`allow_migrate()\` controls whether migrations should be run on a particular database. It doesn't affect regular read/write routing. It's used to determine which databases get which migrations applied.
+\`allow_migrate()\` controls whether migrations should be run on a particular database. It doesn't affect regular read/write routing. It\'s used to determine which databases get which migrations applied.
 
 \`\`\`python
-def allow_migrate(self, db, app_label, model_name=None, **hints):
+def allow_migrate (self, db, app_label, model_name=None, **hints):
     """Only run migrations on primary database"""
     return db == 'default'
 \`\`\`
@@ -296,7 +296,7 @@ def allow_migrate(self, db, app_label, model_name=None, **hints):
 \`allow_relation()\` determines whether relationships between objects from different databases are allowed. It doesn't control where operations are sent.
 
 \`\`\`python
-def allow_relation(self, obj1, obj2, **hints):
+def allow_relation (self, obj1, obj2, **hints):
     """Allow relations if both objects in same database"""
     return obj1._state.db == obj2._state.db
 \`\`\`
@@ -311,12 +311,12 @@ _thread_local = threading.local()
 class StickyPrimaryRouter:
     """Route reads to replicas, but use primary after writes"""
     
-    def db_for_write(self, model, **hints):
+    def db_for_write (self, model, **hints):
         # All writes to primary
         self._mark_write()
         return 'default'
     
-    def db_for_read(self, model, **hints):
+    def db_for_read (self, model, **hints):
         # Use primary for short time after write (avoid replication lag)
         if self._recent_write():
             return 'default'
@@ -325,14 +325,14 @@ class StickyPrimaryRouter:
         import random
         return random.choice(['replica1', 'replica2'])
     
-    def _mark_write(self):
+    def _mark_write (self):
         _thread_local.last_write = time.time()
     
-    def _recent_write(self):
+    def _recent_write (self):
         last_write = getattr(_thread_local, 'last_write', 0)
         return (time.time() - last_write) < 5  # 5 second sticky window
     
-    def allow_migrate(self, db, app_label, model_name=None, **hints):
+    def allow_migrate (self, db, app_label, model_name=None, **hints):
         # Only migrate primary
         return db == 'default'
 \`\`\`
@@ -375,7 +375,7 @@ DATABASE_ROUTERS = ['myapp.routers.StickyPrimaryRouter']
 **Manual Database Selection:**
 \`\`\`python
 # Force specific database
-Article.objects.using('default').create(title='Test')
+Article.objects.using('default').create (title='Test')
 articles = Article.objects.using('replica1').all()
 \`\`\`
 
@@ -386,21 +386,21 @@ Understanding database routing is essential for scaling Django applications hori
     question:
       'What is the correct way to perform a conditional update in Django that only updates records meeting specific criteria?',
     options: [
-      'A) Article.objects.filter(status="draft").save()',
-      'B) Article.objects.update(status="published")',
-      'C) Article.objects.filter(status="draft").update(status="published")',
-      'D) for article in Article.objects.filter(status="draft"): article.status="published"; article.save()',
+      'A) Article.objects.filter (status="draft").save()',
+      'B) Article.objects.update (status="published")',
+      'C) Article.objects.filter (status="draft").update (status="published")',
+      'D) for article in Article.objects.filter (status="draft"): article.status="published"; article.save()',
     ],
     correctAnswer: 2,
     explanation: `
-**Correct Answer: C) Article.objects.filter(status="draft").update(status="published")**
+**Correct Answer: C) Article.objects.filter (status="draft").update (status="published")**
 
 **Why C is correct:**
 Chaining \`filter()\` with \`update()\` performs a single SQL UPDATE query that only affects records matching the filter criteria. This is the most efficient approach for bulk updates.
 
 \`\`\`python
 # ✅ Efficient: Single UPDATE query
-updated_count = Article.objects.filter(status='draft').update(
+updated_count = Article.objects.filter (status='draft').update(
     status='published',
     published_at=timezone.now()
 )
@@ -421,7 +421,7 @@ QuerySets don't have a \`save()\` method. \`save()\` is a model instance method,
 
 \`\`\`python
 # ❌ Dangerous: Updates ALL articles
-Article.objects.update(status='published')  # Updates every single article!
+Article.objects.update (status='published')  # Updates every single article!
 \`\`\`
 
 **Why D is incorrect:**
@@ -429,7 +429,7 @@ While this works functionally, it's extremely inefficient. It creates N separate
 
 \`\`\`python
 # ❌ Inefficient: N queries + loads all into memory
-for article in Article.objects.filter(status='draft'):
+for article in Article.objects.filter (status='draft'):
     article.status = 'published'
     article.save()  # Separate UPDATE query for EACH article
 \`\`\`
@@ -447,7 +447,7 @@ from django.utils import timezone
 # Conditional update with F() expressions
 Article.objects.filter(
     status='draft',
-    created_at__lt=timezone.now() - timedelta(days=30)
+    created_at__lt=timezone.now() - timedelta (days=30)
 ).update(
     status='archived',
     view_count=F('view_count') + 1  # Atomic increment
@@ -458,8 +458,8 @@ from django.db.models import Case, When, Value
 
 Article.objects.update(
     priority=Case(
-        When(view_count__gte=1000, then=Value('high')),
-        When(view_count__gte=100, then=Value('medium')),
+        When (view_count__gte=1000, then=Value('high')),
+        When (view_count__gte=100, then=Value('medium')),
         default=Value('low')
     )
 )
@@ -489,7 +489,7 @@ Article.objects.update(
 \`\`\`python
 def publish_drafts_batch():
     """Publish old draft articles in batch"""
-    threshold = timezone.now() - timedelta(days=7)
+    threshold = timezone.now() - timedelta (days=7)
     
     # Single efficient query
     count = Article.objects.filter(
@@ -500,7 +500,7 @@ def publish_drafts_batch():
         published_at=timezone.now()
     )
     
-    logger.info(f'Published {count} draft articles')
+    logger.info (f'Published {count} draft articles')
     return count
 \`\`\`
 

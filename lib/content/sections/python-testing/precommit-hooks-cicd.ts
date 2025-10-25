@@ -584,7 +584,7 @@ jobs:
 import requests
 import os
 
-def update_status(state, description):
+def update_status (state, description):
     """Update GitHub commit status"""
     url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/statuses/{os.environ['GITHUB_SHA']}"
     

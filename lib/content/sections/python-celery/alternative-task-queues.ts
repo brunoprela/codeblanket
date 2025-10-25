@@ -28,14 +28,14 @@ from redis import Redis
 from rq import Queue
 
 redis_conn = Redis()
-q = Queue(connection=redis_conn)
+q = Queue (connection=redis_conn)
 
-def send_email(email):
+def send_email (email):
     print(f"Sending email to {email}")
     return "sent"
 
 # Enqueue task
-job = q.enqueue(send_email, "user@example.com")
+job = q.enqueue (send_email, "user@example.com")
 
 # Check status
 print(job.is_finished)
@@ -66,11 +66,11 @@ pip install dramatiq[redis]
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker
 
-broker = RedisBroker(host="localhost")
-dramatiq.set_broker(broker)
+broker = RedisBroker (host="localhost")
+dramatiq.set_broker (broker)
 
 @dramatiq.actor
-def send_email(email):
+def send_email (email):
     print(f"Sending email to {email}")
 
 # Send task
@@ -102,7 +102,7 @@ from huey import RedisHuey
 huey = RedisHuey('myapp')
 
 @huey.task()
-def send_email(email):
+def send_email (email):
     print(f"Sending email to {email}")
 
 # Execute
@@ -111,7 +111,7 @@ send_email("user@example.com")
 # Periodic tasks
 from huey import crontab
 
-@huey.periodic_task(crontab(minute='0', hour='*/3'))
+@huey.periodic_task (crontab (minute='0', hour='*/3'))
 def backup():
     perform_backup()
 \`\`\`

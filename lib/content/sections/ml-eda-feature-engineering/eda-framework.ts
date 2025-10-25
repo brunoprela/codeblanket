@@ -118,7 +118,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # For this example, we'll use California Housing dataset
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 print("=" * 70)
@@ -137,7 +137,7 @@ print("\\n3. COLUMN INFORMATION:")
 print(df.dtypes)
 
 # 4. Memory usage
-print(f"\\n4. MEMORY USAGE: {df.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+print(f"\\n4. MEMORY USAGE: {df.memory_usage (deep=True).sum() / 1024**2:.2f} MB")
 
 # 5. Basic statistics
 print("\\n5. BASIC STATISTICS:")
@@ -160,12 +160,12 @@ print(df.describe())
 ### 2. Identify Column Types
 
 \`\`\`python
-def categorize_columns(df):
+def categorize_columns (df):
     """Categorize columns by type for appropriate analysis"""
     
-    numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-    categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
-    datetime_cols = df.select_dtypes(include=['datetime64']).columns.tolist()
+    numerical_cols = df.select_dtypes (include=[np.number]).columns.tolist()
+    categorical_cols = df.select_dtypes (include=['object', 'category']).columns.tolist()
+    datetime_cols = df.select_dtypes (include=['datetime64']).columns.tolist()
     
     # Further split numerical into continuous and discrete
     discrete_cols = []
@@ -175,16 +175,16 @@ def categorize_columns(df):
         # Heuristic: if unique values < 20 and all integers, consider discrete
         n_unique = df[col].nunique()
         if n_unique < 20 and df[col].dtype in ['int64', 'int32']:
-            discrete_cols.append(col)
+            discrete_cols.append (col)
         else:
-            continuous_cols.append(col)
+            continuous_cols.append (col)
     
     print("COLUMN CATEGORIZATION")
     print("=" * 70)
-    print(f"\\nContinuous Numerical ({len(continuous_cols)}): {continuous_cols}")
-    print(f"Discrete Numerical ({len(discrete_cols)}): {discrete_cols}")
-    print(f"Categorical ({len(categorical_cols)}): {categorical_cols}")
-    print(f"Datetime ({len(datetime_cols)}): {datetime_cols}")
+    print(f"\\nContinuous Numerical ({len (continuous_cols)}): {continuous_cols}")
+    print(f"Discrete Numerical ({len (discrete_cols)}): {discrete_cols}")
+    print(f"Categorical ({len (categorical_cols)}): {categorical_cols}")
+    print(f"Datetime ({len (datetime_cols)}): {datetime_cols}")
     
     return {
         'continuous': continuous_cols,
@@ -194,7 +194,7 @@ def categorize_columns(df):
     }
 
 # Categorize our dataset
-column_types = categorize_columns(df)
+column_types = categorize_columns (df)
 \`\`\`
 
 ## Data Quality Assessment
@@ -202,11 +202,11 @@ column_types = categorize_columns(df)
 ### 1. Missing Values Analysis
 
 \`\`\`python
-def analyze_missing_values(df):
+def analyze_missing_values (df):
     """Comprehensive missing value analysis"""
     
     missing_counts = df.isnull().sum()
-    missing_percent = 100 * missing_counts / len(df)
+    missing_percent = 100 * missing_counts / len (df)
     
     missing_df = pd.DataFrame({
         'Column': missing_counts.index,
@@ -222,11 +222,11 @@ def analyze_missing_values(df):
     print("\\nMISSING VALUES ANALYSIS")
     print("=" * 70)
     
-    if len(missing_df) == 0:
+    if len (missing_df) == 0:
         print("✓ No missing values found!")
     else:
-        print(f"\\n{len(missing_df)} columns have missing values:\\n")
-        print(missing_df.to_string(index=False))
+        print(f"\\n{len (missing_df)} columns have missing values:\\n")
+        print(missing_df.to_string (index=False))
         
         # Categorize severity
         critical = missing_df[missing_df['Missing_Percent'] > 50]
@@ -237,21 +237,21 @@ def analyze_missing_values(df):
         low = missing_df[missing_df['Missing_Percent'] <= 5]
         
         print(f"\\nSEVERITY BREAKDOWN:")
-        print(f"  🔴 Critical (>50%): {len(critical)} columns")
-        print(f"  🟠 High (20-50%): {len(high)} columns")
-        print(f"  🟡 Medium (5-20%): {len(medium)} columns")
-        print(f"  🟢 Low (<5%): {len(low)} columns")
+        print(f"  🔴 Critical (>50%): {len (critical)} columns")
+        print(f"  🟠 High (20-50%): {len (high)} columns")
+        print(f"  🟡 Medium (5-20%): {len (medium)} columns")
+        print(f"  🟢 Low (<5%): {len (low)} columns")
     
     return missing_df
 
 # Analyze missing values
-missing_analysis = analyze_missing_values(df)
+missing_analysis = analyze_missing_values (df)
 \`\`\`
 
 ### 2. Duplicate Detection
 
 \`\`\`python
-def analyze_duplicates(df):
+def analyze_duplicates (df):
     """Detect and analyze duplicate rows"""
     
     print("\\nDUPLICATE ANALYSIS")
@@ -259,13 +259,13 @@ def analyze_duplicates(df):
     
     # Check exact duplicates
     n_duplicates = df.duplicated().sum()
-    duplicate_percent = 100 * n_duplicates / len(df)
+    duplicate_percent = 100 * n_duplicates / len (df)
     
     print(f"\\nExact duplicates: {n_duplicates:,} ({duplicate_percent:.2f}%)")
     
     if n_duplicates > 0:
         # Show examples
-        duplicated_rows = df[df.duplicated(keep=False)].sort_values(
+        duplicated_rows = df[df.duplicated (keep=False)].sort_values(
             by=df.columns.tolist()
         )
         print(f"\\nExample duplicated rows:")
@@ -278,13 +278,13 @@ def analyze_duplicates(df):
     return n_duplicates
 
 # Check for duplicates
-n_dups = analyze_duplicates(df)
+n_dups = analyze_duplicates (df)
 \`\`\`
 
 ### 3. Data Type Validation
 
 \`\`\`python
-def validate_data_types(df):
+def validate_data_types (df):
     """Validate that columns have appropriate data types"""
     
     print("\\nDATA TYPE VALIDATION")
@@ -299,20 +299,20 @@ def validate_data_types(df):
         if dtype == 'object':
             try:
                 # Try to convert to numeric
-                pd.to_numeric(df[col], errors='raise')
-                issues.append(f"⚠️  {col}: stored as 'object' but could be numeric")
+                pd.to_numeric (df[col], errors='raise')
+                issues.append (f"⚠️  {col}: stored as 'object' but could be numeric")
             except:
                 pass
         
         # Check if dates are stored as strings
         if dtype == 'object' and 'date' in col.lower():
-            issues.append(f"⚠️  {col}: might be a date stored as string")
+            issues.append (f"⚠️  {col}: might be a date stored as string")
         
         # Check for mixed types
         if dtype == 'object':
-            type_counts = df[col].apply(type).value_counts()
-            if len(type_counts) > 1:
-                issues.append(f"⚠️  {col}: contains mixed types {type_counts.to_dict()}")
+            type_counts = df[col].apply (type).value_counts()
+            if len (type_counts) > 1:
+                issues.append (f"⚠️  {col}: contains mixed types {type_counts.to_dict()}")
     
     if issues:
         print("\\nData type issues found:")
@@ -324,7 +324,7 @@ def validate_data_types(df):
     return issues
 
 # Validate data types
-type_issues = validate_data_types(df)
+type_issues = validate_data_types (df)
 \`\`\`
 
 ## EDA Workflow
@@ -412,14 +412,14 @@ eda_checklist()
 ## Creating an EDA Report
 
 \`\`\`python
-def generate_eda_report(df, target_col=None):
+def generate_eda_report (df, target_col=None):
     """Generate a comprehensive EDA report"""
     
     report = {
         'dataset_name': 'California Housing',
         'timestamp': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S'),
         'shape': df.shape,
-        'memory_mb': df.memory_usage(deep=True).sum() / 1024**2,
+        'memory_mb': df.memory_usage (deep=True).sum() / 1024**2,
         'dtypes': df.dtypes.value_counts().to_dict(),
         'missing_total': df.isnull().sum().sum(),
         'duplicates': df.duplicated().sum()
@@ -456,7 +456,7 @@ def generate_eda_report(df, target_col=None):
             print(f"  Classes: {df[target_col].nunique()}")
             print(f"  Distribution:")
             for label, count in df[target_col].value_counts().items():
-                pct = 100 * count / len(df)
+                pct = 100 * count / len (df)
                 print(f"    {label}: {count:,} ({pct:.1f}%)")
     
     print(f"\\n✅ NEXT STEPS")
@@ -475,13 +475,13 @@ def generate_eda_report(df, target_col=None):
         "Prepare data for modeling"
     ])
     
-    for i, rec in enumerate(recommendations, 1):
+    for i, rec in enumerate (recommendations, 1):
         print(f"  {i}. {rec}")
     
     return report
 
 # Generate report
-report = generate_eda_report(df, target_col='MedHouseVal')
+report = generate_eda_report (df, target_col='MedHouseVal')
 \`\`\`
 
 ## Best Practices for EDA
@@ -497,7 +497,7 @@ print(df.info())
 print(df.describe())
 
 # Level 2: Visual inspection
-df.hist(figsize=(15, 10))
+df.hist (figsize=(15, 10))
 plt.tight_layout()
 plt.show()
 
@@ -510,14 +510,14 @@ plt.show()
 \`\`\`python
 # Numbers alone don't tell the whole story
 
-# Example: Anscombe's Quartet - same statistics, different data!
+# Example: Anscombe\'s Quartet - same statistics, different data!
 x = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5]
 y1 = [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68]
 y2 = [9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74]
 
 # All have same mean, variance, correlation!
-print(f"Mean y1: {np.mean(y1):.2f}, Mean y2: {np.mean(y2):.2f}")
-print(f"Std y1: {np.std(y1):.2f}, Std y2: {np.std(y2):.2f}")
+print(f"Mean y1: {np.mean (y1):.2f}, Mean y2: {np.mean (y2):.2f}")
+print(f"Std y1: {np.std (y1):.2f}, Std y2: {np.std (y2):.2f}")
 
 # But very different patterns when visualized!
 # This is why we ALWAYS visualize data
@@ -559,7 +559,7 @@ findings = {
 # Save findings
 import json
 with open('eda_findings.json', 'w') as f:
-    json.dump(findings, f, indent=2)
+    json.dump (findings, f, indent=2)
 
 print("✓ EDA findings documented")
 \`\`\`
@@ -581,7 +581,7 @@ print("✓ EDA findings documented")
 
 ## Key Takeaways
 
-1. **EDA is not optional**: It's the foundation of successful ML projects
+1. **EDA is not optional**: It\'s the foundation of successful ML projects
 2. **Start with objectives**: Know what you're trying to achieve
 3. **Understand your data sources**: Quality and reliability vary
 4. **Check data quality first**: Missing values, duplicates, type issues

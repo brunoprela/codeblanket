@@ -55,7 +55,7 @@ export const graphDatabasesMCQ: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Missing indexes cause full graph scans. MATCH (p:Product {id: $productId}) without an index on Product.id scans all 10M products (slow!). With index: CREATE INDEX product_id FOR (p:Product) ON (p.id), Neo4j does O(log n) lookup (milliseconds). The subsequent traversal (finding co-purchased products) is fast because it only touches the subgraph (users who bought this product). Graph databases absolutely scale to 10M+ nodes (option A is wrong)—Facebook's social graph has billions. LIMIT (option C) helps but doesn't fix the initial lookup. Sharding (option D) is complex and unnecessary if the real issue is missing indexes. This is the #1 Neo4j performance issue: developers forget that graph traversal is fast but initial node lookup needs indexes just like any database.",
+      "Missing indexes cause full graph scans. MATCH (p:Product {id: $productId}) without an index on Product.id scans all 10M products (slow!). With index: CREATE INDEX product_id FOR (p:Product) ON (p.id), Neo4j does O(log n) lookup (milliseconds). The subsequent traversal (finding co-purchased products) is fast because it only touches the subgraph (users who bought this product). Graph databases absolutely scale to 10M+ nodes (option A is wrong)—Facebook\'s social graph has billions. LIMIT (option C) helps but doesn't fix the initial lookup. Sharding (option D) is complex and unnecessary if the real issue is missing indexes. This is the #1 Neo4j performance issue: developers forget that graph traversal is fast but initial node lookup needs indexes just like any database.",
   },
   {
     id: 'graph-mcq-5',

@@ -160,7 +160,7 @@ class ExecutionHandler:
         self.commission_pct = commission_pct  # 0.1%
         self.slippage_pct = slippage_pct      # 0.05%
     
-    def execute_order(self, order: OrderEvent, current_price: float) -> Optional[FillEvent]:
+    def execute_order (self, order: OrderEvent, current_price: float) -> Optional[FillEvent]:
         """
         Execute order and return fill
         Models realistic execution
@@ -209,7 +209,7 @@ class Portfolio:
         self.equity_curve = []
         self.trades = []
     
-    def update_price(self, symbol: str, price: float, timestamp: int):
+    def update_price (self, symbol: str, price: float, timestamp: int):
         """Update current price for position valuation"""
         self.current_prices[symbol] = price
         
@@ -217,7 +217,7 @@ class Portfolio:
         equity = self.get_total_equity()
         self.equity_curve.append((timestamp, equity))
     
-    def on_fill(self, fill: FillEvent):
+    def on_fill (self, fill: FillEvent):
         """Update portfolio on fill"""
         # Update position
         if fill.symbol not in self.positions:
@@ -240,37 +240,37 @@ class Portfolio:
             'commission': fill.commission
         })
     
-    def get_position(self, symbol: str) -> float:
+    def get_position (self, symbol: str) -> float:
         """Get current position"""
-        return self.positions.get(symbol, 0.0)
+        return self.positions.get (symbol, 0.0)
     
-    def get_position_value(self, symbol: str) -> float:
+    def get_position_value (self, symbol: str) -> float:
         """Get position market value"""
-        quantity = self.positions.get(symbol, 0.0)
-        price = self.current_prices.get(symbol, 0.0)
+        quantity = self.positions.get (symbol, 0.0)
+        price = self.current_prices.get (symbol, 0.0)
         return quantity * price
     
-    def get_total_equity(self) -> float:
+    def get_total_equity (self) -> float:
         """Get total equity (cash + positions)"""
         equity = self.cash
         for symbol, quantity in self.positions.items():
-            price = self.current_prices.get(symbol, 0.0)
+            price = self.current_prices.get (symbol, 0.0)
             equity += quantity * price
         return equity
     
-    def get_metrics(self) -> dict:
+    def get_metrics (self) -> dict:
         """Calculate performance metrics"""
         if not self.equity_curve:
             return {}
         
         # Convert to pandas for analysis
-        df = pd.DataFrame(self.equity_curve, columns=['timestamp', 'equity'])
+        df = pd.DataFrame (self.equity_curve, columns=['timestamp', 'equity'])
         df['returns'] = df['equity'].pct_change()
         
         total_return = (df['equity'].iloc[-1] - self.initial_capital) / self.initial_capital
         
         # Annualized metrics (assuming daily bars)
-        annual_return = (1 + total_return) ** (252 / len(df)) - 1
+        annual_return = (1 + total_return) ** (252 / len (df)) - 1
         annual_volatility = df['returns'].std() * np.sqrt(252)
         sharpe_ratio = annual_return / annual_volatility if annual_volatility > 0 else 0
         
@@ -286,7 +286,7 @@ class Portfolio:
             'sharpe_ratio': sharpe_ratio,
             'max_drawdown': max_drawdown,
             'final_equity': df['equity'].iloc[-1],
-            'num_trades': len(self.trades)
+            'num_trades': len (self.trades)
         }
 
 class Strategy:
@@ -299,7 +299,7 @@ class Strategy:
         self.symbols = symbols
         self.data: Dict[str, pd.DataFrame] = {symbol: pd.DataFrame() for symbol in symbols}
     
-    def on_market_data(self, event: MarketDataEvent, portfolio: Portfolio) -> List[OrderEvent]:
+    def on_market_data (self, event: MarketDataEvent, portfolio: Portfolio) -> List[OrderEvent]:
         """
         Process market data and generate orders
         Returns: List of orders to submit
@@ -320,9 +320,9 @@ class Strategy:
             self.data[event.symbol] = pd.concat([self.data[event.symbol], new_row], ignore_index=True)
         
         # Generate signals
-        return self.generate_signals(event.symbol, event.timestamp, portfolio)
+        return self.generate_signals (event.symbol, event.timestamp, portfolio)
     
-    def generate_signals(self, symbol: str, timestamp: int, portfolio: Portfolio) -> List[OrderEvent]:
+    def generate_signals (self, symbol: str, timestamp: int, portfolio: Portfolio) -> List[OrderEvent]:
         """Override this method with your strategy logic"""
         raise NotImplementedError("Implement generate_signals()")
 
@@ -337,19 +337,19 @@ class MovingAverageCrossStrategy(Strategy):
         self.fast_period = fast_period
         self.slow_period = slow_period
     
-    def generate_signals(self, symbol: str, timestamp: int, portfolio: Portfolio) -> List[OrderEvent]:
+    def generate_signals (self, symbol: str, timestamp: int, portfolio: Portfolio) -> List[OrderEvent]:
         """Generate signals based on MA cross"""
         df = self.data[symbol]
         
-        if len(df) < self.slow_period:
+        if len (df) < self.slow_period:
             return []  # Not enough data
         
         # Calculate MAs
-        df['fast_ma'] = df['close'].rolling(self.fast_period).mean()
-        df['slow_ma'] = df['close'].rolling(self.slow_period).mean()
+        df['fast_ma'] = df['close'].rolling (self.fast_period).mean()
+        df['slow_ma'] = df['close'].rolling (self.slow_period).mean()
         
         # Check for cross
-        if len(df) < 2:
+        if len (df) < 2:
             return []
         
         prev_fast = df['fast_ma'].iloc[-2]
@@ -358,10 +358,10 @@ class MovingAverageCrossStrategy(Strategy):
         curr_slow = df['slow_ma'].iloc[-1]
         
         # Skip if NaN
-        if pd.isna(prev_fast) or pd.isna(curr_fast):
+        if pd.isna (prev_fast) or pd.isna (curr_fast):
             return []
         
-        current_position = portfolio.get_position(symbol)
+        current_position = portfolio.get_position (symbol)
         orders = []
         
         # Golden cross (bullish)
@@ -406,18 +406,18 @@ class BacktestEngine:
         slippage_pct: float = 0.0005
     ):
         self.strategy = strategy
-        self.portfolio = Portfolio(initial_capital)
-        self.execution_handler = ExecutionHandler(commission_pct, slippage_pct)
+        self.portfolio = Portfolio (initial_capital)
+        self.execution_handler = ExecutionHandler (commission_pct, slippage_pct)
         self.event_queue = PriorityQueue()
     
-    def load_data(self, symbol: str, data: pd.DataFrame):
+    def load_data (self, symbol: str, data: pd.DataFrame):
         """
         Load historical data for symbol
         data: DataFrame with columns [timestamp, open, high, low, close, volume]
         """
         for _, row in data.iterrows():
             event = MarketDataEvent(
-                timestamp=int(row['timestamp']),
+                timestamp=int (row['timestamp']),
                 symbol=symbol,
                 open=row['open'],
                 high=row['high'],
@@ -425,9 +425,9 @@ class BacktestEngine:
                 close=row['close'],
                 volume=row['volume']
             )
-            self.event_queue.put(event)
+            self.event_queue.put (event)
     
-    def run(self):
+    def run (self):
         """Run backtest"""
         print("Starting backtest...")
         
@@ -443,13 +443,13 @@ class BacktestEngine:
                 )
                 
                 # Strategy generates orders
-                orders = self.strategy.on_market_data(event, self.portfolio)
+                orders = self.strategy.on_market_data (event, self.portfolio)
                 
                 # Execute orders
                 for order in orders:
-                    fill = self.execution_handler.execute_order(order, event.close)
+                    fill = self.execution_handler.execute_order (order, event.close)
                     if fill:
-                        self.portfolio.on_fill(fill)
+                        self.portfolio.on_fill (fill)
         
         print("Backtest complete!")
         return self.portfolio.get_metrics()
@@ -460,7 +460,7 @@ if __name__ == "__main__":
     import yfinance as yf
     data = yf.download('AAPL', start='2020-01-01', end='2024-01-01')
     data = data.reset_index()
-    data['timestamp'] = data['Date'].astype(np.int64) // 10**6  # Convert to microseconds
+    data['timestamp'] = data['Date'].astype (np.int64) // 10**6  # Convert to microseconds
     data.columns = [c.lower() for c in data.columns]
     
     # Create strategy
@@ -496,7 +496,7 @@ if __name__ == "__main__":
 df['signal'] = df['close'].rolling(20).mean()  # Looks ahead!
 
 # CORRECT: Only use past data
-for i in range(20, len(df)):
+for i in range(20, len (df)):
     df.loc[i, 'signal'] = df['close'].iloc[i-20:i].mean()
 \`\`\`
 
@@ -511,7 +511,7 @@ Example: Testing 2000-2020, only using stocks that exist in 2020. Misses all ban
 **Solution**: Use point-in-time data
 
 \`\`\`python
-def get_universe_at_date(date: datetime) -> List[str]:
+def get_universe_at_date (date: datetime) -> List[str]:
     """
     Get list of tradable symbols at specific date
     Includes delisted/bankrupt companies
@@ -533,10 +533,10 @@ train_data = data[data['date'] < '2020-01-01']  # 2000-2019
 test_data = data[data['date'] >= '2020-01-01']  # 2020-2024
 
 # Develop strategy on train only
-strategy = develop_strategy(train_data)
+strategy = develop_strategy (train_data)
 
 # Evaluate on test (out-of-sample)
-performance = backtest(strategy, test_data)
+performance = backtest (strategy, test_data)
 \`\`\`
 
 ---
@@ -565,7 +565,7 @@ class WalkForwardOptimizer:
         self.test_period_days = test_period_days
         self.reoptimize_frequency_days = reoptimize_frequency_days
     
-    def optimize_parameters(self, data: pd.DataFrame, param_grid: dict) -> dict:
+    def optimize_parameters (self, data: pd.DataFrame, param_grid: dict) -> dict:
         """
         Find best parameters on training data
         param_grid: {'fast_period': [10, 20, 30], 'slow_period': [40, 50, 60]}
@@ -577,7 +577,7 @@ class WalkForwardOptimizer:
         import itertools
         keys = param_grid.keys()
         for values in itertools.product(*param_grid.values()):
-            params = dict(zip(keys, values))
+            params = dict (zip (keys, values))
             
             # Run backtest with these parameters
             strategy = MovingAverageCrossStrategy(
@@ -586,7 +586,7 @@ class WalkForwardOptimizer:
                 slow_period=params['slow_period']
             )
             
-            engine = BacktestEngine(strategy)
+            engine = BacktestEngine (strategy)
             engine.load_data('AAPL', data)
             metrics = engine.run()
             
@@ -596,7 +596,7 @@ class WalkForwardOptimizer:
         
         return best_params
     
-    def walk_forward(self, data: pd.DataFrame, param_grid: dict) -> pd.DataFrame:
+    def walk_forward (self, data: pd.DataFrame, param_grid: dict) -> pd.DataFrame:
         """
         Perform walk-forward optimization
         Returns: Out-of-sample performance
@@ -604,7 +604,7 @@ class WalkForwardOptimizer:
         results = []
         
         start_idx = self.train_period_days
-        while start_idx + self.test_period_days < len(data):
+        while start_idx + self.test_period_days < len (data):
             # Define train and test windows
             train_end_idx = start_idx
             test_end_idx = start_idx + self.test_period_days
@@ -613,14 +613,14 @@ class WalkForwardOptimizer:
             test_data = data.iloc[start_idx:test_end_idx]
             
             # Optimize on train
-            best_params = self.optimize_parameters(train_data, param_grid)
+            best_params = self.optimize_parameters (train_data, param_grid)
             
             # Test on out-of-sample
             strategy = MovingAverageCrossStrategy(
                 symbols=['AAPL'],
                 **best_params
             )
-            engine = BacktestEngine(strategy)
+            engine = BacktestEngine (strategy)
             engine.load_data('AAPL', test_data)
             metrics = engine.run()
             
@@ -634,7 +634,7 @@ class WalkForwardOptimizer:
             # Move to next period
             start_idx += self.reoptimize_frequency_days
         
-        return pd.DataFrame(results)
+        return pd.DataFrame (results)
 
 # Usage
 optimizer = WalkForwardOptimizer()
@@ -660,7 +660,7 @@ Parallel backtesting for speed
 from multiprocessing import Pool
 from typing import Tuple
 
-def run_backtest_parallel(args: Tuple[dict, pd.DataFrame]) -> dict:
+def run_backtest_parallel (args: Tuple[dict, pd.DataFrame]) -> dict:
     """Worker function for parallel execution"""
     params, data = args
     
@@ -670,13 +670,13 @@ def run_backtest_parallel(args: Tuple[dict, pd.DataFrame]) -> dict:
         slow_period=params['slow_period']
     )
     
-    engine = BacktestEngine(strategy)
+    engine = BacktestEngine (strategy)
     engine.load_data('AAPL', data)
     metrics = engine.run()
     
     return {**params, **metrics}
 
-def parallel_parameter_search(data: pd.DataFrame, param_grid: dict, n_processes: int = 4):
+def parallel_parameter_search (data: pd.DataFrame, param_grid: dict, n_processes: int = 4):
     """
     Search parameter space in parallel
     10-100x speedup vs sequential
@@ -686,7 +686,7 @@ def parallel_parameter_search(data: pd.DataFrame, param_grid: dict, n_processes:
     # Generate all parameter combinations
     keys = param_grid.keys()
     param_combinations = [
-        dict(zip(keys, values))
+        dict (zip (keys, values))
         for values in itertools.product(*param_grid.values())
     ]
     
@@ -694,10 +694,10 @@ def parallel_parameter_search(data: pd.DataFrame, param_grid: dict, n_processes:
     args = [(params, data) for params in param_combinations]
     
     # Run in parallel
-    with Pool(processes=n_processes) as pool:
-        results = pool.map(run_backtest_parallel, args)
+    with Pool (processes=n_processes) as pool:
+        results = pool.map (run_backtest_parallel, args)
     
-    return pd.DataFrame(results)
+    return pd.DataFrame (results)
 
 # Usage
 results = parallel_parameter_search(

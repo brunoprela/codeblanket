@@ -5,7 +5,7 @@ export const numpyoperationsQuiz: QuizQuestion[] = [
     id: 'numpy-operations-dq-1',
     question:
       'Explain the concept of "vectorization" in NumPy and why it provides such significant performance improvements over Python loops. Provide a concrete example demonstrating the performance difference.',
-    sampleAnswer: `Vectorization is the process of applying operations to entire arrays at once, rather than using explicit Python loops. This is NumPy's superpower and the foundation of efficient numerical computing in Python.
+    sampleAnswer: `Vectorization is the process of applying operations to entire arrays at once, rather than using explicit Python loops. This is NumPy\'s superpower and the foundation of efficient numerical computing in Python.
 
 **Why Vectorization is Fast:**
 
@@ -23,14 +23,14 @@ import time
 
 # Create large array
 n = 1_000_000
-arr = np.arange(n, dtype=float)
+arr = np.arange (n, dtype=float)
 
 # Method 1: Python loop
 start = time.time()
 result_loop = []
 for x in arr:
-    result_loop.append(x ** 2 + 2 * x + 1)
-result_loop = np.array(result_loop)
+    result_loop.append (x ** 2 + 2 * x + 1)
+result_loop = np.array (result_loop)
 time_loop = time.time() - start
 
 # Method 2: NumPy vectorization
@@ -73,7 +73,7 @@ Consider a neural network forward pass with 1 million parameters:
 
 1. **Always vectorize**: If you write a Python loop over array elements, you're likely doing it wrong
 2. **Use NumPy operations**: +, -, *, /, @, np.sum(), np.mean(), etc.
-3. **Broadcasting**: Leverage NumPy's ability to work with arrays of different shapes
+3. **Broadcasting**: Leverage NumPy\'s ability to work with arrays of different shapes
 4. **Built-in functions**: np.where(), np.clip(), np.maximum() instead of if-else loops
 
 **When Loops Are Acceptable:**
@@ -111,11 +111,11 @@ arr = np.array([[1, 2, 3],
                 [7, 8, 9]])
 
 # axis=0: collapse axis 0 (rows), leaving columns
-print(arr.sum(axis=0))  # [12, 15, 18]
+print(arr.sum (axis=0))  # [12, 15, 18]
 # Sums: column 0: 1+4+7=12, column 1: 2+5+8=15, column 2: 3+6+9=18
 
 # axis=1: collapse axis 1 (columns), leaving rows
-print(arr.sum(axis=1))  # [6, 15, 24]
+print(arr.sum (axis=1))  # [6, 15, 24]
 # Sums: row 0: 1+2+3=6, row 1: 4+5+6=15, row 2: 7+8+9=24
 
 # No axis: collapse everything
@@ -150,13 +150,13 @@ image_batch = np.random.rand(32, 224, 224, 3)  # 32 images, 224×224, RGB
 # Shape: (batch, height, width, channels)
 
 # axis=0: aggregate across batch → (224, 224, 3)
-mean_image = image_batch.mean(axis=0)  # Average image across batch
+mean_image = image_batch.mean (axis=0)  # Average image across batch
 
 # axis=3: aggregate across channels → (32, 224, 224)
-grayscale = image_batch.mean(axis=3)  # Convert to grayscale
+grayscale = image_batch.mean (axis=3)  # Convert to grayscale
 
 # axis=(1,2): aggregate across height and width → (32, 3)
-mean_color_per_image = image_batch.mean(axis=(1, 2))  # Mean RGB per image
+mean_color_per_image = image_batch.mean (axis=(1, 2))  # Mean RGB per image
 \`\`\`
 
 **Practical Applications:**
@@ -164,15 +164,15 @@ mean_color_per_image = image_batch.mean(axis=(1, 2))  # Mean RGB per image
 1. **Feature-wise statistics** (axis=0):
 \`\`\`python
 X = np.random.randn(1000, 20)  # 1000 samples, 20 features
-feature_means = X.mean(axis=0)  # (20,) - mean of each feature
-feature_stds = X.std(axis=0)    # (20,) - std of each feature
+feature_means = X.mean (axis=0)  # (20,) - mean of each feature
+feature_stds = X.std (axis=0)    # (20,) - std of each feature
 X_normalized = (X - feature_means) / feature_stds  # Standardization
 \`\`\`
 
 2. **Sample-wise statistics** (axis=1):
 \`\`\`python
 X = np.random.randn(1000, 20)  # 1000 samples, 20 features
-sample_means = X.mean(axis=1)  # (1000,) - mean of each sample
+sample_means = X.mean (axis=1)  # (1000,) - mean of each sample
 \`\`\`
 
 3. **No axis** (aggregate all):
@@ -192,8 +192,8 @@ Incorrect axis usage is a common source of bugs:
 Always check shapes:
 \`\`\`python
 print(f"Original shape: {arr.shape}")
-print(f"After axis=0: {arr.sum(axis=0).shape}")
-print(f"After axis=1: {arr.sum(axis=1).shape}")
+print(f"After axis=0: {arr.sum (axis=0).shape}")
+print(f"After axis=1: {arr.sum (axis=1).shape}")
 \`\`\`
 
 Once you internalize "axis specifies which dimension to collapse," NumPy operations become much more intuitive!`,
@@ -238,11 +238,11 @@ np.where() has two modes:
 
 \`\`\`python
 # Mode 1: Three arguments (ternary operator)
-result = np.where(arr > 5, 100, -100)  # Same size as input
+result = np.where (arr > 5, 100, -100)  # Same size as input
 # Returns 100 where True, -100 where False
 
 # Mode 2: One argument (index finding)
-indices = np.where(arr > 5)  # Returns tuple of indices
+indices = np.where (arr > 5)  # Returns tuple of indices
 # indices[0] contains the positions
 \`\`\`
 
@@ -259,7 +259,7 @@ indices = np.where(arr > 5)  # Returns tuple of indices
 1. **Filtering data:**
 \`\`\`python
 # Remove outliers
-clean_data = data[np.abs(data - data.mean()) < 2 * data.std()]
+clean_data = data[np.abs (data - data.mean()) < 2 * data.std()]
 
 # Select specific samples
 high_returns = stock_returns[stock_returns > 0.02]
@@ -272,8 +272,8 @@ arr[arr > 100] = 100
 arr[arr < 0] = 0
 
 # Replace outliers with median
-median = np.median(data)
-data[np.abs(data - data.mean()) > 3 * data.std()] = median
+median = np.median (data)
+data[np.abs (data - data.mean()) > 3 * data.std()] = median
 \`\`\`
 
 3. **Multiple conditions:**
@@ -288,27 +288,27 @@ approved_applicants = applicants[mask]
 1. **Maintaining array shape:**
 \`\`\`python
 # Replace negatives with zero, keep positives
-arr = np.where(arr < 0, 0, arr)  # Same size as input
+arr = np.where (arr < 0, 0, arr)  # Same size as input
 
 # Categorize values
-labels = np.where(scores > 90, "A",
-         np.where(scores > 80, "B",
-         np.where(scores > 70, "C", "F")))
+labels = np.where (scores > 90, "A",
+         np.where (scores > 80, "B",
+         np.where (scores > 70, "C", "F")))
 \`\`\`
 
 2. **Element-wise conditionals:**
 \`\`\`python
 # Apply different transformations
-result = np.where(arr % 2 == 0, arr * 2, arr * 3)
+result = np.where (arr % 2 == 0, arr * 2, arr * 3)
 
 # Piecewise functions
-y = np.where(x < 0, 0, np.where(x > 1, 1, x))  # Clip to [0, 1]
+y = np.where (x < 0, 0, np.where (x > 1, 1, x))  # Clip to [0, 1]
 \`\`\`
 
 3. **Finding indices:**
 \`\`\`python
 # Locate outliers
-outlier_indices = np.where(arr > threshold)[0]
+outlier_indices = np.where (arr > threshold)[0]
 
 # Find peaks
 peaks = np.where((arr[1:-1] > arr[:-2]) & (arr[1:-1] > arr[2:]))[0] + 1
@@ -321,7 +321,7 @@ import numpy as np
 import time
 
 n = 10_000_000
-arr = np.random.randn(n)
+arr = np.random.randn (n)
 
 # Boolean indexing (creates copy)
 start = time.time()
@@ -330,7 +330,7 @@ time1 = time.time() - start
 
 # np.where (maintains shape)
 start = time.time()
-result2 = np.where(arr > 0, arr, 0)
+result2 = np.where (arr > 0, arr, 0)
 time2 = time.time() - start
 
 # In-place modification (fastest)
@@ -361,14 +361,14 @@ For very simple conditions, consider:
 
 \`\`\`python
 # Instead of np.where for clipping
-clipped = np.clip(arr, min_val, max_val)  # Faster
+clipped = np.clip (arr, min_val, max_val)  # Faster
 
 # Instead of boolean indexing for simple replacement
 arr[arr < 0] = 0  # In-place
 
 # For max/min comparisons
-result = np.maximum(arr, 0)  # Element-wise max with 0
-result = np.minimum(arr, 100)  # Element-wise min with 100
+result = np.maximum (arr, 0)  # Element-wise max with 0
+result = np.minimum (arr, 100)  # Element-wise min with 100
 \`\`\`
 
 **Best Practices:**
@@ -389,7 +389,7 @@ mask = arr > 0
 arr[mask] *= 2
 
 # OR: np.where maintains shape
-arr = np.where(arr > 0, arr * 2, arr)
+arr = np.where (arr > 0, arr * 2, arr)
 \`\`\`
 
 Understanding these tools and their trade-offs is essential for writing efficient, correct NumPy code!`,

@@ -244,7 +244,7 @@ When target node recovers:
 for hint in hints_for_node_C:
     send_hint_to_C(hint)
     wait_for_ack()
-    delete_hint(hint)
+    delete_hint (hint)
 \`\`\`
 
 **Pros**: Simple, maintains order
@@ -255,7 +255,7 @@ for hint in hints_for_node_C:
 batch = hints_for_node_C[:100]
 send_batch_to_C(batch)
 wait_for_ack()
-delete_hints(batch)
+delete_hints (batch)
 \`\`\`
 
 **Pros**: Faster, less overhead
@@ -494,7 +494,7 @@ Large hints (e.g., binary blobs) can be compressed:
 \`\`\`
 hint = {
   key: "image:123",
-  value: compress(image_data),  // Compressed
+  value: compress (image_data),  // Compressed
   compressed: true
 }
 \`\`\`
@@ -589,7 +589,7 @@ Stream WAL to recovering node.
 **Q: How does hinted handoff improve availability?**
 A: "Without hinted handoff, writes fail if required replicas are down. With hinted handoff: If replica C is down, coordinator stores the write as a 'hint' on another node (D). The write succeeds (availability maintained). When C recovers, D replays the hint to C. This allows writes to succeed during temporary failures while ensuring data eventually reaches all replicas (eventual consistency)."
 
-**Q: What's the difference between a hint and a replica?**
+**Q: What\'s the difference between a hint and a replica?**
 A: "A hint is a temporary stand-in, not a true replica. It doesn't count toward read quorum—if you read from the hint node, it doesn't have the actual data to return. Hints are only for catching up the down node when it recovers. Example: RF=3, W=2, node C down. Write to A, B, hint on D. Write succeeds (2 acks). But read quorum R=2 must come from actual replicas (A, B), not D."
 
 **Q: What happens if hints accumulate for a node that's down for a long time?**

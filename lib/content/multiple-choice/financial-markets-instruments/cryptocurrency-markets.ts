@@ -4,7 +4,7 @@ export const cryptocurrencyMarketsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'fm-1-6-mc-1',
     question:
-      "Bitcoin has a maximum supply of 21 million coins, with approximately 19.5 million currently in circulation. If Bitcoin's price is $40,000, what is the difference between its market capitalization and fully diluted valuation (FDV)?",
+      "Bitcoin has a maximum supply of 21 million coins, with approximately 19.5 million currently in circulation. If Bitcoin\'s price is $40,000, what is the difference between its market capitalization and fully diluted valuation (FDV)?",
     options: ['$20 billion', '$40 billion', '$60 billion', '$80 billion'],
     correctAnswer: 2,
     explanation:
@@ -22,7 +22,7 @@ export const cryptocurrencyMarketsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'fm-1-6-mc-3',
     question:
-      "In the 2022 crypto crisis, Three Arrows Capital's $10 billion failure triggered additional losses through leverage and interconnectedness. If 20 entities were each exposed to 3AC with 5x leverage, what was the approximate total system loss (initial + secondary losses)?",
+      "In the 2022 crypto crisis, Three Arrows Capital\'s $10 billion failure triggered additional losses through leverage and interconnectedness. If 20 entities were each exposed to 3AC with 5x leverage, what was the approximate total system loss (initial + secondary losses)?",
     options: ['$20 billion', '$40 billion', '$60 billion', '$100 billion'],
     correctAnswer: 2,
     explanation:

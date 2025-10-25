@@ -14,30 +14,30 @@ Finding patterns in text is fundamental. We'll cover naive, KMP, and Rabin-Karp 
 Simple but O(n * m) in worst case.
 
 \`\`\`python
-def naive_search(text, pattern):
+def naive_search (text, pattern):
     """
     Find all occurrences of pattern in text.
     Time: O((n-m+1) * m) = O(n * m) worst case
     Space: O(1)
     """
-    n, m = len(text), len(pattern)
+    n, m = len (text), len (pattern)
     positions = []
     
-    for i in range(n - m + 1):
+    for i in range (n - m + 1):
         # Check if pattern matches at position i
         match = True
-        for j in range(m):
+        for j in range (m):
             if text[i + j] != pattern[j]:
                 match = False
                 break
         if match:
-            positions.append(i)
+            positions.append (i)
     
     return positions
 
 text = "AABAACAADAABAABA"
 pattern = "AABA"
-print(naive_search(text, pattern))  # [0, 9, 12]
+print(naive_search (text, pattern))  # [0, 9, 12]
 \`\`\`
 
 **Worst case:** Text = "AAAA...A", Pattern = "AAA...AB"
@@ -49,13 +49,13 @@ print(naive_search(text, pattern))  # [0, 9, 12]
 Use hashing to quickly check potential matches.
 
 \`\`\`python
-def rabin_karp(text, pattern):
+def rabin_karp (text, pattern):
     """
     Find pattern using rolling hash.
     Time: O(n + m) average, O(n * m) worst
     Space: O(1)
     """
-    n, m = len(text), len(pattern)
+    n, m = len (text), len (pattern)
     if m > n:
         return []
     
@@ -68,25 +68,25 @@ def rabin_karp(text, pattern):
     h = 1  # BASE^(m-1) % MOD
     
     # Calculate h = BASE^(m-1) % MOD
-    for i in range(m - 1):
+    for i in range (m - 1):
         h = (h * BASE) % MOD
     
     # Calculate initial hashes
-    for i in range(m):
-        pattern_hash = (BASE * pattern_hash + ord(pattern[i])) % MOD
-        text_hash = (BASE * text_hash + ord(text[i])) % MOD
+    for i in range (m):
+        pattern_hash = (BASE * pattern_hash + ord (pattern[i])) % MOD
+        text_hash = (BASE * text_hash + ord (text[i])) % MOD
     
     # Slide pattern over text
-    for i in range(n - m + 1):
+    for i in range (n - m + 1):
         # If hashes match, verify actual strings (avoid false positives)
         if pattern_hash == text_hash:
             if text[i:i+m] == pattern:
-                positions.append(i)
+                positions.append (i)
         
         # Calculate next hash (rolling hash)
         if i < n - m:
             # Remove leading digit, add trailing digit
-            text_hash = (BASE * (text_hash - ord(text[i]) * h) + ord(text[i + m])) % MOD
+            text_hash = (BASE * (text_hash - ord (text[i]) * h) + ord (text[i + m])) % MOD
             
             # Handle negative values
             if text_hash < 0:
@@ -96,12 +96,12 @@ def rabin_karp(text, pattern):
 
 text = "AABAACAADAABAABA"
 pattern = "AABA"
-print(rabin_karp(text, pattern))  # [0, 9, 12]
+print(rabin_karp (text, pattern))  # [0, 9, 12]
 \`\`\`
 
 **Key insight:** Rolling hash computed in O(1)
 \`\`\`
-Hash(text[i+1:i+m+1]) = (Hash(text[i:i+m]) - text[i] * BASE^(m-1)) * BASE + text[i+m]
+Hash (text[i+1:i+m+1]) = (Hash (text[i:i+m]) - text[i] * BASE^(m-1)) * BASE + text[i+m]
 \`\`\`
 
 ## KMP (Knuth-Morris-Pratt)
@@ -109,18 +109,18 @@ Hash(text[i+1:i+m+1]) = (Hash(text[i:i+m]) - text[i] * BASE^(m-1)) * BASE + text
 Never re-check matched characters using "failure function".
 
 \`\`\`python
-def kmp_search(text, pattern):
+def kmp_search (text, pattern):
     """
     KMP algorithm - never backtracks in text.
     Time: O(n + m), Space: O(m)
     """
-    def compute_lps(pattern):
+    def compute_lps (pattern):
         """
         Compute Longest Proper Prefix which is also Suffix.
         lps[i] = length of longest proper prefix of pattern[0:i+1]
                  which is also a suffix
         """
-        m = len(pattern)
+        m = len (pattern)
         lps = [0] * m
         length = 0  # Length of previous longest prefix suffix
         i = 1
@@ -139,13 +139,13 @@ def kmp_search(text, pattern):
         
         return lps
     
-    n, m = len(text), len(pattern)
+    n, m = len (text), len (pattern)
     if m == 0:
         return [0]
     if m > n:
         return []
     
-    lps = compute_lps(pattern)
+    lps = compute_lps (pattern)
     positions = []
     
     i = 0  # Index for text
@@ -158,7 +158,7 @@ def kmp_search(text, pattern):
         
         if j == m:
             # Pattern found
-            positions.append(i - j)
+            positions.append (i - j)
             j = lps[j - 1]
         elif i < n and text[i] != pattern[j]:
             if j != 0:
@@ -170,7 +170,7 @@ def kmp_search(text, pattern):
 
 text = "AABAACAADAABAABA"
 pattern = "AABA"
-print(kmp_search(text, pattern))  # [0, 9, 12]
+print(kmp_search (text, pattern))  # [0, 9, 12]
 
 # Example of LPS array:
 # Pattern: "AABAABA"

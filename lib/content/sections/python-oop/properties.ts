@@ -15,19 +15,19 @@ class Temperature:
         self._celsius = celsius
     
     @property
-    def celsius(self):
+    def celsius (self):
         """Getter for celsius"""
         return self._celsius
     
     @celsius.setter
-    def celsius(self, value):
+    def celsius (self, value):
         """Setter with validation"""
         if value < -273.15:
             raise ValueError("Temperature below absolute zero!")
         self._celsius = value
     
     @celsius.deleter
-    def celsius(self, value):
+    def celsius (self, value):
         """Deleter (rarely used)"""
         del self._celsius
 
@@ -45,17 +45,17 @@ class Circle:
         self.radius = radius
     
     @property
-    def diameter(self):
+    def diameter (self):
         """Computed on-the-fly"""
         return self.radius * 2
     
     @property
-    def area(self):
+    def area (self):
         """No storage, calculated when accessed"""
         return 3.14159 * self.radius ** 2
     
     @property
-    def circumference(self):
+    def circumference (self):
         return 2 * 3.14159 * self.radius
 
 circle = Circle(5)
@@ -72,12 +72,12 @@ class Person:
         self.age = age  # Uses setter
     
     @property
-    def age(self):
+    def age (self):
         return self._age
     
     @age.setter
-    def age(self, value):
-        if not isinstance(value, int):
+    def age (self, value):
+        if not isinstance (value, int):
             raise TypeError("Age must be an integer")
         if value < 0 or value > 150:
             raise ValueError("Age must be between 0 and 150")
@@ -97,16 +97,16 @@ class BankAccount:
         self._balance = balance
     
     @property
-    def account_number(self):
+    def account_number (self):
         """Read-only property (no setter)"""
         return self._account_number
     
     @property
-    def balance(self):
+    def balance (self):
         """Read-only balance"""
         return self._balance
     
-    def deposit(self, amount):
+    def deposit (self, amount):
         """Controlled balance modification"""
         if amount > 0:
             self._balance += amount
@@ -124,14 +124,14 @@ class DataProcessor:
         self._data = None  # Not loaded yet
     
     @property
-    def data(self):
+    def data (self):
         """Load data only when first accessed"""
         if self._data is None:
             print(f"Loading {self.filename}...")
             self._data = self._load_data()
         return self._data
     
-    def _load_data(self):
+    def _load_data (self):
         # Expensive operation
         return "Loaded data"
 
@@ -149,21 +149,21 @@ class Product:
         self.price = price
     
     @property
-    def price(self):
+    def price (self):
         return self._price
     
     @price.setter
-    def price(self, value):
+    def price (self, value):
         """Auto-convert to float and validate"""
         try:
-            value = float(value)
+            value = float (value)
         except (TypeError, ValueError):
             raise ValueError("Price must be a number")
         
         if value < 0:
             raise ValueError("Price cannot be negative")
         
-        self._price = round(value, 2)  # Store as 2 decimals
+        self._price = round (value, 2)  # Store as 2 decimals
 
 product = Product("Widget", "19.99")  # String accepted
 print(product.price)  # 19.99 (float)
@@ -178,32 +178,32 @@ class Rectangle:
         self._height = height
     
     @property
-    def width(self):
+    def width (self):
         return self._width
     
     @width.setter
-    def width(self, value):
+    def width (self, value):
         if value <= 0:
             raise ValueError("Width must be positive")
         self._width = value
     
     @property
-    def height(self):
+    def height (self):
         return self._height
     
     @height.setter
-    def height(self, value):
+    def height (self, value):
         if value <= 0:
             raise ValueError("Height must be positive")
         self._height = value
     
     @property
-    def area(self):
+    def area (self):
         """Depends on width and height"""
         return self._width * self._height
     
     @property
-    def aspect_ratio(self):
+    def aspect_ratio (self):
         """Depends on width and height"""
         return self._width / self._height
 
@@ -230,11 +230,11 @@ print(rect.area)  # 100 (automatically recalculated)
 \`\`\`python
 class User:
     @property
-    def full_name(self):
+    def full_name (self):
         """Property: simple, no parameters"""
         return f"{self.first_name} {self.last_name}"
     
-    def send_email(self, subject, body):
+    def send_email (self, subject, body):
         """Method: has side effects, needs parameters"""
         # Send email logic
         pass
@@ -245,7 +245,7 @@ class User:
 **1. Calculated Field:**
 \`\`\`python
 @property
-def bmi(self):
+def bmi (self):
     return self.weight / (self.height ** 2)
 \`\`\`
 
@@ -255,7 +255,7 @@ from functools import cached_property
 
 class DataAnalyzer:
     @cached_property
-    def statistics(self):
+    def statistics (self):
         """Computed once, then cached"""
         print("Computing statistics...")
         return self._compute_stats()
@@ -264,7 +264,7 @@ class DataAnalyzer:
 **3. Aliasing:**
 \`\`\`python
 @property
-def username(self):
+def username (self):
     return self.email.split('@')[0]
 \`\`\`
 

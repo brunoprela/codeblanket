@@ -46,18 +46,18 @@ for i in range(10):
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=i
     )
-    model = Ridge(alpha=1.0)
+    model = Ridge (alpha=1.0)
     model.fit(X_train, y_train)
     score = model.score(X_test, y_test)
-    scores.append(score)
+    scores.append (score)
 
 print("R² scores across 10 different random splits:")
-for i, score in enumerate(scores):
+for i, score in enumerate (scores):
     print(f"  Split {i+1}: {score:.4f}")
 
-print(f"\\nMean: {np.mean(scores):.4f}")
-print(f"Std Dev: {np.std(scores):.4f}")
-print(f"Range: [{np.min(scores):.4f}, {np.max(scores):.4f}]")
+print(f"\\nMean: {np.mean (scores):.4f}")
+print(f"Std Dev: {np.std (scores):.4f}")
+print(f"Range: [{np.min (scores):.4f}, {np.max (scores):.4f}]")
 \`\`\`
 
 **Output:**
@@ -94,14 +94,14 @@ from sklearn.model_selection import KFold, cross_val_score
 print("5-Fold Cross-Validation Split Pattern:")
 print("(T=train, V=validation)\\n")
 
-kfold = KFold(n_splits=5, shuffle=True, random_state=42)
-for fold, (train_idx, val_idx) in enumerate(kfold.split(X), 1):
+kfold = KFold (n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, val_idx) in enumerate (kfold.split(X), 1):
     print(f"Fold {fold}: ", end="")
     indicator = ['T'] * len(X)
     for idx in val_idx:
         indicator[idx] = 'V'
     # Show pattern for first 50 samples
-    print('.join(indicator[:50]))
+    print('.join (indicator[:50]))
 
 print("\\nEach sample appears in validation exactly once!")
 print("Each sample appears in training K-1 times!")
@@ -126,30 +126,30 @@ Each sample appears in training K-1 times!
 
 \`\`\`python
 # Manual K-fold implementation (educational)
-kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+kfold = KFold (n_splits=5, shuffle=True, random_state=42)
 scores_manual = []
 
-for fold, (train_idx, val_idx) in enumerate(kfold.split(X), 1):
+for fold, (train_idx, val_idx) in enumerate (kfold.split(X), 1):
     # Split data
     X_train_fold, X_val_fold = X[train_idx], X[val_idx]
     y_train_fold, y_val_fold = y[train_idx], y[val_idx]
     
     # Train model
-    model = Ridge(alpha=1.0)
+    model = Ridge (alpha=1.0)
     model.fit(X_train_fold, y_train_fold)
     
     # Evaluate
     score = model.score(X_val_fold, y_val_fold)
-    scores_manual.append(score)
+    scores_manual.append (score)
     print(f"Fold {fold}: R² = {score:.4f}")
 
-print(f"\\nMean R²: {np.mean(scores_manual):.4f} (+/- {np.std(scores_manual):.4f})")
+print(f"\\nMean R²: {np.mean (scores_manual):.4f} (+/- {np.std (scores_manual):.4f})")
 
 # Sklearn shortcut (automatic)
 print("\\n" + "="*50)
 print("Using sklearn's cross_val_score (automatic):")
 scores_auto = cross_val_score(
-    Ridge(alpha=1.0), X, y, cv=5, scoring='r2'
+    Ridge (alpha=1.0), X, y, cv=5, scoring='r2'
 )
 print(f"Scores: {scores_auto}")
 print(f"Mean R²: {scores_auto.mean():.4f} (+/- {scores_auto.std():.4f})")
@@ -181,7 +181,7 @@ K_values = [2, 3, 5, 10, 20]
 results = []
 
 for k in K_values:
-    scores = cross_val_score(Ridge(alpha=1.0), X, y, cv=k, scoring='r2')
+    scores = cross_val_score(Ridge (alpha=1.0), X, y, cv=k, scoring='r2')
     results.append({
         'K': k,
         'Mean': scores.mean(),
@@ -190,8 +190,8 @@ for k in K_values:
         'Time': k  # Proportional to K
     })
 
-results_df = pd.DataFrame(results)
-print(results_df.to_string(index=False))
+results_df = pd.DataFrame (results)
+print(results_df.to_string (index=False))
 
 print("\\n" + "="*50)
 print("Choosing K:")
@@ -246,27 +246,27 @@ X_class, y_class = make_classification(
 )
 
 print("Original class distribution:")
-unique, counts = np.unique(y_class, return_counts=True)
-for cls, count in zip(unique, counts):
-    print(f"  Class {cls}: {count} ({count/len(y_class)*100:.1f}%)")
+unique, counts = np.unique (y_class, return_counts=True)
+for cls, count in zip (unique, counts):
+    print(f"  Class {cls}: {count} ({count/len (y_class)*100:.1f}%)")
 
 # Compare regular K-fold vs stratified K-fold
 print("\\n" + "="*60)
 print("REGULAR K-FOLD:")
-kfold = KFold(n_splits=5, shuffle=True, random_state=42)
-for fold, (train_idx, val_idx) in enumerate(kfold.split(X_class), 1):
+kfold = KFold (n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, val_idx) in enumerate (kfold.split(X_class), 1):
     y_fold = y_class[val_idx]
-    unique, counts = np.unique(y_fold, return_counts=True)
-    dist = [f"{count/len(y_fold)*100:.1f}%" for count in counts]
+    unique, counts = np.unique (y_fold, return_counts=True)
+    dist = [f"{count/len (y_fold)*100:.1f}%" for count in counts]
     print(f"  Fold {fold} distribution: {dist}")
 
 print("\\n" + "="*60)
 print("STRATIFIED K-FOLD:")
-skfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-for fold, (train_idx, val_idx) in enumerate(skfold.split(X_class, y_class), 1):
+skfold = StratifiedKFold (n_splits=5, shuffle=True, random_state=42)
+for fold, (train_idx, val_idx) in enumerate (skfold.split(X_class, y_class), 1):
     y_fold = y_class[val_idx]
-    unique, counts = np.unique(y_fold, return_counts=True)
-    dist = [f"{count/len(y_fold)*100:.1f}%" for count in counts]
+    unique, counts = np.unique (y_fold, return_counts=True)
+    dist = [f"{count/len (y_fold)*100:.1f}%" for count in counts]
     print(f"  Fold {fold} distribution: {dist}")
 
 # Performance comparison
@@ -275,18 +275,18 @@ print("Performance comparison:")
 
 # Regular K-fold
 scores_regular = cross_val_score(
-    RandomForestClassifier(random_state=42),
+    RandomForestClassifier (random_state=42),
     X_class, y_class,
-    cv=KFold(n_splits=5, shuffle=True, random_state=42),
+    cv=KFold (n_splits=5, shuffle=True, random_state=42),
     scoring='f1_macro'
 )
 print(f"Regular K-fold:    {scores_regular.mean():.4f} (+/- {scores_regular.std():.4f})")
 
 # Stratified K-fold
 scores_stratified = cross_val_score(
-    RandomForestClassifier(random_state=42),
+    RandomForestClassifier (random_state=42),
     X_class, y_class,
-    cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
+    cv=StratifiedKFold (n_splits=5, shuffle=True, random_state=42),
     scoring='f1_macro'
 )
 print(f"Stratified K-fold: {scores_stratified.mean():.4f} (+/- {scores_stratified.std():.4f})")
@@ -336,25 +336,25 @@ from sklearn.model_selection import TimeSeriesSplit
 dates = pd.date_range('2020-01-01', periods=100, freq='D')
 ts_data = pd.DataFrame({
     'date': dates,
-    'value': np.cumsum(np.random.randn(100)) + 100
+    'value': np.cumsum (np.random.randn(100)) + 100
 })
 
 print("Time Series Split (Expanding Window):")
 print("="*60)
 
-tscv = TimeSeriesSplit(n_splits=5)
-for fold, (train_idx, test_idx) in enumerate(tscv.split(ts_data), 1):
+tscv = TimeSeriesSplit (n_splits=5)
+for fold, (train_idx, test_idx) in enumerate (tscv.split (ts_data), 1):
     train_dates = ts_data.iloc[train_idx]['date']
     test_dates = ts_data.iloc[test_idx]['date']
     print(f"Fold {fold}:")
-    print(f"  Train: {train_dates.min().date()} to {train_dates.max().date()} ({len(train_idx)} days)")
-    print(f"  Test:  {test_dates.min().date()} to {test_dates.max().date()} ({len(test_idx)} days)")
+    print(f"  Train: {train_dates.min().date()} to {train_dates.max().date()} ({len (train_idx)} days)")
+    print(f"  Test:  {test_dates.min().date()} to {test_dates.max().date()} ({len (test_idx)} days)")
 
 # Visualize the splits
 fig, axes = plt.subplots(5, 1, figsize=(12, 10))
-for fold, (train_idx, test_idx) in enumerate(tscv.split(ts_data)):
+for fold, (train_idx, test_idx) in enumerate (tscv.split (ts_data)):
     # Create indicator array
-    indicator = np.array(['] * len(ts_data), dtype=object)
+    indicator = np.array(['] * len (ts_data), dtype=object)
     indicator[train_idx] = 'Train'
     indicator[test_idx] = 'Test'
     
@@ -362,11 +362,11 @@ for fold, (train_idx, test_idx) in enumerate(tscv.split(ts_data)):
     train_data = ts_data.iloc[train_idx]
     test_data = ts_data.iloc[test_idx]
     
-    axes[fold].plot(train_data['date'], train_data['value'], 'b-', label='Train', linewidth=2)
-    axes[fold].plot(test_data['date'], test_data['value'], 'r-', label='Test', linewidth=2)
-    axes[fold].set_title(f'Fold {fold+1}')
+    axes[fold].plot (train_data['date'], train_data['value'], 'b-', label='Train', linewidth=2)
+    axes[fold].plot (test_data['date'], test_data['value'], 'r-', label='Test', linewidth=2)
+    axes[fold].set_title (f'Fold {fold+1}')
     axes[fold].set_ylabel('Value')
-    axes[fold].legend(loc='upper left')
+    axes[fold].legend (loc='upper left')
     axes[fold].grid(True, alpha=0.3)
 
 axes[-1].set_xlabel('Date')
@@ -411,14 +411,14 @@ Fold 5:
 In real trading/forecasting, there's often a gap between training and testing (e.g., model retraining delay):
 
 \`\`\`python
-def time_series_split_with_gap(data, n_splits=5, test_size=20, gap=5):
+def time_series_split_with_gap (data, n_splits=5, test_size=20, gap=5):
     """
     Time series split with gap between train and test.
     
     gap=5 means: if training ends on day 100, testing starts on day 106
     This simulates real-world delay in model deployment.
     """
-    n_samples = len(data)
+    n_samples = len (data)
     test_starts = np.linspace(
         test_size + gap,
         n_samples - test_size,
@@ -431,14 +431,14 @@ def time_series_split_with_gap(data, n_splits=5, test_size=20, gap=5):
         test_end = test_start + test_size
         
         train_idx = np.arange(0, train_end)
-        test_idx = np.arange(test_start, min(test_end, n_samples))
+        test_idx = np.arange (test_start, min (test_end, n_samples))
         
         yield train_idx, test_idx
 
 print("Time Series Split with Gap (gap=5 days):")
 print("="*60)
 
-for fold, (train_idx, test_idx) in enumerate(time_series_split_with_gap(ts_data), 1):
+for fold, (train_idx, test_idx) in enumerate (time_series_split_with_gap (ts_data), 1):
     train_dates = ts_data.iloc[train_idx]['date']
     test_dates = ts_data.iloc[test_idx]['date']
     gap_start = train_dates.max()
@@ -480,13 +480,13 @@ print(f"LOOCV will train {len(X_small)} models!")
 
 # LOOCV
 loo = LeaveOneOut()
-scores_loo = cross_val_score(Ridge(alpha=1.0), X_small, y_small, cv=loo, scoring='r2')
+scores_loo = cross_val_score(Ridge (alpha=1.0), X_small, y_small, cv=loo, scoring='r2')
 
 print(f"\\nLOOCV R² scores (first 10 shown): {scores_loo[:10]}")
 print(f"Mean R²: {scores_loo.mean():.4f} (+/- {scores_loo.std():.4f})")
 
 # Compare with 5-fold CV
-scores_5fold = cross_val_score(Ridge(alpha=1.0), X_small, y_small, cv=5, scoring='r2')
+scores_5fold = cross_val_score(Ridge (alpha=1.0), X_small, y_small, cv=5, scoring='r2')
 print(f"\\n5-Fold CV R²: {scores_5fold.mean():.4f} (+/- {scores_5fold.std():.4f})")
 
 print("\\n" + "="*60)
@@ -537,32 +537,32 @@ grid_search = GridSearchCV(Ridge(), param_grid, cv=5)
 grid_search.fit(X_nested, y_nested)
 print(f"Best alpha: {grid_search.best_params_['alpha']}")
 print(f"Best score: {grid_search.best_score_:.4f}")
-print("Problem: This score is optimistic! It's optimized for the CV folds.")
+print("Problem: This score is optimistic! It\'s optimized for the CV folds.")
 
 # ✅ CORRECT: Nested CV (unbiased estimate)
 print("\\n" + "="*60)
 print("✅ NESTED CV (unbiased):")
 
-outer_cv = KFold(n_splits=5, shuffle=True, random_state=42)
+outer_cv = KFold (n_splits=5, shuffle=True, random_state=42)
 nested_scores = []
 
-for fold, (train_idx, test_idx) in enumerate(outer_cv.split(X_nested), 1):
+for fold, (train_idx, test_idx) in enumerate (outer_cv.split(X_nested), 1):
     X_train_outer, X_test_outer = X_nested[train_idx], X_nested[test_idx]
     y_train_outer, y_test_outer = y_nested[train_idx], y_nested[test_idx]
     
     # Inner CV for hyperparameter tuning
-    inner_cv = KFold(n_splits=3, shuffle=True, random_state=42)
+    inner_cv = KFold (n_splits=3, shuffle=True, random_state=42)
     grid_search = GridSearchCV(Ridge(), param_grid, cv=inner_cv)
     grid_search.fit(X_train_outer, y_train_outer)
     
     # Evaluate on outer test set
     best_model = grid_search.best_estimator_
     score = best_model.score(X_test_outer, y_test_outer)
-    nested_scores.append(score)
+    nested_scores.append (score)
     
     print(f"Fold {fold}: Best alpha={grid_search.best_params_['alpha']:6.1f}, Test R²={score:.4f}")
 
-print(f"\\nNested CV Mean R²: {np.mean(nested_scores):.4f} (+/- {np.std(nested_scores):.4f})")
+print(f"\\nNested CV Mean R²: {np.mean (nested_scores):.4f} (+/- {np.std (nested_scores):.4f})")
 print("✅ This is an unbiased estimate of model performance!")
 \`\`\`
 
@@ -571,7 +571,7 @@ print("✅ This is an unbiased estimate of model performance!")
 ❌ NON-NESTED CV (biased):
 Best alpha: 1.0
 Best score: 0.9523
-Problem: This score is optimistic! It's optimized for the CV folds.
+Problem: This score is optimistic! It\'s optimized for the CV folds.
 
 ============================================================
 ✅ NESTED CV (unbiased):
@@ -589,25 +589,25 @@ Nested CV Mean R²: 0.9498 (+/- 0.0028)
 
 \`\`\`python
 # DO: Set random_state for reproducibility
-cv = KFold(n_splits=5, shuffle=True, random_state=42)
+cv = KFold (n_splits=5, shuffle=True, random_state=42)
 
 # DO: Use stratified CV for classification
-cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+cv = StratifiedKFold (n_splits=5, shuffle=True, random_state=42)
 
 # DO: Use time series CV for temporal data
-cv = TimeSeriesSplit(n_splits=5)
+cv = TimeSeriesSplit (n_splits=5)
 
 # DO: Use nested CV for unbiased hyperparameter tuning
 # (shown above)
 
 # DON'T: Use same folds for multiple purposes
-# cv = KFold(n_splits=5)
-# scores1 = cross_val_score(model1, X, y, cv=cv)
-# scores2 = cross_val_score(model2, X, y, cv=cv)  # OK if comparing models
+# cv = KFold (n_splits=5)
+# scores1 = cross_val_score (model1, X, y, cv=cv)
+# scores2 = cross_val_score (model2, X, y, cv=cv)  # OK if comparing models
 # But don't use these same folds for final testing!
 
 # DON'T: Forget to shuffle (except for time series)
-# cv = KFold(n_splits=5, shuffle=False)  # Data might be ordered!
+# cv = KFold (n_splits=5, shuffle=False)  # Data might be ordered!
 
 # DON'T: Use too many folds on small datasets
 # With 50 samples, K=10 means only 5 samples per test fold - unstable!
@@ -630,9 +630,9 @@ y_housing = housing.target
 
 # Define models
 models = {
-    'Ridge': Ridge(alpha=1.0),
-    'Lasso': Lasso(alpha=1.0),
-    'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42),
+    'Ridge': Ridge (alpha=1.0),
+    'Lasso': Lasso (alpha=1.0),
+    'Random Forest': RandomForestRegressor (n_estimators=100, random_state=42),
     'SVR': Pipeline([
         ('scaler', StandardScaler()),
         ('svr', SVR(C=1.0))
@@ -645,7 +645,7 @@ print("="*60)
 
 results = []
 for name, model in models.items():
-    scores = cross_val_score(model, X_housing, y_housing, cv=5, scoring='r2')
+    scores = cross_val_score (model, X_housing, y_housing, cv=5, scoring='r2')
     results.append({
         'Model': name,
         'Mean R²': scores.mean(),
@@ -655,8 +655,8 @@ for name, model in models.items():
     })
     print(f"{name:15s}: {scores.mean():.4f} (+/- {scores.std():.4f})")
 
-results_df = pd.DataFrame(results).sort_values('Mean R²', ascending=False)
-print("\\n" + results_df.to_string(index=False))
+results_df = pd.DataFrame (results).sort_values('Mean R²', ascending=False)
+print("\\n" + results_df.to_string (index=False))
 
 print("\\n✅ Random Forest performs best with most stable results!")
 \`\`\`

@@ -28,7 +28,7 @@ print("=== Tensor Basics ===")
 # Scalars (0D)
 scalar = 42
 print(f"Scalar (0D): {scalar}")
-print(f"Shape: {np.array(scalar).shape}")
+print(f"Shape: {np.array (scalar).shape}")
 print()
 
 # Vectors (1D)
@@ -214,7 +214,7 @@ v1 = np.array([1, 2, 3])
 v2 = np.array([4, 5])
 outer = np.einsum('i,j->ij', v1, v2)
 print(f"Outer product:\\n{outer}")
-print(f"Verify: {np.allclose(outer, np.outer(v1, v2))}")
+print(f"Verify: {np.allclose (outer, np.outer (v1, v2))}")
 \`\`\`
 
 ## Batched Operations
@@ -230,11 +230,11 @@ input_dim = 3
 output_dim = 2
 
 # Weight matrix
-W = np.random.randn(input_dim, output_dim)
-b = np.random.randn(output_dim)
+W = np.random.randn (input_dim, output_dim)
+b = np.random.randn (output_dim)
 
 # Batch of inputs
-X_batch = np.random.randn(batch_size, input_dim)
+X_batch = np.random.randn (batch_size, input_dim)
 
 print(f"Batch size: {batch_size}")
 print(f"Input dim: {input_dim}")
@@ -277,7 +277,7 @@ kernel = np.array([
 ])
 
 # Convolution (technically cross-correlation)
-output = correlate2d(image, kernel, mode='valid')
+output = correlate2d (image, kernel, mode='valid')
 
 print(f"Image shape: {image.shape}")
 print(f"Kernel shape: {kernel.shape}")
@@ -299,9 +299,9 @@ input_features = 784  # e.g., 28×28 image flattened
 hidden_units = 128
 
 # Simulate layer
-X = np.random.randn(batch_size, input_features)
-W = np.random.randn(input_features, hidden_units) * 0.01
-b = np.zeros(hidden_units)
+X = np.random.randn (batch_size, input_features)
+W = np.random.randn (input_features, hidden_units) * 0.01
+b = np.zeros (hidden_units)
 
 # Forward pass
 Z = X @ W + b
@@ -350,19 +350,19 @@ seq_len = 5
 d_model = 8
 
 # Query, Key, Value matrices
-Q = np.random.randn(seq_len, d_model)
-K = np.random.randn(seq_len, d_model)
-V = np.random.randn(seq_len, d_model)
+Q = np.random.randn (seq_len, d_model)
+K = np.random.randn (seq_len, d_model)
+V = np.random.randn (seq_len, d_model)
 
-# Attention scores: QK^T / sqrt(d_model)
-scores = (Q @ K.T) / np.sqrt(d_model)
+# Attention scores: QK^T / sqrt (d_model)
+scores = (Q @ K.T) / np.sqrt (d_model)
 
 # Softmax
-def softmax(x):
-    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
-    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+def softmax (x):
+    exp_x = np.exp (x - np.max (x, axis=-1, keepdims=True))
+    return exp_x / np.sum (exp_x, axis=-1, keepdims=True)
 
-attention_weights = softmax(scores)
+attention_weights = softmax (scores)
 
 # Weighted sum of values
 output = attention_weights @ V

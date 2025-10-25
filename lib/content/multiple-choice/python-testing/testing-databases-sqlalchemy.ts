@@ -28,7 +28,7 @@ export const testingDatabasesSqlalchemyMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        'Transaction rollback is faster (1ms vs 100ms for truncate): One transaction.rollback() vs DELETE FROM each table. Clean state guaranteed: Rollback undoes all changes automatically. Pattern: Begin transaction → test → rollback. Truncate issues: Must disable foreign keys, delete in correct order, slower. Rollback: connection.begin(); session = Session(bind=connection); yield session; transaction.rollback(). Result: 100× faster cleanup, automatic dependency handling.',
+        'Transaction rollback is faster (1ms vs 100ms for truncate): One transaction.rollback() vs DELETE FROM each table. Clean state guaranteed: Rollback undoes all changes automatically. Pattern: Begin transaction → test → rollback. Truncate issues: Must disable foreign keys, delete in correct order, slower. Rollback: connection.begin(); session = Session (bind=connection); yield session; transaction.rollback(). Result: 100× faster cleanup, automatic dependency handling.',
     },
     {
       id: 'tds-mc-3',
@@ -41,7 +41,7 @@ export const testingDatabasesSqlalchemyMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        'Factory Boy generates test data efficiently: Define once, use everywhere. Example: class UserFactory(factory.alchemy.SQLAlchemyModelFactory): username = factory.Sequence(lambda n: f"user{n}"); email = factory.Faker("email"). Usage: user = UserFactory.create() → generates realistic user with Faker data. Benefits: DRY (don\'t repeat data creation), realistic data (Faker), handles relationships (SubFactory). Not for: schema creation (Alembic), query optimization, or connection management. Essential for maintainable test suites.',
+        'Factory Boy generates test data efficiently: Define once, use everywhere. Example: class UserFactory (factory.alchemy.SQLAlchemyModelFactory): username = factory.Sequence (lambda n: f"user{n}"); email = factory.Faker("email"). Usage: user = UserFactory.create() → generates realistic user with Faker data. Benefits: DRY (don\'t repeat data creation), realistic data (Faker), handles relationships (SubFactory). Not for: schema creation (Alembic), query optimization, or connection management. Essential for maintainable test suites.',
     },
     {
       id: 'tds-mc-4',
@@ -55,7 +55,7 @@ export const testingDatabasesSqlalchemyMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 3,
       explanation:
-        'Session scope for engine (expensive to create): @pytest.fixture(scope="session") def engine(): create_engine(...); Base.metadata.create_all(engine); yield; drop_all. Created once at start, reused across all tests (fast). Combine with function-scoped session for isolation: @pytest.fixture def session(engine): connection.begin(); session = Session(); yield; rollback(). Pattern: Expensive setup (engine) → session scope. Cheap, needs isolation (session) → function scope. Result: Fast tests with proper isolation.',
+        'Session scope for engine (expensive to create): @pytest.fixture (scope="session") def engine(): create_engine(...); Base.metadata.create_all (engine); yield; drop_all. Created once at start, reused across all tests (fast). Combine with function-scoped session for isolation: @pytest.fixture def session (engine): connection.begin(); session = Session(); yield; rollback(). Pattern: Expensive setup (engine) → session scope. Cheap, needs isolation (session) → function scope. Result: Fast tests with proper isolation.',
     },
     {
       id: 'tds-mc-5',

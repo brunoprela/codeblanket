@@ -45,7 +45,7 @@ response = openai.chat.completions.create(
     model="gpt-4",
     messages=[
         {"role": "system", "content": BASE_SYSTEM_PROMPT},
-        {"role": "user", "content": "What's the weather in Tokyo?"}
+        {"role": "user", "content": "What\'s the weather in Tokyo?"}
     ],
     functions=[weather_tool, search_tool, database_tool]
 )
@@ -89,16 +89,16 @@ TOOL_USE_EXAMPLES = """Examples:
 User: "What's the capital of France?"
 Response: No tool needed. Answer: "The capital of France is Paris."
 
-User: "What's the weather in Paris?"
-Tool: get_weather(location="Paris, France")
+User: "What\'s the weather in Paris?"
+Tool: get_weather (location="Paris, France")
 Response: Based on weather data...
 
 User: "How many users signed up last week?"
-Tool: query_database(query="SELECT COUNT(*) FROM users WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'")
+Tool: query_database (query="SELECT COUNT(*) FROM users WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'")
 Response: Based on the database...
 
 User: "Send an email to john@example.com about the meeting"
-Tool: send_email(to="john@example.com", subject="Meeting", body="...")
+Tool: send_email (to="john@example.com", subject="Meeting", body="...")
 Response: I've sent the email to john@example.com.
 """
 
@@ -219,7 +219,7 @@ ARGUMENT_VALIDATION_PROMPT = """Before calling any tool:
 
 Examples:
 
-User: "What's the weather?"
+User: "What\'s the weather?"
 Missing: location
 Action: Ask user "Which location would you like weather for?"
 
@@ -275,14 +275,14 @@ MULTI_STEP_PROMPT = """For complex requests:
 
 Example:
 
-User: "What's warmer, San Francisco or Seattle right now?"
+User: "What\'s warmer, San Francisco or Seattle right now?"
 
 Step 1: Get weather for San Francisco
-Tool: get_weather(location="San Francisco, CA")
+Tool: get_weather (location="San Francisco, CA")
 Result: 68°F
 
 Step 2: Get weather for Seattle
-Tool: get_weather(location="Seattle, WA")
+Tool: get_weather (location="Seattle, WA")
 Result: 55°F
 
 Step 3: Compare and respond
@@ -357,26 +357,26 @@ Provide complete examples in conversation format:
 FEW_SHOT_EXAMPLES = """Here are examples of correct tool usage:
 
 Example 1: Simple query
-User: "What's 15% of 230?"
+User: "What\'s 15% of 230?"
 Assistant: Let me calculate that for you.
-Tool: execute_python(code="result = 0.15 * 230\\nprint(result)")
+Tool: execute_python (code="result = 0.15 * 230\\nprint(result)")
 Result: 34.5
 Assistant: 15% of 230 is 34.5.
 
 Example 2: Multi-step query
 User: "Search for Python tutorials and summarize the top result"
 Assistant: I'll search for Python tutorials.
-Tool: search_web(query="Python tutorials")
+Tool: search_web (query="Python tutorials")
 Result: [{"title": "Learn Python", "url": "...", "snippet": "..."}]
 Assistant: I found several tutorials. Let me get more details on the top one.
-Tool: read_url(url="...")
+Tool: read_url (url="...")
 Result: {"content": "..."}
 Assistant: Based on the top result, here's a summary: [summary]
 
 Example 3: Error handling
-User: "What's the weather in Atlantis?"
+User: "What\'s the weather in Atlantis?"
 Assistant: Let me check the weather in Atlantis.
-Tool: get_weather(location="Atlantis")
+Tool: get_weather (location="Atlantis")
 Result: {"error": "Location not found"}
 Assistant: I couldn't find a location called "Atlantis". Did you mean Atlanta, or perhaps a different city?
 """
@@ -392,7 +392,7 @@ messages = [
 Adapt prompts based on user or context:
 
 \`\`\`python
-def get_system_prompt(user: User, context: Dict) -> str:
+def get_system_prompt (user: User, context: Dict) -> str:
     """Generate dynamic system prompt based on context."""
     
     base = BASE_SYSTEM_PROMPT
@@ -415,7 +415,7 @@ def get_system_prompt(user: User, context: Dict) -> str:
     
     return base
 
-system_prompt = get_system_prompt(current_user, request_context)
+system_prompt = get_system_prompt (current_user, request_context)
 \`\`\`
 
 ## Debugging Tool Use Issues
@@ -465,34 +465,34 @@ Always think through which category the request falls into before choosing a too
 \`\`\`python
 ARGUMENT_TEMPLATES = """Argument Templates:
 
-get_weather(location, unit)
+get_weather (location, unit)
 - location: "City, Country" or "City, State"
 - unit: "celsius" or "fahrenheit"
-Example: get_weather(location="Paris, France", unit="celsius")
+Example: get_weather (location="Paris, France", unit="celsius")
 
-send_email(to, subject, body)
+send_email (to, subject, body)
 - to: Valid email address
 - subject: Short, descriptive subject line
 - body: Full email content
-Example: send_email(to="user@example.com", subject="Meeting Reminder", body="...")
+Example: send_email (to="user@example.com", subject="Meeting Reminder", body="...")
 
-query_database(query)
+query_database (query)
 - query: Valid SQL SELECT statement only
 - Must start with SELECT
 - Use single quotes for strings
-Example: query_database(query="SELECT * FROM users WHERE age > 18")
+Example: query_database (query="SELECT * FROM users WHERE age > 18")
 """
 \`\`\`
 
 ## Testing Tool Use Prompts
 
 \`\`\`python
-def test_tool_use_prompt(prompt: str, test_cases: List[Dict]) -> Dict:
+def test_tool_use_prompt (prompt: str, test_cases: List[Dict]) -> Dict:
     """
     Test how well a prompt teaches tool use.
     """
     results = {
-        "total": len(test_cases),
+        "total": len (test_cases),
         "correct_tool": 0,
         "correct_args": 0,
         "no_tool_when_should": 0,
@@ -520,7 +520,7 @@ def test_tool_use_prompt(prompt: str, test_cases: List[Dict]) -> Dict:
                 results["correct_tool"] += 1
                 
                 # Check if correct arguments
-                args = json.loads(message.function_call.arguments)
+                args = json.loads (message.function_call.arguments)
                 if args == case["expected_args"]:
                     results["correct_args"] += 1
             else:
@@ -538,7 +538,7 @@ def test_tool_use_prompt(prompt: str, test_cases: List[Dict]) -> Dict:
 # Test cases
 test_cases = [
     {
-        "query": "What's the weather in Tokyo?",
+        "query": "What\'s the weather in Tokyo?",
         "expected_tool": "get_weather",
         "expected_args": {"location": "Tokyo, Japan"},
         "available_tools": [weather_tool, search_tool]
@@ -582,7 +582,7 @@ Step 4: Execute
 - OR respond directly if no tool needed
 
 Example:
-Query: "What's the population of the capital of Japan?"
+Query: "What\'s the population of the capital of Japan?"
 
 Step 1: User wants population of Japan's capital
 Step 2: I know Tokyo is the capital, but population changes - need current data

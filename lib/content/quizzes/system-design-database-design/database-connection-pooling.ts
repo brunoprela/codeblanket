@@ -76,7 +76,7 @@ current_replica = 0
 def get_read_connection():
     global current_replica
     pool = read_pools[current_replica]
-    current_replica = (current_replica + 1) % len(read_pools)
+    current_replica = (current_replica + 1) % len (read_pools)
     return pool.getconn()
 
 # Total per replica: 20 instances × 50 connections = 1000 max
@@ -105,7 +105,7 @@ class DatabaseConnectionManager:
         )
         self.health_check_thread.start()
     
-    def _create_write_pool(self):
+    def _create_write_pool (self):
         return ConnectionPool(
             host=os.environ['PRIMARY_DB_HOST',],
             database=os.environ['DB_NAME',],
@@ -119,7 +119,7 @@ class DatabaseConnectionManager:
             connect_timeout=5
         )
     
-    def _create_read_pools(self):
+    def _create_read_pools (self):
         replica_hosts = os.environ['REPLICA_DB_HOSTS',].split(',')
         return [
             ConnectionPool(
@@ -138,10 +138,10 @@ class DatabaseConnectionManager:
         ]
     
     @contextmanager
-    def get_write_connection(self):
+    def get_write_connection (self):
         conn = None
         try:
-            conn = self.write_pool.getconn(timeout=10)
+            conn = self.write_pool.getconn (timeout=10)
             # Validate connection
             cursor = conn.cursor()
             cursor.execute("SELECT 1")
@@ -154,13 +154,13 @@ class DatabaseConnectionManager:
             raise
         finally:
             if conn:
-                self.write_pool.putconn(conn)
+                self.write_pool.putconn (conn)
     
     @contextmanager
-    def get_read_connection(self):
-        max_retries = len(self.read_pools)
+    def get_read_connection (self):
+        max_retries = len (self.read_pools)
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             # Get next healthy replica (round-robin)
             pool_idx = self._get_next_healthy_replica()
             
@@ -175,7 +175,7 @@ class DatabaseConnectionManager:
             conn = None
             
             try:
-                conn = pool.getconn(timeout=5)
+                conn = pool.getconn (timeout=5)
                 
                 # Validate connection
                 cursor = conn.cursor()
@@ -186,25 +186,25 @@ class DatabaseConnectionManager:
                 return
                 
             except Exception as e:
-                logger.error(f"Read replica {pool_idx} failed: {e}")
-                self.failed_replicas.add(pool_idx)
+                logger.error (f"Read replica {pool_idx} failed: {e}")
+                self.failed_replicas.add (pool_idx)
                 
                 if conn:
                     # Remove bad connection from pool
-                    pool.putconn(conn, close=True)
+                    pool.putconn (conn, close=True)
                 
                 # Retry with next replica
                 continue
             
             finally:
                 if conn:
-                    pool.putconn(conn)
+                    pool.putconn (conn)
         
         raise Exception("All database connections failed")
     
-    def _get_next_healthy_replica(self):
+    def _get_next_healthy_replica (self):
         healthy_replicas = [
-            i for i in range(len(self.read_pools))
+            i for i in range (len (self.read_pools))
             if i not in self.failed_replicas
         ]
         
@@ -212,35 +212,35 @@ class DatabaseConnectionManager:
             return None
         
         # Round-robin among healthy replicas
-        self.read_pool_index = (self.read_pool_index + 1) % len(healthy_replicas)
+        self.read_pool_index = (self.read_pool_index + 1) % len (healthy_replicas)
         return healthy_replicas[self.read_pool_index]
     
-    def _health_check_loop(self):
+    def _health_check_loop (self):
         while True:
             try:
                 self._check_replica_health()
                 time.sleep(10)  # Check every 10 seconds
             except Exception as e:
-                logger.error(f"Health check error: {e}")
+                logger.error (f"Health check error: {e}")
     
-    def _check_replica_health(self):
-        for idx, pool in enumerate(self.read_pools):
+    def _check_replica_health (self):
+        for idx, pool in enumerate (self.read_pools):
             if idx in self.failed_replicas:
                 # Try to reconnect failed replicas
                 try:
-                    conn = pool.getconn(timeout=3)
+                    conn = pool.getconn (timeout=3)
                     cursor = conn.cursor()
                     cursor.execute("SELECT 1")
                     cursor.fetchone()
-                    pool.putconn(conn)
+                    pool.putconn (conn)
                     
                     # Replica is healthy again
-                    logger.info(f"Replica {idx} recovered")
-                    self.failed_replicas.discard(idx)
+                    logger.info (f"Replica {idx} recovered")
+                    self.failed_replicas.discard (idx)
                     
                 except Exception:
                     # Still unhealthy
-                    pool.putconn(conn, close=True) if conn else None
+                    pool.putconn (conn, close=True) if conn else None
 
 # Global instance
 db_manager = DatabaseConnectionManager()
@@ -250,7 +250,7 @@ db_manager = DatabaseConnectionManager()
 
 \`\`\`python
 # Write operation
-def create_order(user_id, items):
+def create_order (user_id, items):
     with db_manager.get_write_connection() as conn:
         cursor = conn.cursor()
         
@@ -259,7 +259,7 @@ def create_order(user_id, items):
             INSERT INTO orders (user_id, total_amount, status)
             VALUES (%s, %s, %s)
             RETURNING order_id
-        """, (user_id, calculate_total(items), 'pending'))
+        """, (user_id, calculate_total (items), 'pending'))
         
         order_id = cursor.fetchone()[0]
         
@@ -273,14 +273,14 @@ def create_order(user_id, items):
         return order_id
 
 # Read operation
-def get_product(product_id):
+def get_product (product_id):
     with db_manager.get_read_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM products WHERE product_id = %s", (product_id,))
         return cursor.fetchone()
 
 # Read-after-write (use primary to avoid replication lag)
-def get_fresh_order(order_id):
+def get_fresh_order (order_id):
     with db_manager.get_write_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM orders WHERE order_id = %s", (order_id,))
@@ -295,7 +295,7 @@ class PoolMetrics:
         self.pool = pool
         self.name = name
     
-    def get_metrics(self):
+    def get_metrics (self):
         return {
             f"{self.name}_total_connections": self.pool.size,
             f"{self.name}_active_connections": self.pool.size - self.pool.available,
@@ -310,23 +310,23 @@ def collect_pool_metrics():
     metrics = {}
     
     # Write pool metrics
-    write_metrics = PoolMetrics(db_manager.write_pool, "write_pool")
-    metrics.update(write_metrics.get_metrics())
+    write_metrics = PoolMetrics (db_manager.write_pool, "write_pool")
+    metrics.update (write_metrics.get_metrics())
     
     # Read pool metrics (per replica)
-    for idx, pool in enumerate(db_manager.read_pools):
-        read_metrics = PoolMetrics(pool, f"read_pool_{idx}")
-        metrics.update(read_metrics.get_metrics())
+    for idx, pool in enumerate (db_manager.read_pools):
+        read_metrics = PoolMetrics (pool, f"read_pool_{idx}")
+        metrics.update (read_metrics.get_metrics())
     
     # Failed replicas
-    metrics['failed_replicas_count',] = len(db_manager.failed_replicas)
+    metrics['failed_replicas_count',] = len (db_manager.failed_replicas)
     
     return metrics
 
 # Expose metrics endpoint
 @app.route('/metrics')
 def metrics():
-    return jsonify(collect_pool_metrics())
+    return jsonify (collect_pool_metrics())
 
 # Alert rules
 def check_alerts():
@@ -341,7 +341,7 @@ def check_alerts():
         alert("WARNING: High write pool wait time")
     
     # All replicas failed
-    if metrics['failed_replicas_count',] == len(db_manager.read_pools):
+    if metrics['failed_replicas_count',] == len (db_manager.read_pools):
         alert("CRITICAL: All read replicas failed!")
 \`\`\`
 
@@ -353,15 +353,15 @@ def check_alerts():
 # Automatic failover using database proxy (PgBouncer, ProxySQL)
 # Or manual promotion:
 
-def promote_replica_to_primary(replica_idx):
+def promote_replica_to_primary (replica_idx):
     # 1. Stop all writes
     db_manager.write_pool.disable()
     
     # 2. Wait for replication lag to catch up
-    wait_for_replication_sync(replica_idx)
+    wait_for_replication_sync (replica_idx)
     
     # 3. Promote replica
-    promote_replica_command(replica_idx)
+    promote_replica_command (replica_idx)
     
     # 4. Reconfigure write pool to new primary
     db_manager.write_pool = ConnectionPool(
@@ -483,18 +483,18 @@ connection_pool = ConnectionPool(
 
 \`\`\`python
 @contextmanager
-def get_connection_with_timeout(timeout=5):
+def get_connection_with_timeout (timeout=5):
     start_time = time.time()
     
     try:
         # Try to get connection with timeout
-        conn = pool.getconn(timeout=timeout)
+        conn = pool.getconn (timeout=timeout)
         
         elapsed = time.time() - start_time
         
         if elapsed > 1.0:
             # Log slow connection acquisition
-            logger.warning(f"Slow connection acquisition: {elapsed:.2f}s")
+            logger.warning (f"Slow connection acquisition: {elapsed:.2f}s")
             metrics.increment('db.connection.slow_acquisition')
         
         yield conn
@@ -507,7 +507,7 @@ def get_connection_with_timeout(timeout=5):
     
     finally:
         if conn:
-            pool.putconn(conn)
+            pool.putconn (conn)
 \`\`\`
 
 **3. Add Connection Leak Detection**
@@ -522,27 +522,27 @@ class LeakDetectionPool:
         self.active_connections = {}
         self.lock = threading.Lock()
     
-    def getconn(self, timeout=None):
-        conn = self.pool.getconn(timeout=timeout)
+    def getconn (self, timeout=None):
+        conn = self.pool.getconn (timeout=timeout)
         
         with self.lock:
             # Track where connection was acquired
-            self.active_connections[id(conn)] = {
+            self.active_connections[id (conn)] = {
                 'acquired_at': time.time(),
-                'stack_trace': '.join(traceback.format_stack()),
+                'stack_trace': '.join (traceback.format_stack()),
                 'thread': threading.current_thread().name
             }
         
         return conn
     
-    def putconn(self, conn, close=False):
+    def putconn (self, conn, close=False):
         with self.lock:
-            if id(conn) in self.active_connections:
-                del self.active_connections[id(conn)]
+            if id (conn) in self.active_connections:
+                del self.active_connections[id (conn)]
         
-        self.pool.putconn(conn, close=close)
+        self.pool.putconn (conn, close=close)
     
-    def check_for_leaks(self):
+    def check_for_leaks (self):
         """Call this periodically (every 30 seconds)"""
         with self.lock:
             current_time = time.time()
@@ -551,10 +551,10 @@ class LeakDetectionPool:
                 age = current_time - info['acquired_at',]
                 
                 if age > 60:  # Connection held > 60 seconds
-                    logger.error(f"Connection leak detected!")
-                    logger.error(f"Age: {age:.2f}s")
-                    logger.error(f"Thread: {info['thread',]}")
-                    logger.error(f"Stack trace:\\n{info['stack_trace',]}")
+                    logger.error (f"Connection leak detected!")
+                    logger.error (f"Age: {age:.2f}s")
+                    logger.error (f"Thread: {info['thread',]}")
+                    logger.error (f"Stack trace:\\n{info['stack_trace',]}")
                     
                     metrics.increment('db.connection.leak_detected')
 \`\`\`
@@ -562,22 +562,22 @@ class LeakDetectionPool:
 **4. Query Timeout Enforcement**
 
 \`\`\`python
-def execute_with_timeout(cursor, query, params=None, timeout=5):
+def execute_with_timeout (cursor, query, params=None, timeout=5):
     """Enforce query timeout at application level"""
     
     # Set statement timeout (PostgreSQL)
-    cursor.execute(f"SET statement_timeout = {timeout * 1000}")  # milliseconds
+    cursor.execute (f"SET statement_timeout = {timeout * 1000}")  # milliseconds
     
     try:
         if params:
-            cursor.execute(query, params)
+            cursor.execute (query, params)
         else:
-            cursor.execute(query)
+            cursor.execute (query)
         
         return cursor.fetchall()
         
     except QueryTimeout:
-        logger.warning(f"Query timeout after {timeout}s: {query[:100]}")
+        logger.warning (f"Query timeout after {timeout}s: {query[:100]}")
         metrics.increment('db.query.timeout')
         raise
     
@@ -604,7 +604,7 @@ LIMIT 20;
 
 -- Add missing indexes
 CREATE INDEX CONCURRENTLY idx_orders_user_created 
-ON orders(user_id, created_at DESC);
+ON orders (user_id, created_at DESC);
 
 -- Use connection for read-only queries
 EXEC query ON REPLICA;
@@ -616,16 +616,16 @@ EXEC query ON REPLICA;
 # Priority-based connection pool
 class PriorityConnectionPool:
     def __init__(self):
-        self.high_priority_pool = ConnectionPool(maxconn=30)
-        self.low_priority_pool = ConnectionPool(maxconn=10)
+        self.high_priority_pool = ConnectionPool (maxconn=30)
+        self.low_priority_pool = ConnectionPool (maxconn=10)
     
-    def get_connection(self, priority='normal'):
+    def get_connection (self, priority='normal'):
         if priority == 'high':
             # Critical writes, payments, user registration
             return self.high_priority_pool.getconn()
         else:
             # Analytics, reports, background jobs
-            return self.low_priority_pool.getconn(timeout=2)
+            return self.low_priority_pool.getconn (timeout=2)
 \`\`\`
 
 **Long-term Architectural Solutions:**
@@ -635,19 +635,19 @@ class PriorityConnectionPool:
 \`\`\`python
 class SmartConnectionManager:
     def __init__(self):
-        self.write_pool = ConnectionPool(host='primary', maxconn=20)
+        self.write_pool = ConnectionPool (host='primary', maxconn=20)
         self.read_pools = [
-            ConnectionPool(host='replica1', maxconn=50),
-            ConnectionPool(host='replica2', maxconn=50),
-            ConnectionPool(host='replica3', maxconn=50)
+            ConnectionPool (host='replica1', maxconn=50),
+            ConnectionPool (host='replica2', maxconn=50),
+            ConnectionPool (host='replica3', maxconn=50)
         ]
     
-    def get_write_connection(self):
+    def get_write_connection (self):
         return self.write_pool.getconn()
     
-    def get_read_connection(self):
+    def get_read_connection (self):
         # Load balance across replicas
-        replica_idx = random.randint(0, len(self.read_pools) - 1)
+        replica_idx = random.randint(0, len (self.read_pools) - 1)
         return self.read_pools[replica_idx].getconn()
 \`\`\`
 
@@ -656,13 +656,13 @@ class SmartConnectionManager:
 \`\`\`python
 from functools import lru_cache
 
-@lru_cache(maxsize=10000)
-def get_user(user_id):
+@lru_cache (maxsize=10000)
+def get_user (user_id):
     # Check Redis first
-    cached = redis_client.get(f"user:{user_id}")
+    cached = redis_client.get (f"user:{user_id}")
     if cached:
         metrics.increment('cache.hit')
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Cache miss - query database
     metrics.increment('cache.miss')
@@ -672,7 +672,7 @@ def get_user(user_id):
         user = cursor.fetchone()
     
     # Store in Redis (TTL: 5 minutes)
-    redis_client.setex(f"user:{user_id}", 300, json.dumps(user))
+    redis_client.setex (f"user:{user_id}", 300, json.dumps (user))
     
     return user
 \`\`\`
@@ -892,7 +892,7 @@ class HybridPoolManager:
         )
     
     @contextmanager
-    def get_connection(self, priority='normal'):
+    def get_connection (self, priority='normal'):
         if priority == 'critical':
             # Use dedicated critical pool
             pool = self.critical_pool
@@ -909,14 +909,14 @@ class HybridPoolManager:
             yield conn
         finally:
             if conn:
-                pool.putconn(conn)
+                pool.putconn (conn)
 
 # Usage with clear priority declaration
-with pool_manager.get_connection(priority='critical') as conn:
-    process_payment(conn)
+with pool_manager.get_connection (priority='critical') as conn:
+    process_payment (conn)
 
-with pool_manager.get_connection(priority='low') as conn:
-    generate_report(conn)
+with pool_manager.get_connection (priority='low') as conn:
+    generate_report (conn)
 \`\`\`
 
 **When to Use Each Approach:**
@@ -939,11 +939,11 @@ with pool_manager.get_connection(priority='low') as conn:
 \`\`\`python
 # Stripe uses separate pools for different operations
 pools = {
-    'checkout': ConnectionPool(maxconn=100),      # Payment processing
-    'api': ConnectionPool(maxconn=200),           # API requests
-    'dashboard': ConnectionPool(maxconn=50),      # Customer dashboard
-    'analytics': ConnectionPool(maxconn=30),      # Internal analytics
-    'background': ConnectionPool(maxconn=20)      # Background jobs
+    'checkout': ConnectionPool (maxconn=100),      # Payment processing
+    'api': ConnectionPool (maxconn=200),           # API requests
+    'dashboard': ConnectionPool (maxconn=50),      # Customer dashboard
+    'analytics': ConnectionPool (maxconn=30),      # Internal analytics
+    'background': ConnectionPool (maxconn=20)      # Background jobs
 }
 
 # Result:

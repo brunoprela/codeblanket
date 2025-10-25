@@ -53,7 +53,7 @@ export const mergingjoiningdataMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "pd.merge_asof() is designed for time series data where you need to merge on the nearest timestamp within a tolerance, rather than requiring exact matches. It's useful for matching events to prices, aligning data streams, etc.",
+      "pd.merge_asof() is designed for time series data where you need to merge on the nearest timestamp within a tolerance, rather than requiring exact matches. It\'s useful for matching events to prices, aligning data streams, etc.",
   },
   {
     id: 'merging-joining-data-mc-5',

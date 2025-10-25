@@ -100,7 +100,7 @@ det([a b]) = ad - bc
 - det(AB) = det(A)·det(B)
 - det(A^T) = det(A)
 - det(A^{-1}) = 1/det(A)
-- det(cA) = c^n·det(A) for n×n matrix
+- det (cA) = c^n·det(A) for n×n matrix
 
 **Problem 1.2a:**
 
@@ -243,7 +243,7 @@ tr(A) = Σᵢ aᵢᵢ
 
 **Key properties:**
 - tr(A + B) = tr(A) + tr(B)
-- tr(cA) = c·tr(A)
+- tr (cA) = c·tr(A)
 - tr(AB) = tr(BA) (cyclic property)
 - tr(A) = sum of eigenvalues
 - tr(A^T) = tr(A)
@@ -1005,7 +1005,7 @@ If A is symmetric: ∂/∂x (x^T A x) = 2Ax
 
 **Problem 7.1: Minimize Quadratic Form**
 
-Minimize f(w) = w^T Σ w subject to w^T 1 = 1.
+Minimize f (w) = w^T Σ w subject to w^T 1 = 1.
 
 **Solution (Lagrangian):**
 \`\`\`
@@ -1092,7 +1092,7 @@ def determinant_2x2(A: np.ndarray) -> float:
 def inverse_2x2(A: np.ndarray) -> np.ndarray:
     """Invert 2x2 matrix."""
     det = determinant_2x2(A)
-    if abs(det) < 1e-10:
+    if abs (det) < 1e-10:
         raise ValueError("Matrix is singular")
     
     return (1/det) * np.array([[A[1,1], -A[0,1]],
@@ -1111,16 +1111,16 @@ def compute_eigenvalues_2x2_analytical(A: np.ndarray) -> Tuple[float, float]:
     trace = A[0,0] + A[1,1]
     det = determinant_2x2(A)
     
-    # Quadratic formula: λ = (tr ± sqrt(tr² - 4det)) / 2
+    # Quadratic formula: λ = (tr ± sqrt (tr² - 4det)) / 2
     discriminant = trace**2 - 4*det
     
     if discriminant < 0:
         # Complex eigenvalues
         real_part = trace / 2
         imag_part = np.sqrt(-discriminant) / 2
-        return complex(real_part, imag_part), complex(real_part, -imag_part)
+        return complex (real_part, imag_part), complex (real_part, -imag_part)
     else:
-        sqrt_disc = np.sqrt(discriminant)
+        sqrt_disc = np.sqrt (discriminant)
         lambda1 = (trace + sqrt_disc) / 2
         lambda2 = (trace - sqrt_disc) / 2
         return lambda1, lambda2
@@ -1129,7 +1129,7 @@ def compute_eigenvalues_2x2_analytical(A: np.ndarray) -> Tuple[float, float]:
 # Section 3: PCA Implementation
 # ============================================================================
 
-def pca_analysis(data: np.ndarray, n_components: int = None) -> dict:
+def pca_analysis (data: np.ndarray, n_components: int = None) -> dict:
     """
     Perform PCA on data matrix.
     
@@ -1141,28 +1141,28 @@ def pca_analysis(data: np.ndarray, n_components: int = None) -> dict:
         Dictionary with eigenvalues, eigenvectors, variance explained, etc.
     """
     # Center the data
-    data_centered = data - np.mean(data, axis=0)
+    data_centered = data - np.mean (data, axis=0)
     
     # Compute covariance matrix
     n_samples = data.shape[0]
     cov_matrix = (data_centered.T @ data_centered) / (n_samples - 1)
     
     # Eigendecomposition
-    eigenvalues, eigenvectors = np.linalg.eigh(cov_matrix)
+    eigenvalues, eigenvectors = np.linalg.eigh (cov_matrix)
     
     # Sort by eigenvalue (descending)
-    idx = np.argsort(eigenvalues)[::-1]
+    idx = np.argsort (eigenvalues)[::-1]
     eigenvalues = eigenvalues[idx]
     eigenvectors = eigenvectors[:, idx]
     
     # Variance explained
-    total_var = np.sum(eigenvalues)
+    total_var = np.sum (eigenvalues)
     var_explained = eigenvalues / total_var
-    cumulative_var = np.cumsum(var_explained)
+    cumulative_var = np.cumsum (var_explained)
     
     # Project data onto principal components
     if n_components is None:
-        n_components = len(eigenvalues)
+        n_components = len (eigenvalues)
     
     pc_loadings = eigenvectors[:, :n_components]
     transformed_data = data_centered @ pc_loadings
@@ -1181,26 +1181,26 @@ def pca_analysis(data: np.ndarray, n_components: int = None) -> dict:
 # Section 4: Portfolio Optimization
 # ============================================================================
 
-def portfolio_variance(weights: np.ndarray, cov_matrix: np.ndarray) -> float:
+def portfolio_variance (weights: np.ndarray, cov_matrix: np.ndarray) -> float:
     """Calculate portfolio variance: w^T Σ w"""
     return weights @ cov_matrix @ weights
 
-def minimum_variance_portfolio(cov_matrix: np.ndarray) -> np.ndarray:
+def minimum_variance_portfolio (cov_matrix: np.ndarray) -> np.ndarray:
     """
     Find minimum variance portfolio weights.
     
     Formula: w* = Σ^{-1} 1 / (1^T Σ^{-1} 1)
     """
     n = cov_matrix.shape[0]
-    ones = np.ones(n)
+    ones = np.ones (n)
     
-    cov_inv = np.linalg.inv(cov_matrix)
+    cov_inv = np.linalg.inv (cov_matrix)
     numerator = cov_inv @ ones
     denominator = ones @ cov_inv @ ones
     
     return numerator / denominator
 
-def efficient_frontier(mu: np.ndarray, cov_matrix: np.ndarray, 
+def efficient_frontier (mu: np.ndarray, cov_matrix: np.ndarray, 
                       n_points: int = 100) -> Tuple[np.ndarray, np.ndarray]:
     """
     Compute efficient frontier for portfolio optimization.
@@ -1213,16 +1213,16 @@ def efficient_frontier(mu: np.ndarray, cov_matrix: np.ndarray,
     Returns:
         (risks, returns) arrays for plotting
     """
-    n_assets = len(mu)
+    n_assets = len (mu)
     
     # Find minimum variance portfolio
-    w_min = minimum_variance_portfolio(cov_matrix)
+    w_min = minimum_variance_portfolio (cov_matrix)
     r_min = mu @ w_min
-    vol_min = np.sqrt(portfolio_variance(w_min, cov_matrix))
+    vol_min = np.sqrt (portfolio_variance (w_min, cov_matrix))
     
     # Range of target returns
-    r_max = np.max(mu)
-    target_returns = np.linspace(r_min, r_max, n_points)
+    r_max = np.max (mu)
+    target_returns = np.linspace (r_min, r_max, n_points)
     
     risks = []
     actual_returns = []
@@ -1245,25 +1245,25 @@ def efficient_frontier(mu: np.ndarray, cov_matrix: np.ndarray,
             # Numerical optimization needed for n > 2
             from scipy.optimize import minimize
             
-            def objective(w):
-                return portfolio_variance(w, cov_matrix)
+            def objective (w):
+                return portfolio_variance (w, cov_matrix)
             
             constraints = [
-                {'type': 'eq', 'fun': lambda w: np.sum(w) - 1},
+                {'type': 'eq', 'fun': lambda w: np.sum (w) - 1},
                 {'type': 'eq', 'fun': lambda w: mu @ w - target_r}
             ]
             
-            w0 = np.ones(n_assets) / n_assets
-            result = minimize(objective, w0, constraints=constraints)
+            w0 = np.ones (n_assets) / n_assets
+            result = minimize (objective, w0, constraints=constraints)
             w = result.x
         
-        risk = np.sqrt(portfolio_variance(w, cov_matrix))
+        risk = np.sqrt (portfolio_variance (w, cov_matrix))
         ret = mu @ w
         
-        risks.append(risk)
-        actual_returns.append(ret)
+        risks.append (risk)
+        actual_returns.append (ret)
     
-    return np.array(risks), np.array(actual_returns)
+    return np.array (risks), np.array (actual_returns)
 
 # ============================================================================
 # Testing and Examples
@@ -1303,8 +1303,8 @@ if __name__ == "__main__":
                     [0.03, 0.09]])
     weights = np.array([0.6, 0.4])
     
-    port_var = portfolio_variance(weights, cov)
-    port_vol = np.sqrt(port_var)
+    port_var = portfolio_variance (weights, cov)
+    port_vol = np.sqrt (port_var)
     
     print(f"Covariance matrix:")
     print(cov)
@@ -1316,9 +1316,9 @@ if __name__ == "__main__":
     print("\\n\\nExample 3: Minimum Variance Portfolio")
     print("-"*70)
     
-    w_min = minimum_variance_portfolio(cov)
-    var_min = portfolio_variance(w_min, cov)
-    vol_min = np.sqrt(var_min)
+    w_min = minimum_variance_portfolio (cov)
+    var_min = portfolio_variance (w_min, cov)
+    vol_min = np.sqrt (var_min)
     
     print(f"Minimum variance weights: {w_min}")
     print(f"Minimum variance: {var_min:.4f}")
@@ -1332,9 +1332,9 @@ if __name__ == "__main__":
     np.random.seed(42)
     mean = [0, 0]
     cov_data = [[1, 0.8], [0.8, 1]]
-    data = np.random.multivariate_normal(mean, cov_data, 1000)
+    data = np.random.multivariate_normal (mean, cov_data, 1000)
     
-    pca_result = pca_analysis(data)
+    pca_result = pca_analysis (data)
     
     print(f"Eigenvalues: {pca_result['eigenvalues']}")
     print(f"Variance explained: {pca_result['var_explained']}")
@@ -1371,7 +1371,7 @@ if __name__ == "__main__":
 2. **Forgetting to check dimensions** - Can't multiply m×n and p×q unless n=p
 3. **Assuming AB = BA** - Matrix multiplication is NOT commutative
 4. **Thinking eigenvalues sum to determinant** - They sum to TRACE, multiply to determinant
-5. **Forgetting variance formula** - It's w^T Σ w, not w^T Σ or Σ w
+5. **Forgetting variance formula** - It\'s w^T Σ w, not w^T Σ or Σ w
 
 ### Communication Tips
 

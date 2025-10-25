@@ -46,11 +46,11 @@ export const builtinfunctionsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc4',
-    question: 'What does map(func, iterable) return?',
+    question: 'What does map (func, iterable) return?',
     options: ['A list', 'A map object (iterator)', 'A tuple', 'A set'],
     correctAnswer: 1,
     explanation:
-      'map() returns a map object (iterator). Use list(map(...)) to get a list.',
+      'map() returns a map object (iterator). Use list (map(...)) to get a list.',
   },
   {
     id: 'mc5',
@@ -63,6 +63,6 @@ export const builtinfunctionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'isinstance(obj, Class) checks class hierarchy. type(obj) == Class checks exact type only.',
+      'isinstance (obj, Class) checks class hierarchy. type (obj) == Class checks exact type only.',
   },
 ];

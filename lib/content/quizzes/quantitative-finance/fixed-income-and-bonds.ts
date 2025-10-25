@@ -9,7 +9,7 @@ export const fixedIncomeAndBondsQuiz = {
       sampleAnswer: `Answer to be completed.`,
       keyPoints: [
         'Strategy B weights: 31.6% 10Y, 68.4% 30Y to achieve 15Y duration; cannot use only 10Y+20Y (requires shorting)',
-        'Rate rise 1%: Both lose 14.39% (duration-matched), but B loses more dollars ($60.4M vs $57.6M) due to higher initial cost',
+        'Rate rise 1%: Both lose 14.39% (duration-matched), but B loses more dollars (\$60.4M vs $57.6M) due to higher initial cost',
         'Strategy B has higher convexity (230.5 vs 216) → better protection for large rate moves (+0.07% benefit)',
         'Reinvestment risk: Strategy A has ZERO (critical advantage), Strategy B has HIGH (coupons + early maturity → $40M shortfall risk)',
         'Recommendation: Strategy A (zero-coupon) - saves $20M upfront + $2.6M transaction costs, no rebalancing, perfect liability match',
@@ -24,7 +24,7 @@ export const fixedIncomeAndBondsQuiz = {
         'Carry trade: +1.2% if unchanged, -5.8% if rates +1% (12 bps breakeven); high risk from duration mismatch (net D=6.6)',
         'Curve steepener: -16.9% if unchanged (negative carry -13.1%), needs 154 bps steepening to break even (unrealistic)',
         'Bullet 5Y: +5.3% if unchanged, +0.1% if rates +1% (102 bps breakeven); best risk/reward, protected by carry',
-        'Steepener has 4.5× leverage ($447M short for $100M long) with massive negative carry; expensive bet',
+        'Steepener has 4.5× leverage (\$447M short for $100M long) with massive negative carry; expensive bet',
         'Recommendation: Bullet 5Y - balanced carry (4.6%), wide breakeven, works if Fed cuts priced-in or not realized',
       ],
     },

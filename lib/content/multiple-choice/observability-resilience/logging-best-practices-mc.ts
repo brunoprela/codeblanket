@@ -26,7 +26,7 @@ export const loggingBestPracticesMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['DEBUG', 'INFO', 'WARN', 'ERROR'],
     correctAnswer: 2,
     explanation:
-      "This should be WARN because: (1) It's expected behavior (users sometimes enter wrong passwords), (2) The system handled it gracefully (no system error), (3) But it's worth tracking for security (potential attack patterns). ERROR would be if the authentication system itself failed. INFO might be for successful login. DEBUG would be too verbose for production. WARN strikes the right balance for security-relevant but expected events.",
+      "This should be WARN because: (1) It\'s expected behavior (users sometimes enter wrong passwords), (2) The system handled it gracefully (no system error), (3) But it's worth tracking for security (potential attack patterns). ERROR would be if the authentication system itself failed. INFO might be for successful login. DEBUG would be too verbose for production. WARN strikes the right balance for security-relevant but expected events.",
   },
   {
     id: 'mc3',

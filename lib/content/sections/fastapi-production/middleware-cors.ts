@@ -82,7 +82,7 @@ import time
 app = FastAPI()
 
 @app.middleware("http")
-async def simple_middleware(request: Request, call_next):
+async def simple_middleware (request: Request, call_next):
     """
     Basic middleware structure
     
@@ -92,7 +92,7 @@ async def simple_middleware(request: Request, call_next):
     print(f"Incoming request: {request.method} {request.url.path}")
     
     # Process request (call next middleware/route)
-    response = await call_next(request)
+    response = await call_next (request)
     
     # AFTER request processing
     print(f"Response status: {response.status_code}")
@@ -101,16 +101,16 @@ async def simple_middleware(request: Request, call_next):
 
 # Multiple middleware example
 @app.middleware("http")
-async def timing_middleware(request: Request, call_next):
+async def timing_middleware (request: Request, call_next):
     """
     Measure request processing time
     """
     start_time = time.time()
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
+    response.headers["X-Process-Time"] = str (process_time)
     
     return response
 \`\`\`
@@ -140,13 +140,13 @@ app = FastAPI()
 
 # 1. OUTERMOST: Global Exception Handler
 @app.middleware("http")
-async def exception_handling_middleware(request: Request, call_next):
+async def exception_handling_middleware (request: Request, call_next):
     """
     Catch all unhandled exceptions
     Must be outermost to catch errors from all other middleware
     """
     try:
-        return await call_next(request)
+        return await call_next (request)
     except Exception as exc:
         logger.error(
             f"Unhandled exception: {exc}",
@@ -159,29 +159,29 @@ async def exception_handling_middleware(request: Request, call_next):
         )
         
         # Send to error tracking (Sentry)
-        if hasattr(request.state, "request_id"):
-            logger.error(f"Request ID: {request.state.request_id}")
+        if hasattr (request.state, "request_id"):
+            logger.error (f"Request ID: {request.state.request_id}")
         
         return JSONResponse(
             status_code=500,
             content={
                 "error": "internal_server_error",
                 "message": "An unexpected error occurred",
-                "request_id": getattr(request.state, "request_id", "unknown")
+                "request_id": getattr (request.state, "request_id", "unknown")
             }
         )
 
 # 2. Request ID Generation
 @app.middleware("http")
-async def request_id_middleware(request: Request, call_next):
+async def request_id_middleware (request: Request, call_next):
     """
     Generate unique request ID for tracing
     Must be early so all logging includes it
     """
-    request_id = str(uuid4())
+    request_id = str (uuid4())
     request.state.request_id = request_id
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add to response headers
     response.headers["X-Request-ID"] = request_id
@@ -190,7 +190,7 @@ async def request_id_middleware(request: Request, call_next):
 
 # 3. Request Logging
 @app.middleware("http")
-async def logging_middleware(request: Request, call_next):
+async def logging_middleware (request: Request, call_next):
     """
     Log all requests with timing and context
     After request_id so logs include it
@@ -204,14 +204,14 @@ async def logging_middleware(request: Request, call_next):
             "request_id": request.state.request_id,
             "method": request.method,
             "path": request.url.path,
-            "query_params": dict(request.query_params),
+            "query_params": dict (request.query_params),
             "client_ip": request.client.host if request.client else None,
             "user_agent": request.headers.get("user-agent")
         }
     )
     
     # Process request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Log response
     process_time = time.time() - start_time
@@ -232,11 +232,11 @@ async def logging_middleware(request: Request, call_next):
 
 # 4. Security Headers
 @app.middleware("http")
-async def security_headers_middleware(request: Request, call_next):
+async def security_headers_middleware (request: Request, call_next):
     """
     Add security headers to all responses
     """
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Prevent MIME type sniffing
     response.headers["X-Content-Type-Options"] = "nosniff"
@@ -264,7 +264,7 @@ async def security_headers_middleware(request: Request, call_next):
 
 # 5. Rate Limiting (before auth to prevent credential discovery)
 @app.middleware("http")
-async def rate_limiting_middleware(request: Request, call_next):
+async def rate_limiting_middleware (request: Request, call_next):
     """
     Rate limit requests to prevent abuse
     Before authentication to prevent timing attacks
@@ -273,7 +273,7 @@ async def rate_limiting_middleware(request: Request, call_next):
     client_ip = request.client.host if request.client else "unknown"
     
     # Check rate limit
-    is_limited = await check_rate_limit(client_ip)
+    is_limited = await check_rate_limit (client_ip)
     
     if is_limited:
         return JSONResponse(
@@ -286,10 +286,10 @@ async def rate_limiting_middleware(request: Request, call_next):
             headers={"Retry-After": "60"}
         )
     
-    return await call_next(request)
+    return await call_next (request)
 
 # Helper function for rate limiting
-async def check_rate_limit(identifier: str) -> bool:
+async def check_rate_limit (identifier: str) -> bool:
     """
     Check if identifier has exceeded rate limit
     Implementation with Redis in production
@@ -302,7 +302,7 @@ async def check_rate_limit(identifier: str) -> bool:
 # Applied via app.add_middleware() - see CORS section below
 
 # 7. Authentication (closest to routes)
-# Applied per-route via Depends(get_current_user)
+# Applied per-route via Depends (get_current_user)
 # Not global middleware because not all routes need auth
 \`\`\`
 
@@ -315,15 +315,15 @@ Why middleware order is critical
 
 # ❌ WRONG ORDER
 @app.middleware("http")
-async def auth_middleware(request: Request, call_next):
+async def auth_middleware (request: Request, call_next):
     # Tries to use request_id...
-    logger.info(f"Auth check: {request.state.request_id}")  # ERROR! Not set yet
-    return await call_next(request)
+    logger.info (f"Auth check: {request.state.request_id}")  # ERROR! Not set yet
+    return await call_next (request)
 
 @app.middleware("http")
-async def request_id_middleware(request: Request, call_next):
-    request.state.request_id = str(uuid4())
-    return await call_next(request)
+async def request_id_middleware (request: Request, call_next):
+    request.state.request_id = str (uuid4())
+    return await call_next (request)
 
 # ✅ CORRECT ORDER
 # 1. Request ID first (generate)
@@ -425,7 +425,7 @@ allowed_origins = {
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins.get(settings.ENVIRONMENT, []),
+    allow_origins=allowed_origins.get (settings.ENVIRONMENT, []),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -515,7 +515,7 @@ app.add_middleware(
 # Use case: Public API (no authentication)
 
 # Dynamic origin validation
-async def validate_origin(origin: str) -> bool:
+async def validate_origin (origin: str) -> bool:
     """
     Validate origin against database or regex
     """
@@ -529,7 +529,7 @@ async def validate_origin(origin: str) -> bool:
     
     # Check against pattern (for subdomains)
     import re
-    if re.match(r"https://.*\.example\.com$", origin):
+    if re.match (r"https://.*\.example\.com$", origin):
         return True
     
     return False
@@ -588,10 +588,10 @@ class RateLimiter:
         pipe = self.redis.pipeline()
         
         # Remove old entries outside window
-        pipe.zremrangebyscore(key, 0, window_start)
+        pipe.zremrangebyscore (key, 0, window_start)
         
         # Count requests in window
-        pipe.zcard(key)
+        pipe.zcard (key)
         
         # Execute pipeline
         results = await pipe.execute()
@@ -601,11 +601,11 @@ class RateLimiter:
         if request_count >= limit:
             # Rate limited
             # Get oldest entry to calculate reset time
-            oldest = await self.redis.zrange(key, 0, 0, withscores=True)
+            oldest = await self.redis.zrange (key, 0, 0, withscores=True)
             if oldest:
-                reset_at = int(oldest[0][1] + window_seconds)
+                reset_at = int (oldest[0][1] + window_seconds)
             else:
-                reset_at = int(now + window_seconds)
+                reset_at = int (now + window_seconds)
             
             return {
                 "allowed": False,
@@ -615,28 +615,28 @@ class RateLimiter:
             }
         
         # Add current request
-        await self.redis.zadd(key, {str(now): now})
+        await self.redis.zadd (key, {str (now): now})
         
         # Set expiry
-        await self.redis.expire(key, window_seconds)
+        await self.redis.expire (key, window_seconds)
         
         return {
             "allowed": True,
             "remaining": limit - request_count - 1,
-            "reset_at": int(now + window_seconds),
+            "reset_at": int (now + window_seconds),
             "limit": limit
         }
 
-rate_limiter = RateLimiter(redis_client)
+rate_limiter = RateLimiter (redis_client)
 
 # Rate limiting middleware
 @app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
+async def rate_limit_middleware (request: Request, call_next):
     """
     Apply rate limiting based on user tier
     """
     # Determine identifier and limit
-    if hasattr(request.state, "user") and request.state.user:
+    if hasattr (request.state, "user") and request.state.user:
         user = request.state.user
         identifier = f"user:{user.id}"
         
@@ -653,18 +653,18 @@ async def rate_limit_middleware(request: Request, call_next):
         limit = 10  # 10 requests/minute
     
     # Check rate limit
-    result = await rate_limiter.check_rate_limit(identifier, limit, window_seconds=60)
+    result = await rate_limiter.check_rate_limit (identifier, limit, window_seconds=60)
     
     # Add rate limit headers (always)
     rate_limit_headers = {
-        "X-RateLimit-Limit": str(result["limit"]),
-        "X-RateLimit-Remaining": str(result["remaining"]),
-        "X-RateLimit-Reset": str(result["reset_at"])
+        "X-RateLimit-Limit": str (result["limit"]),
+        "X-RateLimit-Remaining": str (result["remaining"]),
+        "X-RateLimit-Reset": str (result["reset_at"])
     }
     
     if not result["allowed"]:
         # Rate limited - return 429
-        retry_after = result["reset_at"] - int(datetime.utcnow().timestamp())
+        retry_after = result["reset_at"] - int (datetime.utcnow().timestamp())
         
         return JSONResponse(
             status_code=429,
@@ -677,12 +677,12 @@ async def rate_limit_middleware(request: Request, call_next):
             },
             headers={
                 **rate_limit_headers,
-                "Retry-After": str(retry_after)
+                "Retry-After": str (retry_after)
             }
         )
     
     # Continue request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Add rate limit headers to successful response
     for key, value in rate_limit_headers.items():
@@ -702,33 +702,33 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter (key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Endpoint-specific limits
 @app.post("/auth/login")
 @limiter.limit("5/minute")  # Only 5 login attempts per minute
-async def login(request: Request, credentials: LoginCredentials):
+async def login (request: Request, credentials: LoginCredentials):
     """Strict limit on login to prevent brute force"""
-    return authenticate(credentials)
+    return authenticate (credentials)
 
 @app.get("/api/data")
 @limiter.limit("100/minute")  # 100 data requests per minute
-async def get_data(request: Request):
+async def get_data (request: Request):
     """Standard limit for data endpoints"""
     return []
 
 @app.get("/api/search")
 @limiter.limit("20/minute")  # Lower limit for expensive searches
-async def search(request: Request, query: str):
+async def search (request: Request, query: str):
     """Lower limit for resource-intensive operations"""
-    return search_database(query)
+    return search_database (query)
 
 # User-specific limits
-def get_user_rate_limit(request: Request) -> str:
+def get_user_rate_limit (request: Request) -> str:
     """Custom key function based on user tier"""
-    if hasattr(request.state, "user"):
+    if hasattr (request.state, "user"):
         user = request.state.user
         if user.is_premium:
             return "1000/minute"
@@ -737,8 +737,8 @@ def get_user_rate_limit(request: Request) -> str:
     return "10/minute"  # Anonymous
 
 @app.get("/api/premium")
-@limiter.limit(get_user_rate_limit)
-async def premium_endpoint(request: Request):
+@limiter.limit (get_user_rate_limit)
+async def premium_endpoint (request: Request):
     """Dynamic limit based on user tier"""
     return []
 \`\`\`
@@ -755,7 +755,7 @@ Middleware for request preprocessing
 """
 
 @app.middleware("http")
-async def request_preprocessing_middleware(request: Request, call_next):
+async def request_preprocessing_middleware (request: Request, call_next):
     """
     Preprocess requests: normalize, validate, enrich
     """
@@ -785,7 +785,7 @@ async def request_preprocessing_middleware(request: Request, call_next):
             content={"error": "Bots not allowed on this endpoint"}
         )
     
-    return await call_next(request)
+    return await call_next (request)
 \`\`\`
 
 ### Response Postprocessing
@@ -798,11 +798,11 @@ Middleware for response postprocessing
 import gzip
 
 @app.middleware("http")
-async def response_compression_middleware(request: Request, call_next):
+async def response_compression_middleware (request: Request, call_next):
     """
     Compress responses if client supports gzip
     """
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Check if client accepts gzip
     accept_encoding = request.headers.get("Accept-Encoding", "")
@@ -814,16 +814,16 @@ async def response_compression_middleware(request: Request, call_next):
             body += chunk
         
         # Compress if large enough (> 1KB)
-        if len(body) > 1024:
-            compressed = gzip.compress(body)
+        if len (body) > 1024:
+            compressed = gzip.compress (body)
             
             return Response(
                 content=compressed,
                 status_code=response.status_code,
                 headers={
-                    **dict(response.headers),
+                    **dict (response.headers),
                     "Content-Encoding": "gzip",
-                    "Content-Length": str(len(compressed))
+                    "Content-Length": str (len (compressed))
                 },
                 media_type=response.media_type
             )
@@ -858,14 +858,14 @@ REQUEST_DURATION = Histogram(
 )
 
 @app.middleware("http")
-async def metrics_middleware(request: Request, call_next):
+async def metrics_middleware (request: Request, call_next):
     """
     Collect request metrics for monitoring
     """
     start_time = time.time()
     
     # Process request
-    response = await call_next(request)
+    response = await call_next (request)
     
     # Calculate duration
     duration = time.time() - start_time
@@ -880,7 +880,7 @@ async def metrics_middleware(request: Request, call_next):
     REQUEST_DURATION.labels(
         method=request.method,
         endpoint=request.url.path
-    ).observe(duration)
+    ).observe (duration)
     
     return response
 \`\`\`

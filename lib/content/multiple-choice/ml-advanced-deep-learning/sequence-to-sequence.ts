@@ -7,9 +7,9 @@ export const sequenceToSequenceMultipleChoice = [
     question: 'In a Seq2Seq model, what role does the context vector play?',
     options: [
       'It stores the vocabulary for both source and target languages',
-      "It's the fixed-size representation of the entire input sequence that the decoder uses to generate output",
+      "It\'s the fixed-size representation of the entire input sequence that the decoder uses to generate output",
       'It determines the learning rate during training',
-      "It's used only during inference, not training",
+      "It\'s used only during inference, not training",
     ],
     correctAnswer: 1,
     explanation:

@@ -22,7 +22,7 @@ export const templatesQuiz = [
     question:
       'Explain the 2D DP template for problems like Knapsack or LCS. How do you handle the nested loops?',
     sampleAnswer:
-      'The 2D template creates table dp[n+1][m+1]. First, initialize entire table (often with 0 or infinity). Second, set base cases for row 0 and column 0. Third, nested loops: outer loop i from 1 to n (first dimension), inner loop j from 1 to m (second dimension). Fourth, for each cell dp[i][j], compute using values from dp[i-1][...] and dp[...][j-1] based on recurrence. Fifth, return dp[n][m]. For LCS: outer loop for first string, inner loop for second string. If characters match: dp[i][j] = 1 + dp[i-1][j-1]. Else: dp[i][j] = max(dp[i-1][j], dp[i][j-1]). This template extends to: Knapsack, Edit Distance, Grid Paths.',
+      'The 2D template creates table dp[n+1][m+1]. First, initialize entire table (often with 0 or infinity). Second, set base cases for row 0 and column 0. Third, nested loops: outer loop i from 1 to n (first dimension), inner loop j from 1 to m (second dimension). Fourth, for each cell dp[i][j], compute using values from dp[i-1][...] and dp[...][j-1] based on recurrence. Fifth, return dp[n][m]. For LCS: outer loop for first string, inner loop for second string. If characters match: dp[i][j] = 1 + dp[i-1][j-1]. Else: dp[i][j] = max (dp[i-1][j], dp[i][j-1]). This template extends to: Knapsack, Edit Distance, Grid Paths.',
     keyPoints: [
       'Create 2D table dp[n+1][m+1]',
       'Base cases: row 0 and column 0',
@@ -36,7 +36,7 @@ export const templatesQuiz = [
     question:
       'Describe the top-down memoization template. How does it differ from bottom-up?',
     sampleAnswer:
-      'Top-down uses recursion with caching. First, create memo dictionary or array. Second, write recursive helper with parameters representing state. Third, check if state in memo; if yes, return cached value. Fourth, if base case, return base value. Fifth, compute result using recursive calls to smaller subproblems. Sixth, store result in memo before returning. Seventh, call helper with initial state. For Fibonacci: helper(n) checks memo, if n <= 1 return n, else compute memo[n] = helper(n-1) + helper(n-2), return memo[n]. Differs from bottom-up: solves top-down (big to small), only computes needed states, has recursion overhead. Bottom-up: solves bottom-up (small to big), computes all states, uses iteration.',
+      'Top-down uses recursion with caching. First, create memo dictionary or array. Second, write recursive helper with parameters representing state. Third, check if state in memo; if yes, return cached value. Fourth, if base case, return base value. Fifth, compute result using recursive calls to smaller subproblems. Sixth, store result in memo before returning. Seventh, call helper with initial state. For Fibonacci: helper (n) checks memo, if n <= 1 return n, else compute memo[n] = helper (n-1) + helper (n-2), return memo[n]. Differs from bottom-up: solves top-down (big to small), only computes needed states, has recursion overhead. Bottom-up: solves bottom-up (small to big), computes all states, uses iteration.',
     keyPoints: [
       'Create memo, write recursive helper',
       'Check memo first, return if cached',

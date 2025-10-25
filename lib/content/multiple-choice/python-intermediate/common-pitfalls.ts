@@ -7,7 +7,7 @@ import { MultipleChoiceQuestion } from '../../../types';
 export const commonpitfallsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
-    question: 'What is wrong with def func(x, lst=[])?',
+    question: 'What is wrong with def func (x, lst=[])?',
     options: [
       'Nothing',
       'Mutable default shared across calls',
@@ -16,7 +16,7 @@ export const commonpitfallsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Mutable defaults are shared. Use None: def func(x, lst=None): lst = lst or []',
+      'Mutable defaults are shared. Use None: def func (x, lst=None): lst = lst or []',
   },
   {
     id: 'mc2',
@@ -33,7 +33,7 @@ export const commonpitfallsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: 'What is wrong with: for item in list: list.remove(item)?',
+    question: 'What is wrong with: for item in list: list.remove (item)?',
     options: [
       'Nothing',
       'Modifying list while iterating skips elements',

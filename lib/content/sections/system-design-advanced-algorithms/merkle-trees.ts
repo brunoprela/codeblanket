@@ -29,8 +29,8 @@ Send all 1M records from A to B → Compare
 
 **Option 2: Hash all data**
 \`\`\`
-hash_A = hash(all records on A)
-hash_B = hash(all records on B)
+hash_A = hash (all records on A)
+hash_B = hash (all records on B)
 if hash_A == hash_B: identical
 \`\`\`
 - ✅ Fast comparison (compare single hash)
@@ -69,31 +69,31 @@ A **Merkle tree** is a binary tree of cryptographic hashes where:
 \`\`\`python
 import hashlib
 
-def hash_data(data):
+def hash_data (data):
     return hashlib.sha256(data.encode()).hexdigest()
 
 # Step 1: Hash leaf nodes (data blocks)
 data = ["Data A", "Data B", "Data C", "Data D"]
-leaf_hashes = [hash_data(d) for d in data]
+leaf_hashes = [hash_data (d) for d in data]
 
 # Step 2: Build tree bottom-up
-def build_merkle_tree(hashes):
-    if len(hashes) == 1:
+def build_merkle_tree (hashes):
+    if len (hashes) == 1:
         return hashes[0]  # Root
     
     next_level = []
-    for i in range(0, len(hashes), 2):
-        if i + 1 < len(hashes):
+    for i in range(0, len (hashes), 2):
+        if i + 1 < len (hashes):
             # Combine two hashes
-            parent_hash = hash_data(hashes[i] + hashes[i+1])
+            parent_hash = hash_data (hashes[i] + hashes[i+1])
         else:
             # Odd number: promote single hash
             parent_hash = hashes[i]
-        next_level.append(parent_hash)
+        next_level.append (parent_hash)
     
-    return build_merkle_tree(next_level)
+    return build_merkle_tree (next_level)
 
-root_hash = build_merkle_tree(leaf_hashes)
+root_hash = build_merkle_tree (leaf_hashes)
 \`\`\`
 
 ### Complete Example
@@ -109,11 +109,11 @@ Level 1 (leaves):
 [a1b2c3, d4e5f6, g7h8i9, j0k1l2]
 
 Level 2 (combine pairs):
-hash(a1b2c3 + d4e5f6) = m3n4o5
-hash(g7h8i9 + j0k1l2) = p6q7r8
+hash (a1b2c3 + d4e5f6) = m3n4o5
+hash (g7h8i9 + j0k1l2) = p6q7r8
 
 Level 3 (root):
-hash(m3n4o5 + p6q7r8) = ROOT_HASH
+hash (m3n4o5 + p6q7r8) = ROOT_HASH
 
 Tree structure:
                ROOT_HASH
@@ -171,50 +171,50 @@ For 1 million blocks:
 \`\`\`python
 class MerkleTree:
     def __init__(self, data_blocks):
-        self.leaves = [self._hash(block) for block in data_blocks]
-        self.tree = self._build_tree(self.leaves)
+        self.leaves = [self._hash (block) for block in data_blocks]
+        self.tree = self._build_tree (self.leaves)
         self.root = self.tree[0] if self.tree else None
     
-    def _hash(self, data):
+    def _hash (self, data):
         """SHA-256 hash"""
-        return hashlib.sha256(str(data).encode()).hexdigest()
+        return hashlib.sha256(str (data).encode()).hexdigest()
     
-    def _build_tree(self, hashes):
+    def _build_tree (self, hashes):
         """Build complete Merkle tree"""
         if not hashes:
             return []
         
         tree = [hashes]
-        while len(tree[-1]) > 1:
+        while len (tree[-1]) > 1:
             level = tree[-1]
             next_level = []
             
-            for i in range(0, len(level), 2):
-                if i + 1 < len(level):
+            for i in range(0, len (level), 2):
+                if i + 1 < len (level):
                     # Combine two hashes
-                    combined = self._hash(level[i] + level[i+1])
+                    combined = self._hash (level[i] + level[i+1])
                 else:
                     # Odd number: duplicate last hash
                     combined = level[i]
-                next_level.append(combined)
+                next_level.append (combined)
             
-            tree.append(next_level)
+            tree.append (next_level)
         
         return tree
     
-    def get_root(self):
+    def get_root (self):
         """Get root hash"""
         return self.root
     
-    def get_proof(self, index):
+    def get_proof (self, index):
         """Get Merkle proof for data at index"""
-        if index < 0 or index >= len(self.leaves):
+        if index < 0 or index >= len (self.leaves):
             return None
         
         proof = []
         for level in self.tree[:-1]:  # Exclude root
             sibling_index = index ^ 1  # Flip last bit (if even→odd, odd→even)
-            if sibling_index < len(level):
+            if sibling_index < len (level):
                 proof.append({
                     'hash': level[sibling_index],
                     'position': 'right' if index % 2 == 0 else 'left'
@@ -223,21 +223,21 @@ class MerkleTree:
         
         return proof
     
-    def verify_proof(self, data, index, proof, root_hash):
+    def verify_proof (self, data, index, proof, root_hash):
         """Verify Merkle proof"""
-        current_hash = self._hash(data)
+        current_hash = self._hash (data)
         
         for node in proof:
             if node['position'] == 'right':
-                current_hash = self._hash(current_hash + node['hash'])
+                current_hash = self._hash (current_hash + node['hash'])
             else:
-                current_hash = self._hash(node['hash'] + current_hash)
+                current_hash = self._hash (node['hash'] + current_hash)
         
         return current_hash == root_hash
 
 # Usage
 data = ["Alice", "Bob", "Charlie", "Dave"]
-tree = MerkleTree(data)
+tree = MerkleTree (data)
 
 print(f"Root hash: {tree.get_root()}")
 
@@ -290,8 +290,8 @@ For 1 million elements:
 
 **Commits are Merkle trees**:
 \`\`\`
-Commit hash = hash(tree hash + parent commit + metadata)
-Tree hash = hash(file hashes)
+Commit hash = hash (tree hash + parent commit + metadata)
+Tree hash = hash (file hashes)
 
 Any file change → tree hash changes → commit hash changes
 \`\`\`
@@ -318,7 +318,7 @@ Block:
   - Merkle root (all transactions)
   - Nonce
 
-Block hash = hash(previous hash + merkle root + nonce)
+Block hash = hash (previous hash + merkle root + nonce)
 \`\`\`
 
 **Benefits**:

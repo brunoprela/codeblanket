@@ -8,7 +8,7 @@ export const memoizationQuiz = [
     question:
       'What is memoization and how does it improve recursive algorithms?',
     sampleAnswer:
-      'Memoization is caching the results of expensive function calls and returning the cached result when the same inputs occur again. It improves recursion by eliminating redundant calculations in problems with overlapping subproblems. Example: naive Fibonacci is O(2^n) because fib(n-1) and fib(n-2) recalculate the same values. With memoization, we compute each fib(k) only once, reducing to O(n) time. Space trade-off: O(n) for the cache.',
+      'Memoization is caching the results of expensive function calls and returning the cached result when the same inputs occur again. It improves recursion by eliminating redundant calculations in problems with overlapping subproblems. Example: naive Fibonacci is O(2^n) because fib (n-1) and fib (n-2) recalculate the same values. With memoization, we compute each fib (k) only once, reducing to O(n) time. Space trade-off: O(n) for the cache.',
     keyPoints: [
       'Cache results of function calls',
       'Return cached result for repeated inputs',
@@ -22,7 +22,7 @@ export const memoizationQuiz = [
     id: 'q-memo2',
     question: 'How do you implement memoization in Python?',
     sampleAnswer:
-      'Three main approaches: 1) **@lru_cache decorator** (easiest): `from functools import lru_cache; @lru_cache(maxsize=None)` before function definition, 2) **Dictionary** (manual): pass memo dict as parameter or use default argument, check if key in memo before computing, store result after computing, 3) **Class with __call__** (advanced): maintain cache as instance variable. The decorator approach is most Pythonic and handles argument hashing automatically.',
+      'Three main approaches: 1) **@lru_cache decorator** (easiest): `from functools import lru_cache; @lru_cache (maxsize=None)` before function definition, 2) **Dictionary** (manual): pass memo dict as parameter or use default argument, check if key in memo before computing, store result after computing, 3) **Class with __call__** (advanced): maintain cache as instance variable. The decorator approach is most Pythonic and handles argument hashing automatically.',
     keyPoints: [
       '@lru_cache decorator - most Pythonic',
       'Dictionary with memo parameter',

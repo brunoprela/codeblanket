@@ -5,7 +5,7 @@
 export const highwatermarkSection = {
   id: 'high-water-mark',
   title: 'High-Water Mark',
-  content: `High-Water Mark is a pattern used in distributed systems to track which data has been successfully replicated and is safe to read. It's crucial for maintaining consistency in leader-follower architectures and is prominently used in systems like Apache Kafka.
+  content: `High-Water Mark is a pattern used in distributed systems to track which data has been successfully replicated and is safe to read. It\'s crucial for maintaining consistency in leader-follower architectures and is prominently used in systems like Apache Kafka.
 
 ## What is High-Water Mark?
 
@@ -214,7 +214,7 @@ Consumer:
 **Criteria for ISR**:
 - Replica is alive (sending heartbeats)
 - Replica has fetched data recently (within \`replica.lag.time.max.ms\`, default 10s)
-- Replica's LEO is close to leader's LEO
+- Replica\'s LEO is close to leader's LEO
 
 **HWM Calculation**:
 \`\`\`
@@ -586,7 +586,7 @@ A: "Consumers are blocked from reading beyond HWM. The broker will either return
 **Q: Why does Kafka truncate the log to the HWM after a leader election?**
 A: "When a leader fails, uncommitted data (beyond HWM) may exist only on that leader. The new leader doesn't have this data. To maintain consistency, when the old leader recovers, it truncates its log to the HWM—the last offset that was replicated to majority. This ensures all replicas agree on the committed data. Consumers never saw the truncated data anyway since it was beyond HWM."
 
-**Q: What's the trade-off between acks=1 and acks=all in Kafka?**
+**Q: What\'s the trade-off between acks=1 and acks=all in Kafka?**
 A: "acks=1: Producer waits only for leader write. Fast (low latency) but data may be lost if leader fails before replication. acks=all: Producer waits for all in-sync replicas. Slower (higher latency) but durable—data is safe even if leader fails. Choice depends on requirements: performance-critical logs use acks=1, financial transactions use acks=all."
 
 **Q: How does HWM prevent split-brain in Kafka?**

@@ -228,7 +228,7 @@ function encodeBase62(id: number): string {
     
     while (id > 0) {
         encoded = chars[id % 62] + encoded;
-        id = Math.floor(id / 62);
+        id = Math.floor (id / 62);
     }
     
     return encoded || '0';
@@ -404,7 +404,7 @@ When single database can't handle load, shard by short_url.
 ### Sharding Strategy: Hash-Based
 
 \`\`\`
-Shard = hash(short_url) % NUM_SHARDS
+Shard = hash (short_url) % NUM_SHARDS
 
 Example (4 shards):
 - "abc123" → hash % 4 = Shard 2

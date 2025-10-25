@@ -63,7 +63,7 @@ export const contextualizedEmbeddingsMultipleChoice: MultipleChoiceQuestion[] =
         'What major limitation of ELMo led to the development of transformer-based models like BERT?',
       options: [
         'ELMo cannot handle polysemy',
-        "ELMo's LSTM architecture requires sequential processing and cannot parallelize effectively",
+        "ELMo\'s LSTM architecture requires sequential processing and cannot parallelize effectively",
         'ELMo requires too much labeled data',
         'ELMo produces embeddings that are too large',
       ],

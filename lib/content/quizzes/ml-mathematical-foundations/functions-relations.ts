@@ -24,13 +24,13 @@ fᵢ(x) = σᵢ(Wᵢx + bᵢ)
 # Layer 1: Input (3 features) → Hidden (4 units)
 def f1(x):
     z1 = W1 @ x + b1  # Linear: 4×3 @ 3×1 = 4×1
-    a1 = relu(z1)      # Activation
+    a1 = relu (z1)      # Activation
     return a1
 
 # Layer 2: Hidden (4) → Hidden (3 units)
 def f2(x):
     z2 = W2 @ x + b2  # Linear: 3×4 @ 4×1 = 3×1
-    a2 = relu(z2)      # Activation
+    a2 = relu (z2)      # Activation
     return a2
 
 # Layer 3: Hidden (3) → Output (1 unit)
@@ -39,14 +39,14 @@ def f3(x):
     return z3          # No activation (regression)
 
 # Complete network: function composition
-def network(x):
+def network (x):
     return f3(f2(f1(x)))
 \`\`\`
 
 **Connection to Chain Rule**:
 
 The chain rule from calculus states:
-d/dx[f(g(x))] = f'(g(x)) · g'(x)
+d/dx[f (g(x))] = f'(g (x)) · g'(x)
 
 For multiple compositions:
 d/dx[f₃(f₂(f₁(x)))] = f₃'(f₂(f₁(x))) · f₂'(f₁(x)) · f₁'(x)
@@ -157,7 +157,7 @@ No matter how many layers you stack, without activation functions, the network c
 - OUTPUT layer for binary classification
 - AVOID in hidden layers of deep networks
 
-**Tanh Function: tanh(x) = (eˣ - e⁻ˣ)/(eˣ + e⁻ˣ)**
+**Tanh Function: tanh (x) = (eˣ - e⁻ˣ)/(eˣ + e⁻ˣ)**
 
 **Properties**:
 - Range: (-1, 1)
@@ -247,7 +247,7 @@ No matter how many layers you stack, without activation functions, the network c
 # Output: Linear or tanh (symmetric around 0)
 
 model = nn.Sequential(
-    nn.Linear(features, 64),
+    nn.Linear (features, 64),
     nn.ReLU(),              # Hidden layer 1
     nn.Linear(64, 32),
     nn.ReLU(),              # Hidden layer 2
@@ -303,18 +303,18 @@ The gradient is **linear** in the error: If error is large, gradient is large (f
 
 **Example**:
 \`\`\`python
-def mse_loss(y_true, y_pred):
+def mse_loss (y_true, y_pred):
     return np.mean((y_true - y_pred)**2)
 
-def mse_gradient(y_true, y_pred):
-    return 2 * (y_pred - y_true) / len(y_true)
+def mse_gradient (y_true, y_pred):
+    return 2 * (y_pred - y_true) / len (y_true)
 
 # Price prediction
 y_true = np.array([100, 150, 200])
 y_pred = np.array([110, 140, 210])
 
-loss = mse_loss(y_true, y_pred)
-grad = mse_gradient(y_true, y_pred)
+loss = mse_loss (y_true, y_pred)
+grad = mse_gradient (y_true, y_pred)
 
 print(f"MSE Loss: {loss}")  # 66.67
 print(f"Gradient: {grad}")  # [6.67, -6.67, 6.67]
@@ -335,7 +335,7 @@ Where yᵢⱼ is one-hot encoded
 
 **Mathematical Properties**:
 
-1. **Always non-negative**: -log(p) ≥ 0 for p ∈ (0,1)
+1. **Always non-negative**: -log (p) ≥ 0 for p ∈ (0,1)
 2. **Asymmetric penalty**: 
    - Predicting 0.01 when truth is 1: Loss ≈ 4.6
    - Predicting 0.99 when truth is 0: Loss ≈ 4.6
@@ -346,7 +346,7 @@ Where yᵢⱼ is one-hot encoded
 **Derivative** (binary case with sigmoid):
 ∂BCE/∂z = ŷ - y
 
-Where z is pre-activation (logit) and ŷ = sigmoid(z)
+Where z is pre-activation (logit) and ŷ = sigmoid (z)
 
 **Remarkable property**: The gradient simplifies to just the error!
 
@@ -370,10 +370,10 @@ Where z is pre-activation (logit) and ŷ = sigmoid(z)
 
 **Example**:
 \`\`\`python
-def binary_cross_entropy(y_true, y_pred, epsilon=1e-10):
+def binary_cross_entropy (y_true, y_pred, epsilon=1e-10):
     # Clip to avoid log(0)
-    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
-    return -np.mean(y_true * np.log(y_pred) + 
+    y_pred = np.clip (y_pred, epsilon, 1 - epsilon)
+    return -np.mean (y_true * np.log (y_pred) + 
                     (1 - y_true) * np.log(1 - y_pred))
 
 # Classification predictions
@@ -381,8 +381,8 @@ y_true = np.array([1, 0, 1, 1, 0])
 y_pred_good = np.array([0.9, 0.1, 0.8, 0.85, 0.15])
 y_pred_bad = np.array([0.6, 0.4, 0.6, 0.55, 0.45])
 
-loss_good = binary_cross_entropy(y_true, y_pred_good)
-loss_bad = binary_cross_entropy(y_true, y_pred_bad)
+loss_good = binary_cross_entropy (y_true, y_pred_good)
+loss_bad = binary_cross_entropy (y_true, y_pred_bad)
 
 print(f"Good predictions loss: {loss_good:.4f}")  # ~0.15
 print(f"Bad predictions loss: {loss_bad:.4f}")    # ~0.62
@@ -430,24 +430,24 @@ With sigmoid + cross-entropy:
 **Regression (price prediction)**:
 \`\`\`python
 # Predicting stock price: Use MSE
-loss = mse_loss(actual_prices, predicted_prices)
+loss = mse_loss (actual_prices, predicted_prices)
 # Treats $10 error on $100 stock same as $10 error on $1000 stock
 \`\`\`
 
 **Classification (trade direction)**:
 \`\`\`python
 # Predicting up/down: Use cross-entropy
-loss = binary_cross_entropy(actual_direction, predicted_prob)
+loss = binary_cross_entropy (actual_direction, predicted_prob)
 # Heavily penalizes confident wrong predictions
 # In trading, being confidently wrong is especially costly!
 \`\`\`
 
 **Advanced**: For trading, you might use custom losses:
 \`\`\`python
-def asymmetric_mse(y_true, y_pred):
+def asymmetric_mse (y_true, y_pred):
     """Penalize underestimating risk more than overestimating"""
     error = y_pred - y_true
-    return np.mean(np.where(error > 0, error**2, 2 * error**2))
+    return np.mean (np.where (error > 0, error**2, 2 * error**2))
 \`\`\`
 
 **Summary**:

@@ -30,7 +30,7 @@ export const analyzingcodeSection = {
 
 **Pattern 1: Single Loop**
 \`\`\`python
-def find_max(arr):
+def find_max (arr):
     max_val = arr[0]     # O(1)
     for num in arr:      # O(n)
         if num > max_val:
@@ -41,7 +41,7 @@ def find_max(arr):
 
 **Pattern 2: Nested Loops (Different Ranges)**
 \`\`\`python
-def print_pairs(arr1, arr2):
+def print_pairs (arr1, arr2):
     for x in arr1:       # n times
         for y in arr2:   # m times
             print(x, y)
@@ -50,8 +50,8 @@ def print_pairs(arr1, arr2):
 
 **Pattern 3: Divide and Conquer**
 \`\`\`python
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
+def binary_search (arr, target):
+    left, right = 0, len (arr) - 1
     while left <= right:  # Halves each time
         mid = (left + right) // 2
         if arr[mid] == target:
@@ -66,23 +66,23 @@ def binary_search(arr, target):
 
 **Pattern 4: Building New Data Structure**
 \`\`\`python
-def find_duplicates(arr):
+def find_duplicates (arr):
     seen = set()         # O(n) space
     duplicates = []
     for num in arr:      # O(n) time
         if num in seen:
-            duplicates.append(num)
-        seen.add(num)
+            duplicates.append (num)
+        seen.add (num)
     return duplicates
 # Time: O(n), Space: O(n)
 \`\`\`
 
 **Pattern 5: Recursive with Branching**
 \`\`\`python
-def fibonacci(n):
+def fibonacci (n):
     if n <= 1:
         return n
-    return fibonacci(n-1) + fibonacci(n-2)
+    return fibonacci (n-1) + fibonacci (n-2)
 # Time: O(2ⁿ) - two branches per call
 # Space: O(n) - max call stack depth
 \`\`\`
@@ -97,13 +97,13 @@ Use the **Recursion Tree Method:**
 
 **Example: Merge Sort**
 \`\`\`python
-def merge_sort(arr):
-    if len(arr) <= 1:
+def merge_sort (arr):
+    if len (arr) <= 1:
         return arr
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
-    return merge(left, right)
+    mid = len (arr) // 2
+    left = merge_sort (arr[:mid])
+    right = merge_sort (arr[mid:])
+    return merge (left, right)
 \`\`\`
 
 - **Depth of tree:** log n (halving each time)
@@ -113,7 +113,7 @@ def merge_sort(arr):
 
 **Common Mistakes to Avoid:**
 
-- ❌ **Forgetting about sorting:** \`sorted(arr)\` is O(n log n)
+- ❌ **Forgetting about sorting:** \`sorted (arr)\` is O(n log n)
 - ❌ **Ignoring built-in operations:** \`list.append()\` is O(1), \`list.insert(0, x)\` is O(n)
 - ❌ **Overlooking recursive call stack space**
 - ❌ **Confusing amortized with worst-case complexity**

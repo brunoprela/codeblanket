@@ -46,7 +46,7 @@ def test_add():
 \`\`\`python
 # calculator.py
 class Calculator:
-    def add(self, a, b):
+    def add (self, a, b):
         return a + b  # Minimal implementation
 
 # Run: PASSES
@@ -57,7 +57,7 @@ class Calculator:
 \`\`\`python
 # Add type hints, docstrings
 class Calculator:
-    def add(self, a: float, b: float) -> float:
+    def add (self, a: float, b: float) -> float:
         """Add two numbers."""
         return a + b
 
@@ -90,7 +90,7 @@ def test_divide_by_zero_bug():
 # FAILS (bug exists)
 
 # 2. Fix code
-def divide(self, a, b):
+def divide (self, a, b):
     if b == 0:
         raise ValueError("Cannot divide by zero")
     return a / b

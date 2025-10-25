@@ -45,16 +45,16 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 # Generate data
-X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, 
+X, y = make_classification (n_samples=1000, n_features=20, n_informative=15, 
                            n_redundant=5, random_state=42)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Single models
 models = {
-    'Decision Tree': DecisionTreeClassifier(max_depth=5, random_state=42),
-    'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
-    'Random Forest (Bagging)': RandomForestClassifier(n_estimators=100, random_state=42),
-    'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, random_state=42)
+    'Decision Tree': DecisionTreeClassifier (max_depth=5, random_state=42),
+    'Logistic Regression': LogisticRegression (random_state=42, max_iter=1000),
+    'Random Forest (Bagging)': RandomForestClassifier (n_estimators=100, random_state=42),
+    'Gradient Boosting': GradientBoostingClassifier (n_estimators=100, random_state=42)
 }
 
 results = []
@@ -65,20 +65,20 @@ for name, model in models.items():
     results.append({'Model': name, 'Train': train_acc, 'Test': test_acc})
 
 import pandas as pd
-df_results = pd.DataFrame(results)
+df_results = pd.DataFrame (results)
 print("Single Models vs Ensembles:")
-print(df_results.to_string(index=False))
+print(df_results.to_string (index=False))
 
 # Visualize
-plt.figure(figsize=(10, 6))
-x = range(len(results))
+plt.figure (figsize=(10, 6))
+x = range (len (results))
 width = 0.35
 plt.bar([i - width/2 for i in x], df_results['Train'], width, label='Train', alpha=0.8)
 plt.bar([i + width/2 for i in x], df_results['Test'], width, label='Test', alpha=0.8)
 plt.xlabel('Model')
 plt.ylabel('Accuracy')
 plt.title('Single Models vs Ensemble Methods')
-plt.xticks(x, df_results['Model'], rotation=45, ha='right')
+plt.xticks (x, df_results['Model'], rotation=45, ha='right')
 plt.legend()
 plt.tight_layout()
 plt.show()
@@ -99,8 +99,8 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 
 # Define base models
-log_clf = LogisticRegression(random_state=42, max_iter=1000)
-rf_clf = RandomForestClassifier(n_estimators=100, random_state=42)
+log_clf = LogisticRegression (random_state=42, max_iter=1000)
+rf_clf = RandomForestClassifier (n_estimators=100, random_state=42)
 svm_clf = SVC(probability=True, random_state=42)  # probability=True for soft voting
 nb_clf = GaussianNB()
 
@@ -164,14 +164,14 @@ from sklearn.ensemble import StackingClassifier
 
 # Define base models (level 0)
 base_models = [
-    ('lr', LogisticRegression(random_state=42, max_iter=1000)),
-    ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
-    ('gb', GradientBoostingClassifier(n_estimators=100, random_state=42)),
+    ('lr', LogisticRegression (random_state=42, max_iter=1000)),
+    ('rf', RandomForestClassifier (n_estimators=100, random_state=42)),
+    ('gb', GradientBoostingClassifier (n_estimators=100, random_state=42)),
     ('svm', SVC(probability=True, random_state=42))
 ]
 
 # Define meta-model (level 1)
-meta_model = LogisticRegression(random_state=42)
+meta_model = LogisticRegression (random_state=42)
 
 # Create stacking ensemble
 stacking_clf = StackingClassifier(
@@ -203,14 +203,14 @@ print("\\nStacking often achieves best performance!")
 # Step 1: Train base models and get out-of-fold predictions
 from sklearn.model_selection import cross_val_predict
 
-base_model_1 = RandomForestClassifier(n_estimators=100, random_state=42)
-base_model_2 = GradientBoostingClassifier(n_estimators=100, random_state=42)
+base_model_1 = RandomForestClassifier (n_estimators=100, random_state=42)
+base_model_2 = GradientBoostingClassifier (n_estimators=100, random_state=42)
 base_model_3 = SVC(probability=True, random_state=42)
 
 # Get out-of-fold predictions for training data
-oof_pred_1 = cross_val_predict(base_model_1, X_train, y_train, cv=5, method='predict_proba')
-oof_pred_2 = cross_val_predict(base_model_2, X_train, y_train, cv=5, method='predict_proba')
-oof_pred_3 = cross_val_predict(base_model_3, X_train, y_train, cv=5, method='predict_proba')
+oof_pred_1 = cross_val_predict (base_model_1, X_train, y_train, cv=5, method='predict_proba')
+oof_pred_2 = cross_val_predict (base_model_2, X_train, y_train, cv=5, method='predict_proba')
+oof_pred_3 = cross_val_predict (base_model_3, X_train, y_train, cv=5, method='predict_proba')
 
 # Create meta-features
 X_meta_train = np.column_stack([
@@ -232,14 +232,14 @@ test_pred_3 = base_model_3.predict_proba(X_test)[:, 1]
 X_meta_test = np.column_stack([test_pred_1, test_pred_2, test_pred_3])
 
 # Step 4: Train meta-model
-meta_model = LogisticRegression(random_state=42)
+meta_model = LogisticRegression (random_state=42)
 meta_model.fit(X_meta_train, y_train)
 
 # Step 5: Make final predictions
 y_pred_stacking = meta_model.predict(X_meta_test)
 
 from sklearn.metrics import accuracy_score
-print(f"\\nManual Stacking Test Accuracy: {accuracy_score(y_test, y_pred_stacking):.4f}")
+print(f"\\nManual Stacking Test Accuracy: {accuracy_score (y_test, y_pred_stacking):.4f}")
 
 # Meta-model coefficients show how much each base model contributes
 print("\\nMeta-model coefficients (importance of each base model):")
@@ -259,8 +259,8 @@ X_train_base, X_train_meta, y_train_base, y_train_meta = train_test_split(
 )
 
 # Train base models on base training set
-base_model_1 = RandomForestClassifier(n_estimators=100, random_state=42)
-base_model_2 = GradientBoostingClassifier(n_estimators=100, random_state=42)
+base_model_1 = RandomForestClassifier (n_estimators=100, random_state=42)
+base_model_2 = GradientBoostingClassifier (n_estimators=100, random_state=42)
 
 base_model_1.fit(X_train_base, y_train_base)
 base_model_2.fit(X_train_base, y_train_base)
@@ -276,13 +276,13 @@ meta_test_2 = base_model_2.predict_proba(X_test)[:, 1]
 X_blend_test = np.column_stack([meta_test_1, meta_test_2])
 
 # Train meta-model
-blend_meta = LogisticRegression(random_state=42)
+blend_meta = LogisticRegression (random_state=42)
 blend_meta.fit(X_blend_train, y_train_meta)
 
 # Predict
 y_pred_blend = blend_meta.predict(X_blend_test)
 
-print(f"Blending Test Accuracy: {accuracy_score(y_test, y_pred_blend):.4f}")
+print(f"Blending Test Accuracy: {accuracy_score (y_test, y_pred_blend):.4f}")
 print("\\nBlending is simpler than stacking but uses less training data.")
 \`\`\`
 
@@ -293,24 +293,24 @@ Stack multiple levels of models.
 \`\`\`python
 # Level 0: Base models
 level0_models = [
-    RandomForestClassifier(n_estimators=100, random_state=42),
-    GradientBoostingClassifier(n_estimators=100, random_state=42),
+    RandomForestClassifier (n_estimators=100, random_state=42),
+    GradientBoostingClassifier (n_estimators=100, random_state=42),
     SVC(probability=True, random_state=42),
-    LogisticRegression(random_state=42, max_iter=1000)
+    LogisticRegression (random_state=42, max_iter=1000)
 ]
 
 # Level 1: Stack on level 0
 level1_clf = StackingClassifier(
     estimators=[('rf', level0_models[0]), ('gb', level0_models[1]), 
                 ('svm', level0_models[2]), ('lr', level0_models[3])],
-    final_estimator=RandomForestClassifier(n_estimators=50, random_state=42),
+    final_estimator=RandomForestClassifier (n_estimators=50, random_state=42),
     cv=5
 )
 
 # Level 2: Final meta-model
 level2_clf = StackingClassifier(
     estimators=[('level1', level1_clf)],
-    final_estimator=LogisticRegression(random_state=42),
+    final_estimator=LogisticRegression (random_state=42),
     cv=3
 )
 
@@ -330,8 +330,8 @@ Use base model predictions as features in meta-model.
 from sklearn.preprocessing import StandardScaler
 
 # Train base models
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
-gb = GradientBoostingClassifier(n_estimators=100, random_state=42)
+rf = RandomForestClassifier (n_estimators=100, random_state=42)
+gb = GradientBoostingClassifier (n_estimators=100, random_state=42)
 
 rf.fit(X_train, y_train)
 gb.fit(X_train, y_train)
@@ -346,7 +346,7 @@ X_train_extended = np.column_stack([X_train, rf_pred, gb_pred])
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train_extended)
 
-meta_clf = LogisticRegression(random_state=42, max_iter=1000)
+meta_clf = LogisticRegression (random_state=42, max_iter=1000)
 meta_clf.fit(X_train_scaled, y_train)
 
 # Test
@@ -382,10 +382,10 @@ from lightgbm import LGBMClassifier
 # Diverse base models
 production_ensemble = VotingClassifier(
     estimators=[
-        ('xgb', XGBClassifier(n_estimators=200, learning_rate=0.1, random_state=42)),
-        ('lgbm', LGBMClassifier(n_estimators=200, learning_rate=0.1, random_state=42)),
-        ('rf', RandomForestClassifier(n_estimators=200, random_state=42)),
-        ('lr', LogisticRegression(random_state=42, max_iter=1000))
+        ('xgb', XGBClassifier (n_estimators=200, learning_rate=0.1, random_state=42)),
+        ('lgbm', LGBMClassifier (n_estimators=200, learning_rate=0.1, random_state=42)),
+        ('rf', RandomForestClassifier (n_estimators=200, random_state=42)),
+        ('lr', LogisticRegression (random_state=42, max_iter=1000))
     ],
     voting='soft',
     weights=[2, 2, 1, 1]  # Weight gradient boosting models more
@@ -430,15 +430,15 @@ from sklearn.svm import SVC
 
 # Diverse base models
 base_models = [
-    ('rf', RandomForestClassifier(n_estimators=200, max_depth=10, random_state=42)),
-    ('gb', GradientBoostingClassifier(n_estimators=200, learning_rate=0.1, random_state=42)),
+    ('rf', RandomForestClassifier (n_estimators=200, max_depth=10, random_state=42)),
+    ('gb', GradientBoostingClassifier (n_estimators=200, learning_rate=0.1, random_state=42)),
     ('svm', SVC(probability=True, kernel='rbf', random_state=42))
 ]
 
 # Stacking with logistic regression meta-model
 stacking_clf = StackingClassifier(
     estimators=base_models,
-    final_estimator=LogisticRegression(random_state=42),
+    final_estimator=LogisticRegression (random_state=42),
     cv=5,
     n_jobs=-1
 )

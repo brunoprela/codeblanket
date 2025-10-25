@@ -1,7 +1,7 @@
 export const mathematicsForFinance = {
-    title: 'Mathematics for Finance',
-    id: 'mathematics-finance',
-    content: `
+  title: 'Mathematics for Finance',
+  id: 'mathematics-finance',
+  content: `
 # Mathematics for Finance
 
 ## Introduction
@@ -36,9 +36,9 @@ import matplotlib.pyplot as plt
 # Calculate returns statistics
 returns = np.array([0.05, -0.02, 0.08, 0.03, -0.01, 0.04, 0.06, -0.03, 0.07, 0.02])
 
-mean_return = np.mean(returns)
-variance = np.var(returns)
-std_dev = np.std(returns)
+mean_return = np.mean (returns)
+variance = np.var (returns)
+std_dev = np.std (returns)
 
 print(f"Mean return: {mean_return:.4f} ({mean_return*100:.2f}%)")
 print(f"Variance: {variance:.6f}")
@@ -71,12 +71,12 @@ msft_returns = np.random.normal(0.0008, 0.015, 252)  # MSFT: 0.08% mean, 1.5% da
 msft_returns = 0.7 * aapl_returns + 0.3 * msft_returns
 
 # Covariance matrix
-cov_matrix = np.cov(aapl_returns, msft_returns)
+cov_matrix = np.cov (aapl_returns, msft_returns)
 print("Covariance matrix:")
 print(cov_matrix)
 
 # Correlation matrix
-corr_matrix = np.corrcoef(aapl_returns, msft_returns)
+corr_matrix = np.corrcoef (aapl_returns, msft_returns)
 print("\\nCorrelation matrix:")
 print(corr_matrix)
 
@@ -106,7 +106,7 @@ from scipy import stats
 returns = np.random.normal(0, 0.02, 1000)  # Normal distribution
 
 # Test normality
-stat, p_value = stats.shapiro(returns)
+stat, p_value = stats.shapiro (returns)
 
 print(f"Shapiro-Wilk test:")
 print(f"  Statistic: {stat:.4f}")
@@ -118,8 +118,8 @@ else:
     print("  ✗ Returns NOT normally distributed (reject null)")
 
 # Calculate skewness and kurtosis
-skewness = stats.skew(returns)
-kurtosis = stats.kurtosis(returns)
+skewness = stats.skew (returns)
+kurtosis = stats.kurtosis (returns)
 
 print(f"\\nSkewness: {skewness:.3f}")
 print(f"  (0 = symmetric, >0 = right tail, <0 = left tail)")
@@ -144,7 +144,7 @@ print(f"  (0 = normal, >0 = fat tails, <0 = thin tails)")
 Bayes' Theorem in Trading
 """
 
-def bayes_update(prior_prob: float, likelihood: float, 
+def bayes_update (prior_prob: float, likelihood: float, 
                  marginal_prob: float) -> float:
     """
     Update probability based on new evidence
@@ -166,7 +166,7 @@ prior = 0.55  # Initial belief stock goes up
 likelihood = 0.80  # P(positive earnings | stock up)
 marginal = 0.60  # P(positive earnings) overall
 
-posterior = bayes_update(prior, likelihood, marginal)
+posterior = bayes_update (prior, likelihood, marginal)
 
 print(f"Prior P(stock up): {prior*100:.0f}%")
 print(f"After positive earnings:")
@@ -183,7 +183,7 @@ print(f"\\nBelief increased by {(posterior-prior)*100:.0f} percentage points")
 Monte Carlo Portfolio Simulation
 """
 
-def monte_carlo_portfolio(initial_value: float, 
+def monte_carlo_portfolio (initial_value: float, 
                          mean_return: float,
                          volatility: float,
                          days: int,
@@ -195,17 +195,17 @@ def monte_carlo_portfolio(initial_value: float,
     """
     results = []
     
-    for _ in range(simulations):
+    for _ in range (simulations):
         portfolio_value = initial_value
         
-        for day in range(days):
+        for day in range (days):
             # Daily return (log-normal distribution)
-            daily_return = np.random.normal(mean_return / 252, volatility / np.sqrt(252))
+            daily_return = np.random.normal (mean_return / 252, volatility / np.sqrt(252))
             portfolio_value *= (1 + daily_return)
         
-        results.append(portfolio_value)
+        results.append (portfolio_value)
     
-    return np.array(results)
+    return np.array (results)
 
 
 # Simulate 1-year portfolio
@@ -213,23 +213,23 @@ initial = 100_000
 mean = 0.10  # 10% annual return
 vol = 0.20  # 20% annual volatility
 
-final_values = monte_carlo_portfolio(initial, mean, vol, 252, simulations=10000)
+final_values = monte_carlo_portfolio (initial, mean, vol, 252, simulations=10000)
 
 # Calculate statistics
-mean_final = np.mean(final_values)
-median_final = np.median(final_values)
-percentile_5 = np.percentile(final_values, 5)  # VaR 95%
-percentile_95 = np.percentile(final_values, 95)
+mean_final = np.mean (final_values)
+median_final = np.median (final_values)
+percentile_5 = np.percentile (final_values, 5)  # VaR 95%
+percentile_95 = np.percentile (final_values, 95)
 
 print(f"\\n=== Monte Carlo Results (10,000 simulations) ===")
-print(f"Initial value: ${initial:,.0f}")
+print(f"Initial value: \${initial:,.0f}")
 print(f"\\nAfter 1 year:")
-print(f"  Mean: ${mean_final:,.0f}")
-print(f"  Median: ${median_final:,.0f}")
-print(f"  5th percentile: ${percentile_5:,.0f} (VaR)")
-print(f"  95th percentile: ${percentile_95:,.0f}")
+print(f"  Mean: \${mean_final:,.0f}")
+print(f"  Median: \${median_final:,.0f}")
+print(f"  5th percentile: \${percentile_5:,.0f} (VaR)")
+print(f"  95th percentile: \${percentile_95:,.0f}")
 
-prob_loss = np.sum(final_values < initial) / len(final_values)
+prob_loss = np.sum (final_values < initial) / len (final_values)
 print(f"\\nProbability of loss: {prob_loss*100:.1f}%")
 \`\`\`
 
@@ -252,15 +252,15 @@ Where:
 Portfolio Variance Calculation
 """
 
-def calculate_portfolio_variance(weights: np.array, 
+def calculate_portfolio_variance (weights: np.array, 
                                 cov_matrix: np.array) -> float:
     """
     Calculate portfolio variance using matrix multiplication
     
-    Var(portfolio) = w^T * Σ * w
+    Var (portfolio) = w^T * Σ * w
     """
     portfolio_variance = weights.T @ cov_matrix @ weights
-    portfolio_std = np.sqrt(portfolio_variance)
+    portfolio_std = np.sqrt (portfolio_variance)
     
     return portfolio_variance, portfolio_std
 
@@ -275,16 +275,16 @@ cov_matrix = np.array([
     [0.02, 0.015, 0.0625]  # Asset 3: 25% vol
 ])
 
-var, std = calculate_portfolio_variance(weights, cov_matrix)
+var, std = calculate_portfolio_variance (weights, cov_matrix)
 
 print(f"Portfolio weights: {weights}")
 print(f"Portfolio variance: {var:.4f}")
 print(f"Portfolio volatility: {std:.4f} ({std*100:.1f}%)")
 
 # Compare to individual assets
-asset_vols = np.sqrt(np.diag(cov_matrix))
+asset_vols = np.sqrt (np.diag (cov_matrix))
 print(f"\\nIndividual asset volatilities:")
-for i, vol in enumerate(asset_vols, 1):
+for i, vol in enumerate (asset_vols, 1):
     print(f"  Asset {i}: {vol*100:.1f}%")
 
 print(f"\\nDiversification benefit: Portfolio vol ({std*100:.1f}%) < weighted average")
@@ -299,18 +299,18 @@ print(f"\\nDiversification benefit: Portfolio vol ({std*100:.1f}%) < weighted av
 PCA for Factor Analysis
 """
 
-def pca_analysis(returns_matrix: np.array, n_components: int = 3):
+def pca_analysis (returns_matrix: np.array, n_components: int = 3):
     """
     Perform PCA on returns to find principal components (factors)
     """
     # Center the data
-    returns_centered = returns_matrix - np.mean(returns_matrix, axis=0)
+    returns_centered = returns_matrix - np.mean (returns_matrix, axis=0)
     
     # Covariance matrix
-    cov = np.cov(returns_centered.T)
+    cov = np.cov (returns_centered.T)
     
     # Eigenvalues and eigenvectors
-    eigenvalues, eigenvectors = np.linalg.eig(cov)
+    eigenvalues, eigenvectors = np.linalg.eig (cov)
     
     # Sort by eigenvalues (descending)
     idx = eigenvalues.argsort()[::-1]
@@ -318,14 +318,14 @@ def pca_analysis(returns_matrix: np.array, n_components: int = 3):
     eigenvectors = eigenvectors[:,idx]
     
     # Variance explained
-    total_var = np.sum(eigenvalues)
+    total_var = np.sum (eigenvalues)
     var_explained = eigenvalues / total_var
     
     print(f"\\n=== PCA Results ===")
-    for i in range(min(n_components, len(eigenvalues))):
+    for i in range (min (n_components, len (eigenvalues))):
         print(f"PC{i+1}: {var_explained[i]*100:.1f}% variance explained")
     
-    cumulative = np.cumsum(var_explained[:n_components])
+    cumulative = np.cumsum (var_explained[:n_components])
     print(f"\\nFirst {n_components} components explain {cumulative[-1]*100:.1f}% of variance")
     
     return eigenvalues, eigenvectors, var_explained
@@ -335,12 +335,12 @@ def pca_analysis(returns_matrix: np.array, n_components: int = 3):
 n_stocks = 10
 n_days = 252
 returns_matrix = np.random.multivariate_normal(
-    mean=np.zeros(n_stocks),
-    cov=np.eye(n_stocks) * 0.0004 + 0.0001,  # Correlation structure
+    mean=np.zeros (n_stocks),
+    cov=np.eye (n_stocks) * 0.0004 + 0.0001,  # Correlation structure
     size=n_days
 )
 
-eigenvalues, eigenvectors, var_explained = pca_analysis(returns_matrix, n_components=3)
+eigenvalues, eigenvectors, var_explained = pca_analysis (returns_matrix, n_components=3)
 
 print(f"\\nInterpretation: First PC likely represents 'market factor'")
 print(f"  (all stocks move together due to market)")
@@ -370,7 +370,7 @@ def black_scholes_call(S: float, K: float, T: float, r: float, sigma: float) -> 
     d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
     d2 = d1 - sigma*np.sqrt(T)
     
-    call_price = S * norm.cdf(d1) - K * np.exp(-r*T) * norm.cdf(d2)
+    call_price = S * norm.cdf (d1) - K * np.exp(-r*T) * norm.cdf (d2)
     
     return call_price
 
@@ -420,11 +420,11 @@ greeks = calculate_greeks(
 )
 
 print(f"\\n=== Option Greeks ===")
-print(f"Option price: ${greeks['price']: .2f}")
-print(f"Delta: {greeks['delta']:.3f} (${greeks['delta']:.2f} per $1 stock move)")
+print(f"Option price: \${greeks['price']:.2f}")
+print(f"Delta: {greeks['delta']:.3f} (\${greeks['delta']:.2f} per $1 stock move)")
 print(f"Gamma: {greeks['gamma']:.4f} (delta change per $1 move)")
-print(f"Theta: ${greeks['theta']:.2f} (daily time decay)")
-print(f"Vega: ${greeks['vega']:.2f} (per 1% vol change)")
+print(f"Theta: \${greeks['theta']:.2f} (daily time decay)")
+print(f"Vega: \${greeks['vega']:.2f} (per 1% vol change)")
 \`\`\`
 
 ---
@@ -443,7 +443,7 @@ Portfolio Optimization
 """
 from scipy.optimize import minimize
 
-def optimize_portfolio(mean_returns: np.array, 
+def optimize_portfolio (mean_returns: np.array, 
                       cov_matrix: np.array,
                       target_return: float = None) -> dict:
     """
@@ -452,15 +452,15 @@ def optimize_portfolio(mean_returns: np.array,
     If target_return specified: minimize variance subject to return constraint
     Else: maximize Sharpe ratio
     """
-    n_assets = len(mean_returns)
+    n_assets = len (mean_returns)
     
     # Objective: minimize variance
-    def portfolio_variance(weights):
+    def portfolio_variance (weights):
         return weights.T @ cov_matrix @ weights
     
     # Constraint: weights sum to 1
     constraints = [
-        {'type': 'eq', 'fun': lambda w: np.sum(w) - 1}
+        {'type': 'eq', 'fun': lambda w: np.sum (w) - 1}
     ]
     
     # If target return specified, add return constraint
@@ -471,7 +471,7 @@ def optimize_portfolio(mean_returns: np.array,
         })
     
     # Bounds: 0 <= weight <= 1 (no shorting, no leverage)
-    bounds = tuple((0, 1) for _ in range(n_assets))
+    bounds = tuple((0, 1) for _ in range (n_assets))
     
     # Initial guess: equal weights
     initial_weights = np.array([1/n_assets] * n_assets)
@@ -487,7 +487,7 @@ def optimize_portfolio(mean_returns: np.array,
     
     optimal_weights = result.x
     optimal_return = optimal_weights.T @ mean_returns
-    optimal_std = np.sqrt(optimal_weights.T @ cov_matrix @ optimal_weights)
+    optimal_std = np.sqrt (optimal_weights.T @ cov_matrix @ optimal_weights)
     
     return {
         'weights': optimal_weights,
@@ -505,7 +505,7 @@ cov_matrix = np.array([
     [0.02, 0.015, 0.09]
 ])
 
-optimal = optimize_portfolio(mean_returns, cov_matrix, target_return=0.11)
+optimal = optimize_portfolio (mean_returns, cov_matrix, target_return=0.11)
 
 print(f"\\n=== Optimal Portfolio ===")
 print(f"Weights: {optimal['weights']}")
@@ -527,4 +527,3 @@ print(f"Sharpe ratio: {optimal['sharpe']:.3f}")
 **Next section**: Reading Financial News & Data - where to find information and how to interpret it.
 `,
 };
-

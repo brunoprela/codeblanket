@@ -7,7 +7,7 @@ import { MultipleChoiceQuestion } from '../../../types';
 export const dijkstraMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
-    question: "What is Dijkstra's algorithm used for?",
+    question: "What is Dijkstra\'s algorithm used for?",
     options: [
       'MST',
       'Single-source shortest path with non-negative weights',
@@ -68,6 +68,6 @@ export const dijkstraMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'During Dijkstra, when updating dist[v], store parent[v] = u. After algorithm, backtrack: path = [target], while path[-1] != source: path.append(parent[path[-1]]). Reverse for source→target.',
+      'During Dijkstra, when updating dist[v], store parent[v] = u. After algorithm, backtrack: path = [target], while path[-1] != source: path.append (parent[path[-1]]). Reverse for source→target.',
   },
 ];

@@ -46,12 +46,12 @@ with open("file.txt", encoding="utf-8") as f:
 from pathlib import Path
 from typing import Optional
 
-def read_text_with_encoding_detection(filepath: str) -> tuple[str, str]:
+def read_text_with_encoding_detection (filepath: str) -> tuple[str, str]:
     """
     Try multiple encodings to read a file.
     Returns content and detected encoding.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Common encodings to try
     encodings = [
@@ -64,13 +64,13 @@ def read_text_with_encoding_detection(filepath: str) -> tuple[str, str]:
     
     for encoding in encodings:
         try:
-            content = path.read_text(encoding=encoding)
+            content = path.read_text (encoding=encoding)
             return content, encoding
         except (UnicodeDecodeError, LookupError):
             continue
     
     # If all fail, read as binary and decode with errors='ignore'
-    content = path.read_text(encoding="utf-8", errors="ignore")
+    content = path.read_text (encoding="utf-8", errors="ignore")
     return content, "utf-8 (with errors ignored)"
 
 # Usage
@@ -85,20 +85,20 @@ print(f"Successfully read file with encoding: {encoding}")
 import chardet
 from pathlib import Path
 
-def read_file_auto_encoding(filepath: str, sample_size: int = 10000) -> str:
+def read_file_auto_encoding (filepath: str, sample_size: int = 10000) -> str:
     """
     Automatically detect encoding using chardet library.
     
     Used by tools like VS Code for automatic encoding detection.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     
     # Read sample bytes for detection
     with path.open("rb") as f:
-        raw_data = f.read(sample_size)
+        raw_data = f.read (sample_size)
     
     # Detect encoding
-    detection = chardet.detect(raw_data)
+    detection = chardet.detect (raw_data)
     encoding = detection["encoding"]
     confidence = detection["confidence"]
     
@@ -106,10 +106,10 @@ def read_file_auto_encoding(filepath: str, sample_size: int = 10000) -> str:
     
     # Read with detected encoding
     if encoding and confidence > 0.7:
-        return path.read_text(encoding=encoding)
+        return path.read_text (encoding=encoding)
     else:
         # Fall back to UTF-8 with error handling
-        return path.read_text(encoding="utf-8", errors="replace")
+        return path.read_text (encoding="utf-8", errors="replace")
 \`\`\`
 
 ## Line-by-Line Processing
@@ -119,14 +119,14 @@ def read_file_auto_encoding(filepath: str, sample_size: int = 10000) -> str:
 \`\`\`python
 from pathlib import Path
 
-def process_file_lines_basic(filepath: str) -> None:
+def process_file_lines_basic (filepath: str) -> None:
     """Process file line by line - memory efficient."""
-    with open(filepath, encoding="utf-8") as f:
-        for line_num, line in enumerate(f, start=1):
+    with open (filepath, encoding="utf-8") as f:
+        for line_num, line in enumerate (f, start=1):
             # line includes newline character
-            process_line(line_num, line)
+            process_line (line_num, line)
 
-def process_line(line_num: int, line: str) -> None:
+def process_line (line_num: int, line: str) -> None:
     """Process a single line."""
     # Strip whitespace and newline
     clean_line = line.rstrip("\\n\\r")
@@ -155,18 +155,18 @@ def read_lines_with_context(
     Yields: (line_num, line, before_lines, after_lines)
     Useful for showing context around matching lines.
     """
-    with open(filepath, encoding="utf-8") as f:
+    with open (filepath, encoding="utf-8") as f:
         lines = [line.rstrip("\\n") for line in f]
     
-    for i, line in enumerate(lines):
+    for i, line in enumerate (lines):
         before = lines[max(0, i - context_before):i]
-        after = lines[i + 1:min(len(lines), i + 1 + context_after)]
+        after = lines[i + 1:min (len (lines), i + 1 + context_after)]
         yield (i + 1, line, before, after)
 
 # Usage: Find TODO comments with context (like Cursor does)
-def find_todos_with_context(filepath: str) -> None:
+def find_todos_with_context (filepath: str) -> None:
     """Find TODO comments and show surrounding code."""
-    for line_num, line, before, after in read_lines_with_context(filepath):
+    for line_num, line, before, after in read_lines_with_context (filepath):
         if "TODO" in line:
             print(f"\\n=== TODO at line {line_num} ===")
             for b in before:
@@ -191,7 +191,7 @@ class LargeFileProcessor:
     """
     
     def __init__(self, filepath: str, chunk_size: int = 8192):
-        self.path = Path(filepath)
+        self.path = Path (filepath)
         self.chunk_size = chunk_size
         self.file_size = self.path.stat().st_size
     
@@ -215,18 +215,18 @@ class LargeFileProcessor:
         bytes_processed = 0
         
         with self.path.open("r", encoding="utf-8") as f:
-            for line_num, line in enumerate(f, start=1):
+            for line_num, line in enumerate (f, start=1):
                 # Process line
-                processor(line_num, line)
+                processor (line_num, line)
                 
                 # Update progress
                 lines_processed += 1
-                bytes_processed += len(line.encode("utf-8"))
+                bytes_processed += len (line.encode("utf-8"))
                 
                 # Report progress every 1000 lines
                 if progress_callback and lines_processed % 1000 == 0:
                     progress = (bytes_processed / self.file_size) * 100
-                    progress_callback(progress)
+                    progress_callback (progress)
         
         elapsed = time.time() - start_time
         
@@ -238,24 +238,24 @@ class LargeFileProcessor:
         }
 
 # Usage
-def analyze_large_log_file(filepath: str):
+def analyze_large_log_file (filepath: str):
     """Analyze a large log file efficiently."""
-    processor = LargeFileProcessor(filepath)
+    processor = LargeFileProcessor (filepath)
     
     error_count = 0
     warning_count = 0
     
-    def count_errors(line_num: int, line: str):
+    def count_errors (line_num: int, line: str):
         nonlocal error_count, warning_count
         if "ERROR" in line:
             error_count += 1
         elif "WARNING" in line:
             warning_count += 1
     
-    def show_progress(progress: float):
+    def show_progress (progress: float):
         print(f"\\rProgress: {progress:.1f}%", end="", flush=True)
     
-    stats = processor.process_lines(count_errors, show_progress)
+    stats = processor.process_lines (count_errors, show_progress)
     
     print(f"\\nFound {error_count} errors and {warning_count} warnings")
     print(f"Processed {stats['lines_processed']:,} lines in {stats['elapsed_seconds']:.2f}s")
@@ -270,7 +270,7 @@ def analyze_large_log_file(filepath: str):
 from pathlib import Path
 from typing import Iterator
 
-def chunk_text_by_chars(text: str, chunk_size: int = 1000, overlap: int = 200) -> Iterator[str]:
+def chunk_text_by_chars (text: str, chunk_size: int = 1000, overlap: int = 200) -> Iterator[str]:
     """
     Split text into overlapping chunks by character count.
     
@@ -278,7 +278,7 @@ def chunk_text_by_chars(text: str, chunk_size: int = 1000, overlap: int = 200) -
     Useful for processing with LLMs that have token limits.
     """
     start = 0
-    text_len = len(text)
+    text_len = len (text)
     
     while start < text_len:
         end = start + chunk_size
@@ -292,18 +292,18 @@ def chunk_text_by_chars(text: str, chunk_size: int = 1000, overlap: int = 200) -
             break
 
 # Usage: Process large document with LLM
-def process_large_document_with_llm(filepath: str):
+def process_large_document_with_llm (filepath: str):
     """Process document in chunks to stay under token limits."""
-    content = Path(filepath).read_text(encoding="utf-8")
+    content = Path (filepath).read_text (encoding="utf-8")
     
     summaries = []
-    for i, chunk in enumerate(chunk_text_by_chars(content, chunk_size=2000), 1):
+    for i, chunk in enumerate (chunk_text_by_chars (content, chunk_size=2000), 1):
         print(f"Processing chunk {i}...")
-        # summary = call_llm_to_summarize(chunk)
-        # summaries.append(summary)
+        # summary = call_llm_to_summarize (chunk)
+        # summaries.append (summary)
     
     # Combine summaries
-    # final_summary = call_llm_to_combine(summaries)
+    # final_summary = call_llm_to_combine (summaries)
 \`\`\`
 
 ### Semantic Chunking (Paragraph-Based)
@@ -312,7 +312,7 @@ def process_large_document_with_llm(filepath: str):
 from pathlib import Path
 from typing import Iterator
 
-def chunk_text_by_paragraphs(text: str, max_chunk_size: int = 1000) -> Iterator[str]:
+def chunk_text_by_paragraphs (text: str, max_chunk_size: int = 1000) -> Iterator[str]:
     """
     Split text by paragraphs, combining until reaching max_chunk_size.
     
@@ -328,12 +328,12 @@ def chunk_text_by_paragraphs(text: str, max_chunk_size: int = 1000) -> Iterator[
         if not para:
             continue
         
-        para_size = len(para)
+        para_size = len (para)
         
         # If single paragraph exceeds max size, yield it anyway
         if para_size > max_chunk_size:
             if current_chunk:
-                yield "\\n\\n".join(current_chunk)
+                yield "\\n\\n".join (current_chunk)
                 current_chunk = []
                 current_size = 0
             yield para
@@ -341,21 +341,21 @@ def chunk_text_by_paragraphs(text: str, max_chunk_size: int = 1000) -> Iterator[
         
         # If adding this paragraph would exceed max size
         if current_size + para_size > max_chunk_size:
-            yield "\\n\\n".join(current_chunk)
+            yield "\\n\\n".join (current_chunk)
             current_chunk = [para]
             current_size = para_size
         else:
-            current_chunk.append(para)
+            current_chunk.append (para)
             current_size += para_size + 2  # +2 for \\n\\n
     
     # Yield remaining chunk
     if current_chunk:
-        yield "\\n\\n".join(current_chunk)
+        yield "\\n\\n".join (current_chunk)
 
 # Usage
 text = Path("document.txt").read_text()
-chunks = list(chunk_text_by_paragraphs(text, max_chunk_size=2000))
-print(f"Split document into {len(chunks)} chunks")
+chunks = list (chunk_text_by_paragraphs (text, max_chunk_size=2000))
+print(f"Split document into {len (chunks)} chunks")
 \`\`\`
 
 ### Sentence-Based Chunking
@@ -364,17 +364,17 @@ print(f"Split document into {len(chunks)} chunks")
 import re
 from typing import Iterator
 
-def chunk_text_by_sentences(text: str, sentences_per_chunk: int = 5) -> Iterator[str]:
+def chunk_text_by_sentences (text: str, sentences_per_chunk: int = 5) -> Iterator[str]:
     """
     Split text by sentences, grouping N sentences per chunk.
     
     Most natural for reading comprehension tasks.
     """
     # Simple sentence splitter (for production, use NLTK or spaCy)
-    sentences = re.split(r'(?<=[.!?])\\s+', text)
+    sentences = re.split (r'(?<=[.!?])\\s+', text)
     
-    for i in range(0, len(sentences), sentences_per_chunk):
-        chunk = " ".join(sentences[i:i + sentences_per_chunk])
+    for i in range(0, len (sentences), sentences_per_chunk):
+        chunk = " ".join (sentences[i:i + sentences_per_chunk])
         yield chunk.strip()
 
 # Better sentence splitting with NLTK
@@ -382,12 +382,12 @@ try:
     import nltk
     nltk.download('punkt', quiet=True)
     
-    def chunk_text_by_sentences_nltk(text: str, sentences_per_chunk: int = 5) -> Iterator[str]:
+    def chunk_text_by_sentences_nltk (text: str, sentences_per_chunk: int = 5) -> Iterator[str]:
         """Better sentence splitting using NLTK."""
-        sentences = nltk.sent_tokenize(text)
+        sentences = nltk.sent_tokenize (text)
         
-        for i in range(0, len(sentences), sentences_per_chunk):
-            chunk = " ".join(sentences[i:i + sentences_per_chunk])
+        for i in range(0, len (sentences), sentences_per_chunk):
+            chunk = " ".join (sentences[i:i + sentences_per_chunk])
             yield chunk.strip()
 except ImportError:
     pass
@@ -412,8 +412,8 @@ def generate_unified_diff(
     This is the format used by git diff and patch tools.
     Similar to how Cursor shows code changes.
     """
-    path1 = Path(file1)
-    path2 = Path(file2)
+    path1 = Path (file1)
+    path2 = Path (file2)
     
     with path1.open() as f1, path2.open() as f2:
         lines1 = f1.readlines()
@@ -422,13 +422,13 @@ def generate_unified_diff(
     diff = difflib.unified_diff(
         lines1,
         lines2,
-        fromfile=str(path1),
-        tofile=str(path2),
+        fromfile=str (path1),
+        tofile=str (path2),
         lineterm="",
         n=context_lines
     )
     
-    return "\\n".join(diff)
+    return "\\n".join (diff)
 
 # Usage
 diff = generate_unified_diff("old_code.py", "new_code.py")
@@ -438,19 +438,19 @@ print(diff)
 ### Computing Edit Distance
 
 \`\`\`python
-def compute_edit_distance(s1: str, s2: str) -> int:
+def compute_edit_distance (s1: str, s2: str) -> int:
     """
     Compute Levenshtein distance (edit distance) between two strings.
     
     Useful for finding similar files or detecting changes.
     """
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    m, n = len (s1), len (s2)
+    dp = [[0] * (n + 1) for _ in range (m + 1)]
     
     # Initialize base cases
-    for i in range(m + 1):
+    for i in range (m + 1):
         dp[i][0] = i
-    for j in range(n + 1):
+    for j in range (n + 1):
         dp[0][j] = j
     
     # Fill DP table
@@ -467,14 +467,14 @@ def compute_edit_distance(s1: str, s2: str) -> int:
     
     return dp[m][n]
 
-def similarity_ratio(s1: str, s2: str) -> float:
+def similarity_ratio (s1: str, s2: str) -> float:
     """
     Compute similarity ratio (0.0 to 1.0) between two strings.
     
     1.0 = identical, 0.0 = completely different
     """
-    distance = compute_edit_distance(s1, s2)
-    max_len = max(len(s1), len(s2))
+    distance = compute_edit_distance (s1, s2)
+    max_len = max (len (s1), len (s2))
     
     if max_len == 0:
         return 1.0
@@ -484,7 +484,7 @@ def similarity_ratio(s1: str, s2: str) -> float:
 # Usage
 old_code = "def hello():\\n    print('hi')"
 new_code = "def hello():\\n    print('hello')"
-similarity = similarity_ratio(old_code, new_code)
+similarity = similarity_ratio (old_code, new_code)
 print(f"Similarity: {similarity:.2%}")
 \`\`\`
 
@@ -512,8 +512,8 @@ def find_changed_lines(
     
     Used by code editors to highlight changes.
     """
-    old_lines = old_content.splitlines(keepends=True)
-    new_lines = new_content.splitlines(keepends=True)
+    old_lines = old_content.splitlines (keepends=True)
+    new_lines = new_content.splitlines (keepends=True)
     
     changes = []
     
@@ -522,26 +522,26 @@ def find_changed_lines(
     
     for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         if tag == 'equal':
-            for i, line in enumerate(new_lines[j1:j2]):
+            for i, line in enumerate (new_lines[j1:j2]):
                 changes.append((j1 + i + 1, ChangeType.UNCHANGED, line))
         elif tag == 'delete':
-            for i, line in enumerate(old_lines[i1:i2]):
+            for i, line in enumerate (old_lines[i1:i2]):
                 changes.append((i1 + i + 1, ChangeType.DELETED, line))
         elif tag == 'insert':
-            for i, line in enumerate(new_lines[j1:j2]):
+            for i, line in enumerate (new_lines[j1:j2]):
                 changes.append((j1 + i + 1, ChangeType.ADDED, line))
         elif tag == 'replace':
-            for i, line in enumerate(old_lines[i1:i2]):
+            for i, line in enumerate (old_lines[i1:i2]):
                 changes.append((i1 + i + 1, ChangeType.DELETED, line))
-            for i, line in enumerate(new_lines[j1:j2]):
+            for i, line in enumerate (new_lines[j1:j2]):
                 changes.append((j1 + i + 1, ChangeType.ADDED, line))
     
     return changes
 
 # Usage: Display changes like Cursor
-def display_diff(old_content: str, new_content: str):
+def display_diff (old_content: str, new_content: str):
     """Display diff with color indicators."""
-    changes = find_changed_lines(old_content, new_content)
+    changes = find_changed_lines (old_content, new_content)
     
     for line_num, change_type, line in changes:
         prefix = change_type.value
@@ -568,8 +568,8 @@ def apply_patch(
     
     Similar to how Cursor applies LLM-generated code changes.
     """
-    original_lines = original_content.splitlines(keepends=True)
-    patch_lines = patch_content.splitlines(keepends=True)
+    original_lines = original_content.splitlines (keepends=True)
+    patch_lines = patch_content.splitlines (keepends=True)
     
     # Parse patch and apply
     # This is a simplified version - production code would use
@@ -582,7 +582,7 @@ def apply_patch(
     # - unidiff
     # Or call external tools like patch command
     
-    return "".join(result_lines)
+    return "".join (result_lines)
 
 # Better approach: Use whatthepatch library
 try:
@@ -593,22 +593,22 @@ try:
         patch_content: str
     ) -> Optional[str]:
         """Apply patch using proper parsing library."""
-        patches = whatthepatch.parse_patch(patch_content)
+        patches = whatthepatch.parse_patch (patch_content)
         
         for patch in patches:
             # Apply diff changes
-            original_lines = original_content.splitlines(keepends=True)
+            original_lines = original_content.splitlines (keepends=True)
             
             for diff in patch.changes:
                 line_num, old_line, new_line = diff
                 if old_line is None:  # Addition
-                    original_lines.insert(line_num, new_line)
+                    original_lines.insert (line_num, new_line)
                 elif new_line is None:  # Deletion
                     del original_lines[line_num]
                 else:  # Modification
                     original_lines[line_num] = new_line
             
-            return "".join(original_lines)
+            return "".join (original_lines)
         
         return None
 except ImportError:
@@ -623,35 +623,35 @@ except ImportError:
 import mmap
 from pathlib import Path
 
-def search_large_file_mmap(filepath: str, search_term: str) -> List[int]:
+def search_large_file_mmap (filepath: str, search_term: str) -> List[int]:
     """
     Search for term in large file using memory mapping.
     
     Much faster than reading line-by-line for large files.
     """
-    path = Path(filepath)
+    path = Path (filepath)
     matches = []
     
     with path.open("r+b") as f:
         # Memory-map the file
-        with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mmapped:
+        with mmap.mmap (f.fileno(), 0, access=mmap.ACCESS_READ) as mmapped:
             # Convert to bytes
             search_bytes = search_term.encode("utf-8")
             
             # Find all occurrences
             position = 0
             while True:
-                position = mmapped.find(search_bytes, position)
+                position = mmapped.find (search_bytes, position)
                 if position == -1:
                     break
-                matches.append(position)
+                matches.append (position)
                 position += 1
     
     return matches
 
 # Usage
 matches = search_large_file_mmap("large_log.txt", "ERROR")
-print(f"Found {len(matches)} occurrences")
+print(f"Found {len (matches)} occurrences")
 \`\`\`
 
 ## Text Normalization
@@ -662,7 +662,7 @@ print(f"Found {len(matches)} occurrences")
 import re
 from typing import Optional
 
-def normalize_text(text: str) -> str:
+def normalize_text (text: str) -> str:
     """
     Normalize text for consistent LLM processing.
     
@@ -675,38 +675,38 @@ def normalize_text(text: str) -> str:
     text = text.replace("\\r\\n", "\\n").replace("\\r", "\\n")
     
     # Remove multiple consecutive blank lines
-    text = re.sub(r"\\n\\n\\n+", "\\n\\n", text)
+    text = re.sub (r"\\n\\n\\n+", "\\n\\n", text)
     
     # Remove trailing whitespace from lines
     lines = [line.rstrip() for line in text.split("\\n")]
-    text = "\\n".join(lines)
+    text = "\\n".join (lines)
     
     # Normalize multiple spaces (but preserve indentation)
-    # text = re.sub(r" +", " ", text)
+    # text = re.sub (r" +", " ", text)
     
     # Remove leading/trailing whitespace from entire text
     text = text.strip()
     
     return text
 
-def remove_comments(code: str, language: str = "python") -> str:
+def remove_comments (code: str, language: str = "python") -> str:
     """
     Remove comments from code.
     Useful for focusing LLM on actual code logic.
     """
     if language == "python":
         # Remove single-line comments
-        code = re.sub(r"#.*$", "", code, flags=re.MULTILINE)
+        code = re.sub (r"#.*$", "", code, flags=re.MULTILINE)
         # Remove docstrings (simplified)
-        code = re.sub(r'"""[\\s\\S]*?"""', "", code)
-        code = re.sub(r"''[\\s\\S]*?''", "", code)
+        code = re.sub (r'"""[\\s\\S]*?"""', "", code)
+        code = re.sub (r"''[\\s\\S]*?''", "", code)
     elif language in ["javascript", "typescript", "java", "cpp"]:
         # Remove single-line comments
-        code = re.sub(r"//.*$", "", code, flags=re.MULTILINE)
+        code = re.sub (r"//.*$", "", code, flags=re.MULTILINE)
         # Remove multi-line comments
-        code = re.sub(r"/\\*[\\s\\S]*?\\*/", "", code)
+        code = re.sub (r"/\\*[\\s\\S]*?\\*/", "", code)
     
-    return normalize_text(code)
+    return normalize_text (code)
 \`\`\`
 
 ## Production Example: File Processor for Code Editor
@@ -734,22 +734,22 @@ class CodeFileProcessor:
     """
     
     def __init__(self, workspace: str):
-        self.workspace = Path(workspace)
+        self.workspace = Path (workspace)
         self.logger = logging.getLogger(__name__)
     
-    def read_file(self, filepath: str) -> Optional[str]:
+    def read_file (self, filepath: str) -> Optional[str]:
         """Read file with encoding detection and error handling."""
         full_path = self.workspace / filepath
         
         try:
             # Try UTF-8 first
-            return full_path.read_text(encoding="utf-8")
+            return full_path.read_text (encoding="utf-8")
         except UnicodeDecodeError:
             # Try with fallback encoding
             try:
-                return full_path.read_text(encoding="latin-1")
+                return full_path.read_text (encoding="latin-1")
             except Exception as e:
-                self.logger.error(f"Failed to read {filepath}: {e}")
+                self.logger.error (f"Failed to read {filepath}: {e}")
                 return None
     
     def generate_diff(
@@ -758,13 +758,13 @@ class CodeFileProcessor:
         new_content: str
     ) -> Tuple[str, List[FileChange]]:
         """Generate diff between current file and new content."""
-        current = self.read_file(filepath)
+        current = self.read_file (filepath)
         if current is None:
             return "", []
         
         # Generate unified diff
-        current_lines = current.splitlines(keepends=True)
-        new_lines = new_content.splitlines(keepends=True)
+        current_lines = current.splitlines (keepends=True)
+        new_lines = new_content.splitlines (keepends=True)
         
         diff = difflib.unified_diff(
             current_lines,
@@ -774,10 +774,10 @@ class CodeFileProcessor:
             lineterm=""
         )
         
-        diff_text = "\\n".join(diff)
+        diff_text = "\\n".join (diff)
         
         # Extract changes
-        changes = self._extract_changes(current, new_content)
+        changes = self._extract_changes (current, new_content)
         
         return diff_text, changes
     
@@ -795,7 +795,7 @@ class CodeFileProcessor:
         
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag == 'delete':
-                for i in range(i1, i2):
+                for i in range (i1, i2):
                     changes.append(FileChange(
                         line_number=i + 1,
                         change_type='delete',
@@ -803,7 +803,7 @@ class CodeFileProcessor:
                         new_content=None
                     ))
             elif tag == 'insert':
-                for j in range(j1, j2):
+                for j in range (j1, j2):
                     changes.append(FileChange(
                         line_number=j + 1,
                         change_type='add',
@@ -811,7 +811,7 @@ class CodeFileProcessor:
                         new_content=new_lines[j]
                     ))
             elif tag == 'replace':
-                for i, j in zip(range(i1, i2), range(j1, j2)):
+                for i, j in zip (range (i1, i2), range (j1, j2)):
                     changes.append(FileChange(
                         line_number=i + 1,
                         change_type='modify',
@@ -833,20 +833,20 @@ class CodeFileProcessor:
         try:
             # Create backup
             if create_backup and full_path.exists():
-                backup_path = full_path.with_suffix(full_path.suffix + ".bak")
+                backup_path = full_path.with_suffix (full_path.suffix + ".bak")
                 import shutil
                 shutil.copy2(full_path, backup_path)
             
             # Write new content atomically
-            temp_path = full_path.with_suffix(full_path.suffix + ".tmp")
-            temp_path.write_text(new_content, encoding="utf-8")
-            temp_path.replace(full_path)
+            temp_path = full_path.with_suffix (full_path.suffix + ".tmp")
+            temp_path.write_text (new_content, encoding="utf-8")
+            temp_path.replace (full_path)
             
-            self.logger.info(f"Successfully updated {filepath}")
+            self.logger.info (f"Successfully updated {filepath}")
             return True
             
         except Exception as e:
-            self.logger.error(f"Failed to update {filepath}: {e}")
+            self.logger.error (f"Failed to update {filepath}: {e}")
             return False
     
     def chunk_file_for_llm(
@@ -855,11 +855,11 @@ class CodeFileProcessor:
         max_chunk_size: int = 2000
     ) -> List[str]:
         """Chunk file for LLM processing."""
-        content = self.read_file(filepath)
+        content = self.read_file (filepath)
         if not content:
             return []
         
-        return list(chunk_text_by_paragraphs(content, max_chunk_size))
+        return list (chunk_text_by_paragraphs (content, max_chunk_size))
 
 # Usage
 processor = CodeFileProcessor("my_project")
@@ -872,7 +872,7 @@ new_code = "# Updated code\\nprint('Hello')"
 diff, changes = processor.generate_diff("src/main.py", new_code)
 
 print(f"Diff:\\n{diff}")
-print(f"\\nChanges: {len(changes)}")
+print(f"\\nChanges: {len (changes)}")
 for change in changes:
     print(f"  Line {change.line_number}: {change.change_type}")
 

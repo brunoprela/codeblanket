@@ -6,7 +6,7 @@ export const celeryArchitecture = {
 
 ## Introduction
 
-**Celery** is Python's most popular distributed task queue. It's production-ready, battle-tested at companies like Instagram, Mozilla, and Robinhood. This section covers Celery's architecture, components, and how they work together.
+**Celery** is Python\'s most popular distributed task queue. It's production-ready, battle-tested at companies like Instagram, Mozilla, and Robinhood. This section covers Celery's architecture, components, and how they work together.
 
 **Why Celery?**
 - **Mature**: 10+ years in production
@@ -62,7 +62,7 @@ app = Celery(
 
 # Define task
 @app.task
-def add(x, y):
+def add (x, y):
     return x + y
 
 # CLIENT CODE: Queue task (producer)
@@ -314,7 +314,7 @@ result = add.delay(4, 6)
 print(result.status)  # PENDING, STARTED, SUCCESS, FAILURE, RETRY
 
 # Wait for result (blocking)
-output = result.get(timeout=10)  # Waits up to 10 seconds
+output = result.get (timeout=10)  # Waits up to 10 seconds
 print(output)  # 10
 
 # Check if ready (non-blocking)
@@ -370,14 +370,14 @@ app.conf.update(
 )
 
 # Task 1: Simple addition
-@app.task(name='tasks.add')
-def add(x, y):
+@app.task (name='tasks.add')
+def add (x, y):
     """Simple CPU-bound task"""
     return x + y
 
 # Task 2: Email sending
-@app.task(name='tasks.send_email', bind=True, max_retries=3)
-def send_email(self, email: str, subject: str, body: str):
+@app.task (name='tasks.send_email', bind=True, max_retries=3)
+def send_email (self, email: str, subject: str, body: str):
     """I/O-bound task with retries"""
     try:
         # Simulate email sending
@@ -389,15 +389,15 @@ def send_email(self, email: str, subject: str, body: str):
         return f"Email sent to {email}"
     except Exception as exc:
         # Retry with exponential backoff
-        raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
+        raise self.retry (exc=exc, countdown=60 * (2 ** self.request.retries))
 
 # Task 3: Long-running report generation
-@app.task(name='tasks.generate_report', bind=True)
-def generate_report(self, user_id: int):
+@app.task (name='tasks.generate_report', bind=True)
+def generate_report (self, user_id: int):
     """Long-running task with progress updates"""
     total_steps = 10
     
-    for step in range(total_steps):
+    for step in range (total_steps):
         time.sleep(5)  # Simulate work
         
         # Update progress
@@ -425,7 +425,7 @@ def add_numbers():
     x = request.json['x']
     y = request.json['y']
     
-    result = add.delay(x, y)
+    result = add.delay (x, y)
     
     return jsonify({
         'task_id': result.id,
@@ -439,7 +439,7 @@ def queue_email():
     subject = request.json['subject']
     body = request.json['body']
     
-    result = send_email.delay(email, subject, body)
+    result = send_email.delay (email, subject, body)
     
     return jsonify({
         'task_id': result.id,
@@ -451,7 +451,7 @@ def queue_report():
     """Queue report generation"""
     user_id = request.json['user_id']
     
-    result = generate_report.delay(user_id)
+    result = generate_report.delay (user_id)
     
     return jsonify({
         'task_id': result.id,
@@ -459,9 +459,9 @@ def queue_report():
     }), 202
 
 @app.route('/task-status/<task_id>', methods=['GET'])
-def task_status(task_id):
+def task_status (task_id):
     """Check task status"""
-    result = AsyncResult(task_id, app=add.app)
+    result = AsyncResult (task_id, app=add.app)
     
     if result.state == 'PENDING':
         response = {
@@ -483,10 +483,10 @@ def task_status(task_id):
     else:  # FAILURE
         response = {
             'state': result.state,
-            'error': str(result.info)
+            'error': str (result.info)
         }
     
-    return jsonify(response)
+    return jsonify (response)
 
 
 # ============================================
@@ -538,11 +538,11 @@ app.conf.task_queue_max_priority = 10
 app.conf.task_default_priority = 5
 
 # Tasks
-@app.task(name='tasks.send_email')
-def send_email(email): pass
+@app.task (name='tasks.send_email')
+def send_email (email): pass
 
-@app.task(name='tasks.process_video')
-def process_video(video_id): pass
+@app.task (name='tasks.process_video')
+def process_video (video_id): pass
 
 # Start workers for specific queues
 # Worker 1: Emails only (10 workers)
@@ -593,7 +593,7 @@ from celery import Celery
 app = Celery('tasks', broker='redis://localhost:6379/0')
 
 @app.task
-def add(x, y):
+def add (x, y):
     return x + y
 
 # Run worker

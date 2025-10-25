@@ -62,7 +62,7 @@ export const stripearchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc5',
-    question: "How long is Stripe's typical API deprecation notice period?",
+    question: "How long is Stripe\'s typical API deprecation notice period?",
     options: ['3 months', '6 months', '12 months', '24+ months'],
     correctAnswer: 3,
     explanation:

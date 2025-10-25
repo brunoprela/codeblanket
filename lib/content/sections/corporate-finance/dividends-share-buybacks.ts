@@ -1,7 +1,7 @@
 export const dividendsShareBuybacks = {
-    title: 'Dividends & Share Buybacks',
-    id: 'dividends-share-buybacks',
-    content: `
+  title: 'Dividends & Share Buybacks',
+  id: 'dividends-share-buybacks',
+  content: `
 # Dividends & Share Buybacks
 
 Companies generate cash. What should they do with it? Reinvest in business? Return to shareholders? This section explores dividend policy, share buybacks, and the factors that drive payout decisions—critical for corporate finance and investment analysis.
@@ -197,7 +197,7 @@ class BuybackAnalysis:
         self.cash_available = cash_available
         self.cost_of_equity = cost_of_equity
     
-    def calculate_metrics(self, shares_repurchased=0):
+    def calculate_metrics (self, shares_repurchased=0):
         """Calculate key metrics with/without buyback."""
         new_shares = self.shares_outstanding - shares_repurchased
         market_cap = self.stock_price * new_shares
@@ -212,16 +212,16 @@ class BuybackAnalysis:
             'Stock Price': self.stock_price
         }
     
-    def buyback_impact(self, buyback_amount):
+    def buyback_impact (self, buyback_amount):
         """Analyze impact of buyback."""
         # Shares repurchased
         shares_repurchased = buyback_amount / self.stock_price
         
         # Before buyback
-        before = self.calculate_metrics(shares_repurchased=0)
+        before = self.calculate_metrics (shares_repurchased=0)
         
         # After buyback
-        after = self.calculate_metrics(shares_repurchased=shares_repurchased)
+        after = self.calculate_metrics (shares_repurchased=shares_repurchased)
         
         # Calculate changes
         eps_change_pct = (after['EPS'] - before['EPS']) / before['EPS']
@@ -240,7 +240,7 @@ class BuybackAnalysis:
             'Price Change %': price_change_pct * 100
         }
     
-    def optimal_buyback_decision(self):
+    def optimal_buyback_decision (self):
         """Determine if buyback is optimal."""
         # Earnings yield vs cost of equity
         eps = self.net_income / self.shares_outstanding
@@ -260,7 +260,7 @@ class BuybackAnalysis:
             'Rationale': rationale
         }
     
-    def compare_dividend_vs_buyback(self, distribution_amount, tax_rate_dividend=0.20, tax_rate_capgain=0.15):
+    def compare_dividend_vs_buyback (self, distribution_amount, tax_rate_dividend=0.20, tax_rate_capgain=0.15):
         """Compare tax efficiency of dividend vs buyback."""
         # Dividend
         dividend_per_share = distribution_amount / self.shares_outstanding
@@ -319,22 +319,22 @@ print(f"\\n{decision['Decision']}")
 print(f"  {decision['Rationale']}")
 
 # Analyze $500M buyback
-buyback = company.buyback_impact(buyback_amount=500)
+buyback = company.buyback_impact (buyback_amount=500)
 print(f"\\n$500M Buyback Impact:")
 print(f"  Shares Repurchased: {buyback['Shares Repurchased']:.1f}M")
-print(f"  EPS Before: ${buyback['Before']['EPS']:.2f}")
-print(f"  EPS After: ${buyback['After']['EPS']:.2f}")
+print(f"  EPS Before: \${buyback['Before']['EPS']:.2f}")
+print(f"  EPS After: \${buyback['After']['EPS']:.2f}")
 print(f"  EPS Change: {buyback['EPS Change %']:.1f}%")
-print(f"  Implied Price (constant P/E): ${buyback['Implied Price (constant P/E)']:.2f}")
+print(f"  Implied Price (constant P/E): \${buyback['Implied Price (constant P/E)']:.2f}")
 print(f"  Price Change: {buyback['Price Change %']:.1f}%")
 
 # Dividend vs buyback
-comparison = company.compare_dividend_vs_buyback(distribution_amount = 100)
+comparison = company.compare_dividend_vs_buyback (distribution_amount = 100)
 print(f"\\n$100M Distribution: Dividend vs Buyback")
-print(f"  Dividend (after tax): ${comparison['Dividend']['After Tax']:.2f}/share")
-print(f"  Buyback (after tax): ${comparison['Buyback']['After Tax Value']:.2f}/share value increase")
+print(f"  Dividend (after tax): \${comparison['Dividend']['After Tax']:.2f}/share")
+print(f"  Buyback (after tax): \${comparison['Buyback']['After Tax Value']:.2f}/share value increase")
 print(f"  Winner: {comparison['Winner']}")
-print(f"  Tax Advantage: ${comparison['Tax Advantage']:.2f}/share")
+print(f"  Tax Advantage: \${comparison['Tax Advantage']:.2f}/share")
 \`\`\`
 
 **Output**:
@@ -459,7 +459,7 @@ valuation = multi_stage_ddm(
 
 print("Multi-Stage DDM Valuation:")
 for key, value in valuation.items():
-    print(f"  {key}: ${value: .2f}")
+    print(f"  {key}: \${value:.2f}")
 \`\`\`
 
 ## Real-World Examples
@@ -505,4 +505,3 @@ for key, value in valuation.items():
 Understanding payout policy is essential for CFOs, investors, and analysts. The optimal policy depends on growth opportunities, shareholder preferences, tax considerations, and financial flexibility needs.
 `,
 };
-

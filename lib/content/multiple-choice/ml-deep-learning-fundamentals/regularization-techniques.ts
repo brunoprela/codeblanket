@@ -14,7 +14,7 @@ export const regularizationTechniquesMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 2,
       explanation:
-        'L1 regularization adds λ*Σ|w| to the loss, with gradient λ*sign(w). This drives weights exactly to zero, creating sparse models. L2 regularization adds λ/2*Σ(w²) with gradient λ*w, shrinking weights proportionally but rarely to exactly zero. L1 is useful for feature selection, while L2 is more common for general regularization.',
+        'L1 regularization adds λ*Σ|w| to the loss, with gradient λ*sign (w). This drives weights exactly to zero, creating sparse models. L2 regularization adds λ/2*Σ(w²) with gradient λ*w, shrinking weights proportionally but rarely to exactly zero. L1 is useful for feature selection, while L2 is more common for general regularization.',
     },
     {
       id: 'regularization-mc2',
@@ -42,7 +42,7 @@ export const regularizationTechniquesMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "Batch Normalization's main advantage is stabilizing training by reducing internal covariate shift. This allows using higher learning rates (faster convergence) and makes the network less sensitive to weight initialization. While BN does act as a regularizer, this is a secondary benefit. It doesn't reduce parameters or eliminate need for other regularization.",
+        "Batch Normalization\'s main advantage is stabilizing training by reducing internal covariate shift. This allows using higher learning rates (faster convergence) and makes the network less sensitive to weight initialization. While BN does act as a regularizer, this is a secondary benefit. It doesn't reduce parameters or eliminate need for other regularization.",
     },
     {
       id: 'regularization-mc4',

@@ -6,7 +6,7 @@ export const propertyBasedTesting = {
 
 ## Introduction
 
-**Property-based testing verifies code properties hold for ALL inputs**, not just specific examples. Instead of testing add(2, 3) == 5, test "add is commutative for all integers". **Hypothesis** is Python's property-based testing library.
+**Property-based testing verifies code properties hold for ALL inputs**, not just specific examples. Instead of testing add(2, 3) == 5, test "add is commutative for all integers". **Hypothesis** is Python\'s property-based testing library.
 
 ---
 
@@ -26,9 +26,9 @@ def test_add():
 from hypothesis import given
 import hypothesis.strategies as st
 
-@given(st.integers(), st.integers())
-def test_add_commutative(a, b):
-    assert add(a, b) == add(b, a)
+@given (st.integers(), st.integers())
+def test_add_commutative (a, b):
+    assert add (a, b) == add (b, a)
 # Tests 100 random integer pairs
 \`\`\`
 
@@ -48,15 +48,15 @@ pip install hypothesis
 from hypothesis import given
 import hypothesis.strategies as st
 
-@given(st.integers())
-def test_absolute_value_positive(n):
+@given (st.integers())
+def test_absolute_value_positive (n):
     """abs() always returns positive"""
-    assert abs(n) >= 0
+    assert abs (n) >= 0
 
-@given(st.text())
-def test_reverse_twice_is_identity(s):
+@given (st.text())
+def test_reverse_twice_is_identity (s):
     """Reversing twice returns original"""
-    assert reverse(reverse(s)) == s
+    assert reverse (reverse (s)) == s
 \`\`\`
 
 ---
@@ -68,17 +68,17 @@ import hypothesis.strategies as st
 
 # Built-in types
 st.integers()           # Any integer
-st.integers(min_value=0, max_value=100)  # 0-100
+st.integers (min_value=0, max_value=100)  # 0-100
 st.floats()             # Floats
 st.text()               # Unicode strings
 st.booleans()           # True/False
 
 # Collections
-st.lists(st.integers())           # List of integers
-st.dictionaries(st.text(), st.integers())  # Dict[str, int]
+st.lists (st.integers())           # List of integers
+st.dictionaries (st.text(), st.integers())  # Dict[str, int]
 
 # Custom
-st.builds(User, username=st.text(), age=st.integers(min_value=0))
+st.builds(User, username=st.text(), age=st.integers (min_value=0))
 \`\`\`
 
 ---
@@ -88,10 +88,10 @@ st.builds(User, username=st.text(), age=st.integers(min_value=0))
 **Hypothesis shrinks failing examples**:
 
 \`\`\`python
-@given(st.lists(st.integers()))
-def test_sort_is_sorted(lst):
-    sorted_lst = sorted(lst)
-    for i in range(len(sorted_lst) - 1):
+@given (st.lists (st.integers()))
+def test_sort_is_sorted (lst):
+    sorted_lst = sorted (lst)
+    for i in range (len (sorted_lst) - 1):
         assert sorted_lst[i] <= sorted_lst[i + 1]
 
 # Hypothesis tries 100 random lists
@@ -102,29 +102,29 @@ def test_sort_is_sorted(lst):
 
 ## Properties to Test
 
-1. **Commutativity**: f(a, b) == f(b, a)
-2. **Associativity**: f(f(a, b), c) == f(a, f(b, c))
-3. **Identity**: f(a, identity) == a
-4. **Idempotence**: f(f(a)) == f(a)
-5. **Inverse**: f(inverse(a)) == identity
+1. **Commutativity**: f (a, b) == f (b, a)
+2. **Associativity**: f (f(a, b), c) == f (a, f (b, c))
+3. **Identity**: f (a, identity) == a
+4. **Idempotence**: f (f(a)) == f (a)
+5. **Inverse**: f (inverse (a)) == identity
 
 ---
 
 ## Realistic Example: Testing Sorting
 
 \`\`\`python
-@given(st.lists(st.integers()))
-def test_sort_properties(lst):
-    sorted_lst = my_sort(lst)
+@given (st.lists (st.integers()))
+def test_sort_properties (lst):
+    sorted_lst = my_sort (lst)
     
     # Property 1: Same length
-    assert len(sorted_lst) == len(lst)
+    assert len (sorted_lst) == len (lst)
     
     # Property 2: Same elements
-    assert sorted(sorted_lst) == sorted(lst)
+    assert sorted (sorted_lst) == sorted (lst)
     
     # Property 3: Is sorted
-    for i in range(len(sorted_lst) - 1):
+    for i in range (len (sorted_lst) - 1):
         assert sorted_lst[i] <= sorted_lst[i + 1]
 \`\`\`
 

@@ -27,7 +27,7 @@ export const logAnalyticsMCQ: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Kafka provides durable buffering between log sources and Elasticsearch. During spikes, Kafka accumulates messages (durable on disk) while Elasticsearch ingests at its steady capacity. After the spike, consumers catch up from Kafka. This prevents log loss and protects Elasticsearch. Kafka acts as a \"shock absorber.\" Increasing heap (option A) doesn't fundamentally solve the spike problem—you'd need infinite heap for unbounded spikes. Adding ES nodes (option C) is expensive and still has limits. Rate-limiting (option D) causes log loss, which defeats the purpose. Kafka's key properties: durable (disk-backed), scalable (add partitions), replayable (can reprocess from any offset). This is why Kafka is standard in production log pipelines.",
+      "Kafka provides durable buffering between log sources and Elasticsearch. During spikes, Kafka accumulates messages (durable on disk) while Elasticsearch ingests at its steady capacity. After the spike, consumers catch up from Kafka. This prevents log loss and protects Elasticsearch. Kafka acts as a \"shock absorber.\" Increasing heap (option A) doesn't fundamentally solve the spike problem—you'd need infinite heap for unbounded spikes. Adding ES nodes (option C) is expensive and still has limits. Rate-limiting (option D) causes log loss, which defeats the purpose. Kafka\'s key properties: durable (disk-backed), scalable (add partitions), replayable (can reprocess from any offset). This is why Kafka is standard in production log pipelines.",
   },
   {
     id: 'log-mcq-3',

@@ -76,7 +76,7 @@ requirements = [
     "Include examples"
 ]
 
-generated_prompt = generate_prompt_for_task(task, requirements)
+generated_prompt = generate_prompt_for_task (task, requirements)
 print("Generated Prompt:")
 print(generated_prompt)
 
@@ -113,7 +113,7 @@ class PromptSelfImprover:
 CURRENT PROMPT:
 {current_prompt}
 
-{self._format_failures(failure_examples)}
+{self._format_failures (failure_examples)}
 
 SUCCESS CRITERIA:
 {success_criteria or 'Maximize accuracy and reliability'}
@@ -134,7 +134,7 @@ Analysis:"""
         analysis = response.choices[0].message.content
         
         # Extract improved prompt (simple parsing)
-        improved_prompt = self._extract_improved_prompt(analysis)
+        improved_prompt = self._extract_improved_prompt (analysis)
         
         return {
             'original_prompt': current_prompt,
@@ -142,7 +142,7 @@ Analysis:"""
             'improved_prompt': improved_prompt
         }
     
-    def _format_failures(self, failures: List[Dict] = None) -> str:
+    def _format_failures (self, failures: List[Dict] = None) -> str:
         """Format failure examples for context."""
         if not failures:
             return ""
@@ -155,7 +155,7 @@ Analysis:"""
         return f"""FAILURE EXAMPLES (these didn't work well):
 {failures_text}"""
     
-    def _extract_improved_prompt(self, analysis: str) -> str:
+    def _extract_improved_prompt (self, analysis: str) -> str:
         """Extract improved prompt from analysis."""
         # Look for sections like "IMPROVED PROMPT:" or similar
         lines = analysis.split('\\n')
@@ -170,9 +170,9 @@ Analysis:"""
             
             if in_prompt_section:
                 if line.strip() and not line.startswith('#'):
-                    prompt_lines.append(line)
+                    prompt_lines.append (line)
         
-        return '\\n'.join(prompt_lines) if prompt_lines else analysis
+        return '\\n'.join (prompt_lines) if prompt_lines else analysis
 
 # Example usage
 improver = PromptSelfImprover()
@@ -227,7 +227,7 @@ class SelfCriticSystem:
         current_output = None
         history = []
         
-        for i in range(iterations):
+        for i in range (iterations):
             print(f"\\nIteration {i+1}:")
             
             # Generate or refine
@@ -289,7 +289,7 @@ Critique:"""
         
         return {
             'final_output': current_output,
-            'iterations': len(history),
+            'iterations': len (history),
             'history': history
         }
 
@@ -450,29 +450,29 @@ class PromptEvolver:
         
         population = [initial_prompt]
         best_prompt = initial_prompt
-        best_score = self._evaluate(initial_prompt, test_cases, evaluation_func)
+        best_score = self._evaluate (initial_prompt, test_cases, evaluation_func)
         
         history = []
         
-        for gen in range(generations):
+        for gen in range (generations):
             print(f"\\nGeneration {gen + 1}:")
             
             # Generate variations
             variations = []
             for prompt in population[:2]:  # Mutate best 2
-                for _ in range(population_size // 2):
-                    variation = self._mutate_prompt(prompt)
-                    variations.append(variation)
+                for _ in range (population_size // 2):
+                    variation = self._mutate_prompt (prompt)
+                    variations.append (variation)
             
             # Evaluate all
             population_with_scores = []
             for prompt in variations:
-                score = self._evaluate(prompt, test_cases, evaluation_func)
+                score = self._evaluate (prompt, test_cases, evaluation_func)
                 population_with_scores.append((prompt, score))
                 print(f"  Variant score: {score:.3f}")
             
             # Keep best
-            population_with_scores.sort(key=lambda x: x[1], reverse=True)
+            population_with_scores.sort (key=lambda x: x[1], reverse=True)
             population = [p for p, _ in population_with_scores[:population_size]]
             
             # Track best
@@ -485,7 +485,7 @@ class PromptEvolver:
             history.append({
                 'generation': gen + 1,
                 'best_score': gen_best[1],
-                'population_size': len(population)
+                'population_size': len (population)
             })
         
         return {
@@ -496,7 +496,7 @@ class PromptEvolver:
             'history': history
         }
     
-    def _mutate_prompt(self, prompt: str) -> str:
+    def _mutate_prompt (self, prompt: str) -> str:
         """Generate variation of prompt."""
         
         mutation_prompt = f"""Create a variation of this prompt that might perform better:
@@ -542,15 +542,15 @@ Variation:"""
                 )
                 
                 output = response.choices[0].message.content
-                score = evaluation_func(output, test_case.get('expected'))
-                scores.append(score)
+                score = evaluation_func (output, test_case.get('expected'))
+                scores.append (score)
             except:
                 scores.append(0.0)
         
-        return sum(scores) / len(scores) if scores else 0.0
+        return sum (scores) / len (scores) if scores else 0.0
 
 # Example usage (conceptual - would need real execution)
-def simple_eval(output: str, expected: str) -> float:
+def simple_eval (output: str, expected: str) -> float:
     return 1.0 if expected.lower() in output.lower() else 0.0
 
 evolver = PromptEvolver()
@@ -591,7 +591,7 @@ class ContinuousImprovement:
         """
         
         # Check if improvement needed
-        if success_rate < 0.90 or len(recent_failures) > 5:
+        if success_rate < 0.90 or len (recent_failures) > 5:
             print(f"Performance below threshold: {success_rate:.1%}")
             print("Generating improved prompt...")
             

@@ -7,7 +7,7 @@ export const realTimeAnalyticsDiscussionQuiz: QuizQuestion[] = [
       'Your company needs to build a real-time fraud detection system that analyzes 50,000 credit card transactions per second and flags suspicious activity within 100ms. The system must track: (1) unusual spending velocity per user, (2) geographic anomalies, (3) merchant patterns. Would you use exact computation or approximation algorithms, and why? Design the streaming pipeline architecture.',
     sampleAnswer: `**Recommendation: Use approximation algorithms for performance**
 
-For 100ms latency at 50k TPS, exact computation is infeasible. Here's a comprehensive architecture:
+For 100ms latency at 50k TPS, exact computation is infeasible. Here\'s a comprehensive architecture:
 
 **Streaming Pipeline:**
 \`\`\`
@@ -26,12 +26,12 @@ Alert System
 
 \`\`\`java
 DataStream<Transaction> transactions = env
-    .addSource(new KafkaSource<>("transactions"));
+    .addSource (new KafkaSource<>("transactions"));
 
 transactions
-    .keyBy(t -> t.userId)
-    .process(new FraudDetector())  // <100ms per event
-    .addSink(new AlertSink());
+    .keyBy (t -> t.userId)
+    .process (new FraudDetector())  // <100ms per event
+    .addSink (new AlertSink());
 
 class FraudDetector extends KeyedProcessFunction<String, Transaction, Alert> {
     // Approximation 1: HyperLogLog for unique merchants
@@ -48,31 +48,31 @@ class FraudDetector extends KeyedProcessFunction<String, Transaction, Alert> {
         // Check 1: Spending velocity (exact, last 24h)
         List<Transaction> recent = recentTxns.get();
         double spent24h = recent.stream()
-            .filter(tx -> tx.timestamp > now() - 24*HOUR)
-            .mapToDouble(tx -> tx.amount)
+            .filter (tx -> tx.timestamp > now() - 24*HOUR)
+            .mapToDouble (tx -> tx.amount)
             .sum();
             
         if (spent24h > 10000) {  // $10k in 24h
-            out.collect(new Alert(t, "High velocity"));
+            out.collect (new Alert (t, "High velocity"));
         }
         
         // Check 2: Geographic anomaly (approximate)
         HyperLogLog hll = uniqueMerchants.value();
-        hll.add(t.merchantCountry);
+        hll.add (t.merchantCountry);
         if (hll.cardinality() > 5) {  // >5 countries in 24h
-            out.collect(new Alert(t, "Geographic anomaly"));
+            out.collect (new Alert (t, "Geographic anomaly"));
         }
         
         // Check 3: Unusual merchant (approximate)
         CountMinSketch cms = merchantCounts.value();
-        long merchantFreq = cms.estimate(t.merchantId);
+        long merchantFreq = cms.estimate (t.merchantId);
         if (merchantFreq == 0) {  // First time at this merchant
-            out.collect(new Alert(t, "New merchant"));
+            out.collect (new Alert (t, "New merchant"));
         }
         
         // Update state
-        cms.add(t.merchantId);
-        merchantCounts.update(cms);
+        cms.add (t.merchantId);
+        merchantCounts.update (cms);
     }
 }
 \`\`\`
@@ -105,16 +105,16 @@ WatermarkStrategy<Event> watermarkStrategy = WatermarkStrategy
     .withIdleness(Duration.ofMinutes(1));
 
 DataStream<Event> events = env
-    .addSource(kafkaSource)
-    .assignTimestampsAndWatermarks(watermarkStrategy);
+    .addSource (kafkaSource)
+    .assignTimestampsAndWatermarks (watermarkStrategy);
 
 events
-    .keyBy(e -> e.userId)
+    .keyBy (e -> e.userId)
     .window(TumblingEventTimeWindows.of(Time.seconds(60)))
     .allowedLateness(Time.seconds(30))  // Accept events up to 30s late
-    .sideOutputLateData(lateEventsTag)  // Track dropped events
-    .aggregate(new CountAggregator())
-    .addSink(dashboardSink);
+    .sideOutputLateData (lateEventsTag)  // Track dropped events
+    .aggregate (new CountAggregator())
+    .addSink (dashboardSink);
 \`\`\`
 
 **Trade-Off Analysis:**
@@ -144,21 +144,21 @@ events
 class TopKHashtags:
     def __init__(self):
         # CMS: 10K width, 5 depth = 50K counters (200KB)
-        self.cms = CountMinSketch(width=10000, depth=5)
+        self.cms = CountMinSketch (width=10000, depth=5)
         # Heap: Track top 100 candidates (1KB)
         self.topK = MinHeap(100)
         
-    def process_tweet(self, hashtags):
+    def process_tweet (self, hashtags):
         for tag in hashtags:
             # Increment count (O(1))
-            count = self.cms.add(tag)
+            count = self.cms.add (tag)
             
             # Update top-K if needed
             if count > self.topK.min():
-                self.topK.add(tag, count)
+                self.topK.add (tag, count)
     
-    def get_top_k(self, k=10):
-        return self.topK.top(k)
+    def get_top_k (self, k=10):
+        return self.topK.top (k)
 \`\`\`
 
 **Memory Usage:**

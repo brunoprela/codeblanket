@@ -9,7 +9,7 @@ export const nonehandlingSection = {
 
 ## What is None?
 
-\`None\` is Python's null value - it represents the absence of a value or a null reference.
+\`None\` is Python\'s null value - it represents the absence of a value or a null reference.
 
 \`\`\`python
 # None is a singleton object
@@ -34,7 +34,7 @@ result = greet()  # Prints "Hello!"
 print(result)     # None
 
 # Explicit return
-def calculate(x):
+def calculate (x):
     if x < 0:
         return None  # Indicate failure/invalid
     return x * 2
@@ -42,7 +42,7 @@ def calculate(x):
 
 ### 2. Default Function Parameters
 \`\`\`python
-def log_message(message, timestamp=None):
+def log_message (message, timestamp=None):
     """Log message with optional timestamp"""
     if timestamp is None:
         timestamp = datetime.now()
@@ -111,18 +111,18 @@ if value is None:
 ### 1. Mutable Default Arguments
 \`\`\`python
 # WRONG - dangerous!
-def add_item(item, items=[]):
-    items.append(item)
+def add_item (item, items=[]):
+    items.append (item)
     return items
 
 list1 = add_item("a")  # ["a"]
 list2 = add_item("b")  # ["a", "b"] - UNEXPECTED!
 
 # RIGHT - use None as default
-def add_item(item, items=None):
+def add_item (item, items=None):
     if items is None:
         items = []
-    items.append(item)
+    items.append (item)
     return items
 
 list1 = add_item("a")  # ["a"]
@@ -133,7 +133,7 @@ list2 = add_item("b")  # ["b"] - correct!
 
 ### 2. Forgetting to Return
 \`\`\`python
-def calculate_discount(price):
+def calculate_discount (price):
     if price > 100:
         return price * 0.9
     # Forgot to return for price <= 100
@@ -144,11 +144,11 @@ print(result)  # None - bug!
 
 ### 3. Confusing None with False, 0, or ""
 \`\`\`python
-def get_user_age(user_id):
+def get_user_age (user_id):
     # Returns 0 for baby, None for invalid ID
     if user_id < 0:
         return None
-    return 0  # Baby's age
+    return 0  # Baby\'s age
 
 age = get_user_age(1)
 if age:  # Wrong! 0 is falsy
@@ -211,10 +211,10 @@ value3 = ""        # Empty string (still a value)
 value4 = 0         # Zero (still a value)
 
 # All are falsy, but only one is None
-print(bool(value1))  # False
-print(bool(value2))  # False
-print(bool(value3))  # False
-print(bool(value4))  # False
+print(bool (value1))  # False
+print(bool (value2))  # False
+print(bool (value3))  # False
+print(bool (value4))  # False
 
 print(value1 is None)  # True
 print(value2 is None)  # False
@@ -231,13 +231,13 @@ class Config:
         self.database_url = None  # Not configured yet
         self.api_key = None        # Not provided
 
-    def is_configured(self):
+    def is_configured (self):
         return self.database_url is not None
 \`\`\`
 
 ### 2. Document When Functions Return None
 \`\`\`python
-def find_user(user_id: int) -> User | None:
+def find_user (user_id: int) -> User | None:
     """
     Find user by ID.
     
@@ -275,7 +275,7 @@ for user in get_users():
 \`\`\`python
 from typing import Optional
 
-def greet(name: str, title: Optional[str] = None) -> str:
+def greet (name: str, title: Optional[str] = None) -> str:
     """
     Optional[str] is equivalent to str | None
     """
@@ -289,8 +289,8 @@ def greet(name: str, title: Optional[str] = None) -> str:
 ### Null Object Pattern Alternative
 \`\`\`python
 # Instead of returning None and checking everywhere
-def get_user_permissions(user_id):
-    user = find_user(user_id)
+def get_user_permissions (user_id):
+    user = find_user (user_id)
     if user is None:
         return []  # Empty permissions instead of None
     return user.permissions
@@ -303,7 +303,7 @@ if "admin" in permissions:  # Works even if empty
 
 ### None Guard Pattern
 \`\`\`python
-def process_data(data=None):
+def process_data (data=None):
     """Early return for None"""
     if data is None:
         return []  # Or raise ValueError
@@ -315,8 +315,8 @@ def process_data(data=None):
 ### Chaining with None
 \`\`\`python
 # Without None handling
-def get_user_city(user_id):
-    user = get_user(user_id)
+def get_user_city (user_id):
+    user = get_user (user_id)
     if user is None:
         return None
     
@@ -327,8 +327,8 @@ def get_user_city(user_id):
     return address.city
 
 # Better - use default values
-def get_user_city(user_id):
-    user = get_user(user_id)
+def get_user_city (user_id):
+    user = get_user (user_id)
     if user is None:
         return "Unknown"
     

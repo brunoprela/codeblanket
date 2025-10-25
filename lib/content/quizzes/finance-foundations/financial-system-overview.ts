@@ -19,15 +19,15 @@ class TVMCalculator:
         self.risk = risk_premium
         self.total_discount = inflation + opportunity + risk
     
-    def present_value(self, future_value, years):
+    def present_value (self, future_value, years):
         return future_value / (1 + self.total_discount) ** years
     
-    def annuity_pv(self, payment, years):
+    def annuity_pv (self, payment, years):
         r = self.total_discount
         return payment * (1 - (1 + r) ** -years) / r
     
-    def compare_options(self, lump_sum, annual_payment, years):
-        pv_annuity = self.annuity_pv(annual_payment, years)
+    def compare_options (self, lump_sum, annual_payment, years):
+        pv_annuity = self.annuity_pv (annual_payment, years)
         difference = lump_sum - pv_annuity
         better = "lump sum" if lump_sum > pv_annuity else "annuity"
         return {
@@ -198,15 +198,15 @@ class RiskMetrics:
         self.rf_rate = risk_free_rate / 252  # Daily risk-free rate
         self.periods_per_year = 252  # Trading days
     
-    def sharpe_ratio(self) -> float:
+    def sharpe_ratio (self) -> float:
         """
         Sharpe Ratio = (Return - Risk-Free Rate) / Total Volatility
         Measures return per unit of TOTAL risk
         """
         excess_returns = self.returns - self.rf_rate
-        return np.sqrt(self.periods_per_year) * excess_returns.mean() / excess_returns.std()
+        return np.sqrt (self.periods_per_year) * excess_returns.mean() / excess_returns.std()
     
-    def sortino_ratio(self) -> float:
+    def sortino_ratio (self) -> float:
         """
         Sortino Ratio = (Return - Risk-Free Rate) / Downside Deviation
         Only penalizes DOWNSIDE volatility (losses)
@@ -215,9 +215,9 @@ class RiskMetrics:
         excess_returns = self.returns - self.rf_rate
         downside_returns = excess_returns[excess_returns < 0]
         downside_std = np.sqrt((downside_returns ** 2).mean())
-        return np.sqrt(self.periods_per_year) * excess_returns.mean() / downside_std
+        return np.sqrt (self.periods_per_year) * excess_returns.mean() / downside_std
     
-    def calmar_ratio(self) -> float:
+    def calmar_ratio (self) -> float:
         """
         Calmar Ratio = Annual Return / Maximum Drawdown
         Measures return per unit of DRAWDOWN risk
@@ -226,16 +226,16 @@ class RiskMetrics:
         cumulative = (1 + self.returns).cumprod()
         running_max = cumulative.expanding().max()
         drawdown = (cumulative - running_max) / running_max
-        max_drawdown = abs(drawdown.min())
-        annual_return = (cumulative.iloc[-1] ** (self.periods_per_year / len(self.returns))) - 1
+        max_drawdown = abs (drawdown.min())
+        annual_return = (cumulative.iloc[-1] ** (self.periods_per_year / len (self.returns))) - 1
         return annual_return / max_drawdown if max_drawdown > 0 else np.inf
     
-    def all_metrics(self) -> Dict[str, float]:
+    def all_metrics (self) -> Dict[str, float]:
         """Calculate all risk-adjusted metrics"""
         cumulative = (1 + self.returns).cumprod()
         total_return = cumulative.iloc[-1] - 1
-        annual_return = (cumulative.iloc[-1] ** (self.periods_per_year / len(self.returns))) - 1
-        annual_volatility = self.returns.std() * np.sqrt(self.periods_per_year)
+        annual_return = (cumulative.iloc[-1] ** (self.periods_per_year / len (self.returns))) - 1
+        annual_volatility = self.returns.std() * np.sqrt (self.periods_per_year)
         
         return {
             "total_return": total_return,
@@ -247,12 +247,12 @@ class RiskMetrics:
             "max_drawdown": self.calculate_max_drawdown(),
         }
     
-    def calculate_max_drawdown(self) -> float:
+    def calculate_max_drawdown (self) -> float:
         """Calculate maximum drawdown"""
         cumulative = (1 + self.returns).cumprod()
         running_max = cumulative.expanding().max()
         drawdown = (cumulative - running_max) / running_max
-        return abs(drawdown.min())
+        return abs (drawdown.min())
 \`\`\`
 
 **2. Why 50% Return Can Be Worse Than 20% Return**
@@ -283,7 +283,7 @@ Both end at similar place, but B is MUCH better experience!
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0.04):
+def plot_efficient_frontier (strategies: Dict[str, pd.Series], rf_rate: float = 0.04):
     """
     Plot strategies on risk-return space
     Show efficient frontier
@@ -292,7 +292,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
     # Calculate metrics for each strategy
     metrics = {}
     for name, returns in strategies.items():
-        rm = RiskMetrics(returns, rf_rate)
+        rm = RiskMetrics (returns, rf_rate)
         metrics[name] = rm.all_metrics()
     
     # Create subplots
@@ -306,7 +306,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
     
     # 1. Risk-Return Scatter (Efficient Frontier)
     colors = ['blue', 'green', 'red', 'orange', 'purple']
-    for i, (name, m) in enumerate(metrics.items()):
+    for i, (name, m) in enumerate (metrics.items()):
         fig.add_trace(
             go.Scatter(
                 x=[m['annual_volatility'] * 100],
@@ -315,7 +315,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
                 name=name,
                 text=[name],
                 textposition='top center',
-                marker=dict(size=15, color=colors[i % len(colors)]),
+                marker=dict (size=15, color=colors[i % len (colors)]),
                 hovertemplate=f'<b>{name}</b><br>' +
                              f'Return: {m["annual_return"]*100:.1f}%<br>' +
                              f'Volatility: {m["annual_volatility"]*100:.1f}%<br>' +
@@ -325,11 +325,11 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
         )
     
     # Add Capital Market Line (CML) from risk-free rate through best Sharpe
-    best_sharpe_name = max(metrics.items(), key=lambda x: x[1]['sharpe_ratio'])[0]
+    best_sharpe_name = max (metrics.items(), key=lambda x: x[1]['sharpe_ratio'])[0]
     best_sharpe_metrics = metrics[best_sharpe_name]
     
     # CML: E(R) = Rf + Sharpe * σ
-    vol_range = np.linspace(0, max(m['annual_volatility'] for m in metrics.values()) * 1.2, 100)
+    vol_range = np.linspace(0, max (m['annual_volatility'] for m in metrics.values()) * 1.2, 100)
     cml_returns = rf_rate + best_sharpe_metrics['sharpe_ratio'] * vol_range
     
     fig.add_trace(
@@ -338,14 +338,14 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
             y=cml_returns * 100,
             mode='lines',
             name='Capital Market Line',
-            line=dict(dash='dash', color='gray'),
+            line=dict (dash='dash', color='gray'),
             hovertemplate='CML: Optimal risk-return tradeoff<extra></extra>'
         ),
         row=1, col=1
     )
     
-    fig.update_xaxes(title_text="Annual Volatility (%)", row=1, col=1)
-    fig.update_yaxes(title_text="Annual Return (%)", row=1, col=1)
+    fig.update_xaxes (title_text="Annual Volatility (%)", row=1, col=1)
+    fig.update_yaxes (title_text="Annual Return (%)", row=1, col=1)
     
     # 2. Sharpe Ratio Comparison
     sharpe_values = [m['sharpe_ratio'] for m in metrics.values()]
@@ -353,7 +353,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
     
     fig.add_trace(
         go.Bar(
-            x=list(metrics.keys()),
+            x=list (metrics.keys()),
             y=sharpe_values,
             marker_color=sharpe_colors,
             text=[f'{s:.2f}' for s in sharpe_values],
@@ -364,20 +364,20 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
     )
     
     # Add benchmark lines
-    fig.add_hline(y=1.0, line_dash="dash", line_color="green", 
+    fig.add_hline (y=1.0, line_dash="dash", line_color="green", 
                   annotation_text="Good (>1.0)", row=1, col=2)
-    fig.add_hline(y=2.0, line_dash="dash", line_color="darkgreen",
+    fig.add_hline (y=2.0, line_dash="dash", line_color="darkgreen",
                   annotation_text="Excellent (>2.0)", row=1, col=2)
     
-    fig.update_yaxes(title_text="Sharpe Ratio", row=1, col=2)
+    fig.update_yaxes (title_text="Sharpe Ratio", row=1, col=2)
     
     # 3. Maximum Drawdown
     dd_values = [m['max_drawdown'] * -100 for m in metrics.values()]
-    dd_colors = ['green' if abs(d) < 10 else 'orange' if abs(d) < 20 else 'red' for d in dd_values]
+    dd_colors = ['green' if abs (d) < 10 else 'orange' if abs (d) < 20 else 'red' for d in dd_values]
     
     fig.add_trace(
         go.Bar(
-            x=list(metrics.keys()),
+            x=list (metrics.keys()),
             y=dd_values,
             marker_color=dd_colors,
             text=[f'{d:.1f}%' for d in dd_values],
@@ -387,7 +387,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
         row=2, col=1
     )
     
-    fig.update_yaxes(title_text="Maximum Drawdown (%)", row=2, col=1)
+    fig.update_yaxes (title_text="Maximum Drawdown (%)", row=2, col=1)
     
     # 4. Return Distribution (Box Plots)
     for name, returns in strategies.items():
@@ -401,7 +401,7 @@ def plot_efficient_frontier(strategies: Dict[str, pd.Series], rf_rate: float = 0
             row=2, col=2
         )
     
-    fig.update_yaxes(title_text="Daily Return (%)", row=2, col=2)
+    fig.update_yaxes (title_text="Daily Return (%)", row=2, col=2)
     
     # Layout
     fig.update_layout(

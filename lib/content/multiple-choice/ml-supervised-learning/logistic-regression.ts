@@ -33,10 +33,10 @@ export const logisticregressionMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'Why is binary cross-entropy loss preferred over mean squared error for logistic regression?',
     options: [
-      "It's faster to compute",
+      "It\'s faster to compute",
       'It requires less memory',
       'It provides better gradients for optimization and creates a convex loss landscape with the sigmoid function',
-      "It's easier to understand",
+      "It\'s easier to understand",
     ],
     correctAnswer: 2,
     explanation:
@@ -48,7 +48,7 @@ export const logisticregressionMultipleChoice: MultipleChoiceQuestion[] = [
       'You have a logistic regression model for credit default prediction. The model predicts P(default) = 0.65 for a customer. What does this mean?',
     options: [
       'The customer will definitely default',
-      "There's a 65% chance the customer will default based on the model",
+      "There\'s a 65% chance the customer will default based on the model",
       "The customer's credit score is 0.65",
       'The model is 65% confident in its prediction',
     ],

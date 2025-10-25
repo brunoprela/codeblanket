@@ -65,6 +65,6 @@ export const queueSystemsBackgroundJobsMultipleChoice: MultipleChoiceQuestion[] 
       ],
       correctAnswer: 1,
       explanation:
-        'In Celery tasks with bind=True, use self.update_state(state=PROCESSING, meta={progress: 50}) to publish progress that clients can poll.',
+        'In Celery tasks with bind=True, use self.update_state (state=PROCESSING, meta={progress: 50}) to publish progress that clients can poll.',
     },
   ];

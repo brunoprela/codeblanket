@@ -37,7 +37,7 @@ app = Celery('mapreduce', broker='redis://localhost:6379/0')
 # ========================================
 
 @app.task
-def map_process_chunk(records: List[int]) -> List[int]:
+def map_process_chunk (records: List[int]) -> List[int]:
     """
     Map: Process chunk of records
     
@@ -52,7 +52,7 @@ def map_process_chunk(records: List[int]) -> List[int]:
 # ========================================
 
 @app.task
-def reduce_sum_results(results: List[List[int]]) -> int:
+def reduce_sum_results (results: List[List[int]]) -> int:
     """
     Reduce: Aggregate all results
     
@@ -61,7 +61,7 @@ def reduce_sum_results(results: List[List[int]]) -> int:
     """
     total = 0
     for chunk_result in results:
-        total += sum(chunk_result)
+        total += sum (chunk_result)
     return total
 
 
@@ -89,22 +89,22 @@ def mapreduce_workflow():
     # Split into chunks
     chunks = []
     for i in range(0, total_records, chunk_size):
-        chunk = list(range(i, i + chunk_size))
-        chunks.append(chunk)
+        chunk = list (range (i, i + chunk_size))
+        chunks.append (chunk)
     
-    print(f"Split {total_records:,} records into {len(chunks)} chunks")
+    print(f"Split {total_records:,} records into {len (chunks)} chunks")
     
     # MAP PHASE: Process chunks in parallel
-    map_job = group(map_process_chunk.s(chunk) for chunk in chunks)
+    map_job = group (map_process_chunk.s (chunk) for chunk in chunks)
     map_result = map_job.apply_async()
     
     # Wait for all map tasks to complete
     map_results = map_result.get()  # List of results from each chunk
     
-    print(f"Map phase complete: {len(map_results)} chunks processed")
+    print(f"Map phase complete: {len (map_results)} chunks processed")
     
     # REDUCE PHASE: Aggregate results
-    reduce_result = reduce_sum_results.delay(map_results)
+    reduce_result = reduce_sum_results.delay (map_results)
     final_sum = reduce_result.get()
     
     print(f"Reduce phase complete: Sum = {final_sum:,}")
@@ -146,7 +146,7 @@ app = Celery('fanout', broker='redis://localhost:6379/0')
 # ========================================
 
 @app.task
-def process_order(order_id: int) -> dict:
+def process_order (order_id: int) -> dict:
     """Process single order (takes 5 seconds)"""
     time.sleep(5)  # Simulate processing
     return {
@@ -161,10 +161,10 @@ def process_order(order_id: int) -> dict:
 # ========================================
 
 @app.task
-def combine_orders(order_results: List[dict]) -> dict:
+def combine_orders (order_results: List[dict]) -> dict:
     """Combine all order results"""
-    total_orders = len(order_results)
-    total_revenue = sum(order['total'] for order in order_results)
+    total_orders = len (order_results)
+    total_revenue = sum (order['total'] for order in order_results)
     
     return {
         'total_orders': total_orders,
@@ -192,9 +192,9 @@ def process_daily_orders():
     
     # Chord: Fan-out (parallel) + Fan-in (callback)
     callback = combine_orders.s()
-    header = [process_order.s(order_id) for order_id in order_ids]
+    header = [process_order.s (order_id) for order_id in order_ids]
     
-    result = chord(header)(callback)
+    result = chord (header)(callback)
     summary = result.get()
     
     print(f"Processed {summary['total_orders']} orders")
@@ -229,8 +229,8 @@ app = Celery('chunking', broker='redis://localhost:6379/0')
 redis_client = redis.Redis()
 
 
-@app.task(soft_time_limit=300, time_limit=330)
-def process_chunk(start_id: int, end_id: int) -> dict:
+@app.task (soft_time_limit=300, time_limit=330)
+def process_chunk (start_id: int, end_id: int) -> dict:
     """
     Process chunk of records
     
@@ -242,20 +242,20 @@ def process_chunk(start_id: int, end_id: int) -> dict:
     checkpoint_key = f"checkpoint:processed:{start_id}:{end_id}"
     
     # Check if already processed (idempotency)
-    if redis_client.exists(checkpoint_key):
+    if redis_client.exists (checkpoint_key):
         return {'status': 'already_processed', 'range': (start_id, end_id)}
     
     # Process records
     processed = 0
-    for record_id in range(start_id, end_id):
+    for record_id in range (start_id, end_id):
         try:
-            process_record(record_id)
+            process_record (record_id)
             processed += 1
         except Exception as e:
-            logger.error(f"Failed record {record_id}: {e}")
+            logger.error (f"Failed record {record_id}: {e}")
     
     # Mark chunk as complete
-    redis_client.setex(checkpoint_key, 86400, 'done')
+    redis_client.setex (checkpoint_key, 86400, 'done')
     
     return {
         'status': 'complete',
@@ -282,10 +282,10 @@ def process_all_records():
     for i in range(0, total_records, chunk_size):
         chunks.append((i, i + chunk_size))
     
-    print(f"Processing {total_records:,} records in {len(chunks)} chunks")
+    print(f"Processing {total_records:,} records in {len (chunks)} chunks")
     
     # Process in parallel
-    job = group(process_chunk.s(start, end) for start, end in chunks)
+    job = group (process_chunk.s (start, end) for start, end in chunks)
     result = job.apply_async()
     
     # Monitor progress
@@ -293,19 +293,19 @@ def process_all_records():
     while not result.ready():
         time.sleep(10)
         completed = sum(1 for r in result.results if r.ready())
-        progress = (completed / len(chunks)) * 100
-        print(f"Progress: {progress:.1f}% ({completed}/{len(chunks)} chunks)")
+        progress = (completed / len (chunks)) * 100
+        print(f"Progress: {progress:.1f}% ({completed}/{len (chunks)} chunks)")
     
     # Final results
     results = result.get()
-    total_processed = sum(r['processed'] for r in results if r['status'] == 'complete')
+    total_processed = sum (r['processed'] for r in results if r['status'] == 'complete')
     
     print(f"Complete! Processed {total_processed:,} records")
     
     return results
 
 
-def process_record(record_id: int):
+def process_record (record_id: int):
     """Process single record"""
     pass  # Your processing logic
 \`\`\`
@@ -333,8 +333,8 @@ redis_client = redis.Redis()
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True)
-def process_user_balance(self, user_id: int):
+@app.task (bind=True)
+def process_user_balance (self, user_id: int):
     """
     Process user balance (must be exclusive)
     
@@ -353,23 +353,23 @@ def process_user_balance(self, user_id: int):
     - Worker 2 processes: $150 + $30 = $180 ✅
     """
     lock_key = f"lock:user:{user_id}"
-    lock = redis_client.lock(lock_key, timeout=300, blocking_timeout=10)
+    lock = redis_client.lock (lock_key, timeout=300, blocking_timeout=10)
     
     # Try to acquire lock
-    if not lock.acquire(blocking=False):
-        logger.warning(f"User {user_id} already being processed by another worker")
+    if not lock.acquire (blocking=False):
+        logger.warning (f"User {user_id} already being processed by another worker")
         raise Ignore()  # Another worker has it
     
     try:
         # Critical section (only one worker executes this)
-        balance = get_user_balance(user_id)
-        logger.info(f"Processing user {user_id}, balance: \${balance}")
+        balance = get_user_balance (user_id)
+        logger.info (f"Processing user {user_id}, balance: \${balance}")
         
         # Update balance
         new_balance = balance + 50
-        set_user_balance(user_id, new_balance)
+        set_user_balance (user_id, new_balance)
         
-        logger.info(f"User {user_id} processed, new balance: \${new_balance}")
+        logger.info (f"User {user_id} processed, new balance: \${new_balance}")
         
         return {'user_id': user_id, 'balance': new_balance}
     
@@ -378,12 +378,12 @@ def process_user_balance(self, user_id: int):
         lock.release()
 
 
-def get_user_balance(user_id: int) -> float:
+def get_user_balance (user_id: int) -> float:
     """Get user balance from database"""
     return 100.0  # Example
 
 
-def set_user_balance(user_id: int, balance: float):
+def set_user_balance (user_id: int, balance: float):
     """Update user balance in database"""
     pass  # Example
 
@@ -413,7 +413,7 @@ redis_client = redis.Redis()
 
 
 @app.task
-def send_notification(user_id: int, notification_id: int, message: str):
+def send_notification (user_id: int, notification_id: int, message: str):
     """
     Idempotent notification sending
     
@@ -428,27 +428,27 @@ def send_notification(user_id: int, notification_id: int, message: str):
     cache_key = f"notification:sent:{notification_id}"
     
     # Check if already sent
-    if redis_client.exists(cache_key):
+    if redis_client.exists (cache_key):
         return {'status': 'already_sent', 'notification_id': notification_id}
     
     # Send notification
-    send_push(user_id, message)
+    send_push (user_id, message)
     
     # Mark as sent (prevents duplicates on retry)
-    redis_client.setex(cache_key, 86400, 'sent')  # 24h expiration
+    redis_client.setex (cache_key, 86400, 'sent')  # 24h expiration
     
     return {'status': 'sent', 'notification_id': notification_id}
 
 
 @app.task
-def process_payment(order_id: int, amount: float):
+def process_payment (order_id: int, amount: float):
     """
     Idempotent payment processing
     
     CRITICAL: Must not charge customer multiple times!
     """
     # Check if already processed
-    payment = Payment.query.filter_by(order_id=order_id).first()
+    payment = Payment.query.filter_by (order_id=order_id).first()
     
     if payment and payment.status == 'complete':
         return {'status': 'already_processed', 'payment_id': payment.id}
@@ -456,7 +456,7 @@ def process_payment(order_id: int, amount: float):
     # Process payment with Stripe idempotency key
     try:
         charge = stripe.Charge.create(
-            amount=int(amount * 100),
+            amount=int (amount * 100),
             currency='usd',
             idempotency_key=f'order_{order_id}'  # Stripe prevents duplicates
         )
@@ -468,7 +468,7 @@ def process_payment(order_id: int, amount: float):
             amount=amount,
             status='complete'
         )
-        db.session.add(payment)
+        db.session.add (payment)
         db.session.commit()
         
         return {'status': 'processed', 'payment_id': payment.id}
@@ -479,7 +479,7 @@ def process_payment(order_id: int, amount: float):
         return {'status': 'already_processed'}
 
 
-def send_push(user_id: int, message: str):
+def send_push (user_id: int, message: str):
     """Send push notification"""
     pass  # Implementation
 \`\`\`

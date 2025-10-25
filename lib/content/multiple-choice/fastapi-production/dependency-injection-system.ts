@@ -13,7 +13,7 @@ export const dependencyInjectionSystemMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'FastAPI caches dependency results per request by default. If a dependency is used multiple times (e.g., get_db used by multiple dependencies or endpoints), it\'s executed only once and the result is cached. Example: @app.get("/test") async def test(d1=Depends(get_db), d2=Depends(get_db)) → get_db called once, result reused. This is a major performance optimization. Disable caching with: Depends(get_db, use_cache=False) when you need fresh values (e.g., timestamps, random values).',
+      'FastAPI caches dependency results per request by default. If a dependency is used multiple times (e.g., get_db used by multiple dependencies or endpoints), it\'s executed only once and the result is cached. Example: @app.get("/test") async def test (d1=Depends (get_db), d2=Depends (get_db)) → get_db called once, result reused. This is a major performance optimization. Disable caching with: Depends (get_db, use_cache=False) when you need fresh values (e.g., timestamps, random values).',
   },
   {
     id: 'fastapi-di-mc-2',
@@ -27,7 +27,7 @@ export const dependencyInjectionSystemMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'Use the dependencies parameter in APIRouter constructor to apply dependencies to all routes in that router. Example: router = APIRouter(prefix="/api", dependencies=[Depends(verify_api_key), Depends(rate_limit)]). All routes in this router automatically have these dependencies applied before the route handler runs. This is perfect for: authentication (all routes require auth), rate limiting (all routes limited), logging (all routes logged). No need to add Depends() to each individual route!',
+      'Use the dependencies parameter in APIRouter constructor to apply dependencies to all routes in that router. Example: router = APIRouter (prefix="/api", dependencies=[Depends (verify_api_key), Depends (rate_limit)]). All routes in this router automatically have these dependencies applied before the route handler runs. This is perfect for: authentication (all routes require auth), rate limiting (all routes limited), logging (all routes logged). No need to add Depends() to each individual route!',
   },
   {
     id: 'fastapi-di-mc-3',
@@ -53,7 +53,7 @@ export const dependencyInjectionSystemMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'Use app.dependency_overrides dictionary to replace dependencies during testing. Example: def mock_get_db(): return MockDB(); app.dependency_overrides[get_db] = mock_get_db. Now all endpoints using get_db will receive MockDB instead. After tests: app.dependency_overrides.clear(). This is essential for: testing without real database, mocking external APIs, testing auth without real tokens, isolating tests from infrastructure. pytest fixture: @pytest.fixture; def client(): app.dependency_overrides[get_db] = mock_db; yield TestClient(app); app.dependency_overrides.clear().',
+      'Use app.dependency_overrides dictionary to replace dependencies during testing. Example: def mock_get_db(): return MockDB(); app.dependency_overrides[get_db] = mock_get_db. Now all endpoints using get_db will receive MockDB instead. After tests: app.dependency_overrides.clear(). This is essential for: testing without real database, mocking external APIs, testing auth without real tokens, isolating tests from infrastructure. pytest fixture: @pytest.fixture; def client(): app.dependency_overrides[get_db] = mock_db; yield TestClient (app); app.dependency_overrides.clear().',
   },
   {
     id: 'fastapi-di-mc-5',
@@ -67,6 +67,6 @@ export const dependencyInjectionSystemMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'Class-based dependencies (callable classes with __init__) provide better organization for complex dependencies with state. Benefits: encapsulate related parameters, provide methods for common operations, use properties for computed values. Example: class Pagination: def __init__(self, page: int = 1, size: int = 20): self.page, self.size = page, size; @property; def offset(self): return (self.page - 1) * self.size; def apply(self, query): return query.offset(self.offset).limit(self.size). Use: @app.get("/") async def root(p: Pagination = Depends()): query = p.apply(query). Better than functions for: complex filtering, pagination, service classes. Performance difference is negligible (<1%).',
+      'Class-based dependencies (callable classes with __init__) provide better organization for complex dependencies with state. Benefits: encapsulate related parameters, provide methods for common operations, use properties for computed values. Example: class Pagination: def __init__(self, page: int = 1, size: int = 20): self.page, self.size = page, size; @property; def offset (self): return (self.page - 1) * self.size; def apply (self, query): return query.offset (self.offset).limit (self.size). Use: @app.get("/") async def root (p: Pagination = Depends()): query = p.apply (query). Better than functions for: complex filtering, pagination, service classes. Performance difference is negligible (<1%).',
   },
 ];

@@ -59,7 +59,7 @@ from typing import Dict, Any, Tuple
 import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -80,7 +80,7 @@ class TrainingPipeline:
         self.scaler = StandardScaler()
         self.model = None
         
-    def load_data(self) -> Tuple[pd.DataFrame, pd.Series]:
+    def load_data (self) -> Tuple[pd.DataFrame, pd.Series]:
         """
         Step 1: Load data from source
         """
@@ -94,19 +94,19 @@ class TrainingPipeline:
         n_features = self.config.get('n_features', 20)
         
         X = pd.DataFrame(
-            np.random.randn(n_samples, n_features),
-            columns=[f'feature_{i}' for i in range(n_features)]
+            np.random.randn (n_samples, n_features),
+            columns=[f'feature_{i}' for i in range (n_features)]
         )
         
         y = pd.Series(
-            X['feature_0'] * 0.5 + X['feature_1'] * 0.3 + np.random.randn(n_samples) * 0.1
+            X['feature_0'] * 0.5 + X['feature_1'] * 0.3 + np.random.randn (n_samples) * 0.1
         )
         
-        logger.info(f"✓ Loaded {len(X)} samples, {len(X.columns)} features")
+        logger.info (f"✓ Loaded {len(X)} samples, {len(X.columns)} features")
         
         return X, y
     
-    def validate_data(self, X: pd.DataFrame, y: pd.Series):
+    def validate_data (self, X: pd.DataFrame, y: pd.Series):
         """
         Step 2: Validate data quality
         """
@@ -115,7 +115,7 @@ class TrainingPipeline:
         # Check for missing values
         missing = X.isnull().sum().sum()
         if missing > 0:
-            raise ValueError(f"Found {missing} missing values")
+            raise ValueError (f"Found {missing} missing values")
         
         # Check for infinite values
         if np.isinf(X.values).any():
@@ -171,7 +171,7 @@ class TrainingPipeline:
             import xgboost as xgb
             self.model = xgb.XGBRegressor(**self.config['model_params'])
         else:
-            raise ValueError(f"Unknown model type: {model_type}")
+            raise ValueError (f"Unknown model type: {model_type}")
         
         # Train
         self.model.fit(X_train, y_train)
@@ -201,25 +201,25 @@ class TrainingPipeline:
         
         # Metrics
         metrics = {
-            'train_rmse': np.sqrt(mean_squared_error(y_train, train_preds)),
-            'train_r2': r2_score(y_train, train_preds),
-            'val_rmse': np.sqrt(mean_squared_error(y_val, val_preds)),
-            'val_r2': r2_score(y_val, val_preds),
-            'test_rmse': np.sqrt(mean_squared_error(y_test, test_preds)),
-            'test_r2': r2_score(y_test, test_preds)
+            'train_rmse': np.sqrt (mean_squared_error (y_train, train_preds)),
+            'train_r2': r2_score (y_train, train_preds),
+            'val_rmse': np.sqrt (mean_squared_error (y_val, val_preds)),
+            'val_r2': r2_score (y_val, val_preds),
+            'test_rmse': np.sqrt (mean_squared_error (y_test, test_preds)),
+            'test_r2': r2_score (y_test, test_preds)
         }
         
-        logger.info(f"✓ Evaluation complete")
-        logger.info(f"  Val RMSE: {metrics['val_rmse']:.6f}")
-        logger.info(f"  Test RMSE: {metrics['test_rmse']:.6f}")
+        logger.info (f"✓ Evaluation complete")
+        logger.info (f"  Val RMSE: {metrics['val_rmse']:.6f}")
+        logger.info (f"  Test RMSE: {metrics['test_rmse']:.6f}")
         
         return metrics
     
-    def save_model(self, model_path: str):
+    def save_model (self, model_path: str):
         """
         Step 6: Save model
         """
-        logger.info(f"Saving model to {model_path}...")
+        logger.info (f"Saving model to {model_path}...")
         
         import joblib
         joblib.dump({
@@ -230,7 +230,7 @@ class TrainingPipeline:
         
         logger.info("✓ Model saved")
     
-    def run(self) -> Dict[str, Any]:
+    def run (self) -> Dict[str, Any]:
         """
         Run complete pipeline
         """
@@ -239,10 +239,10 @@ class TrainingPipeline:
         logger.info("="*60 + "\\n")
         
         # Start MLflow run
-        with mlflow.start_run(run_name=self.config.get('run_name', 'training_run')):
+        with mlflow.start_run (run_name=self.config.get('run_name', 'training_run')):
             
             # Log config
-            mlflow.log_params(self.config['model_params'])
+            mlflow.log_params (self.config['model_params'])
             
             # 1. Load data
             X, y = self.load_data()
@@ -258,7 +258,7 @@ class TrainingPipeline:
                 X_temp, y_temp, test_size=0.25, random_state=42  # 60/20/20 split
             )
             
-            logger.info(f"Data split: train={len(X_train)}, val={len(X_val)}, test={len(X_test)}")
+            logger.info (f"Data split: train={len(X_train)}, val={len(X_val)}, test={len(X_test)}")
             
             # 4. Preprocess
             X_train_scaled, X_val_scaled, X_test_scaled = self.preprocess(
@@ -276,14 +276,14 @@ class TrainingPipeline:
             )
             
             # Log metrics to MLflow
-            mlflow.log_metrics(metrics)
+            mlflow.log_metrics (metrics)
             
             # 7. Save model
             model_path = self.config.get('model_path', 'model.pkl')
-            self.save_model(model_path)
+            self.save_model (model_path)
             
             # Log model to MLflow
-            mlflow.sklearn.log_model(model, "model")
+            mlflow.sklearn.log_model (model, "model")
             
             logger.info("\\n" + "="*60)
             logger.info("Training Pipeline Complete")
@@ -312,7 +312,7 @@ config = {
 }
 
 # Run pipeline
-# pipeline = TrainingPipeline(config)
+# pipeline = TrainingPipeline (config)
 # result = pipeline.run()
 # print(f"\\nFinal metrics: {result['metrics']}")
 \`\`\`
@@ -340,15 +340,15 @@ def setup_distributed():
     Setup distributed training environment
     """
     # Initialize process group
-    dist.init_process_group(backend='nccl')  # or 'gloo' for CPU
+    dist.init_process_group (backend='nccl')  # or 'gloo' for CPU
     
     # Get rank and world size
     rank = dist.get_rank()
     world_size = dist.get_world_size()
     
     # Set device
-    torch.cuda.set_device(rank)
-    device = torch.device(f'cuda:{rank}')
+    torch.cuda.set_device (rank)
+    device = torch.device (f'cuda:{rank}')
     
     return rank, world_size, device
 
@@ -367,18 +367,18 @@ class SimpleNN(nn.Module):
     def __init__(self, input_dim=20, hidden_dim=128, output_dim=1):
         super().__init__()
         self.network = nn.Sequential(
-            nn.Linear(input_dim, hidden_dim),
+            nn.Linear (input_dim, hidden_dim),
             nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),
+            nn.Linear (hidden_dim, hidden_dim),
             nn.ReLU(),
-            nn.Linear(hidden_dim, output_dim)
+            nn.Linear (hidden_dim, output_dim)
         )
     
-    def forward(self, x):
-        return self.network(x)
+    def forward (self, x):
+        return self.network (x)
 
 
-def train_distributed(rank, world_size):
+def train_distributed (rank, world_size):
     """
     Distributed training function
     
@@ -386,18 +386,18 @@ def train_distributed(rank, world_size):
     torchrun --nproc_per_node=4 train_script.py
     """
     # Setup
-    device = torch.device(f'cuda:{rank}')
+    device = torch.device (f'cuda:{rank}')
     
     # Create model and move to device
-    model = SimpleNN(input_dim=20).to(device)
+    model = SimpleNN(input_dim=20).to (device)
     
     # Wrap model with DDP
     model = DDP(model, device_ids=[rank])
     
     # Create dataset
     n_samples = 10000
-    X = torch.randn(n_samples, 20)
-    y = torch.randn(n_samples, 1)
+    X = torch.randn (n_samples, 20)
+    y = torch.randn (n_samples, 1)
     
     dataset = TensorDataset(X, y)
     
@@ -418,7 +418,7 @@ def train_distributed(rank, world_size):
     )
     
     # Optimizer and loss
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
     criterion = nn.MSELoss()
     
     # Training loop
@@ -426,19 +426,19 @@ def train_distributed(rank, world_size):
     
     for epoch in range(10):
         # Set epoch for sampler (important for shuffling)
-        sampler.set_epoch(epoch)
+        sampler.set_epoch (epoch)
         
         epoch_loss = 0.0
         
-        for batch_idx, (batch_X, batch_y) in enumerate(dataloader):
+        for batch_idx, (batch_X, batch_y) in enumerate (dataloader):
             # Move to device
-            batch_X = batch_X.to(device)
-            batch_y = batch_y.to(device)
+            batch_X = batch_X.to (device)
+            batch_y = batch_y.to (device)
             
             # Forward pass
             optimizer.zero_grad()
-            outputs = model(batch_X)
-            loss = criterion(outputs, batch_y)
+            outputs = model (batch_X)
+            loss = criterion (outputs, batch_y)
             
             # Backward pass
             loss.backward()
@@ -447,7 +447,7 @@ def train_distributed(rank, world_size):
             epoch_loss += loss.item()
         
         # Average loss across all processes
-        avg_loss = epoch_loss / len(dataloader)
+        avg_loss = epoch_loss / len (dataloader)
         
         if rank == 0:  # Only print from main process
             print(f"Epoch {epoch+1}/10, Loss: {avg_loss:.6f}")
@@ -473,7 +473,7 @@ Model Parallelism for Large Models
 import torch
 import torch.nn as nn
 
-class LargeModelParallel(nn.Module):
+class LargeModelParallel (nn.Module):
     """
     Split large model across multiple GPUs
     
@@ -493,15 +493,15 @@ class LargeModelParallel(nn.Module):
         self.layer3 = nn.Linear(5000, 5000).to('cuda:1')
         self.layer4 = nn.Linear(5000, 100).to('cuda:1')
     
-    def forward(self, x):
+    def forward (self, x):
         # Start on GPU 0
         x = x.to('cuda:0')
-        x = torch.relu(self.layer1(x))
-        x = torch.relu(self.layer2(x))
+        x = torch.relu (self.layer1(x))
+        x = torch.relu (self.layer2(x))
         
         # Move to GPU 1
         x = x.to('cuda:1')
-        x = torch.relu(self.layer3(x))
+        x = torch.relu (self.layer3(x))
         x = self.layer4(x)
         
         return x
@@ -513,7 +513,7 @@ if torch.cuda.device_count() >= 2:
     
     # Input on CPU, will be moved in forward pass
     x = torch.randn(32, 1000)
-    output = model(x)
+    output = model (x)
     
     print(f"Output shape: {output.shape}")
     print(f"Output device: {output.device}")
@@ -540,7 +540,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.model_split import train_test_split
 
-def train_model_ray(config):
+def train_model_ray (config):
     """
     Training function for Ray Tune
     
@@ -570,10 +570,10 @@ def train_model_ray(config):
     
     # Evaluate
     val_preds = model.predict(X_val)
-    val_rmse = np.sqrt(mean_squared_error(y_val, val_preds))
+    val_rmse = np.sqrt (mean_squared_error (y_val, val_preds))
     
     # Report metrics to Ray Tune
-    tune.report(val_rmse=val_rmse)
+    tune.report (val_rmse=val_rmse)
 
 
 def run_hyperparameter_optimization():
@@ -612,7 +612,7 @@ def run_hyperparameter_optimization():
     )
     
     # Get best hyperparameters
-    best_config = analysis.get_best_config(metric='val_rmse', mode='min')
+    best_config = analysis.get_best_config (metric='val_rmse', mode='min')
     
     print(f"\\n🏆 Best hyperparameters:")
     for key, value in best_config.items():
@@ -640,7 +640,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import cross_val_score
 import numpy as np
 
-def objective(trial):
+def objective (trial):
     """
     Objective function for Optuna
     
@@ -679,7 +679,7 @@ def objective(trial):
     return -scores.mean()
 
 
-def run_optuna_optimization(n_trials=50):
+def run_optuna_optimization (n_trials=50):
     """
     Run Optuna optimization
     """
@@ -691,11 +691,11 @@ def run_optuna_optimization(n_trials=50):
     )
     
     # Optimize
-    study.optimize(objective, n_trials=n_trials, n_jobs=4)  # Parallel trials
+    study.optimize (objective, n_trials=n_trials, n_jobs=4)  # Parallel trials
     
     # Results
     print(f"\\n=== Optuna Results ===")
-    print(f"Number of trials: {len(study.trials)}")
+    print(f"Number of trials: {len (study.trials)}")
     print(f"Best trial: {study.best_trial.number}")
     print(f"Best RMSE: {study.best_value:.6f}")
     
@@ -704,7 +704,7 @@ def run_optuna_optimization(n_trials=50):
         print(f"  {key}: {value}")
     
     # Importance
-    importances = optuna.importance.get_param_importances(study)
+    importances = optuna.importance.get_param_importances (study)
     
     print(f"\\nParameter importances:")
     for key, value in importances.items():
@@ -714,7 +714,7 @@ def run_optuna_optimization(n_trials=50):
 
 
 # Run optimization
-# best_params, study = run_optuna_optimization(n_trials=50)
+# best_params, study = run_optuna_optimization (n_trials=50)
 \`\`\`
 
 ---
@@ -738,8 +738,8 @@ class CheckpointManager:
     """
     
     def __init__(self, checkpoint_dir='checkpoints', keep_best_n=3):
-        self.checkpoint_dir = Path(checkpoint_dir)
-        self.checkpoint_dir.mkdir(exist_ok=True)
+        self.checkpoint_dir = Path (checkpoint_dir)
+        self.checkpoint_dir.mkdir (exist_ok=True)
         
         self.keep_best_n = keep_best_n
         self.checkpoints = []  # List of (metric, path) tuples
@@ -765,11 +765,11 @@ class CheckpointManager:
         
         # Save latest
         latest_path = self.checkpoint_dir / 'latest.pth'
-        torch.save(checkpoint, latest_path)
+        torch.save (checkpoint, latest_path)
         
         # Save epoch checkpoint
         epoch_path = self.checkpoint_dir / f'epoch_{epoch}.pth'
-        torch.save(checkpoint, epoch_path)
+        torch.save (checkpoint, epoch_path)
         
         # Save best
         val_loss = metrics.get('val_loss', float('inf'))
@@ -777,23 +777,23 @@ class CheckpointManager:
         if val_loss < self.best_metric or is_best:
             self.best_metric = val_loss
             best_path = self.checkpoint_dir / 'best.pth'
-            torch.save(checkpoint, best_path)
+            torch.save (checkpoint, best_path)
             
             print(f"✓ New best model: val_loss={val_loss:.6f}")
         
         # Keep only best N checkpoints
         self.checkpoints.append((val_loss, epoch_path))
-        self.checkpoints.sort(key=lambda x: x[0])  # Sort by metric
+        self.checkpoints.sort (key=lambda x: x[0])  # Sort by metric
         
         # Remove old checkpoints
-        if len(self.checkpoints) > self.keep_best_n:
+        if len (self.checkpoints) > self.keep_best_n:
             for _, path in self.checkpoints[self.keep_best_n:]:
                 if path.exists() and path != latest_path:
                     path.unlink()
             
             self.checkpoints = self.checkpoints[:self.keep_best_n]
     
-    def load_checkpoint(self, model, optimizer, checkpoint_path='best.pth'):
+    def load_checkpoint (self, model, optimizer, checkpoint_path='best.pth'):
         """
         Load checkpoint
         """
@@ -803,10 +803,10 @@ class CheckpointManager:
             print(f"Checkpoint not found: {path}")
             return None
         
-        checkpoint = torch.load(path)
+        checkpoint = torch.load (path)
         
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        model.load_state_dict (checkpoint['model_state_dict'])
+        optimizer.load_state_dict (checkpoint['optimizer_state_dict'])
         
         epoch = checkpoint['epoch']
         metrics = checkpoint['metrics']
@@ -818,7 +818,7 @@ class CheckpointManager:
 
 # Example usage
 model = nn.Linear(10, 1)
-optimizer = torch.optim.Adam(model.parameters())
+optimizer = torch.optim.Adam (model.parameters())
 
 checkpoint_mgr = CheckpointManager()
 
@@ -850,28 +850,28 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-def train_with_tensorboard(model, train_loader, val_loader, epochs=10):
+def train_with_tensorboard (model, train_loader, val_loader, epochs=10):
     """
     Training with TensorBoard logging
     """
     # Create writer
     writer = SummaryWriter('runs/training_experiment')
     
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
     criterion = nn.MSELoss()
     
     global_step = 0
     
-    for epoch in range(epochs):
+    for epoch in range (epochs):
         # Training
         model.train()
         train_loss = 0.0
         
-        for batch_idx, (X_batch, y_batch) in enumerate(train_loader):
+        for batch_idx, (X_batch, y_batch) in enumerate (train_loader):
             optimizer.zero_grad()
             
             outputs = model(X_batch)
-            loss = criterion(outputs, y_batch)
+            loss = criterion (outputs, y_batch)
             
             loss.backward()
             optimizer.step()
@@ -882,7 +882,7 @@ def train_with_tensorboard(model, train_loader, val_loader, epochs=10):
             writer.add_scalar('Loss/train_batch', loss.item(), global_step)
             global_step += 1
         
-        avg_train_loss = train_loss / len(train_loader)
+        avg_train_loss = train_loss / len (train_loader)
         
         # Validation
         model.eval()
@@ -891,10 +891,10 @@ def train_with_tensorboard(model, train_loader, val_loader, epochs=10):
         with torch.no_grad():
             for X_batch, y_batch in val_loader:
                 outputs = model(X_batch)
-                loss = criterion(outputs, y_batch)
+                loss = criterion (outputs, y_batch)
                 val_loss += loss.item()
         
-        avg_val_loss = val_loss / len(val_loader)
+        avg_val_loss = val_loss / len (val_loader)
         
         # Log epoch metrics
         writer.add_scalars('Loss/epoch', {
@@ -907,9 +907,9 @@ def train_with_tensorboard(model, train_loader, val_loader, epochs=10):
         
         # Log model weights histogram
         for name, param in model.named_parameters():
-            writer.add_histogram(f'Weights/{name}', param, epoch)
+            writer.add_histogram (f'Weights/{name}', param, epoch)
             if param.grad is not None:
-                writer.add_histogram(f'Gradients/{name}', param.grad, epoch)
+                writer.add_histogram (f'Gradients/{name}', param.grad, epoch)
         
         print(f"Epoch {epoch+1}/{epochs}: train_loss={avg_train_loss:.6f}, val_loss={avg_val_loss:.6f}")
     
@@ -919,8 +919,8 @@ def train_with_tensorboard(model, train_loader, val_loader, epochs=10):
 
 
 # Example
-# model = nn.Sequential(nn.Linear(10, 50), nn.ReLU(), nn.Linear(50, 1))
-# train_with_tensorboard(model, train_loader, val_loader)
+# model = nn.Sequential (nn.Linear(10, 50), nn.ReLU(), nn.Linear(50, 1))
+# train_with_tensorboard (model, train_loader, val_loader)
 \`\`\`
 
 ---
@@ -938,7 +938,7 @@ import torch
 import torch.nn as nn
 from torch.cuda.amp import autocast, GradScaler
 
-def train_with_mixed_precision(model, train_loader, epochs=10):
+def train_with_mixed_precision (model, train_loader, epochs=10):
     """
     Training with automatic mixed precision (AMP)
     
@@ -948,31 +948,31 @@ def train_with_mixed_precision(model, train_loader, epochs=10):
     - Minimal accuracy loss
     """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = model.to(device)
+    model = model.to (device)
     
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam (model.parameters(), lr=0.001)
     criterion = nn.MSELoss()
     
     # Create GradScaler
     scaler = GradScaler()
     
-    for epoch in range(epochs):
+    for epoch in range (epochs):
         model.train()
         
-        for batch_idx, (X_batch, y_batch) in enumerate(train_loader):
-            X_batch = X_batch.to(device)
-            y_batch = y_batch.to(device)
+        for batch_idx, (X_batch, y_batch) in enumerate (train_loader):
+            X_batch = X_batch.to (device)
+            y_batch = y_batch.to (device)
             
             optimizer.zero_grad()
             
             # Forward pass with autocast
             with autocast():
                 outputs = model(X_batch)
-                loss = criterion(outputs, y_batch)
+                loss = criterion (outputs, y_batch)
             
             # Backward pass with scaling
-            scaler.scale(loss).backward()
-            scaler.step(optimizer)
+            scaler.scale (loss).backward()
+            scaler.step (optimizer)
             scaler.update()
             
             if batch_idx % 100 == 0:
@@ -994,9 +994,9 @@ if torch.cuda.is_available():
         torch.randn(1000, 100),
         torch.randn(1000, 1)
     )
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=32)
+    train_loader = torch.utils.data.DataLoader (train_dataset, batch_size=32)
     
-    # train_with_mixed_precision(model, train_loader)
+    # train_with_mixed_precision (model, train_loader)
     print("Mixed precision training example ready")
 else:
     print("CUDA not available")

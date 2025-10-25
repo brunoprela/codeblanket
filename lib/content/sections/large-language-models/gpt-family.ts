@@ -54,7 +54,7 @@ class GPT1Training:
         )
     
     # Stage 1: Unsupervised pre-training
-    def pretrain(self, corpus):
+    def pretrain (self, corpus):
         """
         Pre-train on large text corpus (BooksCorpus: 7,000 books)
         
@@ -62,18 +62,18 @@ class GPT1Training:
         Loss: Cross-entropy
         """
         for text in corpus:
-            tokens = tokenize(text)
+            tokens = tokenize (text)
             
             # For each position, predict next token
-            for i in range(len(tokens) - 1):
+            for i in range (len (tokens) - 1):
                 context = tokens[:i+1]
                 target = tokens[i+1]
                 
                 # Forward pass
-                logits = self.model(context)
+                logits = self.model (context)
                 
                 # Loss
-                loss = cross_entropy(logits[-1], target)
+                loss = cross_entropy (logits[-1], target)
                 
                 # Backward pass
                 loss.backward()
@@ -86,7 +86,7 @@ class GPT1Training:
         # - Common sense patterns
     
     # Stage 2: Supervised fine-tuning
-    def finetune(self, task_data):
+    def finetune (self, task_data):
         """
         Fine-tune on task-specific labeled data
         
@@ -95,16 +95,16 @@ class GPT1Training:
         for text, label in task_data:
             # Add task-specific tokens
             input_text = f"[START] {text} [EXTRACT]"
-            tokens = tokenize(input_text)
+            tokens = tokenize (input_text)
             
             # Forward pass
-            logits = self.model(tokens)
+            logits = self.model (tokens)
             
             # Task-specific head
-            prediction = task_head(logits)
+            prediction = task_head (logits)
             
             # Loss
-            loss = task_loss(prediction, label)
+            loss = task_loss (prediction, label)
             loss.backward()
             optimizer.step()
 
@@ -170,7 +170,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 model = GPT2LMHeadModel.from_pretrained('gpt2')
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
-def zero_shot_classification(text, labels):
+def zero_shot_classification (text, labels):
     """
     Classify text using prompt engineering
     """
@@ -181,7 +181,7 @@ def zero_shot_classification(text, labels):
         prompt = f"{text}\\n\\nThis text is {label}."
         
         # Compute likelihood
-        inputs = tokenizer(prompt, return_tensors='pt')
+        inputs = tokenizer (prompt, return_tensors='pt')
         with torch.no_grad():
             outputs = model(**inputs, labels=inputs['input_ids'])
             loss = outputs.loss.item()  # Negative log likelihood
@@ -189,11 +189,11 @@ def zero_shot_classification(text, labels):
         results[label] = -loss  # Higher is better
     
     # Return most likely label
-    return max(results, key=results.get)
+    return max (results, key=results.get)
 
 # Example: Sentiment analysis
 text = "I loved this movie! It was amazing!"
-sentiment = zero_shot_classification(text, ["positive", "negative"])
+sentiment = zero_shot_classification (text, ["positive", "negative"])
 print(sentiment)  # "positive"
 
 # GPT-2 can do many tasks zero-shot:
@@ -202,11 +202,11 @@ print(sentiment)  # "positive"
 # - Question answering
 # - Reading comprehension
 
-def generate_text(prompt, max_length=100):
+def generate_text (prompt, max_length=100):
     """
     Generate text continuation
     """
-    inputs = tokenizer(prompt, return_tensors='pt')
+    inputs = tokenizer (prompt, return_tensors='pt')
     
     outputs = model.generate(
         **inputs,
@@ -217,11 +217,11 @@ def generate_text(prompt, max_length=100):
         do_sample=True
     )
     
-    return tokenizer.decode(outputs[0])
+    return tokenizer.decode (outputs[0])
 
 # Example
 prompt = "In a shocking finding, scientists discovered"
-text = generate_text(prompt)
+text = generate_text (prompt)
 print(text)
 # Output: coherent, context-aware continuation
 
@@ -247,7 +247,7 @@ class GPT2Training:
         self.model = GPT2(params="1.5B")
     
     # 1. Byte-level BPE
-    def byte_level_bpe(self, text):
+    def byte_level_bpe (self, text):
         """
         Instead of character-level BPE:
         - Encode text as bytes
@@ -260,22 +260,22 @@ class GPT2Training:
         # - Efficient: still compresses well
         
         bytes_text = text.encode('utf-8')
-        tokens = bpe_encode(bytes_text)
+        tokens = bpe_encode (bytes_text)
         return tokens
     
     # 2. Layer normalization positioning
-    def improved_architecture(self):
+    def improved_architecture (self):
         """
         Move layer norm to input of sub-layers (pre-norm)
         Instead of output (post-norm)
         """
-        # GPT-1: x = LayerNorm(x + Attention(x))
-        # GPT-2: x = x + Attention(LayerNorm(x))
+        # GPT-1: x = LayerNorm (x + Attention (x))
+        # GPT-2: x = x + Attention(LayerNorm (x))
         
         # Advantage: Better gradient flow, easier training
     
     # 3. Larger batches
-    def training_config(self):
+    def training_config (self):
         """
         GPT-2 training:
         - Batch size: 512
@@ -330,7 +330,7 @@ gpt3_configs = {
 
 import openai
 
-def few_shot_learning(task, examples, query):
+def few_shot_learning (task, examples, query):
     """
     GPT-3 learns from examples in prompt
     """
@@ -361,7 +361,7 @@ examples = [
 ]
 query = "20°C"
 
-result = few_shot_learning(task, examples, query)
+result = few_shot_learning (task, examples, query)
 print(result)  # "68°F" ✓
 
 # GPT-3 can learn from examples:
@@ -373,7 +373,7 @@ print(result)  # "68°F" ✓
 # - Domain-specific tasks (legal, medical, financial)
 
 # Example: Code generation
-def generate_code(description, examples):
+def generate_code (description, examples):
     """
     Generate code from natural language
     """
@@ -397,7 +397,7 @@ def generate_code(description, examples):
 examples = [
     {
         "description": "Calculate factorial",
-        "code": "def factorial(n):\\n    return 1 if n <= 1 else n * factorial(n-1)"
+        "code": "def factorial (n):\\n    return 1 if n <= 1 else n * factorial (n-1)"
     }
 ]
 
@@ -421,7 +421,7 @@ def arithmetic_emergence():
     """
     prompt = """
 Q: What is 347 + 289?
-A: Let's add step by step.
+A: Let\'s add step by step.
 347 + 289 = 636
 
 Q: What is 1,247 + 3,851?
@@ -454,14 +454,14 @@ def simulate_code():
     Trace code execution mentally
     """
     prompt = """
-def f(x):
+def f (x):
     return x * 2 + 1
 
-result = f(f(3))
+result = f (f(3))
 
 What is result?
 
-Let's trace:
+Let\'s trace:
 1. f(3) = 3 * 2 + 1 = 7
 2. f(7) = 7 * 2 + 1 = 15
 
@@ -535,7 +535,7 @@ def no_persistence():
     Each request is independent
     """
     gpt3("Remember: my name is John")
-    gpt3("What's my name?")
+    gpt3("What\'s my name?")
     # Doesn't remember previous message
 
 # Solutions:
@@ -567,14 +567,14 @@ class GPT35Training:
     4. PPO reinforcement learning
     """
     
-    def step1_pretrain(self):
+    def step1_pretrain (self):
         """
         Standard language modeling
         """
         # Same as GPT-3
         pass
     
-    def step2_supervised_finetuning(self, instruction_data):
+    def step2_supervised_finetuning (self, instruction_data):
         """
         Fine-tune on (instruction, response) pairs
         
@@ -584,11 +584,11 @@ class GPT35Training:
         """
         for instruction, response in instruction_data:
             prompt = f"Human: {instruction}\\n\\nAssistant: {response}"
-            loss = train_on_text(prompt)
+            loss = train_on_text (prompt)
             loss.backward()
             optimizer.step()
     
-    def step3_reward_model(self, comparison_data):
+    def step3_reward_model (self, comparison_data):
         """
         Train reward model to predict human preferences
         
@@ -601,8 +601,8 @@ class GPT35Training:
         Train model to predict A scores higher than B
         """
         for prompt, response_a, response_b, preference in comparison_data:
-            score_a = reward_model(prompt, response_a)
-            score_b = reward_model(prompt, response_b)
+            score_a = reward_model (prompt, response_a)
+            score_b = reward_model (prompt, response_b)
             
             if preference == "A":
                 loss = max(0, score_b - score_a + margin)
@@ -612,7 +612,7 @@ class GPT35Training:
             loss.backward()
             optimizer.step()
     
-    def step4_ppo_training(self, prompts):
+    def step4_ppo_training (self, prompts):
         """
         PPO: Proximal Policy Optimization
         
@@ -624,13 +624,13 @@ class GPT35Training:
         """
         for prompt in prompts:
             # Generate response
-            response = policy_model.generate(prompt)
+            response = policy_model.generate (prompt)
             
             # Get reward
-            reward = reward_model(prompt, response)
+            reward = reward_model (prompt, response)
             
             # KL penalty: stay close to supervised model
-            kl = kl_divergence(policy_model, supervised_model)
+            kl = kl_divergence (policy_model, supervised_model)
             
             # PPO objective
             loss = -reward + beta * kl
@@ -706,7 +706,7 @@ GPT-4: Most capable model (as of 2024)
 # Using GPT-4 API
 import openai
 
-def gpt4_with_vision(image_url, question):
+def gpt4_with_vision (image_url, question):
     """
     Analyze images with GPT-4 Vision
     """
@@ -726,12 +726,12 @@ def gpt4_with_vision(image_url, question):
 
 # Example: Analyze chart
 image_url = "https://example.com/stock-chart.png"
-analysis = gpt4_with_vision(image_url, "Analyze this stock chart")
+analysis = gpt4_with_vision (image_url, "Analyze this stock chart")
 print(analysis)
 # GPT-4 can describe the chart, identify patterns, make predictions
 
 # Advanced reasoning
-def complex_reasoning(problem):
+def complex_reasoning (problem):
     """
     GPT-4 excels at multi-step reasoning
     """
@@ -752,11 +752,11 @@ less than or equal to 2n that are divisible by exactly two of the
 numbers 2, 3, and 5.
 """
 
-solution = complex_reasoning(problem)
+solution = complex_reasoning (problem)
 # GPT-4 can solve this! (GPT-3.5 cannot)
 
 # Coding capabilities
-def generate_complex_code(spec):
+def generate_complex_code (spec):
     """
     GPT-4 can generate entire applications
     """
@@ -781,7 +781,7 @@ Create a Python Flask app with:
 5. Error handling
 """
 
-code = generate_complex_code(spec)
+code = generate_complex_code (spec)
 # GPT-4 generates working, production-quality code!
 
 # Benchmark performance:
@@ -821,13 +821,13 @@ class GPTApplications:
         self.client = openai.OpenAI()
     
     # 1. Content generation
-    def generate_blog_post(self, topic, keywords):
+    def generate_blog_post (self, topic, keywords):
         """
         Generate SEO-optimized content
         """
         prompt = f"""
 Write a 500-word blog post about {topic}.
-Include keywords: {', '.join(keywords)}
+Include keywords: {', '.join (keywords)}
 Use engaging tone, include examples.
 """
         
@@ -839,7 +839,7 @@ Use engaging tone, include examples.
         return response.choices[0].message.content
     
     # 2. Code assistant
-    def code_assistant(self, code, question):
+    def code_assistant (self, code, question):
         """
         Help with code understanding and debugging
         """
@@ -860,7 +860,7 @@ Question: {question}
         return response.choices[0].message.content
     
     # 3. Data extraction
-    def extract_structured_data(self, text):
+    def extract_structured_data (self, text):
         """
         Extract structured data from unstructured text
         """
@@ -877,10 +877,10 @@ Return JSON with keys: name, email, phone, company, role
             response_format={"type": "json_object"}
         )
         
-        return json.loads(response.choices[0].message.content)
+        return json.loads (response.choices[0].message.content)
     
     # 4. Customer support
-    def customer_support_bot(self, conversation_history, new_message):
+    def customer_support_bot (self, conversation_history, new_message):
         """
         Intelligent customer support
         """
@@ -894,7 +894,7 @@ You are a customer support agent for an e-commerce company.
 """}
         ]
         
-        messages.extend(conversation_history)
+        messages.extend (conversation_history)
         messages.append({"role": "user", "content": new_message})
         
         response = self.client.chat.completions.create(
@@ -905,12 +905,12 @@ You are a customer support agent for an e-commerce company.
         return response.choices[0].message.content
     
     # 5. Research assistant
-    def research_assistant(self, query, documents):
+    def research_assistant (self, query, documents):
         """
         Answer questions from documents
         """
         context = "\\n\\n".join([f"Document {i+1}:\\n{doc}" 
-                                for i, doc in enumerate(documents)])
+                                for i, doc in enumerate (documents)])
         
         prompt = f"""
 Based on these documents, answer the question.
@@ -940,8 +940,8 @@ post = app.generate_blog_post(
 
 # Code help
 code_help = app.code_assistant(
-    code="def factorial(n):\\n    return n * factorial(n-1)",
-    question="What's wrong with this code?"
+    code="def factorial (n):\\n    return n * factorial (n-1)",
+    question="What\'s wrong with this code?"
 )
 
 # Data extraction
@@ -949,8 +949,8 @@ email_text = """
 Hi, I'm John Smith from Acme Corp. You can reach me at john@acme.com
 or call 555-0123. I'm the VP of Engineering.
 """
-data = app.extract_structured_data(email_text)
-print(json.dumps(data, indent=2))
+data = app.extract_structured_data (email_text)
+print(json.dumps (data, indent=2))
 \`\`\`
 
 ---

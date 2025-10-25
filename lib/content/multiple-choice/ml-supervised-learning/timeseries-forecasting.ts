@@ -38,7 +38,7 @@ export const timeseriesforecastingMultipleChoice: MultipleChoiceQuestion[] = [
       'Which method is most appropriate for a time series with both trend and seasonality?',
     options: [
       'Simple Exponential Smoothing',
-      "Holt's Linear Trend",
+      "Holt\'s Linear Trend",
       'Holt-Winters (Triple Exponential Smoothing)',
       'Simple Moving Average',
     ],

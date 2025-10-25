@@ -34,35 +34,35 @@ def register_user():
     username = request.json['username']
     
     # Step 1: Save user to database (fast ~10ms)
-    user_id = save_to_database(email, username)
+    user_id = save_to_database (email, username)
     
     # Step 2: Send welcome email (SLOW ~3-5 seconds!)
-    send_welcome_email(email, username)  # BLOCKS HERE ⏰
+    send_welcome_email (email, username)  # BLOCKS HERE ⏰
     
     # Step 3: Generate user report (SLOW ~10 seconds!)
-    generate_welcome_report(user_id)  # BLOCKS HERE TOO ⏰
+    generate_welcome_report (user_id)  # BLOCKS HERE TOO ⏰
     
     # User waits 13-15 seconds before seeing response! 😱
     return jsonify({'message': 'User registered'}), 201
 
 
-def send_welcome_email(email: str, username: str):
+def send_welcome_email (email: str, username: str):
     """Simulates slow email sending"""
     time.sleep(3)  # Network latency, SMTP connection
-    msg = MIMEText(f"Welcome {username}!")
+    msg = MIMEText (f"Welcome {username}!")
     msg['Subject'] = 'Welcome!'
     msg['To'] = email
     # ... SMTP sending logic ...
     print(f"Email sent to {email}")
 
 
-def generate_welcome_report(user_id: int):
+def generate_welcome_report (user_id: int):
     """Simulates expensive report generation"""
     time.sleep(10)  # Database queries, PDF generation
     print(f"Report generated for user {user_id}")
 
 
-def save_to_database(email: str, username: str) -> int:
+def save_to_database (email: str, username: str) -> int:
     """Fast database write"""
     return 12345
 
@@ -125,13 +125,13 @@ Sends request    Queues task          Stores task        Processes task
 Synchronous: Everything happens sequentially
 """
 
-def process_order_sync(order_id: int):
+def process_order_sync (order_id: int):
     # These run one after another (user waits for all)
-    validate_payment(order_id)           # 2 seconds
-    update_inventory(order_id)           # 1 second
-    send_confirmation_email(order_id)    # 3 seconds
-    notify_warehouse(order_id)           # 2 seconds
-    generate_invoice(order_id)           # 5 seconds
+    validate_payment (order_id)           # 2 seconds
+    update_inventory (order_id)           # 1 second
+    send_confirmation_email (order_id)    # 3 seconds
+    notify_warehouse (order_id)           # 2 seconds
+    generate_invoice (order_id)           # 5 seconds
     # Total: 13 seconds of user waiting! 🐌
     
     return "Order processed"
@@ -157,35 +157,35 @@ app = Celery('tasks', broker='redis://localhost:6379/0')
 
 
 @app.task
-def send_confirmation_email(order_id: int):
+def send_confirmation_email (order_id: int):
     """Background task"""
     time.sleep(3)
     print(f"Email sent for order {order_id}")
 
 
 @app.task
-def notify_warehouse(order_id: int):
+def notify_warehouse (order_id: int):
     """Background task"""
     time.sleep(2)
     print(f"Warehouse notified for order {order_id}")
 
 
 @app.task
-def generate_invoice(order_id: int):
+def generate_invoice (order_id: int):
     """Background task"""
     time.sleep(5)
     print(f"Invoice generated for order {order_id}")
 
 
-def process_order_async(order_id: int):
+def process_order_async (order_id: int):
     # Do critical work NOW (user waits)
-    validate_payment(order_id)    # 2 seconds - MUST wait
-    update_inventory(order_id)    # 1 second - MUST wait
+    validate_payment (order_id)    # 2 seconds - MUST wait
+    update_inventory (order_id)    # 1 second - MUST wait
     
     # Queue non-critical work for LATER (instant)
-    send_confirmation_email.delay(order_id)   # Queued ~1ms
-    notify_warehouse.delay(order_id)          # Queued ~1ms
-    generate_invoice.delay(order_id)          # Queued ~1ms
+    send_confirmation_email.delay (order_id)   # Queued ~1ms
+    notify_warehouse.delay (order_id)          # Queued ~1ms
+    generate_invoice.delay (order_id)          # Queued ~1ms
     
     # User gets response after 3 seconds instead of 13!
     return "Order processed"
@@ -279,9 +279,9 @@ def producer_web_server():
     print("Producer: Received user request")
     
     # Queue tasks (producers don't process, just queue)
-    result1 = process_video.delay(video_id=123)
-    result2 = send_email.delay(email='user@example.com')
-    result3 = generate_report.delay(user_id=456)
+    result1 = process_video.delay (video_id=123)
+    result2 = send_email.delay (email='user@example.com')
+    result3 = generate_report.delay (user_id=456)
     
     print(f"Producer: Queued 3 tasks")
     print(f"Producer: Task IDs: {result1.id}, {result2.id}, {result3.id}")
@@ -294,8 +294,8 @@ def producer_web_server():
 # CONSUMER (Celery Worker)
 # ========================================
 
-@app.task(name='process_video')
-def process_video(video_id: int):
+@app.task (name='process_video')
+def process_video (video_id: int):
     """
     Consumer: Processes tasks from queue
     
@@ -307,8 +307,8 @@ def process_video(video_id: int):
     return f"Video {video_id} processed"
 
 
-@app.task(name='send_email')
-def send_email(email: str):
+@app.task (name='send_email')
+def send_email (email: str):
     """Consumer task"""
     print(f"Consumer Worker: Sending email to {email}")
     time.sleep(2)
@@ -316,8 +316,8 @@ def send_email(email: str):
     return f"Email sent to {email}"
 
 
-@app.task(name='generate_report')
-def generate_report(user_id: int):
+@app.task (name='generate_report')
+def generate_report (user_id: int):
     """Consumer task"""
     print(f"Consumer Worker: Generating report for user {user_id}")
     time.sleep(5)
@@ -399,14 +399,14 @@ WITH task queue:
 ### 3. **Reliability with Retries**
 
 \`\`\`python
-@app.task(bind=True, max_retries=3)
-def send_email(self, email: str):
+@app.task (bind=True, max_retries=3)
+def send_email (self, email: str):
     try:
         # Attempt to send email
-        smtp_send(email)
+        smtp_send (email)
     except SMTPException as exc:
         # Retry with exponential backoff
-        raise self.retry(exc=exc, countdown=60 * (2 ** self.request.retries))
+        raise self.retry (exc=exc, countdown=60 * (2 ** self.request.retries))
 
 # Automatic retry schedule:
 # Attempt 1: Immediate
@@ -445,37 +445,37 @@ Smooth out traffic spikes with queues
 ### 1. **Email Sending**
 \`\`\`python
 @app.task
-def send_welcome_email(user_id: int):
+def send_welcome_email (user_id: int):
     """Send email asynchronously"""
-    user = User.query.get(user_id)
-    send_email(user.email, "Welcome!", template='welcome.html')
+    user = User.query.get (user_id)
+    send_email (user.email, "Welcome!", template='welcome.html')
 \`\`\`
 
 ### 2. **Report Generation**
 \`\`\`python
 @app.task
-def generate_monthly_report(company_id: int):
+def generate_monthly_report (company_id: int):
     """Generate PDF report (slow)"""
-    data = fetch_month_data(company_id)
-    pdf = generate_pdf(data)
+    data = fetch_month_data (company_id)
+    pdf = generate_pdf (data)
     upload_to_s3(pdf, f'reports/{company_id}/monthly.pdf')
-    notify_user(company_id, pdf_url)
+    notify_user (company_id, pdf_url)
 \`\`\`
 
 ### 3. **Data Processing**
 \`\`\`python
 @app.task
-def process_uploaded_image(image_id: int):
+def process_uploaded_image (image_id: int):
     """Resize, compress, generate thumbnails"""
-    image = Image.open(get_image_path(image_id))
+    image = Image.open (get_image_path (image_id))
     
     # Generate multiple sizes
     thumbnail = image.resize((150, 150))
     medium = image.resize((600, 600))
     
     # Upload to CDN
-    upload_to_cdn(thumbnail, f'thumbnails/{image_id}.jpg')
-    upload_to_cdn(medium, f'medium/{image_id}.jpg')
+    upload_to_cdn (thumbnail, f'thumbnails/{image_id}.jpg')
+    upload_to_cdn (medium, f'medium/{image_id}.jpg')
 \`\`\`
 
 ### 4. **Scheduled Jobs**
@@ -483,10 +483,10 @@ def process_uploaded_image(image_id: int):
 from celery.schedules import crontab
 
 @app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
+def setup_periodic_tasks (sender, **kwargs):
     # Run every day at midnight
     sender.add_periodic_task(
-        crontab(hour=0, minute=0),
+        crontab (hour=0, minute=0),
         backup_database.s(),
     )
 
@@ -499,15 +499,15 @@ def backup_database():
 
 ### 5. **External API Calls**
 \`\`\`python
-@app.task(bind=True, max_retries=5)
-def fetch_stock_price(self, symbol: str):
+@app.task (bind=True, max_retries=5)
+def fetch_stock_price (self, symbol: str):
     """Call external API with retries"""
     try:
-        response = requests.get(f'https://api.stocks.com/{symbol}')
+        response = requests.get (f'https://api.stocks.com/{symbol}')
         price = response.json()['price']
-        cache.set(f'price:{symbol}', price, timeout=60)
+        cache.set (f'price:{symbol}', price, timeout=60)
     except requests.RequestException as exc:
-        raise self.retry(exc=exc, countdown=30)
+        raise self.retry (exc=exc, countdown=30)
 \`\`\`
 
 ---
@@ -588,7 +588,7 @@ def process_request():
     data = request.json
     
     # Queue task
-    result = celery_task.delay(data)
+    result = celery_task.delay (data)
     
     # Return task ID (user can check status later)
     return {'task_id': result.id}, 202
@@ -596,8 +596,8 @@ def process_request():
 # ============================================
 # Component 3: Celery Tasks (Task Definitions)
 # ============================================
-@celery_app.task(name='celery_task')
-def celery_task(data):
+@celery_app.task (name='celery_task')
+def celery_task (data):
     """Process data (runs in worker)"""
     # Heavy processing...
     return result
@@ -616,7 +616,7 @@ def celery_task(data):
 celery_app.conf.result_backend = 'redis://localhost:6379/1'
 
 # Check task status:
-result = celery_task.delay(data)
+result = celery_task.delay (data)
 print(result.status)  # PENDING, STARTED, SUCCESS, FAILURE
 print(result.result)  # Return value (if complete)
 \`\`\`
@@ -657,36 +657,36 @@ def create_order():
     payment_method = data['payment_method']
     
     # Step 1: Validate (FAST - must happen now)
-    if not validate_items(items):
+    if not validate_items (items):
         return {'error': 'Invalid items'}, 400
     
     # Step 2: Create order record (FAST - must happen now)
-    order = create_order_in_db(user_id, items)
+    order = create_order_in_db (user_id, items)
     order_id = order.id
     
     # Step 3: Charge payment (CRITICAL - must wait for result)
     # But still fast (Stripe API ~500ms)
     payment_result = stripe.Charge.create(
-        amount=calculate_total(items),
+        amount=calculate_total (items),
         currency='usd',
         source=payment_method
     )
     
     if not payment_result.success:
-        cancel_order(order_id)
+        cancel_order (order_id)
         return {'error': 'Payment failed'}, 402
     
     # Step 4: Queue ALL slow, non-critical operations
     # These don't block user response!
     
     job = group([
-        send_confirmation_email.s(order_id),
-        notify_warehouse.s(order_id),
-        update_inventory.s(items),
-        generate_invoice.s(order_id),
-        send_sms_notification.s(user_id, order_id),
-        update_analytics.s(order_id),
-        trigger_shipping_label.s(order_id)
+        send_confirmation_email.s (order_id),
+        notify_warehouse.s (order_id),
+        update_inventory.s (items),
+        generate_invoice.s (order_id),
+        send_sms_notification.s (user_id, order_id),
+        update_analytics.s (order_id),
+        trigger_shipping_label.s (order_id)
     ])
     
     result = job.apply_async()
@@ -705,62 +705,62 @@ def create_order():
 # ========================================
 
 @celery_app.task
-def send_confirmation_email(order_id: int):
+def send_confirmation_email (order_id: int):
     """Send order confirmation (3s)"""
     time.sleep(3)
     print(f"✉️  Email sent for order {order_id}")
 
 
 @celery_app.task
-def notify_warehouse(order_id: int):
+def notify_warehouse (order_id: int):
     """Notify warehouse to ship (2s)"""
     time.sleep(2)
     print(f"📦 Warehouse notified for order {order_id}")
 
 
 @celery_app.task
-def update_inventory(items: list):
+def update_inventory (items: list):
     """Update stock quantities (1s)"""
     time.sleep(1)
-    print(f"📊 Inventory updated for {len(items)} items")
+    print(f"📊 Inventory updated for {len (items)} items")
 
 
 @celery_app.task
-def generate_invoice(order_id: int):
+def generate_invoice (order_id: int):
     """Generate PDF invoice (5s)"""
     time.sleep(5)
     print(f"🧾 Invoice generated for order {order_id}")
 
 
 @celery_app.task
-def send_sms_notification(user_id: int, order_id: int):
+def send_sms_notification (user_id: int, order_id: int):
     """Send SMS confirmation (2s)"""
     time.sleep(2)
     print(f"📱 SMS sent to user {user_id} for order {order_id}")
 
 
 @celery_app.task
-def update_analytics(order_id: int):
+def update_analytics (order_id: int):
     """Update analytics (1s)"""
     time.sleep(1)
     print(f"📈 Analytics updated for order {order_id}")
 
 
 @celery_app.task
-def trigger_shipping_label(order_id: int):
+def trigger_shipping_label (order_id: int):
     """Generate shipping label (4s)"""
     time.sleep(4)
     print(f"🏷️  Shipping label generated for order {order_id}")
 
 
 # Helper functions
-def validate_items(items): return True
-def create_order_in_db(user_id, items): 
+def validate_items (items): return True
+def create_order_in_db (user_id, items): 
     class Order: 
         id = 12345
     return Order()
-def calculate_total(items): return 9999
-def cancel_order(order_id): pass
+def calculate_total (items): return 9999
+def cancel_order (order_id): pass
 \`\`\`
 
 **Timeline:**

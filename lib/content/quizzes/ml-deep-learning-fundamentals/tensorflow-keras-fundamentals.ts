@@ -33,12 +33,12 @@ model = keras.Sequential([
 **Functional API - Complex Architectures:**
 
 \`\`\`python
-inputs = keras.Input(shape=(784,))
+inputs = keras.Input (shape=(784,))
 x = layers.Dense(512, activation='relu')(inputs)
 x = layers.Dropout(0.5)(x)
 outputs = layers.Dense(10, activation='softmax')(x)
 
-model = keras.Model(inputs=inputs, outputs=outputs)
+model = keras.Model (inputs=inputs, outputs=outputs)
 \`\`\`
 
 **Advantages:**
@@ -60,8 +60,8 @@ x = layers.Add()([x, shortcut])  # Cannot do in Sequential!
 
 2. **Multiple Inputs:**
 \`\`\`python
-text_input = keras.Input(shape=(100,))
-num_input = keras.Input(shape=(10,))
+text_input = keras.Input (shape=(100,))
+num_input = keras.Input (shape=(10,))
 combined = layers.concatenate([text_features, num_features])
 \`\`\`
 
@@ -144,8 +144,8 @@ reduce_lr = keras.callbacks.ReduceLROnPlateau(
 **Custom Callback:**
 
 \`\`\`python
-class CustomCallback(keras.callbacks.Callback):
-    def on_epoch_end(self, epoch, logs=None):
+class CustomCallback (keras.callbacks.Callback):
+    def on_epoch_end (self, epoch, logs=None):
         print(f"Epoch {epoch}: loss={logs['loss',]:.4f}")
         
         if logs['val_accuracy',] > 0.95:

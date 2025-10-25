@@ -117,13 +117,13 @@ class Response(BaseModel):
     metadata: Optional[dict] = None
 
 @app.post("/api/process", response_model=Response)
-async def process_request(request: Request):
+async def process_request (request: Request):
     """
     Main processing endpoint
     """
     try:
         # Process request
-        result = await process_data(request.data, request.options)
+        result = await process_data (request.data, request.options)
         
         return Response(
             result=result,
@@ -135,10 +135,10 @@ async def process_request(request: Request):
         return Response(
             result="",
             success=False,
-            metadata={"error": str(e)}
+            metadata={"error": str (e)}
         )
 
-async def process_data(data: str, options: dict = None) -> str:
+async def process_data (data: str, options: dict = None) -> str:
     """
     Core processing logic
     """
@@ -172,17 +172,17 @@ interface APIResponse {
 class APIClient {
   private baseURL: string;
   
-  constructor(baseURL: string) {
+  constructor (baseURL: string) {
     this.baseURL = baseURL;
   }
   
-  async process(request: APIRequest): Promise<APIResponse> {
+  async process (request: APIRequest): Promise<APIResponse> {
     const response = await fetch(\`\${this.baseURL}/api/process\`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(request)
+      body: JSON.stringify (request)
     });
     
     return await response.json();
@@ -312,8 +312,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Usage
-logger.info(f"Processing request: {request_id}")
-logger.error(f"Error occurred: {error_message}")
+logger.info (f"Processing request: {request_id}")
+logger.error (f"Error occurred: {error_message}")
 \`\`\`
 
 ---

@@ -55,7 +55,7 @@ export const orderTypesExecutionMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      '5% stop triggered at $95K, but became market order in illiquid conditions → executed at crash bottom ($91K, 9% loss). Recovered to $98K within minutes. Problem: Stop-loss becomes market order → walks book in illiquid crash → worse price than stop level. Solution: Use stop-limit (but risk no fill) or volatility-adjusted stops.',
+      '5% stop triggered at $95K, but became market order in illiquid conditions → executed at crash bottom (\$91K, 9% loss). Recovered to $98K within minutes. Problem: Stop-loss becomes market order → walks book in illiquid crash → worse price than stop level. Solution: Use stop-limit (but risk no fill) or volatility-adjusted stops.',
   },
   {
     id: 'fm-1-11-mc-5',

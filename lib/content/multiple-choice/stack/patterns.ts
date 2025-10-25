@@ -29,7 +29,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "A monotonic stack maintains elements in either increasing or decreasing order, popping elements that violate this property. It's used for problems like finding the next greater element.",
+      "A monotonic stack maintains elements in either increasing or decreasing order, popping elements that violate this property. It\'s used for problems like finding the next greater element.",
   },
   {
     id: 'mc3',

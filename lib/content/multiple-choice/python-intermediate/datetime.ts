@@ -47,9 +47,14 @@ export const datetimeMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'pi-datetime-mc-4',
     question: 'How do you add 5 days to a datetime object "dt"?',
-    options: ['dt + 5', 'dt.add(5)', 'dt + timedelta(days=5)', 'dt.addDays(5)'],
+    options: [
+      'dt + 5',
+      'dt.add(5)',
+      'dt + timedelta (days=5)',
+      'dt.addDays(5)',
+    ],
     correctAnswer: 2,
-    explanation: 'Use timedelta for date arithmetic: dt + timedelta(days=5)',
+    explanation: 'Use timedelta for date arithmetic: dt + timedelta (days=5)',
   },
   {
     id: 'pi-datetime-mc-5',

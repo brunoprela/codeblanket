@@ -14,9 +14,9 @@ A **palindrome** reads the same forward and backward. Palindrome problems are co
 ### Two Pointers Approach
 
 \`\`\`python
-def is_palindrome(s):
+def is_palindrome (s):
     """Check if string is palindrome - O(n) time, O(1) space"""
-    left, right = 0, len(s) - 1
+    left, right = 0, len (s) - 1
     
     while left < right:
         if s[left] != s[right]:
@@ -33,15 +33,15 @@ print(is_palindrome("hello"))    # False
 ### With Preprocessing (Common Interview Twist)
 
 \`\`\`python
-def is_palindrome_alphanumeric(s):
+def is_palindrome_alphanumeric (s):
     """
     Check if palindrome ignoring case, spaces, punctuation.
     Example: "A man, a plan, a canal: Panama" -> True
     """
     # Clean string: only alphanumeric, lowercase
-    cleaned = '.join(c.lower() for c in s if c.isalnum())
+    cleaned = '.join (c.lower() for c in s if c.isalnum())
     
-    left, right = 0, len(cleaned) - 1
+    left, right = 0, len (cleaned) - 1
     while left < right:
         if cleaned[left] != cleaned[right]:
             return False
@@ -50,9 +50,9 @@ def is_palindrome_alphanumeric(s):
     
     return True
 
-# Or use Python's slicing (less efficient but concise)
-def is_palindrome_simple(s):
-    cleaned = '.join(c.lower() for c in s if c.isalnum())
+# Or use Python\'s slicing (less efficient but concise)
+def is_palindrome_simple (s):
+    cleaned = '.join (c.lower() for c in s if c.isalnum())
     return cleaned == cleaned[::-1]
 \`\`\`
 
@@ -63,7 +63,7 @@ def is_palindrome_simple(s):
 ### Expand Around Center (O(n²))
 
 \`\`\`python
-def longest_palindrome_substring(s):
+def longest_palindrome_substring (s):
     """
     Find longest palindromic substring.
     Time: O(n²), Space: O(1)
@@ -71,22 +71,22 @@ def longest_palindrome_substring(s):
     if not s:
         return ""
     
-    def expand_around_center(left, right):
+    def expand_around_center (left, right):
         """Expand while characters match"""
-        while left >= 0 and right < len(s) and s[left] == s[right]:
+        while left >= 0 and right < len (s) and s[left] == s[right]:
             left -= 1
             right += 1
         return s[left + 1:right]  # Return the palindrome
     
     longest = ""
-    for i in range(len(s)):
+    for i in range (len (s)):
         # Odd length palindromes (center is single char)
-        palindrome1 = expand_around_center(i, i)
+        palindrome1 = expand_around_center (i, i)
         # Even length palindromes (center is between two chars)
-        palindrome2 = expand_around_center(i, i + 1)
+        palindrome2 = expand_around_center (i, i + 1)
         
         # Update longest
-        longest = max(longest, palindrome1, palindrome2, key=len)
+        longest = max (longest, palindrome1, palindrome2, key=len)
     
     return longest
 
@@ -101,24 +101,24 @@ print(longest_palindrome_substring("cbbd"))   # "bb"
 ### Dynamic Programming Approach (O(n²))
 
 \`\`\`python
-def longest_palindrome_dp(s):
+def longest_palindrome_dp (s):
     """
     DP approach: dp[i][j] = True if s[i:j+1] is palindrome
     Time: O(n²), Space: O(n²)
     """
-    n = len(s)
+    n = len (s)
     if n == 0:
         return ""
     
-    dp = [[False] * n for _ in range(n)]
+    dp = [[False] * n for _ in range (n)]
     start, max_length = 0, 1
     
     # Single characters are palindromes
-    for i in range(n):
+    for i in range (n):
         dp[i][i] = True
     
     # Check 2-character palindromes
-    for i in range(n - 1):
+    for i in range (n - 1):
         if s[i] == s[i + 1]:
             dp[i][i + 1] = True
             start = i
@@ -126,7 +126,7 @@ def longest_palindrome_dp(s):
     
     # Check longer palindromes
     for length in range(3, n + 1):
-        for i in range(n - length + 1):
+        for i in range (n - length + 1):
             j = i + length - 1
             
             # s[i:j+1] is palindrome if:
@@ -145,24 +145,24 @@ def longest_palindrome_dp(s):
 **Problem:** Find all ways to partition string into palindromes.
 
 \`\`\`python
-def partition_palindromes(s):
+def partition_palindromes (s):
     """
     Return all possible palindrome partitionings.
     Example: "aab" -> [["a","a","b"], ["aa","b"]]
     """
-    def is_palindrome(substr):
+    def is_palindrome (substr):
         return substr == substr[::-1]
     
-    def backtrack(start, path):
-        if start == len(s):
-            result.append(path[:])  # Found valid partition
+    def backtrack (start, path):
+        if start == len (s):
+            result.append (path[:])  # Found valid partition
             return
         
-        for end in range(start + 1, len(s) + 1):
+        for end in range (start + 1, len (s) + 1):
             substring = s[start:end]
-            if is_palindrome(substring):
-                path.append(substring)
-                backtrack(end, path)
+            if is_palindrome (substring):
+                path.append (substring)
+                backtrack (end, path)
                 path.pop()  # Backtrack
     
     result = []
@@ -178,22 +178,22 @@ print(partition_palindromes("aab"))
 **Problem:** Find minimum cuts needed to partition into all palindromes.
 
 \`\`\`python
-def min_cut_palindrome(s):
+def min_cut_palindrome (s):
     """
     Find minimum cuts for palindrome partition.
     Time: O(n²), Space: O(n²)
     """
-    n = len(s)
+    n = len (s)
     
     # is_pal[i][j] = True if s[i:j+1] is palindrome
-    is_pal = [[False] * n for _ in range(n)]
+    is_pal = [[False] * n for _ in range (n)]
     
     # Build palindrome table
-    for i in range(n):
+    for i in range (n):
         is_pal[i][i] = True
     
     for length in range(2, n + 1):
-        for i in range(n - length + 1):
+        for i in range (n - length + 1):
             j = i + length - 1
             if s[i] == s[j]:
                 is_pal[i][j] = (length == 2) or is_pal[i + 1][j - 1]
@@ -201,14 +201,14 @@ def min_cut_palindrome(s):
     # cuts[i] = minimum cuts for s[0:i+1]
     cuts = [0] * n
     
-    for i in range(n):
+    for i in range (n):
         if is_pal[0][i]:
             cuts[i] = 0  # Whole substring is palindrome
         else:
             min_cuts = float('inf')
-            for j in range(i):
+            for j in range (i):
                 if is_pal[j + 1][i]:
-                    min_cuts = min(min_cuts, cuts[j] + 1)
+                    min_cuts = min (min_cuts, cuts[j] + 1)
             cuts[i] = min_cuts
     
     return cuts[n - 1]
@@ -222,7 +222,7 @@ print(min_cut_palindrome("abc"))    # 2 (a|b|c)
 **Problem:** Check if integer is palindrome (without converting to string).
 
 \`\`\`python
-def is_palindrome_number(x):
+def is_palindrome_number (x):
     """Check if number is palindrome without string conversion"""
     if x < 0:
         return False  # Negative numbers aren't palindromes
@@ -238,7 +238,7 @@ def is_palindrome_number(x):
     return original == reversed_num
 
 # Optimized: only reverse half
-def is_palindrome_number_optimized(x):
+def is_palindrome_number_optimized (x):
     """Only reverse second half"""
     if x < 0 or (x % 10 == 0 and x != 0):
         return False

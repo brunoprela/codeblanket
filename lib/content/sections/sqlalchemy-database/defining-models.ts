@@ -6,7 +6,7 @@ export const definingModels = {
 
 ## Introduction
 
-Database relationships are the foundation of relational databases. SQLAlchemy's ORM provides powerful tools for modeling one-to-one, one-to-many, many-to-many, self-referential, and polymorphic relationships.
+Database relationships are the foundation of relational databases. SQLAlchemy\'s ORM provides powerful tools for modeling one-to-one, one-to-many, many-to-many, self-referential, and polymorphic relationships.
 
 In this section, you'll learn:
 - Table definitions with declarative syntax
@@ -41,7 +41,7 @@ class User(Base):
     __tablename__ = 'users'
     
     # Primary key
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     # Required columns
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
@@ -52,11 +52,11 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     
     # Timestamps
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[Optional[datetime]] = mapped_column(onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column (default=datetime.utcnow)
+    updated_at: Mapped[Optional[datetime]] = mapped_column (onupdate=datetime.utcnow)
     
     def __repr__(self):
-        return f"<User(id={self.id}, email='{self.email}')>"
+        return f"<User (id={self.id}, email='{self.email}')>"
 \`\`\`
 
 ### Column Types
@@ -136,7 +136,7 @@ from sqlalchemy import CheckConstraint, UniqueConstraint, Index
 class Account(Base):
     __tablename__ = 'accounts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(50), index=True)
     age: Mapped[Optional[int]]
@@ -183,7 +183,7 @@ class User(Base):
     # PostgreSQL: SERIAL
     # MySQL: AUTO_INCREMENT
     # SQLite: AUTOINCREMENT
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
 \`\`\`
 
 ### UUID Primary Key
@@ -230,9 +230,9 @@ Multiple columns as primary key
 class UserRole(Base):
     __tablename__ = 'user_roles'
     
-    user_id: Mapped[int] = mapped_column(primary_key=True)
-    role_id: Mapped[int] = mapped_column(primary_key=True)
-    granted_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    user_id: Mapped[int] = mapped_column (primary_key=True)
+    role_id: Mapped[int] = mapped_column (primary_key=True)
+    granted_at: Mapped[datetime] = mapped_column (default=datetime.utcnow)
     
     # No single 'id' column
     # Primary key is (user_id, role_id) combination
@@ -254,7 +254,7 @@ from sqlalchemy import ForeignKey
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     title: Mapped[str] = mapped_column(String(200))
     content: Mapped[str] = mapped_column(Text)
@@ -270,7 +270,7 @@ Foreign Key Cascade Behaviors
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     # CASCADE: Delete posts when user deleted
     user_id: Mapped[int] = mapped_column(
@@ -311,21 +311,21 @@ from sqlalchemy.orm import relationship
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     
     # Relationship: one user has many posts
-    posts: Mapped[list["Post"]] = relationship(back_populates="user")
+    posts: Mapped[list["Post"]] = relationship (back_populates="user")
 
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     title: Mapped[str] = mapped_column(String(200))
     
     # Relationship: post belongs to one user
-    user: Mapped["User"] = relationship(back_populates="posts")
+    user: Mapped["User"] = relationship (back_populates="posts")
 
 # Usage
 user = session.get(User, 1)
@@ -344,7 +344,7 @@ Cascade Delete and Orphan Removal
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     posts: Mapped[list["Post"]] = relationship(
         back_populates="user",
@@ -355,11 +355,11 @@ class User(Base):
 class Post(Base):
     __tablename__ = 'posts'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int] = mapped_column(
         ForeignKey('users.id', ondelete='CASCADE')
     )
-    user: Mapped["User"] = relationship(back_populates="posts")
+    user: Mapped["User"] = relationship (back_populates="posts")
 
 # Cascade options:
 # - save-update: Cascade add() and merge()
@@ -381,7 +381,7 @@ One-to-One Relationship
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     
     # One-to-one: uselist=False
@@ -394,12 +394,12 @@ class User(Base):
 class UserProfile(Base):
     __tablename__ = 'user_profiles'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
     bio: Mapped[Optional[str]] = mapped_column(Text)
     avatar_url: Mapped[Optional[str]] = mapped_column(String(500))
     
-    user: Mapped["User"] = relationship(back_populates="profile")
+    user: Mapped["User"] = relationship (back_populates="profile")
 
 # Usage
 user = session.get(User, 1)
@@ -431,7 +431,7 @@ user_groups = Table(
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     email: Mapped[str] = mapped_column(String(255))
     
     # Many-to-many relationship
@@ -443,7 +443,7 @@ class User(Base):
 class Group(Base):
     __tablename__ = 'groups'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     
     users: Mapped[list["User"]] = relationship(
@@ -453,7 +453,7 @@ class Group(Base):
 
 # Usage
 user = session.get(User, 1)
-user.groups.append(group)  # Add user to group
+user.groups.append (group)  # Add user to group
 session.commit()
 \`\`\`
 
@@ -471,16 +471,16 @@ class UserGroup(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
     group_id: Mapped[int] = mapped_column(ForeignKey('groups.id'), primary_key=True)
     role: Mapped[str] = mapped_column(String(50), default='member')
-    joined_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    joined_at: Mapped[datetime] = mapped_column (default=datetime.utcnow)
     
     # Relationships to parent objects
-    user: Mapped["User"] = relationship(back_populates="group_associations")
-    group: Mapped["Group"] = relationship(back_populates="user_associations")
+    user: Mapped["User"] = relationship (back_populates="group_associations")
+    group: Mapped["Group"] = relationship (back_populates="user_associations")
 
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     
     group_associations: Mapped[list["UserGroup"]] = relationship(
         back_populates="user",
@@ -489,13 +489,13 @@ class User(Base):
     
     # Convenience property
     @property
-    def groups(self):
+    def groups (self):
         return [assoc.group for assoc in self.group_associations]
 
 class Group(Base):
     __tablename__ = 'groups'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     
     user_associations: Mapped[list["UserGroup"]] = relationship(
@@ -508,8 +508,8 @@ user = session.get(User, 1)
 group = session.get(Group, 1)
 
 # Create association with extra data
-assoc = UserGroup(user=user, group=group, role='admin')
-session.add(assoc)
+assoc = UserGroup (user=user, group=group, role='admin')
+session.add (assoc)
 session.commit()
 
 # Access extra data
@@ -529,7 +529,7 @@ Self-Referential: Tree Structure
 class Category(Base):
     __tablename__ = 'categories'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey('categories.id'))
     
@@ -547,12 +547,12 @@ class Category(Base):
     )
 
 # Usage
-root = Category(name="Electronics")
-child1 = Category(name="Computers", parent=root)
-child2 = Category(name="Phones", parent=root)
-grandchild = Category(name="Laptops", parent=child1)
+root = Category (name="Electronics")
+child1 = Category (name="Computers", parent=root)
+child2 = Category (name="Phones", parent=root)
+grandchild = Category (name="Laptops", parent=child1)
 
-session.add(root)
+session.add (root)
 session.commit()
 
 # Traverse tree
@@ -581,7 +581,7 @@ friendships = Table(
 class User(Base):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     username: Mapped[str] = mapped_column(String(50))
     
     # Self-referential many-to-many
@@ -594,9 +594,9 @@ class User(Base):
     )
 
 # Usage
-user1 = User(username="alice")
-user2 = User(username="bob")
-user1.friends.append(user2)  # Alice friends Bob
+user1 = User (username="alice")
+user2 = User (username="bob")
+user1.friends.append (user2)  # Alice friends Bob
 session.commit()
 \`\`\`
 
@@ -614,7 +614,7 @@ Single Table Inheritance
 class Employee(Base):
     __tablename__ = 'employees'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     type: Mapped[str] = mapped_column(String(50))  # Discriminator
     name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str] = mapped_column(String(255))
@@ -641,15 +641,15 @@ class Manager(Employee):
     }
 
 # Usage
-engineer = Engineer(name="Alice", programming_language="Python")
-manager = Manager(name="Bob", department="Engineering")
+engineer = Engineer (name="Alice", programming_language="Python")
+manager = Manager (name="Bob", department="Engineering")
 
 # Query returns correct subclass
 employees = session.query(Employee).all()
 for emp in employees:
-    if isinstance(emp, Engineer):
+    if isinstance (emp, Engineer):
         print(f"Engineer: {emp.programming_language}")
-    elif isinstance(emp, Manager):
+    elif isinstance (emp, Manager):
         print(f"Manager: {emp.department}")
 \`\`\`
 
@@ -663,7 +663,7 @@ Joined Table Inheritance (normalized)
 class Employee(Base):
     __tablename__ = 'employees'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column (primary_key=True)
     type: Mapped[str] = mapped_column(String(50))
     name: Mapped[str] = mapped_column(String(100))
     

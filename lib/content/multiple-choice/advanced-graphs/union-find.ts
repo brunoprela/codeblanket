@@ -16,7 +16,7 @@ export const unionfindMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Union-Find (Disjoint Set Union): efficiently track which vertices are in same connected component. Operations: find(x) finds root, union(x,y) merges sets. Used in Kruskal's MST, cycle detection.",
+      "Union-Find (Disjoint Set Union): efficiently track which vertices are in same connected component. Operations: find (x) finds root, union (x,y) merges sets. Used in Kruskal\'s MST, cycle detection.",
   },
   {
     id: 'mc2',
@@ -36,7 +36,7 @@ export const unionfindMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'How does path compression work?',
     options: [
       'Deletes paths',
-      'During find(x), make all nodes on path point directly to root',
+      'During find (x), make all nodes on path point directly to root',
       'Random',
       'Sorts nodes',
     ],

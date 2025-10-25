@@ -30,7 +30,7 @@ export const whatsapparchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "WhatsApp is built on Erlang/OTP (Open Telecom Platform). Erlang's lightweight processes enable millions of concurrent connections per server (2-3M, 10x industry average). The Actor model simplifies distributed systems, and OTP provides fault tolerance patterns. Mnesia, Erlang's in-memory distributed database, stores user sessions and routing tables with microsecond latency. This architecture enables 50 engineers to handle 100 billion messages daily.",
+      "WhatsApp is built on Erlang/OTP (Open Telecom Platform). Erlang\'s lightweight processes enable millions of concurrent connections per server (2-3M, 10x industry average). The Actor model simplifies distributed systems, and OTP provides fault tolerance patterns. Mnesia, Erlang's in-memory distributed database, stores user sessions and routing tables with microsecond latency. This architecture enables 50 engineers to handle 100 billion messages daily.",
   },
   {
     id: 'mc3',
@@ -44,7 +44,7 @@ export const whatsapparchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "One WhatsApp server handles 2-3 million concurrent connections, which is 10x the industry average. This is achieved through Erlang's lightweight processes (each connection = one Erlang process with minimal overhead), custom FreeBSD kernel tuning for network stack optimization, and stateless server design (no message storage on servers, only routing). This efficiency is a key reason WhatsApp operates with minimal infrastructure and engineering team.",
+      "One WhatsApp server handles 2-3 million concurrent connections, which is 10x the industry average. This is achieved through Erlang\'s lightweight processes (each connection = one Erlang process with minimal overhead), custom FreeBSD kernel tuning for network stack optimization, and stateless server design (no message storage on servers, only routing). This efficiency is a key reason WhatsApp operates with minimal infrastructure and engineering team.",
   },
   {
     id: 'mc4',

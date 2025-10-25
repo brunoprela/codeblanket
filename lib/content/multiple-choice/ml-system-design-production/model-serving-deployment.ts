@@ -45,7 +45,7 @@ export const modelServingDeploymentQuestions: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "ONNX provides excellent load times, framework independence (can switch between PyTorch, TensorFlow, etc.), and runtime optimization for inference (fused operations, quantization support). It's specifically designed for production deployment. Pickle (option A) is Python-specific, has security issues, and is slower. TorchScript (option C) is PyTorch-only and has limited optimization compared to ONNX. SavedModel with XLA (option D) is TensorFlow-specific and XLA compilation adds overhead during loading.",
+      "ONNX provides excellent load times, framework independence (can switch between PyTorch, TensorFlow, etc.), and runtime optimization for inference (fused operations, quantization support). It\'s specifically designed for production deployment. Pickle (option A) is Python-specific, has security issues, and is slower. TorchScript (option C) is PyTorch-only and has limited optimization compared to ONNX. SavedModel with XLA (option D) is TensorFlow-specific and XLA compilation adds overhead during loading.",
     difficulty: 'intermediate',
     topic: 'Model Serving & Deployment',
   },

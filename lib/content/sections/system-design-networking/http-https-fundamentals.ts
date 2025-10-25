@@ -9,7 +9,7 @@ export const httphttpsfundamentalsSection = {
 
 ## What is HTTP?
 
-**HTTP** is an **application-layer protocol** for transmitting hypermedia documents (like HTML). It's the protocol that powers the World Wide Web.
+**HTTP** is an **application-layer protocol** for transmitting hypermedia documents (like HTML). It\'s the protocol that powers the World Wide Web.
 
 **Key Characteristics**:
 - **Stateless**: Each request is independent; server doesn't remember previous requests
@@ -309,7 +309,7 @@ Client                                  Server
 3. **Extended Validation (EV)**: Highest validation, shows green bar (less common now)
 
 **Where to get certificates**:
-- Let's Encrypt (free, automated)
+- Let\'s Encrypt (free, automated)
 - DigiCert, GlobalSign (paid)
 - AWS Certificate Manager (free for AWS services)
 

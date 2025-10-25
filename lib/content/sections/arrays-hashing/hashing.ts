@@ -13,7 +13,7 @@ A data structure that maps keys to values using a hash function, providing O(1) 
 2. **Collision Handling:** Chaining or open addressing
 3. **Load Factor:** Determines when to resize (typically 0.75)
 
-**Python's Hash Tables:**
+**Python\'s Hash Tables:**
 - **dict:** Key-value pairs, insertion order preserved (Python 3.7+)
 - **set:** Unique elements only, no values
 - **Counter:** Specialized dict for counting (from collections)
@@ -23,23 +23,23 @@ A data structure that maps keys to values using a hash function, providing O(1) 
 \`\`\`python
 # Dictionary
 freq = {}
-freq[key] = freq.get(key, 0) + 1  # Count occurrences
+freq[key] = freq.get (key, 0) + 1  # Count occurrences
 
 # Set
 seen = set()
 if num in seen:  # O(1) membership test
     return True
-seen.add(num)
+seen.add (num)
 
 # Counter (best for frequency)
 from collections import Counter
-freq = Counter(nums)
-most_common = freq.most_common(k)
+freq = Counter (nums)
+most_common = freq.most_common (k)
 
 # defaultdict (avoid KeyError)
 from collections import defaultdict
-graph = defaultdict(list)
-graph[node].append(neighbor)  # No initialization needed
+graph = defaultdict (list)
+graph[node].append (neighbor)  # No initialization needed
 \`\`\`
 
 **Hash Table Patterns:**

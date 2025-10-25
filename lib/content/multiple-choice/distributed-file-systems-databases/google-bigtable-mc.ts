@@ -16,7 +16,7 @@ export const bigtableMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "BigTable data model: (row key, column key, timestamp) → value. It's a sparse map (empty cells don't consume space), distributed (across tablet servers), persistent (stored in GFS), multi-dimensional (row, column, time), and sorted (by row key). Not relational!",
+      "BigTable data model: (row key, column key, timestamp) → value. It\'s a sparse map (empty cells don't consume space), distributed (across tablet servers), persistent (stored in GFS), multi-dimensional (row, column, time), and sorted (by row key). Not relational!",
   },
   {
     id: 'mc2',
@@ -55,7 +55,7 @@ export const bigtableMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Chubby is Google's distributed lock service (Paxos-based) used by BigTable for: (1) Ensuring one active master, (2) Storing root tablet location, (3) Tablet server lease management, (4) Cluster coordination. Chubby provides consistency and coordination, not data storage.",
+      "Chubby is Google\'s distributed lock service (Paxos-based) used by BigTable for: (1) Ensuring one active master, (2) Storing root tablet location, (3) Tablet server lease management, (4) Cluster coordination. Chubby provides consistency and coordination, not data storage.",
   },
   {
     id: 'mc5',

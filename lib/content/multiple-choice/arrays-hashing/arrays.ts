@@ -16,7 +16,7 @@ export const arraysMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What does Kadane's algorithm solve?",
+    question: "What does Kadane\'s algorithm solve?",
     options: [
       'Maximum element in array',
       'Maximum subarray sum',
@@ -25,7 +25,7 @@ export const arraysMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Kadane's algorithm finds the maximum sum of any contiguous subarray in O(n) time by maintaining the maximum sum ending at each position.",
+      "Kadane\'s algorithm finds the maximum sum of any contiguous subarray in O(n) time by maintaining the maximum sum ending at each position.",
   },
   {
     id: 'mc3',

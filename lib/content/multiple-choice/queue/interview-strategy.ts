@@ -36,7 +36,7 @@ export const interviewstrategyMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      'What is the purpose of capturing len(queue) in level-order traversal?',
+      'What is the purpose of capturing len (queue) in level-order traversal?',
     options: [
       'To check if the queue is empty',
       'To know how many nodes are in the current level',
@@ -45,7 +45,7 @@ export const interviewstrategyMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Capturing len(queue) at the start tells us exactly how many nodes are in the current level, allowing us to process them separately from the next level.',
+      'Capturing len (queue) at the start tells us exactly how many nodes are in the current level, allowing us to process them separately from the next level.',
   },
   {
     id: 'mc4',

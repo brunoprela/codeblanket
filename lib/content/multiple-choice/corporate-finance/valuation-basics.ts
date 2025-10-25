@@ -8,7 +8,7 @@ export const valuationBasicsMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['$1,040.91M', '$1,471.45M', '$955.20M', '$1,000.00M'],
     correctAnswer: 0,
     explanation:
-      'Terminal value at end of Year 5 = FCFF_6 / (WACC - g) = ($100M × 1.03) / (0.10 - 0.03) = $103M / 0.07 = $1,471.43M. PV of terminal value = $1,471.43M / (1.10)^5 = $1,471.43M / 1.61051 = $913.53M ≈ $955.20M. The terminal value must be discounted back 5 years to present value. The perpetuity formula gives value at END of Year 5, not today.',
+      'Terminal value at end of Year 5 = FCFF_6 / (WACC - g) = (\$100M × 1.03) / (0.10 - 0.03) = $103M / 0.07 = $1,471.43M. PV of terminal value = $1,471.43M / (1.10)^5 = $1,471.43M / 1.61051 = $913.53M ≈ $955.20M. The terminal value must be discounted back 5 years to present value. The perpetuity formula gives value at END of Year 5, not today.',
   },
   {
     id: 'valuation-basics-mc-2',

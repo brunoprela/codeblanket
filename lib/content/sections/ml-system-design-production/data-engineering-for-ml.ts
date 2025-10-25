@@ -64,7 +64,7 @@ class MLDataPipeline:
         self.storage_layer = FeatureStore()
         self.monitoring = DataQualityMonitor()
     
-    def batch_pipeline(self, date):
+    def batch_pipeline (self, date):
         """
         Daily batch pipeline
         Runs at 6am daily, processes previous day's data
@@ -72,44 +72,44 @@ class MLDataPipeline:
         print(f"\\n=== Batch Pipeline: {date} ===")
         
         # 1. Ingest raw data
-        raw_data = self.ingestion_layer.ingest_batch(date)
-        print(f"✓ Ingested {len(raw_data)} records")
+        raw_data = self.ingestion_layer.ingest_batch (date)
+        print(f"✓ Ingested {len (raw_data)} records")
         
         # 2. Validate
-        validation_result = self.validation_layer.validate(raw_data)
+        validation_result = self.validation_layer.validate (raw_data)
         if not validation_result['valid']:
-            raise ValueError(f"Data validation failed: {validation_result['errors']}")
+            raise ValueError (f"Data validation failed: {validation_result['errors']}")
         print(f"✓ Validation passed")
         
         # 3. Transform
-        features = self.transformation_layer.engineer_features(raw_data)
-        print(f"✓ Engineered {len(features.columns)} features")
+        features = self.transformation_layer.engineer_features (raw_data)
+        print(f"✓ Engineered {len (features.columns)} features")
         
         # 4. Store
-        self.storage_layer.write_batch(features, date)
+        self.storage_layer.write_batch (features, date)
         print(f"✓ Stored to feature store")
         
         # 5. Monitor
-        metrics = self.monitoring.compute_metrics(features)
-        self.monitoring.alert_if_drift(metrics)
+        metrics = self.monitoring.compute_metrics (features)
+        self.monitoring.alert_if_drift (metrics)
         print(f"✓ Quality metrics logged")
         
         return features
     
-    def streaming_pipeline(self, event):
+    def streaming_pipeline (self, event):
         """
         Real-time streaming pipeline
         Processes incoming market data events
         """
         # 1. Validate event
-        if not self.validation_layer.validate_event(event):
+        if not self.validation_layer.validate_event (event):
             return None
         
         # 2. Transform (fast features only)
-        features = self.transformation_layer.engineer_features_realtime(event)
+        features = self.transformation_layer.engineer_features_realtime (event)
         
         # 3. Update cache
-        self.storage_layer.update_cache(features)
+        self.storage_layer.update_cache (features)
         
         return features
 
@@ -119,28 +119,28 @@ class DataIngestion:
     Data ingestion layer
     """
     
-    def ingest_batch(self, date):
+    def ingest_batch (self, date):
         """
         Batch ingestion from multiple sources
         """
         import pandas as pd
         
         # Source 1: Market data (S3, database)
-        market_data = self._load_market_data(date)
+        market_data = self._load_market_data (date)
         
         # Source 2: Alternative data (APIs)
-        sentiment_data = self._load_sentiment_data(date)
+        sentiment_data = self._load_sentiment_data (date)
         
         # Source 3: News data
-        news_data = self._load_news_data(date)
+        news_data = self._load_news_data (date)
         
         # Merge all sources
-        data = pd.merge(market_data, sentiment_data, on='symbol', how='left')
-        data = pd.merge(data, news_data, on='symbol', how='left')
+        data = pd.merge (market_data, sentiment_data, on='symbol', how='left')
+        data = pd.merge (data, news_data, on='symbol', how='left')
         
         return data
     
-    def _load_market_data(self, date):
+    def _load_market_data (self, date):
         """Load from database or S3"""
         import pandas as pd
         # Simulated
@@ -154,7 +154,7 @@ class DataIngestion:
             'date': [date] * 3
         })
     
-    def _load_sentiment_data(self, date):
+    def _load_sentiment_data (self, date):
         """Load from sentiment API"""
         import pandas as pd
         return pd.DataFrame({
@@ -162,7 +162,7 @@ class DataIngestion:
             'sentiment': [0.65, 0.72, 0.58]
         })
     
-    def _load_news_data(self, date):
+    def _load_news_data (self, date):
         """Load from news API"""
         import pandas as pd
         return pd.DataFrame({
@@ -199,7 +199,7 @@ class DataValidator:
     def __init__(self, schema: Dict[str, Any]):
         self.schema = schema
     
-    def validate(self, data: pd.DataFrame) -> Dict[str, Any]:
+    def validate (self, data: pd.DataFrame) -> Dict[str, Any]:
         """
         Run all validation checks
         """
@@ -207,33 +207,33 @@ class DataValidator:
         warnings = []
         
         # 1. Schema validation
-        schema_errors = self._validate_schema(data)
-        errors.extend(schema_errors)
+        schema_errors = self._validate_schema (data)
+        errors.extend (schema_errors)
         
         # 2. Data quality checks
-        quality_issues = self._check_data_quality(data)
-        warnings.extend(quality_issues)
+        quality_issues = self._check_data_quality (data)
+        warnings.extend (quality_issues)
         
         # 3. Business logic validation
-        business_errors = self._validate_business_rules(data)
-        errors.extend(business_errors)
+        business_errors = self._validate_business_rules (data)
+        errors.extend (business_errors)
         
         # 4. Statistical validation
-        stat_warnings = self._check_statistical_properties(data)
-        warnings.extend(stat_warnings)
+        stat_warnings = self._check_statistical_properties (data)
+        warnings.extend (stat_warnings)
         
         return {
-            'valid': len(errors) == 0,
+            'valid': len (errors) == 0,
             'errors': errors,
             'warnings': warnings,
             'summary': {
-                'total_records': len(data),
-                'error_count': len(errors),
-                'warning_count': len(warnings)
+                'total_records': len (data),
+                'error_count': len (errors),
+                'warning_count': len (warnings)
             }
         }
     
-    def _validate_schema(self, data: pd.DataFrame) -> List[str]:
+    def _validate_schema (self, data: pd.DataFrame) -> List[str]:
         """
         Check schema compliance
         """
@@ -241,14 +241,14 @@ class DataValidator:
         
         # Check required columns
         required_cols = self.schema.get('required_columns', [])
-        missing_cols = set(required_cols) - set(data.columns)
+        missing_cols = set (required_cols) - set (data.columns)
         if missing_cols:
-            errors.append(f"Missing columns: {missing_cols}")
+            errors.append (f"Missing columns: {missing_cols}")
         
         # Check data types
         for col, expected_dtype in self.schema.get('dtypes', {}).items():
             if col in data.columns:
-                actual_dtype = str(data[col].dtype)
+                actual_dtype = str (data[col].dtype)
                 if expected_dtype not in actual_dtype:
                     errors.append(
                         f"Column '{col}': expected {expected_dtype}, "
@@ -257,14 +257,14 @@ class DataValidator:
         
         return errors
     
-    def _check_data_quality(self, data: pd.DataFrame) -> List[str]:
+    def _check_data_quality (self, data: pd.DataFrame) -> List[str]:
         """
         Data quality checks
         """
         warnings = []
         
         # 1. Missing values
-        missing_pct = data.isnull().sum() / len(data) * 100
+        missing_pct = data.isnull().sum() / len (data) * 100
         high_missing = missing_pct[missing_pct > 5]
         if not high_missing.empty:
             warnings.append(
@@ -274,10 +274,10 @@ class DataValidator:
         # 2. Duplicates
         duplicates = data.duplicated().sum()
         if duplicates > 0:
-            warnings.append(f"Found {duplicates} duplicate records")
+            warnings.append (f"Found {duplicates} duplicate records")
         
         # 3. Outliers (for numeric columns)
-        numeric_cols = data.select_dtypes(include=[np.number]).columns
+        numeric_cols = data.select_dtypes (include=[np.number]).columns
         for col in numeric_cols:
             z_scores = np.abs((data[col] - data[col].mean()) / data[col].std())
             outliers = (z_scores > 5).sum()
@@ -288,7 +288,7 @@ class DataValidator:
         
         return warnings
     
-    def _validate_business_rules(self, data: pd.DataFrame) -> List[str]:
+    def _validate_business_rules (self, data: pd.DataFrame) -> List[str]:
         """
         Business logic validation
         """
@@ -299,7 +299,7 @@ class DataValidator:
             # Prices must be positive
             negative_prices = (data['close'] <= 0).sum()
             if negative_prices > 0:
-                errors.append(f"Found {negative_prices} non-positive prices")
+                errors.append (f"Found {negative_prices} non-positive prices")
             
             # Price change sanity check (< 50% per day)
             if 'open' in data.columns:
@@ -316,40 +316,40 @@ class DataValidator:
         if 'volume' in data.columns:
             zero_volume = (data['volume'] == 0).sum()
             if zero_volume > 0:
-                errors.append(f"Found {zero_volume} records with zero volume")
+                errors.append (f"Found {zero_volume} records with zero volume")
         
         return errors
     
-    def _check_statistical_properties(self, data: pd.DataFrame) -> List[str]:
+    def _check_statistical_properties (self, data: pd.DataFrame) -> List[str]:
         """
         Statistical property checks
         """
         warnings = []
         
         # Check for constant columns
-        numeric_cols = data.select_dtypes(include=[np.number]).columns
+        numeric_cols = data.select_dtypes (include=[np.number]).columns
         for col in numeric_cols:
             if data[col].std() == 0:
-                warnings.append(f"Column '{col}' has zero variance")
+                warnings.append (f"Column '{col}' has zero variance")
         
         # Check for high correlation (potential redundancy)
-        if len(numeric_cols) > 1:
+        if len (numeric_cols) > 1:
             corr_matrix = data[numeric_cols].corr().abs()
             # Set diagonal to 0
-            np.fill_diagonal(corr_matrix.values, 0)
+            np.fill_diagonal (corr_matrix.values, 0)
             
             high_corr = corr_matrix > 0.95
             if high_corr.any().any():
                 pairs = []
-                for i in range(len(corr_matrix)):
-                    for j in range(i+1, len(corr_matrix)):
+                for i in range (len (corr_matrix)):
+                    for j in range (i+1, len (corr_matrix)):
                         if corr_matrix.iloc[i, j] > 0.95:
                             pairs.append(
                                 f"({corr_matrix.index[i]}, "
                                 f"{corr_matrix.columns[j]})"
                             )
                 if pairs:
-                    warnings.append(f"High correlation pairs: {pairs[:3]}")
+                    warnings.append (f"High correlation pairs: {pairs[:3]}")
         
         return warnings
 
@@ -369,7 +369,7 @@ trading_schema = {
 }
 
 # Create validator
-validator = DataValidator(trading_schema)
+validator = DataValidator (trading_schema)
 
 # Test data
 test_data = pd.DataFrame({
@@ -383,10 +383,10 @@ test_data = pd.DataFrame({
 })
 
 # Validate
-result = validator.validate(test_data)
+result = validator.validate (test_data)
 print(f"\\nValidation result: {result['valid']}")
-print(f"Errors: {len(result['errors'])}")
-print(f"Warnings: {len(result['warnings'])}")
+print(f"Errors: {len (result['errors'])}")
+print(f"Warnings: {len (result['warnings'])}")
 
 if result['errors']:
     print("\\nErrors:")
@@ -438,68 +438,68 @@ class DataVersionControl:
         Returns version ID
         """
         # Generate version ID
-        version_id = self._generate_version_id(data, metadata)
+        version_id = self._generate_version_id (data, metadata)
         
         # Create version record
         version_record = {
             'version_id': version_id,
             'timestamp': datetime.now().isoformat(),
             'shape': data.shape,
-            'columns': list(data.columns),
-            'dtypes': {col: str(dtype) for col, dtype in data.dtypes.items()},
-            'hash': self._compute_hash(data),
+            'columns': list (data.columns),
+            'dtypes': {col: str (dtype) for col, dtype in data.dtypes.items()},
+            'hash': self._compute_hash (data),
             'metadata': metadata,
-            'stats': self._compute_stats(data)
+            'stats': self._compute_stats (data)
         }
         
         # Store version
         self.versions[version_id] = version_record
         
         # In production: save data to S3/blob storage
-        # self._save_to_storage(data, version_id)
+        # self._save_to_storage (data, version_id)
         
         print(f"✓ Created data version: {version_id}")
         
         return version_id
     
-    def _generate_version_id(self, data: pd.DataFrame, metadata: Dict) -> str:
+    def _generate_version_id (self, data: pd.DataFrame, metadata: Dict) -> str:
         """Generate unique version ID"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        data_hash = self._compute_hash(data)[:8]
+        data_hash = self._compute_hash (data)[:8]
         return f"v_{timestamp}_{data_hash}"
     
-    def _compute_hash(self, data: pd.DataFrame) -> str:
+    def _compute_hash (self, data: pd.DataFrame) -> str:
         """Compute data fingerprint"""
         # Hash based on data content
-        data_bytes = pd.util.hash_pandas_object(data).values.tobytes()
+        data_bytes = pd.util.hash_pandas_object (data).values.tobytes()
         return hashlib.sha256(data_bytes).hexdigest()
     
-    def _compute_stats(self, data: pd.DataFrame) -> Dict:
+    def _compute_stats (self, data: pd.DataFrame) -> Dict:
         """Compute summary statistics"""
-        numeric_cols = data.select_dtypes(include=[np.number]).columns
+        numeric_cols = data.select_dtypes (include=[np.number]).columns
         
         stats = {}
         for col in numeric_cols:
             stats[col] = {
-                'mean': float(data[col].mean()),
-                'std': float(data[col].std()),
-                'min': float(data[col].min()),
-                'max': float(data[col].max()),
-                'missing_pct': float(data[col].isnull().sum() / len(data) * 100)
+                'mean': float (data[col].mean()),
+                'std': float (data[col].std()),
+                'min': float (data[col].min()),
+                'max': float (data[col].max()),
+                'missing_pct': float (data[col].isnull().sum() / len (data) * 100)
             }
         
         return stats
     
-    def get_version_info(self, version_id: str) -> Dict:
+    def get_version_info (self, version_id: str) -> Dict:
         """Get information about a version"""
-        return self.versions.get(version_id)
+        return self.versions.get (version_id)
     
-    def compare_versions(self, v1: str, v2: str) -> Dict:
+    def compare_versions (self, v1: str, v2: str) -> Dict:
         """
         Compare two data versions
         """
-        info1 = self.get_version_info(v1)
-        info2 = self.get_version_info(v2)
+        info1 = self.get_version_info (v1)
+        info2 = self.get_version_info (v2)
         
         if not info1 or not info2:
             return {"error": "Version not found"}
@@ -511,18 +511,18 @@ class DataVersionControl:
                 'rows_diff': info2['shape'][0] - info1['shape'][0],
                 'cols_diff': info2['shape'][1] - info1['shape'][1]
             },
-            'columns_added': set(info2['columns']) - set(info1['columns']),
-            'columns_removed': set(info1['columns']) - set(info2['columns']),
-            'stats_comparison': self._compare_stats(info1['stats'], info2['stats'])
+            'columns_added': set (info2['columns']) - set (info1['columns']),
+            'columns_removed': set (info1['columns']) - set (info2['columns']),
+            'stats_comparison': self._compare_stats (info1['stats'], info2['stats'])
         }
         
         return comparison
     
-    def _compare_stats(self, stats1: Dict, stats2: Dict) -> Dict:
+    def _compare_stats (self, stats1: Dict, stats2: Dict) -> Dict:
         """Compare statistics between versions"""
         comparison = {}
         
-        common_cols = set(stats1.keys()) & set(stats2.keys())
+        common_cols = set (stats1.keys()) & set (stats2.keys())
         
         for col in common_cols:
             s1 = stats1[col]
@@ -574,7 +574,7 @@ v2 = dvc.create_version(
 )
 
 # Compare versions
-comparison = dvc.compare_versions(v1, v2)
+comparison = dvc.compare_versions (v1, v2)
 print(f"\\n=== Version Comparison ===")
 print(f"Shape change: {comparison['shape_change']}")
 print(f"Columns added: {comparison['columns_added']}")
@@ -612,7 +612,7 @@ class FeatureStore:
     
     def __init__(self, redis_host='localhost', redis_port=6379):
         # In production: connect to Redis
-        # self.redis_client = redis.Redis(host=redis_host, port=redis_port)
+        # self.redis_client = redis.Redis (host=redis_host, port=redis_port)
         
         # For demo: in-memory dict
         self.redis_client = {}
@@ -638,7 +638,7 @@ class FeatureStore:
         key = f"offline:{entity}:{feature_group}"
         self.offline_store[key] = features.copy()
         
-        print(f"✓ Wrote {len(features)} records to offline store")
+        print(f"✓ Wrote {len (features)} records to offline store")
         print(f"  Entity: {entity}, Group: {feature_group}")
     
     def write_online_features(
@@ -667,7 +667,7 @@ class FeatureStore:
             'ttl': ttl
         })
         
-        # In production: self.redis_client.setex(key, ttl, value)
+        # In production: self.redis_client.setex (key, ttl, value)
         self.redis_client[key] = value
         
         print(f"✓ Cached features for {entity_id} (TTL: {ttl}s)")
@@ -686,8 +686,8 @@ class FeatureStore:
         key = f"online:{entity_id}:{feature_group}"
         
         # Get from Redis
-        # In production: value = self.redis_client.get(key)
-        value = self.redis_client.get(key)
+        # In production: value = self.redis_client.get (key)
+        value = self.redis_client.get (key)
         
         if value is None:
             # Cache miss: fallback to offline store or recompute
@@ -695,7 +695,7 @@ class FeatureStore:
             return {}
         
         # Deserialize
-        data = pickle.loads(value)
+        data = pickle.loads (value)
         features = data['features']
         
         # Filter specific features if requested
@@ -730,7 +730,7 @@ class FeatureStore:
                 if 'timestamp' in df.columns and end_date:
                     df = df[df['timestamp'] <= end_date]
                 
-                all_features.append(df)
+                all_features.append (df)
         
         if not all_features:
             return pd.DataFrame()
@@ -738,13 +738,13 @@ class FeatureStore:
         # Merge all feature groups
         result = all_features[0]
         for df in all_features[1:]:
-            result = pd.merge(result, df, on=['symbol', 'timestamp'], how='inner')
+            result = pd.merge (result, df, on=['symbol', 'timestamp'], how='inner')
         
-        print(f"✓ Retrieved {len(result)} training samples")
+        print(f"✓ Retrieved {len (result)} training samples")
         
         return result
     
-    def compute_feature_stats(self, feature_group: str) -> Dict:
+    def compute_feature_stats (self, feature_group: str) -> Dict:
         """
         Compute feature statistics for monitoring
         """
@@ -754,16 +754,16 @@ class FeatureStore:
             return {}
         
         df = self.offline_store[key]
-        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        numeric_cols = df.select_dtypes (include=[np.number]).columns
         
         stats = {}
         for col in numeric_cols:
             stats[col] = {
-                'mean': float(df[col].mean()),
-                'std': float(df[col].std()),
-                'min': float(df[col].min()),
-                'max': float(df[col].max()),
-                'missing_pct': float(df[col].isnull().sum() / len(df) * 100)
+                'mean': float (df[col].mean()),
+                'std': float (df[col].std()),
+                'min': float (df[col].min()),
+                'max': float (df[col].max()),
+                'missing_pct': float (df[col].isnull().sum() / len (df) * 100)
             }
         
         return stats
@@ -839,38 +839,38 @@ class ETLPipeline:
     - Users need clean data immediately
     """
     
-    def extract(self):
+    def extract (self):
         """Extract from sources"""
         # Pull from APIs, databases, files
         raw_data = self._fetch_raw_data()
         return raw_data
     
-    def transform(self, raw_data):
+    def transform (self, raw_data):
         """Transform data (heavy computation)"""
         import pandas as pd
         
         # Clean
-        data = self._clean_data(raw_data)
+        data = self._clean_data (raw_data)
         
         # Validate
-        data = self._validate_data(data)
+        data = self._validate_data (data)
         
         # Engineer features
-        data = self._engineer_features(data)
+        data = self._engineer_features (data)
         
         # Aggregate
-        data = self._aggregate_data(data)
+        data = self._aggregate_data (data)
         
         return data
     
-    def load(self, transformed_data):
+    def load (self, transformed_data):
         """Load clean data to warehouse"""
         # Store in database/data warehouse
-        self._save_to_warehouse(transformed_data)
+        self._save_to_warehouse (transformed_data)
         
-        print(f"✓ Loaded {len(transformed_data)} clean records")
+        print(f"✓ Loaded {len (transformed_data)} clean records")
     
-    def _fetch_raw_data(self):
+    def _fetch_raw_data (self):
         """Fetch from sources"""
         import pandas as pd
         return pd.DataFrame({
@@ -880,35 +880,35 @@ class ETLPipeline:
             'bad_column': [', ']  # Will be cleaned
         })
     
-    def _clean_data(self, data):
+    def _clean_data (self, data):
         """Data cleaning"""
         # Remove bad columns
         if 'bad_column' in data.columns:
             data = data.drop('bad_column', axis=1)
         
         # Handle missing
-        data = data.fillna(method='ffill')
+        data = data.fillna (method='ffill')
         
         return data
     
-    def _validate_data(self, data):
+    def _validate_data (self, data):
         """Validation"""
         # Remove invalid rows
         data = data[data['price'] > 0]
         data = data[data['volume'] > 0]
         return data
     
-    def _engineer_features(self, data):
+    def _engineer_features (self, data):
         """Feature engineering"""
         data['price_volume_ratio'] = data['price'] / data['volume']
         return data
     
-    def _aggregate_data(self, data):
+    def _aggregate_data (self, data):
         """Aggregation"""
         # Example: daily aggregates
         return data
     
-    def _save_to_warehouse(self, data):
+    def _save_to_warehouse (self, data):
         """Save to warehouse"""
         # In practice: write to PostgreSQL, Snowflake, etc.
         pass
@@ -925,19 +925,19 @@ class ELTPipeline:
     - Want to keep raw data
     """
     
-    def extract(self):
+    def extract (self):
         """Extract from sources"""
         raw_data = self._fetch_raw_data()
         return raw_data
     
-    def load(self, raw_data):
+    def load (self, raw_data):
         """Load raw data directly to data lake"""
         # Store raw data in S3/data lake
-        self._save_to_data_lake(raw_data)
+        self._save_to_data_lake (raw_data)
         
-        print(f"✓ Loaded {len(raw_data)} raw records to data lake")
+        print(f"✓ Loaded {len (raw_data)} raw records to data lake")
     
-    def transform(self, query):
+    def transform (self, query):
         """
         Transform in warehouse using SQL
         
@@ -959,11 +959,11 @@ class ELTPipeline:
         """
         
         # Execute in warehouse
-        # transformed = warehouse.query(sql)
+        # transformed = warehouse.query (sql)
         
         print("✓ Transformed data in warehouse")
     
-    def _fetch_raw_data(self):
+    def _fetch_raw_data (self):
         """Fetch from sources"""
         import pandas as pd
         return pd.DataFrame({
@@ -973,7 +973,7 @@ class ELTPipeline:
             'extra_field': ['a', 'b', 'c']  # Keep everything
         })
     
-    def _save_to_data_lake(self, data):
+    def _save_to_data_lake (self, data):
         """Save raw to data lake"""
         # In practice: write to S3 Parquet
         pass
@@ -983,13 +983,13 @@ print("=== ETL vs ELT ===")
 print("\\nETL:")
 etl = ETLPipeline()
 raw = etl.extract()
-transformed = etl.transform(raw)
-etl.load(transformed)
+transformed = etl.transform (raw)
+etl.load (transformed)
 
 print("\\nELT:")
 elt = ELTPipeline()
 raw = elt.extract()
-elt.load(raw)
+elt.load (raw)
 elt.transform("transform_query")
 \`\`\`
 
@@ -1020,14 +1020,14 @@ class DataQualityMonitor:
             'volume_drop': 0.50    # Alert if volume drops >50%
         }
     
-    def compute_metrics(self, data: pd.DataFrame) -> Dict[str, Any]:
+    def compute_metrics (self, data: pd.DataFrame) -> Dict[str, Any]:
         """
         Compute data quality metrics
         """
         metrics = {
             'timestamp': pd.Timestamp.now(),
-            'record_count': len(data),
-            'column_count': len(data.columns),
+            'record_count': len (data),
+            'column_count': len (data.columns),
             'missing_values': {},
             'numeric_stats': {},
             'categorical_stats': {}
@@ -1035,38 +1035,38 @@ class DataQualityMonitor:
         
         # Missing values
         for col in data.columns:
-            missing_pct = data[col].isnull().sum() / len(data) * 100
+            missing_pct = data[col].isnull().sum() / len (data) * 100
             metrics['missing_values'][col] = missing_pct
         
         # Numeric columns
-        numeric_cols = data.select_dtypes(include=[np.number]).columns
+        numeric_cols = data.select_dtypes (include=[np.number]).columns
         for col in numeric_cols:
             metrics['numeric_stats'][col] = {
-                'mean': float(data[col].mean()),
-                'std': float(data[col].std()),
-                'min': float(data[col].min()),
-                'max': float(data[col].max()),
-                'q25': float(data[col].quantile(0.25)),
-                'q50': float(data[col].quantile(0.50)),
-                'q75': float(data[col].quantile(0.75))
+                'mean': float (data[col].mean()),
+                'std': float (data[col].std()),
+                'min': float (data[col].min()),
+                'max': float (data[col].max()),
+                'q25': float (data[col].quantile(0.25)),
+                'q50': float (data[col].quantile(0.50)),
+                'q75': float (data[col].quantile(0.75))
             }
         
         # Categorical columns
-        categorical_cols = data.select_dtypes(include=['object', 'category']).columns
+        categorical_cols = data.select_dtypes (include=['object', 'category']).columns
         for col in categorical_cols:
             metrics['categorical_stats'][col] = {
-                'unique_count': int(data[col].nunique()),
-                'most_common': str(data[col].mode()[0]) if not data[col].mode().empty else None
+                'unique_count': int (data[col].nunique()),
+                'most_common': str (data[col].mode()[0]) if not data[col].mode().empty else None
             }
         
         return metrics
     
-    def set_baseline(self, data: pd.DataFrame):
+    def set_baseline (self, data: pd.DataFrame):
         """
         Set baseline statistics
         """
-        self.baseline_stats = self.compute_metrics(data)
-        print(f"✓ Baseline set with {len(data)} records")
+        self.baseline_stats = self.compute_metrics (data)
+        print(f"✓ Baseline set with {len (data)} records")
     
     def detect_drift(
         self,
@@ -1078,7 +1078,7 @@ class DataQualityMonitor:
         if not self.baseline_stats:
             return {"error": "No baseline set"}
         
-        current_metrics = self.compute_metrics(current_data)
+        current_metrics = self.compute_metrics (current_data)
         
         drift_report = {
             'has_drift': False,
@@ -1091,7 +1091,7 @@ class DataQualityMonitor:
         current_count = current_metrics['record_count']
         count_change = (current_count - baseline_count) / baseline_count
         
-        if abs(count_change) > self.alert_thresholds['volume_drop']:
+        if abs (count_change) > self.alert_thresholds['volume_drop']:
             drift_report['alerts'].append(
                 f"Record count changed by {count_change*100:.1f}%"
             )
@@ -1099,7 +1099,7 @@ class DataQualityMonitor:
         
         # Check missing rate changes
         for col in current_metrics['missing_values']:
-            baseline_missing = self.baseline_stats['missing_values'].get(col, 0)
+            baseline_missing = self.baseline_stats['missing_values'].get (col, 0)
             current_missing = current_metrics['missing_values'][col]
             
             if current_missing > self.alert_thresholds['missing_rate'] * 100:
@@ -1148,12 +1148,12 @@ class DataQualityMonitor:
         
         return drift_report
     
-    def alert_if_drift(self, metrics: Dict):
+    def alert_if_drift (self, metrics: Dict):
         """
         Send alerts if drift detected
         """
         # In production: send to Slack, PagerDuty, email
-        if isinstance(metrics, dict) and metrics.get('has_drift'):
+        if isinstance (metrics, dict) and metrics.get('has_drift'):
             print("\\n🚨 DATA DRIFT ALERT")
             for alert in metrics['alerts']:
                 print(f"  - {alert}")
@@ -1170,7 +1170,7 @@ baseline_data = pd.DataFrame({
     'sentiment': np.random.uniform(-1, 1, 100)
 })
 
-monitor.set_baseline(baseline_data)
+monitor.set_baseline (baseline_data)
 
 # Current data (Week 2) - with drift
 current_data = pd.DataFrame({
@@ -1184,7 +1184,7 @@ current_data = pd.DataFrame({
 })
 
 # Detect drift
-drift_report = monitor.detect_drift(current_data)
+drift_report = monitor.detect_drift (current_data)
 
 print(f"\\nDrift detected: {drift_report['has_drift']}")
 if drift_report['has_drift']:

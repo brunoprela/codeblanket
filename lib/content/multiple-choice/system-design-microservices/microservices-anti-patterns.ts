@@ -49,7 +49,7 @@ export const microservicesantipatternsMultipleChoice: MultipleChoiceQuestion[] =
     },
     {
       id: 'mc-anti-4',
-      question: "What is Conway's Law?",
+      question: "What is Conway\'s Law?",
       options: [
         'A law about API design',
         'Organizations design systems that mirror their communication structure',
@@ -58,7 +58,7 @@ export const microservicesantipatternsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "Conway's Law: \"Organizations design systems that mirror their communication structure.\" For microservices: team structure must align with architecture. Each team should own their services end-to-end (frontend, backend, DB) to enable independent deployment. Don't have functional teams (Frontend Team, Backend Team) each touching all services (coordination nightmare). Options 1, 3, and 4 are unrelated concepts. Conway's Law is about team structure affecting system design.",
+        "Conway\'s Law: \"Organizations design systems that mirror their communication structure.\" For microservices: team structure must align with architecture. Each team should own their services end-to-end (frontend, backend, DB) to enable independent deployment. Don't have functional teams (Frontend Team, Backend Team) each touching all services (coordination nightmare). Options 1, 3, and 4 are unrelated concepts. Conway's Law is about team structure affecting system design.",
     },
     {
       id: 'mc-anti-5',
@@ -66,7 +66,7 @@ export const microservicesantipatternsMultipleChoice: MultipleChoiceQuestion[] =
       options: [
         'Databases are expensive',
         "It creates tight coupling; services can't evolve or scale independently",
-        "It's too slow",
+        "It\'s too slow",
         "It's a security risk",
       ],
       correctAnswer: 1,

@@ -35,7 +35,7 @@ def expectation_demo():
     outcomes = np.array([1, 2, 3, 4, 5, 6])
     probabilities = np.array([1/6] * 6)
     
-    theoretical_mean = np.sum(outcomes * probabilities)
+    theoretical_mean = np.sum (outcomes * probabilities)
     
     print("=== Expectation ===")
     print("Fair die roll:")
@@ -50,16 +50,16 @@ def expectation_demo():
     print("-" * 40)
     
     for n in sample_sizes:
-        rolls = np.random.choice(outcomes, size=n)
+        rolls = np.random.choice (outcomes, size=n)
         sample_mean = rolls.mean()
-        error = abs(sample_mean - theoretical_mean)
+        error = abs (sample_mean - theoretical_mean)
         print(f"{n:11d} | {sample_mean:11.4f} | {error:.6f}")
     
     # Continuous: Normal
     mu, sigma = 5, 2
-    normal = stats.norm(mu, sigma)
+    normal = stats.norm (mu, sigma)
     
-    samples = normal.rvs(size=10000)
+    samples = normal.rvs (size=10000)
     
     print(f"\\nContinuous (Normal): E[X] = μ = {mu}")
     print(f"Empirical mean: {samples.mean():.4f}")
@@ -125,8 +125,8 @@ def variance_demo():
     
     # Two distributions with same mean, different variance
     mean = 10
-    samples1 = np.random.normal(mean, 1, size=10000)  # Small variance
-    samples2 = np.random.normal(mean, 5, size=10000)  # Large variance
+    samples1 = np.random.normal (mean, 1, size=10000)  # Small variance
+    samples2 = np.random.normal (mean, 5, size=10000)  # Large variance
     
     print("=== Variance ===")
     print(f"Both distributions have E[X] = {mean}")
@@ -137,9 +137,9 @@ def variance_demo():
     # Plot
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
-    ax1.hist(samples1, bins=50, density=True, alpha=0.7, label='σ=1')
-    ax1.hist(samples2, bins=50, density=True, alpha=0.7, label='σ=5')
-    ax1.axvline(mean, color='r', linestyle='--', linewidth=2, label='Mean')
+    ax1.hist (samples1, bins=50, density=True, alpha=0.7, label='σ=1')
+    ax1.hist (samples2, bins=50, density=True, alpha=0.7, label='σ=5')
+    ax1.axvline (mean, color='r', linestyle='--', linewidth=2, label='Mean')
     ax1.set_xlabel('Value')
     ax1.set_ylabel('Density')
     ax1.set_title('Same Mean, Different Variance')
@@ -185,7 +185,7 @@ def variance_properties():
     print(f"Var(X) = {X.var():.4f}")
     print()
     
-    # Var(aX + b) = a²Var(X)
+    # Var (aX + b) = a²Var(X)
     Y = a*X + b
     print(f"Var({a}X + {b}) = {Y.var():.4f}")
     print(f"{a}²·Var(X) = {a**2 * X.var():.4f}")
@@ -268,7 +268,7 @@ def loss_expectation_demo():
     print("- We minimize expected loss, not loss on one sample")
     print("- Training set gives empirical estimate: L̂ = (1/n)Σ loss_i")
     print("- True risk: E_P(x,y)[loss]")
-    print("- Empirical risk: (1/n)Σ loss(x_i, y_i)")
+    print("- Empirical risk: (1/n)Σ loss (x_i, y_i)")
 
 loss_expectation_demo()
 \`\`\`
@@ -307,7 +307,7 @@ bias_variance_demo()
 2. **Variance Var(X)**: Spread around mean, E[(X-μ)²]
 3. **Linearity of expectation**: E[X+Y] = E[X] + E[Y] always
 4. **Variance NOT linear**: Var(X+Y) = Var(X) + Var(Y) only if independent
-5. **Var(aX+b) = a²Var(X)**: Scaling squares variance, shift doesn't affect it
+5. **Var (aX+b) = a²Var(X)**: Scaling squares variance, shift doesn't affect it
 6. **ML losses**: Expectations over data distribution
 7. **Bias-variance**: Fundamental tradeoff in model complexity
 

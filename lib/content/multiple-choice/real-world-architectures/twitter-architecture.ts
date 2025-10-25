@@ -34,7 +34,7 @@ export const twitterarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "What is Twitter's Earlybird and what does it do?",
+    question: "What is Twitter\'s Earlybird and what does it do?",
     options: [
       'A caching layer for frequently accessed tweets',
       'A real-time search engine built on Lucene for indexing tweets',
@@ -43,7 +43,7 @@ export const twitterarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Earlybird is Twitter's real-time search engine built on Lucene. It indexes tweets within 5 seconds of posting, enabling immediate searchability for billions of searches. Earlybird uses time-based sharding (recent tweets in hot shards) and inverted indexes. Search results are ranked by keyword relevance (BM25), recency, engagement (likes, retweets), and social graph signals. The system handles 500M+ tweets per day and billions of searches.",
+      "Earlybird is Twitter\'s real-time search engine built on Lucene. It indexes tweets within 5 seconds of posting, enabling immediate searchability for billions of searches. Earlybird uses time-based sharding (recent tweets in hot shards) and inverted indexes. Search results are ranked by keyword relevance (BM25), recency, engagement (likes, retweets), and social graph signals. The system handles 500M+ tweets per day and billions of searches.",
   },
   {
     id: 'mc4',
@@ -57,7 +57,7 @@ export const twitterarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Twitter originally used MySQL but migrated to Manhattan (their custom distributed database). MySQL struggled with write scalability and multi-datacenter replication at Twitter's scale. Manhattan provides horizontal scalability, multi-datacenter replication, tunable consistency, and is optimized for Twitter's access patterns (timeline storage, user graphs, tweet metadata). It handles millions of operations per second across multiple datacenters.",
+      "Twitter originally used MySQL but migrated to Manhattan (their custom distributed database). MySQL struggled with write scalability and multi-datacenter replication at Twitter\'s scale. Manhattan provides horizontal scalability, multi-datacenter replication, tunable consistency, and is optimized for Twitter's access patterns (timeline storage, user graphs, tweet metadata). It handles millions of operations per second across multiple datacenters.",
   },
   {
     id: 'mc5',

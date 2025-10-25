@@ -466,7 +466,7 @@ upload_id = response['UploadId']
 
 # Upload parts
 parts = []
-for i, part_data in enumerate(file_parts):
+for i, part_data in enumerate (file_parts):
     response = s3.upload_part(
         Bucket='my-bucket',
         Key='large-file.zip',
@@ -794,7 +794,7 @@ Store compressed (gzip, brotli) to reduce storage and transfer costs
 ## Interview Tips
 
 **Explain S3 in 2 minutes**:
-"S3 is AWS's object storage with 11 nines durability and strong consistency. Objects are identified by keys (not paths) and stored across multiple AZs with erasure coding. It offers multiple storage classes from frequently-accessed Standard to rarely-accessed Glacier Deep Archive. Key features include versioning, lifecycle policies, encryption, and integration with AWS services. S3 scales automatically and handles trillions of objects. It's perfect for backups, data lakes, static websites, and application storage."
+"S3 is AWS's object storage with 11 nines durability and strong consistency. Objects are identified by keys (not paths) and stored across multiple AZs with erasure coding. It offers multiple storage classes from frequently-accessed Standard to rarely-accessed Glacier Deep Archive. Key features include versioning, lifecycle policies, encryption, and integration with AWS services. S3 scales automatically and handles trillions of objects. It\'s perfect for backups, data lakes, static websites, and application storage."
 
 **Key trade-offs**:
 - Object storage vs file storage: Simplicity vs POSIX semantics

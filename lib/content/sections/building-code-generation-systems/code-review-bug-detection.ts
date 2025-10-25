@@ -115,7 +115,7 @@ Output as JSON array:
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         bugs = []
         for bug_data in result.get("bugs", []):
@@ -133,24 +133,24 @@ Output as JSON array:
 detector = BugDetector()
 
 code = """
-def calculate_average(numbers):
+def calculate_average (numbers):
     total = 0
-    for i in range(len(numbers) + 1):  # Bug: off-by-one
+    for i in range (len (numbers) + 1):  # Bug: off-by-one
         total += numbers[i]
-    return total / len(numbers)  # Bug: division by zero if empty
+    return total / len (numbers)  # Bug: division by zero if empty
 
-def get_user(user_id):
-    user = database.query(user_id)
+def get_user (user_id):
+    user = database.query (user_id)
     return user.name  # Bug: user might be None
 
-def process_items(items):
+def process_items (items):
     for item in items:
         if item.price > 100:
             item.discount = item.price * 0.1
         return item  # Bug: returns after first iteration
 """
 
-bugs = detector.detect_bugs(code)
+bugs = detector.detect_bugs (code)
 
 for bug in bugs:
     print(f"\\n[{bug.severity.upper()}] Line {bug.line}: {bug.category}")
@@ -229,7 +229,7 @@ Output as JSON.
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         issues = []
         for issue_data in result.get("vulnerabilities", []):
@@ -248,23 +248,23 @@ Output as JSON.
 scanner = SecurityScanner()
 
 code = """
-def login(username, password):
+def login (username, password):
     query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"  # SQL injection
-    user = database.execute(query)
+    user = database.execute (query)
     return user
 
-def serve_file(filename):
+def serve_file (filename):
     path = "/uploads/" + filename  # Path traversal
-    with open(path) as f:
+    with open (path) as f:
         return f.read()
 
 API_KEY = "sk-1234567890abcdef"  # Hardcoded secret
 
-def encrypt_data(data):
-    return base64.b64encode(data)  # Weak encryption
+def encrypt_data (data):
+    return base64.b64encode (data)  # Weak encryption
 """
 
-vulnerabilities = scanner.scan_for_vulnerabilities(code)
+vulnerabilities = scanner.scan_for_vulnerabilities (code)
 
 for vuln in vulnerabilities:
     print(f"\\n[{vuln.severity.upper()}] {vuln.type}")
@@ -343,7 +343,7 @@ Output as JSON.
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         issues = []
         for issue_data in result.get("performance_issues", []):
@@ -362,27 +362,27 @@ Output as JSON.
 perf_analyzer = PerformanceAnalyzer()
 
 code = """
-def find_duplicates(items):
+def find_duplicates (items):
     duplicates = []
-    for i in range(len(items)):
-        for j in range(len(items)):  # O(n²)
+    for i in range (len (items)):
+        for j in range (len (items)):  # O(n²)
             if i != j and items[i] == items[j]:
-                duplicates.append(items[i])
+                duplicates.append (items[i])
     return duplicates
 
-def process_data(data):
+def process_data (data):
     result = ""
     for item in data:
-        result += str(item)  # String concatenation in loop
+        result += str (item)  # String concatenation in loop
     return result
 
-def calculate_stats(numbers):
-    mean = sum(numbers) / len(numbers)
+def calculate_stats (numbers):
+    mean = sum (numbers) / len (numbers)
     for num in numbers:
-        diff = num - sum(numbers) / len(numbers)  # Repeated calculation
+        diff = num - sum (numbers) / len (numbers)  # Repeated calculation
 """
 
-issues = perf_analyzer.analyze_performance(code)
+issues = perf_analyzer.analyze_performance (code)
 
 for issue in issues:
     print(f"\\n[{issue.severity}] {issue.type}")
@@ -457,7 +457,7 @@ Output as JSON.
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         smells = []
         for smell_data in result.get("code_smells", []):
@@ -475,7 +475,7 @@ smell_detector = CodeSmellDetector()
 
 code = """
 class DataProcessor:
-    def process(self, data, format, output_path, validate, transform, filter_func, sort_key, limit, offset, callback):  # Long parameter list
+    def process (self, data, format, output_path, validate, transform, filter_func, sort_key, limit, offset, callback):  # Long parameter list
         if format == "json":  # Magic string
             # 50+ lines of processing logic...
             pass
@@ -485,7 +485,7 @@ class DataProcessor:
         # ... many more responsibilities (god class)
 """
 
-smells = smell_detector.detect_smells(code)
+smells = smell_detector.detect_smells (code)
 
 for smell in smells:
     print(f"\\n{smell.type} at {smell.location}")
@@ -539,16 +539,16 @@ class CodeReviewer:
         
         # Run all checks
         if "bugs" in focus_areas:
-            review["bugs"] = self.bug_detector.detect_bugs(code, language)
+            review["bugs"] = self.bug_detector.detect_bugs (code, language)
         
         if "security" in focus_areas:
-            review["security"] = self.security_scanner.scan_for_vulnerabilities(code, language)
+            review["security"] = self.security_scanner.scan_for_vulnerabilities (code, language)
         
         if "performance" in focus_areas:
-            review["performance"] = self.perf_analyzer.analyze_performance(code, language)
+            review["performance"] = self.perf_analyzer.analyze_performance (code, language)
         
         if "style" in focus_areas or "best_practices" in focus_areas:
-            suggestions = self._get_style_suggestions(code, language)
+            suggestions = self._get_style_suggestions (code, language)
             review["suggestions"] = suggestions
         
         return review
@@ -594,7 +594,7 @@ Output as JSON with suggestions array.
         )
         
         import json
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         
         comments = []
         for suggestion in result.get("suggestions", []):
@@ -616,56 +616,56 @@ Output as JSON with suggestions array.
         """Generate formatted review report."""
         
         if format == "markdown":
-            return self._generate_markdown_report(review)
+            return self._generate_markdown_report (review)
         else:
-            return self._generate_text_report(review)
+            return self._generate_text_report (review)
     
-    def _generate_markdown_report(self, review: Dict) -> str:
+    def _generate_markdown_report (self, review: Dict) -> str:
         """Generate markdown review report."""
         lines = ["# Code Review Report\\n"]
         
         # Summary
-        total_issues = sum(len(issues) for issues in review.values())
-        lines.append(f"**Total Issues Found:** {total_issues}\\n")
+        total_issues = sum (len (issues) for issues in review.values())
+        lines.append (f"**Total Issues Found:** {total_issues}\\n")
         
         # Bugs
         if review["bugs"]:
             lines.append("## 🐛 Bugs\\n")
             for bug in review["bugs"]:
-                lines.append(f"### [{bug.severity}] Line {bug.line}: {bug.category}")
-                lines.append(f"**Issue:** {bug.description}")
-                lines.append(f"**Fix:** {bug.suggestion}\\n")
+                lines.append (f"### [{bug.severity}] Line {bug.line}: {bug.category}")
+                lines.append (f"**Issue:** {bug.description}")
+                lines.append (f"**Fix:** {bug.suggestion}\\n")
         
         # Security
         if review["security"]:
             lines.append("## 🔒 Security Issues\\n")
             for issue in review["security"]:
-                lines.append(f"### [{issue.severity}] Line {issue.line}: {issue.type}")
-                lines.append(f"**Issue:** {issue.description}")
+                lines.append (f"### [{issue.severity}] Line {issue.line}: {issue.type}")
+                lines.append (f"**Issue:** {issue.description}")
                 if issue.cwe:
-                    lines.append(f"**CWE:** {issue.cwe}")
-                lines.append(f"**Fix:** {issue.fix}\\n")
+                    lines.append (f"**CWE:** {issue.cwe}")
+                lines.append (f"**Fix:** {issue.fix}\\n")
         
         # Performance
         if review["performance"]:
             lines.append("## ⚡ Performance Issues\\n")
             for issue in review["performance"]:
-                lines.append(f"### [{issue.severity}] Line {issue.line}: {issue.type}")
-                lines.append(f"**Issue:** {issue.description}")
-                lines.append(f"**Impact:** {issue.impact}")
-                lines.append(f"**Optimization:** {issue.optimization}\\n")
+                lines.append (f"### [{issue.severity}] Line {issue.line}: {issue.type}")
+                lines.append (f"**Issue:** {issue.description}")
+                lines.append (f"**Impact:** {issue.impact}")
+                lines.append (f"**Optimization:** {issue.optimization}\\n")
         
         # Suggestions
         if review["suggestions"]:
             lines.append("## 💡 Suggestions\\n")
             for suggestion in review["suggestions"]:
-                lines.append(f"### Line {suggestion.line}")
-                lines.append(f"**{suggestion.message}**")
-                lines.append(f"{suggestion.suggestion}\\n")
+                lines.append (f"### Line {suggestion.line}")
+                lines.append (f"**{suggestion.message}**")
+                lines.append (f"{suggestion.suggestion}\\n")
         
-        return "\\n".join(lines)
+        return "\\n".join (lines)
     
-    def _generate_text_report(self, review: Dict) -> str:
+    def _generate_text_report (self, review: Dict) -> str:
         """Generate plain text report."""
         # Similar to markdown but without formatting
         pass
@@ -674,29 +674,29 @@ Output as JSON with suggestions array.
 reviewer = CodeReviewer()
 
 code = """
-def process_user_data(username, pwd):
+def process_user_data (username, pwd):
     query = f"SELECT * FROM users WHERE name='{username}'"  # SQL injection
-    user = db.execute(query)
+    user = db.execute (query)
     
     results = []
-    for i in range(len(user.orders)):  # Should use enumerate
-        for j in range(len(user.orders)):  # O(n²)
+    for i in range (len (user.orders)):  # Should use enumerate
+        for j in range (len (user.orders)):  # O(n²)
             if user.orders[i].date == user.orders[j].date:
-                results.append(user.orders[i])
+                results.append (user.orders[i])
     
     return results  # No type hints
 """
 
 # Run review
-review = reviewer.review_code(code, language="python")
+review = reviewer.review_code (code, language="python")
 
 # Generate report
-report = reviewer.generate_review_report(review, format="markdown")
+report = reviewer.generate_review_report (review, format="markdown")
 print(report)
 
 # Save to file
 with open("review_report.md", "w") as f:
-    f.write(report)
+    f.write (report)
 \`\`\`
 
 ## Fix Generation
@@ -727,7 +727,7 @@ Original code:
 
 Issue: {issue.description}
 Line: {issue.line}
-Suggested fix: {issue.suggestion if hasattr(issue, 'suggestion') else issue.fix}
+Suggested fix: {issue.suggestion if hasattr (issue, 'suggestion') else issue.fix}
 
 Generate the fixed code using SEARCH/REPLACE format:
 
@@ -756,8 +756,8 @@ Generate the fixed code using SEARCH/REPLACE format:
 fix_gen = FixGenerator()
 
 code = """
-def calculate_average(numbers):
-    return sum(numbers) / len(numbers)
+def calculate_average (numbers):
+    return sum (numbers) / len (numbers)
 """
 
 bug = Bug(
@@ -768,7 +768,7 @@ bug = Bug(
     suggestion="Check if list is empty before calculating average"
 )
 
-fix = fix_gen.generate_fix(code, bug)
+fix = fix_gen.generate_fix (code, bug)
 print(fix)
 \`\`\`
 

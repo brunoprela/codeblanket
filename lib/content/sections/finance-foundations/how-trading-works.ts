@@ -1,7 +1,7 @@
 export const howTradingWorks = {
-    title: 'How Trading Actually Works',
-    id: 'how-trading-works',
-    content: `
+  title: 'How Trading Actually Works',
+  id: 'how-trading-works',
+  content: `
 # How Trading Actually Works
 
 ## Introduction
@@ -74,7 +74,7 @@ class Order:
         if self.timestamp is None:
             self.timestamp = datetime.now()
     
-    def validate(self) -> tuple[bool, str]:
+    def validate (self) -> tuple[bool, str]:
         """Validate order parameters"""
         if self.quantity <= 0:
             return False, "Quantity must be positive"
@@ -100,22 +100,22 @@ class OrderBook:
         self.asks = []  # Sell orders: [(price, quantity, order_id)]
         self.trades = []  # Executed trades
     
-    def add_order(self, order: Order) -> list:
+    def add_order (self, order: Order) -> list:
         """Add order to book and attempt to match"""
         is_valid, msg = order.validate()
         if not is_valid:
-            raise ValueError(f"Invalid order: {msg}")
+            raise ValueError (f"Invalid order: {msg}")
         
         executions = []
         
         if order.order_type == OrderType.MARKET:
-            executions = self._execute_market_order(order)
+            executions = self._execute_market_order (order)
         elif order.order_type == OrderType.LIMIT:
-            executions = self._execute_limit_order(order)
+            executions = self._execute_limit_order (order)
         
         return executions
     
-    def _execute_market_order(self, order: Order) -> list:
+    def _execute_market_order (self, order: Order) -> list:
         """Execute market order immediately at best price"""
         executions = []
         remaining_qty = order.quantity
@@ -126,7 +126,7 @@ class OrderBook:
                 ask_price, ask_qty, ask_order_id = self.asks[0]
                 
                 # Execute trade
-                exec_qty = min(remaining_qty, ask_qty)
+                exec_qty = min (remaining_qty, ask_qty)
                 executions.append({
                     'price': ask_price,
                     'quantity': exec_qty,
@@ -147,7 +147,7 @@ class OrderBook:
             while remaining_qty > 0 and self.bids:
                 bid_price, bid_qty, bid_order_id = self.bids[0]
                 
-                exec_qty = min(remaining_qty, bid_qty)
+                exec_qty = min (remaining_qty, bid_qty)
                 executions.append({
                     'price': bid_price,
                     'quantity': exec_qty,
@@ -167,7 +167,7 @@ class OrderBook:
         
         return executions
     
-    def _execute_limit_order(self, order: Order) -> list:
+    def _execute_limit_order (self, order: Order) -> list:
         """Execute limit order if price matches, otherwise add to book"""
         executions = []
         remaining_qty = order.quantity
@@ -178,7 +178,7 @@ class OrderBook:
                 ask_price, ask_qty, ask_order_id = self.asks[0]
                 
                 if ask_price <= order.limit_price:
-                    exec_qty = min(remaining_qty, ask_qty)
+                    exec_qty = min (remaining_qty, ask_qty)
                     executions.append({
                         'price': ask_price,
                         'quantity': exec_qty,
@@ -198,14 +198,14 @@ class OrderBook:
             # If not fully filled, add to book
             if remaining_qty > 0:
                 self.bids.append((order.limit_price, remaining_qty, order.order_id))
-                self.bids.sort(reverse=True, key=lambda x: x[0])  # Highest price first
+                self.bids.sort (reverse=True, key=lambda x: x[0])  # Highest price first
         
         else:  # SELL
             while remaining_qty > 0 and self.bids:
                 bid_price, bid_qty, bid_order_id = self.bids[0]
                 
                 if bid_price >= order.limit_price:
-                    exec_qty = min(remaining_qty, bid_qty)
+                    exec_qty = min (remaining_qty, bid_qty)
                     executions.append({
                         'price': bid_price,
                         'quantity': exec_qty,
@@ -224,17 +224,17 @@ class OrderBook:
             
             if remaining_qty > 0:
                 self.asks.append((order.limit_price, remaining_qty, order.order_id))
-                self.asks.sort(key=lambda x: x[0])  # Lowest price first
+                self.asks.sort (key=lambda x: x[0])  # Lowest price first
         
         return executions
     
-    def get_best_bid_ask(self) -> tuple:
+    def get_best_bid_ask (self) -> tuple:
         """Get current best bid (buy) and ask (sell) prices"""
         best_bid = self.bids[0][0] if self.bids else None
         best_ask = self.asks[0][0] if self.asks else None
         return best_bid, best_ask
     
-    def get_spread(self) -> float:
+    def get_spread (self) -> float:
         """Get bid-ask spread"""
         best_bid, best_ask = self.get_best_bid_ask()
         if best_bid and best_ask:
@@ -249,25 +249,25 @@ book = OrderBook("AAPL")
 limit_buy = Order("order1", "AAPL", OrderSide.BUY, OrderType.LIMIT, 100, limit_price=150.00)
 limit_sell = Order("order2", "AAPL", OrderSide.SELL, OrderType.LIMIT, 100, limit_price=150.10)
 
-book.add_order(limit_buy)
-book.add_order(limit_sell)
+book.add_order (limit_buy)
+book.add_order (limit_sell)
 
 print("Initial market:")
-print(f"  Best bid: ${book.get_best_bid_ask()[0]:.2f}")
-print(f"  Best ask: ${book.get_best_bid_ask()[1]:.2f}")
-print(f"  Spread: ${book.get_spread():.2f}")
+print(f"  Best bid: \${book.get_best_bid_ask()[0]:.2f}")
+print(f"  Best ask: \${book.get_best_bid_ask()[1]:.2f}")
+print(f"  Spread: \${book.get_spread():.2f}")
 
 # Retail investor places market buy order
 market_buy = Order("order3", "AAPL", OrderSide.BUY, OrderType.MARKET, 50)
-executions = book.add_order(market_buy)
+executions = book.add_order (market_buy)
 
 print(f"\\nMarket buy executed:")
-for i, exec in enumerate(executions, 1):
-    print(f"  Fill {i}: {exec['quantity']} shares @ ${exec['price']:.2f}")
+for i, exec in enumerate (executions, 1):
+    print(f"  Fill {i}: {exec['quantity']} shares @ \${exec['price']:.2f}")
 
 # Retail investor places limit buy order
 limit_buy2 = Order("order4", "AAPL", OrderSide.BUY, OrderType.LIMIT, 100, limit_price = 149.50)
-executions = book.add_order(limit_buy2)
+executions = book.add_order (limit_buy2)
 
 if not executions:
     print(f"\\nLimit buy @ $149.50 added to book (no immediate execution)")
@@ -355,7 +355,7 @@ class Broker:
         self.name = name
         self.pfof_revenue = 0
     
-    def route_order(self, order: Order, nbbo_bid: float, nbbo_ask: float) -> dict:
+    def route_order (self, order: Order, nbbo_bid: float, nbbo_ask: float) -> dict:
         """
         Route order and calculate economics
         
@@ -412,21 +412,21 @@ robinhood = Broker("Robinhood")
 buy_order = Order("ord1", "AAPL", OrderSide.BUY, OrderType.MARKET, 100)
 
 # Current market: $150.00 bid / $150.02 ask
-execution = robinhood.route_order(buy_order, nbbo_bid=150.00, nbbo_ask=150.02)
+execution = robinhood.route_order (buy_order, nbbo_bid=150.00, nbbo_ask=150.02)
 
 print("\\n=== Order Execution ===")
 print(f"Order: Buy 100 AAPL")
 print(f"NBBO: $150.00 / $150.02 (bid/ask)")
 print(f"\\nExecution:")
-print(f"  Filled at: ${execution['execution_price']: .2f}")
-print(f"  Exchange price: ${execution['reference_price']:.2f}")
-print(f"  Price improvement: ${execution['price_improvement']:.2f}/share")
-print(f"  Customer savings: ${execution['customer_savings']:.2f}")
+print(f"  Filled at: \${execution['execution_price']:.2f}")
+print(f"  Exchange price: \${execution['reference_price']:.2f}")
+print(f"  Price improvement: \${execution['price_improvement']:.2f}/share")
+print(f"  Customer savings: \${execution['customer_savings']:.2f}")
 print(f"  Routed to: {execution['routed_to']}")
 print(f"\\nBroker Economics:")
-print(f"  PFOF payment: ${execution['pfof_payment']:.2f}")
+print(f"  PFOF payment: \${execution['pfof_payment']:.2f}")
 print(f"  Commission: $0.00")
-print(f"  Net revenue: ${execution['pfof_payment']:.2f}")
+print(f"  Net revenue: \${execution['pfof_payment']:.2f}")
 \`\`\`
 
 ---
@@ -568,4 +568,3 @@ Complete trace of 100-share AAPL market order:
 **Next section**: Regulatory Landscape for Engineers - what you need to know to build compliant systems.
 `,
 };
-

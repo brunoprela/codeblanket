@@ -23,14 +23,14 @@ export const celeryBeatPeriodicTasksMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'What crontab expression runs a task every weekday (Mon-Fri) at 9 AM?',
     options: [
-      'crontab(hour=9, minute=0)',
-      "crontab(hour=9, minute=0, day_of_week='1-5')",
-      "crontab(hour=9, minute=0, day_of_week='mon-sun')",
-      "crontab(minute=0, hour='9-17')",
+      'crontab (hour=9, minute=0)',
+      "crontab (hour=9, minute=0, day_of_week='1-5')",
+      "crontab (hour=9, minute=0, day_of_week='mon-sun')",
+      "crontab (minute=0, hour='9-17')",
     ],
     correctAnswer: 1,
     explanation:
-      'crontab(hour=9, minute=0, day_of_week="1-5") runs every weekday at 9 AM. day_of_week: 0=Sunday, 1=Monday, ..., 6=Saturday. "1-5" = Mon-Fri. Option 1: Every day (not just weekdays). Option 3: "mon-sun" is every day. Option 4: Every hour 9 AM-5 PM (not 9 AM only). Alternatives: day_of_week="mon-fri" also works.',
+      'crontab (hour=9, minute=0, day_of_week="1-5") runs every weekday at 9 AM. day_of_week: 0=Sunday, 1=Monday, ..., 6=Saturday. "1-5" = Mon-Fri. Option 1: Every day (not just weekdays). Option 3: "mon-sun" is every day. Option 4: Every hour 9 AM-5 PM (not 9 AM only). Alternatives: day_of_week="mon-fri" also works.',
   },
   {
     id: 'mc3',
@@ -51,13 +51,13 @@ export const celeryBeatPeriodicTasksMultipleChoice: MultipleChoiceQuestion[] = [
     question: 'How do you run a task every 15 minutes?',
     options: [
       'schedule: 15.0',
-      "schedule: crontab(minute='*/15')",
-      "schedule: crontab(hour='*/15')",
+      "schedule: crontab (minute='*/15')",
+      "schedule: crontab (hour='*/15')",
       'schedule: 900.0',
     ],
     correctAnswer: 1,
     explanation:
-      'crontab(minute="*/15") runs every 15 minutes (0, 15, 30, 45). Option 1 (15.0): Runs every 15 seconds (not minutes). Option 3: Invalid - */15 on hour. Option 4 (900.0): Every 900 seconds = 15 minutes (works but crontab clearer). Both crontab(minute="*/15") and schedule: 900.0 work, but crontab is more readable for minute-based schedules.',
+      'crontab (minute="*/15") runs every 15 minutes (0, 15, 30, 45). Option 1 (15.0): Runs every 15 seconds (not minutes). Option 3: Invalid - */15 on hour. Option 4 (900.0): Every 900 seconds = 15 minutes (works but crontab clearer). Both crontab (minute="*/15") and schedule: 900.0 work, but crontab is more readable for minute-based schedules.',
   },
   {
     id: 'mc5',

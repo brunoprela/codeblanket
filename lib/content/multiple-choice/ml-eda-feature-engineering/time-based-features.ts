@@ -37,7 +37,7 @@ export const timebasedfeaturesMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'Why do the first few rows have missing values when creating lag features or rolling windows?',
     options: [
-      "It's a bug in the code",
+      "It\'s a bug in the code",
       'There is no past data available for those rows',
       "The scaler hasn't been fitted yet",
       'The data is corrupted',

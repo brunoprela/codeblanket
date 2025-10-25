@@ -43,16 +43,16 @@ Word documents (.docx) are the standard for business documents, reports, and con
 from docx import Document
 from pathlib import Path
 
-def read_word_document(filepath: str) -> str:
+def read_word_document (filepath: str) -> str:
     """Extract all text from Word document."""
-    doc = Document(filepath)
+    doc = Document (filepath)
     
     paragraphs = []
     for para in doc.paragraphs:
         if para.text.strip():
-            paragraphs.append(para.text)
+            paragraphs.append (para.text)
     
-    return "\\n\\n".join(paragraphs)
+    return "\\n\\n".join (paragraphs)
 
 # Usage
 text = read_word_document("report.docx")
@@ -65,13 +65,13 @@ print(text)
 from docx import Document
 from typing import List, Dict
 
-def read_document_structured(filepath: str) -> Dict:
+def read_document_structured (filepath: str) -> Dict:
     """
     Read document preserving structure.
     
     Returns paragraphs with their formatting info.
     """
-    doc = Document(filepath)
+    doc = Document (filepath)
     
     content = {
         "paragraphs": [],
@@ -84,32 +84,32 @@ def read_document_structured(filepath: str) -> Dict:
         para_info = {
             "text": para.text,
             "style": para.style.name,
-            "bold": any(run.bold for run in para.runs),
-            "italic": any(run.italic for run in para.runs),
-            "alignment": str(para.alignment) if para.alignment else None
+            "bold": any (run.bold for run in para.runs),
+            "italic": any (run.italic for run in para.runs),
+            "alignment": str (para.alignment) if para.alignment else None
         }
-        content["paragraphs"].append(para_info)
+        content["paragraphs"].append (para_info)
     
     # Extract tables
-    for table_idx, table in enumerate(doc.tables):
+    for table_idx, table in enumerate (doc.tables):
         table_data = []
         for row in table.rows:
             row_data = [cell.text for cell in row.cells]
-            table_data.append(row_data)
+            table_data.append (row_data)
         
         content["tables"].append({
             "index": table_idx,
             "data": table_data,
-            "rows": len(table.rows),
-            "cols": len(table.columns)
+            "rows": len (table.rows),
+            "cols": len (table.columns)
         })
     
     return content
 
 # Usage
 structured_content = read_document_structured("document.docx")
-print(f"Found {len(structured_content['paragraphs'])} paragraphs")
-print(f"Found {len(structured_content['tables'])} tables")
+print(f"Found {len (structured_content['paragraphs'])} paragraphs")
+print(f"Found {len (structured_content['tables'])} tables")
 \`\`\`
 
 ## Extracting Tables from Word
@@ -119,9 +119,9 @@ from docx import Document
 import pandas as pd
 from typing import List
 
-def extract_tables_from_word(filepath: str) -> List[pd.DataFrame]:
+def extract_tables_from_word (filepath: str) -> List[pd.DataFrame]:
     """Extract all tables as DataFrames."""
-    doc = Document(filepath)
+    doc = Document (filepath)
     tables = []
     
     for table in doc.tables:
@@ -130,18 +130,18 @@ def extract_tables_from_word(filepath: str) -> List[pd.DataFrame]:
         # Extract all rows
         for row in table.rows:
             row_data = [cell.text.strip() for cell in row.cells]
-            data.append(row_data)
+            data.append (row_data)
         
-        if len(data) > 1:
+        if len (data) > 1:
             # First row as headers
-            df = pd.DataFrame(data[1:], columns=data[0])
-            tables.append(df)
+            df = pd.DataFrame (data[1:], columns=data[0])
+            tables.append (df)
     
     return tables
 
 # Usage
 tables = extract_tables_from_word("financial_report.docx")
-for i, df in enumerate(tables):
+for i, df in enumerate (tables):
     print(f"\\nTable {i+1}:")
     print(df.head())
 \`\`\`
@@ -155,7 +155,7 @@ from docx import Document
 from docx.shared import Inches, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-def create_simple_document(output_path: str):
+def create_simple_document (output_path: str):
     """Create a simple Word document."""
     doc = Document()
     
@@ -186,7 +186,7 @@ def create_simple_document(output_path: str):
     doc.add_paragraph('Second step', style='List Number')
     
     # Save document
-    doc.save(output_path)
+    doc.save (output_path)
 
 create_simple_document('output.docx')
 \`\`\`
@@ -197,14 +197,14 @@ create_simple_document('output.docx')
 from docx import Document
 from docx.shared import Inches
 
-def create_document_with_table(output_path: str):
+def create_document_with_table (output_path: str):
     """Create document with formatted table."""
     doc = Document()
     
     doc.add_heading('Sales Report', 0)
     
     # Create table
-    table = doc.add_table(rows=1, cols=3)
+    table = doc.add_table (rows=1, cols=3)
     table.style = 'Light Grid Accent 1'
     
     # Header row
@@ -226,7 +226,7 @@ def create_document_with_table(output_path: str):
         row_cells[1].text = qty
         row_cells[2].text = price
     
-    doc.save(output_path)
+    doc.save (output_path)
 
 create_document_with_table('table_report.docx')
 \`\`\`
@@ -238,7 +238,7 @@ from docx import Document
 from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-def create_formatted_document(output_path: str):
+def create_formatted_document (output_path: str):
     """Create document with advanced formatting."""
     doc = Document()
     
@@ -279,7 +279,7 @@ def create_formatted_document(output_path: str):
     highlight_run.font.highlight_color = True  # Yellow highlight
     highlight_run.bold = True
     
-    doc.save(output_path)
+    doc.save (output_path)
 
 create_formatted_document('formatted_report.docx')
 \`\`\`
@@ -292,13 +292,13 @@ create_formatted_document('formatted_report.docx')
 from docx import Document
 from typing import Dict
 
-def fill_template(template_path: str, output_path: str, replacements: Dict[str, str]):
+def fill_template (template_path: str, output_path: str, replacements: Dict[str, str]):
     """
     Fill a Word template by replacing placeholders.
     
     Template uses placeholders like {{name}}, {{date}}, etc.
     """
-    doc = Document(template_path)
+    doc = Document (template_path)
     
     # Replace in paragraphs
     for para in doc.paragraphs:
@@ -308,7 +308,7 @@ def fill_template(template_path: str, output_path: str, replacements: Dict[str, 
                 # Replace in runs to preserve formatting
                 for run in para.runs:
                     if placeholder in run.text:
-                        run.text = run.text.replace(placeholder, value)
+                        run.text = run.text.replace (placeholder, value)
     
     # Replace in tables
     for table in doc.tables:
@@ -317,9 +317,9 @@ def fill_template(template_path: str, output_path: str, replacements: Dict[str, 
                 for key, value in replacements.items():
                     placeholder = f"{{{{{key}}}}}"
                     if placeholder in cell.text:
-                        cell.text = cell.text.replace(placeholder, value)
+                        cell.text = cell.text.replace (placeholder, value)
     
-    doc.save(output_path)
+    doc.save (output_path)
 
 # Usage: Generate contract from template
 replacements = {
@@ -350,35 +350,35 @@ class WordTemplateProcessor:
     """
     
     def __init__(self, template_path: str):
-        self.doc = Document(template_path)
+        self.doc = Document (template_path)
     
-    def fill(self, data: Dict[str, Any], output_path: str):
+    def fill (self, data: Dict[str, Any], output_path: str):
         """Fill template with data."""
         # Replace variables
-        self._replace_variables(data)
+        self._replace_variables (data)
         
         # Process conditional sections
-        self._process_conditionals(data)
+        self._process_conditionals (data)
         
         # Save result
-        self.doc.save(output_path)
+        self.doc.save (output_path)
     
-    def _replace_variables(self, data: Dict[str, Any]):
+    def _replace_variables (self, data: Dict[str, Any]):
         """Replace {{variable}} placeholders."""
         for para in self.doc.paragraphs:
             for run in para.runs:
                 text = run.text
                 
                 # Find all {{variable}} patterns
-                matches = re.findall(r'{{([a-zA-Z0-9_]+)}}', text)
+                matches = re.findall (r'{{([a-zA-Z0-9_]+)}}', text)
                 
                 for var_name in matches:
                     if var_name in data:
                         placeholder = f"{{{{{var_name}}}}}"
-                        value = str(data[var_name])
-                        run.text = run.text.replace(placeholder, value)
+                        value = str (data[var_name])
+                        run.text = run.text.replace (placeholder, value)
     
-    def _process_conditionals(self, data: Dict[str, Any]):
+    def _process_conditionals (self, data: Dict[str, Any]):
         """Process {{#if condition}}...{{/if}} blocks."""
         # Simplified implementation
         # Production version would handle full conditional logic
@@ -394,7 +394,7 @@ data = {
     "quarter": "Q4 2024"
 }
 
-processor.fill(data, 'quarterly_report.docx')
+processor.fill (data, 'quarterly_report.docx')
 \`\`\`
 
 ## Adding Images
@@ -403,7 +403,7 @@ processor.fill(data, 'quarterly_report.docx')
 from docx import Document
 from docx.shared import Inches
 
-def add_images_to_document(output_path: str):
+def add_images_to_document (output_path: str):
     """Create document with images."""
     doc = Document()
     
@@ -420,7 +420,7 @@ def add_images_to_document(output_path: str):
     caption = doc.add_paragraph('Figure 1: Sales Performance')
     caption.alignment = 1  # Center alignment
     
-    doc.save(output_path)
+    doc.save (output_path)
 \`\`\`
 
 ## Production Word Processor
@@ -445,22 +445,22 @@ class WordDocumentProcessor:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
     
-    def read_document(self, filepath: str) -> Dict:
+    def read_document (self, filepath: str) -> Dict:
         """Read document with full structure extraction."""
         try:
-            doc = Document(filepath)
+            doc = Document (filepath)
             
             return {
                 "filepath": filepath,
-                "paragraphs": self._extract_paragraphs(doc),
-                "tables": self._extract_tables(doc),
-                "text": "\\n\\n".join(p.text for p in doc.paragraphs if p.text.strip())
+                "paragraphs": self._extract_paragraphs (doc),
+                "tables": self._extract_tables (doc),
+                "text": "\\n\\n".join (p.text for p in doc.paragraphs if p.text.strip())
             }
         except Exception as e:
-            self.logger.error(f"Failed to read document: {e}")
+            self.logger.error (f"Failed to read document: {e}")
             return {}
     
-    def _extract_paragraphs(self, doc) -> List[Dict]:
+    def _extract_paragraphs (self, doc) -> List[Dict]:
         """Extract paragraphs with formatting."""
         paragraphs = []
         
@@ -471,23 +471,23 @@ class WordDocumentProcessor:
             paragraphs.append({
                 "text": para.text,
                 "style": para.style.name,
-                "bold": any(run.bold for run in para.runs if run.bold),
-                "italic": any(run.italic for run in para.runs if run.italic)
+                "bold": any (run.bold for run in para.runs if run.bold),
+                "italic": any (run.italic for run in para.runs if run.italic)
             })
         
         return paragraphs
     
-    def _extract_tables(self, doc) -> List[pd.DataFrame]:
+    def _extract_tables (self, doc) -> List[pd.DataFrame]:
         """Extract tables as DataFrames."""
         tables = []
         
         for table in doc.tables:
             data = [[cell.text.strip() for cell in row.cells] for row in table.rows]
             
-            if len(data) > 1:
+            if len (data) > 1:
                 try:
-                    df = pd.DataFrame(data[1:], columns=data[0])
-                    tables.append(df)
+                    df = pd.DataFrame (data[1:], columns=data[0])
+                    tables.append (df)
                 except:
                     pass
         
@@ -516,7 +516,7 @@ class WordDocumentProcessor:
             
             # Add title
             if title:
-                title_para = doc.add_heading(title, 0)
+                title_para = doc.add_heading (title, 0)
                 title_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
             
             # Add table of contents if requested
@@ -527,65 +527,65 @@ class WordDocumentProcessor:
             
             # Add sections
             for section in sections:
-                self._add_section(doc, section)
+                self._add_section (doc, section)
             
-            doc.save(output_path)
-            self.logger.info(f"Generated document: {output_path}")
+            doc.save (output_path)
+            self.logger.info (f"Generated document: {output_path}")
             return True
             
         except Exception as e:
-            self.logger.error(f"Failed to generate document: {e}")
+            self.logger.error (f"Failed to generate document: {e}")
             return False
     
-    def _add_section(self, doc, section: Dict):
+    def _add_section (self, doc, section: Dict):
         """Add a section to the document."""
         section_type = section.get("type")
         
         if section_type == "heading":
-            doc.add_heading(section["text"], level=section.get("level", 1))
+            doc.add_heading (section["text"], level=section.get("level", 1))
         
         elif section_type == "paragraph":
-            para = doc.add_paragraph(section["text"])
+            para = doc.add_paragraph (section["text"])
             if section.get("bold"):
                 for run in para.runs:
                     run.bold = True
         
         elif section_type == "table" and "data" in section:
-            self._add_table_from_dataframe(doc, section["data"])
+            self._add_table_from_dataframe (doc, section["data"])
         
         elif section_type == "image" and "path" in section:
             width = section.get("width", 4)
             try:
-                doc.add_picture(section["path"], width=Inches(width))
+                doc.add_picture (section["path"], width=Inches (width))
             except:
-                self.logger.warning(f"Failed to add image: {section['path']}")
+                self.logger.warning (f"Failed to add image: {section['path']}")
         
         elif section_type == "list":
             for item in section.get("items", []):
-                doc.add_paragraph(item, style='List Bullet')
+                doc.add_paragraph (item, style='List Bullet')
     
-    def _add_table_from_dataframe(self, doc, df: pd.DataFrame):
+    def _add_table_from_dataframe (self, doc, df: pd.DataFrame):
         """Add DataFrame as formatted table."""
-        table = doc.add_table(rows=1, cols=len(df.columns))
+        table = doc.add_table (rows=1, cols=len (df.columns))
         table.style = 'Light Grid Accent 1'
         
         # Header row
         header_cells = table.rows[0].cells
-        for i, col_name in enumerate(df.columns):
-            header_cells[i].text = str(col_name)
+        for i, col_name in enumerate (df.columns):
+            header_cells[i].text = str (col_name)
         
         # Data rows
         for _, row in df.iterrows():
             row_cells = table.add_row().cells
-            for i, value in enumerate(row):
-                row_cells[i].text = str(value)
+            for i, value in enumerate (row):
+                row_cells[i].text = str (value)
 
 # Usage Example: Generate report from LLM output
 processor = WordDocumentProcessor()
 
 # Read existing document for analysis
 doc_data = processor.read_document("input.docx")
-print(f"Document has {len(doc_data['paragraphs'])} paragraphs")
+print(f"Document has {len (doc_data['paragraphs'])} paragraphs")
 
 # Generate new document
 sections = [

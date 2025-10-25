@@ -19,10 +19,10 @@ JWT contains all user info and expiration in the token itself, eliminating datab
 
 \`\`\`python
 # Token Auth - needs database lookup every request
-token = Token.objects.get(key=request_token)
+token = Token.objects.get (key=request_token)
 
 # JWT - validates signature, no database needed
-decoded = jwt.decode(token, SECRET_KEY)
+decoded = jwt.decode (token, SECRET_KEY)
 \`\`\`
 
 JWTs are stateless and scale better for high-traffic APIs.
@@ -42,8 +42,8 @@ JWTs are stateless and scale better for high-traffic APIs.
 **Correct Answer: B) Override get_permissions() method**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_permissions(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_permissions (self):
         if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         elif self.action == 'destroy':
@@ -68,12 +68,12 @@ This gives you full control over permissions per action.
 **Correct Answer: B) Specific object instance access rights**
 
 \`\`\`python
-class IsOwner(permissions.BasePermission):
-    def has_permission(self, request, view):
+class IsOwner (permissions.BasePermission):
+    def has_permission (self, request, view):
         # View-level: Can user access this endpoint at all?
         return request.user.is_authenticated
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         # Object-level: Can user access THIS specific object?
         return obj.owner == request.user
 \`\`\`
@@ -123,7 +123,7 @@ from rest_framework.permissions import AllowAny
 class PublicArticleView(APIView):
     permission_classes = [AllowAny]
     
-    def get(self, request):
+    def get (self, request):
         # Anyone can access
         return Response({...})
 \`\`\`

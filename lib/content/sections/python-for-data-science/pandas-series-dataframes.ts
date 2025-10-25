@@ -16,7 +16,7 @@ export const pandasSeriesDataFrames = {
 Pandas is the de facto standard for data manipulation and analysis in Python. Built on top of NumPy, it provides two primary data structures: **Series** (1-dimensional) and **DataFrame** (2-dimensional), along with powerful tools for data cleaning, transformation, and analysis.
 
 **Why Pandas?**
-- **Labeled data**: Named columns and indices (unlike NumPy's positional access)
+- **Labeled data**: Named columns and indices (unlike NumPy\'s positional access)
 - **Mixed types**: Different columns can have different data types
 - **Missing data**: Built-in handling of NaN values
 - **Rich functionality**: Grouping, merging, reshaping, time series
@@ -50,7 +50,7 @@ print(s)
 
 # Components
 print(f"Values: {s.values}")  # NumPy array
-print(f"Index: {s.index}")    # RangeIndex(start=0, stop=5, step=1)
+print(f"Index: {s.index}")    # RangeIndex (start=0, stop=5, step=1)
 
 # With custom index
 s = pd.Series([10, 20, 30, 40, 50], 
@@ -76,7 +76,7 @@ print(s)
 \`\`\`python
 # Dictionary becomes index: value pairs
 data = {'AAPL': 150.0, 'GOOGL': 2800.0, 'MSFT': 310.0, 'AMZN': 3300.0}
-stocks = pd.Series(data)
+stocks = pd.Series (data)
 print(stocks)
 # AAPL     150.0
 # GOOGL   2800.0
@@ -146,7 +146,7 @@ data = {
     'Salary': [50000, 60000, 75000, 55000],
     'Department': ['IT', 'HR', 'IT', 'Sales']
 }
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 print(df)
 #       Name  Age  Salary Department
 # 0    Alice   25   50000         IT
@@ -155,7 +155,7 @@ print(df)
 # 3    David   28   55000      Sales
 
 # Specify index
-df = pd.DataFrame(data, index=['emp1', 'emp2', 'emp3', 'emp4'])
+df = pd.DataFrame (data, index=['emp1', 'emp2', 'emp3', 'emp4'])
 print(df)
 #           Name  Age  Salary Department
 # emp1     Alice   25   50000         IT
@@ -164,7 +164,7 @@ print(df)
 # emp4     David   28   55000      Sales
 
 # Select specific columns
-df = pd.DataFrame(data, columns=['Name', 'Age'])
+df = pd.DataFrame (data, columns=['Name', 'Age'])
 print(df)
 #       Name  Age
 # 0    Alice   25
@@ -178,7 +178,7 @@ print(df)
 \`\`\`python
 # Random data
 data = np.random.randn(4, 3)
-df = pd.DataFrame(data, 
+df = pd.DataFrame (data, 
                   columns=['A', 'B', 'C'],
                   index=['row1', 'row2', 'row3', 'row4'])
 print(df)
@@ -198,7 +198,7 @@ data = [
     {'name': 'Bob', 'age': 30, 'city': 'LA'},
     {'name': 'Charlie', 'age': 35}  # Missing 'city'
 ]
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 print(df)
 #       name  age city
 # 0    Alice   25  NYC
@@ -233,7 +233,7 @@ csv_data = """Date,Open,High,Low,Close,Volume
 2024-01-02,103,108,102,107,1200000
 2024-01-03,107,110,105,108,900000"""
 
-df = pd.read_csv(io.StringIO(csv_data))
+df = pd.read_csv (io.StringIO(csv_data))
 print(df)
 #          Date  Open  High  Low  Close   Volume
 # 0  2024-01-01   100   105   99    103  1000000
@@ -252,7 +252,7 @@ data = {
     'Salary': [50000, 60000, 75000, 55000, 68000],
     'Department': ['IT', 'HR', 'IT', 'Sales', 'IT']
 }
-df = pd.DataFrame(data)
+df = pd.DataFrame (data)
 
 # Shape (rows, columns)
 print(f"Shape: {df.shape}")  # (5, 4)
@@ -308,7 +308,7 @@ print(df.tail(2))  # Last 2 rows
 
 # Random sample
 print(df.sample(3))  # 3 random rows
-print(df.sample(frac=0.5))  # 50% of rows
+print(df.sample (frac=0.5))  # 50% of rows
 
 # Display settings
 pd.set_option('display.max_rows', 100)
@@ -323,7 +323,7 @@ pd.set_option('display.width', 1000)
 \`\`\`python
 # Single column (returns Series)
 ages = df['Age']
-print(type(ages))  # <class 'pandas.core.series.Series'>
+print(type (ages))  # <class 'pandas.core.series.Series'>
 print(ages)
 
 # Alternative syntax (only for valid identifiers)
@@ -332,7 +332,7 @@ print(ages)
 
 # Multiple columns (returns DataFrame)
 subset = df[['Name', 'Age']]
-print(type(subset))  # <class 'pandas.core.frame.DataFrame'>
+print(type (subset))  # <class 'pandas.core.frame.DataFrame'>
 print(subset)
 
 # Column reordering
@@ -453,15 +453,15 @@ print(f"Age dtype: {df['Age'].dtype}")  # int64
 
 \`\`\`python
 # Convert to numeric
-df['Age'] = df['Age'].astype(np.float64)
+df['Age'] = df['Age'].astype (np.float64)
 print(df['Age'].dtype)  # float64
 
 # Convert to string
-df['Salary'] = df['Salary'].astype(str)
+df['Salary'] = df['Salary'].astype (str)
 print(df['Salary'].dtype)  # object
 
 # Convert back to numeric (handles errors)
-df['Salary'] = pd.to_numeric(df['Salary'], errors='coerce')
+df['Salary'] = pd.to_numeric (df['Salary'], errors='coerce')
 # errors='coerce': invalid values become NaN
 # errors='ignore': leave unchanged
 # errors='raise': raise exception
@@ -530,8 +530,8 @@ df['Tax'] = df['Salary'] * 0.25
 df['Senior'] = df['Age'] >= 30
 
 # Using apply
-df['Name_Length'] = df['Name'].apply(len)
-df['Tax_Bracket'] = df['Salary'].apply(lambda x: 'High' if x > 60000 else 'Low')
+df['Name_Length'] = df['Name'].apply (len)
+df['Tax_Bracket'] = df['Salary'].apply (lambda x: 'High' if x > 60000 else 'Low')
 
 print(df)
 \`\`\`
@@ -542,7 +542,7 @@ print(df)
 # Drop columns
 df_dropped = df.drop(['Bonus', 'Tax'], axis=1)  # axis=1 for columns
 # OR
-df_dropped = df.drop(columns=['Bonus', 'Tax'])
+df_dropped = df.drop (columns=['Bonus', 'Tax'])
 
 # In-place
 df.drop(['Bonus', 'Tax'], axis=1, inplace=True)
@@ -564,13 +564,13 @@ df_filtered = df[df['Age'] >= 30]
 df_unique = df.drop_duplicates()
 
 # Drop duplicates based on specific columns
-df_unique = df.drop_duplicates(subset=['Department'])
+df_unique = df.drop_duplicates (subset=['Department'])
 
 # Drop rows with any NaN
 df_clean = df.dropna()
 
 # Drop rows with all NaN
-df_clean = df.dropna(how='all')
+df_clean = df.dropna (how='all')
 \`\`\`
 
 ## Real-World Example: Stock Data
@@ -586,7 +586,7 @@ stock_data = {
     'Close': np.random.uniform(95, 105, 10),
     'Volume': np.random.randint(1000000, 5000000, 10)
 }
-df = pd.DataFrame(stock_data)
+df = pd.DataFrame (stock_data)
 
 # Set date as index
 df = df.set_index('Date')
@@ -596,7 +596,7 @@ print(df.head())
 df['Return'] = df['Close'].pct_change()
 
 # Calculate moving average
-df['MA_3'] = df['Close'].rolling(window=3).mean()
+df['MA_3'] = df['Close'].rolling (window=3).mean()
 
 # Daily range
 df['Range'] = df['High'] - df['Low']

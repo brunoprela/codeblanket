@@ -42,10 +42,10 @@ word2vec_model.wv['bank']
 **Contextualized Solution:**
 \`\`\`python
 # Contextualized embedding (conceptual)
-embed(sentence="I deposited money at the bank", word_position=5)
+embed (sentence="I deposited money at the bank", word_position=5)
 # Returns vector specific to financial context
 
-embed(sentence="We sat on the river bank", word_position=5)
+embed (sentence="We sat on the river bank", word_position=5)
 # Returns different vector specific to geographical context
 \`\`\`
 
@@ -119,7 +119,7 @@ sentences = [
 ]
 
 # Get embeddings
-embeddings = elmo.embed_sentences(sentences)
+embeddings = elmo.embed_sentences (sentences)
 
 # embeddings[0] = sentence 1, shape: (3, 6, 1024)
 # - 3 layers (0=character, 1=LSTM1, 2=LSTM2)
@@ -138,10 +138,10 @@ print(f"Bank (river) shape: {bank_river.shape}")  # (3, 1024)
 from scipy.spatial.distance import cosine
 
 # Average across layers for comparison
-bank_financial_avg = bank_financial.mean(axis=0)
-bank_river_avg = bank_river.mean(axis=0)
+bank_financial_avg = bank_financial.mean (axis=0)
+bank_river_avg = bank_river.mean (axis=0)
 
-similarity = 1 - cosine(bank_financial_avg, bank_river_avg)
+similarity = 1 - cosine (bank_financial_avg, bank_river_avg)
 print(f"Similarity between 'bank' in different contexts: {similarity:.4f}")
 # Lower similarity than static embeddings!
 \`\`\`
@@ -157,7 +157,7 @@ from allennlp.modules.elmo import Elmo, batch_to_ids
 options_file = "elmo_options.json"
 weight_file = "elmo_weights.hdf5"
 
-elmo = Elmo(options_file, weight_file, num_output_representations=1, dropout=0)
+elmo = Elmo (options_file, weight_file, num_output_representations=1, dropout=0)
 
 # Prepare sentences
 sentences = [
@@ -166,10 +166,10 @@ sentences = [
 ]
 
 # Convert to character IDs
-character_ids = batch_to_ids(sentences)
+character_ids = batch_to_ids (sentences)
 
 # Get ELMo embeddings
-embeddings = elmo(character_ids)
+embeddings = elmo (character_ids)
 
 # embeddings['elmo_representations'][0] shape: (2, max_len, 1024)
 # - 2 sentences
@@ -177,29 +177,29 @@ embeddings = elmo(character_ids)
 # - 1024-dim embeddings
 
 # Use embeddings as features for classifier
-class TextClassifier(nn.Module):
+class TextClassifier (nn.Module):
     def __init__(self, elmo_model, num_classes):
         super().__init__()
         self.elmo = elmo_model
         self.classifier = nn.Linear(1024, num_classes)
         
-    def forward(self, character_ids):
+    def forward (self, character_ids):
         # Get ELMo embeddings
-        embeddings = self.elmo(character_ids)
+        embeddings = self.elmo (character_ids)
         elmo_output = embeddings['elmo_representations'][0]
         
         # Average pool over sequence
-        pooled = elmo_output.mean(dim=1)  # (batch, 1024)
+        pooled = elmo_output.mean (dim=1)  # (batch, 1024)
         
         # Classify
-        logits = self.classifier(pooled)
+        logits = self.classifier (pooled)
         return logits
 
 # Initialize classifier
-classifier = TextClassifier(elmo, num_classes=2)
+classifier = TextClassifier (elmo, num_classes=2)
 
 # Forward pass
-logits = classifier(character_ids)
+logits = classifier (character_ids)
 print(f"Logits shape: {logits.shape}")  # (2, 2) - batch_size × num_classes
 \`\`\`
 
@@ -217,7 +217,7 @@ sentences_train = [
     ['financial', 'bank', 'account'],
 ] * 100
 
-w2v = Word2Vec(sentences_train, vector_size=100, window=5, min_count=1, sg=1)
+w2v = Word2Vec (sentences_train, vector_size=100, window=5, min_count=1, sg=1)
 
 # Static embedding: same vector always
 bank_static = w2v.wv['bank']
@@ -348,7 +348,7 @@ ELMo demonstrated contextualized embeddings work, but:
 - **GPT (2018)**: Transformer-based language model → more scalable
 - **Modern models**: All use attention, not RNNs
 
-**ELMo's Legacy:**
+**ELMo\'s Legacy:**
 - Proved context-dependent embeddings essential
 - Popularized pre-training + fine-tuning
 - Sparked transformer revolution

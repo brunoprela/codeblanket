@@ -6,7 +6,7 @@ export const databaseIntegrationSqlalchemy = {
 
 ## Introduction
 
-Production APIs need databases. FastAPI + SQLAlchemy is the **gold standard** combination for Python database access—FastAPI's dependency injection elegantly manages SQLAlchemy sessions, while SQLAlchemy's ORM provides type-safe, efficient database operations.
+Production APIs need databases. FastAPI + SQLAlchemy is the **gold standard** combination for Python database access—FastAPI's dependency injection elegantly manages SQLAlchemy sessions, while SQLAlchemy\'s ORM provides type-safe, efficient database operations.
 
 **Why SQLAlchemy + FastAPI is powerful:**
 - **Dependency injection**: Automatic session management and cleanup
@@ -110,7 +110,7 @@ def get_db() -> Session:
 @app.get("/users/{user_id}")
 async def get_user(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Database session automatically injected
@@ -118,7 +118,7 @@ async def get_user(
     """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 \`\`\`
 
@@ -181,7 +181,7 @@ class Comment(Base):
     author = relationship("User", back_populates="comments")
 
 # Create tables (use Alembic in production)
-# Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all (bind=engine)
 \`\`\`
 
 ### Pydantic Schemas
@@ -281,7 +281,7 @@ app = FastAPI()
 @app.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
     user: UserCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Create new user
@@ -295,7 +295,7 @@ async def create_user(
         )
     
     # Hash password (use bcrypt in production)
-    hashed_password = hash_password(user.password)
+    hashed_password = hash_password (user.password)
     
     # Create user
     db_user = User(
@@ -304,9 +304,9 @@ async def create_user(
         hashed_password=hashed_password
     )
     
-    db.add(db_user)
+    db.add (db_user)
     db.commit()
-    db.refresh(db_user)
+    db.refresh (db_user)
     
     return db_user
 
@@ -314,12 +314,12 @@ async def create_user(
 @app.get("/users/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Get user by ID"""
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 
 # READ (list)
@@ -327,10 +327,10 @@ async def get_user(
 async def list_users(
     skip: int = 0,
     limit: int = 100,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """List users with pagination"""
-    users = db.query(User).offset(skip).limit(limit).all()
+    users = db.query(User).offset (skip).limit (limit).all()
     return users
 
 # UPDATE
@@ -338,23 +338,23 @@ async def list_users(
 async def update_user(
     user_id: int,
     user: UserUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Update user"""
     db_user = db.query(User).filter(User.id == user_id).first()
     if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
     # Update fields
-    update_data = user.dict(exclude_unset=True)
+    update_data = user.dict (exclude_unset=True)
     if "password" in update_data:
-        update_data["hashed_password"] = hash_password(update_data.pop("password"))
+        update_data["hashed_password"] = hash_password (update_data.pop("password"))
     
     for key, value in update_data.items():
-        setattr(db_user, key, value)
+        setattr (db_user, key, value)
     
     db.commit()
-    db.refresh(db_user)
+    db.refresh (db_user)
     
     return db_user
 
@@ -362,14 +362,14 @@ async def update_user(
 @app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """Delete user"""
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
-    db.delete(user)
+    db.delete (user)
     db.commit()
     
     return None
@@ -397,9 +397,9 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
         self.db = db
     
-    def get(self, id: int) -> Optional[ModelType]:
+    def get (self, id: int) -> Optional[ModelType]:
         """Get by ID"""
-        return self.db.query(self.model).filter(self.model.id == id).first()
+        return self.db.query (self.model).filter (self.model.id == id).first()
     
     def get_multi(
         self,
@@ -407,15 +407,15 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         limit: int = 100
     ) -> List[ModelType]:
         """Get multiple with pagination"""
-        return self.db.query(self.model).offset(skip).limit(limit).all()
+        return self.db.query (self.model).offset (skip).limit (limit).all()
     
-    def create(self, obj_in: CreateSchemaType) -> ModelType:
+    def create (self, obj_in: CreateSchemaType) -> ModelType:
         """Create new object"""
         obj_data = obj_in.dict()
         db_obj = self.model(**obj_data)
-        self.db.add(db_obj)
+        self.db.add (db_obj)
         self.db.commit()
-        self.db.refresh(db_obj)
+        self.db.refresh (db_obj)
         return db_obj
     
     def update(
@@ -424,46 +424,46 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj_in: UpdateSchemaType
     ) -> Optional[ModelType]:
         """Update existing object"""
-        db_obj = self.get(id)
+        db_obj = self.get (id)
         if not db_obj:
             return None
         
-        update_data = obj_in.dict(exclude_unset=True)
+        update_data = obj_in.dict (exclude_unset=True)
         for key, value in update_data.items():
-            setattr(db_obj, key, value)
+            setattr (db_obj, key, value)
         
         self.db.commit()
-        self.db.refresh(db_obj)
+        self.db.refresh (db_obj)
         return db_obj
     
-    def delete(self, id: int) -> bool:
+    def delete (self, id: int) -> bool:
         """Delete object"""
-        db_obj = self.get(id)
+        db_obj = self.get (id)
         if not db_obj:
             return False
         
-        self.db.delete(db_obj)
+        self.db.delete (db_obj)
         self.db.commit()
         return True
 
 class UserRepository(BaseRepository[User, UserCreate, UserUpdate]):
     """User-specific repository"""
     
-    def get_by_username(self, username: str) -> Optional[User]:
+    def get_by_username (self, username: str) -> Optional[User]:
         """Get user by username"""
         return self.db.query(User).filter(User.username == username).first()
     
-    def get_by_email(self, email: str) -> Optional[User]:
+    def get_by_email (self, email: str) -> Optional[User]:
         """Get user by email"""
         return self.db.query(User).filter(User.email == email).first()
     
-    def get_active_users(self, skip: int = 0, limit: int = 100) -> List[User]:
+    def get_active_users (self, skip: int = 0, limit: int = 100) -> List[User]:
         """Get only active users"""
         return (
             self.db.query(User)
             .filter(User.is_active == True)
-            .offset(skip)
-            .limit(limit)
+            .offset (skip)
+            .limit (limit)
             .all()
         )
 
@@ -480,55 +480,55 @@ class PostRepository(BaseRepository[Post, PostCreate, PostUpdate]):
         return (
             self.db.query(Post)
             .filter(Post.author_id == author_id)
-            .offset(skip)
-            .limit(limit)
+            .offset (skip)
+            .limit (limit)
             .all()
         )
     
-    def get_published(self, skip: int = 0, limit: int = 100) -> List[Post]:
+    def get_published (self, skip: int = 0, limit: int = 100) -> List[Post]:
         """Get only published posts"""
         return (
             self.db.query(Post)
             .filter(Post.published == True)
             .order_by(Post.created_at.desc())
-            .offset(skip)
-            .limit(limit)
+            .offset (skip)
+            .limit (limit)
             .all()
         )
 
 # Dependency for repositories
-def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+def get_user_repository (db: Session = Depends (get_db)) -> UserRepository:
     return UserRepository(User, db)
 
-def get_post_repository(db: Session = Depends(get_db)) -> PostRepository:
+def get_post_repository (db: Session = Depends (get_db)) -> PostRepository:
     return PostRepository(Post, db)
 
 # Use in endpoints
 @app.get("/users/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: int,
-    repo: UserRepository = Depends(get_user_repository)
+    repo: UserRepository = Depends (get_user_repository)
 ):
     """Clean endpoint using repository"""
-    user = repo.get(user_id)
+    user = repo.get (user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     return user
 
 @app.post("/users", response_model=UserResponse, status_code=201)
 async def create_user(
     user: UserCreate,
-    repo: UserRepository = Depends(get_user_repository)
+    repo: UserRepository = Depends (get_user_repository)
 ):
     """Create user with repository"""
     # Check duplicates
-    if repo.get_by_username(user.username):
-        raise HTTPException(status_code=409, detail="Username exists")
+    if repo.get_by_username (user.username):
+        raise HTTPException (status_code=409, detail="Username exists")
     
     # Hash password
-    user.password = hash_password(user.password)
+    user.password = hash_password (user.password)
     
-    return repo.create(user)
+    return repo.create (user)
 \`\`\`
 
 ---
@@ -546,7 +546,7 @@ from sqlalchemy.orm import joinedload, selectinload, subqueryload
 
 # Lazy loading (default) - N+1 problem
 @app.get("/posts-lazy")
-async def get_posts_lazy(db: Session = Depends(get_db)):
+async def get_posts_lazy (db: Session = Depends (get_db)):
     """
     BAD: N+1 query problem
     
@@ -567,7 +567,7 @@ async def get_posts_lazy(db: Session = Depends(get_db)):
 
 # Eager loading with joinedload (JOIN)
 @app.get("/posts-joined")
-async def get_posts_joined(db: Session = Depends(get_db)):
+async def get_posts_joined (db: Session = Depends (get_db)):
     """
     GOOD: Single query with JOIN
     
@@ -575,7 +575,7 @@ async def get_posts_joined(db: Session = Depends(get_db)):
     """
     posts = (
         db.query(Post)
-        .options(joinedload(Post.author))  # JOIN authors table
+        .options (joinedload(Post.author))  # JOIN authors table
         .all()
     )
     
@@ -590,7 +590,7 @@ async def get_posts_joined(db: Session = Depends(get_db)):
 
 # Selectin loading (separate SELECT IN)
 @app.get("/posts-selectin")
-async def get_posts_selectin(db: Session = Depends(get_db)):
+async def get_posts_selectin (db: Session = Depends (get_db)):
     """
     GOOD: 2 queries total
     
@@ -600,7 +600,7 @@ async def get_posts_selectin(db: Session = Depends(get_db)):
     """
     posts = (
         db.query(Post)
-        .options(selectinload(Post.author))
+        .options (selectinload(Post.author))
         .all()
     )
     
@@ -614,7 +614,7 @@ async def get_posts_selectin(db: Session = Depends(get_db)):
 
 # Multiple levels of relationships
 @app.get("/posts-with-comments")
-async def get_posts_with_comments(db: Session = Depends(get_db)):
+async def get_posts_with_comments (db: Session = Depends (get_db)):
     """
     Load posts, authors, comments, and comment authors
     """
@@ -640,8 +640,8 @@ Create and Manage Relationships
 @app.post("/posts", response_model=PostWithAuthor)
 async def create_post(
     post: PostCreate,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Create post with author relationship
@@ -651,12 +651,12 @@ async def create_post(
         author_id=current_user.id
     )
     
-    db.add(db_post)
+    db.add (db_post)
     db.commit()
-    db.refresh(db_post)
+    db.refresh (db_post)
     
     # Load author relationship
-    db.refresh(db_post, ["author"])
+    db.refresh (db_post, ["author"])
     
     return db_post
 
@@ -664,8 +664,8 @@ async def create_post(
 async def create_comment(
     post_id: int,
     comment: CommentBase,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends (get_current_user),
+    db: Session = Depends (get_db)
 ):
     """
     Create comment with post and author relationships
@@ -673,7 +673,7 @@ async def create_comment(
     # Verify post exists
     post = db.query(Post).filter(Post.id == post_id).first()
     if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException (status_code=404, detail="Post not found")
     
     db_comment = Comment(
         content=comment.content,
@@ -681,26 +681,26 @@ async def create_comment(
         author_id=current_user.id
     )
     
-    db.add(db_comment)
+    db.add (db_comment)
     db.commit()
-    db.refresh(db_comment)
+    db.refresh (db_comment)
     
     # Load relationships for response
-    db.refresh(db_comment, ["author", "post"])
+    db.refresh (db_comment, ["author", "post"])
     
     return db_comment
 
 @app.get("/users/{user_id}/posts", response_model=List[PostResponse])
 async def get_user_posts(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Get all posts by user (relationship traversal)
     """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
     # Access relationship
     return user.posts
@@ -722,7 +722,7 @@ async def transfer_funds(
     from_account_id: int,
     to_account_id: int,
     amount: float,
-    db: Session = Depends(get_db)
+    db: Session = Depends (get_db)
 ):
     """
     Transaction example: All or nothing
@@ -733,10 +733,10 @@ async def transfer_funds(
         to_account = db.query(Account).filter(Account.id == to_account_id).first()
         
         if not from_account or not to_account:
-            raise HTTPException(status_code=404, detail="Account not found")
+            raise HTTPException (status_code=404, detail="Account not found")
         
         if from_account.balance < amount:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
+            raise HTTPException (status_code=400, detail="Insufficient funds")
         
         # Perform transfer
         from_account.balance -= amount
@@ -748,7 +748,7 @@ async def transfer_funds(
             to_account_id=to_account_id,
             amount=amount
         )
-        db.add(transaction)
+        db.add (transaction)
         
         # Commit all changes atomically
         db.commit()
@@ -762,11 +762,11 @@ async def transfer_funds(
     except Exception as e:
         # Rollback on unexpected error
         db.rollback()
-        raise HTTPException(status_code=500, detail="Transaction failed")
+        raise HTTPException (status_code=500, detail="Transaction failed")
 
 # Manual transaction control
 @app.post("/complex-operation")
-async def complex_operation(db: Session = Depends(get_db)):
+async def complex_operation (db: Session = Depends (get_db)):
     """
     Manual transaction with savepoints
     """
@@ -775,14 +775,14 @@ async def complex_operation(db: Session = Depends(get_db)):
         db.begin_nested()  # Savepoint
         
         # Operation 1
-        user = User(username="test")
-        db.add(user)
+        user = User (username="test")
+        db.add (user)
         db.flush()  # Write to DB but don't commit
         
         # Operation 2 (might fail)
         try:
-            post = Post(title="Test", content="Content", author_id=user.id)
-            db.add(post)
+            post = Post (title="Test", content="Content", author_id=user.id)
+            db.add (post)
             db.flush()
         except Exception:
             # Rollback to savepoint
@@ -796,7 +796,7 @@ async def complex_operation(db: Session = Depends(get_db)):
         
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException (status_code=400, detail=str (e))
 \`\`\`
 
 ---
@@ -837,7 +837,7 @@ async def get_async_db():
 @app.get("/users/{user_id}")
 async def get_user_async(
     user_id: int,
-    db: AsyncSession = Depends(get_async_db)
+    db: AsyncSession = Depends (get_async_db)
 ):
     """
     Async database query
@@ -849,7 +849,7 @@ async def get_user_async(
     user = result.scalar_one_or_none()
     
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException (status_code=404, detail="User not found")
     
     return user
 
@@ -857,13 +857,13 @@ async def get_user_async(
 async def list_users_async(
     skip: int = 0,
     limit: int = 100,
-    db: AsyncSession = Depends(get_async_db)
+    db: AsyncSession = Depends (get_async_db)
 ):
     """
     Async query with pagination
     """
     result = await db.execute(
-        select(User).offset(skip).limit(limit)
+        select(User).offset (skip).limit (limit)
     )
     users = result.scalars().all()
     
@@ -872,15 +872,15 @@ async def list_users_async(
 @app.post("/users")
 async def create_user_async(
     user: UserCreate,
-    db: AsyncSession = Depends(get_async_db)
+    db: AsyncSession = Depends (get_async_db)
 ):
     """
     Async insert
     """
     db_user = User(**user.dict())
-    db.add(db_user)
+    db.add (db_user)
     await db.commit()
-    await db.refresh(db_user)
+    await db.refresh (db_user)
     
     return db_user
 \`\`\`
@@ -904,13 +904,13 @@ from fastapi.testclient import TestClient
 # Test database
 TEST_DATABASE_URL = "sqlite:///./test.db"
 test_engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
-TestSessionLocal = sessionmaker(bind=test_engine)
+TestSessionLocal = sessionmaker (bind=test_engine)
 
 @pytest.fixture
 def db():
     """Test database fixture"""
     # Create tables
-    Base.metadata.create_all(bind=test_engine)
+    Base.metadata.create_all (bind=test_engine)
     
     db = TestSessionLocal()
     try:
@@ -919,10 +919,10 @@ def db():
         db.close()
     
     # Drop tables after test
-    Base.metadata.drop_all(bind=test_engine)
+    Base.metadata.drop_all (bind=test_engine)
 
 @pytest.fixture
-def client(db):
+def client (db):
     """Test client with database"""
     def override_get_db():
         try:
@@ -932,12 +932,12 @@ def client(db):
     
     app.dependency_overrides[get_db] = override_get_db
     
-    with TestClient(app) as c:
+    with TestClient (app) as c:
         yield c
     
     app.dependency_overrides.clear()
 
-def test_create_user(client):
+def test_create_user (client):
     """Test user creation"""
     response = client.post(
         "/users",
@@ -949,14 +949,14 @@ def test_create_user(client):
     assert data["username"] == "testuser"
     assert "id" in data
 
-def test_get_user(client, db):
+def test_get_user (client, db):
     """Test get user"""
     # Create test user
-    user = User(username="testuser", email="test@example.com", hashed_password="hashed")
-    db.add(user)
+    user = User (username="testuser", email="test@example.com", hashed_password="hashed")
+    db.add (user)
     db.commit()
     
-    response = client.get(f"/users/{user.id}")
+    response = client.get (f"/users/{user.id}")
     
     assert response.status_code == 200
     assert response.json()["username"] == "testuser"

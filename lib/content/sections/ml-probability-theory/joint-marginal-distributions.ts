@@ -39,7 +39,7 @@ def joint_distribution_demo():
     cov = [[1, 0.8], [0.8, 1]]  # Correlated
     
     np.random.seed(42)
-    samples = np.random.multivariate_normal(mean, cov, size=5000)
+    samples = np.random.multivariate_normal (mean, cov, size=5000)
     X, Y = samples[:, 0], samples[:, 1]
     
     print("=== Joint Distribution ===")
@@ -66,10 +66,10 @@ def joint_distribution_demo():
     from scipy.stats import multivariate_normal
     x_range = np.linspace(-3, 3, 100)
     y_range = np.linspace(-3, 3, 100)
-    X_grid, Y_grid = np.meshgrid(x_range, y_range)
+    X_grid, Y_grid = np.meshgrid (x_range, y_range)
     pos = np.dstack((X_grid, Y_grid))
-    rv = multivariate_normal(mean, cov)
-    axes[2].contour(X_grid, Y_grid, rv.pdf(pos), levels=10)
+    rv = multivariate_normal (mean, cov)
+    axes[2].contour(X_grid, Y_grid, rv.pdf (pos), levels=10)
     axes[2].set_xlabel('X')
     axes[2].set_ylabel('Y')
     axes[2].set_title('Contour Plot (Joint PDF)')
@@ -96,7 +96,7 @@ def marginal_distribution_demo():
     np.random.seed(42)
     mean = [2, -1]
     cov = [[2, 1], [1, 3]]
-    samples = np.random.multivariate_normal(mean, cov, size=10000)
+    samples = np.random.multivariate_normal (mean, cov, size=10000)
     X, Y = samples[:, 0], samples[:, 1]
     
     print("=== Marginal Distributions ===")
@@ -111,33 +111,33 @@ def marginal_distribution_demo():
     print(f"  E[Y] = {Y.mean():.3f}, Var(Y) = {Y.var():.3f}")
     
     # Plot
-    fig = plt.figure(figsize=(12, 10))
+    fig = plt.figure (figsize=(12, 10))
     gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
     
     # Joint in center
-    ax_joint = fig.add_subplot(gs[1:, :-1])
+    ax_joint = fig.add_subplot (gs[1:, :-1])
     ax_joint.scatter(X, Y, alpha=0.3, s=1)
     ax_joint.set_xlabel('X')
     ax_joint.set_ylabel('Y')
     ax_joint.set_title('Joint Distribution')
     
     # Marginal X on top
-    ax_marg_x = fig.add_subplot(gs[0, :-1], sharex=ax_joint)
+    ax_marg_x = fig.add_subplot (gs[0, :-1], sharex=ax_joint)
     ax_marg_x.hist(X, bins=50, density=True, alpha=0.7, edgecolor='black')
     x_range = np.linspace(X.min(), X.max(), 100)
-    ax_marg_x.plot(x_range, stats.norm(mean[0], np.sqrt(cov[0][0])).pdf(x_range), 'r-', linewidth=2)
+    ax_marg_x.plot (x_range, stats.norm (mean[0], np.sqrt (cov[0][0])).pdf (x_range), 'r-', linewidth=2)
     ax_marg_x.set_ylabel('Density')
     ax_marg_x.set_title('Marginal P(X)')
-    ax_marg_x.tick_params(labelbottom=False)
+    ax_marg_x.tick_params (labelbottom=False)
     
     # Marginal Y on right
-    ax_marg_y = fig.add_subplot(gs[1:, -1], sharey=ax_joint)
+    ax_marg_y = fig.add_subplot (gs[1:, -1], sharey=ax_joint)
     ax_marg_y.hist(Y, bins=50, density=True, alpha=0.7, edgecolor='black', orientation='horizontal')
     y_range = np.linspace(Y.min(), Y.max(), 100)
-    ax_marg_y.plot(stats.norm(mean[1], np.sqrt(cov[1][1])).pdf(y_range), y_range, 'r-', linewidth=2)
+    ax_marg_y.plot (stats.norm (mean[1], np.sqrt (cov[1][1])).pdf (y_range), y_range, 'r-', linewidth=2)
     ax_marg_y.set_xlabel('Density')
     ax_marg_y.set_title('Marginal P(Y)')
-    ax_marg_y.tick_params(labelleft=False)
+    ax_marg_y.tick_params (labelleft=False)
 
 marginal_distribution_demo()
 \`\`\`
@@ -233,11 +233,11 @@ def covariance_demo():
         (X, Y_nonlinear, 'Near-Zero Cov (Nonlinear)'),
     ]
     
-    for ax, (x, y, title) in zip(axes, data_sets):
-        ax.scatter(x, y, alpha=0.5, s=10)
+    for ax, (x, y, title) in zip (axes, data_sets):
+        ax.scatter (x, y, alpha=0.5, s=10)
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
-        ax.set_title(title)
+        ax.set_title (title)
         ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
@@ -247,7 +247,7 @@ covariance_demo()
 
 ## Correlation
 
-**Correlation coefficient** (Pearson's r): Normalized covariance
+**Correlation coefficient** (Pearson\'s r): Normalized covariance
 
 \\[ \\rho_{X,Y} = \\frac{\\text{Cov}(X,Y)}{\\sigma_X \\sigma_Y} \\]
 
@@ -276,7 +276,7 @@ def correlation_demo():
     print("ρ = Cov(X,Y) / (σ_X σ_Y)")
     print()
     
-    for i, rho in enumerate(correlations):
+    for i, rho in enumerate (correlations):
         # Generate Y with specified correlation
         Y = rho * X + np.sqrt(1 - rho**2) * np.random.normal(0, 1, n)
         
@@ -288,13 +288,13 @@ def correlation_demo():
         ax.scatter(X, Y, alpha=0.3, s=5)
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
-        ax.set_title(f'ρ = {rho:.1f} (actual: {actual_corr:.3f})')
+        ax.set_title (f'ρ = {rho:.1f} (actual: {actual_corr:.3f})')
         ax.grid(True, alpha=0.3)
         
         print(f"Target ρ = {rho:.1f}, Actual ρ = {actual_corr:.3f}")
     
     # Remove extra subplot
-    fig.delaxes(axes[5])
+    fig.delaxes (axes[5])
     plt.tight_layout()
 
 correlation_demo()
@@ -326,11 +326,11 @@ def feature_correlation_ml():
     
     print("=== Feature Correlation in ML ===")
     print("Correlation with target:")
-    print(corr_matrix['target'].sort_values(ascending=False))
+    print(corr_matrix['target'].sort_values (ascending=False))
     
     # Plot correlation matrix
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', center=0)
+    plt.figure (figsize=(12, 10))
+    sns.heatmap (corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', center=0)
     plt.title('Feature Correlation Matrix')
     plt.tight_layout()
     

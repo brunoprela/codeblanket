@@ -8,7 +8,7 @@ export const introQuiz = [
     question:
       'Why is repeated string concatenation in a loop O(n²) instead of O(n)?',
     sampleAnswer:
-      "Strings in Python are immutable, so each concatenation s += char creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1, 2nd=2, 3rd=3, ..., nth=n characters. Total: 1+2+3+...+n = n(n+1)/2 = O(n²). Solution: Build a list and use '.join(list) at the end, which is O(n) since it only copies characters once.",
+      "Strings in Python are immutable, so each concatenation s += char creates a new string by copying all existing characters plus the new one. For n iterations: 1st copy=1, 2nd=2, 3rd=3, ..., nth=n characters. Total: 1+2+3+...+n = n (n+1)/2 = O(n²). Solution: Build a list and use '.join (list) at the end, which is O(n) since it only copies characters once.",
     keyPoints: [
       'Strings are immutable in Python',
       'Each += creates new string and copies all chars',
@@ -21,7 +21,7 @@ export const introQuiz = [
     id: 'q2',
     question: 'What is the difference between find() and index() for strings?',
     sampleAnswer:
-      "Both search for substring position, but handle not found differently: find() returns -1 when substring not found (safe, no exception), while index() raises ValueError (need try/except). Use find() when substring might not exist and you want to check: if s.find(sub) != -1. Use index() when you're certain substring exists and want exception on error. Both are O(n*m) time complexity.",
+      "Both search for substring position, but handle not found differently: find() returns -1 when substring not found (safe, no exception), while index() raises ValueError (need try/except). Use find() when substring might not exist and you want to check: if s.find (sub) != -1. Use index() when you're certain substring exists and want exception on error. Both are O(n*m) time complexity.",
     keyPoints: [
       'find(): returns -1 if not found (safe)',
       'index(): raises ValueError if not found',

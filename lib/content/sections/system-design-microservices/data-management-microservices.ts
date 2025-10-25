@@ -110,18 +110,18 @@ Application makes multiple API calls and combines results.
 
 \`\`\`javascript
 // Get orders from Order Service
-const orders = await orderService.getOrdersByUser(userId);
+const orders = await orderService.getOrdersByUser (userId);
 
 // Extract product IDs
-const productIds = orders.map(o => o.productId);
+const productIds = orders.map (o => o.productId);
 
 // Get product details from Product Service
-const products = await productService.getByIds(productIds);
+const products = await productService.getByIds (productIds);
 
 // Combine in application
-const ordersWithProducts = orders.map(order => ({
+const ordersWithProducts = orders.map (order => ({
     ...order,
-    product: products.find(p => p.id === order.productId)
+    product: products.find (p => p.id === order.productId)
 }));
 \`\`\`
 
@@ -158,7 +158,7 @@ const order = {
 
 \`\`\`javascript
 // Product Service
-await productService.updateProduct(productId, {name: 'New Name'});
+await productService.updateProduct (productId, {name: 'New Name'});
 await eventBus.publish('ProductUpdated', {
     productId,
     name: 'New Name',
@@ -201,8 +201,8 @@ Read Side:
 // Order View Service
 eventBus.on('OrderCreated', async (event) => {
     // Get additional data
-    const product = await productService.get(event.productId);
-    const user = await userService.get(event.userId);
+    const product = await productService.get (event.productId);
+    const user = await userService.get (event.userId);
     
     // Create denormalized read model
     await orderViewDB.insert({
@@ -222,7 +222,7 @@ eventBus.on('OrderCreated', async (event) => {
 });
 
 // Queries use read model
-async function getOrderDetailsForUser(userId) {
+async function getOrderDetailsForUser (userId) {
     return await orderViewDB.find({userId});
     // Returns everything in one query!
 }
@@ -260,7 +260,7 @@ CREATE TABLE orders (
 
 CREATE TABLE order_items (
     id UUID PRIMARY KEY,
-    order_id UUID REFERENCES orders(id),
+    order_id UUID REFERENCES orders (id),
     product_id UUID,
     quantity INT,
     price DECIMAL(10,2)
@@ -366,8 +366,8 @@ RETURN recommendation.name
 \`\`\`sql
 CREATE TABLE orders (
     id UUID PRIMARY KEY,
-    user_id UUID REFERENCES users(id),  -- Foreign key
-    product_id UUID REFERENCES products(id)  -- Foreign key
+    user_id UUID REFERENCES users (id),  -- Foreign key
+    product_id UUID REFERENCES products (id)  -- Foreign key
 );
 \`\`\`
 
@@ -389,10 +389,10 @@ CREATE TABLE orders (
 
 \`\`\`javascript
 // Before creating order, verify user and product exist
-const user = await userService.getUser(userId);
+const user = await userService.getUser (userId);
 if (!user) throw new Error('User not found');
 
-const product = await productService.getProduct(productId);
+const product = await productService.getProduct (productId);
 if (!product) throw new Error('Product not found');
 
 // Now create order
@@ -420,8 +420,8 @@ await orderService.createOrder({userId, productId, ...});
 
 \`\`\`javascript
 // Product Service
-async function updateProductPrice(productId, newPrice) {
-    await db.products.update(productId, {price: newPrice});
+async function updateProductPrice (productId, newPrice) {
+    await db.products.update (productId, {price: newPrice});
     
     await eventBus.publish('ProductPriceChanged', {
         productId,
@@ -442,7 +442,7 @@ eventBus.on('ProductPriceChanged', async (event) => {
 
 // Inventory Service (adjust reorder calculations)
 eventBus.on('ProductPriceChanged', async (event) => {
-    await recalculateReorderPoint(event.productId);
+    await recalculateReorderPoint (event.productId);
 });
 \`\`\`
 

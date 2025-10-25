@@ -26,7 +26,7 @@ export const typehintsMultipleChoice: MultipleChoiceQuestion[] = [
       'def sum(*args: int) -> int',
       'def sum(*args: list[int]) -> int',
       'def sum(*args: List[int]) -> int',
-      'def sum(args: int) -> int',
+      'def sum (args: int) -> int',
     ],
     correctAnswer: 0,
     explanation:

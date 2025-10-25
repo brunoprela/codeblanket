@@ -51,7 +51,7 @@ class SequentialCoordinator:
     def __init__(self, agents: List[Any]):
         self.agents = agents
     
-    async def execute(self, initial_input: Any) -> SequentialResult:
+    async def execute (self, initial_input: Any) -> SequentialResult:
         """Execute agents sequentially."""
         import time
         
@@ -61,18 +61,18 @@ class SequentialCoordinator:
         
         current_input = initial_input
         
-        for i, agent in enumerate(self.agents):
+        for i, agent in enumerate (self.agents):
             step_start = time.time()
             
-            print(f"[Step {i+1}/{len(self.agents)}] {agent.name}...")
+            print(f"[Step {i+1}/{len (self.agents)}] {agent.name}...")
             
             # Execute agent
-            output = await agent.execute(current_input)
+            output = await agent.execute (current_input)
             
             step_time = time.time() - step_start
             
-            step_outputs.append(output)
-            step_times.append(step_time)
+            step_outputs.append (output)
+            step_times.append (step_time)
             
             # Output becomes next input
             current_input = output
@@ -102,22 +102,22 @@ class SequentialCoordinator:
         
         current_input = initial_input
         
-        for i, agent in enumerate(self.agents):
+        for i, agent in enumerate (self.agents):
             step_start = time.time()
             
             # Execute agent
-            output = await agent.execute(current_input)
+            output = await agent.execute (current_input)
             
             # Validate if validator provided
-            if validators and i < len(validators) and validators[i]:
+            if validators and i < len (validators) and validators[i]:
                 is_valid = validators[i](output)
                 if not is_valid:
-                    raise ValueError(f"Validation failed after {agent.name}")
+                    raise ValueError (f"Validation failed after {agent.name}")
             
             step_time = time.time() - step_start
             
-            step_outputs.append(output)
-            step_times.append(step_time)
+            step_outputs.append (output)
+            step_times.append (step_time)
             current_input = output
         
         total_time = time.time() - start_time
@@ -135,22 +135,22 @@ class Agent:
         self.name = name
         self.process_fn = process_fn
     
-    async def execute(self, input: Any) -> Any:
-        return await self.process_fn(input)
+    async def execute (self, input: Any) -> Any:
+        return await self.process_fn (input)
 
-async def research(topic: str) -> str:
+async def research (topic: str) -> str:
     await asyncio.sleep(1)  # Simulate work
     return f"Research findings on {topic}: ..."
 
-async def write(research: str) -> str:
+async def write (research: str) -> str:
     await asyncio.sleep(1.5)
     return f"Article based on: {research[:50]}..."
 
-async def review(article: str) -> str:
+async def review (article: str) -> str:
     await asyncio.sleep(1)
     return f"Reviewed article: {article[:50]}..."
 
-async def edit(reviewed: str) -> str:
+async def edit (reviewed: str) -> str:
     await asyncio.sleep(0.5)
     return f"Final edited: {reviewed[:50]}..."
 
@@ -188,7 +188,7 @@ class ParallelCoordinator:
     def __init__(self, agents: Dict[str, Any]):
         self.agents = agents  # {"name": agent}
     
-    async def execute_all(self, input: Any) -> ParallelResult:
+    async def execute_all (self, input: Any) -> ParallelResult:
         """Execute all agents in parallel."""
         import time
         
@@ -196,7 +196,7 @@ class ParallelCoordinator:
         
         # Create tasks for all agents
         tasks = {
-            name: self._execute_with_timing(name, agent, input)
+            name: self._execute_with_timing (name, agent, input)
             for name, agent in self.agents.items()
         }
         
@@ -211,9 +211,9 @@ class ParallelCoordinator:
         individual_times = {}
         failures = {}
         
-        for name, result in zip(tasks.keys(), results):
-            if isinstance(result, Exception):
-                failures[name] = str(result)
+        for name, result in zip (tasks.keys(), results):
+            if isinstance (result, Exception):
+                failures[name] = str (result)
             else:
                 outputs[name] = result['output']
                 individual_times[name] = result['time']
@@ -237,7 +237,7 @@ class ParallelCoordinator:
         import time
         
         start = time.time()
-        output = await agent.execute(input)
+        output = await agent.execute (input)
         elapsed = time.time() - start
         
         return {'output': output, 'time': elapsed}
@@ -259,7 +259,7 @@ class ParallelCoordinator:
         for name, agent in self.agents.items():
             try:
                 result = await asyncio.wait_for(
-                    self._execute_with_timing(name, agent, input),
+                    self._execute_with_timing (name, agent, input),
                     timeout=timeout
                 )
                 outputs[name] = result['output']
@@ -267,7 +267,7 @@ class ParallelCoordinator:
             except asyncio.TimeoutError:
                 failures[name] = f"Timeout after {timeout}s"
             except Exception as e:
-                failures[name] = str(e)
+                failures[name] = str (e)
         
         total_time = time.time() - start_time
         
@@ -279,15 +279,15 @@ class ParallelCoordinator:
         )
 
 # Example: Analyze text from multiple perspectives
-async def analyze_sentiment(text: str) -> Dict:
+async def analyze_sentiment (text: str) -> Dict:
     await asyncio.sleep(1)
     return {"sentiment": "positive", "score": 0.8}
 
-async def extract_keywords(text: str) -> Dict:
+async def extract_keywords (text: str) -> Dict:
     await asyncio.sleep(1.5)
     return {"keywords": ["AI", "technology"]}
 
-async def detect_language(text: str) -> Dict:
+async def detect_language (text: str) -> Dict:
     await asyncio.sleep(0.5)
     return {"language": "en", "confidence": 0.99}
 
@@ -318,22 +318,22 @@ class HierarchicalCoordinator:
         self.manager = manager
         self.workers = workers
     
-    async def execute(self, goal: str) -> Dict[str, Any]:
+    async def execute (self, goal: str) -> Dict[str, Any]:
         """Execute with manager coordinating workers."""
         # 1. Manager creates plan
         print("[Manager] Planning...")
-        plan = await self.manager.create_plan(goal, list(self.workers.keys()))
+        plan = await self.manager.create_plan (goal, list (self.workers.keys()))
         
         # 2. Execute plan stages
         results = []
         for stage in plan['stages']:
             print(f"\\n[Manager] Executing Stage {stage['id']}...")
-            stage_results = await self._execute_stage(stage)
-            results.extend(stage_results)
+            stage_results = await self._execute_stage (stage)
+            results.extend (stage_results)
         
         # 3. Manager synthesizes results
         print("\\n[Manager] Synthesizing results...")
-        final_result = await self.manager.synthesize(results)
+        final_result = await self.manager.synthesize (results)
         
         return {
             "plan": plan,
@@ -341,27 +341,27 @@ class HierarchicalCoordinator:
             "final_result": final_result
         }
     
-    async def _execute_stage(self, stage: Dict) -> List[Dict]:
+    async def _execute_stage (self, stage: Dict) -> List[Dict]:
         """Execute all tasks in a stage."""
         tasks = []
         
         for task in stage['tasks']:
-            worker = self.workers.get(task['worker'])
+            worker = self.workers.get (task['worker'])
             if worker:
-                tasks.append(self._execute_task(worker, task))
+                tasks.append (self._execute_task (worker, task))
         
         # Execute stage tasks in parallel
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         return [
-            r if not isinstance(r, Exception) else {"error": str(r)}
+            r if not isinstance (r, Exception) else {"error": str (r)}
             for r in results
         ]
     
-    async def _execute_task(self, worker: Any, task: Dict) -> Dict:
+    async def _execute_task (self, worker: Any, task: Dict) -> Dict:
         """Execute single task."""
         print(f"  [{worker.name}] {task['description']}")
-        output = await worker.execute(task['description'])
+        output = await worker.execute (task['description'])
         return {
             "task": task['description'],
             "worker": worker.name,
@@ -372,7 +372,7 @@ class HierarchicalCoordinator:
 class ManagerAgent:
     name = "Manager"
     
-    async def create_plan(self, goal: str, workers: List[str]) -> Dict:
+    async def create_plan (self, goal: str, workers: List[str]) -> Dict:
         """Create execution plan."""
         # Simplified - in reality, use LLM
         return {
@@ -400,7 +400,7 @@ class ManagerAgent:
             ]
         }
     
-    async def synthesize(self, results: List[Dict]) -> str:
+    async def synthesize (self, results: List[Dict]) -> str:
         """Synthesize results."""
         return "Project completed successfully with all tasks done."
 
@@ -413,7 +413,7 @@ workers = {
     "reviewer": Agent("Reviewer", lambda x: f"Review: {x}")
 }
 
-hierarchical = HierarchicalCoordinator(manager, workers)
+hierarchical = HierarchicalCoordinator (manager, workers)
 result = await hierarchical.execute("Build authentication system")
 \`\`\`
 
@@ -437,10 +437,10 @@ class ConsensusCoordinator:
     ) -> Dict[str, Any]:
         """Get consensus from agents."""
         # 1. Get opinions from all agents
-        opinions = await self._gather_opinions(question)
+        opinions = await self._gather_opinions (question)
         
         # 2. Find consensus
-        consensus = self._find_consensus(opinions, consensus_threshold)
+        consensus = self._find_consensus (opinions, consensus_threshold)
         
         # 3. If no consensus, iterate
         if not consensus['reached']:
@@ -452,21 +452,21 @@ class ConsensusCoordinator:
         
         return consensus
     
-    async def _gather_opinions(self, question: str) -> List[Dict]:
+    async def _gather_opinions (self, question: str) -> List[Dict]:
         """Get opinion from each agent."""
         tasks = [
-            agent.execute(question)
+            agent.execute (question)
             for agent in self.agents
         ]
         
         results = await asyncio.gather(*tasks)
         
         opinions = []
-        for agent, result in zip(self.agents, results):
+        for agent, result in zip (self.agents, results):
             opinions.append({
                 "agent": agent.name,
                 "opinion": result,
-                "confidence": getattr(result, 'confidence', 1.0)
+                "confidence": getattr (result, 'confidence', 1.0)
             })
         
         return opinions
@@ -482,15 +482,15 @@ class ConsensusCoordinator:
         opinion_groups = {}
         
         for op in opinions:
-            opinion_text = str(op['opinion'])
+            opinion_text = str (op['opinion'])
             if opinion_text not in opinion_groups:
                 opinion_groups[opinion_text] = []
-            opinion_groups[opinion_text].append(op)
+            opinion_groups[opinion_text].append (op)
         
         # Find majority
-        total = len(opinions)
+        total = len (opinions)
         for opinion_text, group in opinion_groups.items():
-            agreement_ratio = len(group) / total
+            agreement_ratio = len (group) / total
             
             if agreement_ratio >= threshold:
                 return {
@@ -522,11 +522,11 @@ class ConsensusCoordinator:
         """Iterate to reach consensus."""
         current_opinions = initial_opinions
         
-        for iteration in range(max_iterations):
+        for iteration in range (max_iterations):
             print(f"Consensus iteration {iteration + 1}...")
             
             # Share opinions with all agents
-            opinion_summary = self._summarize_opinions(current_opinions)
+            opinion_summary = self._summarize_opinions (current_opinions)
             
             # Get revised opinions
             revised = await self._gather_revised_opinions(
@@ -535,7 +535,7 @@ class ConsensusCoordinator:
             )
             
             # Check for consensus
-            consensus = self._find_consensus(revised, threshold)
+            consensus = self._find_consensus (revised, threshold)
             
             if consensus['reached']:
                 consensus['iterations'] = iteration + 1
@@ -550,7 +550,7 @@ class ConsensusCoordinator:
             "final_opinions": current_opinions
         }
     
-    def _summarize_opinions(self, opinions: List[Dict]) -> str:
+    def _summarize_opinions (self, opinions: List[Dict]) -> str:
         """Summarize all opinions."""
         summary = "Current opinions:\\n"
         for op in opinions:
@@ -570,7 +570,7 @@ Other agents' opinions:
 
 Consider these perspectives and provide your revised opinion."""
         
-        return await self._gather_opinions(revised_question)
+        return await self._gather_opinions (revised_question)
 
 # Usage
 class OpinionAgent:
@@ -578,7 +578,7 @@ class OpinionAgent:
         self.name = name
         self.bias = bias
     
-    async def execute(self, question: str) -> str:
+    async def execute (self, question: str) -> str:
         # Simulate agent forming opinion
         await asyncio.sleep(0.5)
         return f"Opinion from {self.bias} perspective: ..."
@@ -612,28 +612,28 @@ class CompetitiveCoordinator:
         self.agents = agents
         self.judge = judge  # Function to evaluate solutions
     
-    async def compete(self, task: str) -> Dict[str, Any]:
+    async def compete (self, task: str) -> Dict[str, Any]:
         """Have agents compete on task."""
         # 1. All agents attempt task in parallel
-        solutions = await self._gather_solutions(task)
+        solutions = await self._gather_solutions (task)
         
         # 2. Judge evaluates all solutions
-        scored_solutions = await self._score_solutions(solutions)
+        scored_solutions = await self._score_solutions (solutions)
         
         # 3. Select winner
-        winner = max(scored_solutions, key=lambda x: x['score'])
+        winner = max (scored_solutions, key=lambda x: x['score'])
         
         return {
             "task": task,
             "all_solutions": scored_solutions,
             "winner": winner,
-            "diversity_score": self._calculate_diversity(scored_solutions)
+            "diversity_score": self._calculate_diversity (scored_solutions)
         }
     
-    async def _gather_solutions(self, task: str) -> List[Dict]:
+    async def _gather_solutions (self, task: str) -> List[Dict]:
         """Get solution from each agent."""
         tasks = [
-            self._get_solution(agent, task)
+            self._get_solution (agent, task)
             for agent in self.agents
         ]
         
@@ -641,15 +641,15 @@ class CompetitiveCoordinator:
         
         return [
             s for s in solutions
-            if not isinstance(s, Exception)
+            if not isinstance (s, Exception)
         ]
     
-    async def _get_solution(self, agent: Any, task: str) -> Dict:
+    async def _get_solution (self, agent: Any, task: str) -> Dict:
         """Get solution from single agent."""
         import time
         
         start = time.time()
-        solution = await agent.execute(task)
+        solution = await agent.execute (task)
         elapsed = time.time() - start
         
         return {
@@ -658,30 +658,30 @@ class CompetitiveCoordinator:
             "time": elapsed
         }
     
-    async def _score_solutions(self, solutions: List[Dict]) -> List[Dict]:
+    async def _score_solutions (self, solutions: List[Dict]) -> List[Dict]:
         """Score all solutions."""
         for solution in solutions:
             # Use judge function to score
-            score = await self.judge(solution['solution'])
+            score = await self.judge (solution['solution'])
             solution['score'] = score
         
         return solutions
     
-    def _calculate_diversity(self, solutions: List[Dict]) -> float:
+    def _calculate_diversity (self, solutions: List[Dict]) -> float:
         """Calculate diversity of solutions."""
         # Simple: ratio of unique solutions
-        unique = len(set(str(s['solution']) for s in solutions))
-        total = len(solutions)
+        unique = len (set (str (s['solution']) for s in solutions))
+        total = len (solutions)
         return unique / total if total > 0 else 0
 
 # Example: Multiple agents solve coding problem
-async def judge_code_solution(code: str) -> float:
+async def judge_code_solution (code: str) -> float:
     """Judge quality of code solution."""
     # In reality, run tests and analyze
     score = 0.0
     
     # Check length (not too short, not too long)
-    if 50 < len(code) < 500:
+    if 50 < len (code) < 500:
         score += 0.3
     
     # Check for error handling
@@ -722,28 +722,28 @@ class AdaptiveCoordinator:
     
     def __init__(self, agents: Dict[str, Any]):
         self.agents = agents
-        self.sequential = SequentialCoordinator(list(agents.values()))
-        self.parallel = ParallelCoordinator(agents)
+        self.sequential = SequentialCoordinator (list (agents.values()))
+        self.parallel = ParallelCoordinator (agents)
     
-    async def execute(self, task: str, context: Dict[str, Any]) -> Dict:
+    async def execute (self, task: str, context: Dict[str, Any]) -> Dict:
         """Choose and execute appropriate strategy."""
-        strategy = self._choose_strategy(task, context)
+        strategy = self._choose_strategy (task, context)
         
         print(f"Using {strategy} coordination...")
         
         if strategy == "sequential":
-            return await self.sequential.execute(task)
+            return await self.sequential.execute (task)
         elif strategy == "parallel":
-            return await self.parallel.execute_all(task)
+            return await self.parallel.execute_all (task)
         elif strategy == "hierarchical":
             # Create manager on the fly
             manager = ManagerAgent()
-            hierarchical = HierarchicalCoordinator(manager, self.agents)
-            return await hierarchical.execute(task)
+            hierarchical = HierarchicalCoordinator (manager, self.agents)
+            return await hierarchical.execute (task)
         else:
-            raise ValueError(f"Unknown strategy: {strategy}")
+            raise ValueError (f"Unknown strategy: {strategy}")
     
-    def _choose_strategy(self, task: str, context: Dict[str, Any]) -> str:
+    def _choose_strategy (self, task: str, context: Dict[str, Any]) -> str:
         """Choose coordination strategy based on context."""
         # Rule-based decision
         
@@ -753,7 +753,7 @@ class AdaptiveCoordinator:
         if context.get("time_critical") and context.get("independent_subtasks"):
             return "parallel"
         
-        if context.get("complex") and len(self.agents) > 3:
+        if context.get("complex") and len (self.agents) > 3:
             return "hierarchical"
         
         # Default

@@ -51,14 +51,14 @@ export const excelfilemanipulationMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'fpdu-excel-manip-mc-4',
     question: 'In openpyxl, how do you reference cell B5?',
     options: [
-      'sheet["B5",] or sheet.cell(row=5, column=2)',
+      'sheet["B5",] or sheet.cell (row=5, column=2)',
       'sheet[5, 2] or sheet.cell("B5")',
       'sheet.get("B5") or sheet.cell(4, 1)',
-      'sheet["B", "5",] or sheet.cell(row=4, column=1)',
+      'sheet["B", "5",] or sheet.cell (row=4, column=1)',
     ],
     correctAnswer: 0,
     explanation:
-      'sheet["B5",] uses Excel notation (letter+number). sheet.cell(row=5, column=2) uses 1-based indexing. Note: column 2 is B, and rows are 1-based.',
+      'sheet["B5",] uses Excel notation (letter+number). sheet.cell (row=5, column=2) uses 1-based indexing. Note: column 2 is B, and rows are 1-based.',
   },
   {
     id: 'fpdu-excel-manip-mc-5',

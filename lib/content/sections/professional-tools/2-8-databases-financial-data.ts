@@ -172,9 +172,9 @@ CREATE TABLE prices (
 );
 
 -- Create indexes for fast queries
-CREATE INDEX idx_prices_ticker ON prices(ticker);
-CREATE INDEX idx_prices_date ON prices(date);
-CREATE INDEX idx_prices_ticker_date ON prices(ticker, date);
+CREATE INDEX idx_prices_ticker ON prices (ticker);
+CREATE INDEX idx_prices_date ON prices (date);
+CREATE INDEX idx_prices_ticker_date ON prices (ticker, date);
 
 -- Explain indexes:
 -- Single column: idx_prices_ticker
@@ -211,7 +211,7 @@ df.columns = [col.lower().replace(' ', '_') for col in df.columns]
 # Insert to database
 df.to_sql('prices', engine, if_exists='append', index=False, method='multi')
 
-print(f"Inserted {len(df)} rows")
+print(f"Inserted {len (df)} rows")
 \`\`\`
 
 ### Bulk Insert (Faster)
@@ -225,12 +225,12 @@ tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA']
 dfs = []
 
 for ticker in tickers:
-    df = yf.download(ticker, start='2020-01-01', end='2024-01-01', progress=False)
+    df = yf.download (ticker, start='2020-01-01', end='2024-01-01', progress=False)
     df = df.reset_index()
     df['ticker'] = ticker
-    dfs.append(df)
+    dfs.append (df)
 
-combined = pd.concat(dfs, ignore_index=True)
+combined = pd.concat (dfs, ignore_index=True)
 combined.columns = [col.lower().replace(' ', '_') for col in combined.columns]
 
 # Bulk insert using execute_values (much faster)
@@ -248,12 +248,12 @@ data_tuples = [
     (
         row['date'],
         row['ticker'],
-        float(row['open']),
-        float(row['high']),
-        float(row['low']),
-        float(row['close']),
-        int(row['volume']),
-        float(row['adj close']) if 'adj close' in row else None
+        float (row['open']),
+        float (row['high']),
+        float (row['low']),
+        float (row['close']),
+        int (row['volume']),
+        float (row['adj close']) if 'adj close' in row else None
     )
     for _, row in combined.iterrows()
 ]
@@ -271,13 +271,13 @@ insert_query = \"\"\"
         adj_close = EXCLUDED.adj_close
 \"\"\"
 
-execute_values(cur, insert_query, data_tuples, page_size=1000)
+execute_values (cur, insert_query, data_tuples, page_size=1000)
 conn.commit()
 
 cur.close()
 conn.close()
 
-print(f"Inserted {len(data_tuples)} rows")
+print(f"Inserted {len (data_tuples)} rows")
 \`\`\`
 
 ## Querying Financial Data
@@ -292,7 +292,7 @@ query = \"\"\"
     ORDER BY ticker, date
 \"\"\"
 
-df = pd.read_sql(query, engine)
+df = pd.read_sql (query, engine)
 print(df.head())
 
 # Calculate returns
@@ -320,7 +320,7 @@ query = \"\"\"
     ORDER BY date
 \"\"\"
 
-df = pd.read_sql(query, engine)
+df = pd.read_sql (query, engine)
 print(df.tail())
 \`\`\`
 
@@ -375,7 +375,7 @@ FROM prices
 ORDER BY ticker, date;
 
 -- Create index on materialized view
-CREATE INDEX idx_daily_stats_ticker_date ON daily_statistics(ticker, date);
+CREATE INDEX idx_daily_stats_ticker_date ON daily_statistics (ticker, date);
 
 -- Refresh materialized view (after new data loaded)
 REFRESH MATERIALIZED VIEW CONCURRENTLY daily_statistics;
@@ -471,7 +471,7 @@ df = df.reset_index()
 
 # Prepare data
 df['ticker'] = 'AAPL'
-df['time'] = pd.to_datetime(df['Date']).dt.tz_localize('America/New_York')
+df['time'] = pd.to_datetime (df['Date']).dt.tz_localize('America/New_York')
 df = df.drop('Date', axis=1)
 df.columns = [col.lower().replace(' ', '_') for col in df.columns]
 
@@ -488,11 +488,11 @@ TimescaleDB's killer feature for financial data:
 SELECT 
     time_bucket('1 hour', time) AS hour,
     ticker,
-    first(open, time) AS open,
-    max(high) AS high,
-    min(low) AS low,
-    last(close, time) AS close,
-    sum(volume) AS volume
+    first (open, time) AS open,
+    max (high) AS high,
+    min (low) AS low,
+    last (close, time) AS close,
+    sum (volume) AS volume
 FROM prices
 WHERE ticker = 'AAPL'
   AND time >= NOW() - INTERVAL '1 week'
@@ -503,11 +503,11 @@ ORDER BY hour DESC;
 SELECT 
     time_bucket('1 day', time) AS day,
     ticker,
-    first(open, time) AS open,
-    max(high) AS high,
-    min(low) AS low,
-    last(close, time) AS close,
-    sum(volume) AS volume
+    first (open, time) AS open,
+    max (high) AS high,
+    min (low) AS low,
+    last (close, time) AS close,
+    sum (volume) AS volume
 FROM prices
 WHERE ticker = 'AAPL'
   AND time >= '2023-01-01'
@@ -518,11 +518,11 @@ ORDER BY day;
 SELECT 
     time_bucket('1 week', time) AS week,
     ticker,
-    first(open, time) AS open,
-    max(high) AS high,
-    min(low) AS low,
-    last(close, time) AS close,
-    sum(volume) AS volume
+    first (open, time) AS open,
+    max (high) AS high,
+    min (low) AS low,
+    last (close, time) AS close,
+    sum (volume) AS volume
 FROM prices
 WHERE ticker = 'AAPL'
 GROUP BY week, ticker
@@ -540,11 +540,11 @@ WITH (timescaledb.continuous) AS
 SELECT 
     time_bucket('1 day', time) AS day,
     ticker,
-    first(open, time) AS open,
-    max(high) AS high,
-    min(low) AS low,
-    last(close, time) AS close,
-    sum(volume) AS volume,
+    first (open, time) AS open,
+    max (high) AS high,
+    min (low) AS low,
+    last (close, time) AS close,
+    sum (volume) AS volume,
     count(*) AS num_bars
 FROM prices
 GROUP BY day, ticker;
@@ -567,11 +567,11 @@ WITH (timescaledb.continuous) AS
 SELECT 
     time_bucket('1 week', day) AS week,
     ticker,
-    first(open, day) AS open,
-    max(high) AS high,
-    min(low) AS low,
-    last(close, day) AS close,
-    sum(volume) AS volume
+    first (open, day) AS open,
+    max (high) AS high,
+    min (low) AS low,
+    last (close, day) AS close,
+    sum (volume) AS volume
 FROM prices_daily
 GROUP BY week, ticker;
 \`\`\`
@@ -590,13 +590,13 @@ ALTER TABLE prices SET (
 SELECT add_compression_policy('prices', INTERVAL '7 days');
 
 -- Manually compress older data
-SELECT compress_chunk(chunk)
+SELECT compress_chunk (chunk)
 FROM show_chunks('prices', older_than => INTERVAL '30 days') AS chunk;
 
 -- Check compression stats
 SELECT 
-    pg_size_pretty(before_compression_total_bytes) as before,
-    pg_size_pretty(after_compression_total_bytes) as after,
+    pg_size_pretty (before_compression_total_bytes) as before,
+    pg_size_pretty (after_compression_total_bytes) as after,
     round((1 - after_compression_total_bytes::numeric / before_compression_total_bytes::numeric) * 100, 2) as compression_ratio
 FROM timescaledb_information.hypertable_compression_stats
 WHERE hypertable_name = 'prices';
@@ -639,11 +639,11 @@ query = \"\"\"
     SELECT 
         time_bucket('1 hour', time) AS hour,
         ticker,
-        first(open, time) AS open,
-        max(high) AS high,
-        min(low) AS low,
-        last(close, time) AS close,
-        sum(volume) AS volume
+        first (open, time) AS open,
+        max (high) AS high,
+        min (low) AS low,
+        last (close, time) AS close,
+        sum (volume) AS volume
     FROM prices
     WHERE ticker = 'AAPL'
       AND time >= NOW() - INTERVAL '1 year'
@@ -652,9 +652,9 @@ query = \"\"\"
 \"\"\"
 
 start = time.time()
-df = pd.read_sql(query, engine)
+df = pd.read_sql (query, engine)
 print(f"Query time: {time.time() - start:.2f}s")
-print(f"Rows returned: {len(df)}")
+print(f"Rows returned: {len (df)}")
 
 # Result: 2.1 seconds for 1 year of hourly data from 1 billion rows
 \`\`\`
@@ -684,7 +684,7 @@ CREATE TABLE tickers (
 -- Prices table (OHLCV)
 CREATE TABLE prices (
     time TIMESTAMPTZ NOT NULL,
-    ticker_id INTEGER NOT NULL REFERENCES tickers(ticker_id),
+    ticker_id INTEGER NOT NULL REFERENCES tickers (ticker_id),
     open NUMERIC(12, 4),
     high NUMERIC(12, 4),
     low NUMERIC(12, 4),
@@ -695,11 +695,11 @@ CREATE TABLE prices (
 
 -- Convert to hypertable
 SELECT create_hypertable('prices', 'time');
-CREATE INDEX idx_prices_ticker_time ON prices(ticker_id, time DESC);
+CREATE INDEX idx_prices_ticker_time ON prices (ticker_id, time DESC);
 
 -- Fundamentals table
 CREATE TABLE fundamentals (
-    ticker_id INTEGER REFERENCES tickers(ticker_id),
+    ticker_id INTEGER REFERENCES tickers (ticker_id),
     date DATE NOT NULL,
     revenue NUMERIC(20, 2),
     earnings NUMERIC(20, 2),
@@ -712,7 +712,7 @@ CREATE TABLE fundamentals (
 -- Splits and dividends
 CREATE TABLE corporate_actions (
     action_id SERIAL PRIMARY KEY,
-    ticker_id INTEGER REFERENCES tickers(ticker_id),
+    ticker_id INTEGER REFERENCES tickers (ticker_id),
     date DATE NOT NULL,
     action_type VARCHAR(20) NOT NULL,  -- 'split', 'dividend', 'merger'
     split_ratio NUMERIC(10, 6),  -- e.g., 2.0 for 2:1 split
@@ -724,7 +724,7 @@ CREATE TABLE corporate_actions (
 -- Metadata tracking
 CREATE TABLE data_updates (
     update_id SERIAL PRIMARY KEY,
-    ticker_id INTEGER REFERENCES tickers(ticker_id),
+    ticker_id INTEGER REFERENCES tickers (ticker_id),
     update_type VARCHAR(50),  -- 'price', 'fundamental', 'action'
     start_date DATE,
     end_date DATE,
@@ -781,7 +781,7 @@ CREATE TABLE prices_daily (
 CREATE TABLE news (
     news_id SERIAL PRIMARY KEY,
     published_at TIMESTAMPTZ NOT NULL,
-    ticker_id INTEGER REFERENCES tickers(ticker_id),
+    ticker_id INTEGER REFERENCES tickers (ticker_id),
     headline TEXT,
     content TEXT,
     source VARCHAR(100),
@@ -789,7 +789,7 @@ CREATE TABLE news (
     sentiment_score NUMERIC(5, 4),  -- -1 to 1
     relevance_score NUMERIC(5, 4)   -- 0 to 1
 );
-CREATE INDEX idx_news_ticker_time ON news(ticker_id, published_at DESC);
+CREATE INDEX idx_news_ticker_time ON news (ticker_id, published_at DESC);
 
 -- Social media mentions
 CREATE TABLE social_mentions (
@@ -827,8 +827,8 @@ CREATE TABLE strategies (
 -- Trades
 CREATE TABLE trades (
     trade_id SERIAL PRIMARY KEY,
-    strategy_id INTEGER REFERENCES strategies(strategy_id),
-    ticker_id INTEGER REFERENCES tickers(ticker_id),
+    strategy_id INTEGER REFERENCES strategies (strategy_id),
+    ticker_id INTEGER REFERENCES tickers (ticker_id),
     entry_time TIMESTAMPTZ NOT NULL,
     entry_price NUMERIC(12, 4) NOT NULL,
     position_size INTEGER NOT NULL,  -- Number of shares
@@ -841,13 +841,13 @@ CREATE TABLE trades (
     slippage NUMERIC(10, 2),
     notes TEXT
 );
-CREATE INDEX idx_trades_strategy ON trades(strategy_id, entry_time DESC);
-CREATE INDEX idx_trades_ticker ON trades(ticker_id, entry_time DESC);
+CREATE INDEX idx_trades_strategy ON trades (strategy_id, entry_time DESC);
+CREATE INDEX idx_trades_ticker ON trades (ticker_id, entry_time DESC);
 
 -- Daily strategy performance
 CREATE TABLE strategy_performance (
     date DATE NOT NULL,
-    strategy_id INTEGER REFERENCES strategies(strategy_id),
+    strategy_id INTEGER REFERENCES strategies (strategy_id),
     pnl NUMERIC(15, 2),
     trades_count INTEGER,
     win_rate NUMERIC(5, 4),
@@ -894,17 +894,17 @@ LIMIT 100;
 \`\`\`sql
 -- Composite index for common query pattern
 CREATE INDEX idx_prices_ticker_time_close 
-ON prices(ticker_id, time DESC, close);
+ON prices (ticker_id, time DESC, close);
 
 -- Covering index (includes all columns in query)
 -- Query never needs to access table, just index
 CREATE INDEX idx_prices_covering 
-ON prices(ticker_id, time DESC) 
+ON prices (ticker_id, time DESC) 
 INCLUDE (open, high, low, close, volume);
 
 -- Partial index (only index subset of data)
 CREATE INDEX idx_prices_recent 
-ON prices(ticker_id, time DESC, close)
+ON prices (ticker_id, time DESC, close)
 WHERE time >= CURRENT_DATE - INTERVAL '30 days';
 
 -- Expression index
@@ -1042,7 +1042,7 @@ ALTER TABLE prices ADD CONSTRAINT check_positive_volume
 ### Data Quality Checks
 
 \`\`\`python
-def validate_price_data(df):
+def validate_price_data (df):
     \"\"\"Validate price data before database insert\"\"\"
     issues = []
     
@@ -1065,7 +1065,7 @@ def validate_price_data(df):
         issues.append("Low not lowest")
     
     # Check for duplicate dates
-    if df.duplicated(subset=['date', 'ticker']).any():
+    if df.duplicated (subset=['date', 'ticker']).any():
         issues.append("Duplicate date/ticker combinations")
     
     # Check for unrealistic price movements (> 50% daily change)
@@ -1074,13 +1074,13 @@ def validate_price_data(df):
         issues.append("Extreme price movements (>50% daily change)")
     
     if issues:
-        raise ValueError(f"Data validation failed: {', '.join(issues)}")
+        raise ValueError (f"Data validation failed: {', '.join (issues)}")
     
     return True
 
 # Usage
 try:
-    validate_price_data(df)
+    validate_price_data (df)
     df.to_sql('prices', engine, if_exists='append', index=False)
     print("Data inserted successfully")
 except ValueError as e:
@@ -1096,8 +1096,8 @@ except ValueError as e:
 SELECT 
     schemaname,
     tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size,
-    pg_total_relation_size(schemaname||'.'||tablename) AS size_bytes
+    pg_size_pretty (pg_total_relation_size (schemaname||'.'||tablename)) AS size,
+    pg_total_relation_size (schemaname||'.'||tablename) AS size_bytes
 FROM pg_tables
 WHERE schemaname = 'public'
 ORDER BY size_bytes DESC;
@@ -1109,7 +1109,7 @@ SELECT
     idx_scan AS index_scans,
     idx_tup_read AS tuples_read,
     idx_tup_fetch AS tuples_fetched,
-    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size
+    pg_size_pretty (pg_relation_size (indexrelid)) AS index_size
 FROM pg_stat_user_indexes
 ORDER BY idx_scan ASC;  -- Unused indexes at top
 
@@ -1129,10 +1129,10 @@ LIMIT 20;
 SELECT 
     schemaname,
     tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size
+    pg_size_pretty (pg_total_relation_size (schemaname||'.'||tablename)) as size
 FROM pg_tables
 WHERE schemaname = 'public'
-ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
+ORDER BY pg_total_relation_size (schemaname||'.'||tablename) DESC;
 \`\`\`
 
 ### Vacuum and Analyze
@@ -1208,12 +1208,12 @@ from psycopg2 import OperationalError, IntegrityError
 import time
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def insert_with_retry(data, max_retries=3):
+def insert_with_retry (data, max_retries=3):
     \"\"\"Insert data with automatic retry on failure\"\"\"
-    for attempt in range(max_retries):
+    for attempt in range (max_retries):
         try:
             conn = psycopg2.connect(
                 host='localhost',
@@ -1236,10 +1236,10 @@ def insert_with_retry(data, max_retries=3):
                     volume = EXCLUDED.volume
             \"\"\"
             
-            cur.executemany(insert_query, data)
+            cur.executemany (insert_query, data)
             conn.commit()
             
-            logger.info(f"Inserted {len(data)} rows successfully")
+            logger.info (f"Inserted {len (data)} rows successfully")
             
             cur.close()
             conn.close()
@@ -1248,13 +1248,13 @@ def insert_with_retry(data, max_retries=3):
             
         except IntegrityError as e:
             # Data constraint violation - don't retry
-            logger.error(f"Data integrity error: {e}")
+            logger.error (f"Data integrity error: {e}")
             conn.rollback()
             raise
             
         except OperationalError as e:
             # Connection/network error - retry
-            logger.warning(f"Connection error (attempt {attempt + 1}/{max_retries}): {e}")
+            logger.warning (f"Connection error (attempt {attempt + 1}/{max_retries}): {e}")
             
             if attempt < max_retries - 1:
                 time.sleep(2 ** attempt)  # Exponential backoff
@@ -1275,9 +1275,9 @@ try:
         ('2024-01-15', 1, 185.50, 187.25, 184.75, 186.80, 52341567),
         # ... more rows
     ]
-    insert_with_retry(data)
+    insert_with_retry (data)
 except Exception as e:
-    logger.error(f"Failed to insert data: {e}")
+    logger.error (f"Failed to insert data: {e}")
 \`\`\`
 
 ## Security Best Practices

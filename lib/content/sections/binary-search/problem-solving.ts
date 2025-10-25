@@ -11,7 +11,7 @@ export const problemsolvingSection = {
 - Ask: "Is the array sorted?" (Critical!)
 - Ask: "Can there be duplicates?"
 - Ask: "What should I return if not found?"
-- Ask: "What's the expected size?" (helps choose algorithm)
+- Ask: "What\'s the expected size?" (helps choose algorithm)
 
 **2. Explain the Approach (1-2 minutes)**
 - State: "I'll use binary search because the array is sorted"

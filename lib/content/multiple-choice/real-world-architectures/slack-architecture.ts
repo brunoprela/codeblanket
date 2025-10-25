@@ -34,7 +34,7 @@ export const slackarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc3',
-    question: "What is Slack's database sharding strategy?",
+    question: "What is Slack\'s database sharding strategy?",
     options: [
       'Shard by user_id for user-centric queries',
       'Shard by workspace_id (tenant-based sharding)',

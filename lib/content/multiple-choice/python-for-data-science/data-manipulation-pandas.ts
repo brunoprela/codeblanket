@@ -20,10 +20,10 @@ export const datamanipulationpandasMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       'Which is the fastest way to create a new column based on a condition in Pandas?',
     options: [
-      'df["new",] = df["col",].apply(lambda x: val1 if x > 5 else val2)',
-      'df["new",] = np.where(df["col",] > 5, val1, val2)',
-      'for i in range(len(df)): df.loc[i, "new",] = val1 if df.loc[i, "col",] > 5 else val2',
-      'df["new",] = df["col",].map(lambda x: val1 if x > 5 else val2)',
+      'df["new",] = df["col",].apply (lambda x: val1 if x > 5 else val2)',
+      'df["new",] = np.where (df["col",] > 5, val1, val2)',
+      'for i in range (len (df)): df.loc[i, "new",] = val1 if df.loc[i, "col",] > 5 else val2',
+      'df["new",] = df["col",].map (lambda x: val1 if x > 5 else val2)',
     ],
     correctAnswer: 1,
     explanation:

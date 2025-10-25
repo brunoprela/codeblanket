@@ -26,10 +26,10 @@ Explore **level by level**, like ripples in water.
 \`\`\`python
 from collections import deque
 
-def bfs(graph, start):
+def bfs (graph, start):
     visited = set()
     queue = deque([start])
-    visited.add(start)
+    visited.add (start)
     
     while queue:
         node = queue.popleft()
@@ -37,8 +37,8 @@ def bfs(graph, start):
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
+                visited.add (neighbor)
+                queue.append (neighbor)
 \`\`\`
 
 **Visualization:**
@@ -76,23 +76,23 @@ Explore **as far as possible** before backtracking.
 
 **Implementation (Recursive):**
 \`\`\`python
-def dfs_recursive(graph, node, visited=None):
+def dfs_recursive (graph, node, visited=None):
     if visited is None:
         visited = set()
     
-    visited.add(node)
+    visited.add (node)
     print(node)  # Process node
     
     for neighbor in graph[node]:
         if neighbor not in visited:
-            dfs_recursive(graph, neighbor, visited)
+            dfs_recursive (graph, neighbor, visited)
     
     return visited
 \`\`\`
 
 **Implementation (Iterative with Stack):**
 \`\`\`python
-def dfs_iterative(graph, start):
+def dfs_iterative (graph, start):
     visited = set()
     stack = [start]
     
@@ -102,12 +102,12 @@ def dfs_iterative(graph, start):
         if node in visited:
             continue
         
-        visited.add(node)
+        visited.add (node)
         print(node)  # Process node
         
         for neighbor in graph[node]:
             if neighbor not in visited:
-                stack.append(neighbor)
+                stack.append (neighbor)
     
     return visited
 \`\`\`

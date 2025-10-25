@@ -17,11 +17,11 @@ export const zoomarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Zoom uses SFU (Selective Forwarding Unit) mode for small meetings (2-40 participants). Each participant sends one video stream to Zoom's Multimedia Router (SFU), which forwards streams to other participants without transcoding. Participants upload 1 stream and download N-1 streams. This balances latency, quality, and bandwidth better than P2P (which becomes impractical beyond 4-5 participants) or MCU (which requires server CPU for compositing).",
+      "Zoom uses SFU (Selective Forwarding Unit) mode for small meetings (2-40 participants). Each participant sends one video stream to Zoom\'s Multimedia Router (SFU), which forwards streams to other participants without transcoding. Participants upload 1 stream and download N-1 streams. This balances latency, quality, and bandwidth better than P2P (which becomes impractical beyond 4-5 participants) or MCU (which requires server CPU for compositing).",
   },
   {
     id: 'mc2',
-    question: "What is Zoom's typical end-to-end latency for video calls?",
+    question: "What is Zoom\'s typical end-to-end latency for video calls?",
     options: [
       '50-100 milliseconds',
       '150-250 milliseconds',
@@ -48,7 +48,7 @@ export const zoomarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc4',
     question:
-      "What bandwidth overhead does Zoom's Forward Error Correction (FEC) add?",
+      "What bandwidth overhead does Zoom\'s Forward Error Correction (FEC) add?",
     options: [
       '1-5% overhead',
       '10-20% overhead',
@@ -57,7 +57,7 @@ export const zoomarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Zoom's Forward Error Correction adds 10-20% bandwidth overhead by sending redundant parity packets. This allows reconstructing lost packets without retransmission, which would add latency. For example, sending packets [1,2,3] plus parity [P123], if packet 2 is lost, it can be recovered using [1,3,P123]. This trade-off of bandwidth for latency is crucial for real-time communication, enabling resilience to 10-20% packet loss.",
+      "Zoom\'s Forward Error Correction adds 10-20% bandwidth overhead by sending redundant parity packets. This allows reconstructing lost packets without retransmission, which would add latency. For example, sending packets [1,2,3] plus parity [P123], if packet 2 is lost, it can be recovered using [1,3,P123]. This trade-off of bandwidth for latency is crucial for real-time communication, enabling resilience to 10-20% packet loss.",
   },
   {
     id: 'mc5',

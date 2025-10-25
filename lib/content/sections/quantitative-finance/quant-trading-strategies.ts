@@ -370,7 +370,7 @@ elif MA_50 < MA_200 and position == 1:
 
 **Modeling:**
 \`\`\`python
-slippage = spread/2 + eta * volatility * sqrt(order_size / daily_volume)
+slippage = spread/2 + eta * volatility * sqrt (order_size / daily_volume)
 \`\`\`
 
 **3. Out-of-sample testing**
@@ -473,7 +473,7 @@ import pandas as pd
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-def time_series_momentum(ticker, lookback=252, skip=21, vol_target=0.10, start='2010-01-01', end='2023-12-31'):
+def time_series_momentum (ticker, lookback=252, skip=21, vol_target=0.10, start='2010-01-01', end='2023-12-31'):
     """
     Time-series momentum with volatility targeting.
     
@@ -488,18 +488,18 @@ def time_series_momentum(ticker, lookback=252, skip=21, vol_target=0.10, start='
     - DataFrame with signals, positions, returns
     """
     # Download data
-    data = yf.download(ticker, start=start, end=end, progress=False)
+    data = yf.download (ticker, start=start, end=end, progress=False)
     data = data['Adj Close'].to_frame('price')
     
     # Calculate momentum signal
-    data['momentum'] = data['price'].pct_change(lookback).shift(skip)
+    data['momentum'] = data['price'].pct_change (lookback).shift (skip)
     
     # Calculate realized volatility (20-day)
     data['returns'] = data['price'].pct_change()
     data['volatility'] = data['returns'].rolling(20).std() * np.sqrt(252)
     
     # Generate position (sign of momentum, scaled by vol target)
-    data['position'] = np.sign(data['momentum']) * (vol_target / data['volatility'])
+    data['position'] = np.sign (data['momentum']) * (vol_target / data['volatility'])
     data['position'] = data['position'].clip(-2, 2)  # Limit leverage to 2×
     
     # Calculate strategy returns
@@ -520,14 +520,14 @@ results = time_series_momentum('SPY', lookback=252, skip=21, vol_target=0.10)
 
 # Performance metrics
 total_return = results['cumulative'].iloc[-1] - 1
-annual_return = (1 + total_return) ** (252 / len(results)) - 1
+annual_return = (1 + total_return) ** (252 / len (results)) - 1
 volatility = results['strategy_returns'].std() * np.sqrt(252)
 sharpe = annual_return / volatility
 
 max_dd = (results['cumulative'] / results['cumulative'].cummax() - 1).min()
 
 buy_hold_return = results['buy_hold'].iloc[-1] - 1
-buy_hold_annual = (1 + buy_hold_return) ** (252 / len(results)) - 1
+buy_hold_annual = (1 + buy_hold_return) ** (252 / len (results)) - 1
 
 print(f"\\nStrategy Performance:")
 print(f"  Total Return: {total_return*100:.2f}%")
@@ -543,14 +543,14 @@ print(f"  Annual Return: {buy_hold_annual*100:.2f}%")
 fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 10))
 
 # Cumulative returns
-ax1.plot(results.index, results['cumulative'], label='Momentum Strategy', linewidth=2)
-ax1.plot(results.index, results['buy_hold'], label='Buy & Hold', linewidth=2, alpha=0.7)
+ax1.plot (results.index, results['cumulative'], label='Momentum Strategy', linewidth=2)
+ax1.plot (results.index, results['buy_hold'], label='Buy & Hold', linewidth=2, alpha=0.7)
 ax1.set_title('Cumulative Returns: Momentum vs Buy & Hold', fontweight='bold')
 ax1.legend()
 ax1.grid(True, alpha=0.3)
 
 # Position over time
-ax2.plot(results.index, results['position'], linewidth=1, color='navy')
+ax2.plot (results.index, results['position'], linewidth=1, color='navy')
 ax2.axhline(0, color='red', linestyle='--', alpha=0.5)
 ax2.set_title('Position (Volatility-Scaled)', fontweight='bold')
 ax2.set_ylabel('Leverage')
@@ -559,7 +559,7 @@ ax2.grid(True, alpha=0.3)
 # Rolling Sharpe (252-day)
 results['rolling_sharpe'] = (results['strategy_returns'].rolling(252).mean() / 
                               results['strategy_returns'].rolling(252).std() * np.sqrt(252))
-ax3.plot(results.index, results['rolling_sharpe'], linewidth=2, color='green')
+ax3.plot (results.index, results['rolling_sharpe'], linewidth=2, color='green')
 ax3.axhline(0, color='red', linestyle='--', alpha=0.5)
 ax3.set_title('Rolling 1-Year Sharpe Ratio', fontweight='bold')
 ax3.grid(True, alpha=0.3)
@@ -572,26 +572,26 @@ plt.show()
 ### Multi-Strategy Portfolio
 
 \`\`\`python
-def multi_strategy_portfolio(tickers=['SPY', 'TLT', 'GLD'], weights=[0.33, 0.33, 0.34]):
+def multi_strategy_portfolio (tickers=['SPY', 'TLT', 'GLD'], weights=[0.33, 0.33, 0.34]):
     """
     Combine momentum strategies on multiple assets.
     """
     all_results = {}
     
     for ticker in tickers:
-        results = time_series_momentum(ticker, lookback=252, skip=21, vol_target=0.10)
+        results = time_series_momentum (ticker, lookback=252, skip=21, vol_target=0.10)
         all_results[ticker] = results['strategy_returns']
     
     # Combine strategies
-    portfolio_df = pd.DataFrame(all_results).fillna(0)
-    portfolio_df['portfolio'] = sum(portfolio_df[ticker] * weight 
-                                    for ticker, weight in zip(tickers, weights))
+    portfolio_df = pd.DataFrame (all_results).fillna(0)
+    portfolio_df['portfolio'] = sum (portfolio_df[ticker] * weight 
+                                    for ticker, weight in zip (tickers, weights))
     
     # Metrics
     portfolio_df['cumulative'] = (1 + portfolio_df['portfolio']).cumprod()
     
     total_return = portfolio_df['cumulative'].iloc[-1] - 1
-    annual_return = (1 + total_return) ** (252 / len(portfolio_df)) - 1
+    annual_return = (1 + total_return) ** (252 / len (portfolio_df)) - 1
     volatility = portfolio_df['portfolio'].std() * np.sqrt(252)
     sharpe = annual_return / volatility
     max_dd = (portfolio_df['cumulative'] / portfolio_df['cumulative'].cummax() - 1).min()
@@ -599,7 +599,7 @@ def multi_strategy_portfolio(tickers=['SPY', 'TLT', 'GLD'], weights=[0.33, 0.33,
     print("\\n" + "="*60)
     print("MULTI-ASSET MOMENTUM PORTFOLIO")
     print("="*60)
-    print(f"Assets: {', '.join(tickers)}")
+    print(f"Assets: {', '.join (tickers)}")
     print(f"Weights: {weights}")
     print(f"\\nPortfolio Performance:")
     print(f"  Annual Return: {annual_return*100:.2f}%")

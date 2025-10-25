@@ -41,7 +41,7 @@ export const portfolioTheoryMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Sharpe ratio is invariant to leverage! Leveraging Portfolio B by 2× doubles both return and volatility, but Sharpe stays 1.2. Any leverage factor: Sharpe(leveraged) = [L×(R-Rf)] / [L×σ] = (R-Rf)/σ = original Sharpe. Since B has higher Sharpe (1.2 > 0.8), any leverage of B beats any leverage of A. Mixing A and B reduces Sharpe below B alone. Best: Portfolio B with optimal leverage based on risk tolerance.',
+      'Sharpe ratio is invariant to leverage! Leveraging Portfolio B by 2× doubles both return and volatility, but Sharpe stays 1.2. Any leverage factor: Sharpe (leveraged) = [L×(R-Rf)] / [L×σ] = (R-Rf)/σ = original Sharpe. Since B has higher Sharpe (1.2 > 0.8), any leverage of B beats any leverage of A. Mixing A and B reduces Sharpe below B alone. Best: Portfolio B with optimal leverage based on risk tolerance.',
   },
   {
     id: 'pt-mc-4',

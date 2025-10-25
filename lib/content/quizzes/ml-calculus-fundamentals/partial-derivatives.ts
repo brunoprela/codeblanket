@@ -21,7 +21,7 @@ export const partialderivativesQuiz = [
     question:
       'How does the chain rule extend to partial derivatives in backpropagation?',
     hint: 'Consider computing ∂L/∂W₁ through intermediate layers.',
-    sampleAnswer: `Backprop applies the multivariable chain rule. For L(f(g(x))), we have: ∂L/∂xᵢ = Σⱼ(∂L/∂fⱼ · ∂fⱼ/∂gₖ · ∂gₖ/∂xᵢ) summing over all paths. In neural networks: ∂L/∂W₁ = ∂L/∂z₂ · ∂z₂/∂a₁ · ∂a₁/∂z₁ · ∂z₁/∂W₁. Each term is a partial derivative or Jacobian matrix. The chain rule says: multiply along paths and sum over branches. This is exactly what backprop does layer-by-layer.`,
+    sampleAnswer: `Backprop applies the multivariable chain rule. For L(f (g(x))), we have: ∂L/∂xᵢ = Σⱼ(∂L/∂fⱼ · ∂fⱼ/∂gₖ · ∂gₖ/∂xᵢ) summing over all paths. In neural networks: ∂L/∂W₁ = ∂L/∂z₂ · ∂z₂/∂a₁ · ∂a₁/∂z₁ · ∂z₁/∂W₁. Each term is a partial derivative or Jacobian matrix. The chain rule says: multiply along paths and sum over branches. This is exactly what backprop does layer-by-layer.`,
     keyPoints: [
       'Multivariable chain rule sums over all paths',
       'Each layer contributes local Jacobian',

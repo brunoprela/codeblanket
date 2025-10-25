@@ -33,8 +33,8 @@ Most commonly, we use **Big O** (worst case) because:
 
 **Linear Search:**
 \`\`\`python
-def linear_search(arr, target):
-    for i in range(len(arr)):
+def linear_search (arr, target):
+    for i in range (len (arr)):
         if arr[i] == target:
             return i
     return -1
@@ -45,14 +45,14 @@ def linear_search(arr, target):
 
 **Quick Sort:**
 \`\`\`python
-def quicksort(arr):
-    if len(arr) <= 1:
+def quicksort (arr):
+    if len (arr) <= 1:
         return arr
-    pivot = arr[len(arr) // 2]
+    pivot = arr[len (arr) // 2]
     left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
-    return quicksort(left) + middle + quicksort(right)
+    return quicksort (left) + middle + quicksort (right)
 \`\`\`
 - **Best Case:** O(n log n) - pivot always splits evenly
 - **Average Case:** O(n log n) - pivot reasonably balanced
@@ -75,8 +75,8 @@ Different from average case! Amortized analysis considers **sequences of operati
 
 \`\`\`python
 arr = []
-for i in range(n):
-    arr.append(i)  # Each append seems O(1)...
+for i in range (n):
+    arr.append (i)  # Each append seems O(1)...
 \`\`\`
 
 - Most appends are O(1)

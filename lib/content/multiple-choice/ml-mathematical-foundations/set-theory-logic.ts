@@ -32,11 +32,11 @@ export const settheorylogicMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc4-demorgan',
-    question: "According to De Morgan's Law, ¬(p ∨ q) is equivalent to:",
+    question: "According to De Morgan\'s Law, ¬(p ∨ q) is equivalent to:",
     options: ['¬p ∨ ¬q', '¬p ∧ ¬q', 'p ∧ q', '¬p → ¬q'],
     correctAnswer: 1,
     explanation:
-      "De Morgan's Law: ¬(p ∨ q) = ¬p ∧ ¬q. The negation of OR becomes AND of negations.",
+      "De Morgan\'s Law: ¬(p ∨ q) = ¬p ∧ ¬q. The negation of OR becomes AND of negations.",
   },
   {
     id: 'mc5-implication',

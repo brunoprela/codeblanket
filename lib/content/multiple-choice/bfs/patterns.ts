@@ -29,7 +29,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Level-tracking: before each level, size = len(queue). Process exactly size nodes (current level), add their children (next level). Track level number. Separates levels cleanly.',
+      'Level-tracking: before each level, size = len (queue). Process exactly size nodes (current level), add their children (next level). Track level number. Separates levels cleanly.',
   },
   {
     id: 'mc3',

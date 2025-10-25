@@ -1,8 +1,9 @@
 export const fixedIncomeMarkets = {
-    title: "Fixed Income Markets",
-    slug: "fixed-income-markets",
-    description: "Master bond markets, pricing, and yield curve analysis for building fixed income systems",
-    content: `
+  title: 'Fixed Income Markets',
+  slug: 'fixed-income-markets',
+  description:
+    'Master bond markets, pricing, and yield curve analysis for building fixed income systems',
+  content: `
 # Fixed Income Markets
 
 ## Introduction: Why Fixed Income Matters
@@ -48,12 +49,12 @@ class Bond:
     issue_date: datetime
     payment_frequency: int = 2  # Semi-annual = 2, Annual = 1, Quarterly = 4
     
-    def get_coupon_payment(self) -> float:
+    def get_coupon_payment (self) -> float:
         """Calculate periodic coupon payment"""
         annual_coupon = self.face_value * self.coupon_rate
         return annual_coupon / self.payment_frequency
     
-    def get_cash_flows(self) -> List[dict]:
+    def get_cash_flows (self) -> List[dict]:
         """
         Generate all future cash flows
         Returns list of {date, amount}
@@ -66,7 +67,7 @@ class Bond:
         months_between_payments = 12 // self.payment_frequency
         
         while current_date < self.maturity_date:
-            current_date += timedelta(days=30 * months_between_payments)
+            current_date += timedelta (days=30 * months_between_payments)
             if current_date <= self.maturity_date:
                 cash_flows.append({
                     'date': current_date,
@@ -80,7 +81,7 @@ class Bond:
         
         return cash_flows
     
-    def years_to_maturity(self, valuation_date: datetime = None) -> float:
+    def years_to_maturity (self, valuation_date: datetime = None) -> float:
         """Calculate years remaining until maturity"""
         if valuation_date is None:
             valuation_date = datetime.now()
@@ -99,14 +100,14 @@ treasury_note = Bond(
 )
 
 print(f"Bond: {treasury_note.issuer}")
-print(f"Face Value: ${treasury_note.face_value:,.0f}")
+print(f"Face Value: \${treasury_note.face_value:,.0f}")
 print(f"Coupon Rate: {treasury_note.coupon_rate*100}%")
-print(f"Coupon Payment (semi-annual): ${treasury_note.get_coupon_payment():.2f}")
+print(f"Coupon Payment (semi-annual): \${treasury_note.get_coupon_payment():.2f}")
 print(f"Years to Maturity: {treasury_note.years_to_maturity():.2f}")
 
 print("\\nCash Flows:")
-for i, cf in enumerate(treasury_note.get_cash_flows()[: 5], 1):
-    print(f"Payment {i}: {cf['date'].strftime('%Y-%m-%d')} - ${cf['amount']:.2f} ({cf['type']})")
+for i, cf in enumerate (treasury_note.get_cash_flows()[: 5], 1):
+    print(f"Payment {i}: {cf['date'].strftime('%Y-%m-%d')} - \${cf['amount']:.2f} ({cf['type']})")
 \`\`\`
 
 **Key Terms:**
@@ -136,7 +137,7 @@ class TreasuryBond(Bond):
         self.default_risk = 0.0  # Assumed risk-free
     
     @classmethod
-    def create_t_bill(cls, face_value: float, days_to_maturity: int) -> 'TreasuryBond':
+    def create_t_bill (cls, face_value: float, days_to_maturity: int) -> 'TreasuryBond':
         """
         Treasury Bills (T-Bills): < 1 year maturity
         Sold at discount, no coupon payments
@@ -144,13 +145,13 @@ class TreasuryBond(Bond):
         return cls(
             face_value=face_value,
             coupon_rate=0.0,  # Zero-coupon
-            maturity_date=datetime.now() + timedelta(days=days_to_maturity),
+            maturity_date=datetime.now() + timedelta (days=days_to_maturity),
             issue_date=datetime.now(),
             payment_frequency=0
         )
     
     @classmethod
-    def create_t_note(cls, face_value: float, years: int, coupon_rate: float) -> 'TreasuryBond':
+    def create_t_note (cls, face_value: float, years: int, coupon_rate: float) -> 'TreasuryBond':
         """
         Treasury Notes (T-Notes): 2-10 year maturity
         Pay semi-annual coupons
@@ -158,13 +159,13 @@ class TreasuryBond(Bond):
         return cls(
             face_value=face_value,
             coupon_rate=coupon_rate,
-            maturity_date=datetime.now() + timedelta(days=365*years),
+            maturity_date=datetime.now() + timedelta (days=365*years),
             issue_date=datetime.now(),
             payment_frequency=2
         )
     
     @classmethod
-    def create_t_bond(cls, face_value: float, years: int, coupon_rate: float) -> 'TreasuryBond':
+    def create_t_bond (cls, face_value: float, years: int, coupon_rate: float) -> 'TreasuryBond':
         """
         Treasury Bonds (T-Bonds): 20-30 year maturity
         Pay semi-annual coupons
@@ -172,20 +173,20 @@ class TreasuryBond(Bond):
         return cls(
             face_value=face_value,
             coupon_rate=coupon_rate,
-            maturity_date=datetime.now() + timedelta(days=365*years),
+            maturity_date=datetime.now() + timedelta (days=365*years),
             issue_date=datetime.now(),
             payment_frequency=2
         )
 
 # Create different Treasury securities
-t_bill = TreasuryBond.create_t_bill(face_value=10000, days_to_maturity=91)  # 3-month
-t_note = TreasuryBond.create_t_note(face_value=1000, years=5, coupon_rate=0.04)
-t_bond = TreasuryBond.create_t_bond(face_value=1000, years=30, coupon_rate=0.045)
+t_bill = TreasuryBond.create_t_bill (face_value=10000, days_to_maturity=91)  # 3-month
+t_note = TreasuryBond.create_t_note (face_value=1000, years=5, coupon_rate=0.04)
+t_bond = TreasuryBond.create_t_bond (face_value=1000, years=30, coupon_rate=0.045)
 
 print("Treasury Securities:")
-print(f"T-Bill (91 days): ${t_bill.face_value}")
-print(f"T-Note (5 year): ${t_note.face_value}, {t_note.coupon_rate*100}% coupon")
-print(f"T-Bond (30 year): ${t_bond.face_value}, {t_bond.coupon_rate*100}% coupon")
+print(f"T-Bill (91 days): \${t_bill.face_value}")
+print(f"T-Note (5 year): \${t_note.face_value}, {t_note.coupon_rate*100}% coupon")
+print(f"T-Bond (30 year): \${t_bond.face_value}, {t_bond.coupon_rate*100}% coupon")
 \`\`\`
 
 ### 2. Corporate Bonds
@@ -202,7 +203,7 @@ class CorporateBond(Bond):
         self.credit_rating = credit_rating
         self.default_probability = self.estimate_default_probability()
     
-    def estimate_default_probability(self) -> float:
+    def estimate_default_probability (self) -> float:
         """
         Estimate default probability based on credit rating
         Based on historical default rates
@@ -219,9 +220,9 @@ class CorporateBond(Bond):
             'C': 0.50,      # 50%
             'D': 1.0        # Default
         }
-        return default_rates.get(self.credit_rating, 0.10)
+        return default_rates.get (self.credit_rating, 0.10)
     
-    def calculate_credit_spread(self, risk_free_yield: float) -> float:
+    def calculate_credit_spread (self, risk_free_yield: float) -> float:
         """
         Credit spread = Extra yield demanded due to default risk
         Corporate Yield = Risk-free Yield + Credit Spread
@@ -230,9 +231,9 @@ class CorporateBond(Bond):
         spread = self.default_probability * 5  # ~5x default probability
         return spread
     
-    def required_yield(self, risk_free_yield: float) -> float:
+    def required_yield (self, risk_free_yield: float) -> float:
         """Calculate required yield for this corporate bond"""
-        credit_spread = self.calculate_credit_spread(risk_free_yield)
+        credit_spread = self.calculate_credit_spread (risk_free_yield)
         return risk_free_yield + credit_spread
 
 # Example: Apple corporate bond
@@ -247,13 +248,13 @@ apple_bond = CorporateBond(
 )
 
 risk_free_rate = 0.04  # 10-year Treasury at 4%
-required_yield = apple_bond.required_yield(risk_free_rate)
+required_yield = apple_bond.required_yield (risk_free_rate)
 
 print(f"Apple Corporate Bond:")
 print(f"Credit Rating: {apple_bond.credit_rating}")
 print(f"Default Probability: {apple_bond.default_probability*100:.3f}%")
 print(f"Risk-free Rate: {risk_free_rate*100}%")
-print(f"Credit Spread: {apple_bond.calculate_credit_spread(risk_free_rate)*100:.2f}%")
+print(f"Credit Spread: {apple_bond.calculate_credit_spread (risk_free_rate)*100:.2f}%")
 print(f"Required Yield: {required_yield*100:.2f}%")
 \`\`\`
 
@@ -270,7 +271,7 @@ class MunicipalBond(Bond):
         super().__init__(**kwargs)
         self.tax_exempt = tax_exempt
     
-    def tax_equivalent_yield(self, nominal_yield: float, tax_rate: float) -> float:
+    def tax_equivalent_yield (self, nominal_yield: float, tax_rate: float) -> float:
         """
         Calculate what taxable yield would be equivalent to tax-free muni yield
         TEY = Tax-free Yield / (1 - Tax Rate)
@@ -279,17 +280,17 @@ class MunicipalBond(Bond):
             return nominal_yield / (1 - tax_rate)
         return nominal_yield
     
-    def compare_to_taxable(self, taxable_yield: float, investor_tax_rate: float) -> dict:
+    def compare_to_taxable (self, taxable_yield: float, investor_tax_rate: float) -> dict:
         """Compare muni bond to taxable alternative"""
         muni_yield = self.coupon_rate
-        tey = self.tax_equivalent_yield(muni_yield, investor_tax_rate)
+        tey = self.tax_equivalent_yield (muni_yield, investor_tax_rate)
         
         return {
             'muni_yield': muni_yield,
             'taxable_equivalent_yield': tey,
             'taxable_alternative_yield': taxable_yield,
             'better_choice': 'Municipal' if tey > taxable_yield else 'Taxable',
-            'advantage': abs(tey - taxable_yield)
+            'advantage': abs (tey - taxable_yield)
         }
 
 # Example: California muni bond
@@ -307,7 +308,7 @@ ca_muni = MunicipalBond(
 investor_tax_rate = 0.37  # 37% federal tax bracket
 corporate_yield = 0.045   # 4.5% taxable
 
-comparison = ca_muni.compare_to_taxable(corporate_yield, investor_tax_rate)
+comparison = ca_muni.compare_to_taxable (corporate_yield, investor_tax_rate)
 
 print("Municipal Bond vs Corporate Bond:")
 print(f"Muni Yield: {comparison['muni_yield']*100}% (tax-free)")
@@ -330,11 +331,11 @@ class HighYieldBond(CorporateBond):
         if self.credit_rating in ['AAA', 'AA', 'A', 'BBB']:
             raise ValueError("High-yield bonds must be below BBB rating")
     
-    def is_distressed(self) -> bool:
+    def is_distressed (self) -> bool:
         """Check if bond is in distress (CCC or lower)"""
         return self.credit_rating in ['CCC', 'CC', 'C', 'D']
     
-    def estimate_recovery_rate(self) -> float:
+    def estimate_recovery_rate (self) -> float:
         """
         If bond defaults, what % of face value do you recover?
         Senior secured bonds recover more than subordinated
@@ -348,7 +349,7 @@ class HighYieldBond(CorporateBond):
             'C': 0.10,
             'D': 0.05
         }
-        return recovery_rates.get(self.credit_rating, 0.40)
+        return recovery_rates.get (self.credit_rating, 0.40)
 
 # Example: Struggling retail company
 junk_bond = HighYieldBond(
@@ -387,7 +388,7 @@ class BondPricer:
     """
     
     @staticmethod
-    def price_bond(bond: Bond, 
+    def price_bond (bond: Bond, 
                    yield_to_maturity: float,
                    valuation_date: datetime = None) -> dict:
         """
@@ -413,7 +414,7 @@ class BondPricer:
         total_pv = 0
         coupon_pv = 0
         
-        for i, cf in enumerate(cash_flows, 1):
+        for i, cf in enumerate (cash_flows, 1):
             # Days from valuation to cash flow
             days_to_cf = (cf['date'] - valuation_date).days
             periods_to_cf = days_to_cf / (365.25 / periods_per_year)
@@ -439,9 +440,9 @@ class BondPricer:
             price_type = "Par"
         
         return {
-            'price': round(total_pv, 2),
-            'coupon_pv': round(coupon_pv, 2),
-            'principal_pv': round(principal_pv, 2),
+            'price': round (total_pv, 2),
+            'coupon_pv': round (coupon_pv, 2),
+            'principal_pv': round (principal_pv, 2),
             'face_value': bond.face_value,
             'price_type': price_type,
             'price_as_percent_of_par': round((total_pv / bond.face_value) * 100, 3),
@@ -449,7 +450,7 @@ class BondPricer:
         }
     
     @staticmethod
-    def calculate_ytm(bond: Bond, 
+    def calculate_ytm (bond: Bond, 
                      market_price: float,
                      valuation_date: datetime = None) -> float:
         """
@@ -458,9 +459,9 @@ class BondPricer:
         
         This is the INVERSE problem: Given price, find yield
         """
-        def price_difference(ytm: float) -> float:
+        def price_difference (ytm: float) -> float:
             """Function to minimize"""
-            calculated_price = BondPricer.price_bond(bond, ytm, valuation_date)['price']
+            calculated_price = BondPricer.price_bond (bond, ytm, valuation_date)['price']
             return calculated_price - market_price
         
         # Initial guess
@@ -468,7 +469,7 @@ class BondPricer:
         
         # Newton-Raphson iteration
         for _ in range(100):
-            price_at_guess = BondPricer.price_bond(bond, ytm_guess, valuation_date)['price']
+            price_at_guess = BondPricer.price_bond (bond, ytm_guess, valuation_date)['price']
             
             # Small change in yield
             delta_ytm = 0.0001
@@ -483,7 +484,7 @@ class BondPricer:
             ytm_new = ytm_guess - (price_at_guess - market_price) / derivative
             
             # Check convergence
-            if abs(ytm_new - ytm_guess) < 0.000001:
+            if abs (ytm_new - ytm_guess) < 0.000001:
                 return ytm_new
             
             ytm_guess = ytm_new
@@ -491,14 +492,14 @@ class BondPricer:
         return ytm_guess
 
 # Example: Price Treasury note at different yields
-t_note = TreasuryBond.create_t_note(face_value=1000, years=10, coupon_rate=0.04)
+t_note = TreasuryBond.create_t_note (face_value=1000, years=10, coupon_rate=0.04)
 
 print("Bond Pricing at Different Yields:\\n")
 
 for ytm in [0.03, 0.04, 0.05]:
-    result = BondPricer.price_bond(t_note, ytm)
+    result = BondPricer.price_bond (t_note, ytm)
     print(f"YTM = {ytm*100}%:")
-    print(f"  Price: ${result['price']: .2f} ({ result['price_as_percent_of_par']: .2f } % of par) ")
+    print(f"  Price: \${result['price']:.2f} ({ result['price_as_percent_of_par']: .2f } % of par) ")
 print(f"  Type: {result['price_type']}")
 print()
 
@@ -510,8 +511,8 @@ print("\\nWhy? Higher discount rate → lower PV of future cash flows")
 
 # Calculate YTM from market price
 market_price = 950  # Bond trading at discount
-calculated_ytm = BondPricer.calculate_ytm(t_note, market_price)
-print(f"\\nIf bond trades at ${market_price}, YTM = {calculated_ytm*100:.3f}%")
+calculated_ytm = BondPricer.calculate_ytm (t_note, market_price)
+print(f"\\nIf bond trades at \${market_price}, YTM = {calculated_ytm*100:.3f}%")
 \`\`\`
 
 **Critical Relationships:**
@@ -533,7 +534,7 @@ print(f"\\nIf bond trades at ${market_price}, YTM = {calculated_ytm*100:.3f}%")
 
 ## Yield Curve and Term Structure
 
-The **yield curve** plots yields of bonds against their maturity. It's one of the most important charts in finance!
+The **yield curve** plots yields of bonds against their maturity. It\'s one of the most important charts in finance!
 
 \`\`\`python
 import matplotlib.pyplot as plt
@@ -550,18 +551,18 @@ class YieldCurve:
             rates: {maturity_years: yield}
             e.g., {0.25: 0.045, 1: 0.047, 2: 0.048, ...}
         """
-        self.rates = dict(sorted(rates.items()))
-        self.maturities = list(self.rates.keys())
-        self.yields = list(self.rates.values())
+        self.rates = dict (sorted (rates.items()))
+        self.maturities = list (self.rates.keys())
+        self.yields = list (self.rates.values())
     
-    def interpolate_rate(self, maturity: float) -> float:
+    def interpolate_rate (self, maturity: float) -> float:
         """Interpolate yield for any maturity"""
-        return np.interp(maturity, self.maturities, self.yields)
+        return np.interp (maturity, self.maturities, self.yields)
     
-    def get_curve_shape(self) -> str:
+    def get_curve_shape (self) -> str:
         """Classify yield curve shape"""
-        short_rate = self.rates[min(self.maturities)]
-        long_rate = self.rates[max(self.maturities)]
+        short_rate = self.rates[min (self.maturities)]
+        long_rate = self.rates[max (self.maturities)]
         mid_rate = self.interpolate_rate(5.0)
         
         if long_rate > short_rate + 0.005:  # 50 bps steeper
@@ -574,7 +575,7 @@ class YieldCurve:
         else:
             return "Flat"
     
-    def calculate_forward_rates(self) -> dict[tuple[float, float], float]:
+    def calculate_forward_rates (self) -> dict[tuple[float, float], float]:
         """
         Calculate implied forward rates
         Forward rate = Interest rate for future period implied by spot rates
@@ -583,7 +584,7 @@ class YieldCurve:
         """
         forward_rates = {}
         
-        for i in range(len(self.maturities) - 1):
+        for i in range (len (self.maturities) - 1):
             t1 = self.maturities[i]
             t2 = self.maturities[i + 1]
             s1 = self.yields[i]
@@ -596,14 +597,14 @@ class YieldCurve:
         
         return forward_rates
     
-    def plot_curve(self):
+    def plot_curve (self):
         """Visualize the yield curve"""
-        plt.figure(figsize=(12, 6))
-        plt.plot(self.maturities, [y * 100 for y in self.yields], 
+        plt.figure (figsize=(12, 6))
+        plt.plot (self.maturities, [y * 100 for y in self.yields], 
                 marker='o', linewidth=2, markersize=8)
         plt.xlabel('Maturity (Years)', fontsize=12)
         plt.ylabel('Yield (%)', fontsize=12)
-        plt.title(f'Yield Curve - {self.get_curve_shape()}', fontsize=14)
+        plt.title (f'Yield Curve - {self.get_curve_shape()}', fontsize=14)
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
         return plt
@@ -626,7 +627,7 @@ print(f"7-year yield: {normal_curve.interpolate_rate(7)*100:.2f}%")
 
 print("\\nForward Rates (implied future rates):")
 forward_rates = normal_curve.calculate_forward_rates()
-for (t1, t2), rate in list(forward_rates.items())[:3]:
+for (t1, t2), rate in list (forward_rates.items())[:3]:
     print(f"  {t1}y → {t2}y: {rate*100:.3f}%")
 
 # Inverted yield curve (recession signal)
@@ -689,27 +690,27 @@ class CreditRatingAnalyzer:
     }
     
     @classmethod
-    def get_rating_info(cls, rating: str) -> dict:
+    def get_rating_info (cls, rating: str) -> dict:
         """Get detailed information about a credit rating"""
-        return cls.RATING_SCALE.get(rating, {'score': 0, 'grade': 'Unknown', 'description': 'N/A'})
+        return cls.RATING_SCALE.get (rating, {'score': 0, 'grade': 'Unknown', 'description': 'N/A'})
     
     @classmethod
-    def is_investment_grade(cls, rating: str) -> bool:
+    def is_investment_grade (cls, rating: str) -> bool:
         """Check if rating is investment grade"""
-        info = cls.get_rating_info(rating)
+        info = cls.get_rating_info (rating)
         return info['grade'] == 'Investment'
     
     @classmethod
-    def compare_ratings(cls, rating1: str, rating2: str) -> dict:
+    def compare_ratings (cls, rating1: str, rating2: str) -> dict:
         """Compare two credit ratings"""
-        info1 = cls.get_rating_info(rating1)
-        info2 = cls.get_rating_info(rating2)
+        info1 = cls.get_rating_info (rating1)
+        info2 = cls.get_rating_info (rating2)
         
         return {
             'rating1': rating1,
             'rating2': rating2,
             'better_rating': rating1 if info1['score'] > info2['score'] else rating2,
-            'score_difference': abs(info1['score'] - info2['score']),
+            'score_difference': abs (info1['score'] - info2['score']),
             'both_investment_grade': (info1['grade'] == 'Investment' and 
                                      info2['grade'] == 'Investment')
         }
@@ -718,7 +719,7 @@ class CreditRatingAnalyzer:
 print("Credit Rating Analysis:\\n")
 
 for rating in ['AAA', 'BBB-', 'BB+', 'B', 'CCC']:
-    info = CreditRatingAnalyzer.get_rating_info(rating)
+    info = CreditRatingAnalyzer.get_rating_info (rating)
     print(f"{rating}: {info['description']} ({info['grade']} grade)")
 
 print("\\n" + "="*50)
@@ -754,13 +755,13 @@ def analyze_treasury_market():
     }
     
     print("U.S. Treasury Market Overview:\\n")
-    print(f"Total Outstanding: ${market_overview['total_outstanding'] / 1e12: .1f} trillion")
-print(f"Daily Trading Volume: ${market_overview['daily_volume']/1e9:.0f} billion")
+    print(f"Total Outstanding: \${market_overview['total_outstanding'] / 1e12:.1f} trillion")
+print(f"Daily Trading Volume: \${market_overview['daily_volume']/1e9:.0f} billion")
 print(f"Role: {market_overview['benchmark_role']}")
 
 print("\\nTop Holders:")
 for holder, amount in market_overview['largest_holders'].items():
-    print(f"  {holder}: ${amount/1e12:.2f}T")
+    print(f"  {holder}: \${amount/1e12:.2f}T")
 
 print("\\nWhy Treasuries Matter:")
 print("✓ Risk-free rate (foundation of all pricing)")
@@ -786,31 +787,31 @@ class BondAnalyticsPlatform:
         self.bonds_database = {}
         self.yield_curve = None
     
-    def add_bond(self, bond_id: str, bond: Bond):
+    def add_bond (self, bond_id: str, bond: Bond):
         """Add bond to tracking database"""
         self.bonds_database[bond_id] = bond
     
-    def update_yield_curve(self, curve: YieldCurve):
+    def update_yield_curve (self, curve: YieldCurve):
         """Update current yield curve"""
         self.yield_curve = curve
     
-    def analyze_bond(self, bond_id: str, market_price: float = None) -> dict:
+    def analyze_bond (self, bond_id: str, market_price: float = None) -> dict:
         """
         Comprehensive bond analysis
         """
-        bond = self.bonds_database.get(bond_id)
+        bond = self.bonds_database.get (bond_id)
         if not bond:
             return {'error': 'Bond not found'}
         
         # Price bond at current yield curve
         maturity_years = bond.years_to_maturity()
-        market_yield = self.yield_curve.interpolate_rate(maturity_years)
+        market_yield = self.yield_curve.interpolate_rate (maturity_years)
         
-        pricing = BondPricer.price_bond(bond, market_yield)
+        pricing = BondPricer.price_bond (bond, market_yield)
         
         # If market price provided, calculate YTM
         if market_price:
-            ytm = BondPricer.calculate_ytm(bond, market_price)
+            ytm = BondPricer.calculate_ytm (bond, market_price)
             ytm_spread = ytm - market_yield
         else:
             ytm = market_yield
@@ -819,7 +820,7 @@ class BondAnalyticsPlatform:
         return {
             'bond_id': bond_id,
             'issuer': bond.issuer,
-            'maturity_years': round(maturity_years, 2),
+            'maturity_years': round (maturity_years, 2),
             'coupon_rate': bond.coupon_rate,
             'market_yield': market_yield,
             'fair_value': pricing['price'],
@@ -830,7 +831,7 @@ class BondAnalyticsPlatform:
             'annual_income': bond.get_coupon_payment() * bond.payment_frequency
         }
     
-    def screen_bonds(self, 
+    def screen_bonds (self, 
                     min_yield: float = None,
                     max_maturity: float = None,
                     min_rating_score: int = None) -> List[dict]:
@@ -842,7 +843,7 @@ class BondAnalyticsPlatform:
         for bond_id, bond in self.bonds_database.items():
             # Calculate metrics
             maturity = bond.years_to_maturity()
-            ytm = self.yield_curve.interpolate_rate(maturity)
+            ytm = self.yield_curve.interpolate_rate (maturity)
             
             # Apply filters
             if min_yield and ytm < min_yield:
@@ -851,8 +852,8 @@ class BondAnalyticsPlatform:
                 continue
             
             # If corporate bond, check rating
-            if isinstance(bond, CorporateBond) and min_rating_score:
-                rating_info = CreditRatingAnalyzer.get_rating_info(bond.credit_rating)
+            if isinstance (bond, CorporateBond) and min_rating_score:
+                rating_info = CreditRatingAnalyzer.get_rating_info (bond.credit_rating)
                 if rating_info['score'] < min_rating_score:
                     continue
             
@@ -861,10 +862,10 @@ class BondAnalyticsPlatform:
                 'issuer': bond.issuer,
                 'ytm': ytm,
                 'maturity': maturity,
-                'rating': bond.credit_rating if isinstance(bond, CorporateBond) else 'AAA'
+                'rating': bond.credit_rating if isinstance (bond, CorporateBond) else 'AAA'
             })
         
-        return sorted(results, key=lambda x: x['ytm'], reverse=True)
+        return sorted (results, key=lambda x: x['ytm'], reverse=True)
 
 # Example usage
 platform = BondAnalyticsPlatform()
@@ -878,19 +879,19 @@ platform.add_bond('AAPL-2031', CorporateBond(
 ))
 
 # Set yield curve
-platform.update_yield_curve(normal_curve)
+platform.update_yield_curve (normal_curve)
 
 # Analyze specific bond
 analysis = platform.analyze_bond('UST-10Y', market_price=980)
 print("Bond Analysis:")
-print(f"Fair Value: ${analysis['fair_value']: .2f}")
-print(f"Market Price: ${analysis['market_price']:.2f}")
+print(f"Fair Value: \${analysis['fair_value']:.2f}")
+print(f"Market Price: \${analysis['market_price']:.2f}")
 print(f"YTM: {analysis['ytm']*100:.3f}%")
 print(f"Is Cheap: {analysis['is_cheap']}")
 
 # Screen bonds
-results = platform.screen_bonds(min_yield = 0.035, max_maturity = 15)
-print(f"\\nFound {len(results)} bonds matching criteria")
+results = platform.screen_bonds (min_yield = 0.035, max_maturity = 15)
+print(f"\\nFound {len (results)} bonds matching criteria")
 \`\`\`
 
 ---
@@ -922,15 +923,18 @@ print(f"\\nFound {len(results)} bonds matching criteria")
 
 You now understand fixed income markets - ready to build bond analytics systems!
 `,
-    exercises: [
-        {
-            prompt: "Build a bond portfolio optimizer that maximizes yield while maintaining a target duration and credit quality. Include constraints for sector diversification and issue concentration limits.",
-            solution: "// Implementation: 1) Fetch universe of bonds with prices/yields, 2) Calculate duration for each bond, 3) Set up optimization problem (maximize yield), 4) Add constraints (target duration ±0.5 years, min 80% investment grade, max 5% in single issuer, sector limits), 5) Use cvxpy or scipy.optimize, 6) Output optimal portfolio weights"
-        },
-        {
-            prompt: "Create a yield curve construction system that bootstraps spot rates from bond prices, handling multiple bonds per maturity. Implement smoothing (e.g., Nelson-Siegel model) and generate forward rate curves.",
-            solution: "// Implementation: 1) Collect bond prices and cash flows for multiple bonds, 2) Bootstrap short end (T-bills) for spot rates, 3) Iterate longer maturities solving for spot rates, 4) Fit Nelson-Siegel or cubic spline for smooth curve, 5) Calculate forward rates from spot rates, 6) Validate curve is arbitrage-free, 7) Visualize with confidence intervals"
-        }
-    ]
+  exercises: [
+    {
+      prompt:
+        'Build a bond portfolio optimizer that maximizes yield while maintaining a target duration and credit quality. Include constraints for sector diversification and issue concentration limits.',
+      solution:
+        '// Implementation: 1) Fetch universe of bonds with prices/yields, 2) Calculate duration for each bond, 3) Set up optimization problem (maximize yield), 4) Add constraints (target duration ±0.5 years, min 80% investment grade, max 5% in single issuer, sector limits), 5) Use cvxpy or scipy.optimize, 6) Output optimal portfolio weights',
+    },
+    {
+      prompt:
+        'Create a yield curve construction system that bootstraps spot rates from bond prices, handling multiple bonds per maturity. Implement smoothing (e.g., Nelson-Siegel model) and generate forward rate curves.',
+      solution:
+        '// Implementation: 1) Collect bond prices and cash flows for multiple bonds, 2) Bootstrap short end (T-bills) for spot rates, 3) Iterate longer maturities solving for spot rates, 4) Fit Nelson-Siegel or cubic spline for smooth curve, 5) Calculate forward rates from spot rates, 6) Validate curve is arbitrage-free, 7) Visualize with confidence intervals',
+    },
+  ],
 };
-

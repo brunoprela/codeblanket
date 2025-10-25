@@ -12,11 +12,11 @@ export const patternsSection = {
 **Template:**
 \`\`\`python
 from collections import Counter
-freq = Counter(arr)
+freq = Counter (arr)
 # Or manually:
 freq = {}
 for item in arr:
-    freq[item] = freq.get(item, 0) + 1
+    freq[item] = freq.get (item, 0) + 1
 \`\`\`
 
 **Applications:**
@@ -31,7 +31,7 @@ for item in arr:
 **Template:**
 \`\`\`python
 seen = {}
-for i, num in enumerate(arr):
+for i, num in enumerate (arr):
     complement = target - num
     if complement in seen:
         return [seen[complement], i]
@@ -50,10 +50,10 @@ for i, num in enumerate(arr):
 **Template:**
 \`\`\`python
 from collections import defaultdict
-groups = defaultdict(list)
+groups = defaultdict (list)
 for item in items:
-    key = compute_key(item)
-    groups[key].append(item)
+    key = compute_key (item)
+    groups[key].append (item)
 return groups.values()
 \`\`\`
 
@@ -72,7 +72,7 @@ seen = set()
 for item in items:
     if item in seen:
         return True  # Found duplicate
-    seen.add(item)
+    seen.add (item)
 return False  # No duplicates
 \`\`\`
 
@@ -87,9 +87,9 @@ return False  # No duplicates
 
 **Template:**
 \`\`\`python
-index_map = {val: i for i, val in enumerate(arr)}
+index_map = {val: i for i, val in enumerate (arr)}
 # Look up index by value in O(1)
-idx = index_map.get(target, -1)
+idx = index_map.get (target, -1)
 \`\`\`
 
 **Applications:**

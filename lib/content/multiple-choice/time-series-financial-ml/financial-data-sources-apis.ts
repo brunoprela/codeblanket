@@ -13,7 +13,7 @@ export const financialDataSourcesAPIsMultipleChoice: MultipleChoiceQuestion[] =
       ],
       correctAnswer: 1,
       explanation:
-        "yfinance has a 15-minute delay (unusable for intraday trading) and occasional data gaps/errors, especially for volume and weekend data. It's free and great for backtesting/learning, but not reliable for live trading where you need real-time data and guaranteed uptime. For paper trading or live trading, use Polygon.io or broker APIs with <1 second latency.",
+        "yfinance has a 15-minute delay (unusable for intraday trading) and occasional data gaps/errors, especially for volume and weekend data. It\'s free and great for backtesting/learning, but not reliable for live trading where you need real-time data and guaranteed uptime. For paper trading or live trading, use Polygon.io or broker APIs with <1 second latency.",
     },
     {
       id: 'fdsa-mc-2',

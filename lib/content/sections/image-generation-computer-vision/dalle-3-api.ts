@@ -117,9 +117,9 @@ class DALLEGenerator:
             "style": style
         }
     
-    def download_image(self, url: str) -> Image.Image:
+    def download_image (self, url: str) -> Image.Image:
         """Download image from URL."""
-        response = requests.get(url)
+        response = requests.get (url)
         return Image.open(BytesIO(response.content))
     
     def generate_and_save(
@@ -131,13 +131,13 @@ class DALLEGenerator:
         """
         Generate and save image in one call.
         """
-        result = self.generate(prompt, **kwargs)
+        result = self.generate (prompt, **kwargs)
         
         # Download image
-        image = self.download_image(result["url"])
+        image = self.download_image (result["url"])
         
         # Save
-        image.save(output_path)
+        image.save (output_path)
         
         print(f"Saved to: {output_path}")
         print(f"Revised prompt: {result['revised_prompt']}")
@@ -198,7 +198,7 @@ size_guide = {
     }
 }
 
-def choose_size(use_case: str) -> str:
+def choose_size (use_case: str) -> str:
     """Choose appropriate size for use case."""
     mapping = {
         "instagram_post": "1024x1024",
@@ -209,7 +209,7 @@ def choose_size(use_case: str) -> str:
         "poster": "1024x1792",
         "presentation": "1792x1024"
     }
-    return mapping.get(use_case, "1024x1024")
+    return mapping.get (use_case, "1024x1024")
 \`\`\`
 
 ### Quality: Standard vs HD
@@ -246,7 +246,7 @@ quality_comparison = {
     }
 }
 
-def should_use_hd(context: dict) -> bool:
+def should_use_hd (context: dict) -> bool:
     """
     Decide whether to use HD quality.
     """
@@ -406,18 +406,18 @@ class DALLEPromptBuilder:
         parts = [subject]
         
         if action:
-            parts.append(action)
+            parts.append (action)
         
         if context:
-            parts.append(context)
+            parts.append (context)
         
         if style:
-            parts.append(f"in {style} style")
+            parts.append (f"in {style} style")
         
         if details:
-            parts.extend(details)
+            parts.extend (details)
         
-        return ", ".join(parts)
+        return ", ".join (parts)
     
     @staticmethod
     def photography_style(
@@ -436,12 +436,12 @@ class DALLEPromptBuilder:
         ]
         
         if camera:
-            parts.append(f"shot on {camera}")
+            parts.append (f"shot on {camera}")
         
         if additional:
-            parts.append(additional)
+            parts.append (additional)
         
-        return ", ".join(parts)
+        return ", ".join (parts)
     
     @staticmethod
     def illustration_style(
@@ -458,12 +458,12 @@ class DALLEPromptBuilder:
         ]
         
         if color_palette:
-            parts.append(f"{color_palette} color palette")
+            parts.append (f"{color_palette} color palette")
         
         if mood:
-            parts.append(f"{mood} mood")
+            parts.append (f"{mood} mood")
         
-        return ", ".join(parts)
+        return ", ".join (parts)
 
 # Usage examples
 builder = DALLEPromptBuilder()
@@ -583,12 +583,12 @@ class AdvancedDALLEPrompts:
         """Create multi-panel composition."""
         panel_descriptions = []
         
-        for i, panel in enumerate(panels, 1):
+        for i, panel in enumerate (panels, 1):
             position = panel.get("position", f"panel {i}")
             content = panel["content"]
-            panel_descriptions.append(f"{position}: {content}")
+            panel_descriptions.append (f"{position}: {content}")
         
-        return f"A multi-panel composition with {', '.join(panel_descriptions)}"
+        return f"A multi-panel composition with {', '.join (panel_descriptions)}"
 
 # Examples
 advanced = AdvancedDALLEPrompts()
@@ -663,7 +663,7 @@ class ProductionDALLE:
         self.logger = logging.getLogger(__name__)
         
         # Create save directory
-        os.makedirs(save_directory, exist_ok=True)
+        os.makedirs (save_directory, exist_ok=True)
     
     def generate_with_retry(
         self,
@@ -679,7 +679,7 @@ class ProductionDALLE:
         """
         last_error = None
         
-        for attempt in range(self.max_retries):
+        for attempt in range (self.max_retries):
             try:
                 # Generate
                 response = self.client.images.generate(
@@ -707,14 +707,14 @@ class ProductionDALLE:
                         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                         filename = f"dalle3_{timestamp}.png"
                     
-                    local_path = os.path.join(self.save_dir, filename)
+                    local_path = os.path.join (self.save_dir, filename)
                     
                     # Download and save
-                    img_data = requests.get(url).content
-                    with open(local_path, 'wb') as f:
-                        f.write(img_data)
+                    img_data = requests.get (url).content
+                    with open (local_path, 'wb') as f:
+                        f.write (img_data)
                     
-                    self.logger.info(f"Saved image to {local_path}")
+                    self.logger.info (f"Saved image to {local_path}")
                 
                 # Create result
                 result = GenerationResult(
@@ -739,16 +739,16 @@ return result
             except Exception as e:
 last_error = e
 self.logger.warning(
-    f"Attempt {attempt + 1} failed: {str(e)}"
+    f"Attempt {attempt + 1} failed: {str (e)}"
 )
 
 if attempt < self.max_retries - 1:
                     # Exponential backoff
 wait_time = 2 ** attempt
-time.sleep(wait_time)
+time.sleep (wait_time)
         
         # All retries failed
-        raise Exception(f"Failed after {self.max_retries} attempts: {last_error}")
+        raise Exception (f"Failed after {self.max_retries} attempts: {last_error}")
     
     def batch_generate(
     self,
@@ -761,32 +761,32 @@ time.sleep(wait_time)
         """
 results = []
 
-for i, prompt in enumerate(prompts):
-    self.logger.info(f"Generating {i+1}/{len(prompts)}")
+for i, prompt in enumerate (prompts):
+    self.logger.info (f"Generating {i+1}/{len (prompts)}")
 
-result = self.generate_with_retry(prompt, ** kwargs)
-results.append(result)
+result = self.generate_with_retry (prompt, ** kwargs)
+results.append (result)
             
             # Rate limiting
-if i < len(prompts) - 1:
-    time.sleep(delay_between)
+if i < len (prompts) - 1:
+    time.sleep (delay_between)
 
 return results
     
-    def get_statistics(self) -> dict:
+    def get_statistics (self) -> dict:
 """Get usage statistics."""
 return {
     "total_generations": self.generation_count,
     "total_cost": self.total_cost,
-    "average_cost": self.total_cost / max(self.generation_count, 1)
+    "average_cost": self.total_cost / max (self.generation_count, 1)
 }
     
-    def export_metadata(self, filepath: str):
+    def export_metadata (self, filepath: str):
 """Export generation metadata."""
 stats = self.get_statistics()
 
-with open(filepath, 'w') as f:
-json.dump(stats, f, indent = 2)
+with open (filepath, 'w') as f:
+json.dump (stats, f, indent = 2)
 
 # Usage
 dalle = ProductionDALLE(save_directory = "./my_images")
@@ -894,7 +894,7 @@ class CostOptimizedDALLE:
         }
     
     @staticmethod
-    def optimize_settings(requirements: dict) -> dict:
+    def optimize_settings (requirements: dict) -> dict:
         """
         Choose optimal settings for requirements.
         """
@@ -920,7 +920,7 @@ class CostOptimizedDALLE:
         return settings
     
     @staticmethod
-    def cache_strategy(prompt: str, cache_dict: dict) -> Optional[str]:
+    def cache_strategy (prompt: str, cache_dict: dict) -> Optional[str]:
         """
         Check cache before generating.
         """
@@ -943,7 +943,7 @@ estimate = optimizer.estimate_cost(
     size="1024x1024",
     quality="standard"
 )
-print(f"Estimated cost: \${estimate['total']: .2f}")
+print(f"Estimated cost: \${estimate['total']:.2f}")
 
 # 2. Optimize settings
 settings = optimizer.optimize_settings({
@@ -956,15 +956,15 @@ print(f"Recommended settings: {settings}")
 # 3. Use caching
 image_cache = {}
 
-def generate_cached(prompt: str) -> str:
+def generate_cached (prompt: str) -> str:
     # Check cache
-cached = optimizer.cache_strategy(prompt, image_cache)
+cached = optimizer.cache_strategy (prompt, image_cache)
 if cached:
     print("Using cached image")
 return cached
     
     # Generate new
-    result = dalle.generate_with_retry(prompt, ** settings)
+    result = dalle.generate_with_retry (prompt, ** settings)
     
     # Cache result
 prompt_hash = hashlib.md5(prompt.encode()).hexdigest()

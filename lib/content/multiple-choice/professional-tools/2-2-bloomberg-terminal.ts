@@ -17,17 +17,17 @@ export const bloombergTerminalMultipleChoice = [
   {
     id: '2-2-q2',
     question:
-      "You want to replicate Bloomberg's equity screening function (EQS) to find stocks with P/E < 15, dividend yield > 3%, and market cap > $1B. Without Bloomberg access, which Python approach is most practical?",
+      "You want to replicate Bloomberg\'s equity screening function (EQS) to find stocks with P/E < 15, dividend yield > 3%, and market cap > $1B. Without Bloomberg access, which Python approach is most practical?",
     options: [
       'Web scrape Bloomberg.com for the data',
       'Use yfinance to fetch data for a list of tickers and filter in pandas',
-      'Purchase Bloomberg API access ($24K/year)',
-      "Use Excel's built-in STOCKHISTORY function",
+      'Purchase Bloomberg API access (\$24K/year)',
+      "Use Excel\'s built-in STOCKHISTORY function",
       'Manually search Yahoo Finance for each ticker',
     ],
     correctAnswer: 1,
     explanation:
-      "Using yfinance with pandas filtering is the most practical approach. You can fetch fundamentals for a universe of tickers (like S&P 500) and filter using pandas DataFrame operations. Web scraping Bloomberg.com violates ToS, API access is expensive, STOCKHISTORY lacks fundamental data, and manual search doesn't scale. The yfinance approach: `stocks = [yf.Ticker(t).info for t in tickers]` then filter on criteria.",
+      "Using yfinance with pandas filtering is the most practical approach. You can fetch fundamentals for a universe of tickers (like S&P 500) and filter using pandas DataFrame operations. Web scraping Bloomberg.com violates ToS, API access is expensive, STOCKHISTORY lacks fundamental data, and manual search doesn't scale. The yfinance approach: `stocks = [yf.Ticker (t).info for t in tickers]` then filter on criteria.",
   },
   {
     id: '2-2-q3',
@@ -42,7 +42,7 @@ export const bloombergTerminalMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "The integrated ecosystem and network effects are Bloomberg's moat. Everyone in institutional finance uses it, creating a communication network (Bloomberg Messenger) that's hard to leave. You can get similar data from competitors, but you can't instantly message 325,000+ professionals. The integration of real-time data, news, analysis, and communication in one platform with shared workflows makes switching costs extremely high. It's not required by regulators or exclusively better data—it's the network.",
+      "The integrated ecosystem and network effects are Bloomberg\'s moat. Everyone in institutional finance uses it, creating a communication network (Bloomberg Messenger) that's hard to leave. You can get similar data from competitors, but you can't instantly message 325,000+ professionals. The integration of real-time data, news, analysis, and communication in one platform with shared workflows makes switching costs extremely high. It\'s not required by regulators or exclusively better data—it's the network.",
   },
   {
     id: '2-2-q4',
@@ -67,7 +67,7 @@ export const bloombergTerminalMultipleChoice = [
       'Install `pip install bloomberg` and use the free API',
       'Use web scraping with BeautifulSoup on bloomberg.com',
       'Install `blpapi` or `pdblp` and connect to localhost:8194 (requires Terminal running)',
-      'Purchase separate Bloomberg API license ($10K/year)',
+      'Purchase separate Bloomberg API license (\$10K/year)',
       'Export data manually to CSV and read in Python',
     ],
     correctAnswer: 2,

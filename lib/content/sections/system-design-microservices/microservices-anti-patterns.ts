@@ -173,9 +173,9 @@ If each service has 99.9% uptime:
 \`\`\`javascript
 // Parallel calls
 const [payment, inventory, shipping] = await Promise.all([
-    paymentService.authorize(order),
-    inventoryService.reserve(order.items),
-    shippingService.calculate(order.address)
+    paymentService.authorize (order),
+    inventoryService.reserve (order.items),
+    shippingService.calculate (order.address)
 ]);
 \`\`\`
 
@@ -210,9 +210,9 @@ const [payment, inventory, shipping] = await Promise.all([
 **Bad**:
 \`\`\`javascript
 BEGIN TRANSACTION;
-  await orderService.createOrder(order);
-  await paymentService.charge(payment);
-  await inventoryService.reserve(items);
+  await orderService.createOrder (order);
+  await paymentService.charge (payment);
+  await inventoryService.reserve (items);
 COMMIT;
 \`\`\`
 
@@ -260,7 +260,7 @@ COMMIT;
 
 ---
 
-## 9. Ignoring Conway's Law
+## 9. Ignoring Conway\'s Law
 
 **Problem**: Microservices architecture doesn't match team structure.
 
@@ -326,9 +326,9 @@ data:
 // API Gateway
 app.post('/orders', async (req, res) => {
     // Business logic in gateway!
-    const tax = calculateTax(req.body.items);
-    const discount = applyPromotions(req.body.items);
-    const total = calculateTotal(req.body.items, tax, discount);
+    const tax = calculateTax (req.body.items);
+    const discount = applyPromotions (req.body.items);
+    const total = calculateTotal (req.body.items, tax, discount);
     
     // Then call service
     await orderService.create({ ...req.body, total });
@@ -342,15 +342,15 @@ app.post('/orders', async (req, res) => {
 \`\`\`javascript
 // API Gateway (routing only)
 app.post('/orders', async (req, res) => {
-    const result = await orderService.create(req.body);
-    res.json(result);
+    const result = await orderService.create (req.body);
+    res.json (result);
 });
 
 // Order Service (business logic)
-async function create(orderData) {
-    const tax = calculateTax(orderData.items);
-    const discount = applyPromotions(orderData.items);
-    const total = calculateTotal(orderData.items, tax, discount);
+async function create (orderData) {
+    const tax = calculateTax (orderData.items);
+    const discount = applyPromotions (orderData.items);
+    const total = calculateTotal (orderData.items, tax, discount);
     // ...
 }
 \`\`\`
@@ -389,7 +389,7 @@ git push → Run tests → Build container → Deploy to staging → Deploy to p
 - ✅ **Async communication** where possible
 - ✅ **Comprehensive monitoring** (metrics, logs, traces)
 - ✅ **Saga pattern** (not distributed transactions)
-- ✅ **Team ownership** aligned with services (Conway's Law)
+- ✅ **Team ownership** aligned with services (Conway\'s Law)
 - ✅ **Automated CI/CD** (cannot do microservices manually)
 - ✅ **Service mesh** for cross-cutting concerns (at scale)
 
@@ -422,7 +422,7 @@ git push → Run tests → Build container → Deploy to staging → Deploy to p
 5. **Async communication**: Reduce coupling and cascading failures
 6. **Monitor everything**: Can't operate microservices blind
 7. **No ACID across services**: Use Saga pattern
-8. **Align teams with services**: Conway's Law
+8. **Align teams with services**: Conway\'s Law
 9. **Automate deployment**: Essential at scale
 10. **Microservices aren't always better**: Trade-offs matter`,
 };

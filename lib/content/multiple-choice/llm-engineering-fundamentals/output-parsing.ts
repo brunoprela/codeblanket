@@ -70,6 +70,6 @@ export const outputparsingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Instructor simplifies structured extraction with one-line syntax: client.create(response_model=MyModel). It handles JSON mode, Pydantic validation, and automatic retries with feedback when validation fails. It abstracts away boilerplate but reduces control over retry logic.',
+      'Instructor simplifies structured extraction with one-line syntax: client.create (response_model=MyModel). It handles JSON mode, Pydantic validation, and automatic retries with feedback when validation fails. It abstracts away boilerplate but reduces control over retry logic.',
   },
 ];

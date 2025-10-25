@@ -8,7 +8,7 @@ export const anagramsQuiz = [
     question:
       'What is the most efficient way to check if two strings are anagrams?',
     sampleAnswer:
-      "Use a frequency counter (hash map or array). Count characters in first string, then decrement for second string. If all counts are zero, they're anagrams. Time: O(n+m), Space: O(1) for fixed alphabet or O(k) for unique chars. This is better than sorting O(n log n). For lowercase only, use 26-element array: counts[ord(c) - ord('a')] for O(1) lookups.",
+      "Use a frequency counter (hash map or array). Count characters in first string, then decrement for second string. If all counts are zero, they're anagrams. Time: O(n+m), Space: O(1) for fixed alphabet or O(k) for unique chars. This is better than sorting O(n log n). For lowercase only, use 26-element array: counts[ord (c) - ord('a')] for O(1) lookups.",
     keyPoints: [
       'Hash map or array for character frequencies',
       'Count first string, decrement for second',
@@ -34,7 +34,7 @@ export const anagramsQuiz = [
   {
     id: 'q-ana3',
     question:
-      "What's the difference between checking anagrams with sorting vs hash map?",
+      "What\'s the difference between checking anagrams with sorting vs hash map?",
     sampleAnswer:
       'Sorting: Sort both strings, compare if equal. Time: O(n log n), Space: O(1) or O(n) depending on sort. Hash map: Count character frequencies, compare counts. Time: O(n), Space: O(k) for k unique chars. Hash map is faster for long strings. Sorting is simpler to implement and works for any characters. For interviews, mention both but implement hash map for better complexity.',
     keyPoints: [

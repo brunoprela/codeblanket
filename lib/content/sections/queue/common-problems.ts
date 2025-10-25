@@ -20,7 +20,7 @@ BFS explores nodes level by level, using a queue to track which nodes to visit n
 \`\`\`python
 from collections import deque
 
-def bfs_tree(root):
+def bfs_tree (root):
     """BFS traversal of binary tree"""
     if not root:
         return []
@@ -31,13 +31,13 @@ def bfs_tree(root):
     while queue:
         # Process current level
         node = queue.popleft()  # FIFO!
-        result.append(node.val)
+        result.append (node.val)
         
         # Add children to queue (next level)
         if node.left:
-            queue.append(node.left)
+            queue.append (node.left)
         if node.right:
-            queue.append(node.right)
+            queue.append (node.right)
     
     return result
 
@@ -57,7 +57,7 @@ def bfs_tree(root):
 Process tree level by level, keeping levels separate.
 
 \`\`\`python
-def level_order(root):
+def level_order (root):
     """Return list of lists, one per level"""
     if not root:
         return []
@@ -66,21 +66,21 @@ def level_order(root):
     queue = deque([root])
     
     while queue:
-        level_size = len(queue)  # Current level size
+        level_size = len (queue)  # Current level size
         level = []
         
         # Process entire level
-        for _ in range(level_size):
+        for _ in range (level_size):
             node = queue.popleft()
-            level.append(node.val)
+            level.append (node.val)
             
             # Add next level
             if node.left:
-                queue.append(node.left)
+                queue.append (node.left)
             if node.right:
-                queue.append(node.right)
+                queue.append (node.right)
         
-        result.append(level)
+        result.append (level)
     
     return result
 
@@ -94,7 +94,7 @@ def level_order(root):
 # Returns: [[1], [2, 3], [4, 5]]
 \`\`\`
 
-**Pattern:** Use \`len(queue)\` to know how many nodes are at current level.
+**Pattern:** Use \`len (queue)\` to know how many nodes are at current level.
 
 ---
 
@@ -105,12 +105,12 @@ Use deque to efficiently track maximum in sliding window.
 \`\`\`python
 from collections import deque
 
-def max_sliding_window(nums, k):
+def max_sliding_window (nums, k):
     """Find max in each window of size k"""
     result = []
     dq = deque()  # Store indices
     
-    for i in range(len(nums)):
+    for i in range (len (nums)):
         # Remove indices outside window
         while dq and dq[0] < i - k + 1:
             dq.popleft()
@@ -119,11 +119,11 @@ def max_sliding_window(nums, k):
         while dq and nums[dq[-1]] < nums[i]:
             dq.pop()
         
-        dq.append(i)
+        dq.append (i)
         
         # Add to result once window is full
         if i >= k - 1:
-            result.append(nums[dq[0]])  # Front is max
+            result.append (nums[dq[0]])  # Front is max
     
     return result
 
@@ -148,15 +148,15 @@ class RecentCounter:
     def __init__(self):
         self.requests = deque()
     
-    def ping(self, t):
+    def ping (self, t):
         """Add request at time t, return count in [t-3000, t]"""
-        self.requests.append(t)
+        self.requests.append (t)
         
         # Remove requests older than t - 3000
         while self.requests and self.requests[0] < t - 3000:
             self.requests.popleft()
         
-        return len(self.requests)
+        return len (self.requests)
 
 # Usage
 counter = RecentCounter()
@@ -184,15 +184,15 @@ class StackUsingQueues:
         self.q1 = deque()
         self.q2 = deque()
     
-    def push(self, x):
+    def push (self, x):
         """Push to stack - O(1)"""
-        self.q1.append(x)
+        self.q1.append (x)
     
-    def pop(self):
+    def pop (self):
         """Pop from stack - O(n)"""
         # Move all but last to q2
-        while len(self.q1) > 1:
-            self.q2.append(self.q1.popleft())
+        while len (self.q1) > 1:
+            self.q2.append (self.q1.popleft())
         
         # Remove last (top of stack)
         result = self.q1.popleft()
@@ -202,14 +202,14 @@ class StackUsingQueues:
         
         return result
     
-    def top(self):
+    def top (self):
         """Peek at top - O(n)"""
         # Similar to pop but add back
-        while len(self.q1) > 1:
-            self.q2.append(self.q1.popleft())
+        while len (self.q1) > 1:
+            self.q2.append (self.q1.popleft())
         
         result = self.q1[0]
-        self.q2.append(self.q1.popleft())
+        self.q2.append (self.q1.popleft())
         
         self.q1, self.q2 = self.q2, self.q1
         

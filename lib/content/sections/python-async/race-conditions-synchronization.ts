@@ -32,7 +32,7 @@ print(f"Sequential: {counter}")  # 200,000
 
 # Concurrent: race condition!
 counter = 0
-threads = [threading.Thread(target=increment) for _ in range(2)]
+threads = [threading.Thread (target=increment) for _ in range(2)]
 for t in threads:
     t.start()
 for t in threads:
@@ -77,7 +77,7 @@ def increment_safe():
 
 # Now it's safe!
 counter = 0
-threads = [threading.Thread(target=increment_safe) for _ in range(2)]
+threads = [threading.Thread (target=increment_safe) for _ in range(2)]
 for t in threads:
     t.start()
 for t in threads:
@@ -96,15 +96,15 @@ import threading
 
 lock = threading.RLock()
 
-def recursive_function(n):
+def recursive_function (n):
     """Acquire lock recursively"""
     with lock:
         print(f"Acquired lock at level {n}")
         if n > 0:
-            recursive_function(n - 1)
+            recursive_function (n - 1)
 
 # Works! Same thread can acquire RLock multiple times
-thread = threading.Thread(target=recursive_function, args=(3,))
+thread = threading.Thread (target=recursive_function, args=(3,))
 thread.start()
 thread.join()
 
@@ -134,7 +134,7 @@ import time
 # Only 3 threads can access simultaneously
 semaphore = threading.Semaphore(3)
 
-def access_resource(n):
+def access_resource (n):
     """Access limited resource"""
     print(f"Thread {n} waiting...")
     with semaphore:
@@ -143,7 +143,7 @@ def access_resource(n):
     print(f"Thread {n} released resource")
 
 # Create 10 threads, but only 3 run concurrently
-threads = [threading.Thread(target=access_resource, args=(i,)) for i in range(10)]
+threads = [threading.Thread (target=access_resource, args=(i,)) for i in range(10)]
 for t in threads:
     t.start()
 for t in threads:
@@ -184,8 +184,8 @@ def coordinator():
     event.set()  # Wake up waiting threads
 
 # Start threads
-worker_thread = threading.Thread(target=worker)
-coord_thread = threading.Thread(target=coordinator)
+worker_thread = threading.Thread (target=worker)
+coord_thread = threading.Thread (target=coordinator)
 
 worker_thread.start()
 coord_thread.start()
@@ -232,7 +232,7 @@ async def main():
     
     print(f"Counter: {counter}")  # Always 1,000,000
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ### asyncio.Semaphore
@@ -248,21 +248,21 @@ import aiohttp
 # Limit to 10 concurrent requests
 semaphore = asyncio.Semaphore(10)
 
-async def fetch_url(session, url):
+async def fetch_url (session, url):
     """Fetch URL with rate limiting"""
     async with semaphore:
-        async with session.get(url) as response:
+        async with session.get (url) as response:
             return await response.text()
 
-async def fetch_all(urls):
+async def fetch_all (urls):
     """Fetch all URLs with concurrency limit"""
     async with aiohttp.ClientSession() as session:
-        tasks = [fetch_url(session, url) for url in urls]
+        tasks = [fetch_url (session, url) for url in urls]
         return await asyncio.gather(*tasks)
 
 # Even with 1000 URLs, only 10 concurrent requests
 urls = ['https://example.com'] * 1000
-results = asyncio.run(fetch_all(urls))
+results = asyncio.run (fetch_all (urls))
 \`\`\`
 
 ### asyncio.Event
@@ -274,7 +274,7 @@ Async Event: Coordinate Coroutines
 
 import asyncio
 
-async def worker(event, name):
+async def worker (event, name):
     """Wait for event"""
     print(f"{name} waiting...")
     await event.wait()
@@ -282,7 +282,7 @@ async def worker(event, name):
     await asyncio.sleep(1)
     print(f"{name} done")
 
-async def coordinator(event):
+async def coordinator (event):
     """Trigger event"""
     await asyncio.sleep(2)
     print("Coordinator triggering event")
@@ -292,13 +292,13 @@ async def main():
     event = asyncio.Event()
     
     await asyncio.gather(
-        worker(event, "Worker-1"),
-        worker(event, "Worker-2"),
-        worker(event, "Worker-3"),
-        coordinator(event)
+        worker (event, "Worker-1"),
+        worker (event, "Worker-2"),
+        worker (event, "Worker-3"),
+        coordinator (event)
     )
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -335,8 +335,8 @@ def thread2():
             print("Thread 2 acquired lock1")
 
 # Deadlock! Both threads waiting for each other
-t1 = threading.Thread(target=thread1)
-t2 = threading.Thread(target=thread2)
+t1 = threading.Thread (target=thread1)
+t2 = threading.Thread (target=thread2)
 t1.start()
 t2.start()
 # Program hangs forever
@@ -372,8 +372,8 @@ def thread2_safe():
             print("Thread 2 acquired lock2")
 
 # No deadlock - same lock order
-t1 = threading.Thread(target=thread1_safe)
-t2 = threading.Thread(target=thread2_safe)
+t1 = threading.Thread (target=thread1_safe)
+t2 = threading.Thread (target=thread2_safe)
 t1.start()
 t2.start()
 t1.join()
@@ -396,19 +396,19 @@ import threading
 import queue
 import time
 
-def producer(q):
+def producer (q):
     """Produce items"""
     for i in range(10):
         item = f"item-{i}"
-        q.put(item)
+        q.put (item)
         print(f"Produced {item}")
         time.sleep(0.1)
 
-def consumer(q):
+def consumer (q):
     """Consume items"""
     while True:
         try:
-            item = q.get(timeout=1)
+            item = q.get (timeout=1)
             print(f"Consumed {item}")
             q.task_done()
         except queue.Empty:
@@ -417,9 +417,9 @@ def consumer(q):
 # Thread-safe queue (no explicit locks needed!)
 q = queue.Queue()
 
-prod = threading.Thread(target=producer, args=(q,))
-cons1 = threading.Thread(target=consumer, args=(q,))
-cons2 = threading.Thread(target=consumer, args=(q,))
+prod = threading.Thread (target=producer, args=(q,))
+cons1 = threading.Thread (target=consumer, args=(q,))
+cons2 = threading.Thread (target=consumer, args=(q,))
 
 prod.start()
 cons1.start()
@@ -439,19 +439,19 @@ Async Queue: Lock-Free async communication
 
 import asyncio
 
-async def producer(q):
+async def producer (q):
     """Produce items"""
     for i in range(10):
         item = f"item-{i}"
-        await q.put(item)
+        await q.put (item)
         print(f"Produced {item}")
         await asyncio.sleep(0.1)
 
-async def consumer(q, name):
+async def consumer (q, name):
     """Consume items"""
     while True:
         try:
-            item = await asyncio.wait_for(q.get(), timeout=1)
+            item = await asyncio.wait_for (q.get(), timeout=1)
             print(f"{name} consumed {item}")
         except asyncio.TimeoutError:
             break
@@ -460,12 +460,12 @@ async def main():
     q = asyncio.Queue()
     
     await asyncio.gather(
-        producer(q),
-        consumer(q, "Consumer-1"),
-        consumer(q, "Consumer-2"),
+        producer (q),
+        consumer (q, "Consumer-1"),
+        consumer (q, "Consumer-2"),
     )
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---
@@ -486,18 +486,18 @@ class ThreadSafeCounter:
         self._value = 0
         self._lock = threading.Lock()
     
-    def increment(self, amount=1):
+    def increment (self, amount=1):
         """Increment counter"""
         with self._lock:
             self._value += amount
     
-    def decrement(self, amount=1):
+    def decrement (self, amount=1):
         """Decrement counter"""
         with self._lock:
             self._value -= amount
     
     @property
-    def value(self):
+    def value (self):
         """Get current value"""
         with self._lock:
             return self._value
@@ -509,7 +509,7 @@ def worker():
     for _ in range(1000):
         counter.increment()
 
-threads = [threading.Thread(target=worker) for _ in range(10)]
+threads = [threading.Thread (target=worker) for _ in range(10)]
 for t in threads:
     t.start()
 for t in threads:
@@ -529,40 +529,40 @@ import asyncio
 
 class ResourcePool:
     def __init__(self, size: int):
-        self.semaphore = asyncio.Semaphore(size)
-        self.resources = [f"Resource-{i}" for i in range(size)]
-        self.available = set(self.resources)
+        self.semaphore = asyncio.Semaphore (size)
+        self.resources = [f"Resource-{i}" for i in range (size)]
+        self.available = set (self.resources)
         self.lock = asyncio.Lock()
     
-    async def acquire(self):
+    async def acquire (self):
         """Acquire resource from pool"""
         await self.semaphore.acquire()
         async with self.lock:
             resource = self.available.pop()
         return resource
     
-    async def release(self, resource):
+    async def release (self, resource):
         """Release resource back to pool"""
         async with self.lock:
-            self.available.add(resource)
+            self.available.add (resource)
         self.semaphore.release()
 
 # Usage
-async def use_resource(pool):
+async def use_resource (pool):
     resource = await pool.acquire()
     try:
         print(f"Using {resource}")
         await asyncio.sleep(1)
     finally:
-        await pool.release(resource)
+        await pool.release (resource)
 
 async def main():
-    pool = ResourcePool(size=3)
+    pool = ResourcePool (size=3)
     
     # 10 tasks, but only 3 resources available
-    await asyncio.gather(*[use_resource(pool) for _ in range(10)])
+    await asyncio.gather(*[use_resource (pool) for _ in range(10)])
 
-asyncio.run(main())
+asyncio.run (main())
 \`\`\`
 
 ---

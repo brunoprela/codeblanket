@@ -68,6 +68,6 @@ export const introductionMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Segment Tree works for any associative operation where combine(a, combine(b, c)) = combine(combine(a, b), c). Examples: sum, min, max, GCD, bitwise OR/AND/XOR.',
+      'Segment Tree works for any associative operation where combine (a, combine (b, c)) = combine (combine (a, b), c). Examples: sum, min, max, GCD, bitwise OR/AND/XOR.',
   },
 ];

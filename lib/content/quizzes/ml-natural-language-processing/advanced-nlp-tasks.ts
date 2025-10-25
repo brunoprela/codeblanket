@@ -80,15 +80,15 @@ Generates new sentences capturing meaning:
 **Hybrid Approach (recommended for production):**
 
 \`\`\`python
-def financial_summary_hybrid(earnings_report):
+def financial_summary_hybrid (earnings_report):
     # 1. Abstractive summary (fluent, synthesized)
-    abstractive_summary = bart_model.generate(earnings_report)
+    abstractive_summary = bart_model.generate (earnings_report)
     
     # 2. Extract key financial sentences (verification)
-    key_sentences = extract_sentences_with_metrics(earnings_report)
+    key_sentences = extract_sentences_with_metrics (earnings_report)
     
     # 3. Verify all facts in abstractive are sourced
-    verified_facts = verify_facts(abstractive_summary, key_sentences)
+    verified_facts = verify_facts (abstractive_summary, key_sentences)
     
     # 4. Return both
     return {
@@ -192,7 +192,7 @@ Sentiment: [MODEL GENERATES]"
 **Step 1: Design prompt template**
 
 \`\`\`python
-def create_few_shot_prompt(examples, query):
+def create_few_shot_prompt (examples, query):
     prompt = "Analyze sentiment of financial news. Output: Positive, Negative, or Neutral.\\n\\n"
     
     # Add examples
@@ -222,7 +222,7 @@ examples = [
     {"text": "Corporation announces quarterly dividend payment", "label": "Neutral"},
     
     # Subtle positive (growth)
-    {"text": "Firm's operating margin expands to 25% on cost efficiencies", "label": "Positive"},
+    {"text": "Firm\'s operating margin expands to 25% on cost efficiencies", "label": "Positive"},
     
     # Subtle negative (risk)
     {"text": "Regulatory investigation could impact future earnings", "label": "Negative"},
@@ -240,8 +240,8 @@ from transformers import pipeline
 # Use GPT-3, GPT-4, or open-source alternative (Llama, Mistral)
 generator = pipeline('text-generation', model='meta-llama/Llama-2-13b-chat-hf')
 
-def few_shot_sentiment(news_text, examples):
-    prompt = create_few_shot_prompt(examples, news_text)
+def few_shot_sentiment (news_text, examples):
+    prompt = create_few_shot_prompt (examples, news_text)
     
     response = generator(
         prompt,
@@ -258,7 +258,7 @@ def few_shot_sentiment(news_text, examples):
 
 # Test
 news = "Federal Reserve raises interest rates by 0.5%, markets tumble"
-sentiment = few_shot_sentiment(news, examples)
+sentiment = few_shot_sentiment (news, examples)
 print(f"Sentiment: {sentiment}")  # Expected: Negative
 \`\`\`
 
@@ -274,15 +274,15 @@ class DynamicFewShotClassifier:
         self.encoder = SentenceTransformer('all-MiniLM-L6-v2')
         self.example_embeddings = self.encoder.encode([ex['text',] for ex in example_pool])
         
-    def select_examples(self, query, k=5):
+    def select_examples (self, query, k=5):
         ''Select most relevant examples for query''
         query_embedding = self.encoder.encode([query])
         
         # Compute similarity
-        similarities = np.dot(query_embedding, self.example_embeddings.T)[0]
+        similarities = np.dot (query_embedding, self.example_embeddings.T)[0]
         
         # Get top k most similar
-        top_indices = np.argsort(similarities)[::-1][:k]
+        top_indices = np.argsort (similarities)[::-1][:k]
         
         # Ensure diversity of labels
         selected = []
@@ -290,25 +290,25 @@ class DynamicFewShotClassifier:
         
         for idx in top_indices:
             ex = self.examples[idx]
-            if ex['label',] not in labels_seen or len(selected) < k:
-                selected.append(ex)
-                labels_seen.add(ex['label',])
+            if ex['label',] not in labels_seen or len (selected) < k:
+                selected.append (ex)
+                labels_seen.add (ex['label',])
             
-            if len(selected) == k:
+            if len (selected) == k:
                 break
         
         return selected
     
-    def classify(self, query):
+    def classify (self, query):
         # Select relevant examples
-        examples = self.select_examples(query, k=5)
+        examples = self.select_examples (query, k=5)
         
         # Few-shot inference
-        sentiment = few_shot_sentiment(query, examples)
+        sentiment = few_shot_sentiment (query, examples)
         return sentiment
 
 # Usage
-classifier = DynamicFewShotClassifier(large_example_pool)
+classifier = DynamicFewShotClassifier (large_example_pool)
 sentiment = classifier.classify("Tech giant announces massive layoffs")
 \`\`\`
 
@@ -352,13 +352,13 @@ initial_classifier = FewShotClassifier()
 
 # Use it to label data automatically
 unlabeled_news = fetch_financial_news()
-pseudo_labels = [initial_classifier.classify(news) for news in unlabeled_news]
+pseudo_labels = [initial_classifier.classify (news) for news in unlabeled_news]
 
 # Human verification of samples
-verified_labels = human_verify(unlabeled_news, pseudo_labels, sample_size=500)
+verified_labels = human_verify (unlabeled_news, pseudo_labels, sample_size=500)
 
 # Fine-tune FinBERT on verified data
-finbert = fine_tune_finbert(verified_labels)
+finbert = fine_tune_finbert (verified_labels)
 
 # Production: fine-tuned model (faster, cheaper, more accurate)
 \`\`\`
@@ -410,7 +410,7 @@ from newsapi import NewsApiClient
 class NewsAggregator:
     def __init__(self):
         self.sources = [
-            NewsApiClient(api_key='...'),  # NewsAPI
+            NewsApiClient (api_key='...'),  # NewsAPI
             # Bloomberg Terminal API
             # Reuters API
             # Twitter API (now X)
@@ -418,7 +418,7 @@ class NewsAggregator:
         ]
         self.news_buffer = []
         
-    async def stream_news(self):
+    async def stream_news (self):
         ''Real-time news streaming''
         while True:
             for source in self.sources:
@@ -426,7 +426,7 @@ class NewsAggregator:
                 
                 for article in news:
                     # Deduplicate
-                    if not self.is_duplicate(article):
+                    if not self.is_duplicate (article):
                         self.news_buffer.append({
                             'text': article['title',] + ' ' + article['content',],
                             'source': article['source',],
@@ -436,7 +436,7 @@ class NewsAggregator:
                         
             await asyncio.sleep(10)  # Poll every 10 seconds
     
-    def is_duplicate(self, article):
+    def is_duplicate (self, article):
         ''Check for duplicate/similar articles''
         # Use embeddings to detect near-duplicates
         # Often same story from multiple sources
@@ -451,18 +451,18 @@ class FinancialEntityExtractor:
         self.ner_model = pipeline('ner', model='dslim/bert-base-NER')
         self.ticker_map = load_ticker_mapping()  # Company name → ticker
         
-    def extract_entities(self, text):
+    def extract_entities (self, text):
         ''Extract companies mentioned''
-        entities = self.ner_model(text)
+        entities = self.ner_model (text)
         
         companies = [e['word',] for e in entities if e['entity_group',] == 'ORG',]
         
         # Link to tickers
         tickers = []
         for company in companies:
-            ticker = self.ticker_map.get(company.lower())
+            ticker = self.ticker_map.get (company.lower())
             if ticker:
-                tickers.append(ticker)
+                tickers.append (ticker)
         
         return {
             'companies': companies,
@@ -484,27 +484,27 @@ class EnsembleSentimentAnalyzer:
             # Custom fine-tuned model
         ]
         
-    def analyze(self, text, ticker=None):
+    def analyze (self, text, ticker=None):
         ''Ensemble sentiment analysis''
         sentiments = []
         
         for model in self.models:
-            result = model(text[:512])[0]
+            result = model (text[:512])[0]
             score = result['score',] if result['label',] == 'positive' else -result['score',]
-            sentiments.append(score)
+            sentiments.append (score)
         
         # Weighted average (FinBERT gets higher weight)
         weights = [0.5, 0.3, 0.2]
-        weighted_sentiment = sum([s * w for s, w in zip(sentiments, weights)])
+        weighted_sentiment = sum([s * w for s, w in zip (sentiments, weights)])
         
         # Adjust by news source credibility
-        source_multiplier = self.get_source_credibility(text)
+        source_multiplier = self.get_source_credibility (text)
         
         final_sentiment = weighted_sentiment * source_multiplier
         
         return {
             'sentiment': final_sentiment,
-            'confidence': np.std(sentiments),  # Lower std = higher agreement
+            'confidence': np.std (sentiments),  # Lower std = higher agreement
             'individual_scores': sentiments
         }
 \`\`\`
@@ -518,10 +518,10 @@ class TradingSignalGenerator:
         self.entity_extractor = FinancialEntityExtractor()
         self.signal_history = {}  # Track signals over time
         
-    def process_news(self, news_article):
+    def process_news (self, news_article):
         ''Convert news to trading signals''
         # Extract entities
-        entities = self.entity_extractor.extract_entities(news_article['text',])
+        entities = self.entity_extractor.extract_entities (news_article['text',])
         
         if not entities['tickers',]:
             return None
@@ -537,9 +537,9 @@ class TradingSignalGenerator:
         for ticker in entities['tickers',]:
             # Calculate metrics
             sentiment_score = sentiment_result['sentiment',]
-            momentum = self.calculate_momentum(ticker)
-            volume = self.get_news_volume(ticker, hours=1)
-            volatility = self.get_market_volatility(ticker)
+            momentum = self.calculate_momentum (ticker)
+            volume = self.get_news_volume (ticker, hours=1)
+            volatility = self.get_market_volatility (ticker)
             
             # Signal strength
             signal_strength = self.calculate_signal_strength(
@@ -552,31 +552,31 @@ class TradingSignalGenerator:
             signal = {
                 'ticker': ticker,
                 'timestamp': news_article['timestamp',],
-                'action': self.determine_action(signal_strength),
+                'action': self.determine_action (signal_strength),
                 'confidence': sentiment_result['confidence',],
                 'sentiment': sentiment_score,
-                'magnitude': abs(signal_strength),
+                'magnitude': abs (signal_strength),
                 'source_news': news_article['text',][:200],
-                'reasoning': self.explain_signal(sentiment_score, momentum, volume)
+                'reasoning': self.explain_signal (sentiment_score, momentum, volume)
             }
             
-            signals.append(signal)
+            signals.append (signal)
         
         return signals
     
-    def calculate_signal_strength(self, sentiment, momentum, volume, confidence):
+    def calculate_signal_strength (self, sentiment, momentum, volume, confidence):
         ''Combine multiple factors''
         # Weighted combination
         signal = (
             0.4 * sentiment +           # Current sentiment
             0.3 * momentum +            # Trend
-            0.2 * np.log1p(volume) +   # News volume (log scale)
+            0.2 * np.log1p (volume) +   # News volume (log scale)
             0.1 * confidence           # Model agreement
         )
         
         return signal
     
-    def determine_action(self, signal_strength, threshold=0.3):
+    def determine_action (self, signal_strength, threshold=0.3):
         ''Convert signal to action''
         if signal_strength > threshold:
             return 'BUY'
@@ -585,15 +585,15 @@ class TradingSignalGenerator:
         else:
             return 'HOLD'
     
-    def calculate_momentum(self, ticker, hours=24):
+    def calculate_momentum (self, ticker, hours=24):
         ''Sentiment momentum over time''
-        recent_signals = self.get_recent_signals(ticker, hours=hours)
+        recent_signals = self.get_recent_signals (ticker, hours=hours)
         
-        if len(recent_signals) < 2:
+        if len (recent_signals) < 2:
             return 0
         
         # Compare recent vs earlier
-        mid = len(recent_signals) // 2
+        mid = len (recent_signals) // 2
         recent_avg = np.mean([s['sentiment',] for s in recent_signals[mid:]])
         earlier_avg = np.mean([s['sentiment',] for s in recent_signals[:mid]])
         
@@ -609,37 +609,37 @@ class RiskManager:
         self.max_daily_loss = 0.02     # Max 2% daily loss
         self.signal_filters = []
         
-    def validate_signal(self, signal, portfolio, market_data):
+    def validate_signal (self, signal, portfolio, market_data):
         ''Apply risk checks before execution''
         checks = {
             'confidence_check': signal['confidence',] > 0.6,
             'volatility_check': market_data['volatility',] < 0.5,
-            'position_size_check': self.check_position_size(signal, portfolio),
+            'position_size_check': self.check_position_size (signal, portfolio),
             'daily_loss_check': portfolio['daily_pnl',] > -self.max_daily_loss,
             'market_hours_check': self.is_market_open(),
             'liquidity_check': market_data['volume',] > 1000000,
         }
         
         # All checks must pass
-        if all(checks.values()):
+        if all (checks.values()):
             return True, "Signal approved"
         else:
             failed = [k for k, v in checks.items() if not v]
             return False, f"Failed checks: {failed}"
     
-    def calculate_position_size(self, signal, portfolio):
+    def calculate_position_size (self, signal, portfolio):
         ''Kelly criterion for position sizing''
         # Simplified Kelly: f = (p*b - q) / b
         # where p = win probability, q = loss probability, b = win/loss ratio
         
         # Estimate based on signal confidence and historical accuracy
-        win_prob = self.estimate_win_probability(signal)
+        win_prob = self.estimate_win_probability (signal)
         win_loss_ratio = 1.5  # Historical average
         
         kelly_fraction = (win_prob * win_loss_ratio - (1 - win_prob)) / win_loss_ratio
         
         # Use fractional Kelly (more conservative)
-        position_size = max(0, min(kelly_fraction * 0.5, self.max_position_size))
+        position_size = max(0, min (kelly_fraction * 0.5, self.max_position_size))
         
         return position_size * portfolio['total_value',]
 \`\`\`
@@ -655,7 +655,7 @@ class NewsTrading System:
         self.portfolio = Portfolio()
         self.metrics_tracker = MetricsTracker()
         
-    async def run(self):
+    async def run (self):
         ''Main trading loop''
         while True:
             # Get latest news
@@ -663,7 +663,7 @@ class NewsTrading System:
             
             for news in news_batch:
                 # Generate signals
-                signals = self.signal_generator.process_news(news)
+                signals = self.signal_generator.process_news (news)
                 
                 if not signals:
                     continue
@@ -673,7 +673,7 @@ class NewsTrading System:
                     approved, reason = self.risk_manager.validate_signal(
                         signal,
                         self.portfolio.get_state(),
-                        market_data=self.get_market_data(signal['ticker',])
+                        market_data=self.get_market_data (signal['ticker',])
                     )
                     
                     if approved:
@@ -684,12 +684,12 @@ class NewsTrading System:
                         )
                         
                         # Execute trade
-                        self.execute_trade(signal['ticker',], signal['action',], size)
+                        self.execute_trade (signal['ticker',], signal['action',], size)
                         
                         # Log
-                        self.log_trade(signal, size, reason)
+                        self.log_trade (signal, size, reason)
                     else:
-                        self.log_rejection(signal, reason)
+                        self.log_rejection (signal, reason)
             
             # Track performance
             self.metrics_tracker.update()
@@ -723,10 +723,10 @@ class NewsTrading System:
 
 \`\`\`python
 metrics = {
-    'sharpe_ratio': calculate_sharpe(returns),
-    'max_drawdown': calculate_max_drawdown(portfolio_value),
+    'sharpe_ratio': calculate_sharpe (returns),
+    'max_drawdown': calculate_max_drawdown (portfolio_value),
     'win_rate': wins / total_trades,
-    'average_holding_period': np.mean(holding_periods),
+    'average_holding_period': np.mean (holding_periods),
     'sentiment_accuracy': correct_predictions / total_predictions,
     'signal_latency': time_news_to_trade,
 }

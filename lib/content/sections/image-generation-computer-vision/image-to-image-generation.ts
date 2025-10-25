@@ -135,7 +135,7 @@ class Img2ImgGenerator:
             torch_dtype=torch.float16,
             safety_checker=None
         )
-        self.pipe = self.pipe.to(device)
+        self.pipe = self.pipe.to (device)
         self.pipe.enable_attention_slicing()
         
         # Try xformers
@@ -170,15 +170,15 @@ class Img2ImgGenerator:
             List of transformed images
         """
         # Resize to appropriate size
-        image = self._resize_image(image)
+        image = self._resize_image (image)
         
         # Set seed
         generator = None
         if seed is not None:
-            generator = torch.Generator(device=self.device).manual_seed(seed)
+            generator = torch.Generator (device=self.device).manual_seed (seed)
         
         # Generate
-        with torch.autocast(self.device):
+        with torch.autocast (self.device):
             result = self.pipe(
                 prompt=prompt,
                 image=image,
@@ -203,18 +203,18 @@ class Img2ImgGenerator:
         w, h = image.size
         
         # Scale down if too large
-        if max(w, h) > max_size:
-            scale = max_size / max(w, h)
-            w = int(w * scale)
-            h = int(h * scale)
+        if max (w, h) > max_size:
+            scale = max_size / max (w, h)
+            w = int (w * scale)
+            h = int (h * scale)
         
         # Round to nearest 64
         w = (w // 64) * 64
         h = (h // 64) * 64
         
         # Ensure minimum size
-        w = max(w, 512)
-        h = max(h, 512)
+        w = max (w, 512)
+        h = max (h, 512)
         
         return image.resize((w, h), Image.LANCZOS)
     
@@ -230,7 +230,7 @@ class Img2ImgGenerator:
         """
         results = []
         
-        for i in range(num_variations):
+        for i in range (num_variations):
             # Use different seed for each
             images = self.generate(
                 image=image,
@@ -238,7 +238,7 @@ class Img2ImgGenerator:
                 seed=42 + i if kwargs.get('seed') else None,
                 **{k: v for k, v in kwargs.items() if k != 'seed'}
             )
-            results.extend(images)
+            results.extend (images)
         
         return results
 
@@ -266,8 +266,8 @@ variations = img2img.generate_variations(
     strength=0.4
 )
 
-for i, var in enumerate(variations):
-    var.save(f"variation_{i}.png")
+for i, var in enumerate (variations):
+    var.save (f"variation_{i}.png")
 \`\`\`
 
 ## Common Use Cases
@@ -283,7 +283,7 @@ class StyleTransfer:
     def __init__(self, img2img_generator):
         self.gen = img2img_generator
     
-    def to_oil_painting(self, image: Image.Image) -> Image.Image:
+    def to_oil_painting (self, image: Image.Image) -> Image.Image:
         """Convert photo to oil painting."""
         return self.gen.generate(
             image=image,
@@ -297,7 +297,7 @@ class StyleTransfer:
             steps=50
         )[0]
     
-    def to_watercolor(self, image: Image.Image) -> Image.Image:
+    def to_watercolor (self, image: Image.Image) -> Image.Image:
         """Convert to watercolor painting."""
         return self.gen.generate(
             image=image,
@@ -311,7 +311,7 @@ class StyleTransfer:
             steps=50
         )[0]
     
-    def to_anime(self, image: Image.Image) -> Image.Image:
+    def to_anime (self, image: Image.Image) -> Image.Image:
         """Convert to anime style."""
         return self.gen.generate(
             image=image,
@@ -325,7 +325,7 @@ class StyleTransfer:
             steps=50
         )[0]
     
-    def to_sketch(self, image: Image.Image) -> Image.Image:
+    def to_sketch (self, image: Image.Image) -> Image.Image:
         """Convert to pencil sketch."""
         return self.gen.generate(
             image=image,
@@ -339,7 +339,7 @@ class StyleTransfer:
             steps=50
         )[0]
     
-    def to_vintage_photo(self, image: Image.Image) -> Image.Image:
+    def to_vintage_photo (self, image: Image.Image) -> Image.Image:
         """Apply vintage photo effect."""
         return self.gen.generate(
             image=image,
@@ -354,15 +354,15 @@ class StyleTransfer:
         )[0]
 
 # Usage
-style_transfer = StyleTransfer(img2img)
+style_transfer = StyleTransfer (img2img)
 
 photo = Image.open("portrait.jpg")
 
 # Try different styles
-oil = style_transfer.to_oil_painting(photo)
-watercolor = style_transfer.to_watercolor(photo)
-anime = style_transfer.to_anime(photo)
-sketch = style_transfer.to_sketch(photo)
+oil = style_transfer.to_oil_painting (photo)
+watercolor = style_transfer.to_watercolor (photo)
+anime = style_transfer.to_anime (photo)
+sketch = style_transfer.to_sketch (photo)
 
 oil.save("oil.png")
 watercolor.save("watercolor.png")
@@ -379,7 +379,7 @@ class PhotoEnhancer:
     def __init__(self, img2img_generator):
         self.gen = img2img_generator
     
-    def enhance_details(self, image: Image.Image) -> Image.Image:
+    def enhance_details (self, image: Image.Image) -> Image.Image:
         """Add more detail and sharpness."""
         return self.gen.generate(
             image=image,
@@ -394,7 +394,7 @@ class PhotoEnhancer:
             guidance_scale=7.0
         )[0]
     
-    def improve_lighting(self, image: Image.Image) -> Image.Image:
+    def improve_lighting (self, image: Image.Image) -> Image.Image:
         """Improve lighting and exposure."""
         return self.gen.generate(
             image=image,
@@ -408,7 +408,7 @@ class PhotoEnhancer:
             steps=40
         )[0]
     
-    def enhance_colors(self, image: Image.Image) -> Image.Image:
+    def enhance_colors (self, image: Image.Image) -> Image.Image:
         """Enhance color vibrancy."""
         return self.gen.generate(
             image=image,
@@ -422,7 +422,7 @@ class PhotoEnhancer:
             steps=40
         )[0]
     
-    def make_professional(self, image: Image.Image) -> Image.Image:
+    def make_professional (self, image: Image.Image) -> Image.Image:
         """Give photo professional look."""
         return self.gen.generate(
             image=image,
@@ -438,15 +438,15 @@ class PhotoEnhancer:
         )[0]
 
 # Usage
-enhancer = PhotoEnhancer(img2img)
+enhancer = PhotoEnhancer (img2img)
 
 photo = Image.open("photo.jpg")
 
 # Various enhancements
-detailed = enhancer.enhance_details(photo)
-better_lit = enhancer.improve_lighting(photo)
-vibrant = enhancer.enhance_colors(photo)
-professional = enhancer.make_professional(photo)
+detailed = enhancer.enhance_details (photo)
+better_lit = enhancer.improve_lighting (photo)
+vibrant = enhancer.enhance_colors (photo)
+professional = enhancer.make_professional (photo)
 \`\`\`
 
 ### 3. Time and Weather Transformations
@@ -460,7 +460,7 @@ class SceneTransformer:
     def __init__(self, img2img_generator):
         self.gen = img2img_generator
     
-    def to_night(self, image: Image.Image) -> Image.Image:
+    def to_night (self, image: Image.Image) -> Image.Image:
         """Convert day scene to night."""
         return self.gen.generate(
             image=image,
@@ -474,7 +474,7 @@ class SceneTransformer:
             steps=50
         )[0]
     
-    def to_sunset(self, image: Image.Image) -> Image.Image:
+    def to_sunset (self, image: Image.Image) -> Image.Image:
         """Add sunset lighting."""
         return self.gen.generate(
             image=image,
@@ -488,7 +488,7 @@ class SceneTransformer:
             steps=50
         )[0]
     
-    def add_rain(self, image: Image.Image) -> Image.Image:
+    def add_rain (self, image: Image.Image) -> Image.Image:
         """Make scene rainy."""
         return self.gen.generate(
             image=image,
@@ -502,7 +502,7 @@ class SceneTransformer:
             steps=50
         )[0]
     
-    def add_snow(self, image: Image.Image) -> Image.Image:
+    def add_snow (self, image: Image.Image) -> Image.Image:
         """Add snow to scene."""
         return self.gen.generate(
             image=image,
@@ -516,7 +516,7 @@ class SceneTransformer:
             steps=50
         )[0]
     
-    def to_autumn(self, image: Image.Image) -> Image.Image:
+    def to_autumn (self, image: Image.Image) -> Image.Image:
         """Transform to autumn colors."""
         return self.gen.generate(
             image=image,
@@ -531,15 +531,15 @@ class SceneTransformer:
         )[0]
 
 # Usage
-transformer = SceneTransformer(img2img)
+transformer = SceneTransformer (img2img)
 
 day_photo = Image.open("street_day.jpg")
 
 # Transform conditions
-night = transformer.to_night(day_photo)
-sunset = transformer.to_sunset(day_photo)
-rainy = transformer.add_rain(day_photo)
-snowy = transformer.add_snow(day_photo)
+night = transformer.to_night (day_photo)
+sunset = transformer.to_sunset (day_photo)
+rainy = transformer.add_rain (day_photo)
+snowy = transformer.add_snow (day_photo)
 \`\`\`
 
 ### 4. Creative Reimagining
@@ -553,7 +553,7 @@ class CreativeReimagineer:
     def __init__(self, img2img_generator):
         self.gen = img2img_generator
     
-    def make_futuristic(self, image: Image.Image) -> Image.Image:
+    def make_futuristic (self, image: Image.Image) -> Image.Image:
         """Add futuristic/sci-fi elements."""
         return self.gen.generate(
             image=image,
@@ -568,7 +568,7 @@ class CreativeReimagineer:
             steps=50
         )[0]
     
-    def make_fantasy(self, image: Image.Image) -> Image.Image:
+    def make_fantasy (self, image: Image.Image) -> Image.Image:
         """Add fantasy/magical elements."""
         return self.gen.generate(
             image=image,
@@ -583,7 +583,7 @@ class CreativeReimagineer:
             steps=50
         )[0]
     
-    def make_post_apocalyptic(self, image: Image.Image) -> Image.Image:
+    def make_post_apocalyptic (self, image: Image.Image) -> Image.Image:
         """Transform to post-apocalyptic."""
         return self.gen.generate(
             image=image,
@@ -597,7 +597,7 @@ class CreativeReimagineer:
             steps=50
         )[0]
     
-    def miniaturize(self, image: Image.Image) -> Image.Image:
+    def miniaturize (self, image: Image.Image) -> Image.Image:
         """Make scene look like miniature/tilt-shift."""
         return self.gen.generate(
             image=image,
@@ -613,13 +613,13 @@ class CreativeReimagineer:
         )[0]
 
 # Usage
-reimaginer = CreativeReimagineer(img2img)
+reimaginer = CreativeReimagineer (img2img)
 
 city_photo = Image.open("city.jpg")
 
-futuristic = reimaginer.make_futuristic(city_photo)
-fantasy = reimaginer.make_fantasy(city_photo)
-apocalyptic = reimaginer.make_post_apocalyptic(city_photo)
+futuristic = reimaginer.make_futuristic (city_photo)
+fantasy = reimaginer.make_fantasy (city_photo)
+apocalyptic = reimaginer.make_post_apocalyptic (city_photo)
 \`\`\`
 
 ## Advanced Techniques
@@ -648,7 +648,7 @@ class ProgressiveRefiner:
         results = [image]
         current = image
         
-        for i in range(iterations):
+        for i in range (iterations):
             print(f"Iteration {i+1}/{iterations}")
             
             # Gradually reduce strength
@@ -661,7 +661,7 @@ class ProgressiveRefiner:
                 steps=40
             )[0]
             
-            results.append(refined)
+            results.append (refined)
             current = refined
         
         return results
@@ -695,7 +695,7 @@ class ProgressiveRefiner:
         return detailed
 
 # Usage
-refiner = ProgressiveRefiner(img2img)
+refiner = ProgressiveRefiner (img2img)
 
 # Progressive refinement
 rough_image = Image.open("rough.png")
@@ -707,8 +707,8 @@ refinement_steps = refiner.refine_iteratively(
 )
 
 # Save each step
-for i, img in enumerate(refinement_steps):
-    img.save(f"refinement_step_{i}.png")
+for i, img in enumerate (refinement_steps):
+    img.save (f"refinement_step_{i}.png")
 \`\`\`
 
 ### Strength Testing
@@ -758,22 +758,22 @@ class StrengthExplorer:
         """
         from PIL import Image, ImageDraw, ImageFont
         
-        images = list(results.values())
-        strengths = list(results.keys())
+        images = list (results.values())
+        strengths = list (results.keys())
         
         # Create grid
         w, h = images[0].size
-        cols = min(len(images), 3)
-        rows = (len(images) + cols - 1) // cols
+        cols = min (len (images), 3)
+        rows = (len (images) + cols - 1) // cols
         
         grid = Image.new('RGB', (w * cols, h * rows + 30))
-        draw = ImageDraw.Draw(grid)
+        draw = ImageDraw.Draw (grid)
         
-        for i, (strength, img) in enumerate(results.items()):
+        for i, (strength, img) in enumerate (results.items()):
             x = (i % cols) * w
             y = (i // cols) * h + 30
             
-            grid.paste(img, (x, y))
+            grid.paste (img, (x, y))
             
             # Add label
             draw.text(
@@ -782,11 +782,11 @@ class StrengthExplorer:
                 fill='white'
             )
         
-        grid.save(output_path)
+        grid.save (output_path)
         print(f"Comparison saved to {output_path}")
 
 # Usage
-explorer = StrengthExplorer(img2img)
+explorer = StrengthExplorer (img2img)
 
 input_img = Image.open("photo.jpg")
 
@@ -800,7 +800,7 @@ results = explorer.test_strengths(
 )
 
 # Create comparison image
-explorer.create_strength_comparison(results)
+explorer.create_strength_comparison (results)
 \`\`\`
 
 ## Production Workflows
@@ -836,26 +836,26 @@ class BatchImg2ImgProcessor:
             transform_fn: Function that takes Image, returns Image
             file_pattern: Glob pattern for files
         """
-        input_path = Path(input_dir)
-        output_path = Path(output_dir)
-        output_path.mkdir(exist_ok=True)
+        input_path = Path (input_dir)
+        output_path = Path (output_dir)
+        output_path.mkdir (exist_ok=True)
         
         # Find all images
-        images = list(input_path.glob(file_pattern))
-        total = len(images)
+        images = list (input_path.glob (file_pattern))
+        total = len (images)
         
         print(f"Processing {total} images...")
         
-        for i, img_path in enumerate(images, 1):
+        for i, img_path in enumerate (images, 1):
             print(f"[{i}/{total}] Processing {img_path.name}")
             
             # Load and transform
-            image = Image.open(img_path)
-            result = transform_fn(image)
+            image = Image.open (img_path)
+            result = transform_fn (image)
             
             # Save with same name
             output_file = output_path / img_path.name
-            result.save(output_file)
+            result.save (output_file)
         
         print(f"Done! Saved to {output_dir}")
     
@@ -869,7 +869,7 @@ class BatchImg2ImgProcessor:
     ):
         """Apply same style to all images."""
         
-        def transform(image):
+        def transform (image):
             return self.gen.generate(
                 image=image,
                 prompt=style_prompt,
@@ -877,10 +877,10 @@ class BatchImg2ImgProcessor:
                 **kwargs
             )[0]
         
-        self.process_directory(input_dir, output_dir, transform)
+        self.process_directory (input_dir, output_dir, transform)
 
 # Usage
-batch = BatchImg2ImgProcessor(img2img)
+batch = BatchImg2ImgProcessor (img2img)
 
 # Apply oil painting style to folder of photos
 batch.apply_style_to_batch(

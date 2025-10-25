@@ -40,7 +40,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 print("Model Selection: Comprehensive Comparison")
 print("="*70)
 print(f"Dataset: {X.shape[0]} samples, {X.shape[1]} features")
-print(f"Classes: {np.bincount(y)} (imbalance ratio: {y.sum()/len(y):.2f})")
+print(f"Classes: {np.bincount (y)} (imbalance ratio: {y.sum()/len (y):.2f})")
 \`\`\`
 
 ## Comparing Multiple Models
@@ -52,11 +52,11 @@ print("="*70)
 
 # Define models to compare
 models = {
-    'Logistic Regression': LogisticRegression(max_iter=5000, random_state=42),
-    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
-    'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, random_state=42),
+    'Logistic Regression': LogisticRegression (max_iter=5000, random_state=42),
+    'Random Forest': RandomForestClassifier (n_estimators=100, random_state=42),
+    'Gradient Boosting': GradientBoostingClassifier (n_estimators=100, random_state=42),
     'SVM (RBF)': SVC(kernel='rbf', probability=True, random_state=42),
-    'Neural Network': MLPClassifier(hidden_layers=(100, 50), max_iter=1000, random_state=42),
+    'Neural Network': MLPClassifier (hidden_layers=(100, 50), max_iter=1000, random_state=42),
 }
 
 # Store results
@@ -77,14 +77,14 @@ for name, model in models.items():
     predict_time = time.time() - start_time
     
     # Calculate metrics
-    accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-    auc = roc_auc_score(y_test, y_pred_proba)
+    accuracy = accuracy_score (y_test, y_pred)
+    precision = precision_score (y_test, y_pred)
+    recall = recall_score (y_test, y_pred)
+    f1 = f1_score (y_test, y_pred)
+    auc = roc_auc_score (y_test, y_pred_proba)
     
     # Cross-validation score
-    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='roc_auc')
+    cv_scores = cross_val_score (model, X_train, y_train, cv=5, scoring='roc_auc')
     
     results.append({
         'Model': name,
@@ -104,11 +104,11 @@ for name, model in models.items():
     print(f"  Train: {train_time:.3f}s, Predict: {predict_time:.4f}s")
 
 # Create results DataFrame
-results_df = pd.DataFrame(results)
+results_df = pd.DataFrame (results)
 print("\\n" + "="*70)
 print("Model Comparison Results")
 print("="*70)
-print(results_df.to_string(index=False))
+print(results_df.to_string (index=False))
 \`\`\`
 
 ## Ranking Models by Different Criteria
@@ -122,7 +122,7 @@ criteria = ['Accuracy', 'AUC', 'F1', 'Train Time (s)', 'Predict Time (ms/sample)
 
 for criterion in criteria:
     ascending = 'Time' in criterion  # Lower is better for time
-    ranked = results_df.sort_values(criterion, ascending=ascending)
+    ranked = results_df.sort_values (criterion, ascending=ascending)
     
     print(f"\\n{criterion}:")
     for idx, row in ranked.iterrows():
@@ -159,14 +159,14 @@ print(f"\\nComparing: {model_1_name} vs {model_2_name}")
 # Perform cross-validation to get paired scores
 from sklearn.model_selection import cross_validate
 
-cv_results_1 = cross_validate(model_1, X_train, y_train, cv=10, scoring='roc_auc')
-cv_results_2 = cross_validate(model_2, X_train, y_train, cv=10, scoring='roc_auc')
+cv_results_1 = cross_validate (model_1, X_train, y_train, cv=10, scoring='roc_auc')
+cv_results_2 = cross_validate (model_2, X_train, y_train, cv=10, scoring='roc_auc')
 
 scores_1 = cv_results_1['test_score']
 scores_2 = cv_results_2['test_score']
 
 # Paired t-test
-t_stat, p_value = ttest_rel(scores_1, scores_2)
+t_stat, p_value = ttest_rel (scores_1, scores_2)
 
 print(f"\\n{model_1_name}:")
 print(f"  Mean AUC: {scores_1.mean():.4f} (+/- {scores_1.std():.4f})")
@@ -194,7 +194,7 @@ print("Model Selection Decision Matrix")
 print("="*70)
 
 # Create a scoring system
-def score_model(row):
+def score_model (row):
     """Score model based on multiple weighted criteria"""
     # Normalize metrics to 0-1 scale
     perf_score = (row['AUC'] - results_df['AUC'].min()) / (results_df['AUC'].max() - results_df['AUC'].min())
@@ -219,7 +219,7 @@ def score_model(row):
     
     return total_score
 
-results_df['Composite Score'] = results_df.apply(score_model, axis=1)
+results_df['Composite Score'] = results_df.apply (score_model, axis=1)
 
 # Rank by composite score
 ranked = results_df.sort_values('Composite Score', ascending=False)
@@ -261,7 +261,7 @@ considerations = {
     "Inference Latency": {
         "metric": "Milliseconds per prediction",
         "priority": "Critical for real-time applications",
-        "question": "What's your latency budget? (< 100ms? < 1s?)",
+        "question": "What\'s your latency budget? (< 100ms? < 1s?)",
     },
     "Memory Footprint": {
         "metric": "Model size (MB)",

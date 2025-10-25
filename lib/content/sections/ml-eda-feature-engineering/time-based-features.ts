@@ -22,7 +22,7 @@ Time is one of the most informative features in many real-world applications - f
 
 ### Basic Temporal Features
 
-\\\`\\\`\\\`python
+\`\`\`python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -36,14 +36,14 @@ print("=" * 70)
 # Create sample time series data
 np.random.seed(42)
 dates = pd.date_range('2020-01-01', '2023-12-31', freq='D')
-n = len(dates)
+n = len (dates)
 
 df = pd.DataFrame({
     'date': dates,
-    'sales': 1000 + np.random.randn(n) * 100 + 
-             np.sin(np.arange(n) * 2 * np.pi / 365) * 200 +  # Yearly seasonality
-             np.sin(np.arange(n) * 2 * np.pi / 7) * 50 +      # Weekly seasonality
-             np.arange(n) * 0.5                                # Trend
+    'sales': 1000 + np.random.randn (n) * 100 + 
+             np.sin (np.arange (n) * 2 * np.pi / 365) * 200 +  # Yearly seasonality
+             np.sin (np.arange (n) * 2 * np.pi / 7) * 50 +      # Weekly seasonality
+             np.arange (n) * 0.5                                # Trend
 })
 
 print("\\nOriginal Data:")
@@ -57,10 +57,10 @@ df['day_of_week'] = df['date'].dt.dayofweek  # Monday=0, Sunday=6
 df['day_of_year'] = df['date'].dt.dayofyear
 df['week_of_year'] = df['date'].dt.isocalendar().week
 df['quarter'] = df['date'].dt.quarter
-df['is_weekend'] = (df['day_of_week'] >= 5).astype(int)
-df['is_month_start'] = df['date'].dt.is_month_start.astype(int)
-df['is_month_end'] = df['date'].dt.is_month_end.astype(int)
-df['is_quarter_start'] = df['date'].dt.is_quarter_start.astype(int)
+df['is_weekend'] = (df['day_of_week'] >= 5).astype (int)
+df['is_month_start'] = df['date'].dt.is_month_start.astype (int)
+df['is_month_end'] = df['date'].dt.is_month_end.astype (int)
+df['is_quarter_start'] = df['date'].dt.is_quarter_start.astype (int)
 
 print("\\nExtracted Date Components:")
 print(df[['date', 'year', 'month', 'day_of_week', 'quarter', 'is_weekend']].head(10))
@@ -69,9 +69,9 @@ print(df[['date', 'year', 'month', 'day_of_week', 'quarter', 'is_weekend']].head
 weekly_avg = df.groupby('day_of_week')['sales'].mean()
 days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-plt.figure(figsize=(10, 4))
-plt.bar(range(7), weekly_avg.values)
-plt.xticks(range(7), days)
+plt.figure (figsize=(10, 4))
+plt.bar (range(7), weekly_avg.values)
+plt.xticks (range(7), days)
 plt.xlabel('Day of Week')
 plt.ylabel('Average Sales')
 plt.title('Weekly Seasonality Pattern')
@@ -79,14 +79,14 @@ plt.grid(True, alpha=0.3)
 plt.show()
 
 print("\\n✓ Basic temporal features extracted")
-\\\`\\\`\\\`
+\`\`\`
 
 ## Cyclical Feature Encoding
 
 ### Handling Cyclical Time Features
 
-\\\`\\\`\\\`python
-def encode_cyclical_features(df, col, max_val):
+\`\`\`python
+def encode_cyclical_features (df, col, max_val):
     """Encode cyclical features using sine and cosine transformation"""
     
     print(f"\\nCYCLICAL ENCODING: {col}")
@@ -102,27 +102,27 @@ def encode_cyclical_features(df, col, max_val):
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
     
     # Original encoding (problematic)
-    axes[0].scatter(df[col], df['sales'], alpha=0.5)
-    axes[0].set_xlabel(f'{col} (linear encoding)')
+    axes[0].scatter (df[col], df['sales'], alpha=0.5)
+    axes[0].set_xlabel (f'{col} (linear encoding)')
     axes[0].set_ylabel('Sales')
-    axes[0].set_title(f'Linear Encoding (gap between {max_val} and 1)')
+    axes[0].set_title (f'Linear Encoding (gap between {max_val} and 1)')
     axes[0].grid(True, alpha=0.3)
     
     # Sine component
-    axes[1].scatter(df[f'{col}_sin'], df['sales'], alpha=0.5)
-    axes[1].set_xlabel(f'{col}_sin')
+    axes[1].scatter (df[f'{col}_sin'], df['sales'], alpha=0.5)
+    axes[1].set_xlabel (f'{col}_sin')
     axes[1].set_ylabel('Sales')
     axes[1].set_title('Sine Component (preserves cyclical)')
     axes[1].grid(True, alpha=0.3)
     
     # Sine vs Cosine (circular pattern)
-    axes[2].scatter(df[f'{col}_sin'], df[f'{col}_cos'], 
+    axes[2].scatter (df[f'{col}_sin'], df[f'{col}_cos'], 
                    c=df[col], cmap='hsv', alpha=0.5)
-    axes[2].set_xlabel(f'{col}_sin')
-    axes[2].set_ylabel(f'{col}_cos')
+    axes[2].set_xlabel (f'{col}_sin')
+    axes[2].set_ylabel (f'{col}_cos')
     axes[2].set_title('Sine vs Cosine (forms circle)')
     axes[2].grid(True, alpha=0.3)
-    plt.colorbar(axes[2].collections[0], ax=axes[2], label=col)
+    plt.colorbar (axes[2].collections[0], ax=axes[2], label=col)
     
     plt.tight_layout()
     plt.show()
@@ -133,24 +133,24 @@ def encode_cyclical_features(df, col, max_val):
     return df
 
 # Encode cyclical features
-df = encode_cyclical_features(df, 'month', 12)
-df = encode_cyclical_features(df, 'day_of_week', 7)
-df = encode_cyclical_features(df, 'day_of_year', 365)
-\\\`\\\`\\\`
+df = encode_cyclical_features (df, 'month', 12)
+df = encode_cyclical_features (df, 'day_of_week', 7)
+df = encode_cyclical_features (df, 'day_of_year', 365)
+\`\`\`
 
 ## Lag Features
 
 ### Creating Historical Values
 
-\\\`\\\`\\\`python
-def create_lag_features(df, target_col, lags=[1, 7, 30]):
+\`\`\`python
+def create_lag_features (df, target_col, lags=[1, 7, 30]):
     """Create lag features (past values)"""
     
     print(f"\\nLAG FEATURES: {target_col}")
     print("=" * 70)
     
     for lag in lags:
-        df[f'{target_col}_lag_{lag}'] = df[target_col].shift(lag)
+        df[f'{target_col}_lag_{lag}'] = df[target_col].shift (lag)
     
     print(f"\\nCreated lag features: {lags}")
     print(f"\\nSample data:")
@@ -160,30 +160,30 @@ def create_lag_features(df, target_col, lags=[1, 7, 30]):
     lag_cols = [f'{target_col}_lag_{lag}' for lag in lags]
     correlations = df[lag_cols + [target_col]].corr()[target_col][:-1]
     
-    plt.figure(figsize=(10, 4))
-    plt.bar(range(len(lags)), correlations.values)
-    plt.xticks(range(len(lags)), [f'Lag {lag}' for lag in lags])
+    plt.figure (figsize=(10, 4))
+    plt.bar (range (len (lags)), correlations.values)
+    plt.xticks (range (len (lags)), [f'Lag {lag}' for lag in lags])
     plt.xlabel('Lag Feature')
-    plt.ylabel(f'Correlation with {target_col}')
+    plt.ylabel (f'Correlation with {target_col}')
     plt.title('Lag Feature Correlation with Target')
     plt.grid(True, alpha=0.3)
     plt.show()
     
     print(f"\\n✓ Lag features capture temporal dependencies")
-    print(f"  Example: Yesterday's sales predict today's sales")
+    print(f"  Example: Yesterday\'s sales predict today's sales")
     
     return df
 
 # Create lag features
-df = create_lag_features(df, 'sales', lags=[1, 7, 30, 365])
-\\\`\\\`\\\`
+df = create_lag_features (df, 'sales', lags=[1, 7, 30, 365])
+\`\`\`
 
 ## Rolling Window Statistics
 
 ### Aggregating Over Time Windows
 
-\\\`\\\`\\\`python
-def create_rolling_features(df, target_col, windows=[7, 30, 90]):
+\`\`\`python
+def create_rolling_features (df, target_col, windows=[7, 30, 90]):
     """Create rolling window statistics"""
     
     print(f"\\nROLLING WINDOW FEATURES: {target_col}")
@@ -192,34 +192,34 @@ def create_rolling_features(df, target_col, windows=[7, 30, 90]):
     for window in windows:
         # Mean
         df[f'{target_col}_rolling_mean_{window}'] = (
-            df[target_col].rolling(window=window, min_periods=1).mean()
+            df[target_col].rolling (window=window, min_periods=1).mean()
         )
         
         # Standard deviation
         df[f'{target_col}_rolling_std_{window}'] = (
-            df[target_col].rolling(window=window, min_periods=1).std()
+            df[target_col].rolling (window=window, min_periods=1).std()
         )
         
         # Min and Max
         df[f'{target_col}_rolling_min_{window}'] = (
-            df[target_col].rolling(window=window, min_periods=1).min()
+            df[target_col].rolling (window=window, min_periods=1).min()
         )
         df[f'{target_col}_rolling_max_{window}'] = (
-            df[target_col].rolling(window=window, min_periods=1).max()
+            df[target_col].rolling (window=window, min_periods=1).max()
         )
     
     print(f"\\nCreated rolling features for windows: {windows}")
     
     # Visualize rolling means
-    plt.figure(figsize=(14, 6))
-    plt.plot(df['date'], df[target_col], label='Actual', alpha=0.5)
+    plt.figure (figsize=(14, 6))
+    plt.plot (df['date'], df[target_col], label='Actual', alpha=0.5)
     
     for window in windows:
-        plt.plot(df['date'], df[f'{target_col}_rolling_mean_{window}'],
+        plt.plot (df['date'], df[f'{target_col}_rolling_mean_{window}'],
                 label=f'{window}-day MA', linewidth=2)
     
     plt.xlabel('Date')
-    plt.ylabel(target_col)
+    plt.ylabel (target_col)
     plt.title('Rolling Averages (Moving Averages)')
     plt.legend()
     plt.grid(True, alpha=0.3)
@@ -231,15 +231,15 @@ def create_rolling_features(df, target_col, windows=[7, 30, 90]):
     return df
 
 # Create rolling features
-df = create_rolling_features(df, 'sales', windows=[7, 30, 90])
-\\\`\\\`\\\`
+df = create_rolling_features (df, 'sales', windows=[7, 30, 90])
+\`\`\`
 
 ## Time Since Events
 
 ### Elapsed Time Features
 
-\\\`\\\`\\\`python
-def create_time_since_features(df, date_col):
+\`\`\`python
+def create_time_since_features (df, date_col):
     """Create 'time since' features"""
     
     print("\\nTIME SINCE FEATURES")
@@ -250,35 +250,35 @@ def create_time_since_features(df, date_col):
     
     # Time since start of year
     df['days_since_year_start'] = (
-        df[date_col] - pd.to_datetime(df[date_col].dt.year.astype(str) + '-01-01')
+        df[date_col] - pd.to_datetime (df[date_col].dt.year.astype (str) + '-01-01')
     ).dt.days
     
     # Time until end of year
     df['days_until_year_end'] = (
-        pd.to_datetime(df[date_col].dt.year.astype(str) + '-12-31') - df[date_col]
+        pd.to_datetime (df[date_col].dt.year.astype (str) + '-12-31') - df[date_col]
     ).dt.days
     
     # Simulate event-based features (e.g., marketing campaign)
     campaign_dates = pd.to_datetime(['2021-06-01', '2022-06-01', '2023-06-01'])
     
-    def days_since_last_campaign(date):
+    def days_since_last_campaign (date):
         past_campaigns = campaign_dates[campaign_dates <= date]
-        if len(past_campaigns) == 0:
+        if len (past_campaigns) == 0:
             return 9999  # No campaign yet
         return (date - past_campaigns.max()).days
     
-    df['days_since_campaign'] = df[date_col].apply(days_since_last_campaign)
+    df['days_since_campaign'] = df[date_col].apply (days_since_last_campaign)
     
     print("\\nCreated time-since features:")
     print(df[['date', 'days_since_start', 'days_since_year_start', 
              'days_since_campaign']].head(10))
     
     # Visualize campaign effect
-    plt.figure(figsize=(14, 6))
-    plt.plot(df['date'], df['sales'], label='Sales', alpha=0.7)
+    plt.figure (figsize=(14, 6))
+    plt.plot (df['date'], df['sales'], label='Sales', alpha=0.7)
     
     for campaign_date in campaign_dates:
-        plt.axvline(campaign_date, color='r', linestyle='--', alpha=0.7, 
+        plt.axvline (campaign_date, color='r', linestyle='--', alpha=0.7, 
                    label='Campaign' if campaign_date == campaign_dates[0] else ')
     
     plt.xlabel('Date')
@@ -294,15 +294,15 @@ def create_time_since_features(df, date_col):
     return df
 
 # Create time-since features
-df = create_time_since_features(df, 'date')
-\\\`\\\`\\\`
+df = create_time_since_features (df, 'date')
+\`\`\`
 
 ## Time-Based Aggregations
 
 ### Group-by Time Periods
 
-\\\`\\\`\\\`python
-def create_time_aggregations(df, date_col, target_col):
+\`\`\`python
+def create_time_aggregations (df, date_col, target_col):
     """Create aggregated features by time periods"""
     
     print("\\nTIME-BASED AGGREGATIONS")
@@ -318,13 +318,13 @@ def create_time_aggregations(df, date_col, target_col):
                             'monthly_min', 'monthly_max', 'monthly_sum']
     
     # Merge back
-    df = df.merge(monthly_stats, on='year_month', how='left')
+    df = df.merge (monthly_stats, on='year_month', how='left')
     
     # Same for weekly
     df['year_week'] = df[date_col].dt.to_period('W')
     weekly_stats = df.groupby('year_week')[target_col].agg(['mean', 'std']).reset_index()
     weekly_stats.columns = ['year_week', 'weekly_mean', 'weekly_std']
-    df = df.merge(weekly_stats, on='year_week', how='left')
+    df = df.merge (weekly_stats, on='year_week', how='left')
     
     print("\\nCreated aggregated features:")
     print(df[['date', 'sales', 'monthly_mean', 'weekly_mean']].head(10))
@@ -332,14 +332,14 @@ def create_time_aggregations(df, date_col, target_col):
     # Visualize monthly aggregations
     fig, axes = plt.subplots(2, 1, figsize=(14, 8))
     
-    axes[0].plot(df['date'], df['sales'], alpha=0.5, label='Daily Sales')
-    axes[0].plot(df['date'], df['monthly_mean'], linewidth=2, label='Monthly Mean')
+    axes[0].plot (df['date'], df['sales'], alpha=0.5, label='Daily Sales')
+    axes[0].plot (df['date'], df['monthly_mean'], linewidth=2, label='Monthly Mean')
     axes[0].set_ylabel('Sales')
     axes[0].set_title('Daily Sales vs Monthly Average')
     axes[0].legend()
     axes[0].grid(True, alpha=0.3)
     
-    axes[1].plot(df['date'], df['monthly_std'], linewidth=2, color='orange')
+    axes[1].plot (df['date'], df['monthly_std'], linewidth=2, color='orange')
     axes[1].set_xlabel('Date')
     axes[1].set_ylabel('Monthly Std Dev')
     axes[1].set_title('Monthly Volatility')
@@ -353,15 +353,15 @@ def create_time_aggregations(df, date_col, target_col):
     return df
 
 # Create aggregations
-df = create_time_aggregations(df, 'date', 'sales')
-\\\`\\\`\\\`
+df = create_time_aggregations (df, 'date', 'sales')
+\`\`\`
 
 ## Holiday and Special Event Features
 
 ### Encoding Special Days
 
-\\\`\\\`\\\`python
-def create_holiday_features(df, date_col, country='US'):
+\`\`\`python
+def create_holiday_features (df, date_col, country='US'):
     """Create features for holidays and special events"""
     
     print("\\nHOLIDAY AND SPECIAL EVENT FEATURES")
@@ -376,7 +376,7 @@ def create_holiday_features(df, date_col, country='US'):
     }
     
     df['month_day'] = df[date_col].dt.strftime('%m-%d')
-    df['is_major_holiday'] = df['month_day'].isin(holidays_dict.keys()).astype(int)
+    df['is_major_holiday'] = df['month_day'].isin (holidays_dict.keys()).astype (int)
     
     # Days before/after holiday
     df['days_to_holiday'] = 0
@@ -389,13 +389,13 @@ def create_holiday_features(df, date_col, country='US'):
         )
         
         future_holidays = holiday_dates[holiday_dates >= date]
-        if len(future_holidays) > 0:
+        if len (future_holidays) > 0:
             df.loc[df[date_col] == date, 'days_to_holiday'] = (
                 future_holidays.min() - date
             ).days
         
         past_holidays = holiday_dates[holiday_dates <= date]
-        if len(past_holidays) > 0:
+        if len (past_holidays) > 0:
             df.loc[df[date_col] == date, 'days_from_holiday'] = (
                 date - past_holidays.max()
             ).days
@@ -404,7 +404,7 @@ def create_holiday_features(df, date_col, country='US'):
     df['is_payday'] = (
         (df[date_col].dt.day == 15) | 
         df[date_col].dt.is_month_end
-    ).astype(int)
+    ).astype (int)
     
     print("\\nHoliday features created:")
     holiday_samples = df[df['is_major_holiday'] == 1][['date', 'is_major_holiday']].head()
@@ -415,8 +415,8 @@ def create_holiday_features(df, date_col, country='US'):
     return df
 
 # Create holiday features
-df = create_holiday_features(df, 'date')
-\\\`\\\`\\\`
+df = create_holiday_features (df, 'date')
+\`\`\`
 
 ## Key Takeaways
 

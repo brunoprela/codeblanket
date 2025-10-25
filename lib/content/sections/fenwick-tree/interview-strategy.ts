@@ -29,7 +29,7 @@ export const interviewstrategySection = {
 
 **2. Handle 1-indexing:**
 - Fenwick uses 1-indexed arrays
-- Convert input: \`update(i+1, val)\`
+- Convert input: \`update (i+1, val)\`
 - Or use 0-indexed version
 
 **3. Choose variant:**

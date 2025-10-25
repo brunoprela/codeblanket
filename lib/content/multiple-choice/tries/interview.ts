@@ -53,7 +53,7 @@ export const interviewMultipleChoice: MultipleChoiceQuestion[] = [
       'Only time complexity',
       'Insert/Search O(m) per word, Space O(ALPHABET × m × n) worst case but better with shared prefixes',
       'Only space complexity',
-      "It's always fast",
+      "It\'s always fast",
     ],
     correctAnswer: 1,
     explanation:

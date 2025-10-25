@@ -55,7 +55,7 @@ export const columnOrientedDatabasesMCQ: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Let's calculate: Athena: 50 queries/day × 30 days = 1,500 queries/month. Each scans 2TB × $5/TB = $10/query. Total: 1,500 × $10 = $15,000/month! ClickHouse: $700/month (fixed cost). ClickHouse is 21x cheaper! The key insight: Athena is great for infrequent queries (10-20/month), but with 50/day, the $5/TB scanning cost accumulates quickly. Additionally, ClickHouse would actually scan much less than 2TB due to column pruning and 50x compression—the 2TB figure is for Athena which must scan Parquet files. With ClickHouse, the same query might scan only 40GB. Serverless (Athena) trades fixed costs for variable costs, which backfires with high query volume. This is why companies with frequent analytical workloads use dedicated columnar databases despite the fixed $700/month cost.",
+      "Let\'s calculate: Athena: 50 queries/day × 30 days = 1,500 queries/month. Each scans 2TB × $5/TB = $10/query. Total: 1,500 × $10 = $15,000/month! ClickHouse: $700/month (fixed cost). ClickHouse is 21x cheaper! The key insight: Athena is great for infrequent queries (10-20/month), but with 50/day, the $5/TB scanning cost accumulates quickly. Additionally, ClickHouse would actually scan much less than 2TB due to column pruning and 50x compression—the 2TB figure is for Athena which must scan Parquet files. With ClickHouse, the same query might scan only 40GB. Serverless (Athena) trades fixed costs for variable costs, which backfires with high query volume. This is why companies with frequent analytical workloads use dedicated columnar databases despite the fixed $700/month cost.",
   },
   {
     id: 'col-db-mcq-5',

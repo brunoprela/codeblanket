@@ -45,7 +45,7 @@ export const introductionSection = {
 Ask clarifying questions:
 - What operations are needed? (read, write, delete)
 - What are the constraints? (capacity limits, time limits)
-- What's the expected performance? (O(1)? O(log N)?)
+- What\'s the expected performance? (O(1)? O(log N)?)
 - How should edge cases be handled? (empty, full, invalid)
 
 **Example - LRU Cache:**
@@ -77,11 +77,11 @@ class LRUCache:
         """Initialize with given capacity"""
         pass
     
-    def get(self, key: int) -> int:
+    def get (self, key: int) -> int:
         """Get value, return -1 if not exists"""
         pass
     
-    def put(self, key: int, value: int) -> None:
+    def put (self, key: int, value: int) -> None:
         """Put key-value, evict LRU if full"""
         pass
 \`\`\`
@@ -144,11 +144,11 @@ class MinStack:
         self.stack = []
         self.min_stack = []  # Track min at each level
     
-    def push(self, val):
-        self.stack.append(val)
+    def push (self, val):
+        self.stack.append (val)
         # Push current min (could be this val)
-        min_val = min(val, self.min_stack[-1] if self.min_stack else val)
-        self.min_stack.append(min_val)
+        min_val = min (val, self.min_stack[-1] if self.min_stack else val)
+        self.min_stack.append (min_val)
 \`\`\`
 
 ### Pattern 3: Two Stacks/Queues
@@ -165,14 +165,14 @@ class QueueUsingStacks:
         self.stack1 = []  # For enqueue
         self.stack2 = []  # For dequeue
     
-    def enqueue(self, x):
-        self.stack1.append(x)
+    def enqueue (self, x):
+        self.stack1.append (x)
     
-    def dequeue(self):
+    def dequeue (self):
         if not self.stack2:
             # Move all from stack1 to stack2 (reverses order)
             while self.stack1:
-                self.stack2.append(self.stack1.pop())
+                self.stack2.append (self.stack1.pop())
         return self.stack2.pop()
 \`\`\`
 
@@ -190,14 +190,14 @@ class HitCounter:
     def __init__(self):
         self.hits = deque()  # Store timestamps
     
-    def hit(self, timestamp):
-        self.hits.append(timestamp)
+    def hit (self, timestamp):
+        self.hits.append (timestamp)
     
-    def getHits(self, timestamp):
+    def getHits (self, timestamp):
         # Remove hits older than 300 seconds
         while self.hits and self.hits[0] <= timestamp - 300:
             self.hits.popleft()
-        return len(self.hits)
+        return len (self.hits)
 \`\`\`
 
 ---

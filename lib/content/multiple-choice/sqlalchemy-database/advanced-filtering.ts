@@ -35,7 +35,7 @@ export const advancedFilteringMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['B-tree', 'Hash', 'GIN (Generalized Inverted Index)', 'GiST'],
     correctAnswer: 2,
     explanation:
-      'GIN (Generalized Inverted Index) is the standard index for full-text search on tsvector columns. It creates an inverted index mapping each lexeme (word stem) to the documents containing it, enabling fast full-text queries. Without GIN index, full-text search requires sequential scan (10-100x slower). GiST is also possible but generally slower for lookups (though faster for updates). B-tree and Hash indexes do not support full-text search operations. Command: CREATE INDEX idx_search ON articles USING gin(search_vector);',
+      'GIN (Generalized Inverted Index) is the standard index for full-text search on tsvector columns. It creates an inverted index mapping each lexeme (word stem) to the documents containing it, enabling fast full-text queries. Without GIN index, full-text search requires sequential scan (10-100x slower). GiST is also possible but generally slower for lookups (though faster for updates). B-tree and Hash indexes do not support full-text search operations. Command: CREATE INDEX idx_search ON articles USING gin (search_vector);',
   },
   {
     id: 'sql-filter-mc-4',
@@ -62,6 +62,6 @@ export const advancedFilteringMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "The @> operator for arrays checks if the left array contains all elements from the right array. Example: ARRAY[1,2,3,4] @> ARRAY[2,3] returns true (contains both 2 and 3). ARRAY['python', 'sql', 'java'] @> ARRAY['python'] returns true. Order does not matter, and left array can have additional elements. For checking single element: use ANY(array_column) = value. For overlap (at least one common element): use &&. For exact match: use =. Requires GIN index for performance: CREATE INDEX ON table USING gin(array_column);",
+      "The @> operator for arrays checks if the left array contains all elements from the right array. Example: ARRAY[1,2,3,4] @> ARRAY[2,3] returns true (contains both 2 and 3). ARRAY['python', 'sql', 'java'] @> ARRAY['python'] returns true. Order does not matter, and left array can have additional elements. For checking single element: use ANY(array_column) = value. For overlap (at least one common element): use &&. For exact match: use =. Requires GIN index for performance: CREATE INDEX ON table USING gin (array_column);",
   },
 ];

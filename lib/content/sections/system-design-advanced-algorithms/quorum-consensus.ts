@@ -23,10 +23,10 @@ Data: { "user:123": { "name": "Alice", "email": "alice@example.com" } }
 ### Option 1: Wait for ALL 5 servers (Strong Consistency)
 
 \`\`\`python
-def write(key, value):
+def write (key, value):
     success_count = 0
     for server in replicas:
-        server.write(key, value)
+        server.write (key, value)
         success_count += 1
     
     if success_count == 5:
@@ -44,8 +44,8 @@ def write(key, value):
 ### Option 2: Wait for just 1 server (High Availability)
 
 \`\`\`python
-def write(key, value):
-    replicas[0].write(key, value)
+def write (key, value):
+    replicas[0].write (key, value)
     return "Success"  # Don't wait for others
 \`\`\`
 
@@ -436,15 +436,15 @@ class QuorumStore:
         # Validate quorum rule
         assert w + r > n, "Must satisfy W + R > N for strong consistency"
     
-    def write(self, key: str, value: Any) -> bool:
+    def write (self, key: str, value: Any) -> bool:
         """Write with quorum"""
-        timestamp = int(time.time() * 1000)
+        timestamp = int (time.time() * 1000)
         version = {"value": value, "timestamp": timestamp}
         
         successes = 0
         for replica in self.replicas:
             try:
-                self._send_write(replica, key, version)
+                self._send_write (replica, key, version)
                 successes += 1
                 
                 # Early return once quorum achieved
@@ -455,42 +455,42 @@ class QuorumStore:
         
         return successes >= self.w
     
-    def read(self, key: str) -> Any:
+    def read (self, key: str) -> Any:
         """Read with quorum"""
         responses = []
         
         for replica in self.replicas:
             try:
-                version = self._send_read(replica, key)
-                responses.append(version)
+                version = self._send_read (replica, key)
+                responses.append (version)
                 
                 # Early return once quorum achieved
-                if len(responses) >= self.r:
+                if len (responses) >= self.r:
                     break
             except Exception:
                 continue
         
-        if len(responses) < self.r:
-            raise Exception(f"Failed to achieve read quorum R={self.r}")
+        if len (responses) < self.r:
+            raise Exception (f"Failed to achieve read quorum R={self.r}")
         
         # Return value with highest timestamp (latest write)
-        latest = max(responses, key=lambda v: v["timestamp"])
+        latest = max (responses, key=lambda v: v["timestamp"])
         
         # Read repair: Update stale replicas
-        self._read_repair(key, latest, responses)
+        self._read_repair (key, latest, responses)
         
         return latest["value"]
     
-    def _read_repair(self, key: str, latest: dict, responses: List[dict]):
+    def _read_repair (self, key: str, latest: dict, responses: List[dict]):
         """Update replicas with stale data"""
-        for i, response in enumerate(responses):
+        for i, response in enumerate (responses):
             if response["timestamp"] < latest["timestamp"]:
                 # This replica is stale, update it
-                self._send_write(self.replicas[i], key, latest)
+                self._send_write (self.replicas[i], key, latest)
 
 # Usage
 replicas = ["server1", "server2", "server3", "server4", "server5"]
-store = QuorumStore(replicas, n=5, w=3, r=3)
+store = QuorumStore (replicas, n=5, w=3, r=3)
 
 # Write with quorum
 store.write("user:123", {"name": "Alice", "email": "alice@example.com"})

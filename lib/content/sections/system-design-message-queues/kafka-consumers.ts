@@ -197,7 +197,7 @@ props.put("auto.commit.interval.ms", "5000");  // Every 5 seconds
 while (true) {
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
     for (ConsumerRecord<String, String> record : records) {
-        process(record);  // Process message
+        process (record);  // Process message
     }
     // Offset auto-committed every 5 seconds
 }
@@ -225,7 +225,7 @@ props.put("enable.auto.commit", "false");
 while (true) {
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
     for (ConsumerRecord<String, String> record : records) {
-        process(record);
+        process (record);
     }
     consumer.commitSync();  // Block until committed
 }
@@ -243,7 +243,7 @@ props.put("enable.auto.commit", "false");
 while (true) {
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
     for (ConsumerRecord<String, String> record : records) {
-        process(record);
+        process (record);
     }
     consumer.commitAsync((offsets, exception) -> {
         if (exception != null) {
@@ -263,14 +263,14 @@ while (true) {
 while (true) {
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
     for (ConsumerRecord<String, String> record : records) {
-        process(record);
+        process (record);
         
         // Commit after each record
         Map<TopicPartition, OffsetAndMetadata> offsets = Collections.singletonMap(
-            new TopicPartition(record.topic(), record.partition()),
-            new OffsetAndMetadata(record.offset() + 1)
+            new TopicPartition (record.topic(), record.partition()),
+            new OffsetAndMetadata (record.offset() + 1)
         );
-        consumer.commitSync(offsets);
+        consumer.commitSync (offsets);
     }
 }
 
@@ -289,7 +289,7 @@ while (true) {
     
     for (ConsumerRecord<String, String> record : records) {
         try {
-            process(record);  // Idempotent processing
+            process (record);  // Idempotent processing
         } catch (Exception e) {
             logger.error("Failed to process: " + record, e);
             // Handle error: skip, DLQ, retry
@@ -444,9 +444,9 @@ while (true) {
     
     for (ConsumerRecord<String, String> record : records) {
         // Process idempotently (check if already processed)
-        if (!isProcessed(record.key())) {
-            processMessage(record);
-            markAsProcessed(record.key());  // Store in database
+        if (!isProcessed (record.key())) {
+            processMessage (record);
+            markAsProcessed (record.key());  // Store in database
         }
     }
     
@@ -468,7 +468,7 @@ while (true) {
     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
     
     for (ConsumerRecord<String, String> record : records) {
-        processMessage(record);  // Idempotent processing
+        processMessage (record);  // Idempotent processing
     }
     
     consumer.commitSync();  // Commit after batch
@@ -489,16 +489,16 @@ while (true) {
     
     for (ConsumerRecord<String, String> record : records) {
         try {
-            processMessage(record);
+            processMessage (record);
         } catch (Exception e) {
-            int retries = getRetryCount(record);
+            int retries = getRetryCount (record);
             if (retries >= MAX_RETRIES) {
                 // Send to DLQ after max retries
                 sendToDLQ(record, e);
                 logger.error("Sent to DLQ: " + record);
             } else {
                 // Increment retry count and reprocess later
-                incrementRetryCount(record);
+                incrementRetryCount (record);
                 throw e;  // Trigger reprocessing
             }
         }
@@ -521,14 +521,14 @@ while (true) {
 // Design consumers to handle duplicate messages
 
 void processOrder(String orderId, OrderData data) {
-    if (orderAlreadyProcessed(orderId)) {
+    if (orderAlreadyProcessed (orderId)) {
         logger.info("Order already processed: " + orderId);
         return;  // Skip duplicate
     }
     
     // Process order
-    saveOrder(orderId, data);
-    markAsProcessed(orderId);
+    saveOrder (orderId, data);
+    markAsProcessed (orderId);
 }
 
 ✅ Safe to reprocess messages
@@ -545,10 +545,10 @@ while (true) {
     
     // Batch database writes
     List<Order> orders = records.stream()
-        .map(record -> parseOrder(record.value()))
+        .map (record -> parseOrder (record.value()))
         .collect(Collectors.toList());
     
-    batchInsert(orders);  // Single database call
+    batchInsert (orders);  // Single database call
     consumer.commitSync();
 }
 
@@ -559,7 +559,7 @@ while (true) {
 ### **3. Graceful Shutdown:**
 
 \`\`\`java
-Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+Runtime.getRuntime().addShutdownHook (new Thread(() -> {
     logger.info("Shutting down consumer...");
     consumer.wakeup();  // Interrupt poll()
 }));

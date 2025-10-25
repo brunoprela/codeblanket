@@ -95,7 +95,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def test_temperature(prompt: str, temperatures: list):
+def test_temperature (prompt: str, temperatures: list):
     """
     Test different temperatures to see the effect.
     """
@@ -134,7 +134,7 @@ test_temperature(
 ### Temperature Selection Guide
 
 \`\`\`python
-def select_temperature(task_type: str) -> float:
+def select_temperature (task_type: str) -> float:
     """
     Select appropriate temperature for task type.
     """
@@ -165,12 +165,12 @@ def select_temperature(task_type: str) -> float:
         "story_writing": 1.1,
     }
     
-    return temperature_map.get(task_type, 0.7)  # Default 0.7
+    return temperature_map.get (task_type, 0.7)  # Default 0.7
 
 # Usage
 tasks = ["code_generation", "chat", "creative_writing"]
 for task in tasks:
-    temp = select_temperature(task)
+    temp = select_temperature (task)
     print(f"{task}: temperature={temp}")
 \`\`\`
 
@@ -206,7 +206,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def extract_structured_data(text: str) -> dict:
+def extract_structured_data (text: str) -> dict:
     """Extract data - must be consistent!"""
     
     response = client.chat.completions.create(
@@ -226,7 +226,7 @@ text = "Hi, I'm Alice (alice@email.com) and I'm 25 years old."
 
 # Should get identical results every time with temp=0
 for i in range(3):
-    result = extract_structured_data(text)
+    result = extract_structured_data (text)
     print(f"Run {i+1}: {result}")
 # All three runs produce identical output!
 \`\`\`
@@ -271,7 +271,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def test_top_p(prompt: str, top_p_values: list):
+def test_top_p (prompt: str, top_p_values: list):
     """Test different top-p values."""
     
     print(f"Prompt: {prompt}\\n")
@@ -327,7 +327,7 @@ Top-P Recommendations:
 - Best for: maximum creativity
 """
 
-def select_top_p(task_type: str) -> float:
+def select_top_p (task_type: str) -> float:
     """Select appropriate top_p for task."""
     
     top_p_map = {
@@ -343,7 +343,7 @@ def select_top_p(task_type: str) -> float:
         "brainstorming": 1.0,
     }
     
-    return top_p_map.get(task_type, 0.9)
+    return top_p_map.get (task_type, 0.9)
 \`\`\`
 
 ## Temperature vs Top-P
@@ -422,13 +422,13 @@ def select_sampling_params(
     
     if prefer_method == "temperature":
         return {
-            "temperature": select_temperature(task_type),
+            "temperature": select_temperature (task_type),
             "top_p": 1.0
         }
     else:
         return {
             "temperature": 1.0,
-            "top_p": select_top_p(task_type)
+            "top_p": select_top_p (task_type)
         }
 
 # Usage
@@ -471,7 +471,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-def test_frequency_penalty(prompt: str):
+def test_frequency_penalty (prompt: str):
     """Test frequency penalty effect."""
     
     penalties = [0.0, 0.5, 1.0]
@@ -526,7 +526,7 @@ Use cases:
 - Brainstorming new ideas (0.8+)
 """
 
-def test_presence_penalty(prompt: str):
+def test_presence_penalty (prompt: str):
     """Test presence penalty effect."""
     
     penalties = [0.0, 0.8, 1.5]
@@ -586,7 +586,7 @@ def generate_with_token_limit(
         'long': 2000,      # ~1400 words
     }
     
-    max_tokens = token_limits.get(expected_length, 500)
+    max_tokens = token_limits.get (expected_length, 500)
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -724,9 +724,9 @@ TASK_CONFIGS = {
     },
 }
 
-def get_task_config(task: str) -> dict:
+def get_task_config (task: str) -> dict:
     """Get optimal config for task type."""
-    return TASK_CONFIGS.get(task, TASK_CONFIGS["chat"])
+    return TASK_CONFIGS.get (task, TASK_CONFIGS["chat"])
 
 # Usage
 config = get_task_config("code_generation")
@@ -750,7 +750,7 @@ class SamplingConfig:
     max_tokens: Optional[int] = None
     stop: Optional[list] = None
     
-    def to_dict(self) -> Dict:
+    def to_dict (self) -> Dict:
         """Convert to API parameters dict."""
         params = {
             'temperature': self.temperature,
@@ -767,7 +767,7 @@ class SamplingConfig:
         
         return params
     
-    def validate(self):
+    def validate (self):
         """Validate parameter ranges."""
         assert 0.0 <= self.temperature <= 2.0, "Temperature must be 0-2"
         assert 0.0 <= self.top_p <= 1.0, "Top-P must be 0-1"
@@ -780,9 +780,9 @@ class ParameterManager:
     def __init__(self):
         self.configs = TASK_CONFIGS
     
-    def get_config(self, task: str) -> SamplingConfig:
+    def get_config (self, task: str) -> SamplingConfig:
         """Get sampling config for task."""
-        params = self.configs.get(task, self.configs["chat"])
+        params = self.configs.get (task, self.configs["chat"])
         config = SamplingConfig(**params)
         config.validate()
         return config
@@ -793,8 +793,8 @@ class ParameterManager:
         **overrides
     ) -> SamplingConfig:
         """Create custom config based on a task template."""
-        base_params = self.configs.get(base_task, self.configs["chat"])
-        base_params.update(overrides)
+        base_params = self.configs.get (base_task, self.configs["chat"])
+        base_params.update (overrides)
         config = SamplingConfig(**base_params)
         config.validate()
         return config
@@ -846,28 +846,28 @@ def ab_test_parameters(
     
     results = []
     
-    for i, config in enumerate(configs):
-        print(f"\\nTesting config {i+1}/{len(configs)}...")
+    for i, config in enumerate (configs):
+        print(f"\\nTesting config {i+1}/{len (configs)}...")
         print(f"  Parameters: {config}")
         
         outputs = []
         tokens_used = []
         
-        for run in range(num_runs):
+        for run in range (num_runs):
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 **config
             )
             
-            outputs.append(response.choices[0].message.content)
-            tokens_used.append(response.usage.total_tokens)
+            outputs.append (response.choices[0].message.content)
+            tokens_used.append (response.usage.total_tokens)
         
         # Calculate metrics
-        avg_tokens = statistics.mean(tokens_used)
+        avg_tokens = statistics.mean (tokens_used)
         
         # Check uniqueness (how varied outputs are)
-        unique_outputs = len(set(outputs))
+        unique_outputs = len (set (outputs))
         variety_score = unique_outputs / num_runs
         
         results.append({
@@ -894,7 +894,7 @@ test_results = ab_test_parameters(
 )
 
 # Analyze results
-for i, result in enumerate(test_results):
+for i, result in enumerate (test_results):
     print(f"\\nConfig {i+1}: {result['config']}")
     print(f"  Variety: {result['variety_score']:.2f}")
     print(f"  Avg tokens: {result['avg_tokens']:.1f}")

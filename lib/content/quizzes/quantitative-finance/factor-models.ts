@@ -10,7 +10,7 @@ export const factorModelsQuiz = {
       keyPoints: [
         'Factor attribution: 22.8% from factors, 0.5% alpha, -9.3% residual → actual 18% (underperformed prediction)',
         'Alpha statistically insignificant (t=0.8 < 1.96): No evidence of skill, likely random chance',
-        "Manager's 6% outperformance vs market fully explained by factor exposures (β_M=1.3, value, momentum tilts)",
+        "Manager\'s 6% outperformance vs market fully explained by factor exposures (β_M=1.3, value, momentum tilts)",
         'R²=0.91 means 91% replicable with factor ETFs at 0.2% fee vs 1.5% mutual fund fee',
         'Recommendation: Reject fund. Net alpha (0.5%) < fees (1.5%) = -1% drag. Build factor portfolio with ETFs instead',
       ],

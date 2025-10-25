@@ -35,13 +35,13 @@ By the end of this section, you'll master:
 from rest_framework import serializers
 from .models import Article
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'  # All fields
         
 # Or specify fields explicitly
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'author', 'created_at']
@@ -51,7 +51,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Field Selection
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     class Meta:
         model = Article
         # Include specific fields
@@ -71,29 +71,29 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Common Field Types
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Explicitly define fields with options
-    title = serializers.CharField(max_length=200, required=True)
-    slug = serializers.SlugField(max_length=200, allow_blank=False)
-    content = serializers.CharField(style={'base_template': 'textarea.html'})
-    excerpt = serializers.CharField(max_length=500, allow_blank=True)
+    title = serializers.CharField (max_length=200, required=True)
+    slug = serializers.SlugField (max_length=200, allow_blank=False)
+    content = serializers.CharField (style={'base_template': 'textarea.html'})
+    excerpt = serializers.CharField (max_length=500, allow_blank=True)
     
     status = serializers.ChoiceField(
         choices=['draft', 'published', 'archived'],
         default='draft'
     )
     
-    view_count = serializers.IntegerField(min_value=0, read_only=True)
-    rating = serializers.FloatField(min_value=0.0, max_value=5.0)
+    view_count = serializers.IntegerField (min_value=0, read_only=True)
+    rating = serializers.FloatField (min_value=0.0, max_value=5.0)
     
-    published_at = serializers.DateTimeField(required=False, allow_null=True)
-    featured = serializers.BooleanField(default=False)
+    published_at = serializers.DateTimeField (required=False, allow_null=True)
+    featured = serializers.BooleanField (default=False)
     
     # URL field with validation
-    source_url = serializers.URLField(required=False, allow_blank=True)
+    source_url = serializers.URLField (required=False, allow_blank=True)
     
     # Email field
-    contact_email = serializers.EmailField(required=False)
+    contact_email = serializers.EmailField (required=False)
     
     class Meta:
         model = Article
@@ -128,19 +128,19 @@ serializers.CharField(
 ### Using source Parameter
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Map to different model field
-    heading = serializers.CharField(source='title')
+    heading = serializers.CharField (source='title')
     
     # Access related object
-    author_name = serializers.CharField(source='author.username')
-    author_email = serializers.EmailField(source='author.email')
+    author_name = serializers.CharField (source='author.username')
+    author_email = serializers.EmailField (source='author.email')
     
     # Call method
-    full_name = serializers.CharField(source='author.get_full_name')
+    full_name = serializers.CharField (source='author.get_full_name')
     
     # Access property
-    is_published = serializers.BooleanField(source='is_published')
+    is_published = serializers.BooleanField (source='is_published')
     
     class Meta:
         model = Article
@@ -154,7 +154,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Custom Computed Fields
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Custom read-only field computed by method
     reading_time = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
@@ -166,20 +166,20 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'reading_time', 'comment_count', 
                   'is_popular', 'author_info']
     
-    def get_reading_time(self, obj):
+    def get_reading_time (self, obj):
         """Calculate reading time in minutes"""
-        words = len(obj.content.split())
+        words = len (obj.content.split())
         return max(1, words // 200)  # ~200 words per minute
     
-    def get_comment_count(self, obj):
+    def get_comment_count (self, obj):
         """Get comment count"""
         return obj.comments.count()
     
-    def get_is_popular(self, obj):
+    def get_is_popular (self, obj):
         """Check if article is popular"""
         return obj.view_count > 10000
     
-    def get_author_info(self, obj):
+    def get_author_info (self, obj):
         """Return author information"""
         return {
             'id': obj.author.id,
@@ -192,18 +192,18 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Accessing Request Context
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     is_bookmarked = serializers.SerializerMethodField()
     can_edit = serializers.SerializerMethodField()
     
-    def get_is_bookmarked(self, obj):
+    def get_is_bookmarked (self, obj):
         """Check if current user bookmarked this article"""
         request = self.context.get('request')
         if request and request.user.is_authenticated:
-            return obj.bookmarks.filter(user=request.user).exists()
+            return obj.bookmarks.filter (user=request.user).exists()
         return False
     
-    def get_can_edit(self, obj):
+    def get_can_edit (self, obj):
         """Check if current user can edit"""
         request = self.context.get('request')
         if request and request.user.is_authenticated:
@@ -211,7 +211,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         return False
 
 # Pass context in view
-serializer = ArticleSerializer(article, context={'request': request})
+serializer = ArticleSerializer (article, context={'request': request})
 \`\`\`
 
 ---
@@ -221,26 +221,26 @@ serializer = ArticleSerializer(article, context={'request': request})
 ### Nested Read Operations
 
 \`\`\`python
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer (serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug']
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer (serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'slug']
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer (serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
-class ArticleDetailSerializer(serializers.ModelSerializer):
+class ArticleDetailSerializer (serializers.ModelSerializer):
     # Nested serializers for related objects
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
-    author = AuthorSerializer(read_only=True)
+    category = CategorySerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
+    author = AuthorSerializer (read_only=True)
     
     class Meta:
         model = Article
@@ -275,16 +275,16 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 ### Nested Write Operations
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Writable nested serializer
     category = CategorySerializer()
-    tags = TagSerializer(many=True)
+    tags = TagSerializer (many=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'category', 'tags']
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         """Handle nested writes on creation"""
         # Extract nested data
         category_data = validated_data.pop('category')
@@ -294,16 +294,16 @@ class ArticleSerializer(serializers.ModelSerializer):
         category, _ = Category.objects.get_or_create(**category_data)
         
         # Create article
-        article = Article.objects.create(category=category, **validated_data)
+        article = Article.objects.create (category=category, **validated_data)
         
         # Create tags
         for tag_data in tags_data:
             tag, _ = Tag.objects.get_or_create(**tag_data)
-            article.tags.add(tag)
+            article.tags.add (tag)
         
         return article
     
-    def update(self, instance, validated_data):
+    def update (self, instance, validated_data):
         """Handle nested writes on update"""
         # Extract nested data
         category_data = validated_data.pop('category', None)
@@ -311,7 +311,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         
         # Update basic fields
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            setattr (instance, attr, value)
         
         # Update category
         if category_data:
@@ -323,7 +323,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             instance.tags.clear()
             for tag_data in tags_data:
                 tag, _ = Tag.objects.get_or_create(**tag_data)
-                instance.tags.add(tag)
+                instance.tags.add (tag)
         
         instance.save()
         return instance
@@ -332,14 +332,14 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Using PrimaryKeyRelatedField
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     # Write with IDs, read with nested data
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
         source='category',
         write_only=True
     )
-    category = CategorySerializer(read_only=True)
+    category = CategorySerializer (read_only=True)
     
     tag_ids = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
@@ -347,7 +347,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         many=True,
         write_only=True
     )
-    tags = TagSerializer(many=True, read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
     
     class Meta:
         model = Article
@@ -380,39 +380,39 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Field-Level Validation
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     
-    def validate_title(self, value):
+    def validate_title (self, value):
         """Validate title field"""
-        if len(value) < 10:
+        if len (value) < 10:
             raise serializers.ValidationError(
                 "Title must be at least 10 characters long."
             )
         
         # Check for profanity (example)
         banned_words = ['spam', 'fake']
-        if any(word in value.lower() for word in banned_words):
+        if any (word in value.lower() for word in banned_words):
             raise serializers.ValidationError(
                 "Title contains inappropriate content."
             )
         
         return value
     
-    def validate_slug(self, value):
+    def validate_slug (self, value):
         """Validate slug is unique"""
         if self.instance:  # Update
-            if Article.objects.filter(slug=value).exclude(pk=self.instance.pk).exists():
+            if Article.objects.filter (slug=value).exclude (pk=self.instance.pk).exists():
                 raise serializers.ValidationError("This slug is already in use.")
         else:  # Create
-            if Article.objects.filter(slug=value).exists():
+            if Article.objects.filter (slug=value).exists():
                 raise serializers.ValidationError("This slug is already in use.")
         
         return value
     
-    def validate_published_at(self, value):
+    def validate_published_at (self, value):
         """Validate publication date"""
         from django.utils import timezone
-        if value and value > timezone.now() + timezone.timedelta(days=365):
+        if value and value > timezone.now() + timezone.timedelta (days=365):
             raise serializers.ValidationError(
                 "Publication date cannot be more than 1 year in the future."
             )
@@ -422,9 +422,9 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Object-Level Validation
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     
-    def validate(self, data):
+    def validate (self, data):
         """Validate across multiple fields"""
         
         # Check status and published_at consistency
@@ -436,7 +436,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         # Check content and excerpt relationship
         content = data.get('content', '')
         excerpt = data.get('excerpt', '')
-        if excerpt and len(excerpt) > len(content):
+        if excerpt and len (excerpt) > len (content):
             raise serializers.ValidationError(
                 "Excerpt cannot be longer than content."
             )
@@ -455,17 +455,17 @@ class ArticleSerializer(serializers.ModelSerializer):
 \`\`\`python
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
-def validate_word_count(value):
+def validate_word_count (value):
     """Custom validator function"""
-    words = len(value.split())
+    words = len (value.split())
     if words < 100:
         raise serializers.ValidationError(
             f"Content must be at least 100 words (current: {words} words)."
         )
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     slug = serializers.SlugField(
-        validators=[UniqueValidator(queryset=Article.objects.all())]
+        validators=[UniqueValidator (queryset=Article.objects.all())]
     )
     
     content = serializers.CharField(
@@ -492,10 +492,10 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 \`\`\`python
 # Read serializer with nested objects
-class ArticleDetailSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
+class ArticleDetailSerializer (serializers.ModelSerializer):
+    author = AuthorSerializer (read_only=True)
+    category = CategorySerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
     reading_time = serializers.SerializerMethodField()
     
     class Meta:
@@ -503,11 +503,11 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'content', 'author', 'category', 
                   'tags', 'reading_time', 'created_at']
     
-    def get_reading_time(self, obj):
-        return len(obj.content.split()) // 200
+    def get_reading_time (self, obj):
+        return len (obj.content.split()) // 200
 
 # Write serializer with IDs
-class ArticleWriteSerializer(serializers.ModelSerializer):
+class ArticleWriteSerializer (serializers.ModelSerializer):
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
         source='category'
@@ -523,10 +523,10 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
         fields = ['title', 'content', 'category_id', 'tag_ids']
 
 # Use in view
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.action in ['create', 'update', 'partial_update']:
             return ArticleWriteSerializer
         return ArticleDetailSerializer
@@ -541,34 +541,34 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from rest_framework import serializers
 
-class ColorField(serializers.Field):
+class ColorField (serializers.Field):
     """
     Custom field for hex color codes
     """
     
-    def to_representation(self, value):
+    def to_representation (self, value):
         """Convert internal to JSON"""
         return value  # Return hex string as-is
     
-    def to_internal_value(self, data):
+    def to_internal_value (self, data):
         """Convert JSON to internal"""
-        if not isinstance(data, str):
+        if not isinstance (data, str):
             raise serializers.ValidationError("Color must be a string.")
         
         if not data.startswith('#'):
             raise serializers.ValidationError("Color must start with #.")
         
-        if len(data) != 7:
+        if len (data) != 7:
             raise serializers.ValidationError("Color must be in #RRGGBB format.")
         
         try:
-            int(data[1:], 16)  # Validate hex
+            int (data[1:], 16)  # Validate hex
         except ValueError:
             raise serializers.ValidationError("Invalid hex color code.")
         
         return data
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer (serializers.ModelSerializer):
     color = ColorField()
     
     class Meta:
@@ -579,9 +579,9 @@ class CategorySerializer(serializers.ModelSerializer):
 ### ListField with Validation
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     keywords = serializers.ListField(
-        child=serializers.CharField(max_length=50),
+        child=serializers.CharField (max_length=50),
         allow_empty=False,
         max_length=10  # Max 10 keywords
     )
@@ -596,10 +596,10 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### JSONField
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     metadata = serializers.JSONField()
     
-    def validate_metadata(self, value):
+    def validate_metadata (self, value):
         """Validate JSON structure"""
         required_keys = ['version', 'source']
         for key in required_keys:
@@ -617,11 +617,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### to_representation Override
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     
-    def to_representation(self, instance):
+    def to_representation (self, instance):
         """Customize output representation"""
-        representation = super().to_representation(instance)
+        representation = super().to_representation (instance)
         
         # Remove null values
         representation = {
@@ -644,23 +644,23 @@ class ArticleSerializer(serializers.ModelSerializer):
 ### Optimizing Nested Queries
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer (serializers.ModelSerializer):
     author = AuthorSerializer()
     
     @classmethod
-    def setup_eager_loading(cls, queryset):
+    def setup_eager_loading (cls, queryset):
         """Optimize queries with select_related/prefetch_related"""
         queryset = queryset.select_related('author', 'category')
         queryset = queryset.prefetch_related('tags', 'comments')
         return queryset
 
 # Use in view
-class ArticleListView(generics.ListAPIView):
+class ArticleListView (generics.ListAPIView):
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         queryset = Article.objects.all()
-        return ArticleSerializer.setup_eager_loading(queryset)
+        return ArticleSerializer.setup_eager_loading (queryset)
 \`\`\`
 
 ---
@@ -670,7 +670,7 @@ class ArticleListView(generics.ListAPIView):
 ### Conditionally Include Fields
 
 \`\`\`python
-class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+class DynamicFieldsModelSerializer (serializers.ModelSerializer):
     """
     A ModelSerializer that takes an additional \`fields\` argument to
     dynamically include/exclude fields.
@@ -690,10 +690,10 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
         
         if fields is not None:
             # Drop any fields not specified
-            allowed = set(fields)
-            existing = set(self.fields)
+            allowed = set (fields)
+            existing = set (self.fields)
             for field_name in existing - allowed:
-                self.fields.pop(field_name)
+                self.fields.pop (field_name)
 
 class ArticleSerializer(DynamicFieldsModelSerializer):
     class Meta:

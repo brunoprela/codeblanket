@@ -154,7 +154,7 @@ function callExternalAPI() {
   return fetch('https://api.example.com/data');
 }
 
-const breaker = new CircuitBreaker(callExternalAPI, {
+const breaker = new CircuitBreaker (callExternalAPI, {
   timeout: 3000,              // 3s timeout
   errorThresholdPercentage: 50, // Open at 50% failure
   resetTimeout: 30000         // Try again after 30s
@@ -162,8 +162,8 @@ const breaker = new CircuitBreaker(callExternalAPI, {
 
 // Use it
 breaker.fire()
-  .then(result => console.log(result))
-  .catch(err => console.log('Circuit breaker caught:', err));
+  .then (result => console.log (result))
+  .catch (err => console.log('Circuit breaker caught:', err));
 
 // Events
 breaker.on('open', () => console.log('Circuit opened'));
@@ -378,16 +378,16 @@ CompletableFuture<String> future = bulkhead.executeSupplier(
 **Node.js (Custom)**:
 \`\`\`javascript
 class Bulkhead {
-  constructor(maxConcurrent) {
+  constructor (maxConcurrent) {
     this.maxConcurrent = maxConcurrent;
     this.current = 0;
     this.queue = [];
   }
 
-  async execute(fn) {
+  async execute (fn) {
     if (this.current >= this.maxConcurrent) {
       // Wait in queue
-      await new Promise(resolve => this.queue.push(resolve));
+      await new Promise (resolve => this.queue.push (resolve));
     }
 
     this.current++;
@@ -435,14 +435,14 @@ External Service
 const bulkhead = new Bulkhead(10);
 
 // Circuit breaker
-const breaker = new CircuitBreaker(callAPI, {
+const breaker = new CircuitBreaker (callAPI, {
   failureThreshold: 5,
   timeout: 30000
 });
 
 // Combined
 async function callWithResilience() {
-  return bulkhead.execute(async () => {
+  return bulkhead.execute (async () => {
     try {
       return await breaker.fire();
     } catch (err) {

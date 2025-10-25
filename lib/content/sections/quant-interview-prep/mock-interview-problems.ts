@@ -30,7 +30,7 @@ This section contains **complete mock interview problems** that combine multiple
 
 ### Part A: Basic Game (10 min)
 
-**Interviewer:** "I'll flip a fair coin repeatedly. You can stop me at any point and receive $1 for each heads minus $1 for each tails shown so far. What's your optimal strategy and expected payout?"
+**Interviewer:** "I'll flip a fair coin repeatedly. You can stop me at any point and receive $1 for each heads minus $1 for each tails shown so far. What\'s your optimal strategy and expected payout?"
 
 **Your Task:** Analyze the game completely.
 
@@ -71,7 +71,7 @@ E(0) = $2
 
 ### Part B: Modified Rules (10 min)
 
-**Interviewer:** "Now I'll give you $1 per heads but you pay me $2 per tails. Same rules—stop whenever you want. What's your strategy and expected value?"
+**Interviewer:** "Now I'll give you $1 per heads but you pay me $2 per tails. Same rules—stop whenever you want. What\'s your strategy and expected value?"
 
 **Solution:**
 
@@ -113,13 +113,13 @@ def play_game():
 
 # Simulate
 results = [play_game() for _ in range(100000)]
-print(f"Expected value: \${sum(results)/len(results):.4f}")
+print(f"Expected value: \${sum (results)/len (results):.4f}")
 print(f"Theoretical: $2.00")
 
 # Distribution
 from collections import Counter
-dist = Counter(results)
-for value in sorted(dist.keys())[:10]:
+dist = Counter (results)
+for value in sorted (dist.keys())[:10]:
     print(f"\${value}: {dist[value]/1000:.1f}%")
 \`\`\`
 
@@ -234,7 +234,7 @@ Current shares: 512
 
 ### Part A: Probability Question (20 min)
 
-**Interviewer:** "You draw cards from a deck without replacement until you get an ace. What's the expected number of cards drawn?"
+**Interviewer:** "You draw cards from a deck without replacement until you get an ace. What\'s the expected number of cards drawn?"
 
 **Solution:**
 
@@ -285,28 +285,28 @@ from collections import Counter
 def draw_until_ace():
     """Draw cards until ace appears."""
     deck = ['A'] * 4 + ['X'] * 48  # 4 aces, 48 others
-    random.shuffle(deck)
+    random.shuffle (deck)
     
-    for i, card in enumerate(deck, 1):
+    for i, card in enumerate (deck, 1):
         if card == 'A':
             return i
     return 53  # Should never reach (ace must appear)
 
 # Simulate
 n_trials = 100000
-results = [draw_until_ace() for _ in range(n_trials)]
+results = [draw_until_ace() for _ in range (n_trials)]
 
 # Statistics
-mean = np.mean(results)
-median = np.median(results)
-std = np.std(results)
+mean = np.mean (results)
+median = np.median (results)
+std = np.std (results)
 
 print(f"Expected draws: {mean:.2f} (theoretical: 10.60)")
 print(f"Median: {median}")
 print(f"Std dev: {std:.2f}")
 
 # Distribution
-dist = Counter(results)
+dist = Counter (results)
 print("\nDistribution (top 15):")
 for draw in range(1, 16):
     prob = dist[draw] / n_trials

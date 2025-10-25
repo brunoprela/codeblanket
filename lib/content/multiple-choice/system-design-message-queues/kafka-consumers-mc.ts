@@ -44,7 +44,7 @@ export const kafkaConsumersMC: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Idempotent processing ensures that processing a message multiple times has the same effect as processing it once. This is crucial because Kafka's at-least-once delivery can result in duplicates (e.g., if a consumer crashes after processing but before committing). For example, a payment processor should check if a payment ID was already processed (using Redis or a database) before charging a card again. Without idempotency, duplicate messages could lead to double charges or inconsistent state.",
+      "Idempotent processing ensures that processing a message multiple times has the same effect as processing it once. This is crucial because Kafka\'s at-least-once delivery can result in duplicates (e.g., if a consumer crashes after processing but before committing). For example, a payment processor should check if a payment ID was already processed (using Redis or a database) before charging a card again. Without idempotency, duplicate messages could lead to double charges or inconsistent state.",
   },
   {
     id: 'kafka-consumers-mc-4',

@@ -45,7 +45,7 @@ export const forwardPropagationMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['2', '3', '4', '10'],
     correctAnswer: 1,
     explanation:
-      'There are 3 matrix multiplications, one for each layer transition: (1) 100→50, (2) 50→25, (3) 25→10. The number of multiplications equals the number of weight matrices, which is len(layer_sizes) - 1 = 4 - 1 = 3.',
+      'There are 3 matrix multiplications, one for each layer transition: (1) 100→50, (2) 50→25, (3) 25→10. The number of multiplications equals the number of weight matrices, which is len (layer_sizes) - 1 = 4 - 1 = 3.',
   },
   {
     id: 'forward-propagation-mc-5',

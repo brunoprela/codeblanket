@@ -271,7 +271,7 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
-def test_cointegration(ticker_a, ticker_b, start='2020-01-01', end='2023-12-31'):
+def test_cointegration (ticker_a, ticker_b, start='2020-01-01', end='2023-12-31'):
     """
     Test if two stocks are cointegrated.
     
@@ -285,7 +285,7 @@ def test_cointegration(ticker_a, ticker_b, start='2020-01-01', end='2023-12-31')
     data = data.dropna()
     
     # Engle-Granger cointegration test
-    score, p_value, _ = coint(data[ticker_a], data[ticker_b])
+    score, p_value, _ = coint (data[ticker_a], data[ticker_b])
     
     # Calculate hedge ratio
     model = OLS(data[ticker_a], data[ticker_b]).fit()
@@ -328,7 +328,7 @@ results = []
 for ticker_a, ticker_b in pairs:
     print(f"\\nTesting {ticker_a} vs {ticker_b}...")
     try:
-        result = test_cointegration(ticker_a, ticker_b)
+        result = test_cointegration (ticker_a, ticker_b)
         print(f"  P-value: {result['p_value']:.4f} {'✓ Cointegrated!' if result['cointegrated'] else '✗ Not cointegrated'}")
         print(f"  Hedge Ratio: {result['hedge_ratio']:.4f}")
         print(f"  Half-life: {result['half_life']:.1f} days")
@@ -347,8 +347,8 @@ for ticker_a, ticker_b in pairs:
 print("\\n" + "="*60)
 print("SUMMARY")
 print("="*60)
-df_results = pd.DataFrame(results)
-print(df_results.to_string(index=False))
+df_results = pd.DataFrame (results)
+print(df_results.to_string (index=False))
 \`\`\`
 
 ### Pairs Trading Strategy
@@ -378,31 +378,31 @@ class PairsTradingStrategy:
         self.exit_z = exit_z
         self.stop_z = stop_z
     
-    def calculate_spread(self, prices_a, prices_b):
+    def calculate_spread (self, prices_a, prices_b):
         """Calculate spread and z-score."""
         spread = prices_a - self.hedge_ratio * prices_b
         
         # Rolling mean and std
-        spread_mean = spread.rolling(self.window).mean()
-        spread_std = spread.rolling(self.window).std()
+        spread_mean = spread.rolling (self.window).mean()
+        spread_std = spread.rolling (self.window).std()
         
         # Z-score
         z_score = (spread - spread_mean) / spread_std
         
         return spread, z_score
     
-    def generate_signals(self, prices_a, prices_b):
+    def generate_signals (self, prices_a, prices_b):
         """Generate trading signals."""
-        spread, z_score = self.calculate_spread(prices_a, prices_b)
+        spread, z_score = self.calculate_spread (prices_a, prices_b)
         
-        signals = pd.DataFrame(index=z_score.index)
+        signals = pd.DataFrame (index=z_score.index)
         signals['spread'] = spread
         signals['z_score'] = z_score
         signals['position'] = 0  # 0: no position, 1: long spread, -1: short spread
         
         # Generate signals
         position = 0
-        for i in range(self.window, len(z_score)):
+        for i in range (self.window, len (z_score)):
             z = z_score.iloc[i]
             
             if position == 0:  # No position
@@ -412,13 +412,13 @@ class PairsTradingStrategy:
                     position = 1  # Long spread (long A, short B)
             
             elif position == 1:  # Long spread
-                if abs(z) < self.exit_z:  # Mean reversion
+                if abs (z) < self.exit_z:  # Mean reversion
                     position = 0  # Close position
                 elif z < -self.stop_z:  # Stop loss
                     position = 0
             
             elif position == -1:  # Short spread
-                if abs(z) < self.exit_z:  # Mean reversion
+                if abs (z) < self.exit_z:  # Mean reversion
                     position = 0
                 elif z > self.stop_z:  # Stop loss
                     position = 0
@@ -427,14 +427,14 @@ class PairsTradingStrategy:
         
         return signals
     
-    def backtest(self, start='2020-01-01', end='2023-12-31', capital=100000):
+    def backtest (self, start='2020-01-01', end='2023-12-31', capital=100000):
         """Backtest strategy."""
         # Download data
         data = yf.download([self.ticker_a, self.ticker_b], start=start, end=end, progress=False)['Adj Close']
         data = data.dropna()
         
         # Generate signals
-        signals = self.generate_signals(data[self.ticker_a], data[self.ticker_b])
+        signals = self.generate_signals (data[self.ticker_a], data[self.ticker_b])
         
         # Calculate returns
         # Position 1: Long A, short B×beta
@@ -452,7 +452,7 @@ class PairsTradingStrategy:
         
         # Performance metrics
         total_return = signals['cumulative'].iloc[-1] - 1
-        annual_return = (1 + total_return) ** (252 / len(signals)) - 1
+        annual_return = (1 + total_return) ** (252 / len (signals)) - 1
         volatility = signals['returns'].std() * np.sqrt(252)
         sharpe = annual_return / volatility if volatility > 0 else 0
         
@@ -479,7 +479,7 @@ hedge_ratio = result['hedge_ratio']
 # Run strategy
 strategy = PairsTradingStrategy('KO', 'PEP', hedge_ratio, 
                                 entry_z=2.0, exit_z=0.5, stop_z=4.0)
-backtest_results = strategy.backtest(start='2020-01-01', end='2023-12-31')
+backtest_results = strategy.backtest (start='2020-01-01', end='2023-12-31')
 
 print(f"\\nTotal Return: {backtest_results['total_return']*100:.2f}%")
 print(f"Annual Return: {backtest_results['annual_return']*100:.2f}%")
@@ -493,7 +493,7 @@ fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 10))
 signals = backtest_results['signals']
 
 # Z-score and signals
-ax1.plot(signals.index, signals['z_score'], linewidth=1, label='Z-score')
+ax1.plot (signals.index, signals['z_score'], linewidth=1, label='Z-score')
 ax1.axhline(2, color='red', linestyle='--', alpha=0.5, label='Entry threshold')
 ax1.axhline(-2, color='red', linestyle='--', alpha=0.5)
 ax1.axhline(0, color='black', linestyle='-', alpha=0.3)
@@ -502,13 +502,13 @@ ax1.legend()
 ax1.grid(True, alpha=0.3)
 
 # Positions
-ax2.plot(signals.index, signals['position'], linewidth=2, color='navy')
+ax2.plot (signals.index, signals['position'], linewidth=2, color='navy')
 ax2.set_title('Position (1=Long Spread, -1=Short Spread, 0=No Position)', fontweight='bold')
 ax2.set_ylim(-1.5, 1.5)
 ax2.grid(True, alpha=0.3)
 
 # Cumulative returns
-ax3.plot(signals.index, signals['cumulative'], linewidth=2, color='green')
+ax3.plot (signals.index, signals['cumulative'], linewidth=2, color='green')
 ax3.set_title('Cumulative Returns', fontweight='bold')
 ax3.set_ylabel('Portfolio Value (Base=1.0)')
 ax3.grid(True, alpha=0.3)
@@ -532,7 +532,7 @@ plt.show()
 - **Trade**: Buy SPY at $450.00, short S&P 500 basket at $450.10
 - **Profit**: $0.10 per share (≈2.2 bps)
 
-**Scalability:** Large capacity ($1B+) due to liquidity.
+**Scalability:** Large capacity (\$1B+) due to liquidity.
 
 ### 2. **Merger Arbitrage**
 

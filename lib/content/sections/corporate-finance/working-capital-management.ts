@@ -1,7 +1,7 @@
 export const workingCapitalManagement = {
-    title: 'Working Capital Management',
-    id: 'working-capital-management',
-    content: `
+  title: 'Working Capital Management',
+  id: 'working-capital-management',
+  content: `
 # Working Capital Management
 
 Working capital management may seem mundane compared to M&A or LBOs, but it's critical for day-to-day operations and value creation. Poor working capital management has bankrupted profitable companies. This section covers strategies to optimize cash conversion, manage liquidity, and maximize operational efficiency.
@@ -143,7 +143,7 @@ class WorkingCapitalAnalysis:
         
         return self.financials
     
-    def calculate_metrics(self):
+    def calculate_metrics (self):
         """Calculate working capital metrics."""
         # Days metrics
         self.financials['DIO'] = (self.financials['Inventory'] / self.financials['COGS']) * 365
@@ -161,11 +161,11 @@ class WorkingCapitalAnalysis:
         
         return self.financials
     
-    def calculate_cash_tied_up(self, ccc_days: float, daily_revenue: float):
+    def calculate_cash_tied_up (self, ccc_days: float, daily_revenue: float):
         """Calculate cash tied up in working capital."""
         return ccc_days * daily_revenue
     
-    def improvement_opportunity(self, target_ccc: float):
+    def improvement_opportunity (self, target_ccc: float):
         """Calculate cash freed by improving CCC."""
         current_ccc = self.financials['CCC'].iloc[-1]
         daily_revenue = self.financials['Revenue'].iloc[-1] / 365
@@ -184,7 +184,7 @@ class WorkingCapitalAnalysis:
             'Cash Freed %': (cash_freed / self.financials['Revenue'].iloc[-1]) * 100
         }
     
-    def print_wc_summary(self):
+    def print_wc_summary (self):
         """Print working capital summary."""
         print(f"\\n{'=' * 70}")
         print(f"Working Capital Analysis: {self.company_name}")
@@ -199,30 +199,30 @@ class WorkingCapitalAnalysis:
         print(f"  {'─' * 68}")
         print(f"  Cash Conversion Cycle (CCC): {latest['CCC']:.1f} days")
         
-        print(f"\\n  Net Working Capital: ${latest['NWC']:,.0f}M")
+        print(f"\\n  Net Working Capital: \${latest['NWC']:,.0f}M")
 print(f"  NWC as % of Revenue: {latest['NWC_pct_Revenue']:.1f}%")
 
 print(f"\\n{'=' * 70}\\n")
     
-    def plot_ccc_trend(self):
+    def plot_ccc_trend (self):
 """Plot CCC trend over time."""
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(figsize = (10, 6))
+fig, ax = plt.subplots (figsize = (10, 6))
 
-years = list(range(1, len(self.financials) + 1))
+years = list (range(1, len (self.financials) + 1))
 
-ax.plot(years, self.financials['DIO'], marker = 'o', label = 'DIO')
-ax.plot(years, self.financials['DSO'], marker = 's', label = 'DSO')
-ax.plot(years, self.financials['DPO'], marker = '^', label = 'DPO')
-ax.plot(years, self.financials['CCC'], marker = 'D', linewidth = 3, label = 'CCC', color = 'black')
+ax.plot (years, self.financials['DIO'], marker = 'o', label = 'DIO')
+ax.plot (years, self.financials['DSO'], marker = 's', label = 'DSO')
+ax.plot (years, self.financials['DPO'], marker = '^', label = 'DPO')
+ax.plot (years, self.financials['CCC'], marker = 'D', linewidth = 3, label = 'CCC', color = 'black')
 
 ax.axhline(0, color = 'gray', linestyle = '--', linewidth = 1)
 ax.set_xlabel('Year', fontsize = 12)
 ax.set_ylabel('Days', fontsize = 12)
-ax.set_title(f'Working Capital Metrics Trend: {self.company_name}', fontsize = 14, fontweight = 'bold')
+ax.set_title (f'Working Capital Metrics Trend: {self.company_name}', fontsize = 14, fontweight = 'bold')
 ax.legend()
-ax.grid(alpha = 0.3)
+ax.grid (alpha = 0.3)
 
 plt.tight_layout()
 plt.show()
@@ -242,16 +242,16 @@ wc.load_financials(
 # Calculate metrics
 metrics = wc.calculate_metrics()
 print("Working Capital Metrics Over Time:")
-print(metrics[['DIO', 'DSO', 'DPO', 'CCC', 'NWC']].to_string(index = False))
+print(metrics[['DIO', 'DSO', 'DPO', 'CCC', 'NWC']].to_string (index = False))
 
 # Print summary
 wc.print_wc_summary()
 
 # Improvement opportunity
-opportunity = wc.improvement_opportunity(target_ccc = 40)
+opportunity = wc.improvement_opportunity (target_ccc = 40)
 print("Working Capital Improvement Opportunity:")
 for key, value in opportunity.items():
-    if isinstance(value, (int, float)):
+    if isinstance (value, (int, float)):
         print(f"  {key}: {value:,.1f}")
     else:
     print(f"  {key}: {value}")
@@ -364,7 +364,7 @@ Free Cash Flow = EBIT(1-T) + D&A - CapEx - Δ NWC
 **Increase in NWC = Use of cash** (reduces FCF)
 **Decrease in NWC = Source of cash** (increases FCF)
 
-**Example**: Company grows revenue 10% ($1B → $1.1B).
+**Example**: Company grows revenue 10% (\$1B → $1.1B).
 - NWC = 15% of revenue
 - Old NWC = $150M
 - New NWC = $165M
@@ -434,4 +434,3 @@ Free Cash Flow = EBIT(1-T) + D&A - CapEx - Δ NWC
 Working capital management may lack the glamor of M&A, but it's essential for operational excellence, cash generation, and value creation. Every dollar freed from working capital is a dollar available for growth, debt reduction, or shareholder returns.
 `,
 };
-

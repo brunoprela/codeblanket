@@ -37,7 +37,7 @@ export const controlflowQuiz = [
       'What is the purpose of the else clause in Python loops? How does it differ from putting code after the loop?',
     hint: "Think about when the else block executes and when it doesn't, especially with break statements.",
     sampleAnswer:
-      "The `else` clause in loops executes only if the loop completes normally (without hitting a break statement). This is different from code after the loop, which always runs. It's useful for search operations: if you break when finding something, else won't run; if you don't find it, else runs to handle the \"not found\" case. For example: searching for a prime number - if you break after finding a divisor, else doesn't run; if no divisors found, else confirms it's prime. Code after the loop would run regardless of whether you broke out or not.",
+      "The `else` clause in loops executes only if the loop completes normally (without hitting a break statement). This is different from code after the loop, which always runs. It\'s useful for search operations: if you break when finding something, else won't run; if you don't find it, else runs to handle the \"not found\" case. For example: searching for a prime number - if you break after finding a divisor, else doesn't run; if no divisors found, else confirms it's prime. Code after the loop would run regardless of whether you broke out or not.",
     keyPoints: [
       'else runs if loop completes without break',
       'Different from code placed after loop',

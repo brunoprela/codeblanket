@@ -102,38 +102,38 @@ class RegexPIIDetector:
             ),
         }
     
-    def detect(self, text: str) -> List[PIIMatch]:
+    def detect (self, text: str) -> List[PIIMatch]:
         """Detect all PII in text"""
         
         matches = []
         
         for pii_type, pattern in self.patterns.items():
-            for match in pattern.finditer(text):
+            for match in pattern.finditer (text):
                 matches.append(PIIMatch(
                     type=pii_type,
                     value=match.group(),
                     start=match.start(),
                     end=match.end(),
-                    confidence=self._calculate_confidence(pii_type, match.group())
+                    confidence=self._calculate_confidence (pii_type, match.group())
                 ))
         
         # Sort by position
-        matches.sort(key=lambda m: m.start)
+        matches.sort (key=lambda m: m.start)
         
         return matches
     
-    def _calculate_confidence(self, pii_type: str, value: str) -> float:
+    def _calculate_confidence (self, pii_type: str, value: str) -> float:
         """Calculate confidence score for detected PII"""
         
         # Basic confidence scoring
         if pii_type == 'email':
             # Higher confidence for common domains
             common_domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com']
-            return 0.95 if any(domain in value for domain in common_domains) else 0.85
+            return 0.95 if any (domain in value for domain in common_domains) else 0.85
         
         elif pii_type == 'credit_card':
             # Validate using Luhn algorithm
-            return 0.99 if self._luhn_check(value.replace('-', ').replace(' ', ')) else 0.5
+            return 0.99 if self._luhn_check (value.replace('-', ').replace(' ', ')) else 0.5
         
         elif pii_type == 'ssn':
             return 0.95  # Pattern is quite specific
@@ -143,27 +143,27 @@ class RegexPIIDetector:
         
         elif pii_type == 'ip_address':
             # Check if valid IP range
-            return 0.85 if self._is_valid_ip(value) else 0.5
+            return 0.85 if self._is_valid_ip (value) else 0.5
         
         return 0.80  # Default confidence
     
-    def _luhn_check(self, card_number: str) -> bool:
+    def _luhn_check (self, card_number: str) -> bool:
         """Validate credit card using Luhn algorithm"""
-        def digits_of(n):
-            return [int(d) for d in str(n)]
+        def digits_of (n):
+            return [int (d) for d in str (n)]
         
-        digits = digits_of(card_number)
+        digits = digits_of (card_number)
         odd_digits = digits[-1::-2]
         even_digits = digits[-2::-2]
-        checksum = sum(odd_digits)
+        checksum = sum (odd_digits)
         for d in even_digits:
-            checksum += sum(digits_of(d * 2))
+            checksum += sum (digits_of (d * 2))
         return checksum % 10 == 0
     
-    def _is_valid_ip(self, ip: str) -> bool:
+    def _is_valid_ip (self, ip: str) -> bool:
         """Check if IP address is valid"""
         parts = ip.split('.')
-        return all(0 <= int(part) <= 255 for part in parts)
+        return all(0 <= int (part) <= 255 for part in parts)
 
 # Example usage
 detector = RegexPIIDetector()
@@ -172,8 +172,8 @@ My email is john.doe@gmail.com and my phone is 555-123-4567.
 My SSN is 123-45-6789 and credit card is 4532-1234-5678-9010.
 """
 
-matches = detector.detect(text)
-print(f"Found {len(matches)} PII matches:")
+matches = detector.detect (text)
+print(f"Found {len (matches)} PII matches:")
 for match in matches:
     print(f"  - {match.type}: {match.value} (confidence: {match.confidence:.2f})")
 \`\`\`
@@ -190,8 +190,8 @@ class NERPIIDetector:
     def __init__(self):
         # Use a model fine-tuned for PII detection
         model_name = "StanfordAIMI/stanford-deidentifier-base"
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForTokenClassification.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained (model_name)
+        self.model = AutoModelForTokenClassification.from_pretrained (model_name)
         self.ner_pipeline = pipeline(
             "ner",
             model=self.model,
@@ -199,12 +199,12 @@ class NERPIIDetector:
             aggregation_strategy="simple"
         )
     
-    def detect(self, text: str) -> List[Dict]:
+    def detect (self, text: str) -> List[Dict]:
         """Detect PII using NER"""
         
         try:
             # Run NER
-            entities = self.ner_pipeline(text)
+            entities = self.ner_pipeline (text)
             
             # Filter for PII-related entities
             pii_entities = []
@@ -220,7 +220,7 @@ class NERPIIDetector:
             }
             
             for entity in entities:
-                if any(label in entity['entity_group'].upper() for label in pii_labels):
+                if any (label in entity['entity_group'].upper() for label in pii_labels):
                     pii_entities.append({
                         'type': entity['entity_group'],
                         'value': entity['word'],
@@ -238,9 +238,9 @@ class NERPIIDetector:
 # Example usage
 ner_detector = NERPIIDetector()
 text = "John Smith lives at 123 Main Street and works at Acme Corp."
-entities = ner_detector.detect(text)
+entities = ner_detector.detect (text)
 
-print(f"Found {len(entities)} PII entities:")
+print(f"Found {len (entities)} PII entities:")
 for entity in entities:
     print(f"  - {entity['type']}: {entity['value']} (confidence: {entity['confidence']:.2f})")
 \`\`\`
@@ -272,25 +272,25 @@ class ComprehensivePIIDetector:
         self.regex_detector = RegexPIIDetector()
         self.ner_detector = NERPIIDetector()
     
-    def detect(self, text: str, use_ner: bool = True) -> PIIDetectionResult:
+    def detect (self, text: str, use_ner: bool = True) -> PIIDetectionResult:
         """Detect PII using multiple methods"""
         
         all_pii = []
         methods_used = ['regex']
         
         # Method 1: Regex detection
-        regex_matches = self.regex_detector.detect(text)
-        all_pii.extend(regex_matches)
+        regex_matches = self.regex_detector.detect (text)
+        all_pii.extend (regex_matches)
         
         # Method 2: NER detection (optional, slower)
         if use_ner:
             methods_used.append('ner')
-            ner_entities = self.ner_detector.detect(text)
+            ner_entities = self.ner_detector.detect (text)
             
             # Convert NER entities to PIIMatch format
             for entity in ner_entities:
                 # Avoid duplicates with regex matches
-                if not self._is_duplicate(entity, all_pii):
+                if not self._is_duplicate (entity, all_pii):
                     all_pii.append(PIIMatch(
                         type=entity['type'],
                         value=entity['value'],
@@ -301,26 +301,26 @@ class ComprehensivePIIDetector:
         
         # Method 3: Custom rules
         methods_used.append('custom_rules')
-        custom_pii = self._custom_detection(text)
+        custom_pii = self._custom_detection (text)
         for item in custom_pii:
-            if not self._is_duplicate(item, all_pii):
-                all_pii.append(item)
+            if not self._is_duplicate (item, all_pii):
+                all_pii.append (item)
         
         # Calculate overall confidence
         avg_confidence = (
-            sum(pii.confidence for pii in all_pii) / len(all_pii)
+            sum (pii.confidence for pii in all_pii) / len (all_pii)
             if all_pii else 0.0
         )
         
         return PIIDetectionResult(
-            has_pii=len(all_pii) > 0,
+            has_pii=len (all_pii) > 0,
             pii_found=all_pii,
-            pii_types=set(pii.type for pii in all_pii),
+            pii_types=set (pii.type for pii in all_pii),
             confidence=avg_confidence,
             methods_used=methods_used
         )
     
-    def _is_duplicate(self, new_item: Dict, existing_items: List[PIIMatch]) -> bool:
+    def _is_duplicate (self, new_item: Dict, existing_items: List[PIIMatch]) -> bool:
         """Check if new item overlaps with existing detections"""
         new_start = new_item.get('start', 0)
         new_end = new_item.get('end', 0)
@@ -332,15 +332,15 @@ class ComprehensivePIIDetector:
         
         return False
     
-    def _custom_detection(self, text: str) -> List[PIIMatch]:
+    def _custom_detection (self, text: str) -> List[PIIMatch]:
         """Custom detection rules for domain-specific PII"""
         
         custom_matches = []
         
         # Example: Detect passport numbers (simplified)
         import re
-        passport_pattern = re.compile(r'\\b[A-Z]{2}\\d{7}\\b')
-        for match in passport_pattern.finditer(text):
+        passport_pattern = re.compile (r'\\b[A-Z]{2}\\d{7}\\b')
+        for match in passport_pattern.finditer (text):
             custom_matches.append(PIIMatch(
                 type='passport',
                 value=match.group(),
@@ -360,7 +360,7 @@ Hi, I'm Jane Doe. You can reach me at jane@example.com or 555-867-5309.
 My address is 456 Oak Avenue, and my DOB is 03/15/1990.
 """
 
-result = detector.detect(text)
+result = detector.detect (text)
 print(f"PII detected: {result.has_pii}")
 print(f"Types: {result.pii_types}")
 print(f"Methods: {result.methods_used}")
@@ -399,7 +399,7 @@ class PIIRedactor:
         """
         
         # Detect PII
-        detection_result = self.detector.detect(text)
+        detection_result = self.detector.detect (text)
         
         if not detection_result.has_pii:
             return text, detection_result
@@ -415,7 +415,7 @@ class PIIRedactor:
         for match in sorted_matches:
             if preserve_format:
                 # Replace with same length of redaction chars
-                replacement = redaction_char * len(match.value)
+                replacement = redaction_char * len (match.value)
             else:
                 # Replace with type label
                 replacement = f"[{match.type.upper()}]"
@@ -431,7 +431,7 @@ class PIIRedactor:
 # Example usage
 redactor = PIIRedactor()
 text = "Contact John Doe at john@example.com or 555-123-4567"
-redacted, result = redactor.redact(text)
+redacted, result = redactor.redact (text)
 
 print(f"Original: {text}")
 print(f"Redacted: {redacted}")
@@ -473,7 +473,7 @@ class SelectivePIIRedactor:
             }
         
         # Detect PII
-        detection_result = self.detector.detect(text)
+        detection_result = self.detector.detect (text)
         
         # Filter for specified types
         matches_to_redact = [
@@ -482,11 +482,11 @@ class SelectivePIIRedactor:
         ]
         
         # Sort in reverse order
-        matches_to_redact.sort(key=lambda m: m.start, reverse=True)
+        matches_to_redact.sort (key=lambda m: m.start, reverse=True)
         
         redacted = text
         for match in matches_to_redact:
-            replacement = replacement_map.get(match.type, '[REDACTED]')
+            replacement = replacement_map.get (match.type, '[REDACTED]')
             redacted = (
                 redacted[:match.start] +
                 replacement +
@@ -543,7 +543,7 @@ class PIIPseudonymizer:
             (pseudonymized_text, pseudonym_mapping)
         """
         
-        detection_result = self.detector.detect(text)
+        detection_result = self.detector.detect (text)
         
         if not detection_result.has_pii:
             return text, {}
@@ -613,7 +613,7 @@ Jane Doe (jane@company.com) and John Smith (jane@company.com)
 called from 555-1234 and 555-5678.
 """
 
-pseudonymized, mapping = pseudonymizer.pseudonymize(text, consistent=True)
+pseudonymized, mapping = pseudonymizer.pseudonymize (text, consistent=True)
 
 print(f"Original: {text}")
 print(f"Pseudonymized: {pseudonymized}")
@@ -665,7 +665,7 @@ class GDPRCompliantPIIHandler:
         """
         
         # Detect PII
-        detection_result = self.detector.detect(data)
+        detection_result = self.detector.detect (data)
         
         # Create data processing record
         record = {
@@ -673,11 +673,11 @@ class GDPRCompliantPIIHandler:
             'timestamp': datetime.now().isoformat(),
             'purpose': purpose,
             'pii_detected': detection_result.has_pii,
-            'pii_types': list(detection_result.pii_types),
+            'pii_types': list (detection_result.pii_types),
             'retention_until': (
-                datetime.now() + timedelta(days=retention_days)
+                datetime.now() + timedelta (days=retention_days)
             ).isoformat(),
-            'data_hash': self._hash_data(data),  # Store hash, not raw data
+            'data_hash': self._hash_data (data),  # Store hash, not raw data
             'consent_obtained': True,  # Track consent
         }
         
@@ -687,12 +687,12 @@ class GDPRCompliantPIIHandler:
         return {
             'processed': True,
             'pii_detected': detection_result.has_pii,
-            'pii_types': list(detection_result.pii_types),
+            'pii_types': list (detection_result.pii_types),
             'retention_period': retention_days,
             'record_id': user_id
         }
     
-    def export_user_data(self, user_id: str) -> Dict:
+    def export_user_data (self, user_id: str) -> Dict:
         """
         Export all data for a user (GDPR Article 20 - Data Portability).
         """
@@ -708,7 +708,7 @@ class GDPRCompliantPIIHandler:
             'format': 'JSON',
         }
     
-    def delete_user_data(self, user_id: str) -> Dict:
+    def delete_user_data (self, user_id: str) -> Dict:
         """
         Delete all user data (GDPR Article 17 - Right to Erasure).
         """
@@ -716,7 +716,7 @@ class GDPRCompliantPIIHandler:
             return {'error': 'User not found'}
         
         # Remove from registry
-        deleted_record = self.data_registry.pop(user_id)
+        deleted_record = self.data_registry.pop (user_id)
         
         # In production: Delete from all systems, databases, backups, logs
         
@@ -727,32 +727,32 @@ class GDPRCompliantPIIHandler:
             'records_deleted': 1,
         }
     
-    def cleanup_expired_data(self) -> Dict:
+    def cleanup_expired_data (self) -> Dict:
         """
         Clean up data past retention period (GDPR Article 5 - Storage Limitation).
         """
         now = datetime.now()
         expired_users = []
         
-        for user_id, record in list(self.data_registry.items()):
-            retention_until = datetime.fromisoformat(record['retention_until'])
+        for user_id, record in list (self.data_registry.items()):
+            retention_until = datetime.fromisoformat (record['retention_until'])
             if now > retention_until:
-                expired_users.append(user_id)
-                self.delete_user_data(user_id)
+                expired_users.append (user_id)
+                self.delete_user_data (user_id)
         
         return {
             'cleanup_date': now.isoformat(),
-            'expired_records': len(expired_users),
+            'expired_records': len (expired_users),
             'deleted_users': expired_users,
         }
     
-    def _hash_data(self, data: str) -> str:
+    def _hash_data (self, data: str) -> str:
         """Hash data for storage (don't store raw PII)"""
         return hashlib.sha256(data.encode()).hexdigest()
     
-    def generate_privacy_report(self) -> Dict:
+    def generate_privacy_report (self) -> Dict:
         """Generate privacy compliance report"""
-        total_users = len(self.data_registry)
+        total_users = len (self.data_registry)
         users_with_pii = sum(
             1 for record in self.data_registry.values()
             if record['pii_detected']
@@ -761,13 +761,13 @@ class GDPRCompliantPIIHandler:
         pii_type_counts = {}
         for record in self.data_registry.values():
             for pii_type in record['pii_types']:
-                pii_type_counts[pii_type] = pii_type_counts.get(pii_type, 0) + 1
+                pii_type_counts[pii_type] = pii_type_counts.get (pii_type, 0) + 1
         
         return {
             'report_date': datetime.now().isoformat(),
             'total_users': total_users,
             'users_with_pii': users_with_pii,
-            'pii_detection_rate': users_with_pii / max(total_users, 1),
+            'pii_detection_rate': users_with_pii / max (total_users, 1),
             'pii_types_detected': pii_type_counts,
             'avg_retention_days': 30,  # Calculate from records
         }

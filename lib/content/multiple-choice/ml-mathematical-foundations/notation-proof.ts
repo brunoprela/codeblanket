@@ -11,7 +11,7 @@ export const notationproofMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['15', '25', '55', '225'],
     correctAnswer: 2,
     explanation:
-      'Σ(i=1 to 5) i² = 1² + 2² + 3² + 4² + 5² = 1 + 4 + 9 + 16 + 25 = 55. Or use formula: n(n+1)(2n+1)/6 = 5×6×11/6 = 55.',
+      'Σ(i=1 to 5) i² = 1² + 2² + 3² + 4² + 5² = 1 + 4 + 9 + 16 + 25 = 55. Or use formula: n (n+1)(2n+1)/6 = 5×6×11/6 = 55.',
   },
   {
     id: 'mc2-quantifiers',
@@ -36,11 +36,11 @@ export const notationproofMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc4-function-composition',
-    question: 'If f(x) = 2x and g(x) = x + 1, what is (f ∘ g)(3)?',
+    question: 'If f (x) = 2x and g (x) = x + 1, what is (f ∘ g)(3)?',
     options: ['7', '8', '10', '14'],
     correctAnswer: 1,
     explanation:
-      '(f ∘ g)(3) means f(g(3)). First g(3) = 3+1 = 4, then f(4) = 2×4 = 8.',
+      '(f ∘ g)(3) means f (g(3)). First g(3) = 3+1 = 4, then f(4) = 2×4 = 8.',
   },
   {
     id: 'mc5-product-notation',

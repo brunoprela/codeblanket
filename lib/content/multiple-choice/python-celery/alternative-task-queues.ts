@@ -16,7 +16,7 @@ export const alternativeTaskQueuesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 0,
     explanation:
-      'RQ is simple, lightweight task queue for Python using Redis. Simpler than Celery but fewer features (no RabbitMQ, no periodic tasks, limited monitoring). Good for MVPs and small projects. Example: q.enqueue(send_email, "user@example.com"). When project grows, migrate to Celery.',
+      'RQ is simple, lightweight task queue for Python using Redis. Simpler than Celery but fewer features (no RabbitMQ, no periodic tasks, limited monitoring). Good for MVPs and small projects. Example: q.enqueue (send_email, "user@example.com"). When project grows, migrate to Celery.',
   },
   {
     id: 'mc2',
@@ -56,7 +56,7 @@ export const alternativeTaskQueuesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Huey has built-in periodic task support via @huey.periodic_task(crontab(...)). RQ has no periodic tasks. Dramatiq needs APScheduler. Celery has Celery Beat. If you need lightweight + periodic tasks, Huey is best choice. Perfect for Flask/Django projects.',
+      'Huey has built-in periodic task support via @huey.periodic_task (crontab(...)). RQ has no periodic tasks. Dramatiq needs APScheduler. Celery has Celery Beat. If you need lightweight + periodic tasks, Huey is best choice. Perfect for Flask/Django projects.',
   },
   {
     id: 'mc5',

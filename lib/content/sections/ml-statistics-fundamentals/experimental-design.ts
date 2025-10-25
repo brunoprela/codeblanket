@@ -60,11 +60,11 @@ alpha = 0.05
 power = 0.80
 baseline = 0.75
 
-# Convert to Cohen's h for proportions
+# Convert to Cohen\'s h for proportions
 from statsmodels.stats.proportion import proportion_effectsize
-h = proportion_effectsize(baseline, baseline + effect_size)
+h = proportion_effectsize (baseline, baseline + effect_size)
 
-n = zt_ind_solve_power(h, alpha=alpha, power=power, alternative='larger')
+n = zt_ind_solve_power (h, alpha=alpha, power=power, alternative='larger')
 
 print(f"\\n=== Sample Size Calculation ===")
 print(f"To detect {effect_size:.1%} improvement:")
@@ -77,7 +77,7 @@ print(f"Total: {2*n:.0f} observations")
 \`\`\`python
 # Proper randomization
 users = np.arange(1000)
-np.random.shuffle(users)
+np.random.shuffle (users)
 
 group_a = users[:500]
 group_b = users[500:]

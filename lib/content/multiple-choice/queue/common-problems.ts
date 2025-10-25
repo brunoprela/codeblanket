@@ -24,13 +24,13 @@ export const commonproblemsMultipleChoice: MultipleChoiceQuestion[] = [
       'In level-order tree traversal, what determines when to start processing a new level?',
     options: [
       'When the queue is empty',
-      'By counting len(queue) at the start of each level',
+      'By counting len (queue) at the start of each level',
       'When we see a None node',
       'After processing the root',
     ],
     correctAnswer: 1,
     explanation:
-      'We capture len(queue) at the start of each level iteration. This tells us exactly how many nodes are in the current level, allowing us to process them separately.',
+      'We capture len (queue) at the start of each level iteration. This tells us exactly how many nodes are in the current level, allowing us to process them separately.',
   },
   {
     id: 'mc3',

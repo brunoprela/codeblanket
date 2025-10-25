@@ -61,9 +61,9 @@ When YOU want to sell, you get the **Bid** price (buyer's price).
 **1. Real-Time Updates:**
 \`\`\`python
 # WebSocket stream for real-time quotes
-async def stream_quotes(ticker: str):
+async def stream_quotes (ticker: str):
     while True:
-        quote = await get_latest_quote(ticker)
+        quote = await get_latest_quote (ticker)
         yield {
             'bid': quote.bid,
             'ask': quote.ask,
@@ -125,7 +125,7 @@ Weak-form EMH states that current prices already reflect all **historical price 
 
 **2. Transaction Costs**
 \`\`\`python
-def calculate_net_returns(gross_returns: float,
+def calculate_net_returns (gross_returns: float,
                          num_trades: int,
                          commission_per_trade: float = 1.0,
                          spread_cost_bps: int = 5) -> float:
@@ -151,7 +151,7 @@ def calculate_net_returns(gross_returns: float,
 # Example: Strategy with 8% gross returns
 gross = 0.08
 trades = 150  # Active strategy
-net = calculate_net_returns(gross, trades)
+net = calculate_net_returns (gross, trades)
 
 print(f"Gross returns: {gross*100}%")
 print(f"Net returns: {net*100:.2f}%")
@@ -174,19 +174,19 @@ Markets change due to:
 
 **1. Statistical Significance**
 \`\`\`python
-def test_strategy_significance(returns: np.ndarray,
+def test_strategy_significance (returns: np.ndarray,
                                num_trials: int = 10000) -> dict:
     """
     Bootstrap test: Is strategy better than random?
     """
-    actual_sharpe = calculate_sharpe(returns)
+    actual_sharpe = calculate_sharpe (returns)
     
     # Generate random strategies
     random_sharpes = []
-    for _ in range(num_trials):
-        random_returns = np.random.permutation(returns)
-        random_sharpe = calculate_sharpe(random_returns)
-        random_sharpes.append(random_sharpe)
+    for _ in range (num_trials):
+        random_returns = np.random.permutation (returns)
+        random_sharpe = calculate_sharpe (random_returns)
+        random_sharpes.append (random_sharpe)
     
     # P-value: What % of random strategies did better?
     p_value = np.mean([rs > actual_sharpe for rs in random_sharpes])
@@ -207,7 +207,7 @@ def test_strategy_significance(returns: np.ndarray,
 
 **3. Walk-Forward Analysis**
 \`\`\`python
-def walk_forward_test(data: pd.DataFrame,
+def walk_forward_test (data: pd.DataFrame,
                      train_period_days: int = 252,
                      test_period_days: int = 63) -> pd.DataFrame:
     """
@@ -216,21 +216,21 @@ def walk_forward_test(data: pd.DataFrame,
     """
     results = []
     
-    for i in range(0, len(data) - train_period_days - test_period_days, test_period_days):
+    for i in range(0, len (data) - train_period_days - test_period_days, test_period_days):
         # Training data
         train_data = data.iloc[i:i+train_period_days]
         
         # Optimize strategy parameters
-        optimal_params = optimize_strategy(train_data)
+        optimal_params = optimize_strategy (train_data)
         
         # Test data (out-of-sample)
         test_data = data.iloc[i+train_period_days:i+train_period_days+test_period_days]
         
         # Apply strategy with optimal params
-        test_returns = backtest_strategy(test_data, optimal_params)
-        results.append(test_returns)
+        test_returns = backtest_strategy (test_data, optimal_params)
+        results.append (test_returns)
     
-    return pd.concat(results)
+    return pd.concat (results)
 \`\`\`
 
 **4. Transaction Cost Sensitivity**
@@ -240,7 +240,7 @@ def walk_forward_test(data: pd.DataFrame,
 
 **5. Regime Detection**
 \`\`\`python
-def detect_regime_changes(returns: pd.Series) -> dict:
+def detect_regime_changes (returns: pd.Series) -> dict:
     """
     Test if strategy performs differently in different market regimes
     """
@@ -257,10 +257,10 @@ def detect_regime_changes(returns: pd.Series) -> dict:
     low_vol = returns[vol <= vol.median()]
     
     return {
-        'bull_market_sharpe': calculate_sharpe(bull_returns),
-        'bear_market_sharpe': calculate_sharpe(bear_returns),
-        'high_vol_sharpe': calculate_sharpe(high_vol),
-        'low_vol_sharpe': calculate_sharpe(low_vol),
+        'bull_market_sharpe': calculate_sharpe (bull_returns),
+        'bear_market_sharpe': calculate_sharpe (bear_returns),
+        'high_vol_sharpe': calculate_sharpe (high_vol),
+        'low_vol_sharpe': calculate_sharpe (low_vol),
         'interpretation': 'Check if strategy works in all conditions'
     }
 \`\`\`
@@ -424,11 +424,11 @@ class StockScreeningPipeline:
     
     def __init__(self):
         self.lambda_client = boto3.client('lambda')
-        self.redis_client = redis.Redis(host='cache.xyz.amazonaws.com')
+        self.redis_client = redis.Redis (host='cache.xyz.amazonaws.com')
         self.s3_client = boto3.client('s3')
         self.pg_conn = self.get_db_connection()
     
-    async def run_daily_screen(self, 
+    async def run_daily_screen (self, 
                               tickers: List[str],
                               screening_date: datetime) -> Dict:
         """
@@ -440,15 +440,15 @@ class StockScreeningPipeline:
         # 1. Split tickers into batches
         batch_size = 50  # Each worker processes 50 stocks
         batches = [tickers[i:i+batch_size] 
-                  for i in range(0, len(tickers), batch_size)]
+                  for i in range(0, len (tickers), batch_size)]
         
-        print(f"Processing {len(tickers)} stocks in {len(batches)} batches")
+        print(f"Processing {len (tickers)} stocks in {len (batches)} batches")
         
         # 2. Invoke Lambda functions in parallel
         tasks = []
         for batch in batches:
-            task = self.process_batch_lambda(batch, screening_date)
-            tasks.append(task)
+            task = self.process_batch_lambda (batch, screening_date)
+            tasks.append (task)
         
         # 3. Wait for all to complete (with timeout)
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -456,10 +456,10 @@ class StockScreeningPipeline:
         # 4. Aggregate results
         all_passing_stocks = []
         for result in results:
-            if isinstance(result, Exception):
+            if isinstance (result, Exception):
                 print(f"Batch failed: {result}")
                 continue
-            all_passing_stocks.extend(result)
+            all_passing_stocks.extend (result)
         
         # 5. Store results
         await self.store_screening_results(
@@ -473,13 +473,13 @@ class StockScreeningPipeline:
         elapsed = (datetime.now() - start_time).total_seconds()
         
         return {
-            'total_stocks_screened': len(tickers),
-            'passing_stocks': len(all_passing_stocks),
+            'total_stocks_screened': len (tickers),
+            'passing_stocks': len (all_passing_stocks),
             'elapsed_seconds': elapsed,
             'status': 'completed' if elapsed < 300 else 'overtime'
         }
     
-    async def process_batch_lambda(self, 
+    async def process_batch_lambda (self, 
                                    tickers: List[str],
                                    date: datetime) -> List[Dict]:
         """
@@ -494,13 +494,13 @@ class StockScreeningPipeline:
         response = self.lambda_client.invoke(
             FunctionName='stock-screener-worker',
             InvocationType='RequestResponse',
-            Payload=json.dumps(payload)
+            Payload=json.dumps (payload)
         )
         
-        result = json.loads(response['Payload'].read())
+        result = json.loads (response['Payload'].read())
         return result['passing_stocks']
     
-    def get_screening_criteria(self) -> Dict:
+    def get_screening_criteria (self) -> Dict:
         """
         Define screening criteria
         """
@@ -523,7 +523,7 @@ class StockScreeningPipeline:
             }
         }
     
-    async def store_screening_results(self,
+    async def store_screening_results (self,
                                      results: List[Dict],
                                      date: datetime):
         """
@@ -538,7 +538,7 @@ class StockScreeningPipeline:
         """
         
         for stock in results:
-            self.pg_conn.execute(query, (
+            self.pg_conn.execute (query, (
                 date,
                 stock['ticker'],
                 stock['market_cap'],
@@ -556,7 +556,7 @@ class StockScreeningPipeline:
         self.redis_client.setex(
             cache_key,
             86400,  # 24 hour TTL
-            json.dumps(results)
+            json.dumps (results)
         )
         
         # Also store in S3 for long-term archive
@@ -564,18 +564,18 @@ class StockScreeningPipeline:
         self.s3_client.put_object(
             Bucket='stock-screening-results',
             Key=s3_key,
-            Body=json.dumps(results, indent=2),
+            Body=json.dumps (results, indent=2),
             ContentType='application/json'
         )
 
 
 # Lambda worker function
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     """
     AWS Lambda function that processes a batch of stocks
     """
     tickers = event['tickers']
-    date = datetime.fromisoformat(event['date'])
+    date = datetime.fromisoformat (event['date'])
     criteria = event['criteria']
     
     passing_stocks = []
@@ -583,13 +583,13 @@ def lambda_handler(event, context):
     for ticker in tickers:
         try:
             # Fetch data (with retry logic)
-            data = fetch_stock_data(ticker, date)
+            data = fetch_stock_data (ticker, date)
             
             # Calculate metrics
-            metrics = calculate_all_metrics(data)
+            metrics = calculate_all_metrics (data)
             
             # Apply screening criteria
-            if passes_screening(metrics, criteria):
+            if passes_screening (metrics, criteria):
                 passing_stocks.append({
                     'ticker': ticker,
                     **metrics
@@ -623,13 +623,13 @@ CREATE TABLE stocks (
     last_updated TIMESTAMP
 );
 
-CREATE INDEX idx_stocks_sector ON stocks(sector);
-CREATE INDEX idx_stocks_market_cap ON stocks(market_cap);
+CREATE INDEX idx_stocks_sector ON stocks (sector);
+CREATE INDEX idx_stocks_market_cap ON stocks (market_cap);
 
 -- Daily metrics (time-series data)
 CREATE TABLE stock_metrics (
     id SERIAL PRIMARY KEY,
-    ticker VARCHAR(10) REFERENCES stocks(ticker),
+    ticker VARCHAR(10) REFERENCES stocks (ticker),
     date DATE NOT NULL,
     
     -- Price data
@@ -657,14 +657,14 @@ CREATE TABLE stock_metrics (
     UNIQUE(ticker, date)
 );
 
-CREATE INDEX idx_metrics_ticker_date ON stock_metrics(ticker, date DESC);
-CREATE INDEX idx_metrics_date ON stock_metrics(date);
+CREATE INDEX idx_metrics_ticker_date ON stock_metrics (ticker, date DESC);
+CREATE INDEX idx_metrics_date ON stock_metrics (date);
 
 -- Screening results
 CREATE TABLE screening_results (
     id SERIAL PRIMARY KEY,
     screening_date DATE NOT NULL,
-    ticker VARCHAR(10) REFERENCES stocks(ticker),
+    ticker VARCHAR(10) REFERENCES stocks (ticker),
     rank INT,  -- 1 = best match
     score DECIMAL(5, 2),  -- Overall screening score
     passes_screen BOOLEAN DEFAULT TRUE,
@@ -679,9 +679,9 @@ CREATE TABLE screening_results (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_screening_date ON screening_results(screening_date DESC);
-CREATE INDEX idx_screening_ticker ON screening_results(ticker);
-CREATE INDEX idx_screening_rank ON screening_results(screening_date, rank);
+CREATE INDEX idx_screening_date ON screening_results (screening_date DESC);
+CREATE INDEX idx_screening_ticker ON screening_results (ticker);
+CREATE INDEX idx_screening_rank ON screening_results (screening_date, rank);
 
 -- Custom user screens
 CREATE TABLE custom_screens (
@@ -703,38 +703,38 @@ class ScreeningCache:
     """
     
     def __init__(self):
-        self.redis = redis.Redis(host='cache.xyz.amazonaws.com')
+        self.redis = redis.Redis (host='cache.xyz.amazonaws.com')
     
-    def cache_latest_results(self, results: List[Dict], date: str):
+    def cache_latest_results (self, results: List[Dict], date: str):
         """Cache latest screening results"""
         key = f"screening:latest"
-        self.redis.setex(key, 86400, json.dumps({
+        self.redis.setex (key, 86400, json.dumps({
             'date': date,
             'results': results,
-            'count': len(results)
+            'count': len (results)
         }))
     
-    def cache_stock_metrics(self, ticker: str, metrics: Dict):
+    def cache_stock_metrics (self, ticker: str, metrics: Dict):
         """Cache individual stock metrics"""
         key = f"stock:{ticker}:metrics"
-        self.redis.setex(key, 3600, json.dumps(metrics))  # 1 hour
+        self.redis.setex (key, 3600, json.dumps (metrics))  # 1 hour
     
-    def cache_sector_performance(self, sector: str, data: Dict):
+    def cache_sector_performance (self, sector: str, data: Dict):
         """Cache sector-level aggregations"""
         key = f"sector:{sector}:performance"
-        self.redis.setex(key, 3600, json.dumps(data))
+        self.redis.setex (key, 3600, json.dumps (data))
     
-    def get_or_compute(self, key: str, compute_fn, ttl: int = 3600):
+    def get_or_compute (self, key: str, compute_fn, ttl: int = 3600):
         """Generic get-or-compute pattern"""
-        cached = self.redis.get(key)
+        cached = self.redis.get (key)
         if cached:
-            return json.loads(cached)
+            return json.loads (cached)
         
         # Compute
         result = compute_fn()
         
         # Cache
-        self.redis.setex(key, ttl, json.dumps(result))
+        self.redis.setex (key, ttl, json.dumps (result))
         
         return result
 \`\`\`
@@ -752,17 +752,17 @@ class ResilientDataFetcher:
         self.primary_api = PolygonAPI()
         self.fallback_api = AlphaVantageAPI()
     
-    @retry(max_attempts=3, backoff=2)
-    async def fetch_stock_data(self, ticker: str) -> Dict:
+    @retry (max_attempts=3, backoff=2)
+    async def fetch_stock_data (self, ticker: str) -> Dict:
         """
         Try primary, fall back to secondary
         """
         try:
-            return await self.primary_api.get_data(ticker)
+            return await self.primary_api.get_data (ticker)
         except APIError as e:
-            logger.warning(f"Primary API failed for {ticker}: {e}")
+            logger.warning (f"Primary API failed for {ticker}: {e}")
             # Fall back to secondary
-            return await self.fallback_api.get_data(ticker)
+            return await self.fallback_api.get_data (ticker)
 \`\`\`
 
 **2. Processing Failures**
@@ -781,7 +781,7 @@ import boto3
 
 cloudwatch = boto3.client('cloudwatch')
 
-def emit_metric(metric_name: str, value: float, unit: str = 'Count'):
+def emit_metric (metric_name: str, value: float, unit: str = 'Count'):
     """
     Emit custom CloudWatch metrics
     """
@@ -841,7 +841,7 @@ async def get_latest_screening():
     # Check Redis cache first
     cached = redis_client.get("screening:latest")
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Fall back to database
     results = db.query("""
@@ -869,7 +869,7 @@ async def get_stock_screening_history(
     return {"ticker": ticker, "history": results}
 
 @app.post("/api/v1/screening/custom")
-async def run_custom_screen(criteria: Dict):
+async def run_custom_screen (criteria: Dict):
     """
     Run custom screening with user-defined criteria
     Expensive operation - rate limit this

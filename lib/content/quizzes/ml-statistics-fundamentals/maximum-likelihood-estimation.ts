@@ -24,7 +24,7 @@ export const maximumlikelihoodestimationQuiz = [
       'How is training a neural network with cross-entropy loss related to maximum likelihood estimation?',
     hint: 'Think about what cross-entropy represents.',
     sampleAnswer:
-      'Cross-entropy = negative log-likelihood for classification. For binary: CE = -Σ[y·log(p) + (1-y)·log(1-p)] is NLL of Bernoulli. Minimizing CE = maximizing likelihood! Training neural nets = MLE. This explains why CE is the "right" loss for classification - it\'s the principled statistical approach.',
+      'Cross-entropy = negative log-likelihood for classification. For binary: CE = -Σ[y·log (p) + (1-y)·log(1-p)] is NLL of Bernoulli. Minimizing CE = maximizing likelihood! Training neural nets = MLE. This explains why CE is the "right" loss for classification - it\'s the principled statistical approach.',
     keyPoints: [
       'Cross-entropy = negative log-likelihood',
       'Minimizing loss = maximizing likelihood',

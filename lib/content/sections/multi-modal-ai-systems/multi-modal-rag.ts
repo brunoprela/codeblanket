@@ -134,7 +134,7 @@ class MultiModalRAG:
         
         # Load CLIP model
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.clip_model, self.preprocess = clip.load(clip_model, device=self.device)
+        self.clip_model, self.preprocess = clip.load (clip_model, device=self.device)
         
         # Initialize FAISS index
         self.dimension = dimension
@@ -143,23 +143,23 @@ class MultiModalRAG:
         # Store documents
         self.documents: List[MultiModalDocument] = []
     
-    def embed_text(self, text: str) -> np.ndarray:
+    def embed_text (self, text: str) -> np.ndarray:
         """Embed text using CLIP."""
         with torch.no_grad():
-            text_tokens = clip.tokenize([text]).to(self.device)
-            text_features = self.clip_model.encode_text(text_tokens)
-            text_features /= text_features.norm(dim=-1, keepdim=True)
+            text_tokens = clip.tokenize([text]).to (self.device)
+            text_features = self.clip_model.encode_text (text_tokens)
+            text_features /= text_features.norm (dim=-1, keepdim=True)
             
         return text_features.cpu().numpy()[0]
     
-    def embed_image(self, image_path: str) -> np.ndarray:
+    def embed_image (self, image_path: str) -> np.ndarray:
         """Embed image using CLIP."""
-        image = Image.open(image_path).convert("RGB")
+        image = Image.open (image_path).convert("RGB")
         
         with torch.no_grad():
-            image_input = self.preprocess(image).unsqueeze(0).to(self.device)
-            image_features = self.clip_model.encode_image(image_input)
-            image_features /= image_features.norm(dim=-1, keepdim=True)
+            image_input = self.preprocess (image).unsqueeze(0).to (self.device)
+            image_features = self.clip_model.encode_image (image_input)
+            image_features /= image_features.norm (dim=-1, keepdim=True)
         
         return image_features.cpu().numpy()[0]
     
@@ -181,16 +181,16 @@ class MultiModalRAG:
         # Create embedding
         if text and image_path:
             # Average text and image embeddings
-            text_emb = self.embed_text(text)
-            image_emb = self.embed_image(image_path)
+            text_emb = self.embed_text (text)
+            image_emb = self.embed_image (image_path)
             embedding = (text_emb + image_emb) / 2
         elif text:
-            embedding = self.embed_text(text)
+            embedding = self.embed_text (text)
         else:  # image_path
-            embedding = self.embed_image(image_path)
+            embedding = self.embed_image (image_path)
         
         # Normalize
-        embedding = embedding / np.linalg.norm(embedding)
+        embedding = embedding / np.linalg.norm (embedding)
         
         # Create document
         doc = MultiModalDocument(
@@ -202,8 +202,8 @@ class MultiModalRAG:
         )
         
         # Add to index
-        self.index.add(np.array([embedding]).astype('float32'))
-        self.documents.append(doc)
+        self.index.add (np.array([embedding]).astype('float32'))
+        self.documents.append (doc)
     
     def retrieve(
         self,
@@ -216,15 +216,15 @@ class MultiModalRAG:
         Query can be text or image.
         """
         # Embed query
-        if isinstance(query, str):
-            query_embedding = self.embed_text(query)
+        if isinstance (query, str):
+            query_embedding = self.embed_text (query)
         else:
             # Assume PIL Image
             # Would need to adapt embed_image to accept PIL Image directly
             raise NotImplementedError("Image query not yet implemented")
         
         # Normalize
-        query_embedding = query_embedding / np.linalg.norm(query_embedding)
+        query_embedding = query_embedding / np.linalg.norm (query_embedding)
         
         # Search
         distances, indices = self.index.search(
@@ -247,7 +247,7 @@ class MultiModalRAG:
         Answer a question using retrieved documents.
         
         Args:
-            question: User's question
+            question: User\'s question
             top_k: Number of documents to retrieve
             include_images_in_response: Whether to send images to LLM
         
@@ -255,18 +255,18 @@ class MultiModalRAG:
             Answer to the question
         """
         # Retrieve relevant documents
-        docs = self.retrieve(question, top_k)
+        docs = self.retrieve (question, top_k)
         
         # Build context
         text_context = []
         images_to_include = []
         
-        for i, doc in enumerate(docs):
+        for i, doc in enumerate (docs):
             if doc.text_content:
-                text_context.append(f"Document {i+1}:\\n{doc.text_content}")
+                text_context.append (f"Document {i+1}:\\n{doc.text_content}")
             
             if doc.image_path and include_images_in_response:
-                images_to_include.append(doc.image_path)
+                images_to_include.append (doc.image_path)
         
         # Prepare messages
         if include_images_in_response and images_to_include:
@@ -279,7 +279,7 @@ class MultiModalRAG:
 Question: {question}
 
 Text Documents:
-{chr(10).join(text_context)}
+{chr(10).join (text_context)}
 
 Analyze the images provided and incorporate any relevant information from them in your answer."""
                 }
@@ -288,8 +288,8 @@ Analyze the images provided and incorporate any relevant information from them i
             # Add images
             import base64
             for img_path in images_to_include[:5]:  # Limit to 5 images
-                with open(img_path, "rb") as f:
-                    img_data = base64.b64encode(f.read()).decode()
+                with open (img_path, "rb") as f:
+                    img_data = base64.b64encode (f.read()).decode()
                     content.append({
                         "type": "image_url",
                         "image_url": {
@@ -310,7 +310,7 @@ Analyze the images provided and incorporate any relevant information from them i
 Question: {question}
 
 Context:
-{chr(10).join(text_context)}
+{chr(10).join (text_context)}
 
 Provide a clear and concise answer based on the context."""
 
@@ -366,11 +366,11 @@ def extract_pdf_content(
     
     Returns list of page contents with text and images.
     """
-    doc = fitz.open(pdf_path)
+    doc = fitz.open (pdf_path)
     
     contents = []
     
-    for page_num, page in enumerate(doc):
+    for page_num, page in enumerate (doc):
         page_content = {
             "page": page_num + 1,
             "text": page.get_text(),
@@ -378,21 +378,21 @@ def extract_pdf_content(
         }
         
         # Extract images
-        for img_index, img in enumerate(page.get_images()):
+        for img_index, img in enumerate (page.get_images()):
             xref = img[0]
-            base_image = doc.extract_image(xref)
+            base_image = doc.extract_image (xref)
             
             image_bytes = base_image["image"]
             image_ext = base_image["ext"]
             
             # Save image temporarily
             image_path = f"page_{page_num+1}_img_{img_index}.{image_ext}"
-            with open(image_path, "wb") as f:
-                f.write(image_bytes)
+            with open (image_path, "wb") as f:
+                f.write (image_bytes)
             
-            page_content["images"].append(image_path)
+            page_content["images"].append (image_path)
         
-        contents.append(page_content)
+        contents.append (page_content)
     
     doc.close()
     
@@ -404,7 +404,7 @@ def index_pdf(
     doc_prefix: str
 ):
     """Index a PDF file into multi-modal RAG."""
-    contents = extract_pdf_content(pdf_path)
+    contents = extract_pdf_content (pdf_path)
     
     for page_content in contents:
         page_num = page_content["page"]
@@ -424,7 +424,7 @@ def index_pdf(
             )
         
         # Index each image with surrounding text as context
-        for img_idx, img_path in enumerate(images):
+        for img_idx, img_path in enumerate (images):
             rag.add_document(
                 doc_id=f"{doc_prefix}_page_{page_num}_img_{img_idx}",
                 text=text,  # Use page text as context
@@ -440,8 +440,8 @@ def index_pdf(
 # Index multiple PDFs
 rag = MultiModalRAG(openai_api_key=os.getenv("OPENAI_API_KEY"))
 
-index_pdf(rag, "annual_report.pdf", "report_2023")
-index_pdf(rag, "product_guide.pdf", "product")
+index_pdf (rag, "annual_report.pdf", "report_2023")
+index_pdf (rag, "product_guide.pdf", "product")
 
 # Query across all documents
 answer = rag.query("What were the key product features mentioned?")
@@ -466,7 +466,7 @@ class LangChainMultiModalRAG:
         openai_api_key: str,
         persist_directory: str = "./chroma_db"
     ):
-        self.embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
+        self.embeddings = OpenAIEmbeddings (openai_api_key=openai_api_key)
         
         self.vectorstore = Chroma(
             embedding_function=self.embeddings,
@@ -505,7 +505,7 @@ class LangChainMultiModalRAG:
         
         The caption is embedded for retrieval, and image path is stored.
         """
-        doc_id = f"img_{len(self.image_registry)}"
+        doc_id = f"img_{len (self.image_registry)}"
         
         # Store image path
         self.image_registry[doc_id] = image_path
@@ -530,7 +530,7 @@ class LangChainMultiModalRAG:
     ) -> str:
         """Query the multi-modal knowledge base."""
         # Retrieve relevant documents
-        docs = self.vectorstore.similarity_search(question, k=k)
+        docs = self.vectorstore.similarity_search (question, k=k)
         
         # Separate text and image documents
         text_docs = []
@@ -538,17 +538,17 @@ class LangChainMultiModalRAG:
         
         for doc in docs:
             if doc.metadata.get("has_image"):
-                image_docs.append(doc)
+                image_docs.append (doc)
             else:
-                text_docs.append(doc)
+                text_docs.append (doc)
         
         # Build prompt with context
         context_parts = []
         
         for doc in text_docs:
-            context_parts.append(doc.page_content)
+            context_parts.append (doc.page_content)
         
-        context = "\\n\\n".join(context_parts)
+        context = "\\n\\n".join (context_parts)
         
         # If we have images, use vision model
         if image_docs:
@@ -572,8 +572,8 @@ Analyze the images and incorporate relevant visual information in your answer.""
             for img_doc in image_docs[:3]:  # Limit to 3 images
                 img_path = img_doc.metadata["image_path"]
                 
-                with open(img_path, "rb") as f:
-                    img_data = base64.b64encode(f.read()).decode()
+                with open (img_path, "rb") as f:
+                    img_data = base64.b64encode (f.read()).decode()
                     content.append({
                         "type": "image_url",
                         "image_url": {
@@ -593,11 +593,11 @@ Analyze the images and incorporate relevant visual information in your answer.""
             # Text-only query
             qa_chain = RetrievalQA.from_chain_type(
                 llm=ChatOpenAI(model="gpt-4"),
-                retriever=self.vectorstore.as_retriever(search_kwargs={"k": k}),
+                retriever=self.vectorstore.as_retriever (search_kwargs={"k": k}),
                 return_source_documents=False
             )
             
-            return qa_chain.run(question)
+            return qa_chain.run (question)
 
 # Example usage
 mm_rag = LangChainMultiModalRAG(openai_api_key=os.getenv("OPENAI_API_KEY"))
@@ -659,8 +659,8 @@ Be specific and use keywords that would help in search."""
     
     client = OpenAI()
     
-    with open(image_path, "rb") as f:
-        img_data = base64.b64encode(f.read()).decode()
+    with open (image_path, "rb") as f:
+        img_data = base64.b64encode (f.read()).decode()
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -726,7 +726,7 @@ class HybridMultiModalRAG:
         self.bm25 = None
         self.tokenized_docs = []
     
-    def _tokenize(self, text: str) -> List[str]:
+    def _tokenize (self, text: str) -> List[str]:
         """Simple tokenization."""
         return text.lower().split()
     
@@ -740,18 +740,18 @@ class HybridMultiModalRAG:
         """Add document to both vector and keyword indexes."""
         # Create embedding (same as before)
         if text and image_path:
-            text_emb = self._embed_text(text)
-            image_emb = self._embed_image(image_path)
+            text_emb = self._embed_text (text)
+            image_emb = self._embed_image (image_path)
             embedding = (text_emb + image_emb) / 2
         elif text:
-            embedding = self._embed_text(text)
+            embedding = self._embed_text (text)
         else:
-            embedding = self._embed_image(image_path)
+            embedding = self._embed_image (image_path)
         
-        embedding = embedding / np.linalg.norm(embedding)
+        embedding = embedding / np.linalg.norm (embedding)
         
         # Add to vector index
-        self.index.add(np.array([embedding]).astype('float32'))
+        self.index.add (np.array([embedding]).astype('float32'))
         
         # Create document
         doc = MultiModalDocument(
@@ -762,16 +762,16 @@ class HybridMultiModalRAG:
             embedding=embedding
         )
         
-        self.documents.append(doc)
+        self.documents.append (doc)
         
         # Add to keyword index
         if text:
-            self.tokenized_docs.append(self._tokenize(text))
+            self.tokenized_docs.append (self._tokenize (text))
         else:
             self.tokenized_docs.append([])
         
         # Rebuild BM25
-        self.bm25 = BM25Okapi(self.tokenized_docs)
+        self.bm25 = BM25Okapi (self.tokenized_docs)
     
     def hybrid_retrieve(
         self,
@@ -791,20 +791,20 @@ class HybridMultiModalRAG:
             Top-k documents
         """
         # Vector search
-        query_embedding = self._embed_text(query)
-        query_embedding = query_embedding / np.linalg.norm(query_embedding)
+        query_embedding = self._embed_text (query)
+        query_embedding = query_embedding / np.linalg.norm (query_embedding)
         
         vector_distances, vector_indices = self.index.search(
             np.array([query_embedding]).astype('float32'),
-            len(self.documents)
+            len (self.documents)
         )
         
         # Normalize vector scores to [0, 1]
         vector_scores = (vector_distances[0] + 1) / 2  # Cosine similarity to [0, 1]
         
         # Keyword search
-        tokenized_query = self._tokenize(query)
-        keyword_scores = self.bm25.get_scores(tokenized_query)
+        tokenized_query = self._tokenize (query)
+        keyword_scores = self.bm25.get_scores (tokenized_query)
         
         # Normalize keyword scores
         if keyword_scores.max() > 0:
@@ -814,25 +814,25 @@ class HybridMultiModalRAG:
         combined_scores = alpha * vector_scores + (1 - alpha) * keyword_scores
         
         # Get top-k indices
-        top_indices = np.argsort(combined_scores)[::-1][:top_k]
+        top_indices = np.argsort (combined_scores)[::-1][:top_k]
         
         return [self.documents[idx] for idx in top_indices]
     
-    def _embed_text(self, text: str) -> np.ndarray:
+    def _embed_text (self, text: str) -> np.ndarray:
         """Embed text with CLIP."""
         with torch.no_grad():
-            text_tokens = clip.tokenize([text]).to(self.device)
-            features = self.clip_model.encode_text(text_tokens)
-            features /= features.norm(dim=-1, keepdim=True)
+            text_tokens = clip.tokenize([text]).to (self.device)
+            features = self.clip_model.encode_text (text_tokens)
+            features /= features.norm (dim=-1, keepdim=True)
         return features.cpu().numpy()[0]
     
-    def _embed_image(self, image_path: str) -> np.ndarray:
+    def _embed_image (self, image_path: str) -> np.ndarray:
         """Embed image with CLIP."""
-        image = Image.open(image_path).convert("RGB")
+        image = Image.open (image_path).convert("RGB")
         with torch.no_grad():
-            image_input = self.preprocess(image).unsqueeze(0).to(self.device)
-            features = self.clip_model.encode_image(image_input)
-            features /= features.norm(dim=-1, keepdim=True)
+            image_input = self.preprocess (image).unsqueeze(0).to (self.device)
+            features = self.clip_model.encode_image (image_input)
+            features /= features.norm (dim=-1, keepdim=True)
         return features.cpu().numpy()[0]
 
 # Usage
@@ -861,10 +861,10 @@ def preprocess_image_for_rag(
     """Preprocess image for efficient RAG."""
     from PIL import Image
     
-    img = Image.open(image_path)
+    img = Image.open (image_path)
     
     # Resize if too large
-    if max(img.size) > max_size:
+    if max (img.size) > max_size:
         img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
     
     # Convert to RGB
@@ -872,8 +872,8 @@ def preprocess_image_for_rag(
         img = img.convert('RGB')
     
     # Save optimized version
-    output_path = f"optimized_{os.path.basename(image_path)}"
-    img.save(output_path, 'JPEG', quality=85, optimize=True)
+    output_path = f"optimized_{os.path.basename (image_path)}"
+    img.save (output_path, 'JPEG', quality=85, optimize=True)
     
     return output_path
 \`\`\`
@@ -899,11 +899,11 @@ def chunk_document_with_images(
     current_length = 0
     
     for sentence in sentences:
-        sentence_length = len(sentence.split())
+        sentence_length = len (sentence.split())
         
         if current_length + sentence_length > chunk_size and current_chunk:
             # Save chunk
-            chunk_text = '. '.join(current_chunk) + '.'
+            chunk_text = '. '.join (current_chunk) + '.'
             chunks.append({
                 "text": chunk_text,
                 "images": []  # Associate images based on position
@@ -911,20 +911,20 @@ def chunk_document_with_images(
             current_chunk = []
             current_length = 0
         
-        current_chunk.append(sentence)
+        current_chunk.append (sentence)
         current_length += sentence_length
     
     # Add remaining chunk
     if current_chunk:
-        chunk_text = '. '.join(current_chunk) + '.'
+        chunk_text = '. '.join (current_chunk) + '.'
         chunks.append({
             "text": chunk_text,
             "images": []
         })
     
     # Associate images with chunks (simplified - in practice, use page/position info)
-    images_per_chunk = len(images) // len(chunks) if chunks else 0
-    for i, chunk in enumerate(chunks):
+    images_per_chunk = len (images) // len (chunks) if chunks else 0
+    for i, chunk in enumerate (chunks):
         start_img = i * images_per_chunk
         end_img = start_img + images_per_chunk
         chunk["images"] = images[start_img:end_img]
@@ -958,7 +958,7 @@ def rerank_multimodal_results(
             scores.append((score, doc))
     
     # Sort by score
-    scores.sort(reverse=True, key=lambda x: x[0])
+    scores.sort (reverse=True, key=lambda x: x[0])
     
     # Return top-k
     return [doc for _, doc in scores[:top_k]]
@@ -978,24 +978,24 @@ class CachedMultiModalRAG:
     
     def __init__(self, openai_api_key: str, redis_host: str = "localhost"):
         self.rag = MultiModalRAG(openai_api_key)
-        self.redis_client = redis.Redis(host=redis_host)
+        self.redis_client = redis.Redis (host=redis_host)
         self.cache_ttl = 86400  # 24 hours
     
-    def query(self, question: str, top_k: int = 5) -> str:
+    def query (self, question: str, top_k: int = 5) -> str:
         """Query with caching."""
         # Generate cache key
         cache_key = f"mmrag:{hashlib.sha256(question.encode()).hexdigest()}:{top_k}"
         
         # Check cache
-        cached = self.redis_client.get(cache_key)
+        cached = self.redis_client.get (cache_key)
         if cached:
-            return json.loads(cached)
+            return json.loads (cached)
         
         # Query RAG
-        answer = self.rag.query(question, top_k)
+        answer = self.rag.query (question, top_k)
         
         # Cache result
-        self.redis_client.setex(cache_key, self.cache_ttl, json.dumps(answer))
+        self.redis_client.setex (cache_key, self.cache_ttl, json.dumps (answer))
         
         return answer
 \`\`\`
@@ -1014,7 +1014,7 @@ def log_rag_query(
 ):
     """Log RAG queries for monitoring."""
     logging.info(
-        f"RAG Query: query_length={len(query)}, "
+        f"RAG Query: query_length={len (query)}, "
         f"retrieved={num_retrieved}, "
         f"time={response_time:.2f}s, "
         f"has_images={has_images}"
@@ -1026,29 +1026,29 @@ def log_rag_query(
 ### 1. Technical Documentation
 
 \`\`\`python
-def build_technical_docs_rag(doc_directory: str) -> MultiModalRAG:
+def build_technical_docs_rag (doc_directory: str) -> MultiModalRAG:
     """Build RAG system for technical documentation."""
     rag = MultiModalRAG(openai_api_key=os.getenv("OPENAI_API_KEY"))
     
     # Process all markdown files
-    for md_file in Path(doc_directory).rglob("*.md"):
-        with open(md_file, 'r') as f:
+    for md_file in Path (doc_directory).rglob("*.md"):
+        with open (md_file, 'r') as f:
             content = f.read()
         
         # Find associated images
         images = []
         image_dir = md_file.parent / "images"
         if image_dir.exists():
-            images = list(image_dir.glob("*.png")) + list(image_dir.glob("*.jpg"))
+            images = list (image_dir.glob("*.png")) + list (image_dir.glob("*.jpg"))
         
         # Add to RAG
         for img in images:
-            caption = generate_image_caption_for_rag(str(img), context=content[:500])
+            caption = generate_image_caption_for_rag (str (img), context=content[:500])
             rag.add_document(
                 f"{md_file.stem}_{img.stem}",
                 text=caption,
-                image_path=str(img),
-                metadata={"source": str(md_file)}
+                image_path=str (img),
+                metadata={"source": str (md_file)}
             )
     
     return rag
@@ -1057,7 +1057,7 @@ def build_technical_docs_rag(doc_directory: str) -> MultiModalRAG:
 ### 2. Product Catalog
 
 \`\`\`python
-def build_product_catalog_rag(products: List[Dict]) -> MultiModalRAG:
+def build_product_catalog_rag (products: List[Dict]) -> MultiModalRAG:
     """Build RAG for product catalog with images."""
     rag = MultiModalRAG(openai_api_key=os.getenv("OPENAI_API_KEY"))
     
@@ -1067,7 +1067,7 @@ def build_product_catalog_rag(products: List[Dict]) -> MultiModalRAG:
         Product: {product['name']}
         Price: \${product['price']}
         Description: {product['description']}
-        Features: {', '.join(product['features'])}
+        Features: {', '.join (product['features'])}
         """
         
         # Add to RAG

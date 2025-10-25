@@ -13,7 +13,7 @@ Design a typeahead system that:
 - **Real-Time Suggestions**: Show suggestions within 100ms
 - **Prefix Matching**: "new y" → ["new york", "new year", "new york times"]
 - **Ranking**: Most popular/relevant suggestions first
-- **Personalization**: User's search history influences suggestions
+- **Personalization**: User\'s search history influences suggestions
 - **Typo Tolerance**: "nwe york" → "new york"
 - **Trending Queries**: "taylor swift concert" spikes during ticket sales
 - **Multi-Language**: Support English, Spanish, Chinese, etc.
@@ -109,7 +109,7 @@ class Trie:
     def __init__(self):
         self.root = TrieNode()
     
-    def insert(self, query, frequency):
+    def insert (self, query, frequency):
         node = self.root
         for char in query:
             if char not in node.children:
@@ -118,7 +118,7 @@ class Trie:
         node.is_end_of_word = True
         node.frequency = frequency
     
-    def search_prefix(self, prefix):
+    def search_prefix (self, prefix):
         node = self.root
         for char in prefix:
             if char not in node.children:
@@ -127,14 +127,14 @@ class Trie:
         
         # Traverse subtree, collect all words
         results = []
-        self._dfs(node, prefix, results)
-        return sorted(results, key=lambda x: x[1], reverse=True)[:10]  # Top 10
+        self._dfs (node, prefix, results)
+        return sorted (results, key=lambda x: x[1], reverse=True)[:10]  # Top 10
     
-    def _dfs(self, node, current_word, results):
+    def _dfs (self, node, current_word, results):
         if node.is_end_of_word:
             results.append((current_word, node.frequency))
         for char, child in node.children.items():
-            self._dfs(child, current_word + char, results)
+            self._dfs (child, current_word + char, results)
 \`\`\`
 
 **Problem**: DFS traversal on every request is slow (1000s of nodes).
@@ -154,7 +154,7 @@ class TrieNode:
         self.top_suggestions = []  # List of (query, frequency), sorted by frequency
 
 class Trie:
-    def insert(self, query, frequency):
+    def insert (self, query, frequency):
         node = self.root
         for char in query:
             if char not in node.children:
@@ -162,20 +162,20 @@ class Trie:
             node = node.children[char]
             
             # Update top suggestions at this node
-            self._update_top_suggestions(node, query, frequency)
+            self._update_top_suggestions (node, query, frequency)
         
         node.is_end_of_word = True
         node.frequency = frequency
     
-    def _update_top_suggestions(self, node, query, frequency):
+    def _update_top_suggestions (self, node, query, frequency):
         # Add new query to suggestions
         node.top_suggestions.append((query, frequency))
         
         # Sort by frequency, keep top 10
-        node.top_suggestions.sort(key=lambda x: x[1], reverse=True)
+        node.top_suggestions.sort (key=lambda x: x[1], reverse=True)
         node.top_suggestions = node.top_suggestions[:10]
     
-    def autocomplete(self, prefix):
+    def autocomplete (self, prefix):
         node = self.root
         for char in prefix:
             if char not in node.children:
@@ -223,15 +223,15 @@ User types "new" → Route to server handling "n"
 **Routing**:
 
 \`\`\`python
-def get_server(prefix):
+def get_server (prefix):
     first_char = prefix[0].lower()
-    server_id = ord(first_char) - ord('a')  # 0-25
+    server_id = ord (first_char) - ord('a')  # 0-25
     server_id = server_id % num_servers  # Distribute evenly
     return f"trie-server-{server_id}"
 
 # User types "new"
 server = get_server("new")  # "trie-server-13" (n = 13)
-suggestions = request(f"{server}/autocomplete?prefix=new")
+suggestions = request (f"{server}/autocomplete?prefix=new")
 \`\`\`
 
 **Load Balancing**:
@@ -239,8 +239,8 @@ suggestions = request(f"{server}/autocomplete?prefix=new")
 - Solution: Partition by query hash (more even distribution)
 
 \`\`\`python
-def get_server_hash(prefix):
-    return hash(prefix) % num_servers
+def get_server_hash (prefix):
+    return hash (prefix) % num_servers
 \`\`\`
 
 ---
@@ -251,13 +251,13 @@ def get_server_hash(prefix):
 
 1. **Frequency**: How many users searched this query?
 2. **Recency**: Recent queries ranked higher (trending)
-3. **Personalization**: User's location, history
+3. **Personalization**: User\'s location, history
 4. **Click-Through Rate (CTR)**: Did users click suggested query?
 
 **Ranking Formula**:
 
 \`\`\`python
-def calculate_score(query, user):
+def calculate_score (query, user):
     base_score = query.frequency
     
     # Boost recent queries (exponential decay)
@@ -294,14 +294,14 @@ def calculate_score(query, user):
 **Approach 1: Edit Distance (Levenshtein)**
 
 \`\`\`python
-def edit_distance(s1, s2):
+def edit_distance (s1, s2):
     # Number of insertions, deletions, substitutions to transform s1 → s2
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    m, n = len (s1), len (s2)
+    dp = [[0] * (n + 1) for _ in range (m + 1)]
     
-    for i in range(m + 1):
+    for i in range (m + 1):
         dp[i][0] = i
-    for j in range(n + 1):
+    for j in range (n + 1):
         dp[0][j] = j
     
     for i in range(1, m + 1):
@@ -309,7 +309,7 @@ def edit_distance(s1, s2):
             if s1[i-1] == s2[j-1]:
                 dp[i][j] = dp[i-1][j-1]
             else:
-                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+                dp[i][j] = 1 + min (dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
     
     return dp[m][n]
 
@@ -319,11 +319,11 @@ def edit_distance(s1, s2):
 **Fuzzy Search in Trie**:
 
 \`\`\`python
-def fuzzy_search(prefix, max_edit_distance=2):
+def fuzzy_search (prefix, max_edit_distance=2):
     results = []
     
-    def dfs(node, current_word, remaining_edits):
-        if node.is_end_of_word and edit_distance(prefix, current_word) <= max_edit_distance:
+    def dfs (node, current_word, remaining_edits):
+        if node.is_end_of_word and edit_distance (prefix, current_word) <= max_edit_distance:
             results.append((current_word, node.frequency))
         
         if remaining_edits == 0:
@@ -331,10 +331,10 @@ def fuzzy_search(prefix, max_edit_distance=2):
         
         # Try all children (exploration)
         for char, child in node.children.items():
-            dfs(child, current_word + char, remaining_edits - 1)
+            dfs (child, current_word + char, remaining_edits - 1)
     
-    dfs(trie.root, "", max_edit_distance)
-    return sorted(results, key=lambda x: x[1], reverse=True)[:10]
+    dfs (trie.root, "", max_edit_distance)
+    return sorted (results, key=lambda x: x[1], reverse=True)[:10]
 \`\`\`
 
 **Problem**: Slow (explores many paths).
@@ -349,12 +349,12 @@ typo_map = {
     "recieve": "receive"
 }
 
-def correct_spelling(prefix):
-    return typo_map.get(prefix, prefix)
+def correct_spelling (prefix):
+    return typo_map.get (prefix, prefix)
 
 # User types "nwe"
 corrected = correct_spelling("nwe")  # "new"
-suggestions = trie.autocomplete(corrected)  # ["new york", "news", ...]
+suggestions = trie.autocomplete (corrected)  # ["new york", "news", ...]
 \`\`\`
 
 **Approach 3: Keyboard Proximity (Advanced)**
@@ -367,12 +367,12 @@ keyboard_neighbors = {
     # ...
 }
 
-def generate_typo_variants(query):
+def generate_typo_variants (query):
     variants = [query]
-    for i, char in enumerate(query):
-        for neighbor in keyboard_neighbors.get(char, []):
+    for i, char in enumerate (query):
+        for neighbor in keyboard_neighbors.get (char, []):
             variant = query[:i] + neighbor + query[i+1:]
-            variants.append(variant)
+            variants.append (variant)
     return variants
 
 # "nwe" → ["nwe", "mwe", "bwe", "nee", "nqe", ...]
@@ -396,23 +396,23 @@ for event in search_stream:
     timestamp = event.timestamp
     window = timestamp // 300  # 5-minute buckets
     
-    redis.zincrby(f"trending:{window}", 1, query)
+    redis.zincrby (f"trending:{window}", 1, query)
 
 # Top 100 trending queries in last 5 minutes
 trending = redis.zrevrange("trending:1672531200", 0, 99, withscores=True)
 
 # Boost trending queries in autocomplete
-def autocomplete_with_trending(prefix):
-    normal_suggestions = trie.autocomplete(prefix)
-    trending_suggestions = [q for q in trending if q.startswith(prefix)]
+def autocomplete_with_trending (prefix):
+    normal_suggestions = trie.autocomplete (prefix)
+    trending_suggestions = [q for q in trending if q.startswith (prefix)]
     
     # Merge: 50% normal, 50% trending
     merged = []
     for i in range(5):
-        if i < len(trending_suggestions):
-            merged.append(trending_suggestions[i])
-        if i < len(normal_suggestions):
-            merged.append(normal_suggestions[i])
+        if i < len (trending_suggestions):
+            merged.append (trending_suggestions[i])
+        if i < len (normal_suggestions):
+            merged.append (normal_suggestions[i])
     
     return merged[:10]
 \`\`\`
@@ -431,18 +431,18 @@ user = {
     "language": "en"
 }
 
-def personalized_autocomplete(prefix, user):
+def personalized_autocomplete (prefix, user):
     # Get base suggestions
-    suggestions = trie.autocomplete(prefix)
+    suggestions = trie.autocomplete (prefix)
     
     # Re-rank based on user context
     scores = []
     for query in suggestions:
-        score = calculate_score(query, user)
+        score = calculate_score (query, user)
         scores.append((query, score))
     
     # Sort by personalized score
-    scores.sort(key=lambda x: x[1], reverse=True)
+    scores.sort (key=lambda x: x[1], reverse=True)
     return [query for query, score in scores[:10]]
 \`\`\`
 
@@ -526,19 +526,19 @@ def personalized_autocomplete(prefix, user):
 
 \`\`\`python
 # Redis cache
-def autocomplete_with_cache(prefix):
+def autocomplete_with_cache (prefix):
     cache_key = f"autocomplete:{prefix}"
     
     # Try cache first
-    cached = redis.get(cache_key)
+    cached = redis.get (cache_key)
     if cached:
-        return json.loads(cached)
+        return json.loads (cached)
     
     # Cache miss: Query Trie
-    suggestions = trie.autocomplete(prefix)
+    suggestions = trie.autocomplete (prefix)
     
     # Store in cache (10-minute TTL)
-    redis.setex(cache_key, 600, json.dumps(suggestions))
+    redis.setex (cache_key, 600, json.dumps (suggestions))
     
     return suggestions
 \`\`\`
@@ -576,11 +576,11 @@ def autocomplete_with_cache(prefix):
 
 \`\`\`python
 # Tokenizer based on language
-def tokenize(query, language):
+def tokenize (query, language):
     if language == "zh":  # Chinese
-        return jieba.cut(query)  # Chinese word segmentation
+        return jieba.cut (query)  # Chinese word segmentation
     elif language == "ja":  # Japanese
-        return mecab.parse(query)
+        return mecab.parse (query)
     else:
         return query.split()  # Space-separated
 
@@ -589,9 +589,9 @@ trie_en = Trie()  # English
 trie_zh = Trie()  # Chinese
 trie_es = Trie()  # Spanish
 
-def autocomplete_multi_lang(prefix, language="en"):
-    trie = get_trie(language)
-    return trie.autocomplete(prefix)
+def autocomplete_multi_lang (prefix, language="en"):
+    trie = get_trie (language)
+    return trie.autocomplete (prefix)
 \`\`\`
 
 ---

@@ -59,16 +59,16 @@ for col in data.columns:
 # Visualize distributions
 fig, axes = plt.subplots(2, 5, figsize=(20, 8))
 
-for idx, col in enumerate(data.columns):
+for idx, col in enumerate (data.columns):
     # Histogram
-    axes[0, idx].hist(data[col], bins=30, edgecolor='black', alpha=0.7)
-    axes[0, idx].set_title(f'{col}\\nHistogram')
+    axes[0, idx].hist (data[col], bins=30, edgecolor='black', alpha=0.7)
+    axes[0, idx].set_title (f'{col}\\nHistogram')
     axes[0, idx].set_xlabel('Value')
     axes[0, idx].set_ylabel('Frequency')
     
     # Box plot
-    axes[1, idx].boxplot(data[col])
-    axes[1, idx].set_title(f'{col}\\nBox Plot')
+    axes[1, idx].boxplot (data[col])
+    axes[1, idx].set_title (f'{col}\\nBox Plot')
     axes[1, idx].set_ylabel('Value')
 
 plt.tight_layout()
@@ -97,7 +97,7 @@ plt.show()
 ### Interpreting Distribution Shapes
 
 \`\`\`python
-def interpret_distribution(series, name):
+def interpret_distribution (series, name):
     """Interpret distribution characteristics and recommend transformations"""
     
     mean = series.mean()
@@ -110,7 +110,7 @@ def interpret_distribution(series, name):
     
     # Skewness interpretation
     print(f"\\n📊 SKEWNESS: {skewness:.3f}")
-    if abs(skewness) < 0.5:
+    if abs (skewness) < 0.5:
         skew_type = "Approximately symmetric"
         transform = "No transformation needed"
     elif skewness > 0.5:
@@ -125,7 +125,7 @@ def interpret_distribution(series, name):
     
     # Kurtosis interpretation
     print(f"\\n📈 KURTOSIS: {kurtosis:.3f}")
-    if abs(kurtosis) < 1:
+    if abs (kurtosis) < 1:
         kurt_type = "Mesokurtic (normal-like tails)"
     elif kurtosis > 1:
         kurt_type = "Leptokurtic (heavy tails, more outliers)"
@@ -138,9 +138,9 @@ def interpret_distribution(series, name):
     print(f"\\n⚖️  CENTRAL TENDENCY:")
     print(f"  Mean: {mean:.3f}")
     print(f"  Median: {median:.3f}")
-    print(f"  Difference: {abs(mean - median):.3f}")
+    print(f"  Difference: {abs (mean - median):.3f}")
     
-    if abs(mean - median) / median < 0.01:
+    if abs (mean - median) / median < 0.01:
         print(f"  Interpretation: Mean ≈ Median → Symmetric distribution")
     elif mean > median:
         print(f"  Interpretation: Mean > Median → Right-skewed (outliers pull mean right)")
@@ -155,7 +155,7 @@ def interpret_distribution(series, name):
 
 # Analyze each distribution
 for col in data.columns:
-    interpret_distribution(data[col], col)
+    interpret_distribution (data[col], col)
 \`\`\`
 
 ## Central Tendency and Spread
@@ -163,7 +163,7 @@ for col in data.columns:
 ### Comprehensive Summary Statistics
 
 \`\`\`python
-def comprehensive_statistics(series, name):
+def comprehensive_statistics (series, name):
     """Calculate and display comprehensive statistics for a feature"""
     
     print(f"\\n{'='*70}")
@@ -175,7 +175,7 @@ def comprehensive_statistics(series, name):
     print(f"  Mean:               {series.mean():.4f}")
     print(f"  Median:             {series.median():.4f}")
     print(f"  Mode:               {series.mode().values[0]:.4f}")
-    print(f"  Trimmed Mean (10%): {stats.trim_mean(series, 0.1):.4f}")
+    print(f"  Trimmed Mean (10%): {stats.trim_mean (series, 0.1):.4f}")
     
     # Spread
     print(f"\\n📏 SPREAD:")
@@ -183,14 +183,14 @@ def comprehensive_statistics(series, name):
     print(f"  Variance:           {series.var():.4f}")
     print(f"  Range:              {series.max() - series.min():.4f}")
     print(f"  IQR (Q3-Q1):        {series.quantile(0.75) - series.quantile(0.25):.4f}")
-    print(f"  MAD (Mean Abs Dev): {np.mean(np.abs(series - series.mean())):.4f}")
+    print(f"  MAD (Mean Abs Dev): {np.mean (np.abs (series - series.mean())):.4f}")
     print(f"  Coefficient of Var: {series.std() / series.mean():.4f}")
     
     # Quantiles
     print(f"\\n📊 QUANTILES:")
     quantiles = [0, 0.01, 0.05, 0.25, 0.50, 0.75, 0.95, 0.99, 1.0]
     for q in quantiles:
-        print(f"  {int(q*100):3d}%: {series.quantile(q):10.4f}")
+        print(f"  {int (q*100):3d}%: {series.quantile (q):10.4f}")
     
     # Shape
     print(f"\\n🎨 SHAPE:")
@@ -200,7 +200,7 @@ def comprehensive_statistics(series, name):
     # Data Quality
     print(f"\\n✅ DATA QUALITY:")
     print(f"  Count:              {series.count():,}")
-    print(f"  Missing:            {series.isnull().sum():,} ({100*series.isnull().sum()/len(series):.2f}%)")
+    print(f"  Missing:            {series.isnull().sum():,} ({100*series.isnull().sum()/len (series):.2f}%)")
     print(f"  Unique:             {series.nunique():,}")
     print(f"  Zeros:              {(series == 0).sum():,}")
     print(f"  Negative:           {(series < 0).sum():,}")
@@ -208,11 +208,11 @@ def comprehensive_statistics(series, name):
 # Example: Analyze California housing data
 from sklearn.datasets import fetch_california_housing
 
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 # Analyze median income
-comprehensive_statistics(df['MedInc'], 'Median Income')
+comprehensive_statistics (df['MedInc'], 'Median Income')
 \`\`\`
 
 ## Identifying Outliers
@@ -220,14 +220,14 @@ comprehensive_statistics(df['MedInc'], 'Median Income')
 ### Multiple Outlier Detection Methods
 
 \`\`\`python
-def detect_outliers(series, name):
+def detect_outliers (series, name):
     """Detect outliers using multiple methods"""
     
     print(f"\\n{'='*70}")
     print(f"OUTLIER DETECTION: {name}")
     print(f"{'='*70}")
     
-    n = len(series)
+    n = len (series)
     outliers_methods = {}
     
     # Method 1: IQR Method (most common)
@@ -239,28 +239,28 @@ def detect_outliers(series, name):
     
     iqr_outliers = series[(series < lower_bound) | (series > upper_bound)]
     outliers_methods['IQR Method'] = {
-        'count': len(iqr_outliers),
-        'percent': 100 * len(iqr_outliers) / n,
+        'count': len (iqr_outliers),
+        'percent': 100 * len (iqr_outliers) / n,
         'bounds': (lower_bound, upper_bound)
     }
     
     # Method 2: Z-Score Method
-    z_scores = np.abs(stats.zscore(series))
+    z_scores = np.abs (stats.zscore (series))
     z_outliers = series[z_scores > 3]
     outliers_methods['Z-Score (>3)'] = {
-        'count': len(z_outliers),
-        'percent': 100 * len(z_outliers) / n,
+        'count': len (z_outliers),
+        'percent': 100 * len (z_outliers) / n,
         'threshold': 3
     }
     
     # Method 3: Modified Z-Score (using MAD)
     median = series.median()
-    mad = np.median(np.abs(series - median))
+    mad = np.median (np.abs (series - median))
     modified_z_scores = 0.6745 * (series - median) / mad
-    mad_outliers = series[np.abs(modified_z_scores) > 3.5]
+    mad_outliers = series[np.abs (modified_z_scores) > 3.5]
     outliers_methods['Modified Z-Score'] = {
-        'count': len(mad_outliers),
-        'percent': 100 * len(mad_outliers) / n,
+        'count': len (mad_outliers),
+        'percent': 100 * len (mad_outliers) / n,
         'threshold': 3.5
     }
     
@@ -269,8 +269,8 @@ def detect_outliers(series, name):
     upper_percentile = series.quantile(0.99)
     percentile_outliers = series[(series < lower_percentile) | (series > upper_percentile)]
     outliers_methods['Percentile (1%, 99%)'] = {
-        'count': len(percentile_outliers),
-        'percent': 100 * len(percentile_outliers) / n,
+        'count': len (percentile_outliers),
+        'percent': 100 * len (percentile_outliers) / n,
         'bounds': (lower_percentile, upper_percentile)
     }
     
@@ -290,24 +290,24 @@ def detect_outliers(series, name):
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
     
     # Box plot
-    axes[0].boxplot(series)
+    axes[0].boxplot (series)
     axes[0].set_title('Box Plot')
-    axes[0].set_ylabel(name)
-    axes[0].axhline(lower_bound, color='r', linestyle='--', label='IQR bounds')
-    axes[0].axhline(upper_bound, color='r', linestyle='--')
+    axes[0].set_ylabel (name)
+    axes[0].axhline (lower_bound, color='r', linestyle='--', label='IQR bounds')
+    axes[0].axhline (upper_bound, color='r', linestyle='--')
     axes[0].legend()
     
     # Histogram with outlier bounds
-    axes[1].hist(series, bins=50, edgecolor='black', alpha=0.7)
-    axes[1].axvline(lower_bound, color='r', linestyle='--', label='IQR bounds')
-    axes[1].axvline(upper_bound, color='r', linestyle='--')
+    axes[1].hist (series, bins=50, edgecolor='black', alpha=0.7)
+    axes[1].axvline (lower_bound, color='r', linestyle='--', label='IQR bounds')
+    axes[1].axvline (upper_bound, color='r', linestyle='--')
     axes[1].set_title('Distribution with Outlier Bounds')
-    axes[1].set_xlabel(name)
+    axes[1].set_xlabel (name)
     axes[1].set_ylabel('Frequency')
     axes[1].legend()
     
     # Z-scores
-    axes[2].scatter(range(len(series)), z_scores, alpha=0.5)
+    axes[2].scatter (range (len (series)), z_scores, alpha=0.5)
     axes[2].axhline(3, color='r', linestyle='--', label='Z=3 threshold')
     axes[2].set_title('Z-Scores')
     axes[2].set_xlabel('Index')
@@ -320,7 +320,7 @@ def detect_outliers(series, name):
     return outliers_methods
 
 # Detect outliers in median income
-outlier_analysis = detect_outliers(df['MedInc'], 'Median Income')
+outlier_analysis = detect_outliers (df['MedInc'], 'Median Income')
 \`\`\`
 
 ## Normality Testing
@@ -328,7 +328,7 @@ outlier_analysis = detect_outliers(df['MedInc'], 'Median Income')
 ### Statistical Tests for Normality
 
 \`\`\`python
-def test_normality(series, name):
+def test_normality (series, name):
     """Test if data follows a normal distribution using multiple tests"""
     
     print(f"\\n{'='*70}")
@@ -339,24 +339,24 @@ def test_normality(series, name):
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
     
     # Histogram with normal curve overlay
-    axes[0].hist(series, bins=30, density=True, alpha=0.7, edgecolor='black')
+    axes[0].hist (series, bins=30, density=True, alpha=0.7, edgecolor='black')
     mu, sigma = series.mean(), series.std()
-    x = np.linspace(series.min(), series.max(), 100)
-    axes[0].plot(x, stats.norm.pdf(x, mu, sigma), 'r-', linewidth=2, label='Normal PDF')
+    x = np.linspace (series.min(), series.max(), 100)
+    axes[0].plot (x, stats.norm.pdf (x, mu, sigma), 'r-', linewidth=2, label='Normal PDF')
     axes[0].set_title('Histogram vs Normal Distribution')
-    axes[0].set_xlabel(name)
+    axes[0].set_xlabel (name)
     axes[0].set_ylabel('Density')
     axes[0].legend()
     
     # Q-Q Plot
-    stats.probplot(series, dist="norm", plot=axes[1])
+    stats.probplot (series, dist="norm", plot=axes[1])
     axes[1].set_title('Q-Q Plot')
     axes[1].grid(True, alpha=0.3)
     
     # Box plot
-    axes[2].boxplot(series)
+    axes[2].boxplot (series)
     axes[2].set_title('Box Plot')
-    axes[2].set_ylabel(name)
+    axes[2].set_ylabel (name)
     
     plt.tight_layout()
     plt.show()
@@ -365,8 +365,8 @@ def test_normality(series, name):
     print(f"\\n📊 STATISTICAL TESTS:\\n")
     
     # Shapiro-Wilk Test (best for n < 5000)
-    if len(series) <= 5000:
-        shapiro_stat, shapiro_p = stats.shapiro(series)
+    if len (series) <= 5000:
+        shapiro_stat, shapiro_p = stats.shapiro (series)
         print(f"Shapiro-Wilk Test:")
         print(f"  Statistic: {shapiro_stat:.4f}")
         print(f"  P-value: {shapiro_p:.4f}")
@@ -374,7 +374,7 @@ def test_normality(series, name):
         print()
     
     # Kolmogorov-Smirnov Test
-    ks_stat, ks_p = stats.kstest(series, 'norm', args=(mu, sigma))
+    ks_stat, ks_p = stats.kstest (series, 'norm', args=(mu, sigma))
     print(f"Kolmogorov-Smirnov Test:")
     print(f"  Statistic: {ks_stat:.4f}")
     print(f"  P-value: {ks_p:.4f}")
@@ -382,14 +382,14 @@ def test_normality(series, name):
     print()
     
     # Anderson-Darling Test
-    anderson_result = stats.anderson(series, dist='norm')
+    anderson_result = stats.anderson (series, dist='norm')
     print(f"Anderson-Darling Test:")
     print(f"  Statistic: {anderson_result.statistic:.4f}")
     print(f"  Critical values: {anderson_result.critical_values}")
     print(f"  Significance levels: {anderson_result.significance_level}%")
     
     # D'Agostino-Pearson Test
-    dagostino_stat, dagostino_p = stats.normaltest(series)
+    dagostino_stat, dagostino_p = stats.normaltest (series)
     print(f"\\nD'Agostino-Pearson Test:")
     print(f"  Statistic: {dagostino_stat:.4f}")
     print(f"  P-value: {dagostino_p:.4f}")
@@ -399,11 +399,11 @@ def test_normality(series, name):
     print(f"\\n📝 SUMMARY:")
     skewness = series.skew()
     kurtosis = series.kurtosis()
-    print(f"  Skewness: {skewness:.4f} ({'near 0 = symmetric' if abs(skewness) < 0.5 else 'skewed'})")
-    print(f"  Kurtosis: {kurtosis:.4f} ({'near 0 = normal-like' if abs(kurtosis) < 1 else 'heavy/light tails'})")
+    print(f"  Skewness: {skewness:.4f} ({'near 0 = symmetric' if abs (skewness) < 0.5 else 'skewed'})")
+    print(f"  Kurtosis: {kurtosis:.4f} ({'near 0 = normal-like' if abs (kurtosis) < 1 else 'heavy/light tails'})")
 
 # Test normality for median income
-test_normality(df['MedInc'], 'Median Income')
+test_normality (df['MedInc'], 'Median Income')
 \`\`\`
 
 ## Transformation Techniques
@@ -411,7 +411,7 @@ test_normality(df['MedInc'], 'Median Income')
 ### Common Transformations for Different Distributions
 
 \`\`\`python
-def apply_transformations(series, name):
+def apply_transformations (series, name):
     """Apply common transformations and compare results"""
     
     print(f"\\n{'='*70}")
@@ -424,11 +424,11 @@ def apply_transformations(series, name):
     # Transformations
     transformations = {
         'Original': original,
-        'Log': np.log1p(original),  # log(1 + x) to handle zeros
-        'Square Root': np.sqrt(original - original.min() + 1),
-        'Cube Root': np.cbrt(original),
-        'Box-Cox': stats.boxcox(original - original.min() + 1)[0],
-        'Yeo-Johnson': stats.yeojohnson(original)[0],
+        'Log': np.log1p (original),  # log(1 + x) to handle zeros
+        'Square Root': np.sqrt (original - original.min() + 1),
+        'Cube Root': np.cbrt (original),
+        'Box-Cox': stats.boxcox (original - original.min() + 1)[0],
+        'Yeo-Johnson': stats.yeojohnson (original)[0],
     }
     
     # Compare skewness
@@ -441,16 +441,16 @@ def apply_transformations(series, name):
         print(f"  {trans_name:15s}: {skew:7.4f}")
     
     # Recommend best transformation
-    best_transform = min(skewness_results, key=lambda x: abs(x[1]))
+    best_transform = min (skewness_results, key=lambda x: abs (x[1]))
     print(f"\\n✓ Best transformation: {best_transform[0]} (skewness closest to 0)")
     
     # Visualize transformations
     fig, axes = plt.subplots(2, 3, figsize=(15, 8))
     axes = axes.ravel()
     
-    for idx, (trans_name, trans_data) in enumerate(transformations.items()):
-        axes[idx].hist(trans_data, bins=30, edgecolor='black', alpha=0.7)
-        axes[idx].set_title(f'{trans_name}\\nSkewness: {trans_data.skew():.3f}')
+    for idx, (trans_name, trans_data) in enumerate (transformations.items()):
+        axes[idx].hist (trans_data, bins=30, edgecolor='black', alpha=0.7)
+        axes[idx].set_title (f'{trans_name}\\nSkewness: {trans_data.skew():.3f}')
         axes[idx].set_xlabel('Value')
         axes[idx].set_ylabel('Frequency')
     
@@ -461,7 +461,7 @@ def apply_transformations(series, name):
 
 # Apply transformations to right-skewed data
 skewed_feature = df['MedInc'] ** 2  # Create more skewed version
-transformations = apply_transformations(skewed_feature, 'Skewed Feature')
+transformations = apply_transformations (skewed_feature, 'Skewed Feature')
 \`\`\`
 
 ## Zero-Variance and Near-Constant Features
@@ -469,7 +469,7 @@ transformations = apply_transformations(skewed_feature, 'Skewed Feature')
 ### Identifying Uninformative Features
 
 \`\`\`python
-def identify_low_variance_features(df, threshold=0.01):
+def identify_low_variance_features (df, threshold=0.01):
     """Identify features with low variance that provide little information"""
     
     print(f"\\n{'='*70}")
@@ -478,15 +478,15 @@ def identify_low_variance_features(df, threshold=0.01):
     
     low_variance = []
     
-    for col in df.select_dtypes(include=[np.number]).columns:
+    for col in df.select_dtypes (include=[np.number]).columns:
         # Calculate coefficient of variation (std / mean)
         if df[col].mean() != 0:
-            cv = df[col].std() / abs(df[col].mean())
+            cv = df[col].std() / abs (df[col].mean())
         else:
             cv = 0
         
         # Calculate unique value ratio
-        unique_ratio = df[col].nunique() / len(df)
+        unique_ratio = df[col].nunique() / len (df)
         
         # Check if nearly constant
         if cv < threshold or unique_ratio < 0.01:
@@ -495,12 +495,12 @@ def identify_low_variance_features(df, threshold=0.01):
                 'cv': cv,
                 'unique_ratio': unique_ratio,
                 'unique_values': df[col].nunique(),
-                'most_common': df[col].mode().values[0] if len(df[col].mode()) > 0 else None,
-                'most_common_freq': df[col].value_counts().iloc[0] / len(df) if len(df[col]) > 0 else 0
+                'most_common': df[col].mode().values[0] if len (df[col].mode()) > 0 else None,
+                'most_common_freq': df[col].value_counts().iloc[0] / len (df) if len (df[col]) > 0 else 0
             })
     
     if low_variance:
-        print(f"\\nFound {len(low_variance)} low-variance features:\\n")
+        print(f"\\nFound {len (low_variance)} low-variance features:\\n")
         for feat in low_variance:
             print(f"Column: {feat['column']}")
             print(f"  Coefficient of Variation: {feat['cv']:.6f}")
@@ -517,7 +517,7 @@ def identify_low_variance_features(df, threshold=0.01):
     return low_variance
 
 # Identify low-variance features
-low_var = identify_low_variance_features(df)
+low_var = identify_low_variance_features (df)
 \`\`\`
 
 ## Key Takeaways

@@ -17,7 +17,7 @@ Understanding the trade-offs helps you choose the right approach for each proble
 
 **Iterative Solution:**
 \`\`\`python
-def sum_n_iterative(n):
+def sum_n_iterative (n):
     """Iterative approach"""
     total = 0
     for i in range(1, n + 1):
@@ -27,16 +27,16 @@ def sum_n_iterative(n):
 
 **Recursive Solution:**
 \`\`\`python
-def sum_n_recursive(n):
+def sum_n_recursive (n):
     """Recursive approach"""
     if n <= 0:
         return 0
-    return n + sum_n_recursive(n - 1)
+    return n + sum_n_recursive (n - 1)
 \`\`\`
 
 **Mathematical Solution:**
 \`\`\`python
-def sum_n_formula(n):
+def sum_n_formula (n):
     """Best approach - O(1)"""
     return n * (n + 1) // 2
 \`\`\`
@@ -48,15 +48,15 @@ def sum_n_formula(n):
 ✅ **More Natural for Some Problems:**
 \`\`\`python
 # Tree traversal is naturally recursive
-def traverse_tree(node):
+def traverse_tree (node):
     if node is None:
         return
     print(node.val)
-    traverse_tree(node.left)
-    traverse_tree(node.right)
+    traverse_tree (node.left)
+    traverse_tree (node.right)
 
 # Iterative version requires explicit stack - more complex!
-def traverse_tree_iterative(root):
+def traverse_tree_iterative (root):
     if root is None:
         return
     stack = [root]
@@ -64,14 +64,14 @@ def traverse_tree_iterative(root):
         node = stack.pop()
         print(node.val)
         if node.right:
-            stack.append(node.right)
+            stack.append (node.right)
         if node.left:
-            stack.append(node.left)
+            stack.append (node.left)
 \`\`\`
 
 ✅ **Cleaner Code for Divide-and-Conquer:**
 \`\`\`python
-def binary_search_recursive(arr, target, left, right):
+def binary_search_recursive (arr, target, left, right):
     """Clean and readable"""
     if left > right:
         return -1
@@ -81,22 +81,22 @@ def binary_search_recursive(arr, target, left, right):
     if arr[mid] == target:
         return mid
     elif arr[mid] < target:
-        return binary_search_recursive(arr, target, mid + 1, right)
+        return binary_search_recursive (arr, target, mid + 1, right)
     else:
-        return binary_search_recursive(arr, target, left, mid - 1)
+        return binary_search_recursive (arr, target, left, mid - 1)
 \`\`\`
 
 ✅ **Better for Backtracking:**
 \`\`\`python
-def generate_permutations(arr, current=[]):
+def generate_permutations (arr, current=[]):
     """Generate all permutations - naturally recursive"""
-    if len(current) == len(arr):
+    if len (current) == len (arr):
         print(current)
         return
     
     for num in arr:
         if num not in current:
-            generate_permutations(arr, current + [num])
+            generate_permutations (arr, current + [num])
 \`\`\`
 
 ---
@@ -111,13 +111,13 @@ def generate_permutations(arr, current=[]):
 ✅ **More Memory Efficient:**
 \`\`\`python
 # Recursive: O(n) space for call stack
-def sum_recursive(n):
+def sum_recursive (n):
     if n <= 0:
         return 0
-    return n + sum_recursive(n - 1)
+    return n + sum_recursive (n - 1)
 
 # Iterative: O(1) space
-def sum_iterative(n):
+def sum_iterative (n):
     total = 0
     for i in range(1, n + 1):
         total += i
@@ -177,15 +177,15 @@ Any recursive function can be converted to iteration using an explicit stack.
 
 **Recursive:**
 \`\`\`python
-def factorial_recursive(n):
+def factorial_recursive (n):
     if n <= 1:
         return 1
-    return n * factorial_recursive(n - 1)
+    return n * factorial_recursive (n - 1)
 \`\`\`
 
 **Iterative with Loop:**
 \`\`\`python
-def factorial_iterative(n):
+def factorial_iterative (n):
     result = 1
     for i in range(2, n + 1):
         result *= i
@@ -194,12 +194,12 @@ def factorial_iterative(n):
 
 **Iterative with Stack (mimics recursion):**
 \`\`\`python
-def factorial_stack(n):
+def factorial_stack (n):
     stack = []
     
     # Build stack (like recursive calls)
     while n > 1:
-        stack.append(n)
+        stack.append (n)
         n -= 1
     
     result = 1

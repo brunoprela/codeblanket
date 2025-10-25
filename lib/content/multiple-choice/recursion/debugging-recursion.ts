@@ -59,10 +59,10 @@ export const debuggingrecursionMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc-debug5',
     question: 'Why is it helpful to trace recursion with small inputs first?',
     options: [
-      "It's faster to execute",
+      "It\'s faster to execute",
       'You can verify logic by hand before complex cases',
       'It uses less memory',
-      "It's required by Python",
+      "It\'s required by Python",
     ],
     correctAnswer: 1,
     explanation:

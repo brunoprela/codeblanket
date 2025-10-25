@@ -50,7 +50,7 @@ Scaling by √d_k prevents dot products from growing too large.
 4. **Attention weights**: Softmax over scores
 
 \`\`\`
-α_{i,j} = softmax_j(score(Q_i, K_j))
+α_{i,j} = softmax_j (score(Q_i, K_j))
 \`\`\`
 
 5. **Output**: Weighted sum of values
@@ -80,7 +80,7 @@ Self-attention allows "sat" to see the entire sentence context!
 **Architecture**:
 
 \`\`\`
-MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
+MultiHead(Q, K, V) = Concat (head_1, ..., head_h) W^O
 
 where head_i = Attention(Q W^Q_i, K W^K_i, V W^V_i)
 \`\`\`
@@ -112,8 +112,8 @@ where head_i = Attention(Q W^Q_i, K W^K_i, V W^V_i)
 **Sinusoidal encoding** (original Transformer):
 
 \`\`\`
-PE(pos, 2i) = sin(pos / 10000^(2i/d_model))
-PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+PE(pos, 2i) = sin (pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos (pos / 10000^(2i/d_model))
 \`\`\`
 
 **Properties**:
@@ -155,7 +155,7 @@ Think of it as: "After seeing the context (attention), what do I do with it?"
 Each sub-layer (attention, FFN) uses:
 
 \`\`\`
-LayerNorm(x + Sublayer(x))
+LayerNorm (x + Sublayer (x))
 \`\`\`
 
 **Residual connection** (x +): 
@@ -225,7 +225,7 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 ### Multi-Head Attention
 
 \`\`\`
-MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
+MultiHead(Q, K, V) = Concat (head_1, ..., head_h) W^O
 
 head_i = Attention(QW^Q_i, KW^K_i, VW^V_i)
 \`\`\`
@@ -263,18 +263,18 @@ def scaled_dot_product_attention(Q, K, V, mask=None):
     d_k = Q.size(-1)
     
     # Compute attention scores: QK^T / √d_k
-    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt (d_k)
     # Shape: (batch_size, num_heads, seq_len_q, seq_len_k)
     
     # Apply mask (set masked positions to large negative value)
     if mask is not None:
-        scores = scores.masked_fill(mask == 0, -1e9)
+        scores = scores.masked_fill (mask == 0, -1e9)
     
     # Compute attention weights
-    attention_weights = F.softmax(scores, dim=-1)
+    attention_weights = F.softmax (scores, dim=-1)
     
     # Apply attention to values
-    output = torch.matmul(attention_weights, V)
+    output = torch.matmul (attention_weights, V)
     
     return output, attention_weights
 
@@ -282,9 +282,9 @@ def scaled_dot_product_attention(Q, K, V, mask=None):
 # Example usage
 batch_size, num_heads, seq_len, d_k = 2, 8, 10, 64
 
-Q = torch.randn(batch_size, num_heads, seq_len, d_k)
-K = torch.randn(batch_size, num_heads, seq_len, d_k)
-V = torch.randn(batch_size, num_heads, seq_len, d_k)
+Q = torch.randn (batch_size, num_heads, seq_len, d_k)
+K = torch.randn (batch_size, num_heads, seq_len, d_k)
+V = torch.randn (batch_size, num_heads, seq_len, d_k)
 
 output, attn_weights = scaled_dot_product_attention(Q, K, V)
 print(f"Output shape: {output.shape}")  # (2, 8, 10, 64)
@@ -295,7 +295,7 @@ print(f"Attention weights sum: {attn_weights[0, 0, 0].sum()}")  # Should be 1.0
 ### Multi-Head Attention
 
 \`\`\`python
-class MultiHeadAttention(nn.Module):
+class MultiHeadAttention (nn.Module):
     def __init__(self, d_model, num_heads):
         """
         Args:
@@ -310,30 +310,30 @@ class MultiHeadAttention(nn.Module):
         self.d_k = d_model // num_heads  # Dimension per head
         
         # Linear projections for Q, K, V
-        self.W_q = nn.Linear(d_model, d_model)
-        self.W_k = nn.Linear(d_model, d_model)
-        self.W_v = nn.Linear(d_model, d_model)
+        self.W_q = nn.Linear (d_model, d_model)
+        self.W_k = nn.Linear (d_model, d_model)
+        self.W_v = nn.Linear (d_model, d_model)
         
         # Output projection
-        self.W_o = nn.Linear(d_model, d_model)
+        self.W_o = nn.Linear (d_model, d_model)
         
-    def split_heads(self, x):
+    def split_heads (self, x):
         """Split last dimension into (num_heads, d_k)"""
         batch_size, seq_len, d_model = x.size()
         # Reshape: (batch, seq_len, d_model) -> (batch, seq_len, num_heads, d_k)
-        x = x.view(batch_size, seq_len, self.num_heads, self.d_k)
+        x = x.view (batch_size, seq_len, self.num_heads, self.d_k)
         # Transpose: (batch, seq_len, num_heads, d_k) -> (batch, num_heads, seq_len, d_k)
         return x.transpose(1, 2)
     
-    def combine_heads(self, x):
+    def combine_heads (self, x):
         """Inverse of split_heads"""
         batch_size, num_heads, seq_len, d_k = x.size()
         # Transpose: (batch, num_heads, seq_len, d_k) -> (batch, seq_len, num_heads, d_k)
         x = x.transpose(1, 2)
         # Reshape: (batch, seq_len, num_heads, d_k) -> (batch, seq_len, d_model)
-        return x.contiguous().view(batch_size, seq_len, self.d_model)
+        return x.contiguous().view (batch_size, seq_len, self.d_model)
     
-    def forward(self, Q, K, V, mask=None):
+    def forward (self, Q, K, V, mask=None):
         """
         Args:
             Q, K, V: (batch_size, seq_len, d_model)
@@ -358,10 +358,10 @@ class MultiHeadAttention(nn.Module):
         # attn_output: (batch, num_heads, seq_len_q, d_k)
         
         # Combine heads
-        output = self.combine_heads(attn_output)  # (batch, seq_len_q, d_model)
+        output = self.combine_heads (attn_output)  # (batch, seq_len_q, d_model)
         
         # Final linear projection
-        output = self.W_o(output)
+        output = self.W_o (output)
         
         return output, attn_weights
 
@@ -370,11 +370,11 @@ class MultiHeadAttention(nn.Module):
 d_model, num_heads, seq_len = 512, 8, 10
 batch_size = 2
 
-mha = MultiHeadAttention(d_model, num_heads)
+mha = MultiHeadAttention (d_model, num_heads)
 
 # Self-attention (Q=K=V)
-x = torch.randn(batch_size, seq_len, d_model)
-output, attn_weights = mha(x, x, x)
+x = torch.randn (batch_size, seq_len, d_model)
+output, attn_weights = mha (x, x, x)
 
 print(f"Input shape: {x.shape}")  # (2, 10, 512)
 print(f"Output shape: {output.shape}")  # (2, 10, 512)
@@ -384,7 +384,7 @@ print(f"Attention weights shape: {attn_weights.shape}")  # (2, 8, 10, 10)
 ### Positional Encoding
 
 \`\`\`python
-class PositionalEncoding(nn.Module):
+class PositionalEncoding (nn.Module):
     def __init__(self, d_model, max_len=5000):
         """
         Args:
@@ -394,14 +394,14 @@ class PositionalEncoding(nn.Module):
         super().__init__()
         
         # Create positional encoding matrix
-        pe = torch.zeros(max_len, d_model)
+        pe = torch.zeros (max_len, d_model)
         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * 
+        div_term = torch.exp (torch.arange(0, d_model, 2).float() * 
                              (-math.log(10000.0) / d_model))
         
         # Apply sine to even indices, cosine to odd indices
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
+        pe[:, 0::2] = torch.sin (position * div_term)
+        pe[:, 1::2] = torch.cos (position * div_term)
         
         # Add batch dimension
         pe = pe.unsqueeze(0)  # (1, max_len, d_model)
@@ -409,7 +409,7 @@ class PositionalEncoding(nn.Module):
         # Register as buffer (not a parameter, but part of state)
         self.register_buffer('pe', pe)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: Input embeddings (batch_size, seq_len, d_model)
@@ -426,14 +426,14 @@ import matplotlib.pyplot as plt
 
 d_model = 128
 max_len = 100
-pe_layer = PositionalEncoding(d_model, max_len)
+pe_layer = PositionalEncoding (d_model, max_len)
 
 # Get positional encodings (for a dummy input)
 x = torch.zeros(1, max_len, d_model)
 pe = pe_layer.pe[0].numpy()  # (max_len, d_model)
 
-plt.figure(figsize=(12, 6))
-plt.imshow(pe.T, aspect='auto', cmap='RdBu', vmin=-1, vmax=1)
+plt.figure (figsize=(12, 6))
+plt.imshow (pe.T, aspect='auto', cmap='RdBu', vmin=-1, vmax=1)
 plt.xlabel('Position')
 plt.ylabel('Dimension')
 plt.title('Positional Encoding Visualization')
@@ -443,9 +443,9 @@ plt.savefig('positional_encoding.png', dpi=150, bbox_inches='tight')
 print("Saved positional encoding visualization")
 
 # Plot specific dimensions
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 for i in [0, 1, 4, 8, 16, 32]:
-    plt.plot(pe[:, i], label=f'Dim {i}')
+    plt.plot (pe[:, i], label=f'Dim {i}')
 plt.xlabel('Position')
 plt.ylabel('Value')
 plt.title('Positional Encoding - Selected Dimensions')
@@ -459,7 +459,7 @@ print("Saved dimension-specific visualization")
 ### Feed-Forward Network
 
 \`\`\`python
-class FeedForward(nn.Module):
+class FeedForward (nn.Module):
     def __init__(self, d_model, d_ff, dropout=0.1):
         """
         Args:
@@ -468,11 +468,11 @@ class FeedForward(nn.Module):
             dropout: Dropout probability
         """
         super().__init__()
-        self.linear1 = nn.Linear(d_model, d_ff)
-        self.dropout = nn.Dropout(dropout)
-        self.linear2 = nn.Linear(d_ff, d_model)
+        self.linear1 = nn.Linear (d_model, d_ff)
+        self.dropout = nn.Dropout (dropout)
+        self.linear2 = nn.Linear (d_ff, d_model)
     
-    def forward(self, x):
+    def forward (self, x):
         """
         Args:
             x: (batch_size, seq_len, d_model)
@@ -482,8 +482,8 @@ class FeedForward(nn.Module):
         """
         # Expand: d_model -> d_ff
         x = self.linear1(x)
-        x = F.relu(x)
-        x = self.dropout(x)
+        x = F.relu (x)
+        x = self.dropout (x)
         
         # Contract: d_ff -> d_model
         x = self.linear2(x)
@@ -495,20 +495,20 @@ class FeedForward(nn.Module):
 d_model, d_ff = 512, 2048
 batch_size, seq_len = 2, 10
 
-ff = FeedForward(d_model, d_ff)
-x = torch.randn(batch_size, seq_len, d_model)
-output = ff(x)
+ff = FeedForward (d_model, d_ff)
+x = torch.randn (batch_size, seq_len, d_model)
+output = ff (x)
 
 print(f"Input shape: {x.shape}")  # (2, 10, 512)
 print(f"Output shape: {output.shape}")  # (2, 10, 512)
-print(f"Parameters: {sum(p.numel() for p in ff.parameters()):,}")
+print(f"Parameters: {sum (p.numel() for p in ff.parameters()):,}")
 # ~2.1M parameters per FFN layer
 \`\`\`
 
 ### Encoder Layer
 
 \`\`\`python
-class EncoderLayer(nn.Module):
+class EncoderLayer (nn.Module):
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
         """
         Single Transformer encoder layer
@@ -522,19 +522,19 @@ class EncoderLayer(nn.Module):
         super().__init__()
         
         # Multi-head self-attention
-        self.self_attn = MultiHeadAttention(d_model, num_heads)
+        self.self_attn = MultiHeadAttention (d_model, num_heads)
         
         # Feed-forward network
-        self.feed_forward = FeedForward(d_model, d_ff, dropout)
+        self.feed_forward = FeedForward (d_model, d_ff, dropout)
         
         # Layer normalization
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
+        self.norm1 = nn.LayerNorm (d_model)
+        self.norm2 = nn.LayerNorm (d_model)
         
         # Dropout
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def forward(self, x, mask=None):
+    def forward (self, x, mask=None):
         """
         Args:
             x: (batch_size, seq_len, d_model)
@@ -544,17 +544,17 @@ class EncoderLayer(nn.Module):
             output: (batch_size, seq_len, d_model)
         """
         # Multi-head attention + residual + norm
-        attn_output, _ = self.self_attn(x, x, x, mask)
-        x = self.norm1(x + self.dropout(attn_output))
+        attn_output, _ = self.self_attn (x, x, x, mask)
+        x = self.norm1(x + self.dropout (attn_output))
         
         # Feed-forward + residual + norm
-        ff_output = self.feed_forward(x)
-        x = self.norm2(x + self.dropout(ff_output))
+        ff_output = self.feed_forward (x)
+        x = self.norm2(x + self.dropout (ff_output))
         
         return x
 
 
-class TransformerEncoder(nn.Module):
+class TransformerEncoder (nn.Module):
     def __init__(self, num_layers, d_model, num_heads, d_ff, dropout=0.1):
         """
         Stack of encoder layers
@@ -569,11 +569,11 @@ class TransformerEncoder(nn.Module):
         super().__init__()
         
         self.layers = nn.ModuleList([
-            EncoderLayer(d_model, num_heads, d_ff, dropout)
-            for _ in range(num_layers)
+            EncoderLayer (d_model, num_heads, d_ff, dropout)
+            for _ in range (num_layers)
         ])
     
-    def forward(self, x, mask=None):
+    def forward (self, x, mask=None):
         """
         Args:
             x: (batch_size, seq_len, d_model)
@@ -583,7 +583,7 @@ class TransformerEncoder(nn.Module):
             output: (batch_size, seq_len, d_model)
         """
         for layer in self.layers:
-            x = layer(x, mask)
+            x = layer (x, mask)
         
         return x
 
@@ -592,20 +592,20 @@ class TransformerEncoder(nn.Module):
 num_layers, d_model, num_heads, d_ff = 6, 512, 8, 2048
 batch_size, seq_len = 2, 10
 
-encoder = TransformerEncoder(num_layers, d_model, num_heads, d_ff)
-x = torch.randn(batch_size, seq_len, d_model)
-output = encoder(x)
+encoder = TransformerEncoder (num_layers, d_model, num_heads, d_ff)
+x = torch.randn (batch_size, seq_len, d_model)
+output = encoder (x)
 
 print(f"Input shape: {x.shape}")  # (2, 10, 512)
 print(f"Output shape: {output.shape}")  # (2, 10, 512)
-print(f"Total parameters: {sum(p.numel() for p in encoder.parameters()):,}")
+print(f"Total parameters: {sum (p.numel() for p in encoder.parameters()):,}")
 # ~19M parameters for 6-layer encoder
 \`\`\`
 
 ### Complete Transformer for Translation
 
 \`\`\`python
-class Transformer(nn.Module):
+class Transformer (nn.Module):
     def __init__(self, src_vocab_size, tgt_vocab_size, d_model=512, 
                  num_heads=8, num_layers=6, d_ff=2048, max_len=5000, dropout=0.1):
         """
@@ -626,47 +626,47 @@ class Transformer(nn.Module):
         self.d_model = d_model
         
         # Embeddings
-        self.src_embedding = nn.Embedding(src_vocab_size, d_model)
-        self.tgt_embedding = nn.Embedding(tgt_vocab_size, d_model)
+        self.src_embedding = nn.Embedding (src_vocab_size, d_model)
+        self.tgt_embedding = nn.Embedding (tgt_vocab_size, d_model)
         
         # Positional encoding
-        self.pos_encoding = PositionalEncoding(d_model, max_len)
+        self.pos_encoding = PositionalEncoding (d_model, max_len)
         
         # Encoder and Decoder
-        self.encoder = TransformerEncoder(num_layers, d_model, num_heads, d_ff, dropout)
-        self.decoder = TransformerDecoder(num_layers, d_model, num_heads, d_ff, dropout)
+        self.encoder = TransformerEncoder (num_layers, d_model, num_heads, d_ff, dropout)
+        self.decoder = TransformerDecoder (num_layers, d_model, num_heads, d_ff, dropout)
         
         # Output projection
-        self.output_proj = nn.Linear(d_model, tgt_vocab_size)
+        self.output_proj = nn.Linear (d_model, tgt_vocab_size)
         
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
     
-    def encode(self, src, src_mask=None):
+    def encode (self, src, src_mask=None):
         """Encode source sequence"""
         # Embedding + positional encoding
-        src = self.src_embedding(src) * math.sqrt(self.d_model)
-        src = self.pos_encoding(src)
-        src = self.dropout(src)
+        src = self.src_embedding (src) * math.sqrt (self.d_model)
+        src = self.pos_encoding (src)
+        src = self.dropout (src)
         
         # Encode
-        memory = self.encoder(src, src_mask)
+        memory = self.encoder (src, src_mask)
         return memory
     
-    def decode(self, tgt, memory, tgt_mask=None, memory_mask=None):
+    def decode (self, tgt, memory, tgt_mask=None, memory_mask=None):
         """Decode target sequence"""
         # Embedding + positional encoding
-        tgt = self.tgt_embedding(tgt) * math.sqrt(self.d_model)
-        tgt = self.pos_encoding(tgt)
-        tgt = self.dropout(tgt)
+        tgt = self.tgt_embedding (tgt) * math.sqrt (self.d_model)
+        tgt = self.pos_encoding (tgt)
+        tgt = self.dropout (tgt)
         
         # Decode
-        output = self.decoder(tgt, memory, tgt_mask, memory_mask)
+        output = self.decoder (tgt, memory, tgt_mask, memory_mask)
         
         # Project to vocabulary
-        logits = self.output_proj(output)
+        logits = self.output_proj (output)
         return logits
     
-    def forward(self, src, tgt, src_mask=None, tgt_mask=None, memory_mask=None):
+    def forward (self, src, tgt, src_mask=None, tgt_mask=None, memory_mask=None):
         """
         Args:
             src: Source sequence (batch_size, src_len)
@@ -679,18 +679,18 @@ class Transformer(nn.Module):
             logits: (batch_size, tgt_len, tgt_vocab_size)
         """
         # Encode source
-        memory = self.encode(src, src_mask)
+        memory = self.encode (src, src_mask)
         
         # Decode target
-        logits = self.decode(tgt, memory, tgt_mask, memory_mask)
+        logits = self.decode (tgt, memory, tgt_mask, memory_mask)
         
         return logits
 
 
 # Helper function to create causal mask
-def create_causal_mask(size):
+def create_causal_mask (size):
     """Create mask that prevents attending to future positions"""
-    mask = torch.triu(torch.ones(size, size), diagonal=1).bool()
+    mask = torch.triu (torch.ones (size, size), diagonal=1).bool()
     return ~mask  # Invert: True where we CAN attend
 
 
@@ -698,7 +698,7 @@ def create_causal_mask(size):
 src_vocab_size, tgt_vocab_size = 10000, 8000
 d_model, num_heads, num_layers, d_ff = 512, 8, 6, 2048
 
-model = Transformer(src_vocab_size, tgt_vocab_size, d_model, num_heads, 
+model = Transformer (src_vocab_size, tgt_vocab_size, d_model, num_heads, 
                     num_layers, d_ff)
 
 # Dummy data
@@ -711,12 +711,12 @@ tgt_mask = create_causal_mask(15).unsqueeze(0).unsqueeze(0)
 # Shape: (1, 1, 15, 15) - broadcasts over batch and heads
 
 # Forward pass
-logits = model(src, tgt, tgt_mask=tgt_mask)
+logits = model (src, tgt, tgt_mask=tgt_mask)
 
 print(f"Source shape: {src.shape}")  # (2, 20)
 print(f"Target shape: {tgt.shape}")  # (2, 15)
 print(f"Output logits shape: {logits.shape}")  # (2, 15, 8000)
-print(f"Total parameters: {sum(p.numel() for p in model.parameters()):,}")
+print(f"Total parameters: {sum (p.numel() for p in model.parameters()):,}")
 # ~65M parameters for base Transformer
 \`\`\`
 
@@ -729,10 +729,10 @@ print(f"Total parameters: {sum(p.numel() for p in model.parameters()):,}")
 Cross-entropy loss over predicted token distributions:
 
 \`\`\`python
-criterion = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
+criterion = nn.CrossEntropyLoss (ignore_index=PAD_IDX)
 
 # Forward pass
-logits = model(src, tgt[:, :-1], tgt_mask=tgt_mask)  # Teacher forcing
+logits = model (src, tgt[:, :-1], tgt_mask=tgt_mask)  # Teacher forcing
 # Predict tokens 1...n from tokens 0...n-1
 
 # Reshape for loss computation
@@ -740,7 +740,7 @@ logits = logits.reshape(-1, tgt_vocab_size)  # (batch * seq_len, vocab)
 targets = tgt[:, 1:].reshape(-1)  # (batch * seq_len)
 
 # Compute loss
-loss = criterion(logits, targets)
+loss = criterion (logits, targets)
 \`\`\`
 
 ### Learning Rate Scheduling
@@ -748,7 +748,7 @@ loss = criterion(logits, targets)
 Original Transformer used **warm-up scheduler**:
 
 \`\`\`
-lr = d_model^{-0.5} × min(step^{-0.5}, step × warmup_steps^{-1.5})
+lr = d_model^{-0.5} × min (step^{-0.5}, step × warmup_steps^{-1.5})
 \`\`\`
 
 - Learning rate **increases** during warm-up (first 4000 steps)
@@ -762,13 +762,13 @@ class TransformerLRScheduler:
         self.warmup_steps = warmup_steps
         self.step_num = 0
     
-    def step(self):
+    def step (self):
         self.step_num += 1
         lr = self._get_lr()
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = lr
     
-    def _get_lr(self):
+    def _get_lr (self):
         return (self.d_model ** -0.5) * min(
             self.step_num ** -0.5,
             self.step_num * (self.warmup_steps ** -1.5)
@@ -776,17 +776,17 @@ class TransformerLRScheduler:
 
 
 # Example usage
-optimizer = torch.optim.Adam(model.parameters(), betas=(0.9, 0.98), eps=1e-9)
-scheduler = TransformerLRScheduler(optimizer, d_model=512, warmup_steps=4000)
+optimizer = torch.optim.Adam (model.parameters(), betas=(0.9, 0.98), eps=1e-9)
+scheduler = TransformerLRScheduler (optimizer, d_model=512, warmup_steps=4000)
 
 # Training loop
-for epoch in range(num_epochs):
+for epoch in range (num_epochs):
     for batch in dataloader:
         optimizer.zero_grad()
         
         # Forward pass
-        logits = model(batch.src, batch.tgt[:, :-1])
-        loss = criterion(logits.reshape(-1, tgt_vocab_size), 
+        logits = model (batch.src, batch.tgt[:, :-1])
+        loss = criterion (logits.reshape(-1, tgt_vocab_size), 
                         batch.tgt[:, 1:].reshape(-1))
         
         # Backward pass

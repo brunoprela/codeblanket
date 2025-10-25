@@ -57,7 +57,7 @@ class VideoStyleTransfer:
         self.use_temporal_consistency = use_temporal_consistency
         
         # Load VGG for style transfer
-        self.vgg = vgg19(pretrained=True).features.to(device).eval()
+        self.vgg = vgg19(pretrained=True).features.to (device).eval()
         
         # Freeze VGG
         for param in self.vgg.parameters():
@@ -87,20 +87,20 @@ class VideoStyleTransfer:
             Stylized frames
         """
         # Preprocess style image
-        style_tensor = self._preprocess_image(style_image)
-        style_features = self._get_features(style_tensor)
-        style_gram = {layer: self._gram_matrix(style_features[layer]) 
+        style_tensor = self._preprocess_image (style_image)
+        style_features = self._get_features (style_tensor)
+        style_gram = {layer: self._gram_matrix (style_features[layer]) 
                       for layer in style_features}
         
         stylized_frames = []
         prev_output = None
         
-        for i, content_frame in enumerate(content_frames):
-            print(f"Stylizing frame {i+1}/{len(content_frames)}")
+        for i, content_frame in enumerate (content_frames):
+            print(f"Stylizing frame {i+1}/{len (content_frames)}")
             
             # Preprocess content frame
-            content_tensor = self._preprocess_image(content_frame)
-            content_features = self._get_features(content_tensor)
+            content_tensor = self._preprocess_image (content_frame)
+            content_features = self._get_features (content_tensor)
             
             # Initialize with content frame (faster convergence)
             output = content_tensor.clone().requires_grad_(True)
@@ -114,7 +114,7 @@ class VideoStyleTransfer:
                     optimizer.zero_grad()
                     
                     # Get features of current output
-                    output_features = self._get_features(output)
+                    output_features = self._get_features (output)
                     
                     # Content loss
                     content_loss = torch.mean(
@@ -124,7 +124,7 @@ class VideoStyleTransfer:
                     # Style loss
                     style_loss = 0
                     for layer in style_gram:
-                        output_gram = self._gram_matrix(output_features[layer])
+                        output_gram = self._gram_matrix (output_features[layer])
                         style_loss += torch.mean((output_gram - style_gram[layer]) ** 2)
                     
                     # Temporal consistency loss (if not first frame)
@@ -145,41 +145,41 @@ class VideoStyleTransfer:
                     
                     return loss
                 
-                optimizer.step(closure)
+                optimizer.step (closure)
             
             # Save output for next frame's temporal loss
             prev_output = output.detach().clone()
             
             # Convert to image
-            stylized_frame = self._postprocess_image(output)
-            stylized_frames.append(stylized_frame)
+            stylized_frame = self._postprocess_image (output)
+            stylized_frames.append (stylized_frame)
         
         return stylized_frames
     
-    def _preprocess_image(self, image: Image.Image) -> torch.Tensor:
+    def _preprocess_image (self, image: Image.Image) -> torch.Tensor:
         """Convert PIL image to tensor"""
         transform = transforms.Compose([
             transforms.Resize((512, 512)),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+            transforms.Normalize (mean=[0.485, 0.456, 0.406],
                                std=[0.229, 0.224, 0.225])
         ])
-        return transform(image).unsqueeze(0).to(self.device)
+        return transform (image).unsqueeze(0).to (self.device)
     
-    def _postprocess_image(self, tensor: torch.Tensor) -> Image.Image:
+    def _postprocess_image (self, tensor: torch.Tensor) -> Image.Image:
         """Convert tensor back to PIL image"""
         # Denormalize
         tensor = tensor.squeeze(0).cpu()
         mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
         std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
         tensor = tensor * std + mean
-        tensor = torch.clamp(tensor, 0, 1)
+        tensor = torch.clamp (tensor, 0, 1)
         
         # Convert to PIL
-        array = (tensor.permute(1, 2, 0).numpy() * 255).astype(np.uint8)
-        return Image.fromarray(array)
+        array = (tensor.permute(1, 2, 0).numpy() * 255).astype (np.uint8)
+        return Image.fromarray (array)
     
-    def _get_features(self, image: torch.Tensor) -> dict:
+    def _get_features (self, image: torch.Tensor) -> dict:
         """Extract features from different VGG layers"""
         features = {}
         x = image
@@ -195,17 +195,17 @@ class VideoStyleTransfer:
         }
         
         for name, layer in self.vgg._modules.items():
-            x = layer(x)
+            x = layer (x)
             if name in layers:
                 features[layers[name]] = x
         
         return features
     
-    def _gram_matrix(self, tensor: torch.Tensor) -> torch.Tensor:
+    def _gram_matrix (self, tensor: torch.Tensor) -> torch.Tensor:
         """Compute Gram matrix for style representation"""
         b, c, h, w = tensor.size()
-        features = tensor.view(b * c, h * w)
-        gram = torch.mm(features, features.t())
+        features = tensor.view (b * c, h * w)
+        gram = torch.mm (features, features.t())
         return gram / (b * c * h * w)
 
 # Fast video style transfer using pre-trained models
@@ -218,9 +218,9 @@ class FastVideoStyleTransfer:
     def __init__(self, model_path: str = "models/style_transfer.pth"):
         # Load pre-trained transformer network
         # In practice, use models from torchvision or other repositories
-        self.transform_net = self._load_model(model_path)
+        self.transform_net = self._load_model (model_path)
     
-    def _load_model(self, model_path: str):
+    def _load_model (self, model_path: str):
         """Load pre-trained style transfer model"""
         # Placeholder - would load actual model
         return None
@@ -242,14 +242,14 @@ class FastVideoStyleTransfer:
         import cv2
         
         # Open video
-        cap = cv2.VideoCapture(video_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap = cv2.VideoCapture (video_path)
+        fps = cap.get (cv2.CAP_PROP_FPS)
+        width = int (cap.get (cv2.CAP_PROP_FRAME_WIDTH))
+        height = int (cap.get (cv2.CAP_PROP_FRAME_HEIGHT))
         
         # Video writer
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+        out = cv2.VideoWriter (output_path, fourcc, fps, (width, height))
         
         frame_count = 0
         while True:
@@ -258,10 +258,10 @@ class FastVideoStyleTransfer:
                 break
             
             # Apply style transfer
-            styled_frame = self._apply_style(frame, style)
+            styled_frame = self._apply_style (frame, style)
             
             # Write frame
-            out.write(styled_frame)
+            out.write (styled_frame)
             frame_count += 1
             
             if frame_count % 30 == 0:
@@ -272,7 +272,7 @@ class FastVideoStyleTransfer:
         
         print(f"✅ Styled video saved to {output_path}")
     
-    def _apply_style(self, frame: np.ndarray, style: str) -> np.ndarray:
+    def _apply_style (self, frame: np.ndarray, style: str) -> np.ndarray:
         """Apply style to single frame"""
         # Convert to tensor
         # Run through transformer network
@@ -287,13 +287,13 @@ def style_transfer_example():
     # Load video frames
     import imageio
     video_reader = imageio.get_reader("input_video.mp4")
-    frames = [Image.fromarray(frame) for frame in video_reader]
+    frames = [Image.fromarray (frame) for frame in video_reader]
     
     # Load style image
     style_image = Image.open("style_reference.jpg")
     
     # Apply style transfer with temporal consistency
-    styler = VideoStyleTransfer(device="cuda")
+    styler = VideoStyleTransfer (device="cuda")
     
     stylized_frames = styler.transfer_style(
         content_frames=frames[:60],  # First 60 frames
@@ -305,7 +305,7 @@ def style_transfer_example():
     # Save as video
     imageio.mimsave(
         "stylized_video.mp4",
-        [np.array(frame) for frame in stylized_frames],
+        [np.array (frame) for frame in stylized_frames],
         fps=30
     )
 
@@ -357,27 +357,27 @@ class VideoObjectRemoval:
             track_object: Whether to track object across frames
         """
         # Load video
-        frames = self._load_video(video_path)
+        frames = self._load_video (video_path)
         
         # Track object across frames if needed
         if track_object:
-            masks = self._track_object(frames, mask)
+            masks = self._track_object (frames, mask)
         else:
-            masks = [mask] * len(frames)
+            masks = [mask] * len (frames)
         
         # Inpaint each frame
         inpainted_frames = []
-        for i, (frame, mask) in enumerate(zip(frames, masks)):
-            print(f"Inpainting frame {i+1}/{len(frames)}")
+        for i, (frame, mask) in enumerate (zip (frames, masks)):
+            print(f"Inpainting frame {i+1}/{len (frames)}")
             
             inpainted = self._inpaint_frame(
                 frame, mask,
                 prev_frame=inpainted_frames[-1] if inpainted_frames else None
             )
-            inpainted_frames.append(inpainted)
+            inpainted_frames.append (inpainted)
         
         # Save video
-        self._save_video(inpainted_frames, output_path, fps=30)
+        self._save_video (inpainted_frames, output_path, fps=30)
         print(f"✅ Object removed, saved to {output_path}")
     
     def _track_object(
@@ -390,9 +390,9 @@ class VideoObjectRemoval:
         """
         masks = [initial_mask]
         
-        for i in range(1, len(frames)):
-            prev_frame = cv2.cvtColor(frames[i-1], cv2.COLOR_RGB2GRAY)
-            curr_frame = cv2.cvtColor(frames[i], cv2.COLOR_RGB2GRAY)
+        for i in range(1, len (frames)):
+            prev_frame = cv2.cvtColor (frames[i-1], cv2.COLOR_RGB2GRAY)
+            curr_frame = cv2.cvtColor (frames[i], cv2.COLOR_RGB2GRAY)
             
             # Compute optical flow
             flow = cv2.calcOpticalFlowFarneback(
@@ -403,21 +403,21 @@ class VideoObjectRemoval:
             # Warp previous mask using flow
             h, w = initial_mask.shape
             flow_map = np.column_stack([
-                (np.arange(w) + flow[:,:,0].flatten()).flatten(),
-                (np.arange(h) + flow[:,:,1].flatten()).flatten(),
+                (np.arange (w) + flow[:,:,0].flatten()).flatten(),
+                (np.arange (h) + flow[:,:,1].flatten()).flatten(),
             ])
             
             # Remap mask
             warped_mask = cv2.remap(
-                masks[-1].astype(np.float32),
+                masks[-1].astype (np.float32),
                 flow[:,:,0], flow[:,:,1],
                 cv2.INTER_LINEAR
             )
             
             # Threshold to binary
-            warped_mask = (warped_mask > 0.5).astype(np.uint8)
+            warped_mask = (warped_mask > 0.5).astype (np.uint8)
             
-            masks.append(warped_mask)
+            masks.append (warped_mask)
         
         return masks
     
@@ -433,12 +433,12 @@ class VideoObjectRemoval:
         Uses previous frame for temporal consistency
         """
         # Convert to tensor
-        frame_tensor = torch.from_numpy(frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
-        mask_tensor = torch.from_numpy(mask).unsqueeze(0).unsqueeze(0).float()
+        frame_tensor = torch.from_numpy (frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+        mask_tensor = torch.from_numpy (mask).unsqueeze(0).unsqueeze(0).float()
         
         # Add previous frame as conditioning if available
         if prev_frame is not None:
-            prev_tensor = torch.from_numpy(prev_frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            prev_tensor = torch.from_numpy (prev_frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
             conditioning = prev_tensor
         else:
             conditioning = None
@@ -452,30 +452,30 @@ class VideoObjectRemoval:
             )
         
         # Convert back to numpy
-        inpainted = (inpainted_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+        inpainted = (inpainted_tensor.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype (np.uint8)
         
         return inpainted
     
-    def _load_inpainting_model(self):
+    def _load_inpainting_model (self):
         """Load inpainting model"""
         # Would load actual model (LaMa, ProPainter, etc.)
         return None
     
-    def _load_tracker(self):
+    def _load_tracker (self):
         """Load object tracker"""
         # Would load tracking model
         return None
     
-    def _load_video(self, path: str) -> List[np.ndarray]:
+    def _load_video (self, path: str) -> List[np.ndarray]:
         """Load video as list of frames"""
         import imageio
-        reader = imageio.get_reader(path)
+        reader = imageio.get_reader (path)
         return [frame for frame in reader]
     
-    def _save_video(self, frames: List[np.ndarray], path: str, fps: int = 30):
+    def _save_video (self, frames: List[np.ndarray], path: str, fps: int = 30):
         """Save frames as video"""
         import imageio
-        imageio.mimsave(path, frames, fps=fps)
+        imageio.mimsave (path, frames, fps=fps)
 
 # Example: Remove person from video
 def remove_person_example():
@@ -538,53 +538,53 @@ class VideoBackgroundReplacement:
             blur_edges: Blur amount for smooth edges
         """
         # Load video
-        frames = self._load_video(video_path)
+        frames = self._load_video (video_path)
         
         # Load/prepare background
         backgrounds = self._prepare_background(
             new_background,
-            num_frames=len(frames),
+            num_frames=len (frames),
             resolution=(frames[0].shape[1], frames[0].shape[0])
         )
         
         # Process each frame
         output_frames = []
         
-        for i, (frame, background) in enumerate(zip(frames, backgrounds)):
-            print(f"Processing frame {i+1}/{len(frames)}")
+        for i, (frame, background) in enumerate (zip (frames, backgrounds)):
+            print(f"Processing frame {i+1}/{len (frames)}")
             
             # Segment foreground
-            mask = self._segment_foreground(frame)
+            mask = self._segment_foreground (frame)
             
             # Blur mask edges for smooth transition
             if blur_edges > 0:
-                mask = cv2.GaussianBlur(mask, (blur_edges*2+1, blur_edges*2+1), 0)
+                mask = cv2.GaussianBlur (mask, (blur_edges*2+1, blur_edges*2+1), 0)
             
             # Expand mask to 3 channels
             mask_3ch = np.stack([mask] * 3, axis=-1)
             
             # Composite
             output = frame * mask_3ch + background * (1 - mask_3ch)
-            output = output.astype(np.uint8)
+            output = output.astype (np.uint8)
             
-            output_frames.append(output)
+            output_frames.append (output)
         
         # Save
-        self._save_video(output_frames, output_path, fps=30)
+        self._save_video (output_frames, output_path, fps=30)
         print(f"✅ Background replaced: {output_path}")
     
-    def _segment_foreground(self, frame: np.ndarray) -> np.ndarray:
+    def _segment_foreground (self, frame: np.ndarray) -> np.ndarray:
         """
         Segment foreground from background
         
         Returns: Mask with values 0-1
         """
         # Convert to tensor
-        frame_tensor = torch.from_numpy(frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+        frame_tensor = torch.from_numpy (frame).permute(2, 0, 1).unsqueeze(0).float() / 255.0
         
         # Run segmentation
         with torch.no_grad():
-            mask = self.segmentation_model(frame_tensor)
+            mask = self.segmentation_model (frame_tensor)
         
         # Convert to numpy
         mask = mask.squeeze().cpu().numpy()
@@ -599,51 +599,51 @@ class VideoBackgroundReplacement:
     ) -> List[np.ndarray]:
         """Prepare background for each frame"""
         
-        if isinstance(background, str):
+        if isinstance (background, str):
             # Load image or video
             if background.endswith(('.mp4', '.avi', '.mov')):
                 # Video background
-                bg_frames = self._load_video(background)
+                bg_frames = self._load_video (background)
                 # Loop if needed
-                while len(bg_frames) < num_frames:
-                    bg_frames.extend(bg_frames)
+                while len (bg_frames) < num_frames:
+                    bg_frames.extend (bg_frames)
                 bg_frames = bg_frames[:num_frames]
             else:
                 # Image background
-                bg_image = cv2.imread(background)
-                bg_image = cv2.resize(bg_image, resolution)
+                bg_image = cv2.imread (background)
+                bg_image = cv2.resize (bg_image, resolution)
                 bg_frames = [bg_image] * num_frames
         
-        elif isinstance(background, np.ndarray):
+        elif isinstance (background, np.ndarray):
             # Single image
             if background.shape[:2] != resolution[::-1]:
-                background = cv2.resize(background, resolution)
+                background = cv2.resize (background, resolution)
             bg_frames = [background] * num_frames
         
-        elif isinstance(background, list):
+        elif isinstance (background, list):
             # List of frames
             bg_frames = background
         
         else:
-            raise ValueError(f"Unsupported background type: {type(background)}")
+            raise ValueError (f"Unsupported background type: {type (background)}")
         
         return bg_frames
     
-    def _load_segmentation_model(self):
+    def _load_segmentation_model (self):
         """Load video segmentation model"""
         # Would load Robust Video Matting or similar
         return None
     
-    def _load_video(self, path: str) -> List[np.ndarray]:
+    def _load_video (self, path: str) -> List[np.ndarray]:
         """Load video"""
         import imageio
-        reader = imageio.get_reader(path)
+        reader = imageio.get_reader (path)
         return [frame for frame in reader]
     
-    def _save_video(self, frames: List[np.ndarray], path: str, fps: int):
+    def _save_video (self, frames: List[np.ndarray], path: str, fps: int):
         """Save video"""
         import imageio
-        imageio.mimsave(path, frames, fps=fps)
+        imageio.mimsave (path, frames, fps=fps)
 
 # Example usage
 def background_replacement_example():
@@ -701,7 +701,7 @@ class VideoUpscaler:
     ):
         self.scale = scale
         self.device = device
-        self.model = self._load_model(model)
+        self.model = self._load_model (model)
     
     def upscale_video(
         self,
@@ -720,10 +720,10 @@ class VideoUpscaler:
         import cv2
         
         # Open video
-        cap = cv2.VideoCapture(input_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap = cv2.VideoCapture (input_path)
+        fps = cap.get (cv2.CAP_PROP_FPS)
+        width = int (cap.get (cv2.CAP_PROP_FRAME_WIDTH))
+        height = int (cap.get (cv2.CAP_PROP_FRAME_HEIGHT))
         
         # Output dimensions
         out_width = width * self.scale
@@ -731,7 +731,7 @@ class VideoUpscaler:
         
         # Video writer
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(output_path, fourcc, fps, (out_width, out_height))
+        out = cv2.VideoWriter (output_path, fourcc, fps, (out_width, out_height))
         
         frame_count = 0
         while True:
@@ -740,10 +740,10 @@ class VideoUpscaler:
                 break
             
             # Upscale frame
-            upscaled = self._upscale_frame(frame, tile_size=tile_size)
+            upscaled = self._upscale_frame (frame, tile_size=tile_size)
             
             # Write
-            out.write(upscaled)
+            out.write (upscaled)
             frame_count += 1
             
             if frame_count % 30 == 0:
@@ -755,7 +755,7 @@ class VideoUpscaler:
         print(f"✅ Upscaled video saved: {output_path}")
         print(f"   Resolution: {width}x{height} → {out_width}x{out_height}")
     
-    def _upscale_frame(self, frame: np.ndarray, tile_size: int = 512) -> np.ndarray:
+    def _upscale_frame (self, frame: np.ndarray, tile_size: int = 512) -> np.ndarray:
         """
         Upscale single frame using tiling for memory efficiency
         """
@@ -773,13 +773,13 @@ class VideoUpscaler:
                 tile = frame[y:y+tile_size, x:x+tile_size]
                 
                 # Upscale tile
-                tile_tensor = torch.from_numpy(tile).permute(2, 0, 1).unsqueeze(0).float() / 255.0
-                tile_tensor = tile_tensor.to(self.device)
+                tile_tensor = torch.from_numpy (tile).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+                tile_tensor = tile_tensor.to (self.device)
                 
                 with torch.no_grad():
-                    upscaled_tile = self.model(tile_tensor)
+                    upscaled_tile = self.model (tile_tensor)
                 
-                upscaled_tile = (upscaled_tile.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+                upscaled_tile = (upscaled_tile.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype (np.uint8)
                 
                 # Place in output
                 out_y = y * self.scale
@@ -791,7 +791,7 @@ class VideoUpscaler:
         
         return output
     
-    def _load_model(self, model_name: str):
+    def _load_model (self, model_name: str):
         """Load super-resolution model"""
         # Would load Real-ESRGAN or similar
         return None
@@ -800,7 +800,7 @@ class VideoUpscaler:
 def upscaling_example():
     """Upscale 480p to 1080p"""
     
-    upscaler = VideoUpscaler(scale=4, device="cuda")
+    upscaler = VideoUpscaler (scale=4, device="cuda")
     
     upscaler.upscale_video(
         input_path="low_res.mp4",
@@ -826,7 +826,7 @@ class FrameInterpolation:
     """
     
     def __init__(self, model: str = "RIFE"):
-        self.model = self._load_model(model)
+        self.model = self._load_model (model)
     
     def interpolate_video(
         self,
@@ -845,10 +845,10 @@ class FrameInterpolation:
         import cv2
         
         # Load video
-        cap = cv2.VideoCapture(input_path)
-        source_fps = cap.get(cv2.CAP_PROP_FPS)
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap = cv2.VideoCapture (input_path)
+        source_fps = cap.get (cv2.CAP_PROP_FPS)
+        width = int (cap.get (cv2.CAP_PROP_FRAME_WIDTH))
+        height = int (cap.get (cv2.CAP_PROP_FRAME_HEIGHT))
         
         # Calculate interpolation factor
         factor = target_fps / source_fps
@@ -857,14 +857,14 @@ class FrameInterpolation:
         
         # Video writer
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(output_path, fourcc, target_fps, (width, height))
+        out = cv2.VideoWriter (output_path, fourcc, target_fps, (width, height))
         
         # Read first frame
         ret, prev_frame = cap.read()
         if not ret:
             return
         
-        out.write(prev_frame)
+        out.write (prev_frame)
         
         # Interpolate between each pair of frames
         while True:
@@ -875,15 +875,15 @@ class FrameInterpolation:
             # Interpolate
             interpolated = self._interpolate_between_frames(
                 prev_frame, next_frame,
-                num_frames=int(factor) - 1
+                num_frames=int (factor) - 1
             )
             
             # Write interpolated frames
             for frame in interpolated:
-                out.write(frame)
+                out.write (frame)
             
             # Write next frame
-            out.write(next_frame)
+            out.write (next_frame)
             
             prev_frame = next_frame
         
@@ -907,21 +907,21 @@ class FrameInterpolation:
             t = i / (num_frames + 1)
             
             # Convert to tensors
-            f1 = torch.from_numpy(frame1).permute(2, 0, 1).unsqueeze(0).float() / 255.0
-            f2 = torch.from_numpy(frame2).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            f1 = torch.from_numpy (frame1).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            f2 = torch.from_numpy (frame2).permute(2, 0, 1).unsqueeze(0).float() / 255.0
             
             # Run interpolation model
             with torch.no_grad():
-                interpolated_frame = self.model(f1, f2, t)
+                interpolated_frame = self.model (f1, f2, t)
             
             # Convert back
-            interpolated_frame = (interpolated_frame.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+            interpolated_frame = (interpolated_frame.squeeze(0).permute(1, 2, 0).cpu().numpy() * 255).astype (np.uint8)
             
-            interpolated.append(interpolated_frame)
+            interpolated.append (interpolated_frame)
         
         return interpolated
     
-    def _load_model(self, model_name: str):
+    def _load_model (self, model_name: str):
         """Load frame interpolation model"""
         # Would load RIFE or FILM
         return None
@@ -986,12 +986,12 @@ class VideoEditingPipeline:
         """
         current_video = input_path
         
-        for i, step in enumerate(steps):
-            print(f"\\n[{i+1}/{len(steps)}] Applying {step.operation.value}...")
+        for i, step in enumerate (steps):
+            print(f"\\n[{i+1}/{len (steps)}] Applying {step.operation.value}...")
             
             # Determine output path
-            if keep_intermediates or i == len(steps) - 1:
-                if i == len(steps) - 1:
+            if keep_intermediates or i == len (steps) - 1:
+                if i == len (steps) - 1:
                     next_video = output_path
                 else:
                     next_video = f"intermediate_{i+1}_{step.operation.value}.mp4"
@@ -1000,19 +1000,19 @@ class VideoEditingPipeline:
             
             # Apply operation
             if step.operation == EditOperation.STYLE_TRANSFER:
-                self.style_transfer.transfer_style(current_video, next_video, **step.params)
+                self.style_transfer.transfer_style (current_video, next_video, **step.params)
             
             elif step.operation == EditOperation.OBJECT_REMOVAL:
-                self.object_remover.remove_object(current_video, next_video, **step.params)
+                self.object_remover.remove_object (current_video, next_video, **step.params)
             
             elif step.operation == EditOperation.BACKGROUND_REPLACE:
-                self.bg_replacer.replace_background(current_video, next_video, **step.params)
+                self.bg_replacer.replace_background (current_video, next_video, **step.params)
             
             elif step.operation == EditOperation.UPSCALE:
-                self.upscaler.upscale_video(current_video, next_video, **step.params)
+                self.upscaler.upscale_video (current_video, next_video, **step.params)
             
             elif step.operation == EditOperation.INTERPOLATE:
-                self.interpolator.interpolate_video(current_video, next_video, **step.params)
+                self.interpolator.interpolate_video (current_video, next_video, **step.params)
             
             current_video = next_video
         

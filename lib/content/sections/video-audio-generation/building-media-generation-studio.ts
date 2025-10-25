@@ -109,19 +109,18 @@ class MediaGenerationStudio:
         )
         
         # Validate and estimate cost
-        estimated_cost = self.cost_tracker.estimate_cost(media_type, config)
+        estimated_cost = self.cost_tracker.estimate_cost (media_type, config)
         job.cost = estimated_cost
         
         # Add to queue
-        await self.job_queue.enqueue(job)
+        await self.job_queue.enqueue (job)
         
         print(f"✅ Job submitted: {job.job_id}")
-        print(f"   Estimated cost: \${estimated_cost: .4f
-}")
+        print(f"   Estimated cost: \${estimated_cost:.4f}")
 
 return job.job_id
     
-    async def process_job(self, job: GenerationJob):
+    async def process_job (self, job: GenerationJob):
 """Process a generation job"""
 
 job.status = JobStatus.PROCESSING
@@ -135,16 +134,16 @@ print(f"Processing job {job.job_id} on GPU {gpu.id}")
             
             # Route to appropriate generator
 if job.media_type == MediaType.VIDEO:
-    result = await self._generate_video(job, gpu)
+    result = await self._generate_video (job, gpu)
             elif job.media_type == MediaType.AUDIO:
-result = await self._generate_audio(job, gpu)
+result = await self._generate_audio (job, gpu)
             elif job.media_type == MediaType.IMAGE:
-result = await self._generate_image(job, gpu)
+result = await self._generate_image (job, gpu)
             elif job.media_type == MediaType.AVATAR:
-result = await self._generate_avatar(job, gpu)
+result = await self._generate_avatar (job, gpu)
             
             # Upload result
-result_url = await self.storage.upload(result, job.job_id)
+result_url = await self.storage.upload (result, job.job_id)
             
             # Update job
 job.status = JobStatus.COMPLETED
@@ -152,45 +151,45 @@ job.result_url = result_url
 job.completed_at = self._get_timestamp()
             
             # Track actual cost
-self.cost_tracker.record_cost(job)
+self.cost_tracker.record_cost (job)
 
 print(f"✅ Job completed: {job.job_id}")
             
         except Exception as e:
 job.status = JobStatus.FAILED
-job.error = str(e)
+job.error = str (e)
 print(f"❌ Job failed: {job.job_id} - {e}")
         
         finally:
             # Release GPU
-await self.gpu_manager.release(gpu)
+await self.gpu_manager.release (gpu)
     
-    async def _generate_video(self, job: GenerationJob, gpu):
+    async def _generate_video (self, job: GenerationJob, gpu):
 """Generate video"""
         # Route to RunwayGen2, SVD, etc.
     pass
     
-    async def _generate_audio(self, job: GenerationJob, gpu):
+    async def _generate_audio (self, job: GenerationJob, gpu):
 """Generate audio"""
         # Route to Whisper, ElevenLabs, MusicGen
 pass
     
-    async def _generate_image(self, job: GenerationJob, gpu):
+    async def _generate_image (self, job: GenerationJob, gpu):
 """Generate image"""
         # Route to Stable Diffusion, DALL - E
 pass
     
-    async def _generate_avatar(self, job: GenerationJob, gpu):
+    async def _generate_avatar (self, job: GenerationJob, gpu):
 """Generate avatar video"""
         # Route to Wav2Lip, D - ID
 pass
     
-    def _generate_job_id(self) -> str:
+    def _generate_job_id (self) -> str:
 """Generate unique job ID"""
 import uuid
-        return str(uuid.uuid4())
+        return str (uuid.uuid4())
     
-    def _get_timestamp(self) -> str:
+    def _get_timestamp (self) -> str:
 """Get current timestamp"""
         from datetime import datetime
         return datetime.utcnow().isoformat()
@@ -201,10 +200,10 @@ class GPUManager:
     
     def __init__(self, num_gpus: int = 4):
 self.num_gpus = num_gpus
-self.available = list(range(num_gpus))
+self.available = list (range (num_gpus))
 self.in_use = {}
     
-    async def allocate(self) -> "GPU":
+    async def allocate (self) -> "GPU":
 """Allocate GPU for job"""
 while not self.available:
 await asyncio.sleep(1)  # Wait for GPU
@@ -215,11 +214,11 @@ await asyncio.sleep(1)  # Wait for GPU
 
 return gpu
     
-    async def release(self, gpu: "GPU"):
+    async def release (self, gpu: "GPU"):
 """Release GPU"""
 if gpu.id in self.in_use:
             del self.in_use[gpu.id]
-self.available.append(gpu.id)
+self.available.append (gpu.id)
 
 @dataclass
 class GPU:
@@ -233,11 +232,11 @@ class JobQueue:
     def __init__(self):
 self.queue = asyncio.Queue()
     
-    async def enqueue(self, job: GenerationJob):
+    async def enqueue (self, job: GenerationJob):
 """Add job to queue"""
-await self.queue.put(job)
+await self.queue.put (job)
     
-    async def dequeue(self) -> GenerationJob:
+    async def dequeue (self) -> GenerationJob:
 """Get next job"""
 return await self.queue.get()
 
@@ -248,7 +247,7 @@ class StorageManager:
     def __init__(self, bucket: str = "media-studio"):
 self.bucket = bucket
     
-    async def upload(self, file_path: Path, job_id: str) -> str:
+    async def upload (self, file_path: Path, job_id: str) -> str:
 """Upload file to S3/storage"""
         # Upload to cloud storage
 url = f"https://cdn.example.com/{job_id}/{file_path.name}"
@@ -266,7 +265,7 @@ COSTS = {
         MediaType.AVATAR: 1.00,  # per minute
 }
     
-    def estimate_cost(self, media_type: MediaType, config: Dict) -> float:
+    def estimate_cost (self, media_type: MediaType, config: Dict) -> float:
 """Estimate job cost"""
 base_cost = self.COSTS[media_type]
 
@@ -276,7 +275,7 @@ return base_cost * duration
         else:
 return base_cost
     
-    def record_cost(self, job: GenerationJob):
+    def record_cost (self, job: GenerationJob):
 """Record actual cost"""
         # Log to database for analytics
         pass
@@ -301,7 +300,7 @@ job_id = await studio.submit_job(
 print(f"Job submitted: {job_id}")
 
 if __name__ == "__main__":
-    asyncio.run(studio_example())
+    asyncio.run (studio_example())
 \`\`\`
 
 ---
@@ -332,17 +331,17 @@ class JobResponse(BaseModel):
 studio = MediaGenerationStudio()
 
 @app.post("/generate", response_model=JobResponse)
-async def generate(request: GenerationRequest, background_tasks: BackgroundTasks):
+async def generate (request: GenerationRequest, background_tasks: BackgroundTasks):
     """Submit generation job"""
     
     job_id = await studio.submit_job(
         user_id="anonymous",  # Would get from auth
-        media_type=MediaType(request.media_type),
+        media_type=MediaType (request.media_type),
         config=request.config,
     )
     
     # Process in background
-    background_tasks.add_task(process_job_background, job_id)
+    background_tasks.add_task (process_job_background, job_id)
     
     return JobResponse(
         job_id=job_id,
@@ -351,24 +350,24 @@ async def generate(request: GenerationRequest, background_tasks: BackgroundTasks
     )
 
 @app.get("/jobs/{job_id}")
-async def get_job_status(job_id: str):
+async def get_job_status (job_id: str):
     """Get job status"""
     # Query from database
     return {"job_id": job_id, "status": "processing"}
 
 @app.get("/jobs/{job_id}/result")
-async def get_job_result(job_id: str):
+async def get_job_result (job_id: str):
     """Get job result"""
     # Return video URL
     return {"url": "https://..."}
 
-async def process_job_background(job_id: str):
+async def process_job_background (job_id: str):
     """Process job in background"""
     # Get job from queue and process
     pass
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ---
@@ -407,7 +406,7 @@ class MonitoringSystem:
             total_cost=0.0,
         )
     
-    def record_job_completion(self, job: GenerationJob, duration: float):
+    def record_job_completion (self, job: GenerationJob, duration: float):
         """Record job completion"""
         self.metrics.total_jobs += 1
         
@@ -425,7 +424,7 @@ class MonitoringSystem:
         # Update cost
         self.metrics.total_cost += job.cost
     
-    def get_metrics(self) -> Dict:
+    def get_metrics (self) -> Dict:
         """Get current metrics"""
         return {
             "total_jobs": self.metrics.total_jobs,
@@ -437,7 +436,7 @@ class MonitoringSystem:
             "avg_cost_per_job": self.metrics.total_cost / max(1, self.metrics.total_jobs),
         }
     
-    def check_alerts(self):
+    def check_alerts (self):
         """Check for alert conditions"""
         metrics = self.get_metrics()
         
@@ -449,10 +448,10 @@ class MonitoringSystem:
         if metrics["avg_processing_time"] > 60:
             self.send_alert("Slow processing", metrics)
     
-    def send_alert(self, message: str, metrics: Dict):
+    def send_alert (self, message: str, metrics: Dict):
         """Send alert (email, Slack, PagerDuty)"""
         print(f"🚨 ALERT: {message}")
-        print(f"   Metrics: {json.dumps(metrics, indent=2)}")
+        print(f"   Metrics: {json.dumps (metrics, indent=2)}")
 \`\`\`
 
 ---
@@ -482,19 +481,19 @@ class ProductionConfig:
     S3_BUCKET = os.getenv("S3_BUCKET", "media-studio-prod")
     
     # GPU Config
-    NUM_GPUS = int(os.getenv("NUM_GPUS", "4"))
-    GPU_MEMORY_PER_JOB = int(os.getenv("GPU_MEMORY_PER_JOB", "8"))  # GB
+    NUM_GPUS = int (os.getenv("NUM_GPUS", "4"))
+    GPU_MEMORY_PER_JOB = int (os.getenv("GPU_MEMORY_PER_JOB", "8"))  # GB
     
     # Queue Config
-    MAX_QUEUE_SIZE = int(os.getenv("MAX_QUEUE_SIZE", "1000"))
-    MAX_CONCURRENT_JOBS = int(os.getenv("MAX_CONCURRENT_JOBS", "10"))
+    MAX_QUEUE_SIZE = int (os.getenv("MAX_QUEUE_SIZE", "1000"))
+    MAX_CONCURRENT_JOBS = int (os.getenv("MAX_CONCURRENT_JOBS", "10"))
     
     # Costs
-    MAX_COST_PER_JOB = float(os.getenv("MAX_COST_PER_JOB", "10.0"))
-    DAILY_BUDGET = float(os.getenv("DAILY_BUDGET", "1000.0"))
+    MAX_COST_PER_JOB = float (os.getenv("MAX_COST_PER_JOB", "10.0"))
+    DAILY_BUDGET = float (os.getenv("DAILY_BUDGET", "1000.0"))
     
     # Monitoring
-    METRICS_INTERVAL = int(os.getenv("METRICS_INTERVAL", "60"))  # seconds
+    METRICS_INTERVAL = int (os.getenv("METRICS_INTERVAL", "60"))  # seconds
     ALERT_EMAIL = os.getenv("ALERT_EMAIL")
     SLACK_WEBHOOK = os.getenv("SLACK_WEBHOOK")
 

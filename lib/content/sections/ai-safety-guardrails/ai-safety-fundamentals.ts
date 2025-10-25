@@ -41,22 +41,22 @@ Safety must be integrated from the earliest stages of system design:
 
 \`\`\`python
 # BAD: Bolt-on safety as an afterthought
-def generate_response(prompt: str) -> str:
-    response = llm.complete(prompt)
+def generate_response (prompt: str) -> str:
+    response = llm.complete (prompt)
     # Oops, forgot safety checks!
     return response
 
 # GOOD: Safety integrated from the start
-def generate_response(prompt: str) -> str:
+def generate_response (prompt: str) -> str:
     # Pre-processing safety
-    if not is_safe_input(prompt):
+    if not is_safe_input (prompt):
         raise SecurityError("Unsafe input detected")
     
     # PII detection
-    prompt = redact_pii(prompt)
+    prompt = redact_pii (prompt)
     
     # Prompt injection defense
-    prompt = sanitize_prompt(prompt)
+    prompt = sanitize_prompt (prompt)
     
     # Generation with safety constraints
     response = llm.complete(
@@ -67,11 +67,11 @@ def generate_response(prompt: str) -> str:
     )
     
     # Post-processing safety
-    response = filter_sensitive_content(response)
-    response = validate_output_quality(response)
+    response = filter_sensitive_content (response)
+    response = validate_output_quality (response)
     
     # Audit logging
-    log_interaction(prompt, response, safety_checks_passed=True)
+    log_interaction (prompt, response, safety_checks_passed=True)
     
     return response
 \`\`\`
@@ -102,31 +102,31 @@ class SafetyLayer:
         self.rate_limiter = RateLimiter()
         self.audit_logger = AuditLogger()
     
-    def process_request(self, user_id: str, prompt: str) -> str:
+    def process_request (self, user_id: str, prompt: str) -> str:
         """Process with multiple safety layers"""
         
         # Layer 1: Rate limiting
-        if not self.rate_limiter.check(user_id):
+        if not self.rate_limiter.check (user_id):
             raise RateLimitError("Too many requests")
         
         # Layer 2: Input validation (all validators must pass)
         for validator in self.input_validators:
-            result = validator.check(prompt)
+            result = validator.check (prompt)
             if not result.is_safe:
                 self.audit_logger.log_violation(
                     user_id, prompt, result.violation_type
                 )
-                raise SafetyError(f"Input failed {validator.name}")
+                raise SafetyError (f"Input failed {validator.name}")
         
         # Layer 3: Safe generation
-        response = self.generate_safely(prompt)
+        response = self.generate_safely (prompt)
         
         # Layer 4: Output validation
         for validator in self.output_validators:
-            result = validator.check(response)
+            result = validator.check (response)
             if not result.is_safe:
                 # Regenerate or return safe fallback
-                response = self.handle_unsafe_output(result)
+                response = self.handle_unsafe_output (result)
         
         # Layer 5: Audit trail
         self.audit_logger.log_successful_interaction(
@@ -155,11 +155,11 @@ def handle_uncertain_safety(
     return content
 
 # Example: Content moderation with uncertainty
-def moderate_content(text: str) -> dict:
+def moderate_content (text: str) -> dict:
     """Moderate with fail-safe defaults"""
     
     # Get moderation score
-    result = openai.Moderation.create(input=text)
+    result = openai.Moderation.create (input=text)
     scores = result.results[0].category_scores
     
     # Use conservative thresholds
@@ -173,16 +173,16 @@ def moderate_content(text: str) -> dict:
     
     violations = []
     for category, score in scores.items():
-        threshold = THRESHOLDS.get(category, 0.5)
+        threshold = THRESHOLDS.get (category, 0.5)
         if score > threshold:
-            violations.append(category)
+            violations.append (category)
     
     if violations:
         return {
             'safe': False,
             'violations': violations,
             'action': 'block',
-            'reason': f"Content flagged for: {', '.join(violations)}"
+            'reason': f"Content flagged for: {', '.join (violations)}"
         }
     
     return {'safe': True, 'violations': [], 'action': 'allow'}
@@ -209,7 +209,7 @@ class SafetyDecision:
     user_id: str
     content_hash: str
     
-    def to_audit_log(self) -> Dict:
+    def to_audit_log (self) -> Dict:
         """Format for audit logging"""
         return {
             'timestamp': self.timestamp.isoformat(),
@@ -222,21 +222,21 @@ class SafetyDecision:
             'content_hash': self.content_hash
         }
     
-    def to_user_message(self) -> str:
+    def to_user_message (self) -> str:
         """User-friendly explanation"""
         if self.action == 'allow':
             return "Content approved"
         elif self.action == 'block':
-            return f"Content blocked: {', '.join(self.reasons)}"
+            return f"Content blocked: {', '.join (self.reasons)}"
         elif self.action == 'modify':
-            return f"Content modified: {', '.join(self.reasons)}"
+            return f"Content modified: {', '.join (self.reasons)}"
         else:
-            return f"Content flagged for review: {', '.join(self.reasons)}"
+            return f"Content flagged for review: {', '.join (self.reasons)}"
 
 class TransparentSafetySystem:
     """Safety system with full transparency"""
     
-    def evaluate(self, content: str, user_id: str) -> SafetyDecision:
+    def evaluate (self, content: str, user_id: str) -> SafetyDecision:
         """Evaluate with transparent decision-making"""
         
         checks_performed = []
@@ -245,21 +245,21 @@ class TransparentSafetySystem:
         
         # Check 1: PII detection
         checks_performed.append('pii_detection')
-        pii_found = self.detect_pii(content)
+        pii_found = self.detect_pii (content)
         if pii_found:
             violations_detected.append('pii')
             reasons.append('Personally identifiable information detected')
         
         # Check 2: Toxicity
         checks_performed.append('toxicity_detection')
-        toxicity_score = self.check_toxicity(content)
+        toxicity_score = self.check_toxicity (content)
         if toxicity_score > 0.7:
             violations_detected.append('toxicity')
-            reasons.append(f'High toxicity score: {toxicity_score:.2f}')
+            reasons.append (f'High toxicity score: {toxicity_score:.2f}')
         
         # Check 3: Prompt injection
         checks_performed.append('injection_detection')
-        injection_detected = self.detect_injection(content)
+        injection_detected = self.detect_injection (content)
         if injection_detected:
             violations_detected.append('injection')
             reasons.append('Potential prompt injection attempt')
@@ -280,7 +280,7 @@ class TransparentSafetySystem:
             checks_performed=checks_performed,
             violations_detected=violations_detected,
             user_id=user_id,
-            content_hash=self.hash_content(content)
+            content_hash=self.hash_content (content)
         )
 \`\`\`
 
@@ -305,7 +305,7 @@ class HumanInTheLoopSafety:
         """Process with human oversight for uncertain cases"""
         
         # Automated safety check
-        safety_result = self.check_safety(content)
+        safety_result = self.check_safety (content)
         
         if safety_result.confidence > self.high_confidence_threshold:
             # High confidence: automated decision
@@ -414,7 +414,7 @@ class ResponsibleAISystem:
         self.privacy_protector = PrivacyProtector()
         self.transparency_logger = TransparencyLogger()
     
-    def evaluate_responsible_ai_metrics(self) -> Dict:
+    def evaluate_responsible_ai_metrics (self) -> Dict:
         """Comprehensive responsible AI evaluation"""
         
         return {
@@ -489,7 +489,7 @@ class SafetyRisk:
         self.mitigations = mitigations
     
     @property
-    def risk_level(self) -> RiskLevel:
+    def risk_level (self) -> RiskLevel:
         """Calculate overall risk level"""
         score = self.severity.value * self.likelihood.value
         
@@ -502,7 +502,7 @@ class SafetyRisk:
         else:
             return RiskLevel.CRITICAL
     
-    def to_dict(self) -> Dict:
+    def to_dict (self) -> Dict:
         return {
             'name': self.name,
             'description': self.description,
@@ -564,19 +564,19 @@ COMMON_AI_RISKS = [
     ),
 ]
 
-def conduct_risk_assessment(risks: List[SafetyRisk]) -> Dict:
+def conduct_risk_assessment (risks: List[SafetyRisk]) -> Dict:
     """Conduct comprehensive safety risk assessment"""
     
     critical_risks = [r for r in risks if r.risk_level == RiskLevel.CRITICAL]
     high_risks = [r for r in risks if r.risk_level == RiskLevel.HIGH]
     
     return {
-        'total_risks': len(risks),
-        'critical_count': len(critical_risks),
-        'high_count': len(high_risks),
+        'total_risks': len (risks),
+        'critical_count': len (critical_risks),
+        'high_count': len (high_risks),
         'critical_risks': [r.to_dict() for r in critical_risks],
         'high_risks': [r.to_dict() for r in high_risks],
-        'requires_immediate_action': len(critical_risks) > 0,
+        'requires_immediate_action': len (critical_risks) > 0,
         'overall_risk_posture': 'HIGH' if critical_risks else 'MEDIUM'
     }
 \`\`\`
@@ -650,37 +650,37 @@ class SafetyMonitor:
             'response_time': 2.0,  # 2 seconds
         }
     
-    def record_metrics(self, metrics: SafetyMetrics):
+    def record_metrics (self, metrics: SafetyMetrics):
         """Record current safety metrics"""
-        self.metrics_history.append(metrics)
+        self.metrics_history.append (metrics)
         
         # Check for threshold violations
-        self.check_thresholds(metrics)
+        self.check_thresholds (metrics)
     
-    def check_thresholds(self, metrics: SafetyMetrics):
+    def check_thresholds (self, metrics: SafetyMetrics):
         """Alert on threshold violations"""
         
-        violation_rate = metrics.safety_violations / max(metrics.total_requests, 1)
-        false_positive_rate = metrics.false_positives / max(metrics.total_requests, 1)
+        violation_rate = metrics.safety_violations / max (metrics.total_requests, 1)
+        false_positive_rate = metrics.false_positives / max (metrics.total_requests, 1)
         
         alerts = []
         
         if violation_rate > self.alert_thresholds['violation_rate']:
-            alerts.append(f"High violation rate: {violation_rate:.2%}")
+            alerts.append (f"High violation rate: {violation_rate:.2%}")
         
         if false_positive_rate > self.alert_thresholds['false_positive_rate']:
-            alerts.append(f"High false positive rate: {false_positive_rate:.2%}")
+            alerts.append (f"High false positive rate: {false_positive_rate:.2%}")
         
         if metrics.avg_response_time > self.alert_thresholds['response_time']:
-            alerts.append(f"Slow response time: {metrics.avg_response_time:.2f}s")
+            alerts.append (f"Slow response time: {metrics.avg_response_time:.2f}s")
         
         if alerts:
-            self.send_alerts(alerts)
+            self.send_alerts (alerts)
     
-    def get_safety_dashboard(self, hours: int = 24) -> Dict:
+    def get_safety_dashboard (self, hours: int = 24) -> Dict:
         """Generate safety dashboard for last N hours"""
         
-        cutoff = datetime.now() - timedelta(hours=hours)
+        cutoff = datetime.now() - timedelta (hours=hours)
         recent_metrics = [
             m for m in self.metrics_history
             if m.timestamp >= cutoff
@@ -689,27 +689,27 @@ class SafetyMonitor:
         if not recent_metrics:
             return {'error': 'No data available'}
         
-        total_requests = sum(m.total_requests for m in recent_metrics)
-        total_violations = sum(m.safety_violations for m in recent_metrics)
-        total_blocked = sum(m.blocked_requests for m in recent_metrics)
+        total_requests = sum (m.total_requests for m in recent_metrics)
+        total_violations = sum (m.safety_violations for m in recent_metrics)
+        total_blocked = sum (m.blocked_requests for m in recent_metrics)
         
         return {
             'period_hours': hours,
             'total_requests': total_requests,
             'safety_violations': total_violations,
-            'violation_rate': total_violations / max(total_requests, 1),
-            'blocked_rate': total_blocked / max(total_requests, 1),
-            'avg_response_time': sum(m.avg_response_time for m in recent_metrics) / len(recent_metrics),
-            'trend': self.calculate_trend(recent_metrics),
+            'violation_rate': total_violations / max (total_requests, 1),
+            'blocked_rate': total_blocked / max (total_requests, 1),
+            'avg_response_time': sum (m.avg_response_time for m in recent_metrics) / len (recent_metrics),
+            'trend': self.calculate_trend (recent_metrics),
         }
     
-    def calculate_trend(self, metrics: List[SafetyMetrics]) -> str:
+    def calculate_trend (self, metrics: List[SafetyMetrics]) -> str:
         """Calculate safety trend"""
-        if len(metrics) < 2:
+        if len (metrics) < 2:
             return 'insufficient_data'
         
-        recent_rate = metrics[-1].safety_violations / max(metrics[-1].total_requests, 1)
-        earlier_rate = metrics[0].safety_violations / max(metrics[0].total_requests, 1)
+        recent_rate = metrics[-1].safety_violations / max (metrics[-1].total_requests, 1)
+        earlier_rate = metrics[0].safety_violations / max (metrics[0].total_requests, 1)
         
         if recent_rate > earlier_rate * 1.2:
             return 'worsening'
@@ -731,7 +731,7 @@ class SafetyRedTeam:
         self.target = target_system
         self.test_results = []
     
-    def run_adversarial_tests(self) -> List[Dict]:
+    def run_adversarial_tests (self) -> List[Dict]:
         """Run comprehensive adversarial testing"""
         
         test_suites = [
@@ -744,7 +744,7 @@ class SafetyRedTeam:
         
         return [result for suite in test_suites for result in suite]
     
-    def test_prompt_injection(self) -> List[Dict]:
+    def test_prompt_injection (self) -> List[Dict]:
         """Test prompt injection vulnerabilities"""
         
         injection_attempts = [
@@ -758,24 +758,24 @@ class SafetyRedTeam:
         results = []
         for attempt in injection_attempts:
             try:
-                response = self.target.generate(attempt)
+                response = self.target.generate (attempt)
                 results.append({
                     'test': 'prompt_injection',
                     'input': attempt,
                     'response': response,
-                    'vulnerable': self.is_injection_successful(response),
+                    'vulnerable': self.is_injection_successful (response),
                 })
             except Exception as e:
                 results.append({
                     'test': 'prompt_injection',
                     'input': attempt,
-                    'error': str(e),
+                    'error': str (e),
                     'vulnerable': False,
                 })
         
         return results
     
-    def test_jailbreaking(self) -> List[Dict]:
+    def test_jailbreaking (self) -> List[Dict]:
         """Test jailbreaking attempts"""
         
         jailbreak_attempts = [
@@ -788,18 +788,18 @@ class SafetyRedTeam:
         results = []
         for attempt in jailbreak_attempts:
             try:
-                response = self.target.generate(attempt)
+                response = self.target.generate (attempt)
                 results.append({
                     'test': 'jailbreaking',
                     'input': attempt,
                     'response': response,
-                    'jailbroken': self.is_jailbreak_successful(response),
+                    'jailbroken': self.is_jailbreak_successful (response),
                 })
             except Exception as e:
                 results.append({
                     'test': 'jailbreaking',
                     'input': attempt,
-                    'error': str(e),
+                    'error': str (e),
                     'jailbroken': False,
                 })
         

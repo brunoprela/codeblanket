@@ -71,7 +71,7 @@ extend-exclude = '''
 
 **Before Black**:
 \`\`\`python
-def calculate_total(items,tax_rate,discount=0.0,shipping=5.99):
+def calculate_total (items,tax_rate,discount=0.0,shipping=5.99):
     subtotal=sum([item.price*item.quantity for item in items])
     tax=subtotal*tax_rate
     total=subtotal+tax+shipping-discount
@@ -80,7 +80,7 @@ def calculate_total(items,tax_rate,discount=0.0,shipping=5.99):
 
 **After Black**:
 \`\`\`python
-def calculate_total(items, tax_rate, discount=0.0, shipping=5.99):
+def calculate_total (items, tax_rate, discount=0.0, shipping=5.99):
     subtotal = sum([item.price * item.quantity for item in items])
     tax = subtotal * tax_rate
     total = subtotal + tax + shipping - discount
@@ -202,15 +202,15 @@ def main():
 
 \`\`\`python
 # Before: B006 (mutable default)
-def add_item(item, items=[]):
-    items.append(item)
+def add_item (item, items=[]):
+    items.append (item)
     return items
 
 # After: Ruff suggests fix
-def add_item(item, items=None):
+def add_item (item, items=None):
     if items is None:
         items = []
-    items.append(item)
+    items.append (item)
     return items
 \`\`\`
 
@@ -266,10 +266,10 @@ ignore_missing_imports = true  # Ignore untyped libraries
 
 **Basic types**:
 \`\`\`python
-def greet(name: str) -> str:
+def greet (name: str) -> str:
     return f"Hello, {name}!"
 
-def add(a: int, b: int) -> int:
+def add (a: int, b: int) -> int:
     return a + b
 
 def get_users() -> list[str]:
@@ -280,15 +280,15 @@ def get_users() -> list[str]:
 \`\`\`python
 from typing import Optional, Union
 
-def find_user(user_id: int) -> Optional[str]:
+def find_user (user_id: int) -> Optional[str]:
     """Returns username or None if not found"""
     if user_id == 1:
         return "alice"
     return None
 
-def process(value: Union[int, str]) -> str:
+def process (value: Union[int, str]) -> str:
     """Accepts int or str"""
-    return str(value)
+    return str (value)
 \`\`\`
 
 **Generic types**:
@@ -301,10 +301,10 @@ class Stack(Generic[T]):
     def __init__(self) -> None:
         self.items: list[T] = []
     
-    def push(self, item: T) -> None:
-        self.items.append(item)
+    def push (self, item: T) -> None:
+        self.items.append (item)
     
-    def pop(self) -> T:
+    def pop (self) -> T:
         return self.items.pop()
 
 # Usage with type safety
@@ -316,7 +316,7 @@ stack.push(2)
 
 **Type errors mypy catches**:
 \`\`\`python
-def calculate(x: int, y: int) -> int:
+def calculate (x: int, y: int) -> int:
     return x + y
 
 # mypy catches:
@@ -398,7 +398,7 @@ min-similarity-lines=4
 **Example**:
 \`\`\`python
 # pylint warns: R0913 (too-many-arguments)
-def create_user(username, email, password, first_name, last_name, age, country, phone):
+def create_user (username, email, password, first_name, last_name, age, country, phone):
     pass  # Too many parameters
 
 # Better: Use dataclass
@@ -415,7 +415,7 @@ class UserData:
     country: str
     phone: str
 
-def create_user(data: UserData):
+def create_user (data: UserData):
     pass  # pylint: compliant
 \`\`\`
 
@@ -476,30 +476,30 @@ tests = [
 **Critical issues**:
 \`\`\`python
 # B201: Flask debug mode in production
-app.run(debug=True)  # Bandit: HIGH severity
+app.run (debug=True)  # Bandit: HIGH severity
 
 # B608: SQL injection
 query = f"SELECT * FROM users WHERE id = {user_id}"
-db.execute(query)  # Bandit: HIGH severity
+db.execute (query)  # Bandit: HIGH severity
 
 # Better:
 query = "SELECT * FROM users WHERE id = ?"
-db.execute(query, (user_id,))
+db.execute (query, (user_id,))
 
 # B602: Shell injection
 import subprocess
-subprocess.call(f"echo {user_input}", shell=True)  # Bandit: HIGH
+subprocess.call (f"echo {user_input}", shell=True)  # Bandit: HIGH
 
 # Better:
 subprocess.call(["echo", user_input])
 
 # B301: Insecure deserialization
 import pickle
-data = pickle.loads(untrusted_data)  # Bandit: MEDIUM
+data = pickle.loads (untrusted_data)  # Bandit: MEDIUM
 
 # Better: Use JSON
 import json
-data = json.loads(untrusted_data)
+data = json.loads (untrusted_data)
 \`\`\`
 
 ---
@@ -531,17 +531,17 @@ radon hal myapp/
 **Cyclomatic complexity** measures number of paths through code:
 
 \`\`\`python
-def simple_function(x):
+def simple_function (x):
     return x * 2
 # Complexity: 1 (one path)
 
-def with_condition(x):
+def with_condition (x):
     if x > 0:
         return x * 2
     return 0
 # Complexity: 2 (two paths)
 
-def complex_function(x, y, z):
+def complex_function (x, y, z):
     if x > 0:
         if y > 0:
             if z > 0:

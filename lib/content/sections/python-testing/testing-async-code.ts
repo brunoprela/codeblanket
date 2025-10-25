@@ -29,15 +29,15 @@ def test_async_function():
 # Manually managing event loop is error-prone
 def test_with_manual_loop():
     loop = asyncio.get_event_loop()
-    result = loop.run_until_complete(fetch_data_async())
+    result = loop.run_until_complete (fetch_data_async())
     # Forgot to close loop—affects other tests
 \`\`\`
 
 **Problem 3**: Async mocking requires special mocks
 \`\`\`python
 # Regular Mock doesn't work for async
-mock = Mock(return_value="data")
-result = await async_function(mock)  # TypeError: object Mock can't be used in await
+mock = Mock (return_value="data")
+result = await async_function (mock)  # TypeError: object Mock can't be used in await
 \`\`\`
 
 **Solution**: pytest-asyncio handles event loops, awaiting, and provides async-aware fixtures.
@@ -101,7 +101,7 @@ async def test_multiple_awaits():
     data3 = await fetch_data(3)
     
     assert data1 != data2 != data3
-    assert all(data is not None for data in [data1, data2, data3])
+    assert all (data is not None for data in [data1, data2, data3])
 \`\`\`
 
 ### Testing Error Handling
@@ -111,7 +111,7 @@ async def test_multiple_awaits():
 async def test_async_exception():
     """Test async function raises exception"""
     with pytest.raises(ValueError, match="Invalid input"):
-        await process_data_async(invalid_input)
+        await process_data_async (invalid_input)
 
 @pytest.mark.asyncio
 async def test_async_timeout_handling():
@@ -122,8 +122,8 @@ async def test_async_timeout_handling():
         await asyncio.sleep(10)
         return "done"
     
-    with pytest.raises(asyncio.TimeoutError):
-        await asyncio.wait_for(slow_operation(), timeout=1.0)
+    with pytest.raises (asyncio.TimeoutError):
+        await asyncio.wait_for (slow_operation(), timeout=1.0)
 \`\`\`
 
 ---
@@ -144,7 +144,7 @@ async def async_client():
     # Cleanup happens automatically after yield
 
 @pytest.mark.asyncio
-async def test_with_async_fixture(async_client):
+async def test_with_async_fixture (async_client):
     """Use async fixture in test"""
     async with async_client.get("https://api.example.com/data") as resp:
         data = await resp.json()
@@ -154,7 +154,7 @@ async def test_with_async_fixture(async_client):
 ### Session-Scoped Async Fixture
 
 \`\`\`python
-@pytest.fixture(scope="session")
+@pytest.fixture (scope="session")
 async def async_db_engine():
     """Session-scoped async database engine"""
     from sqlalchemy.ext.asyncio import create_async_engine
@@ -174,13 +174,13 @@ async def async_db_engine():
     await engine.dispose()
 
 @pytest.fixture
-async def async_db_session(async_db_engine):
+async def async_db_session (async_db_engine):
     """Function-scoped async session with rollback"""
     from sqlalchemy.ext.asyncio import AsyncSession
     
     async with async_db_engine.connect() as connection:
         async with connection.begin() as transaction:
-            session = AsyncSession(bind=connection)
+            session = AsyncSession (bind=connection)
             
             yield session
             
@@ -202,11 +202,11 @@ async def async_redis():
     await redis.wait_closed()
 
 @pytest.fixture
-async def async_cache(async_redis):
+async def async_cache (async_redis):
     """Cache service using async Redis"""
     from myapp.cache import Cache
     
-    cache = Cache(async_redis)
+    cache = Cache (async_redis)
     await cache.clear()  # Start with clean cache
     
     yield cache
@@ -214,7 +214,7 @@ async def async_cache(async_redis):
     await cache.clear()  # Cleanup
 
 @pytest.mark.asyncio
-async def test_with_composed_fixtures(async_cache):
+async def test_with_composed_fixtures (async_cache):
     """Test using composed async fixtures"""
     await async_cache.set("key", "value")
     result = await async_cache.get("key")
@@ -249,7 +249,7 @@ async def test_with_async_mock():
 
 \`\`\`python
 @pytest.mark.asyncio
-async def test_with_mocker(mocker):
+async def test_with_mocker (mocker):
     """Use pytest-mock's mocker fixture"""
     # Patch async function
     mock_fetch = mocker.patch("myapp.services.fetch_data", new_callable=AsyncMock)
@@ -259,11 +259,11 @@ async def test_with_mocker(mocker):
     result = await process_user_data()
     
     assert result["status"] == "success"
-    assert len(result["data"]) == 3
+    assert len (result["data"]) == 3
     mock_fetch.assert_called_once()
 
 @pytest.mark.asyncio
-async def test_mock_side_effect(mocker):
+async def test_mock_side_effect (mocker):
     """Mock with side effect (different return per call)"""
     mock_api = mocker.patch("myapp.api.call_external_api", new_callable=AsyncMock)
     mock_api.side_effect = [
@@ -275,7 +275,7 @@ async def test_mock_side_effect(mocker):
     # Function paginating through API
     all_items = await fetch_all_pages()
     
-    assert len(all_items) == 6
+    assert len (all_items) == 6
     assert mock_api.call_count == 3
 \`\`\`
 
@@ -285,19 +285,19 @@ async def test_mock_side_effect(mocker):
 from unittest.mock import AsyncMock, MagicMock
 
 @pytest.mark.asyncio
-async def test_mock_async_context_manager(mocker):
+async def test_mock_async_context_manager (mocker):
     """Mock async context manager"""
     # Create mock that supports async with
     mock_session = MagicMock()
-    mock_session.__aenter__ = AsyncMock(return_value=mock_session)
-    mock_session.__aexit__ = AsyncMock(return_value=None)
+    mock_session.__aenter__ = AsyncMock (return_value=mock_session)
+    mock_session.__aexit__ = AsyncMock (return_value=None)
     mock_session.get = AsyncMock()
     
     # Mock response
     mock_response = MagicMock()
-    mock_response.json = AsyncMock(return_value={"data": "test"})
-    mock_response.__aenter__ = AsyncMock(return_value=mock_response)
-    mock_response.__aexit__ = AsyncMock(return_value=None)
+    mock_response.json = AsyncMock (return_value={"data": "test"})
+    mock_response.__aenter__ = AsyncMock (return_value=mock_response)
+    mock_response.__aexit__ = AsyncMock (return_value=None)
     
     mock_session.get.return_value = mock_response
     
@@ -337,12 +337,12 @@ async def test_concurrent_requests():
         fetch_data(10),
     )
     
-    assert len(results) == 10
-    assert all(r is not None for r in results)
+    assert len (results) == 10
+    assert all (r is not None for r in results)
     
     # Verify all IDs are unique
     ids = [r["id"] for r in results]
-    assert len(set(ids)) == 10  # All unique
+    assert len (set (ids)) == 10  # All unique
 
 @pytest.mark.asyncio
 async def test_concurrent_with_comprehension():
@@ -351,10 +351,10 @@ async def test_concurrent_with_comprehension():
     
     # More elegant syntax
     results = await asyncio.gather(*[
-        fetch_data(i) for i in range(1, 101)
+        fetch_data (i) for i in range(1, 101)
     ])
     
-    assert len(results) == 100
+    assert len (results) == 100
 \`\`\`
 
 ### Testing Race Conditions
@@ -430,7 +430,7 @@ async def test_gather_with_exceptions():
     )
     
     assert results[0] == "ok"
-    assert isinstance(results[1], ValueError)
+    assert isinstance (results[1], ValueError)
     assert results[2] == "ok"
 \`\`\`
 
@@ -461,7 +461,7 @@ async def test_async_context_manager_exception():
             connection_closed = True
             return False  # Don't suppress exception
         
-        async def query(self):
+        async def query (self):
             raise ValueError("Query failed")
     
     with pytest.raises(ValueError):
@@ -480,14 +480,14 @@ async def test_async_context_manager_exception():
 @pytest.mark.asyncio
 async def test_async_generator():
     """Test async generator"""
-    async def async_range(n):
-        for i in range(n):
+    async def async_range (n):
+        for i in range (n):
             await asyncio.sleep(0.01)  # Simulate async operation
             yield i
     
     items = []
     async for item in async_range(5):
-        items.append(item)
+        items.append (item)
     
     assert items == [0, 1, 2, 3, 4]
 
@@ -504,10 +504,10 @@ async def test_async_generator_with_data():
     batch = []
     count = 0
     async for user in stream_users():
-        batch.append(user)
+        batch.append (user)
         count += 1
         
-        if len(batch) == 10:
+        if len (batch) == 10:
             # Process batch
             assert all("name" in u for u in batch)
             batch.clear()
@@ -530,8 +530,8 @@ async def test_timeout_with_wait_for():
         return "done"
     
     # Operation should timeout
-    with pytest.raises(asyncio.TimeoutError):
-        await asyncio.wait_for(slow_operation(), timeout=1.0)
+    with pytest.raises (asyncio.TimeoutError):
+        await asyncio.wait_for (slow_operation(), timeout=1.0)
 
 @pytest.mark.asyncio
 async def test_timeout_success():
@@ -543,7 +543,7 @@ async def test_timeout_success():
         return "done"
     
     # Should complete successfully
-    result = await asyncio.wait_for(fast_operation(), timeout=5.0)
+    result = await asyncio.wait_for (fast_operation(), timeout=5.0)
     assert result == "done"
 
 @pytest.mark.asyncio
@@ -551,9 +551,9 @@ async def test_custom_timeout():
     """Test custom timeout implementation"""
     import asyncio
     
-    async def operation_with_timeout(timeout):
+    async def operation_with_timeout (timeout):
         try:
-            async with asyncio.timeout(timeout):  # Python 3.11+
+            async with asyncio.timeout (timeout):  # Python 3.11+
                 await asyncio.sleep(2)
                 return "completed"
         except asyncio.TimeoutError:
@@ -578,15 +578,15 @@ from myapp import app
 @pytest.mark.asyncio
 async def test_fastapi_endpoint():
     """Test FastAPI endpoint"""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient (app=app, base_url="http://test") as client:
         response = await client.get("/api/users")
         assert response.status_code == 200
-        assert isinstance(response.json(), list)
+        assert isinstance (response.json(), list)
 
 @pytest.mark.asyncio
-async def test_fastapi_post(async_db_session):
+async def test_fastapi_post (async_db_session):
     """Test FastAPI POST with database"""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient (app=app, base_url="http://test") as client:
         response = await client.post("/api/users", json={
             "username": "alice",
             "email": "alice@example.com"
@@ -602,7 +602,7 @@ async def test_fastapi_websocket():
     """Test FastAPI WebSocket"""
     from fastapi.testclient import TestClient
     
-    with TestClient(app) as client:
+    with TestClient (app) as client:
         with client.websocket_connect("/ws") as websocket:
             websocket.send_text("Hello")
             data = websocket.receive_text()
@@ -629,7 +629,7 @@ async def async_test_db():
         await conn.run_sync(Base.metadata.create_all)
     
     # Create session
-    async with AsyncSession(engine) as session:
+    async with AsyncSession (engine) as session:
         yield session
         await session.rollback()
     
@@ -645,23 +645,23 @@ class AsyncUserFactory:
     _counter = 0
     
     @classmethod
-    async def create(cls, session, **kwargs):
+    async def create (cls, session, **kwargs):
         cls._counter += 1
         user = User(
             username=kwargs.get("username", f"user{cls._counter}"),
             email=kwargs.get("email", f"user{cls._counter}@example.com"),
         )
-        session.add(user)
+        session.add (user)
         await session.commit()
-        await session.refresh(user)
+        await session.refresh (user)
         return user
     
     @classmethod
-    async def create_batch(cls, session, count):
+    async def create_batch (cls, session, count):
         users = []
-        for _ in range(count):
-            user = await cls.create(session)
-            users.append(user)
+        for _ in range (count):
+            user = await cls.create (session)
+            users.append (user)
         return users
 \`\`\`
 
@@ -669,7 +669,7 @@ class AsyncUserFactory:
 
 \`\`\`python
 @pytest.mark.asyncio
-async def test_retry_logic(mocker):
+async def test_retry_logic (mocker):
     """Test async retry mechanism"""
     mock_api = mocker.patch("myapp.api.external_call", new_callable=AsyncMock)
     
@@ -681,7 +681,7 @@ async def test_retry_logic(mocker):
     ]
     
     # Function with retry logic
-    result = await call_with_retry(max_attempts=3)
+    result = await call_with_retry (max_attempts=3)
     
     assert result["status"] == "ok"
     assert mock_api.call_count == 3
@@ -716,14 +716,14 @@ mock = Mock()  # TypeError: can't be used in await
 
 ❌ **Not handling exceptions in gather**
 \`\`\`python
-await asyncio.gather(task1(), task2())  # First exception aborts all
+await asyncio.gather (task1(), task2())  # First exception aborts all
 \`\`\`
 
 ✅ **Correct patterns**
 \`\`\`python
 result = await async_function()
 mock = AsyncMock()
-await asyncio.gather(task1(), task2(), return_exceptions=True)
+await asyncio.gather (task1(), task2(), return_exceptions=True)
 \`\`\`
 
 ---

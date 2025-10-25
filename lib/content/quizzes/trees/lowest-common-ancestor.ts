@@ -8,7 +8,7 @@ export const lowestcommonancestorQuiz = [
     question:
       'Walk me through how the recursive LCA algorithm determines the lowest common ancestor. Why does returning root when both subtrees return non-null give us the LCA?',
     sampleAnswer:
-      "The recursive LCA works bottom-up by returning found nodes upward. When we call lca(root, p, q), we recursively search left and right subtrees. If left subtree returns p and right subtree returns q (or vice versa), it means p and q are in different subtrees of root - so root must be their LCA (the split point). If both results come from one subtree, we pass that result up because both nodes are deeper. The base case 'if root == p or root == q: return root' ensures we return nodes when found. This works because the first ancestor where paths diverge is by definition the lowest common ancestor.",
+      "The recursive LCA works bottom-up by returning found nodes upward. When we call lca (root, p, q), we recursively search left and right subtrees. If left subtree returns p and right subtree returns q (or vice versa), it means p and q are in different subtrees of root - so root must be their LCA (the split point). If both results come from one subtree, we pass that result up because both nodes are deeper. The base case 'if root == p or root == q: return root' ensures we return nodes when found. This works because the first ancestor where paths diverge is by definition the lowest common ancestor.",
     keyPoints: [
       'Works bottom-up, returning found nodes upward',
       'left and right both non-null → split point found',

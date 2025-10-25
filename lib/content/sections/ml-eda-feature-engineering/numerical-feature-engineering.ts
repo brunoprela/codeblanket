@@ -22,7 +22,7 @@ Numerical features are the most common type in machine learning. Proper engineer
 
 ### StandardScaler (Z-score Normalization)
 
-\\\`\\\`\\\`python
+\`\`\`python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,7 +31,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.datasets import fetch_california_housing
 
 # Load data
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 print("=" * 70)
@@ -78,33 +78,33 @@ print(X_robust.describe())
 # Visualize scaling effects
 fig, axes = plt.subplots(3, 4, figsize=(16, 12))
 
-for idx, col in enumerate(features):
+for idx, col in enumerate (features):
     # Original
     axes[idx, 0].hist(X[col], bins=50, edgecolor='black')
-    axes[idx, 0].set_title(f'Original: {col}')
+    axes[idx, 0].set_title (f'Original: {col}')
     axes[idx, 0].set_ylabel('Frequency')
     
     # StandardScaler
     axes[idx, 1].hist(X_standard[f'{col}_standard'], bins=50, edgecolor='black')
-    axes[idx, 1].set_title(f'StandardScaler')
+    axes[idx, 1].set_title (f'StandardScaler')
     
     # MinMaxScaler
     axes[idx, 2].hist(X_minmax[f'{col}_minmax'], bins=50, edgecolor='black')
-    axes[idx, 2].set_title(f'MinMaxScaler')
+    axes[idx, 2].set_title (f'MinMaxScaler')
     
     # RobustScaler
     axes[idx, 3].hist(X_robust[f'{col}_robust'], bins=50, edgecolor='black')
-    axes[idx, 3].set_title(f'RobustScaler')
+    axes[idx, 3].set_title (f'RobustScaler')
 
 plt.tight_layout()
 plt.show()
 
 print("\\n✓ Different scalers for different use cases")
-\\\`\\\`\\\`
+\`\`\`
 
 ### When to Use Each Scaler
 
-\\\`\\\`\\\`python
+\`\`\`python
 def scaler_recommendations():
     """Guide for choosing appropriate scaler"""
     
@@ -169,22 +169,22 @@ def scaler_recommendations():
         print(f"  Use Cases:")
         for uc in info['use_cases']:
             print(f"    • {uc}")
-        print(f"  Pros: {', '.join(info['pros'])}")
-        print(f"  Cons: {', '.join(info['cons'])}")
+        print(f"  Pros: {', '.join (info['pros'])}")
+        print(f"  Cons: {', '.join (info['cons'])}")
     
     return recommendations
 
 recommendations = scaler_recommendations()
-\\\`\\\`\\\`
+\`\`\`
 
 ## Mathematical Transformations
 
 ### Log, Square Root, and Box-Cox
 
-\\\`\\\`\\\`python
+\`\`\`python
 from scipy import stats
 
-def apply_transformations(df, feature):
+def apply_transformations (df, feature):
     """Apply various transformations to handle skewness"""
     
     print(f"\\nTRANSFORMATION ANALYSIS: {feature}")
@@ -194,19 +194,19 @@ def apply_transformations(df, feature):
     df_trans['original'] = df[feature]
     
     # Log transformation (for right-skewed data)
-    df_trans['log'] = np.log1p(df[feature])  # log(1+x) handles zeros
+    df_trans['log'] = np.log1p (df[feature])  # log(1+x) handles zeros
     
     # Square root (milder than log)
-    df_trans['sqrt'] = np.sqrt(df[feature] - df[feature].min() + 1)
+    df_trans['sqrt'] = np.sqrt (df[feature] - df[feature].min() + 1)
     
     # Cube root (handles negative values)
-    df_trans['cbrt'] = np.cbrt(df[feature])
+    df_trans['cbrt'] = np.cbrt (df[feature])
     
     # Box-Cox (automatically finds best power transformation)
-    df_trans['boxcox'], lambda_param = stats.boxcox(df[feature] - df[feature].min() + 1)
+    df_trans['boxcox'], lambda_param = stats.boxcox (df[feature] - df[feature].min() + 1)
     
     # Yeo-Johnson (handles negative values)
-    df_trans['yeojohnson'], lambda_yj = stats.yeojohnson(df[feature])
+    df_trans['yeojohnson'], lambda_yj = stats.yeojohnson (df[feature])
     
     # Compare skewness
     print("\\nSkewness Comparison:")
@@ -218,9 +218,9 @@ def apply_transformations(df, feature):
     fig, axes = plt.subplots(2, 3, figsize=(15, 10))
     axes = axes.ravel()
     
-    for idx, col in enumerate(df_trans.columns):
-        axes[idx].hist(df_trans[col], bins=50, edgecolor='black')
-        axes[idx].set_title(f'{col}\\nSkewness: {df_trans[col].skew():.3f}')
+    for idx, col in enumerate (df_trans.columns):
+        axes[idx].hist (df_trans[col], bins=50, edgecolor='black')
+        axes[idx].set_title (f'{col}\\nSkewness: {df_trans[col].skew():.3f}')
         axes[idx].set_xlabel('Value')
         axes[idx].set_ylabel('Frequency')
     
@@ -228,57 +228,57 @@ def apply_transformations(df, feature):
     plt.show()
     
     # Recommendation
-    best_transform = min(df_trans.columns, 
-                        key=lambda x: abs(df_trans[x].skew()))
+    best_transform = min (df_trans.columns, 
+                        key=lambda x: abs (df_trans[x].skew()))
     print(f"\\n✓ Best transformation: {best_transform} (closest to symmetric)")
     
     return df_trans
 
 # Apply to right-skewed feature
-trans_result = apply_transformations(df, 'MedInc')
-\\\`\\\`\\\`
+trans_result = apply_transformations (df, 'MedInc')
+\`\`\`
 
 ## Binning and Discretization
 
 ### Converting Continuous to Categorical
 
-\\\`\\\`\\\`python
-def create_bins(df, feature, n_bins=5, strategy='quantile'):
+\`\`\`python
+def create_bins (df, feature, n_bins=5, strategy='quantile'):
     """Create bins from continuous features"""
     
     print(f"\\nBINNING: {feature}")
     print("=" * 70)
     
     # Equal-width binning
-    df['equal_width'] = pd.cut(df[feature], bins=n_bins, labels=False)
+    df['equal_width'] = pd.cut (df[feature], bins=n_bins, labels=False)
     
     # Equal-frequency binning (quantiles)
-    df['equal_freq'] = pd.qcut(df[feature], q=n_bins, labels=False, duplicates='drop')
+    df['equal_freq'] = pd.qcut (df[feature], q=n_bins, labels=False, duplicates='drop')
     
     # Custom bins based on domain knowledge
     if feature == 'MedInc':
         custom_bins = [0, 2, 4, 6, 10, 15]
         labels = ['Very Low', 'Low', 'Medium', 'High', 'Very High']
-        df['custom'] = pd.cut(df[feature], bins=custom_bins, labels=labels)
+        df['custom'] = pd.cut (df[feature], bins=custom_bins, labels=labels)
     
     # Visualize bin distributions
     fig, axes = plt.subplots(1, 3, figsize=(15, 4))
     
     # Equal width
-    df['equal_width'].value_counts().sort_index().plot(kind='bar', ax=axes[0])
+    df['equal_width'].value_counts().sort_index().plot (kind='bar', ax=axes[0])
     axes[0].set_title('Equal-Width Bins')
     axes[0].set_xlabel('Bin')
     axes[0].set_ylabel('Count')
     
     # Equal frequency
-    df['equal_freq'].value_counts().sort_index().plot(kind='bar', ax=axes[1])
+    df['equal_freq'].value_counts().sort_index().plot (kind='bar', ax=axes[1])
     axes[1].set_title('Equal-Frequency Bins (Quantiles)')
     axes[1].set_xlabel('Bin')
     axes[1].set_ylabel('Count')
     
     # Custom
     if 'custom' in df.columns:
-        df['custom'].value_counts().plot(kind='bar', ax=axes[2])
+        df['custom'].value_counts().plot (kind='bar', ax=axes[2])
         axes[2].set_title('Custom Bins (Domain-Based)')
         axes[2].set_xlabel('Bin')
         axes[2].set_ylabel('Count')
@@ -300,14 +300,14 @@ def create_bins(df, feature, n_bins=5, strategy='quantile'):
     return df
 
 # Create bins
-df_binned = create_bins(df.copy(), 'MedInc', n_bins=5)
-\\\`\\\`\\\`
+df_binned = create_bins (df.copy(), 'MedInc', n_bins=5)
+\`\`\`
 
 ## Polynomial Features
 
 ### Creating Non-linear Features
 
-\\\`\\\`\\\`python
+\`\`\`python
 from sklearn.preprocessing import PolynomialFeatures
 
 def create_polynomial_features(X, degree=2):
@@ -320,7 +320,7 @@ def create_polynomial_features(X, degree=2):
     print(f"Feature names: {list(X.columns)}")
     
     # Create polynomial features
-    poly = PolynomialFeatures(degree=degree, include_bias=False)
+    poly = PolynomialFeatures (degree=degree, include_bias=False)
     X_poly = poly.fit_transform(X)
     feature_names = poly.get_feature_names_out(X.columns)
     
@@ -334,18 +334,18 @@ def create_polynomial_features(X, degree=2):
     for name in feature_names[:10]:
         print(f"  • {name}")
     
-    if len(feature_names) > 10:
-        print(f"  ... and {len(feature_names) - 10} more")
+    if len (feature_names) > 10:
+        print(f"  ... and {len (feature_names) - 10} more")
     
     # Example: Show correlation with target
     y = df['MedHouseVal']
     correlations = {}
     for col in X_poly_df.columns:
-        corr = X_poly_df[col].corr(y)
-        correlations[col] = abs(corr)
+        corr = X_poly_df[col].corr (y)
+        correlations[col] = abs (corr)
     
     # Top 10 most correlated features
-    top_features = sorted(correlations.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_features = sorted (correlations.items(), key=lambda x: x[1], reverse=True)[:10]
     
     print(f"\\nTop 10 Features by Correlation with Target:")
     for feature, corr in top_features:
@@ -356,14 +356,14 @@ def create_polynomial_features(X, degree=2):
 # Create polynomial features
 X_sample = df[['MedInc', 'HouseAge']].sample(1000, random_state=42)
 X_poly = create_polynomial_features(X_sample, degree=2)
-\\\`\\\`\\\`
+\`\`\`
 
 ## Ratios and Derived Features
 
 ### Creating Business-Meaningful Features
 
-\\\`\\\`\\\`python
-def create_ratio_features(df):
+\`\`\`python
+def create_ratio_features (df):
     """Create ratio and derived features"""
     
     print("\\nRATIO AND DERIVED FEATURES")
@@ -388,9 +388,9 @@ def create_ratio_features(df):
     df_derived['total_bedrooms'] = df['AveBedrms'] * df['AveOccup']
     
     # Flags/Indicators
-    df_derived['is_new_house'] = (df['HouseAge'] < 10).astype(int)
-    df_derived['is_large_household'] = (df['AveOccup'] > 3).astype(int)
-    df_derived['is_high_income'] = (df['MedInc'] > df['MedInc'].median()).astype(int)
+    df_derived['is_new_house'] = (df['HouseAge'] < 10).astype (int)
+    df_derived['is_large_household'] = (df['AveOccup'] > 3).astype (int)
+    df_derived['is_high_income'] = (df['MedInc'] > df['MedInc'].median()).astype (int)
     
     # Show correlation with target
     new_features = [col for col in df_derived.columns if col not in df.columns 
@@ -398,22 +398,22 @@ def create_ratio_features(df):
     
     print("\\nNew Features and Correlation with Target:")
     for feat in new_features:
-        corr = df_derived[feat].corr(df_derived['MedHouseVal'])
+        corr = df_derived[feat].corr (df_derived['MedHouseVal'])
         print(f"  {feat:30s}: {corr:7.4f}")
     
     # Visualize top features
-    top_feats = sorted([(f, abs(df_derived[f].corr(df_derived['MedHouseVal']))) 
+    top_feats = sorted([(f, abs (df_derived[f].corr (df_derived['MedHouseVal']))) 
                        for f in new_features], key=lambda x: x[1], reverse=True)[:4]
     
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     axes = axes.ravel()
     
-    for idx, (feat, corr) in enumerate(top_feats):
+    for idx, (feat, corr) in enumerate (top_feats):
         sample = df_derived.sample(1000, random_state=42)
-        axes[idx].scatter(sample[feat], sample['MedHouseVal'], alpha=0.5)
-        axes[idx].set_xlabel(feat)
+        axes[idx].scatter (sample[feat], sample['MedHouseVal'], alpha=0.5)
+        axes[idx].set_xlabel (feat)
         axes[idx].set_ylabel('MedHouseVal')
-        axes[idx].set_title(f'{feat}\\nCorrelation: {corr:.3f}')
+        axes[idx].set_title (f'{feat}\\nCorrelation: {corr:.3f}')
         axes[idx].grid(True, alpha=0.3)
     
     plt.tight_layout()
@@ -422,8 +422,8 @@ def create_ratio_features(df):
     return df_derived
 
 # Create derived features
-df_with_ratios = create_ratio_features(df)
-\\\`\\\`\\\`
+df_with_ratios = create_ratio_features (df)
+\`\`\`
 
 ## Key Takeaways
 

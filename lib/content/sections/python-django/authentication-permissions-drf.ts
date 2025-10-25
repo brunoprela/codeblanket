@@ -46,7 +46,7 @@ python manage.py migrate
 
 # Create tokens
 from rest_framework.authtoken.models import Token
-token = Token.objects.create(user=user)
+token = Token.objects.create (user=user)
 print(token.key)  # 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
 
 # Use token in requests
@@ -63,12 +63,12 @@ from rest_framework.response import Response
 class CustomAuthToken(ObtainAuthToken):
     """Custom login endpoint returning token and user info"""
     
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
+    def post (self, request, *args, **kwargs):
+        serializer = self.serializer_class (data=request.data,
                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid (raise_exception=True)
         user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = Token.objects.get_or_create (user=user)
         
         return Response({
             'token': token.key,
@@ -100,8 +100,8 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta (minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta (days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,
@@ -147,8 +147,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
+    def get_token (cls, user):
+        token = super().get_token (user)
         
         # Add custom claims
         token['username'] = user.username
@@ -185,7 +185,7 @@ class ArticleCreate(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
 # IsAuthenticatedOrReadOnly - read for all, write for authenticated
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # IsAdminUser - must be admin
@@ -196,12 +196,12 @@ class UserList(APIView):
 ### Object-Level Permissions
 
 \`\`\`python
-class IsAuthorOrReadOnly(permissions.BasePermission):
+class IsAuthorOrReadOnly (permissions.BasePermission):
     """
     Custom permission: only author can edit
     """
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         # Read permissions for any request (GET, HEAD, OPTIONS)
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -209,7 +209,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         # Write permissions only for article author
         return obj.author == request.user
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
@@ -218,12 +218,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
 ### Complex Custom Permissions
 
 \`\`\`python
-class IsAuthorOrStaffOrReadOnly(permissions.BasePermission):
+class IsAuthorOrStaffOrReadOnly (permissions.BasePermission):
     """
     Custom permission with multiple conditions
     """
     
-    def has_permission(self, request, view):
+    def has_permission (self, request, view):
         """Check general permission"""
         # Anyone can read
         if request.method in permissions.SAFE_METHODS:
@@ -232,7 +232,7 @@ class IsAuthorOrStaffOrReadOnly(permissions.BasePermission):
         # Must be authenticated to write
         return request.user and request.user.is_authenticated
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         """Check object-specific permission"""
         # Read permissions for everyone
         if request.method in permissions.SAFE_METHODS:
@@ -241,15 +241,15 @@ class IsAuthorOrStaffOrReadOnly(permissions.BasePermission):
         # Write permissions for author or staff
         return obj.author == request.user or request.user.is_staff
 
-class CanPublishPermission(permissions.BasePermission):
+class CanPublishPermission (permissions.BasePermission):
     """Only editors can publish articles"""
     
-    def has_permission(self, request, view):
+    def has_permission (self, request, view):
         if view.action == 'publish':
             return request.user.has_perm('articles.can_publish')
         return True
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
         IsAuthorOrStaffOrReadOnly,
@@ -260,9 +260,9 @@ class ArticleViewSet(viewsets.ModelViewSet):
 ### Dynamic Permissions
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     
-    def get_permissions(self):
+    def get_permissions (self):
         """Different permissions per action"""
         if self.action == 'list':
             permission_classes = [permissions.AllowAny]
@@ -367,35 +367,35 @@ class APIKeyAuthentication(BaseAuthentication):
     Custom API Key authentication
     """
     
-    def authenticate(self, request):
+    def authenticate (self, request):
         api_key = request.META.get('HTTP_X_API_KEY')
         
         if not api_key:
             return None
         
         try:
-            key = APIKey.objects.select_related('user').get(key=api_key, is_active=True)
+            key = APIKey.objects.select_related('user').get (key=api_key, is_active=True)
         except APIKey.DoesNotExist:
             raise exceptions.AuthenticationFailed('Invalid API key')
         
         # Log API key usage
         key.last_used_at = timezone.now()
         key.usage_count += 1
-        key.save(update_fields=['last_used_at', 'usage_count'])
+        key.save (update_fields=['last_used_at', 'usage_count'])
         
         return (key.user, key)
 
-class APIKey(models.Model):
+class APIKey (models.Model):
     """API Key model"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='api_keys')
-    key = models.CharField(max_length=40, unique=True, db_index=True)
-    name = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_used_at = models.DateTimeField(null=True, blank=True)
-    usage_count = models.IntegerField(default=0)
+    key = models.CharField (max_length=40, unique=True, db_index=True)
+    name = models.CharField (max_length=100)
+    is_active = models.BooleanField (default=True)
+    created_at = models.DateTimeField (auto_now_add=True)
+    last_used_at = models.DateTimeField (null=True, blank=True)
+    usage_count = models.IntegerField (default=0)
     
-    def save(self, *args, **kwargs):
+    def save (self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()
         super().save(*args, **kwargs)
@@ -419,7 +419,7 @@ class SustainedRateThrottle(UserRateThrottle):
     """Sustained rate (10000/day)"""
     rate = '10000/day'
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     throttle_classes = [BurstRateThrottle, SustainedRateThrottle]
 \`\`\`
 

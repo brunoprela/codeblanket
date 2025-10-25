@@ -35,7 +35,7 @@ export const operationsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc3',
     question:
-      "What is Python's recommended data structure for implementing a queue?",
+      "What is Python\'s recommended data structure for implementing a queue?",
     options: ['list', 'tuple', 'collections.deque', 'set'],
     correctAnswer: 2,
     explanation:
@@ -48,7 +48,7 @@ export const operationsMultipleChoice: MultipleChoiceQuestion[] = [
       'Use one stack for everything',
       'Push to stack1, pop from stack1',
       'Push to stack1, transfer to stack2 when popping',
-      "It's impossible",
+      "It\'s impossible",
     ],
     correctAnswer: 2,
     explanation:

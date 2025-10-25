@@ -27,7 +27,7 @@ Greedy algorithms work when:
 3. No need to reconsider past choices
 
 **Examples where greedy works:**
-- Dijkstra's shortest path (non-negative weights)
+- Dijkstra\'s shortest path (non-negative weights)
 - Minimum spanning tree (Prim's, Kruskal's)
 - Huffman coding
 - Activity selection

@@ -7,7 +7,7 @@ import { MultipleChoiceQuestion } from '../../../types';
 export const linkedinarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc1',
-    question: "What is LinkedIn's Espresso database built on top of?",
+    question: "What is LinkedIn\'s Espresso database built on top of?",
     options: [
       'PostgreSQL with custom distributed layer',
       'MySQL storage engine with distributed coordination',
@@ -16,7 +16,7 @@ export const linkedinarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Espresso is built on top of MySQL storage engine with a custom distributed layer. This approach leverages MySQL's proven durability and ACID properties while adding distributed capabilities like horizontal sharding, cross-datacenter replication, and document model with secondary indexes. Espresso provides timeline consistency and handles 1000+ nodes with 100TB+ data serving millions of QPS for LinkedIn's social graph and feed data.",
+      "Espresso is built on top of MySQL storage engine with a custom distributed layer. This approach leverages MySQL's proven durability and ACID properties while adding distributed capabilities like horizontal sharding, cross-datacenter replication, and document model with secondary indexes. Espresso provides timeline consistency and handles 1000+ nodes with 100TB+ data serving millions of QPS for LinkedIn\'s social graph and feed data.",
   },
   {
     id: 'mc2',
@@ -30,11 +30,11 @@ export const linkedinarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "Brooklin is LinkedIn's tool for cross-datacenter data replication. It provides reliable, scalable replication of data between datacenters with configurable consistency models. Brooklin works with various data sources (Espresso, Kafka, databases) and ensures that data changes are propagated across LinkedIn's global infrastructure. It complements Kafka for event propagation and Espresso for storage replication.",
+      "Brooklin is LinkedIn\'s tool for cross-datacenter data replication. It provides reliable, scalable replication of data between datacenters with configurable consistency models. Brooklin works with various data sources (Espresso, Kafka, databases) and ensures that data changes are propagated across LinkedIn's global infrastructure. It complements Kafka for event propagation and Espresso for storage replication.",
   },
   {
     id: 'mc3',
-    question: "What ML evolution did LinkedIn's feed ranking undergo?",
+    question: "What ML evolution did LinkedIn\'s feed ranking undergo?",
     options: [
       'Started with deep learning, moved to simpler logistic regression',
       'Always used deep neural networks',
@@ -43,7 +43,7 @@ export const linkedinarchitectureMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      "LinkedIn's feed ranking evolved from gradient boosted trees to deep neural networks. Initially, they used gradient boosted trees (GBT) for ranking, which worked well with hand-crafted features. As computational resources and data volumes grew, LinkedIn migrated to deep neural networks with embeddings for members and posts. This allows the model to learn feature representations automatically and resulted in 10%+ increase in feed engagement.",
+      "LinkedIn\'s feed ranking evolved from gradient boosted trees to deep neural networks. Initially, they used gradient boosted trees (GBT) for ranking, which worked well with hand-crafted features. As computational resources and data volumes grew, LinkedIn migrated to deep neural networks with embeddings for members and posts. This allows the model to learn feature representations automatically and resulted in 10%+ increase in feed engagement.",
   },
   {
     id: 'mc4',

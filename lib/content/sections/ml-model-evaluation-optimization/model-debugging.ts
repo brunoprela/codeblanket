@@ -49,7 +49,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 print("Model Debugging: Systematic Troubleshooting")
 print("="*70)
 print(f"Dataset: {X.shape[0]} samples, {X.shape[1]} features")
-print(f"Class distribution: {np.bincount(y)}")
+print(f"Class distribution: {np.bincount (y)}")
 print(f"Imbalance ratio: {(y==0).sum() / (y==1).sum():.1f}:1")
 \`\`\`
 
@@ -63,12 +63,12 @@ print("="*70)
 from sklearn.dummy import DummyClassifier
 
 # Baseline: Always predict majority class
-baseline = DummyClassifier(strategy='most_frequent')
+baseline = DummyClassifier (strategy='most_frequent')
 baseline.fit(X_train, y_train)
 baseline_acc = baseline.score(X_test, y_test)
 
 # Baseline: Random guessing
-random_baseline = DummyClassifier(strategy='uniform', random_state=42)
+random_baseline = DummyClassifier (strategy='uniform', random_state=42)
 random_baseline.fit(X_train, y_train)
 random_acc = random_baseline.score(X_test, y_test)
 
@@ -77,7 +77,7 @@ print(f"  Always predict majority class: {baseline_acc:.3f} accuracy")
 print(f"  Random guessing: {random_acc:.3f} accuracy")
 
 # Train actual model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier (n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 train_acc = model.score(X_train, y_train)
 test_acc = model.score(X_test, y_test)
@@ -146,14 +146,14 @@ train_sizes, train_scores, val_scores = learning_curve(
     scoring='accuracy'
 )
 
-plt.figure(figsize=(10, 6))
-plt.plot(train_sizes, train_scores.mean(axis=1), label='Training score', marker='o')
-plt.fill_between(train_sizes, train_scores.mean(axis=1) - train_scores.std(axis=1),
-                 train_scores.mean(axis=1) + train_scores.std(axis=1), alpha=0.1)
+plt.figure (figsize=(10, 6))
+plt.plot (train_sizes, train_scores.mean (axis=1), label='Training score', marker='o')
+plt.fill_between (train_sizes, train_scores.mean (axis=1) - train_scores.std (axis=1),
+                 train_scores.mean (axis=1) + train_scores.std (axis=1), alpha=0.1)
 
-plt.plot(train_sizes, val_scores.mean(axis=1), label='Validation score', marker='o')
-plt.fill_between(train_sizes, val_scores.mean(axis=1) - val_scores.std(axis=1),
-                 val_scores.mean(axis=1) + val_scores.std(axis=1), alpha=0.1)
+plt.plot (train_sizes, val_scores.mean (axis=1), label='Validation score', marker='o')
+plt.fill_between (train_sizes, val_scores.mean (axis=1) - val_scores.std (axis=1),
+                 val_scores.mean (axis=1) + val_scores.std (axis=1), alpha=0.1)
 
 plt.xlabel('Training Set Size')
 plt.ylabel('Accuracy')
@@ -182,14 +182,14 @@ y_pred = model.predict(X_test)
 y_pred_proba = model.predict_proba(X_test)[:, 1]
 
 # Confusion matrix
-cm = confusion_matrix(y_test, y_pred)
+cm = confusion_matrix (y_test, y_pred)
 
 print("\\nConfusion Matrix:")
 print(cm)
 
 # Visualize confusion matrix
-plt.figure(figsize=(8, 6))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.figure (figsize=(8, 6))
+sns.heatmap (cm, annot=True, fmt='d', cmap='Blues')
 plt.title('Confusion Matrix')
 plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
@@ -199,11 +199,11 @@ print("📊 Saved: confusion_matrix_debug.png")
 
 # Classification report
 print("\\nDetailed Classification Report:")
-print(classification_report(y_test, y_pred, target_names=['Class 0', 'Class 1']))
+print(classification_report (y_test, y_pred, target_names=['Class 0', 'Class 1']))
 
 # Identify types of errors
 tn, fp, fn, tp = cm.ravel()
-total = len(y_test)
+total = len (y_test)
 
 print(f"\\nError Breakdown:")
 print(f"  True Negatives (correct): {tn} ({tn/total*100:.1f}%)")
@@ -253,30 +253,30 @@ test_df['correct'] = y_test == y_pred
 false_positives = test_df[(test_df['true_label'] == 0) & (test_df['predicted_label'] == 1)]
 false_negatives = test_df[(test_df['true_label'] == 1) & (test_df['predicted_label'] == 0)]
 
-print(f"\\nFalse Positives (n={len(false_positives)}):")
-if len(false_positives) > 0:
+print(f"\\nFalse Positives (n={len (false_positives)}):")
+if len (false_positives) > 0:
     print("  Feature statistics (mean):")
-    for col in [f'feature_{i}' for i in range(min(5, X_test.shape[1]))]:
+    for col in [f'feature_{i}' for i in range (min(5, X_test.shape[1]))]:
         fp_mean = false_positives[col].mean()
         all_mean = test_df[col].mean()
         diff = fp_mean - all_mean
         print(f"    {col}: {fp_mean:.3f} (overall: {all_mean:.3f}, diff: {diff:+.3f})")
 
-print(f"\\nFalse Negatives (n={len(false_negatives)}):")
-if len(false_negatives) > 0:
+print(f"\\nFalse Negatives (n={len (false_negatives)}):")
+if len (false_negatives) > 0:
     print("  Feature statistics (mean):")
-    for col in [f'feature_{i}' for i in range(min(5, X_test.shape[1]))]:
+    for col in [f'feature_{i}' for i in range (min(5, X_test.shape[1]))]:
         fn_mean = false_negatives[col].mean()
         all_mean = test_df[col].mean()
         diff = fn_mean - all_mean
         print(f"    {col}: {fn_mean:.3f} (overall: {all_mean:.3f}, diff: {diff:+.3f})")
 
 # High-confidence errors (most problematic)
-high_conf_errors = test_df[~test_df['correct'] & (test_df['predicted_proba'].apply(lambda x: max(x, 1-x)) > 0.8)]
+high_conf_errors = test_df[~test_df['correct'] & (test_df['predicted_proba'].apply (lambda x: max (x, 1-x)) > 0.8)]
 
-print(f"\\nHigh-Confidence Errors (n={len(high_conf_errors)}):")
+print(f"\\nHigh-Confidence Errors (n={len (high_conf_errors)}):")
 print("  These are the most problematic - model is confident but wrong")
-if len(high_conf_errors) > 0:
+if len (high_conf_errors) > 0:
     print(f"\\n  Sample of high-confidence errors:")
     sample = high_conf_errors.head(3)[['true_label', 'predicted_label', 'predicted_proba']]
     for idx, row in sample.iterrows():
@@ -315,21 +315,21 @@ else:
 
 # Feature distributions
 print("\\nFeature Distribution Checks:")
-for i in range(min(5, X_train.shape[1])):
+for i in range (min(5, X_train.shape[1])):
     feat = X_train[:, i]
-    skew = pd.Series(feat).skew()
+    skew = pd.Series (feat).skew()
     print(f"  Feature {i}: mean={feat.mean():.2f}, std={feat.std():.2f}, skew={skew:.2f}")
-    if abs(skew) > 2:
+    if abs (skew) > 2:
         print(f"    ⚠️  Highly skewed - consider log transform")
 
 # Target distribution
 print(f"\\nTarget Distribution:")
-print(f"  Training: {np.bincount(y_train)}")
-print(f"  Test: {np.bincount(y_test)}")
+print(f"  Training: {np.bincount (y_train)}")
+print(f"  Test: {np.bincount (y_test)}")
 
-train_ratio = y_train.sum() / len(y_train)
-test_ratio = y_test.sum() / len(y_test)
-ratio_diff = abs(train_ratio - test_ratio)
+train_ratio = y_train.sum() / len (y_train)
+test_ratio = y_test.sum() / len (y_test)
+ratio_diff = abs (train_ratio - test_ratio)
 
 if ratio_diff > 0.05:
     print(f"\\n⚠️  Train/test distribution mismatch: {ratio_diff:.3f}")
@@ -340,8 +340,8 @@ else:
 # Outlier detection
 print("\\nOutlier Detection (using z-score):")
 from scipy import stats
-z_scores = np.abs(stats.zscore(X_train))
-outliers = (z_scores > 3).sum(axis=0)
+z_scores = np.abs (stats.zscore(X_train))
+outliers = (z_scores > 3).sum (axis=0)
 total_outliers = (outliers > 0).sum()
 
 if total_outliers > 0:
@@ -361,7 +361,7 @@ print("="*70)
 # Feature importance
 importances = model.feature_importances_
 feature_importance = pd.DataFrame({
-    'feature': [f'feature_{i}' for i in range(len(importances))],
+    'feature': [f'feature_{i}' for i in range (len (importances))],
     'importance': importances
 }).sort_values('importance', ascending=False)
 
@@ -383,13 +383,13 @@ corr_matrix = X_train_df.corr().abs()
 
 # Find highly correlated pairs
 high_corr_pairs = []
-for i in range(len(corr_matrix.columns)):
-    for j in range(i+1, len(corr_matrix.columns)):
+for i in range (len (corr_matrix.columns)):
+    for j in range (i+1, len (corr_matrix.columns)):
         if corr_matrix.iloc[i, j] > 0.9:
             high_corr_pairs.append((corr_matrix.columns[i], corr_matrix.columns[j], corr_matrix.iloc[i, j]))
 
 if high_corr_pairs:
-    print(f"  ⚠️  {len(high_corr_pairs)} highly correlated feature pairs (>0.9):")
+    print(f"  ⚠️  {len (high_corr_pairs)} highly correlated feature pairs (>0.9):")
     for feat1, feat2, corr in high_corr_pairs[:3]:
         print(f"     {feat1} <-> {feat2}: {corr:.3f}")
     print("   → Consider removing redundant features")

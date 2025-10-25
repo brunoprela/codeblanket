@@ -1,6 +1,6 @@
 export const section8 = {
-    title: "Credit Analysis & Default Risk",
-    content: `
+  title: 'Credit Analysis & Default Risk',
+  content: `
 # Credit Analysis & Default Risk
 
 Learn to assess creditworthiness, predict defaults, and analyze bonds like a professional credit analyst.
@@ -33,32 +33,32 @@ class CreditAnalyzer:
     cfo: float
     fcf: float
     
-    def interest_coverage(self) -> float:
+    def interest_coverage (self) -> float:
         """EBIT / Interest Expense"""
         return self.ebit / self.interest_expense if self.interest_expense > 0 else float('inf')
     
-    def debt_service_coverage(self) -> float:
+    def debt_service_coverage (self) -> float:
         """EBITDA / Interest Expense"""
         return self.ebitda / self.interest_expense if self.interest_expense > 0 else float('inf')
     
-    def leverage_ratio(self) -> float:
+    def leverage_ratio (self) -> float:
         """Total Debt / EBITDA"""
         return self.total_debt / self.ebitda if self.ebitda > 0 else float('inf')
     
-    def net_leverage(self) -> float:
+    def net_leverage (self) -> float:
         """(Total Debt - Cash) / EBITDA"""
         net_debt = self.total_debt - self.cash
         return net_debt / self.ebitda if self.ebitda > 0 else float('inf')
     
-    def debt_to_equity(self) -> float:
+    def debt_to_equity (self) -> float:
         """Total Debt / Shareholders' Equity"""
         return self.total_debt / self.shareholders_equity
     
-    def fcf_to_debt(self) -> float:
+    def fcf_to_debt (self) -> float:
         """FCF / Total Debt - measures debt paydown capability"""
         return self.fcf / self.total_debt if self.total_debt > 0 else float('inf')
     
-    def credit_rating_estimate(self) -> str:
+    def credit_rating_estimate (self) -> str:
         """Estimate credit rating based on metrics."""
         
         ic = self.interest_coverage()
@@ -103,7 +103,7 @@ class CreditAnalyzer:
         else:
             return "CCC or below - Distressed"
     
-    def comprehensive_analysis(self) -> Dict:
+    def comprehensive_analysis (self) -> Dict:
         """Full credit analysis report."""
         
         return {
@@ -133,7 +133,7 @@ ig_company = CreditAnalyzer(
 print("Credit Analysis:")
 analysis = ig_company.comprehensive_analysis()
 for metric, value in analysis.items():
-    if isinstance(value, float) and value != float('inf'):
+    if isinstance (value, float) and value != float('inf'):
         print(f"{metric}: {value:.2f}")
     else:
         print(f"{metric}: {value}")
@@ -162,11 +162,11 @@ class MertonModel:
         """Calculate probability of default using Merton model."""
         
         # Distance to default
-        d1 = (math.log(asset_value / debt_face_value) + 
+        d1 = (math.log (asset_value / debt_face_value) + 
               (risk_free_rate + 0.5 * asset_volatility**2) * time_horizon) / \
-             (asset_volatility * math.sqrt(time_horizon))
+             (asset_volatility * math.sqrt (time_horizon))
         
-        d2 = d1 - asset_volatility * math.sqrt(time_horizon)
+        d2 = d1 - asset_volatility * math.sqrt (time_horizon)
         
         # Default probability
         default_prob = norm.cdf(-d2)
@@ -223,7 +223,7 @@ class CreditSpreadAnalyzer:
         pass
     
     @staticmethod
-    def interpret_spread(spread_bps: float) -> str:
+    def interpret_spread (spread_bps: float) -> str:
         """Interpret credit spread level."""
         
         if spread_bps < 100:
@@ -256,12 +256,12 @@ treasury_yield = 0.035  # 3.5%
 spread_bps = (corporate_yield - treasury_yield) * 10000
 
 print(f"\\nCredit Spread: {spread_bps:.0f} bps")
-print(f"Interpretation: {spread_analyzer.interpret_spread(spread_bps)}")
+print(f"Interpretation: {spread_analyzer.interpret_spread (spread_bps)}")
 
 # Price impact of 50bps spread widening on 7-year duration bond
 duration = 7.0
 spread_change = 50  # bps
-price_impact = spread_analyzer.spread_change_price_impact(duration, spread_change)
+price_impact = spread_analyzer.spread_change_price_impact (duration, spread_change)
 print(f"Price impact of +50bps: {price_impact:.2%}")
 \`\`\`
 
@@ -274,7 +274,7 @@ class CovenantMonitor:
     def __init__(self, covenants: Dict):
         self.covenants = covenants
     
-    def check_compliance(self, financials: Dict) -> Dict:
+    def check_compliance (self, financials: Dict) -> Dict:
         """Check if company is complying with all covenants."""
         
         results = {}
@@ -319,7 +319,7 @@ class CovenantMonitor:
             }
         
         # Overall status
-        all_compliant = all(r['compliant'] for r in results.values())
+        all_compliant = all (r['compliant'] for r in results.values())
         
         return {
             'overall_compliant': all_compliant,
@@ -334,7 +334,7 @@ covenants = {
     'min_fixed_charge_coverage': 1.25
 }
 
-monitor = CovenantMonitor(covenants)
+monitor = CovenantMonitor (covenants)
 
 financials = {
     'total_debt': 2_000_000_000,
@@ -343,7 +343,7 @@ financials = {
     'capex': 100_000_000
 }
 
-compliance = monitor.check_compliance(financials)
+compliance = monitor.check_compliance (financials)
 print("\\nCovenant Compliance:")
 print(f"Overall: {'✓ COMPLIANT' if compliance['overall_compliant'] else '✗ BREACH'}")
 \`\`\`
@@ -377,7 +377,7 @@ class RecoveryAnalyzer:
             'equity': 0.02
         }
         
-        recovery = base_recovery.get(f"{seniority}_{secured_status}", 0.30)
+        recovery = base_recovery.get (f"{seniority}_{secured_status}", 0.30)
         
         # Adjust for asset coverage
         if asset_coverage > 1.5:
@@ -385,10 +385,10 @@ class RecoveryAnalyzer:
         elif asset_coverage < 0.8:
             recovery *= 0.7
         
-        return min(recovery, 1.0)  # Cap at 100%
+        return min (recovery, 1.0)  # Cap at 100%
     
     @staticmethod
-    def loss_given_default(recovery_rate: float) -> float:
+    def loss_given_default (recovery_rate: float) -> float:
         """LGD = 1 - Recovery Rate"""
         return 1 - recovery_rate
     
@@ -411,7 +411,7 @@ recovery = recovery_analyzer.estimate_recovery_rate(
 )
 
 print(f"\\nEstimated Recovery Rate: {recovery:.1%}")
-print(f"Loss Given Default: {recovery_analyzer.loss_given_default(recovery):.1%}")
+print(f"Loss Given Default: {recovery_analyzer.loss_given_default (recovery):.1%}")
 
 # Expected loss calculation
 expected_loss = recovery_analyzer.expected_loss(
@@ -420,8 +420,7 @@ expected_loss = recovery_analyzer.expected_loss(
     loss_given_default=1 - recovery
 )
 
-print(f"Expected Loss: ${expected_loss:, .0f
-}")
+print(f"Expected Loss: \${expected_loss:,.0f}")
 \`\`\`
 
 ## Key Takeaways
@@ -436,7 +435,6 @@ print(f"Expected Loss: ${expected_loss:, .0f
 
 Master credit analysis and you can assess any bond or loan!
 `,
-    discussionQuestions: [],
-        multipleChoiceQuestions: []
+  discussionQuestions: [],
+  multipleChoiceQuestions: [],
 };
-

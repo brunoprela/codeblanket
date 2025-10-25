@@ -58,7 +58,7 @@ from typing import List, Dict, Any
 import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create FastAPI app
@@ -113,7 +113,7 @@ async def load_model():
         logger.info("✓ Model loaded successfully")
     
     except Exception as e:
-        logger.error(f"Failed to load model: {e}")
+        logger.error (f"Failed to load model: {e}")
         raise
 
 
@@ -140,18 +140,18 @@ async def health_check():
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict(request: PredictionRequest):
+async def predict (request: PredictionRequest):
     """
     Prediction endpoint
     
     Latency target: <50ms
     """
     if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
+        raise HTTPException (status_code=503, detail="Model not loaded")
     
     try:
         # Convert to numpy array
-        features = np.array(request.features).reshape(1, -1)
+        features = np.array (request.features).reshape(1, -1)
         
         # Validate input shape
         if features.shape[1] != 20:  # Expected features
@@ -162,38 +162,38 @@ async def predict(request: PredictionRequest):
         
         # Scale features
         if scaler is not None:
-            features = scaler.transform(features)
+            features = scaler.transform (features)
         
         # Predict
-        prediction = model.predict(features)[0]
+        prediction = model.predict (features)[0]
         
         # Confidence (for tree models)
         try:
-            confidence = np.std([tree.predict(features)[0] 
+            confidence = np.std([tree.predict (features)[0] 
                                 for tree in model.estimators_])
         except:
             confidence = 0.0
         
-        logger.info(f"Prediction: {prediction:.6f}")
+        logger.info (f"Prediction: {prediction:.6f}")
         
         return PredictionResponse(
-            prediction=float(prediction),
-            confidence=float(confidence),
+            prediction=float (prediction),
+            confidence=float (confidence),
             model_version="1.0.0"
         )
     
     except Exception as e:
-        logger.error(f"Prediction error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error (f"Prediction error: {e}")
+        raise HTTPException (status_code=500, detail=str (e))
 
 
 @app.post("/batch_predict")
-async def batch_predict(requests: List[PredictionRequest]):
+async def batch_predict (requests: List[PredictionRequest]):
     """
     Batch prediction endpoint
     """
     if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
+        raise HTTPException (status_code=503, detail="Model not loaded")
     
     try:
         # Stack features
@@ -201,19 +201,19 @@ async def batch_predict(requests: List[PredictionRequest]):
         
         # Scale
         if scaler is not None:
-            features = scaler.transform(features)
+            features = scaler.transform (features)
         
         # Predict
-        predictions = model.predict(features)
+        predictions = model.predict (features)
         
         return {
             "predictions": predictions.tolist(),
-            "count": len(predictions)
+            "count": len (predictions)
         }
     
     except Exception as e:
-        logger.error(f"Batch prediction error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error (f"Batch prediction error: {e}")
+        raise HTTPException (status_code=500, detail=str (e))
 
 
 if __name__ == "__main__":
@@ -262,21 +262,21 @@ API_KEYS = {
     hashlib.sha256(b"secret_key_2").hexdigest(): "user_2"
 }
 
-def verify_api_key(x_api_key: str = Header(...)):
+def verify_api_key (x_api_key: str = Header(...)):
     """
     Verify API key
     """
     api_key_hash = hashlib.sha256(x_api_key.encode()).hexdigest()
     
     if api_key_hash not in API_KEYS:
-        raise HTTPException(status_code=401, detail="Invalid API key")
+        raise HTTPException (status_code=401, detail="Invalid API key")
     
     return API_KEYS[api_key_hash]
 
 
 # Request ID middleware
 @app.middleware("http")
-async def add_request_id(request, call_next):
+async def add_request_id (request, call_next):
     """
     Add request ID for tracing
     """
@@ -286,7 +286,7 @@ async def add_request_id(request, call_next):
     
     request.state.request_id = request_id
     
-    response = await call_next(request)
+    response = await call_next (request)
     response.headers["X-Request-ID"] = request_id
     
     return response
@@ -294,22 +294,22 @@ async def add_request_id(request, call_next):
 
 # Latency tracking middleware
 @app.middleware("http")
-async def track_latency(request, call_next):
+async def track_latency (request, call_next):
     """
     Track request latency
     """
     start_time = time.time()
     
-    response = await call_next(request)
+    response = await call_next (request)
     
     latency = (time.time() - start_time) * 1000  # ms
     response.headers["X-Process-Time"] = f"{latency:.2f}ms"
     
-    logger.info(f"Request {request.state.request_id}: {latency:.2f}ms")
+    logger.info (f"Request {request.state.request_id}: {latency:.2f}ms")
     
     # Alert if slow
     if latency > 100:
-        logger.warning(f"Slow request: {latency:.2f}ms")
+        logger.warning (f"Slow request: {latency:.2f}ms")
     
     return response
 
@@ -317,12 +317,12 @@ async def track_latency(request, call_next):
 @app.post("/predict")
 async def predict_authenticated(
     request: PredictionRequest,
-    user: str = Depends(verify_api_key)
+    user: str = Depends (verify_api_key)
 ):
     """
     Authenticated prediction endpoint
     """
-    logger.info(f"Prediction request from user: {user}")
+    logger.info (f"Prediction request from user: {user}")
     
     # Call prediction logic
     # ... (same as before)
@@ -332,17 +332,17 @@ async def predict_authenticated(
 
 # Exception handler
 @app.exception_handler(Exception)
-async def global_exception_handler(request, exc):
+async def global_exception_handler (request, exc):
     """
     Global exception handler
     """
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    logger.error (f"Unhandled exception: {exc}", exc_info=True)
     
     return JSONResponse(
         status_code=500,
         content={
             "error": "Internal server error",
-            "request_id": getattr(request.state, 'request_id', 'unknown')
+            "request_id": getattr (request.state, 'request_id', 'unknown')
         }
     )
 
@@ -508,7 +508,7 @@ class EC2Deployer:
         self.ec2 = boto3.client('ec2', region_name=region)
         self.region = region
     
-    def launch_instance(self, config: Dict[str, Any]):
+    def launch_instance (self, config: Dict[str, Any]):
         """
         Launch EC2 instance
         """
@@ -567,7 +567,7 @@ class EC2Deployer:
             'public_ip': public_ip
         }
     
-    def create_load_balancer(self):
+    def create_load_balancer (self):
         """
         Create Application Load Balancer
         """
@@ -592,7 +592,7 @@ class EC2Deployer:
 
 
 # Example usage
-# deployer = EC2Deployer(region='us-east-1')
+# deployer = EC2Deployer (region='us-east-1')
 # instance = deployer.launch_instance({
 #     'ami_id': 'ami-0c55b159cbfafe1f0',
 #     'instance_type': 't3.medium',
@@ -613,7 +613,7 @@ import boto3
 import joblib
 
 # Lambda handler
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     """
     AWS Lambda handler for predictions
     
@@ -629,7 +629,7 @@ def lambda_handler(event, context):
     """
     try:
         # Parse request
-        body = json.loads(event['body'])
+        body = json.loads (event['body'])
         features = body['features']
         
         # Load model (cached after first invocation)
@@ -640,8 +640,8 @@ def lambda_handler(event, context):
         
         # Predict
         import numpy as np
-        features_array = np.array(features).reshape(1, -1)
-        prediction = model.predict(features_array)[0]
+        features_array = np.array (features).reshape(1, -1)
+        prediction = model.predict (features_array)[0]
         
         return {
             'statusCode': 200,
@@ -650,14 +650,14 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Origin': '*'
             },
             'body': json.dumps({
-                'prediction': float(prediction)
+                'prediction': float (prediction)
             })
         }
     
     except Exception as e:
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str (e)})
         }
 
 
@@ -675,10 +675,10 @@ class LambdaDeployer:
         """
         Upload model to S3
         """
-        self.s3_client.upload_file(model_path, bucket, key)
+        self.s3_client.upload_file (model_path, bucket, key)
         print(f"✓ Uploaded model to s3://{bucket}/{key}")
     
-    def create_lambda_function(self, function_name, role_arn, bucket, model_key):
+    def create_lambda_function (self, function_name, role_arn, bucket, model_key):
         """
         Create Lambda function
         """
@@ -732,7 +732,7 @@ import tensorflow as tf
 import numpy as np
 
 # Save model in SavedModel format
-def save_for_tf_serving(model, export_path):
+def save_for_tf_serving (model, export_path):
     """
     Save model for TensorFlow Serving
     """
@@ -740,7 +740,7 @@ def save_for_tf_serving(model, export_path):
     # ... conversion logic ...
     
     # Save
-    tf.saved_model.save(model, export_path)
+    tf.saved_model.save (model, export_path)
     
     print(f"✓ Model saved to {export_path}")
     print(f"\\nServe with:")
@@ -753,7 +753,7 @@ def save_for_tf_serving(model, export_path):
 # Client code
 import requests
 
-def predict_with_tf_serving(features, url="http://localhost:8501/v1/models/model:predict"):
+def predict_with_tf_serving (features, url="http://localhost:8501/v1/models/model:predict"):
     """
     Call TensorFlow Serving API
     """
@@ -761,13 +761,13 @@ def predict_with_tf_serving(features, url="http://localhost:8501/v1/models/model
         "instances": [features]
     }
     
-    response = requests.post(url, json=payload)
+    response = requests.post (url, json=payload)
     
     if response.status_code == 200:
         predictions = response.json()['predictions']
         return predictions[0]
     else:
-        raise Exception(f"Prediction failed: {response.text}")
+        raise Exception (f"Prediction failed: {response.text}")
 
 
 print("TensorFlow Serving example defined")
@@ -809,7 +809,7 @@ class TradingHandler(BaseHandler):
     Custom handler for trading model
     """
     
-    def preprocess(self, data):
+    def preprocess (self, data):
         """
         Preprocess input
         """
@@ -818,22 +818,22 @@ class TradingHandler(BaseHandler):
         features = input_data.get("features")
         
         # Convert to tensor
-        tensor = torch.tensor(features, dtype=torch.float32)
+        tensor = torch.tensor (features, dtype=torch.float32)
         
         return tensor
     
-    def inference(self, tensor):
+    def inference (self, tensor):
         """
         Run inference
         """
         self.model.eval()
         
         with torch.no_grad():
-            output = self.model(tensor)
+            output = self.model (tensor)
         
         return output
     
-    def postprocess(self, output):
+    def postprocess (self, output):
         """
         Format output
         """
@@ -887,7 +887,7 @@ class BlueGreenDeployment:
         }
         self.traffic_split = {'blue': 100, 'green': 0}
     
-    def deploy_green(self, new_version):
+    def deploy_green (self, new_version):
         """
         Deploy new version to green environment
         """
@@ -898,7 +898,7 @@ class BlueGreenDeployment:
         
         print("✓ Green deployed")
     
-    def test_green(self):
+    def test_green (self):
         """
         Test green environment
         """
@@ -911,7 +911,7 @@ class BlueGreenDeployment:
         
         return True
     
-    def canary_release(self, green_percentage=10):
+    def canary_release (self, green_percentage=10):
         """
         Gradual traffic shift (canary)
         """
@@ -922,7 +922,7 @@ class BlueGreenDeployment:
         
         print(f"✓ Traffic split: {self.traffic_split}")
     
-    def full_cutover(self):
+    def full_cutover (self):
         """
         Full cutover to green
         """
@@ -936,7 +936,7 @@ class BlueGreenDeployment:
         
         print("✓ Cutover complete")
     
-    def rollback(self):
+    def rollback (self):
         """
         Rollback to blue
         """
@@ -950,7 +950,7 @@ class BlueGreenDeployment:
         
         print("✓ Rollback complete")
     
-    def swap_colors(self):
+    def swap_colors (self):
         """
         Swap blue/green labels
         """
@@ -1013,30 +1013,30 @@ class BatchPredictionService:
         self.model = model
         self.batch_size = batch_size
     
-    def predict_batch(self, data: pd.DataFrame) -> pd.DataFrame:
+    def predict_batch (self, data: pd.DataFrame) -> pd.DataFrame:
         """
         Predict on batch of data
         """
-        print(f"Processing {len(data)} records in batches of {self.batch_size}...")
+        print(f"Processing {len (data)} records in batches of {self.batch_size}...")
         
         predictions = []
         
         # Process in batches
-        for i in range(0, len(data), self.batch_size):
+        for i in range(0, len (data), self.batch_size):
             batch = data.iloc[i:i+self.batch_size]
             
             # Predict
-            batch_preds = self.model.predict(batch)
-            predictions.extend(batch_preds)
+            batch_preds = self.model.predict (batch)
+            predictions.extend (batch_preds)
             
-            print(f"  Processed {min(i+self.batch_size, len(data))}/{len(data)}")
+            print(f"  Processed {min (i+self.batch_size, len (data))}/{len (data)}")
         
         # Add predictions to dataframe
         data['prediction'] = predictions
         
         return data
     
-    def daily_batch_job(self, data_path, output_path):
+    def daily_batch_job (self, data_path, output_path):
         """
         Daily batch prediction job
         """
@@ -1044,30 +1044,30 @@ class BatchPredictionService:
         start = time.time()
         
         # Load data
-        data = pd.read_csv(data_path)
-        print(f"Loaded {len(data)} records")
+        data = pd.read_csv (data_path)
+        print(f"Loaded {len (data)} records")
         
         # Predict
-        results = self.predict_batch(data)
+        results = self.predict_batch (data)
         
         # Save
-        results.to_csv(output_path, index=False)
+        results.to_csv (output_path, index=False)
         
         duration = time.time() - start
         print(f"\\n✓ Batch job complete: {duration:.2f}s")
-        print(f"  Throughput: {len(data)/duration:.0f} records/sec")
+        print(f"  Throughput: {len (data)/duration:.0f} records/sec")
 
 
 # Example
 from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
-model = RandomForestRegressor(n_estimators=100)
+model = RandomForestRegressor (n_estimators=100)
 X_train = np.random.randn(1000, 20)
 y_train = np.random.randn(1000)
 model.fit(X_train, y_train)
 
-batch_service = BatchPredictionService(model, batch_size=500)
+batch_service = BatchPredictionService (model, batch_size=500)
 
 # Simulate daily job
 # batch_service.daily_batch_job('data.csv', 'predictions.csv')

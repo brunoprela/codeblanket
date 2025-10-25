@@ -1,12 +1,12 @@
 export const timeValueOfMoney = {
-    title: 'Time Value of Money',
-    id: 'time-value-of-money',
-    content: `
+  title: 'Time Value of Money',
+  id: 'time-value-of-money',
+  content: `
 # Time Value of Money
 
 ## Introduction
 
-Time Value of Money (TVM) is the **most important concept in finance**. It's the foundation for every financial decision: Should you invest? Take a loan? Buy or lease? Accept a job offer with deferred compensation?
+Time Value of Money (TVM) is the **most important concept in finance**. It\'s the foundation for every financial decision: Should you invest? Take a loan? Buy or lease? Accept a job offer with deferred compensation?
 
 The core principle: **A dollar today is worth more than a dollar tomorrow**. Why?
 
@@ -41,12 +41,12 @@ Most people instinctively choose today. But let's quantify the difference:
 PV_today = 1_000_000
 FV_future = PV_today * (1 + 0.07)**10
 
-print(f"$1M today grows to: ${FV_future:,.0f}")
+print(f"$1M today grows to: \${FV_future:,.0f}")
 # $1M today grows to: $1, 967, 151
 
-# What's $1M in 10 years worth today?
+# What\'s $1M in 10 years worth today?
 PV_future = 1_000_000 / (1 + 0.07) ** 10
-print(f"$1M in 10 years is worth today: ${PV_future:,.0f}")
+print(f"$1M in 10 years is worth today: \${PV_future:,.0f}")
 # $1M in 10 years is worth today: $508, 349
 \`\`\`
 
@@ -113,7 +113,7 @@ def future_value(
     """
     if compounding == 'continuous':
         # FV = PV * e^(r*t)
-        return pv * np.exp(rate * nper)
+        return pv * np.exp (rate * nper)
     
     # Get compounding periods per year
     periods_map = {
@@ -124,7 +124,7 @@ def future_value(
         'daily': 365
     }
     
-    m = periods_map.get(compounding, 1)
+    m = periods_map.get (compounding, 1)
     
     # FV = PV * (1 + r/m)^(m*n)
     return pv * (1 + rate/m)**(m * nper)
@@ -135,10 +135,10 @@ pv = 10_000
 rate = 0.07  # 7% annual return
 years = 40
 
-fv = future_value(pv, rate, years)
-print(f"Initial investment: ${pv:, .0f}")
-print(f"Future value (40 years, 7%): ${fv:,.0f}")
-print(f"Total growth: ${fv - pv:,.0f}")
+fv = future_value (pv, rate, years)
+print(f"Initial investment: \${pv:,.0f}")
+print(f"Future value (40 years, 7%): \${fv:,.0f}")
+print(f"Total growth: \${fv - pv:,.0f}")
 print(f"Multiple: {fv / pv:.1f}x")
 
 # Output:
@@ -185,7 +185,7 @@ years_exact = np.log(2) / np.log(1 + rate_pct/100)
 print(f"Rate: {rate_pct}%")
 print(f"Rule of 72: {years_rule:.1f} years")
 print(f"Exact: {years_exact:.1f} years")
-print(f"Error: {abs(years_rule - years_exact)/years_exact * 100:.1f}%")
+print(f"Error: {abs (years_rule - years_exact)/years_exact * 100:.1f}%")
 
 # Output:
 # Rate: 7%
@@ -249,15 +249,15 @@ option_b_fv = 20_000_000  # Future payment
 years = 20
 
 print("Lottery Decision Analysis")
-print(f"\\nOption A: ${option_a:, .0f} today")
-print(f"Option B: ${option_b_fv:,.0f} in {years} years")
+print(f"\\nOption A: \${option_a:,.0f} today")
+print(f"Option B: \${option_b_fv:,.0f} in {years} years")
 print("\\nPresent Value of Option B at different discount rates:")
 print("-" * 60)
 
 for rate in [0.03, 0.05, 0.07, 0.09]:
-    pv_b = present_value(option_b_fv, rate, years)
+    pv_b = present_value (option_b_fv, rate, years)
 better = "Option B wins" if pv_b > option_a else "Option A wins"
-print(f"Rate: {rate:.0%} | PV of Option B: ${pv_b:,.0f} | {better}")
+print(f"Rate: {rate:.0%} | PV of Option B: \${pv_b:,.0f} | {better}")
 
 # Output:
 # Lottery Decision Analysis
@@ -336,7 +336,7 @@ def compare_compounding(
     results.append(('Daily', 365, fv_daily))
     
     # Continuous: FV = PV * e^(rt)
-    fv_continuous = pv * np.exp(rate * years)
+    fv_continuous = pv * np.exp (rate * years)
     results.append(('Continuous', float('inf'), fv_continuous))
     
     df = pd.DataFrame(
@@ -354,11 +354,11 @@ pv = 1_000
 rate = 0.06  # 6% annual
 years = 10
 
-results = compare_compounding(pv, rate, years)
-print(f"Initial Investment: ${pv:, .0f}")
+results = compare_compounding (pv, rate, years)
+print(f"Initial Investment: \${pv:,.0f}")
 print(f"Annual Rate: {rate:.0%}")
 print(f"Time Period: {years} years")
-print("\\n" + results.to_string(index = False))
+print("\\n" + results.to_string (index = False))
 
 # Output:
 # Initial Investment: $1,000
@@ -427,7 +427,7 @@ cards = [
 ]
 
 for name, apr, periods in cards:
-    ear = effective_annual_rate(apr, periods)
+    ear = effective_annual_rate (apr, periods)
     print(f"{name}: {apr:.2%} APR → {ear:.2%} EAR")
 
 # Output:
@@ -524,16 +524,16 @@ annual_rate = 0.07
 monthly_rate = annual_rate / 12
 months = 30 * 12
 
-fv = fv_annuity(monthly_pmt, monthly_rate, months)
+fv = fv_annuity (monthly_pmt, monthly_rate, months)
 total_contributed = monthly_pmt * months
 
 print("Retirement Savings Plan:")
-print(f"Monthly contribution: ${monthly_pmt:, .0f}")
+print(f"Monthly contribution: \${monthly_pmt:,.0f}")
 print(f"Annual return: {annual_rate:.0%}")
 print(f"Time period: 30 years")
-print(f"\\nTotal contributed: ${total_contributed:,.0f}")
-print(f"Future value: ${fv:,.0f}")
-print(f"Investment gains: ${fv - total_contributed:,.0f}")
+print(f"\\nTotal contributed: \${total_contributed:,.0f}")
+print(f"Future value: \${fv:,.0f}")
+print(f"Investment gains: \${fv - total_contributed:,.0f}")
 print(f"Return multiple: {fv / total_contributed:.1f}x")
 
 # Output:
@@ -572,7 +572,7 @@ def fv_annuity_due(
     nper: int
 ) -> float:
     """Calculate FV of annuity due (payments at beginning)"""
-    return fv_annuity(pmt, rate, nper) * (1 + rate)
+    return fv_annuity (pmt, rate, nper) * (1 + rate)
 
 
 def pv_annuity_due(
@@ -581,7 +581,7 @@ def pv_annuity_due(
     nper: int
 ) -> float:
     """Calculate PV of annuity due (payments at beginning)"""
-    return pv_annuity(pmt, rate, nper) * (1 + rate)
+    return pv_annuity (pmt, rate, nper) * (1 + rate)
 
 
 # Compare ordinary vs annuity due
@@ -589,16 +589,16 @@ pmt = 1000
 rate = 0.07
 years = 10
 
-fv_ordinary = fv_annuity(pmt, rate, years)
-fv_due = fv_annuity_due(pmt, rate, years)
+fv_ordinary = fv_annuity (pmt, rate, years)
+fv_due = fv_annuity_due (pmt, rate, years)
 
 print("Ordinary Annuity vs Annuity Due")
-print(f"Payment: ${pmt:, .0f} per year")
+print(f"Payment: \${pmt:,.0f} per year")
 print(f"Rate: {rate:.0%}")
 print(f"Period: {years} years")
-print(f"\\nFV Ordinary Annuity: ${fv_ordinary:,.0f}")
-print(f"FV Annuity Due: ${fv_due:,.0f}")
-print(f"Difference: ${fv_due - fv_ordinary:,.0f}")
+print(f"\\nFV Ordinary Annuity: \${fv_ordinary:,.0f}")
+print(f"FV Annuity Due: \${fv_due:,.0f}")
+print(f"Difference: \${fv_due - fv_ordinary:,.0f}")
 print(f"Percentage increase: {(fv_due/fv_ordinary - 1)*100:.1f}%")
 
 # Output:
@@ -665,12 +665,12 @@ def pv_perpetuity(
 annual_dividend = 5.00
 required_return = 0.08
 
-pv = pv_perpetuity(annual_dividend, required_return)
+pv = pv_perpetuity (annual_dividend, required_return)
 
 print("Preferred Stock Valuation:")
-print(f"Annual dividend: ${annual_dividend: .2f}")
+print(f"Annual dividend: \${annual_dividend:.2f}")
 print(f"Required return: {required_return:.0%}")
-print(f"Present value: ${pv:.2f}")
+print(f"Present value: \${pv:.2f}")
 
 # Output:
 # Preferred Stock Valuation:
@@ -726,16 +726,16 @@ next_dividend = 2.50  # D1
 required_return = 0.10
 div_growth = 0.05  # 5% annual growth
 
-stock_value = pv_growing_perpetuity(next_dividend, required_return, div_growth)
+stock_value = pv_growing_perpetuity (next_dividend, required_return, div_growth)
 
 print("Stock Valuation (Gordon Growth Model):")
-print(f"Next year's dividend (D1): ${next_dividend: .2f}")
+print(f"Next year's dividend (D1): \${next_dividend:.2f}")
 print(f"Required return: {required_return:.0%}")
 print(f"Dividend growth rate: {div_growth:.0%}")
-print(f"Intrinsic value: ${stock_value:.2f}")
+print(f"Intrinsic value: \${stock_value:.2f}")
 
 # Verify with manual calculation
-print(f"\\nManual: ${next_dividend} / ({required_return} - {div_growth}) = ${stock_value:.2f}")
+print(f"\\nManual: \${next_dividend} / ({required_return} - {div_growth}) = \${stock_value:.2f}")
 
 # Output:
 # Stock Valuation(Gordon Growth Model):
@@ -800,15 +800,15 @@ years = 30
 monthly_rate = annual_rate / 12
 months = years * 12
 
-monthly_pmt = pmt_loan(loan_amount, monthly_rate, months)
+monthly_pmt = pmt_loan (loan_amount, monthly_rate, months)
 
 print("Mortgage Calculator:")
-print(f"Loan amount: ${loan_amount:, .0f}")
+print(f"Loan amount: \${loan_amount:,.0f}")
 print(f"Annual rate: {annual_rate:.2%}")
 print(f"Term: {years} years")
-print(f"\\nMonthly payment: ${monthly_pmt:,.2f}")
-print(f"Total paid over {years} years: ${monthly_pmt * months:,.0f}")
-print(f"Total interest paid: ${monthly_pmt * months - loan_amount:,.0f}")
+print(f"\\nMonthly payment: \${monthly_pmt:,.2f}")
+print(f"Total paid over {years} years: \${monthly_pmt * months:,.0f}")
+print(f"Total interest paid: \${monthly_pmt * months - loan_amount:,.0f}")
 
 # Output:
 # Mortgage Calculator:
@@ -847,7 +847,7 @@ def amortization_schedule(
         - Principal
         - Remaining Balance
     """
-    pmt = pmt_loan(principal, rate, nper)
+    pmt = pmt_loan (principal, rate, nper)
     
     schedule = []
     remaining_balance = principal
@@ -870,7 +870,7 @@ def amortization_schedule(
             'Remaining Balance': max(0, remaining_balance)  # Avoid tiny negative
         })
     
-    return pd.DataFrame(schedule)
+    return pd.DataFrame (schedule)
 
 
 # Create schedule for 5-year car loan
@@ -880,14 +880,14 @@ years = 5
 monthly_rate = annual_rate / 12
 months = years * 12
 
-schedule = amortization_schedule(car_loan, monthly_rate, months)
+schedule = amortization_schedule (car_loan, monthly_rate, months)
 
 print("Car Loan Amortization Schedule")
-print(f"Loan: ${car_loan:, .0f} at { annual_rate: .1 %} for { years } years")
+print(f"Loan: \${car_loan:,.0f} at { annual_rate: .1 %} for { years } years")
 print("\\nFirst 6 months:")
-print(schedule.head(6).to_string(index = False))
+print(schedule.head(6).to_string (index = False))
 print("\\nLast 6 months:")
-print(schedule.tail(6).to_string(index = False))
+print(schedule.tail(6).to_string (index = False))
 
 # Output:
 # Car Loan Amortization Schedule
@@ -946,7 +946,7 @@ ax1.set_title('Payment Breakdown Over Time', fontsize=14, fontweight='bold')
 ax1.set_xlabel('Payment Number')
 ax1.set_ylabel('Amount ($)')
 ax1.legend()
-ax1.grid(alpha=0.3)
+ax1.grid (alpha=0.3)
 
 # Plot 2: Remaining balance over time
 ax2.plot(
@@ -958,7 +958,7 @@ ax2.plot(
 ax2.set_title('Loan Balance Over Time', fontsize=14, fontweight='bold')
 ax2.set_xlabel('Payment Number')
 ax2.set_ylabel('Remaining Balance ($)')
-ax2.grid(alpha=0.3)
+ax2.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('loan_amortization.png', dpi=300, bbox_inches='tight')
@@ -1003,7 +1003,7 @@ def compare_job_offers(
     Returns:
         Dictionary with NPV comparison
     """
-    def calculate_npv(salary, bonus, raise_rate, years, discount_rate):
+    def calculate_npv (salary, bonus, raise_rate, years, discount_rate):
         # Signing bonus (immediate)
         npv = bonus
         
@@ -1015,15 +1015,15 @@ def compare_job_offers(
         
         return npv
     
-    npv_a = calculate_npv(salary_a, bonus_a, raise_rate, years, discount_rate)
-    npv_b = calculate_npv(salary_b, bonus_b, raise_rate, years, discount_rate)
+    npv_a = calculate_npv (salary_a, bonus_a, raise_rate, years, discount_rate)
+    npv_b = calculate_npv (salary_b, bonus_b, raise_rate, years, discount_rate)
     
     return {
         'Company A NPV': npv_a,
         'Company B NPV': npv_b,
         'Difference': npv_a - npv_b,
         'Better Choice': 'Company A' if npv_a > npv_b else 'Company B',
-        'Advantage': abs(npv_a - npv_b)
+        'Advantage': abs (npv_a - npv_b)
     }
 
 
@@ -1039,10 +1039,10 @@ result = compare_job_offers(
 )
 
 print("Job Offer Comparison (5-year NPV):")
-print(f"Company A: ${result['Company A NPV']:, .0f}")
-print(f"Company B: ${result['Company B NPV']:,.0f}")
+print(f"Company A: \${result['Company A NPV']:,.0f}")
+print(f"Company B: \${result['Company B NPV']:,.0f}")
 print(f"\\nBetter choice: {result['Better Choice']}")
-print(f"Advantage: ${result['Advantage']:,.0f}")
+print(f"Advantage: \${result['Advantage']:,.0f}")
 
 # Output:
 # Job Offer Comparison(5 - year NPV):
@@ -1086,15 +1086,15 @@ def lease_vs_buy(
     """
     # Lease: PV of lease payments
     monthly_discount = discount_rate / 12
-    pv_lease = pv_annuity(lease_payment, monthly_discount, lease_months)
+    pv_lease = pv_annuity (lease_payment, monthly_discount, lease_months)
     
     # Buy: Loan payment + residual value benefit
     monthly_loan_rate = loan_rate / 12
     loan_months = loan_years * 12
-    loan_payment = pmt_loan(car_price, monthly_loan_rate, loan_months)
+    loan_payment = pmt_loan (car_price, monthly_loan_rate, loan_months)
     
     # PV of loan payments over lease period
-    pv_buy_payments = pv_annuity(loan_payment, monthly_discount, lease_months)
+    pv_buy_payments = pv_annuity (loan_payment, monthly_discount, lease_months)
     
     # At end of lease, you'd own car worth residual_value
     pv_residual = residual_value / (1 + discount_rate)**(lease_months/12)
@@ -1125,13 +1125,13 @@ result = lease_vs_buy(
 
 print("Lease vs Buy Analysis:")
 print(f"\\nLease Option:")
-print(f"  Monthly payment: ${result['Lease Payment']: .2f}")
-print(f"  PV of total cost: ${result['PV Lease Cost']:,.0f}")
+print(f"  Monthly payment: \${result['Lease Payment']:.2f}")
+print(f"  PV of total cost: \${result['PV Lease Cost']:,.0f}")
 print(f"\\nBuy Option:")
-print(f"  Monthly payment: ${result['Buy Payment']:.2f}")
-print(f"  PV of net cost: ${result['PV Buy Cost']:,.0f}")
+print(f"  Monthly payment: \${result['Buy Payment']:.2f}")
+print(f"  PV of net cost: \${result['PV Buy Cost']:,.0f}")
 print(f"\\nBetter option: {result['Better Option']}")
-print(f"Savings: ${abs(result['Savings by Leasing']):,.0f}")
+print(f"Savings: \${abs (result['Savings by Leasing']):,.0f}")
 
 # Output:
 # Lease vs Buy Analysis:
@@ -1204,7 +1204,7 @@ def early_payoff_analysis(
     total_interest_normal = normal_schedule['Interest'].sum()
     
     # Invest extra payment
-    investment_value = fv_annuity(extra_payment, monthly_inv_rate, months_remaining)
+    investment_value = fv_annuity (extra_payment, monthly_inv_rate, months_remaining)
     
     # Net benefit
     interest_saved = total_interest_normal - total_interest_with_extra
@@ -1240,12 +1240,12 @@ print("Early Payoff vs Invest Analysis:")
 print(f"\\nEarly Payoff Option:")
 print(f"  Months to payoff: {result['Early Payoff']['Months to payoff']}")
 print(f"  Months saved: {result['Early Payoff']['Months saved']}")
-print(f"  Interest saved: ${result['Early Payoff']['Interest saved']:, .0f}")
+print(f"  Interest saved: \${result['Early Payoff']['Interest saved']:,.0f}")
 print(f"\\nInvestment Option:")
-print(f"  Final investment value: ${result['Investment']['Final value']:,.0f}")
-print(f"  Total invested: ${result['Investment']['Total invested']:,.0f}")
+print(f"  Final investment value: \${result['Investment']['Final value']:,.0f}")
+print(f"  Total invested: \${result['Investment']['Total invested']:,.0f}")
 print(f"\\nBetter option: {result['Better Option']}")
-print(f"Net benefit: ${abs(result['Net Benefit of Investing']):,.0f}")
+print(f"Net benefit: \${abs (result['Net Benefit of Investing']):,.0f}")
 
 # Output:
 # Early Payoff vs Invest Analysis:
@@ -1284,9 +1284,9 @@ fv_wrong = 10000 * (1 + 0.12)**120  # 120 months
 # ✅ CORRECT: Convert to monthly rate
 fv_correct = 10000 * (1 + 0.12/12)**120
 
-print(f"Wrong: ${fv_wrong:, .0f}")
-print(f"Correct: ${fv_correct:,.0f}")
-print(f"Difference: ${fv_wrong - fv_correct:,.0f}")
+print(f"Wrong: \${fv_wrong:,.0f}")
+print(f"Correct: \${fv_correct:,.0f}")
+print(f"Difference: \${fv_wrong - fv_correct:,.0f}")
 
 # Output:
 # Wrong: $1, 635, 299, 841
@@ -1359,8 +1359,8 @@ print(f"Real rate: {real_rate:.2%}")
 fv_nominal = 10000 * (1 + nominal_rate)**10
 fv_real = 10000 * (1 + real_rate)**10
 
-print(f"\\nFV in nominal dollars: ${fv_nominal:, .0f}")
-print(f"FV in today's dollars: ${fv_real:,.0f}")
+print(f"\\nFV in nominal dollars: \${fv_nominal:,.0f}")
+print(f"FV in today's dollars: \${fv_real:,.0f}")
 
 # Output:
 # Nominal rate: 7.00 %
@@ -1394,7 +1394,7 @@ class TVMCalculator:
     
     Usage:
         calc = TVMCalculator()
-        fv = calc.future_value(pv=1000, rate=0.07, nper=10)
+        fv = calc.future_value (pv=1000, rate=0.07, nper=10)
     """
     
     precision: int = 2  # Decimal places for rounding
@@ -1434,7 +1434,7 @@ class TVMCalculator:
         else:
             fv_annuity = 0
         
-        return round(fv_lump + fv_annuity, self.precision)
+        return round (fv_lump + fv_annuity, self.precision)
     
     def present_value(
         self,
@@ -1459,7 +1459,7 @@ class TVMCalculator:
         else:
             pv_annuity = 0
         
-        return round(pv_lump + pv_annuity, self.precision)
+        return round (pv_lump + pv_annuity, self.precision)
     
     def payment(
         self,
@@ -1484,7 +1484,7 @@ class TVMCalculator:
         
         pmt = -(pv * temp + fv) * rate / ((temp - 1) * (1 + rate * mask))
         
-        return round(pmt, self.precision)
+        return round (pmt, self.precision)
     
     def number_of_periods(
         self,
@@ -1496,7 +1496,7 @@ class TVMCalculator:
         """Calculate number of periods needed"""
         if pmt == 0:
             # Simple lump sum
-            nper = np.log(fv / pv) / np.log(1 + rate)
+            nper = np.log (fv / pv) / np.log(1 + rate)
         else:
             # With payments (more complex)
             # Solving annuity equation for n
@@ -1505,9 +1505,9 @@ class TVMCalculator:
             else:
                 # This requires numerical methods
                 # Using numpy financial function
-                nper = np.nper(rate, pmt, pv, fv)
+                nper = np.nper (rate, pmt, pv, fv)
         
-        return round(nper, 2)
+        return round (nper, 2)
     
     def interest_rate(
         self,
@@ -1524,9 +1524,9 @@ class TVMCalculator:
         This requires iterative solution (Newton-Raphson).
         """
         # Use numpy financial rate function
-        rate = np.rate(nper, pmt, pv, fv, when='end' if when == 'end' else 'begin', guess=guess)
+        rate = np.rate (nper, pmt, pv, fv, when='end' if when == 'end' else 'begin', guess=guess)
         
-        return round(rate, 4)
+        return round (rate, 4)
     
     def effective_rate(
         self,
@@ -1535,7 +1535,7 @@ class TVMCalculator:
     ) -> float:
         """Calculate effective annual rate from nominal rate"""
         eff_rate = (1 + nominal_rate / npery)**npery - 1
-        return round(eff_rate, 4)
+        return round (eff_rate, 4)
     
     def amortization_schedule(
         self,
@@ -1544,7 +1544,7 @@ class TVMCalculator:
         nper: int
     ) -> pd.DataFrame:
         """Generate loan amortization schedule"""
-        pmt = self.payment(principal, rate, nper)
+        pmt = self.payment (principal, rate, nper)
         
         schedule = []
         balance = principal
@@ -1556,13 +1556,13 @@ class TVMCalculator:
             
             schedule.append({
                 'Period': period,
-                'Payment': round(pmt, 2),
-                'Interest': round(interest, 2),
-                'Principal': round(principal_payment, 2),
-                'Balance': round(max(0, balance), 2)
+                'Payment': round (pmt, 2),
+                'Interest': round (interest, 2),
+                'Principal': round (principal_payment, 2),
+                'Balance': round (max(0, balance), 2)
             })
         
-        return pd.DataFrame(schedule)
+        return pd.DataFrame (schedule)
 
 
 # Example usage
@@ -1572,23 +1572,23 @@ print("TVM Calculator Examples:")
 print("=" * 60)
 
 # Future value
-fv = calc.future_value(pv=1000, rate=0.07, nper=10)
-print(f"1. FV of $1,000 at 7% for 10 years: ${fv:, .2f}")
+fv = calc.future_value (pv=1000, rate=0.07, nper=10)
+print(f"1. FV of $1,000 at 7% for 10 years: \${fv:,.2f}")
 
 # Present value
-pv = calc.present_value(fv = 10000, rate = 0.05, nper = 20)
-print(f"2. PV of $10,000 in 20 years at 5%: ${pv:,.2f}")
+pv = calc.present_value (fv = 10000, rate = 0.05, nper = 20)
+print(f"2. PV of $10,000 in 20 years at 5%: \${pv:,.2f}")
 
 # Loan payment
-pmt = calc.payment(pv = 200000, rate = 0.045 / 12, nper = 30 * 12)
-print(f"3. Payment on $200K loan, 4.5%, 30yr: ${-pmt:,.2f}/month")
+pmt = calc.payment (pv = 200000, rate = 0.045 / 12, nper = 30 * 12)
+print(f"3. Payment on $200K loan, 4.5%, 30yr: \${-pmt:,.2f}/month")
 
 # How long to reach goal ?
-    nper = calc.number_of_periods(pv = -1000, fv = 2000, rate = 0.08)
+    nper = calc.number_of_periods (pv = -1000, fv = 2000, rate = 0.08)
 print(f"4. Years to double at 8%: {nper:.1f} years")
 
 # Effective rate
-ear = calc.effective_rate(nominal_rate = 0.06, npery = 12)
+ear = calc.effective_rate (nominal_rate = 0.06, npery = 12)
 print(f"5. Effective rate of 6% monthly: {ear:.2%}")
 
 # Output:
@@ -1721,4 +1721,3 @@ Try these to cement your understanding:
 **Next Section**: [NPV, IRR & Capital Budgeting](./npv-irr-capital-budgeting) →
 `,
 };
-

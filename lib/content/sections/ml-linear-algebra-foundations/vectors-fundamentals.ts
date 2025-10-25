@@ -108,7 +108,7 @@ c · **v** = [c·v₁, c·v₂, ..., c·vₙ]
 **Properties**:
 - Distributive: c(**u** + **v**) = c**u** + c**v**
 - Distributive: (c + d)**v** = c**v** + d**v**
-- Associative: (cd)**v** = c(d**v**)
+- Associative: (cd)**v** = c (d**v**)
 - Identity: 1·**v** = **v**
 
 ## Unit Vectors and Normalization
@@ -159,7 +159,7 @@ print()
 
 # Vector dimensions
 print("Dimension of v1:", v1.shape)
-print("Number of components in v1:", len(v1))
+print("Number of components in v1:", len (v1))
 print()
 
 # Vector addition
@@ -173,19 +173,19 @@ print("2 * v1 =", v_scaled)
 print()
 
 # Vector magnitude (L2 norm)
-magnitude_v1 = np.linalg.norm(v1)
+magnitude_v1 = np.linalg.norm (v1)
 print(f"Magnitude of v1: {magnitude_v1:.4f}")
 print()
 
 # Manual calculation of magnitude
-magnitude_manual = np.sqrt(np.sum(v1**2))
+magnitude_manual = np.sqrt (np.sum (v1**2))
 print(f"Magnitude (manual): {magnitude_manual:.4f}")
 print()
 
 # Normalization
-v1_normalized = v1 / np.linalg.norm(v1)
+v1_normalized = v1 / np.linalg.norm (v1)
 print("Normalized v1:", v1_normalized)
-print("Magnitude of normalized v1:", np.linalg.norm(v1_normalized))
+print("Magnitude of normalized v1:", np.linalg.norm (v1_normalized))
 print()
 
 # Creating zero vector
@@ -214,21 +214,21 @@ print("e3:", e3)
 # Visualizing 2D vectors
 def plot_2d_vectors(*vectors, labels=None, colors=None):
     """Plot multiple 2D vectors"""
-    plt.figure(figsize=(8, 8))
-    plt.axhline(y=0, color='k', linewidth=0.5)
-    plt.axvline(x=0, color='k', linewidth=0.5)
+    plt.figure (figsize=(8, 8))
+    plt.axhline (y=0, color='k', linewidth=0.5)
+    plt.axvline (x=0, color='k', linewidth=0.5)
     plt.grid(True, alpha=0.3)
     
     if colors is None:
         colors = ['blue', 'red', 'green', 'orange', 'purple']
     
-    for i, v in enumerate(vectors):
+    for i, v in enumerate (vectors):
         label = labels[i] if labels else f'v{i+1}'
-        color = colors[i % len(colors)]
+        color = colors[i % len (colors)]
         plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', 
                    scale=1, color=color, width=0.006, label=label)
         # Add text label at vector tip
-        plt.text(v[0]*1.1, v[1]*1.1, label, fontsize=12, color=color)
+        plt.text (v[0]*1.1, v[1]*1.1, label, fontsize=12, color=color)
     
     plt.xlim(-1, 6)
     plt.ylim(-1, 6)
@@ -244,7 +244,7 @@ v1 = np.array([3, 2])
 v2 = np.array([1, 4])
 v_sum = v1 + v2
 
-plot_2d_vectors(v1, v2, v_sum, 
+plot_2d_vectors (v1, v2, v_sum, 
                 labels=['v1', 'v2', 'v1+v2'],
                 colors=['blue', 'red', 'green'])
 \`\`\`
@@ -253,19 +253,19 @@ plot_2d_vectors(v1, v2, v_sum,
 # Visualizing 3D vectors
 def plot_3d_vectors(*vectors, labels=None):
     """Plot multiple 3D vectors"""
-    fig = plt.figure(figsize=(10, 8))
+    fig = plt.figure (figsize=(10, 8))
     ax = fig.add_subplot(111, projection='3d')
     
     colors = ['blue', 'red', 'green', 'orange', 'purple']
     
-    for i, v in enumerate(vectors):
+    for i, v in enumerate (vectors):
         label = labels[i] if labels else f'v{i+1}'
-        color = colors[i % len(colors)]
+        color = colors[i % len (colors)]
         ax.quiver(0, 0, 0, v[0], v[1], v[2], 
                  color=color, arrow_length_ratio=0.1, linewidth=2, label=label)
     
     # Set labels and limits
-    max_val = max([np.max(np.abs(v)) for v in vectors]) * 1.2
+    max_val = max([np.max (np.abs (v)) for v in vectors]) * 1.2
     ax.set_xlim([-1, max_val])
     ax.set_ylim([-1, max_val])
     ax.set_zlim([-1, max_val])
@@ -281,7 +281,7 @@ v3d_1 = np.array([2, 3, 1])
 v3d_2 = np.array([1, 1, 4])
 v3d_sum = v3d_1 + v3d_2
 
-plot_3d_vectors(v3d_1, v3d_2, v3d_sum,
+plot_3d_vectors (v3d_1, v3d_2, v3d_sum,
                 labels=['v1', 'v2', 'v1+v2'])
 \`\`\`
 
@@ -324,13 +324,13 @@ def normalize_features(X):
     return X_normalized
 
 # Normalize our house data
-dataset_normalized = normalize_features(dataset)
+dataset_normalized = normalize_features (dataset)
 print("Normalized dataset:")
 print(dataset_normalized)
 print()
 
 # Verify each row has unit length
-print("Row norms:", np.linalg.norm(dataset_normalized, axis=1))
+print("Row norms:", np.linalg.norm (dataset_normalized, axis=1))
 \`\`\`
 
 ### Example 3: Word Embeddings (Preview)
@@ -351,7 +351,7 @@ word_vectors = {
 result = word_vectors['king'] - word_vectors['man'] + word_vectors['woman']
 print("king - man + woman =", result)
 print("queen =", word_vectors['queen'])
-print("Difference:", np.linalg.norm(result - word_vectors['queen']))
+print("Difference:", np.linalg.norm (result - word_vectors['queen']))
 \`\`\`
 
 ## Common Operations and Properties
@@ -398,12 +398,12 @@ print(f"{a}*v1 + {b}*v2 = {linear_combo}")
 \`\`\`python
 # Good practice: Vectorized operation
 vectors = np.array([[1, 2], [3, 4], [5, 6]])
-norms = np.linalg.norm(vectors, axis=1)  # Fast, vectorized
+norms = np.linalg.norm (vectors, axis=1)  # Fast, vectorized
 
 # Bad practice: Loop (slower)
 norms_slow = []
 for v in vectors:
-    norms_slow.append(np.linalg.norm(v))
+    norms_slow.append (np.linalg.norm (v))
 \`\`\`
 
 ## Connection to Machine Learning
@@ -433,7 +433,7 @@ print("New parameters:", theta_new)
 point1 = np.array([1, 2, 3])
 point2 = np.array([4, 6, 8])
 
-distance = np.linalg.norm(point1 - point2)
+distance = np.linalg.norm (point1 - point2)
 print(f"Distance between points: {distance:.4f}")
 
 # This is used in k-NN, k-means, and many other algorithms

@@ -8,7 +8,7 @@ export const llmEvaluationSafetyQuiz = {
       question:
         'Evaluating LLM capabilities is challenging due to their open-ended nature. Discuss the limitations of standard NLP metrics (BLEU, ROUGE, perplexity) for evaluating modern LLMs. How have benchmarks evolved from narrow tasks to comprehensive evaluations like MMLU and Big-Bench? What role does human evaluation play, and how do you scale it cost-effectively?',
       expectedAnswer:
-        "Should cover: token-level metrics missing semantic quality, perplexity correlating poorly with usability, benchmark saturation and gaming, MMLU testing diverse knowledge domains, Big-Bench's challenging tasks, emergent capabilities not captured by standard metrics, human evaluation as gold standard but expensive and slow, LLM- as - judge using strong models to evaluate, pairwise comparison reducing bias, arena - style evaluation(Chatbot Arena), contamination issues with public benchmarks, and need for continual new evaluation paradigms.",
+        "Should cover: token-level metrics missing semantic quality, perplexity correlating poorly with usability, benchmark saturation and gaming, MMLU testing diverse knowledge domains, Big-Bench\'s challenging tasks, emergent capabilities not captured by standard metrics, human evaluation as gold standard but expensive and slow, LLM- as - judge using strong models to evaluate, pairwise comparison reducing bias, arena - style evaluation(Chatbot Arena), contamination issues with public benchmarks, and need for continual new evaluation paradigms.",
     },
     {
       id: 2,

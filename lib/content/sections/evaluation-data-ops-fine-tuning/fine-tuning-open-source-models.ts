@@ -69,7 +69,7 @@ class ModelSelector:
     }
     
     @classmethod
-    def recommend(cls, gpu_vram_gb: int, use_case: str) -> str:
+    def recommend (cls, gpu_vram_gb: int, use_case: str) -> str:
         """Recommend model based on resources."""
         
         if gpu_vram_gb < 16:
@@ -82,7 +82,7 @@ class ModelSelector:
         else:
             return "mistral-7b"  # Best for 16GB
 
-print(ModelSelector.recommend(gpu_vram_gb=24, use_case="chatbot"))
+print(ModelSelector.recommend (gpu_vram_gb=24, use_case="chatbot"))
 # "mistral-7b"
 \`\`\`
 
@@ -132,11 +132,11 @@ class LoRAFineTuner:
                 torch_dtype=torch.float16
             )
         
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained (model_name)
         self.tokenizer.pad_token = self.tokenizer.eos_token
         
         # Prepare for LoRA
-        self.model = prepare_model_for_kbit_training(self.model)
+        self.model = prepare_model_for_kbit_training (self.model)
     
     def setup_lora(
         self,
@@ -159,11 +159,11 @@ class LoRAFineTuner:
             task_type="CAUSAL_LM"
         )
         
-        self.model = get_peft_model(self.model, lora_config)
+        self.model = get_peft_model (self.model, lora_config)
         
         # Print trainable parameters
-        trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
-        total_params = sum(p.numel() for p in self.model.parameters())
+        trainable_params = sum (p.numel() for p in self.model.parameters() if p.requires_grad)
+        total_params = sum (p.numel() for p in self.model.parameters())
         
         print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_params:.2%})")
         print(f"Total parameters: {total_params:,}")
@@ -174,14 +174,14 @@ class LoRAFineTuner:
     ) -> Dataset:
         """Prepare dataset for training."""
         
-        def format_prompt(example):
+        def format_prompt (example):
             """Format as instruction-following."""
             prompt = f"""<s>[INST] {example['input']} [/INST] {example['output']}</s>"""
             return {"text": prompt}
         
         # Convert to HuggingFace Dataset
-        dataset = Dataset.from_list(examples)
-        dataset = dataset.map(format_prompt)
+        dataset = Dataset.from_list (examples)
+        dataset = dataset.map (format_prompt)
         
         return dataset
     
@@ -233,7 +233,7 @@ class LoRAFineTuner:
         trainer.train()
         
         # Save final model
-        trainer.save_model(output_dir)
+        trainer.save_model (output_dir)
         print(f"✅ Model saved to {output_dir}")
     
     def merge_and_save(
@@ -253,15 +253,15 @@ class LoRAFineTuner:
         )
         
         # Load LoRA adapters
-        model = PeftModel.from_pretrained(base_model, lora_model_path)
+        model = PeftModel.from_pretrained (base_model, lora_model_path)
         
         # Merge
         print("Merging LoRA adapters...")
         model = model.merge_and_unload()
         
         # Save merged model
-        model.save_pretrained(output_path)
-        self.tokenizer.save_pretrained(output_path)
+        model.save_pretrained (output_path)
+        self.tokenizer.save_pretrained (output_path)
         
         print(f"✅ Merged model saved to {output_path}")
 
@@ -272,11 +272,11 @@ finetuner = LoRAFineTuner(
 )
 
 # Setup LoRA
-finetuner.setup_lora(r=8, lora_alpha=32)
+finetuner.setup_lora (r=8, lora_alpha=32)
 
 # Prepare data
-train_data = finetuner.prepare_dataset(training_examples)
-val_data = finetuner.prepare_dataset(validation_examples)
+train_data = finetuner.prepare_dataset (training_examples)
+val_data = finetuner.prepare_dataset (validation_examples)
 
 # Train
 finetuner.train(
@@ -305,7 +305,7 @@ class FullFineTuner:
             device_map="auto",
             torch_dtype=torch.float16
         )
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained (model_name)
     
     def train(
         self,
@@ -345,7 +345,7 @@ class FullFineTuner:
         )
         
         trainer.train()
-        trainer.save_model(output_dir)
+        trainer.save_model (output_dir)
 
 # Usage: Only if you have lots of data (10K+ examples) and GPUs
 # Most users should use LoRA instead!
@@ -365,18 +365,18 @@ class FineTunedInference:
         - Merged model path
         """
         
-        if self._is_lora_model(model_path):
+        if self._is_lora_model (model_path):
             # Load with LoRA adapters
             from peft import PeftModel
             
-            base_model_name = self._get_base_model_name(model_path)
+            base_model_name = self._get_base_model_name (model_path)
             base_model = AutoModelForCausalLM.from_pretrained(
                 base_model_name,
                 device_map="auto",
                 torch_dtype=torch.float16
             )
             
-            self.model = PeftModel.from_pretrained(base_model, model_path)
+            self.model = PeftModel.from_pretrained (base_model, model_path)
         else:
             # Load merged model
             self.model = AutoModelForCausalLM.from_pretrained(
@@ -385,7 +385,7 @@ class FineTunedInference:
                 torch_dtype=torch.float16
             )
         
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.tokenizer = AutoTokenizer.from_pretrained (model_path)
     
     def generate(
         self,
@@ -400,7 +400,7 @@ class FineTunedInference:
         formatted = f"<s>[INST] {prompt} [/INST]"
         
         # Tokenize
-        inputs = self.tokenizer(formatted, return_tensors="pt").to(self.model.device)
+        inputs = self.tokenizer (formatted, return_tensors="pt").to (self.model.device)
         
         # Generate
         outputs = self.model.generate(
@@ -413,7 +413,7 @@ class FineTunedInference:
         )
         
         # Decode
-        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        response = self.tokenizer.decode (outputs[0], skip_special_tokens=True)
         
         # Extract assistant response
         response = response.split("[/INST]")[-1].strip()
@@ -465,7 +465,7 @@ class ProductionDeployment:
             max_tokens=512
         )
         
-        outputs = self.llm.generate(prompts, sampling_params)
+        outputs = self.llm.generate (prompts, sampling_params)
         
         return [output.outputs[0].text for output in outputs]
 

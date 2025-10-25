@@ -12,7 +12,7 @@ Django follows the MVT (Model-View-Template) pattern, which is conceptually simi
 2. **View (V)**: Equivalent to MVC's Controller - contains business logic and handles requests
 3. **Template (T)**: Equivalent to MVC's View - handles presentation logic
 
-**Key Difference**: In Django, the "View" is actually the controller (business logic), and "Template" is the view (presentation). Django's framework itself acts as the controller that routes requests.
+**Key Difference**: In Django, the "View" is actually the controller (business logic), and "Template" is the view (presentation). Django\'s framework itself acts as the controller that routes requests.
 
 **Request/Response Lifecycle:**
 
@@ -94,20 +94,20 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Order
 
-@receiver(post_save, sender=Order)
-def update_inventory_on_order(sender, instance, created, **kwargs):
+@receiver (post_save, sender=Order)
+def update_inventory_on_order (sender, instance, created, **kwargs):
     if created:
         # Signal sent to inventory app
         from inventory.services import reserve_stock
-        reserve_stock(instance)
+        reserve_stock (instance)
 \`\`\`
 
 2. **Abstract Base Classes in Core App:**
 \`\`\`python
 # core/models.py
-class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class TimeStampedModel (models.Model):
+    created_at = models.DateTimeField (auto_now_add=True)
+    updated_at = models.DateTimeField (auto_now=True)
     
     class Meta:
         abstract = True
@@ -123,10 +123,10 @@ class TimeStampedModel(models.Model):
 from products.models import Product
 from inventory.services import check_stock
 
-def create_order(user, items):
+def create_order (user, items):
     # Business logic spanning multiple apps
     for item in items:
-        if not check_stock(item['product_id'], item['quantity']):
+        if not check_stock (item['product_id'], item['quantity']):
             raise InsufficientStockError()
     # Create order...
 \`\`\`
@@ -147,7 +147,7 @@ ORDER_EXPIRY_HOURS = 24
   },
   {
     question:
-      "Explain Django's ORM lazy evaluation and query optimization. How do select_related() and prefetch_related() differ, and when would you use each? Provide examples of N+1 query problems and how to solve them.",
+      "Explain Django\'s ORM lazy evaluation and query optimization. How do select_related() and prefetch_related() differ, and when would you use each? Provide examples of N+1 query problems and how to solve them.",
     answer: `
 **Lazy Evaluation:**
 
@@ -161,7 +161,7 @@ Django QuerySets are lazy - they don't hit the database until evaluated. Evaluat
 **Example:**
 \`\`\`python
 # No database hit yet
-articles = Article.objects.filter(status='published')
+articles = Article.objects.filter (status='published')
 
 # Database hit happens here
 for article in articles:  # Iteration triggers query
@@ -272,8 +272,8 @@ articles = Article.objects.select_related('author').prefetch_related(
 2. Use prefetch_related() for M2M and reverse FK
 3. Chain them for complex relationships
 4. Use only() and defer() to limit fields
-5. Use count() instead of len(queryset)
-6. Use exists() instead of bool(queryset)
+5. Use count() instead of len (queryset)
+6. Use exists() instead of bool (queryset)
 7. Monitor with django-debug-toolbar
 
 This optimization can reduce hundreds of queries to just a handful, dramatically improving performance.

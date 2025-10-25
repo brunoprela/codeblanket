@@ -23,7 +23,7 @@ Correlation is one of the most important yet most misunderstood concepts in data
 
 The **Pearson correlation** (r) measures linear relationships between continuous variables.
 
-\\[ r = \\frac{\\sum(x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum(x_i - \\bar{x})^2 \\sum(y_i - \\bar{y})^2}} \\]
+\\[ r = \\frac{\\sum (x_i - \\bar{x})(y_i - \\bar{y})}{\\sqrt{\\sum (x_i - \\bar{x})^2 \\sum (y_i - \\bar{y})^2}} \\]
 
 **Properties**:
 - Range: -1 to +1
@@ -44,7 +44,7 @@ def demonstrate_correlation():
     """Show different correlation strengths"""
     
     n = 100
-    x = np.random.randn(n)
+    x = np.random.randn (n)
     
     # Create data with different correlations
     correlations = [0.95, 0.7, 0.4, 0, -0.4, -0.7, -0.95]
@@ -52,26 +52,26 @@ def demonstrate_correlation():
     fig, axes = plt.subplots(2, 4, figsize=(16, 8))
     axes = axes.flatten()
     
-    for idx, target_r in enumerate(correlations):
+    for idx, target_r in enumerate (correlations):
         # Generate y with specific correlation to x
-        y = target_r * x + np.sqrt(1 - target_r**2) * np.random.randn(n)
+        y = target_r * x + np.sqrt(1 - target_r**2) * np.random.randn (n)
         
         # Calculate actual correlation
-        actual_r, p_value = stats.pearsonr(x, y)
+        actual_r, p_value = stats.pearsonr (x, y)
         
         # Plot
-        axes[idx].scatter(x, y, alpha=0.6, s=30)
-        axes[idx].set_title(f'r = {actual_r:.2f}\\n(p = {p_value:.4f})')
+        axes[idx].scatter (x, y, alpha=0.6, s=30)
+        axes[idx].set_title (f'r = {actual_r:.2f}\\n (p = {p_value:.4f})')
         axes[idx].set_xlabel('X')
         axes[idx].set_ylabel('Y')
         axes[idx].grid(True, alpha=0.3)
         
         # Add regression line
-        slope, intercept = np.polyfit(x, y, 1)
-        axes[idx].plot(x, slope*x + intercept, 'r--', linewidth=2)
+        slope, intercept = np.polyfit (x, y, 1)
+        axes[idx].plot (x, slope*x + intercept, 'r--', linewidth=2)
     
     # Remove extra subplot
-    fig.delaxes(axes[7])
+    fig.delaxes (axes[7])
     
     plt.suptitle('Pearson Correlation: Different Strengths', 
                  fontsize=14, fontweight='bold')
@@ -98,17 +98,17 @@ def test_correlation_significance():
     
     # Example: Is feature correlated with target?
     n = 50
-    feature = np.random.randn(n)
-    target = 0.4 * feature + np.random.randn(n)  # r ≈ 0.4
+    feature = np.random.randn (n)
+    target = 0.4 * feature + np.random.randn (n)  # r ≈ 0.4
     
     # Pearson correlation with p-value
-    r, p_value = stats.pearsonr(feature, target)
+    r, p_value = stats.pearsonr (feature, target)
     
     # Confidence interval (Fisher z-transformation)
-    z = np.arctanh(r)
-    se = 1 / np.sqrt(n - 3)
+    z = np.arctanh (r)
+    se = 1 / np.sqrt (n - 3)
     z_ci = [z - 1.96*se, z + 1.96*se]
-    r_ci = [np.tanh(z_ci[0]), np.tanh(z_ci[1])]
+    r_ci = [np.tanh (z_ci[0]), np.tanh (z_ci[1])]
     
     print("=== Correlation Significance Test ===")
     print(f"Sample size: {n}")
@@ -145,20 +145,20 @@ def compare_pearson_spearman():
         ("Linear", x, 2*x + np.random.normal(0, 1, n)),
         ("Nonlinear (Quadratic)", x, x**2 + np.random.normal(0, 10, n)),
         ("With Outliers", 
-         np.append(x[:95], [15, 16, 17, 18, 19]),
+         np.append (x[:95], [15, 16, 17, 18, 19]),
          np.append(2*x[:95] + np.random.normal(0, 1, 95), [50, 55, 60, 65, 70]))
     ]
     
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     
-    for idx, (title, x_data, y_data) in enumerate(scenarios):
+    for idx, (title, x_data, y_data) in enumerate (scenarios):
         # Calculate both correlations
-        r_pearson, _ = stats.pearsonr(x_data, y_data)
-        r_spearman, _ = stats.spearmanr(x_data, y_data)
+        r_pearson, _ = stats.pearsonr (x_data, y_data)
+        r_spearman, _ = stats.spearmanr (x_data, y_data)
         
         # Plot
-        axes[idx].scatter(x_data, y_data, alpha=0.6, s=30)
-        axes[idx].set_title(f'{title}\\nPearson: {r_pearson:.3f}\\nSpearman: {r_spearman:.3f}')
+        axes[idx].scatter (x_data, y_data, alpha=0.6, s=30)
+        axes[idx].set_title (f'{title}\\nPearson: {r_pearson:.3f}\\nSpearman: {r_spearman:.3f}')
         axes[idx].set_xlabel('X')
         axes[idx].set_ylabel('Y')
         axes[idx].grid(True, alpha=0.3)
@@ -198,24 +198,24 @@ def correlation_vs_causation():
     drownings = 20 + 3 * (temperature - 20) + np.random.normal(0, 2, 12)
     
     # Spurious correlation!
-    r, p = stats.pearsonr(ice_cream_sales, drownings)
+    r, p = stats.pearsonr (ice_cream_sales, drownings)
     
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
     # Spurious correlation
-    axes[0].scatter(ice_cream_sales, drownings, s=100, alpha=0.6)
+    axes[0].scatter (ice_cream_sales, drownings, s=100, alpha=0.6)
     axes[0].set_xlabel('Ice Cream Sales', fontsize=12)
     axes[0].set_ylabel('Drowning Deaths', fontsize=12)
-    axes[0].set_title(f'Spurious Correlation (r = {r:.3f})\\n"Ice cream causes drowning?"',
+    axes[0].set_title (f'Spurious Correlation (r = {r:.3f})\\n"Ice cream causes drowning?"',
                       fontsize=12, fontweight='bold')
-    slope, intercept = np.polyfit(ice_cream_sales, drownings, 1)
-    axes[0].plot(ice_cream_sales, slope*ice_cream_sales + intercept, 'r--', linewidth=2)
+    slope, intercept = np.polyfit (ice_cream_sales, drownings, 1)
+    axes[0].plot (ice_cream_sales, slope*ice_cream_sales + intercept, 'r--', linewidth=2)
     axes[0].grid(True, alpha=0.3)
     
     # True cause: temperature
-    axes[1].plot(months, temperature, 'o-', label='Temperature', linewidth=2, markersize=8)
-    axes[1].plot(months, ice_cream_sales/10, 's-', label='Ice Cream (scaled)', linewidth=2, markersize=8)
-    axes[1].plot(months, drownings, '^-', label='Drownings', linewidth=2, markersize=8)
+    axes[1].plot (months, temperature, 'o-', label='Temperature', linewidth=2, markersize=8)
+    axes[1].plot (months, ice_cream_sales/10, 's-', label='Ice Cream (scaled)', linewidth=2, markersize=8)
+    axes[1].plot (months, drownings, '^-', label='Drownings', linewidth=2, markersize=8)
     axes[1].set_xlabel('Month', fontsize=12)
     axes[1].set_ylabel('Value', fontsize=12)
     axes[1].set_title('True Cause: Temperature (Confounding Variable)',
@@ -262,16 +262,16 @@ def partial_correlation(X, Y, Z):
     residual_y = Y - Z * beta_yz
     
     # Correlation of residuals
-    r_partial, _ = stats.pearsonr(residual_x, residual_y)
+    r_partial, _ = stats.pearsonr (residual_x, residual_y)
     return r_partial
 
 def demonstrate_partial_correlation():
     """Show how confounders affect correlation"""
     
     n = 100
-    Z = np.random.randn(n)  # Confounder (e.g., temperature)
-    X = 0.7*Z + np.random.randn(n)  # Ice cream (depends on Z)
-    Y = 0.7*Z + np.random.randn(n)  # Drowning (depends on Z)
+    Z = np.random.randn (n)  # Confounder (e.g., temperature)
+    X = 0.7*Z + np.random.randn (n)  # Ice cream (depends on Z)
+    Y = 0.7*Z + np.random.randn (n)  # Drowning (depends on Z)
     
     # Naive correlation (spurious!)
     r_naive, _ = stats.pearsonr(X, Y)
@@ -316,10 +316,10 @@ def correlation_matrix_analysis():
     corr_matrix = data.corr()
     
     # Create heatmap
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots (figsize=(10, 8))
     
-    mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
-    sns.heatmap(corr_matrix, mask=mask, annot=True, fmt='.2f',
+    mask = np.triu (np.ones_like (corr_matrix, dtype=bool))
+    sns.heatmap (corr_matrix, mask=mask, annot=True, fmt='.2f',
                 cmap='coolwarm', center=0, square=True,
                 linewidths=1, cbar_kws={"shrink": 0.8},
                 vmin=-1, vmax=1, ax=ax)
@@ -333,10 +333,10 @@ def correlation_matrix_analysis():
     # Find high correlations
     print("=== Correlation Matrix Analysis ===")
     print("\\nHigh correlations (|r| > 0.7):")
-    for i in range(len(corr_matrix.columns)):
-        for j in range(i+1, len(corr_matrix.columns)):
+    for i in range (len (corr_matrix.columns)):
+        for j in range (i+1, len (corr_matrix.columns)):
             corr_val = corr_matrix.iloc[i, j]
-            if abs(corr_val) > 0.7:
+            if abs (corr_val) > 0.7:
                 print(f"  {corr_matrix.columns[i]} ↔ {corr_matrix.columns[j]}: {corr_val:.3f}")
     
     print("\\n⚠ Multicollinearity Warning:")
@@ -349,7 +349,7 @@ correlation_matrix_analysis()
 ## Multicollinearity Detection (VIF)
 
 \`\`\`python
-def calculate_vif(data):
+def calculate_vif (data):
     """Calculate Variance Inflation Factor for each feature"""
     from sklearn.linear_model import LinearRegression
     
@@ -357,9 +357,9 @@ def calculate_vif(data):
     vif_data["Feature"] = data.columns
     vif_data["VIF"] = [
         1 / (1 - LinearRegression().fit(
-            data.drop(columns=[col]), data[col]
-        ).score(data.drop(columns=[col]), data[col]))
-        if data.drop(columns=[col]).shape[1] > 0 else 1
+            data.drop (columns=[col]), data[col]
+        ).score (data.drop (columns=[col]), data[col]))
+        if data.drop (columns=[col]).shape[1] > 0 else 1
         for col in data.columns
     ]
     
@@ -369,12 +369,12 @@ def calculate_vif(data):
 np.random.seed(42)
 n = 100
 df = pd.DataFrame({
-    'X1': np.random.randn(n),
-    'X2': np.random.randn(n),
+    'X1': np.random.randn (n),
+    'X2': np.random.randn (n),
 })
-df['X3'] = 0.9 * df['X1'] + 0.1 * np.random.randn(n)  # Highly correlated with X1!
+df['X3'] = 0.9 * df['X1'] + 0.1 * np.random.randn (n)  # Highly correlated with X1!
 
-vif = calculate_vif(df)
+vif = calculate_vif (df)
 
 print("=== Variance Inflation Factor (VIF) ===")
 print(vif)
@@ -398,12 +398,12 @@ def point_biserial_example():
     # Continuous: Income
     n = 100
     gender = np.random.binomial(1, 0.5, n)
-    income = np.where(gender == 1, 
+    income = np.where (gender == 1, 
                       np.random.normal(55000, 15000, n),
                       np.random.normal(45000, 15000, n))
     
     # Point-biserial correlation
-    r_pb, p_value = stats.pointbiserialr(gender, income)
+    r_pb, p_value = stats.pointbiserialr (gender, income)
     
     print("=== Point-Biserial Correlation ===")
     print("(Continuous variable vs Binary variable)")
@@ -411,8 +411,7 @@ def point_biserial_example():
     print(f"Correlation: {r_pb:.4f}")
     print(f"P-value: {p_value:.4f}")
     print()
-    print(f"Mean income (Female): \${income[gender == 0].mean():, .0f
-}")
+    print(f"Mean income (Female): \${income[gender == 0].mean():,.0f}")
 print(f"Mean income (Male): \${income[gender==1].mean():,.0f}")
 print()
 
@@ -433,15 +432,15 @@ table = np.array([[30, 10],   # Didn't study
 [20, 40]])   # Studied
     
     # Phi coefficient
-chi2, _, _, _ = stats.chi2_contingency(table, correction = False)
+chi2, _, _, _ = stats.chi2_contingency (table, correction = False)
 n = table.sum()
-phi = np.sqrt(chi2 / n)
+phi = np.sqrt (chi2 / n)
 
 print("\\n=== Phi Coefficient ===")
 print("(Binary variable vs Binary variable)")
 print()
 print("Contingency table:")
-print(pd.DataFrame(table,
+print(pd.DataFrame (table,
     index = ['No study', 'Studied'],
     columns = ['Failed', 'Passed']))
 print()
@@ -463,12 +462,12 @@ def feature_selection_by_correlation():
     from sklearn.feature_selection import SelectKBest, f_classif
     
     # Generate data
-    X, y = make_classification(n_samples=200, n_features=20, 
+    X, y = make_classification (n_samples=200, n_features=20, 
                                 n_informative=10, n_redundant=5,
                                 random_state=42)
     
     # Correlation with target
-    correlations = [abs(stats.pearsonr(X[:, i], y)[0]) for i in range(X.shape[1])]
+    correlations = [abs (stats.pearsonr(X[:, i], y)[0]) for i in range(X.shape[1])]
     
     # Sort by correlation
     feature_importance = pd.DataFrame({
@@ -481,10 +480,10 @@ def feature_selection_by_correlation():
     print(feature_importance.head(10))
     
     # Visualize
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.barh(range(10), feature_importance['Correlation'].head(10))
-    ax.set_yticks(range(10))
-    ax.set_yticklabels(feature_importance['Feature'].head(10))
+    fig, ax = plt.subplots (figsize=(10, 6))
+    ax.barh (range(10), feature_importance['Correlation'].head(10))
+    ax.set_yticks (range(10))
+    ax.set_yticklabels (feature_importance['Feature'].head(10))
     ax.set_xlabel('|Correlation with Target|', fontsize=12)
     ax.set_title('Feature Importance by Correlation', fontsize=14, fontweight='bold')
     ax.invert_yaxis()

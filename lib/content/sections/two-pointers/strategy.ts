@@ -58,8 +58,8 @@ Test these cases:
 **Common Mistakes to Avoid:**
 
 **1. Wrong Initialization**
-❌ \`left, right = 0, len(nums)\` // right should be len(nums) - 1
-✅ \`left, right = 0, len(nums) - 1\`
+❌ \`left, right = 0, len (nums)\` // right should be len (nums) - 1
+✅ \`left, right = 0, len (nums) - 1\`
 
 **2. Infinite Loops**
 ❌ Forgetting to move pointers
@@ -89,7 +89,7 @@ A: "I can sort it first in O(n log n), still better than O(n²)"
 A: "Yes, fix two elements and use two pointers for other two"
 
 **Q: "What about cycle detection in linked list?"**
-A: "Use fast and slow pointers - Floyd's algorithm"
+A: "Use fast and slow pointers - Floyd\'s algorithm"
 
 **Practice Roadmap:**
 

@@ -9,7 +9,7 @@ export const netflixarchitectureSection = {
 
 ## Overview
 
-Netflix's architecture is notable for several pioneering achievements:
+Netflix\'s architecture is notable for several pioneering achievements:
 - **700+ microservices** handling various aspects of the platform
 - **Complete AWS infrastructure** (no on-premise data centers since 2016)
 - **Chaos engineering pioneers** with tools like Chaos Monkey
@@ -132,7 +132,7 @@ Service B → Load Balancer (Ribbon) → Service A instance
 
 ### 3. Circuit Breaker - Hystrix
 
-Hystrix is Netflix's latency and fault tolerance library, providing circuit breaker pattern implementation.
+Hystrix is Netflix\'s latency and fault tolerance library, providing circuit breaker pattern implementation.
 
 **Problem it solves**: In a distributed system, one slow service can cascade and bring down the entire system. A failing dependency consuming threads can lead to resource exhaustion.
 
@@ -254,7 +254,7 @@ Netflix uses **polyglot persistence** - different data stores for different acce
 - **Tunable consistency**: Choose consistency level per query
 - **Optimized for time-series data**: Viewing history is time-based
 
-**Netflix's Cassandra Setup**:
+**Netflix\'s Cassandra Setup**:
 - Largest deployment: 1,000+ nodes per cluster
 - Millions of operations per second
 - Terabytes of data per cluster
@@ -444,7 +444,7 @@ Netflix encodes content into hundreds of versions to support:
 Netflix built their own CDN called **Open Connect** for optimal video delivery.
 
 **Why Build Own CDN?**:
-- **Cost**: Cheaper than using third-party CDNs at Netflix's scale
+- **Cost**: Cheaper than using third-party CDNs at Netflix\'s scale
 - **Control**: Optimize for video streaming specifically
 - **Quality**: Better control over user experience
 - **Scale**: Netflix accounts for ~15% of global internet traffic
@@ -705,7 +705,7 @@ Netflix deploys thousands of times per day across their microservices.
 
 ### Continuous Delivery Pipeline
 
-**Spinnaker** is Netflix's multi-cloud continuous delivery platform.
+**Spinnaker** is Netflix\'s multi-cloud continuous delivery platform.
 
 **Deployment Process**:
 
@@ -856,7 +856,7 @@ A: Multi-layered approach: (1) Open Connect CDN with 18,000+ servers in ISP netw
 
 A: Continuous delivery with Spinnaker: (1) Canary deployment to 5% of instances. (2) Monitor metrics (error rate, latency, business metrics) for 1-2 hours. (3) Automated health checks validate functionality. (4) Gradual rollout to 25%, 50%, 100% with monitoring at each stage. (5) Automated rollback if metrics degrade. (6) Blue-green deployment for larger changes. (7) Feature flags to decouple deployment from release. Netflix does thousands of deployments per day with minimal incidents.
 
-**Q: What is the purpose of Netflix's Chaos Monkey?**
+**Q: What is the purpose of Netflix\'s Chaos Monkey?**
 
 A: Chaos Monkey randomly terminates production instances during business hours to validate resilience. Purpose: (1) Force teams to build resilient services (can't rely on instances staying alive). (2) Uncover hidden dependencies. (3) Validate automatic failover and recovery mechanisms. (4) Build confidence that systems can handle failures. (5) Reduce surprises during actual incidents (teams practice recovery regularly). Culture impact: Teams proactively design for failure rather than reactively fixing issues. Extends to Simian Army (Chaos Kong for region failures, Latency Monkey for network delays, etc.).
 

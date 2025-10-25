@@ -45,8 +45,8 @@ import pytest
     (0, 0, 0),
     (1000, 2000, 3000),
 ])
-def test_add(a, b, expected):
-    assert add(a, b) == expected
+def test_add (a, b, expected):
+    assert add (a, b) == expected
 
 # 1 test, 7 lines, 0% duplication
 # Runs 5 times with different parameters
@@ -62,7 +62,7 @@ def test_add(a, b, expected):
 
 \`\`\`python
 @pytest.mark.parametrize("parameter_name", [value1, value2, value3])
-def test_function(parameter_name):
+def test_function (parameter_name):
     # Test logic using parameter_name
     ...
 \`\`\`
@@ -73,7 +73,7 @@ def test_function(parameter_name):
 import pytest
 
 @pytest.mark.parametrize("number", [1, 2, 3, 4, 5])
-def test_is_positive(number):
+def test_is_positive (number):
     """Test runs 5 times, once for each number"""
     assert number > 0
 
@@ -94,9 +94,9 @@ def test_is_positive(number):
     (10, 20, 30),
     (-1, 1, 0),
 ])
-def test_add(a, b, expected):
+def test_add (a, b, expected):
     """Test with multiple parameters"""
-    result = add(a, b)
+    result = add (a, b)
     assert result == expected
 
 # Output:
@@ -120,7 +120,7 @@ Make test output more readable with custom IDs:
     ("EUR", 85.0),
     ("GBP", 75.0),
 ])
-def test_payment(currency, amount):
+def test_payment (currency, amount):
     assert amount > 0
 
 # Output (hard to read):
@@ -141,7 +141,7 @@ def test_payment(currency, amount):
     ],
     ids=["US Dollars", "Euros", "British Pounds"]
 )
-def test_payment(currency, amount):
+def test_payment (currency, amount):
     assert amount > 0
 
 # Output (readable):
@@ -153,7 +153,7 @@ def test_payment(currency, amount):
 ### Dynamic IDs with Function
 
 \`\`\`python
-def payment_id(payment):
+def payment_id (payment):
     """Generate readable ID from payment data"""
     currency, amount = payment
     return f"{currency}-\${amount:.2f}"
@@ -167,7 +167,7 @@ def payment_id(payment):
     ],
     ids = payment_id
 )
-def test_payment(currency, amount):
+def test_payment (currency, amount):
     assert amount > 0
 
 # Output:
@@ -188,11 +188,11 @@ Use \`pytest.param\` for per-parameter configuration:
 @pytest.mark.parametrize("value", [
     1,
     2,
-    pytest.param(3, marks=pytest.mark.skip(reason="Known bug #123")),
+    pytest.param(3, marks=pytest.mark.skip (reason="Known bug #123")),
     4,
 ])
-def test_process(value):
-    assert process(value) is not None
+def test_process (value):
+    assert process (value) is not None
 
 # Output:
 # test_process[1] PASSED
@@ -206,10 +206,10 @@ def test_process(value):
 \`\`\`python
 @pytest.mark.parametrize("value", [
     pytest.param(1, id="valid"),
-    pytest.param(0, marks=pytest.mark.xfail(reason="Zero not supported"), id="zero"),
+    pytest.param(0, marks=pytest.mark.xfail (reason="Zero not supported"), id="zero"),
     pytest.param(-1, marks=pytest.mark.xfail, id="negative"),
 ])
-def test_divide(value):
+def test_divide (value):
     result = 10 / value
     assert result > 0
 
@@ -228,8 +228,8 @@ def test_divide(value):
     pytest.param(0, 0, 0, id="zeros"),
     pytest.param(1000000, 2000000, 3000000, id="large numbers"),
 ])
-def test_add(a, b, expected):
-    assert add(a, b) == expected
+def test_add (a, b, expected):
+    assert add (a, b) == expected
 \`\`\`
 
 ---
@@ -241,9 +241,9 @@ Stack multiple \`@pytest.mark.parametrize\` for combinations:
 \`\`\`python
 @pytest.mark.parametrize("currency", ["USD", "EUR", "GBP"])
 @pytest.mark.parametrize("amount", [10.0, 50.0, 100.0])
-def test_payment(currency, amount):
+def test_payment (currency, amount):
     """Test all combinations: 3 currencies × 3 amounts = 9 tests"""
-    payment = Payment(currency=currency, amount=amount)
+    payment = Payment (currency=currency, amount=amount)
     assert payment.is_valid()
 
 # Output (9 tests):
@@ -267,8 +267,8 @@ def test_payment(currency, amount):
 Fixtures can also be parametrized:
 
 \`\`\`python
-@pytest.fixture(params=["sqlite", "postgresql", "mysql"])
-def database(request):
+@pytest.fixture (params=["sqlite", "postgresql", "mysql"])
+def database (request):
     """Fixture parametrized by database type"""
     db_type = request.param
     
@@ -283,16 +283,16 @@ def database(request):
     yield db
     db.disconnect()
 
-def test_query(database):
+def test_query (database):
     """Test runs 3 times (once per database)"""
     result = database.query("SELECT 1")
     assert result is not None
 
-def test_insert(database):
+def test_insert (database):
     """Also runs 3 times"""
     database.insert("users", {"name": "Alice"})
     result = database.query("SELECT * FROM users")
-    assert len(result) == 1
+    assert len (result) == 1
 
 # Output:
 # test_query[sqlite] PASSED
@@ -314,16 +314,16 @@ Use \`indirect=True\` to pass parameters through fixtures:
 
 \`\`\`python
 @pytest.fixture
-def user(request):
+def user (request):
     """Fixture that creates user from parameter"""
     name = request.param
-    user = User(name=name)
-    db.add(user)
+    user = User (name=name)
+    db.add (user)
     db.commit()
     return user
 
 @pytest.mark.parametrize("user", ["Alice", "Bob", "Charlie"], indirect=True)
-def test_user_creation(user):
+def test_user_creation (user):
     """user parameter goes through user() fixture"""
     assert user.id is not None
     assert user.name in ["Alice", "Bob", "Charlie"]
@@ -342,9 +342,9 @@ Mix direct and indirect parameters:
 
 \`\`\`python
 @pytest.fixture
-def database(request):
+def database (request):
     db_type = request.param
-    return create_database(db_type)
+    return create_database (db_type)
 
 @pytest.mark.parametrize(
     "database, query",
@@ -355,9 +355,9 @@ def database(request):
     ],
     indirect=["database"]  # Only database goes through fixture
 )
-def test_query(database, query):
+def test_query (database, query):
     """database indirect, query direct"""
-    result = database.execute(query)
+    result = database.execute (query)
     assert result is not None
 \`\`\`
 
@@ -377,9 +377,9 @@ def test_query(database, query):
     ("/api/data", 200),
     ("/nonexistent", 404),
 ])
-def test_endpoint_status(api_client, endpoint, expected_status):
+def test_endpoint_status (api_client, endpoint, expected_status):
     """Test API endpoints return correct status codes"""
-    response = api_client.get(endpoint)
+    response = api_client.get (endpoint)
     assert response.status_code == expected_status
 \`\`\`
 
@@ -396,9 +396,9 @@ def test_endpoint_status(api_client, endpoint, expected_status):
     ("", False),
     ("alice+tag@example.com", True),
 ])
-def test_email_validation(email, is_valid):
+def test_email_validation (email, is_valid):
     """Test email validation logic"""
-    result = validate_email(email)
+    result = validate_email (email)
     assert result == is_valid
 \`\`\`
 
@@ -414,14 +414,14 @@ def test_email_validation(email, is_valid):
     (1000000.00, "USD", False),# Too large (invalid)
     (100.0, "XXX", False),     # Invalid currency
 ])
-def test_payment_validation(amount, currency, should_succeed):
+def test_payment_validation (amount, currency, should_succeed):
     """Test payment validation edge cases"""
     if should_succeed:
-        payment = Payment(amount=amount, currency=currency)
+        payment = Payment (amount=amount, currency=currency)
         assert payment.validate() is True
     else:
         with pytest.raises(ValueError):
-            Payment(amount=amount, currency=currency)
+            Payment (amount=amount, currency=currency)
 \`\`\`
 
 ### Example 4: Mathematical Properties
@@ -434,18 +434,18 @@ def test_payment_validation(amount, currency, should_succeed):
     (0, 0),
     (1000, -500),
 ])
-def test_addition_commutative(a, b):
+def test_addition_commutative (a, b):
     """Test addition is commutative: a + b == b + a"""
-    assert add(a, b) == add(b, a)
+    assert add (a, b) == add (b, a)
 
 @pytest.mark.parametrize("a, b, c", [
     (1, 2, 3),
     (5, 10, 15),
     (-1, 0, 1),
 ])
-def test_addition_associative(a, b, c):
+def test_addition_associative (a, b, c):
     """Test addition is associative: (a + b) + c == a + (b + c)"""
-    assert add(add(a, b), c) == add(a, add(b, c))
+    assert add (add (a, b), c) == add (a, add (b, c))
 \`\`\`
 
 ### Example 5: Date/Time Testing
@@ -462,14 +462,14 @@ from datetime import datetime
     ("2024-01-32", False), # Invalid day
     ("invalid", False),
 ])
-def test_date_parsing(date_str, is_valid):
+def test_date_parsing (date_str, is_valid):
     """Test date parsing with various formats"""
     if is_valid:
-        result = parse_date(date_str)
-        assert isinstance(result, datetime)
+        result = parse_date (date_str)
+        assert isinstance (result, datetime)
     else:
         with pytest.raises(ValueError):
-            parse_date(date_str)
+            parse_date (date_str)
 \`\`\`
 
 ### Example 6: File Processing
@@ -481,14 +481,14 @@ def test_date_parsing(date_str, is_valid):
     ("multi_line.txt", 5),
     ("large_file.txt", 10000),
 ])
-def test_file_line_count(tmp_path, filename, expected_lines):
+def test_file_line_count (tmp_path, filename, expected_lines):
     """Test counting lines in files"""
     # Create test file
     file_path = tmp_path / filename
     file_path.write_text("\\n" * expected_lines)
     
     # Test
-    result = count_lines(file_path)
+    result = count_lines (file_path)
     assert result == expected_lines
 \`\`\`
 
@@ -506,7 +506,7 @@ def test_file_line_count(tmp_path, filename, expected_lines):
     pytest.param(0, False, id="zero amount"),
     pytest.param(-100, False, id="negative amount"),
 ])
-def test_amount_validation(value, expected):
+def test_amount_validation (value, expected):
     ...
 \`\`\`
 
@@ -538,12 +538,12 @@ invalid_emails = [
 ]
 
 @pytest.mark.parametrize("email", valid_emails)
-def test_valid_emails(email):
-    assert validate_email(email) is True
+def test_valid_emails (email):
+    assert validate_email (email) is True
 
 @pytest.mark.parametrize("email", invalid_emails)
-def test_invalid_emails(email):
-    assert validate_email(email) is False
+def test_invalid_emails (email):
+    assert validate_email (email) is False
 \`\`\`
 
 ### 3. Don't Over-Parametrize
@@ -573,7 +573,7 @@ class TestCase:
     TestCase("case 1", {"a": 1, "b": 2, "c": 3}, 6),
     TestCase("case 2", {"a": 2, "b": 3, "c": 4}, 9),
 ], ids=lambda tc: tc.name)
-def test_with_dataclass(test_case):
+def test_with_dataclass (test_case):
     result = process(**test_case.inputs)
     assert result == test_case.expected
 \`\`\`
@@ -584,15 +584,15 @@ def test_with_dataclass(test_case):
 
 \`\`\`python
 @pytest.mark.parametrize("amount", [10.0, 50.0, 100.0])
-def test_payment_amount_accepted(amount):
+def test_payment_amount_accepted (amount):
     """Test various amounts are accepted"""
-    payment = Payment(amount=amount)
+    payment = Payment (amount=amount)
     assert payment.validate()
 
 @pytest.mark.parametrize("currency", ["USD", "EUR", "GBP"])
-def test_payment_currency_accepted(currency):
+def test_payment_currency_accepted (currency):
     """Test various currencies are accepted"""
-    payment = Payment(amount=100.0, currency=currency)
+    payment = Payment (amount=100.0, currency=currency)
     assert payment.validate()
 \`\`\`
 
@@ -602,7 +602,7 @@ def test_payment_currency_accepted(currency):
 @pytest.mark.parametrize("amount, currency, status", [
     (10.0, "USD", "pending"),
     (50.0, "EUR", "completed"),
-    # What's being tested? Amount? Currency? Status? Unclear!
+    # What\'s being tested? Amount? Currency? Status? Unclear!
 ])
 \`\`\`
 
@@ -615,9 +615,9 @@ def test_payment_currency_accepted(currency):
     (65, True),   # Above voting age
     (150, True),  # Edge case: extremely high age
 ])
-def test_voting_eligibility(age, can_vote):
+def test_voting_eligibility (age, can_vote):
     """Test voting eligibility by age"""
-    result = is_eligible_to_vote(age)
+    result = is_eligible_to_vote (age)
     assert result == can_vote
 \`\`\`
 
@@ -647,23 +647,23 @@ invalid_amounts = [
 currencies = ["USD", "EUR", "GBP"]
 
 # Parametrized fixture
-@pytest.fixture(params=currencies)
-def currency(request):
+@pytest.fixture (params=currencies)
+def currency (request):
     """Parametrized currency fixture"""
     return request.param
 
 # Tests
 @pytest.mark.parametrize("amount", valid_amounts)
-def test_valid_payment(currency, amount):
+def test_valid_payment (currency, amount):
     """Test valid payments for all currencies"""
-    payment = Payment(amount=amount, currency=currency)
+    payment = Payment (amount=amount, currency=currency)
     assert payment.validate() is True
 
 @pytest.mark.parametrize("amount", invalid_amounts)
-def test_invalid_payment(currency, amount):
+def test_invalid_payment (currency, amount):
     """Test invalid payments for all currencies"""
     with pytest.raises(ValueError):
-        Payment(amount=amount, currency=currency)
+        Payment (amount=amount, currency=currency)
 
 # Runs:
 # test_valid_payment[USD-small] PASSED
@@ -688,10 +688,10 @@ def test_invalid_payment(currency, amount):
 
 \`\`\`python
 @pytest.mark.parametrize("value", range(1000))  # 1000 tests!
-def test_slow_operation(value):
+def test_slow_operation (value):
     """Each test takes 1 second"""
     time.sleep(1)  # Simulate slow operation
-    assert process(value) is not None
+    assert process (value) is not None
 
 # Total time: 1000 seconds (16.7 minutes) serial
 \`\`\`
@@ -701,10 +701,10 @@ def test_slow_operation(value):
 \`\`\`python
 # Use representative sample instead of all values
 @pytest.mark.parametrize("value", [1, 10, 100, 500, 999])
-def test_slow_operation(value):
+def test_slow_operation (value):
     """Test with representative values"""
     time.sleep(1)
-    assert process(value) is not None
+    assert process (value) is not None
 
 # Total time: 5 seconds (200× faster)
 \`\`\`
@@ -723,7 +723,7 @@ pytest -n 8  # Use 8 CPU cores
 \`\`\`python
 @pytest.mark.slow
 @pytest.mark.parametrize("value", range(1000))
-def test_comprehensive(value):
+def test_comprehensive (value):
     """Comprehensive test suite (run nightly)"""
     ...
 

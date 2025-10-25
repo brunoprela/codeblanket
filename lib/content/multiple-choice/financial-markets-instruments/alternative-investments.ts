@@ -22,11 +22,11 @@ export const alternativeInvestmentsMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'fm-1-8-mc-3',
     question:
-      "Madoff's hedge fund showed 0.5% monthly volatility with 12% annual returns (Sharpe ~7). A typical equity hedge fund has Sharpe of:",
+      "Madoff\'s hedge fund showed 0.5% monthly volatility with 12% annual returns (Sharpe ~7). A typical equity hedge fund has Sharpe of:",
     options: ['0.5-1.0', '1.0-1.5', '2.0-3.0', '5.0-7.0'],
     correctAnswer: 0,
     explanation:
-      "Typical hedge fund Sharpe: 0.5-1.5. Excellent managers: 1.5-2.0. Sharpe > 2 for extended periods is extremely rare (and suspicious). Madoff's Sharpe ~7 was mathematically impossible - a major red flag missed by investors. Too smooth = too good to be true.",
+      "Typical hedge fund Sharpe: 0.5-1.5. Excellent managers: 1.5-2.0. Sharpe > 2 for extended periods is extremely rare (and suspicious). Madoff\'s Sharpe ~7 was mathematically impossible - a major red flag missed by investors. Too smooth = too good to be true.",
   },
   {
     id: 'fm-1-8-mc-4',

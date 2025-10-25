@@ -52,7 +52,7 @@ const cache = redis.createClient();
 // ============ Authentication ============
 
 // Middleware: JWT validation
-async function authenticate(req, res, next) {
+async function authenticate (req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   
   if (!token) {
@@ -60,7 +60,7 @@ async function authenticate(req, res, next) {
   }
   
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify (token, process.env.JWT_SECRET);
     req.user = decoded;
     
     // Add user context for downstream services
@@ -74,7 +74,7 @@ async function authenticate(req, res, next) {
 }
 
 // API Key validation for third-party developers
-async function validateApiKey(req, res, next) {
+async function validateApiKey (req, res, next) {
   const apiKey = req.headers['x-api-key',];
   
   if (!apiKey) {
@@ -84,7 +84,7 @@ async function validateApiKey(req, res, next) {
   // Check Redis cache first
   const cached = await cache.get(\`apikey:\${apiKey}\`);
   if (cached) {
-    req.apiClient = JSON.parse(cached);
+    req.apiClient = JSON.parse (cached);
     return next();
   }
   
@@ -98,7 +98,7 @@ async function validateApiKey(req, res, next) {
   const clientData = await client.json();
   
   // Cache for 1 hour
-  await cache.setex(\`apikey:\${apiKey}\`, 3600, JSON.stringify(clientData));
+  await cache.setex(\`apikey:\${apiKey}\`, 3600, JSON.stringify (clientData));
   
   req.apiClient = clientData;
   next();
@@ -150,7 +150,7 @@ const apiKeyRateLimiter = rateLimit({
 // ============ Caching ============
 
 // Cache middleware
-async function cacheMiddleware(ttl) {
+async function cacheMiddleware (ttl) {
   return async (req, res, next) => {
     // Only cache GET requests
     if (req.method !== 'GET') return next();
@@ -158,16 +158,16 @@ async function cacheMiddleware(ttl) {
     const cacheKey = \`cache:\${req.originalUrl}:\${req.user?.id || 'public'}\`;
     
     // Check cache
-    const cached = await cache.get(cacheKey);
+    const cached = await cache.get (cacheKey);
     if (cached) {
-      return res.json(JSON.parse(cached));
+      return res.json(JSON.parse (cached));
     }
     
     // Override res.json to cache response
     const originalJson = res.json;
-    res.json = function(data) {
-      cache.setex(cacheKey, ttl, JSON.stringify(data));
-      originalJson.call(this, data);
+    res.json = function (data) {
+      cache.setex (cacheKey, ttl, JSON.stringify (data));
+      originalJson.call (this, data);
     };
     
     next();
@@ -177,17 +177,17 @@ async function cacheMiddleware(ttl) {
 // ============ Circuit Breakers ============
 
 const serviceBreakers = {
-  user: new CircuitBreaker(fetchUserService, {
+  user: new CircuitBreaker (fetchUserService, {
     timeout: 3000,
     errorThreshold: 50,
     resetTimeout: 30000
   }),
-  post: new CircuitBreaker(fetchPostService, {
+  post: new CircuitBreaker (fetchPostService, {
     timeout: 3000,
     errorThreshold: 50,
     resetTimeout: 30000
   }),
-  feed: new CircuitBreaker(fetchFeedService, {
+  feed: new CircuitBreaker (fetchFeedService, {
     timeout: 5000,
     errorThreshold: 50,
     resetTimeout: 30000
@@ -215,8 +215,8 @@ app.get('/users/:id',
   cacheMiddleware(300),  // Cache 5 min
   async (req, res) => {
     try {
-      const user = await serviceBreakers.user.fire(req.params.id);
-      res.json(user);
+      const user = await serviceBreakers.user.fire (req.params.id);
+      res.json (user);
     } catch (error) {
       res.status(503).json({ error: 'Service unavailable' });
     }
@@ -232,7 +232,7 @@ app.get('/feed',
     try {
       // Parallel requests
       const [posts, trending, suggested] = await Promise.all([
-        serviceBreakers.feed.fire(req.user.id),
+        serviceBreakers.feed.fire (req.user.id),
         fetch('http://trending-service/trending'),
         fetch(\`http://recommendation-service/suggest/\${req.user.id}\`)
       ]);
@@ -260,7 +260,7 @@ app.get('/api/v1/posts',
       }
     });
     
-    res.json(await posts.json());
+    res.json (await posts.json());
   }
 );
 
@@ -275,13 +275,13 @@ app.post('/posts',
         'content-type': 'application/json',
         'x-user-id': req.user.id
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify (req.body)
     });
     
     // Invalidate feed cache
     await cache.del(\`cache:/feed:\${req.user.id}\`);
     
-    res.status(201).json(await post.json());
+    res.status(201).json (await post.json());
   }
 );
 
@@ -304,7 +304,7 @@ app.use((req, res, next) => {
       req.method,
       req.route?.path || 'unknown',
       res.statusCode
-    ).observe(duration);
+    ).observe (duration);
   });
   
   next();
@@ -312,13 +312,13 @@ app.use((req, res, next) => {
 
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', prometheus.register.contentType);
-  res.end(await prometheus.register.metrics());
+  res.end (await prometheus.register.metrics());
 });
 
 // ============ Error Handling ============
 
 app.use((err, req, res, next) => {
-  console.error(err);
+  console.error (err);
   res.status(500).json({
     error: 'Internal server error',
     requestId: req.headers['x-request-id',]
@@ -442,8 +442,8 @@ const httpsAgent = new https.Agent({
 });
 
 // Use agent in fetch calls
-async function fetchWithPool(url) {
-  return fetch(url, {
+async function fetchWithPool (url) {
+  return fetch (url, {
     agent: url.startsWith('https') ? httpsAgent : httpAgent
   });
 }
@@ -495,15 +495,15 @@ const redis = require('redis');
 const { promisify } = require('util');
 
 const client = redis.createClient();
-const getAsync = promisify(client.get).bind(client);
-const setexAsync = promisify(client.setex).bind(client);
+const getAsync = promisify (client.get).bind (client);
+const setexAsync = promisify (client.setex).bind (client);
 
 // Cache with stale-while-revalidate
 async function cacheWithSWR(key, fetchFn, ttl) {
-  const cached = await getAsync(key);
+  const cached = await getAsync (key);
   
   if (cached) {
-    const data = JSON.parse(cached);
+    const data = JSON.parse (cached);
     
     // If within 80% of TTL, return cached
     if (data.cachedAt + (ttl * 0.8 * 1000) > Date.now()) {
@@ -511,8 +511,8 @@ async function cacheWithSWR(key, fetchFn, ttl) {
     }
     
     // Stale: return cached but refresh in background
-    fetchFn().then(fresh => {
-      setexAsync(key, ttl, JSON.stringify({
+    fetchFn().then (fresh => {
+      setexAsync (key, ttl, JSON.stringify({
         value: fresh,
         cachedAt: Date.now()
       }));
@@ -523,7 +523,7 @@ async function cacheWithSWR(key, fetchFn, ttl) {
   
   // Cache miss: fetch and cache
   const fresh = await fetchFn();
-  await setexAsync(key, ttl, JSON.stringify({
+  await setexAsync (key, ttl, JSON.stringify({
     value: fresh,
     cachedAt: Date.now()
   }));
@@ -539,19 +539,19 @@ Combine duplicate concurrent requests:
 \`\`\`javascript
 const pendingRequests = new Map();
 
-async function coalescedFetch(url) {
+async function coalescedFetch (url) {
   // Check if request already in flight
-  if (pendingRequests.has(url)) {
-    return pendingRequests.get(url);
+  if (pendingRequests.has (url)) {
+    return pendingRequests.get (url);
   }
   
   // Make request
-  const promise = fetch(url).then(res => res.json());
-  pendingRequests.set(url, promise);
+  const promise = fetch (url).then (res => res.json());
+  pendingRequests.set (url, promise);
   
   // Clean up after response
   promise.finally(() => {
-    pendingRequests.delete(url);
+    pendingRequests.delete (url);
   });
   
   return promise;
@@ -563,13 +563,13 @@ async function coalescedFetch(url) {
 \`\`\`javascript
 const compression = require('compression');
 
-app.use(compression({
+app.use (compression({
   level: 6,  // Compression level (1-9)
   threshold: 1024,  // Only compress responses > 1KB
   filter: (req, res) => {
     // Don't compress already compressed formats
     if (req.headers['x-no-compression',]) return false;
-    return compression.filter(req, res);
+    return compression.filter (req, res);
   }
 }));
 \`\`\`
@@ -596,7 +596,7 @@ function roundRobinBackend() {
 app.get('/users/:id', async (req, res) => {
   const backend = roundRobinBackend();
   const user = await fetch(\`\${backend}/users/\${req.params.id}\`);
-  res.json(await user.json());
+  res.json (await user.json());
 });
 \`\`\`
 
@@ -607,17 +607,17 @@ Set aggressive timeouts to fail fast:
 \`\`\`javascript
 const AbortController = require('abort-controller');
 
-async function fetchWithTimeout(url, timeout = 3000) {
+async function fetchWithTimeout (url, timeout = 3000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
   
   try {
-    const response = await fetch(url, {
+    const response = await fetch (url, {
       signal: controller.signal
     });
     return response;
   } finally {
-    clearTimeout(timeoutId);
+    clearTimeout (timeoutId);
   }
 }
 \`\`\`
@@ -641,7 +641,7 @@ app.get('/dashboard', async (req, res) => {
     requests.recommendations = fetch(\`http://recommendation-service/recommend/\${req.user.id}\`);
   }
   
-  const results = await Promise.all(Object.values(requests));
+  const results = await Promise.all(Object.values (requests));
   
   res.json({
     profile: await results[0].json(),
@@ -712,12 +712,12 @@ const gatewayDuration = new prometheus.Histogram({
   buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5]
 });
 
-app.use(async (req, res, next) => {
+app.use (async (req, res, next) => {
   const start = Date.now();
   
   res.on('finish', () => {
     const duration = (Date.now() - start) / 1000;
-    gatewayDuration.labels(req.route?.path, 'gateway').observe(duration);
+    gatewayDuration.labels (req.route?.path, 'gateway').observe (duration);
     
     // Alert on slow requests
     if (duration > 1) {

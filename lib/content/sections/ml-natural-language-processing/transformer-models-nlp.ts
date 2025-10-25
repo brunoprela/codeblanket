@@ -30,37 +30,37 @@ import torch
 import torch.nn as nn
 import math
 
-class TransformerBlock(nn.Module):
+class TransformerBlock (nn.Module):
     """Single Transformer Block"""
     
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
         super().__init__()
         
         # Multi-head self-attention
-        self.attention = nn.MultiheadAttention(d_model, num_heads, dropout=dropout)
+        self.attention = nn.MultiheadAttention (d_model, num_heads, dropout=dropout)
         
         # Feed-forward network
         self.ff = nn.Sequential(
-            nn.Linear(d_model, d_ff),
+            nn.Linear (d_model, d_ff),
             nn.GELU(),
-            nn.Linear(d_ff, d_model)
+            nn.Linear (d_ff, d_model)
         )
         
         # Layer normalization
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
+        self.norm1 = nn.LayerNorm (d_model)
+        self.norm2 = nn.LayerNorm (d_model)
         
         # Dropout
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
         
-    def forward(self, x, mask=None):
+    def forward (self, x, mask=None):
         # Self-attention with residual connection
-        attn_output, _ = self.attention(x, x, x, attn_mask=mask)
-        x = self.norm1(x + self.dropout(attn_output))
+        attn_output, _ = self.attention (x, x, x, attn_mask=mask)
+        x = self.norm1(x + self.dropout (attn_output))
         
         # Feed-forward with residual connection
-        ff_output = self.ff(x)
-        x = self.norm2(x + self.dropout(ff_output))
+        ff_output = self.ff (x)
+        x = self.norm2(x + self.dropout (ff_output))
         
         return x
 \`\`\`
@@ -68,26 +68,26 @@ class TransformerBlock(nn.Module):
 ### Positional Encoding
 
 \`\`\`python
-class PositionalEncoding(nn.Module):
+class PositionalEncoding (nn.Module):
     """Sinusoidal positional encoding"""
     
     def __init__(self, d_model, max_len=5000):
         super().__init__()
         
         # Create positional encoding matrix
-        pe = torch.zeros(max_len, d_model)
+        pe = torch.zeros (max_len, d_model)
         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
         
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * 
+        div_term = torch.exp (torch.arange(0, d_model, 2).float() * 
                             (-math.log(10000.0) / d_model))
         
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
+        pe[:, 0::2] = torch.sin (position * div_term)
+        pe[:, 1::2] = torch.cos (position * div_term)
         
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
         
-    def forward(self, x):
+    def forward (self, x):
         return x + self.pe[:, :x.size(1)]
 \`\`\`
 
@@ -106,7 +106,7 @@ model = BertModel.from_pretrained('bert-base-uncased')
 
 # Tokenize input
 text = "BERT revolutionized NLP"
-tokens = tokenizer(text, return_tensors='pt')
+tokens = tokenizer (text, return_tensors='pt')
 
 # Forward pass
 outputs = model(**tokens)
@@ -126,7 +126,7 @@ print(f"Pooled output shape: {pooled_output.shape}")
 # Randomly mask 15% of tokens, predict them
 
 text = "The cat sat on the [MASK]"
-inputs = tokenizer(text, return_tensors='pt')
+inputs = tokenizer (text, return_tensors='pt')
 
 # Model predicts masked tokens
 outputs = model(**inputs)
@@ -137,7 +137,7 @@ sentence_a = "The cat sat on the mat"
 sentence_b = "The dog ran in the park"
 
 # Model predicts if sentence_b follows sentence_a
-inputs = tokenizer(sentence_a, sentence_b, return_tensors='pt')
+inputs = tokenizer (sentence_a, sentence_b, return_tensors='pt')
 outputs = model(**inputs)
 \`\`\`
 
@@ -146,22 +146,22 @@ outputs = model(**inputs)
 \`\`\`python
 from transformers import BertForSequenceClassification
 
-class BERTClassifier(nn.Module):
+class BERTClassifier (nn.Module):
     def __init__(self, num_classes=2, dropout=0.1):
         super().__init__()
         self.bert = BertModel.from_pretrained('bert-base-uncased')
-        self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout (dropout)
         self.classifier = nn.Linear(768, num_classes)
         
-    def forward(self, input_ids, attention_mask):
-        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
+    def forward (self, input_ids, attention_mask):
+        outputs = self.bert (input_ids=input_ids, attention_mask=attention_mask)
         pooled_output = outputs.pooler_output  # [CLS] token
-        pooled_output = self.dropout(pooled_output)
-        logits = self.classifier(pooled_output)
+        pooled_output = self.dropout (pooled_output)
+        logits = self.classifier (pooled_output)
         return logits
 
 # Training example
-model = BERTClassifier(num_classes=2)
+model = BERTClassifier (num_classes=2)
 optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
 criterion = nn.CrossEntropyLoss()
 
@@ -170,8 +170,8 @@ for batch in dataloader:
     input_ids, attention_mask, labels = batch
     
     optimizer.zero_grad()
-    logits = model(input_ids, attention_mask)
-    loss = criterion(logits, labels)
+    logits = model (input_ids, attention_mask)
+    loss = criterion (logits, labels)
     loss.backward()
     optimizer.step()
 \`\`\`
@@ -191,7 +191,7 @@ model = GPT2Model.from_pretrained('gpt2')
 
 # Tokenize
 text = "Natural language processing"
-tokens = tokenizer(text, return_tensors='pt')
+tokens = tokenizer (text, return_tensors='pt')
 
 # Forward pass
 outputs = model(**tokens)
@@ -208,9 +208,9 @@ from transformers import GPT2LMHeadModel
 model = GPT2LMHeadModel.from_pretrained('gpt2')
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
-def generate_text(prompt, max_length=50, temperature=1.0, top_k=50):
+def generate_text (prompt, max_length=50, temperature=1.0, top_k=50):
     """Generate text autoregressively"""
-    input_ids = tokenizer.encode(prompt, return_tensors='pt')
+    input_ids = tokenizer.encode (prompt, return_tensors='pt')
     
     # Generate
     output = model.generate(
@@ -222,12 +222,12 @@ def generate_text(prompt, max_length=50, temperature=1.0, top_k=50):
         pad_token_id=tokenizer.eos_token_id
     )
     
-    generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+    generated_text = tokenizer.decode (output[0], skip_special_tokens=True)
     return generated_text
 
 # Example
 prompt = "Machine learning is"
-generated = generate_text(prompt, max_length=30)
+generated = generate_text (prompt, max_length=30)
 print(f"Generated: {generated}")
 \`\`\`
 
@@ -265,7 +265,7 @@ print(result)  # [{'label': 'POSITIVE', 'score': 0.999}]
 qa = pipeline('question-answering', model='bert-base-uncased')
 context = "Paris is the capital of France"
 question = "What is the capital of France?"
-answer = qa(question=question, context=context)
+answer = qa (question=question, context=context)
 print(answer)  # {'answer': 'Paris', 'score': 0.987}
 \`\`\`
 
@@ -279,7 +279,7 @@ print(result[0]['generated_text'])
 
 # Completion
 prompt = "The future of AI is"
-result = generator(prompt, max_length=30)
+result = generator (prompt, max_length=30)
 print(result[0]['generated_text'])
 \`\`\`
 
@@ -318,10 +318,10 @@ tokenizer = T5Tokenizer.from_pretrained('t5-small')
 
 # Everything as text-to-text
 input_text = "translate English to French: Hello, how are you?"
-input_ids = tokenizer(input_text, return_tensors='pt').input_ids
+input_ids = tokenizer (input_text, return_tensors='pt').input_ids
 
-outputs = model.generate(input_ids)
-print(tokenizer.decode(outputs[0]))  # "Bonjour, comment allez-vous?"
+outputs = model.generate (input_ids)
+print(tokenizer.decode (outputs[0]))  # "Bonjour, comment allez-vous?"
 \`\`\`
 
 ## Best Practices
@@ -369,8 +369,8 @@ for batch in dataloader:
         outputs = model(**batch)
         loss = outputs.loss
     
-    scaler.scale(loss).backward()
-    scaler.step(optimizer)
+    scaler.scale (loss).backward()
+    scaler.step (optimizer)
     scaler.update()
 \`\`\`
 

@@ -109,11 +109,11 @@ Cons: Still requires state
 \`\`\`javascript
 // Generation
 const apiKey = 'sk_' + randomBytes(32).toString('hex');
-const hash = bcrypt.hash(apiKey, 10);
+const hash = bcrypt.hash (apiKey, 10);
 // Store: id, hash, prefix 'sk_...xyz' (last 4), metadata
 
 // Validation
-const match = bcrypt.compare(providedKey, storedHash);
+const match = bcrypt.compare (providedKey, storedHash);
 \`\`\`
 Benefit: Even if YOUR database is compromised, keys can't be recovered
 

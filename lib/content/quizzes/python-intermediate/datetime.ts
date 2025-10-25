@@ -37,7 +37,7 @@ export const datetimeQuiz = [
       'What is timedelta and how is it used for date arithmetic? Why not just add/subtract integers?',
     hint: 'Think about handling months, leap years, and DST.',
     sampleAnswer:
-      'timedelta represents a duration (like "3 days" or "2 hours") and handles date arithmetic correctly - accounting for months with different days, leap years, and DST. You can\'t just add integers because: tomorrow isn\'t always today+1 (DST shifts), next month isn\'t always +30 days (different month lengths), next year isn\'t always +365 days (leap years). Use timedelta for: adding/subtracting time (today + timedelta(days=7)), calculating differences (end_date - start_date), measuring elapsed time. It handles all calendar complexity automatically.',
+      'timedelta represents a duration (like "3 days" or "2 hours") and handles date arithmetic correctly - accounting for months with different days, leap years, and DST. You can\'t just add integers because: tomorrow isn\'t always today+1 (DST shifts), next month isn\'t always +30 days (different month lengths), next year isn\'t always +365 days (leap years). Use timedelta for: adding/subtracting time (today + timedelta (days=7)), calculating differences (end_date - start_date), measuring elapsed time. It handles all calendar complexity automatically.',
     keyPoints: [
       'Represents duration, not a point in time',
       'Handles calendar complexity (DST, leap years)',

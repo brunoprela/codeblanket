@@ -26,15 +26,15 @@ Decision at each element: include or exclude
 
 **Code:**
 \`\`\`python
-def subsets(nums):
+def subsets (nums):
     result = []
     
-    def backtrack(start, path):
-        result.append(path[:])  # Add current subset
+    def backtrack (start, path):
+        result.append (path[:])  # Add current subset
         
-        for i in range(start, len(nums)):
-            path.append(nums[i])       # Include nums[i]
-            backtrack(i + 1, path)     # Explore
+        for i in range (start, len (nums)):
+            path.append (nums[i])       # Include nums[i]
+            backtrack (i + 1, path)     # Explore
             path.pop()                 # Backtrack
     
     backtrack(0, [])
@@ -60,15 +60,15 @@ All elements used, different orders
 
 **Code:**
 \`\`\`python
-def permute(nums):
+def permute (nums):
     result = []
     
-    def backtrack(path, remaining):
+    def backtrack (path, remaining):
         if not remaining:
-            result.append(path[:])
+            result.append (path[:])
             return
         
-        for i in range(len(remaining)):
+        for i in range (len (remaining)):
             # Choose remaining[i]
             backtrack(
                 path + [remaining[i]], 
@@ -81,18 +81,18 @@ def permute(nums):
 
 **Alternative (Using visited set):**
 \`\`\`python
-def permute_visited(nums):
+def permute_visited (nums):
     result = []
     
-    def backtrack(path):
-        if len(path) == len(nums):
-            result.append(path[:])
+    def backtrack (path):
+        if len (path) == len (nums):
+            result.append (path[:])
             return
         
         for num in nums:
             if num not in path:  # Or use visited set
-                path.append(num)
-                backtrack(path)
+                path.append (num)
+                backtrack (path)
                 path.pop()
     
     backtrack([])
@@ -119,35 +119,35 @@ No two queens share column, diagonal
 
 **Code:**
 \`\`\`python
-def solve_n_queens(n):
+def solve_n_queens (n):
     result = []
-    board = [['.'] * n for _ in range(n)]
+    board = [['.'] * n for _ in range (n)]
     
-    def is_valid(row, col):
+    def is_valid (row, col):
         # Check column
-        for i in range(row):
+        for i in range (row):
             if board[i][col] == 'Q':
                 return False
         
         # Check diagonals
-        for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+        for i, j in zip (range (row-1, -1, -1), range (col-1, -1, -1)):
             if board[i][j] == 'Q':
                 return False
-        for i, j in zip(range(row-1, -1, -1), range(col+1, n)):
+        for i, j in zip (range (row-1, -1, -1), range (col+1, n)):
             if board[i][j] == 'Q':
                 return False
         
         return True
     
-    def backtrack(row):
+    def backtrack (row):
         if row == n:
-            result.append(['.join(r) for r in board])
+            result.append(['.join (r) for r in board])
             return
         
-        for col in range(n):
-            if is_valid(row, col):
+        for col in range (n):
+            if is_valid (row, col):
                 board[row][col] = 'Q'  # Place queen
-                backtrack(row + 1)     # Next row
+                backtrack (row + 1)     # Next row
                 board[row][col] = '.'  # Remove queen
     
     backtrack(0)
@@ -166,12 +166,12 @@ Find if word exists in grid (can move up/down/left/right).
 - Mark visited cells, unmark on backtrack
 
 \`\`\`python
-def exist(board, word):
-    rows, cols = len(board), len(board[0])
+def exist (board, word):
+    rows, cols = len (board), len (board[0])
     
-    def backtrack(r, c, index):
+    def backtrack (r, c, index):
         # Found complete word
-        if index == len(word):
+        if index == len (word):
             return True
         
         # Out of bounds or wrong character
@@ -184,10 +184,10 @@ def exist(board, word):
         board[r][c] = '#'
         
         # Explore all 4 directions
-        found = (backtrack(r+1, c, index+1) or
-                 backtrack(r-1, c, index+1) or
-                 backtrack(r, c+1, index+1) or
-                 backtrack(r, c-1, index+1))
+        found = (backtrack (r+1, c, index+1) or
+                 backtrack (r-1, c, index+1) or
+                 backtrack (r, c+1, index+1) or
+                 backtrack (r, c-1, index+1))
         
         # Unmark (backtrack)
         board[r][c] = temp
@@ -195,9 +195,9 @@ def exist(board, word):
         return found
     
     # Try each cell as starting point
-    for r in range(rows):
-        for c in range(cols):
-            if backtrack(r, c, 0):
+    for r in range (rows):
+        for c in range (cols):
+            if backtrack (r, c, 0):
                 return True
     return False
 \`\`\``,

@@ -161,7 +161,7 @@ Each service has its own database:
     id: 'q2',
     question:
       'Explain Domain-Driven Design\'s "bounded context" concept using a real-world example. How does it help with microservices decomposition?',
-    sampleAnswer: `Domain-Driven Design's "bounded context" is one of the most important concepts for microservices decomposition. Let me explain with a concrete example.
+    sampleAnswer: `Domain-Driven Design\'s "bounded context" is one of the most important concepts for microservices decomposition. Let me explain with a concrete example.
 
 **Bounded Context Definition:**
 
@@ -417,7 +417,7 @@ Patient Registration Service (master):
 
 3. **Discover Multiple Meanings**: Does "Patient" mean same thing everywhere? (No!)
 
-4. **Draw Boundaries**: Where does meaning change? → That's a bounded context boundary
+4. **Draw Boundaries**: Where does meaning change? → That\'s a bounded context boundary
 
 5. **Map to Services**: Each bounded context → One microservice
 
@@ -496,7 +496,7 @@ Notify     High Med    Med  High  High    Low       High -
 **C. Identify pain points:**
 
 Survey engineering team:
-- What's slow to deploy?
+- What\'s slow to deploy?
 - What causes production issues?
 - What's hard to scale?
 - What requires different tech?

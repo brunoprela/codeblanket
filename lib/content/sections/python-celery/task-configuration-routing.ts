@@ -6,7 +6,7 @@ export const taskConfigurationRouting = {
 
 ## Introduction
 
-**Task configuration and routing** allows you to control how tasks are executed: which queue they go to, their priority, time limits, serialization, and more. This section covers Celery's powerful configuration system for production-grade task management.
+**Task configuration and routing** allows you to control how tasks are executed: which queue they go to, their priority, time limits, serialization, and more. This section covers Celery\'s powerful configuration system for production-grade task management.
 
 **Why Configuration Matters:**
 - **Performance**: Optimize worker pools, prefetch settings
@@ -148,18 +148,18 @@ app.conf.task_routes = {
 }
 
 # Define tasks
-@app.task(name='tasks.send_email')
-def send_email(email: str, subject: str, body: str):
+@app.task (name='tasks.send_email')
+def send_email (email: str, subject: str, body: str):
     """Routed to 'emails' queue"""
     pass
 
-@app.task(name='tasks.process_video')
-def process_video(video_id: int):
+@app.task (name='tasks.process_video')
+def process_video (video_id: int):
     """Routed to 'processing' queue"""
     pass
 
-@app.task(name='analytics.calculate_metrics')
-def calculate_metrics(date: str):
+@app.task (name='analytics.calculate_metrics')
+def calculate_metrics (date: str):
     """Routed to 'analytics' queue"""
     pass
 \`\`\`
@@ -218,13 +218,13 @@ app.conf.task_routes = {
 }
 
 # Tasks
-@app.task(name='tasks.urgent_notification')
-def urgent_notification(user_id: int):
+@app.task (name='tasks.urgent_notification')
+def urgent_notification (user_id: int):
     """High priority task"""
     pass
 
-@app.task(name='tasks.batch_analytics')
-def batch_analytics(date: str):
+@app.task (name='tasks.batch_analytics')
+def batch_analytics (date: str):
     """Low priority task"""
     pass
 
@@ -265,7 +265,7 @@ from typing import Dict, Any
 app = Celery('myapp', broker='redis://localhost:6379/0')
 
 # Custom router function
-def route_task(name: str, args: tuple, kwargs: Dict[str, Any],
+def route_task (name: str, args: tuple, kwargs: Dict[str, Any],
                options: dict, task=None, **kw):
     """
     Dynamic routing based on task arguments
@@ -274,7 +274,7 @@ def route_task(name: str, args: tuple, kwargs: Dict[str, Any],
     """
     # Route based on user tier
     if 'user_id' in kwargs:
-        user = get_user(kwargs['user_id'])
+        user = get_user (kwargs['user_id'])
         if user.is_vip:
             return {'queue': 'vip', 'priority': 9}
         elif user.is_premium:
@@ -305,15 +305,15 @@ app.conf.task_routes = (route_task,)
 
 # Example usage
 @app.task
-def process_order(user_id: int, order_id: int):
+def process_order (user_id: int, order_id: int):
     """Dynamically routed based on user tier"""
     pass
 
 # VIP user → 'vip' queue, priority 9
-process_order.delay(user_id=12345, order_id=999)
+process_order.delay (user_id=12345, order_id=999)
 
 # Regular user → 'default' queue, priority 5
-process_order.delay(user_id=67890, order_id=888)
+process_order.delay (user_id=67890, order_id=888)
 \`\`\`
 
 ---
@@ -347,19 +347,19 @@ app = Celery('myapp', broker='redis://localhost:6379/0')
     retry_backoff_max=600,  # Max 10 minutes backoff
     retry_jitter=True,  # Add randomness to backoff
 )
-def send_email(self, email: str, subject: str, body: str):
+def send_email (self, email: str, subject: str, body: str):
     """Email task with comprehensive configuration"""
     try:
-        smtp_send(email, subject, body)
+        smtp_send (email, subject, body)
     except SMTPException as exc:
-        raise self.retry(exc=exc)
+        raise self.retry (exc=exc)
 
 # Task with compression
 @app.task(
     compression='gzip',  # Compress task payload
     serializer='msgpack'  # Fast binary serialization
 )
-def process_large_data(data: dict):
+def process_large_data (data: dict):
     """Task handling large payloads"""
     pass
 
@@ -428,15 +428,15 @@ app = Celery('myapp', broker='redis://localhost:6379/0')
 app.conf.task_default_rate_limit = '100/m'  # 100 per minute
 
 # Task-specific rate limits
-@app.task(rate_limit='10/s')  # 10 per second
-def send_email(email: str):
+@app.task (rate_limit='10/s')  # 10 per second
+def send_email (email: str):
     pass
 
-@app.task(rate_limit='5/m')  # 5 per minute
-def call_external_api(endpoint: str):
+@app.task (rate_limit='5/m')  # 5 per minute
+def call_external_api (endpoint: str):
     pass
 
-@app.task(rate_limit='1/h')  # 1 per hour
+@app.task (rate_limit='1/h')  # 1 per hour
 def expensive_operation():
     pass
 
@@ -489,17 +489,17 @@ def long_running_task():
         raise
 
 # Usage in task
-@app.task(bind=True, soft_time_limit=600)
-def process_data(self):
+@app.task (bind=True, soft_time_limit=600)
+def process_data (self):
     """Handle soft time limit"""
     try:
         for item in large_dataset:
-            process_item(item)
+            process_item (item)
     except SoftTimeLimitExceeded:
         # Save progress
-        save_checkpoint(self.request.id)
+        save_checkpoint (self.request.id)
         # Re-queue continuation
-        process_data_continuation.delay(checkpoint_id=self.request.id)
+        process_data_continuation.delay (checkpoint_id=self.request.id)
         raise
 \`\`\`
 
@@ -543,8 +543,8 @@ app.conf.result_serializer = 'msgpack'
 app.conf.accept_content = ['msgpack', 'json']
 
 # Per-task serializer
-@app.task(serializer='msgpack')
-def binary_data_task(data: bytes):
+@app.task (serializer='msgpack')
+def binary_data_task (data: bytes):
     """Use msgpack for binary data"""
     pass
 
@@ -552,8 +552,8 @@ def binary_data_task(data: bytes):
 app.conf.result_compression = 'gzip'  # Compress results
 app.conf.task_compression = 'gzip'  # Compress tasks
 
-@app.task(compression='gzip')
-def large_payload_task(data: dict):
+@app.task (compression='gzip')
+def large_payload_task (data: dict):
     """Compressed task"""
     pass
 \`\`\`
@@ -689,7 +689,7 @@ beat_schedule = {
     },
     'report-every-day': {
         'task': 'tasks.daily_report',
-        'schedule': crontab(hour=0, minute=0),  # Midnight
+        'schedule': crontab (hour=0, minute=0),  # Midnight
     },
 }
 

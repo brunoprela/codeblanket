@@ -46,7 +46,7 @@ export const tensorflowKerasFundamentalsMultipleChoice: MultipleChoiceQuestion[]
     {
       id: 'tensorflow-keras-mc4',
       question:
-        "How does TensorFlow's GradientTape differ from PyTorch's autograd in terms of usage?",
+        "How does TensorFlow\'s GradientTape differ from PyTorch's autograd in terms of usage?",
       options: [
         'GradientTape requires explicit context manager, autograd tracks automatically',
         'GradientTape is faster but less flexible',
@@ -69,6 +69,6 @@ export const tensorflowKerasFundamentalsMultipleChoice: MultipleChoiceQuestion[]
       ],
       correctAnswer: 1,
       explanation:
-        "SavedModel is TensorFlow's universal format for production deployment. It's language-neutral and works with TensorFlow Serving (scalable serving), TensorFlow Lite (mobile/edge), and TensorFlow.js (browser). The .keras and .h5 formats are good for checkpointing during development but SavedModel is the production standard.",
+        "SavedModel is TensorFlow\'s universal format for production deployment. It's language-neutral and works with TensorFlow Serving (scalable serving), TensorFlow Lite (mobile/edge), and TensorFlow.js (browser). The .keras and .h5 formats are good for checkpointing during development but SavedModel is the production standard.",
     },
   ];

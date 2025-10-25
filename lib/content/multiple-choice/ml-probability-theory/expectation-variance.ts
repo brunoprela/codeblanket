@@ -19,7 +19,7 @@ export const expectationvarianceMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['9', '18', '23', '36'],
     correctAnswer: 3,
     explanation:
-      "Var(aX + b) = a²Var(X). With a=2, b=5: Var(2X + 5) = 2²(9) = 4(9) = 36. The constant 5 doesn't affect variance - it just shifts the distribution.",
+      "Var (aX + b) = a²Var(X). With a=2, b=5: Var(2X + 5) = 2²(9) = 4(9) = 36. The constant 5 doesn't affect variance - it just shifts the distribution.",
   },
   {
     id: 'mc3',

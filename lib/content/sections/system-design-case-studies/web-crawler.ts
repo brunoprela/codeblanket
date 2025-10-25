@@ -5,7 +5,7 @@
 export const webCrawlerSection = {
   id: 'web-crawler',
   title: 'Design Web Crawler',
-  content: `A web crawler (or spider) is a system that systematically browses the web to index content for search engines. Google's crawler processes billions of web pages daily. The core challenges are: handling massive scale (billions of URLs), politeness (respecting robots.txt, rate limits), duplicate detection, handling dynamic content, and maintaining freshness of indexed data.
+  content: `A web crawler (or spider) is a system that systematically browses the web to index content for search engines. Google\'s crawler processes billions of web pages daily. The core challenges are: handling massive scale (billions of URLs), politeness (respecting robots.txt, rate limits), duplicate detection, handling dynamic content, and maintaining freshness of indexed data.
 
 ## Problem Statement
 
@@ -124,9 +124,9 @@ Design a web crawler that:
 queue = ["url1", "url2", "url3", ...]
 while queue:
     url = queue.pop()
-    html = fetch(url)
-    links = extract_links(html)
-    queue.extend(links)
+    html = fetch (url)
+    links = extract_links (html)
+    queue.extend (links)
 \`\`\`
 
 **Problems**:
@@ -167,7 +167,7 @@ class URLFrontier:
         self.medium_priority = PriorityQueue()  # PageRank 0.3-0.8
         self.low_priority = PriorityQueue()     # PageRank < 0.3
     
-    def add_url(self, url, priority_score):
+    def add_url (self, url, priority_score):
         if priority_score > 0.8:
             self.high_priority.put((priority_score, url))
         elif priority_score > 0.3:
@@ -175,7 +175,7 @@ class URLFrontier:
         else:
             self.low_priority.put((priority_score, url))
     
-    def get_next_url(self):
+    def get_next_url (self):
         # 70% from high, 20% from medium, 10% from low
         rand = random.random()
         if rand < 0.7 and not self.high_priority.empty():
@@ -195,20 +195,20 @@ class PolitenessQueue:
         self.last_access = {}  # domain → timestamp
         self.min_delay = 1.0  # 1 second between requests to same domain
     
-    def add_url(self, url):
-        domain = extract_domain(url)
+    def add_url (self, url):
+        domain = extract_domain (url)
         if domain not in self.queues:
             self.queues[domain] = deque()
-        self.queues[domain].append(url)
+        self.queues[domain].append (url)
     
-    def get_next_url(self):
+    def get_next_url (self):
         now = time.time()
         for domain, queue in self.queues.items():
             if not queue:
                 continue
             
             # Check if enough time elapsed since last request
-            last = self.last_access.get(domain, 0)
+            last = self.last_access.get (domain, 0)
             if now - last >= self.min_delay:
                 url = queue.popleft()
                 self.last_access[domain] = now
@@ -232,7 +232,7 @@ class PolitenessQueue:
 ### Solution 1: URL Normalization
 
 \`\`\`python
-def normalize_url(url):
+def normalize_url (url):
     # Convert to lowercase
     url = url.lower()
     
@@ -243,9 +243,9 @@ def normalize_url(url):
     url = url.rstrip("/")
     
     # Sort query parameters (consistent ordering)
-    parsed = urlparse(url)
-    query = parse_qs(parsed.query)
-    sorted_query = urlencode(sorted(query.items()))
+    parsed = urlparse (url)
+    query = parse_qs (parsed.query)
+    sorted_query = urlencode (sorted (query.items()))
     url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}?{sorted_query}"
     
     # Remove fragments
@@ -264,28 +264,28 @@ def normalize_url(url):
 class BloomFilter:
     def __init__(self, size=100_000_000_000, num_hashes=7):
         self.size = size
-        self.bit_array = bitarray(size)  # 100B bits = 12.5 GB
+        self.bit_array = bitarray (size)  # 100B bits = 12.5 GB
         self.num_hashes = num_hashes
     
-    def add(self, url):
-        for i in range(self.num_hashes):
-            index = hash_function(url, i) % self.size
+    def add (self, url):
+        for i in range (self.num_hashes):
+            index = hash_function (url, i) % self.size
             self.bit_array[index] = 1
     
-    def contains(self, url):
-        for i in range(self.num_hashes):
-            index = hash_function(url, i) % self.size
+    def contains (self, url):
+        for i in range (self.num_hashes):
+            index = hash_function (url, i) % self.size
             if self.bit_array[index] == 0:
                 return False  # Definitely not seen
         return True  # Probably seen (false positive rate ~1%)
 
 bloom = BloomFilter()
 
-def should_crawl(url):
-    url = normalize_url(url)
-    if bloom.contains(url):
+def should_crawl (url):
+    url = normalize_url (url)
+    if bloom.contains (url):
         return False  # Already crawled (or false positive)
-    bloom.add(url)
+    bloom.add (url)
     return True
 \`\`\`
 
@@ -298,19 +298,19 @@ def should_crawl(url):
 ### Solution 3: Content Hash (Catch Near-Duplicates)
 
 \`\`\`python
-def content_hash(html):
+def content_hash (html):
     # Remove dynamic content (timestamps, ads, comments)
-    cleaned = remove_boilerplate(html)
+    cleaned = remove_boilerplate (html)
     return hashlib.md5(cleaned.encode()).hexdigest()
 
 # Store in database
 crawled_hashes = set()
 
-def is_duplicate_content(html):
-    h = content_hash(html)
+def is_duplicate_content (html):
+    h = content_hash (html)
     if h in crawled_hashes:
         return True  # Near-duplicate
-    crawled_hashes.add(h)
+    crawled_hashes.add (h)
     return False
 \`\`\`
 
@@ -343,7 +343,7 @@ class RobotsCache:
         self.cache = {}  # domain → RobotsRules
         self.ttl = 86400  # 24 hours
     
-    def get_rules(self, domain):
+    def get_rules (self, domain):
         if domain in self.cache:
             rules, timestamp = self.cache[domain]
             if time.time() - timestamp < self.ttl:
@@ -351,24 +351,24 @@ class RobotsCache:
         
         # Fetch robots.txt
         robots_url = f"https://{domain}/robots.txt"
-        response = requests.get(robots_url, timeout=5)
-        rules = parse_robots_txt(response.text)
+        response = requests.get (robots_url, timeout=5)
+        rules = parse_robots_txt (response.text)
         self.cache[domain] = (rules, time.time())
         return rules
     
-    def can_crawl(self, url):
-        domain = extract_domain(url)
-        rules = self.get_rules(domain)
-        path = extract_path(url)
-        return rules.is_allowed(path, user_agent="MyBot")
+    def can_crawl (self, url):
+        domain = extract_domain (url)
+        rules = self.get_rules (domain)
+        path = extract_path (url)
+        return rules.is_allowed (path, user_agent="MyBot")
 
 robots_cache = RobotsCache()
 
-def fetch_url(url):
-    if not robots_cache.can_crawl(url):
+def fetch_url (url):
+    if not robots_cache.can_crawl (url):
         return None  # Respect robots.txt
     
-    return requests.get(url)
+    return requests.get (url)
 \`\`\`
 
 **Crawl-delay**: Wait specified seconds between requests.
@@ -389,7 +389,7 @@ class CrawlerWorker:
         self.session = requests.Session()  # Connection pooling
         self.user_agent = "MyBot/1.0"
     
-    def run(self):
+    def run (self):
         while True:
             # Get next URL from frontier
             url = url_frontier.get_next_url()
@@ -398,11 +398,11 @@ class CrawlerWorker:
                 continue
             
             # Check robots.txt
-            if not robots_cache.can_crawl(url):
+            if not robots_cache.can_crawl (url):
                 continue
             
             # Check if already crawled (Bloom filter)
-            if not should_crawl(url):
+            if not should_crawl (url):
                 continue
             
             # Fetch HTML
@@ -420,23 +420,23 @@ class CrawlerWorker:
                 html = response.text
                 
                 # Check content duplication
-                if is_duplicate_content(html):
+                if is_duplicate_content (html):
                     continue
                 
                 # Store HTML in S3
-                store_content(url, html)
+                store_content (url, html)
                 
                 # Extract links
-                links = extract_links(html, base_url=url)
+                links = extract_links (html, base_url=url)
                 
                 # Add links to frontier
                 for link in links:
-                    priority = calculate_priority(link)
-                    url_frontier.add_url(link, priority)
+                    priority = calculate_priority (link)
+                    url_frontier.add_url (link, priority)
                 
             except Exception as e:
                 # Handle timeouts, connection errors
-                log_error(url, e)
+                log_error (url, e)
 \`\`\`
 
 ---
@@ -447,8 +447,8 @@ class CrawlerWorker:
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-def extract_links(html, base_url):
-    soup = BeautifulSoup(html, 'html.parser')
+def extract_links (html, base_url):
+    soup = BeautifulSoup (html, 'html.parser')
     links = []
     
     # Find all <a> tags
@@ -456,17 +456,17 @@ def extract_links(html, base_url):
         href = tag['href']
         
         # Convert relative URL to absolute
-        absolute_url = urljoin(base_url, href)
+        absolute_url = urljoin (base_url, href)
         
         # Filter out unwanted URLs
-        if not is_valid_url(absolute_url):
+        if not is_valid_url (absolute_url):
             continue
         
-        links.append(absolute_url)
+        links.append (absolute_url)
     
     return links
 
-def is_valid_url(url):
+def is_valid_url (url):
     # Filter out non-HTTP protocols
     if not url.startswith(("http://", "https://")):
         return False
@@ -498,19 +498,19 @@ def is_valid_url(url):
 **Simple Scoring**:
 
 \`\`\`python
-def calculate_priority(url):
+def calculate_priority (url):
     score = 0.5  # Base score
     
     # Domain reputation (pre-computed)
-    domain = extract_domain(url)
+    domain = extract_domain (url)
     if domain in high_value_domains:  # ["wikipedia.org", "nytimes.com", ...]
         score += 0.3
     
     # Freshness (pages not crawled recently)
-    last_crawl = get_last_crawl_time(url)
+    last_crawl = get_last_crawl_time (url)
     if last_crawl:
         days_since = (time.now() - last_crawl) / 86400
-        score += min(days_since / 30, 0.2)  # Max +0.2 for old pages
+        score += min (days_since / 30, 0.2)  # Max +0.2 for old pages
     
     # URL depth (shorter paths often more important)
     depth = url.count("/") - 2  # Subtract protocol://
@@ -532,9 +532,9 @@ def calculate_priority(url):
 \`\`\`python
 from selenium import webdriver
 
-def fetch_dynamic_content(url):
-    driver = webdriver.Chrome(options=headless_options)
-    driver.get(url)
+def fetch_dynamic_content (url):
+    driver = webdriver.Chrome (options=headless_options)
+    driver.get (url)
     time.sleep(3)  # Wait for JavaScript to execute
     html = driver.page_source
     driver.quit()
@@ -556,14 +556,14 @@ def fetch_dynamic_content(url):
 # Example: Site loads data from https://api.example.com/posts
 # Directly call API instead of rendering page
 
-def detect_apis(html):
+def detect_apis (html):
     # Parse JavaScript, find fetch() or XMLHttpRequest calls
-    apis = regex_find_api_calls(html)
+    apis = regex_find_api_calls (html)
     return apis
 
-apis = detect_apis(html)
+apis = detect_apis (html)
 for api_url in apis:
-    data = requests.get(api_url).json()
+    data = requests.get (api_url).json()
     # Extract structured data directly
 \`\`\`
 
@@ -601,9 +601,9 @@ for api_url in apis:
 **URL Partitioning** (Consistent Hashing):
 
 \`\`\`python
-def assign_url_to_worker(url, num_workers=1000):
-    domain = extract_domain(url)
-    worker_id = hash(domain) % num_workers
+def assign_url_to_worker (url, num_workers=1000):
+    domain = extract_domain (url)
+    worker_id = hash (domain) % num_workers
     return worker_id
 
 # All URLs from same domain go to same worker
@@ -710,16 +710,16 @@ LIMIT 10000;
 
 \`\`\`python
 # On re-crawl, check if content changed
-new_hash = content_hash(new_html)
-old_hash = db.get_content_hash(url)
+new_hash = content_hash (new_html)
+old_hash = db.get_content_hash (url)
 
 if new_hash == old_hash:
     # No change, update timestamp only
-    db.update_last_crawled(url)
+    db.update_last_crawled (url)
 else:
     # Content changed, store new version
-    store_content(url, new_html)
-    db.update(url, new_hash)
+    store_content (url, new_html)
+    db.update (url, new_hash)
 \`\`\`
 
 ---

@@ -21,7 +21,7 @@ Unstructured.io provides a unified API for processing any document type - from P
 from unstructured.partition.auto import partition
 
 # Automatically detect and process any file type
-elements = partition(filename="document.pdf")
+elements = partition (filename="document.pdf")
 
 # Extract text
 for element in elements:
@@ -53,9 +53,9 @@ from unstructured.partition.auto import partition
 elements = partition("document.pdf")
 
 for element in elements:
-    print(f"Type: {type(element).__name__}")
+    print(f"Type: {type (element).__name__}")
     print(f"Text: {element.text}")
-    if hasattr(element, 'metadata'):
+    if hasattr (element, 'metadata'):
         print(f"Page: {element.metadata.page_number}")
         print(f"Coordinates: {element.metadata.coordinates}")
 \`\`\`
@@ -84,26 +84,26 @@ from typing import Dict, List
 class UniversalDocumentProcessor:
     """Process any document type with Unstructured."""
     
-    def process_document(self, filepath: str) -> Dict:
+    def process_document (self, filepath: str) -> Dict:
         """Process any file type automatically."""
         try:
-            elements = partition(filename=filepath)
+            elements = partition (filename=filepath)
             
             return {
                 'filepath': filepath,
-                'elements': [self._element_to_dict(el) for el in elements],
-                'text': '\\n\\n'.join(el.text for el in elements if el.text),
+                'elements': [self._element_to_dict (el) for el in elements],
+                'text': '\\n\\n'.join (el.text for el in elements if el.text),
                 'tables': [el for el in elements if el.category == "Table"]
             }
         except Exception as e:
-            return {'error': str(e)}
+            return {'error': str (e)}
     
-    def _element_to_dict(self, element) -> Dict:
+    def _element_to_dict (self, element) -> Dict:
         """Convert element to dictionary."""
         return {
-            'type': type(element).__name__,
+            'type': type (element).__name__,
             'text': element.text,
-            'metadata': element.metadata.to_dict() if hasattr(element, 'metadata') else {}
+            'metadata': element.metadata.to_dict() if hasattr (element, 'metadata') else {}
         }
 
 # Usage

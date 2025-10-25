@@ -38,13 +38,13 @@ export const qualityDiscussionQuestions = [
 
 **Profitability (4 points)**:
 ✓ 1. ROA positive (NI=$50M > 0) → +1
-✓ 2. CFO positive ($60M > 0) → +1  
+✓ 2. CFO positive (\$60M > 0) → +1  
 ✓ 3. ROA improved (8% > 7%) → +1
-✓ 4. CFO > NI ($60M > $50M) → +1
+✓ 4. CFO > NI (\$60M > $50M) → +1
 **Subtotal: 4/4 points** ✓
 
 **Leverage/Liquidity (3 points)**:
-✓ 5. LTD decreased ($200M < $250M) → +1
+✓ 5. LTD decreased (\$200M < $250M) → +1
 6. Current ratio: Unknown (assume flat) → 0
 ✓ 7. No dilution (100M shares both years) → +1
 **Subtotal: 2/3 points**
@@ -61,7 +61,7 @@ export const qualityDiscussionQuestions = [
 - **No dilution**: Management not raising equity (confident in cash generation)
 - **Overall**: High-quality value stock, likely undervalued
 
-**Investment Action**: BUY - F-Score ≥7 indicates strong fundamentals, particularly combined with improving profitability and debt reduction. This is the type of quality value stock Piotroski's research showed outperforms.`,
+**Investment Action**: BUY - F-Score ≥7 indicates strong fundamentals, particularly combined with improving profitability and debt reduction. This is the type of quality value stock Piotroski\'s research showed outperforms.`,
   },
 
   {

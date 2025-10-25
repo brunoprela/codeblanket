@@ -90,10 +90,10 @@ sns.subscribe(
 )
 
 # 5. Publish order to SNS (fanout to all queues)
-def publish_order(order):
+def publish_order (order):
     sns.publish(
         TopicArn=topic_arn,
-        Message=json.dumps(order),
+        Message=json.dumps (order),
         MessageGroupId=order['customer_id'],  # FIFO: group by customer
         MessageDeduplicationId=order['order_id'],
         MessageAttributes={
@@ -105,18 +105,18 @@ def publish_order(order):
     )
 
 # 6. Consumer: Payment Lambda
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     for record in event['Records']:
-        order = json.loads(record['body'])
+        order = json.loads (record['body'])
         
         try:
             # Check for cancellation
-            if check_cancellation(order['order_id']):
+            if check_cancellation (order['order_id']):
                 print(f"Order {order['order_id']} cancelled, skipping")
                 continue
             
             # Process payment
-            process_payment(order)
+            process_payment (order)
             
         except Exception as e:
             print(f"Payment failed: {e}")
@@ -133,7 +133,7 @@ def lambda_handler(event, context):
 \`\`\`python
 # Cancellation flow:
 # 1. Order API receives cancellation
-def cancel_order(order_id):
+def cancel_order (order_id):
     # Write to DynamoDB cancellation table
     dynamodb.put_item(
         TableName='order_cancellations',
@@ -150,7 +150,7 @@ def cancel_order(order_id):
     )
 
 # 2. Consumers check before processing
-def process_payment(order):
+def process_payment (order):
     # Check DynamoDB for cancellation
     response = dynamodb.get_item(
         TableName='order_cancellations',
@@ -162,7 +162,7 @@ def process_payment(order):
         return  # Skip processing
     
     # Process payment...
-    charge_card(order)
+    charge_card (order)
 \`\`\`
 
 **Race Condition:**
@@ -185,7 +185,7 @@ response = sqs.receive_message(
 )
 
 for msg in response.get('Messages', []):
-    process(msg)
+    process (msg)
 
 # Delete batch (single API call)
 sqs.delete_message_batch(
@@ -268,11 +268,11 @@ def reprocess_dlq():
             break
         
         for msg in messages:
-            order = json.loads(msg['Body'])
+            order = json.loads (msg['Body'])
             
             try:
                 # Attempt reprocessing
-                process_payment(order)
+                process_payment (order)
                 
                 # Success: Delete from DLQ
                 sqs.delete_message(
@@ -356,7 +356,7 @@ queue = sqs.create_queue(
 )
 
 # Producer: Enqueue images
-def enqueue_image(image_url, image_id):
+def enqueue_image (image_url, image_id):
     sqs.send_message(
         QueueUrl=queue_url,
         MessageBody=json.dumps({
@@ -374,11 +374,11 @@ def enqueue_image(image_url, image_id):
     )
 
 # Consumer: Lambda (batch processing)
-def lambda_handler(event, context):
+def lambda_handler (event, context):
     processed = []
     
     for record in event['Records']:
-        message = json.loads(record['body'])
+        message = json.loads (record['body'])
         image_id = message['image_id']
         
         # Idempotency check (S3 or DynamoDB)
@@ -388,8 +388,8 @@ def lambda_handler(event, context):
         
         try:
             # Process image
-            image_data = download_image(message['image_url'])
-            processed_image = resize_and_watermark(image_data)
+            image_data = download_image (message['image_url'])
+            processed_image = resize_and_watermark (image_data)
             
             # Upload to S3 (idempotent)
             s3.put_object(
@@ -398,14 +398,14 @@ def lambda_handler(event, context):
                 Body=processed_image
             )
             
-            processed.append(image_id)
+            processed.append (image_id)
             
         except Exception as e:
             print(f"Processing failed for {image_id}: {e}")
             # Will retry up to 3 times, then DLQ
             raise
     
-    return {'processed': len(processed)}
+    return {'processed': len (processed)}
 
 # Lambda configuration:
 # - Batch size: 10 images (process in parallel)
@@ -458,7 +458,7 @@ except s3.exceptions.NoSuchKey:
     # Not processed, continue
 
 # Option 2: DynamoDB
-def is_processed(image_id):
+def is_processed (image_id):
     response = dynamodb.get_item(
         TableName='processed_images',
         Key={'image_id': image_id}
@@ -466,7 +466,7 @@ def is_processed(image_id):
     return 'Item' in response
 
 # Option 3: ElastiCache Redis (fastest)
-if redis.exists(f"processed:{image_id}"):
+if redis.exists (f"processed:{image_id}"):
     return  # Already processed
 
 # All options make processing idempotent
@@ -487,11 +487,11 @@ Visibility timeout: 200 seconds ✅
 If processing takes longer:
 - Extend visibility timeout programmatically
 
-def process_with_extension(message):
+def process_with_extension (message):
     receipt_handle = message['ReceiptHandle']
     
     for i in range(10):
-        process_image(i)
+        process_image (i)
         
         # Extend visibility every 30 seconds
         if i % 3 == 0:
@@ -620,11 +620,11 @@ dynamodb.create_global_table(
 )
 
 # 3. Order processing with global deduplication
-def process_order(order):
+def process_order (order):
     order_id = order['order_id']
     
     # Check global deduplication (ElastiCache Global Datastore)
-    if redis_global.exists(f"processed:{order_id}"):
+    if redis_global.exists (f"processed:{order_id}"):
         print(f"Order {order_id} already processed globally")
         return
     
@@ -636,12 +636,12 @@ def process_order(order):
     
     if 'Item' in response:
         print(f"Order {order_id} exists in database")
-        redis_global.setex(f"processed:{order_id}", 3600, "true")
+        redis_global.setex (f"processed:{order_id}", 3600, "true")
         return
     
     # Process order
     try:
-        result = charge_card(order)
+        result = charge_card (order)
         
         # Save to DynamoDB (replicated to other region)
         dynamodb.put_item(
@@ -650,13 +650,13 @@ def process_order(order):
                 'order_id': order_id,
                 'status': 'completed',
                 'processed_region': os.environ['AWS_REGION'],
-                'timestamp': int(time.time())
+                'timestamp': int (time.time())
             },
-            ConditionExpression='attribute_not_exists(order_id)'  # Prevent duplicates
+            ConditionExpression='attribute_not_exists (order_id)'  # Prevent duplicates
         )
         
         # Cache globally (fast dedup)
-        redis_global.setex(f"processed:{order_id}", 3600, "true")
+        redis_global.setex (f"processed:{order_id}", 3600, "true")
         
     except dynamodb.exceptions.ConditionalCheckFailedException:
         print(f"Order {order_id} already exists (race condition)")

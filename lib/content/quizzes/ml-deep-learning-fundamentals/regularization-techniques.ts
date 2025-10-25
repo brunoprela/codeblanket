@@ -16,7 +16,7 @@ L2 (Ridge) Regularization:
 
 L1 (Lasso) Regularization:
 - Loss: L_total = L_data + λ · Σ|w|
-- Gradient: ∂L/∂w = ∂L_data/∂w + λ·sign(w)
+- Gradient: ∂L/∂w = ∂L_data/∂w + λ·sign (w)
 - Penalty grows linearly with weight magnitude
 
 **Key Differences:**
@@ -27,7 +27,7 @@ L1 (Lasso) Regularization:
 
 2. **Gradient Behavior:**
    - L2: Gradient is proportional to weight magnitude (λ·w)
-   - L1: Gradient is constant (λ·sign(w)), independent of magnitude
+   - L1: Gradient is constant (λ·sign (w)), independent of magnitude
 
 3. **Sparsity:**
    - L2: Dense models (all weights small but non-zero)
@@ -79,7 +79,7 @@ L1 Regularization:
 - Better interpretation: "Price depends on size, location, age"`,
     keyPoints: [
       'L2 penalty: λ/2·Σ(w²), gradient: λ·w, shrinks weights proportionally',
-      'L1 penalty: λ·Σ|w|, gradient: λ·sign(w), drives weights to exactly zero',
+      'L1 penalty: λ·Σ|w|, gradient: λ·sign (w), drives weights to exactly zero',
       'L2 produces dense models with many small weights',
       'L1 produces sparse models with many zero weights (automatic feature selection)',
       'L1 gradient is constant regardless of weight magnitude',
@@ -138,7 +138,7 @@ Example with 100 neurons:
 **During Training (Inverted Dropout):**
 \`\`\`python
 if training:
-    mask = (torch.rand(x.shape) > dropout_rate)
+    mask = (torch.rand (x.shape) > dropout_rate)
     x = x * mask / (1 - dropout_rate)  # Scale up active neurons
 \`\`\`
 - Randomly drop neurons
@@ -229,9 +229,9 @@ Dropout demonstrates that regularization doesn't require explicit weight constra
 **How it works:**
 \`\`\`python
 # Normalize across batch dimension (same feature, different samples)
-mean = batch.mean(dim=0)  # Shape: (features,)
-var = batch.var(dim=0)
-x_normalized = (x - mean) / sqrt(var + eps)
+mean = batch.mean (dim=0)  # Shape: (features,)
+var = batch.var (dim=0)
+x_normalized = (x - mean) / sqrt (var + eps)
 output = gamma * x_normalized + beta  # Learnable scale/shift
 \`\`\`
 
@@ -247,7 +247,7 @@ output = gamma * x_normalized + beta  # Learnable scale/shift
 1. **Batch Coupling:**
    - Each sample's normalization depends on other samples in batch
    - Breaks independence assumption
-   - Sample's gradient affected by other samples
+   - Sample\'s gradient affected by other samples
 
 2. **Small Batch Issues:**
    - Batch statistics unreliable with small batches (< 16)
@@ -275,9 +275,9 @@ output = gamma * x_normalized + beta  # Learnable scale/shift
 **How it works:**
 \`\`\`python
 # Normalize across feature dimension (same sample, different features)
-mean = sample.mean(dim=-1, keepdim=True)  # Shape: (batch, 1)
-var = sample.var(dim=-1, keepdim=True)
-x_normalized = (x - mean) / sqrt(var + eps)
+mean = sample.mean (dim=-1, keepdim=True)  # Shape: (batch, 1)
+var = sample.var (dim=-1, keepdim=True)
+x_normalized = (x - mean) / sqrt (var + eps)
 output = gamma * x_normalized + beta
 \`\`\`
 
@@ -354,16 +354,16 @@ Transformers (Language modeling):
 
 **Example: GPT-3 Architecture:**
 \`\`\`python
-class TransformerBlock(nn.Module):
+class TransformerBlock (nn.Module):
     def __init__(self):
-        self.ln1 = LayerNorm(d_model)  # Before attention
+        self.ln1 = LayerNorm (d_model)  # Before attention
         self.attn = MultiHeadAttention()
-        self.ln2 = LayerNorm(d_model)  # Before FFN
+        self.ln2 = LayerNorm (d_model)  # Before FFN
         self.ffn = FeedForward()
     
-    def forward(self, x):
-        x = x + self.attn(self.ln1(x))  # LayerNorm + residual
-        x = x + self.ffn(self.ln2(x))
+    def forward (self, x):
+        x = x + self.attn (self.ln1(x))  # LayerNorm + residual
+        x = x + self.ffn (self.ln2(x))
         return x
 \`\`\`
 
@@ -375,7 +375,7 @@ The choice between Batch and Layer Normalization reflects fundamental assumption
 - BatchNorm: "Samples in a batch should have similar statistics"
 - LayerNorm: "Each sample should be normalized independently"
 
-For images with consistent structure, BatchNorm's batch coupling helps. For sequences with variable structure, LayerNorm's independence is essential.`,
+For images with consistent structure, BatchNorm\'s batch coupling helps. For sequences with variable structure, LayerNorm's independence is essential.`,
     keyPoints: [
       'BatchNorm normalizes across batch (same feature, different samples)',
       'LayerNorm normalizes across features (same sample, different features)',

@@ -308,7 +308,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
-def forward_price(spot, rate, dividend_yield, time_to_maturity):
+def forward_price (spot, rate, dividend_yield, time_to_maturity):
     """
     Calculate forward price for asset with dividends.
     
@@ -329,7 +329,7 @@ rate = 0.05
 div_yield = 0.02
 maturity = 1.0
 
-fwd_price = forward_price(spot, rate, div_yield, maturity)
+fwd_price = forward_price (spot, rate, div_yield, maturity)
 print(f"Forward Price: \${fwd_price:.2f}")
 
 # Arbitrage detection
@@ -344,7 +344,7 @@ if market_forward > fwd_price:
 ### Swap Valuation
 
 \`\`\`python
-def swap_rate(discount_factors):
+def swap_rate (discount_factors):
     """
     Calculate fair swap rate given discount factors.
     
@@ -354,20 +354,20 @@ def swap_rate(discount_factors):
     Returns:
     - swap_rate: Fair fixed rate for swap
     """
-    annuity_factor = sum(discount_factors)
+    annuity_factor = sum (discount_factors)
     swap_rate = (1 - discount_factors[-1]) / annuity_factor
     return swap_rate
 
 # Example: 3-year swap
 discount_factors = [0.95, 0.90, 0.85]
-fair_rate = swap_rate(discount_factors)
+fair_rate = swap_rate (discount_factors)
 print(f"\\nFair Swap Rate: {fair_rate*100:.2f}%")
 
 # Swap value after inception
-def swap_value(fixed_rate, floating_rates, discount_factors, notional=1):
+def swap_value (fixed_rate, floating_rates, discount_factors, notional=1):
     """Calculate swap value (receive floating, pay fixed)."""
     # Fixed leg value
-    fixed_pv = sum(fixed_rate * df for df in discount_factors)
+    fixed_pv = sum (fixed_rate * df for df in discount_factors)
     
     # Floating leg value (at reset, floating leg worth par)
     floating_pv = 1 - discount_factors[-1]
@@ -380,14 +380,14 @@ notional = 10_000_000
 locked_rate = 0.04
 floating_rates = [0.03, 0.045, 0.05]
 
-swap_val = swap_value(locked_rate, floating_rates, discount_factors, notional)
+swap_val = swap_value (locked_rate, floating_rates, discount_factors, notional)
 print(f"\\nSwap Value: \${swap_val:,.0f}")
 \`\`\`
 
 ### Asian Option Pricing (Monte Carlo)
 
 \`\`\`python
-def asian_option_mc(spot, strike, rate, sigma, maturity, num_paths=10000, num_steps=252):
+def asian_option_mc (spot, strike, rate, sigma, maturity, num_paths=10000, num_steps=252):
     """
     Price Asian call option using Monte Carlo simulation.
     
@@ -407,22 +407,22 @@ def asian_option_mc(spot, strike, rate, sigma, maturity, num_paths=10000, num_st
     discount_factor = np.exp(-rate * maturity)
     
     payoffs = []
-    for _ in range(num_paths):
+    for _ in range (num_paths):
         # Simulate price path
         prices = [spot]
-        for _ in range(num_steps):
-            dW = np.random.normal(0, np.sqrt(dt))
+        for _ in range (num_steps):
+            dW = np.random.normal(0, np.sqrt (dt))
             S_new = prices[-1] * np.exp((rate - 0.5*sigma**2)*dt + sigma*dW)
             prices.append(S_new)
         
         # Calculate average price
-        avg_price = np.mean(prices)
+        avg_price = np.mean (prices)
         
         # Payoff
-        payoff = max(avg_price - strike, 0)
-        payoffs.append(payoff)
+        payoff = max (avg_price - strike, 0)
+        payoffs.append (payoff)
     
-    option_price = discount_factor * np.mean(payoffs)
+    option_price = discount_factor * np.mean (payoffs)
     return option_price
 
 # Example: Asian call
@@ -436,16 +436,16 @@ rate = 0.05
 sigma = 0.20
 maturity = 1.0
 
-asian_price = asian_option_mc(spot, strike, rate, sigma, maturity)
+asian_price = asian_option_mc (spot, strike, rate, sigma, maturity)
 print(f"Asian Call Price: \${asian_price:.2f}")
 
 # Compare to vanilla European call (Black-Scholes)
 def black_scholes_call(S, K, r, sigma, T):
     d1 = (np.log(S/K) + (r + 0.5*sigma**2)*T) / (sigma*np.sqrt(T))
     d2 = d1 - sigma*np.sqrt(T)
-    return S*norm.cdf(d1) - K*np.exp(-r*T)*norm.cdf(d2)
+    return S*norm.cdf (d1) - K*np.exp(-r*T)*norm.cdf (d2)
 
-vanilla_price = black_scholes_call(spot, strike, rate, sigma, maturity)
+vanilla_price = black_scholes_call (spot, strike, rate, sigma, maturity)
 print(f"Vanilla European Call: \${vanilla_price:.2f}")
 print(f"\\nAsian option is cheaper: \${vanilla_price - asian_price:.2f} ({(vanilla_price-asian_price)/vanilla_price*100:.1f}% discount)")
 print("Reason: Averaging reduces volatility → lower option value")

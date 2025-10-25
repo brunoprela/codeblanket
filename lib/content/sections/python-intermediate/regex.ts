@@ -14,20 +14,20 @@ import re
 
 # Search for pattern
 text = "The quick brown fox jumps over the lazy dog"
-match = re.search(r'fox', text)
+match = re.search (r'fox', text)
 if match:
     print(f"Found at position {match.start()}")
 
 # Match at beginning
-if re.match(r'The', text):
+if re.match (r'The', text):
     print("Starts with 'The'")
 
 # Find all occurrences
-words = re.findall(r'\\w+', text)
+words = re.findall (r'\\w+', text)
 print(words)  # List of all words
 
 # Replace
-new_text = re.sub(r'fox', 'cat', text)
+new_text = re.sub (r'fox', 'cat', text)
 print(new_text)
 \`\`\`
 
@@ -63,12 +63,12 @@ url_pattern = r'https?://\\S+'
 
 # Validate email
 email = "user@example.com"
-if re.match(email_pattern, email):
+if re.match (email_pattern, email):
     print("Valid email")
 
 # Extract phone numbers
 text = "Call 555-123-4567 or 555-987-6543"
-phones = re.findall(phone_pattern, text)
+phones = re.findall (phone_pattern, text)
 print(phones)
 \`\`\`
 
@@ -77,7 +77,7 @@ print(phones)
 \`\`\`python
 # Capture groups
 pattern = r'(\\d{3})-(\\d{3})-(\\d{4})'
-match = re.search(pattern, "555-123-4567")
+match = re.search (pattern, "555-123-4567")
 if match:
     area = match.group(1)      # "555"
     exchange = match.group(2)  # "123"
@@ -85,8 +85,8 @@ if match:
     full = match.group(0)      # "555-123-4567"
 
 # Named groups
-pattern = r'(?P<area>\\d{3})-(?P<exchange>\\d{3})-(?P<number>\\d{4})'
-match = re.search(pattern, "555-123-4567")
+pattern = r'(? P<area>\\d{3})-(? P<exchange>\\d{3})-(? P<number>\\d{4})'
+match = re.search (pattern, "555-123-4567")
 if match:
     print(match.group('area'))  # "555"
     print(match.groupdict())    # {'area': '555', ...}
@@ -96,13 +96,13 @@ if match:
 
 \`\`\`python
 # Compile pattern for reuse
-pattern = re.compile(r'\\d+')
+pattern = re.compile (r'\\d+')
 matches = pattern.findall("I have 3 apples and 5 oranges")
 
 # Flags
-pattern = re.compile(r'hello', re.IGNORECASE)  # Case-insensitive
-pattern = re.compile(r'line 1.*line 2', re.DOTALL)  # . matches newline
-pattern = re.compile(r''
+pattern = re.compile (r'hello', re.IGNORECASE)  # Case-insensitive
+pattern = re.compile (r'line 1.*line 2', re.DOTALL)  # . matches newline
+pattern = re.compile (r''
     \\d{3}   # Area code
     -        # Separator
     \\d{4}   # Number
@@ -133,14 +133,14 @@ cc = r'\\b\\d{4}[ -]?\\d{4}[ -]?\\d{4}[ -]?\\d{4}\\b'
 \`\`\`python
 # Split by pattern
 text = "one,two;three four"
-parts = re.split(r'[,;\\s]+', text)  # ['one', 'two', 'three', 'four']
+parts = re.split (r'[,;\\s]+', text)  # ['one', 'two', 'three', 'four']
 
 # Replace with function
-def capitalize_match(match):
+def capitalize_match (match):
     return match.group(0).upper()
 
 text = "hello world"
-result = re.sub(r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
+result = re.sub (r'\\b\\w+\\b', capitalize_match, text)  # "HELLO WORLD"
 \`\`\`
 
 ## Best Practices

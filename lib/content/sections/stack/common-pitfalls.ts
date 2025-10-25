@@ -9,13 +9,13 @@ export const commonpitfallsSection = {
 
 ❌ **Wrong:**
 \`\`\`python
-def pop_without_check(stack):
+def pop_without_check (stack):
     return stack.pop()  # IndexError if stack is empty
 \`\`\`
 
 ✅ **Correct:**
 \`\`\`python
-def pop_with_check(stack):
+def pop_with_check (stack):
     if not stack:
         return None  # or raise custom exception
     return stack.pop()
@@ -27,29 +27,29 @@ def pop_with_check(stack):
 
 ❌ **Wrong:**
 \`\`\`python
-def valid_parentheses_wrong(s: str) -> bool:
+def valid_parentheses_wrong (s: str) -> bool:
     stack = []
     for char in s:
         if char in '({[':
-            stack.append(char)
+            stack.append (char)
         else:
             if not stack:  # Forgot to check match!
                 return False
-    return len(stack) == 0
+    return len (stack) == 0
 \`\`\`
 
 ✅ **Correct:**
 \`\`\`python
-def valid_parentheses_correct(s: str) -> bool:
+def valid_parentheses_correct (s: str) -> bool:
     stack = []
     pairs = {'(': ')', '{': '}', '[': ']'}
     for char in s:
         if char in pairs:
-            stack.append(char)
+            stack.append (char)
         else:
             if not stack or pairs[stack.pop()] != char:  # Check match!
                 return False
-    return len(stack) == 0
+    return len (stack) == 0
 \`\`\`
 
 ---

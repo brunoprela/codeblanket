@@ -68,11 +68,11 @@ def z_test_example():
     sample_mean = sample.mean()
     
     # Z-statistic
-    se = pop_std / np.sqrt(sample_size)
+    se = pop_std / np.sqrt (sample_size)
     z_stat = (sample_mean - pop_mean) / se
     
     # P-value (two-tailed)
-    p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
+    p_value = 2 * (1 - stats.norm.cdf (abs (z_stat)))
     
     print("=== Z-Test Example ===")
     print(f"H₀: μ = {pop_mean} (ML practitioners have average IQ)")
@@ -112,11 +112,11 @@ def one_sample_ttest():
     accuracies = np.random.normal(0.78, 0.05, 30)  # 30 cross-validation runs
     
     # Perform t-test
-    t_stat, p_value = stats.ttest_1samp(accuracies, target_accuracy)
+    t_stat, p_value = stats.ttest_1samp (accuracies, target_accuracy)
     
     mean_acc = accuracies.mean()
-    se = stats.sem(accuracies)
-    ci = stats.t.interval(0.95, len(accuracies)-1, mean_acc, se)
+    se = stats.sem (accuracies)
+    ci = stats.t.interval(0.95, len (accuracies)-1, mean_acc, se)
     
     print("=== One-Sample T-Test ===")
     print(f"Testing if accuracy differs from {target_accuracy}")
@@ -146,26 +146,26 @@ def two_sample_ttest():
     model_a = np.random.normal(0.75, 0.05, 30)
     model_b = np.random.normal(0.78, 0.05, 30)
     
-    # Levene's test for equal variances
-    _, p_levene = stats.levene(model_a, model_b)
+    # Levene\'s test for equal variances
+    _, p_levene = stats.levene (model_a, model_b)
     equal_var = p_levene > 0.05
     
     # Two-sample t-test
-    t_stat, p_value = stats.ttest_ind(model_a, model_b, equal_var=equal_var)
+    t_stat, p_value = stats.ttest_ind (model_a, model_b, equal_var=equal_var)
     
     # Effect size (Cohen's d)
     pooled_std = np.sqrt((model_a.var() + model_b.var()) / 2)
     cohens_d = (model_b.mean() - model_a.mean()) / pooled_std
     
     print("=== Two-Sample T-Test ===")
-    print(f"Model A mean: {model_a.mean():.4f} (n={len(model_a)})")
-    print(f"Model B mean: {model_b.mean():.4f} (n={len(model_b)})")
+    print(f"Model A mean: {model_a.mean():.4f} (n={len (model_a)})")
+    print(f"Model B mean: {model_b.mean():.4f} (n={len (model_b)})")
     print(f"Difference: {model_b.mean() - model_a.mean():.4f}")
     print()
     print(f"Equal variances? {equal_var} (p_levene={p_levene:.4f})")
     print(f"t-statistic: {t_stat:.4f}")
     print(f"p-value: {p_value:.4f}")
-    print(f"Cohen's d: {cohens_d:.4f} ({interpret_cohens_d(cohens_d)})")
+    print(f"Cohen's d: {cohens_d:.4f} ({interpret_cohens_d (cohens_d)})")
     print()
     
     if p_value < 0.05:
@@ -173,9 +173,9 @@ def two_sample_ttest():
     else:
         print("✗ No significant difference between models")
 
-def interpret_cohens_d(d):
-    """Interpret Cohen's d effect size"""
-    d = abs(d)
+def interpret_cohens_d (d):
+    """Interpret Cohen\'s d effect size"""
+    d = abs (d)
     if d < 0.2:
         return "negligible"
     elif d < 0.5:
@@ -202,12 +202,12 @@ def paired_ttest():
     after = before + improvement
     
     # Paired t-test
-    t_stat, p_value = stats.ttest_rel(after, before)
+    t_stat, p_value = stats.ttest_rel (after, before)
     
     differences = after - before
     mean_diff = differences.mean()
-    se_diff = stats.sem(differences)
-    ci = stats.t.interval(0.95, len(differences)-1, mean_diff, se_diff)
+    se_diff = stats.sem (differences)
+    ci = stats.t.interval(0.95, len (differences)-1, mean_diff, se_diff)
     
     print("=== Paired T-Test ===")
     print(f"Before feature engineering: {before.mean():.4f}")
@@ -227,7 +227,7 @@ def paired_ttest():
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     
     # Before-After plot
-    for i in range(n_samples):
+    for i in range (n_samples):
         axes[0].plot([0, 1], [before[i], after[i]], 'o-', alpha=0.3, color='gray')
     axes[0].plot([0, 1], [before.mean(), after.mean()], 'ro-', linewidth=3, markersize=10, label='Mean')
     axes[0].set_xticks([0, 1])
@@ -238,9 +238,9 @@ def paired_ttest():
     axes[0].grid(True, alpha=0.3)
     
     # Difference distribution
-    axes[1].hist(differences, bins=15, edgecolor='black', alpha=0.7)
+    axes[1].hist (differences, bins=15, edgecolor='black', alpha=0.7)
     axes[1].axvline(0, color='r', linestyle='--', linewidth=2, label='No change')
-    axes[1].axvline(mean_diff, color='g', linestyle='-', linewidth=2, label=f'Mean: {mean_diff:.4f}')
+    axes[1].axvline (mean_diff, color='g', linestyle='-', linewidth=2, label=f'Mean: {mean_diff:.4f}')
     axes[1].set_xlabel('Improvement (After - Before)')
     axes[1].set_ylabel('Frequency')
     axes[1].set_title('Distribution of Improvements')
@@ -272,19 +272,19 @@ def chi_square_test():
     ])
     
     # Chi-square test
-    chi2, p_value, dof, expected = stats.chi2_contingency(observed)
+    chi2, p_value, dof, expected = stats.chi2_contingency (observed)
     
     print("=== Chi-Square Test for Independence ===")
     print("H₀: User type and prediction accuracy are independent")
     print("H₁: User type and prediction accuracy are related")
     print()
     print("Observed frequencies:")
-    print(pd.DataFrame(observed, 
+    print(pd.DataFrame (observed, 
                        index=['Correct', 'Incorrect'],
                        columns=['Premium', 'Free']))
     print()
     print("Expected frequencies (if independent):")
-    print(pd.DataFrame(expected,
+    print(pd.DataFrame (expected,
                        index=['Correct', 'Incorrect'],
                        columns=['Premium', 'Free']))
     print()
@@ -322,7 +322,7 @@ def anova_test():
     model_c = np.random.normal(0.76, 0.05, 25)
     
     # One-way ANOVA
-    f_stat, p_value = stats.f_oneway(model_a, model_b, model_c)
+    f_stat, p_value = stats.f_oneway (model_a, model_b, model_c)
     
     print("=== One-Way ANOVA ===")
     print("H₀: All models have equal mean accuracy")
@@ -345,29 +345,29 @@ def anova_test():
                  ('A', 'C', model_a, model_c),
                  ('B', 'C', model_b, model_c)]
         
-        alpha_corrected = 0.05 / len(pairs)  # Bonferroni
+        alpha_corrected = 0.05 / len (pairs)  # Bonferroni
         print(f"\\nPairwise comparisons (α = {alpha_corrected:.4f}):")
         
         for name1, name2, data1, data2 in pairs:
-            _, p = stats.ttest_ind(data1, data2)
+            _, p = stats.ttest_ind (data1, data2)
             sig = "✓" if p < alpha_corrected else "✗"
             print(f"  {name1} vs {name2}: p={p:.6f} {sig}")
     else:
         print("✗ Fail to reject H₀: No significant difference among models")
     
     # Visualize
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots (figsize=(10, 6))
     
     data = [model_a, model_b, model_c]
     positions = [1, 2, 3]
     
-    bp = ax.boxplot(data, positions=positions, patch_artist=True, widths=0.6)
+    bp = ax.boxplot (data, positions=positions, patch_artist=True, widths=0.6)
     for patch in bp['boxes']:
         patch.set_facecolor('lightblue')
     
     ax.set_xticklabels(['Model A', 'Model B', 'Model C'])
     ax.set_ylabel('Accuracy', fontsize=12)
-    ax.set_title(f'ANOVA: Comparing Multiple Models\\n(F={f_stat:.2f}, p={p_value:.4f})',
+    ax.set_title (f'ANOVA: Comparing Multiple Models\\n(F={f_stat:.2f}, p={p_value:.4f})',
                  fontsize=14, fontweight='bold')
     ax.grid(True, alpha=0.3, axis='y')
     
@@ -395,13 +395,13 @@ def mann_whitney_test():
     model_b = np.random.exponential(0.80, 30)
     
     # Mann-Whitney U test
-    u_stat, p_value = stats.mannwhitneyu(model_a, model_b, alternative='two-sided')
+    u_stat, p_value = stats.mannwhitneyu (model_a, model_b, alternative='two-sided')
     
     print("=== Mann-Whitney U Test ===")
     print("(Non-parametric alternative to two-sample t-test)")
     print()
-    print(f"Model A median: {np.median(model_a):.4f}")
-    print(f"Model B median: {np.median(model_b):.4f}")
+    print(f"Model A median: {np.median (model_a):.4f}")
+    print(f"Model B median: {np.median (model_b):.4f}")
     print(f"U-statistic: {u_stat:.2f}")
     print(f"P-value: {p_value:.6f}")
     print()
@@ -427,14 +427,14 @@ def wilcoxon_test():
     after = before + np.random.exponential(0.05, n)
     
     # Wilcoxon signed-rank test
-    w_stat, p_value = stats.wilcoxon(after, before, alternative='greater')
+    w_stat, p_value = stats.wilcoxon (after, before, alternative='greater')
     
     print("=== Wilcoxon Signed-Rank Test ===")
     print("(Non-parametric alternative to paired t-test)")
     print()
-    print(f"Median before: {np.median(before):.4f}")
-    print(f"Median after: {np.median(after):.4f}")
-    print(f"Median improvement: {np.median(after - before):.4f}")
+    print(f"Median before: {np.median (before):.4f}")
+    print(f"Median after: {np.median (after):.4f}")
+    print(f"Median improvement: {np.median (after - before):.4f}")
     print(f"W-statistic: {w_stat:.2f}")
     print(f"P-value: {p_value:.6f}")
     print()
@@ -460,14 +460,14 @@ def kruskal_wallis_test():
     model_c = np.random.exponential(0.77, 25)
     
     # Kruskal-Wallis test
-    h_stat, p_value = stats.kruskal(model_a, model_b, model_c)
+    h_stat, p_value = stats.kruskal (model_a, model_b, model_c)
     
     print("=== Kruskal-Wallis Test ===")
     print("(Non-parametric alternative to ANOVA)")
     print()
-    print(f"Model A median: {np.median(model_a):.4f}")
-    print(f"Model B median: {np.median(model_b):.4f}")
-    print(f"Model C median: {np.median(model_c):.4f}")
+    print(f"Model A median: {np.median (model_a):.4f}")
+    print(f"Model B median: {np.median (model_b):.4f}")
+    print(f"Model C median: {np.median (model_c):.4f}")
     print(f"H-statistic: {h_stat:.4f}")
     print(f"P-value: {p_value:.6f}")
     print()
@@ -483,22 +483,22 @@ kruskal_wallis_test()
 ## Assumptions Checking
 
 \`\`\`python
-def check_assumptions(data1, data2=None):
+def check_assumptions (data1, data2=None):
     """Check assumptions for parametric tests"""
     
     print("=== Checking Test Assumptions ===")
     print()
     
     # 1. Normality (Shapiro-Wilk test)
-    _, p_norm1 = stats.shapiro(data1)
+    _, p_norm1 = stats.shapiro (data1)
     print(f"Group 1 normality: p={p_norm1:.4f} {'✓' if p_norm1 > 0.05 else '✗ Use non-parametric'}")
     
     if data2 is not None:
-        _, p_norm2 = stats.shapiro(data2)
+        _, p_norm2 = stats.shapiro (data2)
         print(f"Group 2 normality: p={p_norm2:.4f} {'✓' if p_norm2 > 0.05 else '✗ Use non-parametric'}")
         
-        # 2. Equal variances (Levene's test)
-        _, p_var = stats.levene(data1, data2)
+        # 2. Equal variances (Levene\'s test)
+        _, p_var = stats.levene (data1, data2)
         print(f"Equal variances: p={p_var:.4f} {'✓' if p_var > 0.05 else '✗ Use Welch t-test'}")
     
     print()
@@ -512,7 +512,7 @@ def check_assumptions(data1, data2=None):
 data_normal = np.random.normal(0.75, 0.05, 30)
 data_skewed = np.random.exponential(0.75, 30)
 
-check_assumptions(data_normal, data_skewed)
+check_assumptions (data_normal, data_skewed)
 \`\`\`
 
 ## ML-Specific Applications
@@ -526,7 +526,7 @@ def ml_feature_significance():
     with_feature = np.random.normal(0.77, 0.03, 20)
     
     # Paired t-test (same CV folds)
-    t_stat, p_value = stats.ttest_rel(with_feature, without_feature)
+    t_stat, p_value = stats.ttest_rel (with_feature, without_feature)
     
     print("=== Feature Significance Test ===")
     print(f"Without feature: {without_feature.mean():.4f}")
@@ -549,7 +549,7 @@ ml_feature_significance()
 2. **Parametric tests**: Assume normal distribution, more powerful if assumptions met
 3. **Non-parametric tests**: No distribution assumptions, robust to outliers
 4. **Check assumptions**: Normality (Shapiro-Wilk), equal variance (Levene's)
-5. **Effect size matters**: Complement p-values with Cohen's d or similar
+5. **Effect size matters**: Complement p-values with Cohen\'s d or similar
 6. **Multiple comparisons**: Apply corrections (Bonferroni, FDR)
 7. **Paired tests**: More powerful when measurements are related
 8. **ANOVA**: For 3+ groups; follow up with post-hoc tests

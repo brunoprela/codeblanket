@@ -56,9 +56,9 @@ class ROUGEEvaluator:
             use_stemmer=True
         )
     
-    def evaluate(self, prediction: str, reference: str) -> Dict[str, float]:
+    def evaluate (self, prediction: str, reference: str) -> Dict[str, float]:
         """Calculate ROUGE scores."""
-        scores = self.scorer.score(reference, prediction)
+        scores = self.scorer.score (reference, prediction)
         
         # Extract F1 scores
         return {
@@ -73,11 +73,11 @@ class ROUGEEvaluator:
         references: List[str]
     ) -> Dict[str, float]:
         """Evaluate against multiple references (take max)."""
-        all_scores = [self.evaluate(prediction, ref) for ref in references]
+        all_scores = [self.evaluate (prediction, ref) for ref in references]
         
         # Take maximum score for each metric
         return {
-            metric: max(scores[metric] for scores in all_scores)
+            metric: max (scores[metric] for scores in all_scores)
             for metric in ['rouge1', 'rouge2', 'rougeL']
         }
 
@@ -87,7 +87,7 @@ evaluator = ROUGEEvaluator()
 reference = "The cat sat on the mat and looked out the window"
 prediction = "A cat was sitting on a mat while looking through the window"
 
-scores = evaluator.evaluate(prediction, reference)
+scores = evaluator.evaluate (prediction, reference)
 print(f"ROUGE-1: {scores['rouge1']:.2%}")  # ~60% unigram overlap
 print(f"ROUGE-2: {scores['rouge2']:.2%}")  # ~30% bigram overlap
 print(f"ROUGE-L: {scores['rougeL']:.2%}")  # ~50% longest subsequence
@@ -147,10 +147,10 @@ class BLEUEvaluator:
     ) -> float:
         """Evaluate entire corpus."""
         scores = [
-            self.evaluate(pred, ref)
-            for pred, ref in zip(predictions, references)
+            self.evaluate (pred, ref)
+            for pred, ref in zip (predictions, references)
         ]
-        return sum(scores) / len(scores)
+        return sum (scores) / len (scores)
 
 # Usage
 evaluator = BLEUEvaluator()
@@ -158,7 +158,7 @@ evaluator = BLEUEvaluator()
 reference = "The quick brown fox jumps over the lazy dog"
 prediction = "A fast brown fox jumped over a lazy dog"
 
-score = evaluator.evaluate(prediction, reference)
+score = evaluator.evaluate (prediction, reference)
 print(f"BLEU: {score:.2%}")  # ~40%
 \`\`\`
 
@@ -193,14 +193,14 @@ class SemanticSimilarity:
         - all-mpnet-base-v2: Higher quality, slower
         - paraphrase-multilingual: For non-English
         """
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer (model_name)
     
-    def cosine_similarity(self, text1: str, text2: str) -> float:
+    def cosine_similarity (self, text1: str, text2: str) -> float:
         """Cosine similarity between two texts."""
         embeddings = self.model.encode([text1, text2])
         
         # Cosine similarity
-        similarity = 1 - cosine(embeddings[0], embeddings[1])
+        similarity = 1 - cosine (embeddings[0], embeddings[1])
         
         return similarity
     
@@ -211,14 +211,14 @@ class SemanticSimilarity:
     ) -> List[float]:
         """Batch evaluate for efficiency."""
         # Encode all at once (faster)
-        pred_embeddings = self.model.encode(predictions)
-        ref_embeddings = self.model.encode(references)
+        pred_embeddings = self.model.encode (predictions)
+        ref_embeddings = self.model.encode (references)
         
         # Compute similarities
         similarities = []
-        for pred_emb, ref_emb in zip(pred_embeddings, ref_embeddings):
-            sim = 1 - cosine(pred_emb, ref_emb)
-            similarities.append(sim)
+        for pred_emb, ref_emb in zip (pred_embeddings, ref_embeddings):
+            sim = 1 - cosine (pred_emb, ref_emb)
+            similarities.append (sim)
         
         return similarities
     
@@ -229,10 +229,10 @@ class SemanticSimilarity:
     ) -> float:
         """Max similarity with any reference."""
         similarities = [
-            self.cosine_similarity(prediction, ref)
+            self.cosine_similarity (prediction, ref)
             for ref in references
         ]
-        return max(similarities)
+        return max (similarities)
 
 # Usage
 sem_sim = SemanticSimilarity()
@@ -240,12 +240,12 @@ sem_sim = SemanticSimilarity()
 ref = "The movie was excellent and entertaining"
 pred = "The film was great and very enjoyable"  # Similar meaning, different words
 
-score = sem_sim.cosine_similarity(pred, ref)
+score = sem_sim.cosine_similarity (pred, ref)
 print(f"Semantic Similarity: {score:.2%}")  # ~85% (high despite different words)
 
 # Compare with ROUGE (would be low due to different words)
 rouge_eval = ROUGEEvaluator()
-rouge_score = rouge_eval.evaluate(pred, ref)
+rouge_score = rouge_eval.evaluate (pred, ref)
 print(f"ROUGE-1: {rouge_score['rouge1']:.2%}")  # ~20% (low - doesn't understand synonyms)
 \`\`\`
 
@@ -293,7 +293,7 @@ class BERTScoreEvaluator:
             'f1': F1.tolist()
         }
     
-    def evaluate_single(self, prediction: str, reference: str) -> float:
+    def evaluate_single (self, prediction: str, reference: str) -> float:
         """Single example evaluation."""
         result = self.evaluate([prediction], [reference])
         return result['f1'][0]
@@ -304,7 +304,7 @@ bert_eval = BERTScoreEvaluator()
 ref = "The patient was diagnosed with pneumonia"
 pred = "The individual was found to have lung infection"  # Medical paraphrase
 
-score = bert_eval.evaluate_single(pred, ref)
+score = bert_eval.evaluate_single (pred, ref)
 print(f"BERTScore: {score:.2%}")  # ~75% (understands medical synonyms)
 \`\`\`
 
@@ -338,23 +338,23 @@ class FactualityChecker:
         from transformers import pipeline
         self.nli = pipeline('text-classification', model='microsoft/deberta-large-mnli')
     
-    def extract_claims(self, text: str) -> List[str]:
+    def extract_claims (self, text: str) -> List[str]:
         """Extract factual claims from text."""
-        doc = self.nlp(text)
+        doc = self.nlp (text)
         
         # Simple: extract sentences
         claims = [sent.text.strip() for sent in doc.sents]
         
         return claims
     
-    def verify_claim(self, claim: str, reference: str) -> Dict[str, Any]:
+    def verify_claim (self, claim: str, reference: str) -> Dict[str, Any]:
         """Verify if claim is supported by reference using NLI."""
         
         # NLI: Natural Language Inference
         # premise: reference text
         # hypothesis: claim to verify
         
-        result = self.nli(f"{reference} [SEP] {claim}")
+        result = self.nli (f"{reference} [SEP] {claim}")
         
         # Result: entailment, neutral, or contradiction
         label = result[0]['label']
@@ -377,16 +377,16 @@ class FactualityChecker:
         """Evaluate overall factuality."""
         
         # Extract claims from prediction
-        claims = self.extract_claims(prediction)
+        claims = self.extract_claims (prediction)
         
         # Verify each claim
         verifications = [
-            self.verify_claim(claim, reference)
+            self.verify_claim (claim, reference)
             for claim in claims
         ]
         
         # Calculate metrics
-        total_claims = len(claims)
+        total_claims = len (claims)
         supported_claims = sum(1 for v in verifications if v['supported'])
         
         factuality_score = supported_claims / total_claims if total_claims > 0 else 0.0
@@ -413,7 +413,7 @@ Apollo 11 launched in July 1969. Neil Armstrong was the first person on the moon
 The mission lasted about 8 days total. Armstrong planted a flag on Mars.
 """
 
-result = fact_checker.evaluate_factuality(prediction, reference)
+result = fact_checker.evaluate_factuality (prediction, reference)
 print(f"Factuality Score: {result['factuality_score']:.2%}")
 print(f"Supported: {result['supported_claims']}/{result['total_claims']}")
 
@@ -444,7 +444,7 @@ class HallucinationDetector:
         """
         
         # Extract facts from output
-        output_claims = self.extract_claims(model_output)
+        output_claims = self.extract_claims (model_output)
         
         hallucinations = []
         grounded_claims = []
@@ -463,13 +463,13 @@ class HallucinationDetector:
                     'confidence': result['scores'][0]
                 })
             else:
-                grounded_claims.append(claim)
+                grounded_claims.append (claim)
         
-        hallucination_rate = len(hallucinations) / len(output_claims) if output_claims else 0
+        hallucination_rate = len (hallucinations) / len (output_claims) if output_claims else 0
         
         return {
             'hallucination_rate': hallucination_rate,
-            'total_claims': len(output_claims),
+            'total_claims': len (output_claims),
             'hallucinated_claims': hallucinations,
             'grounded_claims': grounded_claims
         }
@@ -480,12 +480,12 @@ detector = HallucinationDetector()
 context = "Apple announced a new iPhone model with improved camera features."
 
 output = """
-Apple's new iPhone features an advanced camera system with 48MP sensors.
+Apple\'s new iPhone features an advanced camera system with 48MP sensors.
 The device also includes a revolutionary holographic display.
 It will be available in 12 new colors including rainbow gradient.
 """
 
-result = detector.detect_hallucination(context, output)
+result = detector.detect_hallucination (context, output)
 print(f"Hallucination Rate: {result['hallucination_rate']:.2%}")
 print("\\nHallucinated claims:")
 for h in result['hallucinated_claims']:
@@ -502,16 +502,16 @@ for h in result['hallucinated_claims']:
 class QAEvaluator:
     """Evaluate question answering outputs."""
     
-    def exact_match(self, prediction: str, reference: str) -> float:
+    def exact_match (self, prediction: str, reference: str) -> float:
         """Exact string match (common for extractive QA)."""
         pred_normalized = prediction.strip().lower()
         ref_normalized = reference.strip().lower()
         return 1.0 if pred_normalized == ref_normalized else 0.0
     
-    def f1_score(self, prediction: str, reference: str) -> float:
+    def f1_score (self, prediction: str, reference: str) -> float:
         """Token-level F1 score."""
-        pred_tokens = set(prediction.lower().split())
-        ref_tokens = set(reference.lower().split())
+        pred_tokens = set (prediction.lower().split())
+        ref_tokens = set (reference.lower().split())
         
         if not pred_tokens or not ref_tokens:
             return 0.0
@@ -521,18 +521,18 @@ class QAEvaluator:
         if not common:
             return 0.0
         
-        precision = len(common) / len(pred_tokens)
-        recall = len(common) / len(ref_tokens)
+        precision = len (common) / len (pred_tokens)
+        recall = len (common) / len (ref_tokens)
         
         f1 = 2 * (precision * recall) / (precision + recall)
         return f1
     
-    def evaluate(self, prediction: str, reference: str) -> Dict[str, float]:
+    def evaluate (self, prediction: str, reference: str) -> Dict[str, float]:
         """Comprehensive QA evaluation."""
         return {
-            'exact_match': self.exact_match(prediction, reference),
-            'f1_score': self.f1_score(prediction, reference),
-            'semantic_similarity': SemanticSimilarity().cosine_similarity(prediction, reference)
+            'exact_match': self.exact_match (prediction, reference),
+            'f1_score': self.f1_score (prediction, reference),
+            'semantic_similarity': SemanticSimilarity().cosine_similarity (prediction, reference)
         }
 
 # Usage
@@ -542,7 +542,7 @@ question = "When was Python created?"
 reference = "1991"
 prediction = "Python was created in 1991"
 
-scores = qa_eval.evaluate(prediction, reference)
+scores = qa_eval.evaluate (prediction, reference)
 print(f"Exact Match: {scores['exact_match']:.2%}")  # 0% (not exact)
 print(f"F1 Score: {scores['f1_score']:.2%}")  # ~33% (contains "1991")
 print(f"Semantic Sim: {scores['semantic_similarity']:.2%}")  # ~70% (same meaning)
@@ -557,7 +557,7 @@ class CodeEvaluator:
     def __init__(self, test_cases: List[Dict]):
         self.test_cases = test_cases
     
-    def execute_code(self, code: str, test_input: Any) -> Tuple[bool, Any, str]:
+    def execute_code (self, code: str, test_input: Any) -> Tuple[bool, Any, str]:
         """
         Safely execute code with test input.
         Returns (success, output, error_message)
@@ -567,10 +567,10 @@ class CodeEvaluator:
         
         # Create temporary Python file
         with open('/tmp/test_code.py', 'w') as f:
-            f.write(code)
-            f.write(f"\\n\\nif __name__ == '__main__':\\n")
-            f.write(f"    result = solution({json.dumps(test_input)})\\n")
-            f.write(f"    print(json.dumps(result))\\n")
+            f.write (code)
+            f.write (f"\\n\\nif __name__ == '__main__':\\n")
+            f.write (f"    result = solution({json.dumps (test_input)})\\n")
+            f.write (f"    print(json.dumps (result))\\n")
         
         try:
             # Execute with timeout
@@ -582,7 +582,7 @@ class CodeEvaluator:
             )
             
             if result.returncode == 0:
-                output = json.loads(result.stdout.strip())
+                output = json.loads (result.stdout.strip())
                 return True, output, ""
             else:
                 return False, None, result.stderr
@@ -590,17 +590,17 @@ class CodeEvaluator:
         except subprocess.TimeoutExpired:
             return False, None, "Execution timeout"
         except Exception as e:
-            return False, None, str(e)
+            return False, None, str (e)
     
-    def evaluate(self, code: str) -> Dict[str, Any]:
+    def evaluate (self, code: str) -> Dict[str, Any]:
         """Evaluate code on test cases."""
         
         passed = 0
         failed = 0
         errors = []
         
-        for i, test in enumerate(self.test_cases):
-            success, output, error = self.execute_code(code, test['input'])
+        for i, test in enumerate (self.test_cases):
+            success, output, error = self.execute_code (code, test['input'])
             
             if success and output == test['expected_output']:
                 passed += 1
@@ -614,13 +614,13 @@ class CodeEvaluator:
                     'error': error
                 })
         
-        pass_rate = passed / len(self.test_cases)
+        pass_rate = passed / len (self.test_cases)
         
         return {
             'pass_rate': pass_rate,
             'passed': passed,
             'failed': failed,
-            'total': len(self.test_cases),
+            'total': len (self.test_cases),
             'errors': errors
         }
 
@@ -631,14 +631,14 @@ test_cases = [
     {'input': [-1, 1], 'expected_output': 0},
 ]
 
-code_eval = CodeEvaluator(test_cases)
+code_eval = CodeEvaluator (test_cases)
 
 generated_code = """
-def solution(numbers):
-    return sum(numbers)
+def solution (numbers):
+    return sum (numbers)
 """
 
-results = code_eval.evaluate(generated_code)
+results = code_eval.evaluate (generated_code)
 print(f"Pass Rate: {results['pass_rate']:.2%}")
 print(f"Passed: {results['passed']}/{results['total']}")
 \`\`\`
@@ -664,7 +664,7 @@ class LLMJudge:
         results = {}
         
         for dimension in dimensions:
-            result = await self._evaluate_dimension(input, output, dimension)
+            result = await self._evaluate_dimension (input, output, dimension)
             results[dimension] = result
         
         return results
@@ -688,7 +688,7 @@ class LLMJudge:
         
         prompt = f"""Evaluate this AI output on {dimension.upper()}.
 
-Question: {prompts.get(dimension, f'Evaluate {dimension}')}
+Question: {prompts.get (dimension, f'Evaluate {dimension}')}
 
 User Input:
 {input}
@@ -713,7 +713,7 @@ Provide your evaluation in this JSON format:
             temperature=0
         )
         
-        result = json.loads(response.choices[0].message.content)
+        result = json.loads (response.choices[0].message.content)
         result['normalized_score'] = result['score'] / 10.0
         
         return result
@@ -731,7 +731,7 @@ for dimension, result in evaluation.items():
     print(f"\\n{dimension.upper()}: {result['score']}/10")
     print(f"  Reasoning: {result['reasoning']}")
     if result['issues']:
-        print(f"  Issues: {', '.join(result['issues'])}")
+        print(f"  Issues: {', '.join (result['issues'])}")
 \`\`\`
 
 ## Production Checklist

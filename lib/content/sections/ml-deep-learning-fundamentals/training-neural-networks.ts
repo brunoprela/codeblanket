@@ -74,14 +74,14 @@ You've learned the components: forward prop, backprop, optimizers, regularizatio
 #### 1. Step Decay
 
 \`\`\`python
-def step_decay_lr(epoch, initial_lr=0.1, drop_rate=0.5, epochs_drop=10):
+def step_decay_lr (epoch, initial_lr=0.1, drop_rate=0.5, epochs_drop=10):
     """Reduce LR by drop_rate every epochs_drop epochs"""
     lr = initial_lr * (drop_rate ** (epoch // epochs_drop))
     return lr
 
 # Example: 0.1 → 0.05 → 0.025 → ...
-lrs = [step_decay_lr(e) for e in range(30)]
-plt.plot(lrs)
+lrs = [step_decay_lr (e) for e in range(30)]
+plt.plot (lrs)
 plt.xlabel('Epoch')
 plt.ylabel('Learning Rate')
 plt.title('Step Decay')
@@ -91,7 +91,7 @@ plt.show()
 #### 2. Exponential Decay
 
 \`\`\`python
-def exp_decay_lr(epoch, initial_lr=0.1, decay_rate=0.95):
+def exp_decay_lr (epoch, initial_lr=0.1, decay_rate=0.95):
     """Smooth exponential decay"""
     lr = initial_lr * (decay_rate ** epoch)
     return lr
@@ -102,14 +102,14 @@ def exp_decay_lr(epoch, initial_lr=0.1, decay_rate=0.95):
 \`\`\`python
 import math
 
-def cosine_annealing_lr(epoch, initial_lr=0.1, min_lr=1e-6, T_max=100):
+def cosine_annealing_lr (epoch, initial_lr=0.1, min_lr=1e-6, T_max=100):
     """Cosine decay from initial_lr to min_lr over T_max epochs"""
-    lr = min_lr + 0.5 * (initial_lr - min_lr) * (1 + math.cos(math.pi * epoch / T_max))
+    lr = min_lr + 0.5 * (initial_lr - min_lr) * (1 + math.cos (math.pi * epoch / T_max))
     return lr
 
 # Smooth decay following cosine curve
-lrs = [cosine_annealing_lr(e, T_max=50) for e in range(50)]
-plt.plot(lrs)
+lrs = [cosine_annealing_lr (e, T_max=50) for e in range(50)]
+plt.plot (lrs)
 plt.title('Cosine Annealing')
 plt.show()
 \`\`\`
@@ -117,7 +117,7 @@ plt.show()
 #### 4. Learning Rate Warmup
 
 \`\`\`python
-def warmup_cosine_lr(epoch, initial_lr=0.1, warmup_epochs=5, total_epochs=100):
+def warmup_cosine_lr (epoch, initial_lr=0.1, warmup_epochs=5, total_epochs=100):
     """Linear warmup followed by cosine annealing"""
     if epoch < warmup_epochs:
         # Linear warmup
@@ -125,11 +125,11 @@ def warmup_cosine_lr(epoch, initial_lr=0.1, warmup_epochs=5, total_epochs=100):
     else:
         # Cosine annealing
         progress = (epoch - warmup_epochs) / (total_epochs - warmup_epochs)
-        lr = initial_lr * 0.5 * (1 + math.cos(math.pi * progress))
+        lr = initial_lr * 0.5 * (1 + math.cos (math.pi * progress))
     return lr
 
-lrs = [warmup_cosine_lr(e) for e in range(100)]
-plt.plot(lrs)
+lrs = [warmup_cosine_lr (e) for e in range(100)]
+plt.plot (lrs)
 plt.title('Warmup + Cosine Annealing')
 plt.show()
 \`\`\`
@@ -148,7 +148,7 @@ class ReduceLROnPlateau:
         self.best_loss = float('inf')
         self.counter = 0
     
-    def step(self, val_loss):
+    def step (self, val_loss):
         """Update LR based on validation loss"""
         if val_loss < self.best_loss:
             self.best_loss = val_loss
@@ -156,16 +156,16 @@ class ReduceLROnPlateau:
         else:
             self.counter += 1
             if self.counter >= self.patience:
-                self.lr = max(self.lr * self.factor, self.min_lr)
+                self.lr = max (self.lr * self.factor, self.min_lr)
                 self.counter = 0
                 print(f"Reducing LR to {self.lr}")
         return self.lr
 
 # Usage
-scheduler = ReduceLROnPlateau(initial_lr=0.1, patience=10)
+scheduler = ReduceLROnPlateau (initial_lr=0.1, patience=10)
 for epoch in range(100):
     val_loss = validate()
-    new_lr = scheduler.step(val_loss)
+    new_lr = scheduler.step (val_loss)
     optimizer.lr = new_lr
 \`\`\`
 
@@ -178,7 +178,7 @@ for epoch in range(100):
 **Solution**: Clip gradient norm to maximum value.
 
 \`\`\`python
-def clip_gradients_norm(gradients, max_norm=5.0):
+def clip_gradients_norm (gradients, max_norm=5.0):
     """
     Clip gradients by global norm
     
@@ -187,8 +187,8 @@ def clip_gradients_norm(gradients, max_norm=5.0):
     # Compute global norm
     total_norm = 0
     for grad in gradients:
-        total_norm += np.sum(grad ** 2)
-    total_norm = np.sqrt(total_norm)
+        total_norm += np.sum (grad ** 2)
+    total_norm = np.sqrt (total_norm)
     
     # Clip if necessary
     clip_coef = max_norm / (total_norm + 1e-6)
@@ -199,13 +199,13 @@ def clip_gradients_norm(gradients, max_norm=5.0):
     return gradients
 
 # Usage in training loop
-gradients = compute_gradients(loss)
-gradients = clip_gradients_norm(gradients, max_norm=5.0)
-apply_gradients(gradients)
+gradients = compute_gradients (loss)
+gradients = clip_gradients_norm (gradients, max_norm=5.0)
+apply_gradients (gradients)
 \`\`\`
 
 **Alternatives**:
-- **Clip by value**: \\(grad = clip(grad, -threshold, threshold)\\)
+- **Clip by value**: \\(grad = clip (grad, -threshold, threshold)\\)
 - **Clip by norm**: \\(grad = grad * min(1, threshold / ||grad||)\\) (preferred)
 
 ## Monitoring Training
@@ -224,25 +224,25 @@ class TrainingMonitor:
         self.lrs = []
         self.grad_norms = []
     
-    def log(self, epoch, train_loss, val_loss, train_acc, val_acc, lr, grad_norm):
-        self.train_losses.append(train_loss)
-        self.val_losses.append(val_loss)
-        self.train_accs.append(train_acc)
-        self.val_accs.append(val_acc)
-        self.lrs.append(lr)
-        self.grad_norms.append(grad_norm)
+    def log (self, epoch, train_loss, val_loss, train_acc, val_acc, lr, grad_norm):
+        self.train_losses.append (train_loss)
+        self.val_losses.append (val_loss)
+        self.train_accs.append (train_acc)
+        self.val_accs.append (val_acc)
+        self.lrs.append (lr)
+        self.grad_norms.append (grad_norm)
         
         print(f"Epoch {epoch}: "
               f"train_loss={train_loss:.4f}, val_loss={val_loss:.4f}, "
               f"train_acc={train_acc:.4f}, val_acc={val_acc:.4f}, "
               f"lr={lr:.6f}")
     
-    def plot(self):
+    def plot (self):
         fig, axes = plt.subplots(2, 2, figsize=(12, 10))
         
         # Loss
-        axes[0, 0].plot(self.train_losses, label='Train')
-        axes[0, 0].plot(self.val_losses, label='Val')
+        axes[0, 0].plot (self.train_losses, label='Train')
+        axes[0, 0].plot (self.val_losses, label='Val')
         axes[0, 0].set_xlabel('Epoch')
         axes[0, 0].set_ylabel('Loss')
         axes[0, 0].set_title('Training vs Validation Loss')
@@ -250,8 +250,8 @@ class TrainingMonitor:
         axes[0, 0].grid(True, alpha=0.3)
         
         # Accuracy
-        axes[0, 1].plot(self.train_accs, label='Train')
-        axes[0, 1].plot(self.val_accs, label='Val')
+        axes[0, 1].plot (self.train_accs, label='Train')
+        axes[0, 1].plot (self.val_accs, label='Val')
         axes[0, 1].set_xlabel('Epoch')
         axes[0, 1].set_ylabel('Accuracy')
         axes[0, 1].set_title('Training vs Validation Accuracy')
@@ -259,7 +259,7 @@ class TrainingMonitor:
         axes[0, 1].grid(True, alpha=0.3)
         
         # Learning Rate
-        axes[1, 0].plot(self.lrs)
+        axes[1, 0].plot (self.lrs)
         axes[1, 0].set_xlabel('Epoch')
         axes[1, 0].set_ylabel('Learning Rate')
         axes[1, 0].set_title('Learning Rate Schedule')
@@ -267,7 +267,7 @@ class TrainingMonitor:
         axes[1, 0].grid(True, alpha=0.3)
         
         # Gradient Norm
-        axes[1, 1].plot(self.grad_norms)
+        axes[1, 1].plot (self.grad_norms)
         axes[1, 1].set_xlabel('Epoch')
         axes[1, 1].set_ylabel('Gradient Norm')
         axes[1, 1].set_title('Gradient Norm (check for exploding/vanishing)')
@@ -282,7 +282,7 @@ for epoch in range(100):
     train_loss, train_acc = train_one_epoch()
     val_loss, val_acc = validate()
     grad_norm = compute_grad_norm()
-    monitor.log(epoch, train_loss, val_loss, train_acc, val_acc, lr, grad_norm)
+    monitor.log (epoch, train_loss, val_loss, train_acc, val_acc, lr, grad_norm)
 \`\`\`
 
 ### Interpreting Training Curves
@@ -312,48 +312,48 @@ for epoch in range(100):
 import numpy as np
 from tqdm import tqdm
 
-def train_model(model, train_loader, val_loader, epochs=100, 
+def train_model (model, train_loader, val_loader, epochs=100, 
                 initial_lr=0.001, device='cpu'):
     """Complete training loop with all best practices"""
     
     # Setup
-    optimizer = Adam(model.parameters(), lr=initial_lr)
-    scheduler = ReduceLROnPlateau(initial_lr, patience=10)
-    early_stop = EarlyStopping(patience=20)
+    optimizer = Adam (model.parameters(), lr=initial_lr)
+    scheduler = ReduceLROnPlateau (initial_lr, patience=10)
+    early_stop = EarlyStopping (patience=20)
     monitor = TrainingMonitor()
     
-    for epoch in range(epochs):
+    for epoch in range (epochs):
         # Training phase
         model.train()
         train_loss = 0
         train_correct = 0
         train_total = 0
         
-        for batch_idx, (data, target) in enumerate(tqdm(train_loader, desc=f'Epoch {epoch+1}')):
-            data, target = data.to(device), target.to(device)
+        for batch_idx, (data, target) in enumerate (tqdm (train_loader, desc=f'Epoch {epoch+1}')):
+            data, target = data.to (device), target.to (device)
             
             # Forward
             optimizer.zero_grad()
-            output = model(data)
-            loss = criterion(output, target)
+            output = model (data)
+            loss = criterion (output, target)
             
             # Backward
             loss.backward()
             
             # Gradient clipping
-            grad_norm = clip_gradients_norm(model.parameters(), max_norm=5.0)
+            grad_norm = clip_gradients_norm (model.parameters(), max_norm=5.0)
             
             # Update
             optimizer.step()
             
             # Track metrics
             train_loss += loss.item()
-            pred = output.argmax(dim=1)
+            pred = output.argmax (dim=1)
             train_correct += (pred == target).sum().item()
             train_total += target.size(0)
         
         # Calculate epoch metrics
-        train_loss /= len(train_loader)
+        train_loss /= len (train_loader)
         train_acc = train_correct / train_total
         
         # Validation phase
@@ -364,28 +364,28 @@ def train_model(model, train_loader, val_loader, epochs=100,
         
         with torch.no_grad():
             for data, target in val_loader:
-                data, target = data.to(device), target.to(device)
-                output = model(data)
-                loss = criterion(output, target)
+                data, target = data.to (device), target.to (device)
+                output = model (data)
+                loss = criterion (output, target)
                 
                 val_loss += loss.item()
-                pred = output.argmax(dim=1)
+                pred = output.argmax (dim=1)
                 val_correct += (pred == target).sum().item()
                 val_total += target.size(0)
         
-        val_loss /= len(val_loader)
+        val_loss /= len (val_loader)
         val_acc = val_correct / val_total
         
         # Learning rate scheduling
-        current_lr = scheduler.step(val_loss)
+        current_lr = scheduler.step (val_loss)
         
         # Log metrics
-        monitor.log(epoch, train_loss, val_loss, train_acc, val_acc, current_lr, grad_norm)
+        monitor.log (epoch, train_loss, val_loss, train_acc, val_acc, current_lr, grad_norm)
         
         # Early stopping
-        if early_stop.step(val_loss, model.state_dict()):
+        if early_stop.step (val_loss, model.state_dict()):
             print(f"Early stopping at epoch {epoch+1}")
-            model.load_state_dict(early_stop.best_weights)
+            model.load_state_dict (early_stop.best_weights)
             break
     
     # Final visualization
@@ -423,12 +423,12 @@ print(f"Train: {len(X_train)}, Val: {len(X_val)}, Test: {len(X_test)}")
 \`\`\`python
 from sklearn.model_selection import KFold
 
-def cross_validate_model(model_fn, X, y, k=5):
+def cross_validate_model (model_fn, X, y, k=5):
     """K-fold cross-validation"""
-    kfold = KFold(n_splits=k, shuffle=True, random_state=42)
+    kfold = KFold (n_splits=k, shuffle=True, random_state=42)
     scores = []
     
-    for fold, (train_idx, val_idx) in enumerate(kfold.split(X)):
+    for fold, (train_idx, val_idx) in enumerate (kfold.split(X)):
         print(f"\\nFold {fold+1}/{k}")
         
         X_train, X_val = X[train_idx], X[val_idx]
@@ -438,10 +438,10 @@ def cross_validate_model(model_fn, X, y, k=5):
         model.fit(X_train, y_train)
         
         val_score = model.evaluate(X_val, y_val)
-        scores.append(val_score)
+        scores.append (val_score)
         print(f"Val accuracy: {val_score:.4f}")
     
-    print(f"\\nAverage: {np.mean(scores):.4f} ± {np.std(scores):.4f}")
+    print(f"\\nAverage: {np.mean (scores):.4f} ± {np.std (scores):.4f}")
     return scores
 \`\`\`
 

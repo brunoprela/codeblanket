@@ -58,7 +58,7 @@ export const lipsyncavatargenerationMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "A presenter is HeyGen's term for an avatar - either from their library or custom-created from user photos. Presenters can be assigned scripts to generate videos.",
+      "A presenter is HeyGen\'s term for an avatar - either from their library or custom-created from user photos. Presenters can be assigned scripts to generate videos.",
   },
   {
     id: 'vag-lipsync-mc-5',

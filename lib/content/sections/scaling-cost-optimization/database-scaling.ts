@@ -47,46 +47,46 @@ class DatabaseCluster:
         
         # Replicas for reads
         self.replica_pools = [
-            pool.ThreadedConnectionPool(min_conn, max_conn, dsn)
+            pool.ThreadedConnectionPool (min_conn, max_conn, dsn)
             for dsn in replica_dsns
         ]
         
-        self.replica_count = len(replica_dsns)
+        self.replica_count = len (replica_dsns)
     
-    def execute_read(self, query: str, params: tuple = None):
+    def execute_read (self, query: str, params: tuple = None):
         """Execute read query on a replica"""
         
         # Round-robin or random selection
-        replica_pool = random.choice(self.replica_pools)
+        replica_pool = random.choice (self.replica_pools)
         
         conn = replica_pool.getconn()
         try:
             with conn.cursor() as cur:
-                cur.execute(query, params)
+                cur.execute (query, params)
                 return cur.fetchall()
         finally:
-            replica_pool.putconn(conn)
+            replica_pool.putconn (conn)
     
-    def execute_write(self, query: str, params: tuple = None):
+    def execute_write (self, query: str, params: tuple = None):
         """Execute write query on primary"""
         
         conn = self.primary_pool.getconn()
         try:
             with conn.cursor() as cur:
-                cur.execute(query, params)
+                cur.execute (query, params)
                 conn.commit()
                 return cur.fetchone()
         finally:
-            self.primary_pool.putconn(conn)
+            self.primary_pool.putconn (conn)
     
-    def get_conversation_history(self, user_id: str):
+    def get_conversation_history (self, user_id: str):
         """Read from replica"""
         return self.execute_read(
             "SELECT * FROM conversations WHERE user_id = %s ORDER BY created_at DESC LIMIT 10",
             (user_id,)
         )
     
-    def save_message(self, user_id: str, role: str, content: str):
+    def save_message (self, user_id: str, role: str, content: str):
         """Write to primary"""
         return self.execute_write(
             "INSERT INTO messages (user_id, role, content) VALUES (%s, %s, %s) RETURNING id",
@@ -165,7 +165,7 @@ class ConnectionPoolManager:
         self.health_check_thread.start()
     
     @contextmanager
-    def get_connection(self):
+    def get_connection (self):
         """Get connection from pool with automatic return"""
         conn = None
         start_time = time.time()
@@ -182,7 +182,7 @@ class ConnectionPoolManager:
             
             # Record query time
             query_time = time.time() - start_time
-            self._update_avg_query_time(query_time)
+            self._update_avg_query_time (query_time)
             
         except Exception as e:
             self.stats["connection_errors"] += 1
@@ -194,9 +194,9 @@ class ConnectionPoolManager:
         finally:
             if conn:
                 self.stats["active_connections"] -= 1
-                self.pool.putconn(conn)
+                self.pool.putconn (conn)
     
-    def _update_avg_query_time(self, query_time: float):
+    def _update_avg_query_time (self, query_time: float):
         """Update rolling average query time"""
         alpha = 0.1  # Smoothing factor
         self.stats["avg_query_time"] = (
@@ -204,7 +204,7 @@ class ConnectionPoolManager:
             (1 - alpha) * self.stats["avg_query_time"]
         )
     
-    def _periodic_health_check(self):
+    def _periodic_health_check (self):
         """Periodically check pool health"""
         while True:
             time.sleep(60)
@@ -217,7 +217,7 @@ class ConnectionPoolManager:
             except Exception as e:
                 print(f"❌ Pool health check failed: {e}")
     
-    def get_pool_stats(self) -> dict:
+    def get_pool_stats (self) -> dict:
         """Get pool statistics"""
         return {
             **self.stats,
@@ -277,24 +277,24 @@ class ShardedDatabase:
         
         for dsn in shard_dsns:
             pool = pool.ThreadedConnectionPool(5, 20, dsn)
-            self.shards.append(pool)
+            self.shards.append (pool)
         
-        self.shard_count = len(self.shards)
+        self.shard_count = len (self.shards)
     
-    def get_shard_index(self, user_id: str) -> int:
+    def get_shard_index (self, user_id: str) -> int:
         """Determine which shard to use for a user"""
         # Hash user_id to get consistent shard
-        hash_value = int(hashlib.md5(user_id.encode()).hexdigest(), 16)
+        hash_value = int (hashlib.md5(user_id.encode()).hexdigest(), 16)
         return hash_value % self.shard_count
     
-    def get_shard(self, user_id: str):
+    def get_shard (self, user_id: str):
         """Get shard for a user"""
-        index = self.get_shard_index(user_id)
+        index = self.get_shard_index (user_id)
         return self.shards[index]
     
-    def save_conversation(self, user_id: str, conversation: Dict):
+    def save_conversation (self, user_id: str, conversation: Dict):
         """Save conversation to appropriate shard"""
-        shard = self.get_shard(user_id)
+        shard = self.get_shard (user_id)
         conn = shard.getconn()
         
         try:
@@ -302,14 +302,14 @@ class ShardedDatabase:
                 cur.execute("""
                     INSERT INTO conversations (user_id, messages, created_at)
                     VALUES (%s, %s, NOW())
-                """, (user_id, json.dumps(conversation)))
+                """, (user_id, json.dumps (conversation)))
                 conn.commit()
         finally:
-            shard.putconn(conn)
+            shard.putconn (conn)
     
-    def get_conversations(self, user_id: str) -> List[Dict]:
+    def get_conversations (self, user_id: str) -> List[Dict]:
         """Get conversations from appropriate shard"""
-        shard = self.get_shard(user_id)
+        shard = self.get_shard (user_id)
         conn = shard.getconn()
         
         try:
@@ -323,24 +323,24 @@ class ShardedDatabase:
                 """, (user_id,))
                 return cur.fetchall()
         finally:
-            shard.putconn(conn)
+            shard.putconn (conn)
     
-    def get_all_conversations(self, user_ids: List[str]) -> Dict:
+    def get_all_conversations (self, user_ids: List[str]) -> Dict:
         """Get conversations for multiple users (scatter-gather)"""
         
         # Group users by shard
         users_by_shard = {}
         for user_id in user_ids:
-            shard_idx = self.get_shard_index(user_id)
+            shard_idx = self.get_shard_index (user_id)
             if shard_idx not in users_by_shard:
                 users_by_shard[shard_idx] = []
-            users_by_shard[shard_idx].append(user_id)
+            users_by_shard[shard_idx].append (user_id)
         
         # Query each shard in parallel
         results = {}
         import concurrent.futures
         
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.shard_count) as executor:
+        with concurrent.futures.ThreadPoolExecutor (max_workers=self.shard_count) as executor:
             futures = {}
             
             for shard_idx, users in users_by_shard.items():
@@ -351,12 +351,12 @@ class ShardedDatabase:
                 )
                 futures[future] = users
             
-            for future in concurrent.futures.as_completed(futures):
-                results.update(future.result())
+            for future in concurrent.futures.as_completed (futures):
+                results.update (future.result())
         
         return results
     
-    def _query_shard_for_users(self, shard_idx: int, user_ids: List[str]) -> Dict:
+    def _query_shard_for_users (self, shard_idx: int, user_ids: List[str]) -> Dict:
         """Query single shard for multiple users"""
         shard = self.shards[shard_idx]
         conn = shard.getconn()
@@ -382,7 +382,7 @@ class ShardedDatabase:
                 
                 return results
         finally:
-            shard.putconn(conn)
+            shard.putconn (conn)
 
 # Usage
 sharded_db = ShardedDatabase([
@@ -426,7 +426,7 @@ Slow queries kill performance. Optimize queries for LLM applications.
 # SELECT * FROM messages WHERE user_id = 'user_123' ORDER BY created_at DESC LIMIT 10;
 # Query time: 2000ms on 10M rows
 
-# CREATE INDEX idx_messages_user_created ON messages(user_id, created_at DESC);
+# CREATE INDEX idx_messages_user_created ON messages (user_id, created_at DESC);
 
 # FAST QUERY (with index):
 # Query time: 5ms on 10M rows
@@ -434,7 +434,7 @@ Slow queries kill performance. Optimize queries for LLM applications.
 class QueryOptimizer:
     """Optimize database queries"""
     
-    def analyze_slow_queries(self, conn):
+    def analyze_slow_queries (self, conn):
         """Find slow queries"""
         with conn.cursor() as cur:
             # PostgreSQL slow query log
@@ -459,17 +459,17 @@ class QueryOptimizer:
                 print(f"  Calls: {calls}, Avg: {mean:.2f}ms, Max: {max_time:.2f}ms")
                 print()
     
-    def explain_query(self, conn, query: str, params: tuple = None):
+    def explain_query (self, conn, query: str, params: tuple = None):
         """Analyze query execution plan"""
         with conn.cursor() as cur:
-            cur.execute(f"EXPLAIN ANALYZE {query}", params)
+            cur.execute (f"EXPLAIN ANALYZE {query}", params)
             plan = cur.fetchall()
             
             print("📊 Query Plan:")
             for line in plan:
                 print(f"  {line[0]}")
     
-    def suggest_indexes(self, conn):
+    def suggest_indexes (self, conn):
         """Suggest missing indexes"""
         with conn.cursor() as cur:
             # Find tables with many sequential scans
@@ -502,7 +502,7 @@ class QueryOptimizer:
 optimizer = QueryOptimizer()
 
 # Find slow queries
-optimizer.analyze_slow_queries(conn)
+optimizer.analyze_slow_queries (conn)
 
 # Analyze specific query
 optimizer.explain_query(
@@ -512,7 +512,7 @@ optimizer.explain_query(
 )
 
 # Get index suggestions
-optimizer.suggest_indexes(conn)
+optimizer.suggest_indexes (conn)
 \`\`\`
 
 ### Common Optimizations
@@ -539,19 +539,19 @@ class CachedDatabase:
     
     def __init__(self, db_pool, redis_url: str):
         self.db = db_pool
-        self.redis = redis.from_url(redis_url)
+        self.redis = redis.from_url (redis_url)
         self.default_ttl = 300  # 5 minutes
     
-    def get_user(self, user_id: str) -> Optional[Dict]:
+    def get_user (self, user_id: str) -> Optional[Dict]:
         """Get user with caching"""
         
         # Check cache first
         cache_key = f"user:{user_id}"
-        cached = self.redis.get(cache_key)
+        cached = self.redis.get (cache_key)
         
         if cached:
             print("✅ Cache hit")
-            return json.loads(cached)
+            return json.loads (cached)
         
         # Cache miss - query database
         print("❌ Cache miss - querying DB")
@@ -577,16 +577,16 @@ class CachedDatabase:
                     self.redis.setex(
                         cache_key,
                         self.default_ttl,
-                        json.dumps(user)
+                        json.dumps (user)
                     )
                     
                     return user
                 
                 return None
         finally:
-            self.db.putconn(conn)
+            self.db.putconn (conn)
     
-    def update_user(self, user_id: str, updates: Dict):
+    def update_user (self, user_id: str, updates: Dict):
         """Update user and invalidate cache"""
         
         conn = self.db.getconn()
@@ -594,8 +594,8 @@ class CachedDatabase:
         try:
             with conn.cursor() as cur:
                 # Build UPDATE query
-                set_clause = ", ".join(f"{k} = %s" for k in updates.keys())
-                values = list(updates.values()) + [user_id]
+                set_clause = ", ".join (f"{k} = %s" for k in updates.keys())
+                values = list (updates.values()) + [user_id]
                 
                 cur.execute(
                     f"UPDATE users SET {set_clause} WHERE id = %s",
@@ -605,14 +605,14 @@ class CachedDatabase:
             
             # Invalidate cache
             cache_key = f"user:{user_id}"
-            self.redis.delete(cache_key)
+            self.redis.delete (cache_key)
             print("🗑️  Cache invalidated")
             
         finally:
-            self.db.putconn(conn)
+            self.db.putconn (conn)
 
 # Usage
-cached_db = CachedDatabase(db_pool, "redis://localhost:6379")
+cached_db = CachedDatabase (db_pool, "redis://localhost:6379")
 
 # First call - DB query (slow)
 user = cached_db.get_user("user_123")  # 50ms
@@ -646,10 +646,10 @@ class VectorDatabase:
     """PostgreSQL with pgvector for embeddings"""
     
     def __init__(self, dsn: str):
-        self.conn = psycopg2.connect(dsn)
+        self.conn = psycopg2.connect (dsn)
         self._setup_pgvector()
     
-    def _setup_pgvector(self):
+    def _setup_pgvector (self):
         """Enable pgvector extension"""
         with self.conn.cursor() as cur:
             # Enable extension
@@ -690,7 +690,7 @@ class VectorDatabase:
             """, (
                 content,
                 embedding.tolist(),
-                json.dumps(metadata or {})
+                json.dumps (metadata or {})
             ))
             
             self.conn.commit()
@@ -746,7 +746,7 @@ doc_id = vector_db.insert_document(
 
 # Search for similar documents
 query_embedding = get_embedding("AI and ML")
-similar_docs = vector_db.search_similar(query_embedding, limit=5)
+similar_docs = vector_db.search_similar (query_embedding, limit=5)
 
 for doc in similar_docs:
     print(f"Similarity: {doc['similarity']:.2f}")
@@ -758,7 +758,7 @@ for doc in similar_docs:
 - **Pinecone**: Managed vector database (easy, expensive)
 - **Weaviate**: Open-source vector database (flexible)
 - **Qdrant**: Fast vector similarity search
-- **FAISS**: Facebook's library (local, very fast)
+- **FAISS**: Facebook\'s library (local, very fast)
 
 ---
 
@@ -786,9 +786,9 @@ class DatabaseMonitor:
     def __init__(self, dsn: str):
         self.dsn = dsn
     
-    def get_metrics(self) -> DatabaseMetrics:
+    def get_metrics (self) -> DatabaseMetrics:
         """Collect database metrics"""
-        conn = psycopg2.connect(self.dsn)
+        conn = psycopg2.connect (self.dsn)
         
         try:
             with conn.cursor() as cur:
@@ -806,8 +806,8 @@ class DatabaseMonitor:
                 # Cache hit rate
                 cur.execute("""
                     SELECT 
-                        sum(heap_blks_hit) / 
-                        (sum(heap_blks_hit) + sum(heap_blks_read)) as cache_hit_rate
+                        sum (heap_blks_hit) / 
+                        (sum (heap_blks_hit) + sum (heap_blks_read)) as cache_hit_rate
                     FROM pg_statio_user_tables
                 """)
                 cache_hit_rate = cur.fetchone()[0] or 0
@@ -815,7 +815,7 @@ class DatabaseMonitor:
                 # Index usage rate
                 cur.execute("""
                     SELECT 
-                        sum(idx_scan) / (sum(seq_scan) + sum(idx_scan)) as index_usage
+                        sum (idx_scan) / (sum (seq_scan) + sum (idx_scan)) as index_usage
                     FROM pg_stat_user_tables
                     WHERE seq_scan + idx_scan > 0
                 """)
@@ -834,18 +834,18 @@ class DatabaseMonitor:
         finally:
             conn.close()
     
-    def alert_if_issues(self, metrics: DatabaseMetrics):
+    def alert_if_issues (self, metrics: DatabaseMetrics):
         """Alert on performance issues"""
         issues = []
         
         if metrics.cache_hit_rate < 0.90:
-            issues.append(f"Low cache hit rate: {metrics.cache_hit_rate:.1%}")
+            issues.append (f"Low cache hit rate: {metrics.cache_hit_rate:.1%}")
         
         if metrics.index_usage_rate < 0.80:
-            issues.append(f"Low index usage: {metrics.index_usage_rate:.1%}")
+            issues.append (f"Low index usage: {metrics.index_usage_rate:.1%}")
         
         if metrics.waiting_connections > 10:
-            issues.append(f"Many waiting connections: {metrics.waiting_connections}")
+            issues.append (f"Many waiting connections: {metrics.waiting_connections}")
         
         if issues:
             print("🚨 DATABASE ISSUES:")
@@ -862,7 +862,7 @@ print(f"Cache hit rate: {metrics.cache_hit_rate:.1%}")
 print(f"Index usage: {metrics.index_usage_rate:.1%}")
 
 # Alert on issues
-monitor.alert_if_issues(metrics)
+monitor.alert_if_issues (metrics)
 \`\`\`
 
 ---

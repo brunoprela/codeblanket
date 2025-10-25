@@ -14,7 +14,7 @@ export const distributedObjectStorageSection = {
 **Key systems**:
 - **Ceph**: Enterprise-grade, unified storage (object, block, file)
 - **MinIO**: Lightweight, S3-compatible, cloud-native
-- **OpenStack Swift**: OpenStack's object storage
+- **OpenStack Swift**: OpenStack\'s object storage
 - **SeaweedFS**: Simple, fast object storage
 
 **Why self-hosted?**
@@ -95,7 +95,7 @@ Applications
 \`\`\`
 Object: "my-file.jpg"
     ↓
-Hash(my-file.jpg) → 1234567890
+Hash (my-file.jpg) → 1234567890
     ↓
 CRUSH algorithm + cluster map
     ↓
@@ -497,25 +497,25 @@ spec:
 **1. API Server** (stateless):
 \`\`\`python
 @app.post("/bucket/{key}")
-def put_object(bucket, key, data):
+def put_object (bucket, key, data):
     # Calculate replicas using consistent hashing
-    nodes = hash_ring.get_nodes(key, count=3)
+    nodes = hash_ring.get_nodes (key, count=3)
     
     # Write to all replicas
     for node in nodes:
-        node.write(bucket, key, data)
+        node.write (bucket, key, data)
     
     return {"status": "success"}
 
 @app.get("/bucket/{key}")
-def get_object(bucket, key):
+def get_object (bucket, key):
     # Get node list
-    nodes = hash_ring.get_nodes(key, count=3)
+    nodes = hash_ring.get_nodes (key, count=3)
     
     # Read from first available
     for node in nodes:
-        if node.has(bucket, key):
-            return node.read(bucket, key)
+        if node.has (bucket, key):
+            return node.read (bucket, key)
     
     return {"error": "not found"}
 \`\`\`
@@ -523,21 +523,21 @@ def get_object(bucket, key):
 **2. Storage Node**:
 \`\`\`python
 class StorageNode:
-    def write(self, bucket, key, data):
+    def write (self, bucket, key, data):
         # Write to disk
         path = f"/storage/{bucket}/{key}"
-        with open(path, 'wb') as f:
-            f.write(data)
+        with open (path, 'wb') as f:
+            f.write (data)
         
         # Update metadata
         self.metadata[f"{bucket}/{key}"] = {
-            "size": len(data),
+            "size": len (data),
             "timestamp": time.time()
         }
     
-    def read(self, bucket, key):
+    def read (self, bucket, key):
         path = f"/storage/{bucket}/{key}"
-        with open(path, 'rb') as f:
+        with open (path, 'rb') as f:
             return f.read()
 \`\`\`
 
@@ -549,21 +549,21 @@ class HashRing:
         self.nodes = nodes
         for node in nodes:
             for i in range(100):  # Virtual nodes
-                hash_val = hash(f"{node}:{i}")
+                hash_val = hash (f"{node}:{i}")
                 self.ring[hash_val] = node
-        self.sorted_keys = sorted(self.ring.keys())
+        self.sorted_keys = sorted (self.ring.keys())
     
-    def get_nodes(self, key, count=3):
-        hash_val = hash(key)
+    def get_nodes (self, key, count=3):
+        hash_val = hash (key)
         # Find position in ring
-        idx = bisect.bisect_right(self.sorted_keys, hash_val)
+        idx = bisect.bisect_right (self.sorted_keys, hash_val)
         # Return N successive nodes
         nodes = []
-        for i in range(count):
-            pos = (idx + i) % len(self.sorted_keys)
+        for i in range (count):
+            pos = (idx + i) % len (self.sorted_keys)
             node = self.ring[self.sorted_keys[pos]]
             if node not in nodes:
-                nodes.append(node)
+                nodes.append (node)
         return nodes
 \`\`\`
 

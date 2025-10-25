@@ -13,7 +13,7 @@ from unittest.mock import Mock, patch
 import openai
 
 class LLMService:
-    def generate(self, prompt: str) -> str:
+    def generate (self, prompt: str) -> str:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
@@ -25,12 +25,12 @@ def mock_openai():
     """Mock OpenAI responses."""
     with patch('openai.ChatCompletion.create') as mock:
         mock_response = Mock()
-        mock_response.choices = [Mock(message=Mock(content="Mocked response"))]
-        mock_response.usage = Mock(total_tokens=100)
+        mock_response.choices = [Mock (message=Mock (content="Mocked response"))]
+        mock_response.usage = Mock (total_tokens=100)
         mock.return_value = mock_response
         yield mock
 
-def test_llm_service(mock_openai):
+def test_llm_service (mock_openai):
     """Test LLM service without calling API."""
     service = LLMService()
     result = service.generate("Test prompt")
@@ -46,13 +46,13 @@ import pytest
 import json
 
 @pytest.fixture
-def snapshot(tmpdir):
+def snapshot (tmpdir):
     """Snapshot testing fixture."""
     snapshot_file = tmpdir.join("snapshots.json")
     
-    def _snapshot(name: str, data: any):
+    def _snapshot (name: str, data: any):
         if snapshot_file.exists():
-            snapshots = json.loads(snapshot_file.read())
+            snapshots = json.loads (snapshot_file.read())
         else:
             snapshots = {}
         
@@ -60,11 +60,11 @@ def snapshot(tmpdir):
             assert snapshots[name] == data, f"Snapshot {name} changed"
         else:
             snapshots[name] = data
-            snapshot_file.write(json.dumps(snapshots, indent=2))
+            snapshot_file.write (json.dumps (snapshots, indent=2))
     
     return _snapshot
 
-def test_prompt_output(snapshot):
+def test_prompt_output (snapshot):
     """Test that prompt output hasn't changed."""
     result = generate("What is 2+2?", temperature=0)
     snapshot("math_prompt", result)
@@ -77,7 +77,7 @@ import pytest
 from fastapi.testclient import TestClient
 from app import app
 
-client = TestClient(app)
+client = TestClient (app)
 
 def test_generation_endpoint():
     """Test end-to-end generation."""
@@ -89,7 +89,7 @@ def test_generation_endpoint():
     
     assert response.status_code == 200
     assert "result" in response.json()
-    assert len(response.json()["result"]) > 0
+    assert len (response.json()["result"]) > 0
 
 @pytest.mark.slow
 def test_generation_quality():
@@ -97,7 +97,7 @@ def test_generation_quality():
     result = generate("Explain Python in one sentence")
     
     # Basic quality checks
-    assert len(result) > 20
+    assert len (result) > 20
     assert "python" in result.lower()
 \`\`\`
 
@@ -107,7 +107,7 @@ def test_generation_quality():
 def test_token_estimation():
     """Test that we estimate costs correctly."""
     prompt = "Short prompt"
-    estimated_cost = estimate_cost(prompt, "gpt-4")
+    estimated_cost = estimate_cost (prompt, "gpt-4")
     
     # Should be roughly $0.01 for short prompt
     assert 0.001 < estimated_cost < 0.05
@@ -129,7 +129,7 @@ class LLMUser(HttpUser):
     wait_time = between(1, 3)
     
     @task
-    def generate(self):
+    def generate (self):
         self.client.post(
             "/generate",
             json={"prompt": "Test prompt"},

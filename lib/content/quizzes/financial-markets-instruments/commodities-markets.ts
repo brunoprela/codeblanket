@@ -31,7 +31,7 @@ Formula: F = S × e^((r + storage - convenience) × T)
 class CommodityFuturesRoll:
     """Calculate roll costs in contango/backwardation"""
     
-    def roll_cost_contango(self, near_month_price, next_month_price, days_between=30):
+    def roll_cost_contango (self, near_month_price, next_month_price, days_between=30):
         """
         When rolling futures in contango, you sell low and buy high
         """
@@ -43,10 +43,10 @@ class CommodityFuturesRoll:
             'roll_loss': roll_loss_per_contract,
             'roll_loss_pct': roll_loss_pct,
             'annualized_loss_pct': annualized_loss_pct,
-            'explanation': f'Sell {near_month_price}, buy {next_month_price} = ${roll_loss_per_contract} loss per barrel'
+            'explanation': f'Sell {near_month_price}, buy {next_month_price} = \${roll_loss_per_contract} loss per barrel'
         }
     
-    def calculate_yearly_erosion(self, contango_pct=12.5):
+    def calculate_yearly_erosion (self, contango_pct=12.5):
         """
         Estimate yearly performance drag from rolling in contango
         """
@@ -70,12 +70,12 @@ class CommodityFuturesRoll:
 roller = CommodityFuturesRoll()
 
 # Monthly roll cost
-roll = roller.roll_cost_contango(near_month_price=80, next_month_price=82, days_between=30)
+roll = roller.roll_cost_contango (near_month_price=80, next_month_price=82, days_between=30)
 print(f"Roll cost: \${roll['roll_loss']}/barrel ({roll['roll_loss_pct']:.2f}%)")
 print(f"Annualized: {roll['annualized_loss_pct']:.1f}%\\n")
 
 # Yearly erosion
-erosion = roller.calculate_yearly_erosion(contango_pct=12.5)
+erosion = roller.calculate_yearly_erosion (contango_pct=12.5)
 print(f"Annual erosion from rolling: {erosion['annual_loss_pct']:.1f}%")
 print(f"{erosion['interpretation']}")
 \`\`\`
@@ -147,7 +147,7 @@ Contango = upward-sloping curve. Holding long futures in contango has negative r
 - Market expects falling prices OR high current demand
 - Example: Gold during crisis (everyone wants physical NOW)
 
-**What's Normal for Each:**
+**What\'s Normal for Each:**
 
 \`\`\`python
 # Typical term structures
@@ -310,14 +310,14 @@ class TermStructureAnalyzer:
     def __init__(self):
         self.history = []  # Historical term structures
     
-    def analyze_curve(self, contracts: List[FuturesContract]) -> Dict:
+    def analyze_curve (self, contracts: List[FuturesContract]) -> Dict:
         """
         Analyze current term structure
         """
         # Sort by expiry
-        sorted_contracts = sorted(contracts, key=lambda c: c.expiry_date)
+        sorted_contracts = sorted (contracts, key=lambda c: c.expiry_date)
         
-        if len(sorted_contracts) < 2:
+        if len (sorted_contracts) < 2:
             return {'error': 'Need at least 2 contracts'}
         
         # Get front month and 12-month contracts
@@ -344,7 +344,7 @@ class TermStructureAnalyzer:
         
         # Calculate slope
         prices = [c.price for c in sorted_contracts]
-        slope = np.polyfit(range(len(prices)), prices, 1)[0]
+        slope = np.polyfit (range (len (prices)), prices, 1)[0]
         
         return {
             'state': state,
@@ -355,30 +355,30 @@ class TermStructureAnalyzer:
             'annualized_pct': annualized_pct,
             'roll_impact': roll_impact,
             'slope': slope,
-            'curve_shape': self._describe_shape(sorted_contracts)
+            'curve_shape': self._describe_shape (sorted_contracts)
         }
     
-    def _describe_shape(self, contracts: List[FuturesContract]) -> str:
+    def _describe_shape (self, contracts: List[FuturesContract]) -> str:
         """Describe curve shape beyond simple contango/backwardation"""
         prices = [c.price for c in contracts]
         
         # Check if curve is relatively flat
-        price_range = max(prices) - min(prices)
+        price_range = max (prices) - min (prices)
         if price_range / prices[0] < 0.02:
             return 'flat'
         
         # Check if curve is steepening or flattening
-        first_half_slope = (prices[len(prices)//2] - prices[0]) / (len(prices)//2)
-        second_half_slope = (prices[-1] - prices[len(prices)//2]) / (len(prices) - len(prices)//2)
+        first_half_slope = (prices[len (prices)//2] - prices[0]) / (len (prices)//2)
+        second_half_slope = (prices[-1] - prices[len (prices)//2]) / (len (prices) - len (prices)//2)
         
-        if abs(second_half_slope) > abs(first_half_slope) * 1.5:
+        if abs (second_half_slope) > abs (first_half_slope) * 1.5:
             return 'steepening'
-        elif abs(second_half_slope) < abs(first_half_slope) * 0.67:
+        elif abs (second_half_slope) < abs (first_half_slope) * 0.67:
             return 'flattening'
         
         return 'linear'
     
-    def calculate_roll_cost(self, front_price: float, next_price: float, days_to_roll: int) -> Dict:
+    def calculate_roll_cost (self, front_price: float, next_price: float, days_to_roll: int) -> Dict:
         """
         Calculate cost of rolling from front month to next month
         """
@@ -402,7 +402,7 @@ class ArbitrageDetector:
     Detect arbitrage opportunities in commodity markets
     """
     
-    def detect_cash_and_carry(self, spot_price: float, futures_price: float, 
+    def detect_cash_and_carry (self, spot_price: float, futures_price: float, 
                               days_to_expiry: int, storage_cost_annual: float,
                               financing_rate: float) -> Dict:
         """
@@ -444,7 +444,7 @@ class ArbitrageDetector:
             }
         }
     
-    def detect_calendar_spread_opportunity(self, near_price: float, far_price: float, 
+    def detect_calendar_spread_opportunity (self, near_price: float, far_price: float, 
                                            historical_spread_mean: float,
                                            historical_spread_std: float) -> Dict:
         """
@@ -485,7 +485,7 @@ class TradingSignalGenerator:
         self.analyzer = analyzer
         self.arb_detector = arb_detector
     
-    def generate_signals(self, contracts: List[FuturesContract], 
+    def generate_signals (self, contracts: List[FuturesContract], 
                         spot_price: float, storage_cost: float,
                         financing_rate: float) -> List[Dict]:
         """
@@ -494,27 +494,27 @@ class TradingSignalGenerator:
         signals = []
         
         # Analyze term structure
-        curve = self.analyzer.analyze_curve(contracts)
+        curve = self.analyzer.analyze_curve (contracts)
         
         # Signal 1: Contango/Backwardation position
-        if curve['state'] == 'contango' and abs(curve['annualized_pct']) > 10:
+        if curve['state'] == 'contango' and abs (curve['annualized_pct']) > 10:
             signals.append({
                 'type': 'Term Structure',
                 'signal': 'AVOID long futures ETFs',
                 'rationale': f'Heavy contango ({curve["annualized_pct"]:.1f}% annual drag)',
                 'priority': 'HIGH'
             })
-        elif curve['state'] == 'backwardation' and abs(curve['annualized_pct']) > 10:
+        elif curve['state'] == 'backwardation' and abs (curve['annualized_pct']) > 10:
             signals.append({
                 'type': 'Term Structure',
                 'signal': 'LONG near-month futures',
-                'rationale': f'Strong backwardation (+{abs(curve["annualized_pct"]):.1f}% roll yield)',
+                'rationale': f'Strong backwardation (+{abs (curve["annualized_pct"]):.1f}% roll yield)',
                 'priority': 'HIGH'
             })
         
         # Signal 2: Arbitrage opportunities
-        if len(contracts) >= 2:
-            front = sorted(contracts, key=lambda c: c.expiry_date)[0]
+        if len (contracts) >= 2:
+            front = sorted (contracts, key=lambda c: c.expiry_date)[0]
             days_to_expiry = (front.expiry_date - datetime.now()).days
             
             arb = self.arb_detector.detect_cash_and_carry(
@@ -546,21 +546,20 @@ print("=== Commodity Futures Trading System ===\\n")
 
 # Create sample contracts
 contracts = [
-    FuturesContract('CL', datetime.now() + timedelta(days=30), 80.0, 100000, 500000),
-    FuturesContract('CL', datetime.now() + timedelta(days=60), 82.0, 80000, 400000),
-    FuturesContract('CL', datetime.now() + timedelta(days=90), 84.0, 60000, 300000),
-    FuturesContract('CL', datetime.now() + timedelta(days=180), 88.0, 40000, 200000),
-    FuturesContract('CL', datetime.now() + timedelta(days=365), 90.0, 30000, 150000),
+    FuturesContract('CL', datetime.now() + timedelta (days=30), 80.0, 100000, 500000),
+    FuturesContract('CL', datetime.now() + timedelta (days=60), 82.0, 80000, 400000),
+    FuturesContract('CL', datetime.now() + timedelta (days=90), 84.0, 60000, 300000),
+    FuturesContract('CL', datetime.now() + timedelta (days=180), 88.0, 40000, 200000),
+    FuturesContract('CL', datetime.now() + timedelta (days=365), 90.0, 30000, 150000),
 ]
 
 # Analyze
 analyzer = TermStructureAnalyzer()
-curve = analyzer.analyze_curve(contracts)
+curve = analyzer.analyze_curve (contracts)
 
 print(f"Term Structure Analysis:")
 print(f"  State: {curve['state'].upper()}")
-print(f"  Front month: \${curve['front_price']: .2f
-    }")
+print(f"  Front month: \${curve['front_price']:.2f}")
 print(f"  12-month: \${curve['back_price']:.2f}")
 print(f"  Spread: \${curve['spread']:.2f} ({curve['spread_pct']:.1f}%)")
 print(f"  Annualized: {curve['annualized_pct']:.1f}%")
@@ -589,8 +588,8 @@ print(f"  Trade: {arb['trade']['action']}")
 print(f"  Profit: \${arb['arbitrage_profit']:.2f}/barrel ({arb['annualized_return']:.1f}% annual)\\n")
 
 # Generate signals
-signal_gen = TradingSignalGenerator(analyzer, arb_detector)
-signals = signal_gen.generate_signals(contracts, 79.0, 8.0, 5.0)
+signal_gen = TradingSignalGenerator (analyzer, arb_detector)
+signals = signal_gen.generate_signals (contracts, 79.0, 8.0, 5.0)
 
 print(f"Trading Signals:")
 for signal in signals:

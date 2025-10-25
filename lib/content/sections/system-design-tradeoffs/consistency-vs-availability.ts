@@ -45,7 +45,7 @@ The **CAP theorem** (Consistency, Availability, Partition Tolerance) states that
 3. Both withdrawals succeed 💰💰
 4. Result: Overdraft by $100 (incorrect) ❌
 
-**For banking, consistency is non-negotiable.** It's better to deny service (unavailable) than to show incorrect balance.
+**For banking, consistency is non-negotiable.** It\'s better to deny service (unavailable) than to show incorrect balance.
 
 ### CP Databases
 - **PostgreSQL**: Single-master, strong consistency

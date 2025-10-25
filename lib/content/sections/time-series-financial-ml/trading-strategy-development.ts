@@ -82,11 +82,11 @@ class Trade:
     commission: float = 0.0
     
     @property
-    def value(self):
+    def value (self):
         return self.quantity * self.price
     
     @property
-    def total_cost(self):
+    def total_cost (self):
         return self.value + self.commission
 
 
@@ -99,15 +99,15 @@ class Position:
     current_price: float
     
     @property
-    def market_value(self):
+    def market_value (self):
         return self.quantity * self.current_price
     
     @property
-    def unrealized_pnl(self):
+    def unrealized_pnl (self):
         return (self.current_price - self.avg_entry_price) * self.quantity
     
     @property
-    def return_pct(self):
+    def return_pct (self):
         if self.avg_entry_price == 0:
             return 0
         return (self.current_price - self.avg_entry_price) / self.avg_entry_price
@@ -135,7 +135,7 @@ class TradingStrategy(ABC):
         self.metrics = {}
     
     @abstractmethod
-    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+    def generate_signals (self, data: pd.DataFrame) -> pd.Series:
         """
         Generate trading signals from market data
         
@@ -148,7 +148,7 @@ class TradingStrategy(ABC):
         pass
     
     @abstractmethod
-    def size_position(self, signal: float, ticker: str, price: float) -> float:
+    def size_position (self, signal: float, ticker: str, price: float) -> float:
         """
         Determine position size for a signal
         
@@ -162,7 +162,7 @@ class TradingStrategy(ABC):
         """
         pass
     
-    def execute_trade(self, ticker: str, quantity: float, price: float, 
+    def execute_trade (self, ticker: str, quantity: float, price: float, 
                      timestamp: datetime, commission_rate: float = 0.001):
         """
         Execute a trade and update portfolio
@@ -175,7 +175,7 @@ class TradingStrategy(ABC):
             commission_rate: Commission as % of trade value
         """
         side = 'BUY' if quantity > 0 else 'SELL'
-        value = abs(quantity * price)
+        value = abs (quantity * price)
         commission = value * commission_rate
         
         # Create trade record
@@ -183,24 +183,24 @@ class TradingStrategy(ABC):
             timestamp=timestamp,
             ticker=ticker,
             side=side,
-            quantity=abs(quantity),
+            quantity=abs (quantity),
             price=price,
             commission=commission
         )
-        self.trades.append(trade)
+        self.trades.append (trade)
         
         # Update capital
         if quantity > 0:  # Buy
             total_cost = value + commission
             if total_cost > self.capital:
-                raise ValueError(f"Insufficient capital: need {total_cost}, have {self.capital}")
+                raise ValueError (f"Insufficient capital: need {total_cost}, have {self.capital}")
             self.capital -= total_cost
         else:  # Sell
             self.capital += value - commission
         
         # Update position
         if ticker not in self.positions:
-            self.positions[ticker] = Position(ticker, 0, 0, price)
+            self.positions[ticker] = Position (ticker, 0, 0, price)
         
         position = self.positions[ticker]
         
@@ -216,21 +216,21 @@ class TradingStrategy(ABC):
         position.current_price = price
         
         # Remove zero positions
-        if abs(position.quantity) < 1e-6:
+        if abs (position.quantity) < 1e-6:
             del self.positions[ticker]
     
-    def update_positions(self, prices: Dict[str, float]):
+    def update_positions (self, prices: Dict[str, float]):
         """Update position values with current prices"""
         for ticker, position in self.positions.items():
             if ticker in prices:
                 position.current_price = prices[ticker]
     
-    def get_portfolio_value(self) -> float:
+    def get_portfolio_value (self) -> float:
         """Calculate total portfolio value"""
-        positions_value = sum(pos.market_value for pos in self.positions.values())
+        positions_value = sum (pos.market_value for pos in self.positions.values())
         return self.capital + positions_value
     
-    def run_backtest(self, data: Dict[str, pd.DataFrame]) -> pd.DataFrame:
+    def run_backtest (self, data: Dict[str, pd.DataFrame]) -> pd.DataFrame:
         """
         Run strategy backtest
         
@@ -243,8 +243,8 @@ class TradingStrategy(ABC):
         # Get common date range
         all_dates = set()
         for df in data.values():
-            all_dates.update(df.index)
-        dates = sorted(all_dates)
+            all_dates.update (df.index)
+        dates = sorted (all_dates)
         
         for date in dates:
             # Get current prices
@@ -254,7 +254,7 @@ class TradingStrategy(ABC):
                     prices[ticker] = df.loc[date, 'Close']
             
             # Update existing positions
-            self.update_positions(prices)
+            self.update_positions (prices)
             
             # Generate signals for each asset
             for ticker, df in data.items():
@@ -265,15 +265,15 @@ class TradingStrategy(ABC):
                 historical_data = df.loc[:date]
                 
                 # Generate signal
-                signals = self.generate_signals(historical_data)
-                if len(signals) == 0:
+                signals = self.generate_signals (historical_data)
+                if len (signals) == 0:
                     continue
                 
                 signal = signals.iloc[-1]
                 price = prices[ticker]
                 
                 # Determine position size
-                target_quantity = self.size_position(signal, ticker, price)
+                target_quantity = self.size_position (signal, ticker, price)
                 
                 # Calculate current quantity
                 current_quantity = self.positions[ticker].quantity if ticker in self.positions else 0
@@ -281,20 +281,20 @@ class TradingStrategy(ABC):
                 # Execute trade if position change needed
                 quantity_to_trade = target_quantity - current_quantity
                 
-                if abs(quantity_to_trade) > 0:
+                if abs (quantity_to_trade) > 0:
                     try:
-                        self.execute_trade(ticker, quantity_to_trade, price, date)
+                        self.execute_trade (ticker, quantity_to_trade, price, date)
                     except ValueError:
                         # Insufficient capital - skip trade
                         pass
             
             # Record portfolio value
             portfolio_value = self.get_portfolio_value()
-            self.equity_curve.append(portfolio_value)
-            self.timestamps.append(date)
+            self.equity_curve.append (portfolio_value)
+            self.timestamps.append (date)
         
         # Calculate returns
-        equity_series = pd.Series(self.equity_curve, index=[None] + self.timestamps)
+        equity_series = pd.Series (self.equity_curve, index=[None] + self.timestamps)
         returns = equity_series.pct_change().dropna()
         
         return pd.DataFrame({
@@ -322,19 +322,19 @@ class MomentumStrategy(TradingStrategy):
         self.holding_period = holding_period
         self.top_pct = top_pct
     
-    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+    def generate_signals (self, data: pd.DataFrame) -> pd.Series:
         """
         Signal = past N-day return
         
         Positive signal = upward momentum
         """
-        if len(data) < self.lookback:
+        if len (data) < self.lookback:
             return pd.Series(0, index=data.index)
         
-        momentum = data['Close'].pct_change(self.lookback)
+        momentum = data['Close'].pct_change (self.lookback)
         return momentum
     
-    def size_position(self, signal: float, ticker: str, price: float) -> float:
+    def size_position (self, signal: float, ticker: str, price: float) -> float:
         """
         Equal weight top 20% momentum stocks
         """
@@ -362,16 +362,16 @@ class CrossSectionalMomentumStrategy(TradingStrategy):
         self.n_short = n_short
         self.tickers = []
     
-    def generate_signals(self, data: Dict[str, pd.DataFrame]) -> Dict[str, float]:
+    def generate_signals (self, data: Dict[str, pd.DataFrame]) -> Dict[str, float]:
         """Generate signals for multiple assets"""
         momentums = {}
         for ticker, df in data.items():
-            if len(df) >= self.lookback:
+            if len (df) >= self.lookback:
                 mom = df['Close'].iloc[-1] / df['Close'].iloc[-self.lookback] - 1
                 momentums[ticker] = mom
         
         # Rank
-        sorted_tickers = sorted(momentums.items(), key=lambda x: x[1], reverse=True)
+        sorted_tickers = sorted (momentums.items(), key=lambda x: x[1], reverse=True)
         
         signals = {}
         # Long top N
@@ -403,17 +403,17 @@ class MeanReversionStrategy(TradingStrategy):
         self.window = window
         self.std_dev = std_dev
     
-    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+    def generate_signals (self, data: pd.DataFrame) -> pd.Series:
         """
         Z-score signals:
         < -2: Oversold (buy)
         > +2: Overbought (sell)
         """
-        if len(data) < self.window:
+        if len (data) < self.window:
             return pd.Series(0, index=data.index)
         
-        sma = data['Close'].rolling(self.window).mean()
-        std = data['Close'].rolling(self.window).std()
+        sma = data['Close'].rolling (self.window).mean()
+        std = data['Close'].rolling (self.window).std()
         z_score = (data['Close'] - sma) / std
         
         # Generate signals
@@ -423,7 +423,7 @@ class MeanReversionStrategy(TradingStrategy):
         
         return signals
     
-    def size_position(self, signal: float, ticker: str, price: float) -> float:
+    def size_position (self, signal: float, ticker: str, price: float) -> float:
         """Fixed position size"""
         if signal == 1:  # Buy
             target_value = self.initial_capital * 0.2  # 20% per position
@@ -447,13 +447,13 @@ class BollingerBandStrategy(TradingStrategy):
         self.window = window
         self.num_std = num_std
     
-    def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+    def generate_signals (self, data: pd.DataFrame) -> pd.Series:
         """Bollinger Band signals"""
-        if len(data) < self.window:
+        if len (data) < self.window:
             return pd.Series(0, index=data.index)
         
-        sma = data['Close'].rolling(self.window).mean()
-        std = data['Close'].rolling(self.window).std()
+        sma = data['Close'].rolling (self.window).mean()
+        std = data['Close'].rolling (self.window).std()
         
         upper_band = sma + self.num_std * std
         lower_band = sma - self.num_std * std
@@ -464,7 +464,7 @@ class BollingerBandStrategy(TradingStrategy):
         
         return signals
     
-    def size_position(self, signal: float, ticker: str, price: float) -> float:
+    def size_position (self, signal: float, ticker: str, price: float) -> float:
         """Fixed position size"""
         if signal != 0:
             target_value = self.initial_capital * 0.25
@@ -497,30 +497,30 @@ class PairsTradingStrategy:
         
         self.position = None  # 'long_spread' or 'short_spread'
     
-    def calculate_spread(self, data1: pd.DataFrame, data2: pd.DataFrame) -> pd.Series:
+    def calculate_spread (self, data1: pd.DataFrame, data2: pd.DataFrame) -> pd.Series:
         """Calculate price spread"""
         # Log prices for better stationarity
-        log_p1 = np.log(data1['Close'])
-        log_p2 = np.log(data2['Close'])
+        log_p1 = np.log (data1['Close'])
+        log_p2 = np.log (data2['Close'])
         
         spread = log_p1 - log_p2
         return spread
     
-    def generate_signals(self, data1: pd.DataFrame, data2: pd.DataFrame) -> Tuple[float, float]:
+    def generate_signals (self, data1: pd.DataFrame, data2: pd.DataFrame) -> Tuple[float, float]:
         """
         Generate signals for both assets
         
         Returns:
             (signal1, signal2): Signals for both assets
         """
-        spread = self.calculate_spread(data1, data2)
+        spread = self.calculate_spread (data1, data2)
         
-        if len(spread) < self.window:
+        if len (spread) < self.window:
             return 0, 0
         
         # Z-score of spread
-        mean = spread.rolling(self.window).mean()
-        std = spread.rolling(self.window).std()
+        mean = spread.rolling (self.window).mean()
+        std = spread.rolling (self.window).std()
         z_score = (spread - mean) / std
         
         current_z = z_score.iloc[-1]
@@ -537,7 +537,7 @@ class PairsTradingStrategy:
                 return 1, -1
         
         # Exit signals
-        elif abs(current_z) < self.exit_threshold:
+        elif abs (current_z) < self.exit_threshold:
             # Close position
             if self.position == 'short_spread':
                 self.position = None
@@ -559,16 +559,16 @@ class SignalProcessor:
     """
     
     @staticmethod
-    def smooth_signals(signals: pd.Series, window: int = 5) -> pd.Series:
+    def smooth_signals (signals: pd.Series, window: int = 5) -> pd.Series:
         """
         Smooth noisy signals using moving average
         
         Reduces whipsaws and false signals
         """
-        return signals.rolling(window, min_periods=1).mean()
+        return signals.rolling (window, min_periods=1).mean()
     
     @staticmethod
-    def filter_by_volatility(signals: pd.Series, data: pd.DataFrame,
+    def filter_by_volatility (signals: pd.Series, data: pd.DataFrame,
                             vol_threshold: float = 0.02,
                             vol_window: int = 21) -> pd.Series:
         """
@@ -577,7 +577,7 @@ class SignalProcessor:
         High vol = higher risk, less predictable
         """
         returns = data['Close'].pct_change()
-        volatility = returns.rolling(vol_window).std()
+        volatility = returns.rolling (vol_window).std()
         
         filtered = signals.copy()
         filtered[volatility > vol_threshold] = 0
@@ -585,7 +585,7 @@ class SignalProcessor:
         return filtered
     
     @staticmethod
-    def filter_by_volume(signals: pd.Series, data: pd.DataFrame,
+    def filter_by_volume (signals: pd.Series, data: pd.DataFrame,
                         volume_percentile: float = 0.3,
                         window: int = 21) -> pd.Series:
         """
@@ -593,7 +593,7 @@ class SignalProcessor:
         
         High volume = more liquidity, better fills
         """
-        volume_threshold = data['Volume'].rolling(window).quantile(volume_percentile)
+        volume_threshold = data['Volume'].rolling (window).quantile (volume_percentile)
         
         filtered = signals.copy()
         filtered[data['Volume'] < volume_threshold] = 0
@@ -601,14 +601,14 @@ class SignalProcessor:
         return filtered
     
     @staticmethod
-    def filter_by_trend(signals: pd.Series, data: pd.DataFrame,
+    def filter_by_trend (signals: pd.Series, data: pd.DataFrame,
                        ma_period: int = 50) -> pd.Series:
         """
         Align signals with longer-term trend
         
         Only long when above MA, only short when below MA
         """
-        ma = data['Close'].rolling(ma_period).mean()
+        ma = data['Close'].rolling (ma_period).mean()
         
         filtered = signals.copy()
         # Suppress long signals when price below MA
@@ -619,7 +619,7 @@ class SignalProcessor:
         return filtered
     
     @staticmethod
-    def combine_signals(signals_list: List[pd.Series],
+    def combine_signals (signals_list: List[pd.Series],
                        weights: Optional[List[float]] = None,
                        method: str = 'weighted_average') -> pd.Series:
         """
@@ -631,21 +631,21 @@ class SignalProcessor:
         - unanimous: Only trade when all agree
         """
         if weights is None:
-            weights = [1.0 / len(signals_list)] * len(signals_list)
+            weights = [1.0 / len (signals_list)] * len (signals_list)
         
         if method == 'weighted_average':
-            combined = sum(w * s for w, s in zip(weights, signals_list))
+            combined = sum (w * s for w, s in zip (weights, signals_list))
             return combined
         
         elif method == 'majority_vote':
-            signs = pd.DataFrame({i: np.sign(s) for i, s in enumerate(signals_list)})
-            majority = signs.sum(axis=1)
-            return np.sign(majority)
+            signs = pd.DataFrame({i: np.sign (s) for i, s in enumerate (signals_list)})
+            majority = signs.sum (axis=1)
+            return np.sign (majority)
         
         elif method == 'unanimous':
-            signs = pd.DataFrame({i: np.sign(s) for i, s in enumerate(signals_list)})
-            all_long = (signs == 1).all(axis=1)
-            all_short = (signs == -1).all(axis=1)
+            signs = pd.DataFrame({i: np.sign (s) for i, s in enumerate (signals_list)})
+            all_long = (signs == 1).all (axis=1)
+            all_short = (signs == -1).all (axis=1)
             
             result = pd.Series(0, index=signs.index)
             result[all_long] = 1
@@ -665,11 +665,11 @@ import yfinance as yf
 data = yf.download('AAPL', start='2020-01-01', end='2024-01-01')
 
 # Generate raw signals (momentum + mean reversion)
-momentum_strategy = MomentumStrategy(lookback=21)
-momentum_signals = momentum_strategy.generate_signals(data)
+momentum_strategy = MomentumStrategy (lookback=21)
+momentum_signals = momentum_strategy.generate_signals (data)
 
-mr_strategy = MeanReversionStrategy(window=20, std_dev=2)
-mr_signals = mr_strategy.generate_signals(data)
+mr_strategy = MeanReversionStrategy (window=20, std_dev=2)
+mr_signals = mr_strategy.generate_signals (data)
 
 # Combine signals
 combined = SignalProcessor.combine_signals(
@@ -678,9 +678,9 @@ combined = SignalProcessor.combine_signals(
 )
 
 # Apply filters
-filtered = SignalProcessor.filter_by_volatility(combined, data, vol_threshold=0.025)
-filtered = SignalProcessor.filter_by_volume(filtered, data, volume_percentile=0.3)
-filtered = SignalProcessor.filter_by_trend(filtered, data, ma_period=50)
+filtered = SignalProcessor.filter_by_volatility (combined, data, vol_threshold=0.025)
+filtered = SignalProcessor.filter_by_volume (filtered, data, volume_percentile=0.3)
+filtered = SignalProcessor.filter_by_trend (filtered, data, ma_period=50)
 
 print(f"Raw signals: {(combined != 0).sum()}")
 print(f"Filtered signals: {(filtered != 0).sum()}")

@@ -5,7 +5,7 @@
 export const phiaccrualfailuredetectorSection = {
   id: 'phi-accrual-failure-detector',
   title: 'Phi Accrual Failure Detector',
-  content: `Phi Accrual Failure Detector is an adaptive failure detection algorithm that provides a continuous suspicion level instead of a binary "alive/dead" decision. It's used in production systems like Apache Cassandra and Akka to handle the challenging problem of distinguishing between slow nodes and dead nodes.
+  content: `Phi Accrual Failure Detector is an adaptive failure detection algorithm that provides a continuous suspicion level instead of a binary "alive/dead" decision. It\'s used in production systems like Apache Cassandra and Akka to handle the challenging problem of distinguishing between slow nodes and dead nodes.
 
 ## What is Phi Accrual Failure Detector?
 
@@ -157,7 +157,7 @@ mean = mean_interval
 stddev = stddev_interval
 
 z_score = (t - mean) / stddev  // How many stddevs away
-phi = -log10(1 - cumulative_normal_distribution(z_score))
+phi = -log10(1 - cumulative_normal_distribution (z_score))
 \`\`\`
 
 ### **Example Calculation**
@@ -194,25 +194,25 @@ class PhiAccrualFailureDetector:
         self.last_heartbeat_time = None
         self.window_size = window_size
     
-    def heartbeat_received(self, timestamp):
+    def heartbeat_received (self, timestamp):
         if self.last_heartbeat_time is not None:
             interval = timestamp - self.last_heartbeat_time
-            self.intervals.append(interval)
-            if len(self.intervals) > self.window_size:
+            self.intervals.append (interval)
+            if len (self.intervals) > self.window_size:
                 self.intervals.pop(0)  // Keep only recent
         self.last_heartbeat_time = timestamp
     
-    def phi(self, current_time):
+    def phi (self, current_time):
         if self.last_heartbeat_time is None:
             return 0.0  // No data yet
         
         time_since_last = current_time - self.last_heartbeat_time
-        mean_interval = mean(self.intervals)
-        stddev_interval = stddev(self.intervals)
+        mean_interval = mean (self.intervals)
+        stddev_interval = stddev (self.intervals)
         
         // Calculate phi using normal distribution
         z_score = (time_since_last - mean_interval) / stddev_interval
-        prob = cumulative_normal(z_score)
+        prob = cumulative_normal (z_score)
         phi = -log10(1 - prob)
         
         return phi
@@ -236,8 +236,8 @@ Where alpha = 0.1 (weight factor)
 Don't calculate phi until enough samples:
 
 \`\`\`
-def phi(self, current_time):
-    if len(self.intervals) < MIN_SAMPLES:  // e.g., 10
+def phi (self, current_time):
+    if len (self.intervals) < MIN_SAMPLES:  // e.g., 10
         return 0.0  // Not enough data, assume alive
     
     // ... calculate phi
@@ -362,7 +362,7 @@ if no_heartbeat_for(3s):
 ### **Phi Accrual**
 
 \`\`\`
-phi = calculate_phi(heartbeat_history)
+phi = calculate_phi (heartbeat_history)
 if phi > threshold:
     mark_suspected()
 \`\`\`

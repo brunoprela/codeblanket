@@ -92,7 +92,7 @@ rpc GetUser(GetUserRequest) returns (User);
 \`\`\`javascript
 // Client
 const response = await client.getUser({ id: '123' });
-console.log(response.name);
+console.log (response.name);
 \`\`\`
 
 ### **2. Server Streaming**
@@ -123,7 +123,7 @@ call.on('end', () => {
 Client streams multiple requests, server sends one response:
 
 \`\`\`protobuf
-rpc UploadUsers(stream CreateUserRequest) returns (UploadSummary);
+rpc UploadUsers (stream CreateUserRequest) returns (UploadSummary);
 \`\`\`
 
 \`\`\`javascript
@@ -132,7 +132,7 @@ const call = client.uploadUsers((err, response) => {
   console.log('Uploaded:', response.count);
 });
 
-users.forEach(user => call.write(user));
+users.forEach (user => call.write (user));
 call.end();
 \`\`\`
 
@@ -143,7 +143,7 @@ call.end();
 Both client and server stream:
 
 \`\`\`protobuf
-rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+rpc Chat (stream ChatMessage) returns (stream ChatMessage);
 \`\`\`
 
 \`\`\`javascript
@@ -183,10 +183,10 @@ UNAUTHENTICATED    = 16  // Not authenticated
 
 \`\`\`javascript
 // Server
-async getUser(call, callback) {
+async getUser (call, callback) {
   const { id } = call.request;
   
-  const user = await db.users.findById(id);
+  const user = await db.users.findById (id);
   
   if (!user) {
     return callback({
@@ -196,7 +196,7 @@ async getUser(call, callback) {
     });
   }
   
-  callback(null, user);
+  callback (null, user);
 }
 \`\`\`
 
@@ -230,12 +230,12 @@ client.getUser({ id: '123' }, metadata, (err, response) => {
 
 \`\`\`javascript
 // Server
-async getUser(call, callback) {
+async getUser (call, callback) {
   const metadata = call.metadata;
   const authToken = metadata.get('authorization')[0];
   
   // Verify token
-  const user = await authenticateToken(authToken);
+  const user = await authenticateToken (authToken);
   
   if (!user) {
     return callback({
@@ -255,7 +255,7 @@ async getUser(call, callback) {
 \`\`\`javascript
 // Timeout after 5 seconds
 const deadline = new Date();
-deadline.setSeconds(deadline.getSeconds() + 5);
+deadline.setSeconds (deadline.getSeconds() + 5);
 
 client.getUser(
   { id: '123' },
@@ -271,7 +271,7 @@ client.getUser(
 **Server Check**:
 
 \`\`\`javascript
-async getUser(call, callback) {
+async getUser (call, callback) {
   // Check if client cancelled or deadline exceeded
   if (call.cancelled) {
     return callback({
@@ -283,7 +283,7 @@ async getUser(call, callback) {
   // Long operation
   const user = await expensiveQuery();
   
-  callback(null, user);
+  callback (null, user);
 }
 \`\`\`
 
@@ -319,10 +319,10 @@ const client = new UserServiceClient('localhost:50051', credentials);
 \`\`\`javascript
 // Client interceptor
 const authInterceptor = (options, nextCall) => {
-  return new grpc.InterceptingCall(nextCall(options), {
+  return new grpc.InterceptingCall (nextCall (options), {
     start: (metadata, listener, next) => {
       metadata.add('authorization', \`Bearer \${getToken()}\`);
-      next(metadata, listener);
+      next (metadata, listener);
     }
   });
 };
@@ -372,20 +372,20 @@ const loggingInterceptor = (call, callback, next) => {
   console.log('Request:', call.request);
   const start = Date.now();
   
-  next(call, (err, response) => {
+  next (call, (err, response) => {
     console.log('Duration:', Date.now() - start);
-    callback(err, response);
+    callback (err, response);
   });
 };
 
-server.use(loggingInterceptor);
+server.use (loggingInterceptor);
 \`\`\`
 
 **Client Interceptor**:
 
 \`\`\`javascript
 const retryInterceptor = (options, nextCall) => {
-  return new grpc.InterceptingCall(nextCall(options), {
+  return new grpc.InterceptingCall (nextCall (options), {
     start: (metadata, listener, next) => {
       const retryListener = {
         onReceiveStatus: (status, nextStatus) => {
@@ -393,10 +393,10 @@ const retryInterceptor = (options, nextCall) => {
             // Retry logic
             return retry();
           }
-          nextStatus(status);
+          nextStatus (status);
         }
       };
-      next(metadata, retryListener);
+      next (metadata, retryListener);
     }
   });
 };
@@ -414,7 +414,7 @@ package ecommerce;
 service ProductService {
   rpc GetProduct(GetProductRequest) returns (Product);
   rpc SearchProducts(SearchRequest) returns (stream Product);
-  rpc CreateOrder(stream OrderItem) returns (Order);
+  rpc CreateOrder (stream OrderItem) returns (Order);
 }
 
 message Product {

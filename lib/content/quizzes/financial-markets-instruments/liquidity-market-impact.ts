@@ -1,12 +1,12 @@
 export const liquidityMarketImpactQuiz = [
     {
         id: 'fm-1-13-q-1',
-        question: "Kyle's Lambda measures permanent market impact: ΔPrice = λ × Quantity. Design a real-time market impact estimation system. How do you distinguish temporary impact (recovers) vs permanent impact (information-driven)? Build a pre-trade cost estimator.",
+        question: "Kyle\'s Lambda measures permanent market impact: ΔPrice = λ × Quantity. Design a real-time market impact estimation system. How do you distinguish temporary impact (recovers) vs permanent impact (information-driven)? Build a pre-trade cost estimator.",
         sampleAnswer: `[Implementation of Kyle's model, calculation of lambda from historical trades, distinction between temporary spread-crossing and permanent information effects, pre-trade TCA]`,
         keyPoints: [
             'Kyle\\'s Lambda: Price impact per unit traded.λ = 0.1 means trading 10K shares moves price $1',
       'Temporary impact: Spread + immediate demand/supply (recovers in minutes). ~50% of total',
-            'Permanent impact: Information signal (doesn\\'t recover).Informed traders cause this',
+            'Permanent impact: Information signal (doesn't recover).Informed traders cause this',
       'Estimation: Regress price change on signed volume. Slope = lambda',
             'Pre-trade: Expected cost = λ × quantity^0.6 (concave: larger orders have economies of scale)'
         ]
@@ -25,7 +25,7 @@ export const liquidityMarketImpactQuiz = [
     },
     {
         id: 'fm-1-13-q-3',
-        question: "Dark pools provide \"lit-seeking\" functionality to find hidden liquidity. Design a multi-venue liquidity aggregation system. How do you prevent information leakage when pinging multiple venues? What's the trade-off between fill rate and information leakage?",
+        question: "Dark pools provide \"lit-seeking\" functionality to find hidden liquidity. Design a multi-venue liquidity aggregation system. How do you prevent information leakage when pinging multiple venues? What\'s the trade-off between fill rate and information leakage?",
         sampleAnswer: `[Multi-venue smart router with randomized pinging, order size obfuscation, timing jitter, and adaptive venue selection based on historical fill rates and leakage metrics]`,
         keyPoints: [
             'Problem: Pinging 10 dark pools → if one leaks, HFTs front-run on lit markets',
@@ -36,4 +36,3 @@ export const liquidityMarketImpactQuiz = [
         ]
     }
 ];
-

@@ -5,7 +5,7 @@
 export const apachekafkaarchitectureSection = {
   id: 'apache-kafka-architecture',
   title: 'Apache Kafka Architecture',
-  content: `Apache Kafka is a distributed streaming platform designed for high-throughput, fault-tolerant, and scalable event streaming. It's widely used at companies like LinkedIn, Netflix, Uber, and Airbnb for real-time data pipelines and stream processing.
+  content: `Apache Kafka is a distributed streaming platform designed for high-throughput, fault-tolerant, and scalable event streaming. It\'s widely used at companies like LinkedIn, Netflix, Uber, and Airbnb for real-time data pipelines and stream processing.
 
 ## What is Apache Kafka?
 
@@ -87,7 +87,7 @@ message = {
   value: { ... }
 }
 
-Partition = hash(key) % num_partitions
+Partition = hash (key) % num_partitions
 
 Same key → Same partition → Ordering guaranteed per key
 No key → Round-robin across partitions
@@ -333,7 +333,7 @@ Better load distribution
 
 ---
 
-## Kafka's Write Path
+## Kafka\'s Write Path
 
 ### **Step-by-Step Write Flow:**
 
@@ -627,7 +627,7 @@ Example: Banking (transaction audit log)
 Interviewer: "Design a system to track user activity on a website"
 
 You:
-"I'll use Kafka for event streaming. Here's why:
+"I'll use Kafka for event streaming. Here\'s why:
 
 Architecture:
 User Actions → API Servers → Kafka Topic: 'user-activity'

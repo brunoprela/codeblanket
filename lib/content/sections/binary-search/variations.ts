@@ -26,7 +26,7 @@ export const variationsSection = {
 **Key Insight:** Minimum is at the rotation point. Compare with rightmost element.
 
 **5. Square Root / nth Root**
-**Problem:** Find floor(sqrt(x)) without using sqrt function.
+**Problem:** Find floor (sqrt (x)) without using sqrt function.
 **Key Insight:** Binary search on the answer space [0, x].
 
 **6. First Bad Version**

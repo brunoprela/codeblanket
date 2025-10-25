@@ -445,7 +445,7 @@ App writes to file, forwarder ships logs
 \`\`\`javascript
 logger.info('User login', {
   user_id: user.id,
-  email: redact(user.email),  // j***@example.com
+  email: redact (user.email),  // j***@example.com
   ip: req.ip
 });
 \`\`\`
@@ -470,7 +470,7 @@ Logstash filters to remove sensitive data
 ### **1. Logging Exceptions Without Context**
 ❌ Bad:
 \`\`\`
-logger.error(error.message)
+logger.error (error.message)
 \`\`\`
 
 ✅ Good:
@@ -521,7 +521,7 @@ logger.info('User login', { event: 'user_login', user_id: 'bob' })
 \`\`\`
 for (let i = 0; i < 1000000; i++) {
   logger.debug('Loop iteration', i);
-  process(i);
+  process (i);
 }
 \`\`\`
 

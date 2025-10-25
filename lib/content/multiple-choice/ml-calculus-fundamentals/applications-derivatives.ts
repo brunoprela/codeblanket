@@ -15,7 +15,7 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'app-deriv-2',
-    question: "Newton's method converges:",
+    question: "Newton\'s method converges:",
     options: [
       'Linearly',
       'Quadratically (very fast)',
@@ -24,21 +24,21 @@ export const applicationsderivativesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Newton's method has quadratic convergence near the root, doubling correct digits each iteration.",
+      "Newton\'s method has quadratic convergence near the root, doubling correct digits each iteration.",
   },
   {
     id: 'app-deriv-3',
     question:
-      'What is the first-order Taylor approximation of f(x) around x=a?',
+      'What is the first-order Taylor approximation of f (x) around x=a?',
     options: [
-      'f(a)',
-      "f(a) + f'(a)(x-a)",
-      "f(a) + f'(a)(x-a) + f'(a)(x-a)²/2",
-      'f(x)',
+      'f (a)',
+      "f (a) + f'(a)(x-a)",
+      "f (a) + f'(a)(x-a) + f'(a)(x-a)²/2",
+      'f (x)',
     ],
     correctAnswer: 1,
     explanation:
-      "First-order (linear) Taylor approximation: f(x) ≈ f(a) + f'(a)(x-a). This is the tangent line.",
+      "First-order (linear) Taylor approximation: f (x) ≈ f (a) + f'(a)(x-a). This is the tangent line.",
   },
   {
     id: 'app-deriv-4',

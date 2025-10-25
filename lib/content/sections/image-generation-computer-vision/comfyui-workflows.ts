@@ -251,9 +251,9 @@ class ComfyUIClient:
         server_address: str = "127.0.0.1:8188"
     ):
         self.server_address = server_address
-        self.client_id = str(uuid.uuid4())
+        self.client_id = str (uuid.uuid4())
     
-    def queue_prompt(self, prompt: dict) -> str:
+    def queue_prompt (self, prompt: dict) -> str:
         """
         Queue a workflow for execution.
         
@@ -272,7 +272,7 @@ class ComfyUIClient:
         
         return response.json()["prompt_id"]
     
-    def get_image(self, filename: str, subfolder: str = "", folder_type: str = "output") -> Image.Image:
+    def get_image (self, filename: str, subfolder: str = "", folder_type: str = "output") -> Image.Image:
         """Download generated image."""
         response = requests.get(
             f"http://{self.server_address}/view",
@@ -285,21 +285,21 @@ class ComfyUIClient:
         
         return Image.open(BytesIO(response.content))
     
-    def get_history(self, prompt_id: str) -> dict:
+    def get_history (self, prompt_id: str) -> dict:
         """Get generation history."""
         response = requests.get(
             f"http://{self.server_address}/history/{prompt_id}"
         )
         return response.json()
     
-    def wait_for_completion(self, prompt_id: str) -> list[Image.Image]:
+    def wait_for_completion (self, prompt_id: str) -> list[Image.Image]:
         """
         Wait for workflow to complete and return images.
         """
         import time
         
         while True:
-            history = self.get_history(prompt_id)
+            history = self.get_history (prompt_id)
             
             if prompt_id in history:
                 outputs = history[prompt_id].get("outputs", {})
@@ -314,13 +314,13 @@ class ComfyUIClient:
                                 img_info.get("subfolder", ""),
                                 img_info.get("type", "output")
                             )
-                            images.append(img)
+                            images.append (img)
                 
                 return images
             
             time.sleep(1)
     
-    def generate(self, workflow: dict) -> list[Image.Image]:
+    def generate (self, workflow: dict) -> list[Image.Image]:
         """
         Generate images from workflow.
         
@@ -330,21 +330,21 @@ class ComfyUIClient:
         Returns:
             List of generated images
         """
-        prompt_id = self.queue_prompt(workflow)
-        return self.wait_for_completion(prompt_id)
+        prompt_id = self.queue_prompt (workflow)
+        return self.wait_for_completion (prompt_id)
 
 # Usage
 client = ComfyUIClient()
 
 # Load workflow from file
 with open("workflow.json", "r") as f:
-    workflow = json.load(f)
+    workflow = json.load (f)
 
 # Generate
-images = client.generate(workflow)
+images = client.generate (workflow)
 
-for i, img in enumerate(images):
-    img.save(f"output_{i}.png")
+for i, img in enumerate (images):
+    img.save (f"output_{i}.png")
 \`\`\`
 
 ### Workflow Templates
@@ -369,7 +369,7 @@ class WorkflowBuilder:
         node_id = self.node_id
         self.node_id += 1
         
-        self.nodes[str(node_id)] = {
+        self.nodes[str (node_id)] = {
             "class_type": node_type,
             "inputs": {**params, **inputs}
         }
@@ -516,7 +516,7 @@ workflow = builder.build_txt2img(
 
 # Execute
 client = ComfyUIClient()
-images = client.generate(workflow)
+images = client.generate (workflow)
 \`\`\`
 
 ## Advanced Techniques
@@ -546,26 +546,26 @@ class BatchGenerator:
         """
         results = []
         
-        for i, var in enumerate(variations):
-            print(f"Generating variation {i+1}/{len(variations)}")
+        for i, var in enumerate (variations):
+            print(f"Generating variation {i+1}/{len (variations)}")
             
             # Apply variation
-            workflow = self._apply_variation(base_workflow, var)
+            workflow = self._apply_variation (base_workflow, var)
             
             # Generate
-            images = self.client.generate(workflow)
-            results.extend(images)
+            images = self.client.generate (workflow)
+            results.extend (images)
         
         return results
     
-    def _apply_variation(self, workflow: dict, changes: dict) -> dict:
+    def _apply_variation (self, workflow: dict, changes: dict) -> dict:
         """Apply parameter changes to workflow."""
         import copy
-        modified = copy.deepcopy(workflow)
+        modified = copy.deepcopy (workflow)
         
         for node_id, params in changes.items():
             if node_id in modified:
-                modified[node_id]["inputs"].update(params)
+                modified[node_id]["inputs"].update (params)
         
         return modified
     
@@ -586,24 +586,24 @@ class BatchGenerator:
         import itertools
         
         # Generate combinations
-        node_ids = list(parameter_ranges.keys())
-        param_names = list(parameter_ranges[node_ids[0]].keys())
+        node_ids = list (parameter_ranges.keys())
+        param_names = list (parameter_ranges[node_ids[0]].keys())
         
         results = {}
         for values in itertools.product(*[parameter_ranges[nid][p] for nid in node_ids for p in param_names]):
             # Build variation
             variation = {}
-            for i, nid in enumerate(node_ids):
+            for i, nid in enumerate (node_ids):
                 variation[nid] = {param_names[i]: values[i]}
             
             # Generate
-            images = self.generate_grid(workflow, [variation])
-            results[str(values)] = images[0]
+            images = self.generate_grid (workflow, [variation])
+            results[str (values)] = images[0]
         
         return results
 
 # Usage
-batch_gen = BatchGenerator(client)
+batch_gen = BatchGenerator (client)
 
 # Test different CFG values
 cfg_variations = [
@@ -613,7 +613,7 @@ cfg_variations = [
     {"5": {"cfg": 11}},
 ]
 
-cfg_results = batch_gen.generate_grid(base_workflow, cfg_variations)
+cfg_results = batch_gen.generate_grid (base_workflow, cfg_variations)
 \`\`\`
 
 ## Custom Nodes
@@ -648,9 +648,9 @@ class MyCustomNode:
     FUNCTION = "process"
     CATEGORY = "image/processing"
     
-    def process(self, image, strength):
+    def process (self, image, strength):
         # Your custom processing
-        processed = your_function(image, strength)
+        processed = your_function (image, strength)
         return (processed,)
 
 NODE_CLASS_MAPPINGS = {
@@ -675,23 +675,23 @@ class CustomEnhancer:
     FUNCTION = "enhance"
     CATEGORY = "image/enhancement"
     
-    def enhance(self, image, enhancement_type):
+    def enhance (self, image, enhancement_type):
         if enhancement_type == "sharpen":
-            return (self.sharpen(image),)
+            return (self.sharpen (image),)
         elif enhancement_type == "denoise":
-            return (self.denoise(image),)
+            return (self.denoise (image),)
         elif enhancement_type == "color_correct":
-            return (self.color_correct(image),)
+            return (self.color_correct (image),)
     
-    def sharpen(self, image):
+    def sharpen (self, image):
         # Sharpening logic
         return image
     
-    def denoise(self, image):
+    def denoise (self, image):
         # Denoising logic
         return image
     
-    def color_correct(self, image):
+    def color_correct (self, image):
         # Color correction logic
         return image
 ''

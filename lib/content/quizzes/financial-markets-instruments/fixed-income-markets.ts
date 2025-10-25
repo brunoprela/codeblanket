@@ -30,7 +30,7 @@ New price ≈ $98.10
 
 \`\`\`python
 class BondPortfolioHedge:
-    def calculate_duration_hedge(self, portfolio_value, portfolio_duration, hedge_instrument_duration):
+    def calculate_duration_hedge (self, portfolio_value, portfolio_duration, hedge_instrument_duration):
         """
         Duration-neutral hedge
         """
@@ -100,7 +100,7 @@ When 2-year > 10-year:
 
 \`\`\`python
 class YieldCurveTrading:
-    def curve_steepener_trade(self):
+    def curve_steepener_trade (self):
         """
         Bet on curve normalizing (steepening)
         """
@@ -111,7 +111,7 @@ class YieldCurveTrading:
             'sizing': 'Duration-neutral (offset rate risk, pure curve bet)'
         }
     
-    def recession_trade(self):
+    def recession_trade (self):
         """
         Position for recession
         """
@@ -122,7 +122,7 @@ class YieldCurveTrading:
             'commodities': 'Short cyclicals (demand drops)'
         }
     
-    def carry_trade(self):
+    def carry_trade (self):
         """
         Exploit inversion
         """
@@ -169,7 +169,7 @@ class CorporateBond:
         self.maturity = maturity_years
         self.rating = credit_rating
     
-    def cash_flows(self) -> List[tuple]:
+    def cash_flows (self) -> List[tuple]:
         """Generate (time, cash_flow) tuples"""
         flows = []
         # Coupons
@@ -179,7 +179,7 @@ class CorporateBond:
         flows[-1] = (self.maturity, flows[-1][1] + self.face_value)
         return flows
     
-    def price_with_zspread(self, treasury_curve, z_spread):
+    def price_with_zspread (self, treasury_curve, z_spread):
         """
         Price bond using Z-spread
         
@@ -189,7 +189,7 @@ class CorporateBond:
         pv = 0
         for t, cf in self.cash_flows():
             # Treasury rate at time t
-            treasury_rate = treasury_curve.get_rate(t)
+            treasury_rate = treasury_curve.get_rate (t)
             
             # Discount at Treasury rate + Z-spread
             discount_rate = treasury_rate + z_spread
@@ -197,31 +197,31 @@ class CorporateBond:
         
         return pv
     
-    def calculate_zspread(self, market_price, treasury_curve):
+    def calculate_zspread (self, market_price, treasury_curve):
         """
         Solve for Z-spread that makes PV = market price
         """
-        def objective(z):
-            return abs(self.price_with_zspread(treasury_curve, z) - market_price)
+        def objective (z):
+            return abs (self.price_with_zspread (treasury_curve, z) - market_price)
         
-        result = minimize_scalar(objective, bounds=(0, 0.10), method='bounded')
+        result = minimize_scalar (objective, bounds=(0, 0.10), method='bounded')
         return result.x
     
-    def calculate_duration(self, market_price, treasury_curve, z_spread):
+    def calculate_duration (self, market_price, treasury_curve, z_spread):
         """
         Modified duration: % price change for 1% yield change
         """
         # Calculate weighted average time to cash flows
         pv_weighted_time = 0
         for t, cf in self.cash_flows():
-            rate = treasury_curve.get_rate(t) + z_spread
+            rate = treasury_curve.get_rate (t) + z_spread
             pv = cf / ((1 + rate) ** t)
             pv_weighted_time += t * pv
         
         macaulay_duration = pv_weighted_time / market_price
         
         # Modified duration = Macaulay / (1 + yield)
-        ytm = treasury_curve.get_rate(self.maturity) + z_spread
+        ytm = treasury_curve.get_rate (self.maturity) + z_spread
         modified_duration = macaulay_duration / (1 + ytm)
         
         return {
@@ -230,14 +230,14 @@ class CorporateBond:
             'interpretation': f'{modified_duration:.2f}% price change per 1% yield change'
         }
     
-    def calculate_convexity(self, market_price, treasury_curve, z_spread):
+    def calculate_convexity (self, market_price, treasury_curve, z_spread):
         """
         Convexity: How duration changes as yields change
         Captures non-linear price/yield relationship
         """
         convexity = 0
         for t, cf in self.cash_flows():
-            rate = treasury_curve.get_rate(t) + z_spread
+            rate = treasury_curve.get_rate (t) + z_spread
             pv = cf / ((1 + rate) ** t)
             convexity += (t * (t + 1) * pv) / ((1 + rate) ** 2)
         
@@ -252,35 +252,35 @@ class CreditSpreadMonitor:
     def __init__(self):
         self.historical_spreads = {}  # symbol -> List[spread]
     
-    def update_spread(self, symbol, spread):
+    def update_spread (self, symbol, spread):
         """Add new spread observation"""
         if symbol not in self.historical_spreads:
             self.historical_spreads[symbol] = []
         
-        self.historical_spreads[symbol].append(spread)
+        self.historical_spreads[symbol].append (spread)
         
         # Keep rolling window (90 days)
-        if len(self.historical_spreads[symbol]) > 90:
+        if len (self.historical_spreads[symbol]) > 90:
             self.historical_spreads[symbol] = self.historical_spreads[symbol][-90:]
     
-    def detect_anomaly(self, symbol, current_spread):
+    def detect_anomaly (self, symbol, current_spread):
         """
         Alert if spread > 2 standard deviations from mean
         """
         if symbol not in self.historical_spreads:
             return None
         
-        history = np.array(self.historical_spreads[symbol])
+        history = np.array (self.historical_spreads[symbol])
         
-        if len(history) < 30:  # Need minimum history
+        if len (history) < 30:  # Need minimum history
             return None
         
-        mean = np.mean(history)
-        std = np.std(history)
+        mean = np.mean (history)
+        std = np.std (history)
         
         z_score = (current_spread - mean) / std if std > 0 else 0
         
-        if abs(z_score) > 2:
+        if abs (z_score) > 2:
             return {
                 'alert': True,
                 'symbol': symbol,
@@ -288,7 +288,7 @@ class CreditSpreadMonitor:
                 'mean_spread_bps': mean * 10000,
                 'std_bps': std * 10000,
                 'z_score': z_score,
-                'severity': 'HIGH' if abs(z_score) > 3 else 'MEDIUM',
+                'severity': 'HIGH' if abs (z_score) > 3 else 'MEDIUM',
                 'interpretation': 'Credit deteriorating' if z_score > 0 else 'Tightening unusually'
             }
         
@@ -299,7 +299,7 @@ class TreasuryCurve:
     def __init__(self, rates_by_maturity):
         self.rates = rates_by_maturity  # {1: 0.03, 2: 0.035, ...}
     
-    def get_rate(self, maturity):
+    def get_rate (self, maturity):
         """Linear interpolation"""
         if maturity in self.rates:
             return self.rates[maturity]
@@ -309,7 +309,7 @@ class TreasuryCurve:
         upper = min([m for m in self.rates.keys() if m > maturity], default=None)
         
         if lower is None or upper is None:
-            return self.rates[min(self.rates.keys(), key=lambda k: abs(k - maturity))]
+            return self.rates[min (self.rates.keys(), key=lambda k: abs (k - maturity))]
         
         # Linear interpolation
         t = (maturity - lower) / (upper - lower)
@@ -334,16 +334,16 @@ bond = CorporateBond(
 market_price = 980  # Trading below par
 
 # Calculate Z-spread
-z_spread = bond.calculate_zspread(market_price, treasury_curve)
+z_spread = bond.calculate_zspread (market_price, treasury_curve)
 print(f"Z-Spread: {z_spread * 10000:.0f} bps")
 
 # Calculate duration
-duration = bond.calculate_duration(market_price, treasury_curve, z_spread)
+duration = bond.calculate_duration (market_price, treasury_curve, z_spread)
 print(f"Modified Duration: {duration['modified_duration']:.2f} years")
 print(f"{duration['interpretation']}")
 
 # Calculate convexity
-convexity = bond.calculate_convexity(market_price, treasury_curve, z_spread)
+convexity = bond.calculate_convexity (market_price, treasury_curve, z_spread)
 print(f"Convexity: {convexity:.2f}")
 
 # Monitor spreads

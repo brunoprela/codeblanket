@@ -29,7 +29,7 @@ export const langgraphagentorchestrationMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      "Conditional edges in LangGraph use a routing function passed to `add_conditional_edges()`. This function receives the current state and returns the name of the next node. Options A, C, and D reflect misunderstandings of LangGraph's conditional routing API.",
+      "Conditional edges in LangGraph use a routing function passed to `add_conditional_edges()`. This function receives the current state and returns the name of the next node. Options A, C, and D reflect misunderstandings of LangGraph\'s conditional routing API.",
   },
   {
     id: 'maas-langgraph-mc-3',

@@ -56,7 +56,7 @@ This comprehensive section covers **150+ classic and advanced probability proble
 
 ### 4. Geometric Probability (20+ problems)
 - Broken stick problems
-- Buffon's needle and variants
+- Buffon\'s needle and variants
 - Random triangles and polygons
 - Meeting time problems
 - Continuous distributions
@@ -159,7 +159,7 @@ This comprehensive section covers **150+ classic and advanced probability proble
 
 **Setup:** You're on a game show with 3 doors. Behind one is a car, behind the other two are goats. You choose door 1. The host (Monty Hall), who knows what's behind each door, opens door 3 to reveal a goat. He then asks: "Would you like to switch to door 2?"
 
-**Question:** Should you switch? What's the probability you win the car if you switch?
+**Question:** Should you switch? What\'s the probability you win the car if you switch?
 
 ---
 
@@ -167,7 +167,7 @@ This comprehensive section covers **150+ classic and advanced probability proble
 
 Most people's initial instinct: "It doesn't matter, it's 50-50 now."
 
-**This is wrong!** Here's why:
+**This is wrong!** Here\'s why:
 
 ---
 
@@ -190,7 +190,7 @@ The key insight: **The host's action gives you information, but it doesn't chang
 
 **Rigorous Solution - Method 1 (Enumeration):**
 
-Let's list all possible scenarios:
+Let\'s list all possible scenarios:
 
 \`\`\`
 Scenario | Car Location | You Choose | Host Opens | Switch Result
@@ -251,14 +251,14 @@ class MontyHallResult:
     total_trials: int
     
     @property
-    def stay_win_rate(self) -> float:
+    def stay_win_rate (self) -> float:
         return self.stay_wins / self.total_trials
     
     @property
-    def switch_win_rate(self) -> float:
+    def switch_win_rate (self) -> float:
         return self.switch_wins / self.total_trials
 
-def monty_hall_game(switch: bool, verbose: bool = False) -> bool:
+def monty_hall_game (switch: bool, verbose: bool = False) -> bool:
     """
     Simulate one game of Monty Hall.
     
@@ -285,7 +285,7 @@ def monty_hall_game(switch: bool, verbose: bool = False) -> bool:
     
     # If player initially chose the car, host has 2 options
     # If player initially chose a goat, host has only 1 option
-    host_opens = random.choice(available_doors)
+    host_opens = random.choice (available_doors)
     
     if verbose:
         print(f"Host opens door {host_opens} (revealing a goat)")
@@ -308,15 +308,15 @@ def monty_hall_game(switch: bool, verbose: bool = False) -> bool:
     
     return won
 
-def run_simulation(n_trials: int = 100000) -> MontyHallResult:
+def run_simulation (n_trials: int = 100000) -> MontyHallResult:
     """Run comprehensive Monty Hall simulation."""
     stay_wins = 0
     switch_wins = 0
     
-    for _ in range(n_trials):
-        if monty_hall_game(switch=False):
+    for _ in range (n_trials):
+        if monty_hall_game (switch=False):
             stay_wins += 1
-        if monty_hall_game(switch=True):
+        if monty_hall_game (switch=True):
             switch_wins += 1
     
     return MontyHallResult(
@@ -336,11 +336,11 @@ print("="*60)
 print("\nExample games:\n")
 for i in range(3):
     print(f"--- Game {i+1} (switching) ---")
-    monty_hall_game(switch=True, verbose=True)
+    monty_hall_game (switch=True, verbose=True)
 
 # Large-scale simulation
 n_trials = 1_000_000
-result = run_simulation(n_trials)
+result = run_simulation (n_trials)
 
 print("\n" + "="*60)
 print(f"Results from {n_trials:,} trials:")
@@ -426,7 +426,7 @@ Advantage of switching: 2.00x
 **Python: 100-Door Variation:**
 
 \`\`\`python
-def monty_hall_n_doors(n_doors: int = 100, n_trials: int = 100000) -> Tuple[float, float]:
+def monty_hall_n_doors (n_doors: int = 100, n_trials: int = 100000) -> Tuple[float, float]:
     """
     Generalized Monty Hall with n doors.
     Host opens n-2 doors after your choice.
@@ -434,7 +434,7 @@ def monty_hall_n_doors(n_doors: int = 100, n_trials: int = 100000) -> Tuple[floa
     stay_wins = 0
     switch_wins = 0
     
-    for _ in range(n_trials):
+    for _ in range (n_trials):
         # Car behind random door
         car_door = random.randint(1, n_doors)
         
@@ -455,7 +455,7 @@ def monty_hall_n_doors(n_doors: int = 100, n_trials: int = 100000) -> Tuple[floa
 
 # Test with different numbers of doors
 for n in [3, 10, 100, 1000]:
-    stay_rate, switch_rate = monty_hall_n_doors(n, 500000)
+    stay_rate, switch_rate = monty_hall_n_doors (n, 500000)
     theoretical_stay = 1/n
     theoretical_switch = (n-1)/n
     print(f"\n{n} doors:")
@@ -479,7 +479,7 @@ This problem is fundamentally about **information asymmetry** and **Bayesian upd
 
 **Question:** How many people must be in a room for there to be a greater than 50% probability that at least two share a birthday?
 
-**Hint 1:** It's easier to calculate the probability that ALL birthdays are different.
+**Hint 1:** It\'s easier to calculate the probability that ALL birthdays are different.
 
 **Hint 2:** Use the complement rule: P(at least one match) = 1 - P(no matches)
 
@@ -523,7 +523,7 @@ n=70: P(match) ≈ 0.999 (99.9%)
 
 **Why is this counterintuitive?**
 
-People often think linearly: "365 days, so you'd need ~183 people for 50% chance." But the number of possible pairs grows quadratically: with n people, there are n(n-1)/2 pairs.
+People often think linearly: "365 days, so you'd need ~183 people for 50% chance." But the number of possible pairs grows quadratically: with n people, there are n (n-1)/2 pairs.
 
 For 23 people: 23 × 22 / 2 = 253 pairs of people who might share a birthday!
 
@@ -540,7 +540,7 @@ from scipy.special import perm, comb
 import matplotlib.pyplot as plt
 from typing import List, Tuple
 
-def birthday_probability_analytical(n_people: int, n_days: int = 365) -> float:
+def birthday_probability_analytical (n_people: int, n_days: int = 365) -> float:
     """
     Calculate probability of at least one birthday match analytically.
     
@@ -559,13 +559,13 @@ def birthday_probability_analytical(n_people: int, n_days: int = 365) -> float:
     
     # Calculate P(all different)
     prob_all_different = 1.0
-    for i in range(n_people):
+    for i in range (n_people):
         prob_all_different *= (n_days - i) / n_days
     
     # P(at least one match) = 1 - P(all different)
     return 1 - prob_all_different
 
-def birthday_probability_exact(n_people: int, n_days: int = 365) -> float:
+def birthday_probability_exact (n_people: int, n_days: int = 365) -> float:
     """
     Calculate exact probability using factorial formula.
     More numerically stable for large n.
@@ -578,14 +578,14 @@ def birthday_probability_exact(n_people: int, n_days: int = 365) -> float:
     # P(all different) = n_days! / [(n_days - n_people)! * n_days^n_people]
     # Use log to avoid overflow
     log_prob_all_different = (
-        sum(np.log(n_days - i) for i in range(n_people)) - 
-        n_people * np.log(n_days)
+        sum (np.log (n_days - i) for i in range (n_people)) - 
+        n_people * np.log (n_days)
     )
     
-    prob_all_different = np.exp(log_prob_all_different)
+    prob_all_different = np.exp (log_prob_all_different)
     return 1 - prob_all_different
 
-def birthday_simulation(n_people: int, n_trials: int = 100000, n_days: int = 365) -> float:
+def birthday_simulation (n_people: int, n_trials: int = 100000, n_days: int = 365) -> float:
     """
     Simulate birthday paradox.
     
@@ -593,26 +593,26 @@ def birthday_simulation(n_people: int, n_trials: int = 100000, n_days: int = 365
         Estimated probability of at least one match
     """
     matches = 0
-    for _ in range(n_trials):
+    for _ in range (n_trials):
         # Generate random birthdays
         birthdays = np.random.randint(0, n_days, n_people)
         
         # Check for duplicates
-        if len(birthdays) != len(set(birthdays)):
+        if len (birthdays) != len (set (birthdays)):
             matches += 1
     
     return matches / n_trials
 
-def find_threshold_n(target_prob: float = 0.5, n_days: int = 365) -> int:
+def find_threshold_n (target_prob: float = 0.5, n_days: int = 365) -> int:
     """
     Find minimum n where P(match) >= target_prob.
     """
     n = 2
-    while birthday_probability_analytical(n, n_days) < target_prob:
+    while birthday_probability_analytical (n, n_days) < target_prob:
         n += 1
     return n
 
-def expected_matches(n_people: int, n_days: int = 365) -> float:
+def expected_matches (n_people: int, n_days: int = 365) -> float:
     """
     Calculate expected number of matching pairs.
     """
@@ -630,10 +630,10 @@ print("n people | Analytical | Simulated | # Pairs | Expected Matches")
 print("-"*70)
 
 for n in [10, 20, 23, 30, 40, 50, 60, 70, 100]:
-    analytical = birthday_probability_analytical(n)
-    simulated = birthday_simulation(n, n_trials=200000)
+    analytical = birthday_probability_analytical (n)
+    simulated = birthday_simulation (n, n_trials=200000)
     n_pairs = n * (n-1) // 2
-    exp_matches = expected_matches(n)
+    exp_matches = expected_matches (n)
     
     print(f"{n:3d}      | {analytical:.4f}     | {simulated:.4f}    | "
           f"{n_pairs:4d}    | {exp_matches:.2f}")
@@ -644,8 +644,8 @@ print("Minimum people needed for different probability thresholds:")
 print("="*70)
 
 for target_prob in [0.25, 0.5, 0.75, 0.9, 0.95, 0.99]:
-    n_needed = find_threshold_n(target_prob)
-    actual_prob = birthday_probability_analytical(n_needed)
+    n_needed = find_threshold_n (target_prob)
+    actual_prob = birthday_probability_analytical (n_needed)
     print(f"P >= {target_prob:.0%}: n = {n_needed:2d} people "
           f"(actual probability: {actual_prob:.4f})")
 
@@ -653,15 +653,15 @@ for target_prob in [0.25, 0.5, 0.75, 0.9, 0.95, 0.99]:
 def plot_birthday_paradox():
     """Create visualization of birthday paradox."""
     n_values = range(1, 101)
-    probabilities = [birthday_probability_analytical(n) for n in n_values]
+    probabilities = [birthday_probability_analytical (n) for n in n_values]
     
-    plt.figure(figsize=(12, 6))
+    plt.figure (figsize=(12, 6))
     
     # Main plot
     plt.subplot(1, 2, 1)
-    plt.plot(n_values, probabilities, 'b-', linewidth=2)
-    plt.axhline(y=0.5, color='r', linestyle='--', label='50% threshold')
-    plt.axvline(x=23, color='g', linestyle='--', label='n=23')
+    plt.plot (n_values, probabilities, 'b-', linewidth=2)
+    plt.axhline (y=0.5, color='r', linestyle='--', label='50% threshold')
+    plt.axvline (x=23, color='g', linestyle='--', label='n=23')
     plt.scatter([23], [birthday_probability_analytical(23)], 
                 color='red', s=100, zorder=5)
     plt.xlabel('Number of People', fontsize=12)
@@ -673,7 +673,7 @@ def plot_birthday_paradox():
     # Number of pairs
     plt.subplot(1, 2, 2)
     pairs = [n*(n-1)//2 for n in n_values]
-    plt.plot(n_values, pairs, 'g-', linewidth=2)
+    plt.plot (n_values, pairs, 'g-', linewidth=2)
     plt.xlabel('Number of People', fontsize=12)
     plt.ylabel('Number of Pairs', fontsize=12)
     plt.title('Number of Possible Matching Pairs', fontsize=14)
@@ -766,7 +766,7 @@ For d=365: n ≈ 1.18√365 ≈ 22.5 ✓
 
 #### Problem 3A: Sum of Two Dice
 
-**Question:** You roll two fair six-sided dice. What's the probability that:
+**Question:** You roll two fair six-sided dice. What\'s the probability that:
 a) The sum is 7?
 b) The sum is even?
 c) At least one die shows a 6?
@@ -831,12 +831,12 @@ def analyze_two_dice():
                 'die2': d2,
                 'sum': d1 + d2,
                 'product': d1 * d2,
-                'max': max(d1, d2),
-                'min': min(d1, d2),
-                'diff': abs(d1 - d2)
+                'max': max (d1, d2),
+                'min': min (d1, d2),
+                'diff': abs (d1 - d2)
             })
     
-    n_total = len(outcomes)
+    n_total = len (outcomes)
     
     print("="*70)
     print("TWO DICE ANALYSIS")
@@ -853,7 +853,7 @@ def analyze_two_dice():
         count = sum_counts[s]
         prob = count / n_total
         ways = [(o['die1'], o['die2']) for o in outcomes if o['sum'] == s]
-        print(f"{s:2d}  |  {count:2d}   | {prob:6.4f}      | {ways[:3]}{'...' if len(ways) > 3 else ''}")
+        print(f"{s:2d}  |  {count:2d}   | {prob:6.4f}      | {ways[:3]}{'...' if len (ways) > 3 else ''}")
     
     # Product distribution
     print("\n\nPRODUCT DISTRIBUTION (most common):")
@@ -923,7 +923,7 @@ outcomes = analyze_two_dice()
 
 **Question:** You repeatedly roll a fair die. On average, how many rolls until you've seen all 6 faces at least once?
 
-**This is the famous Coupon Collector's Problem!**
+**This is the famous Coupon Collector\'s Problem!**
 
 **Solution:**
 
@@ -954,7 +954,7 @@ E[T] = n × H_n
 
 where H_n = 1 + 1/2 + 1/3 + ... + 1/n (the n-th harmonic number)
 
-For large n: H_n ≈ ln(n) + γ, where γ ≈ 0.5772 (Euler-Mascheroni constant)
+For large n: H_n ≈ ln (n) + γ, where γ ≈ 0.5772 (Euler-Mascheroni constant)
 
 \`\`\`python
 """
@@ -964,35 +964,35 @@ Coupon Collector Problem: Dice Edition
 import numpy as np
 from typing import List
 
-def coupon_collector_analytical(n_faces: int = 6) -> float:
+def coupon_collector_analytical (n_faces: int = 6) -> float:
     """Calculate expected rolls to see all faces."""
     harmonic = sum(1/i for i in range(1, n_faces + 1))
     return n_faces * harmonic
 
-def coupon_collector_simulation(n_faces: int = 6, n_trials: int = 100000) -> tuple:
+def coupon_collector_simulation (n_faces: int = 6, n_trials: int = 100000) -> tuple:
     """Simulate coupon collector problem."""
     rolls_needed = []
     
-    for _ in range(n_trials):
+    for _ in range (n_trials):
         seen = set()
         rolls = 0
         
-        while len(seen) < n_faces:
+        while len (seen) < n_faces:
             roll = np.random.randint(1, n_faces + 1)
-            seen.add(roll)
+            seen.add (roll)
             rolls += 1
         
-        rolls_needed.append(rolls)
+        rolls_needed.append (rolls)
     
-    return np.mean(rolls_needed), np.std(rolls_needed), np.median(rolls_needed)
+    return np.mean (rolls_needed), np.std (rolls_needed), np.median (rolls_needed)
 
 # Analysis
 print("COUPON COLLECTOR: How many rolls to see all faces?")
 print("="*70)
 
 for n in [2, 4, 6, 10, 20, 52]:  # 52 for deck of cards analogy
-    analytical = coupon_collector_analytical(n)
-    simulated, std, median = coupon_collector_simulation(n, 100000)
+    analytical = coupon_collector_analytical (n)
+    simulated, std, median = coupon_collector_simulation (n, 100000)
     
     print(f"\nn = {n:2d}:")
     print(f"  Analytical: {analytical:.2f} rolls")
@@ -1012,7 +1012,7 @@ for n in [2, 4, 6, 10, 20, 52]:  # 52 for deck of cards analogy
 
 #### Problem 4A: Expected Length of Longest Streak
 
-**Question:** You flip a fair coin 100 times. What's the expected length of the longest streak of consecutive heads (or tails)?
+**Question:** You flip a fair coin 100 times. What\'s the expected length of the longest streak of consecutive heads (or tails)?
 
 **This is surprisingly hard analytically!**
 
@@ -1124,69 +1124,69 @@ import numpy as np
 from collections import deque
 from typing import List, Tuple
 
-def longest_streak(sequence: List[int]) -> int:
+def longest_streak (sequence: List[int]) -> int:
     """Find longest consecutive run of same value."""
-    if len(sequence) == 0:
+    if len (sequence) == 0:
         return 0
     
     max_streak = 1
     current_streak = 1
     
-    for i in range(1, len(sequence)):
+    for i in range(1, len (sequence)):
         if sequence[i] == sequence[i-1]:
             current_streak += 1
-            max_streak = max(max_streak, current_streak)
+            max_streak = max (max_streak, current_streak)
         else:
             current_streak = 1
     
     return max_streak
 
-def expected_longest_streak(n_flips: int, n_trials: int = 50000) -> Tuple[float, float]:
+def expected_longest_streak (n_flips: int, n_trials: int = 50000) -> Tuple[float, float]:
     """Estimate expected longest streak via simulation."""
     streaks = []
-    for _ in range(n_trials):
+    for _ in range (n_trials):
         flips = np.random.randint(0, 2, n_flips)
-        streaks.append(longest_streak(flips))
+        streaks.append (longest_streak (flips))
     
-    return np.mean(streaks), np.std(streaks)
+    return np.mean (streaks), np.std (streaks)
 
-def wait_for_pattern(pattern: str, max_flips: int = 10000) -> int:
+def wait_for_pattern (pattern: str, max_flips: int = 10000) -> int:
     """
     Count flips until pattern appears.
     pattern: string like 'HH' or 'HT'
     Returns: number of flips (or max_flips if pattern doesn't appear)
     """
     pattern_bits = [1 if c == 'H' else 0 for c in pattern]
-    pattern_len = len(pattern_bits)
+    pattern_len = len (pattern_bits)
     
-    recent = deque(maxlen=pattern_len)
+    recent = deque (maxlen=pattern_len)
     
     for flip_count in range(1, max_flips + 1):
         flip = np.random.randint(0, 2)
-        recent.append(flip)
+        recent.append (flip)
         
-        if len(recent) == pattern_len and list(recent) == pattern_bits:
+        if len (recent) == pattern_len and list (recent) == pattern_bits:
             return flip_count
     
     return max_flips
 
-def compare_patterns(pattern1: str, pattern2: str, n_trials: int = 100000):
+def compare_patterns (pattern1: str, pattern2: str, n_trials: int = 100000):
     """Compare expected waiting times for two patterns."""
-    waits1 = [wait_for_pattern(pattern1) for _ in range(n_trials)]
-    waits2 = [wait_for_pattern(pattern2) for _ in range(n_trials)]
+    waits1 = [wait_for_pattern (pattern1) for _ in range (n_trials)]
+    waits2 = [wait_for_pattern (pattern2) for _ in range (n_trials)]
     
     print(f"\nPattern {pattern1}:")
-    print(f"  Mean:   {np.mean(waits1):.2f} flips")
-    print(f"  Median: {np.median(waits1):.2f} flips")
-    print(f"  Std:    {np.std(waits1):.2f}")
+    print(f"  Mean:   {np.mean (waits1):.2f} flips")
+    print(f"  Median: {np.median (waits1):.2f} flips")
+    print(f"  Std:    {np.std (waits1):.2f}")
     
     print(f"\nPattern {pattern2}:")
-    print(f"  Mean:   {np.mean(waits2):.2f} flips")
-    print(f"  Median: {np.median(waits2):.2f} flips")
-    print(f"  Std:    {np.std(waits2):.2f}")
+    print(f"  Mean:   {np.mean (waits2):.2f} flips")
+    print(f"  Median: {np.median (waits2):.2f} flips")
+    print(f"  Std:    {np.std (waits2):.2f}")
     
     print(f"\nP({pattern1} appears first): "
-          f"{np.mean([w1 < w2 for w1, w2 in zip(waits1, waits2)]):.4f}")
+          f"{np.mean([w1 < w2 for w1, w2 in zip (waits1, waits2)]):.4f}")
 
 # Analysis 1: Longest streak
 print("="*70)
@@ -1194,7 +1194,7 @@ print("LONGEST STREAK ANALYSIS")
 print("="*70)
 
 for n in [10, 50, 100, 500, 1000]:
-    mean_streak, std_streak = expected_longest_streak(n, 50000)
+    mean_streak, std_streak = expected_longest_streak (n, 50000)
     theoretical = np.log2(n)
     print(f"\nn={n:4d} flips:")
     print(f"  Simulated:   {mean_streak:.2f} ± {std_streak:.2f}")
@@ -1210,9 +1210,9 @@ patterns = ['H', 'HT', 'TH', 'HH', 'TT', 'HTH', 'HTT', 'HHH', 'TTT']
 print("\nExpected flips until pattern appears:\n")
 
 for pattern in patterns:
-    waits = [wait_for_pattern(pattern) for _ in range(100000)]
-    mean_wait = np.mean(waits)
-    median_wait = np.median(waits)
+    waits = [wait_for_pattern (pattern) for _ in range(100000)]
+    mean_wait = np.mean (waits)
+    median_wait = np.median (waits)
     print(f"Pattern '{pattern}': {mean_wait:.2f} flips (median: {median_wait:.0f})")
 
 # Analysis 3: Pattern comparisons

@@ -57,7 +57,7 @@ export const hypothesistestingMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Statistical power = 1 - β = P(Reject H₀ | H₀ is false). It's the probability of correctly detecting a real effect when one exists. Higher power means fewer Type II errors (false negatives). Power depends on sample size, effect size, and significance level.",
+      "Statistical power = 1 - β = P(Reject H₀ | H₀ is false). It\'s the probability of correctly detecting a real effect when one exists. Higher power means fewer Type II errors (false negatives). Power depends on sample size, effect size, and significance level.",
   },
   {
     id: 'mc5',

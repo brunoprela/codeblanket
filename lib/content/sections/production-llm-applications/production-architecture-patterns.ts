@@ -129,8 +129,8 @@ app.conf.result_serializer = 'json'
 app.conf.task_track_started = True
 app.conf.task_time_limit = 600  # 10 minute timeout
 
-@app.task(bind=True, max_retries=3)
-def process_document_with_llm(self, document_id: str, prompt: str):
+@app.task (bind=True, max_retries=3)
+def process_document_with_llm (self, document_id: str, prompt: str):
     """
     Process a document with an LLM in the background.
     
@@ -141,13 +141,13 @@ def process_document_with_llm(self, document_id: str, prompt: str):
     """
     try:
         # Update task state to indicate progress
-        self.update_state(state='PROCESSING', meta={'progress': 0})
+        self.update_state (state='PROCESSING', meta={'progress': 0})
         
         # Retrieve document from database
-        document = fetch_document(document_id)
+        document = fetch_document (document_id)
         
         # Update progress
-        self.update_state(state='PROCESSING', meta={'progress': 25})
+        self.update_state (state='PROCESSING', meta={'progress': 25})
         
         # Make LLM API call with retry logic
         response = openai.ChatCompletion.create(
@@ -160,7 +160,7 @@ def process_document_with_llm(self, document_id: str, prompt: str):
         )
         
         # Update progress
-        self.update_state(state='PROCESSING', meta={'progress': 75})
+        self.update_state (state='PROCESSING', meta={'progress': 75})
         
         # Store result
         result = {
@@ -170,20 +170,20 @@ def process_document_with_llm(self, document_id: str, prompt: str):
             'tokens_used': response.usage.total_tokens
         }
         
-        save_result(result)
+        save_result (result)
         
         # Complete
-        self.update_state(state='SUCCESS', meta={'progress': 100})
+        self.update_state (state='SUCCESS', meta={'progress': 100})
         
         return result
         
     except openai.error.RateLimitError as e:
         # Retry with exponential backoff for rate limits
-        logging.warning(f"Rate limit hit for document {document_id}, retrying...")
-        raise self.retry(exc=e, countdown=60 * (2 ** self.request.retries))
+        logging.warning (f"Rate limit hit for document {document_id}, retrying...")
+        raise self.retry (exc=e, countdown=60 * (2 ** self.request.retries))
         
     except Exception as e:
-        logging.error(f"Error processing document {document_id}: {str(e)}")
+        logging.error (f"Error processing document {document_id}: {str (e)}")
         raise
 
 
@@ -193,10 +193,10 @@ from fastapi import FastAPI, BackgroundTasks
 app = FastAPI()
 
 @app.post("/process-document")
-async def submit_document_processing(document_id: str, prompt: str):
+async def submit_document_processing (document_id: str, prompt: str):
     """Submit a document processing job."""
     # Submit to queue
-    task = process_document_with_llm.delay(document_id, prompt)
+    task = process_document_with_llm.delay (document_id, prompt)
     
     return {
         "task_id": task.id,
@@ -206,9 +206,9 @@ async def submit_document_processing(document_id: str, prompt: str):
 
 
 @app.get("/status/{task_id}")
-async def check_task_status(task_id: str):
+async def check_task_status (task_id: str):
     """Check the status of a queued task."""
-    task = app.AsyncResult(task_id)
+    task = app.AsyncResult (task_id)
     
     if task.state == 'PENDING':
         return {"status": "pending", "progress": 0}
@@ -217,7 +217,7 @@ async def check_task_status(task_id: str):
     elif task.state == 'SUCCESS':
         return {"status": "complete", "result": task.result}
     elif task.state == 'FAILURE':
-        return {"status": "failed", "error": str(task.info)}
+        return {"status": "failed", "error": str (task.info)}
     
     return {"status": task.state}
 \`\`\`
@@ -262,7 +262,7 @@ class EventBus:
     
     def __init__(self, host: str = 'localhost'):
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=host)
+            pika.ConnectionParameters (host=host)
         )
         self.channel = self.connection.channel()
         
@@ -273,7 +273,7 @@ class EventBus:
             durable=True
         )
     
-    def publish_event(self, event_type: str, data: Dict[str, Any]):
+    def publish_event (self, event_type: str, data: Dict[str, Any]):
         """Publish an event to the bus."""
         event = {
             'type': event_type,
@@ -284,18 +284,18 @@ class EventBus:
         self.channel.basic_publish(
             exchange='llm_events',
             routing_key=event_type,
-            body=json.dumps(event),
+            body=json.dumps (event),
             properties=pika.BasicProperties(
                 delivery_mode=2,  # Make message persistent
             )
         )
         
-        logging.info(f"Published event: {event_type}")
+        logging.info (f"Published event: {event_type}")
     
-    def subscribe(self, event_pattern: str, handler: Callable):
+    def subscribe (self, event_pattern: str, handler: Callable):
         """Subscribe to events matching a pattern."""
         # Create a queue for this subscriber
-        result = self.channel.queue_declare(queue=', exclusive=True)
+        result = self.channel.queue_declare (queue=', exclusive=True)
         queue_name = result.method.queue
         
         # Bind queue to exchange with pattern
@@ -305,22 +305,22 @@ class EventBus:
             routing_key=event_pattern
         )
         
-        def callback(ch, method, properties, body):
-            event = json.loads(body)
+        def callback (ch, method, properties, body):
+            event = json.loads (body)
             try:
-                handler(event)
-                ch.basic_ack(delivery_tag=method.delivery_tag)
+                handler (event)
+                ch.basic_ack (delivery_tag=method.delivery_tag)
             except Exception as e:
-                logging.error(f"Error handling event: {str(e)}")
+                logging.error (f"Error handling event: {str (e)}")
                 # Reject and requeue
-                ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+                ch.basic_nack (delivery_tag=method.delivery_tag, requeue=True)
         
         self.channel.basic_consume(
             queue=queue_name,
             on_message_callback=callback
         )
         
-        logging.info(f"Subscribed to events: {event_pattern}")
+        logging.info (f"Subscribed to events: {event_pattern}")
         self.channel.start_consuming()
 
 
@@ -329,10 +329,10 @@ class EventBus:
 event_bus = EventBus()
 
 # Service 1: Upload handler
-def handle_document_upload(file_path: str, user_id: str):
+def handle_document_upload (file_path: str, user_id: str):
     """Handle document upload and trigger processing."""
     # Save file and create database record
-    document_id = save_document(file_path, user_id)
+    document_id = save_document (file_path, user_id)
     
     # Publish event
     event_bus.publish_event('document.uploaded', {
@@ -343,21 +343,21 @@ def handle_document_upload(file_path: str, user_id: str):
 
 
 # Service 2: Text extraction (subscribes to upload events)
-def extract_text_handler(event: Dict):
+def extract_text_handler (event: Dict):
     """Extract text from uploaded documents."""
     document_id = event['data']['document_id']
     file_path = event['data']['file_path']
     
     # Extract text
-    text = extract_text_from_file(file_path)
+    text = extract_text_from_file (file_path)
     
     # Save extracted text
-    update_document(document_id, text=text)
+    update_document (document_id, text=text)
     
     # Publish completion event
     event_bus.publish_event('document.text_extracted', {
         'document_id': document_id,
-        'text_length': len(text)
+        'text_length': len (text)
     })
 
 # Subscribe to upload events
@@ -365,12 +365,12 @@ def extract_text_handler(event: Dict):
 
 
 # Service 3: LLM analysis (subscribes to extraction events)
-def llm_analysis_handler(event: Dict):
+def llm_analysis_handler (event: Dict):
     """Analyze document with LLM."""
     document_id = event['data']['document_id']
     
     # Get document text
-    document = get_document(document_id)
+    document = get_document (document_id)
     
     # Call LLM
     response = openai.ChatCompletion.create(
@@ -384,7 +384,7 @@ def llm_analysis_handler(event: Dict):
     analysis = response.choices[0].message.content
     
     # Save analysis
-    update_document(document_id, analysis=analysis)
+    update_document (document_id, analysis=analysis)
     
     # Publish completion event
     event_bus.publish_event('document.analyzed', {
@@ -397,12 +397,12 @@ def llm_analysis_handler(event: Dict):
 
 
 # Service 4: Notification (subscribes to analysis events)
-def notification_handler(event: Dict):
+def notification_handler (event: Dict):
     """Send notification when analysis is complete."""
     document_id = event['data']['document_id']
     
     # Get document and user info
-    document = get_document(document_id)
+    document = get_document (document_id)
     
     # Send notification
     send_notification(
@@ -440,9 +440,9 @@ import json
 app = FastAPI()
 
 # External state storage
-redis_client = Redis(host='localhost', port=6379, db=0, decode_responses=True)
+redis_client = Redis (host='localhost', port=6379, db=0, decode_responses=True)
 
-def get_session_id(x_session_id: str = Header(...)) -> str:
+def get_session_id (x_session_id: str = Header(...)) -> str:
     """Extract session ID from header."""
     return x_session_id
 
@@ -450,7 +450,7 @@ def get_session_id(x_session_id: str = Header(...)) -> str:
 @app.post("/chat")
 async def chat_endpoint(
     message: str,
-    session_id: str = Depends(get_session_id)
+    session_id: str = Depends (get_session_id)
 ):
     """
     Stateless chat endpoint.
@@ -458,10 +458,10 @@ async def chat_endpoint(
     """
     # Retrieve conversation history from Redis
     history_key = f"conversation:{session_id}"
-    history_json = redis_client.get(history_key)
+    history_json = redis_client.get (history_key)
     
     if history_json:
-        conversation_history = json.loads(history_json)
+        conversation_history = json.loads (history_json)
     else:
         conversation_history = []
     
@@ -491,7 +491,7 @@ async def chat_endpoint(
     redis_client.setex(
         history_key,
         3600,
-        json.dumps(conversation_history)
+        json.dumps (conversation_history)
     )
     
     return {
@@ -534,7 +534,7 @@ from typing import AsyncGenerator
 
 app = FastAPI()
 
-async def generate_stream(prompt: str) -> AsyncGenerator[str, None]:
+async def generate_stream (prompt: str) -> AsyncGenerator[str, None]:
     """Stream LLM responses in real-time."""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -549,10 +549,10 @@ async def generate_stream(prompt: str) -> AsyncGenerator[str, None]:
 
 
 @app.post("/generate-realtime")
-async def realtime_generation(prompt: str):
+async def realtime_generation (prompt: str):
     """Real-time streaming generation."""
     return StreamingResponse(
-        generate_stream(prompt),
+        generate_stream (prompt),
         media_type="text/event-stream"
     )
 \`\`\`
@@ -581,11 +581,11 @@ import openai
 app = Celery('batch_processor', broker='redis://localhost:6379/0')
 
 @app.task
-def process_single_item(item_id: str, prompt_template: str) -> dict:
+def process_single_item (item_id: str, prompt_template: str) -> dict:
     """Process a single item with LLM."""
-    item = fetch_item(item_id)
+    item = fetch_item (item_id)
     
-    prompt = prompt_template.format(content=item.content)
+    prompt = prompt_template.format (content=item.content)
     
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -594,19 +594,19 @@ def process_single_item(item_id: str, prompt_template: str) -> dict:
     )
     
     result = response.choices[0].message.content
-    save_result(item_id, result)
+    save_result (item_id, result)
     
     return {"item_id": item_id, "status": "completed"}
 
 
-def process_batch(item_ids: List[str], prompt_template: str):
+def process_batch (item_ids: List[str], prompt_template: str):
     """
     Process a batch of items in parallel.
     Uses Celery groups for parallel execution.
     """
     # Create group of tasks
     job = group(
-        process_single_item.s(item_id, prompt_template)
+        process_single_item.s (item_id, prompt_template)
         for item_id in item_ids
     )
     
@@ -650,19 +650,19 @@ app = Celery('llm_workers')
 class LLMTask(Task):
     """Base task class with LLM-specific features."""
     
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
+    def on_failure (self, exc, task_id, args, kwargs, einfo):
         """Called when task fails."""
-        logging.error(f"Task {task_id} failed: {exc}")
+        logging.error (f"Task {task_id} failed: {exc}")
         # Send alert
-        send_alert(f"LLM task failed: {task_id}")
+        send_alert (f"LLM task failed: {task_id}")
     
-    def on_retry(self, exc, task_id, args, kwargs, einfo):
+    def on_retry (self, exc, task_id, args, kwargs, einfo):
         """Called when task is retried."""
-        logging.warning(f"Task {task_id} retrying: {exc}")
+        logging.warning (f"Task {task_id} retrying: {exc}")
     
-    def on_success(self, retval, task_id, args, kwargs):
+    def on_success (self, retval, task_id, args, kwargs):
         """Called when task succeeds."""
-        logging.info(f"Task {task_id} completed successfully")
+        logging.info (f"Task {task_id} completed successfully")
 
 
 @app.task(
@@ -672,7 +672,7 @@ class LLMTask(Task):
     default_retry_delay=60,
     rate_limit='100/m'  # Max 100 tasks per minute
 )
-def generate_content(self, prompt: str, model: str = "gpt-3.5-turbo"):
+def generate_content (self, prompt: str, model: str = "gpt-3.5-turbo"):
     """
     Generate content with retry logic and error handling.
     """
@@ -702,17 +702,17 @@ def generate_content(self, prompt: str, model: str = "gpt-3.5-turbo"):
         
     except openai.error.RateLimitError as e:
         # Retry with exponential backoff
-        logging.warning(f"Rate limit hit, retrying task {self.request.id}")
-        raise self.retry(exc=e, countdown=60 * (2 ** self.request.retries))
+        logging.warning (f"Rate limit hit, retrying task {self.request.id}")
+        raise self.retry (exc=e, countdown=60 * (2 ** self.request.retries))
         
     except openai.error.APIError as e:
         # Retry on API errors
-        logging.error(f"API error in task {self.request.id}: {str(e)}")
-        raise self.retry(exc=e)
+        logging.error (f"API error in task {self.request.id}: {str (e)}")
+        raise self.retry (exc=e)
         
     except Exception as e:
         # Don't retry on other exceptions
-        logging.error(f"Unexpected error in task {self.request.id}: {str(e)}")
+        logging.error (f"Unexpected error in task {self.request.id}: {str (e)}")
         raise
 
 
@@ -754,7 +754,7 @@ import logging
 app = FastAPI()
 
 # Rate limiting storage
-rate_limits = defaultdict(list)
+rate_limits = defaultdict (list)
 
 class APIGateway:
     """API Gateway implementation."""
@@ -765,7 +765,7 @@ class APIGateway:
             'cache': 'http://cache-service:8002',
             'database': 'http://db-service:8003'
         }
-        self.client = httpx.AsyncClient(timeout=30.0)
+        self.client = httpx.AsyncClient (timeout=30.0)
     
     async def route_request(
         self,
@@ -775,20 +775,20 @@ class APIGateway:
         **kwargs
     ):
         """Route request to appropriate service."""
-        base_url = self.services.get(service)
+        base_url = self.services.get (service)
         if not base_url:
-            raise HTTPException(status_code=404, detail="Service not found")
+            raise HTTPException (status_code=404, detail="Service not found")
         
         url = f"{base_url}{path}"
         
         try:
-            response = await self.client.request(method, url, **kwargs)
+            response = await self.client.request (method, url, **kwargs)
             return response.json()
         except httpx.TimeoutException:
-            raise HTTPException(status_code=504, detail="Service timeout")
+            raise HTTPException (status_code=504, detail="Service timeout")
         except Exception as e:
-            logging.error(f"Error routing to {service}: {str(e)}")
-            raise HTTPException(status_code=503, detail="Service unavailable")
+            logging.error (f"Error routing to {service}: {str (e)}")
+            raise HTTPException (status_code=503, detail="Service unavailable")
 
 
 gateway = APIGateway()
@@ -797,7 +797,7 @@ gateway = APIGateway()
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Rate limiting middleware."""
     
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch (self, request: Request, call_next):
         # Get API key from header
         api_key = request.headers.get('X-API-Key')
         
@@ -809,7 +809,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         
         # Check rate limit (100 requests per minute)
         now = datetime.utcnow()
-        minute_ago = now - timedelta(minutes=1)
+        minute_ago = now - timedelta (minutes=1)
         
         # Clean old requests
         rate_limits[api_key] = [
@@ -818,17 +818,17 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         ]
         
         # Check limit
-        if len(rate_limits[api_key]) >= 100:
+        if len (rate_limits[api_key]) >= 100:
             return JSONResponse(
                 status_code=429,
                 content={"error": "Rate limit exceeded"}
             )
         
         # Add current request
-        rate_limits[api_key].append(now)
+        rate_limits[api_key].append (now)
         
         # Process request
-        response = await call_next(request)
+        response = await call_next (request)
         return response
 
 
@@ -836,7 +836,7 @@ app.add_middleware(RateLimitMiddleware)
 
 
 @app.post("/api/v1/generate")
-async def generate_endpoint(prompt: str, request: Request):
+async def generate_endpoint (prompt: str, request: Request):
     """
     Generate content via API gateway.
     Routes to LLM service with caching and rate limiting.
@@ -848,7 +848,7 @@ async def generate_endpoint(prompt: str, request: Request):
         'cache',
         '/get',
         'POST',
-        json={'key': f"prompt:{hash(prompt)}"}
+        json={'key': f"prompt:{hash (prompt)}"}
     )
     
     if cache_response.get('hit'):
@@ -871,7 +871,7 @@ async def generate_endpoint(prompt: str, request: Request):
         '/set',
         'POST',
         json={
-            'key': f"prompt:{hash(prompt)}",
+            'key': f"prompt:{hash (prompt)}",
             'value': llm_response['result'],
             'ttl': 3600
         }

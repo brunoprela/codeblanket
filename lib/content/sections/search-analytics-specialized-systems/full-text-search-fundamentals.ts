@@ -147,17 +147,17 @@ The classic relevance algorithm has two components:
 
 **Term Frequency (TF)**: How often does the term appear in this document?
 - Intuition: If "machine learning" appears 10 times in a document, it's probably more relevant than if it appears once
-- Formula: \`tf(t, d) = frequency of term t in document d\`
-- Often normalized: \`tf(t, d) = sqrt(frequency)\` (diminishing returns)
+- Formula: \`tf (t, d) = frequency of term t in document d\`
+- Often normalized: \`tf (t, d) = sqrt (frequency)\` (diminishing returns)
 
 **Inverse Document Frequency (IDF)**: How rare is this term across all documents?
 - Intuition: "the" appears in every document (low IDF), but "elasticsearch" is rare (high IDF)
 - Rare terms are more discriminative
-- Formula: \`idf(t) = log(total_docs / docs_containing_term)\`
+- Formula: \`idf (t) = log (total_docs / docs_containing_term)\`
 
 **TF-IDF Score**:
 \`\`\`
-score(t, d) = tf(t, d) × idf(t)
+score (t, d) = tf (t, d) × idf (t)
 \`\`\`
 
 ### Example Calculation
@@ -314,7 +314,7 @@ Recall = Relevant Results Returned / Total Relevant Documents
 - Precision = 7/10 = 70%
 - Recall = 7/20 = 35%
 
-There's often a trade-off: Increasing recall (showing more results) may decrease precision (include less relevant results).
+There\'s often a trade-off: Increasing recall (showing more results) may decrease precision (include less relevant results).
 
 ### Mean Average Precision (MAP)
 

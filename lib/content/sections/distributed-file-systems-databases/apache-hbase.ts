@@ -202,7 +202,7 @@ Flush MemStore to HFile in HDFS
 
 **HFiles**:
 - Immutable sorted files on HDFS
-- Similar to BigTable's SSTables
+- Similar to BigTable\'s SSTables
 
 ---
 
@@ -271,7 +271,7 @@ row_key: Long.MAX_VALUE - timestamp
 
 ✅ **Hashed prefix**:
 \`\`\`
-row_key: hash(user_id) + user_id + timestamp
+row_key: hash (user_id) + user_id + timestamp
 → Writes distributed across regions
 \`\`\`
 
@@ -300,26 +300,26 @@ put.addColumn(
     Bytes.toBytes("name"),
     Bytes.toBytes("Alice")
 );
-table.put(put);
+table.put (put);
 
 // Get (read)
 Get get = new Get(Bytes.toBytes("row_123"));
-Result result = table.get(get);
+Result result = table.get (get);
 byte[] value = result.getValue(
     Bytes.toBytes("personal_info"),
     Bytes.toBytes("name")
 );
-String name = Bytes.toString(value);  // "Alice"
+String name = Bytes.toString (value);  // "Alice"
 
 // Delete
 Delete delete = new Delete(Bytes.toBytes("row_123"));
-table.delete(delete);
+table.delete (delete);
 
 // Scan (range query)
 Scan scan = new Scan();
 scan.setStartRow(Bytes.toBytes("row_100"));
 scan.setStopRow(Bytes.toBytes("row_200"));
-ResultScanner scanner = table.getScanner(scan);
+ResultScanner scanner = table.getScanner (scan);
 for (Result r : scanner) {
     // Process result
 }
@@ -436,7 +436,7 @@ Slow: Get by email (full table scan!)
 
 **1. Phoenix Secondary Indexes**:
 \`\`\`sql
-CREATE INDEX email_idx ON users(email);
+CREATE INDEX email_idx ON users (email);
 -- Now fast: SELECT * FROM users WHERE email = 'alice@example.com';
 \`\`\`
 
@@ -463,7 +463,7 @@ SingleColumnValueFilter filter = new SingleColumnValueFilter(
     CompareOperator.GREATER,
     Bytes.toBytes(25)
 );
-scan.setFilter(filter);
+scan.setFilter (filter);
 
 // RowFilter
 RowFilter rowFilter = new RowFilter(
@@ -473,8 +473,8 @@ RowFilter rowFilter = new RowFilter(
 
 // FilterList (AND/OR multiple filters)
 FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
-filterList.addFilter(filter1);
-filterList.addFilter(filter2);
+filterList.addFilter (filter1);
+filterList.addFilter (filter2);
 \`\`\`
 
 **Benefits**: Reduce data transferred to client
@@ -485,7 +485,7 @@ filterList.addFilter(filter2);
 
 ### Server-Side Processing
 
-**Coprocessors** = HBase's "stored procedures"
+**Coprocessors** = HBase\'s "stored procedures"
 
 **Two types**:
 
@@ -502,7 +502,7 @@ public class AuditObserver implements RegionObserver {
 **2. Endpoints** (like stored procedures):
 \`\`\`java
 public class AggregationEndpoint {
-    public long sum(column) {
+    public long sum (column) {
         // Sum values server-side
         return total;
     }
@@ -540,7 +540,7 @@ byte[][] splits = new byte[][] {
     Bytes.toBytes("row_2000"),
     Bytes.toBytes("row_3000")
 };
-admin.createTable(tableDescriptor, splits);
+admin.createTable (tableDescriptor, splits);
 \`\`\`
 
 ### 4. Bloom Filters

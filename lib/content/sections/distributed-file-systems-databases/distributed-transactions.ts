@@ -232,7 +232,7 @@ If majority responded:
 - ❌ Poor performance (many round trips)
 
 **Use cases**:
-- Chubby (Google's lock service)
+- Chubby (Google\'s lock service)
 - ZooKeeper (uses Zab, similar to Paxos)
 - Cassandra (lightweight transactions)
 

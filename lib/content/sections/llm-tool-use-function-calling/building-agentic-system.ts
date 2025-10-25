@@ -60,16 +60,16 @@ class AgentState(Enum):
 
 @dataclass
 class AgentMemory:
-    """Agent's memory of conversation and execution."""
-    messages: List[Dict[str, Any]] = field(default_factory=list)
-    tool_history: List[Dict[str, Any]] = field(default_factory=list)
-    facts: Dict[str, Any] = field(default_factory=dict)
+    """Agent\'s memory of conversation and execution."""
+    messages: List[Dict[str, Any]] = field (default_factory=list)
+    tool_history: List[Dict[str, Any]] = field (default_factory=list)
+    facts: Dict[str, Any] = field (default_factory=dict)
     
-    def add_message(self, role: str, content: str):
+    def add_message (self, role: str, content: str):
         """Add a message to memory."""
         self.messages.append({"role": role, "content": content})
     
-    def add_tool_call(self, tool_name: str, arguments: Dict, result: Any):
+    def add_tool_call (self, tool_name: str, arguments: Dict, result: Any):
         """Record a tool call."""
         self.tool_history.append({
             "tool": tool_name,
@@ -78,7 +78,7 @@ class AgentMemory:
             "timestamp": datetime.now().isoformat()
         })
     
-    def store_fact(self, key: str, value: Any):
+    def store_fact (self, key: str, value: Any):
         """Store a fact for later use."""
         self.facts[key] = value
 
@@ -103,7 +103,7 @@ class Agent:
         # Build system prompt
         self.system_prompt = self._build_system_prompt()
     
-    def _build_system_prompt(self) -> str:
+    def _build_system_prompt (self) -> str:
         """Build comprehensive system prompt."""
         prompt = """You are an intelligent agent that can use tools to accomplish goals.
 
@@ -140,7 +140,7 @@ You have memory of previous interactions. Use it to provide better answers.
         
         return prompt
     
-    def execute(self, user_goal: str) -> Dict[str, Any]:
+    def execute (self, user_goal: str) -> Dict[str, Any]:
         """
         Execute a goal using tools.
         
@@ -150,24 +150,24 @@ You have memory of previous interactions. Use it to provide better answers.
         Returns:
             Result including answer, steps taken, and metadata
         """
-        logger.info(f"Agent executing goal: {user_goal}")
+        logger.info (f"Agent executing goal: {user_goal}")
         
         self.state = AgentState.PLANNING
         self.memory.add_message("user", user_goal)
         
         try:
             # Planning phase
-            plan = self._plan(user_goal)
-            logger.info(f"Agent plan: {plan}")
+            plan = self._plan (user_goal)
+            logger.info (f"Agent plan: {plan}")
             
             # Execution phase
             self.state = AgentState.EXECUTING
-            result = self._execute_plan(plan)
+            result = self._execute_plan (plan)
             
             # Reflection phase (if enabled)
             if self.enable_reflection:
                 self.state = AgentState.REFLECTING
-                result = self._reflect(user_goal, result)
+                result = self._reflect (user_goal, result)
             
             self.state = AgentState.COMPLETED
             
@@ -175,20 +175,20 @@ You have memory of previous interactions. Use it to provide better answers.
                 "status": "success",
                 "answer": result,
                 "steps": self.memory.tool_history,
-                "iterations": len(self.memory.tool_history)
+                "iterations": len (self.memory.tool_history)
             }
         
         except Exception as e:
             self.state = AgentState.FAILED
-            logger.error(f"Agent failed: {e}")
+            logger.error (f"Agent failed: {e}")
             
             return {
                 "status": "error",
-                "error": str(e),
+                "error": str (e),
                 "steps": self.memory.tool_history
             }
     
-    def _plan(self, goal: str) -> str:
+    def _plan (self, goal: str) -> str:
         """Create a plan to accomplish the goal."""
         planning_prompt = f"""Given this goal: "{goal}"
 
@@ -213,15 +213,15 @@ Provide a clear plan."""
         
         return plan
     
-    def _execute_plan(self, plan: str) -> str:
+    def _execute_plan (self, plan: str) -> str:
         """Execute the plan using tools."""
         messages = [
             {"role": "system", "content": self.system_prompt},
             *self.memory.messages
         ]
         
-        for iteration in range(self.max_iterations):
-            logger.info(f"Agent iteration {iteration + 1}")
+        for iteration in range (self.max_iterations):
+            logger.info (f"Agent iteration {iteration + 1}")
             
             # Get next action
             response = openai.chat.completions.create(
@@ -234,38 +234,38 @@ Provide a clear plan."""
             message = response.choices[0].message
             
             # Add to messages
-            messages.append(message.to_dict())
+            messages.append (message.to_dict())
             
             # Check for tool call
             if message.function_call:
                 tool_name = message.function_call.name
-                tool_args = json.loads(message.function_call.arguments)
+                tool_args = json.loads (message.function_call.arguments)
                 
-                logger.info(f"Agent calling tool: {tool_name}({tool_args})")
+                logger.info (f"Agent calling tool: {tool_name}({tool_args})")
                 
                 # Execute tool
                 try:
-                    result = self._execute_tool(tool_name, tool_args)
+                    result = self._execute_tool (tool_name, tool_args)
                     
                     # Add result to messages
                     messages.append({
                         "role": "function",
                         "name": tool_name,
-                        "content": json.dumps(result)
+                        "content": json.dumps (result)
                     })
                     
                     # Store in memory
-                    self.memory.add_tool_call(tool_name, tool_args, result)
+                    self.memory.add_tool_call (tool_name, tool_args, result)
                 
                 except Exception as e:
-                    logger.error(f"Tool execution failed: {e}")
+                    logger.error (f"Tool execution failed: {e}")
                     
                     # Add error to messages
                     messages.append({
                         "role": "function",
                         "name": tool_name,
                         "content": json.dumps({
-                            "error": str(e),
+                            "error": str (e),
                             "suggestion": "Try a different approach"
                         })
                     })
@@ -279,18 +279,18 @@ Provide a clear plan."""
         # Max iterations reached
         return "I couldn't fully accomplish the goal within the iteration limit."
     
-    def _execute_tool(self, tool_name: str, arguments: Dict) -> Any:
+    def _execute_tool (self, tool_name: str, arguments: Dict) -> Any:
         """Execute a tool safely."""
         # Find tool
         tool = next((t for t in self.tools if t.name == tool_name), None)
         
         if not tool:
-            raise ValueError(f"Tool {tool_name} not found")
+            raise ValueError (f"Tool {tool_name} not found")
         
         # Execute
         return tool.execute(**arguments)
     
-    def _reflect(self, goal: str, result: str) -> str:
+    def _reflect (self, goal: str, result: str) -> str:
         """Reflect on the result and improve if needed."""
         reflection_prompt = f"""Goal: {goal}
 
@@ -322,13 +322,13 @@ If the answer is good, just say "The answer is complete."
         
         return result
     
-    def get_state(self) -> Dict[str, Any]:
+    def get_state (self) -> Dict[str, Any]:
         """Get current agent state."""
         return {
             "state": self.state.value,
-            "memory_size": len(self.memory.messages),
-            "tools_used": len(self.memory.tool_history),
-            "facts_stored": len(self.memory.facts)
+            "memory_size": len (self.memory.messages),
+            "tools_used": len (self.memory.tool_history),
+            "facts_stored": len (self.memory.facts)
         }
 
 # Create agent with tools
@@ -346,7 +346,7 @@ agent = Agent(
 )
 
 # Execute
-result = agent.execute("What's the weather in Tokyo and send a summary to john@example.com")
+result = agent.execute("What\'s the weather in Tokyo and send a summary to john@example.com")
 print(result["answer"])
 print(f"Steps taken: {result['iterations']}")
 \`\`\`
@@ -367,17 +367,17 @@ class HumanInTheLoopAgent(Agent):
         super().__init__(*args, **kwargs)
         self.approval_callback = approval_callback or self._default_approval
     
-    def _execute_tool(self, tool_name: str, arguments: Dict) -> Any:
+    def _execute_tool (self, tool_name: str, arguments: Dict) -> Any:
         """Execute tool with approval check."""
         # Find tool
         tool = next((t for t in self.tools if t.name == tool_name), None)
         
         if not tool:
-            raise ValueError(f"Tool {tool_name} not found")
+            raise ValueError (f"Tool {tool_name} not found")
         
         # Check if approval needed
         if tool.requires_approval:
-            approved = self.approval_callback(tool_name, arguments)
+            approved = self.approval_callback (tool_name, arguments)
             
             if not approved:
                 return {
@@ -388,16 +388,16 @@ class HumanInTheLoopAgent(Agent):
         # Execute
         return tool.execute(**arguments)
     
-    def _default_approval(self, tool_name: str, arguments: Dict) -> bool:
+    def _default_approval (self, tool_name: str, arguments: Dict) -> bool:
         """Default approval prompt."""
         print(f"\\nAgent wants to call: {tool_name}")
-        print(f"Arguments: {json.dumps(arguments, indent=2)}")
+        print(f"Arguments: {json.dumps (arguments, indent=2)}")
         
         response = input("Approve? (yes/no): ")
         return response.lower() in ["yes", "y"]
 
 # Usage
-def slack_approval(tool_name: str, arguments: Dict) -> bool:
+def slack_approval (tool_name: str, arguments: Dict) -> bool:
     """Send approval request to Slack."""
     # Send message to Slack
     # Wait for user response
@@ -427,9 +427,9 @@ class PersistentMemoryAgent(Agent):
         self.db_path = memory_db
         self._init_database()
     
-    def _init_database(self):
+    def _init_database (self):
         """Initialize memory database."""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -454,9 +454,9 @@ class PersistentMemoryAgent(Agent):
         conn.commit()
         conn.close()
     
-    def load_memory(self, user_id: str):
+    def load_memory (self, user_id: str):
         """Load memory for a user."""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Load recent conversations
@@ -476,13 +476,13 @@ class PersistentMemoryAgent(Agent):
         # Load facts
         cursor.execute("SELECT key, value FROM facts")
         for key, value in cursor.fetchall():
-            self.memory.facts[key] = json.loads(value)
+            self.memory.facts[key] = json.loads (value)
         
         conn.close()
     
-    def save_memory(self, user_id: str):
+    def save_memory (self, user_id: str):
         """Save memory to database."""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         cursor = conn.cursor()
         
         # Save messages
@@ -497,13 +497,13 @@ class PersistentMemoryAgent(Agent):
             cursor.execute("""
                 INSERT OR REPLACE INTO facts (key, value, timestamp)
                 VALUES (?, ?, ?)
-            """, (key, json.dumps(value), datetime.now().isoformat()))
+            """, (key, json.dumps (value), datetime.now().isoformat()))
         
         conn.commit()
         conn.close()
 
 # Usage
-persistent_agent = PersistentMemoryAgent(tools=all_tools)
+persistent_agent = PersistentMemoryAgent (tools=all_tools)
 
 # Load memory for user
 persistent_agent.load_memory("user_123")
@@ -526,19 +526,19 @@ class AgentCoordinator:
     def __init__(self):
         self.agents = {}
     
-    def register_agent(self, name: str, agent: Agent, specialization: str):
+    def register_agent (self, name: str, agent: Agent, specialization: str):
         """Register a specialized agent."""
         self.agents[name] = {
             "agent": agent,
             "specialization": specialization
         }
     
-    def execute(self, task: str) -> Dict[str, Any]:
+    def execute (self, task: str) -> Dict[str, Any]:
         """
         Route task to appropriate agent.
         """
         # Determine which agent to use
-        agent_name = self._select_agent(task)
+        agent_name = self._select_agent (task)
         
         if not agent_name:
             return {
@@ -548,7 +548,7 @@ class AgentCoordinator:
         
         # Execute with selected agent
         agent_info = self.agents[agent_name]
-        result = agent_info["agent"].execute(task)
+        result = agent_info["agent"].execute (task)
         
         return {
             **result,
@@ -556,7 +556,7 @@ class AgentCoordinator:
             "specialization": agent_info["specialization"]
         }
     
-    def _select_agent(self, task: str) -> str:
+    def _select_agent (self, task: str) -> str:
         """Select best agent for task using LLM."""
         agent_descriptions = "\\n".join([
             f"- {name}: {info['specialization']}"
@@ -635,7 +635,7 @@ class AgentService:
         self.metrics = MetricsCollector()
         self.cost_tracker = CostTracker()
     
-    async def execute_task(self, 
+    async def execute_task (self, 
                           task: str, 
                           user_id: str,
                           callback_url: Optional[str] = None):
@@ -644,7 +644,7 @@ class AgentService:
         
         try:
             # Execute
-            result = self.agent.execute(task)
+            result = self.agent.execute (task)
             
             # Track metrics
             execution_time = (time.time() - start_time) * 1000
@@ -664,18 +664,18 @@ class AgentService:
             
             # Callback if provided
             if callback_url:
-                requests.post(callback_url, json=result)
+                requests.post (callback_url, json=result)
             
             return result
         
         except Exception as e:
-            logger.exception(f"Agent execution failed: {e}")
+            logger.exception (f"Agent execution failed: {e}")
             raise
 
 agent_service = AgentService()
 
 @app.post("/agent/execute")
-async def execute_agent(request: TaskRequest, background_tasks: BackgroundTasks):
+async def execute_agent (request: TaskRequest, background_tasks: BackgroundTasks):
     """Execute agent task."""
     # Run in background
     background_tasks.add_task(
@@ -702,7 +702,7 @@ async def health_check():
 
 # Run service
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run (app, host="0.0.0.0", port=8000)
 \`\`\`
 
 ## Testing Agents
@@ -714,7 +714,7 @@ import pytest
 
 def test_agent_basic_execution():
     """Test basic agent execution."""
-    agent = Agent(tools=[calculator_tool])
+    agent = Agent (tools=[calculator_tool])
     
     result = agent.execute("Calculate 15% of 230")
     
@@ -723,19 +723,19 @@ def test_agent_basic_execution():
 
 def test_agent_tool_chaining():
     """Test agent can chain tools."""
-    agent = Agent(tools=[search_tool, summarize_tool])
+    agent = Agent (tools=[search_tool, summarize_tool])
     
     result = agent.execute("Search for Python and summarize the results")
     
     assert result["status"] == "success"
-    assert len(result["steps"]) >= 2
+    assert len (result["steps"]) >= 2
 
 def test_agent_error_recovery():
     """Test agent recovers from errors."""
     def failing_tool():
         raise Exception("Tool failed")
     
-    agent = Agent(tools=[Tool(name="failing", function=failing_tool, ...)])
+    agent = Agent (tools=[Tool (name="failing", function=failing_tool, ...)])
     
     result = agent.execute("Use the failing tool")
     
@@ -744,16 +744,16 @@ def test_agent_error_recovery():
 
 def test_agent_max_iterations():
     """Test agent respects max iterations."""
-    agent = Agent(tools=[], max_iterations=3)
+    agent = Agent (tools=[], max_iterations=3)
     
     result = agent.execute("Keep trying to find information")
     
-    assert len(result["steps"]) <= 3
+    assert len (result["steps"]) <= 3
 
 @pytest.mark.asyncio
 async def test_agent_concurrent_requests():
     """Test agent handles concurrent requests."""
-    agent = Agent(tools=all_tools)
+    agent = Agent (tools=all_tools)
     
     tasks = [
         agent.execute("Task 1"),
@@ -763,7 +763,7 @@ async def test_agent_concurrent_requests():
     
     results = await asyncio.gather(*tasks)
     
-    assert all(r["status"] == "success" for r in results)
+    assert all (r["status"] == "success" for r in results)
 \`\`\`
 
 ## Best Practices Summary

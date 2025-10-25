@@ -9,7 +9,7 @@ export const youtubearchitectureSection = {
 
 ## Overview
 
-YouTube's scale and challenges:
+YouTube\'s scale and challenges:
 - **2.5 billion users** worldwide
 - **500+ hours of video** uploaded every minute
 - **1 billion hours** watched daily
@@ -252,7 +252,7 @@ gs://youtube-videos/
 YouTube delivers videos via a global CDN for low latency.
 
 **YouTube CDN**:
-- Built on Google's infrastructure
+- Built on Google\'s infrastructure
 - Edge locations worldwide (1000s of PoPs)
 - Co-located with ISPs for minimal hops
 
@@ -643,7 +643,7 @@ With 500+ hours uploaded per minute, automated moderation (Content ID, spam dete
 
 ## Interview Tips
 
-**Q: How would you design YouTube's video upload and processing pipeline?**
+**Q: How would you design YouTube\'s video upload and processing pipeline?**
 
 A: Chunked resumable upload: Divide video into 5 MB chunks, upload in parallel, store in GCS. Generate video_id, store metadata in Bigtable. Publish "upload complete" event to Pub/Sub. Transcoding workers consume event, download master file, transcode to multiple resolutions (1080p, 720p, 480p) and codecs (H.264, VP9) in parallel using FFmpeg. Upload transcoded files to GCS. Generate thumbnails (extract frames, ML selects best). Update metadata to "processed." Use preemptible VMs for cost savings. Prioritize popular channels. Handle failures with retries and dead-letter queues.
 
@@ -672,6 +672,6 @@ YouTube's architecture demonstrates building a video platform at massive scale:
 7. **Stream processing**: Pub/Sub + Dataflow for views, analytics, fraud detection
 8. **Tiered storage**: Standard, Nearline, Coldline for cost optimization
 
-YouTube's success relies on Google's infrastructure (GCS, Bigtable, Spanner, TensorFlow) and sophisticated ML for recommendations and moderation.
+YouTube\'s success relies on Google's infrastructure (GCS, Bigtable, Spanner, TensorFlow) and sophisticated ML for recommendations and moderation.
 `,
 };

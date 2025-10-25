@@ -31,26 +31,26 @@ Building on basic Excel manipulation, this section covers advanced features that
 \`\`\`python
 from openpyxl import load_workbook
 
-def read_formulas(filepath: str, sheet_name: str = None):
+def read_formulas (filepath: str, sheet_name: str = None):
     """
     Read both formulas and their calculated values.
     
     Important for understanding Excel file logic.
     """
     # Load WITHOUT data_only to see formulas
-    wb_formulas = load_workbook(filepath, data_only=False)
+    wb_formulas = load_workbook (filepath, data_only=False)
     # Load WITH data_only to see values
-    wb_values = load_workbook(filepath, data_only=True)
+    wb_values = load_workbook (filepath, data_only=True)
     
     sheet_f = wb_formulas[sheet_name] if sheet_name else wb_formulas.active
     sheet_v = wb_values[sheet_name] if sheet_name else wb_values.active
     
     for row_idx in range(1, sheet_f.max_row + 1):
         for col_idx in range(1, sheet_f.max_column + 1):
-            cell_f = sheet_f.cell(row_idx, col_idx)
-            cell_v = sheet_v.cell(row_idx, col_idx)
+            cell_f = sheet_f.cell (row_idx, col_idx)
+            cell_v = sheet_v.cell (row_idx, col_idx)
             
-            if cell_f.value and str(cell_f.value).startswith('='):
+            if cell_f.value and str (cell_f.value).startswith('='):
                 print(f"{cell_f.coordinate}: {cell_f.value} = {cell_v.value}")
 
 # Usage
@@ -82,7 +82,7 @@ def create_sheet_with_formulas():
         ['Widget C', 15.75, 75]
     ]
     
-    for idx, row in enumerate(data, start=2):
+    for idx, row in enumerate (data, start=2):
         sheet[f'A{idx}'] = row[0]
         sheet[f'B{idx}'] = row[1]
         sheet[f'C{idx}'] = row[2]
@@ -97,7 +97,7 @@ def create_sheet_with_formulas():
         sheet[f'F{idx}'] = f'=D{idx}+E{idx}'
     
     # Sum formulas at bottom
-    last_row = len(data) + 2
+    last_row = len (data) + 2
     sheet[f'D{last_row}'] = f'=SUM(D2:D{last_row-1})'
     sheet[f'E{last_row}'] = f'=SUM(E2:E{last_row-1})'
     sheet[f'F{last_row}'] = f'=SUM(F2:F{last_row-1})'
@@ -121,53 +121,53 @@ class FormulaGenerator:
     """
     
     @staticmethod
-    def sum_formula(start_cell: str, end_cell: str) -> str:
+    def sum_formula (start_cell: str, end_cell: str) -> str:
         """Generate SUM formula."""
         return f"=SUM({start_cell}:{end_cell})"
     
     @staticmethod
-    def average_formula(start_cell: str, end_cell: str) -> str:
+    def average_formula (start_cell: str, end_cell: str) -> str:
         """Generate AVERAGE formula."""
         return f"=AVERAGE({start_cell}:{end_cell})"
     
     @staticmethod
-    def if_formula(condition: str, true_val: str, false_val: str) -> str:
+    def if_formula (condition: str, true_val: str, false_val: str) -> str:
         """Generate IF formula."""
         return f"=IF({condition}, {true_val}, {false_val})"
     
     @staticmethod
-    def vlookup_formula(lookup_value: str, table_range: str, col_index: int) -> str:
+    def vlookup_formula (lookup_value: str, table_range: str, col_index: int) -> str:
         """Generate VLOOKUP formula."""
         return f"=VLOOKUP({lookup_value}, {table_range}, {col_index}, FALSE)"
     
     @staticmethod
-    def concat_formula(cells: List[str], delimiter: str = "") -> str:
+    def concat_formula (cells: List[str], delimiter: str = "") -> str:
         """Generate concatenation formula."""
         if delimiter:
-            parts = [f'"{delimiter}"' if i > 0 else ' for i in range(len(cells))]
+            parts = [f'"{delimiter}"' if i > 0 else ' for i in range (len (cells))]
             combined = []
-            for i, cell in enumerate(cells):
+            for i, cell in enumerate (cells):
                 if i > 0:
-                    combined.append(f'"{delimiter}"')
-                combined.append(cell)
-            return f"=CONCATENATE({', '.join(combined)})"
-        return f"=CONCATENATE({', '.join(cells)})"
+                    combined.append (f'"{delimiter}"')
+                combined.append (cell)
+            return f"=CONCATENATE({', '.join (combined)})"
+        return f"=CONCATENATE({', '.join (cells)})"
     
     @staticmethod
-    def calculate_column(column_letter: str, rows: int, operation: str) -> str:
+    def calculate_column (column_letter: str, rows: int, operation: str) -> str:
         """Generate formula for entire column operation."""
         start = f"{column_letter}2"
         end = f"{column_letter}{rows}"
         
         operations = {
-            'sum': FormulaGenerator.sum_formula(start, end),
-            'average': FormulaGenerator.average_formula(start, end),
+            'sum': FormulaGenerator.sum_formula (start, end),
+            'average': FormulaGenerator.average_formula (start, end),
             'max': f"=MAX({start}:{end})",
             'min': f"=MIN({start}:{end})",
             'count': f"=COUNT({start}:{end})"
         }
         
-        return operations.get(operation.lower(), "")
+        return operations.get (operation.lower(), "")
 
 # Usage: AI generates "calculate average of column B"
 formula_gen = FormulaGenerator()
@@ -200,7 +200,7 @@ def create_bar_chart():
         ['May', 2000]
     ]
     
-    for idx, row in enumerate(data, start=2):
+    for idx, row in enumerate (data, start=2):
         sheet[f'A{idx}'] = row[0]
         sheet[f'B{idx}'] = row[1]
     
@@ -211,14 +211,14 @@ def create_bar_chart():
     chart.y_axis.title = "Sales ($)"
     
     # Set data range
-    data_ref = Reference(sheet, min_col=2, min_row=1, max_row=len(data)+1)
-    cats_ref = Reference(sheet, min_col=1, min_row=2, max_row=len(data)+1)
+    data_ref = Reference (sheet, min_col=2, min_row=1, max_row=len (data)+1)
+    cats_ref = Reference (sheet, min_col=1, min_row=2, max_row=len (data)+1)
     
-    chart.add_data(data_ref, titles_from_data=True)
-    chart.set_categories(cats_ref)
+    chart.add_data (data_ref, titles_from_data=True)
+    chart.set_categories (cats_ref)
     
     # Add chart to sheet
-    sheet.add_chart(chart, "D2")
+    sheet.add_chart (chart, "D2")
     
     wb.save('chart_demo.xlsx')
 
@@ -256,10 +256,10 @@ class ChartBuilder:
         chart.title = title
         chart.style = 13  # Preset style
         
-        data = Reference(self.sheet, range_string=data_range)
-        chart.add_data(data, titles_from_data=True)
+        data = Reference (self.sheet, range_string=data_range)
+        chart.add_data (data, titles_from_data=True)
         
-        self.sheet.add_chart(chart, position)
+        self.sheet.add_chart (chart, position)
         return chart
     
     def create_pie_chart(
@@ -273,29 +273,29 @@ class ChartBuilder:
         chart = PieChart()
         chart.title = title
         
-        data = Reference(self.sheet, range_string=data_range)
-        labels = Reference(self.sheet, range_string=labels_range)
+        data = Reference (self.sheet, range_string=data_range)
+        labels = Reference (self.sheet, range_string=labels_range)
         
-        chart.add_data(data, titles_from_data=True)
-        chart.set_categories(labels)
+        chart.add_data (data, titles_from_data=True)
+        chart.set_categories (labels)
         
-        self.sheet.add_chart(chart, position)
+        self.sheet.add_chart (chart, position)
         return chart
     
-    def create_combo_chart(self):
+    def create_combo_chart (self):
         """Create combination chart (bar + line)."""
         chart1 = BarChart()
         chart2 = LineChart()
         
         # Configure and combine...
         # chart1 += chart2
-        # self.sheet.add_chart(chart1, "E2")
+        # self.sheet.add_chart (chart1, "E2")
         pass
 
 # Usage
 wb = Workbook()
 sheet = wb.active
-builder = ChartBuilder(wb, sheet)
+builder = ChartBuilder (wb, sheet)
 
 # Add data...
 # builder.create_line_chart("B1:B10", "Sales Trend")
@@ -323,8 +323,8 @@ def apply_conditional_formatting():
         sheet[f'A{i}'] = i * 100
     
     # Define fills
-    green_fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
-    red_fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
+    green_fill = PatternFill (start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
+    red_fill = PatternFill (start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
     
     # Rule: Greater than 500 -> Green
     rule_high = CellIsRule(
@@ -421,7 +421,7 @@ def create_dropdowns():
     )
     
     # Add validation to column A
-    sheet.add_data_validation(category_dv)
+    sheet.add_data_validation (category_dv)
     category_dv.add('A2:A100')
     
     # Create number validation (must be between 1-100)
@@ -433,7 +433,7 @@ def create_dropdowns():
         error='Please enter a number between 1 and 100'
     )
     
-    sheet.add_data_validation(number_dv)
+    sheet.add_data_validation (number_dv)
     number_dv.add('B2:B100')
     
     # Add headers
@@ -463,7 +463,7 @@ def custom_validation():
         formula1="TODAY()",
         error="Date must be in the future"
     )
-    sheet.add_data_validation(date_dv)
+    sheet.add_data_validation (date_dv)
     date_dv.add('A2:A100')
     
     # Email validation (custom formula)
@@ -472,7 +472,7 @@ def custom_validation():
         formula1='=AND(FIND("@",A2)>0, FIND(".",A2)>FIND("@",A2))',
         error="Please enter a valid email"
     )
-    sheet.add_data_validation(email_dv)
+    sheet.add_data_validation (email_dv)
     email_dv.add('B2:B100')
     
     # Add headers
@@ -544,12 +544,12 @@ def create_excel_table():
     ]
     
     # Write headers and data
-    sheet.append(headers)
+    sheet.append (headers)
     for row in data:
-        sheet.append(row)
+        sheet.append (row)
     
     # Create table
-    table = Table(displayName="EmployeeTable", ref="A1:D5")
+    table = Table (displayName="EmployeeTable", ref="A1:D5")
     
     # Add style
     style = TableStyleInfo(
@@ -562,7 +562,7 @@ def create_excel_table():
     table.tableStyleInfo = style
     
     # Add table to sheet
-    sheet.add_table(table)
+    sheet.add_table (table)
     
     wb.save('excel_table.xlsx')
 
@@ -586,23 +586,23 @@ def create_custom_styles():
     sheet = wb.active
     
     # Create custom style for headers
-    header_style = NamedStyle(name="header")
-    header_style.font = Font(bold=True, size=14, color="FFFFFF")
-    header_style.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
-    header_style.alignment = Alignment(horizontal="center", vertical="center")
+    header_style = NamedStyle (name="header")
+    header_style.font = Font (bold=True, size=14, color="FFFFFF")
+    header_style.fill = PatternFill (start_color="4472C4", end_color="4472C4", fill_type="solid")
+    header_style.alignment = Alignment (horizontal="center", vertical="center")
     header_style.border = Border(
-        left=Side(style='thin'),
-        right=Side(style='thin'),
-        top=Side(style='thin'),
-        bottom=Side(style='thin')
+        left=Side (style='thin'),
+        right=Side (style='thin'),
+        top=Side (style='thin'),
+        bottom=Side (style='thin')
     )
     
     # Register style
-    wb.add_named_style(header_style)
+    wb.add_named_style (header_style)
     
     # Create currency style
-    currency_style = NamedStyle(name="currency", number_format='$#,##0.00')
-    wb.add_named_style(currency_style)
+    currency_style = NamedStyle (name="currency", number_format='$#,##0.00')
+    wb.add_named_style (currency_style)
     
     # Apply styles
     sheet['A1'] = 'Product'
@@ -658,65 +658,65 @@ class AdvancedExcelAutomation:
             
             # Write title
             sheet['A1'] = title
-            sheet['A1'].font = Font(size=16, bold=True)
+            sheet['A1'].font = Font (size=16, bold=True)
             sheet.merge_cells('A1:F1')
             
             # Write data
-            for r_idx, row in enumerate(data.itertuples(index=False), start=3):
-                for c_idx, value in enumerate(row, start=1):
-                    sheet.cell(row=r_idx, column=c_idx, value=value)
+            for r_idx, row in enumerate (data.itertuples (index=False), start=3):
+                for c_idx, value in enumerate (row, start=1):
+                    sheet.cell (row=r_idx, column=c_idx, value=value)
             
             # Write headers
-            for c_idx, col_name in enumerate(data.columns, start=1):
-                cell = sheet.cell(row=2, column=c_idx, value=col_name)
-                cell.font = Font(bold=True)
-                cell.fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+            for c_idx, col_name in enumerate (data.columns, start=1):
+                cell = sheet.cell (row=2, column=c_idx, value=col_name)
+                cell.font = Font (bold=True)
+                cell.fill = PatternFill (start_color="4472C4", end_color="4472C4", fill_type="solid")
             
             # Add summary formulas
-            last_row = len(data) + 3
+            last_row = len (data) + 3
             sheet[f'A{last_row}'] = 'Total'
-            sheet[f'A{last_row}'].font = Font(bold=True)
+            sheet[f'A{last_row}'].font = Font (bold=True)
             
             # Add SUM formulas for numeric columns
-            for c_idx in range(2, len(data.columns) + 1):
-                if pd.api.types.is_numeric_dtype(data.iloc[:, c_idx-1]):
+            for c_idx in range(2, len (data.columns) + 1):
+                if pd.api.types.is_numeric_dtype (data.iloc[:, c_idx-1]):
                     formula = self.formula_gen.sum_formula(
                         f"{chr(64+c_idx)}3",
                         f"{chr(64+c_idx)}{last_row-1}"
                     )
-                    sheet.cell(row=last_row, column=c_idx, value=formula)
+                    sheet.cell (row=last_row, column=c_idx, value=formula)
             
             # Add chart if numeric data exists
-            numeric_cols = [i for i, col in enumerate(data.columns) if pd.api.types.is_numeric_dtype(data[col])]
+            numeric_cols = [i for i, col in enumerate (data.columns) if pd.api.types.is_numeric_dtype (data[col])]
             if numeric_cols:
-                self._add_chart(sheet, len(data), numeric_cols[0] + 1)
+                self._add_chart (sheet, len (data), numeric_cols[0] + 1)
             
             # Apply conditional formatting
             if numeric_cols:
                 col_letter = chr(65 + numeric_cols[0])
-                self._apply_conditional_formatting(sheet, f"{col_letter}3:{col_letter}{last_row-1}")
+                self._apply_conditional_formatting (sheet, f"{col_letter}3:{col_letter}{last_row-1}")
             
-            wb.save(output_path)
+            wb.save (output_path)
             return True
             
         except Exception as e:
             print(f"Failed to create dashboard: {e}")
             return False
     
-    def _add_chart(self, sheet, data_rows: int, data_col: int):
+    def _add_chart (self, sheet, data_rows: int, data_col: int):
         """Add bar chart to sheet."""
         chart = BarChart()
         chart.title = "Data Visualization"
         
-        data = Reference(sheet, min_col=data_col, min_row=2, max_row=data_rows + 2)
-        cats = Reference(sheet, min_col=1, min_row=3, max_row=data_rows + 2)
+        data = Reference (sheet, min_col=data_col, min_row=2, max_row=data_rows + 2)
+        cats = Reference (sheet, min_col=1, min_row=3, max_row=data_rows + 2)
         
-        chart.add_data(data, titles_from_data=True)
-        chart.set_categories(cats)
+        chart.add_data (data, titles_from_data=True)
+        chart.set_categories (cats)
         
-        sheet.add_chart(chart, f"{chr(65 + data_col + 2)}3")
+        sheet.add_chart (chart, f"{chr(65 + data_col + 2)}3")
     
-    def _apply_conditional_formatting(self, sheet, range_str: str):
+    def _apply_conditional_formatting (self, sheet, range_str: str):
         """Apply color scale formatting."""
         rule = ColorScaleRule(
             start_type='min',
@@ -727,7 +727,7 @@ class AdvancedExcelAutomation:
             end_type='max',
             end_color='63BE7B'
         )
-        sheet.conditional_formatting.add(range_str, rule)
+        sheet.conditional_formatting.add (range_str, rule)
 
 # Usage: Natural language command
 automation = AdvancedExcelAutomation()
@@ -740,7 +740,7 @@ data = pd.DataFrame({
 })
 
 # "Create a dashboard from this data"
-automation.create_dashboard(data, 'dashboard.xlsx', 'Sales Dashboard')
+automation.create_dashboard (data, 'dashboard.xlsx', 'Sales Dashboard')
 \`\`\`
 
 ## Key Takeaways

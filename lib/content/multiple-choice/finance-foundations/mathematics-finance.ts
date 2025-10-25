@@ -31,7 +31,7 @@ export const mathematicsFinanceMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['42.5%', '8.5%', '63.5% (first 3 PCs)', '20% (1/20 stocks)'],
     correctAnswer: 0,
     explanation:
-      'Variance explained = eigenvalue / sum(eigenvalues). Sum ≈ 8.5 + 4.2 + 2.1 + 1.0 + 0.8 + 0.6 + remaining. Assume remaining small (total eigenvalues = 20 since 20 stocks). Sum ≈ 20. PC1 explains: 8.5 / 20 = 42.5%. First 3 PCs: (8.5 + 4.2 + 2.1) / 20 = 14.8 / 20 = 74%. Interpretation: PC1 (first principal component) is likely "market factor" - when market moves, all stocks move together (explains 42.5% of variance). PC2 might be "sector factor" (tech vs financials). PC3 might be "size factor" (large cap vs small cap). Applications: Factor-neutral trading (ensure portfolio has zero exposure to PC1-PC3), Risk management (portfolio risk = exposure to factors), Dimensionality reduction (instead of tracking 20 stocks, track 3-5 factors).',
+      'Variance explained = eigenvalue / sum (eigenvalues). Sum ≈ 8.5 + 4.2 + 2.1 + 1.0 + 0.8 + 0.6 + remaining. Assume remaining small (total eigenvalues = 20 since 20 stocks). Sum ≈ 20. PC1 explains: 8.5 / 20 = 42.5%. First 3 PCs: (8.5 + 4.2 + 2.1) / 20 = 14.8 / 20 = 74%. Interpretation: PC1 (first principal component) is likely "market factor" - when market moves, all stocks move together (explains 42.5% of variance). PC2 might be "sector factor" (tech vs financials). PC3 might be "size factor" (large cap vs small cap). Applications: Factor-neutral trading (ensure portfolio has zero exposure to PC1-PC3), Risk management (portfolio risk = exposure to factors), Dimensionality reduction (instead of tracking 20 stocks, track 3-5 factors).',
   },
   {
     id: 'mf-mc-4',

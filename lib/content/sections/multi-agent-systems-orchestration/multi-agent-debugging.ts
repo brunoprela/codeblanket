@@ -46,7 +46,7 @@ class AgentLog:
     input: Any
     output: Any
     duration: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field (default_factory=dict)
     error: Optional[str] = None
 
 class AgentLogger:
@@ -61,7 +61,7 @@ class AgentLogger:
             level=logging.INFO,
             format='%(asctime)s [%(name)s] %(message)s',
             handlers=[
-                logging.FileHandler(log_file) if log_file else logging.StreamHandler()
+                logging.FileHandler (log_file) if log_file else logging.StreamHandler()
             ]
         )
         self.logger = logging.getLogger("MultiAgent")
@@ -88,7 +88,7 @@ class AgentLogger:
             error=error
         )
         
-        self.logs.append(log_entry)
+        self.logs.append (log_entry)
         
         # Also log to Python logger
         if error:
@@ -123,9 +123,9 @@ class AgentLogger:
         
         return filtered
     
-    def get_timeline(self, agent_name: Optional[str] = None) -> str:
+    def get_timeline (self, agent_name: Optional[str] = None) -> str:
         """Get timeline of events."""
-        logs = self.get_logs(agent_name=agent_name)
+        logs = self.get_logs (agent_name=agent_name)
         
         timeline = []
         for log in logs:
@@ -135,14 +135,14 @@ class AgentLogger:
                 f"({log.duration:.2f}s)"
             )
         
-        return "\\n".join(timeline)
+        return "\\n".join (timeline)
     
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics (self) -> Dict[str, Any]:
         """Get execution statistics."""
         if not self.logs:
             return {}
         
-        total_duration = sum(l.duration for l in self.logs)
+        total_duration = sum (l.duration for l in self.logs)
         errors = [l for l in self.logs if l.error]
         
         agent_stats = {}
@@ -160,21 +160,21 @@ class AgentLogger:
                 agent_stats[log.agent_name]["errors"] += 1
         
         return {
-            "total_actions": len(self.logs),
+            "total_actions": len (self.logs),
             "total_duration": total_duration,
-            "total_errors": len(errors),
+            "total_errors": len (errors),
             "agent_statistics": agent_stats
         }
     
-    def export_json(self, filepath: str):
+    def export_json (self, filepath: str):
         """Export logs to JSON."""
         logs_data = [
             {
                 "timestamp": l.timestamp,
                 "agent_name": l.agent_name,
                 "action": l.action,
-                "input": str(l.input)[:100],  # Truncate
-                "output": str(l.output)[:100],
+                "input": str (l.input)[:100],  # Truncate
+                "output": str (l.output)[:100],
                 "duration": l.duration,
                 "metadata": l.metadata,
                 "error": l.error
@@ -182,8 +182,8 @@ class AgentLogger:
             for l in self.logs
         ]
         
-        with open(filepath, 'w') as f:
-            json.dump(logs_data, f, indent=2)
+        with open (filepath, 'w') as f:
+            json.dump (logs_data, f, indent=2)
 
 # Usage
 logger = AgentLogger("multi_agent.log")
@@ -194,16 +194,16 @@ class LoggedAgent:
         self.name = name
         self.logger = logger
     
-    async def execute(self, input: Any) -> Any:
+    async def execute (self, input: Any) -> Any:
         """Execute with logging."""
         start_time = time.time()
         error = None
         output = None
         
         try:
-            output = await self._do_work(input)
+            output = await self._do_work (input)
         except Exception as e:
-            error = str(e)
+            error = str (e)
             raise
         finally:
             duration = time.time() - start_time
@@ -218,7 +218,7 @@ class LoggedAgent:
         
         return output
     
-    async def _do_work(self, input: Any) -> Any:
+    async def _do_work (self, input: Any) -> Any:
         """Actual work."""
         import asyncio
         await asyncio.sleep(0.5)
@@ -250,18 +250,18 @@ class TraceContext:
     span_id: str
     
     @classmethod
-    def new_trace(cls) -> 'TraceContext':
+    def new_trace (cls) -> 'TraceContext':
         """Start new trace."""
-        trace_id = str(uuid.uuid4())
-        span_id = str(uuid.uuid4())
-        return cls(trace_id=trace_id, parent_span_id=None, span_id=span_id)
+        trace_id = str (uuid.uuid4())
+        span_id = str (uuid.uuid4())
+        return cls (trace_id=trace_id, parent_span_id=None, span_id=span_id)
     
-    def child_span(self) -> 'TraceContext':
+    def child_span (self) -> 'TraceContext':
         """Create child span."""
         return TraceContext(
             trace_id=self.trace_id,
             parent_span_id=self.span_id,
-            span_id=str(uuid.uuid4())
+            span_id=str (uuid.uuid4())
         )
 
 class TracedAgent:
@@ -286,13 +286,13 @@ class TracedAgent:
             print(f"  Parent: {trace_context.parent_span_id[:8]}")
         
         # Do work
-        result = await self._do_work(input, trace_context)
+        result = await self._do_work (input, trace_context)
         
         print(f"[TRACE] {trace_context.trace_id[:8]} - {self.name} completed")
         
         return result
     
-    async def _do_work(self, input: Any, trace_context: TraceContext) -> Any:
+    async def _do_work (self, input: Any, trace_context: TraceContext) -> Any:
         """Work implementation."""
         # If calling another agent, pass child context
         return f"Result from {self.name}"
@@ -305,7 +305,7 @@ result_a = await agent_a.execute("task", trace)
 
 # Agent A calls Agent B with child span
 agent_b = TracedAgent("AgentB")
-result_b = await agent_b.execute(result_a, trace.child_span())
+result_b = await agent_b.execute (result_a, trace.child_span())
 
 # Can trace entire flow through system
 \`\`\`
@@ -319,7 +319,7 @@ class AgentVisualizer:
     def __init__(self, logger: AgentLogger):
         self.logger = logger
     
-    def generate_sequence_diagram(self) -> str:
+    def generate_sequence_diagram (self) -> str:
         """Generate mermaid sequence diagram."""
         diagram = ["sequenceDiagram"]
         
@@ -333,9 +333,9 @@ class AgentVisualizer:
                     f"    {log.agent_name}->>{log.agent_name}: {log.action}"
                 )
         
-        return "\\n".join(diagram)
+        return "\\n".join (diagram)
     
-    def generate_timeline_html(self) -> str:
+    def generate_timeline_html (self) -> str:
         """Generate HTML timeline."""
         html = ["<div style='font-family: monospace;'>"]
         
@@ -349,9 +349,9 @@ class AgentVisualizer:
             )
         
         html.append("</div>")
-        return "".join(html)
+        return "".join (html)
     
-    def print_tree(self):
+    def print_tree (self):
         """Print execution tree."""
         print("Execution Tree:")
         print("==============")
@@ -360,7 +360,7 @@ class AgentVisualizer:
         for log in self.logger.logs:
             if log.agent_name not in agent_actions:
                 agent_actions[log.agent_name] = []
-            agent_actions[log.agent_name].append(log)
+            agent_actions[log.agent_name].append (log)
         
         for agent_name, actions in agent_actions.items():
             print(f"\\n{agent_name}:")
@@ -369,7 +369,7 @@ class AgentVisualizer:
                 print(f"  {status} {action.action} ({action.duration:.2f}s)")
 
 # Usage
-visualizer = AgentVisualizer(logger)
+visualizer = AgentVisualizer (logger)
 print(visualizer.generate_sequence_diagram())
 visualizer.print_tree()
 \`\`\`
@@ -383,14 +383,14 @@ class AgentProfiler:
     def __init__(self, logger: AgentLogger):
         self.logger = logger
     
-    def find_bottlenecks(self, threshold: float = 1.0) -> List[AgentLog]:
+    def find_bottlenecks (self, threshold: float = 1.0) -> List[AgentLog]:
         """Find slow operations."""
         return [
             log for log in self.logger.logs
             if log.duration > threshold
         ]
     
-    def get_slowest_agents(self, top_n: int = 5) -> List[tuple[str, float]]:
+    def get_slowest_agents (self, top_n: int = 5) -> List[tuple[str, float]]:
         """Get slowest agents by average duration."""
         agent_times = {}
         agent_counts = {}
@@ -408,24 +408,24 @@ class AgentProfiler:
             for agent in agent_times
         ]
         
-        averages.sort(key=lambda x: x[1], reverse=True)
+        averages.sort (key=lambda x: x[1], reverse=True)
         return averages[:top_n]
     
-    def analyze_parallelism(self) -> Dict[str, Any]:
+    def analyze_parallelism (self) -> Dict[str, Any]:
         """Analyze how well agents run in parallel."""
         if not self.logger.logs:
             return {}
         
         # Sort by start time
-        sorted_logs = sorted(self.logger.logs, key=lambda l: l.timestamp)
+        sorted_logs = sorted (self.logger.logs, key=lambda l: l.timestamp)
         
         # Calculate total time span
         start = sorted_logs[0].timestamp
-        end = max(l.timestamp + l.duration for l in sorted_logs)
+        end = max (l.timestamp + l.duration for l in sorted_logs)
         total_wall_time = end - start
         
         # Calculate total CPU time
-        total_cpu_time = sum(l.duration for l in sorted_logs)
+        total_cpu_time = sum (l.duration for l in sorted_logs)
         
         # Parallelism efficiency
         parallelism = total_cpu_time / total_wall_time if total_wall_time > 0 else 0
@@ -434,17 +434,17 @@ class AgentProfiler:
             "total_wall_time": total_wall_time,
             "total_cpu_time": total_cpu_time,
             "parallelism_factor": parallelism,
-            "efficiency": f"{(parallelism / len(set(l.agent_name for l in sorted_logs))) * 100:.1f}%"
+            "efficiency": f"{(parallelism / len (set (l.agent_name for l in sorted_logs))) * 100:.1f}%"
         }
 
 # Usage
-profiler = AgentProfiler(logger)
+profiler = AgentProfiler (logger)
 
 # Find problems
-bottlenecks = profiler.find_bottlenecks(threshold=0.5)
-print(f"Found {len(bottlenecks)} bottlenecks")
+bottlenecks = profiler.find_bottlenecks (threshold=0.5)
+print(f"Found {len (bottlenecks)} bottlenecks")
 
-slowest = profiler.get_slowest_agents(top_n=3)
+slowest = profiler.get_slowest_agents (top_n=3)
 print("Slowest agents:", slowest)
 
 parallelism = profiler.analyze_parallelism()
@@ -461,7 +461,7 @@ class StateInspector:
         self.agents = agents
         self.snapshots: List[Dict[str, Any]] = []
     
-    def take_snapshot(self, label: str):
+    def take_snapshot (self, label: str):
         """Take snapshot of current state."""
         snapshot = {
             "timestamp": time.time(),
@@ -470,10 +470,10 @@ class StateInspector:
         }
         
         for name, agent in self.agents.items():
-            if hasattr(agent, 'get_state'):
+            if hasattr (agent, 'get_state'):
                 snapshot["agent_states"][name] = agent.get_state()
         
-        self.snapshots.append(snapshot)
+        self.snapshots.append (snapshot)
     
     def compare_snapshots(
         self,
@@ -499,13 +499,13 @@ class StateInspector:
         
         return differences
     
-    def print_current_state(self):
+    def print_current_state (self):
         """Print current state of all agents."""
         print("Current State:")
         print("==============")
         
         for name, agent in self.agents.items():
-            if hasattr(agent, 'get_state'):
+            if hasattr (agent, 'get_state'):
                 state = agent.get_state()
                 print(f"\\n{name}:")
                 print(f"  {state}")
@@ -516,7 +516,7 @@ class StatefulAgent:
         self.name = name
         self.state = {"tasks_completed": 0, "current_task": None}
     
-    def get_state(self) -> Dict:
+    def get_state (self) -> Dict:
         return self.state.copy()
 
 agents = {
@@ -524,7 +524,7 @@ agents = {
     "agent2": StatefulAgent("Agent2")
 }
 
-inspector = StateInspector(agents)
+inspector = StateInspector (agents)
 
 # Take snapshots at key points
 inspector.take_snapshot("initial")
@@ -545,10 +545,10 @@ class ErrorReproducer:
     def __init__(self, logger: AgentLogger):
         self.logger = logger
     
-    def get_error_context(self, error_log: AgentLog) -> Dict[str, Any]:
+    def get_error_context (self, error_log: AgentLog) -> Dict[str, Any]:
         """Get context around an error."""
         # Find logs before error
-        error_idx = self.logger.logs.index(error_log)
+        error_idx = self.logger.logs.index (error_log)
         before = self.logger.logs[max(0, error_idx - 5):error_idx]
         
         return {
@@ -567,11 +567,11 @@ class ErrorReproducer:
         print(f"Replaying actions {start_idx} to {end_idx}...")
         
         for log in self.logger.logs[start_idx:end_idx + 1]:
-            agent = agents.get(log.agent_name)
+            agent = agents.get (log.agent_name)
             if agent:
                 print(f"  Replaying: {log.agent_name}.{log.action}")
                 try:
-                    await agent.execute(log.input)
+                    await agent.execute (log.input)
                 except Exception as e:
                     print(f"    ❌ Error reproduced: {e}")
                     return
@@ -580,16 +580,16 @@ class ErrorReproducer:
 
 # Usage
 # Find errors
-errors = logger.get_logs(has_error=True)
+errors = logger.get_logs (has_error=True)
 if errors:
-    reproducer = ErrorReproducer(logger)
+    reproducer = ErrorReproducer (logger)
     
     # Get context
-    context = reproducer.get_error_context(errors[0])
+    context = reproducer.get_error_context (errors[0])
     print("Error context:", context)
     
     # Try to reproduce
-    # await reproducer.replay_scenario(agents, start_idx=0, end_idx=5)
+    # await reproducer.replay_scenario (agents, start_idx=0, end_idx=5)
 \`\`\`
 
 ## Debugging Checklist
@@ -599,34 +599,34 @@ class DebugChecklists:
     """Common debugging checks."""
     
     @staticmethod
-    def check_agent_issues(logger: AgentLogger) -> List[str]:
+    def check_agent_issues (logger: AgentLogger) -> List[str]:
         """Check for common agent issues."""
         issues = []
         
         # Check for errors
-        errors = logger.get_logs(has_error=True)
+        errors = logger.get_logs (has_error=True)
         if errors:
-            issues.append(f"Found {len(errors)} errors")
+            issues.append (f"Found {len (errors)} errors")
         
         # Check for slow agents
         slow = [l for l in logger.logs if l.duration > 5.0]
         if slow:
-            issues.append(f"Found {len(slow)} slow operations (>5s)")
+            issues.append (f"Found {len (slow)} slow operations (>5s)")
         
         # Check for idle agents
         agent_actions = {}
         for log in logger.logs:
-            agent_actions[log.agent_name] = agent_actions.get(log.agent_name, 0) + 1
+            agent_actions[log.agent_name] = agent_actions.get (log.agent_name, 0) + 1
         
-        avg_actions = sum(agent_actions.values()) / len(agent_actions) if agent_actions else 0
+        avg_actions = sum (agent_actions.values()) / len (agent_actions) if agent_actions else 0
         idle = [a for a, count in agent_actions.items() if count < avg_actions * 0.5]
         if idle:
-            issues.append(f"Potentially idle agents: {idle}")
+            issues.append (f"Potentially idle agents: {idle}")
         
         return issues if issues else ["No issues found"]
 
 # Usage
-issues = DebugChecklist.check_agent_issues(logger)
+issues = DebugChecklist.check_agent_issues (logger)
 for issue in issues:
     print(f"⚠️  {issue}")
 \`\`\`

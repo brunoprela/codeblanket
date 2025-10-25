@@ -9,7 +9,7 @@ export const featureengineeringfundamentalsSection = {
 
 ## Introduction
 
-Feature engineering is the art and science of creating new features from existing data to improve model performance. It's often said that "applied machine learning" is essentially feature engineering - good features can make a simple model outperform a complex one with poor features.
+Feature engineering is the art and science of creating new features from existing data to improve model performance. It\'s often said that "applied machine learning" is essentially feature engineering - good features can make a simple model outperform a complex one with poor features.
 
 **Why Feature Engineering Matters**:
 - **Boost Model Performance**: Often 10-50% improvement from good features
@@ -22,7 +22,7 @@ Feature engineering is the art and science of creating new features from existin
 
 ### Definition and Scope
 
-\\\`\\\`\\\`python
+\`\`\`python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,7 +53,7 @@ print(df.head())
 # Model 1: Using raw feature (poor performance)
 X_raw_2d = df[['x']]
 model_raw = LinearRegression()
-scores_raw = cross_val_score(model_raw, X_raw_2d, y, cv=5, 
+scores_raw = cross_val_score (model_raw, X_raw_2d, y, cv=5, 
                              scoring='r2')
 
 print(f"\\nModel 1 (Raw Feature):")
@@ -63,39 +63,39 @@ print(f"  R² Score: {scores_raw.mean():.4f} (+/- {scores_raw.std():.4f})")
 df['x_squared'] = df['x'] ** 2
 X_engineered = df[['x', 'x_squared']]
 model_engineered = LinearRegression()
-scores_engineered = cross_val_score(model_engineered, X_engineered, y, 
+scores_engineered = cross_val_score (model_engineered, X_engineered, y, 
                                    cv=5, scoring='r2')
 
 print(f"\\nModel 2 (Engineered Features):")
 print(f"  Features: x, x²")
 print(f"  R² Score: {scores_engineered.mean():.4f} (+/- {scores_engineered.std():.4f})")
-print(f"\\n✓ Improvement: {(scores_engineered.mean() - scores_raw.mean()) / abs(scores_raw.mean()) * 100:.1f}%")
+print(f"\\n✓ Improvement: {(scores_engineered.mean() - scores_raw.mean()) / abs (scores_raw.mean()) * 100:.1f}%")
 
 # Visualization
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # Plot 1: Raw data with linear fit
-axes[0].scatter(df['x'], df['y'], alpha=0.5, s=10)
+axes[0].scatter (df['x'], df['y'], alpha=0.5, s=10)
 model_raw.fit(X_raw_2d, y)
 x_line = np.linspace(-5, 5, 100).reshape(-1, 1)
-axes[0].plot(x_line, model_raw.predict(x_line), 'r-', linewidth=2, 
+axes[0].plot (x_line, model_raw.predict (x_line), 'r-', linewidth=2, 
             label='Linear (raw)')
 axes[0].set_xlabel('x')
 axes[0].set_ylabel('y')
-axes[0].set_title(f'Raw Feature (R²={scores_raw.mean():.3f})')
+axes[0].set_title (f'Raw Feature (R²={scores_raw.mean():.3f})')
 axes[0].legend()
 axes[0].grid(True, alpha=0.3)
 
 # Plot 2: With polynomial feature
-axes[1].scatter(df['x'], df['y'], alpha=0.5, s=10)
+axes[1].scatter (df['x'], df['y'], alpha=0.5, s=10)
 model_engineered.fit(X_engineered, y)
 x_line_df = pd.DataFrame({'x': x_line.ravel()})
 x_line_df['x_squared'] = x_line_df['x'] ** 2
-axes[1].plot(x_line, model_engineered.predict(x_line_df), 'r-', linewidth=2,
+axes[1].plot (x_line, model_engineered.predict (x_line_df), 'r-', linewidth=2,
             label='Polynomial (x, x²)')
 axes[1].set_xlabel('x')
 axes[1].set_ylabel('y')
-axes[1].set_title(f'Engineered Features (R²={scores_engineered.mean():.3f})')
+axes[1].set_title (f'Engineered Features (R²={scores_engineered.mean():.3f})')
 axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 
@@ -103,13 +103,13 @@ plt.tight_layout()
 plt.show()
 
 print("\\nKEY INSIGHT: Feature engineering captured the quadratic relationship")
-\\\`\\\`\\\`
+\`\`\`
 
 ## Types of Feature Engineering
 
 ### 1. Domain-Driven Features
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Example: E-commerce customer data
 customer_data = pd.DataFrame({
     'customer_id': range(1, 6),
@@ -143,7 +143,7 @@ customer_data['return_rate'] = (
 customer_data['is_at_risk'] = (
     (customer_data['days_since_last_purchase'] > 90) & 
     (customer_data['support_tickets'] > 2)
-).astype(int)
+).astype (int)
 
 customer_data['customer_lifetime_value_estimate'] = (
     customer_data['avg_purchase_value'] * 
@@ -164,15 +164,15 @@ for col in ['avg_purchase_value', 'purchase_frequency', 'return_rate',
     print(customer_data[col].values)
 
 print("\\n✓ Domain knowledge converted to predictive features")
-\\\`\\\`\\\`
+\`\`\`
 
 ### 2. Mathematical Transformations
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Example: Transform skewed features
 from sklearn.datasets import fetch_california_housing
 
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df_housing = housing.frame
 
 print("\\nMATHEMATICAL TRANSFORMATIONS")
@@ -185,8 +185,8 @@ print(f"  Min: {df_housing['MedInc'].min():.3f}")
 print(f"  Max: {df_housing['MedInc'].max():.3f}")
 
 # Transformations
-df_housing['MedInc_log'] = np.log1p(df_housing['MedInc'])
-df_housing['MedInc_sqrt'] = np.sqrt(df_housing['MedInc'])
+df_housing['MedInc_log'] = np.log1p (df_housing['MedInc'])
+df_housing['MedInc_sqrt'] = np.sqrt (df_housing['MedInc'])
 df_housing['MedInc_squared'] = df_housing['MedInc'] ** 2
 
 print(f"\\nAfter Log Transform:")
@@ -198,31 +198,31 @@ print(f"  Skewness: {df_housing['MedInc_sqrt'].skew():.3f}")
 # Visualize transformations
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-axes[0, 0].hist(df_housing['MedInc'], bins=50, edgecolor='black')
-axes[0, 0].set_title(f"Original (Skew={df_housing['MedInc'].skew():.2f})")
+axes[0, 0].hist (df_housing['MedInc'], bins=50, edgecolor='black')
+axes[0, 0].set_title (f"Original (Skew={df_housing['MedInc'].skew():.2f})")
 axes[0, 0].set_xlabel('MedInc')
 
-axes[0, 1].hist(df_housing['MedInc_log'], bins=50, edgecolor='black')
-axes[0, 1].set_title(f"Log Transform (Skew={df_housing['MedInc_log'].skew():.2f})")
+axes[0, 1].hist (df_housing['MedInc_log'], bins=50, edgecolor='black')
+axes[0, 1].set_title (f"Log Transform (Skew={df_housing['MedInc_log'].skew():.2f})")
 axes[0, 1].set_xlabel('log(MedInc)')
 
-axes[1, 0].hist(df_housing['MedInc_sqrt'], bins=50, edgecolor='black')
-axes[1, 0].set_title(f"Sqrt Transform (Skew={df_housing['MedInc_sqrt'].skew():.2f})")
+axes[1, 0].hist (df_housing['MedInc_sqrt'], bins=50, edgecolor='black')
+axes[1, 0].set_title (f"Sqrt Transform (Skew={df_housing['MedInc_sqrt'].skew():.2f})")
 axes[1, 0].set_xlabel('sqrt(MedInc)')
 
-axes[1, 1].hist(df_housing['MedInc_squared'], bins=50, edgecolor='black')
-axes[1, 1].set_title(f"Squared (Skew={df_housing['MedInc_squared'].skew():.2f})")
+axes[1, 1].hist (df_housing['MedInc_squared'], bins=50, edgecolor='black')
+axes[1, 1].set_title (f"Squared (Skew={df_housing['MedInc_squared'].skew():.2f})")
 axes[1, 1].set_xlabel('MedInc²')
 
 plt.tight_layout()
 plt.show()
 
 print("\\n✓ Transformations reduce skewness for linear models")
-\\\`\\\`\\\`
+\`\`\`
 
 ### 3. Interaction Features
 
-\\\`\\\`\\\`python
+\`\`\`python
 # Example: Feature interactions
 print("\\nINTERACTION FEATURES")
 print("=" * 70)
@@ -263,13 +263,13 @@ print(f"  R² Score: {score2:.4f}")
 print(f"  Improvement: {(score2-score1)/score1*100:.2f}%")
 
 print("\\n✓ Interaction features capture combined effects")
-\\\`\\\`\\\`
+\`\`\`
 
 ## Feature Engineering Process
 
 ### Systematic Approach
 
-\\\`\\\`\\\`python
+\`\`\`python
 def feature_engineering_workflow():
     """Complete feature engineering workflow"""
     
@@ -335,11 +335,11 @@ def feature_engineering_workflow():
     return workflow
 
 workflow = feature_engineering_workflow()
-\\\`\\\`\\\`
+\`\`\`
 
 ## Common Feature Engineering Mistakes
 
-\\\`\\\`\\\`python
+\`\`\`python
 def common_mistakes():
     """Common feature engineering mistakes to avoid"""
     
@@ -388,7 +388,7 @@ def common_mistakes():
     return mistakes
 
 mistakes = common_mistakes()
-\\\`\\\`\\\`
+\`\`\`
 
 ## Key Takeaways
 

@@ -8,7 +8,7 @@ export const templatesQuiz = [
     question:
       'Walk me through the merge intervals template. What are the key steps?',
     sampleAnswer:
-      'Merge intervals template has four steps. First, sort intervals by start time. Second, initialize result with first interval. Third, iterate from second interval: if current overlaps with last in result (current.start <= last.end), merge by updating last.end to max(last.end, current.end). If no overlap, append current to result. Fourth, return result. The key insight: after sorting, only need to check current against last merged interval, not all previous intervals. For example, [[1,3], [2,6], [8,10]]: start with [1,3]. [2,6] overlaps (2 <= 3), merge to [1,6]. [8,10] no overlap (8 > 6), append. Result: [[1,6], [8,10]]. This template is foundation for many interval problems.',
+      'Merge intervals template has four steps. First, sort intervals by start time. Second, initialize result with first interval. Third, iterate from second interval: if current overlaps with last in result (current.start <= last.end), merge by updating last.end to max (last.end, current.end). If no overlap, append current to result. Fourth, return result. The key insight: after sorting, only need to check current against last merged interval, not all previous intervals. For example, [[1,3], [2,6], [8,10]]: start with [1,3]. [2,6] overlaps (2 <= 3), merge to [1,6]. [8,10] no overlap (8 > 6), append. Result: [[1,6], [8,10]]. This template is foundation for many interval problems.',
     keyPoints: [
       'Step 1: sort by start time',
       'Step 2: result starts with first interval',
@@ -36,9 +36,9 @@ export const templatesQuiz = [
     question:
       'Describe the overlap check helper function. Why is it useful to abstract this?',
     sampleAnswer:
-      'Overlap check helper: overlaps(a, b) returns True if intervals overlap. Implementation: return not (a.end <= b.start or b.end <= a.start). Or alternatively: a.start < b.end and b.start < a.end. Abstracting to helper function: makes code cleaner, reusable across problems, easier to test, centralizes overlap logic. If overlap logic changes (inclusive vs exclusive ends), only update one place. Many interval problems need overlap check repeatedly: merge, intersection, conflict detection. For example, in My Calendar problem, check if new interval overlaps with any existing. Helper makes this simple: any(overlaps(new, existing) for existing in booked). Without helper, repeat complex condition everywhere, risking bugs. Clean code principle: abstract repeated logic.',
+      'Overlap check helper: overlaps (a, b) returns True if intervals overlap. Implementation: return not (a.end <= b.start or b.end <= a.start). Or alternatively: a.start < b.end and b.start < a.end. Abstracting to helper function: makes code cleaner, reusable across problems, easier to test, centralizes overlap logic. If overlap logic changes (inclusive vs exclusive ends), only update one place. Many interval problems need overlap check repeatedly: merge, intersection, conflict detection. For example, in My Calendar problem, check if new interval overlaps with any existing. Helper makes this simple: any (overlaps (new, existing) for existing in booked). Without helper, repeat complex condition everywhere, risking bugs. Clean code principle: abstract repeated logic.',
     keyPoints: [
-      'Helper: overlaps(a, b) checks overlap',
+      'Helper: overlaps (a, b) checks overlap',
       'Implementation: not (a.end <= b.start or b.end <= a.start)',
       'Benefits: cleaner, reusable, testable',
       'Centralize logic: change once, effect everywhere',

@@ -29,7 +29,7 @@ export const collectionsmoduleMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict(list); d["key",].append(1)',
+      'defaultdict provides a default value for missing keys, avoiding KeyError: d = defaultdict (list); d["key",].append(1)',
   },
   {
     id: 'mc3',

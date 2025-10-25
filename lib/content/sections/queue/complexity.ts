@@ -63,8 +63,8 @@ Why is two-stacks queue O(1) amortized?
 queue = QueueWithStacks()
 
 # 1. Enqueue n items - O(n) total
-for i in range(n):
-    queue.enqueue(i)  # Each O(1)
+for i in range (n):
+    queue.enqueue (i)  # Each O(1)
 
 # stack_in: [0,1,2,...,n-1]
 # stack_out: []
@@ -76,7 +76,7 @@ queue.dequeue()  # Moves all n items from stack_in to stack_out
 # stack_out: [n-1,...,2,1,0]
 
 # 3. Next n-1 dequeues - O(1) each!
-for _ in range(n-1):
+for _ in range (n-1):
     queue.dequeue()  # Just pop from stack_out
 
 # Total cost: n enqueues + n dequeues = n + (n transfer + n pops) = 3n
@@ -96,7 +96,7 @@ space = O(n)  # n elements in queue
 
 ### BFS with Queue:
 \`\`\`python
-def bfs(root):
+def bfs (root):
     queue = deque([root])  # Space: O(width of tree)
     # ...
 
@@ -106,7 +106,7 @@ def bfs(root):
 
 ### Queue in Sliding Window:
 \`\`\`python
-def sliding_window_max(nums, k):
+def sliding_window_max (nums, k):
     dq = deque()  # Space: O(k) max
     # ...
 
@@ -162,12 +162,12 @@ queue.pop(0)  # This is O(n), not O(1)!
 ❌ **Mistake 3:** Creating new deque in loop
 \`\`\`python
 # ❌ BAD - O(n²) total
-for i in range(n):
+for i in range (n):
     queue = deque()  # Creates new deque each time!
 
 # ✅ GOOD - O(n) total
 queue = deque()
-for i in range(n):
+for i in range (n):
     # Reuse same queue
 \`\`\`
 

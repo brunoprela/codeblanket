@@ -39,7 +39,7 @@ export const requestResponseModelsPydanticMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      '@validator validates a single field in isolation. Use for: field-specific checks (password strength, username format), each_item=True for validating list items. Example: @validator("email") def check_email(cls, v): if not "@" in v: raise ValueError("Invalid email"). @root_validator validates entire model with access to all fields. Use for: cross-field validation (password == password_confirm), business rules involving multiple fields (shipping address required if has_physical_items). Example: @root_validator def check_passwords(cls, values): if values.get("password") != values.get("password_confirm"): raise ValueError("Passwords don\'t match"). Performance: @validator runs first (per field), @root_validator runs after all field validators pass.',
+      '@validator validates a single field in isolation. Use for: field-specific checks (password strength, username format), each_item=True for validating list items. Example: @validator("email") def check_email (cls, v): if not "@" in v: raise ValueError("Invalid email"). @root_validator validates entire model with access to all fields. Use for: cross-field validation (password == password_confirm), business rules involving multiple fields (shipping address required if has_physical_items). Example: @root_validator def check_passwords (cls, values): if values.get("password") != values.get("password_confirm"): raise ValueError("Passwords don\'t match"). Performance: @validator runs first (per field), @root_validator runs after all field validators pass.',
   },
   {
     id: 'fastapi-pydantic-mc-4',
@@ -65,6 +65,6 @@ export const requestResponseModelsPydanticMultipleChoice = [
     ],
     correctAnswer: 1,
     explanation:
-      'orm_mode = True enables Pydantic to create instances from ORM objects that use attribute access instead of dict access. SQLAlchemy/Django ORM models use: user.username (attribute), not user["username"] (dict). With orm_mode: UserResponse.from_orm(db_user) works, converting SQLAlchemy model to Pydantic model. Without orm_mode: only UserResponse(**user.dict()) or UserResponse(**dict(user)) works. Example: class UserResponse(BaseModel): id: int; username: str; class Config: orm_mode = True. db_user = session.query(User).first() # SQLAlchemy model, response = UserResponse.from_orm(db_user) # Works! This is essential for FastAPI + SQLAlchemy integration, enabling: return db_user with response_model=UserResponse (FastAPI calls from_orm internally).',
+      'orm_mode = True enables Pydantic to create instances from ORM objects that use attribute access instead of dict access. SQLAlchemy/Django ORM models use: user.username (attribute), not user["username"] (dict). With orm_mode: UserResponse.from_orm (db_user) works, converting SQLAlchemy model to Pydantic model. Without orm_mode: only UserResponse(**user.dict()) or UserResponse(**dict (user)) works. Example: class UserResponse(BaseModel): id: int; username: str; class Config: orm_mode = True. db_user = session.query(User).first() # SQLAlchemy model, response = UserResponse.from_orm (db_user) # Works! This is essential for FastAPI + SQLAlchemy integration, enabling: return db_user with response_model=UserResponse (FastAPI calls from_orm internally).',
   },
 ];

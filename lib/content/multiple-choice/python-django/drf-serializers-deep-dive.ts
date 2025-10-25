@@ -15,14 +15,14 @@ export const DrfSerializersDeepDiveMultipleChoice = [
 **Correct Answer: B) Override create() and update() methods**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True)
+class ArticleSerializer (serializers.ModelSerializer):
+    comments = CommentSerializer (many=True)
     
-    def create(self, validated_data):
+    def create (self, validated_data):
         comments_data = validated_data.pop('comments')
         article = Article.objects.create(**validated_data)
         for comment_data in comments_data:
-            Comment.objects.create(article=article, **comment_data)
+            Comment.objects.create (article=article, **comment_data)
         return article
 \`\`\`
 
@@ -42,9 +42,9 @@ You must explicitly handle nested creation/updates.
 **Correct Answer: B) To customize how data is converted to JSON**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
+class ArticleSerializer (serializers.ModelSerializer):
+    def to_representation (self, instance):
+        data = super().to_representation (instance)
         # Customize output
         data['url'] = f'/articles/{instance.slug}/'
         return data
@@ -66,9 +66,9 @@ Controls the final JSON structure sent to clients.
 **Correct Answer: B) Add validate_<field_name>() method**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    def validate_title(self, value):
-        if len(value) < 10:
+class ArticleSerializer (serializers.ModelSerializer):
+    def validate_title (self, value):
+        if len (value) < 10:
             raise serializers.ValidationError(
                 "Title must be at least 10 characters"
             )
@@ -91,8 +91,8 @@ This validates a specific field independently.
 **Correct Answer: A) Specifies the data source/model field to use**
 
 \`\`\`python
-class ArticleSerializer(serializers.ModelSerializer):
-    author_name = serializers.CharField(source='author.username')
+class ArticleSerializer (serializers.ModelSerializer):
+    author_name = serializers.CharField (source='author.username')
     # Maps author_name in JSON to author.username on model
 \`\`\`
 
@@ -112,8 +112,8 @@ Allows different names in API vs model.
 **Correct Answer: A) Set write_only=True**
 
 \`\`\`python
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+class UserSerializer (serializers.ModelSerializer):
+    password = serializers.CharField (write_only=True)
     
     class Meta:
         model = User

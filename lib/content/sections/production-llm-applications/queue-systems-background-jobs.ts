@@ -7,7 +7,7 @@ Queue systems are the backbone of scalable LLM applications. They decouple reque
 
 When you're building an LLM application that needs to process thousands of documents, generate content for many users, or handle long-running multi-step workflows, queue systems become essential. They transform your architecture from "make the user wait for AI to finish" to "accept the request immediately, process in the background, and notify when complete."
 
-We'll cover Celery (Python's most popular task queue), Redis Queue (RQ), RabbitMQ patterns, job priorities, monitoring, and failure handling. By the end, you'll know how to build robust background processing systems that can handle production workloads reliably.
+We'll cover Celery (Python\'s most popular task queue), Redis Queue (RQ), RabbitMQ patterns, job priorities, monitoring, and failure handling. By the end, you'll know how to build robust background processing systems that can handle production workloads reliably.
 
 ## Why Queue Systems Matter for LLM Apps
 
@@ -30,12 +30,12 @@ LLM API calls are slow and expensive. A single GPT-4 API call can take 10-30 sec
 \`\`\`python
 # SYNCHRONOUS: User waits for LLM to finish
 @app.post("/analyze-document")
-def analyze_sync(document_id: str):
-    # User's HTTP request is open, waiting...
-    document = get_document(document_id)
+def analyze_sync (document_id: str):
+    # User\'s HTTP request is open, waiting...
+    document = get_document (document_id)
     
     # This blocks for 30 seconds
-    analysis = call_llm_api(document.content)
+    analysis = call_llm_api (document.content)
     
     # Finally return after 30 seconds
     return {"analysis": analysis}
@@ -43,9 +43,9 @@ def analyze_sync(document_id: str):
 
 # QUEUE-BASED: User gets immediate response
 @app.post("/analyze-document")
-def analyze_async(document_id: str):
+def analyze_async (document_id: str):
     # Submit job to queue
-    task = analyze_document_task.delay(document_id)
+    task = analyze_document_task.delay (document_id)
     
     # Return immediately (< 100ms)
     return {
@@ -56,16 +56,16 @@ def analyze_async(document_id: str):
 
 # Worker processes the job in background
 @celery_app.task
-def analyze_document_task(document_id: str):
-    document = get_document(document_id)
-    analysis = call_llm_api(document.content)  # Takes 30 seconds, but user isn't waiting
-    save_analysis(document_id, analysis)
-    send_notification(document.user_id, "Analysis complete!")
+def analyze_document_task (document_id: str):
+    document = get_document (document_id)
+    analysis = call_llm_api (document.content)  # Takes 30 seconds, but user isn't waiting
+    save_analysis (document_id, analysis)
+    send_notification (document.user_id, "Analysis complete!")
 \`\`\`
 
 ## Celery: Python's Distributed Task Queue
 
-Celery is the most popular task queue for Python. It's battle-tested, feature-rich, and integrates well with Django, Flask, and FastAPI.
+Celery is the most popular task queue for Python. It\'s battle-tested, feature-rich, and integrates well with Django, Flask, and FastAPI.
 
 ### Core Concepts
 
@@ -104,8 +104,8 @@ app.conf.update(
     task_reject_on_worker_lost=True,
 )
 
-@app.task(bind=True, max_retries=3)
-def generate_content(self, prompt: str, model: str = "gpt-3.5-turbo"):
+@app.task (bind=True, max_retries=3)
+def generate_content (self, prompt: str, model: str = "gpt-3.5-turbo"):
     """
     Generate content with retry logic.
     
@@ -145,15 +145,15 @@ def generate_content(self, prompt: str, model: str = "gpt-3.5-turbo"):
     except openai.error.RateLimitError as exc:
         # Retry with exponential backoff
         countdown = 60 * (2 ** self.request.retries)
-        raise self.retry(exc=exc, countdown=countdown)
+        raise self.retry (exc=exc, countdown=countdown)
     
     except openai.error.APIError as exc:
         # Retry on API errors
-        raise self.retry(exc=exc, countdown=30)
+        raise self.retry (exc=exc, countdown=30)
     
     except Exception as exc:
         # Log unexpected errors but don't retry
-        logging.error(f"Task {self.request.id} failed: {str(exc)}")
+        logging.error (f"Task {self.request.id} failed: {str (exc)}")
         raise
 
 
@@ -174,7 +174,7 @@ task = generate_content.delay("Write a haiku about Python", model="gpt-4")
 task_id = task.id
 
 # Check task status
-result = generate_content.AsyncResult(task_id)
+result = generate_content.AsyncResult (task_id)
 print(result.state)  # PENDING, PROCESSING, SUCCESS, FAILURE
 
 # Get result (blocks until complete)
@@ -204,10 +204,10 @@ class GenerateRequest(BaseModel):
     model: str = "gpt-3.5-turbo"
 
 @app.post("/generate")
-async def create_generation(request: GenerateRequest):
+async def create_generation (request: GenerateRequest):
     """Submit generation task to queue."""
     # Submit to Celery
-    task = generate_content.delay(request.prompt, request.model)
+    task = generate_content.delay (request.prompt, request.model)
     
     return {
         "task_id": task.id,
@@ -216,9 +216,9 @@ async def create_generation(request: GenerateRequest):
     }
 
 @app.get("/tasks/{task_id}")
-async def get_task_status(task_id: str):
+async def get_task_status (task_id: str):
     """Check task status and get result."""
-    task = celery_app.AsyncResult(task_id)
+    task = celery_app.AsyncResult (task_id)
     
     if task.state == 'PENDING':
         return {
@@ -241,7 +241,7 @@ async def get_task_status(task_id: str):
     elif task.state == 'FAILURE':
         return {
             "status": "failed",
-            "error": str(task.info)
+            "error": str (task.info)
         }
     
     return {
@@ -249,9 +249,9 @@ async def get_task_status(task_id: str):
     }
 
 @app.delete("/tasks/{task_id}")
-async def cancel_task(task_id: str):
+async def cancel_task (task_id: str):
     """Cancel a running task."""
-    celery_app.control.revoke(task_id, terminate=True)
+    celery_app.control.revoke (task_id, terminate=True)
     return {"status": "cancelled"}
 \`\`\`
 
@@ -265,14 +265,14 @@ Complex LLM workflows often require multiple steps. Celery provides patterns for
 from celery import chain
 
 @app.task
-def extract_text(document_id: str):
+def extract_text (document_id: str):
     """Step 1: Extract text from document."""
-    document = get_document(document_id)
-    text = extract_text_from_pdf(document.path)
+    document = get_document (document_id)
+    text = extract_text_from_pdf (document.path)
     return {'document_id': document_id, 'text': text}
 
 @app.task
-def summarize_text(data: dict):
+def summarize_text (data: dict):
     """Step 2: Summarize extracted text."""
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -285,7 +285,7 @@ def summarize_text(data: dict):
     return data
 
 @app.task
-def save_results(data: dict):
+def save_results (data: dict):
     """Step 3: Save results to database."""
     update_document(
         data['document_id'],
@@ -310,19 +310,19 @@ result = workflow.apply_async()
 from celery import group
 
 @app.task
-def analyze_sentiment(text: str):
+def analyze_sentiment (text: str):
     """Analyze sentiment of text."""
     # Call LLM
     return {"sentiment": "positive", "score": 0.8}
 
 @app.task
-def extract_entities(text: str):
+def extract_entities (text: str):
     """Extract named entities."""
     # Call LLM
     return {"entities": ["Python", "Celery", "Redis"]}
 
 @app.task
-def categorize_text(text: str):
+def categorize_text (text: str):
     """Categorize text."""
     # Call LLM
     return {"category": "Technology"}
@@ -347,22 +347,22 @@ results = result.get()
 from celery import chord
 
 @app.task
-def process_chunk(text_chunk: str):
+def process_chunk (text_chunk: str):
     """Process a single text chunk."""
     # Analyze chunk
     return analysis_result
 
 @app.task
-def combine_results(results: list):
+def combine_results (results: list):
     """Combine results from all chunks."""
     # Aggregate all chunk analyses
     return final_result
 
 # Split text into chunks, process in parallel, then combine
-chunks = split_text_into_chunks(long_text)
+chunks = split_text_into_chunks (long_text)
 
 workflow = chord(
-    group([process_chunk.s(chunk) for chunk in chunks]),
+    group([process_chunk.s (chunk) for chunk in chunks]),
     combine_results.s()
 )
 
@@ -371,7 +371,7 @@ result = workflow.apply_async()
 
 ## Redis Queue (RQ): Simpler Alternative
 
-RQ is a simpler queue system, perfect for smaller applications or when you don't need Celery's complexity.
+RQ is a simpler queue system, perfect for smaller applications or when you don't need Celery\'s complexity.
 
 \`\`\`python
 # rq_tasks.py
@@ -380,13 +380,13 @@ from rq import Queue
 import openai
 
 # Connect to Redis
-redis_conn = Redis(host='localhost', port=6379)
+redis_conn = Redis (host='localhost', port=6379)
 
 # Create queue
-q = Queue(connection=redis_conn)
+q = Queue (connection=redis_conn)
 
 # Define task function (no decorator needed!)
-def generate_content(prompt: str, model: str = "gpt-3.5-turbo"):
+def generate_content (prompt: str, model: str = "gpt-3.5-turbo"):
     """Simple RQ task."""
     response = openai.ChatCompletion.create(
         model=model,
@@ -432,24 +432,24 @@ app.conf.task_routes = {
 }
 
 @app.task
-def urgent_task(data):
+def urgent_task (data):
     """High priority task for premium users."""
-    return process_urgently(data)
+    return process_urgently (data)
 
 @app.task
-def normal_task(data):
+def normal_task (data):
     """Normal priority task."""
-    return process_normally(data)
+    return process_normally (data)
 
 @app.task
-def batch_task(data):
+def batch_task (data):
     """Low priority batch processing."""
-    return process_in_batch(data)
+    return process_in_batch (data)
 
 # Submit to specific queues
-urgent_task.apply_async(args=["important"], queue='urgent')
-normal_task.apply_async(args=["regular"], queue='default')
-batch_task.apply_async(args=["can_wait"], queue='batch')
+urgent_task.apply_async (args=["important"], queue='urgent')
+normal_task.apply_async (args=["regular"], queue='default')
+batch_task.apply_async (args=["can_wait"], queue='batch')
 
 # Start workers with different queue priorities
 # High priority worker (processes urgent first):
@@ -481,24 +481,24 @@ class LLMTask(Task):
     retry_backoff_max = 600  # Max 10 minutes between retries
     retry_jitter = True  # Add randomness to prevent thundering herd
     
-    def on_failure(self, exc, task_id, args, kwargs, einfo):
+    def on_failure (self, exc, task_id, args, kwargs, einfo):
         """Called when task fails after all retries."""
-        logging.error(f"Task {task_id} permanently failed: {exc}")
+        logging.error (f"Task {task_id} permanently failed: {exc}")
         
         # Move to dead letter queue
-        move_to_dead_letter_queue(task_id, exc, args, kwargs)
+        move_to_dead_letter_queue (task_id, exc, args, kwargs)
         
         # Notify admin
-        send_alert(f"Task {task_id} failed permanently")
+        send_alert (f"Task {task_id} failed permanently")
     
-    def on_retry(self, exc, task_id, args, kwargs, einfo):
+    def on_retry (self, exc, task_id, args, kwargs, einfo):
         """Called when task is retried."""
         retry_count = self.request.retries
-        logging.warning(f"Task {task_id} retry {retry_count}: {exc}")
+        logging.warning (f"Task {task_id} retry {retry_count}: {exc}")
 
 
-@app.task(base=LLMTask)
-def robust_generation(prompt: str):
+@app.task (base=LLMTask)
+def robust_generation (prompt: str):
     """Generation with comprehensive error handling."""
     try:
         response = openai.ChatCompletion.create(
@@ -509,20 +509,20 @@ def robust_generation(prompt: str):
     
     except openai.error.InvalidRequestError as e:
         # Don't retry invalid requests
-        logging.error(f"Invalid request: {str(e)}")
+        logging.error (f"Invalid request: {str (e)}")
         raise  # Fail immediately
     
     except Exception as e:
         # Retry other errors
-        logging.error(f"Error in generation: {str(e)}")
+        logging.error (f"Error in generation: {str (e)}")
         raise
 
 
-def move_to_dead_letter_queue(task_id, error, args, kwargs):
+def move_to_dead_letter_queue (task_id, error, args, kwargs):
     """Store permanently failed tasks for manual review."""
     dead_letter_db.insert({
         'task_id': task_id,
-        'error': str(error),
+        'error': str (error),
         'args': args,
         'kwargs': kwargs,
         'failed_at': datetime.utcnow(),
@@ -537,18 +537,18 @@ Track progress for long-running tasks so users know what's happening.
 \`\`\`python
 from celery import Task
 
-@app.task(bind=True)
-def process_large_document(self, document_id: str):
+@app.task (bind=True)
+def process_large_document (self, document_id: str):
     """
     Process large document with progress updates.
     """
-    document = get_document(document_id)
+    document = get_document (document_id)
     pages = document.pages
-    total_pages = len(pages)
+    total_pages = len (pages)
     
     results = []
     
-    for i, page in enumerate(pages):
+    for i, page in enumerate (pages):
         # Update progress
         self.update_state(
             state='PROCESSING',
@@ -561,8 +561,8 @@ def process_large_document(self, document_id: str):
         )
         
         # Process page
-        page_result = process_page_with_llm(page)
-        results.append(page_result)
+        page_result = process_page_with_llm (page)
+        results.append (page_result)
     
     # Complete
     return {
@@ -574,9 +574,9 @@ def process_large_document(self, document_id: str):
 
 # Check progress from API
 @app.get("/tasks/{task_id}/progress")
-def get_progress(task_id: str):
+def get_progress (task_id: str):
     """Get task progress."""
-    task = app.AsyncResult(task_id)
+    task = app.AsyncResult (task_id)
     
     if task.state == 'PROCESSING':
         return {
@@ -605,23 +605,23 @@ def monitor_celery_events():
     """
     app = Celery('app', broker='redis://localhost:6379/0')
     
-    def on_task_sent(event):
+    def on_task_sent (event):
         """Task was sent to worker."""
         print(f"Task {event['uuid']} sent to worker")
     
-    def on_task_started(event):
+    def on_task_started (event):
         """Task started processing."""
         print(f"Task {event['uuid']} started")
     
-    def on_task_succeeded(event):
+    def on_task_succeeded (event):
         """Task completed successfully."""
         print(f"Task {event['uuid']} succeeded in {event['runtime']}s")
     
-    def on_task_failed(event):
+    def on_task_failed (event):
         """Task failed."""
         print(f"Task {event['uuid']} failed: {event['exception']}")
     
-    with Connection(app.broker_connection()) as connection:
+    with Connection (app.broker_connection()) as connection:
         receiver = EventReceiver(
             connection,
             handlers={
@@ -631,7 +631,7 @@ def monitor_celery_events():
                 'task-failed': on_task_failed,
             }
         )
-        receiver.capture(limit=None, timeout=None, wakeup=True)
+        receiver.capture (limit=None, timeout=None, wakeup=True)
 
 
 # Get queue stats
@@ -691,11 +691,11 @@ app.conf.task_routes = {
 }
 
 # Priority support
-@app.task(priority=9)  # 0-9, higher = more priority
+@app.task (priority=9)  # 0-9, higher = more priority
 def high_priority_task():
     pass
 
-@app.task(priority=0)
+@app.task (priority=0)
 def low_priority_task():
     pass
 \`\`\`

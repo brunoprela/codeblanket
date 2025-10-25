@@ -44,7 +44,7 @@ export const hyperparameterTuningMultipleChoice = {
       ],
       correctAnswer: 1,
       explanation:
-        "Bayesian Optimization builds a probabilistic model of the objective function and intelligently samples promising regions. It's highly sample-efficient, often finding good solutions in 50-100 trials vs thousands for Grid/Random Search. Perfect for limited budgets and many hyperparameters.",
+        "Bayesian Optimization builds a probabilistic model of the objective function and intelligently samples promising regions. It\'s highly sample-efficient, often finding good solutions in 50-100 trials vs thousands for Grid/Random Search. Perfect for limited budgets and many hyperparameters.",
       difficulty: 'advanced' as const,
       category: 'Strategy',
     },

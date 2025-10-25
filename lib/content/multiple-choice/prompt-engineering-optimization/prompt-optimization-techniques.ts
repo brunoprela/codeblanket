@@ -30,7 +30,7 @@ export const promptoptimizationtechniquesMultipleChoice: MultipleChoiceQuestion[
       ],
       correctAnswer: 1,
       explanation:
-        "Prompt compression reduces token count (and thus costs) while trying to preserve semantic meaning and output quality. It's critical for high-volume applications where token costs add up quickly.",
+        "Prompt compression reduces token count (and thus costs) while trying to preserve semantic meaning and output quality. It\'s critical for high-volume applications where token costs add up quickly.",
     },
     {
       id: 'peo-optimization-mc-3',

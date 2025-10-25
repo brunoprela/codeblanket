@@ -39,12 +39,12 @@ class CreateViewOp(MigrateOperation):
         self.select_query = select_query
     
     @classmethod
-    def create_view(cls, operations, view_name, select_query):
-        op = CreateViewOp(view_name, select_query)
-        return operations.invoke(op)
+    def create_view (cls, operations, view_name, select_query):
+        op = CreateViewOp (view_name, select_query)
+        return operations.invoke (op)
 
 @Operations.implementation_for(CreateViewOp)
-def create_view(operations, operation):
+def create_view (operations, operation):
     operations.execute(
         f"CREATE VIEW {operation.view_name} AS {operation.select_query}"
     )
@@ -74,7 +74,7 @@ Batch Mode for SQLite
 
 def upgrade():
     with op.batch_alter_table('users', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('age', sa.Integer()))
+        batch_op.add_column (sa.Column('age', sa.Integer()))
         batch_op.create_index('ix_users_age', ['age'])
         batch_op.drop_column('old_column')
     
@@ -109,7 +109,7 @@ def run_migrations_online():
         'database'
     ) or 'app_db'
     
-    configuration = config.get_section(db_name)
+    configuration = config.get_section (db_name)
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
@@ -117,7 +117,7 @@ def run_migrations_online():
     )
     
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure (connection=connection, target_metadata=target_metadata)
         with context.begin_transaction():
             context.run_migrations()
 

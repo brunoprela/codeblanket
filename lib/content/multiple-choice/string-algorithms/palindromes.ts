@@ -49,7 +49,7 @@ export const palindromesMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 2,
     explanation:
-      'Longest palindromic subsequence requires DP with O(n²) time and space, similar to Longest Common Subsequence between s and reverse(s). Two pointers and expand-around-center work for substrings, not subsequences.',
+      'Longest palindromic subsequence requires DP with O(n²) time and space, similar to Longest Common Subsequence between s and reverse (s). Two pointers and expand-around-center work for substrings, not subsequences.',
   },
   {
     id: 'mc-pal5',

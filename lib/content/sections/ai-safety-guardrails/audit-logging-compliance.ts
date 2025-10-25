@@ -111,17 +111,17 @@ class AuditEvent:
     success: bool
     error_message: Optional[str]
     
-    def to_dict(self) -> Dict:
+    def to_dict (self) -> Dict:
         """Convert to dictionary for storage"""
-        data = asdict(self)
+        data = asdict (self)
         data['timestamp'] = self.timestamp.isoformat()
         data['event_type'] = self.event_type.value
         data['severity'] = self.severity.value
         return data
     
-    def to_json(self) -> str:
+    def to_json (self) -> str:
         """Convert to JSON string"""
-        return json.dumps(self.to_dict())
+        return json.dumps (self.to_dict())
 
 class AuditLogger:
     """Comprehensive audit logging system"""
@@ -154,7 +154,7 @@ class AuditLogger:
         event_id = self._generate_event_id()
         
         # Redact PII from details
-        safe_details = self._redact_pii_from_dict(details or {})
+        safe_details = self._redact_pii_from_dict (details or {})
         
         # Create event
         event = AuditEvent(
@@ -173,11 +173,11 @@ class AuditLogger:
         )
         
         # Store event
-        self.storage.store(event)
+        self.storage.store (event)
         
         # Alert on critical events
         if severity == Severity.CRITICAL:
-            self._send_alert(event)
+            self._send_alert (event)
         
         return event
     
@@ -192,7 +192,7 @@ class AuditLogger:
         """Log a user request"""
         
         # Redact PII from content before logging
-        safe_content, _ = self.pii_redactor.redact(request_content)
+        safe_content, _ = self.pii_redactor.redact (request_content)
         
         self.log_event(
             event_type=EventType.USER_REQUEST,
@@ -202,8 +202,8 @@ class AuditLogger:
             ip_address=ip_address,
             resource="llm",
             details={
-                'content_hash': self._hash_content(request_content),
-                'content_length': len(request_content),
+                'content_hash': self._hash_content (request_content),
+                'content_length': len (request_content),
                 'metadata': metadata or {}
             },
             success=True
@@ -223,7 +223,7 @@ class AuditLogger:
         """Log an LLM response"""
         
         # Redact PII
-        safe_response, _ = self.pii_redactor.redact(response_content)
+        safe_response, _ = self.pii_redactor.redact (response_content)
         
         self.log_event(
             event_type=EventType.LLM_RESPONSE,
@@ -233,8 +233,8 @@ class AuditLogger:
             resource="llm",
             details={
                 'request_hash': request_hash,
-                'response_hash': self._hash_content(response_content),
-                'response_length': len(response_content),
+                'response_hash': self._hash_content (response_content),
+                'response_length': len (response_content),
                 'model': model,
                 'tokens_used': tokens_used,
                 'cost': cost,
@@ -313,28 +313,28 @@ class AuditLogger:
             success=True
         )
     
-    def _generate_event_id(self) -> str:
+    def _generate_event_id (self) -> str:
         """Generate unique event ID"""
         import uuid
-        return str(uuid.uuid4())
+        return str (uuid.uuid4())
     
-    def _hash_content(self, content: str) -> str:
+    def _hash_content (self, content: str) -> str:
         """Hash content for reference without storing sensitive data"""
         return hashlib.sha256(content.encode()).hexdigest()
     
-    def _redact_pii_from_dict(self, data: Dict) -> Dict:
+    def _redact_pii_from_dict (self, data: Dict) -> Dict:
         """Redact PII from dictionary"""
         # Simple implementation - in production, recursively redact
         safe_data = {}
         for key, value in data.items():
-            if isinstance(value, str):
-                safe_value, _ = self.pii_redactor.redact(value)
+            if isinstance (value, str):
+                safe_value, _ = self.pii_redactor.redact (value)
                 safe_data[key] = safe_value
             else:
                 safe_data[key] = value
         return safe_data
     
-    def _send_alert(self, event: AuditEvent):
+    def _send_alert (self, event: AuditEvent):
         """Send alert for critical events"""
         # In production: send to PagerDuty, Slack, email, etc.
         print(f"🚨 CRITICAL ALERT: {event.action}")
@@ -346,9 +346,9 @@ class InMemoryStorage:
     def __init__(self):
         self.events: List[AuditEvent] = []
     
-    def store(self, event: AuditEvent):
+    def store (self, event: AuditEvent):
         """Store event"""
-        self.events.append(event)
+        self.events.append (event)
     
     def query(
         self,
@@ -380,7 +380,7 @@ logger = AuditLogger()
 # Log user request
 logger.log_user_request(
     user_id="user_123",
-    request_content="What's the weather in Paris?",
+    request_content="What\'s the weather in Paris?",
     session_id="session_456",
     ip_address="192.168.1.1"
 )
@@ -406,7 +406,7 @@ logger.log_safety_violation(
     details={'pattern': 'instruction_override'}
 )
 
-print(f"\\nLogged {len(logger.storage.events)} events")
+print(f"\\nLogged {len (logger.storage.events)} events")
 \`\`\`
 
 ## GDPR Compliance Implementation
@@ -451,11 +451,11 @@ class GDPRCompliance System:
             'purpose': purpose,
             'legal_basis': legal_basis,
             'retention_days': retention_days,
-            'retention_until': (datetime.now() + timedelta(days=retention_days)).isoformat(),
+            'retention_until': (datetime.now() + timedelta (days=retention_days)).isoformat(),
             'registered_at': datetime.now().isoformat()
         }
         
-        self.data_registry[user_id]['processing_activities'].append(activity)
+        self.data_registry[user_id]['processing_activities'].append (activity)
         
         # Log registration
         self.audit_logger.log_event(
@@ -466,7 +466,7 @@ class GDPRCompliance System:
             success=True
         )
     
-    def export_user_data(self, user_id: str) -> Dict:
+    def export_user_data (self, user_id: str) -> Dict:
         """
         Export all user data (GDPR Article 20 - Right to Data Portability).
         
@@ -485,15 +485,15 @@ class GDPRCompliance System:
         user_data = {
             'user_id': user_id,
             'export_date': datetime.now().isoformat(),
-            'data_processing_activities': self.data_registry.get(user_id, {}),
-            'audit_log': self._get_user_audit_log(user_id),
+            'data_processing_activities': self.data_registry.get (user_id, {}),
+            'audit_log': self._get_user_audit_log (user_id),
             'format': 'JSON',
             'regulation': 'GDPR Article 20'
         }
         
         return user_data
     
-    def delete_user_data(self, user_id: str, reason: str) -> Dict:
+    def delete_user_data (self, user_id: str, reason: str) -> Dict:
         """
         Delete all user data (GDPR Article 17 - Right to Erasure).
         
@@ -516,7 +516,7 @@ class GDPRCompliance System:
         )
         
         # Delete from registry
-        deleted_data = self.data_registry.pop(user_id, None)
+        deleted_data = self.data_registry.pop (user_id, None)
         
         # In production: Delete from all systems
         # - Database records
@@ -530,16 +530,16 @@ class GDPRCompliance System:
             'deletion_date': datetime.now().isoformat(),
             'data_deleted': 'all',
             'reason': reason,
-            'records_deleted': len(deleted_data['processing_activities']) if deleted_data else 0
+            'records_deleted': len (deleted_data['processing_activities']) if deleted_data else 0
         }
     
-    def check_consent(self, user_id: str, purpose: str) -> bool:
+    def check_consent (self, user_id: str, purpose: str) -> bool:
         """Check if user has given consent for purpose"""
         
-        user_data = self.data_registry.get(user_id, {})
+        user_data = self.data_registry.get (user_id, {})
         consents = user_data.get('consents', {})
         
-        return consents.get(purpose, False)
+        return consents.get (purpose, False)
     
     def record_consent(
         self,
@@ -572,26 +572,26 @@ class GDPRCompliance System:
             details={'method': consent_method}
         )
     
-    def _get_user_audit_log(self, user_id: str) -> List[Dict]:
+    def _get_user_audit_log (self, user_id: str) -> List[Dict]:
         """Get all audit log events for user"""
         
-        events = self.audit_logger.storage.query(user_id=user_id)
+        events = self.audit_logger.storage.query (user_id=user_id)
         return [event.to_dict() for event in events]
     
-    def generate_compliance_report(self) -> Dict:
+    def generate_compliance_report (self) -> Dict:
         """Generate GDPR compliance report"""
         
-        total_users = len(self.data_registry)
+        total_users = len (self.data_registry)
         users_with_consent = sum(
             1 for user in self.data_registry.values()
-            if any(c['granted'] for c in user.get('consents', {}).values())
+            if any (c['granted'] for c in user.get('consents', {}).values())
         )
         
         return {
             'report_date': datetime.now().isoformat(),
             'total_users': total_users,
             'users_with_consent': users_with_consent,
-            'consent_rate': users_with_consent / max(total_users, 1),
+            'consent_rate': users_with_consent / max (total_users, 1),
             'data_retention_policy': 'In place',
             'right_to_access': 'Implemented',
             'right_to_erasure': 'Implemented',
@@ -600,7 +600,7 @@ class GDPRCompliance System:
         }
 
 # Example usage
-compliance = GDPRComplianceSystem(audit_logger=logger)
+compliance = GDPRComplianceSystem (audit_logger=logger)
 
 # Register data processing
 compliance.register_data_processing(
@@ -622,7 +622,7 @@ compliance.record_consent(
 # Export user data
 export = compliance.export_user_data("user_123")
 print(f"\\nExported data for user: {export['user_id']}")
-print(f"Processing activities: {len(export['data_processing_activities'].get('processing_activities', []))}")
+print(f"Processing activities: {len (export['data_processing_activities'].get('processing_activities', []))}")
 
 # Generate compliance report
 report = compliance.generate_compliance_report()
@@ -648,16 +648,16 @@ class AuditAccessControl:
             'user': set()  # Users can only access their own data
         }
     
-    def require_permission(self, permission: str):
+    def require_permission (self, permission: str):
         """Decorator to require permission for function"""
-        def decorator(func):
-            @wraps(func)
-            def wrapper(self, user_role: str, *args, **kwargs):
-                if permission not in self.role_permissions.get(user_role, set()):
+        def decorator (func):
+            @wraps (func)
+            def wrapper (self, user_role: str, *args, **kwargs):
+                if permission not in self.role_permissions.get (user_role, set()):
                     raise PermissionError(
                         f"Role '{user_role}' does not have '{permission}' permission"
                     )
-                return func(self, user_role, *args, **kwargs)
+                return func (self, user_role, *args, **kwargs)
             return wrapper
         return decorator
     

@@ -10,7 +10,7 @@ export const kafkaconsumersQuiz: QuizQuestion[] = [
     question:
       'Explain Kafka consumer groups and how partition assignment works. Design a consumer group for processing 1 million order events per day from a topic with 24 partitions. How many consumers would you deploy, how would you handle rebalancing, and what happens when a consumer crashes?',
     hint: 'Consider parallelism limits, rebalancing strategies, and failure recovery with offset management.',
-    sampleAnswer: `Kafka consumer groups enable parallel processing while maintaining scalability and fault tolerance. Here's a comprehensive analysis:
+    sampleAnswer: `Kafka consumer groups enable parallel processing while maintaining scalability and fault tolerance. Here\'s a comprehensive analysis:
 
 **Consumer Group Fundamentals:**
 
@@ -275,18 +275,18 @@ Consumer 1 takes over Partition 8:
 Result: At-least-once delivery (duplicates possible)
 
 Handling Duplicates (Idempotency):
-def process_order(order):
+def process_order (order):
     order_id = order['order_id']
     
     # Check if already processed
-    if redis.exists(f"processed:{order_id}"):
+    if redis.exists (f"processed:{order_id}"):
         return  # Skip duplicate
     
     # Process order
-    save_order_to_db(order)
+    save_order_to_db (order)
     
     # Mark as processed
-    redis.setex(f"processed:{order_id}", 86400, "true")
+    redis.setex (f"processed:{order_id}", 86400, "true")
 
 ✅ Idempotent processing handles duplicates safely
 \`\`\`
@@ -411,7 +411,7 @@ This design handles 1M orders/day with fault tolerance, automatic failover, and 
     question:
       'Compare manual offset management strategies (commitSync vs commitAsync vs per-record commits) for Kafka consumers. For a payment processing system that cannot tolerate duplicate charges, which strategy would you use and why? Walk through failure scenarios and recovery.',
     hint: 'Consider exactly-once processing, performance trade-offs, and failure recovery with different commit strategies.',
-    sampleAnswer: `Offset management is critical for reliable message processing. The commit strategy determines message processing guarantees and system performance. Here's a comprehensive analysis:
+    sampleAnswer: `Offset management is critical for reliable message processing. The commit strategy determines message processing guarantees and system performance. Here\'s a comprehensive analysis:
 
 **Offset Management Fundamentals:**
 
@@ -448,7 +448,7 @@ while (true) {
     ConsumerRecords<> records = consumer.poll(Duration.ofMillis(100));
     
     for (ConsumerRecord<> record : records) {
-        process(record);  // Process message
+        process (record);  // Process message
     }
     // Offset auto-committed every 5 seconds
 }
@@ -478,7 +478,7 @@ while (true) {
     ConsumerRecords<> records = consumer.poll(Duration.ofMillis(100));
     
     for (ConsumerRecord<> record : records) {
-        process(record);
+        process (record);
     }
     
     consumer.commitSync();  // Blocks until commit succeeds
@@ -518,7 +518,7 @@ while (true) {
     ConsumerRecords<> records = consumer.poll(Duration.ofMillis(100));
     
     for (ConsumerRecord<> record : records) {
-        process(record);
+        process (record);
     }
     
     consumer.commitAsync((offsets, exception) -> {
@@ -564,14 +564,14 @@ while (true) {
     ConsumerRecords<> records = consumer.poll(Duration.ofMillis(100));
     
     for (ConsumerRecord<> record : records) {
-        process(record);  // Process single message
+        process (record);  // Process single message
         
         // Commit this specific record
         Map<TopicPartition, OffsetAndMetadata> offsets = Collections.singletonMap(
-            new TopicPartition(record.topic(), record.partition()),
-            new OffsetAndMetadata(record.offset() + 1)
+            new TopicPartition (record.topic(), record.partition()),
+            new OffsetAndMetadata (record.offset() + 1)
         );
-        consumer.commitSync(offsets);  // Commit after each message
+        consumer.commitSync (offsets);  // Commit after each message
     }
 }
 
@@ -636,7 +636,7 @@ public class PaymentConsumer {
                 Payment payment = record.value();
                 
                 try {
-                    processPaymentIdempotent(payment);
+                    processPaymentIdempotent (payment);
                     
                 } catch (Exception e) {
                     logger.error("Payment processing failed: " + payment.getId(), e);
@@ -668,7 +668,7 @@ public class PaymentConsumer {
         }
         
         // Step 2: Check database (Redis could be cleared)
-        if (db.paymentExists(paymentId)) {
+        if (db.paymentExists (paymentId)) {
             logger.info("Payment {} exists in DB, skipping", paymentId);
             redis.setex("processed:" + paymentId, 86400, "true");  // Cache for 24h
             return;  // Skip duplicate ✅
@@ -687,7 +687,7 @@ public class PaymentConsumer {
             
             // Step 4: Save to database + Redis atomically
             db.transaction(() -> {
-                db.savePayment(paymentId, charge.getId(), payment.getAmount());
+                db.savePayment (paymentId, charge.getId(), payment.getAmount());
                 redis.setex("processed:" + paymentId, 86400, "true");
             });
             
@@ -696,7 +696,7 @@ public class PaymentConsumer {
         } catch (CardDeclinedException e) {
             // Non-retriable error
             logger.warn("Card declined for payment {}", paymentId);
-            db.saveFailedPayment(paymentId, "CARD_DECLINED", e.getMessage());
+            db.saveFailedPayment (paymentId, "CARD_DECLINED", e.getMessage());
             // Don't throw - mark as processed (don't retry card declines)
             
         } catch (PaymentGatewayException e) {
@@ -755,7 +755,7 @@ T5: Consumer restarts
 Recovery:
 T6: Reprocess payment 100:
     - Check Redis: exists("processed:pay_100")? NO (wasn't cached)
-    - Check database: paymentExists(pay_100)? NO (write failed)
+    - Check database: paymentExists (pay_100)? NO (write failed)
     - Call payment gateway with idempotency key "pay_100"
     - Gateway: "Already charged this key!" → Returns original charge ✅
     - Save to database ✅
@@ -777,7 +777,7 @@ T2: Redis cleared (deployment, failover, etc.)
 T3: Consumer crashes, restarts from offset 150
 T4: Reprocess payment 150:
     - Check Redis: exists("processed:pay_150")? NO (cache cleared)
-    - Check database: paymentExists(pay_150)? YES ✅
+    - Check database: paymentExists (pay_150)? YES ✅
     - Skip processing ✅
 T5: Continue normally
 
@@ -824,7 +824,7 @@ Chosen: Strategy 2 (commitSync per batch)
 \`\`\`java
 // 1. Commit after batch, not per message
 for (record : records) {
-    process(record);
+    process (record);
 }
 consumer.commitSync();  // Batch commit ✅
 
@@ -834,14 +834,14 @@ props.put("enable.auto.commit", "false");
 // 3. Use commitAsync for throughput, commitSync on shutdown
 while (running) {
     records = consumer.poll(...);
-    process(records);
+    process (records);
     consumer.commitAsync();  // Non-blocking
 }
 consumer.commitSync();  // Final sync commit on shutdown
 
 // 4. Commit specific offsets (advanced)
 Map<TopicPartition, OffsetAndMetadata> offsets = ...;
-consumer.commitSync(offsets);
+consumer.commitSync (offsets);
 
 // 5. Handle commit failures
 try {
@@ -978,7 +978,7 @@ public class OrderConsumer {
             
             for (ConsumerRecord<String, Order> record : records) {
                 try {
-                    processOrder(record.value());
+                    processOrder (record.value());
                     
                     // Success: Clear retry count
                     redis.del("retry:" + record.key());
@@ -990,7 +990,7 @@ public class OrderConsumer {
                     
                 } catch (RetriableException e) {
                     // Check retry count
-                    int retryCount = getRetryCount(record.key());
+                    int retryCount = getRetryCount (record.key());
                     
                     if (retryCount >= MAX_RETRIES) {
                         // Max retries exceeded: Send to DLQ
@@ -999,16 +999,16 @@ public class OrderConsumer {
                     } else {
                         // Retry with exponential backoff
                         retryCount++;
-                        redis.setex("retry:" + record.key(), 3600, String.valueOf(retryCount));
+                        redis.setex("retry:" + record.key(), 3600, String.valueOf (retryCount));
                         
-                        long backoffMs = calculateBackoff(retryCount);
+                        long backoffMs = calculateBackoff (retryCount);
                         logger.warn("Retriable error (retry {}/{}), backoff {}ms: {}", 
                                    retryCount, MAX_RETRIES, backoffMs, record.key(), e);
                         
-                        Thread.sleep(backoffMs);
+                        Thread.sleep (backoffMs);
                         
                         // Retry same message
-                        processOrder(record.value());
+                        processOrder (record.value());
                         
                         // If we get here, retry succeeded
                         redis.del("retry:" + record.key());
@@ -1020,14 +1020,14 @@ public class OrderConsumer {
         }
     }
     
-    private long calculateBackoff(int retryCount) {
+    private long calculateBackoff (int retryCount) {
         // Exponential backoff: 1s, 2s, 4s, 8s, 16s
         return (long) Math.pow(2, retryCount - 1) * 1000;
     }
     
     private int getRetryCount(String key) {
         String count = redis.get("retry:" + key);
-        return count != null ? Integer.parseInt(count) : 0;
+        return count != null ? Integer.parseInt (count) : 0;
     }
 }
 \`\`\`
@@ -1071,23 +1071,23 @@ public class DLQMessage {
 private void sendToDLQ(ConsumerRecord<String, Order> record, Exception e, 
                        int retryCount, String errorType) {
     DLQMessage dlqMessage = DLQMessage.builder()
-        .originalTopic(record.topic())
-        .originalPartition(record.partition())
-        .originalOffset(record.offset())
-        .key(record.key())
-        .value(serialize(record.value()))
-        .errorType(errorType)
-        .errorMessage(e.getMessage())
-        .errorStackTrace(getStackTrace(e))
-        .retryCount(retryCount)
-        .consumerGroupId(consumerGroupId)
-        .consumerId(consumerId)
-        .firstAttemptTimestamp(getFirstAttemptTimestamp(record.key()))
+        .originalTopic (record.topic())
+        .originalPartition (record.partition())
+        .originalOffset (record.offset())
+        .key (record.key())
+        .value (serialize (record.value()))
+        .errorType (errorType)
+        .errorMessage (e.getMessage())
+        .errorStackTrace (getStackTrace (e))
+        .retryCount (retryCount)
+        .consumerGroupId (consumerGroupId)
+        .consumerId (consumerId)
+        .firstAttemptTimestamp (getFirstAttemptTimestamp (record.key()))
         .lastAttemptTimestamp(Instant.now())
         .dlqTimestamp(Instant.now())
         .environment(System.getenv("ENVIRONMENT"))
-        .applicationVersion(getAppVersion())
-        .additionalContext(buildContext(record))
+        .applicationVersion (getAppVersion())
+        .additionalContext (buildContext (record))
         .build();
     
     ProducerRecord<String, DLQMessage> dlqRecord = new ProducerRecord<>(
@@ -1096,7 +1096,7 @@ private void sendToDLQ(ConsumerRecord<String, Order> record, Exception e,
         dlqMessage
     );
     
-    dlqProducer.send(dlqRecord, (metadata, exception) -> {
+    dlqProducer.send (dlqRecord, (metadata, exception) -> {
         if (exception != null) {
             logger.error("Failed to send to DLQ: {}", record.key(), exception);
             // Fallback: Write to database, file, or secondary DLQ
@@ -1167,7 +1167,7 @@ dlq_oldest_message_age_seconds 3600  // 1 hour old
 
 # Alert on high DLQ arrival rate
 - alert: DLQHighArrivalRate
-  expr: rate(dlq_messages_total[5m]) > 1
+  expr: rate (dlq_messages_total[5m]) > 1
   for: 5m
   severity: warning
   annotations:
@@ -1184,7 +1184,7 @@ dlq_oldest_message_age_seconds 3600  // 1 hour old
 
 # Alert on specific error types
 - alert: DLQValidationErrors
-  expr: rate(dlq_messages_total{error_type="NON_RETRIABLE"}[5m]) > 0.5
+  expr: rate (dlq_messages_total{error_type="NON_RETRIABLE"}[5m]) > 0.5
   for: 10m
   severity: critical
   annotations:
@@ -1258,14 +1258,14 @@ public class DLQReprocessor {
                 DLQMessage dlqMessage = record.value();
                 
                 // Apply filter (e.g., only error_type=X, only after date Y)
-                if (!matchesFilter(dlqMessage, filter)) {
+                if (!matchesFilter (dlqMessage, filter)) {
                     skipped++;
                     continue;
                 }
                 
                 try {
                     // Deserialize original message
-                    Order order = deserialize(dlqMessage.getValue());
+                    Order order = deserialize (dlqMessage.getValue());
                     
                     // Send back to main topic
                     ProducerRecord<String, Order> mainRecord = new ProducerRecord<>(
@@ -1274,15 +1274,15 @@ public class DLQReprocessor {
                         order
                     );
                     
-                    mainProducer.send(mainRecord).get();  // Synchronous
+                    mainProducer.send (mainRecord).get();  // Synchronous
                     
                     // Mark as reprocessed
-                    dlqMessage.setReprocessed(true);
+                    dlqMessage.setReprocessed (true);
                     dlqMessage.setReprocessedBy(System.getenv("USER"));
                     dlqMessage.setReprocessedAt(Instant.now());
                     
                     // Optional: Save reprocessing audit trail
-                    saveReprocessingAudit(dlqMessage);
+                    saveReprocessingAudit (dlqMessage);
                     
                     reprocessed++;
                     logger.info("Reprocessed: {}", dlqMessage.getKey());

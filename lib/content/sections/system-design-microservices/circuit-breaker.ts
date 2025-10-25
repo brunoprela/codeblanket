@@ -126,7 +126,7 @@ if (state === HALF_OPEN) {
 
 \`\`\`javascript
 class CircuitBreaker {
-    constructor(options = {}) {
+    constructor (options = {}) {
         this.failureThreshold = options.failureThreshold || 5;
         this.timeout = options.timeout || 60000; // 60 seconds
         this.resetTimeout = options.resetTimeout || 30000; // 30 seconds
@@ -137,7 +137,7 @@ class CircuitBreaker {
         this.successCount = 0;
     }
     
-    async call(fn) {
+    async call (fn) {
         // Check state
         if (this.state === 'OPEN') {
             if (Date.now() < this.nextAttempt) {
@@ -149,7 +149,7 @@ class CircuitBreaker {
         
         try {
             // Execute function
-            const result = await this.executeWithTimeout(fn, this.timeout);
+            const result = await this.executeWithTimeout (fn, this.timeout);
             
             // Success!
             this.onSuccess();
@@ -162,11 +162,11 @@ class CircuitBreaker {
         }
     }
     
-    async executeWithTimeout(fn, timeout) {
+    async executeWithTimeout (fn, timeout) {
         return Promise.race([
             fn(),
             new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Timeout')), timeout)
+                setTimeout(() => reject (new Error('Timeout')), timeout)
             )
         ]);
     }
@@ -209,10 +209,10 @@ const paymentServiceBreaker = new CircuitBreaker({
     resetTimeout: 30000      // Try again after 30s
 });
 
-async function chargePayment(paymentData) {
+async function chargePayment (paymentData) {
     try {
-        return await paymentServiceBreaker.call(async () => {
-            return await paymentService.charge(paymentData);
+        return await paymentServiceBreaker.call (async () => {
+            return await paymentService.charge (paymentData);
         });
     } catch (error) {
         if (error.message === 'Circuit breaker is OPEN') {
@@ -235,10 +235,10 @@ When circuit breaker is OPEN, what do you return?
 Return sensible default.
 
 \`\`\`javascript
-async function getRecommendations(userId) {
+async function getRecommendations (userId) {
     try {
         return await circuitBreaker.call(() => 
-            recommendationService.get(userId)
+            recommendationService.get (userId)
         );
     } catch (error) {
         // Fallback: return popular products
@@ -254,16 +254,16 @@ Return last known good value.
 \`\`\`javascript
 const cache = new Map();
 
-async function getProductPrice(productId) {
+async function getProductPrice (productId) {
     try {
         const price = await circuitBreaker.call(() => 
-            pricingService.getPrice(productId)
+            pricingService.getPrice (productId)
         );
-        cache.set(productId, price);  // Update cache
+        cache.set (productId, price);  // Update cache
         return price;
     } catch (error) {
         // Fallback: return cached price
-        const cachedPrice = cache.get(productId);
+        const cachedPrice = cache.get (productId);
         if (cachedPrice) {
             return { ...cachedPrice, stale: true };
         }
@@ -277,13 +277,13 @@ async function getProductPrice(productId) {
 Reduce features rather than complete failure.
 
 \`\`\`javascript
-async function getProductDetails(productId) {
-    const product = await productService.get(productId);
+async function getProductDetails (productId) {
+    const product = await productService.get (productId);
     
     // Try to get recommendations (non-critical)
     try {
         product.recommendations = await circuitBreaker.call(() =>
-            recommendationService.getRelated(productId)
+            recommendationService.getRelated (productId)
         );
     } catch (error) {
         // Degrade gracefully - product still works without recommendations
@@ -299,14 +299,14 @@ async function getProductDetails(productId) {
 Queue request for processing when service recovers.
 
 \`\`\`javascript
-async function sendNotification(notification) {
+async function sendNotification (notification) {
     try {
         return await circuitBreaker.call(() => 
-            notificationService.send(notification)
+            notificationService.send (notification)
         );
     } catch (error) {
         // Fallback: queue for later
-        await notificationQueue.enqueue(notification);
+        await notificationQueue.enqueue (notification);
         return { status: 'QUEUED' };
     }
 }
@@ -316,7 +316,7 @@ async function sendNotification(notification) {
 
 ## Real-World Example: Netflix Hystrix
 
-**Hystrix** is Netflix's circuit breaker library (now in maintenance mode, but concepts remain).
+**Hystrix** is Netflix\'s circuit breaker library (now in maintenance mode, but concepts remain).
 
 **Features**:
 - Circuit breaker
@@ -330,14 +330,14 @@ async function sendNotification(notification) {
 @HystrixCommand(
     fallbackMethod = "getDefaultRecommendations",
     commandProperties = {
-        @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
-        @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "20"),
-        @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-        @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "60000")
+        @HystrixProperty (name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000"),
+        @HystrixProperty (name = "circuitBreaker.requestVolumeThreshold", value = "20"),
+        @HystrixProperty (name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+        @HystrixProperty (name = "circuitBreaker.sleepWindowInMilliseconds", value = "60000")
     }
 )
 public List<Movie> getRecommendations(String userId) {
-    return recommendationService.getForUser(userId);
+    return recommendationService.getForUser (userId);
 }
 
 public List<Movie> getDefaultRecommendations(String userId) {
@@ -377,7 +377,7 @@ CircuitBreaker circuitBreaker = CircuitBreaker.of("paymentService", config);
 
 // Decorate function
 Supplier<PaymentResult> decoratedSupplier = CircuitBreaker
-    .decorateSupplier(circuitBreaker, () -> paymentService.charge(payment));
+    .decorateSupplier (circuitBreaker, () -> paymentService.charge (payment));
 
 // Execute
 try {
@@ -398,7 +398,7 @@ const options = {
     resetTimeout: 30000         // Try again after 30s
 };
 
-const breaker = new CircuitBreaker(paymentService.charge, options);
+const breaker = new CircuitBreaker (paymentService.charge, options);
 
 // Add fallback
 breaker.fallback(() => ({status: 'PENDING', message: 'Service unavailable'}));
@@ -409,7 +409,7 @@ breaker.on('halfOpen', () => console.log('Circuit half-open, testing...'));
 breaker.on('close', () => console.log('Circuit closed!'));
 
 // Use it
-const result = await breaker.fire(paymentData);
+const result = await breaker.fire (paymentData);
 \`\`\`
 
 ---
@@ -460,10 +460,10 @@ const retryPolicy = {
     backoff: 'exponential'
 };
 
-async function callServiceWithResilience(data) {
-    return await circuitBreaker.call(async () => {
-        return await retryWithBackoff(async () => {
-            return await service.call(data);
+async function callServiceWithResilience (data) {
+    return await circuitBreaker.call (async () => {
+        return await retryWithBackoff (async () => {
+            return await service.call (data);
         }, retryPolicy);
     });
 }
@@ -536,7 +536,7 @@ Don't retry when circuit is open.
 \`\`\`javascript
 for (let i = 0; i < 3; i++) {
     try {
-        return await breaker.call(fn);
+        return await breaker.call (fn);
     } catch (error) {
         // Circuit is open, but we keep retrying! 🤦
     }
@@ -546,7 +546,7 @@ for (let i = 0; i < 3; i++) {
 ✅ **Good**:
 \`\`\`javascript
 try {
-    return await breaker.call(fn);
+    return await breaker.call (fn);
 } catch (error) {
     if (error.message === 'Circuit breaker is OPEN') {
         return fallback();  // Don't retry

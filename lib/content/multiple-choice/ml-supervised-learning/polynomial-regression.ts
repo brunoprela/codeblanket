@@ -73,6 +73,6 @@ export const polynomialregressionMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Log transformation of the target is appropriate when the relationship is exponential or multiplicative (y = e^(ax), or y = a×b×c). For example, compound interest, population growth, or viral spread follow exponential patterns. Taking log(y) linearizes these relationships: log(y) = ax or log(y) = log(a) + log(b) + log(c), allowing linear regression to work well. It also handles heteroscedasticity (variance increasing with y) and right-skewed distributions.',
+      'Log transformation of the target is appropriate when the relationship is exponential or multiplicative (y = e^(ax), or y = a×b×c). For example, compound interest, population growth, or viral spread follow exponential patterns. Taking log (y) linearizes these relationships: log (y) = ax or log (y) = log (a) + log (b) + log (c), allowing linear regression to work well. It also handles heteroscedasticity (variance increasing with y) and right-skewed distributions.',
   },
 ];

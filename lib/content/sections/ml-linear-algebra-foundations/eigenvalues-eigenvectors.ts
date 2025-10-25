@@ -47,7 +47,7 @@ print(eigenvectors)
 print()
 
 # Verify: Av = λv for each eigenvector
-for i in range(len(eigenvalues)):
+for i in range (len (eigenvalues)):
     v = eigenvectors[:, i]
     lambda_i = eigenvalues[i]
     
@@ -98,7 +98,7 @@ print()
 # Verify with NumPy
 eigenvalues, eigenvectors = np.linalg.eig(A)
 print(f"NumPy eigenvalues: {eigenvalues}")
-print(f"Match: {np.allclose(sorted(eigenvalues), [2, 5])}")
+print(f"Match: {np.allclose (sorted (eigenvalues), [2, 5])}")
 \`\`\`
 
 ## Properties of Eigenvalues and Eigenvectors
@@ -118,10 +118,10 @@ A = np.array([[6, 2],
 eigenvalues = np.linalg.eigvals(A)
 
 trace_A = np.trace(A)
-sum_eigenvalues = np.sum(eigenvalues)
+sum_eigenvalues = np.sum (eigenvalues)
 
 det_A = np.linalg.det(A)
-prod_eigenvalues = np.prod(eigenvalues)
+prod_eigenvalues = np.prod (eigenvalues)
 
 print("Matrix A:")
 print(A)
@@ -130,11 +130,11 @@ print(f"Eigenvalues: {eigenvalues}")
 print()
 print(f"Trace(A) = {trace_A}")
 print(f"Sum of eigenvalues = {sum_eigenvalues}")
-print(f"Equal: {np.allclose(trace_A, sum_eigenvalues)}")
+print(f"Equal: {np.allclose (trace_A, sum_eigenvalues)}")
 print()
 print(f"Det(A) = {det_A}")
 print(f"Product of eigenvalues = {prod_eigenvalues}")
-print(f"Equal: {np.allclose(det_A, prod_eigenvalues)}")
+print(f"Equal: {np.allclose (det_A, prod_eigenvalues)}")
 \`\`\`
 
 ### Property 2: Linear Independence
@@ -153,11 +153,11 @@ print("Matrix A:")
 print(A)
 print()
 print(f"Eigenvalues: {eigenvalues}")
-print(f"Distinct: {len(set(eigenvalues)) == len(eigenvalues)}")
+print(f"Distinct: {len (set (eigenvalues)) == len (eigenvalues)}")
 print()
 
 # Check linear independence via rank
-rank = np.linalg.matrix_rank(eigenvectors)
+rank = np.linalg.matrix_rank (eigenvectors)
 print("Eigenvector matrix (columns are eigenvectors):")
 print(eigenvectors)
 print()
@@ -179,7 +179,7 @@ D = np.array([[3, 0, 0],
 eigenvalues_D = np.linalg.eigvals(D)
 print("Diagonal matrix D:")
 print(D)
-print(f"Eigenvalues: {sorted(eigenvalues_D)}")
+print(f"Eigenvalues: {sorted (eigenvalues_D)}")
 print(f"Diagonal entries: {[D[i,i] for i in range(3)]}")
 print()
 
@@ -192,21 +192,21 @@ eigenvalues_S = np.linalg.eigvals(S)
 print("Symmetric matrix S:")
 print(S)
 print(f"Eigenvalues: {eigenvalues_S}")
-print(f"All real: {np.all(np.isreal(eigenvalues_S))}")
+print(f"All real: {np.all (np.isreal (eigenvalues_S))}")
 print()
 
 # 3. Orthogonal matrix: |λ| = 1
 # Rotation matrix (90 degrees)
 theta = np.pi / 2
-Q = np.array([[np.cos(theta), -np.sin(theta)],
-              [np.sin(theta), np.cos(theta)]])
+Q = np.array([[np.cos (theta), -np.sin (theta)],
+              [np.sin (theta), np.cos (theta)]])
 
 eigenvalues_Q = np.linalg.eigvals(Q)
 print("Rotation matrix Q (90°):")
 print(Q)
 print(f"Eigenvalues: {eigenvalues_Q}")
-print(f"Magnitudes: {np.abs(eigenvalues_Q)}")
-print(f"All have |λ| = 1: {np.allclose(np.abs(eigenvalues_Q), 1)}")
+print(f"Magnitudes: {np.abs (eigenvalues_Q)}")
+print(f"All have |λ| = 1: {np.allclose (np.abs (eigenvalues_Q), 1)}")
 \`\`\`
 
 ## Eigendecomposition (Diagonalization)
@@ -232,7 +232,7 @@ A = np.array([[5, 2],
 eigenvalues, eigenvectors = np.linalg.eig(A)
 
 P = eigenvectors
-D = np.diag(eigenvalues)
+D = np.diag (eigenvalues)
 P_inv = np.linalg.inv(P)
 
 print("Matrix A:")
@@ -258,7 +258,7 @@ print()
 
 # Application: compute A^10 efficiently
 A_10_direct = np.linalg.matrix_power(A, 10)
-D_10 = np.diag(eigenvalues ** 10)
+D_10 = np.diag (eigenvalues ** 10)
 A_10_decomp = P @ D_10 @ P_inv
 
 print("A^10 (via eigendecomposition):")
@@ -294,7 +294,7 @@ print()
 eigenvalues, eigenvectors = np.linalg.eig(A)
 
 Q = eigenvectors
-Lambda = np.diag(eigenvalues)
+Lambda = np.diag (eigenvalues)
 
 print("Q (eigenvectors as columns):")
 print(Q)
@@ -316,7 +316,7 @@ print()
 
 # Eigenvalues are real
 print(f"Eigenvalues: {eigenvalues}")
-print(f"All real: {np.all(np.isreal(eigenvalues))}")
+print(f"All real: {np.all (np.isreal (eigenvalues))}")
 \`\`\`
 
 ## Applications in Machine Learning
@@ -331,7 +331,7 @@ np.random.seed(42)
 n_samples = 100
 
 # Correlated 2D data
-X = np.random.randn(n_samples, 2)
+X = np.random.randn (n_samples, 2)
 X[:, 1] = X[:, 0] + 0.5 * X[:, 1]  # Add correlation
 
 # Covariance matrix
@@ -342,7 +342,7 @@ print(cov)
 print()
 
 # Eigendecomposition
-eigenvalues, eigenvectors = np.linalg.eig(cov)
+eigenvalues, eigenvectors = np.linalg.eig (cov)
 
 # Sort by eigenvalue (descending)
 idx = eigenvalues.argsort()[::-1]
@@ -358,11 +358,11 @@ print(eigenvectors)
 print()
 
 # Eigenvalues represent variance in principal directions
-total_variance = np.sum(eigenvalues)
+total_variance = np.sum (eigenvalues)
 explained_variance_ratio = eigenvalues / total_variance
 
 print("Explained variance ratio:")
-for i, ratio in enumerate(explained_variance_ratio):
+for i, ratio in enumerate (explained_variance_ratio):
     print(f"  PC{i+1}: {ratio:.2%}")
 \`\`\`
 
@@ -391,18 +391,18 @@ print()
 eigenvalues, eigenvectors = np.linalg.eig(P)
 
 # Find index of eigenvalue closest to 1
-idx = np.argmin(np.abs(eigenvalues - 1))
+idx = np.argmin (np.abs (eigenvalues - 1))
 dominant_eigenvalue = eigenvalues[idx]
-page_rank = np.real(eigenvectors[:, idx])
+page_rank = np.real (eigenvectors[:, idx])
 
 # Normalize to probability distribution
-page_rank = page_rank / np.sum(page_rank)
+page_rank = page_rank / np.sum (page_rank)
 
 print(f"Dominant eigenvalue: {dominant_eigenvalue}")
 print()
 print("PageRank scores:")
 pages = ['A', 'B', 'C', 'D']
-for page, score in zip(pages, page_rank):
+for page, score in zip (pages, page_rank):
     print(f"  Page {page}: {score:.3f}")
 \`\`\`
 
@@ -415,21 +415,21 @@ print("\\n=== Application: PCA Preview ===")
 np.random.seed(42)
 n = 50
 theta = np.pi / 4
-X_orig = np.random.randn(n, 2) @ np.diag([3, 1])
+X_orig = np.random.randn (n, 2) @ np.diag([3, 1])
 
 # Rotation
-R = np.array([[np.cos(theta), -np.sin(theta)],
-              [np.sin(theta), np.cos(theta)]])
+R = np.array([[np.cos (theta), -np.sin (theta)],
+              [np.sin (theta), np.cos (theta)]])
 X = (R @ X_orig.T).T
 
 # Center data
-X_centered = X - X.mean(axis=0)
+X_centered = X - X.mean (axis=0)
 
 # Covariance matrix
 cov = np.cov(X_centered.T)
 
 # Eigendecomposition
-eigenvalues, eigenvectors = np.linalg.eig(cov)
+eigenvalues, eigenvectors = np.linalg.eig (cov)
 
 # Sort by eigenvalue
 idx = eigenvalues.argsort()[::-1]
@@ -445,7 +445,7 @@ PC1 = eigenvectors[:, 0]
 X_projected = X_centered @ PC1.reshape(-1, 1)
 
 print(f"First principal component direction: {PC1}")
-print(f"Variance explained: {eigenvalues[0] / np.sum(eigenvalues):.2%}")
+print(f"Variance explained: {eigenvalues[0] / np.sum (eigenvalues):.2%}")
 print()
 print("PCA reduces dimensionality while preserving maximum variance!")
 \`\`\`
@@ -471,9 +471,9 @@ print(f"Eigenvalues: {eigenvalues}")
 print()
 
 # Steady-state distribution (eigenvector for λ=1)
-idx = np.argmin(np.abs(eigenvalues - 1))
-steady_state = np.real(eigenvectors[:, idx])
-steady_state = steady_state / np.sum(steady_state)
+idx = np.argmin (np.abs (eigenvalues - 1))
+steady_state = np.real (eigenvectors[:, idx])
+steady_state = steady_state / np.sum (steady_state)
 
 print(f"Steady-state distribution: {steady_state}")
 print("Long-run probabilities: {:.1%} Sunny, {:.1%} Rainy".format(

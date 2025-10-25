@@ -17,7 +17,7 @@ except ZeroDivisionError:
 
 # Multiple exceptions
 try:
-    value = int(input("Enter a number: "))
+    value = int (input("Enter a number: "))
     result = 10 / value
 except ValueError:
     print("Invalid number!")
@@ -52,7 +52,7 @@ finally:
 ## Raising Exceptions
 
 \`\`\`python
-def validate_age(age):
+def validate_age (age):
     if age < 0:
         raise ValueError("Age cannot be negative")
     if age > 150:
@@ -83,9 +83,9 @@ class Account:
     def __init__(self, balance):
         self.balance = balance
     
-    def withdraw(self, amount):
+    def withdraw (self, amount):
         if amount > self.balance:
-            raise InsufficientFundsError(self.balance, amount)
+            raise InsufficientFundsError (self.balance, amount)
         self.balance -= amount
 
 # Usage

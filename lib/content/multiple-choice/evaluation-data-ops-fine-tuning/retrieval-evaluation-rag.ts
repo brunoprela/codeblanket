@@ -67,7 +67,7 @@ export const retrievalEvaluationRAGMultipleChoice = [
       'RRF always improves any two systems',
       'Dense and BM25 capture different signals, errors are uncorrelated',
       'The math of RRF is optimal',
-      "It's just luck from this specific test set",
+      "It\'s just luck from this specific test set",
     ],
     correctAnswer: 1,
     explanation:

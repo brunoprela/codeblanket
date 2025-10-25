@@ -16,7 +16,7 @@ export const qualityMultipleChoiceQuestions = [
 
   {
     id: 2,
-    question: "Company's Beneish M-Score is -1.78. What does this indicate?",
+    question: "Company\'s Beneish M-Score is -1.78. What does this indicate?",
     options: [
       'Low manipulation risk (score below -2.22 threshold)',
       'High manipulation risk; M-Score > -2.22 suggests probable earnings manipulation - investigate DSRI, GMI, and accruals components',

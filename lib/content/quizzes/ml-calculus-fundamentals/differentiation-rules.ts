@@ -7,7 +7,7 @@ export const differentiationrulesQuiz = [
     id: 'diff-rules-disc-1',
     question: 'Explain how the chain rule enables backpropagation.',
     hint: 'Consider function composition through layers.',
-    sampleAnswer: `Backpropagation is the chain rule applied repeatedly. In a neural network, output = f_n(f_{n-1}(...f_1(x))). To find gradients, we apply the chain rule layer by layer going backward, reusing intermediate results. This makes gradient computation O(n) instead of O(n²).`,
+    sampleAnswer: `Backpropagation is the chain rule applied repeatedly. In a neural network, output = f_n (f_{n-1}(...f_1(x))). To find gradients, we apply the chain rule layer by layer going backward, reusing intermediate results. This makes gradient computation O(n) instead of O(n²).`,
     keyPoints: [
       'Neural networks are function compositions',
       'Chain rule computes gradients through compositions',

@@ -90,7 +90,7 @@ T4+   | 1235    | 1235    | 1235   | Eventually consistent!
 
 ## Consistency Spectrum
 
-Consistency is not binary. There's a spectrum:
+Consistency is not binary. There\'s a spectrum:
 
 \`\`\`
 Strong Consistency ◄────────────────────────► Eventual Consistency
@@ -235,7 +235,7 @@ User: Posts photo to Instagram
 Writes to US-East datacenter
 User: Refreshes feed immediately
 Reads from EU-West datacenter (not replicated yet)
-User: "Where's my photo?! App is broken!" 😡
+User: "Where\'s my photo?! App is broken!" 😡
 \`\`\`
 
 **Solution - Read-Your-Writes**:
@@ -278,7 +278,7 @@ Both come online simultaneously
 **1. Last-Write-Wins (LWW)**
 - Use timestamp, keep the later write
 - Simple but loses data
-- Example: Bob's write at 10:01 wins over Alice's at 10:00
+- Example: Bob\'s write at 10:01 wins over Alice's at 10:00
 - **Problem**: Alice's edit lost! ❌
 
 **2. Version Vectors**
@@ -311,7 +311,7 @@ Both sync
 Merged cart: [Item A, Item B] ✅
 \`\`\`
 
-**Amazon's choice**: Always merge carts (never lose items). Better to have duplicate than lose customer's item.
+**Amazon\'s choice**: Always merge carts (never lose items). Better to have duplicate than lose customer's item.
 
 ---
 
@@ -374,7 +374,7 @@ Most real systems use **different consistency models for different data**.
 
 **Read-Your-Writes**:
 - User's own orders (always see your orders)
-- User's own reviews (see your review immediately)
+- User\'s own reviews (see your review immediately)
 
 **Why**: 99% of traffic is browsing (eventual consistency, fast). 1% is checkout (strong consistency, correct).
 

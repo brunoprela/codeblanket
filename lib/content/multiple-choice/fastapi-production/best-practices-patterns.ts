@@ -40,7 +40,7 @@ export const bestPracticesPatternsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      "Creating database connection is expensive (TCP handshake, authentication, ~50-100ms). Without pooling: Every request creates new connection, 1000 requests = 1000 connections created/destroyed, massive overhead. With pooling: Pre-create 20 connections (pool), reuse connections across requests, request borrows connection from pool, returns after use. Result: 1000 requests = 20 connections reused, 50x faster. Configuration: create_engine(pool_size=20, max_overflow=0). Doesn't increase connections (option 2) - manages reuse. Works with all databases (option 3). Doesn't cache results (option 4) - that's application caching (Redis).",
+      "Creating database connection is expensive (TCP handshake, authentication, ~50-100ms). Without pooling: Every request creates new connection, 1000 requests = 1000 connections created/destroyed, massive overhead. With pooling: Pre-create 20 connections (pool), reuse connections across requests, request borrows connection from pool, returns after use. Result: 1000 requests = 20 connections reused, 50x faster. Configuration: create_engine (pool_size=20, max_overflow=0). Doesn't increase connections (option 2) - manages reuse. Works with all databases (option 3). Doesn't cache results (option 4) - that's application caching (Redis).",
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ export const bestPracticesPatternsMultipleChoice = [
     ],
     correctAnswer: 0,
     explanation:
-      'Anti-pattern: except Exception as e: return {"error": str(e)}. Problem: Exposes stack traces, file paths (/app/src/auth/handlers.py), database details (PostgreSQL version), library versions (SQLAlchemy 2.0). Attackers use this to: Identify vulnerabilities, craft targeted attacks, understand architecture. Production pattern: Log full error server-side, return generic message to client: return {"error": "An error occurred", "request_id": "abc123"}. User references request_id in support tickets, engineers find full details in logs. Using async (option 2), validation (option 3), and error handling (option 4) are all best practices, not anti-patterns.',
+      'Anti-pattern: except Exception as e: return {"error": str (e)}. Problem: Exposes stack traces, file paths (/app/src/auth/handlers.py), database details (PostgreSQL version), library versions (SQLAlchemy 2.0). Attackers use this to: Identify vulnerabilities, craft targeted attacks, understand architecture. Production pattern: Log full error server-side, return generic message to client: return {"error": "An error occurred", "request_id": "abc123"}. User references request_id in support tickets, engineers find full details in logs. Using async (option 2), validation (option 3), and error handling (option 4) are all best practices, not anti-patterns.',
   },
   {
     id: 5,

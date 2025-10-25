@@ -1,12 +1,13 @@
 export const freeDataSourcesQuiz = [
-    {
-        id: '2-4-d1',
-        question: 'A hedge fund manager claims "free data sources like yfinance are insufficient for professional trading - you need Bloomberg." Critically evaluate this claim. Under what circumstances is free data actually sufficient, and when do you genuinely need premium data? Design a decision framework with specific thresholds for when to upgrade from free to paid data sources.',
-        sampleAnswer: `**Critical Evaluation: Free vs Premium Data Sources**
+  {
+    id: '2-4-d1',
+    question:
+      'A hedge fund manager claims "free data sources like yfinance are insufficient for professional trading - you need Bloomberg." Critically evaluate this claim. Under what circumstances is free data actually sufficient, and when do you genuinely need premium data? Design a decision framework with specific thresholds for when to upgrade from free to paid data sources.',
+    sampleAnswer: `**Critical Evaluation: Free vs Premium Data Sources**
 
 **The Claim Deconstructed:**
 
-The hedge fund manager's claim contains partial truth but is often used to justify unnecessary spending. Let's analyze systematically:
+The hedge fund manager's claim contains partial truth but is often used to justify unnecessary spending. Let\'s analyze systematically:
 
 **Where Free Data IS Sufficient (80%+ of use cases):**
 
@@ -110,8 +111,8 @@ Must have premium when:
 └── Co-location with exchanges
 
 Reality: HFT not viable without:
-- Direct exchange feeds ($10K-50K/month)
-- Co-location ($5K-10K/month)
+- Direct exchange feeds (\$10K-50K/month)
+- Co-location (\$5K-10K/month)
 - Premium infrastructure
 Free data has 15-minute delay = completely unusable
 
@@ -217,21 +218,21 @@ def should_upgrade_from_free_data(
         'intraday': 3,  # Real-time necessary
         'hft': 5  # Premium mandatory
     }
-    freq_score = frequency_scores.get(trading_frequency, 0)
+    freq_score = frequency_scores.get (trading_frequency, 0)
     score += freq_score
     
     if freq_score >= 3:
-        reasons.append(f"{trading_frequency} trading requires real-time data")
+        reasons.append (f"{trading_frequency} trading requires real-time data")
     elif freq_score == 1:
-        reasons.append(f"{trading_frequency} trading can work with delayed data")
+        reasons.append (f"{trading_frequency} trading can work with delayed data")
     else:
-        reasons.append(f"{trading_frequency} trading works fine with free data")
+        reasons.append (f"{trading_frequency} trading works fine with free data")
     
     # Factor 3: Asset Classes
     requires_premium = ['fixed_income', 'derivatives', 'forex', 'emerging_markets']
-    if any(ac in asset_classes for ac in requires_premium):
+    if any (ac in asset_classes for ac in requires_premium):
         score += 2
-        reasons.append(f"Asset classes {asset_classes} have weak free data coverage")
+        reasons.append (f"Asset classes {asset_classes} have weak free data coverage")
     
     # Factor 4: Team Size (communication needs)
     if team_size > 10:
@@ -253,7 +254,7 @@ def should_upgrade_from_free_data(
     # Decision logic
     if score >= 5:
         recommendation = "UPGRADE TO PREMIUM (Bloomberg/FactSet)"
-        justification = f"Score {score}/10. Benefits (${potential_benefit_dollars:, .0f}) >> Cost($24K)"
+        justification = f"Score {score}/10. Benefits (\${potential_benefit_dollars:,.0f}) >> Cost(\$24K)"
     elif score >= 3:
 recommendation = "HYBRID APPROACH (Free + Selective Premium)"
 justification = f"Score {score}/10. Use free for research, premium for execution"
@@ -318,7 +319,7 @@ result = should_upgrade_from_free_data(
 print(result['recommendation'])
 # Output: "UPGRADE TO PREMIUM (Bloomberg/FactSet)"
 # Justification: Score 8 / 10. Intraday trading, derivatives,
-# large team, institutional clients.Benefits($400K +) >> Cost($24K).
+# large team, institutional clients.Benefits(\$400K +) >> Cost(\$24K).
 # ROI: 1, 667 %
 
 # Case 4: HFT Firm
@@ -427,12 +428,13 @@ Start free. Upgrade only when you:
 3. Hit clear limitations of free sources
 
 Don't buy Bloomberg because everyone else has it.
-Buy it when the benefits exceed $24K/year.`
+Buy it when the benefits exceed $24K/year.`,
   },
-{
+  {
     id: '2-4-d2',
-        question: 'Design a comprehensive data validation and quality assurance framework for a quantitative trading system that combines multiple free data sources (yfinance, FRED, SEC EDGAR, Alpha Vantage). How would you detect data errors, handle missing values, reconcile discrepancies between sources, and ensure your backtests are using accurate data? Provide specific Python implementation strategies.',
-            sampleAnswer: `**Comprehensive Data Quality Assurance Framework**
+    question:
+      'Design a comprehensive data validation and quality assurance framework for a quantitative trading system that combines multiple free data sources (yfinance, FRED, SEC EDGAR, Alpha Vantage). How would you detect data errors, handle missing values, reconcile discrepancies between sources, and ensure your backtests are using accurate data? Provide specific Python implementation strategies.',
+    sampleAnswer: `**Comprehensive Data Quality Assurance Framework**
 
 **The Data Quality Problem:**
 
@@ -524,9 +526,9 @@ class DataQualityFramework:
         self.issues: List[DataQualityIssue] = []
         self.setup_database()
     
-    def setup_database(self):
+    def setup_database (self):
         \"\"\"Initialize quality assurance database\"\"\"
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         # Table for validated data
         conn.execute('''
@@ -577,7 +579,7 @@ class DataQualityFramework:
         conn.commit()
         conn.close()
     
-    def validate_price_data(self, 
+    def validate_price_data (self, 
                            ticker: str, 
                            df: pd.DataFrame, 
                            source: str) -> Tuple[pd.DataFrame, List[DataQualityIssue]]:
@@ -605,16 +607,16 @@ class DataQualityFramework:
                 issue_type='missing_values',
                 severity='warning',
                 description=f"Missing values found: {null_counts[null_counts > 0].to_dict()}",
-                affected_dates=df[df.isnull().any(axis=1)].index.astype(str).tolist()
+                affected_dates=df[df.isnull().any (axis=1)].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: {issue.description}")
+            issues.append (issue)
+            logger.warning (f"{ticker}: {issue.description}")
             
             # Handle: Forward fill (with limit)
-            df_clean = df_clean.fillna(method='ffill', limit=3)
+            df_clean = df_clean.fillna (method='ffill', limit=3)
         
         # Check 2: Negative Prices
-        negative_prices = (df_clean[['Open', 'High', 'Low', 'Close']] < 0).any(axis=1)
+        negative_prices = (df_clean[['Open', 'High', 'Low', 'Close']] < 0).any (axis=1)
         if negative_prices.any():
             issue = DataQualityIssue(
                 timestamp=datetime.now(),
@@ -623,10 +625,10 @@ class DataQualityFramework:
                 issue_type='negative_prices',
                 severity='critical',
                 description="Negative prices detected",
-                affected_dates=df_clean[negative_prices].index.astype(str).tolist()
+                affected_dates=df_clean[negative_prices].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.error(f"{ticker}: CRITICAL - Negative prices found")
+            issues.append (issue)
+            logger.error (f"{ticker}: CRITICAL - Negative prices found")
             
             # Handle: Remove these rows
             df_clean = df_clean[~negative_prices]
@@ -647,17 +649,17 @@ class DataQualityFramework:
                 issue_type='invalid_ohlc',
                 severity='critical',
                 description="Invalid OHLC relationships (High < Low, etc.)",
-                affected_dates=df_clean[invalid_ohlc].index.astype(str).tolist()
+                affected_dates=df_clean[invalid_ohlc].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.error(f"{ticker}: CRITICAL - Invalid OHLC relationships")
+            issues.append (issue)
+            logger.error (f"{ticker}: CRITICAL - Invalid OHLC relationships")
             
             # Handle: Remove these rows
             df_clean = df_clean[~invalid_ohlc]
         
         # Check 4: Suspicious Returns (>50% daily move)
         returns = df_clean['Close'].pct_change()
-        suspicious_returns = (abs(returns) > 0.50)
+        suspicious_returns = (abs (returns) > 0.50)
         if suspicious_returns.any():
             # Check if these are around split dates (acceptable)
             # Otherwise flag as issue
@@ -668,10 +670,10 @@ class DataQualityFramework:
                 issue_type='suspicious_returns',
                 severity='warning',
                 description=f"Returns >50% detected. Check for stock splits.",
-                affected_dates=df_clean[suspicious_returns].index.astype(str).tolist()
+                affected_dates=df_clean[suspicious_returns].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Suspicious returns detected")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Suspicious returns detected")
         
         # Check 5: Zero Volume
         zero_volume = (df_clean['Volume'] == 0)
@@ -683,10 +685,10 @@ class DataQualityFramework:
                 issue_type='zero_volume',
                 severity='warning',
                 description="Zero volume detected (market holidays or data error)",
-                affected_dates=df_clean[zero_volume].index.astype(str).tolist()
+                affected_dates=df_clean[zero_volume].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Zero volume days found")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Zero volume days found")
         
         # Check 6: Future Dates
         future_dates = df_clean.index > datetime.now()
@@ -698,10 +700,10 @@ class DataQualityFramework:
                 issue_type='future_dates',
                 severity='critical',
                 description="Future dates detected (forward-looking bias!)",
-                affected_dates=df_clean[future_dates].index.astype(str).tolist()
+                affected_dates=df_clean[future_dates].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.error(f"{ticker}: CRITICAL - Future dates in data")
+            issues.append (issue)
+            logger.error (f"{ticker}: CRITICAL - Future dates in data")
             
             # Handle: Remove future dates
             df_clean = df_clean[~future_dates]
@@ -716,17 +718,17 @@ class DataQualityFramework:
                 issue_type='duplicate_dates',
                 severity='warning',
                 description="Duplicate dates detected",
-                affected_dates=df_clean[duplicates].index.astype(str).tolist()
+                affected_dates=df_clean[duplicates].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Duplicate dates found")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Duplicate dates found")
             
             # Handle: Keep last occurrence
-            df_clean = df_clean[~df_clean.index.duplicated(keep='last')]
+            df_clean = df_clean[~df_clean.index.duplicated (keep='last')]
         
         return df_clean, issues
     
-    def cross_source_validation(self, 
+    def cross_source_validation (self, 
                                 ticker: str, 
                                 date_range: Tuple[str, str]) -> pd.DataFrame:
         \"\"\"
@@ -735,41 +737,41 @@ class DataQualityFramework:
         \"\"\"
         start_date, end_date = date_range
         
-        logger.info(f"Cross-source validation for {ticker}")
+        logger.info (f"Cross-source validation for {ticker}")
         
         # Fetch from multiple sources
         sources_data = {}
         
         # Source 1: yfinance
         try:
-            yf_data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+            yf_data = yf.download (ticker, start=start_date, end=end_date, progress=False)
             sources_data['yfinance'] = yf_data
-            logger.info(f"{ticker}: yfinance - {len(yf_data)} rows")
+            logger.info (f"{ticker}: yfinance - {len (yf_data)} rows")
         except Exception as e:
-            logger.error(f"{ticker}: yfinance failed - {e}")
+            logger.error (f"{ticker}: yfinance failed - {e}")
         
         # Source 2: Alpha Vantage (if available)
         # try:
-        #     av_data = fetch_from_alpha_vantage(ticker, start_date, end_date)
+        #     av_data = fetch_from_alpha_vantage (ticker, start_date, end_date)
         #     sources_data['alphavantage'] = av_data
         # except Exception as e:
-        #     logger.error(f"{ticker}: Alpha Vantage failed - {e}")
+        #     logger.error (f"{ticker}: Alpha Vantage failed - {e}")
         
         # Source 3: Polygon.io (if available)
         # try:
-        #     poly_data = fetch_from_polygon(ticker, start_date, end_date)
+        #     poly_data = fetch_from_polygon (ticker, start_date, end_date)
         #     sources_data['polygon'] = poly_data
         # except Exception as e:
-        #     logger.error(f"{ticker}: Polygon failed - {e}")
+        #     logger.error (f"{ticker}: Polygon failed - {e}")
         
         # Compare sources
-        if len(sources_data) == 0:
-            logger.error(f"{ticker}: No data sources available")
+        if len (sources_data) == 0:
+            logger.error (f"{ticker}: No data sources available")
             return None
         
-        if len(sources_data) == 1:
-            logger.warning(f"{ticker}: Only one source available, can't cross-validate")
-            return list(sources_data.values())[0]
+        if len (sources_data) == 1:
+            logger.warning (f"{ticker}: Only one source available, can't cross-validate")
+            return list (sources_data.values())[0]
         
         # Compare close prices across sources
         close_prices = pd.DataFrame({
@@ -778,11 +780,11 @@ class DataQualityFramework:
         })
         
         # Calculate differences
-        mean_price = close_prices.mean(axis=1)
-        pct_diff = (close_prices.sub(mean_price, axis=0) / mean_price * 100)
+        mean_price = close_prices.mean (axis=1)
+        pct_diff = (close_prices.sub (mean_price, axis=0) / mean_price * 100)
         
         # Flag significant discrepancies (>1%)
-        significant_diff = (pct_diff.abs() > 1.0).any(axis=1)
+        significant_diff = (pct_diff.abs() > 1.0).any (axis=1)
         
         if significant_diff.any():
             issue = DataQualityIssue(
@@ -792,18 +794,18 @@ class DataQualityFramework:
                 issue_type='source_discrepancy',
                 severity='warning',
                 description=f"Significant price discrepancies (>1%) between sources",
-                affected_dates=close_prices[significant_diff].index.astype(str).tolist()
+                affected_dates=close_prices[significant_diff].index.astype (str).tolist()
             )
-            self.issues.append(issue)
-            logger.warning(f"{ticker}: Price discrepancies detected")
+            self.issues.append (issue)
+            logger.warning (f"{ticker}: Price discrepancies detected")
             
             # Log specific discrepancies
             for date in close_prices[significant_diff].index:
                 prices = close_prices.loc[date]
-                logger.warning(f"{ticker} {date}: {prices.to_dict()}")
+                logger.warning (f"{ticker} {date}: {prices.to_dict()}")
         
         # Use median price as consensus
-        consensus = close_prices.median(axis=1)
+        consensus = close_prices.median (axis=1)
         
         # Return data with consensus prices
         result = sources_data['yfinance'].copy()  # Use yfinance as base
@@ -812,7 +814,7 @@ class DataQualityFramework:
         
         return result
     
-    def detect_outliers(self, df: pd.DataFrame, ticker: str) -> List[DataQualityIssue]:
+    def detect_outliers (self, df: pd.DataFrame, ticker: str) -> List[DataQualityIssue]:
         \"\"\"
         Statistical outlier detection
         
@@ -826,7 +828,7 @@ class DataQualityFramework:
         # Method 1: Z-score on returns
         returns = df['Close'].pct_change()
         z_scores = (returns - returns.mean()) / returns.std()
-        outliers_zscore = abs(z_scores) > 4  # 4 standard deviations
+        outliers_zscore = abs (z_scores) > 4  # 4 standard deviations
         
         if outliers_zscore.any():
             issue = DataQualityIssue(
@@ -836,10 +838,10 @@ class DataQualityFramework:
                 issue_type='return_outlier',
                 severity='warning',
                 description=f"Return outliers detected (>4 std dev)",
-                affected_dates=df[outliers_zscore].index.astype(str).tolist()
+                affected_dates=df[outliers_zscore].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Return outliers detected")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Return outliers detected")
         
         # Method 2: IQR on volume
         q1 = df['Volume'].quantile(0.25)
@@ -858,14 +860,14 @@ class DataQualityFramework:
                 issue_type='volume_outlier',
                 severity='info',
                 description=f"Volume outliers detected (IQR method)",
-                affected_dates=df[volume_outliers].index.astype(str).tolist()
+                affected_dates=df[volume_outliers].index.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.info(f"{ticker}: Volume outliers detected")
+            issues.append (issue)
+            logger.info (f"{ticker}: Volume outliers detected")
         
         return issues
     
-    def check_completeness(self, 
+    def check_completeness (self, 
                           df: pd.DataFrame, 
                           ticker: str, 
                           expected_days: int) -> List[DataQualityIssue]:
@@ -877,7 +879,7 @@ class DataQualityFramework:
         \"\"\"
         issues = []
         
-        actual_days = len(df)
+        actual_days = len (df)
         completeness_ratio = actual_days / expected_days
         
         if completeness_ratio < 0.95:  # Less than 95% complete
@@ -890,15 +892,15 @@ class DataQualityFramework:
                 description=f"Data only {completeness_ratio:.1%} complete ({actual_days}/{expected_days} days)",
                 affected_dates=[]
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Incomplete data - {completeness_ratio:.1%}")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Incomplete data - {completeness_ratio:.1%}")
         
         # Check for gaps (missing dates)
         df_sorted = df.sort_index()
         date_diffs = df_sorted.index.to_series().diff()
         
         # More than 5 days gap (accounting for weekends/holidays)
-        large_gaps = date_diffs > timedelta(days=5)
+        large_gaps = date_diffs > timedelta (days=5)
         
         if large_gaps.any():
             gap_dates = df_sorted[large_gaps].index
@@ -909,65 +911,65 @@ class DataQualityFramework:
                 issue_type='data_gaps',
                 severity='warning',
                 description=f"Large gaps (>5 days) in data",
-                affected_dates=gap_dates.astype(str).tolist()
+                affected_dates=gap_dates.astype (str).tolist()
             )
-            issues.append(issue)
-            logger.warning(f"{ticker}: Data gaps detected")
+            issues.append (issue)
+            logger.warning (f"{ticker}: Data gaps detected")
         
         return issues
     
-    def process_ticker(self, 
+    def process_ticker (self, 
                       ticker: str, 
                       start_date: str, 
                       end_date: str) -> pd.DataFrame:
         \"\"\"
         Complete data quality pipeline for one ticker
         \"\"\"
-        logger.info(f"Processing {ticker}: {start_date} to {end_date}")
+        logger.info (f"Processing {ticker}: {start_date} to {end_date}")
         
         # Step 1: Fetch data
-        df = yf.download(ticker, start=start_date, end=end_date, progress=False)
+        df = yf.download (ticker, start=start_date, end=end_date, progress=False)
         
         if df.empty:
-            logger.error(f"{ticker}: No data available")
+            logger.error (f"{ticker}: No data available")
             return None
         
         # Step 2: Basic validation
-        df_clean, validation_issues = self.validate_price_data(ticker, df, 'yfinance')
-        self.issues.extend(validation_issues)
+        df_clean, validation_issues = self.validate_price_data (ticker, df, 'yfinance')
+        self.issues.extend (validation_issues)
         
         # Step 3: Cross-source validation (if multiple sources available)
-        # df_consensus = self.cross_source_validation(ticker, (start_date, end_date))
+        # df_consensus = self.cross_source_validation (ticker, (start_date, end_date))
         # if df_consensus is not None:
         #     df_clean = df_consensus
         
         # Step 4: Outlier detection
-        outlier_issues = self.detect_outliers(df_clean, ticker)
-        self.issues.extend(outlier_issues)
+        outlier_issues = self.detect_outliers (df_clean, ticker)
+        self.issues.extend (outlier_issues)
         
         # Step 5: Completeness check
-        expected_trading_days = len(pd.bdate_range(start=start_date, end=end_date))
-        completeness_issues = self.check_completeness(df_clean, ticker, expected_trading_days)
-        self.issues.extend(completeness_issues)
+        expected_trading_days = len (pd.bdate_range (start=start_date, end=end_date))
+        completeness_issues = self.check_completeness (df_clean, ticker, expected_trading_days)
+        self.issues.extend (completeness_issues)
         
         # Step 6: Log to database
-        self.log_validated_data(ticker, df_clean, 'yfinance')
+        self.log_validated_data (ticker, df_clean, 'yfinance')
         self.log_issues()
         
         # Step 7: Generate data hash (for change detection)
         data_hash = hashlib.md5(df_clean.to_json().encode()).hexdigest()
-        logger.info(f"{ticker}: Data hash {data_hash[:8]}")
+        logger.info (f"{ticker}: Data hash {data_hash[:8]}")
         
-        logger.info(f"{ticker}: Processing complete. {len(self.issues)} issues found.")
+        logger.info (f"{ticker}: Processing complete. {len (self.issues)} issues found.")
         
         return df_clean
     
-    def log_validated_data(self, ticker: str, df: pd.DataFrame, source: str):
+    def log_validated_data (self, ticker: str, df: pd.DataFrame, source: str):
         \"\"\"Store validated data in database\"\"\"
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         for date, row in df.iterrows():
-            data_hash = hashlib.md5(str(row.values).encode()).hexdigest()
+            data_hash = hashlib.md5(str (row.values).encode()).hexdigest()
             
             conn.execute('''
                 INSERT OR REPLACE INTO validated_prices 
@@ -992,9 +994,9 @@ class DataQualityFramework:
         conn.commit()
         conn.close()
     
-    def log_issues(self):
+    def log_issues (self):
         \"\"\"Log all issues to database\"\"\"
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         for issue in self.issues:
             conn.execute('''
@@ -1008,7 +1010,7 @@ class DataQualityFramework:
                 issue.issue_type,
                 issue.severity,
                 issue.description,
-                ','.join(issue.affected_dates)
+                ','.join (issue.affected_dates)
             ))
         
         conn.commit()
@@ -1017,9 +1019,9 @@ class DataQualityFramework:
         # Clear processed issues
         self.issues = []
     
-    def generate_quality_report(self, ticker: str = None) -> pd.DataFrame:
+    def generate_quality_report (self, ticker: str = None) -> pd.DataFrame:
         \"\"\"Generate data quality report\"\"\"
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect (self.db_path)
         
         query = '''
             SELECT 
@@ -1040,7 +1042,7 @@ class DataQualityFramework:
             ORDER BY severity DESC, count DESC
         '''
         
-        report = pd.read_sql_query(query, conn)
+        report = pd.read_sql_query (query, conn)
         conn.close()
         
         return report
@@ -1063,9 +1065,9 @@ if __name__ == "__main__":
             )
             
             if df_clean is not None:
-                print(f"\\n{ticker}: {len(df_clean)} clean data points")
+                print(f"\\n{ticker}: {len (df_clean)} clean data points")
         except Exception as e:
-            logger.error(f"{ticker}: Processing failed - {e}")
+            logger.error (f"{ticker}: Processing failed - {e}")
     
     # Generate quality report
     report = qa.generate_quality_report()
@@ -1073,7 +1075,7 @@ if __name__ == "__main__":
     print(report)
     
     # Check critical issues
-    conn = sqlite3.connect(qa.db_path)
+    conn = sqlite3.connect (qa.db_path)
     critical = pd.read_sql_query('''
         SELECT * FROM quality_issues 
         WHERE severity = 'critical' AND resolved = 0
@@ -1096,12 +1098,13 @@ if __name__ == "__main__":
 4. **Automated checks** - don't rely on manual inspection
 5. **Fail loudly** - critical issues should stop execution
 
-This framework prevents costly errors from bad data causing losses in live trading.`
-},
-{
+This framework prevents costly errors from bad data causing losses in live trading.`,
+  },
+  {
     id: '2-4-d3',
-        question: 'A fintech startup wants to build a stock recommendation app for retail investors using only free data sources. They plan to provide daily stock picks based on fundamental analysis and technical indicators. Design the complete data architecture: data sources, update frequency, caching strategy, fallback mechanisms, and cost scaling plan as the user base grows from 100 to 100,000 users. Address legal considerations for redistributing free data.',
-            sampleAnswer: `**Complete Data Architecture for Stock Recommendation App**
+    question:
+      'A fintech startup wants to build a stock recommendation app for retail investors using only free data sources. They plan to provide daily stock picks based on fundamental analysis and technical indicators. Design the complete data architecture: data sources, update frequency, caching strategy, fallback mechanisms, and cost scaling plan as the user base grows from 100 to 100,000 users. Address legal considerations for redistributing free data.',
+    sampleAnswer: `**Complete Data Architecture for Stock Recommendation App**
 
 **Product Overview:**
 - Daily stock recommendations for retail investors
@@ -1167,7 +1170,7 @@ ARCHITECTURE:
 │  - Sentiment scores                      │
 │                                          │
 │ Redis Cache (AWS ElastiCache)           │
-│  - Today's recommendations (24h TTL)     │
+│  - Today\'s recommendations (24h TTL)     │
 │  - Popular stocks data (1h TTL)          │
 │  - API response cache (15min TTL)        │
 │                                          │
@@ -1246,29 +1249,29 @@ class DataCollector:
     
     def __init__(self):
         self.sp500_tickers = self.load_sp500_tickers()
-        self.fred = Fred(api_key='your_key')
+        self.fred = Fred (api_key='your_key')
         self.rate_limit_delay = 0.1  # 100ms between requests
     
-    def load_sp500_tickers(self) -> List[str]:
+    def load_sp500_tickers (self) -> List[str]:
         \"\"\"Get S&P 500 tickers from Wikipedia (free)\"\"\"
         url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-        tables = pd.read_html(url)
+        tables = pd.read_html (url)
         df = tables[0]
         return df['Symbol'].str.replace('.', '-').tolist()
     
-    def collect_daily_prices(self):
+    def collect_daily_prices (self):
         \"\"\"
         Collect daily prices for all S&P 500 stocks
         Batch download with error handling
         \"\"\"
-        logger.info(f"Collecting prices for {len(self.sp500_tickers)} stocks")
+        logger.info (f"Collecting prices for {len (self.sp500_tickers)} stocks")
         
         # Batch download (more efficient than individual)
         # Split into chunks to handle errors
         chunk_size = 50
         all_data = {}
         
-        for i in range(0, len(self.sp500_tickers), chunk_size):
+        for i in range(0, len (self.sp500_tickers), chunk_size):
             chunk = self.sp500_tickers[i:i+chunk_size]
             
             try:
@@ -1285,17 +1288,17 @@ class DataCollector:
                         all_data[ticker] = data[ticker]
                 
                 # Rate limiting
-                time.sleep(self.rate_limit_delay * chunk_size)
+                time.sleep (self.rate_limit_delay * chunk_size)
                 
-                logger.info(f"Processed {i+chunk_size}/{len(self.sp500_tickers)}")
+                logger.info (f"Processed {i+chunk_size}/{len (self.sp500_tickers)}")
                 
             except Exception as e:
-                logger.error(f"Error downloading chunk {i}: {e}")
+                logger.error (f"Error downloading chunk {i}: {e}")
                 # Continue with next chunk
         
         return all_data
     
-    def collect_fundamentals(self, tickers: List[str]):
+    def collect_fundamentals (self, tickers: List[str]):
         \"\"\"
         Collect fundamental data (weekly update)
         \"\"\"
@@ -1303,7 +1306,7 @@ class DataCollector:
         
         for ticker in tickers:
             try:
-                stock = yf.Ticker(ticker)
+                stock = yf.Ticker (ticker)
                 info = stock.info
                 
                 fundamentals.append({
@@ -1323,14 +1326,14 @@ class DataCollector:
                 })
                 
                 # Rate limiting
-                time.sleep(self.rate_limit_delay)
+                time.sleep (self.rate_limit_delay)
                 
             except Exception as e:
-                logger.error(f"Error fetching fundamentals for {ticker}: {e}")
+                logger.error (f"Error fetching fundamentals for {ticker}: {e}")
         
-        return pd.DataFrame(fundamentals)
+        return pd.DataFrame (fundamentals)
     
-    def collect_economic_indicators(self):
+    def collect_economic_indicators (self):
         \"\"\"
         Collect macro indicators from FRED
         \"\"\"
@@ -1346,11 +1349,11 @@ class DataCollector:
         data = {}
         for name, series_id in indicators.items():
             try:
-                series = self.fred.get_series(series_id)
+                series = self.fred.get_series (series_id)
                 data[name] = series.iloc[-1]  # Latest value
                 time.sleep(0.1)  # Rate limiting
             except Exception as e:
-                logger.error(f"Error fetching {name}: {e}")
+                logger.error (f"Error fetching {name}: {e}")
         
         return data
 
@@ -1360,7 +1363,7 @@ class RecommendationEngine:
     Generate stock recommendations from collected data
     \"\"\"
     
-    def calculate_fundamental_score(self, row: pd.Series) -> float:
+    def calculate_fundamental_score (self, row: pd.Series) -> float:
         \"\"\"
         Score 0-100 based on fundamentals
         
@@ -1380,7 +1383,7 @@ class RecommendationEngine:
         
         # ROE score (higher is better)
         if row['roe'] and row['roe'] > 0:
-            roe_score = min(row['roe'] * 100, 25)
+            roe_score = min (row['roe'] * 100, 25)
             score += roe_score
         
         # Debt score (lower debt/equity is better)
@@ -1390,12 +1393,12 @@ class RecommendationEngine:
         
         # Dividend yield bonus
         if row['dividend_yield']:
-            div_score = min(row['dividend_yield'] * 500, 15)
+            div_score = min (row['dividend_yield'] * 500, 15)
             score += div_score
         
-        return min(score, 100)
+        return min (score, 100)
     
-    def calculate_technical_score(self, prices: pd.DataFrame) -> float:
+    def calculate_technical_score (self, prices: pd.DataFrame) -> float:
         \"\"\"
         Score 0-100 based on technical indicators
         
@@ -1408,7 +1411,7 @@ class RecommendationEngine:
         score = 50
         
         # RSI (optimal 40-60)
-        rsi = self.calculate_rsi(prices['Close'])
+        rsi = self.calculate_rsi (prices['Close'])
         if rsi:
             if 40 <= rsi <= 60:
                 score += 15
@@ -1437,18 +1440,18 @@ class RecommendationEngine:
         elif position > 0.9:
             score -= 15  # Near 52w high, might be overextended
         
-        return min(max(score, 0), 100)
+        return min (max (score, 0), 100)
     
-    def calculate_rsi(self, prices: pd.Series, periods: int = 14) -> float:
+    def calculate_rsi (self, prices: pd.Series, periods: int = 14) -> float:
         \"\"\"Calculate RSI indicator\"\"\"
         delta = prices.diff()
-        gain = (delta.where(delta > 0, 0)).rolling(window=periods).mean()
-        loss = (-delta.where(delta < 0, 0)).rolling(window=periods).mean()
+        gain = (delta.where (delta > 0, 0)).rolling (window=periods).mean()
+        loss = (-delta.where (delta < 0, 0)).rolling (window=periods).mean()
         rs = gain / loss
         rsi = 100 - (100 / (1 + rs))
         return rsi.iloc[-1] if not rsi.empty else None
     
-    def generate_recommendations(self, 
+    def generate_recommendations (self, 
                                 fundamentals: pd.DataFrame,
                                 prices: dict,
                                 num_picks: int = 10) -> pd.DataFrame:
@@ -1464,8 +1467,8 @@ class RecommendationEngine:
                 continue
             
             # Calculate scores
-            fund_score = self.calculate_fundamental_score(row)
-            tech_score = self.calculate_technical_score(prices[ticker])
+            fund_score = self.calculate_fundamental_score (row)
+            tech_score = self.calculate_technical_score (prices[ticker])
             
             # Combined score (60% fundamental, 40% technical)
             combined_score = 0.6 * fund_score + 0.4 * tech_score
@@ -1480,13 +1483,13 @@ class RecommendationEngine:
                 'roe': row['roe']
             })
         
-        df_scores = pd.DataFrame(scores)
+        df_scores = pd.DataFrame (scores)
         
         # Top BUY recommendations
-        top_buys = df_scores.nlargest(num_picks, 'combined_score')
+        top_buys = df_scores.nlargest (num_picks, 'combined_score')
         
         # Top SELL recommendations  
-        top_sells = df_scores.nsmallest(num_picks, 'combined_score')
+        top_sells = df_scores.nsmallest (num_picks, 'combined_score')
         
         return {
             'buys': top_buys,
@@ -1509,30 +1512,30 @@ class CacheManager:
     \"\"\"
     
     def __init__(self):
-        self.redis = redis.Redis(host='localhost', port=6379, db=0)
+        self.redis = redis.Redis (host='localhost', port=6379, db=0)
     
-    def cache_recommendations(self, recommendations: dict):
+    def cache_recommendations (self, recommendations: dict):
         \"\"\"Cache today's recommendations (24h TTL)\"\"\"
         key = f"recommendations:{datetime.now().date()}"
         self.redis.setex(
             key,
-            timedelta(hours=24),
-            json.dumps(recommendations, default=str)
+            timedelta (hours=24),
+            json.dumps (recommendations, default=str)
         )
     
-    def get_cached_recommendations(self) -> dict:
+    def get_cached_recommendations (self) -> dict:
         \"\"\"Get cached recommendations\"\"\"
         key = f"recommendations:{datetime.now().date()}"
-        cached = self.redis.get(key)
-        return json.loads(cached) if cached else None
+        cached = self.redis.get (key)
+        return json.loads (cached) if cached else None
     
-    def cache_stock_data(self, ticker: str, data: dict, ttl_minutes: int = 15):
+    def cache_stock_data (self, ticker: str, data: dict, ttl_minutes: int = 15):
         \"\"\"Cache individual stock data (15min TTL)\"\"\"
         key = f"stock:{ticker}"
         self.redis.setex(
             key,
-            timedelta(minutes=ttl_minutes),
-            json.dumps(data, default=str)
+            timedelta (minutes=ttl_minutes),
+            json.dumps (data, default=str)
         )
 \`\`\`
 
@@ -1671,7 +1674,7 @@ COMPLIANCE CHECKLIST:
 5. Consider SEC Registration
    ✗ If providing personalized advice: Need RIA registration
    ✓ If providing general recommendations: May not need registration
-   ✓ Consult securities lawyer ($5K-10K for setup)
+   ✓ Consult securities lawyer (\$5K-10K for setup)
 \`\`\`
 
 **Summary:**
@@ -1683,7 +1686,6 @@ Building on free data is viable and profitable:
 - Stay legal through careful ToS compliance
 - Add value through analysis, not data redistribution
 
-The key: Free data is commodity. Your value is the ANALYSIS and USER EXPERIENCE, not the data itself.`
-}
+The key: Free data is commodity. Your value is the ANALYSIS and USER EXPERIENCE, not the data itself.`,
+  },
 ];
-

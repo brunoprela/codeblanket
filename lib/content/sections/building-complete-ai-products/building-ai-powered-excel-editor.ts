@@ -73,17 +73,17 @@ class ExcelParser {
    * Parse Excel file to structured format
    */
   
-  async parseWorkbook(file: File): Promise<Workbook> {
+  async parseWorkbook (file: File): Promise<Workbook> {
     // Use ExcelJS or similar library
     const XLSX = await import('xlsx');
-    const workbook = XLSX.read(await file.arrayBuffer());
+    const workbook = XLSX.read (await file.arrayBuffer());
     
     const sheets: Sheet[] = [];
     
     for (const sheetName of workbook.SheetNames) {
       const worksheet = workbook.Sheets[sheetName];
-      const sheet = this.parseSheet(worksheet, sheetName);
-      sheets.push(sheet);
+      const sheet = this.parseSheet (worksheet, sheetName);
+      sheets.push (sheet);
     }
     
     return {
@@ -92,9 +92,9 @@ class ExcelParser {
     };
   }
   
-  parseSheet(worksheet: any, name: string): Sheet {
+  parseSheet (worksheet: any, name: string): Sheet {
     const cells = new Map<string, Cell>();
-    const range = XLSX.utils.decode_range(worksheet['!ref'] || 'A1');
+    const range = XLSX.utils.decode_range (worksheet['!ref'] || 'A1');
     
     // Parse all cells
     for (let R = range.s.r; R <= range.e.r; R++) {
@@ -103,19 +103,19 @@ class ExcelParser {
         const cell = worksheet[cellAddress];
         
         if (cell) {
-          cells.set(cellAddress, {
+          cells.set (cellAddress, {
             address: cellAddress,
             value: cell.v,
             formula: cell.f,
-            format: this.detectFormat(cell),
-            style: this.parseStyle(cell)
+            format: this.detectFormat (cell),
+            style: this.parseStyle (cell)
           });
         }
       }
     }
     
     // Detect tables (contiguous ranges with headers)
-    const tables = this.detectTables(cells, range);
+    const tables = this.detectTables (cells, range);
     
     return {
       name,
@@ -125,7 +125,7 @@ class ExcelParser {
     };
   }
   
-  detectTables(cells: Map<string, Cell>, range: any): Table[] {
+  detectTables (cells: Map<string, Cell>, range: any): Table[] {
     // Heuristic: Look for contiguous ranges with text headers
     const tables: Table[] = [];
     
@@ -135,7 +135,7 @@ class ExcelParser {
     return tables;
   }
   
-  detectFormat(cell: any): CellFormat {
+  detectFormat (cell: any): CellFormat {
     const numFmt = cell.z || cell.w;
     
     if (numFmt?.includes('$')) {
@@ -178,7 +178,7 @@ class FormulaGenerator {
      * "=(B2-B1)/B1"
      */
     
-    const prompt = this.buildFormulaPrompt(request, context);
+    const prompt = this.buildFormulaPrompt (request, context);
     
     const client = new Anthropic();
     const response = await client.messages.create({
@@ -190,17 +190,17 @@ class FormulaGenerator {
       }]
     });
     
-    const formula = this.extractFormula(response.content[0].text);
+    const formula = this.extractFormula (response.content[0].text);
     
     // Validate formula
-    if (!this.isValidFormula(formula)) {
+    if (!this.isValidFormula (formula)) {
       throw new Error('Generated invalid formula');
     }
     
     return formula;
   }
   
-  buildFormulaPrompt(request: string, context: FormulaContext): string {
+  buildFormulaPrompt (request: string, context: FormulaContext): string {
     const { selectedCell, nearbyData, tableContext } = context;
     
     return \`
@@ -212,12 +212,12 @@ Context:
 - Selected cell: \${selectedCell.address}
 - Current value: \${selectedCell.value}
 - Nearby data:
-\${this.formatNearbyData(nearbyData)}
+\${this.formatNearbyData (nearbyData)}
 
 \${tableContext ? \`
 - Table structure:
   Headers: \${tableContext.headers.join(', ')}
-  Columns: \${tableContext.columns.map(c => \`\${c.name} (\${c.type})\`).join(', ')}
+  Columns: \${tableContext.columns.map (c => \`\${c.name} (\${c.type})\`).join(', ')}
 \` : '}
 
 Rules:
@@ -231,7 +231,7 @@ Formula:
 \`;
   }
   
-  formatNearbyData(nearbyData: Cell[][]): string {
+  formatNearbyData (nearbyData: Cell[][]): string {
     // Format 5x5 grid around selected cell
     return nearbyData.map((row, i) =>
       row.map((cell, j) =>
@@ -240,13 +240,13 @@ Formula:
     ).join('\\n');
   }
   
-  extractFormula(response: string): string {
+  extractFormula (response: string): string {
     // Extract formula from response
     const match = response.match(/^=.+$/m);
     return match ? match[0] : response.trim();
   }
   
-  isValidFormula(formula: string): boolean {
+  isValidFormula (formula: string): boolean {
     // Basic validation
     if (!formula.startsWith('=')) return false;
     
@@ -286,7 +286,7 @@ const formula = await generator.generateFormula(
   }
 );
 
-console.log(formula);  // "=AVERAGE(B:B)" or "=AVERAGE(B1:B3)"
+console.log (formula);  // "=AVERAGE(B:B)" or "=AVERAGE(B1:B3)"
 \`\`\`
 
 ### Formula Explanation
@@ -298,14 +298,14 @@ console.log(formula);  // "=AVERAGE(B:B)" or "=AVERAGE(B1:B3)"
 
 class FormulaExplainer {
   
-  async explainFormula(formula: string, context: Cell[][]): Promise<string> {
+  async explainFormula (formula: string, context: Cell[][]): Promise<string> {
     const prompt = \`
 Explain this Excel formula in simple, non-technical language:
 
 Formula: \${formula}
 
 Context (nearby cells):
-\${this.formatContext(context)}
+\${this.formatContext (context)}
 
 Explain:
 1. What does this formula do?
@@ -325,9 +325,9 @@ Keep it simple and concise (2-3 sentences).
     return response.content[0].text;
   }
   
-  formatContext(context: Cell[][]): string {
-    return context.map(row =>
-      row.map(cell => \`\${cell.address}=\${cell.value}\`).join('  ')
+  formatContext (context: Cell[][]): string {
+    return context.map (row =>
+      row.map (cell => \`\${cell.address}=\${cell.value}\`).join('  ')
     ).join('\\n');
   }
 }
@@ -371,14 +371,14 @@ class DataAnalyzer {
     
     // Extract relevant data
     const tables = sheet.tables;
-    const relevantTable = this.findRelevantTable(request, tables);
+    const relevantTable = this.findRelevantTable (request, tables);
     
     if (!relevantTable) {
       throw new Error('No relevant data found');
     }
     
     // Prepare data summary
-    const dataSummary = this.summarizeTable(relevantTable);
+    const dataSummary = this.summarizeTable (relevantTable);
     
     // Generate analysis with Claude
     const prompt = \`
@@ -392,10 +392,10 @@ Headers: \${relevantTable.headers.join(', ')}
 Rows: \${relevantTable.data.length}
 
 Summary statistics:
-\${JSON.stringify(dataSummary, null, 2)}
+\${JSON.stringify (dataSummary, null, 2)}
 
 Sample data (first 5 rows):
-\${this.formatSampleData(relevantTable)}
+\${this.formatSampleData (relevantTable)}
 
 Provide:
 1. Key insights (3-5 bullet points)
@@ -419,7 +419,7 @@ Format as JSON:
       messages: [{ role: 'user', content: prompt }]
     });
     
-    const analysis = JSON.parse(response.content[0].text);
+    const analysis = JSON.parse (response.content[0].text);
     
     // Generate charts if suggested
     const charts = await this.generateCharts(
@@ -433,15 +433,15 @@ Format as JSON:
     };
   }
   
-  summarizeTable(table: Table): Record<string, any> {
+  summarizeTable (table: Table): Record<string, any> {
     const summary: Record<string, any> = {};
     
     for (let colIndex = 0; colIndex < table.headers.length; colIndex++) {
       const header = table.headers[colIndex];
-      const values = table.data.map(row => row[colIndex]);
+      const values = table.data.map (row => row[colIndex]);
       
       // Detect column type
-      const numericValues = values.filter(v => typeof v === 'number');
+      const numericValues = values.filter (v => typeof v === 'number');
       
       if (numericValues.length > values.length * 0.8) {
         // Numeric column
@@ -454,11 +454,11 @@ Format as JSON:
         };
       } else {
         // Text column
-        const unique = new Set(values);
+        const unique = new Set (values);
         summary[header] = {
           type: 'text',
           unique_count: unique.size,
-          sample_values: Array.from(unique).slice(0, 5)
+          sample_values: Array.from (unique).slice(0, 5)
         };
       }
     }
@@ -466,9 +466,9 @@ Format as JSON:
     return summary;
   }
   
-  formatSampleData(table: Table): string {
+  formatSampleData (table: Table): string {
     return table.data.slice(0, 5)
-      .map(row => row.join(' | '))
+      .map (row => row.join(' | '))
       .join('\\n');
   }
   
@@ -545,7 +545,7 @@ async function initializeAddin() {
 
 // Generate formula from selection
 async function generateFormula() {
-  await Excel.run(async (context) => {
+  await Excel.run (async (context) => {
     const range = context.workbook.getSelectedRange();
     range.load('address, values, formulas');
     
@@ -566,7 +566,7 @@ async function generateFormula() {
         address,
         values
       })
-    }).then(r => r.json());
+    }).then (r => r.json());
     
     // Insert formula
     range.formulas = [[formula.result]];
@@ -577,7 +577,7 @@ async function generateFormula() {
 
 // Analyze selected data
 async function analyzeData() {
-  await Excel.run(async (context) => {
+  await Excel.run (async (context) => {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const usedRange = sheet.getUsedRange();
     usedRange.load('values, address');
@@ -591,10 +591,10 @@ async function analyzeData() {
         data: usedRange.values,
         address: usedRange.address
       })
-    }).then(r => r.json());
+    }).then (r => r.json());
     
     // Display insights
-    displayInsights(analysis);
+    displayInsights (analysis);
   });
 }
 \`\`\`
@@ -631,45 +631,45 @@ type Action =
 
 class AutomationEngine {
   
-  async executeAutomation(automation: Automation, workbook: Workbook) {
+  async executeAutomation (automation: Automation, workbook: Workbook) {
     for (const action of automation.actions) {
-      await this.executeAction(action, workbook);
+      await this.executeAction (action, workbook);
     }
   }
   
-  async executeAction(action: Action, workbook: Workbook) {
+  async executeAction (action: Action, workbook: Workbook) {
     switch (action.type) {
       case 'refresh_data':
-        await this.refreshData(action.source, workbook);
+        await this.refreshData (action.source, workbook);
         break;
       
       case 'generate_report':
-        await this.generateReport(action.template, workbook);
+        await this.generateReport (action.template, workbook);
         break;
       
       case 'send_email':
-        await this.sendEmail(action, workbook);
+        await this.sendEmail (action, workbook);
         break;
       
       case 'update_formula':
-        await this.updateFormula(action, workbook);
+        await this.updateFormula (action, workbook);
         break;
     }
   }
   
-  async refreshData(source: string, workbook: Workbook) {
+  async refreshData (source: string, workbook: Workbook) {
     // Fetch fresh data from API/database
-    const data = await fetch(source).then(r => r.json());
+    const data = await fetch (source).then (r => r.json());
     
     // Update workbook
     // (Implementation depends on Excel API)
   }
   
-  async generateReport(template: string, workbook: Workbook) {
+  async generateReport (template: string, workbook: Workbook) {
     // Use AI to generate narrative report from data
     const prompt = \`
 Generate an executive summary report from this data:
-\${JSON.stringify(workbook)}
+\${JSON.stringify (workbook)}
 
 Template style: \${template}
 \`;
@@ -684,7 +684,7 @@ Template style: \${template}
     return response.content[0].text;
   }
   
-  async sendEmail(action: any, workbook: Workbook) {
+  async sendEmail (action: any, workbook: Workbook) {
     const report = await this.generateReport('executive', workbook);
     
     // Send via email API (SendGrid, etc.)

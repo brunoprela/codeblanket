@@ -52,14 +52,14 @@ export const complexitySection = {
 Check constraints before recursing, not after:
 \`\`\`python
 # Bad
-if len(path) == n and is_valid(path):  # Check at end
-    result.append(path)
+if len (path) == n and is_valid (path):  # Check at end
+    result.append (path)
 
 # Good  
-if not is_valid(path):  # Check early
+if not is_valid (path):  # Check early
     return
-if len(path) == n:
-    result.append(path)
+if len (path) == n:
+    result.append (path)
 \`\`\`
 
 **2. Constraint Propagation**
@@ -75,7 +75,7 @@ diag2 = set()  # r + c
 Cache results of subproblems (when applicable):
 \`\`\`python
 memo = {}
-def backtrack(state):
+def backtrack (state):
     if state in memo:
         return memo[state]
     # ... compute

@@ -39,10 +39,10 @@ class StrategyCodeGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_strategy_code(self, strategy_description: str,
+    def generate_strategy_code (self, strategy_description: str,
                               framework: str = "backtrader") -> str:
         """
         Generate strategy code from description
@@ -97,7 +97,7 @@ Return complete, executable Python code with detailed comments."""
         
         return code
     
-    def generate_strategy_from_rules(self, entry_rules: Dict,
+    def generate_strategy_from_rules (self, entry_rules: Dict,
         exit_rules: Dict,
         risk_params: Dict) -> str:
 """
@@ -114,13 +114,13 @@ Returns:
 prompt = f"""Generate trading strategy code from these structured rules.
 
 Entry Rules:
-{ json.dumps(entry_rules, indent = 2) }
+{ json.dumps (entry_rules, indent = 2) }
 
 Exit Rules:
-{ json.dumps(exit_rules, indent = 2) }
+{ json.dumps (exit_rules, indent = 2) }
 
 Risk Management:
-{ json.dumps(risk_params, indent = 2) }
+{ json.dumps (risk_params, indent = 2) }
 
 Generate complete backtesting code using backtrader that:
     1. Implements all entry rules (AND / OR logic as specified)
@@ -144,7 +144,7 @@ if "\`\`\`python" in code:
 
 return code
     
-    def explain_existing_strategy(self, strategy_code: str) -> Dict:
+    def explain_existing_strategy (self, strategy_code: str) -> Dict:
 """
         Explain existing strategy code in plain language
 
@@ -199,9 +199,9 @@ response = self.client.messages.create(
     messages = [{ "role": "user", "content": prompt }]
 )
 
-return self._parse_json(response.content[0].text)
+return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
 """Parse JSON from response"""
 try:
 if "\`\`\`json" in response_text:
@@ -210,12 +210,12 @@ if "\`\`\`json" in response_text:
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-code_gen = StrategyCodeGenerator(api_key = "your-key")
+code_gen = StrategyCodeGenerator (api_key = "your-key")
 
 # Natural language strategy
 strategy_desc = """
@@ -229,7 +229,7 @@ Create a momentum strategy that:
 """
 
 # Generate code
-code = code_gen.generate_strategy_code(strategy_desc, framework = "backtrader")
+code = code_gen.generate_strategy_code (strategy_desc, framework = "backtrader")
 print("Generated Strategy Code:")
 print(code)
 
@@ -257,7 +257,7 @@ risk_params = {
     'max_positions': 3
 }
 
-code2 = code_gen.generate_strategy_from_rules(entry_rules, exit_rules, risk_params)
+code2 = code_gen.generate_strategy_from_rules (entry_rules, exit_rules, risk_params)
 print("\\nGenerated from Rules:")
 print(code2)
 \`\`\`
@@ -279,10 +279,10 @@ class BacktestGenerator:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def generate_backtest_framework(self, strategy_code: str,
+    def generate_backtest_framework (self, strategy_code: str,
                                    requirements: Dict) -> str:
         """
         Generate complete backtest framework
@@ -305,7 +305,7 @@ Requirements:
 - End Date: {requirements.get('end_date', '2023-12-31')}
 - Initial Capital: \${requirements.get('initial_capital', 100000)}
 - Commission: {requirements.get('commission', 0.001)}
-- Tickers: {', '.join(requirements.get('tickers', ['SPY']))}
+- Tickers: {', '.join (requirements.get('tickers', ['SPY']))}
 
 Generate Python code that:
 
@@ -354,7 +354,7 @@ code = code.split("\`\`\`python")[1].split("\`\`\`")[0].strip()
 
 return code
     
-    def generate_walk_forward_test(self, strategy_code: str,
+    def generate_walk_forward_test (self, strategy_code: str,
     parameters: Dict) -> str:
 """
         Generate walk - forward testing code
@@ -400,7 +400,7 @@ if "\`\`\`python" in code:
 
 return code
     
-    def generate_monte_carlo_simulation(self, backtest_results: Dict) -> str:
+    def generate_monte_carlo_simulation (self, backtest_results: Dict) -> str:
 """
         Generate Monte Carlo simulation code
 
@@ -420,7 +420,7 @@ Backtest Results Summary:
 
 Generate code that:
 1. Takes historical trade results
-2. Randomly samples trades(with replacement)
+2. Randomly samples trades (with replacement)
 3. Simulates portfolio paths(10,000 simulations)
 4. Calculates distribution of outcomes
 5. Shows confidence intervals
@@ -443,7 +443,7 @@ if "\`\`\`python" in code:
 return code
 
 # Example usage
-backtest_gen = BacktestGenerator(api_key = "your-key")
+backtest_gen = BacktestGenerator (api_key = "your-key")
 
 # Generate complete backtest framework
 requirements = {
@@ -481,10 +481,10 @@ class StrategyAnalyzer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def analyze_backtest_results(self, results: Dict,
+    def analyze_backtest_results (self, results: Dict,
                                  strategy_description: str) -> Dict:
         """
         Analyze backtest results and provide insights
@@ -516,7 +516,7 @@ Provide analysis as JSON:
   "overall_assessment": "Strong/Good/Adequate/Weak/Poor",
   "strengths": [
     {{
-      "aspect": "What's strong",
+      "aspect": "What\'s strong",
       "evidence": "Metrics supporting this",
       "significance": "Why it matters"
     }}
@@ -562,9 +562,9 @@ Provide analysis as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def identify_overfitting(self, in_sample_results: Dict,
+    def identify_overfitting (self, in_sample_results: Dict,
                             out_sample_results: Dict) -> Dict:
         """
         Identify signs of overfitting
@@ -579,10 +579,10 @@ Provide analysis as JSON:
         prompt = f"""Analyze these results for signs of overfitting.
 
 In-Sample Results:
-{json.dumps(in_sample_results, indent=2)}
+{json.dumps (in_sample_results, indent=2)}
 
 Out-of-Sample Results:
-{json.dumps(out_sample_results, indent=2)}
+{json.dumps (out_sample_results, indent=2)}
 
 Analyze:
 1. Performance degradation from in-sample to out-of-sample
@@ -603,9 +603,9 @@ Return analysis as JSON with:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def compare_strategies(self, strategies: List[Dict]) -> Dict:
+    def compare_strategies (self, strategies: List[Dict]) -> Dict:
         """
         Compare multiple strategies
         
@@ -647,9 +647,9 @@ Return detailed comparison with rankings."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -659,12 +659,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-analyzer = StrategyAnalyzer(api_key = "your-key")
+analyzer = StrategyAnalyzer (api_key = "your-key")
 
 results = {
     'total_return': 45.2,
@@ -684,7 +684,7 @@ analysis = analyzer.analyze_backtest_results(
 )
 
 print("Strategy Analysis:")
-print(json.dumps(analysis, indent = 2))
+print(json.dumps (analysis, indent = 2))
 \`\`\`
 
 ---
@@ -704,10 +704,10 @@ class ParameterOptimizer:
     """
     
     def __init__(self, api_key: str):
-        self.client = anthropic.Anthropic(api_key=api_key)
+        self.client = anthropic.Anthropic (api_key=api_key)
         self.model = "claude-3-5-sonnet-20241022"
     
-    def suggest_parameter_ranges(self, strategy_type: str,
+    def suggest_parameter_ranges (self, strategy_type: str,
                                  current_params: Dict) -> Dict:
         """
         Suggest intelligent parameter ranges for optimization
@@ -724,7 +724,7 @@ class ParameterOptimizer:
 Strategy Type: {strategy_type}
 
 Current Parameters:
-{json.dumps(current_params, indent=2)}
+{json.dumps (current_params, indent=2)}
 
 Suggest optimization ranges as JSON:
 {{
@@ -753,9 +753,9 @@ Suggest optimization ranges as JSON:
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def interpret_optimization_results(self, 
+    def interpret_optimization_results (self, 
                                       optimization_results: List[Dict]) -> Dict:
         """
         Interpret parameter optimization results
@@ -773,7 +773,7 @@ Suggest optimization ranges as JSON:
             reverse=True
         )[:10]
         
-        results_summary = json.dumps(top_results, indent=2)
+        results_summary = json.dumps (top_results, indent=2)
         
         prompt = f"""Interpret these parameter optimization results.
 
@@ -796,9 +796,9 @@ Provide interpretation as JSON."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def suggest_strategy_variations(self, base_strategy: Dict,
+    def suggest_strategy_variations (self, base_strategy: Dict,
                                    performance: Dict) -> List[Dict]:
         """
         Suggest variations to improve strategy
@@ -813,10 +813,10 @@ Provide interpretation as JSON."""
         prompt = f"""Suggest strategy variations that might improve performance.
 
 Base Strategy:
-{json.dumps(base_strategy, indent=2)}
+{json.dumps (base_strategy, indent=2)}
 
 Current Performance:
-{json.dumps(performance, indent=2)}
+{json.dumps (performance, indent=2)}
 
 Suggest 5-7 specific variations including:
 1. Modified entry conditions
@@ -839,9 +839,9 @@ Return as JSON list of variations."""
             messages=[{"role": "user", "content": prompt}]
         )
         
-        return self._parse_json(response.content[0].text)
+        return self._parse_json (response.content[0].text)
     
-    def _parse_json(self, response_text: str) -> Dict:
+    def _parse_json (self, response_text: str) -> Dict:
         """Parse JSON from response"""
         import json
         try:
@@ -851,12 +851,12 @@ json_str = response_text.split("\`\`\`json")[1].split("\`\`\`")[0].strip()
 json_str = response_text.split("\`\`\`")[1].split("\`\`\`")[0].strip()
             else:
 json_str = response_text
-return json.loads(json_str)
+return json.loads (json_str)
 except:
 return {}
 
 # Example usage
-optimizer = ParameterOptimizer(api_key = "your-key")
+optimizer = ParameterOptimizer (api_key = "your-key")
 
 current_params = {
     'rsi_period': 14,
@@ -873,7 +873,7 @@ suggestions = optimizer.suggest_parameter_ranges(
 )
 
 print("Parameter Optimization Suggestions:")
-print(json.dumps(suggestions, indent = 2))
+print(json.dumps (suggestions, indent = 2))
 \`\`\`
 
 ---
@@ -893,12 +893,12 @@ class StrategyDevelopmentPipeline:
     """
     
     def __init__(self, api_key: str):
-        self.code_gen = StrategyCodeGenerator(api_key)
-        self.backtest_gen = BacktestGenerator(api_key)
-        self.analyzer = StrategyAnalyzer(api_key)
-        self.optimizer = ParameterOptimizer(api_key)
+        self.code_gen = StrategyCodeGenerator (api_key)
+        self.backtest_gen = BacktestGenerator (api_key)
+        self.analyzer = StrategyAnalyzer (api_key)
+        self.optimizer = ParameterOptimizer (api_key)
     
-    def develop_strategy(self, idea: str) -> Dict:
+    def develop_strategy (self, idea: str) -> Dict:
         """
         Complete strategy development from idea to backtest
         
@@ -909,7 +909,7 @@ class StrategyDevelopmentPipeline:
             Complete strategy package
         """
         print("Step 1: Generating strategy code...")
-        strategy_code = self.code_gen.generate_strategy_code(idea)
+        strategy_code = self.code_gen.generate_strategy_code (idea)
         
         print("Step 2: Generating backtest framework...")
         backtest_code = self.backtest_gen.generate_backtest_framework(
@@ -919,7 +919,7 @@ class StrategyDevelopmentPipeline:
         
         print("Step 3: Running backtest...")
         # In production: actually run the backtest
-        # results = self._run_backtest(backtest_code)
+        # results = self._run_backtest (backtest_code)
         results = {
             'total_return': 35.2,
             'sharpe_ratio': 1.45,
@@ -929,7 +929,7 @@ class StrategyDevelopmentPipeline:
         }
         
         print("Step 4: Analyzing results...")
-        analysis = self.analyzer.analyze_backtest_results(results, idea)
+        analysis = self.analyzer.analyze_backtest_results (results, idea)
         
         print("Step 5: Suggesting improvements...")
         improvements = self.optimizer.suggest_strategy_variations(
@@ -945,7 +945,7 @@ class StrategyDevelopmentPipeline:
             'improvements': improvements
         }
     
-    def iterative_development(self, initial_idea: str,
+    def iterative_development (self, initial_idea: str,
                              max_iterations: int = 3) -> List[Dict]:
         """
         Iteratively improve strategy
@@ -960,13 +960,13 @@ class StrategyDevelopmentPipeline:
         iterations = []
         current_idea = initial_idea
         
-        for i in range(max_iterations):
+        for i in range (max_iterations):
             print(f"\\n{'='*60}")
             print(f"Iteration {i+1}/{max_iterations}")
             print(f"{'='*60}")
             
-            result = self.develop_strategy(current_idea)
-            iterations.append(result)
+            result = self.develop_strategy (current_idea)
+            iterations.append (result)
             
             # Check if good enough
             if result['results']['sharpe_ratio'] > 2.0:
@@ -982,7 +982,7 @@ class StrategyDevelopmentPipeline:
         return iterations
 
 # Example usage
-pipeline = StrategyDevelopmentPipeline(api_key="your-key")
+pipeline = StrategyDevelopmentPipeline (api_key="your-key")
 
 strategy_idea = """
 Create a momentum strategy that buys stocks making new 20-day highs
@@ -991,7 +991,7 @@ Use a 2% stop loss and trail stops by 1 ATR.
 """
 
 # Develop strategy
-result = pipeline.develop_strategy(strategy_idea)
+result = pipeline.develop_strategy (strategy_idea)
 
 print("\\nStrategy Development Complete!")
 print(f"Sharpe Ratio: {result['results']['sharpe_ratio']:.2f}")

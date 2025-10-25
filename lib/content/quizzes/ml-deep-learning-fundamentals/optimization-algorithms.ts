@@ -5,7 +5,7 @@ export const optimizationAlgorithmsQuiz: QuizQuestion[] = [
     id: 'optimization-algorithms-dq-1',
     question:
       'Explain why Adam optimizer is so widely used in deep learning. What problems does it solve compared to vanilla SGD, and when might you choose SGD with momentum instead?',
-    sampleAnswer: `Adam (Adaptive Moment Estimation) has become the default optimizer in deep learning because it combines the best features of momentum and adaptive learning rates while being robust to hyperparameter choices. Here's why it's so effective and when alternatives might be better:
+    sampleAnswer: `Adam (Adaptive Moment Estimation) has become the default optimizer in deep learning because it combines the best features of momentum and adaptive learning rates while being robust to hyperparameter choices. Here\'s why it's so effective and when alternatives might be better:
 
 **Why Adam is Popular:**
 
@@ -46,7 +46,7 @@ Despite Adam's popularity, SGD+Momentum often achieves better generalization in 
    - Requires careful LR scheduling (cosine annealing, step decay)
 
 2. **Small Datasets:**
-   - Adam's adaptive rates can overfit quickly
+   - Adam\'s adaptive rates can overfit quickly
    - SGD's simpler update provides better regularization
    - Particularly true with <10K training samples
 
@@ -80,7 +80,7 @@ Adam's robustness makes it ideal when you need reliable results without extensiv
     id: 'optimization-algorithms-dq-2',
     question:
       'Describe learning rate scheduling and why it is important. Compare step decay, exponential decay, and cosine annealing strategies, and explain when each is most appropriate.',
-    sampleAnswer: `Learning rate scheduling adjusts the learning rate during training to improve convergence and final performance. It's based on the principle that different training phases require different step sizes:
+    sampleAnswer: `Learning rate scheduling adjusts the learning rate during training to improve convergence and final performance. It\'s based on the principle that different training phases require different step sizes:
 
 **Why LR Scheduling Matters:**
 
@@ -129,20 +129,20 @@ For trading models, cosine annealing with Adam often works best. Start with lr=0
 **The Problem with Adam + L2:**
 
 Standard approach (INCORRECT):
-\\\`\\\`\\\`
+\`\`\`
 g_t = ∇L + λθ_t  # Add L2 to gradient
 Apply Adam with g_t
-\\\`\\\`\\\`
+\`\`\`
 
-Issue: Adam's adaptive learning rates scale the L2 term differently for different parameters. Parameters with large historical gradients get their L2 penalty reduced, defeating the purpose of regularization.
+Issue: Adam\'s adaptive learning rates scale the L2 term differently for different parameters. Parameters with large historical gradients get their L2 penalty reduced, defeating the purpose of regularization.
 
 **AdamW Solution (CORRECT):**
 
-\\\`\\\`\\\`
+\`\`\`
 1. Compute gradient: g_t = ∇L (no L2)
 2. Apply Adam update with g_t
 3. Apply weight decay separately: θ = θ - η·λ·θ
-\\\`\\\`\\\`
+\`\`\`
 
 By decoupling weight decay from the gradient, every parameter gets the same proportional decay regardless of its gradient history. This provides consistent, predictable regularization.
 

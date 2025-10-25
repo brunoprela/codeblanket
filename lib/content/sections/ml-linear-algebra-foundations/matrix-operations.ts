@@ -65,12 +65,12 @@ def visualize_matrix_vector_transform(A, x):
     """Visualize how matrix A transforms vector x"""
     y = A @ x
     
-    plt.figure(figsize=(10, 5))
+    plt.figure (figsize=(10, 5))
     
     # Plot original and transformed vector
     plt.subplot(1, 2, 1)
-    plt.axhline(y=0, color='k', linewidth=0.5)
-    plt.axvline(x=0, color='k', linewidth=0.5)
+    plt.axhline (y=0, color='k', linewidth=0.5)
+    plt.axvline (x=0, color='k', linewidth=0.5)
     plt.grid(True, alpha=0.3)
     plt.quiver(0, 0, x[0], x[1], angles='xy', scale_units='xy', scale=1,
               color='blue', width=0.008, label='x (original)')
@@ -86,19 +86,19 @@ def visualize_matrix_vector_transform(A, x):
     
     # Show transformation of unit square
     plt.subplot(1, 2, 2)
-    plt.axhline(y=0, color='k', linewidth=0.5)
-    plt.axvline(x=0, color='k', linewidth=0.5)
+    plt.axhline (y=0, color='k', linewidth=0.5)
+    plt.axvline (x=0, color='k', linewidth=0.5)
     plt.grid(True, alpha=0.3)
     
     # Unit square corners
     square = np.array([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]).T
     transformed_square = A @ square
     
-    plt.plot(square[0, :], square[1, :], 'b-', linewidth=2, label='Original square')
-    plt.plot(transformed_square[0, :], transformed_square[1, :], 'r-', 
+    plt.plot (square[0, :], square[1, :], 'b-', linewidth=2, label='Original square')
+    plt.plot (transformed_square[0, :], transformed_square[1, :], 'r-', 
             linewidth=2, label='Transformed square')
     
-    max_val = max(np.max(transformed_square), 2)
+    max_val = max (np.max (transformed_square), 2)
     plt.xlim(-0.5, max_val)
     plt.ylim(-0.5, max_val)
     plt.xlabel('X')
@@ -115,7 +115,7 @@ visualize_matrix_vector_transform(A, x)
 
 ## Matrix-Matrix Multiplication Revisited
 
-Let's understand matrix multiplication from the perspective of **column combinations** and **row transformations**.
+Let\'s understand matrix multiplication from the perspective of **column combinations** and **row transformations**.
 
 ### Column Perspective
 
@@ -149,13 +149,13 @@ print("Column perspective:")
 print("First column of AB = A @ (first column of B)")
 col1 = A @ B[:, 0]
 print(f"  A @ {B[:, 0]} = {col1}")
-print(f"  Matches AB[:, 0] = {AB[:, 0]}: {np.allclose(col1, AB[:, 0])}")
+print(f"  Matches AB[:, 0] = {AB[:, 0]}: {np.allclose (col1, AB[:, 0])}")
 print()
 
 print("Second column of AB = A @ (second column of B)")
 col2 = A @ B[:, 1]
 print(f"  A @ {B[:, 1]} = {col2}")
-print(f"  Matches AB[:, 1] = {AB[:, 1]}: {np.allclose(col2, AB[:, 1])}")
+print(f"  Matches AB[:, 1] = {AB[:, 1]}: {np.allclose (col2, AB[:, 1])}")
 \`\`\`
 
 ### Row Perspective
@@ -167,7 +167,7 @@ print("\\n=== Row Perspective ===")
 print("First row of AB = (first row of A) @ B")
 row1 = A[0, :] @ B
 print(f"  {A[0, :]} @ B = {row1}")
-print(f"  Matches AB[0, :] = {AB[0, :]}: {np.allclose(row1, AB[0, :])}")
+print(f"  Matches AB[0, :] = {AB[0, :]}: {np.allclose (row1, AB[0, :])}")
 \`\`\`
 
 ## Batch Matrix-Vector Multiplication
@@ -215,7 +215,7 @@ print()
 print("Verification for first sample:")
 y1 = X[0, :] @ W
 print(f"X[0, :] @ W = {X[0, :]} @ W = {y1}")
-print(f"Matches Y[0, :] = {Y[0, :]}: {np.allclose(y1, Y[0, :])}")
+print(f"Matches Y[0, :] = {Y[0, :]}: {np.allclose (y1, Y[0, :])}")
 \`\`\`
 
 ## Matrix Powers
@@ -256,7 +256,7 @@ tr(**A**) = Σᵢ aᵢᵢ = a₁₁ + a₂₂ + ... + aₙₙ
 
 **Properties**:
 - tr(**A** + **B**) = tr(**A**) + tr(**B**)
-- tr(c**A**) = c·tr(**A**)
+- tr (c**A**) = c·tr(**A**)
 - tr(**AB**) = tr(**BA**) (even if **AB** ≠ **BA**!)
 - tr(**A**ᵀ) = tr(**A**)
 
@@ -286,7 +286,7 @@ BA = B @ A
 
 print(f"tr(AB) = {np.trace(AB)}")
 print(f"tr(BA) = {np.trace(BA)}")
-print(f"Equal: {np.isclose(np.trace(AB), np.trace(BA))}")
+print(f"Equal: {np.isclose (np.trace(AB), np.trace(BA))}")
 \`\`\`
 
 ## Broadcasting in NumPy
@@ -343,8 +343,8 @@ batch_with_bias = batch + bias  # Bias broadcast to all samples
 print(f"1. Batch {batch.shape} + bias {bias.shape} → {batch_with_bias.shape}")
 
 # 2. Normalize each feature (across samples)
-mean = batch.mean(axis=0)  # Mean of each feature
-std = batch.std(axis=0)  # Std of each feature
+mean = batch.mean (axis=0)  # Mean of each feature
+std = batch.std (axis=0)  # Std of each feature
 batch_normalized = (batch - mean) / std
 print(f"2. Batch normalization: {batch.shape} → {batch_normalized.shape}")
 
@@ -400,7 +400,7 @@ Let's implement a complete forward pass through a neural network layer using pur
 \`\`\`python
 print("\\n=== Neural Network Forward Pass ===")
 
-def relu(x):
+def relu (x):
     """ReLU activation function"""
     return np.maximum(0, x)
 
@@ -431,13 +431,13 @@ hidden_dim = 3
 output_dim = 2
 batch_size = 5
 
-W1 = np.random.randn(input_dim, hidden_dim) * 0.1
-b1 = np.zeros(hidden_dim)
-W2 = np.random.randn(hidden_dim, output_dim) * 0.1
-b2 = np.zeros(output_dim)
+W1 = np.random.randn (input_dim, hidden_dim) * 0.1
+b1 = np.zeros (hidden_dim)
+W2 = np.random.randn (hidden_dim, output_dim) * 0.1
+b2 = np.zeros (output_dim)
 
 # Input data
-X = np.random.randn(batch_size, input_dim)
+X = np.random.randn (batch_size, input_dim)
 
 print(f"Input X: {X.shape}")
 print(f"W1: {W1.shape}, b1: {b1.shape}")
@@ -507,8 +507,8 @@ print("\\n=== Performance Comparison ===")
 
 # Setup
 n = 1000
-A = np.random.randn(n, n)
-B = np.random.randn(n, n)
+A = np.random.randn (n, n)
+B = np.random.randn (n, n)
 
 # Vectorized (fast)
 start = time.time()
@@ -518,8 +518,8 @@ time_fast = time.time() - start
 # Loop-based (slow) - don't do this!
 start = time.time()
 C_slow = np.zeros((n, n))
-for i in range(min(10, n)):  # Only 10 rows to save time
-    for j in range(n):
+for i in range (min(10, n)):  # Only 10 rows to save time
+    for j in range (n):
         C_slow[i, j] = np.dot(A[i, :], B[:, j])
 time_slow = time.time() - start
 time_slow_extrapolated = time_slow * (n / 10)

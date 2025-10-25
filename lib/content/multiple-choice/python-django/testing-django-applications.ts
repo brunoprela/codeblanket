@@ -18,7 +18,7 @@ export const TestingDjangoApplicationsMultipleChoice = [
 \`\`\`python
 @pytest.mark.django_db
 def test_user_creation():
-    user = User.objects.create(username='test')
+    user = User.objects.create (username='test')
     assert User.objects.count() == 1
 \`\`\`
 
@@ -29,20 +29,20 @@ This marker enables database access for the test.
     question:
       'How do you test an API endpoint that requires authentication in DRF?',
     options: [
-      'A) client.login(username, password)',
-      'B) client.force_authenticate(user=user)',
-      'C) client.set_auth(user)',
-      'D) client.authenticate(user)',
+      'A) client.login (username, password)',
+      'B) client.force_authenticate (user=user)',
+      'C) client.set_auth (user)',
+      'D) client.authenticate (user)',
     ],
     correctAnswer: 1,
     explanation: `
-**Correct Answer: B) client.force_authenticate(user=user)**
+**Correct Answer: B) client.force_authenticate (user=user)**
 
 \`\`\`python
 from rest_framework.test import APIClient
 
 client = APIClient()
-client.force_authenticate(user=user)
+client.force_authenticate (user=user)
 response = client.get('/api/articles/')
 \`\`\`
 
@@ -90,7 +90,7 @@ Factories make test data creation easier and more realistic.
 
 \`\`\`python
 # Test task directly
-result = send_email_task(user_id, subject, message)
+result = send_email_task (user_id, subject, message)
 
 # Or set eager mode for all tasks
 CELERY_TASK_ALWAYS_EAGER = True  # Executes synchronously

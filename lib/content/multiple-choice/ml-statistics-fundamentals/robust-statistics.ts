@@ -38,7 +38,7 @@ export const robuststatisticsMultipleChoice: MultipleChoiceQuestion[] = [
     options: ['The mean', 'The standard deviation', 'The mode', 'The range'],
     correctAnswer: 1,
     explanation:
-      "MAD is a robust measure of spread/dispersion, making it a robust alternative to standard deviation. It's calculated as the median of absolute deviations from the median, and has a 50% breakdown point unlike the standard deviation which has 0%.",
+      "MAD is a robust measure of spread/dispersion, making it a robust alternative to standard deviation. It\'s calculated as the median of absolute deviations from the median, and has a 50% breakdown point unlike the standard deviation which has 0%.",
   },
   {
     id: 'mc4',

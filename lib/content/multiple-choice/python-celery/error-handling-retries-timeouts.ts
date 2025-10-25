@@ -57,7 +57,7 @@ export const errorHandlingRetriesTimeoutsMultipleChoice: MultipleChoiceQuestion[
       ],
       correctAnswer: 1,
       explanation:
-        'autoretry_for=(Exception,) automatically retries task if Exception (or any subclass) is raised. No need for manual self.retry(). Combine with retry_kwargs, retry_backoff for comprehensive auto-retry. Example: @app.task(autoretry_for=(RequestException,), retry_kwargs={"max_retries": 5}).',
+        'autoretry_for=(Exception,) automatically retries task if Exception (or any subclass) is raised. No need for manual self.retry(). Combine with retry_kwargs, retry_backoff for comprehensive auto-retry. Example: @app.task (autoretry_for=(RequestException,), retry_kwargs={"max_retries": 5}).',
     },
     {
       id: 'mc5',

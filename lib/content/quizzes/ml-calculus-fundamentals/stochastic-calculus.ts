@@ -26,11 +26,11 @@ Diffusion models (DALL-E 2, Stable Diffusion, Imagen) are currently state-of-the
 
 **Mathematical formulation:**
 
-Start with data x_0 ~ p_data(x)
+Start with data x_0 ~ p_data (x)
 
 Add noise in T steps:
 \`\`\`
-q(x_t | x_{t-1}) = N(x_t | √(1-β_t)x_{t-1}, β_t I)
+q (x_t | x_{t-1}) = N(x_t | √(1-β_t)x_{t-1}, β_t I)
 \`\`\`
 
 where β_t is noise schedule (typically β_1 < β_2 < ... < β_T).
@@ -66,7 +66,7 @@ Learn to predict the noise ε that was added!
 
 **Forward SDE:**
 \`\`\`
-dx = f(x,t)dt + g(t)dW_t
+dx = f (x,t)dt + g (t)dW_t
 \`\`\`
 
 For diffusion models:
@@ -76,23 +76,23 @@ dx_t = -½β(t)x_t dt + √β(t) dW_t
 
 **Reverse SDE (Anderson, 1982):**
 \`\`\`
-dx_t = [f(x,t) - g²(t)∇_x log p_t(x_t)]dt + g(t)d W̄_t
+dx_t = [f (x,t) - g²(t)∇_x log p_t (x_t)]dt + g (t)d W̄_t
 \`\`\`
 
-where ∇_x log p_t(x) is the **score function**.
+where ∇_x log p_t (x) is the **score function**.
 
-**Key insight:** If we know the score ∇_x log p_t(x), we can run reverse process!
+**Key insight:** If we know the score ∇_x log p_t (x), we can run reverse process!
 
 **5. Score Matching:**
 
 **Neural network learns the score:**
 \`\`\`
-s_θ(x_t, t) ≈ ∇_x log p_t(x_t)
+s_θ(x_t, t) ≈ ∇_x log p_t (x_t)
 \`\`\`
 
 **Training:**
 \`\`\`
-L = E_{t, x_0, ε} [||∇_x log p_t(x_t) - s_θ(x_t, t)||²]
+L = E_{t, x_0, ε} [||∇_x log p_t (x_t) - s_θ(x_t, t)||²]
 \`\`\`
 
 **Equivalently (denoising score matching):**
@@ -114,23 +114,23 @@ Predict the noise added!
 
 **Pseudocode:**
 \`\`\`python
-def generate_sample(model, T=1000):
+def generate_sample (model, T=1000):
     # Start from noise
     x = torch.randn(1, 3, 256, 256)
     
-    for t in reversed(range(T)):
+    for t in reversed (range(T)):
         # Predict noise
-        eps_pred = model(x, t)
+        eps_pred = model (x, t)
         
         # Compute mean
-        alpha_t = get_alpha(t)
-        alpha_prev = get_alpha(t-1)
-        x_prev_mean = (x - eps_pred * (1-alpha_t)/sqrt(1-alpha_bar_t)) / sqrt(alpha_t)
+        alpha_t = get_alpha (t)
+        alpha_prev = get_alpha (t-1)
+        x_prev_mean = (x - eps_pred * (1-alpha_t)/sqrt(1-alpha_bar_t)) / sqrt (alpha_t)
         
         # Add noise (except final step)
         if t > 0:
-            noise = torch.randn_like(x)
-            x = x_prev_mean + sqrt(beta_t) * noise
+            noise = torch.randn_like (x)
+            x = x_prev_mean + sqrt (beta_t) * noise
         else:
             x = x_prev_mean
     
@@ -213,24 +213,24 @@ class DiffusionModel:
         self.model = unet  # Neural network
         self.beta = noise_schedule  # β_1, ..., β_T
     
-    def forward_diffusion(self, x0, t):
+    def forward_diffusion (self, x0, t):
         """Add noise: x_t = √(ᾱ_t)x_0 + √(1-ᾱ_t)ε"""
-        alpha_bar = self.get_alpha_bar(t)
-        eps = torch.randn_like(x0)
-        return sqrt(alpha_bar) * x0 + sqrt(1 - alpha_bar) * eps, eps
+        alpha_bar = self.get_alpha_bar (t)
+        eps = torch.randn_like (x0)
+        return sqrt (alpha_bar) * x0 + sqrt(1 - alpha_bar) * eps, eps
     
-    def loss(self, x0):
+    def loss (self, x0):
         """Denoising score matching loss"""
-        t = torch.randint(0, self.T, (len(x0),))
-        x_t, eps_true = self.forward_diffusion(x0, t)
-        eps_pred = self.model(x_t, t)
-        return F.mse_loss(eps_pred, eps_true)
+        t = torch.randint(0, self.T, (len (x0),))
+        x_t, eps_true = self.forward_diffusion (x0, t)
+        eps_pred = self.model (x_t, t)
+        return F.mse_loss (eps_pred, eps_true)
     
-    def generate(self, shape):
+    def generate (self, shape):
         """Reverse diffusion sampling"""
-        x = torch.randn(shape)
-        for t in reversed(range(self.T)):
-            x = self.reverse_step(x, t)
+        x = torch.randn (shape)
+        for t in reversed (range (self.T)):
+            x = self.reverse_step (x, t)
         return x
 \`\`\`
 
@@ -271,7 +271,7 @@ class DiffusionModel:
     keyPoints: [
       'Forward: Gradually add noise (data → noise via SDE)',
       'Reverse: Learn to denoise (noise → data via reverse SDE)',
-      'Score matching: Learn ∇_x log p_t(x) with neural network',
+      'Score matching: Learn ∇_x log p_t (x) with neural network',
       'Generation: Sample x_T ~ N(0,I), run reverse process',
       'Stochastic calculus: Provides reverse SDE formula',
       'State-of-the-art: Stable training, high quality, controllable',
@@ -288,7 +288,7 @@ Itô's lemma is fundamental to stochastic calculus, extending the chain rule to 
 
 **1. Standard Chain Rule (Deterministic):**
 
-**Problem:** Given y = f(x(t)), find dy/dt
+**Problem:** Given y = f (x(t)), find dy/dt
 
 **Solution:**
 \`\`\`
@@ -300,7 +300,7 @@ dy/dt = (df/dx) · (dx/dt)
 dy = (df/dx) · dx
 \`\`\`
 
-**Intuition:** Small change in x causes proportional change in f(x).
+**Intuition:** Small change in x causes proportional change in f (x).
 
 **2. Stochastic Setting:**
 
@@ -356,7 +356,7 @@ Key insight: (dW)² = dt  (quadratic variation)
 Brownian motion increments:
 \`\`\`
 dW ~ N(0, dt)
-E[(dW)²] = Var(dW) = dt
+E[(dW)²] = Var (dW) = dt
 (dW)² → dt in mean-square sense
 \`\`\`
 
@@ -389,7 +389,7 @@ dW · dW = dt  ← Key rule!
 dS_t = μS_t dt + σS_t dW_t
 \`\`\`
 
-**Find:** d(log S_t)
+**Find:** d (log S_t)
 
 **Apply Itô's lemma with f(S) = log(S):**
 \`\`\`
@@ -399,7 +399,7 @@ dS_t = μS_t dt + σS_t dW_t
 
 **Itô's lemma:**
 \`\`\`
-d(log S_t) = (1/S)dS_t + (1/2)(-1/S²)(dS_t)²
+d (log S_t) = (1/S)dS_t + (1/2)(-1/S²)(dS_t)²
 
 Substitute dS_t = μS dt + σS dW:
 \`\`\`
@@ -423,7 +423,7 @@ Substitute dS_t = μS dt + σS dW:
 
 **Final result:**
 \`\`\`
-d(log S_t) = (μ - σ²/2)dt + σ dW_t
+d (log S_t) = (μ - σ²/2)dt + σ dW_t
 \`\`\`
 
 **Implication:** log(S_t) is Brownian motion with drift!
@@ -446,7 +446,7 @@ dt = T / N
 t = np.linspace(0, T, N+1)
 
 # Simulate GBM
-dW = np.random.randn(n_paths, N) * np.sqrt(dt)
+dW = np.random.randn (n_paths, N) * np.sqrt (dt)
 dS = np.zeros((n_paths, N+1))
 S = np.zeros((n_paths, N+1))
 S[:, 0] = S0
@@ -464,15 +464,15 @@ theoretical_std = sigma * np.sqrt(T)
 
 print("Itô's Lemma Verification:")
 print(f"Theoretical mean: {theoretical_mean:.6f}")
-print(f"Simulated mean:   {np.mean(log_change):.6f}")
+print(f"Simulated mean:   {np.mean (log_change):.6f}")
 print(f"Theoretical std:  {theoretical_std:.6f}")
-print(f"Simulated std:    {np.std(log_change):.6f}")
+print(f"Simulated std:    {np.std (log_change):.6f}")
 print("→ Perfect agreement!")
 
 # Without Itô correction (WRONG)
 wrong_mean = mu * T  # Missing -σ²/2 term
 print(f"\\nWithout Itô correction: {wrong_mean:.6f}")
-print(f"Error: {abs(wrong_mean - np.mean(log_change)):.6f}")
+print(f"Error: {abs (wrong_mean - np.mean (log_change)):.6f}")
 print("→ Significant error without Itô term!")
 \`\`\`
 
@@ -519,12 +519,12 @@ Volatility reduces geometric growth!
 
 Forward SDE:
 \`\`\`
-dx_t = f(x,t)dt + g(t)dW_t
+dx_t = f (x,t)dt + g (t)dW_t
 \`\`\`
 
 Apply Itô to x^T x (squared norm):
 \`\`\`
-d(x^T x) = 2x^T dx + (dx)^T dx
+d (x^T x) = 2x^T dx + (dx)^T dx
          = 2x^T f dt + 2x^T g dW + g² dt
 \`\`\`
 
@@ -539,13 +539,13 @@ dX_t = -∇f(X_t)dt + √(2/β) dW_t
 
 Stationary distribution found using Itô:
 \`\`\`
-Apply Itô to V(x) = e^{-βf(x)}
-→ Proves p(x) ∝ e^{-βf(x)} is stationary
+Apply Itô to V(x) = e^{-βf (x)}
+→ Proves p (x) ∝ e^{-βf (x)} is stationary
 \`\`\`
 
 **C) Score Matching:**
 
-Train neural network s_θ(x,t) ≈ ∇_x log p_t(x)
+Train neural network s_θ(x,t) ≈ ∇_x log p_t (x)
 
 Itô's lemma relates score to:
 \`\`\`
@@ -709,7 +709,7 @@ where ∇̂E computed on mini-batch
 
 **Practical SGLD:**
 \`\`\`python
-def sgld_step(theta, data_batch, lr):
+def sgld_step (theta, data_batch, lr):
     """
     One SGLD step
     
@@ -722,7 +722,7 @@ def sgld_step(theta, data_batch, lr):
         theta: updated parameters
     """
     # Compute gradient on mini-batch
-    grad = compute_gradient(theta, data_batch)
+    grad = compute_gradient (theta, data_batch)
     
     # Langevin noise
     noise = np.random.randn(*theta.shape) * np.sqrt(2 * lr)
@@ -733,17 +733,17 @@ def sgld_step(theta, data_batch, lr):
     return theta
 
 # Bayesian neural network training
-def train_bayes_nn(model, data, n_iter=10000):
-    theta = initialize_parameters(model)
+def train_bayes_nn (model, data, n_iter=10000):
+    theta = initialize_parameters (model)
     samples = []
     
-    for i in range(n_iter):
-        batch = sample_mini_batch(data)
-        theta = sgld_step(theta, batch, lr=0.01)
+    for i in range (n_iter):
+        batch = sample_mini_batch (data)
+        theta = sgld_step (theta, batch, lr=0.01)
         
         # Collect samples (after burn-in)
         if i > n_iter // 2:
-            samples.append(theta.copy())
+            samples.append (theta.copy())
     
     return samples  # Posterior samples!
 \`\`\`
@@ -780,20 +780,20 @@ SGLD naturally prefers flat minima → better generalization!
 
 \`\`\`python
 # Train with SGLD
-posterior_samples = train_bayes_nn(model, data)
+posterior_samples = train_bayes_nn (model, data)
 
 # Prediction with uncertainty
-def predict_with_uncertainty(x_new, posterior_samples):
-    predictions = [model(x_new, theta) for theta in posterior_samples]
+def predict_with_uncertainty (x_new, posterior_samples):
+    predictions = [model (x_new, theta) for theta in posterior_samples]
     
-    mean = np.mean(predictions, axis=0)
-    std = np.std(predictions, axis=0)
+    mean = np.mean (predictions, axis=0)
+    std = np.std (predictions, axis=0)
     
     return mean, std  # Point estimate + uncertainty!
 
 # Example
 x_test = ...
-y_mean, y_std = predict_with_uncertainty(x_test, posterior_samples)
+y_mean, y_std = predict_with_uncertainty (x_test, posterior_samples)
 
 print(f"Prediction: {y_mean:.2f} ± {y_std:.2f}")
 print("95% CI: [{:.2f}, {:.2f}]".format(
@@ -855,13 +855,13 @@ class BayesianNN:
         self.model = model
         self.samples = []
     
-    def sgld_train(self, train_loader, n_epochs=100, lr=0.001):
+    def sgld_train (self, train_loader, n_epochs=100, lr=0.001):
         """Train with SGLD to get posterior samples"""
         
-        for epoch in range(n_epochs):
+        for epoch in range (n_epochs):
             for batch_x, batch_y in train_loader:
                 # Compute gradient
-                loss = nn.MSELoss()(self.model(batch_x), batch_y)
+                loss = nn.MSELoss()(self.model (batch_x), batch_y)
                 self.model.zero_grad()
                 loss.backward()
                 
@@ -872,39 +872,39 @@ class BayesianNN:
                         param -= lr * param.grad
                         
                         # Add Langevin noise
-                        noise = torch.randn_like(param) * np.sqrt(2 * lr)
+                        noise = torch.randn_like (param) * np.sqrt(2 * lr)
                         param += noise
                 
                 # Collect samples (after burn-in)
                 if epoch > n_epochs // 2:
-                    self.samples.append(copy.deepcopy(self.model.state_dict()))
+                    self.samples.append (copy.deepcopy (self.model.state_dict()))
     
-    def predict(self, x, return_std=True):
+    def predict (self, x, return_std=True):
         """Bayesian prediction with uncertainty"""
         predictions = []
         
         for sample in self.samples:
-            self.model.load_state_dict(sample)
+            self.model.load_state_dict (sample)
             with torch.no_grad():
-                pred = self.model(x)
-            predictions.append(pred)
+                pred = self.model (x)
+            predictions.append (pred)
         
-        predictions = torch.stack(predictions)
-        mean = predictions.mean(dim=0)
-        std = predictions.std(dim=0)
+        predictions = torch.stack (predictions)
+        mean = predictions.mean (dim=0)
+        std = predictions.std (dim=0)
         
         if return_std:
             return mean, std
         return mean
 
 # Usage
-model = nn.Sequential(nn.Linear(10, 50), nn.ReLU(), nn.Linear(50, 1))
+model = nn.Sequential (nn.Linear(10, 50), nn.ReLU(), nn.Linear(50, 1))
 bayes_model = BayesianNN(model)
-bayes_model.sgld_train(train_loader)
+bayes_model.sgld_train (train_loader)
 
 # Prediction with uncertainty
 x_test = torch.randn(1, 10)
-y_mean, y_std = bayes_model.predict(x_test)
+y_mean, y_std = bayes_model.predict (x_test)
 print(f"Prediction: {y_mean.item():.2f} ± {y_std.item():.2f}")
 \`\`\`
 

@@ -19,23 +19,23 @@ import aiohttp
 import asyncio
 
 # ❌ Bad: Manual resource management
-async def fetch_bad(url):
+async def fetch_bad (url):
     session = aiohttp.ClientSession()
-    response = await session.get(url)
+    response = await session.get (url)
     data = await response.text()
     await response.close()
     await session.close()  # Easy to forget!
     return data
 
 # ✅ Good: Async context manager
-async def fetch_good(url):
+async def fetch_good (url):
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
+        async with session.get (url) as response:
             return await response.text()
     # Automatically closed, even if exception occurs!
 
 # Context manager guarantees cleanup
-asyncio.run(fetch_good('https://api.example.com'))
+asyncio.run (fetch_good('https://api.example.com'))
 \`\`\`
 
 By the end of this section, you'll understand:
@@ -76,7 +76,7 @@ async def fetch_users():
 # 2. Execute code block
 # 3. Close session (async operation) - GUARANTEED
 
-asyncio.run(fetch_users())
+asyncio.run (fetch_users())
 \`\`\`
 
 ### Creating Custom Async Context Managers
@@ -114,7 +114,7 @@ class AsyncDatabaseConnection:
         # Return False to propagate exceptions, True to suppress
         return False
     
-    async def query(self, sql):
+    async def query (self, sql):
         """Execute query on connection"""
         if not self.connection:
             raise RuntimeError("Not connected")
@@ -127,7 +127,7 @@ async def main():
         print(result)
     # Connection automatically closed
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Connecting to localhost:5432...
@@ -188,7 +188,7 @@ async def test_exceptions():
     except RuntimeError as e:
         print(f"Caught RuntimeError: {e}")
 
-asyncio.run(test_exceptions())
+asyncio.run (test_exceptions())
 
 # Output:
 # Test 1: No exception
@@ -225,7 +225,7 @@ from contextlib import asynccontextmanager
 import asyncio
 
 @asynccontextmanager
-async def database_transaction(connection):
+async def database_transaction (connection):
     """Context manager for database transactions"""
     print("BEGIN TRANSACTION")
     await connection.execute("BEGIN")
@@ -243,7 +243,7 @@ async def database_transaction(connection):
         raise
 
 class MockConnection:
-    async def execute(self, sql):
+    async def execute (self, sql):
         await asyncio.sleep(0.1)
         print(f"  Executing: {sql}")
 
@@ -252,20 +252,20 @@ async def main():
     
     # Successful transaction
     print("Successful transaction:")
-    async with database_transaction(conn):
+    async with database_transaction (conn):
         await conn.execute("INSERT INTO users VALUES (1, 'Alice')")
         await conn.execute("INSERT INTO users VALUES (2, 'Bob')")
     
     print("\\nFailed transaction:")
     # Failed transaction (automatic rollback)
     try:
-        async with database_transaction(conn):
+        async with database_transaction (conn):
             await conn.execute("INSERT INTO users VALUES (3, 'Charlie')")
             raise ValueError("Something went wrong!")
     except ValueError:
         print("Exception handled")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Successful transaction:
@@ -300,7 +300,7 @@ Creating and Using Async Generators
 
 import asyncio
 
-async def async_range(start, stop):
+async def async_range (start, stop):
     """Async version of range()"""
     current = start
     while current < stop:
@@ -313,7 +313,7 @@ async def main():
     async for value in async_range(0, 5):
         print(f"  Got: {value}")
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Iterating async generator:
@@ -334,7 +334,7 @@ Streaming Large Datasets with Async Generators
 import asyncio
 import aiohttp
 
-async def fetch_pages(urls):
+async def fetch_pages (urls):
     """
     Fetch pages and yield them as they complete
     Memory-efficient: Don't load all pages at once
@@ -342,7 +342,7 @@ async def fetch_pages(urls):
     async with aiohttp.ClientSession() as session:
         for url in urls:
             try:
-                async with session.get(url) as response:
+                async with session.get (url) as response:
                     content = await response.text()
                     yield {
                         'url': url,
@@ -352,7 +352,7 @@ async def fetch_pages(urls):
             except Exception as e:
                 yield {
                     'url': url,
-                    'error': str(e),
+                    'error': str (e),
                     'status': None
                 }
 
@@ -367,17 +367,17 @@ async def process_pages():
     
     processed_count = 0
     
-    async for page in fetch_pages(urls):
+    async for page in fetch_pages (urls):
         processed_count += 1
         
         if 'error' in page:
             print(f"[{processed_count}] Error fetching {page['url']}: {page['error']}")
         else:
-            print(f"[{processed_count}] Fetched {page['url']}: {page['status']} ({len(page['content'])} bytes)")
+            print(f"[{processed_count}] Fetched {page['url']}: {page['status']} ({len (page['content'])} bytes)")
     
     print(f"\\nProcessed {processed_count} pages")
 
-# asyncio.run(process_pages())
+# asyncio.run (process_pages())
 
 # Key benefit: Process each page as it arrives
 # Don't wait for all 100 pages before processing
@@ -394,21 +394,21 @@ Combining Async Generator with Context Manager
 import asyncio
 
 @asynccontextmanager
-async def file_reader(filename):
+async def file_reader (filename):
     """Async context manager for file reading"""
     print(f"Opening {filename}")
-    file = await asyncio.to_thread(open, filename, 'r')
+    file = await asyncio.to_thread (open, filename, 'r')
     try:
         yield file
     finally:
         print(f"Closing {filename}")
-        await asyncio.to_thread(file.close)
+        await asyncio.to_thread (file.close)
 
-async def read_lines_async(filename):
+async def read_lines_async (filename):
     """Async generator that yields lines from file"""
-    async with file_reader(filename) as f:
+    async with file_reader (filename) as f:
         while True:
-            line = await asyncio.to_thread(f.readline)
+            line = await asyncio.to_thread (f.readline)
             if not line:
                 break
             await asyncio.sleep(0.01)  # Simulate processing
@@ -469,7 +469,7 @@ async def main():
     # Close generator
     await gen.aclose()
 
-asyncio.run(main())
+asyncio.run (main())
 
 # Output:
 # Received: Hello
@@ -520,13 +520,13 @@ class AsyncDatabasePool:
         return False
     
     @asynccontextmanager
-    async def acquire(self):
+    async def acquire (self):
         """Acquire connection from pool"""
         async with self.pool.acquire() as connection:
             yield connection
     
     @asynccontextmanager
-    async def transaction(self):
+    async def transaction (self):
         """Acquire connection and start transaction"""
         async with self.pool.acquire() as connection:
             async with connection.transaction():
@@ -535,11 +535,11 @@ class AsyncDatabasePool:
 async def main():
     dsn = "postgresql://user:password@localhost/mydb"
     
-    async with AsyncDatabasePool(dsn) as db:
+    async with AsyncDatabasePool (dsn) as db:
         # Simple query with auto-managed connection
         async with db.acquire() as conn:
             users = await conn.fetch("SELECT * FROM users")
-            print(f"Found {len(users)} users")
+            print(f"Found {len (users)} users")
         
         # Transaction with auto-commit/rollback
         async with db.transaction() as conn:
@@ -548,14 +548,14 @@ async def main():
             # Automatically commits if no exception
         
         # Multiple concurrent queries (pool manages connections)
-        async def fetch_user(user_id):
+        async def fetch_user (user_id):
             async with db.acquire() as conn:
                 return await conn.fetchrow("SELECT * FROM users WHERE id = $1", user_id)
         
-        users = await asyncio.gather(*[fetch_user(i) for i in range(1, 11)])
+        users = await asyncio.gather(*[fetch_user (i) for i in range(1, 11)])
 
 # Connection pool automatically created and closed
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ### API Rate Limiter with Context Manager
@@ -583,7 +583,7 @@ class RateLimiter:
         self.last_check = time.time()
         self.lock = asyncio.Lock()
     
-    async def acquire(self):
+    async def acquire (self):
         """Wait until request is allowed"""
         async with self.lock:
             current = time.time()
@@ -599,7 +599,7 @@ class RateLimiter:
             if self.allowance < 1.0:
                 # Not enough tokens, wait
                 sleep_time = (1.0 - self.allowance) * (self.per / self.rate)
-                await asyncio.sleep(sleep_time)
+                await asyncio.sleep (sleep_time)
                 self.allowance = 0.0
             else:
                 self.allowance -= 1.0
@@ -608,7 +608,7 @@ class RateLimitedClient:
     """API client with rate limiting"""
     
     def __init__(self, rate=10, per=1.0):
-        self.limiter = RateLimiter(rate, per)
+        self.limiter = RateLimiter (rate, per)
         self.session = None
     
     async def __aenter__(self):
@@ -620,24 +620,24 @@ class RateLimitedClient:
         await self.session.close()
         return False
     
-    async def get(self, url):
+    async def get (self, url):
         """Rate-limited GET request"""
         await self.limiter.acquire()
-        async with self.session.get(url) as response:
+        async with self.session.get (url) as response:
             return await response.json()
 
 async def main():
     # Allow 10 requests per second
-    async with RateLimitedClient(rate=10, per=1.0) as client:
+    async with RateLimitedClient (rate=10, per=1.0) as client:
         urls = [f"https://api.example.com/data/{i}" for i in range(50)]
         
         # Makes 50 requests, automatically rate-limited to 10/second
-        results = await asyncio.gather(*[client.get(url) for url in urls])
+        results = await asyncio.gather(*[client.get (url) for url in urls])
         
-        print(f"Fetched {len(results)} items (rate-limited)")
+        print(f"Fetched {len (results)} items (rate-limited)")
 
 # Takes ~5 seconds (50 requests / 10 per second)
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ### Streaming Data Processing Pipeline
@@ -650,17 +650,17 @@ Production Pattern: Streaming ETL Pipeline
 import asyncio
 from typing import AsyncIterator
 
-async def extract_data(source_urls) -> AsyncIterator[dict]:
+async def extract_data (source_urls) -> AsyncIterator[dict]:
     """Extract: Fetch data from sources"""
     import aiohttp
     async with aiohttp.ClientSession() as session:
         for url in source_urls:
-            async with session.get(url) as response:
+            async with session.get (url) as response:
                 data = await response.json()
                 for record in data['records']:
                     yield record
 
-async def transform_data(records: AsyncIterator[dict]) -> AsyncIterator[dict]:
+async def transform_data (records: AsyncIterator[dict]) -> AsyncIterator[dict]:
     """Transform: Process and clean records"""
     async for record in records:
         # Transform record
@@ -675,37 +675,37 @@ async def transform_data(records: AsyncIterator[dict]) -> AsyncIterator[dict]:
         if transformed['email'] and '@' in transformed['email']:
             yield transformed
 
-async def load_data(records: AsyncIterator[dict], batch_size=100):
+async def load_data (records: AsyncIterator[dict], batch_size=100):
     """Load: Insert records into database in batches"""
     batch = []
     count = 0
     
     async for record in records:
-        batch.append(record)
+        batch.append (record)
         
-        if len(batch) >= batch_size:
+        if len (batch) >= batch_size:
             # Insert batch
-            await insert_batch(batch)
-            count += len(batch)
+            await insert_batch (batch)
+            count += len (batch)
             print(f"Loaded {count} records")
             batch = []
     
     # Insert remaining
     if batch:
-        await insert_batch(batch)
-        count += len(batch)
+        await insert_batch (batch)
+        count += len (batch)
         print(f"Loaded {count} records (final)")
 
-async def insert_batch(batch):
+async def insert_batch (batch):
     """Insert batch into database"""
     await asyncio.sleep(0.1)  # Simulate database insert
     # await db.executemany("INSERT INTO users ...", batch)
 
-async def etl_pipeline(source_urls):
+async def etl_pipeline (source_urls):
     """Complete ETL pipeline with streaming"""
-    records = extract_data(source_urls)
-    transformed = transform_data(records)
-    await load_data(transformed, batch_size=100)
+    records = extract_data (source_urls)
+    transformed = transform_data (records)
+    await load_data (transformed, batch_size=100)
 
 # Memory-efficient: Process one record at a time
 # Responsive: Can monitor/cancel during processing
@@ -718,9 +718,9 @@ async def main():
         "https://api.example.com/users?page=3",
     ]
     
-    await etl_pipeline(sources)
+    await etl_pipeline (sources)
 
-# asyncio.run(main())
+# asyncio.run (main())
 \`\`\`
 
 ---
@@ -733,14 +733,14 @@ async def main():
 # ✅ Good: Automatic cleanup
 async def fetch_data():
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
+        async with session.get (url) as response:
             return await response.json()
     # Session and response automatically closed
 
 # ❌ Bad: Manual cleanup (easy to forget, especially with exceptions)
 async def fetch_data_bad():
     session = aiohttp.ClientSession()
-    response = await session.get(url)
+    response = await session.get (url)
     data = await response.json()
     await response.close()  # Forgotten if exception occurs
     await session.close()   # Forgotten if exception occurs
@@ -759,7 +759,7 @@ async def temp_resource():
     try:
         yield resource
     finally:
-        await release_resource(resource)
+        await release_resource (resource)
 
 # ❌ Verbose class-based (only needed for complex cases)
 class TempResource:
@@ -768,7 +768,7 @@ class TempResource:
         return self.resource
     
     async def __aexit__(self, *args):
-        await release_resource(self.resource)
+        await release_resource (self.resource)
 \`\`\`
 
 ### Stream Large Datasets with Async Generators
@@ -777,14 +777,14 @@ class TempResource:
 # ✅ Memory-efficient streaming
 async def process_large_dataset():
     async for record in fetch_records_streaming():
-        await process_record(record)
+        await process_record (record)
     # Memory: One record at a time
 
 # ❌ Load everything (high memory)
 async def process_all_at_once():
     records = await fetch_all_records()  # Load 1M records in memory!
     for record in records:
-        await process_record(record)
+        await process_record (record)
 \`\`\`
 
 ---

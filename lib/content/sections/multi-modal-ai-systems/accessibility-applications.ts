@@ -41,10 +41,10 @@ def generate_alt_text(
     Returns:
         Alt-text description
     """
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     prompt = f"""Generate concise, descriptive alt-text for this image.
 
@@ -82,7 +82,7 @@ Provide only the alt-text, nothing else."""
     alt_text = response.choices[0].message.content.strip()
     
     # Ensure length constraint
-    if len(alt_text) > max_length:
+    if len (alt_text) > max_length:
         alt_text = alt_text[:max_length-3] + "..."
     
     return alt_text
@@ -109,10 +109,10 @@ def generate_long_description(
     
     Used when alt-text alone isn't sufficient.
     """
-    with open(image_path, "rb") as f:
+    with open (image_path, "rb") as f:
         image_data = f.read()
     
-    base64_image = base64.b64encode(image_data).decode('utf-8')
+    base64_image = base64.b64encode (image_data).decode('utf-8')
     
     prompts = {
         "chart": """Provide a detailed description of this chart/graph.
@@ -158,7 +158,7 @@ Describe:
 Structure logically for audio presentation."""
     }
     
-    prompt = prompts.get(image_type, prompts["complex"])
+    prompt = prompts.get (image_type, prompts["complex"])
     
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
@@ -205,14 +205,14 @@ def generate_video_audio_descriptions(
     Audio descriptions fill in visual information during natural pauses.
     """
     # Extract key frames
-    cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    cap = cv2.VideoCapture (video_path)
+    fps = cap.get (cv2.CAP_PROP_FPS)
     
     frames_to_describe = []
     frame_count = 0
     
     # Sample every 2 seconds for standard density
-    sample_interval = int(fps * 2) if description_density == "standard" else int(fps * 5)
+    sample_interval = int (fps * 2) if description_density == "standard" else int (fps * 5)
     
     while True:
         ret, frame = cap.read()
@@ -224,7 +224,7 @@ def generate_video_audio_descriptions(
             
             # Save frame
             frame_path = f"frame_{frame_count}.jpg"
-            cv2.imwrite(frame_path, frame)
+            cv2.imwrite (frame_path, frame)
             
             frames_to_describe.append({
                 "timestamp": timestamp,
@@ -239,8 +239,8 @@ def generate_video_audio_descriptions(
     descriptions = []
     
     for frame_info in frames_to_describe:
-        with open(frame_info["frame_path"], "rb") as f:
-            img_data = base64.b64encode(f.read()).decode('utf-8')
+        with open (frame_info["frame_path"], "rb") as f:
+            img_data = base64.b64encode (f.read()).decode('utf-8')
         
         prompt = """Describe what's happening in this video frame for audio description.
 
@@ -276,7 +276,7 @@ Keep it concise (1-2 sentences) as it will be read during video pauses."""
         descriptions.append({
             "timestamp": frame_info["timestamp"],
             "description": description,
-            "duration": len(description.split()) / 2.5  # Approximate speaking time
+            "duration": len (description.split()) / 2.5  # Approximate speaking time
         })
     
     return descriptions
@@ -304,7 +304,7 @@ def make_document_accessible(
     """
     import fitz  # PyMuPDF
     
-    doc = fitz.open(pdf_path)
+    doc = fitz.open (pdf_path)
     
     accessibility_data = {
         "title": "",
@@ -315,7 +315,7 @@ def make_document_accessible(
         "headings": []
     }
     
-    for page_num, page in enumerate(doc):
+    for page_num, page in enumerate (doc):
         page_data = {
             "page": page_num + 1,
             "text": page.get_text(),
@@ -323,18 +323,18 @@ def make_document_accessible(
         }
         
         # Extract and describe images
-        for img_index, img in enumerate(page.get_images()):
+        for img_index, img in enumerate (page.get_images()):
             xref = img[0]
-            base_image = doc.extract_image(xref)
+            base_image = doc.extract_image (xref)
             image_bytes = base_image["image"]
             
             # Save image temporarily
             img_path = f"page_{page_num+1}_img_{img_index}.png"
-            with open(img_path, "wb") as f:
-                f.write(image_bytes)
+            with open (img_path, "wb") as f:
+                f.write (image_bytes)
             
             # Generate alt-text
-            alt_text = generate_alt_text(img_path)
+            alt_text = generate_alt_text (img_path)
             
             page_data["images"].append({
                 "index": img_index,
@@ -342,7 +342,7 @@ def make_document_accessible(
                 "original_path": img_path
             })
         
-        accessibility_data["pages"].append(page_data)
+        accessibility_data["pages"].append (page_data)
     
     doc.close()
     
@@ -351,8 +351,8 @@ def make_document_accessible(
 # Make document accessible
 accessible_doc = make_document_accessible("report.pdf")
 
-print(f"Pages processed: {len(accessible_doc['pages'])}")
-print(f"Images described: {sum(len(p['images']) for p in accessible_doc['pages'])}")
+print(f"Pages processed: {len (accessible_doc['pages'])}")
+print(f"Images described: {sum (len (p['images']) for p in accessible_doc['pages'])}")
 \`\`\`
 
 ## Production Accessibility System
@@ -362,7 +362,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig (level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -409,7 +409,7 @@ class ProductionAccessibilitySystem:
         # Generate long description for complex images (WCAG AA/AAA)
         if wcag_level in ["AA", "AAA"]:
             # Determine if image is complex
-            complexity = self._assess_image_complexity(image_path)
+            complexity = self._assess_image_complexity (image_path)
             
             if complexity == "complex":
                 enhancements["long_description"] = generate_long_description(
@@ -426,15 +426,15 @@ class ProductionAccessibilitySystem:
             timestamp=time.time()
         )
         
-        self.enhancements.append(enhancement)
-        logger.info(f"Enhanced image: {image_path}")
+        self.enhancements.append (enhancement)
+        logger.info (f"Enhanced image: {image_path}")
         
         return enhancement
     
-    def _assess_image_complexity(self, image_path: str) -> str:
+    def _assess_image_complexity (self, image_path: str) -> str:
         """Determine if image is simple or complex."""
-        with open(image_path, "rb") as f:
-            img_data = base64.b64encode(f.read()).decode('utf-8')
+        with open (image_path, "rb") as f:
+            img_data = base64.b64encode (f.read()).decode('utf-8')
         
         prompt = """Is this image simple or complex?
 
@@ -474,12 +474,12 @@ Answer with just "simple" or "complex"."""
         
         if include_captions:
             # Extract audio and generate captions
-            captions = self._generate_captions(video_path)
+            captions = self._generate_captions (video_path)
             enhancements["captions"] = captions
         
         if include_audio_descriptions:
             # Generate audio descriptions
-            descriptions = generate_video_audio_descriptions(video_path)
+            descriptions = generate_video_audio_descriptions (video_path)
             enhancements["audio_descriptions"] = descriptions
         
         enhancement = AccessibilityEnhancement(
@@ -490,12 +490,12 @@ Answer with just "simple" or "complex"."""
             timestamp=time.time()
         )
         
-        self.enhancements.append(enhancement)
-        logger.info(f"Enhanced video: {video_path}")
+        self.enhancements.append (enhancement)
+        logger.info (f"Enhanced video: {video_path}")
         
         return enhancement
     
-    def _generate_captions(self, video_path: str) -> List[Dict[str, Any]]:
+    def _generate_captions (self, video_path: str) -> List[Dict[str, Any]]:
         """Generate captions for video."""
         # Extract audio
         import subprocess
@@ -506,7 +506,7 @@ Answer with just "simple" or "complex"."""
         ], check=True)
         
         # Transcribe with timestamps
-        with open(audio_path, "rb") as f:
+        with open (audio_path, "rb") as f:
             transcription = self.client.audio.transcriptions.create(
                 model="whisper-1",
                 file=f,
@@ -532,19 +532,19 @@ Answer with just "simple" or "complex"."""
         """Batch enhance multiple items."""
         from concurrent.futures import ThreadPoolExecutor
         
-        def enhance_one(item: Dict[str, str]) -> AccessibilityEnhancement:
+        def enhance_one (item: Dict[str, str]) -> AccessibilityEnhancement:
             content_type = item['type']
             path = item['path']
             
             if content_type == "image":
-                return self.enhance_image(path, context=item.get('context'))
+                return self.enhance_image (path, context=item.get('context'))
             elif content_type == "video":
-                return self.enhance_video(path)
+                return self.enhance_video (path)
             else:
-                raise ValueError(f"Unsupported content type: {content_type}")
+                raise ValueError (f"Unsupported content type: {content_type}")
         
-        with ThreadPoolExecutor(max_workers=max_concurrent) as executor:
-            enhancements = list(executor.map(enhance_one, items))
+        with ThreadPoolExecutor (max_workers=max_concurrent) as executor:
+            enhancements = list (executor.map (enhance_one, items))
         
         return enhancements
     
@@ -565,10 +565,10 @@ Answer with just "simple" or "complex"."""
                 "timestamp": enhancement.timestamp
             })
         
-        with open(output_path, "w") as f:
-            json.dump(data, f, indent=2)
+        with open (output_path, "w") as f:
+            json.dump (data, f, indent=2)
         
-        logger.info(f"Exported {len(data)} enhancements to {output_path}")
+        logger.info (f"Exported {len (data)} enhancements to {output_path}")
 
 # Usage
 accessibility_system = ProductionAccessibilitySystem(
@@ -591,7 +591,7 @@ items = [
     {"type": "video", "path": "promo.mp4"}
 ]
 
-enhancements = accessibility_system.batch_enhance(items)
+enhancements = accessibility_system.batch_enhance (items)
 
 # Export all enhancements
 accessibility_system.export_enhancements()
@@ -639,10 +639,10 @@ def check_accessibility_compliance(
     # Calculate compliance level
     if not issues:
         level = "AAA"
-    elif len(issues) <= 2:
+    elif len (issues) <= 2:
         level = "AA"
     else:
-        level = "A" if len(issues) <= 5 else "Non-compliant"
+        level = "A" if len (issues) <= 5 else "Non-compliant"
     
     return {
         "compliance_level": level,
@@ -763,7 +763,7 @@ Next, we'll tie everything together with building complete multi-modal products.
     'Keep alt-text under 125 characters - screen readers handle this best',
     'Use temperature=0.3 for alt-text generation - consistency is important',
     'Assess image complexity before generating long descriptions - not all images need them',
-    "Generate captions with timestamps using Whisper's verbose_json format",
+    "Generate captions with timestamps using Whisper\'s verbose_json format",
     'Batch process website images for efficiency - use ThreadPoolExecutor',
     'Test alt-text with actual screen readers (NVDA, JAWS, VoiceOver)',
     'Export enhancements in standard formats (WebVTT for captions, JSON for metadata)',

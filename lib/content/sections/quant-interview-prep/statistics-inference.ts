@@ -19,7 +19,7 @@ Statistical inference is the backbone of quantitative trading and risk managemen
 **Why Interviewers Test This:**
 1. **Strategy validation**: Is your backtest result real or luck?
 2. **Risk management**: How confident are we in our VaR estimates?
-3. **Parameter estimation**: What's the true expected return?
+3. **Parameter estimation**: What\'s the true expected return?
 4. **A/B testing**: Is Strategy B better than Strategy A?
 5. **Model selection**: Which factors are statistically significant?
 6. **Scientific thinking**: Can you reason rigorously under uncertainty?
@@ -117,7 +117,7 @@ R_annual ~ N(12.6%, 31.7%²)
 
 ### Problem 1.1c: Non-Normal Distribution
 
-**Question:** Returns follow a uniform distribution U[-1%, 3%]. What's the approximate distribution of average return over 50 days?
+**Question:** Returns follow a uniform distribution U[-1%, 3%]. What\'s the approximate distribution of average return over 50 days?
 
 **Solution:**
 
@@ -596,12 +596,12 @@ t = (X̄₁ - X̄₂) / SE_diff
 where SE_diff = √(s₁²/n₁ + s₂²/n₂)
 \`\`\`
 
-**Degrees of freedom (Welch's approximation):**
+**Degrees of freedom (Welch\'s approximation):**
 \`\`\`
 df ≈ (s₁²/n₁ + s₂²/n₂)² / [(s₁²/n₁)²/(n₁-1) + (s₂²/n₂)²/(n₂-1)]
 \`\`\`
 
-(Often approximated as min(n₁-1, n₂-1) for simplicity)
+(Often approximated as min (n₁-1, n₂-1) for simplicity)
 
 ### Problem 4.1a: Comparing Two Strategies
 
@@ -1032,7 +1032,7 @@ from typing import Tuple, Dict, List
 # Section 1: One-Sample Tests
 # ============================================================================
 
-def one_sample_t_test(data: np.ndarray, mu0: float = 0, 
+def one_sample_t_test (data: np.ndarray, mu0: float = 0, 
                       alternative: str = 'two-sided') -> Dict:
     """
     One-sample t-test.
@@ -1048,21 +1048,21 @@ def one_sample_t_test(data: np.ndarray, mu0: float = 0,
     Returns:
         Dictionary with test results
     """
-    n = len(data)
-    xbar = np.mean(data)
-    s = np.std(data, ddof=1)
-    se = s / np.sqrt(n)
+    n = len (data)
+    xbar = np.mean (data)
+    s = np.std (data, ddof=1)
+    se = s / np.sqrt (n)
     
     # T-statistic
     t_stat = (xbar - mu0) / se
     
     # P-value
     if alternative == 'two-sided':
-        p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=n-1))
+        p_value = 2 * (1 - stats.t.cdf (abs (t_stat), df=n-1))
     elif alternative == 'greater':
-        p_value = 1 - stats.t.cdf(t_stat, df=n-1)
+        p_value = 1 - stats.t.cdf (t_stat, df=n-1)
     elif alternative == 'less':
-        p_value = stats.t.cdf(t_stat, df=n-1)
+        p_value = stats.t.cdf (t_stat, df=n-1)
     else:
         raise ValueError("alternative must be 'two-sided', 'greater', or 'less'")
     
@@ -1086,20 +1086,20 @@ def one_sample_t_test(data: np.ndarray, mu0: float = 0,
 # Section 2: Two-Sample Tests
 # ============================================================================
 
-def two_sample_t_test(data1: np.ndarray, data2: np.ndarray,
+def two_sample_t_test (data1: np.ndarray, data2: np.ndarray,
                       alternative: str = 'two-sided') -> Dict:
     """
-    Independent two-sample t-test (Welch's test - unequal variances).
+    Independent two-sample t-test (Welch\'s test - unequal variances).
     
     H0: μ1 = μ2
     H1: μ1 ≠ μ2 (or > or <)
     """
-    n1, n2 = len(data1), len(data2)
-    xbar1, xbar2 = np.mean(data1), np.mean(data2)
-    s1, s2 = np.std(data1, ddof=1), np.std(data2, ddof=1)
+    n1, n2 = len (data1), len (data2)
+    xbar1, xbar2 = np.mean (data1), np.mean (data2)
+    s1, s2 = np.std (data1, ddof=1), np.std (data2, ddof=1)
     
     # Standard error of difference
-    se_diff = np.sqrt(s1**2/n1 + s2**2/n2)
+    se_diff = np.sqrt (s1**2/n1 + s2**2/n2)
     
     # T-statistic
     t_stat = (xbar1 - xbar2) / se_diff
@@ -1109,11 +1109,11 @@ def two_sample_t_test(data1: np.ndarray, data2: np.ndarray,
     
     # P-value
     if alternative == 'two-sided':
-        p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=df))
+        p_value = 2 * (1 - stats.t.cdf (abs (t_stat), df=df))
     elif alternative == 'greater':
-        p_value = 1 - stats.t.cdf(t_stat, df=df)
+        p_value = 1 - stats.t.cdf (t_stat, df=df)
     else:  # 'less'
-        p_value = stats.t.cdf(t_stat, df=df)
+        p_value = stats.t.cdf (t_stat, df=df)
     
     return {
         'mean1': xbar1,
@@ -1125,7 +1125,7 @@ def two_sample_t_test(data1: np.ndarray, data2: np.ndarray,
         'p_value': p_value
     }
 
-def paired_t_test(data1: np.ndarray, data2: np.ndarray,
+def paired_t_test (data1: np.ndarray, data2: np.ndarray,
                   alternative: str = 'two-sided') -> Dict:
     """
     Paired t-test.
@@ -1134,13 +1134,13 @@ def paired_t_test(data1: np.ndarray, data2: np.ndarray,
     H1: μ_diff ≠ 0
     """
     differences = data1 - data2
-    return one_sample_t_test(differences, mu0=0, alternative=alternative)
+    return one_sample_t_test (differences, mu0=0, alternative=alternative)
 
 # ============================================================================
 # Section 3: Power Analysis
 # ============================================================================
 
-def power_one_sample_t(n: int, delta: float, sigma: float,
+def power_one_sample_t (n: int, delta: float, sigma: float,
                        alpha: float = 0.05, alternative: str = 'two-sided') -> float:
     """
     Calculate power for one-sample t-test.
@@ -1156,20 +1156,20 @@ def power_one_sample_t(n: int, delta: float, sigma: float,
         Power (probability of rejecting H0 when H1 is true)
     """
     # Non-centrality parameter
-    ncp = delta / (sigma / np.sqrt(n))
+    ncp = delta / (sigma / np.sqrt (n))
     
     # Critical value under H0
     if alternative == 'two-sided':
         t_crit = stats.t.ppf(1 - alpha/2, df=n-1)
         # Power = P(|T| > t_crit | ncp)
-        power = 1 - stats.nct.cdf(t_crit, df=n-1, nc=ncp) + stats.nct.cdf(-t_crit, df=n-1, nc=ncp)
+        power = 1 - stats.nct.cdf (t_crit, df=n-1, nc=ncp) + stats.nct.cdf(-t_crit, df=n-1, nc=ncp)
     else:  # one-sided
         t_crit = stats.t.ppf(1 - alpha, df=n-1)
-        power = 1 - stats.nct.cdf(t_crit, df=n-1, nc=ncp)
+        power = 1 - stats.nct.cdf (t_crit, df=n-1, nc=ncp)
     
     return power
 
-def sample_size_one_sample_t(delta: float, sigma: float, alpha: float = 0.05,
+def sample_size_one_sample_t (delta: float, sigma: float, alpha: float = 0.05,
                              power: float = 0.8, alternative: str = 'two-sided') -> int:
     """
     Calculate required sample size for desired power.
@@ -1190,50 +1190,50 @@ def sample_size_one_sample_t(delta: float, sigma: float, alpha: float = 0.05,
     else:
         z_alpha = stats.norm.ppf(1 - alpha)
     
-    z_beta = stats.norm.ppf(power)
+    z_beta = stats.norm.ppf (power)
     
     # Formula: n = [(z_alpha + z_beta) * sigma / delta]^2
     n = ((z_alpha + z_beta) * sigma / delta)**2
     
-    return int(np.ceil(n))
+    return int (np.ceil (n))
 
 # ============================================================================
 # Section 4: Multiple Testing Corrections
 # ============================================================================
 
-def bonferroni_correction(p_values: np.ndarray, alpha: float = 0.05) -> np.ndarray:
+def bonferroni_correction (p_values: np.ndarray, alpha: float = 0.05) -> np.ndarray:
     """
     Bonferroni correction for multiple testing.
     
     Returns:
         Boolean array: True if significant after correction
     """
-    k = len(p_values)
+    k = len (p_values)
     adjusted_alpha = alpha / k
     return p_values < adjusted_alpha
 
-def fdr_correction(p_values: np.ndarray, alpha: float = 0.05) -> np.ndarray:
+def fdr_correction (p_values: np.ndarray, alpha: float = 0.05) -> np.ndarray:
     """
     Benjamini-Hochberg False Discovery Rate correction.
     
     Returns:
         Boolean array: True if significant after FDR correction
     """
-    k = len(p_values)
-    sorted_indices = np.argsort(p_values)
+    k = len (p_values)
+    sorted_indices = np.argsort (p_values)
     sorted_p = p_values[sorted_indices]
     
     # Find largest i where p_(i) <= (i/k) * alpha
     thresholds = np.arange(1, k+1) / k * alpha
     significant = sorted_p <= thresholds
     
-    if not np.any(significant):
-        return np.zeros(k, dtype=bool)
+    if not np.any (significant):
+        return np.zeros (k, dtype=bool)
     
-    max_significant_idx = np.where(significant)[0][-1]
+    max_significant_idx = np.where (significant)[0][-1]
     
     # All hypotheses up to max_significant_idx are rejected
-    reject = np.zeros(k, dtype=bool)
+    reject = np.zeros (k, dtype=bool)
     reject[sorted_indices[:max_significant_idx+1]] = True
     
     return reject
@@ -1242,25 +1242,25 @@ def fdr_correction(p_values: np.ndarray, alpha: float = 0.05) -> np.ndarray:
 # Section 5: Trading-Specific Tests
 # ============================================================================
 
-def sharpe_ratio_test(returns: np.ndarray, alpha: float = 0.05) -> Dict:
+def sharpe_ratio_test (returns: np.ndarray, alpha: float = 0.05) -> Dict:
     """
     Test if Sharpe ratio is significantly different from zero.
     
     H0: Sharpe ratio = 0
     H1: Sharpe ratio > 0
     """
-    n = len(returns)
-    mean_ret = np.mean(returns)
-    std_ret = np.std(returns, ddof=1)
+    n = len (returns)
+    mean_ret = np.mean (returns)
+    std_ret = np.std (returns, ddof=1)
     
     # Sample Sharpe ratio
     sharpe = mean_ret / std_ret if std_ret > 0 else 0
     
-    # Test statistic: t = SR * sqrt(n)
-    t_stat = sharpe * np.sqrt(n)
+    # Test statistic: t = SR * sqrt (n)
+    t_stat = sharpe * np.sqrt (n)
     
     # P-value (one-sided)
-    p_value = 1 - stats.t.cdf(t_stat, df=n-1)
+    p_value = 1 - stats.t.cdf (t_stat, df=n-1)
     
     # Confidence interval for Sharpe ratio
     se_sharpe = np.sqrt((1 + sharpe**2/2) / n)
@@ -1294,7 +1294,7 @@ if __name__ == "__main__":
     # Simulate returns with small positive mean
     returns = np.random.normal(0.06, 1.2, 500) / 100  # Convert to decimal
     
-    result = one_sample_t_test(returns, mu0=0, alternative='greater')
+    result = one_sample_t_test (returns, mu0=0, alternative='greater')
     
     print(f"Sample mean: {result['mean']*100:.4f}%")
     print(f"Sample std:  {result['std']*100:.4f}%")
@@ -1315,7 +1315,7 @@ if __name__ == "__main__":
     returns_A = np.random.normal(0.08, 1.2, 200) / 100
     returns_B = np.random.normal(0.12, 1.5, 200) / 100
     
-    result = two_sample_t_test(returns_A, returns_B, alternative='two-sided')
+    result = two_sample_t_test (returns_A, returns_B, alternative='two-sided')
     
     print(f"Strategy A mean: {result['mean1']*100:.4f}%")
     print(f"Strategy B mean: {result['mean2']*100:.4f}%")
@@ -1331,14 +1331,14 @@ if __name__ == "__main__":
     sigma = 1.5 / 100   # Std dev: 1.5%
     
     for n in [100, 500, 1000, 2000, 5000]:
-        pwr = power_one_sample_t(n, delta, sigma, alpha=0.05, alternative='one-sided')
+        pwr = power_one_sample_t (n, delta, sigma, alpha=0.05, alternative='one-sided')
         print(f"n={n:4d}: Power = {pwr:.2%}")
     
     # Example 4: Required sample size
     print("\n\nExample 4: Required Sample Size for 80% Power")
     print("-"*70)
     
-    n_required = sample_size_one_sample_t(delta, sigma, alpha=0.05, power=0.8, alternative='one-sided')
+    n_required = sample_size_one_sample_t (delta, sigma, alpha=0.05, power=0.8, alternative='one-sided')
     print(f"To detect {delta*100:.2f}% mean with 80% power: n = {n_required} observations")
     print(f"(Approximately {n_required/252:.1f} years of daily data)")
     
@@ -1348,7 +1348,7 @@ if __name__ == "__main__":
     
     returns_strategy = np.random.normal(0.001, 0.02, 252)  # 1 year daily
     
-    result = sharpe_ratio_test(returns_strategy, alpha=0.05)
+    result = sharpe_ratio_test (returns_strategy, alpha=0.05)
     
     print(f"Sharpe ratio (daily):      {result['sharpe_ratio']:.4f}")
     print(f"Sharpe ratio (annualized): {result['annualized_sharpe']:.4f}")
@@ -1366,12 +1366,12 @@ if __name__ == "__main__":
                          0.751, 0.803, 0.849, 0.901, 0.945, 0.982])
     
     sig_uncorrected = p_values < 0.05
-    sig_bonferroni = bonferroni_correction(p_values, alpha=0.05)
-    sig_fdr = fdr_correction(p_values, alpha=0.05)
+    sig_bonferroni = bonferroni_correction (p_values, alpha=0.05)
+    sig_fdr = fdr_correction (p_values, alpha=0.05)
     
-    print(f"Uncorrected significant: {np.sum(sig_uncorrected)} / {len(p_values)}")
-    print(f"Bonferroni significant:  {np.sum(sig_bonferroni)} / {len(p_values)}")
-    print(f"FDR significant:         {np.sum(sig_fdr)} / {len(p_values)}")
+    print(f"Uncorrected significant: {np.sum (sig_uncorrected)} / {len (p_values)}")
+    print(f"Bonferroni significant:  {np.sum (sig_bonferroni)} / {len (p_values)}")
+    print(f"FDR significant:         {np.sum (sig_fdr)} / {len (p_values)}")
     
     print("\n" + "="*70)
     print("All examples completed successfully!")

@@ -17,18 +17,18 @@ import time
 # Create large DataFrame
 n = 1_000_000
 df = pd.DataFrame({
-    'A': np.random.randn(n),
-    'B': np.random.randn(n)
+    'A': np.random.randn (n),
+    'B': np.random.randn (n)
 })
 
 # Method 1: Apply with lambda (SLOW)
 start = time.time()
-df['C_apply',] = df['A',].apply(lambda x: x ** 2 if x > 0 else 0)
+df['C_apply',] = df['A',].apply (lambda x: x ** 2 if x > 0 else 0)
 time_apply = time.time() - start
 
 # Method 2: Vectorized with np.where (FAST)
 start = time.time()
-df['C_vectorized',] = np.where(df['A',] > 0, df['A',] ** 2, 0)
+df['C_vectorized',] = np.where (df['A',] > 0, df['A',] ** 2, 0)
 time_vectorized = time.time() - start
 
 # Method 3: Vectorized with boolean indexing (FAST)
@@ -73,7 +73,7 @@ Despite the performance penalty, .apply() is sometimes necessary:
 
 **1. Complex Business Logic:**
 \`\`\`python
-def complex_calculation(row):
+def complex_calculation (row):
     if row['type',] == 'A':
         if row['value',] > 100:
             return row['value',] * 1.5 + row['bonus',]
@@ -85,7 +85,7 @@ def complex_calculation(row):
         return 0
 
 # Too complex for np.where/np.select
-df['result',] = df.apply(complex_calculation, axis=1)
+df['result',] = df.apply (complex_calculation, axis=1)
 \`\`\`
 
 **2. Multiple Column Dependencies:**
@@ -93,7 +93,7 @@ df['result',] = df.apply(complex_calculation, axis=1)
 # Create full name from multiple columns with complex logic
 df['full_info',] = df.apply(
     lambda row: f"{row['first_name',]} {row['middle_initial',]}. {row['last_name',]}" 
-                if pd.notna(row['middle_initial',]) 
+                if pd.notna (row['middle_initial',]) 
                 else f"{row['first_name',]} {row['last_name',]}",
     axis=1
 )
@@ -105,14 +105,14 @@ df['full_info',] = df.apply(
 import some_external_library
 
 df['processed',] = df['text',].apply(
-    lambda x: some_external_library.complex_function(x)
+    lambda x: some_external_library.complex_function (x)
 )
 \`\`\`
 
 **4. Non-Vectorizable Operations:**
 \`\`\`python
 # Operations that can't be vectorized
-df['word_count',] = df['text',].apply(lambda x: len(x.split()))
+df['word_count',] = df['text',].apply (lambda x: len (x.split()))
 # Note: This specific example can be vectorized with .str.split().str.len()
 # but illustrates the concept
 \`\`\`
@@ -122,7 +122,7 @@ df['word_count',] = df['text',].apply(lambda x: len(x.split()))
 **Strategy 1: Vectorize When Possible**
 \`\`\`python
 # Instead of:
-df['C',] = df.apply(lambda row: row['A',] + row['B',], axis=1)
+df['C',] = df.apply (lambda row: row['A',] + row['B',], axis=1)
 
 # Use:
 df['C',] = df['A',] + df['B',]  # 100x faster
@@ -131,22 +131,22 @@ df['C',] = df['A',] + df['B',]  # 100x faster
 **Strategy 2: Use np.where for Conditionals**
 \`\`\`python
 # Instead of:
-df['category',] = df['value',].apply(lambda x: 'High' if x > 100 else 'Low')
+df['category',] = df['value',].apply (lambda x: 'High' if x > 100 else 'Low')
 
 # Use:
-df['category',] = np.where(df['value',] > 100, 'High', 'Low')  # 50x faster
+df['category',] = np.where (df['value',] > 100, 'High', 'Low')  # 50x faster
 \`\`\`
 
 **Strategy 3: Use np.select for Multiple Conditions**
 \`\`\`python
 # Instead of:
-def categorize(x):
+def categorize (x):
     if x < 10: return 'Low'
     elif x < 50: return 'Medium'
     elif x < 100: return 'High'
     else: return 'Very High'
 
-df['category',] = df['value',].apply(categorize)
+df['category',] = df['value',].apply (categorize)
 
 # Use:
 conditions = [
@@ -155,13 +155,13 @@ conditions = [
     df['value',] < 100
 ]
 choices = ['Low', 'Medium', 'High',]
-df['category',] = np.select(conditions, choices, default='Very High')  # 30x faster
+df['category',] = np.select (conditions, choices, default='Very High')  # 30x faster
 \`\`\`
 
 **Strategy 4: Use Vectorized String Methods**
 \`\`\`python
 # Instead of:
-df['upper',] = df['name',].apply(lambda x: x.upper())
+df['upper',] = df['name',].apply (lambda x: x.upper())
 
 # Use:
 df['upper',] = df['name',].str.upper()  # 20x faster
@@ -170,31 +170,31 @@ df['upper',] = df['name',].str.upper()  # 20x faster
 **Strategy 5: Use .transform() for Group Operations**
 \`\`\`python
 # Instead of:
-def pct_of_group_total(row):
+def pct_of_group_total (row):
     group_total = df[df['group',] == row['group',]]['value',].sum()
     return row['value',] / group_total
 
-df['pct',] = df.apply(pct_of_group_total, axis=1)
+df['pct',] = df.apply (pct_of_group_total, axis=1)
 
 # Use:
-df['pct',] = df.groupby('group')['value',].transform(lambda x: x / x.sum())  # 100x faster
+df['pct',] = df.groupby('group')['value',].transform (lambda x: x / x.sum())  # 100x faster
 \`\`\`
 
 **Strategy 6: Cythonize or Numba for Complex Logic**
 \`\`\`python
 from numba import jit
 
-@jit(nopython=True)
+@jit (nopython=True)
 def complex_calculation_numba(A, B):
-    result = np.zeros(len(A))
-    for i in range(len(A)):
+    result = np.zeros (len(A))
+    for i in range (len(A)):
         if A[i] > 0:
             result[i] = A[i] ** 2 + B[i]
         else:
             result[i] = B[i] * 2
     return result
 
-df['result',] = complex_calculation_numba(df['A',].values, df['B',].values)
+df['result',] = complex_calculation_numba (df['A',].values, df['B',].values)
 # Faster than apply, nearly as fast as pure vectorization
 \`\`\`
 
@@ -257,16 +257,16 @@ df = pd.DataFrame({
 })
 
 # On Series (column-wise by default)
-df['A_squared',] = df['A',].apply(lambda x: x ** 2)
+df['A_squared',] = df['A',].apply (lambda x: x ** 2)
 # Result: [1, 4, 9]
 
 # On DataFrame, axis=0 (apply to each column)
-column_sums = df.apply(sum, axis=0)
+column_sums = df.apply (sum, axis=0)
 # Result: Series with sum of each column
 # A: 6, B: 15, C: 24
 
 # On DataFrame, axis=1 (apply to each row)
-row_sums = df.apply(sum, axis=1)
+row_sums = df.apply (sum, axis=1)
 # Result: Series with sum of each row
 # 0: 12, 1: 15, 2: 18
 
@@ -293,17 +293,17 @@ s = pd.Series(['A', 'B', 'C', 'A',])
 
 # Mapping with dictionary
 mapping = {'A': 1, 'B': 2, 'C': 3}
-s_mapped = s.map(mapping)
+s_mapped = s.map (mapping)
 # Result: [1, 2, 3, 1]
 
 # Mapping with function
 s_numbers = pd.Series([1, 2, 3, 4])
-s_squared = s_numbers.map(lambda x: x ** 2)
+s_squared = s_numbers.map (lambda x: x ** 2)
 # Result: [1, 4, 9, 16]
 
 # Mapping with Series (useful for lookups)
 lookup = pd.Series([100, 200, 300], index=['A', 'B', 'C',])
-s_looked_up = s.map(lookup)
+s_looked_up = s.map (lookup)
 # Result: [100, 200, 300, 100]
 
 # Key behavior: unmapped values become NaN
@@ -330,10 +330,10 @@ df = pd.DataFrame({
 })
 
 # .applymap (deprecated, use .map instead)
-# df_squared = df.applymap(lambda x: x ** 2)  # Old way
+# df_squared = df.applymap (lambda x: x ** 2)  # Old way
 
 # New way (pandas 2.1+):
-df_squared = df.map(lambda x: x ** 2)
+df_squared = df.map (lambda x: x ** 2)
 # Result: All values squared
 #    A   B
 # 0  1  16
@@ -366,7 +366,7 @@ df['Value_Normalized',] = df.groupby('Group')['Value',].transform(
 # Result: Normalized within each group, same length as original
 
 # Compare with .apply (aggregates by default)
-group_means = df.groupby('Group')['Value',].apply(lambda x: x.mean())
+group_means = df.groupby('Group')['Value',].apply (lambda x: x.mean())
 # Result: Series with 2 elements (one per group)
 # A: 1.5, B: 3.5
 
@@ -406,12 +406,12 @@ df = pd.DataFrame({
 
 # Method 1: applymap (element-wise)
 start = time.time()
-result1 = df.map(lambda x: x ** 2)  # New syntax for applymap
+result1 = df.map (lambda x: x ** 2)  # New syntax for applymap
 time1 = time.time() - start
 
 # Method 2: apply per column
 start = time.time()
-result2 = df.apply(lambda x: x ** 2)
+result2 = df.apply (lambda x: x ** 2)
 time2 = time.time() - start
 
 # Method 3: Vectorized (fastest)
@@ -460,7 +460,7 @@ df['category',] = df['code',].map({1: 'Low', 2: 'Medium', 3: 'High'})
 - Working with small DataFrames
 
 \`\`\`python
-df_formatted = df.map(lambda x: f"\${x:,.2f}")  # Format all values as currency
+df_formatted = df.map (lambda x: f"\${x:,.2f}")  # Format all values as currency
 \`\`\`
 
 **Use .transform() when:**
@@ -479,19 +479,19 @@ df['value_pct_of_group',] = df.groupby('category')['value',].transform(
 
 **1. Always Try Vectorization First:**
 \`\`\`python
-# Don't: df['C',] = df.apply(lambda row: row['A',] + row['B',], axis=1)
+# Don't: df['C',] = df.apply (lambda row: row['A',] + row['B',], axis=1)
 # Do: df['C',] = df['A',] + df['B',]
 \`\`\`
 
 **2. Use Built-in Functions When Available:**
 \`\`\`python
-# Don't: df.groupby('group')['value',].transform(lambda x: x.mean())
+# Don't: df.groupby('group')['value',].transform (lambda x: x.mean())
 # Do: df.groupby('group')['value',].transform('mean')  # Much faster
 \`\`\`
 
 **3. Avoid .map() on DataFrames (use vectorization):**
 \`\`\`python
-# Don't: df.map(lambda x: x ** 2)
+# Don't: df.map (lambda x: x ** 2)
 # Do: df ** 2
 \`\`\`
 
@@ -548,7 +548,7 @@ s_str = pd.Series(['hello', 'world', 'PANDAS',])
 print(s_str.str.upper())  # Vectorized uppercase
 
 # .dt accessor for datetime operations
-s_dt = pd.Series(pd.date_range('2024-01-01', periods=3))
+s_dt = pd.Series (pd.date_range('2024-01-01', periods=3))
 print(s_dt.dt.month)  # Extract month
 
 # .cat accessor for categorical data
@@ -571,7 +571,7 @@ s.str.upper()
 # 4. Returns new Series with results
 
 # Pseudocode:
-def str_upper(series):
+def str_upper (series):
     # Check dtype
     if series.dtype != 'object':
         raise AttributeError("Can only use .str accessor with string values")
@@ -579,12 +579,12 @@ def str_upper(series):
     # Vectorized operation (implemented in Cython)
     result = []
     for value in series:
-        if pd.isna(value):
-            result.append(value)  # Preserve NaN
+        if pd.isna (value):
+            result.append (value)  # Preserve NaN
         else:
-            result.append(value.upper())  # Python str.upper()
+            result.append (value.upper())  # Python str.upper()
     
-    return pd.Series(result, index=series.index)
+    return pd.Series (result, index=series.index)
 \`\`\`
 
 **2. .dt Accessor:**
@@ -600,14 +600,14 @@ s.dt.month
 # 4. Returns Series with integer results
 
 # Pseudocode:
-def dt_month(series):
+def dt_month (series):
     if series.dtype != 'datetime64[ns]':
         raise AttributeError("Can only use .dt accessor with datetime values")
     
     # Vectorized extraction from underlying numpy array
     # Much faster than Python datetime.month
     return pd.Series(
-        series.values.astype('datetime64[M]').astype(int) % 12 + 1,
+        series.values.astype('datetime64[M]').astype (int) % 12 + 1,
         index=series.index
     )
 \`\`\`
@@ -652,7 +652,7 @@ s = pd.Series(['hello', 'world',] * 50000)
 # Slow: Manual loop
 import time
 start = time.time()
-result_slow = s.apply(lambda x: x.upper())
+result_slow = s.apply (lambda x: x.upper())
 time_slow = time.time() - start
 
 # Fast: Vectorized with .str
@@ -679,7 +679,7 @@ import pandas as pd
 import time
 
 n = 100_000
-s = pd.Series(['test_string_' + str(i) for i in range(n)])
+s = pd.Series(['test_string_' + str (i) for i in range (n)])
 
 # Method 1: Python loop
 start = time.time()
@@ -688,7 +688,7 @@ time1 = time.time() - start
 
 # Method 2: .apply()
 start = time.time()
-result2 = s.apply(lambda x: x.upper())
+result2 = s.apply (lambda x: x.upper())
 time2 = time.time() - start
 
 # Method 3: .str accessor
@@ -713,11 +713,11 @@ print(f".str accessor: {time3:.3f}s")
 
 \`\`\`python
 n = 100_000
-dates = pd.Series(pd.date_range('2020-01-01', periods=n, freq='h'))
+dates = pd.Series (pd.date_range('2020-01-01', periods=n, freq='h'))
 
 # Method 1: .apply() with Python datetime
 start = time.time()
-result1 = dates.apply(lambda x: x.month)
+result1 = dates.apply (lambda x: x.month)
 time1 = time.time() - start
 
 # Method 2: .dt accessor (vectorized NumPy)
@@ -763,7 +763,7 @@ print(s.str.replace('World', 'Earth'))
 
 # Regex operations
 s_num = pd.Series(['abc123', 'def456', 'ghi789',])
-print(s_num.str.extract(r'(\\d+)'))  # Extract digits
+print(s_num.str.extract (r'(\\d+)'))  # Extract digits
 
 # Padding
 print(s_num.str.pad(10, fillchar='0'))  # Pad to length 10
@@ -772,7 +772,7 @@ print(s_num.str.pad(10, fillchar='0'))  # Pad to length 10
 **Common .dt Operations:**
 
 \`\`\`python
-dates = pd.Series(pd.date_range('2024-01-15', periods=5, freq='D'))
+dates = pd.Series (pd.date_range('2024-01-15', periods=5, freq='D'))
 
 # Extract components
 print(dates.dt.year)           # [2024, 2024, ...]
@@ -792,7 +792,7 @@ print(dates.dt.quarter)         # [1, 1, 1, 1, 1]
 print(dates.dt.week)           # ISO week number
 
 # Time components (if datetime has time)
-times = pd.Series(pd.date_range('2024-01-01 10:30:45', periods=3, freq='h'))
+times = pd.Series (pd.date_range('2024-01-01 10:30:45', periods=3, freq='h'))
 print(times.dt.hour)           # [10, 11, 12]
 print(times.dt.minute)         # [30, 30, 30]
 print(times.dt.second)         # [45, 45, 45]
@@ -817,12 +817,12 @@ result = s.str.upper()
 # ['HELLO', NaN, 'WORLD', NaN, 'PANDAS',]
 
 # Manual operations require explicit NaN handling
-def manual_upper(x):
-    if pd.isna(x):
+def manual_upper (x):
+    if pd.isna (x):
         return x
     return x.upper()
 
-result_manual = s.apply(manual_upper)
+result_manual = s.apply (manual_upper)
 # Same result, but more verbose
 \`\`\`
 
@@ -851,7 +851,7 @@ result = s_small.str.upper()
 df['month',] = df['date',].dt.month
 
 # Bad: Might fail on NaN
-df['month',] = df['date',].apply(lambda x: x.month)
+df['month',] = df['date',].apply (lambda x: x.month)
 \`\`\`
 
 **2. Chain Operations:**
@@ -860,7 +860,7 @@ df['month',] = df['date',].apply(lambda x: x.month)
 df['clean_text',] = (df['text',]
     .str.lower()
     .str.strip()
-    .str.replace(r'[^a-z\\s]', ', regex=True)
+    .str.replace (r'[^a-z\\s]', ', regex=True)
 )
 \`\`\`
 
@@ -870,19 +870,19 @@ df['clean_text',] = (df['text',]
 df['contains_python',] = df['text',].str.contains('python')
 
 # Bad: Slower
-df['contains_python',] = df['text',].apply(lambda x: 'python' in x)
+df['contains_python',] = df['text',].apply (lambda x: 'python' in x)
 \`\`\`
 
 **4. Batch Date Conversions:**
 \`\`\`python
 # Good: Convert once
-df['date',] = pd.to_datetime(df['date_string',])
+df['date',] = pd.to_datetime (df['date_string',])
 df['year',] = df['date',].dt.year
 df['month',] = df['date',].dt.month
 
 # Bad: Multiple conversions
-df['year',] = pd.to_datetime(df['date_string',]).dt.year
-df['month',] = pd.to_datetime(df['date_string',]).dt.month  # Redundant conversion!
+df['year',] = pd.to_datetime (df['date_string',]).dt.year
+df['month',] = pd.to_datetime (df['date_string',]).dt.month  # Redundant conversion!
 \`\`\`
 
 **Key Takeaways:**

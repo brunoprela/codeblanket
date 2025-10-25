@@ -6,7 +6,7 @@ export const crossValidationTechniquesMultipleChoice = {
       question:
         'What is the main advantage of k-fold cross-validation over a single train-test split?',
       options: [
-        "It's faster to compute",
+        "It\'s faster to compute",
         'It provides more reliable performance estimates by averaging over k different splits',
         'It requires less data',
         'It always gives higher accuracy scores',

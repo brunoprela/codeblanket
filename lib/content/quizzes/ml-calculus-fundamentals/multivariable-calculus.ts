@@ -97,10 +97,10 @@ Don't compute H explicitly, but can compute Hv for any vector v.
 **How:** Via automatic differentiation
 \`\`\`python
 # Compute Hv without forming H
-def hessian_vector_product(loss_fn, params, v):
-    grads = compute_gradient(loss_fn, params)
+def hessian_vector_product (loss_fn, params, v):
+    grads = compute_gradient (loss_fn, params)
     # Compute gradient of (∇L · v)
-    return compute_gradient(grads @ v, params)
+    return compute_gradient (grads @ v, params)
 \`\`\`
 
 **Cost:** O(n) per product - same as gradient!
@@ -127,7 +127,7 @@ Store only m recent (sₖ, yₖ) pairs (typically m = 5-20).
 
 For probabilistic models, approximate Hessian with Fisher:
 \`\`\`
-F = E[∇log p(y|x,θ) ∇log p(y|x,θ)^T]
+F = E[∇log p (y|x,θ) ∇log p (y|x,θ)^T]
 \`\`\`
 
 **Properties:**
@@ -142,7 +142,7 @@ F ≈ A ⊗ S  (Kronecker product)
 
 **Memory:** O(d₁² + d₂²) instead of O((d₁d₂)²)
 
-**F) Hutchinson's Trace Estimator:**
+**F) Hutchinson\'s Trace Estimator:**
 
 Estimate trace(H) or diagonal via random sampling:
 \`\`\`
@@ -220,8 +220,8 @@ Saddle points are critical points where the Hessian has both positive and negati
 **Probability argument:**
 
 For random critical point in n dimensions:
-- Prob(all n eigenvalues positive) = (1/2)ⁿ
-- Prob(saddle point) = 1 - (1/2)ⁿ - (1/2)ⁿ ≈ 1 for large n
+- Prob (all n eigenvalues positive) = (1/2)ⁿ
+- Prob (saddle point) = 1 - (1/2)ⁿ - (1/2)ⁿ ≈ 1 for large n
 
 **Concrete examples:**
 \`\`\`
@@ -262,7 +262,7 @@ At saddle point with negative eigenvalue λ < 0:
 
 Small perturbation along corresponding eigenvector v:
 \`\`\`
-f(x + εv) ≈ f(x) + (ε²/2)λ·||v||² < f(x)
+f (x + εv) ≈ f (x) + (ε²/2)λ·||v||² < f (x)
 \`\`\`
 
 Loss *decreases* along this direction!
@@ -270,19 +270,19 @@ Loss *decreases* along this direction!
 **B) Gradient Descent Escapes Automatically:**
 
 Near saddle point x*:
-- ∇f(x*) = 0
-- But ∇f(x* + ε) ≠ 0 for almost any perturbation
+- ∇f (x*) = 0
+- But ∇f (x* + ε) ≠ 0 for almost any perturbation
 - Gradient points toward escape direction
 
 \`\`\`python
 # Demonstration: Escaping saddle point
 
 def saddle_escape_demo():
-    # f(x,y) = x² - y² (saddle at origin)
-    def f(x, y):
+    # f (x,y) = x² - y² (saddle at origin)
+    def f (x, y):
         return x**2 - y**2
     
-    def grad(x, y):
+    def grad (x, y):
         return np.array([2*x, -2*y])
     
     # Start near saddle with small perturbation
@@ -292,14 +292,14 @@ def saddle_escape_demo():
     lr = 0.1
     
     for _ in range(20):
-        g = grad(pos[0], pos[1])
+        g = grad (pos[0], pos[1])
         pos = pos - lr * g
-        trajectory.append(pos.copy())
+        trajectory.append (pos.copy())
     
     print("Escaping Saddle Point:")
     print(f"Start: {trajectory[0]}")
     print(f"End:   {trajectory[-1]}")
-    print(f"Distance from saddle: {np.linalg.norm(trajectory[-1]):.6f}")
+    print(f"Distance from saddle: {np.linalg.norm (trajectory[-1]):.6f}")
     print("→ Gradient descent automatically escapes!")
 
 saddle_escape_demo()
@@ -363,7 +363,7 @@ High-dimensional optimization challenges come from saddle points (escapable) NOT
 
 Along direction v with Hessian eigenvalue λ < 0:
 \`\`\`
-f(x - εv) ≈ f(x) - (ε²/2)|λ|  (decreases quadratically!)
+f (x - εv) ≈ f (x) - (ε²/2)|λ|  (decreases quadratically!)
 \`\`\`
 
 **Escape time:**
@@ -389,7 +389,7 @@ Adaptive methods (Adam) balance this.
 
 **Cubic Regularization:**
 \`\`\`
-arg min_p [f(x) + ∇f(x)^T p + (1/2)p^T H p + (M/6)||p||³]
+arg min_p [f (x) + ∇f (x)^T p + (1/2)p^T H p + (M/6)||p||³]
 \`\`\`
 Explicitly escapes negative curvature.
 
@@ -448,9 +448,9 @@ This is one of the success stories of modern deep learning theory: understanding
   {
     id: 'multivar-disc-3',
     question:
-      "Explain how the multivariate Taylor series is used in Newton's method for optimization. Why is Newton's method not commonly used for training deep neural networks?",
+      "Explain how the multivariate Taylor series is used in Newton\'s method for optimization. Why is Newton's method not commonly used for training deep neural networks?",
     hint: 'Consider the second-order Taylor approximation, the Newton update rule, and computational challenges.',
-    sampleAnswer: `**Taylor Series in Newton's Method:**
+    sampleAnswer: `**Taylor Series in Newton\'s Method:**
 
 Newton's method uses the second-order Taylor approximation to find better steps than gradient descent.
 
@@ -460,7 +460,7 @@ Newton's method uses the second-order Taylor approximation to find better steps 
 
 **Taylor expansion around current point x_k:**
 \`\`\`
-f(x) ≈ f(x_k) + ∇f(x_k)^T(x - x_k) + (1/2)(x - x_k)^T H(x_k)(x - x_k)
+f (x) ≈ f (x_k) + ∇f (x_k)^T(x - x_k) + (1/2)(x - x_k)^T H(x_k)(x - x_k)
 \`\`\`
 
 **Quadratic approximation:** Q(x)
@@ -470,21 +470,21 @@ Instead of taking small step against gradient, **minimize Q(x)** exactly.
 
 **Minimization:**
 \`\`\`
-∇Q(x) = ∇f(x_k) + H(x_k)(x - x_k) = 0
+∇Q(x) = ∇f (x_k) + H(x_k)(x - x_k) = 0
 \`\`\`
 
 **Solution:**
 \`\`\`
-x_{k+1} = x_k - H(x_k)^{-1} ∇f(x_k)
+x_{k+1} = x_k - H(x_k)^{-1} ∇f (x_k)
 \`\`\`
 
-**This is Newton's method!**
+**This is Newton\'s method!**
 
 **2. Comparison with Gradient Descent:**
 
 **Gradient Descent:**
 \`\`\`
-x_{k+1} = x_k - α·∇f(x_k)
+x_{k+1} = x_k - α·∇f (x_k)
 \`\`\`
 
 Uses only first-order (gradient) information.
@@ -492,7 +492,7 @@ Needs manual learning rate α.
 
 **Newton's Method:**
 \`\`\`
-x_{k+1} = x_k - H^{-1}·∇f(x_k)
+x_{k+1} = x_k - H^{-1}·∇f (x_k)
 \`\`\`
 
 Uses second-order (Hessian) information.
@@ -521,13 +521,13 @@ Each iteration roughly doubles the number of correct digits!
 
 **B) Invariant to Scaling:**
 
-Newton's method is affine invariant:
+Newton\'s method is affine invariant:
 - Automatically adapts to function curvature
 - No need to tune learning rate
 
 **C) Handles Ill-Conditioning:**
 
-For quadratic f(x) = (1/2)x^T A x - b^T x:
+For quadratic f (x) = (1/2)x^T A x - b^T x:
 
 **Gradient Descent:**
 Convergence rate depends on condition number κ(A):
@@ -547,16 +547,16 @@ x* = A^{-1}b
 def compare_gd_newton():
     """Compare Gradient Descent vs Newton's Method"""
     
-    # Ill-conditioned quadratic: f(x,y) = 10x² + y²
-    def f(xy):
+    # Ill-conditioned quadratic: f (x,y) = 10x² + y²
+    def f (xy):
         x, y = xy
         return 10*x**2 + y**2
     
-    def grad(xy):
+    def grad (xy):
         x, y = xy
         return np.array([20*x, 2*y])
     
-    def hessian(xy):
+    def hessian (xy):
         return np.array([[20, 0], [0, 2]])
     
     # Start point
@@ -568,22 +568,22 @@ def compare_gd_newton():
     gd_trajectory = [x_gd.copy()]
     
     for _ in range(50):
-        x_gd = x_gd - lr * grad(x_gd)
-        gd_trajectory.append(x_gd.copy())
+        x_gd = x_gd - lr * grad (x_gd)
+        gd_trajectory.append (x_gd.copy())
     
-    # Newton's Method
+    # Newton\'s Method
     x_newton = x0.copy()
     newton_trajectory = [x_newton.copy()]
     
     for _ in range(5):  # Much fewer iterations!
-        H = hessian(x_newton)
-        g = grad(x_newton)
+        H = hessian (x_newton)
+        g = grad (x_newton)
         x_newton = x_newton - np.linalg.solve(H, g)
-        newton_trajectory.append(x_newton.copy())
+        newton_trajectory.append (x_newton.copy())
     
     print("Gradient Descent vs Newton's Method:")
-    print(f"GD after 50 iters: {gd_trajectory[-1]}, f = {f(gd_trajectory[-1]):.6f}")
-    print(f"Newton after 5 iters: {newton_trajectory[-1]}, f = {f(newton_trajectory[-1]):.2e}")
+    print(f"GD after 50 iters: {gd_trajectory[-1]}, f = {f (gd_trajectory[-1]):.6f}")
+    print(f"Newton after 5 iters: {newton_trajectory[-1]}, f = {f (newton_trajectory[-1]):.2e}")
     print(f"\\n→ Newton converges in 2 iterations, GD takes 50+!")
 
 compare_gd_newton()
@@ -678,7 +678,7 @@ Cheaper than full Hessian.
 
 Use Fisher information matrix instead of Hessian:
 \`\`\`
-F = E[∇log p(y|x)∇log p(y|x)^T]
+F = E[∇log p (y|x)∇log p (y|x)^T]
 \`\`\`
 
 Block-diagonal approximation makes it tractable:
@@ -694,7 +694,7 @@ F ≈ block_diag(F_1, ..., F_L)
 
 Compute only Hessian-vector products Hv via:
 \`\`\`
-Hv = lim_{ε→0} [∇f(x + εv) - ∇f(x)] / ε
+Hv = lim_{ε→0} [∇f (x + εv) - ∇f (x)] / ε
 \`\`\`
 
 Use Conjugate Gradient to solve Hx = -g without forming H.
@@ -736,13 +736,13 @@ Use Conjugate Gradient to solve Hx = -g without forming H.
 **Preconditioning:**
 Use cheap approximation to Hessian:
 \`\`\`
-x_{k+1} = x_k - M^{-1}·∇f(x_k)
+x_{k+1} = x_k - M^{-1}·∇f (x_k)
 \`\`\`
 
 where M ≈ H (e.g., diagonal, block-diagonal)
 
 **Examples:**
-- **Adam**: M = diag(v_t)^{1/2}
+- **Adam**: M = diag (v_t)^{1/2}
 - **K-FAC**: M = block-diagonal Fisher
 - **Shampoo**: M = Kronecker-factored approximation
 
@@ -753,7 +753,7 @@ where M ≈ H (e.g., diagonal, block-diagonal)
 - Automatic step size
 - Handles ill-conditioning
 
-**Why Newton's method is practically infeasible for deep learning:**
+**Why Newton\'s method is practically infeasible for deep learning:**
 - O(n²) memory (impossible for n ~ 10⁶)
 - O(n³) computation per step (too slow)
 - Noisy Hessian in stochastic setting

@@ -43,11 +43,11 @@ export const graphqlQuiz = [
         this.baseURL = 'https://api.example.com/v1/';
       }
     
-      async getUser(id) {
+      async getUser (id) {
         return this.get(\`users/\${id}\`);
       }
     
-      async getUserPosts(userId) {
+      async getUserPosts (userId) {
         return this.get(\`posts?userId=\${userId}\`);
       }
     }
@@ -75,7 +75,7 @@ export const graphqlQuiz = [
         }
         
         try {
-          const user = jwt.verify(token, SECRET_KEY);
+          const user = jwt.verify (token, SECRET_KEY);
           return { user };
         } catch (error) {
           throw new AuthenticationError('Invalid token');
@@ -88,7 +88,7 @@ export const graphqlQuiz = [
       Query: {
         me: (parent, args, { user }) => {
           // user available from context
-          return getUserById(user.id);
+          return getUserById (user.id);
         }
       }
     };
@@ -101,19 +101,19 @@ export const graphqlQuiz = [
     const DataLoader = require('dataloader');
     
     // Batch load users
-    const createUserLoader = () => new DataLoader(async (userIds) => {
-      const users = await db.users.findByIds(userIds);
+    const createUserLoader = () => new DataLoader (async (userIds) => {
+      const users = await db.users.findByIds (userIds);
       // Return in same order as requested
-      const userMap = new Map(users.map(user => [user.id, user]));
-      return userIds.map(id => userMap.get(id));
+      const userMap = new Map (users.map (user => [user.id, user]));
+      return userIds.map (id => userMap.get (id));
     });
     
     // Batch load posts by user IDs
-    const createPostsByUserLoader = () => new DataLoader(async (userIds) => {
-      const posts = await db.posts.findByUserIds(userIds);
+    const createPostsByUserLoader = () => new DataLoader (async (userIds) => {
+      const posts = await db.posts.findByUserIds (userIds);
       // Group by userId
-      const postsByUser = userIds.map(userId => 
-        posts.filter(post => post.userId === userId)
+      const postsByUser = userIds.map (userId => 
+        posts.filter (post => post.userId === userId)
       );
       return postsByUser;
     });
@@ -121,7 +121,7 @@ export const graphqlQuiz = [
     // Add to context
     const server = new ApolloServer({
       context: ({ req }) => ({
-        user: getUserFromToken(req),
+        user: getUserFromToken (req),
         loaders: {
           user: createUserLoader(),
           postsByUser: createPostsByUserLoader()
@@ -134,12 +134,12 @@ export const graphqlQuiz = [
       Post: {
         author: (post, args, { loaders }) => {
           // Batched! Multiple calls in same request are combined
-          return loaders.user.load(post.userId);
+          return loaders.user.load (post.userId);
         }
       },
       User: {
         posts: (user, args, { loaders }) => {
-          return loaders.postsByUser.load(user.id);
+          return loaders.postsByUser.load (user.id);
         }
       }
     };
@@ -186,12 +186,12 @@ export const graphqlQuiz = [
     });
     
     // Cache hints in schema
-    type User @cacheControl(maxAge: 600) {
+    type User @cacheControl (maxAge: 600) {
       id: ID!
       name: String!
     }
     
-    type Post @cacheControl(maxAge: 60) {
+    type Post @cacheControl (maxAge: 60) {
       id: ID!
       title: String!
     }
@@ -225,7 +225,7 @@ export const graphqlQuiz = [
           Query: {
             fields: {
               user: {
-                merge(existing, incoming) {
+                merge (existing, incoming) {
                   return incoming;
                 }
               }
@@ -253,7 +253,7 @@ export const graphqlQuiz = [
         unreadNotifications
       }
       
-      feed(first: 20) {
+      feed (first: 20) {
         edges {
           node {
             id
@@ -266,7 +266,7 @@ export const graphqlQuiz = [
             likeCount
             commentCount
             likedByMe
-            comments(first: 3) {
+            comments (first: 3) {
               text
               author {
                 username
@@ -396,7 +396,7 @@ export const graphqlQuiz = [
     \`\`\`graphql
     # Malicious query with infinite recursion
     query {
-      user(id: "1") {
+      user (id: "1") {
         friends {
           friends {
             friends {
@@ -421,10 +421,10 @@ export const graphqlQuiz = [
     });
     
     // Custom implementation
-    function depthLimit(maxDepth) {
+    function depthLimit (maxDepth) {
       return function (context) {
         return {
-          Field(node, key, parent, path, ancestors) {
+          Field (node, key, parent, path, ancestors) {
             const depth = ancestors.filter(
               ancestor => ancestor.kind === 'Field'
             ).length;
@@ -446,9 +446,9 @@ export const graphqlQuiz = [
     \`\`\`graphql
     # Expensive query (1 billion operations!)
     query {
-      users(first: 1000) {       # 1,000 users
-        posts(first: 1000) {      # × 1,000 posts each
-          comments(first: 1000) { # × 1,000 comments each
+      users (first: 1000) {       # 1,000 users
+        posts (first: 1000) {      # × 1,000 posts each
+          comments (first: 1000) { # × 1,000 comments each
             # Total: 1,000 × 1,000 × 1,000 = 1 billion
           }
         }
@@ -463,19 +463,19 @@ export const graphqlQuiz = [
     // Define costs in schema
     const typeDefs = gql\`
       type Query {
-        users(first: Int = 20): [User!]! @cost(complexity: 10, multipliers: ["first",])
-        user(id: ID!): User @cost(complexity: 1)
+        users (first: Int = 20): [User!]! @cost (complexity: 10, multipliers: ["first",])
+        user (id: ID!): User @cost (complexity: 1)
       }
       
       type User {
         id: ID!
         name: String!
-        posts(first: Int = 20): [Post!]! @cost(complexity: 5, multipliers: ["first",])
+        posts (first: Int = 20): [Post!]! @cost (complexity: 5, multipliers: ["first",])
       }
       
       type Post {
         id: ID!
-        comments(first: Int = 20): [Comment!]! @cost(complexity: 3, multipliers: ["first",])
+        comments (first: Int = 20): [Comment!]! @cost (complexity: 3, multipliers: ["first",])
       }
     \`;
     
@@ -492,12 +492,12 @@ export const graphqlQuiz = [
     });
     
     // Custom cost calculation
-    function calculateQueryCost(query, schema) {
+    function calculateQueryCost (query, schema) {
       let cost = 0;
       
-      visit(query, {
+      visit (query, {
         Field: (node) => {
-          const fieldDef = schema.getField(node.name.value);
+          const fieldDef = schema.getField (node.name.value);
           const fieldCost = fieldDef?.cost || 1;
           
           // Apply multipliers (e.g., \`first\` argument)
@@ -515,8 +515,8 @@ export const graphqlQuiz = [
     // Validate cost before execution
     const validationRules = [
       (context) => ({
-        Document(node) {
-          const cost = calculateQueryCost(node, context.getSchema());
+        Document (node) {
+          const cost = calculateQueryCost (node, context.getSchema());
           
           if (cost > 1000) {
             throw new Error(\`Query cost \${cost} exceeds limit of 1000\`);
@@ -542,10 +542,10 @@ export const graphqlQuiz = [
           const userId = context.user?.id || context.ip;
           const key = \`rate_limit:\${userId}\`;
           
-          const requests = await redisClient.incr(key);
+          const requests = await redisClient.incr (key);
           
           if (requests === 1) {
-            await redisClient.expire(key, 60); // 1 minute window
+            await redisClient.expire (key, 60); // 1 minute window
           }
           
           if (requests > 100) {
@@ -571,13 +571,13 @@ export const graphqlQuiz = [
       return {
         requestDidStart: async ({ context, request }) => {
           const userId = context.user?.id;
-          const cost = calculateQueryCost(request.query);
+          const cost = calculateQueryCost (request.query);
           
           const key = \`cost_limit:\${userId}\`;
-          const currentCost = await redisClient.incrBy(key, cost);
+          const currentCost = await redisClient.incrBy (key, cost);
           
           if (currentCost === cost) {
-            await redisClient.expire(key, 60); // 1 minute window
+            await redisClient.expire (key, 60); // 1 minute window
           }
           
           if (currentCost > 10000) {
@@ -597,7 +597,7 @@ export const graphqlQuiz = [
     
     // Define @auth directive
     const typeDefs = gql\`
-      directive @auth(requires: Role = USER) on FIELD_DEFINITION
+      directive @auth (requires: Role = USER) on FIELD_DEFINITION
       
       enum Role {
         USER
@@ -606,22 +606,22 @@ export const graphqlQuiz = [
       }
       
       type Query {
-        me: User @auth(requires: USER)
-        users: [User!]! @auth(requires: ADMIN)
-        adminStats: Stats @auth(requires: ADMIN)
+        me: User @auth (requires: USER)
+        users: [User!]! @auth (requires: ADMIN)
+        adminStats: Stats @auth (requires: ADMIN)
       }
       
       type User {
         id: ID!
         name: String!
-        email: String! @auth(requires: USER)
-        privateNotes: String @auth(requires: ADMIN)
+        email: String! @auth (requires: USER)
+        privateNotes: String @auth (requires: ADMIN)
       }
     \`;
     
     // Implement directive
     class AuthDirective extends SchemaDirectiveVisitor {
-      visitFieldDefinition(field) {
+      visitFieldDefinition (field) {
         const { resolve = defaultFieldResolver } = field;
         const { requires } = this.args;
         
@@ -633,11 +633,11 @@ export const graphqlQuiz = [
             throw new AuthenticationError('Not authenticated');
           }
           
-          if (!user.roles.includes(requires)) {
+          if (!user.roles.includes (requires)) {
             throw new ForbiddenError(\`Requires role: \${requires}\`);
           }
           
-          return resolve.apply(this, args);
+          return resolve.apply (this, args);
         };
       }
     }
@@ -686,7 +686,7 @@ export const graphqlQuiz = [
             age: Joi.number().min(13).max(120)
           });
           
-          const { error, value } = schema.validate(args);
+          const { error, value } = schema.validate (args);
           
           if (error) {
             throw new UserInputError('Invalid input', {
@@ -695,7 +695,7 @@ export const graphqlQuiz = [
           }
           
           // Sanitize HTML in user input
-          const sanitizedName = sanitizeHtml(value.name);
+          const sanitizedName = sanitizeHtml (value.name);
           
           return createUser({ ...value, name: sanitizedName });
         }
@@ -706,7 +706,7 @@ export const graphqlQuiz = [
     **6. Query Timeout**
     
     \`\`\`javascript
-    function timeoutPlugin(maxTimeout = 5000) {
+    function timeoutPlugin (maxTimeout = 5000) {
       return {
         requestDidStart: () => {
           const timeout = setTimeout(() => {
@@ -715,7 +715,7 @@ export const graphqlQuiz = [
           
           return {
             willSendResponse: () => {
-              clearTimeout(timeout);
+              clearTimeout (timeout);
             }
           };
         }
@@ -739,9 +739,9 @@ export const graphqlQuiz = [
           
           return {
             didEncounterErrors: ({ errors }) => {
-              errors.forEach(error => {
+              errors.forEach (error => {
                 // Log to Sentry
-                Sentry.captureException(error, {
+                Sentry.captureException (error, {
                   contexts: {
                     graphql: {
                       query: request.query,
@@ -805,7 +805,7 @@ export const graphqlQuiz = [
     \`\`\`javascript
     // Only allow pre-approved queries in production
     const approvedQueries = new Map([
-      ['abc123...', 'query GetUser($id: ID!) { user(id: $id) { id name } }',],
+      ['abc123...', 'query GetUser($id: ID!) { user (id: $id) { id name } }',],
       ['def456...', 'query GetFeed { feed { id title } }',]
     ]);
     
@@ -814,11 +814,11 @@ export const graphqlQuiz = [
       resolvers,
       validationRules: [
         (context) => ({
-          Document(node) {
+          Document (node) {
             if (process.env.NODE_ENV === 'production') {
               const queryHash = context.request.extensions?.persistedQuery?.sha256Hash;
               
-              if (!queryHash || !approvedQueries.has(queryHash)) {
+              if (!queryHash || !approvedQueries.has (queryHash)) {
                 throw new Error('Query not in whitelist');
               }
             }
@@ -837,7 +837,7 @@ export const graphqlQuiz = [
       
       // Authentication
       context: ({ req }) => ({
-        user: getUserFromToken(req),
+        user: getUserFromToken (req),
         ip: req.ip
       }),
       
@@ -925,7 +925,7 @@ export const graphqlQuiz = [
     **Problem**:
     \`\`\`graphql
     query {
-      posts(first: 100) {     # 1 query
+      posts (first: 100) {     # 1 query
         id
         title
         author {              # 100 queries!
@@ -948,41 +948,41 @@ export const graphqlQuiz = [
     
     // 1. Create DataLoader for users
     function createUserLoader() {
-      return new DataLoader(async (userIds) => {
+      return new DataLoader (async (userIds) => {
         console.log(\`Batch loading \${userIds.length} users\`);
         
         // Single query for all user IDs
-        const users = await db.users.findByIds(userIds);
+        const users = await db.users.findByIds (userIds);
         
         // Return in same order as requested
-        const userMap = new Map(users.map(u => [u.id, u]));
-        return userIds.map(id => userMap.get(id));
+        const userMap = new Map (users.map (u => [u.id, u]));
+        return userIds.map (id => userMap.get (id));
       });
     }
     
     // 2. Create DataLoader for comments by post
     function createCommentsByPostLoader() {
-      return new DataLoader(async (postIds) => {
+      return new DataLoader (async (postIds) => {
         console.log(\`Batch loading comments for \${postIds.length} posts\`);
         
         // Single query for all comments
-        const comments = await db.comments.findByPostIds(postIds);
+        const comments = await db.comments.findByPostIds (postIds);
         
         // Group by postId
         const commentsByPost = new Map();
-        postIds.forEach(id => commentsByPost.set(id, []));
-        comments.forEach(comment => {
-          commentsByPost.get(comment.postId).push(comment);
+        postIds.forEach (id => commentsByPost.set (id, []));
+        comments.forEach (comment => {
+          commentsByPost.get (comment.postId).push (comment);
         });
         
-        return postIds.map(id => commentsByPost.get(id) || []);
+        return postIds.map (id => commentsByPost.get (id) || []);
       });
     }
     
     // 3. Add loaders to context
     const server = new ApolloServer({
       context: ({ req }) => ({
-        user: getUserFromToken(req),
+        user: getUserFromToken (req),
         loaders: {
           user: createUserLoader(),
           commentsByPost: createCommentsByPostLoader()
@@ -1001,19 +1001,19 @@ export const graphqlQuiz = [
       Post: {
         author: async (post, args, { loaders }) => {
           // Batched! All posts in request combined into single query
-          return await loaders.user.load(post.userId);
+          return await loaders.user.load (post.userId);
         },
         
         comments: async (post, args, { loaders }) => {
           // Batched! All posts in request combined into single query
-          return await loaders.commentsByPost.load(post.id);
+          return await loaders.commentsByPost.load (post.id);
         }
       },
       
       Comment: {
         author: async (comment, args, { loaders }) => {
           // Batched!
-          return await loaders.user.load(comment.userId);
+          return await loaders.user.load (comment.userId);
         }
       }
     };
@@ -1033,10 +1033,10 @@ export const graphqlQuiz = [
     const resolvers = {
       Mutation: {
         createUser: async (parent, args, { loaders }) => {
-          const user = await db.users.create(args);
+          const user = await db.users.create (args);
           
           // Prime the cache so future loads don't hit DB
-          loaders.user.prime(user.id, user);
+          loaders.user.prime (user.id, user);
           
           return user;
         }
@@ -1049,13 +1049,13 @@ export const graphqlQuiz = [
     const resolvers = {
       Mutation: {
         updateUser: async (parent, { id, ...updates }, { loaders }) => {
-          const user = await db.users.update(id, updates);
+          const user = await db.users.update (id, updates);
           
           // Clear old cached value
-          loaders.user.clear(id);
+          loaders.user.clear (id);
           
           // Prime with new value
-          loaders.user.prime(id, user);
+          loaders.user.prime (id, user);
           
           return user;
         }
@@ -1067,13 +1067,13 @@ export const graphqlQuiz = [
     \`\`\`javascript
     // Load posts by multiple criteria
     function createPostLoader() {
-      return new DataLoader(async (keys) => {
+      return new DataLoader (async (keys) => {
         // keys = [{ userId: '1', status: 'published' }, ...]
         
-        const posts = await db.posts.findByMultiple(keys);
+        const posts = await db.posts.findByMultiple (keys);
         
-        return keys.map(key => 
-          posts.filter(p => 
+        return keys.map (key => 
+          posts.filter (p => 
             p.userId === key.userId && p.status === key.status
           )
         );
@@ -1091,7 +1091,7 @@ export const graphqlQuiz = [
     \`\`\`graphql
     # Slow for large offsets
     query {
-      posts(limit: 20, offset: 10000) {
+      posts (limit: 20, offset: 10000) {
         # SELECT * FROM posts LIMIT 20 OFFSET 10000
         # Database must scan 10,020 rows!
       }
@@ -1103,7 +1103,7 @@ export const graphqlQuiz = [
     **Schema**:
     \`\`\`graphql
     type Query {
-      posts(first: Int, after: String): PostConnection!
+      posts (first: Int, after: String): PostConnection!
     }
     
     type PostConnection {
@@ -1127,11 +1127,11 @@ export const graphqlQuiz = [
     const resolvers = {
       Query: {
         posts: async (parent, { first = 20, after }, context) => {
-          let query = db.posts.query().limit(first + 1);
+          let query = db.posts.query().limit (first + 1);
           
           if (after) {
             // Decode cursor (base64 encoded ID)
-            const cursorId = Buffer.from(after, 'base64').toString('utf-8');
+            const cursorId = Buffer.from (after, 'base64').toString('utf-8');
             query = query.where('id', '>', cursorId);
           }
           
@@ -1140,14 +1140,14 @@ export const graphqlQuiz = [
           const edges = posts.slice(0, first);
           
           return {
-            edges: edges.map(post => ({
+            edges: edges.map (post => ({
               node: post,
-              cursor: Buffer.from(post.id).toString('base64')
+              cursor: Buffer.from (post.id).toString('base64')
             })),
             pageInfo: {
               hasNextPage,
               endCursor: edges.length > 0 
-                ? Buffer.from(edges[edges.length - 1].id).toString('base64')
+                ? Buffer.from (edges[edges.length - 1].id).toString('base64')
                 : null
             }
           };
@@ -1176,30 +1176,30 @@ export const graphqlQuiz = [
     const redisClient = redis.createClient();
     
     // Cached resolver
-    async function getCachedUser(userId) {
+    async function getCachedUser (userId) {
       const cacheKey = \`user:\${userId}\`;
       
       // Try cache first
-      const cached = await redisClient.get(cacheKey);
+      const cached = await redisClient.get (cacheKey);
       if (cached) {
-        return JSON.parse(cached);
+        return JSON.parse (cached);
       }
       
       // Cache miss, load from DB
-      const user = await db.users.findById(userId);
+      const user = await db.users.findById (userId);
       
       // Store in cache (5 minutes)
-      await redisClient.setEx(cacheKey, 300, JSON.stringify(user));
+      await redisClient.setEx (cacheKey, 300, JSON.stringify (user));
       
       return user;
     }
     
     // Integrate with DataLoader
     function createUserLoader() {
-      return new DataLoader(async (userIds) => {
+      return new DataLoader (async (userIds) => {
         // Check Redis for each ID
         const pipeline = redisClient.pipeline();
-        userIds.forEach(id => pipeline.get(\`user:\${id}\`));
+        userIds.forEach (id => pipeline.get(\`user:\${id}\`));
         const cachedResults = await pipeline.exec();
         
         // Separate hits and misses
@@ -1208,7 +1208,7 @@ export const graphqlQuiz = [
         
         userIds.forEach((id, idx) => {
           if (cachedResults[idx][1]) {
-            hits[idx] = JSON.parse(cachedResults[idx][1]);
+            hits[idx] = JSON.parse (cachedResults[idx][1]);
           } else {
             misses.push({ id, idx });
           }
@@ -1216,13 +1216,13 @@ export const graphqlQuiz = [
         
         // Load misses from database
         if (misses.length > 0) {
-          const missedIds = misses.map(m => m.id);
-          const users = await db.users.findByIds(missedIds);
+          const missedIds = misses.map (m => m.id);
+          const users = await db.users.findByIds (missedIds);
           
           // Store in Redis
           const cachePipeline = redisClient.pipeline();
-          users.forEach(user => {
-            cachePipeline.setEx(\`user:\${user.id}\`, 300, JSON.stringify(user));
+          users.forEach (user => {
+            cachePipeline.setEx(\`user:\${user.id}\`, 300, JSON.stringify (user));
           });
           await cachePipeline.exec();
           
@@ -1254,18 +1254,18 @@ export const graphqlQuiz = [
     
     // Add cache hints to schema
     const typeDefs = gql\`
-      type User @cacheControl(maxAge: 300) {
+      type User @cacheControl (maxAge: 300) {
         id: ID!
         name: String!
       }
       
-      type Post @cacheControl(maxAge: 60) {
+      type Post @cacheControl (maxAge: 60) {
         id: ID!
         title: String!
       }
       
       type Query {
-        user(id: ID!): User @cacheControl(maxAge: 600)
+        user (id: ID!): User @cacheControl (maxAge: 600)
       }
     \`;
     \`\`\`
@@ -1301,25 +1301,25 @@ export const graphqlQuiz = [
     **Add Indexes**:
     \`\`\`sql
     -- Index for post author lookups
-    CREATE INDEX idx_posts_user_id ON posts(user_id);
+    CREATE INDEX idx_posts_user_id ON posts (user_id);
     
     -- Index for comments by post
-    CREATE INDEX idx_comments_post_id ON comments(post_id);
+    CREATE INDEX idx_comments_post_id ON comments (post_id);
     
     -- Composite index for pagination
-    CREATE INDEX idx_posts_created_at_id ON posts(created_at DESC, id);
+    CREATE INDEX idx_posts_created_at_id ON posts (created_at DESC, id);
     \`\`\`
     
     **Use SELECT instead of SELECT ***:
     \`\`\`javascript
     // Bad
-    const users = await db.users.findByIds(userIds);
+    const users = await db.users.findByIds (userIds);
     // SELECT * FROM users WHERE id IN (...)
     
     // Good: Only select needed fields
     const users = await db.users
       .select('id', 'name', 'email', 'avatar')
-      .findByIds(userIds);
+      .findByIds (userIds);
     // SELECT id, name, email, avatar FROM users WHERE id IN (...)
     \`\`\`
     
@@ -1343,7 +1343,7 @@ export const graphqlQuiz = [
             const originalQuery = db.query;
             db.query = function(...args) {
               queryCount++;
-              return originalQuery.apply(this, args);
+              return originalQuery.apply (this, args);
             };
             
             return {

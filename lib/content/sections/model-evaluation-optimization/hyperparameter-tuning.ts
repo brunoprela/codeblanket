@@ -69,9 +69,9 @@ for n_estimators in [50, 100, 200]:
                 'accuracy': val_score
             })
 
-df_manual = pd.DataFrame(manual_results).sort_values('accuracy', ascending=False)
+df_manual = pd.DataFrame (manual_results).sort_values('accuracy', ascending=False)
 print("\\nTop 5 configurations:")
-print(df_manual.head().to_string(index=False))
+print(df_manual.head().to_string (index=False))
 
 print("\\n⚠️  Manual tuning limitations:")
 print("  • Time-consuming and tedious")
@@ -98,7 +98,7 @@ param_grid = {
 }
 
 # Calculate total combinations
-total_combinations = np.prod([len(v) for v in param_grid.values()])
+total_combinations = np.prod([len (v) for v in param_grid.values()])
 print(f"\\nParameter grid:")
 for param, values in param_grid.items():
     print(f"  {param}: {values}")
@@ -111,7 +111,7 @@ print("\\nRunning Grid Search...")
 start_time = time.time()
 
 grid_search = GridSearchCV(
-    RandomForestClassifier(random_state=42),
+    RandomForestClassifier (random_state=42),
     param_grid,
     cv=5,
     scoring='accuracy',
@@ -136,14 +136,14 @@ test_score = grid_search.score(X_test, y_test)
 print(f"Test set score: {test_score:.4f}")
 
 # Analyze all results
-cv_results = pd.DataFrame(grid_search.cv_results_)
+cv_results = pd.DataFrame (grid_search.cv_results_)
 
 print("\\nTop 10 configurations:")
 top_configs = cv_results.nsmallest(10, 'rank_test_score')[
     ['param_n_estimators', 'param_max_depth', 'param_min_samples_split',
      'param_min_samples_leaf', 'mean_test_score', 'std_test_score']
 ]
-print(top_configs.to_string(index=False))
+print(top_configs.to_string (index=False))
 \`\`\`
 
 ### Visualizing Grid Search Results
@@ -165,7 +165,7 @@ pivot_data = cv_results.pivot_table(
 )
 
 import seaborn as sns
-sns.heatmap(pivot_data, annot=True, fmt='.4f', cmap='YlOrRd', ax=axes[0])
+sns.heatmap (pivot_data, annot=True, fmt='.4f', cmap='YlOrRd', ax=axes[0])
 axes[0].set_title('Grid Search: n_estimators vs max_depth', fontsize=12, fontweight='bold')
 axes[0].set_xlabel('n_estimators')
 axes[0].set_ylabel('max_depth')
@@ -178,7 +178,7 @@ pivot_data2 = cv_results.pivot_table(
     aggfunc='mean'
 )
 
-sns.heatmap(pivot_data2, annot=True, fmt='.4f', cmap='YlOrRd', ax=axes[1])
+sns.heatmap (pivot_data2, annot=True, fmt='.4f', cmap='YlOrRd', ax=axes[1])
 axes[1].set_title('Grid Search: min_samples_split vs min_samples_leaf', 
                   fontsize=12, fontweight='bold')
 axes[1].set_xlabel('min_samples_leaf')
@@ -189,25 +189,25 @@ plt.savefig('grid_search_heatmap.png', dpi=150, bbox_inches='tight')
 print("\\nHeatmap saved to 'grid_search_heatmap.png'")
 
 # Score distribution
-plt.figure(figsize=(12, 5))
+plt.figure (figsize=(12, 5))
 
 plt.subplot(1, 2, 1)
-plt.hist(cv_results['mean_test_score'], bins=30, edgecolor='black', alpha=0.7)
-plt.axvline(grid_search.best_score_, color='red', linestyle='--', 
+plt.hist (cv_results['mean_test_score'], bins=30, edgecolor='black', alpha=0.7)
+plt.axvline (grid_search.best_score_, color='red', linestyle='--', 
            linewidth=2, label=f'Best: {grid_search.best_score_:.4f}')
 plt.xlabel('Mean CV Score')
 plt.ylabel('Frequency')
 plt.title('Distribution of CV Scores', fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.subplot(1, 2, 2)
-plt.scatter(cv_results['mean_fit_time'], cv_results['mean_test_score'], 
+plt.scatter (cv_results['mean_fit_time'], cv_results['mean_test_score'], 
            alpha=0.6, edgecolors='black', linewidth=0.5)
 plt.xlabel('Mean Fit Time (seconds)')
 plt.ylabel('Mean CV Score')
 plt.title('Score vs Training Time', fontweight='bold')
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('grid_search_analysis.png', dpi=150, bbox_inches='tight')
@@ -245,7 +245,7 @@ print(f"\\nRunning Random Search with {n_iter} iterations...")
 start_time = time.time()
 
 random_search = RandomizedSearchCV(
-    RandomForestClassifier(random_state=42),
+    RandomForestClassifier (random_state=42),
     param_distributions,
     n_iter=n_iter,
     cv=5,
@@ -272,7 +272,7 @@ comparison = pd.DataFrame({
     'Iterations': [total_combinations, n_iter]
 })
 
-print("\\n" + comparison.to_string(index=False))
+print("\\n" + comparison.to_string (index=False))
 
 print(f"\\nRandom search:")
 print(f"  • Explored {n_iter} configurations")
@@ -285,29 +285,29 @@ for param, value in random_search.best_params_.items():
     print(f"  {param}: {value}")
 
 # Convergence plot
-cv_results_random = pd.DataFrame(random_search.cv_results_)
+cv_results_random = pd.DataFrame (random_search.cv_results_)
 scores_sorted = cv_results_random.sort_values('mean_test_score', ascending=False)
 cumulative_best = scores_sorted['mean_test_score'].cummax()
 
-plt.figure(figsize=(12, 6))
+plt.figure (figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
-plt.plot(range(1, len(cumulative_best) + 1), cumulative_best.values, linewidth=2)
+plt.plot (range(1, len (cumulative_best) + 1), cumulative_best.values, linewidth=2)
 plt.xlabel('Number of Iterations')
 plt.ylabel('Best Score Found')
 plt.title('Random Search Convergence', fontweight='bold')
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.subplot(1, 2, 2)
-plt.scatter(range(len(cv_results_random)), cv_results_random['mean_test_score'],
+plt.scatter (range (len (cv_results_random)), cv_results_random['mean_test_score'],
            alpha=0.6, edgecolors='black', linewidth=0.5)
-plt.axhline(y=random_search.best_score_, color='red', linestyle='--', 
+plt.axhline (y=random_search.best_score_, color='red', linestyle='--', 
            linewidth=2, label='Best score')
 plt.xlabel('Iteration')
 plt.ylabel('CV Score')
 plt.title('Score Distribution Across Iterations', fontweight='bold')
 plt.legend()
-plt.grid(alpha=0.3)
+plt.grid (alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('random_search_convergence.png', dpi=150, bbox_inches='tight')
@@ -352,7 +352,7 @@ important_param_values = np.linspace(0, 1, 100)
 unimportant_param_values = np.linspace(0, 1, 100)
 
 # Performance only depends on important parameter
-def performance(important, unimportant):
+def performance (important, unimportant):
     return 1 - (important - 0.7)**2 - 0.01 * np.random.randn()
 
 # Grid search (10x10 = 100 evaluations)
@@ -361,15 +361,15 @@ grid_unimportant = np.linspace(0, 1, 10)
 grid_best = -np.inf
 for imp in grid_important:
     for unimp in grid_unimportant:
-        score = performance(imp, unimp)
-        grid_best = max(grid_best, score)
+        score = performance (imp, unimp)
+        grid_best = max (grid_best, score)
 
 # Random search (100 evaluations)
 np.random.seed(42)
 random_important = np.random.uniform(0, 1, 100)
 random_unimportant = np.random.uniform(0, 1, 100)
-random_best = max([performance(imp, unimp) 
-                   for imp, unimp in zip(random_important, random_unimportant)])
+random_best = max([performance (imp, unimp) 
+                   for imp, unimp in zip (random_important, random_unimportant)])
 
 print(f"Grid search best score: {grid_best:.4f}")
 print(f"  Explored 10 values of important parameter")
@@ -391,10 +391,10 @@ try:
     import optuna
     
     # Suppress optuna logging
-    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    optuna.logging.set_verbosity (optuna.logging.WARNING)
     
     # Define objective function
-    def objective(trial):
+    def objective (trial):
         # Suggest hyperparameters
         n_estimators = trial.suggest_int('n_estimators', 50, 300)
         max_depth = trial.suggest_int('max_depth', 3, 20)
@@ -415,15 +415,15 @@ try:
         
         # Cross-validation score
         from sklearn.model_selection import cross_val_score
-        scores = cross_val_score(model, X_train, y_train, cv=5, scoring='accuracy')
+        scores = cross_val_score (model, X_train, y_train, cv=5, scoring='accuracy')
         return scores.mean()
     
     # Run optimization
     print("\\nRunning Bayesian Optimization...")
     start_time = time.time()
     
-    study = optuna.create_study(direction='maximize', sampler=optuna.samplers.TPESampler(seed=42))
-    study.optimize(objective, n_trials=50, show_progress_bar=False)
+    study = optuna.create_study (direction='maximize', sampler=optuna.samplers.TPESampler (seed=42))
+    study.optimize (objective, n_trials=50, show_progress_bar=False)
     
     bayesian_time = time.time() - start_time
     
@@ -434,30 +434,30 @@ try:
         print(f"  {param}: {value}")
     
     # Optimization history
-    plt.figure(figsize=(14, 5))
+    plt.figure (figsize=(14, 5))
     
     plt.subplot(1, 2, 1)
     trials_df = study.trials_dataframe()
-    plt.plot(trials_df['number'], trials_df['value'], 'o-', alpha=0.6)
-    plt.plot(trials_df['number'], trials_df['value'].cummax(), 
+    plt.plot (trials_df['number'], trials_df['value'], 'o-', alpha=0.6)
+    plt.plot (trials_df['number'], trials_df['value'].cummax(), 
             'r-', linewidth=2, label='Best so far')
     plt.xlabel('Trial')
     plt.ylabel('Objective Value (Accuracy)')
     plt.title('Bayesian Optimization History', fontweight='bold')
     plt.legend()
-    plt.grid(alpha=0.3)
+    plt.grid (alpha=0.3)
     
     plt.subplot(1, 2, 2)
     # Parameter importance
     try:
-        importance = optuna.importance.get_param_importances(study)
-        params = list(importance.keys())
-        values = list(importance.values())
+        importance = optuna.importance.get_param_importances (study)
+        params = list (importance.keys())
+        values = list (importance.values())
         
-        plt.barh(params, values)
+        plt.barh (params, values)
         plt.xlabel('Importance')
         plt.title('Hyperparameter Importance', fontweight='bold')
-        plt.grid(axis='x', alpha=0.3)
+        plt.grid (axis='x', alpha=0.3)
     except:
         plt.text(0.5, 0.5, 'Importance analysis\\nnot available', 
                 ha='center', va='center', fontsize=12)
@@ -478,7 +478,7 @@ try:
         'Trials': [total_combinations * 5, n_iter * 5, 50 * 5]
     })
     
-    print("\\n" + comparison_full.to_string(index=False))
+    print("\\n" + comparison_full.to_string (index=False))
     
 except ImportError:
     print("\\n⚠️  Optuna not installed. Install with: pip install optuna")
@@ -518,7 +518,7 @@ print("\\nRunning Halving Grid Search...")
 start_time = time.time()
 
 halving_grid = HalvingGridSearchCV(
-    RandomForestClassifier(random_state=42),
+    RandomForestClassifier (random_state=42),
     param_grid,
     cv=5,
     factor=3,  # Eliminate 2/3 of candidates each iteration
@@ -536,12 +536,12 @@ print(f"Best score: {halving_grid.best_score_:.4f}")
 print(f"\\nSpeedup vs standard grid search: {grid_time/halving_time:.1f}x")
 
 # Show how candidates were eliminated
-cv_results_halving = pd.DataFrame(halving_grid.cv_results_)
+cv_results_halving = pd.DataFrame (halving_grid.cv_results_)
 
 print(f"\\nSuccessive Halving Rounds:")
-for iteration in sorted(cv_results_halving['iter'].unique()):
+for iteration in sorted (cv_results_halving['iter'].unique()):
     iter_results = cv_results_halving[cv_results_halving['iter'] == iteration]
-    n_candidates = len(iter_results)
+    n_candidates = len (iter_results)
     n_resources = iter_results['n_resources'].iloc[0]
     
     print(f"  Iteration {iteration}: {n_candidates} candidates, "
@@ -582,22 +582,22 @@ lr_initial = 0.1
 
 schedules = {
     'Constant': [lr_initial] * epochs,
-    'Step Decay': [lr_initial * (0.5 ** (e // 30)) for e in range(epochs)],
-    'Exponential': [lr_initial * np.exp(-0.05 * e) for e in range(epochs)],
+    'Step Decay': [lr_initial * (0.5 ** (e // 30)) for e in range (epochs)],
+    'Exponential': [lr_initial * np.exp(-0.05 * e) for e in range (epochs)],
     'Cosine Annealing': [0.001 + 0.5 * (lr_initial - 0.001) * 
-                         (1 + np.cos(np.pi * e / epochs)) for e in range(epochs)],
+                         (1 + np.cos (np.pi * e / epochs)) for e in range (epochs)],
 }
 
-plt.figure(figsize=(14, 6))
+plt.figure (figsize=(14, 6))
 
 for name, schedule in schedules.items():
-    plt.plot(schedule, label=name, linewidth=2)
+    plt.plot (schedule, label=name, linewidth=2)
 
 plt.xlabel('Epoch', fontsize=12)
 plt.ylabel('Learning Rate', fontsize=12)
 plt.title('Learning Rate Schedules', fontsize=14, fontweight='bold')
-plt.legend(fontsize=11)
-plt.grid(alpha=0.3)
+plt.legend (fontsize=11)
+plt.grid (alpha=0.3)
 plt.yscale('log')
 plt.tight_layout()
 plt.savefig('learning_rate_schedules.png', dpi=150, bbox_inches='tight')
@@ -696,8 +696,8 @@ hyperparams_guide = {
 
 for model, params in hyperparams_guide.items():
     print(f"\\n{model}:")
-    print(f"  Critical: {', '.join(params['Critical'])}")
-    print(f"  Important: {', '.join(params['Important'])}")
+    print(f"  Critical: {', '.join (params['Critical'])}")
+    print(f"  Important: {', '.join (params['Important'])}")
     if 'Typical ranges' in params:
         print("  Typical ranges:")
         for param, range_val in params['Typical ranges'].items():
@@ -716,22 +716,22 @@ np.random.seed(42)
 n_days = 1000
 
 # Generate price data
-returns = np.random.randn(n_days) * 0.015
-prices = 100 * np.exp(np.cumsum(returns))
+returns = np.random.randn (n_days) * 0.015
+prices = 100 * np.exp (np.cumsum (returns))
 
-def moving_average_strategy(prices, short_window, long_window, stop_loss_pct):
+def moving_average_strategy (prices, short_window, long_window, stop_loss_pct):
     """
     Simple MA crossover strategy with stop loss.
     Returns: total return percentage.
     """
-    short_ma = pd.Series(prices).rolling(short_window).mean()
-    long_ma = pd.Series(prices).rolling(long_window).mean()
+    short_ma = pd.Series (prices).rolling (short_window).mean()
+    long_ma = pd.Series (prices).rolling (long_window).mean()
     
     position = 0  # 0=no position, 1=long
     entry_price = 0
     returns = []
     
-    for i in range(max(short_window, long_window), len(prices)):
+    for i in range (max (short_window, long_window), len (prices)):
         # Entry signal: short MA crosses above long MA
         if position == 0 and short_ma.iloc[i] > long_ma.iloc[i]:
             position = 1
@@ -752,7 +752,7 @@ def moving_average_strategy(prices, short_window, long_window, stop_loss_pct):
     if position == 1:
         returns.append((prices[-1] - entry_price) / entry_price)
     
-    total_return = np.sum(returns) * 100 if returns else 0
+    total_return = np.sum (returns) * 100 if returns else 0
     return total_return
 
 # Define parameter space
@@ -777,7 +777,7 @@ for short in param_space['short_window']:
         if short >= long:  # Invalid: short window must be < long window
             continue
         for stop in param_space['stop_loss_pct']:
-            total_return = moving_average_strategy(prices, short, long, stop)
+            total_return = moving_average_strategy (prices, short, long, stop)
             
             all_results.append({
                 'short_window': short,
@@ -800,9 +800,9 @@ for param, value in best_params.items():
 print(f"\\nExpected return: {best_return:.2f}%")
 
 # Show top 5
-df_trading = pd.DataFrame(all_results).sort_values('return_%', ascending=False)
+df_trading = pd.DataFrame (all_results).sort_values('return_%', ascending=False)
 print("\\nTop 5 configurations:")
-print(df_trading.head().to_string(index=False))
+print(df_trading.head().to_string (index=False))
 
 print("\\n⚠️  Trading Strategy Tuning Warnings:")
 print("  • Risk of overfitting to historical data")

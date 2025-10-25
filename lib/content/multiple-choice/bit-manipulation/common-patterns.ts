@@ -20,7 +20,7 @@ export const commonpatternsMultipleChoice: MultipleChoiceQuestion[] = [
   },
   {
     id: 'mc2',
-    question: "What is Brian Kernighan's algorithm?",
+    question: "What is Brian Kernighan\'s algorithm?",
     options: [
       'Sorting',
       'Count set bits by repeatedly clearing rightmost set bit: n = n & (n-1) until n=0',
@@ -29,7 +29,7 @@ export const commonpatternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Brian Kernighan's algorithm counts set bits efficiently. n & (n-1) clears rightmost set bit. Repeat until n=0, counting iterations. O(number of set bits) instead of O(log N).",
+      "Brian Kernighan\'s algorithm counts set bits efficiently. n & (n-1) clears rightmost set bit. Repeat until n=0, counting iterations. O(number of set bits) instead of O(log N).",
   },
   {
     id: 'mc3',

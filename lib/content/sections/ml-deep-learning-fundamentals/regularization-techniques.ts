@@ -31,19 +31,19 @@ export const regularizationTechniquesSection = {
 **Idea**: Penalize large weights by adding squared weight magnitude to loss.
 
 **Modified Loss**:
-\\\`\\\`\\\`
+\`\`\`
 L_total = L_data + λ/2 * Σ(w²)
-\\\`\\\`\\\`
+\`\`\`
 
 \`\`\`python
-def l2_loss(y_true, y_pred, weights, lambda_reg=0.01):
+def l2_loss (y_true, y_pred, weights, lambda_reg=0.01):
     """Loss with L2 regularization"""
     data_loss = np.mean((y_true - y_pred)**2)
-    l2_penalty = lambda_reg / 2 * sum(np.sum(w**2) for w in weights)
+    l2_penalty = lambda_reg / 2 * sum (np.sum (w**2) for w in weights)
     return data_loss + l2_penalty
 
 # Gradient includes regularization term
-def l2_gradient(w, grad_data, lambda_reg=0.01):
+def l2_gradient (w, grad_data, lambda_reg=0.01):
     """Gradient with L2 regularization"""
     return grad_data + lambda_reg * w
 \`\`\`
@@ -53,21 +53,21 @@ def l2_gradient(w, grad_data, lambda_reg=0.01):
 ### L1 Regularization (Lasso)
 
 **Modified Loss**:
-\\\`\\\`\\\`
+\`\`\`
 L_total = L_data + λ * Σ|w|
-\\\`\\\`\\\`
+\`\`\`
 
 \`\`\`python
-def l1_loss(y_true, y_pred, weights, lambda_reg=0.01):
+def l1_loss (y_true, y_pred, weights, lambda_reg=0.01):
     """Loss with L1 regularization"""
     data_loss = np.mean((y_true - y_pred)**2)
-    l1_penalty = lambda_reg * sum(np.sum(np.abs(w)) for w in weights)
+    l1_penalty = lambda_reg * sum (np.sum (np.abs (w)) for w in weights)
     return data_loss + l1_penalty
 
 # Gradient includes sign of weights
-def l1_gradient(w, grad_data, lambda_reg=0.01):
+def l1_gradient (w, grad_data, lambda_reg=0.01):
     """Gradient with L1 regularization"""
-    return grad_data + lambda_reg * np.sign(w)
+    return grad_data + lambda_reg * np.sign (w)
 \`\`\`
 
 **Effect**: Drives weights exactly to zero, producing sparse models. Good for feature selection.
@@ -88,7 +88,7 @@ def l1_gradient(w, grad_data, lambda_reg=0.01):
 - Strong regularizer without explicit constraint
 
 \`\`\`python
-def dropout_forward(x, p=0.5, training=True):
+def dropout_forward (x, p=0.5, training=True):
     """
     Apply dropout
     
@@ -128,7 +128,7 @@ class Dropout:
         self.p = p
         self.mask = None
     
-    def forward(self, x, training=True):
+    def forward (self, x, training=True):
         if not training:
             return x
         
@@ -136,14 +136,14 @@ class Dropout:
         self.mask = (np.random.rand(*x.shape) > self.p)
         return x * self.mask / (1 - self.p)
     
-    def backward(self, grad_output):
+    def backward (self, grad_output):
         # Only backprop through active neurons
         return grad_output * self.mask / (1 - self.p)
 
 # Usage
-dropout = Dropout(p=0.5)
+dropout = Dropout (p=0.5)
 output = dropout.forward(X, training=True)
-grad = dropout.backward(grad_output)
+grad = dropout.backward (grad_output)
 \`\`\`
 
 ## Batch Normalization
@@ -155,12 +155,12 @@ grad = dropout.backward(grad_output)
 **Solution**: Normalize activations to zero mean and unit variance within each mini-batch.
 
 **Algorithm**:
-\\\`\\\`\\\`
-μ_batch = mean(x, axis=0)           # per-feature mean
-σ²_batch = var(x, axis=0)           # per-feature variance
+\`\`\`
+μ_batch = mean (x, axis=0)           # per-feature mean
+σ²_batch = var (x, axis=0)           # per-feature variance
 x_norm = (x - μ_batch) / √(σ²_batch + ε)
 y = γ * x_norm + β                  # learnable scale and shift
-\\\`\\\`\\\`
+\`\`\`
 
 \`\`\`python
 class BatchNorm:
@@ -169,34 +169,34 @@ class BatchNorm:
         self.momentum = momentum
         
         # Learnable parameters
-        self.gamma = np.ones(num_features)
-        self.beta = np.zeros(num_features)
+        self.gamma = np.ones (num_features)
+        self.beta = np.zeros (num_features)
         
         # Running statistics for inference
-        self.running_mean = np.zeros(num_features)
-        self.running_var = np.ones(num_features)
+        self.running_mean = np.zeros (num_features)
+        self.running_var = np.ones (num_features)
     
-    def forward(self, x, training=True):
+    def forward (self, x, training=True):
         if training:
             # Compute batch statistics
-            batch_mean = np.mean(x, axis=0)
-            batch_var = np.var(x, axis=0)
+            batch_mean = np.mean (x, axis=0)
+            batch_var = np.var (x, axis=0)
             
             # Normalize
-            x_norm = (x - batch_mean) / np.sqrt(batch_var + self.eps)
+            x_norm = (x - batch_mean) / np.sqrt (batch_var + self.eps)
             
             # Update running statistics
             self.running_mean = self.momentum * self.running_mean + (1 - self.momentum) * batch_mean
             self.running_var = self.momentum * self.running_var + (1 - self.momentum) * batch_var
         else:
             # Use running statistics
-            x_norm = (x - self.running_mean) / np.sqrt(self.running_var + self.eps)
+            x_norm = (x - self.running_mean) / np.sqrt (self.running_var + self.eps)
         
         # Scale and shift
         return self.gamma * x_norm + self.beta
 
 # Example
-bn = BatchNorm(num_features=128)
+bn = BatchNorm (num_features=128)
 X = np.random.randn(32, 128)  # batch_size=32
 
 X_bn = bn.forward(X, training=True)
@@ -222,17 +222,17 @@ print(f"After BN: mean={X_bn.mean():.4f}, std={X_bn.std():.4f}")
 **Key difference**: Normalize across features (not batch).
 
 \`\`\`python
-def layer_norm(x, gamma, beta, eps=1e-5):
+def layer_norm (x, gamma, beta, eps=1e-5):
     """
     Layer normalization
     
     x: (batch_size, features)
     gamma, beta: learnable parameters of shape (features,)
     """
-    mean = np.mean(x, axis=1, keepdims=True)
-    var = np.var(x, axis=1, keepdims=True)
+    mean = np.mean (x, axis=1, keepdims=True)
+    var = np.var (x, axis=1, keepdims=True)
     
-    x_norm = (x - mean) / np.sqrt(var + eps)
+    x_norm = (x - mean) / np.sqrt (var + eps)
     return gamma * x_norm + beta
 
 # Example
@@ -265,7 +265,7 @@ class EarlyStopping:
         self.counter = 0
         self.best_weights = None
     
-    def step(self, val_loss, model_weights):
+    def step (self, val_loss, model_weights):
         """
         Returns True if training should stop
         """
@@ -283,15 +283,15 @@ class EarlyStopping:
             return False
 
 # Usage
-early_stop = EarlyStopping(patience=10)
+early_stop = EarlyStopping (patience=10)
 
 for epoch in range(1000):
     train_loss = train_one_epoch()
     val_loss = validate()
     
-    if early_stop.step(val_loss, model.get_weights()):
+    if early_stop.step (val_loss, model.get_weights()):
         print(f"Early stopping at epoch {epoch}")
-        model.set_weights(early_stop.best_weights)
+        model.set_weights (early_stop.best_weights)
         break
 \`\`\`
 
@@ -309,23 +309,23 @@ class RegularizedModel:
         
         dims = [input_dim] + hidden_dims + [output_dim]
         
-        for i in range(len(dims) - 1):
+        for i in range (len (dims) - 1):
             # Linear layer with L2 regularization
-            self.layers.append(Linear(dims[i], dims[i+1], l2_lambda=l2_lambda))
+            self.layers.append(Linear (dims[i], dims[i+1], l2_lambda=l2_lambda))
             
-            if i < len(dims) - 2:  # Not output layer
+            if i < len (dims) - 2:  # Not output layer
                 # Batch normalization
-                self.bn_layers.append(BatchNorm(dims[i+1]))
+                self.bn_layers.append(BatchNorm (dims[i+1]))
                 
                 # Dropout
-                self.dropout_layers.append(Dropout(dropout_p))
+                self.dropout_layers.append(Dropout (dropout_p))
     
-    def forward(self, x, training=True):
-        for i, layer in enumerate(self.layers[:-1]):
-            x = layer(x)
-            x = self.bn_layers[i].forward(x, training)
-            x = relu(x)
-            x = self.dropout_layers[i].forward(x, training)
+    def forward (self, x, training=True):
+        for i, layer in enumerate (self.layers[:-1]):
+            x = layer (x)
+            x = self.bn_layers[i].forward (x, training)
+            x = relu (x)
+            x = self.dropout_layers[i].forward (x, training)
         
         # Output layer (no BN/dropout)
         x = self.layers[-1](x)

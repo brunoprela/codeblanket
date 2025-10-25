@@ -16,7 +16,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Top-down: pass information down as parameters (path sum, depth, prefix). Process parent info, pass modified version to children. Example: path_sum(node, remaining_target).',
+      'Top-down: pass information down as parameters (path sum, depth, prefix). Process parent info, pass modified version to children. Example: path_sum (node, remaining_target).',
   },
   {
     id: 'mc2',
@@ -29,7 +29,7 @@ export const patternsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'Bottom-up: gather info from children through return values. Compute parent value from children. Example: height = 1 + max(left_height, right_height). Process children first, then parent.',
+      'Bottom-up: gather info from children through return values. Compute parent value from children. Example: height = 1 + max (left_height, right_height). Process children first, then parent.',
   },
   {
     id: 'mc3',

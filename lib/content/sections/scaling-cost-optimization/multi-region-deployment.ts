@@ -37,17 +37,17 @@ class FailoverManager:
         self.current_region = None
         self._select_primary()
     
-    def _select_primary(self):
+    def _select_primary (self):
         """Select highest priority healthy region"""
-        for region in sorted(self.regions, key=lambda r: r["priority"]):
-            if self._is_healthy(region):
+        for region in sorted (self.regions, key=lambda r: r["priority"]):
+            if self._is_healthy (region):
                 self.current_region = region
                 print(f"✅ Using region: {region['name']}")
                 return
         
         raise Exception("No healthy regions available!")
     
-    def _is_healthy(self, region: dict) -> bool:
+    def _is_healthy (self, region: dict) -> bool:
         """Check if region is healthy"""
         try:
             response = requests.get(
@@ -58,11 +58,11 @@ class FailoverManager:
         except:
             return False
     
-    async def make_request(self, endpoint: str, **kwargs):
+    async def make_request (self, endpoint: str, **kwargs):
         """Make request with automatic failover"""
-        max_retries = len(self.regions)
+        max_retries = len (self.regions)
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
                 response = await self._call_region(
                     self.current_region,
@@ -117,7 +117,7 @@ class GeographicLoadBalancer:
             }
         }
     
-    def get_region_for_country(self, country_code: str) -> str:
+    def get_region_for_country (self, country_code: str) -> str:
         """Determine best region for user's country"""
         for region, config in self.regions.items():
             if country_code in config["countries"]:
@@ -126,9 +126,9 @@ class GeographicLoadBalancer:
         # Default to US
         return "us-east-1"
     
-    async def route_request(self, user_country: str, endpoint: str, **kwargs):
+    async def route_request (self, user_country: str, endpoint: str, **kwargs):
         """Route request to appropriate region"""
-        region = self.get_region_for_country(user_country)
+        region = self.get_region_for_country (user_country)
         region_url = self.regions[region]["url"]
         
         print(f"Routing {user_country} → {region}")
@@ -147,7 +147,7 @@ app = FastAPI()
 balancer = GeographicLoadBalancer()
 
 @app.post("/api/chat")
-async def chat(request: Request, body: dict):
+async def chat (request: Request, body: dict):
     # Get user's country from CloudFlare header or GeoIP
     country = request.headers.get("cf-ipcountry", "US")
     
@@ -247,16 +247,16 @@ class MultiRegionDatabase:
             "ap-southeast-1": "mydb-ap-southeast-1-replica.rds.amazonaws.com"
         }
     
-    def get_read_endpoint(self) -> str:
+    def get_read_endpoint (self) -> str:
         """Get read endpoint for current region"""
-        return self.replica_endpoints.get(self.region, self.primary_endpoint)
+        return self.replica_endpoints.get (self.region, self.primary_endpoint)
     
-    def get_write_endpoint(self) -> str:
+    def get_write_endpoint (self) -> str:
         """Always write to primary"""
         return self.primary_endpoint
 
 # Usage
-db = MultiRegionDatabase(region="eu-west-1")
+db = MultiRegionDatabase (region="eu-west-1")
 
 # Reads from local replica (fast)
 connection = psycopg2.connect(
@@ -289,31 +289,31 @@ class EventuallyConsistentCache:
     def __init__(self, redis_clusters: dict):
         # Redis cluster per region
         self.clusters = {
-            region: redis.from_url(url)
+            region: redis.from_url (url)
             for region, url in redis_clusters.items()
         }
         self.local_region = os.getenv("AWS_REGION", "us-east-1")
     
-    async def set(self, key: str, value: str, ttl: int = 3600):
+    async def set (self, key: str, value: str, ttl: int = 3600):
         """Write to local region"""
         local_redis = self.clusters[self.local_region]
-        await local_redis.setex(key, ttl, value)
+        await local_redis.setex (key, ttl, value)
         
         # Async replication to other regions happens automatically
         # via Redis Enterprise or custom replication
     
-    async def get(self, key: str, consistency: str = "eventual"):
+    async def get (self, key: str, consistency: str = "eventual"):
         """Read with specified consistency level"""
         
         if consistency == "eventual":
             # Read from local region (may be stale)
             local_redis = self.clusters[self.local_region]
-            return await local_redis.get(key)
+            return await local_redis.get (key)
         
         elif consistency == "strong":
             # Read from all regions, use most recent
             results = await asyncio.gather(*[
-                cluster.get(key) 
+                cluster.get (key) 
                 for cluster in self.clusters.values()
             ])
             
@@ -332,7 +332,7 @@ cache = EventuallyConsistentCache({
 })
 
 # Write
-await cache.set("user:123", json.dumps(user_data))
+await cache.set("user:123", json.dumps (user_data))
 
 # Read with eventual consistency (fast, may be stale)
 data = await cache.get("user:123", consistency="eventual")
@@ -362,7 +362,7 @@ class DataResidencyManager:
             "OTHER": ["us-east-1", "eu-west-1", "ap-southeast-1"]
         }
     
-    def get_allowed_regions(self, user_country: str) -> List[str]:
+    def get_allowed_regions (self, user_country: str) -> List[str]:
         """Get regions where user's data can be stored"""
         
         if user_country in ["GB", "FR", "DE", "IT", "ES"]:
@@ -372,9 +372,9 @@ class DataResidencyManager:
         else:
             return self.region_requirements["OTHER"]
     
-    def validate_storage_region(self, user_country: str, storage_region: str):
+    def validate_storage_region (self, user_country: str, storage_region: str):
         """Ensure storage region is compliant"""
-        allowed = self.get_allowed_regions(user_country)
+        allowed = self.get_allowed_regions (user_country)
         
         if storage_region not in allowed:
             raise ValueError(
@@ -384,13 +384,13 @@ class DataResidencyManager:
 
 # FastAPI middleware
 @app.middleware("http")
-async def enforce_data_residency(request: Request, call_next):
+async def enforce_data_residency (request: Request, call_next):
     user_country = request.headers.get("cf-ipcountry", "US")
     current_region = os.getenv("AWS_REGION")
     
     # Check if this region can serve this user
     manager = DataResidencyManager()
-    allowed_regions = manager.get_allowed_regions(user_country)
+    allowed_regions = manager.get_allowed_regions (user_country)
     
     if current_region not in allowed_regions:
         # Redirect to compliant region
@@ -403,7 +403,7 @@ async def enforce_data_residency(request: Request, call_next):
             headers={"Location": redirect_url}
         )
     
-    return await call_next(request)
+    return await call_next (request)
 \`\`\`
 
 ---
@@ -462,22 +462,22 @@ class MultiRegionMonitor:
     def __init__(self, regions: List[str]):
         self.regions = regions
     
-    async def check_all_regions(self) -> dict:
+    async def check_all_regions (self) -> dict:
         """Health check all regions"""
         results = {}
         
         tasks = [
-            self._check_region(region)
+            self._check_region (region)
             for region in self.regions
         ]
         
         responses = await asyncio.gather(*tasks, return_exceptions=True)
         
-        for region, response in zip(self.regions, responses):
-            if isinstance(response, Exception):
+        for region, response in zip (self.regions, responses):
+            if isinstance (response, Exception):
                 results[region] = {
                     "healthy": False,
-                    "error": str(response)
+                    "error": str (response)
                 }
             else:
                 results[region] = {
@@ -488,13 +488,13 @@ class MultiRegionMonitor:
         
         return results
     
-    async def _check_region(self, region: str) -> dict:
+    async def _check_region (self, region: str) -> dict:
         """Check single region"""
         url = f"https://{region}.api.example.com/health"
         
         start = time.time()
         async with httpx.AsyncClient() as client:
-            response = await client.get(url, timeout=5.0)
+            response = await client.get (url, timeout=5.0)
         latency = (time.time() - start) * 1000
         
         data = response.json()

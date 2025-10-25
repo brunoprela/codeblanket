@@ -31,12 +31,12 @@ Performance optimization separates basic applications from production-grade syst
 stmt = select(User).where(User.email == "test@example.com")
 
 # Get compiled SQL
-print(stmt.compile(compile_kwargs={"literal_binds": True}))
+print(stmt.compile (compile_kwargs={"literal_binds": True}))
 
 # EXPLAIN (PostgreSQL)
 from sqlalchemy import text
-explain = text(f"EXPLAIN ANALYZE {stmt}")
-result = session.execute(explain)
+explain = text (f"EXPLAIN ANALYZE {stmt}")
+result = session.execute (explain)
 for row in result:
     print(row)
 
@@ -58,8 +58,8 @@ for row in result:
 \`\`\`python
 # BAD: Individual inserts (slow)
 for i in range(10000):
-    user = User(email=f"user{i}@example.com")
-    session.add(user)
+    user = User (email=f"user{i}@example.com")
+    session.add (user)
 session.commit()  # 10+ seconds
 
 # GOOD: Bulk insert mappings (100x faster)

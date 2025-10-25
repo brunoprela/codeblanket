@@ -114,7 +114,7 @@ print(f"\\nDiagonal matrix:\\n{diagonal}")
 ### Range-Based Arrays
 
 \`\`\`python
-# Similar to Python's range()
+# Similar to Python\'s range()
 arange_arr = np.arange(0, 10, 2)  # start, stop, step
 print(f"arange: {arange_arr}")  # [0 2 4 6 8]
 
@@ -220,7 +220,7 @@ print(f"Values between 3 and 8: {arr[complex_mask]}")  # [4 5 6 7]
 data = np.array([1, 2, 3, 100, 4, 5, -50, 6])
 mean = data.mean()
 std = data.std()
-clean_data = data[np.abs(data - mean) < 2 * std]
+clean_data = data[np.abs (data - mean) < 2 * std]
 print(f"Data without outliers: {clean_data}")
 \`\`\`
 
@@ -311,7 +311,7 @@ print(f"Data type: {arr.dtype}")  # int64 (or int32 on 32-bit systems)
 print(f"Item size: {arr.itemsize} bytes")  # 8 bytes for int64
 
 # Convert data type
-float_arr = arr.astype(np.float32)
+float_arr = arr.astype (np.float32)
 print(f"Converted dtype: {float_arr.dtype}")
 print(f"New item size: {float_arr.itemsize} bytes")  # 4 bytes
 \`\`\`
@@ -361,8 +361,8 @@ print(f"Original unchanged: {arr}")  # [1 2 3 4 5]
 arr1 = np.array([1, 2, 3])
 arr2 = arr1
 arr3 = arr1.copy()
-print(f"arr1 and arr2 share memory: {np.shares_memory(arr1, arr2)}")  # True
-print(f"arr1 and arr3 share memory: {np.shares_memory(arr1, arr3)}")  # False
+print(f"arr1 and arr2 share memory: {np.shares_memory (arr1, arr2)}")  # True
+print(f"arr1 and arr3 share memory: {np.shares_memory (arr1, arr3)}")  # False
 \`\`\`
 
 ## Practical Example: Image Representation
@@ -384,12 +384,12 @@ red_channel = rgb_img[:, :, 0]
 print(f"Red channel shape: {red_channel.shape}")
 
 # Convert to grayscale (simple average)
-grayscale_from_rgb = rgb_img.mean(axis=2).astype(np.uint8)
+grayscale_from_rgb = rgb_img.mean (axis=2).astype (np.uint8)
 print(f"Converted grayscale shape: {grayscale_from_rgb.shape}")
 
 # Batch of images (4D: batch x height x width x channels)
 batch_size = 32
-image_batch = np.random.rand(batch_size, 224, 224, 3)
+image_batch = np.random.rand (batch_size, 224, 224, 3)
 print(f"Image batch shape: {image_batch.shape}")  # (32, 224, 224, 3)
 \`\`\`
 
@@ -399,7 +399,7 @@ print(f"Image batch shape: {image_batch.shape}")  # (32, 224, 224, 3)
 # Stock price data: days x features
 days = 252  # Trading days in a year
 features = ['open', 'high', 'low', 'close', 'volume']
-stock_data = np.random.randn(days, len(features))
+stock_data = np.random.randn (days, len (features))
 
 print(f"Stock data shape: {stock_data.shape}")  # (252, 5)
 

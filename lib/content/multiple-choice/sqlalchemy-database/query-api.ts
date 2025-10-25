@@ -7,13 +7,13 @@ export const queryApiMultipleChoice: MultipleChoiceQuestion[] = [
       'What is the correct way to fetch User entities in SQLAlchemy 2.0?',
     options: [
       'session.query(User).all()',
-      'session.execute(select(User)).scalars().all()',
+      'session.execute (select(User)).scalars().all()',
       'session.select(User).all()',
       'User.query.all()',
     ],
     correctAnswer: 1,
     explanation:
-      'SQLAlchemy 2.0 uses session.execute(select(User)).scalars().all(). The select() construct creates the statement, execute() runs it and returns Result, scalars() extracts the first column (User entities), and all() returns a list. session.query() is legacy 1.x API (still works but not recommended). Options 3 and 4 are invalid—session has no select method, User has no query attribute.',
+      'SQLAlchemy 2.0 uses session.execute (select(User)).scalars().all(). The select() construct creates the statement, execute() runs it and returns Result, scalars() extracts the first column (User entities), and all() returns a list. session.query() is legacy 1.x API (still works but not recommended). Options 3 and 4 are invalid—session has no select method, User has no query attribute.',
   },
   {
     id: 'sql-query-mc-2',
@@ -26,7 +26,7 @@ export const queryApiMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'scalars() extracts the first column from Result Row objects. session.execute(select(User)) returns Result[Row] where each Row is tuple-like. scalars() transforms it to Result[User], allowing direct iteration over entities. Without scalars(), you get Row objects: for row in result: user = row[0]. With scalars(): for user in result.scalars(): directly access user. Essential for entity queries.',
+      'scalars() extracts the first column from Result Row objects. session.execute (select(User)) returns Result[Row] where each Row is tuple-like. scalars() transforms it to Result[User], allowing direct iteration over entities. Without scalars(), you get Row objects: for row in result: user = row[0]. With scalars(): for user in result.scalars(): directly access user. Essential for entity queries.',
   },
   {
     id: 'sql-query-mc-3',
@@ -40,7 +40,7 @@ export const queryApiMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'scalar_one() raises NoResultFound if zero rows, MultipleResultsFound if more than one. Use when you expect exactly one result. scalar_one_or_none() returns None if zero rows, raises MultipleResultsFound if more than one. Use when result is optional. Example: user = session.execute(select(User).where(User.id == 1)).scalar_one() - crashes if not found. user = session.execute(select(User).where(User.id == 1)).scalar_one_or_none() - returns None if not found.',
+      'scalar_one() raises NoResultFound if zero rows, MultipleResultsFound if more than one. Use when you expect exactly one result. scalar_one_or_none() returns None if zero rows, raises MultipleResultsFound if more than one. Use when result is optional. Example: user = session.execute (select(User).where(User.id == 1)).scalar_one() - crashes if not found. user = session.execute (select(User).where(User.id == 1)).scalar_one_or_none() - returns None if not found.',
   },
   {
     id: 'sql-query-mc-4',

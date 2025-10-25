@@ -8,7 +8,7 @@ export const introductionQuiz = [
     question:
       'What are the two essential components every recursive function must have?',
     sampleAnswer:
-      'Every recursive function needs: (1) Base Case - a condition that stops the recursion and returns a value directly without further calls. This prevents infinite recursion. (2) Recursive Case - the part where the function calls itself with modified arguments that move towards the base case. For example, in factorial(n), the base case is n <= 1 returning 1, and the recursive case is n * factorial(n-1).',
+      'Every recursive function needs: (1) Base Case - a condition that stops the recursion and returns a value directly without further calls. This prevents infinite recursion. (2) Recursive Case - the part where the function calls itself with modified arguments that move towards the base case. For example, in factorial (n), the base case is n <= 1 returning 1, and the recursive case is n * factorial (n-1).',
     keyPoints: [
       'Base case: stops recursion',
       'Recursive case: calls itself with simpler input',

@@ -39,10 +39,10 @@ export const algorithmselectionQuiz = [
       'How does A* improve on Dijkstra? When would you NOT want to use A*?',
     hint: 'Think about the heuristic function and when you have goal information.',
     sampleAnswer:
-      'A* improves Dijkstra by using a heuristic function h(n) that estimates distance to goal. It prioritizes nodes that are both close to start (g score) AND close to goal (h score), using f(n) = g(n) + h(n). This can dramatically reduce explored nodes. Example: Finding path in a 1000×1000 grid. Dijkstra explores nodes in all directions equally, A* with Manhattan distance focuses toward the goal. However, DON NOT use A* when: 1) You don not know the goal location in advance, 2) You need paths to ALL nodes (use Dijkstra), 3) You cannot devise a good admissible heuristic, 4) Graph structure doesn not support distance estimates. A* is specifically for single-source, single-destination with geometric/spatial properties.',
+      'A* improves Dijkstra by using a heuristic function h (n) that estimates distance to goal. It prioritizes nodes that are both close to start (g score) AND close to goal (h score), using f (n) = g (n) + h (n). This can dramatically reduce explored nodes. Example: Finding path in a 1000×1000 grid. Dijkstra explores nodes in all directions equally, A* with Manhattan distance focuses toward the goal. However, DON NOT use A* when: 1) You don not know the goal location in advance, 2) You need paths to ALL nodes (use Dijkstra), 3) You cannot devise a good admissible heuristic, 4) Graph structure doesn not support distance estimates. A* is specifically for single-source, single-destination with geometric/spatial properties.',
     keyPoints: [
       'A* = Dijkstra + heuristic toward goal',
-      'Uses f(n) = g(n) + h(n) for priority',
+      'Uses f (n) = g (n) + h (n) for priority',
       'Reduces explored nodes when good heuristic exists',
       'Don not use when: no single goal, need all paths, no heuristic',
       'Best for: grids, maps, spatial problems',

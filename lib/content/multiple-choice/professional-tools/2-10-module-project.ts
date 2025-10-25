@@ -17,7 +17,7 @@ export const moduleProjectMultipleChoice: Quiz = {
       ],
       correctAnswer: 1,
       explanation:
-        'Exponential backoff retry logic is critical for production systems. APIs fail temporarily due to: network blips, rate limit exceeded, server maintenance. Without retries, you lose data. Exponential backoff (wait 2s, then 4s, then 8s) prevents overwhelming a struggling API while giving it time to recover. The project uses tenacity library: @retry(stop=stop_after_attempt(3), wait=wait_exponential(...)). Real-world impact: collection script runs overnight, encounters temporary failure at 3 AM, automatically retries and succeeds, vs failing and requiring manual re-run.',
+        'Exponential backoff retry logic is critical for production systems. APIs fail temporarily due to: network blips, rate limit exceeded, server maintenance. Without retries, you lose data. Exponential backoff (wait 2s, then 4s, then 8s) prevents overwhelming a struggling API while giving it time to recover. The project uses tenacity library: @retry (stop=stop_after_attempt(3), wait=wait_exponential(...)). Real-world impact: collection script runs overnight, encounters temporary failure at 3 AM, automatically retries and succeeds, vs failing and requiring manual re-run.',
     },
     {
       id: 'project-2',

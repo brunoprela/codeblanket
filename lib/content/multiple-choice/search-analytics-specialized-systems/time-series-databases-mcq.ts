@@ -4,7 +4,7 @@ export const timeSeriesDatabasesMCQ: MultipleChoiceQuestion[] = [
   {
     id: 'tsdb-mcq-1',
     question:
-      "You have 1 million IoT sensors sending data every second. That's 86.4 billion datapoints per day. Which database characteristic makes time-series databases 10-20x more efficient than PostgreSQL for this workload?",
+      "You have 1 million IoT sensors sending data every second. That\'s 86.4 billion datapoints per day. Which database characteristic makes time-series databases 10-20x more efficient than PostgreSQL for this workload?",
     options: [
       'Better indexing on timestamp columns',
       'Specialized compression for sequential timestamps and repeated values (delta encoding, run-length encoding)',
@@ -55,7 +55,7 @@ export const timeSeriesDatabasesMCQ: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      "Partition pruning is the key benefit. When you query \"WHERE time > NOW() - INTERVAL '1 day'\", TimescaleDB only scans the last day's chunk(s), skipping all older chunks. With 365 chunks (one per day for a year), you scan 1/365th of the data (365x speedup!). Without partitioning, PostgreSQL would scan the entire table. Example: query last 24 hours from 1-year table with 1 billion rows. Single table: scans 1 billion rows (slow). Chunked (daily): scans only 1 chunk = ~2.7 million rows (370x less!). Compression (option A) is a separate optimization. Distribution (option C) requires manual configuration. Indexes (option D) are created based on your specification, not automatic per chunk. Partition pruning is why date-based partitioning is standard for large time-series tables—it's the single most effective optimization for time-range queries.",
+      "Partition pruning is the key benefit. When you query \"WHERE time > NOW() - INTERVAL '1 day'\", TimescaleDB only scans the last day's chunk (s), skipping all older chunks. With 365 chunks (one per day for a year), you scan 1/365th of the data (365x speedup!). Without partitioning, PostgreSQL would scan the entire table. Example: query last 24 hours from 1-year table with 1 billion rows. Single table: scans 1 billion rows (slow). Chunked (daily): scans only 1 chunk = ~2.7 million rows (370x less!). Compression (option A) is a separate optimization. Distribution (option C) requires manual configuration. Indexes (option D) are created based on your specification, not automatic per chunk. Partition pruning is why date-based partitioning is standard for large time-series tables—it's the single most effective optimization for time-range queries.",
   },
   {
     id: 'tsdb-mcq-5',

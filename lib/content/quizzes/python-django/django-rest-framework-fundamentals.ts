@@ -25,17 +25,17 @@ from rest_framework.response import Response
 class ArticleListView(APIView):
     """Most control, most code"""
     
-    def get(self, request):
+    def get (self, request):
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+        serializer = ArticleSerializer (articles, many=True)
+        return Response (serializer.data)
     
-    def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
+    def post (self, request):
+        serializer = ArticleSerializer (data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response (serializer.data, status=201)
+        return Response (serializer.errors, status=400)
 \`\`\`
 
 **When to use APIView:**
@@ -50,16 +50,16 @@ class ArticleListView(APIView):
 \`\`\`python
 from rest_framework import generics
 
-class ArticleListView(generics.ListCreateAPIView):
+class ArticleListView (generics.ListCreateAPIView):
     """Less code, standard patterns"""
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         # Custom filtering
-        return Article.objects.filter(author=self.request.user)
+        return Article.objects.filter (author=self.request.user)
 
-class ArticleDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetailView (generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 \`\`\`
@@ -85,23 +85,23 @@ class ArticleDetailView(generics.RetrieveUpdateDestroyAPIView):
 \`\`\`python
 from rest_framework import viewsets
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     """Least code, most conventions"""
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
     # Optional overrides
-    def get_queryset(self):
+    def get_queryset (self):
         if self.action == 'list':
-            return Article.objects.filter(status='published')
+            return Article.objects.filter (status='published')
         return Article.objects.all()
     
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    def perform_create (self, serializer):
+        serializer.save (author=self.request.user)
     
     # Custom actions
-    @action(detail=True, methods=['post'])
-    def publish(self, request, pk=None):
+    @action (detail=True, methods=['post'])
+    def publish (self, request, pk=None):
         article = self.get_object()
         article.status = 'published'
         article.published_at = timezone.now()
@@ -112,7 +112,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'articles', ArticleViewSet)
+router.register (r'articles', ArticleViewSet)
 
 # Generates:
 # GET    /articles/          -> list
@@ -155,31 +155,31 @@ router.register(r'articles', ArticleViewSet)
 
 \`\`\`python
 # Simple CRUD - Use ViewSet
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet (viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 # Read-only public API - Use ReadOnlyModelViewSet
-class PublicArticleViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Article.objects.filter(status='published')
+class PublicArticleViewSet (viewsets.ReadOnlyModelViewSet):
+    queryset = Article.objects.filter (status='published')
     serializer_class = ArticleSerializer
 
 # Custom analytics endpoint - Use APIView
 class AnalyticsView(APIView):
-    def get(self, request):
+    def get (self, request):
         stats = {
             'total_articles': Article.objects.count(),
-            'published': Article.objects.filter(status='published').count(),
+            'published': Article.objects.filter (status='published').count(),
             'views': Article.objects.aggregate(Sum('view_count'))['view_count__sum']
         }
-        return Response(stats)
+        return Response (stats)
 
 # List + Create with custom validation - Use Generic
-class ArticleListCreateView(generics.ListCreateAPIView):
+class ArticleListCreateView (generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def create(self, request, *args, **kwargs):
+    def create (self, request, *args, **kwargs):
         # Custom validation
         if Article.objects.filter(
             author=request.user,
@@ -189,7 +189,7 @@ class ArticleListCreateView(generics.ListCreateAPIView):
                 {'error': 'Daily article limit reached'},
                 status=400
             )
-        return super().create(request, *args, **kwargs)
+        return super().create (request, *args, **kwargs)
 \`\`\`
 
 **Best Practices:**
@@ -229,7 +229,7 @@ The right pattern depends on your specific use case, but ViewSets provide the be
 \`\`\`python
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     # Default: JSONParser
     parser_classes = [JSONParser, MultiPartParser, FormParser]
     
@@ -245,13 +245,13 @@ class PlainTextParser(BaseParser):
     """Parse plain text request bodies"""
     media_type = 'text/plain'
     
-    def parse(self, stream, media_type=None, parser_context=None):
+    def parse (self, stream, media_type=None, parser_context=None):
         return stream.read().decode('utf-8')
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     parser_classes = [JSONParser, PlainTextParser]
     
-    def create(self, request):
+    def create (self, request):
         # request.data contains parsed data
         if request.content_type == 'text/plain':
             # Handle plain text
@@ -268,7 +268,7 @@ from rest_framework.authentication import (
     TokenAuthentication, SessionAuthentication, BasicAuthentication
 )
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     # Check multiple auth methods (first successful wins)
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     
@@ -281,20 +281,20 @@ from rest_framework.exceptions import AuthenticationFailed
 class APIKeyAuthentication(BaseAuthentication):
     """Authenticate via X-API-Key header"""
     
-    def authenticate(self, request):
+    def authenticate (self, request):
         api_key = request.META.get('HTTP_X_API_KEY')
         
         if not api_key:
             return None  # No authentication attempted
         
         try:
-            user = User.objects.get(api_keys__key=api_key)
+            user = User.objects.get (api_keys__key=api_key)
             return (user, api_key)  # (user, auth)
         except User.DoesNotExist:
             raise AuthenticationFailed('Invalid API key')
 
 # Usage
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     authentication_classes = [APIKeyAuthentication]
 \`\`\`
 
@@ -303,11 +303,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     # All methods require authentication
     permission_classes = [IsAuthenticated]
     
-    def get_permissions(self):
+    def get_permissions (self):
         """Different permissions per action"""
         if self.action in ['list', 'retrieve']:
             # Anyone can read
@@ -325,7 +325,7 @@ from rest_framework.permissions import BasePermission
 class IsOwnerOrReadOnly(BasePermission):
     """Object-level permission: only owner can edit"""
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission (self, request, view, obj):
         # Read permissions for any request
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
             return True
@@ -333,7 +333,7 @@ class IsOwnerOrReadOnly(BasePermission):
         # Write permissions only for owner
         return obj.author == request.user
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 \`\`\`
 
@@ -351,7 +351,7 @@ REST_FRAMEWORK = {
     }
 }
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 # Custom Throttle
@@ -361,50 +361,50 @@ class BurstRateThrottle(SimpleRateThrottle):
     """Limit burst traffic"""
     scope = 'burst'
     
-    def get_cache_key(self, request, view):
+    def get_cache_key (self, request, view):
         if request.user.is_authenticated:
             ident = request.user.pk
         else:
-            ident = self.get_ident(request)
+            ident = self.get_ident (request)
         
         return self.cache_format % {
             'scope': self.scope,
             'ident': ident
         }
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     throttle_classes = [BurstRateThrottle]
 \`\`\`
 
 **5. View Logic Stage:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
-    def get_queryset(self):
+    def get_queryset (self):
         """Filter queryset based on request"""
         qs = super().get_queryset()
         
         # Filter by query param
         status = self.request.query_params.get('status')
         if status:
-            qs = qs.filter(status=status)
+            qs = qs.filter (status=status)
         
         # Filter by user permissions
         if not self.request.user.is_staff:
-            qs = qs.filter(author=self.request.user)
+            qs = qs.filter (author=self.request.user)
         
         return qs
     
-    def get_serializer_context(self):
+    def get_serializer_context (self):
         """Add extra context to serializer"""
         context = super().get_serializer_context()
         context['user_preferences'] = self.request.user.preferences
         return context
     
-    def perform_create(self, serializer):
+    def perform_create (self, serializer):
         """Hook before saving"""
         serializer.save(
             author=self.request.user,
@@ -417,7 +417,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     
     # Client can request format:
@@ -432,7 +432,7 @@ class CSVRenderer(BaseRenderer):
     media_type = 'text/csv'
     format = 'csv'
     
-    def render(self, data, accepted_media_type=None, renderer_context=None):
+    def render (self, data, accepted_media_type=None, renderer_context=None):
         if not data:
             return ''
         
@@ -440,13 +440,13 @@ class CSVRenderer(BaseRenderer):
         from io import StringIO
         
         output = StringIO()
-        writer = csv.DictWriter(output, fieldnames=data[0].keys())
+        writer = csv.DictWriter (output, fieldnames=data[0].keys())
         writer.writeheader()
-        writer.writerows(data)
+        writer.writerows (data)
         
         return output.getvalue()
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     renderer_classes = [JSONRenderer, CSVRenderer]
     
     # GET /api/articles/?format=csv
@@ -462,14 +462,14 @@ import time
 class TimingMixin:
     """Mixin to time API requests"""
     
-    def initial(self, request, *args, **kwargs):
+    def initial (self, request, *args, **kwargs):
         """Called before view logic"""
         request._start_time = time.time()
-        super().initial(request, *args, **kwargs)
+        super().initial (request, *args, **kwargs)
     
-    def finalize_response(self, request, response, *args, **kwargs):
+    def finalize_response (self, request, response, *args, **kwargs):
         """Called after view logic"""
-        response = super().finalize_response(request, response, *args, **kwargs)
+        response = super().finalize_response (request, response, *args, **kwargs)
         
         duration = time.time() - request._start_time
         response['X-Request-Duration'] = f'{duration:.3f}s'
@@ -479,21 +479,21 @@ class TimingMixin:
 class LoggingMixin:
     """Mixin to log API requests"""
     
-    def initial(self, request, *args, **kwargs):
-        logger.info(f'{request.method} {request.path} - User: {request.user}')
-        super().initial(request, *args, **kwargs)
+    def initial (self, request, *args, **kwargs):
+        logger.info (f'{request.method} {request.path} - User: {request.user}')
+        super().initial (request, *args, **kwargs)
 
 class ArticleViewSet(TimingMixin, LoggingMixin, viewsets.ModelViewSet):
     # Mixins execute in order (left to right)
     pass
 
 # Or use a custom exception handler (global middleware)
-def custom_exception_handler(exc, context):
+def custom_exception_handler (exc, context):
     """Global error handler"""
     from rest_framework.views import exception_handler
     
     # Call DRF's default handler first
-    response = exception_handler(exc, context)
+    response = exception_handler (exc, context)
     
     if response is not None:
         # Customize error response
@@ -501,7 +501,7 @@ def custom_exception_handler(exc, context):
         response.data['error_type'] = exc.__class__.__name__
         
         # Log error
-        logger.error(f'API Error: {exc}', exc_info=True)
+        logger.error (f'API Error: {exc}', exc_info=True)
     
     return response
 
@@ -518,7 +518,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
@@ -537,20 +537,20 @@ class ArticleViewSet(viewsets.ModelViewSet):
     # 5. Renderers
     renderer_classes = [JSONRenderer]
     
-    def initial(self, request, *args, **kwargs):
+    def initial (self, request, *args, **kwargs):
         """Before view logic"""
         request._custom_data = {}
-        super().initial(request, *args, **kwargs)
+        super().initial (request, *args, **kwargs)
     
-    def list(self, request):
+    def list (self, request):
         """6. View logic"""
         queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        serializer = self.get_serializer (queryset, many=True)
+        return Response (serializer.data)
     
-    def finalize_response(self, request, response, *args, **kwargs):
+    def finalize_response (self, request, response, *args, **kwargs):
         """After view logic"""
-        response = super().finalize_response(request, response, *args, **kwargs)
+        response = super().finalize_response (request, response, *args, **kwargs)
         response['X-Total-Count'] = self.get_queryset().count()
         return response
 \`\`\`
@@ -614,7 +614,7 @@ urlpatterns = [
 ]
 
 # Add format suffix support
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = format_suffix_patterns (urlpatterns)
 
 # Now supports:
 # /api/articles.json
@@ -626,11 +626,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 @api_view(['GET'])
-def article_list(request, format=None):
+def article_list (request, format=None):
     # format parameter is automatically added
     articles = Article.objects.all()
-    serializer = ArticleSerializer(articles, many=True)
-    return Response(serializer.data)
+    serializer = ArticleSerializer (articles, many=True)
+    return Response (serializer.data)
 \`\`\`
 
 **API Versioning Strategies:**
@@ -653,15 +653,15 @@ urlpatterns = [
 ]
 
 # In view
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         if self.request.version == 'v1':
             return ArticleSerializerV1
         return ArticleSerializerV2
     
-    def list(self, request, *args, **kwargs):
+    def list (self, request, *args, **kwargs):
         if request.version == 'v1':
             # V1 logic
             pass
@@ -683,8 +683,8 @@ GET /api/articles/
 Accept: application/json; version=2.0
 
 # In view
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_serializer_class(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_serializer_class (self):
         version = self.request.version
         if version == '1.0':
             return ArticleSerializerV1
@@ -703,7 +703,7 @@ REST_FRAMEWORK = {
 GET /api/articles/?version=2
 
 # In view
-def get_queryset(self):
+def get_queryset (self):
     if self.request.version == '1':
         # V1: Return all fields
         return Article.objects.all()
@@ -724,15 +724,15 @@ class ArticleSerializerV1(serializers.ModelSerializer):
 
 # serializers/v2.py
 class ArticleSerializerV2(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
+    author = UserSerializer (read_only=True)
+    tags = TagSerializer (many=True, read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'author', 'tags', 'meta']
 
 # Version router
-class VersionedArticleViewSet(viewsets.ModelViewSet):
+class VersionedArticleViewSet (viewsets.ModelViewSet):
     queryset = Article.objects.all()
     
     serializer_classes = {
@@ -740,11 +740,11 @@ class VersionedArticleViewSet(viewsets.ModelViewSet):
         'v2': ArticleSerializerV2,
     }
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         version = self.request.version or 'v1'
-        return self.serializer_classes.get(version, ArticleSerializerV2)
+        return self.serializer_classes.get (version, ArticleSerializerV2)
     
-    def get_queryset(self):
+    def get_queryset (self):
         qs = super().get_queryset()
         
         # V2 has optimization
@@ -753,8 +753,8 @@ class VersionedArticleViewSet(viewsets.ModelViewSet):
         
         return qs
     
-    @action(detail=False, methods=['get'])
-    def trending(self, request):
+    @action (detail=False, methods=['get'])
+    def trending (self, request):
         \"\"\"V2-only endpoint\"\"\"
         if request.version != 'v2':
             return Response(
@@ -766,8 +766,8 @@ class VersionedArticleViewSet(viewsets.ModelViewSet):
             view_count__gte=1000
         ).order_by('-view_count')[:10]
         
-        serializer = self.get_serializer(articles, many=True)
-        return Response(serializer.data)
+        serializer = self.get_serializer (articles, many=True)
+        return Response (serializer.data)
 \`\`\`
 
 **Backward Compatibility Patterns:**
@@ -777,8 +777,8 @@ class VersionedArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 import warnings
 
-class ArticleViewSet(viewsets.ModelViewSet):
-    def list(self, request, *args, **kwargs):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def list (self, request, *args, **kwargs):
         if request.version == 'v1':
             warnings.warn(
                 'API v1 is deprecated. Please migrate to v2.',
@@ -786,12 +786,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
             )
             
             # Add deprecation header
-            response = super().list(request, *args, **kwargs)
+            response = super().list (request, *args, **kwargs)
             response['Warning'] = '299 - "API v1 is deprecated. Use v2."'
             response['Sunset'] = 'Sat, 31 Dec 2024 23:59:59 GMT'
             return response
         
-        return super().list(request, *args, **kwargs)
+        return super().list (request, *args, **kwargs)
 \`\`\`
 
 **2. Field Migration:**
@@ -802,19 +802,19 @@ class ArticleSerializerV2(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField()
     
     # New field
-    author = UserSerializer(read_only=True)
+    author = UserSerializer (read_only=True)
     
     class Meta:
         model = Article
         fields = ['id', 'title', 'author', 'author_name']  # Both included
     
-    def get_author_name(self, obj):
+    def get_author_name (self, obj):
         # Deprecated field still works
         warnings.warn('author_name is deprecated. Use author.name instead.')
         return obj.author.username
 
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
+    def to_representation (self, instance):
+        ret = super().to_representation (instance)
         
         # Remove deprecated field for v3+
         if self.context['request'].version >= 'v3':
@@ -832,18 +832,18 @@ from rest_framework.routers import DefaultRouter
 
 # V1 URLs (legacy)
 router_v1 = DefaultRouter()
-router_v1.register(r'articles', ArticleViewSetV1, basename='article')
+router_v1.register (r'articles', ArticleViewSetV1, basename='article')
 
 # V2 URLs (current)
 router_v2 = DefaultRouter()
-router_v2.register(r'articles', ArticleViewSetV2, basename='article')
+router_v2.register (r'articles', ArticleViewSetV2, basename='article')
 
 urlpatterns = [
-    path('api/v1/', include(router_v1.urls)),
-    path('api/v2/', include(router_v2.urls)),
+    path('api/v1/', include (router_v1.urls)),
+    path('api/v2/', include (router_v2.urls)),
     
     # Default to latest version
-    path('api/', include(router_v2.urls)),
+    path('api/', include (router_v2.urls)),
 ]
 
 # Redirect old endpoints
@@ -860,33 +860,33 @@ urlpatterns += [
 **4. Gradual Migration Strategy:**
 
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     \"\"\"
     Support multiple versions in single ViewSet
     \"\"\"
     
-    def get_serializer_class(self):
+    def get_serializer_class (self):
         version_map = {
             'v1': ArticleSerializerV1,
             'v2': ArticleSerializerV2,
             'v3': ArticleSerializerV3,
         }
-        return version_map.get(self.request.version, ArticleSerializerV3)
+        return version_map.get (self.request.version, ArticleSerializerV3)
     
-    def list(self, request, *args, **kwargs):
+    def list (self, request, *args, **kwargs):
         # Common logic
         queryset = self.get_queryset()
         
         # Version-specific modifications
         if request.version == 'v1':
             # V1: Simple pagination
-            page = self.paginate_queryset(queryset)
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            page = self.paginate_queryset (queryset)
+            serializer = self.get_serializer (page, many=True)
+            return self.get_paginated_response (serializer.data)
         
         elif request.version == 'v2':
             # V2: Add metadata
-            response = super().list(request, *args, **kwargs)
+            response = super().list (request, *args, **kwargs)
             response.data['_meta'] = {
                 'version': 'v2',
                 'total_count': queryset.count()
@@ -894,7 +894,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
             return response
         
         # V3+: Enhanced response
-        return super().list(request, *args, **kwargs)
+        return super().list (request, *args, **kwargs)
 \`\`\`
 
 **5. API Documentation Versioning:**
@@ -902,7 +902,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
 \`\`\`python
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet (viewsets.ModelViewSet):
     
     @extend_schema(
         description='List articles (V1: basic, V2: includes author details)',
@@ -918,8 +918,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
             200: ArticleSerializerV2,
         }
     )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    def list (self, request, *args, **kwargs):
+        return super().list (request, *args, **kwargs)
 \`\`\`
 
 **Best Practices:**

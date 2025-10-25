@@ -31,7 +31,7 @@ from scipy import stats
 from sklearn.datasets import fetch_california_housing
 
 # Load data
-housing = fetch_california_housing(as_frame=True)
+housing = fetch_california_housing (as_frame=True)
 df = housing.frame
 
 print("=" * 70)
@@ -39,15 +39,15 @@ print("PEARSON CORRELATION ANALYSIS")
 print("=" * 70)
 
 # Calculate correlation with target
-correlations = df.corr()['MedHouseVal'].sort_values(ascending=False)
+correlations = df.corr()['MedHouseVal'].sort_values (ascending=False)
 
 print("\\nCorrelation with Target (MedHouseVal):\\n")
 for feature, corr in correlations.items():
     if feature != 'MedHouseVal':
         strength = (
-            "Very Strong" if abs(corr) >= 0.7 else
-            "Strong" if abs(corr) >= 0.5 else
-            "Moderate" if abs(corr) >= 0.3 else
+            "Very Strong" if abs (corr) >= 0.7 else
+            "Strong" if abs (corr) >= 0.5 else
+            "Moderate" if abs (corr) >= 0.3 else
             "Weak"
         )
         direction = "Positive" if corr > 0 else "Negative"
@@ -57,24 +57,24 @@ for feature, corr in correlations.items():
 fig, axes = plt.subplots(2, 4, figsize=(20, 10))
 features = [f for f in df.columns if f != 'MedHouseVal']
 
-for idx, feature in enumerate(features):
-    row, col = divmod(idx, 4)
+for idx, feature in enumerate (features):
+    row, col = divmod (idx, 4)
     ax = axes[row, col]
     
     # Scatter plot with sample (for performance)
-    sample = df.sample(min(1000, len(df)), random_state=42)
-    ax.scatter(sample[feature], sample['MedHouseVal'], alpha=0.5)
+    sample = df.sample (min(1000, len (df)), random_state=42)
+    ax.scatter (sample[feature], sample['MedHouseVal'], alpha=0.5)
     
     # Regression line
-    z = np.polyfit(sample[feature], sample['MedHouseVal'], 1)
-    p = np.poly1d(z)
-    ax.plot(sample[feature].sort_values(), 
-            p(sample[feature].sort_values()), 
+    z = np.polyfit (sample[feature], sample['MedHouseVal'], 1)
+    p = np.poly1d (z)
+    ax.plot (sample[feature].sort_values(), 
+            p (sample[feature].sort_values()), 
             "r--", linewidth=2)
     
-    corr = df[feature].corr(df['MedHouseVal'])
-    ax.set_title(f'{feature}\\nr = {corr:.3f}')
-    ax.set_xlabel(feature)
+    corr = df[feature].corr (df['MedHouseVal'])
+    ax.set_title (f'{feature}\\nr = {corr:.3f}')
+    ax.set_xlabel (feature)
     ax.set_ylabel('MedHouseVal')
     ax.grid(True, alpha=0.3)
 
@@ -97,19 +97,19 @@ plt.show()
 ### Correlation Significance Testing
 
 \`\`\`python
-def test_correlation_significance(df, feature, target, alpha=0.05):
+def test_correlation_significance (df, feature, target, alpha=0.05):
     """Test if correlation is statistically significant"""
     
     # Calculate Pearson correlation
-    corr, p_value = stats.pearsonr(df[feature], df[target])
+    corr, p_value = stats.pearsonr (df[feature], df[target])
     
-    # Calculate confidence interval (Fisher's z-transformation)
-    n = len(df)
-    z = np.arctanh(corr)
-    se = 1 / np.sqrt(n - 3)
+    # Calculate confidence interval (Fisher\'s z-transformation)
+    n = len (df)
+    z = np.arctanh (corr)
+    se = 1 / np.sqrt (n - 3)
     z_critical = stats.norm.ppf(1 - alpha/2)
-    ci_lower = np.tanh(z - z_critical * se)
-    ci_upper = np.tanh(z + z_critical * se)
+    ci_lower = np.tanh (z - z_critical * se)
+    ci_upper = np.tanh (z + z_critical * se)
     
     print(f"\\n{feature} vs {target}")
     print("-" * 60)
@@ -118,11 +118,11 @@ def test_correlation_significance(df, feature, target, alpha=0.05):
     print(f"95% CI: [{ci_lower:.4f}, {ci_upper:.4f}]")
     print(f"Significant: {'✓ Yes' if p_value < alpha else '✗ No'} (α={alpha})")
     
-    # Effect size interpretation (Cohen's guidelines)
+    # Effect size interpretation (Cohen\'s guidelines)
     effect_size = (
-        "Large" if abs(corr) >= 0.5 else
-        "Medium" if abs(corr) >= 0.3 else
-        "Small" if abs(corr) >= 0.1 else
+        "Large" if abs (corr) >= 0.5 else
+        "Medium" if abs (corr) >= 0.3 else
+        "Small" if abs (corr) >= 0.1 else
         "Negligible"
     )
     print(f"Effect Size: {effect_size}")
@@ -131,23 +131,23 @@ def test_correlation_significance(df, feature, target, alpha=0.05):
 
 # Test significance for key features
 for feature in ['MedInc', 'AveRooms', 'Latitude']:
-    test_correlation_significance(df, feature, 'MedHouseVal')
+    test_correlation_significance (df, feature, 'MedHouseVal')
 \`\`\`
 
 ### Non-Parametric Correlations: Spearman and Kendall
 
 \`\`\`python
-def compare_correlation_methods(df, feature, target):
+def compare_correlation_methods (df, feature, target):
     """Compare Pearson, Spearman, and Kendall correlations"""
     
     # Pearson (linear relationships)
-    pearson_r, pearson_p = stats.pearsonr(df[feature], df[target])
+    pearson_r, pearson_p = stats.pearsonr (df[feature], df[target])
     
     # Spearman (monotonic relationships, rank-based)
-    spearman_r, spearman_p = stats.spearmanr(df[feature], df[target])
+    spearman_r, spearman_p = stats.spearmanr (df[feature], df[target])
     
     # Kendall (monotonic relationships, rank-based, robust)
-    kendall_tau, kendall_p = stats.kendalltau(df[feature], df[target])
+    kendall_tau, kendall_p = stats.kendalltau (df[feature], df[target])
     
     print(f"\\nCORRELATION COMPARISON: {feature} vs {target}")
     print("=" * 70)
@@ -158,7 +158,7 @@ def compare_correlation_methods(df, feature, target):
     print(f"{'Kendall':<15} {kendall_tau:12.4f} {kendall_p:12.6f}   Rank correlation")
     
     # Interpretation
-    if abs(pearson_r - spearman_r) < 0.1:
+    if abs (pearson_r - spearman_r) < 0.1:
         print("\\n✓ Pearson ≈ Spearman: Linear relationship")
     else:
         print("\\n⚠️  Pearson ≠ Spearman: Non-linear but monotonic relationship")
@@ -170,7 +170,7 @@ def compare_correlation_methods(df, feature, target):
     }
 
 # Compare methods
-compare_correlation_methods(df, 'MedInc', 'MedHouseVal')
+compare_correlation_methods (df, 'MedInc', 'MedHouseVal')
 \`\`\`
 
 ## Continuous vs Categorical: Box Plots and Statistical Tests
@@ -179,11 +179,11 @@ compare_correlation_methods(df, 'MedInc', 'MedHouseVal')
 
 \`\`\`python
 # Create categorical version of a continuous feature
-df['IncomeBracket'] = pd.cut(df['MedInc'], 
+df['IncomeBracket'] = pd.cut (df['MedInc'], 
                               bins=[0, 2, 4, 6, 15], 
                               labels=['Low', 'Medium', 'High', 'Very High'])
 
-def analyze_continuous_vs_categorical(df, continuous_var, categorical_var):
+def analyze_continuous_vs_categorical (df, continuous_var, categorical_var):
     """Analyze relationship between continuous and categorical variables"""
     
     print(f"\\n{'='*70}")
@@ -191,7 +191,7 @@ def analyze_continuous_vs_categorical(df, continuous_var, categorical_var):
     print(f"{'='*70}")
     
     # Group statistics
-    grouped = df.groupby(categorical_var)[continuous_var].agg([
+    grouped = df.groupby (categorical_var)[continuous_var].agg([
         'count', 'mean', 'median', 'std', 'min', 'max'
     ])
     
@@ -202,46 +202,46 @@ def analyze_continuous_vs_categorical(df, continuous_var, categorical_var):
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
     
     # Box plot
-    df.boxplot(column=continuous_var, by=categorical_var, ax=axes[0])
-    axes[0].set_title(f'{continuous_var} by {categorical_var}')
-    axes[0].set_xlabel(categorical_var)
-    axes[0].set_ylabel(continuous_var)
-    plt.sca(axes[0])
-    plt.xticks(rotation=45)
+    df.boxplot (column=continuous_var, by=categorical_var, ax=axes[0])
+    axes[0].set_title (f'{continuous_var} by {categorical_var}')
+    axes[0].set_xlabel (categorical_var)
+    axes[0].set_ylabel (continuous_var)
+    plt.sca (axes[0])
+    plt.xticks (rotation=45)
     
     # Violin plot
     parts = axes[1].violinplot([
         df[df[categorical_var] == cat][continuous_var].dropna()
         for cat in df[categorical_var].cat.categories
-    ], positions=range(len(df[categorical_var].cat.categories)))
-    axes[1].set_title(f'{continuous_var} by {categorical_var}\\n(Violin Plot)')
-    axes[1].set_xlabel(categorical_var)
-    axes[1].set_ylabel(continuous_var)
-    axes[1].set_xticks(range(len(df[categorical_var].cat.categories)))
-    axes[1].set_xticklabels(df[categorical_var].cat.categories, rotation=45)
+    ], positions=range (len (df[categorical_var].cat.categories)))
+    axes[1].set_title (f'{continuous_var} by {categorical_var}\\n(Violin Plot)')
+    axes[1].set_xlabel (categorical_var)
+    axes[1].set_ylabel (continuous_var)
+    axes[1].set_xticks (range (len (df[categorical_var].cat.categories)))
+    axes[1].set_xticklabels (df[categorical_var].cat.categories, rotation=45)
     
     # Strip plot with means
-    for idx, cat in enumerate(df[categorical_var].cat.categories):
+    for idx, cat in enumerate (df[categorical_var].cat.categories):
         data = df[df[categorical_var] == cat][continuous_var]
-        axes[2].scatter([idx] * len(data), data, alpha=0.3, s=10)
-        axes[2].scatter(idx, data.mean(), color='red', s=200, marker='_', linewidths=3)
-    axes[2].set_title(f'{continuous_var} by {categorical_var}\\n(Means in Red)')
-    axes[2].set_xlabel(categorical_var)
-    axes[2].set_ylabel(continuous_var)
-    axes[2].set_xticks(range(len(df[categorical_var].cat.categories)))
-    axes[2].set_xticklabels(df[categorical_var].cat.categories, rotation=45)
+        axes[2].scatter([idx] * len (data), data, alpha=0.3, s=10)
+        axes[2].scatter (idx, data.mean(), color='red', s=200, marker='_', linewidths=3)
+    axes[2].set_title (f'{continuous_var} by {categorical_var}\\n(Means in Red)')
+    axes[2].set_xlabel (categorical_var)
+    axes[2].set_ylabel (continuous_var)
+    axes[2].set_xticks (range (len (df[categorical_var].cat.categories)))
+    axes[2].set_xticklabels (df[categorical_var].cat.categories, rotation=45)
     axes[2].grid(True, alpha=0.3)
     
     plt.tight_layout()
     plt.show()
 
-analyze_continuous_vs_categorical(df, 'MedHouseVal', 'IncomeBracket')
+analyze_continuous_vs_categorical (df, 'MedHouseVal', 'IncomeBracket')
 \`\`\`
 
 ### Statistical Tests for Group Differences
 
 \`\`\`python
-def test_group_differences(df, continuous_var, categorical_var):
+def test_group_differences (df, continuous_var, categorical_var):
     """Test if groups have significantly different means"""
     
     print(f"\\n{'='*70}")
@@ -255,12 +255,12 @@ def test_group_differences(df, continuous_var, categorical_var):
     
     # Check assumptions
     print("\\n1. NORMALITY TEST (Shapiro-Wilk per group):")
-    for cat, group in zip(df[categorical_var].cat.categories, groups):
-        if len(group) <= 5000:
-            stat, p = stats.shapiro(group)
+    for cat, group in zip (df[categorical_var].cat.categories, groups):
+        if len (group) <= 5000:
+            stat, p = stats.shapiro (group)
             print(f"   {cat}: p={p:.6f} ({'Normal' if p > 0.05 else 'Not Normal'})")
     
-    print("\\n2. VARIANCE HOMOGENEITY TEST (Levene's Test):")
+    print("\\n2. VARIANCE HOMOGENEITY TEST (Levene\'s Test):")
     stat, p = stats.levene(*groups)
     print(f"   Statistic: {stat:.4f}, P-value: {p:.6f}")
     print(f"   {'Equal variances' if p > 0.05 else 'Unequal variances'}")
@@ -280,7 +280,7 @@ def test_group_differences(df, continuous_var, categorical_var):
     print(f"   Result: {'✓ Groups differ significantly' if kw_p < 0.05 else '✗ No significant difference'}")
     
     # Effect size (Eta-squared for ANOVA)
-    ss_between = sum(len(g) * (g.mean() - df[continuous_var].mean())**2 for g in groups)
+    ss_between = sum (len (g) * (g.mean() - df[continuous_var].mean())**2 for g in groups)
     ss_total = sum((df[continuous_var] - df[continuous_var].mean())**2)
     eta_squared = ss_between / ss_total
     
@@ -292,7 +292,7 @@ def test_group_differences(df, continuous_var, categorical_var):
     )
     print(f"   Interpretation: {effect} effect")
 
-test_group_differences(df, 'MedHouseVal', 'IncomeBracket')
+test_group_differences (df, 'MedHouseVal', 'IncomeBracket')
 \`\`\`
 
 ## Categorical vs Categorical: Contingency Tables
@@ -301,11 +301,11 @@ test_group_differences(df, 'MedHouseVal', 'IncomeBracket')
 
 \`\`\`python
 # Create another categorical variable
-df['HouseAgeGroup'] = pd.cut(df['HouseAge'], 
+df['HouseAgeGroup'] = pd.cut (df['HouseAge'], 
                               bins=[0, 15, 30, 45, 60], 
                               labels=['New', 'Medium', 'Old', 'Very Old'])
 
-def analyze_categorical_vs_categorical(df, cat_var1, cat_var2):
+def analyze_categorical_vs_categorical (df, cat_var1, cat_var2):
     """Analyze relationship between two categorical variables"""
     
     print(f"\\n{'='*70}")
@@ -313,17 +313,17 @@ def analyze_categorical_vs_categorical(df, cat_var1, cat_var2):
     print(f"{'='*70}")
     
     # Contingency table
-    contingency = pd.crosstab(df[cat_var1], df[cat_var2])
+    contingency = pd.crosstab (df[cat_var1], df[cat_var2])
     
     print("\\nContingency Table (Counts):\\n")
     print(contingency)
     
     # Normalized (proportions)
     print("\\nRow Proportions:\\n")
-    print(contingency.div(contingency.sum(axis=1), axis=0).round(3))
+    print(contingency.div (contingency.sum (axis=1), axis=0).round(3))
     
     # Chi-square test
-    chi2, p_value, dof, expected = stats.chi2_contingency(contingency)
+    chi2, p_value, dof, expected = stats.chi2_contingency (contingency)
     
     print(f"\\nChi-Square Test of Independence:")
     print(f"  Chi-square statistic: {chi2:.4f}")
@@ -333,8 +333,8 @@ def analyze_categorical_vs_categorical(df, cat_var1, cat_var2):
     
     # Cramér's V (effect size for chi-square)
     n = contingency.sum().sum()
-    min_dim = min(contingency.shape[0], contingency.shape[1]) - 1
-    cramers_v = np.sqrt(chi2 / (n * min_dim))
+    min_dim = min (contingency.shape[0], contingency.shape[1]) - 1
+    cramers_v = np.sqrt (chi2 / (n * min_dim))
     
     print(f"\\nCramér's V (Effect Size): {cramers_v:.4f}")
     effect = (
@@ -345,15 +345,15 @@ def analyze_categorical_vs_categorical(df, cat_var1, cat_var2):
     print(f"  Interpretation: {effect} association")
     
     # Heatmap visualization
-    plt.figure(figsize=(10, 6))
-    sns.heatmap(contingency, annot=True, fmt='d', cmap='YlOrRd')
-    plt.title(f'Contingency Table Heatmap: {cat_var1} vs {cat_var2}')
-    plt.xlabel(cat_var2)
-    plt.ylabel(cat_var1)
+    plt.figure (figsize=(10, 6))
+    sns.heatmap (contingency, annot=True, fmt='d', cmap='YlOrRd')
+    plt.title (f'Contingency Table Heatmap: {cat_var1} vs {cat_var2}')
+    plt.xlabel (cat_var2)
+    plt.ylabel (cat_var1)
     plt.tight_layout()
     plt.show()
 
-analyze_categorical_vs_categorical(df, 'IncomeBracket', 'HouseAgeGroup')
+analyze_categorical_vs_categorical (df, 'IncomeBracket', 'HouseAgeGroup')
 \`\`\`
 
 ## Key Takeaways

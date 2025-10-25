@@ -32,7 +32,7 @@ export const pipelineMultipleChoiceQuestions = [
   {
     id: 3,
     question:
-      "What's the best way to handle historical data revisions when companies restate earnings?",
+      "What\'s the best way to handle historical data revisions when companies restate earnings?",
     options: [
       'Delete old data and insert new',
       'Overwrite existing records',

@@ -121,7 +121,7 @@ print(sorted_multi)
 df.sort_values('Age', inplace=True)
 
 # Reset index after sorting
-df = df.sort_values('Salary').reset_index(drop=True)
+df = df.sort_values('Salary').reset_index (drop=True)
 print(df)
 \`\`\`
 
@@ -132,10 +132,10 @@ print(df)
 df_sorted = df.sort_index()
 
 # Reverse order
-df_sorted = df.sort_index(ascending=False)
+df_sorted = df.sort_index (ascending=False)
 
 # Sort columns (axis=1)
-df_sorted = df.sort_index(axis=1)  # Alphabetical column order
+df_sorted = df.sort_index (axis=1)  # Alphabetical column order
 print(df_sorted)
 \`\`\`
 
@@ -143,18 +143,18 @@ print(df_sorted)
 
 \`\`\`python
 # Add rank column
-df['Salary_Rank'] = df['Salary'].rank(method='dense', ascending=False)
+df['Salary_Rank'] = df['Salary'].rank (method='dense', ascending=False)
 print(df[['Name', 'Salary', 'Salary_Rank']])
 
 # Different ranking methods
-df['rank_average'] = df['Salary'].rank(method='average')  # Average of tied ranks
-df['rank_min'] = df['Salary'].rank(method='min')          # Minimum of tied ranks
-df['rank_max'] = df['Salary'].rank(method='max')          # Maximum of tied ranks
-df['rank_first'] = df['Salary'].rank(method='first')      # Order they appear
-df['rank_dense'] = df['Salary'].rank(method='dense')      # Like min but no gaps
+df['rank_average'] = df['Salary'].rank (method='average')  # Average of tied ranks
+df['rank_min'] = df['Salary'].rank (method='min')          # Minimum of tied ranks
+df['rank_max'] = df['Salary'].rank (method='max')          # Maximum of tied ranks
+df['rank_first'] = df['Salary'].rank (method='first')      # Order they appear
+df['rank_dense'] = df['Salary'].rank (method='dense')      # Like min but no gaps
 
 # Percentile ranking
-df['Salary_Percentile'] = df['Salary'].rank(pct=True) * 100
+df['Salary_Percentile'] = df['Salary'].rank (pct=True) * 100
 print(df[['Name', 'Salary', 'Salary_Percentile']])
 \`\`\`
 
@@ -176,8 +176,8 @@ df['Total_Comp'] = df['Salary'] + df['Bonus']
 df['Senior'] = df['Age'] >= 35
 
 # Multiple conditions with np.where
-df['Level'] = np.where(df['Age'] < 30, 'Junior',
-               np.where(df['Age'] < 40, 'Mid', 'Senior'))
+df['Level'] = np.where (df['Age'] < 30, 'Junior',
+               np.where (df['Age'] < 40, 'Mid', 'Senior'))
 
 # Multiple conditions with np.select
 conditions = [
@@ -186,7 +186,7 @@ conditions = [
     df['Salary'] >= 75000
 ]
 choices = ['Low', 'Medium', 'High']
-df['Salary_Bracket'] = np.select(conditions, choices)
+df['Salary_Bracket'] = np.select (conditions, choices)
 
 print(df)
 \`\`\`
@@ -195,7 +195,7 @@ print(df)
 
 \`\`\`python
 # Insert at position 1
-df.insert(1, 'Employee_ID', range(1, len(df) + 1))
+df.insert(1, 'Employee_ID', range(1, len (df) + 1))
 print(df)
 \`\`\`
 
@@ -205,7 +205,7 @@ print(df)
 # Drop single column
 df_dropped = df.drop('Bonus', axis=1)
 # or
-df_dropped = df.drop(columns=['Bonus'])
+df_dropped = df.drop (columns=['Bonus'])
 
 # Drop multiple columns
 df_dropped = df.drop(['Bonus', 'Country'], axis=1)
@@ -215,14 +215,14 @@ df.drop('Bonus', axis=1, inplace=True)
 
 # Drop columns matching pattern
 cols_to_drop = [col for col in df.columns if 'rank_' in col]
-df = df.drop(columns=cols_to_drop)
+df = df.drop (columns=cols_to_drop)
 \`\`\`
 
 ### Renaming Columns
 
 \`\`\`python
 # Rename specific columns
-df = df.rename(columns={'Salary': 'Annual_Salary', 'Age': 'Years'})
+df = df.rename (columns={'Salary': 'Annual_Salary', 'Age': 'Years'})
 
 # Rename all columns
 df.columns = ['name', 'years', 'annual_salary', 'dept']
@@ -233,7 +233,7 @@ df.columns = df.columns.str.replace(' ', '_')  # Replace spaces
 df.columns = df.columns.str.strip()  # Remove whitespace
 
 # Rename index
-df = df.rename(index={0: 'first', 1: 'second'})
+df = df.rename (index={0: 'first', 1: 'second'})
 \`\`\`
 
 ## Apply, Map, and Transform
@@ -244,14 +244,14 @@ Apply a function along an axis (column or row):
 
 \`\`\`python
 # Apply to single column (returns Series)
-df['Name_Length'] = df['Name'].apply(len)
-df['Name_Upper'] = df['Name'].apply(str.upper)
+df['Name_Length'] = df['Name'].apply (len)
+df['Name_Upper'] = df['Name'].apply (str.upper)
 
 # Lambda functions
-df['Salary_K'] = df['Salary'].apply(lambda x: x / 1000)
+df['Salary_K'] = df['Salary'].apply (lambda x: x / 1000)
 
 # Custom function
-def classify_salary(salary):
+def classify_salary (salary):
     if salary < 60000:
         return 'Low'
     elif salary < 75000:
@@ -259,13 +259,13 @@ def classify_salary(salary):
     else:
         return 'High'
 
-df['Salary_Class'] = df['Salary'].apply(classify_salary)
+df['Salary_Class'] = df['Salary'].apply (classify_salary)
 
 # Apply with multiple arguments
-def adjust_salary(salary, factor=1.1):
+def adjust_salary (salary, factor=1.1):
     return salary * factor
 
-df['Adjusted_Salary'] = df['Salary'].apply(adjust_salary, factor=1.15)
+df['Adjusted_Salary'] = df['Salary'].apply (adjust_salary, factor=1.15)
 
 # Apply to multiple columns
 df['Full_Info'] = df.apply(
@@ -282,14 +282,14 @@ Map values in a Series to other values:
 \`\`\`python
 # Map with dictionary
 dept_map = {'IT': 'Technology', 'HR': 'Human Resources', 'Sales': 'Sales & Marketing'}
-df['Department_Full'] = df['Department'].map(dept_map)
+df['Department_Full'] = df['Department'].map (dept_map)
 
 # Map with function
-df['Age_Squared'] = df['Age'].map(lambda x: x ** 2)
+df['Age_Squared'] = df['Age'].map (lambda x: x ** 2)
 
 # Map with Series
 avg_salaries = df.groupby('Department')['Salary'].mean()
-df['Dept_Avg_Salary'] = df['Department'].map(avg_salaries)
+df['Dept_Avg_Salary'] = df['Department'].map (avg_salaries)
 print(df[['Name', 'Department', 'Salary', 'Dept_Avg_Salary']])
 \`\`\`
 
@@ -306,7 +306,7 @@ df['Department'] = df['Department'].replace({
 })
 
 # Replace with regex
-df['Name'] = df['Name'].replace(r'[aeiou]', 'X', regex=True)
+df['Name'] = df['Name'].replace (r'[aeiou]', 'X', regex=True)
 
 # Replace in entire DataFrame
 df = df.replace({'IT': 'Tech', 'HR': 'People'})
@@ -327,7 +327,7 @@ df['Cumulative_Salary'] = df['Salary'].transform('cumsum')
 
 # Fill missing with group mean
 df['Salary_Filled'] = df.groupby('Department')['Salary'].transform(
-    lambda x: x.fillna(x.mean())
+    lambda x: x.fillna (x.mean())
 )
 \`\`\`
 
@@ -335,17 +335,17 @@ df['Salary_Filled'] = df.groupby('Department')['Salary'].transform(
 
 \`\`\`python
 # Slow: apply with lambda
-df['Salary_Double_Slow'] = df['Salary'].apply(lambda x: x * 2)
+df['Salary_Double_Slow'] = df['Salary'].apply (lambda x: x * 2)
 
 # Fast: vectorized operation
 df['Salary_Double_Fast'] = df['Salary'] * 2
 
 # For complex logic, use np.where or np.select instead of apply
 # Slow
-df['Tax_Slow'] = df['Salary'].apply(lambda x: x * 0.25 if x > 60000 else x * 0.20)
+df['Tax_Slow'] = df['Salary'].apply (lambda x: x * 0.25 if x > 60000 else x * 0.20)
 
 # Fast
-df['Tax_Fast'] = np.where(df['Salary'] > 60000, df['Salary'] * 0.25, df['Salary'] * 0.20)
+df['Tax_Fast'] = np.where (df['Salary'] > 60000, df['Salary'] * 0.25, df['Salary'] * 0.20)
 \`\`\`
 
 ## String Operations
@@ -373,7 +373,7 @@ df['Last_Name'] = df['Name'].str.split().str[-1]
 df['Has_Brown'] = df['Name'].str.contains('Brown')
 
 # Extract with regex
-df['Username'] = df['Email'].str.extract(r'([^@]+)@')
+df['Username'] = df['Email'].str.extract (r'([^@]+)@')
 
 # Replace
 df['Phone_Clean'] = df['Phone'].str.replace('-', ')
@@ -405,7 +405,7 @@ print(df)
 \`\`\`python
 # Extract all matches
 text = pd.Series(['My phone: 555-1234', 'Call 555-5678 or 555-9012'])
-phones = text.str.extractall(r'(\\d{3}-\\d{4})')
+phones = text.str.extractall (r'(\\d{3}-\\d{4})')
 print(phones)
 
 # Find all occurrences
@@ -414,7 +414,7 @@ count = text.str.count('apple')
 print(count)  # [2, 1]
 
 # Replace with regex
-df['Email_Masked'] = df['Email'].str.replace(r'@.*', '@xxx.com', regex=True)
+df['Email_Masked'] = df['Email'].str.replace (r'@.*', '@xxx.com', regex=True)
 \`\`\`
 
 ## Datetime Operations
@@ -429,7 +429,7 @@ df = pd.DataFrame({
 })
 
 # Convert to datetime
-df['Date'] = pd.to_datetime(df['Date'])
+df['Date'] = pd.to_datetime (df['Date'])
 print(df['Date'].dtype)  # datetime64[ns]
 
 # Extract components
@@ -443,8 +443,8 @@ df['Quarter'] = df['Date'].dt.quarter
 df['Week_of_Year'] = df['Date'].dt.isocalendar().week
 
 # Date arithmetic
-df['Next_Week'] = df['Date'] + pd.Timedelta(days=7)
-df['Last_Month'] = df['Date'] - pd.DateOffset(months=1)
+df['Next_Week'] = df['Date'] + pd.Timedelta (days=7)
+df['Last_Month'] = df['Date'] - pd.DateOffset (months=1)
 
 # Date differences
 df['Days_Since_Start'] = (df['Date'] - df['Date'].min()).dt.days
@@ -460,15 +460,15 @@ print(df)
 
 \`\`\`python
 # Generate date range
-date_range = pd.date_range(start='2024-01-01', end='2024-12-31', freq='D')
-print(f"Days in 2024: {len(date_range)}")
+date_range = pd.date_range (start='2024-01-01', end='2024-12-31', freq='D')
+print(f"Days in 2024: {len (date_range)}")
 
 # Business days only
-business_days = pd.bdate_range(start='2024-01-01', end='2024-01-31')
-print(f"Business days in Jan 2024: {len(business_days)}")
+business_days = pd.bdate_range (start='2024-01-01', end='2024-01-31')
+print(f"Business days in Jan 2024: {len (business_days)}")
 
 # Monthly periods
-months = pd.period_range(start='2024-01', end='2024-12', freq='M')
+months = pd.period_range (start='2024-01', end='2024-12', freq='M')
 print(months)
 
 # Create DataFrame with date index
@@ -498,7 +498,7 @@ employees['tenure_days'] = (pd.Timestamp.now() - employees['hire_date']).dt.days
 employees['tenure_years'] = employees['tenure_days'] / 365.25
 
 # Classify employees
-employees['level'] = pd.cut(employees['tenure_years'], 
+employees['level'] = pd.cut (employees['tenure_years'], 
                              bins=[0, 1, 3, 10], 
                              labels=['Junior', 'Mid', 'Senior'])
 
@@ -512,7 +512,7 @@ employees['performance'] = np.random.choice(['Low', 'Medium', 'High'], 100)
 # Filter high performers in IT
 high_performers = employees.query('department == "IT" and performance == "High"')
 
-print(f"High performing IT employees: {len(high_performers)}")
+print(f"High performing IT employees: {len (high_performers)}")
 print(high_performers[['name', 'salary', 'tenure_years']].head())
 \`\`\`
 
@@ -537,7 +537,7 @@ sales['day_of_week'] = sales['date'].dt.day_name()
 sales['is_weekend'] = sales['date'].dt.dayofweek >= 5
 
 # Classify by revenue
-sales['revenue_category'] = pd.cut(sales['revenue'], 
+sales['revenue_category'] = pd.cut (sales['revenue'], 
                                     bins=[0, 100, 500, float('inf')],
                                     labels=['Low', 'Medium', 'High'])
 
@@ -546,7 +546,7 @@ sales = sales.sort_values('date')
 sales['cumulative_revenue'] = sales['revenue'].cumsum()
 
 # Day over day growth
-sales['daily_revenue'] = sales.groupby(sales['date'].dt.date)['revenue'].transform('sum')
+sales['daily_revenue'] = sales.groupby (sales['date'].dt.date)['revenue'].transform('sum')
 
 print(sales.head())
 print(f"\\nTotal revenue: \${sales['revenue'].sum():,.2f}")

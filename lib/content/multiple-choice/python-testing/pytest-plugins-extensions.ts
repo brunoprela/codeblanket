@@ -51,7 +51,7 @@ export const pytestPluginsExtensionsMultipleChoice: MultipleChoiceQuestion[] = [
     ],
     correctAnswer: 1,
     explanation:
-      'mocker fixture provides cleaner mocking interface: def test_function(mocker): mock = mocker.patch("module.Service") vs @patch("module.Service") def test_function(mock_service). Benefits: No decorator needed, cleaner syntax, integrates with pytest fixtures. Example: mocker.patch(), mocker.Mock(), mocker.MagicMock(). Not for: HTTP servers (use pytest-httpserver), auto-mocking imports, or database connections. Makes mocking more Pythonic and maintainable.',
+      'mocker fixture provides cleaner mocking interface: def test_function (mocker): mock = mocker.patch("module.Service") vs @patch("module.Service") def test_function (mock_service). Benefits: No decorator needed, cleaner syntax, integrates with pytest fixtures. Example: mocker.patch(), mocker.Mock(), mocker.MagicMock(). Not for: HTTP servers (use pytest-httpserver), auto-mocking imports, or database connections. Makes mocking more Pythonic and maintainable.',
   },
   {
     id: 'ppe-mc-5',

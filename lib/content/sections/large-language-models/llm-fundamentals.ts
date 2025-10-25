@@ -37,10 +37,10 @@ model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_l
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 # Fine-tune on sentiment data
-def train_sentiment_model(train_data):
+def train_sentiment_model (train_data):
     # Need labeled dataset: (text, label) pairs
     for text, label in train_data:
-        inputs = tokenizer(text, return_tensors='pt')
+        inputs = tokenizer (text, return_tensors='pt')
         outputs = model(**inputs, labels=torch.tensor([label]))
         loss = outputs.loss
         loss.backward()
@@ -62,9 +62,9 @@ Modern LLMs: General-purpose, instruction-following
 
 import anthropic
 
-client = anthropic.Anthropic(api_key="your-key")
+client = anthropic.Anthropic (api_key="your-key")
 
-def llm_sentiment_analysis(text):
+def llm_sentiment_analysis (text):
     """
     No fine-tuning needed - just prompt the model
     """
@@ -88,7 +88,7 @@ def llm_sentiment_analysis(text):
 # ...all without any task-specific training!
 
 # Example: Multiple tasks with the same model
-def multi_task_llm(task, text):
+def multi_task_llm (task, text):
     """
     One model, many tasks
     """
@@ -133,25 +133,25 @@ Understanding autoregressive language modeling
 """
 
 # LLMs are trained to predict the next token
-def language_modeling_objective(text, model):
+def language_modeling_objective (text, model):
     """
     Given: "The cat sat on the"
     Predict: "mat"
     
     Model learns P(next_token | previous_tokens)
     """
-    tokens = tokenize(text)  # ["The", "cat", "sat", "on", "the"]
+    tokens = tokenize (text)  # ["The", "cat", "sat", "on", "the"]
     
     # Training: For each position, predict next token
-    for i in range(len(tokens) - 1):
+    for i in range (len (tokens) - 1):
         context = tokens[:i+1]  # Everything up to position i
         target = tokens[i+1]     # Next token
         
         # Model predicts probability distribution over vocabulary
-        logits = model(context)  # [vocab_size] probabilities
+        logits = model (context)  # [vocab_size] probabilities
         
         # Loss: Cross-entropy between predicted and actual
-        loss = cross_entropy(logits, target)
+        loss = cross_entropy (logits, target)
     
     return loss
 
@@ -176,29 +176,29 @@ tokens = ["The", "cat", "sat", "on", "the", "mat"]
 How LLMs generate text
 """
 
-def generate_text(prompt, model, max_tokens=50):
+def generate_text (prompt, model, max_tokens=50):
     """
     Autoregressive generation: Generate one token at a time
     """
-    tokens = tokenize(prompt)
+    tokens = tokenize (prompt)
     
-    for _ in range(max_tokens):
+    for _ in range (max_tokens):
         # 1. Get probability distribution for next token
-        logits = model(tokens)  # Shape: [vocab_size]
-        probs = softmax(logits)
+        logits = model (tokens)  # Shape: [vocab_size]
+        probs = softmax (logits)
         
         # 2. Sample next token
         # (different sampling strategies covered in Prompt Engineering)
-        next_token = sample(probs, temperature=0.7)
+        next_token = sample (probs, temperature=0.7)
         
         # 3. Append to sequence
-        tokens.append(next_token)
+        tokens.append (next_token)
         
         # 4. Check for stop condition
         if next_token == "<EOS>":  # End of sequence
             break
     
-    return detokenize(tokens)
+    return detokenize (tokens)
 
 # Example: Generating "The cat sat on the mat"
 prompt = "The cat"
@@ -247,8 +247,8 @@ def plot_scaling_laws():
     # Loss (approximate scaling law)
     loss = 2.0 * (params / 1e10) ** (-0.076)
     
-    plt.figure(figsize=(10, 6))
-    plt.loglog(params, loss)
+    plt.figure (figsize=(10, 6))
+    plt.loglog (params, loss)
     plt.xlabel('Parameters')
     plt.ylabel('Loss')
     plt.title('Scaling Laws: Loss vs Model Size')
@@ -262,8 +262,8 @@ def plot_scaling_laws():
     }
     
     for name, size in models.items():
-        idx = np.argmin(np.abs(params - size))
-        plt.scatter(size, loss[idx], s=100, label=name)
+        idx = np.argmin (np.abs (params - size))
+        plt.scatter (size, loss[idx], s=100, label=name)
     
     plt.legend()
     plt.show()
@@ -273,7 +273,7 @@ def plot_scaling_laws():
 # Performance is fundamentally limited by parameter count
 
 # Compute-optimal training (Chinchilla scaling)
-def compute_optimal_tokens(parameters):
+def compute_optimal_tokens (parameters):
     """
     For best performance, train on ~20 tokens per parameter
     """
@@ -298,7 +298,7 @@ Abilities that appear only at certain scales
 # Small models: Cannot do multi-step reasoning
 # Large models: Can break down complex problems
 
-def demonstrate_emergence(model_size):
+def demonstrate_emergence (model_size):
     """
     Emergent abilities appear suddenly at scale
     """
@@ -315,7 +315,7 @@ def demonstrate_emergence(model_size):
     else:  # ≥60B parameters
         # Large models can reason step-by-step
         return """
-        Let's think step by step:
+        Let\'s think step by step:
         1. Roger starts with 5 tennis balls
         2. He buys 2 cans
         3. Each can has 3 balls: 2 × 3 = 6 balls
@@ -350,7 +350,7 @@ import anthropic
 client = anthropic.Anthropic()
 
 # Zero-shot: No examples, just the task
-def zero_shot(text):
+def zero_shot (text):
     response = client.messages.create(
         model="claude-3-5-sonnet-20241022",
         max_tokens=100,
@@ -362,7 +362,7 @@ def zero_shot(text):
     return response.content[0].text
 
 # One-shot: One example
-def one_shot(text):
+def one_shot (text):
     response = client.messages.create(
         model="claude-3-5-sonnet-20241022",
         max_tokens=100,
@@ -382,7 +382,7 @@ Sentiment:"""
     return response.content[0].text
 
 # Few-shot: Multiple examples
-def few_shot(text):
+def few_shot (text):
     response = client.messages.create(
         model="claude-3-5-sonnet-20241022",
         max_tokens=100,
@@ -398,7 +398,7 @@ Sentiment: Positive
 Text: "Terrible experience, waste of money."
 Sentiment: Negative
 
-Text: "It's okay, nothing special."
+Text: "It\'s okay, nothing special."
 Sentiment: Neutral
 
 Text: "{text}"
@@ -411,7 +411,7 @@ Sentiment:"""
 # But zero-shot is often good enough for modern LLMs!
 
 # Example: Custom task (not in training data)
-def classify_urgency(email):
+def classify_urgency (email):
     """
     Classify email urgency - a custom task
     """
@@ -452,10 +452,10 @@ Complete guide to Claude API
 import anthropic
 from typing import List, Dict
 
-client = anthropic.Anthropic(api_key="your-api-key")
+client = anthropic.Anthropic (api_key="your-api-key")
 
 # Basic usage
-def basic_chat(message: str):
+def basic_chat (message: str):
     """
     Simple question-answering
     """
@@ -470,7 +470,7 @@ def basic_chat(message: str):
     return response.content[0].text
 
 # Multi-turn conversation
-def multi_turn_chat(conversation_history: List[Dict[str, str]], new_message: str):
+def multi_turn_chat (conversation_history: List[Dict[str, str]], new_message: str):
     """
     Maintain conversation context
     """
@@ -495,7 +495,7 @@ def multi_turn_chat(conversation_history: List[Dict[str, str]], new_message: str
     return response.content[0].text
 
 # With system prompt
-def chat_with_personality(message: str, personality: str = "helpful"):
+def chat_with_personality (message: str, personality: str = "helpful"):
     """
     System prompts guide behavior
     """
@@ -515,7 +515,7 @@ def chat_with_personality(message: str, personality: str = "helpful"):
     return response.content[0].text
 
 # Streaming responses
-def streaming_chat(message: str):
+def streaming_chat (message: str):
     """
     Stream tokens as they're generated (better UX)
     """
@@ -528,15 +528,15 @@ def streaming_chat(message: str):
             print(text, end="", flush=True)
 
 # Token counting
-def count_tokens(text: str) -> int:
+def count_tokens (text: str) -> int:
     """
     Estimate token count
     """
     # Anthropic: ~1 token per 4 characters (rough estimate)
-    return len(text) // 4
+    return len (text) // 4
 
 # Cost estimation
-def estimate_cost(prompt_tokens: int, completion_tokens: int, model: str = "claude-3-5-sonnet"):
+def estimate_cost (prompt_tokens: int, completion_tokens: int, model: str = "claude-3-5-sonnet"):
     """
     Claude pricing (as of 2024):
     - Sonnet: $3/M input, $15/M output
@@ -554,16 +554,15 @@ def estimate_cost(prompt_tokens: int, completion_tokens: int, model: str = "clau
 
 # Example usage
 prompt = "Write a Python function to calculate fibonacci"
-completion = "def fibonacci(n):\\n    if n <= 1:\\n        return n\\n    return fibonacci(n-1) + fibonacci(n-2)"
+completion = "def fibonacci (n):\\n    if n <= 1:\\n        return n\\n    return fibonacci (n-1) + fibonacci (n-2)"
 
-prompt_tokens = count_tokens(prompt)
-completion_tokens = count_tokens(completion)
-cost = estimate_cost(prompt_tokens, completion_tokens)
+prompt_tokens = count_tokens (prompt)
+completion_tokens = count_tokens (completion)
+cost = estimate_cost (prompt_tokens, completion_tokens)
 
 print(f"Prompt: {prompt_tokens} tokens")
 print(f"Completion: {completion_tokens} tokens")
-print(f"Cost: \${cost: .6f
-}")
+print(f"Cost: \${cost:.6f}")
 \`\`\`
 
 ### Using OpenAI API
@@ -577,7 +576,7 @@ from openai import OpenAI
 client = OpenAI(api_key="your-api-key")
 
 # Basic chat completion
-def chat_with_gpt(message: str):
+def chat_with_gpt (message: str):
     """
     Simple GPT-4 usage
     """
@@ -592,7 +591,7 @@ def chat_with_gpt(message: str):
     return response.choices[0].message.content
 
 # Function calling (tool use)
-def chat_with_tools(message: str):
+def chat_with_tools (message: str):
     """
     LLMs can call functions
     """
@@ -627,7 +626,7 @@ def chat_with_tools(message: str):
     if response.choices[0].message.tool_calls:
         tool_call = response.choices[0].message.tool_calls[0]
         function_name = tool_call.function.name
-        function_args = json.loads(tool_call.function.arguments)
+        function_args = json.loads (tool_call.function.arguments)
         
         print(f"Model wants to call: {function_name}({function_args})")
         
@@ -637,7 +636,7 @@ def chat_with_tools(message: str):
     return response.choices[0].message.content
 
 # Structured outputs (JSON mode)
-def extract_structured_data(text: str):
+def extract_structured_data (text: str):
     """
     Force JSON output
     """
@@ -652,11 +651,11 @@ def extract_structured_data(text: str):
         response_format={"type": "json_object"}
     )
     
-    return json.loads(response.choices[0].message.content)
+    return json.loads (response.choices[0].message.content)
 
 # Example
 text = "John Smith is 35 years old and works at Acme Corp"
-data = extract_structured_data(text)
+data = extract_structured_data (text)
 print(data)  # {"name": "John Smith", "age": 35, "company": "Acme Corp"}
 \`\`\`
 
@@ -718,7 +717,7 @@ models = [
     ),
 ]
 
-def select_model(use_case: str) -> str:
+def select_model (use_case: str) -> str:
     """
     Model selection based on use case
     """
@@ -731,10 +730,10 @@ def select_model(use_case: str) -> str:
         "complex_reasoning": "GPT-4 Turbo",      # Most capable
     }
     
-    return recommendations.get(use_case, "Claude 3.5 Sonnet")
+    return recommendations.get (use_case, "Claude 3.5 Sonnet")
 
 # Cost-performance tradeoff
-def calculate_monthly_cost(requests_per_day: int, avg_input_tokens: int, avg_output_tokens: int, model: str):
+def calculate_monthly_cost (requests_per_day: int, avg_input_tokens: int, avg_output_tokens: int, model: str):
     """
     Estimate monthly costs
     """
@@ -756,12 +755,12 @@ def calculate_monthly_cost(requests_per_day: int, avg_input_tokens: int, avg_out
 print("Chat app (10k req/day, 1k in, 200 out):")
 for model in ["Claude 3 Haiku", "GPT-3.5 Turbo", "Claude 3.5 Sonnet"]:
     cost = calculate_monthly_cost(10_000, 1_000, 200, model)
-    print(f"  {model}: \${cost: .2f}/month")
+    print(f"  {model}: \${cost:.2f}/month")
 
 # Output:
-# Claude 3 Haiku: $165 / month(best value for simple chat)
+# Claude 3 Haiku: $165 / month (best value for simple chat)
 # GPT - 3.5 Turbo: $240 / month
-# Claude 3.5 Sonnet: $1, 200 / month(use for complex queries only)
+# Claude 3.5 Sonnet: $1, 200 / month (use for complex queries only)
 \`\`\`
 
 ---

@@ -65,7 +65,7 @@ export const captheoremMultipleChoice: MultipleChoiceQuestion[] = [
     question:
       "Your Instagram-like social media feed system uses Cassandra. During a network partition, users can still post photos and view feeds, but some users don't see the latest posts for 2-3 seconds until replication completes. Why is this AP design appropriate for this use case?",
     options: [
-      "It's actually incorrect - Instagram should use CP to ensure users always see the latest posts",
+      "It\'s actually incorrect - Instagram should use CP to ensure users always see the latest posts",
       'AP is appropriate because users prefer seeing slightly stale feeds over getting "service unavailable" errors',
       'AP is required because Instagram has too much data for a CP system',
       'AP is used only to save costs, not for technical reasons',

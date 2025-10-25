@@ -27,7 +27,7 @@ from scipy.optimize import approx_fprime
 def compute_jacobian_example():
     """
     Example: F: ℝ² → ℝ³
-    F(x, y) = [x² + y, x·y, sin(x) + cos(y)]
+    F(x, y) = [x² + y, x·y, sin (x) + cos (y)]
     """
     
     def F(xy):
@@ -35,26 +35,26 @@ def compute_jacobian_example():
         return np.array([
             x**2 + y,
             x * y,
-            np.sin(x) + np.cos(y)
+            np.sin (x) + np.cos (y)
         ])
     
-    def jacobian_analytical(xy):
+    def jacobian_analytical (xy):
         x, y = xy
         return np.array([
             [2*x, 1],              # ∂F₁/∂x, ∂F₁/∂y
             [y, x],                # ∂F₂/∂x, ∂F₂/∂y
-            [np.cos(x), -np.sin(y)]  # ∂F₃/∂x, ∂F₃/∂y
+            [np.cos (x), -np.sin (y)]  # ∂F₃/∂x, ∂F₃/∂y
         ])
     
     # Test point
     xy_test = np.array([1.0, 2.0])
     
     # Analytical Jacobian
-    J_analytical = jacobian_analytical(xy_test)
+    J_analytical = jacobian_analytical (xy_test)
     
     # Numerical Jacobian
     J_numerical = np.array([
-        approx_fprime(xy_test, lambda xy: F(xy)[i], 1e-8)
+        approx_fprime (xy_test, lambda xy: F(xy)[i], 1e-8)
         for i in range(3)
     ])
     
@@ -77,21 +77,21 @@ H = [∂²f/∂xᵢ∂xⱼ]
 \`\`\`python
 def compute_hessian_example():
     """
-    Example: f(x, y) = x² + xy + y²
+    Example: f (x, y) = x² + xy + y²
     """
     
-    def f(xy):
+    def f (xy):
         x, y = xy
         return x**2 + x*y + y**2
     
-    def gradient(xy):
+    def gradient (xy):
         x, y = xy
         return np.array([
             2*x + y,    # ∂f/∂x
             x + 2*y     # ∂f/∂y
         ])
     
-    def hessian_analytical(xy):
+    def hessian_analytical (xy):
         return np.array([
             [2, 1],  # ∂²f/∂x², ∂²f/∂x∂y
             [1, 2]   # ∂²f/∂y∂x, ∂²f/∂y²
@@ -101,7 +101,7 @@ def compute_hessian_example():
     xy_test = np.array([1.0, 2.0])
     
     # Analytical Hessian
-    H_analytical = hessian_analytical(xy_test)
+    H_analytical = hessian_analytical (xy_test)
     
     # Numerical Hessian (using gradient)
     h = 1e-7
@@ -110,7 +110,7 @@ def compute_hessian_example():
         for j in range(2):
             e_j = np.zeros(2)
             e_j[j] = h
-            H_numerical[i, j] = (gradient(xy_test + e_j)[i] - gradient(xy_test)[i]) / h
+            H_numerical[i, j] = (gradient (xy_test + e_j)[i] - gradient (xy_test)[i]) / h
     
     print("Hessian Matrix:")
     print(f"Analytical:\\n{H_analytical}")
@@ -120,7 +120,7 @@ def compute_hessian_example():
     # Eigenvalues determine convexity
     eigenvalues = np.linalg.eigvalsh(H_analytical)
     print(f"\\nEigenvalues: {eigenvalues}")
-    if np.all(eigenvalues > 0):
+    if np.all (eigenvalues > 0):
         print("Hessian is positive definite → f is convex")
 
 compute_hessian_example()
@@ -134,7 +134,7 @@ f(**x**) ≈ f(**a**) + ∇f(**a**)·(**x** - **a**) + (1/2)(**x** - **a**)ᵀH(
 
 **Applications**:
 - Approximating loss surfaces
-- Newton's method
+- Newton\'s method
 - Understanding optimization landscapes
 
 \`\`\`python
@@ -143,16 +143,16 @@ def multivariate_taylor_series():
     Demonstrate multivariate Taylor approximation
     """
     
-    # Function: f(x, y) = x² + xy + 2y²
-    def f(xy):
+    # Function: f (x, y) = x² + xy + 2y²
+    def f (xy):
         x, y = xy
         return x**2 + x*y + 2*y**2
     
-    def gradient(xy):
+    def gradient (xy):
         x, y = xy
         return np.array([2*x + y, x + 4*y])
     
-    def hessian(xy):
+    def hessian (xy):
         return np.array([[2, 1], [1, 4]])
     
     # Expansion point
@@ -172,18 +172,18 @@ def multivariate_taylor_series():
         dx = x - a
         
         # True value
-        f_true = f(x)
+        f_true = f (x)
         
         # Taylor approximations
-        f_0th = f(a)  # 0th order
-        f_1st = f(a) + np.dot(gradient(a), dx)  # 1st order
-        f_2nd = f(a) + np.dot(gradient(a), dx) + 0.5 * dx @ hessian(a) @ dx  # 2nd order
+        f_0th = f (a)  # 0th order
+        f_1st = f (a) + np.dot (gradient (a), dx)  # 1st order
+        f_2nd = f (a) + np.dot (gradient (a), dx) + 0.5 * dx @ hessian (a) @ dx  # 2nd order
         
-        print(f"\\nPoint: {x}, Distance from a: {np.linalg.norm(dx):.4f}")
+        print(f"\\nPoint: {x}, Distance from a: {np.linalg.norm (dx):.4f}")
         print(f"True value:        {f_true:.6f}")
-        print(f"0th order approx:  {f_0th:.6f} (error: {abs(f_true - f_0th):.6f})")
-        print(f"1st order approx:  {f_1st:.6f} (error: {abs(f_true - f_1st):.6f})")
-        print(f"2nd order approx:  {f_2nd:.6f} (error: {abs(f_true - f_2nd):.6f})")
+        print(f"0th order approx:  {f_0th:.6f} (error: {abs (f_true - f_0th):.6f})")
+        print(f"1st order approx:  {f_1st:.6f} (error: {abs (f_true - f_1st):.6f})")
+        print(f"2nd order approx:  {f_2nd:.6f} (error: {abs (f_true - f_2nd):.6f})")
     
     print("\\n→ Second-order approximation is exact for quadratic functions!")
 
@@ -206,16 +206,16 @@ def classify_critical_points():
     Find and classify critical points
     """
     
-    # Function: f(x, y) = x² - y²
-    def f(xy):
+    # Function: f (x, y) = x² - y²
+    def f (xy):
         x, y = xy
         return x**2 - y**2
     
-    def gradient(xy):
+    def gradient (xy):
         x, y = xy
         return np.array([2*x, -2*y])
     
-    def hessian(xy):
+    def hessian (xy):
         return np.array([[2, 0], [0, -2]])
     
     # Critical point (gradient = 0)
@@ -223,17 +223,17 @@ def classify_critical_points():
     
     print("Critical Point Analysis:")
     print(f"Point: {critical_point}")
-    print(f"Gradient: {gradient(critical_point)}")
+    print(f"Gradient: {gradient (critical_point)}")
     
-    H = hessian(critical_point)
+    H = hessian (critical_point)
     eigenvalues = np.linalg.eigvalsh(H)
     
     print(f"\\nHessian:\\n{H}")
     print(f"Eigenvalues: {eigenvalues}")
     
-    if np.all(eigenvalues > 0):
+    if np.all (eigenvalues > 0):
         print("→ Local minimum")
-    elif np.all(eigenvalues < 0):
+    elif np.all (eigenvalues < 0):
         print("→ Local maximum")
     else:
         print("→ Saddle point (mixed eigenvalue signs)")
@@ -243,10 +243,10 @@ def classify_critical_points():
     
     x = np.linspace(-2, 2, 100)
     y = np.linspace(-2, 2, 100)
-    X, Y = np.meshgrid(x, y)
+    X, Y = np.meshgrid (x, y)
     Z = X**2 - Y**2
     
-    fig = plt.figure(figsize=(10, 4))
+    fig = plt.figure (figsize=(10, 4))
     
     # 3D surface
     ax1 = fig.add_subplot(121, projection='3d')
@@ -254,14 +254,14 @@ def classify_critical_points():
     ax1.scatter([0], [0], [0], color='red', s=100, label='Saddle point')
     ax1.set_xlabel('x')
     ax1.set_ylabel('y')
-    ax1.set_zlabel('f(x,y)')
-    ax1.set_title('f(x,y) = x² - y²')
+    ax1.set_zlabel('f (x,y)')
+    ax1.set_title('f (x,y) = x² - y²')
     ax1.legend()
     
     # Contour plot
     ax2 = fig.add_subplot(122)
     contour = ax2.contour(X, Y, Z, levels=20, cmap='viridis')
-    ax2.clabel(contour, inline=True, fontsize=8)
+    ax2.clabel (contour, inline=True, fontsize=8)
     ax2.plot(0, 0, 'ro', markersize=10, label='Saddle point')
     ax2.set_xlabel('x')
     ax2.set_ylabel('y')
@@ -291,35 +291,35 @@ def high_dimensional_saddle_points():
     Demonstrate saddle points in high dimensions
     """
     
-    # Function: f(x) = Σᵢ αᵢ·xᵢ² where some αᵢ > 0, some < 0
-    def create_saddle_function(n_pos, n_neg):
+    # Function: f (x) = Σᵢ αᵢ·xᵢ² where some αᵢ > 0, some < 0
+    def create_saddle_function (n_pos, n_neg):
         """Create function with saddle point at origin"""
-        alphas = np.concatenate([np.ones(n_pos), -np.ones(n_neg)])
+        alphas = np.concatenate([np.ones (n_pos), -np.ones (n_neg)])
         
-        def f(x):
-            return 0.5 * np.sum(alphas * x**2)
+        def f (x):
+            return 0.5 * np.sum (alphas * x**2)
         
-        def gradient(x):
+        def gradient (x):
             return alphas * x
         
         def hessian():
-            return np.diag(alphas)
+            return np.diag (alphas)
         
         return f, gradient, hessian, alphas
     
     # Example: 5D space, 3 positive, 2 negative curvatures
-    f, grad, hess, alphas = create_saddle_function(n_pos=3, n_neg=2)
+    f, grad, hess, alphas = create_saddle_function (n_pos=3, n_neg=2)
     
     origin = np.zeros(5)
     print("High-Dimensional Saddle Point:")
-    print(f"Dimensions: {len(origin)}")
-    print(f"Gradient at origin: {grad(origin)}")
+    print(f"Dimensions: {len (origin)}")
+    print(f"Gradient at origin: {grad (origin)}")
     
     H = hess()
     eigenvalues = np.linalg.eigvalsh(H)
     print(f"\\nHessian eigenvalues: {eigenvalues}")
-    print(f"Positive eigenvalues: {np.sum(eigenvalues > 0)}")
-    print(f"Negative eigenvalues: {np.sum(eigenvalues < 0)}")
+    print(f"Positive eigenvalues: {np.sum (eigenvalues > 0)}")
+    print(f"Negative eigenvalues: {np.sum (eigenvalues < 0)}")
     print("→ Saddle point (3 directions decrease, 2 increase)")
     
     # Fraction of saddle points grows exponentially with dimension
@@ -350,16 +350,16 @@ def neural_network_hessian_example():
     W = np.random.randn(1, 2) * 0.1
     b = np.random.randn(1) * 0.1
     
-    def sigmoid(z):
-        return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+    def sigmoid (z):
+        return 1 / (1 + np.exp(-np.clip (z, -500, 500)))
     
-    def sigmoid_derivative(z):
-        s = sigmoid(z)
+    def sigmoid_derivative (z):
+        s = sigmoid (z)
         return s * (1 - s)
     
     def forward(W, b):
         z = X @ W.T + b
-        return sigmoid(z)
+        return sigmoid (z)
     
     def loss(W, b):
         y_pred = forward(W, b)
@@ -369,34 +369,34 @@ def neural_network_hessian_example():
     def params_to_vector(W, b):
         return np.concatenate([W.flatten(), b.flatten()])
     
-    def vector_to_params(theta):
+    def vector_to_params (theta):
         W = theta[:2].reshape(1, 2)
         b = theta[2:].reshape(1)
         return W, b
     
-    def loss_vector(theta):
-        W, b = vector_to_params(theta)
+    def loss_vector (theta):
+        W, b = vector_to_params (theta)
         return loss(W, b)
     
     # Compute Hessian numerically
     theta = params_to_vector(W, b)
-    n_params = len(theta)
+    n_params = len (theta)
     
     H = np.zeros((n_params, n_params))
     h = 1e-5
     
-    for i in range(n_params):
-        for j in range(n_params):
-            e_i = np.zeros(n_params)
-            e_j = np.zeros(n_params)
+    for i in range (n_params):
+        for j in range (n_params):
+            e_i = np.zeros (n_params)
+            e_j = np.zeros (n_params)
             e_i[i] = h
             e_j[j] = h
             
             H[i, j] = (
-                loss_vector(theta + e_i + e_j)
-                - loss_vector(theta + e_i)
-                - loss_vector(theta + e_j)
-                + loss_vector(theta)
+                loss_vector (theta + e_i + e_j)
+                - loss_vector (theta + e_i)
+                - loss_vector (theta + e_j)
+                + loss_vector (theta)
             ) / (h**2)
     
     print("Neural Network Hessian:")
@@ -406,13 +406,13 @@ def neural_network_hessian_example():
     eigenvalues = np.linalg.eigvalsh(H)
     print(f"\\nEigenvalues: {eigenvalues}")
     
-    if np.all(eigenvalues > 0):
+    if np.all (eigenvalues > 0):
         print("→ Loss surface is locally convex")
     else:
         print("→ Loss surface has negative curvature directions")
     
     # Condition number
-    cond = np.max(np.abs(eigenvalues)) / np.min(np.abs(eigenvalues[eigenvalues > 1e-10]))
+    cond = np.max (np.abs (eigenvalues)) / np.min (np.abs (eigenvalues[eigenvalues > 1e-10]))
     print(f"\\nCondition number: {cond:.2f}")
     print("(Higher → harder to optimize)")
 

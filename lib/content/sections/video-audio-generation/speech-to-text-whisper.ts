@@ -159,8 +159,8 @@ class WhisperTranscriber:
         start_time = time.time()
         
         # Load audio if path
-        if isinstance(audio, (str, Path)):
-            audio = whisper.load_audio(str(audio))
+        if isinstance (audio, (str, Path)):
+            audio = whisper.load_audio (str (audio))
         
         # Transcribe
         result = self.model.transcribe(
@@ -180,7 +180,7 @@ class WhisperTranscriber:
         
         # Parse segments
         segments = []
-        for i, seg in enumerate(result["segments"]):
+        for i, seg in enumerate (result["segments"]):
             segments.append(TranscriptionSegment(
                 id=i,
                 start=seg["start"],
@@ -190,7 +190,7 @@ class WhisperTranscriber:
             ))
         
         # Calculate audio duration
-        duration = len(audio) / whisper.audio.SAMPLE_RATE
+        duration = len (audio) / whisper.audio.SAMPLE_RATE
         
         return TranscriptionResult(
             text=result["text"].strip(),
@@ -200,7 +200,7 @@ class WhisperTranscriber:
             processing_time=processing_time,
         )
     
-    def detect_language(self, audio: Union[str, Path, np.ndarray]) -> str:
+    def detect_language (self, audio: Union[str, Path, np.ndarray]) -> str:
         """
         Detect language of audio
         
@@ -208,20 +208,20 @@ class WhisperTranscriber:
             Language code (e.g., "en", "es", "fr")
         """
         # Load audio if needed
-        if isinstance(audio, (str, Path)):
-            audio = whisper.load_audio(str(audio))
+        if isinstance (audio, (str, Path)):
+            audio = whisper.load_audio (str (audio))
         
         # Pad/trim to 30 seconds
-        audio = whisper.pad_or_trim(audio)
+        audio = whisper.pad_or_trim (audio)
         
         # Make log-Mel spectrogram
-        mel = whisper.log_mel_spectrogram(audio).to(self.device)
+        mel = whisper.log_mel_spectrogram (audio).to (self.device)
         
         # Detect language
-        _, probs = self.model.detect_language(mel)
+        _, probs = self.model.detect_language (mel)
         
         # Get most likely language
-        detected_language = max(probs, key=probs.get)
+        detected_language = max (probs, key=probs.get)
         
         print(f"Detected language: {detected_language} ({probs[detected_language]:.2%} confidence)")
         
@@ -251,10 +251,10 @@ class WhisperTranscriber:
         )
         
         # Run diarization
-        diarization = diarization_pipeline(str(audio_path))
+        diarization = diarization_pipeline (str (audio_path))
         
         # Run transcription
-        transcription = self.transcribe(audio_path, word_timestamps=True)
+        transcription = self.transcribe (audio_path, word_timestamps=True)
         
         # Align transcription with speakers
         aligned = []
@@ -274,9 +274,9 @@ class WhisperTranscriber:
         
         return aligned
     
-    def _find_speaker_at_time(self, diarization, time: float) -> str:
+    def _find_speaker_at_time (self, diarization, time: float) -> str:
         """Find which speaker is talking at given time"""
-        for turn, _, speaker in diarization.itertracks(yield_label=True):
+        for turn, _, speaker in diarization.itertracks (yield_label=True):
             if turn.start <= time <= turn.end:
                 return speaker
         return "UNKNOWN"
@@ -298,12 +298,12 @@ class WhisperTranscriber:
         """
         results = []
         
-        for i, audio_file in enumerate(audio_files):
-            print(f"\\n[{i+1}/{len(audio_files)}] Transcribing {audio_file}")
+        for i, audio_file in enumerate (audio_files):
+            print(f"\\n[{i+1}/{len (audio_files)}] Transcribing {audio_file}")
             
             try:
-                result = self.transcribe(audio_file, **transcribe_kwargs)
-                results.append(result)
+                result = self.transcribe (audio_file, **transcribe_kwargs)
+                results.append (result)
                 
                 print(f"✅ Completed in {result.processing_time:.1f}s")
                 print(f"   Duration: {result.duration:.1f}s")
@@ -327,16 +327,16 @@ class WhisperTranscriber:
             result: TranscriptionResult
             output_path: Output .srt file path
         """
-        with open(output_path, "w", encoding="utf-8") as f:
-            for i, segment in enumerate(result.segments, start=1):
+        with open (output_path, "w", encoding="utf-8") as f:
+            for i, segment in enumerate (result.segments, start=1):
                 # Format timestamps
-                start_time = self._format_timestamp_srt(segment.start)
-                end_time = self._format_timestamp_srt(segment.end)
+                start_time = self._format_timestamp_srt (segment.start)
+                end_time = self._format_timestamp_srt (segment.end)
                 
                 # Write segment
-                f.write(f"{i}\\n")
-                f.write(f"{start_time} --> {end_time}\\n")
-                f.write(f"{segment.text}\\n")
+                f.write (f"{i}\\n")
+                f.write (f"{start_time} --> {end_time}\\n")
+                f.write (f"{segment.text}\\n")
                 f.write("\\n")
         
         print(f"💾 Exported SRT: {output_path}")
@@ -347,15 +347,15 @@ class WhisperTranscriber:
         output_path: Union[str, Path],
     ):
         """Export as WebVTT subtitles"""
-        with open(output_path, "w", encoding="utf-8") as f:
+        with open (output_path, "w", encoding="utf-8") as f:
             f.write("WEBVTT\\n\\n")
             
             for segment in result.segments:
-                start_time = self._format_timestamp_vtt(segment.start)
-                end_time = self._format_timestamp_vtt(segment.end)
+                start_time = self._format_timestamp_vtt (segment.start)
+                end_time = self._format_timestamp_vtt (segment.end)
                 
-                f.write(f"{start_time} --> {end_time}\\n")
-                f.write(f"{segment.text}\\n")
+                f.write (f"{start_time} --> {end_time}\\n")
+                f.write (f"{segment.text}\\n")
                 f.write("\\n")
         
         print(f"💾 Exported VTT: {output_path}")
@@ -381,26 +381,26 @@ class WhisperTranscriber:
             ]
         }
         
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+        with open (output_path, "w", encoding="utf-8") as f:
+            json.dump (data, f, indent=2, ensure_ascii=False)
         
         print(f"💾 Exported JSON: {output_path}")
     
     @staticmethod
-    def _format_timestamp_srt(seconds: float) -> str:
+    def _format_timestamp_srt (seconds: float) -> str:
         """Format seconds as SRT timestamp: 00:00:00,000"""
-        hours = int(seconds // 3600)
+        hours = int (seconds // 3600)
         minutes = int((seconds % 3600) // 60)
-        secs = int(seconds % 60)
+        secs = int (seconds % 60)
         millis = int((seconds % 1) * 1000)
         return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
     
     @staticmethod
-    def _format_timestamp_vtt(seconds: float) -> str:
+    def _format_timestamp_vtt (seconds: float) -> str:
         """Format seconds as VTT timestamp: 00:00:00.000"""
-        hours = int(seconds // 3600)
+        hours = int (seconds // 3600)
         minutes = int((seconds % 3600) // 60)
-        secs = int(seconds % 60)
+        secs = int (seconds % 60)
         millis = int((seconds % 1) * 1000)
         return f"{hours:02d}:{minutes:02d}:{secs:02d}.{millis:03d}"
 
@@ -450,48 +450,48 @@ class WhisperWithVAD:
             TranscriptionResult
         """
         # Load audio
-        audio = whisper.load_audio(str(audio_path))
+        audio = whisper.load_audio (str (audio_path))
         
         # Detect speech segments
         print("Running VAD...")
         speech_timestamps = self.get_speech_timestamps(
-            torch.from_numpy(audio),
+            torch.from_numpy (audio),
             self.vad_model,
             min_speech_duration_ms=min_speech_duration_ms,
             min_silence_duration_ms=min_silence_duration_ms,
             return_seconds=True,
         )
         
-        print(f"Found {len(speech_timestamps)} speech segments")
+        print(f"Found {len (speech_timestamps)} speech segments")
         
         # Transcribe each segment
         all_segments = []
         full_text = []
         
-        for i, timestamp in enumerate(speech_timestamps):
-            start_sample = int(timestamp['start'] * whisper.audio.SAMPLE_RATE)
-            end_sample = int(timestamp['end'] * whisper.audio.SAMPLE_RATE)
+        for i, timestamp in enumerate (speech_timestamps):
+            start_sample = int (timestamp['start'] * whisper.audio.SAMPLE_RATE)
+            end_sample = int (timestamp['end'] * whisper.audio.SAMPLE_RATE)
             
             # Extract segment
             segment_audio = audio[start_sample:end_sample]
             
             # Transcribe
-            result = self.transcriber.transcribe(segment_audio)
+            result = self.transcriber.transcribe (segment_audio)
             
             # Adjust timestamps
             for seg in result.segments:
                 seg.start += timestamp['start']
                 seg.end += timestamp['start']
-                all_segments.append(seg)
+                all_segments.append (seg)
             
-            full_text.append(result.text)
+            full_text.append (result.text)
         
         # Combine results
         return TranscriptionResult(
-            text=" ".join(full_text),
+            text=" ".join (full_text),
             language=result.language if result else "unknown",
             segments=all_segments,
-            duration=len(audio) / whisper.audio.SAMPLE_RATE,
+            duration=len (audio) / whisper.audio.SAMPLE_RATE,
             processing_time=0,  # Not tracked here
         )
 
@@ -519,9 +519,9 @@ def production_examples():
     print(f"Realtime factor: {result.duration / result.processing_time:.1f}x")
     
     # Export formats
-    transcriber.export_srt(result, "podcast.srt")
-    transcriber.export_vtt(result, "podcast.vtt")
-    transcriber.export_json(result, "podcast.json")
+    transcriber.export_srt (result, "podcast.srt")
+    transcriber.export_vtt (result, "podcast.vtt")
+    transcriber.export_json (result, "podcast.json")
     
     # Example 2: Language detection
     print("\\n=== Example 2: Language Detection ===")
@@ -577,10 +577,10 @@ def production_examples():
     )
     
     # Save all transcriptions
-    for audio_file, result in zip(audio_files, results):
+    for audio_file, result in zip (audio_files, results):
         if result:
-            output_path = Path(audio_file).with_suffix('.srt')
-            transcriber.export_srt(result, output_path)
+            output_path = Path (audio_file).with_suffix('.srt')
+            transcriber.export_srt (result, output_path)
     
     # Example 7: With VAD (faster, skips silence)
     print("\\n=== Example 7: With VAD ===")
@@ -592,7 +592,7 @@ def production_examples():
         min_silence_duration_ms=300,
     )
     
-    print(f"Transcribed with VAD: {len(result.segments)} segments")
+    print(f"Transcribed with VAD: {len (result.segments)} segments")
 
 if __name__ == "__main__":
     production_examples()
@@ -652,7 +652,7 @@ class WhisperAPI:
         Returns:
             Transcription result
         """
-        with open(audio_path, "rb") as audio_file:
+        with open (audio_path, "rb") as audio_file:
             transcript = openai.Audio.transcribe(
                 model="whisper-1",
                 file=audio_file,
@@ -670,7 +670,7 @@ class WhisperAPI:
         prompt: Optional[str] = None,
     ) -> dict:
         """Translate audio to English"""
-        with open(audio_path, "rb") as audio_file:
+        with open (audio_path, "rb") as audio_file:
             translation = openai.Audio.translate(
                 model="whisper-1",
                 file=audio_file,
@@ -693,7 +693,7 @@ def api_example():
     
     # Save
     with open("subtitles.srt", "w") as f:
-        f.write(result)
+        f.write (result)
 \`\`\`
 
 ---
@@ -726,11 +726,11 @@ vad_transcriber = WhisperWithVAD(transcriber)
 # 3. Batch process with threading
 from concurrent.futures import ThreadPoolExecutor
 
-def transcribe_parallel(audio_files, num_workers=4):
+def transcribe_parallel (audio_files, num_workers=4):
     transcriber = WhisperTranscriber("base")
     
-    with ThreadPoolExecutor(max_workers=num_workers) as executor:
-        results = list(executor.map(transcriber.transcribe, audio_files))
+    with ThreadPoolExecutor (max_workers=num_workers) as executor:
+        results = list (executor.map (transcriber.transcribe, audio_files))
     
     return results
 
@@ -764,7 +764,7 @@ def preprocess_audio(
     - WAV or common formats
     """
     # Load audio (supports many formats)
-    audio = AudioSegment.from_file(input_path)
+    audio = AudioSegment.from_file (input_path)
     
     # Convert to mono
     audio = audio.set_channels(1)
@@ -773,13 +773,13 @@ def preprocess_audio(
     audio = audio.set_frame_rate(16000)
     
     # Export
-    audio.export(output_path, format="wav")
+    audio.export (output_path, format="wav")
     
     return output_path
 
 # Usage
 processed_path = preprocess_audio("input.mp3")
-result = transcriber.transcribe(processed_path)
+result = transcriber.transcribe (processed_path)
 \`\`\`
 
 ---

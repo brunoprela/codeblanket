@@ -19,17 +19,17 @@ export const CustomManagersQuerysetsMultipleChoice = [
 Custom QuerySets enable method chaining, allowing you to build complex queries by calling multiple custom methods in sequence. Each method returns a QuerySet, so you can chain calls together. Custom Managers, by default, return QuerySets only for the initial query.
 
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status='published')
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
+        return self.filter (status='published')
     
-    def featured(self):
-        return self.filter(featured=True)
+    def featured (self):
+        return self.filter (featured=True)
     
-    def recent(self):
-        return self.filter(created_at__gte=timezone.now() - timedelta(days=7))
+    def recent (self):
+        return self.filter (created_at__gte=timezone.now() - timedelta (days=7))
 
-class Article(models.Model):
+class Article (models.Model):
     objects = ArticleQuerySet.as_manager()
 
 # ✅ Method chaining works beautifully
@@ -52,23 +52,23 @@ Custom QuerySets are not required for custom queries. You can use standard Query
 **Production Best Practice:**
 \`\`\`python
 # Combine both for optimal API
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status='published')
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
+        return self.filter (status='published')
     
-    def by_author(self, author):
-        return self.filter(author=author)
+    def by_author (self, author):
+        return self.filter (author=author)
 
-class ArticleManager(models.Manager.from_queryset(ArticleQuerySet)):
-    def get_queryset(self):
+class ArticleManager (models.Manager.from_queryset(ArticleQuerySet)):
+    def get_queryset (self):
         # Manager adds optimization
         return super().get_queryset().select_related('author', 'category')
 
-class Article(models.Model):
+class Article (models.Model):
     objects = ArticleManager()
 
 # Combines: optimization (from Manager) + chaining (from QuerySet)
-Article.objects.published().by_author(user).order_by('-created_at')
+Article.objects.published().by_author (user).order_by('-created_at')
 \`\`\`
 
 This pattern provides both performance optimization and flexible, chainable query building.
@@ -145,18 +145,18 @@ for article in articles:
 # Without Prefetch: 1 + N + N*M queries
 articles = Article.objects.all()
 for article in articles:
-    for comment in article.comments.filter(approved=True):
+    for comment in article.comments.filter (approved=True):
         print(comment.user.name)
 
 # With simple prefetch: 1 + 1 + M queries
 articles = Article.objects.prefetch_related('comments')
 for article in articles:
-    for comment in article.comments.filter(approved=True):
+    for comment in article.comments.filter (approved=True):
         print(comment.user.name)
 
 # With Prefetch object: 1 + 1 queries (optimal!)
 articles = Article.objects.prefetch_related(
-    Prefetch('comments', queryset=Comment.objects.filter(approved=True).select_related('user'))
+    Prefetch('comments', queryset=Comment.objects.filter (approved=True).select_related('user'))
 )
 for article in articles:
     for comment in article.comments.all():  # Already filtered!
@@ -165,8 +165,8 @@ for article in articles:
 
 **Production Use Case:**
 \`\`\`python
-class ArticleViewSet(viewsets.ModelViewSet):
-    def get_queryset(self):
+class ArticleViewSet (viewsets.ModelViewSet):
+    def get_queryset (self):
         if self.action == 'retrieve':
             return Article.objects.prefetch_related(
                 Prefetch(
@@ -204,46 +204,46 @@ Prefetch objects are essential for optimizing complex nested relationships in pr
 A custom Manager that filters the default queryset is the Django-idiomatic way to implement soft deletes. This ensures that "deleted" objects are hidden from all standard queries by default, while still allowing access when needed.
 
 \`\`\`python
-class SoftDeleteQuerySet(models.QuerySet):
-    def delete(self):
+class SoftDeleteQuerySet (models.QuerySet):
+    def delete (self):
         """Soft delete for QuerySets"""
-        return self.update(deleted_at=timezone.now())
+        return self.update (deleted_at=timezone.now())
     
-    def hard_delete(self):
+    def hard_delete (self):
         """Actually delete from database"""
         return super().delete()
     
-    def alive(self):
+    def alive (self):
         """Only non-deleted objects"""
-        return self.filter(deleted_at__isnull=True)
+        return self.filter (deleted_at__isnull=True)
     
-    def dead(self):
+    def dead (self):
         """Only deleted objects"""
-        return self.filter(deleted_at__isnull=False)
+        return self.filter (deleted_at__isnull=False)
 
-class SoftDeleteManager(models.Manager):
-    def get_queryset(self):
+class SoftDeleteManager (models.Manager):
+    def get_queryset (self):
         """Default queryset excludes deleted objects"""
-        return SoftDeleteQuerySet(self.model, using=self._db).alive()
+        return SoftDeleteQuerySet (self.model, using=self._db).alive()
     
-    def all_with_deleted(self):
+    def all_with_deleted (self):
         """Get all objects including deleted"""
-        return SoftDeleteQuerySet(self.model, using=self._db)
+        return SoftDeleteQuerySet (self.model, using=self._db)
 
-class Article(models.Model):
-    title = models.CharField(max_length=200)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+class Article (models.Model):
+    title = models.CharField (max_length=200)
+    deleted_at = models.DateTimeField (null=True, blank=True)
     
     objects = SoftDeleteManager()
     all_objects = models.Manager()  # Bypass soft delete filter
     
-    def delete(self, using=None, keep_parents=False):
+    def delete (self, using=None, keep_parents=False):
         """Soft delete for model instances"""
         self.deleted_at = timezone.now()
         self.save()
 
 # Usage:
-article = Article.objects.get(id=1)
+article = Article.objects.get (id=1)
 article.delete()  # Soft delete
 
 Article.objects.all()  # Excludes deleted articles
@@ -265,30 +265,30 @@ Database constraints prevent deletion at the database level, but that's not soft
 from django.db import models
 from django.utils import timezone
 
-class SoftDeleteQuerySet(models.QuerySet):
-    def delete(self):
-        return self.update(deleted_at=timezone.now(), deleted_by=self._get_current_user())
+class SoftDeleteQuerySet (models.QuerySet):
+    def delete (self):
+        return self.update (deleted_at=timezone.now(), deleted_by=self._get_current_user())
     
-    def hard_delete(self):
+    def hard_delete (self):
         return super().delete()
     
-    def alive(self):
-        return self.filter(deleted_at__isnull=True)
+    def alive (self):
+        return self.filter (deleted_at__isnull=True)
     
-    def dead(self):
-        return self.filter(deleted_at__isnull=False)
+    def dead (self):
+        return self.filter (deleted_at__isnull=False)
     
-    def restore(self):
+    def restore (self):
         """Restore soft-deleted objects"""
-        return self.update(deleted_at=None, deleted_by=None)
+        return self.update (deleted_at=None, deleted_by=None)
 
-class SoftDeleteManager(models.Manager.from_queryset(SoftDeleteQuerySet)):
-    def get_queryset(self):
+class SoftDeleteManager (models.Manager.from_queryset(SoftDeleteQuerySet)):
+    def get_queryset (self):
         return super().get_queryset().alive()
 
-class SoftDeleteModel(models.Model):
+class SoftDeleteModel (models.Model):
     """Abstract base model for soft deletion"""
-    deleted_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    deleted_at = models.DateTimeField (null=True, blank=True, db_index=True)
     deleted_by = models.ForeignKey(
         'auth.User',
         null=True,
@@ -303,27 +303,27 @@ class SoftDeleteModel(models.Model):
     class Meta:
         abstract = True
     
-    def delete(self, using=None, keep_parents=False, hard=False):
+    def delete (self, using=None, keep_parents=False, hard=False):
         if hard:
-            return super().delete(using=using, keep_parents=keep_parents)
+            return super().delete (using=using, keep_parents=keep_parents)
         else:
             self.deleted_at = timezone.now()
             self.save()
     
-    def restore(self):
+    def restore (self):
         self.deleted_at = None
         self.deleted_by = None
         self.save()
 
 # Usage in models:
 class Article(SoftDeleteModel):
-    title = models.CharField(max_length=200)
+    title = models.CharField (max_length=200)
     content = models.TextField()
 
 # In views:
 article.delete()  # Soft delete
 article.restore()  # Restore
-article.delete(hard=True)  # Hard delete
+article.delete (hard=True)  # Hard delete
 
 Article.objects.all()  # Only non-deleted
 Article.all_objects.all()  # Including deleted
@@ -350,10 +350,10 @@ This pattern is widely used in production for critical data that shouldn't be pe
     question:
       'What is the most efficient way to check if a QuerySet has any results without loading them into memory?',
     options: [
-      'A) if len(queryset) > 0:',
+      'A) if len (queryset) > 0:',
       'B) if queryset.count() > 0:',
       'C) if queryset.exists():',
-      'D) if list(queryset):',
+      'D) if list (queryset):',
     ],
     correctAnswer: 2,
     explanation: `
@@ -364,7 +364,7 @@ This pattern is widely used in production for critical data that shouldn't be pe
 
 \`\`\`python
 # ✅ Most efficient
-if Article.objects.filter(status='published').exists():
+if Article.objects.filter (status='published').exists():
     print("Published articles exist")
 
 # SQL Generated:
@@ -373,7 +373,7 @@ if Article.objects.filter(status='published').exists():
 \`\`\`
 
 **Why A is incorrect:**
-\`len(queryset)\` forces Django to execute the query and load ALL results into Python memory, then count them. This is extremely inefficient, especially for large querysets.
+\`len (queryset)\` forces Django to execute the query and load ALL results into Python memory, then count them. This is extremely inefficient, especially for large querysets.
 
 \`\`\`python
 # ❌ Inefficient: Loads all 10,000 articles into memory
@@ -388,7 +388,7 @@ if len(Article.objects.all()) > 0:
 
 \`\`\`python
 # ❌ Less efficient: Counts all rows
-if Article.objects.filter(status='published').count() > 0:
+if Article.objects.filter (status='published').count() > 0:
     pass
 
 # SQL: SELECT COUNT(*) FROM articles WHERE status = 'published'
@@ -396,7 +396,7 @@ if Article.objects.filter(status='published').count() > 0:
 \`\`\`
 
 **Why D is incorrect:**
-\`list(queryset)\` converts the entire queryset to a Python list, loading all data into memory. This is the worst option for checking existence.
+\`list (queryset)\` converts the entire queryset to a Python list, loading all data into memory. This is the worst option for checking existence.
 
 **Performance Comparison (1 million articles):**
 - exists(): ~1ms (stops at first match)
@@ -408,14 +408,14 @@ if Article.objects.filter(status='published').count() > 0:
 
 \`\`\`python
 # ✅ Check existence before querying
-if Article.objects.filter(author=user).exists():
-    articles = Article.objects.filter(author=user).select_related('category')
+if Article.objects.filter (author=user).exists():
+    articles = Article.objects.filter (author=user).select_related('category')
 else:
     articles = []
 
 # ✅ Conditional logic
-has_articles = Article.objects.filter(status='published').exists()
-has_drafts = Article.objects.filter(status='draft').exists()
+has_articles = Article.objects.filter (status='published').exists()
+has_drafts = Article.objects.filter (status='draft').exists()
 
 if has_articles and not has_drafts:
     # All articles are published
@@ -457,23 +457,23 @@ from django.db.models import Exists, OuterRef
 # Check multiple existence conditions in one query
 Article.objects.annotate(
     has_comments=Exists(
-        Comment.objects.filter(article=OuterRef('pk'))
+        Comment.objects.filter (article=OuterRef('pk'))
     ),
     has_likes=Exists(
-        Like.objects.filter(article=OuterRef('pk'))
+        Like.objects.filter (article=OuterRef('pk'))
     )
-).filter(has_comments=True, has_likes=True)
+).filter (has_comments=True, has_likes=True)
 \`\`\`
 
 **API Example:**
 \`\`\`python
 @api_view(['GET'])
-def check_username(request):
+def check_username (request):
     """Check if username is available"""
     username = request.query_params.get('username')
     
     # ✅ Efficient existence check
-    is_taken = User.objects.filter(username=username).exists()
+    is_taken = User.objects.filter (username=username).exists()
     
     return Response({
         'available': not is_taken
@@ -497,25 +497,25 @@ Using \`exists()\` correctly can improve query performance by 100x or more in la
 **Correct Answer: B) Chain additional QuerySet methods after calling your custom method**
 
 **Why B is correct:**
-Returning \`self\` (or more commonly, returning the modified QuerySet) allows method chaining - calling multiple methods in sequence. This is the core pattern that makes Django's QuerySet API so elegant and powerful.
+Returning \`self\` (or more commonly, returning the modified QuerySet) allows method chaining - calling multiple methods in sequence. This is the core pattern that makes Django\'s QuerySet API so elegant and powerful.
 
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
         """Filter to published articles"""
-        return self.filter(status='published')  # Returns QuerySet
+        return self.filter (status='published')  # Returns QuerySet
     
-    def featured(self):
+    def featured (self):
         """Filter to featured articles"""
-        return self.filter(featured=True)  # Returns QuerySet
+        return self.filter (featured=True)  # Returns QuerySet
     
-    def recent(self):
+    def recent (self):
         """Filter to recent articles"""
         from datetime import timedelta
-        week_ago = timezone.now() - timedelta(days=7)
-        return self.filter(created_at__gte=week_ago)  # Returns QuerySet
+        week_ago = timezone.now() - timedelta (days=7)
+        return self.filter (created_at__gte=week_ago)  # Returns QuerySet
 
-class Article(models.Model):
+class Article (models.Model):
     objects = ArticleQuerySet.as_manager()
 
 # ✅ Method chaining works because each method returns a QuerySet
@@ -540,10 +540,10 @@ Custom QuerySet methods should return QuerySets, not model instances. To return 
 
 **Bad Pattern - Breaking the Chain:**
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
         """❌ BAD: Returns list, breaks chaining"""
-        return list(self.filter(status='published'))
+        return list (self.filter (status='published'))
 
 # This breaks method chaining:
 articles = Article.objects.published().featured()  # ❌ AttributeError!
@@ -552,16 +552,16 @@ articles = Article.objects.published().featured()  # ❌ AttributeError!
 
 **Good Pattern - Maintaining Chainability:**
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
         """✅ GOOD: Returns QuerySet"""
-        return self.filter(status='published')
+        return self.filter (status='published')
     
-    def by_category(self, category):
+    def by_category (self, category):
         """✅ GOOD: Returns QuerySet"""
-        return self.filter(category=category)
+        return self.filter (category=category)
     
-    def with_author_details(self):
+    def with_author_details (self):
         """✅ GOOD: Returns QuerySet with optimization"""
         return self.select_related('author', 'author__profile')
 
@@ -571,21 +571,21 @@ Article.objects.published().by_category('tech').with_author_details().order_by('
 
 **When to Return Something Other Than QuerySet:**
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(status='published')  # Returns QuerySet
+class ArticleQuerySet (models.QuerySet):
+    def published (self):
+        return self.filter (status='published')  # Returns QuerySet
     
-    def get_total_views(self):
+    def get_total_views (self):
         """Returns integer, not QuerySet - terminates chain"""
         return self.aggregate(Sum('view_count'))['view_count__sum'] or 0
     
-    def export_to_csv(self):
+    def export_to_csv (self):
         """Returns string, not QuerySet - terminates chain"""
         import csv
         import io
         
         output = io.StringIO()
-        writer = csv.writer(output)
+        writer = csv.writer (output)
         writer.writerow(['Title', 'Author', 'Views'])
         
         for article in self:
@@ -608,21 +608,21 @@ articles = Article.objects.published().get_total_views().featured()  # ❌ Break
 
 **Production Example:**
 \`\`\`python
-class ArticleQuerySet(models.QuerySet):
+class ArticleQuerySet (models.QuerySet):
     # Chainable filters
-    def published(self):
-        return self.filter(status='published')
+    def published (self):
+        return self.filter (status='published')
     
-    def in_language(self, lang):
-        return self.filter(language=lang)
+    def in_language (self, lang):
+        return self.filter (language=lang)
     
-    def for_user(self, user):
+    def for_user (self, user):
         if user.is_staff:
             return self  # All articles
-        return self.filter(author=user)  # Only user's articles
+        return self.filter (author=user)  # Only user's articles
     
     # Terminal methods (return non-QuerySet)
-    def stats(self):
+    def stats (self):
         from django.db.models import Count, Avg, Sum
         return self.aggregate(
             total=Count('id'),
@@ -631,7 +631,7 @@ class ArticleQuerySet(models.QuerySet):
         )
 
 # Usage:
-articles = Article.objects.published().in_language('en').for_user(user)  # ✅ Chaining
+articles = Article.objects.published().in_language('en').for_user (user)  # ✅ Chaining
 stats = Article.objects.published().in_language('en').stats()  # ✅ Terminal method
 \`\`\`
 

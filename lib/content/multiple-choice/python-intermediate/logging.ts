@@ -30,9 +30,9 @@ export const loggingMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc3',
     question: 'Why should you use logging.getLogger(__name__)?',
     options: [
-      "It's faster",
+      "It\'s faster",
       'It shows which module the log came from',
-      "It's required by Python",
+      "It\'s required by Python",
       'It enables colored output',
     ],
     correctAnswer: 1,
@@ -56,10 +56,10 @@ export const loggingMultipleChoice: MultipleChoiceQuestion[] = [
     id: 'mc5',
     question: 'Which is the correct way for lazy evaluation in logging?',
     options: [
-      'logging.info(f"Value: {value}")',
-      'logging.info("Value: " + str(value))',
+      'logging.info (f"Value: {value}")',
+      'logging.info("Value: " + str (value))',
       'logging.info("Value: %s", value)',
-      'logging.info("Value: {}".format(value))',
+      'logging.info("Value: {}".format (value))',
     ],
     correctAnswer: 2,
     explanation:

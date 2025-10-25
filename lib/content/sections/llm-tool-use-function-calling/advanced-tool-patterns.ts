@@ -42,58 +42,58 @@ class ToolChain:
     def __init__(self, registry: ToolRegistry):
         self.registry = registry
     
-    def execute_chain(self, 
+    def execute_chain (self, 
                      steps: List[ToolChainStep], 
                      initial_args: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Execute a chain of tools.
         
         Example chain:
-        1. search_location(query) → location_data
-        2. get_weather(location=location_data.name) → weather
-        3. send_notification(message=weather.summary)
+        1. search_location (query) → location_data
+        2. get_weather (location=location_data.name) → weather
+        3. send_notification (message=weather.summary)
         """
         results = []
         context = initial_args.copy()
         
         for step in steps:
             # Check condition if present
-            if step.condition and not step.condition(context):
+            if step.condition and not step.condition (context):
                 continue
             
             # Build arguments from context
             args = {}
             for param, mapping in step.argument_mapping.items():
                 # Support nested access: "results[0].temperature"
-                value = self._resolve_mapping(mapping, context)
+                value = self._resolve_mapping (mapping, context)
                 args[param] = value
             
             # Execute tool
-            result = self.registry.execute(step.tool_name, **args)
-            results.append(result)
+            result = self.registry.execute (step.tool_name, **args)
+            results.append (result)
             
             # Update context
             context[f"{step.tool_name}_result"] = result
         
         return results
     
-    def _resolve_mapping(self, mapping: str, context: Dict) -> Any:
+    def _resolve_mapping (self, mapping: str, context: Dict) -> Any:
         """Resolve a mapping expression like 'search_result.location.name'."""
         parts = mapping.split('.')
         value = context
         
         for part in parts:
-            if isinstance(value, dict):
-                value = value.get(part)
-            elif hasattr(value, part):
-                value = getattr(value, part)
+            if isinstance (value, dict):
+                value = value.get (part)
+            elif hasattr (value, part):
+                value = getattr (value, part)
             else:
                 return None
         
         return value
 
 # Example: Weather notification chain
-chain = ToolChain(registry)
+chain = ToolChain (registry)
 
 steps = [
     ToolChainStep(
@@ -111,7 +111,7 @@ steps = [
     )
 ]
 
-results = chain.execute_chain(steps, {"location": "San Francisco"})
+results = chain.execute_chain (steps, {"location": "San Francisco"})
 \`\`\`
 
 ### LLM-Guided Chaining
@@ -119,7 +119,7 @@ results = chain.execute_chain(steps, {"location": "San Francisco"})
 Let the LLM decide the chain:
 
 \`\`\`python
-def llm_guided_chain(user_goal: str, 
+def llm_guided_chain (user_goal: str, 
                     available_tools: List[Tool],
                     max_steps: int = 5) -> List[Dict[str, Any]]:
     """
@@ -146,7 +146,7 @@ Call tools one at a time, building on previous results."""
     results = []
     context = {}
     
-    for step in range(max_steps):
+    for step in range (max_steps):
         # Get next action from LLM
         response = openai.chat.completions.create(
             model="gpt-4",
@@ -155,14 +155,14 @@ Call tools one at a time, building on previous results."""
         )
         
         message = response.choices[0].message
-        messages.append(message.to_dict())
+        messages.append (message.to_dict())
         
         if message.function_call:
             # Execute tool
             func_name = message.function_call.name
-            func_args = json.loads(message.function_call.arguments)
+            func_args = json.loads (message.function_call.arguments)
             
-            result = registry.execute(func_name, **func_args)
+            result = registry.execute (func_name, **func_args)
             results.append({
                 "tool": func_name,
                 "arguments": func_args,
@@ -173,7 +173,7 @@ Call tools one at a time, building on previous results."""
             messages.append({
                 "role": "function",
                 "name": func_name,
-                "content": json.dumps(result)
+                "content": json.dumps (result)
             })
         else:
             # LLM finished the chain
@@ -199,8 +199,8 @@ results = llm_guided_chain(
 Create higher-level tools from primitives:
 
 \`\`\`python
-@tool(description="Research a topic comprehensively")
-def research_topic(topic: str) -> dict:
+@tool (description="Research a topic comprehensively")
+def research_topic (topic: str) -> dict:
     """
     Composite tool that uses multiple sources.
     
@@ -211,20 +211,20 @@ def research_topic(topic: str) -> dict:
     4. Synthesize results
     """
     # Step 1: Web search
-    web_results = google_search(query=topic, num_results=5)
+    web_results = google_search (query=topic, num_results=5)
     
     # Step 2: Wikipedia
-    wiki_results = wikipedia_search(query=topic)
+    wiki_results = wikipedia_search (query=topic)
     
     # Step 3: Academic search
-    academic_results = google_scholar_search(query=topic, num_results=5)
+    academic_results = google_scholar_search (query=topic, num_results=5)
     
     # Step 4: Synthesize with LLM
     synthesis_prompt = f"""Synthesize the following research on '{topic}':
 
-Web results: {json.dumps(web_results)}
-Wikipedia: {json.dumps(wiki_results)}
-Academic: {json.dumps(academic_results)}
+Web results: {json.dumps (web_results)}
+Wikipedia: {json.dumps (wiki_results)}
+Academic: {json.dumps (academic_results)}
 
 Provide a comprehensive summary covering:
 1. Key concepts
@@ -256,12 +256,12 @@ Provide a comprehensive summary covering:
 \`\`\`python
 from functools import wraps
 
-def retry_on_failure(max_retries: int = 3):
+def retry_on_failure (max_retries: int = 3):
     """Decorator to retry tool on failure."""
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
-            for attempt in range(max_retries):
+            for attempt in range (max_retries):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
@@ -271,28 +271,28 @@ def retry_on_failure(max_retries: int = 3):
         return wrapper
     return decorator
 
-def with_fallback(fallback_tool: str):
+def with_fallback (fallback_tool: str):
     """Decorator to use fallback tool on failure."""
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
                 # Try fallback
-                return registry.execute(fallback_tool, **kwargs)
+                return registry.execute (fallback_tool, **kwargs)
         return wrapper
     return decorator
 
-def cached(ttl_seconds: int = 3600):
+def cached (ttl_seconds: int = 3600):
     """Decorator to cache tool results."""
     cache = {}
     
-    def decorator(func):
-        @wraps(func)
+    def decorator (func):
+        @wraps (func)
         def wrapper(*args, **kwargs):
             # Create cache key
-            key = f"{func.__name__}:{args}:{sorted(kwargs.items())}"
+            key = f"{func.__name__}:{args}:{sorted (kwargs.items())}"
             
             # Check cache
             if key in cache:
@@ -309,13 +309,13 @@ def cached(ttl_seconds: int = 3600):
     return decorator
 
 # Usage
-@tool(description="Get weather with retries and caching")
-@retry_on_failure(max_retries=3)
+@tool (description="Get weather with retries and caching")
+@retry_on_failure (max_retries=3)
 @with_fallback("get_weather_alternative")
-@cached(ttl_seconds=1800)
-def get_weather_robust(location: str, unit: str = "celsius") -> dict:
+@cached (ttl_seconds=1800)
+def get_weather_robust (location: str, unit: str = "celsius") -> dict:
     """Robust weather tool with multiple resilience patterns."""
-    return weather_api.get_weather(location, unit)
+    return weather_api.get_weather (location, unit)
 \`\`\`
 
 ## Dynamic Tool Generation
@@ -332,7 +332,7 @@ class DynamicToolGenerator:
         self.base_url = base_url
         self.api_key = api_key
     
-    def generate_api_tool(self, 
+    def generate_api_tool (self, 
                          endpoint: str, 
                          method: str,
                          description: str,
@@ -357,7 +357,7 @@ class DynamicToolGenerator:
             category=ToolCategory.API_INTEGRATION
         )
     
-    def generate_tools_from_openapi(self, openapi_spec: Dict) -> List[Tool]:
+    def generate_tools_from_openapi (self, openapi_spec: Dict) -> List[Tool]:
         """
         Generate tools from OpenAPI spec.
         """
@@ -375,7 +375,7 @@ class DynamicToolGenerator:
                     parameters=spec.get("parameters", {})
                 )
                 
-                tools.append(tool)
+                tools.append (tool)
         
         return tools
 
@@ -387,11 +387,11 @@ generator = DynamicToolGenerator(
 
 # Generate tools from OpenAPI spec
 openapi_spec = requests.get("https://api.example.com/openapi.json").json()
-tools = generator.generate_tools_from_openapi(openapi_spec)
+tools = generator.generate_tools_from_openapi (openapi_spec)
 
 # Register all generated tools
 for tool in tools:
-    registry.register(tool)
+    registry.register (tool)
 \`\`\`
 
 ### Database-Driven Tools
@@ -403,13 +403,13 @@ class DatabaseToolGenerator:
     """Generate tools for database operations."""
     
     def __init__(self, connection_string: str):
-        self.engine = create_engine(connection_string)
-        self.inspector = inspect(self.engine)
+        self.engine = create_engine (connection_string)
+        self.inspector = inspect (self.engine)
     
-    def generate_query_tool(self, table_name: str) -> Tool:
+    def generate_query_tool (self, table_name: str) -> Tool:
         """Generate a query tool for a table."""
         # Get table schema
-        columns = self.inspector.get_columns(table_name)
+        columns = self.inspector.get_columns (table_name)
         
         # Build parameter schema
         parameters = {
@@ -419,7 +419,7 @@ class DatabaseToolGenerator:
         
         for col in columns:
             parameters["properties"][col["name"]] = {
-                "type": self._sql_type_to_json_type(col["type"]),
+                "type": self._sql_type_to_json_type (col["type"]),
                 "description": f"Filter by {col['name']}"
             }
         
@@ -429,11 +429,11 @@ class DatabaseToolGenerator:
             
             if filters:
                 conditions = [f"{k} = :{k}" for k in filters.keys()]
-                query += f" WHERE {' AND '.join(conditions)}"
+                query += f" WHERE {' AND '.join (conditions)}"
             
             with self.engine.connect() as conn:
-                result = conn.execute(text(query), filters)
-                return [dict(row) for row in result]
+                result = conn.execute (text (query), filters)
+                return [dict (row) for row in result]
         
         return Tool(
             name=f"query_{table_name}",
@@ -443,13 +443,13 @@ class DatabaseToolGenerator:
             category=ToolCategory.DATABASE
         )
     
-    def generate_all_table_tools(self) -> List[Tool]:
+    def generate_all_table_tools (self) -> List[Tool]:
         """Generate tools for all tables."""
         tools = []
         
         for table_name in self.inspector.get_table_names():
-            tool = self.generate_query_tool(table_name)
-            tools.append(tool)
+            tool = self.generate_query_tool (table_name)
+            tools.append (tool)
         
         return tools
 
@@ -458,7 +458,7 @@ db_generator = DatabaseToolGenerator("postgresql://localhost/mydb")
 table_tools = db_generator.generate_all_table_tools()
 
 for tool in table_tools:
-    registry.register(tool)
+    registry.register (tool)
 \`\`\`
 
 ## Tool Factories
@@ -470,7 +470,7 @@ class ToolFactory:
     """Factory for generating related tools."""
     
     @staticmethod
-    def create_http_tool(name: str, 
+    def create_http_tool (name: str, 
                         url: str, 
                         method: str = "GET",
                         headers: Dict = None) -> Tool:
@@ -502,18 +502,18 @@ class ToolFactory:
         )
     
     @staticmethod
-    def create_file_tool(operation: str) -> Tool:
+    def create_file_tool (operation: str) -> Tool:
         """Create a file operation tool."""
-        def file_op(path: str, content: str = None):
+        def file_op (path: str, content: str = None):
             if operation == "read":
-                with open(path, 'r') as f:
+                with open (path, 'r') as f:
                     return {"content": f.read()}
             elif operation == "write":
-                with open(path, 'w') as f:
-                    f.write(content)
+                with open (path, 'w') as f:
+                    f.write (content)
                 return {"success": True}
             elif operation == "delete":
-                os.remove(path)
+                os.remove (path)
                 return {"success": True}
         
         return Tool(
@@ -547,8 +547,8 @@ write_tool = ToolFactory.create_file_tool("write")
 ### Tools That Create Tools
 
 \`\`\`python
-@tool(description="Create a new tool from a description")
-def create_tool_from_description(name: str, description: str, 
+@tool (description="Create a new tool from a description")
+def create_tool_from_description (name: str, description: str, 
                                  code: str) -> dict:
     """
     Meta-tool that creates new tools.
@@ -573,7 +573,7 @@ Return valid Python function code."""
     
     # Execute code to create function
     namespace = {}
-    exec(generated_code, namespace)
+    exec (generated_code, namespace)
     func = namespace[name]
     
     # Create and register tool
@@ -581,11 +581,11 @@ Return valid Python function code."""
         name=name,
         description=description,
         function=func,
-        schema=generate_schema_from_function(func),
+        schema=generate_schema_from_function (func),
         category=ToolCategory.COMPUTATION
     )
     
-    registry.register(new_tool)
+    registry.register (new_tool)
     
     return {
         "status": "success",
@@ -597,10 +597,10 @@ Return valid Python function code."""
 ### Tools That Modify Tools
 
 \`\`\`python
-@tool(description="Modify an existing tool's behavior")
-def add_logging_to_tool(tool_name: str) -> dict:
+@tool (description="Modify an existing tool's behavior")
+def add_logging_to_tool (tool_name: str) -> dict:
     """Add logging to an existing tool."""
-    tool = registry.get(tool_name)
+    tool = registry.get (tool_name)
     
     if not tool:
         return {"status": "error", "error": f"Tool {tool_name} not found"}
@@ -609,9 +609,9 @@ def add_logging_to_tool(tool_name: str) -> dict:
     original_func = tool.function
     
     def logged_func(**kwargs):
-        logger.info(f"Calling {tool_name} with {kwargs}")
+        logger.info (f"Calling {tool_name} with {kwargs}")
         result = original_func(**kwargs)
-        logger.info(f"{tool_name} returned {result}")
+        logger.info (f"{tool_name} returned {result}")
         return result
     
     # Update tool
@@ -622,12 +622,12 @@ def add_logging_to_tool(tool_name: str) -> dict:
         "message": f"Added logging to {tool_name}"
     }
 
-@tool(description="Combine two tools into one")
-def combine_tools(tool1_name: str, tool2_name: str, 
+@tool (description="Combine two tools into one")
+def combine_tools (tool1_name: str, tool2_name: str, 
                  new_name: str) -> dict:
     """Create a new tool that combines two tools."""
-    tool1 = registry.get(tool1_name)
-    tool2 = registry.get(tool2_name)
+    tool1 = registry.get (tool1_name)
+    tool2 = registry.get (tool2_name)
     
     if not tool1 or not tool2:
         return {"status": "error", "error": "One or both tools not found"}
@@ -648,7 +648,7 @@ def combine_tools(tool1_name: str, tool2_name: str,
         category=tool1.category
     )
     
-    registry.register(new_tool)
+    registry.register (new_tool)
     
     return {
         "status": "success",
@@ -668,18 +668,18 @@ class ConditionalToolRegistry(ToolRegistry):
         super().__init__()
         self.state = {}
     
-    def get_available_tools(self, context: Dict) -> List[Tool]:
+    def get_available_tools (self, context: Dict) -> List[Tool]:
         """Get tools available in current context."""
         available = []
         
         for tool in self.get_all():
             # Check if tool should be available
-            if self._should_be_available(tool, context):
-                available.append(tool)
+            if self._should_be_available (tool, context):
+                available.append (tool)
         
         return available
     
-    def _should_be_available(self, tool: Tool, context: Dict) -> bool:
+    def _should_be_available (self, tool: Tool, context: Dict) -> bool:
         """Determine if tool should be available."""
         # Example: Admin tools only for admins
         if tool.category == ToolCategory.ADMIN:
@@ -699,7 +699,7 @@ context = {
     "budget_remaining": 0.05
 }
 
-available_tools = conditional_registry.get_available_tools(context)
+available_tools = conditional_registry.get_available_tools (context)
 \`\`\`
 
 ## Tool Pipeline Pattern
@@ -713,27 +713,27 @@ class ToolPipeline:
     def __init__(self):
         self.steps: List[Callable] = []
     
-    def add_step(self, func: Callable) -> 'ToolPipeline':
+    def add_step (self, func: Callable) -> 'ToolPipeline':
         """Add a step to the pipeline."""
-        self.steps.append(func)
+        self.steps.append (func)
         return self  # For chaining
     
-    def execute(self, initial_input: Any) -> Any:
+    def execute (self, initial_input: Any) -> Any:
         """Execute pipeline."""
         result = initial_input
         
         for step in self.steps:
-            result = step(result)
+            result = step (result)
         
         return result
 
 # Example: Data processing pipeline
 pipeline = (ToolPipeline()
-    .add_step(lambda x: fetch_data(x))
-    .add_step(lambda x: clean_data(x))
-    .add_step(lambda x: transform_data(x))
-    .add_step(lambda x: analyze_data(x))
-    .add_step(lambda x: generate_report(x))
+    .add_step (lambda x: fetch_data (x))
+    .add_step (lambda x: clean_data (x))
+    .add_step (lambda x: transform_data (x))
+    .add_step (lambda x: analyze_data (x))
+    .add_step (lambda x: generate_report (x))
 )
 
 result = pipeline.execute({"query": "sales data"})

@@ -36,7 +36,7 @@ capabilities = {
         "examples": [
             "Explain what's happening in image",
             "Why is this funny?",
-            "What's wrong with this diagram?",
+            "What\'s wrong with this diagram?",
             "Extract all text and structure it"
         ],
         "advantage": "General intelligence applied to vision"
@@ -81,19 +81,19 @@ class GPT4Vision:
             detail: 'low', 'high', or 'auto' (affects cost and quality)
         
         Returns:
-            Model's response
+            Model\'s response
         """
         # Prepare image
-        if isinstance(image, str):
+        if isinstance (image, str):
             if image.startswith(('http://', 'https://')):
                 # URL
                 image_input = {"type": "image_url", "image_url": {"url": image, "detail": detail}}
             else:
                 # Local file
-                image_input = self._encode_local_image(image, detail)
+                image_input = self._encode_local_image (image, detail)
         else:
             # PIL Image
-            image_input = self._encode_pil_image(image, detail)
+            image_input = self._encode_pil_image (image, detail)
         
         # Call API
         response = self.client.chat.completions.create(
@@ -112,10 +112,10 @@ class GPT4Vision:
         
         return response.choices[0].message.content
     
-    def _encode_local_image(self, filepath: str, detail: str) -> dict:
+    def _encode_local_image (self, filepath: str, detail: str) -> dict:
         """Encode local image to base64."""
-        with open(filepath, "rb") as f:
-            base64_image = base64.b64encode(f.read()).decode('utf-8')
+        with open (filepath, "rb") as f:
+            base64_image = base64.b64encode (f.read()).decode('utf-8')
         
         return {
             "type": "image_url",
@@ -125,11 +125,11 @@ class GPT4Vision:
             }
         }
     
-    def _encode_pil_image(self, image: Image.Image, detail: str) -> dict:
+    def _encode_pil_image (self, image: Image.Image, detail: str) -> dict:
         """Encode PIL Image to base64."""
         buffered = BytesIO()
-        image.save(buffered, format="JPEG")
-        base64_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        image.save (buffered, format="JPEG")
+        base64_image = base64.b64encode (buffered.getvalue()).decode('utf-8')
         
         return {
             "type": "image_url",
@@ -148,12 +148,12 @@ class GPT4Vision:
         # Prepare all images
         image_inputs = []
         for img in images:
-            if isinstance(img, str) and img.startswith(('http://', 'https://')):
+            if isinstance (img, str) and img.startswith(('http://', 'https://')):
                 image_inputs.append({"type": "image_url", "image_url": {"url": img}})
-            elif isinstance(img, Image.Image):
-                image_inputs.append(self._encode_pil_image(img, "auto"))
+            elif isinstance (img, Image.Image):
+                image_inputs.append (self._encode_pil_image (img, "auto"))
             else:
-                image_inputs.append(self._encode_local_image(img, "auto"))
+                image_inputs.append (self._encode_local_image (img, "auto"))
         
         # Create message
         content = [{"type": "text", "text": prompt}] + image_inputs
@@ -209,7 +209,7 @@ class Claude3Vision:
     """
     
     def __init__(self, api_key: Optional[str] = None):
-        self.client = Anthropic(api_key=api_key)
+        self.client = Anthropic (api_key=api_key)
     
     def analyze_image(
         self,
@@ -227,13 +227,13 @@ class Claude3Vision:
         - claude-3-haiku: Fastest
         """
         # Encode image
-        if isinstance(image, str):
-            with open(image, "rb") as f:
-                image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+        if isinstance (image, str):
+            with open (image, "rb") as f:
+                image_data = base64.standard_b64encode (f.read()).decode("utf-8")
         else:
             buffered = BytesIO()
-            image.save(buffered, format="JPEG")
-            image_data = base64.standard_b64encode(buffered.getvalue()).decode("utf-8")
+            image.save (buffered, format="JPEG")
+            image_data = base64.standard_b64encode (buffered.getvalue()).decode("utf-8")
         
         # Call API
         message = self.client.messages.create(
@@ -285,7 +285,7 @@ class DocumentAnalyzer:
     def __init__(self, vision_model: GPT4Vision):
         self.model = vision_model
     
-    def extract_invoice_data(self, image: Union[str, Image.Image]) -> dict:
+    def extract_invoice_data (self, image: Union[str, Image.Image]) -> dict:
         """Extract structured data from invoice."""
         prompt = """
         Extract the following information from this invoice:
@@ -303,18 +303,18 @@ class DocumentAnalyzer:
         Return as JSON.
         """
         
-        response = self.model.analyze_image(image, prompt, max_tokens=1000)
+        response = self.model.analyze_image (image, prompt, max_tokens=1000)
         
         # Parse JSON
         import json
         try:
-            data = json.loads(response)
+            data = json.loads (response)
         except:
             data = {"raw_response": response}
         
         return data
     
-    def analyze_form(self, image: Union[str, Image.Image]) -> dict:
+    def analyze_form (self, image: Union[str, Image.Image]) -> dict:
         """Analyze filled form."""
         prompt = """
         Analyze this form:
@@ -325,25 +325,25 @@ class DocumentAnalyzer:
         Return as structured JSON.
         """
         
-        response = self.model.analyze_image(image, prompt, max_tokens=800)
+        response = self.model.analyze_image (image, prompt, max_tokens=800)
         return {"analysis": response}
     
-    def extract_table_data(self, image: Union[str, Image.Image]) -> str:
+    def extract_table_data (self, image: Union[str, Image.Image]) -> str:
         """Extract table to markdown."""
         prompt = """
         Convert the table in this image to markdown format.
         Preserve all rows and columns accurately.
         """
         
-        return self.model.analyze_image(image, prompt, max_tokens=1000)
+        return self.model.analyze_image (image, prompt, max_tokens=1000)
 
 # Usage
-doc_analyzer = DocumentAnalyzer(gpt4v)
+doc_analyzer = DocumentAnalyzer (gpt4v)
 
 # Extract invoice
 invoice = Image.open("invoice.jpg")
-invoice_data = doc_analyzer.extract_invoice_data(invoice)
-print(json.dumps(invoice_data, indent=2))
+invoice_data = doc_analyzer.extract_invoice_data (invoice)
+print(json.dumps (invoice_data, indent=2))
 
 # Extract table
 table_markdown = doc_analyzer.extract_table_data("table.png")
@@ -361,7 +361,7 @@ class ChartAnalyzer:
     def __init__(self, vision_model: GPT4Vision):
         self.model = vision_model
     
-    def analyze_chart(self, image: Union[str, Image.Image]) -> dict:
+    def analyze_chart (self, image: Union[str, Image.Image]) -> dict:
         """Comprehensive chart analysis."""
         prompt = """
         Analyze this chart:
@@ -372,10 +372,10 @@ class ChartAnalyzer:
         5. Are there any outliers or notable patterns?
         """
         
-        analysis = self.model.analyze_image(image, prompt, max_tokens=600)
+        analysis = self.model.analyze_image (image, prompt, max_tokens=600)
         return {"analysis": analysis}
     
-    def extract_chart_data(self, image: Union[str, Image.Image]) -> str:
+    def extract_chart_data (self, image: Union[str, Image.Image]) -> str:
         """Extract numeric data from chart."""
         prompt = """
         Extract all numeric data from this chart.
@@ -383,7 +383,7 @@ class ChartAnalyzer:
         Format as CSV or structured text.
         """
         
-        return self.model.analyze_image(image, prompt, max_tokens=800)
+        return self.model.analyze_image (image, prompt, max_tokens=800)
     
     def compare_charts(
         self,
@@ -398,18 +398,18 @@ class ChartAnalyzer:
         4. What conclusions can you draw?
         """
         
-        return self.model.compare_images(images, prompt)
+        return self.model.compare_images (images, prompt)
 
 # Usage
-chart_analyzer = ChartAnalyzer(gpt4v)
+chart_analyzer = ChartAnalyzer (gpt4v)
 
 # Analyze single chart
 chart = Image.open("sales_chart.png")
-analysis = chart_analyzer.analyze_chart(chart)
+analysis = chart_analyzer.analyze_chart (chart)
 print(analysis["analysis"])
 
 # Extract data
-data = chart_analyzer.extract_chart_data(chart)
+data = chart_analyzer.extract_chart_data (chart)
 
 # Compare quarters
 q1_chart = Image.open("q1.png")
@@ -434,7 +434,7 @@ class VisualQA:
         question: str
     ) -> str:
         """Ask any question about image."""
-        return self.model.analyze_image(image, question)
+        return self.model.analyze_image (image, question)
     
     def multi_turn_conversation(
         self,
@@ -445,7 +445,7 @@ class VisualQA:
         conversation = []
         
         for question in questions:
-            answer = self.ask_question(image, question)
+            answer = self.ask_question (image, question)
             conversation.append({
                 "question": question,
                 "answer": answer
@@ -460,7 +460,7 @@ class VisualQA:
     ) -> dict:
         """Answer multiple questions at once."""
         combined_prompt = "Answer these questions about the image:\n"
-        for i, q in enumerate(questions, 1):
+        for i, q in enumerate (questions, 1):
             combined_prompt += f"{i}. {q}\n"
         
         response = self.model.analyze_image(
@@ -477,7 +477,7 @@ qa = VisualQA(gpt4v)
 image = Image.open("scene.jpg")
 
 # Single question
-answer = qa.ask_question(image, "How many people are in this image?")
+answer = qa.ask_question (image, "How many people are in this image?")
 
 # Multiple questions
 conversation = qa.multi_turn_conversation(
@@ -485,7 +485,7 @@ conversation = qa.multi_turn_conversation(
     questions=[
         "What is the main subject of this image?",
         "What time of day is it?",
-        "What's the mood or atmosphere?",
+        "What\'s the mood or atmosphere?",
         "What details stand out?"
     ]
 )
@@ -506,7 +506,7 @@ class ImageValidator:
     def __init__(self, vision_model: GPT4Vision):
         self.model = vision_model
     
-    def check_quality(self, image: Union[str, Image.Image]) -> dict:
+    def check_quality (self, image: Union[str, Image.Image]) -> dict:
         """Check technical quality."""
         prompt = """
         Assess this image's technical quality:
@@ -519,10 +519,10 @@ class ImageValidator:
         Return assessment as JSON.
         """
         
-        response = self.model.analyze_image(image, prompt)
+        response = self.model.analyze_image (image, prompt)
         return {"quality_check": response}
     
-    def check_content(self, image: Union[str, Image.Image]) -> dict:
+    def check_content (self, image: Union[str, Image.Image]) -> dict:
         """Check content appropriateness."""
         prompt = """
         Analyze this image's content:
@@ -534,7 +534,7 @@ class ImageValidator:
         Return analysis as JSON.
         """
         
-        response = self.model.analyze_image(image, prompt)
+        response = self.model.analyze_image (image, prompt)
         return {"content_check": response}
     
     def verify_compliance(
@@ -553,15 +553,15 @@ class ImageValidator:
         Return as structured format.
         """
         
-        response = self.model.analyze_image(image, prompt)
+        response = self.model.analyze_image (image, prompt)
         return {"compliance": response}
 
 # Usage
-validator = ImageValidator(gpt4v)
+validator = ImageValidator (gpt4v)
 
 # Quality check
 product_photo = Image.open("product.jpg")
-quality = validator.check_quality(product_photo)
+quality = validator.check_quality (product_photo)
 
 # Compliance check
 requirements = [
@@ -572,7 +572,7 @@ requirements = [
     "High resolution and sharp focus"
 ]
 
-compliance = validator.verify_compliance(product_photo, requirements)
+compliance = validator.verify_compliance (product_photo, requirements)
 print(compliance["compliance"])
 \`\`\`
 
@@ -597,13 +597,13 @@ class ProductionVisionPipeline:
         """Analyze with automatic retry."""
         import time
         
-        for attempt in range(max_retries):
+        for attempt in range (max_retries):
             try:
-                return self.gpt4v.analyze_image(image, prompt)
+                return self.gpt4v.analyze_image (image, prompt)
             except Exception as e:
                 if attempt < max_retries - 1:
                     wait = 2 ** attempt
-                    time.sleep(wait)
+                    time.sleep (wait)
                 else:
                     raise
     
@@ -616,7 +616,7 @@ class ProductionVisionPipeline:
         import hashlib
         
         # Create cache key
-        with open(image_path, 'rb') as f:
+        with open (image_path, 'rb') as f:
             image_hash = hashlib.md5(f.read()).hexdigest()
         
         cache_key = f"{image_hash}:{prompt}"
@@ -625,7 +625,7 @@ class ProductionVisionPipeline:
             return self.cache[cache_key]
         
         # Analyze
-        result = self.analyze_with_retry(image_path, prompt)
+        result = self.analyze_with_retry (image_path, prompt)
         
         # Cache
         self.cache[cache_key] = result
@@ -644,20 +644,20 @@ class ProductionVisionPipeline:
         if parallel:
             from concurrent.futures import ThreadPoolExecutor
             
-            with ThreadPoolExecutor(max_workers=5) as executor:
+            with ThreadPoolExecutor (max_workers=5) as executor:
                 futures = [
-                    executor.submit(self.analyze_with_cache, img, prompt)
+                    executor.submit (self.analyze_with_cache, img, prompt)
                     for img in images
                 ]
                 
-                for img, future in zip(images, futures):
+                for img, future in zip (images, futures):
                     results.append({
                         "image": img,
                         "analysis": future.result()
                     })
         else:
             for img in images:
-                result = self.analyze_with_cache(img, prompt)
+                result = self.analyze_with_cache (img, prompt)
                 results.append({
                     "image": img,
                     "analysis": result

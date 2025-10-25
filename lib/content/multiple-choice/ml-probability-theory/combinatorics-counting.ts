@@ -47,7 +47,7 @@ export const combinatoricscountingMultipleChoice: MultipleChoiceQuestion[] = [
   {
     id: 'mc5',
     question:
-      "What is the sum of all binomial coefficients in row n of Pascal's Triangle?",
+      "What is the sum of all binomial coefficients in row n of Pascal\'s Triangle?",
     options: ['n', 'n!', '2^n', 'n^2'],
     correctAnswer: 2,
     explanation:
